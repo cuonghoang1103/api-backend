@@ -50,6 +50,12 @@ export const TU_DIEN: Record<string, string> = {
   'Không khoá nào khớp bộ lọc.': 'No course matches the filters.',
   'Chưa có khoá học nào được đăng.': 'No courses published yet.',
   // Âm thanh giao diện (04/10/2026).
+  'Âm thanh tin nhắn & thông báo': 'Message & notification sounds',
+  'Kêu khi có tin nhắn, thông báo, admin đăng bài': 'Plays on new messages, notifications and admin posts',
+  'Thông báo của hệ điều hành': 'System notifications',
+  'Hiện thông báo góc màn hình khi app đang ở nền': 'Show a corner notification while the app is in the background',
+  'Tiếng riêng khi có tin nhắn mới, thông báo mới hay admin đăng bài. Dùng chung cài đặt với web.': 'A distinct sound for new messages, notifications and admin posts. Shared with the website settings.',
+  'Khi app đang ở nền, hiện thông báo ở góc màn hình; bấm vào là mở đúng tin nhắn hoặc trang Thông báo.': 'While the app is in the background, show a corner notification; click it to open the message or the Notifications page.',
   'Âm thanh giao diện': 'Interface sounds',
   'Tiếng bấm nút, bật tắt, thông báo, lỗi…': 'Button clicks, toggles, notifications, errors…',
   'Tiếng nhỏ khi bấm nút, bật tắt, mở hộp thoại, lưu xong hay gặp lỗi — trong toàn bộ app.': 'Soft sounds when you click, toggle, open dialogs, save or hit an error — across the whole app.',

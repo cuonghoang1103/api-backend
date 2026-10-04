@@ -51,6 +51,30 @@ declare module '@/lib/socket' {
   export function datNguonSocket(
     f: (() => unknown | Promise<unknown> | null) | null,
   ): void;
+  /** Thông báo trong app (04/10/2026) — `features/thongBao/ThongBaoHost`. */
+  export function connectSocket(): Promise<{
+    on(ev: string, f: (...a: any[]) => void): unknown;
+    off(ev: string, f: (...a: any[]) => void): unknown;
+  }>;
+}
+
+/* Thông báo (04/10/2026): hook realtime + kho chuông + âm thanh thông báo của web. */
+declare module '@/hooks/useNotificationSocket' {
+  export function useNotificationSocket(): void;
+}
+declare module '@/store/notificationStore' {
+  interface TrangThaiThongBao { unreadCount: number; refresh: () => Promise<void> }
+  export const useNotificationStore: {
+    <T>(chon: (s: TrangThaiThongBao) => T): T;
+    getState(): TrangThaiThongBao;
+  };
+}
+declare module '@/store/preferencesStore' {
+  interface TuyChon { masterEnabled: boolean; setMasterEnabled: (v: boolean) => void }
+  export const usePreferencesStore: { <T>(chon: (s: TuyChon) => T): T; getState(): TuyChon };
+}
+declare module '@/lib/sound' {
+  export function playSound(kind: string, opts?: { volume?: number }): Promise<boolean>;
 }
 
 /**

@@ -279,7 +279,8 @@ describe('khopTuyenWeb', () => {
     // 04/10/2026: +1 chi tiết dự án (/projects/:slug → ProjectPageClient).
     // 04/10/2026: +5 CT Work Đợt S3b (meetings, meetings/:num, changes, changes/:num, raid).
     // 04/10/2026: +2 CT Work Đợt S4 (finance, present).
-    expect(thay.size).toBe(130);
+    // 04/10/2026: +1 Thông báo (/notifications).
+    expect(thay.size).toBe(131);
   });
 });
 

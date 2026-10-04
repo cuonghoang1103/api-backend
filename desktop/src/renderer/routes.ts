@@ -22,6 +22,7 @@
  */
 import type { LucideIcon } from 'lucide-react';
 import {
+  Bell,
   Award,
   Target,
   AudioWaveform,
@@ -110,6 +111,10 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['feed', 'newsfeed', 'bai viet'] },
   { path: '/messages', label: 'Tin nhắn', icon: MessagesSquare, group: 'chinh',
     keywords: ['nhắn tin', 'messenger', 'inbox', 'tin nhan'] },
+  /* Thông báo (04/10/2026) — trang `/notifications` của web; chuông trên thanh
+     tiêu đề đếm số chưa đọc. */
+  { path: '/notifications', label: 'Thông báo', icon: Bell, group: 'chinh',
+    keywords: ['notifications', 'thong bao', 'chuong', 'bell', 'tin moi'] },
   { path: '/notes', label: 'Ghi chú', icon: NotebookPen, group: 'chinh',
     keywords: ['notes', 'ghi chep', 'notion'] },
   { path: '/friends', label: 'Bạn bè', icon: Users, group: 'chinh',
@@ -236,7 +241,7 @@ export const GROUP_ORDER: readonly RouteGroup[] = ['chinh', 'ai', 'hoc', 'lam', 
  * trang lên thanh bên thì chỉ thêm đường dẫn của nó vào đúng nhóm.
  */
 export const THANH_BEN: Readonly<Partial<Record<RouteGroup, readonly string[]>>> = {
-  chinh: ['/dashboard', '/messages', '/notes', '/friends'],
+  chinh: ['/dashboard', '/notifications', '/messages', '/notes', '/friends'],
   ai: ['/chat', '/ai-templates'],
   hoc: ['/ielts', '/academy', '/courses', '/code-lab', '/exam', '/interview', '/language', '/algorithms', '/simulation', '/roadmap'],
   lam: ['/creator', '/maker-lab', '/projects', '/work'],

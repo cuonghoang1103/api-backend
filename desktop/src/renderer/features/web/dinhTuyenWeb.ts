@@ -265,6 +265,9 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/saved', nap: () => import('@/app/saved/page') },
 
   /* ── Trang cá nhân ── */
+  /* ── Thông báo (04/10/2026) ── */
+  { mau: '/notifications', nap: () => import('@/app/notifications/page') },
+
   { mau: '/profile', nap: () => import('@/app/profile/page') },
   { mau: '/profile/:id', nap: () => import('@/app/profile/[id]/page') },
   { mau: '/profile/:id/v2', nap: () => import('@/app/profile/[id]/v2/page') },

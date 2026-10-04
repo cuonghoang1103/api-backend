@@ -47,6 +47,7 @@ import { MoPhongPage } from './features/simulation/MoPhongPage';
 import { LoTrinhPage } from './features/roadmap/LoTrinhPage';
 import { NgoaiNguPage } from './features/language/NgoaiNguPage';
 import { IeltsPage } from './features/ielts/IeltsPage';
+import { ThongBaoPage } from './features/thongBao/ThongBaoPage';
 import { PhongVanPage } from './features/interview/PhongVanPage';
 import { CtWorkPage } from './features/work/CtWorkPage';
 import { MangNhaPage } from './features/mang/MangNhaPage';
@@ -75,6 +76,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/roadmap': LoTrinhPage,
   '/language': NgoaiNguPage,
   '/ielts': IeltsPage,
+  '/notifications': ThongBaoPage,
   '/interview': PhongVanPage,
   '/maker-lab': MakerLabPage,
   '/creator': XuongNoiDungPage,

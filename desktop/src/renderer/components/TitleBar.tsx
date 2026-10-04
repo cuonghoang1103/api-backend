@@ -10,7 +10,8 @@
  * được BÊN TRONG nó phải khai báo `no-drag`, nếu không con trỏ kéo cửa sổ thay
  * vì bấm nút — lỗi này rất hay gặp và trông như nút bị hỏng.
  */
-import { Search } from 'lucide-react';
+import { Bell, Search } from 'lucide-react';
+import { useNotificationStore } from '@/store/notificationStore';
 import { useAppState } from '../app-state';
 import { findRoute, INTERNAL_ROUTES } from '../routes';
 import { useDich } from '../i18n';
@@ -25,7 +26,8 @@ const TITLES: Record<string, string> = {
 
 export function TitleBar({ onOpenPalette }: { onOpenPalette: () => void }) {
   const { dich } = useDich();
-  const { route } = useAppState();
+  const { route, navigate } = useAppState();
+  const chuaDoc = useNotificationStore((st) => st.unreadCount);
   /* Trang CON của một cây (`/maker-lab/odin`, `/work/acme/WEB/board`) không có
      mục riêng trong `ROUTES` — lấy nhãn của đoạn cha gần nhất, thay vì rơi về
      "CuongThai" như thể người dùng vừa rời khỏi mục đó. */
@@ -43,6 +45,20 @@ export function TitleBar({ onOpenPalette }: { onOpenPalette: () => void }) {
   return (
     <header className="ct-titlebar" data-mac={isMac}>
       <div className="ct-titlebar-title">{title}</div>
+
+      {/* Chuông thông báo (04/10/2026): số chưa đọc từ kho thông báo của web
+          (`ThongBaoHost` gắn realtime), bấm là mở trang Thông báo. */}
+      <button
+        type="button"
+        className="ct-titlebar-chuong"
+        data-active={route === '/notifications'}
+        onClick={() => navigate('/notifications')}
+        aria-label={chuaDoc ? `${dich('Thông báo')} · ${chuaDoc}` : dich('Thông báo')}
+        title={dich('Thông báo')}
+      >
+        <Bell size={15} aria-hidden />
+        {chuaDoc > 0 && <span className="ct-titlebar-chuong-so">{chuaDoc > 99 ? '99+' : chuaDoc}</span>}
+      </button>
 
       <button
         type="button"

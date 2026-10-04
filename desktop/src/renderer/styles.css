@@ -15463,3 +15463,20 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   .ct-web-host .mx-auto.max-w-6xl { max-width: min(100%, 1640px); }
   .ct-web-host .mx-auto.max-w-7xl { max-width: min(100%, 1760px); }
 }
+
+/* Chuông thông báo trên thanh tiêu đề (04/10/2026). `-webkit-app-region: no-drag`:
+   thanh tiêu đề là vùng kéo cửa sổ — thiếu dòng này nút bấm không ăn. */
+.ct-titlebar-chuong {
+  position: relative;
+  display: grid; place-items: center;
+  width: 32px; height: 30px; margin-left: auto; margin-right: 6px;
+  border-radius: 8px; color: var(--ct-text-muted);
+  -webkit-app-region: no-drag;
+}
+.ct-titlebar-chuong:hover, .ct-titlebar-chuong[data-active='true'] { background: var(--ct-hover); color: var(--ct-text); }
+.ct-titlebar-chuong-so {
+  position: absolute; top: 2px; right: 1px;
+  min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px;
+  background: #ef4444; color: #fff; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center;
+  box-shadow: 0 0 0 2px var(--ct-bg);
+}

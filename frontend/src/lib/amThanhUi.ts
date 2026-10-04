@@ -84,6 +84,7 @@ const lay = (): CaiDatAmThanh => (caiDat ??= typeof window === 'undefined' ? { .
 export function ghiCaiDat(moi: Partial<CaiDatAmThanh>): CaiDatAmThanh {
   caiDat = { ...lay(), ...moi };
   try { localStorage.setItem(KHOA, JSON.stringify(caiDat)); } catch { /* chế độ riêng tư */ }
+  if (typeof document !== 'undefined') { if (caiDat.bat) batGiuSong(); else tatGiuSong(); }
   return caiDat;
 }
 
@@ -143,7 +144,39 @@ function capNhatDem(): void {
     daPhat: { ...dem },
     daNap: bo.size,
     trangThai: ctx?.state ?? 'chua-tao',
+    giuSong: !!giuSong,
+    /** Độ trễ thật tới loa (giây) — đo được, không đoán. */
+    treMs: ctx ? Math.round(((ctx.baseLatency ?? 0) + ((ctx as AudioContext & { outputLatency?: number }).outputLatency ?? 0)) * 1000) : null,
   };
+}
+
+/**
+ * GIỮ LUỒNG ÂM THANH LUÔN SỐNG (04/10/2026).
+ *
+ * Người dùng: "ấn xong 1-2s sau nó mới kêu". Tiếng đã `start()` ngay ở
+ * pointerdown — chỗ trễ nằm DƯỚI trình duyệt: Chromium dừng luồng ra loa sau vài
+ * giây toàn im lặng (tiết kiệm điện), và macOS cho thiết bị âm thanh (nhất là
+ * tai nghe Bluetooth) ngủ. Cú bấm kế tiếp phải chờ thiết bị thức dậy ⇒ trễ cả giây.
+ *
+ * Phát một tín hiệu MỨC -70 dB (tai không nghe được) để luồng không bao giờ "im
+ * hoàn toàn". Chỉ khi trang ĐANG HIỆN — ẩn tab / thu nhỏ cửa sổ thì dừng, không
+ * giữ máy thức vô cớ.
+ */
+let giuSong: ConstantSourceNode | null = null;
+function batGiuSong(): void {
+  const c = ctx;
+  if (!c || !nhanh || giuSong || document.visibilityState !== 'visible' || !lay().bat) return;
+  try {
+    const src = c.createConstantSource();
+    src.offset.value = 0.0003;
+    src.connect(c.destination);
+    src.start();
+    giuSong = src;
+  } catch { /* trình duyệt cũ không có ConstantSourceNode — bỏ qua */ }
+}
+function tatGiuSong(): void {
+  try { giuSong?.stop(); giuSong?.disconnect(); } catch { /* đã dừng */ }
+  giuSong = null;
 }
 
 /** Mở khoá (gọi trong một cú bấm/phím). */
@@ -151,6 +184,7 @@ export function moKhoa(): void {
   const c = layCtx();
   if (!c) return;
   if (c.state === 'suspended') void c.resume().then(capNhatDem);
+  batGiuSong();
   void napBo();
 }
 
@@ -216,6 +250,9 @@ export function ganTuDong(): () => void {
     phat('click');
   };
   const onKey = (): void => { moKhoa(); };
+  const onHien = (): void => {
+    if (document.visibilityState === 'visible') { if (ctx) batGiuSong(); } else tatGiuSong();
+  };
   const onClick = (e: MouseEvent): void => {
     const t = e.target as Element | null;
     if (!t || t.closest('[data-im]')) return;
@@ -262,11 +299,14 @@ export function ganTuDong(): () => void {
   window.addEventListener('pointerdown', onDown, true);
   window.addEventListener('keydown', onKey, true);
   window.addEventListener('click', onClick, true);
+  document.addEventListener('visibilitychange', onHien);
   capNhatDem();
   return () => {
     quan.disconnect();
     window.removeEventListener('pointerdown', onDown, true);
     window.removeEventListener('keydown', onKey, true);
     window.removeEventListener('click', onClick, true);
+    document.removeEventListener('visibilitychange', onHien);
+    tatGiuSong();
   };
 }

@@ -24,6 +24,7 @@ import { nativePageFor } from './page-registry';
 import { findRoute, INTERNAL_ROUTES } from './routes';
 import { Toaster } from 'sonner';
 import QuickCaptureHost from '@/components/notes/QuickCaptureHost';
+import { ThongBaoHost } from './features/thongBao/ThongBaoHost';
 
 function Content() {
   const { route } = useAppState();
@@ -198,6 +199,8 @@ function Shell() {
         <div className="ct-ghi-nhanh-host">
           <QuickCaptureHost />
         </div>
+        {/* Thông báo realtime + âm thanh + thông báo hệ điều hành (04/10/2026). */}
+        <ThongBaoHost />
         {/* Odin nằm NGOÀI vùng nội dung để không bị cuộn theo trang, và ngoài
             ErrorBoundary của nội dung để một trang hỏng không kéo nó chết theo. */}
         <OdinDock />

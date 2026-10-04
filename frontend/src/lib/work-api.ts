@@ -142,6 +142,8 @@ export interface ProjectConfig {
   kind?: ProjectKind;
   kindStored?: ProjectKind | null;
   modules?: ModuleMap;
+  /** Cổng khách (S2b): người xem là khách bị cách ly ⇒ chỉ dùng /portal. */
+  clientView?: boolean;
 }
 
 /** Một thẻ trên board / danh sách. */
@@ -160,6 +162,8 @@ export interface IssueCard {
   teamId?: number | null;
   /** Giai đoạn (S1, mô-đun stages). */
   stageId?: number | null;
+  /** Cổng khách (S2b): thẻ đã chia sẻ với khách. */
+  clientVisible?: boolean;
   priority: number;
   assigneeId: number | null;
   reporterId: number | null;
@@ -178,7 +182,11 @@ export interface IssueCard {
 
 export interface IssueBrief { id: number; key: string; number: number; title: string; statusId: number; typeId: number }
 
-export interface IssueAttachment { id: number; fileName: string; mime: string; size: number; createdAt: string; uploader: WorkUser | null }
+export interface IssueAttachment {
+  id: number; fileName: string; mime: string; size: number; createdAt: string; uploader: WorkUser | null;
+  /** Cổng khách (S2b): tệp chia sẻ với khách / tệp bàn giao. */
+  clientVisible?: boolean; deliverable?: boolean;
+}
 
 export interface IssueDetail extends IssueCard {
   descriptionJson: TiptapDoc | null;
@@ -197,16 +205,21 @@ export interface IssueDetail extends IssueCard {
   watcherCount: number;
   isWatching: boolean;
   canDelete: boolean;
+  clientSharedAt?: string | null;
 }
 
 export interface TiptapDoc { type: 'doc'; content?: unknown[] }
 
 export type CommentReportReason = 'spam' | 'harassment' | 'hate' | 'sexual' | 'violence' | 'other';
 
+/** INTERNAL = ghi chú nội bộ · PUBLIC = trả lời khách (cổng khách S2b). */
+export type CommentVisibility = 'INTERNAL' | 'PUBLIC';
+
 export interface WorkComment {
   id: number;
   bodyJson: TiptapDoc;
   isAi: boolean;
+  visibility?: CommentVisibility;
   createdAt: string;
   editedAt: string | null;
   author: WorkUser | null;
@@ -725,7 +738,7 @@ export const workApi = {
   revokeInvite: (wsId: number, inviteId: number) => d(api.delete(`${B}/workspaces/${wsId}/invites/${inviteId}`)),
   previewInvite: (token: string) =>
     d<{ workspace: { name: string; slug: string }; role: WorkspaceRole; invitedBy: string | null; restrictedToEmail: boolean }>(api.get(`${B}/invites/${encodeURIComponent(token)}`)),
-  acceptInvite: (token: string) => d<{ slug: string }>(api.post(`${B}/invites/${encodeURIComponent(token)}/accept`)),
+  acceptInvite: (token: string) => d<{ slug: string; portalPath?: string }>(api.post(`${B}/invites/${encodeURIComponent(token)}/accept`)),
 
   // Dự án
   createProject: (wsId: number, body: { key: string; name: string; description?: string | null; type: ProjectType; template: ProjectTemplate; visibility?: 'WORKSPACE' | 'PRIVATE'; kind?: ProjectKind; modules?: Partial<ModuleMap> }) =>
@@ -776,7 +789,7 @@ export const workApi = {
   removeLink: (pid: number, num: number, linkId: number) => d(api.delete(`${B}/projects/${pid}/issues/${num}/links/${linkId}`)),
   watch: (pid: number, num: number, on: boolean) => d(on ? api.put(`${B}/projects/${pid}/issues/${num}/watch`) : api.delete(`${B}/projects/${pid}/issues/${num}/watch`)),
   comments: (pid: number, num: number) => d<WorkComment[]>(api.get(`${B}/projects/${pid}/issues/${num}/comments`)),
-  addComment: (pid: number, num: number, bodyJson: TiptapDoc) => d<WorkComment>(api.post(`${B}/projects/${pid}/issues/${num}/comments`, { bodyJson })),
+  addComment: (pid: number, num: number, bodyJson: TiptapDoc, visibility?: CommentVisibility) => d<WorkComment>(api.post(`${B}/projects/${pid}/issues/${num}/comments`, { bodyJson, ...(visibility ? { visibility } : {}) })),
   editComment: (pid: number, num: number, cid: number, bodyJson: TiptapDoc) => d<WorkComment>(api.patch(`${B}/projects/${pid}/issues/${num}/comments/${cid}`, { bodyJson })),
   deleteComment: (pid: number, num: number, cid: number) => d(api.delete(`${B}/projects/${pid}/issues/${num}/comments/${cid}`)),
   reportComment: (pid: number, num: number, cid: number, body: { reason: CommentReportReason; details?: string | null }) =>
@@ -1533,4 +1546,118 @@ export const workDocsApi = {
   searchAll: (q: string) => d<DocSearchHit[]>(api.get(`${B}/search/docs${params({ q })}`)),
   templates: (pid: number) => d<DocTemplateInfo[]>(api.get(`${B}/projects/${pid}/doc-templates`)),
   template: (pid: number, key: string) => d<DocTemplateInfo & { contentJson: TiptapDoc }>(api.get(`${B}/projects/${pid}/doc-templates/${key}`)),
+};
+
+// ─── Cổng khách (đợt S2b, mô-đun clientPortal) ───────────────────
+// Backend: src/services/work/portal.service.ts. `asClient` = "Preview as client"
+// (nhân viên xem đúng như khách, chỉ đọc).
+
+export type PortalTab = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity';
+export type PortalRequestKind = 'BUG' | 'CHANGE' | 'QUESTION' | 'FEEDBACK';
+
+export interface PortalViewer {
+  clientView: boolean; preview: boolean; isClient: boolean;
+  canManage: boolean; canInvite: boolean; canRequestUat: boolean; canSubmitRequest: boolean;
+}
+export interface PortalOverview {
+  project: { key: string; name: string; description: string | null; workspaceName: string; organization: string | null };
+  viewer: PortalViewer;
+  stages: Array<{ id: number; n: number; name: string; status: 'NOT_STARTED' | 'ACTIVE' | 'GATE_REVIEW' | 'DONE'; percent: number; startedAt: string | null; completedAt: string | null }>;
+  currentStage: PortalOverview['stages'][number] | null;
+  overallPercent: number | null;
+  milestones: Array<{ id: number; name: string; status: string; releaseDate: string | null; releasedAt: string | null; items: number; done: number }>;
+  waitingOnClient: Array<{ id: number; title: string; kind: 'UAT' | 'APPROVAL'; dueAt: string | null; createdAt: string }>;
+  counts: { sharedOpen: number; sharedDone: number; requestsOpen: number };
+}
+export interface PortalTypeRef { key: string; name: string; icon: string; color: string }
+export interface PortalStatusRef { name: string; category: StatusCategory; color: string }
+export interface PortalRequestRow {
+  number: number; key: string; title: string; priority: number; type: PortalTypeRef; status: PortalStatusRef; stage: string | null;
+  fromClient: boolean; mine: boolean; replies: number; files: number; createdAt: string; updatedAt: string; resolvedAt: string | null; sharedAt: string | null;
+}
+export interface PortalRequestDetail {
+  id: number; number: number; key: string; title: string; descriptionJson: TiptapDoc | null; priority: number;
+  createdAt: string; updatedAt: string; resolvedAt: string | null; clientSharedAt: string | null; dueDate: string | null;
+  type: PortalTypeRef; status: PortalStatusRef; stage: { n: number; name: string; status: string } | null;
+  parent: { title: string; number: number | null } | null;
+  fixVersion: { name: string; releaseDate: string | null; status: string } | null;
+  reporter: WorkUser | null; fromClient: boolean;
+  attachments: Array<{ id: number; fileName: string; mime: string; size: number; createdAt: string; deliverable: boolean; uploader: WorkUser | null }>;
+  comments: Array<{ id: number; bodyJson: TiptapDoc; createdAt: string; editedAt: string | null; isAi: boolean; author: WorkUser | null }>;
+  viewer: PortalViewer; clientIds: number[];
+}
+export interface PortalUat {
+  round: number; environment: string | null; build: string | null; conditions: string | null;
+  version: { id: number; name: string; releaseDate: string | null } | null; stage: { id: number; n: number; name: string } | null;
+  items: Array<{ number: number; key: string; title: string; done: boolean; status: { name: string; category: StatusCategory }; type: { key: string; name: string } }>;
+  itemCount: number;
+  pages: Array<{ number: number; title: string; status: string }>;
+  files: Array<{ id: number; fileName: string; size: number }>;
+  createdIssues: Array<{ number: number; key: string; title: string; type: { key: string; name: string }; status: { name: string; category: StatusCategory } }>;
+}
+export interface PortalApproval {
+  id: number; targetType: 'ISSUE' | 'STAGE_GATE' | 'DOC' | 'UAT' | 'CR'; title: string; description: string | null; mode: string;
+  status: ApprovalStatus; dueAt: string | null; decidedAt: string | null; createdAt: string; createdBy: WorkUser | null;
+  issue: { number: number; title: string; key: string; shared: boolean } | null;
+  stage: { n: number; name: string; status: string } | null;
+  page: { number: number; title: string } | null;
+  steps: Array<{ id: number; position: number; decision: string; decidedAt: string | null; approver: WorkUser; isClient: boolean; comment: string | null; signature: string | null }>;
+  waitingOnClient: boolean; canDecide: boolean; contentChanged: boolean; signedHash: string | null;
+  uat: PortalUat | null;
+}
+export interface PortalDocuments {
+  viewer: PortalViewer;
+  pages: Array<{ number: number; title: string; status: PageStatus; updatedAt: string; stage: string | null }>;
+  files: Array<{ id: number; fileName: string; mime: string; size: number; createdAt: string; uploader: WorkUser | null; issue: { number: number; title: string; key: string } }>;
+}
+export interface PortalDeliverables {
+  viewer: PortalViewer;
+  files: Array<{ id: number; fileName: string; mime: string; size: number; deliveredAt: string | null; createdAt: string; issue: { number: number; title: string; key: string; version: string | null } }>;
+  releases: Array<{ id: number; name: string; releasedAt: string | null; items: Array<{ number: number; title: string; key: string }> }>;
+}
+export interface PortalActivityItem { id: string; at: string; kind: string; text: string; actor: string | null; issueNumber?: number | null; pageNumber?: number | null; approvalId?: number | null }
+export interface PortalCertificate {
+  project: { name: string; key: string }; vendor: string; client: string | null; requestCode: string | null;
+  title: string; status: ApprovalStatus; round: number; milestone: string | null; environment: string | null; build: string | null;
+  requestedAt: string; decidedAt: string | null;
+  items: PortalUat['items']; results: { total: number; passed: number; failed: number };
+  documents: PortalUat['pages']; files: PortalUat['files']; conditions: string | null; findings: PortalUat['createdIssues'];
+  conclusion: 'ACCEPTED' | 'ACCEPTED_WITH_CONDITIONS' | 'NOT_ACCEPTED' | 'PENDING';
+  signatures: Array<{ name: string; side: 'CLIENT' | 'VENDOR'; decision: string; at: string; signature: string | null; comment: string | null }>;
+  contentHash: string | null; contentChanged: boolean; viewer: PortalViewer; generatedAt: string;
+}
+
+const asQ = (asClient?: boolean, extra: Record<string, string | number | undefined> = {}) => params({ ...extra, ...(asClient ? { as: 'client' } : {}) });
+
+export const workPortalKeys = {
+  all: (pid: number) => ['work', 'portal', pid] as const,
+  tab: (pid: number, tab: string, asClient: boolean) => ['work', 'portal', pid, tab, asClient] as const,
+  request: (pid: number, num: number, asClient: boolean) => ['work', 'portal', pid, 'request', num, asClient] as const,
+  approval: (pid: number, id: number, asClient: boolean) => ['work', 'portal', pid, 'approval', id, asClient] as const,
+  doc: (pid: number, num: number, asClient: boolean) => ['work', 'portal', pid, 'doc', num, asClient] as const,
+};
+
+export const workPortalApi = {
+  overview: (pid: number, asClient?: boolean) => d<PortalOverview>(api.get(`${B}/projects/${pid}/portal/overview${asQ(asClient)}`)),
+  requests: (pid: number, asClient?: boolean, filter?: 'all' | 'open' | 'done' | 'mine') => d<{ viewer: PortalViewer; items: PortalRequestRow[] }>(api.get(`${B}/projects/${pid}/portal/requests${asQ(asClient, { filter })}`)),
+  request: (pid: number, num: number, asClient?: boolean) => d<PortalRequestDetail>(api.get(`${B}/projects/${pid}/portal/requests/${num}${asQ(asClient)}`)),
+  submitRequest: (pid: number, body: { kind: PortalRequestKind; title: string; description?: string | null; priority?: number }) =>
+    d<{ number: number; key: string }>(api.post(`${B}/projects/${pid}/portal/requests`, body)),
+  approvals: (pid: number, asClient?: boolean) => d<{ viewer: PortalViewer; items: PortalApproval[] }>(api.get(`${B}/projects/${pid}/portal/approvals${asQ(asClient)}`)),
+  approval: (pid: number, id: number, asClient?: boolean) => d<PortalApproval>(api.get(`${B}/projects/${pid}/portal/approvals/${id}${asQ(asClient)}`)),
+  documents: (pid: number, asClient?: boolean) => d<PortalDocuments>(api.get(`${B}/projects/${pid}/portal/documents${asQ(asClient)}`)),
+  document: (pid: number, num: number, asClient?: boolean) =>
+    d<{ number: number; title: string; status: PageStatus; visibility: PageVisibility; contentJson: TiptapDoc | null; updatedAt: string; stage: string | null; owner: WorkUser | null }>(api.get(`${B}/projects/${pid}/portal/documents/${num}${asQ(asClient)}`)),
+  deliverables: (pid: number, asClient?: boolean) => d<PortalDeliverables>(api.get(`${B}/projects/${pid}/portal/deliverables${asQ(asClient)}`)),
+  activity: (pid: number, asClient?: boolean) => d<{ viewer: PortalViewer; items: PortalActivityItem[] }>(api.get(`${B}/projects/${pid}/portal/activity${asQ(asClient)}`)),
+  clients: (pid: number) => d<{ clients: Array<WorkUser & { email?: string }>; pendingInvites: Array<{ id: number; email: string; expiresAt: string }> }>(api.get(`${B}/projects/${pid}/portal/clients`)),
+  invite: (pid: number, emails: string[]) => d<Array<{ email: string; status: 'ADDED' | 'ALREADY_MEMBER' | 'INVITED' }>>(api.post(`${B}/projects/${pid}/portal/invite`, { emails })),
+  createUat: (pid: number, body: { title?: string; description?: string | null; versionId?: number | null; stageId?: number | null; issueNumbers: number[]; pageNumbers?: number[]; attachmentIds?: number[]; approverIds: number[]; environment?: string | null; build?: string | null; dueAt?: string | null }) =>
+    d<PortalApproval>(api.post(`${B}/projects/${pid}/portal/uat`, body)),
+  decideUat: (pid: number, id: number, body: { decision: 'APPROVE' | 'REJECT'; comment?: string | null; conditions?: string | null; points?: Array<{ title: string; kind: 'BUG' | 'CHANGE'; detail?: string | null }> }) =>
+    d<PortalApproval>(api.post(`${B}/projects/${pid}/portal/uat/${id}/decide`, body)),
+  certificate: (pid: number, id: number, asClient?: boolean) => d<PortalCertificate>(api.get(`${B}/projects/${pid}/portal/uat/${id}/certificate${asQ(asClient)}`)),
+  // Nhân viên: chia sẻ thẻ / tệp
+  setIssueShared: (pid: number, num: number, visible: boolean) => d<{ number: number; clientVisible: boolean }>(api.put(`${B}/projects/${pid}/issues/${num}/client-visible`, { visible })),
+  setAttachmentClient: (pid: number, aid: number, body: { clientVisible?: boolean; deliverable?: boolean }) => d(api.patch(`${B}/projects/${pid}/attachments/${aid}/client`, body)),
 };

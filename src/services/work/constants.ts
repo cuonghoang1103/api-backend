@@ -61,6 +61,8 @@ export type StudioModule = (typeof STUDIO_MODULES)[number];
 export const STUDIO_MODULES_S1: readonly StudioModule[] = ['teams', 'stages', 'approvals', 'handoffs'];
 /** Mô-đun có tính năng thật từ đợt S2a (04/10/2026): tài liệu dự án kiểu Confluence. */
 export const STUDIO_MODULES_S2A: readonly StudioModule[] = ['docs'];
+/** Mô-đun có tính năng thật từ đợt S2b (04/10/2026): cổng khách (client portal). */
+export const STUDIO_MODULES_S2B: readonly StudioModule[] = ['clientPortal'];
 
 export const TEAM_ROLES = ['LEAD', 'MEMBER'] as const;
 export type TeamRole = (typeof TEAM_ROLES)[number];
@@ -68,7 +70,8 @@ export type TeamRole = (typeof TEAM_ROLES)[number];
 export const STAGE_STATUSES = ['NOT_STARTED', 'ACTIVE', 'GATE_REVIEW', 'DONE'] as const;
 export type StageStatus = (typeof STAGE_STATUSES)[number];
 
-export const APPROVAL_TARGETS = ['ISSUE', 'STAGE_GATE', 'DOC', 'CR'] as const;
+/** UAT (đợt S2b): nghiệm thu của khách cho một mốc/version/giai đoạn — chi tiết ở work_uat_requests. */
+export const APPROVAL_TARGETS = ['ISSUE', 'STAGE_GATE', 'DOC', 'CR', 'UAT'] as const;
 export type ApprovalTarget = (typeof APPROVAL_TARGETS)[number];
 export const APPROVAL_MODES = ['SEQUENTIAL', 'PARALLEL'] as const;
 export type ApprovalMode = (typeof APPROVAL_MODES)[number];
@@ -90,3 +93,16 @@ export type PageStatus = (typeof PAGE_STATUSES)[number];
 /** INTERNAL: chỉ đội làm. CLIENT: khách (vai CLIENT / khách GUEST) đọc được — cổng khách đợt S2b. */
 export const PAGE_VISIBILITY = ['INTERNAL', 'CLIENT'] as const;
 export type PageVisibility = (typeof PAGE_VISIBILITY)[number];
+
+// ─── Cổng khách (đợt S2b, 04/10/2026, mô-đun `clientPortal`) ─────
+
+/** INTERNAL: ghi chú nội bộ (mặc định) · PUBLIC: trả lời khách — khách chỉ thấy PUBLIC. */
+export const COMMENT_VISIBILITY = ['INTERNAL', 'PUBLIC'] as const;
+export type CommentVisibility = (typeof COMMENT_VISIBILITY)[number];
+
+/** Loại yêu cầu khách gửi từ cổng ⇒ loại thẻ + bộ phận nhận (portal.service.ts). */
+export const PORTAL_REQUEST_KINDS = ['BUG', 'CHANGE', 'QUESTION', 'FEEDBACK'] as const;
+export type PortalRequestKind = (typeof PORTAL_REQUEST_KINDS)[number];
+
+/** Nhãn gắn mọi thẻ khách gửi qua cổng. */
+export const FROM_CLIENT_LABEL = 'from-client';

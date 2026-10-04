@@ -13,11 +13,13 @@ import type { Prisma } from '@prisma/client';
 import { Router, type Request, type Response } from 'express';
 import { z, ZodError } from 'zod';
 import { authenticate } from '../middleware/auth.js';
-import { asyncHandler, BadRequestError, UnauthorizedError, NotFoundError } from '../middleware/errorHandler.js';
+import { AppError, asyncHandler, BadRequestError, UnauthorizedError, NotFoundError } from '../middleware/errorHandler.js';
+import { clientPortalRouteAllowed, effectiveWorkspaceRole, isClientScoped, loadProjectAccess, portalOnlyWorkspaceIds } from '../services/work/permissions.js';
 import { prisma } from '../config/database.js';
 import {
-  APPROVAL_MODES, APPROVAL_STATUSES, APPROVAL_TARGETS, HANDOFF_STATUSES, LINK_TYPES, PAGE_STATUSES, PAGE_VISIBILITY, PRIORITY_MAX, PRIORITY_MIN,
+  APPROVAL_MODES, APPROVAL_STATUSES, APPROVAL_TARGETS, COMMENT_VISIBILITY, HANDOFF_STATUSES, PORTAL_REQUEST_KINDS, LINK_TYPES, PAGE_STATUSES, PAGE_VISIBILITY, PRIORITY_MAX, PRIORITY_MIN,
   PROJECT_KINDS, PROJECT_ROLES, PROJECT_TEMPLATES, PROJECT_TYPES, PROJECT_VISIBILITY, STUDIO_MODULES, TEAM_ROLES, WORKSPACE_ROLES,
+  type WorkspaceRole,
 } from '../services/work/constants.js';
 import * as issues from '../services/work/issues.service.js';
 import { registerWorkNotifications } from '../services/work/notify.js';
@@ -52,7 +54,9 @@ import * as stages from '../services/work/stages.service.js';
 import * as approvals from '../services/work/approvals.service.js';
 import * as handoffs from '../services/work/handoffs.service.js';
 import * as pages from '../services/work/pages.service.js';
+import * as portal from '../services/work/portal.service.js';
 import { moveIssueToProject } from '../services/work/issueMove.service.js';
+import portfolioRoutes from './work.portfolio.routes.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
@@ -168,6 +172,21 @@ router.use((req, res, next) => (req.workToken ? next() : authenticate(req, res, 
 // Khoá chỉnh sửa cá nhân: lệnh ghi trong dự án đang khoá ⇒ 423 (xem editLock.service.ts).
 router.use(editLock.editLockGuard());
 
+// Cổng khách (đợt S2b): khách bị cách ly (vai CLIENT ở dự án bật clientPortal) chỉ
+// gọi được tuyến trong DANH SÁCH TRẮNG (permissions.ts clientPortalRouteAllowed).
+// Một chốt cho MỌI tuyến /projects/:pid/** — tuyến thêm sau này mặc định bị chặn
+// với khách. Tuyến được mở vẫn tự lọc dữ liệu trong service.
+router.use('/projects/:pid', asyncHandler(async (req, _res, next) => {
+  const pid = Number(req.params.pid);
+  const uid = req.userId ?? req.user?.userId;
+  if (!uid || !Number.isInteger(pid) || pid <= 0) return next();
+  const access = await loadProjectAccess(uid, pid);
+  if (access && isClientScoped(access) && !clientPortalRouteAllowed(req.method, req.path)) {
+    throw new AppError('This part of the project is not available in the client portal', 403, 'CLIENT_PORTAL_ONLY');
+  }
+  next();
+}));
+
 router.get('/projects/:pid/edit-lock', asyncHandler(async (req, res) => {
   ok(res, await editLock.getLock(callerId(req), idParam(req, 'pid')));
 }));
@@ -193,10 +212,25 @@ router.get('/workspaces', asyncHandler(async (req, res) => {
       },
     },
   });
-  ok(res, rows.map((r) => ({
-    id: r.workspace.id, name: r.workspace.name, slug: r.workspace.slug, description: r.workspace.description,
-    role: r.role, projectCount: r.workspace._count.projects, memberCount: r.workspace._count.members,
-  })));
+  const out = [];
+  // MEMBER chỉ là khách cổng ⇒ GUEST (permissions.portalOnlyWorkspaceIds) — cùng luật với loadWorkspaceRole.
+  const portalOnlyWs = await portalOnlyWorkspaceIds(userId);
+  for (const r of rows) {
+    let projectCount = r.workspace._count.projects;
+    let memberCount = r.workspace._count.members;
+    const role = effectiveWorkspaceRole(r.role as WorkspaceRole, portalOnlyWs.has(r.workspace.id));
+    // Khách của cổng (S2b): không lộ quy mô không gian — chỉ đếm những gì họ thấy được.
+    const only = role === 'GUEST' ? await workspaces.guestPeopleScope(userId, r.workspace.id, role) : null;
+    if (only) {
+      memberCount = only.length;
+      projectCount = (await projects.listProjects(userId, r.workspace.id)).length;
+    }
+    out.push({
+      id: r.workspace.id, name: r.workspace.name, slug: r.workspace.slug, description: r.workspace.description,
+      role, projectCount, memberCount,
+    });
+  }
+  ok(res, out);
 }));
 
 const workspaceBody = z.object({ name: z.string().min(1).max(100), description: z.string().max(2000).nullable().optional() });
@@ -489,8 +523,9 @@ router.get('/projects/:pid/issues/:num/comments', asyncHandler(async (req, res) 
   ok(res, await issues.listComments(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
 }));
 router.post('/projects/:pid/issues/:num/comments', asyncHandler(async (req, res) => {
-  const { bodyJson } = parse(z.object({ bodyJson: tiptapDoc }), req.body);
-  ok(res, await issues.addComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), bodyJson), 201);
+  // visibility (cổng khách S2b): INTERNAL = ghi chú nội bộ (mặc định) · PUBLIC = trả lời khách.
+  const { bodyJson, visibility } = parse(z.object({ bodyJson: tiptapDoc, visibility: z.enum(COMMENT_VISIBILITY).optional() }), req.body);
+  ok(res, await issues.addComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), bodyJson, 'USER', visibility), 201);
 }));
 router.patch('/projects/:pid/issues/:num/comments/:cid', asyncHandler(async (req, res) => {
   const { bodyJson } = parse(z.object({ bodyJson: tiptapDoc }), req.body);
@@ -1625,5 +1660,102 @@ router.post('/projects/:pid/pages/:num/comments', asyncHandler(async (req, res) 
 router.delete('/projects/:pid/pages/:num/comments/:cid', asyncHandler(async (req, res) => {
   ok(res, await pages.deleteComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'cid')));
 }));
+
+// ═══ CỔNG KHÁCH đợt S2b (04/10/2026, mô-đun `clientPortal`) ══════════
+// Quyền + mô-đun kiểm trong portal.service / issues.service. `?as=client` =
+// "Preview as client" của nhân viên (chỉ đọc). Khách bị cách ly chỉ gọi được
+// tuyến trong danh sách trắng (chốt ở đầu file) — /portal/** nằm trong đó.
+
+const asClient = (req: Request) => req.query.as === 'client';
+
+// Nhân viên: chia sẻ thẻ / tệp với khách.
+router.put('/projects/:pid/issues/:num/client-visible', asyncHandler(async (req, res) => {
+  const { visible } = parse(z.object({ visible: z.boolean() }), req.body);
+  ok(res, await issues.setIssueClientVisible(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), visible));
+}));
+router.patch('/projects/:pid/attachments/:aid/client', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ clientVisible: z.boolean().optional(), deliverable: z.boolean().optional() }).refine((b) => b.clientVisible !== undefined || b.deliverable !== undefined, 'Nothing to change'), req.body);
+  ok(res, await issues.setAttachmentClient(callerId(req), idParam(req, 'pid'), idParam(req, 'aid'), body));
+}));
+
+router.get('/projects/:pid/portal/overview', asyncHandler(async (req, res) => {
+  ok(res, await portal.overview(callerId(req), idParam(req, 'pid'), { asClient: asClient(req) }));
+}));
+router.get('/projects/:pid/portal/requests', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ filter: z.enum(['all', 'open', 'done', 'mine']).optional() }), req.query);
+  ok(res, await portal.listRequests(callerId(req), idParam(req, 'pid'), { asClient: asClient(req), filter: q.filter }));
+}));
+router.post('/projects/:pid/portal/requests', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    kind: z.enum(PORTAL_REQUEST_KINDS),
+    title: z.string().min(1, 'Title is required').max(255),
+    description: z.string().max(20_000).nullable().optional(),
+    priority: z.number().int().min(PRIORITY_MIN).max(PRIORITY_MAX).optional(),
+  }), req.body);
+  if (asClient(req)) throw new BadRequestError('Preview as client is read-only', 'WORK_PREVIEW_READONLY');
+  ok(res, await portal.submitRequest(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.get('/projects/:pid/portal/requests/:num', asyncHandler(async (req, res) => {
+  ok(res, await portal.getRequest(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), { asClient: asClient(req) }));
+}));
+router.get('/projects/:pid/portal/approvals', asyncHandler(async (req, res) => {
+  ok(res, await portal.listPortalApprovals(callerId(req), idParam(req, 'pid'), { asClient: asClient(req) }));
+}));
+router.get('/projects/:pid/portal/approvals/:aid', asyncHandler(async (req, res) => {
+  ok(res, await portal.getPortalApproval(callerId(req), idParam(req, 'pid'), idParam(req, 'aid'), { asClient: asClient(req) }));
+}));
+router.get('/projects/:pid/portal/documents', asyncHandler(async (req, res) => {
+  ok(res, await portal.documents(callerId(req), idParam(req, 'pid'), { asClient: asClient(req) }));
+}));
+router.get('/projects/:pid/portal/documents/:num', asyncHandler(async (req, res) => {
+  ok(res, await portal.portalPage(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), { asClient: asClient(req) }));
+}));
+router.get('/projects/:pid/portal/deliverables', asyncHandler(async (req, res) => {
+  ok(res, await portal.deliverables(callerId(req), idParam(req, 'pid'), { asClient: asClient(req) }));
+}));
+router.get('/projects/:pid/portal/activity', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ limit: z.coerce.number().int().min(1).max(200).optional() }), req.query);
+  ok(res, await portal.activity(callerId(req), idParam(req, 'pid'), { asClient: asClient(req), limit: q.limit }));
+}));
+router.get('/projects/:pid/portal/clients', asyncHandler(async (req, res) => {
+  ok(res, await portal.listClients(callerId(req), idParam(req, 'pid')));
+}));
+router.post('/projects/:pid/portal/invite', asyncHandler(async (req, res) => {
+  const { emails } = parse(z.object({ emails: z.array(z.string().email('Invalid email')).min(1).max(20) }), req.body);
+  ok(res, await portal.inviteClients(callerId(req), idParam(req, 'pid'), emails), 201);
+}));
+router.post('/projects/:pid/portal/uat', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    title: z.string().max(200).optional(),
+    description: z.string().max(5000).nullable().optional(),
+    versionId: id.nullable().optional(),
+    stageId: id.nullable().optional(),
+    issueNumbers: z.array(id).min(1).max(300),
+    pageNumbers: z.array(id).max(50).optional(),
+    attachmentIds: z.array(id).max(100).optional(),
+    approverIds: z.array(id).min(1).max(10),
+    mode: z.enum(APPROVAL_MODES).optional(),
+    environment: z.string().max(200).nullable().optional(),
+    build: z.string().max(120).nullable().optional(),
+    dueAt: z.coerce.date().nullable().optional(),
+  }), req.body);
+  ok(res, await portal.createUat(callerId(req), idParam(req, 'pid'), body), 201);
+}));
+router.post('/projects/:pid/portal/uat/:aid/decide', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    decision: z.enum(['APPROVE', 'REJECT']),
+    comment: z.string().max(5000).nullable().optional(),
+    conditions: z.string().max(5000).nullable().optional(),
+    points: z.array(z.object({ title: z.string().min(1).max(255), kind: z.enum(['BUG', 'CHANGE']), detail: z.string().max(5000).nullable().optional() })).max(30).optional(),
+  }), req.body);
+  if (asClient(req)) throw new BadRequestError('Preview as client is read-only', 'WORK_PREVIEW_READONLY');
+  ok(res, await portal.decideUat(callerId(req), idParam(req, 'pid'), idParam(req, 'aid'), body, { ip: req.ip ?? null }));
+}));
+router.get('/projects/:pid/portal/uat/:aid/certificate', asyncHandler(async (req, res) => {
+  ok(res, await portal.uatCertificate(callerId(req), idParam(req, 'pid'), idParam(req, 'aid'), { asClient: asClient(req) }));
+}));
+
+// Đợt S3a: Portfolio + Workload (cấp không gian, chỉ đọc) — tuyến ở work.portfolio.routes.ts.
+router.use(portfolioRoutes);
 
 export default router;

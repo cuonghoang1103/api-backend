@@ -16,7 +16,7 @@
 import crypto from 'node:crypto';
 import { AppError } from '../../middleware/errorHandler.js';
 import {
-  PROJECT_KINDS, STUDIO_MODULES, STUDIO_MODULES_S1, STUDIO_MODULES_S2A,
+  PROJECT_KINDS, STUDIO_MODULES, STUDIO_MODULES_S1, STUDIO_MODULES_S2A, STUDIO_MODULES_S2B,
   type ProjectKind, type StudioModule,
 } from './constants.js';
 
@@ -56,7 +56,8 @@ export function noModules(): ModuleMap {
  */
 export function defaultModulesFor(kind: ProjectKind): ModuleMap {
   const m = noModules();
-  if (kind === 'CLIENT') for (const k of [...STUDIO_MODULES_S1, ...STUDIO_MODULES_S2A]) m[k] = true;
+  // S2b: cổng khách bật mặc định cho dự án CLIENT MỚI — dự án tạo trước giữ settings.modules cũ (tắt).
+  if (kind === 'CLIENT') for (const k of [...STUDIO_MODULES_S1, ...STUDIO_MODULES_S2A, ...STUDIO_MODULES_S2B]) m[k] = true;
   return m;
 }
 

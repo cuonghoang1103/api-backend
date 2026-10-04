@@ -379,9 +379,12 @@ export async function addTimeOff(userId: number, workspaceId: number, input: { u
 }
 
 export async function listTimeOff(userId: number, workspaceId: number) {
-  await requireWorkspace(userId, workspaceId, 'workspace.view');
+  const role = await requireWorkspace(userId, workspaceId, 'workspace.view');
+  // Khách của cổng (S2b) chỉ thấy ngày nghỉ của chính mình — lịch nghỉ của đội là chuyện nội bộ.
+  const { isPortalClientInWorkspace } = await import('./permissions.js');
+  const self = role === 'GUEST' && (await isPortalClientInWorkspace(userId, workspaceId));
   return prisma.workTimeOff.findMany({
-    where: { workspaceId, endDate: { gte: new Date(Date.now() - 30 * DAY) } },
+    where: { workspaceId, endDate: { gte: new Date(Date.now() - 30 * DAY) }, ...(self ? { userId } : {}) },
     orderBy: { startDate: 'asc' },
     select: { id: true, userId: true, startDate: true, endDate: true, note: true, user: { select: PUBLIC_USER } },
   });

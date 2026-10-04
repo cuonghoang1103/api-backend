@@ -30,6 +30,7 @@ import { BadRequestError, ConflictError, ForbiddenError, NotFoundError, AppError
 import { logger } from '../../utils/logger.js';
 import { currentTargetHash, signedHash } from './approvalContent.js';
 import { auditProject } from './audit.js';
+import { maskUser, peopleFilterFor } from './clientPeople.js';
 import { PUBLIC_USER, slugify } from './common.js';
 import type { PageStatus, PageVisibility } from './constants.js';
 import { lineDiff, tiptapToMarkdown, type PmNode } from './docMarkdown.js';
@@ -37,7 +38,7 @@ import { getTemplate, listTemplates, stageTemplateMap } from './docTemplates.js'
 import { emitWorkEvent, type PageEventAction } from './events.js';
 import { mentionedUserIds, notifyWork } from './notify.js';
 import {
-  can, canManagePage, canModifyComment, canViewPage, docAccess, loadProjectAccess, requireProject, type ProjectAccess,
+  can, canManagePage, canModifyComment, canViewPage, docAccess, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess,
 } from './permissions.js';
 import { assertModule, modulesOf, stableStringify } from './studio.js';
 import { tiptapToText } from './tiptapText.js';
@@ -155,8 +156,10 @@ export async function listPages(userId: number, projectId: number, q: { stageId?
   });
   const seen = rows.filter((r) => canViewPage(ctx.access.role, ctx.access.workspaceRole, r.visibility));
   const visible = new Set(seen.map((r) => r.id));
+  // Khách của cổng: chủ trang ngoài phạm vi người khách được thấy ⇒ "Project team" (clientPeople.ts).
+  const people = await peopleFilterFor(ctx.access, userId);
   const pages = seen
-    .map((r) => ({ ...r, parentId: ctx.da.view === 'ALL' ? r.parentId : visibleParent(rows, visible, r.id) }))
+    .map((r) => ({ ...r, owner: maskUser(r.owner, people), parentId: ctx.da.view === 'ALL' ? r.parentId : visibleParent(rows, visible, r.id) }))
     .filter((r) => (q.stageId ? r.stageId === q.stageId : true));
   return {
     pages,
@@ -202,13 +205,17 @@ export async function getPage(userId: number, projectId: number, num: number) {
       },
     }),
     prisma.workPageVersion.aggregate({ where: { pageId: p.id }, _max: { n: true }, _count: true }),
-    pageIssues(p.id, ctx.access.key),
+    // Khách bị cách ly (cổng khách S2b): chỉ thấy thẻ ĐÃ CHIA SẺ trong danh sách thẻ liên kết.
+    pageIssues(p.id, ctx.access.key, isClientScoped(ctx.access)),
     ancestorsOf(ctx, p.parentId),
     prisma.workPage.findMany({ where: { parentId: p.id, deletedAt: null }, orderBy: [{ position: 'asc' }, { id: 'asc' }], select: { id: true, number: true, title: true, status: true, visibility: true } }),
   ]);
+  const people = await peopleFilterFor(ctx.access, userId);
   return {
     ...p,
     ...full,
+    owner: maskUser(full.owner, people),
+    lastEditedBy: maskUser(full.lastEditedBy, people),
     projectKey: ctx.access.key,
     currentVersion: versions._max.n ?? 0,
     versionCount: versions._count,
@@ -219,7 +226,8 @@ export async function getPage(userId: number, projectId: number, num: number) {
     approvalsOn: ctx.access.modules.approvals,
     canEdit: ctx.da.edit,
     canManage: canManagePage(ctx.access.role, ctx.access.workspaceRole, userId, p.ownerId),
-    canComment: can(ctx.access.role, 'comment.create'),
+    // Bình luận trang là trao đổi nội bộ của đội — khách bị cách ly không đọc/viết (tuyến bị chặn).
+    canComment: can(ctx.access.role, 'comment.create') && !isClientScoped(ctx.access),
     canRequestApproval: ctx.access.modules.approvals && ctx.da.edit && can(ctx.access.role, 'approval.create'),
   };
 }
@@ -236,9 +244,9 @@ async function ancestorsOf(ctx: DocCtx, parentId: number | null) {
   return out;
 }
 
-async function pageIssues(pageId: number, projectKey: string) {
+async function pageIssues(pageId: number, projectKey: string, sharedOnly = false) {
   const rows = await prisma.workPageIssueLink.findMany({
-    where: { pageId, issue: { deletedAt: null } },
+    where: { pageId, issue: { deletedAt: null, ...(sharedOnly ? { clientVisible: true } : {}) } },
     orderBy: { id: 'asc' },
     select: { id: true, createdAt: true, issue: { select: ISSUE_BRIEF } },
   });
@@ -570,6 +578,8 @@ export async function unlinkIssue(userId: number, projectId: number, num: number
 export async function issuePages(userId: number, projectId: number, issueNumber: number) {
   const ctx = await docCtx(userId, projectId);
   const i = await issueByNumber(projectId, issueNumber);
+  // Khách bị cách ly: thẻ chưa chia sẻ ⇒ 404 như thẻ không tồn tại.
+  if (isClientScoped(ctx.access) && !(await prisma.workIssue.count({ where: { id: i.id, clientVisible: true } }))) throw new NotFoundError('Issue not found');
   const rows = await prisma.workPageIssueLink.findMany({
     where: { issueId: i.id, page: { deletedAt: null, projectId } },
     orderBy: { id: 'asc' },

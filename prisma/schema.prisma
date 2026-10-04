@@ -10054,6 +10054,8 @@ model WorkProject {
   issueAliases  WorkIssueAlias[]
   /// Tài liệu dự án kiểu Confluence (đợt S2a, mô-đun `docs`).
   pages         WorkPage[]
+  /// Nghiệm thu UAT (đợt S2b, mô-đun `clientPortal`).
+  uatRequests   WorkUatRequest[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
   clientRequest ProjectRequest?
 
@@ -10180,6 +10182,10 @@ model WorkIssue {
   teamId               Int?      @map("team_id")
   /// Giai đoạn của dự án (mô-đun `stages`). Đổi qua applyIssueChange.
   stageId              Int?      @map("stage_id")
+  /// Cổng khách (đợt S2b): thẻ ĐÃ CHIA SẺ cho khách. Khách (vai CLIENT, dự án bật
+  /// clientPortal) chỉ thấy thẻ có cờ này ở MỌI đường đọc. Thẻ khách tự gửi ⇒ true.
+  clientVisible        Boolean   @default(false) @map("client_visible")
+  clientSharedAt       DateTime? @map("client_shared_at")
   title                String    @db.VarChar(255)
   /// JSON của TipTap — cùng định dạng với Ghi chú để dùng lại trình soạn thảo.
   descriptionJson      Json?     @map("description_json")
@@ -10249,6 +10255,7 @@ model WorkIssue {
   @@index([fixVersionId], name: "idx_work_issue_fix_version")
   @@index([teamId], name: "idx_work_issue_team")
   @@index([stageId], name: "idx_work_issue_stage")
+  @@index([projectId, clientVisible], name: "idx_work_issue_client")
   @@map("work_issues")
 }
 
@@ -10324,15 +10331,19 @@ model WorkIssueComponent {
 
 /// Bình luận. authorId null + isAi = true là lời của trợ lý AI.
 model WorkComment {
-  id        Int       @id @default(autoincrement())
-  issueId   Int       @map("issue_id")
-  authorId  Int?      @map("author_id")
-  isAi      Boolean   @default(false) @map("is_ai")
-  bodyJson  Json      @map("body_json")
-  bodyText  String    @map("body_text") @db.Text
-  createdAt DateTime  @default(now()) @map("created_at")
-  editedAt  DateTime? @map("edited_at")
-  deletedAt DateTime? @map("deleted_at")
+  id         Int       @id @default(autoincrement())
+  issueId    Int       @map("issue_id")
+  authorId   Int?      @map("author_id")
+  isAi       Boolean   @default(false) @map("is_ai")
+  bodyJson   Json      @map("body_json")
+  bodyText   String    @map("body_text") @db.Text
+  /// Cổng khách (đợt S2b): INTERNAL = ghi chú nội bộ (mặc định) · PUBLIC = trả lời khách.
+  /// Khách (vai CLIENT ở dự án bật clientPortal) chỉ thấy PUBLIC; bình luận của khách luôn PUBLIC.
+  /// Dự án không bật cổng khách: cột này không được đọc (hành vi cũ).
+  visibility String    @default("INTERNAL") @db.VarChar(16)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  editedAt   DateTime? @map("edited_at")
+  deletedAt  DateTime? @map("deleted_at")
 
   issue     WorkIssue             @relation(fields: [issueId], references: [id], onDelete: Cascade)
   author    User?                 @relation("WorkCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
@@ -10360,16 +10371,21 @@ model WorkCommentReaction {
 }
 
 model WorkAttachment {
-  id         Int      @id @default(autoincrement())
-  issueId    Int      @map("issue_id")
-  uploaderId Int?     @map("uploader_id")
-  r2Key      String   @map("r2_key") @db.VarChar(500)
-  fileName   String   @map("file_name") @db.VarChar(255)
-  mime       String   @db.VarChar(100)
-  size       Int
+  id            Int       @id @default(autoincrement())
+  issueId       Int       @map("issue_id")
+  uploaderId    Int?      @map("uploader_id")
+  r2Key         String    @map("r2_key") @db.VarChar(500)
+  fileName      String    @map("file_name") @db.VarChar(255)
+  mime          String    @db.VarChar(100)
+  size          Int
   /// Bằng chứng của một lần chạy test (ảnh chụp lỗi…). File vẫn thuộc thẻ test case.
-  runId      Int?     @map("run_id")
-  createdAt  DateTime @default(now()) @map("created_at")
+  runId         Int?      @map("run_id")
+  /// Cổng khách (đợt S2b): tệp chia sẻ cho khách (thẻ cũng phải được chia sẻ). Tệp khách tải lên ⇒ true.
+  clientVisible Boolean   @default(false) @map("client_visible")
+  /// Tệp BÀN GIAO (Deliverables trong cổng khách) — luôn kèm clientVisible.
+  deliverable   Boolean   @default(false)
+  deliveredAt   DateTime? @map("delivered_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
 
   issue    WorkIssue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
   uploader User?        @relation("WorkAttachmentUploader", fields: [uploaderId], references: [id], onDelete: SetNull)
@@ -10721,8 +10737,9 @@ model WorkVersion {
   position     Int       @default(0)
   createdAt    DateTime  @default(now()) @map("created_at")
 
-  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  issues  WorkIssue[]
+  project     WorkProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issues      WorkIssue[]
+  uatRequests WorkUatRequest[]
 
   @@unique([projectId, name], name: "uk_work_version", map: "uk_work_version")
   @@map("work_versions")
@@ -11092,11 +11109,12 @@ model WorkStage {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  project   WorkProject    @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  gateIssue WorkIssue?     @relation("WorkStageGateIssue", fields: [gateIssueId], references: [id], onDelete: SetNull)
-  issues    WorkIssue[]    @relation("WorkIssueStage")
-  approvals WorkApproval[]
-  pages     WorkPage[]
+  project     WorkProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  gateIssue   WorkIssue?       @relation("WorkStageGateIssue", fields: [gateIssueId], references: [id], onDelete: SetNull)
+  issues      WorkIssue[]      @relation("WorkIssueStage")
+  approvals   WorkApproval[]
+  pages       WorkPage[]
+  uatRequests WorkUatRequest[]
 
   @@unique([projectId, n], name: "uk_work_stage_n", map: "uk_work_stage_n")
   @@unique([projectId, slug], name: "uk_work_stage_slug", map: "uk_work_stage_slug")
@@ -11133,6 +11151,8 @@ model WorkApproval {
   page      WorkPage?          @relation(fields: [pageId], references: [id], onDelete: Cascade)
   createdBy User?              @relation("WorkApprovalCreator", fields: [createdById], references: [id], onDelete: SetNull)
   steps     WorkApprovalStep[]
+  /// targetType UAT (đợt S2b): chi tiết nghiệm thu (hạng mục, tài liệu, điều kiện, thẻ sinh ra).
+  uat       WorkUatRequest?
 
   @@index([projectId, status], name: "idx_work_approval_project")
   @@index([issueId], name: "idx_work_approval_issue")
@@ -11316,6 +11336,44 @@ model WorkPageComment {
 
   @@index([pageId, createdAt], name: "idx_work_page_comment_page")
   @@map("work_page_comments")
+}
+
+// ─── CT Work — CỔNG KHÁCH đợt S2b (04/10/2026, mô-đun `clientPortal`) ──────────
+
+/// Một yêu cầu nghiệm thu (UAT sign-off) — đi kèm MỘT WorkApproval (targetType UAT)
+/// mà người duyệt là khách. Hạng mục = thẻ clientVisible (id, chụp lúc tạo); tài liệu =
+/// số trang CLIENT; tệp = id tệp clientVisible. `contentHash` của phê duyệt băm cả bộ
+/// (approvalContent.ts uatContent). Từ chối ⇒ thẻ BUG/CR sinh ra ghi ở createdIssueIds.
+model WorkUatRequest {
+  id              Int      @id @default(autoincrement())
+  projectId       Int      @map("project_id")
+  approvalId      Int      @unique(map: "uk_work_uat_approval") @map("approval_id")
+  versionId       Int?     @map("version_id")
+  stageId         Int?     @map("stage_id")
+  /// Lần nghiệm thu thứ mấy của cùng mốc (1, 2…) — để biên bản ghi "lần 2".
+  round           Int      @default(1)
+  environment     String?  @db.VarChar(200)
+  build           String?  @db.VarChar(120)
+  /// number[] — id thẻ (work_issues.id) là hạng mục nghiệm thu.
+  itemIssueIds    Json     @default("[]") @map("item_issue_ids")
+  /// number[] — số trang tài liệu (work_pages.number, visibility CLIENT).
+  pageNumbers     Json     @default("[]") @map("page_numbers")
+  /// number[] — id tệp (work_attachments.id, clientVisible).
+  attachmentIds   Json     @default("[]") @map("attachment_ids")
+  /// Khách duyệt CÓ ĐIỀU KIỆN: điều kiện ghi ở đây (và trên biên bản).
+  conditions      String?  @db.Text
+  /// number[] — thẻ BUG/CR tự sinh khi khách từ chối.
+  createdIssueIds Json     @default("[]") @map("created_issue_ids")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  project  WorkProject  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  approval WorkApproval @relation(fields: [approvalId], references: [id], onDelete: Cascade)
+  version  WorkVersion? @relation(fields: [versionId], references: [id], onDelete: SetNull)
+  stage    WorkStage?   @relation(fields: [stageId], references: [id], onDelete: SetNull)
+
+  @@index([projectId], name: "idx_work_uat_project")
+  @@map("work_uat_requests")
 }
 
 /// KEY GIA HẠN hạn mức AI Code (02/10/2026) — mỗi hàng là MỘT lần người dùng

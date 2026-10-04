@@ -660,6 +660,22 @@ async function clientProgressUrl(projectId: number, code: string): Promise<strin
 }
 
 /**
+ * Cổng khách (CT Work S2b): dự án bật cổng khách VÀ email của phiếu là tài khoản đã
+ * là KHÁCH của dự án ⇒ trỏ thẳng vào /work/<ws>/<KEY>/portal (đăng nhập mới xem được).
+ * Khách chưa có tài khoản / chưa được mời ⇒ null — người gọi lùi về link chỉ đọc cũ.
+ */
+async function clientPortalUrl(projectId: number, email: string): Promise<string | null> {
+  const { portalUrlFor } = await import('./work/portal.service.js');
+  const path = await portalUrlFor(projectId);
+  if (!path) return null;
+  const member = await prisma.workProjectMember.findFirst({
+    where: { projectId, role: 'CLIENT', user: { email: { equals: email.trim(), mode: 'insensitive' } } },
+    select: { id: true },
+  });
+  return member ? frontendUrl(path) : null;
+}
+
+/**
  * Tra cứu công khai: CHỈ trả khi cả mã VÀ email khớp. Không khớp / sai định
  * dạng / không tồn tại ⇒ null — route biến mọi trường hợp đó thành CÙNG một 404.
  */
@@ -674,6 +690,8 @@ export async function lookupProjectRequest(code: string, email: string): Promise
     },
   });
   if (!r || !emailMatches(r.email, n.email)) return null;
-  const progressUrl = r.workProjectId && r.status === 'PROJECT_CREATED' ? await clientProgressUrl(r.workProjectId, r.code) : null;
+  const progressUrl = r.workProjectId && r.status === 'PROJECT_CREATED'
+    ? (await clientPortalUrl(r.workProjectId, r.email)) ?? (await clientProgressUrl(r.workProjectId, r.code))
+    : null;
   return toPublicView(r, progressUrl);
 }

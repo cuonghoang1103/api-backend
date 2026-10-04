@@ -182,6 +182,8 @@ describe('khopTuyenWeb', () => {
       expect(k?.thamSo, v).toEqual({ ws: 'acme', key: 'WEB' });
     }
 
+    expect(khopTuyenWeb('/work/acme/WEB/portal')?.tuyen.mau).toBe('/work/:ws/:key/portal');
+    expect(khopTuyenWeb('/work/acme/WEB/portal/uat/5')?.thamSo).toEqual({ ws: 'acme', key: 'WEB', aid: '5' });
     const dd = khopTuyenWeb('/work/acme/WEB/docs/12');
     expect(dd?.tuyen.mau).toBe('/work/:ws/:key/docs/:num');
     expect(dd?.thamSo).toEqual({ ws: 'acme', key: 'WEB', num: '12' });
@@ -265,8 +267,10 @@ describe('khopTuyenWeb', () => {
     // 04/10/2026: +6 Code Lab (cả cây web thay màn native).
     // 04/10/2026: +2 CT Work Đợt S2a — tài liệu dự án (docs, docs/:num).
     // 04/10/2026: +2 Content Creator AI (/creator/quay-khoa-hoc, /creator/y-tuong-ai).
+    // 04/10/2026: +2 CT Work Đợt S3a (/work/:ws/portfolio, /work/:ws/workload).
+    // 04/10/2026: +2 CT Work Đợt S2b — cổng khách (/work/:ws/:key/portal, /work/:ws/:key/portal/uat/:aid).
     // 04/10/2026: +1 chi tiết dự án (/projects/:slug → ProjectPageClient).
-    expect(thay.size).toBe(119);
+    expect(thay.size).toBe(123);
   });
 });
 

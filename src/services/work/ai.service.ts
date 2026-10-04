@@ -781,24 +781,34 @@ export async function insights(userId: number, projectId: number) {
 export async function weeklyReport(userId: number, projectId: number, input: { audience: 'teacher' | 'client' | 'team'; language?: 'en' | 'vi' }) {
   const access = await requireProject(userId, projectId, 'ai.use');
   const since = new Date(Date.now() - 7 * 86_400_000);
+  // Cổng khách (S2b): báo cáo CHO KHÁCH ở dự án bật cổng khách chỉ dựa trên thẻ ĐÃ CHIA SẺ —
+  // không tên người, không khối lượng việc nội bộ (AI không được lộ thứ khách không thấy).
+  const forClient = input.audience === 'client' && access.modules.clientPortal;
+  const shared = forClient ? { clientVisible: true } : {};
   const [done, created, risks, project] = await Promise.all([
     prisma.workIssue.findMany({
-      where: { projectId, deletedAt: null, resolvedAt: { gte: since }, type: { level: { not: -1 } } },
+      where: { projectId, deletedAt: null, resolvedAt: { gte: since }, type: { level: { not: -1 } }, ...shared },
       select: { number: true, title: true, assignee: { select: { username: true } }, type: { select: { key: true } } },
       take: 80,
     }),
-    prisma.workIssue.count({ where: { projectId, deletedAt: null, createdAt: { gte: since } } }),
+    prisma.workIssue.count({ where: { projectId, deletedAt: null, createdAt: { gte: since }, ...shared } }),
     insights(userId, projectId),
     prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { name: true, key: true } }),
   ]);
+  const sharedKeys = forClient
+    ? new Set((await prisma.workIssue.findMany({ where: { projectId, clientVisible: true, deletedAt: null }, select: { number: true } })).map((i) => `${access.key}-${i.number}`))
+    : null;
+  const keep = (k: string) => !sharedKeys || sharedKeys.has(k);
   const facts = [
     `Project ${project.key} "${project.name}". Period: ${since.toISOString().slice(0, 10)} → ${new Date().toISOString().slice(0, 10)}.`,
-    `Completed (${done.length}): ${done.map((d) => `${access.key}-${d.number} [${d.type.key}] ${d.title}${d.assignee ? ` (@${d.assignee.username})` : ''}`).join('; ') || 'none'}.`,
+    `Completed (${done.length}): ${done.map((d) => `${access.key}-${d.number} [${d.type.key}] ${d.title}${d.assignee && !forClient ? ` (@${d.assignee.username})` : ''}`).join('; ') || 'none'}.`,
     `New issues created: ${created}.`,
-    `Overdue: ${risks.overdue.map((i) => `${i.key} ${i.title}`).join('; ') || 'none'}.`,
-    `Stuck in progress > 5 days: ${risks.stale.map((i) => `${i.key} (${i.idleDays}d)`).join('; ') || 'none'}.`,
-    risks.sprintRisk ? risks.sprintRisk.summary : 'No active sprint.',
-    `Workload: ${risks.loads.map((l) => `@${l.username} ${l.issues} open`).join(', ')}.`,
+    `Overdue: ${risks.overdue.filter((i) => keep(i.key)).map((i) => `${i.key} ${i.title}`).join('; ') || 'none'}.`,
+    `Stuck in progress > 5 days: ${risks.stale.filter((i) => keep(i.key)).map((i) => `${i.key} (${i.idleDays}d)`).join('; ') || 'none'}.`,
+    ...(forClient ? [] : [
+      risks.sprintRisk ? risks.sprintRisk.summary : 'No active sprint.',
+      `Workload: ${risks.loads.map((l) => `@${l.username} ${l.issues} open`).join(', ')}.`,
+    ]),
   ].join('\n');
   const who = input.audience === 'teacher' ? 'the course lecturer (formal, highlight each member\'s work)' : input.audience === 'client' ? 'the client (non-technical, outcomes and risks)' : 'the team (direct, action-oriented)';
   const system = `Write a weekly status report for ${who}. Use ONLY the facts given — do not invent numbers, names or work. Markdown with sections: Summary, Completed this week, Risks & blockers, Next steps. ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"report":"markdown"}`;

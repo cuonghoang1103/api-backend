@@ -14,12 +14,15 @@ import {
 import { getStorageProvider } from '../../storage/StorageProvider.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { displayName, PUBLIC_USER } from './common.js';
-import type { IssueTypeKey, LinkType } from './constants.js';
+import type { CommentVisibility, IssueTypeKey, LinkType } from './constants.js';
+export { commentVisibilityFor } from './permissions.js';
 import { emitWorkEvent, projectRoom, type WorkActor } from './events.js';
 import { getIO } from '../../socket/messaging.socket.js';
 import { DEFAULT_TEMPLATE_NAMES, defaultIssueTemplate, type IssueTemplateDoc } from './templates.js';
 import { applyIssueChange, createIssue, moveIssue, type IssuePatch, type MoveInput } from './issueChange.js';
-import { canDeleteIssue, canModifyComment, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
+import { clientPeopleIds, maskUser, peopleFilterFor, TEAM_USER, type PeopleFilter } from './clientPeople.js';
+import { canDeleteIssue, canModifyComment, commentVisibilityFor, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
+import { assertModule } from './studio.js';
 import { tiptapToText } from './tiptapText.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
@@ -34,7 +37,7 @@ const actorOf = (userId: number, via: Via = 'USER'): WorkActor => ({ kind: via, 
 /** Trường của một thẻ trên board/danh sách — gọn, không mô tả. */
 export const CARD_SELECT = {
   id: true, number: true, title: true, typeId: true, statusId: true, parentId: true, sprintId: true, fixVersionId: true,
-  teamId: true, stageId: true,
+  teamId: true, stageId: true, clientVisible: true,
   priority: true, assigneeId: true, reporterId: true, storyPoints: true, dueDate: true, rank: true, version: true,
   resolvedAt: true, createdAt: true, updatedAt: true,
   labels: { select: { labelId: true } },
@@ -57,8 +60,34 @@ export function toCard(r: CardRow) {
 }
 
 async function findIssue(projectId: number, number: number) {
-  const i = await prisma.workIssue.findFirst({ where: { projectId, number, deletedAt: null }, select: { id: true, reporterId: true } });
+  const i = await prisma.workIssue.findFirst({ where: { projectId, number, deletedAt: null }, select: { id: true, reporterId: true, clientVisible: true } });
   if (!i) throw new NotFoundError('Issue not found');
+  return i;
+}
+
+// ─── Cổng khách (đợt S2b): lọc cho khách bị cách ly ───────────────
+
+/**
+ * Điều kiện thêm vào MỌI truy vấn thẻ đọc cho người xem này: khách bị cách ly
+ * (vai CLIENT + clientPortal) chỉ thấy thẻ ĐÃ CHIA SẺ; người khác không thêm gì.
+ */
+export function clientIssueWhere(access: Pick<ProjectAccess, 'role' | 'modules'>): Prisma.WorkIssueWhereInput {
+  return isClientScoped(access) ? { clientVisible: true } : {};
+}
+
+/**
+ * Thẻ gọn cho khách bị cách ly: bỏ số đếm gồm cả phần CHƯA chia sẻ (bình luận nội
+ * bộ, tệp nội bộ, việc con nội bộ) và điểm ước lượng (số liệu nội bộ).
+ */
+export function scrubCardForClient<T extends Record<string, unknown>>(card: T, scoped: boolean): T {
+  if (!scoped) return card;
+  return { ...card, commentCount: null, attachmentCount: null, subtaskCount: null, storyPoints: null, teamId: null, version: 0 };
+}
+
+/** Như findIssue, nhưng thẻ chưa chia sẻ ⇒ 404 với khách bị cách ly (không lộ là thẻ tồn tại). */
+async function findVisibleIssue(access: ProjectAccess, number: number) {
+  const i = await findIssue(access.projectId, number);
+  if (isClientScoped(access) && !i.clientVisible) throw new NotFoundError('Issue not found');
   return i;
 }
 
@@ -87,8 +116,8 @@ export interface IssueFilters {
 }
 
 export async function listIssues(userId: number, projectId: number, f: IssueFilters) {
-  await requireProject(userId, projectId, 'project.view');
-  const and: Prisma.WorkIssueWhereInput[] = [{ projectId, deletedAt: null }];
+  const access = await requireProject(userId, projectId, 'project.view');
+  const and: Prisma.WorkIssueWhereInput[] = [{ projectId, deletedAt: null }, clientIssueWhere(access)];
   if (f.statusIds?.length) and.push({ statusId: { in: f.statusIds } });
   if (f.typeIds?.length) and.push({ typeId: { in: f.typeIds } });
   if (f.assigneeIds?.length) {
@@ -131,7 +160,7 @@ export async function listIssues(userId: number, projectId: number, f: IssueFilt
     select: CARD_SELECT,
   });
   const hasMore = rows.length > limit;
-  const items = rows.slice(0, limit).map(toCard);
+  const items = rows.slice(0, limit).map((r) => scrubCardForClient(toCard(r), isClientScoped(access)));
   return { items, total, nextCursor: hasMore ? items[items.length - 1].rank : null };
 }
 
@@ -145,9 +174,9 @@ export const BOARD_LIMIT = 2000;
  * mới tạo trông như hỏng.
  */
 export async function getBoard(userId: number, projectId: number, sprintId?: number) {
-  await requireProject(userId, projectId, 'project.view');
+  const access = await requireProject(userId, projectId, 'project.view');
   const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { type: true } });
-  const where: Prisma.WorkIssueWhereInput = { projectId, deletedAt: null, type: { level: { not: 1 } } };
+  const where: Prisma.WorkIssueWhereInput = { projectId, deletedAt: null, type: { level: { not: 1 } }, ...clientIssueWhere(access) };
   const recentOrOpen: Prisma.WorkIssueWhereInput[] = [{ resolvedAt: null }, { resolvedAt: { gte: new Date(Date.now() - 14 * 86_400_000) } }];
   let sprint = null;
   let fallback = false;
@@ -168,49 +197,70 @@ export async function getBoard(userId: number, projectId: number, sprintId?: num
   const rows = await prisma.workIssue.findMany({ where, orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: BOARD_LIMIT + 1, select: CARD_SELECT });
   const truncated = rows.length > BOARD_LIMIT;
   const total = truncated ? await prisma.workIssue.count({ where }) : rows.length;
-  return { mode: project.type, sprint, fallback, issues: rows.slice(0, BOARD_LIMIT).map(toCard), truncated, total, limit: BOARD_LIMIT };
+  return { mode: project.type, sprint, fallback, issues: rows.slice(0, BOARD_LIMIT).map((r) => scrubCardForClient(toCard(r), isClientScoped(access))), truncated, total, limit: BOARD_LIMIT };
 }
 
 export async function getIssueDetail(userId: number, projectId: number, number: number) {
   const access = await requireProject(userId, projectId, 'project.view');
+  const scoped = isClientScoped(access);
   const issue = await prisma.workIssue.findFirst({
-    where: { projectId, number, deletedAt: null },
+    where: { projectId, number, deletedAt: null, ...clientIssueWhere(access) },
     select: {
       ...CARD_SELECT,
+      clientSharedAt: true,
       descriptionJson: true,
       originalEstimateMin: true, remainingEstimateMin: true, timeSpentMin: true, startDate: true, resolution: true,
       assignee: { select: PUBLIC_USER },
       reporter: { select: PUBLIC_USER },
       parent: { select: { id: true, number: true, title: true, typeId: true, statusId: true } },
       children: {
-        where: { deletedAt: null },
+        where: { deletedAt: null, ...(scoped ? { clientVisible: true } : {}) },
         orderBy: [{ rank: 'asc' }, { id: 'asc' }],
         select: { id: true, number: true, title: true, typeId: true, statusId: true, assigneeId: true, priority: true },
       },
       components: { select: { componentId: true } },
-      linksOut: { select: { id: true, type: true, toIssue: { select: { id: true, number: true, title: true, statusId: true, typeId: true, deletedAt: true, project: { select: { key: true } } } } } },
-      linksIn: { select: { id: true, type: true, fromIssue: { select: { id: true, number: true, title: true, statusId: true, typeId: true, deletedAt: true, project: { select: { key: true } } } } } },
-      attachments: { orderBy: { createdAt: 'asc' }, select: { id: true, fileName: true, mime: true, size: true, createdAt: true, uploader: { select: PUBLIC_USER } } },
+      linksOut: { select: { id: true, type: true, toIssue: { select: { id: true, number: true, title: true, statusId: true, typeId: true, deletedAt: true, projectId: true, clientVisible: true, project: { select: { key: true } } } } } },
+      linksIn: { select: { id: true, type: true, fromIssue: { select: { id: true, number: true, title: true, statusId: true, typeId: true, deletedAt: true, projectId: true, clientVisible: true, project: { select: { key: true } } } } } },
+      attachments: {
+        where: scoped ? { clientVisible: true } : {},
+        orderBy: { createdAt: 'asc' },
+        select: { id: true, fileName: true, mime: true, size: true, createdAt: true, clientVisible: true, deliverable: true, uploader: { select: PUBLIC_USER } },
+      },
       watchers: { select: { userId: true } },
     },
   });
-  if (!issue) return throwIfMoved(userId, projectId, number);
+  if (!issue) return scoped ? Promise.reject(new NotFoundError('Issue not found')) : throwIfMoved(userId, projectId, number);
   const { linksOut, linksIn, watchers, components, ...rest } = issue;
   const brief = (i: { id: number; number: number; title: string; statusId: number; typeId: number; project: { key: string } }) => ({
     id: i.id, key: `${i.project.key}-${i.number}`, number: i.number, title: i.title, statusId: i.statusId, typeId: i.typeId,
   });
+  // Khách bị cách ly: chỉ liên kết tới thẻ ĐÃ CHIA SẺ của CHÍNH dự án này (không lộ dự án khác).
+  const linkOk = (i: { deletedAt: Date | null; projectId: number; clientVisible: boolean }) => !i.deletedAt && (!scoped || (i.projectId === projectId && i.clientVisible));
+  const detail = pickDetail(rest);
+  if (scoped) {
+    // Ước lượng/giờ làm là số liệu nội bộ (worklog) — khách không thấy.
+    Object.assign(detail, { originalEstimateMin: null, remainingEstimateMin: null, timeSpentMin: null });
+    // Người: chỉ người khách được thấy (clientPeople.ts) — còn lại "Project team".
+    const f = await clientPeopleIds(projectId, userId);
+    Object.assign(detail, {
+      assignee: maskUser(issue.assignee, f),
+      reporter: maskUser(issue.reporter, f),
+      attachments: issue.attachments.map((a) => ({ ...a, uploader: maskUser(a.uploader, f) })),
+    });
+  }
   return {
-    ...toCard(rest as unknown as CardRow),
-    ...pickDetail(rest),
-    componentIds: components.map((c) => c.componentId),
+    ...scrubCardForClient(toCard(rest as unknown as CardRow), scoped),
+    ...detail,
+    clientSharedAt: issue.clientSharedAt,
+    componentIds: scoped ? [] : components.map((c) => c.componentId),
     // Lưu một chiều, đọc hai chiều: "A blocks B" hiện ở B thành "is blocked by A".
     links: [
-      ...linksOut.filter((l) => !l.toIssue.deletedAt).map((l) => ({ id: l.id, type: l.type as LinkType, direction: 'outward' as const, issue: brief(l.toIssue) })),
-      ...linksIn.filter((l) => !l.fromIssue.deletedAt).map((l) => ({ id: l.id, type: l.type as LinkType, direction: 'inward' as const, issue: brief(l.fromIssue) })),
+      ...linksOut.filter((l) => linkOk(l.toIssue)).map((l) => ({ id: l.id, type: l.type as LinkType, direction: 'outward' as const, issue: brief(l.toIssue) })),
+      ...linksIn.filter((l) => linkOk(l.fromIssue)).map((l) => ({ id: l.id, type: l.type as LinkType, direction: 'inward' as const, issue: brief(l.fromIssue) })),
     ],
     watcherCount: watchers.length,
     isWatching: watchers.some((w) => w.userId === userId),
-    canDelete: canDeleteIssue(access.role, userId, issue.reporterId),
+    canDelete: !scoped && canDeleteIssue(access.role, userId, issue.reporterId),
   };
 }
 
@@ -474,26 +524,37 @@ function commentBody(bodyJson: unknown) {
 }
 
 const COMMENT_SELECT = {
-  id: true, bodyJson: true, isAi: true, createdAt: true, editedAt: true, author: { select: PUBLIC_USER },
+  id: true, bodyJson: true, isAi: true, visibility: true, createdAt: true, editedAt: true, author: { select: PUBLIC_USER },
 } satisfies Prisma.WorkCommentSelect;
 
 export async function listComments(userId: number, projectId: number, number: number) {
-  await requireProject(userId, projectId, 'project.view');
-  const { id } = await findIssue(projectId, number);
-  const comments = await prisma.workComment.findMany({ where: { issueId: id, deletedAt: null }, orderBy: { createdAt: 'asc' }, take: 500, select: COMMENT_SELECT });
+  const access = await requireProject(userId, projectId, 'project.view');
+  const { id } = await findVisibleIssue(access, number);
+  // Khách bị cách ly chỉ đọc "Reply to client" (PUBLIC) — ghi chú nội bộ không bao giờ rời server.
+  const comments = await prisma.workComment.findMany({
+    where: { issueId: id, deletedAt: null, ...(isClientScoped(access) ? { visibility: 'PUBLIC' } : {}) },
+    orderBy: { createdAt: 'asc' }, take: 500, select: COMMENT_SELECT,
+  });
   // Một lượt đọc cảm xúc cho MỌI bình luận của thẻ (không N+1).
   const byComment = await reactionSummaries(comments.map((c) => c.id), userId);
-  return comments.map((c) => ({ ...c, reactions: byComment.get(c.id) ?? [] }));
+  // Khách: người thả cảm xúc ngoài phạm vi ⇒ "Project team" (vẫn đếm, không lộ tên).
+  const f = await peopleFilterFor(access, userId);
+  return comments.map((c) => ({ ...c, author: maskUser(c.author, f), reactions: maskReactions(byComment.get(c.id) ?? [], f) }));
 }
 
-export async function addComment(userId: number, projectId: number, number: number, bodyJson: Prisma.InputJsonValue, via: Via = 'USER') {
-  await requireProject(userId, projectId, 'comment.create');
-  const { id } = await findIssue(projectId, number);
+export async function addComment(
+  userId: number, projectId: number, number: number, bodyJson: Prisma.InputJsonValue, via: Via = 'USER', visibility?: CommentVisibility,
+) {
+  const access = await requireProject(userId, projectId, 'comment.create');
+  const issue = await findVisibleIssue(access, number);
+  const { id } = issue;
+  // Trợ lý AI luôn soạn ghi chú NỘI BỘ — không bao giờ tự trả lời khách.
+  const vis = commentVisibilityFor(access, issue.clientVisible, via === 'AI' ? 'INTERNAL' : visibility);
   const bodyText = commentBody(bodyJson);
   const comment = await prisma.$transaction(async (tx) => {
     // Bình luận AI soạn: vẫn ghi người đã duyệt (authorId) nhưng đánh dấu isAi —
     // hiện là "CT Work AI" và không tính vào số bình luận của ai.
-    const c = await tx.workComment.create({ data: { issueId: id, authorId: userId, isAi: via === 'AI', bodyJson, bodyText }, select: COMMENT_SELECT });
+    const c = await tx.workComment.create({ data: { issueId: id, authorId: userId, isAi: via === 'AI', bodyJson, bodyText, visibility: vis }, select: COMMENT_SELECT });
     // Bình luận vào thẻ nào thì tự theo dõi thẻ đó (như Jira).
     await tx.workWatcher.createMany({ data: [{ issueId: id, userId }], skipDuplicates: true });
     return c;
@@ -504,8 +565,8 @@ export async function addComment(userId: number, projectId: number, number: numb
 
 export async function editComment(userId: number, projectId: number, number: number, commentId: number, bodyJson: Prisma.InputJsonValue) {
   const access = await requireProject(userId, projectId, 'project.view');
-  const { id } = await findIssue(projectId, number);
-  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null }, select: { authorId: true } });
+  const { id } = await findVisibleIssue(access, number);
+  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null, ...(isClientScoped(access) ? { visibility: 'PUBLIC' } : {}) }, select: { authorId: true } });
   if (!c) throw new NotFoundError('Comment not found');
   // Sửa lời người khác là giả mạo — ADMIN chỉ được XOÁ, không được sửa.
   if (c.authorId !== userId || !canModifyComment(access.role, userId, c.authorId)) {
@@ -520,8 +581,8 @@ export async function editComment(userId: number, projectId: number, number: num
 
 export async function deleteComment(userId: number, projectId: number, number: number, commentId: number) {
   const access = await requireProject(userId, projectId, 'project.view');
-  const { id } = await findIssue(projectId, number);
-  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null }, select: { authorId: true } });
+  const { id } = await findVisibleIssue(access, number);
+  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null, ...(isClientScoped(access) ? { visibility: 'PUBLIC' } : {}) }, select: { authorId: true } });
   if (!c) throw new NotFoundError('Comment not found');
   if (!canModifyComment(access.role, userId, c.authorId)) throw new ForbiddenError('You cannot delete this comment');
   await prisma.workComment.update({ where: { id: commentId }, data: { deletedAt: new Date() } });
@@ -584,6 +645,12 @@ async function reactionSummaries(commentIds: number[], viewerId: number): Promis
   return out;
 }
 
+/** Khách: người thả cảm xúc ngoài phạm vi (clientPeople.ts) ⇒ "Project team" — vẫn đếm, không lộ tên. */
+function maskReactions(list: ReactionSummary[], f: PeopleFilter): ReactionSummary[] {
+  if (!f) return list;
+  return list.map((r) => ({ ...r, users: r.users.map((u) => (f.has(u.id) ? u : { id: 0, name: TEAM_USER.displayName })) }));
+}
+
 /**
  * Bật/tắt một cảm xúc. `active` bỏ trống = đảo trạng thái; true/false = đặt
  * thẳng (idempotent — bấm đúp hay mạng gửi lại không làm lệch).
@@ -593,9 +660,9 @@ export async function toggleReaction(
 ) {
   const emoji = normalizeReaction(rawEmoji);
   if (!emoji) throw new BadRequestError(`Unsupported reaction. Use one of ${REACTION_EMOJIS.join(' ')}`, 'WORK_BAD_REACTION');
-  await requireProject(userId, projectId, 'comment.create');
-  const { id } = await findIssue(projectId, number);
-  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null }, select: { id: true } });
+  const access = await requireProject(userId, projectId, 'comment.create');
+  const { id } = await findVisibleIssue(access, number);
+  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null, ...(isClientScoped(access) ? { visibility: 'PUBLIC' } : {}) }, select: { id: true } });
   if (!c) throw new NotFoundError('Comment not found');
 
   const where = { commentId, userId, emoji };
@@ -615,7 +682,7 @@ export async function toggleReaction(
     }
   }
 
-  const reactions = (await reactionSummaries([commentId], userId)).get(commentId) ?? [];
+  const reactions = maskReactions((await reactionSummaries([commentId], userId)).get(commentId) ?? [], await peopleFilterFor(access, userId));
   getIO()?.to(projectRoom(projectId)).emit('work:comment-reaction', { projectId, issueId: id, number, commentId, userId });
   return { commentId, emoji, reacted, reactions };
 }
@@ -683,9 +750,9 @@ function attachmentPrefix(projectId: number, issueId: number) {
 }
 
 export async function presignAttachment(userId: number, projectId: number, number: number, input: { fileName: string; contentType: string; size: number }) {
-  await requireProject(userId, projectId, 'attachment.add');
+  const access = await requireProject(userId, projectId, 'attachment.add');
   assertR2();
-  const { id } = await findIssue(projectId, number);
+  const { id } = await findVisibleIssue(access, number);
   if (!Number.isFinite(input.size) || input.size <= 0 || input.size > MAX_ATTACHMENT_BYTES) {
     throw new BadRequestError('Files must be 25 MB or smaller', 'WORK_FILE_TOO_LARGE');
   }
@@ -699,9 +766,11 @@ export async function presignAttachment(userId: number, projectId: number, numbe
 }
 
 export async function completeAttachment(userId: number, projectId: number, number: number, input: { key: string; fileName: string; runId?: number | null }) {
-  await requireProject(userId, projectId, 'attachment.add');
+  const access = await requireProject(userId, projectId, 'attachment.add');
   assertR2();
-  const { id } = await findIssue(projectId, number);
+  const { id } = await findVisibleIssue(access, number);
+  // Tệp khách tải lên luôn hiện với khách (chính họ gửi).
+  const fromClient = isClientScoped(access);
   // Bằng chứng của lần chạy test: lần chạy phải là của CHÍNH test case này.
   if (input.runId) {
     const run = await prisma.workTestRun.findFirst({ where: { id: input.runId, testCase: { issueId: id }, cycle: { projectId } }, select: { id: true } });
@@ -718,8 +787,8 @@ export async function completeAttachment(userId: number, projectId: number, numb
     throw new BadRequestError('Files must be 25 MB or smaller', 'WORK_FILE_TOO_LARGE');
   }
   const att = await prisma.workAttachment.create({
-    data: { issueId: id, runId: input.runId ?? null, uploaderId: userId, r2Key: input.key, fileName: input.fileName.slice(0, 255) || 'file', mime: head.contentType.slice(0, 100), size: head.size },
-    select: { id: true, fileName: true, mime: true, size: true, createdAt: true, uploader: { select: PUBLIC_USER } },
+    data: { issueId: id, runId: fromClient ? null : input.runId ?? null, uploaderId: userId, r2Key: input.key, fileName: input.fileName.slice(0, 255) || 'file', mime: head.contentType.slice(0, 100), size: head.size, clientVisible: fromClient },
+    select: { id: true, fileName: true, mime: true, size: true, createdAt: true, clientVisible: true, deliverable: true, uploader: { select: PUBLIC_USER } },
   });
   await prisma.workHistory.create({ data: { issueId: id, actorId: userId, actorKind: 'USER', field: 'attachment', toValue: att.fileName } });
   emitWorkEvent({ type: 'issue.updated', projectId, issueId: id, actor: userActor(userId), changes: [] });
@@ -727,14 +796,23 @@ export async function completeAttachment(userId: number, projectId: number, numb
 }
 
 /** inline = xem ngay trong trang (ảnh); không thì trình duyệt tải về với đúng tên file. */
+/** Hạn URL tải tệp cấp cho khách bị cách ly (giây) — xem attachmentDownloadUrl. */
+export const CLIENT_URL_TTL_S = 120;
+
 export async function attachmentDownloadUrl(userId: number, projectId: number, attachmentId: number, inline = false) {
-  await requireProject(userId, projectId, 'project.view');
+  const access = await requireProject(userId, projectId, 'project.view');
+  // Khách bị cách ly: chỉ tệp đã chia sẻ, trên thẻ đã chia sẻ.
+  const scoped = isClientScoped(access);
   const att = await prisma.workAttachment.findFirst({
-    where: { id: attachmentId, issue: { projectId, deletedAt: null } },
+    where: { id: attachmentId, issue: { projectId, deletedAt: null, ...(scoped ? { clientVisible: true } : {}) }, ...(scoped ? { clientVisible: true } : {}) },
     select: { r2Key: true, fileName: true },
   });
   if (!att) throw new NotFoundError('Attachment not found');
-  return getSignedDownloadUrl(att.r2Key, 600, inline ? undefined : att.fileName);
+  // Khách bị cách ly: URL ký sẵn chỉ sống CLIENT_URL_TTL_S. Bỏ chia sẻ tệp/thẻ chặn ngay
+  // việc XIN URL mới (truy vấn trên), nhưng URL đã cấp thì R2 không thu hồi được — hạn
+  // ngắn là thứ giới hạn cửa sổ đó (≤ 2 phút thay vì 10). Client xin URL ngay trước khi
+  // mở/tải nên hạn ngắn không làm hỏng việc tải tệp lớn (R2 kiểm hạn lúc BẮT ĐẦU tải).
+  return getSignedDownloadUrl(att.r2Key, scoped ? CLIENT_URL_TTL_S : 600, inline ? undefined : att.fileName);
 }
 
 export async function deleteAttachment(userId: number, projectId: number, attachmentId: number) {
@@ -792,4 +870,70 @@ export async function reportComment(
     });
   }
   return { reported: true, duplicate: false };
+}
+
+// ─── Cổng khách (đợt S2b): chia sẻ thẻ / tệp với khách ────────────
+
+/**
+ * "Share with client" trên một thẻ. Cần quyền sửa thẻ + mô-đun clientPortal.
+ * Bỏ chia sẻ: thẻ biến mất khỏi cổng khách (bình luận PUBLIC cũ vẫn còn, ẩn theo thẻ).
+ * Ghi lịch sử (`clientVisible`) + sự kiện để board/cổng khách tự làm tươi.
+ */
+export async function setIssueClientVisible(userId: number, projectId: number, number: number, visible: boolean) {
+  const access = await requireProject(userId, projectId, 'issue.edit');
+  assertModule(access, 'clientPortal');
+  const i = await findIssue(projectId, number);
+  if (i.clientVisible === visible) return { number, clientVisible: visible };
+  await prisma.$transaction([
+    prisma.workIssue.update({ where: { id: i.id }, data: { clientVisible: visible, clientSharedAt: visible ? new Date() : null, version: { increment: 1 } } }),
+    prisma.workHistory.create({ data: { issueId: i.id, actorId: userId, actorKind: 'USER', field: 'clientVisible', fromValue: String(!visible), toValue: String(visible) } }),
+  ]);
+  const { auditProject } = await import('./audit.js');
+  await auditProject(projectId, {
+    actorId: userId, action: visible ? 'portal.share_issue' : 'portal.unshare_issue', targetType: 'issue', targetId: i.id,
+    summary: `${visible ? 'Shared' : 'Stopped sharing'} ${access.key}-${number} ${visible ? 'with' : 'from'} the client`,
+  });
+  emitWorkEvent({ type: 'issue.updated', projectId, issueId: i.id, actor: userActor(userId), changes: [{ field: 'clientVisible', from: String(!visible), to: String(visible) }] });
+  return { number, clientVisible: visible };
+}
+
+/**
+ * Chia sẻ một TỆP với khách và/hoặc đánh dấu là BÀN GIAO (Deliverables). Thẻ phải
+ * đã được chia sẻ — tệp chia sẻ trên thẻ nội bộ thì khách không bao giờ mở được.
+ * Bàn giao ⇒ luôn kèm chia sẻ.
+ */
+export async function setAttachmentClient(
+  userId: number, projectId: number, attachmentId: number, input: { clientVisible?: boolean; deliverable?: boolean },
+) {
+  const access = await requireProject(userId, projectId, 'issue.edit');
+  assertModule(access, 'clientPortal');
+  const att = await prisma.workAttachment.findFirst({
+    where: { id: attachmentId, issue: { projectId, deletedAt: null } },
+    select: { id: true, issueId: true, fileName: true, clientVisible: true, deliverable: true, issue: { select: { clientVisible: true, number: true } } },
+  });
+  if (!att) throw new NotFoundError('Attachment not found');
+  const deliverable = input.deliverable ?? att.deliverable;
+  const clientVisible = deliverable ? true : (input.clientVisible ?? att.clientVisible);
+  if (clientVisible && !att.issue.clientVisible) {
+    throw new BadRequestError('Share the issue with the client before sharing its files', 'WORK_ISSUE_NOT_SHARED');
+  }
+  const updated = await prisma.workAttachment.update({
+    where: { id: att.id },
+    data: { clientVisible, deliverable, deliveredAt: deliverable && !att.deliverable ? new Date() : deliverable ? undefined : null },
+    select: { id: true, fileName: true, clientVisible: true, deliverable: true, deliveredAt: true },
+  });
+  if (clientVisible !== att.clientVisible || deliverable !== att.deliverable) {
+    await prisma.workHistory.create({ data: { issueId: att.issueId, actorId: userId, actorKind: 'USER', field: deliverable !== att.deliverable ? 'deliverable' : 'attachmentShared', fromValue: null, toValue: `${att.fileName}: ${deliverable ? 'deliverable' : clientVisible ? 'shared' : 'internal'}` } });
+    const { auditProject } = await import('./audit.js');
+    await auditProject(projectId, {
+      actorId: userId, action: deliverable && !att.deliverable ? 'portal.deliver' : 'portal.share_file', targetType: 'attachment', targetId: att.id,
+      summary: deliverable && !att.deliverable ? `Delivered ${att.fileName} to the client` : `${clientVisible ? 'Shared' : 'Stopped sharing'} file ${att.fileName}`,
+    });
+    emitWorkEvent({ type: 'issue.updated', projectId, issueId: att.issueId, actor: userActor(userId), changes: [] });
+    if (deliverable && !att.deliverable) {
+      const { notifyClientsOfProject } = await import('./portalNotify.js');
+      await notifyClientsOfProject(projectId, userId, { kind: 'deliverable', title: att.fileName, section: 'deliverables' });
+    }
+  }
+  return updated;
 }

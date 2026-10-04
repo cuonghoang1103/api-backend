@@ -24,6 +24,8 @@ import { useQuery } from '@tanstack/react-query';
 import {
   ArrowLeft, CalendarRange, CircleHelp, KeyRound, FlaskConical, Rocket, BarChart3, ChevronDown, Columns3, Inbox, LayoutDashboard,
   List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check, Sparkles, PanelLeftClose, PanelLeftOpen, Milestone, BadgeCheck, Network, FileText,
+  BriefcaseBusiness, Gauge,
+  Handshake, PackageCheck, Activity,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
@@ -37,7 +39,7 @@ import WorkInbox from './shell/WorkInbox';
 import { useSidebarRail } from './shell/mobileNav';
 
 const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search']);
-const WS_PAGES = new Set(['settings', 'teams']);
+const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload']);
 
 export function useWorkPath() {
   const pathname = usePathname() ?? '';
@@ -109,6 +111,7 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'stages', label: 'Stages', icon: Milestone, match: (v) => v === 'stages', module: 'stages' },
       { path: 'approvals', label: 'Approvals', icon: BadgeCheck, match: (v) => v === 'approvals', module: 'approvals' },
       { path: 'docs', label: 'Docs', icon: FileText, match: (v) => v === 'docs', module: 'docs' },
+      { path: 'portal', label: 'Client portal', icon: Handshake, match: (v) => v === 'portal', module: 'clientPortal' },
       { path: 'tests', label: 'Tests', icon: FlaskConical, match: (v) => v === 'tests' },
     ],
   },
@@ -125,9 +128,25 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
  * Mục cấp không gian. `module` = chỉ hiện khi ÍT NHẤT một dự án của không gian
  * bật mô-đun đó, và người xem không phải khách (Teams — lớp studio S1).
  */
-const WORKSPACE_NAV: { path: string; label: string; icon: LucideIcon; module?: StudioModule }[] = [
+/**
+ * Cổng khách (S2b): khách bị cách ly KHÔNG thấy điều hướng nội bộ — chỉ các thẻ
+ * của cổng (đường dẫn /portal?tab=…). Dữ liệu, như PROJECT_NAV.
+ */
+const PORTAL_NAV: { tab: string; label: string; icon: LucideIcon }[] = [
+  { tab: 'overview', label: 'Overview', icon: LayoutDashboard },
+  { tab: 'requests', label: 'Requests', icon: Inbox },
+  { tab: 'approvals', label: 'Approvals', icon: BadgeCheck },
+  { tab: 'documents', label: 'Documents', icon: FileText },
+  { tab: 'deliverables', label: 'Deliverables', icon: PackageCheck },
+  { tab: 'activity', label: 'Activity', icon: Activity },
+];
+
+const WORKSPACE_NAV: { path: string; label: string; icon: LucideIcon; module?: StudioModule; staffOnly?: boolean }[] = [
   { path: '', label: 'Projects', icon: LayoutGrid },
   { path: '/teams', label: 'Teams', icon: Network, module: 'teams' },
+  // Đợt S3a — chỉ người trong đội (không phải khách GUEST); phạm vi dữ liệu do server quyết.
+  { path: '/portfolio', label: 'Portfolio', icon: BriefcaseBusiness, staffOnly: true },
+  { path: '/workload', label: 'Workload', icon: Gauge, staffOnly: true },
   { path: '/settings', label: 'Members & settings', icon: Users },
 ];
 
@@ -173,7 +192,10 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
      của một dự án, nên người dùng kết luận "CT Work chưa có AI". Trong dự án: mở
      cho dự án đó; ngoài dự án: mở dự án dùng AI gần nhất. ⌘J bật/tắt. */
   const duAnMo = projects.find((p) => p.key === key);
-  const aiPid = duAnMo?.id ?? lastAiPid();
+  // Cổng khách (S2b): khách bị cách ly ở dự án này / ở mọi dự án của không gian.
+  const isPortalClient = (p: { role?: string; modules?: { clientPortal?: boolean } }) => p.role === 'CLIENT' && !!p.modules?.clientPortal;
+  const portalOnly = !!ws.data && ws.data.role === 'GUEST' && projects.length > 0 && projects.every(isPortalClient);
+  const aiPid = portalOnly || (duAnMo && isPortalClient(duAnMo)) ? null : duAnMo?.id ?? lastAiPid();
   const aiOpen = useAiPanel((st) => st.open);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -247,9 +269,9 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
       <div ref={scrollRef} className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 pb-3">
         {/* "My work" luôn tới được, kể cả khi đang trong một dự án. */}
         <div className="mt-1 space-y-0.5">
-          <NavItem href="/work?tab=my-work" icon={Inbox} label="My work" active={onMyWork} />
+          {!portalOnly && <NavItem href="/work?tab=my-work" icon={Inbox} label="My work" active={onMyWork} />}
           {/* Tìm thẻ mọi dự án. Không gán phím "/" toàn cục: list/board đã dùng nó — ⌘K là đủ. */}
-          <NavItem href="/work/search" icon={Search} label="Search" active={pathname.startsWith('/work/search')} />
+          {!portalOnly && <NavItem href="/work/search" icon={Search} label="Search" active={pathname.startsWith('/work/search')} />}
           {!slug && <NavItem href="/work?tab=workspaces" icon={LayoutGrid} label="Workspaces" active={onWorkspaces} />}
           {aiPid != null && (
             <button
@@ -270,7 +292,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
           <>
             <GroupLabel>Workspace</GroupLabel>
             <div className="space-y-0.5">
-              {WORKSPACE_NAV.filter((n) => !n.module || (ws.data?.role !== 'GUEST' && projects.some((p) => p.modules?.[n.module!]))).map((n) => (
+              {WORKSPACE_NAV.filter((n) => (!portalOnly || !n.path) && (!n.staffOnly || (!!ws.data && ws.data.role !== 'GUEST')) && (!n.module || (ws.data?.role !== 'GUEST' && projects.some((p) => p.modules?.[n.module!])))).map((n) => (
                 <NavItem
                   key={n.label}
                   href={`/work/${slug}${n.path}`}
@@ -297,7 +319,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                 return (
                   <div key={p.id} data-open-project={open || undefined}>
                     <Link
-                      href={`${base}/board`}
+                      href={isPortalClient(p) ? `${base}/portal` : `${base}/board`}
                       title={p.name}
                       aria-label={p.name}
                       className={cn(ROW, open ? 'font-semibold text-[var(--w-text)]' : ROW_IDLE)}
@@ -306,7 +328,16 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                       <span className="min-w-0 flex-1 truncate">{p.name}</span>
                       <span className="shrink-0 font-mono text-[11px] text-[var(--w-text-3)]">{p.key}</span>
                     </Link>
-                    {open && (
+                    {open && isPortalClient(p) && (
+                      <div className="w-subnav mb-2 ml-[18px] mt-0.5 border-l border-[var(--w-border)] pl-1.5">
+                        <div className="w-eyebrow w-rail-hide px-2 pb-0.5 pt-2">Client portal</div>
+                        {PORTAL_NAV.map((n) => {
+                          const cur = view === 'portal' && (search?.get('tab') ?? 'overview') === n.tab;
+                          return <NavItem key={n.tab} href={`${base}/portal${n.tab === 'overview' ? '' : `?tab=${n.tab}`}`} icon={n.icon} label={n.label} active={cur} indent />;
+                        })}
+                      </div>
+                    )}
+                    {open && !isPortalClient(p) && (
                       <div className="w-subnav mb-2 ml-[18px] mt-0.5 border-l border-[var(--w-border)] pl-1.5">
                         {PROJECT_NAV.map((g) => (
                           <div key={g.group}>

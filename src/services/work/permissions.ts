@@ -13,8 +13,8 @@
  */
 
 import { prisma } from '../../config/database.js';
-import { ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
-import type { ProjectKind, ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
+import { BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
+import type { CommentVisibility, ProjectKind, ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
 import { modulesOf, projectKindOf, type ModuleMap } from './studio.js';
 
 /** Mọi hành động có kiểm quyền. Thêm hành động mới thì thêm vào đây VÀ vào MATRIX. */
@@ -303,10 +303,17 @@ export async function loadProjectAccess(userId: number, projectId: number): Prom
     },
   });
   if (!project) return null;
-  const workspaceRole = (project.workspace.members[0]?.role ?? null) as WorkspaceRole | null;
+  let workspaceRole = (project.workspace.members[0]?.role ?? null) as WorkspaceRole | null;
+  const projectRole = (project.members[0]?.role ?? null) as ProjectRole | null;
+  // MEMBER chỉ là khách cổng ⇒ coi như GUEST (loadWorkspaceRole). Chỉ hỏi DB khi kết
+  // quả có thể đổi: vào ngầm (không dòng dự án, dự án mở cho không gian) hoặc vai CLIENT.
+  if (workspaceRole === 'MEMBER' && ((!projectRole && project.visibility === 'WORKSPACE') || projectRole === 'CLIENT')
+    && (await portalOnlyWorkspaceIds(userId, project.workspaceId)).has(project.workspaceId)) {
+    workspaceRole = 'GUEST';
+  }
   const role = effectiveProjectRole({
     workspaceRole,
-    projectRole: (project.members[0]?.role ?? null) as ProjectRole | null,
+    projectRole,
     visibility: project.visibility as ProjectVisibility,
   });
   if (!role || !workspaceRole) return null;
@@ -326,12 +333,20 @@ export async function requireProject(userId: number, projectId: number, action: 
   return access;
 }
 
+/**
+ * Vai trò không gian HIỆU LỰC — mọi tuyến cấp không gian hỏi ở đây. Khác vai lưu
+ * trong DB ở đúng một chỗ: MEMBER "chỉ là khách cổng" (xem `portalOnlyWorkspaceIds`)
+ * bị coi như GUEST — mất quyền ngầm vào dự án mở cho cả không gian, không tạo dự án,
+ * không thấy bộ phận / danh sách người / workload của đội.
+ */
 export async function loadWorkspaceRole(userId: number, workspaceId: number): Promise<WorkspaceRole | null> {
   const m = await prisma.workMember.findFirst({
     where: { workspaceId, userId, workspace: { deletedAt: null } },
     select: { role: true },
   });
-  return (m?.role ?? null) as WorkspaceRole | null;
+  const raw = (m?.role ?? null) as WorkspaceRole | null;
+  if (raw === 'MEMBER' && (await portalOnlyWorkspaceIds(userId, workspaceId)).has(workspaceId)) return 'GUEST';
+  return raw;
 }
 
 export async function requireWorkspace(userId: number, workspaceId: number, action: WorkspaceAction): Promise<WorkspaceRole> {
@@ -340,3 +355,148 @@ export async function requireWorkspace(userId: number, workspaceId: number, acti
   if (!canWorkspace(role, action)) throw new ForbiddenError('You do not have permission to do this in this workspace');
   return role;
 }
+
+// ─── Cổng khách (đợt S2b, mô-đun clientPortal): CÁCH LY khách ─────
+
+/**
+ * Khách bị cách ly: vai CLIENT ở dự án BẬT clientPortal. Chỉ người này bị lọc
+ * (chỉ thấy thẻ/tệp/bình luận đã chia sẻ). Dự án không bật cổng khách ⇒ vai
+ * CLIENT giữ hành vi cũ (thấy mọi thẻ) — "dự án cũ y nguyên".
+ */
+export function isClientScoped(a: { role: ProjectRole | null; modules?: ModuleMap | null }): boolean {
+  return a.role === 'CLIENT' && a.modules?.clientPortal === true;
+}
+
+/**
+ * DANH SÁCH TRẮNG tuyến /projects/:pid/<sub> mà khách bị cách ly được gọi. Mọi
+ * tuyến khác ⇒ 403 CLIENT_PORTAL_ONLY (work.routes.ts — một chốt cho mọi tuyến,
+ * kể cả tuyến thêm SAU này: quên khai ở đây = khách bị chặn, không phải bị lộ).
+ * Tuyến được mở ở đây vẫn phải tự LỌC trong service (thẻ clientVisible, bình
+ * luận PUBLIC, tệp clientVisible…) — xem portal.service.ts / issues.service.ts.
+ */
+const CLIENT_ROUTES: Array<[method: string, re: RegExp]> = [
+  ['GET', /^$/], // cấu hình dự án — đã rút gọn cho khách (projects.service getProjectConfig)
+  ['*', /^\/portal(\/.*)?$/],
+  ['GET', /^\/issues$/],
+  ['GET', /^\/board$/],
+  ['GET', /^\/search$/],
+  ['GET', /^\/issues\/\d+$/],
+  ['GET', /^\/issues\/\d+\/comments$/],
+  ['POST', /^\/issues\/\d+\/comments$/],
+  ['PATCH', /^\/issues\/\d+\/comments\/\d+$/],
+  ['DELETE', /^\/issues\/\d+\/comments\/\d+$/],
+  ['PUT', /^\/issues\/\d+\/comments\/\d+\/reactions\/[^/]+$/],
+  ['POST', /^\/issues\/\d+\/attachments\/(presign|complete)$/],
+  ['GET', /^\/attachments\/\d+\/url$/],
+  ['GET', /^\/issues\/\d+\/pages$/],
+  ['GET', /^\/approvals$/],
+  ['GET', /^\/approvals\/\d+$/],
+  ['POST', /^\/approvals\/\d+\/decide$/],
+  ['GET', /^\/pages$/],
+  ['GET', /^\/pages\/search$/],
+  ['GET', /^\/pages\/\d+$/],
+  ['GET', /^\/pages\/\d+\/markdown$/],
+];
+
+/** `sub` = phần đường dẫn SAU /projects/:pid ('' cho chính dự án). Hàm thuần — test bằng bảng. */
+export function clientPortalRouteAllowed(method: string, sub: string): boolean {
+  const m = method.toUpperCase();
+  const path = sub === '/' ? '' : sub.replace(/\/+$/, '');
+  return CLIENT_ROUTES.some(([mm, re]) => (mm === '*' || mm === m || (mm === 'GET' && m === 'HEAD')) && re.test(path));
+}
+
+/** Id các dự án mà `userId` là khách bị cách ly (vai CLIENT + clientPortal bật). */
+export async function clientScopedProjectIds(userId: number, workspaceId?: number): Promise<Set<number>> {
+  const rows = await prisma.workProjectMember.findMany({
+    where: { userId, role: 'CLIENT', project: { deletedAt: null, ...(workspaceId ? { workspaceId } : {}), workspace: { deletedAt: null } } },
+    select: { projectId: true, project: { select: { settings: true, workspace: { select: { members: { where: { userId }, select: { role: true } } } } } } },
+  });
+  const out = new Set<number>();
+  for (const r of rows) {
+    const ws = r.project.workspace.members[0]?.role;
+    // OWNER/ADMIN không gian luôn là ADMIN dự án — không bao giờ là khách.
+    if (!ws || ws === 'OWNER' || ws === 'ADMIN') continue;
+    if (modulesOf(r.project.settings).clientPortal) out.add(r.projectId);
+  }
+  return out;
+}
+
+/**
+ * Không gian mà `userId` CHỈ là khách cổng: có ít nhất một dự án mang vai CLIENT ở dự
+ * án bật clientPortal, và KHÔNG có dòng dự án tường minh nào mang vai khác
+ * (ADMIN/MEMBER/VIEWER/TEACHER). Ở những không gian này, vai MEMBER bị hạ thành GUEST
+ * (loadWorkspaceRole / loadProjectAccess / mọi vòng lặp tự tính vai — dùng
+ * `effectiveWorkspaceRole`).
+ *
+ * LUẬT AN TOÀN cho người "vừa khách vừa nhân viên" (CLIENT ở A + vai tường minh khác
+ * ở B): KHÔNG hạ — họ là nhân viên của không gian; riêng dự án A vẫn bị loại khỏi
+ * mọi đường xuyên dự án (tìm kiếm, My work, portfolio, workload — `clientScopedProjectIds`)
+ * và bên trong A họ vẫn bị cách ly như khách. Vai ngầm (MEMBER thấy dự án mở cho
+ * không gian) KHÔNG tính là "vai nhân viên" — nếu tính, mọi khách cũ là MEMBER đều
+ * thoát cách ly.
+ */
+export async function portalOnlyWorkspaceIds(userId: number, workspaceId?: number): Promise<Set<number>> {
+  const rows = await prisma.workProjectMember.findMany({
+    where: { userId, project: { deletedAt: null, ...(workspaceId ? { workspaceId } : {}), workspace: { deletedAt: null } } },
+    select: { role: true, project: { select: { workspaceId: true, settings: true } } },
+  });
+  const scoped = new Set<number>();
+  const staff = new Set<number>();
+  for (const r of rows) {
+    if (r.role === 'CLIENT') {
+      if (modulesOf(r.project.settings).clientPortal) scoped.add(r.project.workspaceId);
+    } else staff.add(r.project.workspaceId);
+  }
+  return new Set([...scoped].filter((w) => !staff.has(w)));
+}
+
+/** Hạ vai không gian theo luật trên (hàm thuần — vòng lặp đã có sẵn tập `portalOnly`). */
+export function effectiveWorkspaceRole(role: WorkspaceRole, portalOnly: boolean): WorkspaceRole {
+  return role === 'MEMBER' && portalOnly ? 'GUEST' : role;
+}
+
+/** Những người trong không gian bị hạ MEMBER ⇒ GUEST (cho danh sách thành viên dự án, workload). */
+export async function portalOnlyUserIds(workspaceId: number): Promise<Set<number>> {
+  const clients = await prisma.workProjectMember.findMany({
+    where: { role: 'CLIENT', project: { workspaceId, deletedAt: null } },
+    select: { userId: true, project: { select: { settings: true } } },
+  });
+  const cand = [...new Set(clients.filter((c) => modulesOf(c.project.settings).clientPortal).map((c) => c.userId))];
+  if (!cand.length) return new Set();
+  const staff = await prisma.workProjectMember.findMany({
+    where: { userId: { in: cand }, role: { not: 'CLIENT' }, project: { workspaceId, deletedAt: null } },
+    select: { userId: true },
+  });
+  const s = new Set(staff.map((x) => x.userId));
+  return new Set(cand.filter((u) => !s.has(u)));
+}
+
+/**
+ * Người này là "khách của cổng" trong không gian: GUEST của không gian VÀ là
+ * khách bị cách ly ở ít nhất một dự án. Dùng cho tuyến cấp không gian (thành
+ * viên, ngày nghỉ, đếm số) — khách không được thấy người/dự án ngoài phạm vi.
+ */
+export async function isPortalClientInWorkspace(userId: number, workspaceId: number): Promise<boolean> {
+  const role = await loadWorkspaceRole(userId, workspaceId);
+  if (role !== 'GUEST') return false;
+  return (await clientScopedProjectIds(userId, workspaceId)).size > 0;
+}
+
+/**
+ * Chế độ hiển thị thật của một bình luận MỚI (cổng khách S2b):
+ *   - khách bị cách ly ⇒ luôn PUBLIC (khách không viết được ghi chú nội bộ);
+ *   - dự án bật clientPortal ⇒ theo lựa chọn, mặc định INTERNAL; PUBLIC chỉ khi thẻ đã chia sẻ;
+ *   - dự án không bật cổng khách ⇒ INTERNAL (cột không được đọc).
+ */
+export function commentVisibilityFor(
+  access: { role: ProjectRole | null; modules?: ModuleMap | null }, issueShared: boolean, wanted: CommentVisibility | undefined,
+): CommentVisibility {
+  if (isClientScoped(access)) return 'PUBLIC';
+  if (!access.modules?.clientPortal) return 'INTERNAL';
+  if (wanted === 'PUBLIC') {
+    if (!issueShared) throw new BadRequestError('Share this issue with the client before replying to them', 'WORK_ISSUE_NOT_SHARED');
+    return 'PUBLIC';
+  }
+  return 'INTERNAL';
+}
+

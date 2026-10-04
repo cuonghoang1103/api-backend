@@ -395,7 +395,7 @@ work_issues, 7 bảng); mọi FK trên/vào `work_issues` + FK SET NULL của b�
   (3 lượt liền) + `studio.test.ts` (luật thuần) trong `npm test`; chạy thật backend :3101 — phiếu → dự án
   CLIENT → duyệt cổng GĐ0 → kích hoạt GĐ1 → bàn giao BA→DEV nhận + trả lại → dự án SCHOOL cũ ⇒ MODULE_DISABLED.
 - [ ] Giao diện cho S1 (phiên làm lại giao diện /work) · L
-- [x] Đợt S2a: tài liệu kiểu Confluence (xem mục dưới) · [ ] Đợt S2b: cổng khách duyệt · Đợt S3: CR + RAID, họp,
+- [x] Đợt S2a: tài liệu kiểu Confluence (xem mục dưới) · [x] Đợt S2b: cổng khách duyệt (xem mục dưới) · Đợt S3: CR + RAID, họp,
       portfolio · Đợt S4: tài chính, báo cáo khách tự động
 
 ### Đợt S2a — tài liệu dự án kiểu Confluence (04/10/2026, mô-đun `docs`)
@@ -437,6 +437,86 @@ CHỈ cho dự án TẠO MỚI kèm `kind: CLIENT` (`defaultModulesFor`). Migrat
   mới → so sánh → khôi phục → xin duyệt → duyệt → sửa ⇒ cảnh báo lệch → liên kết thẻ → dự án School không có Docs;
   0 lỗi JS, 0 tràn ngang 390px; ảnh `~/Desktop/ct-work-ui/s2a/`. Bắt được nhờ E2E: `setEditable()` của TipTap bắn
   'update' lúc mở ⇒ mở trang là tự lưu (đã chặn ở RichEditor + server bỏ qua lưu y nguyên).
+
+### Đợt S2b — cổng khách (04/10/2026, mô-đun `clientPortal`)
+
+Chuẩn tham chiếu: Jira Service Management (internal note vs reply to customer), Linear Customer Requests,
+Basecamp client access. Bật mặc định cho dự án CLIENT MỚI (`defaultModulesFor`); dự án cũ (không có
+`settings.modules.clientPortal`) y nguyên — vai CLIENT ở đó vẫn thấy mọi thẻ như trước. Migration
+`20261004180000_work_portal_s2b` chỉ THÊM (cột có mặc định an toàn + bảng `work_uat_requests`, FK SET NULL DEFERRABLE).
+
+- [x] S2b.A Cách ly khách — MỘT luật: "khách bị cách ly" = vai CLIENT + clientPortal (`permissions.isClientScoped`).
+      Chốt tuyến DANH SÁCH TRẮNG cho mọi `/projects/:pid/**` (`clientPortalRouteAllowed`, work.routes.ts — tuyến thêm sau
+      mặc định bị chặn với khách ⇒ 403 `CLIENT_PORTAL_ONLY`). Tuyến được mở tự lọc: board/list/JQL/chi tiết (thẻ
+      `clientVisible`, liên kết/việc con/tệp đã chia sẻ, ẩn điểm/giờ/số đếm nội bộ), bình luận PUBLIC, tệp clientVisible,
+      trang CLIENT + thẻ liên kết đã chia sẻ, phê duyệt có khách đứng tên (ẩn ghi chú người duyệt nội bộ), cấu hình dự án rút gọn.
+      Cấp không gian: thành viên (chỉ người trong dự án của khách), đếm dự án/thành viên, ngày nghỉ (chỉ của mình), tìm
+      kiếm xuyên dự án + My work + lịch .ics (loại dự án khách), bộ phận (GUEST đã bị chặn từ S1) · L
+- [x] S2b.B Bình luận `visibility` INTERNAL (mặc định) | PUBLIC; khách luôn PUBLIC; PUBLIC chỉ trên thẻ đã chia sẻ; AI luôn
+      INTERNAL. Thông báo: `portalNotify.routeForClient` là CỬA CUỐI của `notifyWork` (khách chỉ nhận trả lời PUBLIC / phê
+      duyệt của mình / tin cổng; link viết lại vào /portal); realtime: khách vào phòng riêng `work:project:<id>:client`,
+      chỉ nhận `portal.changed` không dữ liệu; email khách riêng (thương hiệu "<Dự án> · Client portal"); link công khai
+      của dự án bật cổng chỉ lộ thẻ đã chia sẻ; báo cáo tuần AI audience client chỉ dùng thẻ đã chia sẻ · M
+- [x] S2b.C Cổng `/work/<ws>/<KEY>/portal`: Overview (giai đoạn tên+trạng thái+%, mốc, chờ khách), Requests (khách gửi
+      ⇒ thẻ `from-client` clientVisible vào hàng đợi QA/BA/PM), Approvals, Documents, Deliverables, Activity (chỉ sự kiện
+      công khai); nhân viên: mời khách (vai CLIENT, GUEST không gian, thư riêng, chấp nhận ⇒ vào thẳng cổng), "Preview as
+      client" (`?as=client` phía API, chỉ đọc). Thanh bên của khách chỉ còn "Client portal"; trang nội bộ tự chuyển về cổng · L
+- [x] S2b.D UAT sign-off: `WorkApproval` targetType UAT + `work_uat_requests` (hạng mục = thẻ đã chia sẻ, tài liệu CLIENT,
+      tệp, version/giai đoạn, lần thứ mấy); khách Approve (+ điều kiện) / Reject (lý do + điểm ⇒ thẻ BUG/CR); chữ ký =
+      SHA-256 cả bộ (`approvalContent.uatContent`); biên bản in được `/portal/uat/<id>` theo mẫu bien-ban-nghiem-thu-uat.md
+      (window.print, không thêm thư viện) · M
+- [x] S2b.E Trang tra cứu phiếu: khách có tài khoản và là khách của dự án ⇒ `progressUrl` = cổng; chưa có ⇒ link chỉ đọc cũ.
+      Help: "Client portal", "Internal notes vs client replies", "UAT sign-off" (song ngữ) · S
+- **Nghiệm thu 04/10/2026:** `portal.test.ts` (bảng tuyến khách: mở/chặn, luật bình luận, email) trong `npm test`;
+  `work.portal.db.test.ts` 11 test DB (cách ly trong dự án, 32 tuyến ⇒ CLIENT_PORTAL_ONLY, khách A dò dự án B / dự án nội bộ /
+  thành viên / tìm kiếm / tệp, email + chuông không lộ ghi chú nội bộ, xem trước khớp khách, UAT 2 lần + biên bản, link công khai,
+  tra cứu phiếu); 168/168 test DB CT Work; E2E Playwright (backend :3141 + Next :3140) ảnh `~/Desktop/ct-work-ui/s2b/`
+  (0 lỗi JS, 0 tràn ngang 390px).
+- [x] **Vá rủi ro lộ dữ liệu S2b (04/10/2026)** — 7 test DB mới trong `work.portal.db.test.ts` (18/18; 175/175 test DB CT Work):
+      (1) phê duyệt ISSUE/DOC nêu khách duyệt thẻ chưa `clientVisible` / trang không CLIENT ⇒ 400 `WORK_APPROVER_NOT_CLIENT_VISIBLE`;
+      đối tượng bị bỏ chia sẻ SAU khi gửi ⇒ khách thấy "Item no longer shared" (không mã/tiêu đề/mô tả, mọi đường: /approvals,
+      /portal/approvals, overview, activity), quyết ⇒ 409 `WORK_ITEM_NOT_SHARED`; STAGE_GATE ⇒ khách chỉ thấy "Stage gate: n. tên"
+      (`approvalForClient`). (2) MỘT hàm lọc người `clientPeople.ts` (`clientPeopleIds`): mình + khách cùng dự án + lead + người có
+      tương tác công khai (tác giả reply PUBLIC, assignee thẻ đã chia sẻ, người duyệt/người gửi phê duyệt có khách) — áp cho thành
+      viên dự án/không gian, gợi ý @, reporter/uploader/chủ trang/cảm xúc (ngoài tập ⇒ "Project team", id 0), activity, bảng tra JQL.
+      (3) MEMBER không gian chỉ mang vai CLIENT ở dự án cổng (không dòng dự án tường minh nào khác) ⇒ vai hiệu lực GUEST
+      (`portalOnlyWorkspaceIds` / `effectiveWorkspaceRole`, áp ở loadWorkspaceRole, loadProjectAccess, projectMembers, My work, tìm
+      kiếm, /workspaces, thông báo, bộ phận, workload). Vừa khách A vừa có vai tường minh ở B ⇒ vẫn là nhân viên, A bị loại khỏi mọi
+      đường xuyên dự án. Vai NGẦM (dự án mở cho không gian) không tính là nhân viên. (4) portfolio/workload: test cho GUEST, MEMBER bị
+      hạ, người vừa-khách-vừa-nhân-viên. (5) URL tải tệp ký cho khách hạn 120 s (nhân viên 600 s) — URL đã cấp không thu hồi được.
+
+### Đợt S3a — danh mục dự án (portfolio) + khối lượng việc nhiều dự án (04/10/2026, chỉ đọc)
+
+Không bảng mới, không migration, không ghi gì. Luật thuần ở `src/services/work/portfolioRules.ts` (test
+`portfolio.test.ts`), đọc DB ở `portfolio.service.ts`, tuyến ở `src/routes/work.portfolio.routes.ts` (gắn một dòng
+`router.use` cuối `work.routes.ts`). Không AI, không số bịa: mọi màu đều kèm lý do trỏ đúng một con số.
+
+- [x] S3a.A `GET /workspaces/:wsId/portfolio[?includeArchived=true]`: mỗi dự án người xem mở được (`effectiveProjectRole`;
+      dự án mà người xem là khách cổng S2b bị loại): loại, lead, thẻ mở/quá hạn/xong 14 ngày (tầng 0), sprint đang chạy +
+      tốc độ (`activeSprintPace`), giai đoạn hiện tại + % (chỉ khi mô-đun stages bật), phê duyệt chờ + tuổi, mốc (version
+      UNRELEASED có ngày), phụ thuộc BLOCKS liên dự án chưa xong (phía người xem không mở được ⇒ `hidden`, không mã/tiêu đề),
+      dải mốc gộp (trễ + 90 ngày tới), luật bằng chữ `rules` · M
+- [x] S3a.B Luật RAG (`ragOf`): ĐỎ = mốc quá ngày · sprint hết hạn còn việc · sprint AT_RISK cần ≥ 2× tốc độ gần đây (hoặc
+      chưa đốt được gì) · ≥ 10 thẻ quá hạn hoặc ≥ 3 và ≥ 25% số mở. VÀNG = sprint AT_RISK nhẹ · có thẻ quá hạn · mốc ≤ 7 ngày
+      mà xong < 80% · thẻ bị chặn bởi dự án khác · phê duyệt chờ > 3 ngày. XANH = không dính luật nào. TOO_EARLY/NO_ESTIMATES
+      không phải tín hiệu rủi ro · S
+- [x] S3a.C `GET /workspaces/:wsId/workload?from&to&teamId&projectId&hoursPerPoint` (≤ 26 tuần, tuần T2→CN): giờ còn lại =
+      remaining → original − đã ghi → điểm × h/điểm (mặc định 4) → 0 ("not estimated"); thẻ cha có việc con ước lượng ⇒ 0;
+      rải đều ngày làm việc từ max(bắt đầu, hôm nay) tới hạn, quá hạn dồn vào ngày làm việc gần nhất; không hạn ⇒ đếm
+      "unscheduled". Năng lực = tổng `capacityHours` các dự án (chưa đặt ⇒ 8h/ngày) × ngày T2–T6 từ hôm nay − WorkTimeOff.
+      Quá tải = tuần > 100% (hoặc có việc mà năng lực 0). Gộp theo bộ phận. Quyền: OWNER/ADMIN = mọi người; LEAD = người
+      trong bộ phận mình dẫn + mình; còn lại (kể cả GUEST) = chính mình; lọc team không được xem ⇒ 403; chỉ tính thẻ trong
+      dự án người xem thấy (`visibleProjectIds`) · M
+- [x] S3a.D Giao diện `/work/[ws]/portfolio` (dải đếm theo màu = bộ lọc, lọc loại/lead, sắp xếp, bảng ≥lg / thẻ trên điện
+      thoại, chấm RAG rê/chạm ⇒ lý do, "How is health computed?", dải mốc, danh sách chặn liên dự án) + `/work/[ws]/workload`
+      (lưới người × tuần tô màu theo %, ô quá tải viền đỏ, bấm ô ⇒ thẻ của tuần, tuần trước/sau, 2–12 tuần, lọc bộ phận/dự án,
+      1 pt = …h, "How is load computed?"). Mục sidebar Portfolio/Workload chỉ hiện với người không phải khách. Bài trợ giúp
+      "Portfolio & workload" (song ngữ). Tuyến app desktop `portfolio`, `workload` · M
+- **Nghiệm thu 04/10/2026:** `portfolio.test.ts` 14 phép (luật RAG, quy đổi giờ, rải ngày, tải tuần) trong `npm test`;
+  `work.portfolio.db.test.ts` 6 test DB (RAG + lý do, ẩn dự án PRIVATE với thành viên, giảng viên GUEST chỉ thấy dự án mình,
+  khách cổng rỗng, người ngoài 404, quá tải/năng lực/bộ phận, thành viên chỉ thấy mình + lọc bộ phận 403, lead thấy bộ phận);
+  168/168 test DB CT Work; E2E Playwright (backend :3151 + Next :3150, 5 dự án mẫu đỏ/vàng/xanh): 28 kiểm, 0 lỗi JS, 0 tràn
+  ngang 390px; ảnh `~/Desktop/ct-work-ui/s3a/`.
 
 ## 10. Rủi ro
 

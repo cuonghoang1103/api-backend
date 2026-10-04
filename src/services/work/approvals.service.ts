@@ -32,8 +32,9 @@ import { currentTargetHash, signedHash } from './approvalContent.js';
 import { emitWorkEvent } from './events.js';
 import { notifyWork } from './notify.js';
 import {
-  actionableSteps, can, canCancelApproval, canDecideApprovalStep, canViewPage, docAccess, loadProjectAccess, requireProject, type ProjectAccess,
+  actionableSteps, can, canCancelApproval, canDecideApprovalStep, canViewPage, docAccess, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess,
 } from './permissions.js';
+import { clientMemberIds } from './portalNotify.js';
 import { approvalOutcome, assertModule, modulesOf } from './studio.js';
 
 type Tx = Prisma.TransactionClient;
@@ -44,7 +45,7 @@ export const APPROVAL_SELECT = {
   id: true, projectId: true, targetType: true, issueId: true, stageId: true, pageId: true, title: true, description: true,
   mode: true, status: true, dueAt: true, contentHash: true, decidedAt: true, createdAt: true, updatedAt: true,
   createdBy: { select: PUBLIC_USER },
-  issue: { select: { id: true, number: true, title: true } },
+  issue: { select: { id: true, number: true, title: true, clientVisible: true } },
   stage: { select: { id: true, n: true, slug: true, name: true, status: true } },
   page: { select: { id: true, number: true, title: true, status: true, visibility: true } },
   steps: {
@@ -56,13 +57,22 @@ export const APPROVAL_SELECT = {
 type ApprovalRow = Prisma.WorkApprovalGetPayload<{ select: typeof APPROVAL_SELECT }>;
 
 /** Bản trả cho client: thêm cờ "nội dung đã đổi" + bước nào người xem quyết được. IP không bao giờ trả ra. */
-async function present(a: ApprovalRow, viewer: { userId: number; role: ProjectAccess['role'] }, projectKey: string) {
+async function present(a: ApprovalRow, viewer: { userId: number; role: ProjectAccess['role']; clientView?: boolean; clientIds?: number[] }, projectKey: string) {
   const now = await currentTargetHash(prisma, a);
   const signed = signedHash(a);
   const anyDecided = a.steps.some((s) => s.decidedAt);
+  // Khách (cổng khách S2b): ghi chú của người duyệt NỘI BỘ không lộ — chỉ tên + quyết định + thời điểm.
+  const clientSet = new Set(viewer.clientIds ?? []);
+  const steps = viewer.clientView
+    ? a.steps.map((s) => (clientSet.has(s.approverId) || s.approverId === viewer.userId ? s : { ...s, comment: null }))
+    : a.steps;
+  // Khách: đối tượng đã bị BỎ chia sẻ sau khi gửi duyệt ⇒ ẩn mã/tiêu đề/mô tả (tiêu đề mặc
+  // định chứa tiêu đề thẻ/trang); cổng giai đoạn ⇒ chỉ tên giai đoạn (approvalForClient).
+  const shown = viewer.clientView ? approvalForClient(a) : a;
   return {
-    ...a,
-    issueKey: a.issue ? `${projectKey}-${a.issue.number}` : null,
+    ...shown,
+    steps,
+    issueKey: shown.issue ? `${projectKey}-${shown.issue.number}` : null,
     currentHash: now,
     signedHash: signed,
     // Đã có người ký mà nội dung bây giờ khác lúc ký ⇒ cảnh báo (không tự huỷ).
@@ -70,7 +80,7 @@ async function present(a: ApprovalRow, viewer: { userId: number; role: ProjectAc
     // Còn chờ mà nội dung đã khác lúc gửi duyệt.
     changedSinceRequest: a.status === 'PENDING' && now !== null && a.contentHash !== null && now !== a.contentHash,
     myStepId: a.steps.find((s) => s.approverId === viewer.userId)?.id ?? null,
-    canDecide: a.steps.some((s) => canDecideApprovalStep(viewer.role, viewer.userId, a, s.id)),
+    canDecide: (!viewer.clientView || approvalTargetSharedWithClient(a)) && a.steps.some((s) => canDecideApprovalStep(viewer.role, viewer.userId, a, s.id)),
     canCancel: a.status === 'PENDING' && canCancelApproval(viewer.role, viewer.userId, a.createdBy?.id ?? null),
     waitingOn: actionableSteps(a.mode, a.steps).map((s) => s.approverId),
   };
@@ -94,17 +104,64 @@ function targetLabel(ref: { key: string }, a: { issue?: { number: number } | nul
   return `${ref.key} · ${a.stage?.name ?? 'Approval'}`;
 }
 
+// ─── Cổng khách (S2b): đối tượng phê duyệt khách còn được thấy không ──
+
+export const UNSHARED_TITLE = 'Item no longer shared';
+
+/**
+ * Đối tượng của phê duyệt có còn hiện được cho KHÁCH không: thẻ phải `clientVisible`,
+ * trang phải visibility CLIENT. Cổng giai đoạn / UAT luôn được (khách thấy tên giai
+ * đoạn; UAT tự lọc hạng mục).
+ */
+export function approvalTargetSharedWithClient(a: { targetType: string; issue?: { clientVisible?: boolean } | null; page?: { visibility?: string } | null }): boolean {
+  if (a.targetType === 'ISSUE') return a.issue?.clientVisible === true;
+  if (a.targetType === 'DOC') return a.page?.visibility === 'CLIENT';
+  return true;
+}
+
+/**
+ * Bản phê duyệt khách được đọc. Đối tượng bị bỏ chia sẻ ⇒ không mã, không tiêu đề,
+ * không mô tả, không id đối tượng ("Item no longer shared"). Cổng giai đoạn ⇒ chỉ tên
+ * giai đoạn: tiêu đề dựng lại từ tên, mô tả (ghi chú nội bộ lúc gửi duyệt) bỏ.
+ */
+export function approvalForClient<T extends {
+  targetType: string; title: string; description: string | null; issueId: number | null; pageId: number | null;
+  issue: { number: number; title: string; clientVisible?: boolean } | null;
+  page: { number: number; title: string; visibility?: string } | null;
+  stage: { n: number; name: string } | null;
+}>(a: T): T {
+  if (!approvalTargetSharedWithClient(a)) {
+    return { ...a, title: UNSHARED_TITLE, description: null, issueId: null, pageId: null, issue: null, page: null };
+  }
+  if (a.targetType === 'STAGE_GATE' && a.stage) {
+    return { ...a, title: `Stage gate: ${a.stage.n}. ${a.stage.name}`.slice(0, 200), description: null };
+  }
+  return a;
+}
+
 /**
  * Người được đứng tên duyệt: còn vào được dự án với vai có quyền 'approval.decide'.
  * Duyệt tài liệu: người duyệt còn phải ĐỌC được trang (khách chỉ đọc trang CLIENT).
+ * Cổng khách (S2b): KHÁCH bị cách ly chỉ được nêu tên duyệt thẻ ĐÃ chia sẻ / trang
+ * CLIENT — không thì 400 WORK_APPROVER_NOT_CLIENT_VISIBLE (tiêu đề phê duyệt + thông
+ * báo sẽ lộ đối tượng nội bộ cho khách).
  */
-async function assertApprovers(projectId: number, ids: number[], pageVisibility?: string) {
+async function assertApprovers(projectId: number, ids: number[], target: { pageVisibility?: string; issueShared?: boolean } = {}) {
+  const { pageVisibility, issueShared } = target;
   if (!ids.length) throw new BadRequestError('Add at least one approver', 'WORK_NO_APPROVERS');
   if (ids.length > MAX_APPROVERS) throw new BadRequestError(`At most ${MAX_APPROVERS} approvers`, 'WORK_LIMIT');
   for (const uid of ids) {
     const a = await loadProjectAccess(uid, projectId);
     if (!a || !can(a.role, 'approval.decide')) {
       throw new BadRequestError('Every approver must be a project member who can approve (viewers cannot)', 'WORK_BAD_APPROVER');
+    }
+    if (isClientScoped(a) && (issueShared === false || (pageVisibility !== undefined && pageVisibility !== 'CLIENT'))) {
+      throw new BadRequestError(
+        issueShared === false
+          ? 'A client can only approve issues shared with them — share this issue with the client first, or pick a team member'
+          : 'A client can only approve documents shared with them — set the document visibility to Client first, or pick a team member',
+        'WORK_APPROVER_NOT_CLIENT_VISIBLE',
+      );
     }
     if (pageVisibility && !canViewPage(a.role, a.workspaceRole, pageVisibility)) {
       throw new BadRequestError('Every approver must be able to read this document — share it with the client first (visibility: Client) or pick a team member', 'WORK_BAD_APPROVER');
@@ -165,7 +222,7 @@ export async function createApprovalTx(
   tx: Tx,
   projectId: number,
   creatorId: number,
-  input: { targetType: 'ISSUE' | 'STAGE_GATE' | 'DOC'; issueId?: number | null; stageId?: number | null; pageId?: number | null; title: string; description?: string | null; mode: ApprovalMode; approverIds: number[]; dueAt?: Date | null },
+  input: { targetType: 'ISSUE' | 'STAGE_GATE' | 'DOC' | 'UAT'; issueId?: number | null; stageId?: number | null; pageId?: number | null; title: string; description?: string | null; mode: ApprovalMode; approverIds: number[]; dueAt?: Date | null },
 ): Promise<number> {
   const hash = await currentTargetHash(tx, { targetType: input.targetType, issueId: input.issueId ?? null, stageId: input.stageId ?? null, pageId: input.pageId ?? null });
   const a = await tx.workApproval.create({
@@ -187,10 +244,10 @@ export async function createApproval(userId: number, projectId: number, input: C
   // Cổng giai đoạn chỉ tạo qua POST /stages/:sid/request-gate (có kiểm thứ tự + đổi trạng thái giai đoạn).
   if (input.targetType !== 'ISSUE') throw new BadRequestError('Stage gate approvals are requested from the stage', 'WORK_BAD_APPROVAL_TARGET');
   if (!input.issueNumber) throw new BadRequestError('issueNumber is required', 'VALIDATION_ERROR');
-  const issue = await prisma.workIssue.findFirst({ where: { projectId, number: input.issueNumber, deletedAt: null }, select: { id: true, number: true, title: true } });
+  const issue = await prisma.workIssue.findFirst({ where: { projectId, number: input.issueNumber, deletedAt: null }, select: { id: true, number: true, title: true, clientVisible: true } });
   if (!issue) throw new NotFoundError('Issue not found');
   const approverIds = [...new Set(input.approverIds)];
-  await assertApprovers(projectId, approverIds);
+  await assertApprovers(projectId, approverIds, { issueShared: issue.clientVisible });
   const id = await prisma.$transaction(async (tx) => {
     // Một đối tượng chỉ một yêu cầu đang chờ — hai yêu cầu song song thì không biết cái nào có hiệu lực.
     await tx.$queryRaw`SELECT id FROM work_issues WHERE id = ${issue.id} FOR UPDATE`;
@@ -218,7 +275,7 @@ async function createDocApproval(userId: number, projectId: number, access: Proj
   if (!page) throw new NotFoundError('Document not found');
   if (page.status === 'ARCHIVED') throw new BadRequestError('Archived documents cannot be sent for approval — restore it to Draft first', 'WORK_PAGE_ARCHIVED');
   const approverIds = [...new Set(input.approverIds)];
-  await assertApprovers(projectId, approverIds, page.visibility);
+  await assertApprovers(projectId, approverIds, { pageVisibility: page.visibility });
   const id = await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM work_pages WHERE id = ${page.id} FOR UPDATE`;
     const open = await tx.workApproval.count({ where: { pageId: page.id, status: 'PENDING' } });
@@ -247,9 +304,15 @@ export async function afterCreate(approvalId: number, projectId: number, userId:
 export async function getApproval(userId: number, projectId: number, approvalId: number) {
   const access = await requireProject(userId, projectId, 'project.view');
   assertModule(access, 'approvals');
-  const a = await prisma.workApproval.findFirst({ where: { id: approvalId, projectId }, select: APPROVAL_SELECT });
+  const clientView = isClientScoped(access);
+  const clientIds = clientView ? await clientMemberIds(projectId) : [];
+  const a = await prisma.workApproval.findFirst({
+    // Khách bị cách ly: chỉ yêu cầu có một KHÁCH của dự án đứng tên duyệt.
+    where: { id: approvalId, projectId, ...(clientView ? { steps: { some: { approverId: { in: clientIds } } } } : {}) },
+    select: APPROVAL_SELECT,
+  });
   if (!a || (a.page && !canViewPage(access.role, access.workspaceRole, a.page.visibility))) throw new NotFoundError('Approval request not found');
-  return present(a, { userId, role: access.role }, access.key);
+  return present(a, { userId, role: access.role, clientView, clientIds }, access.key);
 }
 
 export async function listApprovals(
@@ -272,9 +335,13 @@ export async function listApprovals(
   }
   // Khách chỉ thấy phê duyệt của trang họ đọc được — không lộ tên trang nội bộ.
   const restricted = docAccess(access.role, access.workspaceRole).view !== 'ALL';
+  // Khách bị cách ly (cổng khách S2b): chỉ yêu cầu có một khách của dự án đứng tên duyệt.
+  const clientView = isClientScoped(access);
+  const clientIds = clientView ? await clientMemberIds(projectId) : [];
   const rows = await prisma.workApproval.findMany({
     where: {
       projectId,
+      ...(clientView ? { steps: { some: { approverId: { in: clientIds } } } } : {}),
       ...(q.status ? { status: q.status } : {}),
       ...(q.targetType ? { targetType: q.targetType } : {}),
       ...(issueId ? { issueId } : {}),
@@ -286,7 +353,7 @@ export async function listApprovals(
     take: Math.min(Math.max(q.limit ?? 50, 1), 200),
     select: APPROVAL_SELECT,
   });
-  return Promise.all(rows.map((a) => present(a, { userId, role: access.role }, access.key)));
+  return Promise.all(rows.map((a) => present(a, { userId, role: access.role, clientView, clientIds }, access.key)));
 }
 
 /**
@@ -314,8 +381,9 @@ export async function myPendingApprovals(userId: number) {
     if (!access) continue;
     const myStep = a.steps.find((s) => s.approverId === userId);
     if (!myStep || !canDecideApprovalStep(access.role, userId, a, myStep.id)) continue;
+    const clientView = isClientScoped(access);
     out.push({
-      ...(await present(a, { userId, role: access.role }, project.key)),
+      ...(await present(a, { userId, role: access.role, clientView, clientIds: clientView ? await clientMemberIds(project.id) : [] }, project.key)),
       project: { id: project.id, key: project.key, name: project.name, workspaceSlug: project.workspace.slug },
     });
   }
@@ -344,7 +412,7 @@ async function applyStageEffect(tx: Tx, stageId: number | null, status: 'APPROVE
 export async function decideApproval(
   userId: number, projectId: number, approvalId: number,
   input: { decision: 'APPROVE' | 'REJECT'; comment?: string | null },
-  meta: { ip?: string | null } = {},
+  meta: { ip?: string | null; viaUat?: boolean } = {},
 ) {
   const access = await requireProject(userId, projectId, 'project.view');
   assertModule(access, 'approvals');
@@ -356,9 +424,19 @@ export async function decideApproval(
     await tx.$queryRaw`SELECT id FROM work_approvals WHERE id = ${approvalId} FOR UPDATE`;
     const a = await tx.workApproval.findFirst({
       where: { id: approvalId, projectId },
-      select: { id: true, status: true, mode: true, targetType: true, issueId: true, stageId: true, pageId: true, page: { select: { number: true } }, steps: { select: { id: true, approverId: true, position: true, decision: true } } },
+      select: {
+        id: true, status: true, mode: true, targetType: true, issueId: true, stageId: true, pageId: true,
+        issue: { select: { clientVisible: true } }, page: { select: { number: true, visibility: true } },
+        steps: { select: { id: true, approverId: true, position: true, decision: true } },
+      },
     });
     if (!a) throw new NotFoundError('Approval request not found');
+    // Khách không ký cho thứ họ không còn được xem (thẻ/trang đã bị bỏ chia sẻ sau khi gửi duyệt).
+    if (isClientScoped(access) && !approvalTargetSharedWithClient(a)) {
+      throw new AppError('This item is no longer shared with you, so it cannot be approved from the client portal', 409, 'WORK_ITEM_NOT_SHARED');
+    }
+    // Nghiệm thu UAT quyết qua form riêng (điều kiện / điểm từ chối ⇒ thẻ BUG/CR) — portal.service.
+    if (a.targetType === 'UAT' && !meta.viaUat) throw new BadRequestError('Use the UAT sign-off form to decide on this request', 'WORK_USE_UAT_FORM');
     const mine = a.steps.find((s) => s.approverId === userId);
     if (!mine) throw new ForbiddenError('You are not an approver on this request. Nobody can approve on behalf of someone else.');
     if (a.status !== 'PENDING') throw new ConflictError(`This request is already ${a.status.toLowerCase()}`);

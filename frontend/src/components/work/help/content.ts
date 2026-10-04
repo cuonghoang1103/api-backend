@@ -1701,6 +1701,151 @@ export const HELP_ARTICLES: HelpArticle[] = [
     related: ['issues', 'teams'],
   },
 
+  // Đợt S2b (04/10/2026) — cổng khách. Đọc từ portal.service.ts / permissions.ts (clientPortalRouteAllowed) /
+  // portalNotify.ts. Đổi luật hiển thị cho khách ở mã thì sửa ba bài này.
+  {
+    id: 'client-portal',
+    category: 'studio',
+    title: { en: 'Client portal', vi: 'Cổng khách hàng (Client portal)' },
+    summary: {
+      en: 'A separate, simplified view for your client: progress by stage, shared issues and replies, requests, approvals, documents, deliverables and activity — nothing internal.',
+      vi: 'Một giao diện riêng, gọn cho khách: tiến độ theo giai đoạn, thẻ và trả lời đã chia sẻ, yêu cầu, phê duyệt, tài liệu, bàn giao và hoạt động — không có gì nội bộ.',
+    },
+    keywords: ['client', 'customer', 'portal', 'share with client', 'invite client', 'preview as client', 'deliverable', 'khach', 'khach hang', 'cong khach', 'chia se'],
+    pages: [page('project', 'portal', 'Client portal', 'Cổng khách')],
+    blocks: [
+      p('New **Client** projects have the **Client portal** module on (Project settings → Studio → Modules). Older projects keep working exactly as before until you turn it on.', 'Dự án loại **Client** mới bật sẵn mô-đun **Client portal** (Project settings → Studio → Modules). Dự án cũ vẫn chạy y như trước cho tới khi bạn bật.'),
+      steps(
+        ['Open **Client portal** in the project sidebar → **Invite client** with their email. They join as a client (workspace guest) and land straight in the portal.', 'Mở **Client portal** ở thanh bên dự án → **Invite client** bằng email. Khách vào với vai khách (guest của không gian) và vào thẳng cổng.'],
+        ['On each issue the client should follow, press **Share with client**. A yellow **Visible to client** strip marks everything the client can see.', 'Ở mỗi thẻ khách cần theo dõi, bấm **Share with client**. Dải vàng **Visible to client** đánh dấu mọi thứ khách thấy được.'],
+        ['Share documents with **Share with client** on the page (visibility **Team and client**), and files with **Share** or **Deliver** under each attachment.', 'Chia sẻ tài liệu bằng **Share with client** trên trang (chế độ **Team and client**), chia sẻ tệp bằng **Share** hoặc **Deliver** dưới mỗi tệp.'],
+        ['Press **Preview as client** to see exactly what they see. Preview is read-only — you are not signed in as the client.', 'Bấm **Preview as client** để thấy đúng như khách thấy. Chế độ xem trước chỉ đọc — bạn không đăng nhập thay khách.'],
+      ),
+      table(['Tab', ['What the client sees', 'Khách thấy gì']], [
+        ['Overview', ['Progress by stage (name, status, %), upcoming milestones, what is waiting on them', 'Tiến độ theo giai đoạn (tên, trạng thái, %), mốc sắp tới, việc đang chờ họ']],
+        ['Requests', ['Shared issues and their own requests, with replies to client; **New request** sends a bug, change, question or feedback', 'Thẻ đã chia sẻ và yêu cầu của họ, kèm trả lời cho khách; **New request** gửi lỗi, thay đổi, câu hỏi hoặc góp ý']],
+        ['Approvals', ['Requests they are named on: stage gates, client documents, UAT sign-offs', 'Yêu cầu có tên họ: cổng giai đoạn, tài liệu cho khách, nghiệm thu UAT']],
+        ['Documents', ['Pages set to Team and client, and shared files', 'Trang đặt Team and client, và tệp đã chia sẻ']],
+        ['Deliverables', ['Files marked Deliver, and released versions (shared items only)', 'Tệp đánh dấu Deliver, và bản phát hành (chỉ hạng mục đã chia sẻ)']],
+        ['Activity', ['Only public events: sharing, status changes, replies to client, decisions, deliveries', 'Chỉ sự kiện công khai: chia sẻ, đổi trạng thái, trả lời khách, quyết định, bàn giao']],
+      ]),
+      warn('Clients never see unshared issues, internal notes, worklogs, estimates, reports, sprints, other projects, or other clients — the server blocks those, not just the screen. A request from the client becomes an issue labelled **from-client**, already shared, in the matching team queue (bug → QA, change → BA, otherwise PM).', 'Khách không bao giờ thấy thẻ chưa chia sẻ, ghi chú nội bộ, giờ làm, ước lượng, báo cáo, sprint, dự án khác hay khách khác — server chặn, không chỉ ẩn trên màn hình. Yêu cầu của khách thành thẻ nhãn **from-client**, đã chia sẻ, vào hàng đợi bộ phận phù hợp (lỗi → QA, thay đổi → BA, còn lại → PM).'),
+      tip('Clients get professional emails only for replies to client, approval requests, completed stages and new deliverables. They can turn them off in their notification settings.', 'Khách chỉ nhận email (giọng chuyên nghiệp) khi có trả lời cho khách, yêu cầu phê duyệt, giai đoạn hoàn thành và bàn giao mới. Họ tắt được trong cài đặt thông báo.'),
+    ],
+    related: ['internal-notes', 'uat-signoff', 'project-docs', 'approvals'],
+  },
+
+  {
+    id: 'internal-notes',
+    category: 'studio',
+    title: { en: 'Internal notes vs client replies', vi: 'Ghi chú nội bộ và trả lời khách' },
+    summary: {
+      en: 'In client-portal projects every comment is an Internal note unless you choose Reply to client.',
+      vi: 'Ở dự án có cổng khách, mọi bình luận là Ghi chú nội bộ trừ khi bạn chọn Reply to client.',
+    },
+    keywords: ['internal note', 'reply to client', 'comment', 'public', 'private', 'ghi chu noi bo', 'tra loi khach', 'binh luan'],
+    blocks: [
+      p('Like Jira Service Management, comments have two kinds. The default is safe: if you do nothing, the client never sees it.', 'Giống Jira Service Management, bình luận có hai loại. Mặc định là an toàn: không chọn gì thì khách không bao giờ thấy.'),
+      table([['Kind', 'Loại'], ['Who sees it', 'Ai thấy'], ['Email to client', 'Email cho khách']], [
+        [['**Internal note** (default)', '**Internal note** (mặc định)'], ['The project team only', 'Chỉ đội dự án'], NO],
+        [['**Reply to client**', '**Reply to client**'], ['The team and the client (in the portal)', 'Đội và khách (trong cổng)'], YES],
+      ]),
+      list(
+        ['**Reply to client** is only available once the issue is shared. The composer turns yellow so you know it will be read by the client.', '**Reply to client** chỉ dùng được khi thẻ đã chia sẻ. Ô soạn chuyển màu vàng để bạn biết khách sẽ đọc.'],
+        ['Everything the client writes is a reply the team sees. Clients cannot write internal notes.', 'Mọi thứ khách viết đều là trả lời đội thấy được. Khách không viết được ghi chú nội bộ.'],
+        ['Mentioning a client in an internal note does **not** notify them. AI-written comments are always internal.', '@nhắc khách trong ghi chú nội bộ **không** báo cho họ. Bình luận do AI soạn luôn là nội bộ.'],
+        ['Each comment shows **Internal note** or **Reply to client** so the thread is never ambiguous.', 'Mỗi bình luận hiện nhãn **Internal note** hoặc **Reply to client** nên không bao giờ nhầm.'],
+      ),
+      warn('Unsharing an issue hides it — and all its replies — from the client again. Old comments from before the portal was turned on stay internal.', 'Bỏ chia sẻ thẻ là ẩn thẻ — và mọi trả lời — khỏi khách. Bình luận có từ trước khi bật cổng vẫn là nội bộ.'),
+    ],
+    related: ['client-portal', 'issues', 'notifications'],
+  },
+
+  {
+    id: 'uat-signoff',
+    category: 'studio',
+    title: { en: 'UAT sign-off', vi: 'Nghiệm thu UAT' },
+    summary: {
+      en: 'Ask the client to accept a milestone: they approve (optionally with conditions) or reject with points that become bugs and change requests, then print the acceptance certificate.',
+      vi: 'Mời khách nghiệm thu một mốc: duyệt (có thể kèm điều kiện) hoặc từ chối kèm các điểm tự thành lỗi / yêu cầu thay đổi, rồi in biên bản nghiệm thu.',
+    },
+    keywords: ['uat', 'acceptance', 'sign off', 'certificate', 'milestone', 'nghiem thu', 'bien ban', 'moc'],
+    pages: [page('project', 'portal?tab=approvals', 'Client portal → Approvals', 'Cổng khách → Approvals')],
+    blocks: [
+      steps(
+        ['Share the items to accept with the client. Optionally share the UAT plan document and files.', 'Chia sẻ các hạng mục cần nghiệm thu với khách. Có thể chia sẻ thêm tài liệu kế hoạch UAT và tệp.'],
+        ['In **Client portal**, press **Request UAT sign-off**: pick the release, environment, build, items and documents. It needs at least one client approver.', 'Trong **Client portal**, bấm **Request UAT sign-off**: chọn bản phát hành, môi trường, build, hạng mục và tài liệu. Cần ít nhất một khách đứng tên duyệt.'],
+        ['The client opens it from **Approvals** and chooses **Approve** (with optional **Conditions**) or **Reject** with a reason and the points they found.', 'Khách mở ở **Approvals** và chọn **Approve** (có thể kèm **Conditions**) hoặc **Reject** với lý do và các điểm phát hiện.'],
+        ['On reject, each point becomes a **Bug** or **Change** issue labelled from-client. Fix them and send round 2.', 'Khi từ chối, mỗi điểm thành thẻ **Bug** hoặc **Change** nhãn from-client. Sửa xong gửi lần 2.'],
+        ['Once decided, open **Acceptance certificate** → **Print / Save as PDF**.', 'Khi đã quyết, mở **Acceptance certificate** → **Print / Save as PDF**.'],
+      ),
+      list(
+        ['The certificate follows the studio template (scope, results, conclusion, signatures) and lists each signature as a SHA-256 fingerprint of exactly what was reviewed, with name and time.', 'Biên bản theo mẫu của studio (phạm vi, kết quả, kết luận, chữ ký), mỗi chữ ký là dấu vân tay SHA-256 của đúng nội dung đã xem, kèm tên và thời điểm.'],
+        ['If an item or document changes after signing, the sign-off shows that the content changed.', 'Hạng mục hay tài liệu đổi sau khi ký thì phê duyệt báo nội dung đã đổi.'],
+        ['UAT sign-offs can only be decided from the UAT form — the generic Approve button is not used for them.', 'Nghiệm thu UAT chỉ quyết được qua form UAT — không dùng nút Approve chung.'],
+      ),
+      warn('The certificate is a template-based record. Use it as a basis for payment only when both parties’ legal teams accept the template.', 'Biên bản dựng theo mẫu. Chỉ dùng làm căn cứ thanh toán khi pháp lý hai bên chấp thuận mẫu.'),
+    ],
+    related: ['client-portal', 'approvals', 'releases'],
+  },
+
+  // Đợt S3a (04/10/2026) — đọc từ portfolioRules.ts / portfolio.service.ts. Đổi ngưỡng ở mã thì sửa bài này.
+  {
+    id: 'portfolio-workload',
+    category: 'track',
+    title: { en: 'Portfolio & workload', vi: 'Danh mục dự án & khối lượng việc' },
+    summary: {
+      en: 'See every project’s health (red / amber / green, with reasons), upcoming milestones, cross-project blockers, and who is overloaded week by week.',
+      vi: 'Xem sức khoẻ mọi dự án (đỏ / vàng / xanh, kèm lý do), mốc sắp tới, phụ thuộc chặn giữa các dự án, và ai đang quá tải theo từng tuần.',
+    },
+    keywords: ['portfolio', 'workload', 'rag', 'health', 'red amber green', 'overloaded', 'capacity', 'milestone', 'blocked', 'danh muc', 'khoi luong', 'qua tai', 'suc khoe'],
+    pages: [page('workspace', 'portfolio', 'Portfolio', 'Danh mục dự án'), page('workspace', 'workload', 'Workload', 'Khối lượng việc')],
+    blocks: [
+      p(
+        '**Portfolio** and **Workload** live in the workspace sidebar (members only — guests do not see them). Both only read what is already in your projects; nothing is guessed by AI.',
+        '**Portfolio** và **Workload** nằm ở sidebar của không gian (chỉ thành viên — khách không thấy). Cả hai chỉ đọc dữ liệu đã có trong dự án; không có gì do AI đoán.',
+      ),
+      h('Portfolio: who sees what', 'Portfolio: ai thấy gì'),
+      list(
+        ['You see exactly the projects you can open. Private projects you are not in stay hidden — even in the blocker list, where the other side shows as **Issue in another project**.', 'Bạn thấy đúng những dự án bạn mở được. Dự án Private bạn không tham gia bị ẩn — kể cả trong danh sách chặn, phía đó chỉ hiện **Issue in another project**.'],
+        ['Each row shows open / overdue / done-in-14-days issues, the active sprint and its pace, the current stage (Stages module), pending approvals, the next milestone and cross-project blockers.', 'Mỗi dòng có số thẻ mở / quá hạn / xong trong 14 ngày, sprint đang chạy và tốc độ, giai đoạn hiện tại (mô-đun Stages), phê duyệt đang chờ, mốc kế tiếp và số thẻ bị chặn liên dự án.'],
+        ['Hover the health dot (tap on a phone) to read **why** it has that colour. **How is health computed?** lists every rule.', 'Rê chuột vào chấm sức khoẻ (chạm trên điện thoại) để đọc **vì sao** nó có màu đó. Nút **How is health computed?** liệt kê mọi luật.'],
+      ),
+      table(
+        [['Colour', 'Màu'], ['When', 'Khi nào']],
+        [
+          [['Off track (red)', 'Off track (đỏ)'], ['A milestone (unreleased version) is past its release date · the sprint ended with work left · the sprint needs ≥ 2× its recent pace · 10+ overdue issues, or 3+ that are ≥ 25% of open issues', 'Mốc (version chưa phát hành) đã quá ngày · sprint hết hạn còn việc · sprint cần ≥ 2× tốc độ gần đây · từ 10 thẻ quá hạn, hoặc từ 3 thẻ và ≥ 25% số thẻ mở']],
+          [['At risk (amber)', 'At risk (vàng)'], ['The sprint is at risk (needs > 1.3× its pace) · any overdue issue · a milestone due within 7 days with < 80% done · an issue blocked by unfinished work in another project · an approval waiting > 3 days', 'Sprint có rủi ro (cần > 1,3× tốc độ) · có thẻ quá hạn · mốc tới hạn trong 7 ngày mà xong < 80% · thẻ bị chặn bởi việc chưa xong ở dự án khác · phê duyệt chờ > 3 ngày']],
+          [['On track (green)', 'On track (xanh)'], ['None of the above', 'Không dính luật nào ở trên']],
+        ],
+      ),
+      tip(
+        'A sprint on its first day, or with nothing estimated, never turns a project amber — there is not enough data to forecast.',
+        'Sprint ngày đầu, hoặc chưa ước lượng thẻ nào, không làm dự án chuyển vàng — chưa đủ dữ liệu để dự báo.',
+      ),
+      h('Workload: how hours are counted', 'Workload: giờ được tính thế nào'),
+      list(
+        ['Hours left on an issue = **Remaining estimate**; if empty, original estimate minus time logged; if there is no time estimate, story points × hours per point (4h by default — change it with the **1 pt = …h** picker); nothing estimated = 0h, listed as not estimated.', 'Giờ còn lại của thẻ = **Remaining estimate**; trống thì lấy ước lượng gốc trừ giờ đã ghi; không có ước lượng giờ thì điểm × số giờ mỗi điểm (mặc định 4h — đổi bằng ô **1 pt = …h**); không ước lượng gì = 0h, ghi là chưa ước lượng.'],
+        ['Hours are spread over working days from the start date (or today) to the due date. Overdue work lands on the next working day. Issues with no due date are counted under the person as **no due date**, not in the grid.', 'Giờ được rải đều trên các ngày làm việc từ ngày bắt đầu (hoặc hôm nay) tới hạn. Việc quá hạn dồn vào ngày làm việc gần nhất. Thẻ không có hạn được đếm riêng ở người đó (**no due date**), không vào lưới.'],
+        ['Capacity per day = the sum of the hours/day set for that person in each project (**Reports → Capacity**); if none is set, 8h. Weekends and time off count as 0.', 'Năng lực mỗi ngày = tổng giờ/ngày đặt cho người đó ở từng dự án (**Reports → Capacity**); chưa đặt thì 8h. Cuối tuần và ngày nghỉ tính 0.'],
+        ['A cell turns red when a week is above 100% of capacity. Click a cell to see the issues behind it.', 'Ô chuyển đỏ khi một tuần vượt 100% năng lực. Bấm ô để xem các thẻ tạo nên con số đó.'],
+      ),
+      table(
+        [['You are', 'Bạn là'], ['You see', 'Bạn thấy']],
+        [
+          [['Workspace owner / admin', 'Owner / Admin không gian'], ['Everyone, grouped by team', 'Mọi người, gộp theo bộ phận']],
+          [['Team lead', 'Trưởng bộ phận'], ['Yourself and the people in the teams you lead', 'Bạn và người trong các bộ phận bạn dẫn']],
+          [['Anyone else', 'Người khác'], ['Only your own workload', 'Chỉ khối lượng việc của bạn']],
+        ],
+      ),
+      warn(
+        'Workload only counts issues in projects you can open, so a lead may see less than the person really has.',
+        'Workload chỉ tính thẻ trong dự án bạn mở được, nên trưởng bộ phận có thể thấy ít hơn khối việc thật của người đó.',
+      ),
+    ],
+    related: ['time-capacity', 'releases', 'teams', 'stages-gates'],
+  },
+
   // ═══ TRA CỨU ═══
   {
     id: 'apps',
@@ -1981,6 +2126,7 @@ export function helpArticleForPath(pathname: string, search = ''): string {
   if (parts.length === 2) return 'templates';
   if (parts[2] === 'settings') return tab === 'audit' || tab === 'trash' ? 'trash-audit' : 'workspaces';
   if (parts[2] === 'teams') return 'teams';
+  if (parts[2] === 'portfolio' || parts[2] === 'workload') return 'portfolio-workload';
   const view = parts[3] ?? 'board';
   switch (view) {
     case 'board': return 'board';
@@ -1992,6 +2138,7 @@ export function helpArticleForPath(pathname: string, search = ''): string {
     case 'tests': return 'testing';
     case 'stages': return 'stages-gates';
     case 'approvals': return 'approvals';
+    case 'portal': return parts[4] === 'uat' || tab === 'approvals' ? 'uat-signoff' : 'client-portal';
     case 'dashboards': return 'filters-dashboards';
     case 'reports': return tab === 'time' || tab === 'capacity' ? 'time-capacity' : 'reports';
     case 'settings': return SETTINGS_TAB_ARTICLE[tab] ?? 'workflow';

@@ -18,7 +18,7 @@ import { PUBLIC_USER } from './common.js';
 import { TEAM_KEY_RE, type TeamRole } from './constants.js';
 import { applyIssueChange } from './issueChange.js';
 import { CARD_SELECT, toCard } from './issues.service.js';
-import { canAssignTeamIssue, loadProjectAccess, loadWorkspaceRole, requireWorkspace } from './permissions.js';
+import { canAssignTeamIssue, loadProjectAccess, loadWorkspaceRole, portalOnlyUserIds, requireWorkspace } from './permissions.js';
 import { modulesOf } from './studio.js';
 
 const MAX_TEAMS_PER_WORKSPACE = 60;
@@ -44,11 +44,15 @@ function shape(t: TeamRow, openIssues = 0) {
 /** Người được vào bộ phận: thành viên không gian, KHÔNG phải khách. */
 async function assertTeamEligible(workspaceId: number, userIds: number[]) {
   if (!userIds.length) return;
-  const rows = await prisma.workMember.findMany({ where: { workspaceId, userId: { in: userIds } }, select: { userId: true, role: true } });
+  const [rows, portalOnly] = await Promise.all([
+    prisma.workMember.findMany({ where: { workspaceId, userId: { in: userIds } }, select: { userId: true, role: true } }),
+    portalOnlyUserIds(workspaceId),
+  ]);
   for (const uid of userIds) {
     const r = rows.find((x) => x.userId === uid);
     if (!r) throw new BadRequestError('Invite this person to the workspace first', 'WORK_NOT_IN_WORKSPACE');
-    if (r.role === 'GUEST') throw new BadRequestError('Guests (clients, teachers) cannot join a team', 'WORK_BAD_TEAM_MEMBER');
+    // MEMBER chỉ là khách cổng cũng là khách (permissions.portalOnlyUserIds).
+    if (r.role === 'GUEST' || portalOnly.has(uid)) throw new BadRequestError('Guests (clients, teachers) cannot join a team', 'WORK_BAD_TEAM_MEMBER');
   }
 }
 

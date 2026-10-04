@@ -6,13 +6,14 @@ import { randomUUID } from 'node:crypto';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
-import { CARD_SELECT, toCard } from './issues.service.js';
+import { CARD_SELECT, scrubCardForClient, toCard } from './issues.service.js';
 import { compileJql, JqlError, parseJql, type JqlContext } from './jql.js';
-import { requireProject } from './permissions.js';
+import { filterPeople, peopleFilterFor, type PeopleFilter } from './clientPeople.js';
+import { isClientScoped, requireProject } from './permissions.js';
 import { projectMembers } from './projects.service.js';
 import { estimateOf, estimationOf, vnDay } from './sprints.service.js';
 
-async function jqlContext(projectId: number, userId: number, key: string): Promise<JqlContext> {
+async function jqlContext(projectId: number, userId: number, key: string, people: PeopleFilter = null): Promise<JqlContext> {
   const [project, statuses, types, labels, components, members, sprints, customFields, teams, stages] = await Promise.all([
     prisma.workProject.findUnique({ where: { id: projectId }, select: { name: true } }),
     prisma.workStatus.findMany({ where: { workflow: { projectId } }, select: { id: true, name: true, category: true } }),
@@ -29,7 +30,8 @@ async function jqlContext(projectId: number, userId: number, key: string): Promi
   return {
     teams, stages,
     projectKey: key, projectName: project?.name, userId, statuses, types, labels, components,
-    members: members.map((m) => ({ id: m.id, username: m.username })),
+    // Khách của cổng: chỉ người khách được thấy — `assignee = x` / gợi ý "ý bạn là…" không dò ra tên nội bộ.
+    members: filterPeople(members, people).map((m) => ({ id: m.id, username: m.username })),
     sprints,
     customFields: customFields.map((f) => ({ ...f, options: (f.options as Array<{ id: string; label: string }>) ?? [] })),
   };
@@ -44,7 +46,7 @@ export function jqlHttpError(err: JqlError): AppError {
 export async function compileFor(userId: number, projectId: number, query: string) {
   const access = await requireProject(userId, projectId, 'project.view');
   try {
-    const ctx = await jqlContext(projectId, userId, access.key);
+    const ctx = await jqlContext(projectId, userId, access.key, await peopleFilterFor(access, userId));
     const compiled = compileJql(parseJql(query.slice(0, 4000)), ctx);
     return { access, ...compiled };
   } catch (err) {
@@ -53,16 +55,28 @@ export async function compileFor(userId: number, projectId: number, query: strin
   }
 }
 
+/**
+ * Trường JQL khách bị cách ly KHÔNG được lọc theo (cổng khách S2b): đó là số liệu
+ * nội bộ đã bị giấu khỏi thẻ (điểm, bộ phận, sprint, component, người theo dõi) —
+ * lọc theo chúng thì dò ra được giá trị ẩn.
+ */
+const CLIENT_BLOCKED_JQL = /\b(points|storypoints|team|sprint|component|components|watcher|watchers)\b\s*(=|!=|>|<|~|\bin\b|\bnot\b|\bis\b)/i;
+
 export async function search(userId: number, projectId: number, query: string, opts: { limit?: number; offset?: number } = {}) {
-  const { where, orderBy } = await compileFor(userId, projectId, query);
-  const full: Prisma.WorkIssueWhereInput = { AND: [{ projectId, deletedAt: null }, where] };
+  const { where, orderBy, access } = await compileFor(userId, projectId, query);
+  const scoped = isClientScoped(access);
+  if (scoped && CLIENT_BLOCKED_JQL.test(query)) {
+    throw new AppError('This field is not available in the client portal', 400, 'WORK_JQL_ERROR', { position: 0 });
+  }
+  // Khách bị cách ly: chỉ thẻ đã chia sẻ (cùng luật với board/list — issues.service clientIssueWhere).
+  const full: Prisma.WorkIssueWhereInput = { AND: [{ projectId, deletedAt: null }, where, scoped ? { clientVisible: true } : {}] };
   const limit = Math.min(Math.max(opts.limit ?? 100, 1), 500);
   const offset = Math.max(opts.offset ?? 0, 0);
   const [total, rows] = await Promise.all([
     prisma.workIssue.count({ where: full }),
     prisma.workIssue.findMany({ where: full, orderBy, skip: offset, take: limit, select: CARD_SELECT }),
   ]);
-  return { total, items: rows.map(toCard), offset, limit };
+  return { total, items: rows.map((r) => scrubCardForClient(toCard(r), scoped)), offset, limit };
 }
 
 /**

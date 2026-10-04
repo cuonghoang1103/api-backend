@@ -61,8 +61,53 @@ export function projectRoom(projectId: number): string {
   return `work:project:${projectId}`;
 }
 
+/**
+ * Phòng của KHÁCH bị cách ly (cổng khách S2b). Khách KHÔNG vào projectRoom (sự
+ * kiện ở đó mang id thẻ + giá trị thay đổi của mọi thẻ, kể cả thẻ nội bộ). Phòng
+ * này chỉ nhận `portal.changed` KHÔNG kèm dữ liệu, và chỉ khi thay đổi chạm tới thứ
+ * khách thấy được (thẻ đã chia sẻ, bình luận PUBLIC, trang CLIENT, giai đoạn, phê duyệt).
+ */
+export function clientRoom(projectId: number): string {
+  return `work:project:${projectId}:client`;
+}
+
+/** Sự kiện có chạm tới thứ khách thấy được không (đọc DB — chạy sau commit, ngoài lệnh người dùng). */
+async function visibleToClient(event: WorkEvent): Promise<boolean> {
+  const { prisma } = await import('../../config/database.js');
+  switch (event.type) {
+    case 'issue.created':
+    case 'issue.updated':
+    case 'issue.deleted':
+    case 'handoff.updated': {
+      const i = await prisma.workIssue.findUnique({ where: { id: event.issueId }, select: { clientVisible: true } });
+      // Vừa BỎ chia sẻ cũng phải báo để cổng khách gỡ thẻ đi.
+      const unshared = event.type === 'issue.updated' && event.changes.some((c) => c.field === 'clientVisible');
+      return !!i?.clientVisible || unshared;
+    }
+    case 'comment.created': {
+      const c = await prisma.workComment.findUnique({ where: { id: event.commentId }, select: { visibility: true, issue: { select: { clientVisible: true } } } });
+      return c?.visibility === 'PUBLIC' && c.issue.clientVisible;
+    }
+    case 'page.updated': {
+      const p = await prisma.workPage.findUnique({ where: { id: event.pageId }, select: { visibility: true } });
+      return p?.visibility === 'CLIENT' || event.action === 'status' || event.action === 'deleted';
+    }
+    case 'stage.updated':
+    case 'approval.updated':
+      return true;
+    default:
+      return false;
+  }
+}
+
 export function emitWorkEvent(event: WorkEvent): void {
-  getIO()?.to(projectRoom(event.projectId)).emit('work:event', event);
+  const io = getIO();
+  io?.to(projectRoom(event.projectId)).emit('work:event', event);
+  if (io) {
+    void visibleToClient(event)
+      .then((ok) => { if (ok) io.to(clientRoom(event.projectId)).emit('work:event', { type: 'portal.changed', projectId: event.projectId }); })
+      .catch(() => undefined);
+  }
   for (const fn of listeners) {
     Promise.resolve()
       .then(() => fn(event))
@@ -77,4 +122,5 @@ export function emitWorkEvent(event: WorkEvent): void {
  */
 export function evictFromProject(projectId: number, userId: number): void {
   getIO()?.in(`user:${userId}`).socketsLeave(projectRoom(projectId));
+  getIO()?.in(`user:${userId}`).socketsLeave(clientRoom(projectId));
 }

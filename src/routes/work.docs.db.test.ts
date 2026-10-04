@@ -225,7 +225,8 @@ describe('CT Work — tài liệu dự án S2a (HTTP + DB thật)', { skip: !RUN
   it('phê duyệt DOC: gửi ⇒ IN_REVIEW, duyệt ⇒ APPROVED, sửa sau duyệt ⇒ lệch chữ ký; khách không đứng tên trang nội bộ', async () => {
     const bad = await call(member, 'POST', `/projects/${clPid}/approvals`, { targetType: 'DOC', pageNumber: srsNum, approverIds: [client.id] });
     assert.equal(bad.status, 400);
-    assert.equal(bad.code, 'WORK_BAD_APPROVER');
+    // Khách cổng (dự án CLIENT bật clientPortal) ⇒ mã riêng từ 04/10/2026 (vá rủi ro S2b).
+    assert.equal(bad.code, 'WORK_APPROVER_NOT_CLIENT_VISIBLE');
     const a = await call(member, 'POST', `/projects/${clPid}/approvals`, { targetType: 'DOC', pageNumber: srsNum, approverIds: [owner.id] });
     assert.equal(a.status, 201, JSON.stringify(a.raw));
     assert.equal(a.data.targetType, 'DOC');
@@ -276,6 +277,9 @@ describe('CT Work — tài liệu dự án S2a (HTTP + DB thật)', { skip: !RUN
     assert.equal((await call(viewer, 'POST', `/projects/${clPid}/pages/${srsNum}/issues`, { issueNumber: issueNum })).status, 403);
     const fromIssue = await call(viewer, 'GET', `/projects/${clPid}/issues/${issueNum}/pages`);
     assert.deepEqual(fromIssue.data.pages.map((p: any) => p.number).sort(), [srsNum, childNum].sort());
+    // Cổng khách (S2b, bật mặc định cho dự án CLIENT mới): thẻ chưa chia sẻ ⇒ khách 404; chia sẻ rồi mới đọc được.
+    assert.equal((await call(client, 'GET', `/projects/${clPid}/issues/${issueNum}/pages`)).status, 404);
+    await call(member, 'PUT', `/projects/${clPid}/issues/${issueNum}/client-visible`, { visible: true });
     const asClient = await call(client, 'GET', `/projects/${clPid}/issues/${issueNum}/pages`);
     assert.deepEqual(asClient.data.pages.map((p: any) => p.number), [childNum]);
     const page = (await call(member, 'GET', `/projects/${clPid}/pages/${srsNum}`)).data;

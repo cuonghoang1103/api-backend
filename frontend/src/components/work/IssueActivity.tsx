@@ -19,18 +19,25 @@ import { Dialog, PRIORITIES, relativeTime, Spinner, UserAvatar, formatDate } fro
 import { ConfirmDialog } from './settings/shared';
 import { WorklogList } from './TimeTracking';
 import { ReactionBar, ReactionPickerButton, useCommentReactionsRealtime, useToggleReaction } from './comments/CommentReactions';
+import { ClientPill, CommentModeToggle, InternalPill, portalStaff } from './portal/ClientShare';
+import type { CommentVisibility } from '@/lib/work-api';
 
-function CommentComposer({ config, pid, num }: { config: ProjectConfig; pid: number; num: number }) {
+function CommentComposer({ config, pid, num, clientShared }: { config: ProjectConfig; pid: number; num: number; clientShared: boolean }) {
   const qc = useQueryClient();
   const [doc, setDoc] = useState<TiptapDoc | null>(null);
   const [key, setKey] = useState(0);
   const [focused, setFocused] = useState(false);
+  // Cổng khách (S2b): mặc định GHI CHÚ NỘI BỘ; "Reply to client" phải chọn chủ động.
+  const portal = portalStaff(config);
+  const [mode, setMode] = useState<CommentVisibility>('INTERNAL');
+  const toClient = portal && mode === 'PUBLIC' && clientShared;
   const add = useMutation({
-    mutationFn: () => workApi.addComment(pid, num, doc!),
+    mutationFn: () => workApi.addComment(pid, num, doc!, portal ? (toClient ? 'PUBLIC' : 'INTERNAL') : undefined),
     onSuccess: () => {
       setDoc(null);
       setKey((k) => k + 1);
       setFocused(false);
+      setMode('INTERNAL');
       qc.invalidateQueries({ queryKey: wk.comments(pid, num) });
       qc.invalidateQueries({ queryKey: wk.issue(pid, num) });
     },
@@ -47,20 +54,30 @@ function CommentComposer({ config, pid, num }: { config: ProjectConfig; pid: num
     <div className="flex gap-3">
       <UserAvatar user={meUser} size={26} className="mt-1" />
       <div className="min-w-0 flex-1" onFocusCapture={() => setFocused(true)}>
+        {portal && (
+          <div className="mb-2 flex flex-wrap items-center gap-2">
+            <CommentModeToggle value={toClient ? 'PUBLIC' : 'INTERNAL'} onChange={setMode} shared={clientShared} />
+            {toClient
+              ? <span className="text-[11.5px] text-[var(--w-yellow)]">Visible to client — they get an email</span>
+              : <span className="text-[11.5px] text-[var(--w-text-3)]">Only the team sees internal notes</span>}
+          </div>
+        )}
+        <div className={cn(toClient && 'w-reply-client')}>
         <RichEditor
           key={key}
           value={doc}
           onChange={(d) => setDoc(d)}
           members={config.members}
-          placeholder="Add a comment… Type @ to mention someone"
+          placeholder={toClient ? 'Write a reply the client will read…' : 'Add a comment… Type @ to mention someone'}
           minHeight={focused ? 72 : 36}
           toolbar={focused}
           onSubmit={submit}
         />
+        </div>
         {focused && (
           <div className="mt-2 flex items-center gap-2">
             <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={empty || add.isPending} onClick={submit}>
-              {add.isPending ? 'Saving…' : 'Comment'}
+              {add.isPending ? 'Saving…' : toClient ? 'Reply to client' : portal ? 'Add internal note' : 'Comment'}
             </button>
             <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => { setFocused(false); setDoc(null); setKey((k) => k + 1); }}>Cancel</button>
             <span className="ml-auto text-[11px] text-[var(--w-text-3)]"><span className="w-kbd">⌘</span> <span className="w-kbd">↵</span> to send</span>
@@ -156,6 +173,7 @@ function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectC
           <span className="font-semibold text-[var(--w-text)]">{c.isAi ? 'CT Work AI' : userName(c.author)}</span>
           <span className="text-[var(--w-text-3)]" title={new Date(c.createdAt).toLocaleString('en-US')}>{relativeTime(c.createdAt)}</span>
           {c.editedAt && <span className="text-[var(--w-text-3)]">(edited)</span>}
+          {portalStaff(config) && (c.visibility === 'PUBLIC' ? <ClientPill label="Reply to client" /> : <InternalPill label="Internal note" />)}
           {!editing && canReact && (
             // Nút cảm xúc hiện sẵn trên màn hình cảm ứng (không có hover).
             <span className="ml-auto flex opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
@@ -237,6 +255,9 @@ function describe(h: HistoryEntry, lk: Lookups, config: ProjectConfig): { text: 
     case 'dueDate': return { text: `changed the ${FIELD_LABEL[h.field]}`, from: formatDate(h.fromValue) || 'None', to: formatDate(h.toValue) || 'None' };
     case 'fixVersionId': return { text: h.toValue ? 'changed the fix version' : 'removed the fix version' };
     case 'parentId': return { text: h.toValue ? 'changed the parent' : 'removed the parent' };
+    case 'clientVisible': return { text: h.toValue === 'true' ? 'shared the issue with the client' : 'stopped sharing the issue with the client' };
+    case 'deliverable':
+    case 'attachmentShared': return { text: `changed client sharing of ${h.toValue ?? 'a file'}` };
     default: return { text: `changed the ${FIELD_LABEL[h.field] ?? h.field}`, from: h.fromValue ?? 'None', to: h.toValue ?? 'None' };
   }
 }
@@ -277,7 +298,7 @@ const ACTIVITY_TABS = [
   { id: 'worklog', label: 'Work log' },
 ] as const;
 
-export default function IssueActivity({ pid, num, config, lk }: { pid: number; num: number; config: ProjectConfig; lk: Lookups }) {
+export default function IssueActivity({ pid, num, config, lk, clientShared = false }: { pid: number; num: number; config: ProjectConfig; lk: Lookups; clientShared?: boolean }) {
   const [tab, setTab] = useState<(typeof ACTIVITY_TABS)[number]['id']>('comments');
   const comments = useQuery({ queryKey: wk.comments(pid, num), queryFn: () => workApi.comments(pid, num) });
   useCommentReactionsRealtime(pid, num);
@@ -300,7 +321,7 @@ export default function IssueActivity({ pid, num, config, lk }: { pid: number; n
           {comments.isLoading && <Spinner />}
           {comments.data?.map((c) => <CommentItem key={c.id} c={c} config={config} pid={pid} num={num} />)}
           {config.permissions.comment ? (
-            <CommentComposer config={config} pid={pid} num={num} />
+            <CommentComposer config={config} pid={pid} num={num} clientShared={clientShared} />
           ) : (
             <p className="text-[12px] text-[var(--w-text-3)]">You have view-only access to this project.</p>
           )}

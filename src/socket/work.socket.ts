@@ -11,8 +11,8 @@
  */
 
 import type { Server as IOServer, Socket } from 'socket.io';
-import { projectRoom } from '../services/work/events.js';
-import { loadProjectAccess } from '../services/work/permissions.js';
+import { clientRoom, projectRoom } from '../services/work/events.js';
+import { isClientScoped, loadProjectAccess } from '../services/work/permissions.js';
 
 /** Một tab mở vài dự án là cùng; trần để client lỗi không nhét socket vào hàng nghìn phòng. */
 const MAX_PROJECT_ROOMS = 20;
@@ -31,7 +31,8 @@ export function registerWorkRealtime(_io: IOServer, socket: Socket, user: { id: 
       const access = await loadProjectAccess(user.id, pid);
       // Không phân biệt "không tồn tại" với "không có quyền" — như REST trả 404.
       if (!access) return reply({ ok: false, error: 'Project not found' });
-      await socket.join(projectRoom(pid));
+      // Khách bị cách ly (cổng khách S2b) vào phòng RIÊNG — chỉ nhận "portal.changed" không dữ liệu.
+      await socket.join(isClientScoped(access) ? clientRoom(pid) : projectRoom(pid));
       joined.add(pid);
       reply({ ok: true, role: access.role });
     } catch {
@@ -43,6 +44,7 @@ export function registerWorkRealtime(_io: IOServer, socket: Socket, user: { id: 
     const pid = Number(projectId);
     if (!Number.isInteger(pid)) return;
     void socket.leave(projectRoom(pid));
+    void socket.leave(clientRoom(pid));
     joined.delete(pid);
   });
 }

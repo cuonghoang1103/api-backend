@@ -398,7 +398,10 @@ function Result({
           rel="noopener noreferrer"
           className={`${T.btnGhost} mt-6 w-full sm:w-auto`}
         >
-          {L('Xem tiến độ dự án (chỉ đọc)', 'View project progress (read-only)')}
+          {/* Cổng khách (CT Work S2b): khách đã có tài khoản ⇒ link vào cổng khách (/portal); chưa có ⇒ link chỉ đọc cũ. */}
+          {r.progressUrl.includes('/portal')
+            ? L('Mở cổng khách hàng của dự án', 'Open your client portal')
+            : L('Xem tiến độ dự án (chỉ đọc)', 'View project progress (read-only)')}
           <ArrowUpRight aria-hidden className="w-4 h-4" />
         </a>
       ) : r.status === 'PROJECT_CREATED' ? (

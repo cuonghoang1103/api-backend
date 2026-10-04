@@ -20,7 +20,8 @@ import {
 } from './common.js';
 import type { ProjectRole, WorkspaceRole } from './constants.js';
 import { evictFromProject } from './events.js';
-import { loadProjectAccess, requireWorkspace } from './permissions.js';
+import { clientPeopleIds } from './clientPeople.js';
+import { clientScopedProjectIds, loadProjectAccess, requireWorkspace } from './permissions.js';
 
 const INVITE_TTL_DAYS = 7;
 const MAX_WORKSPACES_PER_USER = 30;
@@ -107,12 +108,38 @@ export async function deleteWorkspace(userId: number, workspaceId: number, confi
 
 // ─── Thành viên ──────────────────────────────────────────────────
 
+/**
+ * Cổng khách (S2b): người mà một KHÁCH của không gian được thấy. `wsRole` là vai
+ * HIỆU LỰC (requireWorkspace — MEMBER chỉ là khách cổng đã bị hạ thành GUEST).
+ * Gộp theo từng dự án khách vào được:
+ *   - dự án khách bị cách ly ⇒ `clientPeopleIds` (mình, khách cùng dự án, lead, người
+ *     có tương tác công khai — clientPeople.ts);
+ *   - dự án khác có dòng tường minh (vd dự án khách CŨ, cổng tắt) ⇒ thành viên dự án
+ *     như trước ("dự án cũ y nguyên").
+ * null = không giới hạn (không phải khách của cổng).
+ */
+export async function guestPeopleScope(userId: number, workspaceId: number, wsRole: string): Promise<number[] | null> {
+  if (wsRole !== 'GUEST') return null;
+  const scoped = await clientScopedProjectIds(userId, workspaceId);
+  if (!scoped.size) return null;
+  const { listProjects, projectMembers } = await import('./projects.service.js');
+  const ids = new Set<number>([userId]);
+  for (const p of await listProjects(userId, workspaceId)) {
+    const people = scoped.has(p.id) ? [...(await clientPeopleIds(p.id, userId))] : (await projectMembers(p.id)).map((m) => m.id);
+    for (const id of people) ids.add(id);
+  }
+  return [...ids];
+}
+
 export async function listMembers(userId: number, workspaceId: number, q?: string) {
-  await requireWorkspace(userId, workspaceId, 'workspace.view');
+  const role = await requireWorkspace(userId, workspaceId, 'workspace.view');
   const term = q?.trim();
+  // Khách của cổng chỉ thấy người trong dự án của mình — không thấy khách/nhân sự khác của không gian.
+  const only = await guestPeopleScope(userId, workspaceId, role);
   const rows = await prisma.workMember.findMany({
     where: {
       workspaceId,
+      ...(only ? { userId: { in: only } } : {}),
       ...(term ? { user: { OR: [
         { username: { contains: term, mode: 'insensitive' } },
         { fullName: { contains: term, mode: 'insensitive' } },
@@ -212,6 +239,9 @@ export async function inviteByEmail(userId: number, workspaceId: number, input: 
   await requireWorkspace(userId, workspaceId, 'workspace.members');
   if (input.role === 'OWNER') throw new BadRequestError('Cannot invite someone as owner', 'WORK_BAD_ROLE');
   const project = await checkInviteProject(userId, workspaceId, input);
+  // Khách của dự án luôn vào không gian với vai GUEST — không bao giờ thấy dự án WORKSPACE khác.
+  if (project?.role === 'CLIENT') input = { ...input, role: 'GUEST' };
+  const clientPortal = project?.role === 'CLIENT' ? await clientPortalInfo(project.id) : null;
 
   const emails = [...new Set((input.emails ?? []).map((e) => e.trim().toLowerCase()).filter(Boolean))].slice(0, 50);
   if (!emails.length) throw new BadRequestError('Enter at least one email', 'WORK_EMAIL_REQUIRED');
@@ -227,7 +257,22 @@ export async function inviteByEmail(userId: number, workspaceId: number, input: 
     if (user) {
       const added = await prisma.$transaction((tx) => addMember(tx, workspaceId, user.id, input.role, project));
       results.push({ email, status: added ? 'ADDED' : 'ALREADY_MEMBER' });
-      if (added) {
+      if (added && clientPortal) {
+        // Thư mời KHÁCH: giọng chuyên nghiệp, vào thẳng cổng khách — không nhắc tới "workspace".
+        await notifyWorkInvite(user.id, userId, workspaceId, ws.name, ws.slug);
+        void sendWorkEmail({
+          to: user.email,
+          subject: `${displayName(inviter)} invited you to the client portal for ${clientPortal.name}`,
+          heading: `Your client portal for ${clientPortal.name}`,
+          lines: [
+            `${displayName(inviter)} gave you access to the client portal for "${clientPortal.name}".`,
+            'There you can follow progress by stage, send requests and feedback, approve deliverables and download files.',
+          ],
+          cta: { label: 'Open client portal', url: frontendUrl(clientPortal.path) },
+          brand: `${clientPortal.name} · Client portal`,
+          footer: 'You received this email because the project team added you as a client.',
+        });
+      } else if (added) {
         await notifyWorkInvite(user.id, userId, workspaceId, ws.name, ws.slug);
         void sendWorkEmail({
           to: user.email,
@@ -247,6 +292,22 @@ export async function inviteByEmail(userId: number, workspaceId: number, input: 
         expiresAt: new Date(Date.now() + INVITE_TTL_DAYS * 86_400_000),
       },
     });
+    if (clientPortal) {
+      void sendWorkEmail({
+        to: email,
+        subject: `${displayName(inviter)} invited you to the client portal for ${clientPortal.name}`,
+        heading: `Your client portal for ${clientPortal.name}`,
+        lines: [
+          `${displayName(inviter)} invited you to the client portal for "${clientPortal.name}".`,
+          `Create a free account with this email address (or sign in) and open the link below. The link expires in ${INVITE_TTL_DAYS} days.`,
+        ],
+        cta: { label: 'Accept invitation', url: frontendUrl(`/work/invite/${token}`) },
+        brand: `${clientPortal.name} · Client portal`,
+        footer: 'You received this email because the project team invited you as a client.',
+      });
+      results.push({ email, status: 'INVITED' });
+      continue;
+    }
     void sendWorkEmail({
       to: email,
       subject: `${displayName(inviter)} invited you to ${ws.name} on CT Work`,
@@ -260,6 +321,15 @@ export async function inviteByEmail(userId: number, workspaceId: number, input: 
     results.push({ email, status: 'INVITED' });
   }
   return results;
+}
+
+/** Dự án bật cổng khách ⇒ tên + đường vào cổng (để mời khách vào thẳng cổng). */
+async function clientPortalInfo(projectId: number): Promise<{ name: string; path: string } | null> {
+  const p = await prisma.workProject.findUnique({ where: { id: projectId }, select: { name: true, key: true, settings: true, workspace: { select: { slug: true } } } });
+  if (!p) return null;
+  const { modulesOf } = await import('./studio.js');
+  if (!modulesOf(p.settings).clientPortal) return null;
+  return { name: p.name, path: `/work/${p.workspace.slug}/${p.key}/portal` };
 }
 
 async function checkInviteProject(userId: number, workspaceId: number, input: InviteInput) {
@@ -280,6 +350,7 @@ export async function createInviteLink(
   await requireWorkspace(userId, workspaceId, 'workspace.members');
   if (input.role === 'OWNER') throw new BadRequestError('Cannot invite someone as owner', 'WORK_BAD_ROLE');
   const project = await checkInviteProject(userId, workspaceId, input);
+  if (project?.role === 'CLIENT') input = { ...input, role: 'GUEST' };
   const token = randomToken();
   const days = Math.min(Math.max(input.expiresInDays ?? INVITE_TTL_DAYS, 1), 30);
   const invite = await prisma.workInvite.create({
@@ -346,6 +417,8 @@ export async function acceptInvite(userId: number, token: string) {
     }
   }
   const already = await prisma.workMember.findFirst({ where: { workspaceId: invite.workspaceId, userId }, select: { id: true } });
+  // Lời mời KHÁCH vào dự án bật cổng khách ⇒ trang web chuyển thẳng vào cổng.
+  const portal = invite.projectId && invite.projectRole === 'CLIENT' ? await clientPortalInfo(invite.projectId) : null;
   // Đã là thành viên và lời mời không kèm dự án ⇒ không tiêu một lượt của link chung.
   if (already && !invite.projectId) return { slug: invite.workspace.slug };
   await prisma.$transaction(async (tx) => {
@@ -356,7 +429,7 @@ export async function acceptInvite(userId: number, token: string) {
     });
     if (!used.count) throw new BadRequestError('This invitation has already been used', 'WORK_INVITE_USED');
     const project = invite.projectId ? { id: invite.projectId, role: (invite.projectRole ?? 'MEMBER') as ProjectRole } : null;
-    await addMember(tx, invite.workspaceId, userId, invite.role as WorkspaceRole, project);
+    await addMember(tx, invite.workspaceId, userId, (invite.projectRole === 'CLIENT' ? 'GUEST' : invite.role) as WorkspaceRole, project);
   });
-  return { slug: invite.workspace.slug };
+  return { slug: invite.workspace.slug, ...(portal ? { portalPath: portal.path } : {}) };
 }

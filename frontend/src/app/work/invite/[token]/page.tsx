@@ -44,10 +44,11 @@ export default function InvitePage() {
 
   const accept = useMutation({
     mutationFn: () => workApi.acceptInvite(token),
-    onSuccess: ({ slug }) => {
+    onSuccess: ({ slug, portalPath }) => {
       qc.invalidateQueries({ queryKey: wk.workspaces });
       toast.success(`You joined ${preview.data?.workspace.name ?? 'the workspace'}`);
-      router.push(`/work/${slug}`);
+      // Lời mời KHÁCH (cổng khách S2b) ⇒ vào thẳng cổng khách của dự án.
+      router.push(portalPath ?? `/work/${slug}`);
     },
     onError: (err) => toast.error(workError(err, 'Could not accept the invitation')),
   });

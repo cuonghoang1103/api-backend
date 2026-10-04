@@ -293,6 +293,9 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
      `/work/:ws/:key`, và `/teams/:teamId` (4 đoạn) trước `/:key/board`. */
   { mau: '/work/:ws/teams', nap: () => import('@/app/work/[ws]/teams/page') },
   { mau: '/work/:ws/teams/:teamId', nap: () => import('@/app/work/[ws]/teams/[teamId]/page') },
+  /* Đợt S3a (04/10/2026): danh mục dự án + khối lượng việc — tĩnh, phải đứng TRƯỚC `/work/:ws/:key`. */
+  { mau: '/work/:ws/portfolio', nap: () => import('@/app/work/[ws]/portfolio/page') },
+  { mau: '/work/:ws/workload', nap: () => import('@/app/work/[ws]/workload/page') },
   { mau: '/work/:ws/:key', nap: () => import('@/app/work/[ws]/[key]/page') },
   { mau: '/work/:ws/:key/board', nap: () => import('@/app/work/[ws]/[key]/board/page') },
   { mau: '/work/:ws/:key/backlog', nap: () => import('@/app/work/[ws]/[key]/backlog/page') },
@@ -309,6 +312,9 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   // Đợt S2a: tài liệu dự án kiểu Confluence (mô-đun docs).
   { mau: '/work/:ws/:key/docs', nap: () => import('@/app/work/[ws]/[key]/docs/page') },
   { mau: '/work/:ws/:key/docs/:num', nap: () => import('@/app/work/[ws]/[key]/docs/[num]/page') },
+  // Đợt S2b: cổng khách (mô-đun clientPortal) + biên bản nghiệm thu in được.
+  { mau: '/work/:ws/:key/portal', nap: () => import('@/app/work/[ws]/[key]/portal/page') },
+  { mau: '/work/:ws/:key/portal/uat/:aid', nap: () => import('@/app/work/[ws]/[key]/portal/uat/[aid]/page') },
   { mau: '/work/:ws/:key/tests/:num', nap: () => import('@/app/work/[ws]/[key]/tests/[num]/page') },
   { mau: '/work/:ws/:key/issue/:num', nap: () => import('@/app/work/[ws]/[key]/issue/[num]/page') },
   { mau: '/work/:ws/:key/tests/cycles/:cycleId', nap: () => import('@/app/work/[ws]/[key]/tests/cycles/[cycleId]/page') },

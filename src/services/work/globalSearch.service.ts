@@ -25,7 +25,7 @@ import {
   compileJql, JqlError, normalizeField, ORDERABLE_FIELDS, parseJql, projectScope, quoteIfNeeded, suggest,
   type JqlContext, type JqlMiss, type JqlNode, type JqlQuery,
 } from './jql.js';
-import { effectiveProjectRole } from './permissions.js';
+import { clientScopedProjectIds, effectiveProjectRole, effectiveWorkspaceRole, loadWorkspaceRole, portalOnlyWorkspaceIds } from './permissions.js';
 import { jqlHttpError } from './search.service.js';
 
 export const MAX_PROJECTS = 200;
@@ -65,19 +65,39 @@ export async function visibleProjects(userId: number): Promise<VisibleProject[]>
     },
   });
   const out: VisibleProject[] = [];
+  // Cổng khách (S2b): dự án mà người này là khách bị cách ly KHÔNG nằm trong tìm kiếm
+  // xuyên dự án (JQL ở đây không biết lọc thẻ đã chia sẻ) — khách tìm trong cổng khách.
+  const [portalOnly, portalOnlyWs] = await Promise.all([clientScopedProjectIds(userId), portalOnlyWorkspaceIds(userId)]);
   for (const m of ms) {
     for (const p of m.workspace.projects) {
       const role = effectiveProjectRole({
-        workspaceRole: m.role as WorkspaceRole,
+        // MEMBER chỉ là khách cổng ⇒ GUEST (permissions.portalOnlyWorkspaceIds).
+        workspaceRole: effectiveWorkspaceRole(m.role as WorkspaceRole, portalOnlyWs.has(m.workspace.id)),
         projectRole: (p.members[0]?.role ?? null) as ProjectRole | null,
         visibility: p.visibility as ProjectVisibility,
       });
-      if (!role) continue;
+      if (!role || portalOnly.has(p.id)) continue;
       out.push({
         id: p.id, key: p.key, name: p.name, archived: !!p.archivedAt, updatedAt: p.updatedAt,
         workspace: { id: m.workspace.id, slug: m.workspace.slug, name: m.workspace.name },
       });
     }
+  }
+  return out;
+}
+
+/**
+ * Phạm vi người theo không gian cho khách của cổng (S2b): không gian nào người gọi là
+ * khách của cổng ⇒ tập id được thấy; không có trong map ⇒ không giới hạn.
+ */
+async function guestPeopleScopes(userId: number, wsIds: number[]): Promise<Map<number, Set<number>>> {
+  const out = new Map<number, Set<number>>();
+  if (!wsIds.length) return out;
+  const { guestPeopleScope } = await import('./workspaces.service.js');
+  for (const w of wsIds) {
+    const role = await loadWorkspaceRole(userId, w);
+    const only = role ? await guestPeopleScope(userId, w, role) : null;
+    if (only) out.set(w, new Set(only));
   }
   return out;
 }
@@ -110,7 +130,8 @@ async function batchContexts(userId: number, projects: VisibleProject[], known: 
   const cp = by(components, (c) => c.projectId);
   const sp = by(sprints, (s) => s.projectId);
   const cf = by(fields, (f) => f.projectId);
-  const mb = by(members, (m) => m.workspaceId);
+  const scopes = await guestPeopleScopes(userId, wsIds);
+  const mb = by(members.filter((m) => !scopes.get(m.workspaceId) || scopes.get(m.workspaceId)!.has(m.user.id)), (m) => m.workspaceId);
   const tm = by(teams, (t) => t.workspaceId);
   const sg = by(stages, (x) => x.projectId);
   const now = new Date();
@@ -436,8 +457,11 @@ export async function searchFacets(userId: number) {
   const [statuses, types, members] = await Promise.all([
     prisma.workStatus.findMany({ where: { workflow: { projectId: { in: ids } } }, select: { name: true, category: true, color: true, workflow: { select: { projectId: true } } } }),
     prisma.workIssueType.findMany({ where: { projectId: { in: ids }, archived: false }, orderBy: [{ level: 'desc' }, { position: 'asc' }], select: { key: true, name: true, icon: true, color: true, projectId: true } }),
-    prisma.workMember.findMany({ where: { workspaceId: { in: wsIds } }, take: 500, select: { user: { select: PUBLIC_USER } } }),
+    prisma.workMember.findMany({ where: { workspaceId: { in: wsIds } }, take: 500, select: { workspaceId: true, user: { select: PUBLIC_USER } } }),
   ]);
+  // Khách của cổng (S2b): chỉ người họ được thấy ở không gian đó (workspaces.guestPeopleScope).
+  const scopes = await guestPeopleScopes(userId, wsIds);
+  const seenMembers = members.filter((m) => !scopes.get(m.workspaceId) || scopes.get(m.workspaceId)!.has(m.user.id));
 
   // Gộp theo TÊN (không phân biệt hoa thường): "Done" ở 5 dự án là một mục.
   const st = new Map<string, { name: string; category: string; color: string; projects: Set<number> }>();
@@ -454,7 +478,7 @@ export async function searchFacets(userId: number) {
     e.projects.add(t.projectId);
     ty.set(k, e);
   }
-  const users = new Map(members.map((m) => [m.user.id, m.user]));
+  const users = new Map(seenMembers.map((m) => [m.user.id, m.user]));
 
   return {
     projects: all

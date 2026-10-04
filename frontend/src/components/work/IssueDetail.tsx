@@ -41,6 +41,7 @@ import DevelopmentPanel from './DevelopmentPanel';
 import { IssueApprovals, IssueHandoffs, MoveIssueDialog, StagePicker, TeamPicker } from './studio/IssueStudio';
 import { studioOn } from './studio/shared';
 import { LinkedDocs } from './docs/LinkedDocs';
+import { AttachmentClientControls, IssueClientShare } from './portal/ClientShare';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import {
   formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, ProjectMark, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
@@ -245,13 +246,15 @@ function Links({ issue, pid, lk, editable, onOpenKey }: { issue: TIssueDetail; p
 
 // ─── Đính kèm ────────────────────────────────────────────────────
 
-function AttachmentItem({ a, pid, canDelete, onDeleted }: { a: IssueAttachment; pid: number; canDelete: boolean; onDeleted: () => void }) {
+function AttachmentItem({ a, pid, canDelete, onDeleted, share }: { a: IssueAttachment; pid: number; canDelete: boolean; onDeleted: () => void; share?: ReactNode }) {
   const isImage = a.mime.startsWith('image/');
   const thumb = useQuery({
     queryKey: ['work', 'att', pid, a.id],
     queryFn: () => workApi.attachmentUrl(pid, a.id, true),
     enabled: isImage,
-    staleTime: 8 * 60_000, // URL ký sẵn sống 10 phút
+    // URL ký sẵn sống 10 phút với nhân viên nhưng chỉ 2 phút với khách cổng (issues.service
+    // CLIENT_URL_TTL_S) — giữ dưới mức ngắn hơn để mở lại thẻ không vấp URL hết hạn.
+    staleTime: 90_000,
   });
   const download = async () => {
     try {
@@ -279,6 +282,7 @@ function AttachmentItem({ a, pid, canDelete, onDeleted }: { a: IssueAttachment; 
         <div className="truncate text-[12px] font-medium" title={a.fileName}>{a.fileName}</div>
         <div className="text-[11px] text-[var(--w-text-3)]">{formatBytes(a.size)} · {relativeTime(a.createdAt)}</div>
       </div>
+      {share}
       <div className="absolute right-1 top-1 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
         <button type="button" title="Download" onClick={download} className="w-btn w-btn-icon w-btn-sm"><Download size={12} /></button>
         {canDelete && <button type="button" title="Remove" onClick={() => setConfirmDel(true)} className="w-btn w-btn-icon w-btn-sm"><Trash2 size={12} /></button>}
@@ -330,7 +334,10 @@ function Attachments({ issue, pid, config }: { issue: TIssueDetail; pid: number;
       </div>
       <div className="flex flex-wrap gap-2">
         {issue.attachments.map((a) => (
-          <AttachmentItem key={a.id} a={a} pid={pid} canDelete={a.uploader?.id === meId || config.role === 'ADMIN'} onDeleted={refresh} />
+          <AttachmentItem
+            key={a.id} a={a} pid={pid} canDelete={a.uploader?.id === meId || config.role === 'ADMIN'} onDeleted={refresh}
+            share={<AttachmentClientControls config={config} pid={pid} issueNumber={issue.number} issueShared={!!issue.clientVisible} a={a} />}
+          />
         ))}
         {uploads.map((u) => (
           <div key={u.name} className="flex h-[132px] w-[148px] flex-col items-center justify-center gap-2 rounded-[6px] border border-dashed border-[var(--w-border-strong)] px-2 text-center">
@@ -611,6 +618,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         <div className={cn('flex flex-col gap-6 p-5', variant === 'page' ? 'mx-auto w-full max-w-[1240px] lg:flex-row lg:gap-8 lg:px-8 lg:py-7' : 'xl:flex-row')}>
           <div className={cn('min-w-0 flex-1 space-y-7', variant === 'page' && 'max-w-[820px]')}>
             <TitleEditor value={issue.title} editable={editable} onSave={(title) => set({ title })} />
+            <IssueClientShare config={config} pid={pid} issue={issue} />
             <div className="xl:hidden">{variant === 'drawer' && properties}</div>
             {variant === 'page' && (
               // Dưới lg: thuộc tính nằm ngay dưới tiêu đề (không bị đẩy xuống sau mọi bình luận).
@@ -644,7 +652,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             {studioOn(config, 'handoffs') && <IssueHandoffs config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
             {studioOn(config, 'docs') && <LinkedDocs config={config} issueNumber={issue.number} />}
             <Attachments issue={issue} pid={pid} config={config} />
-            <IssueActivity pid={pid} num={num} config={config} lk={lk} />
+            <IssueActivity pid={pid} num={num} config={config} lk={lk} clientShared={!!issue.clientVisible} />
           </div>
           <aside aria-label="Issue details" className={cn('shrink-0', variant === 'page' ? 'hidden lg:block lg:w-[320px]' : 'hidden xl:block xl:w-[290px]')}>
             <div className={cn('rounded-[12px] border border-[var(--w-border)] bg-[var(--w-raised)] p-3.5 shadow-[var(--w-shadow-card)]', variant === 'page' && 'lg:sticky lg:top-0')}>

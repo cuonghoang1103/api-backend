@@ -7,7 +7,7 @@
  */
 
 import { useState } from 'react';
-import { AlertTriangle, CalendarClock, ChevronDown, ChevronRight, MessageSquare, Paperclip } from 'lucide-react';
+import { AlertTriangle, CalendarClock, ChevronDown, ChevronRight, Eye, MessageSquare, Paperclip } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { IssueCard } from '@/lib/work-api';
 import type { Lookups } from '../hooks';
@@ -128,6 +128,8 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
         {showParent && issue.parentNumber && (
           <span className="truncate font-mono" title="Parent issue">↑ {lk.issueKey(issue.parentNumber)}</span>
         )}
+        {/* Cổng khách (S2b): thẻ đã chia sẻ với khách. */}
+        {issue.clientVisible && <span className="flex shrink-0 items-center text-[var(--w-yellow)]" title="Visible to client" aria-label="Visible to client"><Eye size={11} /></span>}
         {issue.commentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={`${issue.commentCount} comments`}><MessageSquare size={11} />{issue.commentCount}</span>}
         {issue.attachmentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={`${issue.attachmentCount} attachments`}><Paperclip size={11} />{issue.attachmentCount}</span>}
         <span className="ml-auto flex min-w-0 items-center gap-1.5">

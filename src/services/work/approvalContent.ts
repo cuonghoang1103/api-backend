@@ -11,6 +11,9 @@
  *                (một thẻ mở lại sau khi duyệt cổng ⇒ lệch).
  *   DOC        — (đợt S2a) tiêu đề + chữ trơn của trang tài liệu. KHÔNG có trạng
  *                thái/chủ sở hữu/vị trí trong cây (đổi chúng không làm lệch chữ ký).
+ *   UAT        — (đợt S2b) mốc/version/giai đoạn + từng hạng mục (tiêu đề, mô tả,
+ *                xong chưa) + tài liệu (tiêu đề + chữ) + tệp (tên, cỡ). Một hạng mục
+ *                mở lại hay tài liệu sửa sau khi khách ký ⇒ lệch.
  */
 
 import type { Prisma } from '@prisma/client';
@@ -57,8 +60,38 @@ export async function pageContent(db: Db, pageId: number) {
   return { doc: p.number, title: p.title, text: p.contentText ?? '' };
 }
 
+export async function uatContent(db: Db, approvalId: number) {
+  const u = await db.workUatRequest.findUnique({
+    where: { approvalId },
+    select: {
+      projectId: true, round: true, environment: true, build: true, itemIssueIds: true, pageNumbers: true, attachmentIds: true,
+      version: { select: { name: true } }, stage: { select: { n: true, name: true } },
+    },
+  });
+  if (!u) return null;
+  const ids = (u.itemIssueIds as number[]) ?? [];
+  const nums = (u.pageNumbers as number[]) ?? [];
+  const att = (u.attachmentIds as number[]) ?? [];
+  const [items, pages, files] = await Promise.all([
+    db.workIssue.findMany({ where: { id: { in: ids } }, orderBy: { number: 'asc' }, select: { number: true, title: true, descriptionText: true, resolvedAt: true, deletedAt: true } }),
+    db.workPage.findMany({ where: { projectId: u.projectId, number: { in: nums } }, orderBy: { number: 'asc' }, select: { number: true, title: true, contentText: true, deletedAt: true } }),
+    db.workAttachment.findMany({ where: { id: { in: att } }, orderBy: { id: 'asc' }, select: { id: true, fileName: true, size: true } }),
+  ]);
+  return {
+    round: u.round, version: u.version?.name ?? null, stage: u.stage ? `${u.stage.n}. ${u.stage.name}` : null,
+    environment: u.environment ?? '', build: u.build ?? '',
+    items: items.map((i) => ({ n: i.number, title: i.title, description: i.descriptionText ?? '', done: !!i.resolvedAt, removed: !!i.deletedAt })),
+    docs: pages.map((p) => ({ doc: p.number, title: p.title, text: p.contentText ?? '', removed: !!p.deletedAt })),
+    files: files.map((f) => ({ id: f.id, name: f.fileName, size: f.size })),
+  };
+}
+
 /** Băm hiện tại của đối tượng (null = đối tượng đã mất / loại chưa hỗ trợ). */
-export async function currentTargetHash(db: Db, t: { targetType: string; issueId: number | null; stageId: number | null; pageId?: number | null }): Promise<string | null> {
+export async function currentTargetHash(db: Db, t: { id?: number; targetType: string; issueId: number | null; stageId: number | null; pageId?: number | null }): Promise<string | null> {
+  if (t.targetType === 'UAT' && t.id) {
+    const c = await uatContent(db, t.id);
+    return c ? contentHash(c) : null;
+  }
   if (t.targetType === 'DOC' && t.pageId) {
     const c = await pageContent(db, t.pageId);
     return c ? contentHash(c) : null;

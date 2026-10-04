@@ -16,6 +16,7 @@ import { BadRequestError, NotFoundError } from '../../middleware/errorHandler.js
 import { auditProject } from './audit.js';
 import { frontendUrl } from './common.js';
 import { requireProject } from './permissions.js';
+import { modulesOf } from './studio.js';
 import { projectMembers } from './projects.service.js';
 import { burndown, velocity } from './reports.service.js';
 import { estimateOf, estimationOf } from './sprints.service.js';
@@ -59,14 +60,17 @@ async function resolve(token: string, section?: keyof ShareOptions) {
   if (!/^[A-Za-z0-9_-]{20,64}$/.test(token)) throw new NotFoundError('This link is not valid');
   const link = await prisma.workPublicLink.findUnique({
     where: { token },
-    include: { project: { select: { id: true, key: true, name: true, description: true, type: true, deletedAt: true, archivedAt: true, workspace: { select: { name: true, deletedAt: true } } } } },
+    include: { project: { select: { id: true, key: true, name: true, description: true, type: true, settings: true, deletedAt: true, archivedAt: true, workspace: { select: { name: true, deletedAt: true } } } } },
   });
   if (!link || link.revokedAt || (link.expiresAt && link.expiresAt < new Date()) || link.project.deletedAt || link.project.workspace.deletedAt) {
     throw new NotFoundError('This link is not valid');
   }
   const options = { ...DEFAULT_OPTIONS, ...(link.options as Partial<ShareOptions>) };
   if (section && !options[section]) throw new NotFoundError('This section is not shared');
-  return { link, options, project: link.project };
+  // Cổng khách (S2b): dự án bật clientPortal ⇒ link công khai cũng chỉ lộ thẻ ĐÃ CHIA SẺ
+  // (link là phương án cho khách chưa có tài khoản — không được thấy nhiều hơn cổng khách).
+  const portal = modulesOf(link.project.settings).clientPortal;
+  return { link, options, project: link.project, portal, shared: portal ? { clientVisible: true } : {} };
 }
 
 const PUBLIC_CARD = {
@@ -96,24 +100,24 @@ export async function publicSummary(token: string) {
 }
 
 export async function publicIssues(token: string, section: 'board' | 'backlog') {
-  const { project } = await resolve(token, section);
+  const { project, shared } = await resolve(token, section);
   const where = section === 'board'
-    ? { projectId: project.id, deletedAt: null, type: { level: { gte: 0 } }, OR: [{ sprint: { state: 'ACTIVE' } }, ...(project.type === 'KANBAN' ? [{ sprintId: null }] : [])] }
-    : { projectId: project.id, deletedAt: null, type: { level: { gte: 0 } }, resolvedAt: null };
+    ? { projectId: project.id, deletedAt: null, type: { level: { gte: 0 } }, OR: [{ sprint: { state: 'ACTIVE' } }, ...(project.type === 'KANBAN' ? [{ sprintId: null }] : [])], ...shared }
+    : { projectId: project.id, deletedAt: null, type: { level: { gte: 0 } }, resolvedAt: null, ...shared };
   let rows = await prisma.workIssue.findMany({ where, orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: 1000, select: PUBLIC_CARD });
   // Scrum chưa có sprint đang chạy: hiện mọi thẻ đang mở (như board nội bộ).
   if (section === 'board' && !rows.length) {
-    rows = await prisma.workIssue.findMany({ where: { projectId: project.id, deletedAt: null, type: { level: { gte: 0 } }, resolvedAt: null }, orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: 1000, select: PUBLIC_CARD });
+    rows = await prisma.workIssue.findMany({ where: { projectId: project.id, deletedAt: null, type: { level: { gte: 0 } }, resolvedAt: null, ...shared }, orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: 1000, select: PUBLIC_CARD });
   }
   return rows.map(({ id: _id, ...r }) => ({ ...r, key: `${project.key}-${r.number}` }));
 }
 
 export async function publicIssue(token: string, number: number) {
-  const { options, project } = await resolve(token);
+  const { options, project, shared } = await resolve(token);
   if (!options.board && !options.backlog) throw new NotFoundError('This section is not shared');
   const i = await prisma.workIssue.findFirst({
-    where: { projectId: project.id, number, deletedAt: null },
-    select: { ...PUBLIC_CARD, descriptionText: true, startDate: true, createdAt: true, parent: { select: { number: true, title: true } }, children: { where: { deletedAt: null }, select: { number: true, title: true, statusId: true } } },
+    where: { projectId: project.id, number, deletedAt: null, ...shared },
+    select: { ...PUBLIC_CARD, descriptionText: true, startDate: true, createdAt: true, parent: { select: { number: true, title: true } }, children: { where: { deletedAt: null, ...shared }, select: { number: true, title: true, statusId: true } } },
   });
   if (!i) throw new NotFoundError('Issue not found');
   const { id: _id, descriptionText, ...rest } = i;
@@ -121,12 +125,12 @@ export async function publicIssue(token: string, number: number) {
 }
 
 export async function publicReports(token: string) {
-  const { project } = await resolve(token, 'reports');
+  const { project, shared, portal } = await resolve(token, 'reports');
   const [unit, active, closedCount, counts] = await Promise.all([
     estimationOf(project.id),
-    prisma.workSprint.findFirst({ where: { projectId: project.id, state: 'ACTIVE' }, select: { id: true } }),
-    prisma.workSprint.count({ where: { projectId: project.id, state: 'CLOSED' } }),
-    prisma.workIssue.findMany({ where: { projectId: project.id, deletedAt: null, type: { level: 0 } }, select: { resolvedAt: true, storyPoints: true, originalEstimateMin: true } }),
+    portal ? null : prisma.workSprint.findFirst({ where: { projectId: project.id, state: 'ACTIVE' }, select: { id: true } }),
+    portal ? 0 : prisma.workSprint.count({ where: { projectId: project.id, state: 'CLOSED' } }),
+    prisma.workIssue.findMany({ where: { projectId: project.id, deletedAt: null, type: { level: 0 }, ...shared }, select: { resolvedAt: true, storyPoints: true, originalEstimateMin: true } }),
   ]);
   // Hàm báo cáo nội bộ đòi người xem có quyền — ở đây gọi bằng quyền hệ thống
   // qua một người có quyền trong dự án (người đầu tiên là ADMIN).
@@ -141,7 +145,9 @@ export async function publicReports(token: string) {
 }
 
 export async function publicTests(token: string) {
-  const { project } = await resolve(token, 'tests');
+  const { project, portal } = await resolve(token, 'tests');
+  // Dự án bật cổng khách: kết quả kiểm thử nội bộ không đi qua link công khai.
+  if (portal) return [];
   const cycles = await prisma.workTestCycle.findMany({
     where: { projectId: project.id },
     orderBy: { createdAt: 'desc' },

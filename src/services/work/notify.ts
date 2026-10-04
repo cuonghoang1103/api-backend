@@ -20,6 +20,7 @@ import { notifyWork as pushWork } from '../notification.service.js';
 import { logger } from '../../utils/logger.js';
 import { frontendUrl, sendWorkEmail } from './common.js';
 import { onWorkEvent } from './events.js';
+import { clientEmailContent, clientMemberIds, registerPortalNotifications, routeForClient } from './portalNotify.js';
 
 // ─── Email (đợt 6.6) ─────────────────────────────────────────────
 
@@ -71,7 +72,7 @@ async function emailFor(args: WorkNotifyArgs): Promise<void> {
   if (args.receiverId === args.senderId) return;
   const settings = await getNotifySettings(args.receiverId);
   if (settings.emailMode === 'OFF') return;
-  const subject = SUBJECT[args.type](args.payload).slice(0, 240);
+  const subject = (args.payload.portal === true ? clientEmailContent(args.payload).subject : SUBJECT[args.type](args.payload)).slice(0, 240);
   const url = typeof args.payload.url === 'string' ? args.payload.url : null;
   if (settings.emailMode === 'DIGEST' || inQuietHours(settings.quietStart, settings.quietEnd, vnHour())) {
     await prisma.workEmailQueue.create({ data: { userId: args.receiverId, kind: args.type, subject, url } });
@@ -79,6 +80,21 @@ async function emailFor(args: WorkNotifyArgs): Promise<void> {
   }
   const user = await prisma.user.findUnique({ where: { id: args.receiverId }, select: { email: true, enabled: true } });
   if (!user?.enabled || !user.email) return;
+  if (args.payload.portal === true) {
+    // Thư cho KHÁCH (cổng khách S2b): mẫu riêng, chỉ dữ liệu đã chia sẻ, link vào cổng khách.
+    const c = clientEmailContent(args.payload);
+    const project = String(args.payload.projectName ?? 'Your project');
+    await sendWorkEmail({
+      to: user.email,
+      subject: `${project}: ${c.subject}`.slice(0, 240),
+      heading: c.heading,
+      lines: [...c.lines.filter(Boolean), 'You can change how you receive these emails in the client portal → Notification settings.'],
+      cta: url ? { label: c.cta, url: frontendUrl(url) } : undefined,
+      brand: `${project} · Client portal`,
+      footer: 'You received this email because you are a client on this project.',
+    });
+    return;
+  }
   const excerpt = typeof args.payload.excerpt === 'string' ? args.payload.excerpt : null;
   await sendWorkEmail({
     to: user.email,
@@ -89,10 +105,17 @@ async function emailFor(args: WorkNotifyArgs): Promise<void> {
   });
 }
 
-/** Chuông + email trong một nhịp. Lỗi email chỉ ghi log. */
+/**
+ * Chuông + email trong một nhịp. Lỗi email chỉ ghi log.
+ * Cửa cuối của cổng khách (S2b): người nhận là khách bị cách ly ⇒ routeForClient
+ * chỉ cho qua loại khách được biết (trả lời PUBLIC, phê duyệt của chính họ…) và
+ * viết lại link vào cổng khách; còn lại bỏ hẳn.
+ */
 export async function notifyWork(args: WorkNotifyArgs): Promise<void> {
-  await pushWork(args);
-  await emailFor(args).catch((err) => logger.warn('[work] email thông báo lỗi', { err: (err as Error).message }));
+  const routed = await routeForClient(args);
+  if (!routed) return;
+  await pushWork(routed);
+  await emailFor(routed).catch((err) => logger.warn('[work] email thông báo lỗi', { err: (err as Error).message }));
 }
 
 /** Cron 08:00 giờ VN: mỗi người một thư gộp mọi mục đang chờ. */
@@ -164,13 +187,15 @@ async function canStillSee(userIds: number[], projectId: number): Promise<number
   if (!userIds.length) return [];
   const project = await prisma.workProject.findUnique({ where: { id: projectId }, select: { workspaceId: true, visibility: true } });
   if (!project) return [];
-  const [wsMembers, projMembers] = await Promise.all([
+  const [wsMembers, projMembers, portalOnly] = await Promise.all([
     prisma.workMember.findMany({ where: { workspaceId: project.workspaceId, userId: { in: userIds } }, select: { userId: true, role: true } }),
     prisma.workProjectMember.findMany({ where: { projectId, userId: { in: userIds } }, select: { userId: true } }),
+    // MEMBER chỉ là khách cổng ⇒ GUEST: không nhận tin của dự án mở cho không gian (permissions.portalOnlyUserIds).
+    import('./permissions.js').then((m) => m.portalOnlyUserIds(project.workspaceId)),
   ]);
   const explicit = new Set(projMembers.map((m) => m.userId));
   return wsMembers
-    .filter((m) => m.role === 'OWNER' || m.role === 'ADMIN' || explicit.has(m.userId) || (m.role === 'MEMBER' && project.visibility === 'WORKSPACE'))
+    .filter((m) => m.role === 'OWNER' || m.role === 'ADMIN' || explicit.has(m.userId) || (m.role === 'MEMBER' && project.visibility === 'WORKSPACE' && !portalOnly.has(m.userId)))
     .map((m) => m.userId);
 }
 
@@ -187,6 +212,7 @@ let registered = false;
 export function registerWorkNotifications(): void {
   if (registered) return;
   registered = true;
+  registerPortalNotifications();
 
   onWorkEvent(async (e) => {
     if (e.actor.userId === null) return;
@@ -219,8 +245,11 @@ export function registerWorkNotifications(): void {
       ]);
       if (!ref || !comment) return;
       const excerpt = comment.bodyText.slice(0, 140);
-      const mentioned = new Set(await canStillSee(mentionedUserIds(comment.bodyJson), ref.projectId));
-      const watching = await canStillSee(watchers.map((w) => w.userId), ref.projectId);
+      // Khách bị cách ly KHÔNG nhận qua đường này (kể cả bị @nhắc trong ghi chú nội bộ):
+      // trả lời PUBLIC tới khách đi đường riêng (portalNotify) — không trùng, không lộ.
+      const clients = new Set(await clientMemberIds(ref.projectId));
+      const mentioned = new Set((await canStillSee(mentionedUserIds(comment.bodyJson), ref.projectId)).filter((u) => !clients.has(u)));
+      const watching = (await canStillSee(watchers.map((w) => w.userId), ref.projectId)).filter((u) => !clients.has(u));
       const payload = { issueKey: ref.issueKey, title: ref.title, url: `${ref.url}?comment=${e.commentId}`, excerpt };
       for (const uid of mentioned) {
         await notifyWork({ receiverId: uid, senderId: sender, type: 'WORK_MENTION', entityId: e.issueId, secondaryEntityId: e.commentId, payload });

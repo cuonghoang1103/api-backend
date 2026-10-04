@@ -463,3 +463,44 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
    đặt, header tools={false}…) thì không còn vạch trơ trọi giữa khoảng trống. */
 .work-root .w-tools-sep { display: none; }
 .work-root .w-header-actions:not(:empty) + .w-tools > .w-tools-sep { display: block; }
+
+/* ─── Cổng khách (đợt S2b) ─────────────────────────────────────────
+   Dải "Visible to client": MỌI chỗ nội dung sẽ lộ cho khách mang dải này
+   (thẻ đã chia sẻ, ô trả lời khách, bình luận PUBLIC, trang CLIENT, tệp chia sẻ).
+   Màu hổ phách — khác hẳn nhấn tím của giao diện nội bộ để không ai nhầm. */
+.work-root .w-client-ribbon {
+  display: flex; align-items: center; gap: 8px; min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--w-yellow) 45%, transparent);
+  background: color-mix(in srgb, var(--w-yellow) 10%, transparent);
+  color: var(--w-text); border-radius: 8px; padding: 6px 10px; font-size: 12.5px;
+}
+.work-root .w-client-ribbon .w-client-ico { color: var(--w-yellow); flex-shrink: 0; }
+.work-root .w-client-pill {
+  display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px; border-radius: 999px; white-space: nowrap;
+  font-size: 11px; font-weight: 600; line-height: 1;
+  border: 1px solid color-mix(in srgb, var(--w-yellow) 45%, transparent);
+  background: color-mix(in srgb, var(--w-yellow) 12%, transparent); color: var(--w-yellow);
+}
+.work-root .w-internal-pill {
+  display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px; border-radius: 999px; white-space: nowrap;
+  font-size: 11px; font-weight: 600; line-height: 1;
+  border: 1px solid var(--w-border); background: var(--w-sunken); color: var(--w-text-3);
+}
+.work-root .w-reply-client { outline: 1px solid color-mix(in srgb, var(--w-yellow) 55%, transparent); border-radius: 8px; }
+.work-root .w-seg { display: inline-flex; border: 1px solid var(--w-border-strong); border-radius: 7px; padding: 2px; gap: 2px; }
+.work-root .w-seg > button { height: 26px; padding: 0 10px; border-radius: 5px; font-size: 12.5px; font-weight: 500; color: var(--w-text-2); white-space: nowrap; }
+.work-root .w-seg > button[aria-pressed="true"] { background: var(--w-active); color: var(--w-text); }
+.work-root .w-seg > button:disabled { opacity: .45; cursor: not-allowed; }
+
+/* Biên bản nghiệm thu in được (window.print) — chỉ phần biên bản ra giấy. */
+.w-cert { color: #111; background: #fff; }
+.w-cert table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.w-cert th, .w-cert td { border: 1px solid #cfd3da; padding: 6px 8px; text-align: left; vertical-align: top; }
+.w-cert th { background: #f3f4f6; font-weight: 600; }
+@media print {
+  body * { visibility: hidden !important; }
+  .w-cert, .w-cert * { visibility: visible !important; }
+  .w-cert { position: absolute; inset: 0 auto auto 0; width: 100%; padding: 0 !important; box-shadow: none !important; border: 0 !important; }
+  .w-no-print { display: none !important; }
+  @page { margin: 16mm; }
+}

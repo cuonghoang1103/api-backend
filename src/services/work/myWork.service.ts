@@ -10,7 +10,7 @@
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { frontendUrl, sendWorkEmail } from './common.js';
-import { effectiveProjectRole } from './permissions.js';
+import { clientScopedProjectIds, effectiveProjectRole, effectiveWorkspaceRole, portalOnlyWorkspaceIds } from './permissions.js';
 import type { ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
 import { vnDay } from './sprints.service.js';
 
@@ -19,18 +19,23 @@ export async function visibleProjectIds(userId: number): Promise<number[]> {
     where: { userId, workspace: { deletedAt: null } },
     select: {
       role: true,
+      workspaceId: true,
       workspace: { select: { projects: { where: { deletedAt: null, archivedAt: null }, select: { id: true, visibility: true, members: { where: { userId }, select: { role: true } } } } } },
     },
   });
   const ids: number[] = [];
+  // Dự án mà người này là khách bị cách ly (cổng khách S2b) KHÔNG vào My work / lịch .ics —
+  // khách theo dõi việc trong cổng khách (đã lọc), không qua danh sách xuyên dự án.
+  const [portalOnly, portalOnlyWs] = await Promise.all([clientScopedProjectIds(userId), portalOnlyWorkspaceIds(userId)]);
   for (const m of ws) {
     for (const p of m.workspace.projects) {
       const role = effectiveProjectRole({
-        workspaceRole: m.role as WorkspaceRole,
+        // MEMBER chỉ là khách cổng ⇒ GUEST (không vào ngầm dự án mở cho không gian).
+        workspaceRole: effectiveWorkspaceRole(m.role as WorkspaceRole, portalOnlyWs.has(m.workspaceId)),
         projectRole: (p.members[0]?.role ?? null) as ProjectRole | null,
         visibility: p.visibility as ProjectVisibility,
       });
-      if (role) ids.push(p.id);
+      if (role && !portalOnly.has(p.id)) ids.push(p.id);
     }
   }
   return ids;

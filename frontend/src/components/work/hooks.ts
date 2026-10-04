@@ -12,6 +12,7 @@
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { usePathname, useRouter } from 'next/navigation';
 import { connectSocket } from '@/lib/socket';
 import { workApi, type ProjectConfig, type WorkEvent, type WorkStatus } from '@/lib/work-api';
 
@@ -83,7 +84,14 @@ export function useProject(slug: string, key: string) {
     enabled: !!pid,
     staleTime: 60_000,
   });
-  return { pid, config: config.data, isLoading: resolved.isLoading || (!!pid && config.isLoading), error: resolved.error ?? config.error };
+  // Cổng khách (S2b): khách bị cách ly chỉ dùng /portal — trang nội bộ (board, backlog…) chuyển thẳng vào cổng.
+  const router = useRouter();
+  const pathname = usePathname() ?? '';
+  const clientView = config.data?.clientView === true;
+  useEffect(() => {
+    if (clientView && !/\/portal(\/|$)/.test(pathname)) router.replace(`/work/${slug}/${key}/portal`);
+  }, [clientView, pathname, router, slug, key]);
+  return { pid, config: config.data, isLoading: resolved.isLoading || (!!pid && config.isLoading) || (clientView && !/\/portal(\/|$)/.test(pathname)), error: resolved.error ?? config.error };
 }
 
 /** Tra cứu nhanh theo id — dùng ở mọi thẻ trên board nên phải tính một lần. */
@@ -159,6 +167,9 @@ export function useProjectRealtime(pid: number | undefined, onEvent?: (e: WorkEv
     const handler = (e: WorkEvent) => {
       if (e.projectId !== pid) return;
       onEventRef.current?.(e);
+      // Cổng khách (S2b): mọi thay đổi làm tươi dữ liệu cổng. Khách chỉ nhận `portal.changed` (không dữ liệu).
+      queue(['work', 'portal', pid]);
+      if ((e as { type: string }).type === 'portal.changed') return;
       // Tài liệu (S2a): chỉ làm tươi tài liệu (+ phê duyệt của nó) — không đụng board/thẻ.
       if (e.type === 'page.updated') {
         queue(['work', 'pages', pid]);

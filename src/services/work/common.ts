@@ -56,6 +56,10 @@ export async function sendWorkEmail(opts: {
   heading: string;
   lines: string[];
   cta?: { label: string; url: string };
+  /** Dòng thương hiệu đầu thư (mặc định "CT Work") — thư cho khách dùng "<Dự án> · Client portal". */
+  brand?: string;
+  /** Dòng chân thư (mặc định nói về hoạt động trong CT Work). */
+  footer?: string;
 }): Promise<void> {
   const body = opts.lines.map((l) => `<p>${escapeHtml(l)}</p>`).join('\n');
   const cta = opts.cta
@@ -65,11 +69,11 @@ export async function sendWorkEmail(opts: {
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"></head>
 <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;color:#0f172a;padding:32px 0">
   <div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:32px">
-    <div style="font-weight:700;color:#2563eb;margin-bottom:16px">CT Work</div>
+    <div style="font-weight:700;color:#2563eb;margin-bottom:16px">${escapeHtml(opts.brand ?? 'CT Work')}</div>
     <h1 style="font-size:20px;margin:0 0 16px">${escapeHtml(opts.heading)}</h1>
     ${body}
     ${cta}
-    <p style="color:#94a3b8;font-size:12px;margin-top:32px">You received this email because of activity in CT Work.</p>
+    <p style="color:#94a3b8;font-size:12px;margin-top:32px">${escapeHtml(opts.footer ?? 'You received this email because of activity in CT Work.')}</p>
   </div>
 </body></html>`;
   const text = [opts.heading, '', ...opts.lines, ...(opts.cta ? ['', `${opts.cta.label}: ${opts.cta.url}`] : [])].join('\n');

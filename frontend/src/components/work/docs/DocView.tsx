@@ -21,7 +21,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  AlertTriangle, BadgeCheck, Check, ChevronRight, CloudOff, Download, FileText, History, Link2, Loader2, MoreHorizontal, Plus, RefreshCw, Save, Trash2, X,
+  AlertTriangle, BadgeCheck, Check, ChevronRight, CloudOff, Download, FileText, History, Link2, Loader2, MoreHorizontal, Plus, RefreshCw, Save, Trash2, X, Share2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -36,6 +36,7 @@ import { ApprovalDialog } from '../studio/ApprovalDetail';
 import { RequestApprovalDialog } from '../studio/IssueStudio';
 import { ApprovalPill, Pill, ProcessGuideLink, WarnStrip, fmtDateTime, studioOn } from '../studio/shared';
 import DocHistory from './DocHistory';
+import { InternalPill, portalStaff, VisibleToClient } from '../portal/ClientShare';
 import NewPageDialog from './NewPageDialog';
 import { PAGE_STATUS, PageStatusPill, VisibilityBadge, docsBase, downloadText } from './shared';
 
@@ -241,6 +242,17 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
           )}
         </div>
 
+        {/* Cổng khách (S2b): dải rõ ràng khi trang lộ cho khách; nút chia sẻ nhanh khi còn nội bộ. */}
+        {portalStaff(config) && (page.visibility === 'CLIENT' ? (
+          <VisibleToClient className="mt-3">the client can read this page in their portal (Documents)</VisibleToClient>
+        ) : page.canManage && config.permissions.editDocs ? (
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-[12.5px] text-[var(--w-text-3)]">
+            <InternalPill label="Internal only" />
+            <button type="button" className="w-btn w-btn-sm" disabled={patch.isPending} onClick={() => patch.mutate({ visibility: 'CLIENT' })} data-testid="docs-share-client">
+              <Share2 size={13} /> Share with client
+            </button>
+          </div>
+        ) : null)}
         <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[12.5px] text-[var(--w-text-3)]">
           <PageStatusPill status={page.status} />
           <VisibilityBadge visibility={page.visibility} />

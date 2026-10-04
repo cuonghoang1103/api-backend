@@ -13,8 +13,10 @@ import { defaultModulesFor, kindFromTemplate, mergeModules, modulesOf, noModules
 import { auditProject } from './audit.js';
 import { emitWorkEvent, evictFromProject } from './events.js';
 import {
-  can, docAccess, effectiveProjectRole, loadProjectAccess, requireProject, requireWorkspace, type ProjectOptions,
+  can, docAccess, effectiveProjectRole, effectiveWorkspaceRole, isClientScoped, loadProjectAccess, portalOnlyUserIds, requireProject, requireWorkspace,
+  type ProjectOptions,
 } from './permissions.js';
+import { clientPeopleIds, filterPeople } from './clientPeople.js';
 import { seedProjectConfig } from './templates.js';
 
 const MAX_PROJECTS_PER_WORKSPACE = 100;
@@ -98,10 +100,15 @@ export async function listProjects(userId: number, workspaceId: number) {
     });
     if (!role) continue;
     const { members: _m, _count, settings, clientRequest, kind, ...rest } = p;
+    const modules = modulesOf(settings);
+    // Khách bị cách ly (cổng khách S2b): chỉ đếm thẻ đã chia sẻ — không lộ quy mô việc nội bộ.
+    const openIssues = isClientScoped({ role, modules })
+      ? await prisma.workIssue.count({ where: { projectId: p.id, deletedAt: null, resolvedAt: null, clientVisible: true } })
+      : _count.issues;
     out.push({
-      ...rest, role, openIssues: _count.issues,
+      ...rest, role, openIssues,
       kind: projectKindOf({ kind, template: p.template, fromClientRequest: !!clientRequest }),
-      modules: modulesOf(settings),
+      modules,
     });
   }
   return out;
@@ -149,9 +156,16 @@ export async function getProjectConfig(userId: number, projectId: number) {
       },
     },
   });
-  const members = await projectMembers(projectId);
+  // Cổng khách (S2b): khách bị cách ly nhận bản RÚT GỌN — không cấu hình nội bộ
+  // (settings: chỉ dẫn AI, điều kiện Done…; trường tuỳ chỉnh; component; sprint),
+  // và thành viên chỉ là người khách được thấy (clientPeople.ts — một luật cho mọi đường).
+  const clientView = isClientScoped(access);
+  const members = filterPeople(await projectMembers(projectId), clientView ? await clientPeopleIds(projectId, userId) : null);
+  const trimmed = clientView ? { settings: {}, customFields: [], components: [], sprints: [], leadId: null } : {};
   return {
     ...project,
+    ...trimmed,
+    clientView,
     // Lớp studio: loại hiệu lực (dự án cũ suy từ mẫu) + mô-đun đang bật.
     kind: access.kind,
     kindStored: project.kind,
@@ -198,15 +212,17 @@ function docFlags(access: { role: ProjectRole; workspaceRole: WorkspaceRole }) {
 /** Mọi người vào được dự án kèm vai trò hiệu lực — dùng cho ô chọn người, @nhắc tên. */
 export async function projectMembers(projectId: number) {
   const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { workspaceId: true, visibility: true } });
-  const [wsMembers, projMembers] = await Promise.all([
+  const [wsMembers, projMembers, portalOnly] = await Promise.all([
     prisma.workMember.findMany({ where: { workspaceId: project.workspaceId }, select: { role: true, user: { select: PUBLIC_USER } } }),
     prisma.workProjectMember.findMany({ where: { projectId }, select: { userId: true, role: true } }),
+    portalOnlyUserIds(project.workspaceId),
   ]);
   const explicit = new Map(projMembers.map((m) => [m.userId, m.role as ProjectRole]));
   const out: Array<(typeof wsMembers)[number]['user'] & { role: ProjectRole; explicit: boolean }> = [];
   for (const m of wsMembers) {
     const role = effectiveProjectRole({
-      workspaceRole: m.role as 'OWNER' | 'ADMIN' | 'MEMBER' | 'GUEST',
+      // MEMBER chỉ là khách cổng ⇒ GUEST: không hiện như thành viên ngầm của dự án mở cho không gian.
+      workspaceRole: effectiveWorkspaceRole(m.role as WorkspaceRole, portalOnly.has(m.user.id)),
       projectRole: explicit.get(m.user.id) ?? null,
       visibility: project.visibility as ProjectVisibility,
     });
@@ -461,6 +477,11 @@ export async function updateStudioConfig(
       ].filter(Boolean).join(' · ') || 'Updated studio settings',
       detail: { kind, modules, stageGate: settings.stageGate ?? null },
     });
+  }
+  // Bật/tắt cổng khách đổi phòng realtime của khách (phòng riêng ↔ phòng dự án) — đuổi ra để vào lại đúng phòng.
+  if (modules.clientPortal !== before.clientPortal) {
+    const clients = await prisma.workProjectMember.findMany({ where: { projectId, role: 'CLIENT' }, select: { userId: true } });
+    for (const c of clients) evictFromProject(projectId, c.userId);
   }
   emitWorkEvent({ type: 'project.updated', projectId, actor: { kind: 'USER', userId } });
   return getStudioConfig(userId, projectId);

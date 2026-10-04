@@ -1,0 +1,46 @@
+/* Khu vườn CuongMini — cảnh SVG isometric; cây đung đưa, quả chín lấp lánh, chữ xu bay lên. */
+.goc { width: 100%; max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 12px; color: #f0fdf4; user-select: none; -webkit-user-select: none; }
+.hud { width: 100%; display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 13px; border-radius: 999px; font-size: 13px; color: rgba(240, 253, 244, 0.8); background: rgba(34, 197, 94, 0.14); border: 1px solid rgba(74, 222, 128, 0.3); }
+.chip b { color: #fff; font-size: 15px; font-variant-numeric: tabular-nums; }
+.chip[data-gap='true'] { background: rgba(249, 115, 22, 0.22); border-color: rgba(251, 146, 60, 0.5); animation: dap 1s ease-in-out infinite; }
+@keyframes dap { 50% { transform: scale(1.06); } }
+.canh { width: 100%; border-radius: 24px; box-shadow: 0 30px 60px -30px rgba(21, 128, 61, 0.8); touch-action: manipulation; }
+.luong { cursor: pointer; }
+.luong:hover > path { filter: brightness(1.15); }
+.cay { transform-box: fill-box; }
+.cay > g:first-child { transform-origin: 0 0; animation: dua 3.2s ease-in-out infinite; }
+@keyframes dua { 50% { transform: rotate(3deg); } }
+.luong[data-chin='true'] .cay > g:first-child { animation: dua 1.4s ease-in-out infinite; }
+.lap circle { animation: lap 1s ease-in-out infinite; }
+.lap circle:nth-child(2) { animation-delay: 0.5s; }
+@keyframes lap { 50% { opacity: 0.1; transform: scale(0.4); } }
+.nhay { animation: nhay 1s ease-in-out infinite; }
+@keyframes nhay { 50% { transform: translateY(-5px); } }
+.sau { animation: bo 0.6s ease-in-out infinite alternate; }
+@keyframes bo { to { transform: translate(-10px, -26px) scaleX(-1); } }
+.may { animation: troi 40s linear infinite alternate; }
+@keyframes troi { to { transform: translateX(120px); } }
+.tan { transform-box: fill-box; transform-origin: 50% 100%; animation: dua 4s ease-in-out infinite; }
+.song { animation: song 2.4s ease-in-out infinite; }
+@keyframes song { 50% { transform: translateX(10px); opacity: 0.3; } }
+.buom { animation: buom 14s ease-in-out infinite; }
+@keyframes buom { 0% { transform: translate(120px, 220px); } 25% { transform: translate(420px, 160px) scale(0.9); } 50% { transform: translate(820px, 240px); } 75% { transform: translate(560px, 300px) scale(1.1); } 100% { transform: translate(120px, 220px); } }
+.bay { font-size: 30px; font-weight: 900; paint-order: stroke; stroke: rgba(0, 0, 0, 0.35); stroke-width: 4px; animation: bayLen 0.9s ease-out forwards; }
+@keyframes bayLen { to { transform: translateY(-50px); opacity: 0; } }
+
+.congCu { width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 8px; }
+.congCu button {
+  --m: #4ade80;
+  display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 9px 6px; border-radius: 14px; color: #f0fdf4;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--m) 22%, transparent), rgba(20, 30, 20, 0.6)); border: 1px solid color-mix(in srgb, var(--m) 40%, transparent);
+  transition: transform 0.12s, box-shadow 0.2s;
+}
+.congCu button:hover:not(:disabled) { transform: translateY(-2px); }
+.congCu button[data-chon='true'] { box-shadow: 0 0 0 2px var(--m), 0 10px 24px -10px var(--m); background: linear-gradient(160deg, color-mix(in srgb, var(--m) 40%, transparent), rgba(20, 30, 20, 0.5)); }
+.congCu button:disabled { opacity: 0.35; }
+.congCu b { font-size: 13px; }
+.congCu small { font-size: 10.5px; color: rgba(240, 253, 244, 0.7); }
+.hat { width: 16px; height: 16px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--m) 55%); box-shadow: 0 0 10px var(--m); }
+.goiY { display: flex; gap: 6px; align-items: flex-start; font-size: 12.5px; line-height: 1.5; color: rgba(240, 253, 244, 0.65); }
+@media (prefers-reduced-motion: reduce) { .cay > g:first-child, .lap circle, .nhay, .sau, .may, .buom, .chip, .tan, .song { animation: none !important; } }

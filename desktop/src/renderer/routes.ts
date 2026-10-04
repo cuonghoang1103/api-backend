@@ -61,7 +61,7 @@ import {
 } from 'lucide-react';
 import { nativePageFor } from './page-registry';
 
-export type RouteGroup = 'chinh' | 'ai' | 'hoc' | 'lam' | 'tien' | 'khac';
+export type RouteGroup = 'chinh' | 'ai' | 'hoc' | 'lam' | 'giai' | 'tien' | 'khac';
 
 export interface RouteDef {
   /** Đường dẫn, trùng với đường dẫn trên web để mở ngoài là ra đúng trang. */
@@ -199,8 +199,8 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['tin công nghệ', 'blog', 'bài viết', 'tech'] },
   { path: '/music', label: 'Music', icon: Music, group: 'tien',
     keywords: ['music', 'nghe nhạc', 'remix', 'nhac', 'thư giãn'] },
-  { path: '/games', label: 'Trò chơi', icon: Gamepad2, group: 'khac',
-    keywords: ['games', 'tro choi'] },
+  { path: '/games', label: 'Trò chơi', icon: Gamepad2, group: 'giai',
+    keywords: ['games', 'tro choi', 'game', 'luyện não', 'luyen nao', 'iq', 'sudoku', '2048', 'giải trí'] },
   { path: '/finance', label: 'MoneyFlow', icon: Wallet, group: 'tien',
     keywords: ['finance', 'tài chính', 'tai chinh', 'moneyflow', 'chi tieu'] },
   { path: '/forum', label: 'Diễn đàn', icon: Users, group: 'khac',
@@ -220,11 +220,12 @@ export const GROUP_LABELS: Record<RouteGroup, string> = {
   ai: 'AI',
   hoc: 'Học tập',
   lam: 'Làm & sáng tạo',
+  giai: 'Giải trí',
   tien: 'Tiện ích',
   khac: 'Khác',
 };
 
-export const GROUP_ORDER: readonly RouteGroup[] = ['chinh', 'ai', 'hoc', 'lam', 'tien', 'khac'];
+export const GROUP_ORDER: readonly RouteGroup[] = ['chinh', 'ai', 'hoc', 'lam', 'giai', 'tien', 'khac'];
 
 /**
  * THANH BÊN GỌN — đúng danh sách người dùng chốt ngày 04/10/2026:
@@ -247,6 +248,8 @@ export const THANH_BEN: Readonly<Partial<Record<RouteGroup, readonly string[]>>>
   lam: ['/creator', '/maker-lab', '/projects', '/work'],
   /* Đợt 2 (04/10/2026): người dùng thêm lại Music, Projects, Interview, Code Lab,
      Exam Room và mở nhóm "Tiện ích" (Đo mạng, MoneyFlow). */
+  /* 05/10/2026: mục Trò chơi — 10 game luyện não + bảng vàng (features/games/TroChoiPage). */
+  giai: ['/games'],
   tien: ['/music', '/toc-do-mang', '/finance'],
 };
 

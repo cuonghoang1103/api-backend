@@ -95,6 +95,21 @@ publicRouter.get('/leaderboard', async (req, res: Response<ApiResponse>, next) =
   } catch (e) { next(e); }
 });
 
+// GET /api/v1/games/bang-vang — người chơi xếp theo tổng kỷ lục đã chuẩn hoá (game.service bangVang).
+publicRouter.get('/bang-vang', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const limit = parseInt(String(req.query.limit ?? '10'), 10) || 10;
+    res.json({ success: true, data: await svc.bangVang(limit) });
+  } catch (e) { next(e); }
+});
+
+// GET /api/v1/games/ky-luc-cua-toi — { [gameId]: điểm cao nhất } của người đang đăng nhập.
+publicRouter.get('/ky-luc-cua-toi', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.kyLucCuaToi(req.userId!) });
+  } catch (e) { next(e); }
+});
+
 // GET /api/v1/games/by-slug/:slug — single game. Admins may preview DRAFTs.
 publicRouter.get('/by-slug/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {

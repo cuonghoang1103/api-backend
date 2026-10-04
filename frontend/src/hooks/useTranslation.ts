@@ -21,6 +21,22 @@ const translations: Record<Locale, Record<string, any>> = {
 // Async no-op kept so existing `loadTranslations(x).then(...)` calls work.
 async function loadTranslations(_locale: Locale): Promise<void> {}
 
+/**
+ * Ngôn ngữ đã chọn: cookie `locale` (web) → localStorage `locale` → 'en'.
+ * App desktop chạy ở `app://` — trình duyệt không giữ cookie cho scheme đó, nên app ghi
+ * vào localStorage (features/games/TroChoiNoiDung.tsx). Thiếu nhánh này thì mọi màn web
+ * dùng lại trong app đều ra tiếng Anh (05/10/2026: "Play now" trong mục Trò chơi).
+ */
+function docLocale(): Locale {
+  const m = document.cookie.match(/locale=(\w+)/)?.[1];
+  if (m === 'vi' || m === 'en') return m;
+  try {
+    const l = localStorage.getItem('locale');
+    if (l === 'vi' || l === 'en') return l;
+  } catch { /* bỏ qua */ }
+  return 'en';
+}
+
 // Get nested translation value from an object
 function getNestedValue(obj: any, path: string): string | undefined {
   const keys = path.split('.');
@@ -63,16 +79,14 @@ export function useTranslation() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const match = document.cookie.match(/locale=(\w+)/);
-    const savedLocale = (match && (match[1] === 'vi' || match[1] === 'en') ? match[1] : 'en') as Locale;
+    const savedLocale = docLocale();
 
     setLocaleState(savedLocale);
     loadTranslations(savedLocale).then(() => setIsLoaded(true));
 
     // Listen for locale changes broadcast by LanguageSwitcher
     const handleLocaleChange = () => {
-      const newMatch = document.cookie.match(/locale=(\w+)/);
-      const newLocale = (newMatch && (newMatch[1] === 'vi' || newMatch[1] === 'en') ? newMatch[1] : 'en') as Locale;
+      const newLocale = docLocale();
       // Không so với `locale` — closure của effect chạy một lần luôn giữ 'en'
       // (cùng lỗi đã sửa trong LocaleContext.tsx).
       setLocaleState(newLocale);

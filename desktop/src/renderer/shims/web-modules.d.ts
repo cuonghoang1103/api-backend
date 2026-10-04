@@ -586,3 +586,15 @@ declare module '@/components/notes/QuickCaptureHost' {
   const QuickCaptureHost: ComponentType;
   export default QuickCaptureHost;
 }
+
+/* Mục Trò chơi (05/10/2026) — features/games/TroChoiNoiDung.tsx. */
+declare module '@/components/games/hub/GameHub' {
+  import type { ComponentType } from 'react';
+  const GameHub: ComponentType<{ locale?: 'vi' | 'en' }>;
+  export default GameHub;
+}
+declare module '@/components/games/hub/ChoiGameClient' {
+  import type { ComponentType } from 'react';
+  const ChoiGameClient: ComponentType<{ slug: string }>;
+  export default ChoiGameClient;
+}

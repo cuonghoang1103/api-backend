@@ -29,6 +29,8 @@ const SCORE_CAPS: Record<string, number> = {
   'ma-tran-iq': 4_000, // 12 câu × (100 + 40×5 + 60)
   sudoku: 5_000, // gốc Siêu khó 5000, chỉ trừ xuống
   'noi-day': 6_000, // 5 màn × (200×(N−3) + 300)
+  'khu-vuon': 3_000, // 180 giây, 16 luống bí ngô vàng chăm hoàn hảo vẫn dưới trần
+  runner: 60_000, // 30 m/s × 20 phút + sao — ván 20 phút liền là phi thực tế
   '2048': 400_000, // ô 65536 ≈ 1,1 triệu là phi thực tế; ván rất giỏi ~ 200k
 };
 const DEFAULT_SCORE_CAP = 50_000;
@@ -243,6 +245,46 @@ export async function leaderboardGlobal(limit = 5) {
     },
   });
   return rows.map((r, i) => ({ ...toLeaderEntry(r as unknown as LeaderRow, i + 1), game: r.game }));
+}
+
+/**
+ * BẢNG VÀNG (05/10/2026) — xếp hạng NGƯỜI CHƠI trên mọi game.
+ *
+ * Không cộng điểm thô: 2048 dễ ra hàng chục nghìn, Ma trận IQ tối đa vài nghìn — cộng
+ * thô thì bảng chỉ còn là bảng 2048. Mỗi người lấy KỶ LỤC ở từng game, quy về thang
+ * 1000 theo trần điểm của game đó (SCORE_CAPS — cũng là trần chống gian lận), rồi cộng.
+ * Giỏi nhiều game mới đứng đầu. Người ẩn danh (userId null) không vào bảng.
+ */
+export async function bangVang(limit = 10) {
+  const nhom = await prisma.gamePlay.groupBy({
+    by: ['userId', 'gameId'],
+    where: { userId: { not: null }, game: { status: 'PUBLISHED', componentKey: { not: null } } },
+    _max: { score: true },
+  });
+  if (!nhom.length) return [];
+  const games = await prisma.game.findMany({ where: { id: { in: [...new Set(nhom.map((n) => n.gameId))] } }, select: { id: true, componentKey: true } });
+  const tran = new Map(games.map((g) => [g.id, scoreCapFor(g.componentKey)]));
+  const tong = new Map<number, { diem: number; soGame: number }>();
+  for (const n of nhom) {
+    const cap = tran.get(n.gameId) ?? DEFAULT_SCORE_CAP;
+    const d = Math.round(Math.min(1, (n._max.score ?? 0) / cap) * 1000);
+    if (d <= 0) continue;
+    const cu = tong.get(n.userId!) ?? { diem: 0, soGame: 0 };
+    tong.set(n.userId!, { diem: cu.diem + d, soGame: cu.soGame + 1 });
+  }
+  const top = [...tong.entries()].sort((a, b) => b[1].diem - a[1].diem).slice(0, Math.min(50, Math.max(1, limit)));
+  const users = await prisma.user.findMany({ where: { id: { in: top.map(([id]) => id) } }, select: { id: true, username: true, displayName: true, fullName: true, avatarUrl: true } });
+  const u = new Map(users.map((x) => [x.id, x]));
+  return top.map(([id, v], i) => {
+    const x = u.get(id);
+    return { rank: i + 1, userId: id, diem: v.diem, soGame: v.soGame, player: x ? { id, name: x.displayName || x.fullName || x.username, avatarUrl: x.avatarUrl } : null };
+  });
+}
+
+/** Kỷ lục của MỘT người ở từng game — hiện trên thẻ game trong mục Trò chơi. */
+export async function kyLucCuaToi(userId: number): Promise<Record<number, number>> {
+  const nhom = await prisma.gamePlay.groupBy({ by: ['gameId'], where: { userId }, _max: { score: true } });
+  return Object.fromEntries(nhom.map((n) => [n.gameId, n._max.score ?? 0]));
 }
 
 /** Best score for a game (used by the featured spotlight). */

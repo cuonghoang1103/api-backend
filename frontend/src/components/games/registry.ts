@@ -112,6 +112,18 @@ export const GAME_REGISTRY: Record<string, GameRegistryEntry> = {
     scoreCap: 6_000,
     scored: true,
   },
+  'khu-vuon': {
+    name: 'Khu vườn CuongMini (thư giãn)',
+    load: () => loader(() => import('./KhuVuonGame')),
+    scoreCap: 3_000,
+    scored: true,
+  },
+  runner: {
+    name: 'CuongMini chạy (hành động 3D)',
+    load: () => loader(() => import('./RunnerGame')),
+    scoreCap: 60_000,
+    scored: true,
+  },
   '2048': {
     name: '2048',
     load: () => loader(() => import('./Game2048')),

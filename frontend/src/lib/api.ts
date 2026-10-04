@@ -4486,6 +4486,15 @@ export interface GameLeaderEntry {
   game?: { id: number; slug: string; title: string; titleVi: string | null };
 }
 
+export interface GameBangVang {
+  rank: number;
+  userId: number;
+  /** Tổng kỷ lục đã chuẩn hoá — mỗi game tối đa 1000. */
+  diem: number;
+  soGame: number;
+  player: { id: number; name: string; avatarUrl: string | null } | null;
+}
+
 export interface GameStats {
   games: number;
   categories: number;
@@ -4544,6 +4553,14 @@ export const gamesApi = {
   },
   leaderboard(limit = 5) {
     return api.get<{ data: GameLeaderEntry[] }>('/games/leaderboard', { params: { limit } });
+  },
+  /** Bảng vàng (05/10/2026): người chơi xếp theo tổng kỷ lục quy về thang 1000/game. */
+  bangVang(limit = 10) {
+    return api.get<{ data: GameBangVang[] }>('/games/bang-vang', { params: { limit } });
+  },
+  /** { [gameId]: điểm cao nhất } của người đang đăng nhập. */
+  kyLucCuaToi() {
+    return api.get<{ data: Record<number, number> }>('/games/ky-luc-cua-toi');
   },
   gameLeaderboard(id: number, limit = 20) {
     return api.get<{ data: GameLeaderEntry[] }>(`/games/${id}/leaderboard`, { params: { limit } });

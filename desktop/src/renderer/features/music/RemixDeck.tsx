@@ -288,9 +288,7 @@ export function RemixDeck({ baiRemix, baiThuong }: { baiRemix: Track[]; baiThuon
            * ném ra "Internal Server Error" (nginx thay thân JSON của backend
            * bằng trang lỗi của nó, nên thông báo tiếng Việt gốc cũng mất). */
           throw new Error(
-            rut.status === 403
-              ? 'Chỉ tài khoản quản trị mới rút được âm thanh về máy chủ.'
-              : rut.status >= 500
+            rut.status >= 500
                 ? 'Máy chủ chưa tải được bài này từ YouTube. Thử lại sau ít phút; nếu vẫn vậy thì chọn tạm bài ở nhóm "Thư viện".'
                 : chiTiet?.message ?? `Rút âm thanh thất bại (${rut.status})`,
           );

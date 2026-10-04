@@ -15324,6 +15324,7 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-agent .ct-chat-thanh { flex-wrap: wrap; min-width: 0; }
 
 /* Trò chơi (05/10/2026): trang tự cuộn, nền tối của mục game phủ kín vùng nội dung. */
+.ct-nav-quantri .ct-nav-icon { color: #f472b6; }
 .ct-tro-choi { height: 100%; overflow-y: auto; overscroll-behavior: contain; background: #0b0820; }
 .ct-tro-choi[data-choi] { padding: 18px clamp(14px, 3vw, 32px) 40px; background: radial-gradient(120% 50% at 50% -10%, #2a1660, #0b0820 60%); }
 .ct-tro-choi-ve { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px; padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 650; color: #ddd6fe; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.12); }

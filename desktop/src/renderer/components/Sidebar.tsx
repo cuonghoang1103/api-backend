@@ -7,7 +7,8 @@
  * phím phải bấm Tab 14 lần mới ra khỏi sidebar.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { PanelLeft, PanelLeftClose, PanelLeftOpen, Settings } from 'lucide-react';
+import { PanelLeft, PanelLeftClose, PanelLeftOpen, Settings, ShieldCheck } from 'lucide-react';
+import { useSession } from '../auth/session';
 import { useAppState } from '../app-state';
 import { UpdateBanner } from './UpdateBanner';
 import { UserMenu } from './UserMenu';
@@ -45,6 +46,8 @@ const MODE_LABEL: Record<SidebarMode, string> = {
 };
 
 export function Sidebar() {
+  const { user } = useSession();
+  const laAdmin = (user?.roles ?? []).some((r) => /^(ROLE_)?ADMIN$/i.test(r)) || /^(ROLE_)?ADMIN$/i.test(user?.role ?? '');
   const { route, navigate, settings, setSetting } = useAppState();
   const { dich } = useDich();
   const mode: SidebarMode =
@@ -165,6 +168,21 @@ export function Sidebar() {
             động phải nằm trước thứ chỉ để xem. */}
         <UpdateBanner collapsed={collapsed} />
         <UserMenu collapsed={collapsed} />
+
+        {/* Quản trị (05/10/2026) — chỉ tài khoản admin thấy. */}
+        {laAdmin && (
+          <button
+            type="button"
+            className="ct-nav-item ct-nav-quantri"
+            data-route="/quan-tri"
+            data-active={route === '/quan-tri' || route.startsWith('/quan-tri/')}
+            title={collapsed ? dich('Quản trị') : undefined}
+            onClick={() => navigate('/quan-tri')}
+          >
+            <ShieldCheck className="ct-nav-icon" size={17} aria-hidden />
+            <span className="ct-nav-label">{dich('Quản trị')}</span>
+          </button>
+        )}
 
         <button
           type="button"

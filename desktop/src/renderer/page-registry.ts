@@ -53,6 +53,7 @@ import { CtWorkPage } from './features/work/CtWorkPage';
 import { MangNhaPage } from './features/mang/MangNhaPage';
 import { HoSoPage } from './features/profile/HoSoPage';
 import { TroChoiPage } from './features/games/TroChoiPage';
+import { QuanTriPage } from './features/admin/QuanTriPage';
 import { CaiDatThongBaoPage } from './features/profile/CaiDatThongBaoPage';
 import { thuocCayWeb } from './features/web/dinhTuyenWeb';
 
@@ -92,6 +93,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/profile': TrangCaNhanPage,
   '/ho-so': HoSoPage,
   '/games': TroChoiPage,
+  '/quan-tri': QuanTriPage,
   '/settings/notifications': CaiDatThongBaoPage,
   '/work': CtWorkPage,
   '/toc-do-mang': MangNhaPage,
@@ -148,6 +150,8 @@ export function nativePageFor(path: string): ComponentType | undefined {
   if (path.startsWith('/exam/')) return PhongThiPage;
   /* `/games/<slug>` — chơi một game (TroChoiPage tự rẽ theo route), 05/10/2026. */
   if (path.startsWith('/games/')) return TroChoiPage;
+  /* Quản trị (05/10/2026) — `/quan-tri/<mục>`, QuanTriPage tự rẽ theo route. */
+  if (path.startsWith('/quan-tri/')) return QuanTriPage;
   /* `/academy/courses/<slug>` — Học viện NATIVE tự mở môn theo đường dẫn (04/10/2026). */
   if (path.startsWith('/academy/courses/')) return HocVienPage;
   // Trang con của một cây web (`/language/ja/vocab`…). Chính trang chủ cây đọc

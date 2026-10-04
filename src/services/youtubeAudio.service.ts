@@ -107,7 +107,7 @@ export async function downloadImageToR2(
  */
 export async function extractYoutubeAudioToR2(
   youtubeUrl: string,
-  options: { userId?: number } = {},
+  options: { userId?: number; /** Trần kích thước một bài (byte) — 05/10/2026: 30 MB cho mọi tài khoản. */ maxBytes?: number } = {},
 ): Promise<ExtractResult> {
   if (!youtubeUrl || !/^https?:\/\//.test(youtubeUrl)) {
     throw new YoutubeAudioError('Track không có URL YouTube hợp lệ.', 'BAD_URL', 400);
@@ -147,6 +147,8 @@ export async function extractYoutubeAudioToR2(
         '-x', '--audio-format', 'mp3', '--audio-quality', '0',
         '--no-playlist',
         '--no-progress',
+        // Bỏ ngay luồng gốc quá trần — khỏi tốn băng thông + CPU chuyển mã một bài sẽ bị từ chối.
+        ...(options.maxBytes ? ['--max-filesize', String(options.maxBytes)] : []),
         ...ffmpegArgs,
         '-o', outTemplate,
         youtubeUrl,
@@ -166,6 +168,13 @@ export async function extractYoutubeAudioToR2(
     }
     if (buffer.length === 0) {
       throw new YoutubeAudioError('File audio trích xuất bị rỗng.', 'EMPTY', 502);
+    }
+    if (options.maxBytes && buffer.length > options.maxBytes) {
+      throw new YoutubeAudioError(
+        `Bài này nặng ${(buffer.length / 1024 / 1024).toFixed(1)} MB — vượt giới hạn ${Math.round(options.maxBytes / 1024 / 1024)} MB mỗi bài.`,
+        'TOO_LARGE',
+        413,
+      );
     }
     if (buffer.length > config.maxFileSizeAudio) {
       throw new YoutubeAudioError(

@@ -603,18 +603,30 @@ router.delete(
 // ────────────────────────────────────────────────────────────────
 // Extract a YouTube track's audio to R2 so it plays via <audio>
 // (background + lock-screen on mobile) instead of the YouTube iframe.
-// Admin-only: extraction is expensive (yt-dlp + ffmpeg, 1G container)
-// and downloading YouTube audio is a personal-use / ToS-sensitive op.
+//
+// 05/10/2026: MỞ cho mọi tài khoản đã đăng nhập (trước chỉ ADMIN — và ADMIN còn
+// phải qua step-up MFA mà phiên app desktop không có ⇒ chính admin cũng bị 403).
+// Đổi lại có trần: mỗi bài ≤ 30 MB (+ chặn sớm bài > 20 phút), tài khoản thường
+// ≤ 20 lần/ngày. Máy chủ vẫn chỉ chạy MỘT lần rút một lúc (youtubeAudio.service).
 // ════════════════════════════════════════════════════════════════
+const RUT_TOI_DA_BYTE = 30 * 1024 * 1024;
+const RUT_TOI_DA_GIAY = 20 * 60;
+const RUT_LUOT_NGAY = 20;
+const daRut = new Map<string, number>();
+
 router.post(
   '/tracks/:id/download-audio',
   authenticate,
-  requireRole('ADMIN'),
   async (req: any, res: Response<ApiResponse>, next) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id) || id <= 0) {
         throw new AppError('Invalid track ID', 400, 'INVALID_ID');
+      }
+      const laAdmin = (req.user?.roles ?? []).some((r: string) => /^(ROLE_)?ADMIN$/i.test(r));
+      const khoaNgay = `${req.user?.userId}:${new Date().toISOString().slice(0, 10)}`;
+      if (!laAdmin && (daRut.get(khoaNgay) ?? 0) >= RUT_LUOT_NGAY) {
+        throw new AppError(`Hôm nay bạn đã rút ${RUT_LUOT_NGAY} bài — mai rút tiếp nhé.`, 429, 'EXTRACT_DAILY_LIMIT');
       }
 
       const track = (await musicService.getTrackById(id, true)) as {
@@ -632,6 +644,10 @@ router.post(
       // For a YouTube track, getTrackById returns audioUrl = the YouTube
       // watch URL (buildAudioUrl passes it through when set).
       const youtubeUrl = track.audioUrl || '';
+      const thoiLuong = Number((track as { durationSeconds?: number | null }).durationSeconds) || 0;
+      if (thoiLuong > RUT_TOI_DA_GIAY) {
+        throw new AppError(`Bài dài ${Math.round(thoiLuong / 60)} phút — chỉ rút được bài dưới ${RUT_TOI_DA_GIAY / 60} phút (≤ 30 MB).`, 413, 'TOO_LONG');
+      }
 
       const { extractYoutubeAudioToR2, downloadImageToR2, YoutubeAudioError } = await import(
         '../services/youtubeAudio.service.js'
@@ -639,7 +655,9 @@ router.post(
       try {
         const { key, size } = await extractYoutubeAudioToR2(youtubeUrl, {
           userId: req.user?.userId,
+          maxBytes: RUT_TOI_DA_BYTE,
         });
+        if (!laAdmin) { daRut.set(khoaNgay, (daRut.get(khoaNgay) ?? 0) + 1); if (daRut.size > 5000) daRut.clear(); }
 
         // Also copy the cover to R2 when it's still a YouTube thumbnail, so
         // the track is fully self-contained (cover never breaks if YouTube

@@ -205,10 +205,13 @@ export function MusicPage() {
     );
     if (!phanHoi.ok) {
       const chiTiet = await phanHoi.json().catch(() => null) as { message?: string } | null;
+      // Hiện ĐÚNG lý do máy chủ trả về (quá 30 MB, quá 20 phút, hết lượt ngày, YouTube chặn…).
+      // Trước 05/10/2026 mọi 403 bị dịch thành "Chỉ tài khoản quản trị…" — kể cả khi chính
+      // admin bị chặn vì thiếu bước xác minh MFA, nên thông báo nói sai sự thật.
       throw new Error(
-        phanHoi.status === 403
-          ? dich('Chỉ tài khoản quản trị mới rút được âm thanh về máy chủ.')
-          : chiTiet?.message ?? `HTTP ${phanHoi.status}`,
+        chiTiet?.message ?? (phanHoi.status >= 500
+          ? dich('Máy chủ chưa tải được bài này từ YouTube. Thử lại sau ít phút.')
+          : `HTTP ${phanHoi.status}`),
       );
     }
   };

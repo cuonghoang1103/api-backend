@@ -10036,44 +10036,54 @@ model WorkProject {
   updatedAt    DateTime  @updatedAt @map("updated_at")
   deletedAt    DateTime? @map("deleted_at")
 
-  workspace      WorkSpace             @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  lead           User?                 @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
-  members        WorkProjectMember[]
-  invites        WorkInvite[]
-  workflows      WorkWorkflow[]
-  issueTypes     WorkIssueType[]
-  issues         WorkIssue[]
-  labels         WorkLabel[]
-  components     WorkComponent[]
-  sprints        WorkSprint[]
-  testPlans      WorkTestPlan[]
-  testCycles     WorkTestCycle[]
-  customFields   WorkCustomField[]
-  savedFilters   WorkSavedFilter[]
-  dashboards     WorkDashboard[]
-  versions       WorkVersion[]
-  automations    WorkAutomationRule[]
-  github         WorkGithubConnection?
-  devActivity    WorkDevActivity[]
-  publicLinks    WorkPublicLink[]
-  aiThreads      WorkAiThread[]
-  chatHooks      WorkChatHook[]
-  gitlab         WorkGitlabConnection?
-  editLocks      WorkEditLock[]
-  stages         WorkStage[]
-  approvals      WorkApproval[]
-  handoffs       WorkHandoff[]
-  issueAliases   WorkIssueAlias[]
+  workspace         WorkSpace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  lead              User?                  @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
+  members           WorkProjectMember[]
+  invites           WorkInvite[]
+  workflows         WorkWorkflow[]
+  issueTypes        WorkIssueType[]
+  issues            WorkIssue[]
+  labels            WorkLabel[]
+  components        WorkComponent[]
+  sprints           WorkSprint[]
+  testPlans         WorkTestPlan[]
+  testCycles        WorkTestCycle[]
+  customFields      WorkCustomField[]
+  savedFilters      WorkSavedFilter[]
+  dashboards        WorkDashboard[]
+  versions          WorkVersion[]
+  automations       WorkAutomationRule[]
+  github            WorkGithubConnection?
+  devActivity       WorkDevActivity[]
+  publicLinks       WorkPublicLink[]
+  aiThreads         WorkAiThread[]
+  chatHooks         WorkChatHook[]
+  gitlab            WorkGitlabConnection?
+  editLocks         WorkEditLock[]
+  stages            WorkStage[]
+  approvals         WorkApproval[]
+  handoffs          WorkHandoff[]
+  issueAliases      WorkIssueAlias[]
   /// Tài liệu dự án kiểu Confluence (đợt S2a, mô-đun `docs`).
-  pages          WorkPage[]
+  pages             WorkPage[]
   /// Nghiệm thu UAT (đợt S2b, mô-đun `clientPortal`).
-  uatRequests    WorkUatRequest[]
+  uatRequests       WorkUatRequest[]
   /// Đợt S3b: yêu cầu thay đổi (CR), sổ RAID, cuộc họp.
-  changeRequests WorkChangeRequest[]
-  raidItems      WorkRaidItem[]
-  meetings       WorkMeeting[]
+  changeRequests    WorkChangeRequest[]
+  raidItems         WorkRaidItem[]
+  meetings          WorkMeeting[]
+  /// Đợt S4: tài chính dự án (mô-đun finance), báo cáo khách tự động (mô-đun reports), xuất trọn dự án.
+  financeSettings   WorkFinanceSettings?
+  rates             WorkRate[]
+  timesheets        WorkTimesheet[]
+  budgetLines       WorkBudgetLine[]
+  expenses          WorkExpense[]
+  paymentMilestones WorkPaymentMilestone[]
+  reportSchedule    WorkReportSchedule?
+  clientReports     WorkClientReport[]
+  exports           WorkProjectExport[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
-  clientRequest  ProjectRequest?
+  clientRequest     ProjectRequest?
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -10758,10 +10768,12 @@ model WorkVersion {
   position     Int       @default(0)
   createdAt    DateTime  @default(now()) @map("created_at")
 
-  project     WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  issues      WorkIssue[]
-  uatRequests WorkUatRequest[]
-  crLinks     WorkChangeRequestLink[]
+  project           WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issues            WorkIssue[]
+  uatRequests       WorkUatRequest[]
+  crLinks           WorkChangeRequestLink[]
+  /// Đợt S4: mốc thanh toán gắn version (UAT của version được duyệt ⇒ mốc DUE).
+  paymentMilestones WorkPaymentMilestone[]
 
   @@unique([projectId, name], name: "uk_work_version", map: "uk_work_version")
   @@map("work_versions")
@@ -11093,6 +11105,8 @@ model WorkTeam {
   issues       WorkIssue[]
   handoffsFrom WorkHandoff[]    @relation("WorkHandoffFromTeam")
   handoffsTo   WorkHandoff[]    @relation("WorkHandoffToTeam")
+  /// Đợt S4: đơn giá theo bộ phận.
+  rates        WorkRate[]
 
   @@unique([workspaceId, key], name: "uk_work_team_key", map: "uk_work_team_key")
   @@map("work_teams")
@@ -11131,14 +11145,18 @@ model WorkStage {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  project     WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  gateIssue   WorkIssue?              @relation("WorkStageGateIssue", fields: [gateIssueId], references: [id], onDelete: SetNull)
-  issues      WorkIssue[]             @relation("WorkIssueStage")
-  approvals   WorkApproval[]
-  pages       WorkPage[]
-  uatRequests WorkUatRequest[]
-  crLinks     WorkChangeRequestLink[]
-  raidLinks   WorkRaidLink[]
+  project           WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  gateIssue         WorkIssue?              @relation("WorkStageGateIssue", fields: [gateIssueId], references: [id], onDelete: SetNull)
+  issues            WorkIssue[]             @relation("WorkIssueStage")
+  approvals         WorkApproval[]
+  pages             WorkPage[]
+  uatRequests       WorkUatRequest[]
+  crLinks           WorkChangeRequestLink[]
+  raidLinks         WorkRaidLink[]
+  /// Đợt S4: ngân sách / chi phí / mốc thanh toán theo giai đoạn.
+  budgetLines       WorkBudgetLine[]
+  expenses          WorkExpense[]
+  paymentMilestones WorkPaymentMilestone[]
 
   @@unique([projectId, n], name: "uk_work_stage_n", map: "uk_work_stage_n")
   @@unique([projectId, slug], name: "uk_work_stage_slug", map: "uk_work_stage_slug")
@@ -11510,6 +11528,9 @@ model WorkRaidItem {
   trigger           String?   @db.Text
   reviewDate        DateTime? @map("review_date") @db.Date
   reviewNotifiedFor DateTime? @map("review_notified_for") @db.Date
+  /// Đợt S4: rủi ro được phép nêu trong BÁO CÁO TUẦN cho khách (chỉ tiêu đề + mức + hướng xử lý),
+  /// và chỉ khi lịch báo cáo bật "include risks". Sổ RAID vẫn không bao giờ mở cho khách.
+  clientVisible     Boolean   @default(false) @map("client_visible")
   createdById       Int?      @map("created_by_id")
   closedAt          DateTime? @map("closed_at")
   version           Int       @default(0)
@@ -11646,6 +11667,279 @@ model WorkMeetingAction {
   @@index([meetingId, position], name: "idx_work_meeting_action")
   @@index([issueId], name: "idx_work_meeting_action_issue")
   @@map("work_meeting_actions")
+}
+
+// ─── CT Work — TÀI CHÍNH · BÁO CÁO · XUẤT TRỌN đợt S4 (04/10/2026) ───────────
+// Mô-đun `finance` (đơn giá, timesheet tuần, ngân sách, chi phí, mốc thanh toán) và
+// `reports` (báo cáo tuần cho khách tự động, steering, thuyết trình). Xuất trọn dự án
+// (ZIP) không phải mô-đun — quyền ADMIN dự án. CHỈ THEO DÕI: không xuất hoá đơn (hoá đơn
+// điện tử ở VN phải qua nhà cung cấp được cấp phép). Cột người (createdById, userId…) KHÔNG
+// có FK tới users: số liệu kế toán phải sống lâu hơn tài khoản (như work_audit_logs).
+// Xem src/services/work/{finance,financeRules,clientReports,projectExport}.ts.
+
+/// Cấu hình tài chính một dự án: đơn vị tiền (VND mặc định, hoặc USD), giá trị hợp đồng (để
+/// mốc thanh toán tính theo %), tổng ngân sách (null ⇒ tổng các dòng ngân sách).
+/// `alertLevel` = ngưỡng cảnh báo vượt ngân sách đã báo (0 | 80 | 100) — chống báo lặp.
+model WorkFinanceSettings {
+  id            Int      @id @default(autoincrement())
+  projectId     Int      @unique(map: "uk_work_finance_project") @map("project_id")
+  currency      String   @default("VND") @db.VarChar(3)
+  contractValue Float?   @map("contract_value")
+  budgetTotal   Float?   @map("budget_total")
+  alertLevel    Int      @default(0) @map("alert_level")
+  updatedById   Int?     @map("updated_by_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("work_finance_settings")
+}
+
+/// Đơn giá theo giờ. scope: DEFAULT | ROLE (vai trong dự án) | TEAM (bộ phận) | USER (người).
+/// Ưu tiên khi định giá một dòng giờ: USER → TEAM của thẻ → TEAM của người → ROLE → DEFAULT.
+/// `effectiveFrom` null = áp dụng từ đầu; nhiều dòng cùng phạm vi ⇒ lấy dòng có ngày lớn nhất ≤ ngày làm.
+model WorkRate {
+  id            Int       @id @default(autoincrement())
+  projectId     Int       @map("project_id")
+  scope         String    @db.VarChar(8)
+  projectRole   String?   @map("project_role") @db.VarChar(16)
+  teamId        Int?      @map("team_id")
+  userId        Int?      @map("user_id")
+  hourlyRate    Float     @map("hourly_rate")
+  effectiveFrom DateTime? @map("effective_from") @db.Date
+  note          String?   @db.VarChar(200)
+  createdById   Int?      @map("created_by_id")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  team    WorkTeam?   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, scope], name: "idx_work_rate_project")
+  @@map("work_rates")
+}
+
+/// Timesheet TUẦN (T2→CN giờ VN) của một người trong một dự án — chỉ có dòng khi đã nộp.
+/// status: SUBMITTED | APPROVED | RETURNED | REOPENED. SUBMITTED/APPROVED ⇒ khoá ghi/xoá giờ của tuần.
+/// Mở khoá tuần đã duyệt: ADMIN + lý do (audit) ⇒ REOPENED, dòng định giá bị xoá cho tới khi duyệt lại.
+model WorkTimesheet {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  userId       Int       @map("user_id")
+  userName     String    @map("user_name") @db.VarChar(120)
+  weekStart    DateTime  @map("week_start") @db.Date
+  status       String    @db.VarChar(16)
+  totalMinutes Int       @default(0) @map("total_minutes")
+  note         String?   @db.VarChar(1000)
+  submittedAt  DateTime? @map("submitted_at")
+  decidedAt    DateTime? @map("decided_at")
+  decidedById  Int?      @map("decided_by_id")
+  returnReason String?   @map("return_reason") @db.Text
+  reopenedAt   DateTime? @map("reopened_at")
+  reopenedById Int?      @map("reopened_by_id")
+  reopenReason String?   @map("reopen_reason") @db.Text
+  /// Chi phí đã chốt lúc duyệt (tổng cost các dòng) — null khi chưa duyệt.
+  approvedCost Float?    @map("approved_cost")
+  version      Int       @default(0)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  lines   WorkTimesheetLine[]
+
+  @@unique([projectId, userId, weekStart], name: "uk_work_timesheet", map: "uk_work_timesheet")
+  @@index([projectId, status], name: "idx_work_timesheet_project")
+  @@map("work_timesheets")
+}
+
+/// Bản chụp giờ ĐÃ DUYỆT (một dòng / một worklog) + đơn giá áp lúc duyệt. Không FK tới
+/// thẻ/worklog: thẻ bị chuyển dự án hay xoá thì số liệu kế toán đã duyệt vẫn đứng nguyên.
+model WorkTimesheetLine {
+  id          Int      @id @default(autoincrement())
+  timesheetId Int      @map("timesheet_id")
+  worklogId   Int?     @map("worklog_id")
+  issueId     Int?     @map("issue_id")
+  issueKey    String   @map("issue_key") @db.VarChar(24)
+  issueTitle  String   @map("issue_title") @db.VarChar(255)
+  teamId      Int?     @map("team_id")
+  stageId     Int?     @map("stage_id")
+  day         DateTime @db.Date
+  minutes     Int
+  rate        Float?
+  rateSource  String?  @map("rate_source") @db.VarChar(16)
+  cost        Float?
+  note        String?  @db.VarChar(1000)
+
+  timesheet WorkTimesheet @relation(fields: [timesheetId], references: [id], onDelete: Cascade)
+
+  @@index([timesheetId], name: "idx_work_timesheet_line")
+  @@map("work_timesheet_lines")
+}
+
+/// Một dòng ngân sách (hạng mục). category: LABOR | EQUIPMENT | SERVICES | OTHER. Gắn giai đoạn tuỳ chọn.
+model WorkBudgetLine {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  name      String   @db.VarChar(160)
+  category  String   @default("LABOR") @db.VarChar(16)
+  stageId   Int?     @map("stage_id")
+  amount    Float
+  position  Int      @default(0)
+  note      String?  @db.VarChar(500)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project  WorkProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  stage    WorkStage?    @relation(fields: [stageId], references: [id], onDelete: SetNull)
+  expenses WorkExpense[]
+
+  @@index([projectId], name: "idx_work_budget_line_project")
+  @@map("work_budget_lines")
+}
+
+/// Chi phí khác nhập tay (thiết bị, dịch vụ ngoài, bản quyền, đi lại…). category: EQUIPMENT |
+/// SERVICES | LICENSE | TRAVEL | OTHER.
+model WorkExpense {
+  id           Int      @id @default(autoincrement())
+  projectId    Int      @map("project_id")
+  spentOn      DateTime @map("spent_on") @db.Date
+  category     String   @default("OTHER") @db.VarChar(16)
+  description  String   @db.VarChar(500)
+  vendor       String?  @db.VarChar(160)
+  amount       Float
+  budgetLineId Int?     @map("budget_line_id")
+  stageId      Int?     @map("stage_id")
+  createdById  Int?     @map("created_by_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  project    WorkProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  budgetLine WorkBudgetLine? @relation(fields: [budgetLineId], references: [id], onDelete: SetNull)
+  stage      WorkStage?      @relation(fields: [stageId], references: [id], onDelete: SetNull)
+
+  @@index([projectId, spentOn], name: "idx_work_expense_project")
+  @@map("work_expenses")
+}
+
+/// Mốc thanh toán. Số tiền = `amount`, hoặc `percent` × giá trị hợp đồng. trigger: MANUAL | UAT |
+/// STAGE_GATE — UAT của version/giai đoạn gắn được duyệt, hoặc cổng giai đoạn được duyệt ⇒ PLANNED → DUE.
+/// status: PLANNED | DUE | INVOICED (số hoá đơn ghi TAY từ hệ thống hoá đơn bên ngoài) | PAID.
+/// `clientVisible` = khách thấy mốc này trong cổng (tên, số tiền, hạn, trạng thái — không gì khác).
+model WorkPaymentMilestone {
+  id                    Int       @id @default(autoincrement())
+  projectId             Int       @map("project_id")
+  number                Int
+  name                  String    @db.VarChar(160)
+  percent               Float?
+  amount                Float?
+  trigger               String    @default("MANUAL") @db.VarChar(16)
+  versionId             Int?      @map("version_id")
+  stageId               Int?      @map("stage_id")
+  dueDate               DateTime? @map("due_date") @db.Date
+  status                String    @default("PLANNED") @db.VarChar(16)
+  becameDueAt           DateTime? @map("became_due_at")
+  triggeredByApprovalId Int?      @map("triggered_by_approval_id")
+  invoiceNumber         String?   @map("invoice_number") @db.VarChar(80)
+  invoicedAt            DateTime? @map("invoiced_at")
+  paidAt                DateTime? @map("paid_at")
+  clientVisible         Boolean   @default(false) @map("client_visible")
+  note                  String?   @db.VarChar(1000)
+  position              Int       @default(0)
+  createdById           Int?      @map("created_by_id")
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  version WorkVersion? @relation(fields: [versionId], references: [id], onDelete: SetNull)
+  stage   WorkStage?   @relation(fields: [stageId], references: [id], onDelete: SetNull)
+
+  @@unique([projectId, number], name: "uk_work_payment_number", map: "uk_work_payment_number")
+  @@index([versionId], name: "idx_work_payment_version")
+  @@index([stageId], name: "idx_work_payment_stage")
+  @@map("work_payment_milestones")
+}
+
+/// Lịch báo cáo tuần cho khách (mô-đun reports + clientPortal). Thiếu dòng ⇒ mặc định
+/// (bật, Thứ Sáu 16:00 giờ VN). weekday 1 = Thứ Hai … 7 = Chủ Nhật (ISO).
+model WorkReportSchedule {
+  id             Int      @id @default(autoincrement())
+  projectId      Int      @unique(map: "uk_work_report_schedule_project") @map("project_id")
+  enabled        Boolean  @default(true)
+  weekday        Int      @default(5)
+  hour           Int      @default(16)
+  timezone       String   @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
+  includeRisks   Boolean  @default(false) @map("include_risks")
+  includeChanges Boolean  @default(true) @map("include_changes")
+  updatedById    Int?     @map("updated_by_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("work_report_schedules")
+}
+
+/// Lịch sử báo cáo. kind: CLIENT_WEEKLY (khách đọc trong cổng khi clientVisible) | STEERING (nội bộ).
+/// source: AUTO (cron, không LLM) | MANUAL (nhân viên gửi tay, có thể "AI polish").
+/// `data` = dữ liệu dựng XÁC ĐỊNH lúc tạo (chụp lại, không đổi về sau). `autoKey` (vd "2026-W40")
+/// chống gửi tự động hai lần một tuần — UNIQUE (projectId, autoKey), NULL không đụng nhau.
+model WorkClientReport {
+  id             Int       @id @default(autoincrement())
+  projectId      Int       @map("project_id")
+  number         Int
+  kind           String    @db.VarChar(16)
+  source         String    @db.VarChar(8)
+  periodStart    DateTime  @map("period_start") @db.Date
+  periodEnd      DateTime  @map("period_end") @db.Date
+  title          String    @db.VarChar(200)
+  data           Json
+  bodyMarkdown   String?   @map("body_markdown") @db.Text
+  aiPolished     Boolean   @default(false) @map("ai_polished")
+  clientVisible  Boolean   @default(false) @map("client_visible")
+  sentAt         DateTime? @map("sent_at")
+  recipientCount Int       @default(0) @map("recipient_count")
+  autoKey        String?   @map("auto_key") @db.VarChar(24)
+  createdById    Int?      @map("created_by_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, number], name: "uk_work_client_report_number", map: "uk_work_client_report_number")
+  @@unique([projectId, autoKey], name: "uk_work_client_report_auto", map: "uk_work_client_report_auto")
+  @@index([projectId, kind, createdAt], name: "idx_work_client_report_project")
+  @@map("work_client_reports")
+}
+
+/// Một lần XUẤT TRỌN dự án (ZIP: JSON đầy đủ + manifest tệp, tuỳ chọn kèm nội dung tệp).
+/// status: QUEUED | RUNNING | DONE | FAILED | EXPIRED. Tệp nằm trên Cloudflare R2 — `filePath` giữ KEY R2
+/// (`work-exports/<projectId>/<id>.zip`), KHÔNG BAO GIỜ đĩa VPS; tải qua link ký HMAC ⇒ presigned URL; hết
+/// `expiresAt` thì cron xoá object. Chưa có nhập lại (restore) — định dạng mang `formatVersion` để sau này nhập được.
+model WorkProjectExport {
+  id              Int       @id @default(autoincrement())
+  projectId       Int       @map("project_id")
+  requestedById   Int?      @map("requested_by_id")
+  status          String    @default("QUEUED") @db.VarChar(16)
+  progress        Int       @default(0)
+  stage           String?   @db.VarChar(120)
+  includeFiles    Boolean   @default(false) @map("include_files")
+  filePath        String?   @map("file_path") @db.VarChar(500)
+  fileName        String?   @map("file_name") @db.VarChar(200)
+  size            Int?
+  tableCounts     Json?     @map("table_counts")
+  attachmentCount Int       @default(0) @map("attachment_count")
+  attachmentBytes Float     @default(0) @map("attachment_bytes")
+  filesIncluded   Int       @default(0) @map("files_included")
+  error           String?   @db.Text
+  expiresAt       DateTime? @map("expires_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  startedAt       DateTime? @map("started_at")
+  finishedAt      DateTime? @map("finished_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt], name: "idx_work_export_project")
+  @@map("work_project_exports")
 }
 
 /// KEY GIA HẠN hạn mức AI Code (02/10/2026) — mỗi hàng là MỘT lần người dùng

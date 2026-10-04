@@ -396,7 +396,7 @@ work_issues, 7 bảng); mọi FK trên/vào `work_issues` + FK SET NULL của b�
   CLIENT → duyệt cổng GĐ0 → kích hoạt GĐ1 → bàn giao BA→DEV nhận + trả lại → dự án SCHOOL cũ ⇒ MODULE_DISABLED.
 - [ ] Giao diện cho S1 (phiên làm lại giao diện /work) · L
 - [x] Đợt S2a: tài liệu kiểu Confluence (xem mục dưới) · [x] Đợt S2b: cổng khách duyệt (xem mục dưới) · [x] Đợt S3a: portfolio + workload · [x] Đợt S3b: CR + RAID,
-      họp (xem mục dưới) · Đợt S4: tài chính, báo cáo khách tự động
+      họp (xem mục dưới) · [x] Đợt S4: tài chính, báo cáo khách tự động, thuyết trình, xuất trọn dự án (xem mục dưới)
 
 ### Đợt S2a — tài liệu dự án kiểu Confluence (04/10/2026, mô-đun `docs`)
 
@@ -562,6 +562,61 @@ CLIENT/GUEST trừ TEACHER không thấy; VIEWER/TEACHER xem; MEMBER+ sửa) + `
   hash + khách duyệt qua cổng, thẻ thực hiện, RAID + portfolio đỏ/vàng, nhắc một lần, họp + email .ics + biên bản chia sẻ +
   lịch cá nhân, nhân bản); 187/187 test DB CT Work; E2E Playwright (backend :3161 + Next :3160): 30 kiểm, 0 lỗi JS, 0 tràn
   ngang 390px; ảnh `~/Desktop/ct-work-ui/s3b/`.
+
+### Đợt S4 — tài chính · báo cáo khách tự động · thuyết trình · xuất trọn dự án (04/10/2026, mô-đun `finance`, `reports`)
+
+CHỈ THEO DÕI tiền — KHÔNG xuất hoá đơn (hoá đơn điện tử ở VN phải qua nhà cung cấp được cấp phép; câu này có ở UI Finance,
+Payments, cổng khách, help, file .xlsx). Bật mặc định cho dự án CLIENT MỚI (`STUDIO_MODULES_S4` trong `defaultModulesFor`; khoá mới
+`reports`); dự án cũ (không có khoá) ⇒ 403 `MODULE_DISABLED`, ghi giờ không bao giờ bị khoá. Xuất trọn KHÔNG phải mô-đun — quyền ADMIN dự án
+(sao lưu là quyền). Migration `20261004220000_work_s4` chỉ THÊM (1 cột `work_raid_items.client_visible` mặc định false + 10 bảng), FK mới
+DEFERRABLE INITIALLY DEFERRED; cột người KHÔNG FK tới users (số liệu kế toán sống lâu hơn tài khoản). Tuyến ở `src/routes/work.s4.routes.ts`
+(một dòng `router.use` cuối work.routes.ts — qua chốt cổng khách; tuyến tải ZIP công khai ký HMAC gắn TRƯỚC authenticate).
+
+- [x] S4.A Tài chính (`finance.service.ts`, luật thuần `financeRules.ts`): quyền MỘT hàm `financeAccess` — ADMIN dự án thấy đơn giá/chi phí/
+      ngân sách/mốc; MEMBER chỉ giờ của mình; trưởng bộ phận (LEAD) duyệt giờ người trong bộ phận (không thấy tiền); VIEWER/TEACHER/khách/GUEST
+      không gì (403 `WORK_FINANCE_FORBIDDEN`). Đơn giá DEFAULT/ROLE/TEAM/USER + ngày hiệu lực, ưu tiên USER → TEAM của thẻ → TEAM của người →
+      ROLE → DEFAULT; đơn vị tiền theo dự án (VND mặc định | USD). Timesheet tuần T2→CN giờ VN trên WorkWorklog có sẵn: nộp ⇒ SUBMITTED (khoá
+      ghi/xoá giờ của tuần — `assertWeekOpen` trong planning.service, 423 `WORK_TIMESHEET_LOCKED`), rút lại, lead/ADMIN duyệt ⇒ APPROVED + CHỤP
+      từng dòng giờ kèm đơn giá (`work_timesheet_lines`, không FK thẻ/worklog — thẻ chuyển dự án/xoá thì số đã duyệt đứng nguyên), trả lại bắt
+      buộc lý do, mở khoá tuần đã duyệt chỉ ADMIN + lý do ≥ 5 ký tự (audit `timesheet.reopen` kèm chi phí trước đó). Không tự duyệt (trừ ADMIN, có
+      ghi audit). Ngân sách (tổng hoặc Σ dòng theo hạng mục/giai đoạn) + chi phí khác nhập tay. CÔNG THỨC: AC = giờ duyệt × đơn giá chốt + chi
+      phí khác; % hoàn thành = Σ ước lượng gốc thẻ xong ÷ Σ ước lượng gốc (không ước lượng ⇒ theo số thẻ); EV = BAC × %; CPI = EV ÷ AC; EAC =
+      BAC ÷ CPI (PMBOK); chưa có % ⇒ EAC = AC + burn × tuần còn tới ngày phát hành xa nhất, không thì null (không bịa); burn = chi phí 28 ngày ÷ 4;
+      cảnh báo ≥ 80% WARN, ≥ 100% OVER (báo ADMIN+lead MỘT lần mỗi ngưỡng — `alertLevel`), EAC > BAC ⇒ FORECAST_OVER. Mốc thanh toán (số tiền
+      hoặc % giá trị hợp đồng, hạn, PLANNED/DUE/INVOICED/PAID, INVOICED bắt buộc số hoá đơn ghi tay): trigger UAT (version/giai đoạn) hoặc
+      STAGE_GATE ⇒ duyệt xong là DUE trong CÙNG transaction quyết định (`markMilestonesDueTx` gọi từ approvals.decideApproval) + báo PM/kế toán.
+      Xuất kế toán .xlsx (`xlsxWorkbook` của exchange.service — không thêm thư viện): Summary, Approved timesheets, Expenses, Payment milestones.
+      Cổng khách `/portal/payments`: CHỈ mốc `clientVisible` (tên, số tiền, hạn, trạng thái, số hoá đơn) · L
+- [x] S4.B Báo cáo (`clientReports.service.ts`, dạng + Markdown thuần `reportRender.ts`): MỘT hàm dựng `buildReportData` cho báo cáo khách /
+      steering / thuyết trình. Khách: thẻ clientVisible xong/đang làm, giai đoạn + %, phê duyệt/UAT chờ khách, version có hạng mục chia sẻ, mốc
+      clientVisible, CR đã duyệt clientVisible (cờ lịch), rủi ro RISK có cờ mới `clientVisible` (cờ lịch `includeRisks`, mặc định tắt) — không tên
+      người/giờ/đơn giá. Lịch `work_report_schedules` (thiếu dòng ⇒ bật, T6 16:00 Asia/Ho_Chi_Minh): cron mỗi giờ phút 25 (`runClientWeeklyReports`,
+      KHÔNG LLM, file không import tĩnh ai.service — test đọc mã), gửi bù trong ngày, MỘT bản/tuần ISO (UNIQUE projectId+autoKey), không có khách
+      ⇒ bỏ qua; email riêng cho khách + lưu lịch sử `work_client_reports` (cổng `/portal/reports`). Nhân viên: xem trước, gửi tay, "AI polish"
+      chỉ khi bấm (dùng `weeklyReport` audience client có sẵn, sửa được trước khi gửi). Steering: + RAID, quá hạn, khối lượng việc, tài chính chỉ
+      người thấy tiền. In PDF = `.w-cert` + window.print (không thư viện). Thuyết trình `/present`: slide toàn màn hình (←/→, F, Esc), Internal /
+      Client-safe, chọn thẻ demo. **.pptx: bỏ** — repo không có pptxgenjs · L
+- [x] S4.C Xuất trọn ZIP (`projectExport.service.ts`, adm-zip có sẵn): 72 bảng JSON (`data/<bảng>.json`) + `manifest.json` (`format`
+      `ctwork-project-export`, `formatVersion: 1`, số dòng) + `attachments/manifest.json` (key R2, tên, cỡ) + nội dung tệp tuỳ chọn nếu tổng ≤
+      `WORK_EXPORT_MAX_FILE_MB` (mặc định 200). Xoá bí mật (secret GitHub, token GitLab, URL webhook chat, token link công khai), bỏ lời mời đang
+      chờ / khoá sửa cá nhân / hội thoại AI riêng tư, người dùng không email. Chạy nền (setImmediate) có progress. LƯU TRÊN R2, KHÔNG BAO GIỜ đĩa
+      VPS (sự cố đầy đĩa): ZIP dựng theo luồng (JSZip generateNodeStream, tệp đính kèm đọc lười từ R2, HEAD trước — mất ⇒ `missing`) ra một tệp tạm
+      os.tmpdir() ⇒ PutObject key `work-exports/<projectId>/<id>.zip` ⇒ xoá tệp tạm trong `finally`; R2 chưa cấu hình ⇒ 503 `WORK_EXPORT_NO_STORAGE`;
+      tối đa 1 lần xuất/dự án (409) và 2/toàn hệ thống (429 `WORK_EXPORT_BUSY`, khoá tư vấn); "kèm tệp" trần 200 MB; link HMAC 15 phút (kiểm lại
+      ADMIN) ⇒ 302 presigned URL R2 5 phút; hết 72 giờ cron xoá object (EXPIRED); audit `project.export` + `.download`. Chỉ ADMIN; khách
+      ⇒ CLIENT_PORTAL_ONLY. Test dùng kho R2 giả (`_setExportStoreForTests`). **Chưa có nhập lại (restore)** — để đợt sau · M
+- [x] S4.D Giao diện: sidebar "Finance" (mô-đun + vai ADMIN/MEMBER), `/finance` (Overview · My timesheet · Approvals · Rates · Budget & costs ·
+      Payments, theo quyền), Reports + "Client weekly" / "Steering" + nút "Present", `/present`, Project settings → Export → "Export the whole
+      project", cổng khách + "Payments" / "Reports", RAID "Share in client reports", module Finance + "Client reports & present" trong Project
+      settings → Modules; help "Finance & timesheets", "Client reports", "Present mode", "Project export (backup)" (song ngữ); tuyến app desktop
+      `finance`, `present` · L
+- **Nghiệm thu 04/10/2026:** `finance.test.ts` 14 phép (quyền, tuần ISO, khoá, đơn giá, EAC/burn/cảnh báo, mốc, lịch, Markdown, job không import
+  LLM) trong `npm test`; `work.s4.db.test.ts` 10 test DB (dự án cũ MODULE_DISABLED + ghi giờ y nguyên; MEMBER/lead/VIEWER/khách không thấy
+  đơn giá; khoá tuần nộp/duyệt + mở khoá có lý do; budget vs actual + cảnh báo 80/100; mốc DUE khi UAT duyệt; cổng chỉ mốc chia sẻ; báo cáo không
+  chứa thẻ chưa chia sẻ; job nền không fetch ra ngoài + một bản/tuần; export đủ bảng, xoá secret, khách/MEMBER không xuất); 197/197 test DB CT
+  Work; E2E Playwright (backend :3171 + Next :3170): đặt đơn giá → nộp/duyệt tuần → ngân sách vs thực tế → UAT ⇒ mốc DUE → báo cáo tuần xem
+  trước/in/gửi → khách đọc trong cổng → steering → present ←/→/Esc → export ZIP tải về mở được; 0 lỗi JS, 0 tràn ngang 390px; ảnh
+  `~/Desktop/ct-work-ui/s4/`.
 
 ## 10. Rủi ro
 

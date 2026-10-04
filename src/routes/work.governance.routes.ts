@@ -159,6 +159,8 @@ const raidFields = {
   mitigation: text(20_000),
   trigger: text(5000),
   reviewDate: day.nullable().optional(),
+  // Đợt S4: rủi ro được nêu trong báo cáo tuần cho khách (raid.service chỉ nhận với loại RISK).
+  clientVisible: z.boolean().optional(),
 };
 
 router.get('/projects/:pid/raid', asyncHandler(async (req, res) => {

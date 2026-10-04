@@ -25,7 +25,7 @@ export function studioOn(config: Pick<ProjectConfig, 'modules'> | undefined | nu
   return config?.modules?.[m] === true;
 }
 
-/** Mô-đun có tính năng thật: bốn mô-đun đợt S1 + Docs (S2a) + cổng khách (S2b) + CR/RAID/họp (S3b) — thứ tự hiển thị. */
+/** Mô-đun có tính năng thật: bốn mô-đun đợt S1 + Docs (S2a) + cổng khách (S2b) + CR/RAID/họp (S3b) + tài chính/báo cáo (S4) — thứ tự hiển thị. */
 export const S1_MODULES: Array<{ key: StudioModule; label: string; body: string }> = [
   { key: 'teams', label: 'Teams', body: 'Departments shared across projects (BA, DEV, QA…). Issues get a Team field, each team has a work queue its lead assigns from.' },
   { key: 'stages', label: 'Stages & gates', body: 'Run the project as numbered stages. A stage can only start when the previous one passed its gate review.' },
@@ -37,18 +37,19 @@ export const S1_MODULES: Array<{ key: StudioModule; label: string; body: string 
   { key: 'changeRequests', label: 'Change requests', body: 'A change log with impact analysis (scope, schedule, cost, risks, alternatives), signed approval — by your client too — and implementation issues.' },
   { key: 'raid', label: 'RAID log', body: 'Risks, assumptions, issues and dependencies with owners, probability × impact scoring, a 5×5 matrix and review reminders. Internal to the team.' },
   { key: 'meetings', label: 'Meetings', body: 'Kick-offs, weekly syncs and steering meetings: agenda, minutes, decisions, action items that become issues, and calendar invitations (.ics).' },
+  // Đợt S4.
+  { key: 'finance', label: 'Finance', body: 'Hourly rates, weekly timesheets with approval and locking, budget vs actual with a forecast, other costs and payment milestones. Tracking only — CT Work does not issue invoices.' },
+  { key: 'reports', label: 'Client reports & present', body: 'A weekly client report built from shared data and emailed on a schedule (no AI needed), an internal steering report, printable PDFs and a full-screen present mode.' },
 ];
 
 /** Khoá chừa cho đợt sau — hiện mờ "Coming later" để người dùng biết hướng đi. */
-export const LATER_MODULES: Array<{ key: StudioModule; label: string }> = [
-  { key: 'finance', label: 'Finance' },
-];
+export const LATER_MODULES: Array<{ key: StudioModule; label: string }> = [];
 
 export const KIND_INFO: Record<ProjectKind, { label: string; short: string; body: string; modules: StudioModule[] }> = {
   PERSONAL: { label: 'Personal', short: 'Personal', body: 'Your own tasks and side projects. Just a board — nothing to set up.', modules: [] },
   SCHOOL: { label: 'School / coursework', short: 'School', body: 'Group assignments and capstones (SWP391, SWR302, SWT301). Sprints, tests and reports for your lecturer.', modules: [] },
   SOFTWARE: { label: 'Software team', short: 'Software', body: 'A product team shipping software: sprints, code review, releases and GitHub.', modules: [] },
-  CLIENT: { label: 'Client project (studio)', short: 'Client', body: 'Work delivered for a client through departments: stages with gate reviews, approvals and handoffs.', modules: ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings'] },
+  CLIENT: { label: 'Client project (studio)', short: 'Client', body: 'Work delivered for a client through departments: stages with gate reviews, approvals and handoffs.', modules: ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports'] },
 };
 export const KINDS: ProjectKind[] = ['PERSONAL', 'SCHOOL', 'SOFTWARE', 'CLIENT'];
 

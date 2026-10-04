@@ -15,7 +15,7 @@ export type ProjectTemplate = 'BLANK' | 'SWR302' | 'SWT301' | 'SWP391' | 'FREELA
 /** Loại dự án (lớp studio S1). Dự án cũ: suy từ mẫu (kindStored = null). */
 export type ProjectKind = 'PERSONAL' | 'SCHOOL' | 'SOFTWARE' | 'CLIENT';
 /** Mô-đun bật/tắt theo dự án. Đợt S1 có tính năng thật: teams, stages, approvals, handoffs. */
-export type StudioModule = 'teams' | 'stages' | 'approvals' | 'handoffs' | 'docs' | 'clientPortal' | 'changeRequests' | 'raid' | 'meetings' | 'finance';
+export type StudioModule = 'teams' | 'stages' | 'approvals' | 'handoffs' | 'docs' | 'clientPortal' | 'changeRequests' | 'raid' | 'meetings' | 'finance' | 'reports';
 export type ModuleMap = Record<StudioModule, boolean>;
 export type StatusCategory = 'TODO' | 'IN_PROGRESS' | 'DONE';
 export type IssueTypeKey = 'EPIC' | 'STORY' | 'TASK' | 'BUG' | 'SUBTASK' | 'TEST' | 'REQUIREMENT';
@@ -111,6 +111,15 @@ export interface ProjectPermissions {
   // CR · RAID · họp (S3b) — khách/GUEST (trừ giảng viên) không thấy phần nội bộ.
   viewGovernance?: boolean;
   editGovernance?: boolean;
+  // Tài chính · báo cáo · xuất trọn (S4) — quyền theo VAI; mô-đun tắt thì API vẫn 403 MODULE_DISABLED.
+  /** Có trang Finance (ADMIN, MEMBER ghi giờ, trưởng bộ phận duyệt giờ). */
+  viewFinance?: boolean;
+  /** Thấy đơn giá, chi phí, ngân sách, mốc thanh toán (ADMIN dự án). */
+  manageFinance?: boolean;
+  reviewTimesheets?: boolean;
+  viewReports?: boolean;
+  sendClientReports?: boolean;
+  exportProject?: boolean;
 }
 
 export interface ProjectConfig {
@@ -1558,7 +1567,7 @@ export const workDocsApi = {
 // Backend: src/services/work/portal.service.ts. `asClient` = "Preview as client"
 // (nhân viên xem đúng như khách, chỉ đọc).
 
-export type PortalTab = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity' | 'meetings';
+export type PortalTab = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity' | 'meetings' | 'payments' | 'reports';
 export type PortalRequestKind = 'BUG' | 'CHANGE' | 'QUESTION' | 'FEEDBACK';
 
 export interface PortalViewer {

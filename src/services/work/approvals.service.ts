@@ -533,7 +533,11 @@ export async function decideApproval(
       if (a.targetType === 'DOC') await applyPageEffect(tx, a.pageId, outcome);
       if (a.targetType === 'CR') await applyCrEffect(tx, a.changeRequestId, outcome);
     }
-    return { outcome, decision, targetType: a.targetType, issueId: a.issueId, stageId: a.stageId, pageId: a.pageId, pageNumber: a.page?.number ?? null, crNumber: a.changeRequest?.number ?? null };
+    // Đợt S4 (mô-đun finance): UAT / cổng giai đoạn được DUYỆT ⇒ mốc thanh toán gắn với nó PLANNED → DUE (cùng transaction).
+    const dueMilestones = outcome === 'APPROVED' && (a.targetType === 'UAT' || a.targetType === 'STAGE_GATE')
+      ? (await (await import('./finance.service.js')).markMilestonesDueTx(tx, a.id)).ids
+      : [];
+    return { outcome, decision, targetType: a.targetType, issueId: a.issueId, stageId: a.stageId, pageId: a.pageId, pageNumber: a.page?.number ?? null, crNumber: a.changeRequest?.number ?? null, dueMilestones };
   });
 
   emitWorkEvent({ type: 'approval.updated', projectId, approvalId, status: result.outcome, targetType: result.targetType, targetIssueId: result.issueId, stageId: result.stageId, actor: { kind: 'USER', userId } });
@@ -551,6 +555,7 @@ export async function decideApproval(
     summary: `${input.decision === 'APPROVE' ? 'Approved' : 'Rejected'} approval request #${approvalId}${result.outcome !== 'PENDING' ? ` (request is now ${result.outcome})` : ''}`,
     detail: { ip: meta.ip ?? null, comment },
   });
+  if (result.dueMilestones.length) await (await import('./finance.service.js')).notifyMilestonesDue(projectId, result.dueMilestones, userId);
   if (result.outcome === 'PENDING') await notifyApprovers(approvalId, userId);
   else await notifyCreator(approvalId, userId, result.outcome === 'APPROVED' ? 'Approval request approved' : 'Approval request rejected');
   return getApproval(userId, projectId, approvalId);

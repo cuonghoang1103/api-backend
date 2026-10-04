@@ -192,6 +192,26 @@ export function startCronJobs(): void {
     }
   });
 
+  // CT Work đợt S4: báo cáo tuần cho khách theo lịch từng dự án (thứ + giờ + múi giờ; gửi bù trong ngày),
+  // mỗi tuần ISO đúng một bản — dựng XÁC ĐỊNH từ dữ liệu đã chia sẻ, KHÔNG gọi LLM. Kèm dọn tệp xuất
+  // trọn dự án đã hết hạn (72 giờ).
+  cron.schedule('25 * * * *', async () => {
+    try {
+      const { runClientWeeklyReports } = await import('./work/clientReports.service.js');
+      const n = await runClientWeeklyReports();
+      if (n) logger.info('[work] client weekly reports sent', { projects: n });
+    } catch (err) {
+      logger.warn('[work] client weekly reports failed', { error: (err as Error).message });
+    }
+    try {
+      const { purgeExpiredExports } = await import('./work/projectExport.service.js');
+      const n = await purgeExpiredExports();
+      if (n) logger.info('[work] expired project exports removed', { files: n });
+    } catch (err) {
+      logger.warn('[work] project export purge failed', { error: (err as Error).message });
+    }
+  });
+
   cron.schedule('0 * * * *', async () => {
     const redisOk = await pingQuotaRedis();
     if (!redisOk) {

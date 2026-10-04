@@ -18,7 +18,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
   Activity, ArrowLeft, BadgeCheck, CalendarClock, CheckCircle2, Circle, CircleDot, Download, Eye, FileText, Flag, Inbox, LayoutDashboard, MessageSquare,
-  PackageCheck, Paperclip, Plus, Rocket, Send,
+  PackageCheck, Paperclip, Plus, Rocket, Send, Receipt, FileBarChart,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -33,6 +33,7 @@ import { ClientPill } from './ClientShare';
 import { ApprovalsTab, PortalApprovalDialog } from './PortalApprovals';
 import { StaffPanel } from './PortalStaff';
 import { MeetingsTab, PortalMeetingDialog } from './PortalMeetings';
+import { PaymentsTab, ReportsTab } from './PortalS4';
 
 export const PORTAL_TABS: Array<{ id: PortalTab; label: string; icon: typeof Inbox }> = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -42,6 +43,9 @@ export const PORTAL_TABS: Array<{ id: PortalTab; label: string; icon: typeof Inb
   { id: 'deliverables', label: 'Deliverables', icon: PackageCheck },
   // Đợt S3b — chỉ khi mô-đun meetings bật (lọc trong PortalView).
   { id: 'meetings', label: 'Meetings', icon: CalendarClock },
+  // Đợt S4 — mốc thanh toán đã chia sẻ (mô-đun finance) + lịch sử báo cáo tuần (mô-đun reports).
+  { id: 'payments', label: 'Payments', icon: Receipt },
+  { id: 'reports', label: 'Reports', icon: FileBarChart },
   { id: 'activity', label: 'Activity', icon: Activity },
 ];
 
@@ -63,6 +67,7 @@ export function usePortalParams() {
     approval: Number(sp?.get('approval')) || null,
     doc: Number(sp?.get('doc')) || null,
     meeting: Number(sp?.get('meeting')) || null,
+    report: Number(sp?.get('report')) || null,
     set,
   };
 }
@@ -496,7 +501,9 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
   const overview = useQuery({ queryKey: workPortalKeys.tab(pid, 'overview', asClient), queryFn: () => workPortalApi.overview(pid, asClient) });
   const viewer = overview.data?.viewer;
   const meetingsOn = !!config.modules?.meetings;
-  const tabs = useMemo(() => PORTAL_TABS.filter((t) => t.id !== 'meetings' || meetingsOn), [meetingsOn]);
+  const financeOn = !!config.modules?.finance;
+  const reportsOn = !!config.modules?.reports;
+  const tabs = useMemo(() => PORTAL_TABS.filter((t) => (t.id !== 'meetings' || meetingsOn) && (t.id !== 'payments' || financeOn) && (t.id !== 'reports' || reportsOn)), [meetingsOn, financeOn, reportsOn]);
   const waiting = overview.data?.waitingOnClient.length ?? 0;
 
   return (
@@ -523,7 +530,7 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
                 type="button"
                 role="tab"
                 aria-selected={p.tab === t.id}
-                onClick={() => p.set({ tab: t.id === 'overview' ? null : t.id, issue: null, approval: null, doc: null, meeting: null })}
+                onClick={() => p.set({ tab: t.id === 'overview' ? null : t.id, issue: null, approval: null, doc: null, meeting: null, report: null })}
                 className={cn('-mb-px flex h-9 items-center gap-1.5 whitespace-nowrap border-b-2 px-2.5 text-[13px] font-medium', p.tab === t.id ? 'border-[var(--w-accent)] text-[var(--w-text)]' : 'border-transparent text-[var(--w-text-3)] hover:text-[var(--w-text-2)]')}
                 data-testid={`portal-tab-${t.id}`}
               >
@@ -539,6 +546,8 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
         {p.tab === 'documents' && <DocumentsTab pid={pid} asClient={asClient} openDoc={(n) => p.set({ doc: String(n) })} />}
         {p.tab === 'deliverables' && <DeliverablesTab pid={pid} asClient={asClient} />}
         {p.tab === 'meetings' && meetingsOn && <MeetingsTab pid={pid} asClient={asClient} openMeeting={(n) => p.set({ meeting: String(n) })} />}
+        {p.tab === 'payments' && financeOn && <PaymentsTab pid={pid} asClient={asClient} />}
+        {p.tab === 'reports' && reportsOn && <ReportsTab pid={pid} asClient={asClient} openId={p.report} setOpenId={(id) => p.set({ report: id ? String(id) : null })} />}
         {p.tab === 'activity' && <ActivityTab pid={pid} asClient={asClient} go={p.set} />}
         {!isClient && !asClient && (
           <p className="mt-6 text-[12px] text-[var(--w-text-3)]">

@@ -16,6 +16,7 @@ import {
   can, docAccess, effectiveProjectRole, effectiveWorkspaceRole, governanceAccess, isClientScoped, loadProjectAccess, portalOnlyUserIds, requireProject, requireWorkspace,
   type ProjectOptions,
 } from './permissions.js';
+import { financeAccess } from './financeRules.js';
 import { clientPeopleIds, filterPeople } from './clientPeople.js';
 import { seedProjectConfig } from './templates.js';
 
@@ -172,7 +173,7 @@ export async function getProjectConfig(userId: number, projectId: number) {
     modules: access.modules,
     role: access.role,
     workspaceRole: access.workspaceRole,
-    permissions: { ...permissionFlags(access.role, access.options), ...docFlags(access), ...govFlags(access) },
+    permissions: { ...permissionFlags(access.role, access.options), ...docFlags(access), ...govFlags(access), ...(await s4Flags(access, userId)) },
     boardColumns: boardColumns(project.workflows, project.settings),
     members,
   };
@@ -213,6 +214,26 @@ function docFlags(access: { role: ProjectRole; workspaceRole: WorkspaceRole }) {
 function govFlags(access: { role: ProjectRole; workspaceRole: WorkspaceRole }) {
   const g = governanceAccess(access.role, access.workspaceRole);
   return { viewGovernance: g.view, editGovernance: g.edit };
+}
+
+/**
+ * Cờ đợt S4 — tài chính (financeRules.financeAccess: ADMIN thấy tiền; MEMBER chỉ giờ của mình; trưởng
+ * bộ phận duyệt giờ bộ phận), báo cáo/thuyết trình (người của đội — như governance), xuất trọn (ADMIN).
+ * Chỉ là quyền theo VAI; mô-đun tắt thì API vẫn 403 MODULE_DISABLED.
+ */
+async function s4Flags(access: { role: ProjectRole; workspaceRole: WorkspaceRole; workspaceId: number }, userId: number) {
+  const staff = access.role !== 'CLIENT' && access.workspaceRole !== 'GUEST';
+  const isLead = staff && (await prisma.workTeamMember.count({ where: { userId, role: 'LEAD', team: { workspaceId: access.workspaceId, archivedAt: null } } })) > 0;
+  const f = financeAccess(access.role, access.workspaceRole, isLead);
+  const g = governanceAccess(access.role, access.workspaceRole);
+  return {
+    viewFinance: f.manage || f.ownTimesheet || f.review !== null,
+    manageFinance: f.manage,
+    reviewTimesheets: f.review !== null,
+    viewReports: g.view,
+    sendClientReports: g.edit,
+    exportProject: access.role === 'ADMIN' && staff,
+  };
 }
 
 /** Mọi người vào được dự án kèm vai trò hiệu lực — dùng cho ô chọn người, @nhắc tên. */

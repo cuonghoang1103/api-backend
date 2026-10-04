@@ -33,7 +33,7 @@ import { vnDay } from './sprints.service.js';
 import { modulesOf } from './studio.js';
 
 const RAID_SELECT = {
-  id: true, number: true, type: true, title: true, description: true, category: true, status: true, probability: true, impact: true,
+  id: true, number: true, type: true, title: true, description: true, category: true, status: true, probability: true, impact: true, clientVisible: true,
   response: true, mitigation: true, trigger: true, reviewDate: true, closedAt: true, createdAt: true, updatedAt: true, version: true, createdById: true,
   owner: { select: PUBLIC_USER },
   _count: { select: { links: true } },
@@ -110,6 +110,8 @@ export interface RaidInput {
   mitigation?: string | null;
   trigger?: string | null;
   reviewDate?: Date | null;
+  /** Đợt S4: được nêu trong báo cáo tuần cho khách (chỉ RISK; chỉ khi lịch báo cáo bật include risks). */
+  clientVisible?: boolean;
 }
 
 async function assertOwner(projectId: number, uid: number | null | undefined) {
@@ -143,7 +145,7 @@ export async function createRaid(userId: number, projectId: number, input: RaidI
         category: input.category?.trim().slice(0, 60) || null, ownerId: input.ownerId ?? userId, status,
         probability: input.probability ?? null, impact: input.impact ?? null, response: input.response ?? null,
         mitigation: input.mitigation?.trim() || null, trigger: input.trigger?.trim() || null, reviewDate: input.reviewDate ?? null,
-        createdById: userId, closedAt: raidClosed(status) ? new Date() : null,
+        createdById: userId, closedAt: raidClosed(status) ? new Date() : null, clientVisible: input.clientVisible === true && input.type === 'RISK',
       },
       select: { id: true, number: true },
     });
@@ -225,6 +227,8 @@ export async function updateRaid(userId: number, projectId: number, number: numb
     ...(input.mitigation !== undefined ? { mitigation: input.mitigation?.trim() || null } : {}),
     ...(input.trigger !== undefined ? { trigger: input.trigger?.trim() || null } : {}),
     ...(input.reviewDate !== undefined ? { reviewDate: input.reviewDate } : {}),
+    // Đợt S4: chỉ rủi ro (RISK) mới được nêu trong báo cáo khách; đổi loại khác RISK ⇒ tự bỏ cờ.
+    ...(input.clientVisible !== undefined || type !== 'RISK' ? { clientVisible: type === 'RISK' && (input.clientVisible ?? cur.clientVisible) } : {}),
   };
   const changes = Object.entries(next)
     .filter(([k, v]) => hv((cur as Record<string, unknown>)[k]) !== hv(v))

@@ -270,7 +270,7 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/profile/:id/v2', nap: () => import('@/app/profile/[id]/v2/page') },
 
   /* ── CT Work (kiểu Jira) — 23/09/2026 ──
-     Đối chiếu bằng `find frontend/src/app/work -name page.tsx` ⇒ 35 trang (04/10/2026, sau S3b: meetings, changes, raid).
+     Đối chiếu bằng `find frontend/src/app/work -name page.tsx` ⇒ 37 trang (04/10/2026, sau S4: finance, present).
      Khung chung (`app/work/layout.tsx`: thanh bên, bảng lệnh ⌘K, AI, `#work-portal`,
      `work.css`) do `CtWorkPage` dựng — xem tệp đó.
 
@@ -321,6 +321,9 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/:ws/:key/changes', nap: () => import('@/app/work/[ws]/[key]/changes/page') },
   { mau: '/work/:ws/:key/changes/:num', nap: () => import('@/app/work/[ws]/[key]/changes/[num]/page') },
   { mau: '/work/:ws/:key/raid', nap: () => import('@/app/work/[ws]/[key]/raid/page') },
+  // Đợt S4 (04/10/2026): tài chính dự án · chế độ thuyết trình.
+  { mau: '/work/:ws/:key/finance', nap: () => import('@/app/work/[ws]/[key]/finance/page') },
+  { mau: '/work/:ws/:key/present', nap: () => import('@/app/work/[ws]/[key]/present/page') },
   { mau: '/work/:ws/:key/tests/:num', nap: () => import('@/app/work/[ws]/[key]/tests/[num]/page') },
   { mau: '/work/:ws/:key/issue/:num', nap: () => import('@/app/work/[ws]/[key]/issue/[num]/page') },
   { mau: '/work/:ws/:key/tests/cycles/:cycleId', nap: () => import('@/app/work/[ws]/[key]/tests/cycles/[cycleId]/page') },

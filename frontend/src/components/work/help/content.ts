@@ -1878,6 +1878,130 @@ export const HELP_ARTICLES: HelpArticle[] = [
     related: ['client-portal', 'raid-log', 'change-requests'],
   },
 
+  // ═══ Đợt S4: tài chính · báo cáo khách · thuyết trình · xuất trọn ═══
+  {
+    id: 'finance-timesheets',
+    category: 'studio',
+    title: { en: 'Finance & timesheets', vi: 'Tài chính & bảng chấm giờ' },
+    summary: {
+      en: 'Hourly rates, weekly timesheets with approval and locking, budget vs actual with a forecast (EAC), other costs and payment milestones. Tracking only — CT Work does not issue invoices.',
+      vi: 'Đơn giá theo giờ, bảng chấm giờ theo tuần có duyệt và khoá, ngân sách so với thực tế kèm dự báo (EAC), chi phí khác và mốc thanh toán. Chỉ theo dõi — CT Work không xuất hoá đơn.',
+    },
+    keywords: ['finance', 'budget', 'cost', 'rate', 'hourly rate', 'timesheet', 'approve hours', 'eac', 'burn rate', 'payment', 'milestone', 'invoice', 'tai chinh', 'ngan sach', 'chi phi', 'don gia', 'cham cong', 'thanh toan', 'hoa don'],
+    pages: [page('project', 'finance', 'Finance', 'Tài chính')],
+    blocks: [
+      warn(
+        'CT Work only tracks project money. It does not issue invoices — in Vietnam, e-invoices must be issued through a licensed e-invoice provider. When you invoice, record the invoice number from that system on the payment milestone.',
+        'CT Work chỉ theo dõi tiền của dự án. CT Work KHÔNG xuất hoá đơn — ở Việt Nam, hoá đơn điện tử phải phát hành qua nhà cung cấp được cấp phép. Khi đã xuất hoá đơn, ghi số hoá đơn của hệ thống đó vào mốc thanh toán.',
+      ),
+      p('**Finance** in the sidebar (module **Finance**, on for new Client projects). Who sees what:', 'Mục **Finance** ở thanh bên (mô-đun **Finance**, bật sẵn cho dự án Client mới). Ai thấy gì:'),
+      table([['Who', 'Ai'], ['Sees', 'Thấy']], [
+        [['Project admin', 'Admin dự án'], ['Rates, costs, budget, forecast, payments, every timesheet', 'Đơn giá, chi phí, ngân sách, dự báo, mốc thanh toán, mọi bảng giờ']],
+        [['Team lead', 'Trưởng bộ phận'], ['Hours of the people in their team, to approve — never rates or costs', 'Giờ của người trong bộ phận mình để duyệt — không bao giờ thấy đơn giá hay chi phí']],
+        [['Member', 'Thành viên'], ['Only their own hours and timesheet', 'Chỉ giờ và bảng chấm giờ của chính mình']],
+        [['Viewer, teacher, client', 'Người xem, giảng viên, khách'], ['Nothing (clients see shared payment milestones in the portal)', 'Không gì (khách thấy mốc thanh toán đã chia sẻ trong cổng khách)']],
+      ]),
+      h('Weekly timesheet', 'Bảng chấm giờ theo tuần'),
+      steps(
+        ['Log time on issues as usual (issue → Time tracking → **Log work**).', 'Ghi giờ trên thẻ như thường lệ (thẻ → Time tracking → **Log work**).'],
+        ['**Finance → My timesheet** shows the week (Monday–Sunday, Vietnam time) by issue and day. Press **Submit week**.', '**Finance → My timesheet** hiện tuần (Thứ Hai–Chủ Nhật, giờ Việt Nam) theo thẻ và ngày. Bấm **Submit week**.'],
+        ['A submitted week is **locked** — time in it cannot be added or deleted. **Withdraw** to change it.', 'Tuần đã nộp bị **khoá** — không thêm hay xoá giờ trong tuần đó được. Bấm **Withdraw** để sửa.'],
+        ['The team lead or a project admin opens **Approvals** and presses **Approve** or **Return** (a reason is required). You cannot approve your own week unless you are a project admin.', 'Trưởng bộ phận hoặc admin dự án mở **Approvals** rồi bấm **Approve** hoặc **Return** (bắt buộc lý do). Không tự duyệt tuần của mình được, trừ admin dự án.'],
+        ['An approved week stays locked. Only a project admin can **Reopen** it, with a reason that is kept in the audit log; the week is then re-submitted and re-approved.', 'Tuần đã duyệt luôn bị khoá. Chỉ admin dự án **Reopen** được, kèm lý do ghi vào nhật ký quản trị; sau đó tuần được nộp lại và duyệt lại.'],
+      ),
+      h('Rates and cost', 'Đơn giá và chi phí'),
+      list(
+        ['Rates are per hour in the project currency (VND by default, or USD) for **a person**, **a team**, **a project role** or **everyone** (default), optionally from a date.', 'Đơn giá theo giờ bằng đơn vị tiền của dự án (mặc định VND, hoặc USD) cho **một người**, **một bộ phận**, **một vai trong dự án** hoặc **mọi người** (mặc định), có thể kèm ngày bắt đầu hiệu lực.'],
+        ['When a week is approved each hour is priced by the most specific rate: person → the issue’s team → the person’s team → role → default. The price is **frozen** — changing a rate later does not change approved weeks.', 'Khi duyệt tuần, mỗi giờ được định giá theo đơn giá cụ thể nhất: người → bộ phận của thẻ → bộ phận của người → vai → mặc định. Giá được **chốt** — đổi đơn giá sau đó không đổi các tuần đã duyệt.'],
+        ['Actual cost = approved hours × frozen rate + other costs (equipment, outside services, licences…) entered in **Budget & costs**.', 'Chi phí thực tế = giờ đã duyệt × đơn giá đã chốt + chi phí khác (thiết bị, dịch vụ ngoài, bản quyền…) nhập ở **Budget & costs**.'],
+      ),
+      h('Budget vs actual and the forecast', 'Ngân sách so với thực tế và dự báo'),
+      list(
+        ['Budget = the total you set, or the sum of budget lines (by category and stage).', 'Ngân sách = tổng bạn đặt, hoặc tổng các dòng ngân sách (theo hạng mục và giai đoạn).'],
+        ['**Burn rate** = cost of the last 28 days ÷ 4 (per week).', '**Tốc độ đốt tiền** = chi phí 28 ngày gần nhất ÷ 4 (mỗi tuần).'],
+        ['**EAC** (estimate at completion) = budget ÷ CPI, where CPI = EV ÷ actual cost and EV = budget × % complete (% complete from original estimates of finished issues). Before anything is finished: actual cost + burn rate × weeks left to the latest release date.', '**EAC** (dự báo chi phí khi xong) = ngân sách ÷ CPI, với CPI = EV ÷ chi phí thực tế và EV = ngân sách × % hoàn thành (% hoàn thành theo ước lượng gốc của thẻ đã xong). Khi chưa có gì xong: chi phí thực tế + tốc độ đốt × số tuần còn tới ngày phát hành xa nhất.'],
+        ['Admins get one alert when actual cost reaches **80%** and one at **100%** of the budget.', 'Admin nhận một cảnh báo khi chi phí thực tế chạm **80%** và một khi chạm **100%** ngân sách.'],
+      ),
+      h('Payment milestones', 'Mốc thanh toán'),
+      list(
+        ['A milestone is an amount or a % of the contract value, with a due date. Status: **Planned → Due → Invoiced → Paid**.', 'Mỗi mốc là một số tiền hoặc % giá trị hợp đồng, kèm hạn. Trạng thái: **Planned → Due → Invoiced → Paid**.'],
+        ['Link it to a version or stage and choose **When UAT is approved** or **When a stage gate is approved**: the approval makes it **Due** automatically and notifies the project admins.', 'Gắn mốc với version hoặc giai đoạn và chọn **When UAT is approved** hoặc **When a stage gate is approved**: khi được duyệt, mốc tự chuyển **Due** và báo cho admin dự án.'],
+        ['**Invoiced** needs the invoice number from your e-invoice provider. Mark a milestone **Shared** to show its name, amount, due date and status in the client portal → Payments — nothing else.', '**Invoiced** cần số hoá đơn từ nhà cung cấp hoá đơn điện tử. Đánh dấu **Shared** để khách thấy tên, số tiền, hạn và trạng thái ở cổng khách → Payments — không gì khác.'],
+        ['**Export for accounting (.xlsx)**: summary, approved timesheets (hours × rate), other costs and payment milestones.', '**Export for accounting (.xlsx)**: tổng hợp, bảng giờ đã duyệt (giờ × đơn giá), chi phí khác và mốc thanh toán.'],
+      ),
+    ],
+    related: ['time-capacity', 'client-reports', 'uat-signoff', 'project-export'],
+  },
+  {
+    id: 'client-reports',
+    category: 'track',
+    title: { en: 'Client reports', vi: 'Báo cáo cho khách' },
+    summary: {
+      en: 'A weekly report for your client, built automatically from shared data and emailed on a schedule — no AI needed — plus an internal steering report. Both print to PDF.',
+      vi: 'Báo cáo tuần cho khách, dựng tự động từ dữ liệu đã chia sẻ và gửi email theo lịch — không cần AI — kèm báo cáo steering nội bộ. Cả hai in ra PDF được.',
+    },
+    keywords: ['client report', 'weekly report', 'status report', 'steering', 'schedule', 'email', 'pdf', 'print', 'bao cao tuan', 'bao cao khach', 'bao cao trang thai', 'in pdf'],
+    pages: [page('project', 'reports?tab=client', 'Reports → Client weekly', 'Reports → Client weekly'), page('project', 'reports?tab=steering', 'Reports → Steering', 'Reports → Steering')],
+    blocks: [
+      p('**Reports → Client weekly** (module **Client reports & present**, on for new Client projects; the client portal must be on to send).', '**Reports → Client weekly** (mô-đun **Client reports & present**, bật sẵn cho dự án Client mới; cần bật cổng khách để gửi).'),
+      list(
+        ['The report only uses **shared** data: shared issues done and in progress, stages and progress, approvals and UAT waiting on the client, upcoming versions, payment milestones marked shared, approved change requests that are shared, and risks marked **Share in client reports** (when **Include risks** is on).', 'Báo cáo chỉ dùng dữ liệu **đã chia sẻ**: thẻ đã chia sẻ đã xong và đang làm, giai đoạn và tiến độ, phê duyệt và UAT chờ khách, version sắp tới, mốc thanh toán đã chia sẻ, yêu cầu thay đổi đã duyệt và đã chia sẻ, và rủi ro đánh dấu **Share in client reports** (khi bật **Include risks**).'],
+        ['Never included: internal notes, unshared issues, your team’s names, hours, rates or costs.', 'Không bao giờ có: ghi chú nội bộ, thẻ chưa chia sẻ, tên người trong đội, giờ, đơn giá hay chi phí.'],
+        ['**Automatic weekly report**: choose the day, hour and time zone. It is emailed to the clients of the project once a week and saved in their portal → **Reports**. Scheduled reports never use AI.', '**Automatic weekly report**: chọn thứ, giờ và múi giờ. Báo cáo được gửi email cho khách của dự án mỗi tuần một lần và lưu trong cổng khách → **Reports**. Báo cáo theo lịch không bao giờ dùng AI.'],
+        ['**Preview** shows exactly what the client receives. **Send now** sends it by hand. **AI polish** (optional, uses your AI quota) writes a short summary from shared issues that you can edit before sending.', '**Preview** hiện đúng bản khách nhận. **Send now** gửi tay. **AI polish** (tuỳ chọn, dùng hạn mức AI của bạn) viết một đoạn tóm tắt từ thẻ đã chia sẻ, bạn sửa được trước khi gửi.'],
+        ['**Steering** is the internal version: the same facts plus RAID, overdue work and workload, and finance for project admins.', '**Steering** là bản nội bộ: cùng dữ kiện kèm RAID, việc quá hạn, khối lượng việc, và tài chính cho admin dự án.'],
+        ['**Print / PDF** opens your browser’s print dialog with a clean, printable page — choose “Save as PDF”.', '**Print / PDF** mở hộp in của trình duyệt với trang in gọn — chọn “Save as PDF”.'],
+      ),
+    ],
+    related: ['client-portal', 'present-mode', 'finance-timesheets', 'raid-log'],
+  },
+  {
+    id: 'present-mode',
+    category: 'track',
+    title: { en: 'Present mode', vi: 'Chế độ thuyết trình' },
+    summary: {
+      en: 'Full-screen slides built from live project data for demos and steering meetings — with a client-safe mode that only shows shared data.',
+      vi: 'Slide toàn màn hình dựng từ dữ liệu dự án cho buổi demo và họp chỉ đạo — có chế độ an toàn cho khách chỉ hiện dữ liệu đã chia sẻ.',
+    },
+    keywords: ['present', 'presentation', 'slides', 'demo', 'full screen', 'steering meeting', 'thuyet trinh', 'trinh chieu', 'slide'],
+    pages: [page('project', 'present', 'Present', 'Thuyết trình')],
+    blocks: [
+      steps(
+        ['**Reports → Present** (or Steering → **Present**).', '**Reports → Present** (hoặc Steering → **Present**).'],
+        ['Pick the audience: **Internal**, or **Client-safe** — only shared issues, shared milestones and payments, approved shared changes and shared risks. Finance appears only in Internal and only for project admins.', 'Chọn người xem: **Internal**, hoặc **Client-safe** — chỉ thẻ đã chia sẻ, mốc và thanh toán đã chia sẻ, thay đổi đã duyệt và đã chia sẻ, rủi ro đã chia sẻ. Tài chính chỉ có ở Internal và chỉ với admin dự án.'],
+        ['Tick the finished issues you will demo, then **Start presenting**.', 'Chọn các thẻ đã xong sẽ demo, rồi bấm **Start presenting**.'],
+      ),
+      kbd([['→'], 'Next slide', 'Slide sau'], [['←'], 'Previous slide', 'Slide trước'], [['F'], 'Full screen', 'Toàn màn hình'], [['Esc'], 'Leave', 'Thoát']),
+      p('Slides: title · where we are · stages · milestones · demo · risks · changes · finance · next steps. PowerPoint export is not available; use Reports → Print / PDF for a document.', 'Các slide: tiêu đề · hiện trạng · giai đoạn · mốc · demo · rủi ro · thay đổi · tài chính · bước tiếp theo. Chưa xuất được PowerPoint; dùng Reports → Print / PDF nếu cần tài liệu.'),
+    ],
+    related: ['client-reports', 'meetings'],
+  },
+  {
+    id: 'project-export',
+    category: 'connect',
+    title: { en: 'Project export (backup)', vi: 'Xuất trọn dự án (sao lưu)' },
+    summary: {
+      en: 'Download the whole project as a ZIP: every table as JSON plus a manifest of attachments, optionally with the files. Project admins only.',
+      vi: 'Tải cả dự án dưới dạng ZIP: mọi bảng dạng JSON kèm danh sách tệp đính kèm, tuỳ chọn kèm nội dung tệp. Chỉ admin dự án.',
+    },
+    keywords: ['export', 'backup', 'zip', 'download project', 'json', 'archive', 'sao luu', 'xuat du an', 'tai ve'],
+    pages: [page('project', 'settings?tab=export', 'Project settings → Export', 'Cài đặt dự án → Export')],
+    blocks: [
+      steps(
+        ['**Project settings → Export → Export the whole project (backup)**.', '**Project settings → Export → Export the whole project (backup)**.'],
+        ['Optionally tick **Include attachment files** (only when they total under the size limit — otherwise just the list).', 'Có thể chọn **Include attachment files** (chỉ khi tổng dung lượng dưới giới hạn — vượt thì chỉ có danh sách).'],
+        ['The export runs in the background with a progress bar. When it is ready press **Download** — the link works for 15 minutes and the file is kept for 72 hours.', 'Việc xuất chạy nền, có thanh tiến trình. Xong thì bấm **Download** — link dùng được 15 phút, tệp được giữ 72 giờ.'],
+      ),
+      list(
+        ['Inside: `manifest.json` (format version, row counts), `data/<table>.json` for issues, comments, history, worklogs, sprints, versions, stages, approvals, handoffs, docs and versions, change requests, RAID, meetings, finance, reports, audit log…, and `attachments/manifest.json`.', 'Bên trong: `manifest.json` (phiên bản định dạng, số dòng), `data/<bảng>.json` cho thẻ, bình luận, lịch sử, giờ làm, sprint, version, giai đoạn, phê duyệt, bàn giao, tài liệu và phiên bản, yêu cầu thay đổi, RAID, họp, tài chính, báo cáo, nhật ký quản trị…, và `attachments/manifest.json`.'],
+        ['Left out on purpose: webhook URLs and tokens, pending invitations, private AI chats, and people’s email addresses.', 'Cố ý bỏ ra: URL webhook và token, lời mời đang chờ, hội thoại AI riêng tư, và email của mọi người.'],
+        ['Every export and download link is recorded in the audit log.', 'Mỗi lần xuất và mỗi link tải đều được ghi vào nhật ký quản trị.'],
+      ),
+      warn('Restore (import back) is not available yet. The file carries a format version so a later release can import it.', 'Chưa có nhập lại (restore). Tệp mang phiên bản định dạng để bản sau nhập được.'),
+    ],
+    related: ['import-export', 'trash-audit', 'finance-timesheets'],
+  },
+
   {
     id: 'portfolio-workload',
     category: 'track',
@@ -2226,12 +2350,15 @@ export function helpArticleForPath(pathname: string, search = ''): string {
     case 'tests': return 'testing';
     case 'stages': return 'stages-gates';
     case 'approvals': return 'approvals';
-    case 'portal': return parts[4] === 'uat' || tab === 'approvals' ? 'uat-signoff' : tab === 'meetings' ? 'meetings' : 'client-portal';
+    case 'portal': return parts[4] === 'uat' || tab === 'approvals' ? 'uat-signoff' : tab === 'meetings' ? 'meetings' : tab === 'payments' ? 'finance-timesheets' : tab === 'reports' ? 'client-reports' : 'client-portal';
     case 'changes': return 'change-requests';
     case 'raid': return 'raid-log';
     case 'meetings': return 'meetings';
     case 'dashboards': return 'filters-dashboards';
-    case 'reports': return tab === 'time' || tab === 'capacity' ? 'time-capacity' : 'reports';
+    case 'reports': return tab === 'time' || tab === 'capacity' ? 'time-capacity' : tab === 'client' || tab === 'steering' ? 'client-reports' : 'reports';
+    // Đợt S4.
+    case 'finance': return 'finance-timesheets';
+    case 'present': return 'present-mode';
     case 'settings': return SETTINGS_TAB_ARTICLE[tab] ?? 'workflow';
     default: return 'getting-started';
   }

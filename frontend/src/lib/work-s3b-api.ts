@@ -123,6 +123,8 @@ export interface RaidItem {
   mitigation: string | null;
   trigger: string | null;
   reviewDate: string | null;
+  /** Đợt S4: rủi ro được nêu trong báo cáo tuần cho khách (chỉ RISK). */
+  clientVisible?: boolean;
   closedAt: string | null;
   createdAt: string;
   updatedAt: string;
@@ -174,6 +176,7 @@ export interface RaidPatch {
   mitigation?: string | null;
   trigger?: string | null;
   reviewDate?: string | null;
+  clientVisible?: boolean;
 }
 
 export type MeetingType = 'KICKOFF' | 'DAILY' | 'WEEKLY' | 'DEMO' | 'RETRO' | 'STEERING' | 'CLIENT' | 'OTHER';

@@ -426,6 +426,8 @@ export async function addWorklog(
   if (startedAt.getTime() > Date.now() + DAY) throw new BadRequestError('You cannot log time in the future', 'WORK_BAD_WORKLOG');
   const issue = await prisma.workIssue.findFirst({ where: { projectId, number, deletedAt: null }, select: { id: true } });
   if (!issue) throw new NotFoundError('Issue not found');
+  // Đợt S4 (mô-đun finance): tuần đã nộp/đã duyệt bị khoá — 423 WORK_TIMESHEET_LOCKED. Dự án tắt finance ⇒ không đổi gì.
+  await (await import('./finance.service.js')).assertWeekOpen(projectId, userId, startedAt);
   const log = await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM work_issues WHERE id = ${issue.id} FOR UPDATE`;
     const cur = await tx.workIssue.findUniqueOrThrow({ where: { id: issue.id }, select: { timeSpentMin: true, remainingEstimateMin: true } });
@@ -450,6 +452,8 @@ export async function deleteWorklog(userId: number, projectId: number, number: n
   const log = await prisma.workWorklog.findFirst({ where: { id: worklogId, issueId: issue.id } });
   if (!log) throw new NotFoundError('Work log not found');
   if (log.userId !== userId && access.role !== 'ADMIN') throw new ForbiddenError('You can only delete your own work logs');
+  // Đợt S4: xoá giờ của tuần đã nộp/đã duyệt cũng bị khoá (kể cả ADMIN — phải mở khoá có lý do trước).
+  await (await import('./finance.service.js')).assertWeekOpen(projectId, log.userId, log.startedAt);
   await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM work_issues WHERE id = ${issue.id} FOR UPDATE`;
     const cur = await tx.workIssue.findUniqueOrThrow({ where: { id: issue.id }, select: { timeSpentMin: true } });

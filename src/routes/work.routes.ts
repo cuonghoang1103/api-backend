@@ -58,6 +58,7 @@ import * as portal from '../services/work/portal.service.js';
 import { moveIssueToProject } from '../services/work/issueMove.service.js';
 import portfolioRoutes from './work.portfolio.routes.js';
 import governanceRoutes from './work.governance.routes.js';
+import s4Routes, { s4PublicRoutes } from './work.s4.routes.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
@@ -166,6 +167,9 @@ router.get('/share/:token/reports', asyncHandler(async (req, res) => {
 router.get('/share/:token/tests', asyncHandler(async (req, res) => {
   ok(res, await share.publicTests(String(req.params.token)));
 }));
+
+// Đợt S4: tải tệp xuất trọn dự án qua link ký HMAC hạn 15 phút — không cần đăng nhập (đứng TRƯỚC authenticate).
+router.use(s4PublicRoutes);
 
 // API token cá nhân (Bearer ctw_…) đi trước; không phải token thì JWT như cũ.
 router.use(apiTokens.apiTokenAuth);
@@ -1760,5 +1764,7 @@ router.get('/projects/:pid/portal/uat/:aid/certificate', asyncHandler(async (req
 router.use(portfolioRoutes);
 // Đợt S3b: CR · sổ RAID · cuộc họp — tuyến ở work.governance.routes.ts (qua chốt cổng khách ở trên).
 router.use(governanceRoutes);
+// Đợt S4: tài chính · báo cáo khách/steering · thuyết trình · xuất trọn — tuyến ở work.s4.routes.ts (qua chốt cổng khách ở trên).
+router.use(s4Routes);
 
 export default router;

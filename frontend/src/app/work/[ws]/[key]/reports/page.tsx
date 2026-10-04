@@ -22,6 +22,10 @@ import WeeklyReportTab from '@/components/work/reports/WeeklyReportTab';
 import TimeTab from '@/components/work/reports/TimeTab';
 import CapacityTab from '@/components/work/reports/CapacityTab';
 import IssueDrawer from '@/components/work/IssueDrawer';
+import { ClientWeeklyTab, SteeringTab } from '@/components/work/reports/S4ReportTabs';
+import { studioOn } from '@/components/work/studio/shared';
+import Link from 'next/link';
+import { Presentation } from 'lucide-react';
 
 const TABS = [
   { id: 'health', label: 'Health' },
@@ -33,8 +37,12 @@ const TABS = [
   { id: 'contributions', label: 'Contributions' },
   { id: 'time', label: 'Time' },
   { id: 'capacity', label: 'Capacity' },
+  // Đợt S4 (mô-đun reports): chỉ hiện khi bật + người của đội (lọc trong ReportsView).
+  { id: 'client', label: 'Client weekly' },
+  { id: 'steering', label: 'Steering' },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
+const S4_TABS: ReadonlySet<string> = new Set(['client', 'steering']);
 
 function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
   const router = useRouter();
@@ -43,8 +51,10 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
   const lk = useLookups(config);
   useProjectRealtime(pid);
 
+  const reportsOn = studioOn(config, 'reports') && !!config.permissions.viewReports;
+  const tabs = TABS.filter((t) => reportsOn || !S4_TABS.has(t.id));
   const raw = search?.get('tab');
-  const tab: TabId = TABS.some((t) => t.id === raw) ? (raw as TabId) : 'health';
+  const tab: TabId = tabs.some((t) => t.id === raw) ? (raw as TabId) : 'health';
   const setTab = useCallback((id: TabId) => {
     const p = new URLSearchParams(search?.toString());
     if (id === 'health') p.delete('tab');
@@ -66,11 +76,15 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
 
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Reports" />
+      <ProjectHeader config={config} title="Reports">
+        {reportsOn && (
+          <Link href={`/work/${config.workspace.slug}/${config.key}/present`} className="w-btn w-btn-sm" data-testid="header-present"><Presentation size={14} />Present</Link>
+        )}
+      </ProjectHeader>
 
       <div className="shrink-0 overflow-x-auto border-b border-[var(--w-border)] px-4">
         <div className="flex gap-1" role="tablist" aria-label="Reports">
-          {TABS.map((t) => (
+          {tabs.map((t) => (
             <button
               key={t.id}
               type="button"
@@ -101,6 +115,8 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
           {tab === 'contributions' && <ContributionsTab pid={pid} config={config} />}
           {tab === 'time' && <TimeTab pid={pid} config={config} onOpenIssue={setIssue} />}
           {tab === 'capacity' && <CapacityTab pid={pid} config={config} />}
+          {tab === 'client' && reportsOn && <ClientWeeklyTab config={config} />}
+          {tab === 'steering' && reportsOn && <SteeringTab config={config} />}
         </div>
       </div>
       <IssueDrawer pid={pid} num={openNum} onClose={() => setIssue(null)} onOpenIssue={(n) => setIssue(n)} />

@@ -27,6 +27,7 @@ import {
   BriefcaseBusiness, Gauge,
   Handshake, PackageCheck, Activity,
   CalendarClock, GitPullRequestArrow, ShieldAlert,
+  Wallet, Receipt, FileBarChart,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
@@ -88,6 +89,8 @@ interface NavDef {
   match: (view: string | undefined) => boolean;
   /** Lớp studio: chỉ hiện khi dự án BẬT mô-đun này (dự án cũ/School không thấy). */
   module?: StudioModule;
+  /** Đợt S4: chỉ hiện với các vai này trong dự án (Finance: ADMIN thấy tiền, MEMBER ghi giờ). Server vẫn kiểm. */
+  roles?: string[];
 }
 
 /**
@@ -117,6 +120,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'meetings', label: 'Meetings', icon: CalendarClock, match: (v) => v === 'meetings', module: 'meetings' },
       { path: 'changes', label: 'Changes', icon: GitPullRequestArrow, match: (v) => v === 'changes', module: 'changeRequests' },
       { path: 'raid', label: 'RAID', icon: ShieldAlert, match: (v) => v === 'raid', module: 'raid' },
+      // Đợt S4: tài chính (đơn giá/chi phí chỉ ADMIN; MEMBER chỉ timesheet của mình — server quyết).
+      { path: 'finance', label: 'Finance', icon: Wallet, match: (v) => v === 'finance', module: 'finance', roles: ['ADMIN', 'MEMBER'] },
       { path: 'tests', label: 'Tests', icon: FlaskConical, match: (v) => v === 'tests' },
     ],
   },
@@ -144,6 +149,9 @@ const PORTAL_NAV: { tab: string; label: string; icon: LucideIcon; module?: Studi
   { tab: 'documents', label: 'Documents', icon: FileText },
   { tab: 'deliverables', label: 'Deliverables', icon: PackageCheck },
   { tab: 'meetings', label: 'Meetings', icon: CalendarClock, module: 'meetings' },
+  // Đợt S4: mốc thanh toán đã chia sẻ + lịch sử báo cáo tuần.
+  { tab: 'payments', label: 'Payments', icon: Receipt, module: 'finance' },
+  { tab: 'reports', label: 'Reports', icon: FileBarChart, module: 'reports' },
   { tab: 'activity', label: 'Activity', icon: Activity },
 ];
 
@@ -348,7 +356,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                         {PROJECT_NAV.map((g) => (
                           <div key={g.group}>
                             <div className="w-eyebrow w-rail-hide px-2 pb-0.5 pt-2">{g.group}</div>
-                            {g.items.filter((n) => !n.module || p.modules?.[n.module]).map((n) => (
+                            {g.items.filter((n) => (!n.module || p.modules?.[n.module]) && (!n.roles || n.roles.includes(String(p.role)))).map((n) => (
                               <NavItem key={n.path} href={`${base}/${n.path}`} icon={n.icon} label={n.label} active={n.match(view)} indent />
                             ))}
                           </div>

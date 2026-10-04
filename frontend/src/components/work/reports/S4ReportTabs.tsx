@@ -1,0 +1,178 @@
+'use client';
+
+/**
+ * Đợt S4 — hai thẻ mới của trang Reports (mô-đun reports):
+ *   - Client weekly: lịch gửi tự động (thứ, giờ, múi giờ, có nêu rủi ro/CR không), XEM TRƯỚC đúng bản khách
+ *     nhận, "AI polish" (chỉ khi bấm — dùng weeklyReport audience client), gửi tay, lịch sử, in PDF.
+ *   - Steering: báo cáo nội bộ (cùng nguồn + tài chính chỉ khi người xem thấy tiền + RAID + khối lượng việc).
+ * In PDF = trang in được + window.print (khối `.w-cert` — work.css @media print), không thêm thư viện.
+ */
+
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { CalendarClock, History, Mail, Presentation, Printer, Send, Sparkles } from 'lucide-react';
+import { workError, type ProjectConfig } from '@/lib/work-api';
+import { addDays, s4Api, s4Keys, todayVn, WEEKDAYS, type ReportData, type ReportSchedule } from '@/lib/work-s4-api';
+import { Dialog, EmptyState, Field, PageLoading, Spinner, formatDate, relativeTime } from '../ui';
+import { ConfirmDialog, Select, Switch } from '../settings/shared';
+import { Pill } from '../studio/shared';
+import ReportDocument from './ReportDocument';
+
+/** In một báo cáo: dựng bản giấy ẩn (chỉ hiện khi in) rồi gọi window.print. */
+export function usePrintReport() {
+  const [job, setJob] = useState<{ data: ReportData; polished?: string | null; title?: string } | null>(null);
+  useEffect(() => {
+    if (!job) return;
+    const t = setTimeout(() => { window.print(); setJob(null); }, 80);
+    return () => clearTimeout(t);
+  }, [job]);
+  const node = job ? <div className="hidden print:block" aria-hidden="true"><ReportDocument data={job.data} polished={job.polished} title={job.title} paper /></div> : null;
+  return { print: setJob, node };
+}
+
+function Period({ from, to, onChange }: { from: string; to: string; onChange: (p: { from: string; to: string }) => void }) {
+  return (
+    <div className="flex flex-wrap items-end gap-2">
+      <label className="text-[12px] text-[var(--w-text-3)]">From<input type="date" className="w-input mt-0.5 block" value={from} max={to} onChange={(e) => onChange({ from: e.target.value, to })} /></label>
+      <label className="text-[12px] text-[var(--w-text-3)]">To<input type="date" className="w-input mt-0.5 block" value={to} min={from} onChange={(e) => onChange({ from, to: e.target.value })} /></label>
+    </div>
+  );
+}
+
+function ScheduleCard({ pid, s }: { pid: number; s: ReportSchedule }) {
+  const qc = useQueryClient();
+  const [f, setF] = useState(s);
+  useEffect(() => setF(s), [s]);
+  const save = useMutation({
+    mutationFn: () => s4Api.updateSchedule(pid, { enabled: f.enabled, weekday: f.weekday, hour: f.hour, timezone: f.timezone, includeRisks: f.includeRisks, includeChanges: f.includeChanges }),
+    onSuccess: (r) => { qc.setQueryData(s4Keys.schedule(pid), r); qc.invalidateQueries({ queryKey: s4Keys.all(pid) }); toast.success('Schedule saved'); },
+    onError: (e) => toast.error(workError(e)),
+  });
+  const ro = !s.canEdit;
+  return (
+    <div className="w-card p-4" data-testid="report-schedule">
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <CalendarClock size={15} className="text-[var(--w-text-3)]" />
+        <h3 className="w-section-title">Automatic weekly report</h3>
+        <Pill tone={f.enabled ? 'green' : 'neutral'}>{f.enabled ? 'On' : 'Off'}</Pill>
+        <span className="ml-auto text-[12px] text-[var(--w-text-3)]">{s.clientPortal ? `${s.recipients} client${s.recipients === 1 ? '' : 's'} will receive it` : 'Client portal is off — nobody receives it'}</span>
+      </div>
+      <p className="mb-3 text-[12.5px] leading-relaxed text-[var(--w-text-2)]">Built from shared data only — shared issues, stages, approvals and UAT waiting on the client, upcoming milestones, shared payment milestones{f.includeChanges ? ', approved shared change requests' : ''}{f.includeRisks ? ' and risks marked “share in client reports”' : ''}. It is emailed to the clients of this project and saved in their portal. No AI is used for scheduled reports.</p>
+      <div className="grid gap-x-3 sm:grid-cols-[auto_150px_110px_minmax(0,1fr)]">
+        <Field label="Send"><div className="flex h-9 items-center"><Switch checked={f.enabled} disabled={ro} onChange={(v) => setF({ ...f, enabled: v })} label="Send automatically" /></div></Field>
+        <Field label="Every"><Select aria-label="Weekday" value={f.weekday} disabled={ro} onChange={(e) => setF({ ...f, weekday: Number(e.target.value) })} data-testid="sched-weekday">{WEEKDAYS.map((w, i) => <option key={w} value={i + 1}>{w}</option>)}</Select></Field>
+        <Field label="At"><Select aria-label="Hour" value={f.hour} disabled={ro} onChange={(e) => setF({ ...f, hour: Number(e.target.value) })}>{Array.from({ length: 24 }, (_, h) => <option key={h} value={h}>{String(h).padStart(2, '0')}:00</option>)}</Select></Field>
+        <Field label="Time zone"><input className="w-input" value={f.timezone} disabled={ro} onChange={(e) => setF({ ...f, timezone: e.target.value })} /></Field>
+      </div>
+      <div className="mb-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[13px]">
+        <label className="flex items-center gap-2"><input type="checkbox" checked={f.includeChanges} disabled={ro} onChange={(e) => setF({ ...f, includeChanges: e.target.checked })} /> Include approved change requests (shared ones)</label>
+        <label className="flex items-center gap-2"><input type="checkbox" checked={f.includeRisks} disabled={ro} onChange={(e) => setF({ ...f, includeRisks: e.target.checked })} data-testid="sched-risks" /> Include risks marked for client reports</label>
+      </div>
+      {!ro && <button type="button" className="w-btn w-btn-primary" disabled={save.isPending} onClick={() => save.mutate()} data-testid="sched-save">{save.isPending && <Spinner size={12} />}Save schedule</button>}
+      {ro && <p className="text-[12px] text-[var(--w-text-3)]">Only project admins can change the schedule.</p>}
+    </div>
+  );
+}
+
+export function ClientWeeklyTab({ config }: { config: ProjectConfig }) {
+  const pid = config.id;
+  const qc = useQueryClient();
+  const [period, setPeriod] = useState(() => ({ from: addDays(todayVn(), -6), to: todayVn() }));
+  const sched = useQuery({ queryKey: s4Keys.schedule(pid), queryFn: () => s4Api.schedule(pid) });
+  const pv = useQuery({ queryKey: s4Keys.preview(pid, period.from, period.to), queryFn: () => s4Api.preview(pid, period.from, period.to) });
+  const hist = useQuery({ queryKey: s4Keys.history(pid, 'CLIENT_WEEKLY'), queryFn: () => s4Api.history(pid, 'CLIENT_WEEKLY') });
+  const [polished, setPolished] = useState<string | null>(null);
+  const [confirm, setConfirm] = useState(false);
+  const [openId, setOpenId] = useState<number | null>(null);
+  const one = useQuery({ queryKey: s4Keys.report(pid, openId ?? 0), queryFn: () => s4Api.report(pid, openId!), enabled: !!openId });
+  const { print, node } = usePrintReport();
+  const canSend = !!config.permissions.sendClientReports;
+  const polish = useMutation({ mutationFn: () => s4Api.polish(pid), onSuccess: (r) => setPolished(r.markdown), onError: (e) => toast.error(workError(e, 'AI polish failed')) });
+  const send = useMutation({
+    mutationFn: () => s4Api.send(pid, { ...period, bodyMarkdown: polished, aiPolished: !!polished }),
+    onSuccess: (r) => { setConfirm(false); setPolished(null); qc.invalidateQueries({ queryKey: s4Keys.history(pid, 'CLIENT_WEEKLY') }); toast.success(`Report sent to ${r.recipientCount} client${r.recipientCount === 1 ? '' : 's'}`); },
+    onError: (e) => { setConfirm(false); toast.error(workError(e)); },
+  });
+  return (
+    <div className="space-y-4">
+      {sched.data && <ScheduleCard pid={pid} s={sched.data} />}
+      <div className="w-card p-4">
+        <div className="mb-3 flex flex-wrap items-end gap-3">
+          <div className="min-w-0 flex-1"><h3 className="w-section-title">Preview — exactly what your client receives</h3><p className="text-[12px] text-[var(--w-text-3)]">Only shared data. Nothing internal (notes, hours, rates, names of your team) is ever included.</p></div>
+          <Period {...period} onChange={setPeriod} />
+        </div>
+        {pv.isLoading ? <PageLoading rows={4} /> : !pv.data ? <EmptyState title="Could not build the report" body={workError(pv.error)} /> : (
+          <>
+            <div className="rounded-[10px] border border-[var(--w-border)] p-4 md:p-6"><ReportDocument data={pv.data.data} polished={polished} /></div>
+            {polished !== null && (
+              <div className="mt-3">
+                <Field label="AI-polished summary (edit before sending — it is placed above the facts)">
+                  <textarea className="w-input font-mono text-[12.5px]" rows={8} value={polished} onChange={(e) => setPolished(e.target.value)} data-testid="report-polished" />
+                </Field>
+                <button type="button" className="w-btn w-btn-sm" onClick={() => setPolished(null)}>Remove AI summary</button>
+              </div>
+            )}
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button type="button" className="w-btn" onClick={() => print({ data: pv.data!.data, polished })} data-testid="report-print"><Printer size={14} />Print / PDF</button>
+              {canSend && config.permissions.useAi && <button type="button" className="w-btn" disabled={polish.isPending} onClick={() => polish.mutate()} title="Optional: ask AI to write a short summary from shared issues. Uses your AI quota." data-testid="report-polish">{polish.isPending ? <Spinner size={12} /> : <Sparkles size={14} />}AI polish</button>}
+              {canSend && <button type="button" className="w-btn w-btn-primary" disabled={!pv.data.clientPortal || !pv.data.recipients} onClick={() => setConfirm(true)} data-testid="report-send"><Send size={14} />Send now</button>}
+              {!pv.data.recipients && <span className="self-center text-[12px] text-[var(--w-text-3)]">Invite your client to the portal to send reports.</span>}
+            </div>
+          </>
+        )}
+      </div>
+      <div className="w-card p-4">
+        <div className="mb-2 flex items-center gap-2"><History size={15} className="text-[var(--w-text-3)]" /><h3 className="w-section-title">Sent reports</h3></div>
+        {!hist.data?.length ? <p className="text-[13px] text-[var(--w-text-3)]">No reports sent yet.</p> : (
+          <ul className="divide-y divide-[var(--w-border)]" data-testid="report-history">
+            {hist.data.map((r) => (
+              <li key={r.id}>
+                <button type="button" className="flex w-full flex-wrap items-center gap-x-3 gap-y-1 py-2 text-left hover:bg-[var(--w-hover)]" onClick={() => setOpenId(r.id)}>
+                  <span className="tabular-nums text-[12px] text-[var(--w-text-3)]">#{r.number}</span>
+                  <span className="min-w-0 flex-1 truncate text-[13px]">{r.title}</span>
+                  <Pill tone={r.source === 'AUTO' ? 'blue' : 'neutral'}>{r.source === 'AUTO' ? 'Automatic' : r.aiPolished ? 'Manual · AI polished' : 'Manual'}</Pill>
+                  <span className="flex items-center gap-1 text-[12px] text-[var(--w-text-3)]"><Mail size={12} />{r.recipientCount}</span>
+                  <span className="text-[12px] text-[var(--w-text-3)]">{r.sentAt ? relativeTime(r.sentAt) : 'not sent'}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <ConfirmDialog open={confirm} onClose={() => setConfirm(false)} onConfirm={() => send.mutate()} pending={send.isPending} danger={false} confirmLabel="Send report"
+        title="Send this report to your client?" body={<>It goes to {pv.data?.recipients ?? 0} client{pv.data?.recipients === 1 ? '' : 's'} by email and is saved in the client portal → Reports. {polished ? 'Your AI-polished summary is included.' : ''}</>} />
+      <Dialog open={!!openId} onClose={() => setOpenId(null)} width={860} title={one.data ? `Report #${one.data.number}` : 'Report'}
+        footer={one.data && <button type="button" className="w-btn" onClick={() => print({ data: one.data!.data, polished: one.data!.aiPolished ? one.data!.bodyMarkdown : null })}><Printer size={14} />Print / PDF</button>}>
+        {!one.data ? <PageLoading rows={3} /> : <ReportDocument data={one.data.data} polished={one.data.aiPolished ? one.data.bodyMarkdown : null} />}
+      </Dialog>
+      {node}
+    </div>
+  );
+}
+
+export function SteeringTab({ config }: { config: ProjectConfig }) {
+  const pid = config.id;
+  const [period, setPeriod] = useState(() => ({ from: addDays(todayVn(), -13), to: todayVn() }));
+  const q = useQuery({ queryKey: s4Keys.steering(pid, period.from, period.to), queryFn: () => s4Api.steering(pid, period.from, period.to) });
+  const { print, node } = usePrintReport();
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-end gap-3">
+        <div className="min-w-0 flex-1">
+          <h3 className="w-section-title">Steering status report</h3>
+          <p className="text-[12px] text-[var(--w-text-3)]">Internal. Same facts as the client report plus RAID, overdue work, workload{q.data?.financeIncluded ? ' and finance' : ''}. {q.data && !q.data.financeIncluded && config.modules?.finance ? 'Finance is shown to project admins only.' : ''}</p>
+        </div>
+        <Period {...period} onChange={setPeriod} />
+        <button type="button" className="w-btn" disabled={!q.data} onClick={() => q.data && print({ data: q.data.data })} data-testid="steering-print"><Printer size={14} />Print / PDF</button>
+        <Link href={`/work/${config.workspace.slug}/${config.key}/present`} className="w-btn w-btn-primary" data-testid="open-present"><Presentation size={14} />Present</Link>
+      </div>
+      {q.isLoading ? <PageLoading rows={4} /> : !q.data ? <EmptyState title="Could not build the report" body={workError(q.error)} /> : (
+        <div className="w-card p-4 md:p-6"><ReportDocument data={q.data.data} /></div>
+      )}
+      <p className="text-[12px] text-[var(--w-text-3)]">Generated {formatDate(todayVn())}. Every number comes from the project data — nothing is written by AI.</p>
+      {node}
+    </div>
+  );
+}

@@ -55,7 +55,7 @@ export type ProjectKind = (typeof PROJECT_KINDS)[number];
  * Mô-đun bật/tắt theo dự án. Đợt S1 dùng thật 4 mô-đun đầu; các khoá sau CHỪA
  * CHỖ cho đợt 2–4 (lưu được, chưa có route nào đọc).
  */
-export const STUDIO_MODULES = ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance'] as const;
+export const STUDIO_MODULES = ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports'] as const;
 export type StudioModule = (typeof STUDIO_MODULES)[number];
 /** Mô-đun đã có tính năng thật (đợt S1). */
 export const STUDIO_MODULES_S1: readonly StudioModule[] = ['teams', 'stages', 'approvals', 'handoffs'];
@@ -138,3 +138,32 @@ export const MEETING_TYPES = ['KICKOFF', 'DAILY', 'WEEKLY', 'DEMO', 'RETRO', 'ST
 export type MeetingType = (typeof MEETING_TYPES)[number];
 export const MEETING_STATUSES = ['SCHEDULED', 'DONE', 'CANCELLED'] as const;
 export type MeetingStatus = (typeof MEETING_STATUSES)[number];
+
+// ─── Tài chính · báo cáo · xuất trọn (đợt S4, 04/10/2026) ────────
+
+/**
+ * Mô-đun có tính năng thật từ đợt S4: `finance` (đơn giá, timesheet tuần, ngân sách, chi phí,
+ * mốc thanh toán) và `reports` (báo cáo tuần cho khách tự động, steering, chế độ thuyết trình).
+ * Xuất trọn dự án KHÔNG phải mô-đun — quyền ADMIN dự án (sao lưu là quyền, không phải tính năng bật/tắt).
+ */
+export const STUDIO_MODULES_S4: readonly StudioModule[] = ['finance', 'reports'];
+
+/** Đơn vị tiền theo dự án. Mặc định VND. */
+export const CURRENCIES = ['VND', 'USD'] as const;
+export type Currency = (typeof CURRENCIES)[number];
+/** Phạm vi đơn giá — ưu tiên khi định giá: USER → TEAM → ROLE → DEFAULT (financeRules.pickRate). */
+export const RATE_SCOPES = ['DEFAULT', 'ROLE', 'TEAM', 'USER'] as const;
+export type RateScope = (typeof RATE_SCOPES)[number];
+export const TIMESHEET_STATUSES = ['SUBMITTED', 'APPROVED', 'RETURNED', 'REOPENED'] as const;
+export type TimesheetStatus = (typeof TIMESHEET_STATUSES)[number];
+export const BUDGET_CATEGORIES = ['LABOR', 'EQUIPMENT', 'SERVICES', 'OTHER'] as const;
+export type BudgetCategory = (typeof BUDGET_CATEGORIES)[number];
+export const EXPENSE_CATEGORIES = ['EQUIPMENT', 'SERVICES', 'LICENSE', 'TRAVEL', 'OTHER'] as const;
+export type ExpenseCategory = (typeof EXPENSE_CATEGORIES)[number];
+/** Mốc thanh toán: PLANNED → DUE (tay, hoặc UAT/cổng giai đoạn được duyệt) → INVOICED (số hoá đơn ghi tay) → PAID. */
+export const PAYMENT_STATUSES = ['PLANNED', 'DUE', 'INVOICED', 'PAID'] as const;
+export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
+export const PAYMENT_TRIGGERS = ['MANUAL', 'UAT', 'STAGE_GATE'] as const;
+export type PaymentTrigger = (typeof PAYMENT_TRIGGERS)[number];
+export const REPORT_KINDS = ['CLIENT_WEEKLY', 'STEERING'] as const;
+export type ReportKind = (typeof REPORT_KINDS)[number];

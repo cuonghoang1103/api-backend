@@ -85,15 +85,15 @@ function Matrix({ m, cell, onCell }: { m: number[][]; cell: { p: number; i: numb
 
 // ─── Form ────────────────────────────────────────────────────────
 
-type Form = { type: RaidType; title: string; description: string; category: string; ownerId: number | null; status: string; probability: number | null; impact: number | null; response: RaidResponse | null; mitigation: string; trigger: string; reviewDate: string };
-const emptyForm = (type: RaidType): Form => ({ type, title: '', description: '', category: '', ownerId: null, status: type === 'ASSUMPTION' ? 'UNVALIDATED' : 'OPEN', probability: null, impact: null, response: null, mitigation: '', trigger: '', reviewDate: '' });
+type Form = { type: RaidType; title: string; description: string; category: string; ownerId: number | null; status: string; probability: number | null; impact: number | null; response: RaidResponse | null; mitigation: string; trigger: string; reviewDate: string; clientVisible: boolean };
+const emptyForm = (type: RaidType): Form => ({ type, title: '', description: '', category: '', ownerId: null, status: type === 'ASSUMPTION' ? 'UNVALIDATED' : 'OPEN', probability: null, impact: null, response: null, mitigation: '', trigger: '', reviewDate: '', clientVisible: false });
 const formOf = (r: RaidDetail): Form => ({
   type: r.type, title: r.title, description: r.description ?? '', category: r.category ?? '', ownerId: r.owner?.id ?? null, status: r.status,
-  probability: r.probability, impact: r.impact, response: r.response, mitigation: r.mitigation ?? '', trigger: r.trigger ?? '', reviewDate: r.reviewDate ?? '',
+  probability: r.probability, impact: r.impact, response: r.response, mitigation: r.mitigation ?? '', trigger: r.trigger ?? '', reviewDate: r.reviewDate ?? '', clientVisible: !!r.clientVisible,
 });
 const toPatch = (f: Form): RaidPatch & { type: RaidType; title: string } => ({
   type: f.type, title: f.title.trim(), description: f.description.trim() || null, category: f.category.trim() || null, ownerId: f.ownerId, status: f.status,
-  probability: f.probability, impact: f.impact, response: f.response, mitigation: f.mitigation.trim() || null, trigger: f.trigger.trim() || null, reviewDate: f.reviewDate || null,
+  probability: f.probability, impact: f.impact, response: f.response, mitigation: f.mitigation.trim() || null, trigger: f.trigger.trim() || null, reviewDate: f.reviewDate || null, clientVisible: f.type === 'RISK' && f.clientVisible,
 });
 
 function RaidForm({ config, f, set, ro, creating }: { config: ProjectConfig; f: Form; set: (p: Partial<Form>) => void; ro: boolean; creating?: boolean }) {
@@ -157,6 +157,13 @@ function RaidForm({ config, f, set, ro, creating }: { config: ProjectConfig; f: 
       <Field label="Review by" hint="The owner gets a reminder on this day">
         <input type="date" className="w-input !w-[180px]" value={f.reviewDate} disabled={ro} onChange={(e) => set({ reviewDate: e.target.value })} data-testid="raid-review" />
       </Field>
+      {/* Đợt S4: chỉ rủi ro mới nêu được trong báo cáo tuần cho khách (và chỉ khi lịch báo cáo bật "include risks"). */}
+      {f.type === 'RISK' && (
+        <label className="mt-1 flex items-start gap-2 text-[13px]">
+          <input type="checkbox" className="mt-0.5" checked={f.clientVisible} disabled={ro} onChange={(e) => set({ clientVisible: e.target.checked })} data-testid="raid-client-visible" />
+          <span>Share in client reports <span className="text-[var(--w-text-3)]">— title, level and mitigation only, when the weekly report includes risks. The RAID log itself stays internal.</span></span>
+        </label>
+      )}
     </div>
   );
 }

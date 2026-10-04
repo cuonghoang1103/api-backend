@@ -32,6 +32,7 @@ const NEEDS: Partial<Record<StudioModule, { on: StudioModule; text: string }>> =
   stages: { on: 'approvals', text: 'Gate reviews need Approvals — without it stages can open but never close.' },
   handoffs: { on: 'teams', text: 'Turn on Teams to hand off to a department; without it you can hand off to a person.' },
   changeRequests: { on: 'approvals', text: 'Signed decisions on change requests need Approvals — without it they can be written but not approved.' },
+  reports: { on: 'clientPortal', text: 'The weekly client report is emailed to the clients of the portal — without it only the internal steering report and present mode work.' },
 };
 
 export default function ProjectStudio({ config, slug }: { config: ProjectConfig; slug: string }) {
@@ -141,12 +142,12 @@ export default function ProjectStudio({ config, slug }: { config: ProjectConfig;
               </li>
             );
           })}
-          <li className="px-3.5 py-3">
+          {LATER_MODULES.length > 0 && <li className="px-3.5 py-3">
             <div className="text-[12px] font-medium text-[var(--w-text-3)]">Coming later</div>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
               {LATER_MODULES.map((m) => <span key={m.key} className="rounded-[5px] border border-dashed border-[var(--w-border-strong)] px-2 py-0.5 text-[12px] text-[var(--w-text-3)]">{m.label}</span>)}
             </div>
-          </li>
+          </li>}
         </ul>
       </Section>
 

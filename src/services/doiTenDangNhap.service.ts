@@ -103,3 +103,34 @@ export async function doiTenDangNhap(userId: number, raw: unknown, dungLamTenHie
   // provider null/'local' = có mật khẩu ⇒ từ giờ đăng nhập bằng tên mới.
   return { username: ten, dangNhapBangTenMoi: !user.provider || user.provider === 'local' };
 }
+
+/**
+ * Tên đăng nhập ĐẸP cho tài khoản mới đăng nhập bằng Google/GitHub/Apple/Facebook
+ * (04/10/2026). Trước đây là `phần-trước-@ + _ + Date.now() base36` ⇒
+ * `anhthaimeo632005_munfqa89` — người dùng chê xấu.
+ *
+ * Ưu tiên: tên đăng nhập GitHub (nếu có) → họ tên bỏ dấu, viết liền
+ * (Hoàng Nghĩa Cường → hoangnghiacuong) → phần trước @ của email. Trùng thì thêm
+ * số ngắn (hoangnghiacuong2, …, rồi 3 chữ số ngẫu nhiên). Luôn qua cùng luật với
+ * ô đổi tên, nên người dùng sửa lại được bất cứ lúc nào.
+ */
+export async function taoTenDangNhapDep(o: { fullName?: string | null; email: string; goiY?: string | null }): Promise<string> {
+  const lam = (x: string | null | undefined) => String(x ?? '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd')
+    .toLowerCase().replace(/[^a-z0-9._]+/g, '').replace(/[._]{2,}/g, '.')
+    .replace(/^[._]+|[._]+$/g, '').slice(0, 24).replace(/[._]+$/g, '');
+  const ungVien = [lam(o.goiY), lam(o.fullName), lam(o.email.split('@')[0])]
+    .filter((t, i, a) => t.length >= 3 && a.indexOf(t) === i && !loiCuaTen(t));
+  if (!ungVien.length) ungVien.push('ban.moi');
+  const conTrong = async (t: string) => !loiCuaTen(t) && !(await prisma.user.findFirst({
+    where: { username: { equals: t, mode: 'insensitive' } }, select: { id: true },
+  }));
+  for (const t of ungVien) if (await conTrong(t)) return t;
+  const goc = ungVien[0].slice(0, 24);
+  for (let n = 2; n <= 9; n++) if (await conTrong(`${goc}${n}`)) return `${goc}${n}`;
+  for (let i = 0; i < 20; i++) {
+    const t = `${goc}${100 + Math.floor(Math.random() * 900)}`;
+    if (await conTrong(t)) return t;
+  }
+  return `${goc}_${Date.now().toString(36)}`; // lưới cuối, gần như không bao giờ tới
+}

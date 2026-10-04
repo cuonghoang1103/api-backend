@@ -112,7 +112,12 @@ interface BoDieuHuong {
  */
 export function doiDuongApp(duong: string): string {
   const m = /^\/language\/en\/ielts(\/.*)?$/.exec(duong);
-  return m ? `/ielts${m[1] ?? ''}` : duong;
+  if (m) return `/ielts${m[1] ?? ''}`;
+  /* 04/10/2026 (rà toàn bộ link): app đã đăng nhập sẵn — "Đăng nhập/Đăng ký" của web
+     về Tổng quan; hồ sơ của web nằm ở `/ho-so` trong app. */
+  if (duong === '/login' || duong === '/register') return '/dashboard';
+  if (duong === '/settings/profile') return '/ho-so';
+  return duong;
 }
 
 export function tachHref(href: string, hienTai: string): [string, string] {

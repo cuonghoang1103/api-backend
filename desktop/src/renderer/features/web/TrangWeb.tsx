@@ -22,6 +22,7 @@
  * trên web ngày 02/07/2026). Nên lớp bọc này tự đặt `.dark` khi app đang ở chủ
  * đề tối, phạm vi đúng trong cây web.
  */
+import { MoTrenWeb } from '../../components/MoTrenWeb';
 import { Component, Suspense, lazy, useEffect, useMemo, useState,
   type ComponentType, type ReactNode } from 'react';
 import { Loader2 } from 'lucide-react';
@@ -312,9 +313,12 @@ export function TrangWebTheoTuyen({ ten, khung: Khung }: {
         <div className="ct-empty">
           <h1>{dich('Không tìm thấy')}</h1>
           <p>{dich('Không có trang cho đường dẫn')} <code>{route}</code>.</p>
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => navigate(goc)}>
-            Về {ten}
-          </button>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <MoTrenWeb duong={route} />
+            <button type="button" className="ct-btn ct-btn-ghost" onClick={() => navigate(goc)}>
+              Về {ten}
+            </button>
+          </div>
         </div>
       </div>
     );

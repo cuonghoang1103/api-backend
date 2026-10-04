@@ -61,7 +61,7 @@ interface Ky {
 
 export function HocVienPage() {
   const { dich, dichP } = useDich();
-  const { online, navigate } = useAppState();
+  const { online, navigate, route } = useAppState();
   const { api, userId } = useSession();
 
   const [ky, setKy] = useState<Ky[]>([]);
@@ -72,6 +72,12 @@ export function HocVienPage() {
   const [cu, setCu] = useState(false);
   const [loi, setLoi] = useState<string | null>(null);
   const [moSlug, setMoSlug] = useState<string | null>(null);
+  /* Link `/academy/courses/<slug>[/learn]` của các trang web dùng lại (Tư vấn ngành,
+     Sơ đồ môn học, thẻ môn) mở THẲNG môn đó ở đây — trước 04/10/2026 nó rơi vào
+     "Không có trang cho đường dẫn". */
+  const slugTuDuong = /^\/academy\/courses\/([^/?#]+)/.exec(route)?.[1] ?? null;
+  // Rời đường dẫn môn (bấm Academy ở thanh bên) thì đóng môn đang mở theo đường dẫn.
+  useEffect(() => { setMoSlug(slugTuDuong ? decodeURIComponent(slugTuDuong) : null); }, [slugTuDuong]);
 
   /* Hồ sơ ngành. `needsOnboarding` = chưa từng trả lời ⇒ mở robot hỏi. Người
      đã nói "không phải sinh viên FPTU" cũng là một câu trả lời, không hỏi lại. */
@@ -166,7 +172,7 @@ export function HocVienPage() {
   }, [tim, tatCaMon]);
 
   if (moSlug) {
-    return <ChiTietMon slug={moSlug} onQuayLai={() => setMoSlug(null)} />;
+    return <ChiTietMon slug={moSlug} onQuayLai={() => { setMoSlug(null); if (slugTuDuong) navigate('/academy'); }} />;
   }
 
   const tongMon = tatCaMon.length;

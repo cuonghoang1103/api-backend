@@ -70,6 +70,7 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/ielts/phong-thi', nap: () => import('@/app/language/[code]/ielts/phong-thi/page'), thamSoCo: { code: 'en' } },
   { mau: '/ielts/luyen-them', nap: () => import('@/app/language/[code]/ielts/luyen-them/page'), thamSoCo: { code: 'en' } },
   { mau: '/language/:code/dekiru', nap: () => import('@/app/language/[code]/dekiru/page') },
+  { mau: '/language/:code/dekiru/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page') },
 
   /* ── Lộ trình ── */
   { mau: '/roadmap', nap: () => import('@/components/roadmap/RoadmapLanding') },
@@ -220,6 +221,7 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/hoc-tap', nap: () => import('@/app/hoc-tap/page') },
   { mau: '/hoc-tap/mon/:id', nap: () => import('@/app/hoc-tap/mon/[id]/page') },
   { mau: '/finance', nap: () => import('@/app/finance/page') },
+  { mau: '/finance/phan-tich', nap: () => import('@/app/finance/phan-tich/page') },
   { mau: '/finance/currency', nap: () => import('@/app/finance/currency/page') },
   { mau: '/finance/debts', nap: () => import('@/app/finance/debts/page') },
   { mau: '/finance/expenses', nap: () => import('@/app/finance/expenses/page') },
@@ -274,6 +276,8 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   /* Hồ sơ: tên đăng nhập + tên hiển thị + ảnh + tiểu sử — dùng chung trang web (04/10/2026). */
   /* App đặt ở `/ho-so`: `/settings` là màn Cài đặt native của app, nuốt mọi đường con. */
   { mau: '/ho-so', nap: () => import('@/app/settings/profile/page') },
+  /* Cài đặt thông báo — khớp chính xác ở NATIVE_PAGES (CaiDatThongBaoPage). */
+  { mau: '/settings/notifications', nap: () => import('@/app/settings/notifications/page') },
   { mau: '/profile', nap: () => import('@/app/profile/page') },
   { mau: '/profile/:id', nap: () => import('@/app/profile/[id]/page') },
   { mau: '/profile/:id/v2', nap: () => import('@/app/profile/[id]/v2/page') },

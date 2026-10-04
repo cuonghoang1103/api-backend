@@ -28,6 +28,7 @@ import toast from 'react-hot-toast';
 import ThreadRowMenu from './ThreadRowMenu';
 import NewMessageModal from './NewMessageModal';
 import ActiveNowRow from './ActiveNowRow';
+import TimNguoiDeNhan from './TimNguoiDeNhan';
 
 // iOS-like spring transition — feels premium and "lightweight"
 const HOVER_SPRING = 'transition-[background-color,transform,box-shadow] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]';
@@ -218,7 +219,7 @@ export default function ThreadList() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search conversations…"
+            placeholder="Tìm cuộc trò chuyện hoặc người dùng…"
             className="w-full rounded-full border border-transparent bg-white/[0.06] py-1.5 pl-8 pr-7 text-[12px] text-text-primary placeholder:text-text-muted focus:border-cyan-500/40 focus:bg-white/[0.08] focus:outline-none"
           />
           {query && (
@@ -278,6 +279,7 @@ export default function ThreadList() {
       </div>
 
       <div className="chat-messages-scroll min-h-0 flex-1 overflow-y-auto px-2 py-1">
+        {filter !== 'deleted' && <TimNguoiDeNhan query={query} onDaMo={() => setQuery('')} />}
         {filter === 'deleted' ? (
           <DeletedList
             loading={store.deletedThreadsLoading && !store.deletedThreadsLoaded}

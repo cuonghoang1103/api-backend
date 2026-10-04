@@ -10,6 +10,7 @@ import { generateOtp, verifyOtp, getOtpTtl, type OtpType } from './otp.service.j
 import { logger } from '../utils/logger.js';
 import { putObject } from '../config/r2.js';
 import { mfaAtConHieuLuc } from './mfa/adminMfa.js';
+import { taoTenDangNhapDep } from './doiTenDangNhap.service.js';
 
 const SALT_ROUNDS = 12;
 
@@ -533,7 +534,8 @@ export class AuthService {
       const anhMoi = await this.luuAnhOAuth(data);
       user = await prisma.user.create({
         data: {
-          username: data.email.split('@')[0] + '_' + Date.now().toString(36),
+          // Tên đẹp từ họ tên/email thay cho `x_mf2k3x9` (04/10/2026) — doiTenDangNhap.service.ts.
+          username: await taoTenDangNhapDep({ fullName: data.fullName, email: data.email }),
           email: data.email,
           fullName: data.fullName || data.email.split('@')[0],
           provider: data.provider,

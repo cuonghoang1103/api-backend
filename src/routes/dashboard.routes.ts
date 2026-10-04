@@ -759,6 +759,83 @@ router.post('/tasks/:id/hoan', async (req: Request, res: Response<ApiResponse>, 
   } catch (error) { next(error); }
 });
 
+/** Một mốc trong dòng thời gian của ngày — xem `gomNgay`. */
+type MocNgay = { gio: string; den?: string; loai: 'Lên lớp' | 'Thi' | 'Học kỳ' | 'Quá hạn' | 'Việc'; ten: string; trangThai?: string };
+
+const gioVN = (d: Date) => new Date(d.getTime() + 7 * 3600_000).toISOString().slice(11, 16);
+
+/**
+ * Gom MỌI thứ của một ngày (giờ VN) thành một dòng thời gian xếp theo giờ:
+ * thời khoá biểu (ClassSchedule theo thứ, trong khoảng startDate–endDate), lịch thi,
+ * nhiệm vụ học kỳ có giờ bắt đầu hoặc hạn chót trong ngày, nhiệm vụ QUÁ HẠN chưa
+ * xong (tối đa 8), và việc cá nhân. Mốc không có giờ xếp cuối ("--:--").
+ */
+async function gomNgay(
+  userId: number,
+  date: string,
+  ds: Array<{ title: string; batDauAt: Date | null; phutLam: number | null; done: boolean; truotLuc: Date | null }>,
+): Promise<MocNgay[]> {
+  const dau = new Date(`${date}T00:00:00+07:00`);
+  const cuoi = new Date(dau.getTime() + 24 * 3600_000);
+  const ngayDb = new Date(`${date}T00:00:00Z`);
+  const thu = ngayDb.getUTCDay() === 0 ? 8 : ngayDb.getUTCDay() + 1; // 2..8 như ClassSchedule
+  const XONG = ['DAT', 'CHO_CHAM'];
+
+  const [lop, thi, nv, tre] = await Promise.all([
+    prisma.classSchedule.findMany({
+      where: {
+        userId, weekday: thu,
+        AND: [
+          { OR: [{ startDate: null }, { startDate: { lte: ngayDb } }] },
+          { OR: [{ endDate: null }, { endDate: { gte: ngayDb } }] },
+        ],
+      },
+      select: { subject: true, startTime: true, endTime: true, room: true },
+      take: 20,
+    }),
+    prisma.lichThi.findMany({ where: { userId, ngay: ngayDb }, select: { monHoc: true, loai: true, batDau: true, ketThuc: true, phong: true }, take: 10 }),
+    prisma.nhiemVuHoc.findMany({
+      where: { userId, OR: [{ gioBatDau: { gte: dau, lt: cuoi } }, { hanChot: { gte: dau, lt: cuoi } }] },
+      select: { tieuDe: true, gioBatDau: true, hanChot: true, thoiLuongPhut: true, trangThai: true, mon: { select: { maMon: true } } },
+      orderBy: { hanChot: 'asc' },
+      take: 40,
+    }),
+    prisma.nhiemVuHoc.findMany({
+      where: { userId, hanChot: { lt: dau }, trangThai: { notIn: XONG }, mon: { hocKy: { dangHoc: true } } },
+      select: { tieuDe: true, hanChot: true, mon: { select: { maMon: true } } },
+      orderBy: { hanChot: 'asc' },
+      take: 8,
+    }),
+  ]);
+
+  const out: MocNgay[] = [
+    ...lop.map((l) => ({ gio: l.startTime, den: l.endTime, loai: 'Lên lớp' as const, ten: `${l.subject}${l.room ? ` · phòng ${l.room}` : ''}` })),
+    ...thi.map((t) => ({ gio: t.batDau, den: t.ketThuc, loai: 'Thi' as const, ten: `${t.loai} ${t.monHoc}${t.phong ? ` · phòng ${t.phong}` : ''}` })),
+    ...nv.map((n) => {
+      const bd = n.gioBatDau && n.gioBatDau >= dau && n.gioBatDau < cuoi ? n.gioBatDau : null;
+      return {
+        gio: bd ? gioVN(bd) : gioVN(n.hanChot),
+        ...(bd ? { den: gioVN(new Date(bd.getTime() + n.thoiLuongPhut * 60_000)) } : {}),
+        loai: 'Học kỳ' as const,
+        ten: `[${n.mon.maMon}] ${n.tieuDe}${bd ? '' : ' (hạn chót)'}`,
+        trangThai: XONG.includes(n.trangThai) ? 'xong' : 'chưa xong',
+      };
+    }),
+    ...ds.map((v) => ({
+      gio: v.batDauAt ? gioVN(v.batDauAt) : '--:--',
+      ...(v.batDauAt && v.phutLam ? { den: gioVN(new Date(v.batDauAt.getTime() + v.phutLam * 60_000)) } : {}),
+      loai: 'Việc' as const,
+      ten: v.title,
+      trangThai: v.done ? 'xong' : v.truotLuc ? 'trượt' : 'chưa xong',
+    })),
+  ].sort((a, b) => (a.gio === '--:--' ? '99' : a.gio).localeCompare(b.gio === '--:--' ? '99' : b.gio));
+  // Quá hạn đứng ĐẦU: việc nợ từ hôm trước phải nhìn thấy trước mọi thứ.
+  return [
+    ...tre.map((n) => ({ gio: 'quá hạn', loai: 'Quá hạn' as const, ten: `[${n.mon.maMon}] ${n.tieuDe} — hạn ${n.hanChot.toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}`, trangThai: 'chưa xong' })),
+    ...out,
+  ];
+}
+
 // ─── POST /api/v1/dashboard/danh-gia ────────────────────────────
 // AI xem lại kế hoạch của MỘT ngày và nói thẳng chỗ xếp quá tay.
 //
@@ -778,8 +855,12 @@ router.post('/danh-gia', async (req: Request, res: Response<ApiResponse>, next) 
       orderBy: [{ batDauAt: 'asc' }, { id: 'asc' }],
       take: 60,
     });
-    if (ds.length === 0) {
-      res.json({ success: true, data: { nhanXet: 'Ngày này chưa có việc nào để xem.', so: null } });
+    /* Dòng thời gian CẢ NGÀY (04/10/2026): người dùng muốn AI "liệt kê đủ mọi việc
+       ở Học kỳ và hôm nay theo mốc giờ" — trước đó chỉ xem bảng việc trong ngày, bỏ
+       sót giờ lên lớp, lịch thi và nhiệm vụ học kỳ. MÃ gom và xếp, không nhờ model. */
+    const dongThoiGian = await gomNgay(userId, date, ds);
+    if (ds.length === 0 && dongThoiGian.length === 0) {
+      res.json({ success: true, data: { nhanXet: 'Ngày này chưa có việc nào để xem.', so: null, dongThoiGian } });
       return;
     }
 
@@ -820,7 +901,7 @@ router.post('/danh-gia', async (req: Request, res: Response<ApiResponse>, next) 
          này là mấy con số — tổng giờ, chỗ chồng, uy tín đang đặt cược — và
          chúng do mã tính, không cần model. Trả rỗng chỉ vì thiếu khoá là vứt
          đi thứ vẫn dùng được. */
-      res.json({ success: true, data: { nhanXet: null, so, lyDo: 'ai_unavailable' } });
+      res.json({ success: true, data: { nhanXet: null, so, lyDo: 'ai_unavailable', dongThoiGian } });
       return;
     }
 
@@ -838,21 +919,25 @@ router.post('/danh-gia', async (req: Request, res: Response<ApiResponse>, next) 
       purpose: 'plan_review',
       feature: 'chat',
       userId,
-      maxTokens: 420,
+      maxTokens: 520,
       system: 'Bạn xem kế hoạch trong ngày của một người và nói thẳng, ngắn gọn, bằng TIẾNG VIỆT.\n'
         + 'Viết TỐI ĐA 4 gạch đầu dòng, mỗi dòng dưới 22 từ. Không mở bài, không chúc, không khen xã giao.\n'
         + 'CHỈ nói điều RÚT RA TỪ SỐ LIỆU đã cho — TUYỆT ĐỐI không tự cộng lại giờ, không tự suy ra tổng nào khác.\n'
         + 'Ưu tiên theo thứ tự: xếp quá sức → trùng giờ → việc khó dồn cục → việc thiếu giờ/thiếu thời lượng.\n'
+        + 'Nhìn CẢ dòng thời gian (giờ lên lớp, lịch thi, nhiệm vụ học kỳ): chỉ ra việc học kỳ sắp tới hạn hoặc QUÁ HẠN cần làm trước, và chỗ việc cá nhân đè lên giờ học/thi.\n'
+        + 'Danh sách đầy đủ đã được hiện cho người dùng — ĐỪNG chép lại cả danh sách, chỉ nêu nhận xét.\n'
         + 'Nếu kế hoạch ổn thì nói đúng một dòng là ổn, đừng bịa ra vấn đề.',
       messages: [{
         role: 'user',
         content: `Ngày ${date}.\n`
-          + `Số liệu đã tính sẵn: ${JSON.stringify(so)}\n\n`
-          + `Bảng việc (giờ | thời lượng | khó | quan trọng | trạng thái | tên):\n${bang}`,
+          + `Số liệu đã tính sẵn (chỉ bảng việc cá nhân): ${JSON.stringify(so)}\n\n`
+          + `DÒNG THỜI GIAN CẢ NGÀY (giờ | loại | tên | trạng thái) — gồm giờ lên lớp, lịch thi, nhiệm vụ học kỳ, việc cá nhân:\n`
+          + `${dongThoiGian.map((d) => `${d.gio}${d.den ? `–${d.den}` : ''} | ${d.loai} | ${d.ten} | ${d.trangThai ?? ''}`).join('\n') || '(trống)'}\n\n`
+          + `Bảng việc cá nhân chi tiết (giờ | thời lượng | khó | quan trọng | trạng thái | tên):\n${bang || '(không có)'}`,
       }],
     });
 
-    res.json({ success: true, data: { nhanXet: kq?.text?.trim() || null, so } });
+    res.json({ success: true, data: { nhanXet: kq?.text?.trim() || null, so, dongThoiGian } });
   } catch (error) { next(error); }
 });
 

@@ -568,3 +568,35 @@ export async function discoverUsers(
 
   return { users, nextCursor };
 }
+
+// ─── Ai đang online trên CẢ hệ thống (04/10/2026) ───────────────
+// Trang Bạn bè → "Đang online" trước đây chỉ lọc trong danh sách bạn bè. Người dùng
+// muốn thấy MỌI người đang dùng web/app/iOS để kết bạn, nhắn tin ngay. Nguồn sự thật
+// là tập socket đang nối (`getOnlineUserIds`) — không phải `lastActiveAt` (chỉ cập
+// nhật theo nhịp tim, trễ tới 60 giây). Ai tắt "cho người khác thấy trạng thái hoạt
+// động" thì KHÔNG xuất hiện ở đây.
+export async function listOnlineUsers(viewerId: number, limit = 100): Promise<DiscoverUser[]> {
+  const { getOnlineUserIds } = await import('../socket/messaging.socket.js');
+  const ids = getOnlineUserIds().filter((id) => id !== viewerId);
+  if (ids.length === 0) return [];
+  const rows = await prisma.user.findMany({
+    where: { id: { in: ids }, enabled: true, showActiveStatus: true },
+    select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+    orderBy: { lastActiveAt: { sort: 'desc', nulls: 'last' } },
+    take: Math.min(Math.max(limit, 1), 200),
+  });
+  if (rows.length === 0) return [];
+  const rowIds = rows.map((u) => u.id);
+  const [followingIds, friendStatusMap] = await Promise.all([
+    prisma.follow
+      .findMany({ where: { followerId: viewerId, followingId: { in: rowIds } }, select: { followingId: true } })
+      .then((r) => new Set(r.map((x) => x.followingId))),
+    getStatusMap(viewerId, rowIds),
+  ]);
+  return rows.map((u) => ({
+    ...u,
+    isOnline: true,
+    isFollowing: followingIds.has(u.id),
+    friendStatus: friendStatusMap.get(u.id) ?? 'none',
+  }));
+}

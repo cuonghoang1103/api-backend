@@ -26,6 +26,7 @@ export type CauMau = { text: string; ipa?: string };
 type Cham = { tong: number; tu: { tu: string; diem: number; loi: string }[] };
 type Luot = { ai: boolean; text: string; cham?: Cham | null };
 type Pha = 'cho' | 'mo' | 'giasu' | 'nghe' | 'cham' | 'nghi' | 'loi';
+type Giong = 'mac-dinh' | 'khanh-linh' | 'cuong';
 
 const GHI_TOI_DA = 12_000;
 
@@ -40,7 +41,12 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
   const [mau, setMau] = useState<CauMau | null>(null);
   const [luot, setLuot] = useState<Luot[]>([]);
   const [loi, setLoi] = useState('');
-  const st = useRef({ viTri: 0, lanThu: 0, imLien: 0, dong: false });
+  const st = useRef({ viTri: 0, lanThu: 0, imLien: 0, dong: false, diemTruoc: null as number | null, datLien: 0 });
+  /** Giọng CuongMini (04/10/2026): mặc định = giọng Azure hiện tại; hai giọng máy nhà F5. Nhớ trên máy. */
+  const [giong, setGiong] = useState<Giong>(() => { try { const g = localStorage.getItem('goi:giong'); return g === 'khanh-linh' || g === 'cuong' ? g : 'mac-dinh'; } catch { return 'mac-dinh'; } });
+  const doiGiong = (g: Giong) => { setGiong(g); setGiongLui(false); try { localStorage.setItem('goi:giong', g); } catch { /* bỏ qua */ } };
+  /** Máy nhà không trả lời ⇒ máy chủ đã đọc bằng giọng mặc định — báo nhẹ một dòng. */
+  const [giongLui, setGiongLui] = useState(false);
   const cuon = useRef<HTMLDivElement>(null);
 
   useEffect(() => { cuon.current?.scrollTo({ top: cuon.current.scrollHeight, behavior: 'smooth' }); }, [luot]);
@@ -54,7 +60,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
     return () => window.removeEventListener('keydown', h);
   }, [onClose]);
 
-  const trangThai = () => JSON.stringify({ danhSach, viTri: st.current.viTri, lanThu: st.current.lanThu, chuDe });
+  const trangThai = () => JSON.stringify({ danhSach, viTri: st.current.viTri, lanThu: st.current.lanThu, chuDe, giong, diemTruoc: st.current.diemTruoc });
 
   /* Mức micro đi thẳng vào nhân vật + vòng sóng của nút, KHÔNG qua state: trước 04/10
      mỗi lần âm lượng đổi là vẽ lại cả hộp thoại (đè lên nền kính mờ) ⇒ màn hình nhấp nháy. */
@@ -84,18 +90,24 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
   }, [mic]);
 
   /** Gia sư nói (tệp mp3) rồi tới câu mẫu (giọng Anh của khoá), xong thì tự nghe. */
-  const giaSuNoi = useCallback((audioUrl: string | null | undefined, text: string, cauMau: CauMau | null, docMau: boolean) => {
+  const giaSuNoi = useCallback((audio: string | string[] | null | undefined, text: string, cauMau: CauMau | null, docMau: boolean) => {
     if (st.current.dong) return;
     const clips: Clip[] = [];
-    if (audioUrl) clips.push({ text: '', sfx: audioUrl });
+    // Giọng máy nhà trả NHIỀU tệp (đoạn Việt F5 + đoạn Anh) — phát liền nhau, không ngắt.
+    const tep = (Array.isArray(audio) ? audio : audio ? [audio] : []).filter(Boolean);
+    if (tep.length) for (const u of tep) clips.push({ text: '', sfx: u });
     else clips.push({ text: text.replace(/\[\/?en\]/gi, ''), voice: 'uk-nu' }); // không có giọng gia sư: đọc tạm
-    if (docMau && cauMau) clips.push({ text: cauMau.text, voice: 'uk-nu', toc: 0.9 });
+    if (docMau && cauMau) clips.push({ text: '', pauseMs: 280 }, { text: cauMau.text, voice: 'uk-nu', toc: 0.9 });
     setPha('giasu');
-    play(clips, () => { if (!st.current.dong) batNghe(); }, { gapMs: 250 });
+    play(clips, () => { if (!st.current.dong) batNghe(); });
   }, [batNghe]);
 
-  const nhan = useCallback((d: { lyDo?: string; noi?: string; audioUrl?: string | null; mau?: CauMau; viTri?: number; lanThu?: number; cham?: Cham | null; nghe?: string; doiCau?: boolean; loai?: string }) => {
+  const nhan = useCallback((d: { lyDo?: string; noi?: string; audioUrl?: string | null; audioUrls?: string[]; giongThat?: Giong; mau?: CauMau; viTri?: number; lanThu?: number; cham?: Cham | null; nghe?: string; doiCau?: boolean; loai?: string }) => {
     if (d.lyDo === 'het_luot_ngay') { setLoi('Hôm nay bạn đã luyện hết số lượt — mai luyện tiếp nhé.'); setPha('loi'); return; }
+    if (d.giongThat) setGiongLui(d.giongThat === 'mac-dinh' && giong !== 'mac-dinh');
+    // Điểm lần trước CỦA CÙNG CÂU — máy chủ khen tiến bộ; sang câu mới thì xoá.
+    if (d.doiCau) st.current.diemTruoc = null;
+    else if (d.cham) st.current.diemTruoc = d.cham.tong;
     if (typeof d.viTri === 'number') st.current.viTri = d.viTri;
     if (typeof d.lanThu === 'number') st.current.lanThu = d.lanThu;
     if (d.mau) setMau(d.mau);
@@ -115,19 +127,25 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
       if (!d || st.current.dong) return;
       const ngheDuoc = (d.nghe ?? '').trim();
       if (ngheDuoc || d.cham) setLuot((x) => [...x, { ai: false, text: ngheDuoc || mauDaDoc?.text || '…', cham: d.cham ?? null }]);
-      if (d.cham) phanUngNgan(d.cham.tong >= 85 ? 'vui' : d.cham.tong >= 60 ? 'kha' : 'buon', 2600);
+      if (d.cham) {
+        // Đạt 3 câu liền ⇒ mắt trái tim; từ 95 ⇒ ngạc nhiên thích thú; đạt ⇒ vui; khá ⇒ gật gù; thấp ⇒ động viên.
+        const tong = d.cham.tong;
+        st.current.datLien = tong >= 85 ? st.current.datLien + 1 : 0;
+        phanUngNgan(st.current.datLien >= 3 && tong >= 85 ? 'tim' : tong >= 95 ? 'ngac' : tong >= 85 ? 'vui' : tong >= 60 ? 'kha' : 'buon', 2800);
+      }
       if (d.loai === 'hoi') {
         // Đang hỏi: nói câu đệm ngay, gọi AI (~10 giây) song song.
         st.current.imLien = 0;
         setLuot((x) => [...x, { ai: true, text: d.noi ?? '' }]);
         setPha('nghi');
-        const traLoi = api.post('/ielts/ai/goi-gia-su/hoi', { cauHoi: ngheDuoc, mau: d.mau?.text, chuDe }, AI_TIMEOUT);
-        if (d.audioUrl) play({ text: '', sfx: d.audioUrl }, () => { /* chờ câu trả lời */ });
-        const t = (await traLoi).data?.data as { noi?: string; audioUrl?: string | null; lyDo?: string };
+        const traLoi = api.post('/ielts/ai/goi-gia-su/hoi', { cauHoi: ngheDuoc, mau: d.mau?.text, chuDe, giong }, AI_TIMEOUT);
+        const dem = d.audioUrls?.length ? d.audioUrls : d.audioUrl ? [d.audioUrl] : [];
+        if (dem.length) play(dem.map((u) => ({ text: '', sfx: u })), () => { /* chờ câu trả lời */ });
+        const t = (await traLoi).data?.data as { noi?: string; audioUrl?: string | null; audioUrls?: string[]; lyDo?: string };
         if (st.current.dong) return;
         if (!t?.noi) { setLoi('Gia sư chưa trả lời được, bạn đọc tiếp câu mẫu nhé.'); giaSuNoi(null, '', d.mau ?? null, true); return; }
         setLuot((x) => [...x, { ai: true, text: t.noi! }]);
-        giaSuNoi(t.audioUrl, t.noi, d.mau ?? null, true);
+        giaSuNoi(t.audioUrls ?? t.audioUrl, t.noi, d.mau ?? null, true);
         return;
       }
       if (!d.cham) {
@@ -137,7 +155,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
       setLoi('');
       setLuot((x) => [...x, { ai: true, text: d.noi ?? '' }]);
       // Đổi câu hay đọc lại: lượt nào cũng phát lại câu mẫu để người học nghe trước khi đọc.
-      giaSuNoi(d.audioUrl, d.noi ?? '', d.mau ?? null, true);
+      giaSuNoi(d.audioUrls ?? d.audioUrl, d.noi ?? '', d.mau ?? null, true);
     } catch (e) {
       if (st.current.dong) return;
       const m = (e as { response?: { status?: number } })?.response;
@@ -156,7 +174,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
       if (!d || st.current.dong) return;
       setLuot([{ ai: true, text: d.noi ?? '' }]);
       phanUngNgan('chao', 2600);
-      giaSuNoi(d.audioUrl, d.noi ?? '', d.mau ?? null, true);
+      giaSuNoi(d.audioUrls ?? d.audioUrl, d.noi ?? '', d.mau ?? null, true);
     } catch (e) {
       const m = (e as { response?: { status?: number } })?.response;
       setLoi(m?.status === 401 ? 'Đăng nhập để luyện cùng gia sư.' : 'Chưa kết nối được gia sư, thử lại nhé.');
@@ -179,6 +197,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
     const n = Math.max(1, danhSach.length || 12);
     st.current.viTri = (st.current.viTri + 1) % n;
     st.current.lanThu = 0;
+    st.current.diemTruoc = null;
     const m = danhSach.length ? danhSach[st.current.viTri] : null;
     if (m) { setMau(m); setPha('giasu'); play({ text: m.text, voice: 'uk-nu', toc: 0.9 }, () => batNghe()); }
   };
@@ -194,7 +213,15 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
   };
 
   const THEO_PHA: Record<Pha, CamXuc> = { cho: 'cho', mo: 'nghi', giasu: 'noi', nghe: 'nghe', cham: 'nghi', nghi: 'nghi', loi: 'loi' };
-  const camXuc = phanUng ?? THEO_PHA[pha];
+  /* Để im ở trạng thái chờ ~25 giây ⇒ CuongMini ngủ gật (zzz); có gì thay đổi là tỉnh ngay. */
+  const [buonNgu, setBuonNgu] = useState(false);
+  useEffect(() => {
+    setBuonNgu(false);
+    if (pha !== 'cho') return;
+    const t = setTimeout(() => setBuonNgu(true), 25_000);
+    return () => clearTimeout(t);
+  }, [pha, luot.length, mau]);
+  const camXuc = phanUng ?? (buonNgu ? 'ngu' : THEO_PHA[pha]);
   const loiCuoi = [...luot].reverse().find((l) => l.ai)?.text ?? '';
   const iCham = luot.map((l, i) => (l.cham ? i : -1)).filter((i) => i >= 0).pop() ?? -1;
   const chamCuoi = iCham >= 0 ? luot[iCham].cham! : null;
@@ -212,8 +239,19 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
             <div className={s.goiPhu}>{NHAN_NGAN[pha]} · {chuDe}</div>
           </div>
         </div>
-        <button type="button" className={s.goiKetThuc} onClick={onClose}><PhoneOff size={16} /> Kết thúc</button>
+        <div className={s.goiThanhPhai}>
+          <label className={s.goiChonGiong} title="Giọng CuongMini nói tiếng Việt (phần tiếng Anh luôn là giọng Anh chuẩn)">
+            <Volume2 size={14} aria-hidden />
+            <select value={giong} onChange={(e) => doiGiong(e.target.value as Giong)} aria-label="Giọng của CuongMini">
+              <option value="mac-dinh">Giọng mặc định</option>
+              <option value="khanh-linh">Khánh Linh (máy nhà)</option>
+              <option value="cuong">Cường — giảng bài (máy nhà)</option>
+            </select>
+          </label>
+          <button type="button" className={s.goiKetThuc} onClick={onClose}><PhoneOff size={16} /> Kết thúc</button>
+        </div>
       </header>
+      {giongLui && <div className={s.goiGiongLui}>Máy nhà đang bận — CuongMini tạm nói bằng giọng mặc định, tự đổi lại khi máy nhà sẵn sàng.</div>}
 
       <div className={s.goiKhung}>
         <section className={s.goiSanKhau}>

@@ -9,7 +9,7 @@
  * thanh công cụ và khung hướng dẫn cũng to theo, lật trang xong lại phải thu nhỏ.
  */
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { urlAnh } from './useSachRieng';
+import { taiTruocAnh, useAnhTrang } from './useSachRieng';
 import st from './sachGoc.module.css';
 
 const TI_LE = 1600 / 2259; // rộng / cao của ảnh trang
@@ -30,6 +30,9 @@ export function TrangAnh({
   const box = useRef<HTMLDivElement>(null);
   const [kt, setKt] = useState({ w: 0, h: 0 });
   const [tai, setTai] = useState<'dang' | 'xong' | 'loi'>('dang');
+  const anh = useAnhTrang(p);
+  // App: tải blob hỏng thì báo lỗi ngay (thẻ <img> không có src nên không tự báo).
+  useEffect(() => { if (anh === 'loi') setTai('loi'); }, [anh]);
   const zRef = useRef(z);
   zRef.current = z;
 
@@ -51,7 +54,7 @@ export function TrangAnh({
   // Tải trước hai trang kề để lật không phải chờ.
   useEffect(() => {
     if (tai !== 'xong') return;
-    for (const q of [p + 1, p - 1]) if (q >= 1 && q <= 304) { const i = new Image(); i.src = urlAnh(q); }
+    for (const q of [p + 1, p - 1]) if (q >= 1 && q <= 304) taiTruocAnh(q);
   }, [p, tai]);
 
   const baseW = fit === 'ngang' ? kt.w : Math.min(kt.w, kt.h * TI_LE);
@@ -160,7 +163,7 @@ export function TrangAnh({
         {/* eslint-disable-next-line @next/next/no-img-element -- ảnh riêng tư qua API có cookie, không qua next/image */}
         <img
           key={p}
-          src={urlAnh(p)}
+          src={anh && anh !== 'loi' ? anh : undefined}
           alt={`Trang ${p} sách できる日本語`}
           width={1600}
           height={2259}

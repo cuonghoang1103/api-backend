@@ -59,6 +59,48 @@ export const TEN_MUC: Record<LoaiMuc, { ja: string; vi: string; mau: string }> =
 
 export const urlAnh = (p: number, nho = false) => `/api/v1/sach-rieng/dekiru/trang/${p}${nho ? '?nho=1' : ''}`;
 
+/* ── Ảnh trang trong APP DESKTOP (05/10/2026) ──────────────────────────────
+ * Web dùng thẳng `urlAnh` làm `src`: cùng tên miền, cookie đăng nhập tự đi kèm.
+ * App chạy ở `app://cuongthai` — đường tương đối trỏ vào app, và thẻ <img> không
+ * gửi được khoá phiên ⇒ "Không tải được trang". Ở app: tải qua axios (đã gắn máy
+ * chủ thật + khoá phiên) thành blob, giữ trong bộ nhớ đệm nhỏ (lật qua lại tức thì).
+ */
+const laApp = () => typeof window !== 'undefined' && window.location.protocol === 'app:';
+const demAnh = new Map<string, Promise<string>>();
+function taiAnhApp(duong: string): Promise<string> {
+  const co = demAnh.get(duong);
+  if (co) return co;
+  const p = api.get(duong.replace(/^\/api\/v1/, ''), { responseType: 'blob' }).then((r) => URL.createObjectURL(r.data as Blob));
+  p.catch(() => demAnh.delete(duong));
+  demAnh.set(duong, p);
+  if (demAnh.size > 60) { // bỏ ảnh cũ nhất, trả bộ nhớ
+    const [k, v] = demAnh.entries().next().value as [string, Promise<string>];
+    demAnh.delete(k);
+    void v.then((u) => URL.revokeObjectURL(u)).catch(() => {});
+  }
+  return p;
+}
+
+/** Nạp trước trang kế/trước — web dùng Image(), app kéo vào bộ đệm blob. */
+export function taiTruocAnh(p: number) {
+  if (laApp()) void taiAnhApp(urlAnh(p)).catch(() => {});
+  else { const i = new Image(); i.src = urlAnh(p); }
+}
+
+/** `src` dùng được cho ảnh trang: web = URL thẳng; app = blob đã tải (rỗng khi đang tải, 'loi' khi hỏng). */
+export function useAnhTrang(p: number, nho = false): string {
+  const duong = urlAnh(p, nho);
+  const [src, setSrc] = useState<string>(() => (laApp() ? '' : duong));
+  useEffect(() => {
+    if (!laApp()) { setSrc(duong); return; }
+    let huy = false;
+    setSrc('');
+    taiAnhApp(duong).then((u) => { if (!huy) setSrc(u); }).catch(() => { if (!huy) setSrc('loi'); });
+    return () => { huy = true; };
+  }, [duong]);
+  return src;
+}
+
 let quyenDem: Promise<boolean> | null = null;
 
 /** true = tài khoản này xem được Sách gốc. null = đang hỏi. */

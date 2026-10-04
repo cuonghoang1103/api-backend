@@ -24,9 +24,10 @@ import { AI_TIMEOUT, setDefaultVoice } from '@/components/sach-hoc/audio';
 import type { TutorAsk } from '@/components/sach-hoc/tutorContext';
 import cs from '@/components/sach-hoc/course.module.css';
 import { TrangAnh } from './TrangAnh';
+import { AnhNho } from './AnhNho';
 import { HuongDanPanel } from './HuongDanPanel';
 import {
-  TEN_MUC, layHuongDan, layMucLuc, nhanMuc, timTrang, urlAnh, useQuyenSachRieng, type HuongDan, type LoaiMuc, type MucLuc,
+  TEN_MUC, layHuongDan, layMucLuc, nhanMuc, timTrang, useQuyenSachRieng, type HuongDan, type LoaiMuc, type MucLuc,
 } from './useSachRieng';
 import st from './sachGoc.module.css';
 
@@ -299,7 +300,7 @@ export default function SachGoc() {
               {Array.from({ length: baiHienTai.den - baiHienTai.tu + 1 }, (_, i) => baiHienTai.tu + i).map((q) => (
                 <button key={q} type="button" className={`${st.thumb} ${q === p ? st.thumbOn : ''}`} onClick={() => den(q)} aria-label={`Trang ${q}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element -- ảnh riêng tư qua API */}
-                  <img src={urlAnh(q, true)} alt="" loading="lazy" width={120} height={169} />
+                  <AnhNho p={q} rong={120} cao={169} />
                   <span>{q}</span>
                 </button>
               ))}

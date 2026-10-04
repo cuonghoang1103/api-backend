@@ -145,3 +145,60 @@
   .ct-logo-sang, .ct-logo-chu strong { animation: none; }
   .ct-logo-sang { stroke-dasharray: none; }
 }
+
+/* ── Lịch tháng dễ nhìn hơn (04/10/2026) ──────────────────────────────────
+   Người dùng: "tối tối khó nhìn quá". Bản cũ: số ngày màu chữ mờ, nền trong suốt,
+   chấm 5px — cả lưới chìm vào nền. Nay: số sáng rõ, ô có nền nhẹ, ngày CÓ VIỆC tô
+   xanh nhạt + chấm to hơn, hôm nay tô hẳn gradient, cuối tuần hồng nhạt. */
+.ct-workspace .ct-kh-lich {
+  border-radius: 14px;
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(139, 92, 246, .14), transparent 70%),
+    linear-gradient(180deg, rgba(56, 189, 248, .05), transparent 55%);
+}
+.ct-workspace .ct-kh-thang strong {
+  font-size: 15px; font-weight: 750; letter-spacing: -.01em;
+  background: linear-gradient(90deg, #c4b5fd, #f9a8d4); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.ct-workspace .ct-kh-thu span { color: var(--ct-text-muted); font-size: 11.5px; letter-spacing: .02em; }
+.ct-workspace .ct-kh-thu span:nth-child(n + 6) { color: #f9a8d4; }
+.ct-workspace .ct-kh-o { gap: 5px; }
+.ct-workspace .ct-kh-ngay {
+  min-height: 36px; padding: 4px; font-size: 13px; font-weight: 600;
+  color: var(--ct-text); background: rgba(148, 163, 184, .08); border: 1px solid rgba(148, 163, 184, .1);
+  border-radius: 10px; transition: background-color .15s, transform .15s, border-color .15s;
+}
+.ct-workspace .ct-kh-ngay:hover { background: rgba(139, 92, 246, .2); border-color: rgba(167, 139, 250, .45); transform: translateY(-1px); }
+.ct-workspace .ct-kh-ngay[data-ngoai='true'] { background: transparent; border-color: transparent; opacity: .3; }
+.ct-workspace .ct-kh-ngay[data-cuoituan='true'] { color: #fbcfe8; }
+.ct-workspace .ct-kh-ngay:has(.ct-kh-cham i) { background: rgba(56, 189, 248, .13); border-color: rgba(56, 189, 248, .28); }
+.ct-workspace .ct-kh-ngay[data-homnay='true'] {
+  color: #fff; border-color: transparent;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899); box-shadow: 0 8px 18px -10px rgba(236, 72, 153, .9);
+}
+.ct-workspace .ct-kh-ngay[data-chon='true'] { color: var(--ct-text); background: rgba(139, 92, 246, .28); border-color: transparent; }
+.ct-workspace .ct-kh-ngay[data-homnay='true'][data-chon='true'] { color: #fff; background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+.ct-workspace .ct-kh-ngay[data-chon='true']::after { border-color: #c4b5fd; border-radius: 11px; }
+.ct-workspace .ct-kh-cham { height: 6px; gap: 3px; }
+.ct-workspace .ct-kh-cham i { width: 6px; height: 6px; box-shadow: 0 0 0 1.5px rgba(15, 23, 42, .5); }
+.ct-workspace .ct-kh-ngay[data-homnay='true'] .ct-kh-cham i { box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .7); }
+:root[data-theme='light'] .ct-workspace .ct-kh-ngay { background: #f4f2ff; border-color: #e6e1fb; }
+:root[data-theme='light'] .ct-workspace .ct-kh-ngay[data-cuoituan='true'] { color: #db2777; }
+:root[data-theme='light'] .ct-workspace .ct-kh-ngay:has(.ct-kh-cham i) { background: #e0f2fe; border-color: #bae6fd; }
+:root[data-theme='light'] .ct-workspace .ct-kh-thang strong { background-image: linear-gradient(90deg, #7c3aed, #db2777); }
+
+/* Dòng thời gian cả ngày trong ô "Nhờ AI xem lại ngày này". */
+.ct-kh-dong { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.ct-kh-dong li {
+  display: grid; grid-template-columns: 92px 64px minmax(0, 1fr); align-items: baseline; gap: 8px;
+  padding: 6px 10px; border-radius: 9px; font-size: 12.5px; background: rgba(148, 163, 184, .07); border-left: 3px solid #94a3b8;
+}
+.ct-kh-dong li[data-loai='Lên lớp'] { border-left-color: #38bdf8; }
+.ct-kh-dong li[data-loai='Thi'] { border-left-color: #f43f5e; background: rgba(244, 63, 94, .1); }
+.ct-kh-dong li[data-loai='Học kỳ'] { border-left-color: #a78bfa; }
+.ct-kh-dong li[data-loai='Quá hạn'] { border-left-color: #f59e0b; background: rgba(245, 158, 11, .1); }
+.ct-kh-dong li[data-loai='Việc'] { border-left-color: #34d399; }
+.ct-kh-dong li[data-xong='true'] .ct-kh-dong-ten { text-decoration: line-through; opacity: .6; }
+.ct-kh-dong-gio { font-variant-numeric: tabular-nums; font-weight: 650; color: var(--ct-text); }
+.ct-kh-dong-loai { font-size: 11px; font-weight: 650; color: var(--ct-text-muted); }
+.ct-kh-dong-ten { min-width: 0; overflow-wrap: anywhere; }

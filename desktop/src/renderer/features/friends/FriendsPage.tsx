@@ -14,6 +14,7 @@
  *   DELETE /friends/:id                → huỷ kết bạn
  *   GET    /users/search?q=            → [{ id, username, displayName, avatarUrl }]
  *   GET    /users/suggestions          → [{ id, username, displayName, avatarUrl, isOnline }]
+ *   GET    /users/online               → { users: [...] } — MỌI người đang online (04/10/2026)
  *
  * ⚠️ HAI HÌNH DẠNG KHÁC NHAU, DỄ NHẦM:
  * `api.request` bóc `envelope.data`, nên `/friends/requests/*` và
@@ -47,7 +48,7 @@ interface LoiMoi {
   createdAt: string;
 }
 
-type Tab = 'ban' | 'den' | 'di' | 'tim';
+type Tab = 'ban' | 'onl' | 'den' | 'di' | 'tim';
 
 function ten(n?: Nguoi | null): string {
   return n?.displayName || n?.username || 'Không rõ';
@@ -107,6 +108,21 @@ export function FriendsPage() {
   }, [api, userId, online]);
 
   useEffect(() => { void nap(); }, [nap]);
+
+  /* "Đang online" = MỌI người đang dùng web/app/iOS trên máy chủ (04/10/2026), không chỉ
+     bạn bè. Hỏi lại mỗi 30 giây. Máy chủ cũ chưa có `/users/online` (404) ⇒ lùi về bạn
+     bè đang online như trước, không để trang trống. */
+  const [onlineHet, datOnlineHet] = useState<Nguoi[] | null>(null);
+  useEffect(() => {
+    if (!api || !online) return;
+    let con = true;
+    const hoi = () => api.request<{ users?: Nguoi[] }>('/api/v1/users/online')
+      .then((v) => { if (con) datOnlineHet((v?.users ?? []).filter((n) => n.id !== userId)); })
+      .catch(() => { if (con) datOnlineHet(null); });
+    void hoi();
+    const t = setInterval(() => { if (!document.hidden) void hoi(); }, 30_000);
+    return () => { con = false; clearInterval(t); };
+  }, [api, online, userId]);
 
   // ── Tìm người: hoãn một nhịp, đừng gọi mỗi ký tự ──
   const henTim = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -182,25 +198,25 @@ export function FriendsPage() {
     navigate('/messages');
   };
 
-  const dangOnline = ban.filter((n) => n.isOnline);
-  const MUC: Array<{ k: Tab | 'online'; ten: string; icon: React.ReactNode; so?: number }> = [
+  const dangOnline = onlineHet ?? ban.filter((n) => n.isOnline);
+  const MUC: Array<{ k: Tab; ten: string; icon: React.ReactNode; so?: number }> = [
     { k: 'ban', ten: 'Tất cả bạn bè', icon: <Users size={16} aria-hidden />, so: ban.length },
-    { k: 'online', ten: 'Đang online', icon: <span className="ct-bb2-cham" aria-hidden />, so: dangOnline.length },
+    { k: 'onl', ten: 'Đang online', icon: <span className="ct-bb2-cham" aria-hidden />, so: dangOnline.length },
     { k: 'den', ten: 'Lời mời kết bạn', icon: <UserCheck size={16} aria-hidden />, so: den.length },
     { k: 'di', ten: 'Đã gửi', icon: <Send size={16} aria-hidden />, so: di.length },
     { k: 'tim', ten: 'Tìm bạn & gợi ý', icon: <UserPlus size={16} aria-hidden /> },
   ];
-  const [chiOnline, datChiOnline] = useState(false);
-  const mucDangChon = chiOnline && tab === 'ban' ? 'online' : tab;
 
   /** Lọc nhanh trong danh sách bạn (khác ô "Tìm bạn" — cái đó tìm cả web). */
   const [loc, datLoc] = useState('');
-  const banHienThi = (chiOnline ? dangOnline : ban).filter((n) => {
+  const khopLoc = (n: Nguoi) => {
     const q = loc.trim().toLowerCase();
     return !q || ten(n).toLowerCase().includes(q) || n.username.toLowerCase().includes(q);
-  });
+  };
+  const banHienThi = ban.filter(khopLoc);
+  const onlineHienThi = dangOnline.filter(khopLoc);
 
-  const tieuDe = { ban: chiOnline ? 'Đang online' : 'Tất cả bạn bè', den: 'Lời mời kết bạn', di: 'Lời mời đã gửi', tim: 'Tìm bạn & gợi ý' }[tab];
+  const tieuDe = { ban: 'Tất cả bạn bè', onl: 'Đang online', den: 'Lời mời kết bạn', di: 'Lời mời đã gửi', tim: 'Tìm bạn & gợi ý' }[tab];
 
   return (
     <div className="ct-bb2">
@@ -215,11 +231,7 @@ export function FriendsPage() {
         </div>
         <nav className="ct-bb2-muc">
           {MUC.map((m) => (
-            <button key={m.k} type="button" data-chon={mucDangChon === m.k}
-              onClick={() => {
-                if (m.k === 'online') { datTab('ban'); datChiOnline(true); }
-                else { datTab(m.k); datChiOnline(false); }
-              }}>
+            <button key={m.k} type="button" data-chon={tab === m.k} onClick={() => datTab(m.k)}>
               <span className="ct-bb2-muc-icon">{m.icon}</span>
               <span className="ct-bb2-muc-ten">{dich(m.ten)}</span>
               {!!m.so && <span className="ct-bb2-muc-so" data-noi={m.k === 'den'}>{m.so}</span>}
@@ -235,15 +247,18 @@ export function FriendsPage() {
             <h2>{dich(tieuDe)}</h2>
             <p>
               {tab === 'ban' && (ban.length ? `${banHienThi.length}/${ban.length} người` : dich('Kết nối với người khác trên cuongthai.com'))}
+              {tab === 'onl' && (onlineHet
+                ? `${dangOnline.length} người đang dùng CuongThai — web, app, điện thoại`
+                : `${dangOnline.length} bạn bè đang online`)}
               {tab === 'den' && `${den.length} lời mời đang chờ bạn trả lời`}
               {tab === 'di' && `${di.length} lời mời chưa được trả lời`}
               {tab === 'tim' && dich('Tìm theo tên, hoặc kết bạn với người được gợi ý')}
             </p>
           </div>
-          {(tab === 'ban' || tab === 'tim') && (
+          {(tab === 'ban' || tab === 'onl' || tab === 'tim') && (
             <div className="ct-bb2-tim">
               <Search size={15} aria-hidden />
-              {tab === 'ban' ? (
+              {tab !== 'tim' ? (
                 <input value={loc} placeholder={dich('Lọc bạn bè…')} maxLength={80}
                   onChange={(e) => datLoc(e.target.value)} />
               ) : (
@@ -266,7 +281,7 @@ export function FriendsPage() {
               <Trong icon={<Users size={30} aria-hidden />}>
                 {ban.length === 0
                   ? <Chu cau="Chưa có người bạn nào. Sang **Tìm bạn & gợi ý** để bắt đầu." />
-                  : chiOnline ? dich('Chưa có bạn nào đang online.') : `Không ai khớp “${loc.trim()}”.`}
+                  : `Không ai khớp “${loc.trim()}”.`}
               </Trong>
             ) : (
               <ul className="ct-bb2-luoi">
@@ -283,6 +298,27 @@ export function FriendsPage() {
                 ))}
               </ul>
             )
+        )}
+
+        {tab === 'onl' && (
+          onlineHienThi.length === 0 ? (
+            <Trong icon={<Users size={30} aria-hidden />}>
+              {loc.trim() ? `Không ai khớp “${loc.trim()}”.` : dich('Lúc này chưa có ai khác đang online.')}
+            </Trong>
+          ) : (
+            <ul className="ct-bb2-luoi">
+              {onlineHienThi.map((n) => (
+                <The key={n.id} n={{ ...n, isOnline: true }} phu={quanHe(n.id) === 'ban' ? dich('Bạn bè') : undefined}>
+                  <button type="button" className="ct-btn" onClick={() => nhanTin(n)}>
+                    <MessageSquare size={14} aria-hidden /> Nhắn tin
+                  </button>
+                  {quanHe(n.id) !== 'ban' && (
+                    <NutKetBan n={n} qh={quanHe(n.id)} dang={dangChay.has(n.id)} onMoi={() => void moiKetBan(n)} />
+                  )}
+                </The>
+              ))}
+            </ul>
+          )
         )}
 
         {tab === 'den' && (

@@ -16,7 +16,7 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-export type CamXuc = 'cho' | 'chao' | 'noi' | 'nghe' | 'nghi' | 'vui' | 'kha' | 'buon' | 'loi';
+export type CamXuc = 'cho' | 'chao' | 'noi' | 'nghe' | 'nghi' | 'vui' | 'kha' | 'buon' | 'loi' | 'ngac' | 'tim' | 'ngu';
 
 export interface SanKhau {
   datCamXuc(c: CamXuc): void;
@@ -29,18 +29,25 @@ type ThamSo = {
   mo: number; to: number; vui: number; buon: number; boi: number;
   nhinX: number; nhinY: number; mieng: number; cuoi: number; ma: number; nghi: number;
   nghieng: number; gat: number; nhay: number; tayP: number; tayT: number; vay: number; tai: number;
+  /** 04/10: mắt trái tim · ngạc nhiên (mắt tròn + miệng O) · buồn ngủ (lim dim + zzz). */
+  tim: number; ngac: number; ngu: number;
 };
 
+/** Mọi cảm xúc mặc định tắt ba nét mới — khỏi kẹt mắt trái tim khi đổi sang cảm xúc khác. */
+const D = (x: Partial<ThamSo>): Partial<ThamSo> => ({ tim: 0, ngac: 0, ngu: 0, ...x });
 const DICH: Record<CamXuc, Partial<ThamSo>> = {
-  cho: { to: 1, vui: 0, buon: 0, boi: 0, cuoi: 0.55, ma: 0.3, nghi: 0, nghieng: 0, tayP: 0, tayT: 0, vay: 0, nhay: 0 },
-  chao: { to: 1, vui: 1, buon: 0, boi: 0, cuoi: 1, ma: 0.75, nghi: 0, nghieng: 0.08, tayP: 2.5, tayT: 0, vay: 1, nhay: 0 },
-  noi: { to: 1, vui: 0, buon: 0, boi: 0, cuoi: 0.65, ma: 0.35, nghi: 0, nghieng: 0, tayP: 0.35, tayT: 0.2, vay: 0, nhay: 0 },
-  nghe: { to: 1.16, vui: 0, buon: 0, boi: 0, cuoi: 0.3, ma: 0.3, nghi: 0, nghieng: 0.16, tayP: 0, tayT: 0.15, vay: 0, nhay: 0 },
-  nghi: { to: 0.9, vui: 0, buon: 0, boi: 0, cuoi: 0.15, ma: 0.15, nghi: 1, nghieng: -0.1, tayP: 0.45, tayT: 0, vay: 0, nhay: 0 },
-  vui: { to: 1, vui: 1, buon: 0, boi: 0, cuoi: 1, ma: 1, nghi: 0, nghieng: 0.06, tayP: 2.7, tayT: 2.7, vay: 0, nhay: 1 },
-  kha: { to: 1, vui: 1, buon: 0, boi: 0, cuoi: 0.7, ma: 0.55, nghi: 0, nghieng: 0.1, tayP: 0.9, tayT: 0, vay: 0, nhay: 0 },
-  buon: { to: 0.96, vui: 0, buon: 1, boi: 0, cuoi: 0.15, ma: 0.35, nghi: 0, nghieng: -0.12, tayP: 0.7, tayT: 0.7, vay: 0, nhay: 0 },
-  loi: { to: 1, vui: 0, buon: 0, boi: 1, cuoi: 0, ma: 0.2, nghi: 0, nghieng: 0.18, tayP: 0.2, tayT: 0.2, vay: 0, nhay: 0 },
+  cho: D({ to: 1, vui: 0, buon: 0, boi: 0, cuoi: 0.55, ma: 0.3, nghi: 0, nghieng: 0, tayP: 0, tayT: 0, vay: 0, nhay: 0 }),
+  chao: D({ to: 1, vui: 1, buon: 0, boi: 0, cuoi: 1, ma: 0.75, nghi: 0, nghieng: 0.08, tayP: 2.5, tayT: 0, vay: 1, nhay: 0 }),
+  noi: D({ to: 1, vui: 0, buon: 0, boi: 0, cuoi: 0.65, ma: 0.35, nghi: 0, nghieng: 0, tayP: 0.35, tayT: 0.2, vay: 0, nhay: 0 }),
+  nghe: D({ to: 1.16, vui: 0, buon: 0, boi: 0, cuoi: 0.3, ma: 0.3, nghi: 0, nghieng: 0.16, tayP: 0, tayT: 0.15, vay: 0, nhay: 0 }),
+  nghi: D({ to: 0.9, vui: 0, buon: 0, boi: 0, cuoi: 0.15, ma: 0.15, nghi: 1, nghieng: -0.1, tayP: 0.45, tayT: 0, vay: 0, nhay: 0 }),
+  vui: D({ to: 1, vui: 1, buon: 0, boi: 0, cuoi: 1, ma: 1, nghi: 0, nghieng: 0.06, tayP: 2.7, tayT: 2.7, vay: 0, nhay: 1 }),
+  kha: D({ to: 1, vui: 1, buon: 0, boi: 0, cuoi: 0.7, ma: 0.55, nghi: 0, nghieng: 0.1, tayP: 0.9, tayT: 0, vay: 0, nhay: 0 }),
+  buon: D({ to: 0.96, vui: 0, buon: 1, boi: 0, cuoi: 0.15, ma: 0.35, nghi: 0, nghieng: -0.12, tayP: 0.7, tayT: 0.7, vay: 0, nhay: 0 }),
+  loi: D({ to: 1, vui: 0, buon: 0, boi: 1, cuoi: 0, ma: 0.2, nghi: 0, nghieng: 0.18, tayP: 0.2, tayT: 0.2, vay: 0, nhay: 0 }),
+  ngac: D({ to: 1.32, vui: 0, buon: 0, boi: 0, cuoi: 0.3, ma: 0.8, nghi: 0, nghieng: 0, tayP: 2.9, tayT: 2.9, vay: 0, nhay: 0.6, ngac: 1 }),
+  tim: D({ to: 1, vui: 0, buon: 0, boi: 0, cuoi: 1, ma: 1, nghi: 0, nghieng: 0.1, tayP: 1.2, tayT: 1.2, vay: 0, nhay: 0.35, tim: 1 }),
+  ngu: D({ to: 1, vui: 0, buon: 0, boi: 0, cuoi: 0.2, ma: 0.25, nghi: 0, nghieng: 0.22, tayP: 0, tayT: 0, vay: 0, nhay: 0, ngu: 1 }),
 };
 
 /* Màn hình mặt: vẽ trong hệ toạ độ 1024×512, canvas thật 768×384 (đủ nét, tải lên GPU nhẹ). */
@@ -90,7 +97,7 @@ function veMat(g: CanvasRenderingContext2D, p: ThamSo, t: number) {
   for (const s of [-1, 1]) {
     const ex = cx + s * kc;
     // 1) Mắt thường: bầu dục đứng + hai đốm sáng (kiểu mắt hoạt hình).
-    const aThuong = (1 - p.vui) * (1 - p.boi);
+    const aThuong = (1 - p.vui) * (1 - p.boi) * (1 - p.tim);
     if (aThuong > 0.02) {
       g.globalAlpha = aThuong;
       const rw = 54 * p.to, rh = Math.max(6, 78 * p.to * p.mo);
@@ -129,6 +136,20 @@ function veMat(g: CanvasRenderingContext2D, p: ThamSo, t: number) {
       g.beginPath();
       g.arc(ex, cy + 30, 54, Math.PI * 1.12, Math.PI * 1.88);
       g.stroke();
+    }
+    // 4) Mắt trái tim (đọc đạt nhiều câu liền).
+    if (p.tim > 0.02) {
+      g.save();
+      g.globalAlpha = p.tim;
+      g.fillStyle = '#ff7eb6';
+      g.shadowColor = '#ff4f9a';
+      const r = 50 * (0.88 + 0.12 * Math.sin(t * 7)); // tim đập
+      g.beginPath();
+      g.moveTo(ex, cy + r * 1.35);
+      g.bezierCurveTo(ex - r * 2.1, cy + r * 0.1, ex - r * 1.2, cy - r * 1.5, ex, cy - r * 0.45);
+      g.bezierCurveTo(ex + r * 1.2, cy - r * 1.5, ex + r * 2.1, cy + r * 0.1, ex, cy + r * 1.35);
+      g.fill();
+      g.restore();
     }
     // 3) Bối rối: > <
     if (p.boi > 0.02) {
@@ -178,6 +199,19 @@ function veMat(g: CanvasRenderingContext2D, p: ThamSo, t: number) {
     }
   }
   g.restore();
+
+  // Buồn ngủ: chữ z bay lên rồi mờ dần.
+  if (p.ngu > 0.02) {
+    g.save();
+    g.fillStyle = '#c4b5fd';
+    g.font = '800 64px ui-rounded, system-ui, sans-serif';
+    for (let i = 0; i < 3; i++) {
+      const pha = (t * 0.45 + i / 3) % 1;
+      g.globalAlpha = p.ngu * Math.sin(pha * Math.PI);
+      g.fillText('z', MW / 2 + 170 + pha * 100, MH / 2 - 20 - pha * 120 - i * 4);
+    }
+    g.restore();
+  }
 
   // Má hồng.
   if (p.ma > 0.02) {
@@ -378,11 +412,11 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
 
   /* ── Trạng thái ── */
   let camXuc: CamXuc = 'cho';
-  const p: ThamSo = { mo: 1, to: 1, vui: 0, buon: 0, boi: 0, nhinX: 0, nhinY: 0, mieng: 0, cuoi: 0.55, ma: 0.3, nghi: 0, nghieng: 0, gat: 0, nhay: 0, tayP: 0, tayT: 0, vay: 0, tai: 0 };
+  const p: ThamSo = { mo: 1, to: 1, vui: 0, buon: 0, boi: 0, nhinX: 0, nhinY: 0, mieng: 0, cuoi: 0.55, ma: 0.3, nghi: 0, nghieng: 0, gat: 0, nhay: 0, tayP: 0, tayT: 0, vay: 0, tai: 0, tim: 0, ngac: 0, ngu: 0 };
   let chopLuc = 1.5, chopCon = 0;
   let nhinDichX = 0, nhinDichY = 0, doiNhinLuc = 2;
   let troX = 0, troY = 0, coTro = false;
-  const mauDen: Record<CamXuc, string> = { cho: '#fbbf24', chao: '#f472b6', noi: '#fbbf24', nghe: '#f43f5e', nghi: '#60a5fa', vui: '#4ade80', kha: '#a3e635', buon: '#93c5fd', loi: '#fb923c' };
+  const mauDen: Record<CamXuc, string> = { cho: '#fbbf24', chao: '#f472b6', noi: '#fbbf24', nghe: '#f43f5e', nghi: '#60a5fa', vui: '#4ade80', kha: '#a3e635', buon: '#93c5fd', loi: '#fb923c', ngac: '#facc15', tim: '#f472b6', ngu: '#818cf8' };
   const denDich = new THREE.Color(mauDen.cho);
   let angTenV = 0, angTenGoc = 0; // lò xo ăng-ten
 
@@ -425,7 +459,7 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
     chopLuc -= dt;
     if (chopLuc <= 0) { chopCon = 0.16; chopLuc = 2 + Math.random() * 3.5; if (Math.random() < 0.2) chopLuc = 0.28; }
     if (chopCon > 0) chopCon -= dt;
-    const moDich = chopCon > 0 ? 0.08 : camXuc === 'nghi' ? 0.82 : 1;
+    const moDich = chopCon > 0 ? 0.08 : camXuc === 'ngu' ? 0.12 + 0.1 * Math.sin(t * 0.7) : camXuc === 'nghi' ? 0.82 : 1;
     p.mo = tien(p.mo, moDich, chopCon > 0 ? 0.6 : 0.25);
 
     // Ánh mắt: theo con trỏ nếu có, không thì liếc ngẫu nhiên; đang nghĩ thì nhìn lên.
@@ -439,7 +473,8 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
 
     // Miệng: mấp máy theo nhịp âm tiết khi có tiếng gia sư.
     const noi = o.docDangNoi();
-    const mieng = noi ? 0.18 + 0.7 * Math.abs(Math.sin(t * 10.5) * Math.sin(t * 3.7 + 1.3)) : camXuc === 'nghe' ? 0.1 : 0;
+    const mieng = noi ? 0.18 + 0.7 * Math.abs(Math.sin(t * 10.5) * Math.sin(t * 3.7 + 1.3))
+      : camXuc === 'ngac' ? 0.5 : camXuc === 'ngu' ? 0.12 + 0.25 * Math.max(0, Math.sin(t * 0.9)) : camXuc === 'nghe' ? 0.1 : 0;
     p.mieng = tien(p.mieng, mieng, noi ? 0.45 : 0.2);
 
     // Micro: tai sáng + ăng-ten nhún theo giọng người học.
@@ -465,7 +500,7 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
     const gat = noi ? Math.sin(t * 4.2) * 0.035 : camXuc === 'kha' ? Math.max(0, Math.sin(t * 6)) * 0.12 : 0;
     dau.rotation.z = tien(dau.rotation.z, p.nghieng + Math.sin(t * 0.9) * 0.03 * cham, k);
     dau.rotation.y = tien(dau.rotation.y, p.nhinX * 0.32, k * 0.5);
-    dau.rotation.x = tien(dau.rotation.x, -p.nhinY * 0.16 + gat, k * 0.6);
+    dau.rotation.x = tien(dau.rotation.x, -p.nhinY * 0.16 + gat + p.ngu * (0.12 + 0.06 * Math.sin(t * 0.9)), k * 0.6);
     dau.position.y = 0.62 + Math.sin(t * 1.8 * cham + 0.6) * 0.035;
     goc.rotation.y = tien(goc.rotation.y, p.nhinX * 0.12, k * 0.3);
 
@@ -522,7 +557,7 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
     datCamXuc(c) {
       if (c === camXuc) return;
       camXuc = c;
-      if (c === 'vui') phaoSao();
+      if (c === 'vui' || c === 'ngac' || c === 'tim') phaoSao();
     },
     phaoSao,
     huy() {

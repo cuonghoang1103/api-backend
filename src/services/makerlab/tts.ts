@@ -323,7 +323,7 @@ function bocWav(pcm: Buffer, sr: number): Buffer {
   return Buffer.concat([h, pcm]);
 }
 
-async function synthesizeCuongMini(
+export async function synthesizeCuongMini(
   text: string,
   voice: string | undefined,
   speakingRate?: number,

@@ -801,6 +801,8 @@ function InboxTopMenu({ onOpenBlocked }: { onOpenBlocked: () => void }) {
   };
 
   return (
+    // Menu mở sang PHẢI (left-0): nút nằm sát mép trái cột hộp thư, mở sang trái thì nó
+    // tràn ra ngoài cột — app desktop cắt mất nửa chữ sau thanh bên (04/10/2026).
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((s) => !s)}
@@ -818,7 +820,7 @@ function InboxTopMenu({ onOpenBlocked }: { onOpenBlocked: () => void }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.97 }}
             transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute right-0 top-full z-30 mt-1 w-56 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0a0a] p-1.5 shadow-[0_12px_48px_rgba(0,0,0,0.9),0_0_0_1px_rgba(0,0,0,0.6)] [backdrop-filter:none] [-webkit-backdrop-filter:none]"
+            className="absolute left-0 top-full z-30 mt-1 w-56 origin-top-left overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0a0a0a] p-1.5 shadow-[0_12px_48px_rgba(0,0,0,0.9),0_0_0_1px_rgba(0,0,0,0.6)] [backdrop-filter:none] [-webkit-backdrop-filter:none]"
           >
             <button
               onClick={handleOpenBlocked}

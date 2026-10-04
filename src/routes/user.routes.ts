@@ -42,6 +42,7 @@ import {
   getNetworkUsers,
   searchMentionableUsers,
   discoverUsers,
+  listOnlineUsers,
 } from '../services/follow.service.js';
 import { notifyNewFollow } from '../services/notification.service.js';
 import {
@@ -135,6 +136,18 @@ router.get(
     }
   },
 );
+
+// ─── GET /api/v1/users/online ────────────────────────────────
+// Mọi người đang online trên cả hệ thống (web, app, iOS), trừ chính mình và người
+// đã tắt hiện trạng thái hoạt động. Kèm friendStatus để vẽ đúng nút Kết bạn.
+// Phải đứng TRƯỚC /:id.
+router.get('/online', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: { users: await listOnlineUsers(req.user.userId!) } });
+  } catch (error) {
+    next(error);
+  }
+});
 
 // ─── GET /api/v1/users/:id ──────────────────────────────────
 // Enhanced public profile: follows counts, isFollowing, isOnline

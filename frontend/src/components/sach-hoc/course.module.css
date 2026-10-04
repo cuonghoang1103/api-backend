@@ -1451,7 +1451,7 @@
    mẫu đều không làm khung nhảy. Bảng màu riêng (trời đêm tím) dùng cho cả hai giao diện:
    ánh sáng của nhân vật được chỉnh theo nền này. */
 .goiSan {
-  position: fixed; inset: 0; z-index: 80; display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  position: fixed; inset: 0; z-index: 80; display: flex; flex-direction: column;
   color: #f5f3ff; overflow: hidden; container: goisan / size;
   background:
     radial-gradient(60% 50% at 28% 38%, rgba(167, 139, 250, 0.35), transparent 70%),
@@ -1484,8 +1484,13 @@
 .goiPhu { font-size: 13px; color: rgba(237, 233, 254, 0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .goiKetThuc { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 9px 14px; border-radius: 999px; background: #e11d48; color: #fff; font-size: 14px; font-weight: 650; box-shadow: 0 8px 24px -10px rgba(225, 29, 72, 0.8); }
 .goiKetThuc:hover { background: #f43f5e; }
+.goiThanhPhai { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.goiChonGiong { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.09); border: 1px solid rgba(255, 255, 255, 0.14); color: #ede9fe; font-size: 13px; }
+.goiChonGiong select { background: transparent; color: inherit; border: 0; outline: none; font: inherit; cursor: pointer; }
+.goiChonGiong option { color: #1e1b4b; }
+.goiGiongLui { position: relative; justify-self: center; margin: -4px 20px 6px; padding: 6px 12px; border-radius: 10px; font-size: 13px; background: rgba(251, 191, 36, 0.16); color: #fde68a; text-align: center; }
 
-.goiKhung { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.9fr); gap: 20px; min-height: 0; padding: 0 20px; }
+.goiKhung { position: relative; flex: 1; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.9fr); gap: 20px; min-height: 0; padding: 0 20px; }
 .goiSanKhau { position: relative; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
 .goiNhanVat { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.5s ease; }
 .goiNhanVatSan { opacity: 1; }
@@ -1572,6 +1577,7 @@
   .goiThanh { padding: 12px; }
   .goiDay { gap: 10px; padding: 10px 12px 14px; }
   .goiPhuNut span { display: none; }
+  .goiChonGiong select { max-width: 120px; }
   .goiPhuNut { padding: 12px; }
   .goiMau { min-height: 0; padding: 12px; }
   .goiMauChu { font-size: 20px; }

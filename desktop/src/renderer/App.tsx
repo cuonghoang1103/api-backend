@@ -19,6 +19,7 @@ import { TitleBar } from './components/TitleBar';
 import { UpdateToast } from './components/UpdateToast';
 import { About } from './pages/About';
 import { NotPorted } from './pages/NotPorted';
+import { MoTrenWeb } from './components/MoTrenWeb';
 import { Settings } from './pages/Settings';
 import { nativePageFor } from './page-registry';
 import { findRoute, INTERNAL_ROUTES } from './routes';
@@ -63,6 +64,7 @@ function Content() {
         <p>
           Ứng dụng không có trang cho đường dẫn <code>{route}</code>.
         </p>
+        <MoTrenWeb duong={route} />
       </div>
     </div>
   );

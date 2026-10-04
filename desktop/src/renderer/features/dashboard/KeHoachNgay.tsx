@@ -72,6 +72,8 @@ function ChonMuc({ giaTri, datGiaTri, ten, mauTheoMuc, nhan }: {
   );
 }
 
+type MocNgay = { gio: string; den?: string; loai: string; ten: string; trangThai?: string };
+
 export function KeHoachNgay({ onDoiViec }: { onDoiViec?: () => void }) {
   const { api } = useSession();
   const { dich, dichP } = useDich();
@@ -86,6 +88,8 @@ export function KeHoachNgay({ onDoiViec }: { onDoiViec?: () => void }) {
   const [uyTin, datUyTin] = useState<UyTin | null>(null);
   const [dangTai, datDangTai] = useState(false);
   const [nhanXet, datNhanXet] = useState<string | null>(null);
+  /** Dòng thời gian cả ngày do MÁY CHỦ gom (lên lớp, thi, học kỳ, việc) — 04/10/2026. */
+  const [dongTG, datDongTG] = useState<MocNgay[]>([]);
   const [dangXem, datDangXem] = useState(false);
   const [loi, datLoi] = useState<string | null>(null);
   const [moSo, datMoSo] = useState(false);
@@ -130,6 +134,7 @@ export function KeHoachNgay({ onDoiViec }: { onDoiViec?: () => void }) {
        nguyên dưới kế hoạch thứ Tư, và người đọc không có cách nào biết nó
        đang nói về ngày nào. */
     datNhanXet(null);
+    datDongTG([]);
   }, [napNgay, chon]);
 
   const lamMoi = useCallback(async () => {
@@ -202,9 +207,10 @@ export function KeHoachNgay({ onDoiViec }: { onDoiViec?: () => void }) {
       /* Dùng dạng generic `request<T>(…)` chứ KHÔNG `await … as T`: trong tệp
          .tsx, một `as` nằm ở dòng SAU lời gọi làm bộ phân tích JSX vỡ
          (`TS1434`), và thông báo lỗi chỉ vào chữ `as` chứ không nói vì sao. */
-      const j = await api.request<{ nhanXet?: string | null; lyDo?: string }>(
+      const j = await api.request<{ nhanXet?: string | null; lyDo?: string; dongThoiGian?: MocNgay[] }>(
         '/api/v1/dashboard/danh-gia', { method: 'POST', body: { date: chon } },
       );
+      datDongTG(j.dongThoiGian ?? []);
       datNhanXet(j.nhanXet
         ?? (j.lyDo === 'ai_unavailable'
           ? dich('Chưa cắm khoá AI nên chỉ có phần số liệu ở trên.')
@@ -320,10 +326,21 @@ export function KeHoachNgay({ onDoiViec }: { onDoiViec?: () => void }) {
         </div>
 
         <div className="ct-kh-ai">
-          <button type="button" className="ct-kh-ai-nut" disabled={dangXem || viec.length === 0} onClick={() => void nhoAiXem()}>
+          <button type="button" className="ct-kh-ai-nut" disabled={dangXem} onClick={() => void nhoAiXem()}>
             <Sparkles size={14} aria-hidden />
             {dangXem ? dich('Đang xem…') : dich('Nhờ AI xem lại ngày này')}
           </button>
+          {dongTG.length > 0 && (
+            <ol className="ct-kh-dong" aria-label={dich('Mọi việc trong ngày theo giờ')}>
+              {dongTG.map((m, i) => (
+                <li key={i} data-loai={m.loai} data-xong={m.trangThai === 'xong'}>
+                  <span className="ct-kh-dong-gio">{m.gio}{m.den ? `–${m.den}` : ''}</span>
+                  <span className="ct-kh-dong-loai">{dich(m.loai)}</span>
+                  <span className="ct-kh-dong-ten">{m.ten}</span>
+                </li>
+              ))}
+            </ol>
+          )}
           {nhanXet && <div className="ct-kh-ai-chu">{nhanXet}</div>}
         </div>
 

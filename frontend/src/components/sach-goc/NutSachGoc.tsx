@@ -7,7 +7,8 @@
  */
 import Link from 'next/link';
 import type { Lesson } from '@/components/sach-hoc/types';
-import { MUC_CUA_KIND, TEN_MUC, urlAnh, useQuyenSachRieng } from './useSachRieng';
+import { MUC_CUA_KIND, TEN_MUC, useQuyenSachRieng } from './useSachRieng';
+import { AnhNho } from './AnhNho';
 import st from './sachGoc.module.css';
 
 const TRANG_DAU: Record<number, [number, number]> = {
@@ -25,7 +26,7 @@ export function NutSachGoc({ lesson, bai }: { lesson: Lesson; bai: number | unde
     <Link href={href} className={st.the}>
       <span className={st.theAnh}>
         {/* eslint-disable-next-line @next/next/no-img-element -- ảnh riêng tư qua API */}
-        <img src={urlAnh(tu, true)} alt="" width={44} height={62} loading="lazy" />
+        <AnhNho p={tu} rong={44} cao={62} />
       </span>
       <span className={st.theChu}>
         <b>📷 Sách gốc · Bài {bai}</b>

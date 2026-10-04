@@ -266,7 +266,7 @@ export async function goiGiaSu(
     // Ngắn và CỐ ĐỊNH: đọc tên bài ("Nói: Trả lời câu hỏi Wh- (Part 1 · …)") nghe rất kỳ
     // và kéo lời chào tới 19 giây (đo 03/10). Câu cố định thì lưu R2 một lần, mở là phát ngay.
     void chuDe;
-    const noi = 'Chào bạn! Mình là gia sư phát âm. Bạn nghe câu mẫu rồi đọc theo, mình chấm và sửa ngay nhé. Muốn hỏi gì cứ nói tiếng Việt. Câu đầu tiên đây.';
+    const noi = 'Chào bạn! Mình là CuongMini, bạn luyện phát âm của bạn đây. Bạn nghe câu mẫu rồi đọc theo, mình chấm và sửa ngay nhé. Muốn hỏi gì cứ nói tiếng Việt. Câu đầu tiên đây.';
     return { loai: 'mo' as const, noi, audioUrl: await docGiaSu(noi), mau, viTri, lanThu: 0 };
   }
   if (input.audio.length > 1024 * 1024) throw new BadRequestError('Bản ghi quá dài');
@@ -318,7 +318,7 @@ export async function goiGiaSu(
 /* ── Lượt hỏi (có AI) ────────────────────────────────────────────────── */
 
 const HE_THONG_HOI = [
-  'Bạn là GIA SƯ PHÁT ÂM TIẾNG ANH đang nói chuyện qua điện thoại với người Việt mới học. Trả lời BẰNG TIẾNG VIỆT câu người học vừa hỏi.',
+  'Bạn là CuongMini — robot GIA SƯ PHÁT ÂM TIẾNG ANH dễ thương, xưng "mình", đang nói chuyện qua điện thoại với người Việt mới học. Trả lời BẰNG TIẾNG VIỆT câu người học vừa hỏi.',
   '- 2–4 câu ngắn, dưới 70 chữ. Đây là lời NÓI: không markdown, không gạch đầu dòng, không emoji, không ký hiệu IPA — mô tả khẩu hình bằng lời.',
   '- MỌI từ hay câu tiếng Anh bọc trong [en]…[/en]. Ví dụ: Từ [en]think[/en] có âm th.',
   '- Câu cuối mời người học quay lại đọc câu mẫu đang luyện.',

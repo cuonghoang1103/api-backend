@@ -156,6 +156,19 @@ function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string };
             return t && t.diem < 80 ? <div className={s.quizSub}>Chữ cần sửa nhất: <b>{t.tu}</b> ({t.diem} điểm). {giong === 'zh' ? 'Nghe lại mẫu, để ý THANH ĐIỆU của chữ đó.' : 'Nghe lại mẫu, để ý độ dài âm (trường âm, っ, ん).'}</div> : null;
           })()}
           {!ngoai && yeu && <div className={s.quizSub}>Âm cần sửa nhất: <b>/{yeu.am}/</b> trong “{yeu.tu}” ({yeu.diem} điểm). Bấm “Nghe mẫu”, để ý khẩu hình âm đó rồi đọc lại.</div>}
+          {(() => {
+            // Chữ CUỐI câu bị chấm thấp: thường là nuốt âm cuối (/dz/, /ts/, /st/…) — lỗi hay gặp nhất
+            // của người Việt — hoặc ngừng đọc quá sớm. Nhắc cụ thể + bảo nghe lại chính mình.
+            const that = tu.filter((w) => w.loi !== 'Insertion');
+            const cuoi = that[that.length - 1];
+            if (!cuoi || ngoai || (cuoi.loi !== 'Omission' && cuoi.diem >= 60)) return null;
+            return (
+              <div className={s.quizSub}>
+                💡 Chữ cuối “<b>{cuoi.tu}</b>” bị chấm thấp. Người Việt rất hay <b>nuốt âm cuối</b> ở từ cuối câu — đọc rõ trọn âm cuối
+                {cuoi.ipa ? <> (<b>/{cuoi.ipa}/</b>)</> : null}, giữ hơi thêm một nhịp rồi mới dừng. Bấm ▶ nghe lại bản ghi bên dưới xem âm cuối có rõ không.
+              </div>
+            );
+          })()}
           {kq.ngheRa && <div className={s.quizSub}>Máy nghe ra: “{kq.ngheRa}”</div>}
           {url && <audio src={url} controls className={s.recAudio} />}
         </div>

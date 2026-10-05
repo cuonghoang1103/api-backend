@@ -51,10 +51,25 @@ export function useMicro(o: {
     setMuc(0);
   }, []);
 
-  const dung = useCallback(() => {
+  /** Dừng NGAY — dùng khi tự dừng (đã im 1,2 giây sau tiếng nói) hoặc hết giờ. */
+  const dungNgay = useCallback(() => {
     const mr = r.current.mr;
     if (mr && mr.state === 'recording') mr.stop();
   }, []);
+  /**
+   * Người học bấm "Xong": ghi thêm ĐUÔI 0,4 giây rồi mới dừng (05/10/2026). Người dùng
+   * thật đọc "plays, lives, reads" cả nghìn lần vẫn bị chấm "reads" sai, Đọc đủ 67 —
+   * đo trên máy chấm prod: cắt mất đuôi chữ cuối cho ĐÚNG kết quả đó (giọng chuẩn bị cắt
+   * đuôi: reads 0 điểm, Đọc đủ 67). Bấm Xong ngay lúc vừa nói xong là micro dừng giữa
+   * âm cuối /dz/ đang phát — người Việt vốn đã hay nuốt âm cuối, app không được cắt thêm.
+   */
+  const keoDuoi = useRef(false);
+  const dung = useCallback(() => {
+    const mr = r.current.mr;
+    if (!mr || mr.state !== 'recording' || keoDuoi.current) return;
+    keoDuoi.current = true;
+    setTimeout(() => { keoDuoi.current = false; dungNgay(); }, 400);
+  }, [dungNgay]);
 
   const batDau = useCallback(async () => {
     if (dangMo.current || r.current.mr?.state === 'recording') return;
@@ -102,7 +117,7 @@ export function useMicro(o: {
           if (rms > 0.02) { daNoi = true; imTu = 0; }
           else if (daNoi && now - t0 > 600) {
             if (!imTu) imTu = now;
-            if (now - imTu > td.imMs) { dung(); return; }
+            if (now - imTu > td.imMs) { dungNgay(); return; }
           }
         }
         r.current.raf = requestAnimationFrame(vong);
@@ -111,7 +126,7 @@ export function useMicro(o: {
       mr.start();
       setTrangThai('ghi');
       r.current.raf = requestAnimationFrame(vong);
-      r.current.hen = setTimeout(dung, opt.current.toiDaMs);
+      r.current.hen = setTimeout(dungNgay, opt.current.toiDaMs);
     } catch {
       donDep();
       setTrangThai('nghi');
@@ -119,7 +134,7 @@ export function useMicro(o: {
     } finally {
       dangMo.current = false;
     }
-  }, [donDep, dung]);
+  }, [donDep, dungNgay]);
 
   // Rời bài / đổi câu khi đang ghi: tắt micro, bỏ bản ghi dở.
   useEffect(() => () => {

@@ -60,6 +60,7 @@ import {
   Wifi,
 } from 'lucide-react';
 import { nativePageFor } from './page-registry';
+import { IconJp, IconCh } from './features/khoaNgonNgu/KhoaNgonNguPage';
 
 export type RouteGroup = 'chinh' | 'ai' | 'hoc' | 'lam' | 'giai' | 'tien' | 'khac';
 
@@ -156,6 +157,11 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['exam', 'exam room', 'phòng thi', 'thi', 'de thi', 'kiem tra', 'phong thi'] },
   { path: '/ielts', label: 'IELTS', icon: Award, group: 'hoc',
     keywords: ['ielts', 'luyen thi', 'band', 'listening', 'reading', 'writing', 'speaking', 'phat am', 'phong thi'] },
+  /* 05/10/2026: khoá tiếng Nhật (0 → N1, kèm Bài giảng trên lớp Dekiru) và tiếng Trung (0 → HSK 6). */
+  { path: '/jp', label: 'JP', icon: IconJp, group: 'hoc',
+    keywords: ['jp', 'tieng nhat', 'tiếng nhật', 'japanese', 'jlpt', 'n5', 'n1', 'dekiru', 'kanji', 'hiragana', 'katakana'] },
+  { path: '/ch', label: 'CH', icon: IconCh, group: 'hoc',
+    keywords: ['ch', 'tieng trung', 'tiếng trung', 'chinese', 'hsk', 'pinyin', 'han tu', 'hán tự'] },
   { path: '/language', label: 'Ngoại ngữ', icon: Languages, group: 'hoc',
     keywords: ['my language', 'tiếng anh', 'tiếng nhật', 'ngoai ngu'] },
   { path: '/algorithms', label: 'Thuật toán', icon: Binary, group: 'hoc',
@@ -244,7 +250,7 @@ export const GROUP_ORDER: readonly RouteGroup[] = ['chinh', 'ai', 'hoc', 'lam', 
 export const THANH_BEN: Readonly<Partial<Record<RouteGroup, readonly string[]>>> = {
   chinh: ['/dashboard', '/notifications', '/messages', '/notes', '/friends'],
   ai: ['/chat', '/ai-templates'],
-  hoc: ['/ielts', '/academy', '/courses', '/code-lab', '/exam', '/interview', '/language', '/algorithms', '/simulation', '/roadmap'],
+  hoc: ['/ielts', '/jp', '/ch', '/academy', '/courses', '/code-lab', '/exam', '/interview', '/language', '/algorithms', '/simulation', '/roadmap'],
   lam: ['/creator', '/maker-lab', '/projects', '/work'],
   /* Đợt 2 (04/10/2026): người dùng thêm lại Music, Projects, Interview, Code Lab,
      Exam Room và mở nhóm "Tiện ích" (Đo mạng, MoneyFlow). */

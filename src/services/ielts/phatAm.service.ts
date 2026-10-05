@@ -21,7 +21,7 @@
 import { BadRequestError } from '../../middleware/errorHandler.js';
 
 const TOI_DA_GIAY = 20;
-const TOI_DA_KY_TU = 200;
+const TOI_DA_KY_TU = 200; // tiếng Nhật/Trung: 200 chữ đã là đoạn dài
 /** Trần lượt chấm mỗi người mỗi ngày — 5 giờ/tháng chia cho vài người học. */
 const TRAN_NGAY = 150;
 const daCham = new Map<string, number>();
@@ -66,7 +66,8 @@ export async function chamPhatAm(
   if (!key) return { ketQua: null, lyDo: 'chua_co_khoa' };
   if (!demLuot(userId)) return { ketQua: null, lyDo: 'het_luot_ngay' };
 
-  const lang = input.giong === 'us' ? 'en-US' : 'en-GB';
+  // 05/10/2026: khoá JP/CH chấm tiếng Nhật / tiếng Trung — Azure PA hỗ trợ ja-JP, zh-CN.
+  const lang = input.giong === 'us' ? 'en-US' : input.giong === 'ja' ? 'ja-JP' : input.giong === 'zh' ? 'zh-CN' : 'en-GB';
   const cauHinh = {
     ReferenceText: cau,
     GradingSystem: 'HundredMark',

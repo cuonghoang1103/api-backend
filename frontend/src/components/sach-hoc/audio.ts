@@ -94,6 +94,8 @@ function moKhoa() {
 /** Giọng mặc định của khoá đang mở (IELTS: uk-nu, tiếng Nhật: ja-nu) — CoursePage đặt. */
 let defaultVoice: Voice = 'uk-nu';
 export function setDefaultVoice(v: Voice) { defaultVoice = v; }
+/** Thứ tiếng của khoá đang mở, suy từ giọng mặc định — PhatAm/GoiGiaSu dùng. */
+export function ngonNguKhoa(): 'en' | 'ja' | 'zh' { return defaultVoice.startsWith('ja') ? 'ja' : defaultVoice.startsWith('zh') ? 'zh' : 'en'; }
 
 const keyOf = (c: Clip) => `${c.voice ?? defaultVoice}|${c.toc ?? 0.95}|${c.kieu ?? ''}|${c.text}`;
 
@@ -129,8 +131,8 @@ function browserVoice(v?: Voice): SpeechSynthesisVoice | undefined {
   const all = window.speechSynthesis.getVoices();
   const vv = v ?? defaultVoice;
   const nam = vv.endsWith('nam');
-  const lang = vv.startsWith('ja') ? 'ja' : 'en';
-  const want = vv.startsWith('ja') ? 'ja-JP' : vv.startsWith('us') ? 'en-US' : 'en-GB';
+  const lang = vv.startsWith('ja') ? 'ja' : vv.startsWith('zh') ? 'zh' : 'en';
+  const want = vv.startsWith('ja') ? 'ja-JP' : vv.startsWith('zh') ? 'zh-CN' : vv.startsWith('us') ? 'en-US' : 'en-GB';
   const pool = all.filter((x) => x.lang?.replace('_', '-').startsWith(lang));
   // Giọng hệ thống không ghi giới tính — đoán theo tên quen thuộc của macOS/Windows/Chrome.
   const MALE = /(daniel|alex|fred|tom|oliver|arthur|aaron|rishi|david|mark|george|guy|ryan|otoya|hattori|ichiro|keita|male|男)/i;
@@ -151,7 +153,7 @@ function browserSay(c: Clip): Promise<void> {
     parts.forEach((t, i) => {
       const u = new SpeechSynthesisUtterance(t);
       if (voice) u.voice = voice;
-      u.lang = voice?.lang || ((c.voice ?? defaultVoice).startsWith('ja') ? 'ja-JP' : 'en-GB');
+      u.lang = voice?.lang || ((c.voice ?? defaultVoice).startsWith('ja') ? 'ja-JP' : (c.voice ?? defaultVoice).startsWith('zh') ? 'zh-CN' : 'en-GB');
       u.rate = (c.toc ?? 0.95) * (c.kieu === 'danhvan' ? 0.85 : 0.95) * userRate;
       if ((c.voice ?? defaultVoice).endsWith('nam')) u.pitch = 0.8;
       if (i === parts.length - 1) { u.onend = () => resolve(); u.onerror = () => resolve(); }

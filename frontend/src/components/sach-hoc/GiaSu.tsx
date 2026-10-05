@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Send, X, Trash2, Volume2, Copy, Check } from 'lucide-react';
+import { Send, X, Trash2, Volume2, Copy, Check, Phone } from 'lucide-react';
 import { play } from './audio';
-import RobotAI from '@/components/academy/RobotAI';
+import { MiniCuong } from './MiniCuong';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { TutorAsk } from './tutorContext';
 import s from './course.module.css';
@@ -94,15 +94,18 @@ export function GiaSu({
 
   return (
     <div className={s.tutor}>
-      <div className={s.tutorHead}>
-        <RobotAI size={34} dangNghi={asking} />
-        <div className="min-w-0 flex-1">
-          <div className={s.tutorName}>{name}</div>
-          <div className={s.tutorSub}>Đang học: {lessonTitle}</div>
+      <div className={`${s.tutorHead} ${s.thMoi}`}>
+        <MiniCuong size={46} nghi={asking} />
+        <div className="min-w-0 flex-1" style={{ position: 'relative' }}>
+          <div className={s.thTen}>CuongMini</div>
+          <div className={s.thTrangThai} data-nghi={asking || undefined} title={`${name} · Đang học: ${lessonTitle}`}>
+            <i /><span className={s.thChip}>{name.replace(/^Gia sư\s*/i, '')}</span>
+            <span className={s.thCat}>{asking ? 'Đang soạn câu trả lời…' : `Đang học: ${lessonTitle}`}</span>
+          </div>
         </div>
         {onGoi && (
-          <button type="button" className={s.goiMoNut} onClick={onGoi} title="Luyện phát âm cùng gia sư bằng giọng (gia sư nói tiếng Việt)">
-            📞<span>Luyện nói</span>
+          <button type="button" className={`${s.goiMoNut} ${s.thGoi}`} onClick={onGoi} title="Gọi CuongMini luyện nói — đọc theo câu mẫu, máy chấm và sửa bằng tiếng Việt">
+            <Phone size={14} /><span>Luyện nói</span>
           </button>
         )}
         {turns.length > 0 && (
@@ -118,10 +121,13 @@ export function GiaSu({
       </div>
 
       <div ref={bodyRef} className={s.tutorBody}>
-        <p className={s.hello}>
-          Chào bạn! Mình giảng lại, cho thêm ví dụ hoặc chấm câu giúp bạn ngay trên trang đang học.
-          {' '}Muốn hỏi riêng một chỗ thì <b>bôi đen</b> đoạn đó trong bài rồi bấm một nút bên dưới.
-        </p>
+        <div className={s.thChao}>
+          <MiniCuong size={30} />
+          <p>
+            Chào bạn! Mình là <b>CuongMini</b> 👋 Mình giảng lại, cho thêm ví dụ hoặc chấm câu giúp bạn ngay trên trang đang học.
+            {' '}Muốn hỏi riêng một chỗ thì <b>bôi đen</b> đoạn đó trong bài rồi bấm một nút bên dưới.
+          </p>
+        </div>
         {!loggedIn ? (
           <p className={s.hello}>
             <Link href="/login" className={s.linkBtn}>Đăng nhập</Link> để hỏi gia sư.
@@ -143,7 +149,7 @@ export function GiaSu({
           <div key={i} className={s.turn}>
             <div className={s.turnQWrap}><div className={s.turnQ}>{t.q}</div></div>
             <div className={s.turnARow}>
-              <span className={s.turnAvatar}><RobotAI size={26} dangNghi={t.a === null && !t.err} /></span>
+              <span className={s.turnAvatar}><MiniCuong size={26} nghi={t.a === null && !t.err} /></span>
               <div className={s.turnA}>
                 {t.err ? <span className={s.bad}>{t.err}</span>
                   : t.a === null ? (

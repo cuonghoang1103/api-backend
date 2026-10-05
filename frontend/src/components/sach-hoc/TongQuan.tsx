@@ -281,7 +281,7 @@ export function KeHoach({ course, done, scores, plan, onOpen, onOpenDay, savePla
               {plan && <button type="button" className={s.btnGhost} onClick={() => setEditing(false)}>Huỷ</button>}
             </div>
             <p className={s.quizSub}>
-              Gợi ý: 5 buổi/tuần là xong 15 buổi trong 3 tuần. Mỗi buổi 60–90 phút. Học đều quan trọng hơn học nhiều.
+              Gợi ý: 5 buổi/tuần là xong {course.days.length} buổi trong khoảng {Math.ceil(course.days.length / 5)} tuần. Mỗi buổi 60–90 phút. Học đều quan trọng hơn học nhiều.
             </p>
           </div>
         ) : plan ? (

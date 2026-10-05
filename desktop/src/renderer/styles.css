@@ -15340,7 +15340,9 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
    nằm đúng chỗ ba nút đèn giao thông macOS (trafficLightPosition 16,18) ⇒ chừa lề trái, và
    cho kéo cửa sổ bằng thanh đó như thanh tiêu đề thường. */
 .ct-web-host [data-goi-thanh] { padding-left: 92px; -webkit-app-region: drag; }
-.ct-web-host [data-goi-thanh] button { -webkit-app-region: no-drag; }
+/* Mọi thứ BẤM được trong thanh kéo phải no-drag — 05/10/2026: ô chọn giọng (<label><select>) từng
+   nằm trong vùng kéo nên bấm vào chỉ kéo cửa sổ, không mở được danh sách giọng. */
+.ct-web-host [data-goi-thanh] :is(button, select, label, input, a) { -webkit-app-region: no-drag; }
 
 /* IELTS (03/10/2026) — khung đo bề rộng cho @container ctnoidung của khoá học.
    container-type kéo theo layout containment ⇒ lớp phủ fixed bên trong neo vào

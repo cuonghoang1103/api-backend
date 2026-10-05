@@ -20,6 +20,7 @@ import { play, stopAudio, AI_TIMEOUT, type Clip } from './audio';
 import { blobToWav16k } from './wav';
 import { useMicro } from './useMicro';
 import { tepTinh } from './moiTruong';
+import { Inline } from './Blocks';
 import s from './course.module.css';
 
 export type CauMau = { text: string; ipa?: string };
@@ -36,7 +37,9 @@ function LoiNoi({ text }: { text: string }) {
   return <>{parts.map((p, i) => (i % 2 ? <b key={i} className={s.goiEn}>{p}</b> : <span key={i}>{p}</span>))}</>;
 }
 
-export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMau[]; chuDe: string; onClose: () => void }) {
+export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en' }: { danhSach: CauMau[]; chuDe: string; onClose: () => void; ngonNgu?: 'en' | 'ja' | 'zh' }) {
+  /** Giọng đọc câu mẫu theo thứ tiếng của khoá. */
+  const giongMau = ngonNgu === 'ja' ? 'ja-nu' : ngonNgu === 'zh' ? 'zh-nu' : 'uk-nu';
   const [pha, setPha] = useState<Pha>('cho');
   const [mau, setMau] = useState<CauMau | null>(null);
   const [luot, setLuot] = useState<Luot[]>([]);
@@ -60,7 +63,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
     return () => window.removeEventListener('keydown', h);
   }, [onClose]);
 
-  const trangThai = () => JSON.stringify({ danhSach, viTri: st.current.viTri, lanThu: st.current.lanThu, chuDe, giong, diemTruoc: st.current.diemTruoc });
+  const trangThai = () => JSON.stringify({ danhSach, viTri: st.current.viTri, lanThu: st.current.lanThu, chuDe, giong, diemTruoc: st.current.diemTruoc, ngonNgu });
 
   /* Mức micro đi thẳng vào nhân vật + vòng sóng của nút, KHÔNG qua state: trước 04/10
      mỗi lần âm lượng đổi là vẽ lại cả hộp thoại (đè lên nền kính mờ) ⇒ màn hình nhấp nháy. */
@@ -69,7 +72,8 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
   const mic = useMicro({
     toiDaMs: GHI_TOI_DA,
     tuDung: { imMs: 1500 },
-    onXong: (blob) => { void guiLuot(blob); },
+    // Suốt lượt không có tiếng nói (bấm nhầm, chưa kịp nói) ⇒ KHÔNG gửi đi chấm, gia sư nói "chưa nghe thấy".
+    onXong: (blob, { coTieng }) => { void guiLuot(blob, !coTieng); },
     onMuc: (m) => { mucRef.current = m; vongRef.current?.style.setProperty('--muc', m.toFixed(3)); },
   });
   /** Phản ứng tức thời của CuongMini (chào, mừng điểm cao, động viên) — giữ ~2,4 giây rồi về theo pha. */
@@ -96,8 +100,8 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
     // Giọng máy nhà trả NHIỀU tệp (đoạn Việt F5 + đoạn Anh) — phát liền nhau, không ngắt.
     const tep = (Array.isArray(audio) ? audio : audio ? [audio] : []).filter(Boolean);
     if (tep.length) for (const u of tep) clips.push({ text: '', sfx: u });
-    else clips.push({ text: text.replace(/\[\/?en\]/gi, ''), voice: 'uk-nu' }); // không có giọng gia sư: đọc tạm
-    if (docMau && cauMau) clips.push({ text: '', pauseMs: 280 }, { text: cauMau.text, voice: 'uk-nu', toc: 0.9 });
+    else clips.push({ text: text.replace(/\[\/?en\]/gi, ''), voice: giongMau }); // không có giọng gia sư: đọc tạm
+    if (docMau && cauMau) clips.push({ text: '', pauseMs: 280 }, { text: cauMau.text, voice: giongMau, toc: 0.9 });
     setPha('giasu');
     play(clips, () => { if (!st.current.dong) batNghe(); });
   }, [batNghe]);
@@ -114,14 +118,14 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
     return d;
   }, []);
 
-  async function guiLuot(blob: Blob) {
+  async function guiLuot(blob: Blob, imLang = false) {
     if (st.current.dong) return;
     const mauDaDoc = mau; // câu vừa đọc — máy chủ có thể trả câu mẫu MỚI
     setPha('cham');
     try {
       const fd = new FormData();
-      fd.append('audio', await blobToWav16k(blob), 'luot.wav');
-      fd.append('trangThai', trangThai());
+      if (!imLang) fd.append('audio', await blobToWav16k(blob), 'luot.wav');
+      fd.append('trangThai', imLang ? JSON.stringify({ ...JSON.parse(trangThai()), imLang: true }) : trangThai());
       const r = await api.post('/ielts/ai/goi-gia-su', fd, { headers: { 'Content-Type': 'multipart/form-data' }, ...AI_TIMEOUT });
       const d = nhan(r.data?.data ?? {});
       if (!d || st.current.dong) return;
@@ -138,7 +142,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
         st.current.imLien = 0;
         setLuot((x) => [...x, { ai: true, text: d.noi ?? '' }]);
         setPha('nghi');
-        const traLoi = api.post('/ielts/ai/goi-gia-su/hoi', { cauHoi: ngheDuoc, mau: d.mau?.text, chuDe, giong }, AI_TIMEOUT);
+        const traLoi = api.post('/ielts/ai/goi-gia-su/hoi', { cauHoi: ngheDuoc, mau: d.mau?.text, chuDe, giong, ngonNgu }, AI_TIMEOUT);
         const dem = d.audioUrls?.length ? d.audioUrls : d.audioUrl ? [d.audioUrl] : [];
         if (dem.length) play(dem.map((u) => ({ text: '', sfx: u })), () => { /* chờ câu trả lời */ });
         const t = (await traLoi).data?.data as { noi?: string; audioUrl?: string | null; audioUrls?: string[]; lyDo?: string };
@@ -190,7 +194,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
     if (pha === 'nghe') { if (Date.now() - ngheTu.current > 800) mic.dung(); return; }
     if (pha === 'giasu' || pha === 'cho' || pha === 'loi') { stopAudio(); st.current.imLien = 0; setLoi(''); batNghe(); }
   };
-  const ngheMau = () => { if (mau && pha !== 'nghe' && pha !== 'cham') { stopAudio(); play({ text: mau.text, voice: 'uk-nu', toc: 0.85 }); } };
+  const ngheMau = () => { if (mau && pha !== 'nghe' && pha !== 'cham') { stopAudio(); play({ text: mau.text, voice: giongMau, toc: 0.85 }); } };
   const cauKhac = () => {
     if (!danhSach.length && !mau) return;
     stopAudio();
@@ -199,7 +203,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
     st.current.lanThu = 0;
     st.current.diemTruoc = null;
     const m = danhSach.length ? danhSach[st.current.viTri] : null;
-    if (m) { setMau(m); setPha('giasu'); play({ text: m.text, voice: 'uk-nu', toc: 0.9 }, () => batNghe()); }
+    if (m) { setMau(m); setPha('giasu'); play({ text: m.text, voice: giongMau, toc: 0.9 }, () => batNghe()); }
   };
 
   const NHAN: Record<Pha, string> = {
@@ -273,7 +277,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose }: { danhSach: CauMa
             <div className={s.goiNhanMuc}>Câu mẫu — đọc theo</div>
             {mau ? (
               <>
-                <div className={s.goiMauChu}>{mau.text}</div>
+                <div className={s.goiMauChu} lang={ngonNgu === 'en' ? undefined : ngonNgu}><Inline text={mau.text} /></div>
                 {mau.ipa && <div className={s.goiIpa}>/{mau.ipa}/</div>}
               </>
             ) : <div className={s.goiMauTrong}>Bấm nút micro để CuongMini bắt đầu buổi luyện.</div>}

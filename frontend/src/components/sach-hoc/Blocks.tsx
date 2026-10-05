@@ -622,7 +622,7 @@ function renderBlock(b: Block, i: number) {
                   <div key={g.sound} className={s.abcRow}>
                     <span className={s.abcSound}>{g.sound}</span>
                     {g.letters.map((x) => (
-                      <button key={x.l} type="button" className={s.letter} onClick={() => play({ text: x.l, kieu: 'danhvan' })} aria-label={`Nghe chữ ${x.l}`}>
+                      <button key={x.l} type="button" className={s.letter} onClick={() => play(x.doc ? { text: x.doc } : { text: x.l, kieu: 'danhvan' })} aria-label={`Nghe chữ ${x.l}`}>
                         <span className={s.letterL}>{x.l}</span>
                         <span className={s.letterIpa}>{x.ipa}</span>
                       </button>

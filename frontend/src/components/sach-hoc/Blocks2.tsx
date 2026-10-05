@@ -10,7 +10,7 @@ import { Play, Square, Eye, EyeOff, Mic, Volume2, Sparkles, RotateCcw } from 'lu
 import api from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { Block, Role, Voice } from './types';
-import { play, stopAudio, skipClip, AI_TIMEOUT, type Clip } from './audio';
+import { play, stopAudio, skipClip, AI_TIMEOUT, ngonNguKhoa, type Clip } from './audio';
 import { dungLoiDan } from './nghe';
 import { DemDocCau } from './DemDocCau';
 import dynamic from 'next/dynamic';
@@ -21,6 +21,7 @@ import WriteBlock from './WriteBlock';
 import { useMicro } from './useMicro';
 import HanLop from './HanLop';
 import PhatAm from './PhatAm';
+import VietHanZh from './VietHanZh';
 import s from './course.module.css';
 
 // Công cụ chia động từ chỉ có ở một mục tra cứu — tách chunk riêng.
@@ -596,7 +597,8 @@ export function renderBlock2(b: Block, i: number) {
     case 'phatam': return <PhatAm key={b.id} b={b} />;
     case 'build': return <Build key={b.id} b={b} />;
     case 'readkanji': return <ReadKanji key={b.id} b={b} />;
-    case 'write': return <WriteBlock key={b.id} b={b} />;
+    // Khoá CH (giọng zh-…): chữ giản thể ⇒ hanzi-writer; khoá Nhật giữ KanjiVG.
+    case 'write': return ngonNguKhoa() === 'zh' ? <VietHanZh key={b.id} b={b} /> : <WriteBlock key={b.id} b={b} />;
     case 'hanlop': return <HanLop key={`hanlop-${b.bai}`} b={b} />;
     case 'chia': return <ChiaDongTu key="chia" />;
     case 'vocabAll': return <TraTuVung key="vocabAll" />;

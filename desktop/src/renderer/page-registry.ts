@@ -47,6 +47,7 @@ import { MoPhongPage } from './features/simulation/MoPhongPage';
 import { LoTrinhPage } from './features/roadmap/LoTrinhPage';
 import { NgoaiNguPage } from './features/language/NgoaiNguPage';
 import { IeltsPage } from './features/ielts/IeltsPage';
+import { JpPage, ChPage } from './features/khoaNgonNgu/KhoaNgonNguPage';
 import { ThongBaoPage } from './features/thongBao/ThongBaoPage';
 import { PhongVanPage } from './features/interview/PhongVanPage';
 import { CtWorkPage } from './features/work/CtWorkPage';
@@ -80,6 +81,8 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/roadmap': LoTrinhPage,
   '/language': NgoaiNguPage,
   '/ielts': IeltsPage,
+  '/jp': JpPage,
+  '/ch': ChPage,
   '/notifications': ThongBaoPage,
   '/interview': PhongVanPage,
   '/maker-lab': MakerLabPage,
@@ -115,6 +118,8 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
 const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/language', NgoaiNguPage],
   ['/ielts', IeltsPage],
+  ['/jp', JpPage],
+  ['/ch', ChPage],
   ['/roadmap', LoTrinhPage],
   ['/interview', PhongVanPage],
   ['/code-lab', CodeLabPage],

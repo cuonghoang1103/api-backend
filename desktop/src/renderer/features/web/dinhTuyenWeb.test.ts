@@ -286,7 +286,7 @@ describe('khopTuyenWeb', () => {
     // 04/10/2026: +1 hồ sơ & tên đăng nhập (/ho-so).
     // 04/10/2026: +1 cài đặt thông báo (/settings/notifications).
     // 04/10/2026: +2 rà toàn bộ trang thiếu (/language/:code/dekiru/sach-goc, /finance/phan-tich).
-    expect(thay.size).toBe(137);
+    expect(thay.size).toBe(143);
   });
 });
 

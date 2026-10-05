@@ -71,6 +71,13 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/ielts/luyen-them', nap: () => import('@/app/language/[code]/ielts/luyen-them/page'), thamSoCo: { code: 'en' } },
   { mau: '/language/:code/dekiru', nap: () => import('@/app/language/[code]/dekiru/page') },
   { mau: '/language/:code/dekiru/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page') },
+  /* ── JP & CH — mục riêng dưới IELTS (05/10/2026), cùng bộ khung sách-học. ── */
+  { mau: '/language/:code/jp', nap: () => import('@/app/language/[code]/jp/page') },
+  { mau: '/language/:code/ch', nap: () => import('@/app/language/[code]/ch/page') },
+  { mau: '/jp', nap: () => import('@/app/language/[code]/jp/page'), thamSoCo: { code: 'ja' } },
+  { mau: '/jp/tren-lop', nap: () => import('@/app/language/[code]/dekiru/page'), thamSoCo: { code: 'ja' } },
+  { mau: '/jp/tren-lop/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page'), thamSoCo: { code: 'ja' } },
+  { mau: '/ch', nap: () => import('@/app/language/[code]/ch/page'), thamSoCo: { code: 'zh' } },
 
   /* ── Lộ trình ── */
   { mau: '/roadmap', nap: () => import('@/components/roadmap/RoadmapLanding') },
@@ -375,7 +382,7 @@ export function khopTuyenWeb(duong: string): KhopTuyen | null {
 
 /** Gốc của những cây route mà trang web sở hữu — dùng cho router của app. */
 export const GOC_WEB: readonly string[] = [
-  '/language', '/ielts', '/roadmap', '/interview', '/cv',
+  '/language', '/ielts', '/jp', '/ch', '/roadmap', '/interview', '/cv',
   /* Code Lab — cả cây (04/10/2026); `/code-lab` chính nó cũng là trang web. */
   '/code-lab',
   '/maker-lab', '/creator', '/projects', '/exp-hub',

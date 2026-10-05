@@ -113,6 +113,13 @@ interface BoDieuHuong {
 export function doiDuongApp(duong: string): string {
   const m = /^\/language\/en\/ielts(\/.*)?$/.exec(duong);
   if (m) return `/ielts${m[1] ?? ''}`;
+  /* 05/10/2026: khoá JP, Bài giảng trên lớp (Dekiru) và CH là mục riêng của app. */
+  const jp = /^\/language\/ja\/jp(\/.*)?$/.exec(duong);
+  if (jp) return `/jp${jp[1] ?? ''}`;
+  const dk = /^\/language\/ja\/dekiru(\/.*)?$/.exec(duong);
+  if (dk) return `/jp/tren-lop${dk[1] ?? ''}`;
+  const ch = /^\/language\/zh\/ch(\/.*)?$/.exec(duong);
+  if (ch) return `/ch${ch[1] ?? ''}`;
   /* 04/10/2026 (rà toàn bộ link): app đã đăng nhập sẵn — "Đăng nhập/Đăng ký" của web
      về Tổng quan; hồ sơ của web nằm ở `/ho-so` trong app. */
   if (duong === '/login' || duong === '/register') return '/dashboard';

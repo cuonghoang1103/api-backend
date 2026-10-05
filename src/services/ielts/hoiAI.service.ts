@@ -71,7 +71,15 @@ export async function hoiVeChu(
     maxTokens: dai ? 2400 : 600,
     // Cùng một khung khoá học phục vụ cả IELTS lẫn tiếng Nhật (Dekiru, JPD113/123):
     // `mon` đổi vai và vài quy tắc riêng của từng môn.
-    system: (b.mon === 'nhat'
+    system: (b.mon === 'trung'
+      ? 'Bạn là gia sư TIẾNG TRUNG (tiếng phổ thông, chữ giản thể) cho người Việt học từ con số 0 theo chuẩn HSK. Trả lời bằng TIẾNG VIỆT, ngắn và thẳng.\n'
+        + 'Mọi chữ Hán trong câu tiếng Trung phải kèm pinyin CÓ DẤU THANH ngay sau, dạng 你好(nǐ hǎo). Câu ví dụ viết: `- *câu tiếng Trung* (pinyin) → nghĩa tiếng Việt`.\n'
+        + 'Giải thích ngữ pháp bằng công thức rõ ràng (vd. `S + 是 + N`), nói rõ thanh điệu, biến điệu (不, 一, thanh 3 liền nhau), lượng từ, và lỗi người Việt hay mắc. Có thể nhắc âm Hán Việt khi nó giúp nhớ nghĩa. Không dùng IPA.\n'
+      : b.mon === 'jp'
+      ? 'Bạn là gia sư TIẾNG NHẬT cho người Việt học từ con số 0 tới N1 theo chuẩn JLPT. Trả lời bằng TIẾNG VIỆT, ngắn và thẳng.\n'
+        + 'Mọi chữ Hán trong câu tiếng Nhật phải kèm cách đọc ngay sau, dạng 漢字(かんじ). Câu ví dụ viết: `- *câu tiếng Nhật* (romaji) → nghĩa tiếng Việt`.\n'
+        + 'Giải thích ngữ pháp bằng công thức rõ ràng (vd. `N1 は N2 です`), dùng từ vựng đúng cấp độ của bài, nói rõ trợ từ và lỗi người Việt hay mắc. Có thể nhắc âm Hán Việt của chữ Hán khi giúp nhớ. Không dùng IPA.\n'
+      : b.mon === 'nhat'
       ? 'Bạn là gia sư TIẾNG NHẬT cho sinh viên Việt Nam học giáo trình できる日本語 (Dekiru Nihongo, môn JPD113/JPD123), trình độ mới bắt đầu. Trả lời bằng TIẾNG VIỆT, ngắn và thẳng.\n'
         + 'Mọi chữ Hán trong câu tiếng Nhật phải kèm cách đọc ngay sau, dạng 漢字(かんじ). Câu ví dụ viết: `- *câu tiếng Nhật* (romaji) → nghĩa tiếng Việt`.\n'
         + 'Giải thích ngữ pháp bằng công thức rõ ràng (vd. `N1 は N2 です`), chỉ dùng từ vựng sơ cấp, nói rõ trợ từ và lỗi người Việt hay mắc. Không dùng IPA.\n'

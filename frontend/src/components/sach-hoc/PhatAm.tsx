@@ -12,7 +12,8 @@
 import { useEffect, useState } from 'react';
 import { Mic, Square, Volume2 } from 'lucide-react';
 import api from '@/lib/api';
-import { play, AI_TIMEOUT } from './audio';
+import { play, AI_TIMEOUT, ngonNguKhoa } from './audio';
+import { Inline } from './Blocks';
 import { blobToWav16k } from './wav';
 import { useMicro } from './useMicro';
 import type { Block } from './types';
@@ -49,7 +50,12 @@ export function tachAm(ipa: string): string[] {
 
 const mau = (d: number) => (d >= 80 ? s.paGood : d >= 60 ? s.paWarn : s.paBad);
 
-function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string }; giong: 'uk' | 'us' }) {
+type GiongCham = 'uk' | 'us' | 'ja' | 'zh';
+const GIONG_MAU = { uk: 'uk-nu', us: 'us-nu', ja: 'ja-nu', zh: 'zh-nu' } as const;
+const bare = (t: string) => t.replace(/\{([^|}]+)\|[^}]+\}/g, '$1');
+
+function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string }; giong: GiongCham }) {
+  const ngoai = giong === 'ja' || giong === 'zh';
   const [busy, setBusy] = useState(false);
   const [url, setUrl] = useState<string | null>(null);
   const [kq, setKq] = useState<KetQua | null>(null);
@@ -62,7 +68,7 @@ function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string };
       const wav = await blobToWav16k(blob);
       const fd = new FormData();
       fd.append('audio', wav, 'phat-am.wav');
-      fd.append('cau', it.text);
+      fd.append('cau', bare(it.text));
       fd.append('giong', giong);
       const r = await api.post('/ielts/ai/cham-phat-am', fd, { headers: { 'Content-Type': 'multipart/form-data' }, ...AI_TIMEOUT });
       const d = r.data?.data as { ketQua: KetQua | null; lyDo?: string };
@@ -77,13 +83,18 @@ function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string };
   const mic = useMicro({
     toiDaMs: GHI_TOI_DA_MS,
     tuDung: { imMs: 1200 },
-    onXong: (blob) => { setUrl(URL.createObjectURL(blob)); void cham(blob); },
+    onXong: (blob, { coTieng }) => {
+      // Im lặng cả lượt (bấm nhầm) thì đừng gửi: Azure sẽ chấm thành "đọc thiếu" từng từ.
+      if (!coTieng) { setErr('Mình chưa nghe thấy bạn nói gì. Bấm “Đọc & chấm” rồi đọc to câu trên nhé.'); return; }
+      setUrl(URL.createObjectURL(blob)); void cham(blob);
+    },
   });
   const ghi = () => { setKq(null); setErr(''); setUrl(null); void mic.batDau(); };
   const err2 = err || mic.loi;
 
   // Gắn phiên âm của bài vào từ Azure trả về (bỏ qua từ "Insertion" — đọc thừa).
-  const ipaTu = it.ipa.split(/\s+/).filter(Boolean);
+  // Tiếng Nhật/Trung: `ipa` là romaji/pinyin — KHÔNG tách thành tên âm (Azure tự đặt tên âm riêng).
+  const ipaTu = ngoai ? [] : it.ipa.split(/\s+/).filter(Boolean);
   let vi = 0;
   const tu = (kq?.tu ?? []).map((w) => {
     const ipa = w.loi === 'Insertion' ? undefined : ipaTu[vi++];
@@ -97,11 +108,11 @@ function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string };
     <div className={s.paItem}>
       <div className={s.paHead}>
         <div className="min-w-0">
-          <div className={s.paText}>{it.text}</div>
-          <div className={s.quizSub}>/{it.ipa}/{it.vi ? ` · ${it.vi}` : ''}</div>
+          <div className={s.paText} lang={ngoai ? giong : undefined}><Inline text={it.text} /></div>
+          <div className={s.quizSub}>{ngoai ? it.ipa : `/${it.ipa}/`}{it.vi ? ` · ${it.vi}` : ''}</div>
         </div>
         <div className={s.paBtns}>
-          <button type="button" className={s.btnGhost} onClick={() => play({ text: it.text, voice: giong === 'us' ? 'us-nu' : 'uk-nu' })}>
+          <button type="button" className={s.btnGhost} onClick={() => play({ text: it.text, voice: GIONG_MAU[giong] })}>
             <Volume2 size={15} /> Nghe mẫu
           </button>
           {mic.trangThai === 'ghi' ? (
@@ -140,7 +151,11 @@ function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string };
               </span>
             ))}
           </div>
-          {yeu && <div className={s.quizSub}>Âm cần sửa nhất: <b>/{yeu.am}/</b> trong “{yeu.tu}” ({yeu.diem} điểm). Bấm “Nghe mẫu”, để ý khẩu hình âm đó rồi đọc lại.</div>}
+          {ngoai && (() => {
+            const t = [...tu].filter((w) => w.loi !== 'Insertion').sort((a, b) => a.diem - b.diem)[0];
+            return t && t.diem < 80 ? <div className={s.quizSub}>Chữ cần sửa nhất: <b>{t.tu}</b> ({t.diem} điểm). {giong === 'zh' ? 'Nghe lại mẫu, để ý THANH ĐIỆU của chữ đó.' : 'Nghe lại mẫu, để ý độ dài âm (trường âm, っ, ん).'}</div> : null;
+          })()}
+          {!ngoai && yeu && <div className={s.quizSub}>Âm cần sửa nhất: <b>/{yeu.am}/</b> trong “{yeu.tu}” ({yeu.diem} điểm). Bấm “Nghe mẫu”, để ý khẩu hình âm đó rồi đọc lại.</div>}
           {kq.ngheRa && <div className={s.quizSub}>Máy nghe ra: “{kq.ngheRa}”</div>}
           {url && <audio src={url} controls className={s.recAudio} />}
         </div>
@@ -150,6 +165,8 @@ function MotCau({ it, giong }: { it: { text: string; ipa: string; vi?: string };
 }
 
 export default function PhatAm({ b }: { b: Extract<Block, { t: 'phatam' }> }) {
+  // Khoá JP/CH (05/10/2026): chấm theo đúng thứ tiếng của khoá, không có lựa chọn giọng Anh/Mỹ.
+  const nn = ngonNguKhoa();
   const [giong, setGiong] = useState<'uk' | 'us'>('uk');
   useEffect(() => { try { if (localStorage.getItem(ACCENT_KEY) === 'us') setGiong('us'); } catch { /* bỏ qua */ } }, []);
   const chon = (g: 'uk' | 'us') => { setGiong(g); try { localStorage.setItem(ACCENT_KEY, g); } catch { /* bỏ qua */ } };
@@ -159,11 +176,11 @@ export default function PhatAm({ b }: { b: Extract<Block, { t: 'phatam' }> }) {
       <div className={s.quizSub}>
         {b.note ?? 'Bấm “Nghe mẫu”, rồi “Đọc & chấm” và đọc to đúng câu đó (tối đa 15 giây). Máy tô màu từng từ và từng âm: xanh là đúng, vàng là gần đúng, đỏ là cần sửa.'}
       </div>
-      <div className={s.modeSwitch} role="tablist" aria-label="Chấm theo giọng">
+      {nn === 'en' && <div className={s.modeSwitch} role="tablist" aria-label="Chấm theo giọng">
         <button type="button" role="tab" aria-selected={giong === 'uk'} className={`${s.modeBtn} ${giong === 'uk' ? s.modeBtnOn : ''}`} onClick={() => chon('uk')}>🇬🇧 Giọng Anh (như bài học)</button>
         <button type="button" role="tab" aria-selected={giong === 'us'} className={`${s.modeBtn} ${giong === 'us' ? s.modeBtnOn : ''}`} onClick={() => chon('us')}>🇺🇸 Giọng Mỹ</button>
-      </div>
-      {b.items.map((it) => <MotCau key={`${giong}-${it.text}`} it={it} giong={giong} />)}
+      </div>}
+      {b.items.map((it) => <MotCau key={`${nn}-${giong}-${it.text}`} it={it} giong={nn === 'en' ? giong : nn} />)}
     </div>
   );
 }

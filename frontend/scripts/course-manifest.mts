@@ -84,6 +84,23 @@ const SPECS: Spec[] = [
       return out;
     },
   },
+  // Khoá JP (tiếng Nhật 0→N1) và CH (tiếng Trung 0→HSK 6), 05/10/2026: baiN.ts export BAI_N.
+  ...(['jp', 'ch'] as const).map((k): Spec => ({
+    name: k.toUpperCase(),
+    dir: join(LANG, `${k}/bai`),
+    loader: 'index.ts',
+    prefix: 'bai',
+    written: async () => {
+      const dir = join(LANG, `${k}/bai`);
+      const out: Record<number, Lesson[]> = {};
+      for (const n of numbered(dir, 'bai')) {
+        const ls: Lesson[] = (await load(join(dir, `bai${n}.ts`)))[`BAI_${n}`];
+        if (!Array.isArray(ls)) throw new Error(`${k}/bai${n}.ts không export BAI_${n}`);
+        out[n] = ls;
+      }
+      return out;
+    },
+  })),
 ];
 
 /** Mỗi phần tử một dòng — diff của git đọc được khi thêm/sửa một bài. */

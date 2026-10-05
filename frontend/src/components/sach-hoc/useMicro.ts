@@ -20,7 +20,10 @@ import { stopAudio } from './audio';
 export type TrangThaiMicro = 'nghi' | 'mo' | 'ghi';
 
 export function useMicro(o: {
-  onXong: (blob: Blob) => void;
+  /** `coTieng` = false khi suốt lượt ghi không có tiếng nói (bấm nhầm, im lặng) — bên gọi
+   *  nên báo "chưa nghe thấy" thay vì gửi đi chấm: Azure chấm câu im lặng thành "đọc thiếu"
+   *  từng từ, còn Whisper nghe im lặng hay bịa ra một câu (05/10/2026). */
+  onXong: (blob: Blob, info: { coTieng: boolean }) => void;
   /** Tối đa bao lâu (ms) — hết thì tự dừng. */
   toiDaMs: number;
   /** Tự dừng sau khoảng im lặng này (ms) khi đã có tiếng nói; bỏ trống = chỉ dừng bằng tay. */
@@ -68,7 +71,7 @@ export function useMicro(o: {
         const huy = r.current.huy;
         donDep();
         setTrangThai('nghi');
-        if (!huy && chunks.length) opt.current.onXong(new Blob(chunks, { type: mr.mimeType || 'audio/webm' }));
+        if (!huy && chunks.length) opt.current.onXong(new Blob(chunks, { type: mr.mimeType || 'audio/webm' }), { coTieng: khungTieng >= 6 });
       };
       // Đo âm lượng: vẽ thanh mức + phát hiện "đã nói xong".
       const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
@@ -78,6 +81,8 @@ export function useMicro(o: {
       ac.createMediaStreamSource(stream).connect(an);
       const buf = new Float32Array(an.fftSize);
       let daNoi = false;
+      /** Số khung hình (~16ms) có tiếng — ≥ 6 (~0,1 giây) mới tính là đã nói, để tiếng gõ phím/click không lọt. */
+      let khungTieng = 0;
       let mucCu = 0;
       let imTu = 0;
       const t0 = performance.now();
@@ -90,6 +95,7 @@ export function useMicro(o: {
         const cb = opt.current.onMuc;
         if (cb) cb(m);
         else if (Math.abs(m - mucCu) > 0.05) { mucCu = m; setMuc(m); } // khỏi vẽ lại 60 lần/giây
+        if (rms > 0.02) khungTieng++;
         const td = opt.current.tuDung;
         if (td) {
           const now = performance.now();

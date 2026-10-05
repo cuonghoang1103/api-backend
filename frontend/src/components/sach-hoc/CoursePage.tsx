@@ -53,6 +53,8 @@ export default function CoursePage({ course, lessonExtra }: {
   const READY_LESSONS = course.readyLessons;
   const { isAuthenticated } = useLangUser();
   const tien = useTienDo(isAuthenticated, course.stage, course.storageKey);
+  // Đặt NGAY lúc render (không chỉ trong effect): khối PhatAm/GoiGiaSu đọc `ngonNguKhoa()` ngay lần vẽ đầu.
+  setDefaultVoice(course.voice);
   useEffect(() => { setDefaultVoice(course.voice); }, [course.voice]);
 
   // Mặc định là trang Kế hoạch — nó là "bàn học": hôm nay học buổi nào, đã
@@ -83,7 +85,9 @@ export default function CoursePage({ course, lessonExtra }: {
   const [asking, setAsking] = useState(false);
   const [selection, setSelection] = useState('');
   // Khoá tiếng Nhật: bật/tắt furigana (chữ nhỏ trên chữ Hán) — tắt để tự luyện đọc.
-  const isJa = course.voice.startsWith('ja');
+  // Khoá CH (05/10/2026) dùng chung hai nút: chữ nhỏ trên chữ Hán là PINYIN, dòng phiên âm cũng là pinyin.
+  const isZh = course.voice.startsWith('zh');
+  const isJa = course.voice.startsWith('ja') || isZh;
   const [furi, setFuri] = useState(true);
   const [roma, setRoma] = useState(true);
   const [rate, setRateState] = useState(1);
@@ -202,7 +206,8 @@ export default function CoursePage({ course, lessonExtra }: {
     [full],
   );
   const tutorProps = {
-    onGoi: course.tutor.mon === 'ielts' ? () => { setSheetOpen(false); stopAudio(); setGoiMo(true); } : undefined,
+    // Mọi khoá đều có 📞 Luyện nói với CuongMini (05/10/2026: thêm JP, CH, Dekiru) — máy chủ đổi theo `ngonNgu`.
+    onGoi: () => { setSheetOpen(false); stopAudio(); setGoiMo(true); },
     name: course.tutor.name,
     lessonTitle: viewTitle,
     turns,
@@ -250,13 +255,13 @@ export default function CoursePage({ course, lessonExtra }: {
               <CalendarDays size={15} /> {doneDays}/{DAYS.length}<span className={s.btnLabel}>&nbsp;buổi</span>
             </button>
             {isJa && (
-              <button type="button" className={s.iconBtn} onClick={() => setFuri(!furi)} aria-pressed={furi} title="Bật/tắt furigana">
-                <ruby>漢<rt style={{ visibility: 'visible' }}>かん</rt></ruby><span className={s.btnLabel}>{furi ? 'Ẩn furigana' : 'Hiện furigana'}</span>
+              <button type="button" className={s.iconBtn} onClick={() => setFuri(!furi)} aria-pressed={furi} title={isZh ? 'Bật/tắt pinyin trên chữ' : 'Bật/tắt furigana'}>
+                {isZh ? <ruby>汉<rt style={{ visibility: 'visible' }}>hàn</rt></ruby> : <ruby>漢<rt style={{ visibility: 'visible' }}>かん</rt></ruby>}<span className={s.btnLabel}>{isZh ? (furi ? 'Ẩn pinyin trên chữ' : 'Hiện pinyin trên chữ') : furi ? 'Ẩn furigana' : 'Hiện furigana'}</span>
               </button>
             )}
             {isJa && (
-              <button type="button" className={s.iconBtn} onClick={() => setRoma(!roma)} aria-pressed={roma} title="Bật/tắt romaji">
-                <span style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', fontSize: 13 }}>Aa</span><span className={s.btnLabel}>{roma ? 'Ẩn romaji' : 'Hiện romaji'}</span>
+              <button type="button" className={s.iconBtn} onClick={() => setRoma(!roma)} aria-pressed={roma} title={isZh ? 'Bật/tắt dòng pinyin' : 'Bật/tắt romaji'}>
+                <span style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', fontSize: 13 }}>Aa</span><span className={s.btnLabel}>{isZh ? (roma ? 'Ẩn dòng pinyin' : 'Hiện dòng pinyin') : roma ? 'Ẩn romaji' : 'Hiện romaji'}</span>
               </button>
             )}
             {/* Tốc độ đọc cho mọi nút 🔊 — nhớ trên máy. */}
@@ -425,7 +430,7 @@ export default function CoursePage({ course, lessonExtra }: {
         {course.kanji && <KanjiHost course={course} />}
 
         {goiMo && (
-          <GoiGiaSu danhSach={danhSachGoi} chuDe={lesson ? lesson.title : 'những âm người Việt hay đọc sai'} onClose={() => { stopAudio(); setGoiMo(false); }} />
+          <GoiGiaSu ngonNgu={course.lang} danhSach={danhSachGoi} chuDe={lesson ? lesson.title : 'những âm người Việt hay đọc sai'} onClose={() => { stopAudio(); setGoiMo(false); }} />
         )}
 
         {sheetOpen && (

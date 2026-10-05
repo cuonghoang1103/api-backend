@@ -29,7 +29,7 @@ export const PHAN_DUNG_CHUNG = ['roadmap', 'life', 'exam', 'typing'] as const;
  */
 export const SACH = 'sach1';
 /** Mọi khoá kiểu sách dùng chung bảng tiến độ này: IELTS (sach1), tiếng Nhật Dekiru (dekiru1). */
-export const CAC_SACH = [SACH, 'dekiru1'] as const;
+export const CAC_SACH = [SACH, 'dekiru1', 'jp1', 'ch1'] as const;
 const laMaSach = (v: string): boolean => (CAC_SACH as readonly string[]).includes(v);
 export const PHAN_SACH = ['bai', 'baitap', 'kehoach'] as const;
 

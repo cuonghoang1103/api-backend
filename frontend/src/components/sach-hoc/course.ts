@@ -62,7 +62,9 @@ export type CourseDef = {
   /** Giọng đọc mặc định của nút 🔊. */
   voice: Voice;
   /** Gia sư: tên hiển thị + môn gửi lên backend (đổi lời dặn cho AI). */
-  tutor: { name: string; mon: 'ielts' | 'nhat' };
+  tutor: { name: string; mon: 'ielts' | 'nhat' | 'jp' | 'trung' };
+  /** Thứ tiếng của khoá (cuộc gọi CuongMini, chấm phát âm, giọng câu mẫu). Mặc định suy từ `voice`. */
+  ngonNgu?: 'en' | 'ja' | 'zh';
   /** Bối cảnh cho gia sư khi đang ở trang Kế hoạch. */
   planContext: string;
 };
@@ -175,6 +177,7 @@ export function defineCourse(def: CourseDef) {
         ready: d.lessons.some(isReady),
       };
     },
+    lang: def.ngonNgu ?? (def.voice.startsWith('ja') ? 'ja' : def.voice.startsWith('zh') ? 'zh' : 'en') as 'en' | 'ja' | 'zh',
     label: (k: Kind) => def.kindLabel[k] ?? DEFAULT_LABEL[k],
     en: (k: Kind) => def.kindEn[k] ?? DEFAULT_LABEL[k],
     hue: (k: Kind) => def.kindHue[k] ?? DEFAULT_HUE[k],

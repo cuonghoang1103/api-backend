@@ -37,6 +37,9 @@ export const GIONG = {
   // Khoá tiếng Nhật (Dekiru, JPD113/123) dùng chung đường này.
   'ja-nu': 'ja-JP-Wavenet-A',
   'ja-nam': 'ja-JP-Wavenet-C',
+  // Khoá JP/CH (05/10/2026): tiếng Trung phổ thông.
+  'zh-nu': 'cmn-CN-Wavenet-A',
+  'zh-nam': 'cmn-CN-Wavenet-B',
   // Người dẫn bài nghe (lời giới thiệu, đánh số câu) — components/sach-hoc/nghe.ts.
   dan: 'en-GB-Wavenet-A',
 } as const;
@@ -50,6 +53,8 @@ const GIONG_AZURE: Record<Giong, string> = {
   'us-nam': 'en-US-AndrewNeural',
   'ja-nu': 'ja-JP-NanamiNeural',
   'ja-nam': 'ja-JP-KeitaNeural',
+  'zh-nu': 'zh-CN-XiaoxiaoNeural',
+  'zh-nam': 'zh-CN-YunxiNeural',
   dan: 'en-GB-LibbyNeural',
 };
 
@@ -114,7 +119,7 @@ async function synthesizeAzure(text: string, giong: Giong, toc: number, danhVan:
 async function docGoogleDich(text: string, giong: Giong, bam: string, danhVan: boolean) {
   const keyGt = `ielts/audio/gt-${giong.slice(0, 2)}/${bam}.mp3`;
   if (await objectExists(keyGt)) return { url: buildPublicUrl(keyGt), giongDon: true };
-  const tl = giong.startsWith('ja') ? 'ja' : giong.startsWith('us') ? 'en-US' : 'en-GB';
+  const tl = giong.startsWith('ja') ? 'ja' : giong.startsWith('zh') ? 'zh-CN' : giong.startsWith('us') ? 'en-US' : 'en-GB';
   const doc = danhVan ? text.split(/\s*,\s*/).join('. ') : text;
   const mp3 = await synthesizeGoogle(doc, tl);
   const { url } = await putObject(keyGt, mp3, 'audio/mpeg');
@@ -186,7 +191,7 @@ export async function docTo(userId: number, b: { text?: unknown; giong?: unknown
       signal: AbortSignal.timeout(20_000),
       body: JSON.stringify({
         input: danhVan ? { ssml: ssmlDanhVan(text) } : { text },
-        voice: { languageCode: name.slice(0, 5), name },
+        voice: { languageCode: name.split('-').slice(0, 2).join('-'), name },
         audioConfig: { audioEncoding: 'MP3', speakingRate: toc, effectsProfileId: ['headphone-class-device'] },
       }),
     },

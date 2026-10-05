@@ -33,6 +33,19 @@ import { synthesizeCuongMini } from '../makerlab/tts.js';
 import { logger } from '../../utils/logger.js';
 
 const GIONG_GIA_SU = 'en-GB-AdaMultilingualNeural';
+
+/* ── Thứ tiếng của cuộc gọi (05/10/2026: khoá JP + CH) ───────────────────
+ * Cùng một cuộc gọi CuongMini cho ba khoá. `[en]…[/en]` trong lời gia sư giữ
+ * nguyên tên (đã dùng khắp nơi) nhưng nghĩa là "đoạn NGOẠI NGỮ của khoá" — đọc
+ * bằng locale/giọng của thứ tiếng đó. Ada Multilingual đọc được cả ja-JP, zh-CN. */
+export type NgonNgu = 'en' | 'ja' | 'zh';
+export function docNgonNgu(x: unknown): NgonNgu { return x === 'ja' || x === 'zh' ? x : 'en'; }
+const LOCALE: Record<NgonNgu, string> = { en: 'en-GB', ja: 'ja-JP', zh: 'zh-CN' };
+/** Giọng đọc ĐOẠN ngoại ngữ khi gia sư dùng giọng máy nhà (F5 chỉ đọc tiếng Việt). */
+const GIONG_NGOAI: Record<NgonNgu, string> = { en: 'en-GB-SoniaNeural', ja: 'ja-JP-NanamiNeural', zh: 'zh-CN-XiaoxiaoNeural' };
+const TEN_TIENG: Record<NgonNgu, string> = { en: 'tiếng Anh', ja: 'tiếng Nhật', zh: 'tiếng Trung' };
+/** Bỏ furigana/pinyin dạng `{漢字|かな}` → chữ gốc (Azure cần câu mẫu trần). */
+export const chuTran = (s: string) => s.replace(/\{([^|}]+)\|[^}]+\}/g, '$1');
 const TRAN_NGAY = 300;
 const daGoi = new Map<string, number>();
 function demLuot(userId: number) {
@@ -63,6 +76,37 @@ const NGAN_HANG: CauMau[] = [
   { text: 'I go home by train every day.', ipa: 'aɪ ɡəʊ həʊm baɪ treɪn evri deɪ' },
   { text: 'The bird heard a word.', ipa: 'ðə bɜːd hɜːd ə wɜːd' },
 ];
+
+/** Ngân hàng mặc định khoá JP / CH — câu chào hỏi cơ bản, từ dễ tới khó. */
+const NGAN_HANG_NN: Record<'ja' | 'zh', CauMau[]> = {
+  ja: [
+    { text: 'こんにちは。' }, { text: 'ありがとうございます。' }, { text: 'はじめまして。' },
+    { text: 'わたしはベトナムじんです。' }, { text: 'よろしくおねがいします。' }, { text: 'すみません、もういちどおねがいします。' },
+    { text: 'これはなんですか。' }, { text: 'がっこうはどこですか。' }, { text: 'まいにちにほんごをべんきょうします。' },
+    { text: 'きのう、ともだちとえいがをみました。' },
+  ],
+  zh: [
+    { text: '你好！' }, { text: '谢谢！' }, { text: '再见！' }, { text: '我是越南人。' }, { text: '你叫什么名字？' },
+    { text: '我叫小明。' }, { text: '很高兴认识你。' }, { text: '这是什么？' }, { text: '我每天学习汉语。' },
+    { text: '我想喝一杯茶。' },
+  ],
+};
+
+/** Mẹo chung khi không biết đúng âm nào sai (tiếng Nhật/Trung: Azure không trả tên âm dùng được). */
+const MEO_NN: Record<'ja' | 'zh', string[]> = {
+  ja: [
+    'Chú ý độ dài âm: âm kéo dài như おう, ええ phải giữ đủ hai nhịp.',
+    'Âm ngắt っ là một nhịp lặng ngắn, đừng bỏ qua nó.',
+    'Đọc đều từng nhịp, tiếng Nhật không lên xuống mạnh như tiếng Việt.',
+    'Âm ん là một nhịp riêng, giữ hơi mũi đủ lâu.',
+  ],
+  zh: [
+    'Chú ý thanh điệu: thanh 1 giữ cao và phẳng, thanh 4 hạ mạnh từ cao xuống.',
+    'Thanh 3 hạ thấp rồi mới lên; đứng trước thanh 3 khác thì đọc thành thanh 2.',
+    'Phân biệt zh, ch, sh (uốn lưỡi) với z, c, s (đầu lưỡi thẳng).',
+    'Âm ü đọc như u nhưng môi tròn và lưỡi đẩy về trước, gần giống uy.',
+  ],
+};
 
 /* ── Tên âm & mẹo khẩu hình ──────────────────────────────────────────── */
 
@@ -130,6 +174,11 @@ const MEO: Record<string, string> = {
   'ʊə': 'Đây là âm đôi ua: bắt đầu ở u rồi trượt sang ơ.',
 };
 
+const CHUA_NGHE = [
+  'Mình chưa nghe thấy bạn nói gì cả. Bạn nghe câu mẫu rồi đọc to theo mình nhé.',
+  'Hình như bạn chưa nói gì. Không sao, mình đọc lại câu mẫu, bạn đọc theo nhé.',
+  'Mình chưa nghe rõ tiếng bạn. Bạn lại gần micro hơn một chút rồi đọc to nhé.',
+];
 const KHEN = ['Tốt lắm, bạn đọc chuẩn rồi!', 'Hay quá, câu này bạn đọc rất rõ!', 'Chuẩn rồi đấy!', 'Giỏi lắm, phát âm rất ổn!'];
 const chon = <T,>(a: T[]) => a[Math.floor(Math.random() * a.length)];
 const NGUONG_DAT = 85;
@@ -181,7 +230,7 @@ export function hieuChinh(k: KetQuaPhatAm): KetQuaPhatAm {
 const TIEN_BO = ['Tiến bộ rồi đấy!', 'Khá hơn lần trước rồi!', 'Bạn tiến bộ nhanh ghê!'];
 
 /** Câu nhận xét tiếng Việt cho một lượt luyện — soạn sẵn, không gọi AI. */
-export function nhanXet(k: KetQuaPhatAm, mau: CauMau, lanThu: number, diemTruoc?: number): { noi: string; dat: boolean } {
+export function nhanXet(k: KetQuaPhatAm, mau: CauMau, lanThu: number, diemTruoc?: number, nn: NgonNgu = 'en'): { noi: string; dat: boolean } {
   // Khen tiến bộ so với lần đọc trước CÙNG câu — người học thấy công sức của mình có kết quả.
   const tienBo = diemTruoc != null && k.diem.tong >= diemTruoc + 5
     ? `${chon(TIEN_BO)} Từ ${diemTruoc} lên ${k.diem.tong} điểm. `
@@ -189,6 +238,13 @@ export function nhanXet(k: KetQuaPhatAm, mau: CauMau, lanThu: number, diemTruoc?
   if (k.diem.tong >= NGUONG_DAT) return { noi: tienBo ? `${tienBo}Câu này đạt rồi!` : `${chon(KHEN)} Bạn được ${k.diem.tong} điểm.`, dat: true };
   const thieu = k.tu.find((w) => w.loi === 'Omission');
   if (thieu) return { noi: `Bạn đọc thiếu từ [en]${thieu.tu}[/en] rồi. Nghe lại rồi đọc đủ cả câu nhé.`, dat: false };
+  if (nn !== 'en') {
+    // Tiếng Nhật/Trung: Azure không trả tên âm đọc được ⇒ chỉ ra TỪ yếu nhất + một mẹo chung.
+    const yeu = k.tu.filter((w) => w.loi !== 'Insertion').sort((a, b) => a.diem - b.diem)[0];
+    const loiMo = tienBo || (lanThu >= 2 ? 'Gần được rồi.' : `Được ${k.diem.tong} điểm.`);
+    const tuYeu = yeu && yeu.diem < NGUONG_DAT ? ` Chữ [en]${yeu.tu}[/en] chưa chuẩn.` : '';
+    return { noi: `${loiMo}${tuYeu} ${chon(MEO_NN[nn])} Đọc lại theo mình nhé.`, dat: false };
+  }
   const y = amYeuNhat(k, mau.ipa);
   if (!y) return { noi: `Được ${k.diem.tong} điểm. Bạn đọc chậm và rõ hơn một chút nhé.`, dat: false };
   const meo = y.am ? MEO[y.am] : undefined;
@@ -221,16 +277,17 @@ export function tachDoan(noi: string): { en: boolean; t: string }[] {
 const dangTao = new Map<string, Promise<string | null>>();
 
 /** Đọc lời gia sư → URL mp3 trên R2 (lưu theo băm; câu lặp lại phát tức thì). */
-export async function docGiaSu(noi: string): Promise<string | null> {
+export async function docGiaSu(noi: string, nn: NgonNgu = 'en'): Promise<string | null> {
   const key = process.env.AZURE_SPEECH_KEY;
   const region = process.env.AZURE_SPEECH_REGION || 'eastasia';
   if (!key) return null;
-  const r2 = `ielts/audio/giasu/${crypto.createHash('sha1').update(`${GIONG_GIA_SU}|${noi}`).digest('hex')}.mp3`;
+  // Khoá băm của tiếng Anh giữ y như cũ ⇒ tệp đã lưu R2 vẫn dùng lại được.
+  const r2 = `ielts/audio/giasu/${crypto.createHash('sha1').update(`${GIONG_GIA_SU}|${nn === 'en' ? '' : `${nn}|`}${noi}`).digest('hex')}.mp3`;
   const dang = dangTao.get(r2);
   if (dang) return dang;
   const p = (async () => {
     if (await objectExists(r2)) return buildPublicUrl(r2);
-    const body = tachDoan(noi).map((d) => `<lang xml:lang="${d.en ? 'en-GB' : 'vi-VN'}">${escXml(d.t)}</lang>`).join(' ');
+    const body = tachDoan(noi).map((d) => `<lang xml:lang="${d.en ? LOCALE[nn] : 'vi-VN'}">${escXml(d.t)}</lang>`).join(' ');
     const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="vi-VN">`
       + `<voice name="${GIONG_GIA_SU}"><prosody rate="-4%">${body}</prosody></voice></speak>`;
     const res = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
@@ -270,15 +327,15 @@ export async function docGiaSu(noi: string): Promise<string | null> {
  */
 export type GiongGoi = 'mac-dinh' | 'khanh-linh' | 'cuong';
 const GIONG_NHA: Record<Exclude<GiongGoi, 'mac-dinh'>, string> = { 'khanh-linh': 'f5-khanh-linh', cuong: 'f5-cuong-nghiem' };
-const GIONG_ANH = 'en-GB-SoniaNeural';
 let nhaNghiDen = 0;
 
 export function docGiong(x: unknown): GiongGoi {
   return x === 'khanh-linh' || x === 'cuong' ? x : 'mac-dinh';
 }
 
-/** Một đoạn tiếng Anh bằng Sonia → URL mp3 (lưu R2 theo băm). */
-async function docDoanAnh(t: string): Promise<string | null> {
+/** Một đoạn ngoại ngữ (Anh: Sonia · Nhật: Nanami · Trung: Xiaoxiao) → URL mp3 (lưu R2 theo băm). */
+async function docDoanAnh(t: string, nn: NgonNgu = 'en'): Promise<string | null> {
+  const GIONG_ANH = GIONG_NGOAI[nn];
   const key = process.env.AZURE_SPEECH_KEY;
   const region = process.env.AZURE_SPEECH_REGION || 'eastasia';
   if (!key) return null;
@@ -288,7 +345,7 @@ async function docDoanAnh(t: string): Promise<string | null> {
     method: 'POST',
     headers: { 'Ocp-Apim-Subscription-Key': key, 'Content-Type': 'application/ssml+xml', 'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3', 'User-Agent': 'cuongthai-ielts-goi' },
     signal: AbortSignal.timeout(15_000),
-    body: `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-GB"><voice name="${GIONG_ANH}"><prosody rate="-4%">${escXml(t)}</prosody></voice></speak>`,
+    body: `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${LOCALE[nn]}"><voice name="${GIONG_ANH}"><prosody rate="-4%">${escXml(t)}</prosody></voice></speak>`,
   });
   if (!res.ok) return null;
   return (await putObject(r2, Buffer.from(await res.arrayBuffer()), 'audio/mpeg')).url;
@@ -310,8 +367,8 @@ async function docDoanNha(t: string, voice: string, hanMs: number): Promise<stri
  * Đọc lời gia sư theo giọng người dùng chọn. Luôn trả được tiếng (trừ khi cả Azure
  * hỏng): giọng máy nhà hỏng thì `giongThat` = 'mac-dinh' để web báo nhẹ một dòng.
  */
-export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi): Promise<{ audioUrl: string | null; audioUrls?: string[]; giongThat: GiongGoi }> {
-  if (giong === 'mac-dinh' || Date.now() < nhaNghiDen) return { audioUrl: await docGiaSu(noi), giongThat: 'mac-dinh' };
+export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi, nn: NgonNgu = 'en'): Promise<{ audioUrl: string | null; audioUrls?: string[]; giongThat: GiongGoi }> {
+  if (giong === 'mac-dinh' || Date.now() < nhaNghiDen) return { audioUrl: await docGiaSu(noi, nn), giongThat: 'mac-dinh' };
   const doan = tachDoan(noi);
   const tongViet = doan.filter((d) => !d.en).reduce((n, d) => n + d.t.length, 0);
   // F5 đo thật: ~0,9 s cố định + 0,38 × số giây tiếng (~16,5 ký tự/giây) — cho gấp đôi.
@@ -320,8 +377,8 @@ export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi): Promise<{
   try {
     const urls = await Promise.all(doan.map(async (d) => {
       if (d.en) {
-        const u = await docDoanAnh(d.t);
-        if (!u) throw new Error('Azure Sonia hỏng');
+        const u = await docDoanAnh(d.t, nn);
+        if (!u) throw new Error('Azure giọng ngoại ngữ hỏng');
         return u;
       }
       // F5 đọc chữ Latin không dấu theo kiểu đoán: "CuongMini" ra "cuồng mini" / "Cung Ngô Mini"
@@ -333,7 +390,7 @@ export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi): Promise<{
   } catch (e) {
     nhaNghiDen = Date.now() + 120_000;
     logger.warn('[ielts/goi] giọng máy nhà hỏng — dùng giọng mặc định', { giong, ms: Date.now() - t0, loi: e instanceof Error ? e.message : String(e) });
-    return { audioUrl: await docGiaSu(noi), giongThat: 'mac-dinh' };
+    return { audioUrl: await docGiaSu(noi, nn), giongThat: 'mac-dinh' };
   }
 }
 
@@ -342,18 +399,26 @@ export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi): Promise<{
 const CO_DAU = /[ăâđêôơưàáạảãầấậẩẫằắặẳẵèéẹẻẽềếệểễìíịỉĩòóọỏõồốộổỗờớợởỡùúụủũừứựửữỳýỵỷỹ]/i;
 const chu = (s: string) => s.toLowerCase().replace(/[^a-z' ]/g, ' ').split(/\s+/).filter(Boolean);
 /** Bao nhiêu phần từ của câu mẫu xuất hiện trong câu nghe được. */
+const CJK = /[\u3040-\u30ff\u3400-\u9fff]/;
+/** Chữ Nhật/Trung không cách từ ⇒ so theo TỪNG CHỮ (bỏ dấu câu). */
+const kyTu = (s: string) => [...chuTran(s)].filter((c) => CJK.test(c));
 function giongNhau(a: string, b: string) {
+  if (CJK.test(a)) {
+    const A2 = kyTu(a);
+    const B2 = new Set(kyTu(b));
+    return A2.length ? A2.filter((c) => B2.has(c)).length / A2.length : 0;
+  }
   const A = chu(a);
   const B = new Set(chu(b));
   return A.length ? A.filter((w) => B.has(w)).length / A.length : 0;
 }
 
-function sachDanhSach(raw: unknown): CauMau[] {
+function sachDanhSach(raw: unknown, nn: NgonNgu = 'en'): CauMau[] {
   const ds = (Array.isArray(raw) ? raw : [])
     .map((x) => ({ text: String((x as CauMau)?.text ?? '').trim().slice(0, 160), ipa: (x as CauMau)?.ipa ? String((x as CauMau).ipa).slice(0, 300) : undefined }))
     .filter((x) => x.text)
     .slice(0, 40);
-  return ds.length ? ds : NGAN_HANG;
+  return ds.length ? ds : nn === 'en' ? NGAN_HANG : NGAN_HANG_NN[nn];
 }
 
 /**
@@ -363,48 +428,60 @@ function sachDanhSach(raw: unknown): CauMau[] {
  */
 export async function goiGiaSu(
   userId: number,
-  input: { audio?: Buffer; danhSach?: unknown; viTri?: unknown; lanThu?: unknown; chuDe?: unknown; diemTruoc?: unknown; giong?: unknown },
+  input: { audio?: Buffer; danhSach?: unknown; viTri?: unknown; lanThu?: unknown; chuDe?: unknown; diemTruoc?: unknown; giong?: unknown; ngonNgu?: unknown; imLang?: unknown },
 ) {
   if (!demLuot(userId)) return { lyDo: 'het_luot_ngay' as const };
   const giong = docGiong(input.giong);
-  const ds = sachDanhSach(input.danhSach);
+  const nn = docNgonNgu(input.ngonNgu);
+  const ds = sachDanhSach(input.danhSach, nn);
   let viTri = Math.max(0, Math.min(ds.length - 1, Number(input.viTri) || 0));
   let lanThu = Math.max(0, Number(input.lanThu) || 0);
   const mau = ds[viTri];
   const chuDe = String(input.chuDe ?? '').trim().slice(0, 120);
 
+  // Web đo micro thấy CẢ LƯỢT không có tiếng nói (bấm nhầm, chưa kịp nói) ⇒ không chấm gì,
+  // không tính lượt đọc — chỉ nhắc tự nhiên (05/10/2026: trước đây im lặng bị chấm "đọc thiếu").
+  if (input.imLang === true) {
+    const noi = chon(CHUA_NGHE);
+    return { loai: 'luyen' as const, nghe: '', noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu, cham: null, doiCau: false };
+  }
   if (!input.audio?.length) {
     // Ngắn và CỐ ĐỊNH: đọc tên bài ("Nói: Trả lời câu hỏi Wh- (Part 1 · …)") nghe rất kỳ
     // và kéo lời chào tới 19 giây (đo 03/10). Câu cố định thì lưu R2 một lần, mở là phát ngay.
     void chuDe;
-    const noi = 'Chào bạn! Mình là CuongMini, bạn luyện phát âm của bạn đây. Bạn nghe câu mẫu rồi đọc theo, mình chấm và sửa ngay nhé. Muốn hỏi gì cứ nói tiếng Việt. Câu đầu tiên đây.';
-    return { loai: 'mo' as const, noi, ...(await docGiaSuTheoGiong(noi, giong)), mau, viTri, lanThu: 0 };
+    const noi = nn === 'en'
+      ? 'Chào bạn! Mình là CuongMini, bạn luyện phát âm của bạn đây. Bạn nghe câu mẫu rồi đọc theo, mình chấm và sửa ngay nhé. Muốn hỏi gì cứ nói tiếng Việt. Câu đầu tiên đây.'
+      : `Chào bạn! Mình là CuongMini, hôm nay mình cùng luyện nói ${TEN_TIENG[nn]} nhé. Bạn nghe câu mẫu rồi đọc theo, mình chấm và sửa ngay. Muốn hỏi gì cứ nói tiếng Việt. Câu đầu tiên đây.`;
+    return { loai: 'mo' as const, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu: 0 };
   }
   if (input.audio.length > 1024 * 1024) throw new BadRequestError('Bản ghi quá dài');
 
   const [tr, pa] = await Promise.all([
-    transcribeWithGroq(input.audio, 'luot.wav', 'audio/wav', { language: '', hints: mau.text }).catch(() => null),
-    chamPhatAm(userId, { audio: input.audio, cau: mau.text, giong: 'uk' }).catch(() => null),
+    transcribeWithGroq(input.audio, 'luot.wav', 'audio/wav', { language: '', hints: chuTran(mau.text) }).catch(() => null),
+    chamPhatAm(userId, { audio: input.audio, cau: chuTran(mau.text), giong: nn === 'en' ? 'uk' : nn }).catch(() => null),
   ]);
   const nghe = String((tr as { text?: string } | null)?.text ?? '').trim();
-  const k = pa?.ketQua ? hieuChinh(pa.ketQua) : null;
+  let k = pa?.ketQua ? hieuChinh(pa.ketQua) : null;
+  // Có tiếng (tiếng ồn, tiếng thở) nhưng không đọc chữ nào: Azure trả mọi từ "Omission" ⇒
+  // trước đây thành "Bạn đọc thiếu từ…". Coi như chưa nghe thấy.
+  if (k && (k.tu.length === 0 || k.tu.every((w) => w.loi === 'Omission') || k.diem.dayDu < 15)) k = null;
 
   // Nói tiếng Việt và không giống câu mẫu ⇒ đang hỏi gia sư.
   if (nghe && CO_DAU.test(nghe) && giongNhau(mau.text, nghe) < 0.5) {
     // Câu đệm nói NGAY (tệp lưu R2 nên lần sau tức thì) trong lúc web gọi AI ~10 giây.
     const noi = chon(['Câu hỏi hay đấy, để mình giải thích nhé.', 'À, bạn hỏi hay lắm. Đợi mình một chút nhé.', 'Để mình giải thích cho bạn nhé.']);
-    return { loai: 'hoi' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong)), mau, viTri, lanThu };
+    return { loai: 'hoi' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu };
   }
   if (!k) {
     const noi = pa?.lyDo === 'het_luot_thang'
       ? 'Máy chấm phát âm đã hết lượt miễn phí của tháng này. Bạn vẫn có thể hỏi mình bằng tiếng Việt nhé.'
-      : 'Mình chưa nghe rõ. Bạn đọc to hơn một chút, gần micro hơn nhé.';
-    return { loai: 'luyen' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong)), mau, viTri, lanThu, cham: null, doiCau: false };
+      : chon(CHUA_NGHE);
+    return { loai: 'luyen' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu, cham: null, doiCau: false };
   }
 
   lanThu += 1;
   const diemTruoc = lanThu > 1 && Number.isFinite(Number(input.diemTruoc)) ? Number(input.diemTruoc) : undefined;
-  const nx = nhanXet(k, mau, lanThu, diemTruoc);
+  const nx = nhanXet(k, mau, lanThu, diemTruoc, nn);
   let noi = nx.noi;
   let moi = mau;
   if (nx.dat || lanThu >= SO_LAN_TOI_DA) {
@@ -418,7 +495,7 @@ export async function goiGiaSu(
     loai: 'luyen' as const,
     nghe,
     noi,
-    ...(await docGiaSuTheoGiong(noi, giong)),
+    ...(await docGiaSuTheoGiong(noi, giong, nn)),
     mau: moi,
     viTri,
     lanThu,
@@ -429,15 +506,16 @@ export async function goiGiaSu(
 
 /* ── Lượt hỏi (có AI) ────────────────────────────────────────────────── */
 
-const HE_THONG_HOI = [
-  'Bạn là CuongMini — robot GIA SƯ PHÁT ÂM TIẾNG ANH dễ thương, xưng "mình", đang nói chuyện qua điện thoại với người Việt mới học. Trả lời BẰNG TIẾNG VIỆT câu người học vừa hỏi.',
+const heThongHoi = (nn: NgonNgu) => [
+  `Bạn là CuongMini — robot GIA SƯ PHÁT ÂM ${TEN_TIENG[nn].toUpperCase()} dễ thương, xưng "mình", đang nói chuyện qua điện thoại với người Việt mới học. Trả lời BẰNG TIẾNG VIỆT câu người học vừa hỏi.`,
   '- 2–4 câu ngắn, dưới 70 chữ. Đây là lời NÓI: không markdown, không gạch đầu dòng, không emoji, không ký hiệu IPA — mô tả khẩu hình bằng lời.',
-  '- MỌI từ hay câu tiếng Anh bọc trong [en]…[/en]. Ví dụ: Từ [en]think[/en] có âm th.',
+  `- MỌI từ hay câu ${TEN_TIENG[nn]} bọc trong [en]…[/en] (giữ đúng tên thẻ này). Ví dụ: ${nn === 'ja' ? 'Chữ [en]ありがとう[/en] đọc kéo dài âm cuối.' : nn === 'zh' ? 'Chữ [en]谢谢[/en] đọc thanh 4 rồi thanh nhẹ.' : 'Từ [en]think[/en] có âm th.'}`,
   '- Câu cuối mời người học quay lại đọc câu mẫu đang luyện.',
   'Chỉ trả về lời nói, không gì khác.',
 ].join('\n');
 
-export async function hoiGiaSu(userId: number, b: { cauHoi?: unknown; mau?: unknown; chuDe?: unknown; giong?: unknown }) {
+export async function hoiGiaSu(userId: number, b: { cauHoi?: unknown; mau?: unknown; chuDe?: unknown; giong?: unknown; ngonNgu?: unknown }) {
+  const nn = docNgonNgu(b.ngonNgu);
   if (!isAiAvailable()) return { lyDo: 'ai_unavailable' as const };
   if (!demLuot(userId)) return { lyDo: 'het_luot_ngay' as const };
   const cauHoi = String(b.cauHoi ?? '').trim().slice(0, 500);
@@ -450,10 +528,10 @@ export async function hoiGiaSu(userId: number, b: { cauHoi?: unknown; mau?: unkn
     feature: 'chat',
     userId,
     maxTokens: 300,
-    system: HE_THONG_HOI,
+    system: heThongHoi(nn),
     messages: [{ role: 'user', content: `${chuDe ? `Đang học: ${chuDe}\n` : ''}${mau ? `Câu mẫu đang luyện: "${mau}"\n` : ''}Người học hỏi: "${cauHoi}"` }],
   });
   const noi = (kq.text ?? '').replace(/```[a-z]*|```/g, '').trim();
   if (!noi) return { lyDo: 'loi_ai' as const };
-  return { noi, ...(await docGiaSuTheoGiong(noi, docGiong(b.giong))) };
+  return { noi, ...(await docGiaSuTheoGiong(noi, docGiong(b.giong), nn)) };
 }

@@ -304,6 +304,27 @@ export default function LanguageHomePage() {
             />
             {/* IELTS sống ở đây, không ở /tech-trends nữa: một chỗ học tiếng Anh. */}
             {/* Khoá theo giáo trình của trường: Dekiru Nihongo (JPD113/JPD123). */}
+            {/* 05/10/2026: khoá JP tự học 0 → N1 và CH 0 → HSK 6 (cùng khung với IELTS). */}
+            {code === 'ja' && (
+              <StartCard
+                href="/language/ja/jp"
+                icon={<Target size={22} strokeWidth={1.75} />}
+                title="JP · Từ 0 đến N1"
+                desc="Lộ trình JLPT tự học: kana, hội thoại, ngữ pháp, chữ Hán, nghe, nói — luyện nói cùng CuongMini"
+                from="#db2777"
+                to="#8b5cf6"
+              />
+            )}
+            {code === 'zh' && (
+              <StartCard
+                href="/language/zh/ch"
+                icon={<Target size={22} strokeWidth={1.75} />}
+                title="CH · Từ 0 đến HSK 6"
+                desc="Pinyin, thanh điệu, hội thoại, chữ Hán (xem nét, tập viết), nghe, nói — luyện nói cùng CuongMini"
+                from="#dc2626"
+                to="#f59e0b"
+              />
+            )}
             {code === 'ja' && (
               <StartCard
                 href="/language/ja/dekiru"

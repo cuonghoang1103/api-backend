@@ -35,7 +35,8 @@ export type Block =
   | { t: 'rule'; formula: string; vi?: string }
   /** Tra cứu toàn bộ từ vựng của khoá (lấy từ mục lục các buổi): tìm, lọc theo buổi, thẻ nhớ. */
   | { t: 'vocabAll' }
-  | { t: 'alphabet'; groups: { sound: string; letters: { l: string; ipa: string }[] }[] }
+  /** Bảng chữ. `doc` (tuỳ chọn): chữ máy đọc thay cho `l` — khoá CH: ô "bā" đọc 八 (pinyin Latin không đọc trực tiếp được). */
+  | { t: 'alphabet'; groups: { sound: string; letters: { l: string; ipa: string; doc?: string }[] }[] }
   | { t: 'dictation'; id: string; title?: string; items: { label: string; spell: string; answer: string }[] }
   | {
       t: 'quiz'; id: string; title: string; kind: 'fill' | 'translate';
@@ -93,7 +94,7 @@ export type Block =
   | { t: 'chia' };
 
 /** `dan` = người dẫn bài nghe (giới thiệu, đánh số câu) — giọng riêng, khác mọi nhân vật. */
-export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam' | 'ja-nu' | 'ja-nam' | 'dan';
+export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam' | 'ja-nu' | 'ja-nam' | 'zh-nu' | 'zh-nam' | 'dan';
 /** Nhân vật trong hội thoại — mỗi vai một hình và một giọng cố định. */
 export type Role = 'examiner' | 'candidate' | 'a' | 'b' | 'c';
 

@@ -24,6 +24,7 @@ import { Settings } from './pages/Settings';
 import { nativePageFor } from './page-registry';
 import { findRoute, INTERNAL_ROUTES } from './routes';
 import { Toaster } from 'sonner';
+import { LoiMoiDoiKhangHost } from './features/doiKhang/LoiMoiDoiKhangHost';
 import QuickCaptureHost from '@/components/notes/QuickCaptureHost';
 import { ThongBaoHost } from './features/thongBao/ThongBaoHost';
 
@@ -203,6 +204,8 @@ function Shell() {
         </div>
         {/* Thông báo realtime + âm thanh + thông báo hệ điều hành (04/10/2026). */}
         <ThongBaoHost />
+        {/* Lời mời Đối kháng (cờ/bài realtime) — toast Nhận/Từ chối ở mọi trang (05/10/2026). */}
+        <LoiMoiDoiKhangHost />
         {/* Odin nằm NGOÀI vùng nội dung để không bị cuộn theo trang, và ngoài
             ErrorBoundary của nội dung để một trang hỏng không kéo nó chết theo. */}
         <OdinDock />

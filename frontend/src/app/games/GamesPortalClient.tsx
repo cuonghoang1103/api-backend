@@ -14,6 +14,7 @@
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
+import TheVaoDoiKhang from '@/components/doiKhang/TheVaoDoiKhang';
 import { useSearchParams } from 'next/navigation';
 import {
   Search, Trophy, Clock, Lock, Play, Sparkles, X, LayoutGrid, Rows3, Gamepad2, Medal, Flame,
@@ -138,6 +139,9 @@ export default function GamesPortalClient({ games, categories, stats, leaders }:
             <Stat n={stats.totalPlays} label={t('games.statPlays')} />
           </dl>
         </header>
+
+        {/* ── Đối kháng realtime (05/10/2026) ── */}
+        <TheVaoDoiKhang locale={locale === 'en' ? 'en' : 'vi'} />
 
         {/* ── Featured spotlight ──────────────────────── */}
         {spotlight && !hasFilters && (

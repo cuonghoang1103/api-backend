@@ -1022,6 +1022,7 @@ for route in \
     voice \
     games \
     books/tien-do \
+    doi-khang/thong-ke \
     landing/promos \
     landing/stats \
     code-lab/groups \

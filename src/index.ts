@@ -178,6 +178,7 @@ const myLanguageAdminRoutes = myLanguageModule.adminRouter;
 // IELTS — nội dung khoá học + tiến độ, phục vụ app iOS/iPad
 const ieltsRoutes = (await import(path.join(__dirname, 'routes', 'ielts.routes.js'))).default;
 const booksRoutes = (await import(path.join(__dirname, 'routes', 'books.routes.js'))).default;
+const doiKhangRoutes = (await import(path.join(__dirname, 'routes', 'doiKhang.routes.js'))).default;
 // 📷 Sách gốc — ảnh trang sách giáo trình, chỉ tài khoản được phép (SACH_RIENG_USER_IDS / ADMIN)
 const sachRiengRoutes = (await import(path.join(__dirname, 'routes', 'sachRieng.routes.js'))).default;
 const videoRoutes = (await import(path.join(__dirname, 'routes', 'video.routes.js'))).default;
@@ -678,6 +679,7 @@ app.use('/api/v1/finance', financeRoutes);
 app.use('/api/v1/ielts', ieltsRoutes);
 // Thư viện sách — tiến độ đọc (05/10/2026). Nội dung sách là tệp tĩnh của web.
 app.use('/api/v1/books', booksRoutes);
+app.use('/api/v1/doi-khang', doiKhangRoutes);
 app.use('/api/v1/sach-rieng', sachRiengRoutes);
 app.use('/api/v1/video-hoc', videoRoutes);
 app.use('/api/v1/xuong-3d', xuong3dRoutes);

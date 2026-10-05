@@ -14,6 +14,7 @@ import { useLayoutEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import GameHub from '@/components/games/hub/GameHub';
 import ChoiGameClient from '@/components/games/hub/ChoiGameClient';
+import DoiKhangClient from '@/app/games/doi-khang/DoiKhangClient';
 import { useAppState } from '../../app-state';
 import { useDich } from '../../i18n';
 
@@ -26,6 +27,8 @@ export default function TroChoiNoiDung() {
     window.dispatchEvent(new Event('locale-changed'));
   }, [nn]);
   const slug = /^\/games\/([^/?#]+)/.exec(route)?.[1];
+  // Đối kháng (05/10/2026): sảnh + bàn chơi cờ/bài realtime; tham số ?phong=/?choi= qua shim useSearchParams.
+  if (slug === 'doi-khang') return <div className="ct-tro-choi" data-choi=""><DoiKhangClient /></div>;
   if (slug && slug !== 'leaderboard') {
     return (
       <div className="ct-tro-choi" data-choi="">

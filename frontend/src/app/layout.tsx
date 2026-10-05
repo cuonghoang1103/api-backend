@@ -74,6 +74,12 @@ const ListenTogetherSync = dynamic(
   { ssr: false }
 )
 
+// Đối kháng (05/10/2026): thẻ lời mời chơi cờ/bài hiện ở MỌI trang (nghe `dk:loi-moi`).
+const LoiMoiDoiKhang = dynamic(
+  () => import('@/components/doiKhang/LoiMoiDoiKhang'),
+  { ssr: false }
+)
+
 const FloatingAIAssistant = dynamic(
   () => import('@/components/chat/FloatingAIAssistant'),
   { ssr: false }
@@ -412,6 +418,7 @@ export default function RootLayout({
               <MusicHistoryRecorder />
               <GlobalMusicPlayer />
               <ListenTogetherSync />
+              <LoiMoiDoiKhang />
               <FloatingAIAssistant />
               <ProExpiryReminder />
               <LangReviewReminder />

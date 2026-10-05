@@ -12455,3 +12455,39 @@ model HocNgay {
   @@unique([userId, stage, day], name: "uk_hoc_ngay", map: "uk_hoc_ngay")
   @@map("hoc_ngay")
 }
+
+/// Đối kháng realtime (05/10/2026) — một ván đã xong: cờ vua/cờ tướng/tiến lên/caro. Xem docs/doi-khang-spec.md.
+model DoiKhangVan {
+  id        Int      @id @default(autoincrement())
+  tro       String   @db.VarChar(12)
+  maPhong   String   @map("ma_phong") @db.VarChar(8)
+  /// userId theo ghế; bot = 0.
+  nguoiChoi Int[]    @map("nguoi_choi")
+  coBot     Boolean  @default(false) @map("co_bot")
+  ketQua    Json     @map("ket_qua")
+  soNuoc    Int      @default(0) @map("so_nuoc")
+  lichSu    Json     @map("lich_su")
+  batDau    DateTime @map("bat_dau")
+  ketThuc   DateTime @default(now()) @map("ket_thuc")
+
+  @@index([nguoiChoi], type: Gin, map: "idx_doi_khang_van_nguoi")
+  @@index([tro, ketThuc], map: "idx_doi_khang_van_tro")
+  @@map("doi_khang_van")
+}
+
+/// Xếp hạng Elo theo trò (ván có bot không tính).
+model DoiKhangHang {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  tro       String   @db.VarChar(12)
+  elo       Int      @default(1200)
+  thang     Int      @default(0)
+  thua      Int      @default(0)
+  hoa       Int      @default(0)
+  chuoi     Int      @default(0)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, tro], name: "uk_doi_khang_hang", map: "uk_doi_khang_hang")
+  @@index([tro, elo], map: "idx_doi_khang_hang_elo")
+  @@map("doi_khang_hang")
+}

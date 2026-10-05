@@ -593,6 +593,11 @@ declare module '@/components/games/hub/GameHub' {
   const GameHub: ComponentType<{ locale?: 'vi' | 'en' }>;
   export default GameHub;
 }
+// Đối kháng (05/10/2026) — sảnh + bàn chơi cờ/bài realtime, đọc ?phong=/?choi= qua shim useSearchParams.
+declare module '@/app/games/doi-khang/DoiKhangClient' {
+  const DoiKhangClient: () => JSX.Element;
+  export default DoiKhangClient;
+}
 declare module '@/components/games/hub/ChoiGameClient' {
   import type { ComponentType } from 'react';
   const ChoiGameClient: ComponentType<{ slug: string }>;

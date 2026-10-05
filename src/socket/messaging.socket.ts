@@ -36,6 +36,7 @@ import { logger } from '../utils/logger.js';
 // Phase 3: Listen Together. Additive — registers its own listen:* socket
 // handlers + listen:<roomId> rooms; does not touch the messaging logic.
 import { registerListenTogether } from './listen-together.js';
+import { registerDoiKhang } from './doiKhang.socket.js';
 import { registerCallSignaling } from './call.socket.js';
 import { registerWorkRealtime } from './work.socket.js';
 
@@ -513,6 +514,9 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
 
     // CT Work — phòng theo dự án cho board thời gian thực (work.socket.ts).
     registerWorkRealtime(io!, socket, user);
+
+    // Đối kháng realtime: cờ vua/cờ tướng/tiến lên/caro (doiKhang.socket.ts).
+    registerDoiKhang(io!, socket, user);
 
     // Typing indicator — broadcast to the other side of the
     // conversation (excludes the sender by default).

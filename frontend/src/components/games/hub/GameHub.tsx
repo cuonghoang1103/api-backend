@@ -14,6 +14,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import TheVaoDoiKhang from '@/components/doiKhang/TheVaoDoiKhang';
 import { Trophy, Flame, Sparkles, Play, Clock, Users, Gamepad2, Crown, Medal } from 'lucide-react';
 import { gamesApi, type GameDto, type GameCategoryDto, type GameBangVang, type GameStats } from '@/lib/api';
 import NhanVat3D, { type CamXuc } from '@/components/sach-hoc/goi/NhanVat3D';
@@ -141,6 +142,8 @@ export default function GameHub({ locale = 'vi' }: { locale?: 'vi' | 'en' }) {
           <NhanVat3D camXuc={cam} mucRef={mucRef} />
         </div>
       </section>
+
+      <TheVaoDoiKhang locale={locale} />
 
       {/* ── Thử thách hôm nay ── */}
       {thuThach && (

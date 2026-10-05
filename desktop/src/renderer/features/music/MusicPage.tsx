@@ -23,7 +23,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   Clock3, CloudOff, Disc3, HardDrive, Headphones, Heart, Home, Keyboard, Library,
-  ListMusic, Loader2, Maximize2, Moon, PanelRightClose, PanelRightOpen, Play, Plus, RefreshCw, Search,
+  ListMusic, Loader2, Radio, Maximize2, Moon, PanelRightClose, PanelRightOpen, Play, Plus, RefreshCw, Search,
   Shuffle, Sunset, Trash2, Trophy, X, Youtube, Zap,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
@@ -43,6 +43,7 @@ import {
   xoaPlaylist, type Playlist,
 } from './playlists';
 import { RemixDeck } from './RemixDeck';
+import { PhongNgheChung } from './PhongNgheChung';
 import { goi as goiAdmin, LoiAdmin } from '../admin/adminApi';
 import { XacMinhMfa } from '../admin/XacMinhMfa';
 import { TaiNhacLen } from './TaiNhacLen';
@@ -59,7 +60,7 @@ export interface KetQuaYouTube {
   durationSeconds?: number;
 }
 
-type Muc = 'chu' | 'bxh' | 'thu-vien' | 'thich' | 'gan-day' | 'da-tai' | 'remix' | `pl:${number}`;
+type Muc = 'chu' | 'bxh' | 'phong' | 'thu-vien' | 'thich' | 'gan-day' | 'da-tai' | 'remix' | `pl:${number}`;
 type SapXep = 'macdinh' | 'ten' | 'nghesi' | 'dai';
 
 const KHOA_BEN = 'ct-music-ben-an';
@@ -416,6 +417,19 @@ export function MusicPage() {
     [downloaded, online],
   );
 
+  /** Mix mỗi ngày theo loại nhạc (05/10/2026): trộn CỐ ĐỊNH theo ngày (cùng ngày mở lại vẫn là
+   *  mix đó — như Daily Mix), bài đã thích xếp trước, tối đa 30 bài. Sang ngày mới tự đổi. */
+  const mixNgay = useMemo(() => {
+    const ngay = new Date().toISOString().slice(0, 10);
+    const bam = (s: string) => { let h = 2166136261; for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619); return h >>> 0; };
+    return (['vi', 'en', 'zh'] as LoaiNhac[]).map((l) => {
+      const ds = tracksL.filter((t) => loaiNhac(t) === l && phatDuoc(t));
+      ds.sort((a, b) => (Number(daThich.has(b.id)) - Number(daThich.has(a.id))) || (bam(`${ngay}:${a.id}`) - bam(`${ngay}:${b.id}`)));
+      const dau = ds.slice(0, 30);
+      return { loai: l, ds: dau.sort((a, b) => bam(`${ngay}~${a.id}`) - bam(`${ngay}~${b.id}`)) };
+    }).filter((m) => m.ds.length >= 3);
+  }, [tracksL, daThich, phatDuoc]);
+
   const phatDs = useCallback((tatCa: Track[], tron = false) => {
     /* Lọc trước: "Phát tất cả" mà bài đầu là dòng YouTube chưa rút thì bấm xong
        chỉ ra một câu lỗi — đo thật 04/10 với thư viện 70 bài. */
@@ -500,6 +514,7 @@ export function MusicPage() {
   const MUC_CHINH: [Muc, string, JSX.Element, number | null][] = [
     ['chu', dich('Dành cho bạn'), <Home size={16} aria-hidden key="i" />, null],
     ['bxh', dich('Bảng xếp hạng'), <Trophy size={16} aria-hidden key="i" />, null],
+    ['phong', dich('Phòng nghe chung'), <Radio size={16} aria-hidden key="i" />, null],
     ['thu-vien', dich('Thư viện'), <Library size={16} aria-hidden key="i" />, tracks.length],
     ['thich', dich('Đã thích'), <Heart size={16} aria-hidden key="i" />, daThich.size],
     ['gan-day', dich('Nghe gần đây'), <Clock3 size={16} aria-hidden key="i" />, null],
@@ -508,6 +523,7 @@ export function MusicPage() {
   ];
 
   const tim = query.trim();
+  const dungNhacRieng = useCallback(() => { if (playing) toggle(); }, [playing, toggle]);
 
   return (
     /* `.mz-boc` là CONTAINER: bố cục co theo bề rộng THẬT của vùng nội dung
@@ -546,7 +562,7 @@ export function MusicPage() {
           {playlists.length === 0 && !taoPl && <p className="mz-nav-trong">{dich('Chưa có playlist. Bấm + để tạo.')}</p>}
           {playlists.map((p) => (
             <button key={p.id} type="button" className="mz-nav-muc mz-nav-plmuc" data-on={muc === `pl:${p.id}` && !tim} onClick={() => { setMuc(`pl:${p.id}`); setQuery(''); }}>
-              <AnhBia src={p.coverUrl} co={26} />
+              <AnhBia src={p.coverUrl} co={26} ten={p.name} />
               <span>{p.name}</span>
               {!p.isPublic && <i className="mz-nav-khoa" title={cheDoCua(p) === 'chia-se' ? 'Chia sẻ với người cụ thể' : 'Riêng tư'}><BieuTuongCheDo cheDo={cheDoCua(p)} size={11} /></i>}
               {p.trackCount ? <em>{p.trackCount}</em> : null}
@@ -651,6 +667,9 @@ export function MusicPage() {
           </section>
         )}
 
+        {/* ─── Phòng nghe chung — LUÔN gắn (chỉ ẩn) để đổi mục khác không làm rời phòng ─── */}
+        <PhongNgheChung api={api} hien={!tim && muc === 'phong'} tracks={tracks} userId={userId} dungNhacRieng={dungNhacRieng} />
+
         {/* ─── Dành cho bạn ─── */}
         {!tim && muc === 'chu' && (
           <>
@@ -697,6 +716,20 @@ export function MusicPage() {
               </div>
             </section>
 
+            {mixNgay.length > 0 && (
+              <section className="mz-khoi">
+                <h2 className="mz-h2">{dich('Mix mỗi ngày')} <small className="mz-h2-phu">{dich('đổi mới mỗi sáng')}</small></h2>
+                <div className="mz-luoi">
+                  {mixNgay.map((m) => (
+                    <button key={m.loai} type="button" className="mz-the mz-the-mix" data-loai={m.loai} onClick={() => phatDs(m.ds)}>
+                      <span className="mz-the-bia"><BiaGhep tracks={m.ds} co={150} /><span className="mz-mix-nhan">Mix {dich(TEN_LOAI[m.loai])}</span><Play size={18} className="mz-the-dau" aria-hidden /></span>
+                      <strong>{dichP('Mix {loai}', { loai: dich(TEN_LOAI[m.loai]) })}</strong>
+                      <small>{m.ds.slice(0, 3).map((t) => t.artist).filter(Boolean).join(', ')} · {dichP('{n} bài', { n: m.ds.length })}</small>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
             {lichSu && lichSu.length > 0 && (
               <HangThe tieuDe={dich('Nghe gần đây')} ds={lichSu.slice(0, 12)} onTatCa={() => setMuc('gan-day')} onPhat={(t) => playTrack(t, lichSu)} />
             )}
@@ -709,7 +742,7 @@ export function MusicPage() {
                 <div className="mz-luoi">
                   {playlists.map((p) => (
                     <button key={p.id} type="button" className="mz-the" onClick={() => setMuc(`pl:${p.id}`)}>
-                      <span className="mz-the-bia"><AnhBia src={p.coverUrl} co={150} /><ListMusic size={18} className="mz-the-dau" aria-hidden /></span>
+                      <span className="mz-the-bia"><AnhBia src={p.coverUrl} co={150} ten={p.name} /><ListMusic size={18} className="mz-the-dau" aria-hidden /></span>
                       <strong>{p.name}</strong>
                       <small>{dichP('{n} bài', { n: p.trackCount ?? 0 })}</small>
                     </button>
@@ -932,7 +965,7 @@ function HangThe({ tieuDe, ds, onPhat, onTatCa, phu }: {
         {ds.map((t) => (
           <button key={t.id} type="button" className="mz-the" data-dang={currentId === t.id && playing} onClick={() => onPhat(t)} title={t.title}>
             <span className="mz-the-bia">
-              <AnhBia src={t.coverImage} co={150} />
+              <AnhBia src={t.coverImage} co={150} ten={t.title} />
               <span className="mz-the-phat"><Play size={18} fill="currentColor" aria-hidden /></span>
             </span>
             <strong>{t.title}</strong>

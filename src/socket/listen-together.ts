@@ -56,12 +56,18 @@ interface Member {
   sockets: Set<string>;
 }
 
+interface ChatMsg { userId: number; username: string; text: string; at: number }
 interface Room {
   id: string;
   hostId: number;
   hostName: string;
   members: Map<number, Member>;
   state: RoomState;
+  /* 05/10/2026 — phòng nghe chung kiểu Discord (app desktop): tên, công khai, chat, hàng chờ chung. */
+  name: string;
+  isPublic: boolean;
+  chat: ChatMsg[];
+  queue: TrackMeta[];
 }
 
 // Module-level registry — survives across connections (one process).
@@ -128,7 +134,8 @@ function sanitizeTrack(raw: unknown): TrackMeta | null {
     id: String(t.id),
     title: String(t.title ?? 'Unknown'),
     artist: String(t.artist ?? ''),
-    audioUrl: t.audioUrl != null ? String(t.audioUrl) : null,
+    // Chặn lược đồ nguy hiểm (`javascript:`/`file:`/`data:`) — key R2 trần và link http vẫn qua như cũ.
+    audioUrl: t.audioUrl != null && !/^\s*(javascript|data|file|vbscript):/i.test(String(t.audioUrl)) ? String(t.audioUrl).slice(0, 700) : null,
     coverImage: t.coverImage != null ? String(t.coverImage) : null,
     durationSeconds: Number.isFinite(Number(t.durationSeconds)) ? Number(t.durationSeconds) : null,
   };
@@ -184,6 +191,10 @@ export function registerListenTogether(io: IOServer, socket: Socket, user: ConnU
         hostId: user.id,
         hostName: user.username,
         members: new Map(),
+        name: String(payload?.name ?? '').trim().slice(0, 60) || `Phòng của ${user.username}`,
+        isPublic: payload?.isPublic !== false,
+        chat: [],
+        queue: [],
         state: {
           track: sanitizeTrack(payload?.track),
           isPlaying: !!payload?.isPlaying,
@@ -194,7 +205,7 @@ export function registerListenTogether(io: IOServer, socket: Socket, user: ConnU
       rooms.set(id, room);
       addMember(room);
       if (typeof cb === 'function') {
-        cb({ ok: true, roomId: id, hostId: room.hostId, members: membersDTO(room), state: effectiveState(room) });
+        cb({ ok: true, roomId: id, hostId: room.hostId, members: membersDTO(room), state: effectiveState(room), name: room.name, chat: room.chat, queue: room.queue, serverNow: Date.now() });
       }
       io.to(roomKey(id)).emit('listen:members', { roomId: id, members: membersDTO(room), hostId: room.hostId });
     } catch (err) {
@@ -212,7 +223,7 @@ export function registerListenTogether(io: IOServer, socket: Socket, user: ConnU
     }
     addMember(room);
     if (typeof cb === 'function') {
-      cb({ ok: true, roomId: id, hostId: room.hostId, members: membersDTO(room), state: effectiveState(room) });
+      cb({ ok: true, roomId: id, hostId: room.hostId, members: membersDTO(room), state: effectiveState(room), name: room.name, chat: room.chat, queue: room.queue, serverNow: Date.now() });
     }
     io.to(roomKey(id)).emit('listen:members', { roomId: id, members: membersDTO(room), hostId: room.hostId });
   });
@@ -234,7 +245,9 @@ export function registerListenTogether(io: IOServer, socket: Socket, user: ConnU
       track: sanitizeTrack(payload?.track) ?? room.state.track,
       isPlaying: !!payload?.isPlaying,
       positionSec: Number(payload?.positionSec) || 0,
-      updatedAt: Date.now(),
+      // App desktop gửi kèm `at` = giờ MÁY CHỦ (đã đồng bộ đồng hồ) lúc chụp vị trí ⇒ bù được
+      // độ trễ chặng chủ phòng → máy chủ. Lệch quá 3 giây coi như sai, dùng giờ nhận.
+      updatedAt: Number.isFinite(Number(payload?.at)) && Math.abs(Date.now() - Number(payload.at)) < 3000 ? Number(payload.at) : Date.now(),
     };
     // Broadcast to everyone in the room EXCEPT the host (sender).
     socket.to(roomKey(id)).emit('listen:state', { roomId: id, ...room.state });
@@ -250,6 +263,53 @@ export function registerListenTogether(io: IOServer, socket: Socket, user: ConnU
     if (typeof cb === 'function') {
       cb({ ok: true, state: effectiveState(room), members: membersDTO(room), hostId: room.hostId });
     }
+  });
+
+  /* ── Phòng nghe chung mở rộng (05/10/2026) ───────────────────────────── */
+  const laThanhVien = (room: Room) => room.members.has(user.id);
+  // Đồng bộ đồng hồ (kiểu NTP): client đo khứ hồi, lấy mẫu RTT nhỏ nhất ⇒ lệch đồng hồ vài ms.
+  socket.on('listen:time', (_p: any, cb?: (res: unknown) => void) => { if (typeof cb === 'function') cb({ serverNow: Date.now() }); });
+  socket.on('listen:list', (_p: any, cb?: (res: unknown) => void) => {
+    if (typeof cb !== 'function') return;
+    cb({ ok: true, rooms: Array.from(rooms.values()).filter((r) => r.isPublic).slice(0, 50).map((r) => ({
+      roomId: r.id, name: r.name, hostId: r.hostId, hostName: r.hostName, members: r.members.size,
+      isPlaying: r.state.isPlaying, track: r.state.track ? { title: r.state.track.title, artist: r.state.track.artist, coverImage: r.state.track.coverImage } : null,
+    })) });
+  });
+  let chatGanNhat = 0;
+  socket.on('listen:chat', (payload: any) => {
+    const room = rooms.get(String(payload?.roomId ?? '').toUpperCase());
+    const text = String(payload?.text ?? '').trim().slice(0, 300);
+    if (!room || !laThanhVien(room) || !text || Date.now() - chatGanNhat < 400) return;
+    chatGanNhat = Date.now();
+    const msg: ChatMsg = { userId: user.id, username: user.username, text, at: Date.now() };
+    room.chat.push(msg);
+    if (room.chat.length > 50) room.chat.shift();
+    io.to(roomKey(room.id)).emit('listen:chat', { roomId: room.id, ...msg });
+  });
+  let camXucGanNhat = 0;
+  socket.on('listen:react', (payload: any) => {
+    const room = rooms.get(String(payload?.roomId ?? '').toUpperCase());
+    const emoji = String(payload?.emoji ?? '').slice(0, 8);
+    if (!room || !laThanhVien(room) || !emoji || Date.now() - camXucGanNhat < 250) return;
+    camXucGanNhat = Date.now();
+    io.to(roomKey(room.id)).emit('listen:react', { roomId: room.id, userId: user.id, username: user.username, emoji });
+  });
+  // Hàng chờ chung: thành viên nào cũng đề xuất được; chủ phòng gỡ/phát.
+  socket.on('listen:queue-add', (payload: any) => {
+    const room = rooms.get(String(payload?.roomId ?? '').toUpperCase());
+    const t = sanitizeTrack(payload?.track);
+    if (!room || !laThanhVien(room) || !t || (!t.audioUrl && !/^\d+$/.test(t.id)) || room.queue.length >= 50) return;
+    if (room.queue.some((q) => q.id === t.id)) return;
+    room.queue.push(t);
+    io.to(roomKey(room.id)).emit('listen:queue', { roomId: room.id, queue: room.queue, by: user.username, added: t.title });
+  });
+  socket.on('listen:queue-remove', (payload: any) => {
+    const room = rooms.get(String(payload?.roomId ?? '').toUpperCase());
+    if (!room || room.hostId !== user.id) return;
+    const id = String(payload?.trackId ?? '');
+    room.queue = room.queue.filter((q) => q.id !== id);
+    io.to(roomKey(room.id)).emit('listen:queue', { roomId: room.id, queue: room.queue });
   });
 
   // ── Now-listening presence handlers ──

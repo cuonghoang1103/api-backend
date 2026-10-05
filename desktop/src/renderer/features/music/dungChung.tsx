@@ -1,7 +1,7 @@
 /**
  * Mẩu dùng chung của trang Nhạc: ảnh bìa, móc đọc âm thanh nền, định dạng.
  */
-import { useSyncExternalStore, type ReactNode } from 'react';
+import { useState, useSyncExternalStore, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Music2 } from 'lucide-react';
 import { layMucKhongGian, ngheKhongGian, type MucKhongGian } from './khongGian';
@@ -21,20 +21,42 @@ export function doDaiDanhSach(tracks: Track[]): string {
 }
 
 /** Ảnh bìa có chỗ thay thế — bài không có ảnh vẫn ra một ô đẹp, không vỡ. */
-export function AnhBia({ src, co = 40, className }: { src?: string | null | undefined; co?: number; className?: string }) {
-  return src
-    ? <img src={src} alt="" loading="lazy" className={`mz-art ${className ?? ''}`} style={{ width: co, height: co }} />
-    : (
+/** Băm tên ⇒ cặp màu ổn định (cùng bài luôn cùng bìa). */
+function mauTheoTen(ten: string): [number, number] {
+  let h = 2166136261;
+  for (let i = 0; i < ten.length; i++) { h ^= ten.charCodeAt(i); h = Math.imul(h, 16777619); }
+  const g = (h >>> 0) % 360;
+  return [g, (g + 38 + ((h >>> 9) % 50)) % 360];
+}
+
+/**
+ * Ảnh bìa. Không có ảnh ⇒ BÌA TỰ TẠO theo tên (05/10/2026 — người dùng: "ảnh, khung, logo nhạc xấu quá"):
+ * nền hai màu suy từ tên bài, đĩa than mờ, chữ cái đầu — mỗi bài một bìa riêng, không còn ô xám.
+ */
+export function AnhBia({ src, co = 40, className, ten }: { src?: string | null | undefined; co?: number; className?: string; ten?: string | null | undefined }) {
+  const [hong, setHong] = useState(false);
+  if (src && !hong) return <img src={src} alt="" loading="lazy" className={`mz-art ${className ?? ''}`} style={{ width: co, height: co }} onError={() => setHong(true)} />;
+  if (!ten) {
+    return (
       <span className={`mz-art mz-art-trong ${className ?? ''}`} style={{ width: co, height: co }}>
         <Music2 size={Math.round(co * 0.4)} aria-hidden />
       </span>
     );
+  }
+  const [a, b] = mauTheoTen(ten);
+  const chu = (ten.trim().match(/[\p{L}\p{N}]/u)?.[0] ?? '♪').toUpperCase();
+  return (
+    <span className={`mz-art mz-art-tao ${className ?? ''}`} style={{ width: co, height: co, ['--h1' as string]: a, ['--h2' as string]: b, fontSize: co * 0.42 }} aria-hidden>
+      <i className="mz-art-dia" />
+      {co >= 30 && <b>{chu}</b>}
+    </span>
+  );
 }
 
 /** Ghép bốn ảnh bìa thành một ô vuông — bìa của playlist/thư viện. */
 export function BiaGhep({ tracks, co = 132 }: { tracks: Track[]; co?: number }) {
   const anh = tracks.map((t) => t.coverImage).filter((u): u is string => Boolean(u)).slice(0, 4);
-  if (anh.length < 4) return <AnhBia src={anh[0]} co={co} className="mz-bia-ghep" />;
+  if (anh.length < 4) return <AnhBia src={anh[0]} co={co} className="mz-bia-ghep" ten={tracks[0]?.title ?? 'Playlist'} />;
   return (
     <span className="mz-bia-ghep mz-bia-ghep-4" style={{ width: co, height: co }} aria-hidden>
       {anh.map((u, i) => <img key={i} src={u} alt="" loading="lazy" />)}

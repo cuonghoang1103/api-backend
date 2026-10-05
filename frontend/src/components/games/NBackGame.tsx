@@ -1,201 +1,378 @@
 'use client';
 
 /**
- * N-back kép — luyện TRÍ NHỚ LÀM VIỆC (dual n-back, Jaeggi 2008: bài tập trí nhớ
- * làm việc được nghiên cứu nhiều nhất).
+ * N-back kép — luyện TRÍ NHỚ LÀM VIỆC (dual n-back, Jaeggi 2008: bài tập trí nhớ làm việc
+ * được nghiên cứu nhiều nhất).
  *
- * Mỗi lượt: một ô trên lưới 3×3 sáng (bỏ ô giữa — 8 vị trí) KÈM một chữ cái (hiện
- * trong ô và đọc to nếu máy có giọng). Bấm "Vị trí" khi ô trùng ô của N lượt trước,
- * "Chữ" khi chữ trùng. Một ván 3 khối; mỗi khối 20 + N lượt.
+ * Mỗi lượt một thẻ trên lưới 3×3 (bỏ ô giữa — 8 vị trí) LẬT 3D để lộ một chữ cái (đọc to nếu
+ * máy có giọng). Bấm "Vị trí" khi thẻ lật trùng chỗ thẻ của N lượt trước, "Chữ" khi chữ trùng.
  *
- * Tự điều chỉnh như bản chuẩn: khối đạt ≥ 85% ⇒ N + 1; < 60% ⇒ N − 1 (tối thiểu 1).
- * Chấm theo hit/false-alarm của TỪNG kênh: bỏ lỡ một lần trùng và bấm bừa khi không
- * trùng đều trừ — không thể ăn điểm bằng cách bấm liên tục.
+ * Nâng cấp 05/10/2026 — vô tận có lên cấp:
+ *  - Cấp 1–2: 1-back · 3–5: 2-back · 6–8: 3-back · 9–10: 4-back · 11–12: 5-back · rồi N tăng dần
+ *    (tối đa 9). Trong cùng N, nhịp lượt nhanh dần. Mỗi cấp 14 + N lượt.
+ *  - Chấm kiểu "threat score": độ chính xác = trúng / (trúng + bỏ lỡ + bấm nhầm). Không bấm gì
+ *    được 0%, bấm bừa ~30% ⇒ không thể qua cấp bằng mẹo. ≥ 60% qua cấp; dưới thì mất 1 mạng
+ *    (3 mạng) và chơi lại cấp đó với dãy mới.
+ *  - Mỗi lần bấm trúng: +5 × N × hệ số chuỗi (5 trúng liền ×1,5, 10 trúng liền ×2). Qua cấp
+ *    thưởng 30 × N × độ chính xác. Ván cực giỏi tới cấp ~18 (6-back) ≈ 6–8 nghìn < trần 10 000.
  *
- * Điểm = Σ khối round(N × độ chính xác × 300). Báo một lần khi xong 3 khối.
+ * Hợp đồng GameProps: chỉ chơi, gọi onScore đúng một lần. Tạm dừng dò qua class div bọc của
+ * GameShell — nhịp lượt ngưng, tiếp tục thì chạy lại lượt đang dở.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { MapPin, Type, Volume2, VolumeX } from 'lucide-react';
+import { MapPin, Type, Heart, Flame, Target } from 'lucide-react';
 import type { GameProps } from './registry';
+import { sfx, tatTieng } from './shared/amThanh';
+import { phaoGiay, diemBay, rung } from './shared/hieuUng';
 import s from './nBack.module.css';
 
+/* ───────────── Khung co giãn + dò tạm dừng (đọc từ GameShell, không sửa GameShell) ───────────── */
+type Khung = { w: number; h: number; fs: boolean; tam: boolean };
+function useKhungChoi(goc: React.RefObject<HTMLDivElement | null>): Khung {
+  const [k, setK] = useState<Khung>({ w: 560, h: 600, fs: false, tam: false });
+  useEffect(() => {
+    const el = goc.current;
+    if (!el) return;
+    const boc = el.parentElement;
+    const vung = boc?.parentElement ?? boc ?? el;
+    const tinh = () => {
+      const fs = !!document.fullscreenElement;
+      const w = Math.max(280, vung.clientWidth);
+      const h = Math.max(400, fs ? window.innerHeight - 96 : Math.min(window.innerHeight - 130, 860));
+      const tam = !!boc?.classList.contains('pointer-events-none');
+      setK((c) => (c.w === w && c.h === h && c.fs === fs && c.tam === tam ? c : { w, h, fs, tam }));
+    };
+    tinh();
+    const ro = new ResizeObserver(tinh);
+    ro.observe(vung);
+    const mo = new MutationObserver(tinh);
+    if (boc) mo.observe(boc, { attributes: true, attributeFilter: ['class'] });
+    window.addEventListener('resize', tinh);
+    document.addEventListener('fullscreenchange', tinh);
+    return () => {
+      ro.disconnect(); mo.disconnect();
+      window.removeEventListener('resize', tinh);
+      document.removeEventListener('fullscreenchange', tinh);
+    };
+  }, [goc]);
+  return k;
+}
+
+/* ───────────── Luật chơi ───────────── */
 const VI_TRI = [0, 1, 2, 3, 5, 6, 7, 8]; // ô của lưới 3×3, bỏ ô giữa
 const CHU = ['C', 'H', 'K', 'L', 'Q', 'R', 'S', 'T']; // phụ âm đọc to dễ phân biệt
-const SO_KHOI = 3;
-const NHIP_MS = 2600;
-const HIEN_MS = 700;
+const MANG = 3;
+const TRAN = 10_000;
+const QUA_CAP = 0.6;
+
+const BANG: [number, number][] = [
+  [1, 2400], [1, 2100], [2, 2600], [2, 2350], [2, 2100], [3, 2600], [3, 2350], [3, 2150],
+  [4, 2600], [4, 2350], [5, 2600], [5, 2400],
+];
+function cauHinh(cap: number) {
+  if (cap <= BANG.length) { const [n, nhip] = BANG[cap - 1]!; return { n, nhip }; }
+  const du = cap - BANG.length;
+  return { n: Math.min(9, 5 + Math.ceil(du / 2)), nhip: du % 2 ? 2600 : 2400 };
+}
+const soLuot = (n: number) => 14 + n;
+const heSo = (chuoi: number) => (chuoi >= 10 ? 2 : chuoi >= 5 ? 1.5 : 1);
 
 type Luot = { o: number; chu: string };
-type Ket = { trungViTri: boolean; trungChu: boolean; bamViTri: boolean; bamChu: boolean };
-
-/** Sinh dãy có ~30% trùng mỗi kênh (độc lập), phần còn lại cố ý KHÔNG trùng. */
+/** Chọn ngẫu nhiên k chỉ số trong [tu, den). */
+function chonViTri(tu: number, den: number, k: number) {
+  const ds = Array.from({ length: den - tu }, (_, i) => i + tu);
+  for (let i = ds.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [ds[i], ds[j]] = [ds[j]!, ds[i]!]; }
+  return new Set(ds.slice(0, k));
+}
+/** Dãy có đúng ~30% lượt trùng mỗi kênh (tối thiểu 3); lượt khác CỐ Ý không trùng. */
 function sinhKhoi(n: number): Luot[] {
-  const dai = 20 + n;
+  const dai = soLuot(n);
+  const k = Math.max(3, Math.round((dai - n) * 0.3));
+  const trungO = chonViTri(n, dai, k);
+  const trungC = chonViTri(n, dai, k);
+  const chonKhac = <T,>(ds: T[], tranh: T | undefined) => { let x: T; do x = ds[Math.floor(Math.random() * ds.length)]!; while (x === tranh); return x; };
   const d: Luot[] = [];
   for (let i = 0; i < dai; i++) {
-    const coTruoc = i >= n;
-    const oTruoc = coTruoc ? d[i - n]!.o : -1;
-    const chuTruoc = coTruoc ? d[i - n]!.chu : '';
-    const trungO = coTruoc && Math.random() < 0.3;
-    const trungChu = coTruoc && Math.random() < 0.3;
-    const chonKhac = <T,>(ds: T[], tranh: T) => { let x: T; do x = ds[Math.floor(Math.random() * ds.length)]!; while (x === tranh); return x; };
-    d.push({ o: trungO ? oTruoc : chonKhac(VI_TRI, oTruoc), chu: trungChu ? chuTruoc : chonKhac(CHU, chuTruoc) });
+    const truoc = i >= n ? d[i - n] : undefined;
+    d.push({
+      o: truoc && trungO.has(i) ? truoc.o : chonKhac(VI_TRI, truoc?.o),
+      chu: truoc && trungC.has(i) ? truoc.chu : chonKhac(CHU, truoc?.chu),
+    });
   }
   return d;
 }
 
+type Kenh = 'vt' | 'c';
+type KetQua = 'dung' | 'sai' | 'lo' | undefined;
+type TongKet = { qua: boolean; tl: number; thuong: number; capKe: number } | null;
+type Mo = {
+  cap: number; mang: number; diem: number; chuoi: number; nCao: number;
+  day: Luot[]; i: number; hien: boolean; daBam: { vt: boolean; c: boolean }; kq: { vt?: KetQua; c?: KetQua }; loId: number;
+  trung: number; lo: number; nham: number; // của cấp đang chơi
+  tTrung: number; tLo: number; tNham: number; // cả ván
+  pha: 'choi' | 'nghi' | 'het'; tongKet: TongKet; khoiId: number; dongBang: number;
+};
+
 export default function NBackGame({ onScore, locale = 'vi' }: Partial<GameProps>) {
   const vi = locale === 'vi';
-  const [n, setN] = useState(2);
-  const [khoi, setKhoi] = useState(1);
-  const [day, setDay] = useState<Luot[]>(() => sinhKhoi(2));
-  const [i, setI] = useState(-1);
-  const [hien, setHien] = useState(false);
-  const [bamVT, setBamVT] = useState(false);
-  const [bamC, setBamC] = useState(false);
-  const [phanHoi, setPhanHoi] = useState<{ vt?: 'dung' | 'sai'; c?: 'dung' | 'sai' }>({});
-  const [diem, setDiem] = useState(0);
-  const [tongKet, setTongKet] = useState<string | null>(null);
-  const [nCao, setNCao] = useState(2);
-  const [tat, setTat] = useState(() => { try { return localStorage.getItem('game:tieng') === '0'; } catch { return false; } });
+  const gocRef = useRef<HTMLDivElement>(null);
+  const nutRef = useRef<{ vt: HTMLButtonElement | null; c: HTMLButtonElement | null }>({ vt: null, c: null });
+  const k = useKhungChoi(gocRef);
 
-  const ket = useRef<Ket[]>([]);
-  const bamRef = useRef({ vt: false, c: false });
+  const g = useRef<Mo>({
+    cap: 1, mang: MANG, diem: 0, chuoi: 0, nCao: 1,
+    day: sinhKhoi(1), i: -1, hien: false, daBam: { vt: false, c: false }, kq: {}, loId: 0,
+    trung: 0, lo: 0, nham: 0, tTrung: 0, tLo: 0, tNham: 0,
+    pha: 'choi', tongKet: null, khoiId: 1, dongBang: 1,
+  });
+  const [v, setV] = useState<Mo>(() => ({ ...g.current }));
+  const dong = useCallback(() => setV({ ...g.current, daBam: { ...g.current.daBam }, kq: { ...g.current.kq } }), []);
+
   const t0 = useRef(Date.now());
   const daBao = useRef(false);
-  const hen = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const sau = (ms: number, f: () => void) => { hen.current.push(setTimeout(f, ms)); };
+  const tamRef = useRef(false);
+  const henAn = useRef<ReturnType<typeof setTimeout>>();
+  const henNghi = useRef<ReturnType<typeof setTimeout>>();
 
   const doc = useCallback((c: string) => {
-    if (tat) return;
+    if (tatTieng()) return;
     try {
       const u = new SpeechSynthesisUtterance(c);
-      u.lang = 'en-US';
-      u.rate = 1.1;
+      u.lang = 'en-US'; u.rate = 1.1; u.volume = 0.9;
       window.speechSynthesis.cancel();
       window.speechSynthesis.speak(u);
-    } catch { /* không giọng: chữ vẫn hiện trong ô */ }
-  }, [tat]);
-
-  /** Chấm lượt vừa xong (đọc từ ref — trạng thái bấm có thể đổi ngay trước mốc). */
-  const cham = useCallback((idx: number, d: Luot[], nn: number) => {
-    if (idx < 0) return;
-    const coTruoc = idx >= nn;
-    const tVT = coTruoc && d[idx]!.o === d[idx - nn]!.o;
-    const tC = coTruoc && d[idx]!.chu === d[idx - nn]!.chu;
-    ket.current.push({ trungViTri: tVT, trungChu: tC, bamViTri: bamRef.current.vt, bamChu: bamRef.current.c });
+    } catch { /* không giọng: chữ vẫn hiện trên thẻ */ }
   }, []);
 
-  // Nhịp chính: mỗi NHIP_MS một lượt mới.
+  const ketThuc = useCallback(() => {
+    g.current.pha = 'het';
+    dong();
+    if (daBao.current || !onScore) return;
+    daBao.current = true;
+    onScore(Math.min(TRAN, Math.round(g.current.diem)), Math.round((Date.now() - t0.current) / 1000));
+  }, [onScore, dong]);
+
+  const batDauKhoi = useCallback((cap: number) => {
+    const m = g.current;
+    const qua = cap > m.cap;
+    m.cap = cap;
+    const { n } = cauHinh(cap);
+    m.nCao = Math.max(m.nCao, n);
+    m.day = sinhKhoi(n);
+    m.i = -1; m.hien = false; m.daBam = { vt: false, c: false }; m.kq = {};
+    m.trung = 0; m.lo = 0; m.nham = 0;
+    m.pha = 'choi'; m.tongKet = null; m.khoiId += 1;
+    if (qua) { m.dongBang += 1; sfx('lenCap'); }
+    dong();
+  }, [dong]);
+
+  const xongKhoi = useCallback(() => {
+    const m = g.current;
+    const { n } = cauHinh(m.cap);
+    const mau = m.trung + m.lo + m.nham;
+    const tl = mau ? m.trung / mau : 0;
+    m.hien = false;
+    if (tl >= QUA_CAP) {
+      const thuong = Math.round(30 * n * tl);
+      m.diem = Math.min(TRAN, m.diem + thuong);
+      m.tongKet = { qua: true, tl, thuong, capKe: m.cap + 1 };
+      m.pha = 'nghi';
+      sfx('sao');
+      if (gocRef.current) phaoGiay(gocRef.current, { it: true });
+    } else {
+      m.mang -= 1; m.chuoi = 0;
+      sfx('sai');
+      rung(gocRef.current);
+      if (m.mang <= 0) { m.tongKet = { qua: false, tl, thuong: 0, capKe: m.cap }; ketThuc(); return; }
+      m.tongKet = { qua: false, tl, thuong: 0, capKe: m.cap };
+      m.pha = 'nghi';
+    }
+    dong();
+    if (!tamRef.current) henNghi.current = setTimeout(() => batDauKhoi(g.current.tongKet?.capKe ?? g.current.cap), 2600);
+  }, [dong, ketThuc, batDauKhoi]);
+
+  /** Chấm lượt vừa xong: bỏ lỡ lượt trùng (cái bấm trúng/nhầm đã chấm ngay lúc bấm). */
+  const chamLuot = useCallback(() => {
+    const m = g.current;
+    const { n } = cauHinh(m.cap);
+    const i = m.i;
+    if (i < n) return;
+    const tVT = m.day[i]!.o === m.day[i - n]!.o;
+    const tC = m.day[i]!.chu === m.day[i - n]!.chu;
+    let lo = false;
+    if (tVT && !m.daBam.vt) { m.lo++; m.tLo++; m.kq.vt = 'lo'; lo = true; }
+    if (tC && !m.daBam.c) { m.lo++; m.tLo++; m.kq.c = 'lo'; lo = true; }
+    if (lo) { m.chuoi = 0; m.loId += 1; sfx('truot'); }
+  }, []);
+
+  // Nhịp chính: mỗi `nhip` ms một lượt mới. Ngưng khi tạm dừng / nghỉ giữa cấp / hết ván.
   useEffect(() => {
-    if (tongKet !== null && i === -1) return; // đang xem tổng kết khối
+    if (v.pha !== 'choi' || k.tam) return;
+    const { nhip } = cauHinh(v.cap);
     const id = setTimeout(() => {
-      cham(i, day, n);
-      const tiep = i + 1;
-      if (tiep >= day.length) { xongKhoi(); return; }
-      bamRef.current = { vt: false, c: false };
-      setBamVT(false); setBamC(false); setPhanHoi({});
-      setI(tiep);
-      setHien(true);
-      doc(day[tiep]!.chu);
-      sau(HIEN_MS, () => setHien(false));
-    }, i === -1 ? 1200 : NHIP_MS);
+      const m = g.current;
+      if (m.pha !== 'choi') return;
+      if (m.i >= 0) chamLuot();
+      const tiep = m.i + 1;
+      if (tiep >= m.day.length) { dong(); xongKhoi(); return; }
+      const loGiu = m.kq; // giữ dấu "bỏ lỡ" của lượt trước thêm một nhịp để người chơi kịp thấy
+      m.i = tiep; m.hien = true; m.daBam = { vt: false, c: false };
+      m.kq = { vt: loGiu.vt === 'lo' ? 'lo' : undefined, c: loGiu.c === 'lo' ? 'lo' : undefined };
+      dong();
+      doc(m.day[tiep]!.chu);
+      clearTimeout(henAn.current);
+      henAn.current = setTimeout(() => { g.current.hien = false; if (g.current.kq.vt === 'lo') g.current.kq.vt = undefined; if (g.current.kq.c === 'lo') g.current.kq.c = undefined; dong(); }, Math.min(950, nhip * 0.4));
+    }, v.i === -1 ? 1500 : nhip);
     return () => clearTimeout(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i, day, n, tongKet]);
+  }, [v.i, v.pha, v.khoiId, v.cap, k.tam, chamLuot, xongKhoi, doc, dong]);
 
-  useEffect(() => () => { for (const h of hen.current) clearTimeout(h); try { window.speechSynthesis.cancel(); } catch { /* bỏ qua */ } }, []);
-
-  function xongKhoi() {
-    const k = ket.current;
-    // Độ chính xác kiểu "đúng mọi quyết định": mỗi lượt có 2 quyết định (bấm/không bấm).
-    let dung = 0;
-    for (const x of k) { if (x.trungViTri === x.bamViTri) dung++; if (x.trungChu === x.bamChu) dung++; }
-    const tl = k.length ? dung / (k.length * 2) : 0;
-    const cong = Math.round(n * tl * 300);
-    const moi = diem + cong;
-    setDiem(moi);
-    const nMoi = tl >= 0.85 ? n + 1 : tl < 0.6 ? Math.max(1, n - 1) : n;
-    const loi = vi
-      ? `Khối ${khoi}: đúng ${Math.round(tl * 100)}% ở ${n}-back · +${cong} điểm${nMoi > n ? ' · Lên ' + nMoi + '-back!' : nMoi < n ? ' · Lùi về ' + nMoi + '-back' : ''}`
-      : `Block ${khoi}: ${Math.round(tl * 100)}% at ${n}-back · +${cong}${nMoi > n ? ' · Up to ' + nMoi + '-back!' : nMoi < n ? ' · Down to ' + nMoi + '-back' : ''}`;
-    ket.current = [];
-    setI(-1);
-    if (khoi >= SO_KHOI) {
-      setTongKet(loi);
-      if (!daBao.current && onScore) { daBao.current = true; onScore(moi, Math.round((Date.now() - t0.current) / 1000)); }
+  // Tạm dừng: tắt giọng, úp thẻ; tiếp tục trong lúc nghỉ giữa cấp thì đi tiếp.
+  useEffect(() => {
+    if (k.tam === tamRef.current) return;
+    tamRef.current = k.tam;
+    const m = g.current;
+    if (k.tam) {
+      clearTimeout(henNghi.current);
+      try { window.speechSynthesis.cancel(); } catch { /* bỏ qua */ }
+      m.hien = false; dong();
       return;
     }
-    setTongKet(loi);
-    setNCao((x) => Math.max(x, nMoi));
-    sau(2600, () => { setN(nMoi); setKhoi(khoi + 1); setDay(sinhKhoi(nMoi)); setTongKet(null); });
-  }
+    if (m.pha === 'nghi') henNghi.current = setTimeout(() => batDauKhoi(g.current.tongKet?.capKe ?? g.current.cap), 900);
+  }, [k.tam, batDauKhoi, dong]);
 
-  const bam = useCallback((kenh: 'vt' | 'c') => {
-    if (i < n || i < 0) return; // chưa đủ N lượt thì chưa có gì để so
-    if (kenh === 'vt' ? bamRef.current.vt : bamRef.current.c) return;
-    bamRef.current[kenh] = true;
-    const dung = kenh === 'vt' ? day[i]!.o === day[i - n]!.o : day[i]!.chu === day[i - n]!.chu;
-    if (kenh === 'vt') setBamVT(true); else setBamC(true);
-    setPhanHoi((p) => ({ ...p, [kenh]: dung ? 'dung' : 'sai' }));
-  }, [i, n, day]);
+  useEffect(() => () => {
+    clearTimeout(henAn.current); clearTimeout(henNghi.current);
+    try { window.speechSynthesis.cancel(); } catch { /* bỏ qua */ }
+  }, []);
+
+  const bam = useCallback((kenh: Kenh) => {
+    const m = g.current;
+    const { n } = cauHinh(m.cap);
+    if (m.pha !== 'choi' || tamRef.current || m.i < n || m.daBam[kenh]) return;
+    m.daBam[kenh] = true;
+    const luot = m.day[m.i]!, truoc = m.day[m.i - n]!;
+    const dung = kenh === 'vt' ? luot.o === truoc.o : luot.chu === truoc.chu;
+    const goc = gocRef.current, nut = nutRef.current[kenh];
+    let x = 0, y = 0;
+    if (goc && nut) {
+      const a = goc.getBoundingClientRect(), b = nut.getBoundingClientRect();
+      x = b.left - a.left + b.width / 2; y = b.top - a.top + b.height / 2;
+    }
+    if (dung) {
+      m.trung++; m.tTrung++; m.chuoi++;
+      const cong = Math.round(5 * n * heSo(m.chuoi));
+      m.diem = Math.min(TRAN, m.diem + cong);
+      m.kq[kenh] = 'dung';
+      if (m.chuoi >= 3) sfx('combo', { muc: m.chuoi - 2 }); else sfx('dung');
+      diemBay(goc, x, y - 26, `+${cong}`, '#67e8f9');
+      phaoGiay(goc, { x, y, it: true, mau: ['#67e8f9', '#a5f3fc', '#818cf8', '#ffffff', '#4ade80'] });
+    } else {
+      m.nham++; m.tNham++; m.chuoi = 0;
+      m.kq[kenh] = 'sai';
+      sfx('sai');
+      rung(nut);
+    }
+    dong();
+  }, [dong]);
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
-      if (e.repeat) return;
-      if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') bam('vt');
-      if (e.key === 'l' || e.key === 'L' || e.key === 'ArrowRight') bam('c');
+      if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+      const p = e.key.toLowerCase();
+      if (p === 'a' || e.key === 'ArrowLeft') { e.preventDefault(); bam('vt'); }
+      else if (p === 'l' || e.key === 'ArrowRight') { e.preventDefault(); bam('c'); }
     };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
   }, [bam]);
 
-  const luot = day[i];
-  const doiTieng = () => setTat((x) => { try { localStorage.setItem('game:tieng', x ? '1' : '0'); } catch { /* bỏ qua */ } return !x; });
+  /* ───────────── Vẽ ───────────── */
+  const { n } = cauHinh(v.cap);
+  const luot = v.i >= 0 ? v.day[v.i] : undefined;
+  const mauTong = v.tTrung + v.tLo + v.tNham;
+  const chinhXac = mauTong ? Math.round((v.tTrung / mauTong) * 100) : null;
+  const choNho = v.pha === 'choi' && v.i < n;
+  const B = Math.round(Math.max(220, Math.min(k.w - 8, k.h - 250, k.fs ? 720 : 420)));
+  const rong = Math.min(k.w, Math.max(B, 400));
 
   return (
-    <div className={s.goc}>
+    <div ref={gocRef} className={s.goc} style={{ width: rong, ['--b' as string]: `${B}px` }}>
       <div className={s.hud}>
-        <div className={s.nBadge}><b>{n}</b>-back</div>
-        <div className={s.thongSo}>
-          <span>{vi ? 'Khối' : 'Block'} <b>{khoi}/{SO_KHOI}</b></span>
-          <span>{vi ? 'Điểm' : 'Score'} <b>{diem}</b></span>
-          <span>{vi ? 'N cao nhất' : 'Best N'} <b>{nCao}</b></span>
+        <div className={s.nBadge} key={n}><b>{n}</b>-back</div>
+        <div className={s.chip}><span>{vi ? 'Cấp' : 'Level'}</span><b>{v.cap}</b></div>
+        <div className={s.chip}><span>{vi ? 'Điểm' : 'Score'}</span><b>{v.diem.toLocaleString()}</b></div>
+        <div className={s.chip} title={vi ? 'Độ chính xác cả ván' : 'Overall accuracy'}><Target size={14} /><b>{chinhXac === null ? '–' : `${chinhXac}%`}</b></div>
+        {v.chuoi >= 3 && <div key={v.chuoi} className={s.combo}><Flame size={14} /> {v.chuoi}{heSo(v.chuoi) > 1 ? ` · ×${heSo(v.chuoi)}` : ''}</div>}
+        <div className={s.tim} aria-label={`${v.mang} ${vi ? 'mạng' : 'lives'}`}>
+          {Array.from({ length: MANG }, (_, i) => <Heart key={i} size={18} data-con={i < v.mang} />)}
         </div>
-        <button type="button" className={s.nutTieng} onClick={doiTieng} aria-label={tat ? 'Bật tiếng' : 'Tắt tiếng'}>
-          {tat ? <VolumeX size={16} /> : <Volume2 size={16} />}
-        </button>
       </div>
 
-      <div className={s.thanh}><i style={{ width: `${Math.max(0, ((i + 1) / day.length) * 100)}%` }} /></div>
+      <div className={s.tienDo}>
+        <div className={s.thanh}><i style={{ width: `${Math.max(0, ((v.i + 1) / v.day.length) * 100)}%` }} /></div>
+        <span>{vi ? 'Lượt' : 'Turn'} <b>{Math.max(0, v.i + 1)}/{v.day.length}</b></span>
+        <span className={s.demCap}>✓ <b>{v.trung}</b> · {vi ? 'lỡ' : 'miss'} <b>{v.lo}</b> · {vi ? 'nhầm' : 'false'} <b>{v.nham}</b></span>
+      </div>
 
-      <div className={s.ban}>
-        {Array.from({ length: 9 }, (_, o) => (
-          <div key={o} className={s.o} data-giua={o === 4} data-sang={hien && luot?.o === o}>
-            {hien && luot?.o === o && <span className={s.chu}>{luot.chu}</span>}
-            {o === 4 && <span className={s.tam} />}
+      <div className={s.ban} style={{ width: B, height: B }}>
+        {Array.from({ length: 9 }, (_, o) => {
+          if (o === 4) return <div key={o} className={s.giua}><span className={s.tam} /></div>;
+          const lat = v.hien && luot?.o === o;
+          return (
+            <div key={o} className={s.o} data-lat={lat}>
+              <div className={s.mat}>
+                <div className={s.matTruoc} />
+                <div className={s.matSau}>{lat ? luot!.chu : ''}</div>
+              </div>
+            </div>
+          );
+        })}
+        {v.pha === 'choi' && v.i === -1 && (
+          <div key={`b${v.dongBang}`} className={s.bangCap}>
+            <b>{vi ? 'Cấp' : 'Level'} {v.cap}</b>
+            <span>{n}-back · {soLuot(n)} {vi ? 'lượt' : 'turns'}</span>
           </div>
-        ))}
-        {tongKet !== null && (
-          <div className={s.tongKet}>
-            <p>{tongKet}</p>
-            {khoi < SO_KHOI && <small>{vi ? 'Khối tiếp theo bắt đầu ngay…' : 'Next block starting…'}</small>}
+        )}
+        {v.tongKet && v.pha !== 'choi' && (
+          <div className={s.tongKet} data-qua={v.tongKet.qua}>
+            <b>{v.tongKet.qua ? (vi ? 'Qua cấp!' : 'Level clear!') : v.pha === 'het' ? (vi ? 'Hết mạng' : 'Out of lives') : (vi ? 'Chưa đạt' : 'Not quite')}</b>
+            <p>{vi ? 'Chính xác' : 'Accuracy'} <strong>{Math.round(v.tongKet.tl * 100)}%</strong>{v.tongKet.qua ? ` · +${v.tongKet.thuong}` : ` · ${vi ? 'cần' : 'need'} ${QUA_CAP * 100}%`}</p>
+            {v.pha === 'nghi' && (
+              <small>
+                {v.tongKet.qua
+                  ? (vi ? `Tiếp: cấp ${v.tongKet.capKe} · ${cauHinh(v.tongKet.capKe).n}-back` : `Next: level ${v.tongKet.capKe} · ${cauHinh(v.tongKet.capKe).n}-back`)
+                  : (vi ? `Còn ${v.mang} mạng — chơi lại cấp ${v.cap}` : `${v.mang} lives left — retry level ${v.cap}`)}
+              </small>
+            )}
           </div>
         )}
       </div>
 
       <div className={s.nut2}>
-        <button type="button" className={s.nut} data-kq={phanHoi.vt} data-da={bamVT} onPointerDown={(e) => { e.preventDefault(); bam('vt'); }}>
-          <MapPin size={20} /> {vi ? 'Vị trí trùng' : 'Position'} <kbd>A</kbd>
-        </button>
-        <button type="button" className={s.nut} data-kq={phanHoi.c} data-da={bamC} onPointerDown={(e) => { e.preventDefault(); bam('c'); }}>
-          <Type size={20} /> {vi ? 'Chữ trùng' : 'Letter'} <kbd>L</kbd>
-        </button>
+        {(['vt', 'c'] as const).map((kenh) => (
+          <button
+            key={kenh}
+            ref={(el) => { nutRef.current[kenh] = el; }}
+            type="button"
+            className={s.nut}
+            data-kq={v.kq[kenh]}
+            data-da={v.daBam[kenh]}
+            data-tat={choNho}
+            onPointerDown={(e) => { e.preventDefault(); bam(kenh); }}
+          >
+            {kenh === 'vt' ? <MapPin size={20} /> : <Type size={20} />}
+            {kenh === 'vt' ? (vi ? 'Vị trí trùng' : 'Position') : (vi ? 'Chữ trùng' : 'Letter')}
+            <kbd>{kenh === 'vt' ? 'A' : 'L'}</kbd>
+            {v.kq[kenh] === 'lo' && <em key={v.loId} className={s.lo}>{vi ? 'Bỏ lỡ!' : 'Missed!'}</em>}
+          </button>
+        ))}
       </div>
       <p className={s.goiY}>
-        {vi
-          ? `So với ${n} lượt TRƯỚC: ô sáng giống ⇒ "Vị trí", chữ giống ⇒ "Chữ". Không giống thì đừng bấm.`
-          : `Compare with ${n} turns BACK: same square ⇒ Position, same letter ⇒ Letter. Otherwise don't press.`}
+        {choNho
+          ? (vi ? `Ghi nhớ ${n} thẻ đầu — chưa có gì để so…` : `Memorise the first ${n} cards — nothing to compare yet…`)
+          : (vi
+            ? `So với ${n} lượt TRƯỚC: thẻ cùng chỗ ⇒ Vị trí (A / ←), cùng chữ ⇒ Chữ (L / →). Không trùng thì đừng bấm.`
+            : `Compare with ${n} turns BACK: same place ⇒ Position (A / ←), same letter ⇒ Letter (L / →). Otherwise don't press.`)}
       </p>
     </div>
   );

@@ -136,6 +136,8 @@ export default function GamePlayClient({ game, related }: { game: GameDto; relat
             howTo={L(game.controls, game.controlsVi)}
             locale={locale === 'vi' ? 'vi' : 'en'}
             scored={entry.scored}
+            cover={game.coverImage}
+            scoreCap={entry.starCap ?? entry.scoreCap}
             onEnd={onEnd}
             render={(props) => <GameComponent {...props} />}
             extra={

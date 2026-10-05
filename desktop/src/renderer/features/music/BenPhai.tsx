@@ -20,7 +20,9 @@ export function BenPhai({ the, setThe, onMoThuGian }: {
   onMoThuGian: () => void;
 }) {
   const { dich, dichP } = useDich();
-  const { current, playing, daThich, doiThich, tiepTheo, playTrack, boKhoiHang } = useMusicPlayer();
+  const { current, playing, daThich, doiThich, tiepTheo, playTrack, boKhoiHang, doiChoHang } = useMusicPlayer();
+  const [keo, setKeo] = useState<number | null>(null);
+  const [dich2, setDich2] = useState<number | null>(null);
   const [nhieu, setNhieu] = useState(false);
   const thich = current ? daThich.has(current.id) : false;
   const hienHang = nhieu ? tiepTheo.slice(0, 100) : tiepTheo.slice(0, 25);
@@ -31,7 +33,7 @@ export function BenPhai({ the, setThe, onMoThuGian }: {
         <div className="mz-ben-dang" data-phat={playing}>
           {current.coverImage && <div className="mz-ben-loang" style={{ backgroundImage: `url(${current.coverImage})` }} aria-hidden />}
           <div className="mz-ben-bia">
-            <AnhBia src={current.coverImage} co={248} />
+            <AnhBia src={current.coverImage} co={248} ten={current.title} />
           </div>
           <div className="mz-ben-ten-hang">
             <div className="mz-ben-chu">
@@ -79,9 +81,14 @@ export function BenPhai({ the, setThe, onMoThuGian }: {
           ) : (
             <ol className="mz-hang">
               {hienHang.map((t, i) => (
-                <li key={`${t.id}-${i}`} className="mz-hang-dong">
+                <li key={`${t.id}-${i}`} className="mz-hang-dong" draggable title={dich('Kéo để đổi thứ tự')}
+                  data-keo={keo === t.id || undefined} data-dich={dich2 === t.id && keo !== t.id || undefined}
+                  onDragStart={(e) => { setKeo(t.id); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(t.id)); }}
+                  onDragOver={(e) => { if (keo === null) return; e.preventDefault(); e.dataTransfer.dropEffect = 'move'; if (dich2 !== t.id) setDich2(t.id); }}
+                  onDrop={(e) => { e.preventDefault(); if (keo !== null) doiChoHang(keo, t.id); setKeo(null); setDich2(null); }}
+                  onDragEnd={() => { setKeo(null); setDich2(null); }}>
                   <button type="button" className="mz-hang-bam" onClick={() => playTrack(t)} title={dich('Phát ngay')}>
-                    <AnhBia src={t.coverImage} co={34} />
+                    <AnhBia src={t.coverImage} co={34} ten={t.title} />
                     <span className="mz-hang-chu">
                       <span>{t.title}</span>
                       <small>{t.artist || dich('Không rõ nghệ sĩ')} · {clock(t.durationSeconds)}</small>

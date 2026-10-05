@@ -220,8 +220,8 @@ const GAMES: GameSeed[] = [
     descriptionVi: 'Điền lưới 9x9 sao cho mỗi hàng, cột và ô 3x3 đều có đủ số 1-9.',
     longDescription:
       'A classic number puzzle. Fill each row, column and 3x3 subgrid with digits 1 through 9 without repeating a number in the same row, column or box.',
-    controls: 'Click a cell to select it, then pick a number 1-9. Pencil mode adds notes.',
-    controlsVi: 'Bấm vào ô để chọn, rồi chọn số 1-9. Chế độ bút chì để ghi nháp.',
+    controls: 'Click a cell, then press 1-9. N toggles notes, U undo, H hint. 10 levels from 6×6 warm-ups to Master.',
+    controlsVi: 'Bấm ô rồi gõ 1-9. N bật ghi chú, U hoàn tác, H gợi ý. 10 cấp từ 6×6 làm quen tới Bậc thầy.',
     categorySlug: 'iq-logic',
     difficulty: 'HARD',
     status: 'COMING_SOON',
@@ -351,8 +351,8 @@ const GAMES: GameSeed[] = [
     descriptionVi: 'Trượt và gộp các ô cùng số để lên 2048 — rồi phá kỷ lục.',
     longDescription:
       'The classic sliding-tile strategy game with smooth slide, merge and spawn animations.',
-    controls: 'Arrow keys / WASD, or swipe.',
-    controlsVi: 'Phím mũi tên / WASD, hoặc vuốt.',
+    controls: 'Arrow keys / WASD, or swipe. U to undo (limited — earn more by levelling up).',
+    controlsVi: 'Phím mũi tên / WASD, hoặc vuốt. U hoàn tác (có hạn — lên cấp được thêm lượt).',
     categorySlug: 'strategy',
     difficulty: 'MEDIUM',
     status: 'PUBLISHED',
@@ -373,8 +373,8 @@ const GAMES: GameSeed[] = [
     descriptionVi: 'Nối các cặp chấm cùng màu, dây không cắt nhau và phải phủ kín bảng.',
     longDescription:
       'Generated from a random Hamiltonian path, so every puzzle is solvable. Five levels from 5x5 to 8x8.',
-    controls: 'Drag from a dot to its twin. Drag back to undo.',
-    controlsVi: 'Kéo từ một chấm tới chấm cùng màu; kéo lùi để xoá.',
+    controls: 'Drag from a dot to its twin. Drag back to undo. R restart, H hint, N skip level.',
+    controlsVi: 'Kéo từ một chấm tới chấm cùng màu; kéo lùi để xoá. R làm lại, H gợi ý, N bỏ qua màn.',
     categorySlug: 'iq-logic',
     difficulty: 'MEDIUM',
     status: 'PUBLISHED',

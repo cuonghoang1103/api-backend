@@ -26,6 +26,8 @@ export interface GameRegistryEntry {
   load: () => ComponentType<GameProps>;
   /** Display-only mirror of the server cap. */
   scoreCap: number;
+  /** Mốc tính sao ở màn kết quả nếu khác trần (05/10/2026) — Runner trần 60 000 mà ván thường 6–10k. */
+  starCap?: number;
   /** Whether the game reports a score (Tic Tac Toe, for example, does not). */
   scored: boolean;
 }
@@ -39,6 +41,8 @@ export interface GameProps {
   onScore: (score: number, durationSec?: number) => void;
   onExit?: () => void;
   locale: 'vi' | 'en';
+  /** GameShell đang tạm dừng — game nên dừng đồng hồ/chiếu dãy (05/10/2026). */
+  paused?: boolean;
 }
 
 const loader = (fn: () => Promise<{ default: ComponentType<never> }>) =>
@@ -101,7 +105,7 @@ export const GAME_REGISTRY: Record<string, GameRegistryEntry> = {
     scored: true,
   },
   sudoku: {
-    name: 'Sudoku (4 mức, đề duy nhất)',
+    name: 'Sudoku (10 cấp, đề duy nhất)',
     load: () => loader(() => import('./SudokuGame')),
     scoreCap: 5_000,
     scored: true,
@@ -122,6 +126,7 @@ export const GAME_REGISTRY: Record<string, GameRegistryEntry> = {
     name: 'CuongMini chạy (hành động 3D)',
     load: () => loader(() => import('./RunnerGame')),
     scoreCap: 60_000,
+    starCap: 16_000, // 3★ ≈ 9,6k · 2★ ≈ 4,8k
     scored: true,
   },
   '2048': {

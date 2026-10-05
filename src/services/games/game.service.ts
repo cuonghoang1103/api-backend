@@ -26,9 +26,9 @@ const SCORE_CAPS: Record<string, number> = {
   'n-back': 10_000, // 3 khối × N tối đa ~8 × 300
   schulte: 12_000, // 3 vòng, mỗi vòng ô×600/giây — nhanh phi thực tế vẫn dưới trần
   stroop: 6_000, // 60 giây, ~1,5 câu/giây × 40 điểm
-  'ma-tran-iq': 4_000, // 12 câu × (100 + 40×5 + 60)
+  'ma-tran-iq': 4_000, // 15 cấp × (60 + 14×cấp + ≤50 giờ + ≤40 chuỗi) ≈ 3 810 (bản 05/10/2026)
   sudoku: 5_000, // gốc Siêu khó 5000, chỉ trừ xuống
-  'noi-day': 6_000, // 5 màn × (200×(N−3) + 300)
+  'noi-day': 6_000, // 12 màn × (30×N + 10×màn + ≤150 giờ) ≈ 5 130 (bản 05/10/2026)
   'khu-vuon': 3_000, // 180 giây, 16 luống bí ngô vàng chăm hoàn hảo vẫn dưới trần
   runner: 60_000, // 30 m/s × 20 phút + sao — ván 20 phút liền là phi thực tế
   '2048': 400_000, // ô 65536 ≈ 1,1 triệu là phi thực tế; ván rất giỏi ~ 200k

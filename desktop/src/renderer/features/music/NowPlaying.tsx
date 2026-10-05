@@ -91,7 +91,7 @@ export function NowPlaying({ onDong }: { onDong: () => void }) {
       <div className="mz-tg-than">
         <div className="mz-tg-trai">
           <div className="mz-tg-bia">
-            <AnhBia src={current.coverImage} co={340} />
+            <AnhBia src={current.coverImage} co={340} ten={current.title} />
           </div>
           <div className="mz-tg-ten-hang">
             <div>

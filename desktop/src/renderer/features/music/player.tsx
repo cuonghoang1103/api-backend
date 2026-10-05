@@ -217,6 +217,8 @@ interface MusicPlayerValue {
   /** Thêm vào cuối hàng chờ. */
   themVaoHang: (track: Track) => void;
   boKhoiHang: (trackId: number) => void;
+  /** Kéo-thả trong "Tiếp theo": đưa `trackId` lên đứng ngay TRƯỚC `truocId`. */
+  doiChoHang: (trackId: number, truocId: number) => void;
   // Thích
   daThich: Set<number>;
   doiThich: (track: Track) => Promise<void>;
@@ -719,6 +721,21 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     setQueue((cu) => (cu.length > 0 ? cu : tracks).filter((t) => t.id !== trackId));
   }, [currentId, tracks]);
 
+  const doiChoHang = useCallback((trackId: number, truocId: number) => {
+    if (trackId === truocId || trackId === currentId) return;
+    const chen = <T,>(ds: T[], laMinh: (x: T) => boolean, laDich: (x: T) => boolean) => {
+      const minh = ds.find(laMinh);
+      if (minh === undefined) return ds;
+      const con = ds.filter((x) => !laMinh(x));
+      const at = con.findIndex(laDich);
+      con.splice(at < 0 ? con.length : at, 0, minh);
+      return con;
+    };
+    shuffleOrder.current = chen(shuffleOrder.current, (id) => id === trackId, (id) => id === truocId);
+    setQueue((cu) => chen(cu.length > 0 ? cu : tracks, (t) => t.id === trackId, (t) => t.id === truocId));
+    setPhienTron((n) => n + 1);
+  }, [currentId, tracks]);
+
   // ─── Tua ────────────────────────────────────────────────
   const batDauTua = useCallback((giay: number) => {
     seekingRef.current = giay;
@@ -812,12 +829,12 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     playTrack, toggle, step, batDauTua, chotTua, tuaToi,
     volume, setVolume, muted, setMuted, shuffle, setShuffle, repeat, setRepeat,
     mucNhip,
-    tiepTheo, phatTiep, themVaoHang, boKhoiHang,
+    tiepTheo, phatTiep, themVaoHang, boKhoiHang, doiChoHang,
     daThich, doiThich, nhipLichSu,
     eq, datEq, eqDuoc,
     henGio, henGioConLai, datHenGio,
   }), [
-    tiepTheo, phatTiep, themVaoHang, boKhoiHang, daThich, doiThich, nhipLichSu,
+    tiepTheo, phatTiep, themVaoHang, boKhoiHang, doiChoHang, daThich, doiThich, nhipLichSu,
     eq, datEq, eqDuoc, henGio, henGioConLai, datHenGio,
     tracks, loading, error, loadTracks, downloaded, downloading, usage, download, remove, clearAll,
     current, currentId, playing, position, length, seeking,

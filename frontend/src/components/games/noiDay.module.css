@@ -1,18 +1,92 @@
-/* Nối dây — dây neon dày bo tròn trên lưới tối; chấm phát sáng, thắng màn thì cả bảng loé. */
-.goc { width: 100%; max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 12px; color: #f1f5f9; user-select: none; -webkit-user-select: none; }
-.hud { width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.chip { padding: 6px 12px; border-radius: 999px; font-size: 13px; color: rgba(241, 245, 249, 0.75); background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.1); }
-.chip b { color: #fff; font-variant-numeric: tabular-nums; }
-.nut { margin-left: auto; padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 650; color: #e2e8f0; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); }
-.ban {
-  width: min(100%, 520px); aspect-ratio: 1; border-radius: 22px; touch-action: none; cursor: crosshair;
-  background: radial-gradient(90% 90% at 50% 0%, rgba(59, 130, 246, 0.16), transparent 70%), linear-gradient(160deg, #111a33, #080c1c);
-  box-shadow: 0 30px 60px -30px rgba(30, 64, 175, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.06); padding: 6px;
-  transition: box-shadow 0.4s;
+/* Nối dây (05/10/2026) — bảng kính đêm nổi khối; ống dây bóng bo tròn (quầng + thân + bóng dưới + vệt sáng),
+   dây nối xong có dòng sáng chảy; chấm là viên bi gradient; lấp đầy bàn thì sóng sáng chạy dọc từng ống. */
+.goc {
+  position: relative; max-width: 100%; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 12px;
+  color: #f1f5f9; user-select: none; -webkit-user-select: none; font-variant-numeric: tabular-nums;
 }
-.ban[data-thang='true'] { box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.7), 0 0 60px -6px rgba(250, 204, 21, 0.6); animation: bung 0.6s ease; }
-@keyframes bung { 50% { transform: scale(1.025); } }
-.day { filter: drop-shadow(0 0 8px currentColor); opacity: 0.92; }
-.cham { filter: drop-shadow(0 0 10px var(--m)); stroke: rgba(255, 255, 255, 0.85); stroke-width: 5; }
-.goiY { font-size: 13px; text-align: center; color: rgba(241, 245, 249, 0.6); min-height: 1.5em; }
-@media (prefers-reduced-motion: reduce) { .ban { animation: none !important; } }
+.goc kbd {
+  display: inline-block; padding: 0 5px; margin-left: 2px; border-radius: 5px; font-family: inherit; font-weight: 700; font-size: 10.5px; line-height: 1.5;
+  color: #e2e8f0; background: rgba(0, 0, 0, 0.25); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* ── HUD ── */
+.hud { width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 40px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 999px; font-size: 12.5px; color: rgba(241, 245, 249, 0.72);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)); border: 1px solid rgba(148, 197, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 6px 14px -8px rgba(0, 0, 0, 0.6);
+}
+.chip b { color: #fff; font-size: 15px; }
+.chip i { font-style: normal; margin-left: -4px; color: rgba(241, 245, 249, 0.45); }
+.phu { position: relative; flex: 1 1 110px; min-width: 100px; height: 26px; border-radius: 999px; overflow: hidden; background: rgba(8, 12, 28, 0.7); box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(255, 255, 255, 0.06); }
+.phu i { position: absolute; inset: 3px; border-radius: inherit; transform-origin: left; background: linear-gradient(90deg, #f43f5e, #facc15, #22c55e, #06b6d4, #a855f7); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45); transition: transform 0.25s cubic-bezier(.2, .8, .2, 1); }
+.phu b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 12px; font-weight: 800; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); }
+
+/* ── Bảng ── */
+.ban {
+  display: block; border-radius: 24px; touch-action: none; cursor: crosshair;
+  background:
+    radial-gradient(90% 70% at 30% 0%, rgba(96, 165, 250, 0.2), transparent 65%),
+    linear-gradient(165deg, #162142 0%, #0d1530 60%, #080d20 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -3px 0 rgba(0, 0, 0, 0.4),
+    0 4px 0 #050817, 0 34px 70px -30px rgba(37, 99, 235, 0.85), 0 0 0 1px rgba(147, 197, 253, 0.14);
+  transition: box-shadow 0.5s ease;
+}
+.ban[data-thang='true'] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 0 #050817, 0 0 0 3px rgba(250, 204, 21, 0.75), 0 0 70px -6px rgba(250, 204, 21, 0.55);
+  animation: bung 0.7s cubic-bezier(.3, 1.5, .5, 1);
+}
+@keyframes bung { 40% { transform: scale(1.025); } }
+
+.o { fill: #ffffff; fill-opacity: 0.045; transition: fill-opacity 0.2s ease; }
+.o[data-co='true'] { fill-opacity: 0.16; }
+.o[data-song='true'] { animation: song 0.9s ease-out backwards; }
+@keyframes song { 0% { fill-opacity: 0.16; } 30% { fill-opacity: 0.6; } 100% { fill-opacity: 0.22; } }
+
+.ong { transition: opacity 0.2s; }
+.ong[data-dang='true'] polyline:first-child { stroke-opacity: 0.32; }
+.chay { animation: chay 1.1s linear infinite; }
+@keyframes chay { to { stroke-dashoffset: -35; } }
+
+.cham { transform-box: fill-box; transform-origin: center; transition: transform 0.25s cubic-bezier(.3, 1.6, .5, 1); }
+.cham[data-dang='true'] { transform: scale(1.1); }
+.cham[data-xong='true'] { animation: chamXong 0.45s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes chamXong { 50% { transform: scale(1.2); } }
+
+/* ── Chân ── */
+.chan { width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.goiY { font-size: 12.5px; color: rgba(241, 245, 249, 0.6); }
+.nutNhom { display: flex; gap: 8px; margin-left: auto; }
+.nut {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 12px; font-size: 12.5px; font-weight: 700; cursor: pointer; color: #e2e8f0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04)); border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 3px 0 rgba(0, 0, 0, 0.4); transition: transform 0.12s, box-shadow 0.12s, opacity 0.2s;
+}
+.nut:hover:not(:disabled) { background: linear-gradient(180deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.06)); }
+.nut:active:not(:disabled) { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(0, 0, 0, 0.4); }
+.nut:disabled { opacity: 0.35; cursor: default; }
+
+/* ── Băng "Màn N" ── */
+.bang {
+  position: absolute; left: 50%; top: 48%; z-index: 30; display: flex; flex-direction: column; align-items: center; padding: 14px 40px 16px; border-radius: 24px; pointer-events: none;
+  color: #fff; background: linear-gradient(160deg, rgba(14, 165, 233, 0.94), rgba(99, 102, 241, 0.94));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 6px 0 rgba(30, 64, 175, 0.9), 0 30px 60px -20px rgba(14, 165, 233, 0.8);
+  animation: bang 1.7s cubic-bezier(.2, .9, .3, 1) forwards;
+}
+.bang small { font-size: 11px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.9; }
+.bang b { font-size: 56px; font-weight: 900; line-height: 1; text-shadow: 0 3px 0 rgba(30, 64, 175, 0.8); }
+.bang span { font-size: 13px; font-weight: 700; opacity: 0.92; }
+@keyframes bang {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4) rotate(-6deg); }
+  18% { opacity: 1; transform: translate(-50%, -50%) scale(1.08) rotate(1deg); }
+  28% { transform: translate(-50%, -50%) scale(1) rotate(0); }
+  78% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -80%) scale(0.92); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ban, .o, .chay, .cham, .phu i { animation: none !important; transition: none !important; }
+  .bang { animation: bangTinh 1.7s linear forwards; }
+  @keyframes bangTinh { 0%, 85% { opacity: 1; transform: translate(-50%, -50%); } 100% { opacity: 0; transform: translate(-50%, -50%); } }
+}

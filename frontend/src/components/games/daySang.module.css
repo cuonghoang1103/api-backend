@@ -1,71 +1,160 @@
-/* Dãy sáng — ô kính phát sáng trên nền đêm. Màu mỗi ô theo --hue (trải đều vòng màu). */
+/* Dãy sáng — phím đàn kính phát sáng trên nền đêm tím. Mỗi ô một màu theo --hue (xanh → tím → hồng),
+   khối nổi 3D: viền sáng trên, thân dày phía dưới, nhấn xuống khi bấm. Kích thước do JS đo khung (--b). */
 .goc {
-  --nen: #0b0820;
-  width: 100%; max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 14px;
+  --b: 460px;
+  margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 10px;
   user-select: none; -webkit-user-select: none; color: #ede9fe; font-family: inherit;
 }
-.hud { width: 100%; display: flex; align-items: center; gap: 10px; }
-.o1 {
-  display: flex; flex-direction: column; align-items: center; min-width: 64px; padding: 6px 10px; border-radius: 12px;
-  background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1);
-}
-.o1 b { font-size: 20px; line-height: 1.1; font-variant-numeric: tabular-nums; background: linear-gradient(90deg, #c4b5fd, #f0abfc); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.nhanNho { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237, 233, 254, 0.6); }
-.tim { margin-left: auto; display: flex; gap: 4px; }
-.tim svg { color: #475569; transition: color 0.3s, transform 0.3s; }
-.tim svg[data-con='true'] { color: #fb7185; fill: #fb7185; filter: drop-shadow(0 0 6px rgba(251, 113, 133, 0.6)); }
-.nutTieng { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: rgba(255, 255, 255, 0.06); color: #c4b5fd; border: 1px solid rgba(255, 255, 255, 0.1); }
 
+/* HUD */
+.hud { width: 100%; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.chip {
+  display: inline-flex; align-items: baseline; gap: 6px; padding: 6px 12px; border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 6px 16px -10px rgba(0, 0, 0, 0.8);
+}
+.chip span { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(237, 233, 254, 0.6); }
+.chip svg { align-self: center; color: #c4b5fd; }
+.chip b {
+  font-size: 18px; line-height: 1.1; font-variant-numeric: tabular-nums;
+  background: linear-gradient(90deg, #ddd6fe, #f0abfc); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.chip[data-an='true'] { opacity: 0.6; }
+.combo {
+  display: inline-flex; align-items: center; gap: 4px; padding: 5px 11px; border-radius: 999px; font-weight: 800; font-size: 13px;
+  color: #3b0764; background: linear-gradient(135deg, #fde68a, #f9a8d4);
+  box-shadow: 0 0 18px -4px rgba(249, 168, 212, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  animation: bat 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes bat { from { transform: scale(0.4); opacity: 0; } }
+.tim { margin-left: auto; display: flex; gap: 4px; }
+.tim svg { color: #3f3a5a; transition: color 0.3s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.tim svg[data-con='true'] { color: #fb7185; fill: #fb7185; filter: drop-shadow(0 0 6px rgba(251, 113, 133, 0.6)); }
+.tim svg[data-con='false'] { transform: scale(0.8); }
+
+/* Dòng trạng thái + chấm tiến độ */
 .nhanPha {
-  min-height: 34px; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 650; color: #e9d5ff;
+  min-height: 28px; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 650; color: #e9d5ff;
   transition: color 0.3s;
 }
 .goc[data-pha='dung'] .nhanPha { color: #86efac; }
 .goc[data-pha='sai'] .nhanPha { color: #fda4af; }
 .nhanPha[data-nguoc='true'] { color: #fde68a; }
-.huyHieu { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 999px; font-size: 12px; background: rgba(250, 204, 21, 0.16); color: #fde68a; border: 1px solid rgba(250, 204, 21, 0.35); }
-.tienDo { font-variant-numeric: tabular-nums; padding: 2px 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); font-size: 13px; }
+.huyHieu {
+  display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; font-size: 12px;
+  background: rgba(250, 204, 21, 0.16); color: #fde68a; border: 1px solid rgba(250, 204, 21, 0.35);
+}
+.cham { display: flex; gap: 6px; min-height: 10px; flex-wrap: wrap; justify-content: center; max-width: 100%; }
+.cham i {
+  width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5); transition: background 0.2s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+}
+.cham i[data-xong='true'] { background: linear-gradient(180deg, #f0abfc, #a78bfa); transform: scale(1.25); box-shadow: 0 0 10px rgba(240, 171, 252, 0.8); }
 
+/* Bàn đàn */
 .ban {
   --n: 3;
-  position: relative; width: min(100%, 460px); aspect-ratio: 1; display: grid; gap: clamp(8px, 2.2vw, 14px);
-  grid-template-columns: repeat(var(--n), 1fr); padding: clamp(12px, 3vw, 20px); border-radius: 28px;
+  position: relative; display: grid; gap: calc(var(--b) * 0.028);
+  grid-template-columns: repeat(var(--n), 1fr); grid-template-rows: repeat(var(--n), 1fr);
+  padding: calc(var(--b) * 0.04); border-radius: calc(var(--b) * 0.07);
   background:
-    radial-gradient(80% 80% at 50% 0%, rgba(139, 92, 246, 0.25), transparent 70%),
-    linear-gradient(160deg, #191338, var(--nen));
-  box-shadow: 0 30px 60px -30px rgba(76, 29, 149, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transition: box-shadow 0.4s;
+    radial-gradient(90% 70% at 50% 0%, rgba(167, 139, 250, 0.28), transparent 70%),
+    radial-gradient(60% 50% at 50% 110%, rgba(236, 72, 153, 0.16), transparent 70%),
+    linear-gradient(165deg, #1d1642, #0c0921 70%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 2px 0 #050314, 0 34px 70px -28px rgba(91, 33, 182, 0.85), 0 0 0 1px rgba(167, 139, 250, 0.16);
+  transition: box-shadow 0.4s ease;
 }
-.goc[data-pha='dung'] .ban { box-shadow: 0 0 0 2px rgba(134, 239, 172, 0.5), 0 30px 70px -20px rgba(34, 197, 94, 0.5); animation: bung 0.5s ease; }
-.goc[data-pha='sai'] .ban { animation: rung 0.4s ease; }
-@keyframes bung { 50% { transform: scale(1.02); } }
-@keyframes rung { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+.ban[data-pha='dung'] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 2px rgba(134, 239, 172, 0.55), 0 34px 80px -24px rgba(34, 197, 94, 0.55);
+  animation: bung 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes bung { 50% { transform: scale(1.015); } }
 
 .o {
   --hue: 260;
-  position: relative; border-radius: 18%; border: 1px solid hsla(var(--hue), 80%, 70%, 0.25); cursor: pointer;
-  background: linear-gradient(150deg, hsla(var(--hue), 70%, 40%, 0.32), hsla(var(--hue), 60%, 22%, 0.4));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 6px 14px -8px rgba(0, 0, 0, 0.6);
-  transition: transform 0.12s ease, background 0.15s, box-shadow 0.15s;
-  touch-action: manipulation;
+  position: relative; border: 0; border-radius: 22%; cursor: default; padding: 0;
+  background:
+    radial-gradient(120% 90% at 30% 15%, hsla(var(--hue), 90%, 78%, 0.32), transparent 55%),
+    linear-gradient(170deg, hsl(var(--hue), 55%, 34%), hsl(var(--hue), 60%, 18%));
+  box-shadow:
+    inset 0 1.5px 0 hsla(var(--hue), 100%, 88%, 0.35), inset 0 -3px 6px rgba(0, 0, 0, 0.35),
+    0 calc(var(--b) * 0.011) 0 hsl(var(--hue), 55%, 11%), 0 calc(var(--b) * 0.024) calc(var(--b) * 0.03) -6px rgba(0, 0, 0, 0.7);
+  transform: translateY(0);
+  transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.18s ease, filter 0.2s ease, background 0.18s ease;
+  touch-action: manipulation; outline: none;
 }
-.o:disabled { cursor: default; }
-.o:not(:disabled):hover { transform: translateY(-2px); border-color: hsla(var(--hue), 90%, 75%, 0.55); }
+.o[data-mo='true'] { cursor: pointer; }
+.o[data-mo='true']:hover { filter: brightness(1.15); }
+.o[data-mo='true']:active {
+  transform: translateY(calc(var(--b) * 0.009));
+  box-shadow: inset 0 1.5px 0 hsla(var(--hue), 100%, 88%, 0.35), 0 calc(var(--b) * 0.003) 0 hsl(var(--hue), 55%, 11%), 0 4px 10px -6px rgba(0, 0, 0, 0.7);
+}
+/* Bóng kính cong phía trên ô. */
+.o::before {
+  content: ''; position: absolute; left: 12%; right: 12%; top: 7%; height: 32%; border-radius: 50% / 70%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+.o kbd {
+  position: absolute; right: 9%; bottom: 8%; font-family: inherit; font-weight: 700; line-height: 1;
+  font-size: calc(var(--b) / var(--n) * 0.13);
+  color: hsla(var(--hue), 90%, 88%, 0.5); pointer-events: none;
+}
 .o[data-sang='true'] {
-  transform: scale(1.06);
-  background: radial-gradient(circle at 50% 40%, hsl(var(--hue), 100%, 88%), hsl(var(--hue), 95%, 62%) 55%, hsl(var(--hue), 90%, 45%));
-  box-shadow: 0 0 28px 6px hsla(var(--hue), 100%, 65%, 0.75), 0 0 70px 10px hsla(var(--hue), 100%, 60%, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.6);
+  transform: translateY(calc(var(--b) * 0.006)) scale(1.04);
+  background:
+    radial-gradient(circle at 50% 38%, hsl(var(--hue), 100%, 92%), hsl(var(--hue), 95%, 66%) 50%, hsl(var(--hue), 85%, 46%));
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.7), 0 calc(var(--b) * 0.005) 0 hsl(var(--hue), 70%, 30%),
+    0 0 calc(var(--b) * 0.06) calc(var(--b) * 0.012) hsla(var(--hue), 100%, 65%, 0.75),
+    0 0 calc(var(--b) * 0.15) calc(var(--b) * 0.02) hsla(var(--hue), 100%, 60%, 0.3);
 }
+.o[data-sang='true'] kbd { color: hsla(var(--hue), 60%, 25%, 0.7); }
 /* Gợn sóng lan ra khi ô sáng. */
 .o[data-sang='true']::after {
-  content: ''; position: absolute; inset: -4px; border-radius: inherit; border: 2px solid hsla(var(--hue), 100%, 75%, 0.8);
-  animation: gon 0.5s ease-out forwards; pointer-events: none;
+  content: ''; position: absolute; inset: -3px; border-radius: inherit; border: 2px solid hsla(var(--hue), 100%, 80%, 0.85);
+  animation: gon 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; pointer-events: none;
 }
-@keyframes gon { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(1.35); } }
-.o[data-loi='true'] { background: linear-gradient(150deg, #f43f5e, #9f1239); box-shadow: 0 0 30px 6px rgba(244, 63, 94, 0.6); animation: rung 0.35s ease; }
+@keyframes gon { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(1.32); } }
+.o[data-loi='true'] {
+  background: radial-gradient(circle at 50% 38%, #fecdd3, #f43f5e 55%, #9f1239);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.6), 0 0 34px 6px rgba(244, 63, 94, 0.6);
+  animation: lac 0.38s ease;
+}
+@keyframes lac { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
 
-.goiY { font-size: 12.5px; color: rgba(237, 233, 254, 0.55); }
+/* Băng "Cấp N" */
+.bangCap {
+  position: absolute; left: 50%; top: 50%; z-index: 5; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 14px 30px; border-radius: 22px; pointer-events: none; white-space: nowrap;
+  background: linear-gradient(160deg, rgba(49, 26, 107, 0.92), rgba(24, 12, 56, 0.94));
+  border: 1px solid rgba(216, 180, 254, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 20px 50px -14px rgba(168, 85, 247, 0.9);
+  animation: bang 1.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.bangCap b {
+  font-size: calc(var(--b) * 0.1); font-weight: 900; line-height: 1;
+  background: linear-gradient(180deg, #fff, #f0abfc 60%, #c084fc); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.bangCap span { font-size: 13px; font-weight: 650; color: #e9d5ff; }
+@keyframes bang {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5) rotate(-6deg); }
+  22% { opacity: 1; transform: translate(-50%, -50%) scale(1.08) rotate(1deg); }
+  34% { transform: translate(-50%, -50%) scale(1) rotate(0); }
+  78% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -70%) scale(0.92); }
+}
+
+.goiY { font-size: 12.5px; color: rgba(237, 233, 254, 0.55); text-align: center; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ban, .o, .o::after { animation: none !important; transition: none; }
+  .ban, .o, .o::after, .combo, .cham i { animation: none !important; transition: none !important; }
+  .bangCap { animation: bangTinh 1.35s linear forwards; }
+}
+@keyframes bangTinh {
+  0%, 80% { opacity: 1; transform: translate(-50%, -50%); }
+  100% { opacity: 0; transform: translate(-50%, -50%); }
 }

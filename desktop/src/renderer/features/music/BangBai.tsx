@@ -123,7 +123,7 @@ function DongBai({ track, so, coSo, hanhDong, phu, onMenu }: {
             ? dich('Bài lấy từ YouTube — bấm để rút âm thanh về máy chủ rồi phát (10-60 giây)')
             : !phatDuoc ? dich('Chưa tải về máy — cần mạng để nghe') : undefined}
         >
-          <AnhBia src={track.coverImage} co={40} />
+          <AnhBia src={track.coverImage} co={40} ten={track.title} />
           <span className="mz-dong-bia-phu">
             {hanhDong.dangRut === track.id
               ? <Loader2 size={16} className="ct-spin" aria-hidden />

@@ -96,6 +96,15 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // Thư viện sách của APP DESKTOP (05/10/2026): app chạy ở `app://cuongthai` nên
+        // tải tệp sách tĩnh (`/books/<slug>.html`, bản dịch `/books/i18n/*.json`, logo
+        // bìa `/books/logos/*.svg` dùng làm CSS mask) là yêu cầu KHÁC NGUỒN — thiếu dòng
+        // này Chromium chặn bằng CORS. Sách là nội dung công khai, yêu cầu không kèm
+        // cookie (credentials: 'omit') ⇒ mở `*` cho riêng thư mục này là an toàn.
+        source: '/books/:path*',
+        headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }],
+      },
+      {
         // Disable SSR cache for the music page so it always renders fresh
         source: '/music',
         headers: [

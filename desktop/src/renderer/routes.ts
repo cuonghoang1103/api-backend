@@ -155,6 +155,9 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['code', 'lab', 'bài tập', 'thuc hanh'] },
   { path: '/exam', label: 'Exam Room', icon: ClipboardList, group: 'hoc',
     keywords: ['exam', 'exam room', 'phòng thi', 'thi', 'de thi', 'kiem tra', 'phong thi'] },
+  /* 05/10/2026: Library — đọc sách mỗi ngày (41 cuốn, tiến độ đồng bộ, mục tiêu ngày). */
+  { path: '/books', label: 'Library', icon: Library, group: 'hoc',
+    keywords: ['library', 'books', 'sach', 'sách', 'doc sach', 'đọc sách', 'thu vien', 'thư viện', 'book'] },
   { path: '/ielts', label: 'IELTS', icon: Award, group: 'hoc',
     keywords: ['ielts', 'luyen thi', 'band', 'listening', 'reading', 'writing', 'speaking', 'phat am', 'phong thi'] },
   /* 05/10/2026: khoá tiếng Nhật (0 → N1, kèm Bài giảng trên lớp Dekiru) và tiếng Trung (0 → HSK 6). */
@@ -250,7 +253,7 @@ export const GROUP_ORDER: readonly RouteGroup[] = ['chinh', 'ai', 'hoc', 'lam', 
 export const THANH_BEN: Readonly<Partial<Record<RouteGroup, readonly string[]>>> = {
   chinh: ['/dashboard', '/notifications', '/messages', '/notes', '/friends'],
   ai: ['/chat', '/ai-templates'],
-  hoc: ['/ielts', '/jp', '/ch', '/academy', '/courses', '/code-lab', '/exam', '/interview', '/language', '/algorithms', '/simulation', '/roadmap'],
+  hoc: ['/books', '/ielts', '/jp', '/ch', '/academy', '/courses', '/code-lab', '/exam', '/interview', '/language', '/algorithms', '/simulation', '/roadmap'],
   lam: ['/creator', '/maker-lab', '/projects', '/work'],
   /* Đợt 2 (04/10/2026): người dùng thêm lại Music, Projects, Interview, Code Lab,
      Exam Room và mở nhóm "Tiện ích" (Đo mạng, MoneyFlow). */

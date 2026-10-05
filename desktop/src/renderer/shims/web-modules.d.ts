@@ -598,3 +598,18 @@ declare module '@/components/games/hub/ChoiGameClient' {
   const ChoiGameClient: ComponentType<{ slug: string }>;
   export default ChoiGameClient;
 }
+
+/* ── Library (05/10/2026): danh mục sách + hàm băm khối văn xuôi của trình đọc web. ── */
+declare module '@/app/books/booksData' {
+  export type Book = { vol: string; file: string; color: string; title: string; chapters: string; practice: string; words: string; icon: string };
+  export type BookGroup = { title: string; desc: string; books: Book[] };
+  export const BOOK_GROUPS: BookGroup[];
+  export const SKILL_BOOKS: Book[];
+  export const BOOK_LOGOS: Record<string, string>;
+  export const SERIES_STATS: { readonly volumes: string; readonly chapters: string; readonly practice: string; readonly listings: string; readonly tables: string; readonly words: string };
+}
+declare module '@/lib/bookBlocks' {
+  export interface BookBlockRef { el: HTMLElement; hash: string }
+  /** Nhận Document hoặc ShadowRoot — hàm chỉ dùng querySelectorAll. */
+  export function collectBookBlockRefs(doc: Document): BookBlockRef[];
+}

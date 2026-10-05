@@ -1021,6 +1021,7 @@ for route in \
     tech-trends/articles \
     voice \
     games \
+    books/tien-do \
     landing/promos \
     landing/stats \
     code-lab/groups \

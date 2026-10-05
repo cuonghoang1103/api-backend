@@ -12381,3 +12381,44 @@ model WorkSpecReview {
   @@index([stageId, createdAt], name: "idx_work_spec_review_stage")
   @@map("work_spec_reviews")
 }
+
+// ─── THƯ VIỆN SÁCH (/books) — tiến độ đọc theo người (05/10/2026) ───────────────
+// App desktop có mục "Library" để đọc sách mỗi ngày: nhớ đọc tới đâu (đổi máy vẫn
+// đọc tiếp), dấu trang, tổng phút đọc, mục tiêu phút/ngày + chuỗi ngày. Không FK tới
+// users (cùng kiểu IeltsProgress) — xoá tài khoản thì dọn theo user_id.
+
+/// Một cuốn sách một người đang đọc / đã đọc.
+model BookReading {
+  id         Int       @id @default(autoincrement())
+  userId     Int       @map("user_id")
+  /// Tên tệp sách không đuôi, vd "09-git-from-zero-to-confident".
+  slug       String    @db.VarChar(120)
+  /// Chương đang đọc (chỉ số .chap-open, từ 0).
+  chapter    Int       @default(0)
+  /// Vị trí đọc trên CẢ cuốn, 0–100 (tỉ lệ cuộn) — mở lại là về đúng chỗ.
+  percent    Float     @default(0)
+  /// Tổng số giây đã đọc cuốn này (chỉ tính lúc cửa sổ đang mở và có tương tác).
+  seconds    Int       @default(0)
+  /// Dấu trang: [{ p: percent, c: chapter, t: tiêu đề chương, at: ISO }].
+  bookmarks  Json?
+  startedAt  DateTime  @default(now()) @map("started_at")
+  lastReadAt DateTime  @default(now()) @map("last_read_at")
+  /// Lần đầu cuộn tới ≥ 98% — "Đã đọc xong".
+  finishedAt DateTime? @map("finished_at")
+
+  @@unique([userId, slug], name: "uk_book_reading_user_slug", map: "uk_book_reading_user_slug")
+  @@index([userId, lastReadAt], name: "idx_book_reading_user_last")
+  @@map("book_readings")
+}
+
+/// Số giây đọc sách của một người trong MỘT ngày (giờ Việt Nam) — mục tiêu ngày + chuỗi ngày.
+model BookReadingDay {
+  id      Int    @id @default(autoincrement())
+  userId  Int    @map("user_id")
+  /// "YYYY-MM-DD" theo giờ Việt Nam.
+  day     String @db.VarChar(10)
+  seconds Int    @default(0)
+
+  @@unique([userId, day], name: "uk_book_reading_day", map: "uk_book_reading_day")
+  @@map("book_reading_days")
+}

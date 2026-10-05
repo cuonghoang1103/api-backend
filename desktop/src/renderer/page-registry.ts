@@ -48,6 +48,7 @@ import { LoTrinhPage } from './features/roadmap/LoTrinhPage';
 import { NgoaiNguPage } from './features/language/NgoaiNguPage';
 import { IeltsPage } from './features/ielts/IeltsPage';
 import { JpPage, ChPage } from './features/khoaNgonNgu/KhoaNgonNguPage';
+import { ThuVienSachPage } from './features/sach/ThuVienSach';
 import { ThongBaoPage } from './features/thongBao/ThongBaoPage';
 import { PhongVanPage } from './features/interview/PhongVanPage';
 import { CtWorkPage } from './features/work/CtWorkPage';
@@ -97,6 +98,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/ho-so': HoSoPage,
   '/games': TroChoiPage,
   '/quan-tri': QuanTriPage,
+  '/books': ThuVienSachPage,
   '/settings/notifications': CaiDatThongBaoPage,
   '/work': CtWorkPage,
   '/toc-do-mang': MangNhaPage,
@@ -157,6 +159,8 @@ export function nativePageFor(path: string): ComponentType | undefined {
   if (path.startsWith('/games/')) return TroChoiPage;
   /* Quản trị (05/10/2026) — `/quan-tri/<mục>`, QuanTriPage tự rẽ theo route. */
   if (path.startsWith('/quan-tri/')) return QuanTriPage;
+  /* Library (05/10/2026) — `/books/<slug>` là trình đọc, ThuVienSachPage tự rẽ theo route. */
+  if (path.startsWith('/books/')) return ThuVienSachPage;
   /* `/academy/courses/<slug>` — Học viện NATIVE tự mở môn theo đường dẫn (04/10/2026). */
   if (path.startsWith('/academy/courses/')) return HocVienPage;
   // Trang con của một cây web (`/language/ja/vocab`…). Chính trang chủ cây đọc

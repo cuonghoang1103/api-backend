@@ -87,6 +87,8 @@ export function MusicPage() {
   const [sapXep, setSapXep] = useState<SapXep>('macdinh');
   /** Lọc Thư viện theo loại Nhạc Việt / Anh / Trung (05/10/2026). Mỗi lần mở trang về "Tất cả". */
   const [loaiLoc, setLoaiLoc] = useState<LoaiNhac | 'all'>('all');
+  /** Nhãn vừa gán trong phiên — hiện NGAY, không chờ danh sách bài (máy chủ cache 60 giây) tải lại. */
+  const [ganTay, setGanTay] = useState<Record<number, LoaiNhac | null>>({});
   const [benThe, setBenThe] = useState<TheBenPhai>('hang');
   const [benAn, setBenAn] = useState(() => { try { return localStorage.getItem(KHOA_BEN) === '1'; } catch { return false; } });
   const [thuGian, setThuGian] = useState(false);
@@ -355,26 +357,28 @@ export function MusicPage() {
   };
 
   // ─── Danh sách theo mục ─────────────────────────────────────
+  const tracksL = useMemo(() => (Object.keys(ganTay).length ? tracks.map((t) => (t.id in ganTay ? { ...t, language: ganTay[t.id] ?? null } : t)) : tracks), [tracks, ganTay]);
   const demLoai = useMemo(() => {
     const d: Record<LoaiNhac, number> = { vi: 0, en: 0, zh: 0 };
-    for (const t of tracks) { const l = loaiNhac(t); if (l) d[l]++; }
+    for (const t of tracksL) { const l = loaiNhac(t); if (l) d[l]++; }
     return d;
-  }, [tracks]);
+  }, [tracksL]);
   const thuVien = useMemo(() => {
-    const ds = loaiLoc === 'all' ? [...tracks] : tracks.filter((t) => loaiNhac(t) === loaiLoc);
+    const ds = loaiLoc === 'all' ? [...tracksL] : tracksL.filter((t) => loaiNhac(t) === loaiLoc);
     const so = (a: string, b: string) => a.localeCompare(b, 'vi', { sensitivity: 'base' });
     if (sapXep === 'ten') ds.sort((a, b) => so(a.title, b.title));
     else if (sapXep === 'nghesi') ds.sort((a, b) => so(a.artist ?? '', b.artist ?? ''));
     else if (sapXep === 'dai') ds.sort((a, b) => (b.durationSeconds ?? 0) - (a.durationSeconds ?? 0));
     return ds;
-  }, [tracks, sapXep, loaiLoc]);
+  }, [tracksL, sapXep, loaiLoc]);
 
   /** Gán loại cho một bài — máy chủ lưu nhãn cho thư viện chung; null = trả về tự đoán. */
   const doiLoai = useCallback(async (t: Track, loai: LoaiNhac | null) => {
     if (!api) return;
     try {
       await api.request(`/api/v1/music/tracks/${t.id}/language`, { method: 'PATCH', body: { language: loai } });
-      await loadTracks(true);
+      setGanTay((g) => ({ ...g, [t.id]: loai }));
+      void loadTracks(true);
       bao(loai ? dichP('Đã chuyển “{ten}” sang {loai}.', { ten: t.title, loai: dich(TEN_LOAI[loai]) }) : dich('Đã bỏ nhãn — app tự đoán loại theo tên bài.'));
     } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
   }, [api, loadTracks, bao, dich, dichP, setError]);

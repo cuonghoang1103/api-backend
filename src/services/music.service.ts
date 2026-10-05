@@ -405,6 +405,8 @@ export class MusicService {
           audioUrl: true,
           localPath: true,
           category: true,
+          // Nhãn Nhạc Việt / Anh / Trung (05/10/2026) — thiếu dòng này thì app chỉ thấy phần tự đoán.
+          language: true,
           createdAt: true,
         },
       }),

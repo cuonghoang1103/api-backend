@@ -21,8 +21,10 @@ import { emitWorkEvent } from './events.js';
 import { can, loadProjectAccess, requireProject } from './permissions.js';
 import { stageGateOf } from './projects.service.js';
 import { assertModule, stageActivationBlocker } from './studio.js';
+import { projectLanguage } from './projectLanguage.js';
 // Đợt S6: cổng "Spec Fidelity gate" khi xin duyệt cổng giai đoạn đặc tả.
 import { gateSummary, stageGateCheck } from './specReview.service.js';
+import { openStageIssues, resolveEvidence, type GateEvidenceInput, type GateEvidenceStored } from './gateEvidence.js';
 
 const MAX_STAGES = 60;
 const SLUG_RE = /^[a-z0-9][a-z0-9-]{0,79}$/;
@@ -208,7 +210,19 @@ export async function gateApprovers(projectId: number): Promise<{ ids: number[];
  * lần chấm mới nhất của giai đoạn được ĐÍNH KÈM vào phê duyệt (specReviewId + một dòng trong mô tả). Chưa chấm / dưới
  * ngưỡng ⇒ 409 WORK_SPEC_GATE; ADMIN gửi `override: { reason }` để vượt — ghi audit `spec.gate.override`.
  */
-export async function requestGate(userId: number, projectId: number, stageId: number, input: { description?: string | null; dueAt?: Date | null; override?: { reason: string } | null } = {}) {
+export interface RequestGateInput extends GateEvidenceInput {
+  /** Ghi chú NỘI BỘ (khách không thấy). */
+  description?: string | null;
+  /** CTW-1: lời nhắn hiện với KHÁCH trong cổng khách. */
+  clientNote?: string | null;
+  dueAt?: Date | null;
+  override?: { reason: string } | null;
+  /** CTW-13: biết còn thẻ mở mà vẫn gửi (kèm lý do tuỳ chọn). Thiếu khi còn việc mở ⇒ 409 WORK_GATE_OPEN_ISSUES. */
+  acknowledgeOpen?: boolean;
+  openReason?: string | null;
+}
+
+export async function requestGate(userId: number, projectId: number, stageId: number, input: RequestGateInput = {}) {
   const access = await requireStages(userId, projectId, 'stage.requestGate');
   assertModule(access, 'approvals');
   const stageRow = await prisma.workStage.findFirst({ where: { id: stageId, projectId }, select: { id: true, slug: true, n: true, name: true } });
@@ -226,9 +240,22 @@ export async function requestGate(userId: number, projectId: number, stageId: nu
     overrideReason = input.override.reason?.trim() ?? '';
     if (overrideReason.length < 3) throw new BadRequestError('Give a reason for overriding the Spec Fidelity gate', 'WORK_OVERRIDE_REASON');
   }
+  // CTW-13 (sau cổng Spec Fidelity — chặn cứng trước, cảnh báo mềm sau): còn việc mở ⇒ cảnh báo (409 kèm danh sách) — gửi lại với acknowledgeOpen: true (+ lý do) để vẫn gửi.
+  const open = await openStageIssues(projectId, stageId);
+  if (open.count > 0 && input.acknowledgeOpen !== true) {
+    throw new AppError(
+      `${open.count} issue${open.count === 1 ? ' is' : 's are'} still open in stage ${stageRow.n}. ${stageRow.name}. Finish ${open.count === 1 ? 'it' : 'them'} first, or send for approval anyway and say why.`,
+      409, 'WORK_GATE_OPEN_ISSUES',
+      { openIssues: open.count, issues: open.sample.map((i) => ({ number: i.number, key: `${access.key}-${i.number}`, title: i.title, status: i.status.name })) },
+    );
+  }
+  const pinnedEvidence = await resolveEvidence(projectId, input);
+  const evidence: GateEvidenceStored = { ...pinnedEvidence, openIssues: open.count, openReason: open.count ? input.openReason?.trim().slice(0, 1000) || null : null };
   const specLine = spec.applies ? gateSummary(spec, overrideReason) : null;
   const description = specLine ? [input.description?.trim(), specLine].filter(Boolean).join('\n\n') : input.description;
   const approvers = await gateApprovers(projectId);
+  // CTW-14: tiêu đề sinh tự động theo ngôn ngữ dự án (khách Việt không thấy "Gate: …").
+  const vi = (await projectLanguage(projectId)) === 'vi';
   const approvalId = await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM work_stages WHERE id = ${stageId} AND project_id = ${projectId} FOR UPDATE`;
     const s = await tx.workStage.findFirst({ where: { id: stageId, projectId }, select: { id: true, n: true, name: true, status: true } });
@@ -236,8 +263,9 @@ export async function requestGate(userId: number, projectId: number, stageId: nu
     if (s.status !== 'ACTIVE') throw new ConflictError(s.status === 'GATE_REVIEW' ? 'This stage is already waiting for gate approval' : 'Only an active stage can be sent for gate approval');
     await tx.workStage.update({ where: { id: stageId }, data: { status: 'GATE_REVIEW' } });
     return createApprovalTx(tx, projectId, userId, {
-      targetType: 'STAGE_GATE', stageId, title: `Gate: ${s.n}. ${s.name}`.slice(0, 200), description,
+      targetType: 'STAGE_GATE', stageId, title: `${vi ? 'Cổng' : 'Gate'}: ${s.n}. ${s.name}`.slice(0, 200), description,
       mode: approvers.mode, approverIds: approvers.ids, dueAt: input.dueAt, specReviewId: spec.applies ? spec.review?.id ?? null : null,
+      clientNote: input.clientNote, evidence: evidence as Prisma.InputJsonValue,
     });
   });
   if (overrideReason !== null) {

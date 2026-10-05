@@ -30,6 +30,9 @@ export const JQL_FIELDS: Array<{ name: string; hint: string }> = [
   { name: 'due', hint: 'Date' },
   { name: 'resolved', hint: 'Date' },
   { name: 'watcher', hint: 'Username, currentUser()' },
+  // CTW-5 / CTW-11.
+  { name: 'fixVersion', hint: 'Version name, unreleasedVersions(), EMPTY' },
+  { name: 'flagged', hint: 'true · false — blocked issues' },
 ];
 
 export const JQL_OPERATORS: Array<{ op: string; hint: string }> = [
@@ -44,7 +47,7 @@ export const JQL_OPERATORS: Array<{ op: string; hint: string }> = [
   { op: 'IS NOT EMPTY', hint: 'has a value' },
 ];
 
-export const JQL_FUNCTIONS = ['currentUser()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
+export const JQL_FUNCTIONS = ['currentUser()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'releasedVersions()', 'unreleasedVersions()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
 
 export const JQL_EXAMPLES: Array<{ q: string; hint: string }> = [
   { q: 'assignee = currentUser() AND statusCategory != Done', hint: 'My open work' },
@@ -119,6 +122,9 @@ function valuesFor(field: string, cfg: JqlSuggestConfig): Suggestion[] {
     case 'labels': case 'label': return lit(cfg.labels.map((l) => l.name));
     case 'component': case 'components': return lit(cfg.components.map((c) => c.name));
     case 'sprint': return [...fn(['openSprints()', 'closedSprints()', 'futureSprints()']), ...lit(cfg.sprints.map((s) => s.name))];
+    case 'fixversion': case 'fixversions': case 'version': case 'release':
+      return [...fn(['unreleasedVersions()', 'releasedVersions()']), { label: 'EMPTY', insert: 'EMPTY' }, ...lit(uniq((cfg.versions ?? []).map((v) => v.name)), 'Version')];
+    case 'flagged': case 'flag': case 'blocked': return lit(['true', 'false']);
     case 'created': case 'updated': case 'due': case 'duedate': case 'resolved':
       return [...lit(['-1d', '-7d', '-30d']), ...fn(['now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfWeek()', 'endOfMonth()'])];
     default: {

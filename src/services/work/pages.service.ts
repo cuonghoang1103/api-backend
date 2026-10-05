@@ -42,6 +42,7 @@ import {
 } from './permissions.js';
 import { assertModule, modulesOf, stableStringify } from './studio.js';
 import { tiptapToText } from './tiptapText.js';
+import { foldVi } from './fold.js';
 
 type Tx = Prisma.TransactionClient;
 
@@ -676,14 +677,17 @@ export async function deleteComment(userId: number, projectId: number, num: numb
 
 function snippet(text: string | null, q: string): string {
   const t = (text ?? '').replace(/\s+/g, ' ');
-  const i = t.toLowerCase().indexOf(q.toLowerCase());
+  // CTW-6: tìm vị trí trên bản bỏ dấu (foldVi giữ nguyên độ dài với chữ dựng sẵn NFC).
+  const i = foldVi(t).indexOf(foldVi(q));
   if (i < 0) return t.slice(0, 160);
   const start = Math.max(0, i - 60);
   return `${start ? '…' : ''}${t.slice(start, i + q.length + 100)}${i + q.length + 100 < t.length ? '…' : ''}`;
 }
 
 function searchWhere(q: string): Prisma.WorkPageWhereInput {
-  return { OR: [{ title: { contains: q, mode: 'insensitive' } }, { contentText: { contains: q, mode: 'insensitive' } }] };
+  // CTW-6: không phân biệt dấu tiếng Việt (cột sinh tự động, xem fold.ts).
+  const f = foldVi(q);
+  return { OR: [{ titleFold: { contains: f } }, { contentFold: { contains: f } }] };
 }
 
 export async function searchPages(userId: number, projectId: number, qRaw: string, limit = 30) {

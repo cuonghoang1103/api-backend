@@ -7,6 +7,7 @@ import { userName, workApi, workError, type ProjectConfig } from '@/lib/work-api
 import { Field, Spinner } from '../ui';
 import { PROJECT_TYPE_LABEL, Section, Select, Switch } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
+import { ProjectIdentity } from './ProjectIdentity';
 
 const TEMPLATE_LABEL: Record<ProjectConfig['template'], string> = {
   BLANK: 'Blank project',
@@ -91,6 +92,7 @@ export default function ProjectDetails({ config, slug }: { config: ProjectConfig
         )}
       </form>
     </Section>
+    <ProjectIdentity config={config} slug={slug} />
     <AiGuidelines config={config} slug={slug} />
     <DefinitionOfDone config={config} slug={slug} />
     <DoneRules config={config} slug={slug} />

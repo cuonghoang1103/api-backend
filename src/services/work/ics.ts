@@ -84,7 +84,12 @@ export function meetingEventLines(m: IcsMeeting, now: Date): string[] {
     ...m.attendees.map((a) => `ATTENDEE;CN=${icsParam(a.name)};ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION:${calAddress(a)}`),
     `STATUS:${m.status === 'CANCELLED' ? 'CANCELLED' : 'CONFIRMED'}`,
     `X-CTWORK-TZ:${icsEscape(m.timezone)}`,
+    // CTW-24: link phòng họp dạng "Join" — RFC 7986 CONFERENCE (Apple/Thunderbird hiện nút vào phòng);
+    // Outlook/Google đọc LOCATION + dòng "Join:" đầu mô tả.
+    ...(m.meetingUrl?.trim() && /^https?:\/\//i.test(m.meetingUrl.trim()) ? [`CONFERENCE;VALUE=URI;FEATURE=AUDIO,VIDEO;LABEL=Join meeting:${m.meetingUrl.trim()}`] : []),
     'TRANSP:OPAQUE',
+    // CTW-24: nhắc trước 10 phút (lịch của người nhận tự báo).
+    ...(m.status !== 'CANCELLED' ? ['BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${icsEscape(m.title)}`, 'TRIGGER:-PT10M', 'END:VALARM'] : []),
     'END:VEVENT',
   ];
 }

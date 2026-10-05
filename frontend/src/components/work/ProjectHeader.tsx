@@ -41,7 +41,7 @@ export function ProjectCrumbs({ config, title, extra, dense }: { config: Project
         <Crumb href={`/work/${config.workspace.slug}`} className={`max-w-[160px] ${dense ? 'max-2xl:!hidden' : 'max-lg:!hidden'}`}>{config.workspace.name}</Crumb>
         <CrumbSep className={dense ? 'max-2xl:!hidden' : 'max-lg:!hidden'} />
         <Crumb href={`/work/${config.workspace.slug}/${config.key}/board`} className="min-w-[24px] max-w-[220px] shrink">
-          <ProjectMark k={config.key} size={18} />
+          <ProjectMark k={config.key} size={18} brand={config} />
           <span className="truncate">{config.name}</span>
         </Crumb>
         <CrumbSep />

@@ -25,6 +25,7 @@ import { ApprovalPill, Pill, fmtDateTime, useStudioInvalidate } from './shared';
 // Đợt S6: lần chấm Spec Fidelity đính kèm phê duyệt cổng.
 import { OverallBadge, ScoreBars } from '../spec/SpecPanel';
 import type { SpecScores } from '@/lib/work-s6-api';
+import { GateEvidenceView } from './GateEvidence';
 
 const short = (h: string | null) => (h ? `${h.slice(0, 8)}…${h.slice(-4)}` : '');
 
@@ -93,6 +94,18 @@ export function ApprovalBody({ approval: a, config, base: baseProp }: { approval
           {a.dueAt && <><span aria-hidden="true">·</span><span className={cn(a.status === 'PENDING' && new Date(a.dueAt) < new Date() && 'font-medium text-[var(--w-red)]')}>Due {formatDate(a.dueAt)}</span></>}
         </div>
         {a.description && <p className="mt-3 whitespace-pre-wrap text-[13px] leading-relaxed text-[var(--w-text-2)]">{a.description}</p>}
+        {/* CTW-1: lời nhắn người gửi viết cho khách (khách đọc nó thay cho ghi chú nội bộ). */}
+        {a.clientNote && !config?.clientView && (
+          <div className="mt-3 rounded-[8px] border border-[var(--w-border)] px-3 py-2 text-[13px]" data-testid="approval-client-note">
+            <div className="mb-0.5 text-[12px] font-medium text-[var(--w-text-3)]">Message to the client</div>
+            <p className="whitespace-pre-wrap leading-relaxed">{a.clientNote}</p>
+          </div>
+        )}
+        {a.evidence && (
+          <div className="mt-4">
+            <GateEvidenceView pid={a.projectId} ev={a.evidence} clientView={!!config?.clientView} docHref={base ? (n) => `${base}/docs/${n}` : undefined} />
+          </div>
+        )}
         {(() => {
           const sr = (a as typeof a & { specReview?: (SpecScores & { id: number; scopeLabel: string; createdAt: string }) | null }).specReview;
           if (!sr) return null;

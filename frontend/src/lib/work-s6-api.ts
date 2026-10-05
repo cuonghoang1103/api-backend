@@ -112,7 +112,8 @@ export const workS6Api = {
     d<SpecSettings>(api.put(`${B}/projects/${pid}/spec-settings`, body)),
   gate: (pid: number, sid: number) => d<SpecGateStatus>(api.get(`${B}/projects/${pid}/stages/${sid}/spec-gate`)),
   /** Như workStudioApi.requestGate + `override` (ADMIN vượt cổng Spec Fidelity, bắt buộc lý do). */
-  requestGate: (pid: number, sid: number, body: { description?: string | null; dueAt?: string | null; override?: { reason: string } | null }) =>
+  /** CTW-1/13: + clientNote, bằng chứng ghim, acknowledgeOpen/openReason (xem work-ctw-api RequestGateBody). */
+  requestGate: (pid: number, sid: number, body: import('./work-ctw-api').RequestGateBody) =>
     d<{ stage: WorkStage; approval: WorkApproval & { specReview?: (SpecScores & { id: number; scopeLabel: string }) | null } }>(api.post(`${B}/projects/${pid}/stages/${sid}/request-gate`, body)),
   /** Gắn / gỡ nhãn AI-assisted bằng tay. */
   markIssue: (pid: number, num: number, aiAssisted: boolean, version?: number) =>

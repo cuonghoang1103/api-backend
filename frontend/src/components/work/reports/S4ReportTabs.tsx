@@ -14,6 +14,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { CalendarClock, History, Mail, Presentation, Printer, Send, Sparkles } from 'lucide-react';
 import { workError, type ProjectConfig } from '@/lib/work-api';
+import { errorCodeOf } from '@/lib/work-ctw-api';
 import { addDays, s4Api, s4Keys, todayVn, WEEKDAYS, type ReportData, type ReportSchedule } from '@/lib/work-s4-api';
 import { Dialog, EmptyState, Field, PageLoading, Spinner, formatDate, relativeTime } from '../ui';
 import { ConfirmDialog, Select, Switch } from '../settings/shared';
@@ -45,11 +46,19 @@ function ScheduleCard({ pid, s }: { pid: number; s: ReportSchedule }) {
   const qc = useQueryClient();
   const [f, setF] = useState(s);
   useEffect(() => setF(s), [s]);
+  // CTW-3: bật LẦN ĐẦU ⇒ xem trước đúng bản khách nhận rồi mới xác nhận (backend trả 409 nếu thiếu confirm).
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const firstOn = f.enabled && !s.enabled && !!s.needsConfirmation;
+  const firstPreview = useQuery({ queryKey: [...s4Keys.schedule(pid), 'confirm-preview'], queryFn: () => s4Api.preview(pid), enabled: confirmOpen });
   const save = useMutation({
-    mutationFn: () => s4Api.updateSchedule(pid, { enabled: f.enabled, weekday: f.weekday, hour: f.hour, timezone: f.timezone, includeRisks: f.includeRisks, includeChanges: f.includeChanges }),
-    onSuccess: (r) => { qc.setQueryData(s4Keys.schedule(pid), r); qc.invalidateQueries({ queryKey: s4Keys.all(pid) }); toast.success('Schedule saved'); },
-    onError: (e) => toast.error(workError(e)),
+    mutationFn: (confirm?: boolean) => s4Api.updateSchedule(pid, { enabled: f.enabled, weekday: f.weekday, hour: f.hour, timezone: f.timezone, includeRisks: f.includeRisks, includeChanges: f.includeChanges, ...(confirm ? { confirm: true } : {}) }),
+    onSuccess: (r) => { setConfirmOpen(false); qc.setQueryData(s4Keys.schedule(pid), r); qc.invalidateQueries({ queryKey: s4Keys.all(pid) }); toast.success(r.enabled && !s.enabled ? 'Automatic weekly report turned on' : 'Schedule saved'); },
+    onError: (e) => {
+      if (errorCodeOf(e) === 'WORK_REPORT_CONFIRM_REQUIRED') { setConfirmOpen(true); return; }
+      toast.error(workError(e));
+    },
   });
+  const onSave = () => (firstOn ? setConfirmOpen(true) : save.mutate(undefined));
   const ro = !s.canEdit;
   return (
     <div className="w-card p-4" data-testid="report-schedule">
@@ -59,6 +68,12 @@ function ScheduleCard({ pid, s }: { pid: number; s: ReportSchedule }) {
         <Pill tone={f.enabled ? 'green' : 'neutral'}>{f.enabled ? 'On' : 'Off'}</Pill>
         <span className="ml-auto text-[12px] text-[var(--w-text-3)]">{s.clientPortal ? `${s.recipients} client${s.recipients === 1 ? '' : 's'} will receive it` : 'Client portal is off — nobody receives it'}</span>
       </div>
+      {s.enabled && s.clientPortal && s.recipients > 0 && (
+        <p className="mb-3 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px]" data-testid="sched-banner">
+          <Mail size={12} className="mr-1 inline" />Reports go to your client automatically — {s.cadence ?? 'every week'}. Turn this off while the project is still being set up.
+        </p>
+      )}
+      {!s.enabled && s.needsConfirmation && <p className="mb-3 text-[12.5px] text-[var(--w-text-3)]">Off by default: nothing is emailed to your client until you turn this on and confirm the preview.</p>}
       <p className="mb-3 text-[12.5px] leading-relaxed text-[var(--w-text-2)]">Built from shared data only — shared issues, stages, approvals and UAT waiting on the client, upcoming milestones, shared payment milestones{f.includeChanges ? ', approved shared change requests' : ''}{f.includeRisks ? ' and risks marked “share in client reports”' : ''}. It is emailed to the clients of this project and saved in their portal. No AI is used for scheduled reports.</p>
       <div className="grid gap-x-3 sm:grid-cols-[auto_150px_110px_minmax(0,1fr)]">
         <Field label="Send"><div className="flex h-9 items-center"><Switch checked={f.enabled} disabled={ro} onChange={(v) => setF({ ...f, enabled: v })} label="Send automatically" /></div></Field>
@@ -70,8 +85,24 @@ function ScheduleCard({ pid, s }: { pid: number; s: ReportSchedule }) {
         <label className="flex items-center gap-2"><input type="checkbox" checked={f.includeChanges} disabled={ro} onChange={(e) => setF({ ...f, includeChanges: e.target.checked })} /> Include approved change requests (shared ones)</label>
         <label className="flex items-center gap-2"><input type="checkbox" checked={f.includeRisks} disabled={ro} onChange={(e) => setF({ ...f, includeRisks: e.target.checked })} data-testid="sched-risks" /> Include risks marked for client reports</label>
       </div>
-      {!ro && <button type="button" className="w-btn w-btn-primary" disabled={save.isPending} onClick={() => save.mutate()} data-testid="sched-save">{save.isPending && <Spinner size={12} />}Save schedule</button>}
+      {!ro && <button type="button" className="w-btn w-btn-primary" disabled={save.isPending} onClick={onSave} data-testid="sched-save">{save.isPending && <Spinner size={12} />}{firstOn ? 'Preview and turn on…' : 'Save schedule'}</button>}
       {ro && <p className="text-[12px] text-[var(--w-text-3)]">Only project admins can change the schedule.</p>}
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)} width={860} title="Turn on automatic weekly emails to your client?"
+        footer={(
+          <>
+            <button type="button" className="w-btn" onClick={() => setConfirmOpen(false)}>Cancel</button>
+            <button type="button" className="w-btn w-btn-primary" disabled={save.isPending || !firstPreview.data} onClick={() => save.mutate(true)} data-testid="sched-confirm">
+              {save.isPending && <Spinner size={12} />}Looks right — turn on
+            </button>
+          </>
+        )}>
+        <p className="mb-3 text-[13px]">
+          From now on this report is emailed to <b>{s.recipients} client{s.recipients === 1 ? '' : 's'}</b> {`every ${WEEKDAYS[f.weekday - 1] ?? 'week'} at ${String(f.hour).padStart(2, '0')}:00 (${f.timezone})`} and saved in their portal. This is what they would receive today:
+        </p>
+        {firstPreview.isLoading ? <PageLoading rows={4} /> : !firstPreview.data ? <EmptyState title="Could not build the preview" body={workError(firstPreview.error)} /> : (
+          <div className="rounded-[10px] border border-[var(--w-border)] p-4"><ReportDocument data={firstPreview.data.data} /></div>
+        )}
+      </Dialog>
     </div>
   );
 }
@@ -84,12 +115,14 @@ export function ClientWeeklyTab({ config }: { config: ProjectConfig }) {
   const pv = useQuery({ queryKey: s4Keys.preview(pid, period.from, period.to), queryFn: () => s4Api.preview(pid, period.from, period.to) });
   const hist = useQuery({ queryKey: s4Keys.history(pid, 'CLIENT_WEEKLY'), queryFn: () => s4Api.history(pid, 'CLIENT_WEEKLY') });
   const [polished, setPolished] = useState<string | null>(null);
+  // CTW-8: ngôn ngữ bản AI polish — Auto = theo ngôn ngữ dự án.
+  const [polishLang, setPolishLang] = useState<'' | 'en' | 'vi'>('');
   const [confirm, setConfirm] = useState(false);
   const [openId, setOpenId] = useState<number | null>(null);
   const one = useQuery({ queryKey: s4Keys.report(pid, openId ?? 0), queryFn: () => s4Api.report(pid, openId!), enabled: !!openId });
   const { print, node } = usePrintReport();
   const canSend = !!config.permissions.sendClientReports;
-  const polish = useMutation({ mutationFn: () => s4Api.polish(pid), onSuccess: (r) => setPolished(r.markdown), onError: (e) => toast.error(workError(e, 'AI polish failed')) });
+  const polish = useMutation({ mutationFn: () => s4Api.polish(pid, polishLang || undefined), onSuccess: (r) => setPolished(r.markdown), onError: (e) => toast.error(workError(e, 'AI polish failed')) });
   const send = useMutation({
     mutationFn: () => s4Api.send(pid, { ...period, bodyMarkdown: polished, aiPolished: !!polished }),
     onSuccess: (r) => { setConfirm(false); setPolished(null); qc.invalidateQueries({ queryKey: s4Keys.history(pid, 'CLIENT_WEEKLY') }); toast.success(`Report sent to ${r.recipientCount} client${r.recipientCount === 1 ? '' : 's'}`); },
@@ -116,6 +149,11 @@ export function ClientWeeklyTab({ config }: { config: ProjectConfig }) {
             )}
             <div className="mt-3 flex flex-wrap gap-2">
               <button type="button" className="w-btn" onClick={() => print({ data: pv.data!.data, polished })} data-testid="report-print"><Printer size={14} />Print / PDF</button>
+              {canSend && config.permissions.useAi && (
+                <Select aria-label="AI polish language" value={polishLang} onChange={(e) => setPolishLang(e.target.value as '' | 'en' | 'vi')} className="!w-auto" data-testid="report-polish-lang">
+                  <option value="">Language: auto</option><option value="en">English</option><option value="vi">Vietnamese</option>
+                </Select>
+              )}
               {canSend && config.permissions.useAi && <button type="button" className="w-btn" disabled={polish.isPending} onClick={() => polish.mutate()} title="Optional: ask AI to write a short summary from shared issues. Uses your AI quota." data-testid="report-polish">{polish.isPending ? <Spinner size={12} /> : <Sparkles size={14} />}AI polish</button>}
               {canSend && <button type="button" className="w-btn w-btn-primary" disabled={!pv.data.clientPortal || !pv.data.recipients} onClick={() => setConfirm(true)} data-testid="report-send"><Send size={14} />Send now</button>}
               {!pv.data.recipients && <span className="self-center text-[12px] text-[var(--w-text-3)]">Invite your client to the portal to send reports.</span>}

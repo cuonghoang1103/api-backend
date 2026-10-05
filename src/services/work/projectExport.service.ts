@@ -286,7 +286,8 @@ export async function runExport(exportId: number): Promise<void> {
     const tables: Record<string, Rows> = {};
     let i = 0;
     for (const [name, load] of EXPORT_TABLES) {
-      tables[name] = redact(name, await load(pid, { issueIds }));
+      // CTW-6: bỏ cột sinh tự động (title_fold…) — dữ liệu suy ra, CSDL đích tự tính lại.
+      tables[name] = redact(name, (await load(pid, { issueIds })).map(({ titleFold: _t, descriptionFold: _d, contentFold: _c, ...r }) => r));
       i += 1;
       if (i % 6 === 0) await progress(exportId, 5 + (i / EXPORT_TABLES.length) * 55, `Reading ${name}`);
     }

@@ -18,6 +18,7 @@
 import type { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
+import { projectLanguage } from './projectLanguage.js';
 import { logger } from '../../utils/logger.js';
 import { auditProject } from './audit.js';
 import { displayName, frontendUrl, sendWorkEmail } from './common.js';
@@ -57,32 +58,60 @@ async function seesMoney(access: ProjectAccess, userId: number): Promise<boolean
 
 // ─── Lịch ─────────────────────────────────────────────────────────
 
-const DEFAULT_SCHEDULE = { enabled: true, weekday: 5, hour: 16, timezone: 'Asia/Ho_Chi_Minh', includeRisks: false, includeChanges: true };
+/**
+ * CTW-3 (06/10/2026): mặc định TẮT. Gửi email cho khách là hành động đối ngoại — dự án vừa dựng,
+ * dữ liệu còn dở thì không được tự gửi. Bật LẦN ĐẦU phải kèm `confirm: true` (sau khi người bấm đã
+ * xem trước đúng bản khách sẽ nhận); thiếu ⇒ 409 WORK_REPORT_CONFIRM_REQUIRED.
+ */
+const DEFAULT_SCHEDULE = { enabled: false, weekday: 5, hour: 16, timezone: 'Asia/Ho_Chi_Minh', includeRisks: false, includeChanges: true };
+type ScheduleFields = typeof DEFAULT_SCHEDULE;
 
 async function scheduleOf(projectId: number) {
   const s = await prisma.workReportSchedule.findUnique({ where: { projectId } });
-  return s ? { enabled: s.enabled, weekday: s.weekday, hour: s.hour, timezone: s.timezone, includeRisks: s.includeRisks, includeChanges: s.includeChanges } : { ...DEFAULT_SCHEDULE };
+  return s
+    ? { enabled: s.enabled, weekday: s.weekday, hour: s.hour, timezone: s.timezone, includeRisks: s.includeRisks, includeChanges: s.includeChanges, confirmedAt: s.confirmedAt }
+    : { ...DEFAULT_SCHEDULE, confirmedAt: null as Date | null };
 }
+
+const WEEKDAY_NAMES = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 export async function getSchedule(userId: number, projectId: number) {
   const access = await staffCtx(userId, projectId);
+  const s = await scheduleOf(projectId);
   return {
-    ...(await scheduleOf(projectId)),
+    ...s,
+    /** Lần đầu bật cần xem trước + xác nhận. */
+    needsConfirmation: !s.confirmedAt,
+    /** "Every Friday at 16:00 (Asia/Ho_Chi_Minh)" — cho banner "Reports go to your client …". */
+    cadence: `Every ${WEEKDAY_NAMES[s.weekday] ?? 'week'} at ${String(s.hour).padStart(2, '0')}:00 (${s.timezone})`,
     clientPortal: access.modules.clientPortal,
     recipients: (await clientMemberIds(projectId)).length,
     canEdit: can(access.role, 'project.settings'),
   };
 }
 
-export async function updateSchedule(userId: number, projectId: number, input: Partial<typeof DEFAULT_SCHEDULE>) {
+export async function updateSchedule(userId: number, projectId: number, input: Partial<ScheduleFields> & { confirm?: boolean }) {
   const access = await staffCtx(userId, projectId);
   if (!can(access.role, 'project.settings')) throw new ForbiddenError('Only project admins can change the report schedule');
   if (input.timezone) {
     try { new Intl.DateTimeFormat('en-US', { timeZone: input.timezone }); } catch { throw new BadRequestError('Unknown time zone', 'WORK_BAD_TIMEZONE'); }
   }
-  const data = { ...input, updatedById: userId };
+  const { confirm, ...fields } = input;
+  const cur = await scheduleOf(projectId);
+  if (fields.enabled === true && !cur.enabled && !cur.confirmedAt && confirm !== true) {
+    throw new AppError(
+      'Preview the report your client will receive, then confirm to turn on automatic weekly emails',
+      409, 'WORK_REPORT_CONFIRM_REQUIRED', { recipients: (await clientMemberIds(projectId)).length },
+    );
+  }
+  const confirmData = fields.enabled === true && confirm === true ? { confirmedAt: new Date(), confirmedById: userId } : {};
+  const data = { ...fields, ...confirmData, updatedById: userId };
   await prisma.workReportSchedule.upsert({ where: { projectId }, create: { projectId, ...DEFAULT_SCHEDULE, ...data }, update: data });
-  await auditProject(projectId, { actorId: userId, action: 'report.schedule', targetType: 'project', targetId: projectId, summary: 'Changed the client weekly report schedule', detail: { ...input } });
+  await auditProject(projectId, {
+    actorId: userId, action: 'report.schedule', targetType: 'project', targetId: projectId,
+    summary: fields.enabled === true && !cur.enabled ? 'Turned on automatic client weekly reports (previewed and confirmed)' : fields.enabled === false && cur.enabled ? 'Turned off automatic client weekly reports' : 'Changed the client weekly report schedule',
+    detail: { ...input },
+  });
   return getSchedule(userId, projectId);
 }
 
@@ -359,11 +388,13 @@ export async function sendClientWeekly(userId: number, projectId: number, input:
  * "AI polish" — CHỈ khi người bấm tay. Dùng `weeklyReport` audience client có sẵn (chỉ thẻ đã chia sẻ,
  * hạn mức AI của người bấm). Không lưu gì: trả Markdown để người sửa rồi gửi.
  */
-export async function polishClientReport(userId: number, projectId: number) {
+export async function polishClientReport(userId: number, projectId: number, input: { language?: 'en' | 'vi' } = {}) {
   await staffCtx(userId, projectId, { edit: true });
   const { weeklyReport } = await import('./ai.service.js');
-  const r = await weeklyReport(userId, projectId, { audience: 'client' });
-  return { markdown: r.report, quota: r.quota };
+  // CTW-8: cùng ngôn ngữ với dự án/khách (settings.language hoặc đoán từ dữ liệu) — trước đây luôn ra tiếng Anh.
+  const language = input.language ?? (await projectLanguage(projectId));
+  const r = await weeklyReport(userId, projectId, { audience: 'client', language });
+  return { markdown: r.report, quota: r.quota, language };
 }
 
 const REPORT_LIST_SELECT = { id: true, number: true, kind: true, source: true, periodStart: true, periodEnd: true, title: true, aiPolished: true, clientVisible: true, sentAt: true, recipientCount: true, createdAt: true } satisfies Prisma.WorkClientReportSelect;

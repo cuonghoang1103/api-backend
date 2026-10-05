@@ -27,6 +27,7 @@ import { ProcessGuideLink, StagePill, STAGE_STATUS, studioOn, useStudioInvalidat
 // Đợt S6: cổng Spec Fidelity khi xin duyệt cổng (giai đoạn đặc tả) — hiện điểm, lý do chặn, ADMIN ghi đè có lý do.
 import { SpecGateBox } from '../spec/SpecPanel';
 import { specGateError, workS6Api, workS6Keys } from '@/lib/work-s6-api';
+import { gateOpenIssuesOf } from '@/lib/work-ctw-api';
 
 interface Blocked { stageId: number; blocker: { id: number; n: number; name: string; status: string } }
 
@@ -106,6 +107,13 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
     },
   });
   const [ovReason, setOvReason] = useState('');
+  // CTW-1: lời nhắn cho khách + thẻ ghim làm bằng chứng; CTW-13: cảnh báo còn việc mở.
+  const [clientNote, setClientNote] = useState('');
+  const [pinText, setPinText] = useState('');
+  const [openWarn, setOpenWarn] = useState<NonNullable<ReturnType<typeof gateOpenIssuesOf>> | null>(null);
+  const [openReason, setOpenReason] = useState('');
+  const portalOn = !!config.modules?.clientPortal;
+  const pinned = useMemo(() => [...new Set(pinText.split(/[\s,;]+/).map((t) => Number(t.replace(new RegExp(`^${config.key}-`, 'i'), ''))).filter((n) => Number.isInteger(n) && n > 0))], [pinText, config.key]);
   const specGate = useQuery({ queryKey: workS6Keys.gate(config.id, s.id), queryFn: () => workS6Api.gate(config.id, s.id), enabled: gateOpen, retry: false });
   const specBlocked = !!specGate.data?.applies && !specGate.data.pass;
   const isAdmin = config.role === 'ADMIN';
@@ -113,12 +121,18 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
     mutationFn: () => workS6Api.requestGate(config.id, s.id, {
       description: gateNote.trim() || null, dueAt: gateDue ? new Date(`${gateDue}T23:59:00`).toISOString() : null,
       ...(specBlocked && isAdmin && ovReason.trim().length >= 3 ? { override: { reason: ovReason.trim() } } : {}),
+      ...(portalOn && clientNote.trim() ? { clientNote: clientNote.trim() } : {}),
+      ...(pinned.length ? { issueNumbers: pinned } : {}),
+      ...(openWarn ? { acknowledgeOpen: true, openReason: openReason.trim() || null } : {}),
     }),
     onSuccess: (r) => {
       toast.success(r.approval.specReview && specBlocked ? `Gate review requested for stage ${s.n} — Spec Fidelity override recorded in the audit log` : `Gate review requested for stage ${s.n}`);
-      setGateOpen(false); setGateNote(''); setGateDue(''); setOvReason(''); invalidate(); onOpenApproval(r.approval.id);
+      setGateOpen(false); setGateNote(''); setGateDue(''); setOvReason(''); setClientNote(''); setPinText(''); setOpenWarn(null); setOpenReason('');
+      invalidate(); onOpenApproval(r.approval.id);
     },
     onError: (err) => {
+      const ow = gateOpenIssuesOf(err);
+      if (ow) { setOpenWarn(ow); return; }
       if (specGateError(err)) void specGate.refetch();
       toast.error(workError(err, 'Could not request the gate review'));
     },
@@ -193,7 +207,7 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
             )}
             {s.status === 'NOT_STARTED' && !perms.manageStages && <span className="flex items-center gap-1 text-[12px] text-[var(--w-text-3)]"><CircleDashed size={12} /> Not started — a project admin activates it.</span>}
             {s.status === 'ACTIVE' && perms.requestGate && approvalsOn && (
-              <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setGateOpen(true)}><Send size={12} /> Request gate review</button>
+              <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => { setOpenWarn(null); setGateOpen(true); }}><Send size={12} /> Request gate review</button>
             )}
             {s.status === 'ACTIVE' && !approvalsOn && (
               <span className="text-[12px] text-[var(--w-text-3)]">Turn on <b className="font-medium">Approvals</b> in Project settings → Project type &amp; modules to close stages through a gate review.</span>
@@ -241,7 +255,7 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
           <>
             <button type="button" className="w-btn" onClick={() => setGateOpen(false)}>Cancel</button>
             <button type="button" className={cn('w-btn', specBlocked ? 'w-btn-warn' : 'w-btn-primary')} disabled={gate.isPending || specGate.isLoading || (specBlocked && !(isAdmin && ovReason.trim().length >= 3))} onClick={() => gate.mutate()} data-testid="stage-send-gate">
-              {gate.isPending ? <Spinner size={12} /> : <Send size={13} />} {specBlocked ? 'Override and send' : 'Send for review'}
+              {gate.isPending ? <Spinner size={12} /> : <Send size={13} />} {specBlocked ? 'Override and send' : openWarn ? 'Send anyway' : 'Send for review'}
             </button>
           </>
         }
@@ -251,7 +265,27 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
           The stage moves to <b className="font-medium">Gate review</b> and the gate approvers set in Project settings (by default the project admin) are asked to sign off. It becomes Done only when they approve.
         </p>
         <Field label="What should reviewers check? (optional)"><textarea className="w-input" rows={3} maxLength={5000} value={gateNote} onChange={(e) => setGateNote(e.target.value)} placeholder="e.g. Survey report and signed minutes are attached to the gate issue" /></Field>
+        {portalOn && (
+          <Field label="Message to the client (shown in the client portal)" hint="Your note above stays internal. Shared issues, shared files marked as deliverables and client documents of this stage are shown to the client as evidence.">
+            <textarea className="w-input" rows={3} maxLength={5000} value={clientNote} onChange={(e) => setClientNote(e.target.value)} placeholder="e.g. Please review the v3 renders and the globe prototype before approving." data-testid="gate-client-note" />
+          </Field>
+        )}
+        <Field label="Pin issues as evidence (optional)" hint={pinned.length ? `${pinned.length} issue${pinned.length === 1 ? '' : 's'}: ${pinned.map((n) => `${config.key}-${n}`).join(', ')}` : `Issue keys, e.g. ${config.key}-12, ${config.key}-15 — issues of this stage are included automatically.`}>
+          <input className="w-input" value={pinText} onChange={(e) => setPinText(e.target.value)} placeholder={`${config.key}-12, ${config.key}-15`} data-testid="gate-pin-issues" />
+        </Field>
         <Field label="Due (optional)"><input type="date" className="w-input sm:max-w-[200px]" value={gateDue} onChange={(e) => setGateDue(e.target.value)} /></Field>
+        {openWarn && (
+          <div role="alert" className="mt-2 rounded-[8px] border border-[color-mix(in_srgb,var(--w-orange)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_8%,transparent)] p-3 text-[13px]" data-testid="gate-open-warning">
+            <div className="font-semibold">{openWarn.openIssues} issue{openWarn.openIssues === 1 ? ' is' : 's are'} still open in this stage</div>
+            <ul className="my-2 max-h-36 space-y-0.5 overflow-auto text-[12.5px]">
+              {openWarn.issues.map((i) => (
+                <li key={i.number} className="flex min-w-0 gap-2"><Link href={`${base}/issue/${i.number}`} className="shrink-0 font-mono text-[var(--w-accent-text)] hover:underline">{i.key}</Link><span className="min-w-0 flex-1 truncate">{i.title}</span><span className="shrink-0 text-[var(--w-text-3)]">{i.status}</span></li>
+              ))}
+              {openWarn.openIssues > openWarn.issues.length && <li className="text-[var(--w-text-3)]">+{openWarn.openIssues - openWarn.issues.length} more</li>}
+            </ul>
+            <input className="w-input !h-8" value={openReason} maxLength={1000} onChange={(e) => setOpenReason(e.target.value)} placeholder="Why send now? (optional — shown to your team on the approval)" aria-label="Reason for sending with open issues" />
+          </div>
+        )}
       </Dialog>
     </li>
   );

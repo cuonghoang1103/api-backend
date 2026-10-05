@@ -174,12 +174,26 @@ export function validTimezone(tz: string): boolean {
 }
 
 /** Link họp: chỉ http(s). Nhận diện nền tảng để hiện nhãn (KHÔNG gọi API của họ). */
-export function meetingProvider(url: string | null | undefined): 'MEET' | 'ZOOM' | 'TEAMS' | 'OTHER' | null {
+export function meetingProvider(url: string | null | undefined): 'MEET' | 'ZOOM' | 'TEAMS' | 'JITSI' | 'OTHER' | null {
   if (!url) return null;
   let host = '';
   try { host = new URL(url).hostname.toLowerCase(); } catch { return null; }
   if (host === 'meet.google.com') return 'MEET';
+  if (host === 'meet.jit.si' || host.endsWith('.jitsi.net') || host.startsWith('jitsi.')) return 'JITSI';
   if (host.endsWith('zoom.us')) return 'ZOOM';
   if (host.endsWith('teams.microsoft.com') || host.endsWith('teams.live.com')) return 'TEAMS';
   return 'OTHER';
+}
+
+/**
+ * CTW-24 bậc 1: phòng họp Jitsi Meet miễn phí, không cần tài khoản/khoá API —
+ * `https://meet.jit.si/ctwork-<ngẫu nhiên>`. Tên phòng là bí mật duy nhất của phòng nên phải
+ * khó đoán: 16 ký tự [a-z0-9] từ nguồn ngẫu nhiên mật mã (~82 bit).
+ */
+export function newJitsiUrl(rand: (n: number) => Uint8Array = (n) => crypto.getRandomValues(new Uint8Array(n))): string {
+  const abc = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const bytes = rand(16);
+  let id = '';
+  for (const b of bytes) id += abc[b % abc.length];
+  return `https://meet.jit.si/ctwork-${id}`;
 }

@@ -22,9 +22,9 @@ function ProjectCard({ p, slug, muted }: { p: ProjectSummary; slug: string; mute
       className={cn('w-card group relative flex min-w-0 flex-col overflow-hidden p-4 pl-5', muted && 'opacity-70')}
     >
       {/* Dải màu dự án bên trái — nhận ra dự án bằng màu trước khi đọc chữ. */}
-      <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[3px]" style={{ background: avatarColor(p.key) }} />
+      <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[3px]" style={{ background: p.color || avatarColor(p.key) }} />
       <div className="flex items-start gap-3">
-        <ProjectMark k={p.key} size={36} letters={2} />
+        <ProjectMark k={p.key} size={36} letters={2} brand={p} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
             <span className="truncate text-[15px] font-semibold tracking-[-0.01em]">{p.name}</span>

@@ -21,6 +21,7 @@ import { AppError, BadRequestError, NotFoundError } from '../../middleware/error
 import { checkTokenQuota, extractJson, isAiAvailable, llmComplete } from '../interview/llm/index.js';
 import { isProEffective } from '../pro.service.js';
 import { displayName } from './common.js';
+import { foldVi } from './fold.js';
 import { PRIORITY_MAX, PRIORITY_MIN } from './constants.js';
 import { addComment, createIssueAs, updateIssueAs } from './issues.service.js';
 import { isClientScoped, requireProject, type ProjectAccess } from './permissions.js';
@@ -778,16 +779,25 @@ export async function similarIssues(userId: number, projectId: number, title: st
   await requireProject(userId, projectId, 'project.view');
   const t = title.trim();
   if (t.length < 4) return [];
+  // CTW-16: so trên bản bỏ dấu + dấu câu (title_fold) và lấy cả word_similarity — tiêu đề mới NGẮN
+  // ("Địa cầu ngày đêm") nằm gọn trong tiêu đề cũ dài ("Địa cầu: ngày/đêm theo vị trí…") thì
+  // similarity() thấp vì bị chia cho độ dài cả hai chuỗi, còn word_similarity() thì cao.
+  const f = foldVi(t).replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
   try {
     return await prisma.$queryRaw<Array<{ number: number; title: string; score: number; resolved: boolean }>>`
-      SELECT number, title, similarity(title, ${t})::float AS score, resolved_at IS NOT NULL AS resolved
-      FROM work_issues
-      WHERE project_id = ${projectId} AND deleted_at IS NULL AND similarity(title, ${t}) > 0.3
+      SELECT number, title, score, resolved FROM (
+        SELECT number, title,
+          GREATEST(similarity(title_fold, ${f}), word_similarity(${f}, title_fold))::float AS score,
+          resolved_at IS NOT NULL AS resolved
+        FROM work_issues
+        WHERE project_id = ${projectId} AND deleted_at IS NULL
+      ) x
+      WHERE score > 0.45
       ORDER BY score DESC LIMIT 5`;
   } catch {
     // pg_trgm chưa bật (máy dev lạ): lùi về so chuỗi con.
     const rows = await prisma.workIssue.findMany({
-      where: { projectId, deletedAt: null, title: { contains: t.slice(0, 40), mode: 'insensitive' } },
+      where: { projectId, deletedAt: null, titleFold: { contains: f.slice(0, 40) } },
       take: 5, select: { number: true, title: true, resolvedAt: true },
     });
     return rows.map((r) => ({ number: r.number, title: r.title, score: 0.5, resolved: !!r.resolvedAt }));

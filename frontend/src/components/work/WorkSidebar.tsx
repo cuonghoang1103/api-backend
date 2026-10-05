@@ -343,7 +343,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                       aria-label={p.name}
                       className={cn(ROW, open ? 'font-semibold text-[var(--w-text)]' : ROW_IDLE)}
                     >
-                      <span className="w-keep flex"><ProjectMark k={p.key} size={20} /></span>
+                      <span className="w-keep flex"><ProjectMark k={p.key} size={20} brand={p} /></span>
                       <span className="min-w-0 flex-1 truncate">{p.name}</span>
                       <span className="shrink-0 font-mono text-[11px] text-[var(--w-text-3)]">{p.key}</span>
                     </Link>

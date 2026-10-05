@@ -9968,6 +9968,8 @@ model WorkSpace {
   slug        String    @unique(map: "uk_work_space_slug") @db.VarChar(60)
   description String?   @db.Text
   ownerId     Int       @map("owner_id")
+  /// CTW-23: logo không gian (URL công khai trên R2) — cổng khách mang thương hiệu studio.
+  logoUrl     String?   @map("logo_url") @db.VarChar(500)
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
   /// Xoá mềm. Dữ liệu dự án của người khác nằm trong này — xoá cứng
@@ -10055,6 +10057,10 @@ model WorkProject {
   leadId       Int?      @map("lead_id")
   /// Cấu hình nhỏ không đáng một cột: đơn vị ước lượng, Definition of Done…
   settings     Json      @default("{}")
+  /// CTW-23: nhận diện dự án — ảnh (URL công khai trên R2), emoji, màu (#rrggbb).
+  avatarUrl    String?   @map("avatar_url") @db.VarChar(500)
+  iconEmoji    String?   @map("icon_emoji") @db.VarChar(16)
+  color        String?   @db.VarChar(16)
   archivedAt   DateTime? @map("archived_at")
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
@@ -10273,6 +10279,14 @@ model WorkIssue {
   /// Người BẤM áp dụng đề xuất AI gần nhất (không FK — như nhật ký). Luật "AI-assisted work needs an independent
   /// reviewer" loại người này + người báo khỏi danh sách người duyệt hợp lệ.
   aiAppliedById        Int?      @map("ai_applied_by_id")
+  /// CTW-11: cờ "Bị chặn" (impediment) — lý do + người cắm. Null = không bị chặn.
+  flaggedAt            DateTime? @map("flagged_at")
+  flagReason           String?   @map("flag_reason") @db.VarChar(500)
+  flaggedById          Int?      @map("flagged_by_id")
+  /// CTW-6: cột SINH TỰ ĐỘNG trong Postgres (GENERATED ALWAYS … STORED) = lower + bỏ dấu tiếng Việt.
+  /// CHỈ ĐỌC — không bao giờ ghi (Postgres từ chối). Xem fold.ts + migration 20261006120000.
+  titleFold            String?   @default(dbgenerated("lower(translate((COALESCE(title, ''::character varying))::text, 'àÀáÁảẢãÃạẠăĂằẰắẮẳẲẵẴặẶâÂầẦấẤẩẨẫẪậẬèÈéÉẻẺẽẼẹẸêÊềỀếẾểỂễỄệỆìÌíÍỉỈĩĨịỊòÒóÓỏỎõÕọỌôÔồỒốỐổỔỗỖộỘơƠờỜớỚởỞỡỠợỢùÙúÚủỦũŨụỤưƯừỪứỨửỬữỮựỰỳỲýÝỷỶỹỸỵỴđĐ̛̣̀́̃̉̆̂'::text, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeeeeeeeeeeiiiiiiiiiioooooooooooooooooooooooooooooooooouuuuuuuuuuuuuuuuuuuuuuyyyyyyyyyydd'::text))")) @map("title_fold")
+  descriptionFold      String?   @default(dbgenerated("lower(translate(COALESCE(description_text, ''::text), 'àÀáÁảẢãÃạẠăĂằẰắẮẳẲẵẴặẶâÂầẦấẤẩẨẫẪậẬèÈéÉẻẺẽẼẹẸêÊềỀếẾểỂễỄệỆìÌíÍỉỈĩĨịỊòÒóÓỏỎõÕọỌôÔồỒốỐổỔỗỖộỘơƠờỜớỚởỞỡỠợỢùÙúÚủỦũŨụỤưƯừỪứỨửỬữỮựỰỳỲýÝỷỶỹỸỵỴđĐ̛̣̀́̃̉̆̂'::text, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeeeeeeeeeeiiiiiiiiiioooooooooooooooooooooooooooooooooouuuuuuuuuuuuuuuuuuuuuuyyyyyyyyyydd'::text))")) @map("description_fold")
   createdAt            DateTime  @default(now()) @map("created_at")
   updatedAt            DateTime  @updatedAt @map("updated_at")
   deletedAt            DateTime? @map("deleted_at")
@@ -11229,6 +11243,10 @@ model WorkApproval {
   contentHash     String?   @map("content_hash") @db.VarChar(64)
   /// Đợt S6: lần chấm Spec Fidelity đính kèm lúc gửi duyệt cổng giai đoạn (bằng chứng chất lượng đặc tả).
   specReviewId    Int?      @map("spec_review_id")
+  /// CTW-1 (06/10/2026): lời nhắn HIỆN VỚI KHÁCH khi gửi duyệt cổng giai đoạn — `description` vẫn là ghi chú nội bộ.
+  clientNote      String?   @map("client_note") @db.Text
+  /// CTW-1/13: bằng chứng của cổng {issueIds, pageNumbers, attachmentIds, openIssues, openReason}.
+  evidence        Json?
   decidedAt       DateTime? @map("decided_at")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
@@ -11356,6 +11374,9 @@ model WorkPage {
   aiModel        String?   @map("ai_model") @db.VarChar(120)
   aiAssistedAt   DateTime? @map("ai_assisted_at")
   aiAppliedById  Int?      @map("ai_applied_by_id")
+  /// CTW-6: cột SINH TỰ ĐỘNG (lower + bỏ dấu) — CHỈ ĐỌC, xem fold.ts.
+  titleFold      String?   @default(dbgenerated("lower(translate((COALESCE(title, ''::character varying))::text, 'àÀáÁảẢãÃạẠăĂằẰắẮẳẲẵẴặẶâÂầẦấẤẩẨẫẪậẬèÈéÉẻẺẽẼẹẸêÊềỀếẾểỂễỄệỆìÌíÍỉỈĩĨịỊòÒóÓỏỎõÕọỌôÔồỒốỐổỔỗỖộỘơƠờỜớỚởỞỡỠợỢùÙúÚủỦũŨụỤưƯừỪứỨửỬữỮựỰỳỲýÝỷỶỹỸỵỴđĐ̛̣̀́̃̉̆̂'::text, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeeeeeeeeeeiiiiiiiiiioooooooooooooooooooooooooooooooooouuuuuuuuuuuuuuuuuuuuuuyyyyyyyyyydd'::text))")) @map("title_fold")
+  contentFold    String?   @default(dbgenerated("lower(translate(COALESCE(content_text, ''::text), 'àÀáÁảẢãÃạẠăĂằẰắẮẳẲẵẴặẶâÂầẦấẤẩẨẫẪậẬèÈéÉẻẺẽẼẹẸêÊềỀếẾểỂễỄệỆìÌíÍỉỈĩĨịỊòÒóÓỏỎõÕọỌôÔồỒốỐổỔỗỖộỘơƠờỜớỚởỞỡỠợỢùÙúÚủỦũŨụỤưƯừỪứỨửỬữỮựỰỳỲýÝỷỶỹỸỵỴđĐ̛̣̀́̃̉̆̂'::text, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeeeeeeeeeeiiiiiiiiiioooooooooooooooooooooooooooooooooouuuuuuuuuuuuuuuuuuuuuuyyyyyyyyyydd'::text))")) @map("content_fold")
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @updatedAt @map("updated_at")
   deletedAt      DateTime? @map("deleted_at")
@@ -11917,17 +11938,21 @@ model WorkPaymentMilestone {
 /// Lịch báo cáo tuần cho khách (mô-đun reports + clientPortal). Thiếu dòng ⇒ mặc định
 /// (bật, Thứ Sáu 16:00 giờ VN). weekday 1 = Thứ Hai … 7 = Chủ Nhật (ISO).
 model WorkReportSchedule {
-  id             Int      @id @default(autoincrement())
-  projectId      Int      @unique(map: "uk_work_report_schedule_project") @map("project_id")
-  enabled        Boolean  @default(true)
-  weekday        Int      @default(5)
-  hour           Int      @default(16)
-  timezone       String   @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
-  includeRisks   Boolean  @default(false) @map("include_risks")
-  includeChanges Boolean  @default(true) @map("include_changes")
-  updatedById    Int?     @map("updated_by_id")
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+  id             Int       @id @default(autoincrement())
+  projectId      Int       @unique(map: "uk_work_report_schedule_project") @map("project_id")
+  /// CTW-3: mặc định TẮT — gửi ra ngoài là hành động đối ngoại; bật lần đầu phải xem trước + xác nhận.
+  enabled        Boolean   @default(false)
+  weekday        Int       @default(5)
+  hour           Int       @default(16)
+  timezone       String    @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
+  includeRisks   Boolean   @default(false) @map("include_risks")
+  includeChanges Boolean   @default(true) @map("include_changes")
+  updatedById    Int?      @map("updated_by_id")
+  /// CTW-3: lần xác nhận bật đầu tiên (sau khi xem trước). Null = chưa ai xác nhận ⇒ bật phải kèm confirm.
+  confirmedAt    DateTime? @map("confirmed_at")
+  confirmedById  Int?      @map("confirmed_by_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
 
   project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 

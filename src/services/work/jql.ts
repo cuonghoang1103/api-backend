@@ -14,6 +14,7 @@
  */
 
 import type { Prisma } from '@prisma/client';
+import { foldVi } from './fold.js';
 
 // ─── Tách từ ─────────────────────────────────────────────────────
 
@@ -291,6 +292,8 @@ export interface JqlContext {
   teams?: Array<{ id: number; key: string; name: string }>;
   /** Giai đoạn của dự án: `stage = khao-sat` khớp slug, tên hoặc số thứ tự. */
   stages?: Array<{ id: number; n: number; slug: string; name: string }>;
+  /** CTW-5: phiên bản/mốc phát hành — `fixVersion = "v1.0"` khớp tên; status UNRELEASED | RELEASED | ARCHIVED. */
+  versions?: Array<{ id: number; name: string; status: string }>;
   now?: Date;
   /** Tên dự án — `project = "Tên dự án"` cũng khớp. */
   projectName?: string;
@@ -339,6 +342,8 @@ const FIELD_ALIASES: Record<string, string> = {
   project: 'project',
   team: 'team', teams: 'team', department: 'team',
   stage: 'stage', phase: 'stage',
+  flagged: 'flagged', flag: 'flagged', blocked: 'flagged',
+  fixversion: 'fixversion', fixversions: 'fixversion', 'fix version': 'fixversion', version: 'fixversion', release: 'fixversion',
 };
 
 /** Tên trường người dùng gõ ⇒ tên chuẩn (hoặc undefined nếu không phải trường có sẵn). */
@@ -368,9 +373,9 @@ export function projectScope(q: JqlQuery): { include: string[] | null; exclude: 
 export const JQL_FIELDS = [
   'key', 'summary', 'description', 'text', 'status', 'statusCategory', 'type', 'priority', 'assignee', 'reporter',
   'labels', 'component', 'sprint', 'parent', 'points', 'created', 'updated', 'due', 'resolved', 'watcher', 'project',
-  'team', 'stage',
+  'team', 'stage', 'fixVersion', 'flagged',
 ];
-export const JQL_FUNCTIONS = ['currentUser()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
+export const JQL_FUNCTIONS = ['currentUser()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'releasedVersions()', 'unreleasedVersions()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
 
 export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: Prisma.WorkIssueOrderByWithRelationInput[] } {
   const lc = (s: string) => s.toLowerCase();
@@ -495,10 +500,11 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
       case 'text': {
         if (op !== '~' && op !== '!~' && op !== '=' && op !== '!=') return fail(`Use ~ to search text`, pos);
         const t = lit(values[0], pos);
-        const contains = { contains: t, mode: 'insensitive' as const };
-        const m: W = field === 'summary' ? { title: op === '=' || op === '!=' ? { equals: t, mode: 'insensitive' } : contains }
-          : field === 'description' ? { descriptionText: contains }
-            : { OR: [{ title: contains }, { descriptionText: contains }] };
+        // CTW-6: ~ không phân biệt dấu tiếng Việt — so trên cột sinh tự động đã bỏ dấu (fold.ts).
+        const contains = { contains: foldVi(t) };
+        const m: W = field === 'summary' ? (op === '=' || op === '!=' ? { title: { equals: t, mode: 'insensitive' } } : { titleFold: contains })
+          : field === 'description' ? { descriptionFold: contains }
+            : { OR: [{ titleFold: contains }, { descriptionFold: contains }] };
         return op.startsWith('!') ? { NOT: m } : m;
       }
       case 'status': {
@@ -578,6 +584,35 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
           return nameIds(ctx.sprints, [v], 'sprint', pos);
         });
         return inOrNot(op, pos) ? { OR: [{ sprintId: null }, { sprintId: { notIn: ids } }] } : { sprintId: { in: ids } };
+      }
+      case 'flagged': {
+        // CTW-11: flagged = true / false · flagged IS EMPTY / IS NOT EMPTY.
+        if (empty) return { flaggedAt: null };
+        if (notEmpty) return { flaggedAt: { not: null } };
+        if (op !== '=' && op !== '!=') return fail('Use flagged = true or flagged = false', pos);
+        const v = lc(lit(values[0], pos));
+        const yes = ['true', 'yes', '1', 'impediment', 'blocked'].includes(v) ? true : ['false', 'no', '0'].includes(v) ? false : fail('flagged is true or false', at(values[0], pos), suggest(v, ['true', 'false']));
+        return (yes === (op === '=')) ? { flaggedAt: { not: null } } : { flaggedAt: null };
+      }
+      case 'fixversion': {
+        // CTW-5: fixVersion = "v1.0" · IN (…) · IS EMPTY · IN releasedVersions() / unreleasedVersions().
+        if (empty) return { fixVersionId: null };
+        if (notEmpty) return { fixVersionId: { not: null } };
+        const versions = ctx.versions ?? [];
+        const ids = values.flatMap((v) => {
+          if (v.kind === 'fn') {
+            if (v.name === 'releasedversions') return versions.filter((x) => x.status === 'RELEASED').map((x) => x.id);
+            if (v.name === 'unreleasedversions') return versions.filter((x) => x.status === 'UNRELEASED').map((x) => x.id);
+            return fail(`Unknown function ${v.name}()`, at(v, pos), suggest(v.name, ['releasedVersions', 'unreleasedVersions']) && `${suggest(v.name, ['releasedVersions', 'unreleasedVersions'])}()`);
+          }
+          if (['empty', 'null'].includes(lc(v.value)) && !v.quoted) return [-1];
+          return nameIds(versions, [v], 'version', pos);
+        });
+        const real = ids.filter((x) => x !== -1);
+        const withNull = ids.includes(-1);
+        const m: W = { OR: [...(real.length ? [{ fixVersionId: { in: real } }] : []), ...(withNull ? [{ fixVersionId: null }] : []), ...(!real.length && !withNull ? [NONE] : [])] };
+        // Như sprint: "!= v1" gồm cả thẻ chưa gắn phiên bản nào.
+        return inOrNot(op, pos) ? (withNull ? { NOT: m } : { OR: [{ fixVersionId: null }, { fixVersionId: { notIn: real } }] }) : m;
       }
       case 'parent': {
         if (empty) return { parentId: null };

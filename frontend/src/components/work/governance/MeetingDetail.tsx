@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  CalendarClock, CalendarDays, CheckCircle2, Copy, Download, Eye, EyeOff, ListPlus, Mail, MapPin, Plus, Save, Sparkles, Trash2, Users, Video, X, XCircle,
+  CalendarClock, CalendarDays, CheckCircle2, Copy, Eye, EyeOff, ListPlus, Mail, MapPin, Plus, Save, Sparkles, Trash2, Users, Video, X, XCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { isAiQuotaError, userName, workError, type ProjectConfig, type TiptapDoc } from '@/lib/work-api';
@@ -25,6 +25,7 @@ import { ConfirmDialog } from '../settings/shared';
 import { Pill } from '../studio/shared';
 import { AttendeePicker, meetingStatusPill } from './MeetingsView';
 import { PersonSelect, Section, fmtMeetingTime, useGovInvalidate } from './shared';
+import { AddToCalendar, JoinMeetingButton } from '../ctw';
 
 function RichBlock({ config, m, field, title, empty }: { config: ProjectConfig; m: MD; field: 'agendaJson' | 'minutesJson'; title: string; empty: string }) {
   const invalidate = useGovInvalidate(config.id);
@@ -234,6 +235,12 @@ export default function MeetingDetail({ config, num }: { config: ProjectConfig; 
     onError: (err) => toast.error(workError(err)),
   });
   const ics = useMutation({ mutationFn: () => govApi.downloadIcs(pid, num), onError: (err) => toast.error(workError(err, 'Could not download')) });
+  // CTW-24: máy chủ sinh phòng Jitsi (meetingUrl "jitsi").
+  const room = useMutation({
+    mutationFn: () => govApi.updateMeeting(pid, num, { meetingUrl: 'jitsi' }),
+    onSuccess: () => { toast.success('Meeting link created — invite emails and .ics now include it'); invalidate(); },
+    onError: (err) => toast.error(workError(err)),
+  });
 
   if (q.isLoading) return <PageLoading rows={6} />;
   if (q.error || !q.data) return <EmptyState title="Meeting not found" body={workError(q.error)} />;
@@ -258,8 +265,15 @@ export default function MeetingDetail({ config, num }: { config: ProjectConfig; 
         </div>
 
         <div className="flex flex-wrap items-center gap-2" data-testid="meeting-actions-bar">
-          {m.meetingUrl && <a href={m.meetingUrl} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-primary"><Video size={14} /> Join{m.provider && m.provider !== 'OTHER' ? ` (${m.provider === 'MEET' ? 'Meet' : m.provider === 'ZOOM' ? 'Zoom' : 'Teams'})` : ''}</a>}
-          <button type="button" className="w-btn" disabled={ics.isPending} onClick={() => ics.mutate()} data-testid="meeting-ics"><Download size={14} /> .ics</button>
+          {/* CTW-24: nút Join nổi bật; chưa có link ⇒ tạo phòng Jitsi một chạm. CTW-25: Google/Outlook/.ics. */}
+          {m.meetingUrl && m.status !== 'CANCELLED' && <JoinMeetingButton url={m.meetingUrl} startsAt={m.startsAt} endsAt={m.endsAt} />}
+          {!m.meetingUrl && m.canEdit && m.status === 'SCHEDULED' && (
+            <button type="button" className="w-btn w-btn-primary" disabled={room.isPending} onClick={() => room.mutate()} data-testid="meeting-create-link">{room.isPending ? <Spinner size={12} /> : <Video size={14} />} Create meeting link</button>
+          )}
+          <AddToCalendar
+            size="md" onIcs={() => ics.mutate()}
+            event={{ title: `${config.key} · ${m.title}`, start: m.startsAt, end: m.endsAt, location: m.meetingUrl || m.location, details: [m.meetingUrl ? `Join: ${m.meetingUrl}` : '', config.name].filter(Boolean).join('\n') }}
+          />
           {m.canEdit && <button type="button" className="w-btn" disabled={invites.isPending || !m.attendees.length} onClick={() => invites.mutate()}><Mail size={14} /> Email invitations</button>}
           {m.canEdit && <button type="button" className="w-btn" disabled={dup.isPending} onClick={() => dup.mutate()} title="Same time, same people, one week later"><Copy size={14} /> Duplicate next week</button>}
           {m.canEdit && m.status === 'SCHEDULED' && <button type="button" className="w-btn" onClick={() => status.mutate('DONE')} data-testid="meeting-done"><CheckCircle2 size={14} /> Mark done</button>}

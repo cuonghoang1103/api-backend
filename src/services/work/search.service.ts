@@ -14,7 +14,7 @@ import { projectMembers } from './projects.service.js';
 import { estimateOf, estimationOf, vnDay } from './sprints.service.js';
 
 async function jqlContext(projectId: number, userId: number, key: string, people: PeopleFilter = null): Promise<JqlContext> {
-  const [project, statuses, types, labels, components, members, sprints, customFields, teams, stages] = await Promise.all([
+  const [project, statuses, types, labels, components, members, sprints, customFields, teams, stages, versions] = await Promise.all([
     prisma.workProject.findUnique({ where: { id: projectId }, select: { name: true } }),
     prisma.workStatus.findMany({ where: { workflow: { projectId } }, select: { id: true, name: true, category: true } }),
     prisma.workIssueType.findMany({ where: { projectId }, select: { id: true, key: true, name: true } }),
@@ -26,9 +26,11 @@ async function jqlContext(projectId: number, userId: number, key: string, people
     // Bộ phận cấp không gian (kể cả đã lưu trữ — thẻ cũ vẫn tìm được).
     prisma.workTeam.findMany({ where: { workspace: { projects: { some: { id: projectId } } } }, select: { id: true, key: true, name: true } }),
     prisma.workStage.findMany({ where: { projectId }, select: { id: true, n: true, slug: true, name: true } }),
+    // CTW-5: fixVersion.
+    prisma.workVersion.findMany({ where: { projectId }, select: { id: true, name: true, status: true } }),
   ]);
   return {
-    teams, stages,
+    teams, stages, versions,
     projectKey: key, projectName: project?.name, userId, statuses, types, labels, components,
     // Khách của cổng: chỉ người khách được thấy — `assignee = x` / gợi ý "ý bạn là…" không dò ra tên nội bộ.
     members: filterPeople(members, people).map((m) => ({ id: m.id, username: m.username })),
@@ -60,7 +62,7 @@ export async function compileFor(userId: number, projectId: number, query: strin
  * nội bộ đã bị giấu khỏi thẻ (điểm, bộ phận, sprint, component, người theo dõi) —
  * lọc theo chúng thì dò ra được giá trị ẩn.
  */
-const CLIENT_BLOCKED_JQL = /\b(points|storypoints|team|sprint|component|components|watcher|watchers)\b\s*(=|!=|>|<|~|\bin\b|\bnot\b|\bis\b)/i;
+const CLIENT_BLOCKED_JQL = /\b(points|storypoints|team|sprint|component|components|watcher|watchers|flagged|flag|blocked)\b\s*(=|!=|>|<|~|\bin\b|\bnot\b|\bis\b)/i;
 
 export async function search(userId: number, projectId: number, query: string, opts: { limit?: number; offset?: number } = {}) {
   const { where, orderBy, access } = await compileFor(userId, projectId, query);

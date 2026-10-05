@@ -329,12 +329,38 @@ export function UserAvatar({ user, size = 22, className }: { user: Pick<WorkUser
   );
 }
 
-/** Ô chữ tắt màu cố định cho dự án (theo khoá dự án) — sidebar, thanh trên, lưới dự án. */
-export function ProjectMark({ k, size = 20, letters = 1 }: { k: string; size?: number; letters?: 1 | 2 }) {
+/** Nhận diện dự án (CTW-23): ảnh > emoji > chữ tắt; `color` thay màu băm theo khoá. */
+export interface ProjectBrand { avatarUrl?: string | null; iconEmoji?: string | null; color?: string | null }
+
+/** Ô chữ tắt màu cố định cho dự án (theo khoá dự án) — sidebar, thanh trên, lưới dự án. CTW-23: ảnh/emoji/màu riêng nếu có. */
+export function ProjectMark({ k, size = 20, letters = 1, brand }: { k: string; size?: number; letters?: 1 | 2; brand?: ProjectBrand | null }) {
+  const [broken, setBroken] = useState(false);
+  if (brand?.avatarUrl && !broken) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={brand.avatarUrl} alt="" aria-hidden="true" width={size} height={size} onError={() => setBroken(true)}
+        style={{ width: size, height: size }}
+        className="inline-block shrink-0 rounded-[5px] object-cover shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]"
+      />
+    );
+  }
+  const bg = brand?.color || avatarColor(k);
+  if (brand?.iconEmoji) {
+    return (
+      <span
+        aria-hidden="true"
+        style={{ background: `color-mix(in srgb, ${bg} 22%, transparent)`, width: size, height: size, fontSize: Math.round(size * 0.62) }}
+        className="inline-flex shrink-0 items-center justify-center rounded-[5px] leading-none shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]"
+      >
+        {brand.iconEmoji}
+      </span>
+    );
+  }
   return (
     <span
       aria-hidden="true"
-      style={{ background: avatarColor(k), width: size, height: size, fontSize: Math.round(size * (letters === 2 ? 0.38 : 0.52)) }}
+      style={{ background: bg, width: size, height: size, fontSize: Math.round(size * (letters === 2 ? 0.38 : 0.52)) }}
       className="inline-flex shrink-0 items-center justify-center rounded-[5px] font-bold leading-none tracking-[-0.02em] text-white shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]"
     >
       {k.slice(0, letters)}

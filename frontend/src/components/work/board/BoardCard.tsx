@@ -14,6 +14,7 @@ import type { Lookups } from '../hooks';
 import { IssueTypeIcon, LabelChip, PriorityIcon, UserAvatar } from '../ui';
 import type { SubtaskInfo } from './grouping';
 import { TeamChip, useTeamLookup } from '../studio/shared';
+import { FlagBadge } from '../ctw';
 
 export function isOverdue(i: Pick<IssueCard, 'dueDate' | 'statusId'>, lk: Lookups) {
   if (!i.dueDate || lk.statuses.get(i.statusId)?.category === 'DONE') return false;
@@ -130,6 +131,8 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
         )}
         {/* Cổng khách (S2b): thẻ đã chia sẻ với khách. */}
         {issue.clientVisible && <span className="flex shrink-0 items-center text-[var(--w-yellow)]" title="Visible to client" aria-label="Visible to client"><Eye size={11} /></span>}
+        {/* CTW-11: cờ "Bị chặn". */}
+        {issue.flaggedAt && <FlagBadge reason={issue.flagReason} />}
         {issue.commentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={`${issue.commentCount} comments`}><MessageSquare size={11} />{issue.commentCount}</span>}
         {issue.attachmentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={`${issue.attachmentCount} attachments`}><Paperclip size={11} />{issue.attachmentCount}</span>}
         <span className="ml-auto flex min-w-0 items-center gap-1.5">

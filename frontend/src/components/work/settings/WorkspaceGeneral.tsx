@@ -9,6 +9,7 @@ import { useAuthStore } from '@/store/authStore';
 import { wk } from '../hooks';
 import { Field, Spinner, useToggle } from '../ui';
 import { ConfirmDialog, ReadOnlyNotice, Section, TypeToConfirmDialog } from './shared';
+import { WorkspaceLogo } from './ProjectIdentity';
 
 export default function WorkspaceGeneral({ ws }: { ws: WorkspaceDetail }) {
   const router = useRouter();
@@ -87,6 +88,12 @@ export default function WorkspaceGeneral({ ws }: { ws: WorkspaceDetail }) {
           )}
         </form>
       </Section>
+
+      {/* CTW-23: logo không gian. */}
+      <WorkspaceLogo
+        wsId={ws.id} name={ws.name} logoUrl={ws.logoUrl} canEdit={canEdit}
+        onChanged={() => { qc.invalidateQueries({ queryKey: wk.workspace(ws.slug) }); qc.invalidateQueries({ queryKey: wk.workspaces }); }}
+      />
 
       {isOwner ? (
         <Section title="Danger zone" danger description="Deleting a workspace removes access to all of its projects, issues and files for every member.">

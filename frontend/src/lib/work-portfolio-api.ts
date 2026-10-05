@@ -18,6 +18,10 @@ export interface PortfolioProject {
   id: number;
   key: string;
   name: string;
+  /** CTW-23: nhận diện dự án. */
+  avatarUrl?: string | null;
+  iconEmoji?: string | null;
+  color?: string | null;
   type: ProjectType;
   role: ProjectRole;
   archivedAt: string | null;

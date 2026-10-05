@@ -42,6 +42,8 @@ import {
 import { clientMemberIds } from './portalNotify.js';
 import { approvalOutcome, assertModule, modulesOf } from './studio.js';
 import { crCanRequestApproval, crStatusAfterApproval } from './governance.js';
+import { gateEvidence } from './gateEvidence.js';
+import { projectLanguage } from './projectLanguage.js';
 
 type Tx = Prisma.TransactionClient;
 
@@ -50,6 +52,8 @@ const MAX_APPROVERS = 10;
 export const APPROVAL_SELECT = {
   id: true, projectId: true, targetType: true, issueId: true, stageId: true, pageId: true, changeRequestId: true, title: true, description: true,
   mode: true, status: true, dueAt: true, contentHash: true, decidedAt: true, createdAt: true, updatedAt: true,
+  // CTW-1: lời nhắn cho khách + bằng chứng của cổng giai đoạn.
+  clientNote: true, evidence: true,
   createdBy: { select: PUBLIC_USER },
   issue: { select: { id: true, number: true, title: true, clientVisible: true } },
   stage: { select: { id: true, n: true, slug: true, name: true, status: true } },
@@ -78,7 +82,8 @@ async function present(a: ApprovalRow, viewer: { userId: number; role: ProjectAc
     : a.steps;
   // Khách: đối tượng đã bị BỎ chia sẻ sau khi gửi duyệt ⇒ ẩn mã/tiêu đề/mô tả (tiêu đề mặc
   // định chứa tiêu đề thẻ/trang); cổng giai đoạn ⇒ chỉ tên giai đoạn (approvalForClient).
-  const shown = viewer.clientView ? approvalForClient(a) : a;
+  // CTW-1: `evidence` thô (có lý do nội bộ) KHÔNG trả ra — getApproval thay bằng bản đã lọc theo người xem.
+  const { evidence: _rawEvidence, ...shown } = viewer.clientView ? approvalForClient(a) : a;
   return {
     ...shown,
     // Đợt S6: điểm Spec Fidelity là số liệu nội bộ của đội — khách không thấy.
@@ -143,6 +148,8 @@ export function approvalTargetSharedWithClient(a: { targetType: string; issue?: 
  */
 export function approvalForClient<T extends {
   targetType: string; title: string; description: string | null; issueId: number | null; pageId: number | null;
+  /** CTW-1: lời nhắn người gửi viết CHO KHÁCH — thay chỗ mô tả nội bộ. */
+  clientNote?: string | null;
   issue: { number: number; title: string; clientVisible?: boolean } | null;
   page: { number: number; title: string; visibility?: string } | null;
   stage: { n: number; name: string } | null;
@@ -153,7 +160,10 @@ export function approvalForClient<T extends {
     return { ...a, title: UNSHARED_TITLE, description: null, issueId: null, pageId: null, issue: null, page: null, ...('changeRequest' in a ? { changeRequestId: null, changeRequest: null } : {}) };
   }
   if (a.targetType === 'STAGE_GATE' && a.stage) {
-    return { ...a, title: `Stage gate: ${a.stage.n}. ${a.stage.name}`.slice(0, 200), description: null };
+    // CTW-1: mô tả nội bộ bỏ; khách đọc lời nhắn người gửi viết riêng cho khách (nếu có).
+    // CTW-14: tiêu đề lưu bằng tiếng Việt ("Cổng: …") ⇒ bản cho khách cũng tiếng Việt.
+    const vi = a.title.startsWith('Cổng');
+    return { ...a, title: `${vi ? 'Cổng giai đoạn' : 'Stage gate'}: ${a.stage.n}. ${a.stage.name}`.slice(0, 200), description: a.clientNote ?? null };
   }
   return a;
 }
@@ -247,7 +257,12 @@ export async function createApprovalTx(
   tx: Tx,
   projectId: number,
   creatorId: number,
-  input: { targetType: 'ISSUE' | 'STAGE_GATE' | 'DOC' | 'UAT' | 'CR'; issueId?: number | null; stageId?: number | null; pageId?: number | null; changeRequestId?: number | null; title: string; description?: string | null; mode: ApprovalMode; approverIds: number[]; dueAt?: Date | null; specReviewId?: number | null },
+  input: {
+    targetType: 'ISSUE' | 'STAGE_GATE' | 'DOC' | 'UAT' | 'CR'; issueId?: number | null; stageId?: number | null; pageId?: number | null; changeRequestId?: number | null;
+    title: string; description?: string | null; mode: ApprovalMode; approverIds: number[]; dueAt?: Date | null; specReviewId?: number | null;
+    /** CTW-1: lời nhắn cho khách + bằng chứng (cổng giai đoạn). */
+    clientNote?: string | null; evidence?: Prisma.InputJsonValue | null;
+  },
 ): Promise<number> {
   const hash = await currentTargetHash(tx, { targetType: input.targetType, issueId: input.issueId ?? null, stageId: input.stageId ?? null, pageId: input.pageId ?? null, changeRequestId: input.changeRequestId ?? null });
   const a = await tx.workApproval.create({
@@ -257,6 +272,8 @@ export async function createApprovalTx(
       title: input.title.slice(0, 200), description: input.description?.trim() || null, mode: input.mode,
       createdById: creatorId, dueAt: input.dueAt ?? null, contentHash: hash,
       specReviewId: input.specReviewId ?? null,
+      clientNote: input.clientNote?.trim() || null,
+      ...(input.evidence ? { evidence: input.evidence } : {}),
       steps: { create: input.approverIds.map((approverId, position) => ({ approverId, position })) },
     },
     select: { id: true },
@@ -333,6 +350,7 @@ export async function createCrApproval(
   assertModule(access, 'approvals');
   if (!governanceAccess(access.role, access.workspaceRole).edit) throw new ForbiddenError('You cannot send change requests for approval in this project');
   const cr = await prisma.workChangeRequest.findFirst({ where: { projectId, number: crNumber, deletedAt: null }, select: { id: true, number: true, title: true, status: true, clientVisible: true } });
+  const vi = (await projectLanguage(projectId)) === 'vi';
   if (!cr) throw new NotFoundError('Change request not found');
   if (!crCanRequestApproval(cr.status)) throw new ConflictError(`This change request is ${cr.status.toLowerCase().replace('_', ' ')} and cannot be sent for approval`);
   const approverIds = [...new Set(input.approverIds)];
@@ -342,7 +360,8 @@ export async function createCrApproval(
     const open = await tx.workApproval.count({ where: { changeRequestId: cr.id, status: 'PENDING' } });
     if (open) throw new ConflictError('This change request already has a pending approval request');
     const aid = await createApprovalTx(tx, projectId, userId, {
-      targetType: 'CR', changeRequestId: cr.id, title: input.title?.trim() || `Approve change request CR-${cr.number}: ${cr.title}`,
+      targetType: 'CR', changeRequestId: cr.id,
+      title: input.title?.trim() || (vi ? `Duyệt yêu cầu thay đổi CR-${cr.number}: ${cr.title}` : `Approve change request CR-${cr.number}: ${cr.title}`),
       description: input.description, mode: input.mode ?? 'SEQUENTIAL', approverIds, dueAt: input.dueAt,
     });
     const now = new Date();
@@ -376,7 +395,10 @@ export async function getApproval(userId: number, projectId: number, approvalId:
   if (!a || (a.page && !canViewPage(access.role, access.workspaceRole, a.page.visibility))) throw new NotFoundError('Approval request not found');
   // CR nội bộ (đợt S3b): người không đọc được sổ CR chỉ thấy phê duyệt của CR đã chia sẻ.
   if (a.changeRequest && !governanceAccess(access.role, access.workspaceRole).view && !a.changeRequest.clientVisible) throw new NotFoundError('Approval request not found');
-  return present(a, { userId, role: access.role, clientView, clientIds }, access.key);
+  const out = await present(a, { userId, role: access.role, clientView, clientIds }, access.key);
+  // CTW-1: bằng chứng cổng giai đoạn (khách chỉ thấy thứ đã chia sẻ). Bản lưu thô không trả ra.
+  const evidence = await gateEvidence(a, { projectId, projectKey: access.key, clientView });
+  return { ...out, evidence };
 }
 
 export async function listApprovals(

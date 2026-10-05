@@ -17,10 +17,11 @@ import { userName, workError, type ProjectConfig } from '@/lib/work-api';
 import { MEETING_TYPES, MEETING_TYPE_LABEL, govApi, govKeys, type MeetingRow, type MeetingType } from '@/lib/work-s3b-api';
 import { Dialog, EmptyState, Field, PageLoading, Spinner, UserAvatar } from '../ui';
 import { Select } from '../settings/shared';
+import { newJitsiUrl } from '@/lib/work-ctw-api';
 import { Pill } from '../studio/shared';
 import { fmtMeetingTime, fromLocalInput, toLocalInput, useGovInvalidate } from './shared';
 
-const PROVIDER: Record<string, string> = { MEET: 'Google Meet', ZOOM: 'Zoom', TEAMS: 'Microsoft Teams', OTHER: 'Video link' };
+const PROVIDER: Record<string, string> = { MEET: 'Google Meet', ZOOM: 'Zoom', TEAMS: 'Microsoft Teams', JITSI: 'Jitsi Meet', OTHER: 'Video link' };
 const COMMON_TZ = ['Asia/Ho_Chi_Minh', 'Asia/Singapore', 'Asia/Tokyo', 'Europe/London', 'Europe/Berlin', 'America/New_York', 'America/Los_Angeles', 'UTC'];
 
 export function meetingStatusPill(status: string) {
@@ -114,7 +115,13 @@ export function NewMeetingDialog({ config, open, onClose, portalOn }: { config: 
       </div>
       <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
         <Field label="Location (optional)"><input className="w-input" value={location} maxLength={255} onChange={(e) => setLocation(e.target.value)} placeholder="Room, office…" /></Field>
-        <Field label="Video link (optional)" hint="Meet, Zoom or Teams link — stored only"><input className="w-input" value={url} maxLength={500} onChange={(e) => setUrl(e.target.value)} placeholder="https://meet.google.com/…" data-testid="meeting-url" /></Field>
+        <Field label="Video link (optional)" hint="Paste a Google Meet, Zoom or Teams link — or create a free Jitsi room (no account needed)">
+          {/* CTW-24 bậc 1: phòng Jitsi miễn phí, không khoá API. */}
+          <div className="flex gap-1.5">
+            <input className="w-input min-w-0 flex-1" value={url} maxLength={500} onChange={(e) => setUrl(e.target.value)} placeholder="https://meet.google.com/…" data-testid="meeting-url" />
+            <button type="button" className="w-btn shrink-0" onClick={() => setUrl(newJitsiUrl())} title="Create a Jitsi Meet room link" data-testid="meeting-create-link"><Video size={13} /> Create link</button>
+          </div>
+        </Field>
       </div>
       <Field label="Invite" hint={portalOn ? 'Clients see only meetings they are invited to, in the client portal.' : 'Turn on the client portal to invite clients.'}>
         <AttendeePicker config={config} value={ids} onChange={setIds} portalOn={portalOn} />

@@ -26,7 +26,7 @@ import {
   type ProjectConfig, type TiptapDoc,
 } from '@/lib/work-api';
 import RichEditor, { isDocEmpty, RichView } from '../RichEditor';
-import { Dialog, EmptyState, formatBytes, formatDate, PageLoading, relativeTime, Spinner, StatusBadge, UserAvatar } from '../ui';
+import { Dialog, EmptyState, formatBytes, formatDate, PageLoading, ProjectMark, relativeTime, Spinner, StatusBadge, UserAvatar } from '../ui';
 import { Select } from '../settings/shared';
 import { Pill, STAGE_STATUS } from '../studio/shared';
 import { ClientPill } from './ClientShare';
@@ -35,6 +35,7 @@ import { StaffPanel } from './PortalStaff';
 import { MeetingsTab, PortalMeetingDialog } from './PortalMeetings';
 import { PaymentsTab, ReportsTab } from './PortalS4';
 import { DeskRequestDialog, PortalSlaPanel } from '../desk/PortalDesk';
+import { AddToCalendar } from '../ctw';
 
 export const PORTAL_TABS: Array<{ id: PortalTab; label: string; icon: typeof Inbox }> = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -170,6 +171,10 @@ function OverviewTab({ pid, asClient, go }: { pid: number; asClient: boolean; go
                     <Rocket size={14} className="shrink-0 text-[var(--w-text-3)]" />
                     <span className="min-w-0 flex-1 truncate font-medium">{m.name}</span>
                     <span className="shrink-0 text-[12px] text-[var(--w-text-3)]">{m.status === 'RELEASED' ? `Released ${formatDate(m.releasedAt)}` : m.releaseDate ? formatDate(m.releaseDate) : 'No date'}</span>
+                    {/* CTW-25 */}
+                    {m.status !== 'RELEASED' && m.releaseDate && (
+                      <AddToCalendar label="" className="!h-6 !px-1.5" event={{ title: `${o.project.name}: ${m.name}`, start: m.releaseDate.slice(0, 10), allDay: true }} />
+                    )}
                   </div>
                   <div className="mt-1.5 flex items-center gap-2"><Bar value={m.items ? (m.done / m.items) * 100 : 0} /><span className="shrink-0 tabular text-[11.5px] text-[var(--w-text-3)]">{m.done}/{m.items}</span></div>
                 </li>
@@ -522,10 +527,18 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
         </div>
       )}
       <div className="mx-auto w-full max-w-[1120px] px-4 py-5 md:px-6">
-        <div className="mb-5">
-          <div className="w-eyebrow">{isClient || asClient ? 'Client portal' : 'Client portal · team view'}</div>
-          <h1 className="mt-1 text-[22px] font-semibold tracking-[-0.02em] [overflow-wrap:anywhere] md:text-[26px]">{config.name}</h1>
-          {overview.data?.project.organization && <p className="text-[13px] text-[var(--w-text-3)]">for {overview.data.project.organization}</p>}
+        <div className="mb-5 flex min-w-0 items-start gap-3">
+          {/* CTW-23: nhận diện dự án trong cổng khách. */}
+          <span className="mt-1 shrink-0"><ProjectMark k={config.key} size={44} letters={2} brand={overview.data?.project ?? config} /></span>
+          <div className="min-w-0 flex-1">
+            <div className="w-eyebrow">{isClient || asClient ? 'Client portal' : 'Client portal · team view'}</div>
+            <h1 className="mt-1 text-[22px] font-semibold tracking-[-0.02em] [overflow-wrap:anywhere] md:text-[26px]">{config.name}</h1>
+            {overview.data?.project.organization && <p className="text-[13px] text-[var(--w-text-3)]">for {overview.data.project.organization}</p>}
+          </div>
+          {overview.data?.project.workspaceLogoUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={overview.data.project.workspaceLogoUrl} alt={overview.data.project.workspaceName} title={overview.data.project.workspaceName} className="h-10 max-w-[140px] shrink-0 object-contain" data-testid="portal-studio-logo" />
+          )}
         </div>
         {!isClient && !asClient && <StaffPanel config={config} pid={pid} onPreview={() => p.set({ preview: '1' })} />}
         <nav className="-mx-4 mb-5 overflow-x-auto px-4 md:mx-0 md:px-0" aria-label="Portal sections">

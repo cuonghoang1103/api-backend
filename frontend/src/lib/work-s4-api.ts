@@ -137,6 +137,8 @@ export interface ReportData {
 export interface ReportSchedule {
   enabled: boolean; weekday: number; hour: number; timezone: string; includeRisks: boolean; includeChanges: boolean;
   clientPortal: boolean; recipients: number; canEdit: boolean;
+  /** CTW-3: bật lần đầu phải xem trước + xác nhận; câu mô tả lịch gửi. */
+  needsConfirmation?: boolean; cadence?: string; confirmedAt?: string | null;
 }
 
 export interface ReportRow {
@@ -233,11 +235,12 @@ export const s4Api = {
 
   // Báo cáo
   schedule: (pid: number) => d<ReportSchedule>(api.get(`${P(pid)}/reports/client-weekly/schedule`)),
-  updateSchedule: (pid: number, body: Partial<Pick<ReportSchedule, 'enabled' | 'weekday' | 'hour' | 'timezone' | 'includeRisks' | 'includeChanges'>>) =>
+  updateSchedule: (pid: number, body: Partial<Pick<ReportSchedule, 'enabled' | 'weekday' | 'hour' | 'timezone' | 'includeRisks' | 'includeChanges'>> & { confirm?: boolean }) =>
     d<ReportSchedule>(api.put(`${P(pid)}/reports/client-weekly/schedule`, body)),
   preview: (pid: number, from?: string, to?: string) => d<{ data: ReportData; markdown: string; recipients: number; clientPortal: boolean }>(api.get(`${P(pid)}/reports/client-weekly/preview${q({ from, to })}`)),
   send: (pid: number, body: { from?: string; to?: string; bodyMarkdown?: string | null; aiPolished?: boolean }) => d<ReportDetail>(api.post(`${P(pid)}/reports/client-weekly/send`, body)),
-  polish: (pid: number) => d<{ markdown: string }>(api.post(`${P(pid)}/reports/client-weekly/polish`, {}, { timeout: 120_000 })),
+  /** CTW-8: language tuỳ chọn — thiếu ⇒ theo ngôn ngữ dự án. */
+  polish: (pid: number, language?: 'en' | 'vi') => d<{ markdown: string; language?: 'en' | 'vi' }>(api.post(`${P(pid)}/reports/client-weekly/polish`, language ? { language } : {}, { timeout: 120_000 })),
   history: (pid: number, kind?: 'CLIENT_WEEKLY' | 'STEERING') => d<ReportRow[]>(api.get(`${P(pid)}/reports/history${q({ kind })}`)),
   report: (pid: number, id: number) => d<ReportDetail>(api.get(`${P(pid)}/reports/history/${id}`)),
   steering: (pid: number, from?: string, to?: string) => d<{ data: ReportData; markdown: string; financeIncluded: boolean }>(api.get(`${P(pid)}/reports/steering${q({ from, to })}`)),

@@ -26,6 +26,7 @@ import {
   workApi, workError, workErrorStatus, type BacklogData, type BacklogIssue, type BulkPatch, type ProjectConfig,
   type SprintFull,
 } from '@/lib/work-api';
+import { FlagBadge } from './ctw';
 import { TruncatedStrip } from './studio/shared';
 import { wk, type Lookups } from './hooks';
 import { CompleteSprintDialog, EditSprintDialog, PlanSprintDialog, sprintRange, StartSprintDialog, unitLabel } from './SprintDialogs';
@@ -134,6 +135,8 @@ function Row({ issue, lk, unit, selected, onSelect, onOpen, editable, epicTitle,
       <IssueTypeIcon type={lk.types.get(issue.typeId)} size={13} />
       <span className="w-[64px] shrink-0 font-mono text-[11px] text-[var(--w-text-3)]">{lk.issueKey(issue.number)}</span>
       <span className={cn('min-w-0 flex-1 truncate', done && 'text-[var(--w-text-3)] line-through')}>{issue.title}</span>
+      {/* CTW-11 */}
+      {issue.flaggedAt && <FlagBadge reason={issue.flagReason} />}
       {epicTitle && (
         <span className="hidden max-w-[160px] shrink-0 truncate rounded-[4px] bg-[color-mix(in_srgb,#7c3aed_14%,transparent)] px-1.5 py-px text-[11px] font-medium text-[var(--w-epic)] md:inline" title={`Epic: ${epicTitle}`}>
           {epicTitle}

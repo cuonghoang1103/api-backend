@@ -24,6 +24,7 @@ import { clientPeopleIds, maskUser, peopleFilterFor, TEAM_USER, type PeopleFilte
 import { canDeleteIssue, canModifyComment, commentVisibilityFor, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
 import { assertModule } from './studio.js';
 import { tiptapToText } from './tiptapText.js';
+import { foldVi } from './fold.js';
 import { logger } from '../../utils/logger.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
@@ -41,6 +42,8 @@ export const CARD_SELECT = {
   teamId: true, stageId: true, clientVisible: true,
   // Đợt S6: nhãn "AI-assisted" (nguồn gốc AI) hiện trên thẻ/danh sách.
   aiAssisted: true,
+  // CTW-11: cờ "Bị chặn" (huy hiệu trên board/backlog).
+  flaggedAt: true, flagReason: true,
   priority: true, assigneeId: true, reporterId: true, storyPoints: true, dueDate: true, rank: true, version: true,
   resolvedAt: true, createdAt: true, updatedAt: true,
   labels: { select: { labelId: true } },
@@ -84,7 +87,8 @@ export function clientIssueWhere(access: Pick<ProjectAccess, 'role' | 'modules'>
  */
 export function scrubCardForClient<T extends Record<string, unknown>>(card: T, scoped: boolean): T {
   if (!scoped) return card;
-  return { ...card, commentCount: null, attachmentCount: null, subtaskCount: null, storyPoints: null, teamId: null, version: 0 };
+  // CTW-11: cờ chặn + lý do là ghi chú nội bộ của đội.
+  return { ...card, commentCount: null, attachmentCount: null, subtaskCount: null, storyPoints: null, teamId: null, version: 0, flaggedAt: null, flagReason: null };
 }
 
 /** Như findIssue, nhưng thẻ chưa chia sẻ ⇒ 404 với khách bị cách ly (không lộ là thẻ tồn tại). */
@@ -145,8 +149,9 @@ export async function listIssues(userId: number, projectId: number, f: IssueFilt
     const num = Number(q.replace(/^[A-Za-z][A-Za-z0-9]*-/, ''));
     and.push({
       OR: [
-        { title: { contains: q, mode: 'insensitive' } },
-        { descriptionText: { contains: q, mode: 'insensitive' } },
+        // CTW-6: so trên cột sinh tự động đã bỏ dấu — "dia cau" khớp "Địa cầu".
+        { titleFold: { contains: foldVi(q) } },
+        { descriptionFold: { contains: foldVi(q) } },
         ...(Number.isInteger(num) && num > 0 ? [{ number: num }] : []),
       ],
     });
@@ -908,6 +913,37 @@ export async function setIssueClientVisible(userId: number, projectId: number, n
   });
   emitWorkEvent({ type: 'issue.updated', projectId, issueId: i.id, actor: userActor(userId), changes: [{ field: 'clientVisible', from: String(!visible), to: String(visible) }] });
   return { number, clientVisible: visible };
+}
+
+/**
+ * CTW-11: cắm / gỡ cờ "Bị chặn" (impediment, như flag của Jira) — không đổi trạng thái, không đổi cột
+ * board. Bắt buộc lý do khi cắm; tuỳ chọn nối một mục RAID (số) để lý do dẫn tới rủi ro/vấn đề đang theo dõi.
+ */
+export async function setIssueFlag(userId: number, projectId: number, number: number, input: { flagged: boolean; reason?: string | null; raidNumber?: number | null }) {
+  const access = await requireProject(userId, projectId, 'issue.edit');
+  const i = await findVisibleIssue(access, number);
+  const cur = await prisma.workIssue.findUniqueOrThrow({ where: { id: i.id }, select: { flaggedAt: true, flagReason: true } });
+  let reason: string | null = null;
+  if (input.flagged) {
+    reason = input.reason?.trim().slice(0, 450) || '';
+    if (reason.length < 2) throw new BadRequestError('Say why this issue is blocked', 'WORK_FLAG_REASON');
+    if (input.raidNumber) {
+      const raid = await prisma.workRaidItem.findFirst({ where: { projectId, number: input.raidNumber, deletedAt: null }, select: { number: true, type: true } });
+      if (!raid) throw new BadRequestError(`RAID item ${input.raidNumber} not found in this project`, 'WORK_BAD_RAID');
+      reason = `${reason} (RAID ${raid.type.charAt(0)}-${raid.number})`.slice(0, 500);
+    }
+  }
+  if (!input.flagged && !cur.flaggedAt) return { number, flaggedAt: null, flagReason: null };
+  const data = input.flagged
+    ? { flaggedAt: cur.flaggedAt ?? new Date(), flagReason: reason, flaggedById: userId }
+    : { flaggedAt: null, flagReason: null, flaggedById: null };
+  const updated = await prisma.$transaction(async (tx) => {
+    const u = await tx.workIssue.update({ where: { id: i.id }, data: { ...data, version: { increment: 1 } }, select: { flaggedAt: true, flagReason: true } });
+    await tx.workHistory.create({ data: { issueId: i.id, actorId: userId, actorKind: 'USER', field: 'flagged', fromValue: cur.flaggedAt ? (cur.flagReason ?? 'flagged') : null, toValue: input.flagged ? reason : null } });
+    return u;
+  });
+  emitWorkEvent({ type: 'issue.updated', projectId, issueId: i.id, actor: userActor(userId), changes: [{ field: 'flagged', from: cur.flaggedAt ? 'true' : 'false', to: String(input.flagged) }] });
+  return { number, ...updated };
 }
 
 /**

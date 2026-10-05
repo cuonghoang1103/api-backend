@@ -195,7 +195,7 @@ export interface MeetingRow {
   timezone: string;
   location: string | null;
   meetingUrl: string | null;
-  provider: 'MEET' | 'ZOOM' | 'TEAMS' | 'OTHER' | null;
+  provider: 'MEET' | 'ZOOM' | 'TEAMS' | 'JITSI' | 'OTHER' | null;
   minutesShared: boolean;
   createdAt: string;
   updatedAt: string;

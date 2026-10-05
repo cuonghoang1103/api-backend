@@ -180,6 +180,8 @@ router.get('/projects/:pid/finance/export.xlsx', asyncHandler(async (req, res) =
 const scheduleBody = z.object({
   enabled: z.boolean().optional(), weekday: z.number().int().min(1).max(7).optional(), hour: z.number().int().min(0).max(23).optional(),
   timezone: z.string().min(1).max(64).optional(), includeRisks: z.boolean().optional(), includeChanges: z.boolean().optional(),
+  // CTW-3: bật lần đầu phải xác nhận (đã xem trước bản khách nhận).
+  confirm: z.boolean().optional(),
 });
 const period = z.object({ from: ymd.optional(), to: ymd.optional() });
 
@@ -197,7 +199,8 @@ router.post('/projects/:pid/reports/client-weekly/send', asyncHandler(async (req
   ok(res, await reports.sendClientWeekly(callerId(req), P(req, 'pid'), body), 201);
 }));
 router.post('/projects/:pid/reports/client-weekly/polish', asyncHandler(async (req, res) => {
-  ok(res, await reports.polishClientReport(callerId(req), P(req, 'pid')));
+  // CTW-8: language tuỳ chọn; thiếu ⇒ theo ngôn ngữ dự án.
+  ok(res, await reports.polishClientReport(callerId(req), P(req, 'pid'), parse(z.object({ language: z.enum(['en', 'vi']).optional() }), req.body ?? {})));
 }));
 router.get('/projects/:pid/reports/history', asyncHandler(async (req, res) => {
   const q = parse(z.object({ kind: z.enum(REPORT_KINDS).optional() }), req.query);

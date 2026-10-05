@@ -456,7 +456,7 @@ describe('CT Work — cổng khách S2b (HTTP + DB thật)', { skip: !RUN }, () 
     const studio = await call(owner, 'PUT', `/projects/${aPid}/studio`, { stageGate: { approverIds: [clientA.id] } });
     assert.equal(studio.status, 200, JSON.stringify(studio.raw));
     const stage = (await prisma.workStage.findFirstOrThrow({ where: { projectId: aPid, status: 'ACTIVE' } }));
-    const g = await call(staff, 'POST', `/projects/${aPid}/stages/${stage.id}/request-gate`, { description: 'GATE-NOTE: margin below target' });
+    const g = await call(staff, 'POST', `/projects/${aPid}/stages/${stage.id}/request-gate`, { description: 'GATE-NOTE: margin below target', acknowledgeOpen: true });
     assert.equal(g.status, 201, JSON.stringify(g.raw));
     const gid = g.data.approval.id;
     for (const path of [`/projects/${aPid}/approvals/${gid}`, `/projects/${aPid}/portal/approvals/${gid}`]) {

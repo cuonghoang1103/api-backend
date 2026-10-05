@@ -81,12 +81,12 @@ export async function getWorkspace(userId: number, workspaceId: number) {
   const role = await requireWorkspace(userId, workspaceId, 'workspace.view');
   const ws = await prisma.workSpace.findUniqueOrThrow({
     where: { id: workspaceId },
-    select: { id: true, name: true, slug: true, description: true, ownerId: true, createdAt: true },
+    select: { id: true, name: true, slug: true, description: true, ownerId: true, createdAt: true, logoUrl: true },
   });
   return { ...ws, role };
 }
 
-export async function updateWorkspace(userId: number, workspaceId: number, input: { name?: string; description?: string | null }) {
+export async function updateWorkspace(userId: number, workspaceId: number, input: { name?: string; description?: string | null; logoUrl?: null }) {
   await requireWorkspace(userId, workspaceId, 'workspace.settings');
   const data: Prisma.WorkSpaceUpdateInput = {};
   if (input.name !== undefined) {
@@ -95,7 +95,9 @@ export async function updateWorkspace(userId: number, workspaceId: number, input
     data.name = n.slice(0, 100);
   }
   if (input.description !== undefined) data.description = input.description?.trim() || null;
-  return prisma.workSpace.update({ where: { id: workspaceId }, data, select: { id: true, name: true, slug: true, description: true } });
+  // CTW-23: logo tải lên qua /logo/presign + /logo/complete; ở đây chỉ gỡ.
+  if (input.logoUrl === null) data.logoUrl = null;
+  return prisma.workSpace.update({ where: { id: workspaceId }, data, select: { id: true, name: true, slug: true, description: true, logoUrl: true } });
 }
 
 /** Xoá mềm. Dữ liệu còn nguyên trong DB, khôi phục được bằng tay. */

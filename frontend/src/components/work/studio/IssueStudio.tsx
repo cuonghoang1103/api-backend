@@ -389,7 +389,7 @@ export function MoveIssueDialog({ open, onClose, config, issue, lk }: { open: bo
                   <li key={p.id}>
                     <label className={cn('flex cursor-pointer items-center gap-2.5 rounded-[6px] border px-2.5 py-2 text-[13px]', target === p.id ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' : 'border-[var(--w-border)] hover:bg-[var(--w-hover)]')}>
                       <input type="radio" name="move-target" className="sr-only" checked={target === p.id} onChange={() => setTarget(p.id)} />
-                      <ProjectMark k={p.key} size={20} />
+                      <ProjectMark k={p.key} size={20} brand={p} />
                       <span className="min-w-0 flex-1 truncate font-medium">{p.name}</span>
                       <span className="shrink-0 font-mono text-[12px] text-[var(--w-text-3)]">{p.key}</span>
                     </label>

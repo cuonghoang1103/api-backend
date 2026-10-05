@@ -303,13 +303,13 @@ describe('CT Work — lớp studio S1 (HTTP + DB thật)', { skip: !RUN }, () =>
     assert.equal((await call(owner, 'PUT', `/projects/${clPid}/studio`, { stageGate: { approverIds: [leadViewer.id] } })).status, 400);
     const cfg = await call(owner, 'PUT', `/projects/${clPid}/studio`, { stageGate: { approverIds: [member2.id, client.id], mode: 'SEQUENTIAL' } });
     assert.deepEqual(cfg.data.stageGate, { approverIds: [member2.id, client.id], mode: 'SEQUENTIAL' });
-    const rq = await call(ba, 'POST', `/projects/${clPid}/stages/${s0}/request-gate`, { description: 'All intake tasks done' });
+    const rq = await call(ba, 'POST', `/projects/${clPid}/stages/${s0}/request-gate`, { description: 'All intake tasks done', acknowledgeOpen: true });
     assert.equal(rq.status, 201, JSON.stringify(rq.raw));
     assert.equal(rq.data.stage.status, 'GATE_REVIEW');
     const aid = rq.data.approval.id;
     assert.equal(rq.data.approval.targetType, 'STAGE_GATE');
     assert.match(rq.data.approval.contentHash, /^[0-9a-f]{64}$/);
-    assert.equal((await call(ba, 'POST', `/projects/${clPid}/stages/${s0}/request-gate`, {})).status, 409);
+    assert.equal((await call(ba, 'POST', `/projects/${clPid}/stages/${s0}/request-gate`, { acknowledgeOpen: true })).status, 409);
     // Khách là người duyệt thứ 2 ⇒ chưa tới lượt.
     const early = await call(client, 'POST', `/projects/${clPid}/approvals/${aid}/decide`, { decision: 'APPROVE' });
     assert.equal(early.status, 409);

@@ -8,13 +8,14 @@
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { CalendarClock, Download, Lock, MapPin, Video } from 'lucide-react';
+import { CalendarClock, Lock, MapPin } from 'lucide-react';
 import { userName, workError } from '@/lib/work-api';
 import { govApi, govKeys } from '@/lib/work-s3b-api';
 import { RichView } from '../RichEditor';
 import { Dialog, EmptyState, PageLoading, UserAvatar, formatDate } from '../ui';
 import { Pill } from '../studio/shared';
 import { fmtMeetingTime } from '../governance/shared';
+import { AddToCalendar, JoinMeetingButton } from '../ctw';
 
 export function MeetingsTab({ pid, asClient, openMeeting }: { pid: number; asClient: boolean; openMeeting: (n: number) => void }) {
   const q = useQuery({ queryKey: govKeys.portalMeetings(pid, asClient), queryFn: () => govApi.portalMeetings(pid, asClient) });
@@ -26,8 +27,8 @@ export function MeetingsTab({ pid, asClient, openMeeting }: { pid: number; asCli
   return (
     <ul className="w-card divide-y divide-[var(--w-border)] overflow-hidden" data-testid="portal-meetings">
       {q.data.items.map((m) => (
-        <li key={m.id}>
-          <button type="button" onClick={() => openMeeting(m.number)} className="flex w-full min-w-0 items-start gap-3 px-4 py-3 text-left hover:bg-[var(--w-hover)]">
+        <li key={m.id} className="flex min-w-0 items-center">
+          <button type="button" onClick={() => openMeeting(m.number)} className="flex w-full min-w-0 flex-1 items-start gap-3 px-4 py-3 text-left hover:bg-[var(--w-hover)]">
             <CalendarClock size={16} className="mt-0.5 shrink-0 text-[var(--w-text-3)]" />
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[14px] font-medium">{m.title}</span>
@@ -38,6 +39,10 @@ export function MeetingsTab({ pid, asClient, openMeeting }: { pid: number; asCli
               </span>
             </span>
           </button>
+          {/* CTW-24: vào phòng ngay từ danh sách (cuộc họp chưa qua). */}
+          {m.meetingUrl && m.status === 'SCHEDULED' && new Date(m.endsAt).getTime() > Date.now() && (
+            <span className="shrink-0 pr-3"><JoinMeetingButton url={m.meetingUrl} startsAt={m.startsAt} endsAt={m.endsAt} className="w-btn-sm" /></span>
+          )}
         </li>
       ))}
     </ul>
@@ -57,8 +62,12 @@ export function PortalMeetingDialog({ pid, num, asClient, onClose }: { pid: numb
             {m.location && <div className="flex items-center gap-1.5"><MapPin size={14} /><span className="[overflow-wrap:anywhere]">{m.location}</span></div>}
           </div>
           <div className="flex flex-wrap gap-2">
-            {m.meetingUrl && m.status !== 'CANCELLED' && <a href={m.meetingUrl} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-primary"><Video size={14} /> Join meeting</a>}
-            <button type="button" className="w-btn" disabled={ics.isPending} onClick={() => ics.mutate()} data-testid="portal-meeting-ics"><Download size={14} /> Add to calendar (.ics)</button>
+            {/* CTW-24/25: Join nổi bật + Google Calendar / Outlook / .ics. */}
+            {m.meetingUrl && m.status !== 'CANCELLED' && <JoinMeetingButton url={m.meetingUrl} startsAt={m.startsAt} endsAt={m.endsAt} />}
+            <AddToCalendar
+              size="md" onIcs={() => ics.mutate()}
+              event={{ title: m.title, start: m.startsAt, end: m.endsAt, location: m.meetingUrl || m.location, details: m.meetingUrl ? `Join: ${m.meetingUrl}` : null }}
+            />
           </div>
           <section>
             <h3 className="w-section-title mb-2">Attendees</h3>

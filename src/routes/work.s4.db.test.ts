@@ -354,7 +354,7 @@ describe('CT Work — đợt S4: tài chính · báo cáo · xuất trọn (HTTP
   it('job nền theo lịch: không gọi LLM (không fetch ra ngoài), một bản mỗi tuần', async () => {
     const now = new Date();
     const l = localWeekdayHour(now, 'Asia/Ho_Chi_Minh');
-    await call(owner, 'PUT', `/projects/${pid}/reports/client-weekly/schedule`, { enabled: true, weekday: l.weekday, hour: 0, timezone: 'Asia/Ho_Chi_Minh' });
+    await call(owner, 'PUT', `/projects/${pid}/reports/client-weekly/schedule`, { enabled: true, confirm: true, weekday: l.weekday, hour: 0, timezone: 'Asia/Ho_Chi_Minh' });
     const realFetch = globalThis.fetch;
     const outbound: string[] = [];
     globalThis.fetch = (async (input: any, init?: any) => { outbound.push(String(input?.url ?? input)); return realFetch(input, init); }) as typeof fetch;

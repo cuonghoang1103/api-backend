@@ -50,6 +50,7 @@ import { logger } from '../../utils/logger.js';
 import { audit } from './audit.js';
 import { PROJECT_KEY_RE } from './constants.js';
 import { requireWorkspace } from './permissions.js';
+import { GENERATED_FIELDS } from './fold.js';
 import { EXPORT_FORMAT, EXPORT_FORMAT_VERSION, EXPORT_TABLES, emailHash, exportStore, sha256Hex } from './projectExport.service.js';
 
 export const IMPORT_MAX_BYTES = 200 * 1024 * 1024;
@@ -437,6 +438,8 @@ function buildRow(ctx: Ctx, model: DmmfModel, row: Row, order: string[]): Built 
   for (const f of model.fields as DmmfField[]) {
     if (f.kind !== 'scalar' && f.kind !== 'enum') continue;
     if (f.isId && f.hasDefaultValue) continue;
+    // CTW-6: cột sinh tự động (title_fold…) — CSDL tự tính, ghi vào là lỗi 428C9.
+    if (GENERATED_FIELDS.has(`${model.name}.${f.name}`)) continue;
     if (!(f.name in row)) continue;
     let v = row[f.name];
     const target = fks.get(f.name) ?? LOOSE_REFS[`${model.name}.${f.name}`] ?? (USER_COL.test(f.name) && f.type === 'Int' ? 'User' : undefined);

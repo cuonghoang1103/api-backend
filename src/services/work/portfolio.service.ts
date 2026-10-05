@@ -46,6 +46,8 @@ async function projectsInView(userId: number, workspaceId: number) {
       orderBy: [{ archivedAt: { sort: 'asc', nulls: 'first' } }, { name: 'asc' }],
       select: {
         id: true, key: true, name: true, type: true, template: true, kind: true, visibility: true, settings: true, archivedAt: true,
+        // CTW-23: nhận diện dự án.
+        avatarUrl: true, iconEmoji: true, color: true,
         clientRequest: { select: { id: true } },
         lead: { select: PUBLIC_USER },
         members: { where: { userId }, select: { role: true } },
@@ -224,6 +226,7 @@ export async function portfolio(userId: number, workspaceId: number, opts: { inc
 
     rows.push({
       id: p.id, key: p.key, name: p.name, type: p.type, role: p.role, archivedAt: p.archivedAt,
+      avatarUrl: p.avatarUrl, iconEmoji: p.iconEmoji, color: p.color,
       kind: projectKindOf({ kind: p.kind, template: p.template, fromClientRequest: !!p.clientRequest }),
       lead: p.lead,
       url: `/work/${ws.slug}/${p.key}/board`,

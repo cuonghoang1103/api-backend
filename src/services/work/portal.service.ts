@@ -34,6 +34,7 @@ import { notifyWork } from './notify.js';
 import { actionableSteps, can, canViewPage, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
 import { clientMemberIds, notifyClientsOfProject, portalPath } from './portalNotify.js';
 import { assertModule } from './studio.js';
+import { gateEvidence } from './gateEvidence.js';
 
 // ─── Ngữ cảnh người xem ──────────────────────────────────────────
 
@@ -87,7 +88,7 @@ export async function overview(userId: number, projectId: number, opts: { asClie
   const ctx = await portalCtx(userId, projectId, opts);
   const pid = projectId;
   const [project, stages, stageIssues, versions, pending, sharedOpen, sharedDone, fromClientOpen] = await Promise.all([
-    prisma.workProject.findUniqueOrThrow({ where: { id: pid }, select: { key: true, name: true, description: true, workspace: { select: { name: true, slug: true } }, clientRequest: { select: { organization: true, code: true } } } }),
+    prisma.workProject.findUniqueOrThrow({ where: { id: pid }, select: { key: true, name: true, description: true, avatarUrl: true, iconEmoji: true, color: true, workspace: { select: { name: true, slug: true, logoUrl: true } }, clientRequest: { select: { organization: true, code: true } } } }),
     ctx.access.modules.stages
       ? prisma.workStage.findMany({ where: { projectId: pid }, orderBy: { n: 'asc' }, select: { id: true, n: true, slug: true, name: true, status: true, startedAt: true, completedAt: true } })
       : Promise.resolve([]),
@@ -130,7 +131,11 @@ export async function overview(userId: number, projectId: number, opts: { asClie
   const current = stageRows.find((s) => s.status === 'ACTIVE' || s.status === 'GATE_REVIEW') ?? null;
   const overall = stageRows.length ? Math.round(stageRows.reduce((a, s) => a + s.percent, 0) / stageRows.length) : null;
   return {
-    project: { key: project.key, name: project.name, description: ctx.clientView ? null : project.description, workspaceName: project.workspace.name, organization: project.clientRequest?.organization ?? null },
+    project: {
+      key: project.key, name: project.name, description: ctx.clientView ? null : project.description, workspaceName: project.workspace.name, organization: project.clientRequest?.organization ?? null,
+      // CTW-23: cổng khách mang nhận diện dự án + logo studio.
+      avatarUrl: project.avatarUrl, iconEmoji: project.iconEmoji, color: project.color, workspaceLogoUrl: project.workspace.logoUrl,
+    },
     viewer: viewerInfo(ctx),
     stages: stageRows,
     currentStage: current,
@@ -325,6 +330,8 @@ export async function submitRequest(
 
 const PORTAL_APPROVAL_SELECT = {
   id: true, targetType: true, issueId: true, stageId: true, pageId: true, title: true, description: true, mode: true, status: true, dueAt: true, decidedAt: true, createdAt: true, contentHash: true,
+  // CTW-1: lời nhắn cho khách + bằng chứng của cổng giai đoạn.
+  clientNote: true, evidence: true,
   createdBy: { select: PUBLIC_USER },
   issue: { select: { number: true, title: true, clientVisible: true } },
   stage: { select: { n: true, name: true, status: true } },
@@ -350,6 +357,8 @@ async function presentApproval(ctx: PortalCtx, row: PortalApprovalRow, detail = 
   const myStep = a.steps.find((s) => s.approverId === ctx.userId) ?? null;
   const out = {
     id: a.id, targetType: a.targetType, title: a.title, description: a.description, mode: a.mode, status: a.status,
+    // CTW-1: nhân viên thấy riêng lời nhắn cho khách (khách đọc nó qua `description`).
+    clientNote: ctx.clientView ? null : a.clientNote,
     dueAt: a.dueAt, decidedAt: a.decidedAt, createdAt: a.createdAt, createdBy: maskUser(a.createdBy, ctx.people),
     issue: a.issue ? { number: a.issue.number, title: a.issue.title, key: `${ctx.access.key}-${a.issue.number}`, shared: a.issue.clientVisible } : null,
     stage: a.stage ? { n: a.stage.n, name: a.stage.name, status: a.stage.status } : null,
@@ -365,10 +374,13 @@ async function presentApproval(ctx: PortalCtx, row: PortalApprovalRow, detail = 
     contentChanged: anyDecided && now !== null && signed !== null && now !== signed,
     signedHash: signed,
     uat: null as null | Awaited<ReturnType<typeof uatDetail>>,
+    /** CTW-1: bằng chứng cổng giai đoạn — chỉ ở trang chi tiết (lọc theo luật như khách). */
+    evidence: null as null | Awaited<ReturnType<typeof gateEvidence>>,
     /** Phân tích ảnh hưởng của CR — chỉ khi CR đã chia sẻ (crForClient tự lọc clientVisible). */
     changeRequest: null as null | Awaited<ReturnType<typeof import('./changeRequests.service.js')['crForClient']>>,
   };
   if (a.uat) out.uat = await uatDetail(ctx, a.uat, detail);
+  if (detail && a.targetType === 'STAGE_GATE') out.evidence = await gateEvidence(a, { projectId: ctx.access.projectId, projectKey: ctx.access.key, clientView: ctx.clientView });
   if (a.targetType === 'CR' && a.changeRequestId && shared) {
     const { crForClient } = await import('./changeRequests.service.js');
     out.changeRequest = await crForClient(a.changeRequestId);

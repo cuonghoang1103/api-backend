@@ -95,7 +95,7 @@ function ProjectRow({ p }: { p: PortfolioProject }) {
   return (
     <li className="pf-row grid grid-cols-2 gap-x-4 gap-y-3 border-b border-[var(--w-border)] px-4 py-3.5 last:border-b-0 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,0.7fr)] lg:items-center lg:py-2.5" data-key={p.key}>
       <div className="col-span-2 flex min-w-0 items-center gap-2.5 lg:col-span-1">
-        <ProjectMark k={p.key} size={28} />
+        <ProjectMark k={p.key} size={28} brand={p} />
         <div className="min-w-0 flex-1">
           <Link href={p.url} className="block truncate text-[14px] font-semibold hover:underline">{p.name}</Link>
           <div className="flex min-w-0 items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">

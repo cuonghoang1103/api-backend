@@ -11,7 +11,7 @@
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { FilePlus2, FileText, ListTree, Search, Sparkles } from 'lucide-react';
+import { FilePlus2, FileText, FileUp, ListTree, Search, Sparkles } from 'lucide-react';
 import { openAiPanel } from '../ai/store';
 import { cn } from '@/lib/utils';
 import { workDocsApi, type PageStatus, type ProjectConfig, type WorkPageList } from '@/lib/work-api';
@@ -21,6 +21,7 @@ import { ModuleOff, studioOn } from '../studio/shared';
 import DocView from './DocView';
 import DocsTree from './DocsTree';
 import NewPageDialog from './NewPageDialog';
+import ImportMarkdownDialog from './ImportMarkdownDialog';
 import { PAGE_STATUS, PageStatusPill, VisibilityBadge, docsBase, useDocsList } from './shared';
 
 export default function DocsShell({ config, num }: { config: ProjectConfig; num?: number }) {
@@ -28,6 +29,8 @@ export default function DocsShell({ config, num }: { config: ProjectConfig; num?
   const list = useDocsList(config.id, on);
   const [newFor, setNewFor] = useState<{ parent: number | null } | null>(null);
   const [treeOpen, setTreeOpen] = useState(false);
+  // CTW-4: nhập Markdown thành trang mới.
+  const [importOpen, setImportOpen] = useState(false);
   const canEdit = !!list.data?.canEdit && !!config.permissions.editDocs;
   const parent = newFor?.parent ? list.data?.pages.find((p) => p.number === newFor.parent) : null;
   const active = num ? list.data?.pages.find((p) => p.number === num) : undefined;
@@ -38,6 +41,11 @@ export default function DocsShell({ config, num }: { config: ProjectConfig; num?
         {on && num && (
           <button type="button" className="w-btn w-btn-sm md:!hidden" onClick={() => setTreeOpen(true)} aria-label="Show all pages">
             <ListTree size={13} /> Pages
+          </button>
+        )}
+        {on && canEdit && (
+          <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)} data-testid="docs-import-md-open" title="Create a page from Markdown (paste or .md file)">
+            <FileUp size={13} /> <span className="max-sm:hidden">Import Markdown</span>
           </button>
         )}
         {on && canEdit && (
@@ -60,6 +68,7 @@ export default function DocsShell({ config, num }: { config: ProjectConfig; num?
           </main>
         </div>
       )}
+      <ImportMarkdownDialog open={importOpen} onClose={() => setImportOpen(false)} config={config} />
       <NewPageDialog open={!!newFor} onClose={() => setNewFor(null)} config={config} parentNumber={newFor?.parent ?? null} parentTitle={parent?.title ?? null} stageId={parent?.stageId ?? null} />
       <Dialog open={treeOpen} onClose={() => setTreeOpen(false)} title="Pages" width={420}>
         {list.data && (

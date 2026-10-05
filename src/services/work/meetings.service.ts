@@ -27,7 +27,7 @@ import type { MeetingStatus, MeetingType } from './constants.js';
 import { clientPeopleIds, maskUser } from './clientPeople.js';
 import { getTemplate } from './docTemplates.js';
 import { emitWorkEvent } from './events.js';
-import { MEETING_LABEL, meetingProvider, meetingTimeError, splitKickoffTemplate, validTimezone } from './governance.js';
+import { MEETING_LABEL, meetingProvider, meetingTimeError, newJitsiUrl, splitKickoffTemplate, validTimezone } from './governance.js';
 import { dayOf, govCtx, markdownDoc, nextNumber } from './governanceDb.js';
 import { icsDocument, meetingEventLines } from './ics.js';
 import { createIssueAs } from './issues.service.js';
@@ -120,6 +120,12 @@ function richFields(json: Prisma.InputJsonValue | null | undefined, k: 'agenda' 
     : { minutesJson: json === null ? Prisma.DbNull : json, minutesText: text };
 }
 
+/** CTW-24: `meetingUrl: "jitsi"` ⇒ máy chủ sinh phòng Jitsi mới (khó đoán). */
+function resolveMeetingUrl<T extends { meetingUrl?: string | null }>(input: T): T {
+  if (input.meetingUrl?.trim().toLowerCase() === 'jitsi') return { ...input, meetingUrl: newJitsiUrl() };
+  return input;
+}
+
 function assertUrl(url: string | null | undefined) {
   if (!url) return;
   let u: URL;
@@ -139,9 +145,10 @@ async function kickoffTemplate(): Promise<{ agenda: Prisma.InputJsonValue | null
 
 export async function createMeeting(
   userId: number, projectId: number,
-  input: MeetingInput & { title: string; startsAt: Date; endsAt: Date; attendeeIds?: number[]; useTemplate?: boolean; sendInvites?: boolean },
+  rawInput: MeetingInput & { title: string; startsAt: Date; endsAt: Date; attendeeIds?: number[]; useTemplate?: boolean; sendInvites?: boolean },
 ) {
   await govCtx(userId, projectId, 'meetings', { edit: true });
+  const input = resolveMeetingUrl(rawInput);
   const title = input.title.trim();
   if (!title) throw new BadRequestError('Title is required', 'WORK_TITLE_REQUIRED');
   const err = meetingTimeError(input.startsAt, input.endsAt);
@@ -230,8 +237,9 @@ export async function getMeeting(userId: number, projectId: number, number: numb
   };
 }
 
-export async function updateMeeting(userId: number, projectId: number, number: number, input: MeetingInput, expectedVersion?: number) {
+export async function updateMeeting(userId: number, projectId: number, number: number, rawInput: MeetingInput, expectedVersion?: number) {
   await govCtx(userId, projectId, 'meetings', { edit: true });
+  const input = resolveMeetingUrl(rawInput);
   const cur = await findMeeting(projectId, number);
   if (input.title !== undefined && !input.title.trim()) throw new BadRequestError('Title is required', 'WORK_TITLE_REQUIRED');
   const startsAt = input.startsAt ?? cur.startsAt;
@@ -463,7 +471,8 @@ async function buildIcs(meetingId: number, recipientId: number, opts: { clientVi
   const lines = meetingEventLines({
     uid: `ctwork-meeting-${m.id}@cuongthai.com`, sequence: m.sequence, title: `${m.project.key} · ${m.title}`, status: m.status,
     startsAt: m.startsAt, endsAt: m.endsAt, timezone: m.timezone, location: m.location, meetingUrl: m.meetingUrl,
-    description: [m.project.name, m.meetingUrl ? `Join: ${m.meetingUrl}` : '', agenda ? `Agenda:\n${agenda}` : '', url].filter(Boolean).join('\n'),
+    // CTW-24: "Join:" lên ĐẦU mô tả — Outlook/Google chỉ hiện vài dòng đầu.
+    description: [m.meetingUrl ? `Join: ${m.meetingUrl}` : '', m.project.name, agenda ? `Agenda:\n${agenda}` : '', url].filter(Boolean).join('\n'),
     url, categories: m.project.key,
     organizer: { name: m.organizer ? displayName(m.organizer) : m.project.name, email: senderAddress() },
     attendees, updatedAt: m.updatedAt,

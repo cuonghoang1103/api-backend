@@ -51,6 +51,8 @@ import * as trash from '../services/work/trash.service.js';
 import * as onboarding from '../services/work/onboarding.service.js';
 import * as teams from '../services/work/teams.service.js';
 import * as stages from '../services/work/stages.service.js';
+import { markdownToTiptap } from '../services/work/docMarkdown.js';
+import * as branding from '../services/work/branding.service.js';
 import * as approvals from '../services/work/approvals.service.js';
 import * as handoffs from '../services/work/handoffs.service.js';
 import * as pages from '../services/work/pages.service.js';
@@ -92,7 +94,9 @@ function parse<T extends z.ZodTypeAny>(schema: T, value: unknown): z.infer<T> {
     if (err instanceof ZodError) {
       const first = err.issues[0];
       const where = first?.path.length ? `${first.path.join('.')}: ` : '';
-      throw new BadRequestError(`${where}${first?.message ?? 'Invalid input'}`, 'VALIDATION_ERROR');
+      // CTW-4/15: trả ĐỦ mọi lỗi (data.errors) — không chỉ lỗi đầu tiên; trường lạ (.strict) nêu tên.
+      const errors = err.issues.slice(0, 20).map((i) => ({ path: i.path.join('.'), message: i.message }));
+      throw new AppError(`${where}${first?.message ?? 'Invalid input'}`, 400, 'VALIDATION_ERROR', { errors });
     }
     throw err;
   }
@@ -214,7 +218,7 @@ router.get('/workspaces', asyncHandler(async (req, res) => {
       role: true,
       workspace: {
         select: {
-          id: true, name: true, slug: true, description: true,
+          id: true, name: true, slug: true, description: true, logoUrl: true,
           _count: { select: { projects: { where: { deletedAt: null } }, members: true } },
         },
       },
@@ -234,7 +238,7 @@ router.get('/workspaces', asyncHandler(async (req, res) => {
       projectCount = (await projects.listProjects(userId, r.workspace.id)).length;
     }
     out.push({
-      id: r.workspace.id, name: r.workspace.name, slug: r.workspace.slug, description: r.workspace.description,
+      id: r.workspace.id, name: r.workspace.name, slug: r.workspace.slug, description: r.workspace.description, logoUrl: r.workspace.logoUrl,
       role, projectCount, memberCount,
     });
   }
@@ -255,7 +259,19 @@ router.get('/workspaces/by-slug/:slug', asyncHandler(async (req, res) => {
 }));
 
 router.patch('/workspaces/:wsId', asyncHandler(async (req, res) => {
-  ok(res, await workspaces.updateWorkspace(callerId(req), idParam(req, 'wsId'), parse(workspaceBody.partial(), req.body)));
+  ok(res, await workspaces.updateWorkspace(callerId(req), idParam(req, 'wsId'), parse(workspaceBody.partial().extend({ logoUrl: z.null().optional() }), req.body)));
+}));
+
+// CTW-23: logo không gian (ảnh công khai trên R2, ≤ 2 MB) — presign ⇒ PUT thẳng lên R2 ⇒ complete.
+const brandPresign = z.object({ contentType: z.string().min(1).max(100), size: z.number().int().min(1) });
+router.post('/workspaces/:wsId/logo/presign', asyncHandler(async (req, res) => {
+  ok(res, await branding.presignWorkspaceLogo(callerId(req), idParam(req, 'wsId'), parse(brandPresign, req.body)));
+}));
+router.post('/workspaces/:wsId/logo/complete', asyncHandler(async (req, res) => {
+  ok(res, await branding.completeWorkspaceLogo(callerId(req), idParam(req, 'wsId'), parse(z.object({ key: z.string().min(1).max(500) }), req.body)));
+}));
+router.delete('/workspaces/:wsId/logo', asyncHandler(async (req, res) => {
+  ok(res, await branding.removeWorkspaceLogo(callerId(req), idParam(req, 'wsId')));
 }));
 
 router.delete('/workspaces/:wsId', asyncHandler(async (req, res) => {
@@ -356,8 +372,25 @@ router.patch('/projects/:pid', asyncHandler(async (req, res) => {
     visibility: z.enum(PROJECT_VISIBILITY).optional(),
     leadId: id.nullable().optional(),
     settings: z.record(z.unknown()).optional(),
+    // CTW-23: emoji (một biểu tượng ngắn) + màu #rrggbb; ảnh đổi qua /avatar/*, ở đây chỉ gỡ (null).
+    iconEmoji: z.string().max(16).nullable().optional(),
+    color: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Color must look like #2563eb').nullable().optional(),
+    avatarUrl: z.null().optional(),
   }), req.body);
-  ok(res, await projects.updateProject(callerId(req), idParam(req, 'pid'), body));
+  if (body.avatarUrl === null) await branding.removeProjectAvatar(callerId(req), idParam(req, 'pid'));
+  const { avatarUrl: _drop, ...rest } = body;
+  ok(res, await projects.updateProject(callerId(req), idParam(req, 'pid'), rest));
+}));
+
+// CTW-23: ảnh dự án — presign ⇒ PUT thẳng lên R2 ⇒ complete (máy chủ HEAD kiểm loại + cỡ).
+router.post('/projects/:pid/avatar/presign', asyncHandler(async (req, res) => {
+  ok(res, await branding.presignProjectAvatar(callerId(req), idParam(req, 'pid'), parse(brandPresign, req.body)));
+}));
+router.post('/projects/:pid/avatar/complete', asyncHandler(async (req, res) => {
+  ok(res, await branding.completeProjectAvatar(callerId(req), idParam(req, 'pid'), parse(z.object({ key: z.string().min(1).max(500) }), req.body)));
+}));
+router.delete('/projects/:pid/avatar', asyncHandler(async (req, res) => {
+  ok(res, await branding.removeProjectAvatar(callerId(req), idParam(req, 'pid')));
 }));
 
 router.post('/projects/:pid/archive', asyncHandler(async (req, res) => {
@@ -520,6 +553,14 @@ router.delete('/projects/:pid/issues/:num/links/:linkId', asyncHandler(async (re
   ok(res, { removed: true });
 }));
 
+// CTW-11: cờ "Bị chặn" — PUT cắm (bắt buộc lý do), DELETE gỡ.
+router.put('/projects/:pid/issues/:num/flag', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ reason: z.string().min(1).max(450), raidNumber: id.nullable().optional() }).strict(), req.body);
+  ok(res, await issues.setIssueFlag(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), { flagged: true, ...body }));
+}));
+router.delete('/projects/:pid/issues/:num/flag', asyncHandler(async (req, res) => {
+  ok(res, await issues.setIssueFlag(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), { flagged: false }));
+}));
 router.put('/projects/:pid/issues/:num/watch', asyncHandler(async (req, res) => {
   await issues.setWatching(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), true);
   ok(res, { watching: true });
@@ -1494,7 +1535,15 @@ router.post('/projects/:pid/stages/:sid/request-gate', asyncHandler(async (req, 
     description: z.string().max(5000).nullable().optional(), dueAt: z.coerce.date().nullable().optional(),
     // Đợt S6: ADMIN vượt cổng Spec Fidelity (bắt buộc lý do, ghi audit).
     override: z.object({ reason: z.string().min(1).max(1000) }).nullable().optional(),
-  }), req.body ?? {});
+    // CTW-1: lời nhắn cho KHÁCH + bằng chứng ghim (như UAT).
+    clientNote: z.string().max(5000).nullable().optional(),
+    issueNumbers: z.array(id).max(100).optional(),
+    pageNumbers: z.array(id).max(100).optional(),
+    attachmentIds: z.array(id).max(100).optional(),
+    // CTW-13: còn thẻ mở mà vẫn gửi.
+    acknowledgeOpen: z.boolean().optional(),
+    openReason: z.string().max(1000).nullable().optional(),
+  }).strict(), req.body ?? {});
   ok(res, await stages.requestGate(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'), body), 201);
 }));
 
@@ -1586,6 +1635,25 @@ const pageDoc = z
   .refine((v) => JSON.stringify(v).length <= 2_000_000, 'Document is too large')
   .transform((v) => v as Prisma.InputJsonValue);
 
+/** CTW-4: Markdown của một trang (≤ 1 MB chữ). */
+const pageMarkdown = z.string().max(1_000_000, 'Markdown is too large (1 MB max)');
+
+/**
+ * CTW-4: `markdown` ⇒ `contentJson` bằng CHÍNH bộ chuyển của mẫu tài liệu (docMarkdown.ts, qua mdast —
+ * không qua HTML). Không có tiêu đề ⇒ lấy tiêu đề mức 1 đầu tiên làm tiêu đề trang (và bỏ khỏi nội dung).
+ * Gửi cả `markdown` lẫn `contentJson` ⇒ 400 (không đoán cái nào thắng).
+ */
+function markdownContent(markdown: string | undefined, body: { title?: string; contentJson?: unknown }, patch = false): { title?: string; contentJson?: Prisma.InputJsonValue } {
+  if (markdown === undefined) return {};
+  if (body.contentJson !== undefined) throw new BadRequestError('Send either "markdown" or "contentJson", not both', 'VALIDATION_ERROR');
+  const first = /^\s*#\s+(.+?)\s*#*\s*$/m.exec(markdown.split('\n').find((l) => l.trim()) ?? '');
+  const h1 = first?.[1]?.trim() ?? '';
+  const useH1 = !body.title?.trim() && !patch;
+  const dropTitle = !!h1 && (useH1 || body.title?.trim() === h1);
+  const conv = markdownToTiptap(markdown, { dropTitle });
+  return { ...(useH1 && conv.title ? { title: conv.title.slice(0, 255) } : {}), contentJson: conv.doc as unknown as Prisma.InputJsonValue };
+}
+
 router.get('/search/docs', asyncHandler(async (req, res) => {
   const q = parse(z.object({ q: z.string().max(200).default(''), limit: z.coerce.number().int().min(1).max(50).optional() }), req.query);
   ok(res, await pages.searchDocsGlobal(callerId(req), q.q, q.limit));
@@ -1602,15 +1670,18 @@ router.get('/projects/:pid/pages', asyncHandler(async (req, res) => {
   ok(res, await pages.listPages(callerId(req), idParam(req, 'pid'), { stageId: q.stage }));
 }));
 router.post('/projects/:pid/pages', asyncHandler(async (req, res) => {
+  // CTW-4: .strict() — trường lạ (vd. "content", "body") là 400 nêu tên, không còn lặng lẽ tạo trang rỗng.
   const body = parse(z.object({
     title: z.string().max(255).optional(),
     parentNumber: id.nullable().optional(),
     templateKey: z.string().regex(/^[a-z0-9-]{1,64}$/).nullable().optional(),
     stageId: id.nullable().optional(),
     contentJson: pageDoc.optional(),
+    markdown: pageMarkdown.optional(),
     visibility: z.enum(PAGE_VISIBILITY).optional(),
-  }), req.body ?? {});
-  ok(res, await pages.createPage(callerId(req), idParam(req, 'pid'), body), 201);
+  }).strict(), req.body ?? {});
+  const { markdown, ...rest } = body;
+  ok(res, await pages.createPage(callerId(req), idParam(req, 'pid'), { ...rest, ...markdownContent(markdown, rest) }), 201);
 }));
 router.get('/projects/:pid/pages/search', asyncHandler(async (req, res) => {
   const q = parse(z.object({ q: z.string().max(200).default(''), limit: z.coerce.number().int().min(1).max(50).optional() }), req.query);
@@ -1620,9 +1691,11 @@ router.get('/projects/:pid/pages/:num', asyncHandler(async (req, res) => {
   ok(res, await pages.getPage(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
 }));
 router.patch('/projects/:pid/pages/:num', asyncHandler(async (req, res) => {
-  const body = parse(z.object({
+  const parsed = parse(z.object({
     title: z.string().max(255).optional(),
     contentJson: pageDoc.optional(),
+    // CTW-4: thay nội dung bằng Markdown (cùng bộ chuyển với xuất .md).
+    markdown: pageMarkdown.optional(),
     status: z.enum(PAGE_STATUSES).optional(),
     visibility: z.enum(PAGE_VISIBILITY).optional(),
     ownerId: id.optional(),
@@ -1630,8 +1703,9 @@ router.patch('/projects/:pid/pages/:num', asyncHandler(async (req, res) => {
     version: z.number().int().min(0).optional(),
     versionNote: z.string().max(500).nullable().optional(),
     aiAssisted: z.boolean().optional(),
-  }), req.body);
-  ok(res, await pages.updatePage(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body));
+  }).strict(), req.body);
+  const { markdown, ...body } = parsed;
+  ok(res, await pages.updatePage(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), { ...body, ...markdownContent(markdown, body, true) }));
 }));
 router.post('/projects/:pid/pages/:num/move', asyncHandler(async (req, res) => {
   const body = parse(z.object({ parentNumber: id.nullable(), index: z.number().int().min(0).max(10_000) }), req.body);

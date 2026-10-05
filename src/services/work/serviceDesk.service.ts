@@ -409,7 +409,9 @@ export async function staffCreate(userId: number, projectId: number, input: Staf
   });
   await auditProject(projectId, { actorId: userId, action: 'desk.create', targetType: 'issue', targetId: issueId, summary: `${ctx.access.key}-${number} is a service desk request (${type.name}, ${t.priority})` });
   emitWorkEvent({ type: 'issue.updated', projectId, issueId, actor: { kind: 'USER', userId }, changes: [{ field: 'desk', from: null, to: t.priority }] });
-  return issueDesk(userId, projectId, number);
+  // CTW-19: số + khoá + SLA của ticket ở CẤP ĐẦU (trước đây chỉ có cấu hình form — phải GET /desk/queue mới biết số).
+  const d = await issueDesk(userId, projectId, number);
+  return { ...d, number, key: `${ctx.access.key}-${number}`, priority: t.priority };
 }
 
 // ═══ Móc nối từ cửa ghi chung ════════════════════════════════════════

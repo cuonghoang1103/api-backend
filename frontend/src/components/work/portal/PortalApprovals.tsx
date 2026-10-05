@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { userName, workError, workPortalApi, workPortalKeys, workStudioApi, type PortalApproval, type ProjectConfig } from '@/lib/work-api';
 import { Dialog, EmptyState, formatDate, PageLoading, relativeTime, Spinner, StatusBadge, UserAvatar } from '../ui';
 import { ApprovalPill, Pill } from '../studio/shared';
+import { GateEvidenceView } from '../studio/GateEvidence';
 
 const KIND_LABEL: Record<string, string> = { UAT: 'UAT sign-off', STAGE_GATE: 'Stage gate', DOC: 'Document', ISSUE: 'Item', CR: 'Change request' };
 
@@ -149,6 +150,11 @@ export function PortalApprovalDialog({ pid, id, asClient, config, onClose }: { p
             {a.dueAt && <span>Due {formatDate(a.dueAt)}</span>}
           </div>
           {a.description && <p className="whitespace-pre-line text-[13.5px]">{a.description}</p>}
+          {/* CTW-1: xem trước như khách ⇒ nhân viên thấy đúng lời nhắn khách nhận; quản lý ⇒ thấy cả hai. */}
+          {a.clientNote && !asClient && (
+            <p className="whitespace-pre-line rounded-[8px] border border-[var(--w-border)] px-3 py-2 text-[13px]"><span className="mb-0.5 block text-[12px] font-medium text-[var(--w-text-3)]">Message to the client</span>{a.clientNote}</p>
+          )}
+          {a.evidence && <GateEvidenceView pid={pid} ev={a.evidence} clientView={asClient || !!config.clientView} />}
           {a.contentChanged && <p className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px]">The content changed after it was signed. The team may ask for a new sign-off.</p>}
           {a.changeRequest && (
             <section data-testid="portal-cr-analysis">

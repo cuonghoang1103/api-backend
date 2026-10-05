@@ -47,6 +47,7 @@ import { AttachmentClientControls, IssueClientShare } from './portal/ClientShare
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 // Đợt S6: nhãn nguồn gốc AI (AI-assisted) của thẻ.
 import { AiAssistedControl } from './spec/SpecPanel';
+import { AddToCalendar, FlagControl } from './ctw';
 import type { AiProvenance } from '@/lib/work-s6-api';
 import {
   formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, ProjectMark, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
@@ -493,6 +494,12 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         />
       </Prop>
       <Prop label="Priority"><PriorityPicker value={issue.priority} onChange={(priority) => set({ priority })} bare disabled={!editable} /></Prop>
+      {/* CTW-11: cờ "Bị chặn" (khách không thấy). */}
+      {!config.clientView && (
+        <Prop label="Blocked">
+          <FlagControl pid={pid} num={issue.number} flaggedAt={issue.flaggedAt} reason={issue.flagReason} editable={editable} onChanged={() => void qc.invalidateQueries({ queryKey: wk.issue(pid, issue.number) })} />
+        </Prop>
+      )}
       <Prop label="Labels"><LabelsPicker config={config} value={issue.labelIds} onChange={(labelIds) => set({ labelIds })} bare disabled={!editable} /></Prop>
       {type && type.level !== 1 && (
         <Prop label={type.level === -1 ? 'Parent' : 'Epic'}>
@@ -522,7 +529,18 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         </Prop>
       )}
       <Prop label="Start date"><DateInput value={issue.startDate} onChange={(startDate) => set({ startDate })} disabled={!editable} /></Prop>
-      <Prop label="Due date"><DateInput value={issue.dueDate} onChange={(dueDate) => set({ dueDate })} disabled={!editable} /></Prop>
+      <Prop label="Due date">
+        <div className="flex min-w-0 items-center">
+        <DateInput value={issue.dueDate} onChange={(dueDate) => set({ dueDate })} disabled={!editable} />
+        {/* CTW-25: thêm hạn thẻ vào Google Calendar / Outlook (deep link). */}
+        {issue.dueDate && (
+          <AddToCalendar
+            label="Calendar" className="ml-1 !h-6 !px-1.5 text-[11.5px]"
+            event={{ title: `Due: ${lk.issueKey(issue.number)} ${issue.title}`, start: issue.dueDate.slice(0, 10), allDay: true, details: `${config.name}\n${typeof window !== 'undefined' ? window.location.origin : ''}${base}/issue/${issue.number}` }}
+          />
+        )}
+        </div>
+      </Prop>
       {config.components.length > 0 && (
         <Prop label="Components"><ComponentsPicker config={config} value={issue.componentIds} onChange={(componentIds) => set({ componentIds })} bare disabled={!editable} /></Prop>
       )}
@@ -548,7 +566,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             <Crumb href={`/work/${config.workspace.slug}`} className="max-w-[160px] max-lg:!hidden">{config.workspace.name}</Crumb>
             <CrumbSep className="max-lg:!hidden" />
             <Crumb href={`${base}/board`} className="max-w-[200px]">
-              <ProjectMark k={config.key} size={18} />
+              <ProjectMark k={config.key} size={18} brand={config} />
               <span className="truncate">{config.name}</span>
             </Crumb>
             <CrumbSep />

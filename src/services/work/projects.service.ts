@@ -86,6 +86,8 @@ export async function listProjects(userId: number, workspaceId: number) {
     orderBy: [{ archivedAt: { sort: 'asc', nulls: 'first' } }, { createdAt: 'asc' }],
     select: {
       id: true, key: true, name: true, description: true, type: true, template: true, visibility: true, archivedAt: true,
+      // CTW-23: nhận diện dự án (sidebar, danh sách dự án).
+      avatarUrl: true, iconEmoji: true, color: true,
       kind: true, settings: true, clientRequest: { select: { id: true } },
       lead: { select: PUBLIC_USER },
       members: { where: { userId }, select: { role: true } },
@@ -137,7 +139,11 @@ export async function getProjectConfig(userId: number, projectId: number) {
     select: {
       id: true, key: true, name: true, description: true, type: true, template: true, visibility: true,
       settings: true, archivedAt: true, createdAt: true, leadId: true, kind: true,
-      workspace: { select: { id: true, name: true, slug: true } },
+      // CTW-23: nhận diện dự án + logo không gian.
+      avatarUrl: true, iconEmoji: true, color: true,
+      workspace: { select: { id: true, name: true, slug: true, logoUrl: true } },
+      // CTW-5: phiên bản cho gợi ý JQL `fixVersion = …`.
+      versions: { where: { status: { not: 'ARCHIVED' } }, orderBy: [{ position: 'asc' }, { id: 'asc' }], take: 200, select: { id: true, name: true, status: true } },
       workflows: {
         orderBy: { id: 'asc' },
         select: {
@@ -309,10 +315,17 @@ export function boardColumns(workflows: WfLite[], settings: unknown) {
 export async function updateProject(
   userId: number,
   projectId: number,
-  input: { name?: string; description?: string | null; visibility?: ProjectVisibility; leadId?: number | null; settings?: Record<string, unknown> },
+  input: {
+    name?: string; description?: string | null; visibility?: ProjectVisibility; leadId?: number | null; settings?: Record<string, unknown>;
+    /** CTW-23: ảnh tải lên qua /avatar/presign + /avatar/complete; ở đây chỉ nhận null (gỡ ảnh). */
+    avatarUrl?: null; iconEmoji?: string | null; color?: string | null;
+  },
 ) {
   await requireProject(userId, projectId, 'project.settings');
   const data: Prisma.WorkProjectUncheckedUpdateInput = {};
+  if (input.avatarUrl === null) data.avatarUrl = null;
+  if (input.iconEmoji !== undefined) data.iconEmoji = input.iconEmoji?.trim() || null;
+  if (input.color !== undefined) data.color = input.color?.toLowerCase() || null;
   if (input.name !== undefined) {
     const n = input.name.trim();
     if (!n) throw new BadRequestError('Project name is required', 'WORK_NAME_REQUIRED');
@@ -341,6 +354,11 @@ export async function updateProject(
         const typeKeys = Array.isArray(raw?.typeKeys) ? raw.typeKeys.filter((x): x is string => typeof x === 'string').slice(0, 20) : null;
         input.settings = { ...input.settings, doneRequirements: { fieldIds: ids, typeKeys: typeKeys?.length ? typeKeys : null } };
       }
+    }
+    // CTW-8/14: ngôn ngữ cho chữ máy chủ tự sinh (báo cáo AI cho khách, tiêu đề phê duyệt). null = tự đoán.
+    if ('language' in input.settings) {
+      const v = input.settings.language;
+      if (v !== null && v !== 'vi' && v !== 'en') throw new BadRequestError('Language must be "vi", "en" or null (auto)', 'WORK_BAD_LANGUAGE');
     }
     // Chỉ dẫn cho trợ lý AI (ai.service đọc): chuỗi, trần 20.000 ký tự; null/rỗng = xoá.
     if ('aiInstructions' in input.settings) {

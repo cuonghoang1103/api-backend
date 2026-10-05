@@ -27,6 +27,7 @@ import {
 } from './jql.js';
 import { clientScopedProjectIds, effectiveProjectRole, effectiveWorkspaceRole, loadWorkspaceRole, portalOnlyWorkspaceIds } from './permissions.js';
 import { jqlHttpError } from './search.service.js';
+import { foldVi } from './fold.js';
 
 export const MAX_PROJECTS = 200;
 export const MAX_LIMIT = 100;
@@ -107,7 +108,7 @@ async function guestPeopleScopes(userId: number, wsIds: number[]): Promise<Map<n
 async function batchContexts(userId: number, projects: VisibleProject[], known: string[], onMissing: (m: JqlMiss) => void) {
   const ids = projects.map((p) => p.id);
   const wsIds = [...new Set(projects.map((p) => p.workspace.id))];
-  const [statuses, types, labels, components, sprints, fields, members, teams, stages] = await Promise.all([
+  const [statuses, types, labels, components, sprints, fields, members, teams, stages, versions] = await Promise.all([
     prisma.workStatus.findMany({ where: { workflow: { projectId: { in: ids } } }, select: { id: true, name: true, category: true, workflow: { select: { projectId: true } } } }),
     prisma.workIssueType.findMany({ where: { projectId: { in: ids } }, select: { id: true, key: true, name: true, projectId: true } }),
     prisma.workLabel.findMany({ where: { projectId: { in: ids } }, select: { id: true, name: true, projectId: true } }),
@@ -118,6 +119,7 @@ async function batchContexts(userId: number, projects: VisibleProject[], known: 
     prisma.workMember.findMany({ where: { workspaceId: { in: wsIds } }, select: { workspaceId: true, user: { select: { id: true, username: true } } } }),
     prisma.workTeam.findMany({ where: { workspaceId: { in: wsIds } }, select: { id: true, key: true, name: true, workspaceId: true } }),
     prisma.workStage.findMany({ where: { projectId: { in: ids } }, select: { id: true, n: true, slug: true, name: true, projectId: true } }),
+    prisma.workVersion.findMany({ where: { projectId: { in: ids } }, select: { id: true, name: true, status: true, projectId: true } }),
   ]);
   const by = <T, K>(rows: T[], key: (r: T) => K) => {
     const m = new Map<K, T[]>();
@@ -134,6 +136,7 @@ async function batchContexts(userId: number, projects: VisibleProject[], known: 
   const mb = by(members.filter((m) => !scopes.get(m.workspaceId) || scopes.get(m.workspaceId)!.has(m.user.id)), (m) => m.workspaceId);
   const tm = by(teams, (t) => t.workspaceId);
   const sg = by(stages, (x) => x.projectId);
+  const vs = by(versions, (x) => x.projectId);
   const now = new Date();
   return new Map<number, JqlContext>(projects.map((p) => [p.id, {
     projectKey: p.key, projectName: p.name, userId, now, knownProjects: known, onMissing,
@@ -146,6 +149,7 @@ async function batchContexts(userId: number, projects: VisibleProject[], known: 
     members: (mb.get(p.workspace.id) ?? []).map((m) => m.user),
     teams: (tm.get(p.workspace.id) ?? []).map(({ id, key, name }) => ({ id, key, name })),
     stages: (sg.get(p.id) ?? []).map(({ id, n, slug, name }) => ({ id, n, slug, name })),
+    versions: (vs.get(p.id) ?? []).map(({ id, name, status }) => ({ id, name, status })),
   }]));
 }
 
@@ -350,7 +354,9 @@ export async function globalSearch(userId: number, input: GlobalSearchInput) {
   // Chữ tự do: khoá chính xác > tiêu đề bắt đầu bằng > tiêu đề chứa > mô tả chứa.
   const keyMatch = KEY_RE.exec(q);
   const onlyNumber = /^\d{1,9}$/.test(q) ? Number(q) : null;
-  const contains = (s: string) => ({ contains: s, mode: 'insensitive' as const });
+  // CTW-6: chữ tự do so trên cột sinh tự động đã bỏ dấu (fold.ts) — "dia cau" khớp "Địa cầu".
+  const fq = foldVi(q);
+  const contains = (s: string) => ({ contains: foldVi(s) });
   const keyWhere = (ids: number[]): W | null => {
     if (keyMatch) {
       const pids = ids.filter((id) => lc(byId.get(id)!.key) === lc(keyMatch[1]));
@@ -361,12 +367,12 @@ export async function globalSearch(userId: number, input: GlobalSearchInput) {
   const textWhere = (ids: number[]): W | null => {
     if (!q) return null;
     const k = keyWhere(ids);
-    return { OR: [...(k ? [k] : []), { title: contains(q) }, { descriptionText: contains(q) }] };
+    return { OR: [...(k ? [k] : []), { titleFold: contains(q) }, { descriptionFold: contains(q) }] };
   };
 
   const scoreOf = (r: Row): { score: number; match: MatchKind } => {
-    const t = lc(r.title);
-    const s = lc(q);
+    const t = foldVi(r.title);
+    const s = fq;
     if (keyMatch && lc(r.project.key) === lc(keyMatch[1]) && r.number === Number(keyMatch[2])) return { score: 4, match: 'key' };
     if (onlyNumber !== null && r.number === onlyNumber) return { score: 3.5, match: 'key' };
     if (t.startsWith(s)) return { score: 3, match: 'title' };
@@ -388,8 +394,8 @@ export async function globalSearch(userId: number, input: GlobalSearchInput) {
     const byUpdated = dbOrder([{ field: 'updated', dir: 'desc' }]);
     const tiers: W[] = [
       ...(keyWhere(g.ids) ? [keyWhere(g.ids)!] : []),
-      { title: { startsWith: q, mode: 'insensitive' } },
-      { title: contains(q), NOT: { title: { startsWith: q, mode: 'insensitive' } } },
+      { titleFold: { startsWith: fq } },
+      { titleFold: contains(q), NOT: { titleFold: { startsWith: fq } } },
     ];
     const got: Row[] = [];
     for (const t of tiers) {
@@ -398,7 +404,7 @@ export async function globalSearch(userId: number, input: GlobalSearchInput) {
     const uniq = new Map(got.map((r) => [r.id, r]));
     if (uniq.size < need) {
       const rest = await prisma.workIssue.findMany({
-        where: { AND: [base, { descriptionText: contains(q) }, { NOT: { title: contains(q) } }] },
+        where: { AND: [base, { descriptionFold: contains(q) }, { NOT: { titleFold: contains(q) } }] },
         orderBy: byUpdated, take: need, select: ROW_SELECT,
       });
       rest.forEach((r) => uniq.set(r.id, r));

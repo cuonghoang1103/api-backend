@@ -40,6 +40,8 @@ export interface WorkspaceSummary {
   role: WorkspaceRole;
   projectCount: number;
   memberCount: number;
+  /** CTW-23: logo không gian. */
+  logoUrl?: string | null;
 }
 
 export interface ProjectSummary {
@@ -57,6 +59,10 @@ export interface ProjectSummary {
   /** Lớp studio (S1). */
   kind?: ProjectKind;
   modules?: ModuleMap;
+  /** CTW-23: nhận diện dự án. */
+  avatarUrl?: string | null;
+  iconEmoji?: string | null;
+  color?: string | null;
 }
 
 export interface WorkspaceDetail {
@@ -67,6 +73,8 @@ export interface WorkspaceDetail {
   ownerId: number;
   role: WorkspaceRole;
   projects: ProjectSummary[];
+  /** CTW-23: logo không gian. */
+  logoUrl?: string | null;
 }
 
 export interface WorkStatus { id: number; name: string; category: StatusCategory; color: string; position: number; wipLimit: number | null }
@@ -138,7 +146,13 @@ export interface ProjectConfig {
   archivedAt: string | null;
   createdAt: string;
   leadId: number | null;
-  workspace: { id: number; name: string; slug: string };
+  workspace: { id: number; name: string; slug: string; logoUrl?: string | null };
+  /** CTW-23: nhận diện dự án. */
+  avatarUrl?: string | null;
+  iconEmoji?: string | null;
+  color?: string | null;
+  /** CTW-5: phiên bản (chưa lưu trữ) — gợi ý JQL `fixVersion`. */
+  versions?: Array<{ id: number; name: string; status: string }>;
   workflows: WorkWorkflow[];
   issueTypes: WorkIssueType[];
   labels: WorkLabel[];
@@ -194,6 +208,9 @@ export interface IssueCard {
   subtaskCount: number;
   commentCount: number;
   attachmentCount: number;
+  /** CTW-11: cờ "Bị chặn" + lý do (khách không thấy). */
+  flaggedAt?: string | null;
+  flagReason?: string | null;
 }
 
 export interface IssueBrief { id: number; key: string; number: number; title: string; statusId: number; typeId: number }
@@ -1291,6 +1308,9 @@ export interface WorkApproval {
   changeRequestId?: number | null;
   changeRequest?: { id: number; number: number; title: string; status: string; clientVisible: boolean } | null;
   steps: ApprovalStep[];
+  /** CTW-1: lời nhắn cho khách + bằng chứng (chỉ ở GET một phê duyệt). */
+  clientNote?: string | null;
+  evidence?: import('./work-ctw-api').GateEvidence | null;
   issueKey: string | null;
   currentHash: string | null;
   signedHash: string | null;
@@ -1582,7 +1602,11 @@ export interface PortalViewer {
   canManage: boolean; canInvite: boolean; canRequestUat: boolean; canSubmitRequest: boolean;
 }
 export interface PortalOverview {
-  project: { key: string; name: string; description: string | null; workspaceName: string; organization: string | null };
+  project: {
+    key: string; name: string; description: string | null; workspaceName: string; organization: string | null;
+    /** CTW-23: nhận diện dự án + logo studio. */
+    avatarUrl?: string | null; iconEmoji?: string | null; color?: string | null; workspaceLogoUrl?: string | null;
+  };
   viewer: PortalViewer;
   stages: Array<{ id: number; n: number; name: string; status: 'NOT_STARTED' | 'ACTIVE' | 'GATE_REVIEW' | 'DONE'; percent: number; startedAt: string | null; completedAt: string | null }>;
   currentStage: PortalOverview['stages'][number] | null;
@@ -1626,6 +1650,9 @@ export interface PortalApproval {
   steps: Array<{ id: number; position: number; decision: string; decidedAt: string | null; approver: WorkUser; isClient: boolean; comment: string | null; signature: string | null }>;
   waitingOnClient: boolean; canDecide: boolean; contentChanged: boolean; signedHash: string | null;
   uat: PortalUat | null;
+  /** CTW-1: lời nhắn cho khách (nhân viên xem; khách đọc qua `description`) + bằng chứng cổng giai đoạn. */
+  clientNote?: string | null;
+  evidence?: import('./work-ctw-api').GateEvidence | null;
   /** Phân tích ảnh hưởng của CR đã chia sẻ (targetType CR, đợt S3b). */
   changeRequest?: import('./work-s3b-api').CrForClient | null;
 }

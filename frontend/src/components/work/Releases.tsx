@@ -22,6 +22,7 @@ import { wk, type Lookups } from './hooks';
 import UpgradeDialog from './ai/UpgradeDialog';
 import { ConfirmDialog } from './settings/shared';
 import { Dialog, EmptyState, Field, formatDate, IssueTypeIcon, Popover, Spinner, StatusBadge, UserAvatar, useToggle } from './ui';
+import { AddToCalendar } from './ctw';
 
 function todayStr(): string {
   const t = new Date();
@@ -591,6 +592,10 @@ export function VersionDetail({ config, pid, lk, versionId, onBack, onOpenIssue 
             {v.startDate && <span>Start: {formatDate(v.startDate)}</span>}
             <span className={summary?.overdue ? 'text-[var(--w-red)]' : undefined}>Release: {formatDate(v.releaseDate) || 'Not set'}</span>
             {v.releasedAt && <span>Released {formatDate(v.releasedAt)}</span>}
+            {/* CTW-25: mốc phát hành vào Google Calendar / Outlook. */}
+            {v.releaseDate && v.status === 'UNRELEASED' && (
+              <AddToCalendar label="Calendar" className="!h-6 !px-1.5 text-[11.5px]" event={{ title: `Release ${v.name}`, start: v.releaseDate.slice(0, 10), allDay: true, details: v.description ?? null }} />
+            )}
           </div>
           {v.description && <p className="mt-2 max-w-[680px] whitespace-pre-wrap text-[13px] text-[var(--w-text-2)]">{v.description}</p>}
         </div>

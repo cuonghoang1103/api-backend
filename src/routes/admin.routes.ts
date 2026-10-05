@@ -451,7 +451,9 @@ router.get('/stats/overview', authenticate, requireAdmin('ROLE_ADMIN'), async (_
 router.post('/users', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
   try {
     const { username, password, email, fullName, roleName } = req.body;
-    const bcrypt = await import('bcryptjs');
+    // bcryptjs là CommonJS: `await import()` trả namespace, hàm nằm ở `.default` — gọi
+    // thẳng `bcrypt.hash` ⇒ "bcrypt.hash is not a function", tạo người dùng 500 (bắt được 05/10/2026).
+    const bcrypt = (await import('bcryptjs')).default;
     const hashedPassword = await bcrypt.hash(password, 12);
 
     // The DB stores role names in lowercase (`user`, `admin`).

@@ -290,7 +290,7 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/profile/:id/v2', nap: () => import('@/app/profile/[id]/v2/page') },
 
   /* ── CT Work (kiểu Jira) — 23/09/2026 ──
-     Đối chiếu bằng `find frontend/src/app/work -name page.tsx` ⇒ 39 trang (05/10/2026, sau S6: spec).
+     Đối chiếu bằng `find frontend/src/app/work -name page.tsx` ⇒ 40 trang (06/10/2026, sau Resources).
      Khung chung (`app/work/layout.tsx`: thanh bên, bảng lệnh ⌘K, AI, `#work-portal`,
      `work.css`) do `CtWorkPage` dựng — xem tệp đó.
 
@@ -348,6 +348,8 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/:ws/:key/desk', nap: () => import('@/app/work/[ws]/[key]/desk/page') },
   /* Đợt S6 (05/10/2026): Spec quality — chấm Spec Fidelity tập thẻ yêu cầu + lịch sử. */
   { mau: '/work/:ws/:key/spec', nap: () => import('@/app/work/[ws]/[key]/spec/page') },
+  /* Resources (06/10/2026): thư viện link của dự án. */
+  { mau: '/work/:ws/:key/resources', nap: () => import('@/app/work/[ws]/[key]/resources/page') },
   { mau: '/work/:ws/:key/tests/:num', nap: () => import('@/app/work/[ws]/[key]/tests/[num]/page') },
   { mau: '/work/:ws/:key/issue/:num', nap: () => import('@/app/work/[ws]/[key]/issue/[num]/page') },
   { mau: '/work/:ws/:key/tests/cycles/:cycleId', nap: () => import('@/app/work/[ws]/[key]/tests/cycles/[cycleId]/page') },

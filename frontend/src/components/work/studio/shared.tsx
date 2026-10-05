@@ -42,16 +42,18 @@ export const S1_MODULES: Array<{ key: StudioModule; label: string; body: string 
   { key: 'reports', label: 'Client reports & present', body: 'A weekly client report built from shared data and emailed on a schedule (no AI needed), an internal steering report, printable PDFs and a full-screen present mode.' },
   // Đợt S5a.
   { key: 'serviceDesk', label: 'Service desk & SLA', body: 'Request types, P1–P4 from impact × urgency, SLA clocks on working hours (paused while waiting for the customer), queues, alerts, CSAT, problems with postmortems and SLA reports.' },
+  // Resources (06/10/2026) — bật mặc định cho mọi loại dự án mới.
+  { key: 'resources', label: 'Resources', body: 'A library of project links — repos, Figma, docs, audio, Mixamo, 3D assets — in groups you can drag, pinned to the sidebar, searchable, and checked weekly for dead links. Share chosen links with your client.' },
 ];
 
 /** Khoá chừa cho đợt sau — hiện mờ "Coming later" để người dùng biết hướng đi. */
 export const LATER_MODULES: Array<{ key: StudioModule; label: string }> = [];
 
 export const KIND_INFO: Record<ProjectKind, { label: string; short: string; body: string; modules: StudioModule[] }> = {
-  PERSONAL: { label: 'Personal', short: 'Personal', body: 'Your own tasks and side projects. Just a board — nothing to set up.', modules: [] },
-  SCHOOL: { label: 'School / coursework', short: 'School', body: 'Group assignments and capstones (SWP391, SWR302, SWT301). Sprints, tests and reports for your lecturer.', modules: [] },
-  SOFTWARE: { label: 'Software team', short: 'Software', body: 'A product team shipping software: sprints, code review, releases and GitHub.', modules: [] },
-  CLIENT: { label: 'Client project (studio)', short: 'Client', body: 'Work delivered for a client through departments: stages with gate reviews, approvals and handoffs.', modules: ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports', 'serviceDesk'] },
+  PERSONAL: { label: 'Personal', short: 'Personal', body: 'Your own tasks and side projects. Just a board — nothing to set up.', modules: ['resources'] },
+  SCHOOL: { label: 'School / coursework', short: 'School', body: 'Group assignments and capstones (SWP391, SWR302, SWT301). Sprints, tests and reports for your lecturer.', modules: ['resources'] },
+  SOFTWARE: { label: 'Software team', short: 'Software', body: 'A product team shipping software: sprints, code review, releases and GitHub.', modules: ['resources'] },
+  CLIENT: { label: 'Client project (studio)', short: 'Client', body: 'Work delivered for a client through departments: stages with gate reviews, approvals and handoffs.', modules: ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports', 'serviceDesk', 'resources'] },
 };
 export const KINDS: ProjectKind[] = ['PERSONAL', 'SCHOOL', 'SOFTWARE', 'CLIENT'];
 

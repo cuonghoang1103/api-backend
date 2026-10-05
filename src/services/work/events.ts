@@ -51,7 +51,10 @@ export type WorkEvent =
   // Quản trị dự án (đợt S3b): CR / dòng RAID / cuộc họp đổi. Chỉ số + loại — client tải lại
   // qua API (lọc quyền). KHÔNG vào phòng khách (visibleToClient trả false): khách không thấy
   // CR/RAID nội bộ; cổng khách tự tải lại khi mở.
-  | { type: 'governance.updated'; projectId: number; entity: 'cr' | 'raid' | 'meeting'; number: number; action: string; actor: WorkActor };
+  | { type: 'governance.updated'; projectId: number; entity: 'cr' | 'raid' | 'meeting'; number: number; action: string; actor: WorkActor }
+  // Resources (06/10/2026): thư viện link / Web links trên thẻ đổi. Chỉ id — client tải lại qua API (lọc quyền).
+  // `issueNumber` (không phải issueId — xem ghi chú ở trên) khi đổi Web links của một thẻ. Không vào phòng khách.
+  | { type: 'resources.updated'; projectId: number; action: string; resourceId?: number | null; issueNumber?: number | null; actor: WorkActor };
 
 export type PageEventAction = 'created' | 'updated' | 'status' | 'moved' | 'deleted' | 'restored' | 'comment' | 'links';
 

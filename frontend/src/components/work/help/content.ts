@@ -1852,6 +1852,40 @@ export const HELP_ARTICLES: HelpArticle[] = [
     related: ['change-requests', 'portfolio-workload', 'meetings'],
   },
   {
+    id: 'resources',
+    category: 'studio',
+    title: { en: 'Resources — project links in one place', vi: 'Resources — mọi link của dự án ở một chỗ' },
+    summary: {
+      en: 'Keep the team repos, Figma files, docs, sound effects, Mixamo animations, staging and production URLs in groups — searchable, pinned to the sidebar, linked from issues and checked weekly for dead links.',
+      vi: 'Gom repo của nhóm, file Figma, tài liệu, âm thanh, animation Mixamo, link staging/production theo nhóm — tìm được, ghim lên thanh bên, gắn vào thẻ và được kiểm link chết mỗi tuần.',
+    },
+    keywords: ['resources', 'links', 'library', 'bookmark', 'github', 'figma', 'mixamo', 'freesound', 'web links', 'pin', 'import', 'csv', 'markdown', 'tai nguyen', 'lien ket', 'ghim', 'link chet', 'nguon'],
+    pages: [page('project', 'resources', 'Resources', 'Resources')],
+    blocks: [
+      p('**Resources** in the sidebar (module **Resources**, on for every new project; older projects turn it on in Project settings → Project type & modules). The first time it opens it creates eight groups you can rename, recolour, reorder or delete: Source code · Docs · Design · Audio · 3D & Images · References · Environments · Meetings & calendars.', 'Mục **Resources** ở thanh bên (mô-đun **Resources**, bật sẵn cho mọi dự án mới; dự án cũ bật ở Project settings → Project type & modules). Lần đầu mở sẽ tạo sẵn tám nhóm — đổi tên, đổi màu, sắp xếp hay xoá tuỳ ý: Source code · Docs · Design · Audio · 3D & Images · References · Environments · Meetings & calendars.'),
+      steps(
+        ['**Add link** → paste the URL. The title (and description) fill in from the page; a GitHub repo shows stars, default branch and last push. Pick a group and tags.', '**Add link** → dán URL. Tiêu đề (và mô tả) tự điền từ trang; repo GitHub hiện số sao, nhánh mặc định và lần push cuối. Chọn nhóm và nhãn.'],
+        ['Click a title to open it in a new tab. **★** keeps a link in the **Starred** row at the top; **Pin to sidebar** puts it under the project in the sidebar — one click from any page.', 'Bấm tiêu đề để mở ở tab mới. **★** đưa link lên hàng **Starred** trên cùng; **Pin to sidebar** đặt link ngay dưới dự án ở thanh bên — một cú bấm từ mọi trang.'],
+        ['Drag a card onto another card or into another group to reorder or move it. Switch to the compact list with the list icon.', 'Kéo một thẻ thả lên thẻ khác hoặc vào nhóm khác để đổi thứ tự hay chuyển nhóm. Bấm biểu tượng danh sách để xem dạng gọn.'],
+        ['**Import** takes a Markdown list ({{## Group}} then {{- [Title](url) #tag}}) or CSV ({{title, url, group, tags}}). **Preview** shows what will be added; links already in Resources are skipped and new group names become groups.', '**Import** nhận danh sách Markdown ({{## Nhóm}} rồi {{- [Tiêu đề](url) #nhãn}}) hoặc CSV ({{title, url, group, tags}}). **Preview** cho xem trước; link đã có được bỏ qua, tên nhóm mới thành nhóm mới.'],
+      ),
+      table([['Who', 'Ai'], ['Can', 'Được làm gì']], [
+        [['Admin', 'Admin'], ['Edit or delete any link, manage groups, **Check links** now', 'Sửa/xoá mọi link, quản lý nhóm, bấm **Check links**']],
+        [['Member', 'Thành viên'], ['Add links, edit and delete their own, create groups, reorder', 'Thêm link, sửa/xoá link của mình, tạo nhóm, sắp xếp']],
+        [['Viewer · Teacher', 'Người xem · Giảng viên'], ['Read and open', 'Xem và mở']],
+        [['Client', 'Khách'], ['Only links marked **Visible to the client**, in the client portal → **Resources**', 'Chỉ link đánh dấu **Visible to the client**, ở cổng khách → **Resources**']],
+      ]),
+      list(
+        ['Search ignores Vietnamese accents: {{thiet ke}} finds “Thiết kế”. Filter by group, tag, type or **Broken**. ⌘K also finds and opens resources of the project you are in.', 'Ô tìm bỏ qua dấu tiếng Việt: {{thiet ke}} tìm ra “Thiết kế”. Lọc theo nhóm, nhãn, loại hoặc **Broken**. ⌘K cũng tìm và mở được resource của dự án đang mở.'],
+        ['**Web links** on an issue: **From Resources** picks a saved link, **Add URL** pastes one. A pasted link has **Save to Resources**. Deleting a resource keeps the URL on the issues that used it.', '**Web links** trong thẻ: **From Resources** chọn link đã lưu, **Add URL** dán link mới. Link dán thẳng có nút **Save to Resources**. Xoá resource thì thẻ vẫn giữ URL.'],
+        ['Every week CT Work checks each link once. A link that returns 404/410 or whose domain is gone is marked **Broken** and the person who added it is notified once. Private GitHub repos (404 to strangers) are never marked broken.', 'Mỗi tuần CT Work kiểm từng link một lần. Link trả 404/410 hoặc tên miền không còn bị đánh dấu **Broken** và người thêm link được báo một lần. Repo GitHub private (trả 404 cho người lạ) không bao giờ bị coi là hỏng.'],
+      ),
+      warn('CT Work only stores the link and its favicon address — it never copies the file. Clients and guests never see link status, open counts or who added a link.', 'CT Work chỉ lưu link và địa chỉ favicon — không bao giờ sao chép tệp. Khách và khách mời không thấy trạng thái link, số lượt mở hay người thêm link.'),
+      tip('Server addresses on your own network (localhost, 10.x, 192.168.x…) can be saved but are never fetched — titles and link checks only reach the public internet.', 'Địa chỉ trong mạng nội bộ (localhost, 10.x, 192.168.x…) lưu được nhưng không bao giờ bị gọi tới — tự điền tiêu đề và kiểm link chỉ đi ra internet công cộng.'),
+    ],
+    related: ['client-portal', 'issues', 'shortcuts'],
+  },
+  {
     id: 'meetings',
     category: 'studio',
     title: { en: 'Meetings', vi: 'Cuộc họp' },
@@ -2590,10 +2624,11 @@ export function helpArticleForPath(pathname: string, search = ''): string {
     case 'tests': return 'testing';
     case 'stages': return 'stages-gates';
     case 'approvals': return 'approvals';
-    case 'portal': return parts[4] === 'uat' || tab === 'approvals' ? 'uat-signoff' : tab === 'meetings' ? 'meetings' : tab === 'payments' ? 'finance-timesheets' : tab === 'reports' ? 'client-reports' : 'client-portal';
+    case 'portal': return parts[4] === 'uat' || tab === 'approvals' ? 'uat-signoff' : tab === 'meetings' ? 'meetings' : tab === 'payments' ? 'finance-timesheets' : tab === 'reports' ? 'client-reports' : tab === 'resources' ? 'resources' : 'client-portal';
     case 'changes': return 'change-requests';
     case 'raid': return 'raid-log';
     case 'meetings': return 'meetings';
+    case 'resources': return 'resources';
     case 'dashboards': return 'filters-dashboards';
     case 'reports': return tab === 'time' || tab === 'capacity' ? 'time-capacity' : tab === 'client' || tab === 'steering' ? 'client-reports' : 'reports';
     // Đợt S4.

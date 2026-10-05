@@ -212,6 +212,10 @@ export const EXPORT_TABLES: Array<[name: string, load: Loader]> = [
   ['deskProblems', (pid) => prisma.workDeskProblem.findMany({ where: { projectId: pid } }) as unknown as Promise<Rows>],
   ['deskTickets', (_pid, c) => prisma.workDeskTicket.findMany({ where: byIssue(c) }) as unknown as Promise<Rows>],
   ['slaEvents', (_pid, c) => prisma.workSlaEvent.findMany({ where: { ticket: byIssue(c) }, orderBy: { id: 'asc' } }) as unknown as Promise<Rows>],
+  // Resources (06/10/2026): nhóm + link + Web links trên thẻ.
+  ['resourceGroups', (pid) => prisma.workResourceGroup.findMany({ where: { projectId: pid } }) as unknown as Promise<Rows>],
+  ['resources', (pid) => prisma.workResource.findMany({ where: { projectId: pid } }) as unknown as Promise<Rows>],
+  ['issueWebLinks', (_pid, c) => prisma.workIssueWebLink.findMany({ where: byIssue(c) }) as unknown as Promise<Rows>],
   ['auditLog', (pid) => prisma.workAuditLog.findMany({ where: { projectId: pid }, orderBy: { id: 'asc' } }) as unknown as Promise<Rows>],
 ];
 

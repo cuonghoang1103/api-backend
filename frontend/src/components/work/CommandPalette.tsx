@@ -12,9 +12,11 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { Command } from 'cmdk';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowRight, BookOpen, CircleHelp, Columns3, CornerDownLeft, FolderKanban, LayoutGrid, List, Plus, Search, Settings, Sparkles, TextSearch, Users } from 'lucide-react';
+import { ArrowRight, BookOpen, CircleHelp, Columns3, CornerDownLeft, ExternalLink, FolderKanban, LayoutGrid, Library, List, Plus, Search, Settings, Sparkles, TextSearch, Users } from 'lucide-react';
 import { workApi, workSearchApi, workSearchKeys, type StatusCategory } from '@/lib/work-api';
 import { openCreateIssue, wk } from './hooks';
+import { openResourceLink, resApi, resKeys } from '@/lib/work-resources-api';
+import { Favicon } from './resources/shared';
 import { useWorkPath } from './WorkSidebar';
 import { CATEGORY_DOT, IssueTypeIcon, Spinner, WorkPortal } from './ui';
 import { searchHelp } from './help/content';
@@ -114,6 +116,15 @@ function Palette({ onClose }: { onClose: () => void }) {
     staleTime: 10_000,
   });
 
+  // Resources (06/10/2026): link của dự án đang mở — tìm bỏ dấu ở server, Enter mở tab mới.
+  const resourcesOn = !!pid && !!config?.modules?.resources && !config?.clientView;
+  const resources = useQuery({
+    queryKey: [...resKeys.list(pid ?? 0, { q: debounced }), 'palette'],
+    queryFn: () => resApi.list(pid!, { q: debounced }),
+    enabled: resourcesOn && debounced.length > 0,
+    staleTime: 10_000,
+  });
+
   // Mọi dự án (từ 2 ký tự): cùng endpoint với trang /work/search, xếp theo độ khớp.
   const global = useQuery({
     queryKey: [...workSearchKeys.all, 'palette', debounced],
@@ -162,6 +173,7 @@ function Palette({ onClose }: { onClose: () => void }) {
       const base = `/work/${slug}/${key}`;
       list.push({ id: 'board', label: 'Go to board', icon: <Columns3 size={15} />, run: () => go(`${base}/board`) });
       list.push({ id: 'issues', label: 'Go to issues', icon: <List size={15} />, run: () => go(`${base}/list`) });
+      if (config?.modules?.resources && !config.clientView) list.push({ id: 'resources', label: 'Go to resources', icon: <Library size={15} />, keywords: 'links library tai nguyen lien ket', run: () => go(`${base}/resources`) });
       list.push({ id: 'project-settings', label: 'Project settings', icon: <Settings size={15} />, run: () => go(`${base}/settings`) });
     }
     // AI — trước 04/10/2026 ⌘K không có lối nào vào AI.
@@ -213,7 +225,8 @@ function Palette({ onClose }: { onClose: () => void }) {
   const helpLang = useMemo(() => readHelpLang(), []);
   const helpItems = q.length >= 2 ? searchHelp(q).slice(0, 4) : [];
   const searching = (q.length > 0 && q !== debounced) || (!!pid && issues.isFetching) || (debounced.length >= 2 && global.isFetching);
-  const nothing = !actions.length && !projects.length && !wsList.length && !issueItems.length && !globalItems.length && !helpItems.length && !showSearchAll;
+  const resourceItems = resourcesOn && debounced ? (resources.data?.items ?? []).slice(0, 6) : [];
+  const nothing = !actions.length && !projects.length && !wsList.length && !issueItems.length && !resourceItems.length && !globalItems.length && !helpItems.length && !showSearchAll;
 
   return (
     <WorkPortal>
@@ -256,6 +269,19 @@ function Palette({ onClose }: { onClose: () => void }) {
                     <span className="hidden max-w-[120px] shrink-0 truncate text-[11.5px] text-[var(--w-text-3)] sm:inline">{keyHit.project.name}</span>
                     <ArrowRight size={13} className="shrink-0 text-[var(--w-text-3)]" />
                   </Command.Item>
+                </Command.Group>
+              )}
+
+              {resourceItems.length > 0 && pid && (
+                <Command.Group heading="Resources" className={GROUP}>
+                  {resourceItems.map((r) => (
+                    <Command.Item key={`res-${r.id}`} value={`res-${r.id}`} onSelect={() => { onClose(); openResourceLink(pid, r); }} className={ITEM}>
+                      <Favicon r={r} size={14} />
+                      <span className="min-w-0 flex-1 truncate text-[var(--w-text)]">{r.title}</span>
+                      {r.groupName && <span className="hidden max-w-[120px] shrink-0 truncate text-[11.5px] text-[var(--w-text-3)] sm:inline">{r.groupName}</span>}
+                      <ExternalLink size={12} className="shrink-0 text-[var(--w-text-3)]" />
+                    </Command.Item>
+                  ))}
                 </Command.Group>
               )}
 

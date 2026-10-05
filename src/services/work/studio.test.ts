@@ -44,8 +44,12 @@ describe('mô-đun', () => {
     assert.deepEqual([c.teams, c.stages, c.approvals, c.handoffs, c.docs, c.clientPortal], [true, true, true, true, true, true]);
     assert.deepEqual([c.changeRequests, c.raid, c.meetings, c.finance, c.reports], [true, true, true, true, true]);
     for (const k of ['SCHOOL', 'SOFTWARE', 'PERSONAL'] as const) {
-      assert.ok(Object.values(defaultModulesFor(k)).every((v) => v === false), k);
+      // Resources (06/10/2026): thư viện link bật cho MỌI loại dự án mới; mọi mô-đun studio khác vẫn tắt.
+      const { resources, ...rest } = defaultModulesFor(k);
+      assert.equal(resources, true, k);
+      assert.ok(Object.values(rest).every((v) => v === false), k);
     }
+    assert.equal(defaultModulesFor('CLIENT').resources, true);
   });
   it('mergeModules chỉ nhận khoá biết + giá trị boolean', () => {
     const m = mergeModules(defaultModulesFor('SCHOOL'), { teams: true, hacker: true, stages: 'yes' as unknown as boolean });

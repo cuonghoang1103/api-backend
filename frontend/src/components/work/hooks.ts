@@ -176,6 +176,11 @@ export function useProjectRealtime(pid: number | undefined, onEvent?: (e: WorkEv
         if (e.action === 'status') queue(['work', 'approvals', pid]);
         return;
       }
+      // Resources (06/10/2026): thư viện link / Web links trên thẻ đổi ⇒ chỉ làm tươi dữ liệu Resources.
+      if ((e as { type: string }).type === 'resources.updated') {
+        queue(['work', 'resources', pid]);
+        return;
+      }
       // Đợt S3b: CR / RAID / họp đổi ⇒ chỉ làm tươi dữ liệu S3b (+ khu "liên quan" trong thẻ).
       if ((e as { type: string }).type === 'governance.updated') {
         queue(['work', 'gov', pid]);

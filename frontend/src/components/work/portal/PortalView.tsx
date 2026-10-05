@@ -18,7 +18,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
   Activity, ArrowLeft, BadgeCheck, CalendarClock, CheckCircle2, Circle, CircleDot, Download, Eye, FileText, Flag, Inbox, LayoutDashboard, MessageSquare,
-  PackageCheck, Paperclip, Plus, Rocket, Send, Receipt, FileBarChart,
+  PackageCheck, Paperclip, Plus, Rocket, Send, Receipt, FileBarChart, Library,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -36,6 +36,7 @@ import { MeetingsTab, PortalMeetingDialog } from './PortalMeetings';
 import { PaymentsTab, ReportsTab } from './PortalS4';
 import { DeskRequestDialog, PortalSlaPanel } from '../desk/PortalDesk';
 import { AddToCalendar } from '../ctw';
+import PortalResources from '../resources/PortalResources';
 
 export const PORTAL_TABS: Array<{ id: PortalTab; label: string; icon: typeof Inbox }> = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -48,6 +49,8 @@ export const PORTAL_TABS: Array<{ id: PortalTab; label: string; icon: typeof Inb
   // Đợt S4 — mốc thanh toán đã chia sẻ (mô-đun finance) + lịch sử báo cáo tuần (mô-đun reports).
   { id: 'payments', label: 'Payments', icon: Receipt },
   { id: 'reports', label: 'Reports', icon: FileBarChart },
+  // Resources (06/10/2026) — link đội đã chia sẻ (mô-đun resources).
+  { id: 'resources', label: 'Resources', icon: Library },
   { id: 'activity', label: 'Activity', icon: Activity },
 ];
 
@@ -514,7 +517,8 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
   const financeOn = !!config.modules?.finance;
   const reportsOn = !!config.modules?.reports;
   const deskOn = !!config.modules?.serviceDesk;
-  const tabs = useMemo(() => PORTAL_TABS.filter((t) => (t.id !== 'meetings' || meetingsOn) && (t.id !== 'payments' || financeOn) && (t.id !== 'reports' || reportsOn)), [meetingsOn, financeOn, reportsOn]);
+  const resourcesOn = !!config.modules?.resources;
+  const tabs = useMemo(() => PORTAL_TABS.filter((t) => (t.id !== 'meetings' || meetingsOn) && (t.id !== 'payments' || financeOn) && (t.id !== 'reports' || reportsOn) && (t.id !== 'resources' || resourcesOn)), [meetingsOn, financeOn, reportsOn, resourcesOn]);
   const waiting = overview.data?.waitingOnClient.length ?? 0;
 
   return (
@@ -567,6 +571,7 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
         {p.tab === 'meetings' && meetingsOn && <MeetingsTab pid={pid} asClient={asClient} openMeeting={(n) => p.set({ meeting: String(n) })} />}
         {p.tab === 'payments' && financeOn && <PaymentsTab pid={pid} asClient={asClient} />}
         {p.tab === 'reports' && reportsOn && <ReportsTab pid={pid} asClient={asClient} openId={p.report} setOpenId={(id) => p.set({ report: id ? String(id) : null })} />}
+        {p.tab === 'resources' && resourcesOn && <PortalResources pid={pid} asClient={asClient} />}
         {p.tab === 'activity' && <ActivityTab pid={pid} asClient={asClient} go={p.set} />}
         {!isClient && !asClient && (
           <p className="mt-6 text-[12px] text-[var(--w-text-3)]">

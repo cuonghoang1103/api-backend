@@ -10117,6 +10117,9 @@ model WorkProject {
   deskProblems      WorkDeskProblem[]
   /// Đợt S6: lịch sử chấm Spec Fidelity (trang tài liệu / tập thẻ yêu cầu).
   specReviews       WorkSpecReview[]
+  /// Resources (06/10/2026): thư viện link/tài nguyên của dự án (mô-đun resources).
+  resourceGroups    WorkResourceGroup[]
+  resources         WorkResource[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
   clientRequest     ProjectRequest?
 
@@ -10331,6 +10334,8 @@ model WorkIssue {
   customValues   WorkCustomValue[]
   worklogs       WorkWorklog[]
   devActivity    WorkDevActivity[]
+  /// Resources (06/10/2026): "Web links" kiểu Jira trên chi tiết thẻ.
+  webLinks       WorkIssueWebLink[]
 
   @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
   @@index([projectId, statusId, rank], name: "idx_work_issue_board")
@@ -12422,6 +12427,89 @@ model WorkSpecReview {
   @@index([pageId, createdAt], name: "idx_work_spec_review_page")
   @@index([stageId, createdAt], name: "idx_work_spec_review_stage")
   @@map("work_spec_reviews")
+}
+
+// ─── CT Work — RESOURCES (06/10/2026, mô-đun `resources`) ───────────────────────
+// Thư viện link của dự án: repo GitHub, Figma, tài liệu, âm thanh, Mixamo… xếp theo
+// nhóm, ghim lên sidebar, mở một cú bấm. Luật thuần ở services/work/resourceRules.ts.
+
+/// Nhóm tài nguyên (Source code · Docs · Design…). Nhóm mặc định tạo khi dự án mở mô-đun lần đầu.
+model WorkResourceGroup {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  name      String   @db.VarChar(80)
+  /// Emoji / ký hiệu ngắn hiện cạnh tên nhóm.
+  icon      String?  @db.VarChar(16)
+  /// Màu nhấn (#rrggbb).
+  color     String?  @db.VarChar(16)
+  rank      Int      @default(0)
+  isDefault Boolean  @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project   WorkProject    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  resources WorkResource[]
+
+  @@index([projectId, rank], name: "idx_work_resource_group_project")
+  @@map("work_resource_groups")
+}
+
+/// Một link/tài nguyên. `createdById` KHÔNG FK (như WorkSpecReview) — link sống lâu hơn tài khoản.
+model WorkResource {
+  id              Int       @id @default(autoincrement())
+  projectId       Int       @map("project_id")
+  /// Null = "Ungrouped" (nhóm bị xoá ⇒ SetNull).
+  groupId         Int?      @map("group_id")
+  title           String    @db.VarChar(200)
+  /// http / https / mailto, ≤ 2000 ký tự (resourceRules.normalizeUrl).
+  url             String    @db.VarChar(2000)
+  description     String?   @db.Text
+  tags            String[]  @default([])
+  /// Tự nhận từ URL: github, gitlab, figma, gdrive, gdocs, youtube, notion, unity, freesound, mixamo, polyhaven, mail, link…
+  kind            String    @default("link") @db.VarChar(24)
+  faviconUrl      String?   @map("favicon_url") @db.VarChar(500)
+  pinned          Boolean   @default(false)
+  pinnedToSidebar Boolean   @default(false) @map("pinned_to_sidebar")
+  /// TEAM: chỉ đội làm · CLIENT: khách thấy qua cổng khách (/portal/resources).
+  visibility      String    @default("TEAM") @db.VarChar(8)
+  rank            Int       @default(0)
+  createdById     Int?      @map("created_by_id")
+  lastOpenedAt    DateTime? @map("last_opened_at")
+  openCount       Int       @default(0) @map("open_count")
+  /// OK | BROKEN | UNKNOWN — job kiểm link chết hằng tuần.
+  linkStatus      String    @default("UNKNOWN") @map("link_status") @db.VarChar(8)
+  checkedAt       DateTime? @map("checked_at")
+  /// Xem trước (GitHub: stars, lastCommitAt, description, defaultBranch, fetchedAt) + ghi chú kiểm link.
+  meta            Json?
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  project  WorkProject        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  group    WorkResourceGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  webLinks WorkIssueWebLink[]
+
+  @@index([projectId, groupId, rank], name: "idx_work_resource_project")
+  @@index([checkedAt], name: "idx_work_resource_checked")
+  @@map("work_resources")
+}
+
+/// "Web links" trên thẻ: trỏ tới một Resource, HOẶC url + title gõ thẳng. url/title luôn được chép
+/// (ảnh chụp) để link còn dùng được khi Resource bị xoá (resourceId ⇒ null).
+model WorkIssueWebLink {
+  id          Int      @id @default(autoincrement())
+  issueId     Int      @map("issue_id")
+  resourceId  Int?     @map("resource_id")
+  url         String   @db.VarChar(2000)
+  title       String   @db.VarChar(200)
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  issue    WorkIssue     @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  resource WorkResource? @relation(fields: [resourceId], references: [id], onDelete: SetNull)
+
+  @@index([issueId], name: "idx_work_issue_web_link_issue")
+  @@index([resourceId], name: "idx_work_issue_web_link_resource")
+  @@map("work_issue_web_links")
 }
 
 // ─── THƯ VIỆN SÁCH (/books) — tiến độ đọc theo người (05/10/2026) ───────────────

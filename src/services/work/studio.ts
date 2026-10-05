@@ -16,7 +16,7 @@
 import crypto from 'node:crypto';
 import { AppError } from '../../middleware/errorHandler.js';
 import {
-  PROJECT_KINDS, STUDIO_MODULES, STUDIO_MODULES_S1, STUDIO_MODULES_S2A, STUDIO_MODULES_S2B, STUDIO_MODULES_S3B, STUDIO_MODULES_S4, STUDIO_MODULES_S5A,
+  PROJECT_KINDS, STUDIO_MODULES, STUDIO_MODULES_S1, STUDIO_MODULES_S2A, STUDIO_MODULES_S2B, STUDIO_MODULES_S3B, STUDIO_MODULES_S4, STUDIO_MODULES_S5A, STUDIO_MODULES_RESOURCES,
   type ProjectKind, type StudioModule,
 } from './constants.js';
 
@@ -61,6 +61,8 @@ export function defaultModulesFor(kind: ProjectKind): ModuleMap {
   // S4: tài chính + báo cáo khách tự động — cũng chỉ dự án CLIENT tạo SAU đợt này.
   // S5a: service desk & SLA — cũng chỉ dự án CLIENT tạo SAU đợt này.
   if (kind === 'CLIENT') for (const k of [...STUDIO_MODULES_S1, ...STUDIO_MODULES_S2A, ...STUDIO_MODULES_S2B, ...STUDIO_MODULES_S3B, ...STUDIO_MODULES_S4, ...STUDIO_MODULES_S5A]) m[k] = true;
+  // Resources (06/10/2026): thư viện link — bật cho MỌI loại dự án mới (không thêm luật nào, chỉ là chỗ để link).
+  for (const k of STUDIO_MODULES_RESOURCES) m[k] = true;
   return m;
 }
 

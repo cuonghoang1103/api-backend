@@ -21,15 +21,15 @@ const texts = (d: PmNode) => (d.content ?? []).map((n) => `${n.type === 'heading
 
 describe('S5c — mô-đun chưa quyết (Enable all recommended)', () => {
   const s1Era = new Date('2026-10-04T12:00:00+07:00');
-  const after = new Date('2026-10-06T00:00:00+07:00');
+  const after = new Date('2026-10-07T00:00:00+07:00'); // sau mọi MODULE_SINCE (resources: 06/10 18:00)
 
   it('dự án cũ không có settings.modules ⇒ mọi khoá chưa quyết', () => {
-    assert.equal(undecidedModules(undefined, new Date('2026-01-01'), new Set()).length, 12);
+    assert.equal(undecidedModules(undefined, new Date('2026-01-01'), new Set()).length, 13);
   });
   it('dự án tạo ở S1: docs=false là chỗ giữ (chưa quyết); reports/serviceDesk thiếu khoá; teams=true đã quyết', () => {
     const raw = { teams: true, stages: true, approvals: true, handoffs: true, docs: false, clientPortal: false, changeRequests: false, raid: false, meetings: false, finance: false };
     const u = undecidedModules(raw, s1Era, new Set());
-    assert.deepEqual(u.sort(), ['changeRequests', 'clientPortal', 'docs', 'finance', 'meetings', 'raid', 'reports', 'serviceDesk'].sort());
+    assert.deepEqual(u.sort(), ['changeRequests', 'clientPortal', 'docs', 'finance', 'meetings', 'raid', 'reports', 'resources', 'serviceDesk'].sort());
   });
   it('khoá ai đó đã bật/tắt tay (audit) ⇒ đã quyết, không đụng', () => {
     const toggled = toggledKeysFrom(['Modules: docs off, raid on', 'Changed project type to CLIENT']);

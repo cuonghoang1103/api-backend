@@ -15,7 +15,7 @@ export type ProjectTemplate = 'BLANK' | 'SWR302' | 'SWT301' | 'SWP391' | 'FREELA
 /** Loại dự án (lớp studio S1). Dự án cũ: suy từ mẫu (kindStored = null). */
 export type ProjectKind = 'PERSONAL' | 'SCHOOL' | 'SOFTWARE' | 'CLIENT';
 /** Mô-đun bật/tắt theo dự án. Đợt S1 có tính năng thật: teams, stages, approvals, handoffs. */
-export type StudioModule = 'teams' | 'stages' | 'approvals' | 'handoffs' | 'docs' | 'clientPortal' | 'changeRequests' | 'raid' | 'meetings' | 'finance' | 'reports' | 'serviceDesk';
+export type StudioModule = 'teams' | 'stages' | 'approvals' | 'handoffs' | 'docs' | 'clientPortal' | 'changeRequests' | 'raid' | 'meetings' | 'finance' | 'reports' | 'serviceDesk' | 'resources';
 export type ModuleMap = Record<StudioModule, boolean>;
 export type StatusCategory = 'TODO' | 'IN_PROGRESS' | 'DONE';
 export type IssueTypeKey = 'EPIC' | 'STORY' | 'TASK' | 'BUG' | 'SUBTASK' | 'TEST' | 'REQUIREMENT';
@@ -1594,7 +1594,7 @@ export const workDocsApi = {
 // Backend: src/services/work/portal.service.ts. `asClient` = "Preview as client"
 // (nhân viên xem đúng như khách, chỉ đọc).
 
-export type PortalTab = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity' | 'meetings' | 'payments' | 'reports';
+export type PortalTab = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity' | 'meetings' | 'payments' | 'reports' | 'resources';
 export type PortalRequestKind = 'BUG' | 'CHANGE' | 'QUESTION' | 'FEEDBACK';
 
 export interface PortalViewer {

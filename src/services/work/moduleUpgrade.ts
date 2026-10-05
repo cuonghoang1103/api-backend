@@ -41,6 +41,7 @@ export const MODULE_SINCE: Record<StudioModule, string> = {
   finance: '2026-10-04T22:00:00+07:00',
   reports: '2026-10-04T22:00:00+07:00',
   serviceDesk: '2026-10-04T23:00:00+07:00',
+  resources: '2026-10-06T18:00:00+07:00',
 };
 
 /** Mô tả ngắn (tiếng Anh, hiện ở UI + trả qua API) — khớp S1_MODULES của frontend. */
@@ -57,6 +58,7 @@ export const MODULE_INFO: Record<StudioModule, { label: string; body: string }> 
   finance: { label: 'Finance', body: 'Rates, weekly timesheets, budget vs actual and payment milestones (tracking only, no invoicing).' },
   reports: { label: 'Client reports & present', body: 'Automatic weekly client report, steering report and full-screen present mode.' },
   serviceDesk: { label: 'Service desk & SLA', body: 'Request types, P1–P4 priorities, SLA clocks on working hours, queues and CSAT.' },
+  resources: { label: 'Resources', body: 'A library of project links — repos, designs, docs, audio, 3D assets — in groups, pinned to the sidebar, checked weekly for dead links.' },
 };
 
 /** Khoá được nhắc trong một dòng audit `project.studio` ("Modules: docs on, raid off"). */

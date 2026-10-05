@@ -55,7 +55,7 @@ export type ProjectKind = (typeof PROJECT_KINDS)[number];
  * Mô-đun bật/tắt theo dự án. Đợt S1 dùng thật 4 mô-đun đầu; các khoá sau CHỪA
  * CHỖ cho đợt 2–4 (lưu được, chưa có route nào đọc).
  */
-export const STUDIO_MODULES = ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports', 'serviceDesk'] as const;
+export const STUDIO_MODULES = ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports', 'serviceDesk', 'resources'] as const;
 export type StudioModule = (typeof STUDIO_MODULES)[number];
 /** Mô-đun đã có tính năng thật (đợt S1). */
 export const STUDIO_MODULES_S1: readonly StudioModule[] = ['teams', 'stages', 'approvals', 'handoffs'];
@@ -175,3 +175,16 @@ export type ReportKind = (typeof REPORT_KINDS)[number];
  * theo lịch làm việc, hàng đợi, CSAT, Problem + postmortem. Luật thuần ở slaRules.ts.
  */
 export const STUDIO_MODULES_S5A: readonly StudioModule[] = ['serviceDesk'];
+
+// ─── Resources (06/10/2026, mô-đun `resources`) ──────────────────
+
+/**
+ * Thư viện link của dự án (repo, Figma, tài liệu, âm thanh, Mixamo…). Khác các mô-đun studio khác: BẬT MẶC ĐỊNH
+ * cho MỌI loại dự án mới (studio.defaultModulesFor) — nó không thêm luật nào, chỉ là chỗ để link. Dự án tạo trước
+ * thì bật qua "Enable all recommended" (moduleUpgrade) hoặc Project settings → Modules như mọi mô-đun.
+ */
+export const STUDIO_MODULES_RESOURCES: readonly StudioModule[] = ['resources'];
+export const RESOURCE_VISIBILITY = ['TEAM', 'CLIENT'] as const;
+export type ResourceVisibility = (typeof RESOURCE_VISIBILITY)[number];
+export const RESOURCE_LINK_STATUSES = ['OK', 'BROKEN', 'UNKNOWN'] as const;
+export type ResourceLinkStatus = (typeof RESOURCE_LINK_STATUSES)[number];

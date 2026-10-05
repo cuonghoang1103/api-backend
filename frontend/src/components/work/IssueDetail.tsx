@@ -43,6 +43,7 @@ import { studioOn } from './studio/shared';
 import { LinkedDocs } from './docs/LinkedDocs';
 import { IssueGovernance } from './governance/IssueGovernance';
 import { IssueDesk } from './desk/IssueDesk';
+import { IssueWebLinks } from './resources/IssueWebLinks';
 import { AttachmentClientControls, IssueClientShare } from './portal/ClientShare';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 // Đợt S6: nhãn nguồn gốc AI (AI-assisted) của thẻ.
@@ -686,6 +687,8 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             {studioOn(config, 'approvals') && <IssueApprovals config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
             {studioOn(config, 'handoffs') && <IssueHandoffs config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
             {studioOn(config, 'docs') && <LinkedDocs config={config} issueNumber={issue.number} />}
+            {/* Resources (06/10/2026): Web links kiểu Jira (tự ẩn khi mô-đun tắt / khách). */}
+            <IssueWebLinks config={config} issueNumber={issue.number} />
             {/* Đợt S3b: CR liên quan + rủi ro liên quan (tự ẩn khi mô-đun tắt / khách). */}
             <IssueGovernance config={config} issueNumber={issue.number} />
             <IssueDesk config={config} issueNumber={issue.number} show="add" />

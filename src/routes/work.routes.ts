@@ -64,6 +64,7 @@ import s4Routes, { s4PublicRoutes } from './work.s4.routes.js';
 import deskRoutes from './work.desk.routes.js';
 import s5cRoutes from './work.s5c.routes.js';
 import s6Routes from './work.s6.routes.js';
+import resourcesRoutes from './work.resources.routes.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
@@ -1857,5 +1858,7 @@ router.use(deskRoutes);
 router.use(s5cRoutes);
 // Đợt S6: Spec Fidelity (chấm đặc tả, lịch sử, áp dụng gợi ý, cổng giai đoạn, luật AI) — tuyến ở work.s6.routes.ts (qua chốt cổng khách ở trên).
 router.use(s6Routes);
+// Resources (06/10/2026): thư viện link của dự án + Web links trên thẻ — tuyến ở work.resources.routes.ts (qua chốt cổng khách ở trên).
+router.use(resourcesRoutes);
 
 export default router;

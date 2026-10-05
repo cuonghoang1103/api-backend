@@ -28,10 +28,11 @@ import {
   Handshake, PackageCheck, Activity,
   CalendarClock, GitPullRequestArrow, ShieldAlert,
   Wallet, Receipt, FileBarChart,
-  Headset,
+  Headset, Library, ExternalLink,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
+import { resApi, resKeys } from '@/lib/work-resources-api';
 import { useAuthStore } from '@/store/authStore';
 import { wk } from './hooks';
 import { Popover, ProjectMark, UserAvatar, useToggle } from './ui';
@@ -116,6 +117,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'stages', label: 'Stages', icon: Milestone, match: (v) => v === 'stages', module: 'stages' },
       { path: 'approvals', label: 'Approvals', icon: BadgeCheck, match: (v) => v === 'approvals', module: 'approvals' },
       { path: 'docs', label: 'Docs', icon: FileText, match: (v) => v === 'docs', module: 'docs' },
+      // Resources (06/10/2026): thư viện link của dự án — bật mặc định cho mọi loại dự án mới.
+      { path: 'resources', label: 'Resources', icon: Library, match: (v) => v === 'resources', module: 'resources' },
       { path: 'portal', label: 'Client portal', icon: Handshake, match: (v) => v === 'portal', module: 'clientPortal' },
       // Đợt S3b: họp · yêu cầu thay đổi · sổ RAID (mỗi mục chỉ khi mô-đun của nó bật).
       { path: 'meetings', label: 'Meetings', icon: CalendarClock, match: (v) => v === 'meetings', module: 'meetings' },
@@ -157,6 +160,8 @@ const PORTAL_NAV: { tab: string; label: string; icon: LucideIcon; module?: Studi
   // Đợt S4: mốc thanh toán đã chia sẻ + lịch sử báo cáo tuần.
   { tab: 'payments', label: 'Payments', icon: Receipt, module: 'finance' },
   { tab: 'reports', label: 'Reports', icon: FileBarChart, module: 'reports' },
+  // Resources (06/10/2026): link dự án đã chia sẻ với khách.
+  { tab: 'resources', label: 'Resources', icon: Library, module: 'resources' },
   { tab: 'activity', label: 'Activity', icon: Activity },
 ];
 
@@ -168,6 +173,40 @@ const WORKSPACE_NAV: { path: string; label: string; icon: LucideIcon; module?: S
   { path: '/workload', label: 'Workload', icon: Gauge, staffOnly: true },
   { path: '/settings', label: 'Members & settings', icon: Users },
 ];
+
+/**
+ * Resources (06/10/2026): link ghim lên sidebar của dự án đang mở — một cú bấm mở tab mới (đếm lượt mở ở nền).
+ * Không có link ghim / mô-đun tắt ⇒ không vẽ gì.
+ */
+function SidebarPinnedLinks({ pid }: { pid: number }) {
+  const q = useQuery({ queryKey: resKeys.sidebar(pid), queryFn: () => resApi.sidebar(pid), staleTime: 60_000 });
+  const items = q.data?.enabled ? q.data.items : [];
+  if (!items.length) return null;
+  return (
+    <div data-testid="sidebar-pinned-links">
+      <div className="w-eyebrow w-rail-hide px-2 pb-0.5 pt-2">Pinned links</div>
+      {items.map((r) => (
+        <a
+          key={r.id}
+          href={r.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={`${r.title} — ${r.url}`}
+          aria-label={`${r.title} (opens in a new tab)`}
+          onClick={() => { void resApi.open(pid, r.id).catch(() => undefined); }}
+          className={cn(ROW, 'pl-3', ROW_IDLE, 'group')}
+        >
+          {r.faviconUrl
+            // eslint-disable-next-line @next/next/no-img-element
+            ? <img src={r.faviconUrl} alt="" width={15} height={15} loading="lazy" referrerPolicy="no-referrer" className="h-[15px] w-[15px] shrink-0 rounded-[3px]" />
+            : <ExternalLink size={15} className="shrink-0 opacity-80" />}
+          <span className="min-w-0 flex-1 truncate">{r.title}</span>
+          <ExternalLink size={11} className="w-rail-hide shrink-0 opacity-0 transition-opacity group-hover:opacity-60" />
+        </a>
+      ))}
+    </div>
+  );
+}
 
 export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { pathname, slug, key, view } = useWorkPath();
@@ -366,6 +405,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                             ))}
                           </div>
                         ))}
+                        {p.modules?.resources && <SidebarPinnedLinks pid={p.id} />}
                         <div className="my-1.5 border-t border-[var(--w-border)]" />
                         <NavItem href={`${base}/settings`} icon={Settings} label="Project settings" active={view === 'settings'} indent />
                       </div>

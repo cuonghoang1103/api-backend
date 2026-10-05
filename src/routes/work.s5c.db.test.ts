@@ -148,7 +148,7 @@ describe('CT Work — đợt S5c: hoàn thiện (HTTP + DB thật)', { skip: !RU
     assert.equal(av.status, 200, JSON.stringify(av.raw));
     assert.equal(av.data.kind, 'CLIENT');
     assert.ok(av.data.modules.every((m: any) => m.on === false && m.undecided === true && m.body));
-    assert.deepEqual(av.data.willEnable.length, 12);
+    assert.deepEqual(av.data.willEnable.length, 13);
     assert.equal((await call(owner, 'GET', `/projects/${oldPid}/pages`)).code, 'MODULE_DISABLED');
     assert.deepEqual((await prisma.workProject.findUniqueOrThrow({ where: { id: oldPid } })).settings, before, 'đọc không ghi');
     // MEMBER không bấm được; khách cổng không thấy tuyến.
@@ -174,7 +174,7 @@ describe('CT Work — đợt S5c: hoàn thiện (HTTP + DB thật)', { skip: !RU
 
     // Dự án thời S1: docs=false là chỗ giữ ⇒ bật; teams=true giữ; reports/serviceDesk thiếu khoá ⇒ bật.
     const s1 = await call(owner, 'POST', `/projects/${s1Pid}/studio/apply-defaults`);
-    assert.deepEqual([...s1.data.enabled].sort(), ['changeRequests', 'clientPortal', 'docs', 'finance', 'meetings', 'raid', 'reports', 'serviceDesk']);
+    assert.deepEqual([...s1.data.enabled].sort(), ['changeRequests', 'clientPortal', 'docs', 'finance', 'meetings', 'raid', 'reports', 'resources', 'serviceDesk']);
     // School: không có mô-đun nào được khuyên ⇒ không bật gì.
     assert.deepEqual((await call(owner, 'POST', `/projects/${schoolPid}/studio/apply-defaults`)).data.enabled, []);
     assert.equal((await call(owner, 'GET', `/projects/${schoolPid}/studio`)).data.modules.docs, false);

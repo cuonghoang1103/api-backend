@@ -307,6 +307,30 @@ export function deskAccess(role: ProjectRole | null, workspaceRole: WorkspaceRol
   return { view: g.view, work: g.edit, configure: g.manage };
 }
 
+// ─── Resources (06/10/2026, mô-đun resources) ─────────────────────
+
+/**
+ * Quyền trên thư viện link của dự án (hàm thuần — permissions.test.ts):
+ *   - Khách (vai CLIENT) và khách của không gian (GUEST, trừ giảng viên TEACHER) chỉ thấy link
+ *     `visibility = CLIENT`, KHÔNG thấy linkStatus/openCount, không thêm/sửa gì. Khách bị cách ly (cổng
+ *     khách bật) đi qua /portal/resources (danh sách trắng `/portal/**`).
+ *   - VIEWER / TEACHER thấy mọi link, chỉ đọc.
+ *   - MEMBER thêm link + sửa/xoá link CỦA MÌNH; ADMIN sửa tất và quản lý nhóm.
+ */
+export function resourceAccess(role: ProjectRole | null, workspaceRole: WorkspaceRole | null): { view: 'ALL' | 'CLIENT' | null; edit: boolean; manage: boolean } {
+  if (!role) return { view: null, edit: false, manage: false };
+  const restricted = role === 'CLIENT' || (workspaceRole === 'GUEST' && role !== 'TEACHER');
+  if (restricted) return { view: 'CLIENT', edit: false, manage: false };
+  return { view: 'ALL', edit: role === 'ADMIN' || role === 'MEMBER', manage: role === 'ADMIN' };
+}
+
+/** Sửa / xoá / ghim một link: ADMIN dự án, hoặc người tạo còn quyền thêm link. */
+export function canModifyResource(role: ProjectRole | null, workspaceRole: WorkspaceRole | null, userId: number, createdById: number | null): boolean {
+  const a = resourceAccess(role, workspaceRole);
+  if (a.manage) return true;
+  return a.edit && createdById !== null && createdById === userId;
+}
+
 // ─── Tầng đọc DB ──────────────────────────────────────────────────
 
 export interface ProjectAccess {

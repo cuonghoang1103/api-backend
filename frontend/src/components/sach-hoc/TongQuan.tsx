@@ -222,7 +222,12 @@ export function KeHoach({ course, done, scores, plan, onOpen, onOpenDay, savePla
         <div className={s.statBox}><div className={s.statBig}>{lessonsDone}<span>/{lessonsReady.length}</span></div><div className={s.statLbl}>bài đã học (bài đã có)</div></div>
         <div className={s.statBox}><div className={s.statBig}>{avg == null ? '—' : `${avg}%`}</div><div className={s.statLbl}>điểm bài tập trung bình</div></div>
       </div>
-      <div className={s.progressBar}><span style={{ width: `${(doneDays / DAYS.length) * 100}%` }} /></div>
+      {/* 05/10/2026: thanh tính theo BÀI (trước tính theo buổi trọn vẹn — đánh dấu 1 bài thì thanh đứng im
+          tới khi xong cả buổi 4–8 bài, người học tưởng hỏng). */}
+      <div className={s.progressBar} title={`${lessonsDone}/${lessonsReady.length} bài`}><span style={{ width: `${lessonsReady.length ? (lessonsDone / lessonsReady.length) * 100 : 0}%` }} /></div>
+      <p className={s.quizSub} style={{ marginTop: 6 }}>
+        Đang học {course.dayName(current.n)}: <b>{current.lessons.filter((l) => isReady(l) && done.includes(l.id)).length}/{current.lessons.filter(isReady).length}</b> bài · cả khoá <b>{lessonsReady.length ? Math.round((lessonsDone / lessonsReady.length) * 100) : 0}%</b>.
+      </p>
       <p className={s.quizSub} style={{ marginTop: 6 }}>
         {loggedIn ? 'Tiến độ lưu vào tài khoản — mở trên laptop hay iPad đều thấy như nhau.' : 'Đăng nhập để tiến độ đồng bộ giữa laptop và iPad. Hiện chỉ lưu trên trình duyệt này.'}
         {' '}Đã soạn xong {readyDays.length}/{DAYS.length} buổi.

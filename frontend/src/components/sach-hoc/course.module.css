@@ -1680,3 +1680,57 @@
 /* Lời chào đầu khung: bong bóng của CuongMini thay cho đoạn văn trần. */
 .thChao { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
 .thChao > p { margin: 0; padding: 10px 12px; border-radius: 4px 16px 16px 16px; font-size: 13.5px; line-height: 1.55; color: var(--lh-ink-2, var(--lh-ink)); background: color-mix(in srgb, #8b5cf6 9%, var(--lh-surface)); border: 1px solid color-mix(in srgb, #8b5cf6 18%, transparent); }
+
+/* Luyện sâu trong cuộc gọi (05/10/2026): câu gốc khi đang tách từ + âm hay vấp trong buổi. */
+.goiGoc { margin-top: 8px; font-size: 13px; opacity: 0.8; }
+.goiHayVap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; opacity: 0.85; }
+.goiHayVap span { padding: 1px 7px; border-radius: 999px; background: rgba(244, 114, 182, 0.18); border: 1px solid rgba(244, 114, 182, 0.35); font-family: var(--font-jetbrains-mono), monospace; }
+
+/* Tiến độ theo bài trên chip thanh trên + đếm bài mỗi buổi ở mục lục (05/10/2026). */
+.chipVach { display: inline-block; width: 46px; height: 5px; margin-left: 6px; border-radius: 999px; background: color-mix(in srgb, currentColor 18%, transparent); overflow: hidden; vertical-align: middle; }
+.chipVach i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #22c55e, #4ade80); transition: width 0.5s ease; }
+.tocDem { margin-left: 4px; font-size: 11px; font-weight: 600; opacity: 0.6; font-variant-numeric: tabular-nums; }
+
+/* ══ MÀN CHÀO MỖI NGÀY (ChaoBuoiSang.tsx, 05/10/2026) ══════════════════════ */
+.chao { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 20px;
+  background: radial-gradient(70% 60% at 50% 40%, rgba(139, 92, 246, 0.35), transparent 70%), radial-gradient(60% 50% at 80% 90%, rgba(236, 72, 153, 0.25), transparent 70%), rgba(8, 6, 20, 0.72);
+  backdrop-filter: blur(6px); animation: chaoNen 0.45s ease-out; transition: background 0.6s ease, opacity 0.6s ease; }
+@keyframes chaoNen { from { opacity: 0; } }
+.chaoPhao { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.chaoKhoi { position: relative; width: min(860px, 100%); display: grid; grid-template-columns: minmax(220px, 320px) minmax(0, 1fr); gap: 10px 28px; align-items: center; padding: 26px 30px; border-radius: 28px; color: #f5f3ff;
+  background: linear-gradient(150deg, rgba(49, 46, 129, 0.88), rgba(30, 27, 75, 0.9) 55%, rgba(76, 29, 149, 0.86)); border: 1px solid rgba(196, 181, 253, 0.35);
+  box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12); animation: chaoVao 0.6s cubic-bezier(0.2, 0.9, 0.25, 1.25);
+  transition: transform 0.7s cubic-bezier(0.6, -0.1, 0.7, 0.4), opacity 0.6s ease; transform-origin: 100% 100%; }
+@keyframes chaoVao { from { transform: translateY(30px) scale(0.86); opacity: 0; } }
+.chaoThuNho { background: transparent; backdrop-filter: none; pointer-events: none; }
+.chaoThuNho .chaoKhoi { transform: translate(42vw, 40vh) scale(0.08); opacity: 0; }
+.chaoDong { position: absolute; top: 14px; right: 14px; z-index: 2; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; color: #ddd6fe; background: rgba(255, 255, 255, 0.08); }
+.chaoDong:hover { background: rgba(255, 255, 255, 0.16); }
+.chaoNhanVat { position: relative; height: 300px; }
+.chaoNoiDung { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.chaoKhoa { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #c4b5fd; }
+.chaoCau { margin: 0; font-size: clamp(20px, 2.4vw, 27px); font-weight: 750; line-height: 1.32; letter-spacing: -0.01em; color: #fff; animation: chaoCau 0.4s ease-out; }
+@keyframes chaoCau { from { opacity: 0; transform: translateY(6px); } }
+.chaoVi { margin: -4px 0 0; font-size: 13.5px; color: #c4b5fd; }
+.chaoHang { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 4px; }
+.chaoChuoi { position: relative; display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.12); color: #a5b4fc; }
+.chaoChuoi[data-chay] { color: #fb923c; background: linear-gradient(135deg, rgba(251, 146, 60, 0.2), rgba(244, 63, 94, 0.14)); border-color: rgba(251, 146, 60, 0.45); }
+.chaoChuoi[data-chay] svg { filter: drop-shadow(0 0 10px rgba(251, 146, 60, 0.9)); animation: chaoLua 1.2s ease-in-out infinite; }
+@keyframes chaoLua { 50% { transform: scale(1.12) rotate(-4deg); } }
+.chaoChuoi b { font-size: 36px; line-height: 1; color: #fff; font-variant-numeric: tabular-nums; }
+.chaoChuoi span { display: flex; flex-direction: column; font-size: 13px; font-weight: 650; color: #fde68a; }
+.chaoChuoi small { font-size: 11.5px; font-weight: 500; color: #c4b5fd; }
+.chaoKyLuc { position: absolute; top: -10px; right: -8px; display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; font-style: normal; color: #1c1407; background: linear-gradient(135deg, #fde68a, #f59e0b); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5); }
+.chaoTuan { display: grid; grid-template-columns: repeat(14, 12px); gap: 4px; }
+.chaoTuan span { width: 12px; height: 12px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); }
+.chaoTuan span[data-co] { background: linear-gradient(135deg, #fb923c, #f43f5e); box-shadow: 0 0 6px rgba(251, 146, 60, 0.6); }
+.chaoTuan span[data-nay] { outline: 2px solid rgba(253, 230, 138, 0.8); outline-offset: 1px; }
+.chaoTom { padding: 10px 14px; border-radius: 14px; background: rgba(0, 0, 0, 0.22); font-size: 13.5px; color: #e9e5ff; }
+.chaoTom p { margin: 4px 0 0; }
+.chaoVach { height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
+.chaoVach i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #22c55e, #a3e635); transition: width 1s ease; }
+.chaoNut { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 4px; }
+.chaoNut small { opacity: 0.75; font-weight: 500; }
+.chaoTat { margin-left: auto; font-size: 12px; color: #a5b4fc; text-decoration: underline; text-underline-offset: 3px; background: none; }
+@media (max-width: 720px) { .chaoKhoi { grid-template-columns: 1fr; } .chaoNhanVat { height: 200px; } }
+@media (prefers-reduced-motion: reduce) { .chaoKhoi, .chao { animation: none; } .chaoChuoi[data-chay] svg { animation: none; } }

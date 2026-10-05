@@ -12422,3 +12422,19 @@ model BookReadingDay {
   @@unique([userId, day], name: "uk_book_reading_day", map: "uk_book_reading_day")
   @@map("book_reading_days")
 }
+
+/// Ngày có học của một khoá kiểu sách (IELTS sach1, Dekiru, JP jp1, CH ch1) — chuỗi ngày học
+/// liên tiếp + màn chào buổi sáng của CuongMini (05/10/2026). Một dòng = một người · một khoá · một ngày
+/// (giờ Việt Nam); `soViec` đếm số lần ghi tiến độ bài/bài tập/luyện nói trong ngày đó.
+model HocNgay {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  stage     String   @db.VarChar(12)
+  /// "YYYY-MM-DD" theo giờ Việt Nam.
+  day       String   @db.VarChar(10)
+  soViec    Int      @default(1) @map("so_viec")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, stage, day], name: "uk_hoc_ngay", map: "uk_hoc_ngay")
+  @@map("hoc_ngay")
+}

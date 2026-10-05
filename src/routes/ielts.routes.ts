@@ -180,6 +180,14 @@ router.post('/tien-do',
     try { ok(res, await svc.ghiTienDo(uid(req), req.body.items)); } catch (e) { next(e); }
   });
 
+// Chuỗi ngày học của một khoá + ghi "hôm nay có học" từ việc không qua /tien-do (luyện nói cùng CuongMini).
+router.get('/chuoi', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await svc.layChuoi(uid(req), String(req.query.stage ?? ''))); } catch (e) { next(e); }
+});
+router.post('/chuoi/ghi', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await svc.ghiNgayHoc(uid(req), String(req.body?.stage ?? ''))); } catch (e) { next(e); }
+});
+
 router.delete('/tien-do/:stage/:kind/:muc',
   param('muc').isLength({ min: 1, max: 120 }), validate,
   async (req, res: Response<ApiResponse>, next) => {

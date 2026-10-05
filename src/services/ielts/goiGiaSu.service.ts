@@ -186,26 +186,100 @@ const SO_LAN_TOI_DA = 3;
 const NGUYEN_AM = /[aeiouɪʊəɜɑɒɔæʌ]/;
 
 /** Âm yếu nhất — tên âm gắn theo IPA câu mẫu (chỉ khi số âm khớp với Azure). */
-function amYeuNhat(k: KetQuaPhatAm, ipa?: string): { tu: string; am: string | null; diem: number; cuoi: boolean } | null {
+type AmYeu = { tu: string; am: string | null; diem: number; cuoi: boolean; ipa?: string; amTu: string[]; diemTu: number };
+function amYeuNhat(k: KetQuaPhatAm, ipa?: string): AmYeu | null {
   const ipaTu = (ipa ?? '').split(/\s+/).filter(Boolean);
   let vi = 0;
-  let best: { tu: string; am: string | null; diem: number; cuoi: boolean } | null = null;
+  let best: AmYeu | null = null;
   for (const w of k.tu) {
     if (w.loi === 'Insertion') continue;
-    const ten = ipaTu[vi] ? tachAm(ipaTu[vi]) : [];
+    const ipaW = ipaTu[vi];
+    const ten = ipaW ? tachAm(ipaW) : [];
     vi++;
     if (w.loi === 'Omission') continue;
     if (!w.am.length) {
-      if (!best || w.diem < best.diem) best = { tu: w.tu, am: null, diem: w.diem, cuoi: false };
+      if (!best || w.diem < best.diem) best = { tu: w.tu, am: null, diem: w.diem, cuoi: false, ipa: ipaW, amTu: ten, diemTu: w.diem };
       continue;
     }
     w.am.forEach((a, i) => {
       const am = ten.length === w.am.length ? ten[i] : null;
-      if (!best || a.diem < best.diem) best = { tu: w.tu, am, diem: a.diem, cuoi: i === w.am.length - 1 };
+      if (!best || a.diem < best.diem) best = { tu: w.tu, am, diem: a.diem, cuoi: i === w.am.length - 1, ipa: ipaW, amTu: ten, diemTu: w.diem };
     });
   }
   return best;
 }
+
+/* ── Hướng dẫn SÂU (05/10/2026) ──────────────────────────────────────────
+ * Người dùng: "con robot hướng dẫn sâu hơn… sai chỗ nào user gặp nhiều thì hướng dẫn
+ * từ đó, đọc được chuẩn rồi mới ghép cả đoạn… hướng dẫn rồi đọc mẫu + nhấn mạnh đuôi,
+ * hơi". Âm cuối là lỗi số một của người Việt (tiếng Việt không bật phụ âm cuối) ⇒ có
+ * lời dạy riêng cho phụ âm cuối và CỤM phụ âm cuối, kèm cách đọc phiên kiểu Việt. */
+const CUOI_VIET: Record<string, string> = {
+  s: 'xì', z: 'dzzz', t: 'tờ nhẹ', d: 'đờ nhẹ', k: 'cờ nhẹ', ɡ: 'gờ nhẹ', p: 'pờ nhẹ', b: 'bờ nhẹ',
+  v: 'vờ rung', f: 'phờ', θ: 'thờ thổi hơi', ð: 'đờ rung qua răng', ʃ: 'suỵt', tʃ: 'chờ', dʒ: 'giờ', l: 'giữ lưỡi lờ', m: 'ngậm môi mờ', n: 'giữ lưỡi nờ',
+};
+const CUM_CUOI: Record<string, string> = {
+  dz: 'Đuôi dz: đặt lưỡi chạm lợi trên như chữ đ, rồi chuyển ngay sang rung zzz như tiếng ong. Đừng tắt hơi ở chữ đ.',
+  ts: 'Đuôi ts: chạm lưỡi bật t thật nhẹ rồi xì ngay s, như tiếng tàu "tsss".',
+  st: 'Đuôi st: xì s trước rồi chạm lưỡi bật t nhẹ ở cuối, đừng bỏ chữ t.',
+  ks: 'Đuôi ks: chặn hơi ở cuống lưỡi như chữ c, rồi xì s ngay sau.',
+  nd: 'Đuôi nd: giữ lưỡi ở n rồi bật nhẹ d, đừng dừng ở n.',
+  nt: 'Đuôi nt: giữ lưỡi ở n rồi bật t thật nhẹ.',
+  vz: 'Đuôi vz: răng trên chạm môi dưới rung v, rồi trượt sang zzz.',
+  lz: 'Đuôi lz: giữ lưỡi ở l rồi rung tiếp zzz.',
+  mz: 'Đuôi mz: ngậm môi m rồi rung tiếp zzz.',
+  nz: 'Đuôi nz: giữ lưỡi ở n rồi rung tiếp zzz.',
+  ŋz: 'Đuôi ngz: giữ ng qua mũi rồi rung tiếp zzz.',
+  ld: 'Đuôi ld: giữ lưỡi ở l rồi bật nhẹ d.',
+  kt: 'Đuôi kt: chặn ở cuống lưỡi rồi bật t nhẹ, ví dụ looked.',
+  pt: 'Đuôi pt: mím môi chữ p rồi bật t nhẹ.',
+  ðz: 'Đuôi thz: lưỡi giữa hai răng rung, rồi trượt sang zzz.',
+  θs: 'Đuôi ths: lưỡi giữa hai răng thổi hơi, rồi xì s.',
+};
+const PHU_AM = /^(p|b|t|d|k|ɡ|f|v|θ|ð|s|z|ʃ|ʒ|tʃ|dʒ|m|n|ŋ|l|r|h|w|j)$/;
+
+/** Lời dạy cho ĐÚNG chỗ yếu nhất — ưu tiên phụ âm cuối / cụm phụ âm cuối. */
+export function huongDan(y: AmYeu): string {
+  const am = y.am ?? '';
+  const n = y.amTu.length;
+  const laCuoi = y.cuoi || (am && y.amTu[n - 1] === am);
+  if (laCuoi && PHU_AM.test(am) && n >= 2) {
+    const cum = y.amTu.slice(n - 2).join('');
+    if (PHU_AM.test(y.amTu[n - 2]!) && CUM_CUOI[cum]) return `${CUM_CUOI[cum]} Người Việt rất hay nuốt mất đuôi này.`;
+    const viet = CUOI_VIET[am];
+    return `Bạn đang nuốt âm cuối của từ [en]${y.tu}[/en]. ${MEO[am] ?? ''}${viet ? ` Hãy đọc trọn từ rồi thêm rõ "${viet}" ở cuối.` : ''}`.trim();
+  }
+  return MEO[am] ?? 'Nghe kỹ mẫu, để ý khẩu hình rồi đọc chậm lại.';
+}
+
+/** Từ luyện thêm cho âm người học HAY sai (đếm trong buổi gọi) — âm ở vị trí khó nhất (thường là cuối). */
+const TU_LUYEN: Record<string, CauMau[]> = {
+  z: [{ text: 'buzz', ipa: 'bʌz' }, { text: 'goes', ipa: 'ɡəʊz' }, { text: 'reads', ipa: 'riːdz' }],
+  s: [{ text: 'bus', ipa: 'bʌs' }, { text: 'likes', ipa: 'laɪks' }, { text: 'nice', ipa: 'naɪs' }],
+  d: [{ text: 'need', ipa: 'niːd' }, { text: 'played', ipa: 'pleɪd' }, { text: 'good', ipa: 'ɡʊd' }],
+  t: [{ text: 'cat', ipa: 'kæt' }, { text: 'night', ipa: 'naɪt' }, { text: 'worked', ipa: 'wɜːkt' }],
+  k: [{ text: 'book', ipa: 'bʊk' }, { text: 'like', ipa: 'laɪk' }, { text: 'black', ipa: 'blæk' }],
+  v: [{ text: 'live', ipa: 'lɪv' }, { text: 'five', ipa: 'faɪv' }, { text: 'very', ipa: 'veri' }],
+  l: [{ text: 'feel', ipa: 'fiːl' }, { text: 'school', ipa: 'skuːl' }, { text: 'all', ipa: 'ɔːl' }],
+  θ: [{ text: 'think', ipa: 'θɪŋk' }, { text: 'three', ipa: 'θriː' }, { text: 'month', ipa: 'mʌnθ' }],
+  ð: [{ text: 'this', ipa: 'ðɪs' }, { text: 'mother', ipa: 'mʌðə' }, { text: 'they', ipa: 'ðeɪ' }],
+  ʃ: [{ text: 'she', ipa: 'ʃi' }, { text: 'fish', ipa: 'fɪʃ' }, { text: 'wash', ipa: 'wɒʃ' }],
+  r: [{ text: 'red', ipa: 'red' }, { text: 'right', ipa: 'raɪt' }, { text: 'room', ipa: 'ruːm' }],
+  tʃ: [{ text: 'watch', ipa: 'wɒtʃ' }, { text: 'teacher', ipa: 'tiːtʃə' }, { text: 'much', ipa: 'mʌtʃ' }],
+  dʒ: [{ text: 'job', ipa: 'dʒɒb' }, { text: 'page', ipa: 'peɪdʒ' }, { text: 'large', ipa: 'lɑːdʒ' }],
+  'iː': [{ text: 'sheep', ipa: 'ʃiːp' }, { text: 'meet', ipa: 'miːt' }, { text: 'tea', ipa: 'tiː' }],
+  'ɪ': [{ text: 'ship', ipa: 'ʃɪp' }, { text: 'sit', ipa: 'sɪt' }, { text: 'big', ipa: 'bɪɡ' }],
+  'æ': [{ text: 'cat', ipa: 'kæt' }, { text: 'bad', ipa: 'bæd' }, { text: 'apple', ipa: 'æpl' }],
+  'ɜː': [{ text: 'bird', ipa: 'bɜːd' }, { text: 'work', ipa: 'wɜːk' }, { text: 'learn', ipa: 'lɜːn' }],
+  'əʊ': [{ text: 'go', ipa: 'ɡəʊ' }, { text: 'home', ipa: 'həʊm' }, { text: 'phone', ipa: 'fəʊn' }],
+  'eɪ': [{ text: 'day', ipa: 'deɪ' }, { text: 'name', ipa: 'neɪm' }, { text: 'play', ipa: 'pleɪ' }],
+  n: [{ text: 'nine', ipa: 'naɪn' }, { text: 'phone', ipa: 'fəʊn' }, { text: 'green', ipa: 'ɡriːn' }],
+  ŋ: [{ text: 'sing', ipa: 'sɪŋ' }, { text: 'long', ipa: 'lɒŋ' }, { text: 'morning', ipa: 'mɔːnɪŋ' }],
+};
+const NGUONG_TU = 80;
+const SO_LAN_TU = 3;
+const LAN_SAI_THI_NHAC = 3;
+const boDau = (t: string) => t.replace(/[.,!?;:"“”'’]+$/g, '').replace(/^[“"'‘]+/, '');
 
 /**
  * Chấm CHẶT HƠN mà vẫn công bằng (04/10/2026). Azure chấm cả từ khá dễ: đo bằng giọng
@@ -428,7 +502,13 @@ function sachDanhSach(raw: unknown, nn: NgonNgu = 'en'): CauMau[] {
  */
 export async function goiGiaSu(
   userId: number,
-  input: { audio?: Buffer; danhSach?: unknown; viTri?: unknown; lanThu?: unknown; chuDe?: unknown; diemTruoc?: unknown; giong?: unknown; ngonNgu?: unknown; imLang?: unknown },
+  input: {
+    audio?: Buffer; danhSach?: unknown; viTri?: unknown; lanThu?: unknown; chuDe?: unknown; diemTruoc?: unknown; giong?: unknown; ngonNgu?: unknown; imLang?: unknown;
+    /** 05/10/2026 — luyện sâu: 'cau' = đọc cả câu, 'tu' = đang luyện riêng một từ (mau là từ đó, mauGoc là câu). */
+    che?: unknown; mauGoc?: unknown; mauTu?: unknown; lanTu?: unknown;
+    /** Đếm âm người học sai trong buổi (web giữ) + những âm đã giảng riêng rồi. */
+    thongKe?: unknown; daNhac?: unknown;
+  },
 ) {
   if (!demLuot(userId)) return { lyDo: 'het_luot_ngay' as const };
   const giong = docGiong(input.giong);
@@ -436,14 +516,23 @@ export async function goiGiaSu(
   const ds = sachDanhSach(input.danhSach, nn);
   let viTri = Math.max(0, Math.min(ds.length - 1, Number(input.viTri) || 0));
   let lanThu = Math.max(0, Number(input.lanThu) || 0);
-  const mau = ds[viTri];
+  // Chế độ luyện riêng một từ: câu mẫu đang đọc là TỪ đó, câu gốc giữ ở mauGoc để ghép lại.
+  const mauGocIn = input.mauGoc && typeof input.mauGoc === 'object' ? sachDanhSach([input.mauGoc], nn)[0] : undefined;
+  const che: 'cau' | 'tu' = input.che === 'tu' && mauGocIn ? 'tu' : 'cau';
+  let lanTu = Math.max(0, Number(input.lanTu) || 0);
+  const thongKe: Record<string, number> = {};
+  if (input.thongKe && typeof input.thongKe === 'object') for (const [k2, v] of Object.entries(input.thongKe as Record<string, unknown>)) { const n = Number(v); if (k2.length <= 4 && n > 0) thongKe[k2] = Math.min(99, n); }
+  const daNhac = Array.isArray(input.daNhac) ? (input.daNhac as unknown[]).map(String).slice(0, 20) : [];
+  // Từ đang luyện riêng (che 'tu') đi trong trangThai dưới tên `mauTu`.
+  const mauTu = che === 'tu' && input.mauTu && typeof input.mauTu === 'object' ? sachDanhSach([input.mauTu], nn)[0] : undefined;
+  const mau = che === 'tu' && mauTu ? mauTu : ds[viTri];
   const chuDe = String(input.chuDe ?? '').trim().slice(0, 120);
 
   // Web đo micro thấy CẢ LƯỢT không có tiếng nói (bấm nhầm, chưa kịp nói) ⇒ không chấm gì,
   // không tính lượt đọc — chỉ nhắc tự nhiên (05/10/2026: trước đây im lặng bị chấm "đọc thiếu").
   if (input.imLang === true) {
     const noi = chon(CHUA_NGHE);
-    return { loai: 'luyen' as const, nghe: '', noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu, cham: null, doiCau: false };
+    return { loai: 'luyen' as const, nghe: '', noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu, cham: null, doiCau: false, che, mauGoc: mauGocIn ?? null, mauTu: mauTu ?? null, lanTu };
   }
   if (!input.audio?.length) {
     // Ngắn và CỐ ĐỊNH: đọc tên bài ("Nói: Trả lời câu hỏi Wh- (Part 1 · …)") nghe rất kỳ
@@ -470,25 +559,81 @@ export async function goiGiaSu(
   if (nghe && CO_DAU.test(nghe) && giongNhau(mau.text, nghe) < 0.5) {
     // Câu đệm nói NGAY (tệp lưu R2 nên lần sau tức thì) trong lúc web gọi AI ~10 giây.
     const noi = chon(['Câu hỏi hay đấy, để mình giải thích nhé.', 'À, bạn hỏi hay lắm. Đợi mình một chút nhé.', 'Để mình giải thích cho bạn nhé.']);
-    return { loai: 'hoi' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu };
+    return { loai: 'hoi' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu, che, mauGoc: mauGocIn ?? null, mauTu: mauTu ?? null, lanTu };
   }
   if (!k) {
     const noi = pa?.lyDo === 'het_luot_thang'
       ? 'Máy chấm phát âm đã hết lượt miễn phí của tháng này. Bạn vẫn có thể hỏi mình bằng tiếng Việt nhé.'
       : chon(CHUA_NGHE);
-    return { loai: 'luyen' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu, cham: null, doiCau: false };
+    return { loai: 'luyen' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu, cham: null, doiCau: false, che, mauGoc: mauGocIn ?? null, mauTu: mauTu ?? null, lanTu };
   }
 
+  // ── Đang LUYỆN RIÊNG một từ ─────────────────────────────────────────────
+  if (che === 'tu' && mauGocIn) {
+    lanTu += 1;
+    const y = amYeuNhat(k, mau.ipa);
+    const amSai = y && y.diem < 70 ? y.am : null;
+    if (k.diem.tong >= NGUONG_TU || lanTu >= SO_LAN_TU) {
+      const dat = k.diem.tong >= NGUONG_TU;
+      const noi = dat
+        ? `${chon(['Chuẩn rồi!', 'Đúng rồi đấy!', 'Hay lắm!'])} Từ [en]${mau.text}[/en] được ${k.diem.tong} điểm. Giờ mình ghép lại cả câu nhé, nhớ giữ đúng như vừa rồi.`
+        : `Được ${k.diem.tong} điểm, gần được rồi. Mình ghép lại cả câu nhé, đọc chậm và nhớ chỗ vừa luyện.`;
+      return {
+        loai: 'luyen' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)),
+        mau: mauGocIn, viTri, lanThu: 0, doiCau: false, che: 'cau' as const, mauGoc: null, mauTu: null, lanTu: 0, amSai, ghepLai: true,
+        cham: { tong: k.diem.tong, tu: k.tu.map((w) => ({ tu: w.tu, diem: w.diem, loi: w.loi })) },
+      };
+    }
+    const noi = `Được ${k.diem.tong} điểm. ${y ? huongDan(y) : 'Nghe kỹ mẫu rồi đọc chậm lại.'} Nghe mình đọc thật chậm rồi đọc lại theo nhé.`;
+    return {
+      loai: 'luyen' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)),
+      mau, viTri, lanThu, doiCau: false, che: 'tu' as const, mauGoc: mauGocIn, mauTu: mau, lanTu, amSai, tocMau: 0.65,
+      cham: { tong: k.diem.tong, tu: k.tu.map((w) => ({ tu: w.tu, diem: w.diem, loi: w.loi })) },
+    };
+  }
+
+  // ── Đọc CẢ CÂU ──────────────────────────────────────────────────────────
   lanThu += 1;
   const diemTruoc = lanThu > 1 && Number.isFinite(Number(input.diemTruoc)) ? Number(input.diemTruoc) : undefined;
   const nx = nhanXet(k, mau, lanThu, diemTruoc, nn);
+  const y = amYeuNhat(k, mau.ipa);
+  const amSai = !nx.dat && y && y.diem < 70 ? y.am : null;
+  const soTu = k.tu.filter((w) => w.loi !== 'Insertion').length;
+
+  // Câu nhiều từ mà có MỘT từ yếu hẳn ⇒ tách từ đó ra luyện riêng (không bắt đọc lại cả câu mãi).
+  if (!nx.dat && y && y.diemTu < 70 && soTu >= 2) {
+    const tuLuyen: CauMau = { text: boDau(y.tu), ...(y.ipa ? { ipa: y.ipa } : {}) };
+    const loiMo = diemTruoc != null && k.diem.tong >= diemTruoc + 5 ? `Tiến bộ rồi, ${k.diem.tong} điểm.` : `Câu này được ${k.diem.tong} điểm.`;
+    const noi = `${loiMo} Chỗ cần sửa là từ [en]${tuLuyen.text}[/en]. ${nn === 'en' ? huongDan(y) : chon(MEO_NN[nn])} Mình tách riêng từ này luyện trước nhé. Nghe mình đọc chậm, rồi đọc theo.`;
+    return {
+      loai: 'luyen' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)),
+      mau: tuLuyen, viTri, lanThu, doiCau: false, che: 'tu' as const, mauGoc: mau, mauTu: tuLuyen, lanTu: 0, amSai, tocMau: 0.65, tachTu: true,
+      cham: { tong: k.diem.tong, tu: k.tu.map((w) => ({ tu: w.tu, diem: w.diem, loi: w.loi })) },
+    };
+  }
+
   let noi = nx.noi;
   let moi = mau;
+  let nhacAm: string | null = null;
   if (nx.dat || lanThu >= SO_LAN_TOI_DA) {
     if (!nx.dat) noi = 'Câu này hơi khó, mình để lần sau luyện tiếp nhé.';
     viTri = (viTri + 1) % ds.length;
     moi = ds[viTri];
     lanThu = 0;
+    // Âm người học sai LẶP LẠI trong buổi ⇒ giảng riêng một lần + luyện một từ chứa đúng âm đó.
+    const tk = { ...thongKe };
+    if (amSai) tk[amSai] = (tk[amSai] ?? 0) + 1;
+    const hay = Object.entries(tk).filter(([a, c]) => c >= LAN_SAI_THI_NHAC && !daNhac.includes(a) && TU_LUYEN[a]).sort((a, b) => b[1] - a[1])[0];
+    if (nn === 'en' && hay) {
+      nhacAm = hay[0];
+      const tuThem = chon(TU_LUYEN[hay[0]]!);
+      const loi = `${noi} Mình để ý bạn hay vấp cùng một âm, đã ${hay[1]} lần rồi. ${MEO[hay[0]] ?? ''} Mình luyện riêng một từ có âm này nhé: [en]${tuThem.text}[/en].`;
+      return {
+        loai: 'luyen' as const, nghe, noi: loi, ...(await docGiaSuTheoGiong(loi, giong, nn)),
+        mau: tuThem, viTri, lanThu: 0, doiCau: true, che: 'tu' as const, mauGoc: moi, mauTu: tuThem, lanTu: 0, amSai, nhacAm, tocMau: 0.65,
+        cham: { tong: k.diem.tong, tu: k.tu.map((w) => ({ tu: w.tu, diem: w.diem, loi: w.loi })) },
+      };
+    }
     noi += ' Câu tiếp theo đây.';
   }
   return {
@@ -500,6 +645,7 @@ export async function goiGiaSu(
     viTri,
     lanThu,
     doiCau: moi !== mau,
+    che: 'cau' as const, mauGoc: null, mauTu: null, lanTu: 0, amSai, nhacAm,
     cham: { tong: k.diem.tong, tu: k.tu.map((w) => ({ tu: w.tu, diem: w.diem, loi: w.loi })) },
   };
 }

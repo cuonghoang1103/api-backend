@@ -37,14 +37,23 @@ function LoiNoi({ text }: { text: string }) {
   return <>{parts.map((p, i) => (i % 2 ? <b key={i} className={s.goiEn}>{p}</b> : <span key={i}>{p}</span>))}</>;
 }
 
-export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en' }: { danhSach: CauMau[]; chuDe: string; onClose: () => void; ngonNgu?: 'en' | 'ja' | 'zh' }) {
+export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', stage }: { danhSach: CauMau[]; chuDe: string; onClose: () => void; ngonNgu?: 'en' | 'ja' | 'zh'; /** Khoá đang học — luyện ≥ 3 lượt thì tính một ngày học (chuỗi ngày). */ stage?: string }) {
   /** Giọng đọc câu mẫu theo thứ tiếng của khoá. */
   const giongMau = ngonNgu === 'ja' ? 'ja-nu' : ngonNgu === 'zh' ? 'zh-nu' : 'uk-nu';
   const [pha, setPha] = useState<Pha>('cho');
   const [mau, setMau] = useState<CauMau | null>(null);
   const [luot, setLuot] = useState<Luot[]>([]);
   const [loi, setLoi] = useState('');
-  const st = useRef({ viTri: 0, lanThu: 0, imLien: 0, dong: false, diemTruoc: null as number | null, datLien: 0 });
+  const st = useRef({
+    viTri: 0, lanThu: 0, imLien: 0, dong: false, diemTruoc: null as number | null, datLien: 0,
+    /* Luyện sâu (05/10/2026): 'tu' = đang tách một từ ra luyện riêng, đạt rồi mới ghép lại câu gốc. */
+    che: 'cau' as 'cau' | 'tu', mauGoc: null as CauMau | null, mauTu: null as CauMau | null, lanTu: 0,
+    /** Âm người học sai trong buổi — máy chủ giảng riêng khi một âm lặp lại ≥ 3 lần. */
+    thongKe: {} as Record<string, number>, daNhac: [] as string[],
+  });
+  /** Hai thứ hiện lên màn hình: đang luyện riêng từ nào (+ câu gốc), và các âm hay vấp. */
+  const [luyenTu, setLuyenTu] = useState<{ tu: string; goc: string } | null>(null);
+  const [amHayVap, setAmHayVap] = useState<[string, number][]>([]);
   /** Giọng CuongMini (04/10/2026): mặc định = giọng Azure hiện tại; hai giọng máy nhà F5. Nhớ trên máy. */
   const [giong, setGiong] = useState<Giong>(() => { try { const g = localStorage.getItem('goi:giong'); return g === 'khanh-linh' || g === 'cuong' ? g : 'mac-dinh'; } catch { return 'mac-dinh'; } });
   const doiGiong = (g: Giong) => { setGiong(g); setGiongLui(false); try { localStorage.setItem('goi:giong', g); } catch { /* bỏ qua */ } };
@@ -55,7 +64,16 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en' }: {
   useEffect(() => { cuon.current?.scrollTo({ top: cuon.current.scrollHeight, behavior: 'smooth' }); }, [luot]);
   // Đặt lại cờ khi gắn: StrictMode (dev) chạy gắn → dọn → gắn lại; không đặt lại
   // thì cờ "đã đóng" của lần dọn giả kẹt true và cuộc gọi đứng ở "Đang kết nối".
-  useEffect(() => { st.current.dong = false; return () => { st.current.dong = true; stopAudio(); }; }, []);
+  const soLuotCham = useRef(0);
+  useEffect(() => {
+    st.current.dong = false;
+    return () => {
+      st.current.dong = true;
+      stopAudio();
+      // Luyện nói cũng là học: ≥ 3 lượt được chấm ⇒ ghi "hôm nay có học" cho chuỗi ngày (05/10/2026).
+      if (stage && soLuotCham.current >= 3) void api.post('/ielts/chuoi/ghi', { stage }).catch(() => undefined);
+    };
+  }, [stage]);
   // Esc để kết thúc.
   useEffect(() => {
     const h = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -63,7 +81,13 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en' }: {
     return () => window.removeEventListener('keydown', h);
   }, [onClose]);
 
-  const trangThai = () => JSON.stringify({ danhSach, viTri: st.current.viTri, lanThu: st.current.lanThu, chuDe, giong, diemTruoc: st.current.diemTruoc, ngonNgu });
+  const trangThai = () => {
+    const x = st.current;
+    return JSON.stringify({
+      danhSach, viTri: x.viTri, lanThu: x.lanThu, chuDe, giong, diemTruoc: x.diemTruoc, ngonNgu,
+      che: x.che, mauGoc: x.mauGoc, mauTu: x.mauTu, lanTu: x.lanTu, thongKe: x.thongKe, daNhac: x.daNhac,
+    });
+  };
 
   /* Mức micro đi thẳng vào nhân vật + vòng sóng của nút, KHÔNG qua state: trước 04/10
      mỗi lần âm lượng đổi là vẽ lại cả hộp thoại (đè lên nền kính mờ) ⇒ màn hình nhấp nháy. */
@@ -94,19 +118,25 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en' }: {
   }, [mic]);
 
   /** Gia sư nói (tệp mp3) rồi tới câu mẫu (giọng Anh của khoá), xong thì tự nghe. */
-  const giaSuNoi = useCallback((audio: string | string[] | null | undefined, text: string, cauMau: CauMau | null, docMau: boolean) => {
+  const giaSuNoi = useCallback((audio: string | string[] | null | undefined, text: string, cauMau: CauMau | null, docMau: boolean, tocMau?: number) => {
     if (st.current.dong) return;
     const clips: Clip[] = [];
     // Giọng máy nhà trả NHIỀU tệp (đoạn Việt F5 + đoạn Anh) — phát liền nhau, không ngắt.
     const tep = (Array.isArray(audio) ? audio : audio ? [audio] : []).filter(Boolean);
     if (tep.length) for (const u of tep) clips.push({ text: '', sfx: u });
     else clips.push({ text: text.replace(/\[\/?en\]/gi, ''), voice: giongMau }); // không có giọng gia sư: đọc tạm
-    if (docMau && cauMau) clips.push({ text: '', pauseMs: 280 }, { text: cauMau.text, voice: giongMau, toc: 0.9 });
+    // Luyện riêng một từ: đọc THẬT CHẬM trước (nghe rõ đuôi, hơi), rồi tốc độ thường.
+    if (docMau && cauMau && tocMau) clips.push({ text: '', pauseMs: 300 }, { text: cauMau.text, voice: giongMau, toc: tocMau }, { text: '', pauseMs: 550 }, { text: cauMau.text, voice: giongMau, toc: 0.9 });
+    else if (docMau && cauMau) clips.push({ text: '', pauseMs: 280 }, { text: cauMau.text, voice: giongMau, toc: 0.9 });
     setPha('giasu');
     play(clips, () => { if (!st.current.dong) batNghe(); });
   }, [batNghe]);
 
-  const nhan = useCallback((d: { lyDo?: string; noi?: string; audioUrl?: string | null; audioUrls?: string[]; giongThat?: Giong; mau?: CauMau; viTri?: number; lanThu?: number; cham?: Cham | null; nghe?: string; doiCau?: boolean; loai?: string }) => {
+  const nhan = useCallback((d: {
+    lyDo?: string; noi?: string; audioUrl?: string | null; audioUrls?: string[]; giongThat?: Giong; mau?: CauMau; viTri?: number; lanThu?: number;
+    cham?: Cham | null; nghe?: string; doiCau?: boolean; loai?: string;
+    che?: 'cau' | 'tu'; mauGoc?: CauMau | null; mauTu?: CauMau | null; lanTu?: number; amSai?: string | null; nhacAm?: string | null; tocMau?: number; ghepLai?: boolean; tachTu?: boolean;
+  }) => {
     if (d.lyDo === 'het_luot_ngay') { setLoi('Hôm nay bạn đã luyện hết số lượt — mai luyện tiếp nhé.'); setPha('loi'); return; }
     if (d.giongThat) setGiongLui(d.giongThat === 'mac-dinh' && giong !== 'mac-dinh');
     // Điểm lần trước CỦA CÙNG CÂU — máy chủ khen tiến bộ; sang câu mới thì xoá.
@@ -114,6 +144,19 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en' }: {
     else if (d.cham) st.current.diemTruoc = d.cham.tong;
     if (typeof d.viTri === 'number') st.current.viTri = d.viTri;
     if (typeof d.lanThu === 'number') st.current.lanThu = d.lanThu;
+    // Luyện sâu: máy chủ trả trạng thái tách/ghép ở mọi lượt — giữ y nguyên để gửi lại lượt sau.
+    if (d.che) {
+      st.current.che = d.che;
+      st.current.mauGoc = d.mauGoc ?? null;
+      st.current.mauTu = d.mauTu ?? null;
+      st.current.lanTu = d.lanTu ?? 0;
+      setLuyenTu(d.che === 'tu' && d.mauTu && d.mauGoc ? { tu: d.mauTu.text, goc: d.mauGoc.text } : null);
+    }
+    if (d.amSai) {
+      st.current.thongKe[d.amSai] = (st.current.thongKe[d.amSai] ?? 0) + 1;
+      setAmHayVap(Object.entries(st.current.thongKe).filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).slice(0, 3));
+    }
+    if (d.nhacAm && !st.current.daNhac.includes(d.nhacAm)) st.current.daNhac.push(d.nhacAm);
     if (d.mau) setMau(d.mau);
     return d;
   }, []);
@@ -131,6 +174,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en' }: {
       if (!d || st.current.dong) return;
       const ngheDuoc = (d.nghe ?? '').trim();
       if (ngheDuoc || d.cham) setLuot((x) => [...x, { ai: false, text: ngheDuoc || mauDaDoc?.text || '…', cham: d.cham ?? null }]);
+      if (d.cham) soLuotCham.current += 1;
       if (d.cham) {
         // Đạt 3 câu liền ⇒ mắt trái tim; từ 95 ⇒ ngạc nhiên thích thú; đạt ⇒ vui; khá ⇒ gật gù; thấp ⇒ động viên.
         const tong = d.cham.tong;
@@ -159,7 +203,8 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en' }: {
       setLoi('');
       setLuot((x) => [...x, { ai: true, text: d.noi ?? '' }]);
       // Đổi câu hay đọc lại: lượt nào cũng phát lại câu mẫu để người học nghe trước khi đọc.
-      giaSuNoi(d.audioUrls ?? d.audioUrl, d.noi ?? '', d.mau ?? null, true);
+      if (d.ghepLai && d.cham && d.cham.tong >= 80) phanUngNgan('vui', 2600);
+      giaSuNoi(d.audioUrls ?? d.audioUrl, d.noi ?? '', d.mau ?? null, true, d.tocMau);
     } catch (e) {
       if (st.current.dong) return;
       const m = (e as { response?: { status?: number } })?.response;
@@ -202,6 +247,8 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en' }: {
     st.current.viTri = (st.current.viTri + 1) % n;
     st.current.lanThu = 0;
     st.current.diemTruoc = null;
+    st.current.che = 'cau'; st.current.mauGoc = null; st.current.mauTu = null; st.current.lanTu = 0;
+    setLuyenTu(null);
     const m = danhSach.length ? danhSach[st.current.viTri] : null;
     if (m) { setMau(m); setPha('giasu'); play({ text: m.text, voice: giongMau, toc: 0.9 }, () => batNghe()); }
   };
@@ -274,11 +321,17 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en' }: {
 
         <aside className={s.goiBen}>
           <div className={s.goiMau}>
-            <div className={s.goiNhanMuc}>Câu mẫu — đọc theo</div>
+            <div className={s.goiNhanMuc}>{luyenTu ? '🔍 Luyện riêng từ này — đạt rồi ghép lại cả câu' : 'Câu mẫu — đọc theo'}</div>
             {mau ? (
               <>
                 <div className={s.goiMauChu} lang={ngonNgu === 'en' ? undefined : ngonNgu}><Inline text={mau.text} /></div>
                 {mau.ipa && <div className={s.goiIpa}>/{mau.ipa}/</div>}
+                {luyenTu && <div className={s.goiGoc}>Câu gốc: <Inline text={luyenTu.goc} /></div>}
+                {amHayVap.length > 0 && (
+                  <div className={s.goiHayVap} title="Âm bạn đọc chưa chuẩn nhiều lần trong buổi này — CuongMini sẽ giảng riêng khi một âm lặp lại 3 lần">
+                    Âm hay vấp: {amHayVap.map(([a, n]) => <span key={a}>/{a}/ ×{n}</span>)}
+                  </div>
+                )}
               </>
             ) : <div className={s.goiMauTrong}>Bấm nút micro để CuongMini bắt đầu buổi luyện.</div>}
           </div>

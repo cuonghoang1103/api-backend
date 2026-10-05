@@ -19,6 +19,9 @@ import { VideoBai } from './VideoBai';
 import { docTruyVan, ghiTruyVan, laAppDesktop } from './moiTruong';
 import dynamic from 'next/dynamic';
 const GoiGiaSu = dynamic(() => import('./GoiGiaSu'), { ssr: false });
+// Màn chào mỗi ngày (05/10/2026) — tải chậm: chỉ khi hôm nay chưa chào khoá này.
+const ChaoBuoiSang = dynamic(() => import('./ChaoBuoiSang'), { ssr: false });
+import { daChaoHomNay } from './chaoNgay';
 import s from './course.module.css';
 
 /** Trang đang mở: một bài, tổng quan một buổi, hoặc kế hoạch & tiến độ. */
@@ -198,9 +201,26 @@ export default function CoursePage({ course, lessonExtra }: {
   const ctx = useMemo(() => ({ ask, report: tien.report }), [ask, tien.report]);
 
   const doneDays = DAYS.filter((d) => dayDone(d, tien.done)).length;
+  // Tiến độ theo BÀI cho chip trên cùng — đánh dấu một bài là thấy nhích ngay (05/10/2026).
+  const baiCo = DAYS.flatMap((d) => d.lessons).filter(isReady);
+  const baiXong = baiCo.filter((l) => tien.done.includes(l.id)).length;
+  const ptKhoa = baiCo.length ? Math.round((baiXong / baiCo.length) * 100) : 0;
 
   // 📞 Luyện phát âm cùng gia sư: câu mẫu = khối luyện phát âm của bài đang mở (không có thì máy chủ dùng ngân hàng chung).
   const [goiMo, setGoiMo] = useState(false);
+  /* ☀️ Màn chào mỗi ngày: lần đầu mở khoá này trong ngày (từ 5h sáng), đã đăng nhập, tiến độ đã đồng bộ. */
+  const [chaoMo, setChaoMo] = useState(false);
+  useEffect(() => {
+    if (!isAuthenticated || !tien.synced || chaoMo) return;
+    if (!daChaoHomNay(course.stage)) setChaoMo(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, tien.synced, course.stage]);
+  const baiTiep = useMemo(() => {
+    const l = course.readyLessons.find((x) => x.kind !== 'intro' && !tien.done.includes(x.id));
+    if (!l) return null;
+    const d = course.dayOf(l.id);
+    return { id: l.id, title: l.title, ngay: d ? course.dayName(d.n) : '' };
+  }, [course, tien.done]);
   const danhSachGoi = useMemo(
     () => (full?.blocks ?? []).flatMap((b) => (b.t === 'phatam' ? b.items.map((x) => ({ text: x.text, ipa: x.ipa })) : [])),
     [full],
@@ -252,7 +272,8 @@ export default function CoursePage({ course, lessonExtra }: {
             </Link>
             <span className={s.barTitle}>{course.title}</span>
             <button type="button" className={`${s.iconBtn} ${s.barProgress}`} onClick={() => go({ t: 'plan' })}>
-              <CalendarDays size={15} /> {doneDays}/{DAYS.length}<span className={s.btnLabel}>&nbsp;buổi</span>
+              <CalendarDays size={15} /> {baiXong}/{baiCo.length}<span className={s.btnLabel}>&nbsp;bài · {doneDays}/{DAYS.length} buổi</span>
+              <span className={s.chipVach} aria-hidden><i style={{ width: `${ptKhoa}%` }} /></span>
             </button>
             {isJa && (
               <button type="button" className={s.iconBtn} onClick={() => setFuri(!furi)} aria-pressed={furi} title={isZh ? 'Bật/tắt pinyin trên chữ' : 'Bật/tắt furigana'}>
@@ -308,7 +329,7 @@ export default function CoursePage({ course, lessonExtra }: {
                     style={{ paddingTop: 6 }}
                     onClick={() => go({ t: 'day', n: d.n })}
                   >
-                    <span>{course.dayName(d.n)}{isDone ? ' ✓' : ''}</span>
+                    <span>{course.dayName(d.n)}{isDone ? ' ✓' : ''}{!isDone && ready ? <small className={s.tocDem}> {d.lessons.filter((l) => tien.done.includes(l.id)).length}/{d.lessons.filter(isReady).length}</small> : null}</span>
                     <span className={s.soon}>{ready ? 'tổng quan →' : 'sắp có'}</span>
                   </button>
                   {d.lessons.map((l) => tocItem(l))}
@@ -429,8 +450,22 @@ export default function CoursePage({ course, lessonExtra }: {
         {/* Thẻ chữ Hán: chạm chữ Hán bất kỳ trong bài (chỉ khoá có dữ liệu chữ Hán). */}
         {course.kanji && <KanjiHost course={course} />}
 
+        {chaoMo && (
+          <ChaoBuoiSang
+            stage={course.stage}
+            nn={course.lang}
+            voice={course.voice}
+            tenKhoa={course.title}
+            xong={baiXong}
+            tong={baiCo.length}
+            baiTiep={baiTiep}
+            daHoc={tien.done.slice(-3).reverse().map((id) => course.allLessons.find((l) => l.id === id)?.title).filter((t): t is string => !!t)}
+            onDong={() => setChaoMo(false)}
+            onMoBai={(id) => go({ t: 'lesson', id })}
+          />
+        )}
         {goiMo && (
-          <GoiGiaSu ngonNgu={course.lang} danhSach={danhSachGoi} chuDe={lesson ? lesson.title : 'những âm người Việt hay đọc sai'} onClose={() => { stopAudio(); setGoiMo(false); }} />
+          <GoiGiaSu ngonNgu={course.lang} stage={course.stage} danhSach={danhSachGoi} chuDe={lesson ? lesson.title : 'những âm người Việt hay đọc sai'} onClose={() => { stopAudio(); setGoiMo(false); }} />
         )}
 
         {sheetOpen && (

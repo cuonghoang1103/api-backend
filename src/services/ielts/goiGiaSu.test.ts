@@ -4,7 +4,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { hieuChinh, nhanXet } from './goiGiaSu.service.js';
+import { hieuChinh, nhanXet, huongDan, tachAm } from './goiGiaSu.service.js';
 import type { KetQuaPhatAm } from './phatAm.service.js';
 
 const w = (tu: string, diem: number, am: number[], loi = 'None') => ({ tu, diem, loi, am: am.map((d) => ({ am: '', diem: d })) });
@@ -36,4 +36,16 @@ test('khen tiến bộ khi điểm tăng ≥ 5 so với lần trước', () => {
   const k: KetQuaPhatAm = { diem: { chinhXac: 70, troiChay: 90, dayDu: 100, tong: 72 }, ngheRa: '', tu: [w('think', 72, [80, 70, 75, 72])] };
   assert.match(nhanXet(k, { text: 'think' }, 2, 60).noi, /Từ 60 lên 72 điểm/);
   assert.doesNotMatch(nhanXet(k, { text: 'think' }, 2, 70).noi, /lên/);
+});
+
+test('hướng dẫn sâu: đuôi dz của "reads" (05/10/2026 — người dùng thật đọc mãi vẫn sai)', () => {
+  const y = { tu: 'reads', am: 'z', diem: 12, cuoi: true, ipa: 'riːdz', amTu: tachAm('riːdz'), diemTu: 40 };
+  const loi = huongDan(y);
+  assert.match(loi, /Đuôi dz/);
+  assert.match(loi, /zzz/);
+});
+
+test('hướng dẫn sâu: âm cuối đơn lẻ có cách đọc kiểu Việt; âm giữa từ dùng mẹo khẩu hình', () => {
+  assert.match(huongDan({ tu: 'need', am: 'd', diem: 20, cuoi: true, ipa: 'niːd', amTu: tachAm('niːd'), diemTu: 50 }), /nuốt âm cuối.*đờ nhẹ/);
+  assert.match(huongDan({ tu: 'think', am: 'θ', diem: 20, cuoi: false, ipa: 'θɪŋk', amTu: tachAm('θɪŋk'), diemTu: 50 }), /hai hàm răng/);
 });

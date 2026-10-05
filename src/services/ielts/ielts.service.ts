@@ -175,8 +175,44 @@ export async function ghiTienDo(
       update: { xong, diem, ghiChu: m.ghiChu?.slice(0, 2000) ?? null },
     });
     ghi += 1;
+    // Học bài / làm bài tập = một ngày có học (chuỗi ngày + màn chào). Lưu kế hoạch thì không tính.
+    if (laSach && (kind === 'bai' || kind === 'baitap')) await ghiNgayHoc(userId, stage);
   }
   return { ghi };
+}
+
+/* ── Chuỗi ngày học (05/10/2026) ───────────────────────────────────────── */
+const ngayVN = (d = new Date()) => new Date(d.getTime() + 7 * 3600_000).toISOString().slice(0, 10);
+const luiNgay = (day: string, n: number) => { const d = new Date(`${day}T00:00:00Z`); d.setUTCDate(d.getUTCDate() - n); return d.toISOString().slice(0, 10); };
+
+export async function ghiNgayHoc(userId: number, stage: string) {
+  if (!laMaSach(stage)) throw new BadRequestError(`Khoá không hợp lệ: ${stage}`);
+  const day = ngayVN();
+  await prisma.hocNgay.upsert({
+    where: { uk_hoc_ngay: { userId, stage, day } },
+    create: { userId, stage, day },
+    update: { soViec: { increment: 1 } },
+  });
+  return { day };
+}
+
+/** Chuỗi ngày học liên tiếp của một khoá (hôm nay chưa học thì đếm tới hôm qua) + 14 ngày gần nhất. */
+export async function layChuoi(userId: number, stage: string) {
+  if (!laMaSach(stage)) throw new BadRequestError(`Khoá không hợp lệ: ${stage}`);
+  const homNay = ngayVN();
+  const ds = await prisma.hocNgay.findMany({ where: { userId, stage, day: { gte: luiNgay(homNay, 400) } }, select: { day: true, soViec: true } });
+  const co = new Map(ds.map((d) => [d.day, d.soViec]));
+  let d = co.has(homNay) ? homNay : luiNgay(homNay, 1);
+  let chuoi = 0;
+  while (co.has(d)) { chuoi++; d = luiNgay(d, 1); }
+  // Chuỗi dài nhất (để khen "kỷ lục mới").
+  const sx = [...co.keys()].sort();
+  let dai = 0, cur = 0, truoc = '';
+  for (const x of sx) { cur = truoc && luiNgay(x, 1) === truoc ? cur + 1 : 1; dai = Math.max(dai, cur); truoc = x; }
+  return {
+    homNay, chuoi, kyLuc: dai, tongNgay: co.size, daHocHomNay: co.has(homNay),
+    ngay: Array.from({ length: 14 }, (_, i) => { const x = luiNgay(homNay, 13 - i); return { day: x, viec: co.get(x) ?? 0 }; }),
+  };
 }
 
 export async function xoaTienDo(userId: number, stage: string, kind: string, muc: string) {

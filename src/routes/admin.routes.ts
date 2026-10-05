@@ -468,6 +468,10 @@ router.post('/users', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res:
       data: {
         username, email, fullName,
         password: hashedPassword,
+        // Admin tạo tay = admin đứng ra bảo đảm ⇒ coi như đã xác thực email. Không có dòng này
+        // thì tài khoản mới không đăng nhập được (EMAIL_NOT_VERIFIED) — bắt được 06/10/2026 khi
+        // tạo tài khoản bot cho CT Work. Truyền `emailVerified: false` nếu muốn bắt xác thực.
+        emailVerified: req.body?.emailVerified !== false,
         roles: { create: { role: { connect: { name: normalizedRoleName } } } },
       },
       select: {

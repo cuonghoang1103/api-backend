@@ -207,8 +207,12 @@ export async function play(clips: Clip | Clip[], onEnd?: () => void, opt?: { onC
   moKhoa();
   const my = run;
   curOnEnd = onEnd ?? null;
-  // Bỏ markup trước khi đọc: {漢字|かな} → 漢字, **đậm** → đậm.
-  const clean = (t: string) => t.replace(/\{([^|}]+)\|[^}]+\}/g, '$1').replace(/\*\*|==|~~/g, '');
+  // Bỏ markup trước khi đọc: {漢字|かな} → 漢字, **đậm** → đậm. Cụm có CHỮ SỐ ({1日|ついたち},
+  // {20日|はつか}, {7時|しちじ}) thì đọc theo furigana — máy đọc "1日" dễ ra いちにち (05/10/2026).
+  // Chỉ khi furigana là kana: khoá CH dùng cùng cú pháp cho pinyin, không đọc chữ Latin.
+  const clean = (t: string) => t
+    .replace(/\{([^|}]+)\|([^}]+)\}/g, (_m, goc: string, doc: string) => (/[0-9０-９]/.test(goc) && /^[\u3040-\u30ffー]+$/.test(doc) ? doc : goc))
+    .replace(/\*\*|==|~~/g, '');
   const list = (Array.isArray(clips) ? clips : [clips]).map((c) => ({ ...c, text: clean(c.text) }));
   // Hỏi máy chủ ngay cho câu đầu và hai câu kế — không đợi tới lượt.
   list.slice(0, 3).forEach(taiTruoc);

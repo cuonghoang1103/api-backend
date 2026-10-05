@@ -683,6 +683,32 @@ router.post(
 );
 
 // ════════════════════════════════════════════════════════════════
+// PATCH /api/v1/music/tracks/:id/language — gán loại Nhạc Việt / Anh / Trung (05/10/2026)
+// body { language: 'vi' | 'en' | 'zh' | null } — null = trả về "tự đoán theo tên".
+// Mọi tài khoản đã đăng nhập: chỉ là NHÃN phân loại của thư viện chung, không xoá/sửa gì
+// khác (giống thêm bài vào thư viện) — và đổi lại được bất cứ lúc nào.
+// ════════════════════════════════════════════════════════════════
+router.patch(
+  '/tracks/:id/language',
+  authenticate,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id) || id <= 0) throw new AppError('Invalid track ID', 400, 'INVALID_ID');
+      const raw = req.body?.language;
+      if (raw !== null && raw !== 'vi' && raw !== 'en' && raw !== 'zh') {
+        throw new AppError('language phải là vi, en, zh hoặc null', 400, 'INVALID_LANGUAGE');
+      }
+      await musicService.getTrackById(id, true);
+      await musicService.setTrackLanguage(id, raw);
+      res.json({ success: true, message: 'Đã đổi loại nhạc', data: { id, language: raw } });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
 // DELETE /api/v1/music/tracks/:id/audio — gỡ bản âm thanh trên R2 (05/10/2026)
 // ────────────────────────────────────────────────────────────────
 // Ai RÚT bài đó (khoá R2 mang đoạn `u<userId>`) thì gỡ được; admin gỡ được bản

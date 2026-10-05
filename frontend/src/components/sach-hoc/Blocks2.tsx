@@ -43,13 +43,19 @@ const CAST: Record<Role, { voice: Voice; skin: string; hair: string; shirt: stri
  * Giọng của một vai theo NGÔN NGỮ của khoá: khoá tiếng Nhật đọc bằng giọng
  * Nhật (vai nữ → ja-nu, vai nam → ja-nam), khoá tiếng Anh dùng giọng của vai.
  */
+/** Khoá tiếng Nhật ('ja') / tiếng Trung ('zh') — null với khoá tiếng Anh. 05/10/2026: thêm zh (khoá CH). */
+function useNgoaiNgu(): 'ja' | 'zh' | null {
+  const v = useCourse()?.voice ?? '';
+  return v.startsWith('ja') ? 'ja' : v.startsWith('zh') ? 'zh' : null;
+}
+
 function useVoiceFor() {
-  const ja = useCourse()?.voice.startsWith('ja');
+  const nn = useNgoaiNgu();
   // "Cô giáo" / "Cô" là giáo viên nữ dù vai là examiner — giọng theo tên hiển thị.
   return (role: Role, who?: string): Voice => {
-    if (!ja) return CAST[role].voice;
-    if (who && /^(Cô|cô)/.test(who)) return 'ja-nu';
-    return role === 'examiner' || role === 'b' ? 'ja-nam' : 'ja-nu';
+    if (!nn) return CAST[role].voice;
+    if (who && /^(Cô|cô|李老师)/.test(who)) return `${nn}-nu`;
+    return role === 'examiner' || role === 'b' ? `${nn}-nam` : `${nn}-nu`;
   };
 }
 
@@ -113,7 +119,7 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
 
   // Bấm phát lúc đang phát = phát LẠI TỪ ĐẦU (người học muốn nghe lại); dừng có nút riêng.
   const start = () => {
-    const bai = b.lines.map((l) => ({ text: l.text, voice: l.voice ?? 'uk-nu' }));
+    const bai = b.lines.map((l) => ({ text: l.text, voice: l.voice }));
     const { mo, ket } = b.dan ? dungLoiDan({ ...b.dan, tieuDe: b.title }) : { mo: [], ket: [] };
     const all: Clip[] = [...mo, ...bai, ...ket];
     play(all, () => { setPlaying(false); setDoan(null); setCho(null); }, {
@@ -166,7 +172,7 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
                 type="button"
                 className={s.speak}
                 aria-label="Nghe câu này"
-                onClick={() => { play({ text: l.text, voice: l.voice ?? 'uk-nu' }, () => setLine(null)); setLine(i); setPlaying(false); setDoan(null); }}
+                onClick={() => { play({ text: l.text, voice: l.voice }, () => setLine(null)); setLine(i); setPlaying(false); setDoan(null); }}
               >
                 <Volume2 size={14} />
               </button>
@@ -360,8 +366,9 @@ function Chart({ b }: { b: Extract<Block, { t: 'chart' }> }) {
 
 function SpeakQ({ q, part }: { q: string; part: string }) {
   // Máy chấm nói hiện chỉ hiểu tiếng Anh (Whisper 'en' + tiêu chí IELTS) — khoá
-  // tiếng Nhật chỉ ghi âm & nghe lại, không gửi đi chấm sai ngôn ngữ.
-  const ja = useCourse()?.voice.startsWith('ja');
+  // tiếng Nhật/Trung chỉ ghi âm & nghe lại, không gửi đi chấm sai ngôn ngữ.
+  const nn = useNgoaiNgu();
+  const ja = !!nn;
   const [blob, setBlob] = useState<Blob | null>(null);
   const [url, setUrl] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -400,7 +407,7 @@ function SpeakQ({ q, part }: { q: string; part: string }) {
     <div className={s.speakQ}>
       <div className={s.speakRow}>
         <Avatar role="examiner" size={34} />
-        <button type="button" className={s.dText} style={{ flex: 1 }} onClick={() => play({ text: q, voice: ja ? 'ja-nam' : 'uk-nam' })}>
+        <button type="button" className={s.dText} style={{ flex: 1 }} onClick={() => play({ text: q, voice: nn ? `${nn}-nam` : 'uk-nam' })}>
           <Volume2 size={14} className="inline" style={{ marginRight: 6, opacity: 0.6 }} />{q}
         </button>
       </div>
@@ -432,7 +439,7 @@ function SpeakQ({ q, part }: { q: string; part: string }) {
 }
 
 function Speak({ b }: { b: Extract<Block, { t: 'speak' }> }) {
-  const ja = useCourse()?.voice.startsWith('ja');
+  const ja = !!useNgoaiNgu();
   const [k, setK] = useState(0);
   return (
     <div className={s.quiz} key={k}>

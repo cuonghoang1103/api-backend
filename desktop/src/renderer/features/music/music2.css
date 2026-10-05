@@ -508,7 +508,7 @@
 .mz-bxh-video-ten { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; font-size: 12.5px; color: var(--ct-text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mz-bxh-video-ten strong { color: var(--ct-text); }
 .mz-bxh-ds { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 2px 18px; }
-.mz-bxh-dong { display: grid; grid-template-columns: 34px auto minmax(0, 1fr) 24px; align-items: center; gap: 12px; padding: 6px 10px; border-radius: 10px; }
+.mz-bxh-dong { display: grid; grid-template-columns: 34px auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 6px 10px; border-radius: 10px; }
 .mz-bxh-dong:hover { background: var(--ct-hover); }
 .mz-bxh-dong[data-dang='true'] { background: color-mix(in srgb, var(--mz-a) 12%, transparent); }
 .mz-bxh-dong:hover .mz-dong-bia-phu { opacity: 1; }
@@ -539,3 +539,16 @@
 .mz-soan-ds li[data-trang='qua'] { color: var(--ct-text-muted); }
 .mz-soan-ds li[data-trang='dang'] { color: var(--ct-text); background: color-mix(in srgb, var(--mz-a) 14%, transparent); font-weight: 600; }
 .mz-loi-do { color: var(--ct-err); }
+
+/* Lọc Thư viện theo loại Nhạc Việt / Anh / Trung (05/10/2026) — nằm ngay dưới tiêu đề. */
+.mz-loai-loc { padding: 0; flex-wrap: wrap; }
+.mz-loai-loc button small { margin-left: 4px; font-size: 11px; opacity: 0.65; font-variant-numeric: tabular-nums; }
+.mz-menu-phu { margin-left: auto; padding-left: 10px; font-size: 11.5px; color: var(--ct-text-muted); white-space: nowrap; }
+/* Nút thao tác của từng bài trong Bảng xếp hạng: Nghe trong app · Tải về máy · Xem video. */
+.mz-bxh-nut { display: flex; gap: 4px; align-items: center; }
+.mz-bxh-nut button { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; color: var(--ct-text-muted); background: transparent; transition: background 0.15s, color 0.15s; }
+.mz-bxh-nut button:hover:not(:disabled) { color: var(--ct-text); background: var(--ct-hover); }
+.mz-bxh-nut button[data-chinh] { color: #fff; background: linear-gradient(135deg, #ec4899, #8b5cf6); }
+.mz-bxh-nut button[data-chinh]:hover:not(:disabled) { color: #fff; filter: brightness(1.08); }
+.mz-bxh-nut button:disabled { opacity: 0.45; }
+.mz-bxh-the .mz-bxh-nut { justify-content: center; margin-top: 6px; }

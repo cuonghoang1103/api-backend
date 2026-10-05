@@ -19,12 +19,16 @@ với người học: dạy ĐÚNG và ĐỦ những gì tiêu đề ghi.
   **cô Lý** (李老师 Lǐ lǎoshī, giáo viên), **Anna** (安娜 Ānnà, bạn người Nga),
   **Đại Vĩ** (大伟 Dàwěi, bạn người Mỹ), **bà chủ quán** (老板 lǎobǎn).
   Bối cảnh: Lan học ở một trường đại học ở Bắc Kinh, ở ký túc xá.
+  **Tên hiển thị & vai cố định** (giọng/hình nhất quán, giống Bài 0–1): `兰兰 Lan` nữ `a` ·
+  `王明 Vương Minh` nam `b` · `李老师 Cô Lý` nữ `c` · `安娜 Anna` nữ `c` · `大伟 Đại Vĩ` nam `b` ·
+  `老板 Bà chủ quầy` nữ `c`. Bài nghe: nữ `zh-nu`, nam `zh-nam`. Câu hỏi khối `speak` viết
+  chữ Hán trần (đặt khối `examples` có pinyin ngay trên). Quiz pinyin nhận cả dạng số (ni3 hao3).
 - **Pinyin CÓ DẤU THANH ở MỌI câu tiếng Trung** (không dùng số 1–4; thanh nhẹ không
   dấu; tách theo từ: `Wǒ shì Yuènán rén.`). Trường `ro` = pinyin cả câu:
   vocab → `ipa` = pinyin của từ, `exRo` = pinyin câu ví dụ; `examples`/`patterns`/
   `dialogue`/`listen`/`build`/`readkanji` → `ro`.
 - **Chữ có pinyin bên trên**: viết `{汉字|hànzì}` — mỗi TỪ một cặp ngoặc
-  (`{学生|xuéshēng}`, `{你好|nǐ hǎo}`), không lồng ngoặc. Trang có nút bật/tắt. Dấu câu
+  (`{学生|xuésheng}`, `{你好|nǐ hǎo}`), không lồng ngoặc. Trang có nút bật/tắt. Dấu câu
   và chữ Latin để ngoài ngoặc. Ghi pinyin theo cách ĐỌC THỰC TẾ của từ điển (不 bù/bú,
   一 yī/yí/yì: ghi theo biến điệu trong câu, giải thích biến điệu ở Bài 0).
 - **Âm Hán Việt** là lợi thế lớn của người Việt: ghi âm Hán Việt (IN HOA) trong `more`

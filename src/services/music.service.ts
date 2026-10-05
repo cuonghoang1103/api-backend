@@ -723,8 +723,17 @@ export class MusicService {
   // creates.
   async getTrackByAudioUrl(audioUrl: string): Promise<unknown> {
     if (!audioUrl) return null;
+    // 05/10/2026: bài YouTube đã rút về R2 thì `audioUrl` = null, link gốc nằm ở `publicId`
+    // (markTrackDownloaded). Chỉ so `audioUrl` là thêm lại từ Bảng xếp hạng / ô tìm sẽ ra BẢN TRÙNG.
+    const id = /(?:v=|youtu\.be\/|shorts\/)([\w-]{11})/.exec(audioUrl)?.[1];
     return prisma.musicTrack.findFirst({
-      where: { audioUrl, active: true },
+      where: {
+        active: true,
+        OR: id
+          ? [{ audioUrl: { contains: id } }, { publicId: { contains: id } }]
+          : [{ audioUrl }, { publicId: audioUrl }],
+      },
+      orderBy: { id: 'asc' },
     });
   }
 
@@ -886,6 +895,11 @@ export class MusicService {
       },
     });
     return this.getTrackById(id, true);
+  }
+
+  // ─── Loại theo ngôn ngữ (Nhạc Việt / Anh / Trung) ─────────
+  async setTrackLanguage(id: number, language: 'vi' | 'en' | 'zh' | null): Promise<void> {
+    await prisma.musicTrack.update({ where: { id }, data: { language } });
   }
 
   // ─── Gỡ bản âm thanh trên R2 (05/10/2026) ────────────────

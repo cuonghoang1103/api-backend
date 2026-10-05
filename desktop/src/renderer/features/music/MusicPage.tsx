@@ -29,14 +29,14 @@ import {
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { useDich } from '../../i18n';
-import { BangBai, type HanhDongBai } from './BangBai';
+import { BangBai, TEN_LOAI, type HanhDongBai } from './BangBai';
 import { BangXepHang } from './BangXepHang';
 import { BenPhai, type TheBenPhai } from './BenPhai';
 import { AnhBia, BiaGhep, doDaiDanhSach, RaNgoai } from './dungChung';
 import { datMucKhongGian, tatKhongGian } from './khongGian';
 import { layBaiDaThich, layLichSu, layNgheNhieu, xoaLichSu, type BaiNgheNhieu } from './musicApi';
 import { NowPlaying } from './NowPlaying';
-import { clock, fold, formatBytes, laBaiYouTube, shuffled, useMusicPlayer, type Track } from './player';
+import { clock, fold, formatBytes, laBaiYouTube, loaiNhac, shuffled, useMusicPlayer, type LoaiNhac, type Track } from './player';
 import {
   boBaiKhoiPlaylist, layDanhSachPlaylist, layPlaylist, taoPlaylist, themBaiVaoPlaylist,
   xoaPlaylist, type Playlist,
@@ -48,7 +48,7 @@ import { TaiNhacLen } from './TaiNhacLen';
 import './music2.css';
 
 /** Một kết quả tìm trên YouTube — hình dạng của `GET /music/youtube-search`. */
-interface KetQuaYouTube {
+export interface KetQuaYouTube {
   id: string;
   videoId: string;
   title: string;
@@ -85,6 +85,8 @@ export function MusicPage() {
   const [muc, setMuc] = useState<Muc>('chu');
   const [query, setQuery] = useState('');
   const [sapXep, setSapXep] = useState<SapXep>('macdinh');
+  /** Lọc Thư viện theo loại Nhạc Việt / Anh / Trung (05/10/2026). Mỗi lần mở trang về "Tất cả". */
+  const [loaiLoc, setLoaiLoc] = useState<LoaiNhac | 'all'>('all');
   const [benThe, setBenThe] = useState<TheBenPhai>('hang');
   const [benAn, setBenAn] = useState(() => { try { return localStorage.getItem(KHOA_BEN) === '1'; } catch { return false; } });
   const [thuGian, setThuGian] = useState(false);
@@ -279,7 +281,12 @@ export function MusicPage() {
    * (`POST /tracks/remote`, `audioUrl` là link watch?v=…), rồi rút âm thanh —
    * app phát bằng <audio>, mà `/stream/:id` của dòng còn trỏ YouTube trả 400.
    */
-  const themTuYouTube = async (r: KetQuaYouTube) => {
+  /**
+   * `tuy` (05/10/2026, Bảng xếp hạng): `phat` = phát ngay sau khi lưu (mặc định có),
+   * `taiVe` = tải luôn file về máy (nút ⬇). Bài đã có trong thư viện thì máy chủ trả
+   * đúng dòng cũ (so theo id video) — không thêm trùng, không rút lại.
+   */
+  const themTuYouTube = async (r: KetQuaYouTube, tuy: { phat?: boolean; taiVe?: boolean } = {}) => {
     if (!api || dangThem) return;
     setDangThem(r.videoId);
     setError(null);
@@ -301,7 +308,13 @@ export function MusicPage() {
       setTienTrinhThem(dich('Đang làm mới danh sách…'));
       await loadTracks(true);
       setQuery('');
-      playTrack({ id: tao.id, title: r.title, artist: r.artist, coverImage: r.thumbnail, durationSeconds: r.durationSeconds ?? null });
+      const bai = { id: tao.id, title: r.title, artist: r.artist, coverImage: r.thumbnail, durationSeconds: r.durationSeconds ?? null };
+      if (tuy.taiVe) {
+        setTienTrinhThem(dich('Đã lưu lên máy chủ — đang tải về máy…'));
+        await download({ ...bai, audioUrl: null });
+        bao(dichP('Đã thêm “{ten}” vào thư viện và tải về máy.', { ten: r.title }));
+      }
+      if (tuy.phat ?? !tuy.taiVe) playTrack(bai);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : String(caught));
     } finally {
@@ -342,14 +355,29 @@ export function MusicPage() {
   };
 
   // ─── Danh sách theo mục ─────────────────────────────────────
+  const demLoai = useMemo(() => {
+    const d: Record<LoaiNhac, number> = { vi: 0, en: 0, zh: 0 };
+    for (const t of tracks) { const l = loaiNhac(t); if (l) d[l]++; }
+    return d;
+  }, [tracks]);
   const thuVien = useMemo(() => {
-    const ds = [...tracks];
+    const ds = loaiLoc === 'all' ? [...tracks] : tracks.filter((t) => loaiNhac(t) === loaiLoc);
     const so = (a: string, b: string) => a.localeCompare(b, 'vi', { sensitivity: 'base' });
     if (sapXep === 'ten') ds.sort((a, b) => so(a.title, b.title));
     else if (sapXep === 'nghesi') ds.sort((a, b) => so(a.artist ?? '', b.artist ?? ''));
     else if (sapXep === 'dai') ds.sort((a, b) => (b.durationSeconds ?? 0) - (a.durationSeconds ?? 0));
     return ds;
-  }, [tracks, sapXep]);
+  }, [tracks, sapXep, loaiLoc]);
+
+  /** Gán loại cho một bài — máy chủ lưu nhãn cho thư viện chung; null = trả về tự đoán. */
+  const doiLoai = useCallback(async (t: Track, loai: LoaiNhac | null) => {
+    if (!api) return;
+    try {
+      await api.request(`/api/v1/music/tracks/${t.id}/language`, { method: 'PATCH', body: { language: loai } });
+      await loadTracks(true);
+      bao(loai ? dichP('Đã chuyển “{ten}” sang {loai}.', { ten: t.title, loai: dich(TEN_LOAI[loai]) }) : dich('Đã bỏ nhãn — app tự đoán loại theo tên bài.'));
+    } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+  }, [api, loadTracks, bao, dich, dichP, setError]);
 
   /** Dán link YouTube vào ô tìm (04/10) — máy chủ trả đúng video đó; ở đây chỉ để đổi nhãn
    *  và tìm xem bài ấy đã nằm trong thư viện chưa (dòng chưa rút còn giữ link gốc). */
@@ -399,6 +427,7 @@ export function MusicPage() {
     onPhat: (t) => playTrack(t, dsDangXem),
     onRut: (t) => void rutRoiPhat(t),
     onRutVaTai: (t) => void rutVaTai(t),
+    onDoiLoai: (t, l) => void doiLoai(t, l),
     onXoaBanTai: (t) => void xoaBanTai(t),
     dangRut: dangThem !== null ? Number(dangThem) : null,
     playlists,
@@ -695,14 +724,22 @@ export function MusicPage() {
         {!tim && muc === 'thu-vien' && (
           <>
             <DauMuc
-              bia={<BiaGhep tracks={tracks} />}
-              nhan={dich('Thư viện của bạn')}
-              ten={dichP('{n} bài hát', { n: tracks.length })}
-              phu={doDaiDanhSach(tracks)}
+              bia={<BiaGhep tracks={thuVien.length ? thuVien : tracks} />}
+              nhan={loaiLoc === 'all' ? dich('Thư viện của bạn') : dich(TEN_LOAI[loaiLoc])}
+              ten={dichP('{n} bài hát', { n: thuVien.length })}
+              phu={doDaiDanhSach(thuVien)}
               onPhat={() => phatDs(thuVien)}
               onTron={() => phatDs(thuVien, true)}
-              coBai={tracks.length > 0}
+              coBai={thuVien.length > 0}
             >
+              <div className="mz-ben-the mz-loai-loc" role="tablist" aria-label={dich('Loại nhạc')}>
+                <button type="button" role="tab" data-on={loaiLoc === 'all'} aria-selected={loaiLoc === 'all'} onClick={() => setLoaiLoc('all')}>{dich('Tất cả')} <small>{tracks.length}</small></button>
+                {(['vi', 'en', 'zh'] as const).map((l) => (
+                  <button key={l} type="button" role="tab" data-on={loaiLoc === l} aria-selected={loaiLoc === l} onClick={() => setLoaiLoc(l)}>
+                    {dich(TEN_LOAI[l])} <small>{demLoai[l]}</small>
+                  </button>
+                ))}
+              </div>
               <label className="mz-chon">
                 {dich('Sắp xếp')}
                 <select value={sapXep} onChange={(e) => setSapXep(e.target.value as SapXep)}>
@@ -819,7 +856,7 @@ export function MusicPage() {
         )}
 
         {/* ─── Bảng xếp hạng ─── */}
-        {!tim && muc === 'bxh' && <BangXepHang />}
+        {!tim && muc === 'bxh' && <BangXepHang themYT={themTuYouTube} dangThem={dangThem} tienTrinh={tienTrinhThem} />}
 
         {/* ─── Remix ─── */}
         {!tim && muc === 'remix' && (

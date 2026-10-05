@@ -2058,6 +2058,9 @@ model MusicTrack {
   // normal library or the "Tất cả" listing). Filtered server-side in
   // musicService.getTracks so the two libraries stay fully separated.
   category        String    @default("NORMAL") @db.VarChar(16)
+  // Loại theo NGÔN NGỮ cho bộ lọc Nhạc Việt / Anh / Trung (05/10/2026): "vi" | "en" | "zh".
+  // Trống = chưa ai gán — app tự đoán theo tên bài (chữ Hán → zh, có dấu tiếng Việt → vi).
+  language        String?   @map("language") @db.VarChar(8)
   active          Boolean   @default(true)
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime? @updatedAt @map("updated_at")

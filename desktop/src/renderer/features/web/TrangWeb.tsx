@@ -26,7 +26,7 @@ import { MoTrenWeb } from '../../components/MoTrenWeb';
 import { Component, Suspense, lazy, useEffect, useMemo, useState,
   type ComponentType, type ReactNode } from 'react';
 import { Loader2 } from 'lucide-react';
-import { useAuthStore } from '@/store/authStore';
+import { napPhienWeb } from './napPhienWeb';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { configureWebApi } from '../../shims/web-api-adapter';
@@ -67,22 +67,7 @@ export function useCauNoiWeb(): boolean {
        gọi là một lần ĐĂNG NHẬP và phát tiếng "login" — mà hook này chạy ở mỗi trang
        web được mở ⇒ chuyển trang nào cũng kêu "Yahooo" (người dùng: "hơi điếc tai").
        Token không cần nạp lại: axios của web đọc nó qua `getToken` ở trên. */
-    const daCo = (useAuthStore.getState() as unknown as { isAuthenticated?: boolean; user?: { id?: number } | null });
-    if (daCo.isAuthenticated && daCo.user?.id === user.userId) { datXong(true); return; }
-    useAuthStore.getState().setAuth({
-      userId: user.userId,
-      username: user.username,
-      email: user.email,
-      fullName: user.fullName ?? '',
-      avatarUrl: user.avatarUrl ?? '',
-      roles: user.roles,
-      role: user.role,
-      roleVersion: 0,
-      token: api.getToken() ?? '',
-      // Rỗng CÓ CHỦ ĐÍCH: backend không có endpoint nhận refresh token, điền
-      // vào chỉ tạo ảo giác là nó dùng được.
-      refreshToken: '',
-    } as never);
+    napPhienWeb(api, user);
     datXong(true);
   }, [api, user]);
 

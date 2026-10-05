@@ -19,6 +19,9 @@ hứa với người học: bài phải dạy ĐÚNG và ĐỦ các mẫu ghi tr
   **Yamada-sensei** (やまだ先生, cô giáo), **Kim** (キムさん, bạn Hàn), **Mike**
   (マイクさん, bạn Mỹ), **Suzuki** (すずきさん, chủ nhà trọ/nhân viên cửa hàng…).
   Bối cảnh: Lan học ở trường tiếng ở Tokyo, ở ký túc xá, đi làm thêm ở konbini.
+  **Giới tính & vai cố định** (để giọng/hình nhất quán): Lan nữ `a` · Tanaka nam `b` ·
+  Yamada-sensei nữ `c` · Mike nam `b` · Suzuki nam `b` · Kim nữ (chủ yếu trong bài nghe/đọc).
+  Bài nghe: nữ `ja-nu`, nam `ja-nam`.
 - **Romaji ở MỌI câu tiếng Nhật** (Hepburn, tách từ: `watashi wa Ran desu`):
   vocab → `ipa` = romaji của từ, `exRo` = romaji câu ví dụ; `examples`/`patterns`
   → `ro`; `dialogue`/`listen` → `ro`; `build` → `ro`; `readkanji` → `ro`.

@@ -118,7 +118,8 @@ const looksLikeFormula = (c: string) => (/^(S|V|N|Do|Does|Did|Am|Is|Are|Was|Were
 
 function FormulaLegend({ texts }: { texts: string[] }) {
   // Chú thích S/V/O là của ngữ pháp tiếng Anh — khoá tiếng Nhật không dùng.
-  const ja = useCourse()?.voice.startsWith('ja');
+  const v0 = useCourse()?.voice ?? '';
+  const ja = v0.startsWith('ja') || v0.startsWith('zh');
   const roles = rolesIn(texts);
   if (ja || !roles.length) return null;
   return (
@@ -209,7 +210,9 @@ function Hint({ hint, grammar }: { hint?: string; grammar?: string }) {
 /* ── Bài điền / dịch ── */
 function Quiz({ b }: { b: Extract<Block, { t: 'quiz' }> }) {
   const tutor = useTutor();
-  const ja = useCourse()?.voice.startsWith('ja');
+  const v0 = useCourse()?.voice ?? '';
+  const ja = v0.startsWith('ja');
+  const zh = v0.startsWith('zh');
   const [vals, setVals] = useState<string[]>(() => b.items.map(() => ''));
   const [checked, setChecked] = useState(false);
   const [shown, setShown] = useState<Record<number, boolean>>({});
@@ -222,7 +225,7 @@ function Quiz({ b }: { b: Extract<Block, { t: 'quiz' }> }) {
       <div className={s.quizTitle}>{b.title}</div>
       <div className={s.quizSub}>
         {b.kind === 'translate'
-          ? `Gõ câu tiếng ${ja ? 'Nhật (kana hoặc kanji đều được)' : 'Anh'}. Dịch khác đáp án mẫu mà vẫn đúng? Bấm "Nhờ gia sư chấm".`
+          ? `Gõ câu tiếng ${ja ? 'Nhật (kana hoặc kanji đều được)' : zh ? 'Trung (gõ chữ Hán)' : 'Anh'}. Dịch khác đáp án mẫu mà vẫn đúng? Bấm "Nhờ gia sư chấm".`
           : 'Gõ đáp án vào ô trống rồi bấm Kiểm tra.'}
       </div>
       {b.items.map((it, i) => {
@@ -249,7 +252,7 @@ function Quiz({ b }: { b: Extract<Block, { t: 'quiz' }> }) {
                   v[i] = e.target.value;
                   setVals(v);
                 }}
-                placeholder={b.kind === 'translate' ? `Câu tiếng ${ja ? 'Nhật' : 'Anh'} của bạn…` : 'Đáp án…'}
+                placeholder={b.kind === 'translate' ? `Câu tiếng ${ja ? 'Nhật' : zh ? 'Trung' : 'Anh'} của bạn…` : 'Đáp án…'}
                 autoCapitalize="off"
                 autoCorrect="off"
                 spellCheck={false}
@@ -443,7 +446,8 @@ function Masked({ on, onShow, children, label }: { on: boolean; onShow: () => vo
   );
 }
 function Vocab({ b }: { b: Extract<Block, { t: 'vocab' }> }) {
-  const lang = useCourse()?.voice.startsWith('ja') ? 'Nhật' : 'Anh';
+  const v0 = useCourse()?.voice ?? '';
+  const lang = v0.startsWith('ja') ? 'Nhật' : v0.startsWith('zh') ? 'Trung' : 'Anh';
   const [mode, setMode] = useState<VocabMode>('all');
   const [open, setOpen] = useState<Record<number, boolean>>({});
   const pick = (m: VocabMode) => { setMode(m); setOpen({}); };

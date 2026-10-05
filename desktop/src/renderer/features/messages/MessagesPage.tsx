@@ -34,7 +34,7 @@
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import WebMessagesPage from '@/app/messages/page';
-import { useAuthStore } from '@/store/authStore';
+import { napPhienWeb } from '../web/napPhienWeb';
 import { useSession } from '../../auth/session';
 import { configureWebApi } from '../../shims/web-api-adapter';
 import { camSocketDesktop } from '../../shims/web-socket-adapter';
@@ -59,18 +59,7 @@ export function MessagesPage() {
        được, và cửa hàng ghi nhớ lỗi ấy thành "Không kết nối được chat". */
     camSocketDesktop();
 
-    useAuthStore.getState().setAuth({
-      userId: user.userId,
-      username: user.username,
-      email: user.email,
-      fullName: user.fullName ?? '',
-      avatarUrl: user.avatarUrl ?? '',
-      roles: user.roles,
-      role: user.role,
-      roleVersion: 0,
-      token: api.getToken() ?? '',
-      refreshToken: '',
-    } as never);
+    napPhienWeb(api, user);
 
     datSanSang(true);
   }, [api, user]);

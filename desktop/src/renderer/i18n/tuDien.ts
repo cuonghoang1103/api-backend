@@ -1416,7 +1416,6 @@ export const TU_DIEN: Record<string, string> = {
   // KHÔNG thấy — cùng chỗ hụt với nhãn stem. Phải tự nhớ.
   'Phạm vi công cộng': 'Public domain',
   'Tự thu': 'Recorded it myself',
-  'Chưa rõ': 'Unknown',
   'A cappella và stem đăng lên ĐỂ người khác remix':
     'A cappellas and stems posted FOR other people to remix',
   'Sample, loop, one-shot — phần lớn CC0 hoặc CC BY':
@@ -1807,6 +1806,20 @@ export const TU_DIEN: Record<string, string> = {
   'Tải AI về chạy trên máy, dùng khi mất mạng': 'Download an on-device AI for offline use',
   'Tài nguyên': 'Resources',
   'Tải về nghe offline': 'Download for offline listening',
+  'Bỏ nhãn (để app tự đoán)': 'Remove label (let the app guess)',
+  'Loại nhạc': 'Music type',
+  'tự đoán': 'auto',
+  'Lưu vào thư viện và tải về máy': 'Save to library and download to this device',
+  'Nghe trong app (lưu vào thư viện)': 'Listen in the app (saves to your library)',
+  'Top 100 Việt Nam theo Apple Music, thịnh hành trên YouTube — bấm 🎧 để nghe ngay trong app (bài được lưu vào thư viện của bạn), ⬇ để tải về máy, 🎬 để xem video.': 'Vietnam Top 100 from Apple Music and YouTube trending — tap 🎧 to listen in the app (the song is saved to your library), ⬇ to download, 🎬 to watch the video.',
+  'Xem video YouTube': 'Watch on YouTube',
+  'Đã bỏ nhãn — app tự đoán loại theo tên bài.': 'Label removed — the app guesses the type from the title.',
+  'Đã chuyển “{ten}” sang {loai}.': 'Moved “{ten}” to {loai}.',
+  'Đã thêm “{ten}” vào thư viện và tải về máy.': 'Added “{ten}” to your library and downloaded it.',
+  '🇻🇳 Nhạc Việt': '🇻🇳 Vietnamese',
+  '🇬🇧 Nhạc Anh': '🇬🇧 English',
+  '🇨🇳 Nhạc Trung': '🇨🇳 Chinese',
+  'Chưa rõ': 'Unknown',
   'Xoá trên máy và trên máy chủ': 'Delete from this device and the server',
   'Lưu lên máy chủ (R2) và tải về máy': 'Save to the server (R2) and download to this device',
   'Đã lưu lên máy chủ — đang tải về máy…': 'Saved to the server — downloading to this device…',

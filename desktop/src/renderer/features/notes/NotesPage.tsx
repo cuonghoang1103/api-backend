@@ -28,7 +28,7 @@ import { Loader2 } from 'lucide-react';
 import WebNotesPage from '@/app/notes/page';
 // Khung/nền bảng của Notes (Sổ lệnh…) — CẮT từ globals.css của web, xem vite.noi-dung-bai.ts.
 import 'virtual:bang-ghi-chu.css';
-import { useAuthStore } from '@/store/authStore';
+import { napPhienWeb } from '../web/napPhienWeb';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { configureWebApi } from '../../shims/web-api-adapter';
@@ -108,18 +108,7 @@ export function NotesPage() {
     // Dựng lại hình dạng `AuthResponse` mà `setAuth` mong đợi. `refreshToken`
     // để rỗng CÓ CHỦ ĐÍCH: backend không có endpoint nào nhận nó (xem
     // shared/ipc.ts), nên điền vào chỉ tạo ảo giác là nó dùng được.
-    useAuthStore.getState().setAuth({
-      userId: user.userId,
-      username: user.username,
-      email: user.email,
-      fullName: user.fullName ?? '',
-      avatarUrl: user.avatarUrl ?? '',
-      roles: user.roles,
-      role: user.role,
-      roleVersion: 0,
-      token: api.getToken() ?? '',
-      refreshToken: '',
-    } as never);
+    napPhienWeb(api, user);
 
     setReady(true);
   }, [api, user]);

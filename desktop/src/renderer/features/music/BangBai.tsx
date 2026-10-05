@@ -8,13 +8,15 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import {
-  CheckCircle2, Download, Heart, ListEnd, ListPlus, ListStart, Loader2, MoreHorizontal,
-  Pause, Play, Trash2, X, Youtube,
+  Check, CheckCircle2, Download, Heart, ListEnd, ListPlus, ListStart, Loader2, MoreHorizontal,
+  Pause, Play, Tags, Trash2, X, Youtube,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useDich } from '../../i18n';
 import { AnhBia, RaNgoai } from './dungChung';
-import { clock, laBaiYouTube, useMusicPlayer, type Track } from './player';
+import { clock, laBaiYouTube, loaiNhac, useMusicPlayer, type LoaiNhac, type Track } from './player';
+
+export const TEN_LOAI: Record<LoaiNhac | 'khac', string> = { vi: '🇻🇳 Nhạc Việt', en: '🇬🇧 Nhạc Anh', zh: '🇨🇳 Nhạc Trung', khac: 'Chưa rõ' };
 import type { Playlist } from './playlists';
 
 export interface HanhDongBai {
@@ -31,6 +33,8 @@ export interface HanhDongBai {
   onRutVaTai?: ((track: Track) => void) | undefined;
   /** Nút 🗑: xoá bản trên máy VÀ bản trên R2 (nếu mình là người rút). Không có ⇒ chỉ xoá trên máy. */
   onXoaBanTai?: ((track: Track) => void) | undefined;
+  /** Có ⇒ hiện mục "Loại nhạc" (Việt / Anh / Trung) trong menu ⋯ — null = trả về tự đoán. */
+  onDoiLoai?: ((track: Track, loai: LoaiNhac | null) => void) | undefined;
   /** Có ⇒ hiện mục xoá hẳn (chỉ admin). */
   onXoaHan?: ((track: Track) => void) | undefined;
 }
@@ -199,6 +203,7 @@ function MenuBai({ track, x, y, hanhDong, onDong }: {
   const { phatTiep, themVaoHang } = useMusicPlayer();
   const khung = useRef<HTMLDivElement>(null);
   const [moPl, setMoPl] = useState(false);
+  const [moLoai, setMoLoai] = useState(false);
   const [viTri, setViTri] = useState({ left: x, top: y });
 
   /* Lật vào trong khi sát mép cửa sổ — menu mọc ra ngoài màn hình thì nửa số
@@ -209,7 +214,7 @@ function MenuBai({ track, x, y, hanhDong, onDong }: {
     const left = Math.max(8, Math.min(x - r.width, window.innerWidth - r.width - 8));
     const top = y + r.height > window.innerHeight - 8 ? Math.max(8, y - r.height - 8) : y;
     setViTri({ left, top });
-  }, [x, y, moPl]);
+  }, [x, y, moPl, moLoai]);
 
   useEffect(() => {
     const ngoai = (e: PointerEvent) => { if (!khung.current?.contains(e.target as Node)) onDong(); };
@@ -248,6 +253,26 @@ function MenuBai({ track, x, y, hanhDong, onDong }: {
                 {p.name}
               </button>
             ))}
+        </div>
+      )}
+      {hanhDong.onDoiLoai && (
+        <button type="button" role="menuitem" onClick={() => setMoLoai((v) => !v)} aria-expanded={moLoai}>
+          <Tags size={14} aria-hidden /> {dich('Loại nhạc')}
+          <span className="mz-menu-phu">{dich(TEN_LOAI[loaiNhac(track) ?? 'khac'])}{track.language ? '' : ` · ${dich('tự đoán')}`}</span>
+        </button>
+      )}
+      {moLoai && hanhDong.onDoiLoai && (
+        <div className="mz-menu-con">
+          {(['vi', 'en', 'zh'] as const).map((l) => (
+            <button key={l} type="button" role="menuitemradio" aria-checked={track.language === l} onClick={lam(() => hanhDong.onDoiLoai?.(track, l))}>
+              {track.language === l ? <Check size={13} aria-hidden /> : <span style={{ width: 13 }} />} {dich(TEN_LOAI[l])}
+            </button>
+          ))}
+          {track.language && (
+            <button type="button" role="menuitem" onClick={lam(() => hanhDong.onDoiLoai?.(track, null))}>
+              <span style={{ width: 13 }} /> {dich('Bỏ nhãn (để app tự đoán)')}
+            </button>
+          )}
         </div>
       )}
       {hanhDong.onBoKhoiPlaylist && (

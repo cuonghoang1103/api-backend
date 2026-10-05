@@ -33,6 +33,24 @@ export interface Track {
   coverImage?: string | null;
   /** Với bài lấy từ YouTube, đây là link `watch?v=…` chứ không phải file nhạc. */
   audioUrl?: string | null;
+  /** Loại Nhạc Việt / Anh / Trung do người dùng gán (05/10/2026). Trống ⇒ `loaiNhac()` tự đoán. */
+  language?: LoaiNhac | null;
+}
+
+export type LoaiNhac = 'vi' | 'en' | 'zh';
+const CO_DAU_VIET = /[ăâđêôơưàáạảãầấậẩẫằắặẳẵèéẹẻẽềếệểễìíịỉĩòóọỏõồốộổỗờớợởỡùúụủũừứựửữỳýỵỷỹ]/i;
+/**
+ * Loại của một bài: nhãn người dùng gán thắng; chưa gán thì đoán theo tên bài + nghệ sĩ —
+ * có chữ Hán (không kèm kana Nhật) ⇒ Trung, có dấu tiếng Việt ⇒ Việt, chỉ chữ Latin ⇒ Anh.
+ * Đoán sai thì người dùng sửa ở menu ⋯ của bài ("Loại nhạc").
+ */
+export function loaiNhac(t: Track): LoaiNhac | null {
+  if (t.language === 'vi' || t.language === 'en' || t.language === 'zh') return t.language;
+  const chu = `${t.title} ${t.artist ?? ''}`;
+  if (/[\u4e00-\u9fff]/.test(chu) && !/[\u3040-\u30ff]/.test(chu)) return 'zh';
+  if (CO_DAU_VIET.test(chu)) return 'vi';
+  if (/^[\x20-\x7e\u2018-\u201d\u00c0-\u00ff]+$/.test(chu) && /[a-z]/i.test(chu)) return 'en';
+  return null;
 }
 
 /**

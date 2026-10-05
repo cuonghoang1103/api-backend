@@ -77,7 +77,7 @@ export function MusicPage() {
   const {
     tracks, loading, error, setError, loadTracks, downloaded, usage, clearAll,
     current, playing, playTrack, toggle, tuaToi, position, setVolume, setMuted,
-    setShuffle, setRepeat, step, daThich, doiThich, nhipLichSu, datEq, datHenGio,
+    setShuffle, setRepeat, step, daThich, doiThich, nhipLichSu, datEq, datHenGio, download, remove,
   } = player;
 
   const [muc, setMuc] = useState<Muc>('chu');
@@ -213,6 +213,46 @@ export function MusicPage() {
           ? dich('Máy chủ chưa tải được bài này từ YouTube. Thử lại sau ít phút.')
           : `HTTP ${phanHoi.status}`),
       );
+    }
+  };
+
+  /** Nút ⬇ của bài YouTube: rút lên R2 rồi tải luôn về máy. */
+  const rutVaTai = async (track: Track) => {
+    if (!api || dangThem) return;
+    setDangThem(String(track.id));
+    setError(null);
+    try {
+      await rutAmThanh(track.id);
+      setTienTrinhThem(dich('Đã lưu lên máy chủ — đang tải về máy…'));
+      await loadTracks(true);
+      await download({ ...track, audioUrl: null });
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : String(caught));
+    } finally {
+      setDangThem(null);
+      setTienTrinhThem(null);
+    }
+  };
+
+  /**
+   * Nút 🗑 (05/10/2026): xoá bản trên máy RỒI gỡ bản trên R2. Thư viện là dùng chung:
+   * máy chủ chỉ cho người đã rút bài (hoặc admin) gỡ bản R2 — bản người khác rút thì
+   * chỉ xoá trên máy và nói rõ. Bài rút trước 05/10 không còn link YouTube gốc nên
+   * gỡ R2 là bài biến khỏi thư viện — hỏi trước.
+   */
+  const xoaBanTai = async (track: Track) => {
+    if (!api) return;
+    if (!window.confirm(dichP('Xoá "{ten}" khỏi máy bạn và khỏi máy chủ (R2)?', { ten: track.title }))) return;
+    await remove(track.id);
+    try {
+      const r = await fetch(`${api.baseUrlForForms()}/api/v1/music/tracks/${track.id}/audio`, {
+        method: 'DELETE', headers: api.authHeaders(), credentials: 'omit',
+      });
+      const j = await r.json().catch(() => null) as { message?: string; data?: { ketQua?: string } } | null;
+      if (!r.ok) setError(r.status === 403 && j?.message ? `${dich('Đã xoá trên máy.')} ${j.message}` : `${dich('Đã xoá trên máy, nhưng chưa gỡ được bản trên máy chủ')}: ${j?.message ?? r.status}`);
+      await loadTracks(true);
+    } catch (e) {
+      setError(`${dich('Đã xoá trên máy, nhưng chưa gỡ được bản trên máy chủ')}: ${e instanceof Error ? e.message : String(e)}`);
     }
   };
 
@@ -357,6 +397,8 @@ export function MusicPage() {
   const hanhDong: HanhDongBai = {
     onPhat: (t) => playTrack(t, dsDangXem),
     onRut: (t) => void rutRoiPhat(t),
+    onRutVaTai: (t) => void rutVaTai(t),
+    onXoaBanTai: (t) => void xoaBanTai(t),
     dangRut: dangThem !== null ? Number(dangThem) : null,
     playlists,
     onThemVaoPlaylist: (p, t) => void themVaoPl(p, t),

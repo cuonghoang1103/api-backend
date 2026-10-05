@@ -37,7 +37,7 @@ import { normalizeAudio, isFFmpegAvailable } from '../services/ffmpeg.service.js
 import { canAccessMusic, getMusicAccessMode } from '../services/musicAccess.service.js';
 import { optionalAuth, authenticate, requireRole } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
-import { uploadAudio, uploadImage, UploadError } from '../storage/uploadService.js';
+import { uploadAudio, uploadImage, UploadError, keyBelongsToUser } from '../storage/uploadService.js';
 import { config } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
@@ -668,7 +668,7 @@ router.post(
           coverUrl = await downloadImageToR2(cover, { userId: req.user?.userId });
         }
 
-        const updated = await musicService.markTrackDownloaded(id, key, size, coverUrl);
+        const updated = await musicService.markTrackDownloaded(id, key, size, coverUrl, youtubeUrl);
         res.json({ success: true, message: 'Đã tải nhạc về site', data: updated });
       } catch (e) {
         if (e instanceof YoutubeAudioError) {
@@ -676,6 +676,35 @@ router.post(
         }
         throw e;
       }
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// DELETE /api/v1/music/tracks/:id/audio — gỡ bản âm thanh trên R2 (05/10/2026)
+// ────────────────────────────────────────────────────────────────
+// Ai RÚT bài đó (khoá R2 mang đoạn `u<userId>`) thì gỡ được; admin gỡ được bản
+// người khác rút nhưng đó là quyền admin ⇒ step-up MFA. Thư viện là DÙNG CHUNG,
+// nên tài khoản thường không được gỡ bản người khác đã rút.
+// ════════════════════════════════════════════════════════════════
+router.delete(
+  '/tracks/:id/audio',
+  authenticate,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id) || id <= 0) throw new AppError('Invalid track ID', 400, 'INVALID_ID');
+      const track = (await musicService.getTrackById(id, true)) as { localPath?: string | null };
+      const laChu = keyBelongsToUser(track.localPath, req.user?.userId);
+      if (!laChu) {
+        const laAdmin = (req.user?.roles ?? []).some((r: string) => /^(ROLE_)?ADMIN$/i.test(r));
+        if (!laAdmin) throw new AppError('Bản trên máy chủ do người khác rút — chỉ xoá được bản trên máy bạn.', 403, 'NOT_OWNER');
+        await damBaoMfaAdmin(req.userId!, req.user);
+      }
+      const kq = await musicService.goBanR2(id);
+      res.json({ success: true, message: kq, data: { ketQua: kq } });
     } catch (error) {
       next(error);
     }

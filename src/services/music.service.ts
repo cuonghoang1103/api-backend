@@ -870,12 +870,15 @@ export class MusicService {
     key: string,
     size: number,
     coverUrl?: string | null,
+    /** Link YouTube gốc — cất vào `publicId` (cột bỏ trống với nhạc) để `goBanR2` trả bài về YouTube được. */
+    youtubeUrl?: string | null,
   ): Promise<unknown> {
     await prisma.musicTrack.update({
       where: { id },
       data: {
         localPath: key,
         audioUrl: null,
+        ...(youtubeUrl && /youtube\.com|youtu\.be/.test(youtubeUrl) ? { publicId: youtubeUrl } : {}),
         fileSize: BigInt(Math.max(0, Math.floor(size))),
         // Only overwrite the cover when we successfully copied it to R2;
         // otherwise keep the existing (YouTube thumbnail) url.
@@ -883,6 +886,29 @@ export class MusicService {
       },
     });
     return this.getTrackById(id, true);
+  }
+
+  // ─── Gỡ bản âm thanh trên R2 (05/10/2026) ────────────────
+  // Người dùng: "nếu tôi xoá thì nó cũng xoá trên R2 cả máy luôn". Xoá object R2
+  // rồi trả dòng về bài YouTube (link gốc cất ở `publicId` lúc rút). Bài rút TRƯỚC
+  // 05/10 không còn link gốc ⇒ dòng không phát được nữa ⇒ xoá mềm luôn cả bài.
+  async goBanR2(id: number): Promise<'ve-youtube' | 'da-xoa-bai' | 'khong-co-ban-r2'> {
+    const row = await prisma.musicTrack.findUnique({ where: { id } });
+    if (!row || !row.localPath || row.localPath.startsWith('http')) return 'khong-co-ban-r2';
+    const goc = row.publicId && /youtube\.com|youtu\.be/.test(row.publicId) ? row.publicId : null;
+    if (!goc) {
+      await this.deleteTrack(id);
+      return 'da-xoa-bai';
+    }
+    try {
+      const { deleteByUrls } = await import('../storage/uploadService.js');
+      const { getStorageProvider } = await import('../storage/StorageProvider.js');
+      await deleteByUrls([getStorageProvider().publicUrl(row.localPath)]);
+    } catch (e) {
+      logger.warn(`[music] goBanR2 ${id}: xoá R2 lỗi ${(e as Error).message}`);
+    }
+    await prisma.musicTrack.update({ where: { id }, data: { localPath: null, fileSize: null, audioUrl: goc, publicId: null } });
+    return 've-youtube';
   }
 
   // ─── Batch: copy YouTube-thumbnail covers to R2 (admin) ──

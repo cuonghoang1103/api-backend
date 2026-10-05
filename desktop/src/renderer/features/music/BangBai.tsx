@@ -27,6 +27,10 @@ export interface HanhDongBai {
   onThemVaoPlaylist: (playlist: Playlist, track: Track) => void;
   /** Có ⇒ hiện mục "Bỏ khỏi playlist này". */
   onBoKhoiPlaylist?: ((track: Track) => void) | undefined;
+  /** Bài YouTube chưa rút: nút ⬇ rút lên R2 rồi tải luôn về máy (một lần bấm). */
+  onRutVaTai?: ((track: Track) => void) | undefined;
+  /** Nút 🗑: xoá bản trên máy VÀ bản trên R2 (nếu mình là người rút). Không có ⇒ chỉ xoá trên máy. */
+  onXoaBanTai?: ((track: Track) => void) | undefined;
   /** Có ⇒ hiện mục xoá hẳn (chỉ admin). */
   onXoaHan?: ((track: Track) => void) | undefined;
 }
@@ -148,7 +152,7 @@ function DongBai({ track, so, coSo, hanhDong, phu, onMenu }: {
 
       <span className="mz-dong-nut">
         {daTai ? (
-          <button type="button" className="mz-nut-nho" onClick={() => void remove(track.id)} title={dich('Xoá bản đã tải')} aria-label={dich('Xoá bản đã tải')}>
+          <button type="button" className="mz-nut-nho" onClick={() => (hanhDong.onXoaBanTai ? hanhDong.onXoaBanTai(track) : void remove(track.id))} title={dich('Xoá trên máy và trên máy chủ')} aria-label={dich('Xoá trên máy và trên máy chủ')}>
             <Trash2 size={14} aria-hidden />
           </button>
         ) : !chuaRut ? (
@@ -161,6 +165,17 @@ function DongBai({ track, so, coSo, hanhDong, phu, onMenu }: {
             aria-label={dich('Tải về nghe offline')}
           >
             {downloading.has(track.id) ? <Loader2 size={14} className="ct-spin" aria-hidden /> : <Download size={14} aria-hidden />}
+          </button>
+        ) : rutDuoc && hanhDong.onRutVaTai ? (
+          <button
+            type="button"
+            className="mz-nut-nho"
+            onClick={() => hanhDong.onRutVaTai?.(track)}
+            disabled={hanhDong.dangRut === track.id || downloading.has(track.id)}
+            title={dich('Lưu lên máy chủ (R2) và tải về máy')}
+            aria-label={dich('Lưu lên máy chủ (R2) và tải về máy')}
+          >
+            {hanhDong.dangRut === track.id || downloading.has(track.id) ? <Loader2 size={14} className="ct-spin" aria-hidden /> : <Download size={14} aria-hidden />}
           </button>
         ) : <span />}
         <button

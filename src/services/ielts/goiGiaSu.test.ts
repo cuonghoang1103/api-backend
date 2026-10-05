@@ -49,3 +49,8 @@ test('hướng dẫn sâu: âm cuối đơn lẻ có cách đọc kiểu Việt;
   assert.match(huongDan({ tu: 'need', am: 'd', diem: 20, cuoi: true, ipa: 'niːd', amTu: tachAm('niːd'), diemTu: 50 }), /nuốt âm cuối.*đờ nhẹ/);
   assert.match(huongDan({ tu: 'think', am: 'θ', diem: 20, cuoi: false, ipa: 'θɪŋk', amTu: tachAm('θɪŋk'), diemTu: 50 }), /hai hàm răng/);
 });
+
+test('hướng dẫn sâu: âm /d/ yếu ở GIỮA đuôi "dz" (Azure hay chấm âm này) vẫn dạy cả cụm đuôi dz', () => {
+  const loi = huongDan({ tu: 'reads', am: 'd', diem: 15, cuoi: false, ipa: 'riːdz', amTu: tachAm('riːdz'), diemTu: 40, viTri: 2 });
+  assert.match(loi, /Đuôi dz/);
+});

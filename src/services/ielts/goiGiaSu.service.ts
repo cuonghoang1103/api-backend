@@ -186,7 +186,7 @@ const SO_LAN_TOI_DA = 3;
 const NGUYEN_AM = /[aeiouɪʊəɜɑɒɔæʌ]/;
 
 /** Âm yếu nhất — tên âm gắn theo IPA câu mẫu (chỉ khi số âm khớp với Azure). */
-type AmYeu = { tu: string; am: string | null; diem: number; cuoi: boolean; ipa?: string; amTu: string[]; diemTu: number };
+type AmYeu = { tu: string; am: string | null; diem: number; cuoi: boolean; ipa?: string; amTu: string[]; diemTu: number; viTri?: number };
 function amYeuNhat(k: KetQuaPhatAm, ipa?: string): AmYeu | null {
   const ipaTu = (ipa ?? '').split(/\s+/).filter(Boolean);
   let vi = 0;
@@ -203,7 +203,7 @@ function amYeuNhat(k: KetQuaPhatAm, ipa?: string): AmYeu | null {
     }
     w.am.forEach((a, i) => {
       const am = ten.length === w.am.length ? ten[i] : null;
-      if (!best || a.diem < best.diem) best = { tu: w.tu, am, diem: a.diem, cuoi: i === w.am.length - 1, ipa: ipaW, amTu: ten, diemTu: w.diem };
+      if (!best || a.diem < best.diem) best = { tu: w.tu, am, diem: a.diem, cuoi: i === w.am.length - 1, ipa: ipaW, amTu: ten, diemTu: w.diem, viTri: ten.length === w.am.length ? i : undefined };
     });
   }
   return best;
@@ -242,10 +242,16 @@ const PHU_AM = /^(p|b|t|d|k|ɡ|f|v|θ|ð|s|z|ʃ|ʒ|tʃ|dʒ|m|n|ŋ|l|r|h|w|j)$/;
 export function huongDan(y: AmYeu): string {
   const am = y.am ?? '';
   const n = y.amTu.length;
-  const laCuoi = y.cuoi || (am && y.amTu[n - 1] === am);
-  if (laCuoi && PHU_AM.test(am) && n >= 2) {
-    const cum = y.amTu.slice(n - 2).join('');
-    if (PHU_AM.test(y.amTu[n - 2]!) && CUM_CUOI[cum]) return `${CUM_CUOI[cum]} Người Việt rất hay nuốt mất đuôi này.`;
+  // Cụm phụ âm CUỐI = mọi âm sau nguyên âm cuối cùng (reads → d z). Âm yếu nằm trong cụm đó
+  // (kể cả /d/ ở GIỮA "dz" — Azure hay chấm âm này thấp nhất) ⇒ dạy cả cụm đuôi.
+  let nguyenAmCuoi = -1;
+  y.amTu.forEach((a, i) => { if (!PHU_AM.test(a)) nguyenAmCuoi = i; });
+  const trongDuoi = y.viTri != null ? y.viTri > nguyenAmCuoi : y.cuoi || (!!am && y.amTu[n - 1] === am);
+  const laCuoi = trongDuoi && PHU_AM.test(am);
+  if (laCuoi && n >= 2) {
+    const duoi = y.amTu.slice(nguyenAmCuoi + 1);
+    const cum = duoi.length >= 2 ? duoi.slice(-2).join('') : '';
+    if (cum && CUM_CUOI[cum]) return `${CUM_CUOI[cum]} Người Việt rất hay nuốt mất đuôi này.`;
     const viet = CUOI_VIET[am];
     return `Bạn đang nuốt âm cuối của từ [en]${y.tu}[/en]. ${MEO[am] ?? ''}${viet ? ` Hãy đọc trọn từ rồi thêm rõ "${viet}" ở cuối.` : ''}`.trim();
   }
@@ -680,4 +686,68 @@ export async function hoiGiaSu(userId: number, b: { cauHoi?: unknown; mau?: unkn
   const noi = (kq.text ?? '').replace(/```[a-z]*|```/g, '').trim();
   if (!noi) return { lyDo: 'loi_ai' as const };
   return { noi, ...(await docGiaSuTheoGiong(noi, docGiong(b.giong), nn)) };
+}
+
+/* ── 💬 TRÒ CHUYỆN SONG NGỮ (05/10/2026) ─────────────────────────────────
+ * Người dùng: "robot nói được bằng tiếng Việt VÀ ngôn ngữ đang học… dựa vào voice, mic".
+ * Khác lượt luyện phát âm (đọc câu mẫu): ở đây người học NÓI TỰ DO bằng ngôn ngữ đang học;
+ * CuongMini trả lời ngắn đúng trình độ, sửa lỗi nhẹ, bí thì giải thích bằng tiếng Việt, và
+ * luôn hỏi lại một câu để cuộc trò chuyện tiếp diễn. Phần ngoại ngữ bọc [en]…[/en] để giọng
+ * Ada đa ngôn ngữ đọc đúng locale (docGiaSuTheoGiong). Âm thanh người học KHÔNG lưu. */
+const troChuyenHeThong = (nn: NgonNgu, chuDe: string) => [
+  `Bạn là CuongMini — robot bạn đồng hành dễ thương, đang TRÒ CHUYỆN bằng giọng nói để giúp người Việt luyện nói ${TEN_TIENG[nn]}. Xưng "mình", gọi người học là "bạn".`,
+  `Trình độ người học: mới bắt đầu.${chuDe ? ` Họ đang học bài: ${chuDe} — ưu tiên dùng từ và mẫu câu của bài này.` : ''}`,
+  `- Nếu người học nói bằng ${TEN_TIENG[nn]}: trả lời 1–2 câu NGẮN, ĐƠN GIẢN bằng ${TEN_TIENG[nn]}. Nếu câu của họ có lỗi, thêm một câu tiếng Việt ngắn chỉ ra lỗi và đưa câu đúng.`,
+  `- Nếu người học nói tiếng Việt (hỏi, bí, không hiểu): giải thích ngắn bằng tiếng Việt, rồi đưa một câu mẫu ${TEN_TIENG[nn]} để họ nói theo.`,
+  `- LUÔN kết thúc bằng MỘT câu hỏi đơn giản bằng ${TEN_TIENG[nn]} để người học trả lời tiếp.`,
+  `- MỌI từ/câu ${TEN_TIENG[nn]} bọc trong [en]…[/en] (giữ đúng tên thẻ này)${nn === 'ja' ? '; tiếng Nhật viết bằng kana/kanji thông dụng, không romaji' : nn === 'zh' ? '; tiếng Trung viết chữ giản thể, không pinyin' : ''}.`,
+  '- Đây là lời NÓI: tối đa 60 chữ, không markdown, không gạch đầu dòng, không emoji, không ký hiệu phiên âm.',
+  'Chỉ trả về lời nói, không gì khác.',
+].join('\n');
+
+const MO_TRO_CHUYEN: Record<NgonNgu, string> = {
+  en: 'Mình là CuongMini. Mình cùng trò chuyện bằng tiếng Anh nhé, bí thì cứ nói tiếng Việt. [en]Hi! How are you today?[/en]',
+  ja: 'Mình là CuongMini. Mình cùng nói chuyện bằng tiếng Nhật nhé, bí thì cứ nói tiếng Việt. [en]こんにちは！今日は元気ですか。[/en]',
+  zh: 'Mình là CuongMini. Mình cùng nói chuyện bằng tiếng Trung nhé, bí thì cứ nói tiếng Việt. [en]你好！你今天好吗？[/en]',
+};
+
+export async function troChuyen(
+  userId: number,
+  input: { audio?: Buffer; lichSu?: unknown; ngonNgu?: unknown; chuDe?: unknown; giong?: unknown },
+) {
+  if (!demLuot(userId)) return { lyDo: 'het_luot_ngay' as const };
+  const nn = docNgonNgu(input.ngonNgu);
+  const giong = docGiong(input.giong);
+  const chuDe = String(input.chuDe ?? '').trim().slice(0, 160);
+  if (!input.audio?.length) {
+    const noi = MO_TRO_CHUYEN[nn];
+    return { noi, nghe: '', ...(await docGiaSuTheoGiong(noi, giong, nn)) };
+  }
+  if (input.audio.length > 2 * 1024 * 1024) throw new BadRequestError('Bản ghi quá dài');
+  if (!isAiAvailable()) return { lyDo: 'ai_unavailable' as const };
+  const tr = await transcribeWithGroq(input.audio, 'noi.wav', 'audio/wav', { language: '' }).catch(() => null);
+  const nghe = String((tr as { text?: string } | null)?.text ?? '').trim().slice(0, 400);
+  if (!nghe) {
+    const noi = chon(CHUA_NGHE);
+    return { noi, nghe: '', ...(await docGiaSuTheoGiong(noi, giong, nn)) };
+  }
+  const lichSu = (Array.isArray(input.lichSu) ? input.lichSu : [])
+    .slice(-8)
+    .map((t) => ({ ai: !!(t as { ai?: unknown }).ai, text: String((t as { text?: unknown }).text ?? '').slice(0, 400) }))
+    .filter((t) => t.text);
+  const kq = await llmComplete({
+    step: 'generation',
+    purpose: 'language_tutor',
+    feature: 'chat',
+    userId,
+    maxTokens: 320,
+    system: troChuyenHeThong(nn, chuDe),
+    messages: [
+      ...lichSu.map((t) => ({ role: (t.ai ? 'assistant' : 'user') as 'assistant' | 'user', content: t.text })),
+      { role: 'user' as const, content: nghe },
+    ],
+  });
+  const noi = (kq.text ?? '').replace(/```[a-z]*|```/g, '').replace(/\*\*/g, '').trim();
+  if (!noi) return { lyDo: 'loi_ai' as const, nghe };
+  return { noi, nghe, ...(await docGiaSuTheoGiong(noi, giong, nn)) };
 }

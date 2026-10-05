@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { Send, X, Trash2, Volume2, Copy, Check, Phone } from 'lucide-react';
 import { play } from './audio';
@@ -60,8 +60,10 @@ function AnswerTools({ text }: { text: string }) {
 }
 
 export function GiaSu({
-  name, lessonTitle, turns, asking, loggedIn, selection, onAsk, onClear, onClose, closeLabel, onGoi,
+  name, lessonTitle, turns, asking, loggedIn, selection, onAsk, onClear, onClose, closeLabel, onGoi, huanLuyen,
 }: {
+  /** Thẻ 🧭 Huấn luyện (tiến độ, chuỗi ngày, bài cần ôn, mở luyện nói/trò chuyện) — 05/10/2026. */
+  huanLuyen?: ReactNode;
   /** Tên gia sư hiển thị ("Gia sư IELTS", "Gia sư tiếng Nhật"). */
   name: string;
   lessonTitle: string;
@@ -79,6 +81,7 @@ export function GiaSu({
   onGoi?: () => void;
 }) {
   const [text, setText] = useState('');
+  const [the, setThe] = useState<'hoi' | 'hl'>('hoi');
   const bodyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -120,6 +123,13 @@ export function GiaSu({
         )}
       </div>
 
+      {huanLuyen && (
+        <div className={s.tutorThe} role="tablist">
+          <button type="button" role="tab" aria-selected={the === 'hoi'} data-chon={the === 'hoi' || undefined} onClick={() => setThe('hoi')}>💬 Hỏi đáp</button>
+          <button type="button" role="tab" aria-selected={the === 'hl'} data-chon={the === 'hl' || undefined} onClick={() => setThe('hl')}>🧭 Huấn luyện</button>
+        </div>
+      )}
+      {the === 'hl' && huanLuyen ? <div className={s.tutorBody}>{huanLuyen}</div> : <>
       <div ref={bodyRef} className={s.tutorBody}>
         <div className={s.thChao}>
           <MiniCuong size={30} />
@@ -195,6 +205,7 @@ export function GiaSu({
           </button>
         </div>
       )}
+      </>}
     </div>
   );
 }

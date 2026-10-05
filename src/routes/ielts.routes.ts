@@ -21,7 +21,7 @@ import { hoiVeChu, chamBaiViet, CAC_Y } from '../services/ielts/hoiAI.service.js
 import { dungDe, nopDe, lichSuThi } from '../services/ielts/deThi.service.js';
 import { chamBaiNoi } from '../services/ielts/chamNoi.service.js';
 import { chamPhatAm } from '../services/ielts/phatAm.service.js';
-import { goiGiaSu, hoiGiaSu } from '../services/ielts/goiGiaSu.service.js';
+import { goiGiaSu, hoiGiaSu, troChuyen } from '../services/ielts/goiGiaSu.service.js';
 import { docTo } from '../services/ielts/docTo.service.js';
 import { xemChuViet, chamVietTay, MAX_TRANG } from '../services/ielts/vietTay.service.js';
 import multer from 'multer';
@@ -133,6 +133,14 @@ router.post('/ai/goi-gia-su', audioPhatAm.single('audio'), async (req, res: Resp
 });
 router.post('/ai/goi-gia-su/hoi', async (req, res: Response<ApiResponse>, next) => {
   try { ok(res, await hoiGiaSu(uid(req), req.body ?? {})); } catch (e) { next(e); }
+});
+// 💬 Trò chuyện song ngữ cùng CuongMini (05/10/2026) — nói tự do bằng ngôn ngữ đang học.
+router.post('/ai/tro-chuyen', audioNoi.single('audio'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    let tt: { lichSu?: unknown; ngonNgu?: unknown; chuDe?: unknown; giong?: unknown } = {};
+    try { tt = JSON.parse(String(req.body?.trangThai ?? '{}')); } catch { /* lượt mở đầu */ }
+    ok(res, await troChuyen(uid(req), { audio: req.file?.buffer, ...tt }));
+  } catch (e) { next(e); }
 });
 router.post('/ai/cham-noi', audioNoi.single('audio'), async (req, res: Response<ApiResponse>, next) => {
   try {

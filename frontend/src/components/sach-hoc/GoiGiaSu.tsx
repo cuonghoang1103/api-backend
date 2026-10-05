@@ -37,7 +37,11 @@ function LoiNoi({ text }: { text: string }) {
   return <>{parts.map((p, i) => (i % 2 ? <b key={i} className={s.goiEn}>{p}</b> : <span key={i}>{p}</span>))}</>;
 }
 
-export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', stage }: { danhSach: CauMau[]; chuDe: string; onClose: () => void; ngonNgu?: 'en' | 'ja' | 'zh'; /** Khoá đang học — luyện ≥ 3 lượt thì tính một ngày học (chuỗi ngày). */ stage?: string }) {
+export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', stage, cheDoDau = 'phat-am' }: { danhSach: CauMau[]; chuDe: string; onClose: () => void; ngonNgu?: 'en' | 'ja' | 'zh'; /** Khoá đang học — luyện ≥ 3 lượt thì tính một ngày học (chuỗi ngày). */ stage?: string; /** Mở thẳng chế độ nào. */ cheDoDau?: 'phat-am' | 'tro-chuyen' }) {
+  /** 🎯 đọc theo câu mẫu + chấm từng âm  ·  💬 nói tự do bằng ngôn ngữ đang học (05/10/2026). */
+  const [cheDo, setCheDo] = useState<'phat-am' | 'tro-chuyen'>(cheDoDau);
+  const cheDoRef = useRef(cheDo);
+  cheDoRef.current = cheDo;
   /** Giọng đọc câu mẫu theo thứ tiếng của khoá. */
   const giongMau = ngonNgu === 'ja' ? 'ja-nu' : ngonNgu === 'zh' ? 'zh-nu' : 'uk-nu';
   const [pha, setPha] = useState<Pha>('cho');
@@ -163,6 +167,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
 
   async function guiLuot(blob: Blob, imLang = false) {
     if (st.current.dong) return;
+    if (cheDoRef.current === 'tro-chuyen') { void guiTroChuyen(blob, imLang); return; }
     const mauDaDoc = mau; // câu vừa đọc — máy chủ có thể trả câu mẫu MỚI
     setPha('cham');
     try {
@@ -213,10 +218,51 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
     }
   }
 
+  /* ── 💬 Trò chuyện: mỗi lượt gửi bản ghi + 8 lượt gần nhất; CuongMini trả lời rồi tự nghe tiếp. ── */
+  const lichSuTC = useRef<{ ai: boolean; text: string }[]>([]);
+  async function guiTroChuyen(blob: Blob | null, imLang = false) {
+    if (st.current.dong) return;
+    if (imLang) { setLoi('Mình chưa nghe thấy bạn nói gì — bấm 🎙 rồi nói nhé.'); setPha('cho'); return; }
+    setPha(blob ? 'nghi' : 'mo');
+    try {
+      const fd = new FormData();
+      if (blob) fd.append('audio', await blobToWav16k(blob), 'noi.wav');
+      fd.append('trangThai', JSON.stringify({ ngonNgu, chuDe, giong, lichSu: lichSuTC.current.slice(-8) }));
+      const r = await api.post('/ielts/ai/tro-chuyen', fd, { headers: { 'Content-Type': 'multipart/form-data' }, ...AI_TIMEOUT });
+      const d = r.data?.data as { noi?: string; nghe?: string; audioUrl?: string | null; audioUrls?: string[]; lyDo?: string; giongThat?: Giong } | undefined;
+      if (!d || st.current.dong) return;
+      if (d.lyDo === 'het_luot_ngay') { setLoi('Hôm nay bạn đã luyện hết số lượt — mai luyện tiếp nhé.'); setPha('loi'); return; }
+      if (d.lyDo) { setLoi('CuongMini đang bận nghĩ, bạn nói lại nhé.'); setPha('cho'); return; }
+      if (d.giongThat) setGiongLui(d.giongThat === 'mac-dinh' && giong !== 'mac-dinh');
+      const moi: Luot[] = [];
+      if (d.nghe) { moi.push({ ai: false, text: d.nghe }); lichSuTC.current.push({ ai: false, text: d.nghe }); soLuotCham.current += 1; }
+      if (d.noi) { moi.push({ ai: true, text: d.noi }); lichSuTC.current.push({ ai: true, text: d.noi }); }
+      setLuot((x) => (blob ? [...x, ...moi] : moi));
+      setLoi('');
+      phanUngNgan(blob ? 'noi' : 'chao', 2200);
+      giaSuNoi(d.audioUrls ?? d.audioUrl, d.noi ?? '', null, false);
+    } catch (e) {
+      if (st.current.dong) return;
+      const m = (e as { response?: { status?: number } })?.response;
+      setLoi(m?.status === 401 ? 'Đăng nhập để trò chuyện cùng CuongMini.' : 'Mạng chập chờn, chưa gửi được. Bấm 🎙 để nói lại nhé.');
+      setPha('cho');
+    }
+  }
+  const doiCheDo = (c: 'phat-am' | 'tro-chuyen') => {
+    if (c === cheDo || pha === 'nghe' || pha === 'cham' || pha === 'nghi' || pha === 'mo') return;
+    stopAudio();
+    setCheDo(c);
+    setLuot([]);
+    setLoi('');
+    lichSuTC.current = [];
+    setPha('cho');
+  };
+
   const batDau = async () => {
     setLoi('');
     setPha('mo');
     play({ text: '', sfx: tepTinh('/audio/im-lang.mp3') }); // mở khoá âm thanh ngay trong cú bấm (Safari)
+    if (cheDoRef.current === 'tro-chuyen') { void guiTroChuyen(null); return; }
     try {
       const r = await api.post('/ielts/ai/goi-gia-su', (() => { const fd = new FormData(); fd.append('trangThai', trangThai()); return fd; })(), { headers: { 'Content-Type': 'multipart/form-data' }, ...AI_TIMEOUT });
       const d = nhan(r.data?.data ?? {});
@@ -286,9 +332,13 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
         <div className={s.goiDanhTinh}>
           <span className={s.goiCham0} data-pha={pha} />
           <div>
-            <div className={s.goiTen}>Luyện nói cùng CuongMini</div>
+            <div className={s.goiTen}>{cheDo === 'tro-chuyen' ? 'Trò chuyện cùng CuongMini' : 'Luyện nói cùng CuongMini'}</div>
             <div className={s.goiPhu}>{NHAN_NGAN[pha]} · {chuDe}</div>
           </div>
+        </div>
+        <div className={s.goiCheDo} role="tablist" aria-label="Chế độ">
+          <button type="button" role="tab" aria-selected={cheDo === 'phat-am'} data-chon={cheDo === 'phat-am' || undefined} onClick={() => doiCheDo('phat-am')}>🎯 Luyện phát âm</button>
+          <button type="button" role="tab" aria-selected={cheDo === 'tro-chuyen'} data-chon={cheDo === 'tro-chuyen' || undefined} onClick={() => doiCheDo('tro-chuyen')}>💬 Trò chuyện</button>
         </div>
         <div className={s.goiThanhPhai}>
           <label className={s.goiChonGiong} title="Giọng CuongMini nói tiếng Việt (phần tiếng Anh luôn là giọng Anh chuẩn)">
@@ -309,7 +359,9 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
           <NhanVat3D camXuc={camXuc} mucRef={mucRef} />
           <div className={s.goiBongNoi} aria-live="polite">
             {loiCuoi ? <LoiNoi text={loiCuoi} /> : (
-              <span>Chào bạn! Mình là <b>CuongMini</b>. Mình đọc mẫu, bạn đọc theo, mình chấm từng âm. Muốn hỏi gì cứ nói tiếng Việt nhé.</span>
+              cheDo === 'tro-chuyen'
+                ? <span>Chào bạn! Mình là <b>CuongMini</b>. Bấm micro rồi mình cùng trò chuyện nhé — bí thì cứ nói tiếng Việt.</span>
+                : <span>Chào bạn! Mình là <b>CuongMini</b>. Mình đọc mẫu, bạn đọc theo, mình chấm từng âm. Muốn hỏi gì cứ nói tiếng Việt nhé.</span>
             )}
           </div>
           {chamCuoi && (
@@ -320,6 +372,15 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
         </section>
 
         <aside className={s.goiBen}>
+          {cheDo === 'tro-chuyen' ? (
+            <div className={s.goiMau}>
+              <div className={s.goiNhanMuc}>💬 Trò chuyện tự do</div>
+              <div className={s.goiGoiY} style={{ margin: 0 }}>
+                Nói bằng <b>{ngonNgu === 'ja' ? 'tiếng Nhật' : ngonNgu === 'zh' ? 'tiếng Trung' : 'tiếng Anh'}</b> — câu ngắn cũng được. CuongMini trả lời, sửa lỗi nhẹ và hỏi lại bạn.
+                <br />Bí từ hay không hiểu? Cứ <b>nói tiếng Việt</b>, CuongMini giải thích rồi đưa câu mẫu để bạn nói theo.
+              </div>
+            </div>
+          ) : (
           <div className={s.goiMau}>
             <div className={s.goiNhanMuc}>{luyenTu ? '🔍 Luyện riêng từ này — đạt rồi ghép lại cả câu' : 'Câu mẫu — đọc theo'}</div>
             {mau ? (
@@ -336,11 +397,12 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
             ) : <div className={s.goiMauTrong}>Bấm nút micro để CuongMini bắt đầu buổi luyện.</div>}
           </div>
 
+          )}
           <div className={s.goiLog} ref={cuon}>
             {!luot.length && (
               <div className={s.goiGoiY}>
                 🎧 Đeo tai nghe sẽ rõ hơn và micro không thu lại tiếng CuongMini.<br />
-                Mỗi lượt: nghe câu mẫu → đọc theo → nghe nhận xét. Nói xong im 1,5 giây là máy tự chấm.
+                {cheDo === 'tro-chuyen' ? 'Mỗi lượt: bạn nói → CuongMini trả lời và hỏi lại. Nói xong im 1,5 giây là máy tự gửi.' : 'Mỗi lượt: nghe câu mẫu → đọc theo → nghe nhận xét. Nói xong im 1,5 giây là máy tự chấm.'}
               </div>
             )}
             {luot.map((l, i) => (
@@ -361,7 +423,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
       </div>
 
       <footer className={s.goiDay}>
-        <button type="button" className={s.goiPhuNut} onClick={ngheMau} disabled={!mau || pha === 'nghe' || pha === 'cham'}>
+        <button type="button" className={s.goiPhuNut} onClick={ngheMau} disabled={!mau || pha === 'nghe' || pha === 'cham'} style={cheDo === 'tro-chuyen' ? { visibility: 'hidden' } : undefined}>
           <Volume2 size={18} /><span>Nghe mẫu</span>
         </button>
         <div className={s.goiGiua}>
@@ -379,7 +441,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
           </div>
           <div className={s.goiNhan}>{NHAN[pha]}</div>
         </div>
-        <button type="button" className={s.goiPhuNut} onClick={cauKhac} disabled={danhSach.length < 2 || pha === 'nghe' || pha === 'cham'}>
+        <button type="button" className={s.goiPhuNut} onClick={cauKhac} disabled={danhSach.length < 2 || pha === 'nghe' || pha === 'cham'} style={cheDo === 'tro-chuyen' ? { visibility: 'hidden' } : undefined}>
           <SkipForward size={18} /><span>Câu khác</span>
         </button>
         {(loi || mic.loi) && <div className={s.goiLoi}>{loi || mic.loi}</div>}

@@ -162,6 +162,9 @@ function serializePlaylist(raw: any): any {
     out.trackCount = raw._count.tracks;
   }
 
+  // Số người được chia sẻ (playlist riêng tư dạng "chia sẻ", 05/10/2026).
+  if (raw._count?.shares !== undefined) out.shareCount = raw._count.shares;
+
   // Prisma junction tracks: [{ track: {...} }] → [track] (flatten for frontend)
   if (Array.isArray(raw.tracks)) {
     out.tracks = raw.tracks.map((pt: any) => {
@@ -772,7 +775,8 @@ router.get(
     try {
       const playlists = await musicService.getPlaylists(req.userId);
       const serialized = serializePlaylists(playlists);
-      res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+      // Danh sách theo NGƯỜI XEM (của mình + được chia sẻ) ⇒ không cho bộ đệm chung giữ (05/10/2026).
+      res.set('Cache-Control', req.userId ? 'private, no-store' : 'public, max-age=60, stale-while-revalidate=300');
       res.json({ success: true, data: serialized });
     } catch (error) {
       next(error);
@@ -797,9 +801,16 @@ router.get(
       if (!playlist) {
         throw new AppError('Playlist not found', 404, 'PLAYLIST_NOT_FOUND');
       }
+      // 05/10/2026: trước đây KHÔNG kiểm gì — playlist riêng tư mở được bằng id. Không có quyền ⇒ 404
+      // (không lộ là playlist có tồn tại). Admin xem được; sửa/xoá của admin vẫn qua MFA ở tuyến khác.
+      const laAdmin = (req.user?.roles ?? []).some((r: string) => /^(ROLE_)?ADMIN$/i.test(r));
+      if (!(await musicService.coTheXemPlaylist(playlist as { id: number; userId: number | null; isPublic: boolean }, req.userId, laAdmin))) {
+        throw new AppError('Playlist not found', 404, 'PLAYLIST_NOT_FOUND');
+      }
 
       const serialized = serializePlaylist(playlist);
-      res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+      // Riêng tư theo người xem ⇒ KHÔNG cho bộ đệm chung giữ (trước là public 60s).
+      res.set('Cache-Control', (playlist as { isPublic?: boolean }).isPublic ? 'public, max-age=60, stale-while-revalidate=300' : 'private, no-store');
       res.json({ success: true, data: serialized });
     } catch (error) {
       next(error);
@@ -826,7 +837,8 @@ router.post(
         description,
         coverUrl,
         userId: req.userId,
-        isPublic: isPublic ?? true,
+        // 05/10/2026: playlist mới mặc định RIÊNG TƯ — nhiều người nghe nhạc cá nhân; muốn công khai thì bật.
+        isPublic: isPublic ?? false,
       });
 
       const serialized = serializePlaylist(playlist);
@@ -951,6 +963,38 @@ router.post(
     }
   },
 );
+
+// ════════════════════════════════════════════════════════════════
+// GET/PUT /api/v1/music/playlists/:id/chia-se — người được chia sẻ playlist riêng tư (05/10/2026)
+// PUT body { userIds: number[] } — GHI ĐÈ danh sách. Chỉ chủ playlist (admin thì qua MFA).
+// ════════════════════════════════════════════════════════════════
+const chuHoacAdmin = async (req: any, id: number) => {
+  const p: any = await musicService.getPlaylistById(id);
+  if (!p) throw new AppError('Playlist not found', 404, 'PLAYLIST_NOT_FOUND');
+  const isOwner = p.userId === req.userId;
+  const isAdmin = (req.user?.roles ?? []).some((r: string) => /^(ROLE_)?ADMIN$/i.test(r));
+  if (!isOwner && !isAdmin) throw new AppError('Chỉ chủ playlist mới chia sẻ được', 403, 'FORBIDDEN');
+  if (!isOwner) await damBaoMfaAdmin(req.userId!, req.user);
+  return p;
+};
+router.get('/playlists/:id/chia-se', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id) || id <= 0) throw new AppError('Invalid playlist ID', 400, 'INVALID_ID');
+    await chuHoacAdmin(req, id);
+    res.set('Cache-Control', 'private, no-store');
+    res.json({ success: true, data: await musicService.danhSachChiaSe(id) });
+  } catch (error) { next(error); }
+});
+router.put('/playlists/:id/chia-se', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id) || id <= 0) throw new AppError('Invalid playlist ID', 400, 'INVALID_ID');
+    const p = await chuHoacAdmin(req, id);
+    const userIds = Array.isArray(req.body?.userIds) ? req.body.userIds.map(Number) : [];
+    res.json({ success: true, data: await musicService.datChiaSe(id, p.userId ?? null, userIds) });
+  } catch (error) { next(error); }
+});
 
 // ════════════════════════════════════════════════════════════════
 // DELETE /api/v1/music/playlists/:id

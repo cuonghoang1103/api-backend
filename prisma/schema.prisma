@@ -2088,9 +2088,26 @@ model MusicPlaylist {
 
   user   User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
   tracks MusicPlaylistTrack[]
+  /// Người được chủ playlist chia sẻ riêng (05/10/2026) — chỉ có tác dụng khi isPublic = false.
+  shares MusicPlaylistShare[]
 
   @@index([userId], name: "idx_playlists_user")
   @@map("music_playlists")
+}
+
+/// Playlist RIÊNG TƯ chia sẻ cho người được chỉ định (05/10/2026). Ba chế độ suy từ dữ liệu:
+/// isPublic = true → công khai · isPublic = false + không dòng nào ở đây → riêng tư · có dòng → chia sẻ.
+model MusicPlaylistShare {
+  id         Int      @id @default(autoincrement())
+  playlistId Int      @map("playlist_id")
+  userId     Int      @map("user_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  playlist MusicPlaylist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+
+  @@unique([playlistId, userId], name: "uk_playlist_share", map: "uk_playlist_share")
+  @@index([userId], name: "idx_playlist_share_user")
+  @@map("music_playlist_shares")
 }
 
 model MusicPlaylistTrack {

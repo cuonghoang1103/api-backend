@@ -22,6 +22,9 @@ export interface Playlist {
   description?: string | null;
   coverUrl?: string | null;
   isPublic?: boolean;
+  /** Chủ playlist + số người được chia sẻ (05/10/2026). */
+  userId?: number | null;
+  shareCount?: number;
   trackCount?: number;
   createdByName?: string;
   tracks?: Track[];

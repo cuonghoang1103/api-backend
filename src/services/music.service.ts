@@ -994,8 +994,9 @@ export class MusicService {
 
   // ─── GET /playlists ──────────────────────────────────────
   async getPlaylists(userId?: number): Promise<unknown[]> {
+    // 05/10/2026: + playlist RIÊNG TƯ được chia sẻ cho người này.
     const where = userId
-      ? { OR: [{ userId }, { isPublic: true }] }
+      ? { OR: [{ userId }, { isPublic: true }, { shares: { some: { userId } } }] }
       : { isPublic: true };
 
     return prisma.musicPlaylist.findMany({
@@ -1009,10 +1010,36 @@ export class MusicService {
           orderBy: { position: 'asc' },
           take: 5,
         },
-        _count: { select: { tracks: true } },
+        _count: { select: { tracks: true, shares: true } },
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  // ─── Quyền riêng tư playlist (05/10/2026) ─────────────────
+  /** Xem được khi: công khai · là chủ · được chia sẻ · admin. */
+  async coTheXemPlaylist(p: { id: number; userId: number | null; isPublic: boolean }, userId?: number, laAdmin = false): Promise<boolean> {
+    if (p.isPublic || laAdmin) return true;
+    if (!userId) return false;
+    if (p.userId === userId) return true;
+    return (await prisma.musicPlaylistShare.count({ where: { playlistId: p.id, userId } })) > 0;
+  }
+  async danhSachChiaSe(playlistId: number) {
+    const rows = await prisma.musicPlaylistShare.findMany({ where: { playlistId }, orderBy: { createdAt: 'asc' } });
+    if (!rows.length) return [];
+    const users = await prisma.user.findMany({ where: { id: { in: rows.map((r) => r.userId) } }, select: { id: true, username: true, fullName: true, avatarUrl: true } });
+    return users;
+  }
+  /** Ghi đè danh sách người được chia sẻ (tối đa 50). Có người ⇒ playlist thành riêng tư (chế độ "chia sẻ"). */
+  async datChiaSe(playlistId: number, ownerId: number | null, userIds: number[]) {
+    const ds = [...new Set(userIds.filter((x) => Number.isInteger(x) && x > 0 && x !== ownerId))].slice(0, 50);
+    const coThat = ds.length ? (await prisma.user.findMany({ where: { id: { in: ds } }, select: { id: true } })).map((u) => u.id) : [];
+    await prisma.$transaction([
+      prisma.musicPlaylistShare.deleteMany({ where: { playlistId, userId: { notIn: coThat } } }),
+      ...coThat.map((userId) => prisma.musicPlaylistShare.upsert({ where: { uk_playlist_share: { playlistId, userId } }, create: { playlistId, userId }, update: {} })),
+      ...(coThat.length ? [prisma.musicPlaylist.update({ where: { id: playlistId }, data: { isPublic: false } })] : []),
+    ]);
+    return this.danhSachChiaSe(playlistId);
   }
 
   // ─── GET /playlists/:id ──────────────────────────────────

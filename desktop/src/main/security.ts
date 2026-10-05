@@ -248,7 +248,9 @@ export function applySessionPolicies(): void {
    * đưa dữ liệu RA, đọc là app lấy dữ liệu người dùng đã chép ở nơi khác —
    * mật khẩu, số thẻ. Không tính năng nào cần đọc.
    */
-  const ALLOWED_PERMISSIONS = new Set<string>(['media', 'clipboard-sanitized-write']);
+  // 'fullscreen' (05/10/2026): nút ⤢ phóng to game gọi requestFullscreen() — thiếu quyền này Chromium
+  // từ chối ÂM THẦM, người dùng bấm không thấy gì. Chỉ renderer của app được xin (isOwnRenderer).
+  const ALLOWED_PERMISSIONS = new Set<string>(['media', 'clipboard-sanitized-write', 'fullscreen']);
 
   const isOwnRenderer = (url: string): boolean =>
     url.startsWith(APP_ORIGIN) || (IS_DEV && url.startsWith(DEV_SERVER_URL));

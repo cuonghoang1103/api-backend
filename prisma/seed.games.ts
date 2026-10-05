@@ -500,5 +500,12 @@ export async function seedGames(prisma: PrismaClient): Promise<void> {
     });
   }
 
+  // ẨN game cũ của web + game "sắp ra mắt" (05/10/2026) — người dùng: "xoá mấy game sắp ra mắt và game cũ
+  // trên web đi vì chơi không được". ẨN (DRAFT), KHÔNG xoá: lượt chơi/điểm cũ vẫn còn, mở lại được.
+  // ⚠️ Muốn mở lại một game: BỎ slug khỏi danh sách này trước (seed chạy mỗi lần deploy sẽ ẩn lại).
+  const AN_DI = ['snake-game', 'memory-card', 'math-blitz', 'projectile-challenge', 'tic-tac-toe', 'love-me', 'block-breaker'];
+  const an = await prisma.game.updateMany({ where: { slug: { in: AN_DI }, status: { not: 'DRAFT' } }, data: { status: 'DRAFT', featured: false } });
+  if (an.count) console.log(`   ẩn ${an.count} game cũ/sắp ra mắt`);
+
   console.log(`✅ Games seeded (${CATEGORIES.length} categories, ${GAMES.length} games)`);
 }

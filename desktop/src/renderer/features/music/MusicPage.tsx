@@ -30,6 +30,7 @@ import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { useDich } from '../../i18n';
 import { BangBai, TEN_LOAI, type HanhDongBai } from './BangBai';
+import { QuyenPlaylist, BieuTuongCheDo, cheDoCua } from './QuyenPlaylist';
 import { BangXepHang } from './BangXepHang';
 import { BenPhai, type TheBenPhai } from './BenPhai';
 import { AnhBia, BiaGhep, doDaiDanhSach, RaNgoai } from './dungChung';
@@ -67,6 +68,7 @@ export function MusicPage() {
   const { dich, dichP } = useDich();
   const { online } = useAppState();
   const { api, user } = useSession();
+  const userId = user?.userId ?? null;
 
   /*
    * Chỉ ADMIN mới thấy nút xoá hẳn — khớp đúng quyền máy chủ đòi
@@ -546,6 +548,7 @@ export function MusicPage() {
             <button key={p.id} type="button" className="mz-nav-muc mz-nav-plmuc" data-on={muc === `pl:${p.id}` && !tim} onClick={() => { setMuc(`pl:${p.id}`); setQuery(''); }}>
               <AnhBia src={p.coverUrl} co={26} />
               <span>{p.name}</span>
+              {!p.isPublic && <i className="mz-nav-khoa" title={cheDoCua(p) === 'chia-se' ? 'Chia sẻ với người cụ thể' : 'Riêng tư'}><BieuTuongCheDo cheDo={cheDoCua(p)} size={11} /></i>}
               {p.trackCount ? <em>{p.trackCount}</em> : null}
             </button>
           ))}
@@ -848,9 +851,13 @@ export function MusicPage() {
                 onTron={() => phatDs(plMo.tracks ?? [], true)}
                 coBai={(plMo.tracks?.length ?? 0) > 0}
               >
-                <button type="button" className="mz-nut mz-nut-trong" onClick={() => void xoaPlMo()}>
-                  <Trash2 size={14} aria-hidden /> {dich('Xoá playlist')}
-                </button>
+                {api && plMo.userId === userId && <QuyenPlaylist api={api} playlist={plMo} onDoi={() => { void napPlMo(plMo.id); void napPlaylists(); }} />}
+                {plMo.userId !== userId && plMo.createdByName && <span className="mz-pl-cua"><BieuTuongCheDo cheDo={cheDoCua(plMo)} /> {dichP('của @{ten}', { ten: plMo.createdByName })}</span>}
+                {plMo.userId === userId && (
+                  <button type="button" className="mz-nut mz-nut-trong" onClick={() => void xoaPlMo()}>
+                    <Trash2 size={14} aria-hidden /> {dich('Xoá playlist')}
+                  </button>
+                )}
               </DauMuc>
               {(plMo.tracks?.length ?? 0) === 0
                 ? <p className="mz-trong-nho">{dich('Playlist trống. Bấm “⋯” cạnh một bài → Thêm vào playlist.')}</p>

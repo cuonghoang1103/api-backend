@@ -1807,6 +1807,7 @@ export const TU_DIEN: Record<string, string> = {
   'Tài nguyên': 'Resources',
   'Tải về nghe offline': 'Download for offline listening',
   'Bỏ nhãn (để app tự đoán)': 'Remove label (let the app guess)',
+  'của @{ten}': 'by @{ten}',
   'Loại nhạc': 'Music type',
   'tự đoán': 'auto',
   'Lưu vào thư viện và tải về máy': 'Save to library and download to this device',

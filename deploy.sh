@@ -1023,6 +1023,7 @@ for route in \
     games \
     books/tien-do \
     doi-khang/thong-ke \
+    flying-pencil/tts/voices \
     landing/promos \
     landing/stats \
     code-lab/groups \

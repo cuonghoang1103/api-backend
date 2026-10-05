@@ -323,6 +323,16 @@ export default {
         ],
       },
       {
+        summary: 'Chấm Spec Fidelity 4 chiều trước khi ký SRS',
+        role: 'qa',
+        checklist: [
+          'Người chấm khác người viết SRS',
+          'Đầy đủ: có kịch bản lỗi, giá trị biên; Nhất quán: không có quy tắc mâu thuẫn',
+          'Một nghĩa: không từ mơ hồ thiếu số đo; Kiểm chứng được: mỗi yêu cầu có phép kiểm đạt / không đạt',
+          'Đạt ngưỡng đã thoả thuận mới giao việc (kể cả giao cho AI sinh mã / test)',
+        ],
+      },
+      {
         summary: 'Lập ma trận truy vết (RTM) và xin ký duyệt SRS',
         role: 'ba',
         checklist: [
@@ -532,6 +542,7 @@ export default {
         checklist: [
           'PR nhỏ, có mô tả và liên kết story',
           'Người review khác người viết',
+          'Thay đổi do AI hỗ trợ được gắn nhãn AI-assisted (công cụ, phiên bản đặc tả) và người khác review',
           'CI xanh trên bản cuối trước khi merge',
         ],
       },
@@ -634,6 +645,7 @@ export default {
         checklist: [
           'Mỗi yêu cầu có ít nhất một test case',
           'Có test giá trị biên và kịch bản lỗi',
+          'Test do AI sinh được gắn nhãn và người khác review',
           'Cập nhật RTM',
         ],
       },

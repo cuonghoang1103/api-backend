@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
-  Archive, Blocks, Boxes, Columns3, Download, GitMerge, Github, Link2, MessageSquareShare, Shapes, SlidersHorizontal, Tag, TextCursorInput, Trash2, TriangleAlert, Upload, Users, Workflow, Zap,
+  Archive, Blocks, Boxes, Columns3, Download, Gauge, GitMerge, Github, Link2, MessageSquareShare, Shapes, SlidersHorizontal, Tag, TextCursorInput, Trash2, TriangleAlert, Upload, Users, Workflow, Zap,
 } from 'lucide-react';
 import { workError } from '@/lib/work-api';
 import { useProject } from '@/components/work/hooks';
@@ -31,8 +31,10 @@ import ProjectImport from '@/components/work/settings/ProjectImport';
 import ProjectShare from '@/components/work/settings/ProjectShare';
 import ProjectTrash from '@/components/work/settings/ProjectTrash';
 import ProjectDanger from '@/components/work/settings/ProjectDanger';
+// Đợt S6: cổng Spec Fidelity + luật AI-assisted.
+import ProjectSpecQuality from '@/components/work/settings/ProjectSpecQuality';
 
-type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'automation' | 'github' | 'gitlab' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
+type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'automation' | 'github' | 'gitlab' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
 
 function ProjectSettings() {
   const params = useParams<{ ws: string; key: string }>();
@@ -58,6 +60,7 @@ function ProjectSettings() {
       { key: 'board', label: 'Board', icon: Columns3 },
       { key: 'types', label: 'Issue types', icon: Shapes },
       { key: 'fields', label: 'Fields', icon: TextCursorInput },
+      ...(config && config.role !== 'CLIENT' ? [{ key: 'quality' as const, label: 'Spec quality & AI', icon: Gauge }] : []),
     ] },
     { label: 'Automation & integrations', tabs: [
       { key: 'automation', label: 'Automation', icon: Zap },
@@ -121,6 +124,7 @@ function ProjectSettings() {
         {tab === 'board' && <ProjectBoard config={config} slug={slug} />}
         {tab === 'types' && <ProjectIssueTypes config={config} slug={slug} />}
         {tab === 'fields' && <ProjectFields config={config} slug={slug} />}
+        {tab === 'quality' && <ProjectSpecQuality config={config} slug={slug} />}
         {tab === 'automation' && <ProjectAutomation config={config} slug={slug} />}
         {tab === 'github' && <ProjectGithub config={config} slug={slug} />}
         {tab === 'gitlab' && <ProjectGitlab config={config} slug={slug} />}

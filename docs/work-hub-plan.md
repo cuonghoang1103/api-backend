@@ -793,6 +793,57 @@ khách nào ⇒ khách bị cách ly gọi ⇒ 403 `CLIENT_PORTAL_ONLY`). Migrat
   đúng 1 bản do bước AI áp dụng SAU khi xuất) → ZIP hỏng báo lỗi → đề xuất AI "Update document section" → Apply ⇒ v1→v2 → "Summarize
   with AI" gọi cổng LLM thật (200); 0 lỗi JS, 0 tràn ngang 390px; ảnh `~/Desktop/ct-work-ui/s5c/`.
 
+### Đợt S6 — Spec Fidelity + nguồn gốc AI (05/10/2026)
+
+Nguồn ý tưởng: báo cáo SDAD (arXiv 2608.20341) — "Spec Fidelity" 4 chiều (completeness · consistency · unambiguity ·
+verifiability) + nguyên tắc "AI viết thì không tự duyệt phát hành" + provenance; chuẩn nền ISO/IEC/IEEE 29148. Tuyến ở
+`src/routes/work.s6.routes.ts` (một dòng `router.use` cuối work.routes.ts — qua chốt cổng khách ⇒ khách cách ly 403
+`CLIENT_PORTAL_ONLY`). Migration viết tay `20261005170000_work_s6` CHỈ THÊM: bảng `work_spec_reviews`; cột `ai_assisted`,
+`ai_model`, `ai_assisted_at`, `ai_applied_by_id` trên `work_issues` + `work_pages`; `spec_review_id` (FK SET NULL) trên
+`work_approvals`. Luật thuần `specFidelity.ts` (test `s6.test.ts`, 27 phép trong `npm test`).
+
+- [x] S6.A Bộ kiểm XÁC ĐỊNH (`specFidelity.ts`, không LLM, chạy trước): từ mơ hồ EN + VI (fast/user-friendly/etc/TBD/
+      should be fast/and-or…; nhanh/thân thiện/v.v./tuỳ/tùy/có thể/nếu cần… — ranh giới chữ bằng lookaround `\p{L}`,
+      KHÔNG `\b`; cụm dài thắng cụm ngắn; NFC), câu nói về chất lượng mà không có số + đơn vị (`unmeasurable`), thiếu
+      acceptance criteria (Given/When/Then, Happy:/Unhappy:, mục "Acceptance criteria"/"Tiêu chí chấp nhận", taskItem),
+      thiếu edge case, mô tả rỗng, trùng (Jaccard ≥ 0.85) + mã yêu cầu định nghĩa hai lần, thiếu mục chuẩn SRS (29148: purpose/
+      scope, functional, quality, constraints, acceptance), không có failure mode, thiếu test liên kết (traceability THẬT:
+      liên kết TESTS từ thẻ TEST). Trang: rút câu yêu cầu (shall/must/phải/cần…, mã FR-01…, hoặc dưới mục yêu cầu; bảng =
+      một hàng một yêu cầu); câu nhắc `KEY-n` ⇒ đi theo thẻ đó lấy AC + test.
+- [x] S6.B Điểm: mỗi phát hiện mở trừ 15/8/3 (cao/vừa/thấp) × `10/max(10,N)`; đã áp dụng/bỏ qua không trừ; verifiability =
+      40% tỷ lệ có AC + 30% tỷ lệ có test + 30% phần luật; overall = trung bình 4 chiều; không có yêu cầu ⇒ 0. AI trừ tối đa
+      40 mỗi chiều.
+- [x] S6.C LLM bổ sung ngữ nghĩa (`specReview.service.ts`): purpose MỚI `work_spec_review` (gateway.ts, `claude-sonnet-5`,
+      vặn `LLM_MODEL_WORK_SPEC_REVIEW`), chỉ khi người chạy có `ai.use` và bật "Include AI semantic review"; nhận xét phải có
+      `ref` có thật + trích dẫn NGUYÊN VĂN (không thì bỏ), không nhận chiều verifiability. Lỗi/hết hạn mức/cổng tắt ⇒ vẫn
+      trả phần xác định + `semantic: UNAVAILABLE` ("Semantic review unavailable"). KHÔNG có job nền nào gọi. Test giả lập
+      `_setSpecAskForTests`.
+- [x] S6.D Lịch sử `work_spec_reviews` (trang + số phiên bản lúc chấm / tập thẻ dự án·epic·giai đoạn, người chạy, thời
+      điểm, điểm, phát hiện, chưa truy vết, model). Gợi ý viết lại = ĐỀ XUẤT → Apply: trang ⇒ phiên bản MANUAL "Spec
+      Fidelity suggestion applied (…)"; thẻ ⇒ applyIssueChange (thêm khối AC / thay câu); giành khoá open→applied (hai lần ⇒
+      409), chữ đã đổi ⇒ 409 `WORK_SPEC_STALE`; gợi ý từ AI ⇒ AI-assisted. Điểm chỉ đổi khi chấm lại.
+- [x] S6.E Cổng "Spec Fidelity gate" (`settings.specGate`, mặc định TẮT; 70 tổng / 50 mỗi chiều; giai đoạn slug
+      `dac-ta-yeu-cau` hoặc giai đoạn chọn). `requestGate` đọc lần chấm MỚI NHẤT gắn giai đoạn (trang thuộc giai đoạn / thẻ
+      lọc theo giai đoạn) ⇒ đính `specReviewId` + một dòng tóm tắt vào phê duyệt; chưa chấm / dưới ngưỡng ⇒ 409
+      `WORK_SPEC_GATE` (kèm lý do); ADMIN `override: { reason ≥ 3 }` ⇒ qua + audit `spec.gate.override`; MEMBER ⇒ 403. Khách
+      xem phê duyệt cổng KHÔNG thấy điểm. Dự án School không stages: chấm độc lập từ Docs và Issues.
+- [x] S6.F Nguồn gốc AI (`provenance.ts`): actor AI đổi tiêu đề/mô tả hoặc tạo thẻ ⇒ `aiAssisted` + model + người áp dụng,
+      lịch sử field `aiAssisted` ("<model> · AI suggestion applied"; người + thời điểm = actor + createdAt); trang do
+      draft_page/update_page_section ⇒ AI-assisted; commit/PR (GitHub + GitLab) có trailer `Co-Authored-By:` của model AI
+      (Claude/Copilot/GPT/Gemini/… hoặc noreply@anthropic.com) ⇒ gắn cho thẻ liên kết (SYSTEM, gửi lại không ghi thêm); gắn/gỡ
+      tay qua PATCH `aiAssisted`. Luật tuỳ chọn `settings.aiReview.requireIndependentReviewer` (mặc định TẮT): thẻ AI-assisted
+      vào DONE cần phê duyệt ISSUE APPROVED, chữ ký khớp nội dung, có bước duyệt của người ≠ người báo và ≠ người áp dụng AI
+      — hook trong nhánh DONE của applyIssueChange cạnh Done rules (người + AI bị chặn, luật tự động/hệ thống không) ⇒ 400
+      `WORK_AI_REVIEW_REQUIRED`.
+- [x] S6.G UI: ngăn "Spec quality" trên trang Docs (nút "Check spec quality": 4 vạch + tổng, biểu đồ nhỏ lịch sử, lọc theo
+      chiều, bấm mã ⇒ cuộn + nháy đoạn văn / mở thẻ, sửa rồi Apply, Dismiss/Restore, danh sách "Not traced to a test"); trang
+      MỚI `/work/:ws/:key/spec` (phạm vi All / epic / stage, lịch sử, các trang đã chấm) + nút ở Issues + mục "Spec quality"
+      ở thanh bên; hộp "Request gate review" hiện cổng (điểm, lý do, ô lý do ghi đè cho ADMIN); phê duyệt cổng hiện lần chấm
+      đính kèm; nhãn AI-assisted trên thẻ (gắn/gỡ tay) + trang; Settings → "Spec quality & AI". Tuyến app desktop
+      `dinhTuyenWeb.ts` +1 (`/work/:ws/:key/spec`, 144 mẫu).
+- [x] Help: "Spec Fidelity: check the quality of requirements" (4 chiều, cách tính điểm, ví dụ viết lại tốt/xấu VI+EN,
+      ISO/IEC/IEEE 29148, cổng) và "AI provenance: the AI-assisted label" (song ngữ).
+
 ## 10. Rủi ro
 
 | Rủi ro | Cách giữ |

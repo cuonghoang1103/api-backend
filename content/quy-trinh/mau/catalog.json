@@ -177,6 +177,16 @@
       "titleEn": "Communication & escalation plan"
     },
     {
+      "key": "chinh-sach-su-dung-ai",
+      "titleVi": "Chính sách sử dụng AI trong dự án — mẫu tham khảo",
+      "titleEn": "AI usage policy for the project — reference"
+    },
+    {
+      "key": "checklist-spec-fidelity",
+      "titleVi": "Checklist Spec Fidelity cho đặc tả",
+      "titleEn": "Spec Fidelity checklist for specifications"
+    },
+    {
       "key": "tra-loi-danh-gia-nha-cung-cap",
       "titleVi": "Bảng trả lời đánh giá nhà cung cấp",
       "titleEn": "Vendor security questionnaire — answers"

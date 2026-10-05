@@ -20,7 +20,8 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type RefOb
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { ArrowDown, ArrowUp, ChevronDown, Plus, Search, X } from 'lucide-react';
+import { ArrowDown, ArrowUp, ChevronDown, Gauge, Plus, Search, X } from 'lucide-react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
 import { workApi, workError, userName, type BulkPatch, type IssueCard, type IssueQuery, type SavedFilter, type StatusCategory } from '@/lib/work-api';
@@ -571,6 +572,12 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
         />
         <ColumnsMenu value={cols} onChange={setCols} />
         <ExportMenu pid={config.id} getJql={() => (jqlMode ? jqlParam : currentBasicJql())} />
+        {/* Đợt S6: chấm chất lượng đặc tả của thẻ Requirement/Story (trang Spec quality). */}
+        {['ADMIN', 'MEMBER', 'TEACHER'].includes(config.role) && (
+          <Link href={`/work/${config.workspace.slug}/${config.key}/spec`} className="w-btn w-btn-sm" title="Check spec quality of requirements (Spec Fidelity)" data-testid="list-spec-check">
+            <Gauge size={13} /> <span className="max-lg:!hidden">Check spec quality</span>
+          </Link>
+        )}
         {canCreate && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title="Create issue">
             <Plus size={14} /> <span className="max-sm:!hidden">Create issue</span>

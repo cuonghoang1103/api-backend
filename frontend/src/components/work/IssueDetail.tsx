@@ -45,6 +45,9 @@ import { IssueGovernance } from './governance/IssueGovernance';
 import { IssueDesk } from './desk/IssueDesk';
 import { AttachmentClientControls, IssueClientShare } from './portal/ClientShare';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
+// Đợt S6: nhãn nguồn gốc AI (AI-assisted) của thẻ.
+import { AiAssistedControl } from './spec/SpecPanel';
+import type { AiProvenance } from '@/lib/work-s6-api';
 import {
   formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, ProjectMark, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
   EmptyState,
@@ -479,6 +482,15 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
       )}
       <Prop label="Reporter">
         <div className="flex items-center gap-2 px-2 text-[13px]"><UserAvatar user={issue.reporter} size={18} /><span className="truncate">{issue.reporter ? (issue.reporter.displayName || issue.reporter.fullName || issue.reporter.username) : 'Unknown'}</span></div>
+      </Prop>
+      <Prop label="AI-assisted">
+        <AiAssistedControl
+          on={!!(issue as typeof issue & AiProvenance).aiAssisted}
+          model={(issue as AiProvenance).aiModel}
+          at={(issue as AiProvenance).aiAssistedAt}
+          editable={editable}
+          onToggle={(v) => set({ aiAssisted: v } as unknown as IssuePatch)}
+        />
       </Prop>
       <Prop label="Priority"><PriorityPicker value={issue.priority} onChange={(priority) => set({ priority })} bare disabled={!editable} /></Prop>
       <Prop label="Labels"><LabelsPicker config={config} value={issue.labelIds} onChange={(labelIds) => set({ labelIds })} bare disabled={!editable} /></Prop>

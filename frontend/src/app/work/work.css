@@ -504,3 +504,11 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
   .w-no-print { display: none !important; }
   @page { margin: 16mm; }
 }
+
+/* Đợt S6 — Spec quality: khối chữ vừa "nhảy tới" từ một phát hiện nháy sáng 2 giây. */
+.w-spec-flash {
+  background: color-mix(in srgb, var(--w-accent) 16%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--w-accent) 16%, transparent);
+  border-radius: 4px;
+  transition: background 0.4s var(--w-ease), box-shadow 0.4s var(--w-ease);
+}

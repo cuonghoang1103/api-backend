@@ -40,6 +40,10 @@ import { openAiPanel } from '../ai/store';
 import { InternalPill, portalStaff, VisibleToClient } from '../portal/ClientShare';
 import NewPageDialog from './NewPageDialog';
 import { PAGE_STATUS, PageStatusPill, VisibilityBadge, docsBase, downloadText } from './shared';
+// Đợt S6: "Check spec quality" (Spec Fidelity) + nhãn AI-assisted của trang.
+import { AiAssistedBadge, DocSpecDrawer } from '../spec/SpecPanel';
+import type { AiProvenance } from '@/lib/work-s6-api';
+import { Gauge } from 'lucide-react';
 
 type SaveState = 'saved' | 'dirty' | 'saving' | 'error' | 'conflict';
 
@@ -70,6 +74,7 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
   docRef.current = doc;
 
   const [history, setHistory] = useState(false);
+  const [specOpen, setSpecOpen] = useState(false);
   const [asking, setAsking] = useState(false);
   const [approvalOpen, setApprovalOpen] = useState<number | null>(null);
   const [newChild, setNewChild] = useState(false);
@@ -260,7 +265,13 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
           {page.owner && <span className="flex items-center gap-1.5"><UserAvatar user={page.owner} size={16} /> {userName(page.owner)}</span>}
           <span title={fmtDateTime(page.updatedAt)}>Edited {relativeTime(page.updatedAt)}{page.lastEditedBy ? ` by ${userName(page.lastEditedBy)}` : ''}</span>
           {editable && <SaveBadge state={save} savedAt={savedAt} onRetry={() => void flush()} />}
+          {(page as WorkPageDetail & AiProvenance).aiAssisted && <AiAssistedBadge model={(page as AiProvenance).aiModel} at={(page as AiProvenance).aiAssistedAt} />}
           <span className="ml-auto flex items-center gap-1">
+            {['ADMIN', 'MEMBER', 'TEACHER'].includes(config.role) && (
+              <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setSpecOpen(true)} data-testid="docs-spec-check" title="Check spec quality (Spec Fidelity)">
+                <Gauge size={13} /> <span className="max-sm:hidden">Check spec quality</span>
+              </button>
+            )}
             <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => { void flush(); setHistory(true); }} data-testid="docs-history">
               <History size={13} /> <span className="max-sm:hidden">History</span> <span className="tabular text-[var(--w-text-3)]">v{page.currentVersion}</span>
             </button>
@@ -389,6 +400,14 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
         </div>
       </aside>
 
+      <DocSpecDrawer
+        open={specOpen}
+        onClose={() => setSpecOpen(false)}
+        config={config}
+        pageNumber={num}
+        beforeRun={flush}
+        onApplied={() => { void reloadFromServer(); qc.invalidateQueries({ queryKey: workDocsKeys.versions(pid, num) }); }}
+      />
       <DocHistory open={history} onClose={() => setHistory(false)} pid={pid} page={page} canRestore={page.canManage && editable} onRestored={(p) => { qc.setQueryData(key, p); qc.invalidateQueries({ queryKey: workDocsKeys.list(pid) }); }} />
       <RequestApprovalDialog
         open={asking}

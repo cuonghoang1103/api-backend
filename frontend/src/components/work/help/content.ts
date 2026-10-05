@@ -2048,6 +2048,111 @@ export const HELP_ARTICLES: HelpArticle[] = [
     ],
     related: ['project-docs', 'project-export'],
   },
+  // ─── Đợt S6: Spec Fidelity + nguồn gốc AI ───────────────────────
+  {
+    id: 'spec-fidelity',
+    category: 'quality',
+    title: { en: 'Spec Fidelity: check the quality of requirements', vi: 'Spec Fidelity: chấm chất lượng đặc tả yêu cầu' },
+    summary: {
+      en: 'Score a document (SRS) or a set of Requirement/Story issues on four dimensions — completeness, consistency, unambiguity, verifiability — get concrete rewrites, and optionally block a stage gate until the score is good enough.',
+      vi: 'Chấm một tài liệu (SRS) hoặc một tập thẻ Requirement/Story theo bốn chiều — đầy đủ, nhất quán, rõ nghĩa, kiểm chứng được — nhận gợi ý viết lại cụ thể, và tuỳ chọn chặn cổng giai đoạn tới khi điểm đủ.',
+    },
+    keywords: ['spec', 'spec fidelity', 'srs', 'requirement quality', 'ambiguous', 'acceptance criteria', 'traceability', 'iso 29148', 'ieee 29148', 'gate', 'dac ta', 'chat luong yeu cau', 'mo ho', 'tieu chi chap nhan', 'truy vet'],
+    pages: [page('project', 'spec', 'Spec quality', 'Spec quality'), page('project', 'settings?tab=quality', 'Project settings → Spec quality & AI', 'Cài đặt dự án → Spec quality & AI')],
+    blocks: [
+      p(
+        'A requirement is only useful if the developer, the tester and the client read it the same way and can tell when it is done. **Spec Fidelity** measures that, using the characteristics of good requirements in **ISO/IEC/IEEE 29148** (the international standard for requirements engineering).',
+        'Một yêu cầu chỉ có ích khi lập trình viên, tester và khách đọc ra cùng một ý và biết khi nào là xong. **Spec Fidelity** đo điều đó, dựa trên các đặc tính của yêu cầu tốt trong **ISO/IEC/IEEE 29148** (chuẩn quốc tế về kỹ nghệ yêu cầu).',
+      ),
+      h('The four dimensions', 'Bốn chiều'),
+      table(
+        [['Dimension', 'Chiều'], ['What it checks', 'Kiểm gì'], ['Example problem', 'Ví dụ lỗi']],
+        [
+          [['Completeness', 'Completeness (đầy đủ)'], ['Standard sections, edge cases and failure modes, no "TBD"', 'Đủ mục chuẩn, có edge case và failure mode, không còn "TBD"'], ['"Users pay by card." (what if the card is declined?)', '"Người dùng trả bằng thẻ." (thẻ bị từ chối thì sao?)']],
+          [['Consistency', 'Consistency (nhất quán)'], ['No duplicates, no contradictions, each ID defined once', 'Không trùng, không mâu thuẫn, mỗi mã định nghĩa một lần'], ['FR-02 keeps the cart 7 days, NFR-05 says 30 days', 'FR-02 giữ giỏ 7 ngày, NFR-05 nói 30 ngày']],
+          [['Unambiguity', 'Unambiguity (rõ nghĩa)'], ['One reading only — no vague words', 'Chỉ một cách hiểu — không từ mơ hồ'], ['"fast", "user-friendly", "etc.", "nhanh", "thân thiện", "tuỳ", "có thể"', '"fast", "user-friendly", "etc.", "nhanh", "thân thiện", "tuỳ", "có thể"']],
+          [['Verifiability', 'Verifiability (kiểm chứng được)'], ['A pass/fail criterion and a linked test for each requirement', 'Mỗi yêu cầu có tiêu chí đạt/trượt và test liên kết'], ['"The site should be secure." (no number, no test)', '"Trang web phải an toàn." (không số, không test)']],
+        ],
+      ),
+      h('Run a check', 'Chạy một lần chấm'),
+      steps(
+        ['**A document:** open it in **Docs** and click **"Check spec quality"**. A panel opens on the right; click **"Check spec quality"** there.', '**Một tài liệu:** mở trong **Docs** và bấm **"Check spec quality"**. Một khung mở bên phải; bấm **"Check spec quality"** ở đó.'],
+        ['**A set of issues:** **Issues → "Check spec quality"** (or **Spec quality** in the sidebar), choose **All requirements**, **One epic** or **One stage**, then run the check.', '**Một tập thẻ:** **Issues → "Check spec quality"** (hoặc **Spec quality** ở thanh bên), chọn **All requirements**, **One epic** hoặc **One stage**, rồi chạy.'],
+        ['Read the four bars and the findings. Filter by dimension; click a reference (e.g. {{FR-01}} or {{SHOP-12}}) to jump to the paragraph or open the issue.', 'Đọc bốn vạch điểm và các phát hiện. Lọc theo chiều; bấm mã (vd {{FR-01}} hay {{SHOP-12}}) để nhảy tới đoạn văn hoặc mở thẻ.'],
+        ['Expand a finding, edit the suggested rewrite if needed, and click **"Apply"**. Documents get a new version (see **History**); issues are edited with history. Then click **"Check again"** — the score only changes when you re-check.', 'Mở một phát hiện, sửa bản viết lại nếu cần, bấm **"Apply"**. Tài liệu có phiên bản mới (xem **History**); thẻ được sửa kèm lịch sử. Rồi bấm **"Check again"** — điểm chỉ đổi khi chấm lại.'],
+      ),
+      h('How the score is computed', 'Điểm được tính thế nào'),
+      list(
+        ['**Code checks run first and always:** vague words (English and Vietnamese), sentences about speed/security/availability without a number, missing acceptance criteria, duplicates and duplicate IDs, missing SRS sections, and requirements with no linked test — from the real traceability matrix (Tests).', '**Kiểm bằng mã chạy trước và luôn chạy:** từ mơ hồ (Anh và Việt), câu nói về tốc độ/bảo mật/sẵn sàng mà không có con số, thiếu tiêu chí chấp nhận, trùng lặp và trùng mã, thiếu mục chuẩn của SRS, và yêu cầu chưa có test liên kết — lấy từ ma trận truy vết thật (Tests).'],
+        ['**The AI adds semantic findings** (contradictions, missing edge cases, two readings) when **"Include AI semantic review"** is ticked. It can never invent a quote — findings that do not match the text are dropped — and its penalty is capped at 40 points per dimension. If the AI is unavailable you still get the full code check, marked "Semantic review unavailable".', '**AI bổ sung nhận xét ngữ nghĩa** (mâu thuẫn, thiếu edge case, câu hai nghĩa) khi bật **"Include AI semantic review"**. AI không thể bịa trích dẫn — nhận xét không khớp chữ thật bị bỏ — và điểm trừ của nó tối đa 40 mỗi chiều. AI không chạy được thì vẫn có đủ phần kiểm bằng mã, kèm ghi chú "Semantic review unavailable".'],
+        ['Each open finding subtracts 15 (high), 8 (medium) or 3 (low), scaled for size (×10/N when there are N > 10 requirements). Applied or dismissed findings do not count.', 'Mỗi phát hiện còn mở trừ 15 (cao), 8 (vừa) hoặc 3 (thấp), có hệ số theo cỡ (×10/N khi có N > 10 yêu cầu). Phát hiện đã áp dụng hoặc bỏ qua không trừ.'],
+        ['**Verifiability** = 40% share with acceptance criteria + 30% share with a linked test + 30% measurable wording. **Overall** = the average of the four.', '**Verifiability** = 40% tỷ lệ có tiêu chí chấp nhận + 30% tỷ lệ có test liên kết + 30% cách viết đo được. **Overall** = trung bình bốn chiều.'],
+      ),
+      h('Good and bad rewrites', 'Viết lại tốt và xấu'),
+      table(
+        [['Bad', 'Chưa tốt'], ['Good', 'Tốt']],
+        [
+          ['"The product list should be fast."', '"FR-01 The product list shall load within 2 seconds for 95% of requests; if loading fails it shall show an error and a Retry button."'],
+          ['"Hệ thống phải thân thiện với người dùng."', '"Người dùng mới hoàn thành đặt hàng trong dưới 3 phút mà không cần hướng dẫn (đo bằng 5 người thử)."'],
+          ['"Support Momo, ZaloPay, etc."', '"Support exactly: Momo, ZaloPay, VNPay. Other methods are out of scope (see Open questions)."'],
+          ['"Phí giao hàng tuỳ khu vực."', '"Phí giao hàng 20.000 đ nội thành, 35.000 đ ngoại thành; địa chỉ ngoài vùng giao thì báo lỗi và không cho đặt."'],
+        ],
+      ),
+      tip(
+        'Name the requirement issue in the document (e.g. "FR-01 … ({{SHOP-12}})") — the check then follows that issue to its acceptance criteria and test cases, and the sentence counts as traced.',
+        'Ghi mã thẻ yêu cầu ngay trong tài liệu (vd "FR-01 … ({{SHOP-12}})") — lần chấm sẽ đi theo thẻ đó tới tiêu chí chấp nhận và test case, và câu được tính là đã truy vết.',
+      ),
+      h('Spec Fidelity gate', 'Cổng Spec Fidelity'),
+      p(
+        'In **Project settings → Spec quality & AI** an admin can require a passing check (default: overall ≥ 70 and every dimension ≥ 50) before the requirements stage ({{dac-ta-yeu-cau}}) — or any stage you tick — can be sent for gate review. The latest check of that stage (a document in the stage, or the issues of the stage) is attached to the gate approval. Below the threshold, **"Request gate review"** is blocked; a project admin can still send it with a reason, which is recorded in the audit log. School projects without stages can use the check on its own.',
+        'Trong **Project settings → Spec quality & AI**, admin có thể bắt buộc lần chấm đạt (mặc định: tổng ≥ 70 và mỗi chiều ≥ 50) trước khi giai đoạn đặc tả ({{dac-ta-yeu-cau}}) — hoặc giai đoạn bạn tick — được gửi duyệt cổng. Lần chấm mới nhất của giai đoạn (tài liệu thuộc giai đoạn, hoặc thẻ của giai đoạn) được đính kèm vào phê duyệt cổng. Dưới ngưỡng thì **"Request gate review"** bị chặn; admin dự án vẫn gửi được nếu ghi lý do, lý do vào nhật ký audit. Dự án School không có giai đoạn vẫn dùng phần chấm độc lập.',
+      ),
+      warn(
+        'A score is evidence, not a verdict: a short spec with three perfect sentences can score 100 and still miss half the product. Read the findings, and keep a human approver on the gate.',
+        'Điểm là bằng chứng, không phải phán quyết: một đặc tả ngắn ba câu hoàn hảo có thể được 100 mà vẫn thiếu nửa sản phẩm. Hãy đọc phát hiện, và giữ người duyệt là con người ở cổng.',
+      ),
+    ],
+    related: ['ai-provenance', 'testing', 'stages-gates', 'project-docs'],
+  },
+  {
+    id: 'ai-provenance',
+    category: 'ai',
+    title: { en: 'AI provenance: the AI-assisted label', vi: 'Nguồn gốc AI: nhãn AI-assisted' },
+    summary: {
+      en: 'Issues and documents written with AI help are labelled AI-assisted, with the model, time and who applied it. An optional rule makes AI-assisted work need an independent reviewer before Done.',
+      vi: 'Thẻ và tài liệu viết với sự trợ giúp của AI được gắn nhãn AI-assisted, kèm model, thời điểm và người áp dụng. Một luật tuỳ chọn bắt việc AI-assisted phải có người duyệt độc lập trước khi Done.',
+    },
+    keywords: ['ai assisted', 'provenance', 'co-authored-by', 'claude', 'copilot', 'independent reviewer', 'nguon goc ai', 'duyet doc lap', 'trailer'],
+    pages: [page('project', 'settings?tab=quality', 'Project settings → Spec quality & AI', 'Cài đặt dự án → Spec quality & AI')],
+    blocks: [
+      p(
+        'Principle: **whoever lets the AI write must not also be the one who signs it off**, and everyone should be able to see what the AI touched.',
+        'Nguyên tắc: **ai để AI viết thì không tự duyệt phát hành**, và mọi người phải thấy được AI đã chạm vào đâu.',
+      ),
+      h('When the label appears', 'Khi nào nhãn xuất hiện'),
+      list(
+        ['You **Apply** an AI suggestion that creates an issue or changes its title or description (assistant panel, quick actions) — moving status or sprint alone does not count.', 'Bạn bấm **Apply** một đề xuất AI tạo thẻ hoặc đổi tiêu đề/mô tả (khung trợ lý, việc một chạm) — chỉ đổi trạng thái hay sprint thì không tính.'],
+        ['You apply an AI suggestion that creates a document or rewrites a section, or an AI finding from **Spec quality**.', 'Bạn áp dụng đề xuất AI tạo tài liệu hoặc viết lại một mục, hoặc một phát hiện AI trong **Spec quality**.'],
+        ['A linked commit or pull request (GitHub/GitLab) has a trailer such as {{Co-Authored-By: Claude … <noreply@anthropic.com>}} or a Copilot/Gemini/GPT co-author.', 'Một commit hoặc pull request liên kết (GitHub/GitLab) có trailer như {{Co-Authored-By: Claude … <noreply@anthropic.com>}} hoặc đồng tác giả Copilot/Gemini/GPT.'],
+        ['Someone marks it by hand: **AI-assisted → Mark** in the issue details (or remove it with **Remove**).', 'Ai đó gắn tay: **AI-assisted → Mark** trong chi tiết thẻ (gỡ bằng **Remove**).'],
+      ),
+      p(
+        'Each time, the issue **history** records the model, the source and — as the actor of the entry — who applied it and when.',
+        'Mỗi lần như vậy, **lịch sử** thẻ ghi model, nguồn và — là người thực hiện dòng đó — ai áp dụng, lúc nào.',
+      ),
+      h('Independent reviewer rule', 'Luật người duyệt độc lập'),
+      steps(
+        ['Turn on **"AI-assisted work needs an independent reviewer"** in **Project settings → Spec quality & AI** (off by default).', 'Bật **"AI-assisted work needs an independent reviewer"** trong **Project settings → Spec quality & AI** (mặc định tắt).'],
+        ['Moving an AI-assisted issue to a Done column now needs an **approved** approval on the issue, still matching the current content, from someone who is **neither the creator nor the person who applied the AI suggestion**.', 'Từ đó, kéo thẻ AI-assisted sang cột Done cần một phê duyệt **đã duyệt** trên thẻ, chữ ký còn khớp nội dung hiện tại, của người **không phải người tạo thẻ và không phải người áp dụng đề xuất AI**.'],
+        ['Request it from the issue (**Approvals → Request approval**) and pick a teammate. Without it you see "… is AI-assisted. Before it can move to Done it needs an approved review…".', 'Xin duyệt từ thẻ (**Approvals → Request approval**) và chọn một đồng đội. Thiếu thì bạn thấy thông báo "… is AI-assisted. Before it can move to Done it needs an approved review…".'],
+      ),
+      tip(
+        'Automation rules and integrations (e.g. "PR merged → Done") are not blocked by the rule, the same as Done rules — only people and the AI assistant are.',
+        'Luật tự động và tích hợp (vd "PR merged → Done") không bị luật này chặn, giống Done rules — chỉ người và trợ lý AI bị chặn.',
+      ),
+    ],
+    related: ['spec-fidelity', 'ai', 'approvals', 'github'],
+  },
   // ─── Đợt S5a: service desk & SLA ─────────────────────────────────
   {
     id: 'service-desk',

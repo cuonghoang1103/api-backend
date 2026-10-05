@@ -5,7 +5,8 @@
  *
  * Bố cục (bản 2, phương án A):
  *   vòng 3D (ProcessRing) → đường thời gian 7 pha (PhaseTimeline) →
- *   khung chuẩn tham chiếu → việc xuyên suốt → lối sang trang tổ chức → CTA.
+ *   khung chuẩn tham chiếu → việc xuyên suốt → làm dự án với AI (#ai-native) →
+ *   lối sang trang tổ chức → CTA.
  * Mỗi giai đoạn có trang tài liệu riêng: /about/quy-trinh/<slug>.
  *
  * ⛔ Cùng luật với /about: KHÔNG số liệu bịa. Mọi con số ĐẾM từ `data.ts` /
@@ -29,6 +30,7 @@ import { DEPARTMENTS } from './departments';
 import ProcessRing from './ProcessRing';
 import PhaseExplorer from './PhaseExplorer';
 import PhaseTimeline from './PhaseTimeline';
+import AiNative from './AiNative';
 import s from '@/components/studio/showroom.module.css';
 import ScrollReveal from '@/components/studio/ScrollReveal';
 
@@ -219,6 +221,9 @@ export default function ProcessPage() {
           ))}
         </div>
       </Section>
+
+      {/* ── Làm dự án với AI (ai-native.ts) ──────────────────────────── */}
+      <AiNative lang={lang} />
 
       {/* ── Lối sang trang tổ chức ────────────────────────────────────── */}
       <Section band>

@@ -130,7 +130,7 @@ describe('CT Work — tài liệu dự án S2a (HTTP + DB thật)', { skip: !RUN
   it('thư viện mẫu + tạo trang từ mẫu SRS (tiêu đề tiếng Anh, có đề mục + bảng, phiên bản 1 CREATE)', async () => {
     const lib = await call(member, 'GET', `/projects/${clPid}/doc-templates`);
     assert.equal(lib.status, 200);
-    assert.equal(lib.data.length, 36);
+    assert.equal(lib.data.length, 38);
     const srsInfo = lib.data.find((t: any) => t.key === 'srs');
     assert.equal(srsInfo.title, 'Software requirements specification (SRS)');
     const prev = await call(member, 'GET', `/projects/${clPid}/doc-templates/srs`);
@@ -334,7 +334,7 @@ describe('CT Work — tài liệu dự án S2a (HTTP + DB thật)', { skip: !RUN
     assert.equal((await call(member, 'GET', `/projects/${clPid}/pages`)).data.pages.length, 1);
   });
 
-  it('phiếu khách → dự án CLIENT có sẵn cây tài liệu: gốc + 21 giai đoạn + 35 mẫu, gắn đúng giai đoạn', async () => {
+  it('phiếu khách → dự án CLIENT có sẵn cây tài liệu: gốc + 21 giai đoạn + 37 mẫu, gắn đúng giai đoạn', async () => {
     const { createWorkProjectFromRequest } = await import('../services/projectRequest.service.js');
     const code = `YC-2098-${String(Date.now()).slice(-6)}`;
     const r = await prisma.projectRequest.create({
@@ -342,9 +342,9 @@ describe('CT Work — tài liệu dự án S2a (HTTP + DB thật)', { skip: !RUN
     });
     requestIds.push(r.id);
     const out = await createWorkProjectFromRequest(owner.id, r.id);
-    assert.equal(out.counts.docs, 57);
+    assert.equal(out.counts.docs, 59);
     const tree = await call(owner, 'GET', `/projects/${out.projectId}/pages`);
-    assert.equal(tree.data.pages.length, 57);
+    assert.equal(tree.data.pages.length, 59);
     const root = tree.data.pages.filter((p: any) => p.parentId === null);
     assert.deepEqual(root.map((p: any) => p.title), ['Project documents']);
     const stagePages = tree.data.pages.filter((p: any) => p.parentId === root[0].id);
@@ -359,6 +359,6 @@ describe('CT Work — tài liệu dự án S2a (HTTP + DB thật)', { skip: !RUN
     const byStage = await call(owner, 'GET', `/projects/${out.projectId}/pages?stage=${srs.stageId}`);
     assert.ok(byStage.data.pages.some((p: any) => p.templateKey === 'srs'));
     const v = await prisma.workPageVersion.count({ where: { page: { projectId: out.projectId } } });
-    assert.equal(v, 57, 'mỗi trang có bản CREATE');
+    assert.equal(v, 59, 'mỗi trang có bản CREATE');
   });
 });

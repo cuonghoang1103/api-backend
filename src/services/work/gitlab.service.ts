@@ -21,6 +21,7 @@ import { emitWorkEvent } from './events.js';
 import { issueNumbersIn } from './github.service.js';
 import { applyIssueChange } from './issueChange.js';
 import { requireProject } from './permissions.js';
+import { markFromDevActivity } from './provenance.js';
 
 interface GitlabConfig { mrOpenedStatusId?: number | null; mrMergedStatusId?: number | null }
 
@@ -136,6 +137,8 @@ export async function handleWebhook(projectId: number, token: string | undefined
         update: { title: a.title, url: a.url, state: a.state ?? null },
       });
       linked += 1;
+      // Đợt S6: trailer `Co-Authored-By:` của model AI ⇒ thẻ liên kết thành AI-assisted (không ném lỗi).
+      await markFromDevActivity(issue.id, a);
       const action = body.object_attributes?.action;
       const target = a.kind === 'PR' ? (a.state === 'merged' ? cfg.mrMergedStatusId : a.state === 'open' && (action === 'open' || action === 'reopen') ? cfg.mrOpenedStatusId : null) : null;
       if (target) {

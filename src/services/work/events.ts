@@ -22,6 +22,8 @@ export interface WorkActor {
   userId: number | null;
   /** Chuỗi luật tự động đã dẫn tới thay đổi này — dùng để chặn vòng lặp vô hạn. */
   ruleChain?: number[];
+  /** Đợt S6: kind AI — tên model của đề xuất (nguồn gốc AI). Thiếu ⇒ model đang phân cho trợ lý. */
+  model?: string | null;
 }
 
 export interface FieldChange {

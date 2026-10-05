@@ -10092,6 +10092,8 @@ model WorkProject {
   /// Đợt S5a: service desk & SLA (mô-đun serviceDesk) — cấu hình + bản ghi Problem.
   deskSettings      WorkDeskSettings?
   deskProblems      WorkDeskProblem[]
+  /// Đợt S6: lịch sử chấm Spec Fidelity (trang tài liệu / tập thẻ yêu cầu).
+  specReviews       WorkSpecReview[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
   clientRequest     ProjectRequest?
 
@@ -10245,6 +10247,15 @@ model WorkIssue {
   /// Tăng mỗi lần sửa. Client gửi kèm số nó đang cầm; lệch = có người vừa
   /// sửa trước ⇒ trả 409 thay vì đè mất thay đổi của họ.
   version              Int       @default(0)
+  /// Đợt S6 — nguồn gốc AI (provenance): thẻ được tạo/sửa nội dung qua đề xuất AI đã áp dụng, commit/PR có trailer
+  /// `Co-Authored-By:` của một model AI, hoặc gắn tay. Đổi qua applyIssueChange (lịch sử field `aiAssisted`).
+  aiAssisted           Boolean   @default(false) @map("ai_assisted")
+  /// Model AI gần nhất (tên model hoặc tên trong trailer). Null = gắn tay / không rõ.
+  aiModel              String?   @map("ai_model") @db.VarChar(120)
+  aiAssistedAt         DateTime? @map("ai_assisted_at")
+  /// Người BẤM áp dụng đề xuất AI gần nhất (không FK — như nhật ký). Luật "AI-assisted work needs an independent
+  /// reviewer" loại người này + người báo khỏi danh sách người duyệt hợp lệ.
+  aiAppliedById        Int?      @map("ai_applied_by_id")
   createdAt            DateTime  @default(now()) @map("created_at")
   updatedAt            DateTime  @updatedAt @map("updated_at")
   deletedAt            DateTime? @map("deleted_at")
@@ -11169,6 +11180,8 @@ model WorkStage {
   budgetLines       WorkBudgetLine[]
   expenses          WorkExpense[]
   paymentMilestones WorkPaymentMilestone[]
+  /// Đợt S6: lần chấm Spec Fidelity thuộc giai đoạn (cổng "Spec Fidelity gate" đọc lần mới nhất).
+  specReviews       WorkSpecReview[]
 
   @@unique([projectId, n], name: "uk_work_stage_n", map: "uk_work_stage_n")
   @@unique([projectId, slug], name: "uk_work_stage_slug", map: "uk_work_stage_slug")
@@ -11197,11 +11210,14 @@ model WorkApproval {
   createdById     Int?      @map("created_by_id")
   dueAt           DateTime? @map("due_at")
   contentHash     String?   @map("content_hash") @db.VarChar(64)
+  /// Đợt S6: lần chấm Spec Fidelity đính kèm lúc gửi duyệt cổng giai đoạn (bằng chứng chất lượng đặc tả).
+  specReviewId    Int?      @map("spec_review_id")
   decidedAt       DateTime? @map("decided_at")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
   project       WorkProject        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  specReview    WorkSpecReview?    @relation(fields: [specReviewId], references: [id], onDelete: SetNull)
   issue         WorkIssue?         @relation(fields: [issueId], references: [id], onDelete: Cascade)
   stage         WorkStage?         @relation(fields: [stageId], references: [id], onDelete: Cascade)
   page          WorkPage?          @relation(fields: [pageId], references: [id], onDelete: Cascade)
@@ -11318,6 +11334,11 @@ model WorkPage {
   stageId        Int?      @map("stage_id")
   position       Int       @default(0)
   version        Int       @default(0)
+  /// Đợt S6 — nguồn gốc AI: trang được tạo/sửa qua đề xuất AI đã áp dụng (hoặc gắn tay).
+  aiAssisted     Boolean   @default(false) @map("ai_assisted")
+  aiModel        String?   @map("ai_model") @db.VarChar(120)
+  aiAssistedAt   DateTime? @map("ai_assisted_at")
+  aiAppliedById  Int?      @map("ai_applied_by_id")
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @updatedAt @map("updated_at")
   deletedAt      DateTime? @map("deleted_at")
@@ -11334,6 +11355,8 @@ model WorkPage {
   approvals    WorkApproval[]
   /// Đợt S5a: Problem có trang postmortem này.
   postmortemOf WorkDeskProblem[]
+  /// Đợt S6: lịch sử chấm Spec Fidelity của trang.
+  specReviews  WorkSpecReview[]
 
   @@unique([projectId, number], name: "uk_work_page_number", map: "uk_work_page_number")
   @@index([projectId, parentId, position], name: "idx_work_page_tree")
@@ -12315,4 +12338,46 @@ model CrmProposal {
 
   @@unique([dealId, version], name: "uk_crm_proposal_version", map: "uk_crm_proposal_version")
   @@map("crm_proposals")
+}
+
+// ─── CT Work — SPEC FIDELITY đợt S6 (05/10/2026) ──────────────────────────────
+
+/// Một lần chấm "Spec Fidelity" (4 chiều: completeness · consistency · unambiguity · verifiability, 0–100) của MỘT
+/// trang tài liệu (scope PAGE, gắn số phiên bản lúc chấm) hoặc MỘT tập thẻ REQUIREMENT/STORY (scope ISSUES — cả dự
+/// án / một epic / một giai đoạn). `findings`: [{ id, dimension, severity, rule, ref, excerpt, why, suggestion,
+/// rewrite?, target, source: rule|ai, status: open|applied|dismissed, appliedAt?, appliedById? }]. `untraced`: yêu cầu
+/// không truy được tới test. `semantic`: OK | UNAVAILABLE (LLM lỗi — phần xác định vẫn đủ) | SKIPPED.
+/// createdById KHÔNG FK (lịch sử sống lâu hơn tài khoản).
+model WorkSpecReview {
+  id            Int      @id @default(autoincrement())
+  projectId     Int      @map("project_id")
+  scope         String   @db.VarChar(16)
+  pageId        Int?     @map("page_id")
+  pageVersion   Int?     @map("page_version")
+  stageId       Int?     @map("stage_id")
+  epicNumber    Int?     @map("epic_number")
+  scopeLabel    String   @map("scope_label") @db.VarChar(200)
+  overall       Int
+  completeness  Int
+  consistency   Int
+  unambiguity   Int
+  verifiability Int
+  itemCount     Int      @default(0) @map("item_count")
+  findings      Json     @default("[]")
+  untraced      Json     @default("[]")
+  stats         Json     @default("{}")
+  semantic      String   @default("SKIPPED") @db.VarChar(16)
+  model         String?  @db.VarChar(120)
+  createdById   Int?     @map("created_by_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  project   WorkProject    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  page      WorkPage?      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  stage     WorkStage?     @relation(fields: [stageId], references: [id], onDelete: SetNull)
+  approvals WorkApproval[]
+
+  @@index([projectId, scope, createdAt], name: "idx_work_spec_review_project")
+  @@index([pageId, createdAt], name: "idx_work_spec_review_page")
+  @@index([stageId, createdAt], name: "idx_work_spec_review_stage")
+  @@map("work_spec_reviews")
 }

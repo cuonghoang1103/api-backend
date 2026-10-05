@@ -14,6 +14,7 @@ import { NextStep, Section, SectionHeader, StudioShell, T, studioCss as css, use
 import { DEPT_NAMES, PHASES, STAGES, phaseOf, pick, stageHref, type RaciRole } from '../data';
 import { DEPARTMENTS, DEPT_ORDER, raciOverview } from '../departments';
 import OrgFlow from './OrgFlow';
+import { AI_ROLE_SHIFTS } from '../ai-native';
 
 const RACI_CLS: Record<RaciRole, string> = { R: css.raciR, A: css.raciA, C: css.raciC, I: css.raciI };
 
@@ -133,6 +134,29 @@ export default function OrgPage() {
             'In the overview a stage can show several A’s because each activity has its own accountable owner; in a stage’s detailed RACI every activity has exactly one A.',
           )}
         </p>
+      </Section>
+
+      <Section band>
+        <SectionHeader
+          label={L('Khi làm với AI', 'Working with AI')}
+          title={L('Vai không mất đi — trọng tâm dịch chuyển', 'The roles stay — their focus shifts')}
+          lead={
+            <>
+              {L('AI viết nháp nhanh hơn, nên giá trị của mỗi vai dồn về đặc tả, đánh giá và giới hạn quyền. Người duyệt (A) vẫn là người, không phải công cụ. ', 'AI drafts faster, so each role’s value moves to specification, evaluation and permission limits. The approver (A) is still a person, not a tool. ')}
+              <Link href="/about/quy-trinh#ai-native" className="underline underline-offset-2 text-[color:var(--s-ink)] hover:text-[color:var(--s-accent)]">
+                {L('Làm dự án với AI', 'AI-native delivery')}
+              </Link>
+            </>
+          }
+        />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {AI_ROLE_SHIFTS.map((r) => (
+            <article key={r.dept} className={`${T.card} p-5 sm:p-6 min-w-0`}>
+              <h3 className={T.h3}>{pick(DEPT_NAMES[r.dept], lang)}</h3>
+              <p className={`${T.body} mt-2`}>{pick(r.shift, lang)}</p>
+            </article>
+          ))}
+        </div>
       </Section>
 
       <NextStep

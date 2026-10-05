@@ -69,7 +69,10 @@ for (const d of Object.values(DOCS)) {
 }
 for (const s of STAGES) for (const d of s.templates ?? []) if (d.href && !used.has(d.href)) fail(`${s.slug}: mẫu ngoài DOCS ${d.href}`);
 const onDisk = readdirSync(MAU).filter((f) => f.endsWith('.md'));
-for (const f of onDisk) if (!used.has(`/quy-trinh/mau/${f}`)) fail(`mẫu mồ côi (không giai đoạn nào dùng): ${f}`);
+// Mẫu không thuộc giai đoạn nào nhưng có trang khác dẫn tới (vd /about/bao-mat dẫn
+// "tra-loi-danh-gia-nha-cung-cap.md") thì không tính là mồ côi.
+const baoMatSrc = readFileSync(join(ROOT, 'frontend/src/app/about/bao-mat/content.ts'), 'utf8');
+for (const f of onDisk) if (!used.has(`/quy-trinh/mau/${f}`) && !baoMatSrc.includes(`'${f}'`)) fail(`mẫu mồ côi (không giai đoạn hay trang nào dùng): ${f}`);
 const unusedDocs = Object.entries(DOCS).filter(([, d]) => !STAGES.some((s) => s.templates?.includes(d)));
 for (const [k] of unusedDocs) fail(`DOCS.${k} không gắn vào giai đoạn nào`);
 ok.push(`${Object.keys(DOCS).length} mẫu tài liệu, đều có trên đĩa và được dùng`);

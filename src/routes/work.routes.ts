@@ -61,6 +61,7 @@ import governanceRoutes from './work.governance.routes.js';
 import s4Routes, { s4PublicRoutes } from './work.s4.routes.js';
 import deskRoutes from './work.desk.routes.js';
 import s5cRoutes from './work.s5c.routes.js';
+import s6Routes from './work.s6.routes.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
@@ -459,6 +460,8 @@ const issueFields = {
   teamId: id.nullable(),
   stageId: id.nullable(),
   statusId: id,
+  // Đợt S6: gắn / gỡ nhãn "AI-assisted" bằng tay.
+  aiAssisted: z.boolean(),
   labelIds: z.array(id).max(30),
   componentIds: z.array(id).max(30),
 };
@@ -1487,7 +1490,11 @@ router.post('/projects/:pid/stages/:sid/activate', asyncHandler(async (req, res)
   ok(res, await stages.activateStage(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'), body));
 }));
 router.post('/projects/:pid/stages/:sid/request-gate', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ description: z.string().max(5000).nullable().optional(), dueAt: z.coerce.date().nullable().optional() }), req.body ?? {});
+  const body = parse(z.object({
+    description: z.string().max(5000).nullable().optional(), dueAt: z.coerce.date().nullable().optional(),
+    // Đợt S6: ADMIN vượt cổng Spec Fidelity (bắt buộc lý do, ghi audit).
+    override: z.object({ reason: z.string().min(1).max(1000) }).nullable().optional(),
+  }), req.body ?? {});
   ok(res, await stages.requestGate(callerId(req), idParam(req, 'pid'), idParam(req, 'sid'), body), 201);
 }));
 
@@ -1622,6 +1629,7 @@ router.patch('/projects/:pid/pages/:num', asyncHandler(async (req, res) => {
     stageId: id.nullable().optional(),
     version: z.number().int().min(0).optional(),
     versionNote: z.string().max(500).nullable().optional(),
+    aiAssisted: z.boolean().optional(),
   }), req.body);
   ok(res, await pages.updatePage(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body));
 }));
@@ -1773,5 +1781,7 @@ router.use(s4Routes);
 router.use(deskRoutes);
 // Đợt S5c: mô-đun mới cho dự án cũ · thùng rác Docs · nhập lại dự án từ ZIP — tuyến ở work.s5c.routes.ts (qua chốt cổng khách ở trên).
 router.use(s5cRoutes);
+// Đợt S6: Spec Fidelity (chấm đặc tả, lịch sử, áp dụng gợi ý, cổng giai đoạn, luật AI) — tuyến ở work.s6.routes.ts (qua chốt cổng khách ở trên).
+router.use(s6Routes);
 
 export default router;

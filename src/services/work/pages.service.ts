@@ -73,6 +73,8 @@ function requireEdit(ctx: DocCtx) {
 const LIST_SELECT = {
   id: true, number: true, parentId: true, title: true, status: true, visibility: true, stageId: true,
   position: true, ownerId: true, templateKey: true, createdAt: true, updatedAt: true,
+  // Đợt S6: nguồn gốc AI của trang.
+  aiAssisted: true, aiModel: true, aiAssistedAt: true,
 } satisfies Prisma.WorkPageSelect;
 
 /** Trang theo số; không thấy được (đã xoá / trang nội bộ với khách) ⇒ 404. */
@@ -286,6 +288,8 @@ export interface CreatePageInput {
   stageId?: number | null;
   contentJson?: unknown;
   visibility?: PageVisibility;
+  /** Đợt S6: trang do đề xuất AI tạo ⇒ AI-assisted (model; người áp dụng = người gọi). */
+  aiProvenance?: { model: string | null } | null;
 }
 
 export async function createPage(userId: number, projectId: number, input: CreatePageInput) {
@@ -321,6 +325,7 @@ export async function createPage(userId: number, projectId: number, input: Creat
         projectId, number, parentId, title: title.slice(0, 255), contentJson: json, contentText: text,
         status: 'DRAFT', visibility: input.visibility ?? 'INTERNAL', ownerId: userId, lastEditedById: userId,
         templateKey: input.templateKey ?? null, stageId, position: (last._max.position ?? -1) + 1,
+        ...(input.aiProvenance ? { aiAssisted: true, aiModel: input.aiProvenance.model?.slice(0, 120) ?? null, aiAssistedAt: new Date(), aiAppliedById: userId } : {}),
       },
       select: { id: true, number: true, title: true },
     });
@@ -343,6 +348,10 @@ export interface UpdatePageInput {
   version?: number;
   /** Ghi chú ⇒ ép một phiên bản RIÊNG ("Save version"). */
   versionNote?: string | null;
+  /** Đợt S6: sửa nội dung qua đề xuất AI ⇒ AI-assisted. */
+  aiProvenance?: { model: string | null } | null;
+  /** Đợt S6: gắn / gỡ nhãn AI-assisted bằng tay. */
+  aiAssisted?: boolean;
 }
 
 export async function updatePage(userId: number, projectId: number, num: number, input: UpdatePageInput) {
@@ -396,6 +405,17 @@ export async function updatePage(userId: number, projectId: number, num: number,
     if (p.status === 'ARCHIVED' && input.status === undefined) throw new BadRequestError('This document is archived — move it back to Draft to edit it', 'WORK_PAGE_ARCHIVED');
     data.title = title;
     if (bodyChanged) { data.contentJson = json; data.contentText = text; }
+    if (input.aiProvenance) {
+      Object.assign(data, { aiAssisted: true, aiModel: input.aiProvenance.model?.slice(0, 120) ?? null, aiAssistedAt: new Date(), aiAppliedById: userId });
+    }
+  }
+  if (input.aiAssisted !== undefined && !input.aiProvenance) {
+    const cur = await prisma.workPage.findUniqueOrThrow({ where: { id: p.id }, select: { aiAssisted: true } });
+    if (cur.aiAssisted !== input.aiAssisted) {
+      data.aiAssisted = input.aiAssisted;
+      if (input.aiAssisted) data.aiAssistedAt = new Date();
+      audits.push(input.aiAssisted ? 'marked AI-assisted' : 'removed AI-assisted mark');
+    }
   }
   if (!Object.keys(data).length && !input.versionNote) return getPage(userId, projectId, num);
   data.lastEditedById = userId;

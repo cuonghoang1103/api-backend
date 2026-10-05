@@ -27,6 +27,7 @@
  *                                              src/services/ai.service.ts (Groq), src/config/env.ts (R2)
  *  - Việc AI chạy nền mặc định tắt ........... CLAUDE.md mục "BA chốt chặn chi phí"
  *  - AI cục bộ (llama.cpp) ................... desktop/src/main/aiCucBo/, .github/workflows/desktop-ai-ngoai-tuyen.yml
+ *  - Chính sách dùng AI khi làm dự án ........ frontend/public/quy-trinh/mau/chinh-sach-su-dung-ai.md, app/about/quy-trinh/ai-native.ts
  *  - Pháp lý BVDLCN .......................... frontend/src/app/about/quy-trinh/data.ts (91/2025/QH15, NĐ 356/2025 thay NĐ 13/2023)
  */
 
@@ -291,6 +292,19 @@ export const AI_POINTS: { t: Bi; d: Bi }[] = [
     ],
   },
 ];
+
+/** Chính sách khi studio DÙNG AI để làm dự án (khác với tính năng AI trong sản phẩm ở trên). */
+export const AI_POLICY: { t: Bi; d: Bi; links: { href: string; label: Bi }[] } = {
+  t: ['Khi studio dùng AI để làm dự án của bạn', 'When the studio uses AI to build your project'],
+  d: [
+    'Tài liệu, mã nguồn và dữ liệu của khách chỉ được đưa vào công cụ AI khi khách đồng ý bằng văn bản, qua nhà cung cấp đã chốt trong DPA. Thay đổi có AI hỗ trợ được gắn nhãn và do một người khác review trước khi merge. Chi tiết nằm trong mẫu chính sách sử dụng AI ký kèm hợp đồng.',
+    'Client documents, source code and data go into an AI tool only with the client’s written consent, through a provider named in the DPA. AI-assisted changes are labelled and reviewed by someone else before merge. The details are in the AI usage policy template signed alongside the contract.',
+  ],
+  links: [
+    { href: MAU('chinh-sach-su-dung-ai.md'), label: ['Mẫu chính sách sử dụng AI', 'AI usage policy template'] },
+    { href: '/about/quy-trinh#ai-native', label: ['Quy trình làm dự án với AI', 'How we deliver with AI'] },
+  ],
+};
 
 // ─── 5. Thứ CHƯA có ───────────────────────────────────────────────────────
 export const GAPS: { gap: Bi; offset: Bi }[] = [

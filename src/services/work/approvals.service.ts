@@ -55,6 +55,9 @@ export const APPROVAL_SELECT = {
   stage: { select: { id: true, n: true, slug: true, name: true, status: true } },
   page: { select: { id: true, number: true, title: true, status: true, visibility: true } },
   changeRequest: { select: { id: true, number: true, title: true, status: true, clientVisible: true } },
+  // Đợt S6: lần chấm Spec Fidelity đính kèm lúc gửi duyệt cổng giai đoạn.
+  specReviewId: true,
+  specReview: { select: { id: true, scope: true, scopeLabel: true, overall: true, completeness: true, consistency: true, unambiguity: true, verifiability: true, createdAt: true } },
   steps: {
     orderBy: [{ position: 'asc' }, { id: 'asc' }],
     select: { id: true, approverId: true, position: true, decision: true, comment: true, decidedAt: true, contentHash: true, approver: { select: PUBLIC_USER } },
@@ -78,6 +81,8 @@ async function present(a: ApprovalRow, viewer: { userId: number; role: ProjectAc
   const shown = viewer.clientView ? approvalForClient(a) : a;
   return {
     ...shown,
+    // Đợt S6: điểm Spec Fidelity là số liệu nội bộ của đội — khách không thấy.
+    ...(viewer.clientView ? { specReviewId: null, specReview: null } : {}),
     steps,
     issueKey: shown.issue ? `${projectKey}-${shown.issue.number}` : null,
     currentHash: now,
@@ -242,7 +247,7 @@ export async function createApprovalTx(
   tx: Tx,
   projectId: number,
   creatorId: number,
-  input: { targetType: 'ISSUE' | 'STAGE_GATE' | 'DOC' | 'UAT' | 'CR'; issueId?: number | null; stageId?: number | null; pageId?: number | null; changeRequestId?: number | null; title: string; description?: string | null; mode: ApprovalMode; approverIds: number[]; dueAt?: Date | null },
+  input: { targetType: 'ISSUE' | 'STAGE_GATE' | 'DOC' | 'UAT' | 'CR'; issueId?: number | null; stageId?: number | null; pageId?: number | null; changeRequestId?: number | null; title: string; description?: string | null; mode: ApprovalMode; approverIds: number[]; dueAt?: Date | null; specReviewId?: number | null },
 ): Promise<number> {
   const hash = await currentTargetHash(tx, { targetType: input.targetType, issueId: input.issueId ?? null, stageId: input.stageId ?? null, pageId: input.pageId ?? null, changeRequestId: input.changeRequestId ?? null });
   const a = await tx.workApproval.create({
@@ -251,6 +256,7 @@ export async function createApprovalTx(
       changeRequestId: input.changeRequestId ?? null,
       title: input.title.slice(0, 200), description: input.description?.trim() || null, mode: input.mode,
       createdById: creatorId, dueAt: input.dueAt ?? null, contentHash: hash,
+      specReviewId: input.specReviewId ?? null,
       steps: { create: input.approverIds.map((approverId, position) => ({ approverId, position })) },
     },
     select: { id: true },

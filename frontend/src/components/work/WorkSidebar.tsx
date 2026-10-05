@@ -126,6 +126,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       // Đợt S5a: service desk & SLA (hàng đợi, Problem, báo cáo SLA) — chỉ khi mô-đun serviceDesk bật.
       { path: 'desk', label: 'Service desk', icon: Headset, match: (v) => v === 'desk', module: 'serviceDesk' },
       { path: 'tests', label: 'Tests', icon: FlaskConical, match: (v) => v === 'tests' },
+      // Đợt S6: Spec quality (Spec Fidelity) — đội dự án + giảng viên; khách không thấy.
+      { path: 'spec', label: 'Spec quality', icon: Gauge, match: (v) => v === 'spec', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
     ],
   },
   {

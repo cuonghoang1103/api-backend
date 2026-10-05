@@ -33,12 +33,14 @@ const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
  * cộng công cho ai (đúng luật "AI không làm hộ điểm").
  */
 export type Via = 'USER' | 'AI';
-const actorOf = (userId: number, via: Via = 'USER'): WorkActor => ({ kind: via, userId });
+const actorOf = (userId: number, via: Via = 'USER', model?: string | null): WorkActor => ({ kind: via, userId, ...(via === 'AI' && model ? { model } : {}) });
 
 /** Trường của một thẻ trên board/danh sách — gọn, không mô tả. */
 export const CARD_SELECT = {
   id: true, number: true, title: true, typeId: true, statusId: true, parentId: true, sprintId: true, fixVersionId: true,
   teamId: true, stageId: true, clientVisible: true,
+  // Đợt S6: nhãn "AI-assisted" (nguồn gốc AI) hiện trên thẻ/danh sách.
+  aiAssisted: true,
   priority: true, assigneeId: true, reporterId: true, storyPoints: true, dueDate: true, rank: true, version: true,
   resolvedAt: true, createdAt: true, updatedAt: true,
   labels: { select: { labelId: true } },
@@ -211,6 +213,7 @@ export async function getIssueDetail(userId: number, projectId: number, number: 
       clientSharedAt: true,
       descriptionJson: true,
       originalEstimateMin: true, remainingEstimateMin: true, timeSpentMin: true, startDate: true, resolution: true,
+      aiModel: true, aiAssistedAt: true, aiAppliedById: true,
       assignee: { select: PUBLIC_USER },
       reporter: { select: PUBLIC_USER },
       parent: { select: { id: true, number: true, title: true, typeId: true, statusId: true } },
@@ -240,7 +243,7 @@ export async function getIssueDetail(userId: number, projectId: number, number: 
   const detail = pickDetail(rest);
   if (scoped) {
     // Ước lượng/giờ làm là số liệu nội bộ (worklog) — khách không thấy.
-    Object.assign(detail, { originalEstimateMin: null, remainingEstimateMin: null, timeSpentMin: null });
+    Object.assign(detail, { originalEstimateMin: null, remainingEstimateMin: null, timeSpentMin: null, aiAppliedById: null });
     // Người: chỉ người khách được thấy (clientPeople.ts) — còn lại "Project team".
     const f = await clientPeopleIds(projectId, userId);
     Object.assign(detail, {
@@ -287,6 +290,7 @@ async function throwIfMoved(userId: number, projectId: number, number: number): 
 function pickDetail(r: Record<string, unknown>) {
   const keys = [
     'descriptionJson', 'originalEstimateMin', 'remainingEstimateMin', 'timeSpentMin', 'startDate', 'resolution',
+    'aiModel', 'aiAssistedAt', 'aiAppliedById',
     'assignee', 'reporter', 'parent', 'children', 'attachments',
   ];
   return Object.fromEntries(keys.map((k) => [k, r[k]]));
@@ -323,12 +327,14 @@ export async function updateIssueAs(
   body: IssuePatch & { labelIds?: number[]; componentIds?: number[] },
   expectedVersion?: number,
   via: Via = 'USER',
+  /** Đợt S6: tên model của đề xuất AI (nguồn gốc). */
+  model?: string | null,
 ) {
   const onlyStatus = Object.keys(body).every((k) => k === 'statusId');
   const access = await requireProject(userId, projectId, onlyStatus ? 'issue.transition' : 'issue.edit');
   const { id } = await findIssue(projectId, number);
   const { labelIds, componentIds, ...patch } = body;
-  const res = await applyIssueChange(id, patch, actorOf(userId, via), { expectedVersion });
+  const res = await applyIssueChange(id, patch, actorOf(userId, via, model), { expectedVersion });
   if (labelIds !== undefined || componentIds !== undefined) {
     await setIssueTags(access, id, { labelIds, componentIds }, userId, true, via);
   }

@@ -21,6 +21,7 @@ import { frontendUrl } from './common.js';
 import { emitWorkEvent } from './events.js';
 import { applyIssueChange } from './issueChange.js';
 import { requireProject } from './permissions.js';
+import { markFromDevActivity } from './provenance.js';
 
 interface GithubConfig { prOpenedStatusId?: number | null; prMergedStatusId?: number | null }
 
@@ -161,6 +162,8 @@ export async function handleWebhook(projectId: number, event: string | undefined
         update: { title: a.title, url: a.url, state: a.state ?? null },
       });
       linked += 1;
+      // Đợt S6: trailer `Co-Authored-By:` của model AI ⇒ thẻ liên kết thành AI-assisted (không ném lỗi).
+      await markFromDevActivity(issue.id, a);
       // PR mở / merge ⇒ chuyển trạng thái nếu đã cấu hình. Sai quy trình thì bỏ qua (ghi log), không làm hỏng webhook.
       const target = a.kind === 'PR' ? (a.state === 'merged' ? cfg.prMergedStatusId : a.state === 'open' && body.action === 'opened' ? cfg.prOpenedStatusId : null) : null;
       if (target) {

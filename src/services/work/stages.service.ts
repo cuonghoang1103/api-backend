@@ -21,6 +21,8 @@ import { emitWorkEvent } from './events.js';
 import { can, loadProjectAccess, requireProject } from './permissions.js';
 import { stageGateOf } from './projects.service.js';
 import { assertModule, stageActivationBlocker } from './studio.js';
+// Đợt S6: cổng "Spec Fidelity gate" khi xin duyệt cổng giai đoạn đặc tả.
+import { gateSummary, stageGateCheck } from './specReview.service.js';
 
 const MAX_STAGES = 60;
 const SLUG_RE = /^[a-z0-9][a-z0-9-]{0,79}$/;
@@ -199,10 +201,33 @@ export async function gateApprovers(projectId: number): Promise<{ ids: number[];
   return { ids: [p.workspace.ownerId], mode: 'SEQUENTIAL', configured: false };
 }
 
-/** Gửi giai đoạn đang ACTIVE đi duyệt cổng ⇒ GATE_REVIEW + một yêu cầu phê duyệt STAGE_GATE. */
-export async function requestGate(userId: number, projectId: number, stageId: number, input: { description?: string | null; dueAt?: Date | null } = {}) {
+/**
+ * Gửi giai đoạn đang ACTIVE đi duyệt cổng ⇒ GATE_REVIEW + một yêu cầu phê duyệt STAGE_GATE.
+ *
+ * Đợt S6: giai đoạn có cổng Spec Fidelity (settings.specGate bật, giai đoạn `dac-ta-yeu-cau` hoặc giai đoạn chọn) ⇒
+ * lần chấm mới nhất của giai đoạn được ĐÍNH KÈM vào phê duyệt (specReviewId + một dòng trong mô tả). Chưa chấm / dưới
+ * ngưỡng ⇒ 409 WORK_SPEC_GATE; ADMIN gửi `override: { reason }` để vượt — ghi audit `spec.gate.override`.
+ */
+export async function requestGate(userId: number, projectId: number, stageId: number, input: { description?: string | null; dueAt?: Date | null; override?: { reason: string } | null } = {}) {
   const access = await requireStages(userId, projectId, 'stage.requestGate');
   assertModule(access, 'approvals');
+  const stageRow = await prisma.workStage.findFirst({ where: { id: stageId, projectId }, select: { id: true, slug: true, n: true, name: true } });
+  if (!stageRow) throw new NotFoundError('Stage not found');
+  const spec = await stageGateCheck(projectId, stageRow);
+  let overrideReason: string | null = null;
+  if (spec.applies && !spec.pass) {
+    if (!input.override) {
+      throw new AppError(
+        `Spec Fidelity gate: ${spec.reasons.join('; ')}. Run "Check spec quality" and fix the findings, or ask a project admin to override with a reason.`,
+        409, 'WORK_SPEC_GATE', { specGate: spec },
+      );
+    }
+    if (access.role !== 'ADMIN') throw new AppError('Only a project admin can override the Spec Fidelity gate', 403, 'FORBIDDEN');
+    overrideReason = input.override.reason?.trim() ?? '';
+    if (overrideReason.length < 3) throw new BadRequestError('Give a reason for overriding the Spec Fidelity gate', 'WORK_OVERRIDE_REASON');
+  }
+  const specLine = spec.applies ? gateSummary(spec, overrideReason) : null;
+  const description = specLine ? [input.description?.trim(), specLine].filter(Boolean).join('\n\n') : input.description;
   const approvers = await gateApprovers(projectId);
   const approvalId = await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM work_stages WHERE id = ${stageId} AND project_id = ${projectId} FOR UPDATE`;
@@ -211,10 +236,17 @@ export async function requestGate(userId: number, projectId: number, stageId: nu
     if (s.status !== 'ACTIVE') throw new ConflictError(s.status === 'GATE_REVIEW' ? 'This stage is already waiting for gate approval' : 'Only an active stage can be sent for gate approval');
     await tx.workStage.update({ where: { id: stageId }, data: { status: 'GATE_REVIEW' } });
     return createApprovalTx(tx, projectId, userId, {
-      targetType: 'STAGE_GATE', stageId, title: `Gate: ${s.n}. ${s.name}`.slice(0, 200), description: input.description,
-      mode: approvers.mode, approverIds: approvers.ids, dueAt: input.dueAt,
+      targetType: 'STAGE_GATE', stageId, title: `Gate: ${s.n}. ${s.name}`.slice(0, 200), description,
+      mode: approvers.mode, approverIds: approvers.ids, dueAt: input.dueAt, specReviewId: spec.applies ? spec.review?.id ?? null : null,
     });
   });
+  if (overrideReason !== null) {
+    await auditProject(projectId, {
+      actorId: userId, action: 'spec.gate.override', targetType: 'stage', targetId: stageId,
+      summary: `Sent stage ${stageRow.n}. ${stageRow.name} for gate approval below the Spec Fidelity threshold — ${overrideReason.slice(0, 300)}`,
+      detail: { reasons: spec.reasons, reviewId: spec.review?.id ?? null, scores: spec.review?.scores ?? null, reason: overrideReason },
+    });
+  }
   emitWorkEvent({ type: 'stage.updated', projectId, stageId, status: 'GATE_REVIEW', actor: { kind: 'USER', userId } });
   await afterCreate(approvalId, projectId, userId);
   return { stage: await findStage(projectId, stageId), approval: await getApproval(userId, projectId, approvalId) };

@@ -23,6 +23,7 @@ import {
 } from '@/components/studio/StudioUI';
 import {
   AI_POINTS,
+  AI_POLICY,
   DISCLOSURE,
   FAQ,
   FILE_TRA_LOI,
@@ -215,6 +216,17 @@ export default function BaoMatClient() {
             </article>
           ))}
         </div>
+        <article className={`${T.card} p-5 sm:p-6 min-w-0 mt-4`}>
+          <h3 className={T.h3}>{p(AI_POLICY.t)}</h3>
+          <p className={`${T.body} mt-2`}>{p(AI_POLICY.d)}</p>
+          <p className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[0.85rem]">
+            {AI_POLICY.links.map((l) => (
+              <a key={l.href} href={l.href} className="font-semibold text-[color:var(--s-ink)] underline underline-offset-2 hover:text-[color:var(--s-accent)]">
+                {p(l.label)}
+              </a>
+            ))}
+          </p>
+        </article>
       </Section>
 
       {/* ─── 5. Chưa có ─────────────────────────────────────────────── */}

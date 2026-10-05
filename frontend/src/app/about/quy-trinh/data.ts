@@ -263,6 +263,8 @@ export const DOCS = {
   warranty: T('chinh-sach-bao-hanh', 'Chính sách bảo hành sau bàn giao', 'Post-delivery warranty policy'),
   liquidation: T('bien-ban-thanh-ly-hop-dong', 'Biên bản thanh lý hợp đồng — mẫu tham khảo', 'Contract liquidation record — reference'),
   comms: T('ke-hoach-giao-tiep', 'Kế hoạch giao tiếp & leo thang', 'Communication & escalation plan'),
+  aiPolicy: T('chinh-sach-su-dung-ai', 'Chính sách sử dụng AI trong dự án — mẫu tham khảo', 'AI usage policy for the project — reference'),
+  specFidelity: T('checklist-spec-fidelity', 'Checklist Spec Fidelity cho đặc tả', 'Spec Fidelity checklist for specifications'),
 } satisfies Record<string, DocTemplate>;
 
 const D = DOCS;
@@ -700,8 +702,9 @@ const STAGES_RAW: StageInput[] = [
       ['Giới hạn trách nhiệm, bất khả kháng, chấm dứt hợp đồng và trả dữ liệu', 'Liability cap, force majeure, termination and data return'],
       ['Thời điểm chuyển giao quyền sở hữu mã nguồn', 'When source-code ownership transfers'],
       ['Mẫu hợp đồng đã qua luật sư rà soát', 'Contract template reviewed by a lawyer'],
+      ['Chính sách sử dụng AI đã thống nhất: công cụ được phép, dữ liệu nào không được đưa vào AI', 'AI usage policy agreed: permitted tools, which data must never go into AI'],
     ],
-    templates: [D.msa, D.sow, D.dpa, D.kickoff],
+    templates: [D.msa, D.sow, D.dpa, D.aiPolicy, D.kickoff],
     pitfalls: [
       ['Dùng mẫu hợp đồng trên mạng không qua luật sư', 'Using an internet contract template without a lawyer'],
       ['Không ghi thời điểm chuyển giao sở hữu trí tuệ → tranh chấp mã nguồn', 'No IP transfer point → disputes over the code'],
@@ -777,6 +780,7 @@ const STAGES_RAW: StageInput[] = [
       ['Mọi story của sprint đầu có tiêu chí chấp nhận', 'Every first-sprint story has acceptance criteria'],
       ['Mỗi NFR có số đo và cách đo', 'Every NFR has a target and a measurement method'],
       ['RTM đã khởi tạo', 'RTM initialised'],
+      ['Spec Fidelity ≥ ngưỡng thoả thuận (completeness · consistency · unambiguity · verifiability)', 'Spec Fidelity ≥ the agreed threshold (completeness · consistency · unambiguity · verifiability)'],
       ['Từ mốc này, mọi thay đổi đi qua phiếu CR', 'From here on, every change goes through a CR'],
     ],
     checklist: [
@@ -786,8 +790,9 @@ const STAGES_RAW: StageInput[] = [
       ['Thông báo và lỗi hệ thống được liệt kê', 'System messages and errors listed'],
       ['Quy tắc nghiệp vụ (business rules) tách riêng, có ID', 'Business rules listed separately with IDs'],
       ['Ghi rõ dữ liệu cá nhân nào được thu thập, vì sao, giữ bao lâu', 'States which personal data is collected, why, and for how long'],
+      ['Chấm Spec Fidelity 4 chiều trước khi ký duyệt — người chấm khác người viết; chưa đạt ngưỡng thì chưa giao cho AI sinh mã hay test', 'Score Spec Fidelity on all four dimensions before sign-off — the scorer is not the author; below threshold, nothing is handed to AI to generate code or tests'],
     ],
-    templates: [D.srs, D.cr],
+    templates: [D.srs, D.specFidelity, D.cr],
     pitfalls: [
       ['Yêu cầu không kiểm thử được', 'Requirements that cannot be tested'],
       ['Bỏ NFR đến cuối → kiến trúc phải làm lại', 'Leaving NFRs to the end → architecture rework'],
@@ -1123,6 +1128,7 @@ const STAGES_RAW: StageInput[] = [
       ['Demo cuối sprint đã diễn ra, phản hồi đã ghi', 'Sprint demo held, feedback recorded'],
       ['Không còn lỗi mức nghiêm trọng mở trong phần đã làm', 'No open critical defects in delivered work'],
       ['Tài liệu API và sổ tay dev được cập nhật', 'API docs and developer handbook updated'],
+      ['Thay đổi do AI hỗ trợ được người khác review + gắn nhãn', 'AI-assisted changes reviewed by someone else + labelled'],
     ],
     checklist: [
       ['PR nhỏ, có mô tả và liên kết tới story', 'Small PRs with a description and a link to the story'],
@@ -1131,8 +1137,9 @@ const STAGES_RAW: StageInput[] = [
       ['Không ghi log dữ liệu cá nhân hay bí mật', 'No personal data or secrets in logs'],
       ['Tính năng AI có trần chi phí và đường lùi khi nhà cung cấp lỗi', 'AI features have a cost cap and a fallback when the provider fails'],
       ['Chạy đủ bộ kiểm trên bản cuối trước khi commit', 'Full checks run on the final version before committing'],
+      ['Thay đổi do AI hỗ trợ được người khác review + gắn nhãn (PR ghi công cụ, phiên bản đặc tả đã dùng)', 'AI-assisted changes reviewed by someone else + labelled (the PR names the tool and the spec version used)'],
     ],
-    templates: [D.cr, D.weekly],
+    templates: [D.cr, D.weekly, D.aiPolicy],
     pitfalls: [
       ['PR khổng lồ, review cho có', 'Huge PRs reviewed superficially'],
       ['"Chạy trên máy tôi" nhưng chưa chạy trên staging', '"Works on my machine" but never ran on staging'],
@@ -1296,6 +1303,7 @@ const STAGES_RAW: StageInput[] = [
       ['Không còn lỗi Critical/High mở', 'No open Critical/High defects'],
       ['NFR hiệu năng đạt (vd độ trễ p95 theo cam kết)', 'Performance NFRs met (e.g. committed p95 latency)'],
       ['Báo cáo kiểm thử đã phát hành; RTM cập nhật kết quả', 'Test report issued; RTM updated with results'],
+      ['Thay đổi do AI hỗ trợ (test, dữ liệu thử, bản sửa lỗi) được người khác review + gắn nhãn', 'AI-assisted changes (tests, test data, fixes) reviewed by someone else + labelled'],
     ],
     checklist: [
       ['Mỗi yêu cầu có ít nhất một test case', 'Every requirement has at least one test case'],
@@ -1304,6 +1312,7 @@ const STAGES_RAW: StageInput[] = [
       ['Đã test trên các trình duyệt / thiết bị đã cam kết', 'Tested on the committed browsers / devices'],
       ['Dữ liệu kiểm thử không chứa dữ liệu cá nhân thật', 'Test data contains no real personal data'],
       ['Lỗi đã sửa được kiểm lại (re-test) và hồi quy', 'Fixed defects re-tested and regressed'],
+      ['Test do AI sinh được gắn nhãn và người khác review; AI sửa test thì không tự kết luận "đạt"', 'AI-generated tests are labelled and reviewed by someone else; if AI repaired a test, it does not get to declare the pass'],
     ],
     templates: [D.testPlan, D.testCase, D.testReport],
     pitfalls: [

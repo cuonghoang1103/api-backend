@@ -22,6 +22,9 @@ import {
 import { Dialog, EmptyState, PageLoading, Spinner, UserAvatar, formatDate, relativeTime } from '../ui';
 import { ConfirmDialog } from '../settings/shared';
 import { ApprovalPill, Pill, fmtDateTime, useStudioInvalidate } from './shared';
+// Đợt S6: lần chấm Spec Fidelity đính kèm phê duyệt cổng.
+import { OverallBadge, ScoreBars } from '../spec/SpecPanel';
+import type { SpecScores } from '@/lib/work-s6-api';
 
 const short = (h: string | null) => (h ? `${h.slice(0, 8)}…${h.slice(-4)}` : '');
 
@@ -90,6 +93,23 @@ export function ApprovalBody({ approval: a, config, base: baseProp }: { approval
           {a.dueAt && <><span aria-hidden="true">·</span><span className={cn(a.status === 'PENDING' && new Date(a.dueAt) < new Date() && 'font-medium text-[var(--w-red)]')}>Due {formatDate(a.dueAt)}</span></>}
         </div>
         {a.description && <p className="mt-3 whitespace-pre-wrap text-[13px] leading-relaxed text-[var(--w-text-2)]">{a.description}</p>}
+        {(() => {
+          const sr = (a as typeof a & { specReview?: (SpecScores & { id: number; scopeLabel: string; createdAt: string }) | null }).specReview;
+          if (!sr) return null;
+          return (
+            <div className="mt-3 rounded-[8px] border border-[var(--w-border)] p-3" data-testid="approval-spec-review">
+              <div className="mb-2 flex items-center gap-2.5">
+                <OverallBadge n={sr.overall} size={34} />
+                <div className="min-w-0 text-[12px] text-[var(--w-text-3)]">
+                  <div className="text-[13px] font-medium text-[var(--w-text)]">Spec Fidelity attached</div>
+                  <div className="truncate">{sr.scopeLabel} · checked {relativeTime(sr.createdAt)}</div>
+                </div>
+                {base && <Link href={`${base}/spec?review=${sr.id}`} className="ml-auto shrink-0 text-[12px] text-[var(--w-accent-text)] hover:underline">Open</Link>}
+              </div>
+              <ScoreBars s={sr} compact />
+            </div>
+          );
+        })()}
       </div>
 
       {a.contentChanged && (

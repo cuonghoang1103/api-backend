@@ -177,7 +177,7 @@ describe('khopTuyenWeb', () => {
     expect(d?.thamSo).toEqual({ ws: 'acme', key: 'WEB' });
 
     for (const v of ['board', 'backlog', 'list', 'timeline', 'releases', 'reports',
-                     'dashboards', 'tests', 'settings']) {
+                     'dashboards', 'tests', 'settings', 'spec']) {
       const k = khopTuyenWeb(`/work/acme/WEB/${v}`);
       expect(k?.tuyen.mau, v).toBe(`/work/:ws/:key/${v}`);
       expect(k?.thamSo, v).toEqual({ ws: 'acme', key: 'WEB' });
@@ -286,7 +286,8 @@ describe('khopTuyenWeb', () => {
     // 04/10/2026: +1 hồ sơ & tên đăng nhập (/ho-so).
     // 04/10/2026: +1 cài đặt thông báo (/settings/notifications).
     // 04/10/2026: +2 rà toàn bộ trang thiếu (/language/:code/dekiru/sach-goc, /finance/phan-tich).
-    expect(thay.size).toBe(143);
+    // 05/10/2026: +1 CT Work Đợt S6 (spec — Spec quality).
+    expect(thay.size).toBe(144);
   });
 });
 

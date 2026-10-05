@@ -48,7 +48,7 @@ function walk(n: PmNode, fn: (n: PmNode) => void) {
 }
 
 describe('mẫu tài liệu: Markdown → TipTap (36 mẫu thật)', () => {
-  it('có đủ 36 tệp mẫu', () => assert.equal(mdFiles.length, 36));
+  it('có đủ 38 tệp mẫu', () => assert.equal(mdFiles.length, 38));
 
   for (const f of mdFiles) {
     it(f, () => {
@@ -112,7 +112,7 @@ describe('nguồn mẫu cho backend (ảnh Docker không có frontend/public)', 
   it('catalog.json khớp DOCS của /about/quy-trinh (data.ts) + phủ mọi tệp', () => {
     const data = fs.readFileSync(DATA_TS, 'utf8');
     const docs = [...data.matchAll(/T\('([a-z0-9-]+)', '([^']*)', '([^']*)'\)/g)].map((m) => ({ key: m[1], titleVi: m[2], titleEn: m[3] }));
-    assert.equal(docs.length, 35);
+    assert.equal(docs.length, 37);
     const cat = JSON.parse(fs.readFileSync(path.join(BACKEND_DIR, 'catalog.json'), 'utf8')) as { templates: Array<{ key: string; titleVi: string; titleEn: string }> };
     for (const d of docs) assert.deepEqual(cat.templates.find((t) => t.key === d.key), d, d.key);
     assert.deepEqual(cat.templates.map((t) => `${t.key}.md`).sort(), mdFiles);
@@ -120,12 +120,12 @@ describe('nguồn mẫu cho backend (ảnh Docker không có frontend/public)', 
 
   it('thư viện mẫu: 36 mẫu, tên tiếng Anh; 35 mẫu của quy trình đều thuộc ít nhất một giai đoạn', async () => {
     const list = await listTemplates();
-    assert.equal(list.length, 36);
+    assert.equal(list.length, 38);
     assert.ok(list.every((t) => t.title && t.sections > 0));
     const stageMap = await stageTemplateMap();
     assert.equal(stageMap.size, 21);
     const used = new Set([...stageMap.values()].flatMap((v) => v.keys));
-    assert.equal(used.size, 35);
+    assert.equal(used.size, 37);
     for (const k of used) assert.ok(list.some((t) => t.key === k), `giai đoạn trỏ tới mẫu không có tệp: ${k}`);
     const srs = await getTemplate('srs');
     assert.deepEqual(srs.stages.map((s) => s.slug), ['dac-ta-yeu-cau']);

@@ -24,6 +24,8 @@ import { rankAfter, rankBetween, rankInitial } from './rank.js';
 import { tiptapToText } from './tiptapText.js';
 import { assertModule, hasRules, transitionRulesOf } from './studio.js';
 import { currentTargetHash, signedHash } from './approvalContent.js';
+// Đợt S6: nguồn gốc AI + luật "AI-assisted work needs an independent reviewer".
+import { AI_SOURCE, assertAiIndependentReview, assistantModel, provenanceValue } from './provenance.js';
 
 type Tx = Prisma.TransactionClient;
 
@@ -46,6 +48,8 @@ export interface IssuePatch {
   /** Giai đoạn (mô-đun stages). null = bỏ trống — luôn được phép. */
   stageId?: number | null;
   statusId?: number;
+  /** Đợt S6: gắn / gỡ nhãn "AI-assisted" bằng tay. */
+  aiAssisted?: boolean;
 }
 
 export interface CreateIssueInput extends Omit<IssuePatch, 'statusId'> {
@@ -233,6 +237,10 @@ export async function createIssue(input: CreateIssueInput, actor: WorkActor) {
   if (!title) throw new BadRequestError('Title is required', 'WORK_TITLE_REQUIRED');
   if (input.priority !== undefined) assertPriority(input.priority);
   if (input.assigneeId) await assertAssignable(input.projectId, input.assigneeId);
+  // Đợt S6: thẻ do AI đề xuất (actor AI) hoặc gắn tay ⇒ AI-assisted ngay từ lúc tạo.
+  const aiMark = actor.kind === 'AI'
+    ? { model: actor.model ?? (await assistantModel()), appliedById: actor.userId, source: AI_SOURCE.apply }
+    : input.aiAssisted ? { model: null, appliedById: null, source: AI_SOURCE.manual } : null;
 
   const issue = await prisma.$transaction(async (tx) => {
     // Khoá dòng dự án + cấp số. Mọi lệnh tạo thẻ khác của cùng dự án xếp hàng
@@ -304,12 +312,18 @@ export async function createIssue(input: CreateIssueInput, actor: WorkActor) {
         startDate: input.startDate ?? null,
         dueDate: input.dueDate ?? null,
         rank,
+        ...(aiMark ? { aiAssisted: true, aiModel: aiMark.model, aiAssistedAt: new Date(), aiAppliedById: aiMark.appliedById } : {}),
       },
     });
 
     await tx.workHistory.create({
       data: { issueId: created.id, actorId: actor.userId, actorKind: actor.kind, field: 'created', toValue: `${number}` },
     });
+    if (aiMark) {
+      await tx.workHistory.create({
+        data: { issueId: created.id, actorId: actor.userId, actorKind: actor.kind, field: 'aiAssisted', toValue: provenanceValue(aiMark.model, aiMark.source) },
+      });
+    }
     // Người báo và người được giao tự theo dõi thẻ — họ là người cần biết đầu tiên.
     const watchers = [...new Set([created.reporterId, created.assigneeId].filter((x): x is number => !!x))];
     if (watchers.length) {
@@ -329,6 +343,11 @@ export interface ApplyOptions {
   expectedVersion?: number;
   /** Đổi rank cùng lúc (moveIssue dùng). */
   rank?: string;
+  /**
+   * Đợt S6: gắn AI-assisted kèm nguồn (commit/PR có trailer Co-Authored-By, gợi ý Spec Fidelity…). Actor kind AI có
+   * đổi tiêu đề/mô tả thì tự gắn, không cần truyền.
+   */
+  aiProvenance?: { model: string | null; source: string; appliedById: number | null };
 }
 
 export async function applyIssueChange(issueId: number, patch: IssuePatch, actor: WorkActor, opts: ApplyOptions = {}) {
@@ -427,6 +446,8 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, actor
       if (target.category === 'DONE' && before.status.category !== 'DONE') {
         if (actor.kind === 'USER' || actor.kind === 'AI') {
           await assertDoneRequirements(tx, before.projectId, issueId, before.type.key, `${before.project.key}-${before.number}`);
+          // Đợt S6: thẻ AI-assisted + luật duyệt độc lập bật ⇒ cần người khác người tạo/người áp dụng AI duyệt.
+          await assertAiIndependentReview(tx, before.projectId, before, `${before.project.key}-${before.number}`);
         }
         data.resolvedAt = new Date();
         data.resolution = before.resolution ?? 'DONE';
@@ -434,6 +455,24 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, actor
         data.resolvedAt = null;
         data.resolution = null;
       }
+    }
+
+    // ── Đợt S6: nguồn gốc AI ──
+    // Đề xuất AI đổi NỘI DUNG (tiêu đề/mô tả) ⇒ AI-assisted; chỉ kéo cột / đổi sprint thì không phải "AI viết".
+    const contentByAi = actor.kind === 'AI' && changes.some((c) => c.field === 'title' || c.field === 'description');
+    const prov = opts.aiProvenance
+      ?? (contentByAi ? { model: actor.model ?? (await assistantModel()), source: AI_SOURCE.apply, appliedById: actor.userId } : null);
+    if (prov) {
+      data.aiAssisted = true;
+      data.aiModel = prov.model?.slice(0, 120) ?? null;
+      data.aiAssistedAt = new Date();
+      if (prov.appliedById) data.aiAppliedById = prov.appliedById;
+      // Luôn ghi (kể cả cùng model): mỗi lần áp dụng là một mốc provenance — người + thời điểm = actor + createdAt.
+      changes.push({ field: 'aiAssisted', from: before.aiAssisted ? (before.aiModel ?? 'yes') : null, to: provenanceValue(prov.model, prov.source) });
+    } else if (patch.aiAssisted !== undefined && patch.aiAssisted !== before.aiAssisted) {
+      data.aiAssisted = patch.aiAssisted;
+      if (patch.aiAssisted) data.aiAssistedAt = new Date();
+      changes.push({ field: 'aiAssisted', from: before.aiAssisted ? (before.aiModel ?? 'yes') : null, to: patch.aiAssisted ? provenanceValue(null, AI_SOURCE.manual) : null });
     }
 
     if (opts.rank !== undefined) data.rank = opts.rank;

@@ -334,6 +334,7 @@ export type LlmPurpose =
   | 'finance_advisor'     // MoneyFlow — đọc số liệu tiền nong của CHÍNH người dùng rồi khuyên
   | 'work_assistant'      // CT Work — trợ lý trong dự án: viết story, tách việc, sinh test, trả lời về dự án
   | 'work_digest'         // CT Work — diễn đạt lại số liệu mã đã tính (báo cáo tuần, bản tin)
+  | 'work_spec_review'    // CT Work S6 — soát ngữ nghĩa đặc tả (mâu thuẫn, thiếu edge case); phần xác định do MÃ chấm
   | 'note_format'         // Notes — "✨ Sắp xếp lại trang": sửa chính tả + dựng mục/bảng/khối code, KHÔNG thêm ý
   | 've_net'              // Vở iPad — "AI vẽ bằng nét": viết SVG nét đơn, máy chủ đổi ra điểm cho PKStroke
   | 'vo_viet_lai'         // Vở iPad — "AI viết lại trang": đọc ẢNH trang viết tay → khối có cấu trúc, sửa chính tả, KHÔNG thêm ý
@@ -445,6 +446,12 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    */
   work_assistant: 'claude-sonnet-5',
   work_digest: 'gpt-5.4-mini',
+  /**
+   * CT Work đợt S6 (05/10/2026) — "Check spec quality": model chỉ BỔ SUNG nhận xét ngữ nghĩa (mâu thuẫn giữa hai yêu
+   * cầu, thiếu edge case, câu hai nghĩa) cho phần mã đã chấm. Người dùng bấm và ngồi đọc từng phát hiện ⇒ việc tương
+   * tác, cùng model với trợ lý. KHÔNG chạy nền. Vặn bằng `LLM_MODEL_WORK_SPEC_REVIEW`.
+   */
+  work_spec_review: 'claude-sonnet-5',
 
   /**
    * Notes — "✨ Sắp xếp lại trang này" (26/09/2026). `claude-sonnet-4-6`.

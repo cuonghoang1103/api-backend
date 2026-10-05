@@ -21,6 +21,7 @@ import { headingsOf, replaceSection, type PmNode } from './docSections.js';
 import { getTemplate } from './docTemplates.js';
 import * as pages from './pages.service.js';
 import { docAccess, isClientScoped, type ProjectAccess } from './permissions.js';
+import { assistantModel } from './provenance.js';
 
 const clip = (s: string | null | undefined, n: number) => (s ? (s.length > n ? `${s.slice(0, n)}…` : s) : '');
 
@@ -111,7 +112,8 @@ export async function srsFacts(projectId: number, key: string, scope?: string | 
 
 export async function applyDraftPage(userId: number, projectId: number, a: { title: string; markdown: string; parent?: number | null }) {
   const { doc } = markdownToTiptap(a.markdown, { dropTitle: true });
-  const p = await pages.createPage(userId, projectId, { title: a.title, parentNumber: a.parent ?? null, contentJson: doc });
+  // Đợt S6: trang do AI soạn ⇒ AI-assisted (nguồn gốc ghi model + người bấm Apply).
+  const p = await pages.createPage(userId, projectId, { title: a.title, parentNumber: a.parent ?? null, contentJson: doc, aiProvenance: { model: await assistantModel() } });
   return { summary: `Created document ${p.number}: ${p.title}`, number: p.number, pageNumber: p.number };
 }
 
@@ -121,7 +123,7 @@ export async function applyUpdateSection(userId: number, projectId: number, a: {
   const blocks = (markdownToTiptap(a.markdown).doc.content ?? []) as MdNode[] as PmNode[];
   const r = replaceSection((cur.contentJson ?? { type: 'doc', content: [] }) as unknown as PmNode, a.heading, blocks, a.mode === 'append' ? 'append' : 'replace');
   const note = `AI suggestion applied: ${r.found ? (a.mode === 'append' ? 'added to' : 'rewrote') : 'added'} section “${clip(a.heading, 80)}”`;
-  const p = await pages.updatePage(userId, projectId, a.number, { contentJson: r.doc, versionNote: note, version: cur.version });
+  const p = await pages.updatePage(userId, projectId, a.number, { contentJson: r.doc, versionNote: note, version: cur.version, aiProvenance: { model: await assistantModel() } });
   if (!p) throw new NotFoundError('Document not found');
   return { summary: `Updated document ${a.number} (${r.found ? 'section rewritten' : 'new section added'})`, number: a.number, pageNumber: a.number };
 }

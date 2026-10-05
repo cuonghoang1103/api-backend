@@ -24,6 +24,9 @@ import { Dialog, EmptyState, Field, PageLoading, Popover, Spinner, formatDate, u
 import { ConfirmDialog } from '../settings/shared';
 import { ApprovalDialog } from './ApprovalDetail';
 import { ProcessGuideLink, StagePill, STAGE_STATUS, studioOn, useStudioInvalidate } from './shared';
+// Đợt S6: cổng Spec Fidelity khi xin duyệt cổng (giai đoạn đặc tả) — hiện điểm, lý do chặn, ADMIN ghi đè có lý do.
+import { SpecGateBox } from '../spec/SpecPanel';
+import { specGateError, workS6Api, workS6Keys } from '@/lib/work-s6-api';
 
 interface Blocked { stageId: number; blocker: { id: number; n: number; name: string; status: string } }
 
@@ -102,10 +105,23 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
       else toast.error(workError(err, 'Could not activate the stage'));
     },
   });
+  const [ovReason, setOvReason] = useState('');
+  const specGate = useQuery({ queryKey: workS6Keys.gate(config.id, s.id), queryFn: () => workS6Api.gate(config.id, s.id), enabled: gateOpen, retry: false });
+  const specBlocked = !!specGate.data?.applies && !specGate.data.pass;
+  const isAdmin = config.role === 'ADMIN';
   const gate = useMutation({
-    mutationFn: () => workStudioApi.requestGate(config.id, s.id, { description: gateNote.trim() || null, dueAt: gateDue ? new Date(`${gateDue}T23:59:00`).toISOString() : null }),
-    onSuccess: (r) => { toast.success(`Gate review requested for stage ${s.n}`); setGateOpen(false); setGateNote(''); setGateDue(''); invalidate(); onOpenApproval(r.approval.id); },
-    onError: (err) => toast.error(workError(err, 'Could not request the gate review')),
+    mutationFn: () => workS6Api.requestGate(config.id, s.id, {
+      description: gateNote.trim() || null, dueAt: gateDue ? new Date(`${gateDue}T23:59:00`).toISOString() : null,
+      ...(specBlocked && isAdmin && ovReason.trim().length >= 3 ? { override: { reason: ovReason.trim() } } : {}),
+    }),
+    onSuccess: (r) => {
+      toast.success(r.approval.specReview && specBlocked ? `Gate review requested for stage ${s.n} — Spec Fidelity override recorded in the audit log` : `Gate review requested for stage ${s.n}`);
+      setGateOpen(false); setGateNote(''); setGateDue(''); setOvReason(''); invalidate(); onOpenApproval(r.approval.id);
+    },
+    onError: (err) => {
+      if (specGateError(err)) void specGate.refetch();
+      toast.error(workError(err, 'Could not request the gate review'));
+    },
   });
 
   const current = s.status === 'ACTIVE' || s.status === 'GATE_REVIEW';
@@ -224,10 +240,13 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
         footer={
           <>
             <button type="button" className="w-btn" onClick={() => setGateOpen(false)}>Cancel</button>
-            <button type="button" className="w-btn w-btn-primary" disabled={gate.isPending} onClick={() => gate.mutate()}>{gate.isPending ? <Spinner size={12} /> : <Send size={13} />} Send for review</button>
+            <button type="button" className={cn('w-btn', specBlocked ? 'w-btn-warn' : 'w-btn-primary')} disabled={gate.isPending || specGate.isLoading || (specBlocked && !(isAdmin && ovReason.trim().length >= 3))} onClick={() => gate.mutate()} data-testid="stage-send-gate">
+              {gate.isPending ? <Spinner size={12} /> : <Send size={13} />} {specBlocked ? 'Override and send' : 'Send for review'}
+            </button>
           </>
         }
       >
+        <SpecGateBox config={config} stageId={s.id} gate={specGate.data} isAdmin={isAdmin} reason={ovReason} onReason={setOvReason} />
         <p className="mb-4 text-[13px] leading-relaxed text-[var(--w-text-2)]">
           The stage moves to <b className="font-medium">Gate review</b> and the gate approvers set in Project settings (by default the project admin) are asked to sign off. It becomes Done only when they approve.
         </p>

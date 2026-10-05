@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ShieldCheck, KeyRound, X, Loader2 } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { ketThucMfa, ngheYeuCauMfa } from './adminApi';
+import './quanTri.css';
 
 export function XacMinhMfa() {
   const { api, user } = useSession();

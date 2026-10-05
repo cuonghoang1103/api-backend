@@ -84,12 +84,14 @@ export type StorageCategory =
   | 'firmware';
 
 /** Helper for the audio path — pre-pends `songs/` per the spec. */
-export function buildAudioKey(originalName: string, _options: { userId?: number } = {}): string {
-  void _options; // reserved for future per-user prefixes
+export function buildAudioKey(originalName: string, options: { userId?: number } = {}): string {
   const ext = path.extname(originalName).toLowerCase().slice(0, 16) || '.mp3';
   const stamp = Date.now();
   const suffix = randomSuffix();
-  return normalize(`audio/songs/${stamp}-${suffix}${ext}`);
+  // 05/10/2026: có userId ⇒ thêm đoạn `u<id>/` để keyBelongsToUser nhận ra người rút/tải
+  // bài — DELETE /music/tracks/:id/audio cho chính người đó gỡ bản R2 của mình.
+  const u = Number.isInteger(options.userId) && (options.userId as number) > 0 ? `u${options.userId}/` : '';
+  return normalize(`audio/songs/${u}${stamp}-${suffix}${ext}`);
 }
 
 /** Helper for notification sounds — small files, fixed prefix. */

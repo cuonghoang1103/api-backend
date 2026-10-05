@@ -42,6 +42,8 @@ import {
   xoaPlaylist, type Playlist,
 } from './playlists';
 import { RemixDeck } from './RemixDeck';
+import { goi as goiAdmin, LoiAdmin } from '../admin/adminApi';
+import { XacMinhMfa } from '../admin/XacMinhMfa';
 import { TaiNhacLen } from './TaiNhacLen';
 import './music2.css';
 
@@ -245,14 +247,13 @@ export function MusicPage() {
     if (!window.confirm(dichP('Xoá "{ten}" khỏi máy bạn và khỏi máy chủ (R2)?', { ten: track.title }))) return;
     await remove(track.id);
     try {
-      const r = await fetch(`${api.baseUrlForForms()}/api/v1/music/tracks/${track.id}/audio`, {
-        method: 'DELETE', headers: api.authHeaders(), credentials: 'omit',
-      });
-      const j = await r.json().catch(() => null) as { message?: string; data?: { ketQua?: string } } | null;
-      if (!r.ok) setError(r.status === 403 && j?.message ? `${dich('Đã xoá trên máy.')} ${j.message}` : `${dich('Đã xoá trên máy, nhưng chưa gỡ được bản trên máy chủ')}: ${j?.message ?? r.status}`);
+      // Qua goi() của trang Quản trị: admin gỡ bản người khác rút cần step-up MFA ⇒
+      // goi() bật hộp nhập mã 6 số (XacMinhMfa gắn ở cuối trang) rồi tự gọi lại.
+      await goiAdmin(api, `/music/tracks/${track.id}/audio`, { method: 'DELETE' });
       await loadTracks(true);
     } catch (e) {
-      setError(`${dich('Đã xoá trên máy, nhưng chưa gỡ được bản trên máy chủ')}: ${e instanceof Error ? e.message : String(e)}`);
+      const m = e instanceof Error ? e.message : String(e);
+      setError(e instanceof LoiAdmin && e.code === 'NOT_OWNER' ? `${dich('Đã xoá trên máy.')} ${m}` : `${dich('Đã xoá trên máy, nhưng chưa gỡ được bản trên máy chủ')}: ${m}`);
     }
   };
 
@@ -834,6 +835,7 @@ export function MusicPage() {
 
       {thuGian && current && <RaNgoai><NowPlaying onDong={() => setThuGian(false)} /></RaNgoai>}
       {phimTat && <RaNgoai><BangPhimTat onDong={() => setPhimTat(false)} /></RaNgoai>}
+      <RaNgoai><XacMinhMfa /></RaNgoai>
     </div>
     </div>
   );

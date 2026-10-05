@@ -1,6 +1,6 @@
 /* ═══════════ QUẢN TRỊ (05/10/2026) ═══════════
    Theo token chủ đề của app (--ct-*) nên sáng/tối đều đúng; điểm nhấn tím → hồng. */
-.ct-qt { --qt-nhan: #8b5cf6; --qt-nhan2: #ec4899; --qt-the: color-mix(in srgb, var(--ct-text) 4%, transparent); --qt-vien: color-mix(in srgb, var(--ct-text) 10%, transparent);
+.ct-qt, .ct-qt-mfa-nen { --qt-nhan: #8b5cf6; --qt-nhan2: #ec4899; --qt-the: color-mix(in srgb, var(--ct-text) 4%, transparent); --qt-vien: color-mix(in srgb, var(--ct-text) 10%, transparent);
   display: grid; grid-template-columns: 236px minmax(0, 1fr); height: 100%; min-height: 0; color: var(--ct-text); }
 @media (max-width: 900px) { .ct-qt { grid-template-columns: 64px minmax(0, 1fr); } .ct-qt-nav span, .ct-qt-nav p, .ct-qt-nav-dau div, .ct-qt-mfa-chip span, .ct-qt-nav-web { display: none; } }
 

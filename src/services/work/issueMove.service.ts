@@ -24,7 +24,7 @@ import { prisma } from '../../config/database.js';
 import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { auditProject } from './audit.js';
 import { emitWorkEvent } from './events.js';
-import { can, canDeleteIssue, requireProject } from './permissions.js';
+import { assertHumanActor, can, canDeleteIssue, requireProject } from './permissions.js';
 import { rankAfter, rankInitial } from './rank.js';
 import { modulesOf } from './studio.js';
 
@@ -50,6 +50,7 @@ export async function moveIssueToProject(
   userId: number, projectId: number, number: number,
   input: { targetProjectId: number; version?: number },
 ) {
+  await assertHumanActor(userId, 'move issues to another project'); // CTW-28: rời dự án = xoá khỏi dự án nguồn
   if (input.targetProjectId === projectId) throw new BadRequestError('The issue is already in this project', 'WORK_MOVE_SAME');
   const src = await requireProject(userId, projectId, 'issue.edit');
   const dst = await requireProject(userId, input.targetProjectId, 'issue.edit');

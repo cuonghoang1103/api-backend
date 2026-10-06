@@ -18,7 +18,7 @@ import { AppError, BadRequestError, ConflictError, NotFoundError } from '../../m
 import { auditProject } from './audit.js';
 import { createApprovalTx, afterCreate, getApproval } from './approvals.service.js';
 import { emitWorkEvent } from './events.js';
-import { can, loadProjectAccess, requireProject } from './permissions.js';
+import { can, loadProjectAccess, requireProject, assertHumanActor } from './permissions.js';
 import { stageGateOf } from './projects.service.js';
 import { assertModule, stageActivationBlocker } from './studio.js';
 import { projectLanguage } from './projectLanguage.js';
@@ -223,6 +223,7 @@ export interface RequestGateInput extends GateEvidenceInput {
 }
 
 export async function requestGate(userId: number, projectId: number, stageId: number, input: RequestGateInput = {}) {
+  await assertHumanActor(userId, 'request stage gates'); // CTW-28: tầng hành động — agent bị chặn bất kể gọi từ tuyến nào
   const access = await requireStages(userId, projectId, 'stage.requestGate');
   assertModule(access, 'approvals');
   const stageRow = await prisma.workStage.findFirst({ where: { id: stageId, projectId }, select: { id: true, slug: true, n: true, name: true } });

@@ -14,7 +14,7 @@ import { Router, type Request, type Response } from 'express';
 import { z, ZodError } from 'zod';
 import { authenticate } from '../middleware/auth.js';
 import { AppError, asyncHandler, BadRequestError, UnauthorizedError, NotFoundError } from '../middleware/errorHandler.js';
-import { clientPortalRouteAllowed, effectiveWorkspaceRole, isClientScoped, loadProjectAccess, portalOnlyWorkspaceIds } from '../services/work/permissions.js';
+import { agentForbidden, agentRouteAllowed, clientPortalRouteAllowed, effectiveWorkspaceRole, isClientScoped, loadProjectAccess, portalOnlyWorkspaceIds } from '../services/work/permissions.js';
 import { prisma } from '../config/database.js';
 import {
   APPROVAL_MODES, APPROVAL_STATUSES, APPROVAL_TARGETS, COMMENT_VISIBILITY, HANDOFF_STATUSES, PORTAL_REQUEST_KINDS, LINK_TYPES, PAGE_STATUSES, PAGE_VISIBILITY, PRIORITY_MAX, PRIORITY_MIN,
@@ -65,11 +65,18 @@ import deskRoutes from './work.desk.routes.js';
 import s5cRoutes from './work.s5c.routes.js';
 import s6Routes from './work.s6.routes.js';
 import resourcesRoutes from './work.resources.routes.js';
+import agentsRoutes from './work.agents.routes.js';
+import { registerAgentEvents } from '../services/work/agentEvents.js';
+import { startAgentJobs } from '../services/work/agents.service.js';
 
 registerWorkNotifications();
 tests.registerTestingHooks();
 automation.registerAutomation();
 chatHooks.registerChatHooks();
+// CTW-28: hộp thư sự kiện của AI agent (bus ⇒ work_agent_inbox ⇒ SSE/webhook) + job nền lease 60 s / webhook 5 s.
+// Job đặt ở đây thay vì cron.service.ts (ngoài phạm vi đợt A1–A8); vẫn tôn trọng CRON_DISABLED=1, tắt trong test.
+registerAgentEvents();
+startAgentJobs();
 
 const router = Router();
 
@@ -193,6 +200,14 @@ router.use('/projects/:pid', asyncHandler(async (req, _res, next) => {
   const pid = Number(req.params.pid);
   const uid = req.userId ?? req.user?.userId;
   if (!uid || !Number.isInteger(pid) || pid <= 0) return next();
+  // CTW-28: token agent — (1) phạm vi dự án của token ⇒ 404 (không cho biết dự án tồn tại), (2) tuyến đối ngoại
+  // (khách, tiền, xoá, cấu hình) ⇒ 403. Tầng hành động trong service chặn lần nữa (permissions.ts).
+  if (req.agent) {
+    if (req.agent.projectIds && !req.agent.projectIds.includes(pid)) throw new NotFoundError('Project not found');
+    if (!agentRouteAllowed(req.method, req.path)) {
+      throw await agentForbidden(req.agent.userId, 'use this part of a project (client, finance, settings, deletion or approvals)');
+    }
+  }
   const access = await loadProjectAccess(uid, pid);
   if (access && isClientScoped(access) && !clientPortalRouteAllowed(req.method, req.path)) {
     throw new AppError('This part of the project is not available in the client portal', 403, 'CLIENT_PORTAL_ONLY');
@@ -1860,5 +1875,7 @@ router.use(s5cRoutes);
 router.use(s6Routes);
 // Resources (06/10/2026): thư viện link của dự án + Web links trên thẻ — tuyến ở work.resources.routes.ts (qua chốt cổng khách ở trên).
 router.use(resourcesRoutes);
+// CTW-28 (GĐ1 A2–A8): AI agent thành viên — quản lý, token, lease, hộp thư/SSE, webhook — tuyến ở work.agents.routes.ts.
+router.use(agentsRoutes);
 
 export default router;

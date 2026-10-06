@@ -14,6 +14,8 @@ export const PUBLIC_USER = {
   fullName: true,
   displayName: true,
   avatarUrl: true,
+  /** CTW-28: HUMAN | AGENT — một chỗ lan ra mọi avatar/assignee/bình luận/lịch sử (UI gắn 🤖). */
+  kind: true,
 } as const;
 
 export interface PublicUser {
@@ -22,6 +24,7 @@ export interface PublicUser {
   fullName: string | null;
   displayName: string | null;
   avatarUrl: string | null;
+  kind?: string;
 }
 
 export function displayName(u: Pick<PublicUser, 'username' | 'fullName' | 'displayName'>): string {

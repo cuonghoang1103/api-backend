@@ -14,8 +14,7 @@ import { auditProject } from './audit.js';
 import { emitWorkEvent, evictFromProject } from './events.js';
 import {
   can, deskAccess, docAccess, effectiveProjectRole, effectiveWorkspaceRole, governanceAccess, isClientScoped, loadProjectAccess, portalOnlyUserIds, requireProject, requireWorkspace,
-  type ProjectOptions,
-} from './permissions.js';
+  type ProjectOptions, principalOf } from './permissions.js';
 import { financeAccess } from './financeRules.js';
 import { clientPeopleIds, filterPeople } from './clientPeople.js';
 import { seedProjectConfig } from './templates.js';
@@ -393,6 +392,10 @@ export async function setProjectMember(userId: number, projectId: number, target
   const access = await requireProject(userId, projectId, 'project.members');
   const inWs = await prisma.workMember.findFirst({ where: { workspaceId: access.workspaceId, userId: targetUserId }, select: { role: true } });
   if (!inWs) throw new BadRequestError('Invite this person to the workspace first', 'WORK_NOT_IN_WORKSPACE');
+  // CTW-28: vai dự án của AI agent chỉ được MEMBER hoặc VIEWER (không ADMIN/CLIENT/TEACHER).
+  if (!(['MEMBER', 'VIEWER'] as string[]).includes(role) && (await principalOf(targetUserId)) === 'AGENT') {
+    throw new BadRequestError('An AI agent can only be a project Member or Viewer', 'WORK_AGENT_ROLE');
+  }
   if ((inWs.role === 'OWNER' || inWs.role === 'ADMIN') && role !== 'ADMIN') {
     throw new ForbiddenError('Workspace admins are always project admins');
   }

@@ -110,6 +110,12 @@ export class AuthService {
       throw new AppError('Invalid username or password', 401, 'INVALID_CREDENTIALS');
     }
 
+    // CT Work AI agent (CTW-28): không bao giờ đăng nhập — chỉ dùng token ctw_ gắn agent. Chặn TRƯỚC khi so
+    // mật khẩu (agent có password NULL nên vốn không khớp — chốt kép), và không đếm lần sai (không khoá tài khoản).
+    if (user.kind === 'AGENT') {
+      throw new AppError('AI agents cannot sign in. Use the agent\'s CT Work API token.', 403, 'AGENT_NO_LOGIN');
+    }
+
     if (!user.enabled) {
       throw new AppError('Account is disabled', 403, 'ACCOUNT_DISABLED');
     }
@@ -1028,7 +1034,12 @@ export class AuthService {
     avatarUrl: string | null;
     roles: { role: { name: string } }[];
     roleVersion: bigint;
+    kind?: string;
   }, mfaAt?: number): AuthResponse {
+    // CTW-28: MỌI đường cấp JWT (mật khẩu, OAuth, refresh, MFA) đi qua đây ⇒ một chốt cho agent.
+    if (user.kind === 'AGENT') {
+      throw new AppError('AI agents cannot sign in. Use the agent\'s CT Work API token.', 403, 'AGENT_NO_LOGIN');
+    }
     const roles = user.roles.map((ur) => ur.role.name);
     const { token, refreshToken } = this.generateTokens({
       id: user.id,

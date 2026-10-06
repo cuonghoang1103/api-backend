@@ -30,7 +30,7 @@ import { emitWorkEvent } from './events.js';
 import { crManualTransitionAllowed, crPending, crTotals } from './governance.js';
 import { dayOf, govCtx, markdownDoc, nextNumber } from './governanceDb.js';
 import { createIssueAs } from './issues.service.js';
-import { canDeleteGovernance, governanceAccess, loadProjectAccess } from './permissions.js';
+import { canDeleteGovernance, governanceAccess, loadProjectAccess, assertHumanActor } from './permissions.js';
 import { tiptapToText } from './tiptapText.js';
 
 const DAY = 86_400_000;
@@ -271,6 +271,7 @@ export async function setChangeRequestStatus(userId: number, projectId: number, 
 
 /** Chia sẻ CR với khách (cổng khách bật) — điều kiện để khách đứng tên duyệt. */
 export async function setChangeRequestClientVisible(userId: number, projectId: number, number: number, visible: boolean) {
+  await assertHumanActor(userId, 'share change requests with clients'); // CTW-28: tầng hành động — agent bị chặn bất kể gọi từ tuyến nào
   const ctx = await govCtx(userId, projectId, 'changeRequests', { edit: true });
   if (!ctx.access.modules.clientPortal) throw new BadRequestError('Turn on the client portal to share change requests with the client', 'WORK_PORTAL_OFF');
   const cr = await findCr(projectId, number);

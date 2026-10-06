@@ -401,7 +401,7 @@ export async function deleteTimeOff(userId: number, workspaceId: number, id: num
 // ═══ Worklog ══════════════════════════════════════════════════════
 
 const WORKLOG_SELECT = {
-  id: true, minutes: true, startedAt: true, note: true, createdAt: true, userId: true, user: { select: PUBLIC_USER },
+  id: true, minutes: true, startedAt: true, note: true, source: true, createdAt: true, userId: true, user: { select: PUBLIC_USER },
 } satisfies Prisma.WorkWorklogSelect;
 
 export async function listWorklogs(userId: number, projectId: number, number: number) {
@@ -419,7 +419,8 @@ export async function addWorklog(
   userId: number, projectId: number, number: number,
   input: { minutes: number; startedAt?: string; note?: string | null; remaining?: 'auto' | 'keep' | number },
 ) {
-  await requireProject(userId, projectId, 'issue.edit');
+  const access = await requireProject(userId, projectId, 'issue.edit');
+  const isAgent = access.principal === 'AGENT';
   if (!Number.isInteger(input.minutes) || input.minutes < 1 || input.minutes > 24 * 60) throw new BadRequestError('Time spent must be between 1 minute and 24 hours', 'WORK_BAD_WORKLOG');
   const startedAt = input.startedAt ? new Date(input.startedAt) : new Date();
   if (Number.isNaN(startedAt.getTime())) throw new BadRequestError('Invalid start time', 'WORK_BAD_WORKLOG');
@@ -427,17 +428,19 @@ export async function addWorklog(
   const issue = await prisma.workIssue.findFirst({ where: { projectId, number, deletedAt: null }, select: { id: true } });
   if (!issue) throw new NotFoundError('Issue not found');
   // Đợt S4 (mô-đun finance): tuần đã nộp/đã duyệt bị khoá — 423 WORK_TIMESHEET_LOCKED. Dự án tắt finance ⇒ không đổi gì.
-  await (await import('./finance.service.js')).assertWeekOpen(projectId, userId, startedAt);
+  // CTW-28 §5.3: timesheet tuần chỉ dành cho NGƯỜI (nộp/duyệt) — agent không bị khoá tuần.
+  if (!isAgent) await (await import('./finance.service.js')).assertWeekOpen(projectId, userId, startedAt);
   const log = await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM work_issues WHERE id = ${issue.id} FOR UPDATE`;
     const cur = await tx.workIssue.findUniqueOrThrow({ where: { id: issue.id }, select: { timeSpentMin: true, remainingEstimateMin: true } });
-    const created = await tx.workWorklog.create({ data: { issueId: issue.id, userId, minutes: input.minutes, startedAt, note: input.note?.trim().slice(0, 1000) || null }, select: WORKLOG_SELECT });
+    // source MANUAL: người hoặc agent tự ghi; AGENT_AUTO chỉ do job timesheet agent sinh từ lease (A12).
+    const created = await tx.workWorklog.create({ data: { issueId: issue.id, userId, minutes: input.minutes, startedAt, note: input.note?.trim().slice(0, 1000) || null, source: 'MANUAL' }, select: WORKLOG_SELECT });
     let remaining = cur.remainingEstimateMin;
     if (input.remaining === 'auto' || input.remaining === undefined) remaining = cur.remainingEstimateMin === null ? null : Math.max(0, cur.remainingEstimateMin - input.minutes);
     else if (typeof input.remaining === 'number') remaining = Math.max(0, Math.round(input.remaining));
     await tx.workIssue.update({ where: { id: issue.id }, data: { timeSpentMin: cur.timeSpentMin + input.minutes, remainingEstimateMin: remaining, version: { increment: 1 } } });
     await tx.workHistory.create({
-      data: { issueId: issue.id, actorId: userId, actorKind: 'USER', field: 'timeSpentMin', fromValue: String(cur.timeSpentMin), toValue: String(cur.timeSpentMin + input.minutes) },
+      data: { issueId: issue.id, actorId: userId, actorKind: isAgent ? 'AGENT' : 'USER', field: 'timeSpentMin', fromValue: String(cur.timeSpentMin), toValue: String(cur.timeSpentMin + input.minutes) },
     });
     return created;
   });

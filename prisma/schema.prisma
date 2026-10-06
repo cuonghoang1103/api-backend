@@ -455,6 +455,11 @@ model User {
   workMeetingsOrganized  WorkMeeting[]           @relation("WorkMeetingOrganizer")
   workMeetingInvites     WorkMeetingAttendee[]   @relation("WorkMeetingAttendeeUser")
   workMeetingActions     WorkMeetingAction[]     @relation("WorkMeetingActionAssignee")
+  /// CTW-28 (06/10/2026): HUMAN (mặc định) | AGENT — agent KHÔNG đăng nhập (login/JWT ⇒ 403 AGENT_NO_LOGIN),
+  /// chỉ xác thực bằng token ctw_ gắn agent. Hồ sơ agent ở WorkAgent (1:1). Xem docs/ct-work-ai-agents-thiet-ke.md.
+  kind                   String                  @default("HUMAN") @db.VarChar(8)
+  workAgent              WorkAgent?              @relation("WorkAgentUser")
+  workAgentsOwned        WorkAgent[]             @relation("WorkAgentOwner")
   // CRM nhẹ của studio (đợt S5b, 05/10/2026) — /admin/crm
   crmDealsOwned          CrmDeal[]               @relation("CrmDealOwner")
 
@@ -9983,6 +9988,7 @@ model WorkSpace {
   timeOff  WorkTimeOff[]
   audit    WorkAuditLog[]
   teams    WorkTeam[]
+  agents   WorkAgent[]
 
   @@index([ownerId], name: "idx_work_space_owner")
   @@map("work_spaces")
@@ -10846,6 +10852,8 @@ model WorkWorklog {
   minutes   Int
   startedAt DateTime @map("started_at")
   note      String?  @db.VarChar(1000)
+  /// CTW-28: MANUAL (người/agent tự ghi) | AGENT_AUTO (timesheet agent sinh từ lease — GĐ1 A12).
+  source    String   @default("MANUAL") @db.VarChar(10)
   createdAt DateTime @default(now()) @map("created_at")
 
   issue WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
@@ -11026,10 +11034,180 @@ model WorkApiToken {
   revokedAt  DateTime? @map("revoked_at")
   createdAt  DateTime  @default(now()) @map("created_at")
 
-  user User @relation("WorkApiTokenUser", fields: [userId], references: [id], onDelete: Cascade)
+  /// CTW-28: token của AI agent (null = token cá nhân của người). Có ⇒ apiTokenAuth gắn req.agent, rào chắn áp.
+  agentId    Int? @map("agent_id")
+  /// Phạm vi dự án của token agent: [] = mọi dự án agent là thành viên; có phần tử = chỉ các dự án đó.
+  projectIds Json @default("[]") @map("project_ids")
+
+  user  User       @relation("WorkApiTokenUser", fields: [userId], references: [id], onDelete: Cascade)
+  agent WorkAgent? @relation(fields: [agentId], references: [id], onDelete: Cascade)
 
   @@index([userId], name: "idx_work_api_token_user")
+  @@index([agentId], name: "idx_work_api_token_agent")
   @@map("work_api_tokens")
+}
+
+// ─── CT Work — AI agent là thành viên hạng nhất (CTW-28, 06/10/2026) ───────────
+// Thiết kế: docs/ct-work-ai-agents-thiet-ke.md. Agent LÀ một User kind=AGENT + hồ sơ WorkAgent —
+// mọi khoá ngoại sẵn có (assignee, author, actor, worklog…) trỏ users.id nên không bảng nào phải mọc cột thứ hai.
+
+/// Hồ sơ AI agent — một dòng cho mỗi user kind=AGENT. ownerId = NGƯỜI chịu trách nhiệm (bắt buộc, HUMAN).
+/// status: ACTIVE | PAUSED (đọc được, ghi ⇒ 423) | RETIRED (token chết, rời dự án, user.enabled=false — id giữ nguyên).
+model WorkAgent {
+  id              Int       @id @default(autoincrement())
+  userId          Int       @unique(map: "uk_work_agent_user") @map("user_id")
+  workspaceId     Int       @map("workspace_id")
+  ownerId         Int       @map("owner_id")
+  model           String    @db.VarChar(80)
+  roleText        String?   @map("role_text") @db.VarChar(300)
+  capabilities    Json      @default("{}")
+  /// EXTERNAL (tự chạy, nhận việc qua MCP/webhook — GĐ1) | BUILTIN (CT Work chạy qua cổng LLM — GĐ2)
+  runtime         String    @default("EXTERNAL") @db.VarChar(12)
+  status          String    @default("ACTIVE") @db.VarChar(12)
+  parallelSlots   Int       @default(1) @map("parallel_slots")
+  dailyCostCapUsd Float?    @map("daily_cost_cap_usd")
+  /// GĐ2: system prompt riêng của agent dựng sẵn (≤ 20.000 ký tự).
+  instructions    String?   @db.Text
+  lastSeenAt      DateTime? @map("last_seen_at")
+  createdById     Int?      @map("created_by_id")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  retiredAt       DateTime? @map("retired_at")
+
+  user      User             @relation("WorkAgentUser", fields: [userId], references: [id], onDelete: Cascade)
+  owner     User             @relation("WorkAgentOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  workspace WorkSpace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  tokens    WorkApiToken[]
+  leases    WorkAgentLease[]
+  usage     WorkAgentUsage[]
+  webhooks  WorkWebhook[]
+  runs      WorkAgentRun[]
+
+  @@index([workspaceId, status], name: "idx_work_agent_ws")
+  @@index([ownerId], name: "idx_work_agent_owner")
+  @@map("work_agents")
+}
+
+/// "Đang làm" — agent nhận (claim) một thẻ. Hết hạn mà không heartbeat ⇒ sweeper đánh EXPIRED + cắm cờ Blocked.
+/// status: ACTIVE | RELEASED | EXPIRED.
+/// Mỗi thẻ chỉ MỘT lease ACTIVE: `activeIssueId` = issueId khi ACTIVE, NULL khi đã kết thúc; UNIQUE trên cột này
+/// (Postgres cho nhiều NULL) — thay cho partial unique index mà Prisma không khai được, để `migrate diff` sạch.
+model WorkAgentLease {
+  id            Int       @id @default(autoincrement())
+  agentId       Int       @map("agent_id")
+  issueId       Int       @map("issue_id")
+  projectId     Int       @map("project_id")
+  activeIssueId Int?      @unique(map: "uk_work_agent_lease_active") @map("active_issue_id")
+  claimedAt     DateTime  @default(now()) @map("claimed_at")
+  heartbeatAt   DateTime  @default(now()) @map("heartbeat_at")
+  expiresAt     DateTime  @map("expires_at")
+  status        String    @default("ACTIVE") @db.VarChar(10)
+  releasedAt    DateTime? @map("released_at")
+  /// Ghi chú tiến độ gần nhất (heartbeat) — hiện trên thẻ "🤖 working: …".
+  progress      String?   @db.VarChar(300)
+  progressPct   Int?      @map("progress_pct")
+
+  agent WorkAgent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId, status], name: "idx_work_agent_lease_agent")
+  @@index([issueId], name: "idx_work_agent_lease_issue")
+  @@index([status, expiresAt], name: "idx_work_agent_lease_expiry")
+  @@map("work_agent_leases")
+}
+
+/// Chi phí/token của agent theo thẻ. source: REPORTED (agent tự khai qua MCP) | GATEWAY (CT Work đo thật, GĐ2).
+model WorkAgentUsage {
+  id              Int      @id @default(autoincrement())
+  agentId         Int      @map("agent_id")
+  projectId       Int      @map("project_id")
+  issueId         Int?     @map("issue_id")
+  runId           Int?     @map("run_id")
+  model           String   @db.VarChar(80)
+  inputTokens     Int      @default(0) @map("input_tokens")
+  outputTokens    Int      @default(0) @map("output_tokens")
+  cacheReadTokens Int      @default(0) @map("cache_read_tokens")
+  costUsd         Decimal  @default(0) @map("cost_usd") @db.Decimal(12, 6)
+  source          String   @db.VarChar(10)
+  note            String?  @db.VarChar(200)
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  agent WorkAgent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId, createdAt], name: "idx_work_agent_usage_agent")
+  @@index([projectId, createdAt], name: "idx_work_agent_usage_project")
+  @@index([issueId], name: "idx_work_agent_usage_issue")
+  @@map("work_agent_usage")
+}
+
+/// Webhook RA NGOÀI cho agent/hệ thống khác — JSON ký HMAC-SHA256, KHÔNG mang nội dung thẻ/bình luận.
+/// secret lưu nguyên văn (cần để ký) — API luôn che. Của agent (agentId) hoặc của dự án (projectId).
+model WorkWebhook {
+  id          Int       @id @default(autoincrement())
+  workspaceId Int       @map("workspace_id")
+  projectId   Int?      @map("project_id")
+  agentId     Int?      @map("agent_id")
+  url         String    @db.VarChar(600)
+  secret      String    @db.VarChar(100)
+  events      Json      @default("[]")
+  enabled     Boolean   @default(true)
+  createdById Int?      @map("created_by_id")
+  lastSentAt  DateTime? @map("last_sent_at")
+  lastError   String?   @map("last_error") @db.VarChar(300)
+  failCount   Int       @default(0) @map("fail_count")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  agent WorkAgent? @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId], name: "idx_work_webhook_ws")
+  @@index([agentId], name: "idx_work_webhook_agent")
+  @@map("work_webhooks")
+}
+
+/// Hộp thư sự kiện của agent (nguồn cho SSE + hàng chờ gửi webhook). Mỗi sự kiện liên quan tới một agent = 1 dòng.
+/// delivery (gửi webhook): PENDING | SENT | FAILED | SKIPPED (agent không có webhook nào).
+model WorkAgentInbox {
+  id        Int       @id @default(autoincrement())
+  agentId   Int       @map("agent_id")
+  projectId Int       @map("project_id")
+  issueId   Int?      @map("issue_id")
+  type      String    @db.VarChar(32)
+  payload   Json
+  createdAt DateTime  @default(now()) @map("created_at")
+  ackedAt   DateTime? @map("acked_at")
+  delivery  String    @default("PENDING") @db.VarChar(10)
+  attempts  Int       @default(0)
+  nextTryAt DateTime? @map("next_try_at")
+
+  @@index([agentId, id], name: "idx_work_agent_inbox_agent")
+  @@index([delivery, nextTryAt], name: "idx_work_agent_inbox_delivery")
+  @@map("work_agent_inbox")
+}
+
+/// GĐ2: một lượt chạy của agent dựng sẵn trên một thẻ. status: QUEUED | RUNNING | DONE | FAILED | CANCELLED | CAPPED.
+/// Bảng tạo sẵn ở GĐ1 (migration chỉ-thêm một lần), chưa có mã ghi.
+model WorkAgentRun {
+  id            Int       @id @default(autoincrement())
+  agentId       Int       @map("agent_id")
+  projectId     Int       @map("project_id")
+  issueId       Int       @map("issue_id")
+  /// WRITE_SPEC | ANALYZE | SPLIT_EPIC | WRITE_TESTS | TRIAGE_DESK | CUSTOM
+  task          String    @db.VarChar(24)
+  status        String    @default("QUEUED") @db.VarChar(12)
+  requestedById Int       @map("requested_by_id")
+  input         Json      @default("{}")
+  steps         Json      @default("[]")
+  resultText    String?   @map("result_text") @db.Text
+  error         String?   @db.VarChar(500)
+  costUsd       Decimal   @default(0) @map("cost_usd") @db.Decimal(12, 6)
+  startedAt     DateTime? @map("started_at")
+  finishedAt    DateTime? @map("finished_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  agent WorkAgent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([issueId], name: "idx_work_agent_run_issue")
+  @@index([status, createdAt], name: "idx_work_agent_run_status")
+  @@map("work_agent_runs")
 }
 
 /// Hội thoại với trợ lý AI trong một dự án CT Work — lưu ở SERVER để không mất khi

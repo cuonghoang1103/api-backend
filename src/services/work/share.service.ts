@@ -15,7 +15,7 @@ import { prisma } from '../../config/database.js';
 import { BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
 import { auditProject } from './audit.js';
 import { frontendUrl } from './common.js';
-import { requireProject } from './permissions.js';
+import { requireProject, assertHumanActor } from './permissions.js';
 import { modulesOf } from './studio.js';
 import { projectMembers } from './projects.service.js';
 import { burndown, velocity } from './reports.service.js';
@@ -35,6 +35,7 @@ export async function listLinks(userId: number, projectId: number) {
 }
 
 export async function createLink(userId: number, projectId: number, input: { label?: string | null; options?: Partial<ShareOptions>; expiresInDays?: number | null }) {
+  await assertHumanActor(userId, 'create public share links'); // CTW-28: tầng hành động
   await requireProject(userId, projectId, 'project.settings');
   const active = await prisma.workPublicLink.count({ where: { projectId, revokedAt: null } });
   if (active >= 20) throw new BadRequestError('A project can have at most 20 active links', 'WORK_LIMIT');

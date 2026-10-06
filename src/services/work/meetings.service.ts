@@ -31,7 +31,7 @@ import { MEETING_LABEL, meetingProvider, meetingTimeError, newJitsiUrl, splitKic
 import { dayOf, govCtx, markdownDoc, nextNumber } from './governanceDb.js';
 import { icsDocument, meetingEventLines } from './ics.js';
 import { createIssueAs } from './issues.service.js';
-import { can, canDeleteGovernance, governanceAccess, isClientScoped, loadProjectAccess } from './permissions.js';
+import { can, canDeleteGovernance, governanceAccess, isClientScoped, loadProjectAccess, assertHumanActor } from './permissions.js';
 import { portalCtx } from './portal.service.js';
 import { portalPath, routeForClient } from './portalNotify.js';
 import { tiptapToText } from './tiptapText.js';
@@ -390,6 +390,7 @@ export async function suggestActions(userId: number, projectId: number, number: 
 }
 
 export async function shareMinutes(userId: number, projectId: number, number: number, shared: boolean) {
+  await assertHumanActor(userId, 'share meeting notes with clients'); // CTW-28: tầng hành động — agent bị chặn bất kể gọi từ tuyến nào
   const ctx = await govCtx(userId, projectId, 'meetings', { edit: true });
   if (!ctx.access.modules.clientPortal) throw new BadRequestError('Turn on the client portal to share meeting notes with the client', 'WORK_PORTAL_OFF');
   const m = await findMeeting(projectId, number);
@@ -518,6 +519,7 @@ async function emailInvites(meetingId: number, senderId: number, ids: number[]) 
 }
 
 export async function sendInvites(userId: number, projectId: number, number: number) {
+  await assertHumanActor(userId, 'send meeting invitations'); // CTW-28: tầng hành động — agent bị chặn bất kể gọi từ tuyến nào
   await govCtx(userId, projectId, 'meetings', { edit: true });
   const m = await findMeeting(projectId, number);
   const ids = (await prisma.workMeetingAttendee.findMany({ where: { meetingId: m.id }, select: { userId: true } })).map((a) => a.userId);

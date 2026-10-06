@@ -21,7 +21,7 @@ import {
 import type { ProjectRole, WorkspaceRole } from './constants.js';
 import { evictFromProject } from './events.js';
 import { clientPeopleIds } from './clientPeople.js';
-import { clientScopedProjectIds, loadProjectAccess, requireWorkspace } from './permissions.js';
+import { assertHumanActor, clientScopedProjectIds, loadProjectAccess, principalOf, requireWorkspace } from './permissions.js';
 
 const INVITE_TTL_DAYS = 7;
 const MAX_WORKSPACES_PER_USER = 30;
@@ -44,6 +44,7 @@ async function uniqueSlug(name: string): Promise<string> {
 }
 
 export async function createWorkspace(userId: number, input: { name: string; description?: string | null }) {
+  await assertHumanActor(userId, 'create workspaces'); // CTW-28: tầng hành động
   const name = input.name.trim();
   if (!name) throw new BadRequestError('Workspace name is required', 'WORK_NAME_REQUIRED');
   const owned = await prisma.workSpace.count({ where: { ownerId: userId, deletedAt: null } });
@@ -106,6 +107,9 @@ export async function deleteWorkspace(userId: number, workspaceId: number, confi
   const ws = await prisma.workSpace.findUniqueOrThrow({ where: { id: workspaceId }, select: { name: true } });
   if (confirmName.trim() !== ws.name) throw new BadRequestError('Type the workspace name exactly to confirm', 'WORK_CONFIRM_NAME');
   await prisma.workSpace.update({ where: { id: workspaceId }, data: { deletedAt: new Date() } });
+  // CTW-28: không gian xoá (mềm) ⇒ agent của nó RETIRED theo (token chết ngay).
+  const { retireAgentsOfWorkspace } = await import('./agents.service.js');
+  await retireAgentsOfWorkspace(workspaceId, userId);
 }
 
 // ─── Thành viên ──────────────────────────────────────────────────
@@ -163,6 +167,10 @@ export async function updateMemberRole(userId: number, workspaceId: number, targ
   if (role === 'OWNER' || target.role === 'OWNER') {
     throw new ForbiddenError('Use "Transfer ownership" to change the owner');
   }
+  // CTW-28: AI agent luôn là MEMBER của không gian (không ADMIN, không GUEST).
+  if (role !== 'MEMBER' && (await principalOf(targetUserId)) === 'AGENT') {
+    throw new BadRequestError('An AI agent is always a workspace member', 'WORK_AGENT_ROLE');
+  }
   await prisma.workMember.update({ where: { id: target.id }, data: { role } });
   // Khách (GUEST) không thuộc bộ phận nào của studio.
   if (role === 'GUEST') await prisma.workTeamMember.deleteMany({ where: { userId: targetUserId, team: { workspaceId } } });
@@ -177,6 +185,18 @@ export async function removeMember(userId: number, workspaceId: number, targetUs
   const target = await prisma.workMember.findFirst({ where: { workspaceId, userId: targetUserId } });
   if (!target) throw new NotFoundError('Member not found');
   if (target.role === 'OWNER') throw new ForbiddenError('The owner cannot leave. Transfer ownership first.');
+  // CTW-28: agent rời không gian bằng Retire (giữ id + lịch sử, thu hồi token), không bằng xoá thành viên.
+  if ((await principalOf(targetUserId)) === 'AGENT') {
+    throw new BadRequestError('Retire the AI agent instead of removing it', 'WORK_AGENT_RETIRE_INSTEAD');
+  }
+  // Người còn chịu trách nhiệm cho agent chưa retire ⇒ phải chuyển chủ trước (agent không được mồ côi).
+  const owned = await prisma.workAgent.findMany({ where: { workspaceId, ownerId: targetUserId, status: { not: 'RETIRED' } }, select: { user: { select: { username: true } } } });
+  if (owned.length) {
+    throw new BadRequestError(
+      `This person is responsible for ${owned.length} AI agent(s) (${owned.map((a) => `@${a.user.username}`).join(', ')}). Give them a new owner or retire them first.`,
+      'WORK_AGENT_HAS_OWNER',
+    );
+  }
 
   const projects = await prisma.workProject.findMany({ where: { workspaceId }, select: { id: true } });
   await prisma.$transaction([
@@ -194,6 +214,7 @@ export async function transferOwnership(userId: number, workspaceId: number, new
   const target = await prisma.workMember.findFirst({ where: { workspaceId, userId: newOwnerId } });
   if (!target) throw new NotFoundError('Member not found');
   if (target.role === 'GUEST') throw new BadRequestError('A guest cannot become the owner', 'WORK_BAD_ROLE');
+  if ((await principalOf(newOwnerId)) === 'AGENT') throw new BadRequestError('An AI agent cannot own a workspace', 'WORK_AGENT_ROLE');
   await prisma.$transaction([
     prisma.workMember.updateMany({ where: { workspaceId, userId }, data: { role: 'ADMIN' } }),
     prisma.workMember.update({ where: { id: target.id }, data: { role: 'OWNER' } }),
@@ -255,7 +276,9 @@ export async function inviteByEmail(userId: number, workspaceId: number, input: 
   const results: Array<{ email: string; status: 'ADDED' | 'ALREADY_MEMBER' | 'INVITED' }> = [];
 
   for (const email of emails) {
-    const user = await prisma.user.findFirst({ where: { email: { equals: email, mode: 'insensitive' } }, select: { id: true, email: true } });
+    const user = await prisma.user.findFirst({ where: { email: { equals: email, mode: 'insensitive' } }, select: { id: true, email: true, kind: true } });
+    // CTW-28: agent không vào không gian bằng lời mời (tạo/convert ở trang Agents) — @agents.invalid không bao giờ nhận thư.
+    if (user?.kind === 'AGENT') throw new BadRequestError('AI agents are added from the Agents page, not by invitation', 'WORK_AGENT_ROLE');
     if (user) {
       const added = await prisma.$transaction((tx) => addMember(tx, workspaceId, user.id, input.role, project));
       results.push({ email, status: added ? 'ADDED' : 'ALREADY_MEMBER' });
@@ -409,6 +432,7 @@ export async function previewInvite(token: string) {
 }
 
 export async function acceptInvite(userId: number, token: string) {
+  await assertHumanActor(userId, 'accept invitations'); // CTW-28
   const invite = await findUsableInvite(token);
   if (invite.email) {
     const me = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { email: true } });

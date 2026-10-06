@@ -66,6 +66,11 @@ export async function clientPeopleIds(projectId: number, viewerId: number | null
     if (m.organizerId) out.add(m.organizerId);
     for (const at of m.attendees) out.add(at.userId);
   }
+  // CTW-28: cổng khách KHÔNG BAO GIỜ lộ AI agent — agent là assignee của thẻ đã chia sẻ ⇒ khách thấy "Project team".
+  if (out.size) {
+    const agents = await prisma.user.findMany({ where: { id: { in: [...out] }, kind: 'AGENT' }, select: { id: true } });
+    for (const a of agents) if (a.id !== viewerId) out.delete(a.id);
+  }
   return out;
 }
 

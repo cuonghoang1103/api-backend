@@ -31,6 +31,9 @@ export function registerWorkRealtime(_io: IOServer, socket: Socket, user: { id: 
       const access = await loadProjectAccess(user.id, pid);
       // Không phân biệt "không tồn tại" với "không có quyền" — như REST trả 404.
       if (!access) return reply({ ok: false, error: 'Project not found' });
+      // CTW-28: AI agent không vào phòng board (phòng mang giá trị thay đổi của mọi thẻ, kể cả ngoài phạm vi token) —
+      // agent nhận sự kiện qua hộp thư riêng (SSE /agents/me/events, đã lọc theo agent).
+      if (access.principal === 'AGENT') return reply({ ok: false, error: 'AI agents receive events from /agents/me/events' });
       // Khách bị cách ly (cổng khách S2b) vào phòng RIÊNG — chỉ nhận "portal.changed" không dữ liệu.
       await socket.join(isClientScoped(access) ? clientRoom(pid) : projectRoom(pid));
       joined.add(pid);

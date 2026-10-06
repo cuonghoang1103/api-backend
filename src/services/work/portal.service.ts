@@ -31,7 +31,7 @@ import { clientPeopleIds, maskUser, TEAM_NAME, type PeopleFilter } from './clien
 import { emitWorkEvent } from './events.js';
 import { createIssue } from './issueChange.js';
 import { notifyWork } from './notify.js';
-import { actionableSteps, can, canViewPage, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
+import { actionableSteps, can, canViewPage, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess, assertHumanActor } from './permissions.js';
 import { clientMemberIds, notifyClientsOfProject, portalPath } from './portalNotify.js';
 import { assertModule } from './studio.js';
 import { gateEvidence } from './gateEvidence.js';
@@ -52,6 +52,7 @@ export interface PortalCtx {
 }
 
 export async function portalCtx(userId: number, projectId: number, opts: { asClient?: boolean } = {}): Promise<PortalCtx> {
+  await assertHumanActor(userId, 'use the client portal'); // CTW-28: tầng hành động — agent bị chặn bất kể gọi từ tuyến nào
   const access = await requireProject(userId, projectId, 'project.view');
   assertModule(access, 'clientPortal');
   const scoped = isClientScoped(access);

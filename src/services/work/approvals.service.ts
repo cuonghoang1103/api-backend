@@ -37,8 +37,7 @@ import { currentTargetHash, signedHash } from './approvalContent.js';
 import { emitWorkEvent } from './events.js';
 import { notifyWork } from './notify.js';
 import {
-  actionableSteps, can, canCancelApproval, canDecideApprovalStep, canViewPage, docAccess, governanceAccess, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess,
-} from './permissions.js';
+  actionableSteps, can, canCancelApproval, canDecideApprovalStep, canViewPage, docAccess, governanceAccess, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess, assertHumanActor } from './permissions.js';
 import { clientMemberIds } from './portalNotify.js';
 import { approvalOutcome, assertModule, modulesOf } from './studio.js';
 import { crCanRequestApproval, crStatusAfterApproval } from './governance.js';
@@ -184,6 +183,8 @@ async function assertApprovers(projectId: number, ids: number[], target: { pageV
     if (!a || !can(a.role, 'approval.decide')) {
       throw new BadRequestError('Every approver must be a project member who can approve (viewers cannot)', 'WORK_BAD_APPROVER');
     }
+    // CTW-28: người duyệt luôn là NGƯỜI — AI agent không bao giờ đứng tên duyệt.
+    if (a.principal === 'AGENT') throw new BadRequestError('An AI agent cannot be an approver — pick a person', 'WORK_BAD_APPROVER');
     if (isClientScoped(a) && (issueShared === false || crShared === false || (pageVisibility !== undefined && pageVisibility !== 'CLIENT'))) {
       throw new BadRequestError(
         issueShared === false
@@ -345,6 +346,7 @@ export async function createCrApproval(
   userId: number, projectId: number, crNumber: number,
   input: { title?: string; description?: string | null; mode?: ApprovalMode; approverIds: number[]; dueAt?: Date | null },
 ) {
+  await assertHumanActor(userId, 'send change requests for approval'); // CTW-28: tầng hành động — agent bị chặn bất kể gọi từ tuyến nào
   const access = await requireProject(userId, projectId, 'approval.create');
   assertModule(access, 'changeRequests');
   assertModule(access, 'approvals');
@@ -468,7 +470,7 @@ export async function myPendingApprovals(userId: number) {
     const access = await loadProjectAccess(userId, project.id);
     if (!access) continue;
     const myStep = a.steps.find((s) => s.approverId === userId);
-    if (!myStep || !canDecideApprovalStep(access.role, userId, a, myStep.id)) continue;
+    if (!myStep || !canDecideApprovalStep(access.role, userId, a, myStep.id, access.principal)) continue;
     const clientView = isClientScoped(access);
     out.push({
       ...(await present(a, { userId, role: access.role, clientView, clientIds: clientView ? await clientMemberIds(project.id) : [] }, project.key)),
@@ -512,6 +514,7 @@ export async function decideApproval(
   input: { decision: 'APPROVE' | 'REJECT'; comment?: string | null },
   meta: { ip?: string | null; viaUat?: boolean } = {},
 ) {
+  await assertHumanActor(userId, 'decide approvals, stage gates or UAT'); // CTW-28: tầng hành động — agent bị chặn bất kể gọi từ tuyến nào
   const access = await requireProject(userId, projectId, 'project.view');
   assertModule(access, 'approvals');
   const comment = input.comment?.trim() || null;
@@ -540,7 +543,7 @@ export async function decideApproval(
     if (!mine) throw new ForbiddenError('You are not an approver on this request. Nobody can approve on behalf of someone else.');
     if (a.status !== 'PENDING') throw new ConflictError(`This request is already ${a.status.toLowerCase()}`);
     if (mine.decision !== 'PENDING') throw new ConflictError('You have already decided on this request');
-    if (!canDecideApprovalStep(access.role, userId, a, mine.id)) {
+    if (!canDecideApprovalStep(access.role, userId, a, mine.id, access.principal)) {
       if (!can(access.role, 'approval.decide')) throw new ForbiddenError('Your project role cannot approve');
       throw new AppError('It is not your turn yet — earlier approvers decide first', 409, 'WORK_APPROVAL_NOT_YOUR_TURN');
     }

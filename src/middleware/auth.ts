@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/env.js';
 import { prisma } from '../config/database.js';
-import { UnauthorizedError, ForbiddenError } from './errorHandler.js';
+import { AppError, UnauthorizedError, ForbiddenError } from './errorHandler.js';
 import { quyetDinhMfaAdmin, loiMfa } from '../services/mfa/adminMfa.js';
 
 export interface JwtPayload {
@@ -46,12 +46,15 @@ export async function authenticate(
     // the JWT alone is not enough because it has a long TTL.
     const dbUser = await prisma.user.findUnique({
       where: { id: decoded.userId },
-      select: { enabled: true, accountNonLocked: true },
+      select: { enabled: true, accountNonLocked: true, kind: true },
     });
 
     if (!dbUser) throw new UnauthorizedError('User not found');
     if (!dbUser.enabled) throw new ForbiddenError('Account is disabled');
     if (!dbUser.accountNonLocked) throw new ForbiddenError('Account is locked');
+    // CT Work AI agent (CTW-28): JWT nào còn sót của tài khoản đã chuyển thành agent (bot fp_* cũ) chết ngay — agent
+    // chỉ xác thực bằng token ctw_ (apiTokenAuth, chạy TRƯỚC middleware này trên router CT Work).
+    if (dbUser.kind === 'AGENT') throw new AppError('AI agents cannot sign in. Use the agent\'s CT Work API token.', 403, 'AGENT_NO_LOGIN');
 
     next();
   } catch (error) {

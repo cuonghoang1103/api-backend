@@ -27,12 +27,27 @@ export interface AuditEntry {
 
 export async function audit(e: AuditEntry): Promise<void> {
   try {
-    const actor = e.actorId ? await prisma.user.findUnique({ where: { id: e.actorId }, select: { username: true, fullName: true, displayName: true } }) : null;
+    const actor = e.actorId
+      ? await prisma.user.findUnique({
+        where: { id: e.actorId },
+        select: {
+          username: true, fullName: true, displayName: true, kind: true,
+          workAgent: { select: { id: true, ownerId: true, owner: { select: { username: true, fullName: true, displayName: true } } } },
+        },
+      })
+      : null;
+    // CTW-28: agent hành động "thay mặt" người chịu trách nhiệm — tên + detail.agent nói rõ ai phải trả lời.
+    let actorName = actor ? displayName(actor) : null;
+    let detail = e.detail;
+    if (actor?.kind === 'AGENT' && actor.workAgent) {
+      actorName = `🤖 ${displayName(actor)} (on behalf of ${displayName(actor.workAgent.owner)})`;
+      detail = { ...(detail ?? {}), agent: { id: actor.workAgent.id, ownerId: actor.workAgent.ownerId } };
+    }
     await prisma.workAuditLog.create({
       data: {
-        workspaceId: e.workspaceId, projectId: e.projectId ?? null, actorId: e.actorId, actorName: actor ? displayName(actor).slice(0, 100) : null,
+        workspaceId: e.workspaceId, projectId: e.projectId ?? null, actorId: e.actorId, actorName: actorName ? actorName.slice(0, 100) : null,
         action: e.action.slice(0, 48), targetType: e.targetType ?? null, targetId: e.targetId ?? null,
-        summary: e.summary.slice(0, 500), detail: (e.detail ?? undefined) as Prisma.InputJsonValue | undefined,
+        summary: e.summary.slice(0, 500), detail: (detail ?? undefined) as Prisma.InputJsonValue | undefined,
       },
     });
   } catch (err) {

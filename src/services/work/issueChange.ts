@@ -19,7 +19,7 @@ import { logger } from '../../utils/logger.js';
 import { BadRequestError, ConflictError, NotFoundError } from '../../middleware/errorHandler.js';
 import { PRIORITY_DEFAULT, PRIORITY_MAX, PRIORITY_MIN } from './constants.js';
 import { emitWorkEvent, type FieldChange, type WorkActor, type WorkEvent } from './events.js';
-import { can, loadProjectAccess } from './permissions.js';
+import { agentOptionsOf, can, loadProjectAccess, principalOf } from './permissions.js';
 import { rankAfter, rankBetween, rankInitial } from './rank.js';
 import { tiptapToText } from './tiptapText.js';
 import { assertModule, hasRules, transitionRulesOf } from './studio.js';
@@ -125,7 +125,7 @@ async function assertTransitionAllowed(
   });
   if (!rows.length) throw new BadRequestError('This status change is not allowed by the workflow', 'WORK_TRANSITION_DENIED');
   const rules = transitionRulesOf((rows.find((r) => r.fromStatusId === fromStatusId) ?? rows[0]).rules);
-  if (!hasRules(rules) || !ctx || (ctx.actor.kind !== 'USER' && ctx.actor.kind !== 'AI') || !ctx.actor.userId) return;
+  if (!hasRules(rules) || !ctx || (ctx.actor.kind !== 'USER' && ctx.actor.kind !== 'AI' && ctx.actor.kind !== 'AGENT') || !ctx.actor.userId) return;
   const userId = ctx.actor.userId;
   if (rules.teamIds?.length) {
     const access = await loadProjectAccess(userId, ctx.projectId);
@@ -206,6 +206,31 @@ async function assertAssignable(projectId: number, userId: number) {
   }
 }
 
+/**
+ * CTW-28: actor USER/AI mà userId là AI agent ⇒ kind AGENT. Chuẩn hoá NGAY TẠI CỬA GHI CHUNG (fail-closed): mọi
+ * đường gọi (REST, bulk, handoff, desk, MCP sau này…) dựng `{ kind: 'USER' }` đều được sửa đúng — lịch sử ghi
+ * actor_kind AGENT và luật Done⇒Review áp, không phụ thuộc lớp gọi có nhớ hay không.
+ */
+export async function normalizeActor(actor: WorkActor): Promise<WorkActor> {
+  if ((actor.kind === 'USER' || actor.kind === 'AI') && actor.userId && (await principalOf(actor.userId)) === 'AGENT') {
+    return { kind: 'AGENT', userId: actor.userId, ...(actor.ruleChain ? { ruleChain: actor.ruleChain } : {}) };
+  }
+  return actor;
+}
+
+/**
+ * Trạng thái "Review" cho việc agent làm xong (§3.4): `settings.agents.reviewStatusId` nếu thuộc đúng workflow;
+ * không thì trạng thái IN_PROGRESS đầu tiên có tên review/qa/verify; không có ⇒ null (lỗi rõ — không tự tạo cột).
+ */
+export async function reviewStatusFor(tx: Tx, workflowId: number, reviewStatusId: number | null) {
+  if (reviewStatusId) {
+    const st = await tx.workStatus.findFirst({ where: { id: reviewStatusId, workflowId }, select: { id: true, name: true, category: true } });
+    if (st && st.category !== 'DONE') return st;
+  }
+  const rows = await tx.workStatus.findMany({ where: { workflowId, category: 'IN_PROGRESS' }, orderBy: { position: 'asc' }, select: { id: true, name: true, category: true } });
+  return rows.find((r) => /review|qa|verify|kiểm|duyệt/i.test(r.name)) ?? null;
+}
+
 function assertPriority(p: number) {
   if (!Number.isInteger(p) || p < PRIORITY_MIN || p > PRIORITY_MAX) {
     throw new BadRequestError(`Priority must be ${PRIORITY_MIN}–${PRIORITY_MAX}`, 'WORK_BAD_PRIORITY');
@@ -232,7 +257,8 @@ function sameValue(a: unknown, b: unknown): boolean {
 
 // ─── Tạo thẻ ─────────────────────────────────────────────────────
 
-export async function createIssue(input: CreateIssueInput, actor: WorkActor) {
+export async function createIssue(input: CreateIssueInput, rawActor: WorkActor) {
+  const actor = await normalizeActor(rawActor);
   const title = input.title.trim();
   if (!title) throw new BadRequestError('Title is required', 'WORK_TITLE_REQUIRED');
   if (input.priority !== undefined) assertPriority(input.priority);
@@ -350,7 +376,12 @@ export interface ApplyOptions {
   aiProvenance?: { model: string | null; source: string; appliedById: number | null };
 }
 
-export async function applyIssueChange(issueId: number, patch: IssuePatch, actor: WorkActor, opts: ApplyOptions = {}) {
+/** CTW-28: agent xin DONE ⇒ server đổi đích sang Review. Trả về cho lớp gọi (MCP `transition` báo `redirected`). */
+export interface AgentRedirect { wanted: number; to: number; wantedName: string; toName: string }
+
+export async function applyIssueChange(issueId: number, patch: IssuePatch, rawActor: WorkActor, opts: ApplyOptions = {}) {
+  const actor = await normalizeActor(rawActor);
+  let agentRedirected: AgentRedirect | null = null;
   if (patch.priority !== undefined) assertPriority(patch.priority);
   if (patch.title !== undefined && !patch.title.trim()) throw new BadRequestError('Title is required', 'WORK_TITLE_REQUIRED');
 
@@ -435,16 +466,47 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, actor
       data.stageId = patch.stageId;
     }
 
-    if (patch.statusId !== undefined && patch.statusId !== before.statusId) {
-      const workflowId = await workflowIdForType(tx, before.projectId, before.type.workflowId);
-      const target = await assertStatusInWorkflow(tx, patch.statusId, workflowId);
-      await assertTransitionAllowed(tx, workflowId, before.statusId, patch.statusId, { issueId, projectId: before.projectId, actor });
-      track('statusId', before.statusId, patch.statusId);
-      data.statusId = patch.statusId;
+    let toStatusId = patch.statusId;
+    let target: { id: number; category: string } | null = null;
+    let workflowId = 0;
+    if (toStatusId !== undefined && toStatusId !== before.statusId) {
+      workflowId = await workflowIdForType(tx, before.projectId, before.type.workflowId);
+      target = await assertStatusInWorkflow(tx, toStatusId, workflowId);
+      // ── CTW-28 §3.4: "Done của agent ⇒ In Review" — trong CỬA GHI CHUNG nên REST, bulk, MCP, automation-của-agent
+      //    đều bị như nhau. Người duyệt kéo Review → Done như thường (actor USER).
+      if (actor.kind === 'AGENT' && target.category === 'DONE' && before.status.category !== 'DONE') {
+        const proj = await tx.workProject.findUnique({ where: { id: before.projectId }, select: { settings: true } });
+        const ag = agentOptionsOf(proj?.settings);
+        if (ag.doneToReview) {
+          const review = await reviewStatusFor(tx, workflowId, ag.reviewStatusId);
+          if (!review) {
+            throw new BadRequestError(
+              'This project has no review status for agent work. A project admin must set one in Project settings → Agents.',
+              'WORK_AGENT_NO_REVIEW_STATUS',
+            );
+          }
+          const names = await tx.workStatus.findMany({ where: { id: { in: [toStatusId, review.id] } }, select: { id: true, name: true } });
+          agentRedirected = {
+            wanted: toStatusId, to: review.id,
+            wantedName: names.find((n) => n.id === toStatusId)?.name ?? 'Done', toName: review.name,
+          };
+          toStatusId = review.id;
+          target = review;
+        }
+      }
+    }
+    if (agentRedirected) {
+      changes.push({ field: 'agentReview', from: agentRedirected.wantedName, to: agentRedirected.toName });
+    }
+
+    if (toStatusId !== undefined && toStatusId !== before.statusId && target) {
+      await assertTransitionAllowed(tx, workflowId, before.statusId, toStatusId, { issueId, projectId: before.projectId, actor });
+      track('statusId', before.statusId, toStatusId);
+      data.statusId = toStatusId;
       // Vào cột DONE thì ghi thời điểm xong; rời DONE thì xoá — báo cáo
       // velocity/burndown đọc resolvedAt chứ không đọc tên cột.
       if (target.category === 'DONE' && before.status.category !== 'DONE') {
-        if (actor.kind === 'USER' || actor.kind === 'AI') {
+        if (actor.kind === 'USER' || actor.kind === 'AI' || actor.kind === 'AGENT') {
           await assertDoneRequirements(tx, before.projectId, issueId, before.type.key, `${before.project.key}-${before.number}`);
           // Đợt S6: thẻ AI-assisted + luật duyệt độc lập bật ⇒ cần người khác người tạo/người áp dụng AI duyệt.
           await assertAiIndependentReview(tx, before.projectId, before, `${before.project.key}-${before.number}`);
@@ -480,6 +542,11 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, actor
       const { type: _t, status: _s, ...plain } = before;
       return { issue: plain, changes };
     }
+    // Đã đứng ở Review mà agent xin Done lần nữa ⇒ chỉ còn dòng agentReview: không ghi lịch sử trùng, không bump version.
+    if (agentRedirected && changes.length === 1 && opts.rank === undefined) {
+      const { type: _t, status: _s, ...plain } = before;
+      return { issue: plain, changes: [] as FieldChange[] };
+    }
 
     data.version = { increment: 1 };
     const updated = await tx.workIssue.updateMany({
@@ -513,6 +580,10 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, actor
     const event: WorkEvent = { type: 'issue.updated', projectId: head.projectId, issueId, actor, changes: result.changes };
     emitWorkEvent(event);
   }
+  // CTW-28: báo người báo thẻ + người chịu trách nhiệm agent: "🤖 <agent> finished FP-12 — needs your review".
+  if (agentRedirected && result.changes.some((c) => c.field === 'statusId')) {
+    await notifyAgentReview(issueId, actor.userId!).catch((err) => logger.warn('[work] agent: báo review lỗi', { issueId, err: (err as Error).message }));
+  }
   // Đợt S5a: đổi trạng thái của thẻ service desk ⇒ sự kiện SLA (giải quyết / mở lại / chờ khách / trả lời).
   // Gọi thẳng sau commit (không qua bus) để lệnh trả về là SLA đã đúng; lỗi chỉ ghi log, không làm hỏng lệnh.
   if (result.changes.some((c) => c.field === 'statusId')) {
@@ -520,7 +591,25 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, actor
       .then((m) => m.onIssueChanged(issueId, result.changes, actor))
       .catch((err) => logger.warn('[work] desk: cập nhật SLA sau đổi trạng thái lỗi', { issueId, err: (err as Error).message }));
   }
-  return result;
+  return { ...result, agentRedirected };
+}
+
+async function notifyAgentReview(issueId: number, agentUserId: number) {
+  const [i, ag] = await Promise.all([
+    prisma.workIssue.findUnique({ where: { id: issueId }, select: { number: true, title: true, reporterId: true, project: { select: { key: true, workspace: { select: { slug: true } } } } } }),
+    prisma.workAgent.findUnique({ where: { userId: agentUserId }, select: { ownerId: true, user: { select: { username: true, displayName: true, fullName: true } } } }),
+  ]);
+  if (!i || !ag) return;
+  const name = ag.user.displayName || ag.user.fullName || ag.user.username;
+  const issueKey = `${i.project.key}-${i.number}`;
+  const message = `🤖 ${name} finished ${issueKey} — needs your review`;
+  const { notifyWork } = await import('./notify.js');
+  for (const receiverId of new Set([ag.ownerId, i.reporterId].filter((x): x is number => !!x && x !== agentUserId))) {
+    await notifyWork({
+      receiverId, senderId: agentUserId, type: 'WORK_ALERT', entityId: issueId,
+      payload: { issueKey, title: i.title, message, url: `/work/${i.project.workspace.slug}/${i.project.key}/issue/${i.number}` },
+    });
+  }
 }
 
 // ─── Kéo thả ─────────────────────────────────────────────────────

@@ -13,7 +13,7 @@
  */
 
 import { prisma } from '../../config/database.js';
-import { BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
+import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import type { CommentVisibility, ProjectKind, ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
 import { modulesOf, projectKindOf, type ModuleMap } from './studio.js';
 
@@ -125,8 +125,10 @@ export function effectiveProjectRole(input: {
   return null;
 }
 
-export function can(role: ProjectRole | null, action: ProjectAction, opts: ProjectOptions = {}): boolean {
+export function can(role: ProjectRole | null, action: ProjectAction, opts: ProjectOptions = {}, principal: Principal = 'HUMAN'): boolean {
   if (role === null) return false;
+  // CTW-28: lớp phủ AI agent — chặn TRƯỚC bảng vai trò, không tuỳ chọn dự án nào nới được.
+  if (principal === 'AGENT' && AGENT_DENIED_ACTIONS.has(action)) return false;
   if (PROJECT_MATRIX[action].includes(role)) return true;
   // Tuỳ chọn của dự án nới quyền (chỉ nới, không bao giờ siết dưới bảng gốc).
   if (action === 'sprint.manage' && role === 'MEMBER' && opts.membersManageSprints === true) return true;
@@ -145,12 +147,15 @@ export function projectOptionsOf(settings: unknown): ProjectOptions {
   return { membersManageSprints: s.membersManageSprints === true };
 }
 
-export function canWorkspace(role: WorkspaceRole | null, action: WorkspaceAction): boolean {
+export function canWorkspace(role: WorkspaceRole | null, action: WorkspaceAction, principal: Principal = 'HUMAN'): boolean {
+  // CTW-28: agent chỉ ĐỌC ở cấp không gian (xem danh sách, thành viên, dự án, bộ phận) — mọi hành động khác cấm.
+  if (principal === 'AGENT' && action !== 'workspace.view') return false;
   return role !== null && WORKSPACE_MATRIX[action].includes(role);
 }
 
-/** Người báo được tự xoá thẻ của mình khi còn quyền sửa; ADMIN xoá được mọi thẻ. */
-export function canDeleteIssue(role: ProjectRole | null, userId: number, reporterId: number | null): boolean {
+/** Người báo được tự xoá thẻ của mình khi còn quyền sửa; ADMIN xoá được mọi thẻ. Agent: không bao giờ (tự xoá dấu vết). */
+export function canDeleteIssue(role: ProjectRole | null, userId: number, reporterId: number | null, principal: Principal = 'HUMAN'): boolean {
+  if (principal === 'AGENT') return false;
   if (can(role, 'issue.delete')) return true;
   return reporterId === userId && can(role, 'issue.edit');
 }
@@ -185,8 +190,10 @@ export function canDecideApprovalStep(
   userId: number,
   approval: { status: string; mode: string; steps: StepLite[] },
   stepId: number,
+  principal: Principal = 'HUMAN',
 ): boolean {
-  if (!can(role, 'approval.decide') || approval.status !== 'PENDING') return false;
+  // CTW-28: AI agent không bao giờ quyết phê duyệt / cổng / UAT — kể cả khi bước đứng tên nó (dữ liệu cũ của bot fp_*).
+  if (!can(role, 'approval.decide', {}, principal) || approval.status !== 'PENDING') return false;
   const step = approval.steps.find((s) => s.id === stepId);
   if (!step || step.approverId !== userId) return false;
   return actionableSteps(approval.mode, approval.steps).some((s) => s.id === stepId);
@@ -339,6 +346,10 @@ export interface ProjectAccess {
   key: string;
   role: ProjectRole;
   workspaceRole: WorkspaceRole;
+  /** CTW-28: HUMAN | AGENT — đọc từ users.kind trong CÙNG truy vấn (không tin route truyền vào). */
+  principal: Principal;
+  /** settings.agents của dự án (mặc định chặt). */
+  agentOptions: AgentOptions;
   options: ProjectOptions;
   /** Loại dự án hiệu lực (cột kind, hoặc suy từ mẫu với dự án cũ). */
   kind: ProjectKind;
@@ -362,11 +373,12 @@ export async function loadProjectAccess(userId: number, projectId: number): Prom
       kind: true,
       template: true,
       clientRequest: { select: { id: true } },
-      workspace: { select: { members: { where: { userId }, select: { role: true } } } },
+      workspace: { select: { members: { where: { userId }, select: { role: true, user: { select: { kind: true } } } } } },
       members: { where: { userId }, select: { role: true } },
     },
   });
   if (!project) return null;
+  const principal: Principal = project.workspace.members[0]?.user.kind === 'AGENT' ? 'AGENT' : 'HUMAN';
   let workspaceRole = (project.workspace.members[0]?.role ?? null) as WorkspaceRole | null;
   const projectRole = (project.members[0]?.role ?? null) as ProjectRole | null;
   // MEMBER chỉ là khách cổng ⇒ coi như GUEST (loadWorkspaceRole). Chỉ hỏi DB khi kết
@@ -383,6 +395,7 @@ export async function loadProjectAccess(userId: number, projectId: number): Prom
   if (!role || !workspaceRole) return null;
   return {
     projectId: project.id, workspaceId: project.workspaceId, key: project.key, role, workspaceRole,
+    principal, agentOptions: agentOptionsOf(project.settings),
     options: projectOptionsOf(project.settings),
     kind: projectKindOf({ kind: project.kind, template: project.template, fromClientRequest: !!project.clientRequest }),
     modules: modulesOf(project.settings),
@@ -393,7 +406,8 @@ export async function loadProjectAccess(userId: number, projectId: number): Prom
 export async function requireProject(userId: number, projectId: number, action: ProjectAction): Promise<ProjectAccess> {
   const access = await loadProjectAccess(userId, projectId);
   if (!access) throw new NotFoundError('Project not found');
-  if (!can(access.role, action, access.options)) throw new ForbiddenError('You do not have permission to do this in this project');
+  if (access.principal === 'AGENT' && AGENT_DENIED_ACTIONS.has(action)) throw await agentForbidden(userId, AGENT_ACTION_VERBS[action] ?? 'do this');
+  if (!can(access.role, action, access.options, access.principal)) throw new ForbiddenError('You do not have permission to do this in this project');
   return access;
 }
 
@@ -404,20 +418,27 @@ export async function requireProject(userId: number, projectId: number, action: 
  * không thấy bộ phận / danh sách người / workload của đội.
  */
 export async function loadWorkspaceRole(userId: number, workspaceId: number): Promise<WorkspaceRole | null> {
+  return (await loadWorkspaceAccess(userId, workspaceId))?.role ?? null;
+}
+
+/** Vai không gian hiệu lực + principal (CTW-28). */
+export async function loadWorkspaceAccess(userId: number, workspaceId: number): Promise<{ role: WorkspaceRole; principal: Principal } | null> {
   const m = await prisma.workMember.findFirst({
     where: { workspaceId, userId, workspace: { deletedAt: null } },
-    select: { role: true },
+    select: { role: true, user: { select: { kind: true } } },
   });
-  const raw = (m?.role ?? null) as WorkspaceRole | null;
-  if (raw === 'MEMBER' && (await portalOnlyWorkspaceIds(userId, workspaceId)).has(workspaceId)) return 'GUEST';
-  return raw;
+  if (!m) return null;
+  let role = m.role as WorkspaceRole;
+  if (role === 'MEMBER' && (await portalOnlyWorkspaceIds(userId, workspaceId)).has(workspaceId)) role = 'GUEST';
+  return { role, principal: m.user.kind === 'AGENT' ? 'AGENT' : 'HUMAN' };
 }
 
 export async function requireWorkspace(userId: number, workspaceId: number, action: WorkspaceAction): Promise<WorkspaceRole> {
-  const role = await loadWorkspaceRole(userId, workspaceId);
-  if (!role) throw new NotFoundError('Workspace not found');
-  if (!canWorkspace(role, action)) throw new ForbiddenError('You do not have permission to do this in this workspace');
-  return role;
+  const a = await loadWorkspaceAccess(userId, workspaceId);
+  if (!a) throw new NotFoundError('Workspace not found');
+  if (a.principal === 'AGENT' && action !== 'workspace.view') throw await agentForbidden(userId, WORKSPACE_ACTION_VERBS[action]);
+  if (!canWorkspace(a.role, action, a.principal)) throw new ForbiddenError('You do not have permission to do this in this workspace');
+  return a.role;
 }
 
 // ─── Cổng khách (đợt S2b, mô-đun clientPortal): CÁCH LY khách ─────
@@ -553,8 +574,10 @@ export async function isPortalClientInWorkspace(userId: number, workspaceId: num
  *   - dự án không bật cổng khách ⇒ INTERNAL (cột không được đọc).
  */
 export function commentVisibilityFor(
-  access: { role: ProjectRole | null; modules?: ModuleMap | null }, issueShared: boolean, wanted: CommentVisibility | undefined,
+  access: { role: ProjectRole | null; modules?: ModuleMap | null; principal?: Principal }, issueShared: boolean, wanted: CommentVisibility | undefined,
 ): CommentVisibility {
+  // CTW-28: AI agent không bao giờ nói thẳng với khách — bình luận của nó luôn INTERNAL (bỏ qua lựa chọn, không lỗi).
+  if (access.principal === 'AGENT') return 'INTERNAL';
   if (isClientScoped(access)) return 'PUBLIC';
   if (!access.modules?.clientPortal) return 'INTERNAL';
   if (wanted === 'PUBLIC') {
@@ -564,3 +587,154 @@ export function commentVisibilityFor(
   return 'INTERNAL';
 }
 
+
+// ─── AI agent thành viên (CTW-28, 06/10/2026 — docs/ct-work-ai-agents-thiet-ke.md §3) ─────────
+//
+// Rào chắn HAI tầng, cả hai fail-closed:
+//   1. Tầng TUYẾN (`agentRouteAllowed` — chốt ở middleware /projects/:pid): danh sách CẤM tuyến đối ngoại.
+//   2. Tầng HÀNH ĐỘNG (yêu cầu của trưởng nhóm khi duyệt): `requireProject` tự đọc users.kind và chặn
+//      AGENT_DENIED_ACTIONS; hàm service không đi qua `can()` (tài chính, gửi khách, cổng, duyệt…) gọi
+//      `assertHumanActor()` ở dòng đầu. Gọi từ tuyến nào (REST, MCP sau này, AI, script) cũng bị như nhau —
+//      tuyến MỚI quên khai ở tầng 1 vẫn không mở được hành động bị cấm.
+
+/** Chủ thể gọi: người hay AI agent (users.kind). */
+export type Principal = 'HUMAN' | 'AGENT';
+
+/** Hành động agent KHÔNG BAO GIỜ được, kể cả khi vai dự án cho phép. approval.create / handoff.create VẪN được. */
+export const AGENT_DENIED_ACTIONS: ReadonlySet<ProjectAction> = new Set<ProjectAction>([
+  'project.settings', 'project.members', 'project.delete',
+  'issue.delete',                 // agent tự xoá dấu vết: không
+  'comment.moderate',
+  'sprint.manage',
+  'studio.configure', 'stage.manage', 'stage.requestGate',
+  'approval.decide', 'approval.manage',
+  'handoff.manage',
+  'page.manage',
+  'ai.use',                       // GĐ1: agent bên ngoài không tiêu lượt trợ lý AI của web
+]);
+
+const AGENT_ACTION_VERBS: Partial<Record<ProjectAction, string>> = {
+  'project.settings': 'change project settings', 'project.members': 'manage project members', 'project.delete': 'delete projects',
+  'issue.delete': 'delete issues', 'comment.moderate': 'moderate comments', 'sprint.manage': 'manage sprints',
+  'studio.configure': 'configure the project', 'stage.manage': 'manage stages', 'stage.requestGate': 'request stage gates',
+  'approval.decide': 'decide approvals', 'approval.manage': 'manage approvals', 'handoff.manage': 'manage handoffs',
+  'page.manage': 'manage pages', 'ai.use': 'use the CT Work AI assistant',
+};
+const WORKSPACE_ACTION_VERBS: Record<WorkspaceAction, string> = {
+  'workspace.view': 'view the workspace', 'workspace.settings': 'change workspace settings', 'workspace.members': 'manage workspace members',
+  'workspace.createProject': 'create projects', 'workspace.delete': 'delete or transfer workspaces', 'workspace.teams': 'manage teams',
+};
+
+/**
+ * Lỗi 403 WORK_AGENT_FORBIDDEN kèm tên người chịu trách nhiệm — agent đọc `owner` để hỏi người thay vì thử lại.
+ * Trả lỗi (không ném) để nơi gọi `throw await agentForbidden(...)`.
+ */
+export async function agentForbidden(agentUserId: number, verb: string): Promise<AppError> {
+  const a = await prisma.workAgent.findUnique({ where: { userId: agentUserId }, select: { owner: { select: { username: true, displayName: true, fullName: true } } } }).catch(() => null);
+  const ownerName = a?.owner ? (a.owner.displayName || a.owner.fullName || a.owner.username) : null;
+  return new AppError(
+    `AI agents cannot ${verb} in CT Work. Ask the agent's owner${ownerName ? ` (${ownerName})` : ''} to do this.`,
+    403, 'WORK_AGENT_FORBIDDEN', { owner: a?.owner?.username ?? null },
+  );
+}
+
+/** users.kind của một người (một truy vấn khoá chính). Không có ⇒ HUMAN (người lạ sẽ bị chặn ở tầng quyền khác). */
+export async function principalOf(userId: number): Promise<Principal> {
+  const u = await prisma.user.findUnique({ where: { id: userId }, select: { kind: true } });
+  return u?.kind === 'AGENT' ? 'AGENT' : 'HUMAN';
+}
+
+/**
+ * Chốt TẦNG HÀNH ĐỘNG: hàm service có tác dụng đối ngoại / quyết định / tiền gọi dòng này ĐẦU TIÊN.
+ * Agent ⇒ 403 WORK_AGENT_FORBIDDEN, bất kể gọi từ tuyến nào.
+ */
+export async function assertHumanActor(userId: number, verb: string): Promise<void> {
+  if ((await principalOf(userId)) === 'AGENT') throw await agentForbidden(userId, verb);
+}
+
+/** settings.agents của dự án — thiếu/sai kiểu ⇒ mặc định chặt (§2.1). */
+export interface AgentOptions {
+  /** Agent kéo vào DONE ⇒ server đổi đích thành cột Review. Mặc định BẬT. */
+  doneToReview: boolean;
+  /** Trạng thái Review chỉ định (phải thuộc workflow của thẻ); null ⇒ tự dò tên review/qa/verify. */
+  reviewStatusId: number | null;
+  allowCreateIssues: boolean;
+  /** Claim thẻ CHƯA giao ai ⇒ tự giao cho agent. Mặc định TẮT. */
+  allowSelfAssign: boolean;
+  maxOpenLeases: number;
+  leaseMinutes: number;
+  /** Người duyệt mặc định cho request_review (GĐ1 A10) — rỗng ⇒ owner của agent. */
+  reviewerIds: number[];
+}
+
+export function agentOptionsOf(settings: unknown): AgentOptions {
+  const a = (((settings ?? {}) as Record<string, unknown>).agents ?? {}) as Record<string, unknown>;
+  const int = (v: unknown, lo: number, hi: number, d: number) => (typeof v === 'number' && Number.isInteger(v) && v >= lo && v <= hi ? v : d);
+  return {
+    doneToReview: a.doneToReview !== false,
+    reviewStatusId: typeof a.reviewStatusId === 'number' && Number.isInteger(a.reviewStatusId) && a.reviewStatusId > 0 ? a.reviewStatusId : null,
+    allowCreateIssues: a.allowCreateIssues !== false,
+    allowSelfAssign: a.allowSelfAssign === true,
+    maxOpenLeases: int(a.maxOpenLeases, 1, 20, 3),
+    leaseMinutes: int(a.leaseMinutes, 5, 240, 30),
+    reviewerIds: Array.isArray(a.reviewerIds) ? (a.reviewerIds as unknown[]).filter((x): x is number => typeof x === 'number' && Number.isInteger(x) && x > 0).slice(0, 10) : [],
+  };
+}
+
+/**
+ * Tuyến dưới /projects/:pid mà AGENT bị cấm bất kể vai. Khai CẤM (không khai MỞ) vì agent cần hầu hết tuyến
+ * đọc/ghi thẻ — vì vậy tầng hành động (requireProject + assertHumanActor) là lưới thứ hai cho tuyến quên khai.
+ * Thêm tuyến có tác dụng đối ngoại (khách, tiền, xoá, cấu hình) ⇒ thêm vào đây VÀ vào bảng permissions.test.ts.
+ */
+const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
+  // Tiền & báo cáo/gửi cho khách
+  ['*', /^\/finance(\/.*)?$/],
+  ['*', /^\/reports\/client-weekly\/(send|polish|schedule)$/],
+  // Cổng khách & chia sẻ ra ngoài
+  ['*', /^\/portal(\/.*)?$/],
+  ['*', /^\/share-links(\/.*)?$/],
+  ['PUT', /^\/issues\/\d+\/client-visible$/], ['*', /^\/attachments\/\d+\/client$/],
+  ['PUT', /^\/changes\/\d+\/client-visible$/], ['POST', /^\/changes\/\d+\/approval$/],
+  ['*', /^\/meetings\/\d+\/(share|invites)$/],
+  // Duyệt / quyết định
+  ['POST', /^\/approvals\/\d+\/decide$/], ['POST', /^\/stages\/\d+\/(request-gate|activate)$/],
+  // Xuất/nhập dữ liệu, tích hợp ra ngoài
+  ['*', /^\/exports?(\/.*)?$/], ['POST', /^\/import$/],
+  ['*', /^\/chat-hooks(\/.*)?$/], ['*', /^\/webhooks(\/.*)?$/], ['*', /^\/github(\/.*)?$/], ['*', /^\/gitlab(\/.*)?$/],
+  ['*', /^\/automation(\/.*)?$/],
+  // Cấu hình dự án / quyền / thành viên / xoá
+  ['*', /^\/members(\/.*)?$/], ['PATCH', /^$/], ['DELETE', /^$/], ['*', /^\/archive$/],
+  ['*', /^\/(labels|components|workflows|statuses|issue-types|issue-templates|custom-fields|board-columns|studio|desk\/settings|spec-settings|agent-settings|avatar|sample-data|onboarding)(\/.*)?$/],
+  ['PUT', /^\/capacity\/\d+$/], ['POST', /^\/tests\/enable$/],
+  ['POST', /^\/versions\/\d+\/release$/], ['DELETE', /^\/versions\/\d+$/],
+  ['DELETE', /^\/issues\/\d+$/], ['POST', /^\/issues\/\d+\/move-project$/], ['POST', /^\/issues\/bulk$/], ['*', /^\/trash(\/.*)?$/],
+  ['*', /^\/edit-lock$/],
+  // GĐ1: agent bên ngoài không tiêu lượt trợ lý AI của web (GĐ2 mở riêng cho BUILTIN)
+  ['*', /^\/ai(\/.*)?$/],
+];
+
+/** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */
+export function agentRouteAllowed(method: string, sub: string): boolean {
+  const m = method.toUpperCase();
+  const path = sub === '/' ? '' : sub.replace(/\/+$/, '');
+  return !AGENT_DENIED_ROUTES.some(([mm, re]) => (mm === '*' || mm === m || (mm === 'GET' && m === 'HEAD')) && re.test(path));
+}
+
+/**
+ * Tuyến NGOÀI /projects/:pid mà token agent được gọi — DANH SÁCH TRẮNG (fail-closed, khác tuyến dự án):
+ * chỉ ĐỌC không gian/thành viên/dự án/bộ phận (§3.1), việc của tôi, tìm kiếm, tra mã dự án, và /agents/me/**.
+ * Mọi tuyến khác (tạo không gian, nhận lời mời, token, lịch, thùng rác, quản trị không gian…) ⇒ 403.
+ * `scoped` = token giới hạn dự án ⇒ không cho tìm kiếm xuyên dự án (sẽ lộ dự án ngoài phạm vi token).
+ */
+export function agentTopRouteAllowed(method: string, path: string, scoped = false): boolean {
+  const m = method.toUpperCase();
+  const p = path.replace(/\/+$/, '') || '/';
+  if (/^\/projects\/\d+(\/.*)?$/.test(p)) return true; // chốt riêng ở middleware /projects/:pid
+  if (/^\/agents\/me(\/.*)?$/.test(p)) return true;
+  if (m !== 'GET' && m !== 'HEAD') return false;
+  if (/^\/workspaces(\/by-slug\/[^/]+|\/\d+(\/(members|projects|teams))?)?$/.test(p)) return true;
+  if (/^\/me\/(work|approvals|handoffs|notify-settings)$/.test(p)) return true;
+  if (/^\/resolve\/[^/]+\/[^/]+$/.test(p)) return true;
+  if (!scoped && /^\/search(\/(docs|facets))?$/.test(p)) return true;
+  return false;
+}

@@ -27,7 +27,7 @@ import {
   type FinanceAccess, type RateRow,
 } from './financeRules.js';
 import { dayOf } from './governanceDb.js';
-import { loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
+import { loadProjectAccess, requireProject, type ProjectAccess, assertHumanActor } from './permissions.js';
 import { vnDay } from './sprints.service.js';
 import { assertModule, modulesOf } from './studio.js';
 
@@ -57,6 +57,7 @@ async function leadTeamIdsOf(userId: number, workspaceId: number): Promise<numbe
 
 /** Cổng của mọi tuyến tài chính nội bộ: dự án (404) → mô-đun (403 MODULE_DISABLED) → người của đội. */
 export async function finCtx(userId: number, projectId: number): Promise<FinCtx> {
+  await assertHumanActor(userId, 'see or change project finances (rates, timesheets, budget, expenses, payments)'); // CTW-28: tầng hành động — agent bị chặn bất kể gọi từ tuyến nào
   const access = await requireProject(userId, projectId, 'project.view');
   assertModule(access, 'finance');
   const leadTeamIds = access.workspaceRole === 'GUEST' || access.role === 'CLIENT' ? [] : await leadTeamIdsOf(userId, access.workspaceId);

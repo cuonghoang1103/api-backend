@@ -22,7 +22,7 @@ import { projectLanguage } from './projectLanguage.js';
 import { logger } from '../../utils/logger.js';
 import { auditProject } from './audit.js';
 import { displayName, frontendUrl, sendWorkEmail } from './common.js';
-import { actionableSteps, can, governanceAccess, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
+import { actionableSteps, can, governanceAccess, loadProjectAccess, requireProject, type ProjectAccess, assertHumanActor } from './permissions.js';
 import { approvalForClient } from './approvals.service.js';
 import { computeFinance } from './finance.service.js';
 import { financeAccess, isoWeekKey, reportDue } from './financeRules.js';
@@ -91,6 +91,7 @@ export async function getSchedule(userId: number, projectId: number) {
 }
 
 export async function updateSchedule(userId: number, projectId: number, input: Partial<ScheduleFields> & { confirm?: boolean }) {
+  await assertHumanActor(userId, 'schedule client reports'); // CTW-28: tầng hành động — agent bị chặn bất kể gọi từ tuyến nào
   const access = await staffCtx(userId, projectId);
   if (!can(access.role, 'project.settings')) throw new ForbiddenError('Only project admins can change the report schedule');
   if (input.timezone) {
@@ -363,6 +364,7 @@ async function emailClients(projectId: number, reportId: number, data: ReportDat
 
 /** Nhân viên gửi tay (có thể kèm bản "AI polish" đã sửa). Lưu lịch sử + email khách. */
 export async function sendClientWeekly(userId: number, projectId: number, input: { from?: string; to?: string; bodyMarkdown?: string | null; aiPolished?: boolean }) {
+  await assertHumanActor(userId, 'send reports to clients'); // CTW-28: tầng hành động — agent bị chặn bất kể gọi từ tuyến nào
   const access = await staffCtx(userId, projectId, { edit: true });
   if (!access.modules.clientPortal) throw new BadRequestError('Turn on the client portal to send reports to your client', 'WORK_NO_CLIENT_PORTAL');
   if (!(await clientMemberIds(projectId)).length) throw new BadRequestError('Invite your client to the portal first — nobody would receive this report', 'WORK_NO_CLIENTS');
@@ -389,6 +391,7 @@ export async function sendClientWeekly(userId: number, projectId: number, input:
  * hạn mức AI của người bấm). Không lưu gì: trả Markdown để người sửa rồi gửi.
  */
 export async function polishClientReport(userId: number, projectId: number, input: { language?: 'en' | 'vi' } = {}) {
+  await assertHumanActor(userId, 'prepare client reports'); // CTW-28: tầng hành động — agent bị chặn bất kể gọi từ tuyến nào
   await staffCtx(userId, projectId, { edit: true });
   const { weeklyReport } = await import('./ai.service.js');
   // CTW-8: cùng ngôn ngữ với dự án/khách (settings.language hoặc đoán từ dữ liệu) — trước đây luôn ra tiếng Anh.

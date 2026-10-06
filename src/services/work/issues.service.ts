@@ -21,7 +21,7 @@ import { getIO } from '../../socket/messaging.socket.js';
 import { DEFAULT_TEMPLATE_NAMES, defaultIssueTemplate, type IssueTemplateDoc } from './templates.js';
 import { applyIssueChange, createIssue, moveIssue, type IssuePatch, type MoveInput } from './issueChange.js';
 import { clientPeopleIds, maskUser, peopleFilterFor, TEAM_USER, type PeopleFilter } from './clientPeople.js';
-import { canDeleteIssue, canModifyComment, commentVisibilityFor, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
+import { agentForbidden, assertHumanActor, canDeleteIssue, canModifyComment, commentVisibilityFor, isClientScoped, loadProjectAccess, requireProject, type ProjectAccess } from './permissions.js';
 import { assertModule } from './studio.js';
 import { tiptapToText } from './tiptapText.js';
 import { foldVi } from './fold.js';
@@ -35,6 +35,49 @@ const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
  */
 export type Via = 'USER' | 'AI';
 const actorOf = (userId: number, via: Via = 'USER', model?: string | null): WorkActor => ({ kind: via, userId, ...(via === 'AI' && model ? { model } : {}) });
+/** Kind ghi lịch sử: AGENT khi người gọi là AI agent (CTW-28) — cửa ghi chung cũng tự chuẩn hoá, đây cho các ghi trực tiếp. */
+const histKind = (access: Pick<ProjectAccess, 'principal'>, via: Via = 'USER') => (access.principal === 'AGENT' ? 'AGENT' : via);
+
+// ─── AI agent (CTW-28 §3.3): luật sửa thẻ ──────────────────────────
+//
+// Agent chỉ sửa thẻ ĐƯỢC GIAO cho nó; thẻ con của thẻ nó giữ thì chỉ title/description/storyPoints; không giao việc
+// cho ai khác (chỉ tự nhận thẻ trống / bỏ nhận thẻ của mình); không xếp sprint. Tránh agent "dọn dẹp" cả backlog.
+
+const AGENT_SUBTASK_FIELDS = new Set(['title', 'descriptionJson', 'storyPoints']);
+
+async function assertAgentIssueEdit(
+  access: ProjectAccess, userId: number, issueId: number,
+  patch: Record<string, unknown>, extra: { labels?: boolean; rankOnly?: boolean } = {},
+): Promise<void> {
+  if (access.principal !== 'AGENT') return;
+  const i = await prisma.workIssue.findUniqueOrThrow({ where: { id: issueId }, select: { assigneeId: true, parent: { select: { assigneeId: true } } } });
+  const keys = Object.keys(patch).filter((k) => patch[k] !== undefined);
+  if (keys.includes('sprintId')) throw await agentForbidden(userId, 'plan sprints');
+  if (keys.includes('assigneeId')) {
+    const to = patch.assigneeId as number | null;
+    const selfClaim = to === userId && (i.assigneeId === null || i.assigneeId === userId);
+    const selfRelease = to === null && i.assigneeId === userId;
+    if (!selfClaim && !selfRelease) throw await agentForbidden(userId, 'assign issues to other people (they can only take or drop their own)');
+    if (keys.length === 1 && !extra.labels) return;
+  }
+  if (i.assigneeId === userId || (keys.length === 1 && keys[0] === 'assigneeId' && patch.assigneeId === userId)) return;
+  if (i.parent?.assigneeId === userId && !extra.labels && keys.every((k) => AGENT_SUBTASK_FIELDS.has(k))) return;
+  if (extra.rankOnly && !keys.length) return;
+  throw await agentForbidden(userId, 'edit issues assigned to someone else');
+}
+
+async function assertAgentIssueCreate(access: ProjectAccess, userId: number, body: CreateIssueBody): Promise<void> {
+  if (access.principal !== 'AGENT') return;
+  if (body.assigneeId && body.assigneeId !== userId) throw await agentForbidden(userId, 'assign issues to other people');
+  if (body.sprintId) throw await agentForbidden(userId, 'plan sprints');
+  if (access.agentOptions.allowCreateIssues) return;
+  // Tắt tạo thẻ ⇒ vẫn được tạo thẻ con dưới thẻ mình đang giữ.
+  if (body.parentId) {
+    const parent = await prisma.workIssue.findFirst({ where: { id: body.parentId, projectId: access.projectId }, select: { assigneeId: true } });
+    if (parent?.assigneeId === userId) return;
+  }
+  throw await agentForbidden(userId, 'create issues in this project (Project settings → Agents)');
+}
 
 /** Trường của một thẻ trên board/danh sách — gọn, không mô tả. */
 export const CARD_SELECT = {
@@ -317,6 +360,7 @@ export async function createIssueAs(userId: number, projectId: number, body: Cre
   if (access.role === 'CLIENT' && (body.assigneeId || body.sprintId || body.storyPoints !== undefined || body.teamId || body.stageId)) {
     throw new ForbiddenError('Clients can report issues but cannot assign or plan them');
   }
+  await assertAgentIssueCreate(access, userId, body);
   const { labelIds, componentIds, ...rest } = body;
   const issue = await createIssue({ ...rest, projectId }, actorOf(userId, via));
   if (labelIds?.length || componentIds?.length) {
@@ -339,6 +383,7 @@ export async function updateIssueAs(
   const access = await requireProject(userId, projectId, onlyStatus ? 'issue.transition' : 'issue.edit');
   const { id } = await findIssue(projectId, number);
   const { labelIds, componentIds, ...patch } = body;
+  await assertAgentIssueEdit(access, userId, id, patch as Record<string, unknown>, { labels: labelIds !== undefined || componentIds !== undefined });
   const res = await applyIssueChange(id, patch, actorOf(userId, via, model), { expectedVersion });
   if (labelIds !== undefined || componentIds !== undefined) {
     await setIssueTags(access, id, { labelIds, componentIds }, userId, true, via);
@@ -347,8 +392,9 @@ export async function updateIssueAs(
 }
 
 export async function moveIssueAs(userId: number, projectId: number, number: number, input: MoveInput) {
-  await requireProject(userId, projectId, 'issue.transition');
+  const access = await requireProject(userId, projectId, 'issue.transition');
   const { id } = await findIssue(projectId, number);
+  await assertAgentIssueEdit(access, userId, id, { statusId: input.statusId, sprintId: input.sprintId }, { rankOnly: true });
   return (await moveIssue(id, input, userActor(userId))).issue;
 }
 
@@ -394,7 +440,7 @@ async function setIssueTags(
     }
     if (changes.length) {
       await tx.workHistory.createMany({
-        data: changes.map((c) => ({ issueId, actorId: userId, actorKind: via, field: c.field, fromValue: c.from, toValue: c.to })),
+        data: changes.map((c) => ({ issueId, actorId: userId, actorKind: histKind(access, via), field: c.field, fromValue: c.from, toValue: c.to })),
       });
       await tx.workIssue.update({ where: { id: issueId }, data: { version: { increment: 1 } } });
     }
@@ -448,7 +494,7 @@ export async function cloneIssueAs(userId: number, projectId: number, number: nu
   });
   await prisma.workIssueLink.create({ data: { fromIssueId: created.id, toIssueId: src.id, type: 'CLONES', createdById: userId } });
   await prisma.workHistory.create({
-    data: { issueId: created.id, actorId: userId, actorKind: 'USER', field: 'link', toValue: `CLONES ${access.key}-${number}` },
+    data: { issueId: created.id, actorId: userId, actorKind: histKind(access), field: 'link', toValue: `CLONES ${access.key}-${number}` },
   });
   return created;
 }
@@ -457,7 +503,8 @@ export async function cloneIssueAs(userId: number, projectId: number, number: nu
 export async function deleteIssueAs(userId: number, projectId: number, number: number) {
   const access = await requireProject(userId, projectId, 'project.view');
   const issue = await findIssue(projectId, number);
-  if (!canDeleteIssue(access.role, userId, issue.reporterId)) {
+  if (access.principal === 'AGENT') throw await agentForbidden(userId, 'delete issues');
+  if (!canDeleteIssue(access.role, userId, issue.reporterId, access.principal)) {
     throw new ForbiddenError('Only the reporter or a project admin can delete this issue');
   }
   const now = new Date();
@@ -898,6 +945,7 @@ export async function reportComment(
  * Ghi lịch sử (`clientVisible`) + sự kiện để board/cổng khách tự làm tươi.
  */
 export async function setIssueClientVisible(userId: number, projectId: number, number: number, visible: boolean) {
+  await assertHumanActor(userId, 'share issues with clients'); // CTW-28: tầng hành động
   const access = await requireProject(userId, projectId, 'issue.edit');
   assertModule(access, 'clientPortal');
   const i = await findIssue(projectId, number);
@@ -939,7 +987,7 @@ export async function setIssueFlag(userId: number, projectId: number, number: nu
     : { flaggedAt: null, flagReason: null, flaggedById: null };
   const updated = await prisma.$transaction(async (tx) => {
     const u = await tx.workIssue.update({ where: { id: i.id }, data: { ...data, version: { increment: 1 } }, select: { flaggedAt: true, flagReason: true } });
-    await tx.workHistory.create({ data: { issueId: i.id, actorId: userId, actorKind: 'USER', field: 'flagged', fromValue: cur.flaggedAt ? (cur.flagReason ?? 'flagged') : null, toValue: input.flagged ? reason : null } });
+    await tx.workHistory.create({ data: { issueId: i.id, actorId: userId, actorKind: histKind(access), field: 'flagged', fromValue: cur.flaggedAt ? (cur.flagReason ?? 'flagged') : null, toValue: input.flagged ? reason : null } });
     return u;
   });
   emitWorkEvent({ type: 'issue.updated', projectId, issueId: i.id, actor: userActor(userId), changes: [{ field: 'flagged', from: cur.flaggedAt ? 'true' : 'false', to: String(input.flagged) }] });
@@ -954,6 +1002,7 @@ export async function setIssueFlag(userId: number, projectId: number, number: nu
 export async function setAttachmentClient(
   userId: number, projectId: number, attachmentId: number, input: { clientVisible?: boolean; deliverable?: boolean },
 ) {
+  await assertHumanActor(userId, 'share files with clients'); // CTW-28: tầng hành động
   const access = await requireProject(userId, projectId, 'issue.edit');
   assertModule(access, 'clientPortal');
   const att = await prisma.workAttachment.findFirst({

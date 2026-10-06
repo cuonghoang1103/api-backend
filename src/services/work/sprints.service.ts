@@ -16,7 +16,7 @@ import { BadRequestError, ConflictError, NotFoundError } from '../../middleware/
 import { emitWorkEvent, type WorkActor } from './events.js';
 import { applyIssueChange, type IssuePatch } from './issueChange.js';
 import { CARD_SELECT, deleteIssueAs, toCard, updateIssueAs } from './issues.service.js';
-import { requireProject } from './permissions.js';
+import { requireProject, agentForbidden } from './permissions.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
 
@@ -401,7 +401,9 @@ export interface BulkPatch {
  * cho chuyển thẳng sang Done) thì báo riêng thẻ đó, các thẻ khác vẫn đi.
  */
 export async function bulkUpdate(userId: number, projectId: number, numbers: number[], patch: BulkPatch) {
-  await requireProject(userId, projectId, patch.delete ? 'project.view' : 'issue.edit');
+  const access = await requireProject(userId, projectId, patch.delete ? 'project.view' : 'issue.edit');
+  // CTW-28: sửa hàng loạt là công cụ "dọn backlog" — đi thẳng cửa ghi chung, bỏ qua luật sửa-thẻ-của-agent ⇒ cấm agent.
+  if (access.principal === 'AGENT') throw await agentForbidden(userId, 'bulk-edit issues');
   const uniq = [...new Set(numbers)].slice(0, 200);
   const issues = await prisma.workIssue.findMany({ where: { projectId, number: { in: uniq }, deletedAt: null }, select: { id: true, number: true } });
   const updated: number[] = [];

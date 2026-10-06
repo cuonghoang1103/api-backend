@@ -34,7 +34,11 @@ export type LinkType = (typeof LINK_TYPES)[number];
 export const SPRINT_STATES = ['PLANNED', 'ACTIVE', 'CLOSED'] as const;
 export type SprintState = (typeof SPRINT_STATES)[number];
 
-export const ACTOR_KINDS = ['USER', 'AI', 'AUTOMATION', 'SYSTEM'] as const;
+/**
+ * USER = người · AI = trợ lý đề xuất, người bấm Apply (provenance S6) · AGENT = AI agent thành viên (CTW-28,
+ * user kind AGENT tự hành động trong phạm vi token + rào chắn). KHÔNG trộn AI với AGENT — báo cáo "AI-assisted" sẽ sai.
+ */
+export const ACTOR_KINDS = ['USER', 'AI', 'AUTOMATION', 'SYSTEM', 'AGENT'] as const;
 export type ActorKind = (typeof ACTOR_KINDS)[number];
 
 /** 1 = Cao nhất … 5 = Thấp nhất — cùng thứ tự với Jira. */
@@ -188,3 +192,22 @@ export const RESOURCE_VISIBILITY = ['TEAM', 'CLIENT'] as const;
 export type ResourceVisibility = (typeof RESOURCE_VISIBILITY)[number];
 export const RESOURCE_LINK_STATUSES = ['OK', 'BROKEN', 'UNKNOWN'] as const;
 export type ResourceLinkStatus = (typeof RESOURCE_LINK_STATUSES)[number];
+
+// ─── AI agent thành viên (CTW-28, 06/10/2026 — docs/ct-work-ai-agents-thiet-ke.md) ───
+export const USER_KINDS = ['HUMAN', 'AGENT'] as const;
+export type UserKind = (typeof USER_KINDS)[number];
+export const AGENT_STATUSES = ['ACTIVE', 'PAUSED', 'RETIRED'] as const;
+export type AgentStatus = (typeof AGENT_STATUSES)[number];
+export const AGENT_RUNTIMES = ['EXTERNAL', 'BUILTIN'] as const;
+export type AgentRuntime = (typeof AGENT_RUNTIMES)[number];
+/** Vai dự án agent được mang — không ADMIN/CLIENT/TEACHER. */
+export const AGENT_PROJECT_ROLES = ['MEMBER', 'VIEWER'] as const;
+export const LEASE_STATUSES = ['ACTIVE', 'RELEASED', 'EXPIRED'] as const;
+export type LeaseStatus = (typeof LEASE_STATUSES)[number];
+export const WORKLOG_SOURCES = ['MANUAL', 'AGENT_AUTO'] as const;
+/** Loại dòng hộp thư agent (§4.5) — cũng là tên sự kiện webhook. */
+export const AGENT_INBOX_TYPES = [
+  'issue.assigned', 'comment.mention', 'comment.on_my_issue', 'issue.returned', 'handoff.received',
+  'approval.decided', 'issue.flag', 'lease.expired',
+] as const;
+export type AgentInboxType = (typeof AGENT_INBOX_TYPES)[number];

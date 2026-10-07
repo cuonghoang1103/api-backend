@@ -117,7 +117,15 @@ export async function revokeToken(userId: number, id: number) {
  * tiếp để JWT xử lý như cũ. Là token ctw_ ⇒ tự xác thực, gắn req.userId và
  * bỏ qua authenticate (đánh dấu req.workToken).
  */
-export async function apiTokenAuth(req: Request, _res: Response, next: NextFunction): Promise<void> {
+export const apiTokenAuth = taoApiTokenAuth(agentTopRouteAllowed);
+
+/**
+ * Như apiTokenAuth nhưng với danh sách đường AGENT được đi do router tự truyền (mặc định là của CT Work).
+ * Dùng cho router ngoài CT Work cần mở RẤT HẸP cho agent (vd. /flying-pencil/tts — user cho phép 07/10/2026).
+ * Mọi rào chắn khác (token hợp lệ, chưa thu hồi/hết hạn, agent không RETIRED/PAUSED, scope write) giữ nguyên.
+ */
+export function taoApiTokenAuth(choPhepAgent: (method: string, path: string, scoped?: boolean) => boolean) {
+  return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
   try {
     const h = req.headers.authorization;
     if (!h?.startsWith('Bearer ctw_')) return next();
@@ -143,7 +151,7 @@ export async function apiTokenAuth(req: Request, _res: Response, next: NextFunct
       if (!ag || row.user.kind !== 'AGENT' || ag.userId !== row.userId || !scopes.includes('agent')) throw new UnauthorizedError('Invalid API token');
       if (ag.status === 'RETIRED') throw new AppError('This AI agent has been retired', 403, 'WORK_AGENT_RETIRED');
       req.agent = { id: ag.id, userId: ag.userId, workspaceId: ag.workspaceId, ownerId: ag.ownerId, status: ag.status, projectIds: tokenProjectIds(row.projectIds) };
-      if (!agentTopRouteAllowed(req.method, req.path, !!req.agent.projectIds)) {
+      if (!choPhepAgent(req.method, req.path, !!req.agent.projectIds)) {
         throw new AppError('AI agents cannot use this part of CT Work. Ask the agent\'s owner to do this.', 403, 'WORK_AGENT_FORBIDDEN');
       }
       // PAUSED: vẫn đọc được; mọi lệnh ghi ⇒ 423 (cùng mã khoá với editLockGuard).
@@ -168,4 +176,5 @@ export async function apiTokenAuth(req: Request, _res: Response, next: NextFunct
   } catch (err) {
     next(err);
   }
+  };
 }

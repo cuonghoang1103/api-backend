@@ -79,6 +79,8 @@ export default function FloatingAIAssistant() {
    || pathname === '/notes' || pathname?.startsWith('/notes/')
    // IELTS có gia sư riêng neo đúng góc phải; robot nổi che nút Gửi của nó.
    || pathname?.endsWith('/ielts') || pathname?.endsWith('/dekiru')
+   // Phòng thi máy tính / Flashcards / Sổ lỗi IELTS (07/10/2026): robot che nút ◀ ▶ và ô số câu ở thanh dưới.
+   || /\/ielts\/(thi-may|the-tu|so-loi)$/.test(pathname ?? '')
    // 📷 Sách gốc có khung gia sư theo trang ở cột phải — robot che ô gõ câu hỏi.
    || pathname?.endsWith('/dekiru/sach-goc')
    || hiddenOnMobile,

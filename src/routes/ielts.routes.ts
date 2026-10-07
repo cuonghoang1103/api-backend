@@ -25,9 +25,12 @@ import { goiGiaSu, hoiGiaSu, troChuyen } from '../services/ielts/goiGiaSu.servic
 import { docTo } from '../services/ielts/docTo.service.js';
 import { xemChuViet, chamVietTay, MAX_TRANG } from '../services/ielts/vietTay.service.js';
 import multer from 'multer';
+import hocRoutes from './ielts.hoc.routes.js';
 
 const router = Router();
 router.use(authenticate);
+// Flashcard SRS (/vocab/*) · Sổ lỗi (/so-loi/*) · Phòng thi máy tính (/thi-may/*) — 07/10/2026.
+router.use(hocRoutes);
 
 const uid = (req: Request): number => req.userId!;
 const ok = (res: Response<ApiResponse>, data: unknown) => res.json({ success: true, data });

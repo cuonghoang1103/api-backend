@@ -1,0 +1,315 @@
+/**
+ * Đề Reading số 1 (Academic) — 3 passage · 40 câu · 60 phút. TỰ SOẠN 07/10/2026.
+ * Độ khó nhắm band 6–7.5. Đủ các dạng: note, diagram, TFNG, headings,
+ * matching features, summary (word box), YNNG, MCQ một/hai đáp án, sentence completion.
+ * Mỗi đáp án có `ev` = câu nguyên văn trong bài (tô sáng khi xem lại) + giải thích tiếng Việt.
+ */
+import type { DeDoc } from './types';
+
+export const DOC_01: DeDoc = {
+  id: 'doc-01',
+  kyNang: 'doc',
+  ten: 'Academic Reading — Test 1',
+  boDe: 'CuongThai Practice Tests 1',
+  capDo: 'Band 6 → 7.5',
+  moTa: 'Mangroves · The shipping container · The hidden value of boredom',
+  phut: 60,
+  phan: [
+    /* ════════════════ PASSAGE 1 ════════════════ */
+    {
+      so: 1,
+      tieuDe: 'Guardians of the Coast',
+      phuDe: 'How mangrove forests survive where other trees cannot — and why they matter',
+      gioiThieu: 'You should spend about 20 minutes on **Questions 1–13**, which are based on Reading Passage 1 below.',
+      doan: [
+        { s: 'Mangroves are trees and shrubs that grow in the intertidal zone of tropical and subtropical coastlines — the strip of muddy shore that is flooded by the sea twice a day and exposed again when the tide goes out. Around seventy species are recognised, and together they cover roughly 150,000 square kilometres, an area about half the size of Vietnam. Few woody plants can tolerate such conditions. The water that washes around their trunks contains a high level of salt, the soil is soft and unstable, and every few hours the roots are either drowned or left baking in the sun.' },
+        { s: 'Salt is the first problem. Most plants die quickly if their roots sit in seawater, because salt draws water out of their cells. Mangroves deal with it in several ways. Some species filter out more than ninety per cent of the salt at the surface of their roots, so that the water reaching the rest of the tree is almost fresh. Others allow salt into their tissues but then get rid of it through special glands in their leaves; on a dry afternoon, a careful observer can see tiny white crystals glittering on the leaf surface. Interestingly, mangroves do not actually need salt. In laboratory experiments they grow perfectly well in fresh water, but in rivers and lakes they lose out to faster-growing competitors, which is why they are found almost only on the coast.' },
+        { s: 'The second problem is air. Beneath the surface lies waterlogged mud that contains almost no oxygen, so roots buried in it cannot breathe in the normal way. Here again the trees have found different solutions. The red mangrove supports itself on arching prop roots that grow out from the trunk and lower branches, holding the tree above the water like a table on many legs. Others, such as the grey mangrove, send up hundreds of vertical spikes known as pneumatophores, or breathing roots, which poke out of the mud like pencils. Their surfaces are covered with tiny pores that take in air at low tide and pass it down to the buried roots below.' },
+        { s: 'Reproduction is equally unusual. In many mangrove species the seed begins to grow while it is still attached to the parent, developing into a long, spear-shaped seedling before it finally drops. Some seedlings fall straight into the mud and take root immediately. Others are carried away by the tide. Because they are designed to float, they can survive in the sea for up to a year before they reach a suitable shore — a strategy that explains how mangroves have spread across thousands of kilometres of ocean.' },
+        { s: 'For people living on tropical coasts, mangrove forests are far more than a botanical curiosity. The dense tangle of roots slows the movement of water and traps fine sediment, gradually building up the land and protecting it from erosion. During storms, a wide belt of mangroves can reduce the height of waves considerably before they reach the shore. Studies carried out after major storms have found that villages sheltered behind healthy mangroves generally suffered less damage than unprotected ones, although scientists stress that no forest can stop the largest storm surges entirely. The roots also provide shelter for young fish, crabs and shrimp, and many coastal fisheries depend on them.' },
+        { s: 'Mangroves are also remarkable stores of carbon. Their waterlogged soils decompose plant material very slowly, so carbon that would otherwise return to the atmosphere stays buried for centuries. Per hectare, mangrove forests can lock away several times as much carbon as tropical forests on dry land, much of it in the soil rather than in the trees themselves. When a mangrove forest is cleared, however, this stored carbon can be released surprisingly quickly.' },
+        { s: 'Despite their value, mangroves have been disappearing. Over the second half of the twentieth century, large areas were cleared for shrimp ponds, rice fields and coastal construction. In recent years the rate of loss has slowed, and many countries have begun to replant. Vietnam offers a well-known example: the Can Gio forest near Ho Chi Minh City, badly damaged during the war, was replanted from the late 1970s onwards and is now a UNESCO biosphere reserve. Replanting is not always simple, though. Many early replanting schemes failed because seedlings were pushed into mudflats where the tides were too deep or too frequent for them to survive. Ecologists now argue that the most successful projects begin not by planting trees, but by restoring the natural flow of water and letting seedlings arrive by themselves.' },
+      ],
+      nhom: [
+        {
+          id: 'p1-note', tu: 1, den: 5, dang: 'note',
+          huongDan: 'Complete the notes below.\nChoose **ONE WORD ONLY** from the passage for each answer.',
+          gioiHan: { tu: 1 },
+          tieuDe: 'Mangroves',
+          dong: [
+            '## Living conditions',
+            '• grow on muddy shores where the water has a high level of [[1]]',
+            '## Adaptations',
+            '• some species remove salt through glands in their [[2]]',
+            '• seeds start to grow while still attached to the [[3]]',
+            '• seedlings can float in the sea for as long as a [[4]]',
+            '## Value to people',
+            '• reduce the height of [[5]] during storms',
+          ],
+        },
+        {
+          id: 'p1-diagram', tu: 6, den: 8, dang: 'diagram',
+          huongDan: 'Label the diagram below.\nChoose **NO MORE THAN TWO WORDS** from the passage for each answer.',
+          gioiHan: { tu: 2 },
+          tieuDe: 'How mangrove roots cope with the shore',
+          hinh: {
+            w: 560, h: 300,
+            chuThich: 'Sơ đồ rễ cây đước (tự vẽ, không theo tỷ lệ)',
+            ve: [
+              { t: 'rect', x: 0, y: 190, w: 560, h: 110, nen: '#d9c9a8', bo: 0 },
+              { t: 'rect', x: 0, y: 150, w: 560, h: 40, nen: '#cfe3f2', bo: 0 },
+              { t: 'text', x: 470, y: 172, s: 'high tide', co: 12, nghieng: true },
+              { t: 'line', d: [[150, 40], [150, 160]], day: 10, mau: '#6b4f2a' },
+              { t: 'path', d: 'M150 80 C 120 60, 80 60, 60 75 M150 70 C 180 50, 220 50, 240 70', mau: '#4f7a3a', day: 6 },
+              { t: 'circle', x: 150, y: 45, r: 45, nen: '#7fb069' },
+              { t: 'path', d: 'M150 120 C 120 130, 100 160, 90 200 M150 120 C 180 130, 200 160, 210 200 M150 140 C 135 160, 125 180, 120 200 M150 140 C 165 160, 175 180, 180 200', mau: '#6b4f2a', day: 4 },
+              { t: 'line', d: [[205, 175], [290, 120]], mui: true, mau: '#333' },
+              { t: 'o', n: 6, x: 330, y: 110 },
+              { t: 'line', d: [[400, 180], [400, 200], [380, 200]], mau: '#6b4f2a', day: 2 },
+              { t: 'line', d: [[380, 205], [380, 172]], day: 3, mau: '#6b4f2a' },
+              { t: 'line', d: [[400, 205], [400, 168]], day: 3, mau: '#6b4f2a' },
+              { t: 'line', d: [[420, 205], [420, 174]], day: 3, mau: '#6b4f2a' },
+              { t: 'line', d: [[440, 205], [440, 170]], day: 3, mau: '#6b4f2a' },
+              { t: 'line', d: [[360, 230], [460, 230]], day: 3, mau: '#6b4f2a' },
+              { t: 'line', d: [[420, 168], [470, 100]], mui: true, mau: '#333' },
+              { t: 'o', n: 7, x: 500, y: 85 },
+              { t: 'text', x: 470, y: 125, s: 'take in air at low tide', co: 11, giua: true, nghieng: true },
+              { t: 'line', d: [[140, 220], [80, 262]], mui: true, mau: '#333' },
+              { t: 'text', x: 18, y: 284, s: 'roots trap fine', co: 12 },
+              { t: 'o', n: 8, x: 150, y: 278 },
+              { t: 'text', x: 300, y: 270, s: 'mud with almost no oxygen', co: 12, nghieng: true },
+            ],
+          },
+        },
+        {
+          id: 'p1-tfng', tu: 9, den: 13, dang: 'tfng',
+          huongDan: 'Do the following statements agree with the information given in Reading Passage 1?\nChoose\n**TRUE** if the statement agrees with the information\n**FALSE** if the statement contradicts the information\n**NOT GIVEN** if there is no information on this',
+          cau: [
+            { n: 9, s: 'Mangroves are unable to grow unless they are in salt water.' },
+            { n: 10, s: 'An area of mangrove forest can hold more carbon than the same area of tropical forest on dry land.' },
+            { n: 11, s: 'A wide belt of mangroves can completely protect a village from the most powerful storm surges.' },
+            { n: 12, s: 'Shrimp farming has been the single biggest cause of mangrove loss.' },
+            { n: 13, s: 'Some replanting projects failed because seedlings were placed where the water conditions were unsuitable.' },
+          ],
+        },
+      ],
+    },
+
+    /* ════════════════ PASSAGE 2 ════════════════ */
+    {
+      so: 2,
+      tieuDe: 'The Box That Changed the World',
+      phuDe: 'The humble shipping container transformed trade — and created problems of its own',
+      gioiThieu: 'You should spend about 20 minutes on **Questions 14–26**, which are based on Reading Passage 2 below.',
+      doan: [
+        { nhan: 'A', s: 'For most of history, loading a ship was slow, expensive and dangerous work. Cargo travelled as "break-bulk": sacks of coffee, barrels of oil, crates of machinery and bundles of timber, each lifted on and off by teams of dockworkers. A single cargo ship might carry tens of thousands of separate items, and a large vessel could spend a week or more in port being unloaded and reloaded — in some cases nearly as long as it spent at sea. Theft was common, goods were frequently damaged, and the cost of handling cargo at the two ends of a journey often exceeded the cost of the voyage itself.' },
+        { nhan: 'B', s: 'The idea that eventually swept this system away came not from a shipping company but from a road haulier. Malcom McLean, who had built up a large trucking business in the United States, grew frustrated watching his drivers wait for hours while their loads were transferred to ships. His solution was simple: rather than unloading the goods, why not lift the whole trailer box onto the vessel? In 1956 a converted tanker called the Ideal X sailed from Newark to Houston carrying fifty-eight such boxes. According to most accounts, the cost of loading fell by more than ninety per cent compared with traditional methods.' },
+        { nhan: 'C', s: 'Yet a box on its own changed very little. Early containers came in many shapes and sizes, and each shipping line used its own design, which meant that a box from one company could not be carried by another company\'s ships or lifted by its cranes. The real breakthrough came in the late 1960s, when international committees agreed on a small number of standard dimensions, together with standard corner fittings that allowed any crane, truck or train wagon to lock onto any box. Capacity is still measured today in "twenty-foot equivalent units", or TEU, a direct legacy of those negotiations. The maritime historian Daniel Okafor argues that "the container\'s success depended on committees as much as on engineers; without agreement on size, it would have remained a clever local trick."' },
+        { nhan: 'D', s: 'For the people who worked on the docks, the consequences were severe. A ship that once required hundreds of workers for a week could now be emptied by a few crane operators in a day. In port cities on both sides of the Atlantic, dock employment collapsed within a generation, and neighbourhoods that had depended on waterfront jobs for a century fell into decline. "The machines arrived faster than any community could retrain," says Priya Raman, who studies labour history. "Whole districts lost not only their income but their sense of purpose."' },
+        { nhan: 'E', s: 'Elsewhere, the effects were far more positive. As the cost of moving goods fell, it became practical for companies to make different parts of a product in different countries and assemble them somewhere else again. The logistics engineer Hiroshi Tanabe points out that containers allowed factories to keep very small stocks of components, because parts could be scheduled to arrive exactly when they were needed. The port economist Marta Lindqvist goes further, suggesting that cheaper freight was not the most important change at all. "What manufacturers really valued," she says, "was predictability. A container that arrives on the day it was promised is worth more than one that is cheap but late."' },
+        { nhan: 'F', s: 'Seventy years on, the container system faces new pressures. Ships have grown enormously — the largest now carry more than twenty thousand boxes — and only a handful of harbours in the world have water deep enough and cranes tall enough to serve them. Because global supply chains are so tightly linked, a problem in one place can spread rapidly. When a single giant vessel ran aground in the Suez Canal in March 2021, blocking it for six days, the knock-on hold-ups were felt by shipping companies and manufacturers across the globe for months afterwards. The box that made the world smaller has also made it more fragile.' },
+      ],
+      nhom: [
+        {
+          id: 'p2-heading', tu: 14, den: 19, dang: 'heading',
+          huongDan: 'Reading Passage 2 has six paragraphs, **A–F**.\nChoose the correct heading for each paragraph from the list of headings below.\nChoose the correct number, **i–ix**.',
+          hop: {
+            tieuDe: 'List of Headings',
+            ds: [
+              { k: 'i', t: 'A failed government attempt to control shipping prices' },
+              { k: 'ii', t: 'The slow and costly world of loading goods by hand' },
+              { k: 'iii', t: 'An outsider\'s simple idea' },
+              { k: 'iv', t: 'Agreeing on a common format' },
+              { k: 'v', t: 'The human cost on the waterfront' },
+              { k: 'vi', t: 'How cheaper transport reshaped manufacturing' },
+              { k: 'vii', t: 'The environmental price of global shipping' },
+              { k: 'viii', t: 'New risks for an old invention' },
+              { k: 'ix', t: 'The rise of piracy on major trade routes' },
+            ],
+          },
+          cau: [
+            { n: 14, s: 'Paragraph A' },
+            { n: 15, s: 'Paragraph B' },
+            { n: 16, s: 'Paragraph C' },
+            { n: 17, s: 'Paragraph D' },
+            { n: 18, s: 'Paragraph E' },
+            { n: 19, s: 'Paragraph F' },
+          ],
+        },
+        {
+          id: 'p2-feature', tu: 20, den: 23, dang: 'match-feature',
+          huongDan: 'Look at the following statements (Questions 20–23) and the list of people below.\nMatch each statement with the correct person, **A–D**.\nNB You may use any letter more than once.',
+          hop: {
+            tieuDe: 'List of People',
+            ds: [
+              { k: 'A', t: 'Marta Lindqvist' },
+              { k: 'B', t: 'Daniel Okafor' },
+              { k: 'C', t: 'Hiroshi Tanabe' },
+              { k: 'D', t: 'Priya Raman' },
+            ],
+          },
+          cau: [
+            { n: 20, s: 'Containers made it possible for factories to rely on parts arriving at precisely the right time.' },
+            { n: 21, s: 'Job losses happened more quickly than local people could learn new skills.' },
+            { n: 22, s: 'Reliable delivery was more important to manufacturers than low transport costs.' },
+            { n: 23, s: 'International agreement was as important to the container\'s success as its design.' },
+          ],
+        },
+        {
+          id: 'p2-summary', tu: 24, den: 26, dang: 'summary-box',
+          huongDan: 'Complete the summary using the list of words, **A–H**, below.',
+          tieuDe: 'Challenges facing the container system today',
+          dong: [
+            'Container ships are now so large that relatively few [[24]] are able to handle them. Because supply chains around the world are highly [[25]], a problem at a single location can quickly have wider effects. In 2021, for example, one vessel blocked an important canal for less than a week, but it caused [[26]] for businesses worldwide over a much longer period.',
+          ],
+          hop: {
+            ds: [
+              { k: 'A', t: 'ports' }, { k: 'B', t: 'factories' }, { k: 'C', t: 'interconnected' }, { k: 'D', t: 'delays' },
+              { k: 'E', t: 'profits' }, { k: 'F', t: 'flexible' }, { k: 'G', t: 'crews' }, { k: 'H', t: 'shortages' },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ════════════════ PASSAGE 3 ════════════════ */
+    {
+      so: 3,
+      tieuDe: 'The Hidden Value of Boredom',
+      phuDe: 'Is the feeling we try hardest to avoid actually good for us?',
+      gioiThieu: 'You should spend about 20 minutes on **Questions 27–40**, which are based on Reading Passage 3 below.',
+      doan: [
+        { s: 'Few experiences are as universally disliked as boredom. For centuries it has been treated as a minor moral failing — the problem of idle people who lacked the discipline to find something useful to do. Psychologists, for their part, largely ignored it, regarding it as too vague and too ordinary to deserve serious study. Over the past two decades, however, that attitude has changed, and researchers now see boredom as a distinct emotion with its own causes, consequences and, surprisingly, its own benefits. In my view, this shift is overdue: boredom is a far more useful feeling than its reputation suggests.' },
+        { s: 'Most researchers now agree that boredom is best understood as a signal. Just as hunger tells us that we need food, boredom tells us that what we are doing — or not doing — has stopped engaging our minds. It is uncomfortable precisely so that we will act on it. Like physical pain, its unpleasantness is the point: a signal that could easily be ignored would be of little use. Seen this way, boredom is not the opposite of motivation but one of its sources, pushing us to change our situation and look for something more meaningful.' },
+        { s: 'Some evidence suggests that boredom may even make us more creative. In one well-known British experiment, volunteers were first asked to copy telephone numbers from a directory for fifteen minutes, a task chosen because it was almost perfectly dull. They were then asked to think of as many uses as possible for a pair of plastic cups. Compared with a group who had gone straight to the creative task, the bored volunteers came up with more ideas. The researchers suggested that the dull task had encouraged mind-wandering, allowing the volunteers\' thoughts to drift and make unexpected connections. The effect was modest, and not every later study has confirmed it, but it fits with the reports of many writers and scientists who say their best ideas arrive when they are doing nothing in particular.' },
+        { s: 'Not all boredom is harmless, though. Psychologists distinguish between situational boredom, which arises from a particular dull task and disappears when the task ends, and chronic boredom, a lasting tendency to find life unstimulating. It is the second kind that worries researchers. People who are easily bored are more likely to engage in risky behaviour such as gambling, and they report higher levels of anxiety and low mood. Whether boredom causes these problems or simply accompanies them is still debated, but the link is consistent enough to take seriously.' },
+        { s: 'Many of us, it seems, will go to great lengths to avoid even a few minutes of boredom. In a series of studies in the United States, participants were left alone in a plain room for up to fifteen minutes with nothing to do but think. In one version, they could press a button to give themselves a mild electric shock — one that most had earlier said they would pay money to avoid. A quarter of the women and two-thirds of the men chose to shock themselves at least once. The finding says less about pain than about how uncomfortable many of us are when left alone with our own thoughts.' },
+        { s: 'Today, of course, we rarely need to be. A smartphone offers an instant escape from any empty moment: a queue, a bus journey, the thirty seconds while a kettle boils. An entire industry of games, feeds and short videos has grown up around that need. Yet phones do not cure boredom; they merely postpone it, and the constant switching from one small distraction to the next often leaves people feeling flatter and more restless than before. We cannot know for certain whether we are more bored than our grandparents were, because nobody measured boredom in the past. What has clearly changed is how rarely we allow the feeling to run its course.' },
+        { s: 'What, then, should we do? It would be a mistake to try to remove every dull moment from children\'s lessons; learning to stay with a difficult or repetitive task is itself a skill that school should teach. For adults, the most practical advice is to treat boredom as information rather than as an emergency. When it appears, it is worth asking what it is telling us — that a task needs a new approach, perhaps, or that we need a break of a different kind. Some people find it helpful to set aside regular periods without screens, such as a walk with no headphones, so that the mind has space to wander. None of this will make boredom pleasant. But it may allow us to hear what it has been trying to say.' },
+      ],
+      nhom: [
+        {
+          id: 'p3-ynng', tu: 27, den: 31, dang: 'ynng',
+          huongDan: 'Do the following statements agree with the claims of the writer in Reading Passage 3?\nChoose\n**YES** if the statement agrees with the claims of the writer\n**NO** if the statement contradicts the claims of the writer\n**NOT GIVEN** if it is impossible to say what the writer thinks about this',
+          cau: [
+            { n: 27, s: 'Boredom is more valuable than most people believe.' },
+            { n: 28, s: 'People today feel bored more often than people did in the past.' },
+            { n: 29, s: 'Using a smartphone is an effective way to end the feeling of boredom.' },
+            { n: 30, s: 'Teachers should aim to remove all repetitive tasks from lessons.' },
+            { n: 31, s: 'The electric-shock studies show that most people are poor at creative thinking.' },
+          ],
+        },
+        {
+          id: 'p3-mcq', tu: 32, den: 35, dang: 'mcq',
+          huongDan: 'Choose the correct letter, **A, B, C** or **D**.',
+          cau: [
+            {
+              n: 32, s: 'According to the second paragraph, the main purpose of boredom is to',
+              chon: [
+                { k: 'A', t: 'help the mind recover after a period of hard work.' },
+                { k: 'B', t: 'encourage us to change an activity that no longer engages us.' },
+                { k: 'C', t: 'reduce our motivation when a task is too difficult.' },
+                { k: 'D', t: 'warn us that we are physically tired.' },
+              ],
+            },
+            {
+              n: 33, s: 'In the British experiment, volunteers who copied telephone numbers',
+              chon: [
+                { k: 'A', t: 'found the creative task more boring than the other group did.' },
+                { k: 'B', t: 'produced more ideas in the task that followed.' },
+                { k: 'C', t: 'were unable to concentrate on the creative task.' },
+                { k: 'D', t: 'took longer than expected to finish the directory task.' },
+              ],
+            },
+            {
+              n: 34, s: 'What does the writer say about chronic boredom?',
+              chon: [
+                { k: 'A', t: 'It has been proven to cause anxiety and low mood.' },
+                { k: 'B', t: 'It usually disappears when a dull task is over.' },
+                { k: 'C', t: 'It is consistently associated with certain problems.' },
+                { k: 'D', t: 'It is less common than situational boredom.' },
+              ],
+            },
+            {
+              n: 35, s: 'The writer\'s attitude towards the industry of games, feeds and short videos is',
+              chon: [
+                { k: 'A', t: 'enthusiastic, because it removes empty moments.' },
+                { k: 'B', t: 'neutral, because its effects have not been measured.' },
+                { k: 'C', t: 'sceptical, because it delays boredom rather than ending it.' },
+                { k: 'D', t: 'angry, because it was designed to cause anxiety.' },
+              ],
+            },
+          ],
+        },
+        {
+          id: 'p3-mcq2', tu: 36, den: 37, dang: 'mcq2',
+          huongDan: 'Choose **TWO** letters, **A–E**.',
+          nhieu: {
+            ns: [36, 37],
+            s: 'Which TWO pieces of advice does the writer give for dealing with boredom?',
+            chon: [
+              { k: 'A', t: 'Choose the most stimulating activity available.' },
+              { k: 'B', t: 'Think about what the feeling might be indicating.' },
+              { k: 'C', t: 'Avoid repetitive tasks wherever possible.' },
+              { k: 'D', t: 'Spend some time regularly away from digital devices.' },
+              { k: 'E', t: 'Keep a record of when boredom occurs.' },
+            ],
+          },
+        },
+        {
+          id: 'p3-sentence', tu: 38, den: 40, dang: 'sentence',
+          huongDan: 'Complete the sentences below.\nChoose **NO MORE THAN TWO WORDS** from the passage for each answer.',
+          gioiHan: { tu: 2 },
+          dong: [
+            'The writer compares boredom to [[38]], since both are unpleasant so that people will respond to them.',
+            'Researchers believe the dull copying task led to [[39]], which helped the volunteers form new connections.',
+            'People who are easily bored are more likely to take part in [[40]], for example gambling.',
+          ],
+        },
+      ],
+    },
+  ],
+
+  dapAn: {
+    1: { a: ['salt'], vi: 'Bài: "The water … contains a high level of salt". Ghi chú hỏi đúng cụm "high level of" ⇒ chép **salt**. Đừng viết "seawater" — không khớp ngữ pháp "a high level of ___" và không phải chữ trong câu bằng chứng.', ev: 'The water that washes around their trunks contains a high level of salt' },
+    2: { a: ['leaves'], vi: 'Bài: "get rid of it through special glands in their leaves". "remove salt" = paraphrase của "get rid of it". Chỉ ONE WORD ⇒ **leaves** (không viết "their leaves").', ev: 'get rid of it through special glands in their leaves' },
+    3: { a: ['parent'], vi: '"the seed begins to grow while it is still attached to the parent" — chép **parent**. "parent tree" là 2 từ, vượt ONE WORD ONLY ⇒ sai.', ev: 'the seed begins to grow while it is still attached to the parent' },
+    4: { a: ['year'], vi: '"they can survive in the sea for up to a year" — "as long as a ___" = "for up to a ___" ⇒ **year**.', ev: 'they can survive in the sea for up to a year' },
+    5: { a: ['waves'], vi: '"a wide belt of mangroves can reduce the height of waves considerably" ⇒ **waves**. Bẫy: "storm surges" (2 từ, và câu đó nói rừng KHÔNG chặn được hết).', ev: 'a wide belt of mangroves can reduce the height of waves considerably' },
+    6: { a: ['prop roots'], vi: 'Rễ mọc từ thân và cành, vòng xuống nước như chân bàn = "arching prop roots" ⇒ **prop roots** (2 từ). Viết "arching prop roots" là 3 từ ⇒ vượt NO MORE THAN TWO WORDS ⇒ sai.', ev: 'arching prop roots that grow out from the trunk and lower branches' },
+    7: { a: ['breathing roots', 'pneumatophores'], vi: 'Rễ đâm thẳng lên khỏi bùn, hút khí lúc triều thấp = "pneumatophores, or breathing roots" ⇒ **breathing roots** hoặc **pneumatophores** đều đúng.', ev: 'send up hundreds of vertical spikes known as pneumatophores, or breathing roots' },
+    8: { a: ['sediment'], vi: 'Nhãn "roots trap fine ___" ⇒ bài: "slows the movement of water and traps fine sediment" ⇒ **sediment**. Chữ "fine" đã có sẵn trên hình — viết lại "fine sediment" vẫn trong 2 từ nhưng thừa chữ nhãn đã có; đáp án chuẩn là "sediment".', ev: 'slows the movement of water and traps fine sediment' },
+    9: { a: ['FALSE'], vi: 'Bài nói ngược hẳn: "mangroves do not actually need salt… they grow perfectly well in fresh water" ⇒ **FALSE**. Chúng chỉ thua cây khác ở nước ngọt.', ev: 'Interestingly, mangroves do not actually need salt.' },
+    10: { a: ['TRUE'], vi: '"Per hectare, mangrove forests can lock away several times as much carbon as tropical forests on dry land" — "per hectare" = "the same area" ⇒ **TRUE**.', ev: 'Per hectare, mangrove forests can lock away several times as much carbon as tropical forests on dry land' },
+    11: { a: ['FALSE'], vi: 'Bài: "no forest can stop the largest storm surges entirely" — trái với "completely protect… the most powerful" ⇒ **FALSE**.', ev: 'no forest can stop the largest storm surges entirely' },
+    12: { a: ['NOT GIVEN'], vi: 'Bài liệt kê "shrimp ponds, rice fields and coastal construction" nhưng KHÔNG nói cái nào lớn nhất ⇒ **NOT GIVEN**. Bẫy kinh điển: thấy từ "shrimp" là chọn TRUE.', ev: 'large areas were cleared for shrimp ponds, rice fields and coastal construction' },
+    13: { a: ['TRUE'], vi: '"failed because seedlings were pushed into mudflats where the tides were too deep or too frequent" = "water conditions were unsuitable" ⇒ **TRUE**.', ev: 'Many early replanting schemes failed because seedlings were pushed into mudflats where the tides were too deep or too frequent for them to survive.' },
+    14: { a: ['ii'], vi: 'Đoạn A tả hàng "break-bulk" bốc từng món, chậm và tốn kém ⇒ **ii**.', ev: 'For most of history, loading a ship was slow, expensive and dangerous work.' },
+    15: { a: ['iii'], vi: 'Đoạn B: ý tưởng đến "not from a shipping company but from a road haulier" — người ngoài ngành ⇒ **iii** (An outsider\'s simple idea).', ev: 'The idea that eventually swept this system away came not from a shipping company but from a road haulier.' },
+    16: { a: ['iv'], vi: 'Đoạn C: các uỷ ban quốc tế thống nhất kích thước chuẩn ⇒ **iv** (Agreeing on a common format). Không có chính phủ nào kiểm soát giá ⇒ loại i.', ev: 'international committees agreed on a small number of standard dimensions' },
+    17: { a: ['v'], vi: 'Đoạn D: công nhân bến cảng mất việc, khu phố suy tàn ⇒ **v**.', ev: 'For the people who worked on the docks, the consequences were severe.' },
+    18: { a: ['vi'], vi: 'Đoạn E: chi phí vận chuyển giảm ⇒ sản xuất linh kiện ở nhiều nước ⇒ **vi**.', ev: 'it became practical for companies to make different parts of a product in different countries' },
+    19: { a: ['viii'], vi: 'Đoạn F: tàu khổng lồ, chuỗi cung ứng mong manh — "new pressures… more fragile" ⇒ **viii** (New risks for an old invention).', ev: 'Seventy years on, the container system faces new pressures.' },
+    20: { a: ['C'], vi: 'Tanabe: "parts could be scheduled to arrive exactly when they were needed" ⇒ **C**.', ev: 'parts could be scheduled to arrive exactly when they were needed' },
+    21: { a: ['D'], vi: 'Raman: "The machines arrived faster than any community could retrain" — retrain = learn new skills ⇒ **D**.', ev: 'The machines arrived faster than any community could retrain' },
+    22: { a: ['A'], vi: 'Lindqvist: "What manufacturers really valued was predictability…" ⇒ **A**. Bẫy: Tanabe cũng nói về giao hàng đúng giờ nhưng KHÔNG so với chi phí.', ev: 'cheaper freight was not the most important change at all' },
+    23: { a: ['B'], vi: 'Okafor: "depended on committees as much as on engineers" ⇒ **B**.', ev: 'the container\'s success depended on committees as much as on engineers' },
+    24: { a: ['A'], vi: '"only a handful of harbours… can serve them" — harbours = **ports (A)**.', ev: 'only a handful of harbours in the world have water deep enough and cranes tall enough to serve them' },
+    25: { a: ['C'], vi: '"supply chains are so tightly linked" = highly **interconnected (C)**. "flexible" trái nghĩa với ý mong manh.', ev: 'Because global supply chains are so tightly linked, a problem in one place can spread rapidly.' },
+    26: { a: ['D'], vi: '"the knock-on hold-ups were felt… for months" — hold-ups = **delays (D)**. Bài không nhắc thiếu hàng ⇒ loại "shortages".', ev: 'the knock-on hold-ups were felt by shipping companies and manufacturers across the globe for months afterwards' },
+    27: { a: ['YES'], vi: 'Người viết: "boredom is a far more useful feeling than its reputation suggests" ⇒ **YES**.', ev: 'boredom is a far more useful feeling than its reputation suggests' },
+    28: { a: ['NOT GIVEN'], vi: 'Người viết nói "We cannot know for certain whether we are more bored than our grandparents were" — không đồng ý cũng không phản đối ⇒ **NOT GIVEN**.', ev: 'We cannot know for certain whether we are more bored than our grandparents were' },
+    29: { a: ['NO'], vi: '"phones do not cure boredom; they merely postpone it" — trái với "effective way to end" ⇒ **NO**.', ev: 'phones do not cure boredom; they merely postpone it' },
+    30: { a: ['NO'], vi: '"It would be a mistake to try to remove every dull moment from children\'s lessons" ⇒ **NO**.', ev: 'It would be a mistake to try to remove every dull moment from children\'s lessons' },
+    31: { a: ['NOT GIVEN'], vi: 'Người viết rút ra kết luận về việc ta khó chịu khi ở một mình với suy nghĩ — không nói gì về khả năng sáng tạo ⇒ **NOT GIVEN**.', ev: 'The finding says less about pain than about how uncomfortable many of us are when left alone with our own thoughts.' },
+    32: { a: ['B'], vi: '"boredom tells us that what we are doing… has stopped engaging our minds… pushing us to change our situation" ⇒ **B**.', ev: 'boredom tells us that what we are doing — or not doing — has stopped engaging our minds' },
+    33: { a: ['B'], vi: '"the bored volunteers came up with more ideas" ⇒ **B**.', ev: 'the bored volunteers came up with more ideas' },
+    34: { a: ['C'], vi: '"Whether boredom causes these problems… is still debated, but the link is consistent" ⇒ có liên hệ nhất quán (C), CHƯA chứng minh gây ra (loại A).', ev: 'the link is consistent enough to take seriously' },
+    35: { a: ['C'], vi: '"phones do not cure boredom; they merely postpone it" ⇒ hoài nghi **C**.', ev: 'Yet phones do not cure boredom; they merely postpone it' },
+    36: { a: ['B', 'D'], vi: 'Hai lời khuyên: hỏi xem cảm giác chán "đang nói gì" (**B**) và dành thời gian đều đặn không màn hình (**D**). Thứ tự không quan trọng.', ev: 'it is worth asking what it is telling us' },
+    37: { a: ['B', 'D'], vi: 'Như câu 36: **B** và **D**. A ngược ý bài; C bị bác ("a mistake to try to remove every dull moment").', ev: 'Some people find it helpful to set aside regular periods without screens' },
+    38: { a: ['physical pain', 'pain'], vi: '"Like physical pain, its unpleasantness is the point" ⇒ **physical pain** (hoặc pain).', ev: 'Like physical pain, its unpleasantness is the point' },
+    39: { a: ['mind-wandering', 'mind wandering'], vi: '"the dull task had encouraged mind-wandering" ⇒ **mind-wandering** (từ nối gạch tính 1 từ).', ev: 'the dull task had encouraged mind-wandering' },
+    40: { a: ['risky behaviour', 'risky behavior'], vi: '"more likely to engage in risky behaviour such as gambling" ⇒ **risky behaviour** (viết kiểu Mỹ "behavior" cũng được chấp nhận).', ev: 'more likely to engage in risky behaviour such as gambling' },
+  },
+};

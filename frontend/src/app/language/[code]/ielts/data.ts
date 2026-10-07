@@ -707,6 +707,9 @@ export const IELTS = defineCourse({
   // Hai mục tra cứu cả khoá (công thức · từ vựng) — hiện dưới "Mở đầu" ở mục lục.
   extras: [TRA_CONG_THUC, TRA_TU_VUNG],
   links: [
+    { href: '/language/en/ielts/thi-may', label: '🖥️ Online Test — thi trên máy tính (Reading · Listening · Writing)' },
+    { href: '/language/en/ielts/the-tu', label: '🃏 Flashcards 100 từ/ngày (lặp lại ngắt quãng)' },
+    { href: '/language/en/ielts/so-loi', label: '📒 Sổ lỗi tự động' },
     { href: '/language/en/ielts/phong-thi', label: '🎯 Phòng thi thử (đề đủ 3 phần)' },
     { href: '/language/en/ielts/luyen-them', label: '📚 Luyện thêm theo chặng (0 → 7.5)' },
   ],

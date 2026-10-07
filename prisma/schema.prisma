@@ -9953,6 +9953,116 @@ model IeltsProgress {
   @@map("ielts_progress")
 }
 
+/// Thẻ từ IELTS (flashcard 100 từ/ngày, 07/10/2026) — trạng thái lặp lại ngắt
+/// quãng (SM-2 cải biên, `src/services/ielts/srs.ts`) của MỘT từ với MỘT người.
+/// Nội dung từ (nghĩa, IPA, ví dụ) nằm ở web; ở đây chỉ có khoá từ (`tu`,
+/// chữ thường) — thêm bộ từ không phải đụng CSDL. Không FK sang users, theo
+/// cùng kiểu `ielts_progress`.
+model IeltsVocabCard {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  tu        String    @db.VarChar(80)
+  /// Hệ số dễ (SM-2), 1.3–3.0.
+  ease      Float     @default(2.5)
+  /// Khoảng ôn hiện tại, tính bằng ngày (0 = đang học trong buổi).
+  khoang    Float     @default(0)
+  /// Số lần nhớ liên tiếp.
+  lan       Int       @default(0)
+  /// Số lần quên sau khi đã nhớ.
+  quen      Int       @default(0)
+  hanLuc    DateTime  @map("han_luc")
+  lanCuoi   DateTime? @map("lan_cuoi")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@unique([userId, tu], name: "uk_ielts_the_tu", map: "uk_ielts_the_tu")
+  @@index([userId, hanLuc], name: "idx_ielts_the_tu_han")
+  @@map("ielts_vocab_cards")
+}
+
+/// Nhật ký mỗi lần chấm thẻ — để vẽ biểu đồ 30 ngày, tính chuỗi ngày và tỷ lệ
+/// "nhớ sau ≥ 7 ngày" bằng số thật, không ước lượng.
+model IeltsVocabReview {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  tu        String   @db.VarChar(80)
+  /// 1 Quên · 2 Khó · 3 Nhớ · 4 Dễ
+  diem      Int      @db.SmallInt
+  /// Số ngày kể từ lần ôn trước (null = lần đầu gặp).
+  cachNgay  Float?   @map("cach_ngay")
+  moi       Boolean  @default(false)
+  /// Ngày theo giờ Việt Nam, 'YYYY-MM-DD'.
+  ngay      String   @db.VarChar(10)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId, ngay], name: "idx_ielts_on_tu_ngay")
+  @@map("ielts_vocab_reviews")
+}
+
+/// Mục tiêu học từ mới mỗi ngày (mặc định 100).
+model IeltsDailyGoal {
+  userId    Int      @id @map("user_id")
+  tuMoi     Int      @default(100) @map("tu_moi")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("ielts_daily_goals")
+}
+
+/// Sổ lỗi IELTS tự động (07/10/2026) — mỗi câu làm sai ở phòng thi/luyện tập
+/// thành một dòng; người học ghi lý do + "công thức rút ra"; ôn lại có giãn
+/// cách (≥ 2 ngày rồi 7 ngày) để không nhớ đáp án.
+model IeltsMistake {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  /// Khoá nguồn duy nhất của câu, vd. `cdt:doc-01:12` — sai lại thì cộng dồn.
+  nguon     String    @db.VarChar(160)
+  /// doc | nghe | viet | noi | tuvung
+  kyNang    String    @map("ky_nang") @db.VarChar(12)
+  /// Dạng câu hỏi, vd. TFNG, Matching headings, Gap-fill…
+  dang      String    @db.VarChar(48)
+  cauHoi    String    @map("cau_hoi") @db.Text
+  daChon    String    @map("da_chon") @db.Text
+  dapAn     String    @map("dap_an") @db.Text
+  giaiThich String?   @map("giai_thich") @db.Text
+  /// Mã lý do sai (xem LY_DO trong soLoi.service.ts).
+  lyDo      String?   @map("ly_do") @db.VarChar(24)
+  congThuc  String?   @map("cong_thuc") @db.Text
+  /// Đủ dữ liệu để LÀM LẠI câu (loại, lựa chọn, đáp án chấp nhận).
+  duLieu    Json?     @map("du_lieu") @db.JsonB
+  lanSai    Int       @default(1) @map("lan_sai")
+  /// 0 = chờ ôn lần 1 (sau 2 ngày) · 1 = chờ ôn lần 2 (sau 7 ngày) · 2 = đã vững
+  buoc      Int       @default(0)
+  hanOn     DateTime  @map("han_on")
+  daXong    Boolean   @default(false) @map("da_xong")
+  lanOnCuoi DateTime? @map("lan_on_cuoi")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@unique([userId, nguon], name: "uk_ielts_so_loi", map: "uk_ielts_so_loi")
+  @@index([userId, hanOn], name: "idx_ielts_so_loi_han")
+  @@map("ielts_mistakes")
+}
+
+/// Một lượt làm đề ở phòng thi máy tính (CDT) — Practice hoặc Full test.
+model IeltsCdtAttempt {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  deId      String   @map("de_id") @db.VarChar(40)
+  /// doc | nghe | viet
+  kyNang    String   @map("ky_nang") @db.VarChar(12)
+  /// practice | full
+  cheDo     String   @map("che_do") @db.VarChar(12)
+  dung      Int?
+  tong      Int?
+  band      Float?
+  giay      Int      @default(0)
+  /// Câu trả lời, cờ, bài viết, kết quả AI chấm — để xem lại.
+  chiTiet   Json?    @map("chi_tiet") @db.JsonB
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId, deId], name: "idx_ielts_cdt_user_de")
+  @@map("ielts_cdt_attempts")
+}
+
 // ============================================================
 // CT WORK — quản lý dự án kiểu Jira (23/09/2026)
 // ============================================================

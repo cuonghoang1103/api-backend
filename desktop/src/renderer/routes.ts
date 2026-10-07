@@ -159,7 +159,7 @@ export const ROUTES: readonly RouteDef[] = [
   { path: '/books', label: 'Library', icon: Library, group: 'hoc',
     keywords: ['library', 'books', 'sach', 'sách', 'doc sach', 'đọc sách', 'thu vien', 'thư viện', 'book'] },
   { path: '/ielts', label: 'IELTS', icon: Award, group: 'hoc',
-    keywords: ['ielts', 'luyen thi', 'band', 'listening', 'reading', 'writing', 'speaking', 'phat am', 'phong thi'] },
+    keywords: ['ielts', 'luyen thi', 'band', 'listening', 'reading', 'writing', 'speaking', 'phat am', 'phong thi', 'online test', 'flashcard', 'the tu', 'so loi', 'tu vung'] },
   /* 05/10/2026: khoá tiếng Nhật (0 → N1, kèm Bài giảng trên lớp Dekiru) và tiếng Trung (0 → HSK 6). */
   { path: '/jp', label: 'JP', icon: IconJp, group: 'hoc',
     keywords: ['jp', 'tieng nhat', 'tiếng nhật', 'japanese', 'jlpt', 'n5', 'n1', 'dekiru', 'kanji', 'hiragana', 'katakana'] },

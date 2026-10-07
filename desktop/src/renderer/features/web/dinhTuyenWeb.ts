@@ -64,11 +64,18 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/language/:code/ielts', nap: () => import('@/app/language/[code]/ielts/page') },
   { mau: '/language/:code/ielts/phong-thi', nap: () => import('@/app/language/[code]/ielts/phong-thi/page') },
   { mau: '/language/:code/ielts/luyen-them', nap: () => import('@/app/language/[code]/ielts/luyen-them/page') },
+  { mau: '/language/:code/ielts/thi-may', nap: () => import('@/app/language/[code]/ielts/thi-may/page') },
+  { mau: '/language/:code/ielts/the-tu', nap: () => import('@/app/language/[code]/ielts/the-tu/page') },
+  { mau: '/language/:code/ielts/so-loi', nap: () => import('@/app/language/[code]/ielts/so-loi/page') },
 
   /* ── IELTS — mục riêng trên thanh bên (03/10/2026); cùng trang web, code='en'. ── */
   { mau: '/ielts', nap: () => import('@/app/language/[code]/ielts/page'), thamSoCo: { code: 'en' } },
   { mau: '/ielts/phong-thi', nap: () => import('@/app/language/[code]/ielts/phong-thi/page'), thamSoCo: { code: 'en' } },
   { mau: '/ielts/luyen-them', nap: () => import('@/app/language/[code]/ielts/luyen-them/page'), thamSoCo: { code: 'en' } },
+  // Đợt 1 nâng cấp IELTS (07/10/2026): phòng thi máy tính, flashcard SRS, sổ lỗi.
+  { mau: '/ielts/thi-may', nap: () => import('@/app/language/[code]/ielts/thi-may/page'), thamSoCo: { code: 'en' } },
+  { mau: '/ielts/the-tu', nap: () => import('@/app/language/[code]/ielts/the-tu/page'), thamSoCo: { code: 'en' } },
+  { mau: '/ielts/so-loi', nap: () => import('@/app/language/[code]/ielts/so-loi/page'), thamSoCo: { code: 'en' } },
   { mau: '/language/:code/dekiru', nap: () => import('@/app/language/[code]/dekiru/page') },
   { mau: '/language/:code/dekiru/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page') },
   /* ── JP & CH — mục riêng dưới IELTS (05/10/2026), cùng bộ khung sách-học. ── */

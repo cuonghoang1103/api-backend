@@ -62,6 +62,12 @@ describe('khopTuyenWeb', () => {
     expect(khopTuyenWeb('/ielts/luyen-them')?.thamSo).toEqual({ code: 'en' });
     expect(khopTuyenWeb('/language/en/ielts/phong-thi')?.tuyen.mau).toBe('/language/:code/ielts/phong-thi');
     expect(thuocCayWeb('/ielts/phong-thi')).toBe(true);
+    // Đợt 1 nâng cấp (07/10/2026): phòng thi máy tính, flashcard, sổ lỗi.
+    for (const t of ['thi-may', 'the-tu', 'so-loi']) {
+      expect(khopTuyenWeb(`/ielts/${t}`)?.thamSo).toEqual({ code: 'en' });
+      expect(khopTuyenWeb(`/language/en/ielts/${t}`)?.tuyen.mau).toBe(`/language/:code/ielts/${t}`);
+      expect(thuocCayWeb(`/ielts/${t}`)).toBe(true);
+    }
   });
 
   /*
@@ -288,7 +294,8 @@ describe('khopTuyenWeb', () => {
     // 04/10/2026: +2 rà toàn bộ trang thiếu (/language/:code/dekiru/sach-goc, /finance/phan-tich).
     // 05/10/2026: +1 CT Work Đợt S6 (spec — Spec quality).
     // 06/10/2026: +1 CT Work Resources (thư viện link của dự án).
-    expect(thay.size).toBe(145);
+    // 07/10/2026: +6 IELTS đợt 1 (thi-may · the-tu · so-loi, mỗi trang 2 đường /ielts… và /language/:code/ielts…).
+    expect(thay.size).toBe(151);
   });
 });
 

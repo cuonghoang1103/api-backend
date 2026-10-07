@@ -38,13 +38,31 @@ export function MenuTren({ dang, children }: { dang: TrangMenu; children?: React
   );
 }
 
-type TuyChon = { toi: boolean; co: number; serif: boolean };
-const KHOA = 'ielts-cdt:hien-thi';
-const MAC_DINH: TuyChon = { toi: false, co: 16, serif: false };
+/** toi: null = THEO giao diện của web (class `theme-dark` trên <html>); true/false = người học tự chọn bằng nút ☾/☀. */
+type TuyChon = { toi: boolean | null; co: number; serif: boolean };
+// Khoá mới (07/10): bản đầu lưu `toi:false` mỗi lần đổi cỡ chữ ⇒ ép sáng mãi dù web tối — khoá cũ bỏ.
+const KHOA = 'ielts-cdt:hien-thi-v2';
+const MAC_DINH: TuyChon = { toi: null, co: 16, serif: false };
 
-/** Tuỳ chọn hiển thị — mặc định SÁNG như phòng thi thật, kể cả khi web đang để giao diện tối. */
+/** Web có đang để giao diện tối không — theo dõi class `theme-dark` trên <html> (đổi giao diện không cần tải lại trang). */
+function useWebToi(): boolean {
+  const [toi, setToi] = useState(false);
+  useEffect(() => {
+    const html = document.documentElement;
+    const doc = () => setToi(html.classList.contains('theme-dark'));
+    doc();
+    const mo = new MutationObserver(doc);
+    mo.observe(html, { attributes: true, attributeFilter: ['class'] });
+    return () => mo.disconnect();
+  }, []);
+  return toi;
+}
+
+/** Tuỳ chọn hiển thị — mặc định THEO giao diện sáng/tối của web (đồng bộ mọi trang khác); nút ☾/☀ để tự chọn. */
 export function useHienThi() {
-  const [tc, setTc] = useState<TuyChon>(MAC_DINH);
+  const [luu, setTc] = useState<TuyChon>(MAC_DINH);
+  const webToi = useWebToi();
+  const tc = { ...luu, toi: luu.toi ?? webToi };
   useEffect(() => {
     try { const r = localStorage.getItem(KHOA); if (r) setTc({ ...MAC_DINH, ...(JSON.parse(r) as Partial<TuyChon>) }); } catch { /* bỏ qua */ }
   }, []);

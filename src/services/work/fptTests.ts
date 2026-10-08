@@ -6,6 +6,7 @@
  *   • Xuất Excel ĐÚNG CẤU TRÚC mẫu trường:
  *       Report 5.1 Unit Test   = Guideline · Cover · Functions · Statistics · 1 sheet/hàm (ma trận UTCID).
  *       Report 5.2 Integration = Cover · Test Cases · Test Statistics · 1 sheet/module.
+ *       Report 5.3 System Test = Cover · Test Cases · Test Statistics · 1 sheet/WORKFLOW, Round 1–3 (đợt 3B, 09/10/2026).
  *     Vị trí ô, tiêu đề cột, gộp ô, màu (xanh navy 000080 / 333399 / xanh ô liu 76923C), công thức
  *     COUNTIF/SUM như mẫu (sửa luôn lỗi dải SUM lệch của bản mẫu) + giá trị tính sẵn.
  *   • Nhập lại từ đúng mẫu đó (tệp nhóm đang làm bằng Excel/Google Sheets) — đọc theo NHÃN chứ không cứng toạ độ,
@@ -27,6 +28,8 @@ export type CaseResult = (typeof CASE_RESULTS)[number];
 export const IT_STATUSES = ['Passed', 'Failed', 'Pending', 'N/A'] as const;
 export type ItStatus = (typeof IT_STATUSES)[number];
 export const MAX_ROUNDS = 4;
+/** Report 5.3 System Test: mẫu có đúng 3 vòng (Round 1–3). */
+export const SYS_ROUNDS = 3;
 export const CHANGE_ACTIONS = ['A', 'D', 'M'] as const;
 
 export interface DocMeta {
@@ -41,6 +44,9 @@ export interface DocMeta {
   tcPerKloc: number;
   unitNotes: string | null;
   intNotes: string | null;
+  /** Report 5.3 (đợt 3B) — tuỳ chọn để mã cũ/test cũ dựng DocMeta không cần khai. */
+  sysIssueDate?: string | null;
+  sysNotes?: string | null;
 }
 export interface ChangeData {
   effectiveDate: string;
@@ -738,6 +744,186 @@ export function buildIntegrationSheets(input: IntegrationExportInput): XSheet[] 
   return [cover, tc, ts, ...modules.map((m, i) => itModuleSheet(names[i], m))];
 }
 
+// ─── Report 5.3 — System Test (đợt 3B) ───────────────────────────
+//
+// Khác 5.2 ở đúng những chỗ mẫu khác (đọc từ Report5.3_System Test.xlsx):
+//   • sheet theo WORKFLOW (nhãn "Workflow" thay "Feature"), đúng 3 vòng Round 1–3;
+//   • bảng case bắt đầu ở hàng 10 (không có cột Evidence) — Evidence/Actual gói vào ô Note;
+//   • Test Statistics tiêu đề "TEST STATISTICS", bảng ở hàng 10; danh sách thả xuống đặt ở cột R.
+
+const EVIDENCE_MARK = 'Evidence:';
+/** Ô Note của 5.3 gói Actual + Evidence + ghi chú (mẫu không có cột riêng) — nhập lại tách ra được. */
+export function packSysNote(actual: string | null, evidence: string | null, note: string | null): string {
+  const base = packNote(actual, note);
+  const e = (evidence ?? '').trim();
+  return e ? `${base}${base ? '\n\n' : ''}${EVIDENCE_MARK} ${e}` : base;
+}
+export function unpackSysNote(text: string): { actual: string | null; evidence: string | null; note: string | null } {
+  const t = text.trim();
+  const i = t.lastIndexOf(EVIDENCE_MARK);
+  // Chỉ nhận "Evidence:" đứng đầu một đoạn — tránh cắt nhầm câu có chữ evidence ở giữa.
+  if (i < 0 || (i > 0 && t.slice(0, i).slice(-2) !== '\n\n')) return { ...unpackNote(t), evidence: null };
+  const evidence = t.slice(i + EVIDENCE_MARK.length).trim() || null;
+  return { ...unpackNote(t.slice(0, i)), evidence };
+}
+
+function sysWorkflowSheet(name: string, m: ItModuleData): XSheet {
+  const sh = new XSheet(name);
+  sh.showGrid = false;
+  [17, 34.5, 34.1, 34.6, 28.4, 9.4, 10.6, 7, 9.4, 10.6, 7, 9.4, 10.6, 7, 28.6, 10.1, 8.1, 7.6].forEach((w, i) => sh.width(i + 1, w));
+  const lab = { ...S.label, align: { h: 'left' as const, v: 'top' as const, wrap: true } };
+  const prefix = m.idPrefix.replace(/"/g, '');
+  const st = itStats(m.cases);
+  sh.set(2, 1, 'Workflow', lab);
+  sh.set(2, 2, m.name, S.value).merge(2, 2, 2, 5, S.value);
+  sh.set(3, 1, 'Test requirement', lab);
+  sh.set(3, 2, m.testRequirement ?? m.description ?? '', S.value).merge(3, 2, 3, 5, S.value);
+  sh.height(3, 48);
+  sh.set(4, 1, 'Number of TCs', lab);
+  sh.set(4, 2, { f: `COUNTIF(A11:A1000,"*<${prefix}*")`, v: m.cases.length }, S.value).merge(4, 2, 4, 5, S.value);
+  sh.set(5, 1, 'Testing Round', lab);
+  IT_STATUSES.forEach((s, i) => sh.set(5, 2 + i, s, { ...lab, align: { h: 'center', v: 'top' } }));
+  for (let rd = 0; rd < SYS_ROUNDS; rd++) {
+    const col = colName(6 + rd * 3);
+    sh.set(6 + rd, 1, `Round ${rd + 1}`, lab);
+    const c = st.rounds[rd];
+    [c.passed, c.failed, c.pending, c.na].forEach((v, i) =>
+      sh.set(6 + rd, 2 + i, { f: `COUNTIF($${col}$11:$${col}$1000,${colName(2 + i)}$5)`, v }, { ...S.value, align: { h: 'center', v: 'top' } }));
+  }
+  // Danh sách giá trị cho ô thả xuống — mẫu đặt ở R2:R5.
+  IT_STATUSES.forEach((s, i) => sh.set(2 + i, 18, s, S.value));
+
+  const h = 10;
+  ['Test Case ID', 'Test Case Description', 'Test Case Procedure', 'Expected Results', 'Pre-conditions'].forEach((t, i) => sh.set(h, i + 1, t, S.oliveHead));
+  for (let rd = 0; rd < SYS_ROUNDS; rd++) {
+    sh.set(h, 6 + rd * 3, `Round ${rd + 1}`, S.oliveHead);
+    sh.set(h, 7 + rd * 3, 'Test date', S.oliveHead);
+    sh.set(h, 8 + rd * 3, 'Tester', S.oliveHead);
+  }
+  sh.set(h, 15, 'Note', S.oliveHead);
+  sh.height(h, 25.5);
+
+  let r = h + 1;
+  let section: string | null | undefined;
+  let n = 0;
+  const first = r;
+  for (const c of m.cases) {
+    if ((c.section ?? null) !== (section ?? null) && c.section) {
+      sh.set(r, 1, c.section, { font: { name: 'Tahoma', sz: 10, b: true }, fill: AQUA, border: 'thin', align: { v: 'center' } });
+      for (let col = 2; col <= 15; col++) sh.style(r, col, { fill: AQUA, border: 'thin' });
+      r++;
+    }
+    section = c.section;
+    n++;
+    const wrap = { ...S.cell, font: { name: 'Tahoma', sz: 10 } };
+    sh.set(r, 1, `<${prefix}${n}>`, wrap);
+    sh.set(r, 2, c.description, wrap);
+    sh.set(r, 3, packProcedure(c.procedure, c.testData), wrap);
+    sh.set(r, 4, c.expected ?? '', wrap);
+    sh.set(r, 5, c.preConditions ?? '', wrap);
+    for (let rd = 0; rd < SYS_ROUNDS; rd++) {
+      const x = c.rounds[rd];
+      sh.set(r, 6 + rd * 3, x?.status ?? null, wrap);
+      sh.set(r, 7 + rd * 3, dateVal(x?.date), S.cellDate);
+      sh.set(r, 8 + rd * 3, x?.tester ?? null, wrap);
+    }
+    sh.set(r, 15, packSysNote(c.actual, c.evidence, c.note), wrap);
+    r++;
+  }
+  const last = Math.max(r - 1, first) + 50;
+  sh.listValidation([0, 1, 2].map((rd) => `${colName(6 + rd * 3)}${first}:${colName(6 + rd * 3)}${last}`).join(' '), [...IT_STATUSES]);
+  sh.freeze = { col: 2, row: h + 1 };
+  return sh;
+}
+
+export interface SystemExportInput { meta: DocMeta; changes: ChangeData[]; workflows: ItModuleData[] }
+
+export function buildSystemSheets(input: SystemExportInput): XSheet[] {
+  const { meta, workflows } = input;
+  const taken = new Set(['cover', 'test cases', 'test statistics']);
+  const names = workflows.map((m) => safeSheetName(m.sheetName || m.name, taken, 'Workflow'));
+  const cover = coverSheet('SYSTEM TEST REPORT DOCUMENT', meta, meta.sysIssueDate ?? null, 'TestReport5.3', input.changes, 'Create system test document');
+  // Mẫu 5.3 hẹp cột C/D hơn 5.1/5.2.
+  [28.1, 10, 18.2, 8, 38, 48.1].forEach((w, i) => cover.width(i + 1, w));
+
+  const tc = new XSheet('Test Cases');
+  tc.showGrid = false;
+  [1.4, 6.4, 26.5, 20.1, 56, 52.6].forEach((w, i) => tc.width(i + 1, w));
+  tc.set(1, 4, 'TEST CASE LIST', S.title);
+  tc.height(1, 30);
+  const head = (r: number, l: string, v: unknown) => {
+    tc.set(r, 2, l, S.label).merge(r, 2, r, 3, S.label);
+    tc.set(r, 4, v as never, S.value).merge(r, 4, r, 6, S.value);
+  };
+  head(3, 'Project Name', { f: 'Cover!B4', v: meta.projectName });
+  head(4, 'Project Code', { f: 'Cover!B5', v: meta.projectCode });
+  head(5, 'Test Environment Setup Description', meta.environment || '<List environment required by this system\n1. Server\n2. Database\n3. Web Browser\n...>');
+  tc.height(5, 75);
+  ['No', 'Function Name', 'Sheet Name', 'Description', 'Pre-Condition'].forEach((t, i) => tc.set(8, i + 2, t, S.indigoHead));
+  workflows.forEach((m, i) => {
+    const r = 9 + i;
+    tc.set(r, 2, i + 1, { ...S.cellCenter, numFmt: '0.0' });
+    tc.set(r, 3, m.name, S.cell);
+    tc.set(r, 4, names[i], S.link).link(r, 4, names[i], names[i]);
+    tc.set(r, 5, m.description ?? '', S.cell);
+    tc.set(r, 6, m.preCondition ?? '', S.cell);
+  });
+
+  const ts = new XSheet('Test Statistics');
+  ts.showGrid = false;
+  ts.width(1, 4.5).width(2, 18.4).width(3, 26.4).width(4, 11.6).width(5, 11).width(6, 11).width(7, 9).width(8, 35.5);
+  ts.set(1, 2, 'TEST STATISTICS', { ...S.title, fill: WHITE, align: { h: 'center' } }).merge(1, 2, 1, 8);
+  ts.height(1, 30);
+  const sRow = (r: number, l1: string, v1: unknown, l2: string, v2: unknown, date = false) => {
+    ts.set(r, 2, l1, S.label);
+    ts.set(r, 3, v1 as never, S.value).merge(r, 3, r, 4, S.value);
+    ts.set(r, 5, l2, S.label).merge(r, 5, r, 7, S.label);
+    ts.set(r, 8, v2 as never, date ? S.valueDate : S.value);
+  };
+  sRow(3, 'Project Name', { f: 'Cover!B4', v: meta.projectName }, 'Creator', meta.creator ?? '');
+  sRow(4, 'Project Code', { f: 'Cover!B5', v: meta.projectCode }, 'Reviewer/Approver', meta.reviewer ?? '');
+  sRow(5, 'Document Code', { f: `C4&"_"&"Test Report"&"_"&"v${meta.version.replace(/"/g, '')}"`, v: `${meta.projectCode}_Test Report_v${meta.version}` }, 'Issue Date', dateVal(meta.sysIssueDate), true);
+  ts.set(6, 2, 'Notes', S.label);
+  ts.set(6, 3, meta.sysNotes ?? '', S.value).merge(6, 3, 6, 8, S.value);
+  ts.height(6, 30);
+  ['No', 'Module code', 'Passed', 'Failed', 'Pending', 'N/A', 'Number of  test cases'].forEach((t, i) => ts.set(10, i + 2, t, S.navyHead));
+  const tot = { passed: 0, failed: 0, pending: 0, na: 0, total: 0 };
+  workflows.forEach((m, i) => {
+    const r = 11 + i;
+    const st = itStats(m.cases.map((c) => ({ rounds: c.rounds.slice(0, SYS_ROUNDS) })));
+    // Như 5.2: số của vòng chạy cuối; ca chưa có kết quả ở vòng đó tính là Pending cho khớp tổng.
+    const round = Math.max(Math.min(st.lastRound, SYS_ROUNDS), 1);
+    const roundRow = 5 + round;
+    const counts = st.lastRound ? st.rounds[round - 1] : { passed: 0, failed: 0, pending: st.total, na: 0 };
+    const extra = st.lastRound ? st.total - (counts.passed + counts.failed + counts.pending + counts.na) : 0;
+    const q = quoteSheet(names[i]);
+    ts.set(r, 2, i + 1, { ...S.cellCenter, numFmt: '0.0' });
+    ts.set(r, 3, { f: `${q}!B2`, v: m.name }, S.link);
+    ts.link(r, 3, names[i], m.name);
+    ts.set(r, 4, { f: `${q}!B${roundRow}`, v: counts.passed }, S.cellCenter);
+    ts.set(r, 5, { f: `${q}!C${roundRow}`, v: counts.failed }, S.cellCenter);
+    ts.set(r, 6, { f: extra ? `${q}!B4-${q}!B${roundRow}-${q}!C${roundRow}-${q}!E${roundRow}` : `${q}!D${roundRow}`, v: counts.pending + extra }, S.cellCenter);
+    ts.set(r, 7, { f: `${q}!E${roundRow}`, v: counts.na }, S.cellCenter);
+    ts.set(r, 8, { f: `${q}!B4`, v: st.total }, S.cellCenter);
+    tot.passed += counts.passed; tot.failed += counts.failed; tot.pending += counts.pending + extra; tot.na += counts.na; tot.total += st.total;
+  });
+  const sub = 11 + workflows.length;
+  const last = Math.max(sub - 1, 11);
+  ts.set(sub, 3, 'Sub total', S.subtotal);
+  [tot.passed, tot.failed, tot.pending, tot.na, tot.total].forEach((v, j) => ts.set(sub, 4 + j, { f: `SUM(${colName(4 + j)}11:${colName(4 + j)}${last})`, v }, S.subtotal));
+  const cov = itCoverage(tot);
+  const pRow = (r: number, l: string, f: string, v: number) => {
+    ts.set(r, 3, l, S.pctLabel);
+    ts.set(r, 5, { f, v }, S.pctValue);
+    ts.set(r, 6, '%', { font: { name: 'Tahoma', sz: 10 } });
+  };
+  const base = `(H${sub}-G${sub})`;
+  pRow(sub + 2, 'Test coverage', `IF(${base}=0,0,(D${sub}+E${sub})*100/${base})`, cov.coverage);
+  pRow(sub + 3, 'Test successful coverage', `IF(${base}=0,0,D${sub}*100/${base})`, cov.successCoverage);
+
+  return [cover, tc, ts, ...workflows.map((m, i) => sysWorkflowSheet(names[i], m))];
+}
+
 // ─── Nhập (đọc theo NHÃN) ────────────────────────────────────────
 
 const norm = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase();
@@ -1035,7 +1221,7 @@ function parseItModuleSheet(sh: RSheet, warnings: string[]): ItModuleData | null
     else if (t === 'test date' && rounds.length) rounds[rounds.length - 1].date = c;
     else if (t === 'tester' && rounds.length) rounds[rounds.length - 1].tester = c;
   }
-  const name = rightOf(sh, find(sh, /^feature$/, 10)) || sh.name;
+  const name = rightOf(sh, find(sh, /^(feature|workflow)$/, 10)) || sh.name;
   const m: ItModuleData = {
     name: name.slice(0, 120), sheetName: sh.name.slice(0, 31), idPrefix: '',
     description: null, preCondition: null,
@@ -1057,7 +1243,8 @@ function parseItModuleSheet(sh: RSheet, warnings: string[]): ItModuleData | null
       if (pm) m.idPrefix = pm[1].toUpperCase().slice(0, 10);
     }
     const { procedure, testData } = unpackProcedure(proc);
-    const { actual, note } = unpackNote(txt(r, col.note));
+    // 5.3 không có cột Evidence ⇒ gói trong Note; 5.2 có cột riêng (ưu tiên cột).
+    const { actual, note, evidence: evNote } = unpackSysNote(txt(r, col.note));
     m.cases.push({
       section,
       description: desc || proc.split('\n')[0] || `Case ${m.cases.length + 1}`,
@@ -1066,7 +1253,7 @@ function parseItModuleSheet(sh: RSheet, warnings: string[]): ItModuleData | null
       expected: exp || null,
       actual: txt(r, col.actual) || actual,
       preConditions: txt(r, col.pre) || null,
-      evidence: txt(r, col.ev) || null,
+      evidence: txt(r, col.ev) || evNote,
       note,
       rounds: rounds.slice(0, MAX_ROUNDS).map((rc) => ({
         status: IT_STATUS_OF(txt(r, rc.status)),
@@ -1082,11 +1269,11 @@ function parseItModuleSheet(sh: RSheet, warnings: string[]): ItModuleData | null
   return m;
 }
 
-export function parseIntegrationWorkbook(sheets: RSheet[]): ParsedIntegration {
+export function parseIntegrationWorkbook(sheets: RSheet[], opts: { system?: boolean } = {}): ParsedIntegration {
   const warnings: string[] = [];
   const cover = parseCover(sheetByName(sheets, 'Cover'));
   const out: ParsedIntegration = { cover, reviewer: null, notes: null, environment: null, modules: [], warnings };
-  const stat = sheetByName(sheets, 'Test Statistics') ?? sheets.find((s) => find(s, /^integration test report$/, 5));
+  const stat = sheetByName(sheets, 'Test Statistics') ?? sheets.find((s) => find(s, /^(integration test report|test statistics)$/, 5));
   if (stat) {
     out.reviewer = rightOf(stat, find(stat, /^reviewer\/approver$/)) || null;
     out.notes = rightOf(stat, find(stat, /^notes$/)) || null;
@@ -1130,10 +1317,16 @@ export function parseIntegrationWorkbook(sheets: RSheet[]): ParsedIntegration {
     const free = (n?: string) => { const sh = n ? sheetByName(sheets, n) : undefined; return sh && parsed.has(sh.name) && !used.has(sh.name) ? sh : undefined; };
     const byFeature = [...parsed.entries()].find(([k, v]) => !used.has(k) && norm(v.name) === norm(it.name))?.[0];
     const target = free(it.sheet) ?? free(it.link) ?? free(it.name) ?? free(byFeature);
-    if (!target) { warnings.push(`Test Cases row "${it.name}": sheet "${it.sheet}" not found — skipped`); continue; }
+    if (!target) {
+      // 5.3: nhiều dòng "Function" trỏ cùng một sheet workflow — dòng sau dòng đầu không phải lỗi.
+      const again = opts.system && [it.sheet, it.link].some((n) => { const sh = n ? sheetByName(sheets, n) : undefined; return sh && used.has(sh.name); });
+      if (!again) warnings.push(`Test Cases row "${it.name}": sheet "${it.sheet}" not found — skipped`);
+      continue;
+    }
     used.add(target.name);
     const m = parsed.get(target.name)!;
-    m.name = it.name.slice(0, 120);
+    // 5.3: tên chuẩn là nhãn "Workflow" trong sheet (dòng Test Cases là tên chức năng con).
+    if (!opts.system) m.name = it.name.slice(0, 120);
     m.description = it.description;
     m.preCondition = it.pre;
     out.modules.push(m);
@@ -1146,11 +1339,14 @@ export function parseIntegrationWorkbook(sheets: RSheet[]): ParsedIntegration {
   return out;
 }
 
-/** Đoán loại tệp: 5.1 có UTCID, 5.2 có "Test Case ID". */
-export function detectReport(sheets: RSheet[]): 'unit' | 'integration' | null {
+/** Đoán loại tệp: 5.1 có UTCID; 5.3 có nhãn "Workflow" (hoặc Cover "SYSTEM TEST…"); 5.2 có "Test Case ID". */
+export function detectReport(sheets: RSheet[]): 'unit' | 'integration' | 'system' | null {
   if (sheets.some((s) => find(s, /^utcid\s*\d+/, 40, 80))) return 'unit';
-  if (sheets.some((s) => find(s, /^test case id$/, 40))) return 'integration';
-  return null;
+  const hasCases = sheets.some((s) => find(s, /^test case id$/, 40));
+  if (!hasCases) return null;
+  const cover = sheetByName(sheets, 'Cover');
+  if (sheets.some((s) => find(s, /^test case id$/, 40) && find(s, /^workflow$/, 10)) || (cover && find(cover, /^system test/, 5))) return 'system';
+  return 'integration';
 }
 
 /** Excel serial helper xuất ra cho test. */

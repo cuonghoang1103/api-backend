@@ -19,6 +19,8 @@ import { Dialog, relativeTime, Spinner, UserAvatar } from '../ui';
 import { tokensFmt, usd } from './AgentBits';
 import { useAgentDirectory, useWorkspaceAgents } from './directory';
 import { LeaseBadge, projectHasAgents } from './leases';
+import { IssueBuiltinRuns, ProUpsell } from './BuiltinBits';
+import { builtinApi, builtinKeys } from '@/lib/work-builtin-api';
 
 type LeaseRow = Activity['leases'][number];
 
@@ -36,8 +38,9 @@ function leaseLine(l: LeaseRow) {
 /**
  * CTW-34 (GĐ1 cho agent EXTERNAL): "Assign to AI" = giao thẻ cho một agent ACTIVE của dự án — đó chính là hàng đợi của
  * agent (thẻ giao cho nó, chưa có lease; thiết kế §4.4). Inbox `issue.assigned` tự sinh ⇒ agent nhận qua SSE/webhook/
- * wait_events rồi claim. Lời dặn (tuỳ chọn) đi kèm thành bình luận INTERNAL @nhắc agent. Agent BUILTIN chạy hộ (GĐ2,
- * agent-runs) chưa có — nút này không giả vờ chạy gì.
+ * wait_events rồi claim. Lời dặn (tuỳ chọn) đi kèm thành bình luận INTERNAL @nhắc agent.
+ * Đợt 3C: agent BUILTIN ("Built-in") — CT Work chạy hộ: POST …/agent-runs (giao + xếp lượt, lời dặn đi vào lượt chạy).
+ * Chỉ Pro/admin; tài khoản thường thấy nút nâng cấp thay cho nút giao.
  */
 function AssignToAi({ config, issue }: { config: ProjectConfig; issue: IssueDetail }) {
   const qc = useQueryClient();
@@ -46,9 +49,16 @@ function AssignToAi({ config, issue }: { config: ProjectConfig; issue: IssueDeta
   const [pick, setPick] = useState<number | null>(null);
   const [note, setNote] = useState('');
   const agents = config.members.filter((m) => m.kind === 'AGENT' && m.role === 'MEMBER' && dir[m.id]?.status === 'ACTIVE');
+  const anyBuiltin = agents.some((m) => dir[m.id]?.runtime === 'BUILTIN');
+  const budget = useQuery({ queryKey: builtinKeys.budget(config.workspace.id), queryFn: () => builtinApi.budget(config.workspace.id), enabled: open && anyBuiltin, retry: false, staleTime: 30_000 });
+  const pickedBuiltin = !!pick && dir[pick]?.runtime === 'BUILTIN';
   const go = useMutation({
     mutationFn: async () => {
       const a = agents.find((m) => m.id === pick)!;
+      if (dir[a.id]?.runtime === 'BUILTIN') {
+        await builtinApi.start(config.id, issue.number, { agentId: dir[a.id].agentId, note: note.trim() || null });
+        return a;
+      }
       await workApi.updateIssue(config.id, issue.number, { assigneeId: a.id, version: issue.version });
       if (note.trim()) {
         await workApi.addComment(config.id, issue.number, {
@@ -62,7 +72,9 @@ function AssignToAi({ config, issue }: { config: ProjectConfig; issue: IssueDeta
       qc.invalidateQueries({ queryKey: wk.issue(config.id) });
       qc.invalidateQueries({ queryKey: wk.board(config.id) });
       qc.invalidateQueries({ queryKey: wk.issues(config.id) });
-      toast.success(`Assigned to ${userName(a)} — it will pick the issue up from its queue`);
+      qc.invalidateQueries({ queryKey: builtinKeys.issueRuns(config.id, issue.number) });
+      qc.invalidateQueries({ queryKey: agentKeys.issueActivity(config.id, issue.number) });
+      toast.success(dir[a.id]?.runtime === 'BUILTIN' ? `${userName(a)} started — CT Work runs it now; it moves the issue to review when done` : `Assigned to ${userName(a)} — it will pick the issue up from its queue`);
       setOpen(false); setNote(''); setPick(null);
     },
     onError: (err) => toast.error(workError(err, 'Could not assign the issue')),
@@ -83,15 +95,27 @@ function AssignToAi({ config, issue }: { config: ProjectConfig; issue: IssueDeta
               <input type="radio" name="ai-agent" className="accent-[var(--w-accent)]" checked={pick === m.id} onChange={() => setPick(m.id)} />
               <UserAvatar user={m} size={22} />
               <span className="min-w-0 flex-1 truncate text-[13px] font-medium">{userName(m)}</span>
+              {dir[m.id]?.runtime === 'BUILTIN' && <span className="shrink-0 rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 py-px text-[10.5px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]">Built-in</span>}
               <span className="shrink-0 font-mono text-[11px] text-[var(--w-text-3)]">{dir[m.id]?.model}</span>
             </label>
           ))}
         </div>
-        <label className="w-label" htmlFor="ai-note">Instructions (optional)</label>
-        <textarea id="ai-note" className="w-input min-h-[72px] py-2" maxLength={2000} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Anything it should know — posted as an internal comment that @mentions the agent." />
+        {pickedBuiltin && budget.data && !budget.data.canUse ? (
+          <ProUpsell />
+        ) : (
+          <>
+            {pickedBuiltin && (
+              <p className="mb-3 text-[12.5px] leading-relaxed text-[var(--w-text-2)]">
+                Built-in: CT Work runs it now on its own AI — at most {budget.data?.maxSteps ?? 12} steps and {budget.data ? `$${budget.data.runCapUsd}` : 'the run cap'} for this issue. You can stop it any time.
+              </p>
+            )}
+            <label className="w-label" htmlFor="ai-note">Instructions (optional)</label>
+            <textarea id="ai-note" className="w-input min-h-[72px] py-2" maxLength={2000} value={note} onChange={(e) => setNote(e.target.value)} placeholder={pickedBuiltin ? 'Anything it should know, e.g. “Write 5.1 test cases for OrderService.total”.' : 'Anything it should know — posted as an internal comment that @mentions the agent.'} />
+          </>
+        )}
         <div className="mt-4 flex justify-end gap-2">
           <button type="button" className="w-btn" onClick={() => setOpen(false)}>Cancel</button>
-          <button type="button" className="w-btn w-btn-primary" disabled={!pick || go.isPending} onClick={() => go.mutate()}>{go.isPending && <Spinner size={12} />} Assign</button>
+          <button type="button" className="w-btn w-btn-primary" disabled={!pick || go.isPending || (pickedBuiltin && budget.data?.canUse === false)} onClick={() => go.mutate()} data-testid="assign-to-ai-go">{go.isPending && <Spinner size={12} />} {pickedBuiltin ? 'Assign and start' : 'Assign'}</button>
         </div>
       </Dialog>
     </>
@@ -111,11 +135,15 @@ export default function IssueAgentActivity({ config, issue, done }: { config: Pr
     staleTime: 15_000,
   });
   const [more, setMore] = useState(false);
+  // Hook phải đứng TRƯỚC mọi return sớm (React #310).
+  const dir = useAgentDirectory((st) => st.byUser);
   if (!on || !q.data) return null;
   const { leases } = q.data;
   // Server có thể trả usage với tổng 0 dòng ⇒ coi như chưa có chi phí.
   const usage = q.data.usage && q.data.usage.totals.rows > 0 ? q.data.usage : null;
   const assignedToAgent = assignee?.kind === 'AGENT';
+  // Đợt 3C: thẻ giao cho agent DỰNG SẴN — trạng thái nằm ở lượt chạy (IssueBuiltinRuns), không "chờ nó nhận việc".
+  const assignedBuiltin = assignedToAgent && dir[assignee!.id]?.runtime === 'BUILTIN';
   if (!leases.length && !usage && !assignedToAgent) {
     // Chưa dính agent nào: chỉ còn nút "Assign to AI" (thẻ chưa xong, người xem sửa được thẻ).
     return done ? null : <div className="flex justify-end"><AssignToAi config={config} issue={issue} /></div>;
@@ -139,12 +167,19 @@ export default function IssueAgentActivity({ config, issue, done }: { config: Pr
             <span className="text-[12px] text-[var(--w-text-3)]">{leaseLine(active)}</span>
             {active.progress && <p className="w-full pl-[34px] text-[12.5px] text-[var(--w-text-2)]">{active.progress}</p>}
           </div>
-        ) : assignedToAgent ? (
+        ) : assignedToAgent && !assignedBuiltin ? (
           <div className="flex items-center gap-2.5 px-3 py-2.5 text-[13px] text-[var(--w-text-2)]">
             <UserAvatar user={assignee} size={22} />
             <span>Assigned to <b className="font-medium text-[var(--w-text)]">{userName(assignee)}</b> — waiting for it to pick the issue up.</span>
           </div>
         ) : null}
+
+        {(assignedToAgent || leases.length > 0) && (
+          <IssueBuiltinRuns
+            pid={config.id} num={issueNumber} canRun={!done && !!config.permissions.editIssues}
+            builtinAgent={assignedBuiltin ? { agentId: dir[assignee!.id]!.agentId, name: userName(assignee) } : null}
+          />
+        )}
 
         {past.length > 0 && (
           <div className="px-3 py-2">

@@ -19,7 +19,8 @@ export type ProjectType = (typeof PROJECT_TYPES)[number];
 export const PROJECT_VISIBILITY = ['WORKSPACE', 'PRIVATE'] as const;
 export type ProjectVisibility = (typeof PROJECT_VISIBILITY)[number];
 
-export const PROJECT_TEMPLATES = ['BLANK', 'SWR302', 'SWT301', 'SWP391', 'FREELANCE', 'COMPANY'] as const;
+// CTW đợt 3A: CAPSTONE = đồ án tốt nghiệp FPT SEP490/ISP490 (giai đoạn theo lịch Report 1→7, iteration, mẫu tài liệu FPT).
+export const PROJECT_TEMPLATES = ['BLANK', 'SWR302', 'SWT301', 'SWP391', 'FREELANCE', 'COMPANY', 'CAPSTONE'] as const;
 export type ProjectTemplate = (typeof PROJECT_TEMPLATES)[number];
 
 export const STATUS_CATEGORIES = ['TODO', 'IN_PROGRESS', 'DONE'] as const;

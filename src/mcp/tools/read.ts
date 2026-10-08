@@ -40,6 +40,7 @@ async function scopedProjects(ctx: McpCtx) {
 
 const whoami = defineTool({
   name: 'whoami',
+  surfaces: { ask: false, builtin: false },
   title: 'Who am I',
   description: 'Shows which CT Work account this token acts as: the user (kind HUMAN or AGENT), for agents the model, owner (the person responsible) and status, and the token scopes. Call this first.',
   write: false,
@@ -72,6 +73,7 @@ const whoami = defineTool({
 
 const listProjects = defineTool({
   name: 'list_projects',
+  surfaces: { ask: false, builtin: false },
   title: 'List projects',
   description: 'Lists the CT Work projects this token can use: key, name, kind, your role and enabled modules. Use the key as the "project" argument of other tools.',
   write: false,
@@ -89,6 +91,7 @@ const listProjects = defineTool({
 
 const myWork = defineTool({
   name: 'my_work',
+  surfaces: { ask: false, builtin: false },
   title: 'My work',
   description: 'Open issues assigned to you (optionally in one project), oldest due first, with your active leases. This is your work queue.',
   write: false,

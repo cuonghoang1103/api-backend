@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import { userName } from '@/lib/work-api';
 import { agentKeys, agentsApi, type AgentStatus, type WorkAgent } from '@/lib/work-agents-api';
 
-export interface AgentInfo { agentId: number; model: string; status: AgentStatus; owner: string; ownerId: number }
+export interface AgentInfo { agentId: number; model: string; status: AgentStatus; owner: string; ownerId: number; runtime?: 'EXTERNAL' | 'BUILTIN' }
 
 interface DirState {
   byUser: Record<number, AgentInfo>;
@@ -24,7 +24,7 @@ export const useAgentDirectory = create<DirState>((set) => ({
   byUser: {},
   put: (agents) => set((s) => {
     const next = { ...s.byUser };
-    for (const a of agents) next[a.userId] = { agentId: a.id, model: a.model, status: a.status, owner: userName(a.owner), ownerId: a.ownerId };
+    for (const a of agents) next[a.userId] = { agentId: a.id, model: a.model, status: a.status, owner: userName(a.owner), ownerId: a.ownerId, runtime: a.runtime };
     return { byUser: next };
   }),
 }));

@@ -82,6 +82,13 @@ export function templateSpec(template: ProjectTemplate, type: ProjectType): Temp
       return { statuses, types: [...BASE_TYPES, 'TEST'], bugWorkflow: BUG_LIFECYCLE, settings: { ...base, estimation: 'HOURS' } };
     case 'SWP391':
       return { statuses, types: BASE_TYPES, bugWorkflow: BUG_LIFECYCLE, settings: base, firstSprint: type === 'SCRUM' };
+    case 'CAPSTONE':
+      // CTW đợt 3A: đồ án tốt nghiệp FPT. Ước lượng theo GIỜ (Report 2 tính man-day = giờ/8); Requirement + Test cho
+      // SRS/RTM/5.1–5.3; vòng đời Bug có Retest. Sprint = Iteration 1–3 do capstone.service.ts dựng (không "Sprint 1").
+      return {
+        statuses, types: ['EPIC', 'REQUIREMENT', 'STORY', 'TASK', 'BUG', 'TEST', 'SUBTASK'], bugWorkflow: BUG_LIFECYCLE,
+        settings: { ...base, estimation: 'HOURS', capstone: { course: 'SEP490' } },
+      };
     case 'FREELANCE':
       return { statuses, types: BASE_TYPES, settings: { ...base, estimation: 'HOURS', sprintLengthDays: 7 } };
     case 'COMPANY':

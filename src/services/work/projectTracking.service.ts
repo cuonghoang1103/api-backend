@@ -17,12 +17,25 @@
  *
  * Sheet Summary: mỗi PIC một dòng — số Req, LOC dự kiến theo iteration, LOC
  * đã chấm, số Req đạt Quality ≥ L2. Đây là con số GV nhìn để chấm từng người.
+ *
+ * Đợt 3B (09/10/2026, A23) — thêm `variant` đúng từng mẫu lớp:
+ *   • SEP490    = Report2_Project Tracking.xlsx: Scope · WBS · Q&A · TimeLogs · Defects · Issues
+ *                 (giai đoạn/thẻ/worklog/Bug/RAID — dữ liệu ở fptReports.service.loadSep490).
+ *   • SWP391_T1 = Template1_Project Tracking.xlsx: Project · Iter1…Iter4 (Req + pha SRS/SDS theo việc con).
+ *   • ISSUES    = Template4_Issues Report.xlsx: mỗi thẻ một dòng kiểu GitLab (State, Milestone, Labels…).
+ *   • SWP391    = Product + Summary (bản 25/09, giữ nguyên làm mặc định).
  */
 
 import { prisma } from '../../config/database.js';
-import { displayName } from './common.js';
+import { displayName, frontendUrl } from './common.js';
 import { xlsxWorkbook } from './exchange.service.js';
+import { buildSep490Sheets, buildTemplate1Sheets, buildTemplate4Sheet, iterationLabel, type T1Row, type T4Row } from './fptReports.js';
+import { loadSep490 } from './fptReports.service.js';
 import { requireProject } from './permissions.js';
+import { writeXlsx } from './xlsxStyled.js';
+
+export const TRACKING_VARIANTS = ['SWP391', 'SEP490', 'SWP391_T1', 'ISSUES'] as const;
+export type TrackingVariant = (typeof TRACKING_VARIANTS)[number];
 
 const PHASES: Array<[label: string, prefix: RegExp]> = [
   ['SRS', /^write srs\b/i],
@@ -117,8 +130,16 @@ export async function loadRequirements(projectId: number): Promise<{ project: { 
 
 export const PHASE_LABELS = PHASES.map(([l]) => l);
 
-export async function projectTrackingXlsx(userId: number, projectId: number): Promise<{ file: string; buffer: Buffer; count: number }> {
+export async function projectTrackingXlsx(userId: number, projectId: number, variant: TrackingVariant = 'SWP391'): Promise<{ file: string; buffer: Buffer; count: number }> {
   await requireProject(userId, projectId, 'project.view');
+  const stamp = new Date().toISOString().slice(0, 10);
+  if (variant === 'SEP490') {
+    const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true } });
+    const input = await loadSep490(projectId);
+    return { file: `${p.key}_Report2_Project_Tracking_${stamp}`, buffer: writeXlsx(buildSep490Sheets(input), { title: `${p.key} — Project Tracking` }), count: input.wbs.length };
+  }
+  if (variant === 'SWP391_T1') return template1Xlsx(projectId, stamp);
+  if (variant === 'ISSUES') return issuesReportXlsx(projectId, stamp);
   const { project, rows } = await loadRequirements(projectId);
 
   const product = {
@@ -156,3 +177,73 @@ export async function projectTrackingXlsx(userId: number, projectId: number): Pr
   const file = `${project.key}_ProjectTracking_${new Date().toISOString().slice(0, 10)}`;
   return { file, buffer: xlsxWorkbook([product, summary]), count: rows.length };
 }
+
+// ─── Đợt 3B: SWP391 Template1 (Project + Iter1…Iter4) ────────────
+
+async function template1Xlsx(projectId: number, stamp: string) {
+  const { project, rows } = await loadRequirements(projectId);
+  // Feature = epic cha · Actor = trường "Actor" (đọc theo tên) — như cách loadRequirements đọc trường.
+  const extra = await prisma.workIssue.findMany({
+    where: { projectId, number: { in: rows.map((r) => r.number) } },
+    select: {
+      number: true, descriptionText: true, parent: { select: { title: true, type: { select: { key: true } } } }, wbsItem: { select: { feature: true } },
+      customValues: { where: { field: { name: { equals: 'Actor', mode: 'insensitive' } } }, select: { value: true, field: { select: { kind: true, options: true } } } },
+    },
+  });
+  const by = new Map(extra.map((e) => [e.number, e]));
+  const phase = (t: string) => (t === 'Done' ? 'Done' : t === 'Doing' ? 'Doing' : t ? 'Pending' : '');
+  const t1: T1Row[] = rows.map((r) => {
+    const e = by.get(r.number);
+    const cv = e?.customValues[0];
+    const actor = cv ? display({ id: 0, name: 'Actor', kind: cv.field.kind, options: cv.field.options }, cv.value) : null;
+    const status = r.done ? 'Done' : r.category === 'IN_PROGRESS' ? 'Doing' : 'To Do';
+    return {
+      screen: r.screen ? `${r.screen} ${r.title}` : r.title,
+      feature: e?.wbsItem?.feature ?? (e?.parent?.type.key === 'EPIC' ? e.parent.title : r.wf),
+      actor: actor ? String(actor) : '',
+      description: (e?.descriptionText ?? '').split('\n').map((x) => x.trim()).find(Boolean)?.slice(0, 400) ?? '',
+      inCharge: r.pic, status, actual: r.done ? r.iteration : '', updated: 'none', details: r.key,
+      iteration: r.iteration, srs: phase(r.phases[0]), sds: phase(r.phases[1]), notes: `${r.key} · ${r.status}`,
+    };
+  });
+  return { file: `${project.key}_ProjectTracking_T1_${stamp}`, buffer: writeXlsx(buildTemplate1Sheets(t1), { title: `${project.key} — Project Tracking` }), count: t1.length };
+}
+
+// ─── Đợt 3B: SWP391 Template4 Issues Report ──────────────────────
+
+const CAT_LABEL: Record<string, string> = { TODO: '1_To Do', IN_PROGRESS: '2_Doing', DONE: '3_Done' };
+
+async function issuesReportXlsx(projectId: number, stamp: string) {
+  const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true, workspace: { select: { slug: true } } } });
+  const issues = await prisma.workIssue.findMany({
+    where: { projectId, deletedAt: null },
+    orderBy: { number: 'asc' },
+    take: 5000,
+    select: {
+      number: true, title: true, descriptionText: true, createdAt: true, dueDate: true,
+      type: { select: { key: true, name: true } }, status: { select: { category: true } },
+      assignee: { select: { username: true, fullName: true, displayName: true } },
+      fixVersion: { select: { name: true } }, sprint: { select: { name: true } },
+      labels: { select: { label: { select: { name: true } } } },
+      parent: { select: { title: true, type: { select: { key: true } } } },
+    },
+  });
+  const typeLabel = (k: string, name: string) => (k === 'BUG' ? 'Defect' : k === 'STORY' || k === 'REQUIREMENT' || k === 'EPIC' ? 'WP' : k === 'SUBTASK' ? 'Task' : name);
+  const rows: T4Row[] = issues.map((i) => ({
+    title: i.title,
+    description: (i.descriptionText ?? '').replace(/\s+/g, ' ').trim().slice(0, 500),
+    id: i.number,
+    url: frontendUrl(`/work/${p.workspace.slug}/${p.key}/issue/${i.number}`),
+    state: i.status.category === 'DONE' ? 'Closed' : 'Open',
+    assignee: i.assignee ? displayName(i.assignee) : '',
+    createdAt: i.createdAt,
+    dueDate: i.dueDate ? i.dueDate.toISOString().slice(0, 10) : null,
+    milestone: (i.fixVersion?.name ?? i.sprint?.name ?? '').replace(/^Iteration\s*(\d+)$/i, 'iter$1'),
+    labels: [typeLabel(i.type.key, i.type.name), CAT_LABEL[i.status.category] ?? i.status.category, ...i.labels.map((l) => l.label.name)].join(', '),
+    // Functions/Screens = Req cha (việc con của mẫu: Write SRS/SDS/Code… cho một màn hình).
+    functions: i.parent && i.parent.type.key !== 'EPIC' ? i.parent.title.replace(/^\s*[SN]\d{1,3}\s+/, '') : i.type.key === 'STORY' || i.type.key === 'REQUIREMENT' ? i.title.replace(/^\s*[SN]\d{1,3}\s+/, '') : '',
+  }));
+  return { file: `${p.key}_Issues_Report_${stamp}`, buffer: writeXlsx([buildTemplate4Sheet(rows)], { title: `${p.key} — Issues Report` }), count: rows.length };
+}
+
+export { iterationLabel };

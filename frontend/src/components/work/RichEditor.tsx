@@ -10,7 +10,10 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { EditorContent, useEditor, type Editor } from '@tiptap/react';
+import { EditorContent, NodeViewContent, NodeViewWrapper, ReactNodeViewRenderer, useEditor, type Editor, type NodeViewProps } from '@tiptap/react';
+import type { EditorView } from '@tiptap/pm/view';
+import Image from '@tiptap/extension-image';
+import { toast } from 'sonner';
 import { Node, mergeAttributes } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -25,10 +28,12 @@ import TableCell from '@tiptap/extension-table-cell';
 import { common, createLowlight } from 'lowlight';
 import {
   Bold, Code, Heading2, Heading3, Italic, List, ListChecks, ListOrdered, Link2, Quote, SquareCode, Table2, Rows3, Columns3, Trash2,
+  ImagePlus, Workflow,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { userName, type TiptapDoc, type WorkUser } from '@/lib/work-api';
 import { UserAvatar, WorkPortal, khungFixed } from './ui';
+import { IMAGE_SRC_RE, MAX_IMAGE_BYTES, renderMermaidSvg, workDocs3aApi } from '@/lib/work-docs3a-api';
 
 /** ~35 ngôn ngữ phổ biến (java, ts, sql, bash, yaml, json…) — tạo một lần cho cả trang. */
 const LOWLIGHT = createLowlight(common);
@@ -63,6 +68,93 @@ const DocTable = Table.extend({
     return ['div', { class: 'w-table-wrap' }, spec] as unknown as ReturnType<NonNullable<typeof this.parent>>;
   },
 }).configure({ resizable: false, HTMLAttributes: { class: 'w-table' } });
+
+// ─── CTW đợt 3A (A8 + C26): ảnh + sơ đồ Mermaid ───────────────────
+
+/** Ảnh khối. Chỉ vẽ nguồn an toàn: ảnh đã tải lên dự án hoặc https — nút do JSON lạ đưa vào với src khác bị bỏ trống. */
+const DocImage = Image.extend({
+  renderHTML({ HTMLAttributes }) {
+    const src = String(HTMLAttributes.src ?? '');
+    const ok = IMAGE_SRC_RE.test(src) || /^https:\/\//i.test(src);
+    return ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, { src: ok ? src : '', loading: 'lazy', draggable: 'false' })];
+  },
+}).configure({ inline: false, allowBase64: false, HTMLAttributes: { class: 'w-doc-img' } });
+
+const isDark = () => typeof document !== 'undefined' && document.documentElement.classList.contains('theme-dark');
+
+/** Sơ đồ vẽ từ mã nguồn (chờ 400 ms ngừng gõ). Lỗi cú pháp ⇒ dòng báo lỗi ngắn, mã nguồn vẫn còn ở dưới. */
+function MermaidPreview({ source }: { source: string }) {
+  const [svg, setSvg] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  useEffect(() => {
+    let alive = true;
+    const t = setTimeout(() => {
+      if (!source.trim()) { setSvg(null); setErr(null); return; }
+      renderMermaidSvg(source, isDark())
+        .then((x) => { if (alive) { setSvg(x); setErr(null); } })
+        .catch((e: unknown) => { if (alive) { setErr(String((e as Error)?.message ?? e).split('\n')[0].slice(0, 160)); } });
+    }, 400);
+    return () => { alive = false; clearTimeout(t); };
+  }, [source]);
+  if (err) return <p className="mb-1 text-[12px] text-[var(--w-red)]" contentEditable={false}>Diagram error: {err}</p>;
+  if (!svg) return null;
+  // SVG do mermaid sinh với securityLevel 'strict' (không HTML/script từ mã nguồn).
+  return <div className="w-mermaid" contentEditable={false} data-testid="mermaid-diagram" dangerouslySetInnerHTML={{ __html: svg }} />;
+}
+
+/** Khối code: ngôn ngữ "mermaid" ⇒ vẽ sơ đồ phía trên; khi chỉ xem thì ẩn mã nguồn (bấm "Show source" để xem). */
+function CodeBlockView({ node, editor }: NodeViewProps) {
+  const mermaid = String(node.attrs.language ?? '').toLowerCase() === 'mermaid';
+  const [showSource, setShowSource] = useState(false);
+  const editable = editor.isEditable;
+  return (
+    <NodeViewWrapper className={cn('w-codeblock', mermaid && 'w-codeblock-mermaid')}>
+      {mermaid && <MermaidPreview source={node.textContent} />}
+      {mermaid && !editable && (
+        <button type="button" contentEditable={false} className="mb-1 text-[11.5px] text-[var(--w-text-3)] hover:text-[var(--w-text)]" onClick={() => setShowSource((v) => !v)}>
+          {showSource ? 'Hide source' : 'Show source'}
+        </button>
+      )}
+      <pre className={cn('w-code', mermaid && !editable && !showSource && 'hidden')}>
+        <NodeViewContent as="code" className={node.attrs.language ? `language-${node.attrs.language}` : undefined} />
+      </pre>
+    </NodeViewWrapper>
+  );
+}
+
+const CodeBlock = CodeBlockLowlight.extend({ addNodeView() { return ReactNodeViewRenderer(CodeBlockView); } });
+
+const MERMAID_STARTER = 'flowchart TD\n  A[Start] --> B{Valid?}\n  B -- Yes --> C[Save]\n  B -- No --> D[Show error]';
+
+function imageFiles(list: FileList | null | undefined): File[] {
+  return Array.from(list ?? []).filter((f) => /^image\/(png|jpe?g|gif|webp)$/i.test(f.type));
+}
+
+/** Tải ảnh lên dự án rồi chèn tại `pos` (mặc định: chỗ con trỏ). Mỗi ảnh một toast. */
+async function insertImages(view: EditorView, projectId: number, files: File[], pos?: number) {
+  for (const f of files) {
+    if (f.size > MAX_IMAGE_BYTES) { toast.error(`${f.name || 'Image'} is larger than 10 MB`); continue; }
+    const id = toast.loading(`Uploading ${f.name || 'image'}…`);
+    try {
+      const up = await workDocs3aApi.uploadImage(projectId, f, f.name || 'pasted-image.png');
+      const node = view.state.schema.nodes.image?.create({ src: up.url, alt: (f.name || '').replace(/\.[a-z0-9]+$/i, '') || null });
+      if (!node) throw new Error('This editor cannot hold images');
+      // Ảnh là KHỐI: chèn giữa một đoạn chữ sẽ cắt đôi đoạn đó ("Delet" | ảnh | "ed") ⇒ đặt ảnh SAU đoạn đang đứng;
+      // đoạn trống thì thay luôn đoạn đó.
+      const at = Math.min(pos ?? view.state.selection.from, view.state.doc.content.size);
+      const $p = view.state.doc.resolve(at);
+      const tr = view.state.tr;
+      if ($p.depth > 0 && $p.parent.isTextblock && $p.parent.content.size === 0) tr.replaceWith($p.before(), $p.after(), node);
+      else if ($p.depth > 0 && $p.parent.isTextblock) tr.insert($p.after(), node);
+      else tr.insert(at, node);
+      view.dispatch(tr);
+      toast.success('Image added', { id });
+    } catch (err) {
+      const msg = (err as { response?: { data?: { message?: string; error?: { message?: string } } } })?.response?.data;
+      toast.error(msg?.message ?? msg?.error?.message ?? (err as Error)?.message ?? 'Could not upload the image', { id });
+    }
+  }
+}
 
 interface MentionState { query: string; from: number; to: number; left: number; top: number }
 
@@ -99,12 +191,19 @@ export interface RichEditorProps {
    * editor thường sẽ RƠI bảng. Chốt lúc tạo editor (không đổi giữa chừng).
    */
   docs?: boolean;
+  /**
+   * CTW đợt 3A: dự án để tải ảnh lên (dán / kéo-thả / nút ảnh). Không truyền ⇒ ảnh vẫn HIỂN THỊ được nhưng không chèn mới.
+   */
+  projectId?: number;
 }
 
 export default function RichEditor({
   value, onChange, editable = true, placeholder = 'Write something…', members = [], autoFocus, onSubmit, onEscape,
-  minHeight = 80, toolbar = true, className, editorRef, docs = false,
+  minHeight = 80, toolbar = true, className, editorRef, docs = false, projectId,
 }: RichEditorProps) {
+  const pidRef = useRef(projectId);
+  pidRef.current = projectId;
+  const fileRef = useRef<HTMLInputElement>(null);
   const [mention, setMention] = useState<MentionState | null>(null);
   const [hi, setHi] = useState(0);
   const mentionRef = useRef<MentionState | null>(null);
@@ -148,7 +247,9 @@ export default function RichEditor({
       // Khối code tô màu cú pháp (decoration của ProseMirror ⇒ đúng cả lúc xem lẫn lúc sửa).
       // Không khai ngôn ngữ thì lowlight tự đoán.
       StarterKit.configure({ heading: { levels: docs ? [1, 2, 3, 4] : [1, 2, 3] }, codeBlock: false }),
-      CodeBlockLowlight.configure({ lowlight: LOWLIGHT, HTMLAttributes: { class: 'w-code' } }),
+      CodeBlock.configure({ lowlight: LOWLIGHT, HTMLAttributes: { class: 'w-code' } }),
+      // CTW đợt 3A: ảnh có ở MỌI chế độ (mô tả thẻ, bình luận, Docs) — nội dung đã có ảnh vẫn hiện ở chỗ chỉ xem.
+      DocImage,
       Placeholder.configure({ placeholder }),
       Link.configure({ openOnClick: !editable, autolink: true, HTMLAttributes: { rel: 'noopener noreferrer nofollow', target: '_blank' } }),
       TaskList,
@@ -158,6 +259,23 @@ export default function RichEditor({
     ],
     editorProps: {
       attributes: { class: cn('w-prose', editable && 'px-3 py-2.5') },
+      // CTW đợt 3A: dán / thả ảnh ⇒ tải lên dự án (R2) rồi chèn nút ảnh. Không có dự án ⇒ để trình duyệt xử lý như cũ.
+      handlePaste: (view, event) => {
+        const files = imageFiles(event.clipboardData?.files);
+        if (!files.length || !pidRef.current || !view.editable) return false;
+        event.preventDefault();
+        void insertImages(view, pidRef.current, files);
+        return true;
+      },
+      handleDrop: (view, event, _slice, moved) => {
+        if (moved) return false;
+        const files = imageFiles((event as DragEvent).dataTransfer?.files);
+        if (!files.length || !pidRef.current || !view.editable) return false;
+        event.preventDefault();
+        const at = view.posAtCoords({ left: (event as DragEvent).clientX, top: (event as DragEvent).clientY })?.pos;
+        void insertImages(view, pidRef.current, files, at);
+        return true;
+      },
       handleKeyDown: (_view, event) => {
         const list = matchesRef.current;
         if (mentionRef.current && list.length) {
@@ -244,7 +362,18 @@ export default function RichEditor({
           {btn(editor.isActive('taskList'), () => editor.chain().focus().toggleTaskList().run(), ListChecks, 'Checklist')}
           <span className="mx-1 h-4 w-px bg-[var(--w-border)]" />
           {btn(editor.isActive('blockquote'), () => editor.chain().focus().toggleBlockquote().run(), Quote, 'Quote')}
-          {btn(editor.isActive('codeBlock'), () => editor.chain().focus().toggleCodeBlock().run(), SquareCode, 'Code block')}
+          {btn(editor.isActive('codeBlock') && editor.getAttributes('codeBlock').language !== 'mermaid', () => editor.chain().focus().toggleCodeBlock().run(), SquareCode, 'Code block')}
+          {/* CTW đợt 3A: sơ đồ Mermaid (UC, ERD, class, sequence…) — khối code ngôn ngữ "mermaid", vẽ ngay trên trang. */}
+          {btn(editor.isActive('codeBlock', { language: 'mermaid' }), () => {
+            if (editor.isActive('codeBlock', { language: 'mermaid' })) return;
+            // Như ảnh: khối sơ đồ đặt SAU đoạn đang đứng (không cắt đôi chữ); đoạn trống thì thay luôn.
+            const $f = editor.state.selection.$from;
+            const block = { type: 'codeBlock', attrs: { language: 'mermaid' }, content: [{ type: 'text', text: MERMAID_STARTER }] };
+            if ($f.depth > 0 && $f.parent.isTextblock && $f.parent.content.size === 0) editor.chain().focus().insertContentAt({ from: $f.before(), to: $f.after() }, block).run();
+            else if ($f.depth > 0 && $f.parent.isTextblock) editor.chain().focus().insertContentAt($f.after(), block).run();
+            else editor.chain().focus().insertContent(block).run();
+          }, Workflow, 'Diagram (Mermaid)')}
+          {projectId && btn(false, () => fileRef.current?.click(), ImagePlus, 'Image (or paste / drop one)')}
           {btn(editor.isActive('link'), () => {
             if (editor.isActive('link')) { editor.chain().focus().unsetLink().run(); return; }
             const url = window.prompt('Link URL');
@@ -265,6 +394,21 @@ export default function RichEditor({
             </>
           )}
         </div>
+      )}
+      {projectId && editable && (
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/png,image/jpeg,image/gif,image/webp"
+          multiple
+          hidden
+          data-testid="rich-editor-image-input"
+          onChange={(e) => {
+            const files = imageFiles(e.target.files);
+            e.target.value = '';
+            if (editor && files.length) void insertImages(editor.view, projectId, files);
+          }}
+        />
       )}
       <div style={editable ? { minHeight } : undefined}>
         <EditorContent editor={editor} />

@@ -116,7 +116,7 @@ function Description({ issue, config, editable, onSave, saving }: {
   if (editing) {
     return (
       <div>
-        <RichEditor value={draft} onChange={(d) => setDraft(d)} members={config.members} autoFocus minHeight={140} onSubmit={save} onEscape={() => setEditing(false)} />
+        <RichEditor value={draft} onChange={(d) => setDraft(d)} members={config.members} projectId={config.id} autoFocus minHeight={140} onSubmit={save} onEscape={() => setEditing(false)} />
         <div className="mt-2 flex gap-2">
           <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={saving} onClick={save}>{saving ? 'Saving…' : 'Save'}</button>
           <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setEditing(false)}>Cancel</button>

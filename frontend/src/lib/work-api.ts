@@ -11,7 +11,7 @@ import { api } from './api';
 export type WorkspaceRole = 'OWNER' | 'ADMIN' | 'MEMBER' | 'GUEST';
 export type ProjectRole = 'ADMIN' | 'MEMBER' | 'VIEWER' | 'TEACHER' | 'CLIENT';
 export type ProjectType = 'SCRUM' | 'KANBAN' | 'TESTING';
-export type ProjectTemplate = 'BLANK' | 'SWR302' | 'SWT301' | 'SWP391' | 'FREELANCE' | 'COMPANY';
+export type ProjectTemplate = 'BLANK' | 'SWR302' | 'SWT301' | 'SWP391' | 'FREELANCE' | 'COMPANY' | 'CAPSTONE';
 /** Loại dự án (lớp studio S1). Dự án cũ: suy từ mẫu (kindStored = null). */
 export type ProjectKind = 'PERSONAL' | 'SCHOOL' | 'SOFTWARE' | 'CLIENT';
 /** Mô-đun bật/tắt theo dự án. Đợt S1 có tính năng thật: teams, stages, approvals, handoffs. */
@@ -528,7 +528,9 @@ export type AiAction =
   | { type: 'create_test'; title: string; preconditions?: string | null; steps: Array<{ action: string; data?: string | null; expected?: string | null }>; requirement?: number | null }
   // Đợt S5c — tài liệu (mô-đun docs): Apply ⇒ trang mới / phiên bản mới của trang.
   | { type: 'draft_page'; title: string; markdown: string; parent?: number | null }
-  | { type: 'update_page_section'; number: number; heading: string; markdown: string; mode?: 'replace' | 'append' | null };
+  | { type: 'update_page_section'; number: number; heading: string; markdown: string; mode?: 'replace' | 'append' | null }
+  // Đợt 3C — lệnh GHI của registry dùng chung (cùng bộ với MCP + agent dựng sẵn): Apply ⇒ chạy bằng quyền người bấm.
+  | { type: 'command'; command: string; args: Record<string, unknown>; summary?: string | null };
 export interface AiAnswer {
   reply: string; actions: AiAction[]; quota: AiQuota;
   /** Hội thoại đã lưu ở server (trả về từ chat/quick). */

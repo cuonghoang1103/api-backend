@@ -12,6 +12,7 @@ import { ProjectIdentity } from './ProjectIdentity';
 const TEMPLATE_LABEL: Record<ProjectConfig['template'], string> = {
   BLANK: 'Blank project',
   SWP391: 'Software project (SWP391)',
+  CAPSTONE: 'FPT Capstone (SEP490 / ISP490)',
   SWR302: 'Requirements (SWR302)',
   SWT301: 'Software testing (SWT301)',
   FREELANCE: 'Client project',

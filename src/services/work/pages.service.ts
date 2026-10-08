@@ -304,7 +304,7 @@ export async function createPage(userId: number, projectId: number, input: Creat
   if (input.templateKey) {
     const t = await getTemplate(input.templateKey);
     if (!input.contentJson) doc = t.doc;
-    if (!title) title = t.title;
+    if (!title) title = t.pageTitle; // CTW đợt 3A: mẫu FPT ⇒ "Report 2 – Project Management Plan"
     // Mẫu thuộc giai đoạn nào thì gắn giai đoạn đó (nếu dự án có giai đoạn cùng slug).
     if (!stageId && t.stages.length) {
       const s = await prisma.workStage.findFirst({ where: { projectId, slug: { in: t.stages.map((x) => x.slug) } }, orderBy: { n: 'asc' }, select: { id: true } });

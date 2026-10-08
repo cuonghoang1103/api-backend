@@ -35,15 +35,19 @@ export interface DocTemplateInfo {
   sections: number;
   /** Đoạn mở đầu (dòng "Mục đích") — xem trước trong thư viện. */
   summary: string;
+  /** CTW đợt 3A: nhóm trong thư viện ("FPT Capstone"); null = mẫu quy trình studio. */
+  group: string | null;
 }
 
 export interface DocTemplate extends DocTemplateInfo {
+  /** Tiêu đề trang tạo từ mẫu: mẫu FPT ⇒ "Report 2 – Project Management Plan" (đúng tên trên bìa bản gốc). */
+  pageTitle: string;
   markdown: string;
   /** Nội dung TipTap, đã bỏ tiêu đề # đầu (trang có ô tiêu đề riêng). */
   doc: PmNode;
 }
 
-interface Catalog { templates: Array<{ key: string; titleVi: string; titleEn: string }> }
+interface Catalog { templates: Array<{ key: string; titleVi: string; titleEn: string; group?: string }> }
 interface ClientTpl { stages: Array<{ n: number; slug: string; title: string; titleEn?: string; epic?: { description?: string } }> }
 
 let cache: Promise<Map<string, DocTemplate>> | null = null;
@@ -89,6 +93,8 @@ async function load(): Promise<Map<string, DocTemplate>> {
       key: c.key, title: c.titleEn, titleVi: c.titleVi, stages: stagesOf(c.key),
       sections: (markdown.match(/^#{2,6} /gm) ?? []).length,
       summary: summaryOf(markdown),
+      group: c.group ?? null,
+      pageTitle: c.titleEn.replace(/^FPT Capstone — /, '').replace(/^Report (\d)\.?: /, 'Report $1 – '),
       markdown, doc,
     });
   }
@@ -102,7 +108,7 @@ export async function allTemplates(): Promise<Map<string, DocTemplate>> {
 
 /** Danh sách cho thư viện mẫu (không kèm nội dung). */
 export async function listTemplates(): Promise<DocTemplateInfo[]> {
-  return [...(await allTemplates()).values()].map(({ markdown: _m, doc: _d, ...info }) => info);
+  return [...(await allTemplates()).values()].map(({ markdown: _m, doc: _d, pageTitle: _p, ...info }) => info);
 }
 
 export async function getTemplate(key: string): Promise<DocTemplate> {

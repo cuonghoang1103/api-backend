@@ -711,6 +711,9 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['*', /^\/edit-lock$/],
   // GĐ1: agent bên ngoài không tiêu lượt trợ lý AI của web (GĐ2 mở riêng cho BUILTIN)
   ['*', /^\/ai(\/.*)?$/],
+  // Đợt 3C: agent không tự khởi động/dừng agent dựng sẵn (mỗi lượt tiêu tiền LLM của web — chỉ NGƯỜI Pro/admin bấm).
+  // Agent BUILTIN chạy lệnh qua registry, không qua tuyến này.
+  ['*', /^\/issues\/\d+\/agent-runs(\/.*)?$/], ['*', /^\/agent-runs(\/.*)?$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

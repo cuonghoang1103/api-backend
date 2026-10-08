@@ -45,6 +45,10 @@ export function blockedReason(action: AiAction, config: ProjectConfig): string |
     case 'draft_page':
     case 'update_page_section':
       return p.editDocs ? null : 'You don’t have permission to edit documents in this project';
+    // Đợt 3C: lệnh dùng chung — tài liệu cần quyền Docs, còn lại quyền sửa thẻ; server kiểm lại đúng quyền của lệnh.
+    case 'command':
+      return action.command.startsWith('docs_') ? (p.editDocs ? null : 'You don’t have permission to edit documents in this project')
+        : p.editIssues ? null : 'You don’t have permission to make this change in this project';
     default:
       return null;
   }
@@ -66,8 +70,12 @@ function useOpenResult(config: ProjectConfig) {
       router.push(`${base}/tests/${item.number}`);
       return;
     }
-    if (item.action.type === 'draft_page' || item.action.type === 'update_page_section') {
+    if (item.action.type === 'draft_page' || item.action.type === 'update_page_section' || (item.action.type === 'command' && item.action.command.startsWith('docs_'))) {
       router.push(`${base}/docs/${item.number}`);
+      return;
+    }
+    if (item.action.type === 'command' && item.action.command === 'test_create') {
+      router.push(`${base}/tests/${item.number}`);
       return;
     }
     if (pathname && pathname.startsWith(base) && DRAWER_PAGES.test(pathname.slice(base.length))) {
@@ -178,7 +186,19 @@ const TITLES: Record<AiAction['type'], string> = {
   create_test: 'Create test case',
   draft_page: 'Create document',
   update_page_section: 'Update document section',
+  command: 'Run command',
 };
+
+/** Tên lệnh ⇒ nhãn đọc được ("fpt_unit_add_cases" ⇒ "Unit test: add cases"). */
+const COMMAND_LABEL: Record<string, string> = {
+  fpt_unit_create_function: 'Unit test (5.1): add function', fpt_unit_add_cases: 'Unit test (5.1): add test cases', fpt_unit_mark: 'Unit test (5.1): set “O” marks',
+  fpt_unit_record_results: 'Unit test (5.1): record results', fpt_it_create_module: 'Integration/System test: add sheet', fpt_it_add_cases: 'Integration/System test: add cases',
+  fpt_it_record_round: 'Integration/System test: record round', test_create: 'Create test case', test_cycle_create: 'Create test cycle', test_run_record: 'Record test run',
+  docs_draft_page: 'Create document', docs_update_section: 'Update document section', meeting_add_actions: 'Meeting: add action items',
+  meeting_create_issues: 'Meeting: create issues', raid_create: 'Add RAID item', raid_update: 'Update RAID item', weekly_report_generate: 'Generate weekly report',
+  transition: 'Change status', log_work: 'Log work',
+};
+const commandLabel = (c: string) => COMMAND_LABEL[c] ?? c.replace(/_/g, ' ');
 
 export function ActionCard({ config, item, busy, onEdit, onApply, onDismiss, onOpen }: {
   config: ProjectConfig;
@@ -202,7 +222,7 @@ export function ActionCard({ config, item, busy, onEdit, onApply, onDismiss, onO
       )}
     >
       <div className="flex items-center gap-1.5 border-b border-[var(--w-border)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.03em] text-[var(--w-text-3)]">
-        {TITLES[action.type]}
+        {action.type === 'command' ? commandLabel(action.command) : TITLES[action.type]}
         {action.type === 'update_issue' || action.type === 'add_comment' ? <span className="font-mono normal-case text-[var(--w-text-2)]">{k(action.number)}</span> : null}
         {action.type === 'update_page_section' ? <span className="font-mono normal-case text-[var(--w-text-2)]">#{action.number}</span> : null}
       </div>
@@ -443,6 +463,23 @@ function ActionBody({ config, action, editable, onEdit }: { config: ProjectConfi
           </Row>
           <MarkdownPreview text={action.markdown} />
           <div className="px-1.5 text-[11.5px] text-[var(--w-text-3)]">Applying saves a new version of document #{action.number}; you can compare or restore it from History.</div>
+        </div>
+      );
+
+    case 'command':
+      return (
+        <div className="space-y-1.5">
+          {action.summary ? <div className="px-1.5 text-[13px] font-medium">{action.summary}</div> : null}
+          <div className="px-1.5">
+            {Object.entries(action.args ?? {}).slice(0, 12).map(([k, v]) => (
+              <Row key={k} label={k}>
+                {typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean'
+                  ? <span className="whitespace-pre-wrap">{String(v)}</span>
+                  : <MarkdownPreview text={JSON.stringify(v, null, 2)} />}
+              </Row>
+            ))}
+          </div>
+          <div className="px-1.5 text-[11.5px] text-[var(--w-text-3)]">Same command external AI agents use (<span className="font-mono">{action.command}</span>). Nothing changes until you apply it, and it runs with your permissions.</div>
         </div>
       );
 

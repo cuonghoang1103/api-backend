@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Nhập Report 5.1 / 5.2 từ tệp Excel đúng mẫu FPT (nhóm đang làm bằng Excel/Google Sheets chuyển lên CT Work).
+ * Nhập Report 5.1 / 5.2 / 5.3 từ tệp Excel đúng mẫu FPT (nhóm đang làm bằng Excel/Google Sheets chuyển lên CT Work).
  * Bước 1 chạy thử (dryRun) ⇒ xem số hàm/module, test case, cảnh báo; bước 2 nhập thật (Thêm vào | Thay toàn bộ).
  */
 
@@ -12,9 +12,12 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { workError } from '@/lib/work-api';
 import { Dialog, Spinner } from '../../ui';
-import { fptApi, fptKeys, type ImportResult } from './fptApi';
+import { fptApi, fptKeys, type ImportResult, type ReportKind } from './fptApi';
 
-export default function FptImportDialog({ open, onClose, pid, report }: { open: boolean; onClose: () => void; pid: number; report: 'unit' | 'integration' }) {
+const NAME: Record<ReportKind, string> = { unit: 'Unit (5.1)', integration: 'Integration (5.2)', system: 'System (5.3)' };
+const ITEM: Record<ReportKind, string> = { unit: 'functions', integration: 'modules', system: 'workflows' };
+
+export default function FptImportDialog({ open, onClose, pid, report }: { open: boolean; onClose: () => void; pid: number; report: ReportKind }) {
   const qc = useQueryClient();
   const input = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<{ name: string; buf: ArrayBuffer } | null>(null);
@@ -46,7 +49,7 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
     try {
       const r = await fptApi.importXlsx(pid, file.buf, { report, mode, dryRun: false });
       await qc.invalidateQueries({ queryKey: fptKeys.all(pid) });
-      toast.success(`Imported ${r.functions ?? r.modules} ${report === 'unit' ? 'functions' : 'modules'} · ${r.cases} test cases`);
+      toast.success(`Imported ${r.functions ?? r.modules} ${ITEM[report]} · ${r.cases} test cases`);
       onClose();
     } catch (e) {
       toast.error(workError(e, 'Import failed'));
@@ -60,7 +63,7 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
     <Dialog
       open={open}
       onClose={() => !busy && onClose()}
-      title={report === 'unit' ? 'Import Unit Test Report (5.1) from Excel' : 'Import Integration Test Report (5.2) from Excel'}
+      title={report === 'unit' ? 'Import Unit Test Report (5.1) from Excel' : report === 'system' ? 'Import System Test Report (5.3) from Excel' : 'Import Integration Test Report (5.2) from Excel'}
       width={640}
       footer={
         <>
@@ -70,7 +73,7 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
       }
     >
       <p className="mb-3 text-[13px] text-[var(--w-text-2)]">
-        Use the FPT template file ({report === 'unit' ? 'Guideline / Cover / Functions / Statistics + one sheet per function' : 'Cover / Test Cases / Test Statistics + one sheet per module'}).
+        Use the FPT template file ({report === 'unit' ? 'Guideline / Cover / Functions / Statistics + one sheet per function' : report === 'system' ? 'Cover / Test Cases / Test Statistics + one sheet per workflow, Round 1–3' : 'Cover / Test Cases / Test Statistics + one sheet per module'}).
         Labels are matched by name, so moved rows or columns are fine.
       </p>
       <input ref={input} type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="hidden"
@@ -84,11 +87,11 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
         <div className="mt-4 space-y-3 text-[13px]">
           {wrongKind && (
             <p className="rounded-[6px] bg-[color-mix(in_srgb,var(--w-red)_10%,transparent)] px-3 py-2 text-[var(--w-red)]">
-              This looks like a {preview.report === 'unit' ? 'Unit (5.1)' : 'Integration (5.2)'} report — open the other tab to import it.
+              This looks like a {NAME[preview.report]} report — open the other tab to import it.
             </p>
           )}
           <div className="flex flex-wrap gap-4">
-            <span><b>{preview.functions ?? preview.modules}</b> {preview.report === 'unit' ? 'functions' : 'modules'}</span>
+            <span><b>{preview.functions ?? preview.modules}</b> {ITEM[preview.report]}</span>
             <span><b>{preview.cases}</b> test cases</span>
             <span><b>{preview.changes}</b> change records</span>
           </div>
@@ -106,7 +109,7 @@ export default function FptImportDialog({ open, onClose, pid, report }: { open: 
             </ul>
           )}
           <div role="radiogroup" aria-label="Import mode" className="space-y-1.5">
-            {([['append', 'Add to what is already here'], ['replace', `Replace all ${report === 'unit' ? 'unit tests' : 'integration tests'} in this project`]] as const).map(([v, l]) => (
+            {([['append', 'Add to what is already here'], ['replace', `Replace all ${report === 'unit' ? 'unit tests' : report === 'system' ? 'system tests' : 'integration tests'} in this project`]] as const).map(([v, l]) => (
               <label key={v} className={cn('flex cursor-pointer items-center gap-2', v === 'replace' && mode === 'replace' && 'text-[var(--w-red)]')}>
                 <input type="radio" name="fpt-mode" checked={mode === v} onChange={() => setMode(v)} /> {l}
               </label>

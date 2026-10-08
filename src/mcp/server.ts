@@ -23,19 +23,20 @@ import {
   errorText, isRpcMessage, negotiateVersion, PROTOCOL_VERSIONS, RPC, rpcError, untrusted, UNTRUSTED_NOTE, zodToJsonSchema,
   type RpcRequest, type RpcResponse,
 } from './protocol.js';
-import { READ_TOOLS } from './tools/read.js';
-import { WRITE_TOOLS } from './tools/write.js';
+// Đợt 3C: tools/list lấy từ REGISTRY LỆNH DÙNG CHUNG (cùng bộ lệnh với Ask AI + agent BUILTIN). 21 tool cũ vẫn đứng đầu.
+import { mcpCommands } from '../services/work/toolRegistry/index.js';
 import type { ToolDef } from './tools/types.js';
 
 export const SERVER_INFO = { name: 'ctwork', title: 'CT Work', version: '1.0.0' } as const;
 
-export const TOOLS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS];
+export const TOOLS: ToolDef[] = mcpCommands();
 const TOOL_BY_NAME = new Map(TOOLS.map((t) => [t.name, t]));
 
 const INSTRUCTIONS = [
   'CT Work is a Jira-like project tracker. You act as the account of your token (a person or an AI agent member).',
   'Typical loop for an agent: my_work → get_issue → claim_issue → do the work → comment (evidence) → log_work → report_usage → transition "done" (it lands in review; a person closes it) → release_issue. Use wait_events to wait for new work.',
   'Agents cannot approve, delete, assign to others, plan sprints, change settings, reach clients or touch finance — the server refuses (WORK_AGENT_FORBIDDEN). Ask with ask_lead instead of retrying.',
+  'Besides issues and docs there are tools for FPT test reports (fpt_unit_* = Report 5.1, fpt_it_* = 5.2/5.3), Xray test cases (test_*), meetings, RAID, the current sprint, weekly reports and download links (export_file).',
   UNTRUSTED_NOTE,
 ].join('\n');
 

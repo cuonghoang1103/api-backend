@@ -12,7 +12,7 @@ import { Dialog, Field, Spinner } from '../../ui';
 import { fptApi, fptKeys, type DocMeta } from './fptApi';
 import { todayIso } from './shared';
 
-export default function FptDocDialog({ open, onClose, pid, report }: { open: boolean; onClose: () => void; pid: number; report: 'UNIT' | 'INT' }) {
+export default function FptDocDialog({ open, onClose, pid, report }: { open: boolean; onClose: () => void; pid: number; report: 'UNIT' | 'INT' | 'SYS' }) {
   const qc = useQueryClient();
   const q = useQuery({ queryKey: fptKeys.doc(pid), queryFn: () => fptApi.doc(pid), enabled: open });
   const [form, setForm] = useState<Partial<DocMeta> & { projectName?: string; projectCode?: string }>({});
@@ -35,6 +35,7 @@ export default function FptDocDialog({ open, onClose, pid, report }: { open: boo
         projectName: form.projectName || null, projectCode: form.projectCode || null, creator: form.creator || null, reviewer: form.reviewer || null,
         version: form.version || '1.0', unitIssueDate: form.unitIssueDate || null, intIssueDate: form.intIssueDate || null,
         environment: form.environment || null, tcPerKloc: Number(form.tcPerKloc) || 100, unitNotes: form.unitNotes || null, intNotes: form.intNotes || null,
+        sysIssueDate: form.sysIssueDate || null, sysNotes: form.sysNotes || null,
       });
       await qc.invalidateQueries({ queryKey: fptKeys.all(pid) });
       toast.success('Document info saved');
@@ -58,12 +59,15 @@ export default function FptDocDialog({ open, onClose, pid, report }: { open: boo
 
   const changes = (q.data?.changes ?? []).filter((c) => c.report === report);
   const isUnit = report === 'UNIT';
+  // Ba báo cáo dùng chung Cover; ngày phát hành + ghi chú là riêng từng báo cáo.
+  const dateKey = isUnit ? 'unitIssueDate' : report === 'SYS' ? 'sysIssueDate' : 'intIssueDate';
+  const notesKey = isUnit ? 'unitNotes' : report === 'SYS' ? 'sysNotes' : 'intNotes';
 
   return (
     <Dialog
       open={open}
       onClose={() => !saving && onClose()}
-      title={isUnit ? 'Unit test document (Report 5.1) — Cover' : 'Integration test document (Report 5.2) — Cover'}
+      title={isUnit ? 'Unit test document (Report 5.1) — Cover' : report === 'SYS' ? 'System test document (Report 5.3) — Cover' : 'Integration test document (Report 5.2) — Cover'}
       width={860}
       footer={canEdit ? (
         <>
@@ -85,8 +89,8 @@ export default function FptDocDialog({ open, onClose, pid, report }: { open: boo
             <Field label="Reviewer / Approver"><input className="w-input" value={form.reviewer ?? ''} readOnly={!canEdit} maxLength={120} onChange={(e) => set('reviewer', e.target.value)} /></Field>
             <Field label="Version"><input className="w-input" value={form.version ?? ''} readOnly={!canEdit} maxLength={20} onChange={(e) => set('version', e.target.value)} /></Field>
             <Field label="Issue date">
-              <input type="date" className="w-input" readOnly={!canEdit} value={(isUnit ? form.unitIssueDate : form.intIssueDate) ?? ''}
-                onChange={(e) => set(isUnit ? 'unitIssueDate' : 'intIssueDate', e.target.value || null)} />
+              <input type="date" className="w-input" readOnly={!canEdit} value={form[dateKey] ?? ''}
+                onChange={(e) => set(dateKey, e.target.value || null)} />
             </Field>
             {isUnit && (
               <Field label="Normal number of test cases / KLOC" hint="FPT default is 100. Functions with fewer cases than LOC × this are flagged.">
@@ -99,7 +103,7 @@ export default function FptDocDialog({ open, onClose, pid, report }: { open: boo
               placeholder={'1. Server: Node.js 22 / Spring Boot 3\n2. Database: PostgreSQL 16\n3. Web browser: Chrome 129'} />
           </Field>
           <Field label="Notes (Statistics sheet)" hint={isUnit ? 'Explain here if some functions are below the test-case norm.' : undefined}>
-            <textarea className="w-input min-h-[52px]" readOnly={!canEdit} maxLength={4000} value={(isUnit ? form.unitNotes : form.intNotes) ?? ''} onChange={(e) => set(isUnit ? 'unitNotes' : 'intNotes', e.target.value)} />
+            <textarea className="w-input min-h-[52px]" readOnly={!canEdit} maxLength={4000} value={form[notesKey] ?? ''} onChange={(e) => set(notesKey, e.target.value)} />
           </Field>
 
           <div className="mt-2">

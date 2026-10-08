@@ -66,6 +66,8 @@ export interface TokenInput { name?: string; scopes?: Array<'read' | 'write'>; p
 export interface CreateAgentBody {
   name: string; model: string; ownerId?: number; roleText?: string | null; capabilities?: Record<string, boolean>;
   parallelSlots?: number; projectIds?: number[]; projectRole?: 'MEMBER' | 'VIEWER'; token?: TokenInput | null;
+  /** Đợt 3C: BUILTIN = CT Work chạy hộ (Pro/admin, không token). */
+  runtime?: AgentRuntime;
 }
 
 export interface AgentWebhook {

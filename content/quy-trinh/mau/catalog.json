@@ -190,6 +190,48 @@
       "key": "tra-loi-danh-gia-nha-cung-cap",
       "titleVi": "Bảng trả lời đánh giá nhà cung cấp",
       "titleEn": "Vendor security questionnaire — answers"
+    },
+    {
+      "key": "fpt-report1-project-introduction",
+      "titleVi": "FPT Capstone — Report 1: Giới thiệu dự án",
+      "titleEn": "FPT Capstone — Report 1: Project Introduction",
+      "group": "FPT Capstone"
+    },
+    {
+      "key": "fpt-report2-project-management-plan",
+      "titleVi": "FPT Capstone — Report 2: Kế hoạch quản lý dự án",
+      "titleEn": "FPT Capstone — Report 2: Project Management Plan",
+      "group": "FPT Capstone"
+    },
+    {
+      "key": "fpt-report3-srs",
+      "titleVi": "FPT Capstone — Report 3: Đặc tả yêu cầu phần mềm",
+      "titleEn": "FPT Capstone — Report 3: Software Requirement Specification",
+      "group": "FPT Capstone"
+    },
+    {
+      "key": "fpt-report4-sds",
+      "titleVi": "FPT Capstone — Report 4: Đặc tả thiết kế phần mềm",
+      "titleEn": "FPT Capstone — Report 4: Software Design Specification",
+      "group": "FPT Capstone"
+    },
+    {
+      "key": "fpt-report5-test-documentation",
+      "titleVi": "FPT Capstone — Report 5: Tài liệu kiểm thử",
+      "titleEn": "FPT Capstone — Report 5: Software Test Documentation",
+      "group": "FPT Capstone"
+    },
+    {
+      "key": "fpt-report6-user-guides",
+      "titleVi": "FPT Capstone — Report 6: Hướng dẫn sử dụng",
+      "titleEn": "FPT Capstone — Report 6: Software User Guides",
+      "group": "FPT Capstone"
+    },
+    {
+      "key": "fpt-report7-final-report",
+      "titleVi": "FPT Capstone — Report 7: Báo cáo tổng kết",
+      "titleEn": "FPT Capstone — Report 7: Final Project Report",
+      "group": "FPT Capstone"
     }
   ]
 }

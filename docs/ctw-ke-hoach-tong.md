@@ -1,0 +1,65 @@
+# CT WORK — KẾ HOẠCH TỔNG NÂNG CẤP "CHUYÊN NGHIỆP, ĐỦ, KHÔNG SÓT" (chốt 09/10/2026)
+
+**ĐỌC ĐẦU TIÊN** khi người dùng nói "làm CT Work tiếp".
+
+Nguồn chi tiết từng mục (A1…D10, có bằng chứng trong mã): `docs/ctw-ra-soat-thieu-09-10.md`.
+
+Người dùng dặn ngày 09/10:
+> "cứ từ từ mà nâng cấp full chuyên nghiệp đầy đủ không thiếu cái gì"
+
+CT Work là công cụ chính cho đồ án của họ và các nhóm (SEP490/ISP490/SWP391/SWT301/LabFlow). Họ được ưu tiên trước IELTS.
+
+## Luật làm (rút từ các đợt trước)
+- **Đối chiếu MẪU THẬT của trường** (`~/Documents/Report Đồ án/`, `SWP391/materials`), không chỉ so với Jira. Xem bộ nhớ `feedback_ctw_doi_chieu_mau_truong`.
+- **Số agent:** tối đa 3 Opus cùng lúc.
+  - Mỗi đợt có một tệp đề `docs/ctw-dot-N-*.md`.
+  - Agent KHÔNG commit/deploy.
+  - Migration viết tay, mỗi agent một dải timestamp riêng.
+- **Trưởng nhóm (phiên chính)** kiểm lại trên **worktree sạch** dựng từ commit: tsc BE/seed/FE, `npm test`, DB test của đợt. Có làm thì mới bắt được tệp bị `.gitignore` loại (vd `bin/` ở đợt 2).
+  - Sau đó commit bằng index riêng (`GIT_INDEX_FILE`) và đưa `main` tiến lên bằng `update-ref`.
+  - Rồi `echo y | bash deploy-nha.sh`. Lệnh này tự push `main`.
+  - Người dùng đã cho phép deploy CT Work theo từng đợt khi kiểm xanh (09/10: "cứ làm full rồi deploy đi hoặc deploy rồi làm tiếp").
+- **Sau deploy** phải kiểm production bằng phép đo thật (curl, gọi API bằng token agent), không tin log.
+- **Thẻ trên dự án CTW:** AI bình luận cách sửa trên thẻ. Người dùng tự kéo thẻ sang Done; board CTW không có cột Review.
+- **Giao diện và nội dung xuất:** tiếng Anh, theo theme `theme-dark`. Trang mới dưới `app/work` ⇒ thêm tuyến desktop `dinhTuyenWeb.ts`. Đổi giao diện desktop ⇒ `phat-hanh`.
+
+## Trạng thái các đợt
+| Đợt | Nội dung | Trạng thái |
+|---|---|---|
+| 0–8 cũ | Jira + Xray + AI + studio S1–S5c | ✅ prod (xem bộ nhớ `project_ct_work_kieu_jira`) |
+| 1a | 10 lỗi CTW-7,9,10,14,15,17,18,20,27,38 | ✅ prod `89d91ba9` (09/10). Chờ người dùng kéo sang Done |
+| 1b | Unit Test 5.1 + Integration 5.2 đúng mẫu FPT, xuất/nhập Excel | ✅ prod `89d91ba9` |
+| 2 | AI agent GĐ1 A9–A15: MCP 21 tool, gói `packages/ctwork-mcp`, nginx, chi phí/năng suất, trang AI agents, People vs Agents, nút Assign to AI (CTW-34) | ✅ prod `8f179213` (09/10 02:29) — đã thử Claude Code THẬT qua HTTP: whoami/my_work/get_issue đúng |
+| **3A** | Ảnh + Mermaid trong editor; xuất .docx/PDF; bộ mẫu FPT Report 1–7 (đề mục gốc); Record of Changes tự sinh; **mẫu dự án Capstone** | agent đang làm — đề `docs/ctw-dot-3-de-giao.md` |
+| **3B** | System Test 5.3; Project Tracking (SEP490 + SWP391 Template1 + Template4 Issues); WBS + bảng độ phức tạp → man-day; Weekly Report .xlsx; AI Usage Report (Template0) | ✅ xong cục bộ, chờ gộp với 3A rồi deploy |
+| **3C** | **Không phụ thuộc Claude** (chi tiết ngay dưới) | chờ 3A/3B |
+| 4 | SRS có cấu trúc: use case/actor/business rule/screen authorization; RTM mở rộng (SRS/SDS/commit); defect log thống nhất + Severity; Q&A log; Activity trên worklog; ghép Report 7; CTW-12 (spec review chọn khung theo loại trang) | |
+| 5 | Supervisor hub (giảng viên xem mọi nhóm, rubric); đóng góp + đánh giá chéo; LOC thật từ GitHub/GitLab, defect density; luồng lớp học/mã lớp, nhập danh sách MSSV; việc định kỳ; tuyến desktop + phát hành app | |
+| 6 | Chất lượng: CI chạy đủ 48 tệp test work + Postgres + `WORK_DB_TEST=1` (cả trong bộ kiểm của `deploy-nha.sh`); E2E Playwright commit + axe; đo hiệu năng 10k thẻ; **vá 3 rò rỉ cổng khách (D8)**; kỹ thuật thiết kế test EP/BVA/bảng quyết định; Test Summary Report; rủi ro nhập ZIP (D9) | Nên làm sớm nếu 3–4 sửa nhiều tệp chung |
+| **UX** | **Giao diện chuẩn doanh nghiệp (người dùng dặn 09/10, cả web + app desktop)**: rà TOÀN BỘ trang /work bằng ảnh chụp (sáng/tối, 1440px/1024px/390px, app desktop) → chấm theo tiêu chí Linear/Jira/Atlassian Design (mật độ thông tin, phân cấp chữ, khoảng cách, màu trạng thái nhất quán, trống/đang tải/lỗi, phím tắt, focus). Nâng chỗ yếu: dashboard dự án + workspace (KPI tiles, burndown/burnup, CFD, velocity, phân bổ tải, sức khoẻ sprint, rủi ro), biểu đồ chuẩn (một thư viện, tooltip, xuất PNG), bảng số liệu (dính tiêu đề, sắp xếp, cột tuỳ chọn), trang tổng quan "Portfolio" cho trưởng nhóm/giảng viên. **KHÔNG 3D/hiệu ứng trang trí** — công cụ doanh nghiệp cần rõ ràng, nhanh, tập trung; 3D chỉ khi nó giúp HIỂU dữ liệu (thường không). Chỗ nào đã ổn thì giữ, ghi rõ "đã ổn" trong báo cáo rà soát. Làm SAU đợt 3C, TRƯỚC đợt 4 nếu rà thấy lỗi nặng; còn lại gộp dần vào từng đợt (mỗi tính năng mới phải đạt chuẩn này ngay khi làm). **Rà xong 09/10: `docs/ctw-ra-soat-giao-dien-09-10.md` (3,8/5, 270 ảnh)** ⇒ 3 gói: **UX-A** (P0: header dự án vỡ ở 1180px app desktop, số 'open' lệch Projects/Portfolio/Dashboard, tương phản AA token --w-green/yellow/orange; + thống nhất KPI tile, sidebar, Getting started, ARIA) — TRƯỚC đợt 4; **UX-B** (ChartFrame Recharts + xuất PNG/CSV, CFD/cycle/throughput, dashboard Project overview mặc định); **UX-C** (DataTable chung, làm lại WBS, tổng quan giảng viên/trưởng nhóm, Timeline, Issue detail) | sau đợt 3 deploy |
+| 7 | Bù công cụ thương mại: baseline, OKR, CFD/cycle time, planning poker, retro board, timer, forms, import Trello/Asana/xlsx, ép 2FA, knowledge base, Zalo/Discord/email→thẻ (CTW-26), asset/license register (CTW-21), widget, automation thêm | |
+| 8 | Nền tảng: giao diện tiếng Việt, mobile/iOS đủ màn + push, đồng soạn thảo (yjs), whiteboard, offline, vai trò tuỳ biến, RACI, UAT cho giảng viên | |
+| **CUỐI CÙNG** | Ý tưởng người dùng (09/10), để sau cùng theo lời dặn: điều phối nhiều agent / **agent trưởng nhóm** chia việc cho agent khác (bản nhẹ: agent "lead" tạo thẻ con + giao agent khác, qua người duyệt); CTW-35 bàn giao người↔agent có "context pack"; CTW-36 điều phối đa agent đầy đủ | |
+
+## Đợt 3C — "Dùng được khi KHÔNG có Claude"
+Người dùng hỏi ngày 09/10: "không phải lúc nào tôi cũng phụ thuộc vào bạn được". Ba việc:
+
+1. **Bộ lệnh dùng chung (một registry) cho cả MCP lẫn "Ask AI" có sẵn trên web.** Lệnh nào AI ngoài làm qua MCP thì Ask AI làm được, và ngược lại. Ghi vẫn đi qua bước ĐỀ XUẤT → Áp dụng (Ask AI) hoặc rào chắn agent (MCP). Mở rộng các lệnh:
+   - **Kiểm thử:** đọc/tạo hàm và UTCID 5.1, bước 5.2, vòng 5.3, ghi kết quả; test case/run kiểu Xray.
+   - **Docs:** viết nháp trang, sửa mục, qua người duyệt.
+   - **Xuất tệp:** lấy link Excel/Word/PDF.
+   - **Sprint/họp/rủi ro/RTM:** biên bản họp → thẻ, cập nhật RAID, báo cáo tuần.
+2. **Agent BUILTIN** chạy trên máy chủ bằng khoá LLM của web (cổng modelapi, `gateway.ts`).
+   - Hiện máy chủ trả lời "Built-in agents arrive in phase 2" (`agents.service.ts:129`). Phần này mở khoá đó.
+   - "Assign to AI" giao cho nó ⇒ nó tự làm (viết test case, nháp SRS…) rồi chuyển sang Review.
+   - **Trần chi phí riêng** cho agent này, hiện số tiền trên trang AI agents.
+   - Tôn trọng `budget.ts` và quota. Không dùng feature `bulk_gen|news`, vì `LLM_BACKGROUND_ENABLED=false` sẽ chặn im lặng.
+3. **Tài liệu MCP mở cho AI khác:** Cursor, Gemini CLI, Codex CLI, Claude Desktop. Có trang hướng dẫn trong `/work/developer`, thử ít nhất một client không phải Claude.
+   - KHÔNG tự làm MCP cho Google Calendar/Gmail/Drive (Claude đã có connector; lịch CT Work đã có link `.ics`).
+   - KHÔNG làm MCP để chỉnh tệp Excel (CT Work tự xuất đúng mẫu).
+
+## Việc người dùng phải tự làm (nhắc khi cần)
+- Kéo 10 thẻ đợt 1a sang Done (board CTW).
+- Reopen timesheet tuần 05/10 ở dự án Flying Pencil (Finance), vì cần quyền tài chính của người.
+- Xác nhận license MIT và scope `@cuongthai` trước khi publish `ctwork-mcp` lên npm.
+- Gửi thêm mẫu tài liệu của thầy cô (nếu có) vào `~/Downloads`.

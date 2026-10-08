@@ -51,8 +51,10 @@ export default function NewPageDialog({ open, onClose, config, parentNumber, par
     const by = new Map<string, { label: string; n: number; items: DocTemplateInfo[] }>();
     for (const x of list) {
       const s = x.stages[0];
-      const k = s ? s.slug : 'other';
-      const g = by.get(k) ?? { label: s ? `${String(s.n).padStart(2, '0')} · ${s.titleEn}` : 'Other', n: s ? s.n : 99, items: [] };
+      // CTW đợt 3A: mẫu có nhóm riêng (bộ "FPT Capstone" — Report 1→7) đứng đầu danh sách.
+      const group = (x as DocTemplateInfo & { group?: string | null }).group;
+      const k = group ? `group:${group}` : s ? s.slug : 'other';
+      const g = by.get(k) ?? { label: group ? `${group} · Report 1 → 7` : s ? `${String(s.n).padStart(2, '0')} · ${s.titleEn}` : 'Other', n: group ? -1 : s ? s.n : 99, items: [] };
       g.items.push(x);
       by.set(k, g);
     }
@@ -95,7 +97,7 @@ export default function NewPageDialog({ open, onClose, config, parentNumber, par
         <div className="min-w-0">
           <div className="relative mb-2">
             <Search size={13} aria-hidden="true" className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
-            <input className="w-input !pl-7" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search 36 templates" aria-label="Search templates" />
+            <input className="w-input !pl-7" value={q} onChange={(e) => setQ(e.target.value)} placeholder={`Search ${lib.data?.length ?? ''} templates`} aria-label="Search templates" />
           </div>
           <div className="max-h-[52vh] overflow-y-auto rounded-[8px] border border-[var(--w-border)] p-1" role="listbox" aria-label="Templates">
             <TemplateRow active={pick === BLANK} onClick={() => setPick(BLANK)} title="Blank page" sub="Start from an empty page" blank />

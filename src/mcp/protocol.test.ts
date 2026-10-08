@@ -95,10 +95,11 @@ describe('MCP protocol (thuần)', () => {
     const expected = ['whoami', 'list_projects', 'my_work', 'get_issue', 'search_issues', 'list_pages', 'get_page',
       'claim_issue', 'heartbeat', 'release_issue', 'comment', 'transition', 'update_issue', 'create_issue', 'log_work',
       'report_usage', 'attach_file', 'attach_complete', 'ask_lead', 'request_review', 'wait_events'];
-    assert.deepEqual([...names].sort(), [...expected].sort());
+    // Đợt 3C: tools/list sinh từ registry dùng chung — 21 tool GĐ1 đứng đầu, đúng tên; lệnh mới nối sau.
+    assert.deepEqual([...names.slice(0, 21)].sort(), [...expected].sort());
     const readOnly = new Set(['whoami', 'list_projects', 'my_work', 'get_issue', 'search_issues', 'list_pages', 'get_page', 'wait_events']);
     for (const t of TOOLS) {
-      assert.equal(t.write, !readOnly.has(t.name), `${t.name}.write`);
+      if (expected.includes(t.name)) assert.equal(t.write, !readOnly.has(t.name), `${t.name}.write`);
       const j = zodToJsonSchema(t.input) as any;
       assert.equal(j.type, 'object', t.name);
       assert.ok(t.description.length > 20, t.name);

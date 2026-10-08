@@ -10241,6 +10241,13 @@ model WorkProject {
   fptChanges        WorkFptChange[]
   unitFunctions     WorkUnitFunction[]
   itModules         WorkItModule[]
+  /// CTW đợt 3B: WBS + ước lượng, thông tin môn học, Weekly Report, AI Usage Report.
+  wbsItems          WorkWbsItem[]
+  fptReportDoc      WorkFptReportDoc?
+  weeklyReports     WorkWeeklyReport[]
+  aiUsageLogs       WorkAiUsageLog[]
+  /// CTW đợt 3A: ảnh chèn trong trình soạn thảo (Docs, mô tả thẻ, bình luận).
+  docImages         WorkDocImage[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
   clientRequest     ProjectRequest?
 
@@ -10457,6 +10464,8 @@ model WorkIssue {
   devActivity    WorkDevActivity[]
   /// Resources (06/10/2026): "Web links" kiểu Jira trên chi tiết thẻ.
   webLinks       WorkIssueWebLink[]
+  /// CTW đợt 3B (A3): thuộc tính WBS/ước lượng.
+  wbsItem        WorkWbsItem?
 
   @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
   @@index([projectId, statusId, rank], name: "idx_work_issue_board")
@@ -10862,6 +10871,9 @@ model WorkFptTestDoc {
   tcPerKloc     Int       @default(100) @map("tc_per_kloc")
   unitNotes     String?   @map("unit_notes") @db.Text
   intNotes      String?   @map("int_notes") @db.Text
+  /// CTW đợt 3B (A14): Report 5.3 System Test dùng chung Cover — ngày phát hành + ghi chú riêng.
+  sysIssueDate  DateTime? @map("sys_issue_date") @db.Date
+  sysNotes      String?   @map("sys_notes") @db.Text
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
   project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
@@ -10981,6 +10993,8 @@ model WorkItModule {
   description     String?  @db.Text
   preCondition    String?  @map("pre_condition") @db.Text
   testRequirement String?  @map("test_requirement") @db.Text
+  /// CTW đợt 3B (A14): INT = sheet module của Report 5.2 · SYS = sheet workflow của Report 5.3 (Round 1–3).
+  kind            String   @default("INT") @db.VarChar(4)
   position        Int      @default(0)
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
@@ -10988,6 +11002,7 @@ model WorkItModule {
   project WorkProject  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   cases   WorkItCase[]
 
+  @@index([projectId, kind, position], name: "idx_work_it_module_kind")
   @@index([projectId, position], name: "idx_work_it_module_project")
   @@map("work_it_modules")
 }
@@ -11014,6 +11029,108 @@ model WorkItCase {
   @@index([moduleId, position], name: "idx_work_it_case_module")
   @@map("work_it_cases")
 }
+
+// ── CTW đợt 3B ── (09/10/2026) Excel / báo cáo theo mẫu FPT: WBS + ước lượng (A3), Weekly Report (A21),
+// AI Usage Report (A29), thông tin môn học dùng chung cho các báo cáo nộp trường.
+
+/// A3 — thuộc tính WBS/ước lượng của MỘT thẻ (sheet WBS của Report2_Project Tracking).
+/// complexity null ⇒ suy từ fields/transactions theo bảng quy đổi (settings.estimationMatrix),
+/// rồi tới trường tuỳ chỉnh "Complexity". plannedDays null ⇒ man-day theo bảng quy đổi.
+model WorkWbsItem {
+  issueId      Int      @id @map("issue_id")
+  projectId    Int      @map("project_id")
+  /// Screen | Function | Non-UI (cột Type của mẫu).
+  kind         String?  @db.VarChar(12)
+  /// Simple | Medium | Complex.
+  complexity   String?  @db.VarChar(12)
+  /// Số trường dữ liệu / số giao dịch — tiêu chí của mẫu (≤7/≤15/>15 field, ≤3/≤7/>7 transaction).
+  fields       Int?
+  transactions Int?
+  feature      String?  @db.VarChar(120)
+  subFeature   String?  @map("sub_feature") @db.VarChar(120)
+  plannedDays  Float?   @map("planned_days")
+  note         String?  @db.VarChar(1000)
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  issue   WorkIssue   @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], name: "idx_work_wbs_item_project")
+  @@map("work_wbs_items")
+}
+
+/// Thông tin môn học/nhóm dùng chung cho Weekly Report + AI Usage Report (sheet 0.Overview).
+/// week1Start = thứ Hai của tuần 1 học kỳ ⇒ đánh số "Week n". students = [{ code, name, role, aiTools }].
+model WorkFptReportDoc {
+  projectId    Int       @id @map("project_id")
+  subjectCode  String?   @map("subject_code") @db.VarChar(20)
+  subjectName  String?   @map("subject_name") @db.VarChar(120)
+  classCode    String?   @map("class_code") @db.VarChar(40)
+  semester     String?   @db.VarChar(40)
+  lecturer     String?   @db.VarChar(120)
+  groupCode    String?   @map("group_code") @db.VarChar(60)
+  projectTitle String?   @map("project_title") @db.VarChar(200)
+  week1Start   DateTime? @map("week1_start") @db.Date
+  students     Json      @default("[]")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("work_fpt_report_docs")
+}
+
+/// A21 — một kỳ Weekly Report (một sheet "Week n" của mẫu SEP490). data = { status, issues, plan, matters, grades }
+/// — bản người dùng sửa được; "Refresh" điền lại từ dữ liệu tuần. Khoá lạc quan theo `version`.
+model WorkWeeklyReport {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  weekStart   DateTime @map("week_start") @db.Date
+  weekNo      Int?     @map("week_no")
+  data        Json     @default("{}")
+  version     Int      @default(0)
+  createdById Int?     @map("created_by_id")
+  updatedById Int?     @map("updated_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, weekStart], name: "uk_work_weekly_report", map: "uk_work_weekly_report")
+  @@map("work_weekly_reports")
+}
+
+/// A29 — một dòng nhật ký dùng AI (SWP391 Template0, sheet "n. Week n"). source AUTO = tự ghi từ provenance
+/// (thẻ aiAssisted, lượt agent, hội thoại AI) với sourceKey để không ghi trùng; MANUAL = người nhập tay.
+/// issueId/userId KHÔNG có FK — như nhật ký, thẻ/người bị xoá thì dòng khai báo vẫn đứng.
+model WorkAiUsageLog {
+  id         Int      @id @default(autoincrement())
+  projectId  Int      @map("project_id")
+  usedAt     DateTime @map("used_at") @db.Date
+  phase      String   @db.VarChar(40)
+  task       String   @db.VarChar(300)
+  tool       String   @db.VarChar(120)
+  output     String?  @db.Text
+  validation String?  @db.Text
+  evidence   String?  @db.VarChar(1000)
+  measure    String?  @db.VarChar(300)
+  value      Int?
+  risks      String?  @db.Text
+  source     String   @default("MANUAL") @db.VarChar(8)
+  sourceKey  String?  @map("source_key") @db.VarChar(80)
+  issueId    Int?     @map("issue_id")
+  userId     Int?     @map("user_id")
+  userName   String?  @map("user_name") @db.VarChar(120)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, sourceKey], name: "uk_work_ai_usage_source", map: "uk_work_ai_usage_source")
+  @@index([projectId, usedAt], name: "idx_work_ai_usage_project")
+  @@map("work_ai_usage_logs")
+}
+
+// ── hết CTW đợt 3B ──
 
 // ─── CT Work — tuỳ biến & tìm kiếm (đợt 5) ────────────────────────────
 
@@ -12980,6 +13097,30 @@ model WorkIssueWebLink {
   @@map("work_issue_web_links")
 }
 
+// ── CTW đợt 3A ── (09/10/2026) TÀI LIỆU: ảnh trong trình soạn thảo ─────────────────────
+/// Ảnh chèn vào RichEditor (trang Docs, mô tả thẻ, bình luận) — một dòng mỗi ảnh tải lên. Nội dung TipTap chỉ lưu
+/// đường dẫn `/api/v1/work/projects/:pid/images/:id`; quyền xem ảnh = quyền xem dự án (kiểm mỗi lần tải).
+/// Tệp nằm ở kho lưu trữ (R2 trên production) dưới `work/<pid>/img/…`. Trùng nội dung (sha256) trong cùng dự án ⇒ dùng lại dòng cũ.
+/// uploaderId KHÔNG có khoá ngoại: xoá người dùng không được kéo theo ảnh đang nằm trong tài liệu của nhóm.
+model WorkDocImage {
+  id         Int      @id @default(autoincrement())
+  projectId  Int      @map("project_id")
+  uploaderId Int?     @map("uploader_id")
+  r2Key      String   @map("r2_key") @db.VarChar(500)
+  fileName   String   @map("file_name") @db.VarChar(255)
+  mime       String   @db.VarChar(100)
+  size       Int
+  width      Int?
+  height     Int?
+  sha256     String   @db.VarChar(64)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, sha256], map: "idx_work_doc_image_project_sha")
+  @@map("work_doc_images")
+}
+
 // ─── THƯ VIỆN SÁCH (/books) — tiến độ đọc theo người (05/10/2026) ───────────────
 // App desktop có mục "Library" để đọc sách mỗi ngày: nhớ đọc tới đâu (đổi máy vẫn
 // đọc tiếp), dấu trang, tổng phút đọc, mục tiêu phút/ngày + chuỗi ngày. Không FK tới
@@ -13072,3 +13213,25 @@ model DoiKhangHang {
   @@index([tro, elo], map: "idx_doi_khang_hang_elo")
   @@map("doi_khang_hang")
 }
+
+// ── CTW đợt 3C ── (09/10/2026) "Dùng được khi KHÔNG có Claude": agent DỰNG SẴN (runtime BUILTIN) chạy trên máy chủ.
+// Trần tiền theo agent/ngày đã có sẵn (WorkAgent.dailyCostCapUsd, GĐ1); lượt chạy ghi ở WorkAgentRun (GĐ1, chưa từng
+// có mã ghi); chi phí đo thật ghi WorkAgentUsage source GATEWAY. Ở đây chỉ THÊM trần chung của cả không gian.
+
+/// Trần chi phí agent BUILTIN của một không gian (đặt trên trang AI agents). Không có dòng ⇒ mặc định an toàn trong mã
+/// (builtinAgent.service BUILTIN_DEFAULTS). Không khoá ngoại tới work_spaces: chỉ-thêm, không đụng model WorkSpace.
+model WorkBuiltinBudget {
+  workspaceId Int      @id @map("workspace_id")
+  /// Tổng USD/ngày (giờ VN) cho MỌI agent BUILTIN của không gian.
+  dailyCapUsd Decimal  @default(10) @map("daily_cap_usd") @db.Decimal(10, 4)
+  /// USD tối đa cho MỘT lượt chạy (một thẻ).
+  runCapUsd   Decimal  @default(2) @map("run_cap_usd") @db.Decimal(10, 4)
+  /// Số bước (lời gọi model) tối đa mỗi lượt.
+  maxSteps    Int      @default(12) @map("max_steps")
+  updatedById Int?     @map("updated_by_id")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("work_builtin_budgets")
+}
+
+// ── hết CTW đợt 3C ──

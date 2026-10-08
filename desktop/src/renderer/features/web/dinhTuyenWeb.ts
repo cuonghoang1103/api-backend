@@ -336,6 +336,8 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/:ws/:key/reports', nap: () => import('@/app/work/[ws]/[key]/reports/page') },
   { mau: '/work/:ws/:key/dashboards', nap: () => import('@/app/work/[ws]/[key]/dashboards/page') },
   { mau: '/work/:ws/:key/tests', nap: () => import('@/app/work/[ws]/[key]/tests/page') },
+  /* CTW đợt 3B (09/10/2026): báo cáo Excel nộp trường (WBS, Project Tracking, Weekly Report, AI Usage). */
+  { mau: '/work/:ws/:key/school', nap: () => import('@/app/work/[ws]/[key]/school/page') },
   { mau: '/work/:ws/:key/settings', nap: () => import('@/app/work/[ws]/[key]/settings/page') },
   // Lớp studio Đợt S1: giai đoạn & cổng, phê duyệt có chữ ký.
   { mau: '/work/:ws/:key/stages', nap: () => import('@/app/work/[ws]/[key]/stages/page') },

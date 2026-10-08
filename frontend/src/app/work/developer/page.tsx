@@ -352,6 +352,99 @@ function ApiReference() {
   );
 }
 
+// ─── Đợt 3C: cắm AI KHÁC (không phụ thuộc Claude) ────────────────
+
+type ClientId = 'claude-code' | 'claude-desktop' | 'cursor' | 'gemini' | 'codex' | 'http';
+const CLIENTS: Array<{ id: ClientId; name: string; where: string }> = [
+  { id: 'cursor', name: 'Cursor', where: '~/.cursor/mcp.json (or .cursor/mcp.json in a project)' },
+  { id: 'gemini', name: 'Gemini CLI', where: '~/.gemini/settings.json (or .gemini/settings.json in a project)' },
+  { id: 'codex', name: 'Codex CLI', where: '~/.codex/config.toml' },
+  { id: 'claude-desktop', name: 'Claude Desktop', where: 'Settings → Developer → Edit Config (claude_desktop_config.json)' },
+  { id: 'claude-code', name: 'Claude Code', where: 'terminal' },
+  { id: 'http', name: 'Any client / script', where: 'plain HTTP (JSON-RPC 2.0)' },
+];
+
+function clientConfig(id: ClientId, mcp: string): { lang: string; text: string; note: string } {
+  switch (id) {
+    case 'cursor':
+      return {
+        lang: 'json', note: 'Remote MCP over HTTP. Cursor reads ${env:CTW_TOKEN} from your environment — or paste the token instead.',
+        text: JSON.stringify({ mcpServers: { ctwork: { url: mcp, headers: { Authorization: 'Bearer ${env:CTW_TOKEN}' } } } }, null, 2),
+      };
+    case 'gemini':
+      return {
+        lang: 'json', note: 'httpUrl = streamable HTTP. Gemini CLI expands $CTW_TOKEN from the environment. Check with /mcp inside gemini.',
+        text: JSON.stringify({ mcpServers: { ctwork: { httpUrl: mcp, headers: { Authorization: 'Bearer $CTW_TOKEN' }, timeout: 90000 } } }, null, 2),
+      };
+    case 'codex':
+      return {
+        lang: 'toml', note: 'Codex starts the stdio bridge as a local server. Check with `codex mcp list`, then ask Codex to call fpt_unit_list.',
+        text: `[mcp_servers.ctwork]\ncommand = "npx"\nargs = ["-y", "@cuongthai/ctwork-mcp"]\nenv = { CTWORK_TOKEN = "ctw_…", CTWORK_URL = "${mcp}" }`,
+      };
+    case 'claude-desktop':
+      return {
+        lang: 'json', note: 'Claude Desktop starts local (stdio) servers, so it uses the bridge. Restart Claude Desktop after saving.',
+        text: JSON.stringify({ mcpServers: { ctwork: { command: 'npx', args: ['-y', '@cuongthai/ctwork-mcp'], env: { CTWORK_TOKEN: 'ctw_…', CTWORK_URL: mcp } } } }, null, 2),
+      };
+    case 'claude-code':
+      return { lang: 'sh', note: 'Talks to the server directly (no bridge).', text: `claude mcp add --transport http ctwork ${mcp} \\\n  --header "Authorization: Bearer $CTW_TOKEN"` };
+    case 'http':
+    default:
+      return {
+        lang: 'sh', note: 'Stateless: one JSON-RPC message per POST, no session. 120 tool calls per minute per token.',
+        text: `curl -s ${mcp} -H "Authorization: Bearer $CTW_TOKEN" \\\n  -H "Content-Type: application/json" \\\n  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"fpt_unit_list","arguments":{"project":"FP"}}}'`,
+      };
+  }
+}
+
+/** Hướng dẫn cắm Cursor / Gemini CLI / Codex CLI / Claude Desktop — cùng một MCP server, cùng bộ lệnh với Ask AI. */
+function McpClientsGuide() {
+  const [base, setBase] = useState('https://your-domain/api/v1/work');
+  useEffect(() => setBase(`${publicOrigin()}/api/v1/work`), []);
+  const [client, setClient] = useState<ClientId>('cursor');
+  const mcp = `${base}/mcp`;
+  const cfg = clientConfig(client, mcp);
+  const c = CLIENTS.find((x) => x.id === client)!;
+  return (
+    <div className="space-y-4" data-testid="mcp-clients-guide">
+      <p className="text-[13px] leading-relaxed text-[var(--w-text-2)]">
+        CT Work does not depend on one AI vendor. Any MCP client can read and update your projects with the same commands the in-app
+        <span className="font-medium"> Ask AI</span> uses — issues, Docs, FPT test reports 5.1/5.2/5.3, Xray tests, meetings, RAID, weekly reports and download links.
+        Use a <span className="font-medium">personal token</span> (above) to act as yourself, or an <span className="font-medium">AI agent token</span> (workspace → AI agents) for an agent with its own guardrails.
+      </p>
+      <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="MCP client">
+        {CLIENTS.map((x) => (
+          <button
+            key={x.id}
+            type="button"
+            role="tab"
+            aria-selected={client === x.id}
+            onClick={() => setClient(x.id)}
+            className={cn('h-[28px] rounded-[6px] border px-2.5 text-[12.5px] font-medium', client === x.id ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border)] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}
+            data-testid={`mcp-client-${x.id}`}
+          >
+            {x.name}
+          </button>
+        ))}
+      </div>
+      <div role="tabpanel" aria-label={c.name}>
+        <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-2">
+          <span className="text-[12.5px] text-[var(--w-text-2)]">Put this in <span className="font-mono text-[12px] text-[var(--w-text)]">{c.where}</span></span>
+          <span className="font-mono text-[11px] uppercase text-[var(--w-text-3)]">{cfg.lang}</span>
+        </div>
+        <Code>{cfg.text}</Code>
+        <p className="mt-2 text-[12px] leading-relaxed text-[var(--w-text-3)]">{cfg.note}</p>
+      </div>
+      <ul className="list-disc space-y-1 pl-5 text-[12.5px] leading-relaxed text-[var(--w-text-2)]">
+        <li>Keep the token out of files you commit — store it in an environment variable (<code className="font-mono">CTW_TOKEN</code>) where the client supports it.</li>
+        <li>Writes made through a person&apos;s token are yours; through an agent token they follow agent rules (no approving, deleting, settings, finance or clients; Done goes to review).</li>
+        <li>The stdio bridge <code className="font-mono">@cuongthai/ctwork-mcp</code> has no dependencies (Node 18+). Until it is on npm, run it from the repo: <code className="font-mono">node packages/ctwork-mcp/bin/ctwork-mcp.js</code>.</li>
+        <li>No AI subscription at all? Workspace → AI agents → <span className="font-medium">Built-in</span> agent runs on CT Work itself (Pro).</li>
+      </ul>
+    </div>
+  );
+}
+
 // ─── Trang ───────────────────────────────────────────────────────
 
 export default function DeveloperPage() {
@@ -374,6 +467,9 @@ export default function DeveloperPage() {
             action={<button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreating(true)}><Plus size={14} /> Create token</button>}
           >
             <TokenList onCreate={() => setCreating(true)} />
+          </Section>
+          <Section title="Connect any AI (MCP)" description="Cursor, Gemini CLI, Codex CLI, Claude Desktop or Claude Code — one server, one set of commands.">
+            <McpClientsGuide />
           </Section>
           <Section title="REST API reference" description="The most useful endpoints for automation. Ids come from the responses — for example a project's issue types and statuses from the project configuration.">
             <ApiReference />

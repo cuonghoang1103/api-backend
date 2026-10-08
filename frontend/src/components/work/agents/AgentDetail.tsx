@@ -25,6 +25,7 @@ import { Dialog, EmptyState, Field, formatDate, PageLoading, relativeTime, Spinn
 import { ConfirmDialog, Section, Select, Switch } from '../settings/shared';
 import { AgentStatusPill, Stat, TokenRevealDialog, usd } from './AgentBits';
 import { useAgentDirectory } from './directory';
+import { AgentRunsSection } from './BuiltinBits';
 
 const maskUrl = (u: string) => {
   try {
@@ -53,7 +54,7 @@ function EditDialog({ ws, agent, open, onClose }: { ws: WorkspaceDetail; agent: 
   }, [open, agent]);
   const save = useMutation({
     mutationFn: () => agentsApi.update(ws.id, agent.id, {
-      name: name.trim(), model: model.trim(), roleText: roleText.trim() || null, parallelSlots: slots,
+      name: name.trim(), ...(agent.runtime === 'BUILTIN' ? {} : { model: model.trim() }), roleText: roleText.trim() || null, parallelSlots: slots,
       dailyCostCapUsd: cap.trim() === '' ? null : Math.max(0, Number(cap)),
       ...(admin && ownerId !== agent.ownerId ? { ownerId } : {}),
     }),
@@ -66,10 +67,16 @@ function EditDialog({ ws, agent, open, onClose }: { ws: WorkspaceDetail; agent: 
       <form onSubmit={(e) => { e.preventDefault(); if (name.trim() && model.trim()) save.mutate(); }}>
         <div className="grid gap-x-3 sm:grid-cols-2">
           <Field label="Name"><input className="w-input" value={name} maxLength={100} onChange={(e) => setName(e.target.value)} /></Field>
-          <Field label="Model">
-            <input className="w-input" list="edit-models" value={model} maxLength={80} onChange={(e) => setModel(e.target.value)} />
-            <datalist id="edit-models">{AGENT_MODELS.map((m) => <option key={m} value={m} />)}</datalist>
-          </Field>
+          {agent.runtime === 'BUILTIN' ? (
+            <Field label="Model" hint="Built-in agents use the model CT Work picks.">
+              <div className="flex h-[32px] items-center rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-2.5 font-mono text-[12.5px] text-[var(--w-text-2)]">{agent.model}</div>
+            </Field>
+          ) : (
+            <Field label="Model">
+              <input className="w-input" list="edit-models" value={model} maxLength={80} onChange={(e) => setModel(e.target.value)} />
+              <datalist id="edit-models">{AGENT_MODELS.map((m) => <option key={m} value={m} />)}</datalist>
+            </Field>
+          )}
         </div>
         <Field label="Role"><input className="w-input" value={roleText} maxLength={300} onChange={(e) => setRoleText(e.target.value)} /></Field>
         {admin && (
@@ -84,7 +91,7 @@ function EditDialog({ ws, agent, open, onClose }: { ws: WorkspaceDetail; agent: 
           <Field label="Issues at the same time" hint="How many issues it may hold a lease on at once (1–10).">
             <input type="number" min={1} max={10} className="w-input" value={slots} onChange={(e) => setSlots(Math.min(10, Math.max(1, Number(e.target.value) || 1)))} />
           </Field>
-          <Field label="Daily cost cap (USD)" hint="Empty = the workspace default.">
+          <Field label="Daily cost cap (USD)" hint={agent.runtime === 'BUILTIN' ? 'Measured spend of this built-in agent per day. Empty = $5.' : 'Empty = the workspace default.'}>
             <input type="number" min={0} step="0.5" className="w-input" value={cap} onChange={(e) => setCap(e.target.value)} placeholder="No cap" />
           </Field>
         </div>
@@ -389,7 +396,10 @@ export default function AgentDetail({ ws, agentId }: { ws: WorkspaceDetail; agen
               <h2 className="truncate text-[18px] font-semibold tracking-[-0.01em]" data-testid="agent-name">{userName(a.user)}</h2>
               <AgentStatusPill status={a.status} />
             </div>
-            <div className="mt-0.5 text-[13px] text-[var(--w-text-2)]">{a.roleText || 'AI agent'} · <span className="font-mono text-[12px]">@{a.user.username}</span></div>
+            <div className="mt-0.5 text-[13px] text-[var(--w-text-2)]">
+              {a.runtime === 'BUILTIN' && <span className="mr-1.5 rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 py-px text-[10.5px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]">Built-in · runs on CT Work</span>}
+              {a.roleText || 'AI agent'} · <span className="font-mono text-[12px]">@{a.user.username}</span>
+            </div>
             <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[12.5px] text-[var(--w-text-2)]">
               Owner <UserAvatar user={a.owner} size={18} /> <span className="font-medium text-[var(--w-text)]">{userName(a.owner)}</span>
               <span className="text-[var(--w-text-3)]">· created {formatDate(a.createdAt)}</span>
@@ -414,8 +424,8 @@ export default function AgentDetail({ ws, agentId }: { ws: WorkspaceDetail; agen
           <Stat label="Model" value={<span className="font-mono text-[13px]">{a.model}</span>} />
           <Stat label="Last seen" value={a.lastSeenAt ? relativeTime(a.lastSeenAt) : 'Never'} />
           <Stat label="Working on" value={`${a.activeLeases?.length ?? 0} / ${a.parallelSlots}`} hint="Active leases / issues it may hold at once" />
-          <Stat label="Cost · 7 days" value={dash.data ? usd(cost7 ?? 0) : '—'} hint="Self-reported by the agent (report_usage) unless measured by CT Work" />
-          <Stat label="Daily cap" value={a.dailyCostCapUsd === null ? 'Default' : usd(a.dailyCostCapUsd)} />
+          <Stat label="Cost · 7 days" value={dash.data ? usd(cost7 ?? 0) : '—'} hint={a.runtime === 'BUILTIN' ? 'Measured by CT Work' : 'Self-reported by the agent (report_usage) unless measured by CT Work'} />
+          <Stat label="Daily cap" value={a.dailyCostCapUsd === null ? (a.runtime === 'BUILTIN' ? usd(5) : 'Default') : usd(a.dailyCostCapUsd)} />
         </div>
         {!!a.projects?.length && (
           <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[12px]">
@@ -427,11 +437,12 @@ export default function AgentDetail({ ws, agentId }: { ws: WorkspaceDetail; agen
         )}
       </div>
 
+      {a.runtime === 'BUILTIN' && <AgentRunsSection wsId={ws.id} agentId={a.id} canManage={can} />}
       <LeasesSection ws={ws} agent={a} />
-      {can && <TokensSection ws={ws} agent={a} onIssued={setIssued} />}
+      {can && a.runtime !== 'BUILTIN' && <TokensSection ws={ws} agent={a} onIssued={setIssued} />}
       {can && <WebhooksSection ws={ws} agent={a} />}
       {can && <InboxSection ws={ws} agent={a} />}
-      {!can && <p className="mt-2 text-[12.5px] text-[var(--w-text-3)]">Only {userName(a.owner)} (its owner) and workspace admins can see its tokens, webhooks and inbox.</p>}
+      {!can && <p className="mt-2 text-[12.5px] text-[var(--w-text-3)]">Only {userName(a.owner)} (its owner) and workspace admins can see its {a.runtime === 'BUILTIN' ? 'webhooks and inbox, or stop its runs' : 'tokens, webhooks and inbox'}.</p>}
 
       <EditDialog ws={ws} agent={a} open={edit} onClose={() => setEdit(false)} />
       <ConfirmDialog

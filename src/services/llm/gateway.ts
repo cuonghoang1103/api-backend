@@ -334,6 +334,7 @@ export type LlmPurpose =
   | 'finance_advisor'     // MoneyFlow — đọc số liệu tiền nong của CHÍNH người dùng rồi khuyên
   | 'work_assistant'      // CT Work — trợ lý trong dự án: viết story, tách việc, sinh test, trả lời về dự án
   | 'work_digest'         // CT Work — diễn đạt lại số liệu mã đã tính (báo cáo tuần, bản tin)
+  | 'work_agent'          // CT Work đợt 3C — agent DỰNG SẴN (BUILTIN) tự làm một thẻ: vòng lặp gọi lệnh của registry
   | 'work_spec_review'    // CT Work S6 — soát ngữ nghĩa đặc tả (mâu thuẫn, thiếu edge case); phần xác định do MÃ chấm
   | 'note_format'         // Notes — "✨ Sắp xếp lại trang": sửa chính tả + dựng mục/bảng/khối code, KHÔNG thêm ý
   | 've_net'              // Vở iPad — "AI vẽ bằng nét": viết SVG nét đơn, máy chủ đổi ra điểm cho PKStroke
@@ -446,6 +447,17 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    */
   work_assistant: 'claude-sonnet-5',
   work_digest: 'gpt-5.4-mini',
+  /**
+   * CT Work đợt 3C (09/10/2026) — agent BUILTIN: vòng lặp ≤ 12 bước, mỗi bước model trả JSON {call|done}, mã chạy lệnh
+   * của registry. Việc này chạy NỀN (không ai ngồi chờ) và nhân theo số bước ⇒ model RẺ mà gọi lệnh ĐÚNG THAM SỐ.
+   *
+   * `gpt-6-sol`: đo 27/09 sổ cổng trừ ít hơn `gpt-5.6-sol` ~4 lần, nhanh ~3–6 lần, đúng ngang các việc khó.
+   * `gpt-5.4-mini` (rẻ nhất bảng 18/08) KHÔNG còn trong nhóm GPT của khoá — đo `GET /v1/models` 09/10/2026: nhóm GPT
+   * có gpt-6-sol/6-luna/6.1-sol/6-astra/5.6-sol/terra/luna/5.5/5.4/codex, không có 5.4-mini. Grok loại (không tôn
+   * trọng max_tokens ⇒ trần chi phí vô hiệu). Không đi rambo (VIEC_CHI_OPENAI) — để trần tiền/agent tính đúng
+   * theo model này, không bị đổi ngầm sang opus. Vặn bằng `LLM_MODEL_WORK_AGENT`.
+   */
+  work_agent: 'gpt-6-sol',
   /**
    * CT Work đợt S6 (05/10/2026) — "Check spec quality": model chỉ BỔ SUNG nhận xét ngữ nghĩa (mâu thuẫn giữa hai yêu
    * cầu, thiếu edge case, câu hai nghĩa) cho phần mã đã chấm. Người dùng bấm và ngồi đọc từng phát hiện ⇒ việc tương
@@ -847,7 +859,9 @@ function batDauDo(): void {
 // `ve_net` có mặt vì lý do KHÁC: nó gọi qua `llmComplete` (hiểu cả hai giao
 // thức), nhưng chất lượng nét vẽ đo được chỉ tốt trên `gpt-6-sol` — đi rambo là
 // ra model Claude vẽ kém hơn hẳn.
-const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai', 'study_plan', 'study_verify', 'study_coach', 'creator_script']);
+// `work_agent` (đợt 3C): agent BUILTIN của CT Work có trần TIỀN riêng tính theo model của `PURPOSE_MODEL` — đi rambo thì
+// `modelFor()` đổi ngầm sang opus và trần mất nghĩa, nên giữ ở modelapi.
+const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai', 'study_plan', 'study_verify', 'study_coach', 'creator_script', 'work_agent']);
 
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // Đặt TRƯỚC nhánh máy nhà: `agent_code` nằm trong `TOOL_PURPOSES` nên nó
@@ -1013,6 +1027,9 @@ const UU_TIEN: Partial<Record<LlmPurpose, MucUuTien>> = {
   codelab_bulk: 'nen',
   exphub_doc: 'nen',
   news_bulletin: 'nen',
+  // CT Work đợt 3C: agent BUILTIN chạy nền ⇒ qua trần MỀM như việc nền (budget.ts). KHÔNG dùng feature bulk_gen/news
+  // (LLM_BACKGROUND_ENABLED=false chặn im) — feature là 'work', chỉ mức ưu tiên là 'nen'.
+  work_agent: 'nen',
   plan_review: 'nguoi',
 };
 

@@ -31,6 +31,8 @@ const TABS = [
   // Đợt 1b (08/10/2026): tài liệu kiểm thử chuẩn FPT — Report 5.1 / 5.2, xuất/nhập Excel đúng mẫu.
   { id: 'unit', label: 'Unit tests (5.1)' },
   { id: 'integration', label: 'Integration (5.2)' },
+  // Đợt 3B (09/10/2026): Report 5.3 System Test — mỗi workflow một sheet, Round 1–3.
+  { id: 'system', label: 'System tests (5.3)' },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -115,6 +117,7 @@ function TestsView({ config, pid }: { config: ProjectConfig; pid: number }) {
             )}
             {tab === 'unit' && <UnitTab config={config} pid={pid} />}
             {tab === 'integration' && <IntegrationTab config={config} pid={pid} />}
+            {tab === 'system' && <IntegrationTab key="sys" config={config} pid={pid} kind="SYS" />}
             {tab === 'traceability' && (
               <div className="min-h-0 flex-1 overflow-hidden"><TraceabilityTab config={config} pid={pid} /></div>
             )}

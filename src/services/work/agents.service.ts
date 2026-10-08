@@ -33,6 +33,8 @@ import { invalidateAgentCache, recordInbox } from './agentEvents.js';
 type Tx = Prisma.TransactionClient;
 
 const MAX_AGENTS_PER_WORKSPACE = 50;
+/** Đợt 3C: trần tiền/ngày mặc định của một agent BUILTIN (= builtinAgent.service BUILTIN_DEFAULTS.agentDailyUsd). */
+const BUILTIN_DAILY_DEFAULT = 5;
 const LEASE_MAX_MINUTES = 240;
 
 export const AGENT_SELECT = {
@@ -124,9 +126,20 @@ export async function createAgent(callerId: number, workspaceId: number, input: 
   await scopeOf(callerId, workspaceId, 'admin');
   const name = input.name.trim().slice(0, 100);
   if (!name) throw new BadRequestError('Give the agent a name', 'WORK_NAME_REQUIRED');
-  const model = input.model.trim().slice(0, 80);
-  if (!model) throw new BadRequestError('Say which model the agent runs on', 'WORK_AGENT_MODEL');
-  if (input.runtime === 'BUILTIN') throw new BadRequestError('Built-in agents arrive in phase 2', 'WORK_AGENT_RUNTIME');
+  const typed = (input.model ?? '').trim().slice(0, 80);
+  if (!typed && input.runtime !== 'BUILTIN') throw new BadRequestError('Say which model the agent runs on', 'WORK_AGENT_MODEL');
+  // Đợt 3C: agent DỰNG SẴN — CT Work chạy hộ qua cổng LLM của web (builtinAgent.service). Chỉ Pro/admin tạo được, tối đa 3
+  // agent BUILTIN/không gian; model theo purpose `work_agent` (không cho gõ tay); KHÔNG cấp token (nó không chạy ở ngoài);
+  // trần tiền/ngày mặc định 5 $ (sửa được trên trang agent).
+  const builtin = input.runtime === 'BUILTIN';
+  let builtinModelName: string | null = null;
+  if (builtin) {
+    const b = await import('./builtinAgent.service.js');
+    await b.assertCanCreateBuiltin(callerId, workspaceId);
+    builtinModelName = b.builtinModel();
+    input = { ...input, token: null };
+  }
+  const model = builtinModelName ?? typed;
   const ownerId = input.ownerId ?? callerId;
   await assertOwnerCandidate(workspaceId, ownerId);
   const projectIds = [...new Set(input.projectIds ?? [])];
@@ -150,7 +163,8 @@ export async function createAgent(callerId: number, workspaceId: number, input: 
     const agent = await tx.workAgent.create({
       data: {
         userId: user.id, workspaceId, ownerId, model, roleText: input.roleText?.trim().slice(0, 300) || null,
-        capabilities: (input.capabilities ?? {}) as Prisma.InputJsonValue, runtime: 'EXTERNAL',
+        capabilities: (input.capabilities ?? {}) as Prisma.InputJsonValue, runtime: builtin ? 'BUILTIN' : 'EXTERNAL',
+        ...(builtin ? { dailyCostCapUsd: BUILTIN_DAILY_DEFAULT } : {}),
         parallelSlots: Math.min(Math.max(input.parallelSlots ?? 1, 1), 10), createdById: callerId,
       },
       select: { id: true, userId: true },
@@ -208,7 +222,8 @@ export async function updateAgent(callerId: number, workspaceId: number, agentId
   const { agent, scope } = await manageable(callerId, workspaceId, agentId);
   if (agent.status === 'RETIRED') throw new BadRequestError('This agent is retired', 'WORK_AGENT_RETIRED');
   const data: Prisma.WorkAgentUpdateInput = {};
-  if (input.model !== undefined) {
+  // Agent BUILTIN: model đi theo purpose `work_agent` (env LLM_MODEL_WORK_AGENT), không sửa tay ở đây.
+  if (input.model !== undefined && agent.runtime !== 'BUILTIN') {
     const m = input.model.trim().slice(0, 80);
     if (!m) throw new BadRequestError('Say which model the agent runs on', 'WORK_AGENT_MODEL');
     data.model = m;
@@ -376,6 +391,8 @@ export async function createAgentToken(
 ) {
   const { agent } = await manageable(callerId, workspaceId, agentId);
   if (agent.status === 'RETIRED') throw new BadRequestError('This agent is retired', 'WORK_AGENT_RETIRED');
+  // Đợt 3C: agent BUILTIN do CT Work chạy — không có token để ai cầm ra ngoài chạy thay.
+  if (agent.runtime === 'BUILTIN') throw new BadRequestError('Built-in agents run inside CT Work and have no API token', 'WORK_AGENT_RUNTIME');
   await assertProjectsInWorkspace(workspaceId, input.projectIds ?? []);
   const token = await issueAgentToken(agent, input);
   await audit({ workspaceId, actorId: callerId, action: 'agent.token.create', targetType: 'agent', targetId: agentId, summary: `Created token "${token.name}" for @${agent.user.username}`, detail: { tokenId: token.id, scopes: token.scopes, projectIds: input.projectIds ?? [] } });

@@ -3,6 +3,7 @@
  */
 
 import { Prisma } from '@prisma/client';
+import { CAPSTONE_MODULES, seedCapstone } from './capstone.service.js';
 import { prisma } from '../../config/database.js';
 import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { PUBLIC_USER } from './common.js';
@@ -49,7 +50,7 @@ export async function createProject(
   if (count >= MAX_PROJECTS_PER_WORKSPACE) throw new BadRequestError('This workspace has too many projects', 'WORK_LIMIT');
 
   try {
-    return await prisma.$transaction(async (tx) => {
+    const created = await prisma.$transaction(async (tx) => {
       const project = await tx.workProject.create({
         data: {
           workspaceId, key, name: name.slice(0, 120), description: input.description?.trim() || null,
@@ -61,7 +62,10 @@ export async function createProject(
       await tx.workProjectMember.create({ data: { projectId: project.id, userId, role: 'ADMIN' } });
       await seedProjectConfig(tx, project.id, input.template, input.type, { firstSprint: input.firstSprint });
       // Mô-đun ghi SAU seed (seed đặt settings của mẫu) — gộp, không đè.
-      const modules = mergeModules(input.kind ? defaultModulesFor(input.kind) : noModules(), input.modules ?? {});
+      // CTW đợt 3A: mẫu CAPSTONE bật sẵn mô-đun đồ án (giai đoạn, duyệt, Docs, RAID, họp) — ghi đè của người tạo vẫn thắng.
+      const baseModules = input.kind ? defaultModulesFor(input.kind) : noModules();
+      if (input.template === 'CAPSTONE') for (const m of CAPSTONE_MODULES) baseModules[m] = true;
+      const modules = mergeModules(baseModules, input.modules ?? {});
       const cur = await tx.workProject.findUniqueOrThrow({ where: { id: project.id }, select: { settings: true } });
       await tx.workProject.update({
         where: { id: project.id },
@@ -69,6 +73,12 @@ export async function createProject(
       });
       return { id: project.id, key: project.key, name: project.name, kind: project.kind as ProjectKind, modules };
     });
+    // CTW đợt 3A (A30): giai đoạn Report 1→7, Iteration 1–3, trang Docs mẫu FPT, epic theo Report — sau khi dự án đã có.
+    if (input.template === 'CAPSTONE') {
+      const ws = await prisma.workSpace.findUniqueOrThrow({ where: { id: workspaceId }, select: { slug: true } });
+      await seedCapstone(userId, created.id, { wsSlug: ws.slug, key: created.key });
+    }
+    return created;
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
       throw new ConflictError(`Project key ${key} is already used in this workspace`);

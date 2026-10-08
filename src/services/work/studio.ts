@@ -28,6 +28,7 @@ export function kindFromTemplate(template: string | null | undefined): ProjectKi
     case 'SWR302':
     case 'SWT301':
     case 'SWP391':
+    case 'CAPSTONE':
       return 'SCHOOL';
     case 'FREELANCE':
       return 'CLIENT';

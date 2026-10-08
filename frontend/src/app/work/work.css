@@ -350,6 +350,12 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
 .w-prose ul[data-type='taskList'] { list-style: none; padding-left: 2px; }
 .w-prose ul[data-type='taskList'] li { display: flex; gap: 8px; align-items: flex-start; }
 .w-prose ul[data-type='taskList'] li > label { margin-top: 4px; }
+/* CTW đợt 3A: ảnh + sơ đồ Mermaid trong trình soạn thảo (Docs, mô tả thẻ, bình luận). */
+.w-prose img.w-doc-img { display: block; max-width: 100%; height: auto; margin: 10px auto; border-radius: 6px; border: 1px solid var(--w-border); background: #fff; }
+.w-prose[contenteditable='true'] img.w-doc-img.ProseMirror-selectednode { outline: 2px solid var(--w-accent-border); outline-offset: 2px; }
+.w-prose .w-codeblock { margin: 0 0 8px; }
+.w-prose .w-mermaid { display: flex; justify-content: center; overflow-x: auto; padding: 12px; margin-bottom: 6px; border: 1px solid var(--w-border); border-radius: 8px; background: var(--w-sunken); }
+.w-prose .w-mermaid svg { max-width: 100%; height: auto; }
 .w-prose blockquote { border-left: 3px solid var(--w-border-strong); padding-left: 12px; color: var(--w-text-2); margin: 0 0 8px; }
 .w-prose code { font-family: var(--w-font-mono); font-size: 12.5px; background: var(--w-sunken); border: 1px solid var(--w-border); border-radius: 4px; padding: 1px 4px; color: var(--w-code-inline); }
 /* Khối code: bảng màu VS Code Dark+ ở CẢ hai giao diện sáng/tối (như editor thật), để code

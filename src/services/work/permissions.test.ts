@@ -160,6 +160,8 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/versions/2/release'], ['DELETE', '/versions/2'],
     ['DELETE', '/issues/12'], ['POST', '/issues/12/move-project'], ['POST', '/issues/bulk'], ['GET', '/trash'], ['POST', '/trash/3/restore'],
     ['PUT', '/edit-lock'], ['POST', '/ai/chat'], ['GET', '/ai/threads'],
+    // Đợt 3C: agent không tự khởi động / dừng agent dựng sẵn (tiền LLM của web)
+    ['POST', '/issues/12/agent-runs'], ['GET', '/issues/12/agent-runs'], ['POST', '/agent-runs/5/cancel'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [
@@ -197,7 +199,8 @@ describe('AI agent — tuyến ngoài dự án là DANH SÁCH TRẮNG (agentTopR
     for (const [m, p] of [['POST', '/workspaces'], ['PATCH', '/workspaces/3'], ['DELETE', '/workspaces/3'], ['POST', '/workspaces/3/invites'],
       ['GET', '/workspaces/3/agents'], ['POST', '/workspaces/3/agents'], ['POST', '/workspaces/3/agents/1/tokens'], ['GET', '/workspaces/3/audit'],
       ['DELETE', '/workspaces/3/members/9'], ['POST', '/invites/abc/accept'], ['GET', '/me/api-tokens'], ['POST', '/me/calendar-link'],
-      ['PUT', '/me/notify-settings'], ['GET', '/workspaces/3/workload'], ['POST', '/workspaces/3/transfer'], ['GET', '/ai/quota']] as const) {
+      ['PUT', '/me/notify-settings'], ['GET', '/workspaces/3/workload'], ['POST', '/workspaces/3/transfer'], ['GET', '/ai/quota'],
+      ['GET', '/workspaces/3/builtin-budget'], ['PUT', '/workspaces/3/builtin-budget'], ['GET', '/workspaces/3/agents/1/runs']] as const) {
       assert.equal(agentTopRouteAllowed(m, p), false, `${m} ${p}`);
     }
   });

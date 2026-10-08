@@ -4,6 +4,7 @@
  * Tab "Integration (5.2)" — kiểm thử tích hợp theo mẫu FPT: mỗi module/luồng một bảng bước
  * (mã <AT1>, mô tả, thủ tục, dữ liệu, mong đợi, thực tế, tối đa 4 vòng chạy Passed/Failed/Pending/N/A + ngày + người kiểm).
  * Lưu tự động (PUT thay trọn + version). Module đang chọn nằm trong `?mod=`.
+ * Đợt 3B (09/10/2026): cùng thành phần dựng tab "System tests (5.3)" — `kind="SYS"`: mỗi WORKFLOW một bảng, đúng 3 vòng.
  */
 
 import './fpt.css';
@@ -16,7 +17,7 @@ import { cn } from '@/lib/utils';
 import { workError, workErrorStatus, type ProjectConfig } from '@/lib/work-api';
 import { useAuthStore } from '@/store/authStore';
 import { Dialog, EmptyState, Field, PageLoading, Popover, Spinner } from '../../ui';
-import { fptApi, fptKeys, IT_STATUSES, MAX_ROUNDS, pct, type ItCase, type ItModule, type ItRound, type ItStatus } from './fptApi';
+import { fptApi, fptKeys, IT_STATUSES, pct, roundsOf, type ItCase, type ItKind, type ItModule, type ItRound, type ItStatus } from './fptApi';
 import FptDocDialog from './FptDocDialog';
 import FptImportDialog from './FptImportDialog';
 import { ExportButton, InlineText, ResultBar, SaveState, shortDate, Stat, todayIso } from './shared';
@@ -27,7 +28,15 @@ const currentOf = (rounds: ItRound[]): ItStatus => {
 };
 const statusCls = (s: ItStatus) => `fpt-status fpt-status-${s === 'N/A' ? 'NA' : s}`;
 
-export default function IntegrationTab({ config, pid }: { config: ProjectConfig; pid: number }) {
+const TEXT = {
+  INT: { unit: 'module', Unit: 'Module', units: 'Modules', report: 'integration' as const, doc: 'INT' as const, exportLabel: 'Export 5.2 (.xlsx)', field: 'Feature / module',
+    empty: 'No integration test modules yet', emptyBody: 'Integration tests follow the FPT Report 5.2 template: one sheet per module or flow, each test case with procedure, expected result and up to 4 test rounds.' },
+  SYS: { unit: 'workflow', Unit: 'Workflow', units: 'Workflows', report: 'system' as const, doc: 'SYS' as const, exportLabel: 'Export 5.3 (.xlsx)', field: 'Workflow',
+    empty: 'No system test workflows yet', emptyBody: 'System tests follow the FPT Report 5.3 template: one sheet per end-to-end workflow (Login, Pay invoice…), each test case with procedure, expected result and Round 1–3.' },
+};
+
+export default function IntegrationTab({ config, pid, kind = 'INT' }: { config: ProjectConfig; pid: number; kind?: ItKind }) {
+  const T = TEXT[kind];
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
@@ -36,7 +45,7 @@ export default function IntegrationTab({ config, pid }: { config: ProjectConfig;
   const [newOpen, setNewOpen] = useState(false);
   const [docOpen, setDocOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
-  const list = useQuery({ queryKey: fptKeys.it(pid), queryFn: () => fptApi.modules(pid) });
+  const list = useQuery({ queryKey: fptKeys.it(pid, kind), queryFn: () => fptApi.modules(pid, kind) });
   const mods = useMemo(() => list.data?.modules ?? [], [list.data]);
   const selected = Number(search?.get('mod')) || mods[0]?.id || null;
   const select = (id: number) => {
@@ -52,7 +61,7 @@ export default function IntegrationTab({ config, pid }: { config: ProjectConfig;
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-[var(--w-border)] px-4 py-3">
         {s && (
           <>
-            <Stat label="Modules" value={mods.length} />
+            <Stat label={T.units} value={mods.length} />
             <Stat label="Test cases" value={s.total} />
             <Stat label="Passed" value={s.passed} tone="green" />
             <Stat label="Failed" value={s.failed} tone={s.failed ? 'red' : 'muted'} />
@@ -65,18 +74,18 @@ export default function IntegrationTab({ config, pid }: { config: ProjectConfig;
         <div className="ml-auto flex flex-wrap gap-2">
           <button type="button" className="w-btn w-btn-sm" onClick={() => setDocOpen(true)}><FileText size={13} /> <span className="hidden sm:inline">Cover &amp; changes</span></button>
           {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}><FileUp size={13} /> <span className="hidden sm:inline">Import</span></button>}
-          <ExportButton pid={pid} report="integration" label="Export 5.2 (.xlsx)" />
+          <ExportButton pid={pid} report={T.report} label={T.exportLabel} />
         </div>
       </div>
 
       {!mods.length ? (
         <div className="flex-1 overflow-y-auto">
           <EmptyState
-            title="No integration test modules yet"
-            body="Integration tests follow the FPT Report 5.2 template: one sheet per module or flow, each test case with procedure, expected result and up to 4 test rounds."
+            title={T.empty}
+            body={T.emptyBody}
             action={canEdit ? (
               <div className="flex gap-2">
-                <button type="button" className="w-btn w-btn-primary" onClick={() => setNewOpen(true)}><Plus size={14} /> Add module</button>
+                <button type="button" className="w-btn w-btn-primary" onClick={() => setNewOpen(true)}><Plus size={14} /> Add {T.unit}</button>
                 <button type="button" className="w-btn" onClick={() => setImportOpen(true)}><FileUp size={14} /> Import Excel</button>
               </div>
             ) : undefined}
@@ -84,7 +93,7 @@ export default function IntegrationTab({ config, pid }: { config: ProjectConfig;
         </div>
       ) : (
         <div className="flex min-h-0 flex-1 max-md:flex-col">
-          <aside className="w-[240px] shrink-0 overflow-y-auto border-r border-[var(--w-border)] py-1 max-md:max-h-[30vh] max-md:w-full max-md:border-b max-md:border-r-0" aria-label="Modules">
+          <aside className="w-[240px] shrink-0 overflow-y-auto border-r border-[var(--w-border)] py-1 max-md:max-h-[30vh] max-md:w-full max-md:border-b max-md:border-r-0" aria-label={T.units}>
             {mods.map((m) => (
               <button key={m.id} type="button" onClick={() => select(m.id)} aria-current={selected === m.id}
                 className={cn('block w-full px-3 py-2 text-left', selected === m.id ? 'bg-[var(--w-active)]' : 'hover:bg-[var(--w-hover)]')}>
@@ -96,17 +105,17 @@ export default function IntegrationTab({ config, pid }: { config: ProjectConfig;
                 <ResultBar className="mt-1" passed={m.stats.passed} failed={m.stats.failed} total={m.stats.total - m.stats.na} />
               </button>
             ))}
-            {canEdit && <button type="button" className="mx-3 mt-2 w-btn w-btn-sm" onClick={() => setNewOpen(true)}><Plus size={13} /> Module</button>}
+            {canEdit && <button type="button" className="mx-3 mt-2 w-btn w-btn-sm" onClick={() => setNewOpen(true)}><Plus size={13} /> {T.Unit}</button>}
           </aside>
           <section className="min-h-0 min-w-0 flex-1 overflow-y-auto p-4">
-            {selected && <ModulePane key={selected} pid={pid} id={selected} canEdit={canEdit} onDeleted={() => { const p = new URLSearchParams(search?.toString()); p.delete('mod'); router.replace(`${pathname}?${p}`, { scroll: false }); }} />}
+            {selected && <ModulePane key={selected} pid={pid} id={selected} kind={kind} canEdit={canEdit} onDeleted={() => { const p = new URLSearchParams(search?.toString()); p.delete('mod'); router.replace(`${pathname}?${p}`, { scroll: false }); }} />}
           </section>
         </div>
       )}
 
-      <NewModuleDialog open={newOpen} onClose={() => setNewOpen(false)} pid={pid} onCreated={(m) => { qc.invalidateQueries({ queryKey: fptKeys.it(pid) }); select(m.id); }} />
-      <FptDocDialog open={docOpen} onClose={() => setDocOpen(false)} pid={pid} report="INT" />
-      <FptImportDialog open={importOpen} onClose={() => setImportOpen(false)} pid={pid} report="integration" />
+      <NewModuleDialog open={newOpen} onClose={() => setNewOpen(false)} pid={pid} kind={kind} onCreated={(m) => { qc.invalidateQueries({ queryKey: fptKeys.it(pid, kind) }); select(m.id); }} />
+      <FptDocDialog open={docOpen} onClose={() => setDocOpen(false)} pid={pid} report={T.doc} />
+      <FptImportDialog open={importOpen} onClose={() => setImportOpen(false)} pid={pid} report={T.report} />
     </div>
   );
 }
@@ -116,7 +125,7 @@ let seq = 0;
 const k = () => `i${Date.now().toString(36)}${(seq++).toString(36)}`;
 const blankCase = (section: string | null): DCase => ({ key: k(), section, description: '', procedure: '', testData: '', expected: '', actual: '', preConditions: '', evidence: '', note: '', rounds: [] });
 
-function ModulePane({ pid, id, canEdit, onDeleted }: { pid: number; id: number; canEdit: boolean; onDeleted: () => void }) {
+function ModulePane({ pid, id, kind, canEdit, onDeleted }: { pid: number; id: number; kind: ItKind; canEdit: boolean; onDeleted: () => void }) {
   const qc = useQueryClient();
   const q = useQuery({ queryKey: fptKeys.mod(pid, id), queryFn: () => fptApi.mod(pid, id), staleTime: Infinity });
   if (q.isLoading) return <PageLoading rows={4} />;
@@ -126,15 +135,15 @@ function ModulePane({ pid, id, canEdit, onDeleted }: { pid: number; id: number; 
     try {
       const res = await fptApi.updateModule(pid, id, body);
       qc.setQueryData(fptKeys.mod(pid, id), res);
-      qc.invalidateQueries({ queryKey: fptKeys.it(pid) });
+      qc.invalidateQueries({ queryKey: fptKeys.it(pid, kind) });
     } catch (e) { toast.error(workError(e, 'Could not save')); }
   };
   return (
     <div className="mx-auto max-w-[1600px]">
       <div className="mb-3 flex flex-wrap items-end gap-3">
         <div className="min-w-0 flex-1">
-          <div className="text-[12px] text-[var(--w-text-3)]">Feature / module</div>
-          <InlineText value={m.name} readOnly={!canEdit} maxLength={120} ariaLabel="Module name" className="!w-[320px] text-[15px] font-semibold" onCommit={(v) => v.trim() && patch({ name: v.trim() })} />
+          <div className="text-[12px] text-[var(--w-text-3)]">{TEXT[kind].field}</div>
+          <InlineText value={m.name} readOnly={!canEdit} maxLength={120} ariaLabel={`${TEXT[kind].Unit} name`} className="!w-[320px] text-[15px] font-semibold" onCommit={(v) => v.trim() && patch({ name: v.trim() })} />
         </div>
         <label className="text-[12px] text-[var(--w-text-3)]">
           ID prefix
@@ -142,8 +151,8 @@ function ModulePane({ pid, id, canEdit, onDeleted }: { pid: number; id: number; 
         </label>
         {canEdit && (
           <button type="button" className="w-btn w-btn-sm text-[var(--w-red)]" onClick={async () => {
-            if (!window.confirm(`Delete module ${m.name} and its ${m.cases.length} test cases?`)) return;
-            try { await fptApi.deleteModule(pid, id); qc.invalidateQueries({ queryKey: fptKeys.it(pid) }); onDeleted(); } catch (e) { toast.error(workError(e)); }
+            if (!window.confirm(`Delete ${TEXT[kind].unit} ${m.name} and its ${m.cases.length} test cases?`)) return;
+            try { await fptApi.deleteModule(pid, id); qc.invalidateQueries({ queryKey: fptKeys.it(pid, kind) }); onDeleted(); } catch (e) { toast.error(workError(e)); }
           }}><Trash2 size={13} /> Delete</button>
         )}
       </div>
@@ -155,12 +164,12 @@ function ModulePane({ pid, id, canEdit, onDeleted }: { pid: number; id: number; 
           <Field label="Test requirement"><InlineText multiline value={m.testRequirement} readOnly={!canEdit} maxLength={4000} placeholder="- Login: valid credentials log in…" onCommit={(v) => patch({ testRequirement: v })} /></Field>
         </div>
       </details>
-      <CasesTable pid={pid} mod={m} canEdit={canEdit} />
+      <CasesTable pid={pid} mod={m} kind={kind} canEdit={canEdit} />
     </div>
   );
 }
 
-function CasesTable({ pid, mod, canEdit }: { pid: number; mod: ItModule; canEdit: boolean }) {
+function CasesTable({ pid, mod, kind, canEdit }: { pid: number; mod: ItModule; kind: ItKind; canEdit: boolean }) {
   const qc = useQueryClient();
   const me = useAuthStore((s) => s.user);
   const meName = (me as { displayName?: string | null; fullName?: string | null; username?: string } | null)?.displayName || (me as { fullName?: string | null } | null)?.fullName || me?.username || null;
@@ -192,7 +201,7 @@ function CasesTable({ pid, mod, canEdit }: { pid: number; mod: ItModule; canEdit
       savedRev.current = sending;
       setState(rev.current === sending ? 'saved' : 'dirty');
       qc.setQueryData(fptKeys.mod(pid, mod.id), res);
-      qc.invalidateQueries({ queryKey: fptKeys.it(pid) });
+      qc.invalidateQueries({ queryKey: fptKeys.it(pid, kind) });
     } catch (e) {
       setState('error');
       if (workErrorStatus(e) === 409) toast.error('Someone else saved this module a moment ago.', { action: { label: 'Reload', onClick: () => qc.resetQueries({ queryKey: fptKeys.mod(pid, mod.id) }) }, duration: 12_000 });
@@ -273,7 +282,7 @@ function CasesTable({ pid, mod, canEdit }: { pid: number; mod: ItModule; canEdit
                   <td><Cell value={c.expected ?? ''} ro={!canEdit} ph="1. Success message\n2. Home page" onChange={(v) => set(c.key, { expected: v })} /></td>
                   <td><Cell value={c.actual ?? ''} ro={!canEdit} ph="What actually happened" onChange={(v) => set(c.key, { actual: v })} /></td>
                   <td><Cell value={c.preConditions ?? ''} ro={!canEdit} ph="User has an account" onChange={(v) => set(c.key, { preConditions: v })} /></td>
-                  <td className="px-2 py-1.5"><RoundsCell rounds={c.rounds} canEdit={canEdit} meName={meName} onChange={(r) => set(c.key, { rounds: r })} /></td>
+                  <td className="px-2 py-1.5"><RoundsCell rounds={c.rounds} maxRounds={roundsOf(kind)} canEdit={canEdit} meName={meName} onChange={(r) => set(c.key, { rounds: r })} /></td>
                   <td className="text-center">
                     {canEdit && <button type="button" className="fpt-icon mt-1.5" aria-label="Delete test case" onClick={() => change((cs) => cs.filter((x) => x.key !== c.key))}><Trash2 size={12} /></button>}
                   </td>
@@ -321,7 +330,7 @@ function Cell({ value, onChange, ro, ph, invalid }: { value: string; onChange: (
   return <textarea ref={ref} rows={1} className={cn('fpt-cellarea', invalid && !ro && 'placeholder:text-[var(--w-red)]')} value={value} readOnly={ro} placeholder={ro ? '' : ph} onChange={(e) => onChange(e.target.value)} />;
 }
 
-function RoundsCell({ rounds, onChange, canEdit, meName }: { rounds: ItRound[]; onChange: (r: ItRound[]) => void; canEdit: boolean; meName: string | null }) {
+function RoundsCell({ rounds, onChange, canEdit, meName, maxRounds }: { rounds: ItRound[]; onChange: (r: ItRound[]) => void; canEdit: boolean; meName: string | null; maxRounds: number }) {
   const ref = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
   const cur = currentOf(rounds);
@@ -333,9 +342,9 @@ function RoundsCell({ rounds, onChange, canEdit, meName }: { rounds: ItRound[]; 
     onChange(next);
   };
   const quick = (st: ItStatus) => {
-    // Ghi vào vòng gần nhất chưa có kết quả; đầy 4 vòng thì sửa vòng cuối.
-    const free = rounds.findIndex((r) => !r.status);
-    const i = free >= 0 ? free : Math.min(rounds.length, MAX_ROUNDS - 1);
+    // Ghi vào vòng gần nhất chưa có kết quả; đầy vòng (4 ở 5.2, 3 ở 5.3) thì sửa vòng cuối.
+    const free = rounds.slice(0, maxRounds).findIndex((r) => !r.status);
+    const i = free >= 0 ? free : Math.min(rounds.length, maxRounds - 1);
     setRound(i, { status: st, date: rounds[i]?.date ?? todayIso(), tester: rounds[i]?.tester ?? meName });
   };
   return (
@@ -355,7 +364,7 @@ function RoundsCell({ rounds, onChange, canEdit, meName }: { rounds: ItRound[]; 
           <table className="w-full">
             <thead><tr className="text-left text-[11px] text-[var(--w-text-3)]"><th className="font-medium">Round</th><th className="font-medium">Status</th><th className="font-medium">Date</th><th className="font-medium">Tester</th></tr></thead>
             <tbody>
-              {Array.from({ length: MAX_ROUNDS }, (_, i) => {
+              {Array.from({ length: maxRounds }, (_, i) => {
                 const r = rounds[i];
                 return (
                   <tr key={i}>
@@ -379,7 +388,8 @@ function RoundsCell({ rounds, onChange, canEdit, meName }: { rounds: ItRound[]; 
   );
 }
 
-function NewModuleDialog({ open, onClose, pid, onCreated }: { open: boolean; onClose: () => void; pid: number; onCreated: (m: ItModule) => void }) {
+function NewModuleDialog({ open, onClose, pid, kind, onCreated }: { open: boolean; onClose: () => void; pid: number; kind: ItKind; onCreated: (m: ItModule) => void }) {
+  const sys = kind === 'SYS';
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [busy, setBusy] = useState(false);
@@ -387,15 +397,15 @@ function NewModuleDialog({ open, onClose, pid, onCreated }: { open: boolean; onC
   const submit = async () => {
     if (!name.trim()) return;
     setBusy(true);
-    try { const m = await fptApi.createModule(pid, { name: name.trim(), description: description.trim() || null }); onCreated(m); onClose(); }
-    catch (e) { toast.error(workError(e, 'Could not add the module')); }
+    try { const m = await fptApi.createModule(pid, { name: name.trim(), description: description.trim() || null }, kind); onCreated(m); onClose(); }
+    catch (e) { toast.error(workError(e, `Could not add the ${sys ? 'workflow' : 'module'}`)); }
     finally { setBusy(false); }
   };
   return (
-    <Dialog open={open} onClose={() => !busy && onClose()} title="Add integration module" width={480}
+    <Dialog open={open} onClose={() => !busy && onClose()} title={sys ? 'Add system test workflow' : 'Add integration module'} width={480}
       footer={<><button type="button" className="w-btn" onClick={onClose} disabled={busy}>Cancel</button><button type="button" className="w-btn w-btn-primary" onClick={submit} disabled={busy || !name.trim()}>{busy && <Spinner size={12} />} Add</button></>}>
       <form onSubmit={(e) => { e.preventDefault(); void submit(); }}>
-        <Field label="Module / flow name" hint="e.g. Authentication, UserManagement — test IDs use its initials (<AT1>, <UM1>)"><input className="w-input" autoFocus value={name} maxLength={120} onChange={(e) => setName(e.target.value)} /></Field>
+        <Field label={sys ? 'Workflow name' : 'Module / flow name'} hint={sys ? 'e.g. Login, Pay Invoice, Booking Utility — test IDs use its initials (<LG1>, <PI1>)' : 'e.g. Authentication, UserManagement — test IDs use its initials (<AT1>, <UM1>)'}><input className="w-input" autoFocus value={name} maxLength={120} onChange={(e) => setName(e.target.value)} /></Field>
         <Field label="Description"><input className="w-input" value={description} maxLength={4000} onChange={(e) => setDescription(e.target.value)} placeholder="Verify that the authentication workflow works across modules" /></Field>
         <button type="submit" className="hidden" aria-hidden tabIndex={-1} />
       </form>

@@ -61,6 +61,7 @@ async function issueCtx(ctx: McpCtx, project: string, issue: unknown, routes: (n
 
 const claimIssue = defineTool({
   name: 'claim_issue',
+  surfaces: { ask: false, builtin: false },
   title: 'Claim issue',
   description: 'Start working on an issue assigned to you: takes a lease (default from project settings, 5–240 min). A To-do issue moves to In progress. Another agent holding it ⇒ WORK_LEASE_TAKEN. Keep the lease alive with heartbeat; release_issue when you stop.',
   write: true, agentOnly: true,
@@ -75,6 +76,7 @@ const claimIssue = defineTool({
 
 const heartbeat = defineTool({
   name: 'heartbeat',
+  surfaces: { ask: false, builtin: false },
   title: 'Heartbeat',
   description: 'Keeps your lease alive and shows progress on the board ("🤖 72% · running tests"). Call at least every lease period; a lease that expires flags the issue as blocked and alerts your owner.',
   write: true, agentOnly: true,
@@ -95,6 +97,7 @@ const heartbeat = defineTool({
 
 const releaseIssue = defineTool({
   name: 'release_issue',
+  surfaces: { ask: false, builtin: false },
   title: 'Release issue',
   description: 'Ends your lease on an issue (you stopped, finished, or are blocked). The issue stays assigned to you.',
   write: true, agentOnly: true,
@@ -116,6 +119,7 @@ async function leaseInScope(ctx: McpCtx, leaseId: number) {
 
 const comment = defineTool({
   name: 'comment',
+  surfaces: { ask: false },
   title: 'Comment',
   description: 'Adds an INTERNAL comment (markdown) to an issue — evidence of your work, questions, results. Agents can never reply to clients.',
   write: true,
@@ -130,6 +134,7 @@ const comment = defineTool({
 
 const transition = defineTool({
   name: 'transition',
+  surfaces: { builtin: false },
   title: 'Change status',
   description: 'Moves an issue to another status: a status name from get_issue, or "todo" / "in_progress" / "review" / "done". When an AI agent asks for Done, CT Work moves it to the review status instead (redirected) — a person closes it.',
   write: true,
@@ -185,6 +190,7 @@ async function labelIdsOf(projectId: number, names: string[]): Promise<number[]>
 
 const updateIssue = defineTool({
   name: 'update_issue',
+  surfaces: { ask: false },
   title: 'Update issue',
   description: 'Edits fields of an issue assigned to you (or title/description/points of a subtask of your issue). Only the fields you pass change. labels replaces the whole set with existing project labels.',
   write: true,
@@ -217,6 +223,7 @@ const updateIssue = defineTool({
 
 const createIssue = defineTool({
   name: 'create_issue',
+  surfaces: { ask: false },
   title: 'Create issue',
   description: 'Creates an issue (type key such as TASK, BUG, STORY, SUBTASK). SUBTASK needs parent. assignToMe takes it yourself. Agents cannot assign to others or plan sprints.',
   write: true,
@@ -250,6 +257,7 @@ const createIssue = defineTool({
 
 const logWork = defineTool({
   name: 'log_work',
+  surfaces: { builtin: false },
   title: 'Log work',
   description: 'Logs time spent on an issue (1–1440 minutes). Use it for real work time; CT Work also derives agent time from leases, and skips that when you logged the same issue the same day.',
   write: true,
@@ -269,6 +277,7 @@ const logWork = defineTool({
 
 const reportUsage = defineTool({
   name: 'report_usage',
+  surfaces: { ask: false, builtin: false },
   title: 'Report usage',
   description: 'Reports the tokens (and optionally USD) you spent, ideally per issue. Shown in CT Work as "self-reported" agent cost. Without costUsd CT Work estimates it from list prices of known models.',
   write: true, agentOnly: true,
@@ -296,6 +305,7 @@ const reportUsage = defineTool({
 
 const attachFile = defineTool({
   name: 'attach_file',
+  surfaces: { ask: false, builtin: false },
   title: 'Attach file',
   description: `Attaches a file (base64) to an issue — screenshots, logs, build output. Up to ${MCP_INLINE_FILE_MAX / 1024 / 1024} MB inline; for bigger files pass sizeBytes without base64: you get a presigned URL to PUT the bytes to, then call attach_complete.`,
   write: true,
@@ -328,6 +338,7 @@ const attachFile = defineTool({
 
 const attachComplete = defineTool({
   name: 'attach_complete',
+  surfaces: { ask: false, builtin: false },
   title: 'Finish attachment',
   description: 'Registers a file you uploaded with the presigned URL from attach_file.',
   write: true,
@@ -355,6 +366,7 @@ async function leadsFor(ctx: McpCtx, projectId: number): Promise<Array<{ id: num
 
 const askLead = defineTool({
   name: 'ask_lead',
+  surfaces: { ask: false, builtin: false },
   title: 'Ask the lead',
   description: 'Asks your owner and the project lead a question as an INTERNAL comment that @mentions them. blocking=true also flags the issue as Blocked with the question as reason. Use this instead of retrying when something is forbidden or unclear.',
   write: true,
@@ -376,6 +388,7 @@ const askLead = defineTool({
 
 const requestReview = defineTool({
   name: 'request_review',
+  surfaces: { ask: false, builtin: false },
   title: 'Request review',
   description: 'Hands finished work to a person: adds a summary comment, creates an approval request (reviewers from project settings, else your owner) when the Approvals module is on, and moves the issue to the review status.',
   write: true,
@@ -416,6 +429,7 @@ const requestReview = defineTool({
 
 const waitEvents = defineTool({
   name: 'wait_events',
+  surfaces: { ask: false, builtin: false },
   title: 'Wait for events',
   description: 'Long-polls your inbox: returns events after afterId (assigned, mentioned, comment on your issue, returned from review, approval decided, lease expired…), waiting up to timeoutSec (≤ 25) when there are none. Pass the returned lastId next time.',
   write: false, agentOnly: true,

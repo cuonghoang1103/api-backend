@@ -360,6 +360,7 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
             if (empty && appliedTemplate) { setAppliedTemplate(null); setClearedFor(typeId); }
           }}
           members={config.members}
+          projectId={config.id}
           minHeight={120}
           placeholder={type?.key === 'BUG'
             ? 'Steps to reproduce, expected result, actual result…'

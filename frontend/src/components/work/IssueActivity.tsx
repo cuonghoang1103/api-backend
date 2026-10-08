@@ -68,6 +68,7 @@ function CommentComposer({ config, pid, num, clientShared }: { config: ProjectCo
           value={doc}
           onChange={(d) => setDoc(d)}
           members={config.members}
+          projectId={pid}
           placeholder={toClient ? 'Write a reply the client will read…' : 'Add a comment… Type @ to mention someone'}
           minHeight={focused ? 72 : 36}
           toolbar={focused}
@@ -196,7 +197,7 @@ function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectC
         </div>
         {editing ? (
           <>
-            <RichEditor value={draft} onChange={(d) => setDraft(d)} members={config.members} autoFocus onSubmit={() => save.mutate()} onEscape={() => setEditing(false)} />
+            <RichEditor value={draft} onChange={(d) => setDraft(d)} members={config.members} projectId={config.id} autoFocus onSubmit={() => save.mutate()} onEscape={() => setEditing(false)} />
             <div className="mt-2 flex gap-2">
               <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={save.isPending || isDocEmpty(draft)} onClick={() => save.mutate()}>Save</button>
               <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setEditing(false)}>Cancel</button>

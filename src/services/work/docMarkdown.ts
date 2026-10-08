@@ -9,7 +9,9 @@
  *
  * Bộ nút sinh ra khớp trình soạn thảo tài liệu (RichEditor chế độ `docs`):
  *   StarterKit (heading 1–4, list, blockquote, codeBlock, hr, hardBreak,
- *   bold/italic/strike/code) + Link + TaskList/TaskItem + Table/Row/Header/Cell.
+ *   bold/italic/strike/code) + Link + TaskList/TaskItem + Table/Row/Header/Cell
+ *   + Image (khối, đợt 3A — chỉ nguồn `safeImageSrc`). Sơ đồ Mermaid = codeBlock
+ *   language "mermaid" (```mermaid giữ nguyên hai chiều).
  * Tiêu đề #####/###### gộp về mức 4 (editor chỉ có 1–4). Bảng GFM ⇒ bảng TipTap,
  * hàng thiếu ô được đệm ô rỗng (ProseMirror cần bảng chữ nhật).
  */
@@ -45,6 +47,18 @@ interface Md {
 }
 
 const parser = unified().use(remarkParse).use(remarkGfm);
+
+/**
+ * CTW đợt 3A: nguồn ảnh được nhận trong tài liệu — ảnh đã tải lên dự án (`/api/v1/work/projects/:pid/images/:id`)
+ * hoặc ảnh https công khai. Không nhận `data:`/`javascript:`/http thường.
+ */
+export const DOC_IMAGE_SRC_RE = /^\/api\/v1\/work\/projects\/(\d+)\/images\/(\d+)$/;
+export function safeImageSrc(src: string | undefined | null): string | null {
+  if (!src) return null;
+  const s = src.trim();
+  if (DOC_IMAGE_SRC_RE.test(s) || /^https:\/\/[^\s"'<>]+$/i.test(s)) return s.slice(0, 2000);
+  return null;
+}
 
 /** Chỉ nhận liên kết an toàn: http(s), mailto, đường dẫn tương đối gốc '/' và neo '#'. */
 export function safeHref(href: string | undefined | null): string | null {
@@ -132,6 +146,11 @@ function block(n: Md): PmNode[] {
       return [{ type: 'heading', attrs: { level: Math.min(Math.max(n.depth ?? 1, 1), MAX_HEADING) }, ...(c.length ? { content: c } : {}) }];
     }
     case 'paragraph': {
+      // CTW đợt 3A: đoạn CHỈ gồm ảnh (`![alt](src)` đứng riêng) ⇒ nút ảnh khối của editor.
+      const kids = (n.children ?? []).filter((k) => !(k.type === 'text' && !(k.value ?? '').trim()));
+      if (kids.length && kids.every((k) => k.type === 'image' && safeImageSrc(k.url))) {
+        return kids.map((k) => ({ type: 'image', attrs: { src: safeImageSrc(k.url), alt: k.alt || null, title: null } }));
+      }
       const c = inline(n.children);
       return c.length ? [P(c)] : [];
     }
@@ -215,7 +234,7 @@ export function markdownToTiptap(md: string, opts: { dropTitle?: boolean } = {})
 // ─── TipTap ⇒ Markdown (xuất một trang) ──────────────────────────
 
 function escapeText(t: string): string {
-  return t.replace(/([\\`*_[\]])/g, '\\$1');
+  return t.replace(/([\\`*_[\]~])/g, '\\$1');
 }
 
 function inlineMd(nodes: PmNode[] | undefined): string {
@@ -249,6 +268,10 @@ function blockMd(n: PmNode): string {
       return inlineMd(n.content);
     case 'horizontalRule':
       return '---';
+    case 'image': {
+      const src = safeImageSrc(String(n.attrs?.src ?? ''));
+      return src ? `![${String(n.attrs?.alt ?? '').replace(/[[\]]/g, '')}](${src})` : '';
+    }
     case 'blockquote':
       return blocksMd(n.content).split('\n').map((l) => (l ? `> ${l}` : '>')).join('\n');
     case 'codeBlock':

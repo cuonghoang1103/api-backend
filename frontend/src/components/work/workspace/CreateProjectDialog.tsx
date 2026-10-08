@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  ArrowLeft, Briefcase, Building2, Check, ChevronDown, ChevronRight, Code2, FlaskConical, GraduationCap, ListChecks, Square, User, type LucideIcon,
+  ArrowLeft, Award, Briefcase, Building2, Check, ChevronDown, ChevronRight, Code2, FlaskConical, GraduationCap, ListChecks, Square, User, type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
@@ -39,6 +39,8 @@ interface TemplateCard {
 }
 
 export const TEMPLATES: TemplateCard[] = [
+  // CTW đợt 3A: đồ án tốt nghiệp — giai đoạn Report 1→7, Iteration 1–3, trang Docs mẫu FPT, mô-đun đồ án bật sẵn.
+  { key: 'CAPSTONE', name: 'FPT Capstone', body: 'Stages for Reports 1–7, Iterations 1–3, the FPT report templates in Docs, RAID, meetings and approvals ready.', bestFor: 'SEP490 / ISP490 graduation projects', type: 'SCRUM', icon: Award, color: '#c00000' },
   { key: 'SWP391', name: 'Software project', body: 'Scrum with epics, stories, Sprint 1 ready and a bug lifecycle with retest.', bestFor: 'SWP391 capstone teams', type: 'SCRUM', icon: GraduationCap, color: '#2563eb' },
   { key: 'SWR302', name: 'Requirements', body: 'Requirement issues with a MoSCoW field and Sprint 1 ready.', bestFor: 'SWR302 requirement engineering', type: 'SCRUM', icon: ListChecks, color: '#0891b2' },
   { key: 'SWT301', name: 'Software testing', body: 'Test cases with steps, test plans, cycles and a full bug lifecycle.', bestFor: 'SWT301 testing labs', type: 'SCRUM', icon: FlaskConical, color: '#ca8a04' },
@@ -51,8 +53,15 @@ const KIND_ICON: Record<ProjectKind, LucideIcon> = { PERSONAL: User, SCHOOL: Gra
 /** Mẫu gợi ý cho từng loại (đổi được ở bước mẫu). */
 const KIND_TEMPLATE: Record<ProjectKind, ProjectTemplate> = { PERSONAL: 'BLANK', SCHOOL: 'SWP391', SOFTWARE: 'COMPANY', CLIENT: 'FREELANCE' };
 /** Mẫu ⇒ loại (khớp kindFromTemplate ở backend) khi mở thẳng bằng initialTemplate. */
-const TEMPLATE_KIND: Record<ProjectTemplate, ProjectKind> = { SWR302: 'SCHOOL', SWT301: 'SCHOOL', SWP391: 'SCHOOL', FREELANCE: 'CLIENT', BLANK: 'SOFTWARE', COMPANY: 'SOFTWARE' };
+const TEMPLATE_KIND: Record<ProjectTemplate, ProjectKind> = { CAPSTONE: 'SCHOOL', SWR302: 'SCHOOL', SWT301: 'SCHOOL', SWP391: 'SCHOOL', FREELANCE: 'CLIENT', BLANK: 'SOFTWARE', COMPANY: 'SOFTWARE' };
 const modulesFor = (k: ProjectKind): Partial<ModuleMap> => Object.fromEntries(S1_MODULES.map((m) => [m.key, KIND_INFO[k].modules.includes(m.key)]));
+/** Mẫu CAPSTONE: mô-đun đồ án bật sẵn (khớp CAPSTONE_MODULES ở backend capstone.service.ts). */
+const CAPSTONE_MODULES: StudioModule[] = ['stages', 'approvals', 'docs', 'raid', 'meetings', 'resources'];
+const modulesForTemplate = (k: ProjectKind, t: ProjectTemplate): Partial<ModuleMap> => {
+  const m = modulesFor(k);
+  if (t === 'CAPSTONE') for (const x of CAPSTONE_MODULES) m[x] = true;
+  return m;
+};
 
 export const PROJECT_KEY_RE = /^[A-Z][A-Z0-9]{1,9}$/;
 
@@ -111,7 +120,7 @@ export default function CreateProjectDialog({
     setStep(initialTemplate ? 2 : 0);
     const k0 = initialTemplate ? TEMPLATE_KIND[initialTemplate] : 'SCHOOL';
     setKind(k0);
-    setModules(modulesFor(k0));
+    setModules(modulesForTemplate(k0, initialTemplate ?? 'SWP391'));
     setTemplate(initialTemplate ?? 'SWP391');
     setName(''); setKey(''); setKeyTouched(false);
     setType(TEMPLATES.find((t) => t.key === (initialTemplate ?? 'SWP391'))?.type ?? 'SCRUM');
@@ -163,6 +172,9 @@ export default function CreateProjectDialog({
 
   const pickTemplate = (t: TemplateCard) => {
     setTemplate(t.key);
+    // Đổi sang/khỏi CAPSTONE ⇒ đặt lại mô-đun theo loại + mẫu (người dùng vẫn đổi được ở Project settings).
+    if (t.key === 'CAPSTONE') { setKind('SCHOOL'); setModules(modulesForTemplate('SCHOOL', 'CAPSTONE')); }
+    else if (template === 'CAPSTONE') setModules(modulesFor(kind));
     setType(t.type);
     setStep(2);
   };

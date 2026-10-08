@@ -47,7 +47,7 @@ function RichBlock({ config, m, field, title, empty }: { config: ProjectConfig; 
       ) : <button type="button" className="w-btn w-btn-sm" onClick={() => { setDoc(m[field]); setEditing(true); }} data-testid={`meeting-edit-${field}`}>Edit</button>)}
     >
       {editing ? (
-        <div data-testid={`meeting-editor-${field}`}><RichEditor value={doc} onChange={(d) => setDoc(d)} docs toolbar minHeight={160} members={config.members} /></div>
+        <div data-testid={`meeting-editor-${field}`}><RichEditor value={doc} onChange={(d) => setDoc(d)} docs toolbar minHeight={160} members={config.members} projectId={config.id} /></div>
       ) : m[field] ? <div className="max-w-full overflow-x-auto"><RichView value={m[field]} docs /></div> : <p className="text-[13px] text-[var(--w-text-3)]">{empty}</p>}
     </Section>
   );

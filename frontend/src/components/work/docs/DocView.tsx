@@ -43,7 +43,9 @@ import { PAGE_STATUS, PageStatusPill, VisibilityBadge, docsBase, downloadText } 
 // Đợt S6: "Check spec quality" (Spec Fidelity) + nhãn AI-assisted của trang.
 import { AiAssistedBadge, DocSpecDrawer } from '../spec/SpecPanel';
 import type { AiProvenance } from '@/lib/work-s6-api';
-import { Gauge } from 'lucide-react';
+import { FileDown, Gauge, Wand2 } from 'lucide-react';
+// CTW đợt 3A: xuất Word/PDF (sơ đồ Mermaid vẽ sẵn PNG ở trình duyệt) + điền Report từ dữ liệu dự án.
+import { mermaidPngsOf, saveBlob, workDocs3aApi } from '@/lib/work-docs3a-api';
 
 type SaveState = 'saved' | 'dirty' | 'saving' | 'error' | 'conflict';
 
@@ -180,6 +182,31 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
     onError: (err) => toast.error(workError(err, 'Could not export the page')),
   });
 
+  const exportFile = useMutation({
+    mutationFn: async (format: 'docx' | 'pdf') => {
+      await flush();
+      const diagrams = await mermaidPngsOf(docRef.current);
+      return workDocs3aApi.exportPage(pid, num, format, diagrams);
+    },
+    onSuccess: (r) => { saveBlob(r.blob, r.fileName); toast.success(`Downloaded ${r.fileName}`); },
+    onError: (err) => toast.error(workError(err, 'Could not export the page')),
+  });
+  const autofill = useMutation({
+    mutationFn: async () => {
+      await flush();
+      return workDocs3aApi.autofill(pid, num, { version: base.current ?? undefined });
+    },
+    onSuccess: (r) => {
+      if (!r.filled.length) { toast.message('Nothing to fill — this page has no Record of Changes, Project Team, Project Risks, Cost & Time Estimations or Responsibility Assignments table.'); return; }
+      load(r.page);
+      accept(r.page);
+      qc.invalidateQueries({ queryKey: workDocsKeys.versions(pid, num) });
+      const label: Record<string, string> = { recordOfChanges: 'Record of Changes', team: 'Project Team', risks: 'Project Risks', schedule: 'Cost & Time Estimations', raci: 'Responsibility Assignments' };
+      toast.success(`Filled ${r.filled.map((x) => label[x] ?? x).join(', ')} — saved as version ${r.page.currentVersion}`);
+    },
+    onError: (err) => toast.error(workError(err, errCode(err) === 'WORK_PAGE_CONFLICT' ? 'Someone else saved this page — reload first' : 'Could not fill the page')),
+  });
+
   const reloadFromServer = async () => {
     dirty.current = false;
     base.current = null;
@@ -287,7 +314,10 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
         </div>
         <Popover open={more} onClose={() => setMore(false)} anchorRef={moreRef} width={220} align="end">
           <div className="p-1" role="menu">
+            <MenuItem icon={FileDown} label={exportFile.isPending && exportFile.variables === 'docx' ? 'Exporting Word…' : 'Export as Word (.docx)'} onClick={() => { setMore(false); exportFile.mutate('docx'); }} />
+            <MenuItem icon={FileDown} label={exportFile.isPending && exportFile.variables === 'pdf' ? 'Exporting PDF…' : 'Export as PDF'} onClick={() => { setMore(false); exportFile.mutate('pdf'); }} />
             <MenuItem icon={Download} label="Export as Markdown (.md)" onClick={() => { setMore(false); exportMd.mutate(); }} />
+            {editable && <MenuItem icon={Wand2} label="Fill from project data" onClick={() => { setMore(false); autofill.mutate(); }} />}
             {/* Đợt S5c: AI tóm tắt trang (đọc qua quyền của người bấm; không đề xuất gì). */}
             {config.permissions.useAi && <MenuItem icon={Sparkles} label="Summarize with AI" onClick={() => { setMore(false); void flush(); openAiPanel({ pid, quick: { task: 'summarize_page', pageNumber: num, label: `Summarize “${page.title.slice(0, 60)}”` } }); }} />}
             {editable && <MenuItem icon={Save} label="Save as a named version…" onClick={() => { setMore(false); setNoteOpen(true); }} />}
@@ -308,6 +338,7 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
                 touch();
               }}
               members={members}
+              projectId={pid}
               placeholder="Write, or type to start…"
               minHeight={320}
               className="!rounded-[8px]"
@@ -617,6 +648,7 @@ function DocComments({ config, num, canComment }: { config: ProjectConfig; num: 
             value={draft}
             onChange={(d, isEmpty) => { setDraft(d); setEmpty(isEmpty || isDocEmpty(d)); }}
             members={config.members}
+            projectId={config.id}
             placeholder="Add a comment — @mention someone to notify them"
             minHeight={64}
             onSubmit={() => !empty && add.mutate()}

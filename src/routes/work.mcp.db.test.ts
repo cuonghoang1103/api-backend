@@ -169,16 +169,23 @@ describe('CT Work — MCP + chi phí agent (A9–A12, HTTP + DB thật)', { skip
     assert.equal((await rpc(agent, 'tools/call', { name: 'delete_everything', arguments: {} })).body.error.code, -32602);
   });
 
-  it('A9.3 tools/list: agent thấy đủ 21 tool; token người read-only không thấy tool ghi / tool riêng agent', async () => {
+  it('A9.3 tools/list: agent thấy đủ 21 tool cũ (+ lệnh đợt 3C); token người read-only không thấy tool ghi / tool riêng agent', async () => {
     const a = await rpc(agent, 'tools/list');
     const names = a.body.result.tools.map((t: any) => t.name);
-    assert.equal(names.length, 21);
+    // Đợt 3C: tools/list sinh từ registry dùng chung — 21 tool cũ giữ nguyên tên, đứng đầu, rồi tới lệnh mới.
+    const { LEGACY_MCP_TOOLS, mcpCommands } = await import('../services/work/toolRegistry/index.js');
+    assert.equal(LEGACY_MCP_TOOLS.length, 21);
+    assert.deepEqual(names.slice(0, 21), LEGACY_MCP_TOOLS);
+    assert.equal(names.length, mcpCommands().length);
     for (const t of a.body.result.tools) assert.equal(t.inputSchema.type, 'object', t.name);
     const getIssue = a.body.result.tools.find((t: any) => t.name === 'get_issue');
     assert.deepEqual(getIssue.inputSchema.required, ['project', 'issue']);
     assert.equal(getIssue.annotations.readOnlyHint, true);
     const ro = (await rpc(readOnly, 'tools/list')).body.result.tools.map((t: any) => t.name);
-    assert.deepEqual(ro.sort(), ['get_issue', 'get_page', 'list_pages', 'list_projects', 'my_work', 'search_issues', 'whoami']);
+    // 7 tool đọc cũ còn nguyên; thêm lệnh ĐỌC đợt 3C — không lệnh ghi / riêng agent nào lọt vào token read-only.
+    for (const n of ['get_issue', 'get_page', 'list_pages', 'list_projects', 'my_work', 'search_issues', 'whoami']) assert.ok(ro.includes(n), n);
+    const { commandByName } = await import('../services/work/toolRegistry/index.js');
+    for (const n of ro) assert.equal(commandByName(n)!.write || !!commandByName(n)!.agentOnly, false, n);
   });
 
   it('A9.4 whoami / list_projects (token phạm vi FP chỉ thấy FP) / my_work', async () => {
@@ -496,7 +503,8 @@ describe('CT Work — MCP + chi phí agent (A9–A12, HTTP + DB thật)', { skip
     });
     assert.equal(out.code, 0, out.err);
     assert.equal(out.lines.find((l) => l.id === 1).result.serverInfo.name, 'ctwork');
-    assert.equal(out.lines.find((l) => l.id === 2).result.tools.length, 21);
+    const { mcpCommands } = await import('../services/work/toolRegistry/index.js');
+    assert.equal(out.lines.find((l) => l.id === 2).result.tools.length, mcpCommands().length); // 21 cũ + lệnh đợt 3C
     assert.match(out.lines.find((l) => l.id === 3).result.content[0].text, /"kind": "AGENT"/);
     assert.ok(!out.err.includes(agent.token));
   });

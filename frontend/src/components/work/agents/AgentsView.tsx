@@ -21,6 +21,8 @@ import {
 import { Dialog, EmptyState, Field, PageLoading, relativeTime, Spinner, UserAvatar } from '../ui';
 import { Select } from '../settings/shared';
 import { AgentStatusPill, TokenRevealDialog, usd } from './AgentBits';
+import { BuiltinBudgetCard, ProUpsell } from './BuiltinBits';
+import { builtinApi, builtinKeys } from '@/lib/work-builtin-api';
 import { useAgentDirectory } from './directory';
 
 const isAdminRole = (r: string) => r === 'OWNER' || r === 'ADMIN';
@@ -52,14 +54,23 @@ function NewAgentDialog({ ws, meId, open, onClose, onCreated }: {
   const [roleText, setRoleText] = useState('');
   const [projectIds, setProjectIds] = useState<number[]>([]);
   const [write, setWrite] = useState(true);
+  // Đợt 3C: EXTERNAL (AI của bạn qua MCP) | BUILTIN (CT Work chạy hộ — Pro/admin, không token, model do CT Work chọn).
+  const [runtime, setRuntime] = useState<'EXTERNAL' | 'BUILTIN'>('EXTERNAL');
+  const budget = useQuery({ queryKey: builtinKeys.budget(ws.id), queryFn: () => builtinApi.budget(ws.id), enabled: open, retry: false, staleTime: 30_000 });
+  const builtin = runtime === 'BUILTIN';
+  const builtinBlocked = builtin && (!budget.data?.canUse || (budget.data && budget.data.builtinAgents >= budget.data.defaults.perWorkspace));
   const create = useMutation({
-    mutationFn: () => agentsApi.create(ws.id, {
+    mutationFn: () => agentsApi.create(ws.id, builtin ? {
+      name: name.trim(), model: budget.data?.model ?? 'builtin', ownerId: ownerId || meId, roleText: roleText.trim() || null, projectIds, runtime: 'BUILTIN', token: null,
+    } : {
       name: name.trim(), model: model.trim(), ownerId: ownerId || meId, roleText: roleText.trim() || null, projectIds,
       token: { name: 'Default', scopes: write ? ['read', 'write'] : ['read'] },
     }),
     onSuccess: (r) => {
       qc.invalidateQueries({ queryKey: agentKeys.list(ws.id) });
+      qc.invalidateQueries({ queryKey: builtinKeys.budget(ws.id) });
       setName(''); setRoleText(''); setProjectIds([]);
+      if (r.agent.runtime === 'BUILTIN') toast.success('Built-in agent created — assign it an issue with “Assign to AI”');
       onCreated(r.agent, r.token);
     },
     onError: (err) => toast.error(workError(err, 'Could not create the agent')),
@@ -67,10 +78,32 @@ function NewAgentDialog({ ws, meId, open, onClose, onCreated }: {
   const projects = ws.projects.filter((p) => !p.archivedAt);
   return (
     <Dialog open={open} onClose={onClose} title="New AI agent" width={560}>
-      <form onSubmit={(e) => { e.preventDefault(); if (name.trim() && model.trim() && !create.isPending) create.mutate(); }} data-testid="new-agent-form">
+      <form onSubmit={(e) => { e.preventDefault(); if (name.trim() && (builtin || model.trim()) && !builtinBlocked && !create.isPending) create.mutate(); }} data-testid="new-agent-form">
+        <fieldset className="mb-4">
+          <legend className="w-label">How it runs</legend>
+          <div className="grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="How the agent runs">
+            {([
+              ['EXTERNAL', 'Your own AI', 'Claude Code, Cursor, Gemini CLI, Codex… connects with a token (MCP).'],
+              ['BUILTIN', 'Built-in · runs on CT Work', 'CT Work runs it on its own AI. No token. Pro or admin.'],
+            ] as const).map(([v, title, body]) => (
+              <label key={v} className={cn('flex cursor-pointer gap-2.5 rounded-[8px] border px-3 py-2.5', runtime === v ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' : 'border-[var(--w-border)] hover:bg-[var(--w-hover)]')}>
+                <input type="radio" name="agent-runtime" className="mt-0.5 accent-[var(--w-accent)]" checked={runtime === v} onChange={() => setRuntime(v)} data-testid={`runtime-${v.toLowerCase()}`} />
+                <span className="min-w-0"><span className="block text-[13px] font-medium">{title}</span><span className="block text-[12px] leading-snug text-[var(--w-text-3)]">{body}</span></span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        {builtin && budget.data && !budget.data.canUse && <div className="mb-4"><ProUpsell /></div>}
+        {builtin && budget.data?.canUse && budget.data.builtinAgents >= budget.data.defaults.perWorkspace && (
+          <p className="mb-4 text-[12.5px] text-[var(--w-red)]">This workspace already has {budget.data.defaults.perWorkspace} built-in agents — retire one first.</p>
+        )}
         <div className="grid gap-x-3 sm:grid-cols-2">
-          <Field label="Name"><input className="w-input" autoFocus value={name} maxLength={100} onChange={(e) => setName(e.target.value)} placeholder="e.g. Client Unity" /></Field>
-          <Field label="Model"><ModelInput id="new" value={model} onChange={setModel} /></Field>
+          <Field label="Name"><input className="w-input" autoFocus value={name} maxLength={100} onChange={(e) => setName(e.target.value)} placeholder={builtin ? 'e.g. Test writer' : 'e.g. Client Unity'} /></Field>
+          {builtin ? (
+            <Field label="Model" hint="Chosen by CT Work for cost and tool use.">
+              <div className="flex h-[32px] items-center rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-2.5 font-mono text-[12.5px] text-[var(--w-text-2)]">{budget.data?.model ?? '…'}</div>
+            </Field>
+          ) : <Field label="Model"><ModelInput id="new" value={model} onChange={setModel} /></Field>}
           <Field label="Owner" hint="The person responsible for what this agent does. Gets its alerts and reviews its work.">
             <Select value={ownerId === '' ? String(meId ?? '') : String(ownerId)} onChange={(e) => setOwnerId(Number(e.target.value))}>
               {humans.map((m) => <option key={m.id} value={m.id}>{userName(m)}{m.id === meId ? ' (you)' : ''}</option>)}
@@ -95,13 +128,19 @@ function NewAgentDialog({ ws, meId, open, onClose, onCreated }: {
             <p className="mt-1 text-[12px] text-[var(--w-text-3)]">Joins as Member. Projects open to the whole workspace are visible anyway.</p>
           </fieldset>
         )}
-        <label className="mb-1 flex cursor-pointer items-start gap-2 text-[13px]">
-          <input type="checkbox" className="mt-0.5 accent-[var(--w-accent)]" checked={write} onChange={(e) => setWrite(e.target.checked)} />
-          <span>Token can make changes <span className="block text-[12px] text-[var(--w-text-3)]">Off = read only. Agents can never approve, delete, change settings, touch finance or send anything to clients.</span></span>
-        </label>
+        {builtin ? (
+          <p className="mb-1 text-[12px] leading-relaxed text-[var(--w-text-3)]">
+            Spends at most {usd(budget.data?.defaults.agentDailyUsd ?? 5)} a day (change it on its page) and {usd(budget.data?.runCapUsd ?? 2)} per issue. Same rules as any agent: it can never approve, delete, change settings, touch finance or reach clients, and its “Done” goes to review.
+          </p>
+        ) : (
+          <label className="mb-1 flex cursor-pointer items-start gap-2 text-[13px]">
+            <input type="checkbox" className="mt-0.5 accent-[var(--w-accent)]" checked={write} onChange={(e) => setWrite(e.target.checked)} />
+            <span>Token can make changes <span className="block text-[12px] text-[var(--w-text-3)]">Off = read only. Agents can never approve, delete, change settings, touch finance or send anything to clients.</span></span>
+          </label>
+        )}
         <div className="mt-5 flex justify-end gap-2">
           <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
-          <button type="submit" className="w-btn w-btn-primary" disabled={!name.trim() || !model.trim() || create.isPending} data-testid="create-agent">
+          <button type="submit" className="w-btn w-btn-primary" disabled={!name.trim() || (!builtin && !model.trim()) || !!builtinBlocked || create.isPending} data-testid="create-agent">
             {create.isPending && <Spinner size={12} />} Create agent
           </button>
         </div>
@@ -203,6 +242,8 @@ export default function AgentsView({ ws, meId }: { ws: WorkspaceDetail; meId?: n
         </div>
       </div>
 
+      <BuiltinBudgetCard wsId={ws.id} />
+
       {q.isLoading ? <PageLoading rows={4} /> : q.error ? (
         <EmptyState title="Could not load agents" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
       ) : !rows.length ? (
@@ -240,7 +281,10 @@ export default function AgentsView({ ws, meId }: { ws: WorkspaceDetail; meId?: n
                   <span className="block truncate text-[12px] text-[var(--w-text-3)]">{a.roleText || `@${a.user.username}`}</span>
                 </span>
               </span>
-              <span role="cell" className="truncate font-mono text-[12px] text-[var(--w-text-2)] max-md:hidden">{a.model}</span>
+              <span role="cell" className="flex min-w-0 items-center gap-1.5 max-md:hidden">
+                {a.runtime === 'BUILTIN' && <span className="shrink-0 rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 py-px text-[10.5px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]" title="Runs on CT Work">Built-in</span>}
+                <span className="truncate font-mono text-[12px] text-[var(--w-text-2)]">{a.model}</span>
+              </span>
               <span role="cell" className="flex min-w-0 items-center gap-1.5 text-[13px] max-md:hidden"><UserAvatar user={a.owner} size={18} /><span className="truncate">{userName(a.owner)}</span></span>
               <span role="cell" className="justify-self-end md:justify-self-start"><AgentStatusPill status={a.status} /></span>
               <span role="cell" className="text-[12px] text-[var(--w-text-2)] max-md:col-span-2 max-md:text-[var(--w-text-3)]">

@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { workError } from '@/lib/work-api';
 import { Spinner } from '../../ui';
-import { fptApi, saveBlob } from './fptApi';
+import { fptApi, saveBlob, type ReportKind } from './fptApi';
 
 export function Stat({ label, value, tone, hint }: { label: string; value: ReactNode; tone?: 'green' | 'red' | 'yellow' | 'muted'; hint?: string }) {
   return (
@@ -41,7 +41,7 @@ export function ResultBar({ passed, failed, total, className }: { passed: number
   );
 }
 
-export function ExportButton({ pid, report, label }: { pid: number; report: 'unit' | 'integration'; label: string }) {
+export function ExportButton({ pid, report, label }: { pid: number; report: ReportKind; label: string }) {
   const [busy, setBusy] = useState(false);
   return (
     <button

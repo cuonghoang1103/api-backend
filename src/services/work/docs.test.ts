@@ -23,6 +23,7 @@ import Table from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
 import TableHeader from '@tiptap/extension-table-header';
 import TableCell from '@tiptap/extension-table-cell';
+import Image from '@tiptap/extension-image';
 import { Node as PmNodeClass } from '@tiptap/pm/model';
 
 import type { ProjectRole, WorkspaceRole } from './constants.js';
@@ -38,6 +39,8 @@ const DATA_TS = path.resolve('frontend/src/app/about/quy-trinh/data.ts');
 const schema = getSchema([
   StarterKit.configure({ heading: { levels: [1, 2, 3, 4] } }),
   Link, TaskList, TaskItem.configure({ nested: true }), Table, TableRow, TableHeader, TableCell,
+  // CTW đợt 3A: ảnh khối (RichEditor bật Image cho mọi chế độ).
+  Image,
 ]);
 
 const mdFiles = fs.readdirSync(BACKEND_DIR).filter((f) => f.endsWith('.md')).sort();
@@ -48,7 +51,8 @@ function walk(n: PmNode, fn: (n: PmNode) => void) {
 }
 
 describe('mẫu tài liệu: Markdown → TipTap (36 mẫu thật)', () => {
-  it('có đủ 38 tệp mẫu', () => assert.equal(mdFiles.length, 38));
+  // CTW đợt 3A: +7 mẫu FPT Capstone (Report 1, 2, 3, 4, 5.0, 6, 7) — xem docTemplates.test.ts.
+  it('có đủ 45 tệp mẫu', () => assert.equal(mdFiles.length, 45));
 
   for (const f of mdFiles) {
     it(f, () => {
@@ -120,7 +124,7 @@ describe('nguồn mẫu cho backend (ảnh Docker không có frontend/public)', 
 
   it('thư viện mẫu: 36 mẫu, tên tiếng Anh; 35 mẫu của quy trình đều thuộc ít nhất một giai đoạn', async () => {
     const list = await listTemplates();
-    assert.equal(list.length, 38);
+    assert.equal(list.length, 45);
     assert.ok(list.every((t) => t.title && t.sections > 0));
     const stageMap = await stageTemplateMap();
     assert.equal(stageMap.size, 21);

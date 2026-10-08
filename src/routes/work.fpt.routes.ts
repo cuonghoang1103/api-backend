@@ -8,8 +8,10 @@
  *                POST …/unit/:fid/ai-suggest (đề xuất — KHÔNG ghi)
  *   Integration: GET/POST /projects/:pid/fpt-tests/integration · GET/PATCH/DELETE …/integration/:mid
  *                PUT …/integration/:mid/cases
- *   Excel:       GET  /projects/:pid/fpt-tests/export?report=unit|integration[&module=]
- *                POST /projects/:pid/fpt-tests/import?report=auto|unit|integration&mode=append|replace&dryRun=1
+ *   System 5.3:  GET/POST /projects/:pid/fpt-tests/system · GET/PATCH/DELETE …/system/:mid · PUT …/system/:mid/cases
+ *                (đợt 3B — cùng bảng work_it_modules, kind SYS, đúng 3 vòng Round 1–3)
+ *   Excel:       GET  /projects/:pid/fpt-tests/export?report=unit|integration|system[&module=]
+ *                POST /projects/:pid/fpt-tests/import?report=auto|unit|integration|system&mode=append|replace&dryRun=1
  *                     thân = tệp .xlsx nhị phân (application/octet-stream) — tránh bẫy axios đổi FormData thành JSON.
  *
  * Quyền kiểm TRONG service (fptTests.service) — route chỉ kiểm đầu vào.
@@ -79,24 +81,27 @@ router.post(`${B}/unit/:fid/ai-suggest`, asyncHandler(async (req, res) => {
   ok(res, await fpt.aiSuggest(callerId(req), P(req, 'pid'), P(req, 'fid'), body));
 }));
 
-// ─── Integration test ────────────────────────────────────────────
+// ─── Integration test (5.2) + System test (5.3, đợt 3B) ─────────
 router.get(`${B}/integration`, asyncHandler(async (req, res) => ok(res, await fpt.listModules(callerId(req), P(req, 'pid')))));
 router.post(`${B}/integration`, asyncHandler(async (req, res) => ok(res, await fpt.createModule(callerId(req), P(req, 'pid'), parse(fpt.moduleInput, req.body)), 201)));
-router.get(`${B}/integration/:mid`, asyncHandler(async (req, res) => ok(res, await fpt.getModule(callerId(req), P(req, 'pid'), P(req, 'mid')))));
-router.patch(`${B}/integration/:mid`, asyncHandler(async (req, res) => {
+router.get(`${B}/system`, asyncHandler(async (req, res) => ok(res, await fpt.listModules(callerId(req), P(req, 'pid'), 'SYS'))));
+router.post(`${B}/system`, asyncHandler(async (req, res) => ok(res, await fpt.createModule(callerId(req), P(req, 'pid'), parse(fpt.moduleInput, req.body), 'SYS'), 201)));
+// Một workflow 5.3 cũng là một dòng work_it_modules ⇒ đọc/sửa/xoá/lưu case dùng chung handler (id duy nhất trong dự án).
+router.get([`${B}/integration/:mid`, `${B}/system/:mid`], asyncHandler(async (req, res) => ok(res, await fpt.getModule(callerId(req), P(req, 'pid'), P(req, 'mid')))));
+router.patch([`${B}/integration/:mid`, `${B}/system/:mid`], asyncHandler(async (req, res) => {
   const body = parse(fpt.moduleInput.partial(), req.body);
   if (!Object.keys(body).length) throw new BadRequestError('Nothing to change', 'VALIDATION_ERROR');
   ok(res, await fpt.updateModule(callerId(req), P(req, 'pid'), P(req, 'mid'), body));
 }));
-router.delete(`${B}/integration/:mid`, asyncHandler(async (req, res) => {
+router.delete([`${B}/integration/:mid`, `${B}/system/:mid`], asyncHandler(async (req, res) => {
   await fpt.deleteModule(callerId(req), P(req, 'pid'), P(req, 'mid'));
   ok(res, { deleted: true });
 }));
-router.put(`${B}/integration/:mid/cases`, asyncHandler(async (req, res) => ok(res, await fpt.saveItCases(callerId(req), P(req, 'pid'), P(req, 'mid'), parse(fpt.itCasesInput, req.body)))));
+router.put([`${B}/integration/:mid/cases`, `${B}/system/:mid/cases`], asyncHandler(async (req, res) => ok(res, await fpt.saveItCases(callerId(req), P(req, 'pid'), P(req, 'mid'), parse(fpt.itCasesInput, req.body)))));
 
 // ─── Excel ───────────────────────────────────────────────────────
 router.get(`${B}/export`, asyncHandler(async (req, res) => {
-  const q = parse(z.object({ report: z.enum(['unit', 'integration']), module: z.string().max(120).optional() }), req.query);
+  const q = parse(z.object({ report: z.enum(['unit', 'integration', 'system']), module: z.string().max(120).optional() }), req.query);
   const out = await fpt.exportReport(callerId(req), P(req, 'pid'), q.report, { module: q.module });
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   res.setHeader('Content-Disposition', `attachment; filename="${out.file.replace(/[^\x20-\x7e]/g, '_')}"; filename*=UTF-8''${encodeURIComponent(out.file)}`);
@@ -107,7 +112,7 @@ router.get(`${B}/export`, asyncHandler(async (req, res) => {
 const rawXlsx = express.raw({ type: () => true, limit: fpt.MAX_IMPORT_BYTES + 1024 });
 router.post(`${B}/import`, rawXlsx, asyncHandler(async (req, res) => {
   const q = parse(z.object({
-    report: z.enum(['auto', 'unit', 'integration']).default('auto'),
+    report: z.enum(['auto', 'unit', 'integration', 'system']).default('auto'),
     mode: z.enum(['append', 'replace']).default('append'),
     dryRun: z.enum(['0', '1', 'true', 'false']).optional(),
   }), req.query);

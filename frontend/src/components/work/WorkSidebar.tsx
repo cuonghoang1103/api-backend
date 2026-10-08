@@ -29,6 +29,7 @@ import {
   CalendarClock, GitPullRequestArrow, ShieldAlert,
   Wallet, Receipt, FileBarChart,
   Headset, Library, ExternalLink, Bot,
+  FileSpreadsheet,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
@@ -138,6 +139,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
     items: [
       { path: 'reports', label: 'Reports', icon: BarChart3, match: (v) => v === 'reports' },
       { path: 'dashboards', label: 'Dashboards', icon: LayoutDashboard, match: (v) => v === 'dashboards' },
+      // CTW đợt 3B: tệp Excel nộp trường (WBS, Project Tracking, Weekly Report, AI Usage) — đội dự án + giảng viên.
+      { path: 'school', label: 'FPT reports', icon: FileSpreadsheet, match: (v) => v === 'school', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
     ],
   },
 ];

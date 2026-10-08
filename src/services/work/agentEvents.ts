@@ -93,6 +93,8 @@ export async function recordInbox(input: InboxInput) {
     },
   });
   agentBus.emit(`agent:${input.agentId}`, row);
+  // Đợt 3C: kênh chung cho người nghe trong tiến trình (agent BUILTIN tự xếp lượt chạy khi được giao — builtinAgent.service).
+  agentBus.emit('inbox', row, input.actor ?? null);
   return row;
 }
 

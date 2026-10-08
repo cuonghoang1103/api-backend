@@ -70,6 +70,9 @@ import agentsRoutes from './work.agents.routes.js';
 import mcpRoutes from '../mcp/server.js';
 import agentsUiRoutes from './work.agentsUi.routes.js';
 import fptTestRoutes from './work.fpt.routes.js';
+import docs3aRoutes from './work.docs3a.routes.js';
+import fptReportRoutes from './work.fptReports.routes.js';
+import ctw3cRoutes from './work.ctw3c.routes.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
 
@@ -1316,9 +1319,10 @@ router.get('/projects/:pid/issues/:num/dev', asyncHandler(async (req, res) => {
   ok(res, await github.devActivity(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
 }));
 
-// Project Tracking theo mẫu SWP391 (sheet Product + Summary theo PIC)
+// Project Tracking theo mẫu SWP391 (sheet Product + Summary theo PIC); đợt 3B: ?variant=SEP490|SWP391_T1|ISSUES
 router.get('/projects/:pid/export/project-tracking', asyncHandler(async (req, res) => {
-  const out = await projectTracking.projectTrackingXlsx(callerId(req), idParam(req, 'pid'));
+  const q = parse(z.object({ variant: z.enum(projectTracking.TRACKING_VARIANTS).default('SWP391') }), req.query);
+  const out = await projectTracking.projectTrackingXlsx(callerId(req), idParam(req, 'pid'), q.variant);
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   res.setHeader('Content-Disposition', `attachment; filename="${out.file}.xlsx"`);
   res.send(out.buffer);
@@ -1964,5 +1968,11 @@ router.use(agentsRoutes);
 router.use(agentsUiRoutes);
 // Đợt 1b (08/10/2026): tài liệu kiểm thử chuẩn FPT (Report 5.1 Unit + 5.2 Integration, xuất/nhập Excel) — work.fpt.routes.ts.
 router.use(fptTestRoutes);
+// CTW đợt 3A (09/10/2026): ảnh trong trình soạn thảo · xuất .docx/PDF · Record of Changes · điền Report từ dữ liệu — work.docs3a.routes.ts.
+router.use(docs3aRoutes);
+// CTW đợt 3B (09/10/2026): WBS + bảng quy đổi, Weekly Report, AI Usage Report, thông tin môn học — work.fptReports.routes.ts.
+router.use(fptReportRoutes);
+// CTW đợt 3C (09/10/2026): agent dựng sẵn (BUILTIN) — lượt chạy, dừng, trần chi phí; link tải Word/PDF — work.ctw3c.routes.ts.
+router.use(ctw3cRoutes);
 
 export default router;

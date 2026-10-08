@@ -6,7 +6,9 @@
  *     loại N/A/B, P/F, ngày chạy, Defect ID; LOC ⇒ KLOC ⇒ chỉ tiêu 100 TC/KLOC (cảnh báo khi thiếu).
  *   • Integration test (Report 5.2): mỗi MODULE một bảng case (mô tả, thủ tục, dữ liệu, mong đợi,
  *     thực tế, tối đa 4 vòng chạy Passed/Failed/Pending/N/A + ngày + người kiểm).
- *   • Cover + Record of change dùng chung cho cả hai báo cáo.
+ *   • System test (Report 5.3, đợt 3B 09/10/2026): mỗi WORKFLOW một bảng case như integration nhưng đúng 3 vòng
+ *     Round 1–3 — lưu chung bảng work_it_modules với `kind = 'SYS'` (5.2 là 'INT').
+ *   • Cover + Record of change dùng chung cho cả ba báo cáo (report UNIT | INT | SYS).
  *   • Xuất/nhập Excel đúng mẫu (fptTests.ts), AI gợi ý điều kiện biên cho một hàm (có trần).
  *
  * Quyền: đọc = project.view (VIEWER/TEACHER xem được để chấm); ghi = issue.edit (ADMIN/MEMBER).
@@ -21,7 +23,7 @@ import { AppError, BadRequestError, NotFoundError } from '../../middleware/error
 import { checkTokenQuota, extractJson, isAiAvailable, llmComplete } from '../interview/llm/index.js';
 import { emitWorkEvent } from './events.js';
 import {
-  buildIntegrationSheets, buildUnitSheets, CASE_RESULTS, CASE_TYPES, defaultIdPrefix, defaultSheetName, detectReport, IT_STATUSES,
+  buildIntegrationSheets, buildSystemSheets, buildUnitSheets, SYS_ROUNDS, CASE_RESULTS, CASE_TYPES, defaultIdPrefix, defaultSheetName, detectReport, IT_STATUSES,
   itStats, MAX_ROUNDS, parseIntegrationWorkbook, parseUnitWorkbook, requiredCases, unitStats, unitSummary, itCoverage,
   type ChangeData, type DocMeta, type ItCaseData, type ItModuleData, type ItRound, type UnitFunctionData,
 } from './fptTests.js';
@@ -58,8 +60,14 @@ export async function loadMeta(projectId: number): Promise<DocMeta> {
     tcPerKloc: d?.tcPerKloc ?? 100,
     unitNotes: d?.unitNotes ?? null,
     intNotes: d?.intNotes ?? null,
+    sysIssueDate: iso(d?.sysIssueDate),
+    sysNotes: d?.sysNotes ?? null,
   };
 }
+
+/** INT = Report 5.2 (module) · SYS = Report 5.3 (workflow). */
+export type ItKind = 'INT' | 'SYS';
+const roundsMax = (kind: string) => (kind === 'SYS' ? SYS_ROUNDS : MAX_ROUNDS);
 
 export async function getDoc(userId: number, projectId: number) {
   const access = await requireProject(userId, projectId, 'project.view');
@@ -78,7 +86,7 @@ export async function getDoc(userId: number, projectId: number) {
 }
 
 const changeOut = (c: { id: number; report: string; effectiveDate: Date; version: string; changeItem: string | null; action: string; description: string | null; reference: string | null; position: number }) => ({
-  id: c.id, report: c.report as 'UNIT' | 'INT', effectiveDate: iso(c.effectiveDate)!, version: c.version, changeItem: c.changeItem,
+  id: c.id, report: c.report as 'UNIT' | 'INT' | 'SYS', effectiveDate: iso(c.effectiveDate)!, version: c.version, changeItem: c.changeItem,
   action: c.action, description: c.description, reference: c.reference, position: c.position,
 });
 
@@ -94,6 +102,8 @@ export const docInput = z.object({
   tcPerKloc: z.number().int().min(1).max(10000).optional(),
   unitNotes: z.string().max(4000).nullable().optional(),
   intNotes: z.string().max(4000).nullable().optional(),
+  sysIssueDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+  sysNotes: z.string().max(4000).nullable().optional(),
 });
 
 export async function updateDoc(userId: number, projectId: number, input: z.infer<typeof docInput>) {
@@ -111,6 +121,8 @@ export async function updateDoc(userId: number, projectId: number, input: z.infe
   if (input.tcPerKloc !== undefined) data.tcPerKloc = input.tcPerKloc;
   if (input.unitNotes !== undefined) data.unitNotes = s(input.unitNotes);
   if (input.intNotes !== undefined) data.intNotes = s(input.intNotes);
+  if (input.sysIssueDate !== undefined) data.sysIssueDate = toDate(input.sysIssueDate);
+  if (input.sysNotes !== undefined) data.sysNotes = s(input.sysNotes);
   await prisma.workFptTestDoc.upsert({
     where: { projectId },
     create: { ...(data as Prisma.WorkFptTestDocUncheckedCreateInput), projectId },
@@ -121,7 +133,7 @@ export async function updateDoc(userId: number, projectId: number, input: z.infe
 }
 
 export const changeInput = z.object({
-  report: z.enum(['UNIT', 'INT']),
+  report: z.enum(['UNIT', 'INT', 'SYS']),
   effectiveDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   version: z.string().trim().min(1).max(20),
   changeItem: z.string().trim().max(200).nullable().optional(),
@@ -410,10 +422,10 @@ const roundsOf = (v: unknown): ItRound[] => {
   return r.success ? r.data : [];
 };
 
-export async function listModules(userId: number, projectId: number) {
+export async function listModules(userId: number, projectId: number, kind: ItKind = 'INT') {
   await requireProject(userId, projectId, 'project.view');
   const mods = await prisma.workItModule.findMany({
-    where: { projectId },
+    where: { projectId, kind },
     orderBy: [{ position: 'asc' }, { id: 'asc' }],
     select: { id: true, name: true, sheetName: true, idPrefix: true, description: true, preCondition: true, testRequirement: true, position: true, updatedAt: true, cases: { select: { rounds: true } } },
   });
@@ -436,13 +448,13 @@ export const moduleInput = z.object({
   position: z.number().int().min(0).max(100_000).optional(),
 });
 
-export async function createModule(userId: number, projectId: number, input: z.infer<typeof moduleInput>) {
+export async function createModule(userId: number, projectId: number, input: z.infer<typeof moduleInput>, kind: ItKind = 'INT') {
   await requireProject(userId, projectId, 'issue.edit');
-  const count = await prisma.workItModule.count({ where: { projectId } });
-  if (count >= MAX_IT_MODULES) throw new BadRequestError(`A project can have at most ${MAX_IT_MODULES} integration modules`, 'WORK_LIMIT');
+  const count = await prisma.workItModule.count({ where: { projectId, kind } });
+  if (count >= MAX_IT_MODULES) throw new BadRequestError(`A project can have at most ${MAX_IT_MODULES} ${kind === 'SYS' ? 'system test workflows' : 'integration modules'}`, 'WORK_LIMIT');
   const m = await prisma.workItModule.create({
     data: {
-      projectId, name: input.name, sheetName: clean(input.sheetName) ?? null, idPrefix: (input.idPrefix || defaultIdPrefix(input.name)).toUpperCase(),
+      projectId, kind, name: input.name, sheetName: clean(input.sheetName) ?? null, idPrefix: (input.idPrefix || defaultIdPrefix(input.name)).toUpperCase(),
       description: clean(input.description) ?? null, preCondition: clean(input.preCondition) ?? null, testRequirement: clean(input.testRequirement) ?? null,
       position: input.position ?? count,
     },
@@ -456,7 +468,7 @@ export async function getModule(userId: number, projectId: number, id: number) {
   const m = await prisma.workItModule.findFirst({
     where: { id, projectId },
     select: {
-      id: true, name: true, sheetName: true, idPrefix: true, description: true, preCondition: true, testRequirement: true, position: true, updatedAt: true,
+      id: true, name: true, sheetName: true, idPrefix: true, description: true, preCondition: true, testRequirement: true, position: true, updatedAt: true, kind: true,
       cases: { orderBy: [{ position: 'asc' }, { id: 'asc' }] },
     },
   });
@@ -524,8 +536,10 @@ async function writeItCases(tx: Prisma.TransactionClient, moduleId: number, case
 
 export async function saveItCases(userId: number, projectId: number, id: number, input: z.infer<typeof itCasesInput>) {
   await requireProject(userId, projectId, 'issue.edit');
-  const m = await prisma.workItModule.findFirst({ where: { id, projectId }, select: { updatedAt: true } });
+  const m = await prisma.workItModule.findFirst({ where: { id, projectId }, select: { updatedAt: true, kind: true } });
   if (!m) throw new NotFoundError('Module not found');
+  const maxR = roundsMax(m.kind);
+  if (input.cases.some((c) => (c.rounds?.length ?? 0) > maxR)) throw new BadRequestError(`This report has at most ${maxR} test rounds`, 'VALIDATION_ERROR');
   if (input.version && new Date(input.version).getTime() !== m.updatedAt.getTime()) {
     throw new AppError('Someone else changed this module a moment ago. Reload to see their changes.', 409, 'WORK_STALE');
   }
@@ -540,7 +554,7 @@ export async function saveItCases(userId: number, projectId: number, id: number,
 
 // ─── Xuất Excel ──────────────────────────────────────────────────
 
-async function exportChanges(projectId: number, report: 'UNIT' | 'INT'): Promise<ChangeData[]> {
+async function exportChanges(projectId: number, report: 'UNIT' | 'INT' | 'SYS'): Promise<ChangeData[]> {
   const rows = await prisma.workFptChange.findMany({ where: { projectId, report }, orderBy: [{ position: 'asc' }, { id: 'asc' }] });
   return rows.map((c) => ({ effectiveDate: iso(c.effectiveDate)!, version: c.version, changeItem: c.changeItem, action: c.action, description: c.description, reference: c.reference }));
 }
@@ -563,9 +577,9 @@ export async function loadUnitFunctions(projectId: number, moduleName?: string):
   }));
 }
 
-export async function loadItModules(projectId: number): Promise<ItModuleData[]> {
+export async function loadItModules(projectId: number, kind: ItKind = 'INT'): Promise<ItModuleData[]> {
   const mods = await prisma.workItModule.findMany({
-    where: { projectId }, orderBy: [{ position: 'asc' }, { id: 'asc' }],
+    where: { projectId, kind }, orderBy: [{ position: 'asc' }, { id: 'asc' }],
     include: { cases: { orderBy: [{ position: 'asc' }, { id: 'asc' }] } },
   });
   return mods.map((m) => ({
@@ -579,13 +593,18 @@ export async function loadItModules(projectId: number): Promise<ItModuleData[]> 
 
 const fileSafe = (s: string) => s.replace(/[^\p{L}\p{N}._-]+/gu, '_').replace(/^_+|_+$/g, '').slice(0, 60) || 'Project';
 
-export async function exportReport(userId: number, projectId: number, report: 'unit' | 'integration', opts: { module?: string } = {}) {
+export async function exportReport(userId: number, projectId: number, report: 'unit' | 'integration' | 'system', opts: { module?: string } = {}) {
   await requireProject(userId, projectId, 'project.view');
   const meta = await loadMeta(projectId);
   if (report === 'unit') {
     const functions = await loadUnitFunctions(projectId, opts.module);
     const sheets = buildUnitSheets({ meta, changes: await exportChanges(projectId, 'UNIT'), functions });
     return { file: `${fileSafe(meta.projectCode)}_Report5.1_Unit_Test_Report.xlsx`, buffer: writeXlsx(sheets, { title: `${meta.projectCode} — Unit Test Report` }), count: functions.length };
+  }
+  if (report === 'system') {
+    const workflows = (await loadItModules(projectId, 'SYS')).map((m) => ({ ...m, cases: m.cases.map((c) => ({ ...c, rounds: c.rounds.slice(0, SYS_ROUNDS) })) }));
+    const sheets = buildSystemSheets({ meta, changes: await exportChanges(projectId, 'SYS'), workflows });
+    return { file: `${fileSafe(meta.projectCode)}_Report5.3_System_Test_Report.xlsx`, buffer: writeXlsx(sheets, { title: `${meta.projectCode} — System Test Report` }), count: workflows.length };
   }
   const modules = await loadItModules(projectId);
   const sheets = buildIntegrationSheets({ meta, changes: await exportChanges(projectId, 'INT'), modules });
@@ -595,7 +614,7 @@ export async function exportReport(userId: number, projectId: number, report: 'u
 // ─── Nhập Excel ──────────────────────────────────────────────────
 
 export interface ImportResult {
-  report: 'unit' | 'integration';
+  report: 'unit' | 'integration' | 'system';
   dryRun: boolean;
   mode: 'append' | 'replace';
   functions?: number;
@@ -608,7 +627,7 @@ export interface ImportResult {
 
 export async function importReport(
   userId: number, projectId: number, buf: Buffer,
-  opts: { report?: 'unit' | 'integration' | 'auto'; mode?: 'append' | 'replace'; dryRun?: boolean },
+  opts: { report?: 'unit' | 'integration' | 'system' | 'auto'; mode?: 'append' | 'replace'; dryRun?: boolean },
 ): Promise<ImportResult> {
   await requireProject(userId, projectId, 'issue.edit');
   if (buf.length > MAX_IMPORT_BYTES) throw new BadRequestError('The file is larger than 10 MB', 'WORK_IMPORT_TOO_LARGE');
@@ -616,7 +635,7 @@ export async function importReport(
   try { sheets = readXlsx(buf); } catch { throw new BadRequestError('This is not an .xlsx file (Excel 2007+). Save it as .xlsx and try again.', 'WORK_IMPORT_BAD_FILE'); }
   const detected = detectReport(sheets);
   const report = !opts.report || opts.report === 'auto' ? detected : opts.report;
-  if (!report) throw new BadRequestError('Could not find a unit test matrix (UTCID…) or an integration sheet (Test Case ID) in this file.', 'WORK_IMPORT_UNRECOGNISED');
+  if (!report) throw new BadRequestError('Could not find a unit test matrix (UTCID…) or an integration/system test sheet (Test Case ID) in this file.', 'WORK_IMPORT_UNRECOGNISED');
   const mode = opts.mode ?? 'append';
   const dryRun = !!opts.dryRun;
 
@@ -660,27 +679,31 @@ export async function importReport(
     return result;
   }
 
-  const parsed = parseIntegrationWorkbook(sheets);
+  const kind: ItKind = report === 'system' ? 'SYS' : 'INT';
+  const docReport = kind === 'SYS' ? 'SYS' : 'INT';
+  const parsed = parseIntegrationWorkbook(sheets, { system: kind === 'SYS' });
   const mods = parsed.modules.slice(0, MAX_IT_MODULES);
   for (const m of mods) if (m.cases.length > MAX_IT_CASES) { parsed.warnings.push(`${m.name}: only the first ${MAX_IT_CASES} test cases kept`); m.cases = m.cases.slice(0, MAX_IT_CASES); }
+  const maxR = roundsMax(kind);
+  for (const m of mods) for (const c of m.cases) if (c.rounds.length > maxR) c.rounds = c.rounds.slice(0, maxR);
   const result: ImportResult = {
     report, dryRun, mode, modules: mods.length, cases: mods.reduce((s, m) => s + m.cases.length, 0), changes: parsed.cover.changes.length,
     warnings: parsed.warnings.slice(0, 50), preview: mods.map((m) => ({ name: m.name, cases: m.cases.length })),
   };
   if (dryRun) return result;
-  const existing = mode === 'append' ? await prisma.workItModule.count({ where: { projectId } }) : 0;
+  const existing = mode === 'append' ? await prisma.workItModule.count({ where: { projectId, kind } }) : 0;
   if (existing + mods.length > MAX_IT_MODULES) throw new BadRequestError(`This would exceed ${MAX_IT_MODULES} modules — use "Replace" or remove some first`, 'WORK_LIMIT');
   await prisma.$transaction(async (tx) => {
     if (mode === 'replace') {
-      await tx.workItModule.deleteMany({ where: { projectId } });
-      await tx.workFptChange.deleteMany({ where: { projectId, report: 'INT' } });
+      await tx.workItModule.deleteMany({ where: { projectId, kind } });
+      await tx.workFptChange.deleteMany({ where: { projectId, report: docReport } });
     }
-    await applyCover(tx, projectId, parsed.cover, { reviewer: parsed.reviewer, notes: parsed.notes, environment: parsed.environment, tcPerKloc: null }, 'INT', mode);
+    await applyCover(tx, projectId, parsed.cover, { reviewer: parsed.reviewer, notes: parsed.notes, environment: parsed.environment, tcPerKloc: null }, docReport, mode);
     let pos = existing;
     for (const m of mods) {
       const made = await tx.workItModule.create({
         data: {
-          projectId, name: m.name.slice(0, 120) || 'Module', sheetName: m.sheetName?.slice(0, 31) || null, idPrefix: (m.idPrefix || defaultIdPrefix(m.name)).slice(0, 10),
+          projectId, kind, name: m.name.slice(0, 120) || 'Module', sheetName: m.sheetName?.slice(0, 31) || null, idPrefix: (m.idPrefix || defaultIdPrefix(m.name)).slice(0, 10),
           description: m.description, preCondition: m.preCondition, testRequirement: m.testRequirement, position: pos++,
         },
       });
@@ -696,7 +719,7 @@ async function applyCover(
   tx: Prisma.TransactionClient, projectId: number,
   cover: { projectName: string | null; projectCode: string | null; creator: string | null; issueDate: string | null; version: string | null; changes: ChangeData[] },
   extra: { reviewer: string | null; notes: string | null; environment: string | null; tcPerKloc: number | null },
-  report: 'UNIT' | 'INT', mode: 'append' | 'replace',
+  report: 'UNIT' | 'INT' | 'SYS', mode: 'append' | 'replace',
 ) {
   const cur = await tx.workFptTestDoc.findUnique({ where: { projectId } });
   const pick = <T,>(now: T | null | undefined, incoming: T | null | undefined) => (mode === 'replace' ? (incoming ?? now ?? null) : (now ?? incoming ?? null));
@@ -710,7 +733,9 @@ async function applyCover(
     version: (mode === 'replace' ? versionIn : cur?.version ?? versionIn)?.slice(0, 20) || '1.0',
     ...(report === 'UNIT'
       ? { unitIssueDate: pick(cur?.unitIssueDate, toDate(cover.issueDate)), unitNotes: pick(cur?.unitNotes, extra.notes), ...(extra.tcPerKloc ? { tcPerKloc: mode === 'replace' || !cur ? extra.tcPerKloc : cur.tcPerKloc } : {}) }
-      : { intIssueDate: pick(cur?.intIssueDate, toDate(cover.issueDate)), intNotes: pick(cur?.intNotes, extra.notes) }),
+      : report === 'SYS'
+        ? { sysIssueDate: pick(cur?.sysIssueDate, toDate(cover.issueDate)), sysNotes: pick(cur?.sysNotes, extra.notes) }
+        : { intIssueDate: pick(cur?.intIssueDate, toDate(cover.issueDate)), intNotes: pick(cur?.intNotes, extra.notes) }),
   };
   await tx.workFptTestDoc.upsert({ where: { projectId }, create: { projectId, ...data }, update: data });
   if (cover.changes.length) {

@@ -1822,6 +1822,22 @@ export const INVOKE_CHANNELS = {
   'mangNha:thongTin': null,
 
   /**
+   * ── TRÒ CHƠI TẢI VỀ MÁY (08/10/2026) ─────────────────────
+   *
+   * Game cài riêng (Flying Pencil): tải zip từ GitHub Release, kiểm SHA-256,
+   * giải nén vào `userData/games/<ma>/<phiên bản>/`, mở bằng LaunchServices.
+   * Renderer CHỈ gửi mã game trong danh sách đóng — mọi đường dẫn do main tự
+   * dựng, không có kênh nào nhận đường dẫn từ renderer. Tiến độ chảy qua sự
+   * kiện `troChoi:tienDo`.
+   */
+  'troChoi:tinhTrang': z.object({ ma: z.enum(['flying-pencil']), napLai: z.boolean().optional() }),
+  'troChoi:tai': z.object({ ma: z.enum(['flying-pencil']) }),
+  'troChoi:huyTai': z.object({ ma: z.enum(['flying-pencil']) }),
+  'troChoi:choi': z.object({ ma: z.enum(['flying-pencil']) }),
+  'troChoi:go': z.object({ ma: z.enum(['flying-pencil']) }),
+  'troChoi:moThuMuc': z.object({ ma: z.enum(['flying-pencil']) }),
+
+  /**
    * ── AI NGOẠI TUYẾN ───────────────────────────────────────
    *
    * AI chạy THẲNG trên máy người dùng qua llama.cpp, dùng được khi mất mạng.
@@ -2180,6 +2196,8 @@ export const EVENT_CHANNELS = [
   'mangNha:tienDo',
   /** Quét xong một lượt. */
   'mangNha:xong',
+  /** Tiến độ tải/kiểm/giải nén một game cài riêng (`TroChoiTienDo`). */
+  'troChoi:tienDo',
 ] as const;
 
 export type EventChannel = (typeof EVENT_CHANNELS)[number];
@@ -2284,6 +2302,61 @@ export interface RobotKetQuaBoCuc {
   };
   hopTruoc: RobotHop;
   phanTram: number;
+}
+
+/**
+ * ── TRÒ CHƠI TẢI VỀ MÁY — hình dạng dữ liệu (08/10/2026) ──
+ * Bản sao có chủ đích của kiểu trong `main/troChoi/caiGame.ts` (shared không
+ * import ngược từ main — preload nạp file này).
+ */
+export type TroChoiMa = 'flying-pencil';
+
+/** Một ảnh/video trong trang cửa hàng. URL đã được main phân giải thành tuyệt đối. */
+export interface TroChoiMedia {
+  loai: 'anh' | 'video';
+  url: string;
+  /** Ảnh nhỏ cho băng chuyền (ảnh) hoặc ảnh chờ (video). */
+  nho?: string;
+  /** `phim` = cảnh phim dựng sẵn · `game` = chụp trong game. */
+  nguon: 'phim' | 'game';
+  chu?: { vi: string; en: string };
+}
+
+/** Phần `phien_ban.json` mà giao diện cần — đã kiểm hình dạng ở main. */
+export interface TroChoiBanPhatHanh {
+  version: string;
+  size: number;
+  sizeGiaiNen?: number;
+  ngay: string;
+  ghiChu: { vi: string; en: string };
+  yeuCau: string;
+  nhatKy: { version: string; ngay: string; vi: string[]; en: string[] }[];
+  media: TroChoiMedia[];
+}
+
+export interface TroChoiTinhTrang {
+  ma: TroChoiMa;
+  /** Máy này có chạy được không (macOS ≥ 13, Apple Silicon). */
+  hoTro: { ok: boolean; lyDo?: string };
+  /** Bản đã cài và dùng được. `null` = chưa cài. */
+  daCai: { version: string; ngayCai: string; dungLuong: number } | null;
+  /** Bản mới nhất trên máy chủ. `null` khi chưa đọc được (xem `loiBanMoi`). */
+  banMoi: TroChoiBanPhatHanh | null;
+  loiBanMoi?: string;
+  /** Có bản mới khác bản đang cài. */
+  coCapNhat: boolean;
+  dangTai: boolean;
+  /** Byte đã tải dở của bản mới (để hiện "Tiếp tục 45%"). */
+  daTaiDo: number;
+}
+
+export interface TroChoiTienDo {
+  ma: TroChoiMa;
+  buoc: 'tai' | 'kiem' | 'giaiNen' | 'xong' | 'loi' | 'huy';
+  daCo: number;
+  tong: number;
+  bps: number;
+  loi?: string;
 }
 
 export interface DesktopBridge {
@@ -2537,6 +2610,21 @@ export interface DesktopBridge {
     chup(id: string): Promise<{ ok: boolean; anh?: string; rong?: number; cao?: number; loi?: string }>;
     /** Mở trang cấp quyền Ghi màn hình (macOS). Nơi khác thì không làm gì. */
     moCaiDatQuyen(): Promise<{ ok: boolean }>;
+  };
+
+  troChoi: {
+    /** Trạng thái cài + bản mới nhất. `napLai` = bỏ bộ nhớ đệm 60 giây của phien_ban.json. */
+    tinhTrang(ma: TroChoiMa, napLai?: boolean): Promise<TroChoiTinhTrang>;
+    /** Tải (hoặc tải TIẾP) + kiểm + cài bản mới nhất. Trả về ngay; tiến độ qua `troChoi:tienDo`. */
+    tai(ma: TroChoiMa): Promise<{ ok: boolean; loi?: string }>;
+    /** Dừng tải. Phần đã tải được giữ lại để bấm tiếp. */
+    huyTai(ma: TroChoiMa): Promise<{ ok: boolean }>;
+    /** Mở game đã cài. `chan: true` = macOS chặn, giao diện hiện hướng dẫn chuột phải → Mở. */
+    choi(ma: TroChoiMa): Promise<{ ok: boolean; loi?: string; chan?: boolean }>;
+    /** Xoá game khỏi máy (cả phần tải dở). */
+    go(ma: TroChoiMa): Promise<{ ok: boolean; loi?: string }>;
+    /** Hiện app game trong Finder (để chuột phải → Mở khi Gatekeeper chặn). */
+    moThuMuc(ma: TroChoiMa): Promise<{ ok: boolean }>;
   };
 
   mangNha: {

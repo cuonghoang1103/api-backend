@@ -98,6 +98,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'mangNha:thietBi',
   'mangNha:tienDo',
   'mangNha:xong',
+  'troChoi:tienDo',
 ];
 
 const bridge: DesktopBridge = {
@@ -314,6 +315,14 @@ const bridge: DesktopBridge = {
       }>,
     moCaiDatQuyen: () =>
       ipcRenderer.invoke('manHinh:moCaiDatQuyen') as Promise<{ ok: boolean }>,
+  },
+  troChoi: {
+    tinhTrang: (ma, napLai) => ipcRenderer.invoke('troChoi:tinhTrang', { ma, napLai: napLai === true }),
+    tai: (ma) => ipcRenderer.invoke('troChoi:tai', { ma }),
+    huyTai: (ma) => ipcRenderer.invoke('troChoi:huyTai', { ma }),
+    choi: (ma) => ipcRenderer.invoke('troChoi:choi', { ma }),
+    go: (ma) => ipcRenderer.invoke('troChoi:go', { ma }),
+    moThuMuc: (ma) => ipcRenderer.invoke('troChoi:moThuMuc', { ma }),
   },
   mangNha: {
     quet: (tuyChon) =>

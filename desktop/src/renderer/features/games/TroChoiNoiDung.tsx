@@ -16,6 +16,8 @@ import GameHub from '@/components/games/hub/GameHub';
 import ChoiGameClient from '@/components/games/hub/ChoiGameClient';
 import DoiKhangClient from '@/app/games/doi-khang/DoiKhangClient';
 import { useAppState } from '../../app-state';
+import TrangFlyingPencil from './flyingPencil/TrangFlyingPencil';
+import { KhuNoiBat } from './flyingPencil/KhuNoiBat';
 import { useDich } from '../../i18n';
 
 export default function TroChoiNoiDung() {
@@ -28,6 +30,8 @@ export default function TroChoiNoiDung() {
   }, [nn]);
   const slug = /^\/games\/([^/?#]+)/.exec(route)?.[1];
   // Đối kháng (05/10/2026): sảnh + bàn chơi cờ/bài realtime; tham số ?phong=/?choi= qua shim useSearchParams.
+  // Flying Pencil (08/10/2026): game CÀI RIÊNG, không qua API game của web — trang cửa hàng của app.
+  if (slug === 'flying-pencil') return <div key="cua-hang" className="ct-tro-choi" data-cua-hang=""><TrangFlyingPencil /></div>;
   if (slug === 'doi-khang') return <div className="ct-tro-choi" data-choi=""><DoiKhangClient /></div>;
   if (slug && slug !== 'leaderboard') {
     return (
@@ -39,5 +43,11 @@ export default function TroChoiNoiDung() {
       </div>
     );
   }
-  return <div className="ct-tro-choi"><GameHub locale={nn === 'en' ? 'en' : 'vi'} /></div>;
+  return (
+    // `key` riêng mỗi nhánh: cùng một <div> bị React dùng lại thì giữ nguyên scrollTop của trang trước.
+    <div key="sanh" className="ct-tro-choi" data-sanh="">
+      <KhuNoiBat />
+      <GameHub locale={nn === 'en' ? 'en' : 'vi'} />
+    </div>
+  );
 }

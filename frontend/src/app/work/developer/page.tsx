@@ -330,6 +330,20 @@ function ApiReference() {
         ))}
       </div>
 
+      {/* CTW-28 (A14): MCP — Claude Code / client MCP gọi CT Work bằng chính token này (quyền của bạn). */}
+      <div className="border-t border-[var(--w-border)] pt-4" data-testid="developer-mcp">
+        <div className="mb-1 flex items-baseline gap-2">
+          <span className="font-mono text-[11px] font-bold text-[var(--w-accent-text)]">MCP</span>
+          <code className="break-all font-mono text-[12.5px] font-medium text-[var(--w-text)]">{base}/mcp</code>
+        </div>
+        <p className="mb-2 text-[13px] text-[var(--w-text-2)]">
+          Use CT Work from Claude Code or any MCP client: read issues, comment, move cards and log work with your own permissions.
+          For an AI agent that works on its own, create it under <span className="font-medium">AI agents</span> in your workspace instead — it gets its own token and an owner.
+        </p>
+        <Code>{`claude mcp add --transport http ctwork ${base}/mcp \\\n  --header "Authorization: Bearer $CTW_TOKEN"`}</Code>
+        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">Clients that only speak stdio: <code className="font-mono">CTWORK_TOKEN=$CTW_TOKEN npx -y @cuongthai/ctwork-mcp</code>.</p>
+      </div>
+
       <p className="text-[12px] leading-relaxed text-[var(--w-text-3)]">
         Every other endpoint the web app uses under <code className="font-mono">/api/v1/work</code> also accepts tokens, within the token’s access level.
         Creating, listing and revoking API tokens is only possible here on the website — requests to those endpoints made with a token are refused.

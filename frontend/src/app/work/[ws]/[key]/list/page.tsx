@@ -44,6 +44,7 @@ import ProjectHeader from '@/components/work/ProjectHeader';
 import { basicToJql, jqlErrorOf } from '@/components/work/search/jql';
 import { studioOn, useWorkspaceTeams } from '@/components/work/studio/shared';
 import { workStudioApi, workStudioKeys } from '@/lib/work-api';
+import { AgentLeasesProvider, AssigneeKindFilter, type AssigneeKind } from '@/components/work/agents/leases';
 
 const PAGE = 100;
 const ME = -1; // giá trị "Me" trong picker; trên URL là chữ `me`
@@ -176,6 +177,9 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   const stageParam = Number(sp?.get('stage'));
   const stageSel = Number.isInteger(stageParam) && stageParam > 0 ? stageParam : null;
   const showDone = sp?.get('done') === '1';
+  // CTW-28: ?kind=AGENT|HUMAN — dịch thành danh sách người được giao (không cần tham số mới ở API).
+  const kindParam = sp?.get('kind');
+  const kindSel: AssigneeKind = kindParam === 'AGENT' || kindParam === 'HUMAN' ? kindParam : 'ALL';
   const jqlMode = sp?.get('mode') === 'jql';
   const jqlParam = sp?.get('jql') ?? '';
   const filterParam = Number(sp?.get('filter'));
@@ -226,7 +230,13 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   const query = useMemo<IssueQuery>(() => {
     const statusIds = statusGroups.filter((g) => statusSel.includes(g.name)).flatMap((g) => g.ids);
     const pickedDone = statusGroups.some((g) => statusSel.includes(g.name) && g.category === 'DONE');
-    const assignee = assigneeSel.map((a) => (a === ME ? meId ?? -1 : a)).filter((a) => a >= 0);
+    let assignee = assigneeSel.map((a) => (a === ME ? meId ?? -1 : a)).filter((a) => a >= 0);
+    if (kindSel !== 'ALL') {
+      const kindIds = (config?.members ?? []).filter((m) => (m.kind === 'AGENT' ? 'AGENT' : 'HUMAN') === kindSel).map((m) => m.id);
+      const both = assignee.length ? assignee.filter((a) => kindIds.includes(a)) : kindIds;
+      // Giao rỗng ⇒ một id không tồn tại (mảng rỗng = "không lọc" ở API).
+      assignee = both.length ? both : [2147483646];
+    }
     return {
       q: qParam || undefined,
       type: typeSel.length ? typeSel : undefined,
@@ -238,9 +248,9 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
       includeDone: showDone || pickedDone,
       limit: PAGE,
     };
-  }, [qParam, typeSel, statusSel, statusGroups, assigneeSel, meId, labelSel, teamSel, stageSel, showDone]);
+  }, [qParam, typeSel, statusSel, statusGroups, assigneeSel, meId, labelSel, teamSel, stageSel, showDone, kindSel, config]);
 
-  const hasFilters = !!(qParam || typeSel.length || statusSel.length || assigneeSel.length || labelSel.length || teamSel.length || stageSel);
+  const hasFilters = !!(qParam || typeSel.length || statusSel.length || assigneeSel.length || labelSel.length || teamSel.length || stageSel || kindSel !== 'ALL');
   const teamsOn = studioOn(config, 'teams');
   const stagesOn = studioOn(config, 'stages');
   const teamsQ = useWorkspaceTeams(config?.workspace.id, teamsOn);
@@ -501,7 +511,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
 
   const clearFilters = () => {
     setSearch('');
-    setParams({ q: null, type: null, status: null, assignee: null, label: null, team: null, stage: null });
+    setParams({ q: null, type: null, status: null, assignee: null, label: null, team: null, stage: null, kind: null });
   };
 
   const summaryOf = (labels: string[]) => (labels.length === 1 ? `· ${labels[0]}` : `· ${labels.length}`);
@@ -526,6 +536,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
     else if (one) parts.push(one);
     const st = stagesQ.data?.find((x) => x.id === stageSel);
     if (st) parts.push(`stage = ${st.slug}`);
+    if (kindSel !== 'ALL') parts.push(`assigneeKind = ${kindSel}`);
     return parts.join(' AND ');
   };
 
@@ -553,6 +564,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   const canBulk = config.permissions.editIssues || config.permissions.transition || config.permissions.deleteIssues;
 
   return (
+    <AgentLeasesProvider config={config}>
     <div className="flex h-full min-w-0 flex-col">
       {/* Thanh đầu — cùng khung ProjectHeader với mọi trang dự án */}
       <ProjectHeader
@@ -673,6 +685,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
             summary={stageSel ? `· ${stagesQ.data?.find((x) => x.id === stageSel)?.n ?? '?'}` : undefined}
           />
         )}
+        {config && <AssigneeKindFilter config={config} value={kindSel} onChange={(v) => setParams({ kind: v === 'ALL' ? null : v })} />}
         <label className="ml-1 flex h-[26px] cursor-pointer select-none items-center gap-1.5 rounded-[6px] px-1.5 text-[12px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]">
           <input
             type="checkbox"
@@ -864,6 +877,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
         />
       )}
     </div>
+    </AgentLeasesProvider>
   );
 }
 

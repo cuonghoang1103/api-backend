@@ -38,6 +38,7 @@ import HeaderTools from './shell/HeaderTools';
 import { Crumb, CrumbSep } from './ProjectHeader';
 import { TimeTrackingBlock } from './TimeTracking';
 import DevelopmentPanel from './DevelopmentPanel';
+import IssueAgentActivity from './agents/IssueAgentActivity';
 import { IssueApprovals, IssueHandoffs, MoveIssueDialog, StagePicker, TeamPicker } from './studio/IssueStudio';
 import { studioOn } from './studio/shared';
 import { LinkedDocs } from './docs/LinkedDocs';
@@ -684,6 +685,8 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             </section>
             <Subtasks issue={issue} config={config} lk={lk} onOpen={onOpenIssue} onAdd={() => setSubtaskOpen(true)} />
             <Links issue={issue} pid={pid} lk={lk} editable={editable} onOpenKey={openKey} />
+            {/* CTW-28: agent đang làm / đã làm thẻ này + chi phí của thẻ (tự ẩn khi thẻ chưa từng dính agent). */}
+            <IssueAgentActivity config={config} issue={issue} done={lk.statuses.get(issue.statusId)?.category === 'DONE'} />
             {studioOn(config, 'approvals') && <IssueApprovals config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
             {studioOn(config, 'handoffs') && <IssueHandoffs config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
             {studioOn(config, 'docs') && <LinkedDocs config={config} issueNumber={issue.number} />}

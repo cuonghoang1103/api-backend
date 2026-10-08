@@ -24,6 +24,8 @@ import CapacityTab from '@/components/work/reports/CapacityTab';
 import IssueDrawer from '@/components/work/IssueDrawer';
 import { ClientWeeklyTab, SteeringTab } from '@/components/work/reports/S4ReportTabs';
 import { studioOn } from '@/components/work/studio/shared';
+import { ProjectAgentsReport } from '@/components/work/agents/PeopleVsAgents';
+import { projectHasAgents } from '@/components/work/agents/leases';
 import Link from 'next/link';
 import { Presentation } from 'lucide-react';
 
@@ -37,6 +39,8 @@ const TABS = [
   { id: 'contributions', label: 'Contributions' },
   { id: 'time', label: 'Time' },
   { id: 'capacity', label: 'Capacity' },
+  // CTW-28 A15: chỉ hiện khi dự án có AI agent (lọc trong ReportsView).
+  { id: 'agents', label: 'People vs Agents' },
   // Đợt S4 (mô-đun reports): chỉ hiện khi bật + người của đội (lọc trong ReportsView).
   { id: 'client', label: 'Client weekly' },
   { id: 'steering', label: 'Steering' },
@@ -52,7 +56,8 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
   useProjectRealtime(pid);
 
   const reportsOn = studioOn(config, 'reports') && !!config.permissions.viewReports;
-  const tabs = TABS.filter((t) => reportsOn || !S4_TABS.has(t.id));
+  const hasAgents = projectHasAgents(config) && config.role !== 'CLIENT' && !config.clientView;
+  const tabs = TABS.filter((t) => (reportsOn || !S4_TABS.has(t.id)) && (t.id !== 'agents' || hasAgents));
   const raw = search?.get('tab');
   const tab: TabId = tabs.some((t) => t.id === raw) ? (raw as TabId) : 'health';
   const setTab = useCallback((id: TabId) => {
@@ -115,6 +120,7 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
           {tab === 'contributions' && <ContributionsTab pid={pid} config={config} />}
           {tab === 'time' && <TimeTab pid={pid} config={config} onOpenIssue={setIssue} />}
           {tab === 'capacity' && <CapacityTab pid={pid} config={config} />}
+          {tab === 'agents' && hasAgents && <ProjectAgentsReport config={config} />}
           {tab === 'client' && reportsOn && <ClientWeeklyTab config={config} />}
           {tab === 'steering' && reportsOn && <SteeringTab config={config} />}
         </div>

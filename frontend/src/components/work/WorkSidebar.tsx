@@ -28,7 +28,7 @@ import {
   Handshake, PackageCheck, Activity,
   CalendarClock, GitPullRequestArrow, ShieldAlert,
   Wallet, Receipt, FileBarChart,
-  Headset, Library, ExternalLink,
+  Headset, Library, ExternalLink, Bot,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
@@ -43,7 +43,7 @@ import WorkInbox from './shell/WorkInbox';
 import { useSidebarRail } from './shell/mobileNav';
 
 const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search']);
-const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload']);
+const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents']);
 
 export function useWorkPath() {
   const pathname = usePathname() ?? '';
@@ -171,6 +171,8 @@ const WORKSPACE_NAV: { path: string; label: string; icon: LucideIcon; module?: S
   // Đợt S3a — chỉ người trong đội (không phải khách GUEST); phạm vi dữ liệu do server quyết.
   { path: '/portfolio', label: 'Portfolio', icon: BriefcaseBusiness, staffOnly: true },
   { path: '/workload', label: 'Workload', icon: Gauge, staffOnly: true },
+  // CTW-28 (A14): AI agent thành viên — tạo, token, webhook, hộp thư.
+  { path: '/agents', label: 'AI agents', icon: Bot, staffOnly: true },
   { path: '/settings', label: 'Members & settings', icon: Users },
 ];
 

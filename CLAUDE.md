@@ -616,6 +616,43 @@ Xem cấu hình đang chạy trên prod: `GET /api/v1/ai/admin/llm-config` (admi
 
 ---
 
+## Agent trong CT Work (CTW-28, GĐ1 — 09/10/2026)
+
+Thiết kế: `docs/ct-work-ai-agents-thiet-ke.md` · hợp đồng API đợt 2: `docs/ctw-dot-2-hop-dong-api.md`.
+
+- **Agent LÀ một `User` với `kind = 'AGENT'`** + hồ sơ `work_agents` (1:1, `ownerId` = NGƯỜI chịu trách nhiệm). Mọi FK
+  cũ (assignee, author, worklog…) trỏ `users.id` ⇒ bot `fp_*` chuyển thành agent bằng **Convert** mà giữ nguyên id.
+  `PUBLIC_USER` có `kind` ⇒ `UserAvatar` (ui.tsx) tự gắn 🤖 + tooltip "AI agent · model · owner" ở MỌI chỗ.
+- **Agent không bao giờ đăng nhập** (password NULL, `@agents.invalid`, login ⇒ 403 `AGENT_NO_LOGIN`). Xác thực DUY
+  NHẤT bằng token `ctw_` có scope `agent`, cấp ở `/work/<ws>/agents/<id>` (hiện MỘT lần kèm lệnh
+  `claude mcp add --transport http ctwork https://cuongthai.com/api/v1/work/mcp --header "Authorization: Bearer …"`).
+  PAUSED: đọc được, ghi ⇒ 423. RETIRED: token thu hồi, rời dự án, lịch sử giữ.
+- **Rào chắn ở server, một chỗ** — `src/services/work/permissions.ts`: `AGENT_DENIED_ACTIONS` (qua `can()`),
+  `AGENT_DENIED_ROUTES` (tuyến dưới `/projects/:pid`, khai CẤM), `agentTopRouteAllowed` (tuyến NGOÀI `/projects/:pid`,
+  khai MỞ — fail-closed). Agent không duyệt, không xoá, không cấu hình, không tài chính, không gửi khách, bình luận luôn
+  INTERNAL, cổng khách không bao giờ thấy agent (`scrubCardForClient` ⇒ "Team").
+- **"Done" của agent ⇒ cột Review** (trong cửa ghi chung `applyIssueChange`, nên REST/MCP/bulk như nhau). Tắt được ở
+  Project settings → **AI agents** (ADMIN, có audit). Lease (claim/heartbeat/release) = "đang làm"; sweeper 60 s:
+  hết hạn ⇒ cờ Blocked + báo owner. Chip `🤖 working · 72%` trên board/backlog/list đọc `GET /projects/:pid/agent-leases`.
+- **Chi phí agent là USD ƯỚC LƯỢNG, phần lớn TỰ KHAI** (`report_usage`, `source = REPORTED`) — mọi chỗ hiện tiền agent
+  phải ghi nhãn nguồn ("self-reported"), không trình bày như số đo. Báo cáo: Reports → **People vs Agents** (dự án),
+  Workload → **People vs Agents** (không gian).
+- JQL: `assigneeKind = AGENT | HUMAN`, `assignee IN agents()` / `people()` (khách cổng dùng ⇒ 400).
+- Test: `WORK_DB_TEST=1 npx tsx --test src/routes/work.agents.db.test.ts src/routes/work.agentsUi.db.test.ts` +
+  `npx tsx --test src/services/work/permissions.test.ts src/services/work/jql.test.ts`.
+
+**Checklist khi thêm tuyến CT Work** (tuyến mới dưới `/projects/:pid` mặc định MỞ cho agent):
+1. Tuyến có **tác dụng đối ngoại** — khách, tiền, xoá, cấu hình dự án, gửi ra ngoài (email/chat/webhook/export) ⇒ thêm
+   vào `AGENT_DENIED_ROUTES` **và** vào bảng trong `permissions.test.ts` (bảng đó là danh sách để không ai quên).
+2. Hành động mới đi qua `can()` mà phá huỷ/quản trị ⇒ thêm vào `AGENT_DENIED_ACTIONS` (chốt ở service, không chỉ tuyến —
+   "ẩn UI không phải ẩn API").
+3. Tuyến NGOÀI `/projects/:pid` mà agent cần ⇒ mở rõ trong `agentTopRouteAllowed` (mặc định agent bị 403).
+4. Dữ liệu trả cho khách cổng ⇒ không lộ agent (assignee/actor agent ⇒ "Team").
+5. Trang mới dưới `app/work` ⇒ thêm tuyến app desktop (`desktop/src/renderer/features/web/dinhTuyenWeb.ts`, tĩnh TRƯỚC
+   động); trang cấp không gian ⇒ thêm tên vào `WS_PAGES` trong `WorkSidebar.tsx` (không thì bị đọc thành mã dự án).
+
+---
+
 ## Feature Implementation Workflow
 
 1. **Plan first** — understand full scope, list files to change

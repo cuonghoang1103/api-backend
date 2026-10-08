@@ -9,6 +9,8 @@
  *     GET/POST  /workspaces/:wsId/agents/:agentId/webhooks      · PATCH/DELETE …/webhooks/:hid · POST …/webhooks/:hid/test
  *     GET       /workspaces/:wsId/agents/:agentId/inbox         (50 dòng gần nhất)
  *     GET/PUT   /projects/:pid/agent-settings                   (Done⇒Review, reviewStatusId, … — ADMIN dự án)
+ *     GET       /workspaces/:wsId/agents/dashboard?days=30       (A12 People vs Agents — admin: tất; owner: agent của mình)
+ *     GET       /projects/:pid/reports/agents?from&to&sprintId   (A12) · GET /projects/:pid/issues/:num/agent-activity
  *
  *   Agent (token ctw_ của agent):
  *     GET  /agents/me · GET /agents/me/leases
@@ -16,6 +18,7 @@
  *     POST /agents/me/leases/:id/heartbeat { progress?, progressPct?, extendMinutes? } · POST …/:id/release { reason? }
  *     GET  /agents/me/inbox?after=&limit=   (poll)  · GET /agents/me/events?after= (SSE, ping 20 s, 1 kết nối/token)
  *     POST /agents/me/events/ack { lastId }
+ *     POST /projects/:pid/agent-usage { issueNumber?, model, inputTokens, outputTokens, … }  (A12 — tự khai chi phí)
  *
  * Quyền kiểm TRONG service — route chỉ kiểm đầu vào.
  */
@@ -26,6 +29,7 @@ import { AppError, asyncHandler, UnauthorizedError } from '../middleware/errorHa
 import { AGENT_PROJECT_ROLES } from '../services/work/constants.js';
 import * as agents from '../services/work/agents.service.js';
 import * as webhooks from '../services/work/webhooks.service.js';
+import * as agentReports from '../services/work/agentReports.service.js';
 import { ackInbox, agentBus, listInbox } from '../services/work/agentEvents.js';
 
 const router = Router();
@@ -89,6 +93,12 @@ router.post('/workspaces/:wsId/agents', asyncHandler(async (req, res) => {
     token: tokenInput.nullable().optional(),
   }).strict(), req.body);
   ok(res, await agents.createAgent(callerId(req), P(req, 'wsId'), body), 201);
+}));
+
+// A12: dashboard "People vs Agents" — khai TRƯỚC /:agentId (không thì "dashboard" bị đọc như id ⇒ 400).
+router.get('/workspaces/:wsId/agents/dashboard', asyncHandler(async (req, res) => {
+  const { days } = parse(z.object({ days: z.coerce.number().int().min(7).max(180).optional() }), req.query);
+  ok(res, await agentReports.workspaceAgentDashboard(callerId(req), P(req, 'wsId'), { days }));
 }));
 
 router.post('/workspaces/:wsId/agents/convert', asyncHandler(async (req, res) => {
@@ -176,6 +186,34 @@ router.put('/projects/:pid/agent-settings', asyncHandler(async (req, res) => {
     reviewerIds: z.array(id).max(10).optional(),
   }).strict(), req.body);
   ok(res, await agents.updateAgentSettings(callerId(req), P(req, 'pid'), body));
+}));
+
+// ─── Chi phí / năng suất (A12) ───────────────────────────────────
+
+const ymd = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD');
+
+router.get('/projects/:pid/reports/agents', asyncHandler(async (req, res) => {
+  const q = parse(z.object({ from: ymd.optional(), to: ymd.optional(), sprintId: id.optional() }), req.query);
+  ok(res, await agentReports.projectAgentReport(callerId(req), P(req, 'pid'), q));
+}));
+
+router.get('/projects/:pid/issues/:num/agent-activity', asyncHandler(async (req, res) => {
+  ok(res, await agents.issueAgentActivity(callerId(req), P(req, 'pid'), P(req, 'num')));
+}));
+
+/** Agent tự khai chi phí qua REST (MCP: tool report_usage). */
+router.post('/projects/:pid/agent-usage', asyncHandler(async (req, res) => {
+  meAgent(req);
+  const body = parse(z.object({
+    issueNumber: id.nullable().optional(),
+    model: z.string().min(1).max(80),
+    inputTokens: z.number().int().min(0),
+    outputTokens: z.number().int().min(0),
+    cacheReadTokens: z.number().int().min(0).optional(),
+    costUsd: z.number().min(0).max(10_000).nullable().optional(),
+    note: z.string().max(200).nullable().optional(),
+  }).strict(), req.body);
+  ok(res, await agents.reportUsage(callerId(req), P(req, 'pid'), body), 201);
 }));
 
 // ─── Agent tự làm việc (token agent) ─────────────────────────────

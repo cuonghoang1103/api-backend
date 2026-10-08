@@ -255,6 +255,8 @@ function describe(h: HistoryEntry, lk: Lookups, config: ProjectConfig): { text: 
     case 'dueDate': return { text: `changed the ${FIELD_LABEL[h.field]}`, from: formatDate(h.fromValue) || 'None', to: formatDate(h.toValue) || 'None' };
     case 'fixVersionId': return { text: h.toValue ? 'changed the fix version' : 'removed the fix version' };
     case 'parentId': return { text: h.toValue ? 'changed the parent' : 'removed the parent' };
+    // CTW-28: agent kéo Done ⇒ server đổi đích sang cột Review (thiết kế §3.4).
+    case 'agentReview': return { text: `moved it to ${h.toValue ?? 'review'} instead of ${h.fromValue ?? 'Done'} — agent work needs a person's review` };
     case 'clientVisible': return { text: h.toValue === 'true' ? 'shared the issue with the client' : 'stopped sharing the issue with the client' };
     case 'deliverable':
     case 'attachmentShared': return { text: `changed client sharing of ${h.toValue ?? 'a file'}` };

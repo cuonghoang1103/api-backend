@@ -644,7 +644,7 @@ export async function agentInboxForAdmin(callerId: number, workspaceId: number, 
 let jobsStarted = false;
 
 /**
- * Sweeper lease 60 s + gửi webhook 5 s, trong tiến trình backend (một tiến trình — không cần hàng đợi ngoài).
+ * Sweeper lease 60 s + gửi webhook 5 s + timesheet agent mỗi giờ (từ 01:00 VN), trong tiến trình backend (một tiến trình — không cần hàng đợi ngoài).
  * Không chạy khi CRON_DISABLED=1 (backend phụ cùng DB) hoặc trong test (test gọi tay sweep/dispatch).
  */
 export function startAgentJobs(): void {
@@ -660,6 +660,17 @@ export function startAgentJobs(): void {
       .catch((err) => logger.warn('[work] agent lease sweeper lỗi', { err: (err as Error).message }))
       .finally(() => { sweeping = false; });
   }, 60_000).unref();
+  // A12 §5.3: timesheet agent tự sinh — mỗi giờ, chỉ từ 01:00 giờ VN; idempotent (note "auto from lease #id").
+  let timesheeting = false;
+  setInterval(() => {
+    const hourVn = Number(new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', hour12: false }).format(new Date()));
+    if (timesheeting || hourVn < 1) return;
+    timesheeting = true;
+    generateAgentTimesheets()
+      .then((n) => { if (n) logger.info('[work] agent timesheet: worklog AGENT_AUTO', { n }); })
+      .catch((err) => logger.warn('[work] agent timesheet lỗi', { err: (err as Error).message }))
+      .finally(() => { timesheeting = false; });
+  }, 60 * 60_000).unref();
   setInterval(() => {
     void import('./webhooks.service.js')
       .then((m) => m.dispatchWebhooks())
@@ -667,3 +678,170 @@ export function startAgentJobs(): void {
   }, 5_000).unref();
 }
 
+
+// ─── Chi phí agent (CTW-33 §5.1, A12) ────────────────────────────
+
+/** Trần chống rác cho số tự khai: ≤ 500 dòng/agent/ngày (giờ VN), mỗi dòng ≤ 5 M token. */
+export const USAGE_MAX_ROWS_PER_DAY = 500;
+export const USAGE_MAX_TOKENS_PER_ROW = 5_000_000;
+
+export interface ReportUsageInput {
+  issueNumber?: number | null;
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+  cacheReadTokens?: number;
+  costUsd?: number | null;
+  note?: string | null;
+}
+
+/**
+ * Agent bên ngoài TỰ KHAI token/tiền cho một thẻ (MCP `report_usage`, REST `POST /projects/:pid/agent-usage`).
+ * source luôn 'REPORTED' — dashboard ghi nhãn "self-reported". costUsd thiếu ⇒ ước lượng bằng bảng giá cổng
+ * (`gateway.costUsd`) nếu biết model; model lạ ⇒ 0 + note 'unknown model'.
+ */
+export async function reportUsage(userId: number, projectId: number, input: ReportUsageInput) {
+  const access = await requireProject(userId, projectId, 'project.view');
+  const agent = await agentOfUser(userId);
+  if (agent.workspaceId !== access.workspaceId) throw new NotFoundError('Project not found');
+  const model = input.model.trim().slice(0, 80);
+  if (!model) throw new BadRequestError('Say which model did the work', 'WORK_AGENT_MODEL');
+  const nums = [input.inputTokens, input.outputTokens, input.cacheReadTokens ?? 0];
+  if (nums.some((n) => !Number.isInteger(n) || n < 0)) throw new BadRequestError('Token counts must be whole numbers ≥ 0', 'VALIDATION_ERROR');
+  if (nums.reduce((s, n) => s + n, 0) > USAGE_MAX_TOKENS_PER_ROW) {
+    throw new BadRequestError(`One usage report can carry at most ${USAGE_MAX_TOKENS_PER_ROW.toLocaleString('en-US')} tokens — split it per task`, 'WORK_AGENT_USAGE_LIMIT');
+  }
+  if (input.costUsd !== undefined && input.costUsd !== null && (!Number.isFinite(input.costUsd) || input.costUsd < 0 || input.costUsd > 10_000)) {
+    throw new BadRequestError('costUsd must be between 0 and 10000', 'VALIDATION_ERROR');
+  }
+  let issueId: number | null = null;
+  if (input.issueNumber) {
+    const i = await prisma.workIssue.findFirst({ where: { projectId, number: input.issueNumber, deletedAt: null }, select: { id: true } });
+    if (!i) throw new NotFoundError('Issue not found');
+    issueId = i.id;
+  }
+  const { vnDay } = await import('./sprints.service.js');
+  const { zonedMidnight } = await import('./projectTime.js');
+  const since = zonedMidnight(vnDay());
+  const today = await prisma.workAgentUsage.count({ where: { agentId: agent.id, source: 'REPORTED', createdAt: { gte: since } } });
+  if (today >= USAGE_MAX_ROWS_PER_DAY) {
+    throw new BadRequestError(`An agent can report usage at most ${USAGE_MAX_ROWS_PER_DAY} times a day — batch your reports`, 'WORK_AGENT_USAGE_LIMIT');
+  }
+  let costUsd = input.costUsd ?? null;
+  let note = input.note?.trim().slice(0, 200) || null;
+  if (costUsd === null) {
+    const gw = await import('../llm/gateway.js');
+    const known = gw.MODEL_CATALOG[model] !== undefined || gw.isLocalModel(model) || hasPriceOverride(model);
+    if (known) costUsd = gw.costUsd(model, input.inputTokens, input.outputTokens);
+    else { costUsd = 0; note = note ? `${note} · unknown model`.slice(0, 200) : 'unknown model'; }
+  }
+  const row = await prisma.workAgentUsage.create({
+    data: {
+      agentId: agent.id, projectId, issueId, model, inputTokens: input.inputTokens, outputTokens: input.outputTokens,
+      cacheReadTokens: input.cacheReadTokens ?? 0, costUsd: new Prisma.Decimal(costUsd.toFixed(6)), source: 'REPORTED', note,
+    },
+    select: { id: true, costUsd: true, source: true, note: true },
+  });
+  return { usageId: row.id, costUsd: Number(row.costUsd), source: row.source, note: row.note };
+}
+
+function hasPriceOverride(model: string): boolean {
+  try {
+    const map = JSON.parse(process.env.LLM_PRICE_OVERRIDES || '{}') as Record<string, unknown>;
+    return !!map[model];
+  } catch {
+    return false;
+  }
+}
+
+/** Khối "Agent activity" trên thẻ: lease (đang giữ + 10 gần nhất) + chi phí theo agent. Khách cổng ⇒ 403. */
+export async function issueAgentActivity(userId: number, projectId: number, number: number) {
+  const access = await requireProject(userId, projectId, 'project.view');
+  const { isClientScoped } = await import('./permissions.js');
+  if (isClientScoped(access)) throw new ForbiddenError('Not available in the client portal');
+  const issue = await prisma.workIssue.findFirst({ where: { projectId, number, deletedAt: null }, select: { id: true } });
+  if (!issue) throw new NotFoundError('Issue not found');
+  const agentSel = { select: { id: true, userId: true, model: true, user: { select: { username: true, displayName: true, fullName: true } } } } as const;
+  const [leases, usage] = await Promise.all([
+    prisma.workAgentLease.findMany({
+      where: { issueId: issue.id }, orderBy: { id: 'desc' }, take: 11,
+      select: { id: true, status: true, claimedAt: true, heartbeatAt: true, expiresAt: true, releasedAt: true, progress: true, progressPct: true, agent: agentSel },
+    }),
+    prisma.workAgentUsage.findMany({
+      where: { issueId: issue.id }, orderBy: { id: 'desc' }, take: 2000,
+      select: { id: true, agentId: true, model: true, inputTokens: true, outputTokens: true, cacheReadTokens: true, costUsd: true, source: true, note: true, createdAt: true, agent: agentSel },
+    }),
+  ]);
+  const agentView = (a: (typeof leases)[number]['agent']) => ({ id: a.id, userId: a.userId, username: a.user.username, displayName: displayName(a.user), model: a.model });
+  const ordered = [...leases.filter((l) => l.status === 'ACTIVE'), ...leases.filter((l) => l.status !== 'ACTIVE')].slice(0, 11);
+  const totals = { inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, costUsd: 0, reported: 0, gateway: 0, rows: usage.length };
+  const byAgent = new Map<number, { agentId: number; username: string; displayName: string; inputTokens: number; outputTokens: number; costUsd: number }>();
+  for (const u of usage) {
+    const c = Number(u.costUsd);
+    totals.inputTokens += u.inputTokens; totals.outputTokens += u.outputTokens; totals.cacheReadTokens += u.cacheReadTokens; totals.costUsd += c;
+    if (u.source === 'GATEWAY') totals.gateway += c; else totals.reported += c;
+    const b = byAgent.get(u.agentId) ?? { agentId: u.agentId, username: u.agent.user.username, displayName: displayName(u.agent.user), inputTokens: 0, outputTokens: 0, costUsd: 0 };
+    b.inputTokens += u.inputTokens; b.outputTokens += u.outputTokens; b.costUsd += c;
+    byAgent.set(u.agentId, b);
+  }
+  const r6 = (n: number) => Math.round(n * 1e6) / 1e6;
+  return {
+    leases: ordered.map(({ agent, ...l }) => ({ ...l, agent: agentView(agent) })),
+    usage: {
+      totals: { ...totals, costUsd: r6(totals.costUsd), reported: r6(totals.reported), gateway: r6(totals.gateway) },
+      byAgent: [...byAgent.values()].map((b) => ({ ...b, costUsd: r6(b.costUsd) })).sort((a, b) => b.costUsd - a.costUsd),
+      recent: usage.slice(0, 20).map(({ agent: _a, costUsd, ...u }) => ({ ...u, costUsd: Number(costUsd) })),
+    },
+  };
+}
+
+// ─── Timesheet agent tự sinh từ lease (§5.3, A12) ────────────────
+
+/**
+ * Lease đã kết thúc (RELEASED/EXPIRED) TRƯỚC 00:00 hôm nay (giờ VN) trong `lookbackDays` ngày ⇒ một worklog
+ * `source='AGENT_AUTO'`, `minutes = min(thời lượng lease, 8h)`, `note = "auto from lease #id"`.
+ * Không sinh nếu: đã có (note khớp — chạy lại vô hại), hoặc agent đã TỰ ghi giờ (MANUAL) cùng thẻ cùng ngày (VN) của
+ * lúc claim — tránh đếm đôi. Không vào timesheet tuần của người (finance bỏ qua AGENT_AUTO + user AGENT).
+ */
+export async function generateAgentTimesheets(now = new Date(), lookbackDays = 3): Promise<number> {
+  const { vnDay } = await import('./sprints.service.js');
+  const { zonedMidnight, addDays } = await import('./projectTime.js');
+  const today = vnDay(now);
+  const until = zonedMidnight(today);
+  const since = zonedMidnight(addDays(today, -lookbackDays));
+  const leases = await prisma.workAgentLease.findMany({
+    where: { status: { in: ['RELEASED', 'EXPIRED'] }, releasedAt: { gte: since, lt: until } },
+    orderBy: { id: 'asc' },
+    take: 2000,
+    select: { id: true, issueId: true, claimedAt: true, releasedAt: true, expiresAt: true, agent: { select: { userId: true } } },
+  });
+  let made = 0;
+  for (const l of leases) {
+    try {
+      const end = l.releasedAt ?? l.expiresAt;
+      const minutes = Math.min(Math.round((end.getTime() - l.claimedAt.getTime()) / 60_000), 8 * 60);
+      if (minutes < 1) continue;
+      const note = `auto from lease #${l.id}`;
+      const day = vnDay(l.claimedAt);
+      const dayStart = zonedMidnight(day);
+      const dayEnd = zonedMidnight(addDays(day, 1));
+      const created = await prisma.$transaction(async (tx) => {
+        await tx.$queryRaw`SELECT id FROM work_issues WHERE id = ${l.issueId} FOR UPDATE`;
+        const dup = await tx.workWorklog.findFirst({ where: { issueId: l.issueId, userId: l.agent.userId, source: 'AGENT_AUTO', note }, select: { id: true } });
+        if (dup) return false;
+        const manual = await tx.workWorklog.findFirst({ where: { issueId: l.issueId, userId: l.agent.userId, source: 'MANUAL', startedAt: { gte: dayStart, lt: dayEnd } }, select: { id: true } });
+        if (manual) return false;
+        const cur = await tx.workIssue.findFirst({ where: { id: l.issueId, deletedAt: null }, select: { timeSpentMin: true } });
+        if (!cur) return false;
+        await tx.workWorklog.create({ data: { issueId: l.issueId, userId: l.agent.userId, minutes, startedAt: l.claimedAt, note, source: 'AGENT_AUTO' } });
+        await tx.workIssue.update({ where: { id: l.issueId }, data: { timeSpentMin: cur.timeSpentMin + minutes, version: { increment: 1 } } });
+        await tx.workHistory.create({ data: { issueId: l.issueId, actorId: l.agent.userId, actorKind: 'AGENT', field: 'timeSpentMin', fromValue: String(cur.timeSpentMin), toValue: String(cur.timeSpentMin + minutes) } });
+        return true;
+      });
+      if (created) made += 1;
+    } catch (err) {
+      logger.warn('[work] agent timesheet: lỗi một lease', { leaseId: l.id, err: (err as Error).message });
+    }
+  }
+  return made;
+}

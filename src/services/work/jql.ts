@@ -344,6 +344,8 @@ const FIELD_ALIASES: Record<string, string> = {
   stage: 'stage', phase: 'stage',
   flagged: 'flagged', flag: 'flagged', blocked: 'flagged',
   fixversion: 'fixversion', fixversions: 'fixversion', 'fix version': 'fixversion', version: 'fixversion', release: 'fixversion',
+  // CTW-28 (A13): người được giao là NGƯỜI hay AI AGENT — `assigneeKind = AGENT`.
+  assigneekind: 'assigneekind', 'assignee kind': 'assigneekind', assigneetype: 'assigneekind',
 };
 
 /** Tên trường người dùng gõ ⇒ tên chuẩn (hoặc undefined nếu không phải trường có sẵn). */
@@ -373,9 +375,9 @@ export function projectScope(q: JqlQuery): { include: string[] | null; exclude: 
 export const JQL_FIELDS = [
   'key', 'summary', 'description', 'text', 'status', 'statusCategory', 'type', 'priority', 'assignee', 'reporter',
   'labels', 'component', 'sprint', 'parent', 'points', 'created', 'updated', 'due', 'resolved', 'watcher', 'project',
-  'team', 'stage', 'fixVersion', 'flagged',
+  'team', 'stage', 'fixVersion', 'flagged', 'assigneeKind',
 ];
-export const JQL_FUNCTIONS = ['currentUser()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'releasedVersions()', 'unreleasedVersions()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
+export const JQL_FUNCTIONS = ['currentUser()', 'agents()', 'people()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'releasedVersions()', 'unreleasedVersions()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
 
 export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: Prisma.WorkIssueOrderByWithRelationInput[] } {
   const lc = (s: string) => s.toLowerCase();
@@ -397,8 +399,11 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
     return true;
   };
 
-  const userIds = (vals: JqlValue[], pos: number): Array<number | null> => vals.map((v) => {
-    if (v.kind === 'fn') return v.name === 'currentuser' ? ctx.userId : fail(`Unknown function ${v.name}()`, at(v, pos), suggest(v.name, ['currentUser']) && 'currentUser()');
+  /** CTW-28: `assignee IN agents()` / `people()` — lọc theo users.kind (không cần danh sách id). */
+  const kindFns = (vals: JqlValue[]): Array<'AGENT' | 'HUMAN'> =>
+    vals.flatMap((v) => (v.kind === 'fn' && v.name === 'agents' ? ['AGENT' as const] : v.kind === 'fn' && v.name === 'people' ? ['HUMAN' as const] : []));
+  const userIds = (vals: JqlValue[], pos: number): Array<number | null> => vals.filter((v) => !(v.kind === 'fn' && (v.name === 'agents' || v.name === 'people'))).map((v) => {
+    if (v.kind === 'fn') return v.name === 'currentuser' ? ctx.userId : fail(`Unknown function ${v.name}()`, at(v, pos), suggest(v.name, ['currentUser', 'agents', 'people']) && `${suggest(v.name, ['currentUser', 'agents', 'people'])}()`);
     if (['empty', 'null', 'unassigned'].includes(lc(v.value))) return null;
     const u = ctx.members.find((m) => lc(m.username) === lc(v.value.replace(/^@/, '')));
     if (u) return u.id;
@@ -544,9 +549,15 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
         if (empty) return { [col]: null };
         if (notEmpty) return { [col]: { not: null } };
         const ids = userIds(values, pos);
+        const kinds = kindFns(values);
         const real = ids.filter((x): x is number => x !== null);
         const withNull = ids.includes(null);
-        const m: W = { OR: [...(real.length ? [{ [col]: { in: real } }] : []), ...(withNull ? [{ [col]: null }] : [])] };
+        const rel = field === 'assignee' ? 'assignee' : 'reporter';
+        const m: W = { OR: [
+          ...(real.length ? [{ [col]: { in: real } }] : []),
+          ...(withNull ? [{ [col]: null }] : []),
+          ...(kinds.length ? [{ [rel]: { kind: { in: kinds } } }] : []),
+        ] };
         return inOrNot(op, pos) ? { NOT: m } : m;
       }
       case 'labels': {
@@ -584,6 +595,19 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
           return nameIds(ctx.sprints, [v], 'sprint', pos);
         });
         return inOrNot(op, pos) ? { OR: [{ sprintId: null }, { sprintId: { notIn: ids } }] } : { sprintId: { in: ids } };
+      }
+      case 'assigneekind': {
+        // CTW-28: assigneeKind = AGENT | HUMAN (người: human/person/people). IS EMPTY = chưa giao ai.
+        // `!=` gồm cả thẻ chưa giao (giống sprint/fixVersion: "không phải agent").
+        if (empty) return { assigneeId: null };
+        if (notEmpty) return { assigneeId: { not: null } };
+        const kinds = values.map((v) => {
+          const s = lc(lit(v, pos)).replace(/[\s_-]/g, '');
+          const k = ['agent', 'agents', 'ai', 'aiagent', 'bot'].includes(s) ? 'AGENT' : ['human', 'humans', 'person', 'people', 'user'].includes(s) ? 'HUMAN' : null;
+          return k ?? fail('assigneeKind is AGENT or HUMAN', at(v, pos), suggest(lit(v, pos), ['AGENT', 'HUMAN']));
+        });
+        const m: W = { assignee: { kind: { in: kinds as string[] } } };
+        return inOrNot(op, pos) ? { NOT: m } : m;
       }
       case 'flagged': {
         // CTW-11: flagged = true / false · flagged IS EMPTY / IS NOT EMPTY.

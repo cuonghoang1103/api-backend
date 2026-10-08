@@ -27,6 +27,8 @@ export interface WorkUser {
   fullName: string | null;
   displayName: string | null;
   avatarUrl: string | null;
+  /** CTW-28: HUMAN (mặc định, dữ liệu cũ thiếu trường) | AGENT — UserAvatar gắn 🤖. */
+  kind?: 'HUMAN' | 'AGENT' | string;
 }
 
 export const userName = (u: Pick<WorkUser, 'username' | 'fullName' | 'displayName'> | null | undefined) =>
@@ -626,7 +628,10 @@ export interface TimeOffEntry { id: number; userId: number; startDate: string; e
 export interface Worklog { id: number; minutes: number; startedAt: string; note: string | null; createdAt: string; userId: number; user: WorkUser }
 export interface TimeReport {
   from: string; to: string; totalMin: number;
-  people: Array<{ user: WorkUser; name: string; totalMin: number; byDay: Record<string, number>; issues: Array<{ number: number; title: string; minutes: number }> }>;
+  people: Array<{ user: WorkUser; name: string; totalMin: number; byDay: Record<string, number>; issues: Array<{ number: number; title: string; minutes: number }>; userKind?: 'HUMAN' | 'AGENT'; autoMin?: number }>;
+  /** CTW-28 A12-1: lọc theo loại + tổng phút theo loại (phút). */
+  principal?: 'HUMAN' | 'AGENT' | 'ALL';
+  byPrincipal?: { HUMAN: number; AGENT: number };
 }
 export type RuleTrigger = 'issue.created' | 'issue.transitioned' | 'issue.assigned' | 'field.changed' | 'comment.added' | 'scheduled.daily';
 export type RuleActionKind = 'transition' | 'assign' | 'set_priority' | 'add_label' | 'comment' | 'move_to_active_sprint' | 'notify' | 'create_subtask';
@@ -1022,7 +1027,7 @@ export const workApi = {
   addWorklog: (pid: number, num: number, body: { minutes: number; startedAt?: string; note?: string | null; remaining?: 'auto' | 'keep' | number }) =>
     d<Worklog>(api.post(`${B}/projects/${pid}/issues/${num}/worklogs`, body)),
   deleteWorklog: (pid: number, num: number, logId: number) => d(api.delete(`${B}/projects/${pid}/issues/${num}/worklogs/${logId}`)),
-  timeReport: (pid: number, q: { from: string; to: string; userId?: number }) => d<TimeReport>(api.get(`${B}/projects/${pid}/reports/time${params(q)}`)),
+  timeReport: (pid: number, q: { from: string; to: string; userId?: number; principal?: 'HUMAN' | 'AGENT' | 'ALL' }) => d<TimeReport>(api.get(`${B}/projects/${pid}/reports/time${params(q)}`)),
   automationRules: (pid: number) => d<AutomationRule[]>(api.get(`${B}/projects/${pid}/automation`)),
   saveAutomationRule: (pid: number, body: { id?: number; name: string; enabled?: boolean; trigger: RuleTrigger; config: RuleConfig }) =>
     d<AutomationRule>(api.post(`${B}/projects/${pid}/automation`, body)),

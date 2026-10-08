@@ -1,0 +1,30 @@
+{
+  "name": "@cuongthai/ctwork-mcp",
+  "version": "0.1.0",
+  "description": "stdio ⇄ HTTP bridge for the CT Work MCP server (https://cuongthai.com/api/v1/work/mcp) — for MCP clients that only speak stdio.",
+  "type": "module",
+  "bin": {
+    "ctwork-mcp": "bin/ctwork-mcp.js"
+  },
+  "files": [
+    "bin/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ct-work",
+    "ai-agent"
+  ],
+  "homepage": "https://cuongthai.com/work/developer",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}

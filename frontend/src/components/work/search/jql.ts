@@ -33,6 +33,8 @@ export const JQL_FIELDS: Array<{ name: string; hint: string }> = [
   // CTW-5 / CTW-11.
   { name: 'fixVersion', hint: 'Version name, unreleasedVersions(), EMPTY' },
   { name: 'flagged', hint: 'true · false — blocked issues' },
+  // CTW-28: người hay AI agent.
+  { name: 'assigneeKind', hint: 'AGENT · HUMAN — work done by AI agents' },
 ];
 
 export const JQL_OPERATORS: Array<{ op: string; hint: string }> = [
@@ -47,7 +49,7 @@ export const JQL_OPERATORS: Array<{ op: string; hint: string }> = [
   { op: 'IS NOT EMPTY', hint: 'has a value' },
 ];
 
-export const JQL_FUNCTIONS = ['currentUser()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'releasedVersions()', 'unreleasedVersions()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
+export const JQL_FUNCTIONS = ['currentUser()', 'agents()', 'people()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'releasedVersions()', 'unreleasedVersions()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
 
 export const JQL_EXAMPLES: Array<{ q: string; hint: string }> = [
   { q: 'assignee = currentUser() AND statusCategory != Done', hint: 'My open work' },
@@ -56,6 +58,7 @@ export const JQL_EXAMPLES: Array<{ q: string; hint: string }> = [
   { q: 'due < now() AND statusCategory != Done', hint: 'Overdue' },
   { q: 'summary ~ "login" OR description ~ "login"', hint: 'Text search' },
   { q: 'assignee IS EMPTY AND priority >= High', hint: 'Urgent and unassigned' },
+  { q: 'assigneeKind = AGENT AND statusCategory != Done', hint: 'Open work of AI agents' },
 ];
 
 const ORDERABLE = ['key', 'rank', 'priority', 'created', 'updated', 'due', 'resolved', 'points', 'summary', 'status', 'assignee'];
@@ -117,8 +120,9 @@ function valuesFor(field: string, cfg: JqlSuggestConfig): Suggestion[] {
     case 'type': case 'issuetype': return lit(cfg.issueTypes.map((t) => t.name));
     case 'priority': return lit(['Highest', 'High', 'Medium', 'Low', 'Lowest']);
     case 'assignee': case 'reporter': case 'watcher': case 'watchers':
-      return [...fn(['currentUser()']), ...(f === 'assignee' ? [{ label: 'EMPTY', insert: 'EMPTY' }] : []),
-        ...cfg.members.map((m) => ({ label: m.username, insert: quote(m.username), hint: m.displayName || m.fullName || undefined }))];
+      return [...fn(['currentUser()', ...(f === 'assignee' || f === 'reporter' ? ['agents()', 'people()'] : [])]), ...(f === 'assignee' ? [{ label: 'EMPTY', insert: 'EMPTY' }] : []),
+        ...cfg.members.map((m) => ({ label: m.username, insert: quote(m.username), hint: m.kind === 'AGENT' ? `🤖 ${m.displayName || m.fullName || 'AI agent'}` : m.displayName || m.fullName || undefined }))];
+    case 'assigneekind': case 'assignee kind': case 'assigneetype': return [...lit(['AGENT', 'HUMAN']), { label: 'EMPTY', insert: 'EMPTY' }];
     case 'labels': case 'label': return lit(cfg.labels.map((l) => l.name));
     case 'component': case 'components': return lit(cfg.components.map((c) => c.name));
     case 'sprint': return [...fn(['openSprints()', 'closedSprints()', 'futureSprints()']), ...lit(cfg.sprints.map((s) => s.name))];

@@ -471,7 +471,7 @@ export async function deleteWorklog(userId: number, projectId: number, number: n
 }
 
 /** Báo cáo thời gian: giờ theo người × ngày trong khoảng (giờ VN), kèm từng thẻ. */
-export async function timeReport(userId: number, projectId: number, q: { from: string; to: string; userId?: number }) {
+export async function timeReport(userId: number, projectId: number, q: { from: string; to: string; userId?: number; principal?: 'HUMAN' | 'AGENT' | 'ALL' }) {
   await requireProject(userId, projectId, 'project.view');
   if (q.from > q.to) throw new BadRequestError('"From" must be before "to"', 'WORK_BAD_DATES');
   if (Date.parse(q.to) - Date.parse(q.from) > 92 * DAY) throw new BadRequestError('Pick a range of at most 3 months', 'WORK_BAD_DATES');
@@ -479,26 +479,37 @@ export async function timeReport(userId: number, projectId: number, q: { from: s
   const since = new Date(Date.parse(`${q.from}T00:00:00+07:00`));
   const until = new Date(Date.parse(`${q.to}T00:00:00+07:00`) + DAY);
   const logs = await prisma.workWorklog.findMany({
-    where: { issue: { projectId, deletedAt: null }, startedAt: { gte: since, lt: until }, ...(q.userId ? { userId: q.userId } : {}) },
-    select: { minutes: true, startedAt: true, userId: true, user: { select: PUBLIC_USER }, issue: { select: { number: true, title: true } } },
+    where: {
+      issue: { projectId, deletedAt: null }, startedAt: { gte: since, lt: until }, ...(q.userId ? { userId: q.userId } : {}),
+      // A12: tách giờ NGƯỜI / giờ AGENT (users.kind).
+      ...(q.principal && q.principal !== 'ALL' ? { user: { kind: q.principal } } : {}),
+    },
+    select: { minutes: true, startedAt: true, userId: true, source: true, user: { select: PUBLIC_USER }, issue: { select: { number: true, title: true } } },
     orderBy: { startedAt: 'asc' },
   });
-  const people = new Map<number, { user: (typeof logs)[number]['user']; totalMin: number; byDay: Record<string, number>; byIssue: Map<number, { number: number; title: string; minutes: number }> }>();
+  const people = new Map<number, { user: (typeof logs)[number]['user']; totalMin: number; autoMin: number; byDay: Record<string, number>; byIssue: Map<number, { number: number; title: string; minutes: number }> }>();
   for (const l of logs) {
     let p = people.get(l.userId);
-    if (!p) { p = { user: l.user, totalMin: 0, byDay: {}, byIssue: new Map() }; people.set(l.userId, p); }
+    if (!p) { p = { user: l.user, totalMin: 0, autoMin: 0, byDay: {}, byIssue: new Map() }; people.set(l.userId, p); }
     const d = vnDay(l.startedAt);
     p.totalMin += l.minutes;
+    if (l.source === 'AGENT_AUTO') p.autoMin += l.minutes;
     p.byDay[d] = (p.byDay[d] ?? 0) + l.minutes;
     const bi = p.byIssue.get(l.issue.number) ?? { number: l.issue.number, title: l.issue.title, minutes: 0 };
     bi.minutes += l.minutes;
     p.byIssue.set(l.issue.number, bi);
   }
+  const isAgent = (u: { kind?: string | null }) => u.kind === 'AGENT';
   return {
     from: q.from, to: q.to,
+    principal: q.principal ?? 'ALL',
     totalMin: logs.reduce((s, l) => s + l.minutes, 0),
+    byPrincipal: {
+      HUMAN: logs.filter((l) => !isAgent(l.user)).reduce((s, l) => s + l.minutes, 0),
+      AGENT: logs.filter((l) => isAgent(l.user)).reduce((s, l) => s + l.minutes, 0),
+    },
     people: [...people.values()]
-      .map((p) => ({ user: p.user, name: displayName(p.user), totalMin: p.totalMin, byDay: p.byDay, issues: [...p.byIssue.values()].sort((a, b) => b.minutes - a.minutes) }))
+      .map((p) => ({ user: p.user, userKind: isAgent(p.user) ? 'AGENT' : 'HUMAN', name: displayName(p.user), totalMin: p.totalMin, autoMin: p.autoMin, byDay: p.byDay, issues: [...p.byIssue.values()].sort((a, b) => b.minutes - a.minutes) }))
       .sort((a, b) => b.totalMin - a.totalMin),
   };
 }

@@ -974,6 +974,7 @@ info "Smoke-testing core API routes are mounted..."
 smoke_failed=false
 for route in \
     work/workspaces \
+    work/mcp \
     admin/project-requests \
     video-hoc/danh-muc \
     video-hoc/thu-vien \

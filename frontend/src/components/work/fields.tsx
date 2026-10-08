@@ -15,6 +15,7 @@ import {
 } from '@/lib/work-api';
 import { allowedTargets, wk, type Lookups } from './hooks';
 import DatePopover, { formatYmd } from './shell/DatePopover';
+import { useAgentDirectory, useWorkspaceAgents } from './agents/directory';
 import {
   CATEGORY_DOT, IssueTypeIcon, LabelChip, PickerList, Popover, PRIORITIES, PriorityIcon, StatusBadge, UserAvatar, useToggle,
   type PickOption,
@@ -136,12 +137,27 @@ export function AssigneePicker({ config, value, onChange, meId, bare, disabled }
   config: ProjectConfig; value: number | null; onChange: (id: number | null) => void; meId?: number; bare?: boolean; disabled?: boolean;
 }) {
   const p = usePick();
+  // CTW-28: sổ tra agent (trạng thái PAUSED/RETIRED) — khách 403 thì im lặng, nhóm agent vẫn hiện theo users.kind.
+  useWorkspaceAgents(config.workspace.id, config.role !== 'CLIENT');
+  const dir = useAgentDirectory((s) => s.byUser);
   // Chỉ người có quyền sửa thẻ mới nhận việc được (backend cũng chặn y hệt).
   const assignable = config.members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER');
   const cur = config.members.find((m) => m.id === value) ?? null;
+  const people = assignable.filter((m) => m.kind !== 'AGENT');
+  // Agent đã RETIRED: ẩn (trừ khi đang là người được giao — vẫn phải hiện tên). PAUSED: hiện mờ, không chọn được.
+  const agents = assignable.filter((m) => m.kind === 'AGENT' && (dir[m.id]?.status !== 'RETIRED' || m.id === value));
+  const hasAgents = agents.length > 0;
   const options: PickOption<number>[] = [
     { value: 0, label: 'Unassigned', icon: <UserAvatar user={null} size={16} /> },
-    ...assignable.map((m) => ({ value: m.id, label: userName(m), hint: m.id === meId ? 'You' : undefined, keywords: m.username, icon: <UserAvatar user={m} size={16} /> })),
+    ...people.map((m) => ({ value: m.id, label: userName(m), hint: m.id === meId ? 'You' : undefined, keywords: m.username, icon: <UserAvatar user={m} size={16} />, group: hasAgents ? 'People' : undefined })),
+    ...agents.map((m) => {
+      const st = dir[m.id]?.status;
+      return {
+        value: m.id, label: userName(m), keywords: `${m.username} agent ai bot ${dir[m.id]?.model ?? ''}`,
+        hint: st === 'PAUSED' ? 'Paused' : st === 'RETIRED' ? 'Retired' : dir[m.id]?.model,
+        icon: <UserAvatar user={m} size={16} />, group: 'AI agents', disabled: (st === 'PAUSED' || st === 'RETIRED') && m.id !== value,
+      };
+    }),
   ];
   return (
     <>
@@ -149,7 +165,7 @@ export function AssigneePicker({ config, value, onChange, meId, bare, disabled }
         <UserAvatar user={cur} size={18} />
         <span className={cn('flex-1 truncate', !cur && 'text-[var(--w-text-3)]')}>{cur ? userName(cur) : 'Unassigned'}</span>
       </Trigger>
-      <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={240}>
+      <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={hasAgents ? 270 : 240}>
         <PickerList options={options} selected={[value ?? 0]} onPick={(v) => { onChange(v || null); p.close(); }} placeholder="Assign to…" />
       </Popover>
     </>

@@ -63,11 +63,13 @@ export async function compileFor(userId: number, projectId: number, query: strin
  * lọc theo chúng thì dò ra được giá trị ẩn.
  */
 const CLIENT_BLOCKED_JQL = /\b(points|storypoints|team|sprint|component|components|watcher|watchers|flagged|flag|blocked)\b\s*(=|!=|>|<|~|\bin\b|\bnot\b|\bis\b)/i;
+/** CTW-28: cổng khách không bao giờ lộ agent ⇒ không lọc theo loại người được giao (dò ra thẻ nào agent làm). */
+const CLIENT_BLOCKED_AGENT_JQL = /\bassignee\s*kind\b|\bassigneekind\b|\bassigneetype\b|\b(agents|people)\s*\(/i;
 
 export async function search(userId: number, projectId: number, query: string, opts: { limit?: number; offset?: number } = {}) {
   const { where, orderBy, access } = await compileFor(userId, projectId, query);
   const scoped = isClientScoped(access);
-  if (scoped && CLIENT_BLOCKED_JQL.test(query)) {
+  if (scoped && (CLIENT_BLOCKED_JQL.test(query) || CLIENT_BLOCKED_AGENT_JQL.test(query))) {
     throw new AppError('This field is not available in the client portal', 400, 'WORK_JQL_ERROR', { position: 0 });
   }
   // Khách bị cách ly: chỉ thẻ đã chia sẻ (cùng luật với board/list — issues.service clientIssueWhere).

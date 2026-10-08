@@ -15,6 +15,7 @@ import { IssueTypeIcon, LabelChip, PriorityIcon, UserAvatar } from '../ui';
 import type { SubtaskInfo } from './grouping';
 import { TeamChip, useTeamLookup } from '../studio/shared';
 import { FlagBadge } from '../ctw';
+import { LeaseChipFor } from '../agents/leases';
 
 export function isOverdue(i: Pick<IssueCard, 'dueDate' | 'statusId'>, lk: Lookups) {
   if (!i.dueDate || lk.statuses.get(i.statusId)?.category === 'DONE') return false;
@@ -71,6 +72,10 @@ function MiniProgress({ done, total }: { done: number; total: number }) {
   );
 }
 
+function LeaseRow({ issueId }: { issueId: number }) {
+  return <div className="mb-2 empty:hidden"><LeaseChipFor issueId={issueId} /></div>;
+}
+
 export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, showParent }: {
   issue: IssueCard;
   lk: Lookups;
@@ -112,6 +117,8 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
       <p className={cn('mb-2 line-clamp-3 text-[14px] font-medium leading-[1.4] tracking-[-0.005em] text-[var(--w-text)]', done && 'font-normal text-[var(--w-text-3)] line-through decoration-[var(--w-text-3)]')}>
         {issue.title}
       </p>
+      {/* CTW-28: agent đang làm thẻ này (lease) — "🤖 working · 72%" / đỏ khi tắt nhịp. */}
+      <LeaseRow issueId={issue.id} />
       {labels.length > 0 && (
         <div className="mb-2 flex flex-wrap gap-1">
           {labels.map((l) => <LabelChip key={l.id} label={l} />)}

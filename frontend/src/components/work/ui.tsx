@@ -15,11 +15,12 @@ import {
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import {
-  AlertOctagon, Bookmark, Bug, CheckSquare, ChevronsUp, ChevronUp, ChevronDown, ChevronsDown, Equal,
+  AlertOctagon, Bookmark, Bot, Bug, CheckSquare, ChevronsUp, ChevronUp, ChevronDown, ChevronsDown, Equal,
   FileText, FlaskConical, Inbox, Layers, SquareDashedBottom, X, Check, Search, SearchX,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { userName, type IssueTypeKey, type StatusCategory, type WorkUser } from '@/lib/work-api';
+import { agentTooltip, useAgentDirectory } from './agents/directory';
 
 // ─── Portal ──────────────────────────────────────────────────────
 
@@ -133,6 +134,10 @@ export interface PickOption<T> {
   icon?: ReactNode;
   hint?: string;
   keywords?: string;
+  /** Tiêu đề nhóm (vd "People" / "AI agents") — đổi nhóm giữa hai dòng liền nhau ⇒ vẽ tiêu đề. */
+  group?: string;
+  /** Hiện nhưng không chọn được (vd agent đang tạm dừng). */
+  disabled?: boolean;
 }
 
 interface PickerProps<T> {
@@ -162,7 +167,7 @@ export function PickerList<T>({ options, selected, onPick, multi, placeholder = 
   useEffect(() => setHi(0), [q]);
 
   const choose = (i: number) => {
-    if (i < filtered.length) onPick(filtered[i].value);
+    if (i < filtered.length) { if (!filtered[i].disabled) onPick(filtered[i].value); }
     else if (canCreate) onCreate!(q.trim());
   };
 
@@ -187,15 +192,20 @@ export function PickerList<T>({ options, selected, onPick, multi, placeholder = 
       <div className="max-h-[280px] overflow-y-auto p-1">
         {filtered.map((o, i) => {
           const isSel = selected.includes(o.value);
+          const head = o.group && o.group !== filtered[i - 1]?.group ? o.group : null;
           return (
+            <div key={String(o.value)} role="none">
+            {head && <div role="presentation" className="px-2 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-[0.04em] text-[var(--w-text-3)] first:pt-1">{head}</div>}
             <button
-              key={String(o.value)}
               type="button"
+              disabled={o.disabled}
+              aria-disabled={o.disabled || undefined}
               onMouseEnter={() => setHi(i)}
               onClick={() => choose(i)}
               className={cn(
                 'flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px]',
-                i === hi ? 'bg-[var(--w-hover)]' : '',
+                i === hi && !o.disabled ? 'bg-[var(--w-hover)]' : '',
+                o.disabled && 'cursor-not-allowed opacity-50',
               )}
             >
               {o.icon && <span className="flex w-4 shrink-0 justify-center">{o.icon}</span>}
@@ -205,6 +215,7 @@ export function PickerList<T>({ options, selected, onPick, multi, placeholder = 
                 <Check size={13} className={cn('shrink-0', isSel ? 'text-[var(--w-accent-text)]' : 'opacity-0')} />
               )}
             </button>
+            </div>
           );
         })}
         {canCreate && (
@@ -283,10 +294,13 @@ export function initialsOf(user: { username: string; fullName?: string | null; d
   return (user.username || '?').slice(0, 1).toUpperCase();
 }
 
-export function UserAvatar({ user, size = 22, className }: { user: Pick<WorkUser, 'username' | 'fullName' | 'displayName' | 'avatarUrl'> | null | undefined; size?: number; className?: string }) {
+export function UserAvatar({ user, size = 22, className }: { user: Pick<WorkUser, 'username' | 'fullName' | 'displayName' | 'avatarUrl'> & { id?: number; kind?: WorkUser['kind'] } | null | undefined; size?: number; className?: string }) {
   const [broken, setBroken] = useState(false);
   const src = user?.avatarUrl;
   useEffect(() => setBroken(false), [src]);
+  // CTW-28: AI agent ⇒ góc vuông bo + huy hiệu robot + tooltip "AI agent · model · owner" (một chỗ, lan khắp nơi).
+  const isAgent = user?.kind === 'AGENT';
+  const info = useAgentDirectory((s) => (isAgent && user?.id ? s.byUser[user.id] : undefined));
   if (!user) {
     return (
       <span
@@ -298,33 +312,54 @@ export function UserAvatar({ user, size = 22, className }: { user: Pick<WorkUser
     );
   }
   const name = userName(user);
+  const title = isAgent ? agentTooltip(name, info) : name;
+  const shape = isAgent ? 'rounded-[30%]' : 'rounded-full';
+  let face: ReactNode;
   if (src && !broken) {
-    return (
+    face = (
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={src}
         alt={name}
-        title={name}
+        title={title}
         width={size}
         height={size}
         onError={() => setBroken(true)}
         style={{ width: size, height: size }}
-        className={cn('inline-block shrink-0 rounded-full object-cover', className)}
+        className={cn('inline-block shrink-0 object-cover', shape, !isAgent && className, isAgent && info?.status === 'PAUSED' && 'opacity-60')}
       />
     );
+  } else {
+    const initials = initialsOf(user);
+    // Chữ tắt phải NẰM TRONG vòng tròn: ~42% đường kính, hai chữ thì nhỏ hơn chút.
+    const fs = Math.max(9, Math.round(size * (initials.length > 1 ? 0.38 : 0.44)));
+    face = (
+      <span
+        role="img"
+        aria-label={isAgent ? `${name} (AI agent)` : name}
+        title={title}
+        style={{ width: size, height: size, fontSize: fs, background: avatarColor(user.username || name) }}
+        className={cn('inline-flex shrink-0 select-none items-center justify-center overflow-hidden font-semibold leading-none tracking-[-0.01em] text-white', shape, !isAgent && className, isAgent && info?.status === 'PAUSED' && 'opacity-60')}
+      >
+        {size >= 14 ? initials : null}
+      </span>
+    );
   }
-  const initials = initialsOf(user);
-  // Chữ tắt phải NẰM TRONG vòng tròn: ~42% đường kính, hai chữ thì nhỏ hơn chút.
-  const fs = Math.max(9, Math.round(size * (initials.length > 1 ? 0.38 : 0.44)));
+  if (!isAgent) return face;
+  // Huy hiệu ~½ avatar nhỏ, trần 18px ở avatar lớn (không che chữ tắt). Khung cố định cỡ — cha flex/stretch không kéo giãn.
+  const b = Math.min(18, Math.max(9, Math.round(size * (size >= 32 ? 0.36 : 0.52))));
   return (
-    <span
-      role="img"
-      aria-label={name}
-      title={name}
-      style={{ width: size, height: size, fontSize: fs, background: avatarColor(user.username || name) }}
-      className={cn('inline-flex shrink-0 select-none items-center justify-center overflow-hidden rounded-full font-semibold leading-none tracking-[-0.01em] text-white', className)}
-    >
-      {size >= 14 ? initials : null}
+    <span className={cn('relative inline-flex shrink-0', className)} style={{ width: size, height: size }} data-agent="true" title={title}>
+      {face}
+      {size >= 14 && (
+        <span
+          aria-hidden
+          className="absolute -bottom-[2px] -right-[3px] inline-flex items-center justify-center rounded-full bg-[var(--w-accent)] text-white ring-[1.5px] ring-[var(--w-raised)]"
+          style={{ width: b, height: b }}
+        >
+          <Bot size={Math.max(7, b - 3)} strokeWidth={2.4} />
+        </span>
+      )}
     </span>
   );
 }

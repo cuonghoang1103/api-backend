@@ -126,55 +126,71 @@ export const apiTokenAuth = taoApiTokenAuth(agentTopRouteAllowed);
  */
 export function taoApiTokenAuth(choPhepAgent: (method: string, path: string, scoped?: boolean) => boolean) {
   return async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
-  try {
-    const h = req.headers.authorization;
-    if (!h?.startsWith('Bearer ctw_')) return next();
-    const token = h.slice(7).trim();
-    if (!/^ctw_[0-9a-f]{8}_[A-Za-z0-9_-]{20,64}$/.test(token)) throw new UnauthorizedError('Invalid API token');
-    const row = await prisma.workApiToken.findUnique({
-      where: { tokenHash: sha256(token) },
-      select: {
-        id: true, userId: true, scopes: true, expiresAt: true, revokedAt: true, lastUsedAt: true, agentId: true, projectIds: true,
-        user: { select: { enabled: true, accountNonLocked: true, username: true, email: true, kind: true } },
-        agent: { select: { id: true, userId: true, workspaceId: true, ownerId: true, status: true, lastSeenAt: true } },
-      },
-    });
-    if (!row || row.revokedAt) throw new UnauthorizedError('Invalid API token');
-    if (row.expiresAt && row.expiresAt < new Date()) throw new UnauthorizedError('This API token has expired');
-    const scopes = (row.scopes as TokenScope[]) ?? ['read'];
-    // Lịch (.ics) không phải token API.
-    if (scopes.includes('calendar' as TokenScope)) throw new UnauthorizedError('Invalid API token');
-    // ── CTW-28: token agent ⇒ gắn req.agent. Dữ liệu lệch (token agent trỏ user thường, token thường trỏ user agent,
-    //    thiếu scope 'agent') ⇒ 401 — không bao giờ đoán.
-    if (row.agentId || row.user.kind === 'AGENT') {
-      const ag = row.agent;
-      if (!ag || row.user.kind !== 'AGENT' || ag.userId !== row.userId || !scopes.includes('agent')) throw new UnauthorizedError('Invalid API token');
-      if (ag.status === 'RETIRED') throw new AppError('This AI agent has been retired', 403, 'WORK_AGENT_RETIRED');
-      req.agent = { id: ag.id, userId: ag.userId, workspaceId: ag.workspaceId, ownerId: ag.ownerId, status: ag.status, projectIds: tokenProjectIds(row.projectIds) };
-      if (!choPhepAgent(req.method, req.path, !!req.agent.projectIds)) {
-        throw new AppError('AI agents cannot use this part of CT Work. Ask the agent\'s owner to do this.', 403, 'WORK_AGENT_FORBIDDEN');
-      }
-      // PAUSED: vẫn đọc được; mọi lệnh ghi ⇒ 423 (cùng mã khoá với editLockGuard).
-      if (ag.status === 'PAUSED' && req.method !== 'GET' && req.method !== 'HEAD') {
-        throw new AppError('This AI agent is paused. Its owner must resume it before it can make changes.', 423, 'WORK_AGENT_PAUSED');
-      }
-      if (!ag.lastSeenAt || Date.now() - ag.lastSeenAt.getTime() > 60_000) {
-        await prisma.workAgent.update({ where: { id: ag.id }, data: { lastSeenAt: new Date() } }).catch(() => undefined);
-      }
+    try {
+      await xacThucTokenCtw(req, { choPhepAgent, ghi: req.method !== 'GET' && req.method !== 'HEAD' });
+      next();
+    } catch (err) {
+      next(err);
     }
-    if (!row.user.enabled || !row.user.accountNonLocked) throw new ForbiddenError('Account is disabled');
-    if (req.method !== 'GET' && req.method !== 'HEAD' && !scopes.includes('write')) throw new ForbiddenError('This API token is read-only');
-    // Token không được quản lý token.
-    if (req.path.startsWith('/me/api-tokens') || req.path.startsWith('/me/calendar-link')) throw new ForbiddenError('Manage API tokens from the CT Work website');
-    req.userId = row.userId;
-    req.user = { userId: row.userId, username: row.user.username, email: row.user.email } as typeof req.user;
-    req.workToken = { id: row.id, scopes };
-    if (!row.lastUsedAt || Date.now() - row.lastUsedAt.getTime() > 60_000) {
-      await prisma.workApiToken.update({ where: { id: row.id }, data: { lastUsedAt: new Date(), lastUsedIp: (req.ip ?? '').slice(0, 64) || null } }).catch(() => undefined);
-    }
-    next();
-  } catch (err) {
-    next(err);
-  }
   };
+}
+
+/**
+ * Lõi xác thực token ctw_ (dùng chung cho middleware REST ở trên VÀ cho MCP — src/mcp/server.ts).
+ * Trả false nếu header không phải `Bearer ctw_…` (để lớp gọi tự quyết: REST rơi về JWT, MCP trả 401).
+ *
+ * `ghi` = lệnh này có ghi không. REST suy từ method. MCP luôn POST nên gọi với `ghi: false` ở tầng HTTP rồi
+ * TỰ kiểm lại cho từng tool ghi (scope 'write' + agent PAUSED ⇒ 423) — rào chắn không nới, chỉ dời xuống đúng chỗ
+ * biết lệnh nào là ghi.
+ */
+export async function xacThucTokenCtw(
+  req: Request,
+  opts: { choPhepAgent: (method: string, path: string, scoped?: boolean) => boolean; ghi: boolean },
+): Promise<boolean> {
+  const h = req.headers.authorization;
+  if (!h?.startsWith('Bearer ctw_')) return false;
+  const token = h.slice(7).trim();
+  if (!/^ctw_[0-9a-f]{8}_[A-Za-z0-9_-]{20,64}$/.test(token)) throw new UnauthorizedError('Invalid API token');
+  const row = await prisma.workApiToken.findUnique({
+    where: { tokenHash: sha256(token) },
+    select: {
+      id: true, userId: true, scopes: true, expiresAt: true, revokedAt: true, lastUsedAt: true, agentId: true, projectIds: true,
+      user: { select: { enabled: true, accountNonLocked: true, username: true, email: true, kind: true } },
+      agent: { select: { id: true, userId: true, workspaceId: true, ownerId: true, status: true, lastSeenAt: true } },
+    },
+  });
+  if (!row || row.revokedAt) throw new UnauthorizedError('Invalid API token');
+  if (row.expiresAt && row.expiresAt < new Date()) throw new UnauthorizedError('This API token has expired');
+  const scopes = (row.scopes as TokenScope[]) ?? ['read'];
+  // Lịch (.ics) không phải token API.
+  if (scopes.includes('calendar' as TokenScope)) throw new UnauthorizedError('Invalid API token');
+  // ── CTW-28: token agent ⇒ gắn req.agent. Dữ liệu lệch (token agent trỏ user thường, token thường trỏ user agent,
+  //    thiếu scope 'agent') ⇒ 401 — không bao giờ đoán.
+  if (row.agentId || row.user.kind === 'AGENT') {
+    const ag = row.agent;
+    if (!ag || row.user.kind !== 'AGENT' || ag.userId !== row.userId || !scopes.includes('agent')) throw new UnauthorizedError('Invalid API token');
+    if (ag.status === 'RETIRED') throw new AppError('This AI agent has been retired', 403, 'WORK_AGENT_RETIRED');
+    req.agent = { id: ag.id, userId: ag.userId, workspaceId: ag.workspaceId, ownerId: ag.ownerId, status: ag.status, projectIds: tokenProjectIds(row.projectIds) };
+    if (!opts.choPhepAgent(req.method, req.path, !!req.agent.projectIds)) {
+      throw new AppError('AI agents cannot use this part of CT Work. Ask the agent\'s owner to do this.', 403, 'WORK_AGENT_FORBIDDEN');
+    }
+    // PAUSED: vẫn đọc được; mọi lệnh ghi ⇒ 423 (cùng mã khoá với editLockGuard).
+    if (ag.status === 'PAUSED' && opts.ghi) {
+      throw new AppError('This AI agent is paused. Its owner must resume it before it can make changes.', 423, 'WORK_AGENT_PAUSED');
+    }
+    if (!ag.lastSeenAt || Date.now() - ag.lastSeenAt.getTime() > 60_000) {
+      await prisma.workAgent.update({ where: { id: ag.id }, data: { lastSeenAt: new Date() } }).catch(() => undefined);
+    }
+  }
+  if (!row.user.enabled || !row.user.accountNonLocked) throw new ForbiddenError('Account is disabled');
+  if (opts.ghi && !scopes.includes('write')) throw new ForbiddenError('This API token is read-only');
+  // Token không được quản lý token.
+  if (req.path.startsWith('/me/api-tokens') || req.path.startsWith('/me/calendar-link')) throw new ForbiddenError('Manage API tokens from the CT Work website');
+  req.userId = row.userId;
+  req.user = { userId: row.userId, username: row.user.username, email: row.user.email } as typeof req.user;
+  req.workToken = { id: row.id, scopes };
+  if (!row.lastUsedAt || Date.now() - row.lastUsedAt.getTime() > 60_000) {
+    await prisma.workApiToken.update({ where: { id: row.id }, data: { lastUsedAt: new Date(), lastUsedIp: (req.ip ?? '').slice(0, 64) || null } }).catch(() => undefined);
+  }
+  return true;
 }

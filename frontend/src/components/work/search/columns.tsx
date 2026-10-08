@@ -13,6 +13,7 @@ import { userName, type IssueCard, type ProjectConfig, type StatusCategory } fro
 import type { Lookups } from '../hooks';
 import { formatDate, IssueTypeIcon, LabelChip, Popover, relativeTime, StatusBadge, UserAvatar, useToggle } from '../ui';
 import { PriorityWithTip } from '../board/BoardCard';
+import { LeaseChipFor } from '../agents/leases';
 
 export type ColId =
   | 'key' | 'type' | 'title' | 'status' | 'priority' | 'assignee' | 'reporter' | 'sprint'
@@ -71,6 +72,8 @@ export const COLUMNS: Record<ColId, ColDef> = {
         <span className="flex min-w-0 items-center gap-2">
           <span className={cn('truncate', done && 'text-[var(--w-text-2)]')}>{i.title}</span>
           {pn !== undefined && <span className="hidden shrink-0 font-mono text-[10.5px] text-[var(--w-text-3)] sm:inline" title="Parent">↑ {c.lk.issueKey(pn)}</span>}
+          {/* CTW-28: chip lease của agent (chỉ có khi trang bọc AgentLeasesProvider). */}
+          <span className="hidden shrink-0 sm:inline-flex"><LeaseChipFor issueId={i.id} compact /></span>
         </span>
       );
     },

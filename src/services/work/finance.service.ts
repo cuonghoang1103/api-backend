@@ -27,7 +27,7 @@ import {
   type FinanceAccess, type RateRow,
 } from './financeRules.js';
 import { dayOf } from './governanceDb.js';
-import { loadProjectAccess, requireProject, type ProjectAccess, assertHumanActor } from './permissions.js';
+import { loadProjectAccess, requireProject, type ProjectAccess, assertHumanActor, principalOf } from './permissions.js';
 import { vnDay } from './sprints.service.js';
 import { assertModule, modulesOf } from './studio.js';
 
@@ -207,6 +207,8 @@ const addDay = (day: string) => new Date(Date.parse(`${day}T00:00:00Z`) + DAY).t
 export async function assertWeekOpen(projectId: number, userId: number, startedAt: Date, settings?: unknown): Promise<void> {
   const s = settings !== undefined ? settings : (await prisma.workProject.findUnique({ where: { id: projectId }, select: { settings: true } }))?.settings;
   if (!modulesOf(s).finance) return;
+  // CTW-28 §5.3 (A12): timesheet tuần chỉ dành cho NGƯỜI — giờ của AI agent không bao giờ bị khoá tuần.
+  if ((await principalOf(userId)) === 'AGENT') return;
   const week = weekStartOf(vnDay(startedAt));
   const ts = await prisma.workTimesheet.findUnique({ where: { uk_work_timesheet: { projectId, userId, weekStart: dateOf(week) } }, select: { id: true, status: true } });
   if (ts && weekLocked(ts.status)) {
@@ -243,7 +245,8 @@ function presentTs(t: TsRow, manage: boolean) {
 async function weekLogs(projectId: number, userId: number, week: string) {
   const { since, until } = vnWeekRange(week);
   return prisma.workWorklog.findMany({
-    where: { userId, startedAt: { gte: since, lt: until }, issue: { projectId } },
+    // A12: giờ AGENT_AUTO (timesheet agent tự sinh từ lease) không bao giờ vào timesheet tuần của người.
+    where: { userId, startedAt: { gte: since, lt: until }, issue: { projectId }, source: { not: 'AGENT_AUTO' } },
     orderBy: { startedAt: 'asc' },
     select: { id: true, minutes: true, startedAt: true, note: true, issue: { select: { id: true, number: true, title: true, teamId: true, stageId: true, deletedAt: true } } },
   });
@@ -254,6 +257,9 @@ export async function weekView(userId: number, projectId: number, q: { week?: st
   const ctx = await finCtx(userId, projectId);
   const target = q.userId ?? userId;
   if (target !== userId && !(await canReviewUser(ctx, target))) throw new ForbiddenError('You can only see your own timesheet');
+  if (target !== userId && (await principalOf(target)) === 'AGENT') {
+    throw new BadRequestError('AI agents have no weekly timesheet — see Reports → People vs Agents for their time and cost', 'WORK_AGENT_NO_TIMESHEET');
+  }
   if (target === userId && !ctx.fa.ownTimesheet && !ctx.fa.review) throw new ForbiddenError('Your role does not log time in this project');
   const week = q.week ? (isWeekStart(q.week) ? q.week : weekStartOf(q.week)) : weekStartOf(vnDay());
   const [logs, ts, project, user] = await Promise.all([

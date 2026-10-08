@@ -11,6 +11,7 @@ import { Layers, PanelLeft, Plus, Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { userName, workApi, workError, type BacklogIssue, type ProjectConfig } from '@/lib/work-api';
 import Backlog from '@/components/work/Backlog';
+import { AgentLeasesProvider, AssigneeKindFilter, assigneeKindOk, type AssigneeKind } from '@/components/work/agents/leases';
 import CreateIssueDialog from '@/components/work/CreateIssueDialog';
 import IssueDrawer from '@/components/work/IssueDrawer';
 import GettingStartedCard from '@/components/work/onboarding/GettingStartedCard';
@@ -31,6 +32,8 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
 
   const [q, setQ] = useState('');
   const [people, setPeople] = useState<number[]>([]);
+  // CTW-28: All / People / Agents.
+  const [kind, setKind] = useState<AssigneeKind>('ALL');
   /** null = mọi epic · 0 = thẻ không thuộc epic nào · số = một epic. */
   const [epic, setEpic] = useState<number | null>(null);
   const [epicPanel, setEpicPanel] = useState(true);
@@ -80,11 +83,12 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
     const t = q.trim().toLowerCase();
     if (t && !i.title.toLowerCase().includes(t) && !lk.issueKey(i.number).toLowerCase().includes(t)) return false;
     if (people.length && !(i.assigneeId && people.includes(i.assigneeId))) return false;
+    if (!assigneeKindOk(kind, i.assigneeId, lk)) return false;
     if (epic === 0 && i.parentId) return false;
     if (epic && i.parentId !== epic) return false;
     return true;
-  }, [q, people, epic, lk]);
-  const filtered = !!q.trim() || people.length > 0 || epic !== null;
+  }, [q, people, kind, epic, lk]);
+  const filtered = !!q.trim() || people.length > 0 || epic !== null || kind !== 'ALL';
 
   if (config.type === 'KANBAN') {
     return (
@@ -133,8 +137,9 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
             </button>
           ))}
         </div>
+        <AssigneeKindFilter config={config} value={kind} onChange={setKind} />
         {filtered && (
-          <button type="button" onClick={() => { setQ(''); setPeople([]); setEpic(null); }} className="w-btn w-btn-ghost w-btn-sm"><X size={12} /> Clear</button>
+          <button type="button" onClick={() => { setQ(''); setPeople([]); setEpic(null); setKind('ALL'); }} className="w-btn w-btn-ghost w-btn-sm"><X size={12} /> Clear</button>
         )}
         <span className="ml-auto hidden text-[12px] text-[var(--w-text-3)] lg:inline">
           Drag to plan · <span className="w-kbd">⌘</span>/<span className="w-kbd">⇧</span>+click to select many
@@ -193,7 +198,9 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
           ) : backlog.error ? (
             <EmptyState title="Could not load the backlog" body={workError(backlog.error)} action={<button type="button" className="w-btn" onClick={() => backlog.refetch()}>Try again</button>} />
           ) : data ? (
-            <Backlog config={config} lk={lk} data={data} onOpen={openIssue} filter={filter} />
+            <AgentLeasesProvider config={config}>
+              <Backlog config={config} lk={lk} data={data} onOpen={openIssue} filter={filter} />
+            </AgentLeasesProvider>
           ) : null}
         </div>
       </div>

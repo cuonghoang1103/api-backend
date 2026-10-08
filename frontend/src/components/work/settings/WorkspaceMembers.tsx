@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Search, X } from 'lucide-react';
@@ -55,13 +56,16 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
     onError: (err) => toast.error(workError(err, 'Could not transfer ownership')),
   });
 
+  // CTW-28: AI agent nằm ở mục riêng (không tính vào số người, không đổi vai/xoá ở đây — quản lý ở trang AI agents).
+  const agents = useMemo(() => (q.data ?? []).filter((m) => m.kind === 'AGENT'), [q.data]);
+  const humans = useMemo(() => (q.data ?? []).filter((m) => m.kind !== 'AGENT'), [q.data]);
   const members = useMemo(() => {
     const t = filter.trim().toLowerCase();
-    const list = q.data ?? [];
+    const list = humans;
     return t ? list.filter((m) => `${userName(m)} ${m.username}`.toLowerCase().includes(t)) : list;
-  }, [q.data, filter]);
+  }, [humans, filter]);
 
-  const transferCandidates = (q.data ?? []).filter((m) => m.id !== me && m.role !== 'GUEST' && m.role !== 'OWNER');
+  const transferCandidates = humans.filter((m) => m.id !== me && m.role !== 'GUEST' && m.role !== 'OWNER');
   const target = q.data?.find((m) => m.id === transferTo);
 
   if (q.isLoading) return <div className="flex justify-center py-12"><Spinner size={18} /></div>;
@@ -71,7 +75,7 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
     <div>
       <Section
         title="Members"
-        description={`${q.data?.length ?? 0} ${q.data?.length === 1 ? 'person has' : 'people have'} access to this workspace.`}
+        description={`${humans.length} ${humans.length === 1 ? 'person has' : 'people have'} access to this workspace.`}
       >
         <div className="mb-3 grid grid-cols-1 gap-x-6 gap-y-1 text-[12px] text-[var(--w-text-2)] sm:grid-cols-3">
           {ASSIGNABLE.map((r) => (
@@ -79,7 +83,7 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
           ))}
         </div>
 
-        {(q.data?.length ?? 0) > 8 && (
+        {humans.length > 8 && (
           <div className="relative mb-3 max-w-[280px]">
             <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
             <input className="w-input pl-8" placeholder="Filter members" value={filter} onChange={(e) => setFilter(e.target.value)} />
@@ -129,6 +133,27 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
           {!members.length && <div className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">No members match “{filter}”.</div>}
         </div>
       </Section>
+
+      {agents.length > 0 && (
+        <Section
+          title="AI agents"
+          description="Agents are not counted as people. They sign in only with their own token; manage them, their owner and their tokens on the AI agents page."
+          action={<Link href={`/work/${ws.slug}/agents`} className="w-btn w-btn-sm">Manage agents</Link>}
+        >
+          <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]" data-testid="ws-members-agents">
+            {agents.map((m) => (
+              <div key={m.id} className="flex items-center gap-3 border-b border-[var(--w-border)] px-3 py-2.5 last:border-b-0">
+                <UserAvatar user={m} size={28} />
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-[13px] font-medium">{userName(m)}</div>
+                  <div className="truncate text-[12px] text-[var(--w-text-3)]">@{m.username}</div>
+                </div>
+                <span className="shrink-0 text-[12px] text-[var(--w-text-2)]">AI agent</span>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
 
       {isOwner && (
         <Section title="Transfer ownership" description="The new owner gets full control, including deleting the workspace. You will become an admin.">

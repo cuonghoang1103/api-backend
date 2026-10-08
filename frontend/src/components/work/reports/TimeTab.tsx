@@ -15,6 +15,7 @@ import { fmtMinutes } from '@/components/work/TimeTracking';
 import { EmptyState, Spinner, UserAvatar } from '@/components/work/ui';
 import { cn } from '@/lib/utils';
 import { fmtDay, StatCell } from './shared';
+import { AssigneeKindFilter, type AssigneeKind } from '../agents/leases';
 
 // ─── Ngày theo giờ Việt Nam ──────────────────────────────────────
 
@@ -50,11 +51,13 @@ export default function TimeTab({ pid, config, onOpenIssue }: { pid: number; con
   const [from, setFrom] = useState(() => mondayOf(vnToday()));
   const [to, setTo] = useState(() => addDays(mondayOf(vnToday()), 6));
   const [open, setOpen] = useState<Set<number>>(new Set());
+  // CTW-28 A12-1/A15: giờ người vs giờ agent (agent: lease ⇒ timesheet tự sinh, tách riêng).
+  const [kind, setKind] = useState<AssigneeKind>('ALL');
 
   const validRange = !!from && !!to && from <= to;
   const q = useQuery({
-    queryKey: [...wk.timeReport(pid), from, to],
-    queryFn: () => workApi.timeReport(pid, { from, to }),
+    queryKey: [...wk.timeReport(pid), from, to, kind],
+    queryFn: () => workApi.timeReport(pid, { from, to, ...(kind !== 'ALL' ? { principal: kind } : {}) }),
     enabled: validRange,
   });
   const days = useMemo(() => (validRange ? daysBetween(from, to) : []), [from, to, validRange]);
@@ -89,6 +92,7 @@ export default function TimeTab({ pid, config, onOpenIssue }: { pid: number; con
           <span>to</span>
           <input type="date" aria-label="To" value={to} min={from} onChange={(e) => e.target.value && setTo(e.target.value)} className="w-input !h-[28px] !w-auto py-0 text-[12px]" />
         </div>
+        <AssigneeKindFilter config={config} value={kind} onChange={setKind} />
         <span className="text-[12px] text-[var(--w-text-3)] sm:ml-auto">Days in Vietnam time (UTC+7)</span>
       </div>
 
@@ -104,7 +108,11 @@ export default function TimeTab({ pid, config, onOpenIssue }: { pid: number; con
         <>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             <StatCell label="Total logged" value={fmtMinutes(data.totalMin)} tone="accent" />
-            <StatCell label="People" value={data.people.length} />
+            <StatCell
+              label={kind === 'AGENT' ? 'Agents' : 'People'}
+              value={data.people.length}
+              hint={data.byPrincipal && kind === 'ALL' && data.byPrincipal.AGENT > 0 ? `people ${fmtMinutes(data.byPrincipal.HUMAN)} · agents ${fmtMinutes(data.byPrincipal.AGENT)}` : undefined}
+            />
             <StatCell label="Days with logs" value={`${activeDays} / ${days.length}`} />
             <StatCell label="Per person" value={fmtMinutes(data.totalMin / data.people.length)} hint="Average" />
           </div>
@@ -134,6 +142,7 @@ export default function TimeTab({ pid, config, onOpenIssue }: { pid: number; con
                             <ChevronDown size={13} className={cn('shrink-0 text-[var(--w-text-3)] transition-transform', !expanded && '-rotate-90')} />
                             <UserAvatar user={p.user} size={20} />
                             <span className="max-w-[160px] truncate font-medium">{p.name}</span>
+                            {!!p.autoMin && <span className="shrink-0 text-[11px] text-[var(--w-text-3)]" title="Logged automatically from the agent's leases">{fmtMinutes(p.autoMin)} auto</span>}
                           </button>
                         </td>
                         {showDays && days.map((d) => (

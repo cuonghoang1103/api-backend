@@ -207,3 +207,27 @@ describe('JQL — trường project', () => {
     assert.deepEqual(projectScope(parseJql('ORDER BY created')), { include: null, exclude: [] });
   });
 });
+
+describe('JQL — CTW-28 assigneeKind + agents()/people() (A13)', () => {
+  it('assigneeKind = AGENT / HUMAN (bí danh agent·ai·bot / person·people)', () => {
+    assert.deepEqual(w('assigneeKind = AGENT'), { assignee: { kind: { in: ['AGENT'] } } });
+    assert.deepEqual(w('assigneeKind = ai'), { assignee: { kind: { in: ['AGENT'] } } });
+    assert.deepEqual(w('"assignee kind" = people'), { assignee: { kind: { in: ['HUMAN'] } } });
+    assert.deepEqual(w('assigneeKind IN (AGENT, HUMAN)'), { assignee: { kind: { in: ['AGENT', 'HUMAN'] } } });
+  });
+  it('!= gồm cả thẻ chưa giao (NOT relation) · IS EMPTY = chưa giao', () => {
+    assert.deepEqual(w('assigneeKind != AGENT'), { NOT: { assignee: { kind: { in: ['AGENT'] } } } });
+    assert.deepEqual(w('assigneeKind IS EMPTY'), { assigneeId: null });
+    assert.deepEqual(w('assigneeKind IS NOT EMPTY'), { assigneeId: { not: null } });
+  });
+  it('giá trị lạ ⇒ lỗi kèm gợi ý', () => {
+    assert.throws(() => w('assigneeKind = AGNT'), (e: unknown) => e instanceof JqlError && /AGENT or HUMAN/.test(e.message) && e.suggestion === 'AGENT');
+  });
+  it('assignee IN agents() / people(), trộn với tên và EMPTY', () => {
+    assert.deepEqual(w('assignee IN agents()'), { OR: [{ assignee: { kind: { in: ['AGENT'] } } }] });
+    assert.deepEqual(w('assignee IN (cuong, people())'), { OR: [{ assigneeId: { in: [7] } }, { assignee: { kind: { in: ['HUMAN'] } } }] });
+    assert.deepEqual(w('assignee NOT IN (agents())'), { NOT: { OR: [{ assignee: { kind: { in: ['AGENT'] } } }] } });
+    assert.deepEqual(w('reporter = agents()'), { OR: [{ reporter: { kind: { in: ['AGENT'] } } }] });
+    assert.throws(() => w('assignee = agent()'), /Unknown function agent\(\)/);
+  });
+});

@@ -20,6 +20,7 @@ import StartProjectButton from '@/components/work/onboarding/StartProjectButton'
 import ProjectHeader from '@/components/work/ProjectHeader';
 import { CompleteSprintDialog } from '@/components/work/SprintDialogs';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
+import { AgentLeasesProvider, AssigneeKindFilter, assigneeKindOk, type AssigneeKind } from '@/components/work/agents/leases';
 import {
   EmptyState, IssueTypeIcon, isTyping, PickerList, Popover, UserAvatar, useToggle, PageLoading,
 } from '@/components/work/ui';
@@ -43,6 +44,8 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
   const [onlyMine, setOnlyMine] = useState(false);
   const [people, setPeople] = useState<number[]>([]);
   const [types, setTypes] = useState<number[]>([]);
+  // CTW-28: All / People / Agents.
+  const [kind, setKind] = useState<AssigneeKind>('ALL');
   const [createOpen, setCreateOpen] = useState(false);
   const [completeOpen, setCompleteOpen] = useState(false);
   const typeMenu = useToggle();
@@ -83,15 +86,16 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
 
   const visible = useMemo(() => {
     const t = q.trim().toLowerCase();
-    if (!t && !onlyMine && !people.length && !types.length) return null;
+    if (!t && !onlyMine && !people.length && !types.length && kind === 'ALL') return null;
     return new Set((issues ?? []).filter((i) => {
       if (onlyMine && i.assigneeId !== meId) return false;
+      if (!assigneeKindOk(kind, i.assigneeId, lk)) return false;
       if (people.length && !(i.assigneeId && people.includes(i.assigneeId))) return false;
       if (types.length && !types.includes(i.typeId)) return false;
       if (t && !i.title.toLowerCase().includes(t) && !lk.issueKey(i.number).toLowerCase().includes(t)) return false;
       return true;
     }).map((i) => i.id));
-  }, [issues, q, onlyMine, people, types, meId, lk]);
+  }, [issues, q, onlyMine, people, types, kind, meId, lk]);
   const filtered = visible !== null;
 
   const sprint = board.data?.sprint;
@@ -127,6 +131,7 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
         <button type="button" onClick={() => setOnlyMine((v) => !v)} className={cn('w-btn w-btn-sm', onlyMine && 'w-btn-on')}>
           Only my issues
         </button>
+        <AssigneeKindFilter config={config} value={kind} onChange={setKind} />
         <button ref={typeRef} type="button" onClick={typeMenu.toggle} className={cn('w-btn w-btn-sm', types.length > 0 && 'w-btn-on')}>
           <Filter size={12} /> Type{types.length > 0 && ` · ${types.length}`}
         </button>
@@ -140,7 +145,7 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
           />
         </Popover>
         {filtered && (
-          <button type="button" onClick={() => { setQ(''); setOnlyMine(false); setPeople([]); setTypes([]); }} className="w-btn w-btn-ghost w-btn-sm">
+          <button type="button" onClick={() => { setQ(''); setOnlyMine(false); setPeople([]); setTypes([]); setKind('ALL'); }} className="w-btn w-btn-ghost w-btn-sm">
             <X size={12} /> Clear
           </button>
         )}
@@ -173,6 +178,13 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
           No sprint is running, so the board shows every open issue. Plan and start a sprint from the Backlog.
         </div>
       )}
+      {/* CTW-28 (§8.5): dự án tắt "Done của agent ⇒ Review" ⇒ nhắc ngay trên board (velocity có thể gồm việc chưa ai duyệt). */}
+      {(config.settings?.agents as { doneToReview?: boolean } | undefined)?.doneToReview === false && config.members.some((m) => m.kind === 'AGENT') && (
+        <div className="flex shrink-0 items-center gap-2 border-b border-[var(--w-border)] bg-[color-mix(in_srgb,var(--w-orange)_10%,transparent)] px-4 py-2 text-[12px] text-[var(--w-text-2)]">
+          <Info size={13} className="shrink-0 text-[var(--w-orange)]" />
+          AI agents can close issues directly in this project — their work skips review. Change it in Project settings → AI agents.
+        </div>
+      )}
       {sprint?.goal && (
         <div className="shrink-0 border-b border-[var(--w-border)] px-4 py-2 text-[12px] text-[var(--w-text-2)]">
           <span className="font-medium text-[var(--w-text)]">Sprint goal:</span> {sprint.goal}
@@ -194,7 +206,9 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
             action={config.permissions.createIssues ? <button type="button" className="w-btn w-btn-primary" onClick={() => setCreateOpen(true)}><Plus size={14} /> Create issue</button> : undefined}
           />
         ) : board.data ? (
-          <Board config={config} lk={lk} data={board.data} visible={visible} onOpen={openIssue} toolbarLeading={filterControls} />
+          <AgentLeasesProvider config={config}>
+            <Board config={config} lk={lk} data={board.data} visible={visible} onOpen={openIssue} toolbarLeading={filterControls} />
+          </AgentLeasesProvider>
         ) : null}
       </div>
 

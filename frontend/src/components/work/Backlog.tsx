@@ -27,6 +27,7 @@ import {
   type SprintFull,
 } from '@/lib/work-api';
 import { FlagBadge } from './ctw';
+import { LeaseChipFor } from './agents/leases';
 import { TruncatedStrip } from './studio/shared';
 import { wk, type Lookups } from './hooks';
 import { CompleteSprintDialog, EditSprintDialog, PlanSprintDialog, sprintRange, StartSprintDialog, unitLabel } from './SprintDialogs';
@@ -143,6 +144,7 @@ function Row({ issue, lk, unit, selected, onSelect, onOpen, editable, epicTitle,
         </span>
       )}
       {issue.subtaskCount > 0 && <span className="hidden text-[11px] text-[var(--w-text-3)] sm:inline" title="Sub-tasks">{issue.subtaskCount} {issue.subtaskCount === 1 ? 'sub-task' : 'sub-tasks'}</span>}
+      <span className="hidden md:inline-flex"><LeaseChipFor issueId={issue.id} compact /></span>
       <span className="hidden sm:inline"><StatusBadge status={lk.statuses.get(issue.statusId)} /></span>
       <EstimateCell issue={issue} unit={unit} editable={editable} onSave={(v) => onEstimate(issue, v)} />
       <PriorityWithTip priority={issue.priority} size={13} />

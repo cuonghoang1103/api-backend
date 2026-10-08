@@ -193,6 +193,16 @@ export function useProjectRealtime(pid: number | undefined, onEvent?: (e: WorkEv
         queue(wk.tests(pid));
         return;
       }
+      // CTW-28: nhịp tim/claim/release của agent (chỉ socket, field agentProgress) ⇒ chỉ làm tươi chip lease + khối
+      // Agent activity — không kéo lại cả board mỗi lần agent báo tiến độ.
+      if (e.type === 'issue.updated' && e.changes?.length && e.changes.every((c) => c.field === 'agentProgress')) {
+        queue(['work', 'agent-leases', pid]);
+        queue(['work', 'issue', pid]);
+        return;
+      }
+      if (e.type === 'issue.updated' && e.changes?.some((c) => c.field === 'flagged' || c.field === 'assigneeId' || c.field === 'statusId')) {
+        queue(['work', 'agent-leases', pid]);
+      }
       queue(wk.board(pid));
       queue(wk.issues(pid));
       queue(wk.issue(pid));

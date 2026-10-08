@@ -67,6 +67,8 @@ import s5cRoutes from './work.s5c.routes.js';
 import s6Routes from './work.s6.routes.js';
 import resourcesRoutes from './work.resources.routes.js';
 import agentsRoutes from './work.agents.routes.js';
+import mcpRoutes from '../mcp/server.js';
+import agentsUiRoutes from './work.agentsUi.routes.js';
 import fptTestRoutes from './work.fpt.routes.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
@@ -203,6 +205,10 @@ router.get('/share/:token/tests', asyncHandler(async (req, res) => {
 
 // Đợt S4: tải tệp xuất trọn dự án qua link ký HMAC hạn 15 phút — không cần đăng nhập (đứng TRƯỚC authenticate).
 router.use(s4PublicRoutes);
+
+// CTW-28 A9: MCP server (Streamable HTTP, không phiên) — tự xác thực bằng token ctw_ và tự chốt từng tool (src/mcp).
+// Đứng TRƯỚC apiTokenAuth: MCP luôn POST nên chốt "POST = ghi" của REST dời xuống từng tool ghi (không nới).
+router.use('/mcp', mcpRoutes);
 
 // API token cá nhân (Bearer ctw_…) đi trước; không phải token thì JWT như cũ.
 router.use(apiTokens.apiTokenAuth);
@@ -1202,7 +1208,8 @@ router.delete('/projects/:pid/issues/:num/worklogs/:logId', asyncHandler(async (
   ok(res, { deleted: true });
 }));
 router.get('/projects/:pid/reports/time', asyncHandler(async (req, res) => {
-  const q = parse(z.object({ from: ymd, to: ymd, userId: id.optional() }), req.query);
+  // A12: principal=HUMAN|AGENT|ALL tách giờ người / giờ agent (mặc định ALL — hành vi cũ).
+  const q = parse(z.object({ from: ymd, to: ymd, userId: id.optional(), principal: z.enum(['HUMAN', 'AGENT', 'ALL']).optional() }), req.query);
   ok(res, await planning.timeReport(callerId(req), idParam(req, 'pid'), q));
 }));
 
@@ -1953,6 +1960,8 @@ router.use(s6Routes);
 router.use(resourcesRoutes);
 // CTW-28 (GĐ1 A2–A8): AI agent thành viên — quản lý, token, lease, hộp thư/SSE, webhook — tuyến ở work.agents.routes.ts.
 router.use(agentsRoutes);
+// CTW-28 (GĐ1 A13–A14): tuyến ĐỌC cho giao diện agent (chip lease, khối Agent activity, "My agents need you").
+router.use(agentsUiRoutes);
 // Đợt 1b (08/10/2026): tài liệu kiểm thử chuẩn FPT (Report 5.1 Unit + 5.2 Integration, xuất/nhập Excel) — work.fpt.routes.ts.
 router.use(fptTestRoutes);
 

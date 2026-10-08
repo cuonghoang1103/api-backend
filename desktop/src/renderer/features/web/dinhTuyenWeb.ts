@@ -323,6 +323,10 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   /* Đợt S3a (04/10/2026): danh mục dự án + khối lượng việc — tĩnh, phải đứng TRƯỚC `/work/:ws/:key`. */
   { mau: '/work/:ws/portfolio', nap: () => import('@/app/work/[ws]/portfolio/page') },
   { mau: '/work/:ws/workload', nap: () => import('@/app/work/[ws]/workload/page') },
+  /* CTW-28 A14 (09/10/2026): AI agent thành viên — tĩnh, phải đứng TRƯỚC `/work/:ws/:key`; `/agents/:id` (4 đoạn) cũng
+     trước `/:key/board` (cùng 4 đoạn — "agents" không bao giờ là mã dự án vì mã VIẾT HOA). */
+  { mau: '/work/:ws/agents', nap: () => import('@/app/work/[ws]/agents/page') },
+  { mau: '/work/:ws/agents/:id', nap: () => import('@/app/work/[ws]/agents/[id]/page') },
   { mau: '/work/:ws/:key', nap: () => import('@/app/work/[ws]/[key]/page') },
   { mau: '/work/:ws/:key/board', nap: () => import('@/app/work/[ws]/[key]/board/page') },
   { mau: '/work/:ws/:key/backlog', nap: () => import('@/app/work/[ws]/[key]/backlog/page') },

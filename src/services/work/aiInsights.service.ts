@@ -11,6 +11,7 @@
 
 import { prisma } from '../../config/database.js';
 import { loadRequirements, PHASE_LABELS, type ReqRow } from './projectTracking.service.js';
+import { dayInZone } from './projectTime.js';
 
 const DAY = 86_400_000;
 const num = (v: unknown) => (typeof v === 'number' ? v : Number(v) || 0);
@@ -100,7 +101,7 @@ export async function teamHealthFacts(projectId: number): Promise<{ text: string
     'All numbers below are computed by code — do not change them. "BEHIND" = done LOC under 70% of what the elapsed time implies.',
     'Per person (requirements of this iteration):', ...(people.length ? people : ['(no requirements found — label issues "Req" or fill Screen ID)']),
     `In progress but untouched for 3+ days and no commit/PR in 3 days (${stale.length}):`,
-    ...stale.map((s) => `${project.key}-${s.number} "${s.title}" @${s.assignee?.username ?? 'unassigned'} last change ${s.updatedAt.toISOString().slice(0, 10)}`),
+    ...stale.map((s) => `${project.key}-${s.number} "${s.title}" @${s.assignee?.username ?? 'unassigned'} last change ${dayInZone(s.updatedAt)}`),
     `Overdue and not done (${overdue.length}):`,
     ...overdue.map((o) => `${project.key}-${o.number} "${o.title}" @${o.assignee?.username ?? 'unassigned'} due ${o.dueDate!.toISOString().slice(0, 10)}`),
   ].join('\n');

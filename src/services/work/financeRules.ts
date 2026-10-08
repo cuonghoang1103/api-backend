@@ -67,6 +67,17 @@ export function weekEndOf(weekStart: string): string {
   return new Date(Date.parse(`${weekStart}T00:00:00Z`) + 6 * DAY).toISOString().slice(0, 10);
 }
 
+/**
+ * CTW-38 (08/10/2026): tuần đã KẾT THÚC chưa (theo ngày VN `today`)? Duyệt tuần chụp giá TỪNG dòng giờ của
+ * cả tuần rồi khoá cả tuần ⇒ duyệt khi tuần còn dở sẽ khoá luôn những ngày chưa tới (thứ Ba ghi giờ ⇒ 423).
+ * Chọn CHẶN DUYỆT tới khi hết Chủ nhật — không chọn "chỉ khoá tới hôm nay", vì bản chụp chi phí đã duyệt sẽ
+ * không còn khớp tổng giờ của tuần (ngân sách/EAC/xuất số liệu đều dựa trên bản chụp). Nộp sớm vẫn được;
+ * người duyệt có thể Trả lại; tuần đã duyệt nhầm thì ADMIN mở lại (reopen) như cũ.
+ */
+export function weekIsOver(weekStart: string, today: string): boolean {
+  return weekEndOf(weekStart) < today;
+}
+
 /** Khoảng UTC [since, until) của một tuần theo giờ VN (+07, không đổi giờ mùa hè). */
 export function vnWeekRange(weekStart: string): { since: Date; until: Date } {
   const since = new Date(Date.parse(`${weekStart}T00:00:00+07:00`));

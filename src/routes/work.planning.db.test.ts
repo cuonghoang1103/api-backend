@@ -256,8 +256,11 @@ describe('CT Work đợt 6 — HTTP + DB', { skip: !RUN }, () => {
     await runScheduledRules();
     const n = await prisma.socialNotification.findFirst({ where: { receiverId: dev2.id, type: 'WORK_ALERT', entityId: late.id } });
     assert.ok(n, 'người được giao nhận WORK_ALERT');
+    // CTW-7: "Test" mặc định là chạy thử (DRY_RUN); execute:true mới chạy thật.
     const test = await call(lead, 'POST', `/projects/${pid}/automation/${r.data.id}/test`, { number: late.number });
-    assert.equal(test.data.status, 'SUCCESS');
+    assert.equal(test.data.status, 'DRY_RUN');
+    const real = await call(lead, 'POST', `/projects/${pid}/automation/${r.data.id}/test`, { number: late.number, execute: true });
+    assert.equal(real.data.status, 'SUCCESS');
     await call(lead, 'DELETE', `/projects/${pid}/automation/${r.data.id}`);
   });
 

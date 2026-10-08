@@ -293,13 +293,15 @@ export async function createApproval(userId: number, projectId: number, input: C
   if (!issue) throw new NotFoundError('Issue not found');
   const approverIds = [...new Set(input.approverIds)];
   await assertApprovers(projectId, approverIds, { issueShared: issue.clientVisible });
+  const vi = (await projectLanguage(projectId)) === 'vi';
   const id = await prisma.$transaction(async (tx) => {
     // Một đối tượng chỉ một yêu cầu đang chờ — hai yêu cầu song song thì không biết cái nào có hiệu lực.
     await tx.$queryRaw`SELECT id FROM work_issues WHERE id = ${issue.id} FOR UPDATE`;
     const open = await tx.workApproval.count({ where: { issueId: issue.id, status: 'PENDING' } });
     if (open) throw new ConflictError('This issue already has a pending approval request');
     return createApprovalTx(tx, projectId, userId, {
-      targetType: 'ISSUE', issueId: issue.id, title: input.title?.trim() || `Approve ${access.key}-${issue.number}: ${issue.title}`,
+      // CTW-14: tiêu đề tự sinh theo ngôn ngữ dự án.
+      targetType: 'ISSUE', issueId: issue.id, title: input.title?.trim() || (vi ? `Duyệt ${access.key}-${issue.number}: ${issue.title}` : `Approve ${access.key}-${issue.number}: ${issue.title}`),
       description: input.description, mode: input.mode ?? 'SEQUENTIAL', approverIds, dueAt: input.dueAt,
     });
   });
@@ -321,12 +323,13 @@ async function createDocApproval(userId: number, projectId: number, access: Proj
   if (page.status === 'ARCHIVED') throw new BadRequestError('Archived documents cannot be sent for approval — restore it to Draft first', 'WORK_PAGE_ARCHIVED');
   const approverIds = [...new Set(input.approverIds)];
   await assertApprovers(projectId, approverIds, { pageVisibility: page.visibility });
+  const vi = (await projectLanguage(projectId)) === 'vi';
   const id = await prisma.$transaction(async (tx) => {
     await tx.$queryRaw`SELECT id FROM work_pages WHERE id = ${page.id} FOR UPDATE`;
     const open = await tx.workApproval.count({ where: { pageId: page.id, status: 'PENDING' } });
     if (open) throw new ConflictError('This document already has a pending approval request');
     const aid = await createApprovalTx(tx, projectId, userId, {
-      targetType: 'DOC', pageId: page.id, title: input.title?.trim() || `Approve document: ${page.title}`,
+      targetType: 'DOC', pageId: page.id, title: input.title?.trim() || (vi ? `Duyệt tài liệu: ${page.title}` : `Approve document: ${page.title}`),
       description: input.description, mode: input.mode ?? 'SEQUENTIAL', approverIds, dueAt: input.dueAt,
     });
     await tx.workPage.update({ where: { id: page.id }, data: { status: 'IN_REVIEW' } });

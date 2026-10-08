@@ -1,0 +1,59 @@
+/* CT Work — bảng ma trận Report 5.1 + bảng Integration 5.2 (đợt 1b). Không bọc @layer (xem work.css). */
+
+.fpt-matrix { border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 12.5px; }
+.fpt-matrix th, .fpt-matrix td { border-bottom: 1px solid var(--w-border); padding: 0; background: var(--w-panel); }
+.fpt-matrix td + td, .fpt-matrix th + td, .fpt-matrix th + th { border-left: 1px solid var(--w-border); }
+.fpt-sticky { position: sticky; left: 0; z-index: 2; text-align: left; font-weight: 400; box-shadow: 1px 0 0 var(--w-border); }
+.fpt-matrix thead th { position: sticky; top: 0; z-index: 3; background: var(--w-raised, var(--w-panel)); vertical-align: bottom; }
+.fpt-matrix thead th.fpt-sticky { z-index: 4; padding: 8px 12px; }
+.fpt-utc-btn { display: flex; width: 100%; height: 86px; align-items: flex-end; justify-content: center; padding-bottom: 6px; font-size: 11px; font-weight: 600; color: var(--w-text-2); }
+.fpt-utc-btn:hover { background: var(--w-hover); color: var(--w-text); }
+.fpt-vertical { writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: 0.02em; }
+.fpt-add-case { display: flex; width: 100%; height: 86px; align-items: center; justify-content: center; color: var(--w-text-3); }
+.fpt-add-case:hover { color: var(--w-accent); background: var(--w-hover); }
+
+.fpt-sec-head { padding: 6px 12px !important; font-size: 11px; font-weight: 700 !important; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--w-on-accent, #fff); background: #1e2a78 !important; }
+.fpt-sec-fill { background: color-mix(in srgb, #1e2a78 10%, var(--w-panel)) !important; }
+.fpt-group th { padding: 4px 8px 4px 8px; background: var(--w-sunken) !important; }
+.fpt-group-fill { background: var(--w-sunken) !important; }
+.fpt-row th { padding: 2px 6px 2px 0; }
+.fpt-res-label { padding: 6px 12px !important; font-size: 12px; color: var(--w-text-2); }
+
+.fpt-input { height: 26px; border-radius: 4px; border: 1px solid transparent; background: transparent; padding: 0 6px; font-size: 12.5px; color: var(--w-text); outline: none; }
+.fpt-input:hover:not([readonly]) { border-color: var(--w-border); }
+.fpt-input:focus { border-color: var(--w-accent); background: var(--w-panel); }
+.fpt-group-input { flex: 1; min-width: 0; font-weight: 600; }
+.fpt-mini { display: inline-flex; align-items: center; gap: 2px; height: 22px; padding: 0 6px; border-radius: 4px; font-size: 11.5px; color: var(--w-text-2); white-space: nowrap; }
+.fpt-mini:hover { background: var(--w-hover); color: var(--w-text); }
+.fpt-sec-head .fpt-mini { color: rgba(255,255,255,.85); }
+.fpt-sec-head .fpt-mini:hover { background: rgba(255,255,255,.14); color: #fff; }
+.fpt-icon { display: inline-flex; height: 22px; width: 22px; align-items: center; justify-content: center; border-radius: 4px; color: var(--w-text-3); }
+.fpt-icon:hover { background: var(--w-hover); color: var(--w-red); }
+.fpt-row .fpt-row-del { opacity: 0; }
+.fpt-row:hover .fpt-row-del, .fpt-row-del:focus-visible { opacity: 1; }
+.fpt-row:hover th, .fpt-row:hover td { background: color-mix(in srgb, var(--w-accent) 4%, var(--w-panel)); }
+
+.fpt-cell { text-align: center; vertical-align: middle; }
+.fpt-mark { display: flex; width: 100%; height: 30px; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: var(--w-accent-text, var(--w-accent)); }
+.fpt-mark:not(:disabled):hover { background: var(--w-accent-soft); }
+.fpt-mark.is-on { background: color-mix(in srgb, var(--w-accent) 14%, transparent); }
+.fpt-mark:focus-visible, .fpt-chip:focus-visible, .fpt-utc-btn:focus-visible { outline: 2px solid var(--w-accent); outline-offset: -2px; }
+.fpt-chip { display: inline-flex; min-width: 24px; height: 22px; margin: 4px 0; align-items: center; justify-content: center; border-radius: 4px; font-size: 11.5px; font-weight: 700; font-family: var(--w-font-mono); }
+.fpt-tiny { width: 100%; height: 28px; font-size: 10.5px; color: var(--w-text-2); }
+.fpt-tiny:hover { background: var(--w-hover); }
+
+/* Bảng Integration (5.2) */
+.fpt-it { border-collapse: separate; border-spacing: 0; table-layout: fixed; font-size: 12.5px; }
+.fpt-it th { position: sticky; top: 0; z-index: 2; background: #4f6228; color: #fff; font-weight: 600; text-align: left; padding: 7px 8px; font-size: 12px; }
+.fpt-it td { border-bottom: 1px solid var(--w-border); border-left: 1px solid var(--w-border); vertical-align: top; background: var(--w-panel); padding: 0; }
+.fpt-it td:first-child { border-left: 0; }
+.fpt-it textarea.fpt-cellarea { display: block; width: 100%; min-height: 34px; resize: none; border: 0; background: transparent; padding: 7px 8px; font-size: 12.5px; line-height: 1.45; color: var(--w-text); outline: none; overflow: hidden; }
+.fpt-it textarea.fpt-cellarea:focus { box-shadow: inset 0 0 0 2px var(--w-accent); }
+.fpt-it tr.fpt-it-sec td { background: color-mix(in srgb, #2bb3c0 14%, var(--w-panel)); }
+.fpt-it tr:hover td { background: color-mix(in srgb, var(--w-accent) 3%, var(--w-panel)); }
+.fpt-status { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 999px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+.fpt-status-Passed { background: color-mix(in srgb, var(--w-green) 16%, transparent); color: var(--w-green); }
+.fpt-status-Failed { background: color-mix(in srgb, var(--w-red) 14%, transparent); color: var(--w-red); }
+.fpt-status-Pending { background: var(--w-sunken); color: var(--w-text-2); }
+.fpt-status-NA { background: color-mix(in srgb, var(--w-yellow) 16%, transparent); color: var(--w-yellow); }

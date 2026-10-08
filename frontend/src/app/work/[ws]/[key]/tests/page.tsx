@@ -20,12 +20,17 @@ import NewTestDialog from '@/components/work/tests/NewTestDialog';
 import { EnableTestingState, testingEnabled } from '@/components/work/tests/testing-ui';
 import CyclesTab from '@/components/work/tests/CyclesTab';
 import TraceabilityTab from '@/components/work/tests/TraceabilityTab';
+import UnitTab from '@/components/work/tests/fpt/UnitTab';
+import IntegrationTab from '@/components/work/tests/fpt/IntegrationTab';
 
 const TABS = [
   { id: 'library', label: 'Test library' },
   { id: 'plans', label: 'Test plans' },
   { id: 'cycles', label: 'Test cycles' },
   { id: 'traceability', label: 'Traceability' },
+  // Đợt 1b (08/10/2026): tài liệu kiểm thử chuẩn FPT — Report 5.1 / 5.2, xuất/nhập Excel đúng mẫu.
+  { id: 'unit', label: 'Unit tests (5.1)' },
+  { id: 'integration', label: 'Integration (5.2)' },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -108,6 +113,8 @@ function TestsView({ config, pid }: { config: ProjectConfig; pid: number }) {
             {tab === 'cycles' && (
               <div className="min-h-0 flex-1 overflow-hidden"><CyclesTab config={config} pid={pid} /></div>
             )}
+            {tab === 'unit' && <UnitTab config={config} pid={pid} />}
+            {tab === 'integration' && <IntegrationTab config={config} pid={pid} />}
             {tab === 'traceability' && (
               <div className="min-h-0 flex-1 overflow-hidden"><TraceabilityTab config={config} pid={pid} /></div>
             )}

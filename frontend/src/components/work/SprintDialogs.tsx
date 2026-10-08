@@ -400,6 +400,15 @@ export function PlanSprintDialog({ open, onClose, pid, sprint, issueKey }: {
               )}
             </div>
 
+            {!!p.excluded && (p.excluded.testCases > 0 || p.excluded.deskTickets > 0) && (
+              <p className="text-[12px] text-[var(--w-text-3)]">
+                Not planned (not backlog work): {[
+                  p.excluded.testCases ? `${p.excluded.testCases} test case${p.excluded.testCases === 1 ? '' : 's'}` : '',
+                  p.excluded.deskTickets ? `${p.excluded.deskTickets} service desk ticket${p.excluded.deskTickets === 1 ? '' : 's'}` : '',
+                ].filter(Boolean).join(' and ')}.
+              </p>
+            )}
+
             {p.warnings.length > 0 && (
               <ul className="space-y-1.5 rounded-[8px] border border-[color-mix(in_srgb,var(--w-orange)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_8%,transparent)] px-3 py-2.5">
                 {p.warnings.map((w, i) => (

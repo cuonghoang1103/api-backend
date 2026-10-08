@@ -178,6 +178,7 @@ function Workload({ d, unit }: { d: InsightsData; unit: string }) {
   return (
     <Card>
       <SectionTitle right={over.size ? <span className="text-[12px] font-medium text-[var(--w-orange)]">{over.size} overloaded</span> : null}>Workload</SectionTitle>
+      {d.loadScope && <p className="-mt-1 mb-2 text-[12px] text-[var(--w-text-3)]">Counting work {d.loadScope.kind === 'sprint' ? `in the ${d.loadScope.label}` : d.loadScope.label} · {d.loadScope.workingDaysLeft} working day{d.loadScope.workingDaysLeft === 1 ? '' : 's'} left</p>}
       {!loads.length ? (
         <div className="flex items-center gap-2 text-[13px] text-[var(--w-text-2)]">
           <CheckCircle2 size={14} className="shrink-0 text-[var(--w-green)]" /> No open assigned work right now.
@@ -194,14 +195,14 @@ function Workload({ d, unit }: { d: InsightsData; unit: string }) {
                     <div className="h-full rounded-full" style={{ width: `${(l.points / max) * 100}%`, background: hot ? 'var(--w-orange)' : 'var(--w-accent)' }} />
                   </div>
                   <span className="whitespace-nowrap text-right text-[12px] tabular-nums text-[var(--w-text-2)]">
-                    {num(l.points)} {unit} · {l.issues} {l.issues === 1 ? 'issue' : 'issues'}
+                    {num(l.points)}{l.capacity != null ? ` / ${num(l.capacity)}` : ''} {unit} · {l.issues} {l.issues === 1 ? 'issue' : 'issues'}
                   </span>
                 </li>
               );
             })}
           </ul>
           {over.size > 0 && (
-            <p className="mt-3 text-[12px] text-[var(--w-text-3)]">Highlighted members carry more than 1.6× the team average. Consider rebalancing.</p>
+            <p className="mt-3 text-[12px] text-[var(--w-text-3)]">Highlighted members have more work than their capacity (hours per day × working days left), or — when no capacity is set — more than 1.6× the team average. Consider rebalancing.</p>
           )}
         </>
       )}

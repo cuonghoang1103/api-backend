@@ -20,6 +20,7 @@ import * as approvals from '../services/work/approvals.service.js';
 import * as crs from '../services/work/changeRequests.service.js';
 import * as meetings from '../services/work/meetings.service.js';
 import * as raid from '../services/work/raid.service.js';
+import { resolveParentId } from '../services/work/issueRefs.js';
 
 const router = Router();
 
@@ -252,8 +253,23 @@ router.put('/projects/:pid/meetings/:num/actions', asyncHandler(async (req, res)
   ok(res, await meetings.setActions(callerId(req), P(req, 'pid'), P(req, 'num'), items));
 }));
 router.post('/projects/:pid/meetings/:num/actions/issues', asyncHandler(async (req, res) => {
-  const { actionIds } = parse(z.object({ actionIds: z.array(id).max(100).optional() }), req.body ?? {});
-  ok(res, await meetings.createIssuesFromActions(callerId(req), P(req, 'pid'), P(req, 'num'), actionIds), 201);
+  // CTW-17: `defaults` (tuỳ chọn) — trường không gửi ⇒ kế thừa từ cuộc họp (sprint/giai đoạn đang chạy, bộ phận
+  // của người được giao); null ⇒ để trống. Epic nhận parentId / parentNumber / parentKey ("FP-1") như mọi chỗ (CTW-15).
+  const { actionIds, defaults } = parse(z.object({
+    actionIds: z.array(id).max(100).optional(),
+    defaults: z.object({
+      sprintId: id.nullable().optional(),
+      stageId: id.nullable().optional(),
+      teamId: id.nullable().optional(),
+      parentId: id.nullable().optional(),
+      parentNumber: id.nullable().optional(),
+      parentKey: z.string().max(32).nullable().optional(),
+      labelIds: z.array(id).max(30).optional(),
+    }).strict().optional(),
+  }), req.body ?? {});
+  const { parentId: pId, parentNumber, parentKey, ...rest } = defaults ?? {};
+  const parentId = await resolveParentId(P(req, 'pid'), { parentId: pId, parentNumber, parentKey });
+  ok(res, await meetings.createIssuesFromActions(callerId(req), P(req, 'pid'), P(req, 'num'), actionIds, { ...rest, ...(parentId !== undefined ? { parentId } : {}) }), 201);
 }));
 router.post('/projects/:pid/meetings/:num/actions/suggest', asyncHandler(async (req, res) => {
   ok(res, await meetings.suggestActions(callerId(req), P(req, 'pid'), P(req, 'num')));

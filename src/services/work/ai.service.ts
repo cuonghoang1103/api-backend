@@ -26,6 +26,8 @@ import { PRIORITY_MAX, PRIORITY_MIN } from './constants.js';
 import { addComment, createIssueAs, updateIssueAs } from './issues.service.js';
 import { isClientScoped, requireProject, type ProjectAccess } from './permissions.js';
 import { activeSprintPace, type SprintPace } from './sprintPace.js';
+import { computeLoads, LOAD_WINDOW_DAYS, overloadFact, workingDaysLeft } from './insightLoad.js';
+import { dayInZone, lastWeekPeriod, projectTimezone } from './projectTime.js';
 import { projectMembers } from './projects.service.js';
 import { bulkUpdate, computeSprintReport, estimateOf, estimationOf } from './sprints.service.js';
 import { createTest } from './tests.service.js';
@@ -210,7 +212,7 @@ async function projectContext(access: ProjectAccess, focusText: string) {
       `Issue types: ${project.issueTypes.map((t) => `${t.key} (${t.level === 1 ? 'epic' : t.level === -1 ? 'sub-task' : 'standard'})`).join(', ')}.`,
       `Statuses: ${[...new Set(statuses.map((s) => s.name))].join(', ')}.`,
       `Members who can be assigned: ${members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER').map((m) => `@${m.username} (${displayName(m)})`).join(', ') || 'none'}.`,
-      `Open sprints: ${sprints.map((s) => `${s.name} [${s.state}]${s.goal ? ` goal: ${clip(s.goal, 120)}` : ''}${s.endAt ? ` ends ${s.endAt.toISOString().slice(0, 10)}` : ''}`).join('; ') || 'none'}.`,
+      `Open sprints: ${sprints.map((s) => `${s.name} [${s.state}]${s.goal ? ` goal: ${clip(s.goal, 120)}` : ''}${s.endAt ? ` ends ${dayInZone(s.endAt)}` : ''}`).join('; ') || 'none'}.`,
       ...(pace ? [`Sprint pace (computed): ${pace.summary}`] : []),
       `Relevant issues (most recently updated first):`,
       ...lines,
@@ -395,7 +397,7 @@ export async function chat(
   const system = `You are the CT Work project assistant — a senior Scrum master, business analyst and QA lead in one.
 You help a team manage their project (software school projects like SWP391/SWR302/SWT301, freelance and company work).
 You can read the project context below. Be concrete, short and practical. Use Markdown in "reply" (short lists, bold key facts). ${LANG_RULE}
-The user is @${me.username}. Today is ${new Date().toISOString().slice(0, 10)}.
+The user is @${me.username}. Today is ${dayInZone(new Date())}.
 ${ACTIONS_DOC}${docsBlock}
 Only propose actions when the user asks for changes or clearly benefits from them; otherwise return an empty list.
 Never invent issue numbers that are not in the context (except for issues you propose to create).
@@ -516,7 +518,7 @@ Return ONLY JSON: {"reply":"short markdown explanation","actions":[…]}`;
   const facts = input.task === 'req_review' ? (await reqReviewFacts(projectId, input.text)).text
     : input.task === 'team_health' ? (await teamHealthFacts(projectId)).text : null;
   const user = facts
-    ? `Facts (computed by code):\n${facts}\n\nToday is ${new Date().toISOString().slice(0, 10)}.`
+    ? `Facts (computed by code):\n${facts}\n\nToday is ${dayInZone(new Date())}.`
     : `${ctx.text}${focus ? `\n\nFocused issue:\n${focus.text}` : ''}${input.text ? `\n\nUser input:\n${clip(input.text, 12000)}` : ''}`;
   // Việc một chạm cũng vào hội thoại: một dòng "câu hỏi" mô tả việc đã bấm + câu trả lời có tiêu đề.
   const label = (input.label?.trim() || QUICK_LABELS[input.task]).slice(0, 120);
@@ -563,7 +565,7 @@ Return ONLY JSON: {"reply":"short markdown","actions":[…]}`;
   const userMsg = await threads.addMessage(thread.id, { role: 'user', authorId: userId, content: asked, issueNumber: null });
   let out: { reply: string; actions?: unknown };
   try {
-    out = parseJson(await ask(userId, system, `Facts:\n${facts}\n\nToday is ${new Date().toISOString().slice(0, 10)}.${input.text && input.task === 'summarize_page' ? `\nUser note: ${clip(input.text, 1000)}` : ''}`, input.task === 'draft_srs' ? 8000 : 2000), z.object({ reply: z.string(), actions: z.unknown().optional() }));
+    out = parseJson(await ask(userId, system, `Facts:\n${facts}\n\nToday is ${dayInZone(new Date())}.${input.text && input.task === 'summarize_page' ? `\nUser note: ${clip(input.text, 1000)}` : ''}`, input.task === 'draft_srs' ? 8000 : 2000), z.object({ reply: z.string(), actions: z.unknown().optional() }));
   } catch (err) {
     await threads.markFailed(userMsg.id, err);
     throw err;
@@ -844,6 +846,7 @@ export async function insights(userId: number, projectId: number) {
     where: { projectId, deletedAt: null, resolvedAt: null, type: { level: { not: 1 } } },
     select: {
       number: true, title: true, priority: true, dueDate: true, updatedAt: true, assigneeId: true, storyPoints: true, originalEstimateMin: true,
+      sprintId: true,
       status: { select: { category: true, name: true } },
     },
   });
@@ -854,13 +857,29 @@ export async function insights(userId: number, projectId: number) {
   const dueSoon = open.filter((i) => i.dueDate && i.dueDate.getTime() + day >= now && i.dueDate.getTime() < now + 3 * day);
   const stale = open.filter((i) => i.status.category === 'IN_PROGRESS' && now - i.updatedAt.getTime() > staleDays * day);
   const unassignedUrgent = open.filter((i) => !i.assigneeId && i.priority <= 2);
-  const loads = members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER').map((m) => ({
-    username: m.username,
-    points: Math.round(open.filter((i) => i.assigneeId === m.id).reduce((s, i) => s + estimateOf(i, mode), 0) * 10) / 10,
-    issues: open.filter((i) => i.assigneeId === m.id).length,
-  }));
-  const avg = loads.length ? loads.reduce((s, l) => s + l.points, 0) / loads.length : 0;
-  const overloaded = loads.filter((l) => avg > 0 && l.points > avg * 1.6 && l.points - avg >= 3);
+
+  // CTW-9: tải chỉ tính việc TRONG PHẠM VI (sprint đang chạy; Kanban ⇒ đang làm / có hạn trong 14 ngày),
+  // so với sức chứa của từng người (capacityHours) — không cộng mọi thẻ mở của mọi sprint tương lai.
+  const activeSprints = await prisma.workSprint.findMany({ where: { projectId, state: 'ACTIVE' }, select: { id: true, name: true, endAt: true } });
+  const plannedIds = new Set((await prisma.workSprint.findMany({ where: { projectId, state: 'PLANNED' }, select: { id: true } })).map((s) => s.id));
+  const windowEnd = now + LOAD_WINDOW_DAYS * day;
+  const inScope = activeSprints.length
+    ? (i: (typeof open)[number]) => i.sprintId !== null && activeSprints.some((s) => s.id === i.sprintId)
+    : (i: (typeof open)[number]) => !(i.sprintId !== null && plannedIds.has(i.sprintId))
+      && (i.status.category === 'IN_PROGRESS' || (!!i.dueDate && i.dueDate.getTime() < windowEnd));
+  const sprintEnd = activeSprints.map((s) => s.endAt?.getTime() ?? 0).reduce((a, b) => Math.max(a, b), 0);
+  const daysLeft = workingDaysLeft(new Date(now), new Date(activeSprints.length ? (sprintEnd > now ? sprintEnd : now) : windowEnd - day));
+  const loadScope = activeSprints.length
+    ? { kind: 'sprint' as const, label: `active sprint ${activeSprints.map((s) => `"${s.name}"`).join(', ')}`, workingDaysLeft: daysLeft }
+    : { kind: 'window' as const, label: `in progress or due in the next ${LOAD_WINDOW_DAYS} days`, workingDaysLeft: daysLeft };
+  const team = members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER');
+  const caps = new Map((await prisma.workProjectMember.findMany({ where: { projectId, userId: { in: team.map((m) => m.id) } }, select: { userId: true, capacityHours: true } })).map((c) => [c.userId, c.capacityHours]));
+  const loads = computeLoads({
+    members: team.map((m) => ({ id: m.id, username: m.username, capacityHours: caps.get(m.id) ?? null })),
+    issues: open.filter(inScope).map((i) => ({ assigneeId: i.assigneeId, estimate: estimateOf(i, mode) })),
+    mode, daysLeft,
+  });
+  const overloaded = loads.filter((l) => l.overloaded);
 
   // Tốc độ sprint: dùng chung mốc cam kết với Burndown (sprintPace.ts) — không
   // phụ thuộc cron snapshot nên ngày đầu không còn báo "0 pts/day, AT RISK".
@@ -873,6 +892,7 @@ export async function insights(userId: number, projectId: number) {
     unassignedUrgent: unassignedUrgent.map(brief),
     overloaded,
     loads,
+    loadScope,
     sprintRisk,
     unit: mode,
   };
@@ -884,7 +904,10 @@ export async function insights(userId: number, projectId: number) {
  */
 export async function weeklyReport(userId: number, projectId: number, input: { audience: 'teacher' | 'client' | 'team'; language?: 'en' | 'vi' }) {
   const access = await requireProject(userId, projectId, 'ai.use');
-  const since = new Date(Date.now() - 7 * 86_400_000);
+  // CTW-18: kỳ = 7 ngày lịch theo múi giờ dự án (hôm nay lùi 6) — ĐÚNG kỳ của xem trước báo cáo tuần
+  // (clientReports periodOf). Trước: now − 7×24h in bằng UTC ⇒ lệch một ngày lúc 00:00–07:00 giờ VN.
+  const period = lastWeekPeriod(new Date(), await projectTimezone(projectId));
+  const since = period.since;
   // Cổng khách (S2b): báo cáo CHO KHÁCH ở dự án bật cổng khách chỉ dựa trên thẻ ĐÃ CHIA SẺ —
   // không tên người, không khối lượng việc nội bộ (AI không được lộ thứ khách không thấy).
   const forClient = input.audience === 'client' && access.modules.clientPortal;
@@ -904,21 +927,22 @@ export async function weeklyReport(userId: number, projectId: number, input: { a
     : null;
   const keep = (k: string) => !sharedKeys || sharedKeys.has(k);
   const facts = [
-    `Project ${project.key} "${project.name}". Period: ${since.toISOString().slice(0, 10)} → ${new Date().toISOString().slice(0, 10)}.`,
+    `Project ${project.key} "${project.name}". Period: ${period.from} → ${period.to} (${period.tz}).`,
     `Completed (${done.length}): ${done.map((d) => `${access.key}-${d.number} [${d.type.key}] ${d.title}${d.assignee && !forClient ? ` (@${d.assignee.username})` : ''}`).join('; ') || 'none'}.`,
     `New issues created: ${created}.`,
     `Overdue: ${risks.overdue.filter((i) => keep(i.key)).map((i) => `${i.key} ${i.title}`).join('; ') || 'none'}.`,
     `Stuck in progress > 5 days: ${risks.stale.filter((i) => keep(i.key)).map((i) => `${i.key} (${i.idleDays}d)`).join('; ') || 'none'}.`,
     ...(forClient ? [] : [
       risks.sprintRisk ? risks.sprintRisk.summary : 'No active sprint.',
-      `Workload: ${risks.loads.map((l) => `@${l.username} ${l.issues} open`).join(', ')}.`,
+      `Workload (${risks.loadScope.label}): ${risks.loads.map((l) => `@${l.username} ${l.points} ${l.unit} in ${l.issues} issue${l.issues === 1 ? '' : 's'}`).join(', ') || 'none'}.`,
+      overloadFact(risks.loads, risks.loadScope.label),
     ]),
   ].join('\n');
   const who = input.audience === 'teacher' ? 'the course lecturer (formal, highlight each member\'s work)' : input.audience === 'client' ? 'the client (non-technical, outcomes and risks)' : 'the team (direct, action-oriented)';
   const system = `Write a weekly status report for ${who}. Use ONLY the facts given — do not invent numbers, names or work. Markdown with sections: Summary, Completed this week, Risks & blockers, Next steps. ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"report":"markdown"}`;
   // Chỉ diễn đạt lại số liệu đã tính ⇒ model rẻ (work_digest).
   const out = parseJson(await ask(userId, system, facts, 1800, 'work_digest'), z.object({ report: z.string() }));
-  return { report: out.report, facts, quota: await aiQuota(userId) };
+  return { report: out.report, period: { from: period.from, to: period.to, timezone: period.tz }, facts, quota: await aiQuota(userId) };
 }
 
 
@@ -959,7 +983,7 @@ export async function releaseNotes(userId: number, projectId: number, versionId:
  * chỉ viết lời giải thích — con số và danh sách luôn do mã quyết.
  * Không tự ghi: giao diện dùng bulkUpdate để chuyển thẻ khi người dùng đồng ý.
  */
-export async function planSprint(userId: number, projectId: number, input: { sprintId: number; explain?: boolean; language?: 'en' | 'vi' }) {
+export async function planSprint(userId: number, projectId: number, input: { sprintId: number; explain?: boolean; language?: 'en' | 'vi'; includeTestCases?: boolean; includeDeskTickets?: boolean }) {
   const access = await requireProject(userId, projectId, 'sprint.manage');
   const mode = await estimationOf(projectId);
   const sprint = await prisma.workSprint.findFirst({ where: { id: input.sprintId, projectId }, select: { id: true, name: true, state: true, startAt: true, endAt: true } });
@@ -971,10 +995,25 @@ export async function planSprint(userId: number, projectId: number, input: { spr
     select: { name: true, committedPoints: true, completedPoints: true },
   });
   const velocity = history.length ? Math.round((history.reduce((s, h) => s + (h.completedPoints ?? 0), 0) / history.length) * 10) / 10 : null;
+  // CTW-10: test case (Xray, loại TEST) là kịch bản kiểm thử, ticket service desk chạy theo SLA — không phải
+  // việc backlog để ước lượng/xếp sprint. Mặc định bỏ khỏi backlog lập kế hoạch (đếm riêng trong `excluded`);
+  // includeTestCases / includeDeskTickets = true để tính lại như cũ.
+  const planWhere: Prisma.WorkIssueWhereInput = {
+    projectId, sprintId: null, deletedAt: null, resolvedAt: null, type: { level: 0 },
+    AND: [
+      ...(input.includeTestCases ? [] : [{ type: { key: { not: 'TEST' } } }]),
+      ...(input.includeDeskTickets ? [] : [{ deskTicket: { is: null } }]),
+    ],
+  };
+  const baseBacklog: Prisma.WorkIssueWhereInput = { projectId, sprintId: null, deletedAt: null, resolvedAt: null, type: { level: 0 } };
+  const [excludedTests, excludedDesk] = await Promise.all([
+    input.includeTestCases ? 0 : prisma.workIssue.count({ where: { ...baseBacklog, type: { level: 0, key: 'TEST' } } }),
+    input.includeDeskTickets ? 0 : prisma.workIssue.count({ where: { ...baseBacklog, deskTicket: { isNot: null }, ...(input.includeTestCases ? {} : { type: { level: 0, key: { not: 'TEST' } } }) } }),
+  ]);
   const [inSprint, backlog] = await Promise.all([
     prisma.workIssue.findMany({ where: { sprintId: sprint.id, deletedAt: null, resolvedAt: null, type: { level: 0 } }, select: { number: true, title: true, storyPoints: true, originalEstimateMin: true } }),
     prisma.workIssue.findMany({
-      where: { projectId, sprintId: null, deletedAt: null, resolvedAt: null, type: { level: 0 } },
+      where: planWhere,
       orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: 300,
       select: { number: true, title: true, priority: true, storyPoints: true, originalEstimateMin: true, assigneeId: true,
         linksIn: { where: { type: 'BLOCKS', fromIssue: { resolvedAt: null, deletedAt: null } }, select: { fromIssue: { select: { number: true, sprintId: true } } } } },
@@ -1001,6 +1040,7 @@ export async function planSprint(userId: number, projectId: number, input: { spr
   const result = {
     sprint: { id: sprint.id, name: sprint.name }, unit: mode, velocity, history, target, alreadyPlanned: already,
     selected, plannedTotal: total, warnings, rationale: null as string | null,
+    excluded: { testCases: excludedTests, deskTickets: excludedDesk },
   };
   if (input.explain) {
     const facts = [
@@ -1030,7 +1070,7 @@ export async function retro(userId: number, projectId: number, input: { sprintId
   const rep = stored?.completed ? (stored as Awaited<ReturnType<typeof computeSprintReport>>) : await computeSprintReport(projectId, s.id);
   const members = await projectMembers(projectId);
   const facts = [
-    `Sprint "${s.name}" (${s.state})${s.goal ? `, goal: ${s.goal}` : ''}. ${s.startAt ? `From ${s.startAt.toISOString().slice(0, 10)}` : ''}${s.endAt ? ` to ${s.endAt.toISOString().slice(0, 10)}` : ''}.`,
+    `Sprint "${s.name}" (${s.state})${s.goal ? `, goal: ${s.goal}` : ''}. ${s.startAt ? `From ${dayInZone(s.startAt)}` : ''}${s.endAt ? ` to ${dayInZone(s.endAt)}` : ''}.`,
     `Committed ${rep.committedPoints} ${rep.unit === 'HOURS' ? 'hours' : 'points'}, completed ${rep.completedPoints}.`,
     `Completed (${rep.completed.length}): ${rep.completed.map((i) => `${access.key}-${i.number} ${i.title}`).join('; ') || 'none'}.`,
     `Not completed (${rep.incomplete.length}): ${rep.incomplete.map((i) => `${access.key}-${i.number} ${i.title}`).join('; ') || 'none'}.`,
@@ -1065,7 +1105,7 @@ export async function dailyBrief(userId: number, projectId: number, input: { lan
     `Due in 3 days: ${risks.dueSoon.map((i) => `${i.key} (@${i.assignee ?? 'unassigned'})`).join('; ') || 'none'}.`,
     `Stuck in progress: ${risks.stale.map((i) => `${i.key} ${i.idleDays}d`).join('; ') || 'none'}.`,
     `Urgent but unassigned: ${risks.unassignedUrgent.map((i) => i.key).join('; ') || 'none'}.`,
-    `Overloaded: ${risks.overloaded.map((l) => `@${l.username} ${l.points}`).join(', ') || 'none'}.`,
+    overloadFact(risks.loads, risks.loadScope.label),
     risks.sprintRisk ? risks.sprintRisk.summary : 'No active sprint.',
   ].join('\n');
   const system = `Write today's stand-up brief for the team: 3-6 short markdown bullets, most important first (risks, overdue work, who should look at what). Use ONLY the facts; do not invent. ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"brief":"markdown"}`;

@@ -26,7 +26,7 @@
 
 import type { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
-import { BadRequestError, ConflictError, ForbiddenError, NotFoundError, AppError } from '../../middleware/errorHandler.js';
+import { BadRequestError, ForbiddenError, NotFoundError, AppError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
 import { currentTargetHash, signedHash } from './approvalContent.js';
 import { auditProject } from './audit.js';
@@ -376,16 +376,32 @@ export async function updatePage(userId: number, projectId: number, num: number,
     audits.push(`owner → user #${input.ownerId}`);
   }
   if (input.status !== undefined && input.status !== p.status) {
-    // APPROVED / IN_REVIEW chỉ đi qua phê duyệt khi mô-đun approvals bật; tắt thì ADMIN đặt tay được APPROVED.
+    // CTW-20: luồng trạng thái DRAFT → IN_REVIEW → APPROVED (→ ARCHIVED). Mô-đun approvals bật ⇒ IN_REVIEW /
+    // APPROVED CHỈ qua yêu cầu phê duyệt; lỗi phải chỉ đường (endpoint + thân) chứ không chỉ "send for approval".
+    const base = `/api/v1/work/projects/${projectId}`;
+    if (p.status === 'ARCHIVED' && input.status !== 'DRAFT') {
+      throw new BadRequestError(`This document is archived — move it back to Draft first (PATCH ${base}/pages/${num} {"status":"DRAFT"})`, 'WORK_PAGE_ARCHIVED');
+    }
     if (input.status === 'IN_REVIEW' || input.status === 'APPROVED') {
       if (ctx.access.modules.approvals) {
-        throw new BadRequestError('Send the document for approval instead — it becomes Approved when every approver signs', 'WORK_PAGE_APPROVAL_REQUIRED');
+        const how = { method: 'POST', path: `${base}/pages/${num}/request-approval`, body: { approverIds: ['<user id>'], mode: 'SEQUENTIAL | PARALLEL (optional)', description: '(optional)' } };
+        throw new AppError(
+          `"${input.status === 'IN_REVIEW' ? 'In review' : 'Approved'}" is set by the approval flow, not by PATCH. Send the document for approval: `
+          + `POST ${how.path} {"approverIds":[…]} (same as POST ${base}/approvals {"targetType":"DOC","pageNumber":${num},"approverIds":[…]}). `
+          + 'It becomes In review at once and Approved when every approver signs; rejecting or cancelling returns it to Draft.',
+          400, 'WORK_PAGE_APPROVAL_REQUIRED', { hint: how, currentStatus: p.status },
+        );
       }
       if (input.status === 'APPROVED' && !ctx.da.manage) throw new ForbiddenError('Only a project admin can mark a document as approved');
     }
     if (p.status === 'IN_REVIEW' && ctx.access.modules.approvals) {
-      const pending = await prisma.workApproval.count({ where: { pageId: p.id, status: 'PENDING' } });
-      if (pending) throw new ConflictError('This document is waiting for approval — cancel the request first');
+      const pending = await prisma.workApproval.findFirst({ where: { pageId: p.id, status: 'PENDING' }, select: { id: true } });
+      if (pending) {
+        throw new AppError(
+          `This document is waiting for approval — cancel the request first: POST ${base}/approvals/${pending.id}/cancel (it then returns to Draft)`,
+          409, 'WORK_PAGE_PENDING_APPROVAL', { approvalId: pending.id, hint: { method: 'POST', path: `${base}/approvals/${pending.id}/cancel`, body: { reason: '(optional)' } } },
+        );
+      }
     }
     data.status = input.status;
     audits.push(`status ${p.status} → ${input.status}`);

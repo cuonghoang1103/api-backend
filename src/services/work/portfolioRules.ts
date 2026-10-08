@@ -103,26 +103,34 @@ export interface RagInput {
 
 const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? '' : 's'}`;
 
-export function ragOf(i: RagInput): { rag: Rag; reasons: RagReason[] } {
+/**
+ * `lang` (CTW-14, 08/10/2026): câu lý do theo ngôn ngữ của dự án — dự án tiếng Việt thấy lý do tiếng Việt
+ * trên Portfolio/Health. Mã (`code`) không đổi, giao diện/test lọc theo mã.
+ */
+export function ragOf(i: RagInput, lang: 'en' | 'vi' = 'en'): { rag: Rag; reasons: RagReason[] } {
   const reasons: RagReason[] = [];
-  const u = i.sprint?.unit === 'HOURS' ? 'h' : 'pts';
+  const vi = lang === 'vi';
+  const u = i.sprint?.unit === 'HOURS' ? 'h' : vi ? 'điểm' : 'pts';
+  const pl = (n: number, en: string, v: string) => (vi ? `${n} ${v}` : plural(n, en));
 
   // ── ĐỎ ──
   for (const m of i.milestones) {
     if (m.daysUntil < 0) {
-      reasons.push({ level: 'RED', code: 'MILESTONE_LATE', text: `Milestone "${m.name}" was due ${m.date} (${plural(-m.daysUntil, 'day')} ago) and is not released.` });
+      reasons.push({ level: 'RED', code: 'MILESTONE_LATE', text: vi ? `Mốc "${m.name}" đến hạn ${m.date} (trễ ${pl(-m.daysUntil, 'day', 'ngày')}) mà chưa phát hành.` : `Milestone "${m.name}" was due ${m.date} (${plural(-m.daysUntil, 'day')} ago) and is not released.` });
     }
   }
   let sprintCounted = false;
   if (i.sprint && i.sprint.status === 'AT_RISK') {
     const s = i.sprint;
     if (s.daysLeft === 0) {
-      reasons.push({ level: 'RED', code: 'SPRINT_ENDED', text: `Sprint "${s.name}" passed its end date with work remaining.` });
+      reasons.push({ level: 'RED', code: 'SPRINT_ENDED', text: vi ? `Sprint "${s.name}" đã quá ngày kết thúc mà vẫn còn việc.` : `Sprint "${s.name}" passed its end date with work remaining.` });
       sprintCounted = true;
     } else if (s.recentPerDay <= 0 || s.neededPerDay >= s.recentPerDay * RAG_RULES.RED_PACE_RATIO) {
       reasons.push({
         level: 'RED', code: 'SPRINT_PACE_SEVERE',
-        text: `Sprint "${s.name}" needs ${s.neededPerDay} ${u}/day but recent pace is ${s.recentPerDay} ${u}/day (≥ ${RAG_RULES.RED_PACE_RATIO}× short).`,
+        text: vi
+          ? `Sprint "${s.name}" cần ${s.neededPerDay} ${u}/ngày nhưng nhịp gần đây chỉ ${s.recentPerDay} ${u}/ngày (thiếu ≥ ${RAG_RULES.RED_PACE_RATIO}×).`
+          : `Sprint "${s.name}" needs ${s.neededPerDay} ${u}/day but recent pace is ${s.recentPerDay} ${u}/day (≥ ${RAG_RULES.RED_PACE_RATIO}× short).`,
       });
       sprintCounted = true;
     }
@@ -130,7 +138,7 @@ export function ragOf(i: RagInput): { rag: Rag; reasons: RagReason[] } {
   const overdueRed = i.overdue >= RAG_RULES.RED_OVERDUE_ABS
     || (i.overdue >= RAG_RULES.RED_OVERDUE_MIN && i.open > 0 && i.overdue / i.open >= RAG_RULES.RED_OVERDUE_SHARE);
   if (overdueRed) {
-    reasons.push({ level: 'RED', code: 'OVERDUE_MANY', text: `${plural(i.overdue, 'issue')} overdue out of ${i.open} open (${Math.round((i.overdue / Math.max(1, i.open)) * 100)}%).` });
+    reasons.push({ level: 'RED', code: 'OVERDUE_MANY', text: vi ? `${i.overdue} thẻ quá hạn trên ${i.open} thẻ đang mở (${Math.round((i.overdue / Math.max(1, i.open)) * 100)}%).` : `${plural(i.overdue, 'issue')} overdue out of ${i.open} open (${Math.round((i.overdue / Math.max(1, i.open)) * 100)}%).` });
   }
 
   const risks = [...(i.openRisks ?? [])].sort((a, b) => b.score - a.score);
@@ -139,66 +147,82 @@ export function ragOf(i: RagInput): { rag: Rag; reasons: RagReason[] } {
     const top = critical[0];
     reasons.push({
       level: 'RED', code: 'RISK_CRITICAL',
-      text: `${plural(critical.length, 'open risk')} with score ≥ ${RAG_RULES.RED_RISK_SCORE} — top: ${top.key} "${top.title}" (${top.score}).`,
+      text: vi
+        ? `${critical.length} rủi ro đang mở có điểm ≥ ${RAG_RULES.RED_RISK_SCORE} — cao nhất: ${top.key} "${top.title}" (${top.score}).`
+        : `${plural(critical.length, 'open risk')} with score ≥ ${RAG_RULES.RED_RISK_SCORE} — top: ${top.key} "${top.title}" (${top.score}).`,
     });
   }
 
   if (i.sla?.openP1Breached.length) {
     const top = i.sla.openP1Breached[0];
-    reasons.push({ level: 'RED', code: 'SLA_P1_BREACHED', text: `${plural(i.sla.openP1Breached.length, 'open P1 request')} breached SLA — ${top.key} "${top.title}".` });
+    reasons.push({ level: 'RED', code: 'SLA_P1_BREACHED', text: vi ? `${i.sla.openP1Breached.length} yêu cầu P1 đang mở đã vi phạm SLA — ${top.key} "${top.title}".` : `${plural(i.sla.openP1Breached.length, 'open P1 request')} breached SLA — ${top.key} "${top.title}".` });
   }
 
   // ── VÀNG ──
   if (i.sla && i.sla.monthPercent !== null && i.sla.monthPercent < RAG_RULES.AMBER_SLA_PERCENT) {
-    reasons.push({ level: 'AMBER', code: 'SLA_BELOW_TARGET', text: `Only ${i.sla.monthPercent}% of service desk SLA targets met this month (${i.sla.monthDone} with an outcome; target ≥ ${RAG_RULES.AMBER_SLA_PERCENT}%).` });
+    reasons.push({ level: 'AMBER', code: 'SLA_BELOW_TARGET', text: vi ? `Tháng này chỉ đạt ${i.sla.monthPercent}% mục tiêu SLA của service desk (${i.sla.monthDone} có kết quả; mục tiêu ≥ ${RAG_RULES.AMBER_SLA_PERCENT}%).` : `Only ${i.sla.monthPercent}% of service desk SLA targets met this month (${i.sla.monthDone} with an outcome; target ≥ ${RAG_RULES.AMBER_SLA_PERCENT}%).` });
   }
   const high = risks.filter((r) => r.score >= RAG_RULES.AMBER_RISK_SCORE && r.score < RAG_RULES.RED_RISK_SCORE);
   if (high.length) {
     reasons.push({
       level: 'AMBER', code: 'RISK_HIGH',
-      text: `${plural(high.length, 'open risk')} with score ${RAG_RULES.AMBER_RISK_SCORE}–${RAG_RULES.RED_RISK_SCORE - 1} — top: ${high[0].key} "${high[0].title}" (${high[0].score}).`,
+      text: vi
+        ? `${high.length} rủi ro đang mở có điểm ${RAG_RULES.AMBER_RISK_SCORE}–${RAG_RULES.RED_RISK_SCORE - 1} — cao nhất: ${high[0].key} "${high[0].title}" (${high[0].score}).`
+        : `${plural(high.length, 'open risk')} with score ${RAG_RULES.AMBER_RISK_SCORE}–${RAG_RULES.RED_RISK_SCORE - 1} — top: ${high[0].key} "${high[0].title}" (${high[0].score}).`,
     });
   }
   const crLate = (i.pendingChangeRequests ?? []).filter((c) => c.waitingDays > RAG_RULES.AMBER_CR_DAYS).sort((a, b) => b.waitingDays - a.waitingDays);
   if (crLate.length) {
     reasons.push({
       level: 'AMBER', code: 'CR_WAITING',
-      text: `${plural(crLate.length, 'change request')} waiting for a decision more than ${RAG_RULES.AMBER_CR_DAYS} days; the oldest (${crLate[0].key}) has waited ${plural(crLate[0].waitingDays, 'day')}.`,
+      text: vi
+        ? `${crLate.length} yêu cầu thay đổi chờ quyết định quá ${RAG_RULES.AMBER_CR_DAYS} ngày; lâu nhất (${crLate[0].key}) đã chờ ${crLate[0].waitingDays} ngày.`
+        : `${plural(crLate.length, 'change request')} waiting for a decision more than ${RAG_RULES.AMBER_CR_DAYS} days; the oldest (${crLate[0].key}) has waited ${plural(crLate[0].waitingDays, 'day')}.`,
     });
   }
   if (i.sprint && i.sprint.status === 'AT_RISK' && !sprintCounted) {
     const s = i.sprint;
-    reasons.push({ level: 'AMBER', code: 'SPRINT_AT_RISK', text: `Sprint "${s.name}" needs ${s.neededPerDay} ${u}/day vs recent ${s.recentPerDay} ${u}/day, ${plural(s.daysLeft, 'day')} left.` });
+    reasons.push({ level: 'AMBER', code: 'SPRINT_AT_RISK', text: vi ? `Sprint "${s.name}" cần ${s.neededPerDay} ${u}/ngày so với nhịp gần đây ${s.recentPerDay} ${u}/ngày, còn ${s.daysLeft} ngày.` : `Sprint "${s.name}" needs ${s.neededPerDay} ${u}/day vs recent ${s.recentPerDay} ${u}/day, ${plural(s.daysLeft, 'day')} left.` });
   }
   if (!overdueRed && i.overdue > 0) {
-    reasons.push({ level: 'AMBER', code: 'OVERDUE_SOME', text: `${plural(i.overdue, 'issue')} overdue out of ${i.open} open.` });
+    reasons.push({ level: 'AMBER', code: 'OVERDUE_SOME', text: vi ? `${i.overdue} thẻ quá hạn trên ${i.open} thẻ đang mở.` : `${plural(i.overdue, 'issue')} overdue out of ${i.open} open.` });
   }
   for (const m of i.milestones) {
     if (m.daysUntil < 0 || m.daysUntil > RAG_RULES.AMBER_MILESTONE_DAYS || m.total === 0) continue;
     const share = m.done / m.total;
     if (share < RAG_RULES.AMBER_MILESTONE_DONE) {
-      const when = m.daysUntil === 0 ? 'today' : `in ${plural(m.daysUntil, 'day')}`;
-      reasons.push({ level: 'AMBER', code: 'MILESTONE_SOON', text: `Milestone "${m.name}" is due ${when} with ${m.done}/${m.total} issues done (${Math.round(share * 100)}%).` });
+      const when = m.daysUntil === 0 ? (vi ? 'hôm nay' : 'today') : vi ? `sau ${m.daysUntil} ngày` : `in ${plural(m.daysUntil, 'day')}`;
+      reasons.push({ level: 'AMBER', code: 'MILESTONE_SOON', text: vi ? `Mốc "${m.name}" đến hạn ${when}, mới xong ${m.done}/${m.total} thẻ (${Math.round(share * 100)}%).` : `Milestone "${m.name}" is due ${when} with ${m.done}/${m.total} issues done (${Math.round(share * 100)}%).` });
     }
   }
   if (i.blockedBy > 0) {
-    reasons.push({ level: 'AMBER', code: 'BLOCKED_CROSS', text: `${plural(i.blockedBy, 'open issue')} blocked by unfinished work in another project.` });
+    reasons.push({ level: 'AMBER', code: 'BLOCKED_CROSS', text: vi ? `${i.blockedBy} thẻ đang mở bị chặn bởi việc chưa xong ở dự án khác.` : `${plural(i.blockedBy, 'open issue')} blocked by unfinished work in another project.` });
   }
   if (i.oldestPendingApprovalDays !== null && i.oldestPendingApprovalDays > RAG_RULES.AMBER_APPROVAL_DAYS) {
     reasons.push({
       level: 'AMBER', code: 'APPROVAL_WAITING',
-      text: `${plural(i.pendingApprovals, 'approval')} pending; the oldest has waited ${plural(i.oldestPendingApprovalDays, 'day')}.`,
+      text: vi
+        ? `${i.pendingApprovals} phê duyệt đang chờ; lâu nhất đã chờ ${i.oldestPendingApprovalDays} ngày.`
+        : `${plural(i.pendingApprovals, 'approval')} pending; the oldest has waited ${plural(i.oldestPendingApprovalDays, 'day')}.`,
     });
   }
 
   const rag: Rag = reasons.some((r) => r.level === 'RED') ? 'RED' : reasons.length ? 'AMBER' : 'GREEN';
   if (rag === 'GREEN') {
-    const bits = [
-      i.overdue === 0 ? 'no overdue issues' : null,
-      i.milestones.length ? 'milestones on schedule' : 'no dated milestones',
-      i.sprint ? (i.sprint.status === 'ON_TRACK' ? 'sprint on track' : `sprint ${i.sprint.status.toLowerCase().replace('_', ' ')}`) : 'no active sprint',
-      'nothing blocked from other projects',
-    ].filter(Boolean);
+    const SPRINT_VI: Record<string, string> = { ON_TRACK: 'sprint đúng nhịp', DONE: 'sprint đã xong', TOO_EARLY: 'sprint mới bắt đầu', NO_ESTIMATES: 'sprint chưa có ước lượng', AT_RISK: 'sprint có rủi ro' };
+    const bits = vi
+      ? [
+        i.overdue === 0 ? 'không có thẻ quá hạn' : null,
+        i.milestones.length ? 'các mốc đúng lịch' : 'chưa có mốc có ngày',
+        i.sprint ? SPRINT_VI[i.sprint.status] ?? `sprint ${i.sprint.status.toLowerCase()}` : 'không có sprint đang chạy',
+        'không bị dự án khác chặn',
+      ].filter(Boolean)
+      : [
+        i.overdue === 0 ? 'no overdue issues' : null,
+        i.milestones.length ? 'milestones on schedule' : 'no dated milestones',
+        i.sprint ? (i.sprint.status === 'ON_TRACK' ? 'sprint on track' : `sprint ${i.sprint.status.toLowerCase().replace('_', ' ')}`) : 'no active sprint',
+        'nothing blocked from other projects',
+      ].filter(Boolean);
     reasons.push({ level: 'GREEN', code: 'ALL_CLEAR', text: `${bits.join(', ')}.`.replace(/^./, (c) => c.toUpperCase()) });
   }
   // Đỏ trước, rồi vàng.

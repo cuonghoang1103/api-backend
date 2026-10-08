@@ -594,8 +594,42 @@ export const DEFAULT_REQUEST_TYPES: RequestTypeConfig[] = [
 
 const FIELD_KEY_RE = /^[a-z][a-z0-9_]{0,31}$/;
 
-/** Đọc cấu hình loại yêu cầu (thiếu ⇒ mặc định; loại lạ bị bỏ; luôn đủ 4 loại theo thứ tự). */
-export function requestTypesOf(raw: unknown): RequestTypeConfig[] {
+/**
+ * CTW-14 (08/10/2026): bản tiếng Việt của 4 loại yêu cầu MẶC ĐỊNH (dự án tiếng Việt — khách thấy "Report an
+ * incident" giữa giao diện cổng tiếng Việt). Chỉ thay chữ CÒN NGUYÊN mặc định tiếng Anh; chữ người quản trị
+ * đã tự đặt thì giữ nguyên.
+ */
+const REQUEST_TYPES_VI: Record<string, { name: string; description: string; fields: Record<string, string> }> = {
+  INCIDENT: {
+    name: 'Báo sự cố', description: 'Có gì đó hỏng, ngừng chạy hoặc chạy sai',
+    fields: { affected: 'Phần nào bị ảnh hưởng (trang, tính năng, hệ thống)?', since: 'Bắt đầu từ khi nào?', steps: 'Các bước tái hiện' },
+  },
+  SERVICE_REQUEST: { name: 'Yêu cầu dịch vụ', description: 'Cấp quyền, tài khoản, xuất dữ liệu, việc định kỳ', fields: { need: 'Anh/chị cần gì?', by: 'Cần trước ngày' } },
+  QUESTION: { name: 'Đặt câu hỏi', description: 'Cách một thứ hoạt động, hoặc điều cần làm rõ', fields: {} },
+  CHANGE: { name: 'Yêu cầu thay đổi', description: 'Tính năng mới hoặc thay đổi so với điều đã thống nhất', fields: { change: 'Cần thay đổi gì?', why: 'Vì sao cần?' } },
+};
+
+function localizeType(t: RequestTypeConfig, lang: 'en' | 'vi'): RequestTypeConfig {
+  const vi = lang === 'vi' ? REQUEST_TYPES_VI[t.key] : undefined;
+  const d = DEFAULT_REQUEST_TYPES.find((x) => x.key === t.key);
+  if (!vi || !d) return t;
+  return {
+    ...t,
+    name: t.name === d.name ? vi.name : t.name,
+    description: t.description === d.description ? vi.description : t.description,
+    fields: t.fields.map((f) => {
+      const df = d.fields.find((x) => x.key === f.key);
+      return df && f.label === df.label && vi.fields[f.key] ? { ...f, label: vi.fields[f.key] } : f;
+    }),
+  };
+}
+
+/** Đọc cấu hình loại yêu cầu (thiếu ⇒ mặc định; loại lạ bị bỏ; luôn đủ 4 loại theo thứ tự). `lang` = ngôn ngữ dự án (CTW-14). */
+export function requestTypesOf(raw: unknown, lang: 'en' | 'vi' = 'en'): RequestTypeConfig[] {
+  return requestTypesRaw(raw).map((t) => localizeType(t, lang));
+}
+
+function requestTypesRaw(raw: unknown): RequestTypeConfig[] {
   const list = Array.isArray(raw) ? (raw as Array<Record<string, unknown>>) : [];
   return DEFAULT_REQUEST_TYPES.map((d) => {
     const r = list.find((x) => x && x.key === d.key);

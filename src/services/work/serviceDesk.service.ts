@@ -41,6 +41,7 @@ import {
   type SlaEvent, type SlaEventKind, type SlaGoals, type SlaResult, type TargetResult, type WorkCalendar,
 } from './slaRules.js';
 import { assertModule, modulesOf } from './studio.js';
+import { projectLanguage } from './projectLanguage.js';
 
 type Tx = Prisma.TransactionClient;
 const DAY = 86_400_000;
@@ -83,7 +84,7 @@ export async function loadDeskConfig(projectId: number, tx: Tx | typeof prisma =
     calendar: calendarUsable(calendar) ? calendar : { ...DEFAULT_CALENDAR, holidays: calendar.holidays },
     goals: goalsOf(row?.goals),
     matrix: matrixOf(row?.matrix),
-    requestTypes: requestTypesOf(row?.requestTypes),
+    requestTypes: requestTypesOf(row?.requestTypes, await projectLanguage(projectId)), // CTW-14
     pauseStatusIds: pause,
     responseStatusIds: ids(row?.responseStatusIds),
     atRiskPercent: row?.atRiskPercent ?? 75,

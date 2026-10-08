@@ -31,6 +31,7 @@ import { dayOf } from './governanceDb.js';
 import { clientMemberIds } from './portalNotify.js';
 import { reportEmailLines, reportMarkdown, type ReportData } from './reportRender.js';
 import { vnDay } from './sprints.service.js';
+import { dayInZone, DEFAULT_TZ, zonedMidnight } from './projectTime.js';
 import { assertModule, modulesOf, type ModuleMap } from './studio.js';
 import type { RaidType } from './constants.js';
 
@@ -126,6 +127,8 @@ interface BuildOpts {
   includeChanges: boolean;
   /** Steering/present nội bộ của người thấy tiền. */
   includeFinance?: boolean;
+  /** CTW-18: múi giờ cắt ngày của kỳ (lịch báo cáo của dự án) — mặc định Asia/Ho_Chi_Minh. */
+  tz?: string;
 }
 
 /**
@@ -135,8 +138,9 @@ interface BuildOpts {
  */
 export async function buildReportData(projectId: number, modules: ModuleMap, o: BuildOpts): Promise<ReportData> {
   const client = o.audience === 'client';
-  const since = new Date(Date.parse(`${o.from}T00:00:00+07:00`));
-  const until = new Date(Date.parse(`${o.to}T00:00:00+07:00`) + DAY);
+  // CTW-18: 00:00 theo múi giờ dự án (trước cứng +07:00 — đúng với VN, lệch với dự án múi giờ khác).
+  const since = zonedMidnight(o.from, o.tz ?? DEFAULT_TZ);
+  const until = zonedMidnight(addDays(o.to, 1), o.tz ?? DEFAULT_TZ);
   const shared: Prisma.WorkIssueWhereInput = client ? { clientVisible: true } : {};
   const notEpic: Prisma.WorkIssueWhereInput = { type: { level: { not: 1 } } };
   const project = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true, name: true } });
@@ -233,6 +237,8 @@ export async function buildReportData(projectId: number, modules: ModuleMap, o: 
 
   const data: ReportData = {
     formatVersion: 1,
+    // CTW-14: chữ khuôn của báo cáo theo ngôn ngữ dự án.
+    language: await projectLanguage(projectId),
     audience: o.audience,
     project: { key: project.key, name: project.name },
     period: { from: o.from, to: o.to },
@@ -315,8 +321,9 @@ async function internalExtras(projectId: number, modules: ModuleMap, o: BuildOpt
   };
 }
 
-function periodOf(q: { from?: string; to?: string }) {
-  const to = q.to ?? vnDay();
+function periodOf(q: { from?: string; to?: string }, tz: string = DEFAULT_TZ) {
+  // CTW-18: "hôm nay" theo múi giờ dự án — cùng một kỳ với AI weekly-report (projectTime.lastWeekPeriod).
+  const to = q.to ?? dayInZone(new Date(), tz);
   const from = q.from ?? addDays(to, -6);
   if (from > to) throw new BadRequestError('"From" must be before "to"', 'WORK_BAD_DATES');
   if (Date.parse(to) - Date.parse(from) > 92 * DAY) throw new BadRequestError('Pick a period of at most 3 months', 'WORK_BAD_DATES');
@@ -329,7 +336,7 @@ function periodOf(q: { from?: string; to?: string }) {
 export async function previewClientWeekly(userId: number, projectId: number, q: { from?: string; to?: string }) {
   const access = await staffCtx(userId, projectId);
   const s = await scheduleOf(projectId);
-  const data = await buildReportData(projectId, access.modules, { audience: 'client', ...periodOf(q), includeRisks: s.includeRisks, includeChanges: s.includeChanges });
+  const data = await buildReportData(projectId, access.modules, { audience: 'client', ...periodOf(q, s.timezone), tz: s.timezone, includeRisks: s.includeRisks, includeChanges: s.includeChanges });
   return { data, markdown: reportMarkdown(data), recipients: (await clientMemberIds(projectId)).length, clientPortal: access.modules.clientPortal };
 }
 
@@ -348,14 +355,17 @@ async function emailClients(projectId: number, reportId: number, data: ReportDat
   let n = 0;
   for (const u of users) {
     if (!u.email || u.workNotifySetting?.emailMode === 'OFF') continue;
+    const vi = data.language === 'vi'; // CTW-14
     await sendWorkEmail({
       to: u.email,
-      subject: `${p.name}: weekly update ${data.period.from} → ${data.period.to}`.slice(0, 240),
-      heading: `Weekly update — ${p.name}`,
+      subject: (vi ? `${p.name}: cập nhật tuần ${data.period.from} → ${data.period.to}` : `${p.name}: weekly update ${data.period.from} → ${data.period.to}`).slice(0, 240),
+      heading: vi ? `Cập nhật hằng tuần — ${p.name}` : `Weekly update — ${p.name}`,
       lines: reportEmailLines(data),
-      cta: { label: 'Open the report', url: frontendUrl(`/work/${p.workspace.slug}/${p.key}/portal?tab=reports&report=${reportId}`) },
-      brand: `${p.name} · Client portal`,
-      footer: 'You received this email because you are a client on this project. Your project team sends it every week.',
+      cta: { label: vi ? 'Mở báo cáo' : 'Open the report', url: frontendUrl(`/work/${p.workspace.slug}/${p.key}/portal?tab=reports&report=${reportId}`) },
+      brand: `${p.name} · ${vi ? 'Cổng khách hàng' : 'Client portal'}`,
+      footer: vi
+        ? 'Anh/chị nhận email này vì là khách hàng của dự án. Nhóm dự án gửi bản cập nhật hằng tuần.'
+        : 'You received this email because you are a client on this project. Your project team sends it every week.',
     });
     n += 1;
   }
@@ -369,13 +379,13 @@ export async function sendClientWeekly(userId: number, projectId: number, input:
   if (!access.modules.clientPortal) throw new BadRequestError('Turn on the client portal to send reports to your client', 'WORK_NO_CLIENT_PORTAL');
   if (!(await clientMemberIds(projectId)).length) throw new BadRequestError('Invite your client to the portal first — nobody would receive this report', 'WORK_NO_CLIENTS');
   const s = await scheduleOf(projectId);
-  const period = periodOf(input);
-  const data = await buildReportData(projectId, access.modules, { audience: 'client', ...period, includeRisks: s.includeRisks, includeChanges: s.includeChanges });
+  const period = periodOf(input, s.timezone);
+  const data = await buildReportData(projectId, access.modules, { audience: 'client', ...period, tz: s.timezone, includeRisks: s.includeRisks, includeChanges: s.includeChanges });
   const body = input.bodyMarkdown?.trim() ? input.bodyMarkdown.trim().slice(0, 50_000) : reportMarkdown(data);
   const r = await prisma.$transaction(async (tx) => tx.workClientReport.create({
     data: {
       projectId, number: await nextReportNumber(tx, projectId), kind: 'CLIENT_WEEKLY', source: 'MANUAL', periodStart: dateOf(period.from), periodEnd: dateOf(period.to),
-      title: `Weekly update ${period.from} → ${period.to}`, data: data as unknown as Prisma.InputJsonValue, bodyMarkdown: body,
+      title: `${data.language === 'vi' ? 'Cập nhật tuần' : 'Weekly update'} ${period.from} → ${period.to}`, data: data as unknown as Prisma.InputJsonValue, bodyMarkdown: body,
       aiPolished: input.aiPolished === true && !!input.bodyMarkdown?.trim(), clientVisible: true, createdById: userId,
     },
     select: { id: true, number: true },
@@ -504,13 +514,13 @@ export async function runClientWeeklyReports(now = new Date(), opts: { projectId
       if (await prisma.workClientReport.findUnique({ where: { uk_work_client_report_auto: { projectId: p.id, autoKey } }, select: { id: true } })) continue;
       if (!(await clientMemberIds(p.id)).length) continue;
       const period = { from: addDays(due.day, -6), to: due.day };
-      const data = await buildReportData(p.id, modules, { audience: 'client', ...period, includeRisks: s.includeRisks, includeChanges: s.includeChanges });
+      const data = await buildReportData(p.id, modules, { audience: 'client', ...period, tz: s.timezone, includeRisks: s.includeRisks, includeChanges: s.includeChanges });
       let created: { id: number; number: number };
       try {
         created = await prisma.$transaction(async (tx) => tx.workClientReport.create({
           data: {
             projectId: p.id, number: await nextReportNumber(tx, p.id), kind: 'CLIENT_WEEKLY', source: 'AUTO', autoKey,
-            periodStart: dateOf(period.from), periodEnd: dateOf(period.to), title: `Weekly update ${period.from} → ${period.to}`,
+            periodStart: dateOf(period.from), periodEnd: dateOf(period.to), title: `${data.language === 'vi' ? 'Cập nhật tuần' : 'Weekly update'} ${period.from} → ${period.to}`,
             data: data as unknown as Prisma.InputJsonValue, bodyMarkdown: reportMarkdown(data), clientVisible: true,
           },
           select: { id: true, number: true },

@@ -30,6 +30,7 @@ import {
 import { activeSprintPace } from './sprintPace.js';
 import { vnDay } from './sprints.service.js';
 import { modulesOf, projectKindOf } from './studio.js';
+import { languageSetting, looksVietnamese } from './projectLanguage.js';
 
 const DAY = 86_400_000;
 const r1 = (n: number) => Math.round(n * 10) / 10;
@@ -222,7 +223,8 @@ export async function portfolio(userId: number, workspaceId: number, opts: { inc
       openRisks, pendingChangeRequests,
       // Người không đọc được hàng đợi service desk (khách/GUEST) ⇒ không tính luật S5a (cùng luật "người của đội").
       sla: govView ? slaByProject.get(p.id) ?? null : null,
-    });
+      // CTW-14: lý do theo ngôn ngữ dự án (settings.language; chưa đặt ⇒ đoán từ tên dự án — không thêm truy vấn mỗi dự án).
+    }, languageSetting(p.settings) ?? (looksVietnamese(p.name) ? 'vi' : 'en'));
 
     rows.push({
       id: p.id, key: p.key, name: p.name, type: p.type, role: p.role, archivedAt: p.archivedAt,

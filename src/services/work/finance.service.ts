@@ -23,7 +23,7 @@ import type { BudgetCategory, Currency, ExpenseCategory, PaymentStatus, PaymentT
 import { xlsxWorkbook } from './exchange.service.js';
 import {
   alertToSend, budgetSummary, EAC_FORMULA, financeAccess, isWeekStart, lineCost, milestoneAmount, milestonesTriggeredBy,
-  paymentTransitionOk, percentComplete, pickRate, round2, timesheetTransitionOk, vnWeekRange, weekEndOf, weekLocked, weekStartOf,
+  paymentTransitionOk, percentComplete, pickRate, round2, timesheetTransitionOk, vnWeekRange, weekEndOf, weekIsOver, weekLocked, weekStartOf,
   type FinanceAccess, type RateRow,
 } from './financeRules.js';
 import { dayOf } from './governanceDb.js';
@@ -196,6 +196,8 @@ export async function deleteRate(userId: number, projectId: number, rateId: numb
   return listRates(userId, projectId);
 }
 
+const addDay = (day: string) => new Date(Date.parse(`${day}T00:00:00Z`) + DAY).toISOString().slice(0, 10);
+
 // ─── Khoá tuần (gọi từ planning.service khi ghi/xoá worklog) ─────
 
 /**
@@ -206,13 +208,20 @@ export async function assertWeekOpen(projectId: number, userId: number, startedA
   const s = settings !== undefined ? settings : (await prisma.workProject.findUnique({ where: { id: projectId }, select: { settings: true } }))?.settings;
   if (!modulesOf(s).finance) return;
   const week = weekStartOf(vnDay(startedAt));
-  const ts = await prisma.workTimesheet.findUnique({ where: { uk_work_timesheet: { projectId, userId, weekStart: dateOf(week) } }, select: { status: true } });
+  const ts = await prisma.workTimesheet.findUnique({ where: { uk_work_timesheet: { projectId, userId, weekStart: dateOf(week) } }, select: { id: true, status: true } });
   if (ts && weekLocked(ts.status)) {
+    // CTW-38: lỗi 423 chỉ đường — ai mở được, gọi gì.
+    const base = `/api/v1/work/projects/${projectId}/finance/timesheets/${ts.id}`;
     throw new AppError(
       ts.status === 'APPROVED'
-        ? `The week of ${week} is approved and locked. A project admin can reopen it (with a reason) before time is changed.`
-        : `The week of ${week} is submitted for approval. Withdraw it first to change its time.`,
-      423, 'WORK_TIMESHEET_LOCKED', { weekStart: week, status: ts.status },
+        ? `The week of ${week} is approved and locked. Ask a project admin to reopen it (Finance → Timesheets → Reopen, or POST ${base}/reopen {"reason":"…"}) before time is changed.`
+        : `The week of ${week} is submitted for approval. Withdraw it first (POST ${base}/withdraw) to change its time, or ask the reviewer to return it.`,
+      423, 'WORK_TIMESHEET_LOCKED', {
+        weekStart: week, status: ts.status, timesheetId: ts.id,
+        hint: ts.status === 'APPROVED'
+          ? { who: 'project admin', method: 'POST', path: `${base}/reopen`, body: { reason: '(at least 5 characters)' } }
+          : { who: 'you', method: 'POST', path: `${base}/withdraw` },
+      },
     );
   }
 }
@@ -276,6 +285,8 @@ export async function weekView(userId: number, projectId: number, q: { week?: st
       submit: target === userId && ctx.fa.ownTimesheet && timesheetTransitionOk(status, 'submit') && totalMin > 0,
       withdraw: target === userId && timesheetTransitionOk(status, 'withdraw'),
       review: status === 'SUBMITTED' && (target !== userId || ctx.fa.manage) && (await canReviewUser(ctx, target)),
+      // CTW-38: Return vẫn được ngay; Approve chỉ khi tuần đã hết (theo ngày VN).
+      approve: status === 'SUBMITTED' && weekIsOver(week, vnDay()) && (target !== userId || ctx.fa.manage) && (await canReviewUser(ctx, target)),
       reopen: ctx.fa.manage && status === 'APPROVED',
     },
   };
@@ -366,6 +377,14 @@ export async function approveWeek(userId: number, projectId: number, timesheetId
     if (ts.userId === userId && !ctx.fa.manage) throw new ForbiddenError('You cannot approve your own timesheet');
     if (!timesheetTransitionOk(ts.status, 'approve')) throw new ConflictError(`This week is ${ts.status.toLowerCase()}`);
     const week = dayOf(ts.weekStart)!;
+    // CTW-38: chặn duyệt tuần chưa kết thúc (lý do ở financeRules.weekIsOver).
+    if (!weekIsOver(week, vnDay())) {
+      const end = weekEndOf(week);
+      throw new AppError(
+        `The week of ${week} is not over yet (it ends on Sunday ${end}). Approve it from ${addDay(end)} — approving now would lock days that have not happened yet. Return it if something needs fixing now.`,
+        409, 'WORK_WEEK_NOT_OVER', { weekStart: week, weekEnd: end, approvableFrom: addDay(end) },
+      );
+    }
     const lines = await priceLines(tx, projectId, ts.userId, week);
     await tx.workTimesheetLine.deleteMany({ where: { timesheetId: ts.id } });
     if (lines.length) await tx.workTimesheetLine.createMany({ data: lines.map((l) => ({ ...l, timesheetId: ts.id })) });

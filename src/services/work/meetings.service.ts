@@ -35,6 +35,8 @@ import { can, canDeleteGovernance, governanceAccess, isClientScoped, loadProject
 import { portalCtx } from './portal.service.js';
 import { portalPath, routeForClient } from './portalNotify.js';
 import { tiptapToText } from './tiptapText.js';
+// CTW-18: ngày họp theo múi giờ của cuộc họp (startsAt là DateTime — toISOString in ra ngày UTC).
+import { dayInZone } from './projectTime.js';
 
 const MAX_ATTENDEES = 100;
 const MAX_ACTIONS = 100;
@@ -331,9 +333,64 @@ export async function setActions(
  * làm = người phụ trách nếu người đó được giao việc trong dự án, hạn = hạn của việc. Việc đã có
  * thẻ bị bỏ qua ⇒ bấm hai lần không nhân đôi.
  */
-export async function createIssuesFromActions(userId: number, projectId: number, number: number, actionIds?: number[]) {
+/**
+ * CTW-17: mặc định cho thẻ sinh từ action họp. Trường nào KHÔNG gửi ⇒ kế thừa từ ngữ cảnh cuộc họp
+ * (inferActionContext); gửi `null` ⇒ để trống; gửi id ⇒ dùng đúng id đó (vẫn qua kiểm tra của issueChange).
+ */
+export interface ActionIssueDefaults {
+  sprintId?: number | null;
+  stageId?: number | null;
+  teamId?: number | null;
+  /** Epic/thẻ cha — route đã đổi parentKey/parentNumber thành id nội bộ. */
+  parentId?: number | null;
+  labelIds?: number[];
+}
+
+/**
+ * Ngữ cảnh cuộc họp ⇒ sprint / giai đoạn đang chạy (cuộc họp không lưu sprint/giai đoạn nên suy từ NGÀY họp):
+ *   - sprint: sprint chưa đóng có khung ngày chứa giờ họp (ưu tiên ACTIVE), không có thì sprint ACTIVE.
+ *     Agent không được xếp sprint (assertAgentIssueCreate) ⇒ bỏ qua với agent.
+ *   - giai đoạn: mô-đun stages bật ⇒ giai đoạn ACTIVE (n nhỏ nhất).
+ * Bộ phận suy theo TỪNG người được giao (teamOf) — xem createIssuesFromActions.
+ */
+export async function inferActionContext(
+  access: { projectId: number; principal?: string; modules: { stages?: boolean; teams?: boolean } },
+  startsAt: Date,
+): Promise<{ sprintId: number | null; stageId: number | null }> {
+  let sprintId: number | null = null;
+  if (access.principal !== 'AGENT') {
+    const open = await prisma.workSprint.findMany({
+      where: { projectId: access.projectId, state: { in: ['ACTIVE', 'PLANNED'] } },
+      orderBy: [{ position: 'asc' }, { id: 'asc' }],
+      select: { id: true, state: true, startAt: true, endAt: true },
+    });
+    const covers = (s: (typeof open)[number]) => !!s.startAt && !!s.endAt && s.startAt <= startsAt && startsAt <= s.endAt;
+    sprintId = (open.find((s) => s.state === 'ACTIVE' && covers(s)) ?? open.find(covers) ?? open.find((s) => s.state === 'ACTIVE'))?.id ?? null;
+  }
+  let stageId: number | null = null;
+  if (access.modules.stages) {
+    stageId = (await prisma.workStage.findFirst({ where: { projectId: access.projectId, status: 'ACTIVE' }, orderBy: { n: 'asc' }, select: { id: true } }))?.id ?? null;
+  }
+  return { sprintId, stageId };
+}
+
+export async function createIssuesFromActions(userId: number, projectId: number, number: number, actionIds?: number[], defaults: ActionIssueDefaults = {}) {
   const ctx = await govCtx(userId, projectId, 'meetings', { edit: true });
   const m = await findMeeting(projectId, number);
+  const inferred = await inferActionContext(ctx.access, m.startsAt);
+  const sprintId = defaults.sprintId !== undefined ? defaults.sprintId : inferred.sprintId;
+  const stageId = defaults.stageId !== undefined ? defaults.stageId : inferred.stageId;
+  // Bộ phận: gửi tường minh ⇒ dùng; không ⇒ bộ phận DUY NHẤT của người được giao (nhiều/không có ⇒ để trống).
+  const teamCache = new Map<number, number | null>();
+  const teamOf = async (uid: number | undefined): Promise<number | null> => {
+    if (defaults.teamId !== undefined) return defaults.teamId;
+    if (!uid || !ctx.access.modules.teams) return null;
+    if (!teamCache.has(uid)) {
+      const rows = await prisma.workTeamMember.findMany({ where: { userId: uid, team: { workspaceId: ctx.access.workspaceId, archivedAt: null } }, select: { teamId: true } });
+      teamCache.set(uid, rows.length === 1 ? rows[0].teamId : null);
+    }
+    return teamCache.get(uid)!;
+  };
   const actions = await prisma.workMeetingAction.findMany({
     where: { meetingId: m.id, issueId: null, ...(actionIds?.length ? { id: { in: actionIds } } : {}) },
     orderBy: [{ position: 'asc' }, { id: 'asc' }],
@@ -349,17 +406,22 @@ export async function createIssuesFromActions(userId: number, projectId: number,
       const acc = await loadProjectAccess(a.assigneeId, projectId);
       if (acc && can(acc.role, 'issue.edit')) assigneeId = a.assigneeId;
     }
+    const teamId = await teamOf(assigneeId);
     const issue = await createIssueAs(userId, projectId, {
       typeId: type.id, title: a.text.slice(0, 255),
-      descriptionJson: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: `Action item from meeting M-${m.number}: ${m.title} (${dayOf(m.startsAt)}).` }] }] } as Prisma.InputJsonValue,
+      descriptionJson: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: `Action item from meeting M-${m.number}: ${m.title} (${dayInZone(m.startsAt, m.timezone)}).` }] }] } as Prisma.InputJsonValue,
       assigneeId, dueDate: a.dueDate ?? undefined,
+      // CTW-17: kế thừa ngữ cảnh họp (null = để trống ⇒ không gửi trường).
+      ...(sprintId ? { sprintId } : {}), ...(stageId ? { stageId } : {}), ...(teamId ? { teamId } : {}),
+      ...(defaults.parentId ? { parentId: defaults.parentId } : {}),
+      ...(defaults.labelIds?.length ? { labelIds: defaults.labelIds } : {}),
     });
     await prisma.workMeetingAction.update({ where: { id: a.id }, data: { issueId: issue.id } });
     created.push({ actionId: a.id, number: issue.number, key: `${ctx.access.key}-${issue.number}`, title: issue.title });
   }
   emitWorkEvent({ type: 'governance.updated', projectId, entity: 'meeting', number, action: 'actions', actor: { kind: 'USER', userId } });
   await auditProject(projectId, { actorId: userId, action: 'meeting.issues', targetType: 'meeting', targetId: m.id, summary: `Created ${created.length} issue${created.length === 1 ? '' : 's'} from meeting M-${number}: ${created.map((c) => c.key).join(', ')}`.slice(0, 300) });
-  return { created, meeting: await getMeeting(userId, projectId, number) };
+  return { created, applied: { sprintId, stageId, teamId: defaults.teamId ?? null, parentId: defaults.parentId ?? null }, meeting: await getMeeting(userId, projectId, number) };
 }
 
 /**
@@ -373,7 +435,7 @@ export async function suggestActions(userId: number, projectId: number, number: 
   const text = [m.minutesText ?? '', decisions.length ? `Decisions:\n${decisions.map((d) => `- ${d}`).join('\n')}` : ''].filter(Boolean).join('\n\n').trim();
   if (!text) throw new BadRequestError('Write the minutes (or decisions) first, then ask AI for action items', 'WORK_AI_NEEDS_TEXT');
   const { quick } = await import('./ai.service.js');
-  const out = await quick(userId, projectId, { task: 'meeting_notes', text: `Meeting M-${m.number} "${m.title}" (${dayOf(m.startsAt)})\n\n${text}`, label: `Action items · meeting M-${m.number}` });
+  const out = await quick(userId, projectId, { task: 'meeting_notes', text: `Meeting M-${m.number} "${m.title}" (${dayInZone(m.startsAt, m.timezone)}, ${m.timezone})\n\n${text}`, label: `Action items · meeting M-${m.number}` });
   const members = await prisma.user.findMany({
     where: { username: { in: out.actions.flatMap((a) => (a.type === 'create_issue' && a.assignee ? [a.assignee.replace(/^@/, '')] : [])) } },
     select: { id: true, username: true },

@@ -10236,6 +10236,11 @@ model WorkProject {
   /// Resources (06/10/2026): thư viện link/tài nguyên của dự án (mô-đun resources).
   resourceGroups    WorkResourceGroup[]
   resources         WorkResource[]
+  /// Đợt 1b (08/10/2026): tài liệu kiểm thử chuẩn FPT — Report 5.1 Unit + 5.2 Integration.
+  fptTestDoc        WorkFptTestDoc?
+  fptChanges        WorkFptChange[]
+  unitFunctions     WorkUnitFunction[]
+  itModules         WorkItModule[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
   clientRequest     ProjectRequest?
 
@@ -10833,6 +10838,181 @@ model WorkTestRunDefect {
   @@id([runId, issueId])
   @@index([issueId], name: "idx_work_run_defect_issue")
   @@map("work_test_run_defects")
+}
+
+// ─── CT Work — tài liệu kiểm thử chuẩn FPT (đợt 1b, 08/10/2026) ──────────
+// Report 5.1 Unit Test (ma trận UTCID × Condition/Confirmation, dấu "O", loại N/A/B)
+// và Report 5.2 Integration Test (mỗi module một sheet: bước, mong đợi, 4 vòng chạy).
+// Xuất/nhập Excel đúng mẫu trường — xem src/services/work/fptTests.service.ts.
+
+/// Thông tin trang Cover/Statistics dùng chung cho hai báo cáo — một dòng/dự án.
+model WorkFptTestDoc {
+  projectId     Int       @id @map("project_id")
+  /// null ⇒ dùng tên dự án / mã dự án.
+  projectName   String?   @map("project_name") @db.VarChar(200)
+  projectCode   String?   @map("project_code") @db.VarChar(40)
+  creator       String?   @db.VarChar(120)
+  reviewer      String?   @db.VarChar(120)
+  version       String    @default("1.0") @db.VarChar(20)
+  unitIssueDate DateTime? @map("unit_issue_date") @db.Date
+  intIssueDate  DateTime? @map("int_issue_date") @db.Date
+  /// "Test Environment Setup Description" (Server, Database, Web Browser…).
+  environment   String?   @db.Text
+  /// "Normal number of Test cases/KLOC" — chỉ tiêu trường đặt 100.
+  tcPerKloc     Int       @default(100) @map("tc_per_kloc")
+  unitNotes     String?   @map("unit_notes") @db.Text
+  intNotes      String?   @map("int_notes") @db.Text
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("work_fpt_test_docs")
+}
+
+/// Record of change trên Cover. report: UNIT | INT. action: A | D | M.
+model WorkFptChange {
+  id            Int      @id @default(autoincrement())
+  projectId     Int      @map("project_id")
+  report        String   @db.VarChar(4)
+  effectiveDate DateTime @map("effective_date") @db.Date
+  version       String   @db.VarChar(20)
+  changeItem    String?  @map("change_item") @db.VarChar(200)
+  action        String   @default("A") @db.VarChar(1)
+  description   String?  @db.Text
+  reference     String?  @db.VarChar(300)
+  position      Int      @default(0)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, report], name: "idx_work_fpt_change_project")
+  @@map("work_fpt_changes")
+}
+
+/// Một HÀM được unit test (một dòng sheet Functions + một sheet ma trận riêng).
+model WorkUnitFunction {
+  id              Int      @id @default(autoincrement())
+  projectId       Int      @map("project_id")
+  /// Lớp/module (vd AuthService) — sheet Functions gộp ô theo cột này.
+  moduleName      String   @map("module_name") @db.VarChar(120)
+  methodName      String   @map("method_name") @db.VarChar(120)
+  /// Tên sheet trong Excel (≤31 ký tự, duy nhất trong file) — null ⇒ suy từ methodName.
+  sheetName       String?  @map("sheet_name") @db.VarChar(31)
+  description     String?  @db.Text
+  preCondition    String?  @map("pre_condition") @db.Text
+  testRequirement String?  @map("test_requirement") @db.Text
+  /// Tham chiếu mã: đường dẫn tệp#dòng hoặc link GitHub.
+  codeRef         String?  @map("code_ref") @db.VarChar(500)
+  /// Số dòng mã của hàm ⇒ KLOC ⇒ chỉ tiêu số test case.
+  loc             Int?
+  createdBy       String?  @map("created_by") @db.VarChar(120)
+  executedBy      String?  @map("executed_by") @db.VarChar(120)
+  position        Int      @default(0)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  project WorkProject    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  rows    WorkUnitRow[]
+  cases   WorkUnitCase[]
+
+  @@index([projectId, position], name: "idx_work_unit_function_project")
+  @@map("work_unit_functions")
+}
+
+/// Một dòng của ma trận: section COND (Condition) | CONFIRM (Confirmation).
+/// groupName = nhóm in ở cột B (Precondition, tên tham số, Return, Exception, Log message…);
+/// label = chú thích cột C (vd "255 characters"); value = giá trị cột D.
+model WorkUnitRow {
+  id         Int     @id @default(autoincrement())
+  functionId Int     @map("function_id")
+  section    String  @db.VarChar(8)
+  groupName  String  @map("group_name") @db.VarChar(120)
+  label      String? @db.VarChar(200)
+  value      String? @db.Text
+  position   Int
+
+  function WorkUnitFunction @relation(fields: [functionId], references: [id], onDelete: Cascade)
+  marks    WorkUnitMark[]
+
+  @@index([functionId, position], name: "idx_work_unit_row_function")
+  @@map("work_unit_rows")
+}
+
+/// Một test case UTCIDnn (số thứ tự = position + 1). type: N | A | B. result: P | F | null (chưa chạy).
+model WorkUnitCase {
+  id         Int       @id @default(autoincrement())
+  functionId Int       @map("function_id")
+  position   Int
+  type       String    @default("N") @db.VarChar(1)
+  result     String?   @db.VarChar(1)
+  executedAt DateTime? @map("executed_at") @db.Date
+  /// Defect ID như trong mẫu (vd "CTW-12") — giao diện tự nối sang thẻ nếu khớp mã dự án.
+  defectId   String?   @map("defect_id") @db.VarChar(60)
+  note       String?   @db.Text
+
+  function WorkUnitFunction @relation(fields: [functionId], references: [id], onDelete: Cascade)
+  marks    WorkUnitMark[]
+
+  @@index([functionId, position], name: "idx_work_unit_case_function")
+  @@map("work_unit_cases")
+}
+
+/// Ô đánh dấu "O" của ma trận (dòng × test case).
+model WorkUnitMark {
+  rowId  Int @map("row_id")
+  caseId Int @map("case_id")
+
+  row      WorkUnitRow  @relation(fields: [rowId], references: [id], onDelete: Cascade)
+  testCase WorkUnitCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@id([rowId, caseId])
+  @@index([caseId], name: "idx_work_unit_mark_case")
+  @@map("work_unit_marks")
+}
+
+/// Một MODULE/luồng integration test (một sheet của Report 5.2).
+model WorkItModule {
+  id              Int      @id @default(autoincrement())
+  projectId       Int      @map("project_id")
+  name            String   @db.VarChar(120)
+  sheetName       String?  @map("sheet_name") @db.VarChar(31)
+  /// Tiền tố mã test case trong sheet: "AT" ⇒ <AT1>, <AT2>…
+  idPrefix        String   @default("IT") @map("id_prefix") @db.VarChar(10)
+  description     String?  @db.Text
+  preCondition    String?  @map("pre_condition") @db.Text
+  testRequirement String?  @map("test_requirement") @db.Text
+  position        Int      @default(0)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  project WorkProject  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  cases   WorkItCase[]
+
+  @@index([projectId, position], name: "idx_work_it_module_project")
+  @@map("work_it_modules")
+}
+
+/// Một integration test case. section = dòng nhóm (vd "Login") in phía trên các case liền nhau.
+/// rounds = [{ status: Passed|Failed|Pending|N/A, date: "YYYY-MM-DD"|null, tester }] — tối đa 4 vòng như mẫu.
+model WorkItCase {
+  id            Int     @id @default(autoincrement())
+  moduleId      Int     @map("module_id")
+  position      Int
+  section       String? @db.VarChar(200)
+  description   String  @db.Text
+  procedure     String? @db.Text
+  testData      String? @map("test_data") @db.Text
+  expected      String? @db.Text
+  actual        String? @db.Text
+  preConditions String? @map("pre_conditions") @db.Text
+  evidence      String? @db.Text
+  note          String? @db.Text
+  rounds        Json    @default("[]")
+
+  module WorkItModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@index([moduleId, position], name: "idx_work_it_case_module")
+  @@map("work_it_cases")
 }
 
 // ─── CT Work — tuỳ biến & tìm kiếm (đợt 5) ────────────────────────────

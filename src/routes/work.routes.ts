@@ -58,6 +58,7 @@ import * as handoffs from '../services/work/handoffs.service.js';
 import * as pages from '../services/work/pages.service.js';
 import * as portal from '../services/work/portal.service.js';
 import { moveIssueToProject } from '../services/work/issueMove.service.js';
+import { normalizeIssueRefBody, resolveParentId, typeIdFromKey } from '../services/work/issueRefs.js';
 import portfolioRoutes from './work.portfolio.routes.js';
 import governanceRoutes from './work.governance.routes.js';
 import s4Routes, { s4PublicRoutes } from './work.s4.routes.js';
@@ -66,6 +67,7 @@ import s5cRoutes from './work.s5c.routes.js';
 import s6Routes from './work.s6.routes.js';
 import resourcesRoutes from './work.resources.routes.js';
 import agentsRoutes from './work.agents.routes.js';
+import fptTestRoutes from './work.fpt.routes.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
 
@@ -103,11 +105,27 @@ function parse<T extends z.ZodTypeAny>(schema: T, value: unknown): z.infer<T> {
       const first = err.issues[0];
       const where = first?.path.length ? `${first.path.join('.')}: ` : '';
       // CTW-4/15: trả ĐỦ mọi lỗi (data.errors) — không chỉ lỗi đầu tiên; trường lạ (.strict) nêu tên.
-      const errors = err.issues.slice(0, 20).map((i) => ({ path: i.path.join('.'), message: i.message }));
-      throw new AppError(`${where}${first?.message ?? 'Invalid input'}`, 400, 'VALIDATION_ERROR', { errors });
+      // "Expected number, received nan" (z.coerce trên chữ) ⇒ câu người đọc được.
+      const human = (m: string) => (/received nan/i.test(m) ? 'Expected a number (an id), got text' : m);
+      const errors = err.issues.slice(0, 20).map((i) => ({ path: i.path.join('.'), message: human(i.message) }));
+      const more = err.issues.length > 1 ? ` (+${err.issues.length - 1} more — see errors)` : '';
+      throw new AppError(`${where}${human(first?.message ?? 'Invalid input')}${more}`, 400, 'VALIDATION_ERROR', { errors });
     }
     throw err;
   }
+}
+
+/**
+ * CTW-27: PATCH/hành động mà sau khi parse không còn trường nào để đổi ⇒ 400 (thay vì 200 im lặng).
+ * Nêu trường lạ nếu có (zod mặc định lột trường lạ — "status" thay vì "statusId" là lỗi hay gặp).
+ */
+function requireSomeChange(parsed: Record<string, unknown>, raw: unknown, allowed: string[]): void {
+  if (Object.values(parsed).some((v) => v !== undefined)) return;
+  const unknown = raw && typeof raw === 'object' ? Object.keys(raw as object).filter((k) => !allowed.includes(k) && k !== 'version') : [];
+  const msg = unknown.length
+    ? `Unknown field(s): ${unknown.join(', ')} — nothing to change. Allowed: ${allowed.join(', ')}`
+    : `Nothing to change — send at least one of: ${allowed.join(', ')}`;
+  throw new AppError(msg, 400, 'VALIDATION_ERROR', { errors: unknown.length ? unknown.map((k) => ({ path: k, message: 'Unknown field' })) : [{ path: '', message: 'Empty body' }] });
 }
 
 const id = z.coerce.number().int().positive();
@@ -515,8 +533,36 @@ const issueFields = {
   componentIds: z.array(id).max(30),
 };
 
+/** CTW-15: cha theo số thẻ / khoá thẻ (ngoài parentId nội bộ) + loại thẻ theo khoá — xem issueRefs.ts. */
+const issueRefFields = {
+  parentNumber: id.nullable(),
+  parentKey: z.string().max(32).nullable(),
+  typeKey: z.string().min(1).max(16),
+};
+
+/** Gộp parentId/parentNumber/parentKey + typeKey ⇒ id nội bộ (lỗi 400 nêu đúng trường). */
+async function resolveIssueRefs<T extends { parentId?: number | null; parentNumber?: number | null; parentKey?: string | null; typeKey?: string; typeId?: number }>(
+  pid: number, body: T,
+): Promise<Omit<T, 'parentNumber' | 'parentKey' | 'typeKey'>> {
+  const { parentNumber, parentKey, typeKey, ...rest } = body;
+  const parentId = await resolveParentId(pid, { parentId: body.parentId, parentNumber, parentKey });
+  const out = { ...rest } as Omit<T, 'parentNumber' | 'parentKey' | 'typeKey'> & { parentId?: number | null; typeId?: number };
+  if (parentId !== undefined) out.parentId = parentId;
+  if (typeKey !== undefined) {
+    const tid = await typeIdFromKey(pid, typeKey);
+    if (body.typeId !== undefined && body.typeId !== tid) throw new BadRequestError('typeId and typeKey point to different issue types — send only one of them', 'WORK_BAD_TYPE');
+    out.typeId = tid;
+  }
+  return out;
+}
+
 router.post('/projects/:pid/issues', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ ...issueFields, typeId: id }).partial().required({ title: true, typeId: true }), req.body);
+  const parsed = parse(
+    z.object({ ...issueFields, ...issueRefFields, typeId: id }).partial().required({ title: true })
+      .refine((b) => b.typeId !== undefined || b.typeKey !== undefined, { message: 'Required — send typeId (number) or typeKey (e.g. "STORY")', path: ['typeId'] }),
+    normalizeIssueRefBody(req.body),
+  );
+  const body = await resolveIssueRefs(idParam(req, 'pid'), parsed);
   const issue = await issues.createIssueAs(callerId(req), idParam(req, 'pid'), body as issues.CreateIssueBody);
   ok(res, await issues.getIssueDetail(callerId(req), idParam(req, 'pid'), issue.number), 201);
 }));
@@ -526,19 +572,30 @@ router.get('/projects/:pid/issues/:num', asyncHandler(async (req, res) => {
 }));
 
 router.patch('/projects/:pid/issues/:num', asyncHandler(async (req, res) => {
-  const { version, ...body } = parse(z.object({ ...issueFields, version: z.number().int().min(0).optional() }).partial(), req.body);
+  const raw = normalizeIssueRefBody(req.body);
+  const { version, typeKey, ...parsed } = parse(z.object({ ...issueFields, ...issueRefFields, version: z.number().int().min(0).optional() }).partial(), raw);
+  // CTW-27 (rà endpoint tương tự): thân rỗng / chỉ có trường lạ (vd. "status") ⇒ zod lột sạch ⇒ trước đây 200 mà không đổi gì.
+  requireSomeChange({ ...parsed, typeKey }, raw, [...Object.keys(issueFields), 'parentNumber', 'parentKey']);
+  // Đổi loại thẻ không đi qua PATCH (có luồng riêng) — typeKey ở đây chỉ để báo lỗi rõ thay vì lặng lẽ bỏ.
+  if (typeKey !== undefined) throw new BadRequestError('Changing the issue type is not supported here — typeKey is only accepted when creating an issue', 'WORK_BAD_TYPE');
+  const body = await resolveIssueRefs(idParam(req, 'pid'), parsed);
   await issues.updateIssueAs(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body, version);
   ok(res, await issues.getIssueDetail(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
 }));
 
 router.post('/projects/:pid/issues/:num/move', asyncHandler(async (req, res) => {
+  // CTW-27: thân rỗng / statusId undefined (JSON bỏ undefined ⇒ {}) trước đây trả 200 mà không đổi gì ⇒
+  // client tưởng đã chuyển trạng thái. Bắt buộc ít nhất một trường di chuyển; trường lạ (vd. "status") ⇒ 400 nêu tên.
   const body = parse(z.object({
     statusId: id.optional(),
     sprintId: id.nullable().optional(),
     beforeIssueId: id.nullable().optional(),
     afterIssueId: id.nullable().optional(),
     version: z.number().int().min(0).optional(),
-  }), req.body);
+  }).strict().refine(
+    (b) => b.statusId !== undefined || b.sprintId !== undefined || b.beforeIssueId !== undefined || b.afterIssueId !== undefined,
+    { message: 'Nothing to move: send statusId (number), sprintId (number or null) and/or beforeIssueId/afterIssueId', path: ['statusId'] },
+  ), req.body);
   const { version, ...rest } = body;
   const moved = await issues.moveIssueAs(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), { ...rest, expectedVersion: version });
   ok(res, moved);
@@ -680,11 +737,17 @@ router.post('/projects/:pid/issues/bulk', asyncHandler(async (req, res) => {
       priority: z.number().int().min(PRIORITY_MIN).max(PRIORITY_MAX).optional(),
       statusId: id.optional(),
       parentId: id.nullable().optional(),
+      // CTW-15: cha theo số thẻ / khoá thẻ.
+      parentNumber: id.nullable().optional(),
+      parentKey: z.string().max(32).nullable().optional(),
       addLabelIds: z.array(id).max(30).optional(),
       delete: z.literal(true).optional(),
     }).refine((p) => Object.keys(p).length > 0, 'Nothing to change'),
-  }), req.body);
-  ok(res, await sprints.bulkUpdate(callerId(req), idParam(req, 'pid'), body.numbers, body.patch));
+  }), { ...req.body, patch: normalizeIssueRefBody(req.body?.patch) });
+  const { parentNumber, parentKey, ...patch } = body.patch;
+  const parentId = await resolveParentId(idParam(req, 'pid'), { parentId: patch.parentId, parentNumber, parentKey });
+  if (parentId !== undefined) patch.parentId = parentId;
+  ok(res, await sprints.bulkUpdate(callerId(req), idParam(req, 'pid'), body.numbers, patch));
 }));
 
 // ═══ Báo cáo ════════════════════════════════════════════════════════
@@ -898,7 +961,8 @@ router.post('/projects/:pid/ai/weekly-report', asyncHandler(async (req, res) => 
   ok(res, await ai.weeklyReport(callerId(req), idParam(req, 'pid'), body));
 }));
 router.post('/projects/:pid/ai/plan-sprint', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ sprintId: id, explain: z.boolean().optional(), language: z.enum(['en', 'vi']).optional() }), req.body);
+  // CTW-10: test case + ticket desk mặc định không vào backlog lập kế hoạch (bật lại bằng hai cờ).
+  const body = parse(z.object({ sprintId: id, explain: z.boolean().optional(), language: z.enum(['en', 'vi']).optional(), includeTestCases: z.boolean().optional(), includeDeskTickets: z.boolean().optional() }), req.body);
   ok(res, await ai.planSprint(callerId(req), idParam(req, 'pid'), body));
 }));
 router.post('/projects/:pid/ai/retro', asyncHandler(async (req, res) => {
@@ -1175,8 +1239,9 @@ router.get('/projects/:pid/automation-logs', asyncHandler(async (req, res) => {
   ok(res, await automation.ruleLogs(callerId(req), idParam(req, 'pid'), ruleId));
 }));
 router.post('/projects/:pid/automation/:ruleId/test', asyncHandler(async (req, res) => {
-  const { number } = parse(z.object({ number: id }), req.body);
-  ok(res, await automation.testRule(callerId(req), idParam(req, 'pid'), idParam(req, 'ruleId'), number));
+  // CTW-7: mặc định CHẠY THỬ (không ghi gì lên thẻ); `execute: true` mới chạy thật.
+  const { number, execute } = parse(z.object({ number: id, execute: z.boolean().optional() }), req.body);
+  ok(res, await automation.testRule(callerId(req), idParam(req, 'pid'), idParam(req, 'ruleId'), number, { execute }));
 }));
 
 router.get('/me/notify-settings', asyncHandler(async (req, res) => {
@@ -1723,6 +1788,17 @@ router.patch('/projects/:pid/pages/:num', asyncHandler(async (req, res) => {
   const { markdown, ...body } = parsed;
   ok(res, await pages.updatePage(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), { ...body, ...markdownContent(markdown, body, true) }));
 }));
+// CTW-20: lối tắt gửi duyệt một trang — y hệt POST /approvals {targetType:'DOC', pageNumber}; trang ⇒ IN_REVIEW.
+router.post('/projects/:pid/pages/:num/request-approval', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    title: z.string().min(1).max(200).optional(),
+    description: z.string().max(5000).nullable().optional(),
+    mode: z.enum(APPROVAL_MODES).optional(),
+    approverIds: z.array(id).min(1, 'Pick at least one approver (approverIds)').max(10),
+    dueAt: z.coerce.date().nullable().optional(),
+  }).strict(), req.body);
+  ok(res, await approvals.createApproval(callerId(req), idParam(req, 'pid'), { ...body, targetType: 'DOC', pageNumber: idParam(req, 'num') }), 201);
+}));
 router.post('/projects/:pid/pages/:num/move', asyncHandler(async (req, res) => {
   const body = parse(z.object({ parentNumber: id.nullable(), index: z.number().int().min(0).max(10_000) }), req.body);
   ok(res, await pages.movePage(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body));
@@ -1877,5 +1953,7 @@ router.use(s6Routes);
 router.use(resourcesRoutes);
 // CTW-28 (GĐ1 A2–A8): AI agent thành viên — quản lý, token, lease, hộp thư/SSE, webhook — tuyến ở work.agents.routes.ts.
 router.use(agentsRoutes);
+// Đợt 1b (08/10/2026): tài liệu kiểm thử chuẩn FPT (Report 5.1 Unit + 5.2 Integration, xuất/nhập Excel) — work.fpt.routes.ts.
+router.use(fptTestRoutes);
 
 export default router;

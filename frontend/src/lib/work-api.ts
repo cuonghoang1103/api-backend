@@ -550,9 +550,16 @@ export interface AiFilterResult {
   explanation: string | null; quota: AiQuota;
 }
 export interface InsightIssue { key: string; number: number; title: string; assignee: string | null; status: string; dueDate: string | null }
+export interface InsightLoad {
+  username: string; points: number; issues: number;
+  /** CTW-9 (tuỳ chọn): sức chứa trong phạm vi (null = chưa khai giờ/ngày) + cơ sở kết luận quá tải. */
+  capacity?: number | null; overloaded?: boolean; basis?: 'capacity' | 'relative'; unit?: 'points' | 'hours';
+}
 export interface InsightsData {
   overdue: InsightIssue[]; dueSoon: InsightIssue[]; stale: Array<InsightIssue & { idleDays: number }>; unassignedUrgent: InsightIssue[];
-  overloaded: Array<{ username: string; points: number; issues: number }>; loads: Array<{ username: string; points: number; issues: number }>;
+  overloaded: Array<InsightLoad>; loads: Array<InsightLoad>;
+  /** CTW-9: phạm vi tính tải (sprint đang chạy, hoặc việc đang làm/có hạn 14 ngày tới) — tuỳ chọn cho backend cũ. */
+  loadScope?: { kind: 'sprint' | 'window'; label: string; workingDaysLeft: number };
   sprintRisk: null | {
     sprint: string; remaining: number; daysLeft: number; neededPerDay: number; recentPerDay: number; atRisk: boolean;
     // Thêm 23/09 (sprintPace.ts) — tuỳ chọn để tương thích bản backend cũ.
@@ -632,7 +639,13 @@ export interface AutomationRule {
   id: number; name: string; enabled: boolean; trigger: RuleTrigger; config: RuleConfig; createdById: number | null; runCount: number;
   lastRunAt: string | null; createdAt: string; updatedAt: string; recentProblems: number;
 }
-export type RuleLogStatus = 'SUCCESS' | 'NO_MATCH' | 'FAILED' | 'LOOP_BLOCKED' | 'THROTTLED';
+export type RuleLogStatus = 'SUCCESS' | 'NO_MATCH' | 'FAILED' | 'LOOP_BLOCKED' | 'THROTTLED' | 'DRY_RUN';
+/** CTW-7: kết quả "Test rule" — mặc định chạy thử (dryRun), `actions` là việc SẼ làm. */
+export interface RuleTestResult {
+  dryRun: boolean; status: RuleLogStatus; message: string;
+  conditions?: Array<{ jql: string; matched: boolean }>;
+  actions: Array<{ kind: string; summary: string; willChange: boolean }>;
+}
 export interface RuleLog {
   id: number; ruleId: number; ruleName: string; issueId: number | null; issue: { number: number; title: string } | null;
   status: RuleLogStatus; message: string; durationMs: number; createdAt: string;
@@ -645,6 +658,8 @@ export interface SprintPlan {
   history: Array<{ name: string; committedPoints: number | null; completedPoints: number | null }>;
   target: number; alreadyPlanned: number; selected: Array<{ number: number; title: string; points: number }>;
   plannedTotal: number; warnings: string[]; rationale: string | null;
+  /** CTW-10: test case (Xray) + ticket service desk không vào backlog lập kế hoạch — chỉ đếm. */
+  excluded?: { testCases: number; deskTickets: number };
 }
 export interface RetroResult { summary: string; actions: AiAction[]; facts: string; quota: AiQuota }
 export interface DailyBrief { text: string; at: string; by: number }
@@ -1014,8 +1029,8 @@ export const workApi = {
   setAutomationEnabled: (pid: number, ruleId: number, enabled: boolean) => d(api.patch(`${B}/projects/${pid}/automation/${ruleId}`, { enabled })),
   deleteAutomationRule: (pid: number, ruleId: number) => d(api.delete(`${B}/projects/${pid}/automation/${ruleId}`)),
   automationLogs: (pid: number, ruleId?: number) => d<RuleLog[]>(api.get(`${B}/projects/${pid}/automation-logs${ruleId ? `?ruleId=${ruleId}` : ''}`)),
-  testAutomationRule: (pid: number, ruleId: number, number: number) =>
-    d<{ status: RuleLogStatus; message: string }>(api.post(`${B}/projects/${pid}/automation/${ruleId}/test`, { number })),
+  testAutomationRule: (pid: number, ruleId: number, number: number, execute = false) =>
+    d<RuleTestResult>(api.post(`${B}/projects/${pid}/automation/${ruleId}/test`, { number, ...(execute ? { execute: true } : {}) })),
   notifySettings: () => d<NotifySettings>(api.get(`${B}/me/notify-settings`)),
   setNotifySettings: (body: Partial<NotifySettings>) => d<NotifySettings>(api.put(`${B}/me/notify-settings`, body)),
 

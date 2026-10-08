@@ -322,7 +322,15 @@ function ReviewDialog({ config, ts, onClose }: { config: ProjectConfig; ts: Time
           <>
             {v.can.reopen && <button type="button" className="w-btn" onClick={() => setMode('reopen')} data-testid="ts-reopen"><Unlock size={14} />Reopen…</button>}
             {v.can.review && <button type="button" className="w-btn" onClick={() => setMode('return')} data-testid="ts-return"><RotateCcw size={14} />Return…</button>}
-            {v.can.review && <button type="button" className="w-btn w-btn-primary" disabled={approve.isPending} onClick={() => approve.mutate()} data-testid="ts-approve">{approve.isPending ? <Spinner size={12} /> : <CheckCircle2 size={14} />}Approve</button>}
+            {v.can.review && (() => {
+              // CTW-38: tuần chưa hết ⇒ chưa duyệt được (duyệt sẽ khoá cả những ngày chưa tới).
+              const notOver = v.can.approve === false;
+              return (
+                <button type="button" className="w-btn w-btn-primary" disabled={approve.isPending || notOver} title={notOver ? `This week ends on ${formatDate(v.weekEnd)} — you can approve it after that. Return it if something needs fixing now.` : undefined} onClick={() => approve.mutate()} data-testid="ts-approve">
+                  {approve.isPending ? <Spinner size={12} /> : <CheckCircle2 size={14} />}{notOver ? `Approve after ${formatDate(v.weekEnd)}` : 'Approve'}
+                </button>
+              );
+            })()}
           </>
         ) : (
           <>

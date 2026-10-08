@@ -56,7 +56,8 @@ export interface WeekView {
   logs: Array<{ id: number; minutes: number; startedAt: string; day: string; note: string | null; issueKey: string; issueNumber: number; issueTitle: string }>;
   totalMin: number; byDay: Record<string, number>;
   timesheet: Timesheet | null; locked: boolean;
-  can: { submit: boolean; withdraw: boolean; review: boolean; reopen: boolean };
+  /** approve (CTW-38, tuỳ chọn cho backend cũ): false khi tuần chưa kết thúc — chỉ Return được. */
+  can: { submit: boolean; withdraw: boolean; review: boolean; reopen: boolean; approve?: boolean };
 }
 
 export interface BudgetSummary {

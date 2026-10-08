@@ -178,9 +178,10 @@ function throttled(ruleId: number): boolean {
   return w.n > MAX_RUNS_PER_HOUR;
 }
 
-async function log(ruleId: number, issueId: number | null, status: string, message: string, started: number) {
+async function writeLog(ruleId: number, issueId: number | null, status: string, message: string, started: number) {
   await prisma.workAutomationLog.create({ data: { ruleId, issueId, status, message: message.slice(0, 2000), durationMs: Date.now() - started } });
 }
+const log = writeLog;
 
 /** Thẻ có khớp một JQL không — dịch JQL rồi hỏi DB đúng thẻ đó. */
 async function issueMatches(projectId: number, issueId: number, jql: string, actorUserId: number | null): Promise<boolean> {
@@ -296,9 +297,11 @@ async function runActions(rule: Rule, issueId: number, actor: WorkActor): Promis
 }
 
 /** Chạy một luật trên một thẻ: kiểm vòng lặp, điều kiện, rồi hành động. Không bao giờ ném. */
-export async function runRuleOnIssue(rule: Rule, issueId: number, cause: WorkActor | null): Promise<string> {
+export async function runRuleOnIssue(rule: Rule, issueId: number, cause: WorkActor | null, opts: { test?: boolean } = {}): Promise<string> {
   const started = Date.now();
   const chain = cause?.ruleChain ?? [];
+  // CTW-7: lần chạy thật bấm từ nút "Test" ghi rõ trong nhật ký.
+  const log = (ruleId: number, iid: number | null, status: string, message: string, t: number) => writeLog(ruleId, iid, status, opts.test ? `Test run — ${message}` : message, t);
   try {
     if (chain.includes(rule.id)) {
       await log(rule.id, issueId, 'LOOP_BLOCKED', `Skipped: this change was caused by the same rule (chain ${chain.join(' → ')}).`, started);
@@ -364,16 +367,121 @@ export async function runScheduledRules(): Promise<number> {
   return runs;
 }
 
-/** Chạy thử ngay một luật trên một thẻ (nút "Test rule" trong UI). */
-export async function testRule(userId: number, projectId: number, ruleId: number, number: number) {
+export interface PlannedAction {
+  kind: ActionKind;
+  /** Câu mô tả việc SẼ làm (tiếng Anh như mọi chữ giao diện CT Work). */
+  summary: string;
+  /** false = thẻ đã ở đúng trạng thái đó / không áp dụng được ⇒ chạy thật cũng bỏ qua. */
+  willChange: boolean;
+}
+
+/**
+ * CTW-7: XEM TRƯỚC hành động của luật trên một thẻ — KHÔNG ghi gì (không bình luận, không thông báo,
+ * không đổi thẻ). Tính trên trạng thái HIỆN TẠI của thẻ; khi chạy thật các hành động chạy lần lượt nên
+ * hành động sau có thể thấy kết quả của hành động trước.
+ */
+export async function previewActions(rule: Rule, issueId: number): Promise<PlannedAction[]> {
+  const cfg = rule.config as RuleConfig;
+  const issue = await prisma.workIssue.findFirst({
+    where: { id: issueId, deletedAt: null },
+    select: { id: true, projectId: true, reporterId: true, assigneeId: true, statusId: true, priority: true, type: { select: { level: true } } },
+  });
+  if (!issue) return [];
+  const userName = async (uid: number | null) => {
+    if (!uid) return 'nobody';
+    const u = await prisma.user.findUnique({ where: { id: uid }, select: { username: true } });
+    return u ? `@${u.username}` : `user #${uid}`;
+  };
+  const out: PlannedAction[] = [];
+  for (const a of cfg.actions) {
+    switch (a.kind) {
+      case 'transition': {
+        const st = await prisma.workStatus.findUnique({ where: { id: a.statusId! }, select: { name: true } });
+        const same = issue.statusId === a.statusId;
+        out.push({ kind: a.kind, summary: same ? `Already in "${st?.name ?? 'unknown status'}" — no transition` : `Move to "${st?.name ?? 'unknown status'}"`, willChange: !same });
+        break;
+      }
+      case 'assign': {
+        const to = a.assignee === 'reporter' ? issue.reporterId : (a.assignee ?? null);
+        const same = to === issue.assigneeId;
+        out.push({ kind: a.kind, summary: same ? `Already assigned to ${await userName(to)}` : to ? `Assign to ${await userName(to)}` : 'Unassign', willChange: !same });
+        break;
+      }
+      case 'set_priority':
+        out.push({ kind: a.kind, summary: `Set priority to ${a.priority}`, willChange: issue.priority !== a.priority });
+        break;
+      case 'add_label': {
+        const l = await prisma.workLabel.findUnique({ where: { id: a.labelId! }, select: { name: true } });
+        const has = (await prisma.workIssueLabel.count({ where: { issueId, labelId: a.labelId! } })) > 0;
+        out.push({ kind: a.kind, summary: has ? `Already has label "${l?.name ?? '?'}"` : `Add label "${l?.name ?? '?'}"`, willChange: !has });
+        break;
+      }
+      case 'comment':
+        out.push({ kind: a.kind, summary: `Post an automation comment: "${(a.text ?? '').slice(0, 200)}"`, willChange: true });
+        break;
+      case 'move_to_active_sprint': {
+        if (issue.type.level !== 0) { out.push({ kind: a.kind, summary: 'Skipped — only standard issues go into sprints', willChange: false }); break; }
+        const sp = await prisma.workSprint.findFirst({ where: { projectId: issue.projectId, state: 'ACTIVE' }, select: { name: true } });
+        out.push({ kind: a.kind, summary: sp ? `Add to the active sprint "${sp.name}"` : 'Skipped — no active sprint', willChange: !!sp });
+        break;
+      }
+      case 'notify': {
+        const receivers = new Set<number>();
+        for (const t of a.to ?? []) {
+          if (t === 'assignee' && issue.assigneeId) receivers.add(issue.assigneeId);
+          else if (t === 'reporter' && issue.reporterId) receivers.add(issue.reporterId);
+          else if (t === 'watchers') (await prisma.workWatcher.findMany({ where: { issueId }, select: { userId: true } })).forEach((w) => receivers.add(w.userId));
+          else if (typeof t === 'number') receivers.add(t);
+        }
+        const names: string[] = [];
+        for (const uid of receivers) if (await loadProjectAccess(uid, issue.projectId)) names.push(await userName(uid));
+        out.push({ kind: a.kind, summary: names.length ? `Notify ${names.join(', ')}: "${(a.text ?? '').slice(0, 200)}"` : 'Notify — nobody to notify', willChange: names.length > 0 });
+        break;
+      }
+      case 'create_subtask': {
+        if (issue.type.level !== 0) { out.push({ kind: a.kind, summary: 'Skipped — sub-tasks can only be created under a standard issue', willChange: false }); break; }
+        out.push({ kind: a.kind, summary: `Create sub-task "${(a.title ?? '').slice(0, 200)}"`, willChange: true });
+        break;
+      }
+    }
+  }
+  return out;
+}
+
+/**
+ * Chạy thử một luật trên một thẻ (nút "Test rule" trong UI).
+ * CTW-7: MẶC ĐỊNH là CHẠY THỬ (dry-run) — kiểm điều kiện JQL rồi trả danh sách hành động SẼ làm, không
+ * bình luận/không gửi thông báo/không đổi thẻ. Chỉ `execute: true` mới chạy thật (nhật ký ghi "Test run").
+ */
+export async function testRule(userId: number, projectId: number, ruleId: number, number: number, opts: { execute?: boolean } = {}) {
   await requireProject(userId, projectId, 'project.settings');
   const r = await prisma.workAutomationRule.findFirst({ where: { id: ruleId, projectId }, select: { id: true, projectId: true, name: true, trigger: true, config: true, createdById: true } });
   if (!r) throw new NotFoundError('Rule not found');
   const issue = await prisma.workIssue.findFirst({ where: { projectId, number, deletedAt: null }, select: { id: true } });
   if (!issue) throw new NotFoundError('Issue not found');
-  const status = await runRuleOnIssue(r, issue.id, null);
-  const last = await prisma.workAutomationLog.findFirst({ where: { ruleId: r.id }, orderBy: { id: 'desc' }, select: { status: true, message: true } });
-  return { status, message: last?.message ?? '' };
+  if (opts.execute) {
+    const status = await runRuleOnIssue(r, issue.id, null, { test: true });
+    const last = await prisma.workAutomationLog.findFirst({ where: { ruleId: r.id }, orderBy: { id: 'desc' }, select: { status: true, message: true } });
+    return { dryRun: false, status, message: last?.message ?? '', actions: [] as PlannedAction[] };
+  }
+  const started = Date.now();
+  const cfg = r.config as unknown as RuleConfig;
+  const conditions: Array<{ jql: string; matched: boolean }> = [];
+  try {
+    for (const c of cfg.conditions ?? []) conditions.push({ jql: c.jql, matched: await issueMatches(projectId, issue.id, c.jql, r.createdById) });
+  } catch (err) {
+    const message = `Dry run: ${err instanceof Error ? err.message : String(err)}`;
+    await log(r.id, issue.id, 'DRY_RUN', message, started);
+    return { dryRun: true, status: 'FAILED' as const, message, conditions, actions: [] as PlannedAction[] };
+  }
+  const failed = conditions.find((c) => !c.matched);
+  const actions = failed ? [] : await previewActions(r, issue.id);
+  const message = failed
+    ? `Dry run — condition not met: ${failed.jql}. Nothing would run.`
+    : `Dry run — nothing was changed. Would: ${actions.filter((a) => a.willChange).map((a) => a.summary).join('; ') || 'nothing (issue already matches every action)'}`;
+  // Nhật ký vẫn ghi để thấy ai đã thử — trạng thái DRY_RUN, không đếm vào runCount.
+  await log(r.id, issue.id, 'DRY_RUN', message, started);
+  return { dryRun: true, status: failed ? ('NO_MATCH' as const) : ('DRY_RUN' as const), message, conditions, actions };
 }
 
 let registered = false;

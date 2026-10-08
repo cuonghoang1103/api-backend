@@ -19,7 +19,7 @@ import {
 import { cn } from '@/lib/utils';
 import {
   userName, workApi, workError, type AutomationRule, type ProjectConfig, type RuleAction, type RuleActionKind, type RuleConfig,
-  type RuleLog, type RuleLogStatus, type RuleTrigger,
+  type RuleLog, type RuleLogStatus, type RuleTestResult, type RuleTrigger,
 } from '@/lib/work-api';
 import { wk } from '../hooks';
 import { JqlInput } from '../search/JqlInput';
@@ -68,6 +68,7 @@ const LOG_STATUS: Record<RuleLogStatus, { label: string; cls: string }> = {
   FAILED: { label: 'Failed', cls: 'text-[var(--w-red)] bg-[color-mix(in_srgb,var(--w-red)_12%,transparent)] border-[color-mix(in_srgb,var(--w-red)_35%,transparent)]' },
   LOOP_BLOCKED: { label: 'Loop blocked', cls: 'text-[var(--w-orange)] bg-[color-mix(in_srgb,var(--w-orange)_12%,transparent)] border-[color-mix(in_srgb,var(--w-orange)_35%,transparent)]' },
   THROTTLED: { label: 'Throttled', cls: 'text-[var(--w-orange)] bg-[color-mix(in_srgb,var(--w-orange)_12%,transparent)] border-[color-mix(in_srgb,var(--w-orange)_35%,transparent)]' },
+  DRY_RUN: { label: 'Dry run', cls: 'text-[var(--w-text-2)] bg-[var(--w-sunken)] border-[var(--w-border-strong)]' },
 };
 
 function StatusPill({ status }: { status: RuleLogStatus }) {
@@ -581,14 +582,15 @@ function RuleEditor({ open, initial, onClose, config, canEdit }: { open: boolean
 function TestDialog({ rule, onClose, config }: { rule: AutomationRule | null; onClose: () => void; config: ProjectConfig }) {
   const qc = useQueryClient();
   const [text, setText] = useState('');
-  const [result, setResult] = useState<{ status: RuleLogStatus; message: string } | null>(null);
+  const [result, setResult] = useState<RuleTestResult | null>(null);
   const [seen, setSeen] = useState<AutomationRule | null>(null);
   if (rule !== seen) { setSeen(rule); setText(''); setResult(null); }
   // Nhận "12" hoặc "KEY-12".
   const m = /^(?:[a-z][a-z0-9]*-)?(\d+)$/i.exec(text.trim());
   const number = m ? Number(m[1]) : null;
+  // CTW-7: "Run test" = chạy thử (không đổi gì); "Apply for real" mới chạy thật trên thẻ.
   const run = useMutation({
-    mutationFn: () => workApi.testAutomationRule(config.id, rule!.id, number!),
+    mutationFn: (execute: boolean) => workApi.testAutomationRule(config.id, rule!.id, number!, execute),
     onSuccess: (r) => {
       setResult(r);
       qc.invalidateQueries({ queryKey: wk.automation(config.id) });
@@ -598,9 +600,9 @@ function TestDialog({ rule, onClose, config }: { rule: AutomationRule | null; on
   });
   return (
     <Dialog open={!!rule} onClose={onClose} title="Test rule" width={460}>
-      <form onSubmit={(e) => { e.preventDefault(); if (number && !run.isPending) run.mutate(); }}>
+      <form onSubmit={(e) => { e.preventDefault(); if (number && !run.isPending) run.mutate(false); }}>
         <p className="mb-3 text-[13px] leading-relaxed text-[var(--w-text-2)]">
-          Runs <span className="font-medium text-[var(--w-text)]">{rule?.name}</span> on one issue now, skipping the trigger but checking its conditions. <span className="text-[var(--w-text)]">The actions are applied for real.</span>
+          Dry-runs <span className="font-medium text-[var(--w-text)]">{rule?.name}</span> on one issue, skipping the trigger but checking its conditions. <span className="text-[var(--w-text)]">Nothing is changed</span> — you see what the rule would do, then choose whether to apply it.
         </p>
         <label className="w-label" htmlFor="w-test-issue">Issue</label>
         <div className="flex gap-2">
@@ -611,9 +613,25 @@ function TestDialog({ rule, onClose, config }: { rule: AutomationRule | null; on
           </button>
         </div>
         {result && (
-          <div className="mt-4 flex items-start gap-2 rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[13px]">
-            <StatusPill status={result.status} />
-            <span className="min-w-0 break-words text-[var(--w-text-2)]">{result.message || '—'}</span>
+          <div className="mt-4 rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[13px]">
+            <div className="flex items-start gap-2">
+              <StatusPill status={result.status} />
+              <span className="min-w-0 break-words text-[var(--w-text-2)]">{result.dryRun && result.actions.length ? 'Dry run — nothing was changed. The rule would:' : (result.message || '—')}</span>
+            </div>
+            {result.dryRun && result.actions.length > 0 && (
+              <>
+                <ul className="mt-2 list-disc space-y-0.5 pl-5 text-[var(--w-text-2)]">
+                  {result.actions.map((a, i) => (
+                    <li key={i} className={cn('break-words', !a.willChange && 'text-[var(--w-text-3)]')}>{a.summary}</li>
+                  ))}
+                </ul>
+                {result.actions.some((a) => a.willChange) && (
+                  <button type="button" className="w-btn w-btn-sm mt-2" disabled={run.isPending} onClick={() => run.mutate(true)}>
+                    Apply for real on {config.key}-{number}
+                  </button>
+                )}
+              </>
+            )}
           </div>
         )}
       </form>

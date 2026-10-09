@@ -24,6 +24,7 @@ import { openContextualHelp, openHelp } from './help/store';
 import { readHelpLang } from './help/HelpPanel';
 import { OPEN_PALETTE_EVENT } from './shell/HeaderTools';
 import { openAiPanel, type AiQuickRequest } from './ai/store';
+import { wt, wfmt } from '@/components/work/i18n';
 
 const ITEM =
   'flex h-9 cursor-pointer items-center gap-2.5 rounded-[6px] px-2.5 text-[13px] text-[var(--w-text-2)] data-[selected=true]:bg-[var(--w-hover)] data-[selected=true]:text-[var(--w-text)]';
@@ -160,7 +161,7 @@ function Palette({ onClose }: { onClose: () => void }) {
     if (inProject && config?.permissions.createIssues) {
       list.push({
         id: 'create',
-        label: 'Create issue',
+        label: wt('palette.createIssue'),
         icon: <Plus size={15} />,
         hint: 'C',
         run: () => {
@@ -171,10 +172,10 @@ function Palette({ onClose }: { onClose: () => void }) {
     }
     if (inProject) {
       const base = `/work/${slug}/${key}`;
-      list.push({ id: 'board', label: 'Go to board', icon: <Columns3 size={15} />, run: () => go(`${base}/board`) });
-      list.push({ id: 'issues', label: 'Go to issues', icon: <List size={15} />, run: () => go(`${base}/list`) });
-      if (config?.modules?.resources && !config.clientView) list.push({ id: 'resources', label: 'Go to resources', icon: <Library size={15} />, keywords: 'links library tai nguyen lien ket', run: () => go(`${base}/resources`) });
-      list.push({ id: 'project-settings', label: 'Project settings', icon: <Settings size={15} />, run: () => go(`${base}/settings`) });
+      list.push({ id: 'board', label: wt('palette.goBoard'), icon: <Columns3 size={15} />, run: () => go(`${base}/board`) });
+      list.push({ id: 'issues', label: wt('palette.goIssues'), icon: <List size={15} />, run: () => go(`${base}/list`) });
+      if (config?.modules?.resources && !config.clientView) list.push({ id: 'resources', label: wt('palette.goResources'), icon: <Library size={15} />, keywords: 'links library tai nguyen lien ket', run: () => go(`${base}/resources`) });
+      list.push({ id: 'project-settings', label: wt('palette.projectSettings'), icon: <Settings size={15} />, run: () => go(`${base}/settings`) });
     }
     // AI — trước 04/10/2026 ⌘K không có lối nào vào AI.
     if (inProject && config?.permissions.useAi) {
@@ -184,20 +185,20 @@ function Palette({ onClose }: { onClose: () => void }) {
         ...(id === 'ai-ask' ? { hint: '⌘J' } : {}),
         run: () => { onClose(); openAiPanel({ pid, ...(quick ? { quick } : {}) }); },
       });
-      ai('ai-ask', 'Ask AI', 'hoi assistant chat');
-      ai('ai-req', 'AI: Requirement check before submitting', 'soat req yeu cau review', { task: 'req_review' });
-      ai('ai-meeting', 'AI: Meeting notes to tasks', 'bien ban hop meeting', { task: 'meeting_notes' });
-      ai('ai-health', 'AI: Team health check', 'suc khoe nhom team', { task: 'team_health' });
+      ai('ai-ask', wt('palette.askAi'), 'hoi assistant chat');
+      ai('ai-req', wt('palette.aiReq'), 'soat req yeu cau review', { task: 'req_review' });
+      ai('ai-meeting', wt('palette.aiMeeting'), 'bien ban hop meeting', { task: 'meeting_notes' });
+      ai('ai-health', wt('palette.aiHealth'), 'suc khoe nhom team', { task: 'team_health' });
     }
-    list.push({ id: 'search', label: 'Search all issues', icon: <TextSearch size={15} />, keywords: 'find filter jql query advanced', run: () => go('/work/search') });
+    list.push({ id: 'search', label: wt('palette.searchAll'), icon: <TextSearch size={15} />, keywords: 'find filter jql query advanced', run: () => go('/work/search') });
     if (slug) {
-      list.push({ id: 'projects', label: 'All projects', icon: <LayoutGrid size={15} />, run: () => go(`/work/${slug}`) });
-      list.push({ id: 'ws-settings', label: 'Workspace settings', icon: <Users size={15} />, run: () => go(`/work/${slug}/settings`) });
+      list.push({ id: 'projects', label: wt('palette.allProjects'), icon: <LayoutGrid size={15} />, run: () => go(`/work/${slug}`) });
+      list.push({ id: 'ws-settings', label: wt('palette.wsSettings'), icon: <Users size={15} />, run: () => go(`/work/${slug}/settings`) });
     }
     // Trợ giúp luôn có (mọi trang), tìm được bằng cả "guide", "huong dan".
     list.push({
       id: 'help',
-      label: 'Help & guide',
+      label: wt('palette.helpGuide'),
       icon: <CircleHelp size={15} />,
       hint: '?',
       keywords: 'guide docs how to tutorial huong dan tro giup',
@@ -235,18 +236,18 @@ function Palette({ onClose }: { onClose: () => void }) {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Command palette"
+          aria-label={wt('palette.label')}
           style={{ boxShadow: 'var(--w-shadow-pop)' }}
           className="pointer-events-auto w-full max-w-[560px] overflow-hidden rounded-[10px] bg-[var(--w-raised)] text-[var(--w-text)]"
         >
-          <Command shouldFilter={false} loop label="Command palette">
+          <Command shouldFilter={false} loop label={wt('palette.label')}>
             <div className="flex items-center gap-2.5 border-b border-[var(--w-border)] px-3.5">
               <Search size={15} className="shrink-0 text-[var(--w-text-3)]" />
               <Command.Input
                 autoFocus
                 value={search}
                 onValueChange={setSearch}
-                placeholder={inProject ? `Search ${key} and all issues, projects, actions…` : 'Search issues, projects, actions…'}
+                placeholder={inProject ? wt('palette.placeholderProject', { key }) : wt('palette.placeholder')}
                 className="h-12 min-w-0 flex-1 bg-transparent text-[14px] outline-none placeholder:text-[var(--w-text-3)]"
               />
               {searching && <Spinner size={14} />}
@@ -256,12 +257,12 @@ function Palette({ onClose }: { onClose: () => void }) {
             <Command.List className="max-h-[min(420px,55vh)] overflow-y-auto overscroll-contain p-1.5">
               {nothing && !searching && (
                 <div className="py-8 text-center text-[13px] text-[var(--w-text-3)]">
-                  {issues.isError || global.isError ? 'Search failed. Try again.' : 'No results'}
+                  {issues.isError || global.isError ? wt('palette.searchFailed') : wt('palette.noResults')}
                 </div>
               )}
 
               {keyHit && (
-                <Command.Group heading="Jump to" className={GROUP}>
+                <Command.Group heading={wt('palette.jumpTo')} className={GROUP}>
                   <Command.Item key={`key-${keyHit.id}`} value={`key-${keyHit.id}`} onSelect={() => go(keyHit.url)} className={ITEM}>
                     <IssueTypeIcon type={keyHit.type} size={13} />
                     <span className="shrink-0 font-mono text-[12px] font-semibold text-[var(--w-accent-text)]">{keyHit.key}</span>
@@ -273,7 +274,7 @@ function Palette({ onClose }: { onClose: () => void }) {
               )}
 
               {resourceItems.length > 0 && pid && (
-                <Command.Group heading="Resources" className={GROUP}>
+                <Command.Group heading={wt('palette.resources')} className={GROUP}>
                   {resourceItems.map((r) => (
                     <Command.Item key={`res-${r.id}`} value={`res-${r.id}`} onSelect={() => { onClose(); openResourceLink(pid, r); }} className={ITEM}>
                       <Favicon r={r} size={14} />
@@ -286,7 +287,7 @@ function Palette({ onClose }: { onClose: () => void }) {
               )}
 
               {(localItems.length > 0 || otherGlobal.length > 0 || showSearchAll) && (
-                <Command.Group heading="Issues" className={GROUP}>
+                <Command.Group heading={wt('palette.issues')} className={GROUP}>
                   {localItems.map((it) => {
                     const type = config?.issueTypes.find((t) => t.id === it.typeId);
                     return (
@@ -329,7 +330,7 @@ function Palette({ onClose }: { onClose: () => void }) {
                         Search all issues for <span className="font-medium text-[var(--w-text)]">“{q}”</span>
                       </span>
                       {global.data && debounced === q && (
-                        <span className="shrink-0 text-[11.5px] tabular-nums text-[var(--w-text-3)]">{global.data.total.toLocaleString('en-US')}</span>
+                        <span className="shrink-0 text-[11.5px] tabular-nums text-[var(--w-text-3)]">{global.data.total.toLocaleString(wfmt.intl())}</span>
                       )}
                     </Command.Item>
                   )}
@@ -337,7 +338,7 @@ function Palette({ onClose }: { onClose: () => void }) {
               )}
 
               {actions.length > 0 && (
-                <Command.Group heading="Actions" className={GROUP}>
+                <Command.Group heading={wt('palette.actions')} className={GROUP}>
                   {actions.map((a) => (
                     <Command.Item key={a.id} value={`action-${a.id}`} onSelect={a.run} className={ITEM}>
                       <span className="flex w-4 shrink-0 justify-center text-[var(--w-text-3)]">{a.icon}</span>
@@ -349,20 +350,20 @@ function Palette({ onClose }: { onClose: () => void }) {
               )}
 
               {projects.length > 0 && (
-                <Command.Group heading="Projects" className={GROUP}>
+                <Command.Group heading={wt('palette.projects')} className={GROUP}>
                   {projects.map((p) => (
                     <Command.Item key={`project-${p.id}`} value={`project-${p.id}`} onSelect={() => go(`/work/${slug}/${p.key}/board`)} className={ITEM}>
                       <FolderKanban size={15} className="shrink-0 text-[var(--w-text-3)]" />
                       <span className="w-[48px] shrink-0 truncate font-mono text-[11px] font-semibold text-[var(--w-text-3)]">{p.key}</span>
                       <span className="min-w-0 flex-1 truncate">{p.name}</span>
-                      {p.key === key && <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">Current</span>}
+                      {p.key === key && <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{wt('palette.current')}</span>}
                     </Command.Item>
                   ))}
                 </Command.Group>
               )}
 
               {helpItems.length > 0 && (
-                <Command.Group heading="Help" className={GROUP}>
+                <Command.Group heading={wt('palette.help')} className={GROUP}>
                   {helpItems.map((a) => (
                     <Command.Item
                       key={`help-${a.id}`}
@@ -378,14 +379,14 @@ function Palette({ onClose }: { onClose: () => void }) {
               )}
 
               {wsList.length > 0 && (
-                <Command.Group heading="Workspaces" className={GROUP}>
+                <Command.Group heading={wt('palette.workspaces')} className={GROUP}>
                   {wsList.map((w) => (
                     <Command.Item key={`ws-${w.id}`} value={`ws-${w.id}`} onSelect={() => go(`/work/${w.slug}`)} className={ITEM}>
                       <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[4px] bg-[var(--w-sunken)] text-[9px] font-bold text-[var(--w-text-2)]">
                         {w.name.slice(0, 2).toUpperCase()}
                       </span>
                       <span className="min-w-0 flex-1 truncate">{w.name}</span>
-                      {w.slug === slug && <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">Current</span>}
+                      {w.slug === slug && <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{wt('palette.current')}</span>}
                     </Command.Item>
                   ))}
                 </Command.Group>
@@ -393,9 +394,9 @@ function Palette({ onClose }: { onClose: () => void }) {
             </Command.List>
 
             <div className="flex items-center gap-4 border-t border-[var(--w-border)] px-3.5 py-2 text-[11px] text-[var(--w-text-3)]">
-              <span className="flex items-center gap-1"><kbd className="w-kbd">↑</kbd><kbd className="w-kbd">↓</kbd> navigate</span>
-              <span className="flex items-center gap-1"><kbd className="w-kbd"><CornerDownLeft size={10} /></kbd> open</span>
-              <span className="hidden items-center gap-1 sm:flex"><kbd className="w-kbd">esc</kbd> close</span>
+              <span className="flex items-center gap-1"><kbd className="w-kbd">↑</kbd><kbd className="w-kbd">↓</kbd> {wt('palette.navigate')}</span>
+              <span className="flex items-center gap-1"><kbd className="w-kbd"><CornerDownLeft size={10} /></kbd> {wt('palette.open')}</span>
+              <span className="hidden items-center gap-1 sm:flex"><kbd className="w-kbd">esc</kbd> {wt('palette.close')}</span>
             </div>
           </Command>
         </div>

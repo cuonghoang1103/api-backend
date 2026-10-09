@@ -24,6 +24,7 @@ import { AgentLeasesProvider, AssigneeKindFilter, assigneeKindOk, type AssigneeK
 import {
   EmptyState, IssueTypeIcon, isTyping, PickerList, Popover, UserAvatar, useToggle, PageLoading,
 } from '@/components/work/ui';
+import { wt } from '@/components/work/i18n';
 
 function daysLeft(end: string | null) {
   if (!end) return null;
@@ -111,7 +112,7 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
             value={q}
             onChange={(e) => setQ(e.target.value)}
             onKeyDown={(e) => e.key === 'Escape' && (setQ(''), (e.target as HTMLInputElement).blur())}
-            placeholder="Search board"
+            placeholder={wt('board.searchBoard')}
             className="w-input h-[28px] w-[180px] pl-7 text-[12px]"
           />
         </div>
@@ -129,11 +130,11 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
           ))}
         </div>
         <button type="button" onClick={() => setOnlyMine((v) => !v)} className={cn('w-btn w-btn-sm', onlyMine && 'w-btn-on')}>
-          Only my issues
+          {wt('board.onlyMine')}
         </button>
         <AssigneeKindFilter config={config} value={kind} onChange={setKind} />
         <button ref={typeRef} type="button" onClick={typeMenu.toggle} className={cn('w-btn w-btn-sm', types.length > 0 && 'w-btn-on')}>
-          <Filter size={12} /> Type{types.length > 0 && ` · ${types.length}`}
+          <Filter size={12} /> {wt('board.typeFilter')}{types.length > 0 && ` · ${types.length}`}
         </button>
         <Popover open={typeMenu.on} onClose={typeMenu.close} anchorRef={typeRef} width={220}>
           <PickerList
@@ -141,12 +142,12 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
             options={config.issueTypes.filter((t) => t.level !== 1).map((t) => ({ value: t.id, label: t.name, icon: <IssueTypeIcon type={t} size={12} /> }))}
             selected={types}
             onPick={(id) => setTypes((ts) => (ts.includes(id) ? ts.filter((x) => x !== id) : [...ts, id]))}
-            placeholder="Issue type…"
+            placeholder={wt('board.issueTypePh')}
           />
         </Popover>
         {filtered && (
           <button type="button" onClick={() => { setQ(''); setOnlyMine(false); setPeople([]); setTypes([]); setKind('ALL'); }} className="w-btn w-btn-ghost w-btn-sm">
-            <X size={12} /> Clear
+            <X size={12} /> {wt('board.clear')}
           </button>
         )}
     </>
@@ -156,22 +157,22 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
     <div className="flex h-full flex-col">
       <ProjectHeader
         config={config}
-        title={sprint ? sprint.name : 'Board'}
+        title={sprint ? sprint.name : wt('board.board')}
         // UX-A: "x days left" là thông tin của sprint ⇒ đứng cạnh tên sprint, không chiếm chỗ của nút.
         extra={sprint && left !== null ? (
           <span className={cn('shrink-0 whitespace-nowrap text-[12px] max-sm:!hidden', left < 0 ? 'text-[var(--w-red)]' : 'text-[var(--w-text-3)]')}>
-            {left < 0 ? `${-left} days overdue` : left === 0 ? 'Ends today' : `${left} days left`}
+            {left < 0 ? wt('board.daysOverdue', { n: -left }) : left === 0 ? wt('board.endsToday') : wt('board.daysLeft', { n: left })}
           </span>
         ) : undefined}
       >
         {sprint?.state === 'ACTIVE' && config.permissions.manageSprints && (
           <button type="button" className="w-btn w-btn-sm" onClick={() => setCompleteOpen(true)}>
-            <CheckCircle2 size={13} /> <span className="hidden sm:inline">Complete sprint</span>
+            <CheckCircle2 size={13} /> <span className="hidden sm:inline">{wt('board.completeSprint')}</span>
           </button>
         )}
         {config.permissions.createIssues && (
-          <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title="Create issue (C)">
-            <Plus size={14} /> <span className="hidden sm:inline">Create</span>
+          <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title={wt('board.createIssueC')}>
+            <Plus size={14} /> <span className="hidden sm:inline">{wt('board.create')}</span>
           </button>
         )}
       </ProjectHeader>
@@ -179,19 +180,19 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
       {board.data?.fallback && (
         <div className="flex shrink-0 items-center gap-2 border-b border-[var(--w-border)] bg-[var(--w-accent-soft)] px-4 py-2 text-[12px] text-[var(--w-text-2)]">
           <Info size={13} className="shrink-0 text-[var(--w-accent-text)]" />
-          No sprint is running, so the board shows every open issue. Plan and start a sprint from the Backlog.
+          {wt('board.fallback')}
         </div>
       )}
       {/* CTW-28 (§8.5): dự án tắt "Done của agent ⇒ Review" ⇒ nhắc ngay trên board (velocity có thể gồm việc chưa ai duyệt). */}
       {(config.settings?.agents as { doneToReview?: boolean } | undefined)?.doneToReview === false && config.members.some((m) => m.kind === 'AGENT') && (
         <div className="flex shrink-0 items-center gap-2 border-b border-[var(--w-border)] bg-[color-mix(in_srgb,var(--w-orange)_10%,transparent)] px-4 py-2 text-[12px] text-[var(--w-text-2)]">
           <Info size={13} className="shrink-0 text-[var(--w-orange)]" />
-          AI agents can close issues directly in this project — their work skips review. Change it in Project settings → AI agents.
+          {wt('board.agentsSkipReview')}
         </div>
       )}
       {sprint?.goal && (
         <div className="shrink-0 border-b border-[var(--w-border)] px-4 py-2 text-[12px] text-[var(--w-text-2)]">
-          <span className="font-medium text-[var(--w-text)]">Sprint goal:</span> {sprint.goal}
+          <span className="font-medium text-[var(--w-text)]">{wt('board.sprintGoal')}</span> {sprint.goal}
         </div>
       )}
 
@@ -202,12 +203,12 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
         {board.isLoading ? (
           <PageLoading />
         ) : board.error ? (
-          <EmptyState title="Could not load the board" body={workError(board.error)} action={<button type="button" className="w-btn" onClick={() => board.refetch()}>Try again</button>} />
+          <EmptyState title={wt('board.loadFailed')} body={workError(board.error)} action={<button type="button" className="w-btn" onClick={() => board.refetch()}>{wt('board.tryAgain')}</button>} />
         ) : board.data && !board.data.issues.length && !filtered ? (
           <EmptyState
-            title="Nothing on the board yet"
-            body={config.permissions.createIssues ? 'Create your first issue — press C anywhere on this page.' : 'Issues will appear here once your team creates them.'}
-            action={config.permissions.createIssues ? <button type="button" className="w-btn w-btn-primary" onClick={() => setCreateOpen(true)}><Plus size={14} /> Create issue</button> : undefined}
+            title={wt('board.emptyTitle')}
+            body={config.permissions.createIssues ? wt('board.emptyBodyCreate') : wt('board.emptyBody')}
+            action={config.permissions.createIssues ? <button type="button" className="w-btn w-btn-primary" onClick={() => setCreateOpen(true)}><Plus size={14} /> {wt('board.createIssue')}</button> : undefined}
           />
         ) : board.data ? (
           <AgentLeasesProvider config={config}>
@@ -245,7 +246,7 @@ function BoardPageInner() {
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   if (isLoading) return <PageLoading />;
   if (error || !config || !pid) {
-    return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} action={<StartProjectButton label="Start a new project" />} />;
+    return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : wt('common.projectNotFoundBody')} action={<StartProjectButton label={wt('common.startNewProject')} />} />;
   }
   return <BoardView config={config} pid={pid} slug={params.ws} />;
 }

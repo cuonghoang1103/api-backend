@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { workError } from '@/lib/work-api';
 import { Dialog, EmptyState, Field, PageLoading, Spinner } from '../ui';
 import { ddmm, mondayOf, schoolApi, schoolKeys, SDLC_PHASES, todayLocal, type AiUsageInput, type AiUsageLog } from './schoolApi';
+import { wt } from '@/components/work/i18n';
 
 export default function AiUsageTab({ pid, canEdit }: { pid: number; canEdit: boolean }) {
   const qc = useQueryClient();
@@ -24,13 +25,13 @@ export default function AiUsageTab({ pid, canEdit }: { pid: number; canEdit: boo
     const m = new Map<string, { label: string; rows: AiUsageLog[] }>();
     for (const l of q.data?.logs ?? []) {
       const key = l.weekNo && l.weekNo > 0 ? `n${String(l.weekNo).padStart(3, '0')}` : `d${mondayOf(l.usedAt)}`;
-      if (!m.has(key)) m.set(key, { label: l.weekNo && l.weekNo > 0 ? `Week ${l.weekNo}` : `Week of ${ddmm(mondayOf(l.usedAt))}`, rows: [] });
+      if (!m.has(key)) m.set(key, { label: l.weekNo && l.weekNo > 0 ? `Week ${l.weekNo}` : wt('school.weekOf', { d: ddmm(mondayOf(l.usedAt)) }), rows: [] });
       m.get(key)!.rows.push(l);
     }
     return [...m.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([, v]) => v);
   }, [q.data]);
   if (q.isLoading) return <PageLoading />;
-  if (!q.data) return <EmptyState title="Could not load" body={q.error ? workError(q.error) : undefined} />;
+  if (!q.data) return <EmptyState title={wt('common.couldNotLoad')} body={q.error ? workError(q.error) : undefined} />;
   const logs = q.data.logs;
   const missing = logs.filter((l) => !l.validation || !l.value).length;
 
@@ -39,31 +40,31 @@ export default function AiUsageTab({ pid, canEdit }: { pid: number; canEdit: boo
     try {
       const r = await schoolApi.syncAi(pid);
       await qc.invalidateQueries({ queryKey: schoolKeys.ai(pid) });
-      toast.success(r.added ? `Added ${r.added} entr${r.added === 1 ? 'y' : 'ies'} from CT Work` : 'Nothing new to add');
-    } catch (e) { toast.error(workError(e, 'Could not collect')); } finally { setBusy(null); }
+      toast.success(r.added ? wt('school.aiAdded', { count: r.added }) : wt('school.nothingNew'));
+    } catch (e) { toast.error(workError(e, wt('school.collectFailed'))); } finally { setBusy(null); }
   };
   const patch = async (l: AiUsageLog, body: Partial<AiUsageInput>) => {
     try {
       const res = await schoolApi.updateAi(pid, l.id, body);
       qc.setQueryData<typeof q.data>(schoolKeys.ai(pid), (old) => old && { ...old, logs: old.logs.map((x) => (x.id === l.id ? { ...x, ...res } : x)) });
-    } catch (e) { toast.error(workError(e, 'Could not save')); }
+    } catch (e) { toast.error(workError(e, wt('common.couldNotSave'))); }
   };
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-wrap items-center gap-3 border-b border-[var(--w-border)] px-4 py-3">
-        <div className="text-[13px]"><b>{logs.length}</b> entries · <span className={cn(missing && 'text-[var(--w-yellow)]')}>{missing} need validation or a value score</span></div>
+        <div className="text-[13px]"><b>{logs.length}</b> {wt('school.entries')} · <span className={cn(missing && 'text-[var(--w-yellow)]')}>{wt('school.needValidation', { n: missing })}</span></div>
         <div className="ml-auto flex flex-wrap gap-2">
-          {canEdit && <button type="button" className="w-btn w-btn-sm" disabled={!!busy} onClick={sync} title="AI-assisted issues, AI agent runs and AI assistant conversations">{busy === 'sync' ? <Spinner size={12} /> : <Bot size={13} />} Collect from CT Work</button>}
-          {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setAddOpen(true)}><Plus size={13} /> Entry</button>}
+          {canEdit && <button type="button" className="w-btn w-btn-sm" disabled={!!busy} onClick={sync} title={wt('school.collectTitle')}>{busy === 'sync' ? <Spinner size={12} /> : <Bot size={13} />} {wt('school.collect')}</button>}
+          {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setAddOpen(true)}><Plus size={13} /> {wt('school.entry')}</button>}
           <button type="button" className="w-btn w-btn-sm w-btn-primary" disabled={!!busy} onClick={async () => {
             setBusy('export');
-            try { toast.success(`Exported ${await schoolApi.exportAi(pid)}`); } catch (e) { toast.error(workError(e, 'Could not export')); } finally { setBusy(null); }
-          }}>{busy === 'export' ? <Spinner size={12} /> : <Download size={13} />} Export Template0 (.xlsx)</button>
+            try { toast.success(wt('fpt.exported', { name: await schoolApi.exportAi(pid) })); } catch (e) { toast.error(workError(e, wt('fpt.exportFailed'))); } finally { setBusy(null); }
+          }}>{busy === 'export' ? <Spinner size={12} /> : <Download size={13} />} {wt('school.exportT0')}</button>
         </div>
       </div>
       {!logs.length ? (
-        <EmptyState title="No AI usage logged yet" body="SWP391 asks every group to declare how they used AI each week. Collect what CT Work already knows (AI-assisted issues, agent runs, AI assistant chats), add your own entries for ChatGPT, Copilot…, then fill in how you validated each output."
-          action={canEdit ? <div className="flex gap-2"><button type="button" className="w-btn w-btn-primary" onClick={sync}><Bot size={14} /> Collect from CT Work</button><button type="button" className="w-btn" onClick={() => setAddOpen(true)}><Plus size={14} /> Add entry</button></div> : undefined} />
+        <EmptyState title={wt('school.noAi')} body={wt('school.noAiBody')}
+          action={canEdit ? <div className="flex gap-2"><button type="button" className="w-btn w-btn-primary" onClick={sync}><Bot size={14} /> {wt('school.collect')}</button><button type="button" className="w-btn" onClick={() => setAddOpen(true)}><Plus size={14} /> {wt('school.addEntry')}</button></div> : undefined} />
       ) : (
         <div className="min-h-0 flex-1 overflow-auto p-4">
           {groups.map((g) => (
@@ -77,7 +78,7 @@ export default function AiUsageTab({ pid, canEdit }: { pid: number; canEdit: boo
                   <tbody>
                     {g.rows.map((l) => (
                       <tr key={l.id} className="align-top">
-                        <td className="whitespace-nowrap border-t border-[var(--w-border)] px-2 py-1.5">{ddmm(l.usedAt)}{l.source === 'AUTO' && <div className="text-[10.5px] text-[var(--w-text-3)]" title="Collected from CT Work">auto</div>}</td>
+                        <td className="whitespace-nowrap border-t border-[var(--w-border)] px-2 py-1.5">{ddmm(l.usedAt)}{l.source === 'AUTO' && <div className="text-[10.5px] text-[var(--w-text-3)]" title={wt('school.collectedFrom')}>auto</div>}</td>
                         <td className="border-t border-[var(--w-border)] px-1 py-1">
                           <select className="w-input h-[28px] w-[130px] text-[12px]" disabled={!canEdit} value={l.phase} aria-label="SDLC phase" onChange={(e) => patch(l, { phase: e.target.value })}>
                             {SDLC_PHASES.map((p) => <option key={p}>{p}</option>)}
@@ -96,8 +97,8 @@ export default function AiUsageTab({ pid, canEdit }: { pid: number; canEdit: boo
                         </td>
                         <Cell w={170} v={l.risks} ro={!canEdit} label="Risks" onCommit={(v) => patch(l, { risks: v || null })} />
                         <td className="border-t border-[var(--w-border)] px-1 py-1.5 text-center">
-                          {canEdit && <button type="button" className="text-[var(--w-text-3)] hover:text-[var(--w-red)]" aria-label="Delete entry" onClick={async () => {
-                            if (!window.confirm('Delete this entry? (An auto-collected entry comes back the next time you press “Collect from CT Work”.)')) return;
+                          {canEdit && <button type="button" className="text-[var(--w-text-3)] hover:text-[var(--w-red)]" aria-label={wt('school.deleteEntry')} onClick={async () => {
+                            if (!window.confirm(wt('school.deleteEntryQ'))) return;
                             try { await schoolApi.deleteAi(pid, l.id); qc.invalidateQueries({ queryKey: schoolKeys.ai(pid) }); } catch (e) { toast.error(workError(e)); }
                           }}><Trash2 size={12} /></button>}
                         </td>
@@ -121,7 +122,7 @@ function Cell({ v, onCommit, ro, label, w, max = 4000, warn }: { v: string | nul
   return (
     <td className="border-t border-[var(--w-border)] px-1 py-1" style={{ width: w }}>
       <textarea rows={2} className={cn('w-input min-h-[44px] resize-y py-1 text-[12.5px]', warn && !ro && 'placeholder:text-[var(--w-yellow)]')} readOnly={ro} aria-label={label} maxLength={max}
-        placeholder={warn && !ro ? 'Fill in…' : ''} value={focus ? t : v ?? ''}
+        placeholder={warn && !ro ? wt('school.fillIn') : ''} value={focus ? t : v ?? ''}
         onFocus={() => { setFocus(true); setT(v ?? ''); }} onChange={(e) => setT(e.target.value)}
         onBlur={() => { setFocus(false); if (t.trim() !== (v ?? '')) onCommit(t.trim()); }} />
     </td>
@@ -136,26 +137,26 @@ function AddDialog({ open, onClose, pid, onAdded }: { open: boolean; onClose: ()
   const submit = async () => {
     if (!f.task.trim() || !f.tool.trim()) return;
     setBusy(true);
-    try { await schoolApi.addAi(pid, f); onAdded(); setF(blank()); onClose(); } catch (e) { toast.error(workError(e, 'Could not add')); } finally { setBusy(false); }
+    try { await schoolApi.addAi(pid, f); onAdded(); setF(blank()); onClose(); } catch (e) { toast.error(workError(e, wt('school.addFailed'))); } finally { setBusy(false); }
   };
   return (
-    <Dialog open={open} onClose={() => !busy && onClose()} title="Add AI usage entry" width={620}
-      footer={<><button type="button" className="w-btn" onClick={onClose} disabled={busy}>Cancel</button><button type="button" className="w-btn w-btn-primary" onClick={submit} disabled={busy || !f.task.trim() || !f.tool.trim()}>{busy && <Spinner size={12} />} Add</button></>}>
+    <Dialog open={open} onClose={() => !busy && onClose()} title={wt('school.addAiEntry')} width={620}
+      footer={<><button type="button" className="w-btn" onClick={onClose} disabled={busy}>{wt('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" onClick={submit} disabled={busy || !f.task.trim() || !f.tool.trim()}>{busy && <Spinner size={12} />} {wt('common.add')}</button></>}>
       <div className="grid gap-x-4 sm:grid-cols-3">
-        <Field label="Date"><input type="date" className="w-input" value={f.usedAt} onChange={(e) => set('usedAt', e.target.value)} /></Field>
-        <Field label="SDLC phase"><select className="w-input" value={f.phase} onChange={(e) => set('phase', e.target.value)}>{SDLC_PHASES.map((p) => <option key={p}>{p}</option>)}</select></Field>
-        <Field label="AI tool"><input className="w-input" value={f.tool} maxLength={120} placeholder="ChatGPT, Copilot…" onChange={(e) => set('tool', e.target.value)} /></Field>
+        <Field label={wt('common.day')}><input type="date" className="w-input" value={f.usedAt} onChange={(e) => set('usedAt', e.target.value)} /></Field>
+        <Field label={wt('school.sdlc')}><select className="w-input" value={f.phase} onChange={(e) => set('phase', e.target.value)}>{SDLC_PHASES.map((p) => <option key={p}>{p}</option>)}</select></Field>
+        <Field label={wt('school.aiTool')}><input className="w-input" value={f.tool} maxLength={120} placeholder="ChatGPT, Copilot…" onChange={(e) => set('tool', e.target.value)} /></Field>
       </div>
-      <Field label="Task / activity"><input className="w-input" value={f.task} maxLength={300} placeholder="User story development" onChange={(e) => set('task', e.target.value)} /></Field>
+      <Field label={wt('school.task')}><input className="w-input" value={f.task} maxLength={300} placeholder="User story development" onChange={(e) => set('task', e.target.value)} /></Field>
       <div className="grid gap-x-4 sm:grid-cols-2">
-        <Field label="AI output"><textarea className="w-input min-h-[60px]" value={f.output ?? ''} maxLength={4000} placeholder="10 user stories" onChange={(e) => set('output', e.target.value)} /></Field>
-        <Field label="Your validation / modification"><textarea className="w-input min-h-[60px]" value={f.validation ?? ''} maxLength={4000} placeholder="Kept 5, rewrote 3 to match scope" onChange={(e) => set('validation', e.target.value)} /></Field>
-        <Field label="Evidence / link"><input className="w-input" value={f.evidence ?? ''} maxLength={1000} placeholder="Drive folder, commit, chat export" onChange={(e) => set('evidence', e.target.value)} /></Field>
-        <Field label="Quantitative measure"><input className="w-input" value={f.measure ?? ''} maxLength={300} placeholder="8 user stories kept" onChange={(e) => set('measure', e.target.value)} /></Field>
+        <Field label={wt('school.aiOutput')}><textarea className="w-input min-h-[60px]" value={f.output ?? ''} maxLength={4000} placeholder="10 user stories" onChange={(e) => set('output', e.target.value)} /></Field>
+        <Field label={wt('school.validation')}><textarea className="w-input min-h-[60px]" value={f.validation ?? ''} maxLength={4000} placeholder="Kept 5, rewrote 3 to match scope" onChange={(e) => set('validation', e.target.value)} /></Field>
+        <Field label={wt('school.evidence')}><input className="w-input" value={f.evidence ?? ''} maxLength={1000} placeholder="Drive folder, commit, chat export" onChange={(e) => set('evidence', e.target.value)} /></Field>
+        <Field label={wt('school.measure')}><input className="w-input" value={f.measure ?? ''} maxLength={300} placeholder="8 user stories kept" onChange={(e) => set('measure', e.target.value)} /></Field>
       </div>
       <div className="grid gap-x-4 sm:grid-cols-[120px_1fr]">
-        <Field label="Value (1–5)"><select className="w-input" value={f.value ?? ''} onChange={(e) => set('value', e.target.value ? Number(e.target.value) : null)}><option value="">—</option>{[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>{n}</option>)}</select></Field>
-        <Field label="Risks / limitations"><input className="w-input" value={f.risks ?? ''} maxLength={4000} placeholder="Some stories were out of scope" onChange={(e) => set('risks', e.target.value)} /></Field>
+        <Field label={wt('school.value15')}><select className="w-input" value={f.value ?? ''} onChange={(e) => set('value', e.target.value ? Number(e.target.value) : null)}><option value="">—</option>{[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>{n}</option>)}</select></Field>
+        <Field label={wt('school.risks')}><input className="w-input" value={f.risks ?? ''} maxLength={4000} placeholder="Some stories were out of scope" onChange={(e) => set('risks', e.target.value)} /></Field>
       </div>
     </Dialog>
   );

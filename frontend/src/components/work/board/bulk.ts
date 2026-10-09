@@ -8,6 +8,7 @@
 
 import { workApi, type BulkPatch, type StatusCategory } from '@/lib/work-api';
 import type { Lookups } from '../hooks';
+import { wt } from '@/components/work/i18n';
 
 export interface BulkResult { updated: number[]; failed: Array<{ number: number; error: string }> }
 
@@ -31,7 +32,7 @@ export async function bulkSetStatusByName(
   const failed: BulkResult['failed'] = [];
   for (const i of issues) {
     const st = lk.workflowOfType(i.typeId)?.statuses.find((s) => s.name === name);
-    if (!st) { failed.push({ number: i.number, error: `"${name}" is not in this issue type's workflow` }); continue; }
+    if (!st) { failed.push({ number: i.number, error: wt('board.notInWf', { name }) }); continue; }
     groups.set(st.id, [...(groups.get(st.id) ?? []), i.number]);
   }
   const updated: number[] = [];

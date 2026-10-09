@@ -23,6 +23,7 @@ import UpgradeDialog from './ai/UpgradeDialog';
 import { ConfirmDialog } from './settings/shared';
 import { Dialog, EmptyState, Field, formatDate, IssueTypeIcon, Popover, Spinner, StatusBadge, UserAvatar, useToggle } from './ui';
 import { AddToCalendar } from './ctw';
+import { wt } from '@/components/work/i18n';
 
 function todayStr(): string {
   const t = new Date();
@@ -30,7 +31,9 @@ function todayStr(): string {
 }
 const dateInput = (iso: string | null | undefined) => (iso ? iso.slice(0, 10) : '');
 
-const STATUS_LABEL: Record<VersionStatus, string> = { UNRELEASED: 'Unreleased', RELEASED: 'Released', ARCHIVED: 'Archived' };
+const STATUS_LABEL: Record<VersionStatus, string> = {
+  get UNRELEASED() { return wt('releases.unreleased'); }, get RELEASED() { return wt('releases.released'); }, get ARCHIVED() { return wt('common.archived'); },
+};
 const STATUS_STYLE: Record<VersionStatus, string> = {
   UNRELEASED: 'bg-[var(--w-sunken)] text-[var(--w-text-2)] border-[var(--w-border-strong)]',
   RELEASED: 'bg-[color-mix(in_srgb,var(--w-green)_14%,transparent)] text-[var(--w-green)] border-[color-mix(in_srgb,var(--w-green)_40%,transparent)]',
@@ -48,7 +51,7 @@ export function VersionStatusBadge({ status }: { status: VersionStatus }) {
 function Progress({ done, total, wide }: { done: number; total: number; wide?: boolean }) {
   const pct = total ? Math.round((done / total) * 100) : 0;
   return (
-    <div className={cn('flex items-center gap-2', wide ? 'w-full' : 'w-[150px]')} title={`${done} of ${total} issues done`}>
+    <div className={cn('flex items-center gap-2', wide ? 'w-full' : 'w-[150px]')} title={wt('releases.progressTitle', { done, total })}>
       <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--w-sunken)]">
         <div className="h-full rounded-full bg-[var(--w-green)]" style={{ width: `${pct}%` }} />
       </div>
@@ -83,35 +86,35 @@ function VersionDialog({ open, onClose, pid, version }: { open: boolean; onClose
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: wk.versions(pid) });
-      toast.success(version ? 'Version updated' : 'Version created');
+      toast.success(version ? wt('releases.updated') : wt('releases.created'));
       onClose();
     },
-    onError: (err) => toast.error(workError(err, 'Could not save the version')),
+    onError: (err) => toast.error(workError(err, wt('releases.saveFailed'))),
   });
 
   return (
-    <Dialog open={open} onClose={onClose} title={version ? 'Edit version' : 'Create version'} width={480}>
+    <Dialog open={open} onClose={onClose} title={version ? wt('releases.editVersion') : wt('releases.createVersion')} width={480}>
       <form onSubmit={(e) => { e.preventDefault(); if (name.trim() && !badDates && !save.isPending) save.mutate(); }}>
-        <Field label="Name">
-          <input className="w-input" value={name} onChange={(e) => setName(e.target.value)} maxLength={60} placeholder="e.g. v1.2.0" autoFocus />
+        <Field label={wt('common.name')}>
+          <input className="w-input" value={name} onChange={(e) => setName(e.target.value)} maxLength={60} placeholder={wt('releases.namePh')} autoFocus />
         </Field>
         <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
-          <Field label="Start date">
+          <Field label={wt('common.startDate')}>
             <input type="date" className="w-input" value={start} onChange={(e) => setStart(e.target.value)} />
           </Field>
-          <Field label="Release date">
+          <Field label={wt('releases.releaseDate')}>
             <input type="date" className="w-input" value={release} onChange={(e) => setRelease(e.target.value)} />
           </Field>
         </div>
-        {badDates && <p className="-mt-2 mb-3 text-[12px] text-[var(--w-red)]">The start date must be on or before the release date.</p>}
-        <Field label="Description">
-          <textarea className="w-input min-h-[80px] py-2" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="What is this release about?" />
+        {badDates && <p className="-mt-2 mb-3 text-[12px] text-[var(--w-red)]">{wt('releases.badDates')}</p>}
+        <Field label={wt('common.description')}>
+          <textarea className="w-input min-h-[80px] py-2" value={description} onChange={(e) => setDescription(e.target.value)} placeholder={wt('releases.descPh')} />
         </Field>
         <div className="mt-5 flex justify-end gap-2">
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="submit" className="w-btn w-btn-primary" disabled={!name.trim() || badDates || save.isPending}>
             {save.isPending && <Spinner size={12} />}
-            {version ? 'Save' : 'Create'}
+            {version ? wt('common.save') : wt('common.create')}
           </button>
         </div>
       </form>
@@ -145,10 +148,10 @@ function ReleaseDialog({ open, onClose, pid, version, versions }: {
     onSuccess: (r) => {
       qc.invalidateQueries({ queryKey: wk.versions(pid) });
       qc.invalidateQueries({ queryKey: wk.issues(pid) });
-      toast.success(r.moved ? `${r.version.name} released · ${r.moved} unfinished issue${r.moved === 1 ? '' : 's'} moved` : `${r.version.name} released`);
+      toast.success(r.moved ? wt('releases.releasedMoved', { name: r.version.name, count: r.moved }) : wt('releases.releasedName', { name: r.version.name }));
       onClose();
     },
-    onError: (err) => toast.error(workError(err, 'Could not release the version')),
+    onError: (err) => toast.error(workError(err, wt('releases.releaseFailed'))),
   });
 
   return (
@@ -156,31 +159,31 @@ function ReleaseDialog({ open, onClose, pid, version, versions }: {
       open={open}
       onClose={onClose}
       width={460}
-      title={<span className="inline-flex items-center gap-2"><Rocket size={15} /> Release {version?.name}</span>}
+      title={<span className="inline-flex items-center gap-2"><Rocket size={15} /> {wt('releases.releaseName', { name: version?.name ?? '' })}</span>}
       footer={(
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="button" className="w-btn w-btn-primary" disabled={!version || release.isPending} onClick={() => release.mutate()}>
-            {release.isPending && <Spinner size={12} />} Release
+            {release.isPending && <Spinner size={12} />} {wt('releases.release')}
           </button>
         </>
       )}
     >
-      <Field label="Release date">
+      <Field label={wt('releases.releaseDate')}>
         <input type="date" className="w-input" value={date} onChange={(e) => setDate(e.target.value)} />
       </Field>
       {unfinished > 0 ? (
         <Field
-          label={`Move ${unfinished} unfinished issue${unfinished === 1 ? '' : 's'} to`}
-          hint="Unfinished issues can't ship in this release. Pick where they go next."
+          label={wt('releases.moveUnfinished', { count: unfinished })}
+          hint={wt('releases.moveHint')}
         >
           <select className="w-input" value={target} onChange={(e) => setTarget(e.target.value)}>
             {others.map((v) => <option key={v.id} value={v.id}>{v.name}</option>)}
-            <option value="none">Remove from version</option>
+            <option value="none">{wt('releases.removeFromVersion')}</option>
           </select>
         </Field>
       ) : (
-        <p className="text-[13px] text-[var(--w-text-2)]">All {version?.total ?? 0} issues in this version are done.</p>
+        <p className="text-[13px] text-[var(--w-text-2)]">{wt('releases.allDone', { count: version?.total ?? 0 })}</p>
       )}
     </Dialog>
   );
@@ -194,15 +197,15 @@ function ActionsMenu({ version, onAction }: { version: VersionSummary; onAction:
   const ref = useRef<HTMLButtonElement>(null);
   const t = useToggle();
   const items: Array<{ id: VersionAction; label: string; danger?: boolean }> = [
-    { id: 'edit', label: 'Edit' },
-    ...(version.status === 'UNRELEASED' ? [{ id: 'release' as const, label: 'Release' }] : []),
-    ...(version.status === 'RELEASED' ? [{ id: 'unrelease' as const, label: 'Unrelease' }] : []),
-    version.status === 'ARCHIVED' ? { id: 'unarchive' as const, label: 'Unarchive' } : { id: 'archive' as const, label: 'Archive' },
-    { id: 'delete', label: 'Delete', danger: true },
+    { id: 'edit', label: wt('common.edit') },
+    ...(version.status === 'UNRELEASED' ? [{ id: 'release' as const, label: wt('releases.release') }] : []),
+    ...(version.status === 'RELEASED' ? [{ id: 'unrelease' as const, label: wt('releases.unrelease') }] : []),
+    version.status === 'ARCHIVED' ? { id: 'unarchive' as const, label: wt('common.unarchive') } : { id: 'archive' as const, label: wt('common.archive') },
+    { id: 'delete', label: wt('common.delete'), danger: true },
   ];
   return (
     <>
-      <button ref={ref} type="button" onClick={(e) => { e.stopPropagation(); t.toggle(); }} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`Actions for ${version.name}`}>
+      <button ref={ref} type="button" onClick={(e) => { e.stopPropagation(); t.toggle(); }} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('releases.actionsFor', { name: version.name })}>
         <MoreHorizontal size={15} />
       </button>
       <Popover open={t.on} onClose={t.close} anchorRef={ref} width={170} align="end">
@@ -235,20 +238,20 @@ function useVersionActions(pid: number, versions: VersionSummary[], onDeleted?: 
     mutationFn: ({ v, status }: { v: VersionSummary; status: 'UNRELEASED' | 'ARCHIVED' }) => workApi.updateVersion(pid, v.id, { status }),
     onSuccess: (out, { v, status }) => {
       qc.invalidateQueries({ queryKey: wk.versions(pid) });
-      toast.success(status === 'ARCHIVED' ? `${out.name} archived` : v.status === 'ARCHIVED' ? `${out.name} restored as unreleased` : `${out.name} is unreleased again`);
+      toast.success(status === 'ARCHIVED' ? wt('releases.archivedName', { name: out.name }) : v.status === 'ARCHIVED' ? wt('releases.restoredName', { name: out.name }) : wt('releases.unreleasedName', { name: out.name }));
     },
-    onError: (err) => toast.error(workError(err, 'Could not update the version')),
+    onError: (err) => toast.error(workError(err, wt('releases.updateFailed'))),
   });
   const del = useMutation({
     mutationFn: (v: VersionSummary) => workApi.deleteVersion(pid, v.id),
     onSuccess: (_d, v) => {
       qc.invalidateQueries({ queryKey: wk.versions(pid) });
       qc.invalidateQueries({ queryKey: wk.issues(pid) });
-      toast.success(`${v.name} deleted`);
+      toast.success(wt('releases.deletedName', { name: v.name }));
       setDeleting(null);
       onDeleted?.();
     },
-    onError: (err) => toast.error(workError(err, 'Could not delete the version')),
+    onError: (err) => toast.error(workError(err, wt('releases.deleteFailed'))),
   });
 
   const run = (v: VersionSummary, a: VersionAction) => {
@@ -268,11 +271,11 @@ function useVersionActions(pid: number, versions: VersionSummary[], onDeleted?: 
         onClose={() => setDeleting(null)}
         onConfirm={() => deleting && del.mutate(deleting)}
         pending={del.isPending}
-        title={`Delete ${deleting?.name ?? 'version'}?`}
-        confirmLabel="Delete version"
+        title={wt('releases.deleteQ', { name: deleting?.name ?? wt('common.version') })}
+        confirmLabel={wt('releases.deleteVersion')}
         body={deleting?.total
-          ? <>The version will be removed from <strong className="text-[var(--w-text)]">{deleting.total} issue{deleting.total === 1 ? '' : 's'}</strong>. The issues themselves are kept. This can&apos;t be undone.</>
-          : <>This version has no issues. This can&apos;t be undone.</>}
+          ? wt('releases.deleteBody', { count: deleting.total })
+          : wt('releases.deleteBodyEmpty')}
       />
     </>
   );
@@ -283,10 +286,10 @@ function useVersionActions(pid: number, versions: VersionSummary[], onDeleted?: 
 
 type Tab = 'all' | VersionStatus;
 const TABS: Array<{ id: Tab; label: string }> = [
-  { id: 'all', label: 'All' },
-  { id: 'UNRELEASED', label: 'Unreleased' },
-  { id: 'RELEASED', label: 'Released' },
-  { id: 'ARCHIVED', label: 'Archived' },
+  { id: 'all', get label() { return wt('common.all'); } },
+  { id: 'UNRELEASED', get label() { return wt('releases.unreleased'); } },
+  { id: 'RELEASED', get label() { return wt('releases.released'); } },
+  { id: 'ARCHIVED', get label() { return wt('common.archived'); } },
 ];
 
 export function ReleasesList({ config, pid, onOpenVersion }: { config: ProjectConfig; pid: number; onOpenVersion: (id: number) => void }) {
@@ -307,7 +310,7 @@ export function ReleasesList({ config, pid, onOpenVersion }: { config: ProjectCo
   return (
     <div className="w-page">
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <div className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]" role="group" aria-label="Filter by status">
+        <div className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]" role="group" aria-label={wt('releases.filterStatus')}>
           {TABS.map((t) => (
             <button
               key={t.id}
@@ -322,11 +325,11 @@ export function ReleasesList({ config, pid, onOpenVersion }: { config: ProjectCo
         </div>
         <div className="relative">
           <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search versions" className="w-input h-[28px] w-[180px] pl-7 text-[12px]" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={wt('releases.searchPh')} className="w-input h-[28px] w-[180px] pl-7 text-[12px]" />
         </div>
         {canManage && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm ml-auto" onClick={actions.create}>
-            <Plus size={14} /> Create version
+            <Plus size={14} /> {wt('releases.createVersion')}
           </button>
         )}
       </div>
@@ -334,26 +337,26 @@ export function ReleasesList({ config, pid, onOpenVersion }: { config: ProjectCo
       {q.isLoading ? (
         <div className="flex justify-center py-16"><Spinner size={20} /></div>
       ) : q.error ? (
-        <EmptyState title="Could not load versions" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('releases.loadFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : !versions.length ? (
         <EmptyState
-          title="No versions yet"
-          body="Versions group the issues you plan to ship together. Track progress toward a release date and publish release notes when it ships."
-          action={canManage ? <button type="button" className="w-btn w-btn-primary" onClick={actions.create}><Plus size={14} /> Create version</button> : undefined}
+          title={wt('releases.noVersions')}
+          body={wt('releases.noVersionsBody')}
+          action={canManage ? <button type="button" className="w-btn w-btn-primary" onClick={actions.create}><Plus size={14} /> {wt('releases.createVersion')}</button> : undefined}
         />
       ) : !shown.length ? (
-        <EmptyState title="No versions match" body="Try another status or clear the search." />
+        <EmptyState title={wt('releases.noMatch')} body={wt('releases.noMatchBody')} />
       ) : (
         <div className="overflow-x-auto rounded-[var(--w-radius-lg)] border border-[var(--w-border)]">
           <table className="w-full min-w-[760px] border-collapse text-[13px]">
             <thead>
               <tr className="border-b border-[var(--w-border)] bg-[var(--w-sunken)] text-left text-[11.5px] font-medium text-[var(--w-text-3)]">
-                <th className="px-3 py-2 font-medium">Version</th>
-                <th className="px-3 py-2 font-medium">Status</th>
-                <th className="px-3 py-2 font-medium">Progress</th>
-                <th className="px-3 py-2 font-medium">Start date</th>
-                <th className="px-3 py-2 font-medium">Release date</th>
-                <th className="px-3 py-2 font-medium">Description</th>
+                <th className="px-3 py-2 font-medium">{wt('common.version')}</th>
+                <th className="px-3 py-2 font-medium">{wt('common.status')}</th>
+                <th className="px-3 py-2 font-medium">{wt('common.progress')}</th>
+                <th className="px-3 py-2 font-medium">{wt('common.startDate')}</th>
+                <th className="px-3 py-2 font-medium">{wt('releases.releaseDate')}</th>
+                <th className="px-3 py-2 font-medium">{wt('common.description')}</th>
                 <th className="w-10 px-2 py-2" />
               </tr>
             </thead>
@@ -368,7 +371,7 @@ export function ReleasesList({ config, pid, onOpenVersion }: { config: ProjectCo
                   <td className="whitespace-nowrap px-3 py-2.5 text-[var(--w-text-2)]">{formatDate(v.startDate) || <span className="text-[var(--w-text-3)]">—</span>}</td>
                   <td className="whitespace-nowrap px-3 py-2.5">
                     <span className={v.overdue ? 'text-[var(--w-red)]' : 'text-[var(--w-text-2)]'}>{formatDate(v.releaseDate) || <span className="text-[var(--w-text-3)]">—</span>}</span>
-                    {v.overdue && <span className="ml-1.5 rounded-[4px] bg-[color-mix(in_srgb,var(--w-red)_14%,transparent)] px-1.5 py-0.5 text-[10.5px] font-semibold uppercase text-[var(--w-red)]">Overdue</span>}
+                    {v.overdue && <span className="ml-1.5 rounded-[4px] bg-[color-mix(in_srgb,var(--w-red)_14%,transparent)] px-1.5 py-0.5 text-[10.5px] font-semibold uppercase text-[var(--w-red)]">{wt('common.overdue')}</span>}
                   </td>
                   <td className="max-w-[280px] truncate px-3 py-2.5 text-[var(--w-text-2)]" title={v.description ?? undefined}>{v.description}</td>
                   <td className="px-2 py-2.5 text-right" onClick={(e) => e.stopPropagation()}>
@@ -439,9 +442,9 @@ function ReleaseNotes({ config, pid, version }: { config: ProjectConfig; pid: nu
     mutationFn: () => workApi.updateVersion(pid, version.id, { releaseNotes: text.trim() ? text : null }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: wk.versions(pid) });
-      toast.success('Release notes saved');
+      toast.success(wt('releases.notesSaved'));
     },
-    onError: (err) => toast.error(workError(err, 'Could not save the release notes')),
+    onError: (err) => toast.error(workError(err, wt('releases.notesSaveFailed'))),
   });
   const gen = useMutation({
     mutationFn: () => workApi.aiReleaseNotes(pid, version.id, { audience, language }),
@@ -449,18 +452,18 @@ function ReleaseNotes({ config, pid, version }: { config: ProjectConfig; pid: nu
       setText(r.notes);
       setQuota(r.quota);
       setMode('write');
-      toast.success('Draft ready — review it, then save');
+      toast.success(wt('releases.draftReady'));
     },
     onError: (err) => {
       if (isAiQuotaError(err)) setUpgrade(true);
-      else toast.error(workError(err, 'The AI could not write release notes'));
+      else toast.error(workError(err, wt('releases.aiFailed')));
     },
   });
 
   return (
     <div className="rounded-[var(--w-radius-lg)] border border-[var(--w-border)] bg-[var(--w-panel)]">
       <div className="flex flex-wrap items-center gap-2 border-b border-[var(--w-border)] px-3 py-2">
-        <div className="text-[13px] font-semibold">Release notes</div>
+        <div className="text-[13px] font-semibold">{wt('releases.notes')}</div>
         <div className="ml-auto inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]" role="tablist">
           {(['write', 'preview'] as const).filter((m) => canManage || m === 'preview').map((m) => (
             <button
@@ -471,7 +474,7 @@ function ReleaseNotes({ config, pid, version }: { config: ProjectConfig; pid: nu
               onClick={() => setMode(m)}
               className={cn('h-[24px] px-2 text-[12px] font-medium capitalize', mode === m ? 'bg-[var(--w-active)] text-[var(--w-text)]' : 'text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}
             >
-              {m}
+              {m === 'write' ? wt('releases.write') : wt('common.preview')}
             </button>
           ))}
         </div>
@@ -479,20 +482,20 @@ function ReleaseNotes({ config, pid, version }: { config: ProjectConfig; pid: nu
 
       {canAi && (
         <div className="flex flex-wrap items-center gap-2 border-b border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2">
-          <select className="w-input h-[28px] w-auto py-0 text-[12px]" value={audience} onChange={(e) => setAudience(e.target.value as 'users' | 'team')} aria-label="Audience">
-            <option value="users">For users</option>
-            <option value="team">For the team</option>
+          <select className="w-input h-[28px] w-auto py-0 text-[12px]" value={audience} onChange={(e) => setAudience(e.target.value as 'users' | 'team')} aria-label={wt('releases.audience')}>
+            <option value="users">{wt('releases.forUsers')}</option>
+            <option value="team">{wt('releases.forTeam')}</option>
           </select>
-          <select className="w-input h-[28px] w-auto py-0 text-[12px]" value={language} onChange={(e) => setLanguage(e.target.value as 'en' | 'vi')} aria-label="Language">
+          <select className="w-input h-[28px] w-auto py-0 text-[12px]" value={language} onChange={(e) => setLanguage(e.target.value as 'en' | 'vi')} aria-label={wt('releases.aiLanguage')}>
             <option value="en">English</option>
-            <option value="vi">Vietnamese</option>
+            <option value="vi">Tiếng Việt</option>
           </select>
           <button type="button" className="w-btn w-btn-sm" disabled={gen.isPending} onClick={() => gen.mutate()}>
-            {gen.isPending ? <Spinner size={12} /> : <Sparkles size={13} className="text-[var(--w-accent-text)]" />} Generate with AI
+            {gen.isPending ? <Spinner size={12} /> : <Sparkles size={13} className="text-[var(--w-accent-text)]" />} {wt('releases.genAi')}
           </button>
           {quota && (
             <span className="text-[11.5px] text-[var(--w-text-3)]">
-              {quota.remaining === null ? 'Unlimited AI requests (Pro)' : `${quota.remaining} AI request${quota.remaining === 1 ? '' : 's'} left today`}
+              {quota.remaining === null ? wt('releases.unlimitedAi') : wt('releases.aiLeft', { count: quota.remaining })}
             </span>
           )}
         </div>
@@ -503,7 +506,7 @@ function ReleaseNotes({ config, pid, version }: { config: ProjectConfig; pid: nu
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder={'Write release notes in Markdown.\n\n## New\n- …\n\n## Bug fixes\n- …'}
+            placeholder={wt('releases.notesPh')}
             className="w-input min-h-[280px] resize-y py-2 font-mono text-[12.5px] leading-relaxed"
             disabled={gen.isPending}
           />
@@ -524,16 +527,16 @@ function ReleaseNotes({ config, pid, version }: { config: ProjectConfig; pid: nu
             </ReactMarkdown>
           </div>
         ) : (
-          <p className="py-6 text-center text-[13px] text-[var(--w-text-3)]">No release notes yet.</p>
+          <p className="py-6 text-center text-[13px] text-[var(--w-text-3)]">{wt('releases.noNotes')}</p>
         )}
       </div>
 
       {canManage && (
         <div className="flex items-center justify-end gap-2 border-t border-[var(--w-border)] px-3 py-2">
-          {dirty && <span className="mr-auto text-[12px] text-[var(--w-text-3)]">Unsaved changes</span>}
-          {dirty && <button type="button" className="w-btn w-btn-sm" onClick={() => setText(saved)}>Discard</button>}
+          {dirty && <span className="mr-auto text-[12px] text-[var(--w-text-3)]">{wt('issues.unsaved')}</span>}
+          {dirty && <button type="button" className="w-btn w-btn-sm" onClick={() => setText(saved)}>{wt('common.discard')}</button>}
           <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={!dirty || save.isPending} onClick={() => save.mutate()}>
-            {save.isPending && <Spinner size={12} />} Save
+            {save.isPending && <Spinner size={12} />} {wt('common.save')}
           </button>
         </div>
       )}
@@ -567,9 +570,9 @@ export function VersionDetail({ config, pid, lk, versionId, onBack, onOpenIssue 
   if (detail.error || !detail.data) {
     return (
       <EmptyState
-        title="Version not found"
-        body={detail.error ? workError(detail.error) : 'It may have been deleted.'}
-        action={<button type="button" className="w-btn" onClick={onBack}><ArrowLeft size={14} /> All versions</button>}
+        title={wt('releases.notFound')}
+        body={detail.error ? workError(detail.error) : wt('releases.notFoundBody')}
+        action={<button type="button" className="w-btn" onClick={onBack}><ArrowLeft size={14} /> {wt('releases.allVersions')}</button>}
       />
     );
   }
@@ -579,22 +582,22 @@ export function VersionDetail({ config, pid, lk, versionId, onBack, onOpenIssue 
   return (
     <div className="w-page">
       <button type="button" onClick={onBack} className="mb-3 inline-flex items-center gap-1 text-[12.5px] text-[var(--w-text-2)] hover:text-[var(--w-text)]">
-        <ArrowLeft size={13} /> All versions
+        <ArrowLeft size={13} /> {wt('releases.allVersions')}
       </button>
       <div className="mb-5 flex flex-wrap items-start gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-[20px] font-semibold">{v.name}</h1>
             <VersionStatusBadge status={v.status} />
-            {summary?.overdue && <span className="rounded-[4px] bg-[color-mix(in_srgb,var(--w-red)_14%,transparent)] px-1.5 py-0.5 text-[10.5px] font-semibold uppercase text-[var(--w-red)]">Overdue</span>}
+            {summary?.overdue && <span className="rounded-[4px] bg-[color-mix(in_srgb,var(--w-red)_14%,transparent)] px-1.5 py-0.5 text-[10.5px] font-semibold uppercase text-[var(--w-red)]">{wt('common.overdue')}</span>}
           </div>
           <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px] text-[var(--w-text-2)]">
-            {v.startDate && <span>Start: {formatDate(v.startDate)}</span>}
-            <span className={summary?.overdue ? 'text-[var(--w-red)]' : undefined}>Release: {formatDate(v.releaseDate) || 'Not set'}</span>
-            {v.releasedAt && <span>Released {formatDate(v.releasedAt)}</span>}
+            {v.startDate && <span>{wt('releases.startOn', { date: formatDate(v.startDate) })}</span>}
+            <span className={summary?.overdue ? 'text-[var(--w-red)]' : undefined}>{wt('releases.releaseOn', { date: formatDate(v.releaseDate) || wt('common.notSet') })}</span>
+            {v.releasedAt && <span>{wt('releases.releasedOn', { date: formatDate(v.releasedAt) })}</span>}
             {/* CTW-25: mốc phát hành vào Google Calendar / Outlook. */}
             {v.releaseDate && v.status === 'UNRELEASED' && (
-              <AddToCalendar label="Calendar" className="!h-6 !px-1.5 text-[11.5px]" event={{ title: `Release ${v.name}`, start: v.releaseDate.slice(0, 10), allDay: true, details: v.description ?? null }} />
+              <AddToCalendar label={wt('releases.calendar')} className="!h-6 !px-1.5 text-[11.5px]" event={{ title: wt('releases.releaseName', { name: v.name }), start: v.releaseDate.slice(0, 10), allDay: true, details: v.description ?? null }} />
             )}
           </div>
           {v.description && <p className="mt-2 max-w-[680px] whitespace-pre-wrap text-[13px] text-[var(--w-text-2)]">{v.description}</p>}
@@ -602,7 +605,7 @@ export function VersionDetail({ config, pid, lk, versionId, onBack, onOpenIssue 
         {canManage && summary && (
           <div className="flex items-center gap-2">
             {v.status === 'UNRELEASED' && (
-              <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => actions.run(summary, 'release')}><Rocket size={13} /> Release</button>
+              <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => actions.run(summary, 'release')}><Rocket size={13} /> {wt('releases.release')}</button>
             )}
             <ActionsMenu version={summary} onAction={(a) => actions.run(summary, a)} />
           </div>
@@ -615,13 +618,13 @@ export function VersionDetail({ config, pid, lk, versionId, onBack, onOpenIssue 
         <div className="min-w-0">
           {total ? (
             <>
-              <IssueGroup title="Done" issues={groups.done} lk={lk} onOpenIssue={onOpenIssue} />
-              <IssueGroup title="In progress" issues={groups.progress} lk={lk} onOpenIssue={onOpenIssue} />
-              <IssueGroup title="To do" issues={groups.todo} lk={lk} onOpenIssue={onOpenIssue} />
+              <IssueGroup title={wt('status.catDone')} issues={groups.done} lk={lk} onOpenIssue={onOpenIssue} />
+              <IssueGroup title={wt('status.catInProgress')} issues={groups.progress} lk={lk} onOpenIssue={onOpenIssue} />
+              <IssueGroup title={wt('status.catTodo')} issues={groups.todo} lk={lk} onOpenIssue={onOpenIssue} />
             </>
           ) : (
             <div className="rounded-[var(--w-radius-lg)] border border-dashed border-[var(--w-border-strong)] px-4 py-10 text-center text-[13px] text-[var(--w-text-2)]">
-              No issues in this version yet. Set the <strong className="text-[var(--w-text)]">Fix version</strong> field on an issue to add it.
+              {wt('releases.noIssues')}
             </div>
           )}
         </div>

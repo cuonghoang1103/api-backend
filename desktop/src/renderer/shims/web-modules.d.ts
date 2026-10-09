@@ -340,6 +340,15 @@ declare module '@/components/work/ai/store' {
   export const useAiPanel: <T>(chon: (st: { open: boolean; pid: number | null }) => T) => T;
 }
 
+/**
+ * CTW K-3 (10/10/2026): thông báo tin chat CT Work — ThongBaoHost gắn CÙNG host của web (badge, âm, thông báo native
+ * qua `Notification` của Electron, bấm mở đúng kênh). `go` = điều hướng của app (đường dẫn web có `?c=&m=`).
+ */
+declare module '@/components/work/chat/ChatNotifier' {
+  import type { ComponentType } from 'react';
+  export const ChatNotifierHost: ComponentType<{ go?: (url: string) => void }>;
+}
+
 declare module '@/components/providers/TanStackQueryProvider' {
   import type { ComponentType, ReactNode } from 'react';
   const P: ComponentType<{ children: ReactNode }>;

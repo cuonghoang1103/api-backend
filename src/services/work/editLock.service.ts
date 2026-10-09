@@ -30,6 +30,8 @@ const ALLOWED_WHILE_LOCKED: RegExp[] = [
   /^\/ai\/messages\/\d+\/actions\/\d+$/, // bỏ qua / khôi phục đề xuất — KHÔNG phải /apply
   /^\/filters(\/\d+)?$/,
   /^\/dashboards(\/\d+)?$/,
+  // CTW K-3: nhắn tin trong kênh chat (trừ "tạo thẻ từ tin" — đó là đổi kế hoạch).
+  /^\/chat\/(?!.*\/issue$).+$/,
 ];
 
 export function isAllowedWhileLocked(subPath: string): boolean {

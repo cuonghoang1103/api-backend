@@ -212,5 +212,7 @@ export const WORKLOG_SOURCES = ['MANUAL', 'AGENT_AUTO'] as const;
 export const AGENT_INBOX_TYPES = [
   'issue.assigned', 'comment.mention', 'comment.on_my_issue', 'issue.returned', 'handoff.received',
   'approval.decided', 'issue.flag', 'lease.expired',
+  // CTW K-3: được @nhắc trong kênh chat dự án (payload: channel, messageId, threadId, url — đọc bằng chat_read).
+  'chat.mention',
 ] as const;
 export type AgentInboxType = (typeof AGENT_INBOX_TYPES)[number];

@@ -20,6 +20,8 @@ import {
   CATEGORY_DOT, IssueTypeIcon, LabelChip, PickerList, Popover, PRIORITIES, PriorityIcon, StatusBadge, UserAvatar, useToggle,
   type PickOption,
 } from './ui';
+import { wt } from '@/components/work/i18n';
+import { statusName, typeName } from '@/components/work/i18n/names';
 
 /** Nút mở popover chọn. `bare` = không viền (dùng trong cột thuộc tính). */
 export function Trigger({ children, disabled, bare, onClick, triggerRef, className }: {
@@ -62,15 +64,15 @@ export function TypePicker({ config, value, onChange, levels, bare, disabled }: 
     <>
       <Trigger triggerRef={p.ref} onClick={p.toggle} bare={bare} disabled={disabled}>
         <IssueTypeIcon type={cur} />
-        <span className="flex-1 truncate">{cur?.name ?? 'Select type'}</span>
+        <span className="flex-1 truncate">{cur ? typeName(cur.name) : wt('fields.selectType')}</span>
         {!disabled && !bare && <ChevronDown size={13} className="text-[var(--w-text-3)]" />}
       </Trigger>
       <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={220}>
         <PickerList
-          options={types.map((t) => ({ value: t.id, label: t.name, icon: <IssueTypeIcon type={t} size={12} /> }))}
+          options={types.map((t) => ({ value: t.id, label: typeName(t.name), icon: <IssueTypeIcon type={t} size={12} /> }))}
           selected={[value]}
           onPick={(id) => { onChange(id); p.close(); }}
-          placeholder="Issue type…"
+          placeholder={wt('board.issueTypePh')}
         />
       </Popover>
     </>
@@ -95,13 +97,13 @@ export function StatusPicker({ lk, issue, onChange, bare, disabled }: {
       <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={220}>
         <PickerList
           options={(wf?.statuses ?? []).filter((s) => allowed.includes(s.id) || s.id === issue.statusId).map((s) => ({
-            value: s.id, label: s.name, hint: s.id === issue.statusId ? 'Current' : undefined,
+            value: s.id, label: statusName(s.name), hint: s.id === issue.statusId ? wt('fields.current') : undefined,
             icon: <span className="h-2 w-2 rounded-full" style={{ background: CATEGORY_DOT[s.category] }} />,
           }))}
           selected={[issue.statusId]}
           onPick={(id) => { if (id !== issue.statusId) onChange(id); p.close(); }}
-          placeholder="Move to…"
-          empty="No transitions from this status"
+          placeholder={wt('fields.moveTo')}
+          empty={wt('fields.noTransitions')}
         />
       </Popover>
     </>
@@ -124,7 +126,7 @@ export function PriorityPicker({ value, onChange, bare, disabled }: { value: num
           options={PRIORITIES.map((x) => ({ value: x.value, label: x.label, icon: <PriorityIcon priority={x.value} size={14} /> }))}
           selected={[value]}
           onPick={(v) => { onChange(v); p.close(); }}
-          placeholder="Priority…"
+          placeholder={wt('board.priorityPh')}
         />
       </Popover>
     </>
@@ -148,14 +150,14 @@ export function AssigneePicker({ config, value, onChange, meId, bare, disabled }
   const agents = assignable.filter((m) => m.kind === 'AGENT' && (dir[m.id]?.status !== 'RETIRED' || m.id === value));
   const hasAgents = agents.length > 0;
   const options: PickOption<number>[] = [
-    { value: 0, label: 'Unassigned', icon: <UserAvatar user={null} size={16} /> },
-    ...people.map((m) => ({ value: m.id, label: userName(m), hint: m.id === meId ? 'You' : undefined, keywords: m.username, icon: <UserAvatar user={m} size={16} />, group: hasAgents ? 'People' : undefined })),
+    { value: 0, label: wt('common.unassigned'), icon: <UserAvatar user={null} size={16} /> },
+    ...people.map((m) => ({ value: m.id, label: userName(m), hint: m.id === meId ? wt('fields.you') : undefined, keywords: m.username, icon: <UserAvatar user={m} size={16} />, group: hasAgents ? wt('agents.people') : undefined })),
     ...agents.map((m) => {
       const st = dir[m.id]?.status;
       return {
         value: m.id, label: userName(m), keywords: `${m.username} agent ai bot ${dir[m.id]?.model ?? ''}`,
-        hint: st === 'PAUSED' ? 'Paused' : st === 'RETIRED' ? 'Retired' : dir[m.id]?.model,
-        icon: <UserAvatar user={m} size={16} />, group: 'AI agents', disabled: (st === 'PAUSED' || st === 'RETIRED') && m.id !== value,
+        hint: st === 'PAUSED' ? wt('fields.paused') : st === 'RETIRED' ? wt('fields.retired') : dir[m.id]?.model,
+        icon: <UserAvatar user={m} size={16} />, group: wt('fields.aiAgents'), disabled: (st === 'PAUSED' || st === 'RETIRED') && m.id !== value,
       };
     }),
   ];
@@ -163,10 +165,10 @@ export function AssigneePicker({ config, value, onChange, meId, bare, disabled }
     <>
       <Trigger triggerRef={p.ref} onClick={p.toggle} bare={bare} disabled={disabled}>
         <UserAvatar user={cur} size={18} />
-        <span className={cn('flex-1 truncate', !cur && 'text-[var(--w-text-3)]')}>{cur ? userName(cur) : 'Unassigned'}</span>
+        <span className={cn('flex-1 truncate', !cur && 'text-[var(--w-text-3)]')}>{cur ? userName(cur) : wt('common.unassigned')}</span>
       </Trigger>
       <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={hasAgents ? 270 : 240}>
-        <PickerList options={options} selected={[value ?? 0]} onPick={(v) => { onChange(v || null); p.close(); }} placeholder="Assign to…" />
+        <PickerList options={options} selected={[value ?? 0]} onPick={(v) => { onChange(v || null); p.close(); }} placeholder={wt('board.assignTo')} />
       </Popover>
     </>
   );
@@ -192,14 +194,14 @@ export function LabelsPicker({ config, value, onChange, bare, disabled }: {
       onChange([...value, l.id]);
       qc.invalidateQueries({ queryKey: wk.project(config.id) });
     } catch (err) {
-      toast.error(workError(err, 'Could not create label'));
+      toast.error(workError(err, wt('fields.labelFailed')));
     }
   };
   return (
     <>
       <Trigger triggerRef={p.ref} onClick={p.toggle} bare={bare} disabled={disabled} className="flex-wrap py-1">
         {chosen.length ? chosen.map((l) => <LabelChip key={l.id} label={l} />) : (
-          <span className="flex items-center gap-1.5 text-[var(--w-text-3)]"><Tag size={13} /> None</span>
+          <span className="flex items-center gap-1.5 text-[var(--w-text-3)]"><Tag size={13} /> {wt('common.none')}</span>
         )}
       </Trigger>
       <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={240}>
@@ -209,8 +211,8 @@ export function LabelsPicker({ config, value, onChange, bare, disabled }: {
           selected={value}
           onPick={toggle}
           onCreate={disabled ? undefined : create}
-          placeholder="Find or create a label…"
-          empty="No labels yet"
+          placeholder={wt('fields.findLabel')}
+          empty={wt('fields.noLabels')}
         />
       </Popover>
     </>
@@ -224,11 +226,11 @@ export function ComponentsPicker({ config, value, onChange, bare, disabled }: {
 }) {
   const p = usePick();
   const chosen = config.components.filter((c) => value.includes(c.id));
-  if (!config.components.length && !chosen.length) return <span className="px-2 text-[13px] text-[var(--w-text-3)]">None</span>;
+  if (!config.components.length && !chosen.length) return <span className="px-2 text-[13px] text-[var(--w-text-3)]">{wt('common.none')}</span>;
   return (
     <>
       <Trigger triggerRef={p.ref} onClick={p.toggle} bare={bare} disabled={disabled}>
-        <span className={cn('flex-1 truncate', !chosen.length && 'text-[var(--w-text-3)]')}>{chosen.map((c) => c.name).join(', ') || 'None'}</span>
+        <span className={cn('flex-1 truncate', !chosen.length && 'text-[var(--w-text-3)]')}>{chosen.map((c) => c.name).join(', ') || wt('common.none')}</span>
       </Trigger>
       <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={240}>
         <PickerList
@@ -236,7 +238,7 @@ export function ComponentsPicker({ config, value, onChange, bare, disabled }: {
           options={config.components.map((c) => ({ value: c.id, label: c.name }))}
           selected={value}
           onPick={(id) => onChange(value.includes(id) ? value.filter((x) => x !== id) : [...value, id])}
-          placeholder="Components…"
+          placeholder={wt('fields.componentsPh')}
         />
       </Popover>
     </>
@@ -253,19 +255,19 @@ export function SprintPicker({ config, value, onChange, bare, disabled }: {
   return (
     <>
       <Trigger triggerRef={p.ref} onClick={p.toggle} bare={bare} disabled={disabled}>
-        <span className={cn('flex-1 truncate', !cur && 'text-[var(--w-text-3)]')}>{cur ? cur.name : value ? 'Closed sprint' : 'Backlog'}</span>
-        {cur?.state === 'ACTIVE' && <span className="rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 text-[10px] font-semibold uppercase text-[var(--w-accent-text)]">Active</span>}
+        <span className={cn('flex-1 truncate', !cur && 'text-[var(--w-text-3)]')}>{cur ? cur.name : value ? wt('issues.closedSprint') : wt('backlog.backlog')}</span>
+        {cur?.state === 'ACTIVE' && <span className="rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 text-[10px] font-semibold uppercase text-[var(--w-accent-text)]">{wt('board.active')}</span>}
       </Trigger>
       <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={240}>
         <PickerList
           options={[
-            { value: 0, label: 'Backlog' },
-            ...config.sprints.map((s) => ({ value: s.id, label: s.name, hint: s.state === 'ACTIVE' ? 'Active' : undefined })),
+            { value: 0, label: wt('backlog.backlog') },
+            ...config.sprints.map((s) => ({ value: s.id, label: s.name, hint: s.state === 'ACTIVE' ? wt('board.active') : undefined })),
           ]}
           selected={[value ?? 0]}
           onPick={(v) => { onChange(v || null); p.close(); }}
-          placeholder="Sprint…"
-          empty="No open sprints"
+          placeholder={wt('board.sprintPh')}
+          empty={wt('fields.noSprints')}
         />
       </Popover>
     </>
@@ -287,7 +289,7 @@ export function ParentPicker({ config, lk, childLevel, value, onChange, excludeI
     enabled: p.on && parentTypeIds.length > 0,
   });
   if (!parentTypeIds.length) return null;
-  const label = childLevel === -1 ? 'Parent issue' : 'Epic';
+  const isSub = childLevel === -1;
   return (
     <>
       <Trigger triggerRef={p.ref} onClick={p.toggle} bare={bare} disabled={disabled}>
@@ -297,13 +299,13 @@ export function ParentPicker({ config, lk, childLevel, value, onChange, excludeI
             <span className="flex-1 truncate">{value.title}</span>
           </>
         ) : (
-          <span className="flex items-center gap-1.5 text-[var(--w-text-3)]"><CircleDashed size={13} /> {childLevel === -1 ? 'Choose parent' : 'No epic'}</span>
+          <span className="flex items-center gap-1.5 text-[var(--w-text-3)]"><CircleDashed size={13} /> {childLevel === -1 ? wt('fields.chooseParent') : wt('board.noEpic')}</span>
         )}
       </Trigger>
       <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={300}>
         <PickerList
           options={[
-            ...(childLevel === -1 ? [] : [{ value: 0, label: 'No epic' }]),
+            ...(childLevel === -1 ? [] : [{ value: 0, label: wt('board.noEpic') }]),
             ...(q.data?.items ?? []).filter((i) => i.id !== excludeId).map((i) => ({
               value: i.id, label: i.title, keywords: lk.issueKey(i.number), hint: lk.issueKey(i.number),
               icon: <IssueTypeIcon type={lk.types.get(i.typeId)} size={12} />,
@@ -315,8 +317,8 @@ export function ParentPicker({ config, lk, childLevel, value, onChange, excludeI
             onChange(hit ? { id: hit.id, number: hit.number, title: hit.title } : null);
             p.close();
           }}
-          placeholder={`Search ${label.toLowerCase()}s…`}
-          empty={q.isLoading ? 'Loading…' : `No open ${label.toLowerCase()}s`}
+          placeholder={isSub ? wt('fields.searchParents') : wt('board.searchEpics')}
+          empty={q.isLoading ? wt('common.loading') : isSub ? wt('fields.noOpenParents') : wt('fields.noOpenEpics')}
         />
       </Popover>
     </>
@@ -326,7 +328,7 @@ export function ParentPicker({ config, lk, childLevel, value, onChange, excludeI
 // ─── Ngày + số ───────────────────────────────────────────────────
 
 /** Ô ngày: nút hiện "Sep 26, 2026", bấm mở lịch nhỏ (shell/DatePopover). */
-export function DateInput({ value, onChange, disabled, placeholder = 'None', bare = true }: {
+export function DateInput({ value, onChange, disabled, placeholder = wt('common.none'), bare = true }: {
   value: string | null; onChange: (v: string | null) => void; disabled?: boolean; placeholder?: string; bare?: boolean;
 }) {
   const p = usePick();
@@ -344,7 +346,7 @@ export function DateInput({ value, onChange, disabled, placeholder = 'None', bar
   );
 }
 
-export function NumberInput({ value, onCommit, placeholder = 'None', disabled, step = 1 }: {
+export function NumberInput({ value, onCommit, placeholder = wt('common.none'), disabled, step = 1 }: {
   value: number | null; onCommit: (v: number | null) => void; placeholder?: string; disabled?: boolean; step?: number;
 }) {
   const [draft, setDraft] = useState<string | null>(null);
@@ -387,11 +389,11 @@ export function FixVersionPicker({ config, value, onChange, bare, disabled }: {
   return (
     <>
       <Trigger triggerRef={p.ref} onClick={p.toggle} bare={bare} disabled={disabled}>
-        <span className={cn('flex-1 truncate', !cur && 'text-[var(--w-text-3)]')}>{cur ? cur.name : value ? 'Unknown version' : 'None'}</span>
-        {cur?.status === 'RELEASED' && <span className="rounded-[4px] bg-[color-mix(in_srgb,var(--w-green)_14%,transparent)] px-1.5 text-[10px] font-semibold uppercase text-[var(--w-green)]">Released</span>}
+        <span className={cn('flex-1 truncate', !cur && 'text-[var(--w-text-3)]')}>{cur ? cur.name : value ? wt('fields.unknownVersion') : wt('common.none')}</span>
+        {cur?.status === 'RELEASED' && <span className="rounded-[4px] bg-[color-mix(in_srgb,var(--w-green)_14%,transparent)] px-1.5 text-[10px] font-semibold uppercase text-[var(--w-green)]">{wt('releases.released')}</span>}
       </Trigger>
       <Popover open={p.on} onClose={p.close} anchorRef={p.ref} width={240}>
-        <div className="max-h-[280px] overflow-y-auto p-1" role="listbox" aria-label="Fix version">
+        <div className="max-h-[280px] overflow-y-auto p-1" role="listbox" aria-label={wt('issues.colFixVersion')}>
           <button
             type="button"
             role="option"
@@ -399,11 +401,11 @@ export function FixVersionPicker({ config, value, onChange, bare, disabled }: {
             onClick={() => pick(null)}
             className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]"
           >
-            <span className="flex-1 text-[var(--w-text-2)]">None</span>
+            <span className="flex-1 text-[var(--w-text-2)]">{wt('common.none')}</span>
             {value === null && <Check size={13} className="text-[var(--w-accent-text)]" />}
           </button>
-          {q.isLoading && <div className="px-2 py-3 text-center text-[12px] text-[var(--w-text-3)]">Loading…</div>}
-          {!q.isLoading && !versions.length && <div className="px-2 py-3 text-center text-[12px] text-[var(--w-text-3)]">No versions yet</div>}
+          {q.isLoading && <div className="px-2 py-3 text-center text-[12px] text-[var(--w-text-3)]">{wt('common.loading')}</div>}
+          {!q.isLoading && !versions.length && <div className="px-2 py-3 text-center text-[12px] text-[var(--w-text-3)]">{wt('releases.noVersions')}</div>}
           {versions.map((v) => {
             const locked = v.status !== 'UNRELEASED';
             return (
@@ -414,7 +416,7 @@ export function FixVersionPicker({ config, value, onChange, bare, disabled }: {
                 aria-selected={v.id === value}
                 aria-disabled={locked}
                 disabled={locked}
-                title={locked ? `${v.name} is ${v.status === 'RELEASED' ? 'released' : 'archived'}` : undefined}
+                title={locked ? wt(v.status === 'RELEASED' ? 'fields.isReleased' : 'fields.isArchived', { name: v.name }) : undefined}
                 onClick={() => pick(v.id)}
                 className={cn(
                   'flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px]',
@@ -422,7 +424,7 @@ export function FixVersionPicker({ config, value, onChange, bare, disabled }: {
                 )}
               >
                 <span className="min-w-0 flex-1 truncate">{v.name}</span>
-                {locked && <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{v.status === 'RELEASED' ? 'Released' : 'Archived'}</span>}
+                {locked && <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{v.status === 'RELEASED' ? wt('releases.released') : wt('common.archived')}</span>}
                 {v.id === value && <Check size={13} className="shrink-0 text-[var(--w-accent-text)]" />}
               </button>
             );

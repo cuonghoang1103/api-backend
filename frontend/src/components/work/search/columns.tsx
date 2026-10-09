@@ -14,6 +14,7 @@ import type { Lookups } from '../hooks';
 import { formatDate, IssueTypeIcon, LabelChip, Popover, relativeTime, StatusBadge, UserAvatar, useToggle } from '../ui';
 import { PriorityWithTip } from '../board/BoardCard';
 import { LeaseChipFor } from '../agents/leases';
+import { wt, wfmt } from '@/components/work/i18n';
 
 export type ColId =
   | 'key' | 'type' | 'title' | 'status' | 'priority' | 'assignee' | 'reporter' | 'sprint'
@@ -54,24 +55,24 @@ const personName = (id: number | null, lk: Lookups) => (id ? userName(lk.members
 
 export const COLUMNS: Record<ColId, ColDef> = {
   type: {
-    label: 'Type', track: '44px', min: 44, mobile: true,
+    get label() { return wt('issues.colType'); }, track: '44px', min: 44, mobile: true,
     cell: (i, c) => <IssueTypeIcon type={c.lk.types.get(i.typeId)} size={14} />,
     cmp: (a, b, c) => (c.lk.types.get(a.typeId)?.name ?? '').localeCompare(c.lk.types.get(b.typeId)?.name ?? ''),
   },
   key: {
-    label: 'Key', track: '84px', min: 84, jql: 'key', mobile: true,
+    get label() { return wt('issues.colKey'); }, track: '84px', min: 84, jql: 'key', mobile: true,
     cell: (i, c) => <span className="truncate font-mono text-[11.5px] text-[var(--w-text-3)]">{c.lk.issueKey(i.number)}</span>,
     cmp: (a, b) => a.number - b.number,
   },
   title: {
-    label: 'Title', track: 'minmax(220px,1fr)', min: 240, jql: 'summary', mobile: true, fixed: true,
+    get label() { return wt('issues.colTitle'); }, track: 'minmax(220px,1fr)', min: 240, jql: 'summary', mobile: true, fixed: true,
     cell: (i, c) => {
       const pn = c.parentNum(i);
       const done = c.lk.statuses.get(i.statusId)?.category === 'DONE';
       return (
         <span className="flex min-w-0 items-center gap-2">
           <span className={cn('truncate', done && 'text-[var(--w-text-2)]')}>{i.title}</span>
-          {pn !== undefined && <span className="hidden shrink-0 font-mono text-[10.5px] text-[var(--w-text-3)] sm:inline" title="Parent">↑ {c.lk.issueKey(pn)}</span>}
+          {pn !== undefined && <span className="hidden shrink-0 font-mono text-[10.5px] text-[var(--w-text-3)] sm:inline" title={wt('issues.parent')}>↑ {c.lk.issueKey(pn)}</span>}
           {/* CTW-28: chip lease của agent (chỉ có khi trang bọc AgentLeasesProvider). */}
           <span className="hidden shrink-0 sm:inline-flex"><LeaseChipFor issueId={i.id} compact /></span>
         </span>
@@ -80,7 +81,7 @@ export const COLUMNS: Record<ColId, ColDef> = {
     cmp: (a, b) => a.title.localeCompare(b.title),
   },
   status: {
-    label: 'Status', track: '140px', min: 120, jql: 'status', mobile: true,
+    get label() { return wt('issues.colStatus'); }, track: '140px', min: 120, jql: 'status', mobile: true,
     cell: (i, c) => <span className="min-w-0"><StatusBadge status={c.lk.statuses.get(i.statusId)} /></span>,
     cmp: (a, b, c) => {
       const sa = c.lk.statuses.get(a.statusId);
@@ -89,25 +90,25 @@ export const COLUMNS: Record<ColId, ColDef> = {
     },
   },
   priority: {
-    label: 'Priority', track: '64px', min: 64, jql: 'priority',
+    get label() { return wt('issues.colPriority'); }, track: '64px', min: 64, jql: 'priority',
     cell: (i) => <PriorityWithTip priority={i.priority} size={15} />,
     cmp: (a, b) => a.priority - b.priority,
   },
   assignee: {
-    label: 'Assignee', track: '150px', min: 130, jql: 'assignee', mobile: true,
+    get label() { return wt('issues.colAssignee'); }, track: '150px', min: 130, jql: 'assignee', mobile: true,
     cell: (i, c) => {
       const u = i.assigneeId ? c.lk.members.get(i.assigneeId) ?? null : null;
       return (
         <span className="flex min-w-0 items-center gap-1.5">
           <UserAvatar user={u} size={20} />
-          <span className={cn('hidden truncate text-[12.5px] md:inline', !u && 'text-[var(--w-text-3)]')}>{u ? userName(u) : 'Unassigned'}</span>
+          <span className={cn('hidden truncate text-[12.5px] md:inline', !u && 'text-[var(--w-text-3)]')}>{u ? userName(u) : wt('common.unassigned')}</span>
         </span>
       );
     },
     cmp: (a, b, c) => nullsLast(personName(a.assigneeId, c.lk).toLowerCase(), personName(b.assigneeId, c.lk).toLowerCase()),
   },
   reporter: {
-    label: 'Reporter', track: '150px', min: 130,
+    get label() { return wt('issues.colReporter'); }, track: '150px', min: 130,
     cell: (i, c) => {
       const u = i.reporterId ? c.lk.members.get(i.reporterId) ?? null : null;
       return (
@@ -120,11 +121,11 @@ export const COLUMNS: Record<ColId, ColDef> = {
     cmp: (a, b, c) => nullsLast(personName(a.reporterId, c.lk).toLowerCase(), personName(b.reporterId, c.lk).toLowerCase()),
   },
   sprint: {
-    label: 'Sprint', track: '120px', min: 110,
+    get label() { return wt('issues.colSprint'); }, track: '120px', min: 110,
     cell: (i, c) => {
-      if (!i.sprintId) return <span className="text-[12px] text-[var(--w-text-3)]">Backlog</span>;
+      if (!i.sprintId) return <span className="text-[12px] text-[var(--w-text-3)]">{wt('backlog.backlog')}</span>;
       const s = c.config.sprints.find((x) => x.id === i.sprintId);
-      return <span className="truncate text-[12.5px]" title={s?.state === 'ACTIVE' ? 'Active sprint' : undefined}>{s ? s.name : 'Closed sprint'}{s?.state === 'ACTIVE' && ' •'}</span>;
+      return <span className="truncate text-[12.5px]" title={s?.state === 'ACTIVE' ? wt('issues.activeSprint') : undefined}>{s ? s.name : wt('issues.closedSprint')}{s?.state === 'ACTIVE' && ' •'}</span>;
     },
     cmp: (a, b, c) => nullsLast(
       a.sprintId ? c.config.sprints.find((s) => s.id === a.sprintId)?.name ?? '~' : null,
@@ -132,17 +133,17 @@ export const COLUMNS: Record<ColId, ColDef> = {
     ),
   },
   points: {
-    label: 'Points', track: '64px', min: 64, jql: 'points', align: 'right',
+    get label() { return wt('issues.colPoints'); }, track: '64px', min: 64, jql: 'points', align: 'right',
     cell: (i) => <span className="tabular text-[12px] text-[var(--w-text-2)]">{i.storyPoints ?? ''}</span>,
     cmp: (a, b) => nullsLast(a.storyPoints, b.storyPoints),
   },
   due: {
-    label: 'Due', track: '104px', min: 100, jql: 'due',
+    get label() { return wt('issues.colDue'); }, track: '104px', min: 100, jql: 'due',
     cell: (i, c) => {
       const due = i.dueDate?.slice(0, 10);
       const overdue = !!due && due < c.today && c.lk.statuses.get(i.statusId)?.category !== 'DONE';
       return (
-        <span className={cn('tabular truncate text-[12px]', overdue ? 'font-medium text-[var(--w-red)]' : 'text-[var(--w-text-2)]')} title={overdue ? 'Overdue' : undefined}>
+        <span className={cn('tabular truncate text-[12px]', overdue ? 'font-medium text-[var(--w-red)]' : 'text-[var(--w-text-2)]')} title={overdue ? wt('common.overdue') : undefined}>
           {due ? formatDate(due) : ''}
         </span>
       );
@@ -150,17 +151,17 @@ export const COLUMNS: Record<ColId, ColDef> = {
     cmp: (a, b) => nullsLast(a.dueDate?.slice(0, 10), b.dueDate?.slice(0, 10)),
   },
   created: {
-    label: 'Created', track: '96px', min: 90, jql: 'created', align: 'right',
-    cell: (i) => <span className="tabular truncate text-[12px] text-[var(--w-text-3)]" title={new Date(i.createdAt).toLocaleString('en-US')}>{relativeTime(i.createdAt)}</span>,
+    get label() { return wt('issues.colCreated'); }, track: '96px', min: 90, jql: 'created', align: 'right',
+    cell: (i) => <span className="tabular truncate text-[12px] text-[var(--w-text-3)]" title={new Date(i.createdAt).toLocaleString(wfmt.intl())}>{relativeTime(i.createdAt)}</span>,
     cmp: (a, b) => a.createdAt.localeCompare(b.createdAt),
   },
   updated: {
-    label: 'Updated', track: '96px', min: 90, jql: 'updated', align: 'right',
-    cell: (i) => <span className="tabular truncate text-[12px] text-[var(--w-text-3)]" title={new Date(i.updatedAt).toLocaleString('en-US')}>{relativeTime(i.updatedAt)}</span>,
+    get label() { return wt('issues.colUpdated'); }, track: '96px', min: 90, jql: 'updated', align: 'right',
+    cell: (i) => <span className="tabular truncate text-[12px] text-[var(--w-text-3)]" title={new Date(i.updatedAt).toLocaleString(wfmt.intl())}>{relativeTime(i.updatedAt)}</span>,
     cmp: (a, b) => a.updatedAt.localeCompare(b.updatedAt),
   },
   labels: {
-    label: 'Labels', track: '180px', min: 160,
+    get label() { return wt('issues.colLabels'); }, track: '180px', min: 160,
     cell: (i, c) => {
       const ls = i.labelIds.map((id) => c.lk.labels.get(id)).filter((l): l is NonNullable<typeof l> => !!l);
       return (
@@ -173,7 +174,7 @@ export const COLUMNS: Record<ColId, ColDef> = {
     cmp: (a, b, c) => nullsLast(c.lk.labels.get(a.labelIds[0])?.name, c.lk.labels.get(b.labelIds[0])?.name),
   },
   fixVersion: {
-    label: 'Fix version', track: '120px', min: 110,
+    get label() { return wt('issues.colFixVersion'); }, track: '120px', min: 110,
     cell: (i, c) => <span className="truncate text-[12.5px]">{c.versionName(i.fixVersionId)}</span>,
     cmp: (a, b, c) => nullsLast(c.versionName(a.fixVersionId) || null, c.versionName(b.fixVersionId) || null),
   },
@@ -201,11 +202,11 @@ export function ColumnsMenu({ value, onChange }: { value: ColId[]; onChange: (co
   };
   return (
     <>
-      <button ref={ref} type="button" onClick={t.toggle} className="w-btn w-btn-sm" aria-haspopup="menu" aria-expanded={t.on} title="Show or hide columns">
-        <Columns3 size={13} /> <span className="max-sm:!hidden">Columns</span>
+      <button ref={ref} type="button" onClick={t.toggle} className="w-btn w-btn-sm" aria-haspopup="menu" aria-expanded={t.on} title={wt('issues.colsTitle')}>
+        <Columns3 size={13} /> <span className="max-sm:!hidden">{wt('issues.columns')}</span>
       </button>
       <Popover open={t.on} onClose={t.close} anchorRef={ref} width={210} align="end">
-        <div className="max-h-[360px] overflow-y-auto p-1" role="menu" aria-label="Columns">
+        <div className="max-h-[360px] overflow-y-auto p-1" role="menu" aria-label={wt('issues.columns')}>
           {COLUMN_ORDER.map((id) => {
             const c = COLUMNS[id];
             const on = value.includes(id);
@@ -223,13 +224,13 @@ export function ColumnsMenu({ value, onChange }: { value: ColId[]; onChange: (co
                   {on && <Check size={11} strokeWidth={3} />}
                 </span>
                 <span className="flex-1">{c.label}</span>
-                {c.fixed && <span className="text-[11px] text-[var(--w-text-3)]">Always</span>}
+                {c.fixed && <span className="text-[11px] text-[var(--w-text-3)]">{wt('issues.always')}</span>}
               </button>
             );
           })}
           <div className="my-1 h-px bg-[var(--w-border)]" />
           <button type="button" onClick={() => onChange(DEFAULT_COLUMNS)} className="w-full rounded-[5px] px-2 py-1.5 text-left text-[12.5px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]">
-            Reset to default
+            {wt('issues.resetDefault')}
           </button>
         </div>
       </Popover>

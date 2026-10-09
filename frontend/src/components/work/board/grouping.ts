@@ -9,14 +9,15 @@
 
 import type { IssueCard } from '@/lib/work-api';
 import type { Lookups } from '../hooks';
+import { wt } from '@/components/work/i18n';
 
 export type GroupBy = 'none' | 'assignee' | 'epic' | 'subtasks';
 
 export const GROUP_OPTIONS: Array<{ value: GroupBy; label: string; hint: string }> = [
-  { value: 'none', label: 'None', hint: 'Sub-tasks nested inside their parent card' },
-  { value: 'assignee', label: 'Assignee', hint: 'One swimlane per person' },
-  { value: 'epic', label: 'Epic', hint: 'One swimlane per epic' },
-  { value: 'subtasks', label: 'Sub-tasks', hint: 'One swimlane per parent issue, sub-tasks as cards' },
+  { value: 'none', get label() { return wt('board.gNone'); }, get hint() { return wt('board.gNoneHint'); } },
+  { value: 'assignee', get label() { return wt('board.gAssignee'); }, get hint() { return wt('board.gAssigneeHint'); } },
+  { value: 'epic', get label() { return wt('board.gEpic'); }, get hint() { return wt('board.gEpicHint'); } },
+  { value: 'subtasks', get label() { return wt('board.gSubtasks'); }, get hint() { return wt('board.gSubtasksHint'); } },
 ];
 
 export interface QuickFilters {
@@ -128,12 +129,12 @@ export function buildLanes(
     // Giữ thứ tự rank của thẻ cha.
     lanes.sort((a, b) => (a.parent!.rank < b.parent!.rank ? -1 : a.parent!.rank > b.parent!.rank ? 1 : 0));
     for (const i of issues) if (!nestedIds.has(i.id) && !nested.has(i.id)) other.push(i);
-    lanes.push({ key: 'other', title: 'Other issues', cards: other });
+    lanes.push({ key: 'other', title: wt('board.otherIssues'), cards: other });
     return lanes;
   }
 
   const top = issues.filter((i) => !nestedIds.has(i.id));
-  if (mode === 'none') return [{ key: 'all', title: 'All issues', cards: top }];
+  if (mode === 'none') return [{ key: 'all', title: wt('board.allIssues'), cards: top }];
 
   const map = new Map<string, Lane>();
   const get = (key: string, make: () => Lane) => {
@@ -145,14 +146,14 @@ export function buildLanes(
     if (mode === 'assignee') {
       const uid = i.assigneeId;
       const m = uid ? lk.members.get(uid) : null;
-      const title = uid ? (m ? m.displayName || m.fullName || m.username : 'Former member') : 'Unassigned';
+      const title = uid ? (m ? m.displayName || m.fullName || m.username : wt('board.formerMember')) : wt('common.unassigned');
       get(`u:${uid ?? 0}`, () => ({ key: `u:${uid ?? 0}`, title, userId: uid, cards: [] })).cards.push(i);
     } else {
       // Việc con lẻ (cha không trên board) không có epic trực tiếp ⇒ "No epic".
       const epicId = i.parentId && epics.has(i.parentId) ? i.parentId : null;
       const e = epicId ? epics.get(epicId)! : null;
       get(`e:${epicId ?? 0}`, () => ({
-        key: `e:${epicId ?? 0}`, title: e ? e.title : 'No epic', epic: e && epicId ? { id: epicId, number: e.number } : null, cards: [],
+        key: `e:${epicId ?? 0}`, title: e ? e.title : wt('board.noEpic'), epic: e && epicId ? { id: epicId, number: e.number } : null, cards: [],
       })).cards.push(i);
     }
   }

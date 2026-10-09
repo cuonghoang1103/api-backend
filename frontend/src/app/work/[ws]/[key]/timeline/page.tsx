@@ -13,6 +13,7 @@ import ProjectHeader from '@/components/work/ProjectHeader';
 import Timeline from '@/components/work/Timeline';
 import { useLookups, useProject, useProjectRealtime } from '@/components/work/hooks';
 import { EmptyState, PageLoading } from '@/components/work/ui';
+import { wt } from '@/components/work/i18n';
 
 function TimelineView({ config, pid }: { config: ProjectConfig; pid: number }) {
   const router = useRouter();
@@ -32,7 +33,7 @@ function TimelineView({ config, pid }: { config: ProjectConfig; pid: number }) {
 
   return (
     <div className="flex h-full min-w-0 flex-col">
-      <ProjectHeader config={config} title="Timeline" />
+      <ProjectHeader config={config} title={wt('timeline.title')} />
       <div className="min-h-0 min-w-0 flex-1">
         <Timeline config={config} pid={pid} lk={lk} onOpen={(n) => setIssue(n)} />
       </div>
@@ -54,6 +55,6 @@ function Inner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   if (isLoading) return <PageLoading />;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
+  if (error || !config || !pid) return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : wt('common.projectNotFoundBody')} />;
   return <TimelineView config={config} pid={pid} />;
 }

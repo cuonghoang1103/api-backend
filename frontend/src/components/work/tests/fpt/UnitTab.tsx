@@ -22,6 +22,7 @@ import { ExportButton, InlineText, ResultBar, Stat } from './shared';
 import UnitMatrix from './UnitMatrix';
 import { KpiRow } from '../../KpiTile';
 import { PaneStrip, usePaneKeys, usePanes } from '../../shell/panes';
+import { wt } from '@/components/work/i18n';
 
 export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: number }) {
   const router = useRouter();
@@ -56,66 +57,66 @@ export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: n
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-wrap items-start gap-3 border-b border-[var(--w-border)] px-4 py-3">
         {s && (
-          <KpiRow min={96} className="min-w-0 flex-1" label="Unit test summary">
-            <Stat label="Functions" value={s.functions} />
-            <Stat label="Test cases" value={s.total} />
+          <KpiRow min={96} className="min-w-0 flex-1" label={wt('fpt.unitSummary')}>
+            <Stat label={wt('fpt.functions')} value={s.functions} />
+            <Stat label="Test case" value={s.total} />
             <Stat label="Passed" value={s.passed} tone={s.passed ? 'green' : 'muted'} />
             <Stat label="Failed" value={s.failed} tone={s.failed ? 'red' : 'muted'} />
-            <Stat label="Untested" value={s.untested} tone="muted" />
-            <Stat label="Coverage" value={pct(s.coverage)} hint="(Passed + Failed) / Total" />
+            <Stat label={wt('fpt.untested')} value={s.untested} tone="muted" />
+            <Stat label={wt('fpt.coverage')} value={pct(s.coverage)} hint="(Passed + Failed) / Total" />
             <Stat label="N · A · B" value={<span className="text-[14px]">{pct(s.normalPct)} · {pct(s.abnormalPct)} · {pct(s.boundaryPct)}</span>} hint="Normal · Abnormal · Boundary" />
             <Stat
-              label={`Norm ${list.data!.tcPerKloc}/KLOC`}
+              label={wt('fpt.normK', { k: list.data!.tcPerKloc })}
               tone={s.meetsNorm === false ? 'red' : s.meetsNorm ? 'green' : 'muted'}
-              value={s.meetsNorm === null ? <span className="text-[13px] font-normal">add LOC</span> : `${s.casesWithLoc}/${s.requiredCases}`}
-              hint={s.meetsNorm === null ? 'Fill in "Lines of code" for functions to check the test-case norm.' : `KLOC ${s.kloc} — ${s.belowNorm} function(s) below the norm${s.functionsWithoutLoc ? `, ${s.functionsWithoutLoc} without LOC` : ''}`}
+              value={s.meetsNorm === null ? <span className="text-[13px] font-normal">{wt('fpt.addLoc')}</span> : `${s.casesWithLoc}/${s.requiredCases}`}
+              hint={s.meetsNorm === null ? wt('fpt.fillLoc') : `KLOC ${s.kloc} — ${wt('fpt.belowNormN', { n: s.belowNorm })}${s.functionsWithoutLoc ? `, ${wt('fpt.withoutLoc', { n: s.functionsWithoutLoc })}` : ''}`}
             />
           </KpiRow>
         )}
         <div className="ml-auto flex shrink-0 flex-wrap justify-end gap-2">
-          <button type="button" className="w-btn w-btn-sm" onClick={() => setDocOpen(true)}><FileText size={13} /> <span className="hidden sm:inline">Cover &amp; changes</span></button>
-          {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}><FileUp size={13} /> <span className="hidden sm:inline">Import</span></button>}
-          <ExportButton pid={pid} report="unit" label="Export 5.1 (.xlsx)" />
+          <button type="button" className="w-btn w-btn-sm" onClick={() => setDocOpen(true)}><FileText size={13} /> <span className="hidden sm:inline">{wt('fpt.coverChanges')}</span></button>
+          {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}><FileUp size={13} /> <span className="hidden sm:inline">{wt('common.import')}</span></button>}
+          <ExportButton pid={pid} report="unit" label={wt('fpt.export51')} />
         </div>
       </div>
 
       {!fns.length ? (
         <div className="flex-1 overflow-y-auto">
           <EmptyState
-            title="No unit-tested functions yet"
-            body="Unit test cases follow the FPT Report 5.1 template: one matrix per function — conditions and confirmations as rows, UTCID test cases as columns, marked with “O”. Add a function or import your team's Excel file."
+            title={wt('fpt.noFunctions')}
+            body={wt('fpt.noFunctionsBody')}
             action={canEdit ? (
               <div className="flex gap-2">
-                <button type="button" className="w-btn w-btn-primary" onClick={() => setNewOpen(true)}><Plus size={14} /> Add function</button>
-                <button type="button" className="w-btn" onClick={() => setImportOpen(true)}><FileUp size={14} /> Import Excel</button>
+                <button type="button" className="w-btn w-btn-primary" onClick={() => setNewOpen(true)}><Plus size={14} /> {wt('fpt.addFunction')}</button>
+                <button type="button" className="w-btn" onClick={() => setImportOpen(true)}><FileUp size={14} /> {wt('fpt.importExcel')}</button>
               </div>
             ) : undefined}
           />
         </div>
       ) : (
         <div ref={panes.ref} className="flex min-h-0 flex-1 max-md:flex-col">
-          {panes.left.mode === 'strip' && <PaneStrip label="Functions" shortcut="[" onOpen={panes.left.toggle} />}
+          {panes.left.mode === 'strip' && <PaneStrip label={wt('fpt.functions')} shortcut="[" onOpen={panes.left.toggle} />}
           {panes.left.mode === 'inline' && (
-          <aside className="flex w-[280px] shrink-0 flex-col border-r border-[var(--w-border)] max-md:max-h-[40vh] max-md:w-full max-md:border-b max-md:border-r-0" aria-label="Functions list">
+          <aside className="flex w-[280px] shrink-0 flex-col border-r border-[var(--w-border)] max-md:max-h-[40vh] max-md:w-full max-md:border-b max-md:border-r-0" aria-label={wt('fpt.functionsList')}>
             <div className="space-y-2 border-b border-[var(--w-border)] p-3">
               <div className="relative">
                 <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
-                <input className="w-input h-[30px] pl-8 text-[13px]" placeholder="Search functions" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search functions" />
+                <input className="w-input h-[30px] pl-8 text-[13px]" placeholder={wt('fpt.searchFunctions')} value={q} onChange={(e) => setQ(e.target.value)} aria-label={wt('fpt.searchFunctions')} />
               </div>
               <div className="flex gap-2">
-                <select className="w-input h-[30px] min-w-0 flex-1 text-[13px]" value={module} onChange={(e) => setModule(e.target.value)} aria-label="Filter by module">
+                <select className="w-input h-[30px] min-w-0 flex-1 text-[13px]" value={module} onChange={(e) => setModule(e.target.value)} aria-label={wt('fpt.filterModule')}>
                   <option value="">All modules ({modules.length})</option>
                   {modules.map((m) => <option key={m} value={m}>{m}</option>)}
                 </select>
-                {canEdit && <button type="button" className="w-btn w-btn-sm w-btn-icon !h-[30px] !w-[30px]" onClick={() => setNewOpen(true)} aria-label="Add function" title="Add function"><Plus size={14} /></button>}
-                <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon !h-[30px] !w-[30px]" onClick={panes.left.toggle} aria-label="Hide functions list ([)" title="Hide the list — widen the matrix ([)"><PanelLeftClose size={14} /></button>
+                {canEdit && <button type="button" className="w-btn w-btn-sm w-btn-icon !h-[30px] !w-[30px]" onClick={() => setNewOpen(true)} aria-label={wt('fpt.addFunction')} title={wt('fpt.addFunction')}><Plus size={14} /></button>}
+                <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon !h-[30px] !w-[30px]" onClick={panes.left.toggle} aria-label={wt('fpt.hideList')} title={wt('fpt.hideListTitle')}><PanelLeftClose size={14} /></button>
               </div>
             </div>
             <FunctionList fns={shown} selected={selected} onSelect={select} />
           </aside>
           )}
           <section className="min-h-0 min-w-0 flex-1 overflow-y-auto p-4">
-            {selected ? <FunctionPane key={selected} pid={pid} id={selected} canEdit={canEdit} onDeleted={() => { const p = new URLSearchParams(search?.toString()); p.delete('fn'); router.replace(`${pathname}?${p}`, { scroll: false }); }} onOpen={select} /> : <EmptyState title="No function matches" />}
+            {selected ? <FunctionPane key={selected} pid={pid} id={selected} canEdit={canEdit} onDeleted={() => { const p = new URLSearchParams(search?.toString()); p.delete('fn'); router.replace(`${pathname}?${p}`, { scroll: false }); }} onOpen={select} /> : <EmptyState title={wt('fpt.noFnMatch')} />}
           </section>
         </div>
       )}
@@ -134,7 +135,7 @@ function FunctionList({ fns, selected, onSelect }: { fns: UnitFunctionListItem[]
     if (g) g[1].push(f); else groups.push([f.moduleName, [f]]);
   }
   return (
-    <nav className="min-h-0 flex-1 overflow-y-auto py-1" aria-label="Functions">
+    <nav className="min-h-0 flex-1 overflow-y-auto py-1" aria-label={wt('fpt.functions')}>
       {groups.map(([m, list]) => (
         <div key={m} className="mb-1">
           <div className="px-3 pb-0.5 pt-2 text-[11px] font-semibold uppercase tracking-wide text-[var(--w-text-3)]">{m}</div>
@@ -148,7 +149,7 @@ function FunctionList({ fns, selected, onSelect }: { fns: UnitFunctionListItem[]
             >
               <div className="flex items-center gap-1.5">
                 <span className="min-w-0 flex-1 truncate text-[13px] font-medium">{f.methodName}</span>
-                {f.belowNorm && <span title={`Below the norm: ${f.stats.total}/${f.requiredCases} test cases`}><AlertTriangle size={12} className="text-[var(--w-yellow)]" /></span>}
+                {f.belowNorm && <span title={wt('fpt.belowNorm', { n: f.stats.total, req: f.requiredCases ?? 0 })}><AlertTriangle size={12} className="text-[var(--w-yellow)]" /></span>}
                 <span className="text-[11.5px] tabular-nums text-[var(--w-text-3)]">{f.stats.total}</span>
               </div>
               <ResultBar className="mt-1" passed={f.stats.passed} failed={f.stats.failed} total={f.stats.total} />
@@ -165,7 +166,7 @@ function FunctionPane({ pid, id, canEdit, onDeleted, onOpen }: { pid: number; id
   const q = useQuery({ queryKey: fptKeys.fn(pid, id), queryFn: () => fptApi.fn(pid, id), staleTime: Infinity });
   const f = q.data;
   if (q.isLoading) return <PageLoading rows={4} />;
-  if (!f) return <EmptyState title="Function not found" body={q.error ? workError(q.error) : undefined} />;
+  if (!f) return <EmptyState title={wt('fpt.fnNotFound')} body={q.error ? workError(q.error) : undefined} />;
 
   const patch = async (body: Parameters<typeof fptApi.updateFunction>[2]) => {
     try {
@@ -173,50 +174,50 @@ function FunctionPane({ pid, id, canEdit, onDeleted, onOpen }: { pid: number; id
       // Thông tin đầu đổi ⇒ updatedAt đổi ⇒ ma trận nhận version mới qua prop (tránh 409 giả), giữ bản nháp.
       qc.setQueryData(fptKeys.fn(pid, id), res);
       qc.invalidateQueries({ queryKey: fptKeys.unit(pid) });
-    } catch (e) { toast.error(workError(e, 'Could not save')); }
+    } catch (e) { toast.error(workError(e, wt('common.couldNotSave'))); }
   };
 
   return (
     <div className="mx-auto max-w-[1400px]">
       <div className="mb-3 flex flex-wrap items-start gap-3">
         <div className="min-w-0 flex-1">
-          <div className="text-[12px] text-[var(--w-text-3)]">Code module</div>
+          <div className="text-[12px] text-[var(--w-text-3)]">{wt('fpt.codeModule')}</div>
           <div className="flex flex-wrap items-center gap-2">
-            <InlineText value={f.moduleName} readOnly={!canEdit} ariaLabel="Module name" maxLength={120} className="!w-[200px] font-medium" onCommit={(v) => v.trim() && patch({ moduleName: v.trim() })} />
+            <InlineText value={f.moduleName} readOnly={!canEdit} ariaLabel={wt('fpt.moduleName')} maxLength={120} className="!w-[200px] font-medium" onCommit={(v) => v.trim() && patch({ moduleName: v.trim() })} />
             <span className="text-[var(--w-text-3)]">›</span>
-            <InlineText value={f.methodName} readOnly={!canEdit} ariaLabel="Method name" maxLength={120} className="!w-[220px] text-[15px] font-semibold" onCommit={(v) => v.trim() && patch({ methodName: v.trim() })} />
+            <InlineText value={f.methodName} readOnly={!canEdit} ariaLabel={wt('fpt.methodName')} maxLength={120} className="!w-[220px] text-[15px] font-semibold" onCommit={(v) => v.trim() && patch({ methodName: v.trim() })} />
           </div>
         </div>
         {canEdit && (
           <div className="flex gap-2">
             <button type="button" className="w-btn w-btn-sm" onClick={async () => {
-              try { const c = await fptApi.duplicateFunction(pid, id); qc.invalidateQueries({ queryKey: fptKeys.unit(pid) }); onOpen(c.id); toast.success('Function duplicated'); } catch (e) { toast.error(workError(e)); }
-            }}><Copy size={13} /> Duplicate</button>
+              try { const c = await fptApi.duplicateFunction(pid, id); qc.invalidateQueries({ queryKey: fptKeys.unit(pid) }); onOpen(c.id); toast.success(wt('fpt.duplicated')); } catch (e) { toast.error(workError(e)); }
+            }}><Copy size={13} /> {wt('tests.duplicate')}</button>
             <button type="button" className="w-btn w-btn-sm text-[var(--w-red)]" onClick={async () => {
-              if (!window.confirm(`Delete ${f.methodName} and its ${f.cases.length} test cases?`)) return;
+              if (!window.confirm(wt('fpt.deleteFnQ', { name: f.methodName, n: f.cases.length }))) return;
               try { await fptApi.deleteFunction(pid, id); qc.invalidateQueries({ queryKey: fptKeys.unit(pid) }); onDeleted(); } catch (e) { toast.error(workError(e)); }
-            }}><Trash2 size={13} /> Delete</button>
+            }}><Trash2 size={13} /> {wt('common.delete')}</button>
           </div>
         )}
       </div>
 
       <details className="mb-4 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)]" open={!f.description && canEdit}>
         <summary className="cursor-pointer select-none px-3 py-2 text-[13px] font-medium">
-          Details <span className="font-normal text-[var(--w-text-3)]">— description, pre-condition, test requirement, lines of code, people</span>
+          {wt('common.details')} <span className="font-normal text-[var(--w-text-3)]">— {wt('fpt.detailsSub')}</span>
         </summary>
         <div className="grid gap-x-4 gap-y-1 border-t border-[var(--w-border)] p-3 md:grid-cols-2">
-          <Field label="Description"><InlineText multiline value={f.description} readOnly={!canEdit} maxLength={4000} placeholder="What the function does" onCommit={(v) => patch({ description: v })} /></Field>
-          <Field label="Pre-condition"><InlineText multiline value={f.preCondition} readOnly={!canEdit} maxLength={4000} placeholder="Valid credentials are provided." onCommit={(v) => patch({ preCondition: v })} /></Field>
-          <Field label="Test requirement"><InlineText multiline value={f.testRequirement} readOnly={!canEdit} maxLength={4000} placeholder="Brief description of what is tested" onCommit={(v) => patch({ testRequirement: v })} /></Field>
+          <Field label={wt('fpt.fDescription')}><InlineText multiline value={f.description} readOnly={!canEdit} maxLength={4000} placeholder={wt('fpt.fDescPh')} onCommit={(v) => patch({ description: v })} /></Field>
+          <Field label={wt('fpt.fPre')}><InlineText multiline value={f.preCondition} readOnly={!canEdit} maxLength={4000} placeholder={wt('fpt.fPrePh')} onCommit={(v) => patch({ preCondition: v })} /></Field>
+          <Field label={wt('fpt.fReq')}><InlineText multiline value={f.testRequirement} readOnly={!canEdit} maxLength={4000} placeholder={wt('fpt.fReqPh')} onCommit={(v) => patch({ testRequirement: v })} /></Field>
           <div className="grid grid-cols-2 gap-x-3">
-            <Field label="Lines of code" hint={f.requiredCases !== null ? `Needs ≥ ${f.requiredCases} test cases (${f.tcPerKloc}/KLOC)` : 'Used for the test-case norm'}>
-              <InlineText value={f.loc === null ? '' : String(f.loc)} readOnly={!canEdit} placeholder="e.g. 45" onCommit={(v) => { const n = v.trim() ? Math.max(0, Math.round(Number(v))) : null; if (n === null || Number.isFinite(n)) patch({ loc: n }); }} />
+            <Field label={wt('fpt.fLoc')} hint={f.requiredCases !== null ? wt('fpt.needsN', { n: f.requiredCases, k: f.tcPerKloc }) : wt('fpt.usedForNorm')}>
+              <InlineText value={f.loc === null ? '' : String(f.loc)} readOnly={!canEdit} placeholder={wt('create.eg', { v: 45 })} onCommit={(v) => { const n = v.trim() ? Math.max(0, Math.round(Number(v))) : null; if (n === null || Number.isFinite(n)) patch({ loc: n }); }} />
             </Field>
-            <Field label="Sheet name" hint="Excel sheet (≤ 31 chars)"><InlineText value={f.sheetName} readOnly={!canEdit} maxLength={31} placeholder={f.methodName.charAt(0).toLowerCase() + f.methodName.slice(1)} onCommit={(v) => patch({ sheetName: v })} /></Field>
-            <Field label="Created by"><InlineText value={f.createdBy} readOnly={!canEdit} maxLength={120} onCommit={(v) => patch({ createdBy: v })} /></Field>
-            <Field label="Executed by"><InlineText value={f.executedBy} readOnly={!canEdit} maxLength={120} onCommit={(v) => patch({ executedBy: v })} /></Field>
+            <Field label={wt('fpt.fSheet')} hint={wt('fpt.fSheetHint')}><InlineText value={f.sheetName} readOnly={!canEdit} maxLength={31} placeholder={f.methodName.charAt(0).toLowerCase() + f.methodName.slice(1)} onCommit={(v) => patch({ sheetName: v })} /></Field>
+            <Field label={wt('fpt.fCreatedBy')}><InlineText value={f.createdBy} readOnly={!canEdit} maxLength={120} onCommit={(v) => patch({ createdBy: v })} /></Field>
+            <Field label={wt('fpt.fExecutedBy')}><InlineText value={f.executedBy} readOnly={!canEdit} maxLength={120} onCommit={(v) => patch({ executedBy: v })} /></Field>
           </div>
-          <Field label="Code reference" hint="File path#line or a GitHub link">
+          <Field label={wt('fpt.fCodeRef')} hint={wt('fpt.fCodeRefHint')}>
             <InlineText value={f.codeRef} readOnly={!canEdit} maxLength={500} placeholder="src/services/auth.service.ts#L42" onCommit={(v) => patch({ codeRef: v })} />
           </Field>
         </div>
@@ -255,25 +256,25 @@ function NewFunctionDialog({ open, onClose, pid, modules, defaultModule, onCreat
       onCreated(f);
       onClose();
     } catch (e) {
-      toast.error(workError(e, 'Could not add the function'));
+      toast.error(workError(e, wt('fpt.addFnFailed')));
     } finally {
       setBusy(false);
     }
   };
   return (
-    <Dialog open={open} onClose={() => !busy && onClose()} title="Add function" width={520}
-      footer={<><button type="button" className="w-btn" onClick={onClose} disabled={busy}>Cancel</button><button type="button" className="w-btn w-btn-primary" onClick={submit} disabled={busy || !moduleName.trim() || !methodName.trim()}>{busy && <Spinner size={12} />} Add</button></>}>
+    <Dialog open={open} onClose={() => !busy && onClose()} title={wt('fpt.addFunction')} width={520}
+      footer={<><button type="button" className="w-btn" onClick={onClose} disabled={busy}>{wt('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" onClick={submit} disabled={busy || !moduleName.trim() || !methodName.trim()}>{busy && <Spinner size={12} />} {wt('common.add')}</button></>}>
       <form onSubmit={(e) => { e.preventDefault(); void submit(); }}>
-        <Field label="Module / class" hint="e.g. AuthService, UserController">
+        <Field label={wt('fpt.fModule')} hint={wt('fpt.fModuleHint')}>
           <input className="w-input" list="fpt-modules" value={moduleName} maxLength={120} onChange={(e) => setModuleName(e.target.value)} autoFocus />
           <datalist id="fpt-modules">{modules.map((m) => <option key={m} value={m} />)}</datalist>
         </Field>
-        <Field label="Method"><input className="w-input" value={methodName} maxLength={120} placeholder="Login" onChange={(e) => setMethodName(e.target.value)} /></Field>
+        <Field label={wt('fpt.fMethod')}><input className="w-input" value={methodName} maxLength={120} placeholder="Login" onChange={(e) => setMethodName(e.target.value)} /></Field>
         <div className="grid grid-cols-[120px_1fr] gap-3">
-          <Field label="Lines of code"><input className="w-input" inputMode="numeric" value={loc} onChange={(e) => setLoc(e.target.value.replace(/[^\d]/g, ''))} placeholder="45" /></Field>
-          <Field label="Description"><input className="w-input" value={description} maxLength={4000} onChange={(e) => setDescription(e.target.value)} placeholder="Authenticates a user" /></Field>
+          <Field label={wt('fpt.fLoc')}><input className="w-input" inputMode="numeric" value={loc} onChange={(e) => setLoc(e.target.value.replace(/[^\d]/g, ''))} placeholder="45" /></Field>
+          <Field label={wt('fpt.fDescription')}><input className="w-input" value={description} maxLength={4000} onChange={(e) => setDescription(e.target.value)} placeholder={wt('fpt.fDescPh2')} /></Field>
         </div>
-        <p className="text-[12px] text-[var(--w-text-3)]">Starts with a Precondition row, Return / Exception / Log message groups and one Normal test case.</p>
+        <p className="text-[12px] text-[var(--w-text-3)]">{wt('fpt.startsWith')}</p>
         <button type="submit" className="hidden" aria-hidden tabIndex={-1} />
       </form>
     </Dialog>

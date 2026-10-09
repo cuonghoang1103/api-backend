@@ -21,6 +21,8 @@ import {
 import { cn } from '@/lib/utils';
 import { userName, type IssueTypeKey, type StatusCategory, type WorkUser } from '@/lib/work-api';
 import { agentTooltip, useAgentDirectory } from './agents/directory';
+import { wt, wfmt } from './i18n';
+import { statusName, typeName } from './i18n/names';
 
 // ─── Portal ──────────────────────────────────────────────────────
 
@@ -151,7 +153,7 @@ interface PickerProps<T> {
   onCreate?: (text: string) => void;
 }
 
-export function PickerList<T>({ options, selected, onPick, multi, placeholder = 'Search…', empty = 'No results', onCreate }: PickerProps<T>) {
+export function PickerList<T>({ options, selected, onPick, multi, placeholder = wt('common.searchPlaceholder'), empty = wt('common.noResults'), onCreate }: PickerProps<T>) {
   const [q, setQ] = useState('');
   const [hi, setHi] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -225,7 +227,7 @@ export function PickerList<T>({ options, selected, onPick, multi, placeholder = 
             onClick={() => choose(filtered.length)}
             className={cn('flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px]', hi === filtered.length ? 'bg-[var(--w-hover)]' : '')}
           >
-            <span className="text-[var(--w-text-3)]">Create</span>
+            <span className="text-[var(--w-text-3)]">{wt('common.createQuoted')}</span>
             <span className="truncate font-medium">“{q.trim()}”</span>
           </button>
         )}
@@ -258,7 +260,7 @@ export function Dialog({
           {title !== undefined && (
             <div className="flex items-center justify-between border-b border-[var(--w-border)] px-5 py-3.5">
               <div className="text-[15px] font-semibold">{title}</div>
-              {dismissible && <button type="button" onClick={onClose} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Close"><X size={15} /></button>}
+              {dismissible && <button type="button" onClick={onClose} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('common.close')}><X size={15} /></button>}
             </div>
           )}
           <div className="px-5 py-4">{children}</div>
@@ -335,8 +337,8 @@ export function UserAvatar({ user, size = 22, className }: { user: Pick<WorkUser
     return (
       <span
         role="img"
-        title="Unassigned"
-        aria-label="Unassigned"
+        title={wt('common.unassigned')}
+        aria-label={wt('common.unassigned')}
         style={{ width: size, height: size }}
         className={cn('inline-flex shrink-0 items-center justify-center rounded-full border border-dashed border-[var(--w-border-strong)]', className)}
       />
@@ -451,7 +453,7 @@ export function IssueTypeIcon({ type, size = 14 }: { type: { key: string; color:
   const Icon = (type && TYPE_ICON[type.key as IssueTypeKey]) || CheckSquare;
   return (
     <span
-      title={type?.name}
+      title={type ? typeName(type.name) : undefined}
       style={{ background: type?.color ?? 'var(--w-chart-8)', width: size + 2, height: size + 2 }}
       className="inline-flex shrink-0 items-center justify-center rounded-[4px] text-white"
     >
@@ -461,11 +463,12 @@ export function IssueTypeIcon({ type, size = 14 }: { type: { key: string; color:
 }
 
 export const PRIORITIES = [
-  { value: 1, label: 'Highest', color: 'var(--w-prio-1)', Icon: ChevronsUp },
-  { value: 2, label: 'High', color: 'var(--w-prio-2)', Icon: ChevronUp },
-  { value: 3, label: 'Medium', color: 'var(--w-prio-3)', Icon: Equal },
-  { value: 4, label: 'Low', color: 'var(--w-prio-4)', Icon: ChevronDown },
-  { value: 5, label: 'Lowest', color: 'var(--w-prio-5)', Icon: ChevronsDown },
+  // `label` là getter: hằng số cấp module mà tính chữ một lần lúc import thì kẹt ở ngôn ngữ đầu tiên.
+  { value: 1, get label() { return wt('status.prioHighest'); }, color: 'var(--w-prio-1)', Icon: ChevronsUp },
+  { value: 2, get label() { return wt('status.prioHigh'); }, color: 'var(--w-prio-2)', Icon: ChevronUp },
+  { value: 3, get label() { return wt('status.prioMedium'); }, color: 'var(--w-prio-3)', Icon: Equal },
+  { value: 4, get label() { return wt('status.prioLow'); }, color: 'var(--w-prio-4)', Icon: ChevronDown },
+  { value: 5, get label() { return wt('status.prioLowest'); }, color: 'var(--w-prio-5)', Icon: ChevronsDown },
 ] as const;
 
 export function priorityOf(priority: number) {
@@ -535,7 +538,8 @@ function sentenceCase(name: string): string {
 
 export function StatusBadge({ status, className }: { status: { name: string; category: StatusCategory } | undefined; className?: string }) {
   if (!status) return null;
-  const text = sentenceCase(status.name);
+  const shown = statusName(status.name);
+  const text = shown === status.name ? sentenceCase(status.name) : shown;
   return (
     <span
       title={status.name}
@@ -559,7 +563,7 @@ export function LabelChip({ label }: { label: { name: string; color: string } })
 // ─── Nhỏ lẻ ──────────────────────────────────────────────────────
 
 export const Spinner = ({ size = 16 }: { size?: number }) => (
-  <span role="status" aria-label="Loading" style={{ width: size, height: size }} className="inline-block animate-spin rounded-full border-2 border-[var(--w-border-strong)] border-t-[var(--w-accent)]" />
+  <span role="status" aria-label={wt('common.loading')} style={{ width: size, height: size }} className="inline-block animate-spin rounded-full border-2 border-[var(--w-border-strong)] border-t-[var(--w-accent)]" />
 );
 
 /**
@@ -567,7 +571,7 @@ export const Spinner = ({ size = 16 }: { size?: number }) => (
  * "một thanh tiêu đề + vài hàng" thay cho vòng quay trơ trọi giữa màn hình.
  * Dùng chung cho mọi trang /work để chỗ nào cũng tải trông như nhau.
  */
-export function PageLoading({ rows = 6, label = 'Loading…' }: { rows?: number; label?: string }) {
+export function PageLoading({ rows = 6, label = wt('common.loading') }: { rows?: number; label?: string }) {
   return (
     <div role="status" aria-live="polite" className="flex h-full min-h-[200px] w-full flex-col gap-3 overflow-hidden p-5 md:p-6">
       <span className="sr-only">{label}</span>
@@ -600,11 +604,11 @@ const NOT_FOUND_RE = /not found|unavailable|no access|does not exist/i;
 export function EmptyState({ title, body, action, icon }: { title: string; body?: string; action?: ReactNode; icon?: ReactNode }) {
   const notFound = NOT_FOUND_RE.test(title);
   const same = body && body.trim().replace(/[.!]$/, '').toLowerCase() === title.trim().replace(/[.!]$/, '').toLowerCase();
-  const text = same ? (notFound ? 'It may have been deleted, renamed, or you no longer have access to it.' : undefined) : body;
+  const text = same ? (notFound ? wt('common.notFoundBody') : undefined) : body;
   const act = action ?? (notFound ? (
     <div className="flex flex-wrap items-center justify-center gap-2">
-      <Link href="/work?tab=my-work" className="w-btn w-btn-primary">Back to My work</Link>
-      <Link href="/work?tab=workspaces" className="w-btn">Workspaces</Link>
+      <Link href="/work?tab=my-work" className="w-btn w-btn-primary">{wt('common.backToMyWork')}</Link>
+      <Link href="/work?tab=workspaces" className="w-btn">{wt('common.workspaces')}</Link>
     </div>
   ) : undefined);
   return (
@@ -661,19 +665,15 @@ export function useToggle(initial = false) {
   return { on, open, close, toggle, set: setOn };
 }
 
+/** Theo ngôn ngữ CT Work: "5m ago" / "5 phút trước" (components/work/i18n/core.ts). */
 export function relativeTime(iso: string): string {
-  const diff = (Date.now() - new Date(iso).getTime()) / 1000;
-  if (diff < 45) return 'just now';
-  if (diff < 3600) return `${Math.round(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.round(diff / 3600)}h ago`;
-  if (diff < 86400 * 7) return `${Math.round(diff / 86400)}d ago`;
-  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: new Date(iso).getFullYear() === new Date().getFullYear() ? undefined : 'numeric' });
+  return wfmt.relative(iso);
 }
 
+/** "Oct 9, 2026" / "9 thg 10, 2026" — theo UTC như trước (ngày lịch không lệch múi giờ). */
 export function formatDate(iso: string | null | undefined): string {
   if (!iso) return '';
-  const d = new Date(iso.length === 10 ? `${iso}T00:00:00Z` : iso);
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  return wfmt.date(iso, { timeZone: 'UTC' });
 }
 
 /**

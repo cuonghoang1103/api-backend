@@ -45,6 +45,8 @@ import { basicToJql, jqlErrorOf } from '@/components/work/search/jql';
 import { studioOn, useWorkspaceTeams } from '@/components/work/studio/shared';
 import { workStudioApi, workStudioKeys } from '@/lib/work-api';
 import { AgentLeasesProvider, AssigneeKindFilter, type AssigneeKind } from '@/components/work/agents/leases';
+import { wt } from '@/components/work/i18n';
+import { statusName } from '@/components/work/i18n/names';
 
 const PAGE = 100;
 const ME = -1; // giá trị "Me" trong picker; trên URL là chữ `me`
@@ -117,7 +119,7 @@ function FilterButton<T>({
         <ChevronDown size={12} className="opacity-60" />
       </button>
       <Popover open={pop.on} onClose={pop.close} anchorRef={ref as RefObject<HTMLElement>} width={250}>
-        <PickerList options={options} selected={selected} onPick={onToggle} multi placeholder={`Filter by ${label.toLowerCase()}…`} />
+        <PickerList options={options} selected={selected} onPick={onToggle} multi placeholder={wt('issues.filterBy', { what: label.toLowerCase() })} />
       </Popover>
     </>
   );
@@ -126,7 +128,7 @@ function FilterButton<T>({
 /** Công tắc Basic | JQL. */
 function ModeToggle({ mode, onChange }: { mode: 'basic' | 'jql'; onChange: (m: 'basic' | 'jql') => void }) {
   return (
-    <div className="inline-flex shrink-0 rounded-[var(--w-radius)] border border-[var(--w-border-strong)] p-0.5" role="tablist" aria-label="Search mode">
+    <div className="inline-flex shrink-0 rounded-[var(--w-radius)] border border-[var(--w-border-strong)] p-0.5" role="tablist" aria-label={wt('issues.searchMode')}>
       {(['basic', 'jql'] as const).map((m) => (
         <button
           key={m}
@@ -386,13 +388,13 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
       return { ...r, label: v.label };
     },
     onSuccess: (r) => {
-      if (r.updated.length) toast.success(`${r.updated.length} ${r.updated.length === 1 ? 'issue' : 'issues'} ${r.label}`);
-      if (r.failed.length) toast.error(`${r.failed.length} could not be changed: ${r.failed.slice(0, 3).map((f) => `${lk.issueKey(f.number)} (${f.error})`).join(', ')}`);
+      if (r.updated.length) toast.success(wt('backlog.bulkDone', { count: r.updated.length, label: r.label }));
+      if (r.failed.length) toast.error(wt('backlog.bulkFailed', { count: r.failed.length, list: r.failed.slice(0, 3).map((f) => `${lk.issueKey(f.number)} (${f.error})`).join(', ') }));
       const failedNums = new Set(r.failed.map((f) => f.number));
       setSelected(new Set(items.filter((i) => failedNums.has(i.number)).map((i) => i.id)));
       for (const k of [wk.issues(pid!), wk.board(pid!), wk.backlog(pid!)]) qc.invalidateQueries({ queryKey: k });
     },
-    onError: (err) => toast.error(workError(err, 'Bulk change failed')),
+    onError: (err) => toast.error(workError(err, wt('backlog.bulkFailedAll'))),
   });
 
   // ── Drawer ──
@@ -485,16 +487,16 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
     () =>
       statusGroups.map((g) => ({
         value: g.name,
-        label: g.name,
+        label: statusName(g.name),
         icon: <span className="h-2 w-2 rounded-full" style={{ background: g.color }} />,
-        hint: g.category === 'DONE' ? 'Done' : g.category === 'IN_PROGRESS' ? 'In progress' : 'To do',
+        hint: g.category === 'DONE' ? wt('status.catDone') : g.category === 'IN_PROGRESS' ? wt('status.catInProgress') : wt('status.catTodo'),
       })),
     [statusGroups],
   );
   const assigneeOptions = useMemo<PickOption<number>[]>(
     () => [
-      { value: ME, label: 'Me', icon: <UserAvatar user={config?.members.find((m) => m.id === meId)} size={16} />, keywords: 'myself current' },
-      { value: 0, label: 'Unassigned', icon: <UserAvatar user={null} size={16} />, keywords: 'nobody none' },
+      { value: ME, label: wt('common.me'), icon: <UserAvatar user={config?.members.find((m) => m.id === meId)} size={16} />, keywords: 'myself current' },
+      { value: 0, label: wt('common.unassigned'), icon: <UserAvatar user={null} size={16} />, keywords: 'nobody none' },
       ...(config?.members ?? [])
         .filter((m) => m.id !== meId)
         .map((m) => ({ value: m.id, label: userName(m), icon: <UserAvatar user={m} size={16} />, keywords: m.username })),
@@ -551,7 +553,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   if (projectError) {
     return (
       <div className="h-full overflow-y-auto">
-        <EmptyState title="Project not found" body="It may have been deleted, or you no longer have access to it." />
+        <EmptyState title={wt('common.projectNotFound')} body={wt('common.notFoundBody')} />
       </div>
     );
   }
@@ -569,7 +571,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
       {/* Thanh đầu — cùng khung ProjectHeader với mọi trang dự án */}
       <ProjectHeader
         config={config}
-        title="Issues"
+        title={wt('issues.title')}
         tools={false}
         extra={countLabel ? <span className="w-count">{countLabel}</span> : undefined}
       >
@@ -585,13 +587,13 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
         <ExportMenu pid={config.id} getJql={() => (jqlMode ? jqlParam : currentBasicJql())} />
         {/* Đợt S6: chấm chất lượng đặc tả của thẻ Requirement/Story (trang Spec quality). */}
         {['ADMIN', 'MEMBER', 'TEACHER'].includes(config.role) && (
-          <Link href={`/work/${config.workspace.slug}/${config.key}/spec`} className="w-btn w-btn-sm" title="Check spec quality of requirements (Spec Fidelity)" data-testid="list-spec-check">
-            <Gauge size={13} /> <span className="max-lg:!hidden">Check spec quality</span>
+          <Link href={`/work/${config.workspace.slug}/${config.key}/spec`} className="w-btn w-btn-sm" title={wt('issues.specTitle')} data-testid="list-spec-check">
+            <Gauge size={13} /> <span className="max-lg:!hidden">{wt('issues.spec')}</span>
           </Link>
         )}
         {canCreate && (
-          <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title="Create issue">
-            <Plus size={14} /> <span className="max-sm:!hidden">Create issue</span>
+          <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title={wt('board.createIssue')}>
+            <Plus size={14} /> <span className="max-sm:!hidden">{wt('board.createIssue')}</span>
             <kbd className="ml-1 hidden rounded-[3px] bg-white/20 px-1 text-[10px] font-medium leading-[16px] md:inline">C</kbd>
           </button>
         )}
@@ -624,12 +626,12 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
                 else (e.target as HTMLInputElement).blur();
               }
             }}
-            placeholder="Search issues or keys…"
-            aria-label="Search issues"
+            placeholder={wt('issues.searchPh')}
+            aria-label={wt('issues.searchAria')}
             className="w-input !h-[28px] !pl-7 !pr-7 !text-[12.5px]"
           />
           {search ? (
-            <button type="button" onClick={() => setSearch('')} className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-[var(--w-text-3)] hover:text-[var(--w-text)]" aria-label="Clear search">
+            <button type="button" onClick={() => setSearch('')} className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-[var(--w-text-3)] hover:text-[var(--w-text)]" aria-label={wt('issues.clearSearch')}>
               <X size={12} />
             </button>
           ) : (
@@ -637,29 +639,29 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
           )}
         </div>
         <FilterButton
-          label="Type"
+          label={wt('common.type')}
           options={typeOptions}
           selected={typeSel}
           onToggle={(v) => setParams({ type: joinOrNull(toggleIn(typeSel, v)) })}
           summary={summaryOf(typeSel.map((id) => lk.types.get(id)?.name ?? '?'))}
         />
         <FilterButton
-          label="Status"
+          label={wt('common.status')}
           options={statusOptions}
           selected={statusSel}
           onToggle={(v) => setParams({ status: joinOrNull(toggleIn(statusSel, v)) })}
-          summary={summaryOf(statusSel)}
+          summary={summaryOf(statusSel.map(statusName))}
         />
         <FilterButton
-          label="Assignee"
+          label={wt('common.assignee')}
           options={assigneeOptions}
           selected={assigneeSel}
           onToggle={(v) => setParams({ assignee: joinOrNull(toggleIn(assigneeSel, v).map((a) => (a === ME ? 'me' : a))) })}
-          summary={summaryOf(assigneeSel.map((a) => (a === ME ? 'Me' : a === 0 ? 'Unassigned' : userName(lk.members.get(a)))))}
+          summary={summaryOf(assigneeSel.map((a) => (a === ME ? wt('common.me') : a === 0 ? wt('common.unassigned') : userName(lk.members.get(a)))))}
         />
         {labelOptions.length > 0 && (
           <FilterButton
-            label="Label"
+            label={wt('issues.label')}
             options={labelOptions}
             selected={labelSel}
             onToggle={(v) => setParams({ label: joinOrNull(toggleIn(labelSel, v)) })}
@@ -668,16 +670,16 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
         )}
         {teamsOn && (teamsQ.data?.length ?? 0) > 0 && (
           <FilterButton
-            label="Team"
-            options={[{ value: 0, label: 'No team' }, ...(teamsQ.data ?? []).filter((t) => !t.archivedAt).map((t) => ({ value: t.id, label: t.name, hint: t.key, keywords: t.key, icon: <span className="h-2 w-2 rounded-full" style={{ background: t.color }} /> }))]}
+            label={wt('board.team')}
+            options={[{ value: 0, label: wt('board.noTeam') }, ...(teamsQ.data ?? []).filter((t) => !t.archivedAt).map((t) => ({ value: t.id, label: t.name, hint: t.key, keywords: t.key, icon: <span className="h-2 w-2 rounded-full" style={{ background: t.color }} /> }))]}
             selected={teamSel}
             onToggle={(v) => setParams({ team: joinOrNull(toggleIn(teamSel, v)) })}
-            summary={summaryOf(teamSel.map((id) => (id === 0 ? 'No team' : teamsQ.data?.find((t) => t.id === id)?.key ?? '?')))}
+            summary={summaryOf(teamSel.map((id) => (id === 0 ? wt('board.noTeam') : teamsQ.data?.find((t) => t.id === id)?.key ?? '?')))}
           />
         )}
         {stagesOn && (stagesQ.data?.length ?? 0) > 0 && (
           <FilterButton
-            label="Stage"
+            label={wt('issues.stage')}
             options={(stagesQ.data ?? []).map((st) => ({ value: st.id, label: `${st.n}. ${st.name}`, keywords: st.slug }))}
             selected={stageSel ? [stageSel] : []}
             onToggle={(v) => setParams({ stage: v === stageSel ? null : String(v) })}
@@ -692,11 +694,11 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
             onChange={(e) => setParams({ done: e.target.checked ? '1' : null })}
             className="h-3.5 w-3.5 accent-[var(--w-accent)]"
           />
-          Show done
+          {wt('issues.showDone')}
         </label>
         {hasFilters && (
           <button type="button" onClick={clearFilters} className="w-btn w-btn-ghost w-btn-sm">
-            <X size={12} /> Clear filters
+            <X size={12} /> {wt('issues.clearFilters')}
           </button>
         )}
       </div>
@@ -705,17 +707,17 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
       {/* Bảng */}
       <div className="min-h-0 flex-1 overflow-auto">
        {/* UX-A ARIA: hàng (row) và nhóm hàng (rowgroup) cần vai cha table. */}
-       <div style={{ ...gridVars, minWidth: tpl.minWidth }} className="max-md:!min-w-0" role="table" aria-label="Issues">
+       <div style={{ ...gridVars, minWidth: tpl.minWidth }} className="max-md:!min-w-0" role="table" aria-label={wt('issues.title')}>
         <div
           role="row"
           className={cn(GRID, 'sticky top-0 z-[1] h-9 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-3 text-[12px] font-medium text-[var(--w-text-3)] shadow-[0_1px_0_var(--w-border)] md:px-4')}
         >
-          <span className="flex items-center" role="columnheader" aria-label="Select">
+          <span className="flex items-center" role="columnheader" aria-label={wt('common.select')}>
             {canBulk && (
               <input
                 type="checkbox"
-                aria-label={allSelected ? 'Clear selection' : 'Select all loaded issues'}
-                title={allSelected ? 'Clear selection' : 'Select all loaded issues'}
+                aria-label={allSelected ? wt('board.clearSel') : wt('issues.selectAllLoaded')}
+                title={allSelected ? wt('board.clearSel') : wt('issues.selectAllLoaded')}
                 checked={allSelected}
                 ref={(el) => { if (el) el.indeterminate = someSelected; }}
                 onChange={() => setSelected(allSelected ? new Set() : new Set(rows.map((r) => r.id)))}
@@ -733,7 +735,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
                 role="columnheader"
                 aria-sort={active ? (sortState!.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
                 onClick={() => onSort(c)}
-                title={`Sort by ${def.label.toLowerCase()}${jqlMode && def.jql ? ' (ORDER BY in JQL)' : jqlMode ? ' (loaded rows only)' : ''}`}
+                title={`${wt('issues.sortBy', { col: def.label.toLowerCase() })}${jqlMode && def.jql ? wt('issues.sortJql') : jqlMode ? wt('issues.sortLoaded') : ''}`}
                 className={cn(
                   'flex h-full min-w-0 items-center gap-1 hover:text-[var(--w-text)]',
                   def.align === 'right' && 'justify-end',
@@ -741,7 +743,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
                   active && 'text-[var(--w-text)]',
                 )}
               >
-                <span className="truncate">{c === 'type' ? 'Type' : def.label}</span>
+                <span className="truncate">{c === 'type' ? wt('common.type') : def.label}</span>
                 {active && (sortState!.dir === 'asc' ? <ArrowUp size={11} /> : <ArrowDown size={11} />)}
               </button>
             );
@@ -760,46 +762,46 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
             ))}
           </div>
         ) : jqlError ? (
-          <EmptyState title="Fix the query to see results" body="Check the highlighted part of your query, or open Syntax help for fields and examples." />
+          <EmptyState title={wt('issues.fixQuery')} body={wt('issues.fixQueryBody')} />
         ) : list.isError ? (
           <EmptyState
-            title="Couldn't load issues"
+            title={wt('issues.loadFailed')}
             body={workError(list.error)}
-            action={<button type="button" className="w-btn" onClick={() => list.refetch()}>Try again</button>}
+            action={<button type="button" className="w-btn" onClick={() => list.refetch()}>{wt('common.tryAgain')}</button>}
           />
         ) : !items.length && jqlMode ? (
           <EmptyState
-            title="No issues match this query"
-            body={jqlParam ? 'Try widening the query: remove a clause or include done issues.' : 'This project has no issues yet.'}
+            title={wt('issues.noMatchQuery')}
+            body={jqlParam ? wt('issues.widenQuery') : wt('issues.noIssuesProject')}
           />
         ) : !items.length ? (
           hasFilters ? (
             <EmptyState
-              title="No issues match your filters"
-              body={showDone ? 'Try a different search or remove some filters.' : 'Try a different search, remove some filters, or include done issues.'}
+              title={wt('issues.noMatchFilters')}
+              body={showDone ? wt('issues.tryDifferent') : wt('issues.tryDifferentDone')}
               action={
                 <div className="flex gap-2">
-                  <button type="button" className="w-btn" onClick={clearFilters}>Clear filters</button>
-                  {!showDone && <button type="button" className="w-btn w-btn-ghost" onClick={() => setParams({ done: '1' })}>Show done</button>}
+                  <button type="button" className="w-btn" onClick={clearFilters}>{wt('issues.clearFilters')}</button>
+                  {!showDone && <button type="button" className="w-btn w-btn-ghost" onClick={() => setParams({ done: '1' })}>{wt('issues.showDone')}</button>}
                 </div>
               }
             />
           ) : (
             <EmptyState
-              title={showDone ? 'No issues yet' : 'No open issues'}
+              title={showDone ? wt('issues.noIssuesYet') : wt('issues.noOpen')}
               body={
                 showDone
-                  ? 'Issues track the work in this project: stories, tasks, bugs and more.'
-                  : 'Everything open is cleared. Create a new issue, or include done issues to see completed work.'
+                  ? wt('issues.noIssuesBody')
+                  : wt('issues.noOpenBody')
               }
               action={
                 <div className="flex gap-2">
                   {canCreate && (
                     <button type="button" className="w-btn w-btn-primary" onClick={() => setCreateOpen(true)}>
-                      <Plus size={14} /> Create issue
+                      <Plus size={14} /> {wt('board.createIssue')}
                     </button>
                   )}
-                  {!showDone && <button type="button" className="w-btn" onClick={() => setParams({ done: '1' })}>Show done</button>}
+                  {!showDone && <button type="button" className="w-btn" onClick={() => setParams({ done: '1' })}>{wt('issues.showDone')}</button>}
                 </div>
               }
             />
@@ -827,17 +829,17 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
               <div className="flex justify-center py-3">
                 <button type="button" className="w-btn w-btn-sm" disabled={list.isFetchingNextPage} onClick={() => list.fetchNextPage()}>
                   {list.isFetchingNextPage ? <Spinner size={12} /> : null}
-                  Load more
+                  {wt('issues.loadMore')}
                 </button>
               </div>
             )}
             <div className="hidden items-center gap-3 px-4 py-3 text-[11px] text-[var(--w-text-3)] md:flex">
-              <span className="flex items-center gap-1"><kbd className="w-kbd">J</kbd><kbd className="w-kbd">K</kbd> move</span>
-              <span className="flex items-center gap-1"><kbd className="w-kbd">↵</kbd> open</span>
-              {canBulk && <span className="flex items-center gap-1"><kbd className="w-kbd">X</kbd> select</span>}
-              {clientSort && list.hasNextPage && <span>Sorted within loaded issues — load more to include the rest.</span>}
-              {canCreate && <span className="flex items-center gap-1"><kbd className="w-kbd">C</kbd> create</span>}
-              <span className="flex items-center gap-1"><kbd className="w-kbd">/</kbd> search</span>
+              <span className="flex items-center gap-1"><kbd className="w-kbd">J</kbd><kbd className="w-kbd">K</kbd> {wt('issues.kMove')}</span>
+              <span className="flex items-center gap-1"><kbd className="w-kbd">↵</kbd> {wt('issues.kOpen')}</span>
+              {canBulk && <span className="flex items-center gap-1"><kbd className="w-kbd">X</kbd> {wt('issues.kSelect')}</span>}
+              {clientSort && list.hasNextPage && <span>{wt('issues.sortedLoaded')}</span>}
+              {canCreate && <span className="flex items-center gap-1"><kbd className="w-kbd">C</kbd> {wt('issues.kCreate')}</span>}
+              <span className="flex items-center gap-1"><kbd className="w-kbd">/</kbd> {wt('issues.kSearch')}</span>
             </div>
           </div>
         )}
@@ -852,7 +854,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
           sprints={config.sprints}
           busy={bulk.isPending}
           onPatch={(patch, label) => bulk.mutate({ patch, label })}
-          onStatus={(name) => bulk.mutate({ status: name, label: `moved to ${name}` })}
+          onStatus={(name) => bulk.mutate({ status: name, label: wt('board.movedTo', { name: statusName(name) }) })}
           onClear={() => setSelected(new Set())}
           onDelete={() => setBulkDelete(true)}
         />
@@ -860,10 +862,10 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
       <ConfirmDialog
         open={bulkDelete}
         onClose={() => setBulkDelete(false)}
-        onConfirm={() => { setBulkDelete(false); bulk.mutate({ patch: { delete: true }, label: 'deleted' }); }}
-        title={`Delete ${selected.size} ${selected.size === 1 ? 'issue' : 'issues'}`}
-        body="The selected issues and their sub-tasks move to the project trash. Project admins can restore them from Settings → Trash."
-        confirmLabel="Delete"
+        onConfirm={() => { setBulkDelete(false); bulk.mutate({ patch: { delete: true }, label: wt('backlog.deletedLabel') }); }}
+        title={wt('backlog.deleteN', { count: selected.size })}
+        body={wt('issues.deleteBody')}
+        confirmLabel={wt('common.delete')}
         pending={bulk.isPending}
       />
 

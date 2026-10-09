@@ -13,24 +13,25 @@ import { cn } from '@/lib/utils';
 import { workApi, workError, type ProjectConfig, type RunStatus } from '@/lib/work-api';
 import { wk } from '../hooks';
 import { Spinner } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 export const RUN_STATUS_META: Record<RunStatus, { label: string; cls: string }> = {
   PASS: {
-    label: 'Passed',
+    get label() { return wt('tests.rsPassed'); },
     cls: 'bg-[color-mix(in_srgb,var(--w-green)_14%,transparent)] text-[var(--w-green)] border-[color-mix(in_srgb,var(--w-green)_40%,transparent)]',
   },
   FAIL: {
-    label: 'Failed',
+    get label() { return wt('tests.rsFailed'); },
     cls: 'bg-[color-mix(in_srgb,var(--w-red)_14%,transparent)] text-[var(--w-red)] border-[color-mix(in_srgb,var(--w-red)_40%,transparent)]',
   },
   BLOCKED: {
-    label: 'Blocked',
+    get label() { return wt('tests.rsBlocked'); },
     cls: 'bg-[color-mix(in_srgb,var(--w-orange)_14%,transparent)] text-[var(--w-orange)] border-[color-mix(in_srgb,var(--w-orange)_40%,transparent)]',
   },
-  RETEST: { label: 'Retest', cls: 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)] border-[var(--w-accent-border)]' },
-  IN_PROGRESS: { label: 'In progress', cls: 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)] border-[var(--w-accent-border)]' },
-  SKIP: { label: 'Skipped', cls: 'bg-[var(--w-sunken)] text-[var(--w-text-3)] border-[var(--w-border-strong)]' },
-  TODO: { label: 'To do', cls: 'bg-[var(--w-sunken)] text-[var(--w-text-3)] border-[var(--w-border-strong)]' },
+  RETEST: { get label() { return wt('tests.rsRetest'); }, cls: 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)] border-[var(--w-accent-border)]' },
+  IN_PROGRESS: { get label() { return wt('tests.rsInProgress'); }, cls: 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)] border-[var(--w-accent-border)]' },
+  SKIP: { get label() { return wt('tests.rsSkipped'); }, cls: 'bg-[var(--w-sunken)] text-[var(--w-text-3)] border-[var(--w-border-strong)]' },
+  TODO: { get label() { return wt('tests.rsToDo'); }, cls: 'bg-[var(--w-sunken)] text-[var(--w-text-3)] border-[var(--w-border-strong)]' },
 };
 
 export function RunStatusPill({ status, title, className }: { status: RunStatus; title?: string; className?: string }) {
@@ -63,9 +64,9 @@ export function EnableTestingState({ config, pid }: { config: ProjectConfig; pid
     try {
       await workApi.enableTesting(pid);
       await Promise.all([qc.invalidateQueries({ queryKey: wk.project(pid) }), qc.invalidateQueries({ queryKey: wk.tests(pid) })]);
-      toast.success('Test management enabled');
+      toast.success(wt('tests.enabled'));
     } catch (e) {
-      toast.error(workError(e, 'Could not enable test management'));
+      toast.error(workError(e, wt('tests.enableFailed')));
     } finally {
       setPending(false);
     }
@@ -75,18 +76,17 @@ export function EnableTestingState({ config, pid }: { config: ProjectConfig; pid
       <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[8px] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]">
         <FlaskConical size={20} />
       </span>
-      <div className="text-[15px] font-semibold">Test management is not enabled</div>
+      <div className="text-[15px] font-semibold">{wt('tests.notEnabled')}</div>
       <p className="mt-1.5 max-w-[460px] text-[13px] leading-relaxed text-[var(--w-text-2)]">
-        Enabling it adds a <b>Test</b> issue type to this project so you can write test cases with steps, group them into
-        test plans, execute them in test cycles, and trace coverage back to requirements.
+        {wt('tests.notEnabledBody')}
       </p>
       <div className="mt-4">
         {config.permissions.settings ? (
           <button type="button" className="w-btn w-btn-primary" onClick={enable} disabled={pending}>
-            {pending && <Spinner size={12} />} Enable test management
+            {pending && <Spinner size={12} />} {wt('tests.enable')}
           </button>
         ) : (
-          <p className="text-[12px] text-[var(--w-text-3)]">Ask a project admin to enable test management in this project.</p>
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('tests.askAdmin')}</p>
         )}
       </div>
     </div>

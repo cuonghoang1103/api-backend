@@ -35,6 +35,7 @@ import ProjectDanger from '@/components/work/settings/ProjectDanger';
 import ProjectSpecQuality from '@/components/work/settings/ProjectSpecQuality';
 // CTW-28 A14: luật cho AI agent (Done ⇒ Review, lease, người duyệt).
 import ProjectAgents from '@/components/work/settings/ProjectAgents';
+import { wt } from '@/components/work/i18n';
 
 type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'agents' | 'automation' | 'github' | 'gitlab' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
 
@@ -50,34 +51,34 @@ function ProjectSettings() {
   // Nhóm điều hướng dọc; `?tab=` giữ nguyên như cũ.
   const perms = config?.permissions;
   const groups: NavGroup<Tab>[] = [
-    { label: 'General', tabs: [
-      { key: 'details', label: 'Details', icon: SlidersHorizontal },
-      { key: 'studio', label: 'Project type & modules', icon: Blocks },
-      { key: 'members', label: 'Members', icon: Users },
-      { key: 'labels', label: 'Labels', icon: Tag },
-      { key: 'components', label: 'Components', icon: Boxes },
+    { get label() { return wt('settings.tGeneral'); }, tabs: [
+      { key: 'details', get label() { return wt('settings.tDetails'); }, icon: SlidersHorizontal },
+      { key: 'studio', get label() { return wt('settings.tProjectTypeModules'); }, icon: Blocks },
+      { key: 'members', get label() { return wt('settings.tMembers'); }, icon: Users },
+      { key: 'labels', get label() { return wt('settings.tLabels'); }, icon: Tag },
+      { key: 'components', get label() { return wt('settings.tComponents'); }, icon: Boxes },
     ] },
-    { label: 'Work', tabs: [
-      { key: 'workflow', label: 'Workflow', icon: Workflow },
-      { key: 'board', label: 'Board', icon: Columns3 },
-      { key: 'types', label: 'Issue types', icon: Shapes },
-      { key: 'fields', label: 'Fields', icon: TextCursorInput },
-      ...(config && config.role !== 'CLIENT' ? [{ key: 'quality' as const, label: 'Spec quality & AI', icon: Gauge }] : []),
+    { get label() { return wt('settings.tWork'); }, tabs: [
+      { key: 'workflow', get label() { return wt('settings.tWorkflow'); }, icon: Workflow },
+      { key: 'board', get label() { return wt('settings.tBoard'); }, icon: Columns3 },
+      { key: 'types', get label() { return wt('settings.tIssueTypes'); }, icon: Shapes },
+      { key: 'fields', get label() { return wt('settings.tFields'); }, icon: TextCursorInput },
+      ...(config && config.role !== 'CLIENT' ? [{ key: 'quality' as const, get label() { return wt('settings.tSpecQualityAi'); }, icon: Gauge }] : []),
       ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'agents' as const, label: 'AI agents', icon: Bot }] : []),
     ] },
-    { label: 'Automation & integrations', tabs: [
-      { key: 'automation', label: 'Automation', icon: Zap },
-      { key: 'github', label: 'GitHub', icon: Github },
-      { key: 'gitlab', label: 'GitLab', icon: GitMerge },
-      ...(perms?.settings ? [{ key: 'chat' as const, label: 'Chat notifications', icon: MessageSquareShare }] : []),
-      { key: 'share', label: 'Public links', icon: Link2 },
+    { get label() { return wt('settings.tAutomationIntegrations'); }, tabs: [
+      { key: 'automation', get label() { return wt('settings.tAutomation'); }, icon: Zap },
+      { key: 'github', get label() { return wt('settings.tGithub'); }, icon: Github },
+      { key: 'gitlab', get label() { return wt('settings.tGitlab'); }, icon: GitMerge },
+      ...(perms?.settings ? [{ key: 'chat' as const, get label() { return wt('settings.tChatNotifications'); }, icon: MessageSquareShare }] : []),
+      { key: 'share', get label() { return wt('settings.tPublicLinks'); }, icon: Link2 },
     ] },
-    { label: 'Data', tabs: [
-      { key: 'export', label: 'Export', icon: Download },
-      ...(perms?.settings ? [{ key: 'import' as const, label: 'Import', icon: Upload }] : []),
-      ...(perms?.deleteIssues ? [{ key: 'trash' as const, label: 'Trash', icon: Trash2 }] : []),
+    { get label() { return wt('settings.tData'); }, tabs: [
+      { key: 'export', get label() { return wt('settings.tExport'); }, icon: Download },
+      ...(perms?.settings ? [{ key: 'import' as const, get label() { return wt('settings.tImport'); }, icon: Upload }] : []),
+      ...(perms?.deleteIssues ? [{ key: 'trash' as const, get label() { return wt('settings.tTrash'); }, icon: Trash2 }] : []),
     ] },
-    { label: 'Danger zone', danger: true, tabs: perms?.settings ? [{ key: 'danger' as const, label: 'Danger zone', icon: TriangleAlert }] : [] },
+    { get label() { return wt('settings.tDangerZone'); }, danger: true, tabs: perms?.settings ? [{ key: 'danger' as const, get label() { return wt('settings.tDangerZone'); }, icon: TriangleAlert }] : [] },
   ];
   const tabs: TabDef<Tab>[] = groups.flatMap((g) => g.tabs);
   const raw = search?.get('tab') as Tab | null;
@@ -88,15 +89,15 @@ function ProjectSettings() {
   if (error || !config) {
     return (
       <div className="flex h-full flex-col">
-        <PageHeader title="Project settings" />
+        <PageHeader title={wt('palette.projectSettings')} />
         <div className="min-h-0 flex-1 overflow-y-auto">
           <EmptyState
-            title="Project not found"
-            body={workError(error, 'This project does not exist or you do not have access to it.')}
+            title={wt('common.projectNotFound')}
+            body={workError(error, wt('settings.projNotExist'))}
             action={
               <div className="flex flex-wrap justify-center gap-2">
-                <Link href={`/work/${slug}`} className="w-btn w-btn-primary">Back to workspace</Link>
-                <Link href="/work?tab=my-work" className="w-btn">My work</Link>
+                <Link href={`/work/${slug}`} className="w-btn w-btn-primary">{wt('settings.backToWs')}</Link>
+                <Link href="/work?tab=my-work" className="w-btn">{wt('shell.myWork')}</Link>
               </div>
             }
           />
@@ -107,16 +108,16 @@ function ProjectSettings() {
 
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Settings" tools={false} />
-      <SettingsLayout groups={groups} active={tab} onChange={setTab} label="Project settings">
+      <ProjectHeader config={config} title={wt('common.settings')} tools={false} />
+      <SettingsLayout groups={groups} active={tab} onChange={setTab} label={wt('palette.projectSettings')}>
         {config.archivedAt && (
           <div className="mb-6 flex items-center gap-2 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2.5 text-[13px] text-[var(--w-text-2)]">
             <Archive size={14} className="shrink-0" />
-            This project is archived. Restore it from the Danger zone to show it in the sidebar again.
+            {wt('settings.archivedNotice')}
           </div>
         )}
         {!config.permissions.settings && (
-          <ReadOnlyNotice>You can view these settings, but only project admins can change them.</ReadOnlyNotice>
+          <ReadOnlyNotice>{wt('settings.readOnly')}</ReadOnlyNotice>
         )}
         {tab === 'details' && <ProjectDetails config={config} slug={slug} />}
         {tab === 'studio' && <ProjectStudio config={config} slug={slug} />}

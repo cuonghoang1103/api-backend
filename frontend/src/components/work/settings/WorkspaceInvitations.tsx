@@ -13,6 +13,7 @@ import { wk } from '../hooks';
 import { EmptyState, Field, Spinner, formatDate } from '../ui';
 import { ConfirmDialog, PROJECT_ROLE_LABEL, ReadOnlyNotice, Section, Select, WS_ROLE_HELP, WS_ROLE_LABEL } from './shared';
 import { wsMembersKey } from './WorkspaceMembers';
+import { wt } from '@/components/work/i18n';
 
 const invitesKey = (wsId: number) => ['work', 'ws-invites', wsId] as const;
 const INVITE_ROLES: Array<Exclude<WorkspaceRole, 'OWNER'>> = ['MEMBER', 'ADMIN', 'GUEST'];
@@ -20,7 +21,7 @@ const PROJECT_ROLES: ProjectRole[] = ['MEMBER', 'VIEWER', 'TEACHER', 'CLIENT', '
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type InviteResult = { email: string; status: 'ADDED' | 'ALREADY_MEMBER' | 'INVITED' };
-const RESULT_LABEL: Record<InviteResult['status'], string> = { ADDED: 'Added', ALREADY_MEMBER: 'Already a member', INVITED: 'Invitation sent' };
+const RESULT_LABEL: Record<InviteResult['status'], string> = { get ADDED() { return wt('settings.rAdded'); }, get ALREADY_MEMBER() { return wt('settings.rAlready'); }, get INVITED() { return wt('settings.rInvited'); } };
 
 /** Chọn vai trò không gian + (tuỳ chọn) dự án + vai trò dự án — dùng chung cho mời email và link. */
 function RolePickers({
@@ -35,18 +36,18 @@ function RolePickers({
   const projects = ws.projects.filter((p) => !p.archivedAt && p.role === 'ADMIN');
   return (
     <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-3">
-      <Field label="Workspace role" hint={WS_ROLE_HELP[role]}>
+      <Field label={wt('settings.wsRole')} hint={WS_ROLE_HELP[role]}>
         <Select value={role} onChange={(e) => setRole(e.target.value as Exclude<WorkspaceRole, 'OWNER'>)}>
           {INVITE_ROLES.map((r) => <option key={r} value={r}>{WS_ROLE_LABEL[r]}</option>)}
         </Select>
       </Field>
-      <Field label="Add to project (optional)">
+      <Field label={wt('settings.addToProject')}>
         <Select value={projectId} onChange={(e) => setProjectId(e.target.value ? Number(e.target.value) : '')} disabled={!projects.length}>
-          <option value="">{projects.length ? 'No project' : 'No projects you admin'}</option>
+          <option value="">{projects.length ? wt('settings.noProject') : wt('settings.noAdminProjects')}</option>
           {projects.map((p) => <option key={p.id} value={p.id}>{p.key} · {p.name}</option>)}
         </Select>
       </Field>
-      <Field label="Project role">
+      <Field label={wt('settings.projRole')}>
         <Select value={projectRole} onChange={(e) => setProjectRole(e.target.value as ProjectRole)} disabled={!projectId}>
           {PROJECT_ROLES.map((r) => <option key={r} value={r}>{PROJECT_ROLE_LABEL[r]}</option>)}
         </Select>
@@ -92,13 +93,13 @@ export default function WorkspaceInvitations({ ws }: { ws: WorkspaceDetail }) {
       setResults(r);
       setEmailText('');
       const n = r.filter((x) => x.status !== 'ALREADY_MEMBER').length;
-      toast.success(n ? `${n} ${n === 1 ? 'person' : 'people'} invited` : 'Everyone is already a member');
+      toast.success(n ? wt('settings.nInvited', { count: n }) : wt('settings.allMembers'));
       qc.invalidateQueries({ queryKey: invitesKey(ws.id) });
       qc.invalidateQueries({ queryKey: wsMembersKey(ws.id) });
       qc.invalidateQueries({ queryKey: wk.workspace(ws.slug) });
       qc.invalidateQueries({ queryKey: wk.workspaces });
     },
-    onError: (err) => toast.error(workError(err, 'Could not send invitations')),
+    onError: (err) => toast.error(workError(err, wt('settings.inviteFailed'))),
   });
   const canInvite = parsed.valid.length > 0 && parsed.valid.length <= 50 && !parsed.invalid.length && !inviteEmails.isPending;
 
@@ -121,16 +122,16 @@ export default function WorkspaceInvitations({ ws }: { ws: WorkspaceDetail }) {
       setCopied(false);
       qc.invalidateQueries({ queryKey: invitesKey(ws.id) });
     },
-    onError: (err) => toast.error(workError(err, 'Could not create the invite link')),
+    onError: (err) => toast.error(workError(err, wt('settings.linkFailed'))),
   });
   const copy = async () => {
     if (!link) return;
     try {
       await navigator.clipboard.writeText(link.url);
       setCopied(true);
-      toast.success('Link copied');
+      toast.success(wt('common.linkCopied'));
     } catch {
-      toast.error('Copy failed — select the link and copy it manually');
+      toast.error(wt('settings.copyFailed'));
     }
   };
 
@@ -139,22 +140,22 @@ export default function WorkspaceInvitations({ ws }: { ws: WorkspaceDetail }) {
   const [revoking, setRevoking] = useState<WorkInvite | null>(null);
   const revoke = useMutation({
     mutationFn: (id: number) => workApi.revokeInvite(ws.id, id),
-    onSuccess: () => { toast.success('Invitation revoked'); setRevoking(null); qc.invalidateQueries({ queryKey: invitesKey(ws.id) }); },
-    onError: (err) => toast.error(workError(err, 'Could not revoke the invitation')),
+    onSuccess: () => { toast.success(wt('settings.revoked')); setRevoking(null); qc.invalidateQueries({ queryKey: invitesKey(ws.id) }); },
+    onError: (err) => toast.error(workError(err, wt('settings.revokeFailed'))),
   });
   const projectName = (id: number | null) => (id ? ws.projects.find((p) => p.id === id)?.key ?? 'a project' : null);
 
-  if (!canManage) return <ReadOnlyNotice>Only workspace owners and admins can invite people.</ReadOnlyNotice>;
+  if (!canManage) return <ReadOnlyNotice>{wt('settings.onlyAdminsInvite')}</ReadOnlyNotice>;
 
   return (
     <div>
-      <Section title="Invite by email" description="People who already have an account are added right away. Everyone else receives an email with a link that expires in 7 days.">
+      <Section title={wt('settings.inviteEmail')} description={wt('settings.inviteEmailDesc')}>
         <form onSubmit={(e) => { e.preventDefault(); if (canInvite) inviteEmails.mutate(); }}>
           <Field
-            label="Email addresses"
+            label={wt('settings.emails')}
             hint={parsed.invalid.length
               ? undefined
-              : parsed.valid.length > 50 ? 'At most 50 addresses at a time.' : 'Separate with commas or new lines.'}
+              : parsed.valid.length > 50 ? wt('settings.max50') : wt('settings.separate')}
           >
             <textarea
               className="w-input"
@@ -169,12 +170,12 @@ export default function WorkspaceInvitations({ ws }: { ws: WorkspaceDetail }) {
             />
           </Field>
           {parsed.invalid.length > 0 && (
-            <p className="-mt-3 mb-4 text-[12px] text-[var(--w-red)]">Not a valid email: {parsed.invalid.slice(0, 3).join(', ')}{parsed.invalid.length > 3 ? '…' : ''}</p>
+            <p className="-mt-3 mb-4 text-[12px] text-[var(--w-red)]">{wt('settings.invalidEmail')} {parsed.invalid.slice(0, 3).join(', ')}{parsed.invalid.length > 3 ? '…' : ''}</p>
           )}
           <RolePickers ws={ws} {...emailRoles} />
           <button type="submit" className="w-btn w-btn-primary" disabled={!canInvite}>
             {inviteEmails.isPending && <Spinner size={12} />}
-            {parsed.valid.length > 1 ? `Invite ${parsed.valid.length} people` : 'Send invitation'}
+            {parsed.valid.length > 1 ? wt('settings.inviteN', { n: parsed.valid.length }) : wt('settings.sendInvite')}
           </button>
         </form>
 
@@ -192,20 +193,20 @@ export default function WorkspaceInvitations({ ws }: { ws: WorkspaceDetail }) {
         )}
       </Section>
 
-      <Section title="Invite link" description="Share one link in your class or team chat. Anyone with the link can join until it expires or runs out of uses.">
+      <Section title={wt('settings.inviteLink2')} description={wt('settings.inviteLinkDesc')}>
         <form onSubmit={(e) => { e.preventDefault(); if (!createLink.isPending) createLink.mutate(); }}>
           <RolePickers ws={ws} {...linkRoles} />
           <div className="grid grid-cols-2 gap-x-3 sm:max-w-[340px]">
-            <Field label="Max uses">
+            <Field label={wt('settings.maxUses')}>
               <input type="number" className="w-input tabular" min={1} max={200} value={maxUses} onChange={(e) => setMaxUses(Math.min(200, Math.max(1, Number(e.target.value) || 1)))} />
             </Field>
-            <Field label="Expires in (days)">
+            <Field label={wt('settings.expiresDays')}>
               <input type="number" className="w-input tabular" min={1} max={30} value={days} onChange={(e) => setDays(Math.min(30, Math.max(1, Number(e.target.value) || 1)))} />
             </Field>
           </div>
           <button type="submit" className="w-btn" disabled={createLink.isPending}>
             {createLink.isPending ? <Spinner size={12} /> : <Link2 size={14} />}
-            Create invite link
+            {wt('settings.createLink')}
           </button>
         </form>
 
@@ -215,33 +216,33 @@ export default function WorkspaceInvitations({ ws }: { ws: WorkspaceDetail }) {
               <input className="w-input min-w-0 flex-1 font-mono text-[12px]" readOnly value={link.url} onFocus={(e) => e.currentTarget.select()} />
               <button type="button" className="w-btn w-btn-primary shrink-0" onClick={copy}>
                 {copied ? <Check size={14} /> : <Copy size={14} />}
-                {copied ? 'Copied' : 'Copy'}
+                {copied ? wt('common.copied') : wt('common.copy')}
               </button>
             </div>
             <p className="mt-2 text-[12px] text-[var(--w-text-2)]">
-              This link is shown only once — copy it now. Valid for {link.maxUses} {link.maxUses === 1 ? 'use' : 'uses'} until {formatDate(link.expiresAt)}.
+              {wt('settings.linkOnce', { n: link.maxUses, date: formatDate(link.expiresAt) })}
             </p>
           </div>
         )}
       </Section>
 
-      <Section title="Pending invitations" description="Invitations that have not expired or been revoked.">
+      <Section title={wt('settings.pending')} description={wt('settings.pendingDesc')}>
         {invites.isLoading ? (
           <div className="flex justify-center py-6"><Spinner size={16} /></div>
         ) : invites.error ? (
-          <EmptyState title="Couldn't load invitations" body={workError(invites.error)} />
+          <EmptyState title={wt('settings.invLoadFailed')} body={workError(invites.error)} />
         ) : !invites.data?.length ? (
-          <p className="text-[13px] text-[var(--w-text-3)]">No pending invitations.</p>
+          <p className="text-[13px] text-[var(--w-text-3)]">{wt('settings.noPending')}</p>
         ) : (
           <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
             <table className="w-full table-fixed text-[13px]">
               <thead>
                 <tr className="border-b border-[var(--w-border)] bg-[var(--w-sunken)] text-left text-[11px] uppercase tracking-wide text-[var(--w-text-3)]">
-                  <th className="px-3 py-2 font-medium">Invitee</th>
-                  <th className="w-[92px] px-2 py-2 font-medium">Role</th>
-                  <th className="hidden w-[64px] px-2 py-2 font-medium sm:table-cell">Uses</th>
-                  <th className="hidden w-[110px] px-2 py-2 font-medium md:table-cell">Expires</th>
-                  <th className="hidden w-[150px] px-2 py-2 font-medium md:table-cell">Invited by</th>
+                  <th className="px-3 py-2 font-medium">{wt('settings.invitee')}</th>
+                  <th className="w-[92px] px-2 py-2 font-medium">{wt('common.role')}</th>
+                  <th className="hidden w-[64px] px-2 py-2 font-medium sm:table-cell">{wt('settings.uses')}</th>
+                  <th className="hidden w-[110px] px-2 py-2 font-medium md:table-cell">{wt('settings.expires')}</th>
+                  <th className="hidden w-[150px] px-2 py-2 font-medium md:table-cell">{wt('settings.invitedBy')}</th>
                   <th className="w-[78px]" />
                 </tr>
               </thead>
@@ -250,11 +251,11 @@ export default function WorkspaceInvitations({ ws }: { ws: WorkspaceDetail }) {
                   <tr key={inv.id} className="border-b border-[var(--w-border)] last:border-b-0">
                     <td className="max-w-0 px-3 py-2">
                       <div className="flex items-center gap-1.5 truncate">
-                        {inv.email ? <span className="truncate">{inv.email}</span> : <><Link2 size={13} className="shrink-0 text-[var(--w-text-3)]" /><span>Invite link</span></>}
+                        {inv.email ? <span className="truncate">{inv.email}</span> : <><Link2 size={13} className="shrink-0 text-[var(--w-text-3)]" /><span>{wt('settings.inviteLink2')}</span></>}
                       </div>
                       {projectName(inv.projectId) && (
                         <div className="truncate text-[11px] text-[var(--w-text-3)]">
-                          + {projectName(inv.projectId)}{inv.projectRole ? ` as ${PROJECT_ROLE_LABEL[inv.projectRole]}` : ''}
+                          + {projectName(inv.projectId)}{inv.projectRole ? ` ${wt('settings.asRole', { r: PROJECT_ROLE_LABEL[inv.projectRole] })}` : ''}
                         </div>
                       )}
                     </td>
@@ -263,7 +264,7 @@ export default function WorkspaceInvitations({ ws }: { ws: WorkspaceDetail }) {
                     <td className="hidden px-2 py-2 text-[var(--w-text-2)] md:table-cell">{formatDate(inv.expiresAt)}</td>
                     <td className="hidden truncate px-2 py-2 text-[var(--w-text-2)] md:table-cell">{userName(inv.invitedBy)}</td>
                     <td className="px-2 py-2 text-right">
-                      <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-danger" onClick={() => setRevoking(inv)}>Revoke</button>
+                      <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-danger" onClick={() => setRevoking(inv)}>{wt('settings.revoke')}</button>
                     </td>
                   </tr>
                 ))}
@@ -276,9 +277,9 @@ export default function WorkspaceInvitations({ ws }: { ws: WorkspaceDetail }) {
       <ConfirmDialog
         open={!!revoking}
         onClose={() => setRevoking(null)}
-        title="Revoke invitation?"
-        body={revoking?.email ? <>The link sent to <span className="font-medium text-[var(--w-text)]">{revoking.email}</span> will stop working.</> : 'Anyone who has this link will no longer be able to join.'}
-        confirmLabel="Revoke"
+        title={wt('settings.revokeQ')}
+        body={revoking?.email ? wt('settings.revokeEmail', { email: revoking.email }) : wt('settings.revokeLink')}
+        confirmLabel={wt('settings.revoke')}
         pending={revoke.isPending}
         onConfirm={() => revoking && revoke.mutate(revoking.id)}
       />

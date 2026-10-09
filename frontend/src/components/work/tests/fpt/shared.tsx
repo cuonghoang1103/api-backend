@@ -10,6 +10,7 @@ import { workError } from '@/lib/work-api';
 import { Spinner } from '../../ui';
 import { fptApi, saveBlob, type ReportKind } from './fptApi';
 import KpiTile from '../../KpiTile';
+import { wt } from '@/components/work/i18n';
 
 /** Ô số liệu của 5.1/5.2 — nay là `KpiTile` cỡ nhỏ (UX-A: bỏ dải chữ HOA, kiểu KPI thứ ba). */
 export function Stat({ label, value, tone, hint }: { label: string; value: ReactNode; tone?: 'green' | 'red' | 'yellow' | 'muted'; hint?: string }) {
@@ -40,9 +41,9 @@ export function ExportButton({ pid, report, label }: { pid: number; report: Repo
         try {
           const { blob, fileName } = await fptApi.exportXlsx(pid, report);
           saveBlob(blob, fileName);
-          toast.success(`Exported ${fileName}`);
+          toast.success(wt('fpt.exported', { name: fileName }));
         } catch (e) {
-          toast.error(workError(e, 'Could not export'));
+          toast.error(workError(e, wt('fpt.exportFailed')));
         } finally {
           setBusy(false);
         }
@@ -89,7 +90,7 @@ export function InlineText({
 
 /** Trạng thái lưu tự động. */
 export function SaveState({ state }: { state: 'idle' | 'dirty' | 'saving' | 'saved' | 'error' }) {
-  const text = { idle: '', dirty: 'Unsaved changes', saving: 'Saving…', saved: 'All changes saved', error: 'Not saved' }[state];
+  const text = { idle: '', dirty: wt('issues.unsaved'), saving: wt('common.saving'), saved: wt('fpt.allSaved'), error: wt('fpt.notSaved') }[state];
   if (!text) return null;
   return (
     <span className={cn('inline-flex items-center gap-1 text-[12px]', state === 'error' ? 'text-[var(--w-red)]' : 'text-[var(--w-text-3)]')} aria-live="polite">

@@ -9,13 +9,17 @@
  * nhập (trừ /work/invite/* và link chia sẻ /work/share/*). Hai đường công khai
  * đó KHÔNG có sidebar / bảng lệnh / AI (những thứ cần đăng nhập). Toàn bộ chữ
  * trong /work bằng tiếng Anh.
+ *
+ * 10/10/2026: giao diện song ngữ — ngôn ngữ theo NGƯỜI DÙNG (components/work/i18n). Vùng nội dung mang `key={locale}`
+ * ⇒ đổi ngôn ngữ thì cả cây CT Work vẽ lại, nên `wt()` gọi trong lúc render luôn đúng.
  */
 
-import { Suspense, useEffect } from 'react';
+import { Fragment, Suspense, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import WorkSidebar from '@/components/work/WorkSidebar';
 import CommandPalette from '@/components/work/CommandPalette';
+import { ChatNotifierHost } from '@/components/work/chat/ChatNotifier'; // CTW K-3: badge/âm/thông báo tin chat
 import AiPanelHost from '@/components/work/ai/AiPanelHost';
 import HelpPanelHost from '@/components/work/help/HelpPanel';
 import { useDaDangNhap } from '@/hooks/useDaDangNhap';
@@ -23,6 +27,8 @@ import { Spinner } from '@/components/work/ui';
 import { useMobileNav, useSidebarRail } from '@/components/work/shell/mobileNav';
 import { useLayoutPrefs } from '@/components/work/shell/panes';
 import { isTyping } from '@/components/work/ui';
+import { useWorkLocaleStore, wt } from '@/components/work/i18n';
+import { FirstRunLanguagePrompt, WorkLangSync } from '@/components/work/i18n/LanguageSwitch';
 
 export default function WorkShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';
@@ -34,6 +40,11 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
   const pageHasHeader = useMobileNav((s) => s.headers > 0);
 
   useEffect(() => setMobileNav(false), [pathname, setMobileNav]);
+
+  // Ngôn ngữ CT Work: đọc bản đệm/cookie ngay (vẽ đúng từ lần đầu), rồi hỏi máy chủ.
+  const locale = useWorkLocaleStore((s) => s.locale);
+  const localeReady = useWorkLocaleStore((s) => s.ready);
+  useEffect(() => { useWorkLocaleStore.getState().init(); }, []);
 
   // Sidebar thu gọn (≥md): đọc lựa chọn đã lưu / tự thu gọn khi cửa sổ hẹp.
   const rail = useSidebarRail((s) => s.collapsed);
@@ -70,13 +81,15 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
   }, [sanSang, daDangNhap, isPublic, pathname]);
 
   return (
-    <div className="work-root fixed inset-0 z-[45] flex overflow-hidden">
+    <div className="work-root fixed inset-0 z-[45] flex overflow-hidden" lang={locale}>
+      <WorkLangSync />
       {isPublic ? (
-        <main className="flex-1 overflow-y-auto">{children}</main>
-      ) : !sanSang || !daDangNhap ? (
+        <main key={locale} className="flex-1 overflow-y-auto">{children}</main>
+      ) : !sanSang || !daDangNhap || !localeReady ? (
         <div className="flex flex-1 items-center justify-center"><Spinner size={20} /></div>
       ) : (
-        <>
+        <Fragment key={locale}>
+          <a href="#work-main" className="w-skip-link">{wt('shell.skipToContent')}</a>
           <aside
             className={`hidden shrink-0 overflow-hidden bg-[var(--w-bg)] transition-[width] duration-200 ease-out ${focus ? '' : 'md:block'}`}
             style={{ width: rail ? 'var(--w-sidebar-rail)' : 'var(--w-sidebar-w)' }}
@@ -97,10 +110,10 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
               </aside>
             </div>
           )}
-          <main className={`flex min-w-0 flex-1 flex-col bg-[var(--w-panel)] md:my-2 md:mr-2 md:rounded-[12px] md:border md:border-[var(--w-border)] ${focus ? 'md:ml-2' : ''}`} style={{ boxShadow: 'var(--w-shadow-card)' }}>
+          <main id="work-main" tabIndex={-1} className={`flex min-w-0 flex-1 flex-col bg-[var(--w-panel)] md:my-2 md:mr-2 md:rounded-[12px] md:border md:border-[var(--w-border)] ${focus ? 'md:ml-2' : ''}`} style={{ boxShadow: 'var(--w-shadow-card)' }}>
             {!pageHasHeader && (
               <div className="w-header flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 md:hidden">
-                <button type="button" onClick={() => setMobileNav(true)} className="w-btn w-btn-ghost w-btn-icon" aria-label="Open navigation">
+                <button type="button" onClick={() => setMobileNav(true)} className="w-btn w-btn-ghost w-btn-icon" aria-label={wt('shell.openNavigation')}>
                   <Menu size={17} />
                 </button>
                 <span className="text-[15px] font-semibold">CT Work</span>
@@ -109,9 +122,11 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
             <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
           </main>
           <CommandPalette />
+          <ChatNotifierHost />
           <AiPanelHost />
           <HelpPanelHost />
-        </>
+          <FirstRunLanguagePrompt />
+        </Fragment>
       )}
       <div id="work-portal" />
     </div>

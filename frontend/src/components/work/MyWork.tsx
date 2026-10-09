@@ -18,13 +18,15 @@ import { cn } from '@/lib/utils';
 import { CalendarButton } from '@/components/work/CalendarFeed';
 import WaitingOnMe from '@/components/work/studio/WaitingOnMe';
 import AgentsNeedYou from '@/components/work/agents/AgentsNeedYou';
+import { wt } from '@/components/work/i18n';
+import { WorkLanguageChip } from '@/components/work/i18n/LanguageSwitch';
 
 const GROUPS: Array<{ id: MyWorkItem['bucket']; label: string; tone?: string }> = [
-  { id: 'overdue', label: 'Overdue', tone: 'text-[var(--w-red)]' },
-  { id: 'today', label: 'Due today', tone: 'text-[var(--w-orange)]' },
-  { id: 'soon', label: 'Due soon' },
-  { id: 'later', label: 'Later' },
-  { id: 'none', label: 'No due date' },
+  { id: 'overdue', get label() { return wt('home.overdue'); }, tone: 'text-[var(--w-red)]' },
+  { id: 'today', get label() { return wt('home.dueToday'); }, tone: 'text-[var(--w-orange)]' },
+  { id: 'soon', get label() { return wt('home.dueSoon'); } },
+  { id: 'later', get label() { return wt('home.later'); } },
+  { id: 'none', get label() { return wt('home.noDueDate'); } },
 ];
 
 function Counter({ label, value, tone, icon: Icon }: { label: string; value: number; tone?: string; icon: typeof Bell }) {
@@ -42,9 +44,9 @@ function Counter({ label, value, tone, icon: Icon }: { label: string; value: num
 // ─── Cài đặt thông báo (email + giờ im lặng, giờ Việt Nam) ────────
 
 const EMAIL_MODES: Array<{ id: EmailMode; label: string; help: string }> = [
-  { id: 'INSTANT', label: 'Instantly', help: 'An email for each notification, as it happens.' },
-  { id: 'DIGEST', label: 'Daily digest', help: 'One summary email every morning at 08:00.' },
-  { id: 'OFF', label: 'Off', help: 'In-app notifications only.' },
+  { id: 'INSTANT', get label() { return wt('home.emailInstant'); }, get help() { return wt('home.emailInstantHelp'); } },
+  { id: 'DIGEST', get label() { return wt('home.emailDigest'); }, get help() { return wt('home.emailDigestHelp'); } },
+  { id: 'OFF', get label() { return wt('home.emailOff'); }, get help() { return wt('home.emailOffHelp'); } },
 ];
 
 const HOURS = Array.from({ length: 24 }, (_, h) => h);
@@ -60,16 +62,22 @@ function NotifyForm({ initial, onClose }: { initial: NotifySettings; onClose: ()
     mutationFn: () => workApi.setNotifySettings({ emailMode: mode, quietStart: quiet ? start : null, quietEnd: quiet ? end : null }),
     onSuccess: (data) => {
       qc.setQueryData(wk.notifySettings, data);
-      toast.success('Notification settings saved');
+      toast.success(wt('home.notifySaved'));
       onClose();
     },
-    onError: (err) => toast.error(workError(err, 'Could not save notification settings')),
+    onError: (err) => toast.error(workError(err, wt('home.notifySaveFailed'))),
   });
   const same = quiet && start === end;
   return (
     <form onSubmit={(e) => { e.preventDefault(); if (!save.isPending && !same) save.mutate(); }}>
+      {/* i18n 10/10: ngôn ngữ giao diện CT Work — lưu NGAY khi bấm (không chờ nút Save của phần thông báo). */}
+      <div className="mb-5">
+        <div className="w-label">{wt('common.language')} / Language</div>
+        <WorkLanguageChip />
+        <p className="mt-1.5 text-[12px] leading-relaxed text-[var(--w-text-2)]">{wt('shell.languageHelp')} {wt('shell.languageGeneratedNote')}</p>
+      </div>
       <fieldset className="mb-5">
-        <legend className="w-label">Email notifications</legend>
+        <legend className="w-label">{wt('home.emailNotifications')}</legend>
         <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
           {EMAIL_MODES.map((m) => (
             <label key={m.id} className={cn('flex cursor-pointer items-start gap-2.5 border-b border-[var(--w-border)] px-3 py-2.5 last:border-b-0', mode === m.id && 'bg-[var(--w-accent-soft)]')}>
@@ -86,31 +94,31 @@ function NotifyForm({ initial, onClose }: { initial: NotifySettings; onClose: ()
       <div className={cn('mb-1', mode === 'OFF' && 'opacity-50')}>
         <div className="flex items-center justify-between gap-3">
           <div>
-            <div className="text-[13px] font-medium">Quiet hours</div>
-            <p className="text-[12px] text-[var(--w-text-2)]">Emails during these hours wait for the next digest. Vietnam time (UTC+7).</p>
+            <div className="text-[13px] font-medium">{wt('home.quietHours')}</div>
+            <p className="text-[12px] text-[var(--w-text-2)]">{wt('home.quietHelp')}</p>
           </div>
-          <Switch checked={quiet} disabled={mode === 'OFF'} onChange={setQuiet} label="Quiet hours" />
+          <Switch checked={quiet} disabled={mode === 'OFF'} onChange={setQuiet} label={wt('home.quietHours')} />
         </div>
         {quiet && (
           <div className="mt-3 flex flex-wrap items-center gap-2 text-[13px]">
-            <span className="text-[var(--w-text-2)]">From</span>
-            <Select aria-label="Quiet hours start" value={start} disabled={mode === 'OFF'} onChange={(e) => setStart(Number(e.target.value))} className="!w-auto">
+            <span className="text-[var(--w-text-2)]">{wt('home.from')}</span>
+            <Select aria-label={wt('home.quietStart')} value={start} disabled={mode === 'OFF'} onChange={(e) => setStart(Number(e.target.value))} className="!w-auto">
               {HOURS.map((h) => <option key={h} value={h}>{fmtHour(h)}</option>)}
             </Select>
-            <span className="text-[var(--w-text-2)]">to</span>
-            <Select aria-label="Quiet hours end" value={end} disabled={mode === 'OFF'} onChange={(e) => setEnd(Number(e.target.value))} className="!w-auto">
+            <span className="text-[var(--w-text-2)]">{wt('home.to')}</span>
+            <Select aria-label={wt('home.quietEnd')} value={end} disabled={mode === 'OFF'} onChange={(e) => setEnd(Number(e.target.value))} className="!w-auto">
               {HOURS.map((h) => <option key={h} value={h}>{fmtHour(h)}</option>)}
             </Select>
           </div>
         )}
-        {same && <p className="mt-1.5 text-[12px] text-[var(--w-red)]">Start and end must be different.</p>}
+        {same && <p className="mt-1.5 text-[12px] text-[var(--w-red)]">{wt('home.startEndDiffer')}</p>}
       </div>
 
       <div className="mt-5 flex justify-end gap-2 border-t border-[var(--w-border)] pt-3">
-        <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+        <button type="button" className="w-btn" onClick={onClose}>{wt('home.cancel')}</button>
         <button type="submit" className="w-btn w-btn-primary" disabled={save.isPending || same}>
           {save.isPending && <Spinner size={12} />}
-          Save
+          {wt('home.save')}
         </button>
       </div>
     </form>
@@ -120,11 +128,11 @@ function NotifyForm({ initial, onClose }: { initial: NotifySettings; onClose: ()
 function NotifySettingsDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const q = useQuery({ queryKey: wk.notifySettings, queryFn: workApi.notifySettings, enabled: open });
   return (
-    <Dialog open={open} onClose={onClose} title="Notification settings" width={480}>
+    <Dialog open={open} onClose={onClose} title={wt('home.personalSettings')} width={480}>
       {q.isLoading ? (
         <div className="flex justify-center py-8"><Spinner /></div>
       ) : q.error || !q.data ? (
-        <EmptyState title="Could not load your settings" body={q.error ? workError(q.error) : undefined} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('home.couldNotLoadSettings')} body={q.error ? workError(q.error) : undefined} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('home.tryAgain')}</button>} />
       ) : (
         <NotifyForm key={q.dataUpdatedAt} initial={q.data} onClose={onClose} />
       )}
@@ -137,7 +145,7 @@ function NotifyButton() {
   return (
     <>
       <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setOpen(true)}>
-        <Bell size={13} /> Email &amp; notification settings
+        <Bell size={13} /> {wt('home.personalSettingsBtn')}
       </button>
       <NotifySettingsDialog open={open} onClose={() => setOpen(false)} />
     </>
@@ -149,17 +157,17 @@ export default function MyWork() {
 
   if (q.isLoading) return <div className="flex justify-center py-16"><Spinner size={20} /></div>;
   if (q.error || !q.data) {
-    return <EmptyState title="Couldn't load your work" body={q.error ? workError(q.error) : undefined} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />;
+    return <EmptyState title={wt('home.couldNotLoadWork')} body={q.error ? workError(q.error) : undefined} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('home.tryAgain')}</button>} />;
   }
   const { items, counts } = q.data;
 
   return (
     <div className="space-y-5">
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Counter label="Overdue" value={counts.overdue} tone="text-[var(--w-red)]" icon={AlertTriangle} />
-        <Counter label="Due today" value={counts.dueToday} tone="text-[var(--w-orange)]" icon={CalendarClock} />
-        <Counter label="In progress" value={counts.inProgress} tone="text-[var(--w-blue)]" icon={CircleDot} />
-        <Counter label="Open" value={counts.total} icon={Inbox} />
+        <Counter label={wt('home.overdue')} value={counts.overdue} tone="text-[var(--w-red)]" icon={AlertTriangle} />
+        <Counter label={wt('home.dueToday')} value={counts.dueToday} tone="text-[var(--w-orange)]" icon={CalendarClock} />
+        <Counter label={wt('home.inProgress')} value={counts.inProgress} tone="text-[var(--w-blue)]" icon={CircleDot} />
+        <Counter label={wt('home.open')} value={counts.total} icon={Inbox} />
       </div>
       <div className="flex flex-wrap justify-end gap-1">
         <CalendarButton />
@@ -174,9 +182,9 @@ export default function MyWork() {
       {!items.length ? (
         <div className="w-card flex flex-col items-center px-6 py-14 text-center">
           <CheckCircle2 size={28} className="text-[var(--w-green)]" />
-          <div className="mt-3 text-[15px] font-semibold">You&apos;re all caught up</div>
+          <div className="mt-3 text-[15px] font-semibold">{wt('home.caughtUp')}</div>
           <p className="mt-1.5 max-w-[420px] text-[13px] leading-relaxed text-[var(--w-text-2)]">
-            Nothing open is assigned to you across your projects. Issues assigned to you will show up here, grouped by due date.
+            {wt('home.caughtUpBody')}
           </p>
         </div>
       ) : (
@@ -205,7 +213,7 @@ export default function MyWork() {
                           <StatusBadge status={it.status} className="max-w-[140px] truncate" />
                           {it.dueDate && (
                             <span className={cn('whitespace-nowrap tabular-nums', it.bucket === 'overdue' && 'font-medium text-[var(--w-red)]', it.bucket === 'today' && 'font-medium text-[var(--w-orange)]')}>
-                              {it.bucket === 'today' ? 'Today' : formatDate(it.dueDate)}
+                              {it.bucket === 'today' ? wt('common.today') : formatDate(it.dueDate)}
                             </span>
                           )}
                         </div>

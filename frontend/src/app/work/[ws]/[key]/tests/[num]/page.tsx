@@ -12,6 +12,7 @@ import IssueDrawer from '@/components/work/IssueDrawer';
 import { useProject, useProjectRealtime } from '@/components/work/hooks';
 import { EmptyState, PageLoading } from '@/components/work/ui';
 import TestEditor from '@/components/work/tests/TestEditor';
+import { wt } from '@/components/work/i18n';
 
 export default function TestCasePage() {
   return (
@@ -45,7 +46,7 @@ function Inner() {
 
   if (isLoading) return <PageLoading />;
   if (error || !config || !pid || !Number.isInteger(num) || num <= 0) {
-    return <EmptyState title="Test not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
+    return <EmptyState title={wt('tests.notFound')} body={error ? workError(error) : wt('common.projectNotFoundBody')} />;
   }
   return (
     <>

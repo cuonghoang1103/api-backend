@@ -18,6 +18,7 @@ import { Popover } from '../../ui';
 import { fptApi, fptKeys, TYPE_LABEL, utcId, type CaseResult, type CaseType, type UnitFunction, type UnitSection } from './fptApi';
 import { SaveState, shortDate, todayIso } from './shared';
 import AiSuggestDialog from './AiSuggestDialog';
+import { wt } from '@/components/work/i18n';
 
 export interface DRow { key: string; section: UnitSection; groupName: string; label: string; value: string }
 export interface DCase { key: string; type: CaseType; result: CaseResult | null; executedAt: string | null; defectId: string; note: string }
@@ -105,11 +106,11 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
       setState('error');
       if (workErrorStatus(e) === 409) {
         setStale(true);
-        toast.error('Someone else saved this function a moment ago.', {
-          action: { label: 'Reload', onClick: () => qc.resetQueries({ queryKey: fptKeys.fn(pid, fn.id) }) },
+        toast.error(wt('fpt.someoneSaved'), {
+          action: { label: wt('fpt.reload'), onClick: () => qc.resetQueries({ queryKey: fptKeys.fn(pid, fn.id) }) },
           duration: 12_000,
         });
-      } else toast.error(workError(e, 'Could not save the matrix'));
+      } else toast.error(workError(e, wt('fpt.matrixFailed')));
     }
   }, [pid, fn.id, qc, stale]);
 
@@ -251,7 +252,7 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
           <td colSpan={draft.cases.length + 1} className="fpt-sec-fill" />
         </tr>
         {groups.length === 0 && (
-          <tr><td className="fpt-sticky px-3 py-2 text-[12px] text-[var(--w-text-3)]">No {title.toLowerCase()} rows yet.</td><td colSpan={draft.cases.length + 1} /></tr>
+          <tr><td className="fpt-sticky px-3 py-2 text-[12px] text-[var(--w-text-3)]">{wt('fpt.noRowsYet', { what: title })}</td><td colSpan={draft.cases.length + 1} /></tr>
         )}
         {groups.map((g) => (
           <GroupRows
@@ -276,16 +277,16 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
   return (
     <div className="flex min-h-0 flex-col">
       <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12.5px] text-[var(--w-text-2)]">
-        <span><b className="tabular-nums text-[var(--w-text)]">{stats.total}</b> test cases</span>
+        <span><b className="tabular-nums text-[var(--w-text)]">{stats.total}</b> test case</span>
         <span className="text-[var(--w-green)]">{stats.passed} passed</span>
         <span className="text-[var(--w-red)]">{stats.failed} failed</span>
-        <span>{stats.total - stats.passed - stats.failed} untested</span>
+        <span>{wt('fpt.nUntested', { n: stats.total - stats.passed - stats.failed })}</span>
         <span className="text-[var(--w-text-3)]">N {stats.n} · A {stats.a} · B {stats.b}</span>
         <span className="ml-auto flex items-center gap-2">
           <SaveState state={stale ? 'error' : state} />
           {canEdit && (
-            <button type="button" className="w-btn w-btn-sm" onClick={() => setAiOpen(true)} title="Suggest normal / abnormal / boundary cases with AI">
-              <Sparkles size={13} /> AI suggest
+            <button type="button" className="w-btn w-btn-sm" onClick={() => setAiOpen(true)} title={wt('fpt.aiSuggestTitle')}>
+              <Sparkles size={13} /> {wt('fpt.aiSuggest')}
             </button>
           )}
           {canEdit && <button type="button" className="w-btn w-btn-sm w-btn-primary" onClick={() => addCase()}><Plus size={13} /> Test case</button>}
@@ -302,8 +303,8 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
           <thead>
             <tr>
               <th className="fpt-sticky fpt-corner" scope="col">
-                <div className="text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Group · value</div>
-                <div className="mt-0.5 text-[11px] text-[var(--w-text-3)]">Click a cell to mark <b>O</b></div>
+                <div className="text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{wt('fpt.groupValue')}</div>
+                <div className="mt-0.5 text-[11px] text-[var(--w-text-3)]">{wt('fpt.clickMark')} <b>O</b></div>
               </th>
               {draft.cases.map((c, i) => (
                 <th key={c.key} scope="col" className="fpt-utc">
@@ -313,7 +314,7 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
                 </th>
               ))}
               <th className="fpt-utc" scope="col">
-                {canEdit && <button type="button" className="fpt-add-case" onClick={() => addCase()} aria-label="Add test case"><Plus size={14} /></button>}
+                {canEdit && <button type="button" className="fpt-add-case" onClick={() => addCase()} aria-label={wt('fpt.addCase')}><Plus size={14} /></button>}
               </th>
             </tr>
           </thead>
@@ -328,7 +329,7 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
               <th className="fpt-sticky fpt-res-label" scope="row">Type <span className="text-[var(--w-text-3)]">(N · A · B)</span></th>
               {draft.cases.map((c) => (
                 <td key={c.key} className="fpt-cell">
-                  <button type="button" disabled={!canEdit} className={cn('fpt-chip', TYPE_TONE[c.type])} onClick={() => setCase(c.key, { type: NEXT_TYPE[c.type] })} title={`${TYPE_LABEL[c.type]} — click to change`}>
+                  <button type="button" disabled={!canEdit} className={cn('fpt-chip', TYPE_TONE[c.type])} onClick={() => setCase(c.key, { type: NEXT_TYPE[c.type] })} title={`${TYPE_LABEL[c.type]} — ${wt('fpt.clickChange')}`}>
                     {c.type}
                   </button>
                 </td>
@@ -347,7 +348,7 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
                       result: c.result === null ? 'P' : c.result === 'P' ? 'F' : null,
                       executedAt: c.result === null ? (c.executedAt ?? todayIso()) : c.executedAt,
                     })}
-                    title="Click: untested → P → F"
+                    title={wt('fpt.clickCycle')}
                   >
                     {c.result ?? '–'}
                   </button>
@@ -368,7 +369,7 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
               <th className="fpt-sticky fpt-res-label" scope="row">Defect ID</th>
               {draft.cases.map((c) => (
                 <td key={c.key} className="fpt-cell">
-                  <button type="button" className={cn('fpt-tiny', c.defectId && 'font-semibold text-[var(--w-red)]')} onClick={(e) => openMenu(c.key, e.currentTarget)} title={c.defectId || 'No defect'}>
+                  <button type="button" className={cn('fpt-tiny', c.defectId && 'font-semibold text-[var(--w-red)]')} onClick={(e) => openMenu(c.key, e.currentTarget)} title={c.defectId || wt('fpt.noDefect')}>
                     {c.defectId ? '●' : '–'}
                   </button>
                 </td>
@@ -423,15 +424,15 @@ function GroupRows({ section, group, cases, marks, canEdit, onRename, onAddValue
               className="fpt-input fpt-group-input"
               value={name}
               readOnly={!canEdit}
-              aria-label={`${section === 'COND' ? 'Input' : 'Confirmation'} group name`}
+              aria-label={wt('fpt.groupName', { s: section === 'COND' ? 'Input' : 'Confirmation' })}
               onChange={(e) => setName(e.target.value)}
               onBlur={() => (name.trim() ? onRename(name) : setName(group.name))}
               onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
             />
             {canEdit && (
               <>
-                <button type="button" className="fpt-mini" onClick={onAddValue} title="Add a value row"><Plus size={12} /> Value</button>
-                <button type="button" className="fpt-icon" onClick={onDeleteGroup} aria-label={`Delete group ${group.name}`} title="Delete group"><Trash2 size={12} /></button>
+                <button type="button" className="fpt-mini" onClick={onAddValue} title={wt('fpt.addValueRow')}><Plus size={12} /> Value</button>
+                <button type="button" className="fpt-icon" onClick={onDeleteGroup} aria-label={wt('fpt.deleteGroupN', { name: group.name })} title={wt('fpt.deleteGroup')}><Trash2 size={12} /></button>
               </>
             )}
           </div>
@@ -442,11 +443,11 @@ function GroupRows({ section, group, cases, marks, canEdit, onRename, onAddValue
         <tr key={r.key} className="fpt-row">
           <th className="fpt-sticky" scope="row">
             <div className="flex items-center gap-1 pl-3">
-              <input className="fpt-input w-[34%] border-dashed text-[12px] text-[var(--w-text-2)] hover:border-[var(--w-border)]" placeholder="" title="Note shown next to the value, e.g. “with space”, “255 characters”" value={r.label} readOnly={!canEdit} maxLength={200}
-                aria-label="Note (e.g. with space, 255 characters)" onChange={(e) => onRow(r.key, { label: e.target.value })} />
+              <input className="fpt-input w-[34%] border-dashed text-[12px] text-[var(--w-text-2)] hover:border-[var(--w-border)]" placeholder="" title={wt('fpt.noteTitle')} value={r.label} readOnly={!canEdit} maxLength={200}
+                aria-label={wt('fpt.noteAria')} onChange={(e) => onRow(r.key, { label: e.target.value })} />
               <input className="fpt-input min-w-0 flex-1 text-right font-mono text-[12px]" placeholder={section === 'COND' ? 'value' : 'expected'} value={r.value} readOnly={!canEdit}
-                aria-label="Value" onChange={(e) => onRow(r.key, { value: e.target.value })} />
-              {canEdit && <button type="button" className="fpt-icon fpt-row-del" onClick={() => onDeleteRow(r.key)} aria-label="Delete row"><X size={12} /></button>}
+                aria-label={wt('fpt.value')} onChange={(e) => onRow(r.key, { value: e.target.value })} />
+              {canEdit && <button type="button" className="fpt-icon fpt-row-del" onClick={() => onDeleteRow(r.key)} aria-label={wt('fpt.deleteRow')}><X size={12} /></button>}
             </div>
           </th>
           {cases.map((c, i) => {
@@ -484,7 +485,7 @@ function ConfirmGroupAdder({ existing, onAdd }: { existing: string[]; onAdd: (na
         <div className="py-1">
           {opts.map((o) => (
             <button key={o} type="button" className="block w-full px-3 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]" onClick={() => { onAdd(o); setOpen(false); }}>
-              {o} {existing.includes(o) && <span className="text-[11px] text-[var(--w-text-3)]">(another)</span>}
+              {o} {existing.includes(o) && <span className="text-[11px] text-[var(--w-text-3)]">({wt('fpt.another')})</span>}
             </button>
           ))}
         </div>
@@ -503,14 +504,14 @@ function CaseMenu({ index, total, c, canEdit, onChange, onDuplicate, onDelete, o
         <b>{utcId(index)}</b>
         {canEdit && (
           <span className="flex gap-1">
-            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={index === 0} onClick={() => onMove(-1)} aria-label="Move left"><ArrowLeft size={13} /></button>
-            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={index === total - 1} onClick={() => onMove(1)} aria-label="Move right"><ArrowRight size={13} /></button>
+            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={index === 0} onClick={() => onMove(-1)} aria-label={wt('fpt.moveLeft')}><ArrowLeft size={13} /></button>
+            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={index === total - 1} onClick={() => onMove(1)} aria-label={wt('fpt.moveRight')}><ArrowRight size={13} /></button>
           </span>
         )}
       </div>
       <div>
-        <div className="w-label !mb-1">Type</div>
-        <div className="flex gap-1" role="radiogroup" aria-label="Type">
+        <div className="w-label !mb-1">{wt('common.type')} (Type)</div>
+        <div className="flex gap-1" role="radiogroup" aria-label={wt('common.type')}>
           {(['N', 'A', 'B'] as CaseType[]).map((t) => (
             <button key={t} type="button" role="radio" aria-checked={c.type === t} disabled={!canEdit} onClick={() => onChange({ type: t })}
               className={cn('flex-1 rounded-[5px] border px-1 py-1 text-[12px]', c.type === t ? 'border-[var(--w-accent)] bg-[var(--w-accent-soft)] font-semibold' : 'border-[var(--w-border)]')}>
@@ -520,33 +521,33 @@ function CaseMenu({ index, total, c, canEdit, onChange, onDuplicate, onDelete, o
         </div>
       </div>
       <div>
-        <div className="w-label !mb-1">Result</div>
-        <div className="flex gap-1" role="radiogroup" aria-label="Result">
+        <div className="w-label !mb-1">{wt('fpt.result')} (Result)</div>
+        <div className="flex gap-1" role="radiogroup" aria-label={wt('fpt.result')}>
           {([null, 'P', 'F'] as Array<CaseResult | null>).map((r) => (
             <button key={String(r)} type="button" role="radio" aria-checked={c.result === r} disabled={!canEdit}
               onClick={() => onChange({ result: r, executedAt: r && !c.executedAt ? todayIso() : c.executedAt })}
               className={cn('flex-1 rounded-[5px] border px-1 py-1 text-[12px]', c.result === r ? 'border-[var(--w-accent)] bg-[var(--w-accent-soft)] font-semibold' : 'border-[var(--w-border)]')}>
-              {r === null ? 'Untested' : r === 'P' ? 'Passed' : 'Failed'}
+              {r === null ? wt('fpt.untested') : r === 'P' ? 'Passed' : 'Failed'}
             </button>
           ))}
         </div>
       </div>
       <label className="block">
-        <span className="w-label !mb-1">Executed date</span>
+        <span className="w-label !mb-1">{wt('fpt.executedDate')} (Executed date)</span>
         <input type="date" className="w-input h-[30px]" value={c.executedAt ?? ''} disabled={!canEdit} onChange={(e) => onChange({ executedAt: e.target.value || null })} />
       </label>
       <label className="block">
         <span className="w-label !mb-1">Defect ID</span>
-        <input className="w-input h-[30px]" value={c.defectId} disabled={!canEdit} maxLength={60} placeholder="e.g. OBS-12" onChange={(e) => onChange({ defectId: e.target.value })} />
+        <input className="w-input h-[30px]" value={c.defectId} disabled={!canEdit} maxLength={60} placeholder={wt('create.eg', { v: 'OBS-12' })} onChange={(e) => onChange({ defectId: e.target.value })} />
       </label>
       <label className="block">
-        <span className="w-label !mb-1">Note</span>
-        <input className="w-input h-[30px]" value={c.note} disabled={!canEdit} maxLength={2000} placeholder="What this case checks" onChange={(e) => onChange({ note: e.target.value })} />
+        <span className="w-label !mb-1">{wt('fpt.note')}</span>
+        <input className="w-input h-[30px]" value={c.note} disabled={!canEdit} maxLength={2000} placeholder={wt('fpt.notePh')} onChange={(e) => onChange({ note: e.target.value })} />
       </label>
       {canEdit && (
         <div className="flex justify-between pt-1">
-          <button type="button" className="w-btn w-btn-sm" onClick={onDuplicate}><Copy size={12} /> Duplicate</button>
-          <button type="button" className="w-btn w-btn-sm text-[var(--w-red)]" onClick={onDelete}><Trash2 size={12} /> Delete</button>
+          <button type="button" className="w-btn w-btn-sm" onClick={onDuplicate}><Copy size={12} /> {wt('tests.duplicate')}</button>
+          <button type="button" className="w-btn w-btn-sm text-[var(--w-red)]" onClick={onDelete}><Trash2 size={12} /> {wt('common.delete')}</button>
         </div>
       )}
     </div>

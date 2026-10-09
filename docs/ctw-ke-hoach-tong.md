@@ -79,3 +79,13 @@ Nguồn: Gemini đánh giá repo; Claude đã đo lại (schema 13.537 dòng/459
 ## LabFlow Demo (SWT) + bổ sung kế hoạch đồ án thật (09/10)
 - Project LFD (workspace SWT301) dựng y theo kế hoạch đồ án LabFlow AI (labflow-v2.json), repo private `cuonghoang1103/LabFlow-AI-demo`, trưởng nhóm = token admin người dùng (C1), agent Cường 1–4 = C2–C5. Code ĐÚNG, không cài lỗi. Lệch kế hoạch ⇒ Change Request.
 - Người dùng cho phép BỔ SUNG kế hoạch đồ án THẬT (project LF, workspace LabFlow Studio): gom chỗ thiếu vào `~/Documents/My_Project/LabFlow-SWT-Demo-private/PLAN-GAPS.md`; SAU mốc Lab 2 áp vào LF theo kiểu CHỈ THÊM (thẻ/Docs/bình luận gắn nhãn "[Bổ sung]"), không xoá/đổi thẻ hay tiến độ của người dùng; đồ án code vẫn do người dùng tự gõ tay.
+
+## Sơ đồ đẹp (09/10)
+- Plugin Claude Code `diagram-design` đã cài (xem bộ nhớ reference_diagram_design_plugin). Việc treo: thư viện mẫu sơ đồ (kiến trúc/ERD/sequence/state/swimlane/Gantt/journey…) cho **AI Code + AI Chat app desktop** (system prompt + công cụ chọn mẫu) và cho **Docs CT Work** (chèn mẫu, xuất SVG/PNG, tương thích Mermaid hiện có). Làm sau khi xong đợt K-3/Đóng góp/i18n.
+
+## Trạng thái 09/10 tối (ghi để phiên sau làm tiếp)
+- ✅ prod: đợt 1, 2, 3/3C, UX-A, 6a, 4, 5b K-1, UX-D, UX-E, sửa logo/ảnh bìa/emoji (55c7e1a7). App desktop v0.5.172.
+- ✅ xong cục bộ, CHỜ deploy chung: **K-3 kênh chat dự án** (thông báo, âm báo, tắt tiếng 30'/1h/8h…, gọi nhóm Jitsi/Meet).
+- 🔄 đang làm: **Đóng góp & hiệu suất thành viên** (chỉ số/kỳ/heatmap/radar/peer review/xuất PDF), **i18n GĐ1** (nút Tiếng Việt/English theo người dùng; GĐ2 = docs/chat/reports/IssueDetail/WorkSidebar sau khi K-3/Đóng góp xong), **Diagram Studio + AI vẽ sơ đồ** (Mermaid/Excalidraw/nhập draw.io, mẫu editorial từ diagram-design, AI sinh sequence từ UC spec, ERD/class từ repo GitHub, chèn Report 3/4, RTM "UC chưa có sequence").
+- ⏭ còn lại theo thứ tự: i18n GĐ2 → 4b SWR302 → 5 (giảng viên hub, lớp học/mã lớp, việc định kỳ) → 5b K-2 (ghi âm họp→biên bản AI, điểm danh) + K-3b đồng soạn thảo → UX-B/UX-C → 6/6b → 7 → 8 → mang thư viện sơ đồ vào AI Code/AI Chat app → CUỐI CÙNG (điều phối đa agent). Sửa deploy-nha.sh (CI kiểm trên worktree sạch của SHA đã deploy) làm xen khi rảnh.
+- Người dùng chốt 09/10: "note lại toàn bộ rồi nâng cấp + làm full dần dần, nhớ hoạt động được và tốt" ⇒ mỗi đợt: kiểm worktree sạch (cả kiểu Docker không node_modules gốc) → deploy → THỬ THẬT trên prod → phát hành app nếu đổi giao diện → mới báo xong.

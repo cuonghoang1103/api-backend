@@ -25,14 +25,15 @@ import { CourseTab, TrackingTab } from '@/components/work/school/TrackingTab';
 import WeeklyTab from '@/components/work/school/WeeklyTab';
 import AiUsageTab from '@/components/work/school/AiUsageTab';
 import QnaTab from '@/components/work/school/QnaTab';
+import { wt } from '@/components/work/i18n';
 
 const TABS = [
-  { id: 'wbs', label: 'WBS & estimates' },
-  { id: 'tracking', label: 'Project tracking' },
-  { id: 'weekly', label: 'Weekly report' },
-  { id: 'ai', label: 'AI usage' },
-  { id: 'qna', label: 'Q&A log' },
-  { id: 'course', label: 'Course & group' },
+  { id: 'wbs', get label() { return wt('school.tabWbsEstimates'); } },
+  { id: 'tracking', get label() { return wt('school.tabProjectTracking'); } },
+  { id: 'weekly', get label() { return wt('school.tabWeeklyReport'); } },
+  { id: 'ai', get label() { return wt('school.tabAiUsage'); } },
+  { id: 'qna', get label() { return wt('school.tabQALog'); } },
+  { id: 'course', get label() { return wt('school.tabCourseGroup'); } },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -60,9 +61,9 @@ function SchoolView({ config, pid }: { config: ProjectConfig; pid: number }) {
 
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="FPT reports"><PageFocusButton scope="school" /></ProjectHeader>
+      <ProjectHeader config={config} title={wt('school.title')}><PageFocusButton scope="school" /></ProjectHeader>
       <div className="shrink-0 overflow-x-auto border-b border-[var(--w-border)] px-4">
-        <div className="flex gap-1" role="tablist" aria-label="FPT reports">
+        <div className="flex gap-1" role="tablist" aria-label={wt('school.title')}>
           {TABS.map((t) => (
             <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}
               className={cn('-mb-px whitespace-nowrap border-b-2 px-2.5 py-2.5 text-[13px] font-medium transition-colors',
@@ -98,7 +99,7 @@ function Inner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   if (isLoading) return <PageLoading />;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
-  if (config.role === 'CLIENT' || config.clientView) return <EmptyState title="Not available" body="School reports are only visible to the project team and lecturers." />;
+  if (error || !config || !pid) return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : wt('common.projectNotFoundBody')} />;
+  if (config.role === 'CLIENT' || config.clientView) return <EmptyState title={wt('school.notAvail')} body={wt('school.notAvailBody')} />;
   return <SchoolView config={config} pid={pid} />;
 }

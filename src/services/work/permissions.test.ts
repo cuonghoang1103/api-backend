@@ -162,6 +162,8 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['PUT', '/edit-lock'], ['POST', '/ai/chat'], ['GET', '/ai/threads'],
     // Đợt 3C: agent không tự khởi động / dừng agent dựng sẵn (tiền LLM của web)
     ['POST', '/issues/12/agent-runs'], ['GET', '/issues/12/agent-runs'], ['POST', '/agent-runs/5/cancel'],
+    // CTW Đóng góp: agent không đọc số liệu người, không chấm chéo, không xuất
+    ['GET', '/contrib/summary'], ['GET', '/contrib/members/3'], ['GET', '/contrib/export.xlsx'], ['PUT', '/contrib/peer/rounds/2/reviews/3'], ['GET', '/contrib'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [

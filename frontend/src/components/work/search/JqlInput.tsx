@@ -2,7 +2,7 @@
 
 /**
  * Ô nhập JQL: phông đơn cách, Enter để chạy, gợi ý trường/giá trị khi gõ,
- * hộp "Syntax help", và lỗi cú pháp hiện ngay dưới ô kèm dấu ^ đúng vị trí.
+ * hộp wt('issues.syntaxHelp'), và lỗi cú pháp hiện ngay dưới ô kèm dấu ^ đúng vị trí.
  */
 
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import type { ProjectConfig } from '@/lib/work-api';
 import { Popover, useToggle } from '../ui';
 import { JQL_EXAMPLES, JQL_FIELDS, JQL_FUNCTIONS, JQL_OPERATORS, suggest, type JqlSuggestConfig, type Suggestion } from './jql';
+import { wt } from '@/components/work/i18n';
 
 export interface JqlInputHandle { focus: () => void }
 
@@ -26,7 +27,7 @@ export const JqlInput = forwardRef<JqlInputHandle, {
   className?: string;
   /** Nhãn nút chạy (mặc định "Search"). */
   runLabel?: string;
-}>(function JqlInput({ value, onChange, onRun, config, error, ranQuery, placeholder, className, runLabel = 'Search' }, ref) {
+}>(function JqlInput({ value, onChange, onRun, config, error, ranQuery, placeholder, className, runLabel = wt('common.search') }, ref) {
   const inputRef = useRef<HTMLInputElement>(null);
   const helpRef = useRef<HTMLButtonElement>(null);
   const help = useToggle();
@@ -74,7 +75,7 @@ export const JqlInput = forwardRef<JqlInputHandle, {
             spellCheck={false}
             autoComplete="off"
             autoCapitalize="off"
-            aria-label="JQL query"
+            aria-label={wt('issues.jqlQuery')}
             aria-invalid={!!error}
             placeholder={placeholder ?? 'e.g. assignee = currentUser() AND statusCategory != Done'}
             onChange={(e) => { onChange(e.target.value); setCaret(e.target.selectionStart ?? e.target.value.length); setDismissed(false); }}
@@ -108,7 +109,7 @@ export const JqlInput = forwardRef<JqlInputHandle, {
               type="button"
               onClick={() => { onChange(''); inputRef.current?.focus(); }}
               className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-[var(--w-text-3)] hover:text-[var(--w-text)]"
-              aria-label="Clear query"
+              aria-label={wt('issues.clearQuery')}
             >
               <X size={12} />
             </button>
@@ -134,7 +135,7 @@ export const JqlInput = forwardRef<JqlInputHandle, {
                 </button>
               ))}
               <div className="mt-0.5 border-t border-[var(--w-border)] px-2 pt-1 text-[10.5px] text-[var(--w-text-3)]">
-                <kbd className="w-kbd">Tab</kbd> to complete · <kbd className="w-kbd">↵</kbd> to search
+                <kbd className="w-kbd">Tab</kbd> {wt('issues.toComplete')} · <kbd className="w-kbd">↵</kbd> {wt('issues.toSearch')}
               </div>
             </div>
           )}
@@ -142,14 +143,14 @@ export const JqlInput = forwardRef<JqlInputHandle, {
         <button type="button" className="w-btn w-btn-primary w-btn-sm shrink-0" onClick={() => onRun(value.trim())} title={`${runLabel} (Enter)`}>
           <CornerDownLeft size={13} /> <span className="max-sm:!hidden">{runLabel}</span>
         </button>
-        <button ref={helpRef} type="button" onClick={help.toggle} className="w-btn w-btn-ghost w-btn-icon w-btn-sm shrink-0" aria-label="Syntax help" title="Syntax help">
+        <button ref={helpRef} type="button" onClick={help.toggle} className="w-btn w-btn-ghost w-btn-icon w-btn-sm shrink-0" aria-label={wt('issues.syntaxHelp')} title={wt('issues.syntaxHelp')}>
           <CircleHelp size={14} />
         </button>
       </div>
 
       {error && (
         <div role="alert" className="mt-1.5 min-w-0 text-[12px]">
-          <div className="text-[var(--w-red)]">{error.message}{showCaret && <span className="text-[var(--w-text-3)]"> · at character {error.position + 1}</span>}</div>
+          <div className="text-[var(--w-red)]">{error.message}{showCaret && <span className="text-[var(--w-text-3)]"> · {wt('issues.atChar', { n: error.position + 1 })}</span>}</div>
           {showCaret && value && (
             <pre className="mt-1 overflow-x-auto rounded-[5px] bg-[var(--w-sunken)] px-2 py-1 font-mono text-[11.5px] leading-[1.45] text-[var(--w-text-2)]">
               {value.slice(0, error.position)}
@@ -174,7 +175,7 @@ export const JqlInput = forwardRef<JqlInputHandle, {
 function SyntaxHelp({ config, onPick }: { config: ProjectConfig; onPick: (q: string) => void }) {
   return (
     <div className="max-h-[70vh] overflow-y-auto p-3 text-[12px]">
-      <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Examples</div>
+      <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{wt('issues.examples')}</div>
       <div className="mb-3 space-y-0.5">
         {JQL_EXAMPLES.map((ex) => (
           <button key={ex.q} type="button" onClick={() => onPick(ex.q)} className="block w-full rounded-[5px] px-2 py-1 text-left hover:bg-[var(--w-hover)]">
@@ -183,7 +184,7 @@ function SyntaxHelp({ config, onPick }: { config: ProjectConfig; onPick: (q: str
           </button>
         ))}
       </div>
-      <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Fields</div>
+      <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{wt('issues.fields')}</div>
       <div className="mb-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 px-2">
         {JQL_FIELDS.map((f) => (
           <div key={f.name} className="contents">
@@ -194,11 +195,11 @@ function SyntaxHelp({ config, onPick }: { config: ProjectConfig; onPick: (q: str
         {config.customFields.map((f) => (
           <div key={f.id} className="contents">
             <span className="truncate font-mono">{/\s/.test(f.name) ? `"${f.name}"` : f.name}</span>
-            <span className="truncate text-[var(--w-text-3)]">Custom field · {f.kind.toLowerCase()}</span>
+            <span className="truncate text-[var(--w-text-3)]">{wt('issues.customField')} · {f.kind.toLowerCase()}</span>
           </div>
         ))}
       </div>
-      <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Operators</div>
+      <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{wt('issues.operators')}</div>
       <div className="mb-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 px-2">
         {JQL_OPERATORS.map((o) => (
           <div key={o.op} className="contents">
@@ -207,12 +208,12 @@ function SyntaxHelp({ config, onPick }: { config: ProjectConfig; onPick: (q: str
           </div>
         ))}
       </div>
-      <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Functions & dates</div>
+      <div className="mb-1 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{wt('issues.functionsDates')}</div>
       <p className="mb-2 px-2 font-mono text-[11.5px] leading-relaxed text-[var(--w-text-2)]">{JQL_FUNCTIONS.join('  ')}</p>
       <p className="px-2 leading-relaxed text-[var(--w-text-3)]">
-        Dates accept <span className="font-mono">2026-09-01</span>, relative values like <span className="font-mono">-7d</span> or <span className="font-mono">2w</span>, and the functions above.
-        Combine clauses with <span className="font-mono">AND</span>, <span className="font-mono">OR</span>, <span className="font-mono">NOT</span> and parentheses; quote values with spaces.
-        Sort with <span className="font-mono">ORDER BY field ASC|DESC</span>.
+        {wt('issues.jqlDates')} <span className="font-mono">2026-09-01</span>, <span className="font-mono">-7d</span>, <span className="font-mono">2w</span>.{' '}
+        {wt('issues.jqlCombine')} <span className="font-mono">AND</span> / <span className="font-mono">OR</span> / <span className="font-mono">NOT</span>.{' '}
+        {wt('issues.jqlSort')} <span className="font-mono">ORDER BY field ASC|DESC</span>.
       </p>
     </div>
   );

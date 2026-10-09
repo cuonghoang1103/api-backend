@@ -27,15 +27,16 @@ import UseCasesTab, { SuggestDialog } from '@/components/work/srs/UseCasesTab';
 import { ActorsTab, FunctionsTab, RulesTab } from '@/components/work/srs/CatalogTabs';
 import { AuthMatrixTab, ScreensTab } from '@/components/work/srs/ScreensTab';
 import RtmTab from '@/components/work/srs/RtmTab';
+import { wt } from '@/components/work/i18n';
 
 const TABS = [
-  { id: 'use-cases', label: 'Use cases' },
-  { id: 'actors', label: 'Actors' },
-  { id: 'rules', label: 'Business rules' },
-  { id: 'screens', label: 'Screens & flow' },
-  { id: 'authorization', label: 'Screen authorization' },
-  { id: 'non-ui', label: 'Non-UI functions' },
-  { id: 'traceability', label: 'Traceability (RTM)' },
+  { id: 'use-cases', get label() { return wt('srs.tabUseCases'); } },
+  { id: 'actors', get label() { return wt('srs.tabActors'); } },
+  { id: 'rules', get label() { return wt('srs.tabBusinessRules'); } },
+  { id: 'screens', get label() { return wt('srs.tabScreensFlow'); } },
+  { id: 'authorization', get label() { return wt('srs.tabScreenAuthorization'); } },
+  { id: 'non-ui', get label() { return wt('srs.tabNonUiFunctions'); } },
+  { id: 'traceability', get label() { return wt('srs.tabTraceabilityRtm'); } },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -65,12 +66,12 @@ function RequirementsView({ config, pid }: { config: ProjectConfig; pid: number 
     mutationFn: () => workCtw4Api.fillReport3(pid, q.data!.report3Page!.number),
     onSuccess: (r) => {
       qc.invalidateQueries({ queryKey: ['work'] });
-      if (!r.filled.length) { toast.message('Nothing to fill yet — add actors, use cases, screens or rules first.'); return; }
-      toast.success(`Filled ${r.filled.map((x) => SRS_SECTION_LABEL[x]).join(', ')} — saved as version ${r.page.currentVersion}`, {
-        action: { label: 'Open page', onClick: () => router.push(`${base}/docs/${q.data!.report3Page!.number}`) },
+      if (!r.filled.length) { toast.message(wt('srs.nothingFill')); return; }
+      toast.success(wt('srs.filled', { list: r.filled.map((x) => SRS_SECTION_LABEL[x]).join(', '), v: r.page.currentVersion }), {
+        action: { label: wt('srs.openPage'), onClick: () => router.push(`${base}/docs/${q.data!.report3Page!.number}`) },
       });
     },
-    onError: (e) => toast.error(workError(e, 'Could not fill the Report 3 page')),
+    onError: (e) => toast.error(workError(e, wt('srs.fillFailed'))),
   });
   const exportR3 = async (format: 'docx' | 'pdf') => {
     setExporting(format);
@@ -79,38 +80,38 @@ function RequirementsView({ config, pid }: { config: ProjectConfig; pid: number 
       const diagrams = await mermaidPngsOf(pre.doc);
       const f = await workCtw4Api.exportReport3(pid, format, diagrams);
       saveBlob(f.blob, f.fileName);
-      toast.success(`Downloaded ${f.fileName}`);
-    } catch (e) { toast.error(workError(e, 'Could not export Report 3')); } finally { setExporting(null); }
+      toast.success(wt('srs.downloaded', { name: f.fileName }));
+    } catch (e) { toast.error(workError(e, wt('srs.exportFailed'))); } finally { setExporting(null); }
   };
 
   if (q.isLoading) return <PageLoading />;
-  if (!q.data) return <EmptyState title="Could not load the requirements" body={q.error ? workError(q.error) : undefined} />;
+  if (!q.data) return <EmptyState title={wt('srs.loadFailed')} body={q.error ? workError(q.error) : undefined} />;
   const data = q.data;
   const count: Partial<Record<TabId, number>> = { 'use-cases': data.useCases.length, actors: data.actors.length, rules: data.rules.length, screens: data.screens.length, 'non-ui': data.functions.length };
 
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Requirements">
+      <ProjectHeader config={config} title={wt('srs.title')}>
         <PageFocusButton scope="requirements" />
         {data.canEdit && (
-          <button type="button" className="w-btn w-btn-sm" onClick={() => setSuggest(true)} aria-label="Draft use cases from an issue" title="AI drafts use cases from an issue or epic — saved as proposals">
-            <Sparkles size={13} /> <span className="max-sm:hidden">Draft from issue</span>
+          <button type="button" className="w-btn w-btn-sm" onClick={() => setSuggest(true)} aria-label={wt('srs.draftTitle')} title={wt('srs.draftHint')}>
+            <Sparkles size={13} /> <span className="max-sm:hidden">{wt('srs.draftFromIssue')}</span>
           </button>
         )}
         {data.report3Page ? (
-          <button type="button" className="w-btn w-btn-sm" disabled={fill.isPending || !data.canEdit} onClick={() => fill.mutate()} aria-label="Fill the Report 3 page" title={`Write these tables into “${data.report3Page.title}” (one new version)`}>
-            {fill.isPending ? <Spinner size={12} /> : <Wand2 size={13} />} <span className="max-sm:hidden">Fill Report 3 page</span>
+          <button type="button" className="w-btn w-btn-sm" disabled={fill.isPending || !data.canEdit} onClick={() => fill.mutate()} aria-label={wt('srs.fillR3')} title={wt('srs.fillR3Title', { t: data.report3Page.title })}>
+            {fill.isPending ? <Spinner size={12} /> : <Wand2 size={13} />} <span className="max-sm:hidden">{wt('srs.fillR3')}</span>
           </button>
         ) : null}
-        <button type="button" className="w-btn w-btn-sm w-btn-primary" disabled={!!exporting} onClick={() => exportR3('docx')} aria-label="Export Report 3 as Word" title="Report 3 – Software Requirement Specification in the official headings">
+        <button type="button" className="w-btn w-btn-sm w-btn-primary" disabled={!!exporting} onClick={() => exportR3('docx')} aria-label={wt('srs.exportWord')} title={wt('srs.exportWordTitle')}>
           {exporting === 'docx' ? <Spinner size={12} /> : <FileDown size={13} />} <span className="max-sm:hidden">Report 3</span> .docx
         </button>
-        <button type="button" className="w-btn w-btn-sm" disabled={!!exporting} onClick={() => exportR3('pdf')} aria-label="Export Report 3 as PDF">
+        <button type="button" className="w-btn w-btn-sm" disabled={!!exporting} onClick={() => exportR3('pdf')} aria-label={wt('srs.exportPdf')}>
           {exporting === 'pdf' ? <Spinner size={12} /> : null} PDF
         </button>
       </ProjectHeader>
       <div className="shrink-0 overflow-x-auto border-b border-[var(--w-border)] px-4">
-        <div className="flex gap-1" role="tablist" aria-label="Requirements">
+        <div className="flex gap-1" role="tablist" aria-label={wt('srs.title')}>
           {TABS.map((t) => (
             <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)} data-testid={`req-tab-${t.id}`}
               className={cn('-mb-px flex items-center gap-1.5 whitespace-nowrap border-b-2 px-2.5 py-2.5 text-[13px] font-medium transition-colors',
@@ -124,8 +125,8 @@ function RequirementsView({ config, pid }: { config: ProjectConfig; pid: number 
         <div className="mx-auto w-full max-w-[1400px] p-4">
           {data.report3Page ? null : (
             <p className="mb-3 flex items-center gap-1.5 text-[12.5px] text-[var(--w-text-2)]">
-              <FileText size={13} aria-hidden="true" /> No Report 3 page in Docs yet — the export uses the official template. Create the page from the “FPT Capstone” template to edit around these tables.
-              <Link className="text-[var(--w-accent-text)] hover:underline" href={`${base}/docs`}>Open Docs</Link>
+              <FileText size={13} aria-hidden="true" /> {wt('srs.noR3')}
+              <Link className="text-[var(--w-accent-text)] hover:underline" href={`${base}/docs`}>{wt('srs.openDocs')}</Link>
             </p>
           )}
           {tab === 'use-cases' && <UseCasesTab pid={pid} data={data} openUc={uc} onOpenUc={(n) => setParam({ uc: n ? String(n) : null })} onOpenIssue={(n) => setParam({ issue: String(n) }, true)} />}
@@ -156,7 +157,7 @@ function Inner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   if (isLoading) return <PageLoading />;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
-  if (config.role === 'CLIENT' || config.clientView) return <EmptyState title="Not available" body="Requirements are only visible to the project team and lecturers." />;
+  if (error || !config || !pid) return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : wt('common.projectNotFoundBody')} />;
+  if (config.role === 'CLIENT' || config.clientView) return <EmptyState title={wt('school.notAvail')} body={wt('srs.notAvailBody')} />;
   return <RequirementsView config={config} pid={pid} />;
 }

@@ -23,17 +23,18 @@ import CyclesTab from '@/components/work/tests/CyclesTab';
 import TraceabilityTab from '@/components/work/tests/TraceabilityTab';
 import UnitTab from '@/components/work/tests/fpt/UnitTab';
 import IntegrationTab from '@/components/work/tests/fpt/IntegrationTab';
+import { wt } from '@/components/work/i18n';
 
 const TABS = [
-  { id: 'library', label: 'Test library' },
-  { id: 'plans', label: 'Test plans' },
-  { id: 'cycles', label: 'Test cycles' },
-  { id: 'traceability', label: 'Traceability' },
+  { id: 'library', get label() { return wt('tests.tabTestLibrary'); } },
+  { id: 'plans', get label() { return wt('tests.tabTestPlans'); } },
+  { id: 'cycles', get label() { return wt('tests.tabTestCycles'); } },
+  { id: 'traceability', get label() { return wt('tests.tabTraceability'); } },
   // Đợt 1b (08/10/2026): tài liệu kiểm thử chuẩn FPT — Report 5.1 / 5.2, xuất/nhập Excel đúng mẫu.
-  { id: 'unit', label: 'Unit tests (5.1)' },
-  { id: 'integration', label: 'Integration (5.2)' },
+  { id: 'unit', get label() { return wt('tests.tabUnitTests51'); } },
+  { id: 'integration', get label() { return wt('tests.tabIntegration52'); } },
   // Đợt 3B (09/10/2026): Report 5.3 System Test — mỗi workflow một sheet, Round 1–3.
-  { id: 'system', label: 'System tests (5.3)' },
+  { id: 'system', get label() { return wt('tests.tabSystemTests53'); } },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -74,11 +75,11 @@ function TestsView({ config, pid }: { config: ProjectConfig; pid: number }) {
 
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Tests">
+      <ProjectHeader config={config} title={wt('tests.title')}>
         {enabled && <PageFocusButton scope="tests" />}
         {enabled && config.permissions.createIssues && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setNewOpen(true)}>
-            <Plus size={14} /> <span className="hidden sm:inline">New test</span>
+            <Plus size={14} /> <span className="hidden sm:inline">{wt('tests.newTest')}</span>
           </button>
         )}
       </ProjectHeader>
@@ -90,7 +91,7 @@ function TestsView({ config, pid }: { config: ProjectConfig; pid: number }) {
       ) : (
         <>
           <div className="shrink-0 overflow-x-auto border-b border-[var(--w-border)] px-4">
-            <div className="flex gap-1" role="tablist" aria-label="Tests">
+            <div className="flex gap-1" role="tablist" aria-label={wt('tests.title')}>
               {TABS.map((t) => (
                 <button
                   key={t.id}
@@ -148,7 +149,7 @@ function Inner() {
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   if (isLoading) return <PageLoading />;
   if (error || !config || !pid) {
-    return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
+    return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : wt('common.projectNotFoundBody')} />;
   }
   return <TestsView config={config} pid={pid} />;
 }

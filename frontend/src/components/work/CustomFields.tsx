@@ -18,6 +18,7 @@ import { DateInput } from './fields';
 import { wk } from './hooks';
 import { Dialog, PickerList, Popover, Spinner, UserAvatar, useToggle, type PickOption } from './ui';
 import { resolveEmbed } from '@/components/notes/extensions/NoteEmbed';
+import { wt } from '@/components/work/i18n';
 
 function Row({ field, children }: { field: CustomField; children: ReactNode }) {
   return (
@@ -31,7 +32,7 @@ function Row({ field, children }: { field: CustomField; children: ReactNode }) {
 }
 
 /** Ô chữ/số sửa tại chỗ: lưu khi rời ô hoặc Enter, Esc để huỷ. */
-function CommitInput({ value, onCommit, disabled, placeholder = 'None', inputMode, validate }: {
+function CommitInput({ value, onCommit, disabled, placeholder = wt('common.none'), inputMode, validate }: {
   value: string; onCommit: (v: string) => void; disabled?: boolean; placeholder?: string;
   inputMode?: 'text' | 'decimal' | 'url'; validate?: (v: string) => string | null;
 }) {
@@ -86,7 +87,7 @@ function OptionChip({ label, color }: { label: string; color: string }) {
   );
 }
 
-const None = () => <span className="text-[var(--w-text-3)]">None</span>;
+const None = () => <span className="text-[var(--w-text-3)]">{wt('common.none')}</span>;
 
 function SelectEditor({ field, value, onChange, disabled }: { field: CustomField; value: CustomValue; onChange: (v: CustomValue) => void; disabled?: boolean }) {
   const p = useToggle();
@@ -95,7 +96,7 @@ function SelectEditor({ field, value, onChange, disabled }: { field: CustomField
   const selected = multi ? (Array.isArray(value) ? value : []) : typeof value === 'string' ? [value] : [];
   const chosen = field.options.filter((o) => selected.includes(o.id));
   const options: PickOption<string>[] = [
-    ...(multi ? [] : [{ value: '', label: 'None' }]),
+    ...(multi ? [] : [{ value: '', label: wt('common.none') }]),
     ...field.options.map((o) => ({ value: o.id, label: o.label, icon: <span className="h-2 w-2 rounded-full" style={{ background: o.color }} /> })),
   ];
   return (
@@ -118,7 +119,7 @@ function SelectEditor({ field, value, onChange, disabled }: { field: CustomField
             }
           }}
           placeholder={`${field.name}…`}
-          empty="No options"
+          empty={wt('fields.noOptions')}
         />
       </Popover>
     </>
@@ -130,7 +131,7 @@ function UserEditor({ field, value, config, onChange, disabled }: { field: Custo
   const ref = useRef<HTMLButtonElement>(null);
   const cur = typeof value === 'number' ? config.members.find((m) => m.id === value) : undefined;
   const options: PickOption<number>[] = [
-    { value: 0, label: 'None', icon: <UserAvatar user={null} size={16} /> },
+    { value: 0, label: wt('common.none'), icon: <UserAvatar user={null} size={16} /> },
     ...config.members.map((m) => ({ value: m.id, label: userName(m), keywords: m.username, icon: <UserAvatar user={m} size={16} /> })),
   ];
   return (
@@ -138,7 +139,7 @@ function UserEditor({ field, value, config, onChange, disabled }: { field: Custo
       <PickTrigger triggerRef={ref} onClick={p.toggle} disabled={disabled}>
         {cur ? (
           <><UserAvatar user={cur} size={18} /><span className="min-w-0 flex-1 truncate">{userName(cur)}</span></>
-        ) : typeof value === 'number' ? <span className="text-[var(--w-text-3)]">Former member</span> : <None />}
+        ) : typeof value === 'number' ? <span className="text-[var(--w-text-3)]">{wt('board.formerMember')}</span> : <None />}
       </PickTrigger>
       <Popover open={p.on} onClose={p.close} anchorRef={ref} width={240}>
         <PickerList options={options} selected={[typeof value === 'number' ? value : 0]} onPick={(id) => { onChange(id || null); p.close(); }} placeholder={`${field.name}…`} />
@@ -164,12 +165,12 @@ function FieldEditor({ field, value, config, onChange, disabled }: {
               placeholder="https://…"
               onCommit={(v) => onChange(v || null)}
               disabled={disabled}
-              validate={(v) => (/^https?:\/\/\S+$/i.test(v) ? null : 'Enter a full link that starts with http:// or https://')}
+              validate={(v) => (/^https?:\/\/\S+$/i.test(v) ? null : wt('fields.fullLink'))}
             />
           </div>
           {url && resolveEmbed(url) && <DocPreviewButton url={url} name={field.name} />}
           {url && (
-            <a href={url} target="_blank" rel="noopener noreferrer" title="Open link" className="w-btn w-btn-ghost w-btn-icon w-btn-sm shrink-0"><ExternalLink size={12} /></a>
+            <a href={url} target="_blank" rel="noopener noreferrer" title={wt('fields.openLink')} className="w-btn w-btn-ghost w-btn-icon w-btn-sm shrink-0"><ExternalLink size={12} /></a>
           )}
         </div>
       );
@@ -181,7 +182,7 @@ function FieldEditor({ field, value, config, onChange, disabled }: {
           inputMode="decimal"
           onCommit={(v) => onChange(v === '' ? null : Number(v))}
           disabled={disabled}
-          validate={(v) => (Number.isFinite(Number(v)) ? null : `${field.name} must be a number`)}
+          validate={(v) => (Number.isFinite(Number(v)) ? null : wt('fields.mustNumber', { name: field.name }))}
         />
       );
     case 'DATE':
@@ -234,7 +235,7 @@ export default function CustomFieldsGroup({ pid, num, typeKey, config, editable 
     },
     onError: (err, _v, ctx) => {
       if (ctx?.prev) qc.setQueryData(wk.customValues(pid, num), ctx.prev);
-      toast.error(workError(err, 'Could not save the field'));
+      toast.error(workError(err, wt('fields.saveFailed')));
     },
   });
 
@@ -247,7 +248,7 @@ export default function CustomFieldsGroup({ pid, num, typeKey, config, editable 
         Fields {(q.isLoading || save.isPending) && <Spinner size={10} />}
       </div>
       {q.isError ? (
-        <p className="py-1 text-[12px] text-[var(--w-red)]">{workError(q.error, 'Could not load fields')}</p>
+        <p className="py-1 text-[12px] text-[var(--w-red)]">{workError(q.error, wt('fields.loadFailed'))}</p>
       ) : (
         fields.map((f) => (
           <Row key={f.id} field={f}>
@@ -276,18 +277,17 @@ function DocPreviewButton({ url, name }: { url: string; name: string }) {
   if (!embed) return null;
   return (
     <>
-      <button type="button" title="Preview" aria-label={`Preview ${name}`} className="w-btn w-btn-ghost w-btn-icon w-btn-sm shrink-0" onClick={() => setOpen(true)}><Eye size={12} /></button>
+      <button type="button" title={wt('common.preview')} aria-label={wt('fields.previewName', { name })} className="w-btn w-btn-ghost w-btn-icon w-btn-sm shrink-0" onClick={() => setOpen(true)}><Eye size={12} /></button>
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
         width={1100}
         title={<span className="flex items-center gap-2">{name}<span className="text-[12px] font-normal text-[var(--w-text-3)]">{embed.provider} · preview</span></span>}
-        footer={<a href={url} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-primary w-btn-sm"><ExternalLink size={13} /> Open to edit</a>}
+        footer={<a href={url} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-primary w-btn-sm"><ExternalLink size={13} /> {wt('fields.openToEdit')}</a>}
       >
-        <iframe src={embed.src} title={`${name} preview`} className="h-[70vh] w-full rounded-[6px] border border-[var(--w-border)] bg-white" allow="fullscreen" referrerPolicy="no-referrer-when-downgrade" />
+        <iframe src={embed.src} title={wt('fields.previewName', { name })} className="h-[70vh] w-full rounded-[6px] border border-[var(--w-border)] bg-white" allow="fullscreen" referrerPolicy="no-referrer-when-downgrade" />
         <p className="mt-2 text-[12px] text-[var(--w-text-3)]">
-          Blank or asking you to sign in? The file must be shared (“Anyone with the link” or your school account), and you may need to be
-          signed in to Google/Microsoft in this browser. You can always use “Open to edit”.
+          {wt('fields.previewHelp')}
         </p>
       </Dialog>
     </>

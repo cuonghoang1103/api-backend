@@ -88,10 +88,12 @@ export function useProject(slug: string, key: string) {
   const router = useRouter();
   const pathname = usePathname() ?? '';
   const clientView = config.data?.clientView === true;
+  // CTW K-3: khách cũng mở được trang Chat (server chỉ cho thấy kênh CLIENT — mặc định không có).
+  const portalPath = /\/(portal|chat)(\/|$|\?)/.test(pathname);
   useEffect(() => {
-    if (clientView && !/\/portal(\/|$)/.test(pathname)) router.replace(`/work/${slug}/${key}/portal`);
-  }, [clientView, pathname, router, slug, key]);
-  return { pid, config: config.data, isLoading: resolved.isLoading || (!!pid && config.isLoading) || (clientView && !/\/portal(\/|$)/.test(pathname)), error: resolved.error ?? config.error };
+    if (clientView && !portalPath) router.replace(`/work/${slug}/${key}/portal`);
+  }, [clientView, portalPath, router, slug, key]);
+  return { pid, config: config.data, isLoading: resolved.isLoading || (!!pid && config.isLoading) || (clientView && !portalPath), error: resolved.error ?? config.error };
 }
 
 /** Tra cứu nhanh theo id — dùng ở mọi thẻ trên board nên phải tính một lần. */

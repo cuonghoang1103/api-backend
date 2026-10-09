@@ -19,6 +19,7 @@ import {
   workStudioApi, workStudioKeys, type ApprovalStatus, type HandoffStatus, type ProjectConfig, type ProjectKind,
   type StageStatus, type StudioModule, type WorkTeam,
 } from '@/lib/work-api';
+import { wt, wfmt } from '@/components/work/i18n';
 
 /** Mô-đun có bật ở dự án này không (thiếu `modules` = dự án cũ = tắt). */
 export function studioOn(config: Pick<ProjectConfig, 'modules'> | undefined | null, m: StudioModule): boolean {
@@ -27,33 +28,33 @@ export function studioOn(config: Pick<ProjectConfig, 'modules'> | undefined | nu
 
 /** Mô-đun có tính năng thật: bốn mô-đun đợt S1 + Docs (S2a) + cổng khách (S2b) + CR/RAID/họp (S3b) + tài chính/báo cáo (S4) — thứ tự hiển thị. */
 export const S1_MODULES: Array<{ key: StudioModule; label: string; body: string }> = [
-  { key: 'teams', label: 'Teams', body: 'Departments shared across projects (BA, DEV, QA…). Issues get a Team field, each team has a work queue its lead assigns from.' },
-  { key: 'stages', label: 'Stages & gates', body: 'Run the project as numbered stages. A stage can only start when the previous one passed its gate review.' },
-  { key: 'approvals', label: 'Approvals', body: 'Formal sign-off on issues and stage gates — sequential or parallel approvers, each decision signed with a content fingerprint.' },
-  { key: 'handoffs', label: 'Handoffs', body: 'Pass an issue to another team or person with a checklist they must tick before accepting, or return with a reason.' },
-  { key: 'docs', label: 'Docs', body: 'Confluence-style project documents: a page tree, 36 process templates (SRS, SOW, test plan…), version history, approvals and links to issues.' },
-  { key: 'clientPortal', label: 'Client portal', body: 'A separate portal for your client: only issues, documents and files you share, replies (internal notes stay internal), requests, approvals and UAT sign-off.' },
+  { key: 'teams', get label() { return wt('studio.mod_teams'); }, get body() { return wt('studio.modBody_teams'); } },
+  { key: 'stages', get label() { return wt('studio.mod_stages'); }, get body() { return wt('studio.modBody_stages'); } },
+  { key: 'approvals', get label() { return wt('studio.mod_approvals'); }, get body() { return wt('studio.modBody_approvals'); } },
+  { key: 'handoffs', get label() { return wt('studio.mod_handoffs'); }, get body() { return wt('studio.modBody_handoffs'); } },
+  { key: 'docs', get label() { return wt('studio.mod_docs'); }, get body() { return wt('studio.modBody_docs'); } },
+  { key: 'clientPortal', get label() { return wt('studio.mod_clientPortal'); }, get body() { return wt('studio.modBody_clientPortal'); } },
   // Đợt S3b.
-  { key: 'changeRequests', label: 'Change requests', body: 'A change log with impact analysis (scope, schedule, cost, risks, alternatives), signed approval — by your client too — and implementation issues.' },
-  { key: 'raid', label: 'RAID log', body: 'Risks, assumptions, issues and dependencies with owners, probability × impact scoring, a 5×5 matrix and review reminders. Internal to the team.' },
-  { key: 'meetings', label: 'Meetings', body: 'Kick-offs, weekly syncs and steering meetings: agenda, minutes, decisions, action items that become issues, and calendar invitations (.ics).' },
+  { key: 'changeRequests', get label() { return wt('studio.mod_changeRequests'); }, get body() { return wt('studio.modBody_changeRequests'); } },
+  { key: 'raid', get label() { return wt('studio.mod_raid'); }, get body() { return wt('studio.modBody_raid'); } },
+  { key: 'meetings', get label() { return wt('studio.mod_meetings'); }, get body() { return wt('studio.modBody_meetings'); } },
   // Đợt S4.
-  { key: 'finance', label: 'Finance', body: 'Hourly rates, weekly timesheets with approval and locking, budget vs actual with a forecast, other costs and payment milestones. Tracking only — CT Work does not issue invoices.' },
-  { key: 'reports', label: 'Client reports & present', body: 'A weekly client report built from shared data and emailed on a schedule (no AI needed), an internal steering report, printable PDFs and a full-screen present mode.' },
+  { key: 'finance', get label() { return wt('studio.mod_finance'); }, get body() { return wt('studio.modBody_finance'); } },
+  { key: 'reports', get label() { return wt('studio.mod_reports'); }, get body() { return wt('studio.modBody_reports'); } },
   // Đợt S5a.
-  { key: 'serviceDesk', label: 'Service desk & SLA', body: 'Request types, P1–P4 from impact × urgency, SLA clocks on working hours (paused while waiting for the customer), queues, alerts, CSAT, problems with postmortems and SLA reports.' },
+  { key: 'serviceDesk', get label() { return wt('studio.mod_serviceDesk'); }, get body() { return wt('studio.modBody_serviceDesk'); } },
   // Resources (06/10/2026) — bật mặc định cho mọi loại dự án mới.
-  { key: 'resources', label: 'Resources', body: 'A library of project links — repos, Figma, docs, audio, Mixamo, 3D assets — in groups you can drag, pinned to the sidebar, searchable, and checked weekly for dead links. Share chosen links with your client.' },
+  { key: 'resources', get label() { return wt('studio.mod_resources'); }, get body() { return wt('studio.modBody_resources'); } },
 ];
 
 /** Khoá chừa cho đợt sau — hiện mờ "Coming later" để người dùng biết hướng đi. */
 export const LATER_MODULES: Array<{ key: StudioModule; label: string }> = [];
 
 export const KIND_INFO: Record<ProjectKind, { label: string; short: string; body: string; modules: StudioModule[] }> = {
-  PERSONAL: { label: 'Personal', short: 'Personal', body: 'Your own tasks and side projects. Just a board — nothing to set up.', modules: ['resources'] },
-  SCHOOL: { label: 'School / coursework', short: 'School', body: 'Group assignments and capstones (SWP391, SWR302, SWT301). Sprints, tests and reports for your lecturer.', modules: ['resources'] },
-  SOFTWARE: { label: 'Software team', short: 'Software', body: 'A product team shipping software: sprints, code review, releases and GitHub.', modules: ['resources'] },
-  CLIENT: { label: 'Client project (studio)', short: 'Client', body: 'Work delivered for a client through departments: stages with gate reviews, approvals and handoffs.', modules: ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports', 'serviceDesk', 'resources'] },
+  PERSONAL: { get label() { return wt('studio.kind_PERSONAL'); }, get short() { return wt('studio.kindShort_PERSONAL'); }, get body() { return wt('studio.kindBody_PERSONAL'); }, modules: ['resources'] },
+  SCHOOL: { get label() { return wt('studio.kind_SCHOOL'); }, get short() { return wt('studio.kindShort_SCHOOL'); }, get body() { return wt('studio.kindBody_SCHOOL'); }, modules: ['resources'] },
+  SOFTWARE: { get label() { return wt('studio.kind_SOFTWARE'); }, get short() { return wt('studio.kindShort_SOFTWARE'); }, get body() { return wt('studio.kindBody_SOFTWARE'); }, modules: ['resources'] },
+  CLIENT: { get label() { return wt('studio.kind_CLIENT'); }, get short() { return wt('studio.kindShort_CLIENT'); }, get body() { return wt('studio.kindBody_CLIENT'); }, modules: ['teams', 'stages', 'approvals', 'handoffs', 'docs', 'clientPortal', 'changeRequests', 'raid', 'meetings', 'finance', 'reports', 'serviceDesk', 'resources'] },
 };
 export const KINDS: ProjectKind[] = ['PERSONAL', 'SCHOOL', 'SOFTWARE', 'CLIENT'];
 
@@ -186,13 +187,13 @@ export function WarnStrip({ children, className }: { children: ReactNode; classN
 
 export function fmtDateTime(iso: string | null | undefined): string {
   if (!iso) return '';
-  return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  return new Date(iso).toLocaleString(wfmt.intl(), { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
 }
 
 /** "Showing 2,000 of 2,413 issues — use filters or the list view" (board cắt ở 2000, backlog 3000). */
 export function TruncatedStrip({ data, what = 'issues' }: { data: { truncated?: boolean; total?: number; limit?: number }; what?: string }) {
   if (!data.truncated) return null;
-  const n = (x: number | undefined) => (x ?? 0).toLocaleString('en-US');
+  const n = (x: number | undefined) => (x ?? 0).toLocaleString(wfmt.intl());
   return (
     <WarnStrip>
       Showing <b className="font-semibold">{n(data.limit)}</b> of <b className="font-semibold">{n(data.total)}</b> {what} — use filters or the list view to see the rest.

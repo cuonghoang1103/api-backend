@@ -38,9 +38,11 @@ import {
 import { PriorityWithTip } from './board/BoardCard';
 import BulkBar from './board/BulkBar';
 import { bulkSetStatusByName, type BulkResult } from './board/bulk';
+import { wt } from '@/components/work/i18n';
+import { statusName } from '@/components/work/i18n/names';
 
 /** Thành viên không có quyền sprint vẫn THẤY nút (mờ) và biết vì sao — không giấu im lặng. */
-const NO_SPRINT_PERM = 'Only project admins can manage sprints';
+const noSprintPerm = () => wt('backlog.noSprintPerm');
 
 type Container = number | 'backlog';
 const cid = (c: Container) => `box:${c}`;
@@ -78,7 +80,7 @@ function EstimateCell({ issue, unit, editable, onSave }: { issue: BacklogIssue; 
     <button
       type="button"
       disabled={!editable}
-      title={editable ? (unit === 'HOURS' ? 'Estimate (hours) — click to edit' : 'Story points — click to edit') : unit === 'HOURS' ? 'Estimate (hours)' : 'Story points'}
+      title={editable ? (unit === 'HOURS' ? wt('backlog.estHoursEdit') : wt('backlog.ptsEdit')) : unit === 'HOURS' ? wt('backlog.estHours') : wt('common.storyPoints')}
       onPointerDown={(e) => e.stopPropagation()}
       onClick={(e) => { e.stopPropagation(); setDraft(val === null ? '' : String(val)); }}
       className={cn(
@@ -87,7 +89,7 @@ function EstimateCell({ issue, unit, editable, onSave }: { issue: BacklogIssue; 
         editable && 'hover:bg-[var(--w-active)]',
       )}
     >
-      {val === null ? '–' : unit === 'HOURS' ? `${val}h` : `${val} ${val === 1 ? 'pt' : 'pts'}`}
+      {val === null ? '–' : unit === 'HOURS' ? `${val}h` : wt('board.ptsShort', { count: val })}
     </button>
   );
 }
@@ -144,7 +146,7 @@ function Row({ issue, lk, unit, selected, onSelect, onOpen, editable, epicTitle,
           {epicTitle}
         </span>
       )}
-      {issue.subtaskCount > 0 && <span className="hidden text-[11px] text-[var(--w-text-3)] sm:inline" title="Sub-tasks">{issue.subtaskCount} {issue.subtaskCount === 1 ? 'sub-task' : 'sub-tasks'}</span>}
+      {issue.subtaskCount > 0 && <span className="hidden text-[11px] text-[var(--w-text-3)] sm:inline" title={wt('board.gSubtasks')}>{wt('board.nSubtasks', { count: issue.subtaskCount })}</span>}
       <span className="hidden md:inline-flex"><LeaseChipFor issueId={issue.id} compact /></span>
       <span className="hidden sm:inline"><StatusBadge status={lk.statuses.get(issue.statusId)} /></span>
       <EstimateCell issue={issue} unit={unit} editable={editable} onSave={(v) => onEstimate(issue, v)} />
@@ -164,7 +166,7 @@ function Box({ id, children, empty }: { id: Container; children: ReactNode; empt
     <div
       ref={setNodeRef}
       role="grid"
-      aria-label={id === 'backlog' ? 'Backlog issues' : 'Sprint issues'}
+      aria-label={id === 'backlog' ? wt('backlog.backlogIssues') : wt('backlog.sprintIssues')}
       className={cn('overflow-hidden rounded-[8px] border border-[var(--w-border)] transition-colors', isOver && 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]')}
     >
       <div role="rowgroup">{children}</div>
@@ -179,9 +181,9 @@ const EMPTY_TOTALS: BoxTotals = { count: 0, todo: 0, progress: 0, done: 0, nTodo
 /** "2 to do · 1 in progress · 1 done · 21 pts" — chữ rõ nghĩa thay cho ba con số trơn. */
 function SprintSummary({ t, unit }: { t: BoxTotals; unit: BacklogData['unit'] }) {
   const r = (n: number) => Math.round(n * 10) / 10;
-  const u = unit === 'HOURS' ? 'h' : 'pts';
+  const u = unit === 'HOURS' ? 'h' : wt('backlog.ptsUnit');
   const part = (n: number, pts: number, label: string, color: string) => (
-    <span className="inline-flex items-center gap-1" title={`${n} ${n === 1 ? 'issue' : 'issues'} ${label} · ${r(pts)} ${unitLabel(unit)}`}>
+    <span className="inline-flex items-center gap-1" title={`${wt('common.issueCount', { count: n })} ${label} · ${r(pts)} ${unitLabel(unit)}`}>
       <span className="h-2 w-2 rounded-full" style={{ background: color }} />
       <span className="tabular">{n}</span> {label}
     </span>
@@ -189,14 +191,14 @@ function SprintSummary({ t, unit }: { t: BoxTotals; unit: BacklogData['unit'] })
   const total = t.todo + t.progress + t.done;
   return (
     <span className="hidden items-center gap-2 text-[12px] text-[var(--w-text-2)] sm:flex">
-      {part(t.nTodo, t.todo, 'to do', 'var(--w-text-3)')}
+      {part(t.nTodo, t.todo, wt('backlog.sumTodo'), 'var(--w-text-3)')}
       <span className="text-[var(--w-text-3)]">·</span>
-      {part(t.nProgress, t.progress, 'in progress', 'var(--w-accent)')}
+      {part(t.nProgress, t.progress, wt('backlog.sumProgress'), 'var(--w-accent)')}
       <span className="text-[var(--w-text-3)]">·</span>
-      {part(t.nDone, t.done, 'done', 'var(--w-green)')}
+      {part(t.nDone, t.done, wt('backlog.sumDone'), 'var(--w-green)')}
       <span
         className="rounded-full bg-[var(--w-sunken)] px-1.5 py-px text-[11px] font-semibold tabular text-[var(--w-text)]"
-        title={`Total estimate: ${r(total)} ${unitLabel(unit)} (${r(t.done)} done)`}
+        title={wt('backlog.totalEst', { total: r(total), unit: unitLabel(unit), done: r(t.done) })}
       >
         {r(total)} {u}
       </span>
@@ -210,7 +212,7 @@ function SprintBtn({ allowed, disabledReason, onClick, children, ghost }: {
 }) {
   const off = !allowed || !!disabledReason;
   return (
-    <span title={!allowed ? NO_SPRINT_PERM : disabledReason} className={cn('inline-flex', off && 'cursor-not-allowed')}>
+    <span title={!allowed ? noSprintPerm() : disabledReason} className={cn('inline-flex', off && 'cursor-not-allowed')}>
       <button type="button" disabled={off} onClick={onClick} className={cn('w-btn w-btn-sm', ghost && 'w-btn-ghost', off && 'pointer-events-none')}>
         {children}
       </button>
@@ -225,7 +227,7 @@ function QuickCreate({ onCreate }: { onCreate: (title: string) => Promise<unknow
   if (!open) {
     return (
       <button type="button" onClick={() => setOpen(true)} className="flex h-9 w-full items-center gap-2 px-3 text-[13px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text-2)]">
-        <Plus size={14} /> Create issue
+        <Plus size={14} /> {wt('board.createIssue')}
       </button>
     );
   }
@@ -246,7 +248,7 @@ function QuickCreate({ onCreate }: { onCreate: (title: string) => Promise<unknow
         onChange={(e) => setTitle(e.target.value)}
         onBlur={() => { if (!title.trim()) setOpen(false); }}
         onKeyDown={(e) => e.key === 'Escape' && (setTitle(''), setOpen(false))}
-        placeholder="What needs to be done? Press Enter to create"
+        placeholder={wt('backlog.quickPh')}
         className="w-input h-8"
       />
     </form>
@@ -349,14 +351,14 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
       return { ...r, label: v.label };
     },
     onSuccess: (r) => {
-      if (r.updated.length) toast.success(`${r.updated.length} ${r.updated.length === 1 ? 'issue' : 'issues'} ${r.label}`);
+      if (r.updated.length) toast.success(wt('backlog.bulkDone', { count: r.updated.length, label: r.label }));
       if (r.failed.length) {
-        toast.error(`${r.failed.length} could not be changed: ${r.failed.slice(0, 3).map((f) => `${lk.issueKey(f.number)} (${f.error})`).join(', ')}`);
+        toast.error(wt('backlog.bulkFailed', { count: r.failed.length, list: r.failed.slice(0, 3).map((f) => `${lk.issueKey(f.number)} (${f.error})`).join(', ') }));
       }
       setSelected(new Set(r.failed.map((f) => data.issues.find((i) => i.number === f.number)?.id).filter((x): x is number => !!x)));
       refresh();
     },
-    onError: (err) => toast.error(workError(err, 'Bulk change failed')),
+    onError: (err) => toast.error(workError(err, wt('backlog.bulkFailedAll'))),
   });
 
   const estimate = useMutation({
@@ -365,7 +367,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
         ? { originalEstimateMin: v.value === null ? null : Math.round(v.value * 60), version: v.issue.version }
         : { storyPoints: v.value, version: v.issue.version }),
     onSuccess: refresh,
-    onError: (err) => { toast.error(workErrorStatus(err) === 409 ? 'Someone else just changed this issue. Refreshed.' : workError(err)); refresh(); },
+    onError: (err) => { toast.error(workErrorStatus(err) === 409 ? wt('backlog.issueChanged') : workError(err)); refresh(); },
   });
 
   const move = useMutation({
@@ -375,7 +377,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
         beforeIssueId: v.before, afterIssueId: v.after, version: v.issue.version,
       }),
     onSettled: async (_d, err, v) => {
-      if (err) toast.error(workErrorStatus(err) === 409 ? 'The backlog changed while you were dragging. Refreshed.' : workError(err, 'Could not move the issue'));
+      if (err) toast.error(workErrorStatus(err) === 409 ? wt('backlog.changedWhileDrag') : workError(err, wt('board.moveFailed')));
       await qc.invalidateQueries({ queryKey: wk.backlog(pid) });
       qc.invalidateQueries({ queryKey: wk.board(pid) });
       orderRef.current = null;
@@ -429,7 +431,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
       await workApi.createIssue(pid, { typeId, title, sprintId: sprintId ?? undefined });
       refresh();
     } catch (err) {
-      toast.error(workError(err, 'Could not create the issue'));
+      toast.error(workError(err, wt('board.createFailed')));
       throw err;
     }
   };
@@ -494,33 +496,33 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
                   {isCollapsed ? <ChevronRight size={14} /> : <ChevronDown size={14} />}
                   {s.name}
                 </button>
-                {s.state === 'ACTIVE' && <span className="rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 text-[10px] font-semibold uppercase text-[var(--w-accent-text)]">Active</span>}
+                {s.state === 'ACTIVE' && <span className="rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 text-[10px] font-semibold uppercase text-[var(--w-accent-text)]">{wt('board.active')}</span>}
                 {range && <span className="text-[12px] text-[var(--w-text-3)]">{range}</span>}
-                <span className="text-[12px] text-[var(--w-text-3)] tabular">({t.count} {t.count === 1 ? 'issue' : 'issues'})</span>
+                <span className="text-[12px] text-[var(--w-text-3)] tabular">({wt('common.issueCount', { count: t.count })})</span>
                 <span className="ml-auto flex items-center gap-2">
                   <SprintSummary t={t} unit={data.unit} />
                   {s.state === 'PLANNED' && canPlan && (
                     <button
                       type="button"
                       className="w-btn w-btn-ghost w-btn-sm"
-                      title="Propose issues for this sprint from your velocity"
+                      title={wt('backlog.planAiTitle')}
                       onClick={() => setDialog({ kind: 'plan', sprint: s })}
                     >
-                      <Sparkles size={12} /> <span className="max-sm:!hidden">Plan with AI</span>
+                      <Sparkles size={12} /> <span className="max-sm:!hidden">{wt('backlog.planAi')}</span>
                     </button>
                   )}
                   {s.state === 'PLANNED' && (
                     <SprintBtn
                       allowed={canPlan}
-                      disabledReason={active ? `${active.name} is still running — complete it first` : undefined}
+                      disabledReason={active ? wt('backlog.stillRunning', { name: active.name }) : undefined}
                       onClick={() => setDialog({ kind: 'start', sprint: s })}
                     >
-                      <Play size={12} /> Start sprint
+                      <Play size={12} /> {wt('backlog.startSprint')}
                     </SprintBtn>
                   )}
                   {s.state === 'ACTIVE' && (
                     <SprintBtn allowed={canPlan} onClick={() => setDialog({ kind: 'complete', sprint: s })}>
-                      <CheckCircle2 size={12} /> Complete sprint
+                      <CheckCircle2 size={12} /> {wt('board.completeSprint')}
                     </SprintBtn>
                   )}
                   {canPlan && <SprintMenu sprint={s} onEdit={() => setDialog({ kind: 'edit', sprint: s })} onDelete={() => setDialog({ kind: 'delete', sprint: s })} />}
@@ -532,7 +534,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
                   id={s.id}
                   empty={!lists.get(s.id)?.length ? (
                     <div className="flex h-16 items-center justify-center border-b border-dashed border-[var(--w-border)] text-[12px] text-[var(--w-text-3)] last:border-b-0">
-                      {t.count ? 'No issues match the current filter.' : 'Plan this sprint by dragging issues here from the backlog.'}
+                      {t.count ? wt('backlog.noMatch') : wt('backlog.planHint')}
                     </div>
                   ) : null}
                 >
@@ -552,9 +554,9 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
               className="flex items-center gap-1.5 text-[13px] font-semibold"
             >
               {collapsed.has('backlog') ? <ChevronRight size={14} /> : <ChevronDown size={14} />}
-              Backlog
+              {wt('backlog.backlog')}
             </button>
-            <span className="text-[12px] text-[var(--w-text-3)] tabular">({totals.get('backlog')?.count ?? 0} issues)</span>
+            <span className="text-[12px] text-[var(--w-text-3)] tabular">({wt('common.issueCount', { count: totals.get('backlog')?.count ?? 0 })})</span>
             <span className="ml-auto flex items-center gap-2">
               {totals.get('backlog') && <SprintSummary t={totals.get('backlog')!} unit={data.unit} />}
               <SprintBtn
@@ -563,7 +565,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
                   try { await workApi.createSprint(pid); refresh(); qc.invalidateQueries({ queryKey: wk.project(pid) }); } catch (err) { toast.error(workError(err)); }
                 }}
               >
-                <Plus size={12} /> Create sprint
+                <Plus size={12} /> {wt('backlog.createSprint')}
               </SprintBtn>
             </span>
           </div>
@@ -572,7 +574,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
               id="backlog"
               empty={!lists.get('backlog')?.length ? (
                 <div className="flex h-16 items-center justify-center border-b border-dashed border-[var(--w-border)] text-[12px] text-[var(--w-text-3)] last:border-b-0">
-                  {totals.get('backlog')?.count ? 'No issues match the current filter.' : 'Your backlog is empty.'}
+                  {totals.get('backlog')?.count ? wt('backlog.noMatch') : wt('backlog.empty')}
                 </div>
               ) : null}
             >
@@ -602,7 +604,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
           epics={data.epics.filter((e) => !e.done)}
           busy={bulk.isPending}
           onPatch={(patch, label) => bulk.mutate({ patch, label })}
-          onStatus={(name) => bulk.mutate({ status: name, label: `moved to ${name}` })}
+          onStatus={(name) => bulk.mutate({ status: name, label: wt('board.movedTo', { name: statusName(name) }) })}
           onClear={() => setSelected(new Set())}
           onDelete={() => setBulkDelete(true)}
         />
@@ -611,10 +613,10 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
       <ConfirmDialog
         open={bulkDelete}
         onClose={() => setBulkDelete(false)}
-        onConfirm={() => { setBulkDelete(false); bulk.mutate({ patch: { delete: true }, label: 'deleted' }); }}
-        title={`Delete ${selected.size} ${selected.size === 1 ? 'issue' : 'issues'}`}
-        body="The selected issues and their sub-tasks will be deleted."
-        confirmLabel="Delete"
+        onConfirm={() => { setBulkDelete(false); bulk.mutate({ patch: { delete: true }, label: wt('backlog.deletedLabel') }); }}
+        title={wt('backlog.deleteN', { count: selected.size })}
+        body={wt('backlog.deleteBody')}
+        confirmLabel={wt('common.delete')}
       />
 
       {dialog?.kind === 'start' && (
@@ -641,9 +643,9 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
           open
           onClose={() => setDialog(null)}
           onConfirm={() => deleteSprint.mutate(dialog.sprint)}
-          title={`Delete ${dialog.sprint.name}`}
-          body="The sprint is removed and its issues go back to the backlog."
-          confirmLabel="Delete sprint"
+          title={wt('backlog.deleteSprintName', { name: dialog.sprint.name })}
+          body={wt('backlog.deleteSprintBody')}
+          confirmLabel={wt('backlog.deleteSprint')}
           pending={deleteSprint.isPending}
         />
       )}
@@ -656,12 +658,12 @@ function SprintMenu({ sprint, onEdit, onDelete }: { sprint: SprintFull; onEdit: 
   const ref = useRef<HTMLButtonElement>(null);
   return (
     <>
-      <button ref={ref} type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Sprint actions" onClick={t.toggle}><MoreHorizontal size={14} /></button>
+      <button ref={ref} type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('backlog.sprintActions')} onClick={t.toggle}><MoreHorizontal size={14} /></button>
       <Popover open={t.on} onClose={t.close} anchorRef={ref} width={180} align="end">
         <div className="p-1">
-          <button type="button" onClick={() => { t.close(); onEdit(); }} className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left hover:bg-[var(--w-hover)]"><Pencil size={13} /> Edit sprint</button>
+          <button type="button" onClick={() => { t.close(); onEdit(); }} className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left hover:bg-[var(--w-hover)]"><Pencil size={13} /> {wt('backlog.editSprint')}</button>
           {sprint.state === 'PLANNED' && (
-            <button type="button" onClick={() => { t.close(); onDelete(); }} className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[var(--w-red)] hover:bg-[var(--w-hover)]"><Trash2 size={13} /> Delete sprint</button>
+            <button type="button" onClick={() => { t.close(); onDelete(); }} className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[var(--w-red)] hover:bg-[var(--w-hover)]"><Trash2 size={13} /> {wt('backlog.deleteSprint')}</button>
           )}
         </div>
       </Popover>

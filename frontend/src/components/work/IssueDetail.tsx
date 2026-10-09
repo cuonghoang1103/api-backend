@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
+import { ShareToChannelButton } from './chat/ShareToChannel';
 import {
   issueMovedTo, workApi, workError, workErrorStatus, type IssueDetail as TIssueDetail, type IssuePatch, type LinkType,
   type ProjectConfig, type TiptapDoc, type IssueAttachment,
@@ -615,6 +616,8 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             <span className={cn('tabular', issue.isWatching && 'text-[var(--w-accent-text)]')}>{issue.watcherCount}</span>
           </button>
           <button type="button" title="Copy link" onClick={() => { void navigator.clipboard.writeText(url); toast.success('Link copied'); }} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Copy size={13} /></button>
+          {/* CTW K-3: chia sẻ thẻ vào kênh chat (thẻ xem trước theo quyền người xem). Khách không có kênh nội bộ. */}
+          {config.role !== 'CLIENT' && <ShareToChannelButton pid={config.id} path={`/work/${config.workspace.slug}/${config.key}/issue/${issue.number}`} label={`${lk.issueKey(issue.number)}: ${issue.title}`} wsSlug={config.workspace.slug} projectKey={config.key} compact className="w-btn-ghost" />}
           {variant === 'drawer' && (
             <Link href={`${base}/issue/${num}`} title="Open full page" className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><ExternalLink size={13} /></Link>
           )}

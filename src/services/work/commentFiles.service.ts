@@ -79,6 +79,38 @@ function assertStorage() {
   }
 }
 
+// ─── Dùng chung với kênh chat dự án (K-3, chatFiles.service.ts) ─────
+
+/** Kho R2 (hoặc kho giả của test) — chat dùng CHUNG để test chỉ thay một chỗ. */
+export const commentStore = (): CommentStore => store;
+/** Ném WORK_NO_STORAGE khi máy chủ không có R2 (bỏ qua khi test đã thay kho). */
+export const assertCommentStorage = (): void => assertStorage();
+/** Có STT không (khoá Groq hoặc STT giả của test). */
+export const sttReady = (): boolean => sttConfigured();
+/** Gọi STT (Groq thật hoặc STT giả của test) — Whisper tự dò ngôn ngữ. */
+export async function runStt(audio: Buffer, fileName: string, mime: string) {
+  const stt: SttFn = sttOverride ?? (async (buf, name, m) => {
+    const { transcribeWithGroq } = await import('../interview/voice/stt.js');
+    return transcribeWithGroq(buf, name, m, { language: '', detail: true });
+  });
+  return stt(audio, fileName, mime);
+}
+/** Theo dõi một việc nền (phiên âm) để test chờ được bằng `_awaitTranscriptionsForTests`. */
+export function trackBackground(p: Promise<unknown>): void {
+  pending.add(p);
+  void p.finally(() => pending.delete(p));
+}
+/** Lượt phiên âm đã dùng HÔM NAY của dự án — CỘNG voice note bình luận (K-1) và voice note chat (K-3): một trần chung. */
+export async function sttUsedToday(projectId: number): Promise<number> {
+  const since = vnDayStart();
+  const [a, b] = await Promise.all([
+    prisma.workVoiceNote.count({ where: { transcriptStatus: { in: ['DONE', 'NO_SPEECH', 'FAILED'] }, transcribedAt: { gte: since }, attachment: { issue: { projectId } } } }),
+    prisma.workChannelFile.count({ where: { transcriptStatus: { in: ['DONE', 'NO_SPEECH', 'FAILED'] }, transcribedAt: { gte: since }, channel: { projectId } } }),
+  ]);
+  return a + b;
+}
+export const sttDailyLimit = (): number => dailyLimit();
+
 // ─── Đọc ─────────────────────────────────────────────────────────
 
 export const COMMENT_FILE_SELECT = {
@@ -247,9 +279,8 @@ export async function transcribeVoiceNote(attachmentId: number): Promise<Transcr
       status = 'NO_KEY';
       await setStatus(attachmentId, status);
     } else {
-      const used = await prisma.workVoiceNote.count({
-        where: { transcriptStatus: { in: ['DONE', 'NO_SPEECH', 'FAILED'] }, transcribedAt: { gte: vnDayStart() }, attachment: { issue: { projectId: a.issue.projectId } } },
-      });
+      // K-3: trần chung với voice note của kênh chat (một hạn mức Groq cho cả dự án).
+      const used = await sttUsedToday(a.issue.projectId);
       if (used >= dailyLimit()) {
         status = 'LIMIT';
         await setStatus(attachmentId, status);

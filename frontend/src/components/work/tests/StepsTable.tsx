@@ -11,6 +11,7 @@ import { ArrowDown, ArrowUp, Copy, GripVertical, MoreHorizontal, Plus, Trash2 } 
 import { cn } from '@/lib/utils';
 import type { TestStep } from '@/lib/work-api';
 import { Popover } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 export interface DraftStep { key: string; action: string; data: string; expected: string }
 
@@ -30,9 +31,9 @@ export function stepsForSave(steps: DraftStep[]): TestStep[] {
 /** Lỗi phía client trùng luật backend, để báo trước khi gửi. */
 export function stepsProblem(steps: DraftStep[]): string | null {
   const real = stepsForSave(steps);
-  if (real.length > 100) return 'A test can have at most 100 steps.';
+  if (real.length > 100) return wt('tests.max100');
   const i = real.findIndex((s) => !s.action);
-  if (i >= 0) return `Step ${i + 1} needs an action.`;
+  if (i >= 0) return wt('tests.stepNeedsAction', { n: i + 1 });
   return null;
 }
 
@@ -81,16 +82,16 @@ function RowMenu({ index, count, onInsert, onDuplicate, onDelete, onMove }: {
   const run = (fn: () => void) => () => { fn(); setOpen(false); };
   return (
     <>
-      <button ref={ref} type="button" tabIndex={-1} onClick={() => setOpen((v) => !v)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`Step ${index + 1} actions`}>
+      <button ref={ref} type="button" tabIndex={-1} onClick={() => setOpen((v) => !v)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('tests.stepActions', { n: index + 1 })}>
         <MoreHorizontal size={14} />
       </button>
       <Popover open={open} onClose={() => setOpen(false)} anchorRef={ref} width={190} align="end" className="p-1">
-        <button type="button" className={item} onClick={run(onInsert)}><Plus size={13} /> Insert step below</button>
-        <button type="button" className={item} onClick={run(onDuplicate)}><Copy size={13} /> Duplicate</button>
-        <button type="button" className={item} disabled={index === 0} onClick={run(() => onMove(-1))}><ArrowUp size={13} /> Move up</button>
-        <button type="button" className={item} disabled={index === count - 1} onClick={run(() => onMove(1))}><ArrowDown size={13} /> Move down</button>
+        <button type="button" className={item} onClick={run(onInsert)}><Plus size={13} /> {wt('tests.insertBelow')}</button>
+        <button type="button" className={item} onClick={run(onDuplicate)}><Copy size={13} /> {wt('tests.duplicate')}</button>
+        <button type="button" className={item} disabled={index === 0} onClick={run(() => onMove(-1))}><ArrowUp size={13} /> {wt('tests.moveUp')}</button>
+        <button type="button" className={item} disabled={index === count - 1} onClick={run(() => onMove(1))}><ArrowDown size={13} /> {wt('tests.moveDown')}</button>
         <div className="my-1 border-t border-[var(--w-border)]" />
-        <button type="button" className={cn(item, 'text-[var(--w-red)]')} onClick={run(onDelete)}><Trash2 size={13} /> Delete step</button>
+        <button type="button" className={cn(item, 'text-[var(--w-red)]')} onClick={run(onDelete)}><Trash2 size={13} /> {wt('tests.deleteStep')}</button>
       </Popover>
     </>
   );
@@ -147,9 +148,9 @@ export default function StepsTable({ steps, onChange, readOnly, showErrors }: {
       <div ref={tableRef} className="min-w-[600px]">
         <div className={cn(cols, 'border-b border-[var(--w-border)] bg-[var(--w-sunken)] text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]')}>
           <div className="px-2 py-2 text-center">#</div>
-          <div className="px-2 py-2">Action</div>
-          <div className="px-2 py-2">Test data</div>
-          <div className="px-2 py-2">Expected result</div>
+          <div className="px-2 py-2">{wt('tests.action')}</div>
+          <div className="px-2 py-2">{wt('tests.testData')}</div>
+          <div className="px-2 py-2">{wt('tests.expected')}</div>
           <div />
         </div>
         {steps.map((s, i) => {
@@ -171,7 +172,7 @@ export default function StepsTable({ steps, onChange, readOnly, showErrors }: {
                     draggable
                     onDragStart={(e) => { setDragFrom(i); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(i)); }}
                     onDragEnd={() => { setDragFrom(null); setDragOver(null); }}
-                    title="Drag to reorder"
+                    title={wt('tests.dragReorder')}
                     className="hidden cursor-grab text-[var(--w-text-3)] md:inline-flex md:opacity-0 md:group-hover:opacity-100"
                   >
                     <GripVertical size={12} />
@@ -179,9 +180,9 @@ export default function StepsTable({ steps, onChange, readOnly, showErrors }: {
                 )}
                 <span>{i + 1}</span>
               </div>
-              <div className="p-1"><AutoTextarea cellId={`${s.key}:action`} value={s.action} onChange={(v) => update(i, { action: v })} placeholder="Describe the action" readOnly={readOnly} onKeyDown={keyHandler(i)} invalid={showErrors && hasContent && !s.action.trim()} /></div>
-              <div className="p-1"><AutoTextarea cellId={`${s.key}:data`} value={s.data} onChange={(v) => update(i, { data: v })} placeholder="Input values" readOnly={readOnly} onKeyDown={keyHandler(i)} /></div>
-              <div className="p-1"><AutoTextarea cellId={`${s.key}:expected`} value={s.expected} onChange={(v) => update(i, { expected: v })} placeholder="What should happen" readOnly={readOnly} onKeyDown={keyHandler(i)} /></div>
+              <div className="p-1"><AutoTextarea cellId={`${s.key}:action`} value={s.action} onChange={(v) => update(i, { action: v })} placeholder={wt('tests.actionPh')} readOnly={readOnly} onKeyDown={keyHandler(i)} invalid={showErrors && hasContent && !s.action.trim()} /></div>
+              <div className="p-1"><AutoTextarea cellId={`${s.key}:data`} value={s.data} onChange={(v) => update(i, { data: v })} placeholder={wt('tests.dataPh')} readOnly={readOnly} onKeyDown={keyHandler(i)} /></div>
+              <div className="p-1"><AutoTextarea cellId={`${s.key}:expected`} value={s.expected} onChange={(v) => update(i, { expected: v })} placeholder={wt('tests.expectedPh')} readOnly={readOnly} onKeyDown={keyHandler(i)} /></div>
               <div className="flex justify-center py-1">
                 {!readOnly && (
                   <RowMenu
@@ -199,19 +200,19 @@ export default function StepsTable({ steps, onChange, readOnly, showErrors }: {
         })}
         {!steps.length && (
           <div className="px-4 py-6 text-center text-[13px] text-[var(--w-text-3)]">
-            {readOnly ? 'This test has no steps.' : 'No steps yet. Add the first step below.'}
+            {readOnly ? wt('tests.noStepsRO') : wt('tests.noSteps')}
           </div>
         )}
       </div>
       {!readOnly && (
         <div className="flex items-center gap-3 border-t border-[var(--w-border)] px-2 py-1.5">
           <button type="button" className="w-btn w-btn-ghost w-btn-sm" disabled={steps.length >= 100} onClick={() => insertAt(steps.length)}>
-            <Plus size={13} /> Add step
+            <Plus size={13} /> {wt('tests.addStep')}
           </button>
           <span className="hidden text-[11px] text-[var(--w-text-3)] sm:inline">
-            <span className="w-kbd">Tab</span> next cell · <span className="w-kbd">⌘</span>+<span className="w-kbd">Enter</span> new step below
+            <span className="w-kbd">Tab</span> {wt('tests.nextCell')} · <span className="w-kbd">⌘</span>+<span className="w-kbd">Enter</span> {wt('tests.newStepBelow')}
           </span>
-          {steps.length >= 100 && <span className="text-[11px] text-[var(--w-orange)]">Maximum of 100 steps reached</span>}
+          {steps.length >= 100 && <span className="text-[11px] text-[var(--w-orange)]">{wt('tests.maxReached')}</span>}
         </div>
       )}
     </div>

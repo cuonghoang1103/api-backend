@@ -75,7 +75,9 @@ import fptReportRoutes from './work.fptReports.routes.js';
 import ctw3cRoutes from './work.ctw3c.routes.js';
 import ctw5bRoutes from './work.ctw5b.routes.js'; // CTW đợt 5b K-1: tệp/voice note trong bình luận
 import ctw4Routes from './work.ctw4.routes.js';
+import ctwk3Routes from './work.ctwk3.routes.js'; // CTW K-3: kênh chat dự án
 import uxdRoutes, { uxdPublicRoutes } from './work.uxd.routes.js'; // UX-D: ảnh xem trước link + ảnh bìa dự án
+import contribRoutes from './work.contrib.routes.js'; // CTW Đóng góp: chỉ số thành viên + đánh giá chéo
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
@@ -2002,5 +2004,9 @@ router.use(ctw5bRoutes);
 // CTW đợt 4: SRS có cấu trúc, RTM, defect log, Q&A, Report 7, activity worklog (work.ctw4.routes.ts).
 router.use(ctw4Routes);
 router.use(uxdRoutes); // UX-D: ảnh bìa dự án (chỉ ADMIN dự án)
+// CTW Đóng góp (A26/A27): đóng góp & hiệu suất thành viên, đánh giá chéo, xuất xlsx/PDF (work.contrib.routes.ts).
+router.use(contribRoutes);
+// CTW K-3: kênh chat dự án (work.ctwk3.routes.ts — quyền trong chat.service.ts).
+router.use(ctwk3Routes);
 
 export default router;

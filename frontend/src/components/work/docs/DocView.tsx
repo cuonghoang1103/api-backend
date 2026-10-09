@@ -24,6 +24,7 @@ import {
   AlertTriangle, BadgeCheck, Check, ChevronRight, CloudOff, Download, FileText, History, Link2, Loader2, MoreHorizontal, Plus, RefreshCw, Save, Sparkles, Trash2, X, Share2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ShareToChannelButton } from '../chat/ShareToChannel';
 import {
   userName, workApi, workDocsApi, workDocsKeys, workError, workStudioApi, workStudioKeys,
   type PageComment, type PageStatus, type PageVisibility, type ProjectConfig, type TiptapDoc, type WorkPageDetail,
@@ -431,6 +432,8 @@ export default function DocView({ config, num, details, focus = false }: { confi
                 <Gauge size={13} /> <span className="max-sm:hidden">Check spec quality</span>
               </button>
             )}
+            {/* CTW K-3: chia sẻ trang vào kênh chat (khách chỉ thấy thẻ xem trước nếu trang đã chia sẻ cho họ). */}
+            {config.role !== 'CLIENT' && <ShareToChannelButton pid={config.id} path={`/work/${config.workspace.slug}/${config.key}/docs/${page.number}`} label={page.title || 'Untitled page'} wsSlug={config.workspace.slug} projectKey={config.key} className="w-btn-ghost" />}
             <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => { void flush(); setHistory(true); }} data-testid="docs-history">
               <History size={13} /> <span className="max-sm:hidden">History</span> <span className="tabular text-[var(--w-text-3)]">v{page.currentVersion}</span>
             </button>

@@ -2823,6 +2823,8 @@ export interface ServerPreferences {
     combo: string | null;
     chosenAt: string | null;
   };
+  /** CT Work: ngôn ngữ giao diện riêng của /work (null = chưa chọn, theo site). Máy chủ cũ không trả ⇒ tuỳ chọn. */
+  work?: { locale: 'vi' | 'en' | null };
   updatedAt: string | null;
 }
 
@@ -2839,6 +2841,7 @@ export type ServerPreferencesPatch = {
   };
   ui?: Partial<ServerPreferences['ui']>;
   academy?: Partial<ServerPreferences['academy']>;
+  work?: { locale: 'vi' | 'en' | null };
 };
 
 export const preferencesApi = {

@@ -18,6 +18,7 @@ import { Dialog, EmptyState, Field, relativeTime, Spinner } from '../ui';
 import { Select } from '../settings/shared';
 import TestPicker from './TestPicker';
 import { CycleStateBadge, CYCLE_STATE_META, StatusBar } from './runStatus';
+import { wt, wfmt } from '@/components/work/i18n';
 
 export default function CyclesTab({ config, pid }: { config: ProjectConfig; pid: number }) {
   // Realtime do trang /tests gọi (gọi thêm ở đây thì rời tab sẽ `work:leave` mất phòng của trang).
@@ -38,7 +39,7 @@ export default function CyclesTab({ config, pid }: { config: ProjectConfig; pid:
     const tests = (search?.get('tests') ?? '').split(',').map(Number).filter((n) => Number.isInteger(n) && n > 0);
     const planId = Number(search?.get('plan')) || null;
     if (canEdit) setDialog({ tests: [...new Set(tests)], planId });
-    else toast.error('You do not have permission to create test cycles');
+    else toast.error(wt('tests.noCyclePerm'));
     const p = new URLSearchParams(search?.toString());
     ['new', 'tests', 'plan'].forEach((k) => p.delete(k));
     const s = p.toString();
@@ -60,7 +61,7 @@ export default function CyclesTab({ config, pid }: { config: ProjectConfig; pid:
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-[var(--w-border)] px-4 py-2">
         <div className="relative">
           <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search cycles" className="w-input !h-[28px] w-[180px] pl-7 text-[12px]" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={wt('tests.searchCycles')} className="w-input !h-[28px] w-[180px] pl-7 text-[12px]" />
         </div>
         <div className="flex flex-wrap items-center gap-1">
           {(['ALL', 'PLANNED', 'IN_PROGRESS', 'DONE'] as const).map((s) => (
@@ -70,14 +71,14 @@ export default function CyclesTab({ config, pid }: { config: ProjectConfig; pid:
               onClick={() => setState(s)}
               className={cn('h-[26px] rounded-full border px-2.5 text-[12px]', state === s ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border-strong)] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}
             >
-              {s === 'ALL' ? 'All' : CYCLE_STATE_META[s].label}
+              {s === 'ALL' ? wt('common.all') : CYCLE_STATE_META[s].label}
               <span className="ml-1 tabular text-[var(--w-text-3)]">{s === 'ALL' ? cycles.data?.length ?? 0 : countBy(s)}</span>
             </button>
           ))}
         </div>
         {canEdit && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm ml-auto" onClick={() => setDialog({ tests: [], planId: null })}>
-            <Plus size={14} /> New cycle
+            <Plus size={14} /> {wt('tests.newCycle')}
           </button>
         )}
       </div>
@@ -86,19 +87,19 @@ export default function CyclesTab({ config, pid }: { config: ProjectConfig; pid:
         {cycles.isLoading ? (
           <div className="flex h-full items-center justify-center py-16"><Spinner size={20} /></div>
         ) : cycles.error ? (
-          <EmptyState title="Could not load test cycles" body={workError(cycles.error)} action={<button type="button" className="w-btn" onClick={() => cycles.refetch()}>Try again</button>} />
+          <EmptyState title={wt('tests.cyclesLoadFailed')} body={workError(cycles.error)} action={<button type="button" className="w-btn" onClick={() => cycles.refetch()}>{wt('common.tryAgain')}</button>} />
         ) : !cycles.data?.length ? (
           <EmptyState
-            title="No test cycles yet"
-            body="A test cycle is one round of execution — for example “Sprint 3 regression on Staging”. Add tests from a plan or pick them individually, then record Pass / Fail for each step."
-            action={canEdit ? <button type="button" className="w-btn w-btn-primary" onClick={() => setDialog({ tests: [], planId: null })}><Plus size={14} /> New cycle</button> : undefined}
+            title={wt('tests.noCycles')}
+            body={wt('tests.noCyclesBody')}
+            action={canEdit ? <button type="button" className="w-btn w-btn-primary" onClick={() => setDialog({ tests: [], planId: null })}><Plus size={14} /> {wt('tests.newCycle')}</button> : undefined}
           />
         ) : !list.length ? (
-          <EmptyState title="No matching cycles" body="Try a different search or state filter." />
+          <EmptyState title={wt('tests.noMatchCycles')} body={wt('tests.noMatchCyclesBody')} />
         ) : (
           <div className="min-w-[760px]">
             <div className="sticky top-0 z-[1] grid grid-cols-[minmax(220px,2fr)_minmax(140px,1fr)_110px_minmax(200px,1.4fr)_90px] gap-3 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-4 py-2 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
-              <span>Cycle</span><span>Environment · Build</span><span>State</span><span>Progress</span><span className="text-right">Pass rate</span>
+              <span>{wt('tests.cycle')}</span><span>{wt('tests.envBuild')}</span><span>{wt('tests.state')}</span><span>{wt('common.progress')}</span><span className="text-right">{wt('tests.passRate')}</span>
             </div>
             {list.map((c) => (
               <Link
@@ -109,20 +110,20 @@ export default function CyclesTab({ config, pid }: { config: ProjectConfig; pid:
                 <div className="min-w-0">
                   <div className="truncate text-[13px] font-medium">{c.name}</div>
                   <div className="truncate text-[12px] text-[var(--w-text-3)]">
-                    {c.plan ? `Plan: ${c.plan.name}` : 'No plan'} · created {relativeTime(c.createdAt)}
+                    {c.plan ? wt('tests.planName', { name: c.plan.name }) : wt('tests.noPlan')} · {wt('tests.createdAgo', { when: relativeTime(c.createdAt) })}
                   </div>
                 </div>
                 <div className="min-w-0 text-[12px] text-[var(--w-text-2)]">
-                  <div className="truncate">{c.environment || <span className="text-[var(--w-text-3)]">No environment</span>}</div>
-                  {c.build && <div className="truncate text-[var(--w-text-3)]">Build {c.build}</div>}
+                  <div className="truncate">{c.environment || <span className="text-[var(--w-text-3)]">{wt('tests.noEnv')}</span>}</div>
+                  {c.build && <div className="truncate text-[var(--w-text-3)]">{wt('tests.buildN', { b: c.build })}</div>}
                 </div>
                 <div><CycleStateBadge state={c.state} /></div>
                 <div className="min-w-0">
                   <StatusBar counts={c.counts} total={c.total} />
                   <div className="mt-1 text-[12px] tabular text-[var(--w-text-3)]">
-                    {c.executed} of {c.total} executed
-                    {c.counts.FAIL > 0 && <span className="text-[var(--w-red)]"> · {c.counts.FAIL} failed</span>}
-                    {c.counts.BLOCKED > 0 && <span className="text-[var(--w-orange)]"> · {c.counts.BLOCKED} blocked</span>}
+                    {wt('tests.executedOf', { done: c.executed, total: c.total })}
+                    {c.counts.FAIL > 0 && <span className="text-[var(--w-red)]"> · {wt('tests.nFailed', { n: c.counts.FAIL })}</span>}
+                    {c.counts.BLOCKED > 0 && <span className="text-[var(--w-orange)]"> · {wt('tests.nBlocked', { n: c.counts.BLOCKED })}</span>}
                   </div>
                 </div>
                 <div className="text-right text-[13px] font-semibold tabular">
@@ -166,7 +167,7 @@ function NewCycleDialog({ config, pid, initialTests, initialPlanId, onClose, onC
 
   // Tên gợi ý khi mở từ một plan.
   useEffect(() => {
-    if (plan && !name) setName(`${plan.name} — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`);
+    if (plan && !name) setName(`${plan.name} — ${new Date().toLocaleDateString(wfmt.intl(), { month: 'short', day: 'numeric' })}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plan?.id]);
 
@@ -175,7 +176,7 @@ function NewCycleDialog({ config, pid, initialTests, initialPlanId, onClose, onC
   const total = fromPlan.length + extra.length;
 
   const submit = async () => {
-    if (!name.trim()) { toast.error('Give the cycle a name'); return; }
+    if (!name.trim()) { toast.error(wt('tests.cycleNameReq')); return; }
     setBusy(true);
     try {
       const res = await workApi.createTestCycle(pid, {
@@ -183,10 +184,10 @@ function NewCycleDialog({ config, pid, initialTests, initialPlanId, onClose, onC
         planId, numbers: extra,
       });
       qc.invalidateQueries({ queryKey: wk.tests(pid) });
-      toast.success(`Cycle “${name.trim()}” created with ${total} test${total === 1 ? '' : 's'}`);
+      toast.success(wt('tests.cycleCreated', { name: name.trim(), count: total }));
       onCreated(res.id);
     } catch (err) {
-      toast.error(workError(err, 'Could not create the cycle'));
+      toast.error(workError(err, wt('tests.cycleCreateFailed')));
       setBusy(false);
     }
   };
@@ -195,37 +196,37 @@ function NewCycleDialog({ config, pid, initialTests, initialPlanId, onClose, onC
     <Dialog
       open
       onClose={onClose}
-      title="New test cycle"
+      title={wt('tests.newTestCycle')}
       width={560}
       footer={
         <>
-          <span className="mr-auto self-center text-[12px] text-[var(--w-text-3)]">{total} test{total === 1 ? '' : 's'} will be added</span>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <span className="mr-auto self-center text-[12px] text-[var(--w-text-3)]">{wt('tests.willAdd', { count: total })}</span>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="button" className="w-btn w-btn-primary" disabled={busy || !name.trim()} onClick={submit}>
-            {busy && <Spinner size={12} />} Create cycle
+            {busy && <Spinner size={12} />} {wt('tests.createCycleBtn')}
           </button>
         </>
       }
     >
       <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
-        <Field label="Name">
-          <input autoFocus value={name} onChange={(e) => setName(e.target.value)} maxLength={120} placeholder="e.g. Sprint 3 regression" className="w-input" />
+        <Field label={wt('common.name')}>
+          <input autoFocus value={name} onChange={(e) => setName(e.target.value)} maxLength={120} placeholder={wt('tests.cycleNamePh')} className="w-input" />
         </Field>
         <div className="grid gap-x-3 sm:grid-cols-2">
-          <Field label="Environment">
-            <input value={environment} onChange={(e) => setEnvironment(e.target.value)} placeholder="e.g. Staging · Chrome 128" className="w-input" />
+          <Field label={wt('tests.environment')}>
+            <input value={environment} onChange={(e) => setEnvironment(e.target.value)} placeholder={wt('tests.envPh')} className="w-input" />
           </Field>
-          <Field label="Build / version">
-            <input value={build} onChange={(e) => setBuild(e.target.value)} placeholder="e.g. 1.4.0-rc2" className="w-input" />
+          <Field label={wt('tests.buildVersion')}>
+            <input value={build} onChange={(e) => setBuild(e.target.value)} placeholder={wt('tests.buildPh')} className="w-input" />
           </Field>
         </div>
-        <Field label="Test plan" hint={plan ? `All ${fromPlan.length} test${fromPlan.length === 1 ? '' : 's'} in this plan will be added.` : 'Optional. Adds every test in the plan.'}>
+        <Field label="Test plan" hint={plan ? wt('tests.allInPlan', { count: fromPlan.length }) : wt('tests.planOptional')}>
           <Select value={planId ?? ''} onChange={(e) => setPlanId(Number(e.target.value) || null)} disabled={plans.isLoading}>
-            <option value="">{plans.isLoading ? 'Loading plans…' : 'No plan'}</option>
+            <option value="">{plans.isLoading ? wt('tests.loadingPlans') : wt('tests.noPlan')}</option>
             {activePlans.map((p) => <option key={p.id} value={p.id}>{p.name} ({p.testNumbers.length})</option>)}
           </Select>
         </Field>
-        <Field label={plan ? 'Additional tests' : 'Tests'} hint={plan && tests.length !== extra.length ? 'Tests already in the plan are counted once.' : undefined}>
+        <Field label={plan ? wt('tests.additional') : wt('tests.testsLbl')} hint={plan && tests.length !== extra.length ? wt('tests.countedOnce') : undefined}>
           <TestPicker pid={pid} projectKey={config.key} value={tests} onChange={setTests} />
         </Field>
         <button type="submit" hidden />

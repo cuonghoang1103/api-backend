@@ -16,6 +16,7 @@ import { wk } from '../hooks';
 import { Dialog, PRIORITIES, Spinner } from '../ui';
 import { parseTestsCsv, templateCsv } from './csv';
 import { isTestsDisabledError } from './testing-ui';
+import { wt } from '@/components/work/i18n';
 
 type Result = { created: number[]; failed: Array<{ row: number; title: string; error: string }> };
 
@@ -40,10 +41,10 @@ export default function ImportTestsDialog({ open, onClose, config, pid, onOpenTe
 
   const readFile = (f: File | undefined) => {
     if (!f) return;
-    if (f.size > 5 * 1024 * 1024) { toast.error('The file is larger than 5 MB.'); return; }
+    if (f.size > 5 * 1024 * 1024) { toast.error(wt('tests.over5mb')); return; }
     const r = new FileReader();
     r.onload = () => { setText(String(r.result ?? '')); setFileName(f.name); };
-    r.onerror = () => toast.error('Could not read the file.');
+    r.onerror = () => toast.error(wt('tests.readFailed'));
     r.readAsText(f);
   };
 
@@ -68,9 +69,9 @@ export default function ImportTestsDialog({ open, onClose, config, pid, onOpenTe
       setStage('done');
       qc.invalidateQueries({ queryKey: wk.tests(pid) });
       qc.invalidateQueries({ queryKey: wk.issues(pid) });
-      if (res.created.length) toast.success(`Imported ${res.created.length} test${res.created.length === 1 ? '' : 's'}`);
+      if (res.created.length) toast.success(wt('tests.imported', { count: res.created.length }));
     } catch (e) {
-      toast.error(isTestsDisabledError(e) ? 'Test management is not enabled for this project.' : workError(e, 'Import failed'));
+      toast.error(isTestsDisabledError(e) ? wt('tests.notEnabled') : workError(e, wt('tests.importFailed')));
     } finally {
       setPending(false);
     }
@@ -81,32 +82,32 @@ export default function ImportTestsDialog({ open, onClose, config, pid, onOpenTe
 
   const footer = stage === 'source' ? (
     <>
-      <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
-      <button type="button" className="w-btn w-btn-primary" disabled={!text.trim()} onClick={() => setStage('preview')}>Preview</button>
+      <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
+      <button type="button" className="w-btn w-btn-primary" disabled={!text.trim()} onClick={() => setStage('preview')}>{wt('common.preview')}</button>
     </>
   ) : stage === 'preview' ? (
     <>
-      <button type="button" className="w-btn" onClick={() => setStage('source')} disabled={pending}>Back</button>
+      <button type="button" className="w-btn" onClick={() => setStage('source')} disabled={pending}>{wt('common.back')}</button>
       <button type="button" className="w-btn w-btn-primary" disabled={pending || blocking || !parsed?.tests.length} onClick={runImport}>
         {pending && <Spinner size={12} />} Import {parsed?.tests.length ?? 0} test{parsed?.tests.length === 1 ? '' : 's'}
       </button>
     </>
   ) : (
-    <button type="button" className="w-btn w-btn-primary" onClick={onClose}>Done</button>
+    <button type="button" className="w-btn w-btn-primary" onClick={onClose}>{wt('common.done')}</button>
   );
 
   return (
-    <Dialog open={open} onClose={() => !pending && onClose()} title="Import tests from CSV" width={820} footer={footer}>
+    <Dialog open={open} onClose={() => !pending && onClose()} title={wt('tests.importTitle')} width={820} footer={footer}>
       {stage === 'source' && (
         <div className="space-y-4">
           <div className="flex flex-wrap items-start justify-between gap-3 text-[13px] leading-relaxed text-[var(--w-text-2)]">
             <p className="min-w-0 flex-1 basis-[320px]">
-              One row per step. Start a new test by filling <b>Title</b>; leave Title empty to add more steps to the test above.
-              Columns: <code className="text-[12px]">Title</code>, <code className="text-[12px]">Preconditions</code>, <code className="text-[12px]">Step</code>,{' '}
+              {wt('tests.importHelp')}{' '}
+              {wt('tests.columns')} <code className="text-[12px]">Title</code>, <code className="text-[12px]">Preconditions</code>, <code className="text-[12px]">Step</code>,{' '}
               <code className="text-[12px]">Test data</code>, <code className="text-[12px]">Expected result</code>, <code className="text-[12px]">Requirement</code>,{' '}
-              <code className="text-[12px]">Priority</code> (Highest–Lowest or 1–5).
+              <code className="text-[12px]">Priority</code> {wt('tests.prioRange')}
             </p>
-            <button type="button" className="w-btn w-btn-sm" onClick={downloadTemplate}><Download size={13} /> Download template</button>
+            <button type="button" className="w-btn w-btn-sm" onClick={downloadTemplate}><Download size={13} /> {wt('tests.downloadTemplate')}</button>
           </div>
 
           <div
@@ -120,9 +121,9 @@ export default function ImportTestsDialog({ open, onClose, config, pid, onOpenTe
           >
             <FileUp size={18} className="text-[var(--w-text-3)]" />
             <div>
-              {fileName ? <span className="font-medium">{fileName}</span> : 'Drop a .csv file here, or'}{' '}
+              {fileName ? <span className="font-medium">{fileName}</span> : wt('tests.dropCsv')}{' '}
               <button type="button" className="font-medium text-[var(--w-accent-text)] underline-offset-2 hover:underline" onClick={() => fileRef.current?.click()}>
-                {fileName ? 'choose another file' : 'browse'}
+                {fileName ? wt('tests.chooseAnother') : wt('tests.browse')}
               </button>
             </div>
             <input
@@ -135,7 +136,7 @@ export default function ImportTestsDialog({ open, onClose, config, pid, onOpenTe
           </div>
 
           <div>
-            <label className="w-label">Or paste CSV</label>
+            <label className="w-label">{wt('tests.orPaste')}</label>
             <textarea
               className="w-input min-h-[140px] font-mono text-[12px]"
               value={text}
@@ -150,9 +151,9 @@ export default function ImportTestsDialog({ open, onClose, config, pid, onOpenTe
       {stage === 'preview' && parsed && (
         <div className="space-y-3">
           <div className="flex flex-wrap gap-x-5 gap-y-1 text-[13px]">
-            <span><b className="tabular">{parsed.tests.length}</b> <span className="text-[var(--w-text-2)]">tests found</span></span>
-            <span><b className="tabular">{totalSteps}</b> <span className="text-[var(--w-text-2)]">steps</span></span>
-            <span><b className="tabular">{parsed.warnings.length + parsed.tests.reduce((n, t) => n + t.warnings.length, 0)}</b> <span className="text-[var(--w-text-2)]">warnings</span></span>
+            <span><b className="tabular">{parsed.tests.length}</b> <span className="text-[var(--w-text-2)]">{wt('tests.testsFound')}</span></span>
+            <span><b className="tabular">{totalSteps}</b> <span className="text-[var(--w-text-2)]">{wt('tests.stepsLower')}</span></span>
+            <span><b className="tabular">{parsed.warnings.length + parsed.tests.reduce((n, t) => n + t.warnings.length, 0)}</b> <span className="text-[var(--w-text-2)]">{wt('tests.warnings')}</span></span>
           </div>
           {parsed.errors.map((e) => (
             <Notice key={e} kind="error">{e}</Notice>
@@ -165,12 +166,12 @@ export default function ImportTestsDialog({ open, onClose, config, pid, onOpenTe
               <table className="w-full min-w-[620px] border-collapse text-[12.5px]">
                 <thead className="sticky top-0 bg-[var(--w-sunken)] text-left text-[11px] uppercase tracking-wide text-[var(--w-text-3)]">
                   <tr>
-                    <th className="px-2.5 py-2 font-medium">Row</th>
-                    <th className="px-2.5 py-2 font-medium">Title</th>
-                    <th className="px-2.5 py-2 text-right font-medium">Steps</th>
-                    <th className="px-2.5 py-2 font-medium">Requirements</th>
-                    <th className="px-2.5 py-2 font-medium">Priority</th>
-                    <th className="px-2.5 py-2 font-medium">Warnings</th>
+                    <th className="px-2.5 py-2 font-medium">{wt('tests.row')}</th>
+                    <th className="px-2.5 py-2 font-medium">{wt('common.title')}</th>
+                    <th className="px-2.5 py-2 text-right font-medium">{wt('tests.steps')}</th>
+                    <th className="px-2.5 py-2 font-medium">{wt('tests.requirements')}</th>
+                    <th className="px-2.5 py-2 font-medium">{wt('common.priority')}</th>
+                    <th className="px-2.5 py-2 font-medium">{wt('tests.warningsH')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -188,15 +189,15 @@ export default function ImportTestsDialog({ open, onClose, config, pid, onOpenTe
               </table>
             </div>
           )}
-          <p className="text-[12px] text-[var(--w-text-3)]">Requirements that cannot be found are skipped; the test is still created.</p>
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('tests.reqSkipped')}</p>
         </div>
       )}
 
       {stage === 'done' && result && (
         <div className="space-y-3">
           <div className="flex flex-wrap gap-x-5 gap-y-1 text-[13px]">
-            <span className="inline-flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[var(--w-green)]" /> <b className="tabular">{result.created.length}</b> created</span>
-            <span className="inline-flex items-center gap-1.5"><XCircle size={14} className={result.failed.length ? 'text-[var(--w-red)]' : 'text-[var(--w-text-3)]'} /> <b className="tabular">{result.failed.length}</b> failed</span>
+            <span className="inline-flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[var(--w-green)]" /> <b className="tabular">{result.created.length}</b> {wt('tests.createdLower')}</span>
+            <span className="inline-flex items-center gap-1.5"><XCircle size={14} className={result.failed.length ? 'text-[var(--w-red)]' : 'text-[var(--w-text-3)]'} /> <b className="tabular">{result.failed.length}</b> {wt('tests.failedLower')}</span>
           </div>
           {result.created.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
@@ -205,19 +206,19 @@ export default function ImportTestsDialog({ open, onClose, config, pid, onOpenTe
                   {config.key}-{n}
                 </button>
               ))}
-              {result.created.length > 60 && <span className="text-[12px] text-[var(--w-text-3)]">+{result.created.length - 60} more</span>}
+              {result.created.length > 60 && <span className="text-[12px] text-[var(--w-text-3)]">{wt('tests.nMore', { n: result.created.length - 60 })}</span>}
             </div>
           )}
           {result.failed.length > 0 && (
             <div className="max-h-[40vh] overflow-auto rounded-[8px] border border-[var(--w-border)]">
               <table className="w-full min-w-[480px] border-collapse text-[12.5px]">
                 <thead className="sticky top-0 bg-[var(--w-sunken)] text-left text-[11px] uppercase tracking-wide text-[var(--w-text-3)]">
-                  <tr><th className="px-2.5 py-2 font-medium">Test #</th><th className="px-2.5 py-2 font-medium">Title</th><th className="px-2.5 py-2 font-medium">Error</th></tr>
+                  <tr><th className="px-2.5 py-2 font-medium">{wt('tests.testNo')}</th><th className="px-2.5 py-2 font-medium">{wt('common.title')}</th><th className="px-2.5 py-2 font-medium">{wt('tests.error')}</th></tr>
                 </thead>
                 <tbody>
                   {result.failed.map((f) => (
                     <tr key={f.row} className="border-t border-[var(--w-border)] align-top">
-                      <td className="px-2.5 py-1.5 tabular text-[var(--w-text-3)]">{f.row}{parsed?.tests[f.row - 1] ? ` (row ${parsed.tests[f.row - 1].row})` : ''}</td>
+                      <td className="px-2.5 py-1.5 tabular text-[var(--w-text-3)]">{f.row}{parsed?.tests[f.row - 1] ? ` (${wt('tests.rowN', { n: parsed.tests[f.row - 1].row })})` : ''}</td>
                       <td className="px-2.5 py-1.5">{f.title || '—'}</td>
                       <td className="px-2.5 py-1.5 text-[var(--w-red)]">{f.error}</td>
                     </tr>

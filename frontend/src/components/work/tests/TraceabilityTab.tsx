@@ -14,13 +14,14 @@ import { workApi, workError, type Coverage, type IssueRef, type ProjectConfig } 
 import { useLookups, wk } from '../hooks';
 import { EmptyState, IssueTypeIcon, Spinner, StatusBadge, signalText } from '../ui';
 import { downloadCsv, RUN_META, RunStatusPill, safeFileName } from './runStatus';
+import { wt } from '@/components/work/i18n';
 
 const COVERAGE_META: Record<Coverage, { label: string; color: string; help: string }> = {
-  NOT_COVERED: { label: 'Not covered', color: 'var(--w-text-3)', help: 'No test is linked to this requirement' },
-  NOT_RUN: { label: 'Not run', color: 'var(--w-text-2)', help: 'Linked tests have not been executed yet' },
-  FAILING: { label: 'Failing', color: 'var(--w-red)', help: 'At least one linked test failed its latest run' },
-  BLOCKED: { label: 'Blocked', color: 'var(--w-orange)', help: 'At least one linked test is blocked' },
-  PASSING: { label: 'Passing', color: 'var(--w-green)', help: 'Every linked test passed (or was skipped) in its latest run' },
+  NOT_COVERED: { get label() { return wt('tests.covNotCovered'); }, color: 'var(--w-text-3)', get help() { return wt('tests.covHelpNoTestIsLinkedToThisRequirement'); } },
+  NOT_RUN: { get label() { return wt('tests.covNotRun'); }, color: 'var(--w-text-2)', get help() { return wt('tests.covHelpLinkedTestsHaveNotBeenExecutedYet'); } },
+  FAILING: { get label() { return wt('tests.covFailing'); }, color: 'var(--w-red)', get help() { return wt('tests.covHelpAtLeastOneLinkedTestFailedItsLatestRun'); } },
+  BLOCKED: { get label() { return wt('tests.covBlocked'); }, color: 'var(--w-orange)', get help() { return wt('tests.covHelpAtLeastOneLinkedTestIsBlocked'); } },
+  PASSING: { get label() { return wt('tests.covPassing'); }, color: 'var(--w-green)', get help() { return wt('tests.covHelpEveryLinkedTestPassedOrWasSkippedInItsLa'); } },
 };
 const COVERAGE_ORDER: Coverage[] = ['FAILING', 'BLOCKED', 'NOT_RUN', 'NOT_COVERED', 'PASSING'];
 
@@ -79,7 +80,7 @@ export default function TraceabilityTab({ config, pid }: { config: ProjectConfig
       rows.map((r) => [
         lk.issueKey(r.number), r.title, COVERAGE_META[r.coverage].label,
         r.tests.map((x) => lk.issueKey(x.number)).join(' '),
-        r.tests.map((x) => `${lk.issueKey(x.number)}: ${x.lastStatus ? RUN_META[x.lastStatus].label : 'Never run'}`).join('; '),
+        r.tests.map((x) => `${lk.issueKey(x.number)}: ${x.lastStatus ? RUN_META[x.lastStatus].label : wt('tests.neverRun')}`).join('; '),
         r.bugs.map((b) => lk.issueKey(b.number)).join(' '),
       ]),
     );
@@ -87,7 +88,7 @@ export default function TraceabilityTab({ config, pid }: { config: ProjectConfig
 
   if (trace.isLoading) return <div className="flex h-full items-center justify-center py-16"><Spinner size={20} /></div>;
   if (trace.error || !trace.data) {
-    return <EmptyState title="Could not load traceability" body={workError(trace.error)} action={<button type="button" className="w-btn" onClick={() => trace.refetch()}>Try again</button>} />;
+    return <EmptyState title={wt('tests.traceLoadFailed')} body={workError(trace.error)} action={<button type="button" className="w-btn" onClick={() => trace.refetch()}>{wt('common.tryAgain')}</button>} />;
   }
   const s = trace.data.summary;
 
@@ -95,19 +96,18 @@ export default function TraceabilityTab({ config, pid }: { config: ProjectConfig
     <div className="flex h-full min-h-0 flex-col">
       <div className="shrink-0 border-b border-[var(--w-border)] px-4 pb-3 pt-3">
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          <Card label="Requirements" value={s.total} />
-          <Card label="Covered" value={`${s.coveragePct}%`} sub={`${s.covered} of ${s.total} have tests`} pct={s.coveragePct} color="var(--w-accent)" />
-          <Card label="Passing" value={`${s.passingPct}%`} sub={`${s.passing} of ${s.total} pass`} pct={s.passingPct} color="var(--w-green)" />
-          <Card label="Failing" value={s.failing} sub={s.failing ? 'Need attention' : 'None failing'} color={s.failing ? 'var(--w-red)' : undefined} />
+          <Card label={wt('tests.requirements')} value={s.total} />
+          <Card label={wt('tests.covered')} value={`${s.coveragePct}%`} sub={wt('tests.haveTests', { n: s.covered, total: s.total })} pct={s.coveragePct} color="var(--w-accent)" />
+          <Card label={wt('tests.covPassing')} value={`${s.passingPct}%`} sub={wt('tests.nPass', { n: s.passing, total: s.total })} pct={s.passingPct} color="var(--w-green)" />
+          <Card label={wt('tests.covFailing')} value={s.failing} sub={s.failing ? wt('tests.needAttention') : wt('tests.noneFailing')} color={s.failing ? 'var(--w-red)' : undefined} />
         </div>
         <p className="mt-2.5 text-[12px] leading-relaxed text-[var(--w-text-3)]">
-          Requirements are Requirement and Story issues. A requirement is <b className="font-medium text-[var(--w-text-2)]">covered</b> when at least one test is linked to it with a “tests” link;
-          its status comes from each linked test’s <b className="font-medium text-[var(--w-text-2)]">latest run</b> in any cycle — any failure makes it Failing, any block makes it Blocked, and it is Passing only when every test passed or was skipped.
+          {wt('tests.traceHelp')}
         </p>
         <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
           <div className="relative mr-1">
             <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search requirements or tests" className="w-input !h-[28px] w-[210px] pl-7 text-[12px]" />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={wt('tests.searchReqTests')} className="w-input !h-[28px] w-[210px] pl-7 text-[12px]" />
           </div>
           {(['ALL', ...COVERAGE_ORDER] as const).map((k) => (
             <button
@@ -118,26 +118,26 @@ export default function TraceabilityTab({ config, pid }: { config: ProjectConfig
               className={cn('inline-flex h-[26px] items-center gap-1.5 rounded-full border px-2.5 text-[12px]', filter === k ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border-strong)] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}
             >
               {k !== 'ALL' && <span className="h-1.5 w-1.5 rounded-full" style={{ background: COVERAGE_META[k].color }} />}
-              {k === 'ALL' ? 'All' : COVERAGE_META[k].label}
+              {k === 'ALL' ? wt('common.all') : COVERAGE_META[k].label}
               <span className="tabular text-[var(--w-text-3)]">{k === 'ALL' ? s.total : counts[k]}</span>
             </button>
           ))}
-          <button type="button" className="w-btn w-btn-sm ml-auto" onClick={exportCsv} disabled={!rows.length}><Download size={13} /> Export CSV</button>
+          <button type="button" className="w-btn w-btn-sm ml-auto" onClick={exportCsv} disabled={!rows.length}><Download size={13} /> {wt('tests.exportCsv')}</button>
         </div>
       </div>
 
       <div className="min-h-0 flex-1 overflow-auto">
         {!trace.data.rows.length ? (
           <EmptyState
-            title="No requirements yet"
-            body="Create Requirement or Story issues, then link tests to them (a test “tests” a requirement) to see coverage here."
+            title={wt('tests.noReqs')}
+            body={wt('tests.noReqsBody')}
           />
         ) : !rows.length ? (
-          <EmptyState title="No matching requirements" body="Try a different search or coverage filter." />
+          <EmptyState title={wt('tests.noMatchReqs')} body={wt('tests.noMatchReqsBody')} />
         ) : (
           <div className="min-w-[820px]">
             <div className="sticky top-0 z-[1] grid grid-cols-[minmax(240px,1.6fr)_110px_minmax(280px,2fr)_minmax(150px,1fr)] gap-3 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-4 py-2 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
-              <span>Requirement</span><span>Coverage</span><span>Tests · latest result</span><span>Open bugs</span>
+              <span>{wt('tests.requirement')}</span><span>{wt('tests.coverage')}</span><span>{wt('tests.testsLatest')}</span><span>{wt('tests.openBugs')}</span>
             </div>
             {rows.map((r) => (
               <div key={r.number} className="grid grid-cols-[minmax(240px,1.6fr)_110px_minmax(280px,2fr)_minmax(150px,1fr)] items-start gap-3 border-b border-[var(--w-border)] px-4 py-2.5 text-[13px]">
@@ -157,7 +157,7 @@ export default function TraceabilityTab({ config, pid }: { config: ProjectConfig
                       <span className="shrink-0 text-[12px] font-medium text-[var(--w-text-2)]">{lk.issueKey(t.number)}</span>
                       <span className="min-w-0 truncate text-[12.5px]">{t.title}</span>
                     </button>
-                  )) : <span className="text-[12px] text-[var(--w-text-3)]">No linked tests</span>}
+                  )) : <span className="text-[12px] text-[var(--w-text-3)]">{wt('tests.noLinkedTests')}</span>}
                 </div>
                 <div className="flex min-w-0 flex-wrap gap-1">
                   {r.bugs.length ? r.bugs.map((b) => (

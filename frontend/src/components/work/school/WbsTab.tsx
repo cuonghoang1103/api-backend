@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { workError } from '@/lib/work-api';
 import { Dialog, EmptyState, PageLoading, Spinner } from '../ui';
 import { COMPLEXITIES, days, schoolApi, schoolKeys, WBS_KINDS, type Complexity, type EstimationMatrix, type WbsData, type WbsItemInput, type WbsRow } from './schoolApi';
+import { wt } from '@/components/work/i18n';
 
 const numOrNull = (v: string) => (v.trim() === '' ? null : Math.max(0, Number(v)) || 0);
 
@@ -26,7 +27,7 @@ export default function WbsTab({ pid, onOpenIssue }: { pid: number; onOpenIssue:
   const data = q.data;
   const rows = useMemo(() => (data?.rows ?? []).filter((r) => !onlyLeaves || !r.childCount), [data, onlyLeaves]);
   if (q.isLoading) return <PageLoading />;
-  if (!data) return <EmptyState title="Could not load the WBS" body={q.error ? workError(q.error) : undefined} />;
+  if (!data) return <EmptyState title={wt('school.wbsLoadFailed')} body={q.error ? workError(q.error) : undefined} />;
 
   const patch = async (r: WbsRow, body: WbsItemInput) => {
     try {
@@ -34,39 +35,39 @@ export default function WbsTab({ pid, onOpenIssue }: { pid: number; onOpenIssue:
       qc.setQueryData<WbsData>(schoolKeys.wbs(pid), (old) => old && res.row ? { ...old, totals: res.totals, rows: old.rows.map((x) => (x.issueId === res.row!.issueId ? res.row! : x)) } : old);
       // Cha cộng dồn effort của con ⇒ tải lại cả cây cho số ở dòng cha đúng.
       qc.invalidateQueries({ queryKey: schoolKeys.wbs(pid) });
-    } catch (e) { toast.error(workError(e, 'Could not save')); }
+    } catch (e) { toast.error(workError(e, wt('common.couldNotSave'))); }
   };
   const t = data.totals;
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-[var(--w-border)] px-4 py-3">
-        <Stat label="Planned" value={`${days(t.plannedDays)} pds`} />
-        <Stat label="Actual" value={`${days(t.actualDays)} pds`} tone={t.actualDays > t.plannedDays && t.plannedDays > 0 ? 'red' : undefined} />
-        <Stat label="Estimated" value={t.functions} />
-        <Stat label="Not estimated" value={t.unestimated} tone={t.unestimated ? 'yellow' : undefined} />
+        <Stat label={wt('school.planned')} value={wt('school.pds', { n: days(t.plannedDays) })} />
+        <Stat label={wt('school.actual')} value={wt('school.pds', { n: days(t.actualDays) })} tone={t.actualDays > t.plannedDays && t.plannedDays > 0 ? 'red' : undefined} />
+        <Stat label={wt('school.estimated')} value={t.functions} />
+        <Stat label={wt('school.notEstimated')} value={t.unestimated} tone={t.unestimated ? 'yellow' : undefined} />
         <div className="flex flex-wrap gap-2 text-[12px] text-[var(--w-text-2)]">
           {t.byIteration.map((it) => (
             <span key={it.iteration} className="rounded-full bg-[var(--w-sunken)] px-2 py-0.5">{it.iteration}: <b>{it.functions}</b> · {days(it.plannedDays)} pds</span>
           ))}
         </div>
         <div className="ml-auto flex flex-wrap items-center gap-2">
-          <label className="flex items-center gap-1.5 text-[12.5px] text-[var(--w-text-2)]"><input type="checkbox" checked={onlyLeaves} onChange={(e) => setOnlyLeaves(e.target.checked)} /> Functions only</label>
-          <button type="button" className="w-btn w-btn-sm" onClick={() => setMatrixOpen(true)}><Settings2 size={13} /> Complexity table</button>
+          <label className="flex items-center gap-1.5 text-[12.5px] text-[var(--w-text-2)]"><input type="checkbox" checked={onlyLeaves} onChange={(e) => setOnlyLeaves(e.target.checked)} /> {wt('school.functionsOnly')}</label>
+          <button type="button" className="w-btn w-btn-sm" onClick={() => setMatrixOpen(true)}><Settings2 size={13} /> {wt('school.complexityTable')}</button>
           <button type="button" className="w-btn w-btn-sm" disabled={busy} onClick={async () => {
             setBusy(true);
-            try { toast.success(`Exported ${await schoolApi.exportWbs(pid)}`); } catch (e) { toast.error(workError(e, 'Could not export')); } finally { setBusy(false); }
-          }}>{busy ? <Spinner size={12} /> : <Download size={13} />} Export WBS (.xlsx)</button>
+            try { toast.success(wt('fpt.exported', { name: await schoolApi.exportWbs(pid) })); } catch (e) { toast.error(workError(e, wt('fpt.exportFailed'))); } finally { setBusy(false); }
+          }}>{busy ? <Spinner size={12} /> : <Download size={13} />} {wt('school.exportWbs')}</button>
         </div>
       </div>
-      {data.truncated && <div className="border-b border-[var(--w-border)] bg-[var(--w-yellow-soft,transparent)] px-4 py-2 text-[12.5px] text-[var(--w-yellow)]">Only the first 3,000 issues are shown.</div>}
+      {data.truncated && <div className="border-b border-[var(--w-border)] bg-[var(--w-yellow-soft,transparent)] px-4 py-2 text-[12.5px] text-[var(--w-yellow)]">{wt('school.first3000')}</div>}
       {!rows.length ? (
-        <EmptyState title="No work items yet" body="The WBS is built from your epics, stories and sub-tasks. Create an epic with a few stories under it, then estimate each one here." />
+        <EmptyState title={wt('school.noItems')} body={wt('school.noItemsBody')} />
       ) : (
         <div className="min-h-0 flex-1 overflow-auto">
           <table className="w-full min-w-[1180px] border-separate border-spacing-0 text-[12.5px]">
             <thead className="sticky top-0 z-10 bg-[var(--w-raised,var(--w-panel))] text-left text-[11.5px] text-[var(--w-text-2)]">
               <tr>
-                {['#', 'Function / Screen', 'Type', 'Feature', 'Fields', 'Trans.', 'Level', 'Planned (pds)', 'Actual (pds)', 'Iteration', 'Status', 'In charge'].map((h) => (
+                {['#', wt('school.hFunction'), wt('common.type'), wt('school.hFeature'), wt('school.hFields'), wt('school.hTrans'), wt('school.hLevel'), wt('school.hPlanned'), wt('school.hActual'), 'Iteration', wt('common.status'), wt('school.hInCharge')].map((h) => (
                   <th key={h} className="whitespace-nowrap border-b border-[var(--w-border)] px-2 py-2 font-semibold">{h}</th>
                 ))}
               </tr>
@@ -81,26 +82,26 @@ export default function WbsTab({ pid, onOpenIssue }: { pid: number; onOpenIssue:
                     </button>
                   </td>
                   <td className="border-b border-[var(--w-border)] px-1 py-1">
-                    <select className="w-input h-[28px] w-[96px] text-[12px]" disabled={!data.canEdit} value={r.kind} aria-label="Type" onChange={(e) => patch(r, { kind: e.target.value || null })}>
+                    <select className="w-input h-[28px] w-[96px] text-[12px]" disabled={!data.canEdit} value={r.kind} aria-label={wt('common.type')} onChange={(e) => patch(r, { kind: e.target.value || null })}>
                       <option value="">—</option>
                       {WBS_KINDS.map((k) => <option key={k} value={k}>{k}</option>)}
                     </select>
                   </td>
-                  <td className="border-b border-[var(--w-border)] px-1 py-1"><TextCell value={r.feature} ro={!data.canEdit} width={130} label="Feature" onCommit={(v) => patch(r, { feature: v || null })} /></td>
-                  <td className="border-b border-[var(--w-border)] px-1 py-1"><NumCell value={r.fields} ro={!data.canEdit} label="Fields" onCommit={(v) => patch(r, { fields: v })} /></td>
-                  <td className="border-b border-[var(--w-border)] px-1 py-1"><NumCell value={r.transactions} ro={!data.canEdit} label="Transactions" onCommit={(v) => patch(r, { transactions: v })} /></td>
+                  <td className="border-b border-[var(--w-border)] px-1 py-1"><TextCell value={r.feature} ro={!data.canEdit} width={130} label={wt('school.hFeature')} onCommit={(v) => patch(r, { feature: v || null })} /></td>
+                  <td className="border-b border-[var(--w-border)] px-1 py-1"><NumCell value={r.fields} ro={!data.canEdit} label={wt('school.hFields')} onCommit={(v) => patch(r, { fields: v })} /></td>
+                  <td className="border-b border-[var(--w-border)] px-1 py-1"><NumCell value={r.transactions} ro={!data.canEdit} label={wt('school.transactions')} onCommit={(v) => patch(r, { transactions: v })} /></td>
                   <td className="border-b border-[var(--w-border)] px-1 py-1">
                     <select className={cn('w-input h-[28px] w-[132px] text-[12px]', r.complexitySource && r.complexitySource !== 'set' && 'italic text-[var(--w-text-2)]')} disabled={!data.canEdit}
-                      value={r.complexitySource === 'set' ? r.complexity ?? '' : ''} aria-label="Complexity" title={r.complexitySource === 'derived' ? `From fields/transactions: ${r.complexity}` : r.complexitySource === 'field' ? `From the Complexity field: ${r.complexity}` : undefined}
+                      value={r.complexitySource === 'set' ? r.complexity ?? '' : ''} aria-label={wt('school.complexity')} title={r.complexitySource === 'derived' ? wt('school.fromFT', { c: r.complexity }) : r.complexitySource === 'field' ? wt('school.fromField', { c: r.complexity }) : undefined}
                       onChange={(e) => patch(r, { complexity: (e.target.value || null) as Complexity | null })}>
-                      <option value="">{r.complexity && r.complexitySource !== 'set' ? `Auto · ${r.complexity}` : '—'}</option>
+                      <option value="">{r.complexity && r.complexitySource !== 'set' ? `${wt('school.auto')} · ${r.complexity}` : '—'}</option>
                       {COMPLEXITIES.map((c) => <option key={c} value={c}>{c}</option>)}
                     </select>
                   </td>
                   <td className="border-b border-[var(--w-border)] px-1 py-1">
                     <div className="flex items-center gap-1">
-                      <NumCell value={r.plannedSource === 'override' ? r.plannedDays : null} placeholder={r.plannedSource && r.plannedSource !== 'override' ? days(r.plannedDays) : ''} step={0.5} ro={!data.canEdit} label="Planned effort override" onCommit={(v) => patch(r, { plannedDays: v })} />
-                      {r.childCount > 0 && <span className="text-[11px] text-[var(--w-text-3)]" title="Including children">Σ{days(r.plannedTotal)}</span>}
+                      <NumCell value={r.plannedSource === 'override' ? r.plannedDays : null} placeholder={r.plannedSource && r.plannedSource !== 'override' ? days(r.plannedDays) : ''} step={0.5} ro={!data.canEdit} label={wt('school.plannedOverride')} onCommit={(v) => patch(r, { plannedDays: v })} />
+                      {r.childCount > 0 && <span className="text-[11px] text-[var(--w-text-3)]" title={wt('school.inclChildren')}>Σ{days(r.plannedTotal)}</span>}
                     </div>
                   </td>
                   <td className={cn('border-b border-[var(--w-border)] px-2 py-1 tabular-nums', r.plannedTotal && r.actualTotal > r.plannedTotal ? 'text-[var(--w-red)]' : '')}>{days(r.childCount ? r.actualTotal : r.actualDays) || '—'}</td>
@@ -163,19 +164,18 @@ function MatrixDialog({ open, onClose, pid, matrix, canEdit }: { open: boolean; 
     try {
       const res = await schoolApi.setMatrix(pid, m);
       qc.setQueryData(schoolKeys.wbs(pid), res);
-      toast.success('Complexity table saved');
+      toast.success(wt('school.complexitySaved'));
       onClose();
-    } catch (e) { toast.error(workError(e, 'Could not save')); } finally { setSaving(false); }
+    } catch (e) { toast.error(workError(e, wt('common.couldNotSave'))); } finally { setSaving(false); }
   };
   return (
-    <Dialog open={open} onClose={() => !saving && onClose()} title="Complexity → effort" width={620}
-      footer={canEdit ? <><button type="button" className="w-btn" onClick={onClose}>Cancel</button><button type="button" className="w-btn w-btn-primary" disabled={saving} onClick={save}>{saving && <Spinner size={12} />} Save</button></> : <button type="button" className="w-btn" onClick={onClose}>Close</button>}>
+    <Dialog open={open} onClose={() => !saving && onClose()} title={wt('school.complexityTitle')} width={620}
+      footer={canEdit ? <><button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" disabled={saving} onClick={save}>{saving && <Spinner size={12} />} {wt('common.save')}</button></> : <button type="button" className="w-btn" onClick={onClose}>{wt('common.close')}</button>}>
       <p className="mb-3 text-[12.5px] text-[var(--w-text-2)]">
-        A function is <b>Simple</b> when both its fields and transactions are within the Simple limits, otherwise <b>Medium</b> within the Medium limits, otherwise <b>Complex</b>.
-        The default is the FPT SEP490 template (≤7 fields &amp; ≤3 transactions = 3 man-days, ≤15 &amp; ≤7 = 5, more = 7).{!canEdit && ' Only project admins can change it.'}
+        {wt('school.complexityHelp')}{!canEdit && ` ${wt('school.onlyAdmins')}`}
       </p>
       <table className="w-full text-[12.5px]">
-        <thead className="text-left text-[11.5px] text-[var(--w-text-2)]"><tr><th className="py-1">Level</th><th>Max fields</th><th>Max transactions</th><th>Man-days</th></tr></thead>
+        <thead className="text-left text-[11.5px] text-[var(--w-text-2)]"><tr><th className="py-1">{wt('school.hLevel')}</th><th>{wt('school.maxFields')}</th><th>{wt('school.maxTrans')}</th><th>{wt('school.manDays')}</th></tr></thead>
         <tbody>
           {m.levels.map((l, i) => (
             <tr key={l.name}>
@@ -183,16 +183,16 @@ function MatrixDialog({ open, onClose, pid, matrix, canEdit }: { open: boolean; 
               {(['maxFields', 'maxTransactions', 'manDays'] as const).map((k) => (
                 <td key={k} className="pr-2">
                   <input type="number" min={0} step={k === 'manDays' ? 0.5 : 1} className="w-input h-[30px] w-[110px]" readOnly={!canEdit} aria-label={`${l.name} ${k}`}
-                    value={l[k] ?? ''} placeholder={k === 'manDays' ? '' : 'no limit'} onChange={(e) => setLv(i, k, e.target.value)} />
+                    value={l[k] ?? ''} placeholder={k === 'manDays' ? '' : wt('school.noLimit')} onChange={(e) => setLv(i, k, e.target.value)} />
                 </td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-      <label className="mt-3 flex items-center gap-2 text-[12.5px]">Hours per man-day
+      <label className="mt-3 flex items-center gap-2 text-[12.5px]">{wt('school.hoursPerDay')}
         <input type="number" min={1} max={24} className="w-input h-[30px] w-[80px]" readOnly={!canEdit} value={m.hoursPerDay} onChange={(e) => setM((x) => ({ ...x, hoursPerDay: Number(e.target.value) || 8 }))} />
-        <span className="text-[var(--w-text-3)]">— converts logged hours and hour estimates to man-days</span>
+        <span className="text-[var(--w-text-3)]">— {wt('school.hoursHelp')}</span>
       </label>
     </Dialog>
   );

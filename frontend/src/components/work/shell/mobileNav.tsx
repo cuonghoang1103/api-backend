@@ -11,6 +11,7 @@
 import { useEffect, useLayoutEffect } from 'react';
 import { create } from 'zustand';
 import { Menu } from 'lucide-react';
+import { wt } from '@/components/work/i18n';
 
 interface MobileNavState {
   open: boolean;
@@ -45,7 +46,7 @@ export function MobileNavButton() {
       type="button"
       onClick={() => setOpen(true)}
       className="w-btn w-btn-ghost w-btn-icon -ml-1.5 shrink-0 md:!hidden"
-      aria-label="Open navigation"
+      aria-label={wt('shell.openNavigation')}
     >
       <Menu size={17} />
     </button>

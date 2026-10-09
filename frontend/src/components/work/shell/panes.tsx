@@ -31,6 +31,7 @@ import { create } from 'zustand';
 import { Maximize2, Minimize2, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { WorkPortal, isTyping, khungFixed } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 // ─── Lựa chọn đã lưu ─────────────────────────────────────────────
 
@@ -286,8 +287,7 @@ export function PaneToggle({ pane, side, label, shortcut, className, showLabel =
   pane: PaneState; side: 'left' | 'right'; label: string; shortcut?: string; className?: string; showLabel?: boolean;
 }) {
   const Icon = side === 'left' ? (pane.visible ? PanelLeftClose : PanelLeftOpen) : (pane.visible ? PanelRightClose : PanelRightOpen);
-  const verb = pane.visible ? 'Hide' : 'Show';
-  const tip = `${verb} ${label.toLowerCase()}${shortcut ? ` (${shortcut})` : ''}`;
+  const tip = `${wt(pane.visible ? 'shell.hidePane' : 'shell.showPane', { pane: label.toLowerCase() })}${shortcut ? ` (${shortcut})` : ''}`;
   return (
     <button
       type="button"
@@ -306,7 +306,7 @@ export function PaneToggle({ pane, side, label, shortcut, className, showLabel =
 
 /** Nút Focus / Full width (đổi thành "Exit focus" khi đang bật). */
 export function FocusToggle({ on, onToggle, className, compact }: { on: boolean; onToggle: () => void; className?: string; compact?: boolean }) {
-  const tip = on ? 'Exit focus (Esc)' : 'Focus — full width, hide sidebars (F)';
+  const tip = on ? wt('shell.exitFocusEsc') : wt('shell.focusTip');
   return (
     <button
       type="button"
@@ -318,14 +318,14 @@ export function FocusToggle({ on, onToggle, className, compact }: { on: boolean;
       data-testid="focus-toggle"
     >
       {on ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-      {!compact && <span className="max-md:hidden">{on ? 'Exit focus' : 'Focus'}</span>}
+      {!compact && <span className="max-md:hidden">{on ? wt('shell.exitFocus') : 'Focus'}</span>}
     </button>
   );
 }
 
 /** Thanh mảnh còn lại khi người dùng ẩn panel trái — một nút mở lại. */
 export function PaneStrip({ label, shortcut, onOpen, className }: { label: string; shortcut?: string; onOpen: () => void; className?: string }) {
-  const tip = `Show ${label.toLowerCase()}${shortcut ? ` (${shortcut})` : ''}`;
+  const tip = `${wt('shell.showPane', { pane: label.toLowerCase() })}${shortcut ? ` (${shortcut})` : ''}`;
   return (
     <div className={cn('flex shrink-0 flex-col items-center border-r border-[var(--w-border)] bg-[var(--w-bg)] pt-2 max-md:h-10 max-md:w-full max-md:flex-row max-md:border-b max-md:border-r-0 max-md:px-2 max-md:pt-0 md:w-10', className)} data-pane-strip>
       <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm md:!w-8" onClick={onOpen} aria-label={tip} title={tip}>
@@ -385,7 +385,7 @@ export function PaneDrawer({ open, onClose, side, label, width = 320, children }
       >
         <div className="flex h-[48px] shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3">
           <span className="min-w-0 flex-1 truncate text-[14px] font-semibold">{label}</span>
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onClose} aria-label={`Close ${label.toLowerCase()} (Esc)`} title="Close (Esc)">
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onClose} aria-label={`${wt('shell.closePane', { pane: label.toLowerCase() })} (Esc)`} title={wt('shell.closeEsc')}>
             <X size={15} />
           </button>
         </div>

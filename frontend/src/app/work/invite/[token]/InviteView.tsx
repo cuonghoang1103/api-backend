@@ -21,6 +21,7 @@ import { ProjectMark, Spinner, UserAvatar } from '@/components/work/ui';
 import { WorkspaceMark, WS_ROLE_HELP, WS_ROLE_LABEL } from '@/components/work/settings/shared';
 import ProjectCover from '@/components/work/cover/ProjectCover';
 import { anhTuyetDoi } from '@/lib/anhTuyetDoi';
+import { wt } from '@/components/work/i18n';
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
@@ -41,9 +42,9 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 const STATE = {
-  WORK_INVITE_EXPIRED: { icon: Clock, title: 'This invitation has expired', body: 'Invitations are valid for a limited time. Ask the person who invited you to send a new one.' },
-  WORK_INVITE_USED: { icon: MailCheck, title: 'This invitation has already been used', body: 'Each invitation link can be used a set number of times. If you already joined, open your workspaces; otherwise ask for a new link.' },
-  INVALID: { icon: MailX, title: 'Invitation not found', body: 'The link may be incomplete, or the invitation was cancelled. Check that you copied the whole link, or ask for a new one.' },
+  WORK_INVITE_EXPIRED: { icon: Clock, get title() { return wt('invite.expired'); }, get body() { return wt('invite.expiredBody'); } },
+  WORK_INVITE_USED: { icon: MailCheck, get title() { return wt('invite.used'); }, get body() { return wt('invite.usedBody'); } },
+  INVALID: { icon: MailX, get title() { return wt('invite.notFound'); }, get body() { return wt('invite.notFoundBody'); } },
 } as const;
 
 export default function InviteView() {
@@ -65,15 +66,15 @@ export default function InviteView() {
     mutationFn: () => workApi.acceptInvite(token),
     onSuccess: ({ slug, portalPath }) => {
       qc.invalidateQueries({ queryKey: wk.workspaces });
-      toast.success(`You joined ${preview.data?.workspace.name ?? 'the workspace'}`);
+      toast.success(wt('invite.joined', { name: preview.data?.workspace.name ?? wt('invite.theWs') }));
       // Lời mời KHÁCH (cổng khách S2b) ⇒ vào thẳng cổng khách của dự án.
       router.push(portalPath ?? `/work/${slug}`);
     },
-    onError: (err) => toast.error(workError(err, 'Could not accept the invitation')),
+    onError: (err) => toast.error(workError(err, wt('invite.acceptFailed'))),
   });
 
   if (preview.isLoading || !sanSang) {
-    return <Shell><div className="flex justify-center py-16" role="status" aria-label="Loading invitation"><Spinner size={20} /></div></Shell>;
+    return <Shell><div className="flex justify-center py-16" role="status" aria-label={wt('invite.loading')}><Spinner size={20} /></div></Shell>;
   }
 
   if (preview.error || !preview.data) {
@@ -89,7 +90,7 @@ export default function InviteView() {
           </span>
           <h1 className="text-[18px] font-semibold">{s.title}</h1>
           <p className="mt-2 text-[13.5px] leading-relaxed text-[var(--w-text-2)]">{s.body}</p>
-          <Link href={daDangNhap ? '/work' : '/'} className="w-btn mt-6">{daDangNhap ? 'Go to your workspaces' : 'Back to home'}</Link>
+          <Link href={daDangNhap ? '/work' : '/'} className="w-btn mt-6">{daDangNhap ? wt('invite.goWs') : wt('invite.backHome')}</Link>
         </div>
       </Shell>
     );
@@ -118,23 +119,23 @@ export default function InviteView() {
         {inviterName && (
           <div className="mb-3 flex items-center gap-2 text-[13px] text-[var(--w-text-2)]">
             <UserAvatar user={{ username: inviterName, fullName: inviterName, displayName: inviterName, avatarUrl: valid?.inviter?.avatarUrl ?? null }} size={22} />
-            <span><span className="font-medium text-[var(--w-text)]">{inviterName}</span> invited you</span>
+            <span><span className="font-medium text-[var(--w-text)]">{inviterName}</span> {wt('invite.invitedYou')}</span>
           </div>
         )}
         <h1 className="text-[20px] font-semibold leading-snug tracking-[-0.01em] [overflow-wrap:anywhere]">
-          Join <span className="text-[var(--w-accent-text)]">{where}</span> on CT Work
+          {wt('invite.joinA')} <span className="text-[var(--w-accent-text)]">{where}</span> {wt('invite.joinB')}
         </h1>
         <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[13px]">
-          <dt className="text-[var(--w-text-3)]">Workspace</dt><dd className="min-w-0 truncate font-medium">{workspace.name}</dd>
-          {project && (<><dt className="text-[var(--w-text-3)]">Project</dt><dd className="min-w-0 truncate font-medium">{project.name}</dd></>)}
-          <dt className="text-[var(--w-text-3)]">Your role</dt>
+          <dt className="text-[var(--w-text-3)]">{wt('common.workspace')}</dt><dd className="min-w-0 truncate font-medium">{workspace.name}</dd>
+          {project && (<><dt className="text-[var(--w-text-3)]">{wt('common.project')}</dt><dd className="min-w-0 truncate font-medium">{project.name}</dd></>)}
+          <dt className="text-[var(--w-text-3)]">{wt('home.yourRole')}</dt>
           <dd className="font-medium">{WS_ROLE_LABEL[role]}{roleHelp && <span className="font-normal text-[var(--w-text-3)]"> — {roleHelp.charAt(0).toLowerCase() + roleHelp.slice(1)}</span>}</dd>
-          {valid && (<><dt className="text-[var(--w-text-3)]">Members</dt><dd className="flex items-center gap-1.5 font-medium"><Users size={13} className="text-[var(--w-text-3)]" />{valid.memberCount} {valid.memberCount === 1 ? 'person' : 'people'}</dd></>)}
+          {valid && (<><dt className="text-[var(--w-text-3)]">{wt('common.members')}</dt><dd className="flex items-center gap-1.5 font-medium"><Users size={13} className="text-[var(--w-text-3)]" />{wt('invite.nPeople', { count: valid.memberCount })}</dd></>)}
         </dl>
 
         {restrictedToEmail && (
           <p className="mt-4 rounded-[8px] bg-[var(--w-accent-soft)] px-3 py-2 text-[12.5px] leading-relaxed text-[var(--w-accent-text)]">
-            This invitation was sent to a specific email address. Sign in — or create an account — with that same address to accept it.
+            {wt('invite.restricted')}
           </p>
         )}
 
@@ -142,21 +143,20 @@ export default function InviteView() {
           {daDangNhap ? (
             <button type="button" className="w-btn w-btn-primary h-10 w-full text-[14px]" onClick={() => accept.mutate()} disabled={accept.isPending || accept.isSuccess} data-testid="invite-accept">
               {(accept.isPending || accept.isSuccess) && <Spinner size={12} />}
-              Accept invitation
+              {wt('invite.accept')}
             </button>
           ) : (
             <>
-              <Link href={`/login?callbackUrl=${callback}`} className="w-btn w-btn-primary h-10 w-full text-[14px]" data-testid="invite-signin">Sign in to accept</Link>
-              <Link href={`/register?callbackUrl=${callback}`} className="w-btn h-10 w-full">Create a free account</Link>
+              <Link href={`/login?callbackUrl=${callback}`} className="w-btn w-btn-primary h-10 w-full text-[14px]" data-testid="invite-signin">{wt('invite.signIn')}</Link>
+              <Link href={`/register?callbackUrl=${callback}`} className="w-btn h-10 w-full">{wt('invite.register')}</Link>
               <p className="mt-2 text-[12px] leading-relaxed text-[var(--w-text-3)]">
-                New to CT Work? Create an account, verify your email, and you&apos;ll come straight back here to accept.
-                <span lang="vi" className="mt-1 block">Chưa có tài khoản? Đăng ký bằng email được mời rồi quay lại trang này để chấp nhận.</span>
+                {wt('invite.newHint')}
               </p>
             </>
           )}
         </div>
         <p className="mt-5 flex items-center gap-1.5 border-t border-[var(--w-border)] pt-4 text-[12px] text-[var(--w-text-3)]">
-          <LinkIcon size={12} /> Not expecting this? You can safely close this page — nothing happens until you accept.
+          <LinkIcon size={12} /> {wt('invite.notExpecting')}
         </p>
       </div>
     </Shell>

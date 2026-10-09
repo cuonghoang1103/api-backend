@@ -22,6 +22,7 @@ import { Lock, LockOpen } from 'lucide-react';
 import { api } from '@/lib/api';
 import { editLockedPid, workApi, workError, type ProjectConfig } from '@/lib/work-api';
 import { cn } from '@/lib/utils';
+import { wt } from '@/components/work/i18n';
 
 const LOCK_MESSAGE_PREFIX = 'Editing is locked';
 const TOAST_ID = 'ctwork-edit-locked';
@@ -33,10 +34,10 @@ let installed = false;
 async function unlock(pid: number) {
   try {
     await workApi.setEditLock(pid, false);
-    toast.success('Editing unlocked. Try your change again.', { id: TOAST_ID });
+    toast.success(wt('shell.unlockedRetry'), { id: TOAST_ID });
     window.dispatchEvent(new CustomEvent('ctwork:edit-lock', { detail: { pid, locked: false } }));
   } catch (err) {
-    toast.error(workError(err, 'Could not unlock editing'), { id: TOAST_ID });
+    toast.error(workError(err, wt('shell.couldNotUnlock')), { id: TOAST_ID });
   }
 }
 
@@ -50,13 +51,13 @@ function install() {
   });
   const original = toast.error;
   const wrapped = ((message: Parameters<typeof toast.error>[0], data?: Parameters<typeof toast.error>[1]) => {
-    if (typeof message === 'string' && message.startsWith(LOCK_MESSAGE_PREFIX) && lastLockedPid) {
+    if (typeof message === 'string' && (message.startsWith(LOCK_MESSAGE_PREFIX) || message === wt('errors.editLocked')) && lastLockedPid) {
       const pid = lastLockedPid;
-      return original('Editing is locked for this project', {
+      return original(wt('shell.lockedForProject'), {
         id: TOAST_ID,
-        description: 'You turned on the edit lock so nothing changes by accident. Unlock to make this change.',
+        description: wt('shell.lockedToastBody'),
         duration: 8000,
-        action: { label: 'Unlock', onClick: () => { void unlock(pid); } },
+        action: { label: wt('shell.unlock'), onClick: () => { void unlock(pid); } },
       });
     }
     return original(message, data);
@@ -89,9 +90,9 @@ export function useEditLock(config: ProjectConfig) {
     onSuccess: (r) => {
       qc.setQueryData(lockKey(pid), r);
       void qc.invalidateQueries({ queryKey: ['work', 'project', pid] });
-      toast.success(r.locked ? 'Editing locked — browse freely, nothing will change by accident' : 'Editing unlocked', { id: TOAST_ID });
+      toast.success(r.locked ? wt('shell.lockedToast') : wt('shell.unlockedToast'), { id: TOAST_ID });
     },
-    onError: (err) => toast.error(workError(err, 'Could not change the edit lock')),
+    onError: (err) => toast.error(workError(err, wt('shell.couldNotChangeLock'))),
   });
   return { ready: !!q.data, locked, pending: toggle.isPending, toggle: () => toggle.mutate(!locked) };
 }
@@ -106,12 +107,12 @@ export function EditLockButton({ config }: { config: ProjectConfig }) {
       onClick={l.toggle}
       disabled={l.pending}
       aria-pressed={l.locked}
-      aria-label={l.locked ? 'Editing is locked — click to unlock' : 'Lock editing'}
-      title={l.locked ? 'Editing is locked for you in this project. Click to unlock.' : 'Lock editing so you can browse without changing anything by accident'}
+      aria-label={l.locked ? wt('shell.lockedClickUnlock') : wt('shell.lockEditing')}
+      title={l.locked ? wt('shell.lockedTitle') : wt('shell.lockTitle')}
       className={cn('w-btn shrink-0', l.locked && 'w-btn-warn')}
     >
       {l.locked ? <Lock size={14} /> : <LockOpen size={14} className="text-[var(--w-text-2)]" />}
-      <span className="max-xl:hidden">{l.locked ? 'Locked' : 'Lock'}</span>
+      <span className="max-xl:hidden">{l.locked ? wt('shell.lockedShort') : wt('shell.lockShort')}</span>
     </button>
   );
 }
@@ -125,9 +126,9 @@ export function EditLockBanner({ config }: { config: ProjectConfig }) {
   return (
     <div role="status" className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1 border-b border-[color-mix(in_srgb,var(--w-orange)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_10%,transparent)] px-3 py-1.5 text-[12.5px] text-[var(--w-text)] md:px-5">
       <Lock size={13} className="shrink-0 text-[var(--w-orange)]" />
-      <span className="min-w-0 flex-1"><span className="font-semibold">Editing is locked.</span> You’re viewing this project read-only so nothing changes by accident. Comments and the AI assistant still work.</span>
+      <span className="min-w-0 flex-1"><span className="font-semibold">{wt('shell.bannerTitle')}</span> {wt('shell.bannerBody')}</span>
       <button type="button" className="w-btn w-btn-sm shrink-0" onClick={() => { void unlock(config.id); }}>
-        <LockOpen size={12} /> Unlock to edit
+        <LockOpen size={12} /> {wt('shell.unlockToEdit')}
       </button>
     </div>
   );
@@ -140,11 +141,11 @@ export function EditLockPill({ config }: { config: ProjectConfig }) {
     <button
       type="button"
       onClick={() => { void unlock(config.id); }}
-      title="Editing is locked — you can read, comment and ask the AI. Click to unlock."
-      aria-label="Editing is locked — click to unlock"
+      title={wt('shell.lockedPillTitle')}
+      aria-label={wt('shell.lockedClickUnlock')}
       className="w-btn w-btn-sm w-btn-warn shrink-0"
     >
-      <Lock size={12} /> Locked
+      <Lock size={12} /> {wt('shell.lockedShort')}
     </button>
   );
 }

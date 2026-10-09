@@ -133,4 +133,8 @@ export function emitWorkEvent(event: WorkEvent): void {
 export function evictFromProject(projectId: number, userId: number): void {
   getIO()?.in(`user:${userId}`).socketsLeave(projectRoom(projectId));
   getIO()?.in(`user:${userId}`).socketsLeave(clientRoom(projectId));
+  // CTW K-3: rời mọi phòng kênh chat của dự án (`work:chat:<dự án>:<kênh>`).
+  void getIO()?.in(`user:${userId}`).fetchSockets().then((ss) => {
+    for (const s of ss) for (const r of s.rooms) if (r.startsWith(`work:chat:${projectId}:`)) s.leave(r);
+  }).catch(() => undefined);
 }

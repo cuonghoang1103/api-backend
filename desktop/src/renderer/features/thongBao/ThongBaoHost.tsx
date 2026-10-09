@@ -23,6 +23,9 @@ import { useAppState } from '../../app-state';
 import { camSocketDesktop } from '../../shims/web-socket-adapter';
 import { datTruyVanCho } from '../../shims/next-navigation';
 import { useSession } from '../../auth/session';
+// CTW K-3: tin chat CT Work — cùng một host với web (badge, âm tự tổng hợp, thông báo NATIVE qua Notification của
+// Electron, bấm mở đúng kênh/tin). Khoá cấp module trong ChatNotifierHost ⇒ CT Work mở cùng lúc cũng không kêu hai lần.
+import { ChatNotifierHost } from '@/components/work/chat/ChatNotifier';
 
 const KHOA_OS = 'ct-thong-bao-os';
 export function docThongBaoOs(): boolean {
@@ -34,6 +37,7 @@ export function ghiThongBaoOs(bat: boolean): void {
 
 interface GoiThongBao {
   type?: string;
+  payload?: { chat?: boolean } | null;
   sender?: { displayName?: string | null; username?: string | null } | null;
 }
 
@@ -72,6 +76,8 @@ export function ThongBaoHost() {
         n.onclick = () => { window.focus(); khiBam?.(); navigate(den); };
       };
       const onTb = (p: GoiThongBao) => {
+        // Tin chat CT Work (@nhắc / trả lời) ⇒ ChatNotifierHost đã báo (đúng kênh, theo tắt tiếng) — không báo lần hai.
+        if (p?.payload?.chat === true) return;
         bao('🔔 Thông báo mới', `${ten(p.sender)} ${CAU[p.type ?? ''] ?? 'có hoạt động mới'}`, '/notifications');
       };
       const onAdmin = () => bao('📣 Admin vừa đăng thông báo', 'Mở để xem chi tiết', '/notifications');
@@ -97,5 +103,14 @@ export function ThongBaoHost() {
     return () => { huy = true; go?.(); };
   }, [navigate, userId]);
 
-  return null;
+  return (
+    <ChatNotifierHost
+      go={(url) => {
+        const i = url.indexOf('?');
+        const duong = i >= 0 ? url.slice(0, i) : url;
+        if (i >= 0) datTruyVanCho(duong, url.slice(i + 1));
+        navigate(duong);
+      }}
+    />
+  );
 }

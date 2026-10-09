@@ -22,18 +22,19 @@ import {
   type HelpArticle, type HelpBlock, type HelpLang, type HelpPageLink, type LText,
 } from './content';
 import { openContextualHelp, useHelp } from './store';
+import { currentWorkLocale } from '@/components/work/i18n';
 
 // ─── Lưu trữ cục bộ ──────────────────────────────────────────────
 
 const LANG_KEY = 'ctwork-help:lang';
 const LAST_KEY = 'ctwork-help:last';
 
+/**
+ * i18n 10/10: ngăn Trợ giúp mở bằng ĐÚNG ngôn ngữ giao diện CT Work của người dùng (components/work/i18n).
+ * Nút đổi ngôn ngữ trong ngăn chỉ đổi bài đang đọc (không đổi giao diện).
+ */
 export function readHelpLang(): HelpLang {
-  try {
-    return window.localStorage.getItem(LANG_KEY) === 'en' ? 'en' : 'vi';
-  } catch {
-    return 'vi';
-  }
+  return currentWorkLocale();
 }
 function save(key: string, value: string) {
   try {
@@ -72,8 +73,8 @@ const UI: Record<string, LText> = {
   close: { en: 'Close (Esc)', vi: 'Đóng (Esc)' },
   shortcut: { en: 'Press ? to open or close', vi: 'Nhấn ? để mở hoặc đóng' },
   uiNote: {
-    en: 'Buttons in CT Work are in English — labels in quotes match the screen exactly.',
-    vi: 'Nút trong CT Work ghi bằng tiếng Anh — nhãn trong ngoặc kép giống hệt trên màn hình.',
+    en: 'Labels in quotes are the English button names. If your CT Work is set to Tiếng Việt, the screen shows the Vietnamese name instead.',
+    vi: 'Nhãn trong ngoặc kép là tên nút tiếng Anh. Khi CT Work đặt Tiếng Việt, trên màn hình là tên tiếng Việt tương ứng (đổi ngôn ngữ ở menu tài khoản).',
   },
 };
 

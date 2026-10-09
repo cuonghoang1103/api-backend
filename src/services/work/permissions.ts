@@ -483,6 +483,8 @@ const CLIENT_ROUTES: Array<[method: string, re: RegExp]> = [
   ['GET', /^\/pages\/\d+\/markdown$/],
   // Đợt 6a: ảnh trong tài liệu/mô tả/bình luận — docs3a.readImage chỉ trả ảnh nằm trong nội dung ĐÃ chia sẻ.
   ['GET', /^\/images\/\d+$/],
+  // CTW K-3: kênh chat — service chỉ cho khách thấy kênh CLIENT (mặc định không có). Khách không "tạo thẻ" từ tin.
+  ['*', /^\/chat(?!.*\/issue$)(\/.*)?$/],
 ];
 
 /** `sub` = phần đường dẫn SAU /projects/:pid ('' cho chính dự án). Hàm thuần — test bằng bảng. */
@@ -716,6 +718,10 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   // Đợt 3C: agent không tự khởi động/dừng agent dựng sẵn (mỗi lượt tiêu tiền LLM của web — chỉ NGƯỜI Pro/admin bấm).
   // Agent BUILTIN chạy lệnh qua registry, không qua tuyến này.
   ['*', /^\/issues\/\d+\/agent-runs(\/.*)?$/], ['*', /^\/agent-runs(\/.*)?$/],
+  // CTW K-3: agent đọc/ghi kênh chat CHỈ qua registry (chat_channels / chat_read / chat_post) — một đường, một luật.
+  ['*', /^\/chat(\/.*)?$/],
+  // CTW Đóng góp: số liệu đóng góp + đánh giá chéo của NGƯỜI — agent không đọc, không chấm (contribGate cũng chặn).
+  ['*', /^\/contrib(\/.*)?$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

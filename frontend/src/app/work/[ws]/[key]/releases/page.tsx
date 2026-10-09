@@ -14,6 +14,7 @@ import ProjectHeader from '@/components/work/ProjectHeader';
 import { ReleasesList, VersionDetail } from '@/components/work/Releases';
 import { useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
 import { EmptyState, PageLoading } from '@/components/work/ui';
+import { wt } from '@/components/work/i18n';
 
 function ReleasesView({ config, pid }: { config: ProjectConfig; pid: number }) {
   const router = useRouter();
@@ -41,7 +42,7 @@ function ReleasesView({ config, pid }: { config: ProjectConfig; pid: number }) {
 
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Releases" />
+      <ProjectHeader config={config} title={wt('releases.title')} />
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         {versionId ? (
           <VersionDetail
@@ -74,6 +75,6 @@ function Inner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   if (isLoading) return <PageLoading />;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
+  if (error || !config || !pid) return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : wt('common.projectNotFoundBody')} />;
   return <ReleasesView config={config} pid={pid} />;
 }

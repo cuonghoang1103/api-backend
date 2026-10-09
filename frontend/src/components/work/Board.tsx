@@ -39,6 +39,8 @@ import { TeamsCtx, TruncatedStrip, studioOn, useWorkspaceTeams } from './studio/
 import {
   buildLanes, EMPTY_QUICK, isSubtask, makeQuickTest, subtasksByParent, type GroupBy, type Lane, type QuickFilters, type SubtaskInfo,
 } from './board/grouping';
+import { wt } from '@/components/work/i18n';
+import { statusName, typeName } from '@/components/work/i18n/names';
 
 export { CardBody } from './board/BoardCard';
 
@@ -74,7 +76,7 @@ function SortableCard({ issue, lk, onOpen, disabled, subtasks, inDone, showParen
       // UX-A ARIA: dnd-kit gán role=button, mà thẻ có nút sub-task bên trong (nested-interactive).
       // Thẻ là một NHÓM có tên (mã + tiêu đề); Enter mở thẻ, Space nhấc lên kéo như cũ.
       role="group"
-      aria-roledescription="draggable issue card"
+      aria-roledescription={wt('board.dragCard')}
       aria-label={`${lk.issueKey(issue.number)} ${issue.title}`}
       // Không kéo được (chỉ xem / đang khoá chỉnh sửa) vẫn MỞ thẻ được ⇒ không phải "disabled".
       aria-disabled={undefined}
@@ -99,7 +101,7 @@ function QuickAdd({ onCreate }: { onCreate: (title: string) => Promise<unknown> 
   if (!open) {
     return (
       <button type="button" onClick={() => setOpen(true)} className="flex h-8 w-full items-center gap-1.5 rounded-[6px] px-2 text-[12px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text-2)]">
-        <Plus size={13} /> Create issue
+        <Plus size={13} /> {wt('board.createIssue')}
       </button>
     );
   }
@@ -115,7 +117,7 @@ function QuickAdd({ onCreate }: { onCreate: (title: string) => Promise<unknown> 
       rows={2}
       value={title}
       disabled={busy}
-      placeholder="What needs to be done? Enter to create"
+      placeholder={wt('board.quickAddPh')}
       onChange={(e) => setTitle(e.target.value)}
       onBlur={() => { if (!title.trim()) setOpen(false); }}
       onKeyDown={(e) => {
@@ -152,7 +154,7 @@ function Cell({ laneKey, col, cards, lk, onOpen, canDrag, onQuickAdd, highlight,
     >
       {!cards.length && !onQuickAdd && grow && (
         <div aria-hidden="true" className="flex h-16 items-center justify-center rounded-[8px] border border-dashed border-[var(--w-border-strong)] text-[12px] text-[var(--w-text-3)]">
-          {inDone ? 'Drop finished work here' : 'No issues'}
+          {inDone ? wt('board.dropDone') : wt('board.noIssues')}
         </div>
       )}
       <SortableContext items={cards.map((i) => i.id)} strategy={verticalListSortingStrategy}>
@@ -192,17 +194,17 @@ function LaneHeader({ lane, lk, collapsed, onToggle, onOpen, info, count }: {
         {p && <span className="shrink-0 font-mono text-[11.5px] text-[var(--w-text-3)]">{lk.issueKey(p.number)}</span>}
         <span className="truncate text-[13px] font-semibold">{lane.title}</span>
         <span className="shrink-0 rounded-full bg-[var(--w-sunken)] px-1.5 text-[11px] font-medium tabular text-[var(--w-text-2)]">
-          {count} {lane.parent ? (count === 1 ? 'sub-task' : 'sub-tasks') : count === 1 ? 'issue' : 'issues'}
+          {lane.parent ? wt('board.nSubtasks', { count }) : wt('common.issueCount', { count })}
         </span>
       </button>
       {p && (
         <>
           <StatusBadge status={lk.statuses.get(p.statusId)} />
-          {info && <span className="text-[11.5px] tabular text-[var(--w-text-3)]">{info.done}/{info.total} done</span>}
+          {info && <span className="text-[11.5px] tabular text-[var(--w-text-3)]">{wt('board.subtasksDone', { done: info.done, total: info.total })}</span>}
           {info && info.open > 0 && lk.statuses.get(p.statusId)?.category === 'DONE' && (
-            <span className="text-[11.5px] font-medium text-[var(--w-orange)]" title="The parent is done but some sub-tasks are still open">⚠ {info.open} still open</span>
+            <span className="text-[11.5px] font-medium text-[var(--w-orange)]" title={wt('board.parentDoneOpen')}>⚠ {wt('board.stillOpen', { n: info.open })}</span>
           )}
-          <button type="button" onClick={() => onOpen(p.number)} className="text-[12px] text-[var(--w-accent-text)] hover:underline">Open</button>
+          <button type="button" onClick={() => onOpen(p.number)} className="text-[12px] text-[var(--w-accent-text)] hover:underline">{wt('board.open')}</button>
         </>
       )}
     </div>
@@ -336,7 +338,7 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
       workApi.moveIssue(pid, v.num, { statusId: v.statusId, beforeIssueId: v.beforeIssueId, afterIssueId: v.afterIssueId, version: v.version }),
     onSettled: async (_d, err, v) => {
       if (err) {
-        toast.error(workErrorStatus(err) === 409 ? 'The board changed while you were dragging. Refreshed.' : workError(err, 'Could not move the issue'));
+        toast.error(workErrorStatus(err) === 409 ? wt('board.changedWhileDrag') : workError(err, wt('board.moveFailed')));
       }
       await qc.invalidateQueries({ queryKey: wk.board(pid) });
       qc.invalidateQueries({ queryKey: wk.backlog(pid) });
@@ -393,8 +395,8 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
     if (!target.statusIds.includes(fromStatus)) {
       const options = allowedTargets(lk, issue.typeId, fromStatus, target.statusIds);
       if (!options.length) {
-        const fromName = lk.statuses.get(fromStatus)?.name ?? 'this status';
-        toast.error(`The ${lk.types.get(issue.typeId)?.name ?? 'issue'} workflow does not allow moving from ${fromName} to ${target.name}.`);
+        const fromName = lk.statuses.get(fromStatus)?.name ?? wt('board.thisStatus');
+        toast.error(wt('board.wfNotAllowed', { type: typeName(lk.types.get(issue.typeId)?.name ?? wt('common.issue')), from: statusName(fromName), to: statusName(target.name) }));
         return;
       }
       statusId = options[0];
@@ -433,7 +435,7 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
       await qc.invalidateQueries({ queryKey: wk.board(pid) });
       qc.invalidateQueries({ queryKey: wk.backlog(pid) });
     } catch (err) {
-      toast.error(workError(err, 'Could not create the issue'));
+      toast.error(workError(err, wt('board.createFailed')));
       throw err;
     }
   };
@@ -476,18 +478,18 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
                 return (
                   <div key={col.key} style={COL_STYLE} className="flex h-8 shrink-0 items-center gap-2 px-1.5">
                     <StatusGlyph category={(col.category in { TODO: 1, IN_PROGRESS: 1, DONE: 1 } ? col.category : "TODO") as StatusCategory} size={14} />
-                    <span className="truncate text-[13px] font-semibold text-[var(--w-text)]">{col.name}</span>
+                    <span className="truncate text-[13px] font-semibold text-[var(--w-text)]">{statusName(col.name)}</span>
                     <span
                       className={cn(
                         'w-count shrink-0',
                         over && '!bg-[color-mix(in_srgb,var(--w-red)_14%,transparent)] !text-[var(--w-red)]',
                       )}
-                      title={col.wipLimit !== null ? `${s.count} issues · WIP limit ${col.wipLimit}${over ? ' — over the limit' : ''}` : `${s.count} issues`}
+                      title={col.wipLimit !== null ? wt('board.colTitleWip', { count: s.count, limit: col.wipLimit, over: over ? wt('board.overLimit') : '' }) : wt('common.issueCount', { count: s.count })}
                     >
                       {s.count}{col.wipLimit !== null && ` / ${col.wipLimit}`}
                     </span>
-                    {over && <span className="shrink-0 text-[11px] font-semibold text-[var(--w-red)]">Over WIP</span>}
-                    <span className="ml-auto shrink-0 text-[12px] tabular text-[var(--w-text-3)]" title="Story points in this column">{Math.round(s.points * 10) / 10} pts</span>
+                    {over && <span className="shrink-0 text-[11px] font-semibold text-[var(--w-red)]">{wt('board.overWip')}</span>}
+                    <span className="ml-auto shrink-0 text-[12px] tabular text-[var(--w-text-3)]" title={wt('board.pointsInCol')}>{wt('board.pts', { n: Math.round(s.points * 10) / 10 })}</span>
                   </div>
                 );
               })}
@@ -537,7 +539,7 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
               );
             })}
             {!filtered.length && (
-              <p className="sticky left-0 py-6 text-center text-[13px] text-[var(--w-text-3)]">No issues match the current filters.</p>
+              <p className="sticky left-0 py-6 text-center text-[13px] text-[var(--w-text-3)]">{wt('board.noMatch')}</p>
             )}
           </div>
         </div>

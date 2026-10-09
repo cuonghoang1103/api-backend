@@ -16,6 +16,7 @@ import { useLookups, wk } from '../hooks';
 import { ConfirmDialog } from '../settings/shared';
 import { Dialog, EmptyState, Field, formatDate, Popover, Spinner } from '../ui';
 import { RunStatusPill } from './testing-ui';
+import { wt } from '@/components/work/i18n';
 
 export default function PlansTab({ config, pid }: { config: ProjectConfig; pid: number }) {
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function PlansTab({ config, pid }: { config: ProjectConfig; pid: 
   const setArchived = async (p: TestPlan, archived: boolean) => {
     try {
       await workApi.updateTestPlan(pid, p.id, { archived });
-      toast.success(archived ? `“${p.name}” archived` : `“${p.name}” restored`);
+      toast.success(archived ? wt('tests.planArchived', { name: p.name }) : wt('tests.planRestored', { name: p.name }));
       refresh();
     } catch (e) { toast.error(workError(e)); }
   };
@@ -58,7 +59,7 @@ export default function PlansTab({ config, pid }: { config: ProjectConfig; pid: 
     setBusy(true);
     try {
       await workApi.deleteTestPlan(pid, deleting.id);
-      toast.success(`Plan “${deleting.name}” deleted`);
+      toast.success(wt('tests.planDeleted', { name: deleting.name }));
       setDeleting(null);
       refresh();
     } catch (e) { toast.error(workError(e)); } finally { setBusy(false); }
@@ -70,29 +71,29 @@ export default function PlansTab({ config, pid }: { config: ProjectConfig; pid: 
       <div className="w-page">
         <div className="mb-4 flex flex-wrap items-center gap-2">
           <div className="min-w-0 flex-1">
-            <h2 className="text-[14px] font-semibold">Test plans</h2>
-            <p className="text-[12.5px] text-[var(--w-text-2)]">A plan is a reusable set of tests — for a release, a feature, or a regression suite. Run it as many times as you need.</p>
+            <h2 className="text-[14px] font-semibold">{wt('tests.tabTestPlans')}</h2>
+            <p className="text-[12.5px] text-[var(--w-text-2)]">{wt('tests.plansIntro')}</p>
           </div>
           {archivedCount > 0 && (
             <label className="flex items-center gap-1.5 text-[12px] text-[var(--w-text-2)]">
               <input type="checkbox" checked={showArchived} onChange={(e) => setShowArchived(e.target.checked)} className="accent-[var(--w-accent)]" />
-              Show archived ({archivedCount})
+              {wt('tests.showArchived', { n: archivedCount })}
             </label>
           )}
           {canEdit && (
-            <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setEditing('new')}><Plus size={13} /> New plan</button>
+            <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setEditing('new')}><Plus size={13} /> {wt('tests.newPlan')}</button>
           )}
         </div>
 
         {plans.isLoading ? (
           <div className="flex h-40 items-center justify-center"><Spinner size={20} /></div>
         ) : plans.error ? (
-          <EmptyState title="Could not load test plans" body={workError(plans.error)} action={<button type="button" className="w-btn" onClick={() => plans.refetch()}>Try again</button>} />
+          <EmptyState title={wt('tests.plansLoadFailed')} body={workError(plans.error)} action={<button type="button" className="w-btn" onClick={() => plans.refetch()}>{wt('common.tryAgain')}</button>} />
         ) : !visible.length ? (
           <EmptyState
-            title={all.length ? 'All plans are archived' : 'No test plans yet'}
-            body={all.length ? 'Show archived plans to see them.' : 'Group related tests into a plan, then start a test cycle from it whenever you need to run them.'}
-            action={canEdit && !all.length ? <button type="button" className="w-btn w-btn-primary" onClick={() => setEditing('new')}>New plan</button> : undefined}
+            title={all.length ? wt('tests.allArchived') : wt('tests.noPlans')}
+            body={all.length ? wt('tests.showArchivedHint') : wt('tests.noPlansBody')}
+            action={canEdit && !all.length ? <button type="button" className="w-btn w-btn-primary" onClick={() => setEditing('new')}>{wt('tests.newPlan')}</button> : undefined}
           />
         ) : (
           <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)]">
@@ -106,16 +107,16 @@ export default function PlansTab({ config, pid }: { config: ProjectConfig; pid: 
                       <span className="min-w-0">
                         <span className="flex flex-wrap items-center gap-1.5">
                           <span className={cn('truncate text-[13.5px] font-medium', p.archivedAt && 'text-[var(--w-text-3)]')}>{p.name}</span>
-                          {p.archivedAt && <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[10.5px] font-medium uppercase text-[var(--w-text-3)]">Archived</span>}
+                          {p.archivedAt && <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[10.5px] font-medium uppercase text-[var(--w-text-3)]">{wt('common.archived')}</span>}
                         </span>
                         <span className="mt-0.5 block text-[12px] text-[var(--w-text-3)]">
-                          <span className="tabular">{p.testNumbers.length}</span> test{p.testNumbers.length === 1 ? '' : 's'} · <span className="tabular">{p.cycleCount}</span> cycle{p.cycleCount === 1 ? '' : 's'} · Created {formatDate(p.createdAt)}
+                          {wt('tests.nTests', { count: p.testNumbers.length })} · {wt('tests.nCycles', { count: p.cycleCount })} · {wt('tests.createdOn', { date: formatDate(p.createdAt) })}
                         </span>
                       </span>
                     </button>
                     {canEdit && !p.archivedAt && (
-                      <button type="button" className="w-btn w-btn-sm" onClick={() => run(p)} disabled={!p.testNumbers.length} title={p.testNumbers.length ? 'Create a test cycle from this plan' : 'Add tests to the plan first'}>
-                        <PlayCircle size={13} /> <span className="max-sm:hidden">Run this plan</span>
+                      <button type="button" className="w-btn w-btn-sm" onClick={() => run(p)} disabled={!p.testNumbers.length} title={p.testNumbers.length ? wt('tests.runPlanTitle') : wt('tests.addTestsFirst')}>
+                        <PlayCircle size={13} /> <span className="max-sm:hidden">{wt('tests.runPlan')}</span>
                       </button>
                     )}
                     {canEdit && (
@@ -132,7 +133,7 @@ export default function PlansTab({ config, pid }: { config: ProjectConfig; pid: 
                     <div className="border-t border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-3 sm:pl-9">
                       {p.description && <p className="mb-3 whitespace-pre-wrap text-[13px] text-[var(--w-text-2)]">{p.description}</p>}
                       {!p.testNumbers.length ? (
-                        <p className="text-[12.5px] text-[var(--w-text-3)]">This plan has no tests yet.{canEdit && ' Use “Manage tests” to add some.'}</p>
+                        <p className="text-[12.5px] text-[var(--w-text-3)]">{wt('tests.planEmpty')}{canEdit && ` ${wt('tests.planEmptyHint')}`}</p>
                       ) : (
                         <ul className="divide-y divide-[var(--w-border)] rounded-[6px] border border-[var(--w-border)] bg-[var(--w-panel)]">
                           {p.testNumbers.map((n) => {
@@ -140,10 +141,10 @@ export default function PlansTab({ config, pid }: { config: ProjectConfig; pid: 
                             return (
                               <li key={n} className="flex items-center gap-2 px-2.5 py-1.5 text-[13px]">
                                 <button type="button" onClick={() => router.push(`${base}/${n}`)} className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)] hover:underline">{lk.issueKey(n)}</button>
-                                <span className="min-w-0 flex-1 truncate">{t?.title ?? <span className="text-[var(--w-text-3)]">{tests.isLoading ? 'Loading…' : 'Unavailable'}</span>}</span>
+                                <span className="min-w-0 flex-1 truncate">{t?.title ?? <span className="text-[var(--w-text-3)]">{tests.isLoading ? wt('common.loading') : wt('tests.unavailable')}</span>}</span>
                                 {t?.lastRun && <RunStatusPill status={t.lastRun.status} title={t.lastRun.cycleName} />}
                                 {canEdit && (
-                                  <button type="button" onClick={() => removeTest(p, n)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`Remove ${lk.issueKey(n)} from plan`} title="Remove from plan">
+                                  <button type="button" onClick={() => removeTest(p, n)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('tests.removeKey', { key: lk.issueKey(n) })} title={wt('tests.removeFromPlan')}>
                                     <X size={13} />
                                   </button>
                                 )}
@@ -153,7 +154,7 @@ export default function PlansTab({ config, pid }: { config: ProjectConfig; pid: 
                         </ul>
                       )}
                       {canEdit && (
-                        <button type="button" className="w-btn w-btn-sm mt-2" onClick={() => setManaging(p)}><ListChecks size={13} /> Manage tests</button>
+                        <button type="button" className="w-btn w-btn-sm mt-2" onClick={() => setManaging(p)}><ListChecks size={13} /> {wt('tests.manageTests')}</button>
                       )}
                     </div>
                   )}
@@ -187,9 +188,9 @@ export default function PlansTab({ config, pid }: { config: ProjectConfig; pid: 
         onClose={() => setDeleting(null)}
         onConfirm={doDelete}
         pending={busy}
-        title="Delete test plan?"
-        confirmLabel="Delete plan"
-        body={<>The plan <b className="text-[var(--w-text)]">{deleting?.name}</b> will be deleted. Its tests and any test cycles already run from it are kept.</>}
+        title={wt('tests.deletePlanQ')}
+        confirmLabel={wt('tests.deletePlan')}
+        body={wt('tests.deletePlanBody', { name: deleting?.name ?? '' })}
       />
     </div>
   );
@@ -202,17 +203,17 @@ function PlanMenu({ plan, onEdit, onManage, onArchive, onDelete }: { plan: TestP
   const act = (fn: () => void) => () => { setOpen(false); fn(); };
   return (
     <>
-      <button ref={ref} type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => setOpen((v) => !v)} aria-label={`Actions for ${plan.name}`}>
+      <button ref={ref} type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => setOpen((v) => !v)} aria-label={wt('releases.actionsFor', { name: plan.name })}>
         <MoreHorizontal size={15} />
       </button>
       <Popover open={open} onClose={() => setOpen(false)} anchorRef={ref} width={180} align="end" className="p-1">
-        <button type="button" className={item} onClick={act(onEdit)}><Pencil size={13} /> Edit details</button>
-        <button type="button" className={item} onClick={act(onManage)}><ListChecks size={13} /> Manage tests</button>
+        <button type="button" className={item} onClick={act(onEdit)}><Pencil size={13} /> {wt('tests.editDetails')}</button>
+        <button type="button" className={item} onClick={act(onManage)}><ListChecks size={13} /> {wt('tests.manageTests')}</button>
         <button type="button" className={item} onClick={act(onArchive)}>
-          {plan.archivedAt ? <><ArchiveRestore size={13} /> Restore</> : <><Archive size={13} /> Archive</>}
+          {plan.archivedAt ? <><ArchiveRestore size={13} /> {wt('common.restore')}</> : <><Archive size={13} /> {wt('common.archive')}</>}
         </button>
         <div className="my-1 border-t border-[var(--w-border)]" />
-        <button type="button" className={cn(item, 'text-[var(--w-red)]')} onClick={act(onDelete)}><Trash2 size={13} /> Delete</button>
+        <button type="button" className={cn(item, 'text-[var(--w-red)]')} onClick={act(onDelete)}><Trash2 size={13} /> {wt('common.delete')}</button>
       </Popover>
     </>
   );
@@ -239,16 +240,16 @@ function PlanDialog({ open, plan, onClose, pid, onSaved, tests, issueKey }: {
     try {
       if (plan) {
         await workApi.updateTestPlan(pid, plan.id, { name: name.trim(), description: desc.trim() || null });
-        toast.success('Plan updated');
+        toast.success(wt('tests.planUpdated'));
         onSaved(plan.id, false);
       } else {
         const r = await workApi.createTestPlan(pid, { name: name.trim(), description: desc.trim() || null, numbers: picked });
-        toast.success(`Plan “${name.trim()}” created`);
+        toast.success(wt('tests.planCreated', { name: name.trim() }));
         onSaved(r.id, true);
       }
       onClose();
     } catch (e) {
-      toast.error(workError(e, 'Could not save the plan'));
+      toast.error(workError(e, wt('tests.planSaveFailed')));
     } finally {
       setPending(false);
     }
@@ -258,28 +259,28 @@ function PlanDialog({ open, plan, onClose, pid, onSaved, tests, issueKey }: {
     <Dialog
       open={open}
       onClose={() => !pending && onClose()}
-      title={plan ? 'Edit test plan' : 'New test plan'}
+      title={plan ? wt('tests.editPlan') : wt('tests.newTestPlan')}
       width={plan ? 520 : 640}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose} disabled={pending}>Cancel</button>
-          <button type="button" className="w-btn w-btn-primary" onClick={save} disabled={pending}>{pending && <Spinner size={12} />} {plan ? 'Save' : 'Create plan'}</button>
+          <button type="button" className="w-btn" onClick={onClose} disabled={pending}>{wt('common.cancel')}</button>
+          <button type="button" className="w-btn w-btn-primary" onClick={save} disabled={pending}>{pending && <Spinner size={12} />} {plan ? wt('common.save') : wt('tests.createPlan')}</button>
         </>
       }
     >
       <form onSubmit={(e) => { e.preventDefault(); save(); }}>
-        <Field label="Name">
-          <input autoFocus className={cn('w-input', tried && !name.trim() && '!border-[var(--w-red)]')} value={name} maxLength={120} onChange={(e) => setName(e.target.value)} placeholder="e.g. Release 1.2 regression" />
-          {tried && !name.trim() && <p className="mt-1 text-[12px] text-[var(--w-red)]">Name is required.</p>}
+        <Field label={wt('common.name')}>
+          <input autoFocus className={cn('w-input', tried && !name.trim() && '!border-[var(--w-red)]')} value={name} maxLength={120} onChange={(e) => setName(e.target.value)} placeholder={wt('tests.planNamePh')} />
+          {tried && !name.trim() && <p className="mt-1 text-[12px] text-[var(--w-red)]">{wt('tests.nameRequired')}</p>}
         </Field>
-        <Field label="Description">
-          <textarea className="w-input min-h-[72px]" value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="Scope, target release, entry/exit criteria…" />
+        <Field label={wt('common.description')}>
+          <textarea className="w-input min-h-[72px]" value={desc} onChange={(e) => setDesc(e.target.value)} placeholder={wt('tests.planDescPh')} />
         </Field>
         <button type="submit" className="hidden" aria-hidden tabIndex={-1} />
       </form>
       {!plan && (
         <div>
-          <label className="w-label">Tests <span className="font-normal text-[var(--w-text-3)]">({picked.length} selected)</span></label>
+          <label className="w-label">{wt('tests.testsLbl')} <span className="font-normal text-[var(--w-text-3)]">({wt('common.selected', { count: picked.length })})</span></label>
           <TestChecklist tests={tests} value={picked} onChange={setPicked} issueKey={issueKey} />
         </div>
       )}
@@ -303,11 +304,11 @@ function ManageTestsDialog({ plan, onClose, pid, tests, testsLoading, issueKey, 
     setPending(true);
     try {
       await workApi.updateTestPlan(pid, plan.id, { addNumbers: add, removeNumbers: remove });
-      toast.success('Plan tests updated');
+      toast.success(wt('tests.planTestsUpdated'));
       onSaved();
       onClose();
     } catch (e) {
-      toast.error(workError(e, 'Could not update the plan'));
+      toast.error(workError(e, wt('tests.planUpdateFailed')));
     } finally {
       setPending(false);
     }
@@ -317,15 +318,15 @@ function ManageTestsDialog({ plan, onClose, pid, tests, testsLoading, issueKey, 
     <Dialog
       open={!!plan}
       onClose={() => !pending && onClose()}
-      title={plan ? `Tests in “${plan.name}”` : ''}
+      title={plan ? wt('tests.testsIn', { name: plan.name }) : ''}
       width={640}
       footer={
         <>
           <span className="mr-auto self-center text-[12px] text-[var(--w-text-3)]">
-            {add.length || remove.length ? `+${add.length} / −${remove.length}` : `${picked.length} selected`}
+            {add.length || remove.length ? `+${add.length} / −${remove.length}` : wt('common.selected', { count: picked.length })}
           </span>
-          <button type="button" className="w-btn" onClick={onClose} disabled={pending}>Cancel</button>
-          <button type="button" className="w-btn w-btn-primary" onClick={save} disabled={pending || (!add.length && !remove.length)}>{pending && <Spinner size={12} />} Save</button>
+          <button type="button" className="w-btn" onClick={onClose} disabled={pending}>{wt('common.cancel')}</button>
+          <button type="button" className="w-btn w-btn-primary" onClick={save} disabled={pending || (!add.length && !remove.length)}>{pending && <Spinner size={12} />} {wt('common.save')}</button>
         </>
       }
     >
@@ -353,13 +354,13 @@ function TestChecklist({ tests, value, onChange, issueKey }: {
     const nums = shown.map((t) => t.number);
     onChange(allShown ? value.filter((n) => !nums.includes(n)) : [...new Set([...value, ...nums])]);
   };
-  if (!tests.length) return <p className="py-4 text-center text-[13px] text-[var(--w-text-3)]">There are no tests in this project yet.</p>;
+  if (!tests.length) return <p className="py-4 text-center text-[13px] text-[var(--w-text-3)]">{wt('tests.noTestsProject')}</p>;
   return (
     <div className="rounded-[8px] border border-[var(--w-border)]">
       <div className="flex items-center gap-2 border-b border-[var(--w-border)] px-2.5">
         <Search size={13} className="shrink-0 text-[var(--w-text-3)]" />
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filter tests" className="h-9 min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-[var(--w-text-3)]" />
-        <button type="button" onClick={toggleShown} className="shrink-0 text-[12px] font-medium text-[var(--w-accent-text)] hover:underline">{allShown ? 'Deselect shown' : 'Select shown'}</button>
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={wt('tests.filterTests')} className="h-9 min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-[var(--w-text-3)]" />
+        <button type="button" onClick={toggleShown} className="shrink-0 text-[12px] font-medium text-[var(--w-accent-text)] hover:underline">{allShown ? wt('tests.deselectShown') : wt('tests.selectShown')}</button>
       </div>
       <div className="max-h-[320px] overflow-y-auto p-1">
         {shown.map((t) => (
@@ -372,10 +373,10 @@ function TestChecklist({ tests, value, onChange, issueKey }: {
             />
             <span className="w-[72px] shrink-0 font-mono text-[11.5px] text-[var(--w-text-2)]">{issueKey(t.number)}</span>
             <span className="min-w-0 flex-1 truncate">{t.title}</span>
-            <span className="hidden shrink-0 text-[11px] text-[var(--w-text-3)] sm:inline">{t.kind === 'GHERKIN' ? 'Gherkin' : `${t.stepCount} steps`}</span>
+            <span className="hidden shrink-0 text-[11px] text-[var(--w-text-3)] sm:inline">{t.kind === 'GHERKIN' ? 'Gherkin' : wt('tests.nSteps', { count: t.stepCount })}</span>
           </label>
         ))}
-        {!shown.length && <p className="px-2 py-3 text-center text-[12px] text-[var(--w-text-3)]">No tests match “{q}”.</p>}
+        {!shown.length && <p className="px-2 py-3 text-center text-[12px] text-[var(--w-text-3)]">{wt('tests.noTestsMatchQ', { q })}</p>}
       </div>
     </div>
   );

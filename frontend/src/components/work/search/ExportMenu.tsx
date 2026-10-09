@@ -10,17 +10,18 @@ import { toast } from 'sonner';
 import { ChevronDown, Download, FileSpreadsheet, FileText, Sheet } from 'lucide-react';
 import { workApi, workError } from '@/lib/work-api';
 import { Popover, Spinner, useToggle } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 type Format = 'csv' | 'xlsx' | 'pdf';
 
 const FORMATS: Array<{ key: Format; label: string; hint: string; Icon: typeof FileText }> = [
-  { key: 'csv', label: 'CSV', hint: 'Re-importable, Jira-compatible columns', Icon: Sheet },
-  { key: 'xlsx', label: 'Excel (.xlsx)', hint: 'Spreadsheet with all fields', Icon: FileSpreadsheet },
-  { key: 'pdf', label: 'PDF', hint: 'Printable summary table', Icon: FileText },
+  { key: 'csv', label: 'CSV', get hint() { return wt('issues.exCsv'); }, Icon: Sheet },
+  { key: 'xlsx', label: 'Excel (.xlsx)', get hint() { return wt('issues.exXlsx'); }, Icon: FileSpreadsheet },
+  { key: 'pdf', label: 'PDF', get hint() { return wt('issues.exPdf'); }, Icon: FileText },
 ];
 
 /** Lỗi của responseType 'blob' là một Blob — đọc JSON bên trong để lấy thông điệp. */
-export async function blobError(err: unknown, fallback = 'Could not export the issues'): Promise<string> {
+export async function blobError(err: unknown, fallback = wt('issues.exportFailed')): Promise<string> {
   const data = (err as { response?: { data?: unknown } })?.response?.data;
   if (data instanceof Blob) {
     try {
@@ -71,15 +72,15 @@ export default function ExportMenu({ pid, getJql }: { pid: number; getJql: () =>
         className="w-btn w-btn-sm gap-1"
         aria-haspopup="menu"
         aria-expanded={pop.on}
-        title="Export the issues matching the current filter"
+        title={wt('issues.exportTitle')}
       >
         {busy ? <Spinner size={12} /> : <Download size={13} />}
-        <span className="max-sm:!hidden">{busy ? 'Exporting…' : 'Export'}</span>
+        <span className="max-sm:!hidden">{busy ? wt('issues.exporting') : wt('common.export')}</span>
         <ChevronDown size={12} className="opacity-60" />
       </button>
       <Popover open={pop.on} onClose={pop.close} anchorRef={btnRef} width={260} align="end">
         <div className="p-1" role="menu">
-          <div className="px-2 pb-1 pt-1.5 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Export current filter</div>
+          <div className="px-2 pb-1 pt-1.5 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{wt('issues.exportCurrent')}</div>
           {FORMATS.map(({ key, label, hint, Icon }) => (
             <button
               key={key}

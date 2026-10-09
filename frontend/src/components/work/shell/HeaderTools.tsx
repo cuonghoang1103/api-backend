@@ -13,6 +13,8 @@ import { useAuthStore } from '@/store/authStore';
 import { Popover, UserAvatar, useToggle } from '../ui';
 import { openHelp } from '../help/store';
 import WorkInbox from './WorkInbox';
+import { wt } from '../i18n';
+import { WorkLanguageChip } from '../i18n/LanguageSwitch';
 
 /** Sự kiện mở bảng lệnh ⌘K từ một nút (CommandPalette lắng nghe). */
 export const OPEN_PALETTE_EVENT = 'work:open-palette';
@@ -30,13 +32,13 @@ export function SearchTrigger() {
     <button
       type="button"
       onClick={openPalette}
-      aria-label="Search and jump (Command K)"
-      title="Search issues, projects and commands"
+      aria-label={wt('shell.searchAndJump')}
+      title={wt('shell.searchTitle')}
       className="group flex h-[30px] min-w-0 items-center gap-2 rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-2.5 text-[13px] text-[var(--w-text-3)] transition-colors hover:border-[var(--w-border-strong)] hover:text-[var(--w-text-2)] xl:w-[180px] 2xl:w-[240px]"
     >
       <Search size={14} className="shrink-0" />
       {/* UX-A: dưới 1280px (khổ app desktop) chỉ còn icon — nhường chỗ cho tên dự án. */}
-      <span className="truncate max-xl:hidden">Search or jump to…</span>
+      <span className="truncate max-xl:hidden">{wt('shell.searchOrJump')}</span>
       <kbd className="w-kbd ml-auto shrink-0 whitespace-nowrap max-xl:!hidden">{mac ? '⌘' : 'Ctrl'}K</kbd>
     </button>
   );
@@ -57,12 +59,12 @@ function UserMenu() {
         onClick={pop.toggle}
         aria-haspopup="menu"
         aria-expanded={pop.on}
-        aria-label="Account"
+        aria-label={wt('shell.account')}
         className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-shadow hover:shadow-[0_0_0_3px_var(--w-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--w-accent-border)]"
       >
         <UserAvatar user={u} size={26} />
       </button>
-      <Popover open={pop.on} onClose={pop.close} anchorRef={ref} width={240} align="end">
+      <Popover open={pop.on} onClose={pop.close} anchorRef={ref} width={252} align="end">
         <div role="menu" className="p-1">
           <div className="flex items-center gap-2.5 px-2 pb-2 pt-1.5">
             <UserAvatar user={u} size={30} />
@@ -72,11 +74,16 @@ function UserMenu() {
             </span>
           </div>
           <div className="my-1 border-t border-[var(--w-border)]" />
-          <Link role="menuitem" href="/work?tab=my-work" onClick={pop.close} className={item}><Inbox size={14} /> My work</Link>
-          <Link role="menuitem" href="/work/developer" onClick={pop.close} className={item}><KeyRound size={14} /> API tokens</Link>
-          <button role="menuitem" type="button" onClick={() => { pop.close(); openHelp(); }} className={item}><CircleHelp size={14} /> Help &amp; guide</button>
+          <Link role="menuitem" href="/work?tab=my-work" onClick={pop.close} className={item}><Inbox size={14} /> {wt('shell.myWork')}</Link>
+          <Link role="menuitem" href="/work/developer" onClick={pop.close} className={item}><KeyRound size={14} /> {wt('shell.apiTokens')}</Link>
+          <button role="menuitem" type="button" onClick={() => { pop.close(); openHelp(); }} className={item}><CircleHelp size={14} /> {wt('shell.helpGuide')}</button>
           <div className="my-1 border-t border-[var(--w-border)]" />
-          <Link role="menuitem" href="/" onClick={pop.close} className={item}><ArrowLeft size={14} /> Back to CuongThai</Link>
+          <div className="flex items-center justify-between gap-2 px-2 py-1">
+            <span className="text-[12px] text-[var(--w-text-3)]">{wt('common.language')}</span>
+            <WorkLanguageChip compact menu />
+          </div>
+          <div className="my-1 border-t border-[var(--w-border)]" />
+          <Link role="menuitem" href="/" onClick={pop.close} className={item}><ArrowLeft size={14} /> {wt('shell.backToSite')}</Link>
         </div>
       </Popover>
     </>

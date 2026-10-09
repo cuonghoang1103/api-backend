@@ -12,6 +12,8 @@ import { AlertTriangle, BadgeCheck, Bot, Eye } from 'lucide-react';
 import { userName, type WorkUser } from '@/lib/work-api';
 import { agentKeys, agentsApi } from '@/lib/work-agents-api';
 import { relativeTime, UserAvatar } from '../ui';
+import { wt } from '@/components/work/i18n';
+import { statusName } from '@/components/work/i18n/names';
 
 export default function AgentsNeedYou() {
   const q = useQuery({ queryKey: agentKeys.needMe, queryFn: agentsApi.needMe, staleTime: 30_000, retry: false });
@@ -36,26 +38,26 @@ export default function AgentsNeedYou() {
   );
 
   return (
-    <section aria-label="My agents need you" data-testid="agents-need-you">
+    <section aria-label={wt('home.agentsNeedYou')} data-testid="agents-need-you">
       <h2 className="mb-2 flex items-center gap-2 text-[14px] font-semibold">
-        <Bot size={15} className="text-[var(--w-accent-text)]" /> My agents need you
+        <Bot size={15} className="text-[var(--w-accent-text)]" /> {wt('home.agentsNeedYou')}
         <span className="rounded-full bg-[var(--w-sunken)] px-2 text-[12px] font-medium leading-[20px] tabular-nums text-[var(--w-text-2)]">{total}</span>
       </h2>
       <ul className="w-card overflow-hidden">
         {d.expired.map((x) => (
           <Row key={`e${x.key}`} href={x.url} agent={who(x.agentUserId)} tone="text-[var(--w-red)]" icon={<AlertTriangle size={14} />}
             title={<><span className="font-mono text-[12px] text-[var(--w-accent-text)]">{x.key}</span> {x.title}</>}
-            sub={`${userName(who(x.agentUserId))} stopped responding${x.expiredAt ? ` ${relativeTime(x.expiredAt)}` : ''} — issue flagged as blocked`} />
+            sub={wt('home.agentStopped', { name: userName(who(x.agentUserId)), when: x.expiredAt ? ` ${relativeTime(x.expiredAt)}` : '' })} />
         ))}
         {d.review.map((x) => (
           <Row key={`r${x.key}`} href={x.url} agent={who(x.agentUserId)} tone="text-[var(--w-accent-text)]" icon={<Eye size={14} />}
             title={<><span className="font-mono text-[12px] text-[var(--w-accent-text)]">{x.key}</span> {x.title}</>}
-            sub={`${userName(who(x.agentUserId))} finished — waiting in “${x.status.name}” for your review · ${x.project.name}`} />
+            sub={wt('home.agentFinished', { name: userName(who(x.agentUserId)), status: statusName(x.status.name), project: x.project.name })} />
         ))}
         {d.approvals.map((x) => (
           <Row key={`a${x.id}`} href={x.url} agent={who(x.agentUserId)} tone="text-[var(--w-orange)]" icon={<BadgeCheck size={14} />}
             title={x.title}
-            sub={`Approval requested by ${userName(who(x.agentUserId))} ${relativeTime(x.createdAt)} · ${x.project.name}`} />
+            sub={wt('home.agentApproval', { name: userName(who(x.agentUserId)), when: relativeTime(x.createdAt), project: x.project.name })} />
         ))}
       </ul>
     </section>

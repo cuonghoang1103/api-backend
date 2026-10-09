@@ -9,11 +9,12 @@ import { workApi, workError, type ProjectConfig, type WorkLabel } from '@/lib/wo
 import { Popover, Spinner, useToggle } from '../ui';
 import { ConfirmDialog, Section } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
+import { wt } from '@/components/work/i18n';
 
 /** Bảng màu nhãn — màu dữ liệu, nên được phép viết cứng. */
 export const LABEL_COLORS = ['#64748b', '#dc2626', '#ea580c', '#ca8a04', '#16a34a', '#0891b2', '#2563eb', '#7c3aed'];
 
-export function ColorPicker({ value, onChange, disabled, ariaLabel = 'Label colour' }: { value: string; onChange: (c: string) => void; disabled?: boolean; ariaLabel?: string }) {
+export function ColorPicker({ value, onChange, disabled, ariaLabel = wt('settings.labelColour') }: { value: string; onChange: (c: string) => void; disabled?: boolean; ariaLabel?: string }) {
   const ref = useRef<HTMLButtonElement>(null);
   const pop = useToggle();
   return (
@@ -34,7 +35,7 @@ export function ColorPicker({ value, onChange, disabled, ariaLabel = 'Label colo
             <button
               key={c}
               type="button"
-              aria-label={`Colour ${c}`}
+              aria-label={`${wt('settings.color')} ${c}`}
               onClick={() => { onChange(c); pop.close(); }}
               className="flex h-8 w-full items-center justify-center rounded-[6px] hover:bg-[var(--w-hover)]"
             >
@@ -56,7 +57,7 @@ function LabelRow({ label, pid, canEdit, onChanged, onDelete }: { label: WorkLab
   const update = useMutation({
     mutationFn: (body: { name: string; color: string }) => workApi.updateLabel(pid, label.id, body),
     onSuccess: () => onChanged(),
-    onError: (err) => { toast.error(workError(err, 'Could not update the label')); setName(label.name); },
+    onError: (err) => { toast.error(workError(err, wt('settings.labelUpdateFailed'))); setName(label.name); },
   });
 
   const commitName = () => {
@@ -80,14 +81,14 @@ function LabelRow({ label, pid, canEdit, onChanged, onDelete }: { label: WorkLab
             if (e.key === 'Enter') e.currentTarget.blur();
             if (e.key === 'Escape') { setName(label.name); e.currentTarget.blur(); }
           }}
-          aria-label="Label name"
+          aria-label={wt('settings.labelName')}
         />
       ) : (
         <span className="min-w-0 flex-1 truncate px-2 text-[13px]">{label.name}</span>
       )}
       {update.isPending && <Spinner size={12} />}
       {canEdit && (
-        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onDelete} aria-label={`Delete label ${label.name}`} title="Delete label">
+        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onDelete} aria-label={wt('settings.deleteLabelN', { name: label.name })} title={wt('settings.deleteLabel')}>
           <Trash2 size={13} />
         </button>
       )}
@@ -105,23 +106,23 @@ export default function ProjectLabels({ config, slug }: { config: ProjectConfig;
   const create = useMutation({
     mutationFn: () => workApi.createLabel(config.id, { name: newName.trim(), color: newColor }),
     onSuccess: (l) => {
-      toast.success(`Label “${l.name}” created`);
+      toast.success(wt('settings.labelCreated', { name: l.name }));
       setNewName('');
       setNewColor(LABEL_COLORS[(LABEL_COLORS.indexOf(newColor) + 1) % LABEL_COLORS.length]);
       invalidate();
     },
-    onError: (err) => toast.error(workError(err, 'Could not create the label')),
+    onError: (err) => toast.error(workError(err, wt('fields.labelFailed'))),
   });
   const del = useMutation({
     mutationFn: (id: number) => workApi.deleteLabel(config.id, id),
-    onSuccess: () => { toast.success('Label deleted'); setDeleting(null); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not delete the label')),
+    onSuccess: () => { toast.success(wt('settings.labelDeleted')); setDeleting(null); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('settings.labelDeleteFailed'))),
   });
 
   const labels = [...config.labels].sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <Section title="Labels" description="Tag issues across types and sprints — for example frontend, backend or needs-design. Click a name to rename it.">
+    <Section title={wt('common.labels')} description={wt('settings.labelsDesc')}>
       <div className="max-w-[560px]">
         {canEdit && (
           <form
@@ -129,10 +130,10 @@ export default function ProjectLabels({ config, slug }: { config: ProjectConfig;
             onSubmit={(e) => { e.preventDefault(); if (newName.trim() && !create.isPending) create.mutate(); }}
           >
             <ColorPicker value={newColor} onChange={setNewColor} />
-            <input className="w-input min-w-0 flex-1" placeholder="New label name" value={newName} maxLength={50} onChange={(e) => setNewName(e.target.value)} />
+            <input className="w-input min-w-0 flex-1" placeholder={wt('settings.newLabelName')} value={newName} maxLength={50} onChange={(e) => setNewName(e.target.value)} />
             <button type="submit" className="w-btn shrink-0" disabled={!newName.trim() || create.isPending}>
               {create.isPending ? <Spinner size={12} /> : <Plus size={14} />}
-              Add
+              {wt('common.add')}
             </button>
           </form>
         )}
@@ -140,15 +141,15 @@ export default function ProjectLabels({ config, slug }: { config: ProjectConfig;
           {labels.map((l) => (
             <LabelRow key={l.id} label={l} pid={config.id} canEdit={canEdit} onChanged={invalidate} onDelete={() => setDeleting(l)} />
           ))}
-          {!labels.length && <div className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">No labels yet.</div>}
+          {!labels.length && <div className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">{wt('fields.noLabels')}.</div>}
         </div>
       </div>
       <ConfirmDialog
         open={!!deleting}
         onClose={() => setDeleting(null)}
-        title="Delete label?"
-        body={<>The label <span className="font-medium text-[var(--w-text)]">{deleting?.name}</span> will be removed from every issue that uses it.</>}
-        confirmLabel="Delete label"
+        title={wt('settings.deleteLabelQ')}
+        body={wt('settings.deleteLabelBody', { name: deleting?.name ?? '' })}
+        confirmLabel={wt('settings.deleteLabel')}
         pending={del.isPending}
         onConfirm={() => deleting && del.mutate(deleting.id)}
       />

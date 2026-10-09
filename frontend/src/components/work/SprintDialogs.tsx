@@ -17,13 +17,14 @@ import { wk } from './hooks';
 import { Dialog, Field, Spinner } from './ui';
 import AiMarkdown from './ai/AiMarkdown';
 import UpgradeDialog from './ai/UpgradeDialog';
+import { wt, wfmt } from '@/components/work/i18n';
 
 const DURATIONS = [
-  { weeks: 1, label: '1 week' },
-  { weeks: 2, label: '2 weeks' },
-  { weeks: 3, label: '3 weeks' },
-  { weeks: 4, label: '4 weeks' },
-  { weeks: 0, label: 'Custom' },
+  { weeks: 1, get label() { return wt('sprint.weeks', { count: 1 }); } },
+  { weeks: 2, get label() { return wt('sprint.weeks', { count: 2 }); } },
+  { weeks: 3, get label() { return wt('sprint.weeks', { count: 3 }); } },
+  { weeks: 4, get label() { return wt('sprint.weeks', { count: 4 }); } },
+  { weeks: 0, get label() { return wt('sprint.custom'); } },
 ];
 
 /** yyyy-mm-ddThh:mm theo giờ máy — định dạng của <input type="datetime-local">. */
@@ -32,7 +33,7 @@ function toLocalInput(d: Date): string {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
 }
 
-export const unitLabel = (u: EstimationUnit) => (u === 'HOURS' ? 'h' : 'pts');
+export const unitLabel = (u: EstimationUnit) => (u === 'HOURS' ? 'h' : wt('backlog.ptsUnit'));
 
 function invalidateAll(qc: ReturnType<typeof useQueryClient>, pid: number) {
   for (const k of [wk.backlog(pid), wk.board(pid), wk.sprints(pid), wk.project(pid), wk.issues(pid), wk.reports(pid)]) {
@@ -71,42 +72,41 @@ export function StartSprintDialog({ open, onClose, pid, sprint, issueCount, poin
     mutationFn: () => workApi.startSprint(pid, sprint.id, {
       name: name.trim(), goal: goal.trim() || null, startAt: new Date(start).toISOString(), endAt: new Date(end).toISOString(),
     }),
-    onSuccess: () => { toast.success(`${name.trim()} started`); invalidateAll(qc, pid); onClose(); },
-    onError: (err) => toast.error(workError(err, 'Could not start the sprint')),
+    onSuccess: () => { toast.success(wt('sprint.started', { name: name.trim() })); invalidateAll(qc, pid); onClose(); },
+    onError: (err) => toast.error(workError(err, wt('sprint.startFailed'))),
   });
 
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      title="Start sprint"
+      title={wt('backlog.startSprint')}
       width={520}
       footer={(
         <>
-          <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="button" className="w-btn w-btn-primary" disabled={!valid || m.isPending} onClick={() => m.mutate()}>
-            {m.isPending ? 'Starting…' : 'Start sprint'}
+            {m.isPending ? wt('sprint.starting') : wt('backlog.startSprint')}
           </button>
         </>
       )}
     >
       <p className="mb-4 text-[13px] text-[var(--w-text-2)]">
-        <span className="font-semibold text-[var(--w-text)]">{issueCount}</span> {issueCount === 1 ? 'issue' : 'issues'} ·{' '}
-        <span className="font-semibold text-[var(--w-text)]">{points}</span> {unitLabel(unit)} will be committed to this sprint.
-        {issueCount === 0 && <span className="mt-1 block text-[var(--w-orange)]">This sprint is empty. Drag issues into it from the backlog first.</span>}
+        {wt('sprint.commit', { count: issueCount, points, unit: unitLabel(unit) })}
+        {issueCount === 0 && <span className="mt-1 block text-[var(--w-orange)]">{wt('sprint.emptyWarn')}</span>}
       </p>
-      <Field label="Sprint name"><input className="w-input" value={name} maxLength={100} onChange={(e) => setName(e.target.value)} /></Field>
+      <Field label={wt('sprint.name')}><input className="w-input" value={name} maxLength={100} onChange={(e) => setName(e.target.value)} /></Field>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <Field label="Duration">
+        <Field label={wt('sprint.duration')}>
           <select className="w-input" value={weeks} onChange={(e) => setWeeks(Number(e.target.value))}>
             {DURATIONS.map((d) => <option key={d.weeks} value={d.weeks}>{d.label}</option>)}
           </select>
         </Field>
-        <Field label="Start date"><input type="datetime-local" className="w-input" value={start} onChange={(e) => setStart(e.target.value)} /></Field>
-        <Field label="End date"><input type="datetime-local" className="w-input" value={end} disabled={weeks !== 0} onChange={(e) => setEnd(e.target.value)} /></Field>
+        <Field label={wt('common.startDate')}><input type="datetime-local" className="w-input" value={start} onChange={(e) => setStart(e.target.value)} /></Field>
+        <Field label={wt('common.endDate')}><input type="datetime-local" className="w-input" value={end} disabled={weeks !== 0} onChange={(e) => setEnd(e.target.value)} /></Field>
       </div>
-      <Field label="Sprint goal" hint="One sentence the whole team can remember. Shown on the board.">
-        <textarea className="w-input" rows={2} value={goal} maxLength={5000} onChange={(e) => setGoal(e.target.value)} placeholder="e.g. Customers can pay by card" />
+      <Field label={wt('sprint.goal')} hint={wt('sprint.goalHint')}>
+        <textarea className="w-input" rows={2} value={goal} maxLength={5000} onChange={(e) => setGoal(e.target.value)} placeholder={wt('sprint.goalPh')} />
       </Field>
     </Dialog>
   );
@@ -130,58 +130,58 @@ export function CompleteSprintDialog({ open, onClose, pid, sprint, plannedSprint
   const m = useMutation({
     mutationFn: () => workApi.completeSprint(pid, sprint.id, moveTo === 'new' || moveTo === 'backlog' ? moveTo : Number(moveTo)),
     onSuccess: (res) => {
-      toast.success(`${sprint.name} completed — ${res.report.completed.length} of ${res.report.completed.length + res.report.incomplete.length} issues done`);
+      toast.success(wt('sprint.completed', { name: sprint.name, done: res.report.completed.length, total: res.report.completed.length + res.report.incomplete.length }));
       invalidateAll(qc, pid);
       onClose();
     },
-    onError: (err) => toast.error(workError(err, 'Could not complete the sprint')),
+    onError: (err) => toast.error(workError(err, wt('sprint.completeFailed'))),
   });
 
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      title={`Complete ${sprint.name}`}
+      title={wt('sprint.completeName', { name: sprint.name })}
       width={480}
       footer={(
         <>
-          <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="button" className="w-btn w-btn-primary" disabled={!r || m.isPending} onClick={() => m.mutate()}>
-            {m.isPending ? 'Completing…' : 'Complete sprint'}
+            {m.isPending ? wt('sprint.completing') : wt('board.completeSprint')}
           </button>
         </>
       )}
     >
       {!r ? (
-        <p className="text-[13px] text-[var(--w-text-3)]">Loading sprint summary…</p>
+        <p className="text-[13px] text-[var(--w-text-3)]">{wt('sprint.loadingSummary')}</p>
       ) : (
         <>
           <div className="mb-4 grid grid-cols-2 gap-2">
             <div className="rounded-[8px] border border-[var(--w-border)] p-3">
-              <div className="flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><CheckCircle2 size={13} className="text-[var(--w-green)]" /> Completed</div>
+              <div className="flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><CheckCircle2 size={13} className="text-[var(--w-green)]" /> {wt('sprint.completedLbl')}</div>
               <div className="mt-1 text-[20px] font-semibold tabular">{r.completed.length}</div>
               <div className="text-[12px] text-[var(--w-text-3)] tabular">{r.completedPoints} {unitLabel(r.unit)}</div>
             </div>
             <div className="rounded-[8px] border border-[var(--w-border)] p-3">
-              <div className="flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><CircleDashed size={13} /> Open</div>
+              <div className="flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><CircleDashed size={13} /> {wt('sprint.openLbl')}</div>
               <div className="mt-1 text-[20px] font-semibold tabular">{r.incomplete.length}</div>
               <div className="text-[12px] text-[var(--w-text-3)] tabular">{Math.round(r.incomplete.reduce((s, i) => s + i.points, 0) * 10) / 10} {unitLabel(r.unit)}</div>
             </div>
           </div>
           {r.incomplete.length > 0 ? (
-            <Field label="Move open issues to" hint="Their sub-tasks that are not done move with them.">
+            <Field label={wt('sprint.moveOpenTo')} hint={wt('sprint.moveOpenHint')}>
               <select className="w-input" value={moveTo} onChange={(e) => setMoveTo(e.target.value)}>
                 {plannedSprints.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-                <option value="new">New sprint</option>
-                <option value="backlog">Backlog</option>
+                <option value="new">{wt('sprint.newSprint')}</option>
+                <option value="backlog">{wt('backlog.backlog')}</option>
               </select>
             </Field>
           ) : (
-            <p className="text-[13px] text-[var(--w-green)]">Every issue in this sprint is done. Nice work.</p>
+            <p className="text-[13px] text-[var(--w-green)]">{wt('sprint.allDone')}</p>
           )}
           {(r.added.length > 0 || r.removed.length > 0) && (
             <p className="text-[12px] text-[var(--w-text-3)]">
-              Scope changed during the sprint: {r.added.length} added, {r.removed.length} removed.
+              {wt('sprint.scopeChanged', { added: r.added.length, removed: r.removed.length })}
             </p>
           )}
         </>
@@ -211,29 +211,29 @@ export function EditSprintDialog({ open, onClose, pid, sprint }: { open: boolean
       endAt: end ? new Date(end).toISOString() : null,
     }),
     onSuccess: () => { invalidateAll(qc, pid); onClose(); },
-    onError: (err) => toast.error(workError(err, 'Could not save the sprint')),
+    onError: (err) => toast.error(workError(err, wt('sprint.saveFailed'))),
   });
   const running = sprint.state === 'ACTIVE';
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      title="Edit sprint"
+      title={wt('backlog.editSprint')}
       width={480}
       footer={(
         <>
-          <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>Cancel</button>
-          <button type="button" className="w-btn w-btn-primary" disabled={!name.trim() || !datesOk || m.isPending} onClick={() => m.mutate()}>Save</button>
+          <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>{wt('common.cancel')}</button>
+          <button type="button" className="w-btn w-btn-primary" disabled={!name.trim() || !datesOk || m.isPending} onClick={() => m.mutate()}>{wt('common.save')}</button>
         </>
       )}
     >
-      <Field label="Sprint name"><input className="w-input" value={name} maxLength={100} onChange={(e) => setName(e.target.value)} /></Field>
+      <Field label={wt('sprint.name')}><input className="w-input" value={name} maxLength={100} onChange={(e) => setName(e.target.value)} /></Field>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Field label="Start date"><input type="datetime-local" className="w-input" value={start} onChange={(e) => setStart(e.target.value)} disabled={running} /></Field>
-        <Field label="End date"><input type="datetime-local" className="w-input" value={end} onChange={(e) => setEnd(e.target.value)} /></Field>
+        <Field label={wt('common.startDate')}><input type="datetime-local" className="w-input" value={start} onChange={(e) => setStart(e.target.value)} disabled={running} /></Field>
+        <Field label={wt('common.endDate')}><input type="datetime-local" className="w-input" value={end} onChange={(e) => setEnd(e.target.value)} /></Field>
       </div>
-      {!datesOk && <p className="-mt-2 mb-3 text-[12px] text-[var(--w-red)]">The end date must be after the start date.</p>}
-      <Field label="Sprint goal"><textarea className="w-input" rows={2} value={goal} onChange={(e) => setGoal(e.target.value)} /></Field>
+      {!datesOk && <p className="-mt-2 mb-3 text-[12px] text-[var(--w-red)]">{wt('errors.endAfterStart')}.</p>}
+      <Field label={wt('sprint.goal')}><textarea className="w-input" rows={2} value={goal} onChange={(e) => setGoal(e.target.value)} /></Field>
     </Dialog>
   );
 }
@@ -269,10 +269,10 @@ export function PlanSprintDialog({ open, onClose, pid, sprint, issueKey }: {
 
   const explain = useMutation({
     mutationFn: () => workApi.aiPlanSprint(pid, { sprintId: sprint.id, explain: true }),
-    onSuccess: (r) => setRationale(r.rationale ?? 'No explanation was returned.'),
+    onSuccess: (r) => setRationale(r.rationale ?? wt('sprint.noExplanation')),
     onError: (err) => {
       if (isAiQuotaError(err)) setUpgrade(true);
-      else toast.error(workError(err, 'Could not explain this plan'));
+      else toast.error(workError(err, wt('sprint.explainFailed')));
     },
   });
 
@@ -280,15 +280,15 @@ export function PlanSprintDialog({ open, onClose, pid, sprint, issueKey }: {
   const apply = useMutation({
     mutationFn: () => workApi.bulkUpdate(pid, picked.map((i) => i.number), { sprintId: sprint.id }),
     onSuccess: (r) => {
-      if (r.updated.length) toast.success(`${r.updated.length} ${r.updated.length === 1 ? 'issue' : 'issues'} added to ${sprint.name}`);
-      if (r.failed.length) toast.error(`${r.failed.length} could not be moved: ${r.failed.slice(0, 3).map((f) => `${issueKey(f.number)} (${f.error})`).join(', ')}`);
+      if (r.updated.length) toast.success(wt('sprint.addedTo', { count: r.updated.length, name: sprint.name }));
+      if (r.failed.length) toast.error(wt('sprint.moveFailedN', { count: r.failed.length, list: r.failed.slice(0, 3).map((f) => `${issueKey(f.number)} (${f.error})`).join(', ') }));
       invalidateAll(qc, pid);
       onClose();
     },
-    onError: (err) => toast.error(workError(err, 'Could not add the issues to the sprint')),
+    onError: (err) => toast.error(workError(err, wt('sprint.addFailed'))),
   });
 
-  const u = p ? unitLabel(p.unit) : 'pts';
+  const u = p ? unitLabel(p.unit) : wt('backlog.ptsUnit');
   const r1 = (n: number) => Math.round(n * 10) / 10;
   const pickedPts = r1(picked.reduce((s, i) => s + i.points, 0));
   const total = p ? r1(p.alreadyPlanned + pickedPts) : 0;
@@ -302,40 +302,40 @@ export function PlanSprintDialog({ open, onClose, pid, sprint, issueKey }: {
         open={open}
         onClose={onClose}
         width={600}
-        title={<span className="inline-flex items-center gap-2"><Sparkles size={16} className="text-[var(--w-accent-text)]" />Plan {sprint.name}</span>}
+        title={<span className="inline-flex items-center gap-2"><Sparkles size={16} className="text-[var(--w-accent-text)]" />{wt('sprint.planName', { name: sprint.name })}</span>}
         footer={(
           <>
-            <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>Cancel</button>
+            <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>{wt('common.cancel')}</button>
             <button type="button" className="w-btn w-btn-primary" disabled={!picked.length || apply.isPending} onClick={() => apply.mutate()}>
-              {apply.isPending && <Spinner size={12} />} Add {picked.length || ''} {picked.length === 1 ? 'issue' : 'issues'} to sprint
+              {apply.isPending && <Spinner size={12} />} {wt('sprint.addToSprint', { count: picked.length })}
             </button>
           </>
         )}
       >
         {plan.isLoading ? (
-          <div className="flex items-center justify-center gap-2 py-12 text-[13px] text-[var(--w-text-2)]"><Spinner size={16} /> Calculating velocity…</div>
+          <div className="flex items-center justify-center gap-2 py-12 text-[13px] text-[var(--w-text-2)]"><Spinner size={16} /> {wt('sprint.calculating')}</div>
         ) : plan.error || !p ? (
           <div className="py-8 text-center">
-            <div className="text-[14px] font-semibold">Could not build a plan</div>
+            <div className="text-[14px] font-semibold">{wt('sprint.planFailed')}</div>
             <p className="mt-1 text-[13px] text-[var(--w-text-2)]">{workError(plan.error)}</p>
-            <button type="button" className="w-btn mt-3" onClick={() => plan.refetch()}>Try again</button>
+            <button type="button" className="w-btn mt-3" onClick={() => plan.refetch()}>{wt('common.tryAgain')}</button>
           </div>
         ) : (
           <div className="space-y-4">
             <p className="text-[13px] leading-relaxed text-[var(--w-text-2)]">
-              Proposed from your backlog order and the team&apos;s recent velocity. The numbers are calculated from project data — no AI request is used.
+              {wt('sprint.planIntro')}
             </p>
 
             {/* Velocity */}
             <div className="grid grid-cols-3 gap-2">
-              <PlanStat label="Velocity" value={p.velocity === null ? '—' : `${r1(p.velocity)} ${u}`} hint={p.history.length ? `Avg of last ${p.history.length}` : 'No history yet'} />
-              <PlanStat label="Target" value={`${r1(p.target)} ${u}`} hint={p.velocity === null ? 'Default capacity' : 'Based on velocity'} />
-              <PlanStat label="Already planned" value={`${r1(p.alreadyPlanned)} ${u}`} hint="Open work in sprint" />
+              <PlanStat label="Velocity" value={p.velocity === null ? '—' : `${r1(p.velocity)} ${u}`} hint={p.history.length ? wt('sprint.avgLast', { n: p.history.length }) : wt('sprint.noHistory')} />
+              <PlanStat label={wt('sprint.target')} value={`${r1(p.target)} ${u}`} hint={p.velocity === null ? wt('sprint.defaultCapacity') : wt('sprint.basedOnVelocity')} />
+              <PlanStat label={wt('sprint.alreadyPlanned')} value={`${r1(p.alreadyPlanned)} ${u}`} hint={wt('sprint.openInSprint')} />
             </div>
             {p.history.length > 0 && (
               <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
                 <div className="grid grid-cols-[minmax(0,1fr)_84px_84px] gap-2 bg-[var(--w-sunken)] px-3 py-1.5 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
-                  <span>Recent sprint</span><span className="text-right">Committed</span><span className="text-right">Completed</span>
+                  <span>{wt('sprint.recentSprint')}</span><span className="text-right">{wt('sprint.committed')}</span><span className="text-right">{wt('sprint.completedLbl')}</span>
                 </div>
                 {p.history.map((h, i) => (
                   <div key={i} className="grid grid-cols-[minmax(0,1fr)_84px_84px] gap-2 border-t border-[var(--w-border)] px-3 py-1.5 text-[12.5px]">
@@ -350,27 +350,27 @@ export function PlanSprintDialog({ open, onClose, pid, sprint, issueKey }: {
             {/* Tổng so với mục tiêu */}
             <div>
               <div className="mb-1 flex items-center justify-between text-[12px]">
-                <span className="text-[var(--w-text-2)]">Planned total</span>
+                <span className="text-[var(--w-text-2)]">{wt('sprint.plannedTotal')}</span>
                 <span className={cn('font-semibold tabular', over ? 'text-[var(--w-red)]' : 'text-[var(--w-text)]')}>{total} / {r1(p.target)} {u}</span>
               </div>
-              <div className="relative h-2.5 overflow-hidden rounded-full bg-[var(--w-sunken)]" role="img" aria-label={`${total} of ${r1(p.target)} ${u} planned`}>
+              <div className="relative h-2.5 overflow-hidden rounded-full bg-[var(--w-sunken)]" role="img" aria-label={wt('sprint.plannedAria', { total, target: r1(p.target), unit: u })}>
                 <div className="absolute inset-y-0 left-0 bg-[var(--w-text-3)] opacity-50" style={{ width: `${(p.alreadyPlanned / scale) * 100}%` }} />
                 <div className="absolute inset-y-0" style={{ left: `${(p.alreadyPlanned / scale) * 100}%`, width: `${(pickedPts / scale) * 100}%`, background: over ? 'var(--w-red)' : 'var(--w-accent)' }} />
                 {total > p.target && <div className="absolute inset-y-0 w-px bg-[var(--w-text)]" style={{ left: `${(p.target / scale) * 100}%` }} />}
               </div>
               <div className="mt-1 flex flex-wrap gap-x-3 text-[11px] text-[var(--w-text-3)]">
-                <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-[2px] bg-[var(--w-text-3)] opacity-50" /> Already in sprint {r1(p.alreadyPlanned)}</span>
-                <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-[2px] bg-[var(--w-accent)]" /> Selected {pickedPts}</span>
+                <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-[2px] bg-[var(--w-text-3)] opacity-50" /> {wt('sprint.alreadyIn', { n: r1(p.alreadyPlanned) })}</span>
+                <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-[2px] bg-[var(--w-accent)]" /> {wt('sprint.selectedPts', { n: pickedPts })}</span>
               </div>
             </div>
 
             {/* Đề xuất */}
             <div>
               <div className="mb-1.5 flex items-center gap-2">
-                <h3 className="text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Proposed issues <span className="tabular normal-case">({p.selected.length})</span></h3>
+                <h3 className="text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{wt('sprint.proposed')} <span className="tabular normal-case">({p.selected.length})</span></h3>
                 {p.selected.length > 1 && (
                   <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => setChecked(allOn ? new Set() : new Set(p.selected.map((i) => i.number)))}>
-                    {allOn ? 'Clear all' : 'Select all'}
+                    {allOn ? wt('sprint.clearAll') : wt('common.selectAll')}
                   </button>
                 )}
               </div>
@@ -395,17 +395,17 @@ export function PlanSprintDialog({ open, onClose, pid, sprint, issueKey }: {
                 </div>
               ) : (
                 <div className="rounded-[8px] border border-dashed border-[var(--w-border-strong)] px-3 py-4 text-center text-[12.5px] text-[var(--w-text-2)]">
-                  Nothing else fits. The sprint is already at capacity, or the backlog has no estimated issues.
+                  {wt('sprint.nothingFits')}
                 </div>
               )}
             </div>
 
             {!!p.excluded && (p.excluded.testCases > 0 || p.excluded.deskTickets > 0) && (
               <p className="text-[12px] text-[var(--w-text-3)]">
-                Not planned (not backlog work): {[
-                  p.excluded.testCases ? `${p.excluded.testCases} test case${p.excluded.testCases === 1 ? '' : 's'}` : '',
-                  p.excluded.deskTickets ? `${p.excluded.deskTickets} service desk ticket${p.excluded.deskTickets === 1 ? '' : 's'}` : '',
-                ].filter(Boolean).join(' and ')}.
+                {wt('sprint.notPlanned')} {[
+                  p.excluded.testCases ? wt('sprint.nTestCases', { count: p.excluded.testCases }) : '',
+                  p.excluded.deskTickets ? wt('sprint.nDeskTickets', { count: p.excluded.deskTickets }) : '',
+                ].filter(Boolean).join(wt('sprint.and'))}.
               </p>
             )}
 
@@ -424,11 +424,11 @@ export function PlanSprintDialog({ open, onClose, pid, sprint, issueKey }: {
             <div className="rounded-[8px] border border-[var(--w-border)]">
               <div className="flex flex-wrap items-center gap-2 px-3 py-2">
                 <span className="min-w-0 flex-1 text-[12.5px] text-[var(--w-text-2)]">
-                  {rationale ? 'AI coach notes' : 'Get a short explanation of the risks and what to clarify before starting. Uses 1 AI request.'}
+                  {rationale ? wt('sprint.coachNotes') : wt('sprint.explainHint')}
                 </span>
                 <button type="button" className="w-btn w-btn-sm" disabled={explain.isPending} onClick={() => explain.mutate()}>
                   {explain.isPending ? <Spinner size={12} /> : <Sparkles size={13} />}
-                  {explain.isPending ? 'Explaining…' : rationale ? 'Explain again' : 'Explain this plan'}
+                  {explain.isPending ? wt('sprint.explaining') : rationale ? wt('sprint.explainAgain') : wt('sprint.explain')}
                 </button>
               </div>
               {rationale && <AiMarkdown text={rationale} className="border-t border-[var(--w-border)] px-3 py-3" />}
@@ -454,7 +454,7 @@ function PlanStat({ label, value, hint }: { label: string; value: string; hint: 
 /** "Sep 23 – Oct 7" */
 export function sprintRange(s: { startAt: string | null; endAt: string | null }): string | null {
   if (!s.startAt && !s.endAt) return null;
-  const f = (iso: string) => new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const f = (iso: string) => new Date(iso).toLocaleDateString(wfmt.intl(), { month: 'short', day: 'numeric' });
   return `${s.startAt ? f(s.startAt) : '…'} – ${s.endAt ? f(s.endAt) : '…'}`;
 }
 

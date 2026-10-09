@@ -109,6 +109,13 @@ export interface UserPreferences {
     /** ISO time the student answered, for "bạn đã chọn ngành này từ …". */
     chosenAt: string | null;
   };
+  /** CT Work (/work, cả app desktop): ngôn ngữ GIAO DIỆN mà người dùng chọn cho riêng CT Work
+   *  (10/10/2026). `null` = chưa chọn ⇒ CT Work theo ngôn ngữ của site và hỏi một lần lúc vào.
+   *  Tách khỏi `ui.locale` vì CT Work từng chốt toàn tiếng Anh: nhóm trưởng chọn Tiếng Việt cho CT Work
+   *  không được kéo cả site đổi theo, và ngược lại. */
+  work: {
+    locale: 'vi' | 'en' | null;
+  };
   /** ISO timestamp of the last successful write. Drives the
    *  newest-wins reconciliation on the client. */
   updatedAt: string | null;
@@ -146,6 +153,7 @@ export function defaultPreferences(): UserPreferences {
       combo: null,
       chosenAt: null,
     },
+    work: { locale: null },
     updatedAt: null,
   };
 }
@@ -208,6 +216,7 @@ export function sanitize(input: unknown, base: UserPreferences): UserPreferences
     notify: { ...base.notify, types: { ...base.notify.types } },
     ui: { ...base.ui },
     academy: { ...base.academy },
+    work: { ...base.work },
     updatedAt: base.updatedAt,
   };
   if (!input || typeof input !== 'object') return out;
@@ -249,6 +258,12 @@ export function sanitize(input: unknown, base: UserPreferences): UserPreferences
       const t = typeof a.chosenAt === 'string' ? Date.parse(a.chosenAt) : NaN;
       out.academy.chosenAt = Number.isNaN(t) ? null : new Date(t).toISOString();
     }
+  }
+
+  if (src.work && typeof src.work === 'object') {
+    const w = src.work as Record<string, unknown>;
+    // null = "bỏ chọn, theo site"; giá trị lạ bị bỏ qua (giữ giá trị cũ).
+    if ('locale' in w && (w.locale === 'vi' || w.locale === 'en' || w.locale === null)) out.work.locale = w.locale;
   }
 
   // Carry the stored stamp through. Without this, reading a row back

@@ -20,6 +20,8 @@ import {
 } from '@/lib/work-api';
 import { wk, type Lookups } from './hooks';
 import { EmptyState, IssueTypeIcon, PickerList, Popover, UserAvatar, useToggle, type PickOption, PageLoading } from './ui';
+import { wt } from '@/components/work/i18n';
+import { statusName } from '@/components/work/i18n/names';
 
 const DAY = 86_400_000;
 const ROW_H = 36;
@@ -27,11 +29,12 @@ const HEADER_H = 48;
 
 type Zoom = 'weeks' | 'months' | 'quarters';
 const ZOOMS: Array<{ id: Zoom; label: string; dw: number }> = [
-  { id: 'weeks', label: 'Weeks', dw: 32 },
-  { id: 'months', label: 'Months', dw: 10 },
-  { id: 'quarters', label: 'Quarters', dw: 3.5 },
+  { id: 'weeks', get label() { return wt('timeline.weeks'); }, dw: 32 },
+  { id: 'months', get label() { return wt('timeline.months'); }, dw: 10 },
+  { id: 'quarters', get label() { return wt('timeline.quarters'); }, dw: 3.5 },
 ];
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+/** Tên tháng ngắn theo ngôn ngữ CT Work (gọi lúc vẽ). */
+const months = () => wt('timeline.monthsShort').split(',');
 
 // Ngày quy về số nguyên "ngày kể từ epoch" (UTC) — cộng trừ không lệch múi giờ.
 const toDay = (s: string) => Math.floor(Date.parse(`${s}T00:00:00Z`) / DAY);
@@ -41,7 +44,7 @@ function todayStr(): string {
   const t = new Date();
   return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
 }
-const shortDate = (n: number) => `${MONTHS[utc(n).getUTCMonth()]} ${utc(n).getUTCDate()}`;
+const shortDate = (n: number) => wt('timeline.dayMonth', { m: months()[utc(n).getUTCMonth()], d: utc(n).getUTCDate() });
 
 type Row =
   | { kind: 'epic'; item: TimelineItem; childCount: number }
@@ -108,7 +111,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
     }
     const loose = orphans.filter(match);
     if (loose.length) {
-      out.push({ kind: 'group', id: 'none', label: 'No epic', childCount: loose.length });
+      out.push({ kind: 'group', id: 'none', label: wt('board.noEpic'), childCount: loose.length });
       if (!collapsed.has('none')) loose.forEach((k) => out.push({ kind: 'issue', item: k, nested: false }));
     }
     const ids = new Set<number>();
@@ -180,15 +183,15 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
       const y = d.getUTCFullYear(), mo = d.getUTCMonth(), dd = d.getUTCDate(), dow = d.getUTCDay();
       if (zoom === 'quarters') {
         push(top, `${y}q${Math.floor(mo / 3)}`, n, `Q${Math.floor(mo / 3) + 1} ${y}`);
-        push(bottom, `${y}-${mo}`, n, MONTHS[mo]);
+        push(bottom, `${y}-${mo}`, n, months()[mo]);
         if (dd === 1) lines.push(xOf(n));
       } else if (zoom === 'months') {
-        push(top, `${y}-${mo}`, n, `${MONTHS[mo]} ${y}`);
+        push(top, `${y}-${mo}`, n, `${months()[mo]} ${y}`);
         const wkStart = n - ((dow + 6) % 7);
         push(bottom, `w${wkStart}`, n, String(utc(wkStart).getUTCDate()));
         if (dow === 1) lines.push(xOf(n));
       } else {
-        push(top, `${y}-${mo}`, n, `${MONTHS[mo]} ${y}`);
+        push(top, `${y}-${mo}`, n, `${months()[mo]} ${y}`);
         bottom.push({ x: xOf(n), w: dw, label: String(dd), dim: dow === 0 || dow === 6 });
         if (dow === 1) lines.push(xOf(n));
       }
@@ -209,8 +212,8 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
     } catch (err) {
       if (prev) qc.setQueryData(key, prev);
       toast.error(workErrorStatus(err) === 409
-        ? `${lk.issueKey(item.number)} was changed by someone else. Refreshed.`
-        : workError(err, 'Could not update the dates'));
+        ? wt('timeline.changedBy', { key: lk.issueKey(item.number) })
+        : workError(err, wt('timeline.datesFailed')));
       qc.invalidateQueries({ queryKey: key });
     }
   }, [pid, qc, lk]);
@@ -303,14 +306,14 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
   const peoplePop = useToggle();
   const versionPop = useToggle();
   const peopleOptions: PickOption<number>[] = useMemo(() => [
-    { value: 0, label: 'Unassigned', icon: <UserAvatar user={null} size={16} /> },
+    { value: 0, label: wt('common.unassigned'), icon: <UserAvatar user={null} size={16} /> },
     ...config.members.map((m) => ({ value: m.id, label: userName(m), icon: <UserAvatar user={m} size={16} />, keywords: m.username })),
   ], [config.members]);
   const versionOptions: PickOption<number>[] = useMemo(
-    () => (versions.data ?? []).filter((v) => v.status !== 'ARCHIVED').map((v) => ({ value: v.id, label: v.name, hint: v.status === 'RELEASED' ? 'Released' : undefined })),
+    () => (versions.data ?? []).filter((v) => v.status !== 'ARCHIVED').map((v) => ({ value: v.id, label: v.name, hint: v.status === 'RELEASED' ? wt('timeline.released') : undefined })),
     [versions.data],
   );
-  const versionName = versionId !== null ? versions.data?.find((v) => v.id === versionId)?.name ?? 'Version' : null;
+  const versionName = versionId !== null ? versions.data?.find((v) => v.id === versionId)?.name ?? wt('common.version') : null;
   const filtered = people.length > 0 || versionId !== null;
 
   const toggleCollapse = (k: string) => setCollapsed((s) => {
@@ -321,7 +324,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
 
   if (q.isLoading) return <PageLoading />;
   if (q.error || !data) {
-    return <EmptyState title="Could not load the timeline" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />;
+    return <EmptyState title={wt('timeline.loadFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />;
   }
 
   const bodyH = Math.max(rows.length * ROW_H, 120);
@@ -333,10 +336,10 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
     <div className="flex h-full min-h-0 flex-col" style={{ ['--tl-weekend' as string]: 'color-mix(in srgb, var(--w-text) 4%, transparent)' }}>
       {/* Thanh công cụ */}
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-[var(--w-border)] px-4 py-2">
-        <button type="button" onClick={() => setNarrowTree((v) => !v)} className={cn('w-btn w-btn-sm w-btn-icon', narrowTree && 'w-btn-on')} title={narrowTree ? 'Show issue titles' : 'Collapse the issue column'} aria-label="Toggle issue column">
+        <button type="button" onClick={() => setNarrowTree((v) => !v)} className={cn('w-btn w-btn-sm w-btn-icon', narrowTree && 'w-btn-on')} title={narrowTree ? wt('timeline.showTitles') : wt('timeline.collapseCol')} aria-label={wt('timeline.toggleCol')}>
           <PanelLeft size={13} />
         </button>
-        <div className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]" role="group" aria-label="Zoom">
+        <div className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]" role="group" aria-label={wt('timeline.zoom')}>
           {ZOOMS.map((z) => (
             <button
               key={z.id}
@@ -349,43 +352,43 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
             </button>
           ))}
         </div>
-        <button type="button" className="w-btn w-btn-sm" onClick={scrollToday}><Crosshair size={13} /> Today</button>
+        <button type="button" className="w-btn w-btn-sm" onClick={scrollToday}><Crosshair size={13} /> {wt('common.today')}</button>
 
         <button ref={peopleBtn} type="button" onClick={peoplePop.toggle} className={cn('w-btn w-btn-sm', people.length > 0 && 'w-btn-on')}>
-          <Filter size={12} /> Assignee{people.length > 0 && ` · ${people.length}`}
+          <Filter size={12} /> {wt('common.assignee')}{people.length > 0 && ` · ${people.length}`}
         </button>
         <Popover open={peoplePop.on} onClose={peoplePop.close} anchorRef={peopleBtn} width={240}>
           <PickerList
             options={peopleOptions}
             selected={people}
             multi
-            placeholder="Filter by assignee"
+            placeholder={wt('timeline.filterAssignee')}
             onPick={(v) => setPeople((p) => (p.includes(v) ? p.filter((x) => x !== v) : [...p, v]))}
           />
         </Popover>
         {versionOptions.length > 0 && (
           <>
             <button ref={versionBtn} type="button" onClick={versionPop.toggle} className={cn('w-btn w-btn-sm max-w-[180px]', versionId !== null && 'w-btn-on')}>
-              <span className="truncate">{versionName ? `Version: ${versionName}` : 'Version'}</span> <ChevronDown size={12} className="shrink-0" />
+              <span className="truncate">{versionName ? `${wt('common.version')}: ${versionName}` : wt('common.version')}</span> <ChevronDown size={12} className="shrink-0" />
             </button>
             <Popover open={versionPop.on} onClose={versionPop.close} anchorRef={versionBtn} width={240}>
               <PickerList
                 options={versionOptions}
                 selected={versionId !== null ? [versionId] : []}
-                placeholder="Filter by version"
+                placeholder={wt('timeline.filterVersion')}
                 onPick={(v) => { setVersionId((c) => (c === v ? null : v)); versionPop.close(); }}
               />
             </Popover>
           </>
         )}
         {filtered && (
-          <button type="button" onClick={() => { setPeople([]); setVersionId(null); }} className="w-btn w-btn-ghost w-btn-sm"><X size={12} /> Clear</button>
+          <button type="button" onClick={() => { setPeople([]); setVersionId(null); }} className="w-btn w-btn-ghost w-btn-sm"><X size={12} /> {wt('board.clear')}</button>
         )}
 
         <div className="ml-auto flex flex-wrap items-center gap-2">
           {data.conflicts.length > 0 && (
-            <span className="inline-flex h-[24px] items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] px-2 text-[12px] text-[var(--w-red)]" title="A blocked issue is scheduled to start before its blocker is due">
-              <AlertTriangle size={12} /> {data.conflicts.length} scheduling conflict{data.conflicts.length === 1 ? '' : 's'}
+            <span className="inline-flex h-[24px] items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] px-2 text-[12px] text-[var(--w-red)]" title={wt('timeline.conflictTitle')}>
+              <AlertTriangle size={12} /> {wt('timeline.conflicts', { count: data.conflicts.length })}
             </span>
           )}
           {/* Không có phụ thuộc nào thì "đường găng" chỉ là một thẻ dài nhất — vô nghĩa, ẩn đi. */}
@@ -393,11 +396,11 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
             <>
               {showCritical && (
                 <span className="inline-flex h-[24px] items-center rounded-full bg-[color-mix(in_srgb,var(--w-orange)_16%,transparent)] px-2 text-[12px] font-medium text-[var(--w-orange)]">
-                  Critical path: {data.criticalDays} day{data.criticalDays === 1 ? '' : 's'}
+                  {wt('timeline.criticalPath', { count: data.criticalDays })}
                 </span>
               )}
               <button type="button" onClick={() => setShowCritical((v) => !v)} aria-pressed={showCritical} className={cn('w-btn w-btn-sm', showCritical && 'w-btn-on')}>
-                <Route size={13} /> <span className="hidden sm:inline">Show critical path</span>
+                <Route size={13} /> <span className="hidden sm:inline">{wt('timeline.showCritical')}</span>
               </button>
             </>
           )}
@@ -406,8 +409,8 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
 
       {!rows.length ? (
         <EmptyState
-          title={filtered ? 'No issues match these filters' : 'Nothing to plan yet'}
-          body={filtered ? 'Try clearing the filters.' : 'Create epics and issues, then set start and due dates to see them on the timeline.'}
+          title={filtered ? wt('timeline.noMatch') : wt('timeline.nothing')}
+          body={filtered ? wt('timeline.tryClear') : wt('timeline.nothingBody')}
         />
       ) : (
         <div ref={scroller} className="relative min-h-0 min-w-0 flex-1 overflow-auto overscroll-contain">
@@ -415,7 +418,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
             {/* Tiêu đề (dính trên) */}
             <div className="sticky top-0 z-20 flex border-b border-[var(--w-border)] bg-[var(--w-panel)]" style={{ height: HEADER_H }}>
               <div className="sticky left-0 z-30 flex shrink-0 items-end border-r border-[var(--w-border)] bg-[var(--w-panel)] px-3 pb-1.5 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]" style={{ width: treeW }}>
-                {narrowTree ? 'Issue' : 'Work'}
+                {narrowTree ? wt('common.issue') : wt('timeline.work')}
               </div>
               <div className="relative shrink-0" style={{ width: gridW }}>
                 {scale.top.map((s) => (
@@ -432,7 +435,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                     {s.w >= 14 ? s.label : ''}
                   </div>
                 ))}
-                <div className="absolute bottom-0 h-6 w-[2px] -translate-x-1/2 rounded-full bg-[var(--w-accent)]" style={{ left: xOf(today) + dw / 2 }} title="Today" />
+                <div className="absolute bottom-0 h-6 w-[2px] -translate-x-1/2 rounded-full bg-[var(--w-accent)]" style={{ left: xOf(today) + dw / 2 }} title={wt('common.today')} />
               </div>
             </div>
 
@@ -463,7 +466,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                       style={{ height: ROW_H }}
                     >
                       {isEpic && (
-                        <button type="button" onClick={() => toggleCollapse(`e${it.id}`)} className="rounded p-0.5 text-[var(--w-text-3)] hover:bg-[var(--w-active)] hover:text-[var(--w-text)]" aria-label={open ? 'Collapse epic' : 'Expand epic'} aria-expanded={open}>
+                        <button type="button" onClick={() => toggleCollapse(`e${it.id}`)} className="rounded p-0.5 text-[var(--w-text-3)] hover:bg-[var(--w-active)] hover:text-[var(--w-text)]" aria-label={open ? wt('timeline.collapseEpic') : wt('timeline.expandEpic')} aria-expanded={open}>
                           {open ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
                         </button>
                       )}
@@ -496,7 +499,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                         role="button"
                         tabIndex={-1}
                         className="group/sch absolute inset-0 cursor-copy"
-                        title="Click a day to schedule this issue"
+                        title={wt('timeline.clickDay')}
                         onClick={(e) => clickEmptyRow(e, r.item)}
                       >
                         {/* Luôn thấy (không chỉ khi rê chuột): thẻ chưa có ngày trông như dòng trống bị lỗi. */}
@@ -507,7 +510,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                           )}
                           style={{ left: treeW + 8, height: ROW_H - 10 }}
                         >
-                          <CalendarPlus size={12} /> {hoverRow === idx ? 'Click the start day' : 'Not scheduled — click to add dates'}
+                          <CalendarPlus size={12} /> {hoverRow === idx ? wt('timeline.clickStart') : wt('timeline.notScheduledAdd')}
                         </span>
                       </div>
                     )}
@@ -516,7 +519,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                         className="pointer-events-none sticky mt-[5px] inline-flex items-center gap-1 rounded-[5px] border border-dashed border-[var(--w-border-strong)] px-2 text-[11.5px] text-[var(--w-text-3)]"
                         style={{ left: treeW + 8, height: ROW_H - 10 }}
                       >
-                        Not scheduled
+                        {wt('timeline.notScheduled')}
                       </span>
                     )}
                   </div>
@@ -537,8 +540,8 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                   {arrows.map((a) => {
                     const color = a.conflict ? 'var(--w-red)' : a.critical ? 'var(--w-orange)' : 'var(--w-text-3)';
                     const tip = a.conflict
-                      ? `${lk.issueKey(itemById.get(a.from)?.number ?? 0)} blocks ${lk.issueKey(itemById.get(a.to)?.number ?? 0)}, but ${lk.issueKey(itemById.get(a.to)?.number ?? 0)} starts before its blocker is due`
-                      : `${lk.issueKey(itemById.get(a.from)?.number ?? 0)} blocks ${lk.issueKey(itemById.get(a.to)?.number ?? 0)}`;
+                      ? wt('timeline.blocksConflict', { a: lk.issueKey(itemById.get(a.from)?.number ?? 0), b: lk.issueKey(itemById.get(a.to)?.number ?? 0) })
+                      : wt('timeline.blocks', { a: lk.issueKey(itemById.get(a.from)?.number ?? 0), b: lk.issueKey(itemById.get(a.to)?.number ?? 0) });
                     return (
                       <g key={a.key}>
                         <path d={a.path} fill="none" stroke={color} strokeWidth={a.critical || a.conflict ? 2 : 1.25} strokeDasharray={a.conflict ? '4 3' : undefined} markerEnd={`url(#tl-arrow-${a.conflict ? 'x' : a.critical ? 'c' : 'n'})`} opacity={a.critical || a.conflict ? 1 : 0.75} />
@@ -566,7 +569,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                   const isConflict = conflictIds.has(it.id);
                   const dragging = drag?.id === it.id;
                   const status = lk.statuses.get(it.statusId);
-                  const label = `${lk.issueKey(it.number)} ${it.title}\n${shortDate(s.start)} – ${shortDate(s.end)}${derived ? ' (from child issues)' : ''}${status ? `\n${status.name}` : ''}${it.progress > 0 && it.progress < 1 ? ` · ${Math.round(it.progress * 100)}% done` : ''}`;
+                  const label = `${lk.issueKey(it.number)} ${it.title}\n${shortDate(s.start)} – ${shortDate(s.end)}${derived ? wt('timeline.fromChildren') : ''}${status ? `\n${statusName(status.name)}` : ''}${it.progress > 0 && it.progress < 1 ? ` · ${wt('timeline.pctDone', { n: Math.round(it.progress * 100) })}` : ''}`;
                   return (
                     <div
                       key={`bar${it.id}`}

@@ -15,14 +15,15 @@ import { workApi, workError, type ApiToken, type TokenScope } from '@/lib/work-a
 import { Dialog, EmptyState, Field, formatDate, publicOrigin, relativeTime, Spinner } from '@/components/work/ui';
 import { ConfirmDialog, PageHeader, Section, Select } from '@/components/work/settings/shared';
 import { copyText } from '@/components/work/settings/ProjectShare';
+import { wt } from '@/components/work/i18n';
 
 const TOKENS_KEY = ['work', 'me', 'api-tokens'] as const;
 
 const EXPIRY = [
-  { value: '', label: 'Never' },
-  { value: '30', label: '30 days' },
-  { value: '90', label: '90 days' },
-  { value: '365', label: '1 year' },
+  { value: '', get label() { return wt('dev.never'); } },
+  { value: '30', get label() { return wt('common.days', { count: 30 }); } },
+  { value: '90', get label() { return wt('common.days', { count: 90 }); } },
+  { value: '365', get label() { return wt('dev.oneYear'); } },
 ];
 
 // ─── Tạo token ───────────────────────────────────────────────────
@@ -47,7 +48,7 @@ function CreateTokenDialog({ open, onClose }: { open: boolean; onClose: () => vo
       expiresInDays: expiry ? Number(expiry) : null,
     }),
     onSuccess: (t) => { setCreated(t); qc.invalidateQueries({ queryKey: TOKENS_KEY }); },
-    onError: (err) => toast.error(workError(err, 'Could not create the token')),
+    onError: (err) => toast.error(workError(err, wt('dev.createFailed'))),
   });
 
   const copy = async () => {
@@ -61,44 +62,44 @@ function CreateTokenDialog({ open, onClose }: { open: boolean; onClose: () => vo
       <Dialog
         open={open}
         onClose={onClose}
-        title="Copy your new API token"
+        title={wt('dev.copyNew')}
         width={540}
         dismissible={false}
-        footer={<button type="button" className="w-btn w-btn-primary" onClick={onClose}>{copied ? 'Done' : 'I’ve saved it'}</button>}
+        footer={<button type="button" className="w-btn w-btn-primary" onClick={onClose}>{copied ? wt('common.done') : wt('dev.saved')}</button>}
       >
         <div className="mb-3 flex gap-2 rounded-[6px] border border-[color-mix(in_srgb,var(--w-orange)_45%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_10%,transparent)] px-3 py-2.5 text-[13px] leading-relaxed">
           <AlertTriangle size={15} className="mt-0.5 shrink-0 text-[var(--w-orange)]" />
           <span>
-            Copy this token now and store it somewhere safe, like a password manager or your CI secrets.
-            <span className="font-medium"> For security it will never be shown again.</span> If you lose it, revoke it and create a new one.
+            {wt('dev.copyNowA')}
+            <span className="font-medium"> {wt('dev.copyNowB')}</span> {wt('dev.copyNowC')}
           </span>
         </div>
         <label className="w-label">{created.name}</label>
         <div className="flex gap-2">
           <input className="w-input min-w-0 flex-1 font-mono !text-[12px]" readOnly value={created.token} onFocus={(e) => e.currentTarget.select()} aria-label="API token" />
           <button type="button" className="w-btn w-btn-primary shrink-0" onClick={copy}>
-            {copied ? <Check size={13} /> : <Copy size={13} />} {copied ? 'Copied' : 'Copy'}
+            {copied ? <Check size={13} /> : <Copy size={13} />} {copied ? wt('common.copied') : wt('common.copy')}
           </button>
         </div>
         <p className="mt-3 text-[12px] text-[var(--w-text-3)]">
-          {created.scopes.includes('write') ? 'Read & write' : 'Read only'} · {created.expiresAt ? `expires ${formatDate(created.expiresAt)}` : 'never expires'}
+          {created.scopes.includes('write') ? wt('dev.rw') : wt('dev.ro')} · {created.expiresAt ? wt('dev.expiresOn', { date: formatDate(created.expiresAt) }) : wt('dev.neverExpires')}
         </p>
       </Dialog>
     );
   }
 
   return (
-    <Dialog open={open} onClose={onClose} title="Create API token" width={500}>
+    <Dialog open={open} onClose={onClose} title={wt('dev.createTitle')} width={500}>
       <form onSubmit={(e) => { e.preventDefault(); if (name.trim() && !create.isPending) create.mutate(); }}>
-        <Field label="Name" hint="Something that tells you where it’s used — e.g. “GitHub Actions” or “Sprint report script”.">
-          <input className="w-input" value={name} maxLength={100} onChange={(e) => setName(e.target.value)} autoFocus placeholder="Token name" />
+        <Field label={wt('common.name')} hint={wt('dev.nameHint')}>
+          <input className="w-input" value={name} maxLength={100} onChange={(e) => setName(e.target.value)} autoFocus placeholder={wt('dev.tokenName')} />
         </Field>
         <div className="mb-4">
-          <label className="w-label">Access</label>
+          <label className="w-label">{wt('create.access')}</label>
           <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
             {([
-              { v: 'read', t: 'Read only', d: 'View workspaces, projects, issues, search and export. Any change is rejected.' },
-              { v: 'write', t: 'Read & write', d: 'Also create and update issues, comment and log work — anything your account is allowed to do.' },
+              { v: 'read', t: wt('dev.ro'), d: wt('dev.roDesc') },
+              { v: 'write', t: wt('dev.rw'), d: wt('dev.rwDesc') },
             ] as const).map((o) => (
               <label key={o.v} className={cn('flex cursor-pointer items-start gap-2.5 border-b border-[var(--w-border)] px-3 py-2.5 last:border-b-0', scope === o.v ? 'bg-[var(--w-accent-soft)]' : 'hover:bg-[var(--w-hover)]')}>
                 <input type="radio" name="scope" className="mt-0.5 accent-[var(--w-accent)]" checked={scope === o.v} onChange={() => setScope(o.v)} />
@@ -110,15 +111,15 @@ function CreateTokenDialog({ open, onClose }: { open: boolean; onClose: () => vo
             ))}
           </div>
         </div>
-        <Field label="Expires">
+        <Field label={wt('settings.expires')}>
           <Select value={expiry} onChange={(e) => setExpiry(e.target.value)}>
             {EXPIRY.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}
           </Select>
         </Field>
         <div className="mt-5 flex justify-end gap-2">
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="submit" className="w-btn w-btn-primary" disabled={!name.trim() || create.isPending}>
-            {create.isPending && <Spinner size={12} />} Create token
+            {create.isPending && <Spinner size={12} />} {wt('dev.createToken')}
           </button>
         </div>
       </form>
@@ -134,20 +135,20 @@ function TokenList({ onCreate }: { onCreate: () => void }) {
   const [revoking, setRevoking] = useState<ApiToken | null>(null);
   const revoke = useMutation({
     mutationFn: (id: number) => workApi.revokeApiToken(id),
-    onSuccess: () => { toast.success('Token revoked'); setRevoking(null); qc.invalidateQueries({ queryKey: TOKENS_KEY }); },
-    onError: (err) => toast.error(workError(err, 'Could not revoke the token')),
+    onSuccess: () => { toast.success(wt('dev.revoked')); setRevoking(null); qc.invalidateQueries({ queryKey: TOKENS_KEY }); },
+    onError: (err) => toast.error(workError(err, wt('dev.revokeFailed'))),
   });
 
   if (q.isLoading) return <div className="flex justify-center py-10"><Spinner size={18} /></div>;
-  if (q.error) return <EmptyState title="Could not load your tokens" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />;
+  if (q.error) return <EmptyState title={wt('dev.loadFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />;
   const rows = q.data ?? [];
   if (!rows.length) {
     return (
       <div className="flex flex-col items-center rounded-[8px] border border-dashed border-[var(--w-border)] px-6 py-10 text-center">
         <KeyRound size={20} className="mb-2 text-[var(--w-text-3)]" />
-        <div className="text-[13px] font-medium">No API tokens yet</div>
-        <p className="mt-1 max-w-[380px] text-[12px] text-[var(--w-text-3)]">Create a token to call the CT Work API from scripts, CI pipelines or other tools.</p>
-        <button type="button" className="w-btn mt-4" onClick={onCreate}><Plus size={14} /> Create token</button>
+        <div className="text-[13px] font-medium">{wt('dev.noTokens')}</div>
+        <p className="mt-1 max-w-[380px] text-[12px] text-[var(--w-text-3)]">{wt('dev.noTokensBody')}</p>
+        <button type="button" className="w-btn mt-4" onClick={onCreate}><Plus size={14} /> {wt('dev.createToken')}</button>
       </div>
     );
   }
@@ -158,12 +159,12 @@ function TokenList({ onCreate }: { onCreate: () => void }) {
         <table className="w-full min-w-[680px] text-[13px]">
           <thead>
             <tr className="border-b border-[var(--w-border)] text-left text-[11px] uppercase tracking-wide text-[var(--w-text-3)]">
-              <th className="px-3 py-2 font-medium">Name</th>
-              <th className="px-3 py-2 font-medium">Access</th>
-              <th className="px-3 py-2 font-medium">Created</th>
-              <th className="px-3 py-2 font-medium">Last used</th>
-              <th className="px-3 py-2 font-medium">Expires</th>
-              <th className="px-3 py-2" aria-label="Actions" />
+              <th className="px-3 py-2 font-medium">{wt('common.name')}</th>
+              <th className="px-3 py-2 font-medium">{wt('create.access')}</th>
+              <th className="px-3 py-2 font-medium">{wt('common.created')}</th>
+              <th className="px-3 py-2 font-medium">{wt('dev.lastUsed')}</th>
+              <th className="px-3 py-2 font-medium">{wt('settings.expires')}</th>
+              <th className="px-3 py-2" aria-label={wt('common.actions')} />
             </tr>
           </thead>
           <tbody>
@@ -180,7 +181,7 @@ function TokenList({ onCreate }: { onCreate: () => void }) {
                       'rounded-[4px] border px-1.5 text-[11px] font-medium leading-[18px]',
                       t.scopes.includes('write') ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border-strong)] text-[var(--w-text-2)]',
                     )}>
-                      {t.scopes.includes('write') ? 'Read & write' : 'Read only'}
+                      {t.scopes.includes('write') ? wt('dev.rw') : wt('dev.ro')}
                     </span>
                   </td>
                   <td className="whitespace-nowrap px-3 py-2 text-[var(--w-text-2)]">{formatDate(t.createdAt)}</td>
@@ -190,13 +191,13 @@ function TokenList({ onCreate }: { onCreate: () => void }) {
                         <div className="whitespace-nowrap">{relativeTime(t.lastUsedAt)}</div>
                         {t.lastUsedIp && <div className="font-mono text-[11px] text-[var(--w-text-3)]">{t.lastUsedIp}</div>}
                       </>
-                    ) : <span className="text-[var(--w-text-3)]">Never</span>}
+                    ) : <span className="text-[var(--w-text-3)]">{wt('dev.never')}</span>}
                   </td>
                   <td className={cn('whitespace-nowrap px-3 py-2', expired ? 'font-medium text-[var(--w-red)]' : 'text-[var(--w-text-2)]')}>
-                    {t.expiresAt ? `${expired ? 'Expired ' : ''}${formatDate(t.expiresAt)}` : 'Never'}
+                    {t.expiresAt ? `${expired ? `${wt('dev.expired')} ` : ''}${formatDate(t.expiresAt)}` : wt('dev.never')}
                   </td>
                   <td className="px-3 py-2 text-right">
-                    <button type="button" className="w-btn w-btn-sm w-btn-danger" onClick={() => setRevoking(t)}>Revoke</button>
+                    <button type="button" className="w-btn w-btn-sm w-btn-danger" onClick={() => setRevoking(t)}>{wt('settings.revoke')}</button>
                   </td>
                 </tr>
               );
@@ -207,9 +208,9 @@ function TokenList({ onCreate }: { onCreate: () => void }) {
       <ConfirmDialog
         open={!!revoking}
         onClose={() => setRevoking(null)}
-        title="Revoke API token?"
-        body={<>Scripts and integrations using <span className="font-medium text-[var(--w-text)]">{revoking?.name}</span> will stop working immediately. This can&apos;t be undone.</>}
-        confirmLabel="Revoke token"
+        title={wt('dev.revokeQ')}
+        body={wt('dev.revokeBody', { name: revoking?.name ?? '' })}
+        confirmLabel={wt('dev.revokeToken')}
         pending={revoke.isPending}
         onConfirm={() => revoking && revoke.mutate(revoking.id)}
       />
@@ -228,10 +229,10 @@ function Code({ children }: { children: string }) {
       </pre>
       <button
         type="button"
-        onClick={() => copyText(children, 'Command')}
+        onClick={() => copyText(children, wt('dev.command'))}
         className="w-btn w-btn-ghost w-btn-icon w-btn-sm absolute right-1.5 top-1.5 !bg-[var(--w-panel)] opacity-80 hover:opacity-100"
-        aria-label="Copy"
-        title="Copy"
+        aria-label={wt('common.copy')}
+        title={wt('common.copy')}
       >
         <Copy size={12} />
       </button>
@@ -452,27 +453,26 @@ export default function DeveloperPage() {
   const [creating, setCreating] = useState(false);
   return (
     <div className="flex h-full flex-col">
-      <PageHeader title="API tokens" sub="Developer" />
+      <PageHeader title="API tokens" sub={wt('dev.developer')} />
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         <div className="mx-auto w-full max-w-[960px] px-4 py-6 md:px-6">
           <Section
             title="API tokens"
             description={
               <>
-                Use personal API tokens to connect scripts, CI pipelines and other tools to CT Work — like API tokens in Jira.
-                Send one as <code className="rounded-[4px] bg-[var(--w-sunken)] px-1 font-mono text-[12px] text-[var(--w-text)]">Authorization: Bearer &lt;token&gt;</code>.
-                A token acts as you, with exactly your permissions in each workspace and project; a read-only token can never change anything.
-                Treat tokens like passwords and revoke any you no longer use.
+                {wt('dev.introA')}{' '}
+                {wt('dev.introB')} <code className="rounded-[4px] bg-[var(--w-sunken)] px-1 font-mono text-[12px] text-[var(--w-text)]">Authorization: Bearer &lt;token&gt;</code>.
+                {' '}{wt('dev.introC')}
               </>
             }
-            action={<button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreating(true)}><Plus size={14} /> Create token</button>}
+            action={<button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreating(true)}><Plus size={14} /> {wt('dev.createToken')}</button>}
           >
             <TokenList onCreate={() => setCreating(true)} />
           </Section>
-          <Section title="Connect any AI (MCP)" description="Cursor, Gemini CLI, Codex CLI, Claude Desktop or Claude Code — one server, one set of commands.">
+          <Section title={wt('dev.mcpTitle')} description={wt('dev.mcpDesc')}>
             <McpClientsGuide />
           </Section>
-          <Section title="REST API reference" description="The most useful endpoints for automation. Ids come from the responses — for example a project's issue types and statuses from the project configuration.">
+          <Section title={wt('dev.restTitle')} description={wt('dev.restDesc')}>
             <ApiReference />
           </Section>
         </div>

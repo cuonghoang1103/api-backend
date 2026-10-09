@@ -12,6 +12,7 @@ import { wk } from '../hooks';
 import { Dialog, Field, Spinner } from '../ui';
 import StepsTable, { emptyStep, stepsForSave, stepsProblem, type DraftStep } from './StepsTable';
 import { isTestsDisabledError, parseIssueKeys } from './testing-ui';
+import { wt } from '@/components/work/i18n';
 
 export default function NewTestDialog({ open, onClose, config, pid, onCreated, defaultRequirement }: {
   open: boolean;
@@ -53,12 +54,12 @@ export default function NewTestDialog({ open, onClose, config, pid, onCreated, d
       });
       qc.invalidateQueries({ queryKey: wk.tests(pid) });
       qc.invalidateQueries({ queryKey: wk.issues(pid) });
-      if (res.failedLinks.length) toast.warning(`Test created, but these requirements could not be linked: ${res.failedLinks.join(', ')}`);
-      else toast.success(`${config.key}-${res.number} created`);
+      if (res.failedLinks.length) toast.warning(wt('tests.createdNoLink', { list: res.failedLinks.join(', ') }));
+      else toast.success(wt('create.created', { key: `${config.key}-${res.number}` }));
       onClose();
       onCreated(res.number);
     } catch (e) {
-      toast.error(isTestsDisabledError(e) ? 'Test management is not enabled for this project.' : workError(e, 'Could not create the test'));
+      toast.error(isTestsDisabledError(e) ? wt('tests.notEnabled') : workError(e, wt('tests.createFailed')));
     } finally {
       setPending(false);
     }
@@ -68,40 +69,40 @@ export default function NewTestDialog({ open, onClose, config, pid, onCreated, d
     <Dialog
       open={open}
       onClose={() => !pending && onClose()}
-      title="New test"
+      title={wt('tests.newTest')}
       width={760}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose} disabled={pending}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose} disabled={pending}>{wt('common.cancel')}</button>
           <button type="button" className="w-btn w-btn-primary" onClick={submit} disabled={pending}>
-            {pending && <Spinner size={12} />} Create test
+            {pending && <Spinner size={12} />} {wt('tests.createTest')}
           </button>
         </>
       }
     >
       <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
-        <Field label="Title">
+        <Field label={wt('common.title')}>
           <input
             autoFocus
             className={cn('w-input', tried && !title.trim() && '!border-[var(--w-red)]')}
             value={title}
             maxLength={255}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. Login with valid credentials"
+            placeholder={wt('tests.titlePh')}
           />
-          {tried && !title.trim() && <p className="mt-1 text-[12px] text-[var(--w-red)]">Title is required.</p>}
+          {tried && !title.trim() && <p className="mt-1 text-[12px] text-[var(--w-red)]">{wt('errors.titleRequired')}.</p>}
         </Field>
         <div className="grid gap-x-4 sm:grid-cols-[1fr_auto]">
-          <Field label="Covers requirements" hint={`Issue keys separated by commas, e.g. ${config.key}-12, ${config.key}-15`}>
+          <Field label={wt('tests.covers')} hint={wt('tests.coversHint', { a: `${config.key}-12`, b: `${config.key}-15` })}>
             <input className="w-input" value={reqs} onChange={(e) => setReqs(e.target.value)} placeholder={`${config.key}-12`} />
           </Field>
-          <Field label="Priority">
+          <Field label={wt('common.priority')}>
             <div className="w-[160px] rounded-[6px] border border-[var(--w-border-strong)]">
               <PriorityPicker value={priority} onChange={setPriority} bare />
             </div>
           </Field>
         </div>
-        <Field label="Test type">
+        <Field label={wt('tests.testType')}>
           <KindToggle value={kind} onChange={setKind} />
         </Field>
         {/* nút submit ẩn để Enter trong ô tiêu đề tạo test */}
@@ -109,12 +110,12 @@ export default function NewTestDialog({ open, onClose, config, pid, onCreated, d
       </form>
       {kind === 'MANUAL' ? (
         <div>
-          <label className="w-label">Steps</label>
+          <label className="w-label">{wt('tests.steps')}</label>
           <StepsTable steps={steps} onChange={setSteps} showErrors={tried} />
         </div>
       ) : (
         <div>
-          <label className="w-label">Scenario (Gherkin)</label>
+          <label className="w-label">{wt('tests.scenario')}</label>
           <textarea
             className="w-input min-h-[160px] font-mono text-[12.5px]"
             value={gherkin}
@@ -130,7 +131,7 @@ export default function NewTestDialog({ open, onClose, config, pid, onCreated, d
 
 export function KindToggle({ value, onChange, disabled }: { value: 'MANUAL' | 'GHERKIN'; onChange: (v: 'MANUAL' | 'GHERKIN') => void; disabled?: boolean }) {
   return (
-    <div role="radiogroup" aria-label="Test type" className="inline-flex rounded-[6px] border border-[var(--w-border-strong)] p-0.5">
+    <div role="radiogroup" aria-label={wt('tests.testType')} className="inline-flex rounded-[6px] border border-[var(--w-border-strong)] p-0.5">
       {(['MANUAL', 'GHERKIN'] as const).map((k) => (
         <button
           key={k}
@@ -144,7 +145,7 @@ export function KindToggle({ value, onChange, disabled }: { value: 'MANUAL' | 'G
             value === k ? 'bg-[var(--w-active)] text-[var(--w-text)]' : 'text-[var(--w-text-2)] hover:text-[var(--w-text)]',
           )}
         >
-          {k === 'MANUAL' ? 'Manual' : 'Gherkin'}
+          {k === 'MANUAL' ? wt('tests.manual') : 'Gherkin'}
         </button>
       ))}
     </div>

@@ -24,6 +24,7 @@ import { AssigneePicker, PriorityPicker } from '../fields';
 import { Dialog, Field, formatBytes, isTyping, PriorityIcon, relativeTime, Spinner, StatusBadge, WorkPortal, PageLoading } from '../ui';
 import { Select } from '../settings/shared';
 import { formatDateTime, RUN_META, RunStatusPill, STEP_META } from './runStatus';
+import { wt } from '@/components/work/i18n';
 
 type Step = TestRunDetail['steps'][number];
 
@@ -111,12 +112,12 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
       const steps = r.steps.map((s) => (s.id === stepId ? { ...s, status } : s));
       return { ...r, steps, status: derive(steps) };
     });
-    enqueue(() => workApi.updateStepResult(pid, runId, stepId, { status }), 'Could not save the step result');
+    enqueue(() => workApi.updateStepResult(pid, runId, stepId, { status }), wt('tests.stepSaveFailed'));
   }, [canExecute, patchLocal, enqueue, pid, runId]);
 
   const setActual = useCallback((stepId: number, actual: string) => {
     patchLocal((r) => ({ ...r, steps: r.steps.map((s) => (s.id === stepId ? { ...s, actual } : s)) }));
-    return enqueue(() => workApi.updateStepResult(pid, runId, stepId, { actual: actual || null }), 'Could not save the actual result');
+    return enqueue(() => workApi.updateStepResult(pid, runId, stepId, { actual: actual || null }), wt('tests.actualSaveFailed'));
   }, [patchLocal, enqueue, pid, runId]);
 
   const setRun = useCallback((body: { status?: RunStatus; comment?: string | null; reset?: boolean }, msg: string) => {
@@ -135,7 +136,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
       const steps = r.steps.map((s) => (s.status === 'TODO' ? { ...s, status: 'PASS' as const } : s));
       return { ...r, steps, status: derive(steps) };
     });
-    for (const s of todo) enqueue(() => workApi.updateStepResult(pid, runId, s.id, { status: 'PASS' }), 'Could not save the step result');
+    for (const s of todo) enqueue(() => workApi.updateStepResult(pid, runId, s.id, { status: 'PASS' }), wt('tests.stepSaveFailed'));
   };
 
   // ─── Điều hướng & phím tắt ──────────────────────────────────────
@@ -193,17 +194,17 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
   const link = async () => {
     const t = linkText.trim().toUpperCase();
     const m = /^(?:([A-Z][A-Z0-9_]*)-)?(\d+)$/.exec(t);
-    if (!m) { toast.error(`Enter an issue key like ${config.key}-12`); return; }
-    if (m[1] && m[1] !== config.key.toUpperCase()) { toast.error(`Only issues from ${config.key} can be linked`); return; }
+    if (!m) { toast.error(wt('tests.enterKey', { key: `${config.key}-12` })); return; }
+    if (m[1] && m[1] !== config.key.toUpperCase()) { toast.error(wt('tests.onlyProject', { key: config.key })); return; }
     setLinking(true);
     try {
       await workApi.linkDefect(pid, runId, Number(m[2]));
       setLinkText('');
-      toast.success(`${lk.issueKey(Number(m[2]))} linked`);
+      toast.success(wt('tests.linked', { key: lk.issueKey(Number(m[2])) }));
       await qc.invalidateQueries({ queryKey: runKey });
       refreshOthers();
     } catch (err) {
-      toast.error(workError(err, 'Could not link the issue'));
+      toast.error(workError(err, wt('tests.linkIssueFailed')));
     } finally {
       setLinking(false);
     }
@@ -214,7 +215,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
       await workApi.unlinkDefect(pid, runId, num);
       refreshOthers();
     } catch (err) {
-      toast.error(workError(err, 'Could not unlink the issue'));
+      toast.error(workError(err, wt('tests.unlinkFailed')));
     }
     qc.invalidateQueries({ queryKey: runKey });
   };
@@ -225,7 +226,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
     if (!data || !canAttach) return;
     const testNumber = data.testCase.issue.number;
     for (const raw of files) {
-      if (raw.size > 25 * 1024 * 1024) { toast.error(`${raw.name || 'File'} is larger than 25 MB`); continue; }
+      if (raw.size > 25 * 1024 * 1024) { toast.error(wt('tests.tooLarge', { name: raw.name || wt('tests.file') })); continue; }
       const file = namedFile(raw);
       const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
       setUploads((u) => [...u, { id, name: file.name, pct: 0 }]);
@@ -233,7 +234,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
         await workApi.uploadRunEvidence(pid, testNumber, data.id, file, (pct) => setUploads((u) => u.map((x) => (x.id === id ? { ...x, pct } : x))));
       } catch (err) {
         // Thông điệp server (vd chưa cấu hình R2) hiện nguyên văn.
-        toast.error(workError(err, `Could not upload ${file.name}`));
+        toast.error(workError(err, wt('tests.uploadFailed', { name: file.name })));
       } finally {
         setUploads((u) => u.filter((x) => x.id !== id));
         await qc.invalidateQueries({ queryKey: runKey });
@@ -261,22 +262,22 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
       <div className="fixed inset-0 z-[60] bg-black/20 md:bg-black/10" onMouseDown={onClose} />
       <div
         role="complementary"
-        aria-label="Test execution"
+        aria-label={wt('tests.execution')}
         onPaste={onPaste}
         className="fixed inset-y-0 right-0 z-[61] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-panel)] sm:w-[min(780px,94vw)]"
         style={{ boxShadow: 'var(--w-shadow-pop)' }}
       >
         {/* Thanh trên */}
         <div className="flex h-12 shrink-0 items-center gap-1.5 border-b border-[var(--w-border)] px-3">
-          <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" disabled={!prevId} onClick={() => prevId && onNavigate(prevId)} title="Previous test ( [ )" aria-label="Previous test"><ChevronUp size={15} /></button>
-          <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" disabled={!nextId} onClick={() => nextId && onNavigate(nextId)} title="Next test ( ] )" aria-label="Next test"><ChevronDown size={15} /></button>
-          {idx >= 0 && <span className="text-[12px] tabular text-[var(--w-text-3)]">{idx + 1} of {runIds.length}</span>}
-          {saving && <span className="ml-2 flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><Spinner size={11} /> Saving…</span>}
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" disabled={!prevId} onClick={() => prevId && onNavigate(prevId)} title={`${wt('tests.prevTest')} ( [ )`} aria-label={wt('tests.prevTest')}><ChevronUp size={15} /></button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" disabled={!nextId} onClick={() => nextId && onNavigate(nextId)} title={`${wt('tests.nextTest')} ( ] )`} aria-label={wt('tests.nextTest')}><ChevronDown size={15} /></button>
+          {idx >= 0 && <span className="text-[12px] tabular text-[var(--w-text-3)]">{wt('tests.idxOf', { i: idx + 1, n: runIds.length })}</span>}
+          {saving && <span className="ml-2 flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><Spinner size={11} /> {wt('common.saving')}</span>}
           <div className="ml-auto flex items-center gap-1.5">
             {nextId && (
-              <button type="button" className="w-btn w-btn-sm" onClick={() => onNavigate(nextId)} title="Next test ( ] )">Next test</button>
+              <button type="button" className="w-btn w-btn-sm" onClick={() => onNavigate(nextId)} title={`${wt('tests.nextTest')} ( ] )`}>{wt('tests.nextTest')}</button>
             )}
-            <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" onClick={onClose} aria-label="Close" title="Close (Esc)"><X size={15} /></button>
+            <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" onClick={onClose} aria-label={wt('common.close')} title={wt('shell.closeEsc')}><X size={15} /></button>
           </div>
         </div>
 
@@ -285,9 +286,9 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
             <PageLoading />
           ) : run.error || !data ? (
             <div className="px-6 py-16 text-center">
-              <div className="text-[15px] font-semibold">Could not load this test run</div>
+              <div className="text-[15px] font-semibold">{wt('tests.runLoadFailed')}</div>
               <p className="mt-1.5 text-[13px] text-[var(--w-text-2)]">{workError(run.error)}</p>
-              <button type="button" className="w-btn mt-4" onClick={() => run.refetch()}>Try again</button>
+              <button type="button" className="w-btn mt-4" onClick={() => run.refetch()}>{wt('common.tryAgain')}</button>
             </div>
           ) : (
             <div className="px-4 pb-10 pt-4 sm:px-6">
@@ -298,7 +299,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
                 <span>·</span>
                 <span className="truncate">{data.cycle.name}</span>
                 {data.cycle.environment && <><span>·</span><span className="truncate">{data.cycle.environment}</span></>}
-                {data.cycle.build && <><span>·</span><span className="truncate">Build {data.cycle.build}</span></>}
+                {data.cycle.build && <><span>·</span><span className="truncate">{wt('tests.buildN', { b: data.cycle.build })}</span></>}
               </div>
               <h2 className="mt-1 text-[18px] font-semibold leading-snug">{data.testCase.issue.title}</h2>
 
@@ -307,22 +308,22 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
                 <RunStatusPill status={status} className="!h-[24px] !text-[12px]" />
                 {canExecute && (
                   <Select
-                    aria-label="Override run status"
+                    aria-label={wt('tests.overrideStatus')}
                     value={status}
-                    onChange={(e) => setRun({ status: e.target.value as RunStatus }, 'Could not update the run status')}
+                    onChange={(e) => setRun({ status: e.target.value as RunStatus }, wt('tests.statusFailed'))}
                     className="!h-[28px] !w-auto text-[12px]"
                   >
-                    {(Object.keys(RUN_META) as RunStatus[]).map((s) => <option key={s} value={s}>{s === status ? `Status: ${RUN_META[s].label}` : `Set to ${RUN_META[s].label}`}</option>)}
+                    {(Object.keys(RUN_META) as RunStatus[]).map((s) => <option key={s} value={s}>{s === status ? wt('tests.statusIs', { s: RUN_META[s].label }) : wt('tests.setTo', { s: RUN_META[s].label })}</option>)}
                   </Select>
                 )}
                 <span className="text-[12px] text-[var(--w-text-3)]">
                   {data.executedAt
-                    ? <>Executed by <span className="text-[var(--w-text-2)]">{data.executedBy ? userName(data.executedBy) : 'someone'}</span> · {formatDateTime(data.executedAt)}</>
-                    : 'Not executed yet'}
+                    ? <>{wt('tests.executedBy')} <span className="text-[var(--w-text-2)]">{data.executedBy ? userName(data.executedBy) : wt('tests.someone')}</span> · {formatDateTime(data.executedAt)}</>
+                    : wt('tests.notExecutedYet')}
                 </span>
                 {canExecute && status !== 'TODO' && status !== 'RETEST' && (
-                  <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => setRun({ reset: true }, 'Could not reset the run')} title="Clear every step result (linked bugs are kept)">
-                    <RotateCcw size={12} /> Reset
+                  <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => setRun({ reset: true }, wt('tests.resetFailed'))} title={wt('tests.resetTitle')}>
+                    <RotateCcw size={12} /> {wt('common.reset')}
                   </button>
                 )}
               </div>
@@ -330,10 +331,10 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
               {status === 'RETEST' && (
                 <div className="mt-3 flex flex-wrap items-center gap-3 rounded-[8px] border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-3 py-2.5">
                   <RotateCcw size={15} className="shrink-0 text-[var(--w-accent-text)]" />
-                  <span className="min-w-0 flex-1 text-[13px]">A linked bug was moved to Retest — run this test again.</span>
+                  <span className="min-w-0 flex-1 text-[13px]">{wt('tests.retestBanner')}</span>
                   {canExecute && (
-                    <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setRun({ reset: true }, 'Could not start the re-run').then(() => requestAnimationFrame(() => focusStep(0)))}>
-                      Start re-run
+                    <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setRun({ reset: true }, wt('tests.rerunFailed')).then(() => requestAnimationFrame(() => focusStep(0)))}>
+                      {wt('tests.startRerun')}
                     </button>
                   )}
                 </div>
@@ -343,23 +344,23 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
                 <div className="mt-3 flex flex-wrap items-center gap-3 rounded-[8px] border px-3 py-2.5" style={{ borderColor: 'color-mix(in srgb, var(--w-red) 40%, transparent)', background: 'color-mix(in srgb, var(--w-red) 8%, transparent)' }}>
                   <AlertTriangle size={15} className="shrink-0 text-[var(--w-red)]" />
                   <span className="min-w-0 flex-1 text-[13px]">
-                    {status === 'FAIL' ? 'This test failed.' : 'This test is blocked.'}{' '}
-                    {data.defects.length ? `${data.defects.length} bug${data.defects.length === 1 ? '' : 's'} linked.` : 'Record a bug so the team can fix it.'}
+                    {status === 'FAIL' ? wt('tests.thisFailed') : wt('tests.thisBlocked')}{' '}
+                    {data.defects.length ? wt('tests.bugsLinked', { count: data.defects.length }) : wt('tests.recordBug')}
                   </span>
-                  <button type="button" className="w-btn w-btn-danger-solid w-btn-sm" onClick={() => setBugOpen(true)}><Bug size={13} /> Create bug</button>
+                  <button type="button" className="w-btn w-btn-danger-solid w-btn-sm" onClick={() => setBugOpen(true)}><Bug size={13} /> {wt('tests.createBug')}</button>
                 </div>
               )}
 
               {data.testCase.preconditions && (
                 <section className="mt-5">
-                  <h3 className="mb-1.5 text-[12px] font-semibold text-[var(--w-text-2)]">Preconditions</h3>
+                  <h3 className="mb-1.5 text-[12px] font-semibold text-[var(--w-text-2)]">{wt('tests.preconditions')}</h3>
                   <p className="whitespace-pre-wrap text-[13px] leading-relaxed">{data.testCase.preconditions}</p>
                 </section>
               )}
 
               {data.gherkin && (
                 <section className="mt-5">
-                  <h3 className="mb-1.5 text-[12px] font-semibold text-[var(--w-text-2)]">Scenario</h3>
+                  <h3 className="mb-1.5 text-[12px] font-semibold text-[var(--w-text-2)]">{wt('tests.scenarioShort')}</h3>
                   <pre className="overflow-x-auto whitespace-pre rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2.5 font-mono text-[12.5px] leading-relaxed">{data.gherkin}</pre>
                 </section>
               )}
@@ -368,22 +369,22 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
               <section className="mt-5">
                 <div className="mb-2 flex flex-wrap items-center gap-2">
                   <h3 className="text-[12px] font-semibold text-[var(--w-text-2)]">
-                    Steps {data.steps.length > 0 && <span className="tabular normal-case">({data.steps.length - todoCount}/{data.steps.length})</span>}
+                    {wt('tests.steps')} {data.steps.length > 0 && <span className="tabular normal-case">({data.steps.length - todoCount}/{data.steps.length})</span>}
                   </h3>
                   <span className="hidden text-[11px] text-[var(--w-text-3)] md:inline">
-                    <span className="w-kbd">P</span> pass · <span className="w-kbd">F</span> fail · <span className="w-kbd">B</span> blocked · <span className="w-kbd">S</span> skip · <span className="w-kbd">↑</span><span className="w-kbd">↓</span> move · <span className="w-kbd">Enter</span> actual result
+                    <span className="w-kbd">P</span> pass · <span className="w-kbd">F</span> fail · <span className="w-kbd">B</span> blocked · <span className="w-kbd">S</span> skip · <span className="w-kbd">↑</span><span className="w-kbd">↓</span> {wt('issues.kMove')} · <span className="w-kbd">Enter</span> {wt('tests.actualResult')}
                   </span>
                   {canExecute && todoCount > 0 && (
-                    <button type="button" className="w-btn w-btn-sm ml-auto" onClick={passRemaining}><CheckCheck size={13} /> Pass all remaining ({todoCount})</button>
+                    <button type="button" className="w-btn w-btn-sm ml-auto" onClick={passRemaining}><CheckCheck size={13} /> {wt('tests.passRemaining', { n: todoCount })}</button>
                   )}
                 </div>
 
                 {!data.steps.length ? (
                   <div className="rounded-[8px] border border-dashed border-[var(--w-border-strong)] px-4 py-5 text-center text-[13px] text-[var(--w-text-2)]">
-                    {data.gherkin ? 'This scenario has no manual steps. Run it, then record the result:' : 'This test has no steps. Record the overall result:'}
+                    {data.gherkin ? wt('tests.gherkinNoSteps') : wt('tests.noStepsRecord')}
                     {canExecute && (
                       <div className="mt-3 flex justify-center">
-                        <Segmented value={(['PASS', 'FAIL', 'BLOCKED', 'SKIP'] as StepStatus[]).includes(status as StepStatus) ? (status as StepStatus) : 'TODO'} onChange={(s) => setRun({ status: s === 'TODO' ? 'TODO' : s }, 'Could not update the run status')} />
+                        <Segmented value={(['PASS', 'FAIL', 'BLOCKED', 'SKIP'] as StepStatus[]).includes(status as StepStatus) ? (status as StepStatus) : 'TODO'} onChange={(s) => setRun({ status: s === 'TODO' ? 'TODO' : s }, wt('tests.statusFailed'))} />
                       </div>
                     )}
                   </div>
@@ -408,14 +409,14 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
 
               {/* Ghi chú */}
               <section className="mt-6">
-                <h3 className="mb-1.5 text-[12px] font-semibold text-[var(--w-text-2)]">Comment</h3>
+                <h3 className="mb-1.5 text-[12px] font-semibold text-[var(--w-text-2)]">{wt('tests.comment')}</h3>
                 <AutoText
                   key={`c-${data.id}`}
                   value={data.comment ?? ''}
                   disabled={!canExecute}
-                  placeholder={canExecute ? 'Notes about this run — observations, logs, evidence links…' : 'No comment'}
+                  placeholder={canExecute ? wt('tests.commentPh') : wt('tests.noComment')}
                   rows={3}
-                  onSave={(t) => setRun({ comment: t || null }, 'Could not save the comment')}
+                  onSave={(t) => setRun({ comment: t || null }, wt('tests.commentFailed'))}
                 />
               </section>
 
@@ -432,9 +433,9 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
               {/* Bug */}
               <section className="mt-6">
                 <div className="mb-2 flex items-center gap-2">
-                  <h3 className="text-[12px] font-semibold text-[var(--w-text-2)]">Defects</h3>
+                  <h3 className="text-[12px] font-semibold text-[var(--w-text-2)]">{wt('tests.defectsH')}</h3>
                   {canCreateBug && status !== 'FAIL' && status !== 'BLOCKED' && (
-                    <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => setBugOpen(true)}><Bug size={13} /> Create bug</button>
+                    <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => setBugOpen(true)}><Bug size={13} /> {wt('tests.createBug')}</button>
                   )}
                 </div>
                 {data.defects.length ? (
@@ -448,28 +449,28 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
                         </button>
                         {d.statusId !== undefined && <StatusBadge status={lk.statuses.get(d.statusId)} />}
                         {canEdit && (
-                          <button type="button" onClick={() => unlink(d.number)} className="w-btn w-btn-ghost w-btn-sm w-btn-icon" title="Unlink from this run" aria-label={`Unlink ${lk.issueKey(d.number)}`}><X size={13} /></button>
+                          <button type="button" onClick={() => unlink(d.number)} className="w-btn w-btn-ghost w-btn-sm w-btn-icon" title={wt('tests.unlinkRun')} aria-label={wt('tests.unlinkKey', { key: lk.issueKey(d.number) })}><X size={13} /></button>
                         )}
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-[13px] text-[var(--w-text-3)]">No bugs linked to this run.</p>
+                  <p className="text-[13px] text-[var(--w-text-3)]">{wt('tests.noBugs')}</p>
                 )}
                 {canEdit && (
                   <form className="mt-2 flex items-center gap-2" onSubmit={(e) => { e.preventDefault(); link(); }}>
                     <div className="relative flex-1 sm:max-w-[260px]">
                       <Link2 size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
-                      <input value={linkText} onChange={(e) => setLinkText(e.target.value)} placeholder={`Link existing bug, e.g. ${config.key}-12`} className="w-input !h-[28px] pl-7 text-[12px]" />
+                      <input value={linkText} onChange={(e) => setLinkText(e.target.value)} placeholder={wt('tests.linkBugPh', { key: `${config.key}-12` })} className="w-input !h-[28px] pl-7 text-[12px]" />
                     </div>
-                    <button type="submit" className="w-btn w-btn-sm" disabled={!linkText.trim() || linking}>{linking && <Spinner size={11} />} Link</button>
+                    <button type="submit" className="w-btn w-btn-sm" disabled={!linkText.trim() || linking}>{linking && <Spinner size={11} />} {wt('tests.link')}</button>
                   </form>
                 )}
               </section>
 
               {nextId && (
                 <div className="mt-8 flex justify-end">
-                  <button type="button" className="w-btn w-btn-primary" onClick={() => onNavigate(nextId)}>Next test <ChevronDown size={14} className="-rotate-90" /></button>
+                  <button type="button" className="w-btn w-btn-primary" onClick={() => onNavigate(nextId)}>{wt('tests.nextTest')} <ChevronDown size={14} className="-rotate-90" /></button>
                 </div>
               )}
             </div>
@@ -489,7 +490,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
             setBugOpen(false);
             qc.invalidateQueries({ queryKey: runKey });
             refreshOthers();
-            toast.success(`Bug ${lk.issueKey(num)} created and linked`, { action: { label: 'Open', onClick: () => onOpenIssue(num) } });
+            toast.success(wt('tests.bugCreated', { key: lk.issueKey(num) }), { action: { label: wt('common.open'), onClick: () => onOpenIssue(num) } });
           }}
         />
       )}
@@ -517,7 +518,7 @@ function StepRow({ step, index, canExecute, rowRef, actualRef, onKeyDown, onStat
       ref={(el) => { localRef.current = el; rowRef(el); }}
       tabIndex={0}
       onKeyDown={onKeyDown}
-      aria-label={`Step ${index + 1}: ${STEP_META[step.status].label}`}
+      aria-label={wt('tests.stepAria', { n: index + 1, s: STEP_META[step.status].label })}
       className="group rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] outline-none transition-shadow focus-within:border-[var(--w-accent-border)] focus:shadow-[0_0_0_3px_var(--w-accent-soft)]"
       style={done ? { borderLeft: `3px solid ${step.status === 'SKIP' ? 'var(--w-border-strong)' : color}` } : undefined}
     >
@@ -525,9 +526,9 @@ function StepRow({ step, index, canExecute, rowRef, actualRef, onKeyDown, onStat
         <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--w-sunken)] text-[11px] font-semibold tabular text-[var(--w-text-2)]">{index + 1}</span>
         <div className="min-w-0 flex-1">
           <div className="grid gap-x-4 gap-y-1.5 md:grid-cols-[1.3fr_1fr_1.3fr]">
-            <StepCell label="Action" text={step.action} />
-            <StepCell label="Test data" text={step.data} mono />
-            <StepCell label="Expected result" text={step.expected} />
+            <StepCell label={wt('tests.action')} text={step.action} />
+            <StepCell label={wt('tests.testData')} text={step.data} mono />
+            <StepCell label={wt('tests.expected')} text={step.expected} />
           </div>
           <div className="mt-2.5 flex flex-wrap items-center gap-2">
             {canExecute ? (
@@ -536,7 +537,7 @@ function StepRow({ step, index, canExecute, rowRef, actualRef, onKeyDown, onStat
               <span className="text-[12px] font-medium" style={{ color }}>{STEP_META[step.status].label}</span>
             )}
             {canExecute && !wantActual && (
-              <button type="button" tabIndex={-1} className="w-btn w-btn-ghost w-btn-sm" onClick={() => setShowActual(true)}>Add actual result</button>
+              <button type="button" tabIndex={-1} className="w-btn w-btn-ghost w-btn-sm" onClick={() => setShowActual(true)}>{wt('tests.addActual')}</button>
             )}
           </div>
           {wantActual && (
@@ -544,7 +545,7 @@ function StepRow({ step, index, canExecute, rowRef, actualRef, onKeyDown, onStat
               <AutoText
                 value={step.actual ?? ''}
                 disabled={!canExecute}
-                placeholder="Actual result — what really happened?"
+                placeholder={wt('tests.actualPh')}
                 rows={2}
                 inputRef={actualRef}
                 onEscape={() => localRef.current?.focus()}
@@ -569,7 +570,7 @@ function StepCell({ label, text, mono }: { label: string; text: string | null; m
 
 function Segmented({ value, onChange }: { value: StepStatus; onChange: (s: StepStatus) => void }) {
   return (
-    <div role="radiogroup" aria-label="Step result" className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]">
+    <div role="radiogroup" aria-label={wt('tests.stepResult')} className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]">
       {STEP_CHOICES.map((s, i) => {
         const m = STEP_META[s];
         const on = value === s;
@@ -658,7 +659,7 @@ function CreateBugDialog({ config, pid, run, failedStep, testKey, onClose, onCre
       const res = await workApi.createDefect(pid, run.id, { title: title.trim(), stepResultId: failedStep?.id ?? null, priority, assigneeId });
       onCreated(res.number);
     } catch (err) {
-      toast.error(workError(err, 'Could not create the bug'));
+      toast.error(workError(err, wt('tests.bugFailed')));
       setBusy(false);
     }
   };
@@ -667,34 +668,34 @@ function CreateBugDialog({ config, pid, run, failedStep, testKey, onClose, onCre
     <Dialog
       open
       onClose={onClose}
-      title="Create bug from this run"
+      title={wt('tests.bugFromRun')}
       width={500}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
-          <button type="button" className="w-btn w-btn-primary" disabled={busy || !title.trim()} onClick={submit}>{busy && <Spinner size={12} />} Create bug</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
+          <button type="button" className="w-btn w-btn-primary" disabled={busy || !title.trim()} onClick={submit}>{busy && <Spinner size={12} />} {wt('tests.createBug')}</button>
         </>
       }
     >
       <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
-        <Field label="Summary">
+        <Field label={wt('common.summary')}>
           <input autoFocus value={title} onChange={(e) => setTitle(e.target.value)} maxLength={255} className="w-input" />
         </Field>
         <div className="grid gap-x-3 sm:grid-cols-2">
-          <Field label="Priority"><PriorityPicker value={priority} onChange={setPriority} /></Field>
-          <Field label="Assignee"><AssigneePicker config={config} value={assigneeId} onChange={setAssigneeId} /></Field>
+          <Field label={wt('common.priority')}><PriorityPicker value={priority} onChange={setPriority} /></Field>
+          <Field label={wt('common.assignee')}><AssigneePicker config={config} value={assigneeId} onChange={setAssigneeId} /></Field>
         </div>
         <div className="rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12px] leading-relaxed text-[var(--w-text-2)]">
-          The description is filled in for you: preconditions, steps to reproduce
-          {failedStep ? ` (up to step ${failedStep.position + 1})` : ''}, expected and actual result
-          {run.cycle.environment || run.cycle.build ? ', and the environment' : ''}. The bug is linked to this run and to the test.
+          {wt('tests.bugDescA')}
+          {failedStep ? wt('tests.bugDescUpTo', { n: failedStep.position + 1 }) : ''}{wt('tests.bugDescB')}
+          {run.cycle.environment || run.cycle.build ? wt('tests.bugDescEnv') : ''}{wt('tests.bugDescC')}
         </div>
         {run.evidence.length > 0 && (
           <div className="mt-2 flex items-start gap-2 rounded-[6px] border border-[var(--w-border)] px-3 py-2 text-[12px] leading-relaxed text-[var(--w-text-2)]">
             <ImagePlus size={13} className="mt-0.5 shrink-0 text-[var(--w-text-3)]" />
             <span>
-              {run.evidence.length} evidence file{run.evidence.length === 1 ? '' : 's'} from this run stay{run.evidence.length === 1 ? 's' : ''} attached to the test case{' '}
-              <span className="font-medium text-[var(--w-text)]">{testKey}</span>. Developers can open them from the bug through its link to the test.
+              {wt('tests.evidenceStays', { count: run.evidence.length })}{' '}
+              <span className="font-medium text-[var(--w-text)]">{testKey}</span>. {wt('tests.evidenceDevs')}
             </span>
           </div>
         )}
@@ -735,11 +736,11 @@ function EvidenceSection({ pid, evidence, uploads, canAttach, testKey, onFiles }
     >
       <div className="mb-2 flex items-center gap-2">
         <h3 className="text-[12px] font-semibold text-[var(--w-text-2)]">
-          Evidence {evidence.length > 0 && <span className="tabular normal-case">({evidence.length})</span>}
+          {wt('tests.evidence')} {evidence.length > 0 && <span className="tabular normal-case">({evidence.length})</span>}
         </h3>
         {canAttach && (
           <>
-            <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => inputRef.current?.click()}><ImagePlus size={13} /> Add evidence</button>
+            <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => inputRef.current?.click()}><ImagePlus size={13} /> {wt('tests.addEvidence')}</button>
             <input ref={inputRef} type="file" multiple hidden accept="image/*,video/*,.pdf,.txt,.log,.har,.json,.zip" onChange={(e) => { if (e.target.files?.length) onFiles(Array.from(e.target.files)); e.target.value = ''; }} />
           </>
         )}
@@ -765,16 +766,16 @@ function EvidenceSection({ pid, evidence, uploads, canAttach, testKey, onFiles }
           onClick={() => inputRef.current?.click()}
           className="flex w-full flex-col items-center gap-1 rounded-[8px] border border-dashed border-[var(--w-border-strong)] px-4 py-4 text-center text-[12px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)]"
         >
-          <span className="text-[13px] text-[var(--w-text-2)]">Drop screenshots or files here, or click to browse</span>
+          <span className="text-[13px] text-[var(--w-text-2)]">{wt('tests.dropHere')}</span>
           <span>
-            You can also paste a screenshot with <span className="w-kbd">{isMac ? '⌘' : 'Ctrl'}</span><span className="w-kbd">V</span>. Max 25 MB each.
+            {wt('tests.pasteHint')} <span className="w-kbd">{isMac ? '⌘' : 'Ctrl'}</span><span className="w-kbd">V</span>. {wt('tests.max25')}
           </span>
         </button>
       ) : (
-        <p className="text-[13px] text-[var(--w-text-3)]">No evidence attached to this run.</p>
+        <p className="text-[13px] text-[var(--w-text-3)]">{wt('tests.noEvidence')}</p>
       )}
       {(evidence.length > 0 || uploads.length > 0) && (
-        <p className="mt-1.5 text-[11px] text-[var(--w-text-3)]">Files are stored on the test case {testKey}.{canAttach ? ` Drop or paste (${isMac ? '⌘' : 'Ctrl'}+V) to add more.` : ''}</p>
+        <p className="mt-1.5 text-[11px] text-[var(--w-text-3)]">{wt('tests.filesStored', { key: testKey })}{canAttach ? ` ${wt('tests.dropMore', { k: isMac ? '⌘' : 'Ctrl' })}` : ''}</p>
       )}
 
       {preview && <EvidenceLightbox pid={pid} ev={preview} onClose={() => setPreview(null)} />}
@@ -800,14 +801,14 @@ function EvidenceItem({ pid, ev, onPreview }: { pid: number; ev: RunEvidence; on
     try {
       window.open(await workApi.attachmentUrl(pid, ev.id, true), '_blank', 'noopener');
     } catch (err) {
-      toast.error(workError(err, 'Could not open the file'));
+      toast.error(workError(err, wt('tests.openFileFailed')));
     }
   };
   return (
     <button
       type="button"
       onClick={open}
-      title={`${ev.fileName}${ev.uploader ? ` · added by ${userName(ev.uploader)}` : ''}`}
+      title={`${ev.fileName}${ev.uploader ? ` · ${wt('tests.addedBy', { name: userName(ev.uploader) })}` : ''}`}
       className="w-[132px] overflow-hidden rounded-[6px] border border-[var(--w-border)] text-left hover:border-[var(--w-accent-border)]"
     >
       <span className="flex h-[80px] w-full items-center justify-center bg-[var(--w-sunken)]">
@@ -840,15 +841,15 @@ function EvidenceLightbox({ pid, ev, onClose }: { pid: number; ev: RunEvidence; 
       <div role="dialog" aria-modal="true" aria-label={ev.fileName} className="fixed inset-0 z-[70] flex flex-col bg-black/80" onMouseDown={onClose}>
         <div className="flex h-12 shrink-0 items-center gap-2 px-4 text-[13px] text-white" onMouseDown={(e) => e.stopPropagation()}>
           <span className="min-w-0 flex-1 truncate">{ev.fileName}</span>
-          {url.data && <a href={url.data} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-sm">Open original</a>}
-          <button type="button" className="w-btn w-btn-sm w-btn-icon" onClick={onClose} aria-label="Close preview"><X size={14} /></button>
+          {url.data && <a href={url.data} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-sm">{wt('tests.openOriginal')}</a>}
+          <button type="button" className="w-btn w-btn-sm w-btn-icon" onClick={onClose} aria-label={wt('tests.closePreview')}><X size={14} /></button>
         </div>
         <div className="flex min-h-0 flex-1 items-center justify-center p-4">
           {url.data ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={url.data} alt={ev.fileName} className="max-h-full max-w-full rounded-[4px] object-contain" onMouseDown={(e) => e.stopPropagation()} />
           ) : url.error ? (
-            <span className="text-[13px] text-white">{workError(url.error, 'Could not load the image')}</span>
+            <span className="text-[13px] text-white">{workError(url.error, wt('tests.imageFailed'))}</span>
           ) : (
             <Spinner size={20} />
           )}

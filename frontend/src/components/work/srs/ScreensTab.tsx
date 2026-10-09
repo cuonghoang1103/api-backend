@@ -14,6 +14,7 @@ import { renderMermaidSvg } from '@/lib/work-docs3a-api';
 import { workCtw4Api, workCtw4Keys, type SrsData, type SrsScreen } from '@/lib/work-ctw4-api';
 import { Dialog, EmptyState, Field, Spinner } from '../ui';
 import { Clip, TableFrame, TD, TextArea, TH } from './shared';
+import { wt } from '@/components/work/i18n';
 
 const mm = (s: string) => s.replace(/["\n\r[\]{}|<>]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 60) || '…';
 /** Cùng cú pháp với srs.ts (máy chủ) — sơ đồ trên trang giống sơ đồ trong Report 3. */
@@ -45,7 +46,7 @@ function FlowDiagram({ data }: { data: SrsData }) {
   if (err) return <pre className="overflow-auto rounded-[6px] bg-[var(--w-sunken)] p-3 text-[12px]">{src}</pre>;
   if (!svg) return <div className="flex h-24 items-center justify-center"><Spinner /></div>;
   // SVG do mermaid tự vẽ với securityLevel 'strict' (không script, không HTML label).
-  return <div className="overflow-auto [&_svg]:mx-auto [&_svg]:max-h-[360px]" role="img" aria-label={`Screens flow: ${data.screens.length} screens, ${data.links.length} links`} dangerouslySetInnerHTML={{ __html: svg }} />;
+  return <div className="overflow-auto [&_svg]:mx-auto [&_svg]:max-h-[360px]" role="img" aria-label={wt('srs.flowAria', { s: data.screens.length, l: data.links.length })} dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 
 export function ScreensTab({ pid, data }: { pid: number; data: SrsData }) {
@@ -70,26 +71,26 @@ export function ScreensTab({ pid, data }: { pid: number; data: SrsData }) {
       const body = { name: f.name.trim(), feature: f.feature.trim() || null, description: f.description || null, linksTo: f.linksTo.map((l) => ({ screenId: l.screenId, label: l.label.trim() || null })), actorIds: f.actorIds, ...(issueNumber ? { issueNumber } : {}) };
       return edit === 'new' ? workCtw4Api.createScreen(pid, body) : workCtw4Api.updateScreen(pid, (edit as SrsScreen).id, body);
     },
-    onSuccess: () => { refresh(); setEdit(null); toast.success('Saved'); },
-    onError: (e) => toast.error(workError(e, 'Could not save the screen')),
+    onSuccess: () => { refresh(); setEdit(null); toast.success(wt('common.saved')); },
+    onError: (e) => toast.error(workError(e, wt('srs.screenSaveFailed'))),
   });
-  const del = useMutation({ mutationFn: (id: number) => workCtw4Api.deleteScreen(pid, id), onSuccess: () => { refresh(); toast.success('Screen deleted'); }, onError: (e) => toast.error(workError(e, 'Could not delete')) });
+  const del = useMutation({ mutationFn: (id: number) => workCtw4Api.deleteScreen(pid, id), onSuccess: () => { refresh(); toast.success(wt('srs.screenDeleted')); }, onError: (e) => toast.error(workError(e, wt('common.couldNotDelete'))) });
   const self = edit && edit !== 'new' ? edit.id : -1;
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
-        <p className="flex-1 text-[13px] text-[var(--w-text-2)]">Each screen, where it leads, and which actors may open it. Builds Screens Flow (1.4.1) and Screen Authorization (1.4.2) of Report 3.</p>
-        {data.canEdit && <button type="button" className="w-btn w-btn-sm w-btn-primary" onClick={() => setEdit('new')}><Plus size={14} /> Add screen</button>}
+        <p className="flex-1 text-[13px] text-[var(--w-text-2)]">{wt('srs.screensIntro')}</p>
+        {data.canEdit && <button type="button" className="w-btn w-btn-sm w-btn-primary" onClick={() => setEdit('new')}><Plus size={14} /> {wt('srs.addScreen')}</button>}
       </div>
-      {!data.screens.length ? <EmptyState title="No screens yet" body="Add screens such as Login, Home, Book Device — then link them to draw the flow." /> : (
+      {!data.screens.length ? <EmptyState title={wt('srs.noScreens')} body={wt('srs.noScreensBody')} /> : (
         <>
           <section aria-labelledby="flow-h" className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] p-3">
-            <h2 id="flow-h" className="mb-2 text-[13px] font-semibold">Screens flow</h2>
+            <h2 id="flow-h" className="mb-2 text-[13px] font-semibold">{wt('srs.screensFlow')}</h2>
             <FlowDiagram data={data} />
           </section>
-          <TableFrame label="Screens" maxH="420px">
+          <TableFrame label={wt('srs.screens')} maxH="420px">
             <table className="w-full min-w-[760px] border-separate border-spacing-0">
-              <thead><tr>{['Screen', 'Feature', 'Navigates to', 'Actors', 'Description', ''].map((h, i) => <th key={i} scope="col" className={TH}>{h}</th>)}</tr></thead>
+              <thead><tr>{[wt('srs.screen'), wt('school.hFeature'), wt('srs.navTo'), 'Actor', wt('common.description'), ''].map((h, i) => <th key={i} scope="col" className={TH}>{h}</th>)}</tr></thead>
               <tbody>
                 {data.screens.map((s) => (
                   <tr key={s.id} className="hover:bg-[var(--w-hover)]">
@@ -101,8 +102,8 @@ export function ScreensTab({ pid, data }: { pid: number; data: SrsData }) {
                     <td className={`${TD} w-20`}>
                       {data.canEdit && (
                         <span className="flex justify-end gap-1">
-                          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`Edit ${s.name}`} onClick={() => setEdit(s)}><Pencil size={13} /></button>
-                          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`Delete ${s.name}`} onClick={() => window.confirm(`Delete screen ${s.name}?`) && del.mutate(s.id)}><Trash2 size={13} /></button>
+                          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`${wt('common.edit')} ${s.name}`} onClick={() => setEdit(s)}><Pencil size={13} /></button>
+                          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`${wt('common.delete')} ${s.name}`} onClick={() => window.confirm(wt('srs.deleteScreenQ', { name: s.name })) && del.mutate(s.id)}><Trash2 size={13} /></button>
                         </span>
                       )}
                     </td>
@@ -113,25 +114,25 @@ export function ScreensTab({ pid, data }: { pid: number; data: SrsData }) {
           </TableFrame>
         </>
       )}
-      <Dialog open={!!edit} onClose={() => setEdit(null)} title={edit === 'new' ? 'Add screen' : 'Edit screen'} width={640}
-        footer={<><button type="button" className="w-btn" onClick={() => setEdit(null)}>Cancel</button><button type="button" className="w-btn w-btn-primary" disabled={!f.name.trim() || save.isPending} onClick={() => save.mutate()}>{save.isPending && <Spinner size={12} />} Save</button></>}>
+      <Dialog open={!!edit} onClose={() => setEdit(null)} title={edit === 'new' ? wt('srs.addScreen') : wt('srs.editScreen')} width={640}
+        footer={<><button type="button" className="w-btn" onClick={() => setEdit(null)}>{wt('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" disabled={!f.name.trim() || save.isPending} onClick={() => save.mutate()}>{save.isPending && <Spinner size={12} />} {wt('common.save')}</button></>}>
         <div className="grid gap-x-4 sm:grid-cols-2">
-          <Field label="Screen name"><input className="w-input" autoFocus value={f.name} maxLength={160} placeholder="Book Device" onChange={(e) => setF({ ...f, name: e.target.value })} /></Field>
-          <Field label="Feature"><input className="w-input" value={f.feature} maxLength={120} placeholder="Booking" onChange={(e) => setF({ ...f, feature: e.target.value })} /></Field>
+          <Field label={wt('srs.screenName')}><input className="w-input" autoFocus value={f.name} maxLength={160} placeholder={wt('srs.screenPh')} onChange={(e) => setF({ ...f, name: e.target.value })} /></Field>
+          <Field label={wt('school.hFeature')}><input className="w-input" value={f.feature} maxLength={120} placeholder="Booking" onChange={(e) => setF({ ...f, feature: e.target.value })} /></Field>
         </div>
-        <TextArea id="screen-desc" label="Description" value={f.description} rows={2} onChange={(v) => setF({ ...f, description: v })} />
-        <Field label="Requirement issue (optional)"><input className="w-input" value={f.issue} placeholder={`${data.key}-12`} onChange={(e) => setF({ ...f, issue: e.target.value })} /></Field>
+        <TextArea id="screen-desc" label={wt('common.description')} value={f.description} rows={2} onChange={(v) => setF({ ...f, description: v })} />
+        <Field label={wt('srs.reqIssueOpt')}><input className="w-input" value={f.issue} placeholder={`${data.key}-12`} onChange={(e) => setF({ ...f, issue: e.target.value })} /></Field>
         <fieldset className="mb-3">
-          <legend className="w-label">Actors allowed (Screen Authorization)</legend>
+          <legend className="w-label">{wt('srs.actorsAllowed')}</legend>
           <div className="flex flex-wrap gap-x-4 gap-y-1">
             {data.actors.map((a) => (
               <label key={a.id} className="flex items-center gap-1.5 text-[13px]"><input type="checkbox" checked={f.actorIds.includes(a.id)} onChange={() => setF({ ...f, actorIds: f.actorIds.includes(a.id) ? f.actorIds.filter((x) => x !== a.id) : [...f.actorIds, a.id] })} />{a.name}</label>
             ))}
-            {!data.actors.length && <span className="text-[12.5px] text-[var(--w-text-3)]">Add actors first.</span>}
+            {!data.actors.length && <span className="text-[12.5px] text-[var(--w-text-3)]">{wt('srs.addActorsFirst')}</span>}
           </div>
         </fieldset>
         <fieldset>
-          <legend className="w-label">Navigates to (Screens Flow)</legend>
+          <legend className="w-label">{wt('srs.navToFlow')}</legend>
           <div className="flex flex-col gap-1.5">
             {data.screens.filter((s) => s.id !== self).map((s) => {
               const on = f.linksTo.find((l) => l.screenId === s.id);
@@ -140,11 +141,11 @@ export function ScreensTab({ pid, data }: { pid: number; data: SrsData }) {
                   <label className="flex min-w-[180px] items-center gap-1.5 text-[13px]">
                     <input type="checkbox" checked={!!on} onChange={() => setF({ ...f, linksTo: on ? f.linksTo.filter((l) => l.screenId !== s.id) : [...f.linksTo, { screenId: s.id, label: '' }] })} />{s.name}
                   </label>
-                  {on && <input className="w-input h-7 max-w-[240px] text-[12.5px]" aria-label={`Action that leads to ${s.name}`} placeholder="Action (optional), e.g. Sign in" value={on.label} onChange={(e) => setF({ ...f, linksTo: f.linksTo.map((l) => (l.screenId === s.id ? { ...l, label: e.target.value } : l)) })} />}
+                  {on && <input className="w-input h-7 max-w-[240px] text-[12.5px]" aria-label={wt('srs.actionTo', { name: s.name })} placeholder={wt('srs.actionPh')} value={on.label} onChange={(e) => setF({ ...f, linksTo: f.linksTo.map((l) => (l.screenId === s.id ? { ...l, label: e.target.value } : l)) })} />}
                 </div>
               );
             })}
-            {data.screens.length < 2 && <span className="text-[12.5px] text-[var(--w-text-3)]">Add another screen to link them.</span>}
+            {data.screens.length < 2 && <span className="text-[12.5px] text-[var(--w-text-3)]">{wt('srs.addAnother')}</span>}
           </div>
         </fieldset>
       </Dialog>
@@ -164,18 +165,18 @@ export function AuthMatrixTab({ pid, data }: { pid: number; data: SrsData }) {
       if (prev) qc.setQueryData<SrsData>(key, { ...prev, auth: v.allowed ? [...prev.auth, [v.screenId, v.actorId]] : prev.auth.filter(([s, a]) => !(s === v.screenId && a === v.actorId)) });
       return { prev };
     },
-    onError: (e, _v, ctx) => { if (ctx?.prev) qc.setQueryData(workCtw4Keys.srs(pid), ctx.prev); toast.error(workError(e, 'Could not change access')); },
+    onError: (e, _v, ctx) => { if (ctx?.prev) qc.setQueryData(workCtw4Keys.srs(pid), ctx.prev); toast.error(workError(e, wt('srs.accessFailed'))); },
     onSettled: () => qc.invalidateQueries({ queryKey: workCtw4Keys.srs(pid) }),
   });
-  if (!data.screens.length || !data.actors.length) return <EmptyState title="Nothing to authorize yet" body="Add actors and screens first — then click a cell to allow an actor on a screen." />;
+  if (!data.screens.length || !data.actors.length) return <EmptyState title={wt('srs.nothingAuth')} body={wt('srs.nothingAuthBody')} />;
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-[13px] text-[var(--w-text-2)]">Click a cell to allow or deny. Exported as table 1.4.2 Screen Authorization of Report 3 (X = allowed).</p>
-      <TableFrame label="Screen authorization matrix">
+      <p className="text-[13px] text-[var(--w-text-2)]">{wt('srs.authIntro')}</p>
+      <TableFrame label={wt('srs.authMatrix')}>
         <table className="border-separate border-spacing-0">
           <thead>
             <tr>
-              <th scope="col" className={`${TH} sticky left-0 z-[2] min-w-[200px]`}>Screen</th>
+              <th scope="col" className={`${TH} sticky left-0 z-[2] min-w-[200px]`}>{wt('srs.screen')}</th>
               {data.actors.map((a) => <th key={a.id} scope="col" className={`${TH} text-center`}>{a.name}</th>)}
             </tr>
           </thead>
@@ -187,7 +188,7 @@ export function AuthMatrixTab({ pid, data }: { pid: number; data: SrsData }) {
                   const on = set.has(`${s.id}:${a.id}`);
                   return (
                     <td key={a.id} className={`${TD} p-0 text-center`}>
-                      <button type="button" aria-pressed={on} disabled={!data.canEdit} aria-label={`${on ? 'Deny' : 'Allow'} ${a.name} on ${s.name}`}
+                      <button type="button" aria-pressed={on} disabled={!data.canEdit} aria-label={wt(on ? 'srs.deny' : 'srs.allow', { a: a.name, s: s.name })}
                         className={`m-1 inline-flex h-7 w-12 items-center justify-center rounded-[5px] border text-[12px] font-semibold transition-colors ${on ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border)] text-[var(--w-text-3)] hover:bg-[var(--w-hover)]'}`}
                         onClick={() => toggle.mutate({ screenId: s.id, actorId: a.id, allowed: !on })}>
                         {on ? <><Check size={13} aria-hidden="true" /> X</> : '—'}

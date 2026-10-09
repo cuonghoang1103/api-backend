@@ -15,6 +15,7 @@
 import crypto from 'node:crypto';
 import { prisma } from '../../config/database.js';
 import { BadRequestError, NotFoundError, UnauthorizedError } from '../../middleware/errorHandler.js';
+import { extractGithubContribs, recordDevContributions } from './contribDev.js';
 import { logger } from '../../utils/logger.js';
 import { auditProject } from './audit.js';
 import { frontendUrl } from './common.js';
@@ -147,6 +148,8 @@ export async function handleWebhook(projectId: number, event: string | undefined
   try { body = JSON.parse(raw.toString('utf8')); } catch { throw new BadRequestError('Invalid JSON payload', 'WORK_BAD_PAYLOAD'); }
   await prisma.workGithubConnection.update({ where: { projectId }, data: { lastEventAt: new Date(), ...(body?.repository?.full_name && !conn.repoFullName ? { repoFullName: String(body.repository.full_name).slice(0, 200) } : {}) } });
   if (!event || event === 'ping') return { ok: true, linked: 0 };
+  // CTW Đóng góp (A26): giữ MỌI commit/PR (kể cả không nhắc mã thẻ) + số dòng khi payload có — không bao giờ ném.
+  await recordDevContributions(projectId, conn.project.key, 'GITHUB', extractGithubContribs(event, body));
 
   const cfg = conn.config as GithubConfig;
   const repo = body?.repository?.full_name ? String(body.repository.full_name).slice(0, 200) : null;

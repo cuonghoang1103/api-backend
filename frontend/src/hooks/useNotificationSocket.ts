@@ -86,6 +86,9 @@ export function useNotificationSocket(): void {
           // and 'notification' respectively. The user
           // can swap the actual MP3 in /settings/notifications.
           if (typeof window === 'undefined') return;
+          // CTW K-3: chuông của tin chat CT Work (@nhắc / trả lời) vẫn vào danh sách, nhưng ÂM do ChatNotifierHost
+          // phát theo tắt tiếng / giờ im lặng của chat — không kêu hai lần, không kêu khi kênh đang tắt tiếng.
+          if ((payload.payload as { chat?: unknown } | null | undefined)?.chat === true) return;
           // When the super-admin (Cuong03dx) is the actor — e.g. they liked /
           // commented on the recipient's post — play the dedicated "admin
           // notification" sound the user configured in /settings/notifications.

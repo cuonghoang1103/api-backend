@@ -621,3 +621,15 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
 .w-typing-dots i:nth-child(3) { animation-delay: .3s; }
 @keyframes w-typing { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-3px); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .w-rec-dot, .w-typing-dots i { animation: none; } }
+
+/* i18n 10/10: "Bỏ qua, tới nội dung" — ẩn tới khi được focus bằng Tab. */
+.work-root .w-skip-link { position: absolute; left: 8px; top: -48px; z-index: 80; padding: 6px 12px; border-radius: 6px; background: var(--w-panel); color: var(--w-text); border: 1px solid var(--w-accent-border); font-size: 13px; font-weight: 600; }
+.work-root .w-skip-link:focus { top: 8px; }
+
+/* CTW K-3: kênh chat — tin được nhảy tới (từ thông báo / ghim / tìm kiếm) loé nền một nhịp; vạch "New messages". */
+.work-root .w-chat-flash { animation: w-chat-flash 1.8s ease-out 1; }
+@keyframes w-chat-flash { 0%, 30% { background: color-mix(in srgb, var(--w-yellow) 26%, transparent); } 100% { background: transparent; } }
+.work-root .w-chat-new { display: flex; align-items: center; gap: 8px; margin: 6px 20px; color: var(--w-red-text); font-size: 11.5px; font-weight: 600; }
+.work-root .w-chat-new::before, .work-root .w-chat-new::after { content: ''; flex: 1; height: 1px; background: color-mix(in srgb, var(--w-red) 55%, transparent); }
+.work-root .w-chat-md p:empty { display: none; }
+@media (prefers-reduced-motion: reduce) { .work-root .w-chat-flash { animation: none; } }

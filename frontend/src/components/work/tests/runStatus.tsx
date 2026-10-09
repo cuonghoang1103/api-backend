@@ -7,31 +7,32 @@
 
 import type { CycleCounts, CycleState, RunStatus, StepStatus } from '@/lib/work-api';
 import { cn } from '@/lib/utils';
+import { wt, wfmt } from '@/components/work/i18n';
 
 export const RUN_META: Record<RunStatus, { label: string; color: string }> = {
-  TODO: { label: 'To do', color: 'var(--w-text-3)' },
-  IN_PROGRESS: { label: 'In progress', color: 'var(--w-accent)' },
-  PASS: { label: 'Passed', color: 'var(--w-green)' },
-  FAIL: { label: 'Failed', color: 'var(--w-red)' },
-  BLOCKED: { label: 'Blocked', color: 'var(--w-orange)' },
-  SKIP: { label: 'Skipped', color: 'var(--w-text-3)' },
-  RETEST: { label: 'Retest', color: 'var(--w-accent)' },
+  TODO: { get label() { return wt('tests.rsToDo'); }, color: 'var(--w-text-3)' },
+  IN_PROGRESS: { get label() { return wt('tests.rsInProgress'); }, color: 'var(--w-accent)' },
+  PASS: { get label() { return wt('tests.rsPassed'); }, color: 'var(--w-green)' },
+  FAIL: { get label() { return wt('tests.rsFailed'); }, color: 'var(--w-red)' },
+  BLOCKED: { get label() { return wt('tests.rsBlocked'); }, color: 'var(--w-orange)' },
+  SKIP: { get label() { return wt('tests.rsSkipped'); }, color: 'var(--w-text-3)' },
+  RETEST: { get label() { return wt('tests.rsRetest'); }, color: 'var(--w-accent)' },
 };
 
 /** Thứ tự hiện trên thanh xếp chồng và chip lọc. */
 export const RUN_ORDER: RunStatus[] = ['PASS', 'FAIL', 'BLOCKED', 'RETEST', 'IN_PROGRESS', 'SKIP', 'TODO'];
 
 export const STEP_META: Record<StepStatus, { label: string; short: string; key: string; color: string }> = {
-  TODO: { label: 'Not run', short: '—', key: '', color: 'var(--w-text-3)' },
-  PASS: { label: 'Pass', short: 'Pass', key: 'P', color: 'var(--w-green)' },
-  FAIL: { label: 'Fail', short: 'Fail', key: 'F', color: 'var(--w-red)' },
-  BLOCKED: { label: 'Blocked', short: 'Blocked', key: 'B', color: 'var(--w-orange)' },
-  SKIP: { label: 'Skip', short: 'Skip', key: 'S', color: 'var(--w-text-2)' },
+  TODO: { get label() { return wt('tests.rsNotRun'); }, short: '—', key: '', color: 'var(--w-text-3)' },
+  PASS: { get label() { return wt('tests.rsPass'); }, short: 'Pass', key: 'P', color: 'var(--w-green)' },
+  FAIL: { get label() { return wt('tests.rsFail'); }, short: 'Fail', key: 'F', color: 'var(--w-red)' },
+  BLOCKED: { get label() { return wt('tests.rsBlocked'); }, short: 'Blocked', key: 'B', color: 'var(--w-orange)' },
+  SKIP: { get label() { return wt('tests.rsSkip'); }, short: 'Skip', key: 'S', color: 'var(--w-text-2)' },
 };
 
 export function RunStatusPill({ status, className }: { status: RunStatus | null | undefined; className?: string }) {
   if (!status) {
-    return <span className={cn('inline-flex h-[20px] items-center rounded-[4px] border border-dashed border-[var(--w-border-strong)] px-1.5 text-[11px] text-[var(--w-text-3)]', className)}>Never run</span>;
+    return <span className={cn('inline-flex h-[20px] items-center rounded-[4px] border border-dashed border-[var(--w-border-strong)] px-1.5 text-[11px] text-[var(--w-text-3)]', className)}>{wt('tests.neverRun')}</span>;
   }
   const m = RUN_META[status];
   const muted = status === 'TODO' || status === 'SKIP';
@@ -48,9 +49,9 @@ export function RunStatusPill({ status, className }: { status: RunStatus | null 
 }
 
 export const CYCLE_STATE_META: Record<CycleState, { label: string; color: string }> = {
-  PLANNED: { label: 'Planned', color: 'var(--w-text-2)' },
-  IN_PROGRESS: { label: 'In progress', color: 'var(--w-accent-text)' },
-  DONE: { label: 'Done', color: 'var(--w-green)' },
+  PLANNED: { get label() { return wt('tests.rsPlanned'); }, color: 'var(--w-text-2)' },
+  IN_PROGRESS: { get label() { return wt('tests.rsInProgress'); }, color: 'var(--w-accent-text)' },
+  DONE: { get label() { return wt('tests.rsDone'); }, color: 'var(--w-green)' },
 };
 
 export function CycleStateBadge({ state }: { state: CycleState }) {
@@ -69,7 +70,7 @@ export function CycleStateBadge({ state }: { state: CycleState }) {
 
 /** Thanh tiến độ xếp chồng theo trạng thái; TODO là phần nền còn trống. */
 export function StatusBar({ counts, total, height = 6, className }: { counts: CycleCounts['counts']; total: number; height?: number; className?: string }) {
-  const title = RUN_ORDER.filter((s) => counts[s]).map((s) => `${RUN_META[s].label}: ${counts[s]}`).join(' · ') || 'No tests';
+  const title = RUN_ORDER.filter((s) => counts[s]).map((s) => `${RUN_META[s].label}: ${counts[s]}`).join(' · ') || wt('tests.noTests');
   return (
     <div title={title} style={{ height }} className={cn('flex w-full overflow-hidden rounded-full bg-[var(--w-sunken)]', className)}>
       {total > 0 && RUN_ORDER.filter((s) => s !== 'TODO' && counts[s]).map((s) => (
@@ -111,5 +112,5 @@ export const safeFileName = (s: string) => s.replace(/[^\p{L}\p{N}._-]+/gu, '-')
 
 export function formatDateTime(iso: string | null | undefined): string {
   if (!iso) return '';
-  return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  return new Date(iso).toLocaleString(wfmt.intl(), { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 }

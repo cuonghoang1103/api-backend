@@ -8,6 +8,7 @@
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { GapCode, UcPriority, UcStatus } from '@/lib/work-ctw4-api';
+import { wt } from '@/components/work/i18n';
 
 const tint = (c: string) => `color-mix(in srgb, var(${c}) 14%, transparent)`;
 
@@ -24,12 +25,12 @@ export function Chip({ tone, children, title }: { tone: 'green' | 'yellow' | 're
   );
 }
 
-export const STATUS_TEXT: Record<UcStatus, string> = { PROPOSED: 'Proposed', DRAFT: 'Draft', APPROVED: 'Approved' };
+export const STATUS_TEXT: Record<UcStatus, string> = { get PROPOSED() { return wt('srs.stProposed'); }, get DRAFT() { return wt('common.draft'); }, get APPROVED() { return wt('srs.stApproved'); } };
 export function UcStatusChip({ status }: { status: UcStatus }) {
-  return <Chip tone={status === 'APPROVED' ? 'green' : status === 'PROPOSED' ? 'accent' : 'muted'} title={status === 'PROPOSED' ? 'Suggested by AI — not in the document until a person accepts it' : undefined}>{STATUS_TEXT[status]}</Chip>;
+  return <Chip tone={status === 'APPROVED' ? 'green' : status === 'PROPOSED' ? 'accent' : 'muted'} title={status === 'PROPOSED' ? wt('srs.proposedHint') : undefined}>{STATUS_TEXT[status]}</Chip>;
 }
 
-export const PRIORITY_TEXT: Record<UcPriority, string> = { HIGH: 'High', MEDIUM: 'Medium', LOW: 'Low' };
+export const PRIORITY_TEXT: Record<UcPriority, string> = { get HIGH() { return wt('status.prioHigh'); }, get MEDIUM() { return wt('status.prioMedium'); }, get LOW() { return wt('status.prioLow'); } };
 export function PriorityChip({ p }: { p: UcPriority }) {
   return <Chip tone={p === 'HIGH' ? 'orange' : p === 'LOW' ? 'muted' : 'blue'}>{PRIORITY_TEXT[p]}</Chip>;
 }

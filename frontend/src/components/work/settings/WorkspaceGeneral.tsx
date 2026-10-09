@@ -10,6 +10,7 @@ import { wk } from '../hooks';
 import { Field, Spinner, useToggle } from '../ui';
 import { ConfirmDialog, ReadOnlyNotice, Section, TypeToConfirmDialog } from './shared';
 import { WorkspaceLogo } from './ProjectIdentity';
+import { wt } from '@/components/work/i18n';
 
 export default function WorkspaceGeneral({ ws }: { ws: WorkspaceDetail }) {
   const router = useRouter();
@@ -26,54 +27,54 @@ export default function WorkspaceGeneral({ ws }: { ws: WorkspaceDetail }) {
   const save = useMutation({
     mutationFn: () => workApi.updateWorkspace(ws.id, { name: name.trim(), description: description.trim() || null }),
     onSuccess: () => {
-      toast.success('Workspace updated');
+      toast.success(wt('settings.wsUpdated'));
       qc.invalidateQueries({ queryKey: wk.workspace(ws.slug) });
       qc.invalidateQueries({ queryKey: wk.workspaces });
     },
-    onError: (err) => toast.error(workError(err, 'Could not save changes')),
+    onError: (err) => toast.error(workError(err, wt('settings.saveChangesFailed'))),
   });
 
   const delDialog = useToggle();
   const del = useMutation({
     mutationFn: (typed: string) => workApi.deleteWorkspace(ws.id, typed),
     onSuccess: () => {
-      toast.success(`Workspace “${ws.name}” deleted`);
+      toast.success(wt('settings.wsDeleted', { name: ws.name }));
       qc.invalidateQueries({ queryKey: wk.workspaces });
       qc.removeQueries({ queryKey: wk.workspace(ws.slug) });
       router.push('/work');
     },
-    onError: (err) => toast.error(workError(err, 'Could not delete the workspace')),
+    onError: (err) => toast.error(workError(err, wt('settings.wsDeleteFailed'))),
   });
 
   const leaveDialog = useToggle();
   const leave = useMutation({
     mutationFn: () => {
-      if (!me) throw new Error('Your session is not ready yet. Reload the page and try again.');
+      if (!me) throw new Error(wt('settings.sessionNotReady'));
       return workApi.removeMember(ws.id, me);
     },
     onSuccess: () => {
-      toast.success(`You left ${ws.name}`);
+      toast.success(wt('settings.youLeft', { name: ws.name }));
       qc.invalidateQueries({ queryKey: wk.workspaces });
       qc.removeQueries({ queryKey: wk.workspace(ws.slug) });
       router.push('/work');
     },
-    onError: (err) => toast.error(workError(err, 'Could not leave the workspace')),
+    onError: (err) => toast.error(workError(err, wt('settings.leaveFailed'))),
   });
 
   return (
     <div>
-      {!canEdit && <ReadOnlyNotice>Only workspace owners and admins can change these settings.</ReadOnlyNotice>}
+      {!canEdit && <ReadOnlyNotice>{wt('settings.wsReadOnly')}</ReadOnlyNotice>}
 
-      <Section title="Workspace details" description="The name appears in the sidebar, invitations and email notifications.">
+      <Section title={wt('settings.wsDetails')} description={wt('settings.wsDetailsDesc')}>
         <form
           className="max-w-[520px]"
           onSubmit={(e) => { e.preventDefault(); if (canEdit && dirty && name.trim() && !save.isPending) save.mutate(); }}
         >
-          <Field label="Name">
+          <Field label={wt('common.name')}>
             <input className="w-input" value={name} onChange={(e) => setName(e.target.value)} disabled={!canEdit} maxLength={100} />
           </Field>
-          <Field label="Description">
-            <textarea className="w-input" rows={3} value={description} onChange={(e) => setDescription(e.target.value)} disabled={!canEdit} maxLength={2000} placeholder="What does this team work on?" />
+          <Field label={wt('common.description')}>
+            <textarea className="w-input" rows={3} value={description} onChange={(e) => setDescription(e.target.value)} disabled={!canEdit} maxLength={2000} placeholder={wt('create.wsDescPh')} />
           </Field>
           <Field label="URL">
             <div className="flex h-8 items-center rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-2.5 font-mono text-[12px] text-[var(--w-text-2)]">
@@ -83,7 +84,7 @@ export default function WorkspaceGeneral({ ws }: { ws: WorkspaceDetail }) {
           {canEdit && (
             <button type="submit" className="w-btn w-btn-primary" disabled={!dirty || !name.trim() || save.isPending}>
               {save.isPending && <Spinner size={12} />}
-              Save changes
+              {wt('common.saveChanges')}
             </button>
           )}
         </form>
@@ -96,37 +97,37 @@ export default function WorkspaceGeneral({ ws }: { ws: WorkspaceDetail }) {
       />
 
       {isOwner ? (
-        <Section title="Danger zone" danger description="Deleting a workspace removes access to all of its projects, issues and files for every member.">
+        <Section title={wt('settings.tDangerZone')} danger description={wt('settings.wsDangerDesc')}>
           <div className="flex flex-col gap-3 rounded-[8px] border border-[color-mix(in_srgb,var(--w-red)_35%,transparent)] px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-[13px]">
-              <div className="font-medium">Delete this workspace</div>
-              <div className="text-[var(--w-text-2)]">Transfer ownership first if you only want to step away.</div>
+              <div className="font-medium">{wt('settings.deleteThisWs')}</div>
+              <div className="text-[var(--w-text-2)]">{wt('settings.transferFirst')}</div>
             </div>
-            <button type="button" className="w-btn w-btn-danger shrink-0" onClick={delDialog.open}>Delete workspace</button>
+            <button type="button" className="w-btn w-btn-danger shrink-0" onClick={delDialog.open}>{wt('settings.deleteWs')}</button>
           </div>
         </Section>
       ) : (
-        <Section title="Leave workspace" description="You will lose access to every project in this workspace until someone invites you again.">
-          <button type="button" className="w-btn w-btn-danger" onClick={leaveDialog.open}>Leave workspace</button>
+        <Section title={wt('settings.leaveWs')} description={wt('settings.leaveDesc')}>
+          <button type="button" className="w-btn w-btn-danger" onClick={leaveDialog.open}>{wt('settings.leaveWs')}</button>
         </Section>
       )}
 
       <TypeToConfirmDialog
         open={delDialog.on}
         onClose={delDialog.close}
-        title="Delete workspace"
-        body={<>This deletes <span className="font-medium text-[var(--w-text)]">{ws.name}</span> with all of its projects. Members lose access immediately.</>}
+        title={wt('settings.deleteWs')}
+        body={wt('settings.deleteWsBody', { name: ws.name })}
         expected={ws.name}
-        confirmLabel="Delete workspace"
+        confirmLabel={wt('settings.deleteWs')}
         pending={del.isPending}
         onConfirm={(typed) => del.mutate(typed)}
       />
       <ConfirmDialog
         open={leaveDialog.on}
         onClose={leaveDialog.close}
-        title="Leave workspace?"
-        body={<>You will no longer see <span className="font-medium text-[var(--w-text)]">{ws.name}</span> or its projects.</>}
-        confirmLabel="Leave workspace"
+        title={wt('settings.leaveWsQ')}
+        body={wt('settings.leaveBody', { name: ws.name })}
+        confirmLabel={wt('settings.leaveWs')}
         pending={leave.isPending}
         onConfirm={() => leave.mutate()}
       />

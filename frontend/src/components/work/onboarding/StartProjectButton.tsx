@@ -12,9 +12,10 @@ import { cn } from '@/lib/utils';
 import type { ProjectTemplate } from '@/lib/work-api';
 import CreateProjectDialog from '../workspace/CreateProjectDialog';
 import { useToggle } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 export default function StartProjectButton({
-  workspaceId, slug, label = 'Start a project', primary = true, small = false, className, icon, initialTemplate,
+  workspaceId, slug, label = wt('home.stepProject'), primary = true, small = false, className, icon, initialTemplate,
 }: {
   /** Có thì tạo vào đúng workspace này; bỏ trống thì tự chọn / tự tạo. */
   workspaceId?: number;

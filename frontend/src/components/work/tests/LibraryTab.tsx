@@ -16,6 +16,7 @@ import { useLookups, wk } from '../hooks';
 import { EmptyState, PickerList, Popover, PriorityIcon, relativeTime, Spinner, UserAvatar } from '../ui';
 import ImportTestsDialog from './ImportTestsDialog';
 import { RunStatusPill } from './testing-ui';
+import { wt, wfmt } from '@/components/work/i18n';
 
 export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
   config: ProjectConfig;
@@ -67,16 +68,16 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
       if (planId) {
         await workApi.updateTestPlan(pid, planId, { addNumbers: selected });
         const name = plans.data?.find((p) => p.id === planId)?.name ?? 'plan';
-        toast.success(`Added ${selected.length} test${selected.length === 1 ? '' : 's'} to “${name}”`);
+        toast.success(wt('tests.addedToPlan', { count: selected.length, name }));
       } else if (newName) {
         await workApi.createTestPlan(pid, { name: newName, numbers: selected });
-        toast.success(`Created plan “${newName}” with ${selected.length} test${selected.length === 1 ? '' : 's'}`);
+        toast.success(wt('tests.createdPlan', { count: selected.length, name: newName }));
       }
       qc.invalidateQueries({ queryKey: wk.tests(pid) });
       setPlanOpen(false);
       setSelected([]);
     } catch (e) {
-      toast.error(workError(e, 'Could not add tests to the plan'));
+      toast.error(workError(e, wt('tests.addPlanFailed')));
     } finally {
       setAdding(false);
     }
@@ -98,34 +99,34 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Escape' && setInput('')}
-            placeholder="Search by title or key"
+            placeholder={wt('tests.searchPh')}
             className="w-input !h-[28px] pl-7 text-[12px] sm:!w-[260px]"
           />
           {list.isFetching && q && <span className="absolute right-2 top-1/2 -translate-y-1/2"><Spinner size={11} /></span>}
         </div>
         {selected.length > 0 ? (
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[12px] text-[var(--w-text-2)]"><b className="tabular text-[var(--w-text)]">{selected.length}</b> selected</span>
+            <span className="text-[12px] text-[var(--w-text-2)]">{wt('common.selected', { count: selected.length })}</span>
             {canEdit && (
               <>
                 <button ref={planBtn} type="button" className="w-btn w-btn-sm" onClick={() => setPlanOpen((v) => !v)} disabled={adding}>
-                  {adding ? <Spinner size={11} /> : <ListPlus size={13} />} Add to plan
+                  {adding ? <Spinner size={11} /> : <ListPlus size={13} />} {wt('tests.addToPlan')}
                 </button>
                 <button type="button" className="w-btn w-btn-sm" onClick={createCycle}>
-                  <PlayCircle size={13} /> Create test cycle
+                  <PlayCircle size={13} /> {wt('tests.createCycle')}
                 </button>
               </>
             )}
-            <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setSelected([])}><X size={12} /> Clear</button>
+            <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setSelected([])}><X size={12} /> {wt('board.clear')}</button>
           </div>
         ) : (
           <span className="hidden text-[12px] text-[var(--w-text-3)] md:inline">
-            {list.data ? `${items.length} test${items.length === 1 ? '' : 's'}` : ''}
+            {list.data ? wt('tests.nTests', { count: items.length }) : ''}
           </span>
         )}
         {config.permissions.createIssues && (
           <button type="button" className="w-btn w-btn-sm ml-auto" onClick={() => setImportOpen(true)}>
-            <FileUp size={13} /> <span className="max-sm:hidden">Import CSV</span>
+            <FileUp size={13} /> <span className="max-sm:hidden">{wt('tests.importCsv')}</span>
           </button>
         )}
       </div>
@@ -135,12 +136,12 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
           <div className="flex justify-center p-4"><Spinner /></div>
         ) : (
           <PickerList
-            options={(plans.data ?? []).filter((p) => !p.archivedAt).map((p) => ({ value: p.id, label: p.name, hint: `${p.testNumbers.length} tests` }))}
+            options={(plans.data ?? []).filter((p) => !p.archivedAt).map((p) => ({ value: p.id, label: p.name, hint: wt('tests.nTests', { count: p.testNumbers.length }) }))}
             selected={[]}
             onPick={(id) => addToPlan(id)}
             onCreate={(name) => addToPlan(null, name)}
-            placeholder="Find or create a plan…"
-            empty="No plans yet — type a name to create one"
+            placeholder={wt('tests.findPlan')}
+            empty={wt('tests.noPlansType')}
           />
         )}
       </Popover>
@@ -149,18 +150,18 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
         {list.isLoading ? (
           <div className="flex h-40 items-center justify-center"><Spinner size={20} /></div>
         ) : list.error ? (
-          <EmptyState title="Could not load tests" body={workError(list.error)} action={<button type="button" className="w-btn" onClick={() => list.refetch()}>Try again</button>} />
+          <EmptyState title={wt('tests.loadFailed')} body={workError(list.error)} action={<button type="button" className="w-btn" onClick={() => list.refetch()}>{wt('common.tryAgain')}</button>} />
         ) : !items.length ? (
           q ? (
-            <EmptyState title="No tests match your search" body={`Nothing matches “${q}”. Try a different title or key.`} action={<button type="button" className="w-btn" onClick={() => setInput('')}>Clear search</button>} />
+            <EmptyState title={wt('tests.noMatch')} body={wt('tests.noMatchBody', { q })} action={<button type="button" className="w-btn" onClick={() => setInput('')}>{wt('issues.clearSearch')}</button>} />
           ) : (
             <EmptyState
-              title="No test cases yet"
-              body="Write test cases with steps and expected results, then group them into plans and run them in test cycles."
+              title={wt('tests.noTestCases')}
+              body={wt('tests.noTestsBody')}
               action={config.permissions.createIssues ? (
                 <div className="flex flex-wrap justify-center gap-2">
-                  {onNewTest && <button type="button" className="w-btn w-btn-primary" onClick={onNewTest}>New test</button>}
-                  <button type="button" className="w-btn" onClick={() => setImportOpen(true)}><FileUp size={13} /> Import CSV</button>
+                  {onNewTest && <button type="button" className="w-btn w-btn-primary" onClick={onNewTest}>{wt('tests.newTest')}</button>}
+                  <button type="button" className="w-btn" onClick={() => setImportOpen(true)}><FileUp size={13} /> {wt('tests.importCsv')}</button>
                 </div>
               ) : undefined}
             />
@@ -170,17 +171,17 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
             <thead className="sticky top-0 z-[1] bg-[var(--w-panel)] shadow-[inset_0_-1px_0_var(--w-border)]">
               <tr>
                 <th className="w-[36px] px-2.5 py-2">
-                  <input type="checkbox" aria-label="Select all tests" checked={allSelected} onChange={toggleAll} className="accent-[var(--w-accent)]" />
+                  <input type="checkbox" aria-label={wt('tests.selectAll')} checked={allSelected} onChange={toggleAll} className="accent-[var(--w-accent)]" />
                 </th>
-                <th className={cn(th, 'w-[90px]')}>Key</th>
-                <th className={th}>Title</th>
-                <th className={cn(th, 'w-[80px]')}>Type</th>
-                <th className={cn(th, 'w-[64px] text-right')}>Steps</th>
-                <th className={cn(th, 'w-[160px]')}>Requirements</th>
-                <th className={cn(th, 'w-[110px]')}>Last result</th>
-                <th className={cn(th, 'w-[70px]')}>Priority</th>
-                <th className={cn(th, 'w-[70px]')}>Assignee</th>
-                <th className={cn(th, 'w-[96px]')}>Updated</th>
+                <th className={cn(th, 'w-[90px]')}>{wt('common.key')}</th>
+                <th className={th}>{wt('common.title')}</th>
+                <th className={cn(th, 'w-[80px]')}>{wt('common.type')}</th>
+                <th className={cn(th, 'w-[64px] text-right')}>{wt('tests.steps')}</th>
+                <th className={cn(th, 'w-[160px]')}>{wt('tests.requirements')}</th>
+                <th className={cn(th, 'w-[110px]')}>{wt('tests.lastResult')}</th>
+                <th className={cn(th, 'w-[70px]')}>{wt('common.priority')}</th>
+                <th className={cn(th, 'w-[70px]')}>{wt('common.assignee')}</th>
+                <th className={cn(th, 'w-[96px]')}>{wt('common.updated')}</th>
               </tr>
             </thead>
             <tbody>
@@ -217,7 +218,7 @@ function Row({ t, issueKey, assignee, selected, onToggle, onOpen, onOpenIssue }:
 }) {
   const td = 'px-2.5 py-2 align-middle';
   const runTitle = t.lastRun
-    ? `${t.lastRun.cycleName}${t.lastRun.executedAt ? ` · ${new Date(t.lastRun.executedAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}` : ''}`
+    ? `${t.lastRun.cycleName}${t.lastRun.executedAt ? ` · ${new Date(t.lastRun.executedAt).toLocaleString(wfmt.intl(), { dateStyle: 'medium', timeStyle: 'short' })}` : ''}`
     : undefined;
   return (
     <tr
@@ -225,13 +226,13 @@ function Row({ t, issueKey, assignee, selected, onToggle, onOpen, onOpenIssue }:
       className={cn('cursor-pointer border-b border-[var(--w-border)] hover:bg-[var(--w-hover)]', selected && 'bg-[var(--w-accent-soft)] hover:bg-[var(--w-accent-soft)]')}
     >
       <td className={td} onClick={(e) => e.stopPropagation()}>
-        <input type="checkbox" aria-label={`Select ${issueKey(t.number)}`} checked={selected} onChange={onToggle} className="accent-[var(--w-accent)]" />
+        <input type="checkbox" aria-label={wt('tests.selectKey', { key: issueKey(t.number) })} checked={selected} onChange={onToggle} className="accent-[var(--w-accent)]" />
       </td>
       <td className={cn(td, 'whitespace-nowrap font-mono text-[12px] text-[var(--w-text-2)]')}>{issueKey(t.number)}</td>
       <td className={cn(td, 'max-w-[380px]')}><span className="line-clamp-2 font-medium">{t.title}</span></td>
       <td className={td}>
         <span className="inline-flex h-[20px] items-center rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] text-[var(--w-text-2)]">
-          {t.kind === 'GHERKIN' ? 'Gherkin' : 'Manual'}
+          {t.kind === 'GHERKIN' ? 'Gherkin' : wt('tests.manual')}
         </span>
       </td>
       <td className={cn(td, 'text-right tabular text-[var(--w-text-2)]')}>{t.kind === 'GHERKIN' ? '—' : t.stepCount}</td>
@@ -252,15 +253,15 @@ function Row({ t, issueKey, assignee, selected, onToggle, onOpen, onOpenIssue }:
             {t.requirements.length > 3 && <span className="text-[11px] text-[var(--w-text-3)]" title={t.requirements.slice(3).map((r) => issueKey(r.number)).join(', ')}>+{t.requirements.length - 3}</span>}
           </div>
         ) : (
-          <span className="text-[12px] text-[var(--w-text-3)]">None</span>
+          <span className="text-[12px] text-[var(--w-text-3)]">{wt('common.none')}</span>
         )}
       </td>
       <td className={td}>
-        {t.lastRun ? <RunStatusPill status={t.lastRun.status} title={runTitle} /> : <span className="text-[12px] text-[var(--w-text-3)]">Not run</span>}
+        {t.lastRun ? <RunStatusPill status={t.lastRun.status} title={runTitle} /> : <span className="text-[12px] text-[var(--w-text-3)]">{wt('tests.rsNotRun')}</span>}
       </td>
       <td className={td}><PriorityIcon priority={t.priority} /></td>
       <td className={td}><UserAvatar user={assignee ?? null} size={22} /></td>
-      <td className={cn(td, 'whitespace-nowrap text-[12px] text-[var(--w-text-3)]')} title={new Date(t.updatedAt).toLocaleString('en-US')}>{relativeTime(t.updatedAt)}</td>
+      <td className={cn(td, 'whitespace-nowrap text-[12px] text-[var(--w-text-3)]')} title={new Date(t.updatedAt).toLocaleString(wfmt.intl())}>{relativeTime(t.updatedAt)}</td>
     </tr>
   );
 }

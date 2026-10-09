@@ -27,6 +27,7 @@ import TestPicker from '@/components/work/tests/TestPicker';
 import {
   CYCLE_STATE_META, formatDateTime, RUN_META, RUN_ORDER, RunStatusPill, StatusBar,
 } from '@/components/work/tests/runStatus';
+import { wt } from '@/components/work/i18n';
 
 type Filter = RunStatus | 'ALL' | 'NOT_RUN';
 // "Not run" = chưa thực thi (khớp công thức executed của backend): To do + In progress + Retest.
@@ -34,7 +35,7 @@ const NOT_RUN: RunStatus[] = ['TODO', 'IN_PROGRESS', 'RETEST'];
 /** Trạng thái đã thực thi — mỗi cái một chip; phần chưa chạy gộp thành một chip "Not run". */
 const EXECUTED: RunStatus[] = ['PASS', 'FAIL', 'BLOCKED', 'SKIP'];
 /** Nhãn riêng trang này: TODO gọi là "Not started" để không trùng nghĩa với chip "Not run". */
-const legendLabel = (s: RunStatus) => (s === 'TODO' ? 'Not started' : RUN_META[s].label);
+const legendLabel = (s: RunStatus) => (s === 'TODO' ? wt('tests.notStarted') : RUN_META[s].label);
 const GRID = 'grid grid-cols-[minmax(260px,2.4fr)_70px_minmax(150px,1fr)_110px_minmax(150px,1fr)_minmax(110px,0.8fr)_36px] items-center gap-3';
 
 function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: number; cycleId: number }) {
@@ -87,7 +88,7 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
 
   // ─── Cập nhật ───────────────────────────────────────────────────
   const refresh = () => qc.invalidateQueries({ queryKey: wk.tests(pid) });
-  const patchCycle = async (body: Parameters<typeof workApi.updateTestCycle>[2], msg = 'Could not update the cycle') => {
+  const patchCycle = async (body: Parameters<typeof workApi.updateTestCycle>[2], msg = wt('tests.cycleUpdateFailed')) => {
     qc.setQueryData<TestCycleDetail>(cycleKey, (old) => (old ? { ...old, ...(body.state ? { state: body.state } : {}), ...(body.name ? { name: body.name } : {}), ...('environment' in body ? { environment: body.environment ?? null } : {}), ...('build' in body ? { build: body.build ?? null } : {}) } : old));
     try {
       await workApi.updateTestCycle(pid, cycleId, body);
@@ -105,7 +106,7 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
       const res = await workApi.updateTestRun(pid, runId, { assigneeId });
       qc.setQueryData([...wk.tests(pid), 'run', runId], res);
     } catch (err) {
-      toast.error(workError(err, 'Could not change the assignee'));
+      toast.error(workError(err, wt('tests.assigneeFailed')));
     }
     qc.invalidateQueries({ queryKey: cycleKey });
   };
@@ -132,9 +133,9 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
     return (
       <Shell config={config}>
         <EmptyState
-          title="Could not load this test cycle"
-          body={workError(cycle.error, 'It may have been deleted.')}
-          action={<div className="flex gap-2"><Link href={listHref} className="w-btn">Back to cycles</Link><button type="button" className="w-btn" onClick={() => cycle.refetch()}>Try again</button></div>}
+          title={wt('tests.cycleLoadFailed')}
+          body={workError(cycle.error, wt('releases.notFoundBody'))}
+          action={<div className="flex gap-2"><Link href={listHref} className="w-btn">{wt('tests.backToCycles')}</Link><button type="button" className="w-btn" onClick={() => cycle.refetch()}>{wt('common.tryAgain')}</button></div>}
         />
       </Shell>
     );
@@ -142,48 +143,48 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
 
   const notRun = data.total - data.executed;
   const chips: Array<{ key: Filter; label: string; count: number; color?: string; hint?: string }> = [
-    { key: 'ALL', label: 'All', count: data.total },
+    { key: 'ALL', label: wt('common.all'), count: data.total },
     ...EXECUTED.filter((s) => data.counts[s] > 0 || s !== 'SKIP').map((s) => ({ key: s as Filter, label: RUN_META[s].label, count: data.counts[s], color: RUN_META[s].color })),
     {
-      key: 'NOT_RUN', label: 'Not run', count: notRun, color: 'var(--w-text-3)',
-      hint: `Not executed yet: ${data.counts.TODO} not started, ${data.counts.IN_PROGRESS} in progress, ${data.counts.RETEST} waiting for retest`,
+      key: 'NOT_RUN', label: wt('tests.rsNotRun'), count: notRun, color: 'var(--w-text-3)',
+      hint: wt('tests.notRunHint', { a: data.counts.TODO, b: data.counts.IN_PROGRESS, c: data.counts.RETEST }),
     },
   ];
   const passRateHint = data.passRate === null
-    ? 'Pass rate = passed ÷ executed runs. Nothing has been executed yet.'
-    : `Pass rate = passed ÷ executed runs = ${data.counts.PASS} ÷ ${data.executed}. Executed means passed, failed, blocked or skipped; ${notRun} not-run ${notRun === 1 ? 'test is' : 'tests are'} excluded.`;
+    ? wt('tests.passRateNone')
+    : wt('tests.passRateHint', { pass: data.counts.PASS, exec: data.executed, count: notRun });
 
   return (
     <Shell config={config}>
       <div className="min-h-0 flex-1 overflow-y-auto">
         {/* Đầu trang */}
         <div className="border-b border-[var(--w-border)] px-4 pb-4 pt-3">
-          <Link href={listHref} className="inline-flex items-center gap-1 text-[12px] text-[var(--w-text-3)] hover:text-[var(--w-text)]"><ArrowLeft size={12} /> Test cycles</Link>
+          <Link href={listHref} className="inline-flex items-center gap-1 text-[12px] text-[var(--w-text-3)] hover:text-[var(--w-text)]"><ArrowLeft size={12} /> {wt('tests.tabTestCycles')}</Link>
           <div className="mt-1 flex flex-wrap items-start gap-2">
             <div className="min-w-0 flex-1 basis-[260px]">
               <InlineText
                 value={data.name}
                 disabled={!canEdit}
                 required
-                ariaLabel="Cycle name"
+                ariaLabel={wt('tests.cycleName')}
                 className="text-[20px] font-semibold"
                 onSave={(v) => patchCycle({ name: v })}
               />
               <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-[var(--w-text-3)]">
-                <label className="flex items-center gap-1">Environment
-                  <InlineText value={data.environment ?? ''} placeholder="Not set" disabled={!canEdit} className="w-[180px] text-[12px] text-[var(--w-text)]" onSave={(v) => patchCycle({ environment: v || null })} />
+                <label className="flex items-center gap-1">{wt('tests.environment')}
+                  <InlineText value={data.environment ?? ''} placeholder={wt('common.notSet')} disabled={!canEdit} className="w-[180px] text-[12px] text-[var(--w-text)]" onSave={(v) => patchCycle({ environment: v || null })} />
                 </label>
-                <label className="flex items-center gap-1">Build
-                  <InlineText value={data.build ?? ''} placeholder="Not set" disabled={!canEdit} className="w-[130px] text-[12px] text-[var(--w-text)]" onSave={(v) => patchCycle({ build: v || null })} />
+                <label className="flex items-center gap-1">{wt('tests.build')}
+                  <InlineText value={data.build ?? ''} placeholder={wt('common.notSet')} disabled={!canEdit} className="w-[130px] text-[12px] text-[var(--w-text)]" onSave={(v) => patchCycle({ build: v || null })} />
                 </label>
-                {data.plan && <span>Plan: <span className="text-[var(--w-text-2)]">{data.plan.name}</span></span>}
-                {data.startAt && <span>Started {formatDateTime(data.startAt)}</span>}
-                {data.endAt && <span>Finished {formatDateTime(data.endAt)}</span>}
+                {data.plan && <span>{wt('tests.planLbl')} <span className="text-[var(--w-text-2)]">{data.plan.name}</span></span>}
+                {data.startAt && <span>{wt('tests.startedOn', { date: formatDateTime(data.startAt) })}</span>}
+                {data.endAt && <span>{wt('tests.finishedOn', { date: formatDateTime(data.endAt) })}</span>}
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <StateControl value={data.state} disabled={!canEdit} onChange={(state) => patchCycle({ state }).then((ok) => ok && toast.success(`Cycle marked ${CYCLE_STATE_META[state].label.toLowerCase()}`))} />
-              {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setAddOpen(true)}><Plus size={13} /> Add tests</button>}
+              <StateControl value={data.state} disabled={!canEdit} onChange={(state) => patchCycle({ state }).then((ok) => ok && toast.success(wt('tests.cycleMarked', { s: CYCLE_STATE_META[state].label.toLowerCase() })))} />
+              {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setAddOpen(true)}><Plus size={13} /> {wt('tests.addTests')}</button>}
               <ExportReportMenu pid={pid} cycleId={cycleId} />
               {canEdit && <MoreMenu onDelete={() => setDeleteOpen(true)} />}
             </div>
@@ -191,12 +192,12 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
 
           {/* Thẻ tổng */}
           <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
-            <Stat label="Total" value={data.total} />
-            <Stat label="Passed" value={data.counts.PASS} color="var(--w-green)" onClick={() => setFilter('PASS')} />
-            <Stat label="Failed" value={data.counts.FAIL} color="var(--w-red)" onClick={() => setFilter('FAIL')} />
-            <Stat label="Blocked" value={data.counts.BLOCKED} color="var(--w-orange)" onClick={() => setFilter('BLOCKED')} />
-            <Stat label="Not run" value={notRun} onClick={() => setFilter('NOT_RUN')} />
-            <Stat label="Pass rate" sub="of executed" value={data.passRate === null ? '—' : `${data.passRate}%`} hint={passRateHint} />
+            <Stat label={wt('common.total')} value={data.total} />
+            <Stat label={wt('tests.rsPassed')} value={data.counts.PASS} color="var(--w-green)" onClick={() => setFilter('PASS')} />
+            <Stat label={wt('tests.rsFailed')} value={data.counts.FAIL} color="var(--w-red)" onClick={() => setFilter('FAIL')} />
+            <Stat label={wt('tests.rsBlocked')} value={data.counts.BLOCKED} color="var(--w-orange)" onClick={() => setFilter('BLOCKED')} />
+            <Stat label={wt('tests.rsNotRun')} value={notRun} onClick={() => setFilter('NOT_RUN')} />
+            <Stat label={wt('tests.passRate')} sub={wt('tests.ofExecuted')} value={data.passRate === null ? '—' : `${data.passRate}%`} hint={passRateHint} />
           </div>
           <StatusBar counts={data.counts} total={data.total} height={8} className="mt-3" />
           <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-[var(--w-text-3)]">
@@ -225,24 +226,24 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
             </button>
           ))}
           <span className="ml-auto hidden text-[11px] text-[var(--w-text-3)] lg:inline">
-            <span className="w-kbd">J</span><span className="w-kbd">K</span> move · <span className="w-kbd">Enter</span> execute
+            <span className="w-kbd">J</span><span className="w-kbd">K</span> {wt('issues.kMove')} · <span className="w-kbd">Enter</span> {wt('tests.execute')}
           </span>
         </div>
 
         {/* Bảng lần chạy */}
         {!data.runs.length ? (
           <EmptyState
-            title="This cycle has no tests"
-            body="Add tests to start executing them."
-            action={canEdit ? <button type="button" className="w-btn w-btn-primary" onClick={() => setAddOpen(true)}><Plus size={14} /> Add tests</button> : undefined}
+            title={wt('tests.cycleEmpty')}
+            body={wt('tests.cycleEmptyBody')}
+            action={canEdit ? <button type="button" className="w-btn w-btn-primary" onClick={() => setAddOpen(true)}><Plus size={14} /> {wt('tests.addTests')}</button> : undefined}
           />
         ) : (
           <div className="overflow-x-auto pb-6">
             <div className="sm:min-w-[900px]">
               <div className={cn(GRID, 'max-sm:!hidden border-y border-[var(--w-border)] bg-[var(--w-sunken)] px-4 py-2 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]')}>
-                <span>Test</span><span>Priority</span><span>Assignee</span><span>Status</span><span>Executed</span><span>Defects</span><span />
+                <span>{wt('tests.test')}</span><span>{wt('common.priority')}</span><span>{wt('common.assignee')}</span><span>{wt('common.status')}</span><span>{wt('tests.executed')}</span><span>{wt('tests.defectsH')}</span><span />
               </div>
-              {!runs.length && <div className="px-4 py-8 text-center text-[13px] text-[var(--w-text-3)]">No runs match this filter.</div>}
+              {!runs.length && <div className="px-4 py-8 text-center text-[13px] text-[var(--w-text-3)]">{wt('tests.noRunsMatch')}</div>}
               {runs.map((r, i) => (
                 <div key={r.id} className="group">
                 {/* Điện thoại (< 640px): dạng thẻ, vẫn giữ trạng thái + người + lỗi */}
@@ -273,7 +274,7 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
                         {lk.issueKey(d.number)}
                       </button>
                     ))}
-                    {r.comment && <MessageSquare size={12} aria-label="Has a comment" />}
+                    {r.comment && <MessageSquare size={12} aria-label={wt('tests.hasComment')} />}
                   </div>
                 </div>
                 <div
@@ -314,7 +315,7 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
                   </div>
                   <div onClick={(e) => e.stopPropagation()} className="flex justify-end">
                     {canEdit && (
-                      <button type="button" className={cn('w-btn w-btn-ghost w-btn-sm w-btn-icon', cursor !== i && runParam !== r.id && '[@media(hover:hover)]:opacity-0 [@media(hover:hover)]:focus-visible:opacity-100 [@media(hover:hover)]:group-hover:opacity-100')} title="Remove from cycle" aria-label={`Remove ${lk.issueKey(r.test.number)} from cycle`} onClick={() => setRemoveRun({ id: r.id, label: `${lk.issueKey(r.test.number)} ${r.test.title}` })}>
+                      <button type="button" className={cn('w-btn w-btn-ghost w-btn-sm w-btn-icon', cursor !== i && runParam !== r.id && '[@media(hover:hover)]:opacity-0 [@media(hover:hover)]:focus-visible:opacity-100 [@media(hover:hover)]:group-hover:opacity-100')} title={wt('tests.removeFromCycle')} aria-label={wt('tests.removeKeyCycle', { key: lk.issueKey(r.test.number) })} onClick={() => setRemoveRun({ id: r.id, label: `${lk.issueKey(r.test.number)} ${r.test.title}` })}>
                         <X size={13} />
                       </button>
                     )}
@@ -334,22 +335,22 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
           existing={data.runs.map((r) => r.test.number)}
           onClose={() => setAddOpen(false)}
           onAdd={async (numbers) => {
-            const ok = await patchCycle({ addNumbers: numbers }, 'Could not add tests');
-            if (ok) { toast.success(`${numbers.length} test${numbers.length === 1 ? '' : 's'} added`); setAddOpen(false); }
+            const ok = await patchCycle({ addNumbers: numbers }, wt('tests.addTestsFailed'));
+            if (ok) { toast.success(wt('tests.nAdded', { count: numbers.length })); setAddOpen(false); }
           }}
         />
       )}
       <ConfirmDialog
         open={!!removeRun}
         onClose={() => setRemoveRun(null)}
-        title="Remove test from cycle?"
-        body={<>The run of <b>{removeRun?.label}</b> and its step results will be deleted from this cycle. Linked bugs are not affected.</>}
-        confirmLabel="Remove"
+        title={wt('tests.removeTestQ')}
+        body={wt('tests.removeTestBody', { label: removeRun?.label ?? '' })}
+        confirmLabel={wt('common.remove')}
         pending={busy}
         onConfirm={async () => {
           if (!removeRun) return;
           setBusy(true);
-          const ok = await patchCycle({ removeRunIds: [removeRun.id] }, 'Could not remove the test');
+          const ok = await patchCycle({ removeRunIds: [removeRun.id] }, wt('tests.removeTestFailed'));
           setBusy(false);
           if (ok) { if (runParam === removeRun.id) closeRun(); setRemoveRun(null); }
         }}
@@ -357,20 +358,20 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
       <ConfirmDialog
         open={deleteOpen}
         onClose={() => setDeleteOpen(false)}
-        title="Delete this test cycle?"
-        body={<>“{data.name}” and all {data.total} of its runs and step results will be permanently deleted. Bugs created from it are kept.</>}
-        confirmLabel="Delete cycle"
+        title={wt('tests.deleteCycleQ')}
+        body={wt('tests.deleteCycleBody', { name: data.name, n: data.total })}
+        confirmLabel={wt('tests.deleteCycle')}
         pending={busy}
         onConfirm={async () => {
           setBusy(true);
           try {
             await workApi.deleteTestCycle(pid, cycleId);
-            toast.success('Test cycle deleted');
+            toast.success(wt('tests.cycleDeleted'));
             qc.removeQueries({ queryKey: cycleKey });
             refresh();
             router.push(listHref);
           } catch (err) {
-            toast.error(workError(err, 'Could not delete the cycle'));
+            toast.error(workError(err, wt('tests.cycleDeleteFailed')));
             setBusy(false);
           }
         }}
@@ -397,7 +398,7 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
 function Shell({ config, children }: { config: ProjectConfig; children: React.ReactNode }) {
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Test cycle" />
+      <ProjectHeader config={config} title={wt('tests.testCycle')} />
       {children}
     </div>
   );
@@ -423,7 +424,7 @@ function Stat({ label, value, color, hint, sub, onClick }: { label: string; valu
 
 function StateControl({ value, onChange, disabled }: { value: CycleState; onChange: (s: CycleState) => void; disabled?: boolean }) {
   return (
-    <div role="radiogroup" aria-label="Cycle state" className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]">
+    <div role="radiogroup" aria-label={wt('tests.cycleState')} className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]">
       {(['PLANNED', 'IN_PROGRESS', 'DONE'] as CycleState[]).map((s, i) => {
         const on = value === s;
         return (
@@ -446,9 +447,9 @@ function StateControl({ value, onChange, disabled }: { value: CycleState; onChan
 
 type ReportFormat = 'xlsx' | 'pdf' | 'csv';
 const REPORT_FORMATS: Array<{ key: ReportFormat; label: string; hint: string; Icon: typeof FileText }> = [
-  { key: 'xlsx', label: 'Excel (.xlsx)', hint: 'Summary sheet plus every run', Icon: FileSpreadsheet },
-  { key: 'pdf', label: 'PDF', hint: 'Printable report to share or attach', Icon: FileText },
-  { key: 'csv', label: 'CSV', hint: 'Raw results for spreadsheets and scripts', Icon: Sheet },
+  { key: 'xlsx', label: 'Excel (.xlsx)', get hint() { return wt('tests.repXlsx'); }, Icon: FileSpreadsheet },
+  { key: 'pdf', label: 'PDF', get hint() { return wt('tests.repPdf'); }, Icon: FileText },
+  { key: 'csv', label: 'CSV', get hint() { return wt('tests.repCsv'); }, Icon: Sheet },
 ];
 
 /** Báo cáo cycle tạo ở server (tổng quan + từng lần chạy); tải bằng object URL. */
@@ -463,7 +464,7 @@ function ExportReportMenu({ pid, cycleId }: { pid: number; cycleId: number }) {
       const { blob, fileName } = await workApi.exportTestCycle(pid, cycleId, format);
       saveBlob(blob, fileName);
     } catch (err) {
-      toast.error(await blobError(err, 'Could not export the report'));
+      toast.error(await blobError(err, wt('tests.exportFailed')));
     } finally {
       setBusy(null);
     }
@@ -472,12 +473,12 @@ function ExportReportMenu({ pid, cycleId }: { pid: number; cycleId: number }) {
     <>
       <button ref={ref} type="button" className="w-btn w-btn-sm gap-1" onClick={t.toggle} disabled={!!busy} aria-haspopup="menu" aria-expanded={t.on}>
         {busy ? <Spinner size={12} /> : <Download size={13} />}
-        <span className="max-sm:!hidden">{busy ? 'Exporting…' : 'Export report'}</span>
+        <span className="max-sm:!hidden">{busy ? wt('issues.exporting') : wt('tests.exportReport')}</span>
         <ChevronDown size={12} className="opacity-60" />
       </button>
       <Popover open={t.on} onClose={t.close} anchorRef={ref} width={260} align="end">
         <div className="p-1" role="menu">
-          <div className="px-2 pb-1 pt-1.5 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Export cycle report</div>
+          <div className="px-2 pb-1 pt-1.5 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{wt('tests.exportCycleReport')}</div>
           {REPORT_FORMATS.map(({ key, label, hint, Icon }) => (
             <button key={key} type="button" role="menuitem" onClick={() => void run(key)} className="flex w-full items-start gap-2 rounded-[5px] px-2 py-1.5 text-left hover:bg-[var(--w-hover)]">
               <Icon size={14} className="mt-0.5 shrink-0 text-[var(--w-text-3)]" />
@@ -498,11 +499,11 @@ function MoreMenu({ onDelete }: { onDelete: () => void }) {
   const ref = useRef<HTMLButtonElement>(null);
   return (
     <>
-      <button ref={ref} type="button" className="w-btn w-btn-sm w-btn-icon" onClick={t.toggle} aria-label="More actions"><MoreHorizontal size={14} /></button>
+      <button ref={ref} type="button" className="w-btn w-btn-sm w-btn-icon" onClick={t.toggle} aria-label={wt('common.moreActions')}><MoreHorizontal size={14} /></button>
       <Popover open={t.on} onClose={t.close} anchorRef={ref} width={180} align="end">
         <div className="p-1">
           <button type="button" className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[var(--w-red)] hover:bg-[var(--w-hover)]" onClick={() => { t.close(); onDelete(); }}>
-            <Trash2 size={13} /> Delete cycle
+            <Trash2 size={13} /> {wt('tests.deleteCycle')}
           </button>
         </div>
       </Popover>
@@ -550,23 +551,23 @@ function AddTestsDialog({ config, pid, existing, onClose, onAdd }: {
     <Dialog
       open
       onClose={onClose}
-      title="Add tests to cycle"
+      title={wt('tests.addToCycle')}
       width={520}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button
             type="button"
             className="w-btn w-btn-primary"
             disabled={!picked.length || busy}
             onClick={async () => { setBusy(true); await onAdd(picked); setBusy(false); }}
           >
-            {busy && <Spinner size={12} />} Add {picked.length || ''} test{picked.length === 1 ? '' : 's'}
+            {busy && <Spinner size={12} />} {wt('tests.addNTests', { count: picked.length })}
           </button>
         </>
       }
     >
-      <p className="mb-3 text-[13px] text-[var(--w-text-2)]">Each test gets a fresh run with a snapshot of its current steps. Tests already in this cycle are hidden.</p>
+      <p className="mb-3 text-[13px] text-[var(--w-text-2)]">{wt('tests.addHelp')}</p>
       <TestPicker pid={pid} projectKey={config.key} value={picked} onChange={setPicked} exclude={existing} />
     </Dialog>
   );
@@ -585,7 +586,7 @@ function Inner() {
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   const cycleId = Number(params.cycleId);
   if (isLoading) return <PageLoading />;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
-  if (!Number.isInteger(cycleId) || cycleId <= 0) return <EmptyState title="Test cycle not found" />;
+  if (error || !config || !pid) return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : wt('common.projectNotFoundBody')} />;
+  if (!Number.isInteger(cycleId) || cycleId <= 0) return <EmptyState title={wt('tests.cycleNotFound')} />;
   return <CycleView config={config} pid={pid} cycleId={cycleId} />;
 }

@@ -16,6 +16,7 @@ import { formatDate, relativeTime } from '../ui';
 import { ApprovalDialog } from './ApprovalDetail';
 import HandoffCard from './HandoffCard';
 import { Pill } from './shared';
+import { wt } from '@/components/work/i18n';
 
 export default function WaitingOnMe() {
   const approvals = useQuery({ queryKey: workStudioKeys.myApprovals, queryFn: workStudioApi.myApprovals, staleTime: 15_000 });
@@ -25,15 +26,15 @@ export default function WaitingOnMe() {
   const h = handoffs.data ?? [];
   if (!a.length && !h.length) return null;
   return (
-    <section aria-label="Waiting on me" className="space-y-3">
+    <section aria-label={wt('home.waitingOnMe')} className="space-y-3">
       <h2 className="flex items-center gap-2 text-[14px] font-semibold">
-        Waiting on me
+        {wt('home.waitingOnMe')}
         <span className="rounded-full bg-[var(--w-accent-soft)] px-2 text-[12px] font-medium leading-[20px] tabular-nums text-[var(--w-accent-text)]">{a.length + h.length}</span>
       </h2>
       <div className={cn('grid grid-cols-1 gap-3', a.length && h.length && 'xl:grid-cols-2')}>
         {a.length > 0 && (
           <div>
-            <h3 className="mb-1.5 text-[12px] font-medium text-[var(--w-text-3)]">Approvals · your turn</h3>
+            <h3 className="mb-1.5 text-[12px] font-medium text-[var(--w-text-3)]">{wt('home.approvalsYourTurn')}</h3>
             <ul className="w-card overflow-hidden">
               {a.map((x) => (
                 <li key={x.id} className="border-b border-[var(--w-border)] last:border-b-0">
@@ -49,8 +50,8 @@ export default function WaitingOnMe() {
                       <span className="mt-0.5 flex min-w-0 flex-wrap items-center gap-x-2 text-[12px] text-[var(--w-text-3)]">
                         <span className="truncate">{x.project.name}</span>
                         <span aria-hidden="true">·</span>
-                        <span>{x.dueAt ? `Due ${formatDate(x.dueAt)}` : `Asked ${relativeTime(x.createdAt)}`}</span>
-                        {x.contentChanged && <Pill tone="orange">Changed</Pill>}
+                        <span>{x.dueAt ? wt('home.dueOn', { date: formatDate(x.dueAt) }) : wt('home.askedAgo', { when: relativeTime(x.createdAt) })}</span>
+                        {x.contentChanged && <Pill tone="orange">{wt('home.changed')}</Pill>}
                       </span>
                     </span>
                   </button>
@@ -61,7 +62,7 @@ export default function WaitingOnMe() {
         )}
         {h.length > 0 && (
           <div>
-            <h3 className="mb-1.5 text-[12px] font-medium text-[var(--w-text-3)]">Incoming handoffs</h3>
+            <h3 className="mb-1.5 text-[12px] font-medium text-[var(--w-text-3)]">{wt('home.incomingHandoffs')}</h3>
             <div className="w-card divide-y divide-[var(--w-border)] overflow-hidden">
               {h.map((x) => <HandoffCard key={`${x.id}-${x.status}`} h={x} issueHref={`/work/${x.project.workspaceSlug}/${x.project.key}/issue/${x.issue.number}`} />)}
             </div>

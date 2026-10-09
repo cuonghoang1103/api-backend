@@ -15,6 +15,7 @@ import type { ProjectConfig } from '@/lib/work-api';
 import { agentKeys, agentsApi, type LeaseChip } from '@/lib/work-agents-api';
 import type { Lookups } from '../hooks';
 import { useWorkspaceAgents } from './directory';
+import { wt } from '@/components/work/i18n';
 
 const LeasesCtx = createContext<Map<number, LeaseChip> | null>(null);
 
@@ -42,10 +43,10 @@ export function useLeaseFor(issueId: number): LeaseChip | undefined {
 
 function ago(iso: string) {
   const s = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 1000));
-  if (s < 60) return `${s}s ago`;
+  if (s < 60) return wt('agents.secAgo', { n: s });
   const m = Math.round(s / 60);
-  if (m < 60) return `${m} min ago`;
-  return `${Math.round(m / 60)} h ago`;
+  if (m < 60) return wt('common.minutesAgo', { n: m });
+  return wt('common.hoursAgo', { n: Math.round(m / 60) });
 }
 
 export function LeaseBadge({ lease, compact }: { lease: LeaseChip; compact?: boolean }) {
@@ -53,10 +54,10 @@ export function LeaseBadge({ lease, compact }: { lease: LeaseChip; compact?: boo
   const stale = lease.status === 'ACTIVE' && new Date(lease.expiresAt).getTime() < Date.now();
   const bad = lease.status === 'EXPIRED' || stale;
   const pct = lease.progressPct;
-  const label = bad ? (compact ? 'stalled' : 'agent stalled') : pct !== null && pct !== undefined ? `working · ${pct}%` : 'working';
+  const label = bad ? (compact ? wt('agents.stalled') : wt('agents.agentStalled')) : pct !== null && pct !== undefined ? `${wt('agents.working')} · ${pct}%` : wt('agents.working');
   const tip = bad
-    ? `The agent stopped sending heartbeats (last ${ago(lease.heartbeatAt)}). The issue is flagged as blocked until someone looks at it.`
-    : `An AI agent is working on this issue${lease.progress ? ` — ${lease.progress}` : ''} · last heartbeat ${ago(lease.heartbeatAt)}`;
+    ? wt('agents.stalledTip', { when: ago(lease.heartbeatAt) })
+    : wt('agents.workingTip', { progress: lease.progress ? ` — ${lease.progress}` : '', when: ago(lease.heartbeatAt) });
   return (
     <span
       title={tip}
@@ -97,15 +98,15 @@ export function assigneeKindOk(kind: AssigneeKind, assigneeId: number | null | u
 }
 
 const KIND_OPTS: Array<{ v: AssigneeKind; label: string; icon?: typeof Bot }> = [
-  { v: 'ALL', label: 'All' },
-  { v: 'HUMAN', label: 'People', icon: Users },
-  { v: 'AGENT', label: 'Agents', icon: Bot },
+  { v: 'ALL', get label() { return wt('common.all'); } },
+  { v: 'HUMAN', get label() { return wt('agents.people'); }, icon: Users },
+  { v: 'AGENT', get label() { return wt('agents.agents'); }, icon: Bot },
 ];
 
 export function AssigneeKindFilter({ config, value, onChange }: { config: ProjectConfig; value: AssigneeKind; onChange: (v: AssigneeKind) => void }) {
   if (!projectHasAgents(config) || config.clientView) return null;
   return (
-    <div role="radiogroup" aria-label="Assignee kind" className="inline-flex h-[28px] items-center rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] p-[2px]" data-testid="assignee-kind">
+    <div role="radiogroup" aria-label={wt('agents.assigneeKind')} className="inline-flex h-[28px] items-center rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] p-[2px]" data-testid="assignee-kind">
       {KIND_OPTS.map((o) => (
         <button
           key={o.v}
@@ -113,7 +114,7 @@ export function AssigneeKindFilter({ config, value, onChange }: { config: Projec
           role="radio"
           aria-checked={value === o.v}
           onClick={() => onChange(o.v)}
-          title={o.v === 'ALL' ? 'People and AI agents' : o.v === 'HUMAN' ? 'Only issues assigned to people' : 'Only issues assigned to AI agents'}
+          title={o.v === 'ALL' ? wt('agents.kindAll') : o.v === 'HUMAN' ? wt('agents.kindHuman') : wt('agents.kindAgent')}
           className={cn(
             'inline-flex h-[22px] items-center gap-1 rounded-[4px] px-2 text-[12px] font-medium transition-colors',
             value === o.v ? 'bg-[var(--w-raised)] text-[var(--w-text)] shadow-[var(--w-shadow-card)]' : 'text-[var(--w-text-3)] hover:text-[var(--w-text-2)]',

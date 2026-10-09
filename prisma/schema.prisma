@@ -415,6 +415,19 @@ model User {
   workIssuesReported     WorkIssue[]             @relation("WorkIssueReporter")
   workComments           WorkComment[]           @relation("WorkCommentAuthor")
   workCommentReactions   WorkCommentReaction[]   @relation("WorkCommentReactionUser")
+  // ── CTW K-3 ── kênh chat dự án
+  workChannelsCreated    WorkChannel[]           @relation("WorkChannelCreator")
+  workChannelMembers     WorkChannelMember[]     @relation("WorkChannelMemberUser")
+  workChannelMessages    WorkChannelMessage[]    @relation("WorkChannelMessageAuthor")
+  workChannelReactions   WorkChannelReaction[]   @relation("WorkChannelReactionUser")
+  workChannelFiles       WorkChannelFile[]       @relation("WorkChannelFileUploader")
+  workChatPref           WorkChatPref?           @relation("WorkChatPrefUser")
+  // ── hết CTW K-3 ──
+  // ── CTW Đóng góp ── đánh giá chéo + danh tính git
+  workPeerGiven          WorkPeerReview[]        @relation("WorkPeerReviewer")
+  workPeerReceived       WorkPeerReview[]        @relation("WorkPeerReviewee")
+  workGitIdentities      WorkGitIdentity[]       @relation("WorkGitIdentityUser")
+  // ── hết CTW Đóng góp ──
   workAttachments        WorkAttachment[]        @relation("WorkAttachmentUploader")
   workHistory            WorkHistory[]           @relation("WorkHistoryActor")
   workWatching           WorkWatcher[]           @relation("WorkWatcherUser")
@@ -10261,6 +10274,12 @@ model WorkProject {
   srsFunctions      WorkSrsFunction[]
   traceLinks        WorkTraceLink[]
   defectInfos       WorkDefectInfo[]
+  /// CTW K-3: kênh chat của dự án (xoá dự án ⇒ xoá kênh + tin + tệp theo dây chuyền).
+  channels          WorkChannel[]
+  /// CTW Đóng góp: commit/PR từ webhook (cả commit không nhắc mã thẻ), danh tính git ↔ người, phiếu đánh giá chéo.
+  devContributions  WorkDevContribution[]
+  gitIdentities     WorkGitIdentity[]
+  peerRounds        WorkPeerRound[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
   clientRequest     ProjectRequest?
 
@@ -13535,3 +13554,268 @@ model WorkVoiceNote {
 }
 
 // ── hết CTW đợt 5b K-1 ──
+
+// ── CTW K-3 ── (10/10/2026) KÊNH CHAT DỰ ÁN: #general tự có + kênh chủ đề (PUBLIC trong đội / PRIVATE theo thành viên /
+// CLIENT với khách — mặc định không có, ADMIN bật). Quyền đi theo permissions.ts (chatRules.ts — hàm thuần): khách
+// (CLIENT) và GUEST (trừ TEACHER) KHÔNG thấy kênh nội bộ. Tin nhắn markdown (chữ thô, client vẽ bằng react-markdown
+// không HTML thô), @username, luồng trả lời một cấp, ghim, cảm xúc, tệp/ảnh/voice note (R2 + phiên âm Groq của K-1).
+
+/// Một kênh của dự án. name = chữ thường không dấu (`general`, `frontend`…), duy nhất trong dự án.
+/// kind: PUBLIC (mọi người của đội thấy) · PRIVATE (chỉ thành viên kênh — WorkChannelMember.explicit) ·
+/// CLIENT (đội + khách của dự án). isGeneral = kênh #general tự sinh (không xoá/không đổi loại được).
+/// callUrl/callStartedAt: "Gọi nhóm" gần nhất (Jitsi tự sinh hoặc link Meet dán vào) — dùng lại trong 4 giờ.
+model WorkChannel {
+  id            Int       @id @default(autoincrement())
+  projectId     Int       @map("project_id")
+  name          String    @db.VarChar(40)
+  topic         String?   @db.VarChar(250)
+  kind          String    @default("PUBLIC") @db.VarChar(12)
+  isGeneral     Boolean   @default(false) @map("is_general")
+  createdById   Int?      @map("created_by_id")
+  callUrl       String?   @map("call_url") @db.VarChar(500)
+  callStartedAt DateTime? @map("call_started_at")
+  lastMessageAt DateTime? @map("last_message_at")
+  archivedAt    DateTime? @map("archived_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  project   WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy User?                @relation("WorkChannelCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  members   WorkChannelMember[]
+  messages  WorkChannelMessage[]
+  files     WorkChannelFile[]
+
+  @@unique([projectId, name], map: "uk_work_channel_name")
+  @@index([projectId], map: "idx_work_channel_project")
+  @@map("work_channels")
+}
+
+/// Người ↔ kênh: thành viên tường minh của kênh PRIVATE (explicit = true) VÀ trạng thái riêng của MỌI người với mọi kênh
+/// (dòng tạo lúc cần): tin đã đọc tới đâu, tắt tiếng tới khi nào, chế độ báo (DEFAULT | ALL | MENTIONS).
+/// mutedUntil ≥ năm 2999 = "cho tới khi bật lại".
+model WorkChannelMember {
+  channelId  Int       @map("channel_id")
+  userId     Int       @map("user_id")
+  explicit   Boolean   @default(false)
+  lastReadId Int       @default(0) @map("last_read_id")
+  lastReadAt DateTime? @map("last_read_at")
+  mutedUntil DateTime? @map("muted_until")
+  notify     String    @default("DEFAULT") @db.VarChar(12)
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  channel WorkChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user    User        @relation("WorkChannelMemberUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([channelId, userId])
+  @@index([userId], map: "idx_work_channel_member_user")
+  @@map("work_channel_members")
+}
+
+/// Một tin. kind: USER · SYSTEM (gọi nhóm, tạo thẻ, đổi kênh — meta mô tả). body = markdown thô (≤ 8000 ký tự,
+/// đã bỏ ký tự điều khiển). parentId = gốc luồng (một cấp). mentions = id người được @nhắc (đã lọc theo quyền xem kênh).
+/// refs = liên kết nội bộ đã nhận ra (thẻ/Docs/test/họp) — xem trước được dựng LÚC ĐỌC theo quyền của người xem.
+/// clientKey = khoá chống gửi trùng của hàng chờ ngoại tuyến (cùng tác giả + cùng khoá ⇒ trả lại tin cũ).
+model WorkChannelMessage {
+  id          Int       @id @default(autoincrement())
+  channelId   Int       @map("channel_id")
+  authorId    Int?      @map("author_id")
+  kind        String    @default("USER") @db.VarChar(12)
+  body        String    @db.Text
+  parentId    Int?      @map("parent_id")
+  replyCount  Int       @default(0) @map("reply_count")
+  lastReplyAt DateTime? @map("last_reply_at")
+  mentions    Int[]     @default([])
+  refs        Json?
+  meta        Json?
+  pinnedAt    DateTime? @map("pinned_at")
+  pinnedById  Int?      @map("pinned_by_id")
+  clientKey   String?   @map("client_key") @db.VarChar(64)
+  editedAt    DateTime? @map("edited_at")
+  deletedAt   DateTime? @map("deleted_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  channel   WorkChannel           @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  author    User?                 @relation("WorkChannelMessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  parent    WorkChannelMessage?   @relation("WorkChannelThread", fields: [parentId], references: [id], onDelete: SetNull)
+  replies   WorkChannelMessage[]  @relation("WorkChannelThread")
+  reactions WorkChannelReaction[]
+  files     WorkChannelFile[]
+
+  @@unique([authorId, clientKey], map: "uk_work_channel_message_client_key")
+  @@index([channelId, id], map: "idx_work_channel_message_channel")
+  @@index([parentId], map: "idx_work_channel_message_parent")
+  @@map("work_channel_messages")
+}
+
+/// Cảm xúc trên tin (mỗi người một lần mỗi emoji). Không sinh thông báo.
+model WorkChannelReaction {
+  id        Int      @id @default(autoincrement())
+  messageId Int      @map("message_id")
+  userId    Int      @map("user_id")
+  emoji     String   @db.VarChar(16)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  message WorkChannelMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User               @relation("WorkChannelReactionUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId, emoji], map: "uk_work_channel_reaction")
+  @@map("work_channel_reactions")
+}
+
+/// Tệp / ảnh / voice note trong tin (R2 khoá `work/<dự án>/chat/<kênh>/…`). messageId null = bản nháp chưa gửi
+/// (dọn sau 24 giờ). Voice note: durationMs + phiên âm (cùng trạng thái với WorkVoiceNote của K-1).
+model WorkChannelFile {
+  id               Int       @id @default(autoincrement())
+  channelId        Int       @map("channel_id")
+  messageId        Int?      @map("message_id")
+  uploaderId       Int?      @map("uploader_id")
+  r2Key            String    @map("r2_key") @db.VarChar(500)
+  fileName         String    @map("file_name") @db.VarChar(255)
+  mime             String    @db.VarChar(100)
+  size             Int
+  durationMs       Int?      @map("duration_ms")
+  transcriptStatus String?   @map("transcript_status") @db.VarChar(12)
+  transcript       String?   @db.Text
+  language         String?   @db.VarChar(12)
+  transcribedAt    DateTime? @map("transcribed_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  channel  WorkChannel         @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  message  WorkChannelMessage? @relation(fields: [messageId], references: [id], onDelete: SetNull)
+  uploader User?               @relation("WorkChannelFileUploader", fields: [uploaderId], references: [id], onDelete: SetNull)
+
+  @@index([channelId], map: "idx_work_channel_file_channel")
+  @@index([messageId], map: "idx_work_channel_file_message")
+  @@index([transcriptStatus, transcribedAt], map: "idx_work_channel_file_stt")
+  @@map("work_channel_files")
+}
+
+/// Cài đặt chat CHUNG của một người (đồng bộ web ↔ app desktop): tắt tiếng mọi kênh tới khi nào, chế độ báo
+/// (ALL | MENTIONS), âm báo, thông báo hệ thống, email tóm tắt tin chưa đọc (mặc định TẮT — đi thư gộp 08:00 có sẵn).
+/// Giờ im lặng dùng chung WorkNotifySetting.quietStart/quietEnd.
+model WorkChatPref {
+  userId       Int       @id @map("user_id")
+  mutedUntil   DateTime? @map("muted_until")
+  notify       String    @default("ALL") @db.VarChar(12)
+  sound        Boolean   @default(true)
+  desktop      Boolean   @default(true)
+  emailDigest  Boolean   @default(false) @map("email_digest")
+  lastDigestAt DateTime? @map("last_digest_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  user User @relation("WorkChatPrefUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("work_chat_prefs")
+}
+
+// ── hết CTW K-3 ──
+
+// ── CTW Đóng góp ── (10/10/2026) ĐÓNG GÓP & HIỆU SUẤT THÀNH VIÊN (A26 LOC thật, A27 đánh giá chéo). Bộ chỉ số tính TRỰC
+// TIẾP từ dữ liệu sẵn có (contrib.service.ts) — chỉ thêm những gì dữ liệu cũ thiếu: commit/PR đủ (kể cả không nhắc mã thẻ)
+// kèm dòng thêm/xoá, ánh xạ danh tính git ↔ người, và phiếu đánh giá chéo ẩn danh.
+
+/// Một commit / PR nhận từ webhook GitHub/GitLab. Khác WorkDevActivity (chỉ commit NHẮC mã thẻ, gắn vào thẻ): bảng này
+/// giữ MỌI commit của repo đã nối để đếm đóng góp code. additions/deletions/filesChanged = null khi webhook không gửi
+/// (push của GitHub chỉ có danh sách tệp; số dòng chỉ có ở sự kiện pull_request). Người = suy LÚC ĐỌC từ
+/// authorLogin/authorEmail/authorName qua WorkGitIdentity + khớp username/email — đổi ánh xạ không cần ghi lại dữ liệu.
+model WorkDevContribution {
+  id           Int      @id @default(autoincrement())
+  projectId    Int      @map("project_id")
+  /// GITHUB | GITLAB
+  provider     String   @db.VarChar(8)
+  /// COMMIT | PR
+  kind         String   @db.VarChar(8)
+  externalId   String   @map("external_id") @db.VarChar(200)
+  repo         String?  @db.VarChar(200)
+  title        String?  @db.VarChar(300)
+  url          String?  @db.VarChar(500)
+  /// PR: open | draft | merged | closed.
+  state        String?  @db.VarChar(16)
+  authorLogin  String?  @map("author_login") @db.VarChar(100)
+  authorName   String?  @map("author_name") @db.VarChar(100)
+  authorEmail  String?  @map("author_email") @db.VarChar(200)
+  additions    Int?
+  deletions    Int?
+  filesChanged Int?     @map("files_changed")
+  /// Số thẻ (KEY-n) nhắc trong commit/PR — cho chế độ xem theo task.
+  issueNumbers Int[]    @default([]) @map("issue_numbers")
+  occurredAt   DateTime @map("occurred_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, kind, externalId], map: "uk_work_dev_contribution")
+  @@index([projectId, occurredAt], map: "idx_work_dev_contribution_project")
+  @@map("work_dev_contributions")
+}
+
+/// Ánh xạ tay "danh tính git" (login / email / tên tác giả, chữ thường) ⇒ người trong dự án. Trưởng nhóm gán khi commit
+/// không tự khớp được (vd tên máy "DESKTOP-ABC" hay email cá nhân khác email tài khoản).
+model WorkGitIdentity {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  identity    String   @db.VarChar(200)
+  userId      Int      @map("user_id")
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User        @relation("WorkGitIdentityUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, identity], map: "uk_work_git_identity")
+  @@index([userId], map: "idx_work_git_identity_user")
+  @@map("work_git_identities")
+}
+
+/// Một đợt đánh giá chéo (theo sprint / giai đoạn / khoảng tuỳ chọn). status: OPEN (đang nhận phiếu) | CLOSED.
+/// criteria = [{ key, label, description }] (4–5 tiêu chí, thang 1–5). sprintId/stageId chỉ để hiển thị — không FK
+/// (xoá sprint không xoá phiếu đã chấm).
+model WorkPeerRound {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @map("project_id")
+  title       String    @db.VarChar(160)
+  /// SPRINT | STAGE | CUSTOM
+  scope       String    @default("CUSTOM") @db.VarChar(12)
+  sprintId    Int?      @map("sprint_id")
+  stageId     Int?      @map("stage_id")
+  status      String    @default("OPEN") @db.VarChar(12)
+  criteria    Json      @default("[]")
+  closesAt    DateTime? @map("closes_at")
+  closedAt    DateTime? @map("closed_at")
+  createdById Int?      @map("created_by_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  reviews WorkPeerReview[]
+
+  @@index([projectId, createdAt], map: "idx_work_peer_round_project")
+  @@map("work_peer_rounds")
+}
+
+/// Phiếu của MỘT người chấm cho MỘT người được chấm trong một đợt. scores = { <criterion key>: 1..5 }.
+/// reviewerId KHÔNG BAO GIỜ trả ra API (ẩn danh với mọi vai, kể cả trưởng nhóm) — chỉ dùng để sửa phiếu của chính mình
+/// và đếm ai đã nộp.
+model WorkPeerReview {
+  id          Int      @id @default(autoincrement())
+  roundId     Int      @map("round_id")
+  reviewerId  Int      @map("reviewer_id")
+  revieweeId  Int      @map("reviewee_id")
+  scores      Json     @default("{}")
+  comment     String?  @db.Text
+  submittedAt DateTime @default(now()) @map("submitted_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  round    WorkPeerRound @relation(fields: [roundId], references: [id], onDelete: Cascade)
+  reviewer User          @relation("WorkPeerReviewer", fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewee User          @relation("WorkPeerReviewee", fields: [revieweeId], references: [id], onDelete: Cascade)
+
+  @@unique([roundId, reviewerId, revieweeId], map: "uk_work_peer_review")
+  @@index([roundId, revieweeId], map: "idx_work_peer_review_reviewee")
+  @@index([reviewerId], map: "idx_work_peer_review_reviewer")
+  @@index([revieweeId], map: "idx_work_peer_review_reviewee_user")
+  @@map("work_peer_reviews")
+}
+
+// ── hết CTW Đóng góp ──

@@ -16,7 +16,8 @@ import BurndownTab from '@/components/work/reports/BurndownTab';
 import VelocityTab from '@/components/work/reports/VelocityTab';
 import SprintReportTab from '@/components/work/reports/SprintReportTab';
 import EpicsTab from '@/components/work/reports/EpicsTab';
-import ContributionsTab from '@/components/work/reports/ContributionsTab';
+// CTW Đóng góp (10/10/2026): tab Contributions = bảng chỉ số đầy đủ + chi tiết người + theo task + đánh giá chéo.
+import ContribView from '@/components/work/contrib/ContribView';
 import HealthTab from '@/components/work/reports/HealthTab';
 import WeeklyReportTab from '@/components/work/reports/WeeklyReportTab';
 import TimeTab from '@/components/work/reports/TimeTab';
@@ -57,7 +58,9 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
 
   const reportsOn = studioOn(config, 'reports') && !!config.permissions.viewReports;
   const hasAgents = projectHasAgents(config) && config.role !== 'CLIENT' && !config.clientView;
-  const tabs = TABS.filter((t) => (reportsOn || !S4_TABS.has(t.id)) && (t.id !== 'agents' || hasAgents));
+  // CTW Đóng góp: khách không thấy số liệu đóng góp của đội (máy chủ cũng chặn 403).
+  const teamSide = config.role !== 'CLIENT' && !config.clientView;
+  const tabs = TABS.filter((t) => (reportsOn || !S4_TABS.has(t.id)) && (t.id !== 'agents' || hasAgents) && (t.id !== 'contributions' || teamSide));
   const raw = search?.get('tab');
   const tab: TabId = tabs.some((t) => t.id === raw) ? (raw as TabId) : 'health';
   const setTab = useCallback((id: TabId) => {
@@ -117,7 +120,7 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
           {tab === 'velocity' && <VelocityTab pid={pid} />}
           {tab === 'sprint' && <SprintReportTab pid={pid} config={config} lk={lk} />}
           {tab === 'epics' && <EpicsTab pid={pid} config={config} lk={lk} />}
-          {tab === 'contributions' && <ContributionsTab pid={pid} config={config} />}
+          {tab === 'contributions' && <ContribView pid={pid} config={config} />}
           {tab === 'time' && <TimeTab pid={pid} config={config} onOpenIssue={setIssue} />}
           {tab === 'capacity' && <CapacityTab pid={pid} config={config} />}
           {tab === 'agents' && hasAgents && <ProjectAgentsReport config={config} />}

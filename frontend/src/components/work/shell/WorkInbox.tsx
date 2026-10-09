@@ -20,6 +20,7 @@ import { useNotificationSocket } from '@/hooks/useNotificationSocket';
 import type { SocialNotification } from '@/types/social';
 import { cn } from '@/lib/utils';
 import { Popover, relativeTime, Spinner, UserAvatar, useToggle } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 const INBOX_KEY = ['work', 'inbox'] as const;
 
@@ -28,24 +29,41 @@ const isWork = (n: SocialNotification) => typeof n.type === 'string' && n.type.s
 const str = (v: unknown) => (typeof v === 'string' ? v : '');
 
 function actorName(n: SocialNotification) {
-  return n.sender?.displayName || n.sender?.fullName || n.sender?.username || 'Someone';
+  return n.sender?.displayName || n.sender?.fullName || n.sender?.username || wt('notify.someone');
 }
 
-/** Câu tiếng Anh cho một thông báo, vd "Minh assigned you SHOP-12: Checkout page". */
+/**
+ * Câu cho một thông báo theo ngôn ngữ NGƯỜI XEM, vd "Minh assigned you SHOP-12: Checkout page" /
+ * "Minh giao cho bạn SHOP-12: Checkout page". Máy chủ chỉ lưu dữ liệu (payload) — câu dựng ở đây.
+ */
 export function describeWorkNotification(n: SocialNotification): { actor: string; text: string } {
   const p = n.payload ?? {};
-  const key = str(p.issueKey) || 'an issue';
+  const key = str(p.issueKey) || wt('notify.anIssue');
   const title = str(p.title);
   const target = `${key}${title ? `: ${title}` : ''}`;
   const actor = actorName(n);
   switch (n.type) {
-    case 'WORK_INVITE': return { actor, text: `added you to ${str(p.workspaceName) || 'a workspace'}` };
-    case 'WORK_ASSIGN': return { actor, text: `assigned you ${target}` };
-    case 'WORK_COMMENT': return { actor, text: `commented on ${target}` };
-    case 'WORK_MENTION': return { actor, text: `mentioned you in ${target}` };
-    case 'WORK_ALERT': return { actor: '', text: `${key}: ${str(p.message) || 'needs your attention'}` };
-    default: return { actor, text: `updated ${target}` };
+    case 'WORK_INVITE': return { actor, text: wt('notify.invite', { workspace: str(p.workspaceName) || wt('notify.aWorkspace') }) };
+    case 'WORK_ASSIGN': return { actor, text: wt('notify.assign', { target }) };
+    case 'WORK_COMMENT': return { actor, text: wt('notify.comment', { target }) };
+    case 'WORK_MENTION': return { actor, text: wt('notify.mention', { target }) };
+    case 'WORK_ALERT': return { actor: '', text: `${key}: ${alertText(str(p.message))}` };
+    default: return { actor, text: wt('notify.updated', { target }) };
   }
+}
+
+/** Câu cảnh báo máy chủ viết sẵn (tiếng Anh) ⇒ dịch các mẫu hay gặp; mẫu lạ giữ nguyên. */
+function alertText(msg: string): string {
+  if (!msg) return wt('notify.needsAttention');
+  let m: RegExpExecArray | null;
+  if ((m = /^Your approval is requested: (.+)$/.exec(msg))) return wt('notify.approvalRequested', { title: m[1] });
+  if ((m = /^(.+) submitted the timesheet for week (.+)$/.exec(msg))) return wt('notify.timesheetSubmitted', { name: m[1], week: m[2] });
+  if ((m = /^Review due: (.+)$/.exec(msg))) return wt('notify.reviewDue', { item: m[1] });
+  if ((m = /^🤖 (.+?) finished (\S+) — needs your review(.*)$/.exec(msg))) return wt('notify.agentFinished', { name: m[1], key: m[2] }) + m[3];
+  if ((m = /^🤖 (.+?) stopped responding on (\S+) \(lease expired\) — flagged as blocked$/.exec(msg))) return wt('notify.agentStopped', { name: m[1], key: m[2] });
+  if ((m = /^Broken link: (.+)$/.exec(msg))) return wt('notify.brokenLink', { detail: m[1] });
+  if ((m = /^A comment was reported \((.+)\)\. Review and remove it if needed\.$/.exec(msg))) return wt('notify.commentReported', { reason: m[1] });
+  return msg;
 }
 
 /** Chỉ theo đường dẫn nội bộ /work/... (chặn open redirect). */
@@ -133,10 +151,10 @@ export default function WorkInbox({ onNavigate, align = 'start' }: { onNavigate?
         ref={btnRef}
         type="button"
         onClick={pop.toggle}
-        aria-label={count ? `Notifications, ${count} unread` : 'Notifications'}
+        aria-label={count ? wt('notify.unreadCount', { count }) : wt('notify.notifications')}
         aria-haspopup="dialog"
         aria-expanded={pop.on}
-        title="Notifications"
+        title={wt('notify.notifications')}
         className={cn(
           'w-nav-row relative flex h-8 w-8 shrink-0 items-center justify-center rounded-[6px] text-[var(--w-text-2)] transition-colors hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]',
           pop.on && 'bg-[var(--w-active)] text-[var(--w-text)]',
@@ -150,14 +168,14 @@ export default function WorkInbox({ onNavigate, align = 'start' }: { onNavigate?
         )}
       </button>
       <Popover open={pop.on} onClose={pop.close} anchorRef={btnRef} width={360} align={align}>
-        <div role="dialog" aria-label="CT Work notifications">
+        <div role="dialog" aria-label={wt('notify.dialogLabel')}>
           <div className="flex items-center justify-between border-b border-[var(--w-border)] px-3.5 py-2.5">
             <div className="flex items-center gap-2">
-              <span className="text-[14px] font-semibold">Inbox</span>
-              {count > 0 && <span className="rounded-full bg-[var(--w-accent-soft)] px-1.5 text-[12px] font-medium text-[var(--w-accent-text)]">{count} new</span>}
+              <span className="text-[14px] font-semibold">{wt('notify.inbox')}</span>
+              {count > 0 && <span className="rounded-full bg-[var(--w-accent-soft)] px-1.5 text-[12px] font-medium text-[var(--w-accent-text)]">{wt('notify.newCount', { count })}</span>}
             </div>
             <button type="button" className="w-btn w-btn-ghost w-btn-sm" disabled={!count} onClick={() => markRead(unread.map((n) => n.id))}>
-              <CheckCheck size={14} /> Mark all as read
+              <CheckCheck size={14} /> {wt('notify.markAllRead')}
             </button>
           </div>
           <div className="max-h-[min(460px,65vh)] overflow-y-auto p-1">
@@ -166,8 +184,8 @@ export default function WorkInbox({ onNavigate, align = 'start' }: { onNavigate?
             ) : !items.length ? (
               <div className="px-6 py-10 text-center">
                 <Bell size={22} className="mx-auto text-[var(--w-text-3)]" />
-                <div className="mt-2 text-[14px] font-medium">You&apos;re all caught up</div>
-                <p className="mt-1 text-[13px] text-[var(--w-text-2)]">Assignments, comments and mentions from your projects will show up here.</p>
+                <div className="mt-2 text-[14px] font-medium">{wt('notify.caughtUp')}</div>
+                <p className="mt-1 text-[13px] text-[var(--w-text-2)]">{wt('notify.emptyBody')}</p>
               </div>
             ) : (
               items.map((n) => {
@@ -192,7 +210,7 @@ export default function WorkInbox({ onNavigate, align = 'start' }: { onNavigate?
                       {excerpt && <span className="mt-0.5 line-clamp-1 block text-[12px] text-[var(--w-text-2)]">“{excerpt}”</span>}
                       <span className="mt-0.5 block text-[12px] text-[var(--w-text-3)]">{relativeTime(n.createdAt)}</span>
                     </span>
-                    {!n.isRead && <span aria-label="Unread" className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[var(--w-accent)]" />}
+                    {!n.isRead && <span aria-label={wt('notify.unread')} className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[var(--w-accent)]" />}
                   </button>
                 );
               })

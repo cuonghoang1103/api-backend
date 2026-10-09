@@ -27,6 +27,7 @@ import { Switch } from '../settings/shared';
 import { wk } from '../hooks';
 import { Dialog, Field, Spinner } from '../ui';
 import { Select } from '../settings/shared';
+import { wt } from '@/components/work/i18n';
 
 interface TemplateCard {
   key: ProjectTemplate;
@@ -40,13 +41,13 @@ interface TemplateCard {
 
 export const TEMPLATES: TemplateCard[] = [
   // CTW đợt 3A: đồ án tốt nghiệp — giai đoạn Report 1→7, Iteration 1–3, trang Docs mẫu FPT, mô-đun đồ án bật sẵn.
-  { key: 'CAPSTONE', name: 'FPT Capstone', body: 'Stages for Reports 1–7, Iterations 1–3, the FPT report templates in Docs, RAID, meetings and approvals ready.', bestFor: 'SEP490 / ISP490 graduation projects', type: 'SCRUM', icon: Award, color: '#c00000' },
-  { key: 'SWP391', name: 'Software project', body: 'Scrum with epics, stories, Sprint 1 ready and a bug lifecycle with retest.', bestFor: 'SWP391 capstone teams', type: 'SCRUM', icon: GraduationCap, color: '#2563eb' },
-  { key: 'SWR302', name: 'Requirements', body: 'Requirement issues with a MoSCoW field and Sprint 1 ready.', bestFor: 'SWR302 requirement engineering', type: 'SCRUM', icon: ListChecks, color: '#0891b2' },
-  { key: 'SWT301', name: 'Software testing', body: 'Test cases with steps, test plans, cycles and a full bug lifecycle.', bestFor: 'SWT301 testing labs', type: 'SCRUM', icon: FlaskConical, color: '#ca8a04' },
-  { key: 'FREELANCE', name: 'Client project', body: 'Weekly sprints and hour estimates you can report to a client.', bestFor: 'Freelancers and small agencies', type: 'SCRUM', icon: Briefcase, color: '#16a34a' },
-  { key: 'COMPANY', name: 'Team project', body: 'Code review and QA columns before Done.', bestFor: 'Product teams at work', type: 'SCRUM', icon: Building2, color: '#7c3aed' },
-  { key: 'BLANK', name: 'Blank project', body: 'To Do, In Progress, Done. Configure the rest yourself.', bestFor: 'Anything else', type: 'SCRUM', icon: Square, color: '#64748b' },
+  { key: 'CAPSTONE', get name() { return wt('create.tpl_CAPSTONE'); }, get body() { return wt('create.tplBody_CAPSTONE'); }, get bestFor() { return wt('create.tplBest_CAPSTONE'); }, type: 'SCRUM', icon: Award, color: '#c00000' },
+  { key: 'SWP391', get name() { return wt('create.tpl_SWP391'); }, get body() { return wt('create.tplBody_SWP391'); }, get bestFor() { return wt('create.tplBest_SWP391'); }, type: 'SCRUM', icon: GraduationCap, color: '#2563eb' },
+  { key: 'SWR302', get name() { return wt('create.tpl_SWR302'); }, get body() { return wt('create.tplBody_SWR302'); }, get bestFor() { return wt('create.tplBest_SWR302'); }, type: 'SCRUM', icon: ListChecks, color: '#0891b2' },
+  { key: 'SWT301', get name() { return wt('create.tpl_SWT301'); }, get body() { return wt('create.tplBody_SWT301'); }, get bestFor() { return wt('create.tplBest_SWT301'); }, type: 'SCRUM', icon: FlaskConical, color: '#ca8a04' },
+  { key: 'FREELANCE', get name() { return wt('create.tpl_FREELANCE'); }, get body() { return wt('create.tplBody_FREELANCE'); }, get bestFor() { return wt('create.tplBest_FREELANCE'); }, type: 'SCRUM', icon: Briefcase, color: '#16a34a' },
+  { key: 'COMPANY', get name() { return wt('create.tpl_COMPANY'); }, get body() { return wt('create.tplBody_COMPANY'); }, get bestFor() { return wt('create.tplBest_COMPANY'); }, type: 'SCRUM', icon: Building2, color: '#7c3aed' },
+  { key: 'BLANK', get name() { return wt('create.tpl_BLANK'); }, get body() { return wt('create.tplBody_BLANK'); }, get bestFor() { return wt('create.tplBest_BLANK'); }, type: 'SCRUM', icon: Square, color: '#64748b' },
 ];
 
 const KIND_ICON: Record<ProjectKind, LucideIcon> = { PERSONAL: User, SCHOOL: GraduationCap, SOFTWARE: Code2, CLIENT: Briefcase };
@@ -152,7 +153,7 @@ export default function CreateProjectDialog({
       let sampled = 0;
       if (sample) {
         try { sampled = (await workApi.addSampleData(p.id)).issues; } catch (err) {
-          toast.error(workError(err, 'The project was created, but sample data could not be added'));
+          toast.error(workError(err, wt('create.sampleFailed')));
         }
       }
       return { ...p, slug: ws.slug, sampled };
@@ -160,10 +161,10 @@ export default function CreateProjectDialog({
     onSuccess: (p) => {
       qc.invalidateQueries({ queryKey: wk.workspace(p.slug) });
       qc.invalidateQueries({ queryKey: wk.workspaces });
-      toast.success(p.sampled ? `Project ${p.key} created with ${p.sampled} sample issues` : `Project ${p.key} created`);
+      toast.success(p.sampled ? wt('create.projectCreatedSample', { key: p.key, count: p.sampled }) : wt('create.projectCreated', { key: p.key }));
       router.push(`/work/${p.slug}/${p.key}/board`);
     },
-    onError: (err) => toast.error(workError(err, 'Could not create the project')),
+    onError: (err) => toast.error(workError(err, wt('create.projectCreateFailed'))),
   });
 
   const keyValid = PROJECT_KEY_RE.test(key);
@@ -189,13 +190,13 @@ export default function CreateProjectDialog({
   const onModules = S1_MODULES.filter((m) => modules[m.key]);
 
   return (
-    <Dialog open={open} onClose={onClose} title={step === 0 ? 'Create project · what kind of project?' : step === 1 ? 'Create project · choose a template' : 'Create project · name it'} width={660}>
+    <Dialog open={open} onClose={onClose} title={step === 0 ? wt('create.titleKind') : step === 1 ? wt('create.titleTpl') : wt('create.titleName')} width={660}>
       {step === 0 ? (
         <div>
           <p className="mb-3 text-[13px] text-[var(--w-text-2)]">
-            The type decides which modules start on. Everything can be changed later in Project settings → Project type &amp; modules.
+            {wt('create.kindIntro')}
           </p>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Project type">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2" role="radiogroup" aria-label={wt('create.projectType')}>
             {KINDS.map((k) => {
               const Icon = KIND_ICON[k];
               const info = KIND_INFO[k];
@@ -218,7 +219,7 @@ export default function CreateProjectDialog({
                     <span className="mt-1.5 flex flex-wrap gap-1">
                       {info.modules.length ? info.modules.map((m) => (
                         <span key={m} className="rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 text-[11px] font-medium leading-[18px] text-[var(--w-accent-text)]">{S1_MODULES.find((x) => x.key === m)?.label}</span>
-                      )) : <span className="text-[11px] text-[var(--w-text-3)]">No extra modules</span>}
+                      )) : <span className="text-[11px] text-[var(--w-text-3)]">{wt('create.noModules')}</span>}
                     </span>
                   </span>
                   <ChevronRight size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)] opacity-0 transition-opacity group-hover:opacity-100" />
@@ -227,13 +228,13 @@ export default function CreateProjectDialog({
             })}
           </div>
           <div className="mt-4 flex justify-end">
-            <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+            <button type="button" className="w-btn" onClick={onClose}>{wt('create.cancel')}</button>
           </div>
         </div>
       ) : step === 1 ? (
         <div>
           <p className="mb-3 text-[13px] text-[var(--w-text-2)]">
-            Templates set up columns, issue types and settings for you. You can change everything later.
+            {wt('create.tplIntro')}
           </p>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {TEMPLATES.map((t) => {
@@ -256,7 +257,7 @@ export default function CreateProjectDialog({
                   <span className="min-w-0 flex-1 pr-4">
                     <span className="block text-[13px] font-medium">{t.name}</span>
                     <span className="mt-0.5 block text-[12px] leading-snug text-[var(--w-text-2)]">{t.body}</span>
-                    <span className="mt-1 block text-[11px] text-[var(--w-text-3)]">Best for: {t.bestFor}</span>
+                    <span className="mt-1 block text-[11px] text-[var(--w-text-3)]">{wt('create.bestFor', { what: t.bestFor })}</span>
                   </span>
                   <ChevronRight size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)] opacity-0 transition-opacity group-hover:opacity-100" />
                 </button>
@@ -264,8 +265,8 @@ export default function CreateProjectDialog({
             })}
           </div>
           <div className="mt-4 flex justify-end gap-2">
-            <button type="button" className="w-btn mr-auto" onClick={() => setStep(2)}><ArrowLeft size={13} /> Back</button>
-            <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+            <button type="button" className="w-btn mr-auto" onClick={() => setStep(2)}><ArrowLeft size={13} /> {wt('create.back')}</button>
+            <button type="button" className="w-btn" onClick={onClose}>{wt('create.cancel')}</button>
           </div>
         </div>
       ) : (
@@ -280,32 +281,32 @@ export default function CreateProjectDialog({
             </span>
             <span className="min-w-0 flex-1">
               <span className="block text-[13px] font-medium">{picked.name}</span>
-              <span className="block truncate text-[11px] text-[var(--w-text-3)]">Best for: {picked.bestFor}</span>
+              <span className="block truncate text-[11px] text-[var(--w-text-3)]">{wt('create.bestFor', { what: picked.bestFor })}</span>
             </span>
-            <span className="flex shrink-0 items-center gap-1 text-[12px] text-[var(--w-accent-text)]">Change template</span>
+            <span className="flex shrink-0 items-center gap-1 text-[12px] text-[var(--w-accent-text)]">{wt('create.changeTemplate')}</span>
           </button>
           <p className="-mt-1 mb-3 flex flex-wrap items-center gap-x-1.5 text-[12px] text-[var(--w-text-3)]">
-            <span>Type: <b className="font-medium text-[var(--w-text-2)]">{KIND_INFO[kind].label}</b></span>
+            <span>{wt('create.typeLabel')} <b className="font-medium text-[var(--w-text-2)]">{KIND_INFO[kind].label}</b></span>
             <span aria-hidden="true">·</span>
-            <span>{onModules.length ? `Modules: ${onModules.map((m) => m.label).join(', ')}` : 'No extra modules'}</span>
-            <button type="button" className="text-[var(--w-accent-text)] hover:underline" onClick={() => setStep(0)}>Change type</button>
+            <span>{onModules.length ? wt('create.modulesList', { list: onModules.map((m) => m.label).join(', ') }) : wt('create.noModules')}</span>
+            <button type="button" className="text-[var(--w-accent-text)] hover:underline" onClick={() => setStep(0)}>{wt('create.changeType')}</button>
           </p>
 
           <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[1fr_160px]">
-            <Field label="Project name">
+            <Field label={wt('create.projectName')}>
               <input
                 className="w-input"
                 value={name}
                 maxLength={120}
                 autoFocus
-                placeholder="e.g. Online Bookstore"
+                placeholder={wt('create.projectNamePh')}
                 onChange={(e) => {
                   setName(e.target.value);
                   if (!keyTouched) setKey(deriveKey(e.target.value));
                 }}
               />
             </Field>
-            <Field label="Key">
+            <Field label={wt('create.key')}>
               <input
                 className="w-input font-mono uppercase"
                 value={key}
@@ -321,8 +322,8 @@ export default function CreateProjectDialog({
           </div>
           <p className={cn('-mt-2 mb-4 text-[12px]', key && !keyValid ? 'text-[var(--w-red)]' : 'text-[var(--w-text-3)]')}>
             {key && !keyValid
-              ? 'Key must be 2–10 letters or digits and start with a letter.'
-              : `Filled in from the name. Issue keys will look like ${keyValid ? key : 'SWP'}-12.`}
+              ? wt('create.keyInvalid')
+              : wt('create.keyHint', { key: keyValid ? key : 'SWP' })}
           </p>
 
           <label className="mb-4 flex cursor-pointer items-start gap-2.5 rounded-[8px] border border-[var(--w-border)] px-3 py-2.5 hover:bg-[var(--w-hover)]">
@@ -333,25 +334,25 @@ export default function CreateProjectDialog({
               onChange={(e) => { setSample(e.target.checked); setSampleTouched(true); }}
             />
             <span className="min-w-0">
-              <span className="block text-[13px] font-medium">Add sample data so I can explore</span>
+              <span className="block text-[13px] font-medium">{wt('create.addSample')}</span>
               <span className="block text-[12px] leading-snug text-[var(--w-text-2)]">
                 {template === 'SWT301'
-                  ? 'Example requirements, 6 test cases with steps and a test plan.'
+                  ? wt('create.sampleSwt')
                   : type === 'KANBAN'
-                    ? 'Example tasks and bugs, a few already in progress.'
-                    : 'Example epics, stories with story points and acceptance criteria, bugs and a planned Sprint 1.'}
-                {' '}Remove it with one click when you are ready.
+                    ? wt('create.sampleKanban')
+                    : wt('create.sampleScrum')}
+                {' '}{wt('create.sampleRemove')}
               </span>
             </span>
           </label>
 
           <button type="button" className="mb-2 flex items-center gap-1 text-[12px] text-[var(--w-text-2)] hover:text-[var(--w-text)]" onClick={() => setMore((v) => !v)} aria-expanded={more}>
-            {more ? <ChevronDown size={13} /> : <ChevronRight size={13} />} More options
+            {more ? <ChevronDown size={13} /> : <ChevronRight size={13} />} {wt('create.moreOptions')}
           </button>
           {more && (
             <div className="mb-2">
               <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
-                <Field label="Type">
+                <Field label={wt('create.type')}>
                   <div className="flex h-8 rounded-[6px] border border-[var(--w-border-strong)] p-0.5">
                     {(['SCRUM', 'KANBAN'] as const).map((t) => (
                       <button
@@ -368,20 +369,20 @@ export default function CreateProjectDialog({
                     ))}
                   </div>
                 </Field>
-                <Field label="Access">
+                <Field label={wt('create.access')}>
                   <Select value={visibility} onChange={(e) => setVisibility(e.target.value as 'WORKSPACE' | 'PRIVATE')}>
-                    <option value="WORKSPACE">Everyone in the workspace</option>
-                    <option value="PRIVATE">Only invited members</option>
+                    <option value="WORKSPACE">{wt('create.everyoneWs')}</option>
+                    <option value="PRIVATE">{wt('create.onlyInvited')}</option>
                   </Select>
                 </Field>
               </div>
               <p className="-mt-2 mb-4 text-[12px] text-[var(--w-text-3)]">
-                {type === 'SCRUM' ? 'Plan work in sprints from a backlog.' : 'Continuous flow on a board, no sprints.'}
+                {type === 'SCRUM' ? wt('create.scrumHint') : wt('create.kanbanHint')}
               </p>
-              <Field label="Description (optional)">
+              <Field label={wt('create.descOptional')}>
                 <textarea className="w-input" rows={2} value={description} maxLength={5000} onChange={(e) => setDescription(e.target.value)} />
               </Field>
-              <Field label="Modules">
+              <Field label={wt('create.modules')}>
                 <ul className="divide-y divide-[var(--w-border)] rounded-[8px] border border-[var(--w-border)]">
                   {S1_MODULES.map((m) => (
                     <li key={m.key} className="flex items-center gap-3 px-3 py-2">
@@ -389,7 +390,7 @@ export default function CreateProjectDialog({
                         <span className="block text-[13px] font-medium">{m.label}</span>
                         <span className="block text-[12px] leading-snug text-[var(--w-text-2)]">{m.body}</span>
                       </span>
-                      <Switch checked={!!modules[m.key]} onChange={(v) => setModules((x) => ({ ...x, [m.key as StudioModule]: v }))} label={`${m.label} module`} />
+                      <Switch checked={!!modules[m.key]} onChange={(v) => setModules((x) => ({ ...x, [m.key as StudioModule]: v }))} label={wt('create.moduleSwitch', { name: m.label })} />
                     </li>
                   ))}
                 </ul>
@@ -399,12 +400,12 @@ export default function CreateProjectDialog({
 
           <div className="mt-2 flex items-center justify-end gap-2">
             <button type="button" className="w-btn mr-auto" onClick={() => setStep(0)}>
-              <ArrowLeft size={13} /> Back
+              <ArrowLeft size={13} /> {wt('create.back')}
             </button>
-            <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+            <button type="button" className="w-btn" onClick={onClose}>{wt('create.cancel')}</button>
             <button type="submit" className="w-btn w-btn-primary" disabled={!canSubmit}>
               {(create.isPending || create.isSuccess) ? <Spinner size={12} /> : <Check size={13} />}
-              {create.isPending && sample ? 'Creating & adding samples…' : 'Create project'}
+              {create.isPending && sample ? wt('create.creatingSamples') : wt('create.createProject')}
             </button>
           </div>
         </form>

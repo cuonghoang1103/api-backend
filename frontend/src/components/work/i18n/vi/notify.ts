@@ -1,0 +1,30 @@
+import type { notify as En } from '../en/notify';
+import type { Strings } from '../core';
+
+export const notify: Strings<typeof En> = {
+  someone: 'Ai đó',
+  anIssue: 'một thẻ',
+  aWorkspace: 'một không gian làm việc',
+  invite: 'đã thêm bạn vào {workspace}',
+  assign: 'đã giao cho bạn {target}',
+  comment: 'đã bình luận ở {target}',
+  mention: 'đã nhắc bạn trong {target}',
+  updated: 'đã cập nhật {target}',
+  needsAttention: 'cần bạn xem',
+  approvalRequested: 'Bạn được nhờ duyệt: {title}',
+  timesheetSubmitted: '{name} đã nộp bảng chấm công tuần {week}',
+  reviewDue: 'Đến hạn rà soát: {item}',
+  agentFinished: '🤖 {name} đã làm xong {key} — cần bạn review',
+  agentStopped: '🤖 {name} ngừng phản hồi ở {key} (hết hạn giữ việc) — đã đánh dấu bị chặn',
+  brokenLink: 'Link hỏng: {detail}',
+  commentReported: 'Một bình luận bị báo cáo ({reason}). Hãy xem và gỡ nếu cần.',
+  unreadCount: 'Thông báo, {count} chưa đọc',
+  notifications: 'Thông báo',
+  dialogLabel: 'Thông báo CT Work',
+  inbox: 'Hộp thư',
+  newCount: '{count} mới',
+  markAllRead: 'Đánh dấu đã đọc hết',
+  caughtUp: 'Bạn đã xem hết',
+  emptyBody: 'Việc được giao, bình luận và lượt nhắc tên trong các dự án của bạn sẽ hiện ở đây.',
+  unread: 'Chưa đọc',
+};

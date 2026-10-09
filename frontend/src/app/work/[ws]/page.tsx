@@ -11,9 +11,10 @@ import { cn } from '@/lib/utils';
 import { userName, workApi, workError, type ProjectSummary } from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
 import { avatarColor, EmptyState, PageLoading, ProjectMark, StatusGlyph, UserAvatar, useToggle } from '@/components/work/ui';
-import { PageHeader, PROJECT_ROLE_LABEL, PROJECT_TYPE_LABEL, WorkspaceMark, WS_ROLE_LABEL } from '@/components/work/settings/shared';
+import { PageHeader, PROJECT_ROLE_LABEL, projectTypeLabel, WorkspaceMark, WS_ROLE_LABEL } from '@/components/work/settings/shared';
 import CreateProjectDialog from '@/components/work/workspace/CreateProjectDialog';
-import { OPEN_ISSUES_DEFINITION } from '@/components/work/openIssues';
+import { openIssuesDefinition } from '@/components/work/openIssues';
+import { wt } from '@/components/work/i18n';
 import ProjectCover from '@/components/work/cover/ProjectCover'; // UX-D
 
 /** Thẻ dự án: ô màu theo khoá, tên, loại, vai trò, người phụ trách, số việc đang mở. */
@@ -32,12 +33,12 @@ function ProjectCard({ p, slug, muted }: { p: ProjectSummary; slug: string; mute
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
             <span className="truncate text-[15px] font-semibold tracking-[-0.01em]">{p.name}</span>
-            {p.visibility === 'PRIVATE' && <Lock size={13} className="shrink-0 text-[var(--w-text-3)]" aria-label="Private project" />}
+            {p.visibility === 'PRIVATE' && <Lock size={13} className="shrink-0 text-[var(--w-text-3)]" aria-label={wt('home.privateProject')} />}
           </div>
           <div className="mt-0.5 flex min-w-0 flex-wrap items-center gap-x-1.5 text-[12px] text-[var(--w-text-3)]">
             <span className="font-mono">{p.key}</span>
             <span aria-hidden="true">·</span>
-            <span>{PROJECT_TYPE_LABEL[p.type]}</span>
+            <span>{projectTypeLabel(p.type)}</span>
             <span aria-hidden="true">·</span>
             <span>{PROJECT_ROLE_LABEL[p.role]}</span>
           </div>
@@ -53,11 +54,11 @@ function ProjectCard({ p, slug, muted }: { p: ProjectSummary; slug: string; mute
             <span className="truncate">{userName(p.lead)}</span>
           </span>
         ) : (
-          <span className="text-[var(--w-text-3)]">No lead</span>
+          <span className="text-[var(--w-text-3)]">{wt('home.noLead')}</span>
         )}
-        <span className="flex shrink-0 items-center gap-1.5 tabular-nums" title={`${p.openIssues} open issues. ${OPEN_ISSUES_DEFINITION}`}>
+        <span className="flex shrink-0 items-center gap-1.5 tabular-nums" title={`${wt('home.nOpenIssues', { count: p.openIssues })} ${openIssuesDefinition()}`}>
           <StatusGlyph category="IN_PROGRESS" size={13} />
-          <span className="font-semibold text-[var(--w-text)]">{p.openIssues}</span> open
+          <span className="font-semibold text-[var(--w-text)]">{p.openIssues}</span> {wt('home.openShort')}
         </span>
       </div>
     </Link>
@@ -113,9 +114,9 @@ function WorkspaceOverview() {
   if (q.error || !ws) {
     return (
       <div className="flex h-full flex-col">
-        <PageHeader title="Workspace" />
+        <PageHeader title={wt('home.workspace')} />
         <div className="min-h-0 flex-1 overflow-y-auto">
-          <EmptyState title="Workspace not found" body={workError(q.error, 'This workspace does not exist or you no longer have access to it.')} />
+          <EmptyState title={wt('home.wsNotFound')} body={workError(q.error, wt('home.wsNotFoundBody'))} />
         </div>
       </div>
     );
@@ -129,12 +130,12 @@ function WorkspaceOverview() {
         title={ws.name}
         actions={
           <>
-            <Link href={`/work/${slug}/settings`} className="w-btn w-btn-sm" aria-label="Members & settings" title="Members & settings">
-              <Settings size={14} /> <span className="max-sm:hidden">Members &amp; settings</span>
+            <Link href={`/work/${slug}/settings`} className="w-btn w-btn-sm" aria-label={wt('home.membersSettings')} title={wt('home.membersSettings')}>
+              <Settings size={14} /> <span className="max-sm:hidden">{wt('home.membersSettings')}</span>
             </Link>
             {canCreate && (
               <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={dialog.open}>
-                <Plus size={14} /> New project
+                <Plus size={14} /> {wt('home.newProject')}
               </button>
             )}
           </>
@@ -148,22 +149,22 @@ function WorkspaceOverview() {
               <div className="min-w-0 flex-1">
                 <h2 className="text-[24px] font-semibold leading-tight tracking-[-0.02em] [overflow-wrap:anywhere]">{ws.name}</h2>
                 <p className="mt-1 max-w-[560px] text-[14px] text-[var(--w-text-2)]">
-                  {ws.description || 'Your team\'s projects live here. Open one to see its board, backlog and reports.'}
+                  {ws.description || wt('home.wsDescFallback')}
                 </p>
               </div>
             </div>
             {/* Ba con số thật của không gian — không trang trí. */}
             <dl className="grid shrink-0 grid-cols-3 overflow-hidden rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] text-center sm:w-[340px]">
               <div className="px-3 py-2">
-                <dt className="text-[12px] text-[var(--w-text-3)]">Projects</dt>
+                <dt className="text-[12px] text-[var(--w-text-3)]">{wt('home.projects')}</dt>
                 <dd className="text-[18px] font-semibold tabular-nums">{active.length}</dd>
               </div>
               <div className="border-x border-[var(--w-border)] px-3 py-2">
-                <dt className="text-[12px] text-[var(--w-text-3)]" title={OPEN_ISSUES_DEFINITION}>Open issues</dt>
-                <dd className="text-[18px] font-semibold tabular-nums" title={OPEN_ISSUES_DEFINITION}>{openIssues}</dd>
+                <dt className="text-[12px] text-[var(--w-text-3)]" title={openIssuesDefinition()}>{wt('home.openIssues')}</dt>
+                <dd className="text-[18px] font-semibold tabular-nums" title={openIssuesDefinition()}>{openIssues}</dd>
               </div>
               <div className="px-3 py-2">
-                <dt className="text-[12px] text-[var(--w-text-3)]">Your role</dt>
+                <dt className="text-[12px] text-[var(--w-text-3)]">{wt('home.yourRole')}</dt>
                 <dd className="truncate pt-1 text-[13px] font-semibold leading-[22px]">{WS_ROLE_LABEL[ws.role]}</dd>
               </div>
             </dl>
@@ -171,7 +172,7 @@ function WorkspaceOverview() {
 
           {active.length > 0 && (
             <div className="mb-3 flex items-center gap-2">
-              <h3 className="w-section-title">Projects</h3>
+              <h3 className="w-section-title">{wt('home.projects')}</h3>
               <span className="w-count">{active.length}</span>
             </div>
           )}
@@ -181,11 +182,11 @@ function WorkspaceOverview() {
             <div className="w-card !border-dashed !shadow-none">
               <EmptyState
                 icon={<FolderKanban size={20} />}
-                title="No projects yet"
+                title={wt('home.noProjects')}
                 body={canCreate
-                  ? 'Create a project to start planning sprints, tracking bugs and managing tests. Templates set up the workflow for you.'
-                  : 'You have not been added to any project in this workspace yet. Ask a workspace admin to add you.'}
-                action={canCreate ? <button type="button" className="w-btn w-btn-primary" onClick={dialog.open}><Plus size={14} /> Create your first project</button> : undefined}
+                  ? wt('home.noProjectsBodyAdmin')
+                  : wt('home.noProjectsBody')}
+                action={canCreate ? <button type="button" className="w-btn w-btn-primary" onClick={dialog.open}><Plus size={14} /> {wt('home.createFirst')}</button> : undefined}
               />
             </div>
           )}
@@ -199,7 +200,7 @@ function WorkspaceOverview() {
                 aria-expanded={showArchived}
               >
                 <ChevronRight size={14} className={cn('transition-transform', showArchived && 'rotate-90')} />
-                Archived
+                {wt('home.archived')}
                 <span className="text-[var(--w-text-3)]">{archived.length}</span>
               </button>
               {showArchived && <ProjectGrid projects={archived} slug={slug} muted />}

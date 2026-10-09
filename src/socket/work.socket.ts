@@ -88,6 +88,54 @@ export function registerWorkRealtime(_io: IOServer, socket: Socket, user: { id: 
     socket.to(projectRoom(m.projectId)).emit('work:presence', { ...m, user: who, at: now });
   });
 
+  /**
+   * CTW K-3: kênh chat — vào phòng `work:chat:<dự án>:<kênh>` (kiểm quyền thấy kênh bằng đúng hàm của REST) để nhận
+   * `work:chat:event` (tin mới/sửa/xoá/cảm xúc/ghim) + "đang gõ". Agent không vào (agent đọc qua registry).
+   */
+  const chatRooms = new Set<string>();
+  socket.on('work:chat:join', async (raw: unknown, ack?: Ack) => {
+    const reply: Ack = typeof ack === 'function' ? ack : () => {};
+    const r = (raw ?? {}) as { projectId?: unknown; channelId?: unknown };
+    const pid = Number(r.projectId);
+    const cid = Number(r.channelId);
+    if (!Number.isInteger(pid) || pid <= 0 || !Number.isInteger(cid) || cid <= 0) return reply({ ok: false, error: 'Invalid channel' });
+    if (chatRooms.size >= 30) return reply({ ok: false, error: 'Too many open channels' });
+    try {
+      const { canJoinChannel, chatRoom } = await import('../services/work/chatSocket.js');
+      if (!(await canJoinChannel(user.id, pid, cid))) return reply({ ok: false, error: 'Channel not found' });
+      const room = chatRoom(pid, cid);
+      await socket.join(room);
+      chatRooms.add(room);
+      reply({ ok: true });
+    } catch {
+      reply({ ok: false, error: 'Could not open channel' });
+    }
+  });
+  socket.on('work:chat:leave', (raw: unknown) => {
+    const r = (raw ?? {}) as { projectId?: unknown; channelId?: unknown };
+    const room = `work:chat:${Number(r.projectId)}:${Number(r.channelId)}`;
+    void socket.leave(room);
+    chatRooms.delete(room);
+  });
+  /** "Đang gõ…": chỉ phát lại trong phòng kênh socket ĐÃ vào (đã kiểm quyền); không ghi DB; trần nhịp như hiện diện. */
+  socket.on('work:chat:typing', async (raw: unknown) => {
+    const r = (raw ?? {}) as { projectId?: unknown; channelId?: unknown; threadId?: unknown; typing?: unknown };
+    const room = `work:chat:${Number(r.projectId)}:${Number(r.channelId)}`;
+    if (!socket.rooms.has(room)) return;
+    const now = Date.now();
+    if (now - burstAt > 10_000) { burst = 0; burstAt = now; }
+    if (++burst > PRESENCE_BURST) return;
+    if (!who) {
+      who = await prisma.user.findUnique({ where: { id: user.id }, select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } }).catch(() => null);
+      if (!who) return;
+    }
+    const threadId = Number(r.threadId);
+    socket.to(room).emit('work:chat:typing', {
+      projectId: Number(r.projectId), channelId: Number(r.channelId), threadId: Number.isInteger(threadId) && threadId > 0 ? threadId : null,
+      typing: r.typing !== false, user: who, at: now,
+    });
+  });
+
   socket.on('disconnect', () => {
     if (!who) return;
     for (const v of present.values()) socket.to(projectRoom(v.projectId)).emit('work:presence', { ...v, state: 'left', user: who, at: Date.now() });

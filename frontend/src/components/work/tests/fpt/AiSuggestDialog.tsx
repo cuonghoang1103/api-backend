@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { workError } from '@/lib/work-api';
 import { Dialog, Field, Spinner } from '../../ui';
 import { fptApi, TYPE_LABEL, type AiSuggestion } from './fptApi';
+import { wt } from '@/components/work/i18n';
 
 export default function AiSuggestDialog({ open, onClose, pid, fnId, onApply }: {
   open: boolean; onClose: () => void; pid: number; fnId: number; onApply: (s: AiSuggestion) => void;
@@ -24,7 +25,7 @@ export default function AiSuggestDialog({ open, onClose, pid, fnId, onApply }: {
     try {
       setRes(await fptApi.aiSuggest(pid, fnId, { signature: signature.trim() || null, extra: extra.trim() || null }));
     } catch (e) {
-      toast.error(workError(e, 'AI could not suggest cases'));
+      toast.error(workError(e, wt('fpt.aiFailed')));
     } finally {
       setBusy(false);
     }
@@ -34,17 +35,17 @@ export default function AiSuggestDialog({ open, onClose, pid, fnId, onApply }: {
     <Dialog
       open={open}
       onClose={() => !busy && onClose()}
-      title={<span className="inline-flex items-center gap-2"><Sparkles size={15} /> Suggest test cases</span>}
+      title={<span className="inline-flex items-center gap-2"><Sparkles size={15} /> {wt('fpt.suggestTitle')}</span>}
       width={720}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose} disabled={busy}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose} disabled={busy}>{wt('common.cancel')}</button>
           {res ? (
             <button type="button" className="w-btn w-btn-primary" onClick={() => onApply(res)} disabled={!res.cases.length}>
               Add {res.cases.length} case{res.cases.length === 1 ? '' : 's'} to the matrix
             </button>
           ) : (
-            <button type="button" className="w-btn w-btn-primary" onClick={run} disabled={busy}>{busy && <Spinner size={12} />} Suggest</button>
+            <button type="button" className="w-btn w-btn-primary" onClick={run} disabled={busy}>{busy && <Spinner size={12} />} {wt('fpt.suggest')}</button>
           )}
         </>
       }
@@ -52,37 +53,36 @@ export default function AiSuggestDialog({ open, onClose, pid, fnId, onApply }: {
       {!res ? (
         <>
           <p className="mb-3 text-[13px] text-[var(--w-text-2)]">
-            AI reads the function&apos;s description and requirement and proposes concrete input values with Normal, Abnormal and Boundary cases.
-            Nothing is saved until you add it — review the values first.
+            {wt('fpt.aiIntro')}
           </p>
-          <Field label="Signature or code (optional)" hint="Paste the method signature or its body — gives better boundary values.">
+          <Field label={wt('fpt.sigLabel')} hint={wt('fpt.sigHint')}>
             <textarea className="w-input min-h-[110px] font-mono text-[12px]" value={signature} maxLength={8000} onChange={(e) => setSignature(e.target.value)}
               placeholder={'public boolean login(String email, String password)'} />
           </Field>
-          <Field label="Extra instructions (optional)">
-            <input className="w-input" value={extra} maxLength={2000} onChange={(e) => setExtra(e.target.value)} placeholder="e.g. password must be 8–32 characters" />
+          <Field label={wt('fpt.extraLabel')}>
+            <input className="w-input" value={extra} maxLength={2000} onChange={(e) => setExtra(e.target.value)} placeholder={wt('fpt.extraPh')} />
           </Field>
-          {busy && <p className="text-[12.5px] text-[var(--w-text-3)]">Thinking… this usually takes 10–30 seconds.</p>}
+          {busy && <p className="text-[12.5px] text-[var(--w-text-3)]">{wt('fpt.thinking')}</p>}
         </>
       ) : (
         <div className="space-y-3 text-[13px]">
           {res.notes && <p className="text-[var(--w-text-2)]">{res.notes}</p>}
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <div className="w-label">Conditions</div>
+              <div className="w-label">Condition</div>
               <ul className="space-y-0.5">
                 {res.conditions.map((c, i) => <li key={i}><span className="text-[var(--w-text-3)]">{c.group}</span> · <code>{c.value || '""'}</code>{c.label ? <span className="text-[var(--w-text-3)]"> ({c.label})</span> : null}</li>)}
               </ul>
             </div>
             <div>
-              <div className="w-label">Confirmations</div>
+              <div className="w-label">Confirmation</div>
               <ul className="space-y-0.5">
                 {res.confirmations.map((c, i) => <li key={i}><span className="text-[var(--w-text-3)]">{c.group}</span> · <code>{c.value}</code></li>)}
               </ul>
             </div>
           </div>
           <div>
-            <div className="w-label">Test cases</div>
+            <div className="w-label">Test case</div>
             <ul className="space-y-1">
               {res.cases.map((c, i) => (
                 <li key={i} className="flex gap-2">
@@ -92,7 +92,7 @@ export default function AiSuggestDialog({ open, onClose, pid, fnId, onApply }: {
               ))}
             </ul>
           </div>
-          <button type="button" className="w-btn w-btn-sm" onClick={() => setRes(null)}>Try again</button>
+          <button type="button" className="w-btn w-btn-sm" onClick={() => setRes(null)}>{wt('common.tryAgain')}</button>
         </div>
       )}
     </Dialog>

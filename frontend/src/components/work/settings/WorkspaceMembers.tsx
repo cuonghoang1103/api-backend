@@ -10,6 +10,7 @@ import { useAuthStore } from '@/store/authStore';
 import { wk } from '../hooks';
 import { EmptyState, Spinner, UserAvatar, formatDate } from '../ui';
 import { ConfirmDialog, Section, Select, WS_ROLE_HELP, WS_ROLE_LABEL } from './shared';
+import { wt } from '@/components/work/i18n';
 
 export const wsMembersKey = (wsId: number) => ['work', 'ws-members', wsId] as const;
 
@@ -32,15 +33,15 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
 
   const setRole = useMutation({
     mutationFn: (v: { userId: number; role: WorkspaceRole }) => workApi.setMemberRole(ws.id, v.userId, v.role),
-    onSuccess: () => { toast.success('Role updated'); refresh(); },
-    onError: (err) => toast.error(workError(err, 'Could not change the role')),
+    onSuccess: () => { toast.success(wt('settings.wsRoleUpdated')); refresh(); },
+    onError: (err) => toast.error(workError(err, wt('settings.roleFailed'))),
   });
 
   const [removing, setRemoving] = useState<WorkspaceMember | null>(null);
   const remove = useMutation({
     mutationFn: (userId: number) => workApi.removeMember(ws.id, userId),
-    onSuccess: () => { toast.success('Member removed'); setRemoving(null); refresh(); },
-    onError: (err) => toast.error(workError(err, 'Could not remove the member')),
+    onSuccess: () => { toast.success(wt('settings.memberRemoved')); setRemoving(null); refresh(); },
+    onError: (err) => toast.error(workError(err, wt('settings.removeFailed'))),
   });
 
   const [transferTo, setTransferTo] = useState<number | ''>('');
@@ -48,12 +49,12 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
   const transfer = useMutation({
     mutationFn: (userId: number) => workApi.transferOwnership(ws.id, userId),
     onSuccess: () => {
-      toast.success('Ownership transferred. You are now an admin.');
+      toast.success(wt('settings.ownershipDone'));
       setConfirmTransfer(false);
       setTransferTo('');
       refresh();
     },
-    onError: (err) => toast.error(workError(err, 'Could not transfer ownership')),
+    onError: (err) => toast.error(workError(err, wt('settings.ownershipFailed'))),
   });
 
   // CTW-28: AI agent nằm ở mục riêng (không tính vào số người, không đổi vai/xoá ở đây — quản lý ở trang AI agents).
@@ -69,13 +70,13 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
   const target = q.data?.find((m) => m.id === transferTo);
 
   if (q.isLoading) return <div className="flex justify-center py-12"><Spinner size={18} /></div>;
-  if (q.error) return <EmptyState title="Couldn't load members" body={workError(q.error)} />;
+  if (q.error) return <EmptyState title={wt('settings.membersLoadFailed')} body={workError(q.error)} />;
 
   return (
     <div>
       <Section
-        title="Members"
-        description={`${humans.length} ${humans.length === 1 ? 'person has' : 'people have'} access to this workspace.`}
+        title={wt('common.members')}
+        description={wt('settings.nPeopleAccess', { count: humans.length })}
       >
         <div className="mb-3 grid grid-cols-1 gap-x-6 gap-y-1 text-[12px] text-[var(--w-text-2)] sm:grid-cols-3">
           {ASSIGNABLE.map((r) => (
@@ -86,7 +87,7 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
         {humans.length > 8 && (
           <div className="relative mb-3 max-w-[280px]">
             <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
-            <input className="w-input pl-8" placeholder="Filter members" value={filter} onChange={(e) => setFilter(e.target.value)} />
+            <input className="w-input pl-8" placeholder={wt('settings.filterMembers')} value={filter} onChange={(e) => setFilter(e.target.value)} />
           </div>
         )}
 
@@ -100,7 +101,7 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 truncate text-[13px] font-medium">
                     <span className="truncate">{userName(m)}</span>
-                    {self && <span className="shrink-0 text-[11px] font-normal text-[var(--w-text-3)]">(you)</span>}
+                    {self && <span className="shrink-0 text-[11px] font-normal text-[var(--w-text-3)]">({wt('common.you')})</span>}
                   </div>
                   <div className="truncate text-[12px] text-[var(--w-text-3)]">
                     @{m.username}
@@ -115,14 +116,14 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
                     value={m.role}
                     disabled={setRole.isPending}
                     onChange={(e) => setRole.mutate({ userId: m.id, role: e.target.value as WorkspaceRole })}
-                    aria-label={`Role of ${userName(m)}`}
+                    aria-label={wt('settings.roleOf', { name: userName(m) })}
                   >
                     {ASSIGNABLE.map((r) => <option key={r} value={r}>{WS_ROLE_LABEL[r]}</option>)}
                   </Select>
                 )}
                 <div className="w-7 shrink-0">
                   {editable && (
-                    <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => setRemoving(m)} aria-label={`Remove ${userName(m)}`} title="Remove from workspace">
+                    <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => setRemoving(m)} aria-label={wt('tests.removeK', { key: userName(m) })} title={wt('settings.removeFromWs')}>
                       <X size={14} />
                     </button>
                   )}
@@ -136,9 +137,9 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
 
       {agents.length > 0 && (
         <Section
-          title="AI agents"
-          description="Agents are not counted as people. They sign in only with their own token; manage them, their owner and their tokens on the AI agents page."
-          action={<Link href={`/work/${ws.slug}/agents`} className="w-btn w-btn-sm">Manage agents</Link>}
+          title={wt('fields.aiAgents')}
+          description={wt('settings.agentsDesc')}
+          action={<Link href={`/work/${ws.slug}/agents`} className="w-btn w-btn-sm">{wt('settings.manageAgents')}</Link>}
         >
           <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]" data-testid="ws-members-agents">
             {agents.map((m) => (
@@ -156,20 +157,20 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
       )}
 
       {isOwner && (
-        <Section title="Transfer ownership" description="The new owner gets full control, including deleting the workspace. You will become an admin.">
+        <Section title={wt('settings.transferOwnership')} description={wt('settings.transferDesc')}>
           {transferCandidates.length ? (
             <form
               className="flex max-w-[520px] flex-col gap-2 sm:flex-row"
               onSubmit={(e) => { e.preventDefault(); if (transferTo) setConfirmTransfer(true); }}
             >
               <Select value={transferTo} onChange={(e) => setTransferTo(e.target.value ? Number(e.target.value) : '')} className="sm:flex-1">
-                <option value="">Choose a member…</option>
+                <option value="">{wt('settings.chooseMember')}</option>
                 {transferCandidates.map((m) => <option key={m.id} value={m.id}>{userName(m)} (@{m.username})</option>)}
               </Select>
-              <button type="submit" className="w-btn shrink-0" disabled={!transferTo}>Transfer ownership</button>
+              <button type="submit" className="w-btn shrink-0" disabled={!transferTo}>{wt('settings.transferOwnership')}</button>
             </form>
           ) : (
-            <p className="text-[13px] text-[var(--w-text-3)]">Add another admin or member first — guests cannot become the owner.</p>
+            <p className="text-[13px] text-[var(--w-text-3)]">{wt('settings.addAdminFirst')}</p>
           )}
         </Section>
       )}
@@ -177,18 +178,18 @@ export default function WorkspaceMembers({ ws }: { ws: WorkspaceDetail }) {
       <ConfirmDialog
         open={!!removing}
         onClose={() => setRemoving(null)}
-        title="Remove member?"
-        body={<><span className="font-medium text-[var(--w-text)]">{removing ? userName(removing) : ''}</span> will lose access to this workspace and all of its projects. Issues they created or were assigned stay in place.</>}
-        confirmLabel="Remove"
+        title={wt('settings.removeMemberQ')}
+        body={wt('settings.removeMemberBody', { name: removing ? userName(removing) : '' })}
+        confirmLabel={wt('common.remove')}
         pending={remove.isPending}
         onConfirm={() => removing && remove.mutate(removing.id)}
       />
       <ConfirmDialog
         open={confirmTransfer}
         onClose={() => setConfirmTransfer(false)}
-        title="Transfer ownership?"
-        body={<><span className="font-medium text-[var(--w-text)]">{target ? userName(target) : ''}</span> will become the owner of {ws.name}. You will become an admin and can no longer delete the workspace.</>}
-        confirmLabel="Transfer ownership"
+        title={wt('settings.transferQ')}
+        body={wt('settings.transferBody', { name: target ? userName(target) : '', ws: ws.name })}
+        confirmLabel={wt('settings.transferOwnership')}
         pending={transfer.isPending}
         onConfirm={() => typeof transferTo === 'number' && transfer.mutate(transferTo)}
       />

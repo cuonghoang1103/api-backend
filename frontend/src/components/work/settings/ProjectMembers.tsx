@@ -10,6 +10,7 @@ import { Spinner, UserAvatar } from '../ui';
 import { PROJECT_ROLE_HELP, PROJECT_ROLE_LABEL, Section, Select, WS_ROLE_LABEL } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
 import { wsMembersKey } from './WorkspaceMembers';
+import { wt } from '@/components/work/i18n';
 
 const ROLES: ProjectRole[] = ['ADMIN', 'MEMBER', 'VIEWER', 'TEACHER', 'CLIENT'];
 
@@ -37,22 +38,22 @@ export default function ProjectMembers({ config, slug }: { config: ProjectConfig
 
   const add = useMutation({
     mutationFn: () => workApi.setProjectMember(config.id, Number(addId), addRole),
-    onSuccess: () => { toast.success('Added to the project'); setAddId(''); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not add this person')),
+    onSuccess: () => { toast.success(wt('settings.addedToProject')); setAddId(''); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('settings.addPersonFailed'))),
   });
 
   const setRole = useMutation({
     mutationFn: (v: { userId: number; role: ProjectRole }) => workApi.setProjectMember(config.id, v.userId, v.role),
     onMutate: (v) => setBusyId(v.userId),
-    onSuccess: () => { toast.success('Project role updated'); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not change the role')),
+    onSuccess: () => { toast.success(wt('settings.roleUpdated')); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('settings.roleFailed'))),
     onSettled: () => setBusyId(null),
   });
   const reset = useMutation({
     mutationFn: (userId: number) => workApi.removeProjectMember(config.id, userId),
     onMutate: (userId) => setBusyId(userId),
-    onSuccess: () => { toast.success('Role reset to the workspace default'); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not reset the role')),
+    onSuccess: () => { toast.success(wt('settings.roleReset')); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('settings.roleResetFailed'))),
     onSettled: () => setBusyId(null),
   });
 
@@ -67,16 +68,16 @@ export default function ProjectMembers({ config, slug }: { config: ProjectConfig
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5 text-[13px] font-medium">
             <span className="truncate">{userName(m)}</span>
-            {self && <span className="shrink-0 text-[11px] font-normal text-[var(--w-text-3)]">(you)</span>}
+            {self && <span className="shrink-0 text-[11px] font-normal text-[var(--w-text-3)]">({wt('common.you')})</span>}
           </div>
           <div className="truncate text-[12px] text-[var(--w-text-3)]">
             @{m.username}
             {wr && <span className="hidden sm:inline"> · Workspace {WS_ROLE_LABEL[wr].toLowerCase()}</span>}
-            {!wsAdmin && <span className="hidden sm:inline"> · {m.explicit ? 'Set for this project' : 'Default from workspace'}</span>}
+            {!wsAdmin && <span className="hidden sm:inline"> · {m.explicit ? wt('settings.setForProject') : wt('settings.defaultFromWs')}</span>}
           </div>
         </div>
         {wsAdmin ? (
-          <span className="shrink-0 text-[13px] text-[var(--w-text-2)]">Admin (workspace)</span>
+          <span className="shrink-0 text-[13px] text-[var(--w-text-2)]">{wt('settings.adminWs')}</span>
         ) : editable ? (
           <div className="flex shrink-0 items-center gap-1">
             {m.explicit && (
@@ -85,9 +86,9 @@ export default function ProjectMembers({ config, slug }: { config: ProjectConfig
                 className="w-btn w-btn-ghost w-btn-sm max-sm:!hidden"
                 disabled={busyId === m.id}
                 onClick={() => reset.mutate(m.id)}
-                title="Use the role this person gets from the workspace"
+                title={wt('settings.useWsRole')}
               >
-                Reset to default
+                {wt('settings.resetDefault')}
               </button>
             )}
             <Select
@@ -95,7 +96,7 @@ export default function ProjectMembers({ config, slug }: { config: ProjectConfig
               value={m.role}
               disabled={busyId === m.id}
               onChange={(e) => setRole.mutate({ userId: m.id, role: e.target.value as ProjectRole })}
-              aria-label={`Project role of ${userName(m)}`}
+              aria-label={wt('settings.roleOf', { name: userName(m) })}
             >
               {ROLES.map((r) => <option key={r} value={r}>{PROJECT_ROLE_LABEL[r]}</option>)}
             </Select>
@@ -109,11 +110,11 @@ export default function ProjectMembers({ config, slug }: { config: ProjectConfig
 
   return (
     <Section
-      title="Members"
+      title={wt('common.members')}
       description={
         config.visibility === 'PRIVATE'
-          ? 'This project is private: only people with a project role (and workspace admins) can see it.'
-          : 'Everyone in the workspace can see this project. Workspace guests only see it when given a project role here.'
+          ? wt('settings.privateDesc')
+          : wt('settings.publicDesc')
       }
     >
       <div className="mb-4 grid grid-cols-1 gap-x-6 gap-y-1 text-[12px] text-[var(--w-text-2)] sm:grid-cols-2">
@@ -126,7 +127,7 @@ export default function ProjectMembers({ config, slug }: { config: ProjectConfig
       ) : (
         <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
           {config.members.map(row)}
-          {!config.members.length && <div className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">No members yet.</div>}
+          {!config.members.length && <div className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">{wt('settings.noMembers')}</div>}
         </div>
       )}
       {canManage && outsiders.length > 0 && (
@@ -134,23 +135,23 @@ export default function ProjectMembers({ config, slug }: { config: ProjectConfig
           className="mt-3 flex flex-col gap-2 sm:flex-row"
           onSubmit={(e) => { e.preventDefault(); if (addId && !add.isPending) add.mutate(); }}
         >
-          <Select value={addId} onChange={(e) => setAddId(e.target.value ? Number(e.target.value) : '')} className="sm:flex-1" aria-label="Workspace member to add">
-            <option value="">Add a workspace member to this project…</option>
+          <Select value={addId} onChange={(e) => setAddId(e.target.value ? Number(e.target.value) : '')} className="sm:flex-1" aria-label={wt('settings.wsMemberToAdd')}>
+            <option value="">{wt('settings.addWsMember')}</option>
             {outsiders.map((m) => <option key={m.id} value={m.id}>{userName(m)} (@{m.username}) · {WS_ROLE_LABEL[m.role]}</option>)}
           </Select>
-          <Select value={addRole} onChange={(e) => setAddRole(e.target.value as ProjectRole)} className="sm:w-[120px]" aria-label="Project role">
+          <Select value={addRole} onChange={(e) => setAddRole(e.target.value as ProjectRole)} className="sm:w-[120px]" aria-label={wt('settings.projRole')}>
             {ROLES.map((r) => <option key={r} value={r}>{PROJECT_ROLE_LABEL[r]}</option>)}
           </Select>
           <button type="submit" className="w-btn shrink-0" disabled={!addId || add.isPending}>
             {add.isPending && <Spinner size={12} />}
-            Add
+            {wt('common.add')}
           </button>
         </form>
       )}
       <p className="mt-3 text-[12px] text-[var(--w-text-3)]">
-        To add someone who is not in the workspace yet, invite them from{' '}
-        <Link href={`/work/${slug}/settings?tab=invitations`} className="text-[var(--w-accent-text)] hover:underline">workspace settings</Link>{' '}
-        and pick this project.
+        {wt('settings.inviteA')}{' '}
+        <Link href={`/work/${slug}/settings?tab=invitations`} className="text-[var(--w-accent-text)] hover:underline">{wt('settings.inviteLink')}</Link>{' '}
+        {wt('settings.inviteB')}
       </p>
     </Section>
   );

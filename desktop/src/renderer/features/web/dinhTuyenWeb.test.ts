@@ -183,7 +183,7 @@ describe('khopTuyenWeb', () => {
     expect(d?.thamSo).toEqual({ ws: 'acme', key: 'WEB' });
 
     for (const v of ['board', 'backlog', 'list', 'timeline', 'releases', 'reports',
-                     'dashboards', 'tests', 'settings', 'spec']) {
+                     'dashboards', 'tests', 'settings', 'spec', 'chat']) {
       const k = khopTuyenWeb(`/work/acme/WEB/${v}`);
       expect(k?.tuyen.mau, v).toBe(`/work/:ws/:key/${v}`);
       expect(k?.thamSo, v).toEqual({ ws: 'acme', key: 'WEB' });
@@ -296,7 +296,8 @@ describe('khopTuyenWeb', () => {
     // 06/10/2026: +1 CT Work Resources (thư viện link của dự án).
     // 07/10/2026: +6 IELTS đợt 1 (thi-may · the-tu · so-loi, mỗi trang 2 đường /ielts… và /language/:code/ielts…).
     // 09/10/2026: +1 CT Work đợt 4 (requirements — SRS có cấu trúc + RTM). Trước dòng này tệp đã đỏ 154≠151 (+3 trang của phiên khác chưa ghi số).
-    expect(thay.size).toBe(155);
+    // 10/10/2026: +1 CT Work K-3 (chat — kênh chat dự án).
+    expect(thay.size).toBe(156);
   });
 });
 

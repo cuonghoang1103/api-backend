@@ -69,6 +69,8 @@ export async function setNotifySettings(userId: number, input: { emailMode?: Ema
  */
 async function emailFor(args: WorkNotifyArgs): Promise<void> {
   if (process.env.WORK_EMAIL_NOTIFICATIONS === 'false' || args.type === 'WORK_INVITE') return;
+  // CTW K-3: tin chat không gửi email tức thì (chat là nhịp nhanh) — chỉ thư gộp "tin chưa đọc" khi người dùng BẬT.
+  if (args.payload.chat === true) return;
   if (args.receiverId === args.senderId) return;
   const settings = await getNotifySettings(args.receiverId);
   if (settings.emailMode === 'OFF') return;
@@ -121,6 +123,8 @@ export async function notifyWork(args: WorkNotifyArgs): Promise<void> {
 /** Cron 08:00 giờ VN: mỗi người một thư gộp mọi mục đang chờ. */
 export async function sendDigests(): Promise<number> {
   if (process.env.WORK_EMAIL_NOTIFICATIONS === 'false') return 0;
+  // CTW K-3: người bật "Email digest of unread chat" ⇒ một dòng tóm tắt vào cùng thư gộp (mặc định TẮT).
+  await import('./chat.service.js').then((m) => m.queueChatDigests()).catch((err) => logger.warn('[work] chat digest lỗi', { err: (err as Error).message }));
   const users = await prisma.workEmailQueue.findMany({ where: { sentAt: null }, distinct: ['userId'], select: { userId: true } });
   let sent = 0;
   for (const { userId } of users) {

@@ -17,6 +17,7 @@ import WorkspaceInvitations from '@/components/work/settings/WorkspaceInvitation
 import WorkspaceTrash from '@/components/work/settings/WorkspaceTrash';
 import WorkspaceAudit from '@/components/work/settings/WorkspaceAudit';
 import WorkspaceImport from '@/components/work/settings/WorkspaceImport';
+import { wt } from '@/components/work/i18n';
 
 type Tab = 'general' | 'members' | 'invitations' | 'audit' | 'import' | 'trash';
 
@@ -31,16 +32,16 @@ function WorkspaceSettings() {
 
   const canManage = ws?.role === 'OWNER' || ws?.role === 'ADMIN';
   const groups: NavGroup<Tab>[] = [
-    { label: 'Workspace', tabs: [
-      { key: 'general', label: 'General', icon: SlidersHorizontal },
-      { key: 'members', label: 'Members', icon: Users },
-      ...(canManage ? [{ key: 'invitations' as const, label: 'Invitations', icon: MailPlus }] : []),
+    { get label() { return wt('settings.tWorkspace'); }, tabs: [
+      { key: 'general', get label() { return wt('settings.tGeneral'); }, icon: SlidersHorizontal },
+      { key: 'members', get label() { return wt('settings.tMembers'); }, icon: Users },
+      ...(canManage ? [{ key: 'invitations' as const, get label() { return wt('settings.tInvitations'); }, icon: MailPlus }] : []),
     ] },
-    { label: 'Data', tabs: canManage ? [
-      { key: 'audit' as const, label: 'Audit log', icon: ScrollText },
+    { get label() { return wt('settings.tData'); }, tabs: canManage ? [
+      { key: 'audit' as const, get label() { return wt('settings.tAuditLog'); }, icon: ScrollText },
       // Đợt S5c: nhập lại dự án từ ZIP xuất trọn (luôn thành dự án MỚI).
-      { key: 'import' as const, label: 'Import project', icon: FileUp },
-      { key: 'trash' as const, label: 'Trash', icon: Trash2 },
+      { key: 'import' as const, get label() { return wt('settings.tImportProject'); }, icon: FileUp },
+      { key: 'trash' as const, get label() { return wt('settings.tTrash'); }, icon: Trash2 },
     ] : [] },
   ];
   const tabs: TabDef<Tab>[] = groups.flatMap((g) => g.tabs);
@@ -52,9 +53,9 @@ function WorkspaceSettings() {
   if (q.error || !ws) {
     return (
       <div className="flex h-full flex-col">
-        <PageHeader title="Workspace settings" />
+        <PageHeader title={wt('palette.wsSettings')} />
         <div className="min-h-0 flex-1 overflow-y-auto">
-          <EmptyState title="Workspace not found" body={workError(q.error, 'This workspace does not exist or you no longer have access to it.')} />
+          <EmptyState title={wt('home.wsNotFound')} body={workError(q.error, wt('home.wsNotFoundBody'))} />
         </div>
       </div>
     );
@@ -63,9 +64,9 @@ function WorkspaceSettings() {
   return (
     <div className="flex h-full flex-col">
       <PageHeader
-        title={<><Crumb href={`/work/${slug}`} className="max-w-[220px] font-normal">{ws.name}</Crumb><CrumbSep className="mx-1.5" />Settings</>}
+        title={<><Crumb href={`/work/${slug}`} className="max-w-[220px] font-normal">{ws.name}</Crumb><CrumbSep className="mx-1.5" />{wt('common.settings')}</>}
       />
-      <SettingsLayout groups={groups} active={tab} onChange={setTab} label="Workspace settings">
+      <SettingsLayout groups={groups} active={tab} onChange={setTab} label={wt('palette.wsSettings')}>
         {tab === 'general' && <WorkspaceGeneral ws={ws} />}
         {tab === 'members' && <WorkspaceMembers ws={ws} />}
         {tab === 'invitations' && <WorkspaceInvitations ws={ws} />}

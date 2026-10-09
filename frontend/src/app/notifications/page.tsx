@@ -41,6 +41,10 @@ function describeWork(n: SocialNotification): string {
   const str = (v: unknown) => (typeof v === 'string' ? v : '');
   const key = str(p.issueKey) || 'an issue';
   const title = str(p.title);
+  // CTW K-3: tin chat — issueKey = "#kênh", title = "KEY · tên dự án".
+  if (p.chat === true) {
+    return n.type === 'WORK_MENTION' ? `${name} mentioned you in ${key}${title ? ` (${title})` : ''}` : `${name} replied to your thread in ${key}${title ? ` (${title})` : ''}`;
+  }
   switch (n.type) {
     case 'WORK_INVITE': return `${name} added you to ${str(p.workspaceName) || 'a workspace'}`;
     case 'WORK_ASSIGN': return `${name} assigned you ${key}${title ? `: ${title}` : ''}`;

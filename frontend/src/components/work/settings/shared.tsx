@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { avatarColor, Dialog, Spinner } from '../ui';
 import { MobileNavButton } from '../shell/mobileNav';
 import HeaderTools from '../shell/HeaderTools';
+import { wt } from '@/components/work/i18n';
 
 /** Thanh tiêu đề 52px: nút ☰ (điện thoại), tiêu đề trái, hành động phải. */
 export function PageHeader({ title, sub, actions }: { title: ReactNode; sub?: ReactNode; actions?: ReactNode }) {
@@ -59,7 +60,7 @@ export interface NavGroup<K extends string> { label: string; tabs: TabDef<K>[]; 
  * đầu trang trên điện thoại. Nội dung dùng hết bề ngang, riêng form giới hạn
  * ~880px cho dễ đọc. Nhóm rỗng (không đủ quyền) tự ẩn.
  */
-export function SettingsLayout<K extends string>({ groups, active, onChange, children, label = 'Settings sections' }: {
+export function SettingsLayout<K extends string>({ groups, active, onChange, children, label = wt('settings.sections') }: {
   groups: NavGroup<K>[]; active: K; onChange: (k: K) => void; children: ReactNode; label?: string;
 }) {
   const visible = groups.filter((g) => g.tabs.length);
@@ -158,7 +159,7 @@ export function Select({ className, children, ...rest }: SelectHTMLAttributes<HT
 
 /** Hộp xác nhận cho thao tác phá huỷ. */
 export function ConfirmDialog({
-  open, onClose, onConfirm, title, body, confirmLabel = 'Confirm', danger = true, pending,
+  open, onClose, onConfirm, title, body, confirmLabel = wt('common.confirm'), danger = true, pending,
 }: {
   open: boolean; onClose: () => void; onConfirm: () => void; title: string; body: ReactNode;
   confirmLabel?: string; danger?: boolean; pending?: boolean;
@@ -171,7 +172,7 @@ export function ConfirmDialog({
       width={440}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="button" autoFocus className={cn('w-btn', danger ? 'w-btn-danger-solid' : 'w-btn-primary')} disabled={pending} onClick={onConfirm}>
             {pending && <Spinner size={12} />}
             {confirmLabel}
@@ -199,11 +200,11 @@ export function TypeToConfirmDialog({
       <form onSubmit={(e) => { e.preventDefault(); if (match && !pending) onConfirm(typed.trim()); }}>
         <div className="mb-4 text-[13px] leading-relaxed text-[var(--w-text-2)]">{body}</div>
         <label className="w-label">
-          Type <span className="font-mono font-semibold text-[var(--w-text)]">{expected}</span> to confirm
+          {wt('settings.typeA')} <span className="font-mono font-semibold text-[var(--w-text)]">{expected}</span> {wt('settings.typeB')}
         </label>
         <input className="w-input" value={typed} onChange={(e) => setTyped(e.target.value)} autoFocus autoComplete="off" spellCheck={false} />
         <div className="mt-5 flex justify-end gap-2">
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="submit" className="w-btn w-btn-danger-solid" disabled={!match || pending}>
             {pending && <Spinner size={12} />}
             {confirmLabel}
@@ -215,22 +216,31 @@ export function TypeToConfirmDialog({
 }
 
 /** Tên vai trò hiển thị. */
-export const WS_ROLE_LABEL = { OWNER: 'Owner', ADMIN: 'Admin', MEMBER: 'Member', GUEST: 'Guest' } as const;
-export const PROJECT_ROLE_LABEL = { ADMIN: 'Admin', MEMBER: 'Member', VIEWER: 'Viewer', TEACHER: 'Teacher', CLIENT: 'Client' } as const;
+/** Getter: nhãn theo ngôn ngữ CT Work lúc vẽ. */
+export const WS_ROLE_LABEL = {
+  get OWNER() { return wt('home.roleOwner'); }, get ADMIN() { return wt('home.roleAdmin'); },
+  get MEMBER() { return wt('home.roleMember'); }, get GUEST() { return wt('home.roleGuest'); },
+} as const;
+export const PROJECT_ROLE_LABEL = {
+  get ADMIN() { return wt('home.roleAdmin'); }, get MEMBER() { return wt('home.roleMember'); }, get VIEWER() { return wt('home.roleViewer'); },
+  get TEACHER() { return wt('home.roleTeacher'); }, get CLIENT() { return wt('home.roleClient'); },
+} as const;
 export const PROJECT_TYPE_LABEL = { SCRUM: 'Scrum', KANBAN: 'Kanban', TESTING: 'Testing' } as const;
+/** Scrum/Kanban giữ tên gốc; Testing dịch. */
+export const projectTypeLabel = (t: keyof typeof PROJECT_TYPE_LABEL) => (t === 'TESTING' ? wt('home.typeTesting') : PROJECT_TYPE_LABEL[t]);
 
 export const WS_ROLE_HELP: Record<'ADMIN' | 'MEMBER' | 'GUEST', string> = {
-  ADMIN: 'Manages members and every project',
-  MEMBER: 'Works in shared projects',
-  GUEST: 'Only sees projects they are added to (teachers, clients)',
+  get ADMIN() { return wt('settings.wsAdminHelp'); },
+  get MEMBER() { return wt('settings.wsMemberHelp'); },
+  get GUEST() { return wt('settings.wsGuestHelp'); },
 };
 
 export const PROJECT_ROLE_HELP: Record<'ADMIN' | 'MEMBER' | 'VIEWER' | 'TEACHER' | 'CLIENT', string> = {
-  ADMIN: 'Full control of the project and its settings',
-  MEMBER: 'Creates, edits and moves issues',
-  VIEWER: 'Read only',
-  TEACHER: 'Can view and comment (for lecturers)',
-  CLIENT: 'Can view, comment and report issues',
+  get ADMIN() { return wt('settings.pAdminHelp'); },
+  get MEMBER() { return wt('settings.pMemberHelp'); },
+  get VIEWER() { return wt('settings.pViewerHelp'); },
+  get TEACHER() { return wt('settings.pTeacherHelp'); },
+  get CLIENT() { return wt('settings.pClientHelp'); },
 };
 
 /** Ô vuông đại diện không gian: logo đã tải lên (nếu có), không thì chữ tắt trên màu riêng. */

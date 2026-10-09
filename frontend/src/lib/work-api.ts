@@ -5,6 +5,9 @@
  * Kiểu ở đây phải khớp với service backend — đổi một bên thì đổi bên kia.
  */
 import { api } from './api';
+import { localizeError } from '@/components/work/i18n/errors';
+import { translate } from '@/components/work/i18n/core';
+import { currentWorkLocale } from '@/components/work/i18n/store';
 
 // ─── Kiểu ────────────────────────────────────────────────────────
 
@@ -1162,9 +1165,13 @@ export const workApi = {
 };
 
 /** Thông điệp lỗi đọc được từ lỗi axios. */
-export function workError(err: unknown, fallback = 'Something went wrong'): string {
-  const e = err as { response?: { data?: { error?: string; message?: string } }; message?: string };
-  return e?.response?.data?.error || e?.response?.data?.message || e?.message || fallback;
+export function workError(err: unknown, fallback?: string): string {
+  const e = err as { response?: { status?: number; data?: { error?: string; message?: string; code?: string } }; request?: unknown; code?: string; message?: string };
+  const server = e?.response?.data?.error || e?.response?.data?.message;
+  // i18n 10/10: câu theo ngôn ngữ CT Work cho các mã/câu hay gặp (components/work/i18n/errors.ts). Máy chủ không đổi.
+  const network = !e?.response && (e?.code === 'ERR_NETWORK' || !!e?.request);
+  const local = localizeError(currentWorkLocale(), { status: e?.response?.status, code: e?.response?.data?.code, message: server, network });
+  return local || server || fallback || e?.message || translate(currentWorkLocale(), 'common.somethingWrong');
 }
 
 /** Server từ chối vì người dùng đang BẬT khoá chỉnh sửa dự án (xem components/work/editLock.tsx). */

@@ -9,6 +9,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Compass, X } from 'lucide-react';
 import { openHelp } from './store';
+import { wt } from '@/components/work/i18n';
 
 const KEY = 'ctwork-help:tour-dismissed';
 
@@ -37,15 +38,15 @@ export default function HelpTourCard() {
     <div className="mb-5 flex items-start gap-3 rounded-[var(--w-radius-lg)] border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-4 py-3">
       <Compass size={18} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />
       <div className="min-w-0 flex-1">
-        <div className="text-[13px] font-semibold">New to CT Work? Take the 5-minute tour</div>
+        <div className="text-[13px] font-semibold">{wt('shell.tourTitle')}</div>
         <p className="mt-0.5 text-[12.5px] leading-relaxed text-[var(--w-text-2)]">
-          Create a workspace, start a project from a template, invite your team and run your first sprint. Available in English and Tiếng Việt.
+          {wt('shell.tourBody')}
         </p>
         <button type="button" className="w-btn w-btn-primary w-btn-sm mt-2.5" onClick={() => openHelp('getting-started')}>
-          Start the tour <ArrowRight size={13} />
+          {wt('shell.startTour')} <ArrowRight size={13} />
         </button>
       </div>
-      <button type="button" onClick={dismiss} className="w-btn w-btn-ghost w-btn-icon w-btn-sm shrink-0" aria-label="Dismiss" title="Dismiss">
+      <button type="button" onClick={dismiss} className="w-btn w-btn-ghost w-btn-icon w-btn-sm shrink-0" aria-label={wt('shell.dismiss')} title={wt('shell.dismiss')}>
         <X size={14} />
       </button>
     </div>

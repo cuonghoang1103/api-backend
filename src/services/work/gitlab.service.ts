@@ -17,6 +17,7 @@ import { BadRequestError, NotFoundError, UnauthorizedError } from '../../middlew
 import { logger } from '../../utils/logger.js';
 import { auditProject } from './audit.js';
 import { frontendUrl } from './common.js';
+import { extractGitlabContribs, recordDevContributions } from './contribDev.js';
 import { emitWorkEvent } from './events.js';
 import { issueNumbersIn } from './github.service.js';
 import { applyIssueChange } from './issueChange.js';
@@ -124,6 +125,8 @@ export async function handleWebhook(projectId: number, token: string | undefined
   const repo = body?.project?.path_with_namespace ? String(body.project.path_with_namespace).slice(0, 200) : null;
   await prisma.workGitlabConnection.update({ where: { projectId }, data: { lastEventAt: new Date(), ...(repo && !conn.repoPath ? { repoPath: repo } : {}) } });
 
+  // CTW Đóng góp (A26): giữ MỌI commit/MR (kể cả không nhắc mã thẻ) — không bao giờ ném.
+  await recordDevContributions(projectId, conn.project.key, 'GITLAB', extractGitlabContribs(body));
   const cfg = conn.config as GitlabConfig;
   let linked = 0;
   for (const a of extractGitlabActivities(body)) {

@@ -23,6 +23,7 @@ import FptImportDialog from './FptImportDialog';
 import { ExportButton, InlineText, ResultBar, SaveState, shortDate, Stat, todayIso } from './shared';
 import { KpiRow } from '../../KpiTile';
 import { PaneStrip, usePaneKeys, usePanes } from '../../shell/panes';
+import { wt } from '@/components/work/i18n';
 
 const currentOf = (rounds: ItRound[]): ItStatus => {
   for (let i = rounds.length - 1; i >= 0; i--) if (rounds[i]?.status) return rounds[i].status!;
@@ -31,10 +32,11 @@ const currentOf = (rounds: ItRound[]): ItStatus => {
 const statusCls = (s: ItStatus) => `fpt-status fpt-status-${s === 'N/A' ? 'NA' : s}`;
 
 const TEXT = {
-  INT: { unit: 'module', Unit: 'Module', units: 'Modules', report: 'integration' as const, doc: 'INT' as const, exportLabel: 'Export 5.2 (.xlsx)', field: 'Feature / module',
-    empty: 'No integration test modules yet', emptyBody: 'Integration tests follow the FPT Report 5.2 template: one sheet per module or flow, each test case with procedure, expected result and up to 4 test rounds.' },
-  SYS: { unit: 'workflow', Unit: 'Workflow', units: 'Workflows', report: 'system' as const, doc: 'SYS' as const, exportLabel: 'Export 5.3 (.xlsx)', field: 'Workflow',
-    empty: 'No system test workflows yet', emptyBody: 'System tests follow the FPT Report 5.3 template: one sheet per end-to-end workflow (Login, Pay invoice…), each test case with procedure, expected result and Round 1–3.' },
+  // Getter: chữ theo ngôn ngữ CT Work lúc vẽ.
+  INT: { get unit() { return wt('fpt.uModule'); }, get Unit() { return wt('fpt.UModule'); }, get units() { return wt('fpt.UModules'); }, report: 'integration' as const, doc: 'INT' as const, get exportLabel() { return wt('fpt.export52'); }, get field() { return wt('fpt.fieldModule'); },
+    get empty() { return wt('fpt.emptyInt'); }, get emptyBody() { return wt('fpt.emptyIntBody'); } },
+  SYS: { get unit() { return wt('fpt.uWorkflow'); }, get Unit() { return wt('fpt.UWorkflow'); }, get units() { return wt('fpt.UWorkflows'); }, report: 'system' as const, doc: 'SYS' as const, get exportLabel() { return wt('fpt.export53'); }, get field() { return 'Workflow'; },
+    get empty() { return wt('fpt.emptySys'); }, get emptyBody() { return wt('fpt.emptySysBody'); } },
 };
 
 export default function IntegrationTab({ config, pid, kind = 'INT' }: { config: ProjectConfig; pid: number; kind?: ItKind }) {
@@ -65,20 +67,20 @@ export default function IntegrationTab({ config, pid, kind = 'INT' }: { config: 
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-wrap items-start gap-3 border-b border-[var(--w-border)] px-4 py-3">
         {s && (
-          <KpiRow min={96} className="min-w-0 flex-1" label="Integration test summary">
+          <KpiRow min={96} className="min-w-0 flex-1" label={wt('fpt.intSummary')}>
             <Stat label={T.units} value={mods.length} />
-            <Stat label="Test cases" value={s.total} />
+            <Stat label="Test case" value={s.total} />
             <Stat label="Passed" value={s.passed} tone={s.passed ? 'green' : 'muted'} />
             <Stat label="Failed" value={s.failed} tone={s.failed ? 'red' : 'muted'} />
             <Stat label="Pending" value={s.pending} tone="muted" />
             <Stat label="N/A" value={s.na} tone="muted" />
-            <Stat label="Coverage" value={pct(s.coverage)} hint="(Passed + Failed) / (Total − N/A)" />
-            <Stat label="Success" value={pct(s.successCoverage)} hint="Passed / (Total − N/A)" />
+            <Stat label={wt('fpt.coverage')} value={pct(s.coverage)} hint="(Passed + Failed) / (Total − N/A)" />
+            <Stat label={wt('fpt.success')} value={pct(s.successCoverage)} hint="Passed / (Total − N/A)" />
           </KpiRow>
         )}
         <div className="ml-auto flex shrink-0 flex-wrap justify-end gap-2">
-          <button type="button" className="w-btn w-btn-sm" onClick={() => setDocOpen(true)}><FileText size={13} /> <span className="hidden sm:inline">Cover &amp; changes</span></button>
-          {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}><FileUp size={13} /> <span className="hidden sm:inline">Import</span></button>}
+          <button type="button" className="w-btn w-btn-sm" onClick={() => setDocOpen(true)}><FileText size={13} /> <span className="hidden sm:inline">{wt('fpt.coverChanges')}</span></button>
+          {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}><FileUp size={13} /> <span className="hidden sm:inline">{wt('common.import')}</span></button>}
           <ExportButton pid={pid} report={T.report} label={T.exportLabel} />
         </div>
       </div>
@@ -90,8 +92,8 @@ export default function IntegrationTab({ config, pid, kind = 'INT' }: { config: 
             body={T.emptyBody}
             action={canEdit ? (
               <div className="flex gap-2">
-                <button type="button" className="w-btn w-btn-primary" onClick={() => setNewOpen(true)}><Plus size={14} /> Add {T.unit}</button>
-                <button type="button" className="w-btn" onClick={() => setImportOpen(true)}><FileUp size={14} /> Import Excel</button>
+                <button type="button" className="w-btn w-btn-primary" onClick={() => setNewOpen(true)}><Plus size={14} /> {wt('fpt.addX', { x: T.unit })}</button>
+                <button type="button" className="w-btn" onClick={() => setImportOpen(true)}><FileUp size={14} /> {wt('fpt.importExcel')}</button>
               </div>
             ) : undefined}
           />
@@ -102,7 +104,7 @@ export default function IntegrationTab({ config, pid, kind = 'INT' }: { config: 
           {panes.left.mode === 'inline' && (
           <aside className="w-[240px] shrink-0 overflow-y-auto border-r border-[var(--w-border)] py-1 max-md:max-h-[30vh] max-md:w-full max-md:border-b max-md:border-r-0" aria-label={T.units}>
             <div className="flex justify-end px-2 pb-1">
-              <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" onClick={panes.left.toggle} aria-label={`Hide ${T.units.toLowerCase()} list ([)`} title="Hide the list — widen the table ([)"><PanelLeftClose size={14} /></button>
+              <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" onClick={panes.left.toggle} aria-label={`${wt('fpt.hideXList', { x: T.units.toLowerCase() })} ([)`} title={wt('fpt.hideTableTitle')}><PanelLeftClose size={14} /></button>
             </div>
             {mods.map((m) => (
               <button key={m.id} type="button" onClick={() => select(m.id)} aria-current={selected === m.id}
@@ -140,39 +142,39 @@ function ModulePane({ pid, id, kind, canEdit, onDeleted }: { pid: number; id: nu
   const qc = useQueryClient();
   const q = useQuery({ queryKey: fptKeys.mod(pid, id), queryFn: () => fptApi.mod(pid, id), staleTime: Infinity });
   if (q.isLoading) return <PageLoading rows={4} />;
-  if (!q.data) return <EmptyState title="Module not found" body={q.error ? workError(q.error) : undefined} />;
+  if (!q.data) return <EmptyState title={wt('fpt.moduleNotFound')} body={q.error ? workError(q.error) : undefined} />;
   const m = q.data;
   const patch = async (body: Parameters<typeof fptApi.updateModule>[2]) => {
     try {
       const res = await fptApi.updateModule(pid, id, body);
       qc.setQueryData(fptKeys.mod(pid, id), res);
       qc.invalidateQueries({ queryKey: fptKeys.it(pid, kind) });
-    } catch (e) { toast.error(workError(e, 'Could not save')); }
+    } catch (e) { toast.error(workError(e, wt('common.couldNotSave'))); }
   };
   return (
     <div className="mx-auto max-w-[1600px]">
       <div className="mb-3 flex flex-wrap items-end gap-3">
         <div className="min-w-0 flex-1">
           <div className="text-[12px] text-[var(--w-text-3)]">{TEXT[kind].field}</div>
-          <InlineText value={m.name} readOnly={!canEdit} maxLength={120} ariaLabel={`${TEXT[kind].Unit} name`} className="!w-[320px] text-[15px] font-semibold" onCommit={(v) => v.trim() && patch({ name: v.trim() })} />
+          <InlineText value={m.name} readOnly={!canEdit} maxLength={120} ariaLabel={wt('fpt.xName', { x: TEXT[kind].Unit })} className="!w-[320px] text-[15px] font-semibold" onCommit={(v) => v.trim() && patch({ name: v.trim() })} />
         </div>
         <label className="text-[12px] text-[var(--w-text-3)]">
           ID prefix
-          <InlineText value={m.idPrefix} readOnly={!canEdit} maxLength={10} ariaLabel="ID prefix" className="!w-[80px] font-mono" onCommit={(v) => /^[A-Za-z]{1,10}$/.test(v.trim()) ? patch({ idPrefix: v.trim().toUpperCase() }) : toast.error('Use 1–10 letters, e.g. AT')} />
+          <InlineText value={m.idPrefix} readOnly={!canEdit} maxLength={10} ariaLabel={wt('fpt.idPrefix')} className="!w-[80px] font-mono" onCommit={(v) => /^[A-Za-z]{1,10}$/.test(v.trim()) ? patch({ idPrefix: v.trim().toUpperCase() }) : toast.error(wt('fpt.prefixRule'))} />
         </label>
         {canEdit && (
           <button type="button" className="w-btn w-btn-sm text-[var(--w-red)]" onClick={async () => {
-            if (!window.confirm(`Delete ${TEXT[kind].unit} ${m.name} and its ${m.cases.length} test cases?`)) return;
+            if (!window.confirm(wt('fpt.deleteModQ', { x: TEXT[kind].unit, name: m.name, n: m.cases.length }))) return;
             try { await fptApi.deleteModule(pid, id); qc.invalidateQueries({ queryKey: fptKeys.it(pid, kind) }); onDeleted(); } catch (e) { toast.error(workError(e)); }
-          }}><Trash2 size={13} /> Delete</button>
+          }}><Trash2 size={13} /> {wt('common.delete')}</button>
         )}
       </div>
       <details className="mb-4 rounded-[8px] border border-[var(--w-border)]" open={!m.description && canEdit}>
-        <summary className="cursor-pointer select-none px-3 py-2 text-[13px] font-medium">Details <span className="font-normal text-[var(--w-text-3)]">— description, pre-condition, test requirement</span></summary>
+        <summary className="cursor-pointer select-none px-3 py-2 text-[13px] font-medium">{wt('common.details')} <span className="font-normal text-[var(--w-text-3)]">— {wt('fpt.detailsSub2')}</span></summary>
         <div className="grid gap-x-4 border-t border-[var(--w-border)] p-3 md:grid-cols-3">
-          <Field label="Description"><InlineText multiline value={m.description} readOnly={!canEdit} maxLength={4000} placeholder="Verify that the login workflow works across UI, API and DB" onCommit={(v) => patch({ description: v })} /></Field>
-          <Field label="Pre-condition"><InlineText multiline value={m.preCondition} readOnly={!canEdit} maxLength={4000} placeholder="User account exists and is activated" onCommit={(v) => patch({ preCondition: v })} /></Field>
-          <Field label="Test requirement"><InlineText multiline value={m.testRequirement} readOnly={!canEdit} maxLength={4000} placeholder="- Login: valid credentials log in…" onCommit={(v) => patch({ testRequirement: v })} /></Field>
+          <Field label={wt('fpt.fDescription')}><InlineText multiline value={m.description} readOnly={!canEdit} maxLength={4000} placeholder={wt('fpt.modDescPh')} onCommit={(v) => patch({ description: v })} /></Field>
+          <Field label={wt('fpt.fPre')}><InlineText multiline value={m.preCondition} readOnly={!canEdit} maxLength={4000} placeholder={wt('fpt.modPrePh')} onCommit={(v) => patch({ preCondition: v })} /></Field>
+          <Field label={wt('fpt.fReq')}><InlineText multiline value={m.testRequirement} readOnly={!canEdit} maxLength={4000} placeholder={wt('fpt.modReqPh')} onCommit={(v) => patch({ testRequirement: v })} /></Field>
         </div>
       </details>
       <CasesTable pid={pid} mod={m} kind={kind} canEdit={canEdit} />
@@ -215,8 +217,8 @@ function CasesTable({ pid, mod, kind, canEdit }: { pid: number; mod: ItModule; k
       qc.invalidateQueries({ queryKey: fptKeys.it(pid, kind) });
     } catch (e) {
       setState('error');
-      if (workErrorStatus(e) === 409) toast.error('Someone else saved this module a moment ago.', { action: { label: 'Reload', onClick: () => qc.resetQueries({ queryKey: fptKeys.mod(pid, mod.id) }) }, duration: 12_000 });
-      else toast.error(workError(e, 'Could not save the test cases'));
+      if (workErrorStatus(e) === 409) toast.error(wt('fpt.someoneSavedMod'), { action: { label: wt('fpt.reload'), onClick: () => qc.resetQueries({ queryKey: fptKeys.mod(pid, mod.id) }) }, duration: 12_000 });
+      else toast.error(workError(e, wt('fpt.casesFailed')));
     }
   }, [pid, mod.id, qc]);
   useEffect(() => {
@@ -241,10 +243,10 @@ function CasesTable({ pid, mod, kind, canEdit }: { pid: number; mod: ItModule; k
     <div>
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <SaveState state={state} />
-        {missing > 0 && state === 'dirty' && <span className="text-[12px] text-[var(--w-yellow)]">{missing} case(s) need a description before saving</span>}
+        {missing > 0 && state === 'dirty' && <span className="text-[12px] text-[var(--w-yellow)]">{wt('fpt.needDesc', { n: missing })}</span>}
         {canEdit && (
           <span className="ml-auto flex gap-2">
-            <button type="button" className="w-btn w-btn-sm" onClick={() => { const name = window.prompt('Section name (e.g. Login, Forgot password)'); if (name?.trim()) addCase(name.trim().slice(0, 200)); }}><Plus size={13} /> Section</button>
+            <button type="button" className="w-btn w-btn-sm" onClick={() => { const name = window.prompt(wt('fpt.sectionPrompt')); if (name?.trim()) addCase(name.trim().slice(0, 200)); }}><Plus size={13} /> {wt('fpt.section')}</button>
             <button type="button" className="w-btn w-btn-sm w-btn-primary" onClick={() => addCase(lastSection)}><Plus size={13} /> Test case</button>
           </span>
         )}
@@ -257,7 +259,7 @@ function CasesTable({ pid, mod, kind, canEdit }: { pid: number; mod: ItModule; k
           </colgroup>
           <thead>
             <tr>
-              <th aria-label="Expand" /><th>Test Case ID</th><th>Description</th><th>Procedure</th><th>Test data</th><th>Expected results</th><th>Actual result</th><th>Pre-conditions</th><th>Result (rounds)</th><th aria-label="Actions" />
+              <th aria-label={wt('fpt.expand')} /><th>Test Case ID</th><th>Description</th><th>Procedure</th><th>Test data</th><th>Expected results</th><th>Actual result</th><th>Pre-conditions</th><th>Result (rounds)</th><th aria-label={wt('common.actions')} />
             </tr>
           </thead>
           <tbody>
@@ -282,7 +284,7 @@ function CasesTable({ pid, mod, kind, canEdit }: { pid: number; mod: ItModule; k
                 ) : null,
                 <tr key={c.key}>
                   <td className="text-center">
-                    <button type="button" className="mt-2 text-[var(--w-text-3)] hover:text-[var(--w-text)]" aria-expanded={isOpen} aria-label="More fields" onClick={() => setOpen((s) => { const x = new Set(s); if (x.has(c.key)) x.delete(c.key); else x.add(c.key); return x; })}>
+                    <button type="button" className="mt-2 text-[var(--w-text-3)] hover:text-[var(--w-text)]" aria-expanded={isOpen} aria-label={wt('fpt.moreFields')} onClick={() => setOpen((s) => { const x = new Set(s); if (x.has(c.key)) x.delete(c.key); else x.add(c.key); return x; })}>
                       {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                     </button>
                   </td>
@@ -295,7 +297,7 @@ function CasesTable({ pid, mod, kind, canEdit }: { pid: number; mod: ItModule; k
                   <td><Cell value={c.preConditions ?? ''} ro={!canEdit} ph="User has an account" onChange={(v) => set(c.key, { preConditions: v })} /></td>
                   <td className="px-2 py-1.5"><RoundsCell rounds={c.rounds} maxRounds={roundsOf(kind)} canEdit={canEdit} meName={meName} onChange={(r) => set(c.key, { rounds: r })} /></td>
                   <td className="text-center">
-                    {canEdit && <button type="button" className="fpt-icon mt-1.5" aria-label="Delete test case" onClick={() => change((cs) => cs.filter((x) => x.key !== c.key))}><Trash2 size={12} /></button>}
+                    {canEdit && <button type="button" className="fpt-icon mt-1.5" aria-label={wt('fpt.deleteCase')} onClick={() => change((cs) => cs.filter((x) => x.key !== c.key))}><Trash2 size={12} /></button>}
                   </td>
                 </tr>,
                 isOpen ? (
@@ -303,16 +305,16 @@ function CasesTable({ pid, mod, kind, canEdit }: { pid: number; mod: ItModule; k
                     <td />
                     <td colSpan={9} className="bg-[var(--w-sunken)]">
                       <div className="grid gap-3 p-3 md:grid-cols-3">
-                        <label className="text-[12px] text-[var(--w-text-2)]">Section<input className="w-input mt-1 h-[30px]" readOnly={!canEdit} value={c.section ?? ''} maxLength={200} onChange={(e) => set(c.key, { section: e.target.value || null })} /></label>
-                        <label className="text-[12px] text-[var(--w-text-2)]">Evidence (link / screenshot)<input className="w-input mt-1 h-[30px]" readOnly={!canEdit} value={c.evidence ?? ''} maxLength={2000} onChange={(e) => set(c.key, { evidence: e.target.value })} /></label>
-                        <label className="text-[12px] text-[var(--w-text-2)]">Note<input className="w-input mt-1 h-[30px]" readOnly={!canEdit} value={c.note ?? ''} maxLength={4000} onChange={(e) => set(c.key, { note: e.target.value })} /></label>
+                        <label className="text-[12px] text-[var(--w-text-2)]">{wt('fpt.section')}<input className="w-input mt-1 h-[30px]" readOnly={!canEdit} value={c.section ?? ''} maxLength={200} onChange={(e) => set(c.key, { section: e.target.value || null })} /></label>
+                        <label className="text-[12px] text-[var(--w-text-2)]">{wt('fpt.evidenceLink')}<input className="w-input mt-1 h-[30px]" readOnly={!canEdit} value={c.evidence ?? ''} maxLength={2000} onChange={(e) => set(c.key, { evidence: e.target.value })} /></label>
+                        <label className="text-[12px] text-[var(--w-text-2)]">{wt('fpt.note')}<input className="w-input mt-1 h-[30px]" readOnly={!canEdit} value={c.note ?? ''} maxLength={4000} onChange={(e) => set(c.key, { note: e.target.value })} /></label>
                       </div>
                     </td>
                   </tr>
                 ) : null,
               ];
             })}
-            {!cases.length && <tr><td colSpan={10} className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">No test cases yet.</td></tr>}
+            {!cases.length && <tr><td colSpan={10} className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">{wt('fpt.noCases')}</td></tr>}
           </tbody>
         </table>
       </div>
@@ -324,7 +326,7 @@ function SectionName({ value, canEdit, onRename }: { value: string; canEdit: boo
   const [v, setV] = useState(value);
   useEffect(() => setV(value), [value]);
   return (
-    <input className="fpt-input w-[280px] font-semibold" value={v} readOnly={!canEdit} aria-label="Section name" maxLength={200}
+    <input className="fpt-input w-[280px] font-semibold" value={v} readOnly={!canEdit} aria-label={wt('fpt.sectionName')} maxLength={200}
       onChange={(e) => setV(e.target.value)} onBlur={() => (v.trim() && v !== value ? onRename(v.trim()) : setV(value))}
       onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()} />
   );
@@ -360,7 +362,7 @@ function RoundsCell({ rounds, onChange, canEdit, meName, maxRounds }: { rounds: 
   };
   return (
     <>
-      <button ref={ref} type="button" className="flex flex-wrap items-center gap-1" onClick={() => setOpen(true)} aria-label={`Result: ${cur}. Edit rounds`}>
+      <button ref={ref} type="button" className="flex flex-wrap items-center gap-1" onClick={() => setOpen(true)} aria-label={wt('fpt.resultEdit', { s: cur })}>
         <span className={statusCls(cur)}>{cur}</span>
         {rounds.length > 0 && <span className="text-[11px] text-[var(--w-text-3)]">R{rounds.length}{rounds[rounds.length - 1]?.date ? ` · ${shortDate(rounds[rounds.length - 1].date)}` : ''}</span>}
       </button>
@@ -368,12 +370,12 @@ function RoundsCell({ rounds, onChange, canEdit, meName, maxRounds }: { rounds: 
         <div className="space-y-2 p-3 text-[12.5px]">
           {canEdit && (
             <div className="flex flex-wrap gap-1">
-              <span className="mr-1 self-center text-[var(--w-text-3)]">Record next round:</span>
+              <span className="mr-1 self-center text-[var(--w-text-3)]">{wt('fpt.nextRound')}</span>
               {IT_STATUSES.map((s) => <button key={s} type="button" className={statusCls(s)} onClick={() => quick(s)}>{s}</button>)}
             </div>
           )}
           <table className="w-full">
-            <thead><tr className="text-left text-[11px] text-[var(--w-text-3)]"><th className="font-medium">Round</th><th className="font-medium">Status</th><th className="font-medium">Date</th><th className="font-medium">Tester</th></tr></thead>
+            <thead><tr className="text-left text-[11px] text-[var(--w-text-3)]"><th className="font-medium">Round</th><th className="font-medium">{wt('common.status')}</th><th className="font-medium">{wt('common.day')}</th><th className="font-medium">Tester</th></tr></thead>
             <tbody>
               {Array.from({ length: maxRounds }, (_, i) => {
                 const r = rounds[i];
@@ -409,15 +411,15 @@ function NewModuleDialog({ open, onClose, pid, kind, onCreated }: { open: boolea
     if (!name.trim()) return;
     setBusy(true);
     try { const m = await fptApi.createModule(pid, { name: name.trim(), description: description.trim() || null }, kind); onCreated(m); onClose(); }
-    catch (e) { toast.error(workError(e, `Could not add the ${sys ? 'workflow' : 'module'}`)); }
+    catch (e) { toast.error(workError(e, wt('fpt.addModFailed'))); }
     finally { setBusy(false); }
   };
   return (
-    <Dialog open={open} onClose={() => !busy && onClose()} title={sys ? 'Add system test workflow' : 'Add integration module'} width={480}
-      footer={<><button type="button" className="w-btn" onClick={onClose} disabled={busy}>Cancel</button><button type="button" className="w-btn w-btn-primary" onClick={submit} disabled={busy || !name.trim()}>{busy && <Spinner size={12} />} Add</button></>}>
+    <Dialog open={open} onClose={() => !busy && onClose()} title={sys ? wt('fpt.addSysWf') : wt('fpt.addIntMod')} width={480}
+      footer={<><button type="button" className="w-btn" onClick={onClose} disabled={busy}>{wt('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" onClick={submit} disabled={busy || !name.trim()}>{busy && <Spinner size={12} />} {wt('common.add')}</button></>}>
       <form onSubmit={(e) => { e.preventDefault(); void submit(); }}>
-        <Field label={sys ? 'Workflow name' : 'Module / flow name'} hint={sys ? 'e.g. Login, Pay Invoice, Booking Utility — test IDs use its initials (<LG1>, <PI1>)' : 'e.g. Authentication, UserManagement — test IDs use its initials (<AT1>, <UM1>)'}><input className="w-input" autoFocus value={name} maxLength={120} onChange={(e) => setName(e.target.value)} /></Field>
-        <Field label="Description"><input className="w-input" value={description} maxLength={4000} onChange={(e) => setDescription(e.target.value)} placeholder="Verify that the authentication workflow works across modules" /></Field>
+        <Field label={sys ? wt('fpt.wfName') : wt('fpt.modName')} hint={sys ? wt('fpt.wfHint') : wt('fpt.modHint')}><input className="w-input" autoFocus value={name} maxLength={120} onChange={(e) => setName(e.target.value)} /></Field>
+        <Field label={wt('fpt.fDescription')}><input className="w-input" value={description} maxLength={4000} onChange={(e) => setDescription(e.target.value)} placeholder={wt('fpt.addDescPh')} /></Field>
         <button type="submit" className="hidden" aria-hidden tabIndex={-1} />
       </form>
     </Dialog>

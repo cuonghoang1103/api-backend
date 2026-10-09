@@ -20,6 +20,7 @@ import { EmptyState, IssueTypeIcon, relativeTime, Spinner, StatusBadge, UserAvat
 import { KindToggle } from './NewTestDialog';
 import StepsTable, { stepsForSave, stepsProblem, toDraft, type DraftStep } from './StepsTable';
 import { parseIssueKeys, RunStatusPill } from './testing-ui';
+import { wt, wfmt } from '@/components/work/i18n';
 
 interface Draft { kind: 'MANUAL' | 'GHERKIN'; preconditions: string; gherkin: string; steps: DraftStep[] }
 
@@ -96,9 +97,9 @@ export default function TestEditor({ config, pid, num, onOpenIssue }: {
       setDraft(fromDetail(res));
       setTried(false);
       qc.invalidateQueries({ queryKey: [...wk.tests(pid), 'list'] });
-      toast.success('Test saved');
+      toast.success(wt('tests.saved'));
     } catch (e) {
-      toast.error(workError(e, 'Could not save the test'));
+      toast.error(workError(e, wt('tests.saveFailed')));
     } finally {
       setSaving(false);
     }
@@ -138,15 +139,15 @@ export default function TestEditor({ config, pid, num, onOpenIssue }: {
       <div className="flex h-full flex-col">
         <ProjectHeader config={config} title={key} />
         <EmptyState
-          title={notFound ? 'Test not found' : 'Could not load this test'}
-          body={notFound ? `${key} does not exist, was deleted, or is not a Test issue.` : workError(test.error)}
+          title={notFound ? wt('tests.notFound') : wt('tests.loadOneFailed')}
+          body={notFound ? wt('tests.notFoundBody', { key }) : workError(test.error)}
           action={
             <div className="flex flex-wrap justify-center gap-2">
-              <Link href={base} className="w-btn">Back to tests</Link>
+              <Link href={base} className="w-btn">{wt('tests.backToTests')}</Link>
               {notFound ? (
-                <Link href={`/work/${config.workspace.slug}/${config.key}/issue/${num}`} className="w-btn">Open {key} as issue</Link>
+                <Link href={`/work/${config.workspace.slug}/${config.key}/issue/${num}`} className="w-btn">{wt('tests.openKeyAsIssue', { key })}</Link>
               ) : (
-                <button type="button" className="w-btn" onClick={() => test.refetch()}>Try again</button>
+                <button type="button" className="w-btn" onClick={() => test.refetch()}>{wt('common.tryAgain')}</button>
               )}
             </div>
           }
@@ -163,15 +164,15 @@ export default function TestEditor({ config, pid, num, onOpenIssue }: {
       <ProjectHeader config={config} title={key}>
         {canEdit && dirty && (
           <>
-            <span className="hidden text-[12px] text-[var(--w-orange)] md:inline">Unsaved changes</span>
-            <button type="button" className="w-btn w-btn-sm" onClick={discard} disabled={saving}><RotateCcw size={13} /> <span className="max-sm:hidden">Discard</span></button>
-            <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={save} disabled={saving} title="Save (⌘S)">
-              {saving ? <Spinner size={11} /> : <Save size={13} />} Save
+            <span className="hidden text-[12px] text-[var(--w-orange)] md:inline">{wt('issues.unsaved')}</span>
+            <button type="button" className="w-btn w-btn-sm" onClick={discard} disabled={saving}><RotateCcw size={13} /> <span className="max-sm:hidden">{wt('common.discard')}</span></button>
+            <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={save} disabled={saving} title={wt('tests.saveKey')}>
+              {saving ? <Spinner size={11} /> : <Save size={13} />} {wt('common.save')}
             </button>
           </>
         )}
-        <button type="button" className="w-btn w-btn-sm" onClick={() => onOpenIssue(num)} title="Comments, assignee, labels, status">
-          <ExternalLink size={13} /> <span className="max-sm:hidden">Open as issue</span>
+        <button type="button" className="w-btn w-btn-sm" onClick={() => onOpenIssue(num)} title={wt('tests.openIssueTitle')}>
+          <ExternalLink size={13} /> <span className="max-sm:hidden">{wt('tests.openAsIssue')}</span>
         </button>
       </ProjectHeader>
 
@@ -179,7 +180,7 @@ export default function TestEditor({ config, pid, num, onOpenIssue }: {
         <div className="mx-auto grid w-full max-w-[1280px] gap-6 px-4 py-5 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="min-w-0">
             <Link href={base} className="mb-2 inline-flex items-center gap-1 text-[12px] text-[var(--w-text-3)] hover:text-[var(--w-text)]">
-              <ArrowLeft size={12} /> Test library
+              <ArrowLeft size={12} /> {wt('tests.tabTestLibrary')}
             </Link>
             <TitleEditor pid={pid} num={num} title={t.title} canEdit={canEdit} detailKey={detailKey} />
 
@@ -189,47 +190,47 @@ export default function TestEditor({ config, pid, num, onOpenIssue }: {
                 <span className="flex items-center gap-2 text-[12px] text-[var(--w-text-3)]">
                   <StatusBadge status={lk.statuses.get(issue.data.statusId)} />
                   <UserAvatar user={issue.data.assignee} size={20} />
-                  <span className="max-sm:hidden">{issue.data.assignee ? userName(issue.data.assignee) : 'Unassigned'}</span>
+                  <span className="max-sm:hidden">{issue.data.assignee ? userName(issue.data.assignee) : wt('common.unassigned')}</span>
                 </span>
               )}
-              <span className="text-[12px] text-[var(--w-text-3)]">Updated {relativeTime(t.updatedAt)}</span>
+              <span className="text-[12px] text-[var(--w-text-3)]">{wt('tests.updatedAgo', { when: relativeTime(t.updatedAt) })}</span>
             </div>
 
             {!canEdit && (
               <div className="mt-4 flex items-center gap-2 rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px] text-[var(--w-text-2)]">
-                <Lock size={13} className="shrink-0" /> You have view-only access to this test.
+                <Lock size={13} className="shrink-0" /> {wt('tests.viewOnly')}
               </div>
             )}
             {staleWhileDirty && (
               <div className="mt-4 rounded-[6px] border border-[color-mix(in_srgb,var(--w-orange)_45%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_8%,transparent)] px-3 py-2 text-[12.5px]">
-                Someone else updated this test while you were editing. Saving will overwrite their changes —{' '}
-                <button type="button" className="font-medium text-[var(--w-accent-text)] hover:underline" onClick={discard}>discard yours and load the latest</button>.
+                {wt('tests.staleA')}{' '}
+                <button type="button" className="font-medium text-[var(--w-accent-text)] hover:underline" onClick={discard}>{wt('tests.staleB')}</button>.
               </div>
             )}
 
             {draft.kind === 'MANUAL' ? (
               <>
-                <Section title="Preconditions">
+                <Section title={wt('tests.preconditions')}>
                   {canEdit ? (
                     <textarea
                       className="w-input min-h-[64px]"
                       value={draft.preconditions}
                       onChange={(e) => setD({ preconditions: e.target.value })}
-                      placeholder="State the system must be in before the first step (accounts, data, configuration)…"
+                      placeholder={wt('tests.precondPh')}
                     />
                   ) : (
-                    <p className="whitespace-pre-wrap text-[13px] text-[var(--w-text-2)]">{draft.preconditions || <span className="text-[var(--w-text-3)]">None</span>}</p>
+                    <p className="whitespace-pre-wrap text-[13px] text-[var(--w-text-2)]">{draft.preconditions || <span className="text-[var(--w-text-3)]">{wt('common.none')}</span>}</p>
                   )}
                 </Section>
-                <Section title={`Steps (${stepsForSave(draft.steps).length})`}>
+                <Section title={`${wt('tests.steps')} (${stepsForSave(draft.steps).length})`}>
                   <StepsTable steps={draft.steps} onChange={(steps) => setD({ steps })} readOnly={!canEdit} showErrors={tried} />
                 </Section>
               </>
             ) : (
-              <Section title="Scenario (Gherkin)">
+              <Section title={wt('tests.scenario')}>
                 <GherkinEditor value={draft.gherkin} onChange={(g) => setD({ gherkin: g })} readOnly={!canEdit} />
                 <p className="mt-1.5 text-[12px] text-[var(--w-text-3)]">
-                  Keywords: Feature, Background, Scenario, Scenario Outline, Examples, Given, When, Then, And, But. Manual steps are kept if you switch back.
+                  {wt('tests.gherkinHelp')}
                 </p>
               </Section>
             )}
@@ -238,7 +239,7 @@ export default function TestEditor({ config, pid, num, onOpenIssue }: {
           <aside className="min-w-0 space-y-5 lg:border-l lg:border-[var(--w-border)] lg:pl-6">
             <Requirements pid={pid} num={num} config={config} issue={issue.data} loading={issue.isLoading} canEdit={canEdit} onOpenIssue={onOpenIssue} />
 
-            <SideSection title="Test plans">
+            <SideSection title={wt('tests.tabTestPlans')}>
               {t.plans.length ? (
                 <ul className="space-y-1">
                   {t.plans.map((p) => (
@@ -248,11 +249,11 @@ export default function TestEditor({ config, pid, num, onOpenIssue }: {
                   ))}
                 </ul>
               ) : (
-                <p className="text-[12.5px] text-[var(--w-text-3)]">Not in any plan. Add it from the test library.</p>
+                <p className="text-[12.5px] text-[var(--w-text-3)]">{wt('tests.notInPlan')}</p>
               )}
             </SideSection>
 
-            <SideSection title="Run history">
+            <SideSection title={wt('tests.runHistory')}>
               {t.runs.length ? (
                 <ul className="space-y-2">
                   {t.runs.map((r) => (
@@ -273,15 +274,15 @@ export default function TestEditor({ config, pid, num, onOpenIssue }: {
                           <span className="inline-flex items-center gap-1"><UserAvatar user={r.executedBy} size={14} /> {userName(r.executedBy)}</span>
                         ) : null}
                         {r.executedAt ? (
-                          <span title={new Date(r.executedAt).toLocaleString('en-US')}>{relativeTime(r.executedAt)}</span>
+                          <span title={new Date(r.executedAt).toLocaleString(wfmt.intl())}>{relativeTime(r.executedAt)}</span>
                         ) : (
-                          <span>Not executed</span>
+                          <span>{wt('tests.notExecuted')}</span>
                         )}
                       </div>
                       {r.comment && <p className="mt-1 line-clamp-2 text-[12px] text-[var(--w-text-2)]">{r.comment}</p>}
                       {r.defects.length > 0 && (
                         <div className="mt-1.5 flex flex-wrap items-center gap-1">
-                          <span className="text-[11px] text-[var(--w-text-3)]">Defects:</span>
+                          <span className="text-[11px] text-[var(--w-text-3)]">{wt('tests.defects')}</span>
                           {r.defects.map((d) => (
                             <button key={d.number} type="button" title={d.title} onClick={() => onOpenIssue(d.number)} className="rounded-[4px] border border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] px-1 font-mono text-[11px] text-[var(--w-red)] hover:bg-[var(--w-hover)]">
                               {lk.issueKey(d.number)}
@@ -293,7 +294,7 @@ export default function TestEditor({ config, pid, num, onOpenIssue }: {
                   ))}
                 </ul>
               ) : (
-                <p className="text-[12.5px] text-[var(--w-text-3)]">This test has not been run yet. Add it to a test cycle to execute it.</p>
+                <p className="text-[12.5px] text-[var(--w-text-3)]">{wt('tests.notRunYet')}</p>
               )}
             </SideSection>
           </aside>
@@ -345,7 +346,7 @@ function TitleEditor({ pid, num, title, canEdit, detailKey }: { pid: number; num
       qc.invalidateQueries({ queryKey: wk.issue(pid, num) });
       setEditing(false);
     } catch (e) {
-      toast.error(workError(e, 'Could not rename the test'));
+      toast.error(workError(e, wt('tests.renameFailed')));
     } finally {
       setSaving(false);
     }
@@ -377,7 +378,7 @@ function TitleEditor({ pid, num, title, canEdit, detailKey }: { pid: number; num
     <h1
       className={cn('break-words rounded-[6px] text-[20px] font-semibold leading-snug', canEdit && '-mx-1.5 cursor-text px-1.5 py-0.5 hover:bg-[var(--w-hover)]')}
       onClick={() => canEdit && setEditing(true)}
-      title={canEdit ? 'Click to rename' : undefined}
+      title={canEdit ? wt('tests.clickRename') : undefined}
     >
       {title}
     </h1>
@@ -411,7 +412,7 @@ function Requirements({ pid, num, config, issue, loading, canEdit, onOpenIssue }
     }
     setBusy(false);
     refresh();
-    if (failed.length) toast.error(`Could not link ${failed.join(', ')}`);
+    if (failed.length) toast.error(wt('tests.linkFailed', { list: failed.join(', ') }));
     else { setValue(''); setAdding(false); }
   };
   const remove = async (linkId: number) => {
@@ -420,9 +421,9 @@ function Requirements({ pid, num, config, issue, loading, canEdit, onOpenIssue }
 
   return (
     <SideSection
-      title="Requirements covered"
+      title={wt('tests.reqsCovered')}
       action={canEdit && !adding ? (
-        <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setAdding(true)}><Plus size={12} /> Add</button>
+        <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setAdding(true)}><Plus size={12} /> {wt('common.add')}</button>
       ) : undefined}
     >
       {adding && (
@@ -436,8 +437,8 @@ function Requirements({ pid, num, config, issue, loading, canEdit, onOpenIssue }
             placeholder={`${config.key}-12, ${config.key}-15`}
             disabled={busy}
           />
-          <button type="submit" className="w-btn w-btn-primary w-btn-sm" disabled={busy || !value.trim()}>{busy ? <Spinner size={11} /> : 'Link'}</button>
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => { setAdding(false); setValue(''); }} aria-label="Cancel"><X size={13} /></button>
+          <button type="submit" className="w-btn w-btn-primary w-btn-sm" disabled={busy || !value.trim()}>{busy ? <Spinner size={11} /> : wt('tests.link')}</button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => { setAdding(false); setValue(''); }} aria-label={wt('common.cancel')}><X size={13} /></button>
         </form>
       )}
       {loading ? (
@@ -452,7 +453,7 @@ function Requirements({ pid, num, config, issue, loading, canEdit, onOpenIssue }
                 <span className="truncate">{l.issue.title}</span>
               </button>
               {canEdit && (
-                <button type="button" onClick={() => remove(l.id)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm opacity-60 group-hover:opacity-100" aria-label={`Unlink ${l.issue.key}`} title="Remove coverage link">
+                <button type="button" onClick={() => remove(l.id)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm opacity-60 group-hover:opacity-100" aria-label={wt('tests.unlinkKey', { key: l.issue.key })} title={wt('tests.removeCoverage')}>
                   <X size={12} />
                 </button>
               )}
@@ -460,7 +461,7 @@ function Requirements({ pid, num, config, issue, loading, canEdit, onOpenIssue }
           ))}
         </ul>
       ) : (
-        <p className="flex items-center gap-1.5 text-[12.5px] text-[var(--w-text-3)]"><Link2 size={12} /> Not linked to any requirement yet.</p>
+        <p className="flex items-center gap-1.5 text-[12.5px] text-[var(--w-text-3)]"><Link2 size={12} /> {wt('tests.notLinked')}</p>
       )}
     </SideSection>
   );

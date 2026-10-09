@@ -16,13 +16,14 @@ import type { SubtaskInfo } from './grouping';
 import { TeamChip, useTeamLookup } from '../studio/shared';
 import { FlagBadge } from '../ctw';
 import { LeaseChipFor } from '../agents/leases';
+import { wt, wfmt } from '@/components/work/i18n';
 
 export function isOverdue(i: Pick<IssueCard, 'dueDate' | 'statusId'>, lk: Lookups) {
   if (!i.dueDate || lk.statuses.get(i.statusId)?.category === 'DONE') return false;
   return new Date(`${i.dueDate.slice(0, 10)}T23:59:59`).getTime() < Date.now();
 }
 
-const fmtDue = (d: string) => new Date(`${d.slice(0, 10)}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+const fmtDue = (d: string) => new Date(`${d.slice(0, 10)}T00:00:00Z`).toLocaleDateString(wfmt.intl(), { month: 'short', day: 'numeric', timeZone: 'UTC' });
 
 /** Ưu tiên kèm chú thích khi rê chuột (PriorityIcon của ui.tsx đã tự có title "High priority"). */
 export function PriorityWithTip({ priority, size = 13 }: { priority: number; size?: number }) {
@@ -34,9 +35,9 @@ export function PointsBadge({ points, unit = 'pts' }: { points: number | null; u
   return (
     <span
       className="inline-flex h-[18px] shrink-0 items-center rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] font-semibold tabular text-[var(--w-text-2)] shadow-[inset_0_0_0_1px_var(--w-border)]"
-      title={`Estimate: ${points} ${unit === 'pts' ? (points === 1 ? 'story point' : 'story points') : unit}`}
+      title={unit === 'pts' ? wt('board.estimatePts', { count: points }) : wt('board.estimateUnit', { n: points, unit })}
     >
-      {points} {unit === 'pts' && points === 1 ? 'pt' : unit}
+      {unit === 'pts' ? wt('board.ptsShort', { count: points }) : `${points} ${unit}`}
     </span>
   );
 }
@@ -46,7 +47,7 @@ export function DueChip({ issue, lk }: { issue: Pick<IssueCard, 'dueDate' | 'sta
   const overdue = isOverdue(issue, lk);
   return (
     <span
-      title={overdue ? `Overdue — was due ${fmtDue(issue.dueDate)}` : `Due ${fmtDue(issue.dueDate)}`}
+      title={overdue ? wt('board.overdueWas', { date: fmtDue(issue.dueDate) }) : wt('board.dueOn', { date: fmtDue(issue.dueDate) })}
       className={cn(
         'inline-flex h-[18px] shrink-0 items-center gap-0.5 rounded-[4px] px-1 text-[11px] tabular',
         overdue
@@ -63,7 +64,7 @@ export function DueChip({ issue, lk }: { issue: Pick<IssueCard, 'dueDate' | 'sta
 function MiniProgress({ done, total }: { done: number; total: number }) {
   const pct = total ? Math.round((done / total) * 100) : 0;
   return (
-    <span className="flex items-center gap-1.5" title={`${done} of ${total} sub-tasks done`}>
+    <span className="flex items-center gap-1.5" title={wt('board.subtasksDoneOf', { done, total })}>
       <span className="h-1 w-12 overflow-hidden rounded-full bg-[var(--w-sunken)]">
         <span className="block h-full rounded-full bg-[var(--w-green)]" style={{ width: `${pct}%` }} />
       </span>
@@ -109,9 +110,9 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
       {warn && (
         <div
           className="mb-1.5 inline-flex items-center gap-1 rounded-[4px] bg-[color-mix(in_srgb,var(--w-orange)_14%,transparent)] px-1.5 py-px text-[11px] font-medium text-[var(--w-orange)]"
-          title="This issue is in a Done column but some of its sub-tasks are still open"
+          title={wt('board.doneColOpenKids')}
         >
-          <AlertTriangle size={11} /> {openKids} open {openKids === 1 ? 'sub-task' : 'sub-tasks'}
+          <AlertTriangle size={11} /> {wt('board.openSubtasks', { count: openKids })}
         </div>
       )}
       <p className={cn('mb-2 line-clamp-3 text-[14px] font-medium leading-[1.4] tracking-[-0.005em] text-[var(--w-text)]', done && 'font-normal text-[var(--w-text-3)] line-through decoration-[var(--w-text-3)]')}>
@@ -134,14 +135,14 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
         <span className={cn('shrink-0 font-mono text-[12px] font-medium text-[var(--w-text-2)]', done && 'line-through')}>{lk.issueKey(issue.number)}</span>
         {team && <TeamChip team={team} />}
         {showParent && issue.parentNumber && (
-          <span className="truncate font-mono" title="Parent issue">↑ {lk.issueKey(issue.parentNumber)}</span>
+          <span className="truncate font-mono" title={wt('board.parentIssue')}>↑ {lk.issueKey(issue.parentNumber)}</span>
         )}
         {/* Cổng khách (S2b): thẻ đã chia sẻ với khách. */}
-        {issue.clientVisible && <span className="flex shrink-0 items-center text-[var(--w-yellow)]" title="Visible to client" aria-label="Visible to client"><Eye size={11} /></span>}
+        {issue.clientVisible && <span className="flex shrink-0 items-center text-[var(--w-yellow)]" title={wt('board.visibleToClient')} aria-label={wt('board.visibleToClient')}><Eye size={11} /></span>}
         {/* CTW-11: cờ "Bị chặn". */}
         {issue.flaggedAt && <FlagBadge reason={issue.flagReason} />}
-        {issue.commentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={`${issue.commentCount} comments`}><MessageSquare size={11} />{issue.commentCount}</span>}
-        {issue.attachmentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={`${issue.attachmentCount} attachments`}><Paperclip size={11} />{issue.attachmentCount}</span>}
+        {issue.commentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={wt('board.nComments', { count: issue.commentCount })}><MessageSquare size={11} />{issue.commentCount}</span>}
+        {issue.attachmentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={wt('board.nAttachments', { count: issue.attachmentCount })}><Paperclip size={11} />{issue.attachmentCount}</span>}
         <span className="ml-auto flex min-w-0 items-center gap-1.5">
           <DueChip issue={issue} lk={lk} />
           <PointsBadge points={issue.storyPoints} />
@@ -161,7 +162,7 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
             className="flex h-7 w-full items-center gap-1.5 rounded-b-[8px] px-3 text-[11.5px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]"
           >
             {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-            <span>{subtasks.total} {subtasks.total === 1 ? 'sub-task' : 'sub-tasks'}</span>
+            <span>{wt('board.nSubtasks', { count: subtasks.total })}</span>
             <span className="ml-auto text-[var(--w-text-3)]"><MiniProgress done={subtasks.done} total={subtasks.total} /></span>
           </button>
           {expanded && (

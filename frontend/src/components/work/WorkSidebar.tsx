@@ -29,7 +29,7 @@ import {
   CalendarClock, GitPullRequestArrow, ShieldAlert,
   Wallet, Receipt, FileBarChart,
   Headset, Library, ExternalLink, Bot,
-  FileSpreadsheet,
+  FileSpreadsheet, MessagesSquare,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
@@ -41,8 +41,11 @@ import { WorkspaceMark } from './settings/shared';
 import { openHelp } from './help/store';
 import { lastAiPid, openAiPanel, useAiPanel } from './ai/store';
 import WorkInbox from './shell/WorkInbox';
+import { WorkLanguageChip } from './i18n/LanguageSwitch';
 import { useSidebarRail } from './shell/mobileNav';
 import RailTooltip from './shell/RailTooltip';
+import { ChatNavBadge } from './chat/ChatNotifier';
+import { chatApi, chatKeys } from '@/lib/work-chat-api';
 
 const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search']);
 const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents']);
@@ -116,6 +119,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
     group: 'Work',
     items: [
       { path: 'list', label: 'Issues', icon: List, match: (v) => v === 'list' || v === 'issue' },
+      // CTW K-3: kênh chat dự án (badge số chưa đọc). Khách (CLIENT) chỉ thấy kênh khách — mục riêng trong cổng khách.
+      { path: 'chat', label: 'Chat', icon: MessagesSquare, match: (v) => v === 'chat', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       { path: 'tests', label: 'Tests', icon: FlaskConical, match: (v) => v === 'tests' },
       { path: 'docs', label: 'Docs', icon: FileText, match: (v) => v === 'docs', module: 'docs' },
       // Resources (06/10/2026): thư viện link của dự án — bật mặc định cho mọi loại dự án mới.
@@ -257,6 +262,13 @@ function SidebarPinnedLinks({ pid }: { pid: number }) {
       ))}
     </div>
   );
+}
+
+/** CTW K-3: khách cổng thấy mục "Chat" CHỈ khi đội đã mở kênh khách (máy chủ trả danh sách đã lọc). */
+function PortalChatLink({ pid, href, active }: { pid: number; href: string; active: boolean }) {
+  const q = useQuery({ queryKey: chatKeys.channels(pid), queryFn: () => chatApi.channels(pid), staleTime: 60_000, retry: false });
+  if (!q.data?.channels.length) return null;
+  return <NavItem href={href} icon={MessagesSquare} label="Chat" active={active} indent badge={<ChatNavBadge pid={pid} />} />;
 }
 
 export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void }) {
@@ -460,6 +472,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                           const cur = view === 'portal' && (search?.get('tab') ?? 'overview') === n.tab;
                           return <NavItem key={n.tab} href={`${base}/portal${n.tab === 'overview' ? '' : `?tab=${n.tab}`}`} icon={n.icon} label={n.label} active={cur} indent />;
                         })}
+                        <PortalChatLink pid={p.id} href={`${base}/chat`} active={view === 'chat'} />
                       </div>
                     )}
                     {open && !isPortalClient(p) && (
@@ -474,7 +487,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                             <div key={g.group} role="group" aria-label={g.group}>
                               <GroupToggle label={g.group} open={open} count={items.length} onToggle={() => groups.toggle(g.group, open)} />
                               {open && items.map((n) => (
-                                <NavItem key={n.path} href={`${base}/${n.path}`} icon={n.icon} label={n.label} active={n.match(view)} indent />
+                                <NavItem key={n.path} href={`${base}/${n.path}`} icon={n.icon} label={n.label} active={n.match(view)} indent badge={n.path === 'chat' ? <ChatNavBadge pid={p.id} /> : undefined} />
                               ))}
                             </div>
                           );
@@ -548,6 +561,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
             </span>
           </div>
         )}
+        {inDrawer && <div className="px-2 pt-1"><WorkLanguageChip /></div>}
       </div>
     </nav>
   );

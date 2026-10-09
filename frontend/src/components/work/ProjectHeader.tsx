@@ -26,6 +26,7 @@ import { MobileNavButton } from './shell/mobileNav';
 import HeaderTools from './shell/HeaderTools';
 import { cn } from '@/lib/utils';
 import { Popover, ProjectMark, useToggle } from './ui';
+import { wt } from '@/components/work/i18n';
 import ProjectCover from './cover/ProjectCover'; // UX-D
 
 export function Crumb({ href, children, className, title }: { href: string; children: ReactNode; className?: string; title?: string }) {
@@ -44,7 +45,7 @@ export const CrumbSep = ({ className }: { className?: string }) => (
 export function ProjectCrumbs({ config, title, extra, showWs = true }: { config: ProjectConfig; title: ReactNode; extra?: ReactNode; showWs?: boolean }) {
   const projectTip = `${config.workspace.name} › ${config.name}`;
   return (
-    <nav aria-label="Breadcrumb" className="flex min-w-0 flex-1 items-center overflow-hidden">
+    <nav aria-label={wt('shell.breadcrumb')} className="flex min-w-0 flex-1 items-center overflow-hidden">
       {/* ≥md: một dòng */}
       <div className="flex min-w-0 items-center gap-1.5 text-[13px] max-md:!hidden">
         {showWs && (
@@ -61,7 +62,7 @@ export function ProjectCrumbs({ config, title, extra, showWs = true }: { config:
         <h1 className="max-w-[60%] flex-none truncate text-[15px] font-semibold tracking-[-0.01em] text-[var(--w-text)]" title={typeof title === 'string' ? title : undefined}>{title}</h1>
         {extra && <span data-crumb-extra className="flex shrink-0 items-center">{extra}</span>}
         {config.archivedAt && (
-          <span className="shrink-0 rounded-full border border-[var(--w-border-strong)] px-2 text-[12px] leading-[20px] text-[var(--w-text-2)]">Archived</span>
+          <span className="shrink-0 rounded-full border border-[var(--w-border-strong)] px-2 text-[12px] leading-[20px] text-[var(--w-text-2)]">{wt('shell.archived')}</span>
         )}
       </div>
       {/* <md: hai dòng */}
@@ -95,23 +96,23 @@ function MoreMenu({ config, items }: { config: ProjectConfig; items?: ReactNode 
         onClick={pop.toggle}
         aria-haspopup="menu"
         aria-expanded={pop.on}
-        aria-label={lock.locked ? 'More actions (editing is locked)' : 'More actions'}
-        title={lock.locked ? 'More — editing is locked' : 'More: help, edit lock'}
+        aria-label={lock.locked ? wt('shell.moreLocked') : wt('shell.moreActions')}
+        title={lock.locked ? wt('shell.moreLockedTitle') : wt('shell.moreTitle')}
         className={cn('w-btn w-btn-icon shrink-0', lock.locked && 'w-btn-warn')}
         data-testid="project-header-more"
       >
         {lock.locked ? <Lock size={14} /> : <MoreHorizontal size={16} className="text-[var(--w-text-2)]" />}
       </button>
       <Popover open={pop.on} onClose={pop.close} anchorRef={ref} width={232} align="end">
-        <div role="menu" aria-label="More actions" className="p-1">
+        <div role="menu" aria-label={wt('shell.moreActions')} className="p-1">
           {items}
           <button role="menuitem" type="button" className={MENU_ITEM} onClick={() => { pop.close(); openContextualHelp(); }}>
-            <CircleHelp size={14} /> Help for this page <kbd className="w-kbd ml-auto">?</kbd>
+            <CircleHelp size={14} /> {wt('shell.helpForPage')} <kbd className="w-kbd ml-auto">?</kbd>
           </button>
           {lock.ready && (
             <button role="menuitem" type="button" className={MENU_ITEM} disabled={lock.pending} onClick={() => { pop.close(); lock.toggle(); }}>
               {lock.locked ? <LockOpen size={14} /> : <Lock size={14} />}
-              {lock.locked ? 'Unlock editing' : 'Lock editing'}
+              {lock.locked ? wt('shell.unlockEditing') : wt('shell.lockEditing')}
             </button>
           )}
         </div>

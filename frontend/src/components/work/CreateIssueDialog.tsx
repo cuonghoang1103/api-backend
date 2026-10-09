@@ -23,6 +23,7 @@ import {
 import RichEditor, { isDocEmpty } from './RichEditor';
 import { Dialog } from './ui';
 import { useIssueTemplates } from './templates/useIssueTemplates';
+import { wt } from '@/components/work/i18n';
 
 /** Chữ trơn của một tài liệu TipTap (đoạn cách nhau bằng xuống dòng). */
 function docText(doc: TiptapDoc | null): string {
@@ -129,12 +130,12 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
   const draftWithAi = async () => {
     // Mẫu chưa sửa chỉ là khung sườn — không gửi cho AI như thể là ý tưởng.
     const idea = [title.trim(), appliedTemplate && !descDirty ? '' : docText(desc)].filter(Boolean).join('\n').trim();
-    if (!idea) { toast.error('Type a short idea first'); return; }
+    if (!idea) { toast.error(wt('create.typeIdea')); return; }
     setDrafting(true);
     try {
       const r = await workApi.aiQuick(config.id, { task: 'write_story', text: idea });
       const a = r.actions.find((x) => x.type === 'create_issue');
-      if (!a || a.type !== 'create_issue') { toast.error('The AI did not return a story. Try rephrasing your idea.'); return; }
+      if (!a || a.type !== 'create_issue') { toast.error(wt('create.aiNoStory')); return; }
       setTitle(a.title);
       const content: unknown[] = (a.description ?? '').split(/\n{2,}/).filter(Boolean).map((p) => ({ type: 'paragraph', content: [{ type: 'text', text: p.trim() }] }));
       if (a.acceptanceCriteria?.length) {
@@ -149,10 +150,10 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
       if (a.storyPoints !== undefined && a.storyPoints !== null) setStoryPoints(a.storyPoints);
       const story = config.issueTypes.find((t) => t.key === (a.issueType || 'STORY').toUpperCase());
       if (story && level !== -1) setTypeId(story.id);
-      toast.success('Draft ready — review it before creating');
+      toast.success(wt('create.draftReady'));
     } catch (err) {
       if (isAiQuotaError(err)) setUpgrade(true);
-      else toast.error(workError(err, 'The AI could not draft this issue'));
+      else toast.error(workError(err, wt('create.aiFailed')));
     } finally {
       setDrafting(false);
     }
@@ -246,8 +247,8 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
       qc.invalidateQueries({ queryKey: wk.issues(config.id) });
       qc.invalidateQueries({ queryKey: wk.backlog(config.id) });
       const sprintName = issue.sprintId ? config.sprints.find((s) => s.id === issue.sprintId)?.name : null;
-      toast.success(`Created ${lk.issueKey(issue.number)}${sprintName ? ` in ${sprintName}` : level === 0 && config.type !== 'KANBAN' ? ' in the backlog' : ''}`, {
-        action: onCreated ? { label: 'Open', onClick: () => onCreated(issue.number) } : undefined,
+      toast.success(sprintName ? wt('create.createdIn', { key: lk.issueKey(issue.number), where: sprintName }) : level === 0 && config.type !== 'KANBAN' ? wt('create.createdBacklog', { key: lk.issueKey(issue.number) }) : wt('create.created', { key: lk.issueKey(issue.number) }), {
+        action: onCreated ? { label: wt('common.open'), onClick: () => onCreated(issue.number) } : undefined,
       });
       if (another) {
         setTitle('');
@@ -258,7 +259,7 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
         onClose();
       }
     },
-    onError: (err) => toast.error(workError(err, 'Could not create the issue')),
+    onError: (err) => toast.error(workError(err, wt('board.createFailed'))),
   });
 
   const needsParent = level === -1 && !parent;
@@ -270,17 +271,17 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
       open={open}
       onClose={onClose}
       width={680}
-      title={<span className="flex items-center gap-2"><span className="font-mono text-[12px] font-normal text-[var(--w-text-3)]">{config.key}</span> Create issue</span>}
+      title={<span className="flex items-center gap-2"><span className="font-mono text-[12px] font-normal text-[var(--w-text-3)]">{config.key}</span> {wt('board.createIssue')}</span>}
       footer={(
         <div className="flex w-full items-center justify-between">
           <label className="flex cursor-pointer items-center gap-2 text-[12px] text-[var(--w-text-2)]">
             <input type="checkbox" checked={another} onChange={(e) => setAnother(e.target.checked)} className="accent-[var(--w-accent)]" />
-            Create another
+            {wt('create.another')}
           </label>
           <div className="flex gap-2">
-            <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>Cancel</button>
+            <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>{wt('common.cancel')}</button>
             <button type="button" className="w-btn w-btn-primary" disabled={!canSubmit} onClick={submit}>
-              {create.isPending ? 'Creating…' : 'Create'} <span className="w-kbd border-white/30 text-white/80">⌘↵</span>
+              {create.isPending ? wt('common.creating') : wt('common.create')} <span className="w-kbd border-white/30 text-white/80">⌘↵</span>
             </button>
           </div>
         </div>
@@ -308,25 +309,25 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
           onChange={(e) => setTitle(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter' && !e.metaKey && !e.ctrlKey && !e.nativeEvent.isComposing) { e.preventDefault(); submit(); } }}
           maxLength={255}
-          placeholder={level === 1 ? 'Epic name' : type?.key === 'BUG' ? 'What went wrong?' : 'Issue title'}
+          placeholder={level === 1 ? wt('create.epicName') : type?.key === 'BUG' ? wt('create.whatWrong') : wt('create.issueTitle')}
           className="mb-3 w-full bg-transparent text-[18px] font-semibold text-[var(--w-text)] outline-none placeholder:text-[var(--w-text-3)]"
         />
 
         {config.permissions.useAi && level !== -1 && (
           <div className="-mt-1 mb-2 flex items-center gap-2">
-            <button type="button" className="w-btn w-btn-ghost w-btn-sm" disabled={drafting} onClick={draftWithAi} title="Turn your idea into a user story with acceptance criteria (uses 1 AI request)">
-              <Sparkles size={13} /> {drafting ? 'Drafting…' : 'Draft with AI'}
+            <button type="button" className="w-btn w-btn-ghost w-btn-sm" disabled={drafting} onClick={draftWithAi} title={wt('create.draftAiTitle')}>
+              <Sparkles size={13} /> {drafting ? wt('create.drafting') : wt('create.draftAi')}
             </button>
           </div>
         )}
         {!!similar.data?.length && (
           <div className="mb-3 rounded-[6px] border border-[color-mix(in_srgb,var(--w-orange)_35%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_8%,transparent)] px-3 py-2 text-[12px]">
-            <div className="mb-1 font-medium text-[var(--w-text)]">Possible duplicates</div>
+            <div className="mb-1 font-medium text-[var(--w-text)]">{wt('create.duplicates')}</div>
             {similar.data.slice(0, 3).map((x) => (
               <div key={x.number} className="flex items-center gap-2 text-[var(--w-text-2)]">
                 <span className="font-mono text-[11px] text-[var(--w-text-3)]">{lk.issueKey(x.number)}</span>
                 <span className="truncate">{x.title}</span>
-                {x.resolved && <span className="text-[var(--w-text-3)]">(done)</span>}
+                {x.resolved && <span className="text-[var(--w-text-3)]">({wt('backlog.sumDone')})</span>}
               </div>
             ))}
           </div>
@@ -334,17 +335,17 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
         {appliedTemplate ? (
           <div className="mb-1.5 flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]" aria-live="polite">
             <FileText size={12} aria-hidden />
-            <span>Template: <span className="font-medium text-[var(--w-text-2)]">{appliedTemplate.name}</span></span>
+            <span>{wt('create.template')} <span className="font-medium text-[var(--w-text-2)]">{appliedTemplate.name}</span></span>
             <span aria-hidden>·</span>
             <button type="button" className="rounded-[3px] font-medium text-[var(--w-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--w-accent-border)]" onClick={clearTemplate}>
-              Clear
+              {wt('board.clear')}
             </button>
           </div>
         ) : templateOfType && isDocEmpty(desc) ? (
           <div className="mb-1.5 flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">
             <FileText size={12} aria-hidden />
             <button type="button" className="rounded-[3px] font-medium text-[var(--w-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--w-accent-border)]" onClick={applyTemplateNow}>
-              Use the {templateOfType.name} template
+              {wt('create.useTemplate', { name: templateOfType.name })}
             </button>
           </div>
         ) : null}
@@ -363,47 +364,47 @@ export default function CreateIssueDialog({ open, onClose, config, defaults, onC
           projectId={config.id}
           minHeight={120}
           placeholder={type?.key === 'BUG'
-            ? 'Steps to reproduce, expected result, actual result…'
+            ? wt('create.bugPh')
             : type?.key === 'STORY'
-              ? 'As a <user>, I want <goal> so that <reason>. Add acceptance criteria as a checklist.'
-              : 'Add a description… Type @ to mention someone.'}
+              ? wt('create.storyPh')
+              : wt('create.descPh')}
         />
 
         <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
           {!isClient && (
             <div>
-              <div className="w-label">Assignee</div>
+              <div className="w-label">{wt('common.assignee')}</div>
               <AssigneePicker config={config} value={assigneeId} onChange={setAssigneeId} meId={meId} />
             </div>
           )}
           <div>
-            <div className="w-label">Priority</div>
+            <div className="w-label">{wt('common.priority')}</div>
             <PriorityPicker value={priority} onChange={setPriority} />
           </div>
           <div>
-            <div className="w-label">Labels</div>
+            <div className="w-label">{wt('common.labels')}</div>
             <LabelsPicker config={config} value={labelIds} onChange={setLabelIds} disabled={isClient} />
           </div>
           {!isClient && config.type !== 'KANBAN' && level === 0 && (
             <div>
-              <div className="w-label">Sprint</div>
+              <div className="w-label">{wt('common.sprint')}</div>
               <SprintPicker config={config} value={sprintId} onChange={setSprintId} />
             </div>
           )}
           {!isClient && level !== 1 && (
             <div>
-              <div className="w-label">{hoursMode ? 'Estimate (hours)' : 'Story points'}</div>
+              <div className="w-label">{hoursMode ? wt('backlog.estHours') : wt('common.storyPoints')}</div>
               <div className="rounded-[var(--w-radius)] border border-[var(--w-border-strong)]">
-                <NumberInput value={storyPoints} onCommit={setStoryPoints} placeholder={hoursMode ? 'e.g. 4' : 'e.g. 3'} />
+                <NumberInput value={storyPoints} onCommit={setStoryPoints} placeholder={hoursMode ? wt('create.eg', { v: 4 }) : wt('create.eg', { v: 3 })} />
               </div>
             </div>
           )}
           <div>
-            <div className="w-label">Due date</div>
+            <div className="w-label">{wt('common.dueDate')}</div>
             <DateInput value={dueDate} onChange={setDueDate} bare={false} />
           </div>
         </div>
-        {needsParent && <p className="mt-3 text-[12px] text-[var(--w-orange)]">Choose the parent issue for this sub-task.</p>}
+        {needsParent && <p className="mt-3 text-[12px] text-[var(--w-orange)]">{wt('create.chooseParent')}</p>}
       </div>
       <UpgradeDialog open={upgrade} onClose={() => setUpgrade(false)} />
     </Dialog>

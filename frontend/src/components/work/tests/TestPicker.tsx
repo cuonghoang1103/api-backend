@@ -8,6 +8,7 @@ import { ChevronDown, X } from 'lucide-react';
 import { workApi, workError } from '@/lib/work-api';
 import { wk } from '../hooks';
 import { PickerList, Popover, PriorityIcon, Spinner, useToggle, type PickOption } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 export function useTestList(pid: number) {
   return useQuery({ queryKey: [...wk.tests(pid), 'picker-tests'], queryFn: () => workApi.tests(pid), staleTime: 30_000 });
@@ -46,24 +47,24 @@ export default function TestPicker({ pid, projectKey, value, onChange, exclude =
     <div>
       <div className="flex flex-wrap items-center gap-2">
         <button ref={ref} type="button" onClick={pop.toggle} className="w-btn w-btn-sm">
-          {value.length ? `${value.length} test${value.length === 1 ? '' : 's'} selected` : 'Select tests'} <ChevronDown size={12} />
+          {value.length ? wt('tests.nSelected', { count: value.length }) : wt('tests.selectTests')} <ChevronDown size={12} />
         </button>
         {tests.isLoading && <Spinner size={12} />}
         {!!value.length && (
-          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => onChange([])}>Clear</button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => onChange([])}>{wt('board.clear')}</button>
         )}
         {!!options.length && value.length < allVisible.length && (
-          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => onChange([...new Set([...value, ...allVisible])])}>Select all ({allVisible.length})</button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => onChange([...new Set([...value, ...allVisible])])}>{wt('tests.selectAllN', { n: allVisible.length })}</button>
         )}
       </div>
-      {tests.error && <p className="mt-1 text-[12px] text-[var(--w-red)]">{workError(tests.error, 'Could not load tests')}</p>}
+      {tests.error && <p className="mt-1 text-[12px] text-[var(--w-red)]">{workError(tests.error, wt('tests.loadFailed'))}</p>}
       {!!value.length && (
         <div className="mt-2 flex max-h-[132px] flex-wrap gap-1.5 overflow-y-auto">
           {value.map((n) => (
             <span key={n} className="inline-flex h-[22px] max-w-full items-center gap-1 rounded-[4px] border border-[var(--w-border-strong)] bg-[var(--w-sunken)] pl-1.5 pr-0.5 text-[12px]">
               <span className="shrink-0 font-medium text-[var(--w-text-2)]">{key(n)}</span>
               <span className="max-w-[180px] truncate">{titleOf(n) ?? ''}</span>
-              <button type="button" onClick={() => toggle(n)} aria-label={`Remove ${key(n)}`} className="rounded-[3px] p-0.5 text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]"><X size={11} /></button>
+              <button type="button" onClick={() => toggle(n)} aria-label={wt('tests.removeK', { key: key(n) })} className="rounded-[3px] p-0.5 text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]"><X size={11} /></button>
             </span>
           ))}
         </div>
@@ -74,8 +75,8 @@ export default function TestPicker({ pid, projectKey, value, onChange, exclude =
           selected={value}
           onPick={toggle}
           multi
-          placeholder="Search tests by key, title or requirement…"
-          empty={tests.isLoading ? 'Loading…' : tests.data?.length ? 'No matching tests' : 'No tests in this project yet'}
+          placeholder={wt('tests.pickerPh')}
+          empty={tests.isLoading ? wt('common.loading') : tests.data?.length ? wt('tests.noMatchingTests') : wt('tests.noTestsProject')}
         />
       </Popover>
     </div>

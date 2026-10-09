@@ -18,6 +18,7 @@ import StartProjectButton from '@/components/work/onboarding/StartProjectButton'
 import ProjectHeader from '@/components/work/ProjectHeader';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
 import { EmptyState, isTyping, UserAvatar, PageLoading } from '@/components/work/ui';
+import { wt } from '@/components/work/i18n';
 
 const EPIC_PANEL_KEY = 'work.backlog.epics';
 
@@ -92,25 +93,25 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
   if (config.type === 'KANBAN') {
     return (
       <div className="flex h-full flex-col">
-        <ProjectHeader config={config} title="Backlog" />
-        <EmptyState title="Kanban projects have no sprints" body="Work flows continuously on the board. Switch to a Scrum project to plan in sprints." />
+        <ProjectHeader config={config} title={wt('backlog.backlog')} />
+        <EmptyState title={wt('backlog.kanbanNoSprints')} body={wt('backlog.kanbanNoSprintsBody')} />
       </div>
     );
   }
 
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Backlog">
+      <ProjectHeader config={config} title={wt('backlog.backlog')}>
         {config.permissions.createIssues && (
-          <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title="Create issue (C)">
-            <Plus size={14} /> <span className="hidden sm:inline">Create</span>
+          <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreateOpen(true)} title={wt('backlog.createIssueC')}>
+            <Plus size={14} /> <span className="hidden sm:inline">{wt('backlog.create')}</span>
           </button>
         )}
       </ProjectHeader>
 
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-[var(--w-border)] px-4 py-2">
-        <button type="button" onClick={toggleEpics} className={cn('w-btn w-btn-sm max-md:!hidden', epicPanel && 'w-btn-on')} title="Show epics">
-          <PanelLeft size={13} /> Epics
+        <button type="button" onClick={toggleEpics} className={cn('w-btn w-btn-sm max-md:!hidden', epicPanel && 'w-btn-on')} title={wt('backlog.showEpics')}>
+          <PanelLeft size={13} /> {wt('backlog.epics')}
         </button>
         <div className="relative">
           <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
@@ -119,7 +120,7 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
             value={q}
             onChange={(e) => setQ(e.target.value)}
             onKeyDown={(e) => e.key === 'Escape' && (setQ(''), (e.target as HTMLInputElement).blur())}
-            placeholder="Search backlog"
+            placeholder={wt('backlog.searchBacklog')}
             className="w-input h-[28px] w-[180px] pl-7 text-[12px]"
           />
         </div>
@@ -138,10 +139,10 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
         </div>
         <AssigneeKindFilter config={config} value={kind} onChange={setKind} />
         {filtered && (
-          <button type="button" onClick={() => { setQ(''); setPeople([]); setEpic(null); setKind('ALL'); }} className="w-btn w-btn-ghost w-btn-sm"><X size={12} /> Clear</button>
+          <button type="button" onClick={() => { setQ(''); setPeople([]); setEpic(null); setKind('ALL'); }} className="w-btn w-btn-ghost w-btn-sm"><X size={12} /> {wt('backlog.clear')}</button>
         )}
         <span className="ml-auto hidden text-[12px] text-[var(--w-text-3)] lg:inline">
-          Drag to plan · <span className="w-kbd">⌘</span>/<span className="w-kbd">⇧</span>+click to select many
+          {wt('backlog.dragHintA')} · <span className="w-kbd">⌘</span>/<span className="w-kbd">⇧</span>{wt('backlog.dragHintB')}
         </span>
       </div>
 
@@ -149,9 +150,9 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
         {epicPanel && data && (
           <aside className="hidden w-[248px] shrink-0 overflow-y-auto border-r border-[var(--w-border)] p-2 md:block">
             <div className="mb-1 flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
-              <Layers size={12} /> Epics
+              <Layers size={12} /> {wt('backlog.epics')}
             </div>
-            {[{ id: null as number | null, label: 'All issues' }, { id: 0, label: 'Issues without epic' }].map((o) => (
+            {[{ id: null as number | null, label: wt('backlog.allIssues') }, { id: 0, label: wt('backlog.noEpicIssues') }].map((o) => (
               <button
                 key={String(o.id)}
                 type="button"
@@ -170,7 +171,7 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
                   type="button"
                   onClick={() => setEpic(epic === e.id ? null : e.id)}
                   onDoubleClick={() => openIssue(e.number)}
-                  title="Click to filter · double-click to open"
+                  title={wt('backlog.epicClickTitle')}
                   className={cn('mb-0.5 w-full rounded-[6px] px-2 py-1.5 text-left', epic === e.id ? 'bg-[var(--w-active)]' : 'hover:bg-[var(--w-hover)]')}
                 >
                   <div className="flex items-center gap-1.5 text-[13px]">
@@ -186,7 +187,7 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
                 </button>
               );
             })}
-            {!data.epics.length && <p className="px-2 py-1 text-[12px] text-[var(--w-text-3)]">No epics yet. Create one to group related stories.</p>}
+            {!data.epics.length && <p className="px-2 py-1 text-[12px] text-[var(--w-text-3)]">{wt('backlog.noEpicsYet')}</p>}
           </aside>
         )}
         <div className="min-w-0 flex-1 overflow-y-auto">
@@ -194,7 +195,7 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
           {backlog.isLoading ? (
             <PageLoading />
           ) : backlog.error ? (
-            <EmptyState title="Could not load the backlog" body={workError(backlog.error)} action={<button type="button" className="w-btn" onClick={() => backlog.refetch()}>Try again</button>} />
+            <EmptyState title={wt('backlog.loadFailed')} body={workError(backlog.error)} action={<button type="button" className="w-btn" onClick={() => backlog.refetch()}>{wt('backlog.tryAgain')}</button>} />
           ) : data ? (
             <AgentLeasesProvider config={config}>
               <Backlog config={config} lk={lk} data={data} onOpen={openIssue} filter={filter} />
@@ -226,6 +227,6 @@ function Inner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   if (isLoading) return <PageLoading />;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} action={<StartProjectButton label="Start a new project" />} />;
+  if (error || !config || !pid) return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : wt('common.projectNotFoundBody')} action={<StartProjectButton label={wt('common.startNewProject')} />} />;
   return <BacklogView config={config} pid={pid} slug={params.ws} />;
 }

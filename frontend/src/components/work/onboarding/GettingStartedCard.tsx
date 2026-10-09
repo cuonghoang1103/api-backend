@@ -3,7 +3,7 @@
 /**
  * Thẻ "Getting started" — CHỈ trên Board (UX-A: trước đây lặp ở cả Backlog), cho tới
  * khi bị ẩn hoặc làm xong. Mặc định là MỘT DÒNG (tiến độ + bước kế tiếp + nút làm
- * ngay); bấm "Show steps" mới mở lưới 6 bước (~300px — ở khổ app desktop 1180×800
+ * ngay); bấm wt('onboard.showSteps') mới mở lưới 6 bước (~300px — ở khổ app desktop 1180×800
  * nó từng đẩy board xuống chỉ còn một hàng thẻ). Mở/gập nhớ theo dự án; tắt (×) và
  * làm xong cũng được nhớ ⇒ không gọi API nữa.
  * Mỗi bước đọc từ DỮ LIỆU THẬT (GET /projects/:pid/onboarding), nên làm theo
@@ -21,6 +21,7 @@ import { workApi, workError, type ProjectConfig } from '@/lib/work-api';
 import { wk } from '../hooks';
 import { openHelp } from '../help/store';
 import { Spinner } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 const DISMISS_KEY = (pid: number) => `work.gettingStarted.dismissed.${pid}`;
 const COLLAPSE_KEY = (pid: number) => `work.gettingStarted.expanded.${pid}`;
@@ -79,13 +80,13 @@ export default function GettingStartedCard({
   };
   const addSample = useMutation({
     mutationFn: () => workApi.addSampleData(pid),
-    onSuccess: (r) => { toast.success(`Added ${r.issues} sample issues — explore, then remove them any time`); refresh(); },
-    onError: (err) => toast.error(workError(err, 'Could not add sample data')),
+    onSuccess: (r) => { toast.success(wt('onboard.sampleAdded', { count: r.issues })); refresh(); },
+    onError: (err) => toast.error(workError(err, wt('onboard.sampleAddFailed'))),
   });
   const removeSample = useMutation({
     mutationFn: () => workApi.removeSampleData(pid),
-    onSuccess: (r) => { toast.success(`Removed ${r.issues} sample issues`); refresh(); },
-    onError: (err) => toast.error(workError(err, 'Could not remove sample data')),
+    onSuccess: (r) => { toast.success(wt('onboard.sampleRemoved', { count: r.issues })); refresh(); },
+    onError: (err) => toast.error(workError(err, wt('onboard.sampleRemoveFailed'))),
   });
 
   // Làm xong ⇒ nhớ luôn (lần sau không hiện, không gọi API).
@@ -104,36 +105,36 @@ export default function GettingStartedCard({
 
   const steps: Step[] = [
     {
-      id: 'issues', title: 'Create your first issues', done: d.steps.createIssues, guide: 'issues',
-      body: 'Break the work into stories, tasks and bugs.',
-      action: config.permissions.createIssues ? btn('Create issue', onCreateIssue, onCreateIssue ? undefined : `${base}/backlog`) : undefined,
+      id: 'issues', title: wt('onboard.s1'), done: d.steps.createIssues, guide: 'issues',
+      body: wt('onboard.s1b'),
+      action: config.permissions.createIssues ? btn(wt('onboard.createIssue'), onCreateIssue, onCreateIssue ? undefined : `${base}/backlog`) : undefined,
     },
     {
-      id: 'invite', title: 'Invite your team', done: d.steps.inviteTeam, guide: 'workspaces',
-      body: 'Add teammates so you can assign work to them.',
-      action: config.permissions.manageMembers ? btn('Invite', undefined, `${base}/settings?tab=members`) : undefined,
+      id: 'invite', title: wt('onboard.s2'), done: d.steps.inviteTeam, guide: 'workspaces',
+      body: wt('onboard.s2b'),
+      action: config.permissions.manageMembers ? btn(wt('onboard.invite'), undefined, `${base}/settings?tab=members`) : undefined,
     },
     ...(d.scrum ? [
       {
-        id: 'plan', title: 'Plan Sprint 1', done: d.steps.planSprint, guide: 'backlog-sprints',
-        body: 'Drag issues from the backlog into the sprint.',
-        action: btn('Open backlog', undefined, `${base}/backlog`),
+        id: 'plan', title: wt('onboard.s3'), done: d.steps.planSprint, guide: 'backlog-sprints',
+        body: wt('onboard.s3b'),
+        action: btn(wt('onboard.openBacklog'), undefined, `${base}/backlog`),
       },
       {
-        id: 'start', title: 'Start the sprint', done: d.steps.startSprint, guide: 'backlog-sprints',
-        body: 'Pick dates and a goal, then press Start sprint.',
-        action: config.permissions.manageSprints ? btn('Open backlog', undefined, `${base}/backlog`) : undefined,
+        id: 'start', title: wt('onboard.s4'), done: d.steps.startSprint, guide: 'backlog-sprints',
+        body: wt('onboard.s4b'),
+        action: config.permissions.manageSprints ? btn(wt('onboard.openBacklog'), undefined, `${base}/backlog`) : undefined,
       },
     ] : []),
     {
-      id: 'done', title: 'Move an issue to Done', done: d.steps.moveToDone, guide: 'board',
-      body: 'Drag a card to the last column on the board.',
-      action: btn('Open board', undefined, `${base}/board`),
+      id: 'done', title: wt('onboard.s5'), done: d.steps.moveToDone, guide: 'board',
+      body: wt('onboard.s5b'),
+      action: btn(wt('onboard.openBoard'), undefined, `${base}/board`),
     },
     {
-      id: 'share', title: 'Share a read-only link with your lecturer', done: d.steps.shareLink, guide: 'public-links',
-      body: 'Your lecturer or client can follow progress without an account.',
-      action: admin ? btn('Create link', undefined, `${base}/settings?tab=share`) : undefined,
+      id: 'share', title: wt('onboard.s6'), done: d.steps.shareLink, guide: 'public-links',
+      body: wt('onboard.s6b'),
+      action: admin ? btn(wt('onboard.createLink'), undefined, `${base}/settings?tab=share`) : undefined,
     },
   ];
   const doneCount = steps.filter((s) => s.done).length;
@@ -148,41 +149,41 @@ export default function GettingStartedCard({
 
   return (
     <section
-      aria-label="Getting started"
+      aria-label={wt('onboard.gettingStarted')}
       className={cn('overflow-hidden rounded-[10px] border border-[var(--w-border)] bg-[var(--w-raised)] shadow-[var(--w-shadow-card)]', className)}
     >
       <div className="flex min-h-[40px] flex-wrap items-center gap-x-2.5 gap-y-1.5 px-3 py-1.5">
-        <h2 className="text-[13px] font-semibold">Getting started</h2>
-        <span className="text-[12px] tabular-nums text-[var(--w-text-3)]">{doneCount} of {steps.length} done</span>
-        <div className="h-1 w-[72px] shrink-0 overflow-hidden rounded-full bg-[var(--w-sunken)]" role="progressbar" aria-label="Getting started progress" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
+        <h2 className="text-[13px] font-semibold">{wt('onboard.gettingStarted')}</h2>
+        <span className="text-[12px] tabular-nums text-[var(--w-text-3)]">{wt('onboard.doneOf', { done: doneCount, total: steps.length })}</span>
+        <div className="h-1 w-[72px] shrink-0 overflow-hidden rounded-full bg-[var(--w-sunken)]" role="progressbar" aria-label={wt('onboard.progress')} aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
           <div className="h-full rounded-full bg-[var(--w-green)] transition-[width]" style={{ width: `${pct}%` }} />
         </div>
         {collapsed && next && (
           <span className="flex min-w-0 flex-1 items-center gap-2 text-[12.5px] text-[var(--w-text-2)] max-sm:basis-full">
-            <span className="min-w-0 truncate"><span className="text-[var(--w-text-3)]">Next:</span> {next.title}</span>
+            <span className="min-w-0 truncate"><span className="text-[var(--w-text-3)]">{wt('onboard.next')}</span> {next.title}</span>
             {next.action && <span className="shrink-0">{next.action}</span>}
           </span>
         )}
         {!collapsed && <span className="flex-1" />}
         {!collapsed && admin && d.canAddSample && (
-          <button type="button" className="w-btn w-btn-sm" disabled={addSample.isPending} onClick={() => addSample.mutate()} title="Fill this project with realistic example issues you can remove later">
-            {addSample.isPending ? <Spinner size={12} /> : <Sparkles size={13} />} Add sample data
+          <button type="button" className="w-btn w-btn-sm" disabled={addSample.isPending} onClick={() => addSample.mutate()} title={wt('onboard.sampleTitle')}>
+            {addSample.isPending ? <Spinner size={12} /> : <Sparkles size={13} />} {wt('onboard.addSample')}
           </button>
         )}
         {!collapsed && admin && d.sampleData && (
-          <button type="button" className="w-btn w-btn-sm" disabled={removeSample.isPending} onClick={() => removeSample.mutate()} title="Delete only the sample issues, labels and sprint that were added for you">
-            {removeSample.isPending ? <Spinner size={12} /> : <Trash2 size={13} />} Remove sample data
+          <button type="button" className="w-btn w-btn-sm" disabled={removeSample.isPending} onClick={() => removeSample.mutate()} title={wt('onboard.removeSampleTitle')}>
+            {removeSample.isPending ? <Spinner size={12} /> : <Trash2 size={13} />} {wt('onboard.removeSample')}
           </button>
         )}
         {!collapsed && (
           <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => openHelp('getting-started')}>
-            <BookOpen size={13} /> Guide
+            <BookOpen size={13} /> {wt('onboard.guide')}
           </button>
         )}
         <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={toggle} aria-expanded={!collapsed}>
-          {collapsed ? <ChevronDown size={14} /> : <ChevronUp size={14} />} {collapsed ? 'Show steps' : 'Hide steps'}
+          {collapsed ? <ChevronDown size={14} /> : <ChevronUp size={14} />} {collapsed ? wt('onboard.showSteps') : wt('onboard.hideSteps')}
         </button>
-        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={dismiss} aria-label="Dismiss getting started" title="Dismiss — you can reopen the guide from Help">
+        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={dismiss} aria-label={wt('onboard.dismiss')} title={wt('onboard.dismissTitle')}>
           <X size={14} />
         </button>
       </div>
@@ -201,14 +202,14 @@ export default function GettingStartedCard({
               </span>
               <div className="min-w-0 flex-1">
                 <div className={cn('text-[13px] font-medium', s.done && 'text-[var(--w-text-3)] line-through')}>
-                  {s.title}<span className="sr-only">{s.done ? ' (done)' : ''}</span>
+                  {s.title}<span className="sr-only">{s.done ? wt('onboard.doneSr') : ''}</span>
                 </div>
                 {!s.done && <p className="mt-0.5 text-[12px] leading-snug text-[var(--w-text-2)]">{s.body}</p>}
                 {!s.done && (
                   <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     {s.action}
                     <button type="button" className="text-[12px] text-[var(--w-accent-text)] hover:underline" onClick={() => openHelp(s.guide)}>
-                      Open guide
+                      {wt('onboard.openGuide')}
                     </button>
                   </div>
                 )}

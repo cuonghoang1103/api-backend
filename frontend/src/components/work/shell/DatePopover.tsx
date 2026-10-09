@@ -12,8 +12,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { wt, wfmt } from '@/components/work/i18n';
 
-const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+/** Getter: theo ngôn ngữ CT Work lúc vẽ. */
+const weekdays = () => wt('shell.weekdaysShort').split(',');
 
 /** Ngày thuần (năm, tháng 0-11, ngày) — tránh lệch múi giờ khi dùng Date. */
 interface Ymd { y: number; m: number; d: number }
@@ -53,7 +55,7 @@ const same = (a: Ymd | null, b: Ymd | null) => !!a && !!b && a.y === b.y && a.m 
 export function formatYmd(v: string | null | undefined): string {
   const x = parseYmd(v);
   if (!x) return '';
-  return new Date(Date.UTC(x.y, x.m, x.d)).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  return new Date(Date.UTC(x.y, x.m, x.d)).toLocaleDateString(wfmt.intl(), { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 }
 
 export default function DatePopover({ value, onChange, onClose }: {
@@ -105,21 +107,21 @@ export default function DatePopover({ value, onChange, onClose }: {
     }
   };
 
-  const monthLabel = new Date(Date.UTC(focus.y, focus.m, 1)).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+  const monthLabel = new Date(Date.UTC(focus.y, focus.m, 1)).toLocaleDateString(wfmt.intl(), { month: 'long', year: 'numeric', timeZone: 'UTC' });
 
   return (
-    <div className="p-2.5" role="dialog" aria-label="Choose a date">
+    <div className="p-2.5" role="dialog" aria-label={wt('shell.chooseDate')}>
       <div className="mb-2 flex items-center justify-between">
-        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Previous month" onClick={() => setFocus(addMonths(focus, -1))}>
+        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('shell.prevMonth')} onClick={() => setFocus(addMonths(focus, -1))}>
           <ChevronLeft size={15} />
         </button>
         <div className="text-[13px] font-semibold" aria-live="polite">{monthLabel}</div>
-        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Next month" onClick={() => setFocus(addMonths(focus, 1))}>
+        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('shell.nextMonth')} onClick={() => setFocus(addMonths(focus, 1))}>
           <ChevronRight size={15} />
         </button>
       </div>
       <div className="grid grid-cols-7 gap-0.5 text-center text-[11px] font-medium text-[var(--w-text-3)]">
-        {WEEKDAYS.map((w) => <div key={w} className="py-1">{w}</div>)}
+        {weekdays().map((w) => <div key={w} className="py-1">{w}</div>)}
       </div>
       <div ref={gridRef} role="grid" onKeyDown={onKey} className="grid grid-cols-7 gap-0.5">
         {days.map((x) => {
@@ -153,8 +155,8 @@ export default function DatePopover({ value, onChange, onClose }: {
         })}
       </div>
       <div className="mt-2 flex items-center justify-between border-t border-[var(--w-border)] pt-2">
-        <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => pick(today)}>Today</button>
-        <button type="button" className="w-btn w-btn-ghost w-btn-sm" disabled={!value} onClick={() => pick(null)}>Clear</button>
+        <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => pick(today)}>{wt('shell.today')}</button>
+        <button type="button" className="w-btn w-btn-ghost w-btn-sm" disabled={!value} onClick={() => pick(null)}>{wt('shell.clearDate')}</button>
       </div>
     </div>
   );

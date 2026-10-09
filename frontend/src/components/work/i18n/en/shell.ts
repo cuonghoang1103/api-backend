@@ -13,6 +13,7 @@ export const shell = {
   helpGuide: 'Help & guide',
   backToSite: 'Back to CuongThai',
   skipToContent: 'Skip to content',
+  loading: 'Loading CT Work…',
   breadcrumb: 'Breadcrumb',
   archived: 'Archived',
   moreLocked: 'More actions (editing is locked)',

@@ -367,6 +367,8 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/:ws/:key/resources', nap: () => import('@/app/work/[ws]/[key]/resources/page') },
   /* CTW K-3 (10/10/2026): kênh chat dự án (?c= kênh, ?m= tin, ?t= luồng). */
   { mau: '/work/:ws/:key/chat', nap: () => import('@/app/work/[ws]/[key]/chat/page') },
+  /* CTW Diagram (10/10/2026): Diagram Studio (?d= mở một sơ đồ). */
+  { mau: '/work/:ws/:key/diagrams', nap: () => import('@/app/work/[ws]/[key]/diagrams/page') },
   { mau: '/work/:ws/:key/tests/:num', nap: () => import('@/app/work/[ws]/[key]/tests/[num]/page') },
   { mau: '/work/:ws/:key/issue/:num', nap: () => import('@/app/work/[ws]/[key]/issue/[num]/page') },
   { mau: '/work/:ws/:key/tests/cycles/:cycleId', nap: () => import('@/app/work/[ws]/[key]/tests/cycles/[cycleId]/page') },

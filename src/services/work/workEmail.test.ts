@@ -39,7 +39,7 @@ describe('UX-D email CT Work', () => {
     const m = buildInviteEmail({ ...base, kind: 'INVITE' });
     assert.equal(m.subject, 'Hoàng Cường mời bạn tham gia SE1801 Nhóm 3 · Hệ thống đặt sân trên CT Work');
     for (const s of ['Chấp nhận lời mời', 'Thành viên (Member)', '16/10/2026', 'đúng email sv.nguyen@fpt.edu.vn', 'invited you to join', 'Oct 16, 2026',
-      `${site}/images/work-covers/email/school-swp391.jpg`, `${site}/images/ct-work/ct-work-96.png`, 'cuong.jpg', 'color-scheme', 'prefers-color-scheme:dark',
+      `${site}/images/work-covers/email/school-swp391.jpg`, `${site}/images/ct-work/ct-work-email-96.png?v=2`, 'cuong.jpg', 'color-scheme', 'prefers-color-scheme:dark',
       'Bạn nhận thư này vì Hoàng Cường', 'bỏ qua thư', 'cuongthai.com']) {
       assert.ok(m.html.includes(s), `thiếu "${s}"`);
     }
@@ -86,7 +86,7 @@ describe('UX-D email CT Work', () => {
       await deliverWorkEmail({ to: 'a@b.co', subject: 'S', html: '<p>x</p>', text: 'x', replyTo: 'teacher@fe.edu.vn', refId: 'r1' });
     } finally { (emailService as any).send = orig; }
     assert.equal(sent[0].fromName, WORK_FROM_NAME);
-    assert.ok(sent[0].html.includes('ct-work-96.png') && sent[0].html.includes('>Open<'));
+    assert.ok(sent[0].html.includes('ct-work-email-96.png') && sent[0].html.includes('>Open<'));
     assert.ok(sent[0].text.includes('Open:\nhttps://cuongthai.com/work/x'));
     assert.equal(sent[1].replyTo, undefined);
     assert.equal(sent[2].replyTo, 'teacher@fe.edu.vn');

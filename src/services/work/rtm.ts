@@ -18,11 +18,13 @@
 
 import { XSheet, type XStyle } from './xlsxStyled.js';
 
-export const GAP_CODES = ['UC_INCOMPLETE', 'NO_ISSUE', 'NO_SRS', 'NO_SDS', 'NO_CODE', 'NO_TEST', 'NOT_RUN', 'FAILING', 'OPEN_BUGS'] as const;
+export const GAP_CODES = ['UC_INCOMPLETE', 'NO_ISSUE', 'NO_SRS', 'NO_SDS', 'NO_CODE', 'NO_TEST', 'NOT_RUN', 'FAILING', 'OPEN_BUGS', 'NO_SEQUENCE'] as const;
 export type GapCode = (typeof GAP_CODES)[number];
 export const GAP_LABEL: Record<GapCode, string> = {
   UC_INCOMPLETE: 'UC spec incomplete', NO_ISSUE: 'No linked requirement issue', NO_SRS: 'No SRS section', NO_SDS: 'No SDS section',
   NO_CODE: 'No commit / PR', NO_TEST: 'No test', NOT_RUN: 'Tests not run', FAILING: 'Tests failing', OPEN_BUGS: 'Open bugs',
+  // CTW Diagram (10/10/2026): UC chưa có sequence diagram nào (DRAFT/APPROVED) trong Diagram Studio.
+  NO_SEQUENCE: 'No sequence diagram',
 };
 export const RTM_STATUSES = ['Planned', 'Analyzed', 'Designed', 'Coded', 'Tested'] as const;
 
@@ -52,6 +54,8 @@ export interface RtmRow {
   ucMissing: string[];
   status: (typeof RTM_STATUSES)[number];
   gaps: GapCode[];
+  /** CTW Diagram: sequence diagram của UC ("D-4", "D-7 (draft)"). undefined = không xét (dòng REQ / dữ liệu cũ). */
+  sequence?: string[];
 }
 
 /** Gộp số liệu kiểm thử của một dòng: có test không, đã chạy chưa, có trượt không. */
@@ -78,6 +82,7 @@ export function evaluateRow(r: Omit<RtmRow, 'status' | 'gaps'>): Pick<RtmRow, 's
   else if (!t.run) gaps.push('NOT_RUN');
   if (t.failed) gaps.push('FAILING');
   if (r.bugs.some((b) => b.open)) gaps.push('OPEN_BUGS');
+  if (r.kind === 'UC' && r.sequence && !r.sequence.length) gaps.push('NO_SEQUENCE');
   const analyzed = r.kind === 'UC' ? !r.ucMissing.length : r.srs.length > 0;
   const status: RtmRow['status'] = t.total && t.run && !t.failed && t.notRun === 0 && coded ? 'Tested'
     : coded ? 'Coded' : r.sds.length ? 'Designed' : analyzed ? 'Analyzed' : 'Planned';

@@ -76,7 +76,9 @@ const FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue
 
 export function renderWorkEmail(p: WorkEmailParts): { html: string; text: string } {
   const vi = p.lang === 'vi';
-  const logo = siteUrl('/images/ct-work/ct-work-96.png');
+  // Mark CT Work bản EMAIL: ô vuông nền đặc (Outlook không bo góc, Gmail tối không đảo màu ảnh) — bo bằng CSS.
+  // Dựng bởi frontend/scripts/ct-work-brand/build.mts; tên mới + ?v=2 để proxy ảnh của Gmail không giữ logo cũ.
+  const logo = siteUrl('/images/ct-work/ct-work-email-96.png?v=2');
   const brand = p.brand ?? 'CT Work';
   const hero = p.hero
     ? p.hero.url
@@ -136,7 +138,7 @@ ${p.preheader ? `<div style="display:none;max-height:0;overflow:hidden;mso-hide:
   <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="wrap" style="width:600px;max-width:600px">
     <tr><td style="padding:0 4px 16px">
       <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-        <td valign="middle"><img src="${esc(logo)}" width="28" height="28" alt="CT Work" style="display:block;width:28px;height:28px;border:0;border-radius:7px"></td>
+        <td valign="middle"><img src="${esc(logo)}" width="28" height="28" alt="CT Work" style="display:block;width:28px;height:28px;border:0;border-radius:6px"></td>
         <td valign="middle" class="tx" style="padding-left:9px;font:600 15px ${FONT};color:${C.text}">${esc(brand)}<span class="mu" style="font-weight:400;color:${C.muted}">&nbsp;&nbsp;by CuongThai</span></td>
       </tr></table>
     </td></tr>

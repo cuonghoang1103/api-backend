@@ -1,0 +1,44 @@
+Third-party notices
+===================
+
+This file lists third-party material whose license asks for its notice to travel with copies of the code.
+(npm dependencies carry their own LICENSE files inside node_modules and are not repeated here.)
+
+--------------------------------------------------------------------------------
+diagram-design — https://github.com/cathrynlavery/diagram-design
+Used by: CT Work Diagram Studio (2026-10-10)
+  - src/services/work/diagramImport.ts   draw.io / Excalidraw reading adapted from scripts/drawio_extract.py and
+                                         scripts/excalidraw_extract.py (payload inflation, <object> unwrapping, HTML label
+                                         flattening, shape classes, edge-label folding, start-only arrows reversed)
+  - src/services/work/diagramAi.ts       editorial and selection rules distilled (not copied) from SKILL.md and references/
+  - src/services/work/diagramGen.ts, frontend/src/components/work/diagrams/render.ts, templates.ts
+                                         style guide principles (one accent, hairline borders, 6px radius, node budget)
+--------------------------------------------------------------------------------
+MIT License
+
+Copyright (c) 2025 Cathryn Lavery
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+--------------------------------------------------------------------------------
+Fonts shipped in frontend/public (both SIL Open Font License 1.1, copied from npm packages):
+  - frontend/public/diagram-fonts/be-vietnam-pro-*.woff2   Be Vietnam Pro (@fontsource/be-vietnam-pro) — embedded in
+                                                          exported diagram SVGs for Vietnamese diacritics
+  - frontend/public/excalidraw-assets/fonts/**              Excalidraw fonts (@excalidraw/excalidraw, MIT package;
+                                                          Excalifont/Virgil/Nunito/… under their own OFL/MIT notices)

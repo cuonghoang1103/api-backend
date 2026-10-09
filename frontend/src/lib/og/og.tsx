@@ -35,7 +35,8 @@ async function publicDataUri(rel: string, mime: string): Promise<string | null> 
   } catch { return null; }
 }
 
-export const ctWorkLogo = () => publicDataUri('images/ct-work/ct-work.svg', 'image/svg+xml');
+// PNG (không phải SVG): mark có bóng đổ bằng filter SVG mà Satori không vẽ. 112 px = 2× ô 56 px của <Brand>.
+export const ctWorkLogo = () => publicDataUri('images/ct-work/ct-work-mark-112.png', 'image/png');
 
 /** Ảnh từ mạng ⇒ data URI (≤ 3 MB, ≤ 3 s; chỉ PNG/JPEG). Lỗi ⇒ null. */
 export async function remoteImage(url: string | null | undefined): Promise<string | null> {

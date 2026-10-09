@@ -269,7 +269,8 @@ describe('CT Work — đợt 4: SRS có cấu trúc & truy vết (HTTP + DB th�
     assert.deepEqual(row.integration.map((u: any) => [u.name, u.passed]), [['Reservation API', 1]]);
     assert.deepEqual(row.xray.map((t: any) => t.last), ['FAIL']);
     assert.deepEqual(row.bugs.map((b: any) => [b.key, b.open]), [[`LAB-${bug.number}`, true]]);
-    assert.deepEqual(row.gaps, ['FAILING', 'OPEN_BUGS']);
+    // CTW Diagram (10/10/2026): UC chưa có sequence diagram ⇒ thêm chỗ hở NO_SEQUENCE.
+    assert.deepEqual(row.gaps, ['FAILING', 'OPEN_BUGS', 'NO_SEQUENCE']);
     assert.equal(row.status, 'Coded');
     const uc2 = r.data.rows.find((x: any) => x.reqId === 'UC-02');
     assert.ok(['UC_INCOMPLETE', 'NO_ISSUE', 'NO_SDS', 'NO_CODE', 'NO_TEST'].every((g) => uc2.gaps.includes(g)), uc2.gaps.join());

@@ -36,7 +36,7 @@ export function PriorityChip({ p }: { p: UcPriority }) {
 }
 
 export const GAP_TONE: Record<GapCode, 'red' | 'orange' | 'yellow'> = {
-  FAILING: 'red', OPEN_BUGS: 'red', NO_TEST: 'orange', NOT_RUN: 'yellow', NO_CODE: 'yellow', NO_SDS: 'yellow', NO_SRS: 'orange', UC_INCOMPLETE: 'orange', NO_ISSUE: 'yellow',
+  FAILING: 'red', OPEN_BUGS: 'red', NO_TEST: 'orange', NOT_RUN: 'yellow', NO_CODE: 'yellow', NO_SDS: 'yellow', NO_SRS: 'orange', UC_INCOMPLETE: 'orange', NO_ISSUE: 'yellow', NO_SEQUENCE: 'yellow',
 };
 
 /** Ô chữ nhiều dòng có nhãn thật (`<label htmlFor>`). */

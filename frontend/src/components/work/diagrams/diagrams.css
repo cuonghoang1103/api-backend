@@ -1,0 +1,10 @@
+/* CTW Diagram — khung xem trước sơ đồ theo biến thể theme (sáng / tối / in). Màu nền = "giấy" của bộ theme trong render.ts. */
+.ctw-dg-preview { display: block; padding: 24px; }
+/* Vùng cuộn là KHUNG CHA (có tabIndex) — khung này không tự cuộn, để chỉ một vùng cuộn nhận tiêu điểm. */
+.ctw-dg-preview.ctw-dg-light { background: #fbfaf7; }
+.ctw-dg-preview.ctw-dg-dark { background: #141416; }
+.ctw-dg-preview.ctw-dg-print { background: #ffffff; }
+/* Căn giữa bằng margin (không dùng flex center: sơ đồ rộng hơn khung sẽ bị cắt mép trái, không cuộn tới được). */
+.ctw-dg-preview .ctw-dg-svg { width: max-content; max-width: none; margin: 0 auto; }
+.ctw-dg-preview .ctw-dg-svg svg { max-width: none; height: auto; display: block; }
+.ctw-excalidraw .excalidraw { --ui-font: 'Be Vietnam Pro', Inter, system-ui, sans-serif; }

@@ -19,6 +19,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
+    "@excalidraw/excalidraw": "^0.18.1",
     "@fontsource-variable/fraunces": "^5.3.0",
     "@fontsource-variable/newsreader": "^5.3.0",
     "@fontsource/be-vietnam-pro": "^5.3.0",

@@ -23,12 +23,12 @@ import { ChatNotifierHost } from '@/components/work/chat/ChatNotifier'; // CTW K
 import AiPanelHost from '@/components/work/ai/AiPanelHost';
 import HelpPanelHost from '@/components/work/help/HelpPanel';
 import { useDaDangNhap } from '@/hooks/useDaDangNhap';
-import { Spinner } from '@/components/work/ui';
 import { useMobileNav, useSidebarRail } from '@/components/work/shell/mobileNav';
 import { useLayoutPrefs } from '@/components/work/shell/panes';
 import { isTyping } from '@/components/work/ui';
 import { useWorkLocaleStore, wt } from '@/components/work/i18n';
 import { FirstRunLanguagePrompt, WorkLangSync } from '@/components/work/i18n/LanguageSwitch';
+import { CtWorkMark } from '@/components/work/brand/CtWorkMark';
 
 export default function WorkShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';
@@ -86,7 +86,11 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
       {isPublic ? (
         <main key={locale} className="flex-1 overflow-y-auto">{children}</main>
       ) : !sanSang || !daDangNhap || !localeReady ? (
-        <div className="flex flex-1 items-center justify-center"><Spinner size={20} /></div>
+        // Màn tải: logo động (giảm chuyển động ⇒ logo tĩnh). Chữ cho trình đọc màn hình.
+        <div className="flex flex-1 items-center justify-center" role="status">
+          <CtWorkMark size={52} animate="loop" />
+          <span className="sr-only">{wt('shell.loading')}</span>
+        </div>
       ) : (
         <Fragment key={locale}>
           <a href="#work-main" className="w-skip-link">{wt('shell.skipToContent')}</a>
@@ -116,7 +120,7 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
                 <button type="button" onClick={() => setMobileNav(true)} className="w-btn w-btn-ghost w-btn-icon" aria-label={wt('shell.openNavigation')}>
                   <Menu size={17} />
                 </button>
-                <span className="text-[15px] font-semibold">CT Work</span>
+                <span className="flex items-center gap-2 text-[15px] font-semibold"><CtWorkMark size={22} />CT Work</span>
               </div>
             )}
             <div className="min-h-0 flex-1 overflow-hidden">{children}</div>

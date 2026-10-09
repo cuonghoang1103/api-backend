@@ -46,8 +46,8 @@ export const SRS_SECTION_LABEL: Record<SrsFillSection, string> = {
 
 // ─── RTM ─────────────────────────────────────────────────────────
 
-export type GapCode = 'UC_INCOMPLETE' | 'NO_ISSUE' | 'NO_SRS' | 'NO_SDS' | 'NO_CODE' | 'NO_TEST' | 'NOT_RUN' | 'FAILING' | 'OPEN_BUGS';
-export const GAP_CODES: GapCode[] = ['UC_INCOMPLETE', 'NO_ISSUE', 'NO_SRS', 'NO_SDS', 'NO_CODE', 'NO_TEST', 'NOT_RUN', 'FAILING', 'OPEN_BUGS'];
+export type GapCode = 'UC_INCOMPLETE' | 'NO_ISSUE' | 'NO_SRS' | 'NO_SDS' | 'NO_CODE' | 'NO_TEST' | 'NOT_RUN' | 'FAILING' | 'OPEN_BUGS' | 'NO_SEQUENCE';
+export const GAP_CODES: GapCode[] = ['UC_INCOMPLETE', 'NO_ISSUE', 'NO_SRS', 'NO_SDS', 'NO_CODE', 'NO_TEST', 'NOT_RUN', 'FAILING', 'OPEN_BUGS', 'NO_SEQUENCE'];
 export const RTM_STATUSES = ['Planned', 'Analyzed', 'Designed', 'Coded', 'Tested'] as const;
 export interface TestSet { name: string; ref?: string; cases: number; passed: number; failed: number; notRun: number }
 export interface RtmRow {

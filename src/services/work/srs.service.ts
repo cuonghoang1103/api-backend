@@ -629,7 +629,9 @@ export async function report3Doc(userId: number, projectId: number) {
     doc = JSON.parse(JSON.stringify((await getTemplate('fpt-report3-srs')).doc)) as PmNode;
   }
   const filled = applySrsFill(doc, await loadSrs(projectId));
-  return { doc, title, version, page: pg ? { number: pg.number, title: pg.title } : null, filled };
+  // CTW Diagram: sơ đồ ĐÃ DUYỆT (use case / ERD / workflow) vào đúng mục của bản xuất (trong bộ nhớ, không ghi trang).
+  const diagramsFilled = await (await import('./diagrams.service.js')).fillReportDocInMemory(projectId, doc, 3).catch(() => []);
+  return { doc, title, version, page: pg ? { number: pg.number, title: pg.title } : null, filled, diagramsFilled };
 }
 
 export async function exportReport3(userId: number, projectId: number, input: { format: 'docx' | 'pdf'; diagrams?: Array<string | null> }) {

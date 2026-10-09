@@ -10280,6 +10280,8 @@ model WorkProject {
   devContributions  WorkDevContribution[]
   gitIdentities     WorkGitIdentity[]
   peerRounds        WorkPeerRound[]
+  /// CTW Diagram: sơ đồ của dự án (Mermaid/Excalidraw) + phiên bản + bình luận.
+  diagrams          WorkDiagram[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
   clientRequest     ProjectRequest?
 
@@ -13819,3 +13821,93 @@ model WorkPeerReview {
 }
 
 // ── hết CTW Đóng góp ──
+
+// ── CTW Diagram ── (10/10/2026) DIAGRAM STUDIO + AI VẼ SƠ ĐỒ: sơ đồ của dự án (Mermaid hoặc Excalidraw), mỗi lần lưu
+// là một PHIÊN BẢN (khôi phục được), bình luận trên sơ đồ, AI vẽ từ CHÍNH dữ liệu dự án (UC/actor/BR/màn/workflow/repo)
+// kèm kiểm tra "mọi thực thể có nguồn" (origin.sources/assumptions). Sơ đồ ĐÃ DUYỆT (approvedVersion) mới vào Report 3/4;
+// khối nhúng trong trang Docs trỏ tới sơ đồ bằng dòng đầu `%% ctw-diagram:<id>@latest|@<v>` (Mermaid) hoặc alt ảnh
+// (Excalidraw) — đổi phiên bản ⇒ trang được cập nhật. Liên kết thẻ/UC/trang KHÔNG có FK (đa nguồn, lọc khi đọc).
+
+/// Một sơ đồ (D-<number>). format: MERMAID | EXCALIDRAW. diagramType: SEQUENCE | USE_CASE | ERD | CLASS | ACTIVITY |
+/// STATE | DEPLOYMENT | ARCHITECTURE | DATA_FLOW | SWIMLANE | GANTT | JOURNEY | TIMELINE | MINDMAP | SCREEN_FLOW |
+/// FLOWCHART | WHITEBOARD | OTHER. status: PROPOSED (AI/agent vẽ — chờ người duyệt) | DRAFT | APPROVED.
+model WorkDiagram {
+  id              Int       @id @default(autoincrement())
+  projectId       Int       @map("project_id")
+  number          Int
+  format          String    @default("MERMAID") @db.VarChar(12)
+  diagramType     String    @map("diagram_type") @db.VarChar(16)
+  title           String    @db.VarChar(200)
+  description     String?   @db.Text
+  /// Nhóm chức năng (Report 4 "2.n <Feature>") — lấy từ UC khi AI vẽ, người sửa được.
+  feature         String?   @db.VarChar(120)
+  status          String    @default("DRAFT") @db.VarChar(10)
+  /// Số phiên bản đang hiện (WorkDiagramVersion.number).
+  currentVersion  Int       @default(1) @map("current_version")
+  /// Phiên bản người đã duyệt — bản này (không phải bản nháp mới hơn) đi vào Report 3/4.
+  approvedVersion Int?      @map("approved_version")
+  issueId         Int?      @map("issue_id")
+  useCaseId       Int?      @map("use_case_id")
+  pageNumber      Int?      @map("page_number")
+  aiModel         String?   @map("ai_model") @db.VarChar(80)
+  createdById     Int?      @map("created_by_id")
+  updatedById     Int?      @map("updated_by_id")
+  /// Khoá lạc quan (tăng mỗi lần ghi).
+  rev             Int       @default(0)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  project  WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  versions WorkDiagramVersion[]
+  comments WorkDiagramComment[]
+
+  @@unique([projectId, number], name: "uk_work_diagram_number", map: "uk_work_diagram_number")
+  @@index([projectId, diagramType], map: "idx_work_diagram_type")
+  @@index([useCaseId], map: "idx_work_diagram_use_case")
+  @@map("work_diagrams")
+}
+
+/// Một phiên bản của sơ đồ. state: ACCEPTED (đã/đang là bản hiện hành) | PROPOSED (AI/agent đề xuất sửa một sơ đồ đã
+/// có — chờ người nhận) | DISCARDED. origin = { generator, sources[], assumptions[], checks } khi AI vẽ / nhập tệp.
+/// previewImageId = WorkDocImage PNG xem trước (Excalidraw — để nhúng vào Docs/xuất Word).
+model WorkDiagramVersion {
+  id             Int      @id @default(autoincrement())
+  diagramId      Int      @map("diagram_id")
+  number         Int
+  source         String   @db.Text
+  note           String?  @db.VarChar(300)
+  state          String   @default("ACCEPTED") @db.VarChar(10)
+  origin         Json?
+  previewImageId Int?     @map("preview_image_id")
+  authorId       Int?     @map("author_id")
+  aiModel        String?  @map("ai_model") @db.VarChar(80)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  diagram WorkDiagram @relation(fields: [diagramId], references: [id], onDelete: Cascade)
+
+  @@unique([diagramId, number], name: "uk_work_diagram_version", map: "uk_work_diagram_version")
+  @@map("work_diagram_versions")
+}
+
+/// Bình luận trên sơ đồ — gắn được vào phiên bản và một phần tử (anchor = tên participant/entity/nút), trả lời theo luồng.
+model WorkDiagramComment {
+  id            Int       @id @default(autoincrement())
+  diagramId     Int       @map("diagram_id")
+  authorId      Int?      @map("author_id")
+  parentId      Int?      @map("parent_id")
+  versionNumber Int?      @map("version_number")
+  anchor        String?   @db.VarChar(160)
+  body          String    @db.Text
+  resolvedAt    DateTime? @map("resolved_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+
+  diagram WorkDiagram @relation(fields: [diagramId], references: [id], onDelete: Cascade)
+
+  @@index([diagramId, createdAt], map: "idx_work_diagram_comment")
+  @@map("work_diagram_comments")
+}
+
+// ── hết CTW Diagram ──

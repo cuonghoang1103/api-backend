@@ -24,7 +24,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
   ArrowLeft, CalendarRange, CircleHelp, KeyRound, FlaskConical, Rocket, BarChart3, ChevronDown, Columns3, Inbox, LayoutDashboard,
   List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check, Sparkles, PanelLeftClose, PanelLeftOpen, Milestone, BadgeCheck, Network, FileText,
-  BriefcaseBusiness, Gauge, ListTree,
+  BriefcaseBusiness, Gauge, ListTree, Shapes,
   Handshake, PackageCheck, Activity,
   CalendarClock, GitPullRequestArrow, ShieldAlert,
   Wallet, Receipt, FileBarChart,
@@ -44,6 +44,7 @@ import WorkInbox from './shell/WorkInbox';
 import { WorkLanguageChip } from './i18n/LanguageSwitch';
 import { useSidebarRail } from './shell/mobileNav';
 import RailTooltip from './shell/RailTooltip';
+import { CtWorkMark } from './brand/CtWorkMark';
 import { ChatNavBadge } from './chat/ChatNotifier';
 import { chatApi, chatKeys } from '@/lib/work-chat-api';
 
@@ -129,6 +130,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'spec', label: 'Spec quality', icon: Gauge, match: (v) => v === 'spec', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       // CTW đợt 4: SRS có cấu trúc (use case/actor/BR/màn/phân quyền) + RTM — đội dự án + giảng viên.
       { path: 'requirements', label: 'Requirements', icon: ListTree, match: (v) => v === 'requirements', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      // CTW Diagram: Diagram Studio (Mermaid/Excalidraw, AI vẽ từ dữ liệu dự án) — đội dự án + giảng viên.
+      { path: 'diagrams', label: 'Diagrams', icon: Shapes, match: (v) => v === 'diagrams', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
     ],
   },
   // UX-A (09/10/2026): Insights đứng TRƯỚC nhóm studio. Dự án CLIENT bật đủ mô-đun có
@@ -354,12 +357,13 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
           aria-haspopup="menu"
           aria-expanded={switcher.on}
           title={currentName ?? 'CT Work'}
-          className="w-nav-row flex h-10 min-w-0 flex-1 items-center gap-2.5 rounded-[8px] px-2 text-left transition-colors hover:bg-[var(--w-hover)]"
+          className="w-nav-row ctw-mark-host flex h-10 min-w-0 flex-1 items-center gap-2.5 rounded-[8px] px-2 text-left transition-colors hover:bg-[var(--w-hover)]"
         >
           {currentName ? (
             <span className="w-keep flex"><WorkspaceMark name={currentName} logoUrl={currentLogo} size={26} /></span>
           ) : (
-            <span className="w-keep flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[7px] bg-[var(--w-accent)] text-[11px] font-bold text-white">CT</span>
+            // Logo CT Work (chưa chọn không gian) — rê chuột vào nút thì dấu tích vẽ lại.
+            <span className="w-keep flex"><CtWorkMark size={26} animate="hover" /></span>
           )}
           <span className="min-w-0 flex-1 leading-tight">
             <span className="block truncate text-[14px] font-semibold">{currentName ?? 'CT Work'}</span>

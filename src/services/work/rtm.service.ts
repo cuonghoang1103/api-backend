@@ -108,6 +108,9 @@ export async function loadRtm(projectId: number): Promise<RtmData> {
   const srs = await loadSrs(projectId);
   const ucs = inDocument(srs.useCases);
   const sections = new Map(ucSpecSection({ actors: srs.actors, useCases: srs.useCases, rules: srs.rules }).sections.map((s) => [s.useCaseId, s.number]));
+  // CTW Diagram: sequence diagram (DRAFT/APPROVED, không tính đề xuất AI chưa duyệt) của từng UC ⇒ cột SDS + chỗ hở NO_SEQUENCE.
+  const seqRows = await prisma.workDiagram.findMany({ where: { projectId, deletedAt: null, diagramType: 'SEQUENCE', useCaseId: { not: null }, status: { not: 'PROPOSED' } }, orderBy: { number: 'asc' }, select: { number: true, useCaseId: true, status: true } });
+  const seqOf = (ucId: number) => seqRows.filter((d) => d.useCaseId === ucId).map((d) => `D-${d.number}${d.status === 'APPROVED' ? '' : ' (draft)'}`);
 
   const [ucIssue, reqIssues, screens, functions, trace, docs] = await Promise.all([
     prisma.workUseCase.findMany({ where: { projectId, status: { not: 'PROPOSED' } }, select: { id: true, issueId: true } }),
@@ -252,7 +255,7 @@ export async function loadRtm(projectId: number): Promise<RtmData> {
       reqId: ucKey(u.number), kind: 'UC', ucNumber: u.number, issueNumber: iss && !iss.deletedAt ? iss.number : null, issueKey: iss && !iss.deletedAt ? `${key}-${iss.number}` : null,
       requirement: u.name, feature: u.feature ?? '', rules: u.ruleNumbers.filter((n) => ruleName.has(n)).map(brKey),
       // Trang Report 3 đã có mục của UC ⇒ dùng số mục thật của trang; chưa có ⇒ số mục sẽ sinh khi xuất Report 3.
-      srs: c.srs.length ? c.srs : sec ? [`Report 3 §${sec} (generated)`] : [], screens: scr, sds: c.sds, code: c.code,
+      srs: c.srs.length ? c.srs : sec ? [`Report 3 §${sec} (generated)`] : [], screens: scr, sds: [...c.sds, ...seqOf(u.id).map((k) => `Sequence ${k}`)], code: c.code, sequence: seqOf(u.id),
       classMethod: c.classMethod, unit: c.unit, integration: c.integration, system: c.system, xray: c.xray, bugs: c.bugs,
       iteration: iterationOf(issueId), issueDone: !!iss?.resolvedAt || iss?.status.category === 'DONE', ucMissing: ucMissing(u),
     };

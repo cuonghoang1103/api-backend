@@ -15,6 +15,7 @@ import { Eye, LinkIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, workError, workErrorStatus } from '@/lib/work-api';
 import { formatDate, Spinner } from '@/components/work/ui';
+import { CtWorkMark } from '@/components/work/brand/CtWorkMark';
 import {
   ShareBacklog, ShareBoard, ShareIssuePanel, ShareReportsView, ShareTestsView, useShareLookups,
 } from '@/components/work/share/ShareViews';
@@ -31,7 +32,7 @@ function Unavailable({ notFound, message, retry }: { notFound: boolean; message?
   return (
     <div className="flex min-h-full items-center justify-center bg-[var(--w-bg)] px-4 py-12">
       <div className="w-full max-w-[420px]">
-        <div className="mb-6 text-center text-[13px] font-semibold tracking-tight text-[var(--w-text-2)]">CT Work</div>
+        <div className="mb-6 flex items-center justify-center gap-2 text-[13px] font-semibold tracking-tight text-[var(--w-text-2)]"><CtWorkMark size={22} />CT Work</div>
         <div className="flex flex-col items-center rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)] px-6 py-7 text-center">
           <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[var(--w-sunken)] text-[var(--w-text-2)]">
             <LinkIcon size={18} />
@@ -91,7 +92,7 @@ export default function SharedProjectPage() {
       {/* Thanh trên */}
       <header className="border-b border-[var(--w-border)] bg-[var(--w-panel)]">
         <div className="mx-auto flex h-11 w-full max-w-[1280px] items-center gap-2 px-4 md:px-6">
-          <span className="text-[13px] font-semibold tracking-tight">CT Work</span>
+          <span className="flex items-center gap-2 text-[13px] font-semibold tracking-tight"><CtWorkMark size={20} />CT Work</span>
           <span className="text-[13px] text-[var(--w-text-3)]">·</span>
           <span className="truncate text-[13px] text-[var(--w-text-2)]">Shared view</span>
           <span className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full border border-[var(--w-border-strong)] bg-[var(--w-sunken)] px-2 text-[11px] font-medium leading-[20px] text-[var(--w-text-2)]">

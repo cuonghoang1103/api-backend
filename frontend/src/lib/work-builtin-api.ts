@@ -9,10 +9,10 @@ type Env<T> = { data: T };
 const d = <T,>(p: Promise<{ data: Env<T> }>) => p.then((r) => r.data.data);
 
 export type RunStatus = 'QUEUED' | 'RUNNING' | 'DONE' | 'FAILED' | 'CANCELLED' | 'CAPPED';
-export const BUILTIN_TASKS = ['WRITE_TESTS', 'WRITE_SPEC', 'ANALYZE', 'SPLIT_EPIC', 'TRIAGE_DESK', 'CUSTOM'] as const;
+export const BUILTIN_TASKS = ['WRITE_TESTS', 'WRITE_SPEC', 'ANALYZE', 'SPLIT_EPIC', 'TRIAGE_DESK', 'CUSTOM', 'DRAW_DIAGRAM'] as const;
 export type BuiltinTask = (typeof BUILTIN_TASKS)[number];
 export const TASK_LABEL: Record<BuiltinTask, string> = {
-  WRITE_TESTS: 'Write test cases', WRITE_SPEC: 'Write the spec', ANALYZE: 'Analyse', SPLIT_EPIC: 'Split into issues', TRIAGE_DESK: 'Triage', CUSTOM: 'Do what the issue says',
+  WRITE_TESTS: 'Write test cases', WRITE_SPEC: 'Write the spec', ANALYZE: 'Analyse', SPLIT_EPIC: 'Split into issues', TRIAGE_DESK: 'Triage', CUSTOM: 'Do what the issue says', DRAW_DIAGRAM: 'Draw a diagram',
 };
 
 export interface AgentRunStep { at: string; step: number; text: string }

@@ -1,0 +1,56 @@
+/*
+ * Logo động CT Work — CtWorkMark.tsx. Chỉ transform/opacity/stroke-dashoffset (không đổi bố cục ⇒ không làm chậm trang).
+ * Trạng thái GỐC của mọi phần tử là hình hoàn chỉnh; keyframes chỉ mô tả đoạn "đang vẽ" ⇒ tắt animation (giảm chuyển
+ * động, trình duyệt cũ) vẫn ra logo đầy đủ.
+ */
+.ctw-mark { display: block; flex-shrink: 0; overflow: visible; }
+.ctw-mark .ctw-mark-dot { transform-box: fill-box; transform-origin: center; }
+.ctw-mark .ctw-mark-short, .ctw-mark .ctw-mark-long { stroke-dasharray: 1 2; stroke-dashoffset: 0; }
+html.theme-dark .ctw-mark .ctw-mark-rim { stroke-opacity: .26; }
+
+/* Vẽ một lần (gắn vào trang) + vẽ lại khi rê chuột. */
+.ctw-mark--intro .ctw-mark-dot,
+.ctw-mark-host:hover .ctw-mark--hover .ctw-mark-dot,
+.ctw-mark--hover:hover .ctw-mark-dot { animation: ctw-mark-pop .34s cubic-bezier(.3, 1.6, .55, 1) both; }
+.ctw-mark--intro .ctw-mark-short,
+.ctw-mark-host:hover .ctw-mark--hover .ctw-mark-short,
+.ctw-mark--hover:hover .ctw-mark-short { animation: ctw-mark-draw .26s .16s cubic-bezier(.55, 0, .45, 1) both; }
+.ctw-mark--intro .ctw-mark-long,
+.ctw-mark-host:hover .ctw-mark--hover .ctw-mark-long,
+.ctw-mark--hover:hover .ctw-mark-long { animation: ctw-mark-draw .36s .38s cubic-bezier(.3, 0, .15, 1) both; }
+
+@keyframes ctw-mark-pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes ctw-mark-draw { 0% { stroke-dashoffset: 1; opacity: 0; } 6% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 1; } }
+
+/* Màn tải: lặp 2,6 s — chấm → nét ngắn → nét dài → ô "nảy" nhẹ khi xong → mờ dần → lại từ đầu. */
+.ctw-mark--loop { animation: ctw-mark-bump 2.6s ease-in-out infinite; transform-origin: center; }
+.ctw-mark--loop .ctw-mark-dot { animation: ctw-mark-loop-dot 2.6s cubic-bezier(.3, 1.4, .55, 1) infinite; }
+.ctw-mark--loop .ctw-mark-short { animation: ctw-mark-loop-short 2.6s cubic-bezier(.55, 0, .45, 1) infinite; }
+.ctw-mark--loop .ctw-mark-long { animation: ctw-mark-loop-long 2.6s cubic-bezier(.3, 0, .15, 1) infinite; }
+
+@keyframes ctw-mark-loop-dot {
+  0% { transform: scale(0); opacity: 0; }
+  12%, 80% { transform: scale(1); opacity: 1; }
+  92%, 100% { transform: scale(1); opacity: 0; }
+}
+@keyframes ctw-mark-loop-short {
+  0%, 12% { stroke-dashoffset: 1; opacity: 0; }
+  13% { opacity: 1; }
+  28%, 80% { stroke-dashoffset: 0; opacity: 1; }
+  92%, 100% { stroke-dashoffset: 0; opacity: 0; }
+}
+@keyframes ctw-mark-loop-long {
+  0%, 28% { stroke-dashoffset: 1; opacity: 0; }
+  29% { opacity: 1; }
+  50%, 80% { stroke-dashoffset: 0; opacity: 1; }
+  92%, 100% { stroke-dashoffset: 0; opacity: 0; }
+}
+@keyframes ctw-mark-bump {
+  0%, 50% { transform: scale(1); }
+  57% { transform: scale(1.07); }
+  66%, 100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctw-mark, .ctw-mark * { animation: none !important; }
+}

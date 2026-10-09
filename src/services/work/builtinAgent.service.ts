@@ -53,7 +53,7 @@ export const BUILTIN_DEFAULTS = {
   maxTokensPerStep: 3000,
 } as const;
 
-export const BUILTIN_TASKS = ['WRITE_TESTS', 'WRITE_SPEC', 'ANALYZE', 'SPLIT_EPIC', 'TRIAGE_DESK', 'CUSTOM'] as const;
+export const BUILTIN_TASKS = ['WRITE_TESTS', 'WRITE_SPEC', 'ANALYZE', 'SPLIT_EPIC', 'TRIAGE_DESK', 'CUSTOM', 'DRAW_DIAGRAM'] as const;
 export type BuiltinTask = (typeof BUILTIN_TASKS)[number];
 const ACTIVE_RUN = ['QUEUED', 'RUNNING'];
 const RESULT_MAX = 6_000;
@@ -236,6 +236,8 @@ async function enqueue(input: { agentId: number; projectId: number; issueId: num
 export function inferTask(title: string, typeKey: string): BuiltinTask {
   if (typeKey === 'EPIC') return 'SPLIT_EPIC';
   if (/\b(test|tests|testing|utcid|unit test|test case)\b|kiểm thử|ca kiểm|5\.[123]/i.test(title)) return 'WRITE_TESTS';
+  // CTW Diagram: "vẽ sequence cho UC-05", "draw the ERD" ⇒ vẽ sơ đồ (trước WRITE_SPEC: "sơ đồ use case" không phải viết đặc tả).
+  if (/\b(diagram|sequence|erd|uml|state machine|swimlane)\b|sơ đồ|(^|\s)vẽ(\s|$)/i.test(title)) return 'DRAW_DIAGRAM';
   if (/\b(srs|spec|specification|requirement)\b|đặc tả|yêu cầu/i.test(title)) return 'WRITE_SPEC';
   return 'CUSTOM';
 }
@@ -394,6 +396,7 @@ const TASK_HINT: Record<BuiltinTask, string> = {
   SPLIT_EPIC: 'Split the issue into 3–8 smaller issues with create_issue (STORY/TASK, or SUBTASK with parent = this issue), each independently completable.',
   TRIAGE_DESK: 'Triage the request: summarise it, propose priority and next step in a comment.',
   CUSTOM: 'Do what the issue asks, using the commands below.',
+  DRAW_DIAGRAM: 'Draw the diagram the issue asks for with diagram_generate — it draws from the project\'s own data and checks it (e.g. {"type":"SEQUENCE","useCase":"UC-05"}; USE_CASE, ERD, CLASS, ACTIVITY, STATE, SCREEN_FLOW, DEPLOYMENT). Read the use case first with srs_use_case_get if unsure which one. If the issue asks to fix an existing diagram, use diagram_get then diagram_update. Never write diagram source from memory. Finish with done: the diagram key and URL, the sources it used and every assumption the reviewer must check.',
 };
 
 export function systemPrompt(o: { agentName: string; projectKey: string; issueKey: string; maxSteps: number; catalog: string }) {

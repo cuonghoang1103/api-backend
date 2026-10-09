@@ -22,7 +22,7 @@ async function render(node: Node, _cacheSeconds: number) {
 function Brand({ logo, light = true, label = 'CT Work' }: { logo: string | null; light?: boolean; label?: string }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-      {logo ? <img src={logo} width={56} height={56} style={{ borderRadius: 14 }} /> : <div style={{ display: 'flex', width: 56, height: 56, borderRadius: 14, background: ACCENT }} />}
+      {logo ? <img src={logo} width={56} height={56} /> : <div style={{ display: 'flex', width: 56, height: 56, borderRadius: 14, background: ACCENT }} />}
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
         <span style={{ fontSize: 34, fontWeight: 800, color: light ? '#ffffff' : '#1a1a17', letterSpacing: -0.5 }}>{label}</span>
         <span style={{ fontSize: 24, fontWeight: 400, color: light ? 'rgba(255,255,255,0.72)' : '#5f5e58' }}>by CuongThai</span>

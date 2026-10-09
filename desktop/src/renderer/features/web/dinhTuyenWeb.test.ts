@@ -297,7 +297,8 @@ describe('khopTuyenWeb', () => {
     // 07/10/2026: +6 IELTS đợt 1 (thi-may · the-tu · so-loi, mỗi trang 2 đường /ielts… và /language/:code/ielts…).
     // 09/10/2026: +1 CT Work đợt 4 (requirements — SRS có cấu trúc + RTM). Trước dòng này tệp đã đỏ 154≠151 (+3 trang của phiên khác chưa ghi số).
     // 10/10/2026: +1 CT Work K-3 (chat — kênh chat dự án).
-    expect(thay.size).toBe(156);
+    // 10/10/2026: +1 CT Work Diagram (diagrams — Diagram Studio).
+    expect(thay.size).toBe(157);
   });
 });
 

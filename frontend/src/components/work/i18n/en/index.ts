@@ -5,6 +5,7 @@ import { backlog } from './backlog';
 import { board } from './board';
 import { create } from './create';
 import { dev } from './dev';
+import { diagram } from './diagram';
 import { errors } from './errors';
 import { fields } from './fields';
 import { fpt } from './fpt';
@@ -25,4 +26,4 @@ import { studio } from './studio';
 import { tests } from './tests';
 import { timeline } from './timeline';
 
-export const en = { common, agents, backlog, board, create, dev, errors, fields, fpt, home, invite, issues, notify, onboard, palette, releases, school, settings, shell, sprint, srs, status, studio, tests, timeline };
+export const en = { common, agents, backlog, board, create, dev, diagram, errors, fields, fpt, home, invite, issues, notify, onboard, palette, releases, school, settings, shell, sprint, srs, status, studio, tests, timeline };

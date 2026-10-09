@@ -78,6 +78,7 @@ import ctw4Routes from './work.ctw4.routes.js';
 import ctwk3Routes from './work.ctwk3.routes.js'; // CTW K-3: kênh chat dự án
 import uxdRoutes, { uxdPublicRoutes } from './work.uxd.routes.js'; // UX-D: ảnh xem trước link + ảnh bìa dự án
 import contribRoutes from './work.contrib.routes.js'; // CTW Đóng góp: chỉ số thành viên + đánh giá chéo
+import diagramRoutes from './work.diagrams.routes.js'; // CTW Diagram: Diagram Studio + AI vẽ sơ đồ
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
@@ -2008,5 +2009,7 @@ router.use(uxdRoutes); // UX-D: ảnh bìa dự án (chỉ ADMIN dự án)
 router.use(contribRoutes);
 // CTW K-3: kênh chat dự án (work.ctwk3.routes.ts — quyền trong chat.service.ts).
 router.use(ctwk3Routes);
+// CTW Diagram: Diagram Studio (sơ đồ Mermaid/Excalidraw, phiên bản, AI vẽ từ dữ liệu dự án) — work.diagrams.routes.ts.
+router.use(diagramRoutes);
 
 export default router;

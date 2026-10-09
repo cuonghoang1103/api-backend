@@ -16,6 +16,7 @@ export const shell: Strings<typeof En> = {
   helpGuide: 'Hướng dẫn sử dụng',
   backToSite: 'Về CuongThai',
   skipToContent: 'Bỏ qua, tới nội dung',
+  loading: 'Đang tải CT Work…',
   breadcrumb: 'Đường dẫn',
   archived: 'Đã lưu trữ',
   moreLocked: 'Thao tác khác (đang khoá chỉnh sửa)',

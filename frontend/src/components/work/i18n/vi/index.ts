@@ -6,6 +6,7 @@ import { backlog } from './backlog';
 import { board } from './board';
 import { create } from './create';
 import { dev } from './dev';
+import { diagram } from './diagram';
 import { errors } from './errors';
 import { fields } from './fields';
 import { fpt } from './fpt';
@@ -27,4 +28,4 @@ import { tests } from './tests';
 import { timeline } from './timeline';
 
 /** Mọi miền và mọi khoá của bản tiếng Anh phải có ở đây (thiếu/thừa ⇒ lỗi tsc). */
-export const vi: { [D in keyof typeof En]: Strings<(typeof En)[D]> } = { common, agents, backlog, board, create, dev, errors, fields, fpt, home, invite, issues, notify, onboard, palette, releases, school, settings, shell, sprint, srs, status, studio, tests, timeline };
+export const vi: { [D in keyof typeof En]: Strings<(typeof En)[D]> } = { common, agents, backlog, board, create, dev, diagram, errors, fields, fpt, home, invite, issues, notify, onboard, palette, releases, school, settings, shell, sprint, srs, status, studio, tests, timeline };

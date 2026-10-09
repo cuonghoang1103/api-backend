@@ -20,16 +20,16 @@ import { wk } from '@/components/work/hooks';
 import { ProjectMark, Spinner, UserAvatar } from '@/components/work/ui';
 import { WorkspaceMark, WS_ROLE_HELP, WS_ROLE_LABEL } from '@/components/work/settings/shared';
 import ProjectCover from '@/components/work/cover/ProjectCover';
-import { anhTuyetDoi } from '@/lib/anhTuyetDoi';
+import { CtWorkMark } from '@/components/work/brand/CtWorkMark';
 import { wt } from '@/components/work/i18n';
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-full flex-col items-center justify-center bg-[var(--w-bg)] px-4 py-10">
       <div className="w-full max-w-[460px]">
-        <Link href="/work" className="mx-auto mb-6 flex w-fit items-center gap-2 text-[14px] font-semibold tracking-tight text-[var(--w-text)]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={anhTuyetDoi("/images/ct-work/ct-work.svg")} alt="" width={24} height={24} className="h-6 w-6" />
+        <Link href="/work" className="ctw-mark-host mx-auto mb-6 flex w-fit items-center gap-2.5 text-[14px] font-semibold tracking-tight text-[var(--w-text)]">
+          {/* SVG nội tuyến (không phải <img>) ⇒ không phụ thuộc đường dẫn tĩnh, chạy đúng cả trong app desktop (app://). */}
+          <CtWorkMark size={28} animate="intro" />
           CT Work <span className="font-normal text-[var(--w-text-3)]">by CuongThai</span>
         </Link>
         <main className="overflow-hidden rounded-[14px] border border-[var(--w-border)] bg-[var(--w-panel)]" style={{ boxShadow: 'var(--w-shadow-card)' }}>{children}</main>

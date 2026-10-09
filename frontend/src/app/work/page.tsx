@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { ChevronRight, Columns3, Compass, FolderKanban, Layers, Plus, RotateCcw, Users } from 'lucide-react';
+import { ChevronRight, Compass, FolderKanban, Layers, Plus, RotateCcw, Users } from 'lucide-react';
 import { workApi, workError, type WorkspaceSummary } from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
 import { EmptyState, Popover, relativeTime, Spinner, useToggle, PageLoading } from '@/components/work/ui';
@@ -18,6 +18,7 @@ import HelpTourCard from '@/components/work/help/HelpTourCard';
 import { cn } from '@/lib/utils';
 import { openHelp } from '@/components/work/help/store';
 import { wt } from '@/components/work/i18n';
+import { CtWorkMark } from '@/components/work/brand/CtWorkMark';
 
 type HomeTab = 'my-work' | 'workspaces';
 const HOME_TABS: Array<{ id: HomeTab; label: string }> = [
@@ -210,8 +211,9 @@ function WelcomeHero({ onCreate }: { onCreate: () => void }) {
   ];
   return (
     <div className="mx-auto flex max-w-[720px] flex-col items-center py-10 text-center md:py-16">
-      <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-[14px] bg-[var(--w-accent)] text-white" style={{ boxShadow: '0 8px 24px color-mix(in srgb, var(--w-accent) 35%, transparent)' }}>
-        <Columns3 size={26} />
+      {/* Logo CT Work vẽ dần khi trang chào hiện ra (trạng thái trống: chưa có không gian nào). */}
+      <div className="mb-6 rounded-[16px]" style={{ boxShadow: '0 10px 28px color-mix(in srgb, var(--w-accent) 32%, transparent)' }}>
+        <CtWorkMark size={64} animate="intro" />
       </div>
       <h2 className="text-[26px] font-semibold leading-tight tracking-[-0.02em] md:text-[30px]">{wt('home.heroTitle')}</h2>
       <p className="mt-3 max-w-[520px] text-[15px] leading-relaxed text-[var(--w-text-2)]">

@@ -14,13 +14,17 @@ export const metadata: Metadata = {
   title: { default: 'CT Work', template: '%s · CT Work' },
   description: 'CT Work by CuongThai — project workspace for teams and student groups: boards, sprints, docs and reports.',
   applicationName: 'CT Work by CuongThai',
+  // 10/10/2026 — bộ nhận diện mới (mark "Flow Check", xem public/images/ct-work/BRAND.md). Tên tệp MỚI + `?v=2`:
+  // trình duyệt giữ favicon rất lâu theo URL, đổi URL là cách duy nhất chắc chắn thay được icon cũ trên tab.
   icons: {
     icon: [
-      { url: '/images/ct-work/ct-work.svg', type: 'image/svg+xml' },
-      { url: '/images/ct-work/ct-work-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/images/ct-work/favicon.ico?v=2', sizes: '16x16 32x32 48x48' },
+      { url: '/images/ct-work/icon.svg?v=2', type: 'image/svg+xml' },
+      { url: '/images/ct-work/icon-192.png?v=2', sizes: '192x192', type: 'image/png' },
     ],
-    apple: { url: '/images/ct-work/ct-work-180.png', sizes: '180x180' },
+    apple: { url: '/images/ct-work/apple-touch-icon.png?v=2', sizes: '180x180' },
   },
+  manifest: '/images/ct-work/work.webmanifest?v=2',
   appleWebApp: { title: 'CT Work' },
   openGraph: {
     type: 'website',

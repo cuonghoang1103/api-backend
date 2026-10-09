@@ -1,0 +1,10 @@
+slug	MOI	id	credit	ly_do
+ga-3-0-slides	MOI	MdjyWei7ZKo	? — Expressions Follow Along: Advanced Expression Usage – GitHub Actions Course	Biểu thức nâng cao (toán tử, hàm, điều kiện) — đúng trục Ch3; bổ sung cho các video context đã dùng ở 3.1–3.5. CHƯA KIỂM yt-check/yt-desc (youtube.com bị chặn)
+ga-4-0-slides	MOI	W-1Zf8lrdxU	? — E5 - GitHub Actions: Write custom Javascript & Docker actions || Beginner Friendly	Bao cả hai loại action tự viết (JS + Docker) — đúng Ch4 "action là gì / tự viết". CHƯA KIỂM
+ga-5-0-slides	MOI	H28tBI48-Rw	? — Caching Job Dependencies and Build Outputs – GitHub Actions Course	Cache dependency LẪN build output, khớp Ch5 cache + artifact; chưa dùng trong manifest (các video cache khác đã gắn 5.1–5.5). CHƯA KIỂM
+ga-6-0-slides	MOI	MpTqyYyvHk0	? — Common Vulnerabilities in GitHub Actions - And How to Protect Against Them	Tổng quan bề mặt tấn công (injection, token, secrets, pull_request_target) — hợp slide tổng Ch6 hơn video OIDC/AWS lẻ. CHƯA KIỂM
+ga-7-0-slides	MOI	VmSKTVFBKQg	? — GitHub Actions - Workflow Concurrency	concurrency/cancel-in-progress — trọng tâm Ch7; id khác yAb8OSYCHTc đã dùng ở 7.2. CHƯA KIỂM
+ga-8-0-slides	MOI	HWGot0-P1Ps	? — Debugging GitHub Actions - GitHub Hosted Runners with tmate	Vào thẳng runner để tái lập lỗi — khớp Ch8 "khi CI đỏ / tái lập". CHƯA KIỂM
+ga-9-0-slides	MOI	w_37LDOy4sI	? — GitHub Actions: Approvals, Environments and Visualization DEEP DIVE	Deep dive environment + phê duyệt thủ công + sơ đồ luồng deploy — đúng Ch9 (người như biện pháp kiểm soát). CHƯA KIỂM
+ga-10-0-slides	MOI	C3fYHasoWv8	? — CI/CD Pipeline Passed… But App Was Broken | Real DevOps Failure Explained	Ca thật "pipeline xanh mà app hỏng" — trùng tinh thần Ch10 (seed qua checklist vẫn vỡ prod, smoke test). Chất lượng kênh chưa rõ ⇒ ưu tiên xem lại trước khi seed. CHƯA KIỂM
+ga-11-0-slides	MOI	Tz7FsunBbfQ	? — GitHub Actions Certification – Full Course to PASS the Exam	Khoá đầy đủ ôn thi chứng chỉ GH Actions — hợp Ch11 ôn tổng Ch1–10 + chuẩn bị phỏng vấn. CHƯA KIỂM

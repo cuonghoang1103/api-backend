@@ -16,6 +16,7 @@ import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigat
 import { cn } from '@/lib/utils';
 import { workError, type ProjectConfig } from '@/lib/work-api';
 import ProjectHeader from '@/components/work/ProjectHeader';
+import { PageFocusButton } from '@/components/work/shell/panes'; // UX-E: Focus / Full width
 import IssueDrawer from '@/components/work/IssueDrawer';
 import { useProject, useProjectRealtime } from '@/components/work/hooks';
 import { EmptyState, PageLoading } from '@/components/work/ui';
@@ -59,7 +60,7 @@ function SchoolView({ config, pid }: { config: ProjectConfig; pid: number }) {
 
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="FPT reports" />
+      <ProjectHeader config={config} title="FPT reports"><PageFocusButton scope="school" /></ProjectHeader>
       <div className="shrink-0 overflow-x-auto border-b border-[var(--w-border)] px-4">
         <div className="flex gap-1" role="tablist" aria-label="FPT reports">
           {TABS.map((t) => (

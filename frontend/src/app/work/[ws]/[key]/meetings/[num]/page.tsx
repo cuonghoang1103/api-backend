@@ -5,6 +5,7 @@
 import { Suspense } from 'react';
 import { useParams } from 'next/navigation';
 import ProjectHeader from '@/components/work/ProjectHeader';
+import { PageFocusButton } from '@/components/work/shell/panes'; // UX-E: Focus / Full width
 import { useProject, useProjectRealtime } from '@/components/work/hooks';
 import { EmptyState, PageLoading } from '@/components/work/ui';
 import { ModuleOff, studioOn } from '@/components/work/studio/shared';
@@ -19,7 +20,7 @@ function Inner() {
   if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : undefined} />;
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Meeting" />
+      <ProjectHeader config={config} title="Meeting"><PageFocusButton scope="meeting" /></ProjectHeader>
       {!studioOn(config, 'meetings') ? <ModuleOff config={config} label="The Meetings module" />
         : !config.permissions.viewGovernance ? <EmptyState title="Only for the project team" body="Meeting minutes and action items are internal to the team. Meetings you are invited to appear in the client portal." />
           : <MeetingDetail config={config} num={Number(params.num)} key={params.num} />}

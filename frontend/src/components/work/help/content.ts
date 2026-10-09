@@ -2378,6 +2378,19 @@ export const HELP_ARTICLES: HelpArticle[] = [
         [['⌘', 'K'], 'Command palette: search issues, projects, actions', 'Bảng lệnh: tìm issue, dự án, thao tác'],
         [['?'], 'Open or close this guide', 'Mở hoặc đóng hướng dẫn này'],
         [['Esc'], 'Close the open panel or dialog', 'Đóng ngăn hoặc hộp thoại đang mở'],
+        [['⌘', '\\'], 'Collapse or expand the sidebar (also leaves Focus)', 'Thu gọn hoặc mở sidebar (cũng thoát Focus)'],
+        [['⌘', 'J'], 'Open or close Ask AI', 'Mở hoặc đóng Ask AI'],
+      ),
+      h('Reading & writing space', 'Không gian đọc & viết'),
+      kbd(
+        [['['], 'Docs: show or hide the page tree · Tests 5.1–5.3: show or hide the list', 'Docs: hiện/ẩn cây trang · Tests 5.1–5.3: hiện/ẩn danh sách'],
+        [[']'], 'Docs: show or hide page Details · Issue page: show or hide the Details column', 'Docs: hiện/ẩn Details của trang · Trang issue: hiện/ẩn cột Details'],
+        [['F'], 'Focus / full width — hides the sidebar and side panels (Docs, Tests, Requirements, FPT reports, Meeting)', 'Focus / toàn chiều rộng — ẩn sidebar và panel phụ (Docs, Tests, Requirements, FPT reports, Họp)'],
+        [['Esc'], 'Close the side panel, then leave Focus', 'Đóng ngăn phụ, rồi thoát Focus'],
+      ),
+      p(
+        'Panels you hide stay hidden next time (per browser). On narrow screens — iPad portrait, the desktop app with the sidebar open — Details and the page tree become slide-over panels automatically, so the text keeps a comfortable width. Turn spell-check off for a page from **More (…) › Check spelling while editing**.',
+        'Panel đã ẩn sẽ vẫn ẩn ở lần sau (theo trình duyệt). Trên màn hẹp — iPad dọc, app desktop khi sidebar đang mở — Details và cây trang tự thành ngăn trượt để chữ luôn đủ rộng. Tắt gạch chân chính tả ở **More (…) › Check spelling while editing**.',
       ),
       h('Board & Backlog', 'Board & Backlog'),
       kbd(

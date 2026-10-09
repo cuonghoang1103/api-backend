@@ -412,6 +412,7 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
 /* Bảng (chỉ trang TÀI LIỆU — RichEditor docs). Khung bọc tự cuộn ngang: bảng 6 cột
    của SRS/RTM không làm trang tràn ngang ở 390px. */
 .w-prose .w-table-wrap { max-width: 100%; overflow-x: auto; margin: 4px 0 12px; border: 1px solid var(--w-border); border-radius: var(--w-radius); }
+.w-prose .w-table-wrap:focus-visible { outline: 2px solid var(--w-accent); outline-offset: 2px; }
 .w-prose table { border-collapse: collapse; width: 100%; min-width: 420px; table-layout: auto; font-size: 13px; line-height: 1.45; }
 .w-prose th, .w-prose td { border-bottom: 1px solid var(--w-border); border-right: 1px solid var(--w-border); padding: 6px 9px; vertical-align: top; text-align: left; min-width: 72px; }
 .w-prose tr > :last-child { border-right: 0; }
@@ -432,6 +433,30 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
 .w-doc .w-prose h4 { font-size: 13.5px; font-weight: 650; color: var(--w-text-2); margin: 16px 0 6px; }
 .w-doc .w-prose blockquote { background: var(--w-sunken); border-left-color: var(--w-accent-border); border-radius: 0 6px 6px 0; padding: 8px 12px; }
 .w-doc .w-prose blockquote p { margin-bottom: 4px; }
+
+/* UX-E: độ dài dòng dễ đọc. Đoạn văn, đề mục, danh sách, trích dẫn giữ ~80–88 ký tự (640px ở
+   14.5px); bảng, khối code, sơ đồ và ảnh được rộng hết cột. Đo bằng px (không em) để đề mục và
+   đoạn văn — khác cỡ chữ — cùng một mép trái/phải khi căn giữa ở chế độ Focus. */
+.w-doc { --w-measure: 640px; }
+.w-doc .w-prose > :where(p, h1, h2, h3, h4, ul, ol, blockquote, hr) { max-width: var(--w-measure); }
+/* Bảng trong tài liệu: rộng theo nội dung (không ép 9 cột vào bề ngang cột chữ — từng có cột "Rule"
+   chỉ còn một chữ mỗi dòng trên iPad dọc), mỗi ô tối đa ~22em rồi xuống dòng; bảng rộng hơn khung thì
+   cuộn ngang trong `.w-table-wrap` của nó, trang không bị vỡ. */
+.w-doc .w-prose table { width: max-content; min-width: 100%; }
+.w-doc .w-prose :is(th, td) > p { min-width: 4.5em; max-width: 22em; }
+/* Focus / Full width: cột chữ căn giữa, chữ lớn hơn chút; khối rộng vẫn tràn hết 1200px. */
+.w-doc.w-doc-focus { --w-measure: 720px; }
+.w-doc-focus .w-prose { font-size: 16px; line-height: 1.75; }
+/* :is (không phải :where) ⇒ đủ độ ưu tiên để thắng `margin` của `.w-doc .w-prose h2` ở trên. */
+.w-doc-focus .w-prose > :is(p, h1, h2, h3, h4, ul, ol, blockquote, hr) { margin-left: auto; margin-right: auto; }
+.w-doc-focus .w-doc-head { max-width: var(--w-measure); margin-left: auto; margin-right: auto; }
+/* iPad / màn cảm ứng: chữ tài liệu to hơn một nấc (14.5px đọc lâu trên iPad là mỏi). */
+@media (pointer: coarse) {
+  .w-doc { --w-measure: 680px; }
+  .w-doc .w-prose { font-size: 15.5px; line-height: 1.72; }
+  .w-doc.w-doc-focus { --w-measure: 760px; }
+  .w-doc-focus .w-prose { font-size: 17px; }
+}
 
 /* So sánh phiên bản: dòng thêm / bớt. */
 .w-diff { font-family: var(--w-font-mono); font-size: 12.5px; line-height: 1.55; }

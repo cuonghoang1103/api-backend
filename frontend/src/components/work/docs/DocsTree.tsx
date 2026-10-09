@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { ChevronRight, FileText, MoreHorizontal, Plus, Search, X } from 'lucide-react';
+import { ChevronRight, FileText, MoreHorizontal, PanelLeftClose, Plus, Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workDocsApi, workDocsKeys, workError, type ProjectConfig, type WorkPageItem, type WorkPageList } from '@/lib/work-api';
 import { useAuthStore } from '@/store/authStore';
@@ -37,13 +37,15 @@ function saveOpen(pid: number, s: Set<number>) {
   try { localStorage.setItem(`ctw-docs-open-${pid}`, JSON.stringify([...s].slice(0, 500))); } catch { /* chế độ riêng tư */ }
 }
 
-export default function DocsTree({ config, list, activeNum, onNew, onNavigate }: {
+export default function DocsTree({ config, list, activeNum, onNew, onNavigate, onHide }: {
   config: ProjectConfig;
   list: WorkPageList;
   activeNum?: number;
   /** Mở hộp "New page" với cha đã chọn (null = gốc). */
   onNew: (parentNumber: number | null) => void;
   onNavigate?: () => void;
+  /** UX-E: nút "Hide pages" ([) khi cây đang là cột cạnh nội dung. */
+  onHide?: () => void;
 }) {
   const pid = config.id;
   const qc = useQueryClient();
@@ -265,6 +267,11 @@ export default function DocsTree({ config, list, activeNum, onNew, onNavigate }:
         {canEdit && (
           <button type="button" className="w-btn w-btn-icon !h-8 !w-8" aria-label="New page" title="New page" onClick={() => onNew(null)}>
             <Plus size={14} />
+          </button>
+        )}
+        {onHide && (
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon !h-8 !w-8" aria-label="Hide pages ([)" title="Hide pages ([)" onClick={onHide} data-testid="docs-tree-hide">
+            <PanelLeftClose size={14} />
           </button>
         )}
       </div>

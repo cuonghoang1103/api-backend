@@ -21,6 +21,8 @@ import HelpPanelHost from '@/components/work/help/HelpPanel';
 import { useDaDangNhap } from '@/hooks/useDaDangNhap';
 import { Spinner } from '@/components/work/ui';
 import { useMobileNav, useSidebarRail } from '@/components/work/shell/mobileNav';
+import { useLayoutPrefs } from '@/components/work/shell/panes';
+import { isTyping } from '@/components/work/ui';
 
 export default function WorkShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';
@@ -35,7 +37,30 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
 
   // Sidebar thu gọn (≥md): đọc lựa chọn đã lưu / tự thu gọn khi cửa sổ hẹp.
   const rail = useSidebarRail((s) => s.collapsed);
-  useEffect(() => { useSidebarRail.getState().init(); }, []);
+  useEffect(() => { useSidebarRail.getState().init(); useLayoutPrefs.getState().load(); }, []);
+
+  // UX-E: chế độ Focus của trang (Docs, Tests…) ẩn hẳn sidebar dự án. Rời khỏi trang đã bật
+  // (đường dẫn ra ngoài `focusBase`) ⇒ tự thoát, sidebar quay lại.
+  const focus = useLayoutPrefs((s) => s.focus);
+  const focusBase = useLayoutPrefs((s) => s.focusBase);
+  useEffect(() => {
+    if (focus && focusBase && pathname !== focusBase && !pathname.startsWith(`${focusBase}/`)) useLayoutPrefs.getState().exitFocus();
+  }, [pathname, focus, focusBase]);
+
+  // ⌘\ (Ctrl+\): thu gọn / mở sidebar; đang Focus thì thoát Focus. Chạy cả khi đang gõ
+  // (phím có ⌘ không gõ ra chữ) — trừ ô nhập thường, nơi ⌘\ không có nghĩa gì nên vẫn cho.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.altKey || e.shiftKey || e.key !== '\\' || e.defaultPrevented) return;
+      if (isTyping(e.target) && (e.target as HTMLElement).tagName === 'SELECT') return;
+      e.preventDefault();
+      const lp = useLayoutPrefs.getState();
+      if (lp.focus) lp.exitFocus();
+      else useSidebarRail.getState().toggle();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // Lưới đỡ phía client (middleware là chốt chính): phiên hết hạn giữa chừng.
   useEffect(() => {
@@ -53,8 +78,9 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
       ) : (
         <>
           <aside
-            className="hidden shrink-0 overflow-hidden bg-[var(--w-bg)] transition-[width] duration-200 ease-out md:block"
+            className={`hidden shrink-0 overflow-hidden bg-[var(--w-bg)] transition-[width] duration-200 ease-out ${focus ? '' : 'md:block'}`}
             style={{ width: rail ? 'var(--w-sidebar-rail)' : 'var(--w-sidebar-w)' }}
+            data-focus-hidden={focus ? '' : undefined}
           >
             {/* Sidebar đọc ?tab= (useSearchParams) ⇒ cần Suspense. */}
             <Suspense fallback={null}><WorkSidebar /></Suspense>
@@ -71,7 +97,7 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
               </aside>
             </div>
           )}
-          <main className="flex min-w-0 flex-1 flex-col bg-[var(--w-panel)] md:my-2 md:mr-2 md:rounded-[12px] md:border md:border-[var(--w-border)]" style={{ boxShadow: 'var(--w-shadow-card)' }}>
+          <main className={`flex min-w-0 flex-1 flex-col bg-[var(--w-panel)] md:my-2 md:mr-2 md:rounded-[12px] md:border md:border-[var(--w-border)] ${focus ? 'md:ml-2' : ''}`} style={{ boxShadow: 'var(--w-shadow-card)' }}>
             {!pageHasHeader && (
               <div className="w-header flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 md:hidden">
                 <button type="button" onClick={() => setMobileNav(true)} className="w-btn w-btn-ghost w-btn-icon" aria-label="Open navigation">

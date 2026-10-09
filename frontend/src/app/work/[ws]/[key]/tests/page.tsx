@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { workError, type ProjectConfig } from '@/lib/work-api';
 import IssueDrawer from '@/components/work/IssueDrawer';
 import ProjectHeader from '@/components/work/ProjectHeader';
+import { PageFocusButton } from '@/components/work/shell/panes'; // UX-E: Focus / Full width
 import { useProject, useProjectRealtime } from '@/components/work/hooks';
 import { EmptyState, PageLoading } from '@/components/work/ui';
 import LibraryTab from '@/components/work/tests/LibraryTab';
@@ -74,6 +75,7 @@ function TestsView({ config, pid }: { config: ProjectConfig; pid: number }) {
   return (
     <div className="flex h-full flex-col">
       <ProjectHeader config={config} title="Tests">
+        {enabled && <PageFocusButton scope="tests" />}
         {enabled && config.permissions.createIssues && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setNewOpen(true)}>
             <Plus size={14} /> <span className="hidden sm:inline">New test</span>

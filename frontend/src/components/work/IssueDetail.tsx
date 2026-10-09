@@ -53,6 +53,7 @@ import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import { AiAssistedControl } from './spec/SpecPanel';
 import { AddToCalendar, FlagControl } from './ctw';
 import type { AiProvenance } from '@/lib/work-s6-api';
+import { PaneToggle, usePaneKeys, usePanes } from './shell/panes'; // UX-E: cột Details ẩn/hiện
 import {
   formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, ProjectMark, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
   EmptyState,
@@ -388,6 +389,15 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
   const router = useRouter();
   // Trang riêng trên điện thoại/iPad dọc: thẻ "Details" ngay dưới tiêu đề, mở sẵn.
   const [detailsOpen, setDetailsOpen] = useState(true);
+  // UX-E: cột Details bên phải (trang riêng) — ẩn/hiện bằng nút hoặc `]`, nhớ lựa chọn. Không đủ chỗ
+  // (nội dung còn < 640px — iPad dọc, app desktop 1180 khi sidebar mở) ⇒ tự về khối "Details" gập
+  // được ngay dưới tiêu đề, nội dung dùng hết bề ngang.
+  const panes = usePanes('issue', { right: { width: 352, minFrame: 1024 }, minMain: 640 });
+  const sidePane = panes.right;
+  const sideOn = variant === 'page' && sidePane.mode === 'inline';
+  usePaneKeys(variant === 'page' ? {
+    right: () => (sidePane.mode === 'drawer' ? setDetailsOpen((v) => !v) : sidePane.toggle()),
+  } : {});
 
   const q = useQuery({ queryKey: wk.issue(pid, num), queryFn: () => workApi.issue(pid, num), retry: (n, err) => workErrorStatus(err) !== 404 && n < 2 });
   const issue = q.data;
@@ -648,21 +658,25 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             </>
           )}
           {onClose && <button type="button" onClick={onClose} title="Close (Esc)" className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><X size={15} /></button>}
+          {variant === 'page' && sidePane.mode !== 'drawer' && (
+            <PaneToggle pane={sidePane} side="right" label="Details" shortcut="]" showLabel={false} className="w-btn-ghost" />
+          )}
         </div>
         {variant === 'page' && <HeaderTools />}
       </div>
 
       {/* Thân */}
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className={cn('flex flex-col gap-6 p-5', variant === 'page' ? 'mx-auto w-full max-w-[1240px] lg:flex-row lg:gap-8 lg:px-8 lg:py-7' : 'xl:flex-row')}>
-          <div className={cn('min-w-0 flex-1 space-y-7', variant === 'page' && 'max-w-[820px]')}>
+      <div ref={variant === 'page' ? panes.ref : undefined} className="min-h-0 flex-1 overflow-y-auto">
+        <div className={cn('flex flex-col gap-6 p-5', variant === 'page' ? cn('mx-auto w-full max-w-[1240px] lg:px-8 lg:py-7', sideOn && 'flex-row gap-8') : 'xl:flex-row')}>
+          <div className={cn('min-w-0 flex-1 space-y-7', variant === 'page' && (sideOn ? 'max-w-[820px]' : 'mx-auto w-full max-w-[860px]'))}>
             <TitleEditor value={issue.title} editable={editable} onSave={(title) => set({ title })} />
             <IssueClientShare config={config} pid={pid} issue={issue} />
             <IssuePresenceStrip pid={pid} num={issue.number} enabled={config.role !== 'CLIENT'} />
             <div className="xl:hidden">{variant === 'drawer' && properties}</div>
-            {variant === 'page' && (
-              // Dưới lg: thuộc tính nằm ngay dưới tiêu đề (không bị đẩy xuống sau mọi bình luận).
-              <section className="rounded-[8px] border border-[var(--w-border)] lg:hidden">
+            {variant === 'page' && !sideOn && (
+              // Không có cột Details (hẹp, hoặc người dùng ẩn): thuộc tính nằm ngay dưới tiêu đề
+              // (không bị đẩy xuống sau mọi bình luận).
+              <section className="rounded-[8px] border border-[var(--w-border)]" data-testid="issue-details-inline">
                 <button
                   type="button"
                   onClick={() => setDetailsOpen((v) => !v)}
@@ -704,11 +718,13 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             <Attachments issue={issue} pid={pid} config={config} />
             <IssueActivity pid={pid} num={num} config={config} lk={lk} clientShared={!!issue.clientVisible} />
           </div>
-          <aside aria-label="Issue details" className={cn('shrink-0', variant === 'page' ? 'hidden lg:block lg:w-[320px]' : 'hidden xl:block xl:w-[290px]')}>
-            <div className={cn('rounded-[12px] border border-[var(--w-border)] bg-[var(--w-raised)] p-3.5 shadow-[var(--w-shadow-card)]', variant === 'page' && 'lg:sticky lg:top-0')}>
+          {(variant !== 'page' || sideOn) && (
+          <aside aria-label="Issue details" className={cn('shrink-0', variant === 'page' ? 'w-[320px]' : 'hidden xl:block xl:w-[290px]')} data-testid={variant === 'page' ? 'issue-details-pane' : undefined}>
+            <div className={cn('rounded-[12px] border border-[var(--w-border)] bg-[var(--w-raised)] p-3.5 shadow-[var(--w-shadow-card)]', variant === 'page' && 'sticky top-0')}>
               {properties}
             </div>
           </aside>
+          )}
         </div>
       </div>
 

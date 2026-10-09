@@ -394,9 +394,10 @@ export function RequestDialog({ pid, num, asClient, onClose, deskOn }: { pid: nu
 function DocumentDialog({ pid, num, asClient, onClose }: { pid: number; num: number | null; asClient: boolean; onClose: () => void }) {
   const q = useQuery({ queryKey: workPortalKeys.doc(pid, num ?? 0, asClient), queryFn: () => workPortalApi.document(pid, num!, asClient), enabled: !!num });
   return (
-    <Dialog open={!!num} onClose={onClose} width={820} title={q.data?.title ?? 'Document'}>
+    <Dialog open={!!num} onClose={onClose} width={900} title={q.data?.title ?? 'Document'}>
       {q.isLoading ? <PageLoading rows={4} /> : q.error || !q.data ? <EmptyState title="Not available" body={workError(q.error)} /> : (
-        <div>
+        // UX-E: cùng kiểu chữ trang Docs (cỡ chữ, khoảng dòng, độ dài dòng ~80 ký tự; bảng cuộn ngang trong khung riêng).
+        <div className="w-doc min-w-0">
           <p className="mb-4 text-[12.5px] text-[var(--w-text-3)]">{q.data.stage ? `${q.data.stage} · ` : ''}Updated {relativeTime(q.data.updatedAt)}</p>
           <RichView value={q.data.contentJson} docs />
         </div>

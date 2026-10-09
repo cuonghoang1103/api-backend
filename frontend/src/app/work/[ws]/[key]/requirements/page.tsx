@@ -19,6 +19,7 @@ import { workError, type ProjectConfig } from '@/lib/work-api';
 import { mermaidPngsOf, saveBlob } from '@/lib/work-docs3a-api';
 import { SRS_SECTION_LABEL, workCtw4Api, workCtw4Keys } from '@/lib/work-ctw4-api';
 import ProjectHeader from '@/components/work/ProjectHeader';
+import { PageFocusButton } from '@/components/work/shell/panes'; // UX-E: Focus / Full width
 import IssueDrawer from '@/components/work/IssueDrawer';
 import { useProject, useProjectRealtime } from '@/components/work/hooks';
 import { EmptyState, PageLoading, Spinner } from '@/components/work/ui';
@@ -90,6 +91,7 @@ function RequirementsView({ config, pid }: { config: ProjectConfig; pid: number 
   return (
     <div className="flex h-full flex-col">
       <ProjectHeader config={config} title="Requirements">
+        <PageFocusButton scope="requirements" />
         {data.canEdit && (
           <button type="button" className="w-btn w-btn-sm" onClick={() => setSuggest(true)} aria-label="Draft use cases from an issue" title="AI drafts use cases from an issue or epic — saved as proposals">
             <Sparkles size={13} /> <span className="max-sm:hidden">Draft from issue</span>

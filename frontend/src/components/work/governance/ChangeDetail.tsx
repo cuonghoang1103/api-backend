@@ -121,7 +121,7 @@ function Description({ config, cr }: { config: ProjectConfig; cr: CrDetail }) {
       {editing ? (
         <RichEditor value={doc} onChange={(d) => setDoc(d)} docs toolbar minHeight={180} members={config.members} projectId={config.id} />
       ) : cr.descriptionJson ? (
-        <div className="max-w-full overflow-x-auto"><RichView value={cr.descriptionJson} docs /></div>
+        <div className="w-doc max-w-full overflow-x-auto"><RichView value={cr.descriptionJson} docs /></div>
       ) : <p className="text-[13px] text-[var(--w-text-3)]">No description.</p>}
     </Section>
   );

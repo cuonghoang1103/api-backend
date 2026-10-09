@@ -1,54 +1,86 @@
 'use client';
 
 /**
- * Khung trang Docs (S2a): cây tài liệu bên trái (280px) + nội dung bên phải.
+ * Khung trang Docs (S2a): cây tài liệu bên trái + nội dung bên phải.
  * Dùng cho /work/<ws>/<KEY>/docs (trang tổng quan) và /docs/<num> (một trang).
  *
- * Điện thoại (<md): /docs hiện cây toàn màn; /docs/<num> chỉ hiện nội dung, nút
- * "Pages" mở cây trong hộp thoại — không có hai cột chen nhau ở 390px.
+ * UX-E (09/10/2026) — người dùng chụp iPad: 4 cột cùng lúc, nội dung còn ~400px.
+ *   · Cây trang ẩn/hiện bằng nút hoặc phím `[`; ẩn thì còn thanh mảnh có nút mở lại.
+ *   · Panel Details của trang (DocView) ẩn/hiện bằng nút "Details" hoặc `]`.
+ *   · Không đủ chỗ (đo thật, xem shell/panes.tsx) ⇒ panel thành NGĂN TRƯỢT:
+ *     Details khi khung < 1280px hoặc nội dung còn < 660px; cây trang khi khung < 1024px
+ *     hoặc nội dung còn < 620px.
+ *   · Focus / Full width (`F`, Esc để thoát): ẩn sidebar dự án + hai panel, nội dung
+ *     rộng tối đa nhưng dòng chữ vẫn ~80 ký tự (bảng, code, sơ đồ được rộng hơn).
+ * Điện thoại (<768px): /docs hiện cây toàn màn; /docs/<num> chỉ hiện nội dung, nút
+ * "Pages" mở cây trong ngăn trượt.
  */
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { FilePlus2, FileText, FileUp, ListTree, Search, Sparkles } from 'lucide-react';
+import { FilePlus2, FileText, FileUp, Search, Sparkles } from 'lucide-react';
 import { openAiPanel } from '../ai/store';
 import { cn } from '@/lib/utils';
 import { workDocsApi, type PageStatus, type ProjectConfig, type WorkPageList } from '@/lib/work-api';
 import ProjectHeader from '../ProjectHeader';
-import { Dialog, EmptyState, PageLoading, UserAvatar, relativeTime } from '../ui';
+import { EmptyState, PageLoading, UserAvatar, relativeTime } from '../ui';
 import { ModuleOff, studioOn } from '../studio/shared';
+import { FocusToggle, PaneDrawer, PaneStrip, PaneToggle, escapePanes, focusBaseOf, toggleFocus, usePaneKeys, usePanes } from '../shell/panes';
 import DocView from './DocView';
 import DocsTree from './DocsTree';
 import NewPageDialog from './NewPageDialog';
 import ImportMarkdownDialog from './ImportMarkdownDialog';
 import { PAGE_STATUS, PageStatusPill, VisibilityBadge, docsBase, useDocsList } from './shared';
 
+/** Bề ngang cột cây trang / Details và chỗ tối thiểu cho nội dung (gồm lề 2×32px + khe 40px). */
+const TREE_W = 272;
+const DETAILS_W = 300;
+const MIN_MAIN = 660;
+
 export default function DocsShell({ config, num }: { config: ProjectConfig; num?: number }) {
   const on = studioOn(config, 'docs');
   const list = useDocsList(config.id, on);
   const [newFor, setNewFor] = useState<{ parent: number | null } | null>(null);
-  const [treeOpen, setTreeOpen] = useState(false);
   // CTW-4: nhập Markdown thành trang mới.
   const [importOpen, setImportOpen] = useState(false);
+  const pathname = usePathname() ?? '';
+  const panes = usePanes('docs', {
+    // Cây trang cần ít chỗ hơn Details: ở 1180px (app desktop, sidebar mở) vẫn giữ cây, chữ còn ~590px.
+    left: { width: TREE_W, minFrame: 1024, strip: true, minMain: 620 },
+    right: num ? { width: DETAILS_W, minFrame: 1280 } : undefined,
+    minMain: MIN_MAIN,
+    focusable: !!num,
+  });
+  const { left: tree, right: details, focus } = panes;
+  const onFocus = () => toggleFocus('docs', focusBaseOf(pathname));
+  usePaneKeys({
+    left: tree.toggle,
+    right: num ? details.toggle : undefined,
+    focus: num ? onFocus : undefined,
+    escape: () => escapePanes('docs'),
+  });
+
   const canEdit = !!list.data?.canEdit && !!config.permissions.editDocs;
   const parent = newFor?.parent ? list.data?.pages.find((p) => p.number === newFor.parent) : null;
   const active = num ? list.data?.pages.find((p) => p.number === num) : undefined;
+  // Điện thoại, trang tổng quan: cây trang chiếm cả màn (không có gì để đọc bên cạnh).
+  const mobileIndex = !num && panes.frame < 768;
 
   return (
     <div className="flex h-full flex-col">
       <ProjectHeader config={config} title={active ? active.title : 'Docs'}>
-        {on && num && (
-          <button type="button" className="w-btn w-btn-sm md:!hidden" onClick={() => setTreeOpen(true)} aria-label="Show all pages">
-            <ListTree size={13} /> Pages
-          </button>
+        {on && list.data && !mobileIndex && (
+          <PaneToggle pane={tree} side="left" label="Pages" shortcut="[" showLabel={tree.mode === 'drawer'} />
         )}
-        {on && canEdit && (
+        {on && num && list.data && <FocusToggle on={focus} onToggle={onFocus} compact={panes.frame < 768} />}
+        {on && canEdit && !focus && (
           <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)} data-testid="docs-import-md-open" title="Create a page from Markdown (paste or .md file)">
-            <FileUp size={13} /> <span className="max-sm:hidden">Import Markdown</span>
+            <FileUp size={13} /> <span className="max-lg:hidden">Import Markdown</span>
           </button>
         )}
-        {on && canEdit && (
+        {on && canEdit && !focus && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setNewFor({ parent: null })} data-testid="docs-new">
             <FilePlus2 size={13} /> <span className="max-sm:hidden">New page</span>
           </button>
@@ -59,24 +91,34 @@ export default function DocsShell({ config, num }: { config: ProjectConfig; num?
       ) : list.isLoading ? <PageLoading /> : !list.data ? (
         <EmptyState title="Could not load documents" />
       ) : (
-        <div className="flex min-h-0 flex-1">
-          <aside className={cn('shrink-0 border-r border-[var(--w-border)] bg-[var(--w-bg)] md:w-[280px]', num ? 'max-md:hidden' : 'max-md:w-full max-md:border-r-0')} aria-label="Document tree">
-            <DocsTree config={config} list={list.data} activeNum={num} onNew={(p) => setNewFor({ parent: p })} />
-          </aside>
-          <main className={cn('min-w-0 flex-1 overflow-y-auto', !num && 'max-md:hidden')}>
-            {num ? <DocView key={num} config={config} num={num} /> : <DocsHome config={config} list={list.data} onNew={() => setNewFor({ parent: null })} />}
-          </main>
+        <div ref={panes.ref} className="flex min-h-0 flex-1">
+          {(mobileIndex || tree.mode === 'inline') && (
+            <aside
+              className={cn('shrink-0 border-r border-[var(--w-border)] bg-[var(--w-bg)]', mobileIndex ? 'w-full border-r-0' : '')}
+              style={mobileIndex ? undefined : { width: TREE_W }}
+              aria-label="Document tree"
+              data-testid="docs-tree-pane"
+            >
+              <DocsTree config={config} list={list.data} activeNum={num} onNew={(p) => setNewFor({ parent: p })} onHide={mobileIndex ? undefined : tree.close} />
+            </aside>
+          )}
+          {!mobileIndex && tree.mode === 'strip' && <PaneStrip label="Pages" shortcut="[" onOpen={tree.toggle} />}
+          {!mobileIndex && (
+            <main className="min-w-0 flex-1 overflow-y-auto" data-testid="docs-main">
+              {num ? <DocView key={num} config={config} num={num} details={details} focus={focus} /> : <DocsHome config={config} list={list.data} onNew={() => setNewFor({ parent: null })} />}
+            </main>
+          )}
         </div>
       )}
       <ImportMarkdownDialog open={importOpen} onClose={() => setImportOpen(false)} config={config} />
       <NewPageDialog open={!!newFor} onClose={() => setNewFor(null)} config={config} parentNumber={newFor?.parent ?? null} parentTitle={parent?.title ?? null} stageId={parent?.stageId ?? null} />
-      <Dialog open={treeOpen} onClose={() => setTreeOpen(false)} title="Pages" width={420}>
-        {list.data && (
-          <div className="-mx-5 -my-4 h-[70vh]">
-            <DocsTree config={config} list={list.data} activeNum={num} onNew={(p) => { setTreeOpen(false); setNewFor({ parent: p }); }} onNavigate={() => setTreeOpen(false)} />
+      {list.data && (
+        <PaneDrawer open={tree.drawerOpen} onClose={tree.close} side="left" label="Pages" width={320}>
+          <div className="h-full">
+            <DocsTree config={config} list={list.data} activeNum={num} onNew={(p) => { tree.close(); setNewFor({ parent: p }); }} onNavigate={tree.close} />
           </div>
-        )}
-      </Dialog>
+        </PaneDrawer>
+      )}
     </div>
   );
 }

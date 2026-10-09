@@ -79,8 +79,8 @@ export function PortalMeetingDialog({ pid, num, asClient, onClose }: { pid: numb
           </section>
           {m.shared ? (
             <>
-              {m.agendaJson && <section><h3 className="w-section-title mb-2">Agenda</h3><div className="max-w-full overflow-x-auto"><RichView value={m.agendaJson} docs /></div></section>}
-              {m.minutesJson && <section data-testid="portal-meeting-minutes"><h3 className="w-section-title mb-2">Minutes</h3><div className="max-w-full overflow-x-auto"><RichView value={m.minutesJson} docs /></div></section>}
+              {m.agendaJson && <section><h3 className="w-section-title mb-2">Agenda</h3><div className="w-doc max-w-full overflow-x-auto"><RichView value={m.agendaJson} docs /></div></section>}
+              {m.minutesJson && <section data-testid="portal-meeting-minutes"><h3 className="w-section-title mb-2">Minutes</h3><div className="w-doc max-w-full overflow-x-auto"><RichView value={m.minutesJson} docs /></div></section>}
               {!!m.decisions?.length && (
                 <section><h3 className="w-section-title mb-2">Decisions</h3><ol className="list-decimal space-y-1 pl-5 text-[13.5px]">{m.decisions.map((d, i) => <li key={i} className="[overflow-wrap:anywhere]">{d}</li>)}</ol></section>
               )}

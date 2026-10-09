@@ -65,7 +65,12 @@ const Mention = Node.create({
 const DocTable = Table.extend({
   renderHTML(props) {
     const spec = this.parent?.(props);
-    return ['div', { class: 'w-table-wrap' }, spec] as unknown as ReturnType<NonNullable<typeof this.parent>>;
+    // UX-E: chế độ CHỈ ĐỌC — khung cuộn ngang phải tới được bằng bàn phím (Tab rồi ←/→; axe
+    // scrollable-region-focusable). Khi đang soạn thì KHÔNG: tabindex bên trong contenteditable
+    // giành tiêu điểm khỏi editor lúc bấm vào ô. Đọc `options.editable` (view chưa có lúc dựng schema).
+    const readOnly = this.editor?.options.editable === false;
+    const attrs = readOnly ? { class: 'w-table-wrap', tabindex: '0', role: 'region', 'aria-label': 'Table — scroll sideways' } : { class: 'w-table-wrap' };
+    return ['div', attrs, spec] as unknown as ReturnType<NonNullable<typeof this.parent>>;
   },
 }).configure({ resizable: false, HTMLAttributes: { class: 'w-table' } });
 
@@ -195,11 +200,16 @@ export interface RichEditorProps {
    * CTW đợt 3A: dự án để tải ảnh lên (dán / kéo-thả / nút ảnh). Không truyền ⇒ ảnh vẫn HIỂN THỊ được nhưng không chèn mới.
    */
   projectId?: number;
+  /**
+   * UX-E: kiểm tra chính tả của trình duyệt khi đang SOẠN (mặc định bật). Chế độ chỉ đọc
+   * luôn tắt — chữ tiếng Việt/Anh trong tài liệu từng bị gạch chân chấm đỏ khi chỉ xem.
+   */
+  spellCheck?: boolean;
 }
 
 export default function RichEditor({
   value, onChange, editable = true, placeholder = 'Write something…', members = [], autoFocus, onSubmit, onEscape,
-  minHeight = 80, toolbar = true, className, editorRef, docs = false, projectId,
+  minHeight = 80, toolbar = true, className, editorRef, docs = false, projectId, spellCheck = true,
 }: RichEditorProps) {
   const pidRef = useRef(projectId);
   pidRef.current = projectId;
@@ -258,7 +268,9 @@ export default function RichEditor({
       ...(docs ? [DocTable, TableRow, TableHeader, TableCell] : []),
     ],
     editorProps: {
-      attributes: { class: cn('w-prose', editable && 'px-3 py-2.5') },
+      // `spellcheck` ở đây chỉ là giá trị LÚC TẠO (tránh nháy gạch chân). TipTap trải (spread) object này
+      // nên không dùng hàm được; đổi sau đó (bật/tắt, sửa ↔ xem) do effect bên dưới đặt thẳng lên DOM.
+      attributes: { class: cn('w-prose', editable && 'px-3 py-2.5'), spellcheck: editable && spellCheck ? 'true' : 'false' },
       // CTW đợt 3A: dán / thả ảnh ⇒ tải lên dự án (R2) rồi chèn nút ảnh. Không có dự án ⇒ để trình duyệt xử lý như cũ.
       handlePaste: (view, event) => {
         const files = imageFiles(event.clipboardData?.files);
@@ -331,6 +343,14 @@ export default function RichEditor({
     if (editor && editor.isEditable !== editable) editor.setEditable(editable, false);
   }, [editor, editable]);
 
+  // UX-E: chính tả chỉ khi ĐANG SOẠN và người dùng bật; chỉ đọc luôn tắt (không còn gạch chân chấm đỏ
+  // dưới chữ tiếng Việt/Anh khi xem tài liệu). ProseMirror chỉ ghi lại thuộc tính khi giá trị khai trong
+  // `attributes` đổi — mà giá trị đó chốt lúc tạo editor — nên đặt thẳng lên DOM là bền.
+  useEffect(() => {
+    if (!editor || editor.isDestroyed) return;
+    editor.view.dom.setAttribute('spellcheck', editable && spellCheck ? 'true' : 'false');
+  }, [editor, editable, spellCheck]);
+
   const btn = (active: boolean, onClick: () => void, Icon: typeof Bold, title: string) => (
     <button
       type="button"
@@ -345,7 +365,8 @@ export default function RichEditor({
   return (
     <div className={cn(editable && 'rounded-[6px] border border-[var(--w-border-strong)] bg-[var(--w-panel)] focus-within:border-[var(--w-accent-border)] focus-within:shadow-[0_0_0_3px_var(--w-accent-soft)]', className)}>
       {editable && toolbar && editor && (
-        <div className="flex flex-wrap items-center gap-0.5 border-b border-[var(--w-border)] px-1.5 py-1">
+        // UX-E: trang tài liệu dài ⇒ thanh công cụ DÍNH đầu vùng cuộn; luôn xuống dòng khi hẹp (không bị cắt).
+        <div className={cn('flex flex-wrap items-center gap-0.5 border-b border-[var(--w-border)] px-1.5 py-1', docs && 'sticky top-0 z-[2] rounded-t-[8px] bg-[var(--w-panel)]')} role="toolbar" aria-label="Formatting">
           {docs && (
             <>
               {btn(editor.isActive('heading', { level: 2 }), () => editor.chain().focus().toggleHeading({ level: 2 }).run(), Heading2, 'Heading')}

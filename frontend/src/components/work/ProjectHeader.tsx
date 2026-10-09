@@ -147,6 +147,14 @@ export default function ProjectHeader({ config, title, children, extra, tools = 
   const measureRef = useRef<HTMLSpanElement>(null);
   const wsMeasureRef = useRef<HTMLSpanElement>(null);
   const [layout, setLayout] = useState<{ stack: boolean; showWs: boolean }>({ stack: false, showWs: true });
+  // UX-E: chống dao động. Mở sidebar từ thanh icon (60 → 248px, có chuyển động) trên Board/Docs từng làm
+  // header đổi stack ↔ không stack liên tục trong cùng một lần vẽ ⇒ React #185 (Maximum update depth),
+  // cả trang trắng (có từ trước UX-E; ⌘\ làm nó dễ gặp hơn). Hai chốt: (1) đã xuống hàng thì phải dư
+  // ≥16px mới lên lại; (2) đổi quá 6 lần trong cùng một lượt vẽ ⇒ dừng, khung hình sau đo lại từ đầu.
+  const layoutRef = useRef(layout);
+  layoutRef.current = layout;
+  const flips = useRef({ n: 0 });
+  const remeasure = useRef<() => void>(() => {});
 
   const measure = useCallback(() => {
     const row = rowRef.current;
@@ -164,12 +172,21 @@ export default function ProjectHeader({ config, title, children, extra, tools = 
     const crumbMin = Math.min(crumbNat, narrow ? 150 : 360);
     const wsW = Math.min(wsMeasureRef.current?.getBoundingClientRect().width ?? 0, 160) + 20;
     const fixed = toolsW + menuBtn + gap * 2;
-    const stack = acts > 0 && crumbMin + acts + fixed > avail;
+    const stack = acts > 0 && crumbMin + acts + fixed > avail - (layoutRef.current.stack ? 16 : 0);
     const rest = avail - fixed - (stack ? 0 : acts);
     const showWs = !narrow && crumbNat + wsW <= rest;
-    setLayout((l) => (l.stack === stack && l.showWs === showWs ? l : { stack, showWs }));
+    const l = layoutRef.current;
+    if (l.stack === stack && l.showWs === showWs) return;
+    const f = flips.current;
+    // Đếm số lần đổi trong CÙNG một lượt chạy đồng bộ; khung hình kế tiếp đếm lại từ 0 và đo lại.
+    if (f.n === 0) requestAnimationFrame(() => { const again = flips.current.n > 6; flips.current.n = 0; if (again) remeasure.current(); });
+    f.n += 1;
+    if (f.n > 6) return;
+    layoutRef.current = { stack, showWs };
+    setLayout(layoutRef.current);
   }, []);
 
+  remeasure.current = measure;
   useLayoutEffect(() => {
     measure();
   });

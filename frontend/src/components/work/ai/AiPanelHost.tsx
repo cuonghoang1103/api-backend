@@ -20,7 +20,7 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeSanitize from 'rehype-sanitize';
 import { toast } from 'sonner';
-import { Activity, AlertTriangle, ArrowUp, ClipboardCheck, FileText, GraduationCap, History, Lock, RotateCcw, Search, Sparkles, Square, SquarePen, Trash2, Users, X } from 'lucide-react';
+import { Activity, AlertTriangle, ArrowUp, ClipboardCheck, FileText, GraduationCap, History, Lock, Maximize2, Minimize2, RotateCcw, Search, Sparkles, Square, SquarePen, Trash2, Users, X } from 'lucide-react';
 import {
   isAiQuotaError, workApi, workError, workErrorStatus,
   type AiMessage, type AiQuickTask, type AiQuota, type ProjectConfig,
@@ -32,6 +32,7 @@ import { relativeTime, Spinner, UserAvatar, WorkPortal } from '../ui';
 import { ActionGroup, type ActionItem } from './ActionCard';
 import UpgradeDialog from './UpgradeDialog';
 import { openAiPanel, useAiPanel, type AiQuickRequest } from './store';
+import { useLayoutPrefs } from '../shell/panes';
 
 // ─── Kiểu + lưu trữ ──────────────────────────────────────────────
 
@@ -160,6 +161,9 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  // UX-E: câu trả lời dài (bảng, code, kế hoạch) trong cột 440px rất khó đọc ⇒ nút mở rộng 760px, nhớ lựa chọn.
+  const wide = useLayoutPrefs((s) => s.aiWide);
+  useEffect(() => { useLayoutPrefs.getState().load(); }, []);
 
   const { data: quota } = useQuery({ queryKey: QUOTA_KEY, queryFn: workApi.aiQuota, staleTime: 30_000 });
 
@@ -419,7 +423,8 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
         role="dialog"
         aria-modal="false"
         aria-label="AI assistant"
-        className="fixed inset-y-0 right-0 z-[66] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-bg)] sm:w-[440px]"
+        className={cn('fixed inset-y-0 right-0 z-[66] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-bg)] transition-[width] duration-150', wide ? 'sm:w-[min(760px,92vw)]' : 'sm:w-[440px]')}
+        data-wide={wide || undefined}
         style={{ boxShadow: 'var(--w-shadow-pop)' }}
       >
         {/* Đầu ngăn */}
@@ -445,6 +450,17 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
           </button>
           <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={newConversation} disabled={!!waiting} aria-label="New conversation" title="New conversation">
             <SquarePen size={14} />
+          </button>
+          <button
+            type="button"
+            className="w-btn w-btn-ghost w-btn-icon w-btn-sm max-sm:!hidden"
+            onClick={() => useLayoutPrefs.getState().setAiWide(!wide)}
+            aria-pressed={wide}
+            aria-label={wide ? 'Narrow the AI panel' : 'Widen the AI panel'}
+            title={wide ? 'Narrow panel' : 'Widen panel — easier to read long answers'}
+            data-testid="ai-panel-wide"
+          >
+            {wide ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
           </button>
           <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onClose} aria-label="Close AI assistant" title="Close (Esc)">
             <X size={15} />

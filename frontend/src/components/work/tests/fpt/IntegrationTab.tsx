@@ -11,7 +11,7 @@ import './fpt.css';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ChevronDown, ChevronRight, FileText, FileUp, Plus, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronRight, FileText, FileUp, PanelLeftClose, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { workError, workErrorStatus, type ProjectConfig } from '@/lib/work-api';
@@ -22,6 +22,7 @@ import FptDocDialog from './FptDocDialog';
 import FptImportDialog from './FptImportDialog';
 import { ExportButton, InlineText, ResultBar, SaveState, shortDate, Stat, todayIso } from './shared';
 import { KpiRow } from '../../KpiTile';
+import { PaneStrip, usePaneKeys, usePanes } from '../../shell/panes';
 
 const currentOf = (rounds: ItRound[]): ItStatus => {
   for (let i = rounds.length - 1; i >= 0; i--) if (rounds[i]?.status) return rounds[i].status!;
@@ -46,6 +47,9 @@ export default function IntegrationTab({ config, pid, kind = 'INT' }: { config: 
   const [newOpen, setNewOpen] = useState(false);
   const [docOpen, setDocOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
+  // UX-E: danh sách module/workflow ẩn/hiện (nút hoặc `[`) để bảng 5.2/5.3 rộng tối đa; nhớ lựa chọn.
+  const panes = usePanes(`tests-${kind.toLowerCase()}`, { left: { width: 240, neverDrawer: true, strip: true } });
+  usePaneKeys({ left: panes.left.toggle });
   const list = useQuery({ queryKey: fptKeys.it(pid, kind), queryFn: () => fptApi.modules(pid, kind) });
   const mods = useMemo(() => list.data?.modules ?? [], [list.data]);
   const selected = Number(search?.get('mod')) || mods[0]?.id || null;
@@ -93,8 +97,13 @@ export default function IntegrationTab({ config, pid, kind = 'INT' }: { config: 
           />
         </div>
       ) : (
-        <div className="flex min-h-0 flex-1 max-md:flex-col">
+        <div ref={panes.ref} className="flex min-h-0 flex-1 max-md:flex-col">
+          {panes.left.mode === 'strip' && <PaneStrip label={T.units} shortcut="[" onOpen={panes.left.toggle} />}
+          {panes.left.mode === 'inline' && (
           <aside className="w-[240px] shrink-0 overflow-y-auto border-r border-[var(--w-border)] py-1 max-md:max-h-[30vh] max-md:w-full max-md:border-b max-md:border-r-0" aria-label={T.units}>
+            <div className="flex justify-end px-2 pb-1">
+              <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" onClick={panes.left.toggle} aria-label={`Hide ${T.units.toLowerCase()} list ([)`} title="Hide the list — widen the table ([)"><PanelLeftClose size={14} /></button>
+            </div>
             {mods.map((m) => (
               <button key={m.id} type="button" onClick={() => select(m.id)} aria-current={selected === m.id}
                 className={cn('block w-full px-3 py-2 text-left', selected === m.id ? 'bg-[var(--w-active)]' : 'hover:bg-[var(--w-hover)]')}>
@@ -108,6 +117,7 @@ export default function IntegrationTab({ config, pid, kind = 'INT' }: { config: 
             ))}
             {canEdit && <button type="button" className="mx-3 mt-2 w-btn w-btn-sm" onClick={() => setNewOpen(true)}><Plus size={13} /> {T.Unit}</button>}
           </aside>
+          )}
           <section className="min-h-0 min-w-0 flex-1 overflow-y-auto p-4">
             {selected && <ModulePane key={selected} pid={pid} id={selected} kind={kind} canEdit={canEdit} onDeleted={() => { const p = new URLSearchParams(search?.toString()); p.delete('mod'); router.replace(`${pathname}?${p}`, { scroll: false }); }} />}
           </section>

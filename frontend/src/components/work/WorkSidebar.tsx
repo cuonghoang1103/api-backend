@@ -42,6 +42,7 @@ import { openHelp } from './help/store';
 import { lastAiPid, openAiPanel, useAiPanel } from './ai/store';
 import WorkInbox from './shell/WorkInbox';
 import { useSidebarRail } from './shell/mobileNav';
+import RailTooltip from './shell/RailTooltip';
 
 const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search']);
 const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents']);
@@ -270,6 +271,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
   const switcher = useToggle();
   const switcherRef = useRef<HTMLButtonElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
 
   const workspaces = useQuery({ queryKey: wk.workspaces, queryFn: workApi.workspaces, staleTime: 60_000 });
   const ws = useQuery({ queryKey: wk.workspace(slug ?? ''), queryFn: () => workApi.workspaceBySlug(slug!), enabled: !!slug, staleTime: 30_000 });
@@ -327,7 +329,9 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
   }, [aiPid]);
 
   return (
-    <nav aria-label="CT Work" data-rail={rail || undefined} className={cn('flex h-full flex-col text-[13.5px]', rail && 'w-rail')} onClick={(e) => (e.target as HTMLElement).closest('a') && onNavigate?.()}>
+    <nav ref={navRef} aria-label="CT Work" data-rail={rail || undefined} className={cn('flex h-full flex-col text-[13.5px]', rail && 'w-rail')} onClick={(e) => (e.target as HTMLElement).closest('a') && onNavigate?.()}>
+      {/* UX-E: thanh icon ⇒ bong bóng tên mục khi rê chuột / Tab (title của trình duyệt chậm, không hiện khi dùng phím). */}
+      <RailTooltip navRef={navRef} enabled={rail} />
       {/* Đầu: đổi không gian + chuông. */}
       <div className="flex items-center gap-1 px-2 pb-1 pt-2.5">
         <button
@@ -522,13 +526,15 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
           <button
             type="button"
             onClick={toggleRail}
-            title={rail ? 'Expand sidebar' : 'Collapse sidebar'}
+            title={rail ? 'Expand sidebar (⌘\\)' : 'Collapse sidebar (⌘\\)'}
             aria-label={rail ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-keyshortcuts="Meta+Backslash Control+Backslash"
             aria-expanded={!rail}
             className={cn(ROW, ROW_IDLE, 'w-full text-left')}
           >
             {rail ? <PanelLeftOpen size={15} className="shrink-0 opacity-80" /> : <PanelLeftClose size={15} className="shrink-0 opacity-80" />}
             <span className="min-w-0 flex-1 truncate">Collapse sidebar</span>
+            <kbd className="w-kbd max-md:!hidden">{'⌘\\'}</kbd>
           </button>
         )}
         {/* ≥md người dùng nằm ở thanh trên (HeaderTools); ngăn kéo điện thoại giữ ở đây. */}

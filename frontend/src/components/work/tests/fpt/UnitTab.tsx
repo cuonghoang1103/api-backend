@@ -10,7 +10,7 @@ import './fpt.css';
 import { useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { AlertTriangle, Copy, FileText, FileUp, Plus, Search, Trash2 } from 'lucide-react';
+import { AlertTriangle, Copy, FileText, FileUp, PanelLeftClose, Plus, Search, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { workError, type ProjectConfig } from '@/lib/work-api';
@@ -21,6 +21,7 @@ import FptImportDialog from './FptImportDialog';
 import { ExportButton, InlineText, ResultBar, Stat } from './shared';
 import UnitMatrix from './UnitMatrix';
 import { KpiRow } from '../../KpiTile';
+import { PaneStrip, usePaneKeys, usePanes } from '../../shell/panes';
 
 export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: number }) {
   const router = useRouter();
@@ -33,6 +34,9 @@ export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: n
   const [newOpen, setNewOpen] = useState(false);
   const [docOpen, setDocOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
+  // UX-E: danh sách hàm ẩn/hiện (nút hoặc `[`) để ma trận 5.1 rộng tối đa; nhớ lựa chọn.
+  const panes = usePanes('tests-unit', { left: { width: 280, neverDrawer: true, strip: true } });
+  usePaneKeys({ left: panes.left.toggle });
 
   const list = useQuery({ queryKey: fptKeys.unit(pid), queryFn: () => fptApi.functions(pid) });
   const fns = useMemo(() => list.data?.functions ?? [], [list.data]);
@@ -89,8 +93,10 @@ export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: n
           />
         </div>
       ) : (
-        <div className="flex min-h-0 flex-1 max-md:flex-col">
-          <aside className="flex w-[280px] shrink-0 flex-col border-r border-[var(--w-border)] max-md:max-h-[40vh] max-md:w-full max-md:border-b max-md:border-r-0">
+        <div ref={panes.ref} className="flex min-h-0 flex-1 max-md:flex-col">
+          {panes.left.mode === 'strip' && <PaneStrip label="Functions" shortcut="[" onOpen={panes.left.toggle} />}
+          {panes.left.mode === 'inline' && (
+          <aside className="flex w-[280px] shrink-0 flex-col border-r border-[var(--w-border)] max-md:max-h-[40vh] max-md:w-full max-md:border-b max-md:border-r-0" aria-label="Functions list">
             <div className="space-y-2 border-b border-[var(--w-border)] p-3">
               <div className="relative">
                 <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
@@ -102,10 +108,12 @@ export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: n
                   {modules.map((m) => <option key={m} value={m}>{m}</option>)}
                 </select>
                 {canEdit && <button type="button" className="w-btn w-btn-sm w-btn-icon !h-[30px] !w-[30px]" onClick={() => setNewOpen(true)} aria-label="Add function" title="Add function"><Plus size={14} /></button>}
+                <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon !h-[30px] !w-[30px]" onClick={panes.left.toggle} aria-label="Hide functions list ([)" title="Hide the list — widen the matrix ([)"><PanelLeftClose size={14} /></button>
               </div>
             </div>
             <FunctionList fns={shown} selected={selected} onSelect={select} />
           </aside>
+          )}
           <section className="min-h-0 min-w-0 flex-1 overflow-y-auto p-4">
             {selected ? <FunctionPane key={selected} pid={pid} id={selected} canEdit={canEdit} onDeleted={() => { const p = new URLSearchParams(search?.toString()); p.delete('fn'); router.replace(`${pathname}?${p}`, { scroll: false }); }} onOpen={select} /> : <EmptyState title="No function matches" />}
           </section>

@@ -48,13 +48,18 @@ import { FileDown, Gauge, Wand2 } from 'lucide-react';
 // CTW đợt 3A: xuất Word/PDF (sơ đồ Mermaid vẽ sẵn PNG ở trình duyệt) + điền Report từ dữ liệu dự án.
 import { mermaidPngsOf, saveBlob, workDocs3aApi } from '@/lib/work-docs3a-api';
 import { SRS_SECTION_LABEL, workCtw4Api } from '@/lib/work-ctw4-api'; // CTW đợt 4: Report 3 từ SRS có cấu trúc, ghép Report 7
-import { ListTree, Layers } from 'lucide-react';
+import { ListTree, Layers, PanelRightClose, PanelRightOpen, SpellCheck } from 'lucide-react';
+import { PaneDrawer, useLayoutPrefs, type PaneState } from '../shell/panes';
 
 type SaveState = 'saved' | 'dirty' | 'saving' | 'error' | 'conflict';
 
 const errCode = (err: unknown) => (err as { response?: { data?: { code?: string } } })?.response?.data?.code;
 
-export default function DocView({ config, num }: { config: ProjectConfig; num: number }) {
+/**
+ * UX-E: `details` = chế độ của panel Details do DocsShell tính (inline / ẩn / ngăn trượt —
+ * xem shell/panes.tsx). `focus` = chế độ Focus: nội dung rộng, dòng chữ giữ ~80 ký tự.
+ */
+export default function DocView({ config, num, details, focus = false }: { config: ProjectConfig; num: number; details?: PaneState; focus?: boolean }) {
   const pid = config.id;
   const qc = useQueryClient();
   const router = useRouter();
@@ -88,6 +93,9 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
   const [note, setNote] = useState('');
   const moreRef = useRef<HTMLButtonElement>(null);
   const [more, setMore] = useState(false);
+  // UX-E: kiểm tra chính tả khi đang soạn (gạch chân chấm đỏ của trình duyệt) — bật/tắt, nhớ.
+  const spell = useLayoutPrefs((s) => s.spell);
+  const setSpell = useLayoutPrefs((s) => s.setSpell);
 
   // ?approval=<id> (thông báo trong chuông trỏ thẳng vào đây) ⇒ mở chi tiết phê duyệt.
   useEffect(() => {
@@ -264,10 +272,85 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
   const base$ = docsBase(config);
   const pendingApproval = page.approval?.status === 'PENDING';
   const members = config.members;
+  // Không có `details` (dùng ngoài DocsShell) ⇒ giữ cột Details như cũ.
+  const detailsInline = !details || details.mode === 'inline';
+  const detailsBody = (
+    <>
+          <div>
+            <div className="mb-2 flex items-center gap-2">
+              <h2 className="w-section-title">Details</h2>
+              {details && details.mode === 'inline' && (
+                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm ml-auto" onClick={details.close} aria-label="Hide page details (])" title="Hide details (])" data-testid="docs-details-hide">
+                  <PanelRightClose size={14} />
+                </button>
+              )}
+            </div>
+            <dl className="space-y-2.5 text-[13px]">
+              <Prop label="Status">
+                {page.canEdit && config.permissions.editDocs ? (
+                  <Select aria-label="Document status" value={page.status} disabled={patch.isPending || page.status === 'IN_REVIEW'} onChange={(e) => patch.mutate({ status: e.target.value as PageStatus })} className="!h-8">
+                    {(['DRAFT', 'IN_REVIEW', 'APPROVED', 'ARCHIVED'] as PageStatus[]).map((s) => (
+                      <option key={s} value={s} disabled={(s === 'IN_REVIEW' || s === 'APPROVED') && (page.approvalsOn || (s === 'APPROVED' && !config.permissions.manageDocs) || s === 'IN_REVIEW')}>
+                        {PAGE_STATUS[s].label}{(s === 'IN_REVIEW' || s === 'APPROVED') && page.approvalsOn ? ' (via approval)' : ''}
+                      </option>
+                    ))}
+                  </Select>
+                ) : <PageStatusPill status={page.status} />}
+              </Prop>
+              <Prop label="Visible to">
+                {page.canManage && config.permissions.editDocs ? (
+                  <Select aria-label="Who can see this page" value={page.visibility} disabled={patch.isPending} onChange={(e) => patch.mutate({ visibility: e.target.value as PageVisibility })} className="!h-8">
+                    <option value="INTERNAL">Project team only</option>
+                    <option value="CLIENT">Team and client</option>
+                  </Select>
+                ) : <VisibilityBadge visibility={page.visibility} />}
+              </Prop>
+              <Prop label="Owner">
+                {page.canManage && config.permissions.editDocs ? (
+                  <Select aria-label="Page owner" value={page.ownerId ?? ''} disabled={patch.isPending} onChange={(e) => patch.mutate({ ownerId: Number(e.target.value) })} className="!h-8">
+                    {page.ownerId === null && <option value="">No owner</option>}
+                    {members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER' || m.id === page.ownerId).map((m) => <option key={m.id} value={m.id}>{userName(m)}</option>)}
+                  </Select>
+                ) : <span className="flex items-center gap-1.5">{page.owner ? <><UserAvatar user={page.owner} size={18} /> {userName(page.owner)}</> : '—'}</span>}
+              </Prop>
+              {studioOn(config, 'stages') && (
+                <Prop label="Stage">
+                  <StageSelect config={config} value={page.stageId} disabled={!page.canEdit || !config.permissions.editDocs || patch.isPending} onChange={(v) => patch.mutate({ stageId: v })} />
+                  {page.stage && <ProcessGuideLink slug={page.stage.slug} className="mt-1" />}
+                </Prop>
+              )}
+              {page.templateKey && <Prop label="Template"><span className="font-mono text-[12px] text-[var(--w-text-2)]">{page.templateKey}</span></Prop>}
+            </dl>
+          </div>
+
+          {page.approvalsOn && (
+            <div>
+              <h2 className="w-section-title mb-2">Approval</h2>
+              {page.approval ? (
+                <button type="button" onClick={() => setApprovalOpen(page.approval!.id)} className="flex w-full flex-wrap items-center gap-2 rounded-[8px] border border-[var(--w-border)] px-2.5 py-2 text-left text-[12.5px] hover:bg-[var(--w-hover)]" data-testid="docs-approval">
+                  <ApprovalPill status={page.approval.status} />
+                  {page.approval.contentChanged && <Pill tone="orange" title="Edited after it was signed">Changed since approval</Pill>}
+                  <span className="ml-auto text-[var(--w-text-3)]">{relativeTime(page.approval.decidedAt ?? page.approval.createdAt)}</span>
+                </button>
+              ) : <p className="text-[12px] text-[var(--w-text-3)]">Not sent for approval yet.</p>}
+            </div>
+          )}
+
+          <DocIssues config={config} page={page} onChange={accept} />
+    </>
+  );
 
   return (
-    <div className="w-doc mx-auto flex w-full max-w-[1240px] flex-col gap-6 px-4 pb-16 pt-4 md:px-8 lg:flex-row lg:gap-10">
-      <article className="min-w-0 flex-1 lg:max-w-[860px]">
+    <div
+      className={cn(
+        'w-doc mx-auto flex w-full gap-10 px-4 pb-16 pt-4 md:px-8',
+        detailsInline ? 'max-w-[1240px] flex-row' : 'flex-col',
+        focus ? 'w-doc-focus max-w-[1200px]' : !detailsInline && 'max-w-[1000px]',
+      )}
+      data-testid="doc-view"
+    >
+      <article className={cn('min-w-0 flex-1', detailsInline && 'max-w-[860px]')}>
+        <div className="w-doc-head">
         {/* Đường dẫn: Docs › cha › … */}
         <nav aria-label="Page location" className="mb-3 flex min-w-0 flex-wrap items-center gap-1 text-[12.5px] text-[var(--w-text-3)]">
           <Link href={base$} className="hover:text-[var(--w-text)]">Docs</Link>
@@ -329,7 +412,20 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
           <span title={fmtDateTime(page.updatedAt)}>Edited {relativeTime(page.updatedAt)}{page.lastEditedBy ? ` by ${userName(page.lastEditedBy)}` : ''}</span>
           {editable && <SaveBadge state={save} savedAt={savedAt} onRetry={() => void flush()} />}
           {(page as WorkPageDetail & AiProvenance).aiAssisted && <AiAssistedBadge model={(page as AiProvenance).aiModel} at={(page as AiProvenance).aiAssistedAt} />}
-          <span className="ml-auto flex items-center gap-1">
+          <span className="ml-auto flex flex-wrap items-center justify-end gap-1">
+            {details && details.mode !== 'inline' && (
+              <button
+                type="button"
+                className={cn('w-btn w-btn-ghost w-btn-sm', details.visible && 'w-btn-on')}
+                onClick={details.toggle}
+                aria-pressed={details.visible}
+                aria-label={`${details.visible ? 'Hide' : 'Show'} page details (])`}
+                title={`${details.visible ? 'Hide' : 'Show'} details — status, owner, approval, linked issues (])`}
+                data-testid="docs-details-toggle"
+              >
+                <PanelRightOpen size={13} /> <span className="max-sm:hidden">Details</span>
+              </button>
+            )}
             {['ADMIN', 'MEMBER', 'TEACHER'].includes(config.role) && (
               <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setSpecOpen(true)} data-testid="docs-spec-check" title="Check spec quality (Spec Fidelity)">
                 <Gauge size={13} /> <span className="max-sm:hidden">Check spec quality</span>
@@ -362,10 +458,18 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
             {/* Đợt S5c: AI tóm tắt trang (đọc qua quyền của người bấm; không đề xuất gì). */}
             {config.permissions.useAi && <MenuItem icon={Sparkles} label="Summarize with AI" onClick={() => { setMore(false); void flush(); openAiPanel({ pid, quick: { task: 'summarize_page', pageNumber: num, label: `Summarize “${page.title.slice(0, 60)}”` } }); }} />}
             {editable && <MenuItem icon={Save} label="Save as a named version…" onClick={() => { setMore(false); setNoteOpen(true); }} />}
+            {editable && (
+              <button type="button" role="menuitemcheckbox" aria-checked={spell} onClick={() => { setMore(false); setSpell(!spell); }} className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]" data-testid="docs-spellcheck">
+                <SpellCheck size={13} className="shrink-0 opacity-80" /> <span className="flex-1">Check spelling while editing</span>
+                {spell && <Check size={13} className="shrink-0 text-[var(--w-accent-text)]" />}
+              </button>
+            )}
             {editable && <MenuItem icon={Plus} label="Add a sub-page" onClick={() => { setMore(false); setNewChild(true); }} />}
             {page.canManage && <MenuItem icon={Trash2} label="Delete page…" danger onClick={() => { setMore(false); setConfirmDel(true); }} />}
           </div>
         </Popover>
+
+        </div>
 
         <div className="mt-5 min-w-0">
           {!ready ? <PageLoading rows={8} /> : editable ? (
@@ -381,6 +485,7 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
               members={members}
               projectId={pid}
               placeholder="Write, or type to start…"
+              spellCheck={spell}
               minHeight={320}
               className="!rounded-[8px]"
             />
@@ -413,65 +518,19 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
         <DocComments config={config} num={num} canComment={page.canComment} />
       </article>
 
-      <aside className="w-full shrink-0 lg:sticky lg:top-4 lg:max-h-[calc(100vh-120px)] lg:w-[300px] lg:self-start lg:overflow-y-auto" aria-label="Page details">
-        <div className="space-y-5 rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)] p-4">
-          <div>
-            <h2 className="w-section-title mb-2">Details</h2>
-            <dl className="space-y-2.5 text-[13px]">
-              <Prop label="Status">
-                {page.canEdit && config.permissions.editDocs ? (
-                  <Select aria-label="Document status" value={page.status} disabled={patch.isPending || page.status === 'IN_REVIEW'} onChange={(e) => patch.mutate({ status: e.target.value as PageStatus })} className="!h-8">
-                    {(['DRAFT', 'IN_REVIEW', 'APPROVED', 'ARCHIVED'] as PageStatus[]).map((s) => (
-                      <option key={s} value={s} disabled={(s === 'IN_REVIEW' || s === 'APPROVED') && (page.approvalsOn || (s === 'APPROVED' && !config.permissions.manageDocs) || s === 'IN_REVIEW')}>
-                        {PAGE_STATUS[s].label}{(s === 'IN_REVIEW' || s === 'APPROVED') && page.approvalsOn ? ' (via approval)' : ''}
-                      </option>
-                    ))}
-                  </Select>
-                ) : <PageStatusPill status={page.status} />}
-              </Prop>
-              <Prop label="Visible to">
-                {page.canManage && config.permissions.editDocs ? (
-                  <Select aria-label="Who can see this page" value={page.visibility} disabled={patch.isPending} onChange={(e) => patch.mutate({ visibility: e.target.value as PageVisibility })} className="!h-8">
-                    <option value="INTERNAL">Project team only</option>
-                    <option value="CLIENT">Team and client</option>
-                  </Select>
-                ) : <VisibilityBadge visibility={page.visibility} />}
-              </Prop>
-              <Prop label="Owner">
-                {page.canManage && config.permissions.editDocs ? (
-                  <Select aria-label="Page owner" value={page.ownerId ?? ''} disabled={patch.isPending} onChange={(e) => patch.mutate({ ownerId: Number(e.target.value) })} className="!h-8">
-                    {page.ownerId === null && <option value="">No owner</option>}
-                    {members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER' || m.id === page.ownerId).map((m) => <option key={m.id} value={m.id}>{userName(m)}</option>)}
-                  </Select>
-                ) : <span className="flex items-center gap-1.5">{page.owner ? <><UserAvatar user={page.owner} size={18} /> {userName(page.owner)}</> : '—'}</span>}
-              </Prop>
-              {studioOn(config, 'stages') && (
-                <Prop label="Stage">
-                  <StageSelect config={config} value={page.stageId} disabled={!page.canEdit || !config.permissions.editDocs || patch.isPending} onChange={(v) => patch.mutate({ stageId: v })} />
-                  {page.stage && <ProcessGuideLink slug={page.stage.slug} className="mt-1" />}
-                </Prop>
-              )}
-              {page.templateKey && <Prop label="Template"><span className="font-mono text-[12px] text-[var(--w-text-2)]">{page.templateKey}</span></Prop>}
-            </dl>
+      {detailsInline && (
+        <aside className="sticky top-4 max-h-[calc(100vh-120px)] w-[300px] shrink-0 self-start overflow-y-auto" aria-label="Page details" data-testid="docs-details-pane">
+          <div className="space-y-5 rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)] p-4">
+            {detailsBody}
           </div>
+        </aside>
+      )}
 
-          {page.approvalsOn && (
-            <div>
-              <h2 className="w-section-title mb-2">Approval</h2>
-              {page.approval ? (
-                <button type="button" onClick={() => setApprovalOpen(page.approval!.id)} className="flex w-full flex-wrap items-center gap-2 rounded-[8px] border border-[var(--w-border)] px-2.5 py-2 text-left text-[12.5px] hover:bg-[var(--w-hover)]" data-testid="docs-approval">
-                  <ApprovalPill status={page.approval.status} />
-                  {page.approval.contentChanged && <Pill tone="orange" title="Edited after it was signed">Changed since approval</Pill>}
-                  <span className="ml-auto text-[var(--w-text-3)]">{relativeTime(page.approval.decidedAt ?? page.approval.createdAt)}</span>
-                </button>
-              ) : <p className="text-[12px] text-[var(--w-text-3)]">Not sent for approval yet.</p>}
-            </div>
-          )}
-
-          <DocIssues config={config} page={page} onChange={accept} />
-        </div>
-      </aside>
-
+      {details && details.mode === 'drawer' && (
+        <PaneDrawer open={details.drawerOpen} onClose={details.close} side="right" label="Page details" width={340}>
+          <div className="space-y-5 p-4">{detailsBody}</div>
+        </PaneDrawer>
+      )}
       <DocSpecDrawer
         open={specOpen}
         onClose={() => setSpecOpen(false)}

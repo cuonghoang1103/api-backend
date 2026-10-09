@@ -26,6 +26,7 @@ import { Pill } from '../studio/shared';
 import { AttendeePicker, meetingStatusPill } from './MeetingsView';
 import { PersonSelect, Section, fmtMeetingTime, useGovInvalidate } from './shared';
 import { AddToCalendar, JoinMeetingButton } from '../ctw';
+import { usePanes } from '../shell/panes';
 
 function RichBlock({ config, m, field, title, empty }: { config: ProjectConfig; m: MD; field: 'agendaJson' | 'minutesJson'; title: string; empty: string }) {
   const invalidate = useGovInvalidate(config.id);
@@ -47,8 +48,8 @@ function RichBlock({ config, m, field, title, empty }: { config: ProjectConfig; 
       ) : <button type="button" className="w-btn w-btn-sm" onClick={() => { setDoc(m[field]); setEditing(true); }} data-testid={`meeting-edit-${field}`}>Edit</button>)}
     >
       {editing ? (
-        <div data-testid={`meeting-editor-${field}`}><RichEditor value={doc} onChange={(d) => setDoc(d)} docs toolbar minHeight={160} members={config.members} projectId={config.id} /></div>
-      ) : m[field] ? <div className="max-w-full overflow-x-auto"><RichView value={m[field]} docs /></div> : <p className="text-[13px] text-[var(--w-text-3)]">{empty}</p>}
+        <div className="w-doc" data-testid={`meeting-editor-${field}`}><RichEditor value={doc} onChange={(d) => setDoc(d)} docs toolbar minHeight={160} members={config.members} projectId={config.id} /></div>
+      ) : m[field] ? <div className="w-doc max-w-full overflow-x-auto"><RichView value={m[field]} docs /></div> : <p className="text-[13px] text-[var(--w-text-3)]">{empty}</p>}
     </Section>
   );
 }
@@ -208,6 +209,10 @@ export default function MeetingDetail({ config, num }: { config: ProjectConfig; 
   const invalidate = useGovInvalidate(pid);
   const q = useQuery({ queryKey: govKeys.meeting(pid, num), queryFn: () => govApi.meeting(pid, num) });
   const [confirmDel, setConfirmDel] = useState(false);
+  // UX-E: hai cột (biên bản | người dự) chỉ khi biên bản còn ≥ 600px — đo khung thật, không theo
+  // breakpoint (app desktop 1180 từng ép biên bản còn ~540px). Hẹp hơn ⇒ một cột, người dự xuống dưới.
+  const panes = usePanes('meeting', { right: { width: 316 }, minMain: 664 });
+  const twoCol = panes.right.mode === 'inline';
   const base = `/work/${config.workspace.slug}/${config.key}`;
   const status = useMutation({
     mutationFn: (s: 'DONE' | 'CANCELLED' | 'SCHEDULED') => govApi.updateMeeting(pid, num, { status: s }),
@@ -247,8 +252,8 @@ export default function MeetingDetail({ config, num }: { config: ProjectConfig; 
   const m = q.data;
 
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-      <div className="mx-auto w-full max-w-[1040px] space-y-4 px-4 py-5 md:px-6">
+    <div ref={panes.ref} className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+      <div className={cn('mx-auto w-full space-y-4 px-4 py-5 md:px-6', twoCol ? 'max-w-[1040px]' : 'max-w-[900px]')}>
         <div>
           <Link href={`${base}/meetings`} className="text-[12.5px] text-[var(--w-text-3)] hover:text-[var(--w-text)]">← Meetings</Link>
           <div className="mt-1 flex min-w-0 flex-wrap items-center gap-2">
@@ -287,7 +292,7 @@ export default function MeetingDetail({ config, num }: { config: ProjectConfig; 
           {m.canDelete && <button type="button" className="w-btn w-btn-ghost w-btn-danger ml-auto" onClick={() => setConfirmDel(true)}><Trash2 size={14} /> Delete</button>}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className={cn('grid grid-cols-1 gap-4', twoCol && 'grid-cols-[minmax(0,1fr)_300px]')}>
           <div className="min-w-0 space-y-4">
             <RichBlock config={config} m={m} field="agendaJson" title="Agenda" empty="No agenda yet." />
             <RichBlock config={config} m={m} field="minutesJson" title="Minutes" empty="No minutes yet — write them during or after the meeting." />

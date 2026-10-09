@@ -21,6 +21,7 @@ CT Work là công cụ chính cho đồ án của họ và các nhóm (SEP490/IS
   - Sau đó commit bằng index riêng (`GIT_INDEX_FILE`) và đưa `main` tiến lên bằng `update-ref`.
   - Rồi `echo y | bash deploy-nha.sh`. Lệnh này tự push `main`.
   - Người dùng đã cho phép deploy CT Work theo từng đợt khi kiểm xanh (09/10: "cứ làm full rồi deploy đi hoặc deploy rồi làm tiếp").
+- ⚠️ **`git checkout -- frontend/tsconfig.json` sau `next build` XOÁ cả sửa đổi THẬT của tệp đó** (09/10: mất dòng exclude `e2e/**` của 6a ⇒ build Docker frontend hỏng 'Cannot find module playwright'). Đề giao từ nay: chép lưu tsconfig TRƯỚC build rồi chép trả lại, không checkout. Trưởng nhóm kiểm frontend tsc trên worktree KHÔNG có node_modules gốc (giống Docker).
 - **Sau deploy** phải kiểm production bằng phép đo thật (curl, gọi API bằng token agent), không tin log.
 - **Thẻ trên dự án CTW:** AI bình luận cách sửa trên thẻ. Người dùng tự kéo thẻ sang Done; board CTW không có cột Review.
 - **Giao diện và nội dung xuất:** tiếng Anh, theo theme `theme-dark`. Trang mới dưới `app/work` ⇒ thêm tuyến desktop `dinhTuyenWeb.ts`. Đổi giao diện desktop ⇒ `phat-hanh`.
@@ -74,3 +75,7 @@ Nguồn: Gemini đánh giá repo; Claude đã đo lại (schema 13.537 dòng/459
 2. **Khi nâng Prisma 6 (≥6.6, multi-file GA):** chia `schema.prisma` theo miền (work/course/auth/…) — lợi ích chính là bớt xung đột khi nhiều agent cùng sửa, KHÔNG phải tốc độ generate.
 3. **Làm dần:** tách `frontend/src/lib/api.ts` theo miền mỗi khi đụng tới miền đó.
 4. **KHÔNG làm lúc này:** tách microservice (1 VPS 6GB, chưa đo thấy tải) · viết lại deploy-nha.sh sang Node (đường deploy duy nhất, rủi ro cao). P3006 giữ cách hiện tại (migration tay + `migrate diff`).
+
+## LabFlow Demo (SWT) + bổ sung kế hoạch đồ án thật (09/10)
+- Project LFD (workspace SWT301) dựng y theo kế hoạch đồ án LabFlow AI (labflow-v2.json), repo private `cuonghoang1103/LabFlow-AI-demo`, trưởng nhóm = token admin người dùng (C1), agent Cường 1–4 = C2–C5. Code ĐÚNG, không cài lỗi. Lệch kế hoạch ⇒ Change Request.
+- Người dùng cho phép BỔ SUNG kế hoạch đồ án THẬT (project LF, workspace LabFlow Studio): gom chỗ thiếu vào `~/Documents/My_Project/LabFlow-SWT-Demo-private/PLAN-GAPS.md`; SAU mốc Lab 2 áp vào LF theo kiểu CHỈ THÊM (thẻ/Docs/bình luận gắn nhãn "[Bổ sung]"), không xoá/đổi thẻ hay tiến độ của người dùng; đồ án code vẫn do người dùng tự gõ tay.

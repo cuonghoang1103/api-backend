@@ -1004,3 +1004,13 @@ export async function channelsForAgent(userId: number, projectId: number) {
   const r = await listChannels(userId, projectId);
   return r.channels.map((c) => ({ name: c.name, kind: c.kind, topic: c.topic, unread: c.unread, canPost: c.canPost }));
 }
+
+/**
+ * CTW K-2: tin HỆ THỐNG vào #general (nhắc họp sắp bắt đầu). `actorId` = chủ trì cuộc họp (tác giả hiển thị của tin).
+ * Không fan-out thông báo riêng — người được mời đã nhận chuông nhắc họp; tin này để cả đội thấy trong kênh.
+ */
+export async function postSystemNotice(projectId: number, actorId: number, text: string, meta: Record<string, unknown>): Promise<number> {
+  await ensureGeneral(projectId);
+  const ch = await prisma.workChannel.findFirstOrThrow({ where: { projectId, isGeneral: true }, select: { id: true, projectId: true } });
+  return systemMessage(ch, actorId, text, meta);
+}

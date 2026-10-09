@@ -28,6 +28,7 @@ import { PersonSelect, Section, fmtMeetingTime, useGovInvalidate } from './share
 import { AddToCalendar, JoinMeetingButton } from '../ctw';
 import { usePanes } from '../shell/panes';
 import { wt, wfmt } from '@/components/work/i18n';
+import { MeetingK2Main, MeetingK2Side } from '../meetings2/MeetingRoom'; // CTW K-2: điểm danh, ghi âm, transcript, biên bản AI
 
 function RichBlock({ config, m, field, title, empty }: { config: ProjectConfig; m: MD; field: 'agendaJson' | 'minutesJson'; title: string; empty: string }) {
   const invalidate = useGovInvalidate(config.id);
@@ -299,8 +300,10 @@ export default function MeetingDetail({ config, num }: { config: ProjectConfig; 
             <RichBlock config={config} m={m} field="minutesJson" title={wt('gov.minutes')} empty={wt('gov.noMinutes')} />
             <Decisions config={config} m={m} />
             <Actions config={config} m={m} />
+            <MeetingK2Main config={config} m={m} />
           </div>
           <div className="min-w-0 space-y-4">
+            <MeetingK2Side config={config} m={m} />
             <Attendees config={config} m={m} />
             {(m.previous || m.next.length > 0) && (
               <Section title={wt('gov.series')}>

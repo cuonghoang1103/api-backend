@@ -74,6 +74,21 @@ export function dayDiff(a: string, b: string): number {
   return Math.round((p(b) - p(a)) / DAY_MS);
 }
 
+/**
+ * Số ngày im lặng tới hôm nay (UX-B 10/10/2026). Mốc sàn = max(ngày tham gia dự án, ngày tạo dự án, đầu kỳ):
+ * nhóm mới lập KHÔNG bị báo "182 days without activity" chỉ vì heatmap tải 182 ngày.
+ *   · có hoạt động từ mốc sàn trở đi ⇒ số ngày SAU ngày hoạt động cuối (hôm nay có hoạt động ⇒ 0);
+ *   · không ⇒ số ngày từ mốc sàn tới hôm nay, tính cả hai đầu (tham gia hôm nay, chưa làm gì ⇒ 1).
+ * Các mốc là YYYY-MM-DD (so sánh chuỗi được); null ⇒ bỏ qua.
+ */
+export function silentDaysSince(p: { today: string; lastActiveDay: string | null; floors: Array<string | null | undefined> }): number {
+  const floor = p.floors.filter((d): d is string => !!d).reduce<string | null>((a, d) => (a === null || d > a ? d : a), null);
+  if (floor && floor > p.today) return 0;
+  if (p.lastActiveDay && (!floor || p.lastActiveDay >= floor)) return Math.max(0, dayDiff(p.lastActiveDay, p.today));
+  if (!floor) return 0;
+  return dayDiff(floor, p.today) + 1;
+}
+
 /** Mọi ngày từ a tới b, gồm cả hai đầu (trần 800 ngày). */
 export function daysInclusive(a: string, b: string): string[] {
   const out: string[] = [];
@@ -466,7 +481,7 @@ export const METRIC_DEFINITIONS: Record<string, { label: string; how: string }> 
   itExecuted: { label: '5.2 / 5.3 runs', how: 'Integration / system test rounds marked Passed or Failed with the member as tester.' },
   defectsFound: { label: 'Defects found', how: 'Bugs linked to failed test runs executed by the member.' },
   bugsReported: { label: 'Bugs reported', how: 'Bug issues the member reported in the range.' },
-  meetings: { label: 'Meetings', how: 'Meetings marked Done that the member was invited to (or organised), out of all non-cancelled meetings they were invited to.' },
+  meetings: { label: 'Meetings', how: 'Meetings the member attended (Present or Late in the attendance register) out of all non-cancelled meetings they were invited to. Meetings without attendance fall back to the estimate: marked Done and the member was invited (or organised).' },
   activeDays: { label: 'Active days', how: 'Days in the range with at least one action: an issue change, comment, chat message, work log, doc edit, test run, review or commit.' },
   streak: { label: 'Streak', how: 'Longest run of consecutive active days in the range.' },
   silent: { label: 'Days silent', how: 'Consecutive days without any recorded action up to today.' },

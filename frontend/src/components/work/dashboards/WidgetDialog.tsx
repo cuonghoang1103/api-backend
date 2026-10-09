@@ -6,6 +6,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
 import { workApi, type DashboardWidget, type GroupBy, type ProjectConfig, type WidgetKind } from '@/lib/work-api';
 import { Dialog, Field, Spinner } from '../ui';
@@ -32,6 +33,7 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
   const [groupBy, setGroupBy] = useState<GroupBy>('status');
   const [days, setDays] = useState(30);
   const [sprintId, setSprintId] = useState<number | null>(null);
+  const [versionId, setVersionId] = useState<number | null>(null);
   const [text, setText] = useState('');
   const [size, setSize] = useState<'half' | 'full'>('half');
   const [checking, setChecking] = useState(false);
@@ -39,6 +41,8 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
   const [tested, setTested] = useState<{ q: string; total: number } | null>(null);
   const [otherErr, setOtherErr] = useState<string | null>(null);
   const sprints = useAllSprints(pid);
+  // UX-B: widget release_burnup chọn version (để trống = version chưa phát hành gần nhất).
+  const versions = useQuery({ queryKey: ['work', 'reports', pid, 'versions-lite'], queryFn: () => workApi.versions(pid), enabled: open && kind === 'release_burnup', staleTime: 60_000 });
 
   useEffect(() => {
     if (!open) return;
@@ -48,6 +52,7 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
     setGroupBy(initial?.groupBy ?? 'status');
     setDays(initial?.days ?? 30);
     setSprintId(initial?.sprintId ?? null);
+    setVersionId(initial?.versionId ?? null);
     setText(initial?.text ?? '');
     setSize(initial?.size ?? 'half');
     setJqlErr(null);
@@ -88,7 +93,8 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
       size,
       ...(meta.usesQuery ? { query: q } : {}),
       ...(kind === 'pie' || kind === 'bar' ? { groupBy } : {}),
-      ...(kind === 'created_resolved' ? { days } : {}),
+      ...(kind === 'created_resolved' || kind === 'cfd' ? { days } : {}),
+      ...(kind === 'release_burnup' ? { versionId } : {}),
       ...(kind === 'burndown' ? { sprintId } : {}),
       ...(kind === 'text' ? { text } : {}),
     });
@@ -165,7 +171,7 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
         </Field>
       )}
 
-      {kind === 'created_resolved' && (
+      {(kind === 'created_resolved' || kind === 'cfd') && (
         <Field label={wt('dash.period')}>
           <select value={days} onChange={(e) => setDays(Number(e.target.value))} className="w-input">
             {DAY_OPTIONS.map((d) => <option key={d} value={d}>{wt('dash.lastNDays', { n: d })}</option>)}
@@ -178,6 +184,15 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
           <select value={sprintId ?? ''} onChange={(e) => setSprintId(e.target.value ? Number(e.target.value) : null)} className="w-input">
             <option value="">{wt('dash.activeAuto')}</option>
             {reportable.map((s) => <option key={s.id} value={s.id}>{s.name}{s.state === 'ACTIVE' ? wt('contrib.activeParen') : ''}</option>)}
+          </select>
+        </Field>
+      )}
+
+      {kind === 'release_burnup' && (
+        <Field label={wt('charts.pickVersion')} hint={wt('charts.versionHint')}>
+          <select value={versionId ?? ''} onChange={(e) => setVersionId(e.target.value ? Number(e.target.value) : null)} className="w-input">
+            <option value="">{wt('charts.latestVersion')}</option>
+            {(versions.data ?? []).filter((v) => v.status !== 'ARCHIVED').map((v) => <option key={v.id} value={v.id}>{v.name}{v.status === 'RELEASED' ? wt('charts.releasedParen') : ''}</option>)}
           </select>
         </Field>
       )}

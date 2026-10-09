@@ -16,7 +16,8 @@ import { cn } from '@/lib/utils';
 import { userName, workError, type ProjectConfig, type WorkspaceDetail } from '@/lib/work-api';
 import { agentKeys, agentsApi, type AgentBrief, type CostSource } from '@/lib/work-agents-api';
 import { EmptyState, Spinner, UserAvatar } from '../ui';
-import { axisTick, Card, fmtDay, Legend, SectionTitle, StatCell, useAllSprints } from '../reports/shared';
+import { axisTick, Card, fmtDay, SectionTitle, StatCell, useAllSprints } from '../reports/shared';
+import ChartFrame from '../charts/ChartFrame';
 import { tokensFmt, usd } from './AgentBits';
 import { wt, wfmt } from '@/components/work/i18n';
 
@@ -218,38 +219,53 @@ export function WorkspaceAgentsDashboard({ ws }: { ws: WorkspaceDetail }) {
             <StatCell label={wt('agents.returnRate')} value={pct(t?.agentReturnRate)} tone={(t?.agentReturnRate ?? 0) > 0.25 ? 'red' : undefined} hint={wt('agents.returnRateHint')} />
           </div>
 
-          <Card>
-            <SectionTitle right={<Legend items={[...(own ? [] : [{ label: wt('agents.people'), color: PEOPLE }]), { label: wt('agents.agents'), color: AGENTS }]} />}>{wt('agents.resolvedPerWeek')}</SectionTitle>
-            <div className="h-[220px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart data={chart} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
-                  <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
-                  <XAxis dataKey="week" tickFormatter={fmtDay} tick={axisTick} axisLine={false} tickLine={false} />
-                  <YAxis allowDecimals={false} tick={axisTick} axisLine={false} tickLine={false} />
-                  <Tooltip content={<WeekTip />} cursor={{ fill: 'var(--w-hover)' }} />
-                  {!own && <Bar dataKey="People" fill={PEOPLE} radius={[3, 3, 0, 0]} maxBarSize={22} isAnimationActive={false} />}
-                  <Bar dataKey="Agents" fill={AGENTS} radius={[3, 3, 0, 0]} maxBarSize={22} isAnimationActive={false} />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
-          </Card>
+          {/* UX-B: hai biểu đồ đi qua ChartFrame (chú giải bật/tắt, xuất PNG/CSV, bảng ẩn cho trình đọc màn hình). */}
+          <ChartFrame
+            title={wt('agents.resolvedPerWeek')} description={wt('charts.agentsWeekDesc')} height={220}
+            status={chart.length ? 'ready' : 'empty'}
+            series={[...(own ? [] : [{ key: 'People', label: wt('agents.people'), color: PEOPLE }]), { key: 'Agents', label: wt('agents.agents'), color: AGENTS }]}
+            rows={chart} columns={[{ key: 'week', label: wt('charts.weekOf') }, ...(own ? [] : [{ key: 'People', label: wt('agents.people') }]), { key: 'Agents', label: wt('agents.agents') }, { key: 'Returned', label: wt('charts.returned') }]}
+            fileName="people-vs-agents"
+          >
+            {(hidden) => (
+              <div className="h-[220px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart data={chart} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
+                    <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
+                    <XAxis dataKey="week" tickFormatter={fmtDay} tick={axisTick} axisLine={false} tickLine={false} />
+                    <YAxis allowDecimals={false} tick={axisTick} axisLine={false} tickLine={false} />
+                    <Tooltip content={<WeekTip />} cursor={{ fill: 'var(--w-hover)' }} />
+                    {!own && !hidden.has('People') && <Bar dataKey="People" fill={PEOPLE} radius={[3, 3, 0, 0]} maxBarSize={22} isAnimationActive={false} />}
+                    {!hidden.has('Agents') && <Bar dataKey="Agents" fill={AGENTS} radius={[3, 3, 0, 0]} maxBarSize={22} isAnimationActive={false} />}
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+          </ChartFrame>
 
-          <Card>
-            <SectionTitle right={<Legend items={[{ label: wt('agents.agentUsdEst'), color: COST }, ...(own ? [] : [{ label: wt('agents.peopleHours'), color: PEOPLE, dashed: true }])]} />}>{wt('agents.costVsHours')}</SectionTitle>
-            <div className="h-[200px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart data={chart} margin={{ top: 8, right: 0, left: -18, bottom: 0 }}>
-                  <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
-                  <XAxis dataKey="week" tickFormatter={fmtDay} tick={axisTick} axisLine={false} tickLine={false} />
-                  <YAxis yAxisId="usd" tick={axisTick} axisLine={false} tickLine={false} tickFormatter={(v: number) => `$${v}`} />
-                  {!own && <YAxis yAxisId="h" orientation="right" tick={axisTick} axisLine={false} tickLine={false} tickFormatter={(v: number) => `${v}h`} />}
-                  <Tooltip content={<WeekTip />} cursor={{ fill: 'var(--w-hover)' }} />
-                  <Bar yAxisId="usd" dataKey="Cost" fill={COST} radius={[3, 3, 0, 0]} maxBarSize={22} isAnimationActive={false} />
-                  {!own && <Line yAxisId="h" dataKey="Hours" stroke={PEOPLE} strokeDasharray="4 3" strokeWidth={2} dot={{ r: 2.5 }} isAnimationActive={false} />}
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
-          </Card>
+          <ChartFrame
+            title={wt('agents.costVsHours')} description={wt('charts.agentsCostDesc')} height={200}
+            status={chart.length ? 'ready' : 'empty'}
+            series={[{ key: 'Cost', label: wt('agents.agentUsdEst'), color: COST }, ...(own ? [] : [{ key: 'Hours', label: wt('agents.peopleHours'), color: PEOPLE, dashed: true }])]}
+            rows={chart} columns={[{ key: 'week', label: wt('charts.weekOf') }, { key: 'Cost', label: wt('agents.agentUsdEst') }, ...(own ? [] : [{ key: 'Hours', label: wt('agents.peopleHours') }])]}
+            fileName="agent-cost-vs-hours"
+          >
+            {(hidden) => (
+              <div className="h-[200px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart data={chart} margin={{ top: 8, right: 0, left: -18, bottom: 0 }}>
+                    <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
+                    <XAxis dataKey="week" tickFormatter={fmtDay} tick={axisTick} axisLine={false} tickLine={false} />
+                    <YAxis yAxisId="usd" tick={axisTick} axisLine={false} tickLine={false} tickFormatter={(v: number) => `$${v}`} />
+                    {!own && <YAxis yAxisId="h" orientation="right" tick={axisTick} axisLine={false} tickLine={false} tickFormatter={(v: number) => `${v}h`} />}
+                    <Tooltip content={<WeekTip />} cursor={{ fill: 'var(--w-hover)' }} />
+                    {!hidden.has('Cost') && <Bar yAxisId="usd" dataKey="Cost" fill={COST} radius={[3, 3, 0, 0]} maxBarSize={22} isAnimationActive={false} />}
+                    {!own && !hidden.has('Hours') && <Line yAxisId="h" dataKey="Hours" stroke={PEOPLE} strokeDasharray="4 3" strokeWidth={2} dot={{ r: 2.5 }} isAnimationActive={false} />}
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+          </ChartFrame>
 
           <Card className="!p-0">
             <div className="px-4 pt-3"><SectionTitle>{wt('agents.agents')}</SectionTitle></div>

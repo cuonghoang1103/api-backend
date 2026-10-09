@@ -41,7 +41,9 @@ export async function launch(): Promise<Browser> {
 }
 
 export async function newContext(browser: Browser): Promise<BrowserContext> {
-  const ctx = await browser.newContext({ baseURL: BASE, viewport: { width: 1440, height: 900 }, acceptDownloads: true });
+  // E2E_BYPASS_CSP=1: bản build production chạy local nối WebSocket thẳng cổng backend (localhost:31xx) — CSP thật chỉ mở
+  // wss://cuongthai.com (cùng gốc qua nginx). Chỉ để thử local; production không cần.
+  const ctx = await browser.newContext({ baseURL: BASE, viewport: { width: 1440, height: 900 }, acceptDownloads: true, bypassCSP: process.env.E2E_BYPASS_CSP === '1' });
   ctx.setDefaultTimeout(45_000);
   ctx.setDefaultNavigationTimeout(90_000); // next dev biên dịch trang lần đầu khá lâu
   return ctx;

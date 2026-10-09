@@ -28,6 +28,11 @@ import { ConfirmDialog, Select } from '../settings/shared';
 import { Pill, useWorkspaceTeams } from '../studio/shared';
 import { wk } from '../hooks';
 import { wt, wfmt } from '@/components/work/i18n';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import ChartFrame from '../charts/ChartFrame';
+import { AXIS_TICK, SERIES } from '../charts/chartColors';
+import { FlowTooltip } from '../charts/FlowCharts';
+import { fmtDay } from '../reports/shared';
 
 type Tab = 'overview' | 'timesheet' | 'approvals' | 'rates' | 'budget' | 'payments';
 
@@ -75,40 +80,54 @@ function Kpi({ label, value, sub, tone }: { label: string; value: ReactNode; sub
 
 function BudgetBar({ pct }: { pct: number | null }) {
   if (pct === null) return null;
-  const color = pct >= 100 ? 'var(--w-red)' : pct >= 80 ? 'var(--w-orange)' : 'var(--w-green)';
+  // UX-B: đỏ chỉ khi vượt ngân sách; rãnh dùng --w-border-strong (rãnh --w-sunken cũ gần như vô hình ở nền tối).
+  const color = pct >= 100 ? 'var(--w-red)' : pct >= 80 ? 'var(--w-orange)' : 'var(--w-status-done)';
   return (
     <div className="mt-3">
-      <div className="relative h-2.5 overflow-hidden rounded-full bg-[var(--w-sunken)]" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={wt('finance.budgetUsed')}>
+      <div className="relative h-2.5 overflow-hidden rounded-full bg-[var(--w-border-strong)]" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={wt('finance.budgetUsed')} aria-valuetext={wt('finance.pctUsed', { pct })}>
         <div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${Math.min(100, pct)}%`, background: color }} />
-        <div className="absolute inset-y-0 w-px bg-[var(--w-text-3)] opacity-60" style={{ left: '80%' }} title={wt('finance.warning80')} />
+        <div className="absolute inset-y-0 w-0.5 bg-[var(--w-text-2)]" style={{ left: '80%' }} title={wt('finance.warning80')} />
       </div>
       <div className="mt-1 flex justify-between text-[11.5px] text-[var(--w-text-3)]"><span>{wt('finance.pctUsed', { pct })}</span><span>{wt('finance.warningAt80')}</span></div>
     </div>
   );
 }
 
+/** UX-B: chi phí theo tuần — Recharts cột chồng trong ChartFrame (trục, tooltip, trạng thái trống, xuất PNG/CSV). */
 function WeeklyBars({ f }: { f: FinanceSummary }) {
-  const max = Math.max(1, ...f.weekly.map((w) => w.labor + w.expenses));
+  const rows = f.weekly.map((w) => ({ ...w, total: w.labor + w.expenses }));
+  const empty = !rows.length || rows.every((w) => !w.total);
+  const money = (v: number) => fmtMoney(v, f.currency);
+  const short = (v: number) => (Math.abs(v) >= 1_000_000 ? `${Math.round(v / 100_000) / 10}M` : Math.abs(v) >= 1000 ? `${Math.round(v / 100) / 10}k` : String(v));
   return (
-    <div className="w-card p-4">
-      <div className="mb-3 flex flex-wrap items-center gap-3">
-        <h3 className="w-section-title">{wt('finance.costPerWeek')}</h3>
-        <span className="flex items-center gap-1.5 text-[11.5px] text-[var(--w-text-3)]"><span className="h-2 w-2 rounded-[2px] bg-[var(--w-chart-1)]" />{wt('finance.laborApproved')}</span>
-        <span className="flex items-center gap-1.5 text-[11.5px] text-[var(--w-text-3)]"><span className="h-2 w-2 rounded-[2px] bg-[var(--w-chart-3)]" />{wt('finance.otherCosts')}</span>
-      </div>
-      <div className="flex h-[120px] items-end gap-1" role="img" aria-label={wt('finance.costPerWeekAria')}>
-        {f.weekly.map((w) => {
-          const total = w.labor + w.expenses;
-          return (
-            <div key={w.weekStart} className="flex h-full min-w-0 flex-1 flex-col justify-end" title={wt('finance.weekOfTip', { w: w.weekStart, m: fmtMoney(total, f.currency) })}>
-              <div className="w-full rounded-t-[2px] bg-[var(--w-chart-3)]" style={{ height: `${(w.expenses / max) * 100}%` }} />
-              <div className="w-full bg-[var(--w-chart-1)]" style={{ height: `${(w.labor / max) * 100}%`, minHeight: total ? 2 : 0 }} />
-            </div>
-          );
-        })}
-      </div>
-      <div className="mt-1 flex justify-between text-[11px] text-[var(--w-text-3)]"><span>{f.weekly[0]?.weekStart}</span><span>{wt('finance.thisWeekLc')}</span></div>
-    </div>
+    <ChartFrame
+      title={wt('finance.costPerWeek')} description={wt('charts.costDesc')} height={200}
+      status={empty ? 'empty' : 'ready'} emptyText={wt('charts.costEmpty')}
+      series={[{ key: 'labor', label: wt('finance.laborApproved'), color: SERIES.labor }, { key: 'expenses', label: wt('finance.otherCosts'), color: SERIES.other }]}
+      rows={rows}
+      columns={[
+        { key: 'weekStart', label: wt('charts.weekOf') }, { key: 'labor', label: wt('finance.laborApproved') },
+        { key: 'expenses', label: wt('finance.otherCosts') }, { key: 'total', label: wt('charts.total') },
+      ]}
+      summary={wt('finance.costPerWeekAria')}
+      fileName="cost-per-week"
+      testId="chart-cost-week"
+    >
+      {(hidden) => (
+        <div className="h-[200px] w-full min-w-0">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={rows} margin={{ top: 6, right: 8, bottom: 0, left: 0 }}>
+              <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
+              <XAxis dataKey="weekStart" tickFormatter={fmtDay} tick={AXIS_TICK} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} minTickGap={16} />
+              <YAxis tickFormatter={short} tick={AXIS_TICK} tickLine={false} axisLine={false} width={48} />
+              <Tooltip content={<FlowTooltip labelFormat={(l) => wt('charts.weekOfX', { d: fmtDay(l) })} fmt={(v) => money(v)} />} cursor={{ fill: 'var(--w-hover)' }} />
+              {!hidden.has('labor') && <Bar dataKey="labor" stackId="c" name={wt('finance.laborApproved')} fill={SERIES.labor} maxBarSize={28} isAnimationActive={false} />}
+              {!hidden.has('expenses') && <Bar dataKey="expenses" stackId="c" name={wt('finance.otherCosts')} fill={SERIES.other} radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </ChartFrame>
   );
 }
 

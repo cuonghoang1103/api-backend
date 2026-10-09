@@ -26,12 +26,13 @@ import { CONTRIB_COMMANDS } from './contrib.js';
 import { DIAGRAM_COMMANDS } from './diagrams.js';
 import { SWR_COMMANDS } from './swr.js';
 import { TEACHING_COMMANDS } from './teaching.js'; // CTW đợt 5: hub giảng viên (chỉ đọc)
+import { MEETING2_COMMANDS } from './meetings2.js'; // CTW K-2: transcript họp + đề xuất biên bản AI
 import { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 export { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 /** Thứ tự = thứ tự trong tools/list: 21 tool cũ trước (client cũ thấy y hệt), lệnh mới sau. */
-export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS, ...SRS_COMMANDS, ...CHAT_COMMANDS, ...CONTRIB_COMMANDS, ...DIAGRAM_COMMANDS, ...TEACHING_COMMANDS, ...SWR_COMMANDS];
+export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS, ...SRS_COMMANDS, ...CHAT_COMMANDS, ...CONTRIB_COMMANDS, ...DIAGRAM_COMMANDS, ...TEACHING_COMMANDS, ...SWR_COMMANDS, ...MEETING2_COMMANDS];
 
 const BY_NAME = new Map(COMMANDS.map((t) => [t.name, t]));
 if (BY_NAME.size !== COMMANDS.length) throw new Error('toolRegistry: trùng tên lệnh');

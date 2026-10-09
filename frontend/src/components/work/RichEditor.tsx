@@ -14,7 +14,12 @@ import { EditorContent, NodeViewContent, NodeViewWrapper, ReactNodeViewRenderer,
 import type { EditorView } from '@tiptap/pm/view';
 import Image from '@tiptap/extension-image';
 import { toast } from 'sonner';
-import { Node, mergeAttributes } from '@tiptap/core';
+import { Mark, Node, mergeAttributes } from '@tiptap/core';
+// CTW K-3b: đồng soạn thảo (Yjs) — cùng gói Notes đang dùng, không thêm phụ thuộc.
+import Collaboration from '@tiptap/extension-collaboration';
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
+import type { HocuspocusProvider } from '@hocuspocus/provider';
+import type * as Y from 'yjs';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
@@ -57,6 +62,36 @@ const Mention = Node.create({
   },
   renderText: ({ node }) => `@${node.attrs.label}`,
 });
+
+/**
+ * CTW K-3b (K19/K7): neo bình luận gắn đoạn văn — khớp `CommentAnchor` của máy chủ (collabSchema.ts). Có ở MỌI chế độ để
+ * nội dung đã có neo không rơi mark khi mở bằng editor thường. Tô sáng do DocView bật theo từng neo còn mở (style riêng).
+ */
+const CommentAnchor = Mark.create({
+  name: 'commentAnchor',
+  inclusive: false,
+  addAttributes() {
+    return {
+      id: {
+        default: null,
+        parseHTML: (el) => el.getAttribute('data-comment-anchor'),
+        renderHTML: (a) => (a.id ? { 'data-comment-anchor': a.id } : {}),
+      },
+    };
+  },
+  parseHTML: () => [{ tag: 'span[data-comment-anchor]' }],
+  renderHTML({ HTMLAttributes }) {
+    return ['span', mergeAttributes(HTMLAttributes, { class: 'w-anchor' }), 0];
+  },
+});
+
+/** Phiên đồng soạn (K-3b) truyền vào RichEditor: nội dung nằm trong Y.Doc, KHÔNG trong `value`. */
+export interface RichEditorCollab {
+  doc: Y.Doc;
+  provider: HocuspocusProvider;
+  /** CollaborationCursor GHI ĐÈ trường awareness `user` bằng object này ⇒ phải mang đủ id/avatar cho dải hiện diện. */
+  user: { name: string; color: string; id: number; avatarUrl: string | null };
+}
 
 /**
  * Bảng cho trang TÀI LIỆU (S2a). Bọc <table> trong một div cuộn ngang riêng — bảng
@@ -206,12 +241,21 @@ export interface RichEditorProps {
    * luôn tắt — chữ tiếng Việt/Anh trong tài liệu từng bị gạch chân chấm đỏ khi chỉ xem.
    */
   spellCheck?: boolean;
+  /**
+   * CTW K-3b: ĐỒNG SOẠN THẢO — nội dung lấy từ Y.Doc (Collaboration) + con trỏ người khác (CollaborationCursor). Bỏ
+   * `value`, tắt lịch sử của StarterKit (Yjs có undo riêng). Chốt lúc tạo editor — đổi phiên ⇒ gắn `key` mới.
+   */
+  collab?: RichEditorCollab | null;
+  /** CTW K-3b: bấm vào chữ có neo bình luận ⇒ mở luồng đó. */
+  onAnchorClick?: (anchorId: string) => void;
 }
 
 export default function RichEditor({
   value, onChange, editable = true, placeholder = wt('editor.writePh'), members = [], autoFocus, onSubmit, onEscape,
-  minHeight = 80, toolbar = true, className, editorRef, docs = false, projectId, spellCheck = true,
+  minHeight = 80, toolbar = true, className, editorRef, docs = false, projectId, spellCheck = true, collab = null, onAnchorClick,
 }: RichEditorProps) {
+  const anchorClickRef = useRef(onAnchorClick);
+  anchorClickRef.current = onAnchorClick;
   const pidRef = useRef(projectId);
   pidRef.current = projectId;
   const fileRef = useRef<HTMLInputElement>(null);
@@ -253,11 +297,12 @@ export default function RichEditor({
   const editor = useEditor({
     immediatelyRender: false,
     editable,
-    content: (value as object) ?? '',
+    // K-3b: phiên đồng soạn đã nạp sẵn Y.Doc — đưa `content` vào sẽ gieo nội dung LẦN NỮA cho mỗi người mở.
+    content: collab ? undefined : (value as object) ?? '',
     extensions: [
       // Khối code tô màu cú pháp (decoration của ProseMirror ⇒ đúng cả lúc xem lẫn lúc sửa).
       // Không khai ngôn ngữ thì lowlight tự đoán.
-      StarterKit.configure({ heading: { levels: docs ? [1, 2, 3, 4] : [1, 2, 3] }, codeBlock: false }),
+      StarterKit.configure({ heading: { levels: docs ? [1, 2, 3, 4] : [1, 2, 3] }, codeBlock: false, ...(collab ? { history: false } : {}) }),
       CodeBlock.configure({ lowlight: LOWLIGHT, HTMLAttributes: { class: 'w-code' } }),
       // CTW đợt 3A: ảnh có ở MỌI chế độ (mô tả thẻ, bình luận, Docs) — nội dung đã có ảnh vẫn hiện ở chỗ chỉ xem.
       DocImage,
@@ -267,6 +312,11 @@ export default function RichEditor({
       TaskItem.configure({ nested: true }),
       Mention,
       ...(docs ? [DocTable, TableRow, TableHeader, TableCell] : []),
+      CommentAnchor,
+      ...(collab ? [
+        Collaboration.configure({ document: collab.doc, field: 'default' }),
+        CollaborationCursor.configure({ provider: collab.provider, user: collab.user }),
+      ] : []),
     ],
     editorProps: {
       // `spellcheck` ở đây chỉ là giá trị LÚC TẠO (tránh nháy gạch chân). TipTap trải (spread) object này
@@ -288,6 +338,13 @@ export default function RichEditor({
         const at = view.posAtCoords({ left: (event as DragEvent).clientX, top: (event as DragEvent).clientY })?.pos;
         void insertImages(view, pidRef.current, files, at);
         return true;
+      },
+      // K-3b: bấm vào chữ có neo bình luận ⇒ mở luồng (cả lúc xem lẫn lúc sửa).
+      handleClick: (_view, _pos, event) => {
+        const el = (event.target as HTMLElement | null)?.closest?.('[data-comment-anchor]');
+        const id = el?.getAttribute('data-comment-anchor');
+        if (id && anchorClickRef.current) anchorClickRef.current(id);
+        return false;
       },
       handleKeyDown: (_view, event) => {
         const list = matchesRef.current;
@@ -331,11 +388,12 @@ export default function RichEditor({
 
   // Nội dung đổi từ bên ngoài (thẻ khác, người khác vừa sửa) khi KHÔNG đang gõ.
   useEffect(() => {
-    if (!editor || editor.isFocused) return;
+    // K-3b: đồng soạn ⇒ nội dung đến từ Yjs, `value` không phải nguồn sự thật (đặt lại sẽ phát thay đổi cho cả phòng).
+    if (!editor || editor.isFocused || collab) return;
     const cur = JSON.stringify(editor.getJSON());
     const next = JSON.stringify(value ?? { type: 'doc', content: [] });
     if (cur !== next) editor.commands.setContent((value as object) ?? '', false);
-  }, [editor, value]);
+  }, [editor, value, collab]);
 
   // emitUpdate = false: setEditable() của TipTap mặc định BẮN 'update' ⇒ onChange chạy
   // ngay lúc mở dù không ai gõ gì (trang tài liệu tự lưu sinh phiên bản rỗng — bắt được

@@ -10296,6 +10296,8 @@ model WorkProject {
   swrSettings       WorkSwrSettings?
   requirementInfos  WorkRequirementInfo[]
   // ── hết CTW đợt 4b ──
+  /// CTW K-2: cấu hình họp (hạn lưu audio, trần phiên âm/ngày, nhắc họp).
+  meetingSettings   WorkMeetingSettings?
   /// CTW đợt 5: nhóm của lớp học sinh ra dự án này (tối đa một) + điểm rubric theo mốc.
   classGroup        WorkClassGroup?        @relation("WorkClassGroupProject")
   grades            WorkGrade[]            @relation("WorkGradeProject")
@@ -12063,6 +12065,9 @@ model WorkPage {
   postmortemOf WorkDeskProblem[]
   /// Đợt S6: lịch sử chấm Spec Fidelity của trang.
   specReviews  WorkSpecReview[]
+  /// CTW K-3b: trạng thái đồng soạn thảo (Yjs) + bình luận gắn đoạn văn.
+  collab       WorkPageCollab?
+  anchors      WorkPageAnchor[]
 
   @@unique([projectId, number], name: "uk_work_page_number", map: "uk_work_page_number")
   @@index([projectId, parentId, position], name: "idx_work_page_tree")
@@ -12126,6 +12131,8 @@ model WorkPageComment {
   author  User?             @relation("WorkPageCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
   parent  WorkPageComment?  @relation("WorkPageCommentThread", fields: [parentId], references: [id], onDelete: SetNull)
   replies WorkPageComment[] @relation("WorkPageCommentThread")
+  /// CTW K-3b: bình luận gốc gắn vào một đoạn văn bản của trang.
+  anchor  WorkPageAnchor?
 
   @@index([pageId, createdAt], name: "idx_work_page_comment_page")
   @@index([parentId], map: "idx_work_page_comment_parent")
@@ -12379,6 +12386,15 @@ model WorkMeeting {
   attendees WorkMeetingAttendee[]
   actions   WorkMeetingAction[]
 
+  // ── CTW K-2 ── agenda có cấu trúc, link bản ghi hình ngoài (K12), mốc đã nhắc họp (K21), ghi âm + đề xuất biên bản AI.
+  /// [{ id, title, presenterId, minutes, ref }] — ref = mã thẻ "FP-12" / trang "DOC-3" / URL.
+  agendaItems   Json                      @default("[]") @map("agenda_items")
+  recordingUrl  String?                   @map("recording_url") @db.VarChar(500)
+  remindedAt    DateTime?                 @map("reminded_at")
+  recordings    WorkMeetingRecording[]
+  minutesDrafts WorkMeetingMinutesDraft[]
+  // ── hết CTW K-2 ──
+
   @@unique([projectId, number], name: "uk_work_meeting_number", map: "uk_work_meeting_number")
   @@index([projectId, startsAt], name: "idx_work_meeting_project")
   @@map("work_meetings")
@@ -12389,6 +12405,19 @@ model WorkMeetingAttendee {
   meetingId Int      @map("meeting_id")
   userId    Int      @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
+
+  // ── CTW K-2 ── RSVP (YES|NO|MAYBE + lý do) và điểm danh (PRESENT|LATE|EXCUSED|ABSENT; AUTO khi bấm "Vào họp" / MANUAL
+  // khi chủ trì đánh dấu). `invited` = false ⇒ người tự vào họp không có lời mời (walk-in).
+  invited          Boolean   @default(true)
+  rsvp             String?   @db.VarChar(8)
+  rsvpNote         String?   @map("rsvp_note") @db.VarChar(300)
+  rsvpAt           DateTime? @map("rsvp_at")
+  attendance       String?   @db.VarChar(8)
+  attendanceSource String?   @map("attendance_source") @db.VarChar(6)
+  markedById       Int?      @map("marked_by_id")
+  joinedAt         DateTime? @map("joined_at")
+  leftAt           DateTime? @map("left_at")
+  // ── hết CTW K-2 ──
 
   meeting WorkMeeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
   user    User        @relation("WorkMeetingAttendeeUser", fields: [userId], references: [id], onDelete: Cascade)
@@ -14254,3 +14283,163 @@ model WorkSwrSettings {
 }
 
 // ── hết CTW đợt 4b ──
+
+// ── CTW K-2 ── (10/10/2026) HỌP GHI ÂM → PHIÊN ÂM → AI BIÊN BẢN (rà soát K9–K14, K21). Ghi âm chỉ khi mọi người đang ở
+// phòng họp CT Work đã ĐỒNG Ý (ghi lại ai/lúc nào); audio cắt đoạn ~1–2 phút, tải dần lên R2 qua backend; Groq Whisper
+// phiên âm nền từng đoạn; AI viết biên bản dạng ĐỀ XUẤT, mỗi quyết định/việc phải trích được dòng transcript. Audio có
+// hạn lưu (mặc định 30 ngày, theo dự án) — job dọn xoá object R2 nhưng GIỮ bản chép lời. Cột người (userId…) không FK
+// tới users (như work_audit_logs): biên bản phải sống lâu hơn tài khoản. Xem src/services/work/meetingRec*.ts.
+
+/// Cấu hình họp của dự án. `sttDailyLimit` null ⇒ env WORK_MEETING_STT_DAILY (mặc định 240 đoạn/ngày).
+model WorkMeetingSettings {
+  projectId          Int      @id @map("project_id")
+  audioRetentionDays Int      @default(30) @map("audio_retention_days")
+  sttDailyLimit      Int?     @map("stt_daily_limit")
+  reminderMinutes    Int      @default(10) @map("reminder_minutes")
+  remindInChat       Boolean  @default(true) @map("remind_in_chat")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("work_meeting_settings")
+}
+
+/// Một lượt ghi âm (LIVE từ micro) hoặc một tệp tải lên (UPLOAD). status: CONSENT (đang hỏi đồng ý) → RECORDING →
+/// ENDED; STOPPED = có người từ chối / dừng giữa chừng. `expiresAt` = hạn xoá audio; `audioDeletedAt` = đã xoá audio.
+model WorkMeetingRecording {
+  id             Int       @id @default(autoincrement())
+  meetingId      Int       @map("meeting_id")
+  startedById    Int?      @map("started_by_id")
+  source         String    @default("LIVE") @db.VarChar(8)
+  status         String    @default("CONSENT") @db.VarChar(12)
+  fileName       String?   @map("file_name") @db.VarChar(255)
+  startedAt      DateTime? @map("started_at")
+  endedAt        DateTime? @map("ended_at")
+  durationMs     Int       @default(0) @map("duration_ms")
+  expiresAt      DateTime? @map("expires_at")
+  audioDeletedAt DateTime? @map("audio_deleted_at")
+  deletedById    Int?      @map("deleted_by_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  meeting  WorkMeeting          @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  consents WorkMeetingConsent[]
+  chunks   WorkMeetingChunk[]
+
+  @@index([meetingId], name: "idx_work_meeting_rec_meeting")
+  @@index([expiresAt], name: "idx_work_meeting_rec_expires")
+  @@map("work_meeting_recordings")
+}
+
+/// Ai đồng ý / từ chối ghi âm, lúc nào (bằng chứng đồng ý — NĐ 13/2023).
+model WorkMeetingConsent {
+  id          Int      @id @default(autoincrement())
+  recordingId Int      @map("recording_id")
+  userId      Int      @map("user_id")
+  decision    String   @db.VarChar(8)
+  at          DateTime @default(now())
+
+  recording WorkMeetingRecording @relation(fields: [recordingId], references: [id], onDelete: Cascade)
+
+  @@unique([recordingId, userId], name: "uk_work_meeting_consent", map: "uk_work_meeting_consent")
+  @@map("work_meeting_consents")
+}
+
+/// Một đoạn audio (~1–2 phút). `seq` duy nhất trong lượt ghi ⇒ gửi lại sau rớt mạng không nhân đôi. `startMs` = vị trí
+/// đoạn trong lượt ghi. `segments` = [{ start, end, text, speakerId? }] (giây, tính trong đoạn). `r2Key` null = audio đã xoá.
+model WorkMeetingChunk {
+  id            Int       @id @default(autoincrement())
+  recordingId   Int       @map("recording_id")
+  seq           Int
+  r2Key         String?   @map("r2_key") @db.VarChar(500)
+  mime          String    @db.VarChar(100)
+  size          Int
+  startMs       Int       @map("start_ms")
+  durationMs    Int       @map("duration_ms")
+  speakerId     Int?      @map("speaker_id")
+  uploaderId    Int?      @map("uploader_id")
+  status        String    @default("PENDING") @db.VarChar(12)
+  attempts      Int       @default(0)
+  error         String?   @db.VarChar(300)
+  text          String?   @db.Text
+  segments      Json?
+  language      String?   @db.VarChar(12)
+  transcribedAt DateTime? @map("transcribed_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  recording WorkMeetingRecording @relation(fields: [recordingId], references: [id], onDelete: Cascade)
+
+  @@unique([recordingId, seq], name: "uk_work_meeting_chunk", map: "uk_work_meeting_chunk")
+  @@index([status, transcribedAt], name: "idx_work_meeting_chunk_status")
+  @@map("work_meeting_chunks")
+}
+
+/// Biên bản AI dạng ĐỀ XUẤT: { summary, decisions[], actions[], openIssues[] } — mỗi mục có `evidence` (id dòng
+/// transcript + trích dẫn) hoặc `unsupported: true`. Chủ trì duyệt ⇒ APPLIED (đổ vào biên bản), hoặc DISMISSED.
+model WorkMeetingMinutesDraft {
+  id          Int       @id @default(autoincrement())
+  meetingId   Int       @map("meeting_id")
+  recordingId Int?      @map("recording_id")
+  createdById Int?      @map("created_by_id")
+  status      String    @default("PROPOSED") @db.VarChar(10)
+  language    String    @default("vi") @db.VarChar(8)
+  content     Json
+  model       String?   @db.VarChar(80)
+  decidedById Int?      @map("decided_by_id")
+  decidedAt   DateTime? @map("decided_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  meeting WorkMeeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@index([meetingId, createdAt], name: "idx_work_meeting_minutes_draft")
+  @@map("work_meeting_minutes_drafts")
+}
+
+// ── hết CTW K-2 ──
+
+// ── CTW K-3b ── (10/10/2026) ĐỒNG SOẠN THẢO REALTIME CHO DOCS (Hocuspocus + Yjs, khuôn của Notes) + BÌNH LUẬN GẮN
+// ĐOẠN VĂN (K18 + K19/K7). Trang vẫn là nguồn sự thật cho lịch sử/xuất/tìm kiếm/RTM: gateway ghi trạng thái Yjs vào
+// đây VÀ chụp lại thành work_pages.content_json + work_page_versions (xem socket/work-docs-collaboration.gateway.ts).
+
+/// Trạng thái CRDT (Yjs) của một trang Docs. `contentHash` = băm nội dung trang lúc gateway ghi lần cuối — trang bị sửa
+/// NGOÀI phiên cộng tác (script, seed, collab đang tắt) thì lần mở sau khớp lại theo kiểu diff, không mất lịch sử Yjs.
+/// `clientUsers` = { clientID Yjs: userId } do MÁY CHỦ ghi (tác giả theo đoạn, không tin client). `disabled` = công tắc
+/// theo trang (công tắc theo dự án nằm ở work_projects.settings.collab.enabled).
+model WorkPageCollab {
+  pageId         Int       @id @map("page_id")
+  state          Bytes?
+  stateVector    Bytes?    @map("state_vector")
+  byteSize       Int       @default(0) @map("byte_size")
+  updateCount    Int       @default(0) @map("update_count")
+  contentHash    String?   @map("content_hash") @db.VarChar(64)
+  clientUsers    Json?     @map("client_users")
+  disabled       Boolean   @default(false)
+  lastSnapshotAt DateTime? @map("last_snapshot_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  page WorkPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@map("work_page_collab")
+}
+
+/// Bình luận GẮN ĐOẠN VĂN (K19/K7): bình luận gốc (work_page_comments) + mark TipTap `commentAnchor{id}` trong nội dung.
+/// Trả lời đi theo luồng sẵn có (parentId). Resolve ẩn tô sáng nhưng giữ mark (mở lại được).
+model WorkPageAnchor {
+  id           Int       @id @default(autoincrement())
+  pageId       Int       @map("page_id")
+  commentId    Int       @unique @map("comment_id")
+  anchorId     String    @map("anchor_id") @db.VarChar(40)
+  quote        String    @db.VarChar(500)
+  resolvedAt   DateTime? @map("resolved_at")
+  resolvedById Int?      @map("resolved_by_id")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  page    WorkPage        @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  comment WorkPageComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, anchorId], name: "uk_work_page_anchor", map: "uk_work_page_anchor")
+  @@map("work_page_anchors")
+}
+
+// ── hết CTW K-3b ──

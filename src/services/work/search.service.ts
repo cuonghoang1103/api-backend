@@ -12,6 +12,7 @@ import { filterPeople, peopleFilterFor, type PeopleFilter } from './clientPeople
 import { isClientScoped, requireProject } from './permissions.js';
 import { projectMembers } from './projects.service.js';
 import { estimateOf, estimationOf, vnDay } from './sprints.service.js';
+import { OVERVIEW_DASHBOARD_NAME, createOverviewDashboard } from './dashboardDefaults.js';
 
 async function jqlContext(projectId: number, userId: number, key: string, people: PeopleFilter = null): Promise<JqlContext> {
   const [project, statuses, types, labels, components, members, sprints, customFields, teams, stages, versions] = await Promise.all([
@@ -153,9 +154,10 @@ export async function stats(userId: number, projectId: number, query: string, gr
   const [members, sprints] = await Promise.all([projectMembers(projectId), prisma.workSprint.findMany({ where: { projectId }, select: { id: true, name: true } })]);
   const PRI = ['', 'Highest', 'High', 'Medium', 'Low', 'Lowest'];
   const CAT: Record<string, string> = { TODO: 'To do', IN_PROGRESS: 'In progress', DONE: 'Done' };
-  const buckets = new Map<string, { key: string; label: string; color?: string; count: number; points: number }>();
-  const add = (key: string, label: string, pts: number, color?: string) => {
-    const b = buckets.get(key) ?? { key, label, color, count: 0, points: 0 };
+  // UX-B: nhóm theo trạng thái mang theo `category` ⇒ biểu đồ tô theo màu nhóm (khớp badge trạng thái).
+  const buckets = new Map<string, { key: string; label: string; color?: string; category?: string; count: number; points: number }>();
+  const add = (key: string, label: string, pts: number, color?: string, category?: string) => {
+    const b = buckets.get(key) ?? { key, label, color, ...(category ? { category } : {}), count: 0, points: 0 };
     b.count += 1;
     b.points = Math.round((b.points + pts) * 10) / 10;
     buckets.set(key, b);
@@ -163,7 +165,7 @@ export async function stats(userId: number, projectId: number, query: string, gr
   for (const r of rows) {
     const pts = estimateOf(r, mode);
     switch (groupBy) {
-      case 'status': add(`s${r.status.name}`, r.status.name, pts, r.status.color); break;
+      case 'status': add(`s${r.status.name}`, r.status.name, pts, r.status.color, r.status.category); break;
       case 'statusCategory': add(r.status.category, CAT[r.status.category] ?? r.status.category, pts); break;
       case 'assignee': {
         const m = members.find((x) => x.id === r.assigneeId);
@@ -214,7 +216,12 @@ export async function createdVsResolved(userId: number, projectId: number, days:
 // ─── Dashboard ───────────────────────────────────────────────────
 
 // 'top_risks' (đợt S3b): rủi ro mở điểm cao nhất của sổ RAID — số liệu ở GET /projects/:pid/raid/top (rỗng khi mô-đun tắt).
-export const WIDGET_KINDS = ['filter', 'pie', 'bar', 'counter', 'created_resolved', 'burndown', 'my_issues', 'text', 'health', 'top_risks'] as const;
+// UX-B (10/10/2026): + 'kpis' (hàng KPI có xu hướng), 'cfd', 'throughput', 'cycle_time', 'aging_wip', 'velocity',
+// 'release_burnup' (versionId), 'workload' (tải theo người), 'overdue' (danh sách việc trễ) — số liệu ở /reports/* (flowReports.service.ts).
+export const WIDGET_KINDS = [
+  'filter', 'pie', 'bar', 'counter', 'created_resolved', 'burndown', 'my_issues', 'text', 'health', 'top_risks',
+  'kpis', 'cfd', 'throughput', 'cycle_time', 'aging_wip', 'velocity', 'release_burnup', 'workload', 'overdue',
+] as const;
 export interface Widget {
   id: string;
   kind: (typeof WIDGET_KINDS)[number];
@@ -222,9 +229,22 @@ export interface Widget {
   query?: string;
   groupBy?: GroupBy;
   sprintId?: number | null;
+  versionId?: number | null;
   days?: number;
   text?: string;
   size?: 'half' | 'full';
+}
+
+// UX-B: dashboard "Project overview" mặc định ⇒ dashboardDefaults.ts (không import vòng với projects.service).
+
+/** Nút "Create project overview" (dự án cũ chưa có): ai xem được dự án cũng tạo được (dashboard dùng chung, như tạo tay). */
+export async function ensureOverviewDashboard(userId: number, projectId: number) {
+  await requireProject(userId, projectId, 'project.view');
+  const existing = await prisma.workDashboard.findFirst({
+    where: { projectId, name: OVERVIEW_DASHBOARD_NAME, shared: true },
+    select: { id: true, name: true, shared: true, ownerId: true, widgets: true, updatedAt: true },
+  });
+  return existing ?? createOverviewDashboard(prisma, projectId, userId);
 }
 
 async function validateWidgets(userId: number, projectId: number, widgets: Widget[]) {

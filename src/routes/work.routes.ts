@@ -77,10 +77,13 @@ import ctw5bRoutes from './work.ctw5b.routes.js'; // CTW đợt 5b K-1: tệp/vo
 import ctw4Routes from './work.ctw4.routes.js';
 import ctw4bRoutes from './work.ctw4b.routes.js'; // CTW đợt 4b: SWR302 hồ sơ Wiegers + sáu liên kết
 import ctwk3Routes from './work.ctwk3.routes.js'; // CTW K-3: kênh chat dự án
+import ctwk3bRoutes from './work.ctwk3b.routes.js'; // CTW K-3b: đồng soạn thảo Docs + bình luận gắn đoạn văn
 import uxdRoutes, { uxdPublicRoutes } from './work.uxd.routes.js'; // UX-D: ảnh xem trước link + ảnh bìa dự án
 import contribRoutes from './work.contrib.routes.js'; // CTW Đóng góp: chỉ số thành viên + đánh giá chéo
+import uxbRoutes from './work.uxb.routes.js'; // UX-B: CFD, cycle time, throughput, aging WIP, release burnup, KPI, dashboard overview
 import diagramRoutes from './work.diagrams.routes.js'; // CTW Diagram: Diagram Studio + AI vẽ sơ đồ
 import ctw5Routes from './work.ctw5.routes.js'; // CTW đợt 5: hub giảng viên, lớp học, rubric/điểm, việc định kỳ
+import ctwk2Routes from './work.ctwk2.routes.js'; // CTW K-2: họp ghi âm → phiên âm → AI biên bản, RSVP, điểm danh
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
@@ -1145,6 +1148,7 @@ router.delete('/projects/:pid/filters/:filterId', asyncHandler(async (req, res) 
 const widgetBody = z.object({
   id: z.string().max(40).default(''), kind: z.enum(searchSvc.WIDGET_KINDS), title: z.string().max(80).default(''),
   query: z.string().max(4000).optional(), groupBy: z.enum(searchSvc.GROUP_BYS).optional(), sprintId: id.nullable().optional(),
+  versionId: id.nullable().optional(), // UX-B: widget release_burnup
   days: z.number().int().min(7).max(90).optional(), text: z.string().max(5000).optional(), size: z.enum(['half', 'full']).optional(),
 });
 router.get('/projects/:pid/dashboards', asyncHandler(async (req, res) => {
@@ -2011,11 +2015,17 @@ router.use(ctw4bRoutes);
 router.use(uxdRoutes); // UX-D: ảnh bìa dự án (chỉ ADMIN dự án)
 // CTW Đóng góp (A26/A27): đóng góp & hiệu suất thành viên, đánh giá chéo, xuất xlsx/PDF (work.contrib.routes.ts).
 router.use(contribRoutes);
+// UX-B: báo cáo dòng chảy + KPI + dashboard "Project overview" (work.uxb.routes.ts — số liệu ở flowReports.service.ts).
+router.use(uxbRoutes);
 // CTW K-3: kênh chat dự án (work.ctwk3.routes.ts — quyền trong chat.service.ts).
 router.use(ctwk3Routes);
+// CTW K-3b: đồng soạn thảo Docs (Yjs) + bình luận gắn đoạn văn (work.ctwk3b.routes.ts).
+router.use(ctwk3bRoutes);
 // CTW Diagram: Diagram Studio (sơ đồ Mermaid/Excalidraw, phiên bản, AI vẽ từ dữ liệu dự án) — work.diagrams.routes.ts.
 router.use(diagramRoutes);
 // CTW đợt 5: hub giảng viên (/teaching), lớp học (/classes), rubric + điểm, tuần 1, việc định kỳ — work.ctw5.routes.ts.
 router.use(ctw5Routes);
+// CTW K-2: agenda có cấu trúc, RSVP, điểm danh, ghi âm có đồng ý, phiên âm, biên bản AI (work.ctwk2.routes.ts).
+router.use(ctwk2Routes);
 
 export default router;

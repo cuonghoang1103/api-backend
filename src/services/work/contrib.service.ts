@@ -19,10 +19,15 @@ import { PUBLIC_USER, displayName, type PublicUser } from './common.js';
 import { chatMessages, chatVoiceNotes, type ChatMessageRow } from './contribChat.js';
 import {
   addDays, attentionSignals, contribAccess, dayDiff, dayKey, daysInclusive, identityResolver, isOverdue, lateDays, mean, median,
-  pctChange, previousWindow, resolveWindow, round1, safeTz, startOfDay, streaks, weekStart, fold, FAIRNESS_NOTE, METRIC_DEFINITIONS,
+  pctChange, previousWindow, resolveWindow, round1, safeTz, silentDaysSince, startOfDay, streaks, weekStart, fold, FAIRNESS_NOTE, METRIC_DEFINITIONS,
   type ContribAccess, type ContribWindow, type RangePreset, type Signal,
 } from './contribRules.js';
 import type { ProjectRole } from './constants.js';
+import { attendedForContrib } from './meetingRules.js';
+
+/** CTW K-2: "đã dự họp" — điểm danh thật khi cuộc họp đã điểm danh, không thì ước lượng cũ (DONE + được mời). */
+const didAttend = (m: { status: string; tracked: boolean; att: Record<number, string | null> }, userId: number) =>
+  attendedForContrib({ status: m.status, tracked: m.tracked, attendance: m.att[userId] }).attended;
 import { mentionedUserIds } from './notify.js';
 import { agentForbidden, loadProjectAccess, type ProjectAccess } from './permissions.js';
 import { projectMembers } from './projects.service.js';
@@ -155,11 +160,15 @@ interface Raw {
   steps: Array<{ userId: number; decision: string; at: Date; approvalId: number; title: string; issueId: number | null }>;
   approvalsCreated: Array<{ userId: number; at: Date; title: string; issueId: number | null }>;
   dev: Array<{ userId: number | null; kind: string; title: string; url: string | null; additions: number | null; deletions: number | null; at: Date; issueNumbers: number[]; login: string | null; name: string | null; email: string | null; state: string | null }>;
-  meetings: Array<{ id: number; number: number; title: string; status: string; startsAt: Date; people: number[] }>;
+  /** CTW K-2: `tracked` = cuộc họp đã điểm danh thật ⇒ "đã dự" theo `att`; chưa ⇒ ước lượng cũ (DONE + được mời). */
+  meetings: Array<{ id: number; number: number; title: string; status: string; startsAt: Date; people: number[]; tracked: boolean; att: Record<number, string | null> }>;
   chat: ChatMessageRow[] | null;
   fpt: Array<{ userId: number; kind: 'UTC_CREATED' | 'UTC_RUN' | 'IT_RUN'; at: Date }>;
   /** userId ⇒ ngày ⇒ số hành động (heatmap, chuỗi ngày, sparkline). */
   daily: Map<number, Map<string, number>>;
+  /** UX-B: ngày tạo dự án + ngày từng người vào dự án (mốc sàn của "N days without activity"). */
+  projectCreatedDay: string | null;
+  joinedDay: Map<number, string>;
 }
 
 async function loadRaw(projectId: number, people: Array<PublicUser & { email?: string | null }>, spanFrom: Date, spanTo: Date, tz: string, now: Date): Promise<Raw> {
@@ -221,7 +230,7 @@ async function loadRaw(projectId: number, people: Array<PublicUser & { email?: s
     }),
     prisma.workMeeting.findMany({
       where: { projectId, deletedAt: null, status: { not: 'CANCELLED' }, startsAt: inSpan },
-      select: { id: true, number: true, title: true, status: true, startsAt: true, organizerId: true, attendees: { select: { userId: true } } },
+      select: { id: true, number: true, title: true, status: true, startsAt: true, organizerId: true, attendees: { select: { userId: true, attendance: true } } },
     }),
     chatMessages(projectId, spanFrom, spanTo),
     chatVoiceNotes(projectId, spanFrom, spanTo),
@@ -307,11 +316,26 @@ async function loadRaw(projectId: number, people: Array<PublicUser & { email?: s
     steps: steps.map((s) => ({ userId: s.approverId, decision: s.decision, at: s.decidedAt!, approvalId: s.approvalId, title: s.approval.title, issueId: s.approval.issueId })),
     approvalsCreated: approvals.map((a) => ({ userId: a.createdById!, at: a.createdAt, title: a.title, issueId: a.issueId })),
     dev,
-    meetings: meetings.map((m) => ({ id: m.id, number: m.number, title: m.title, status: m.status, startsAt: m.startsAt, people: [...new Set([...m.attendees.map((a) => a.userId), ...(m.organizerId ? [m.organizerId] : [])])] })),
+    meetings: meetings.map((m) => ({ id: m.id, number: m.number, title: m.title, status: m.status, startsAt: m.startsAt, people: [...new Set([...m.attendees.map((a) => a.userId), ...(m.organizerId ? [m.organizerId] : [])])], tracked: m.attendees.some((a) => a.attendance), att: Object.fromEntries(m.attendees.map((a) => [a.userId, a.attendance])) })),
     chat,
     fpt,
     daily: new Map(),
+    projectCreatedDay: null,
+    joinedDay: new Map(),
   };
+
+  // UX-B: mốc sàn của số ngày im lặng — ngày vào dự án (thành viên dự án, không có thì thành viên không gian).
+  const proj = await prisma.workProject.findUnique({ where: { id: projectId }, select: { createdAt: true, workspaceId: true } });
+  if (proj) {
+    raw.projectCreatedDay = dayKey(proj.createdAt, tz);
+    const ids = people.map((p) => p.id);
+    const [pm, wm] = await Promise.all([
+      prisma.workProjectMember.findMany({ where: { projectId, userId: { in: ids } }, select: { userId: true, createdAt: true } }),
+      prisma.workMember.findMany({ where: { workspaceId: proj.workspaceId, userId: { in: ids } }, select: { userId: true, joinedAt: true } }),
+    ]);
+    for (const m of wm) raw.joinedDay.set(m.userId, dayKey(m.joinedAt, tz));
+    for (const m of pm) raw.joinedDay.set(m.userId, dayKey(m.createdAt, tz));
+  }
 
   // Hành động theo ngày: mọi thứ người đó TỰ làm (không tính được mời họp).
   const bump = (u: number | null | undefined, at: Date) => {
@@ -417,7 +441,6 @@ function metricsFor(raw: Raw, w: ContribWindow, ids: number[]): Map<number, Memb
     const st = streaks(activeSet, w.fromDay, w.toDay);
     const allDays = [...daily.keys()].filter((d) => d <= raw.today).sort();
     const lastActiveDay = allDays.length ? allDays[allDays.length - 1] : null;
-    const spanStartDay = dayKey(raw.span.from, raw.tz);
     let actions = 0;
     for (const [d, n] of daily) if (d >= w.fromDay && d <= w.toDay) actions += n;
 
@@ -463,13 +486,13 @@ function metricsFor(raw: Raw, w: ContribWindow, ids: number[]): Map<number, Memb
       utcidExecuted: fptMine.filter((f) => f.kind === 'UTC_RUN').length,
       itExecuted: fptMine.filter((f) => f.kind === 'IT_RUN').length,
       meetingsInvited: meets.length,
-      meetingsAttended: meets.filter((m) => m.status === 'DONE').length,
+      meetingsAttended: meets.filter((m) => didAttend(m, id)).length,
       actions,
       activeDays: st.activeDays,
       currentStreak: st.currentStreak,
       longestStreak: st.longestStreak,
       longestSilence: st.longestSilence,
-      silentNow: w.includesToday ? (lastActiveDay ? dayDiff(lastActiveDay, raw.today) : dayDiff(spanStartDay, raw.today) + 1) : null,
+      silentNow: w.includesToday ? silentDaysSince({ today: raw.today, lastActiveDay, floors: [raw.joinedDay.get(id), raw.projectCreatedDay, w.fromDay] }) : null,
       lastActiveDay,
     });
   }
@@ -696,7 +719,7 @@ export async function memberDetail(userId: number, projectId: number, memberId: 
     tl.push({ at: d.at.toISOString(), kind: 'code', text: `${d.kind === 'PR' ? 'Pull request' : 'Commit'}: ${d.title}${d.additions !== null ? ` (+${d.additions} −${d.deletions ?? 0})` : ''}`, issue: first ? { number: first.number, title: first.title } : null, url: d.url });
   }
   for (const c of raw.chat ?? []) if (c.authorId === memberId && inW(c.createdAt, cur)) tl.push({ at: c.createdAt.toISOString(), kind: 'chat', text: 'Sent a chat message', issue: null });
-  for (const mt of raw.meetings) if (inW(mt.startsAt, cur) && mt.people.includes(memberId)) tl.push({ at: mt.startsAt.toISOString(), kind: 'meeting', text: `${mt.status === 'DONE' ? 'Attended' : 'Invited to'} "${mt.title}"`, issue: null, url: `meetings/${mt.number}` });
+  for (const mt of raw.meetings) if (inW(mt.startsAt, cur) && mt.people.includes(memberId)) tl.push({ at: mt.startsAt.toISOString(), kind: 'meeting', text: `${didAttend(mt, memberId) ? 'Attended' : 'Invited to'} "${mt.title}"`, issue: null, url: `meetings/${mt.number}` });
   tl.sort((a, b) => b.at.localeCompare(a.at));
 
   // Chat: chỉ đếm theo ngày, KHÔNG trả nội dung tin (kênh riêng tư có thể chứa thứ người xem không được đọc).
@@ -743,7 +766,7 @@ export async function memberDetail(userId: number, projectId: number, memberId: 
     code: raw.dev.filter((d) => d.userId === memberId && inW(d.at, cur)).sort((a, b) => b.at.getTime() - a.at.getTime()).slice(0, 30)
       .map((d) => ({ kind: d.kind, title: d.title, url: d.url, at: d.at.toISOString(), additions: d.additions, deletions: d.deletions, state: d.state, issueNumbers: d.issueNumbers })),
     docs: [...pages.values()].sort((a, b) => b.versions - a.versions),
-    meetings: raw.meetings.filter((mt) => inW(mt.startsAt, cur) && mt.people.includes(memberId)).map((mt) => ({ number: mt.number, title: mt.title, startsAt: mt.startsAt.toISOString(), attended: mt.status === 'DONE', status: mt.status })),
+    meetings: raw.meetings.filter((mt) => inW(mt.startsAt, cur) && mt.people.includes(memberId)).map((mt) => ({ number: mt.number, title: mt.title, startsAt: mt.startsAt.toISOString(), attended: didAttend(mt, memberId), attendanceTracked: mt.tracked, status: mt.status })),
   };
 }
 

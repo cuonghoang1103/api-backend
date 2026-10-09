@@ -23,6 +23,7 @@ import UpgradeDialog from './ai/UpgradeDialog';
 import { ConfirmDialog } from './settings/shared';
 import { Dialog, EmptyState, Field, formatDate, IssueTypeIcon, Popover, Spinner, StatusBadge, UserAvatar, useToggle } from './ui';
 import { AddToCalendar } from './ctw';
+import { ReleaseBurnupChart } from './charts/FlowCharts';
 import { wt } from '@/components/work/i18n';
 
 function todayStr(): string {
@@ -52,8 +53,9 @@ function Progress({ done, total, wide }: { done: number; total: number; wide?: b
   const pct = total ? Math.round((done / total) * 100) : 0;
   return (
     <div className={cn('flex items-center gap-2', wide ? 'w-full' : 'w-[150px]')} title={wt('releases.progressTitle', { done, total })}>
-      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--w-sunken)]">
-        <div className="h-full rounded-full bg-[var(--w-green)]" style={{ width: `${pct}%` }} />
+      {/* UX-B: thanh tiến độ có vai progressbar + rãnh thấy được ở nền tối; màu Done khớp màu trạng thái. */}
+      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--w-border-strong)]" role="progressbar" aria-valuemin={0} aria-valuemax={total || 1} aria-valuenow={done} aria-valuetext={wt('releases.progressTitle', { done, total })} aria-label={wt('common.progress')}>
+        <div className="h-full rounded-full bg-[var(--w-status-done)]" style={{ width: `${pct}%` }} />
       </div>
       <span className="shrink-0 text-[11.5px] tabular text-[var(--w-text-3)]">{done}/{total}</span>
     </div>
@@ -613,6 +615,8 @@ export function VersionDetail({ config, pid, lk, versionId, onBack, onOpenIssue 
       </div>
 
       {summary && <div className="mb-5 max-w-[420px]"><Progress done={summary.done} total={summary.total} wide /></div>}
+      {/* UX-B: burnup / burndown của version này (dựng lại từ lịch sử gắn/gỡ version), có dự báo ngày xong. */}
+      {total > 0 && <div className="mb-5"><ReleaseBurnupChart pid={pid} versionId={versionId} height={240} /></div>}
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)]">
         <div className="min-w-0">

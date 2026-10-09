@@ -22,6 +22,7 @@ CT Work là công cụ chính cho đồ án của họ và các nhóm (SEP490/IS
   - Rồi `echo y | bash deploy-nha.sh`. Lệnh này tự push `main`.
   - Người dùng đã cho phép deploy CT Work theo từng đợt khi kiểm xanh (09/10: "cứ làm full rồi deploy đi hoặc deploy rồi làm tiếp").
 - ⚠️ **`git checkout -- frontend/tsconfig.json` sau `next build` XOÁ cả sửa đổi THẬT của tệp đó** (09/10: mất dòng exclude `e2e/**` của 6a ⇒ build Docker frontend hỏng 'Cannot find module playwright'). Đề giao từ nay: chép lưu tsconfig TRƯỚC build rồi chép trả lại, không checkout. Trưởng nhóm kiểm frontend tsc trên worktree KHÔNG có node_modules gốc (giống Docker).
+- ⚠️ **Agent KHÔNG được `pkill`/`killall` theo tên** (10/10: `pkill -f "cat" -n` của agent UX-B giết lượt deploy-nha giữa bước đẩy GHCR, exit 144). Chỉ giết theo CỔNG/PID của chính mình. Ghi luật này vào MỌI đề giao.
 - **Sau deploy** phải kiểm production bằng phép đo thật (curl, gọi API bằng token agent), không tin log.
 - **Thẻ trên dự án CTW:** AI bình luận cách sửa trên thẻ. Người dùng tự kéo thẻ sang Done; board CTW không có cột Review.
 - **Giao diện và nội dung xuất:** tiếng Anh, theo theme `theme-dark`. Trang mới dưới `app/work` ⇒ thêm tuyến desktop `dinhTuyenWeb.ts`. Đổi giao diện desktop ⇒ `phat-hanh`.

@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
   addDays, aggregatePeer, attentionSignals, contribAccess, dayKey, DEFAULT_CRITERIA, identityKey, identityResolver, lateDays, normalizeCriteria,
-  pctChange, previousWindow, resolveWindow, responseHours, startOfDay, streaks, tzOffsetMin, validateScores, weekStart, METRIC_DEFINITIONS, FAIRNESS_NOTE,
+  pctChange, previousWindow, resolveWindow, responseHours, silentDaysSince, startOfDay, streaks, tzOffsetMin, validateScores, weekStart, METRIC_DEFINITIONS, FAIRNESS_NOTE,
 } from './contribRules.js';
 import { extractGithubContribs, extractGitlabContribs } from './contribDev.js';
 
@@ -215,5 +215,26 @@ describe('webhook ⇒ commit/PR (A26)', () => {
     assert.deepEqual([push[0].authorLogin, push[0].authorName, push[0].filesChanged], [null, 'Lê Anh', 1]);
     const mr = extractGitlabContribs({ object_kind: 'merge_request', project: { path_with_namespace: 'g/p' }, user: { username: 'anhle' }, object_attributes: { iid: 4, title: 'MR', state: 'opened', url: 'u' } });
     assert.deepEqual([mr[0].externalId, mr[0].authorLogin, mr[0].state], ['g/p!4', 'anhle', 'open']);
+  });
+});
+
+describe('UX-B (a) — số ngày im lặng tính từ mốc sàn', () => {
+  const today = '2026-10-10';
+  it('nhóm mới lập (dự án tạo 3 ngày trước, chưa ai làm gì) ⇒ 4 ngày, KHÔNG phải 182', () => {
+    assert.equal(silentDaysSince({ today, lastActiveDay: null, floors: ['2026-10-07', '2026-10-07', '2026-04-12'] }), 4);
+  });
+  it('người vào hôm nay, chưa làm gì ⇒ 1 ngày', () => {
+    assert.equal(silentDaysSince({ today, lastActiveDay: null, floors: [today, '2026-01-01', '2026-09-01'] }), 1);
+  });
+  it('có hoạt động sau mốc sàn ⇒ đếm từ ngày hoạt động cuối', () => {
+    assert.equal(silentDaysSince({ today, lastActiveDay: '2026-10-04', floors: ['2026-09-01', '2026-09-01', '2026-09-10'] }), 6);
+    assert.equal(silentDaysSince({ today, lastActiveDay: today, floors: ['2026-09-01'] }), 0);
+  });
+  it('hoạt động cuối TRƯỚC đầu kỳ ⇒ chỉ đếm trong kỳ (từ đầu kỳ, tính cả hai đầu)', () => {
+    assert.equal(silentDaysSince({ today, lastActiveDay: '2026-08-01', floors: ['2026-07-01', '2026-07-01', '2026-10-05'] }), 6);
+  });
+  it('mốc sàn ở tương lai (múi giờ lệch) ⇒ 0; bỏ qua mốc null', () => {
+    assert.equal(silentDaysSince({ today, lastActiveDay: null, floors: ['2026-10-11', null, undefined] }), 0);
+    assert.equal(silentDaysSince({ today, lastActiveDay: null, floors: [null, '2026-10-08'] }), 3);
   });
 });

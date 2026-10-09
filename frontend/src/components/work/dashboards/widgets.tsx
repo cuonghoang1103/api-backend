@@ -13,6 +13,11 @@ import { useQuery } from '@tanstack/react-query';
 import {
   Bar, BarChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
+import ChartFrame from '../charts/ChartFrame';
+import { CATEGORY_COLOR, SERIES, bandColors } from '../charts/chartColors';
+import {
+  AgingWipChart, CfdChart, CycleTimeChart, KpiStrip, LoadByPersonChart, ReleaseBurnupChart, SprintBurndownChart, ThroughputChart, VelocityChart,
+} from '../charts/FlowCharts';
 import { cn } from '@/lib/utils';
 import {
   workApi, workError, type DashboardWidget, type GroupBy, type IssueCard, type ProjectConfig, type StatsGroup, type WidgetKind,
@@ -21,7 +26,7 @@ import { wk, type Lookups } from '../hooks';
 import { OPEN_ISSUES_JQL, counterHint } from '../openIssues';
 import KpiTile, { type KpiTone } from '../KpiTile';
 import { IssueTypeIcon, PRIORITIES, Spinner, StatusBadge, UserAvatar, formatDate } from '../ui';
-import { axisTick, fmtDay, fmtValue, Legend, unitLabel, useAllSprints, useReportableSprints } from '../reports/shared';
+import { axisTick, fmtDay, unitLabel } from '../reports/shared';
 import { jqlErrorOf, jqlListUrl } from '../search/jql';
 import { govApi, govKeys } from '@/lib/work-s3b-api';
 import { ScoreBadge } from '../governance/shared';
@@ -40,9 +45,22 @@ export const WIDGET_META: Record<WidgetKind, { label: string; description: strin
   health: { get label() { return wt('dash.l_health'); }, get description() { return wt('dash.d_health'); }, get defaultTitle() { return wt('dash.t_health'); }, usesQuery: false },
   text: { get label() { return wt('dash.l_text'); }, get description() { return wt('dash.d_text'); }, get defaultTitle() { return wt('dash.t_text'); }, usesQuery: false },
   top_risks: { get label() { return wt('dash.l_top_risks'); }, get description() { return wt('dash.d_top_risks'); }, get defaultTitle() { return wt('dash.t_top_risks'); }, usesQuery: false },
+  // UX-B (10/10/2026): biểu đồ dòng chảy + KPI + tải + việc trễ.
+  kpis: { get label() { return wt('charts.w_kpis'); }, get description() { return wt('charts.wd_kpis'); }, get defaultTitle() { return wt('charts.kpis'); }, usesQuery: false },
+  cfd: { get label() { return wt('charts.cfd'); }, get description() { return wt('charts.wd_cfd'); }, get defaultTitle() { return wt('charts.cfd'); }, usesQuery: false },
+  throughput: { get label() { return wt('charts.throughput'); }, get description() { return wt('charts.wd_throughput'); }, get defaultTitle() { return wt('charts.throughput'); }, usesQuery: false },
+  cycle_time: { get label() { return wt('charts.cycleTitle'); }, get description() { return wt('charts.wd_cycle'); }, get defaultTitle() { return wt('charts.cycleTitle'); }, usesQuery: false },
+  aging_wip: { get label() { return wt('charts.aging'); }, get description() { return wt('charts.wd_aging'); }, get defaultTitle() { return wt('charts.aging'); }, usesQuery: false },
+  velocity: { get label() { return wt('charts.velocity'); }, get description() { return wt('charts.wd_velocity'); }, get defaultTitle() { return wt('charts.velocity'); }, usesQuery: false },
+  release_burnup: { get label() { return wt('charts.releaseBurnup'); }, get description() { return wt('charts.wd_release'); }, get defaultTitle() { return wt('charts.releaseBurnup'); }, usesQuery: false },
+  workload: { get label() { return wt('charts.workload'); }, get description() { return wt('charts.wd_workload'); }, get defaultTitle() { return wt('charts.workload'); }, usesQuery: false },
+  overdue: { get label() { return wt('charts.overdueIssues'); }, get description() { return wt('charts.wd_overdue'); }, get defaultTitle() { return wt('charts.overdueIssues'); }, usesQuery: false },
 };
 
-export const WIDGET_KINDS: WidgetKind[] = ['filter', 'counter', 'pie', 'bar', 'created_resolved', 'burndown', 'my_issues', 'health', 'top_risks', 'text'];
+export const WIDGET_KINDS: WidgetKind[] = [
+  'kpis', 'burndown', 'cfd', 'throughput', 'cycle_time', 'aging_wip', 'velocity', 'release_burnup', 'workload', 'overdue',
+  'filter', 'counter', 'pie', 'bar', 'created_resolved', 'my_issues', 'health', 'top_risks', 'text',
+];
 
 export const GROUP_BY_OPTIONS: Array<{ value: GroupBy; label: string }> = [
   { value: 'status', get label() { return wt('common.status'); } },
@@ -57,29 +75,39 @@ export const GROUP_BY_OPTIONS: Array<{ value: GroupBy; label: string }> = [
 
 export const newWidgetId = () => Math.random().toString(36).slice(2, 10);
 
-/** Bộ widget khởi đầu — chỉ dùng JQL chung chung để dự án nào cũng hợp lệ. */
-export function defaultWidgets(): DashboardWidget[] {
+/**
+ * Bộ widget khởi đầu = dashboard "Project overview" (UX-B) — KHỚP `overviewWidgets()` ở máy chủ
+ * (src/services/work/dashboardDefaults.ts). Tiêu đề trống ⇒ hiện tiêu đề mặc định theo ngôn ngữ người xem.
+ */
+export function defaultWidgets(opts: { scrum?: boolean; raid?: boolean } = {}): DashboardWidget[] {
+  const scrum = opts.scrum ?? true;
+  const w = (kind: WidgetKind, size: 'half' | 'full', extra: Partial<DashboardWidget> = {}): DashboardWidget => ({ id: newWidgetId(), kind, title: '', size, ...extra });
   return [
-    { id: newWidgetId(), kind: 'counter', title: wt('rep.openIssues'), query: OPEN_ISSUES_JQL, size: 'half' },
-    { id: newWidgetId(), kind: 'counter', title: wt('common.overdue'), query: `due < now() AND ${OPEN_ISSUES_JQL}`, size: 'half' },
-    { id: newWidgetId(), kind: 'pie', title: wt('dash.tIssuesByStatus'), query: '', groupBy: 'status', size: 'half' },
-    { id: newWidgetId(), kind: 'bar', title: wt('dash.tOpenByAssignee'), query: OPEN_ISSUES_JQL, groupBy: 'assignee', size: 'half' },
-    { id: newWidgetId(), kind: 'created_resolved', title: wt('dash.tCr30'), query: '', days: 30, size: 'full' },
-    { id: newWidgetId(), kind: 'my_issues', title: wt('dash.t_my_issues'), size: 'half' },
-    { id: newWidgetId(), kind: 'health', title: wt('dash.t_health'), size: 'half' },
+    w('kpis', 'full'),
+    scrum ? w('burndown', 'half') : w('throughput', 'half'),
+    w('cfd', 'half', { days: 30 }),
+    scrum ? w('throughput', 'half') : w('aging_wip', 'half'),
+    w('workload', 'half'),
+    w('overdue', 'half'),
+    opts.raid ? w('top_risks', 'half') : w('created_resolved', 'half', { days: 30 }),
   ];
 }
+
+/** JQL cũ của bộ khởi đầu trước UX-B (giữ để widget "Open issues" vẫn dùng chung định nghĩa). */
+export const OPEN_JQL = OPEN_ISSUES_JQL;
+export const OVERDUE_JQL = `due < now() AND ${OPEN_ISSUES_JQL} ORDER BY due`;
 
 const MY_ISSUES_JQL = 'assignee = currentUser() AND statusCategory != Done ORDER BY priority';
 
 // ─── Màu ─────────────────────────────────────────────────────────
 
 const PALETTE = ['var(--w-chart-1)', 'var(--w-chart-2)', 'var(--w-chart-3)', 'var(--w-chart-4)', 'var(--w-chart-5)', 'var(--w-chart-6)', 'var(--w-chart-7)', 'var(--w-chart-8)'];
-const CATEGORY_COLOR: Record<string, string> = { TODO: 'var(--w-status-todo)', IN_PROGRESS: 'var(--w-status-progress)', DONE: 'var(--w-status-done)' };
 
 function groupColor(g: StatsGroup, i: number, groupBy: GroupBy | undefined): string {
   if (g.key === 'none') return 'var(--w-border-strong)';
-  if (groupBy === 'statusCategory') return CATEGORY_COLOR[g.key] ?? PALETTE[i % PALETTE.length];
+  if (groupBy === 'statusCategory') return CATEGORY_COLOR[g.key as keyof typeof CATEGORY_COLOR] ?? PALETTE[i % PALETTE.length];
+  // UX-B: trạng thái tô theo NHÓM (khớp badge/glyph trạng thái), không theo màu tự đặt của trạng thái.
+  if (groupBy === 'status' && g.category) return CATEGORY_COLOR[g.category];
   if (groupBy === 'priority') {
     const p = PRIORITIES.find((x) => `p${x.value}` === g.key);
     if (p) return p.color;
@@ -93,6 +121,11 @@ function groupColor(g: StatsGroup, i: number, groupBy: GroupBy | undefined): str
  * chưa dùng kế tiếp trong bảng màu phân loại.
  */
 function distinctColors(groups: StatsGroup[], groupBy: GroupBy | undefined): string[] {
+  // UX-B: nhóm theo trạng thái ⇒ cùng sắc của nhóm (To do xám / In progress xanh dương / Done xanh lá), đậm nhạt khác nhau.
+  if (groupBy === 'status' && groups.some((g) => g.category)) {
+    const shades = bandColors(groups.map((g) => ({ key: g.key, category: g.category ?? 'TODO' })));
+    return groups.map((g) => (g.key === 'none' ? 'var(--w-border-strong)' : shades[g.key]));
+  }
   const used = new Set<string>();
   let next = 0;
   return groups.map((g, i) => {
@@ -215,7 +248,7 @@ function CounterWidget({ pid, jql, config }: { pid: number; jql: string; config:
       title={counterHint(jql)}
     >
       <span className="text-[44px] font-semibold leading-none tabular-nums">{q.data.total}</span>
-      <span className="mt-2 text-[12px] text-[var(--w-text-3)] group-hover:text-[var(--w-accent-text)]">{q.data.total === 1 ? 'issue' : 'issues'} · View</span>
+      <span className="mt-2 text-[12px] text-[var(--w-text-3)] group-hover:text-[var(--w-accent-text)]">{wt('charts.counterView', { count: q.data.total })}</span>
     </Link>
   );
 }
@@ -231,82 +264,100 @@ function useStats(pid: number, groupBy: GroupBy, jql: string) {
   });
 }
 
-function PieWidget({ pid, jql, groupBy }: { pid: number; jql: string; groupBy: GroupBy }) {
+function PieWidget({ pid, jql, groupBy, title }: { pid: number; jql: string; groupBy: GroupBy; title: string }) {
   const q = useStats(pid, groupBy, jql);
   const data = useMemo(() => {
     const groups = q.data?.groups ?? [];
     const colors = distinctColors(groups, groupBy);
     return groups.map((g, i) => ({ ...g, color: colors[i] }));
   }, [q.data, groupBy]);
-  if (q.isLoading) return <Loading />;
-  if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
-  if (!q.data.total) return <Empty>{wt('dash.noMatch')}</Empty>;
+  const jqlErr = q.error ? jqlErrorOf(q.error) : null;
+  if (jqlErr) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
+  const total = q.data?.total ?? 0;
   return (
-    <div className="flex min-w-0 items-center gap-4">
-      <div className="relative h-[168px] w-[168px] shrink-0 max-[380px]:h-[132px] max-[380px]:w-[132px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie data={data} dataKey="count" nameKey="label" innerRadius="58%" outerRadius="100%" paddingAngle={data.length > 1 ? 1.5 : 0} stroke="none" isAnimationActive={false}>
-              {/* UX-A ARIA: mỗi lát (path role=img của Recharts) cần tên. */}
-              {data.map((g) => <Cell key={g.key} fill={g.color} aria-label={`${g.label}: ${g.count}`} />)}
-            </Pie>
-            <Tooltip content={<CountTooltip />} />
-          </PieChart>
-        </ResponsiveContainer>
-        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-[20px] font-semibold tabular-nums">{q.data.total}</span>
-          <span className="text-[11px] text-[var(--w-text-3)]">issues</span>
-        </div>
-      </div>
-      <div className="min-w-0 flex-1 space-y-1">
-        {data.slice(0, 8).map((g) => (
-          <div key={g.key} className="flex min-w-0 items-center gap-2 text-[12.5px]">
-            <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: g.color }} />
-            <span className="min-w-0 flex-1 truncate text-[var(--w-text-2)]">{g.label}</span>
-            <span className="shrink-0 tabular-nums">{g.count}</span>
-            <span className="w-9 shrink-0 text-right text-[11px] tabular-nums text-[var(--w-text-3)]">{Math.round((g.count / q.data!.total) * 100)}%</span>
+    <ChartFrame
+      bare title={title} description={wt('charts.pieDesc')} height={168}
+      status={q.isLoading ? 'loading' : q.error ? 'error' : !total ? 'empty' : 'ready'} error={q.error ? workError(q.error) : undefined} onRetry={() => q.refetch()}
+      emptyText={wt('dash.noMatch')}
+      rows={data} columns={[{ key: 'label', label: wt('charts.group') }, { key: 'count', label: wt('charts.issuesUnit') }, { key: 'pct', label: '%', value: (g) => Math.round((g.count / Math.max(1, total)) * 100) }]}
+      summary={wt('charts.pieSummary', { t: title, s: data.slice(0, 8).map((g) => `${g.label} ${g.count}`).join(', ') })}
+    >
+      {() => (
+        <div className="flex min-w-0 items-center gap-4">
+          <div className="relative h-[168px] w-[168px] shrink-0 max-[380px]:h-[132px] max-[380px]:w-[132px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={data} dataKey="count" nameKey="label" innerRadius="58%" outerRadius="100%" paddingAngle={data.length > 1 ? 1.5 : 0} stroke="none" isAnimationActive={false}>
+                  {data.map((g) => <Cell key={g.key} fill={g.color} />)}
+                </Pie>
+                <Tooltip content={<CountTooltip />} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-[20px] font-semibold tabular-nums">{total}</span>
+              <span className="text-[11px] text-[var(--w-text-3)]">{wt('charts.issuesUnit')}</span>
+            </div>
           </div>
-        ))}
-        {data.length > 8 && <div className="text-[11px] text-[var(--w-text-3)]">+{data.length - 8} more</div>}
-      </div>
-    </div>
+          <div className="min-w-0 flex-1 space-y-1">
+            {data.slice(0, 8).map((g) => (
+              <div key={g.key} className="flex min-w-0 items-center gap-2 text-[12.5px]">
+                <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: g.color }} />
+                <span className="min-w-0 flex-1 truncate text-[var(--w-text-2)]">{g.label}</span>
+                <span className="shrink-0 tabular-nums">{g.count}</span>
+                <span className="w-9 shrink-0 text-right text-[11px] tabular-nums text-[var(--w-text-3)]">{Math.round((g.count / total) * 100)}%</span>
+              </div>
+            ))}
+            {data.length > 8 && <div className="text-[11px] text-[var(--w-text-3)]">{wt('charts.nMore', { n: data.length - 8 })}</div>}
+          </div>
+        </div>
+      )}
+    </ChartFrame>
   );
 }
 
-function BarWidget({ pid, jql, groupBy }: { pid: number; jql: string; groupBy: GroupBy }) {
+function BarWidget({ pid, jql, groupBy, title }: { pid: number; jql: string; groupBy: GroupBy; title: string }) {
   const q = useStats(pid, groupBy, jql);
   const data = useMemo(() => {
     const groups = (q.data?.groups ?? []).slice(0, 15);
     const colors = distinctColors(groups, groupBy);
     return groups.map((g, i) => ({ ...g, color: colors[i] }));
   }, [q.data, groupBy]);
-  if (q.isLoading) return <Loading />;
-  if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
-  if (!q.data.total) return <Empty>{wt('dash.noMatch')}</Empty>;
+  const jqlErr = q.error ? jqlErrorOf(q.error) : null;
+  if (jqlErr) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
   const height = Math.max(140, data.length * 30 + 24);
   return (
-    <div className="w-full min-w-0" style={{ height }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} layout="vertical" margin={{ top: 0, right: 16, bottom: 0, left: 0 }} barCategoryGap={6}>
-          <CartesianGrid stroke="var(--w-chart-grid)" horizontal={false} />
-          <XAxis type="number" allowDecimals={false} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} />
-          <YAxis
-            type="category" dataKey="label" width={96} tick={axisTick} tickLine={false} axisLine={false}
-            tickFormatter={(v: string) => (v.length > 14 ? `${v.slice(0, 13)}…` : v)}
-          />
-          <Tooltip content={<CountTooltip />} cursor={{ fill: 'var(--w-hover)' }} />
-          <Bar dataKey="count" radius={[0, 3, 3, 0]} maxBarSize={20} isAnimationActive={false}>
-              {data.map((g) => <Cell key={g.key} fill={g.color} />)}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    <ChartFrame
+      bare title={title} description={wt('charts.barDesc')} height={height}
+      status={q.isLoading ? 'loading' : q.error ? 'error' : !q.data?.total ? 'empty' : 'ready'} error={q.error ? workError(q.error) : undefined} onRetry={() => q.refetch()}
+      emptyText={wt('dash.noMatch')}
+      rows={data} columns={[{ key: 'label', label: wt('charts.group') }, { key: 'count', label: wt('charts.issuesUnit') }, { key: 'points', label: wt('charts.points') }]}
+      summary={wt('charts.pieSummary', { t: title, s: data.map((g) => `${g.label} ${g.count}`).join(', ') })}
+    >
+      {() => (
+        <div className="w-full min-w-0" style={{ height }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} layout="vertical" margin={{ top: 0, right: 16, bottom: 0, left: 0 }} barCategoryGap={6}>
+              <CartesianGrid stroke="var(--w-chart-grid)" horizontal={false} />
+              <XAxis type="number" allowDecimals={false} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} />
+              <YAxis
+                type="category" dataKey="label" width={96} tick={axisTick} tickLine={false} axisLine={false}
+                tickFormatter={(v: string) => (v.length > 14 ? `${v.slice(0, 13)}…` : v)}
+              />
+              <Tooltip content={<CountTooltip />} cursor={{ fill: 'var(--w-hover)' }} />
+              <Bar dataKey="count" radius={[0, 3, 3, 0]} maxBarSize={20} isAnimationActive={false}>
+                {data.map((g) => <Cell key={g.key} fill={g.color} />)}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </ChartFrame>
   );
 }
 
 // ─── Tạo mới vs xong ─────────────────────────────────────────────
 
-function CreatedResolvedWidget({ pid, jql, days }: { pid: number; jql: string; days: number }) {
+function CreatedResolvedWidget({ pid, jql, days, title }: { pid: number; jql: string; days: number; title: string }) {
   const q = useQuery({
     queryKey: [...wk.widget(pid), 'created-resolved', days, jql],
     queryFn: () => workApi.createdResolved(pid, days, jql),
@@ -314,74 +365,35 @@ function CreatedResolvedWidget({ pid, jql, days }: { pid: number; jql: string; d
     retry: retryUnlessJql,
   });
   const totals = useMemo(() => (q.data ?? []).reduce((a, d) => ({ created: a.created + d.created, resolved: a.resolved + d.resolved }), { created: 0, resolved: 0 }), [q.data]);
-  if (q.isLoading) return <Loading />;
-  if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
+  const jqlErr = q.error ? jqlErrorOf(q.error) : null;
+  if (jqlErr) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
+  // UX-B: "Created" là màu trung tính, "Resolved" là màu Done — đỏ chỉ dành cho điều xấu.
+  const series = [
+    { key: 'created', label: wt('dash.createdN', { n: totals.created }), color: SERIES.created },
+    { key: 'resolved', label: wt('dash.resolvedN', { n: totals.resolved }), color: SERIES.resolved },
+  ];
   return (
-    <div className="min-w-0">
-      <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1">
-        <Legend items={[{ label: wt('dash.createdN', { n: totals.created }), color: 'var(--w-chart-1)' }, { label: wt('dash.resolvedN', { n: totals.resolved }), color: 'var(--w-green)' }]} />
-        <span className="ml-auto text-[11px] text-[var(--w-text-3)]">{wt('dash.lastNDays', { n: days })}</span>
-      </div>
-      <div className="h-[200px] w-full min-w-0">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={q.data} margin={{ top: 6, right: 8, bottom: 0, left: -20 }}>
-            <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
-            <XAxis dataKey="day" tickFormatter={fmtDay} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} minTickGap={24} />
-            <YAxis allowDecimals={false} tick={axisTick} tickLine={false} axisLine={false} width={40} />
-            <Tooltip content={<CountTooltip labelFormat={fmtDay} />} cursor={{ stroke: 'var(--w-border-strong)' }} />
-            <Line type="monotone" dataKey="created" name="Created" stroke="var(--w-chart-1)" strokeWidth={2} dot={false} isAnimationActive={false} />
-            <Line type="monotone" dataKey="resolved" name="Resolved" stroke="var(--w-green)" strokeWidth={2} dot={false} isAnimationActive={false} />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
-}
-
-// ─── Burndown ────────────────────────────────────────────────────
-
-function BurndownWidget({ pid, sprintId }: { pid: number; sprintId: number | null | undefined }) {
-  const sprintsQ = useAllSprints(pid);
-  const sprints = useReportableSprints(sprintsQ.data);
-  // Không chọn sprint ⇒ sprint đang chạy (hoặc sprint đóng gần nhất).
-  const chosen = (sprintId && sprints.find((s) => s.id === sprintId)) || sprints[0];
-  const q = useQuery({
-    queryKey: [...wk.reports(pid), 'burndown', chosen?.id ?? null],
-    queryFn: () => workApi.burndown(pid, chosen!.id),
-    enabled: !!chosen,
-  });
-  if (sprintsQ.isLoading || (chosen && q.isLoading)) return <Loading />;
-  if (sprintsQ.error) return <WidgetError err={sprintsQ.error} onRetry={() => sprintsQ.refetch()} />;
-  if (!chosen) return <Empty>{wt('dash.noStarted')}</Empty>;
-  if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
-  const d = q.data;
-  const last = [...d.points].reverse().find((p) => p.remaining !== null);
-  return (
-    <div className="min-w-0">
-      <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px]">
-        <span className="font-medium">{d.sprint.name}</span>
-        {d.sprint.state === 'ACTIVE' && <span className="rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 text-[10px] font-semibold uppercase text-[var(--w-accent-text)]">{wt('studio.stActive')}</span>}
-        <span className="ml-auto text-[var(--w-text-3)]">{wt('dash.remaining')} <span className="font-medium tabular-nums text-[var(--w-text)]">{fmtValue(last?.remaining ?? null, d.unit)}</span></span>
-      </div>
-      {!d.points.length ? (
-        <Empty>{wt('share.vNoDataBody')}</Empty>
-      ) : (
+    <ChartFrame
+      bare title={title} description={wt('charts.crDesc')} height={200} subtitle={wt('dash.lastNDays', { n: days })}
+      status={q.isLoading ? 'loading' : q.error ? 'error' : 'ready'} error={q.error ? workError(q.error) : undefined} onRetry={() => q.refetch()}
+      series={series} rows={q.data} columns={[{ key: 'day', label: wt('charts.day') }, { key: 'created', label: wt('charts.created') }, { key: 'resolved', label: wt('charts.resolved') }]}
+      summary={wt('charts.crSummary', { n: days, a: totals.created, b: totals.resolved })}
+    >
+      {(hidden) => (
         <div className="h-[200px] w-full min-w-0">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={d.points} margin={{ top: 6, right: 8, bottom: 0, left: -12 }}>
+            <LineChart data={q.data} margin={{ top: 6, right: 8, bottom: 0, left: -20 }}>
               <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
-              <XAxis dataKey="day" tickFormatter={fmtDay} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} minTickGap={20} />
-              <YAxis allowDecimals={false} tick={axisTick} tickLine={false} axisLine={false} width={44}
-                label={{ value: unitLabel(d.unit), angle: -90, position: 'insideLeft', offset: 18, fill: 'var(--w-text-3)', fontSize: 11 }} />
+              <XAxis dataKey="day" tickFormatter={fmtDay} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} minTickGap={24} />
+              <YAxis allowDecimals={false} tick={axisTick} tickLine={false} axisLine={false} width={40} />
               <Tooltip content={<CountTooltip labelFormat={fmtDay} />} cursor={{ stroke: 'var(--w-border-strong)' }} />
-              <Line type="linear" dataKey="ideal" name="Guideline" stroke="var(--w-text-3)" strokeDasharray="5 4" strokeWidth={1.5} dot={false} isAnimationActive={false} />
-              <Line type="stepAfter" dataKey="remaining" name="Remaining" stroke="var(--w-chart-1)" strokeWidth={2}
-                dot={d.points.filter((x) => x.remaining !== null).length < 3 ? { r: 3, fill: 'var(--w-chart-1)', strokeWidth: 0 } : false} isAnimationActive={false} />
+              {!hidden.has('created') && <Line type="monotone" dataKey="created" name={wt('charts.created')} stroke={SERIES.created} strokeWidth={2} dot={false} isAnimationActive={false} />}
+              {!hidden.has('resolved') && <Line type="monotone" dataKey="resolved" name={wt('charts.resolved')} stroke={SERIES.resolved} strokeWidth={2} dot={false} isAnimationActive={false} />}
             </LineChart>
           </ResponsiveContainer>
         </div>
       )}
-    </div>
+    </ChartFrame>
   );
 }
 
@@ -444,17 +456,27 @@ export function WidgetBody({ w, pid, config, lk, onOpenIssue }: {
   w: DashboardWidget; pid: number; config: ProjectConfig; lk: Lookups; onOpenIssue: (n: number) => void;
 }) {
   const jql = w.query ?? '';
+  const title = w.title || WIDGET_META[w.kind]?.defaultTitle || '';
   switch (w.kind) {
     case 'filter': return <IssueListWidget pid={pid} jql={jql} lk={lk} config={config} onOpenIssue={onOpenIssue} emptyText={wt('dash.noMatch')} />;
     case 'my_issues': return <IssueListWidget pid={pid} jql={MY_ISSUES_JQL} lk={lk} config={config} onOpenIssue={onOpenIssue} emptyText={wt('dash.nothingMine')} />;
+    case 'overdue': return <IssueListWidget pid={pid} jql={OVERDUE_JQL} lk={lk} config={config} onOpenIssue={onOpenIssue} emptyText={wt('charts.noOverdue')} />;
     case 'counter': return <CounterWidget pid={pid} jql={jql} config={config} />;
-    case 'pie': return <PieWidget pid={pid} jql={jql} groupBy={w.groupBy ?? 'status'} />;
-    case 'bar': return <BarWidget pid={pid} jql={jql} groupBy={w.groupBy ?? 'status'} />;
-    case 'created_resolved': return <CreatedResolvedWidget pid={pid} jql={jql} days={w.days ?? 30} />;
-    case 'burndown': return <BurndownWidget pid={pid} sprintId={w.sprintId} />;
+    case 'pie': return <PieWidget pid={pid} jql={jql} groupBy={w.groupBy ?? 'status'} title={title} />;
+    case 'bar': return <BarWidget pid={pid} jql={jql} groupBy={w.groupBy ?? 'status'} title={title} />;
+    case 'created_resolved': return <CreatedResolvedWidget pid={pid} jql={jql} days={w.days ?? 30} title={title} />;
+    case 'burndown': return <SprintBurndownChart pid={pid} sprintId={w.sprintId} bare height={200} />;
     case 'health': return <HealthWidget pid={pid} onOpenIssue={onOpenIssue} />;
     case 'text': return <TextWidget text={w.text} />;
     case 'top_risks': return <TopRisksWidget pid={pid} config={config} />;
+    case 'kpis': return <KpiStrip pid={pid} config={config} />;
+    case 'cfd': return <CfdChart pid={pid} days={w.days ?? 30} bare height={220} />;
+    case 'throughput': return <ThroughputChart pid={pid} bare height={200} />;
+    case 'cycle_time': return <CycleTimeChart pid={pid} bare height={220} onOpenIssue={onOpenIssue} />;
+    case 'aging_wip': return <AgingWipChart pid={pid} bare height={220} onOpenIssue={onOpenIssue} />;
+    case 'velocity': return <VelocityChart pid={pid} bare height={220} />;
+    case 'release_burnup': return <ReleaseBurnupChart pid={pid} versionId={w.versionId} bare height={220} />;
+    case 'workload': return <LoadByPersonChart pid={pid} bare />;
     default: return <Empty>{wt('dash.unknown')}</Empty>;
   }
 }

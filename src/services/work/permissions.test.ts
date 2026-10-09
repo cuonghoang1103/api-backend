@@ -163,7 +163,10 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     // Đợt 3C: agent không tự khởi động / dừng agent dựng sẵn (tiền LLM của web)
     ['POST', '/issues/12/agent-runs'], ['GET', '/issues/12/agent-runs'], ['POST', '/agent-runs/5/cancel'],
     // CTW Đóng góp: agent không đọc số liệu người, không chấm chéo, không xuất
-    ['GET', '/contrib/summary'], ['GET', '/contrib/members/3'], ['GET', '/contrib/export.xlsx'], ['PUT', '/contrib/peer/rounds/2/reviews/3'], ['GET', '/contrib'],
+    ['GET', '/contrib/summary'], ['GET', '/contrib/members/3'], ['GET', '/contrib/export.xlsx'], ['PUT', '/contrib/peer/rounds/2/reviews/3'], ['GET', '/contrib'],    // CTW K-2: ghi âm / điểm danh / RSVP / cấu hình họp / duyệt biên bản AI
+    ['POST', '/meetings/3/recordings'], ['POST', '/meetings/3/recordings/2/chunks'], ['GET', '/meetings/3/recordings/2/chunks/0/audio'],
+    ['DELETE', '/meetings/3/recordings/2/audio'], ['PUT', '/meetings/3/attendance'], ['POST', '/meetings/3/rsvp'], ['POST', '/meetings/3/join'],
+    ['PUT', '/meeting-settings'], ['POST', '/meetings/3/minutes-ai/4/apply'], ['POST', '/meetings/3/minutes-ai/4/dismiss'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [
@@ -173,6 +176,7 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/issues/12/claim'], ['POST', '/approvals'], ['GET', '/approvals/7'], ['POST', '/issues/12/handoffs'],
     ['POST', '/handoffs/3/accept'], ['GET', '/pages'], ['GET', '/pages/2/markdown'], ['GET', '/search'], ['GET', '/raid'],
     ['GET', '/meetings/3'], ['GET', '/reports/burndown'], ['HEAD', '/board'],
+    ['GET', '/meetings/3/transcript'], ['POST', '/meetings/3/minutes-ai'], ['GET', '/meetings/3/room'],
   ];
   it(`${denied.length} tuyến đối ngoại ⇒ cấm`, () => {
     assert.ok(denied.length >= 25);

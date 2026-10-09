@@ -24,7 +24,7 @@ import type { ProjectRole, ProjectVisibility } from './constants.js';
 import { visibleProjectIds } from './myWork.service.js';
 import { clientScopedProjectIds, effectiveProjectRole, governanceAccess, portalOnlyUserIds, requireWorkspace } from './permissions.js';
 import {
-  RAG_RULES, RAG_RULE_TEXT, WORKLOAD_RULES, addDays, daysBetween, issueHours, loadTone, mondayOf, personWeeks, ragOf, weeksOf,
+  RAG_RULES, RAG_RULE_TEXT, WORKLOAD_RULES, addDays, daysBetween, issueHours, loadTone, mondayOf, personWeeks, plannedDate, ragOf, weeksOf,
   type HoursSource,
 } from './portfolioRules.js';
 import { countedIssueWhere } from './openIssues.js';
@@ -337,6 +337,9 @@ export async function workload(userId: number, workspaceId: number, q: WorkloadQ
       storyPoints: true, originalEstimateMin: true, remainingEstimateMin: true, timeSpentMin: true, teamId: true,
       status: { select: { name: true, category: true } },
       type: { select: { key: true, name: true, color: true } },
+      // UX-B (d): thẻ không có hạn ⇒ lấy ngày kết thúc sprint (chưa đóng), rồi ngày phát hành version.
+      sprint: { select: { state: true, endAt: true, name: true } },
+      fixVersion: { select: { releaseDate: true, name: true, status: true } },
       _count: { select: { children: { where: { deletedAt: null, OR: [{ originalEstimateMin: { not: null } }, { remainingEstimateMin: { not: null } }, { storyPoints: { not: null } }] } } } },
     },
   }) : [];
@@ -366,16 +369,23 @@ export async function workload(userId: number, workspaceId: number, q: WorkloadQ
       const h = issueHours({ ...i, hasEstimatedChildren: i._count.children > 0 }, hoursPerPoint);
       const p = projById.get(i.projectId)!;
       const due = dayOf(i.dueDate);
+      const plan = plannedDate({
+        due,
+        sprintEnd: i.sprint && i.sprint.state !== 'CLOSED' && i.sprint.endAt ? vnDay(i.sprint.endAt) : null,
+        versionRelease: i.fixVersion && i.fixVersion.status !== 'RELEASED' ? dayOf(i.fixVersion.releaseDate) : null,
+      });
       return {
         id: i.id, key: `${p.key}-${i.number}`, number: i.number, title: i.title, priority: i.priority,
         project: { id: p.id, key: p.key, name: p.name }, teamId: i.teamId,
         start: dayOf(i.startDate), due, overdue: !!due && due < today,
+        planDue: plan.day, planSource: plan.source,
+        planLabel: plan.source === 'sprint' ? i.sprint?.name ?? null : plan.source === 'version' ? i.fixVersion?.name ?? null : null,
         hours: h.hours, source: h.source as HoursSource,
         status: i.status, type: i.type,
         url: `/work/${ws.slug}/${p.key}/issue/${i.number}`,
       };
     });
-    const weeksOut = personWeeks({ weeks, from, to, today, hoursPerDay, off, issues: mine });
+    const weeksOut = personWeeks({ weeks, from, to, today, hoursPerDay, off, issues: mine.map((i) => ({ ...i, due: i.planDue })) });
     const totalHours = r1(weeksOut.reduce((s, w) => s + w.hours, 0));
     const totalCapacity = r1(weeksOut.reduce((s, w) => s + w.capacity, 0));
     const inGrid = new Set(weeksOut.flatMap((w) => w.issueIds));
@@ -391,9 +401,10 @@ export async function workload(userId: number, workspaceId: number, q: WorkloadQ
       ...loadTone(totalHours, totalCapacity),
       overloaded: weeksOut.some((w) => w.overloaded),
       overloadedWeeks: weeksOut.filter((w) => w.overloaded).map((w) => w.start),
-      unscheduled: mine.filter((i) => !i.due).length,
+      unscheduled: mine.filter((i) => !i.planDue).length,
+      scheduledBySprint: mine.filter((i) => !i.due && i.planDue).length,
       unestimated: mine.filter((i) => i.source === 'none' && inGrid.has(i.id)).length,
-      issues: mine.filter((i) => inGrid.has(i.id) || !i.due),
+      issues: mine.filter((i) => inGrid.has(i.id) || !i.planDue),
     };
   }).sort((a, b) => Number(b.overloaded) - Number(a.overloaded) || (b.pct ?? 0) - (a.pct ?? 0) || a.user.username.localeCompare(b.user.username));
 
@@ -427,6 +438,7 @@ export async function workload(userId: number, workspaceId: number, q: WorkloadQ
         'Nothing estimated: 0 h (counted as unestimated, never guessed).',
         'A parent whose sub-tasks are estimated counts 0 h itself (the sub-tasks carry the hours).',
         'Hours are spread evenly over working days from max(start date, today) to the due date; overdue work lands on the next working day from today.',
+        'No due date: the end date of the issue’s open sprint is used, then the release date of its unreleased fix version. Neither ⇒ listed as unscheduled, not in the grid.',
         `Capacity: the sum of hours/day set on each project (Reports → Capacity); none set ⇒ ${WORKLOAD_RULES.DEFAULT_HOURS_PER_DAY} h/day. Weekends and time off count as 0.`,
       ],
     },

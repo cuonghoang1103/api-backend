@@ -69,7 +69,8 @@
 
   /* Nhấn — iris */
   --w-accent: #4f5bd5;        /* chữ trắng trên nó: 5.5:1 */
-  --w-accent-hover: #434fc4;
+  --w-accent-hover: #434fc4;   /* chữ trắng: 6.7:1 — hover phải TỐI hơn nền thường, không sáng hơn */
+  --w-danger-bg: #cf342f;      /* nút đỏ đặc, chữ trắng: 5.0:1 */
   --w-accent-text: #3f4bbf;   /* 7.1:1 trên trắng */
   --w-accent-soft: rgba(79, 91, 213, 0.1);
   --w-accent-border: rgba(79, 91, 213, 0.48);
@@ -155,7 +156,8 @@ html.theme-dark .work-root {
   --w-text-3: #8f8f98;        /* 5.7:1 trên panel · 5.3:1 trên raised · 5.9:1 trên sunken */
 
   --w-accent: #5d67d8;        /* chữ trắng: 4.8:1 */
-  --w-accent-hover: #6871e0;
+  --w-accent-hover: #4f59c8;   /* UX-B: #6871e0 cũ chỉ 4.18:1 với chữ trắng ⇒ 5.8:1 */
+  --w-danger-bg: #c43d37;      /* --w-red tối (#ef6b66) với chữ trắng chỉ 3.0:1 ⇒ 5.2:1 */
   --w-accent-text: #a9b0f7;   /* 8.9:1 trên panel */
   --w-accent-soft: rgba(110, 120, 235, 0.16);
   --w-accent-border: rgba(130, 140, 245, 0.55);
@@ -290,11 +292,14 @@ html.theme-dark .work-root .w-btn { box-shadow: none; }
 }
 html.theme-dark .work-root .w-btn-primary { box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset; }
 .w-btn-primary:hover:not(:disabled) { background: var(--w-accent-hover); background-image: none; }
+/* UX-B: lớp phủ :active chung của .w-btn là --w-hover — ở giao diện tối nó TRẮNG mờ ⇒ làm sáng nền tím, chữ trắng tụt
+   dưới 4.5:1. Nút đặc dùng màu hover (tối hơn) cho cả lúc nhấn. */
+.w-btn-primary:active:not(:disabled) { background: var(--w-accent-hover); background-image: none; }
 .w-btn-ghost { background: transparent; border-color: transparent; color: var(--w-text-2); box-shadow: none; }
 .w-btn-ghost:hover:not(:disabled) { color: var(--w-text); background: var(--w-hover); background-image: none; }
-.w-btn-danger { color: var(--w-red); }
-.w-btn-danger-solid { background: var(--w-red); border-color: var(--w-red); color: #fff; }
-.w-btn-danger-solid:hover:not(:disabled) { background: color-mix(in srgb, var(--w-red) 88%, #000); background-image: none; }
+.w-btn-danger { color: var(--w-red-text); }
+.w-btn-danger-solid { background: var(--w-danger-bg); border-color: var(--w-danger-bg); color: #fff; }
+.w-btn-danger-solid:hover:not(:disabled), .w-btn-danger-solid:active:not(:disabled) { background: color-mix(in srgb, var(--w-danger-bg) 88%, #000); background-image: none; }
 .w-btn-sm { height: 26px; padding: 0 8px; font-size: 12px; }
 .w-btn-icon { width: 28px; padding: 0; }
 .w-btn-sm.w-btn-icon { width: 26px; }
@@ -633,3 +638,20 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
 .work-root .w-chat-new::before, .work-root .w-chat-new::after { content: ''; flex: 1; height: 1px; background: color-mix(in srgb, var(--w-red) 55%, transparent); }
 .work-root .w-chat-md p:empty { display: none; }
 @media (prefers-reduced-motion: reduce) { .work-root .w-chat-flash { animation: none; } }
+
+/* ── CTW K-3b: đồng soạn thảo Docs — con trỏ/vùng chọn của người khác (màu theo người, do awareness gửi) ── */
+.w-prose .collaboration-cursor__caret {
+  position: relative; margin-left: -1px; margin-right: -1px; border-left: 2px solid currentColor; border-right: 0;
+  word-break: normal; pointer-events: none;
+}
+.w-prose .collaboration-cursor__label {
+  position: absolute; top: -1.5em; left: -1px; z-index: 3; padding: 2px 6px; border-radius: 4px 4px 4px 0;
+  color: #fff; font-size: 11px; font-weight: 600; line-height: 1.3; white-space: nowrap; user-select: none; pointer-events: none;
+}
+.w-prose .ProseMirror-yjs-selection { opacity: 0.85; }
+/* Neo bình luận: không tô mặc định (DocView chỉ tô neo còn mở); vẫn có hình con trỏ tay khi rê. */
+.w-prose .w-anchor { text-decoration: none; }
+/* Cuộn tới một bình luận (bấm chữ được tô) ⇒ nháy nền nhẹ. */
+.w-flash { animation: w-flash 1.6s ease-out; border-radius: 6px; }
+@keyframes w-flash { 0%, 30% { background: color-mix(in srgb, var(--w-yellow) 22%, transparent); } 100% { background: transparent; } }
+@media (prefers-reduced-motion: reduce) { .w-flash { animation: none; outline: 2px solid var(--w-yellow); } }

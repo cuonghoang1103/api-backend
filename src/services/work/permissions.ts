@@ -724,6 +724,11 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['*', /^\/contrib(\/.*)?$/],
   // CTW đợt 5: điểm rubric của sinh viên — agent không đọc, không chấm (teaching.service gradeGate cũng chặn).
   ['*', /^\/grades(\/.*)?$/],
+  // CTW K-2: agent không ghi âm, không điểm danh/RSVP, không đổi cấu hình họp, không duyệt biên bản. Đọc transcript +
+  // đề xuất biên bản AI vẫn mở (registry meeting_transcript_get / meeting_minutes_propose).
+  ['*', /^\/meetings\/\d+\/(recordings|attendance|rsvp|join|leave|recording-link)(\/.*)?$/],
+  ['*', /^\/meeting-settings$/],
+  ['POST', /^\/meetings\/\d+\/minutes-ai\/\d+\/(apply|dismiss)$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

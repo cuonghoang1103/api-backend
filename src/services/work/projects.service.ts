@@ -20,6 +20,7 @@ import {
 import { financeAccess } from './financeRules.js';
 import { clientPeopleIds, filterPeople } from './clientPeople.js';
 import { seedProjectConfig } from './templates.js';
+import { createOverviewDashboard } from './dashboardDefaults.js';
 import { openIssueWhere } from './openIssues.js';
 import { defaultCoverFor } from './covers.js'; // UX-D
 
@@ -77,6 +78,8 @@ export async function createProject(
         where: { id: project.id },
         data: { settings: { ...((cur.settings as object) ?? {}), modules } as Prisma.InputJsonValue },
       });
+      // UX-B: dự án mới có sẵn dashboard "Project overview" (KPI, burndown, CFD, throughput, tải, việc trễ, rủi ro).
+      await createOverviewDashboard(tx, project.id, userId);
       return { id: project.id, key: project.key, name: project.name, kind: project.kind as ProjectKind, modules };
     });
     // CTW đợt 3A (A30): giai đoạn Report 1→7, Iteration 1–3, trang Docs mẫu FPT, epic theo Report — sau khi dự án đã có.

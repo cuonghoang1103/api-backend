@@ -329,6 +329,18 @@ export function nextWorkDay(d: string, off: Array<{ start: string; end: string }
   return d;
 }
 
+/**
+ * UX-B (d): ngày dùng để rải giờ. Có hạn ⇒ hạn. Không có ⇒ ngày kết thúc sprint còn mở của thẻ, rồi ngày phát
+ * hành version chưa phát hành. Không có gì ⇒ null (thẻ "chưa lên lịch", không vào lưới — không đoán).
+ * Trước đây thẻ không hạn bị bỏ khỏi lưới ⇒ nhóm có 12 thẻ đang chạy trong sprint mà Workload báo 0%.
+ */
+export function plannedDate(p: { due: string | null; sprintEnd: string | null; versionRelease: string | null }): { day: string | null; source: 'due' | 'sprint' | 'version' | null } {
+  if (p.due) return { day: p.due, source: 'due' };
+  if (p.sprintEnd) return { day: p.sprintEnd, source: 'sprint' };
+  if (p.versionRelease) return { day: p.versionRelease, source: 'version' };
+  return { day: null, source: null };
+}
+
 /** Rải giờ của một thẻ theo ngày (xem chú thích WORKLOAD_RULES). */
 export function allocate(
   hours: number,

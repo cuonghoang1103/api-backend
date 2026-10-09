@@ -118,6 +118,11 @@ export interface TranscriptResult {
    * Chữ trông tự tin y như thật. Trường này mới là chỗ lộ ra.
    */
   language?: string;
+  /**
+   * CTW K-2: các đoạn có mốc thời gian (giây, tính từ đầu tệp) — chỉ khi `detail: true`. Phiên âm cuộc họp ghép
+   * transcript có mốc giờ từ đây; nơi khác bỏ qua trường này.
+   */
+  segments?: Array<{ start: number; end: number; text: string; noSpeechProb?: number }>;
 }
 
 /**
@@ -228,7 +233,7 @@ export async function transcribeWithGroq(
     const json = (await res.json()) as {
       text?: string;
       language?: string;
-      segments?: Array<{ no_speech_prob?: number; avg_logprob?: number }>;
+      segments?: Array<{ no_speech_prob?: number; avg_logprob?: number; start?: number; end?: number; text?: string }>;
     };
     const text = (json.text ?? '').trim();
     if (!opts.detail || !json.segments?.length)
@@ -245,6 +250,9 @@ export async function transcribeWithGroq(
       language: json.language,
       noSpeechProb: mean((s) => s.no_speech_prob),
       avgLogprob: mean((s) => s.avg_logprob),
+      segments: segs
+        .filter((s) => typeof s.start === 'number' && typeof s.end === 'number' && (s.text ?? '').trim())
+        .map((s) => ({ start: s.start!, end: s.end!, text: (s.text ?? '').trim(), noSpeechProb: s.no_speech_prob })),
     };
   } catch (e) {
     if ((e as Error).name === 'AbortError') throw new Error('groq stt timeout');

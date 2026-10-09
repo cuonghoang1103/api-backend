@@ -32,6 +32,8 @@ const ALLOWED_WHILE_LOCKED: RegExp[] = [
   /^\/dashboards(\/\d+)?$/,
   // CTW K-3: nhắn tin trong kênh chat (trừ "tạo thẻ từ tin" — đó là đổi kế hoạch).
   /^\/chat\/(?!.*\/issue$).+$/,
+  // CTW K-3b: ghi ngay bản đồng soạn đang sống (không đổi nội dung — chỉ đẩy trạng thái Yjs xuống DB trước khi xuất).
+  /^\/pages\/\d+\/collab\/flush$/,
 ];
 
 export function isAllowedWhileLocked(subPath: string): boolean {

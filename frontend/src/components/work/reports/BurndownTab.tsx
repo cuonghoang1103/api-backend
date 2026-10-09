@@ -2,21 +2,17 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { workApi, workError } from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
-import { EmptyState, formatDate, Spinner } from '@/components/work/ui';
-import { cn } from '@/lib/utils';
-import {
-  axisTick, Card, ChartTooltip, fmtDay, fmtValue, Legend, SprintSelect, StatCell, unitLabel, useAllSprints, useReportableSprints,
-} from './shared';
+import { EmptyState, formatDate, PageLoading } from '@/components/work/ui';
+import { fmtValue, SprintSelect, StatCell, useAllSprints, useReportableSprints } from './shared';
+import { SprintBurndownChart } from '../charts/FlowCharts';
 import { wt } from '@/components/work/i18n';
 
 export default function BurndownTab({ pid }: { pid: number }) {
   const sprintsQ = useAllSprints(pid);
   const sprints = useReportableSprints(sprintsQ.data);
   const [sprintId, setSprintId] = useState<number | null>(null);
-  const [mode, setMode] = useState<'burndown' | 'burnup'>('burndown');
 
   useEffect(() => {
     if (!sprints.length) return;
@@ -40,7 +36,7 @@ export default function BurndownTab({ pid }: { pid: number }) {
     return { committed, completed, remaining };
   }, [q.data]);
 
-  if (sprintsQ.isLoading) return <div className="flex justify-center py-16"><Spinner size={20} /></div>;
+  if (sprintsQ.isLoading) return <PageLoading rows={4} />;
   if (sprintsQ.error) return <EmptyState title={wt('rep.loadSprintsFailed')} body={workError(sprintsQ.error)} />;
   if (!sprints.length) return <EmptyState title={wt('rep.noSprints')} body={wt('rep.noSprintsBody')} />;
 
@@ -59,27 +55,12 @@ export default function BurndownTab({ pid }: { pid: number }) {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
         <SprintSelect sprints={sprints} value={sprintId} onChange={setSprintId} />
-        <div className="ml-auto inline-flex rounded-[var(--w-radius)] border border-[var(--w-border-strong)] p-0.5" role="tablist" aria-label={wt('rep.chartType')}>
-          {(['burndown', 'burnup'] as const).map((m) => (
-            <button
-              key={m}
-              type="button"
-              role="tab"
-              aria-selected={mode === m}
-              onClick={() => setMode(m)}
-              className={cn(
-                'h-[24px] rounded-[4px] px-2.5 text-[12px] font-medium',
-                mode === m ? 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'text-[var(--w-text-2)] hover:text-[var(--w-text)]',
-              )}
-            >
-              {m === 'burndown' ? 'Burndown' : 'Burnup'}
-            </button>
-          ))}
-        </div>
       </div>
 
       {q.isLoading ? (
-        <div className="flex justify-center py-16"><Spinner size={20} /></div>
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-4" aria-hidden="true">
+          {[0, 1, 2, 3].map((i) => <span key={i} className="w-skel h-[78px] !rounded-[10px]" />)}
+        </div>
       ) : q.error ? (
         <EmptyState title={wt('rep.loadBdFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : d && stats ? (
@@ -95,47 +76,10 @@ export default function BurndownTab({ pid }: { pid: number }) {
               <span className="font-medium text-[var(--w-text)]">{wt('rep.sprintGoal')}</span> {d.sprint.goal}
             </div>
           )}
-          <Card>
-            {!d.points.length ? (
-              <EmptyState title={wt('rep.noData')} body={wt('rep.noDataBody')} />
-            ) : (
-              <>
-                <div className="mb-3">
-                  <Legend
-                    items={mode === 'burndown'
-                      ? [{ label: wt('rep.remaining'), color: 'var(--w-accent)' }, { label: wt('rep.guideline'), color: 'var(--w-text-3)', dashed: true }]
-                      : [{ label: wt('rep.completed'), color: 'var(--w-green)' }, { label: wt('rep.scope'), color: 'var(--w-text-2)' }]}
-                  />
-                </div>
-                <div className="h-[300px] w-full min-w-0">
-                  <ResponsiveContainer width="100%" height="100%">
-                    {/* Sprint mới chạy 1–2 ngày thì đường chỉ có 1–2 điểm — Recharts không vẽ
-                        được đường từ 1 điểm, nên bật chấm để người xem vẫn thấy số liệu. */}
-                    <LineChart data={d.points} margin={{ top: 8, right: 12, bottom: 0, left: -8 }}>
-                      <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
-                      <XAxis dataKey="day" tickFormatter={fmtDay} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} minTickGap={16} />
-                      <YAxis tick={axisTick} tickLine={false} axisLine={false} allowDecimals={false} width={48}
-                        label={{ value: unitLabel(unit), angle: -90, position: 'insideLeft', offset: 18, fill: 'var(--w-text-3)', fontSize: 11 }} />
-                      <Tooltip content={<ChartTooltip unit={unit} labelFormat={fmtDay} />} cursor={{ stroke: 'var(--w-border-strong)' }} />
-                      {mode === 'burndown' ? (
-                        <>
-                          <Line type="linear" dataKey="ideal" name={wt('rep.guideline')} stroke="var(--w-text-3)" strokeDasharray="5 4" strokeWidth={1.5} dot={false} isAnimationActive={false} />
-                          <Line type="stepAfter" dataKey="remaining" name={wt('rep.remaining')} stroke="var(--w-chart-1)" strokeWidth={2} dot={d.points.filter((x) => x.remaining !== null).length < 3 ? { r: 3.5, fill: 'var(--w-chart-1)', strokeWidth: 0 } : false} activeDot={{ r: 4 }} isAnimationActive={false} />
-                        </>
-                      ) : (
-                        <>
-                          <Line type="stepAfter" dataKey="total" name={wt('rep.scope')} stroke="var(--w-text-2)" strokeWidth={1.5} dot={d.points.filter((x) => x.total !== null).length < 3 ? { r: 3, fill: 'var(--w-text-2)', strokeWidth: 0 } : false} isAnimationActive={false} />
-                          <Line type="stepAfter" dataKey="done" name={wt('rep.completed')} stroke="var(--w-green)" strokeWidth={2} dot={d.points.filter((x) => x.done !== null).length < 3 ? { r: 3.5, fill: 'var(--w-green)', strokeWidth: 0 } : false} activeDot={{ r: 4 }} isAnimationActive={false} />
-                        </>
-                      )}
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </>
-            )}
-          </Card>
         </>
       ) : null}
+      {/* UX-B: biểu đồ đi qua ChartFrame (chú giải bật/tắt, cách tính, xuất PNG/CSV, có đường scope). */}
+      {sprintId !== null && <SprintBurndownChart pid={pid} sprintId={sprintId} height={300} />}
     </div>
   );
 }

@@ -413,10 +413,29 @@ export async function updatePage(userId: number, projectId: number, num: number,
   let json: Prisma.InputJsonValue | undefined;
   let text: string | undefined;
   if (input.contentJson !== undefined) ({ json, text } = normDoc(input.contentJson));
+  // CTW K-3b: trang đang đồng soạn (Yjs) ⇒ nội dung từ máy chủ (Fill / Report / Wiegers / Diagram / @latest / AI apply)
+  // đi QUA Yjs bằng gộp ba chiều theo khối — không đè chữ người đang gõ, không vấp 409 vì phiên bản do người khác đẩy.
+  // Gateway đã ghi nội dung + phiên bản (kèm ghi chú) ⇒ phần dưới chỉ còn trường khác (trạng thái, chủ trang, AI…).
+  let viaCollab = false;
+  if (json !== undefined && stableStringify(json) !== stableStringify(p.contentJson)) {
+    if (p.status === 'ARCHIVED' && input.status === undefined) throw new BadRequestError('This document is archived — move it back to Draft to edit it', 'WORK_PAGE_ARCHIVED');
+    const { applyPageContentViaCollab } = await import('../../socket/work-docs-collaboration.gateway.js');
+    const r = await applyPageContentViaCollab({
+      pageId: p.id, base: p.contentJson, next: json, actorId: userId, mode: 'merge',
+      title: input.title !== undefined ? (input.title.trim() || 'Untitled') : undefined,
+      note: input.versionNote ?? (input.aiProvenance ? 'AI suggestion applied' : null),
+    });
+    if (r) {
+      viaCollab = true;
+      json = undefined;
+      text = undefined;
+      if (input.aiProvenance) Object.assign(data, { aiAssisted: true, aiModel: input.aiProvenance.model?.slice(0, 120) ?? null, aiAssistedAt: new Date(), aiAppliedById: userId });
+    }
+  }
   // Gửi lại y nguyên nội dung đang có (tự lưu không có gì mới) ⇒ KHÔNG tính là sửa:
   // không tăng version, không đổi "Edited by", không đẻ phiên bản.
   const bodyChanged = json !== undefined && stableStringify(json) !== stableStringify(p.contentJson);
-  const contentChange = bodyChanged || (input.title !== undefined && (input.title.trim() || 'Untitled') !== p.title);
+  const contentChange = bodyChanged || (!viaCollab && input.title !== undefined && (input.title.trim() || 'Untitled') !== p.title);
   const title = input.title !== undefined ? (input.title.trim() || 'Untitled').slice(0, 255) : p.title;
   if (contentChange) {
     if (p.status === 'ARCHIVED' && input.status === undefined) throw new BadRequestError('This document is archived — move it back to Draft to edit it', 'WORK_PAGE_ARCHIVED');
@@ -434,20 +453,20 @@ export async function updatePage(userId: number, projectId: number, num: number,
       audits.push(input.aiAssisted ? 'marked AI-assisted' : 'removed AI-assisted mark');
     }
   }
-  if (!Object.keys(data).length && !input.versionNote) return getPage(userId, projectId, num);
+  if (!Object.keys(data).length && (!input.versionNote || viaCollab)) return getPage(userId, projectId, num);
   data.lastEditedById = userId;
   data.version = { increment: 1 };
 
   const r = await prisma.$transaction(async (tx) => {
-    // Ghi có điều kiện theo version ⇒ hai người lưu cùng lúc không đè nhau.
-    const where = { id: p.id, ...(input.version !== undefined ? { version: input.version } : {}) };
+    // Ghi có điều kiện theo version ⇒ hai người lưu cùng lúc không đè nhau. Đồng soạn (K-3b): Yjs đã gộp ⇒ bỏ khoá này.
+    const where = { id: p.id, ...(input.version !== undefined && !viaCollab ? { version: input.version } : {}) };
     const upd = await tx.workPage.updateMany({ where, data: data as Prisma.WorkPageUncheckedUpdateManyInput });
     if (!upd.count) {
       const now = await tx.workPage.findUnique({ where: { id: p.id }, select: { version: true, lastEditedBy: { select: PUBLIC_USER } } });
       throw new AppError('Someone else saved this document a moment ago. Reload to see their changes.', 409, 'WORK_PAGE_CONFLICT', { version: now?.version ?? null, by: now?.lastEditedBy ?? null });
     }
     const cur = await tx.workPage.findUniqueOrThrow({ where: { id: p.id }, select: { title: true, contentJson: true, contentText: true, version: true } });
-    if (contentChange || input.versionNote) {
+    if ((contentChange || input.versionNote) && !viaCollab) {
       await snapshotTx(tx, p.id, userId, cur, input.versionNote ? 'MANUAL' : 'EDIT', input.versionNote);
     }
     return cur;
@@ -569,7 +588,10 @@ export async function restoreVersion(userId: number, projectId: number, num: num
   if (!canManagePage(ctx.access.role, ctx.access.workspaceRole, userId, p.ownerId)) throw new ForbiddenError('Only the document owner or a project admin can restore a version');
   const v = await versionRow(p.id, n);
   const { json, text } = normDoc(v.contentJson);
-  await prisma.$transaction(async (tx) => {
+  // CTW K-3b: trang đang đồng soạn ⇒ khôi phục đi qua Yjs (người đang mở thấy ngay, bản offline của họ vẫn gộp đúng).
+  const { applyPageContentViaCollab } = await import('../../socket/work-docs-collaboration.gateway.js');
+  const live = await applyPageContentViaCollab({ pageId: p.id, base: p.contentJson, next: json, actorId: userId, mode: 'replace', title: v.title, note: `Restored version ${n}`, kind: 'RESTORE' });
+  if (!live) await prisma.$transaction(async (tx) => {
     await tx.workPage.update({ where: { id: p.id }, data: { title: v.title, contentJson: json, contentText: text, lastEditedById: userId, version: { increment: 1 } } });
     await snapshotTx(tx, p.id, userId, { title: v.title, contentJson: json, contentText: text }, 'RESTORE', `Restored version ${n}`);
   });
@@ -633,6 +655,8 @@ export async function issuePages(userId: number, projectId: number, issueNumber:
 const COMMENT_SELECT = {
   id: true, bodyJson: true, bodyText: true, createdAt: true, editedAt: true, authorId: true, author: { select: PUBLIC_USER },
   parentId: true, // CTW đợt 5b K-1: luồng trả lời một cấp
+  // CTW K-3b: bình luận gắn đoạn văn (neo + đã resolve chưa).
+  anchor: { select: { anchorId: true, quote: true, resolvedAt: true, resolvedById: true } },
 } satisfies Prisma.WorkPageCommentSelect;
 
 export async function listComments(userId: number, projectId: number, num: number) {

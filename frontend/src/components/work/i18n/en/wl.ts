@@ -42,5 +42,7 @@ export const wl = {
   timeOff: 'Time off: {s}',
   overdueDot: 'Overdue · ',
   dueSp: 'Due ',
+  bySprint: 'No due date — planned to {n} end ({d})',
+  byVersion: 'No due date — planned to release {n} ({d})',
   noDueDate: 'No due date',
 };

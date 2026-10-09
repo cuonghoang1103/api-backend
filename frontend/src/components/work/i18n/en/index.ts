@@ -9,6 +9,7 @@ import { chat } from './chat';
 import { classroom } from './classroom';
 import { contrib } from './contrib';
 import { cover } from './cover';
+import { collab } from './collab';
 import { create } from './create';
 import { desk } from './desk';
 import { detail } from './detail';
@@ -67,5 +68,7 @@ import { pages } from './pages';
 import { uat } from './uat';
 import { tpl } from './tpl';
 import { nav } from './nav';
+import { charts } from './charts'; // UX-B
+import { meeting2 } from './meeting2';
 
-export const en = { common, agents, ai, audit, backlog, board, chat, classroom, contrib, cover, create, desk, detail, dev, diagram, docs, editor, errors, fields, finance, fpt, git, gov, home, invite, issues, modup, notify, onboard, palette, pchat, pexport, pimport, releases, school, settings, share, shell, sprint, srs, status, swr, studio, teacher, tests, time, timeline, trash, pboard, pfields, pspec, ptypes, wf, pagents, pstudio, auto, rep, portal, res, pf, wl, gs, jql, dash, pages, uat, tpl, nav };
+export const en = { common, agents, ai, audit, backlog, board, chat, classroom, contrib, cover, collab, create, desk, detail, dev, diagram, docs, editor, errors, fields, finance, fpt, git, gov, home, invite, issues, modup, notify, onboard, palette, pchat, pexport, pimport, releases, school, settings, share, shell, sprint, srs, status, swr, studio, teacher, tests, time, timeline, trash, pboard, pfields, pspec, ptypes, wf, pagents, pstudio, auto, rep, portal, res, pf, wl, gs, jql, dash, pages, uat, tpl, nav, meeting2, charts };

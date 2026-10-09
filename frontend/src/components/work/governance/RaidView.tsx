@@ -24,6 +24,8 @@ import { ConfirmDialog, Select } from '../settings/shared';
 import { Pill } from '../studio/shared';
 import { LEVEL_COLOR, PersonSelect, RaidStatusPill, ScoreBadge, levelOf, useGovInvalidate } from './shared';
 import { wt } from '@/components/work/i18n';
+import ChartFrame from '../charts/ChartFrame';
+import { resolveColor } from '../charts/exportChart';
 
 const STATUSES: Record<RaidType, string[]> = {
   RISK: ['OPEN', 'MONITORING', 'MITIGATED', 'CLOSED'], ISSUE: ['OPEN', 'MONITORING', 'MITIGATED', 'CLOSED'],
@@ -35,53 +37,93 @@ const iLabel = (n: number) => wt('gov.iLabels').split(',')[n] ?? '';
 // ─── Ma trận ─────────────────────────────────────────────────────
 
 function Matrix({ m, cell, onCell }: { m: number[][]; cell: { p: number; i: number } | null; onCell: (c: { p: number; i: number } | null) => void }) {
+  // UX-B: ma trận đi chung ChartFrame (cách tính, xuất PNG vẽ tay trên canvas + CSV). Lưới vẫn là nút bấm (lọc theo ô) —
+  // Recharts không có loại heatmap, và ô phải bấm được bằng bàn phím.
+  const rows: Array<{ p: number; i: number; score: number; count: number }> = [];
+  for (const p of [5, 4, 3, 2, 1]) for (const i of [1, 2, 3, 4, 5]) rows.push({ p, i, score: p * i, count: m[p - 1]?.[i - 1] ?? 0 });
+  const total = rows.reduce((s, r) => s + r.count, 0);
+  const draw = (ctx: CanvasRenderingContext2D, w: number) => {
+    const root = document.querySelector('[data-testid="raid-matrix"]') ?? document.body;
+    const col = (v: string) => resolveColor(root, v);
+    const size = Math.min(64, Math.floor((w - 40) / 5));
+    const gap = 4;
+    ctx.font = '600 13px Inter, "Segoe UI", Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    rows.forEach((r) => {
+      const x = 28 + (r.i - 1) * (size + gap);
+      const y = (5 - r.p) * (size + gap);
+      const lv = levelOf(r.score)!;
+      ctx.fillStyle = col(`color-mix(in srgb, ${LEVEL_COLOR[lv]} ${r.count ? 30 : 12}%, var(--w-panel))`);
+      ctx.fillRect(x, y, size, size);
+      ctx.fillStyle = col('var(--w-text)');
+      if (r.count) ctx.fillText(String(r.count), x + size / 2, y + size / 2);
+      ctx.fillStyle = col('var(--w-text-3)');
+      ctx.font = '500 10px Inter, Arial, sans-serif';
+      ctx.fillText(String(r.score), x + 9, y + 9);
+      ctx.font = '600 13px Inter, "Segoe UI", Arial, sans-serif';
+    });
+    ctx.fillStyle = col('var(--w-text-3)');
+    ctx.font = '500 11px Inter, "Segoe UI", Arial, sans-serif';
+    ctx.fillText(wt('gov.impactArrow'), 28 + (5 * (size + gap)) / 2, 5 * (size + gap) + 12);
+    ctx.save();
+    ctx.translate(10, (5 * (size + gap)) / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText(wt('gov.probArrow'), 0, 0);
+    ctx.restore();
+  };
   return (
     <div className="min-w-0" data-testid="raid-matrix">
-      <div className="mb-2 flex items-center justify-between">
-        <h2 className="w-section-title">{wt('gov.riskMatrix')}</h2>
-        {cell && <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => onCell(null)}><X size={12} /> {wt('common.clear')}</button>}
-      </div>
-      <div className="flex gap-1.5">
-        <div className="flex w-4 shrink-0 items-center justify-center">
-          <span className="-rotate-90 whitespace-nowrap text-[11px] font-medium text-[var(--w-text-3)]">{wt('gov.probArrow')}</span>
-        </div>
-        <div className="min-w-0 flex-1">
-          {/* UX-A: lưới ARIA đúng cấu trúc grid › row › gridcell › button; số điểm dùng màu chữ thường (trước 2.3:1). */}
-          <div className="flex flex-col gap-1" role="grid" aria-label={wt('gov.probByImpact')}>
-            {[5, 4, 3, 2, 1].map((p) => (
-              <div key={p} role="row" className="grid grid-cols-5 gap-1">
-                {[1, 2, 3, 4, 5].map((i) => {
-                  const n = m[p - 1]?.[i - 1] ?? 0;
-                  const lv = levelOf(p * i)!;
-                  const on = cell?.p === p && cell?.i === i;
-                  return (
-                    <div key={i} role="gridcell" className="min-w-0">
-                      <button
-                        type="button"
-                        aria-label={wt('gov.cellAria', { p, pl: pLabel(p - 1), i, il: iLabel(i - 1), count: n })}
-                        aria-pressed={on}
-                        onClick={() => onCell(on ? null : { p, i })}
-                        data-testid={`raid-cell-${p}-${i}`}
-                        className={cn('relative flex aspect-square min-h-[34px] w-full items-center justify-center rounded-[6px] text-[13px] font-semibold tabular-nums text-[var(--w-text)] transition-[box-shadow]', on && 'ring-2 ring-[var(--w-accent)] ring-offset-1 ring-offset-[var(--w-panel)]')}
-                        style={{ background: `color-mix(in srgb, ${LEVEL_COLOR[lv]} ${n ? 30 : 12}%, var(--w-panel))` }}
-                      >
-                        {n || ''}
-                        <span aria-hidden="true" className="absolute left-1 top-0.5 text-[10px] font-medium text-[var(--w-text-2)]">{p * i}</span>
-                      </button>
-                    </div>
-                  );
-                })}
+      <h2 className="w-section-title">{wt('gov.riskMatrix')}</h2>
+      <ChartFrame
+        bare title={wt('gov.riskMatrix')} description={wt('charts.riskMatrixDesc')} interactive
+        toolbar={cell ? <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => onCell(null)}><X size={12} /> {wt('common.clear')}</button> : undefined}
+        series={(['HIGH', 'MEDIUM', 'LOW'] as const).map((l) => ({ key: l, label: l === 'HIGH' ? wt('gov.legend') : l === 'MEDIUM' ? wt('gov.legendM') : wt('gov.legendL'), color: `color-mix(in srgb, ${LEVEL_COLOR[l]} 45%, var(--w-panel))`, fixed: true }))}
+        rows={rows}
+        columns={[{ key: 'p', label: wt('charts.probability') }, { key: 'i', label: wt('charts.impact') }, { key: 'score', label: wt('charts.score') }, { key: 'count', label: wt('charts.risks') }]}
+        summary={wt('charts.riskMatrixSummary', { count: total })}
+        drawPng={draw} drawPngSize={{ width: 380, height: 380 }}
+        fileName="risk-matrix"
+      >
+        {() => (
+          <div className="flex gap-1.5">
+            <div className="flex w-4 shrink-0 items-center justify-center">
+              <span className="-rotate-90 whitespace-nowrap text-[11px] font-medium text-[var(--w-text-3)]">{wt('gov.probArrow')}</span>
+            </div>
+            <div className="min-w-0 flex-1">
+              {/* UX-A: lưới ARIA đúng cấu trúc grid › row › gridcell › button; số điểm dùng màu chữ thường (trước 2.3:1). */}
+              <div className="flex flex-col gap-1" role="grid" aria-label={wt('gov.probByImpact')}>
+                {[5, 4, 3, 2, 1].map((p) => (
+                  <div key={p} role="row" className="grid grid-cols-5 gap-1">
+                    {[1, 2, 3, 4, 5].map((i) => {
+                      const n = m[p - 1]?.[i - 1] ?? 0;
+                      const lv = levelOf(p * i)!;
+                      const on = cell?.p === p && cell?.i === i;
+                      return (
+                        <div key={i} role="gridcell" className="min-w-0">
+                          <button
+                            type="button"
+                            aria-label={wt('gov.cellAria', { p, pl: pLabel(p - 1), i, il: iLabel(i - 1), count: n })}
+                            aria-pressed={on}
+                            onClick={() => onCell(on ? null : { p, i })}
+                            data-testid={`raid-cell-${p}-${i}`}
+                            className={cn('relative flex aspect-square min-h-[34px] w-full items-center justify-center rounded-[6px] text-[13px] font-semibold tabular-nums text-[var(--w-text)] transition-[box-shadow]', on && 'ring-2 ring-[var(--w-accent)] ring-offset-1 ring-offset-[var(--w-panel)]')}
+                            style={{ background: `color-mix(in srgb, ${LEVEL_COLOR[lv]} ${n ? 30 : 12}%, var(--w-panel))` }}
+                          >
+                            {n || ''}
+                            <span aria-hidden="true" className="absolute left-1 top-0.5 text-[10px] font-medium text-[var(--w-text-2)]">{p * i}</span>
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
               </div>
-            ))}
+              <div className="mt-1 text-center text-[11px] font-medium text-[var(--w-text-3)]">{wt('gov.impactArrow')}</div>
+            </div>
           </div>
-          <div className="mt-1 text-center text-[11px] font-medium text-[var(--w-text-3)]">{wt('gov.impactArrow')}</div>
-        </div>
-      </div>
-      <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[11.5px] text-[var(--w-text-3)]">
-        {(['HIGH', 'MEDIUM', 'LOW'] as const).map((l) => (
-          <span key={l} className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-[3px]" style={{ background: `color-mix(in srgb, ${LEVEL_COLOR[l]} 45%, var(--w-panel))` }} />{l === 'HIGH' ? wt('gov.legend') : l === 'MEDIUM' ? wt('gov.legendM') : wt('gov.legendL')}</span>
-        ))}
-      </div>
+        )}
+      </ChartFrame>
     </div>
   );
 }
@@ -393,7 +435,7 @@ export default function RaidView({ config }: { config: ProjectConfig }) {
             )}
           </div>
           {tab === 'RISK' && (
-            <aside className="w-card h-fit p-4 lg:sticky lg:top-4">
+            <aside className="w-card h-fit p-4 lg:sticky lg:top-4" aria-label={wt('gov.riskMatrix')}>
               <Matrix m={d.matrix} cell={cell} onCell={setCell} />
               <p className="mt-3 text-[12px] text-[var(--w-text-3)]">{d.highRisks ? wt('gov.highRisks', { count: d.highRisks }) : wt('gov.noHighRisks')}</p>
             </aside>

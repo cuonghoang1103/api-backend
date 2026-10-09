@@ -10,6 +10,7 @@ import { prisma } from '../../config/database.js';
 import { NotFoundError } from '../../middleware/errorHandler.js';
 import { PUBLIC_USER } from './common.js';
 import { requireProject } from './permissions.js';
+import { rollingAverage } from './flowMetrics.js';
 import {
   computeSprintReport, estimateOf, estimationOf, snapshotSprint, vnDay, type SprintReport,
 } from './sprints.service.js';
@@ -83,7 +84,10 @@ export async function velocity(userId: number, projectId: number) {
     take: 7,
     select: { id: true, name: true, committedPoints: true, completedPoints: true, completedAt: true },
   });
-  const sprints = closed.reverse().map((s) => ({ ...s, committedPoints: s.committedPoints ?? 0, completedPoints: s.completedPoints ?? 0 }));
+  const base = closed.reverse().map((s) => ({ ...s, committedPoints: s.committedPoints ?? 0, completedPoints: s.completedPoints ?? 0 }));
+  // UX-B: đường trung bình trượt 3 sprint (gồm sprint đó) để thấy xu hướng, không chỉ từng cột.
+  const avg3 = rollingAverage(base.map((s) => s.completedPoints), 3);
+  const sprints = base.map((s, i) => ({ ...s, rollingAverage: avg3[i] }));
   const recent = sprints.slice(-3);
   const average = recent.length ? round1(recent.reduce((a, s) => a + s.completedPoints, 0) / recent.length) : null;
   return { unit: await estimationOf(projectId), sprints, average };

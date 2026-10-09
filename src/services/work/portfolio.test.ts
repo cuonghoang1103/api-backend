@@ -6,7 +6,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
-  RAG_RULES, addDays, allocate, issueHours, loadTone, mondayOf, personWeeks, ragOf, weeksOf, workDays, type RagInput,
+  RAG_RULES, addDays, allocate, issueHours, loadTone, mondayOf, personWeeks, plannedDate, ragOf, weeksOf, workDays, type RagInput,
 } from './portfolioRules.js';
 
 const base: RagInput = { open: 20, overdue: 0, sprint: null, milestones: [], blockedBy: 0, pendingApprovals: 0, oldestPendingApprovalDays: null };
@@ -157,5 +157,24 @@ describe('openIssues — một định nghĩa "open" cho Projects / Portfolio / 
     assert.match(OPEN_ISSUES_JQL, /statusCategory != Done/);
     assert.match(OPEN_ISSUES_JQL, /type != "Sub-task"/);
     assert.match(OPEN_ISSUES_DEFINITION, /excluding sub-tasks/);
+  });
+});
+
+describe('UX-B (d) — thẻ không có hạn vẫn vào lưới Workload', () => {
+  it('plannedDate: hạn > ngày kết thúc sprint > ngày phát hành version > null', () => {
+    assert.deepEqual(plannedDate({ due: '2026-10-20', sprintEnd: '2026-10-16', versionRelease: '2026-11-01' }), { day: '2026-10-20', source: 'due' });
+    assert.deepEqual(plannedDate({ due: null, sprintEnd: '2026-10-16', versionRelease: '2026-11-01' }), { day: '2026-10-16', source: 'sprint' });
+    assert.deepEqual(plannedDate({ due: null, sprintEnd: null, versionRelease: '2026-11-01' }), { day: '2026-11-01', source: 'version' });
+    assert.deepEqual(plannedDate({ due: null, sprintEnd: null, versionRelease: null }), { day: null, source: null });
+  });
+  it('12 thẻ trong sprint, không hạn, 2 h mỗi thẻ ⇒ 24 h rải tới ngày kết thúc sprint (không còn 0%)', () => {
+    // Thứ Hai 12/10 → thứ Sáu 16/10: 5 ngày làm việc × 8 h = 40 h năng lực; 24 h tải ⇒ 60%.
+    const weeks = weeksOf('2026-10-12', '2026-10-18');
+    const issues = Array.from({ length: 12 }, (_, k) => ({ id: k + 1, hours: 2, start: null, due: plannedDate({ due: null, sprintEnd: '2026-10-16', versionRelease: null }).day }));
+    const w = personWeeks({ weeks, from: '2026-10-12', to: '2026-10-18', today: '2026-10-12', hoursPerDay: 8, off: [], issues });
+    assert.equal(w[0].capacity, 40);
+    assert.equal(w[0].hours, 24);
+    assert.equal(w[0].pct, 60);
+    assert.equal(w[0].issueIds.length, 12);
   });
 });

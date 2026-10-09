@@ -189,6 +189,7 @@ describe('CT Work đợt 5 — tuỳ biến & tìm kiếm', { skip: !RUN }, () =
     assert.equal(d.status, 201, JSON.stringify(d.raw));
     assert.ok(d.data.widgets.every((w: any) => w.id));
     assert.equal((await call(dev, 'POST', `/projects/${pid}/dashboards`, { name: 'X', widgets: [{ kind: 'filter', query: 'oops =' }] })).status, 400);
-    assert.equal((await call(lead, 'GET', `/projects/${pid}/dashboards`)).data.length, 1);
+    // UX-B: dự án mới có sẵn "Project overview" ⇒ 1 dashboard mặc định + "Team".
+    assert.equal((await call(lead, 'GET', `/projects/${pid}/dashboards`)).data.length, 2);
   });
 });

@@ -21,6 +21,7 @@ import { newJitsiUrl } from '@/lib/work-ctw-api';
 import { Pill } from '../studio/shared';
 import { fmtMeetingTime, fromLocalInput, toLocalInput, useGovInvalidate } from './shared';
 import { wt, wfmt } from '@/components/work/i18n';
+import AttendanceReport from '../meetings2/AttendanceReport'; // CTW K-2: tab Chuyên cần
 
 const PROVIDER: Record<string, string> = { MEET: 'Google Meet', ZOOM: 'Zoom', TEAMS: 'Microsoft Teams', JITSI: 'Jitsi Meet', get OTHER() { return wt('gov.videoLink'); } };
 const COMMON_TZ = ['Asia/Ho_Chi_Minh', 'Asia/Singapore', 'Asia/Tokyo', 'Europe/London', 'Europe/Berlin', 'America/New_York', 'America/Los_Angeles', 'UTC'];
@@ -166,24 +167,25 @@ function MeetingItem({ m, base }: { m: MeetingRow; base: string }) {
 
 export default function MeetingsView({ config }: { config: ProjectConfig }) {
   const pid = config.id;
-  const [scope, setScope] = useState<'upcoming' | 'past'>('upcoming');
+  const [scope, setScope] = useState<'upcoming' | 'past' | 'attendance'>('upcoming');
   const [creating, setCreating] = useState(false);
-  const q = useQuery({ queryKey: govKeys.meetings(pid, scope), queryFn: () => govApi.meetings(pid, scope) });
+  const listScope = scope === 'attendance' ? 'past' : scope;
+  const q = useQuery({ queryKey: govKeys.meetings(pid, listScope), queryFn: () => govApi.meetings(pid, listScope) });
   const base = `/work/${config.workspace.slug}/${config.key}/meetings`;
   return (
     <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
       <div className="w-page">
         <div className="mb-4 flex flex-wrap items-center gap-2">
           <div className="inline-flex rounded-[7px] border border-[var(--w-border-strong)] p-0.5" role="tablist" aria-label={wt('gov.meetings')}>
-            {(['upcoming', 'past'] as const).map((k) => (
+            {(['upcoming', 'past', 'attendance'] as const).map((k) => (
               <button key={k} type="button" role="tab" aria-selected={scope === k} onClick={() => setScope(k)} className={cn('flex h-7 items-center rounded-[5px] px-3 text-[13px] font-medium', scope === k ? 'bg-[var(--w-active)] text-[var(--w-text)]' : 'text-[var(--w-text-2)] hover:text-[var(--w-text)]')}>
-                {k === 'upcoming' ? wt('gov.upcoming') : wt('gov.past')}
+                {k === 'upcoming' ? wt('gov.upcoming') : k === 'past' ? wt('gov.past') : wt('meeting2.tabAttendance')}
               </button>
             ))}
           </div>
           {q.data?.canEdit && <button type="button" className="w-btn w-btn-primary ml-auto" onClick={() => setCreating(true)} data-testid="meeting-new"><Plus size={14} /> {wt('gov.scheduleMeeting')}</button>}
         </div>
-        {q.isLoading ? <PageLoading rows={4} /> : q.error || !q.data ? <EmptyState title={wt('gov.loadMeetingsFailed')} body={workError(q.error)} /> : q.data.items.length ? (
+        {scope === 'attendance' ? <AttendanceReport config={config} /> : q.isLoading ? <PageLoading rows={4} /> : q.error || !q.data ? <EmptyState title={wt('gov.loadMeetingsFailed')} body={workError(q.error)} /> : q.data.items.length ? (
           <ul className="w-card divide-y divide-[var(--w-border)] overflow-hidden" data-testid="meeting-list">{q.data.items.map((m) => <MeetingItem key={m.id} m={m} base={base} />)}</ul>
         ) : (
           <EmptyState

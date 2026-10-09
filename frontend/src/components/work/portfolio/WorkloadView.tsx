@@ -24,6 +24,10 @@ import { Dialog, EmptyState, PageLoading, Popover, UserAvatar, useToggle, signal
 import { fmtDay } from '../reports/shared';
 import { TeamChip } from '../studio/shared';
 import { wt } from '@/components/work/i18n';
+import { Bar, CartesianGrid, Cell, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import ChartFrame from '../charts/ChartFrame';
+import { AXIS_TICK, SERIES } from '../charts/chartColors';
+import { FlowTooltip } from '../charts/FlowCharts';
 
 const LEVEL: Record<LoadLevel, { bg: string; fg: string; label: string }> = {
   none: { bg: 'transparent', fg: 'var(--w-text-3)', get label() { return wt('wl.free'); } },
@@ -57,7 +61,8 @@ function LoadCell({ w, onOpen, label }: { w: WorkloadWeek; onOpen?: () => void; 
   const body = (
     <>
       <span className="block text-[13px] font-semibold tabular-nums" style={{ color: signalText(lv.fg) }}>{w.hours ? `${h1(w.hours)}h` : '—'}</span>
-      <span className="block text-[11px] tabular-nums text-[var(--w-text-3)]">
+      {/* UX-B: ô tải cao/vượt có nền cam/đỏ ⇒ dòng phụ dùng --w-text-2 (text-3 tụt dưới 4.5:1 trên nền đó). */}
+      <span className={cn('block text-[11px] tabular-nums', w.level === 'high' || w.level === 'over' ? 'text-[var(--w-text-2)]' : 'text-[var(--w-text-3)]')}>
         {w.capacity ? wt('wl.pctOf', { p: w.pct ?? 0, h: h1(w.capacity) }) : w.hours ? wt('wl.noCapacity') : wt('wl.off')}
       </span>
     </>
@@ -69,6 +74,50 @@ function LoadCell({ w, onOpen, label }: { w: WorkloadWeek; onOpen?: () => void; 
     </button>
   ) : (
     <div className={cls} style={{ background: lv.bg }} aria-label={label} data-level={w.level}>{body}</div>
+  );
+}
+
+/**
+ * UX-B: tải cả nhóm theo tuần — giờ đã lên kế hoạch so với năng lực (Recharts trong ChartFrame, xuất PNG/CSV).
+ * Cột đỏ khi vượt năng lực (đỏ = xấu), còn lại màu "đang làm"; năng lực là đường bậc thang xám.
+ */
+function TeamLoadChart({ data }: { data: Workload }) {
+  const rows = useMemo(() => data.weeks.map((w, i) => {
+    const hours = Math.round(data.people.reduce((s, p) => s + (p.weeks[i]?.hours ?? 0), 0) * 10) / 10;
+    const capacity = Math.round(data.people.reduce((s, p) => s + (p.weeks[i]?.capacity ?? 0), 0) * 10) / 10;
+    return { week: w.start, hours, capacity, pct: capacity ? Math.round((hours / capacity) * 100) : null, over: capacity > 0 && hours > capacity };
+  }), [data]);
+  const empty = rows.every((r) => !r.hours && !r.capacity);
+  return (
+    <ChartFrame
+      title={wt('charts.teamLoad')} description={wt('charts.teamLoadDesc')} height={180} className="mb-3"
+      status={empty ? 'empty' : 'ready'} emptyText={wt('charts.teamLoadEmpty')}
+      series={[{ key: 'hours', label: wt('charts.plannedHours'), color: SERIES.inProgress }, { key: 'capacity', label: wt('charts.capacity'), color: SERIES.capacity, dashed: true }]}
+      rows={rows}
+      columns={[{ key: 'week', label: wt('charts.weekOf') }, { key: 'hours', label: wt('charts.plannedHours') }, { key: 'capacity', label: wt('charts.capacity') }, { key: 'pct', label: '%' }]}
+      summary={wt('charts.teamLoadSummary', { n: rows.length, o: rows.filter((r) => r.over).length })}
+      fileName="team-load"
+      testId="chart-team-load"
+    >
+      {(hidden) => (
+        <div className="h-[180px] w-full min-w-0">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={rows} margin={{ top: 6, right: 8, bottom: 0, left: -12 }}>
+              <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
+              <XAxis dataKey="week" tickFormatter={fmtDay} tick={AXIS_TICK} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} />
+              <YAxis tick={AXIS_TICK} tickLine={false} axisLine={false} width={48} tickFormatter={(v: number) => `${v}h`} />
+              <Tooltip content={<FlowTooltip labelFormat={(l) => wt('charts.weekOfX', { d: fmtDay(l) })} fmt={(v) => `${h1(v)} h`} />} cursor={{ fill: 'var(--w-hover)' }} />
+              {!hidden.has('hours') && (
+                <Bar dataKey="hours" name={wt('charts.plannedHours')} radius={[3, 3, 0, 0]} maxBarSize={36} isAnimationActive={false}>
+                  {rows.map((r) => <Cell key={r.week} fill={r.over ? SERIES.overdue : SERIES.inProgress} />)}
+                </Bar>
+              )}
+              {!hidden.has('capacity') && <Line type="stepAfter" dataKey="capacity" name={wt('charts.capacity')} stroke={SERIES.capacity} strokeDasharray="5 4" strokeWidth={1.5} dot={false} isAnimationActive={false} />}
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </ChartFrame>
   );
 }
 
@@ -171,6 +220,8 @@ export default function WorkloadView({ ws }: { ws: WorkspaceDetail }) {
         {data.truncated && <span className="text-[var(--w-orange)]">{wt('wl.first5000')}</span>}
       </div>
 
+      {data.people.length > 0 && <TeamLoadChart data={data} />}
+
       {data.people.length === 0 ? (
         <EmptyState title={wt('wl.noOne')} body={wt('wl.noOneBody')} />
       ) : (
@@ -269,7 +320,7 @@ export default function WorkloadView({ ws }: { ws: WorkspaceDetail }) {
                     <span className="min-w-0 flex-1 truncate" title={i.title}>{i.title}</span>
                     <span className="shrink-0 text-[12px] tabular-nums text-[var(--w-text-2)]" title={SOURCE[i.source]}>{i.hours ? `${h1(i.hours)}h` : '—'} <span className="text-[var(--w-text-3)]">· {SOURCE[i.source]}</span></span>
                     <span className={cn('w-full text-[12px] tabular-nums sm:w-auto', i.overdue ? 'font-medium text-[var(--w-red)]' : 'text-[var(--w-text-3)]')}>
-                      {i.due ? `${i.overdue ? wt('wl.overdueDot') : wt('wl.dueSp')}${fmtDay(i.due)}` : wt('wl.noDueDate')} · {i.status.name}
+                      {i.due ? `${i.overdue ? wt('wl.overdueDot') : wt('wl.dueSp')}${fmtDay(i.due)}` : i.planDue ? wt(i.planSource === 'version' ? 'wl.byVersion' : 'wl.bySprint', { d: fmtDay(i.planDue), n: i.planLabel ?? '' }) : wt('wl.noDueDate')} · {i.status.name}
                     </span>
                   </li>
                 ))}

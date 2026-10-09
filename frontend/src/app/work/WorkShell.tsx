@@ -14,7 +14,7 @@
  * ⇒ đổi ngôn ngữ thì cả cây CT Work vẽ lại, nên `wt()` gọi trong lúc render luôn đúng.
  */
 
-import { Fragment, Suspense, useEffect } from 'react';
+import { Fragment, Suspense, useCallback, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import WorkSidebar from '@/components/work/WorkSidebar';
@@ -30,6 +30,23 @@ import { useWorkLocaleStore, wt } from '@/components/work/i18n';
 import { FirstRunLanguagePrompt, WorkLangSync } from '@/components/work/i18n/LanguageSwitch';
 import { CtWorkMark } from '@/components/work/brand/CtWorkMark';
 
+/**
+ * UX-B (c): vùng nội dung CT Work là `<div>` mang `role="main"` CHỈ KHI chưa nằm trong một `<main>` khác.
+ * Trên web, layout site (DockLayout) đã bọc mọi trang trong `<main class="app-main">` ⇒ thêm một main nữa là
+ * "main lồng nhau" (axe best-practice landmark-no-duplicate-main / landmark-main-is-top-level). App desktop dựng
+ * thẳng layout này, không có DockLayout ⇒ ở đó vùng này tự nhận vai main. Đổi `role` không làm cây con dựng lại
+ * (khác với đổi thẻ <main>↔<div>). Skip-link vẫn trỏ `#work-main` (tabIndex −1).
+ */
+function useMainRole(): [(el: HTMLElement | null) => void, 'main' | undefined] {
+  const [role, setRole] = useState<'main' | undefined>(undefined);
+  const ref = useCallback((el: HTMLElement | null) => {
+    if (!el) return;
+    const nested = !!el.parentElement?.closest('main, [role="main"]');
+    setRole(nested ? undefined : 'main');
+  }, []);
+  return [ref, role];
+}
+
 export default function WorkShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';
   const isPublic = pathname.startsWith('/work/invite/') || pathname.startsWith('/work/share/');
@@ -40,6 +57,8 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
   const pageHasHeader = useMobileNav((s) => s.headers > 0);
 
   useEffect(() => setMobileNav(false), [pathname, setMobileNav]);
+  const [mainRef, mainRole] = useMainRole();
+  const [publicMainRef, publicMainRole] = useMainRole();
 
   // Ngôn ngữ CT Work: đọc bản đệm/cookie ngay (vẽ đúng từ lần đầu), rồi hỏi máy chủ.
   const locale = useWorkLocaleStore((s) => s.locale);
@@ -84,7 +103,7 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
     <div className="work-root fixed inset-0 z-[45] flex overflow-hidden" lang={locale}>
       <WorkLangSync />
       {isPublic ? (
-        <main key={locale} className="flex-1 overflow-y-auto">{children}</main>
+        <div key={locale} ref={publicMainRef} role={publicMainRole} className="flex-1 overflow-y-auto">{children}</div>
       ) : !sanSang || !daDangNhap || !localeReady ? (
         // Màn tải: logo động (giảm chuyển động ⇒ logo tĩnh). Chữ cho trình đọc màn hình.
         <div className="flex flex-1 items-center justify-center" role="status">
@@ -114,7 +133,7 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
               </aside>
             </div>
           )}
-          <main id="work-main" tabIndex={-1} className={`flex min-w-0 flex-1 flex-col bg-[var(--w-panel)] md:my-2 md:mr-2 md:rounded-[12px] md:border md:border-[var(--w-border)] ${focus ? 'md:ml-2' : ''}`} style={{ boxShadow: 'var(--w-shadow-card)' }}>
+          <div id="work-main" ref={mainRef} role={mainRole} tabIndex={-1} className={`flex min-w-0 flex-1 flex-col bg-[var(--w-panel)] md:my-2 md:mr-2 md:rounded-[12px] md:border md:border-[var(--w-border)] ${focus ? 'md:ml-2' : ''}`} style={{ boxShadow: 'var(--w-shadow-card)' }}>
             {!pageHasHeader && (
               <div className="w-header flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 md:hidden">
                 <button type="button" onClick={() => setMobileNav(true)} className="w-btn w-btn-ghost w-btn-icon" aria-label={wt('shell.openNavigation')}>
@@ -124,7 +143,7 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
               </div>
             )}
             <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
-          </main>
+          </div>
           <CommandPalette />
           <ChatNotifierHost />
           <AiPanelHost />

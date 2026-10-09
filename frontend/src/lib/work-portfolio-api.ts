@@ -81,6 +81,10 @@ export interface WorkloadIssue {
   start: string | null;
   due: string | null;
   overdue: boolean;
+  /** UX-B: ngày dùng để rải giờ — hạn, hoặc ngày kết thúc sprint / phát hành version khi thẻ không có hạn. */
+  planDue?: string | null;
+  planSource?: 'due' | 'sprint' | 'version' | null;
+  planLabel?: string | null;
   hours: number;
   source: 'remaining' | 'original' | 'points' | 'none' | 'children';
   status: { name: string; category: StatusCategory };
@@ -102,6 +106,8 @@ export interface WorkloadPerson {
   overloaded: boolean;
   overloadedWeeks: string[];
   unscheduled: number;
+  /** UX-B: thẻ không hạn nhưng đã rải theo sprint/version. */
+  scheduledBySprint?: number;
   unestimated: number;
   issues: WorkloadIssue[];
 }

@@ -156,6 +156,8 @@ const noteSyncedBlockRoutes = (await import(path.join(__dirname, 'routes', 'note
 const mobileRoutes = (await import(path.join(__dirname, 'routes', 'mobile.routes.js'))).default;
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
 const { initNotesCollaborationGateway } = await import(path.join(__dirname, 'socket', 'notes-collaboration.gateway.js'));
+// CTW K-3b: đồng soạn thảo Docs của CT Work (Hocuspocus/Yjs) trên /notes-collaboration/work-docs
+const { initWorkDocsCollaborationGateway } = await import(path.join(__dirname, 'socket', 'work-docs-collaboration.gateway.js'));
 // Maker Lab — hardware/embedded hub + raw-WebSocket gateway for physical devices
 const makerLabModule = await import(path.join(__dirname, 'routes', 'makerLab.routes.js'));
 const makerLabRoutes = makerLabModule.default;
@@ -718,6 +720,8 @@ initSocketServer(server);
 // Dedicated Hocuspocus/Yjs protocol on /notes-collaboration. It shares the
 // HTTP server but not Socket.IO's wire protocol.
 initNotesCollaborationGateway(server);
+// CTW K-3b: cùng khuôn, đường con /notes-collaboration/work-docs (nằm dưới location nginx sẵn có).
+await initWorkDocsCollaborationGateway(server);
 
 // ─── 9d. Maker Lab device gateway (raw WebSocket) ─────
 // Shares the same HTTP server but claims only /device-ws. Must be

@@ -14,6 +14,8 @@ import { EmptyState, PageLoading } from '@/components/work/ui';
 import { cn } from '@/lib/utils';
 import BurndownTab from '@/components/work/reports/BurndownTab';
 import VelocityTab from '@/components/work/reports/VelocityTab';
+import FlowTab from '@/components/work/reports/FlowTab';
+import ReleaseTab from '@/components/work/reports/ReleaseTab';
 import SprintReportTab from '@/components/work/reports/SprintReportTab';
 import EpicsTab from '@/components/work/reports/EpicsTab';
 // CTW Đóng góp (10/10/2026): tab Contributions = bảng chỉ số đầy đủ + chi tiết người + theo task + đánh giá chéo.
@@ -36,6 +38,9 @@ const TABS = [
   { id: 'weekly', get label() { return wt('rep.tab_weekly'); } },
   { id: 'burndown', get label() { return wt('rep.tab_burndown'); } },
   { id: 'velocity', get label() { return wt('rep.tab_velocity'); } },
+  // UX-B: dòng chảy (CFD, throughput, cycle time, aging WIP) + burnup theo release.
+  { id: 'flow', get label() { return wt('charts.tabFlow'); } },
+  { id: 'release', get label() { return wt('charts.tabRelease'); } },
   { id: 'sprint', get label() { return wt('rep.tab_sprint'); } },
   { id: 'epics', get label() { return wt('rep.tab_epics'); } },
   { id: 'contributions', get label() { return wt('rep.tab_contributions'); } },
@@ -61,7 +66,7 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
   const hasAgents = projectHasAgents(config) && config.role !== 'CLIENT' && !config.clientView;
   // CTW Đóng góp: khách không thấy số liệu đóng góp của đội (máy chủ cũng chặn 403).
   const teamSide = config.role !== 'CLIENT' && !config.clientView;
-  const tabs = TABS.filter((t) => (reportsOn || !S4_TABS.has(t.id)) && (t.id !== 'agents' || hasAgents) && (t.id !== 'contributions' || teamSide));
+  const tabs = TABS.filter((t) => (reportsOn || !S4_TABS.has(t.id)) && (t.id !== 'agents' || hasAgents) && (t.id !== 'contributions' || teamSide) && ((t.id !== 'flow' && t.id !== 'release') || teamSide));
   const raw = search?.get('tab');
   const tab: TabId = tabs.some((t) => t.id === raw) ? (raw as TabId) : 'health';
   const setTab = useCallback((id: TabId) => {
@@ -119,6 +124,8 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
           {tab === 'weekly' && <WeeklyReportTab pid={pid} config={config} />}
           {tab === 'burndown' && <BurndownTab pid={pid} />}
           {tab === 'velocity' && <VelocityTab pid={pid} />}
+          {tab === 'flow' && <FlowTab pid={pid} onOpenIssue={setIssue} />}
+          {tab === 'release' && <ReleaseTab pid={pid} />}
           {tab === 'sprint' && <SprintReportTab pid={pid} config={config} lk={lk} />}
           {tab === 'epics' && <EpicsTab pid={pid} config={config} lk={lk} />}
           {tab === 'contributions' && <ContribView pid={pid} config={config} />}

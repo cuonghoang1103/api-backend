@@ -452,7 +452,8 @@ export interface BurndownPoint { day: string; remaining: number | null; total: n
 export interface BurndownData { sprint: SprintFull & { goal: string | null }; unit: EstimationUnit; points: BurndownPoint[] }
 export interface VelocityData {
   unit: EstimationUnit;
-  sprints: Array<{ id: number; name: string; committedPoints: number; completedPoints: number; completedAt: string | null }>;
+  /** UX-B: rollingAverage = TB trượt 3 sprint (gồm sprint đó); bản dữ liệu cũ (chia sẻ) có thể thiếu. */
+  sprints: Array<{ id: number; name: string; committedPoints: number; completedPoints: number; completedAt: string | null; rollingAverage?: number }>;
   /** Trung bình điểm hoàn thành của 3 sprint gần nhất (null nếu chưa có sprint nào đóng). */
   average: number | null;
 }
@@ -609,12 +610,14 @@ export interface CustomField { id: number; name: string; kind: CustomKind; optio
 export type CustomValue = string | number | boolean | string[] | null;
 export type CustomValues = Record<string, CustomValue>;
 export type GroupBy = 'status' | 'statusCategory' | 'assignee' | 'type' | 'priority' | 'label' | 'sprint' | 'component';
-export interface StatsGroup { key: string; label: string; count: number; points: number; color?: string }
+export interface StatsGroup { key: string; label: string; count: number; points: number; color?: string; /** UX-B: có khi nhóm theo trạng thái. */ category?: StatusCategory }
 export interface StatsData { unit: EstimationUnit; total: number; groups: StatsGroup[] }
 export interface SavedFilter { id: number; name: string; query: string; shared: boolean; ownerId: number; updatedAt: string; owner: { username: string } }
-export type WidgetKind = 'filter' | 'pie' | 'bar' | 'counter' | 'created_resolved' | 'burndown' | 'my_issues' | 'text' | 'health' | 'top_risks';
+export type WidgetKind = 'filter' | 'pie' | 'bar' | 'counter' | 'created_resolved' | 'burndown' | 'my_issues' | 'text' | 'health' | 'top_risks'
+  // UX-B: biểu đồ dòng chảy + KPI + tải theo người + việc trễ (số liệu ở work-uxb-api.ts).
+  | 'kpis' | 'cfd' | 'throughput' | 'cycle_time' | 'aging_wip' | 'velocity' | 'release_burnup' | 'workload' | 'overdue';
 export interface DashboardWidget {
-  id: string; kind: WidgetKind; title: string; query?: string; groupBy?: GroupBy; sprintId?: number | null; days?: number; text?: string; size?: 'half' | 'full';
+  id: string; kind: WidgetKind; title: string; query?: string; groupBy?: GroupBy; sprintId?: number | null; versionId?: number | null; days?: number; text?: string; size?: 'half' | 'full';
 }
 export interface WorkDashboard { id: number; name: string; shared: boolean; ownerId: number; widgets: DashboardWidget[]; updatedAt: string }
 export interface SearchResult { total: number; items: IssueCard[]; offset: number; limit: number }

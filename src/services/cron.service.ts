@@ -256,6 +256,36 @@ export function startCronJobs(): void {
     }
   });
 
+  // CTW K-2: nhắc họp (mỗi phút — N phút trước giờ họp, chuông + #general) + xếp lại đoạn phiên âm kẹt/hết trần.
+  cron.schedule('* * * * *', async () => {
+    try {
+      const { runMeetingReminders } = await import('./work/meetingRec.service.js');
+      const n = await runMeetingReminders();
+      if (n) logger.info('[work] meeting reminders sent', { people: n });
+    } catch (err) {
+      logger.warn('[work] meeting reminders failed', { error: (err as Error).message });
+    }
+  });
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      const { requeueStuckChunks } = await import('./work/meetingRec.service.js');
+      const n = await requeueStuckChunks();
+      if (n) logger.info('[work] meeting transcription requeued', { chunks: n });
+    } catch (err) {
+      logger.warn('[work] meeting transcription requeue failed', { error: (err as Error).message });
+    }
+  });
+  // CTW K-2: xoá audio họp quá hạn lưu (mặc định 30 ngày theo dự án) — GIỮ bản chép lời.
+  cron.schedule('40 * * * *', async () => {
+    try {
+      const { purgeExpiredMeetingAudio } = await import('./work/meetingRec.service.js');
+      const n = await purgeExpiredMeetingAudio();
+      if (n) logger.info('[work] expired meeting audio removed', { chunks: n });
+    } catch (err) {
+      logger.warn('[work] meeting audio purge failed', { error: (err as Error).message });
+    }
+  });
+
   // CT Work — Resources (06/10/2026): kiểm link chết hằng tuần, 02:30 Chủ nhật giờ VN (19:30 UTC thứ Bảy).
   // HEAD rồi GET qua safeFetch (chặn SSRF), tối đa WORK_LINK_CHECK_LIMIT link/lượt; tắt bằng WORK_LINK_CHECK_ENABLED=false.
   cron.schedule('30 19 * * 6', async () => {

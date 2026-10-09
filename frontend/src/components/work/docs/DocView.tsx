@@ -52,6 +52,13 @@ import { SRS_SECTION_LABEL, workCtw4Api } from '@/lib/work-ctw4-api'; // CTW đ�
 import { ListTree, Layers, PanelRightClose, PanelRightOpen, SpellCheck } from 'lucide-react';
 import { PaneDrawer, useLayoutPrefs, type PaneState } from '../shell/panes';
 import { wt } from '@/components/work/i18n';
+// CTW K-3b: đồng soạn thảo (Yjs) + bình luận gắn đoạn văn + tác giả theo đoạn.
+import { BubbleMenu, type Editor } from '@tiptap/react';
+import { WebSocketStatus } from '@hocuspocus/provider';
+import { MessageSquarePlus, Users } from 'lucide-react';
+import { markTyping, useDocCollab, type CollabState } from './useDocCollab';
+import { newAnchorId, workCollabApi, workCollabKeys, type CollabSession, type PageAnchor } from '@/lib/work-collab-api';
+import { PresenceBar } from '../comments/IssuePresence';
 
 type SaveState = 'saved' | 'dirty' | 'saving' | 'error' | 'conflict';
 
@@ -99,6 +106,56 @@ export default function DocView({ config, num, details, focus = false }: { confi
   const spell = useLayoutPrefs((s) => s.spell);
   const setSpell = useLayoutPrefs((s) => s.setSpell);
 
+  // ─── CTW K-3b: đồng soạn thảo ───────────────────────────────────
+  // Mọi hook đặt TRƯỚC các return sớm bên dưới (quy tắc hook — build không lint nên không ai chặn hộ).
+  const [collabAttempt, setCollabAttempt] = useState(0);
+  const collab = useDocCollab(pid, num, !!page, collabAttempt);
+  const live = collab.state === 'live' ? collab : null;
+  const liveRef = useRef(false);
+  liveRef.current = !!live;
+  const meId = useAuthStore((s) => s.user?.id);
+  const [ed, setEd] = useState<Editor | null>(null);
+  const [inline, setInline] = useState<{ anchorId: string; quote: string } | null>(null);
+  const [inlineDraft, setInlineDraft] = useState<TiptapDoc | null>(null);
+  const inlineOpen = useRef(false);
+  const [authorsOpen, setAuthorsOpen] = useState(false);
+  const [focusComment, setFocusComment] = useState<{ id: number; n: number } | null>(null);
+  const commentsQ = useQuery({ queryKey: workDocsKeys.comments(pid, num), queryFn: () => workDocsApi.comments(pid, num), enabled: !!page });
+  const anchors = useMemo(() => {
+    const m = new Map<string, { commentId: number; resolved: boolean }>();
+    for (const c of commentsQ.data ?? []) {
+      const a = (c as PageComment & { anchor?: PageAnchor | null }).anchor;
+      if (a) m.set(a.anchorId, { commentId: c.id, resolved: !!a.resolvedAt });
+    }
+    return m;
+  }, [commentsQ.data]);
+  // Neo còn mở ⇒ tô sáng. anchorId do máy chủ kiểm ^[A-Za-z0-9_-]{6,40}$ ⇒ an toàn trong bộ chọn CSS.
+  const anchorCss = useMemo(() => [...anchors].filter(([id, v]) => !v.resolved && /^[A-Za-z0-9_-]+$/.test(id)).map(([id]) => `.w-doc [data-comment-anchor="${id}"]`).join(','), [anchors]);
+  const jumpToComment = useCallback((anchorId: string) => {
+    const a = anchors.get(anchorId);
+    if (a) setFocusComment((f) => ({ id: a.commentId, n: (f?.n ?? 0) + 1 }));
+  }, [anchors]);
+  // Tiêu đề sống trong Y.Doc (metadata.title) khi đồng soạn ⇒ mọi người thấy tiêu đề mới ngay.
+  const liveDoc = live?.doc ?? null;
+  useEffect(() => {
+    if (!liveDoc) return;
+    const meta = liveDoc.getMap<unknown>('metadata');
+    const sync = () => { const t = meta.get('title'); if (typeof t === 'string') setTitle(t); };
+    sync();
+    meta.observe(sync);
+    return () => meta.unobserve(sync);
+  }, [liveDoc]);
+  const removeAnchorMark = useCallback((anchorId: string) => {
+    if (!ed || ed.isDestroyed) return;
+    const type = ed.schema.marks.commentAnchor;
+    if (!type) return;
+    const tr = ed.state.tr;
+    ed.state.doc.descendants((n, pos) => {
+      if (n.isText && n.marks.some((m) => m.type === type && m.attrs.id === anchorId)) tr.removeMark(pos, pos + n.nodeSize, type);
+    });
+    if (tr.docChanged) ed.view.dispatch(tr);
+  }, [ed]);
+
   // ?approval=<id> (thông báo trong chuông trỏ thẳng vào đây) ⇒ mở chi tiết phê duyệt.
   useEffect(() => {
     const a = Number(sp?.get('approval'));
@@ -118,10 +175,13 @@ export default function DocView({ config, num, details, focus = false }: { confi
   useEffect(() => {
     if (!page) return;
     if (base.current === null) { load(page); return; }
-    if (!dirty.current && page.version > base.current) load(page);
+    // K-3b: đồng soạn ⇒ nội dung + tiêu đề đến qua Yjs; đừng nạp đè bằng bản REST (trễ hơn bản đang sống).
+    if (!dirty.current && page.version > base.current && !liveRef.current) load(page);
   }, [page, load]);
 
   const editable = !!page && page.canEdit && !!config.permissions.editDocs && page.status !== 'ARCHIVED';
+  /** K-3b: sửa được trong phòng Yjs = máy chủ cho 'edit' (vai, khoá chỉnh sửa, lưu trữ) VÀ trang sửa được như thường. */
+  const liveEditable = !!live && live.session.canEdit && editable;
 
   const accept = useCallback((p: WorkPageDetail) => {
     base.current = p.version;
@@ -129,10 +189,10 @@ export default function DocView({ config, num, details, focus = false }: { confi
     qc.invalidateQueries({ queryKey: workDocsKeys.list(pid) });
   }, [qc, key, pid]);
 
-  const flush = useCallback(async () => {
+  const flushRest = useCallback(async () => {
     if (timer.current) { clearTimeout(timer.current); timer.current = null; }
     if (!dirty.current || base.current === null) return;
-    if (inflight.current) { timer.current = setTimeout(() => void flush(), 400); return; }
+    if (inflight.current) { timer.current = setTimeout(() => void flushRest(), 400); return; }
     inflight.current = true;
     const mySeq = seq.current;
     setSave('saving');
@@ -140,7 +200,7 @@ export default function DocView({ config, num, details, focus = false }: { confi
       const r = await workDocsApi.update(pid, num, { title: titleRef.current, contentJson: docRef.current ?? undefined, version: base.current });
       accept(r);
       setSavedAt(new Date().toISOString());
-      if (mySeq === seq.current) { dirty.current = false; setSave('saved'); } else timer.current = setTimeout(() => void flush(), 800);
+      if (mySeq === seq.current) { dirty.current = false; setSave('saved'); } else timer.current = setTimeout(() => void flushRest(), 800);
     } catch (err) {
       setSave(errCode(err) === 'WORK_PAGE_CONFLICT' ? 'conflict' : 'error');
     } finally {
@@ -148,13 +208,19 @@ export default function DocView({ config, num, details, focus = false }: { confi
     }
   }, [pid, num, accept]);
 
+  /** K-3b: đồng soạn ⇒ "lưu ngay" = bảo máy chủ ghi bản Yjs đang sống xuống trang (trước xuất/lịch sử/AI); không thì REST. */
+  const flush = useCallback(async () => {
+    if (liveRef.current) { await workCollabApi.flush(pid, num).catch(() => undefined); return; }
+    await flushRest();
+  }, [pid, num, flushRest]);
+
   const touch = useCallback(() => {
     dirty.current = true;
     seq.current += 1;
     setSave((s) => (s === 'conflict' ? s : 'dirty'));
     if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => void flush(), 1200);
-  }, [flush]);
+    timer.current = setTimeout(() => void flushRest(), 1200);
+  }, [flushRest]);
 
   // Rời trang: lưu ngay; đóng tab khi còn chữ chưa lưu ⇒ trình duyệt hỏi lại.
   useEffect(() => {
@@ -253,6 +319,46 @@ export default function DocView({ config, num, details, focus = false }: { confi
     onError: (err) => toast.error(workError(err, wt('docs.exportFinalFailed'))),
   });
 
+  const setPageCollab = useMutation({
+    mutationFn: (enabled: boolean) => workCollabApi.setPage(pid, num, enabled),
+    onSuccess: (r) => { toast.success(r.pageEnabled ? wt('collab.turnedOn') : wt('collab.turnedOff')); setCollabAttempt((a) => a + 1); qc.invalidateQueries({ queryKey: key }); },
+    onError: (err) => toast.error(workError(err, wt('collab.toggleFailed'))),
+  });
+  const setProjectCollab = useMutation({
+    mutationFn: (enabled: boolean) => workCollabApi.setProject(pid, enabled),
+    onSuccess: (r) => { toast.success(r.enabled ? wt('collab.turnedOn') : wt('collab.turnedOff')); setCollabAttempt((a) => a + 1); },
+    onError: (err) => toast.error(workError(err, wt('collab.toggleFailed'))),
+  });
+  const addInline = useMutation({
+    mutationFn: () => workCollabApi.addInline(pid, num, { anchorId: inline!.anchorId, quote: inline!.quote, bodyJson: inlineDraft! }),
+    onSuccess: async () => {
+      inlineOpen.current = false;
+      setInline(null);
+      setInlineDraft(null);
+      toast.success(wt('collab.inlineAdded'));
+      await qc.invalidateQueries({ queryKey: workDocsKeys.comments(pid, num) });
+    },
+    onError: (err) => toast.error(workError(err, wt('collab.inlineFailed'))),
+  });
+  /** Bấm "Comment" trên vùng chọn: gắn mark neo NGAY (neo trôi theo chữ khi người khác gõ), rồi mới mở hộp viết. */
+  const startInline = () => {
+    if (!ed || ed.state.selection.empty) return;
+    const { from, to } = ed.state.selection;
+    const quote = ed.state.doc.textBetween(from, to, ' ').replace(/\s+/g, ' ').trim().slice(0, 500);
+    if (!quote) return;
+    const anchorId = newAnchorId();
+    inlineOpen.current = true;
+    ed.chain().setTextSelection({ from, to }).setMark('commentAnchor', { id: anchorId }).run();
+    setInlineDraft(null);
+    setInline({ anchorId, quote });
+  };
+  const cancelInline = () => {
+    inlineOpen.current = false;
+    if (inline && !addInline.isSuccess) removeAnchorMark(inline.anchorId);
+    setInline(null);
+    setInlineDraft(null);
+  };
+
   const reloadFromServer = async () => {
     dirty.current = false;
     base.current = null;
@@ -322,7 +428,16 @@ export default function DocView({ config, num, details, focus = false }: { confi
                 </Prop>
               )}
               {page.templateKey && <Prop label={wt('docs.template')}><span className="font-mono text-[12px] text-[var(--w-text-2)]">{page.templateKey}</span></Prop>}
+              <Prop label={wt('collab.liveEditing')}>
+                <CollabToggle collab={collab} pending={setPageCollab.isPending} onChange={(v) => setPageCollab.mutate(v)} />
+              </Prop>
             </dl>
+            {collabSessionOf(collab)?.canToggleProject && (
+              <label className="mt-2.5 flex items-start gap-2 text-[12px] text-[var(--w-text-2)]">
+                <input type="checkbox" className="mt-0.5" checked={!!collabSessionOf(collab)?.projectEnabled} disabled={setProjectCollab.isPending} onChange={(e) => setProjectCollab.mutate(e.target.checked)} data-testid="docs-collab-project" />
+                <span>{wt('collab.projectToggle')}</span>
+              </label>
+            )}
           </div>
 
           {page.approvalsOn && (
@@ -386,7 +501,12 @@ export default function DocView({ config, num, details, focus = false }: { confi
               rows={1}
               maxLength={255}
               aria-label={wt('docs.pageTitle')}
-              onChange={(e) => { setTitle(e.target.value.replace(/\n/g, ' ')); touch(); }}
+              onChange={(e) => {
+                const v = e.target.value.replace(/\n/g, ' ');
+                setTitle(v);
+                // K-3b: tiêu đề cũng đồng soạn (metadata.title của Y.Doc); máy chủ ghi xuống trang cùng nội dung.
+                if (live) { if (liveEditable) live.doc.getMap('metadata').set('title', v.slice(0, 255)); } else touch();
+              }}
               onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }}
               className="min-w-0 flex-1 resize-none overflow-hidden bg-transparent text-[26px] font-semibold leading-tight tracking-[-0.02em] text-[var(--w-text)] outline-none [field-sizing:content] placeholder:text-[var(--w-text-3)] max-sm:text-[22px]"
               placeholder={wt('common.untitled')}
@@ -412,7 +532,17 @@ export default function DocView({ config, num, details, focus = false }: { confi
           <VisibilityBadge visibility={page.visibility} />
           {page.owner && <span className="flex items-center gap-1.5"><UserAvatar user={page.owner} size={16} /> {userName(page.owner)}</span>}
           <span title={fmtDateTime(page.updatedAt)}>{wt('docs.editedAgo', { t: relativeTime(page.updatedAt) })}{page.lastEditedBy ? wt('docs.byX', { name: userName(page.lastEditedBy) }) : ''}</span>
-          {editable && <SaveBadge state={save} savedAt={savedAt} onRetry={() => void flush()} />}
+          {live ? <CollabBadge live={live} canEdit={liveEditable} /> : editable && <SaveBadge state={save} savedAt={savedAt} onRetry={() => void flush()} />}
+          {!live && collab.state !== 'loading' && 'error' in collab && collab.error && editable && (
+            <button type="button" className="flex items-center gap-1 text-[var(--w-text-3)] hover:text-[var(--w-text)]" onClick={() => setCollabAttempt((a) => a + 1)} title={wt('collab.error', { reason: collab.error })}>
+              <RefreshCw size={11} /> {wt('collab.fallback')}
+            </button>
+          )}
+          {collab.state === 'degraded' && editable && (
+            <button type="button" className="flex items-center gap-1 text-[var(--w-text-3)] hover:text-[var(--w-text)]" onClick={() => setCollabAttempt((a) => a + 1)} data-testid="docs-collab-retry">
+              <RefreshCw size={11} /> {wt('collab.fallback')}
+            </button>
+          )}
           {(page as WorkPageDetail & AiProvenance).aiAssisted && <AiAssistedBadge model={(page as AiProvenance).aiModel} at={(page as AiProvenance).aiAssistedAt} />}
           <span className="ml-auto flex flex-wrap items-center justify-end gap-1">
             {details && details.mode !== 'inline' && (
@@ -448,6 +578,11 @@ export default function DocView({ config, num, details, focus = false }: { confi
             </button>
           </span>
         </div>
+        {live && live.peers.some((p) => p.id !== meId) && (
+          <div className="mt-2">
+            <PresenceBar peers={live.peers.filter((p) => p.id !== meId).map((p) => ({ user: { id: p.id, username: p.name, fullName: null, displayName: p.name, avatarUrl: p.avatarUrl }, state: (p.typing ? 'editing' : 'viewing') as 'editing' | 'viewing', at: Date.now() }))} />
+          </div>
+        )}
         <Popover open={more} onClose={() => setMore(false)} anchorRef={moreRef} width={220} align="end">
           <div className="p-1" role="menu">
             <MenuItem icon={FileDown} label={exportFile.isPending && exportFile.variables === 'docx' ? wt('docs.exportWordIng') : wt('docs.exportWord')} onClick={() => { setMore(false); exportFile.mutate('docx'); }} />
@@ -462,6 +597,7 @@ export default function DocView({ config, num, details, focus = false }: { confi
             {/* Đợt S5c: AI tóm tắt trang (đọc qua quyền của người bấm; không đề xuất gì). */}
             {config.permissions.useAi && <MenuItem icon={Sparkles} label={wt('docs.summarizeAi')} onClick={() => { setMore(false); void flush(); openAiPanel({ pid, quick: { task: 'summarize_page', pageNumber: num, label: wt('docs.summarizeX', { t: page.title.slice(0, 60) }) } }); }} />}
             {editable && <MenuItem icon={Save} label={wt('docs.saveNamed')} onClick={() => { setMore(false); setNoteOpen(true); }} />}
+            {config.role !== 'CLIENT' && <MenuItem icon={Users} label={wt('collab.authors')} onClick={() => { setMore(false); setAuthorsOpen(true); }} />}
             {editable && (
               <button type="button" role="menuitemcheckbox" aria-checked={spell} onClick={() => { setMore(false); setSpell(!spell); }} className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]" data-testid="docs-spellcheck">
                 <SpellCheck size={13} className="shrink-0 opacity-80" /> <span className="flex-1">{wt('docs.spellcheck')}</span>
@@ -476,9 +612,39 @@ export default function DocView({ config, num, details, focus = false }: { confi
         </div>
 
         <div className="mt-5 min-w-0">
-          {!ready ? <PageLoading rows={8} /> : editable ? (
+          {anchorCss && <style>{`${anchorCss}{background:color-mix(in srgb,var(--w-yellow) 20%,transparent);border-bottom:2px solid var(--w-yellow);border-radius:2px;cursor:pointer}`}</style>}
+          {/* Đang viết bình luận ⇒ ẨN bong bóng qua shouldShow (nó nằm trên hộp thoại). KHÔNG gỡ khỏi cây React: tippy đã dời
+              phần tử ra ngoài ⇒ React removeChild ném lỗi, cả trang sập (bắt được bằng E2E). */}
+          {ed && editable && page.canComment && (
+            <BubbleMenu editor={ed} tippyOptions={{ duration: 100, placement: 'top' }} shouldShow={({ editor: e, state }) => !inlineOpen.current && e.isEditable && !state.selection.empty && !e.isActive('codeBlock') && state.doc.textBetween(state.selection.from, state.selection.to, ' ').trim().length > 0}>
+              <button type="button" className="w-btn w-btn-sm" onMouseDown={(e) => e.preventDefault()} onClick={startInline} title={wt('collab.commentOnSel')} data-testid="docs-inline-comment">
+                <MessageSquarePlus size={13} /> {wt('collab.commentBtn')}
+              </button>
+            </BubbleMenu>
+          )}
+          {!ready || collab.state === 'loading' || (live && !live.synced && !live.offline) ? <PageLoading rows={8} /> : live ? (
+            <RichEditor
+              key={live.doc.guid}
+              docs
+              value={null}
+              collab={{ doc: live.doc, provider: live.provider, user: live.session.user }}
+              editable={liveEditable}
+              toolbar={liveEditable}
+              onChange={() => markTyping(live.provider)}
+              members={members}
+              projectId={pid}
+              placeholder={wt('docs.writePh')}
+              spellCheck={spell}
+              minHeight={320}
+              className="!rounded-[8px]"
+              editorRef={setEd}
+              onAnchorClick={jumpToComment}
+            />
+          ) : editable ? (
             <RichEditor
               docs
+              editorRef={setEd}
+              onAnchorClick={jumpToComment}
               value={doc}
               onChange={(d) => {
                 // Lưới an toàn: sự kiện "update" không đổi nội dung (editor tự bắn) không được tính là sửa.
@@ -494,7 +660,7 @@ export default function DocView({ config, num, details, focus = false }: { confi
               className="!rounded-[8px]"
             />
           ) : (
-            <RichView value={doc} docs />
+            <RichEditor value={doc} editable={false} toolbar={false} docs onAnchorClick={jumpToComment} />
           )}
           {page.status === 'ARCHIVED' && page.canEdit && (
             <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{wt('docs.archivedRo')}</p>
@@ -519,7 +685,7 @@ export default function DocView({ config, num, details, focus = false }: { confi
           </section>
         )}
 
-        <DocComments config={config} num={num} canComment={page.canComment} />
+        <DocComments config={config} num={num} canComment={page.canComment} canResolve={page.canEdit && !!config.permissions.editDocs} focus={focusComment} />
       </article>
 
       {detailsInline && (
@@ -570,6 +736,17 @@ export default function DocView({ config, num, details, focus = false }: { confi
         body={wt('docs.deleteBody', { t: page.title, sub: page.children.length ? wt('docs.andInside') : '' })}
         confirmLabel={wt('common.delete')}
       />
+      <Dialog
+        open={!!inline}
+        onClose={cancelInline}
+        title={wt('collab.commentDialog')}
+        width={480}
+        footer={<><button type="button" className="w-btn" onClick={cancelInline}>{wt('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" disabled={isDocEmpty(inlineDraft) || addInline.isPending} onClick={() => addInline.mutate()} data-testid="docs-inline-post">{addInline.isPending ? <Spinner size={12} /> : null} {wt('collab.post')}</button></>}
+      >
+        {inline && <blockquote className="mb-3 border-l-2 border-[var(--w-yellow)] pl-2.5 text-[12.5px] text-[var(--w-text-2)]">{inline.quote}</blockquote>}
+        <RichEditor value={inlineDraft} onChange={(d) => setInlineDraft(d)} members={members} projectId={pid} placeholder={wt('collab.commentPh')} minHeight={72} autoFocus onSubmit={() => !isDocEmpty(inlineDraft) && addInline.mutate()} />
+      </Dialog>
+      <AuthorsDialog open={authorsOpen} onClose={() => setAuthorsOpen(false)} pid={pid} num={num} meId={meId} />
       <Dialog
         open={noteOpen}
         onClose={() => setNoteOpen(false)}
@@ -700,7 +877,7 @@ function DocIssues({ config, page, onChange }: { config: ProjectConfig; page: Wo
 
 // ─── Bình luận ───────────────────────────────────────────────────
 
-function DocComments({ config, num, canComment }: { config: ProjectConfig; num: number; canComment: boolean }) {
+function DocComments({ config, num, canComment, canResolve = false, focus = null }: { config: ProjectConfig; num: number; canComment: boolean; canResolve?: boolean; focus?: { id: number; n: number } | null }) {
   const pid = config.id;
   const qc = useQueryClient();
   const meId = useAuthStore((s) => s.user?.id);
@@ -734,7 +911,35 @@ function DocComments({ config, num, canComment }: { config: ProjectConfig; num: 
     onError: (err) => toast.error(workError(err, wt('docs.postReplyFailed'))),
   });
   const ids = new Set(list.map((c) => c.id));
-  const roots = list.filter((c) => !c.parentId || !ids.has(c.parentId));
+  // CTW K-3b: bình luận gắn đoạn văn — đã xử lý thì gom lại (bấm để hiện); bấm chữ được tô trong trang ⇒ cuộn tới đây.
+  const anchorOf = (c: PageComment) => (c as PageComment & { anchor?: PageAnchor | null }).anchor ?? null;
+  const [showResolved, setShowResolved] = useState(false);
+  const resolvedCount = list.filter((c) => anchorOf(c)?.resolvedAt).length;
+  const resolve = useMutation({
+    mutationFn: ({ id, resolved }: { id: number; resolved: boolean }) => workCollabApi.resolve(pid, num, id, resolved),
+    onSuccess: () => qc.invalidateQueries({ queryKey: key }),
+    onError: (err) => toast.error(workError(err, wt('collab.resolveFailed'))),
+  });
+  useEffect(() => {
+    if (!focus) return;
+    const target = list.find((c) => c.id === focus.id);
+    if (target && anchorOf(target)?.resolvedAt) setShowResolved(true);
+    const t = setTimeout(() => {
+      const el = document.getElementById(`comment-${focus.id}`);
+      if (!el) return;
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('w-flash');
+      setTimeout(() => el.classList.remove('w-flash'), 1600);
+    }, 60);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focus]);
+  const jumpToText = (anchorId: string) => {
+    const el = document.querySelector(`.w-doc [data-comment-anchor="${anchorId.replace(/[^A-Za-z0-9_-]/g, '')}"]`);
+    if (!el) { toast.message(wt('collab.textGone')); return; }
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+  const roots = list.filter((c) => !c.parentId || !ids.has(c.parentId)).filter((c) => showResolved || !anchorOf(c)?.resolvedAt);
   const repliesOf = (rid: number) => list.filter((c) => c.parentId === rid);
   const row = (c: PageComment, small = false) => (
     <div className="flex gap-2.5" id={`comment-${c.id}`}>
@@ -750,13 +955,36 @@ function DocComments({ config, num, canComment }: { config: ProjectConfig; num: 
             )}
           </span>
         </div>
+        {!small && anchorOf(c) && (() => {
+          const a = anchorOf(c)!;
+          return (
+            <div className="mt-1 flex flex-wrap items-center gap-2 text-[12px]">
+              <button type="button" className={cn('max-w-full truncate rounded-[4px] border-l-2 px-1.5 py-0.5 text-left', a.resolvedAt ? 'border-[var(--w-border-strong)] text-[var(--w-text-3)]' : 'border-[var(--w-yellow)] bg-[color-mix(in_srgb,var(--w-yellow)_12%,transparent)] text-[var(--w-text-2)]')} onClick={() => jumpToText(a.anchorId)} title={wt('collab.jumpToText')}>
+                {wt('collab.onQuote', { q: a.quote.length > 90 ? `${a.quote.slice(0, 90)}…` : a.quote })}
+              </button>
+              {a.resolvedAt && <span className="text-[var(--w-green-text)]"><Check size={11} className="inline" aria-hidden="true" /> {wt('collab.resolved')}</span>}
+              {(canResolve || c.authorId === meId) && (
+                <button type="button" className="text-[var(--w-text-3)] hover:text-[var(--w-text)]" disabled={resolve.isPending} onClick={() => resolve.mutate({ id: c.id, resolved: !a.resolvedAt })} data-testid="docs-inline-resolve">
+                  {a.resolvedAt ? wt('collab.reopen') : wt('collab.resolve')}
+                </button>
+              )}
+            </div>
+          );
+        })()}
         <div className="mt-1 min-w-0"><RichView value={c.bodyJson} /></div>
       </div>
     </div>
   );
   return (
     <section className="mt-10" aria-label={wt('docs.comments')}>
-      <h2 className="w-section-title mb-3">{wt('docs.comments')} {list.length > 0 && <span className="tabular text-[var(--w-text-3)]">· {list.length}</span>}</h2>
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <h2 className="w-section-title">{wt('docs.comments')} {list.length > 0 && <span className="tabular text-[var(--w-text-3)]">· {list.length}</span>}</h2>
+        {resolvedCount > 0 && (
+          <button type="button" className="ml-auto text-[12px] text-[var(--w-text-3)] hover:text-[var(--w-text)]" onClick={() => setShowResolved((v) => !v)} aria-pressed={showResolved}>
+            {showResolved ? wt('collab.hideResolved') : wt('collab.showResolved', { n: resolvedCount })}
+          </button>
+        )}
+      </div>
       <ul className="space-y-4">
         {roots.map((c) => {
           const rs = c.parentId && !ids.has(c.parentId) ? [] : repliesOf(c.id);
@@ -812,5 +1040,81 @@ function DocComments({ config, num, canComment }: { config: ProjectConfig; num: 
         </div>
       ) : !list.length ? <p className="text-[12px] text-[var(--w-text-3)]">{wt('docs.noComments')}</p> : null}
     </section>
+  );
+}
+
+// ─── CTW K-3b: đồng soạn thảo — trạng thái, công tắc, tác giả theo đoạn ─────
+
+function collabSessionOf(c: CollabState): CollabSession | null {
+  if (c.state === 'loading') return null;
+  return c.session ?? null;
+}
+
+/** Huy hiệu thay "Saved" khi đồng soạn: trực tiếp / đang đồng bộ / mất mạng (chữ vẫn giữ trên máy). */
+function CollabBadge({ live, canEdit }: { live: Extract<CollabState, { state: 'live' }>; canEdit: boolean }) {
+  if (live.offline || live.status === WebSocketStatus.Disconnected) {
+    return <span className="flex items-center gap-1 font-medium text-[var(--w-orange-text)]" aria-live="polite" title={wt('collab.offline')} data-testid="docs-collab-offline"><CloudOff size={12} /> {wt('collab.offlineShort')}</span>;
+  }
+  if (!live.synced || live.status === WebSocketStatus.Connecting) return <span className="flex items-center gap-1" aria-live="polite"><Loader2 size={12} className="animate-spin" /> {wt('collab.connecting')}</span>;
+  if (live.unsynced) return <span className="flex items-center gap-1 text-[var(--w-text-3)]" aria-live="polite"><Loader2 size={12} className="animate-spin" /> {wt('collab.syncing')}</span>;
+  return (
+    <span className="flex items-center gap-1.5 text-[var(--w-green-text)]" aria-live="polite" title={`${wt('collab.liveTip')} · ${wt('collab.cursorTip')}`} data-testid="docs-collab-live">
+      <span className="relative flex h-2 w-2" aria-hidden="true"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--w-green)] opacity-50 motion-reduce:animate-none" /><span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--w-green)]" /></span>
+      {canEdit ? wt('collab.live') : wt('collab.readOnly')}
+      {live.peers.length > 1 && <span className="tabular text-[var(--w-text-3)]">· {wt('collab.peopleHere', { count: live.peers.length })}</span>}
+    </span>
+  );
+}
+
+function CollabToggle({ collab, pending, onChange }: { collab: CollabState; pending: boolean; onChange: (v: boolean) => void }) {
+  const s = collabSessionOf(collab);
+  if (!s) return <span className="text-[12px] text-[var(--w-text-3)]">…</span>;
+  if (!s.projectEnabled) return <span className="text-[12px] text-[var(--w-text-3)]">{wt('collab.offByProject')}</span>;
+  if (s.canToggle) {
+    return (
+      <Select aria-label={wt('collab.liveEditing')} value={s.pageEnabled ? 'on' : 'off'} disabled={pending} onChange={(e) => onChange(e.target.value === 'on')} className="!h-8" title={wt('collab.pageToggleHint')} data-testid="docs-collab-toggle">
+        <option value="on">{wt('collab.on')}</option>
+        <option value="off">{wt('collab.off')}</option>
+      </Select>
+    );
+  }
+  return <span className="text-[12px] text-[var(--w-text-2)]">{s.pageEnabled ? (s.enabled ? wt('collab.on') : wt('collab.notAvailable')) : wt('collab.offByPage')}</span>;
+}
+
+function AuthorsDialog({ open, onClose, pid, num, meId }: { open: boolean; onClose: () => void; pid: number; num: number; meId?: number }) {
+  const q = useQuery({ queryKey: workCollabKeys.authors(pid, num), queryFn: () => workCollabApi.authors(pid, num), enabled: open, staleTime: 5_000 });
+  const who = (a: { userId: number | null; user: { id: number; username: string; fullName: string | null; displayName: string | null; avatarUrl: string | null } | null }) =>
+    a.userId === null || !a.user ? wt('collab.beforeLive') : `${userName(a.user)}${a.userId === meId ? ` (${wt('common.you')})` : ''}`;
+  const total = (q.data?.totals ?? []).reduce((n, x) => n + x.chars, 0) || 1;
+  return (
+    <Dialog open={open} onClose={onClose} title={wt('collab.authorsTitle')} width={560}>
+      <p className="mb-3 text-[12px] text-[var(--w-text-3)]">{wt('collab.authorsHint')}</p>
+      {q.isLoading ? <PageLoading rows={4} /> : !q.data?.live ? <p className="text-[13px] text-[var(--w-text-2)]">{wt('collab.noAuthors')}</p> : (
+        <div className="space-y-4">
+          <section aria-label={wt('collab.total')}>
+            <h3 className="w-section-title mb-2">{wt('collab.total')}</h3>
+            <ul className="space-y-1.5">
+              {q.data.totals.map((a) => (
+                <li key={String(a.userId)} className="flex items-center gap-2 text-[13px]">
+                  {a.user ? <UserAvatar user={a.user} size={18} /> : <span className="h-[18px] w-[18px] rounded-full bg-[var(--w-hover)]" aria-hidden="true" />}
+                  <span className="min-w-0 flex-1 truncate">{who(a)}</span>
+                  <span className="tabular text-[12px] text-[var(--w-text-3)]">{Math.round((a.chars / total) * 100)}% · {wt('collab.chars', { n: a.chars })}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section>
+            <ul className="max-h-[50vh] divide-y divide-[var(--w-border)] overflow-y-auto rounded-[8px] border border-[var(--w-border)]" tabIndex={0} aria-label={wt('collab.authors')}>
+              {q.data.blocks.map((b) => (
+                <li key={b.index} className="px-3 py-2">
+                  <p className="truncate text-[12.5px] text-[var(--w-text)]">{b.preview || <span className="text-[var(--w-text-3)]">{wt('collab.emptyBlock')}</span>}</p>
+                  <p className="mt-0.5 text-[11.5px] text-[var(--w-text-3)]">{b.authors.map((a) => `${who(a)} (${a.chars})`).join(' · ')}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+      )}
+    </Dialog>
   );
 }

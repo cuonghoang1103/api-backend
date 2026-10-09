@@ -1,17 +1,17 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { workApi, workError } from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
-import { EmptyState, formatDate, Spinner } from '@/components/work/ui';
-import { axisTick, Card, ChartTooltip, Legend, num, SectionTitle, unitLabel } from './shared';
+import { EmptyState, formatDate, PageLoading } from '@/components/work/ui';
+import { num, SectionTitle, unitLabel } from './shared';
+import { VelocityChart } from '../charts/FlowCharts';
 import { wt } from '@/components/work/i18n';
 
 export default function VelocityTab({ pid }: { pid: number }) {
   const q = useQuery({ queryKey: [...wk.reports(pid), 'velocity'], queryFn: () => workApi.velocity(pid) });
 
-  if (q.isLoading) return <div className="flex justify-center py-16"><Spinner size={20} /></div>;
+  if (q.isLoading) return <PageLoading rows={4} />;
   if (q.error) return <EmptyState title={wt('rep.loadVelFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />;
   const d = q.data;
   if (!d || !d.sprints.length) {
@@ -30,25 +30,8 @@ export default function VelocityTab({ pid }: { pid: number }) {
         </div>
       </div>
 
-      <Card>
-        <div className="mb-3">
-          <Legend items={[{ label: wt('rep.committed'), color: 'var(--w-text-3)' }, { label: wt('rep.completed'), color: 'var(--w-accent)' }]} />
-        </div>
-        <div className="h-[280px] w-full min-w-0">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={d.sprints} margin={{ top: 8, right: 8, bottom: 0, left: -8 }} barGap={3} barCategoryGap="24%">
-              <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
-              <XAxis dataKey="name" tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} interval={0}
-                tickFormatter={(s: string) => (s.length > 12 ? `${s.slice(0, 11)}…` : s)} />
-              <YAxis tick={axisTick} tickLine={false} axisLine={false} allowDecimals={false} width={48}
-                label={{ value: u, angle: -90, position: 'insideLeft', offset: 18, fill: 'var(--w-text-3)', fontSize: 11 }} />
-              <Tooltip content={<ChartTooltip unit={d.unit} />} cursor={{ fill: 'var(--w-hover)' }} />
-              <Bar dataKey="committedPoints" name={wt('rep.committed')} fill="var(--w-text-3)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
-              <Bar dataKey="completedPoints" name={wt('rep.completed')} fill="var(--w-chart-1)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </Card>
+      {/* UX-B: ChartFrame — cột cam kết/hoàn thành + đường trung bình trượt 3 sprint, xuất PNG/CSV. */}
+      <VelocityChart pid={pid} height={280} />
 
       <div>
         <SectionTitle>{wt('rep.sprints')}</SectionTitle>

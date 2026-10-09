@@ -45,5 +45,7 @@ export const wl: Strings<typeof En> = {
   timeOff: 'Ngày nghỉ: {s}',
   overdueDot: 'Quá hạn · ',
   dueSp: 'Hạn ',
+  bySprint: 'Không có hạn — tính tới hết {n} ({d})',
+  byVersion: 'Không có hạn — tính tới ngày phát hành {n} ({d})',
   noDueDate: 'Không có hạn',
 };

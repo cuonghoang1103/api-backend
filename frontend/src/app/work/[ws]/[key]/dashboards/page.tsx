@@ -28,6 +28,11 @@ import { ConfirmDialog } from '@/components/work/settings/shared';
 import { defaultWidgets, WIDGET_META, WidgetBody } from '@/components/work/dashboards/widgets';
 import WidgetDialog from '@/components/work/dashboards/WidgetDialog';
 import { wt } from '@/components/work/i18n';
+import { uxbApi } from '@/lib/work-uxb-api';
+import { studioOn } from '@/components/work/studio/shared';
+
+/** UX-B: tên dashboard mặc định do máy chủ đặt ("Project overview") hiện theo ngôn ngữ người xem. */
+const dashName = (n: string) => (n === 'Project overview' ? wt('charts.overviewName') : n);
 
 // useSearchParams bắt buộc nằm trong <Suspense> — thiếu là Next 14 báo lỗi lúc build.
 export default function DashboardsPage() {
@@ -111,9 +116,20 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
   const more = useToggle();
   const moreRef = useRef<HTMLButtonElement>(null);
 
+  // UX-B: dự án cũ chưa có dashboard ⇒ nút tạo "Project overview" (máy chủ dựng đúng bộ widget như dự án mới).
+  const overview = useMutation({
+    mutationFn: () => uxbApi.createOverview(pid),
+    onSuccess: (d) => {
+      qc.setQueryData<WorkDashboard[]>(wk.dashboards(pid), (old) => (old?.some((x) => x.id === d.id) ? old : [...(old ?? []), d]));
+      qc.invalidateQueries({ queryKey: wk.dashboards(pid) });
+      setParams({ d: String(d.id) });
+      toast.success(wt('dash.dashCreated', { n: wt('charts.overviewName') }));
+    },
+    onError: (err) => toast.error(workError(err, wt('dash.saveFailed'))),
+  });
   const createDashboard = (name: string, shared: boolean, seed: boolean) =>
     save.mutate(
-      { name, shared, widgets: seed ? defaultWidgets() : [] },
+      { name, shared, widgets: seed ? defaultWidgets({ scrum: config.type === 'SCRUM', raid: studioOn(config, 'raid') }) : [] },
       { onSuccess: (d) => { setNameDialog(null); toast.success(wt('dash.dashCreated', { n: d.name })); if (!seed) setDraft(startEdit(d)); } },
     );
 
@@ -160,11 +176,16 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
       ) : !current ? (
         <EmptyState
           title={wt('dash.noDash')}
-          body={wt('dash.noDashBody')}
+          body={wt('charts.overviewBody')}
           action={
-            <button type="button" className="w-btn w-btn-primary" disabled={save.isPending} onClick={() => createDashboard(wt('dash.projectOverview'), true, true)}>
-              {save.isPending ? <Spinner size={12} /> : <Plus size={14} />} {wt('dash.createDashboard')}
-            </button>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <button type="button" className="w-btn w-btn-primary" disabled={overview.isPending} onClick={() => overview.mutate()} data-testid="create-overview">
+                {overview.isPending ? <Spinner size={12} /> : <LayoutDashboard size={14} />} {wt('charts.overviewCreate')}
+              </button>
+              <button type="button" className="w-btn" disabled={save.isPending} onClick={() => setNameDialog('create')}>
+                <Plus size={14} /> {wt('dash.createDashboard')}
+              </button>
+            </div>
           }
         />
       ) : (
@@ -204,13 +225,13 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
                   aria-expanded={switcher.on}
                 >
                   <LayoutDashboard size={14} className="shrink-0 text-[var(--w-text-3)]" />
-                  <span className="truncate">{current.name}</span>
+                  <span className="truncate">{dashName(current.name)}</span>
                   <ChevronDown size={13} className="shrink-0 text-[var(--w-text-3)]" />
                 </button>
                 <span className="inline-flex items-center gap-1 text-[12px] text-[var(--w-text-3)]" title={current.shared ? wt('dash.everyoneSees') : wt('dash.onlyYou')}>
                   {current.shared ? <Users size={12} /> : <Lock size={12} />}
                   {current.shared ? wt('dash.shared') : wt('dash.private')}
-                  <span className="max-sm:!hidden">· by {ownerName(current)}</span>
+                  <span className="max-sm:!hidden">· {wt('charts.byOwner', { n: ownerName(current) })}</span>
                 </span>
                 <div className="flex-1" />
                 {canEdit && (
@@ -256,7 +277,7 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
                   className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left hover:bg-[var(--w-hover)]"
                 >
                   <span className="w-3.5 shrink-0">{d.id === current.id && <Check size={13} className="text-[var(--w-accent-text)]" />}</span>
-                  <span className="min-w-0 flex-1 truncate text-[13px]">{d.name}</span>
+                  <span className="min-w-0 flex-1 truncate text-[13px]">{dashName(d.name)}</span>
                   <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{d.shared ? (d.ownerId === meId ? wt('dash.shared') : ownerName(d)) : wt('dash.private')}</span>
                 </button>
               ))}
@@ -298,7 +319,7 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
                     >
                       <div className="flex min-h-[40px] items-center gap-1 border-b border-[var(--w-border)] py-1.5 pl-4 pr-2">
                         {handle}
-                        <h3 className="min-w-0 flex-1 truncate text-[13px] font-semibold" title={w.query || undefined}>{w.title || WIDGET_META[w.kind]?.defaultTitle}</h3>
+                        <h2 className="min-w-0 flex-1 truncate text-[13px] font-semibold" title={w.query || undefined}>{w.title || WIDGET_META[w.kind]?.defaultTitle}</h2>
                         {editing && (
                           <div className="flex shrink-0 items-center">
                             <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" title={wt('studio.moveUp')} aria-label={wt('studio.moveUp')} disabled={i === 0} onClick={() => move(i, -1)}><ArrowUp size={13} /></button>
@@ -341,7 +362,7 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
         onClose={() => setConfirmDel(false)}
         onConfirm={() => { if (current) del.mutate(current.id, { onSettled: () => setConfirmDel(false) }); }}
         title={wt('dash.deleteDashboard')}
-        body={wt('dash.deleteBody', { n: current?.name ?? '', s: current?.shared ? wt('dash.forEveryone') : '' })}
+        body={wt('dash.deleteBody', { n: dashName(current?.name ?? ''), s: current?.shared ? wt('dash.forEveryone') : '' })}
         confirmLabel={wt('dash.deleteDashboard')}
         pending={del.isPending}
       />

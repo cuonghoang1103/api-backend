@@ -32,10 +32,11 @@ export function SearchTrigger() {
       onClick={openPalette}
       aria-label="Search and jump (Command K)"
       title="Search issues, projects and commands"
-      className="group flex h-[30px] min-w-0 items-center gap-2 rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-2.5 text-[13px] text-[var(--w-text-3)] transition-colors hover:border-[var(--w-border-strong)] hover:text-[var(--w-text-2)] lg:w-[180px] 2xl:w-[240px]"
+      className="group flex h-[30px] min-w-0 items-center gap-2 rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-2.5 text-[13px] text-[var(--w-text-3)] transition-colors hover:border-[var(--w-border-strong)] hover:text-[var(--w-text-2)] xl:w-[180px] 2xl:w-[240px]"
     >
       <Search size={14} className="shrink-0" />
-      <span className="truncate max-lg:hidden">Search or jump to…</span>
+      {/* UX-A: dưới 1280px (khổ app desktop) chỉ còn icon — nhường chỗ cho tên dự án. */}
+      <span className="truncate max-xl:hidden">Search or jump to…</span>
       <kbd className="w-kbd ml-auto shrink-0 whitespace-nowrap max-xl:!hidden">{mac ? '⌘' : 'Ctrl'}K</kbd>
     </button>
   );

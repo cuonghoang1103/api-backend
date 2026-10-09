@@ -18,6 +18,8 @@ import { frontendUrl } from './common.js';
 import { requireProject, assertHumanActor } from './permissions.js';
 import { modulesOf } from './studio.js';
 import { projectMembers } from './projects.service.js';
+import { clientPeopleIds } from './clientPeople.js';
+import { imageIdsIn, imageReferenced, readImageBytes } from './docs3a.service.js';
 import { burndown, velocity } from './reports.service.js';
 import { estimateOf, estimationOf } from './sprints.service.js';
 
@@ -80,13 +82,18 @@ const PUBLIC_CARD = {
 } as const;
 
 export async function publicSummary(token: string) {
-  const { link, options, project } = await resolve(token);
+  const { link, options, project, portal } = await resolve(token);
   // Đếm lượt xem (thô) — không chặn đọc nếu ghi hỏng.
   await prisma.workPublicLink.update({ where: { id: link.id }, data: { viewCount: { increment: 1 }, lastViewedAt: new Date() } }).catch(() => undefined);
   const [workflows, types, members, sprints, labels] = await Promise.all([
     prisma.workWorkflow.findMany({ where: { projectId: project.id }, select: { id: true, isDefault: true, statuses: { orderBy: { position: 'asc' }, select: { id: true, name: true, category: true, color: true, position: true } } } }),
     prisma.workIssueType.findMany({ where: { projectId: project.id, archived: false }, orderBy: { position: 'asc' }, select: { id: true, key: true, name: true, icon: true, color: true, level: true } }),
-    projectMembers(project.id),
+    // Đợt 6a: dự án bật cổng khách ⇒ link công khai không thấy nhiều người hơn khách cổng (clientPeople.ts).
+    projectMembers(project.id).then(async (ms) => {
+      if (!portal) return ms;
+      const seen = await clientPeopleIds(project.id, null);
+      return ms.filter((m) => seen.has(m.id));
+    }),
     prisma.workSprint.findMany({ where: { projectId: project.id, state: { not: 'CLOSED' } }, orderBy: [{ position: 'asc' }, { id: 'asc' }], select: { id: true, name: true, goal: true, state: true, startAt: true, endAt: true } }),
     prisma.workLabel.findMany({ where: { projectId: project.id }, select: { id: true, name: true, color: true } }),
   ]);
@@ -101,7 +108,7 @@ export async function publicSummary(token: string) {
 }
 
 export async function publicIssues(token: string, section: 'board' | 'backlog') {
-  const { project, shared } = await resolve(token, section);
+  const { project, shared, portal } = await resolve(token, section);
   const where = section === 'board'
     ? { projectId: project.id, deletedAt: null, type: { level: { gte: 0 } }, OR: [{ sprint: { state: 'ACTIVE' } }, ...(project.type === 'KANBAN' ? [{ sprintId: null }] : [])], ...shared }
     : { projectId: project.id, deletedAt: null, type: { level: { gte: 0 } }, resolvedAt: null, ...shared };
@@ -110,19 +117,49 @@ export async function publicIssues(token: string, section: 'board' | 'backlog') 
   if (section === 'board' && !rows.length) {
     rows = await prisma.workIssue.findMany({ where: { projectId: project.id, deletedAt: null, type: { level: { gte: 0 } }, resolvedAt: null, ...shared }, orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: 1000, select: PUBLIC_CARD });
   }
-  return rows.map(({ id: _id, ...r }) => ({ ...r, key: `${project.key}-${r.number}` }));
+  // Đợt 6a: dự án bật cổng khách ⇒ thẻ trỏ tới epic chưa chia sẻ thì bỏ parentId (không dò được epic ẩn).
+  const parentIds = [...new Set(rows.map((r) => r.parentId).filter((x): x is number => !!x))];
+  const okParents = portal && parentIds.length
+    ? new Set((await prisma.workIssue.findMany({ where: { id: { in: parentIds }, clientVisible: true, deletedAt: null }, select: { id: true } })).map((x) => x.id))
+    : null;
+  return rows.map(({ id: _id, ...r }) => ({ ...r, parentId: okParents && r.parentId && !okParents.has(r.parentId) ? null : r.parentId, key: `${project.key}-${r.number}` }));
 }
 
 export async function publicIssue(token: string, number: number) {
-  const { options, project, shared } = await resolve(token);
+  const { options, project, shared, portal } = await resolve(token);
   if (!options.board && !options.backlog) throw new NotFoundError('This section is not shared');
   const i = await prisma.workIssue.findFirst({
     where: { projectId: project.id, number, deletedAt: null, ...shared },
-    select: { ...PUBLIC_CARD, descriptionText: true, startDate: true, createdAt: true, parent: { select: { number: true, title: true } }, children: { where: { deletedAt: null, ...shared }, select: { number: true, title: true, statusId: true } } },
+    select: {
+      ...PUBLIC_CARD, descriptionText: true, descriptionJson: true, startDate: true, createdAt: true,
+      parent: { select: { number: true, title: true, clientVisible: true } },
+      children: { where: { deletedAt: null, ...shared }, select: { number: true, title: true, statusId: true } },
+    },
   });
   if (!i) throw new NotFoundError('Issue not found');
-  const { id: _id, descriptionText, ...rest } = i;
-  return { ...rest, key: `${project.key}-${i.number}`, description: options.descriptions ? descriptionText : null };
+  const { id: _id, descriptionText, descriptionJson, parent, ...rest } = i;
+  // Đợt 6a: epic chưa chia sẻ (dự án bật cổng khách) ⇒ không số, không tiêu đề.
+  const parentShown = parent && (!portal || parent.clientVisible) ? { number: parent.number, title: parent.title } : null;
+  return {
+    ...rest,
+    parentId: parentShown ? rest.parentId : null,
+    parent: parentShown,
+    key: `${project.key}-${i.number}`,
+    description: options.descriptions ? descriptionText : null,
+    // Ảnh trong mô tả (đợt 3A) qua đường riêng của link — đường /projects/:pid/images cần đăng nhập.
+    images: options.descriptions ? imageIdsIn(descriptionJson, project.id).map((id) => `/api/v1/work/share/${token}/images/${id}`) : [],
+  };
+}
+
+/**
+ * Ảnh qua link công khai (đợt 6a): chỉ ảnh nằm trong MÔ TẢ của một thẻ link đọc được (link bật mô tả + board/backlog;
+ * dự án bật cổng khách ⇒ thẻ đã chia sẻ). Trang và bình luận không đi qua link ⇒ ảnh của chúng 404.
+ */
+export async function publicImage(token: string, imageId: number) {
+  const { options, project, portal } = await resolve(token);
+  if (!options.descriptions || (!options.board && !options.backlog)) throw new NotFoundError('Image not found');
+  if (!(await imageReferenced(project.id, imageId, { pages: false, issues: portal ? 'SHARED' : 'ALL', comments: null }))) throw new NotFoundError('Image not found');
+  return readImageBytes(project.id, imageId);
 }
 
 export async function publicReports(token: string) {

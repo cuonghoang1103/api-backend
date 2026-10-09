@@ -193,7 +193,7 @@ export function WorkspaceAgentsDashboard({ ws }: { ws: WorkspaceDetail }) {
   const t = d?.totals;
   const own = d?.scope === 'OWN';
   return (
-    <div className="mx-auto w-full max-w-[1100px] space-y-4 px-4 py-5" data-testid="agents-dashboard">
+    <div className="w-page space-y-4" data-testid="agents-dashboard">
       <div className="flex flex-wrap items-center gap-2">
         <div role="radiogroup" aria-label="Range" className="inline-flex h-[28px] items-center rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] p-[2px]">
           {[14, 30, 90].map((n) => (

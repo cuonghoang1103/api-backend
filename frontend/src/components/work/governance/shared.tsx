@@ -28,6 +28,8 @@ export const RaidStatusPill = ({ status }: { status: string }) => <Pill tone={RA
 
 /** Màu theo mức rủi ro — dùng cho ô ma trận + huy hiệu điểm. */
 export const LEVEL_COLOR: Record<RiskLevel, string> = { HIGH: 'var(--w-red)', MEDIUM: 'var(--w-orange)', LOW: 'var(--w-green)' };
+/** Màu CHỮ cùng mức (UX-A P0-3: token chữ ≥ 4.5:1, khác màu nền/viền ở trên). */
+export const LEVEL_TEXT: Record<RiskLevel, string> = { HIGH: 'var(--w-red-text)', MEDIUM: 'var(--w-orange-text)', LOW: 'var(--w-green-text)' };
 
 export function levelOf(score: number | null): RiskLevel | null {
   if (score === null) return null;
@@ -44,7 +46,7 @@ export function ScoreBadge({ score, title, className }: { score: number | null; 
     <span
       title={title ?? `Score ${score} (${lv.toLowerCase()})`}
       className={cn('inline-flex h-[22px] min-w-[30px] items-center justify-center rounded-[6px] px-1.5 text-[12px] font-semibold tabular-nums', className)}
-      style={{ color: LEVEL_COLOR[lv], background: `color-mix(in srgb, ${LEVEL_COLOR[lv]} 12%, transparent)`, boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${LEVEL_COLOR[lv]} 35%, transparent)` }}
+      style={{ color: LEVEL_TEXT[lv], background: `color-mix(in srgb, ${LEVEL_COLOR[lv]} 12%, transparent)`, boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${LEVEL_COLOR[lv]} 35%, transparent)` }}
     >
       {score}
     </span>
@@ -118,11 +120,12 @@ export const toLocalInput = (iso: string) => {
 };
 export const fromLocalInput = (v: string) => new Date(v).toISOString();
 
+/** Một cặp nhãn–giá trị; tự là một <dl> (UX-A ARIA: dt/dd phải có cha dl). */
 export function Kv({ k, children }: { k: string; children: ReactNode }) {
   return (
-    <div className="min-w-0">
+    <dl className="min-w-0">
       <dt className="text-[12px] font-medium text-[var(--w-text-3)]">{k}</dt>
       <dd className="mt-0.5 min-w-0 text-[13.5px] [overflow-wrap:anywhere]">{children}</dd>
-    </div>
+    </dl>
   );
 }

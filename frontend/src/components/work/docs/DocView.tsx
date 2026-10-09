@@ -36,6 +36,7 @@ import { ApprovalDialog } from '../studio/ApprovalDetail';
 import { RequestApprovalDialog } from '../studio/IssueStudio';
 import { ApprovalPill, Pill, ProcessGuideLink, WarnStrip, fmtDateTime, studioOn } from '../studio/shared';
 import DocHistory from './DocHistory';
+import { workCommentsApi } from '@/lib/work-comments-api'; // CTW đợt 5b K-1: trả lời theo luồng ở bình luận trang
 import { openAiPanel } from '../ai/store';
 import { InternalPill, portalStaff, VisibleToClient } from '../portal/ClientShare';
 import NewPageDialog from './NewPageDialog';
@@ -46,6 +47,8 @@ import type { AiProvenance } from '@/lib/work-s6-api';
 import { FileDown, Gauge, Wand2 } from 'lucide-react';
 // CTW đợt 3A: xuất Word/PDF (sơ đồ Mermaid vẽ sẵn PNG ở trình duyệt) + điền Report từ dữ liệu dự án.
 import { mermaidPngsOf, saveBlob, workDocs3aApi } from '@/lib/work-docs3a-api';
+import { SRS_SECTION_LABEL, workCtw4Api } from '@/lib/work-ctw4-api'; // CTW đợt 4: Report 3 từ SRS có cấu trúc, ghép Report 7
+import { ListTree, Layers } from 'lucide-react';
 
 type SaveState = 'saved' | 'dirty' | 'saving' | 'error' | 'conflict';
 
@@ -207,6 +210,39 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
     onError: (err) => toast.error(workError(err, errCode(err) === 'WORK_PAGE_CONFLICT' ? 'Someone else saved this page — reload first' : 'Could not fill the page')),
   });
 
+  // CTW đợt 4: trang Report 3 ⇐ SRS có cấu trúc; trang Report 7 ⇐ ghép Report 1–6 (mỗi lần = MỘT phiên bản có ghi chú).
+  const fillSrs = useMutation({
+    mutationFn: async () => { await flush(); return workCtw4Api.fillReport3(pid, num, { version: base.current ?? undefined }); },
+    onSuccess: (r) => {
+      if (!r.filled.length) { toast.message('Nothing to fill — add actors and use cases on the Requirements page first.'); return; }
+      load(r.page);
+      accept(r.page);
+      qc.invalidateQueries({ queryKey: workDocsKeys.versions(pid, num) });
+      toast.success(`Filled ${r.filled.map((x) => SRS_SECTION_LABEL[x] ?? x).join(', ')} — saved as version ${r.page.currentVersion}`);
+    },
+    onError: (err) => toast.error(workError(err, errCode(err) === 'WORK_PAGE_CONFLICT' ? 'Someone else saved this page — reload first' : 'Could not fill the page')),
+  });
+  const assembleFinal = useMutation({
+    mutationFn: async () => { await flush(); return workCtw4Api.assembleFinal(pid, base.current ?? undefined); },
+    onSuccess: (r) => {
+      if (!r.changed) { toast.message('Nothing to assemble — Reports 1–6 have no content yet.'); return; }
+      load(r.page);
+      accept(r.page);
+      qc.invalidateQueries({ queryKey: workDocsKeys.versions(pid, num) });
+      toast.success(`Assembled Reports ${r.merged.join(', ')}${r.missing.length ? ` — missing Report ${r.missing.join(', ')} (kept as is)` : ''}`);
+    },
+    onError: (err) => toast.error(workError(err, errCode(err) === 'WORK_PAGE_CONFLICT' ? 'Someone else saved this page — reload first' : 'Could not assemble the final report')),
+  });
+  const exportFinal = useMutation({
+    mutationFn: async (format: 'docx' | 'pdf') => {
+      await flush();
+      const f = await workCtw4Api.finalDoc(pid);
+      return workCtw4Api.exportFinal(pid, format, await mermaidPngsOf(f.doc));
+    },
+    onSuccess: (r) => { saveBlob(r.blob, r.fileName); toast.success(`Downloaded ${r.fileName}`); },
+    onError: (err) => toast.error(workError(err, 'Could not export the final report')),
+  });
+
   const reloadFromServer = async () => {
     dirty.current = false;
     base.current = null;
@@ -318,6 +354,11 @@ export default function DocView({ config, num }: { config: ProjectConfig; num: n
             <MenuItem icon={FileDown} label={exportFile.isPending && exportFile.variables === 'pdf' ? 'Exporting PDF…' : 'Export as PDF'} onClick={() => { setMore(false); exportFile.mutate('pdf'); }} />
             <MenuItem icon={Download} label="Export as Markdown (.md)" onClick={() => { setMore(false); exportMd.mutate(); }} />
             {editable && <MenuItem icon={Wand2} label="Fill from project data" onClick={() => { setMore(false); autofill.mutate(); }} />}
+            {page.templateKey === 'fpt-report3-srs' && editable && <MenuItem icon={Wand2} label="Fill from structured requirements" onClick={() => { setMore(false); fillSrs.mutate(); }} />}
+            {page.templateKey === 'fpt-report3-srs' && <MenuItem icon={ListTree} label="Open Requirements" onClick={() => { setMore(false); router.push(`/work/${config.workspace.slug}/${config.key}/requirements`); }} />}
+            {page.templateKey === 'fpt-report7-final-report' && editable && <MenuItem icon={Layers} label="Assemble from Reports 1–6" onClick={() => { setMore(false); assembleFinal.mutate(); }} />}
+            {page.templateKey === 'fpt-report7-final-report' && <MenuItem icon={FileDown} label={exportFinal.isPending ? 'Exporting final report…' : 'Export final report (.docx)'} onClick={() => { setMore(false); exportFinal.mutate('docx'); }} />}
+            {page.templateKey === 'fpt-report7-final-report' && <MenuItem icon={FileDown} label="Export final report (.pdf)" onClick={() => { setMore(false); exportFinal.mutate('pdf'); }} />}
             {/* Đợt S5c: AI tóm tắt trang (đọc qua quyền của người bấm; không đề xuất gì). */}
             {config.permissions.useAi && <MenuItem icon={Sparkles} label="Summarize with AI" onClick={() => { setMore(false); void flush(); openAiPanel({ pid, quick: { task: 'summarize_page', pageNumber: num, label: `Summarize “${page.title.slice(0, 60)}”` } }); }} />}
             {editable && <MenuItem icon={Save} label="Save as a named version…" onClick={() => { setMore(false); setNoteOpen(true); }} />}
@@ -621,25 +662,72 @@ function DocComments({ config, num, canComment }: { config: ProjectConfig; num: 
     onError: (err) => toast.error(workError(err, 'Could not delete the comment')),
   });
   const list = q.data ?? [];
+  // CTW đợt 5b K-1: luồng trả lời một cấp (server gắn trả lời-của-trả-lời vào gốc). Trả lời mồ côi đứng như gốc.
+  const [replyTo, setReplyTo] = useState<PageComment | null>(null);
+  const [replyDraft, setReplyDraft] = useState<TiptapDoc | null>(null);
+  const reply = useMutation({
+    mutationFn: () => workCommentsApi.addPageComment(pid, num, replyDraft!, replyTo!.id) as Promise<PageComment>,
+    onSuccess: (c) => { qc.setQueryData<PageComment[]>(key, (old) => [...(old ?? []), c]); setReplyTo(null); setReplyDraft(null); },
+    onError: (err) => toast.error(workError(err, 'Could not post the reply')),
+  });
+  const ids = new Set(list.map((c) => c.id));
+  const roots = list.filter((c) => !c.parentId || !ids.has(c.parentId));
+  const repliesOf = (rid: number) => list.filter((c) => c.parentId === rid);
+  const row = (c: PageComment, small = false) => (
+    <div className="flex gap-2.5" id={`comment-${c.id}`}>
+      <UserAvatar user={c.author} size={small ? 22 : 26} />
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2 text-[12.5px]">
+          <span className="font-medium">{userName(c.author)}</span>
+          <span className="text-[var(--w-text-3)]" title={fmtDateTime(c.createdAt)}>{relativeTime(c.createdAt)}</span>
+          <span className="ml-auto flex gap-3">
+            {canComment && <button type="button" className="text-[12px] text-[var(--w-text-3)] hover:text-[var(--w-text)]" aria-label={`Reply to ${userName(c.author)}`} onClick={() => { setReplyTo(c); setReplyDraft(null); }}>Reply</button>}
+            {(c.canDelete || c.authorId === meId) && (
+              <button type="button" className="text-[12px] text-[var(--w-text-3)] hover:text-[var(--w-red)]" onClick={() => del.mutate(c.id)}>Delete</button>
+            )}
+          </span>
+        </div>
+        <div className="mt-1 min-w-0"><RichView value={c.bodyJson} /></div>
+      </div>
+    </div>
+  );
   return (
     <section className="mt-10" aria-label="Comments">
       <h2 className="w-section-title mb-3">Comments {list.length > 0 && <span className="tabular text-[var(--w-text-3)]">· {list.length}</span>}</h2>
       <ul className="space-y-4">
-        {list.map((c) => (
-          <li key={c.id} className="flex gap-2.5" id={`comment-${c.id}`}>
-            <UserAvatar user={c.author} size={26} />
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2 text-[12.5px]">
-                <span className="font-medium">{userName(c.author)}</span>
-                <span className="text-[var(--w-text-3)]" title={fmtDateTime(c.createdAt)}>{relativeTime(c.createdAt)}</span>
-                {(c.canDelete || c.authorId === meId) && (
-                  <button type="button" className="ml-auto text-[12px] text-[var(--w-text-3)] hover:text-[var(--w-red)]" onClick={() => del.mutate(c.id)}>Delete</button>
-                )}
-              </div>
-              <div className="mt-1 min-w-0"><RichView value={c.bodyJson} /></div>
-            </div>
-          </li>
-        ))}
+        {roots.map((c) => {
+          const rs = c.parentId && !ids.has(c.parentId) ? [] : repliesOf(c.id);
+          const replyingHere = replyTo && (replyTo.id === c.id || rs.some((r) => r.id === replyTo.id));
+          return (
+            <li key={c.id}>
+              {row(c)}
+              {(rs.length > 0 || replyingHere) && (
+                <div className="ml-[12px] mt-2 space-y-3 border-l-2 border-[var(--w-border)] pl-[22px]">
+                  {rs.map((r) => <div key={r.id}>{row(r, true)}</div>)}
+                  {replyingHere && (
+                    <div data-testid="page-reply-composer">
+                      <RichEditor
+                        value={replyDraft}
+                        onChange={(d) => setReplyDraft(d)}
+                        members={config.members}
+                        projectId={config.id}
+                        placeholder={`Reply to ${userName(replyTo!.author)}…`}
+                        minHeight={48}
+                        autoFocus
+                        onSubmit={() => !isDocEmpty(replyDraft) && reply.mutate()}
+                        onEscape={() => setReplyTo(null)}
+                      />
+                      <div className="mt-2 flex justify-end gap-2">
+                        <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setReplyTo(null)}>Cancel</button>
+                        <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={isDocEmpty(replyDraft) || reply.isPending} onClick={() => reply.mutate()}>Reply</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </li>
+          );
+        })}
       </ul>
       {canComment ? (
         <div className="mt-4">

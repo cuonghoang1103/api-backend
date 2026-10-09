@@ -12,9 +12,12 @@
 import { useEffect, useState } from 'react';
 import { AlarmClock, CheckCircle2, CircleAlert, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { signalText } from '../ui';
 import type { DeskPriority, SlaStatus, SlaTarget } from '@/lib/work-s5a-api';
 
 export const P_COLOR: Record<DeskPriority, string> = { P1: 'var(--w-red)', P2: 'var(--w-orange)', P3: 'var(--w-blue)', P4: 'var(--w-status-todo)' };
+/** Màu CHỮ của huy hiệu (UX-A P0-3: trước 3.1–3.9:1). P4 dùng chữ phụ mức 2 thay vì xám glyph. */
+export const P_TEXT: Record<DeskPriority, string> = { P1: 'var(--w-red-text)', P2: 'var(--w-orange-text)', P3: 'var(--w-blue-text)', P4: 'var(--w-text-2)' };
 export const P_LABEL: Record<DeskPriority, string> = { P1: 'Critical', P2: 'High', P3: 'Medium', P4: 'Low' };
 
 export function PriorityBadge({ p, className, long }: { p: DeskPriority; className?: string; long?: boolean }) {
@@ -22,7 +25,7 @@ export function PriorityBadge({ p, className, long }: { p: DeskPriority; classNa
     <span
       title={`${p} · ${P_LABEL[p]}`}
       className={cn('inline-flex h-[20px] shrink-0 items-center gap-1 rounded-[5px] px-1.5 text-[11.5px] font-semibold tabular-nums', className)}
-      style={{ color: P_COLOR[p], background: `color-mix(in srgb, ${P_COLOR[p]} 12%, transparent)`, boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${P_COLOR[p]} 35%, transparent)` }}
+      style={{ color: P_TEXT[p], background: `color-mix(in srgb, ${P_COLOR[p]} 12%, transparent)`, boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${P_COLOR[p]} 35%, transparent)` }}
       data-testid={`prio-${p}`}
     >
       {p}{long && <span className="font-medium">· {P_LABEL[p]}</span>}
@@ -75,7 +78,7 @@ export function SlaClock({ t, fetchedAt, compact, label }: { t: SlaTarget; fetch
   ].filter(Boolean).join(' · ');
   return (
     <div className={cn('min-w-0', compact ? 'w-[118px]' : 'w-full')} title={title} data-sla-status={status}>
-      <div className="flex min-w-0 items-center gap-1 text-[12px] font-medium tabular-nums" style={{ color: t.paused && !t.stopped ? 'var(--w-text-3)' : color }}>
+      <div className="flex min-w-0 items-center gap-1 text-[12px] font-medium tabular-nums" style={{ color: t.paused && !t.stopped ? 'var(--w-text-3)' : signalText(color) }}>
         <Icon size={12} className="shrink-0" />
         <span className="truncate">{text}</span>
       </div>

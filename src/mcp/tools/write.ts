@@ -25,6 +25,7 @@ import { resolveStatus, workflowOf } from '../issueView.js';
 import { untrusted } from '../protocol.js';
 import { issueArg, projectArg } from './read.js';
 import { defineTool, type ToolDef } from './types.js';
+import { TL_ACTIVITIES } from '../../services/work/fptReports.js';
 
 /** Tệp gửi thẳng qua MCP (base64 trong JSON-RPC). Lớn hơn ⇒ trả URL ký sẵn để agent PUT thẳng lên kho. */
 export const MCP_INLINE_FILE_MAX = 6 * 1024 * 1024;
@@ -121,14 +122,18 @@ const comment = defineTool({
   name: 'comment',
   surfaces: { ask: false },
   title: 'Comment',
-  description: 'Adds an INTERNAL comment (markdown) to an issue — evidence of your work, questions, results. Agents can never reply to clients.',
+  description: 'Adds an INTERNAL comment (markdown) to an issue — evidence of your work, questions, results. Agents can never reply to clients. To answer someone in a thread, pass reply_to = the comment id shown in get_issue (replies are one level deep: replying to a reply joins its thread).',
   write: true,
-  input: z.object({ project: projectArg, issue: issueArg, markdown: markdownArg }),
+  input: z.object({
+    project: projectArg, issue: issueArg, markdown: markdownArg,
+    // CTW đợt 5b K-1: trả lời theo luồng — người được trả lời nhận thông báo "New reply".
+    reply_to: z.number().int().positive().optional().describe('Comment id to reply to (from get_issue, "comment #<id>")'),
+  }),
   run: async (ctx, a) => {
     const { p, n, key } = await issueCtx(ctx, a.project, a.issue, (n) => [['POST', `/issues/${n}/comments`]]);
-    const c = await issues.addComment(ctx.userId, p.id, n, docOf(a.markdown), 'USER', 'INTERNAL');
+    const c = await issues.addComment(ctx.userId, p.id, n, docOf(a.markdown), 'USER', 'INTERNAL', { parentId: a.reply_to ?? null });
     await touchLease(ctx, await issueIdOf(p.id, n));
-    return { commentId: c.id, issue: key, visibility: c.visibility };
+    return { commentId: c.id, issue: key, visibility: c.visibility, ...(c.parentId ? { thread: c.parentId } : {}) };
   },
 });
 
@@ -266,10 +271,13 @@ const logWork = defineTool({
     minutes: z.number().int().min(1).max(1440),
     note: z.string().max(1000).optional(),
     startedAt: z.string().max(40).optional().describe('ISO date-time; default now'),
+    // CTW đợt 4 (A24): cột Activity / Work Product của sheet TimeLogs.
+    activity: z.enum(TL_ACTIVITIES).optional().describe('Training | Analyzing | Designing | Coding | Testing | Deploying'),
+    workProduct: z.string().max(120).optional().describe('Report1 (Intro)…Report7 (Final), Software Package, or a module name'),
   }),
   run: async (ctx, a) => {
     const { p, n, key } = await issueCtx(ctx, a.project, a.issue, (n) => [['POST', `/issues/${n}/worklogs`]]);
-    const w = await planning.addWorklog(ctx.userId, p.id, n, { minutes: a.minutes, note: a.note, startedAt: a.startedAt });
+    const w = await planning.addWorklog(ctx.userId, p.id, n, { minutes: a.minutes, note: a.note, startedAt: a.startedAt, activity: a.activity, workProduct: a.workProduct });
     await touchLease(ctx, await issueIdOf(p.id, n));
     return { worklogId: w.id, issue: key, minutes: w.minutes, source: w.source };
   },

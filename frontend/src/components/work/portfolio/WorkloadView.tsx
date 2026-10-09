@@ -20,7 +20,7 @@ import { userName, workError, type WorkspaceDetail } from '@/lib/work-api';
 import {
   portfolioKeys, workPortfolioApi, type LoadLevel, type Workload, type WorkloadIssue, type WorkloadPerson, type WorkloadWeek,
 } from '@/lib/work-portfolio-api';
-import { Dialog, EmptyState, PageLoading, Popover, UserAvatar, useToggle } from '../ui';
+import { Dialog, EmptyState, PageLoading, Popover, UserAvatar, useToggle, signalText } from '../ui';
 import { fmtDay } from '../reports/shared';
 import { TeamChip } from '../studio/shared';
 
@@ -55,7 +55,7 @@ function LoadCell({ w, onOpen, label }: { w: WorkloadWeek; onOpen?: () => void; 
   const lv = LEVEL[w.level];
   const body = (
     <>
-      <span className="block text-[13px] font-semibold tabular-nums" style={{ color: lv.fg }}>{w.hours ? `${h1(w.hours)}h` : '—'}</span>
+      <span className="block text-[13px] font-semibold tabular-nums" style={{ color: signalText(lv.fg) }}>{w.hours ? `${h1(w.hours)}h` : '—'}</span>
       <span className="block text-[11px] tabular-nums text-[var(--w-text-3)]">
         {w.capacity ? `${w.pct ?? 0}% of ${h1(w.capacity)}h` : w.hours ? 'no capacity' : 'off'}
       </span>
@@ -115,7 +115,7 @@ export default function WorkloadView({ ws }: { ws: WorkspaceDetail }) {
   };
 
   return (
-    <div className="mx-auto w-full max-w-[1280px] px-4 py-5 md:px-6">
+    <div className="w-page">
       {data.scope === 'SELF' && (
         <p className="mb-3 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[13px] text-[var(--w-text-2)]">
           You are seeing your own workload. Workspace admins see everyone; team leads see the people in their teams.

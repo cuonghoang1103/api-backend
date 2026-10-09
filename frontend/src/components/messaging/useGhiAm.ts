@@ -74,16 +74,23 @@ export interface BoGhiAm {
   trangThai: TrangThaiGhi;
   giay: number;
   loi: string | null;
+  /** Mã lỗi để nơi dùng tự viết câu theo ngôn ngữ của mình (CT Work nói tiếng Anh). */
+  maLoi: 'khong-ho-tro' | 'bi-tu-choi' | 'khong-co-micro' | 'khac' | null;
   batDau: () => Promise<void>;
   /** Dừng và trả về tệp. `null` khi người dùng huỷ hoặc ghi quá ngắn. */
   ketThuc: () => Promise<File | null>;
   huy: () => void;
 }
 
-export function useGhiAm(): BoGhiAm {
+/**
+ * `giayToiDa`: trần riêng của nơi dùng (mặc định GIAY_TOI_DA). CT Work voice note dùng 180 giây (đợt 5b K-1).
+ */
+export function useGhiAm(opts: { giayToiDa?: number } = {}): BoGhiAm {
+  const tran = opts.giayToiDa ?? GIAY_TOI_DA;
   const [trangThai, datTrangThai] = useState<TrangThaiGhi>('roi');
   const [giay, datGiay] = useState(0);
   const [loi, datLoi] = useState<string | null>(null);
+  const [maLoi, datMaLoi] = useState<BoGhiAm['maLoi']>(null);
 
   const mayRef = useRef<MediaRecorder | null>(null);
   const luongRef = useRef<MediaStream | null>(null);
@@ -110,8 +117,10 @@ export function useGhiAm(): BoGhiAm {
   const batDau = useCallback(async () => {
     if (trangThai !== 'roi') return;
     datLoi(null);
+    datMaLoi(null);
     if (typeof MediaRecorder === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
       datLoi('Trình duyệt này không ghi âm được.');
+      datMaLoi('khong-ho-tro');
       return;
     }
     try {
@@ -132,7 +141,7 @@ export function useGhiAm(): BoGhiAm {
         datGiay((g) => {
           /* Chạm trần thì tự dừng. Không có chốt này thì một lần bấm nhầm để
              lại một tệp hàng chục MB mà người dùng không định gửi. */
-          if (g + 1 >= GIAY_TOI_DA) mayRef.current?.stop();
+          if (g + 1 >= tran) mayRef.current?.stop();
           return g + 1;
         });
       }, 1000);
@@ -140,6 +149,7 @@ export function useGhiAm(): BoGhiAm {
       don();
       datTrangThai('roi');
       const ten = (e as Error)?.name;
+      datMaLoi(ten === 'NotAllowedError' ? 'bi-tu-choi' : ten === 'NotFoundError' ? 'khong-co-micro' : 'khac');
       datLoi(
         ten === 'NotAllowedError'
           ? 'Bạn chưa cho phép dùng micro.'
@@ -148,7 +158,7 @@ export function useGhiAm(): BoGhiAm {
             : 'Không mở được micro.',
       );
     }
-  }, [trangThai, don]);
+  }, [trangThai, don, tran]);
 
   const ketThuc = useCallback(async (): Promise<File | null> => {
     const may = mayRef.current;
@@ -183,7 +193,8 @@ export function useGhiAm(): BoGhiAm {
     datTrangThai('roi');
     datGiay(0);
     datLoi(null);
+    datMaLoi(null);
   }, [don]);
 
-  return { trangThai, giay, loi, batDau, ketThuc, huy };
+  return { trangThai, giay, loi, maLoi, batDau, ketThuc, huy };
 }

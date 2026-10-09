@@ -11,6 +11,19 @@ export interface EmailPayload {
   text?: string;
   /** Tệp đính kèm (CT Work S3b: lời mời họp .ics). `content` là base64. */
   attachments?: Array<{ filename: string; content: string; contentType?: string }>;
+  /** Tên người gửi hiển thị (giữ ĐÚNG địa chỉ của RESEND_FROM_EMAIL, chỉ thay tên) — CT Work: "CT Work · CuongThai". */
+  fromName?: string;
+  /** Reply-To (CT Work: email người mời — người nhận trả lời thẳng người quen, không vào hộp noreply). */
+  replyTo?: string;
+  /** Header thêm (vd. X-Entity-Ref-ID để Gmail không gộp các thư mời khác nhau vào một chuỗi). */
+  headers?: Record<string, string>;
+}
+
+/** "Tên <a@b>" hoặc "a@b" ⇒ "Tên mới <a@b>" (bỏ ký tự có thể bẻ header). */
+export function withFromName(from: string, name: string): string {
+  const addr = /<([^>]+)>/.exec(from)?.[1] ?? from.trim();
+  const safe = name.replace(/[\r\n"<>]/g, '').trim();
+  return safe ? `"${safe}" <${addr}>` : addr;
 }
 
 export class EmailService {
@@ -30,8 +43,10 @@ export class EmailService {
 
     try {
       const result = await resend.emails.send({
-        from: config.resendFromEmail,
+        from: payload.fromName ? withFromName(config.resendFromEmail, payload.fromName) : config.resendFromEmail,
         to: payload.to,
+        ...(payload.replyTo ? { replyTo: payload.replyTo } : {}),
+        ...(payload.headers ? { headers: payload.headers } : {}),
         subject: payload.subject,
         html: payload.html,
         text: payload.text,

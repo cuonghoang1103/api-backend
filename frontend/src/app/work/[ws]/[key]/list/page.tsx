@@ -571,7 +571,6 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
         config={config}
         title="Issues"
         tools={false}
-        wrap
         extra={countLabel ? <span className="w-count">{countLabel}</span> : undefined}
       >
         <ModeToggle mode={jqlMode ? 'jql' : 'basic'} onChange={setMode} />
@@ -705,7 +704,8 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
 
       {/* Bảng */}
       <div className="min-h-0 flex-1 overflow-auto">
-       <div style={{ ...gridVars, minWidth: tpl.minWidth }} className="max-md:!min-w-0">
+       {/* UX-A ARIA: hàng (row) và nhóm hàng (rowgroup) cần vai cha table. */}
+       <div style={{ ...gridVars, minWidth: tpl.minWidth }} className="max-md:!min-w-0" role="table" aria-label="Issues">
         <div
           role="row"
           className={cn(GRID, 'sticky top-0 z-[1] h-9 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-3 text-[12px] font-medium text-[var(--w-text-3)] shadow-[0_1px_0_var(--w-border)] md:px-4')}

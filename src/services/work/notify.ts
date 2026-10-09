@@ -32,7 +32,7 @@ type WorkNotifyArgs = Parameters<typeof pushWork>[0];
 const SUBJECT: Record<WorkNotifyArgs['type'], (p: Record<string, unknown>) => string> = {
   WORK_INVITE: (p) => `You were added to ${p.workspaceName ?? 'a workspace'}`,
   WORK_ASSIGN: (p) => `${p.issueKey} was assigned to you: ${p.title}`,
-  WORK_COMMENT: (p) => `New comment on ${p.issueKey}: ${p.title}`,
+  WORK_COMMENT: (p) => (p.reply ? `New reply to your comment on ${p.issueKey}: ${p.title}` : `New comment on ${p.issueKey}: ${p.title}`),
   WORK_MENTION: (p) => `You were mentioned in ${p.issueKey}: ${p.title}`,
   WORK_ALERT: (p) => `${p.issueKey}: ${p.message ?? 'needs your attention'}`,
 };
@@ -254,8 +254,14 @@ export function registerWorkNotifications(): void {
       for (const uid of mentioned) {
         await notifyWork({ receiverId: uid, senderId: sender, type: 'WORK_MENTION', entityId: e.issueId, secondaryEntityId: e.commentId, payload });
       }
+      // K-1 (đợt 5b): người được trả lời nhận "New reply" (kể cả khi đã bỏ theo dõi thẻ), một lần — không thêm WORK_COMMENT.
+      let replied: number | null = null;
+      if (e.replyTo && e.replyTo !== sender && !mentioned.has(e.replyTo) && !clients.has(e.replyTo) && (await canStillSee([e.replyTo], ref.projectId)).length) {
+        replied = e.replyTo;
+        await notifyWork({ receiverId: replied, senderId: sender, type: 'WORK_COMMENT', entityId: e.issueId, secondaryEntityId: e.commentId, payload: { ...payload, reply: true } });
+      }
       for (const uid of watching) {
-        if (mentioned.has(uid)) continue;
+        if (mentioned.has(uid) || uid === replied) continue;
         await notifyWork({ receiverId: uid, senderId: sender, type: 'WORK_COMMENT', entityId: e.issueId, secondaryEntityId: e.commentId, payload });
       }
     }

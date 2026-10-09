@@ -171,7 +171,7 @@ export default function MeetingsView({ config }: { config: ProjectConfig }) {
   const base = `/work/${config.workspace.slug}/${config.key}/meetings`;
   return (
     <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-      <div className="mx-auto w-full max-w-[960px] px-4 py-5 md:px-6">
+      <div className="w-page">
         <div className="mb-4 flex flex-wrap items-center gap-2">
           <div className="inline-flex rounded-[7px] border border-[var(--w-border-strong)] p-0.5" role="tablist" aria-label="Meetings">
             {(['upcoming', 'past'] as const).map((k) => (

@@ -295,7 +295,8 @@ describe('khopTuyenWeb', () => {
     // 05/10/2026: +1 CT Work Đợt S6 (spec — Spec quality).
     // 06/10/2026: +1 CT Work Resources (thư viện link của dự án).
     // 07/10/2026: +6 IELTS đợt 1 (thi-may · the-tu · so-loi, mỗi trang 2 đường /ielts… và /language/:code/ielts…).
-    expect(thay.size).toBe(151);
+    // 09/10/2026: +1 CT Work đợt 4 (requirements — SRS có cấu trúc + RTM). Trước dòng này tệp đã đỏ 154≠151 (+3 trang của phiên khác chưa ghi số).
+    expect(thay.size).toBe(155);
   });
 });
 

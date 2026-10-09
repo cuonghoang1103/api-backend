@@ -13,12 +13,13 @@ import { useQuery } from '@tanstack/react-query';
 import {
   Bar, BarChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
-import { AlertTriangle, Clock, Hourglass, UserX } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   workApi, workError, type DashboardWidget, type GroupBy, type IssueCard, type ProjectConfig, type StatsGroup, type WidgetKind,
 } from '@/lib/work-api';
 import { wk, type Lookups } from '../hooks';
+import { OPEN_ISSUES_JQL, counterHint } from '../openIssues';
+import KpiTile, { type KpiTone } from '../KpiTile';
 import { IssueTypeIcon, PRIORITIES, Spinner, StatusBadge, UserAvatar, formatDate } from '../ui';
 import { axisTick, fmtDay, fmtValue, Legend, unitLabel, useAllSprints, useReportableSprints } from '../reports/shared';
 import { jqlErrorOf, jqlListUrl } from '../search/jql';
@@ -58,10 +59,10 @@ export const newWidgetId = () => Math.random().toString(36).slice(2, 10);
 /** Bộ widget khởi đầu — chỉ dùng JQL chung chung để dự án nào cũng hợp lệ. */
 export function defaultWidgets(): DashboardWidget[] {
   return [
-    { id: newWidgetId(), kind: 'counter', title: 'Open issues', query: 'statusCategory != Done', size: 'half' },
-    { id: newWidgetId(), kind: 'counter', title: 'Overdue', query: 'due < now() AND statusCategory != Done', size: 'half' },
+    { id: newWidgetId(), kind: 'counter', title: 'Open issues', query: OPEN_ISSUES_JQL, size: 'half' },
+    { id: newWidgetId(), kind: 'counter', title: 'Overdue', query: `due < now() AND ${OPEN_ISSUES_JQL}`, size: 'half' },
     { id: newWidgetId(), kind: 'pie', title: 'Issues by status', query: '', groupBy: 'status', size: 'half' },
-    { id: newWidgetId(), kind: 'bar', title: 'Open issues by assignee', query: 'statusCategory != Done', groupBy: 'assignee', size: 'half' },
+    { id: newWidgetId(), kind: 'bar', title: 'Open issues by assignee', query: OPEN_ISSUES_JQL, groupBy: 'assignee', size: 'half' },
     { id: newWidgetId(), kind: 'created_resolved', title: 'Created vs resolved (30 days)', query: '', days: 30, size: 'full' },
     { id: newWidgetId(), kind: 'my_issues', title: 'My open issues', size: 'half' },
     { id: newWidgetId(), kind: 'health', title: 'Project health', size: 'half' },
@@ -210,7 +211,7 @@ function CounterWidget({ pid, jql, config }: { pid: number; jql: string; config:
     <Link
       href={jqlListUrl(config.workspace.slug, config.key, jql)}
       className="group flex min-h-[120px] flex-col items-center justify-center rounded-[6px] hover:bg-[var(--w-hover)]"
-      title={jql || 'All issues'}
+      title={counterHint(jql)}
     >
       <span className="text-[44px] font-semibold leading-none tabular-nums">{q.data.total}</span>
       <span className="mt-2 text-[12px] text-[var(--w-text-3)] group-hover:text-[var(--w-accent-text)]">{q.data.total === 1 ? 'issue' : 'issues'} · View</span>
@@ -245,7 +246,8 @@ function PieWidget({ pid, jql, groupBy }: { pid: number; jql: string; groupBy: G
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={data} dataKey="count" nameKey="label" innerRadius="58%" outerRadius="100%" paddingAngle={data.length > 1 ? 1.5 : 0} stroke="none" isAnimationActive={false}>
-              {data.map((g) => <Cell key={g.key} fill={g.color} />)}
+              {/* UX-A ARIA: mỗi lát (path role=img của Recharts) cần tên. */}
+              {data.map((g) => <Cell key={g.key} fill={g.color} aria-label={`${g.label}: ${g.count}`} />)}
             </Pie>
             <Tooltip content={<CountTooltip />} />
           </PieChart>
@@ -293,7 +295,7 @@ function BarWidget({ pid, jql, groupBy }: { pid: number; jql: string; groupBy: G
           />
           <Tooltip content={<CountTooltip />} cursor={{ fill: 'var(--w-hover)' }} />
           <Bar dataKey="count" radius={[0, 3, 3, 0]} maxBarSize={20} isAnimationActive={false}>
-            {data.map((g) => <Cell key={g.key} fill={g.color} />)}
+              {data.map((g) => <Cell key={g.key} fill={g.color} />)}
           </Bar>
         </BarChart>
       </ResponsiveContainer>
@@ -316,7 +318,7 @@ function CreatedResolvedWidget({ pid, jql, days }: { pid: number; jql: string; d
   return (
     <div className="min-w-0">
       <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1">
-        <Legend items={[{ label: `Created · ${totals.created}`, color: 'var(--w-red)' }, { label: `Resolved · ${totals.resolved}`, color: 'var(--w-green)' }]} />
+        <Legend items={[{ label: `Created · ${totals.created}`, color: 'var(--w-chart-1)' }, { label: `Resolved · ${totals.resolved}`, color: 'var(--w-green)' }]} />
         <span className="ml-auto text-[11px] text-[var(--w-text-3)]">Last {days} days</span>
       </div>
       <div className="h-[200px] w-full min-w-0">
@@ -326,7 +328,7 @@ function CreatedResolvedWidget({ pid, jql, days }: { pid: number; jql: string; d
             <XAxis dataKey="day" tickFormatter={fmtDay} tick={axisTick} tickLine={false} axisLine={{ stroke: 'var(--w-border-strong)' }} minTickGap={24} />
             <YAxis allowDecimals={false} tick={axisTick} tickLine={false} axisLine={false} width={40} />
             <Tooltip content={<CountTooltip labelFormat={fmtDay} />} cursor={{ stroke: 'var(--w-border-strong)' }} />
-            <Line type="monotone" dataKey="created" name="Created" stroke="var(--w-red)" strokeWidth={2} dot={false} isAnimationActive={false} />
+            <Line type="monotone" dataKey="created" name="Created" stroke="var(--w-chart-1)" strokeWidth={2} dot={false} isAnimationActive={false} />
             <Line type="monotone" dataKey="resolved" name="Resolved" stroke="var(--w-green)" strokeWidth={2} dot={false} isAnimationActive={false} />
           </LineChart>
         </ResponsiveContainer>
@@ -389,23 +391,18 @@ function HealthWidget({ pid, onOpenIssue }: { pid: number; onOpenIssue: (n: numb
   if (q.isLoading) return <Loading />;
   if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
   const d = q.data;
-  const cells = [
-    { label: 'Overdue', n: d.overdue.length, icon: AlertTriangle, color: 'var(--w-red)' },
-    { label: 'Due in 3 days', n: d.dueSoon.length, icon: Clock, color: 'var(--w-accent-text)' },
-    { label: 'Stuck > 5 days', n: d.stale.length, icon: Hourglass, color: 'var(--w-orange)' },
-    { label: 'Urgent, no owner', n: d.unassignedUrgent.length, icon: UserX, color: 'var(--w-red)' },
+  const cells: { label: string; n: number; tone: KpiTone }[] = [
+    { label: 'Overdue', n: d.overdue.length, tone: 'red' },
+    { label: 'Due in 3 days', n: d.dueSoon.length, tone: 'accent' },
+    { label: 'Stuck > 5 days', n: d.stale.length, tone: 'orange' },
+    { label: 'Urgent, no owner', n: d.unassignedUrgent.length, tone: 'red' },
   ];
   const attention = [...d.overdue.map((i) => ({ ...i, why: `Due ${formatDate(i.dueDate)}` })), ...d.stale.map((i) => ({ ...i, why: `Idle ${i.idleDays}d` }))].slice(0, 4);
   const risk = d.sprintRisk;
   return (
     <div className="min-w-0 space-y-3">
       <div className="grid grid-cols-2 gap-2">
-        {cells.map((c) => (
-          <div key={c.label} className="min-w-0 rounded-[6px] border border-[var(--w-border)] px-2.5 py-2">
-            <div className="flex items-center gap-1.5 truncate text-[11px] text-[var(--w-text-3)]"><c.icon size={12} style={{ color: c.n ? c.color : undefined }} /> {c.label}</div>
-            <div className={cn('mt-0.5 text-[18px] font-semibold tabular-nums', !c.n && 'text-[var(--w-green)]')} style={c.n ? { color: c.color } : undefined}>{c.n}</div>
-          </div>
-        ))}
+        {cells.map((c) => <KpiTile key={c.label} size="sm" label={c.label} value={c.n} tone={c.n ? c.tone : 'green'} />)}
       </div>
       {risk && (
         <p className={cn('text-[12px]', risk.atRisk ? 'text-[var(--w-red)]' : 'text-[var(--w-text-2)]')}>

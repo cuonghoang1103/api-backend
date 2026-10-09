@@ -19,6 +19,8 @@ import { portfolioKeys, workPortfolioApi, type PortfolioProject, type Rag } from
 import { EmptyState, PageLoading, Popover, ProjectMark, UserAvatar, useToggle } from '../ui';
 import { fmtDay } from '../reports/shared';
 import { KIND_INFO, Pill } from '../studio/shared';
+import { OPEN_ISSUES_DEFINITION } from '../openIssues';
+import KpiTile, { KpiRow } from '../KpiTile';
 
 export const RAG_META: Record<Rag, { label: string; color: string; tone: 'red' | 'orange' | 'green'; rank: number }> = {
   RED: { label: 'Off track', color: 'var(--w-red)', tone: 'red', rank: 0 },
@@ -112,7 +114,7 @@ function ProjectRow({ p }: { p: PortfolioProject }) {
       <div className="max-lg:hidden"><RagDot p={p} withLabel /></div>
 
       <Cell label="Issues">
-        <span className="tabular-nums"><b className="font-semibold text-[var(--w-text)]">{p.counts.open}</b> open</span>
+        <span className="tabular-nums" title={OPEN_ISSUES_DEFINITION}><b className="font-semibold text-[var(--w-text)]">{p.counts.open}</b> open</span>
         <span className="text-[12px] text-[var(--w-text-3)]">
           <span className={cn('whitespace-nowrap tabular-nums', p.counts.overdue > 0 && 'font-semibold text-[var(--w-red)]')}>{p.counts.overdue} overdue</span> · <span className="whitespace-nowrap tabular-nums" title="Done in the last 14 days">{p.counts.done14} done 14d</span>
         </span>
@@ -215,28 +217,25 @@ export default function PortfolioView({ ws }: { ws: WorkspaceDetail }) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[1280px] px-4 py-5 md:px-6">
+    <div className="w-page">
       {/* Số tổng theo màu — bấm để lọc. */}
-      <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4" role="group" aria-label="Filter by health">
+      <KpiRow min={150} className="mb-4" label="Filter by health">
         {(['ALL', 'RED', 'AMBER', 'GREEN'] as const).map((k) => {
           const on = rag === k;
           const n = k === 'ALL' ? data.projects.length : counts[k];
           return (
-            <button
+            <KpiTile
               key={k}
-              type="button"
-              aria-pressed={on}
+              size="sm"
+              label={k === 'ALL' ? 'All projects' : RAG_META[k].label}
+              value={n}
+              dot={k === 'ALL' ? undefined : RAG_META[k].color}
+              pressed={on}
               onClick={() => setRag(on && k !== 'ALL' ? 'ALL' : k)}
-              className={cn('flex min-w-0 items-center gap-2.5 rounded-[10px] border bg-[var(--w-raised)] px-3.5 py-2.5 text-left shadow-[var(--w-shadow-card)] transition-colors',
-                on ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' : 'border-[var(--w-border)] hover:border-[var(--w-border-strong)]')}
-            >
-              {k !== 'ALL' && <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: RAG_META[k].color }} aria-hidden="true" />}
-              <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-[var(--w-text-2)]">{k === 'ALL' ? 'All projects' : RAG_META[k].label}</span>
-              <span className="text-[20px] font-semibold leading-none tabular-nums">{n}</span>
-            </button>
+            />
           );
         })}
-      </div>
+      </KpiRow>
 
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <select aria-label="Project type" className="w-input h-8 w-auto max-w-full py-0 pr-7 text-[13px]" value={kind} onChange={(e) => setKind(e.target.value as ProjectKind | 'ALL')}>

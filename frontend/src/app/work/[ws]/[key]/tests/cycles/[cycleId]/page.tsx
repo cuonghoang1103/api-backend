@@ -165,6 +165,7 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
                 value={data.name}
                 disabled={!canEdit}
                 required
+                ariaLabel="Cycle name"
                 className="text-[20px] font-semibold"
                 onSave={(v) => patchCycle({ name: v })}
               />
@@ -246,7 +247,6 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
                 <div key={r.id} className="group">
                 {/* Điện thoại (< 640px): dạng thẻ, vẫn giữ trạng thái + người + lỗi */}
                 <div
-                  role="button"
                   tabIndex={-1}
                   onClick={() => openRun(r.id)}
                   className={cn('flex cursor-pointer flex-col gap-1.5 border-b border-[var(--w-border)] px-4 py-2.5 text-[13px] sm:hidden', runParam === r.id ? 'bg-[var(--w-active)]' : 'active:bg-[var(--w-hover)]')}
@@ -277,7 +277,6 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
                   </div>
                 </div>
                 <div
-                  role="button"
                   tabIndex={-1}
                   onClick={() => openRun(r.id)}
                   className={cn(GRID, 'max-sm:!hidden cursor-pointer border-b border-[var(--w-border)] px-4 py-2 text-[13px]', cursor === i ? 'bg-[var(--w-hover)]' : 'hover:bg-[var(--w-hover)]', runParam === r.id && 'bg-[var(--w-active)]')}
@@ -512,8 +511,8 @@ function MoreMenu({ onDelete }: { onDelete: () => void }) {
 }
 
 /** Ô chữ sửa tại chỗ: Enter/blur lưu, Esc huỷ. */
-function InlineText({ value, onSave, disabled, placeholder, className, required }: {
-  value: string; onSave: (v: string) => void; disabled?: boolean; placeholder?: string; className?: string; required?: boolean;
+function InlineText({ value, onSave, disabled, placeholder, className, required, ariaLabel }: {
+  value: string; onSave: (v: string) => void; disabled?: boolean; placeholder?: string; className?: string; required?: boolean; ariaLabel?: string;
 }) {
   const [v, setV] = useState(value);
   const [editing, setEditing] = useState(false);
@@ -529,6 +528,7 @@ function InlineText({ value, onSave, disabled, placeholder, className, required 
       value={v}
       disabled={disabled}
       placeholder={placeholder}
+      aria-label={ariaLabel}
       onFocus={() => setEditing(true)}
       onChange={(e) => setV(e.target.value)}
       onBlur={commit}

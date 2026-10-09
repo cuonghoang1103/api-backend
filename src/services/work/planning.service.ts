@@ -402,6 +402,7 @@ export async function deleteTimeOff(userId: number, workspaceId: number, id: num
 
 const WORKLOG_SELECT = {
   id: true, minutes: true, startedAt: true, note: true, source: true, createdAt: true, userId: true, user: { select: PUBLIC_USER },
+  activity: true, workProduct: true,
 } satisfies Prisma.WorkWorklogSelect;
 
 export async function listWorklogs(userId: number, projectId: number, number: number) {
@@ -417,7 +418,7 @@ export async function listWorklogs(userId: number, projectId: number, number: nu
  */
 export async function addWorklog(
   userId: number, projectId: number, number: number,
-  input: { minutes: number; startedAt?: string; note?: string | null; remaining?: 'auto' | 'keep' | number },
+  input: { minutes: number; startedAt?: string; note?: string | null; remaining?: 'auto' | 'keep' | number; activity?: string | null; workProduct?: string | null },
 ) {
   const access = await requireProject(userId, projectId, 'issue.edit');
   const isAgent = access.principal === 'AGENT';
@@ -434,7 +435,8 @@ export async function addWorklog(
     await tx.$queryRaw`SELECT id FROM work_issues WHERE id = ${issue.id} FOR UPDATE`;
     const cur = await tx.workIssue.findUniqueOrThrow({ where: { id: issue.id }, select: { timeSpentMin: true, remainingEstimateMin: true } });
     // source MANUAL: người hoặc agent tự ghi; AGENT_AUTO chỉ do job timesheet agent sinh từ lease (A12).
-    const created = await tx.workWorklog.create({ data: { issueId: issue.id, userId, minutes: input.minutes, startedAt, note: input.note?.trim().slice(0, 1000) || null, source: 'MANUAL' }, select: WORKLOG_SELECT });
+    // CTW đợt 4 (A24): Activity (danh sách sheet TimeLogs) + Work Product — người chọn, không thì bản xuất suy từ tiêu đề thẻ.
+    const created = await tx.workWorklog.create({ data: { issueId: issue.id, userId, minutes: input.minutes, startedAt, note: input.note?.trim().slice(0, 1000) || null, source: 'MANUAL', activity: input.activity || null, workProduct: input.workProduct?.trim().slice(0, 120) || null }, select: WORKLOG_SELECT });
     let remaining = cur.remainingEstimateMin;
     if (input.remaining === 'auto' || input.remaining === undefined) remaining = cur.remainingEstimateMin === null ? null : Math.max(0, cur.remainingEstimateMin - input.minutes);
     else if (typeof input.remaining === 'number') remaining = Math.max(0, Math.round(input.remaining));

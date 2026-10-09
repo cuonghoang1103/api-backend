@@ -228,4 +228,41 @@ describe('CT Work — Portfolio + Workload S3a (HTTP + DB thật)', { skip: !RUN
     const bad = await call(owner, 'GET', `/workspaces/${wsId}/workload?from=2026-10-10&to=2026-01-01`);
     assert.equal(bad.status, 400);
   });
+
+  it('UX-A P0-2: số "open" GIỐNG NHAU ở Projects, Portfolio và JQL của widget Dashboard (không tính sub-task)', async () => {
+    const r = await call(owner, 'POST', `/workspaces/${wsId}/projects`, { key: 'PO', name: 'Open count', template: 'BLANK', kind: 'SOFTWARE' });
+    assert.equal(r.status, 201, JSON.stringify(r.raw));
+    pid.PO = r.data.id;
+    const cfg = (await call(owner, 'GET', `/projects/${pid.PO}`)).data;
+    const type = (k: string) => cfg.issueTypes.find((t: any) => t.key === k).id;
+    const mk = async (body: Record<string, unknown>) => {
+      const x = await call(owner, 'POST', `/projects/${pid.PO}/issues`, body);
+      assert.equal(x.status, 201, JSON.stringify(x.raw));
+      return x.data;
+    };
+    const epic = await mk({ typeId: type('EPIC'), title: 'Epic counts' });
+    const t1 = await mk({ typeId: type('TASK'), title: 'Task one', parentId: epic.id });
+    await mk({ typeId: type('BUG'), title: 'Bug counts' });
+    await mk({ typeId: type('SUBTASK'), title: 'Sub-task never counts', parentId: t1.id });
+    const done = await mk({ typeId: type('TASK'), title: 'Done does not count' });
+    const taskType = cfg.issueTypes.find((t: any) => t.key === 'TASK');
+    const wf = cfg.workflows.find((w: any) => w.id === taskType.workflowId) ?? cfg.workflows.find((w: any) => w.isDefault) ?? cfg.workflows[0];
+    const doneStatus = wf.statuses.find((s: any) => s.category === 'DONE').id;
+    assert.equal((await call(owner, 'POST', `/projects/${pid.PO}/issues/${done.number}/move`, { statusId: doneStatus })).status, 200);
+    const deleted = await mk({ typeId: type('TASK'), title: 'Deleted does not count' });
+    assert.equal((await call(owner, 'DELETE', `/projects/${pid.PO}/issues/${deleted.number}`)).status, 200);
+
+    const list = await call(owner, 'GET', `/workspaces/${wsId}/projects`);
+    const pf = await call(owner, 'GET', `/workspaces/${wsId}/portfolio`);
+    const { OPEN_ISSUES_JQL } = await import('../services/work/openIssues.js');
+    const jql = await call(owner, 'GET', `/projects/${pid.PO}/search?jql=${encodeURIComponent(OPEN_ISSUES_JQL)}&limit=1`);
+    assert.equal(jql.status, 200, JSON.stringify(jql.raw));
+    const fromList = list.data.find((p: any) => p.key === 'PO').openIssues;
+    const fromPf = pf.data.projects.find((p: any) => p.key === 'PO').counts.open;
+    assert.deepEqual([fromList, fromPf, jql.data.total], [3, 3, 3], 'epic + task + bug; không sub-task, không Done, không đã xoá');
+    // Các dự án cũ trong bài cũng khớp giữa hai trang.
+    for (const k of ['PA', 'PB', 'PC', 'PCL']) {
+      assert.equal(list.data.find((p: any) => p.key === k).openIssues, pf.data.projects.find((p: any) => p.key === k).counts.open, `lệch ở ${k}`);
+    }
+  });
 });

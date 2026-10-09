@@ -67,7 +67,7 @@ export default function PlansTab({ config, pid }: { config: ProjectConfig; pid: 
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-      <div className="mx-auto w-full max-w-[1000px] px-4 py-5">
+      <div className="w-page">
         <div className="mb-4 flex flex-wrap items-center gap-2">
           <div className="min-w-0 flex-1">
             <h2 className="text-[14px] font-semibold">Test plans</h2>

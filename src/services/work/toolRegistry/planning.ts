@@ -68,7 +68,7 @@ const updateSection = defineTool({
 
 // ─── Xuất tệp: trả link tải ──────────────────────────────────────
 
-export const EXPORT_KINDS = ['unit_test', 'integration_test', 'system_test', 'project_tracking', 'weekly_report', 'ai_usage', 'wbs', 'page_docx', 'page_pdf'] as const;
+export const EXPORT_KINDS = ['unit_test', 'integration_test', 'system_test', 'project_tracking', 'weekly_report', 'ai_usage', 'wbs', 'page_docx', 'page_pdf', 'rtm', 'report3_docx', 'report3_pdf', 'final_docx', 'final_pdf'] as const;
 
 /** Tuyến REST (sau /projects/:pid) + mô tả của từng loại tệp. Một chỗ — export_file và test cùng đọc. */
 export function exportRoute(kind: (typeof EXPORT_KINDS)[number], o: { module?: string; variant?: string; weeklyIds?: number[]; page?: number }): { path: string; file: string } {
@@ -84,6 +84,12 @@ export function exportRoute(kind: (typeof EXPORT_KINDS)[number], o: { module?: s
     case 'weekly_report': return { path: `/fpt-reports/weekly/export${q({ ids: o.weeklyIds?.length ? o.weeklyIds.join(',') : undefined })}`, file: 'Weekly Report (.xlsx)' };
     case 'ai_usage': return { path: '/fpt-reports/ai-usage/export', file: 'AI Usage Report (.xlsx)' };
     case 'wbs': return { path: '/wbs/export', file: 'WBS + estimation (.xlsx)' };
+    // CTW đợt 4: RTM (Excel), Report 3 SRS sinh từ SRS có cấu trúc, Report 7 Final ghép Report 1–6 (Word/PDF).
+    case 'rtm': return { path: '/rtm/export.xlsx', file: 'Requirement Traceability Matrix (.xlsx)' };
+    case 'report3_docx': return { path: '/srs/report3/export.docx', file: 'Report 3 Software Requirement Specification (.docx)' };
+    case 'report3_pdf': return { path: '/srs/report3/export.pdf', file: 'Report 3 Software Requirement Specification (.pdf)' };
+    case 'final_docx': return { path: '/final-report/export.docx', file: 'Report 7 Final Project Report (.docx)' };
+    case 'final_pdf': return { path: '/final-report/export.pdf', file: 'Report 7 Final Project Report (.pdf)' };
     case 'page_docx':
     case 'page_pdf': {
       if (!o.page) throw new BadRequestError('Say which page to export (page number)', 'VALIDATION_ERROR');
@@ -97,7 +103,7 @@ const routeOnly = (path: string) => path.replace(/\?.*$/, '');
 
 const exportFile = defineTool({
   name: 'export_file', title: 'Get a download link', group: 'export',
-  description: 'Returns a download link for a file CT Work generates in the official FPT templates: unit_test / integration_test / system_test (Reports 5.1–5.3, Excel), project_tracking (variant SWP391 | SEP490 | SWP391_T1 | ISSUES), weekly_report, ai_usage, wbs, page_docx / page_pdf (one Docs page as Word or PDF). The link needs the same login (web cookie, or Authorization: Bearer <token>).',
+  description: 'Returns a download link for a file CT Work generates in the official FPT templates: unit_test / integration_test / system_test (Reports 5.1–5.3, Excel), project_tracking (variant SWP391 | SEP490 | SWP391_T1 | ISSUES), weekly_report, ai_usage, wbs, page_docx / page_pdf (one Docs page as Word or PDF), rtm (traceability matrix, Excel), report3_docx / report3_pdf (Report 3 SRS from the structured requirements), final_docx / final_pdf (Report 7 Final). The link needs the same login (web cookie, or Authorization: Bearer <token>).',
   write: false,
   input: z.object({
     project: projectArg, kind: z.enum(EXPORT_KINDS),

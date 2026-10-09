@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { workApi, type EstimationUnit, type SprintFull } from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
 import { cn } from '@/lib/utils';
+import KpiTile from '../KpiTile';
 
 export const unitLabel = (u: EstimationUnit | undefined) => (u === 'HOURS' ? 'h' : 'pts');
 
@@ -57,23 +58,9 @@ export function SprintSelect({ sprints, value, onChange, className }: { sprints:
   );
 }
 
+/** Ô số liệu của báo cáo — nay là `KpiTile` dùng chung (UX-A). Giữ tên cũ cho 30+ chỗ gọi. */
 export function StatCell({ label, value, hint, tone }: { label: string; value: ReactNode; hint?: ReactNode; tone?: 'green' | 'red' | 'accent' }) {
-  return (
-    <div className="min-w-0 rounded-[10px] border border-[var(--w-border)] bg-[var(--w-raised)] px-3.5 py-3 shadow-[var(--w-shadow-card)]">
-      <div className="truncate text-[12px] font-medium text-[var(--w-text-2)]">{label}</div>
-      <div
-        className={cn(
-          'mt-1 truncate text-[24px] font-semibold leading-tight tracking-[-0.02em] tabular-nums',
-          tone === 'green' && 'text-[var(--w-green)]',
-          tone === 'red' && 'text-[var(--w-red)]',
-          tone === 'accent' && 'text-[var(--w-accent-text)]',
-        )}
-      >
-        {value}
-      </div>
-      {hint && <div className="mt-0.5 truncate text-[11px] text-[var(--w-text-3)]">{hint}</div>}
-    </div>
-  );
+  return <KpiTile label={label} value={value} hint={hint} tone={tone} />;
 }
 
 type TipPayload = { name?: string | number; value?: number | string | null | (number | string)[]; color?: string; stroke?: string; fill?: string; dataKey?: unknown };

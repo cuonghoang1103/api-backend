@@ -89,7 +89,7 @@ export default function ChangesView({ config }: { config: ProjectConfig }) {
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-      <div className="mx-auto w-full max-w-[1120px] px-4 py-5 md:px-6">
+      <div className="w-page">
         <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4" data-testid="cr-totals">
           <div className="w-card p-3">
             <div className="w-eyebrow">Approved</div>

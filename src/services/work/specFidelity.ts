@@ -397,6 +397,75 @@ export const SRS_SECTIONS: Array<{ key: string; label: string; re: RegExp; sever
   { key: 'acceptance', label: 'Acceptance criteria / verification', re: /(acceptance|verification|validation|test|chấp\s*nhận|nghiệm\s*thu|kiểm\s*(thử|tra))/iu, severity: 'medium' },
 ];
 
+/**
+ * CTW-12 (đợt 4, 09/10/2026): khung mục theo LOẠI TRANG — trước đây mọi trang (kể cả GDD) bị chấm theo khung SRS ISO 29148
+ * ⇒ GDD thiếu "Functional requirements" oan. Mỗi loại một khung + bộ luật trang riêng:
+ *   SRS   ISO/IEC/IEEE 29148 (như cũ) — mục chuẩn + "không có failure mode" + "thiếu tiêu chí chấp nhận".
+ *   SDD   IEEE 1016 (Software Design Description) / FPT Report 4 — kiến trúc, dữ liệu, thành phần/giao diện, thiết kế chi
+ *         tiết, lý do thiết kế. Không chấm AC/failure mode (tài liệu thiết kế không viết tiêu chí chấp nhận).
+ *   GDD   Game Design Document — tổng quan/ý tưởng, gameplay & cơ chế, cốt truyện/nhân vật, màn chơi/thế giới, mỹ thuật &
+ *         âm thanh, giao diện/điều khiển, kỹ thuật. Không chấm AC/failure mode.
+ *   OTHER tài liệu khác (biên bản, kế hoạch…) — không kiểm mục, chỉ các luật câu chữ (mơ hồ, chỗ trống, trùng…).
+ */
+export const DOC_KINDS = ['SRS', 'SDD', 'GDD', 'OTHER'] as const;
+export type DocKind = (typeof DOC_KINDS)[number];
+
+export const SDD_SECTIONS: Array<{ key: string; label: string; re: RegExp; severity: Severity }> = [
+  { key: 'architecture', label: 'Architecture / high-level design', re: /(architecture|high[\s-]*level|system design|overview|kiến\s*trúc|tổng\s*quan)/iu, severity: 'medium' },
+  { key: 'data', label: 'Data / database design', re: /(database|data\s*(design|model)|\berd?\b|entity|schema|cơ\s*sở\s*dữ\s*liệu|dữ\s*liệu)/iu, severity: 'medium' },
+  { key: 'components', label: 'Component / interface design', re: /(component|module|package|interface|\bapi\b|class\s*spec|thành\s*phần|giao\s*diện\s*lập\s*trình)/iu, severity: 'medium' },
+  { key: 'detailed', label: 'Detailed design (class / sequence)', re: /(detailed|class\s*diagram|sequence|activity|chi\s*tiết|tuần\s*tự)/iu, severity: 'medium' },
+  { key: 'rationale', label: 'Design rationale / constraints', re: /(rationale|decision|constraint|trade[\s-]*off|other design|lý\s*do|quyết\s*định|ràng\s*buộc)/iu, severity: 'low' },
+];
+
+export const GDD_SECTIONS: Array<{ key: string; label: string; re: RegExp; severity: Severity }> = [
+  { key: 'concept', label: 'Game overview / concept', re: /(overview|concept|vision|pitch|summary|tổng\s*quan|ý\s*tưởng|giới\s*thiệu)/iu, severity: 'medium' },
+  { key: 'gameplay', label: 'Gameplay & mechanics', re: /(gameplay|mechanic|core loop|rules?|controls?|lối\s*chơi|cơ\s*chế|luật\s*chơi)/iu, severity: 'medium' },
+  { key: 'story', label: 'Story / characters', re: /(story|narrative|character|lore|cốt\s*truyện|nhân\s*vật|cốt\s*chuyện)/iu, severity: 'low' },
+  { key: 'levels', label: 'Levels / world', re: /(level|world|map|mission|stage|màn\s*chơi|thế\s*giới|bản\s*đồ|nhiệm\s*vụ)/iu, severity: 'medium' },
+  { key: 'art', label: 'Art & audio', re: /(\bart\b|visual|audio|sound|music|style|mỹ\s*thuật|hình\s*ảnh|âm\s*thanh|nhạc)/iu, severity: 'low' },
+  { key: 'ui', label: 'UI / HUD / controls', re: /(\bui\b|\bhud\b|menu|interface|controls?|giao\s*diện|điều\s*khiển)/iu, severity: 'low' },
+  { key: 'tech', label: 'Technical / platform', re: /(technical|technology|platform|engine|performance|kỹ\s*thuật|nền\s*tảng|công\s*nghệ)/iu, severity: 'low' },
+];
+
+export const DOC_KIND_LABEL: Record<DocKind, string> = { SRS: 'Software Requirements Specification', SDD: 'Software Design Description', GDD: 'Game Design Document', OTHER: 'Other document' };
+const DOC_KIND_STANDARD: Record<DocKind, string> = { SRS: 'ISO/IEC/IEEE 29148 SRS outline', SDD: 'IEEE 1016 SDD outline', GDD: 'game design document outline', OTHER: '' };
+
+export function sectionsFor(kind: DocKind) {
+  return kind === 'SRS' ? SRS_SECTIONS : kind === 'SDD' ? SDD_SECTIONS : kind === 'GDD' ? GDD_SECTIONS : [];
+}
+
+/**
+ * Loại trang: mẫu (templateKey) trước, rồi tiêu đề, rồi đề mục (≥ 2 đề mục đặc trưng). Không đoán được ⇒ OTHER — KHÔNG mặc
+ * định SRS (đó chính là lỗi CTW-12).
+ */
+export function docKindOf(p: { templateKey?: string | null; title?: string | null; headings?: string[] }): DocKind {
+  const k = (p.templateKey ?? '').toLowerCase();
+  if (/^fpt-report3|^srs\b|^dac-ta|requirement/.test(k)) return 'SRS';
+  if (/^fpt-report4|^sdd\b|^sds\b|thiet-ke|design/.test(k)) return 'SDD';
+  if (/^gdd\b|game/.test(k)) return 'GDD';
+  const t = p.title ?? '';
+  if (/\bgdd\b|game\s*design/i.test(t)) return 'GDD';
+  if (/\b(sdd|sds)\b|design\s*(spec|doc|desc)|report\s*4\b|thiết\s*kế/iu.test(t)) return 'SDD';
+  if (/\bsrs\b|requirements?|report\s*3\b|yêu\s*cầu|đặc\s*tả/iu.test(t)) return 'SRS';
+  const hs = (p.headings ?? []).map(norm);
+  const hits = (list: typeof SRS_SECTIONS) => list.filter((s) => hs.some((h) => s.re.test(h))).length;
+  const gdd = hs.filter((h) => /(gameplay|mechanic|core loop|level design|lối\s*chơi|màn\s*chơi|nhân\s*vật)/iu.test(h)).length;
+  if (gdd >= 2) return 'GDD';
+  const sdd = hs.filter((h) => /(architecture|class\s*diagram|sequence\s*diagram|database\s*design|package\s*diagram|kiến\s*trúc)/iu.test(h)).length;
+  if (sdd >= 2) return 'SDD';
+  if (hits(SRS_SECTIONS) >= 3 || hs.some((h) => /(functional\s+requirement|use\s*case|non-?\s*functional)/iu.test(h))) return 'SRS';
+  return 'OTHER';
+}
+
+/** Luật bỏ qua theo cấu hình dự án (spec-settings `rules.disabled`). */
+export function disabledRulesOf(settings: unknown): string[] {
+  const r = ((settings ?? {}) as { specRules?: { disabled?: unknown } }).specRules?.disabled;
+  return Array.isArray(r) ? [...new Set(r.filter((x): x is string => typeof x === 'string' && /^[a-z_]{2,40}$/.test(x)))].slice(0, 40) : [];
+}
+/** Luật tắt được (luật trang + luật câu chữ). */
+export const TOGGLEABLE_RULES = ['missing_section', 'no_failure_modes', 'missing_ac', 'no_test', 'vague_term', 'weak_modal', 'placeholder', 'unmeasurable', 'duplicate', 'duplicate_id', 'no_edge_case', 'empty_description'] as const;
+
 // ─── Phân tích xác định ───────────────────────────────────────────
 
 const clip = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1)}…` : s);
@@ -429,6 +498,10 @@ export interface AnalyzeInput {
   pageNumber?: number;
   /** Dự án có quản lý test (loại thẻ TEST) không. */
   testingEnabled: boolean;
+  /** CTW-12: loại trang (PAGE) — chọn khung mục + luật trang. Không truyền ⇒ SRS (hành vi cũ, cho lời gọi cũ). */
+  docKind?: DocKind;
+  /** Luật dự án đã tắt (spec-settings). */
+  disabledRules?: string[];
 }
 
 export interface AnalyzeResult { findings: Finding[]; untraced: UntracedItem[]; stats: Omit<ReviewStats, 'verifiabilityRules'> }
@@ -554,19 +627,20 @@ export function analyze(input: AnalyzeInput): AnalyzeResult {
     }
   }
 
-  // ── Trang: mục chuẩn SRS · không có failure mode · AC tổng ──
+  // ── Trang: mục chuẩn theo LOẠI trang (CTW-12) · không có failure mode · AC tổng (hai luật sau chỉ cho SRS) ──
+  const kind: DocKind = input.docKind ?? 'SRS';
   if (input.scope === 'PAGE' && items.length) {
     const hs = (input.headings ?? []).map(norm);
-    for (const sec of SRS_SECTIONS) {
+    for (const sec of sectionsFor(kind)) {
       if (hs.some((h) => sec.re.test(h))) continue;
       push({
         dimension: 'completeness', severity: sec.severity, rule: 'missing_section', ref: 'Document', excerpt: '',
-        why: `No "${sec.label}" section (ISO/IEC/IEEE 29148 SRS outline).`,
+        why: `No "${sec.label}" section (${DOC_KIND_STANDARD[kind]}).`,
         suggestion: `Add a "${sec.label}" heading, even if it only says "None" — then the gap is a decision, not an omission.`,
         rewrite: null, target: input.pageNumber ? { kind: 'PAGE', pageNumber: input.pageNumber } : null,
       });
     }
-    if (!items.some((it) => it.hasEdgeCase)) {
+    if (kind === 'SRS' && !items.some((it) => it.hasEdgeCase)) {
       push({
         dimension: 'completeness', severity: 'high', rule: 'no_failure_modes', ref: 'Document', excerpt: '',
         why: 'No requirement says what happens on errors, invalid input, timeouts or limits — only the happy path is specified.',
@@ -575,7 +649,7 @@ export function analyze(input: AnalyzeInput): AnalyzeResult {
       });
     }
     const noAc = items.filter((it) => !it.hasAcceptanceCriteria);
-    if (noAc.length) {
+    if (kind === 'SRS' && noAc.length) {
       push({
         dimension: 'verifiability', severity: noAc.length / items.length > 0.5 ? 'high' : 'medium', rule: 'missing_ac', ref: 'Document',
         excerpt: noAc.slice(0, 6).map((it) => it.ref).join(', ') + (noAc.length > 6 ? ` +${noAc.length - 6} more` : ''),
@@ -594,8 +668,9 @@ export function analyze(input: AnalyzeInput): AnalyzeResult {
     .slice(0, 200)
     .map((it) => ({ ref: it.ref, title: clip(it.kind === 'ISSUE' ? (it.title ?? '') : it.text, 200), hasAcceptanceCriteria: it.hasAcceptanceCriteria, target: targetOf(input, it) }));
 
+  const off = new Set(input.disabledRules ?? []);
   return {
-    findings: out.map((f, i) => ({ ...f, id: `r${i + 1}` })),
+    findings: out.filter((f) => !off.has(f.rule)).map((f, i) => ({ ...f, id: `r${i + 1}` })),
     untraced,
     stats: {
       items: items.length, withAcceptanceCriteria: withAc, withTests, measurable,

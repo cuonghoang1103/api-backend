@@ -9,6 +9,7 @@ import ArticleActions from './ArticleActions';
 import ReaderAiTools from './ReaderAiTools';
 import ReadingProgress from './ReadingProgress';
 import ArticleComments from './ArticleComments';
+import { OG_SITE, ogImageOr } from '@/lib/og/pickImage'; // UX-D
 
 /**
  * Tech Trends — article detail page (SSR).
@@ -118,13 +119,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       modifiedTime: article.updatedAt || undefined,
       authors: [authorName(article.author)],
       tags: article.tags,
-      images: image ? [image] : ['/opengraph-image'],
+      images: ogImageOr(image, url), // UX-D: không có ảnh PNG/JPEG ⇒ ảnh động opengraph-image.tsx
+      ...OG_SITE,
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image', // UX-D: luôn ảnh lớn — opengraph-image.tsx cùng thư mục có tiêu đề thật
       title: article.title,
       description,
-      images: image ? [image] : undefined,
+      images: ogImageOr(image, url),
     },
   };
 }

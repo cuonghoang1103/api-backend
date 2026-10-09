@@ -6,7 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
-import { CARD_SELECT, scrubCardForClient, toCard } from './issues.service.js';
+import { CARD_SELECT, clientCard } from './issues.service.js';
 import { compileJql, JqlError, parseJql, type JqlContext } from './jql.js';
 import { filterPeople, peopleFilterFor, type PeopleFilter } from './clientPeople.js';
 import { isClientScoped, requireProject } from './permissions.js';
@@ -49,6 +49,7 @@ export async function compileFor(userId: number, projectId: number, query: strin
   const access = await requireProject(userId, projectId, 'project.view');
   try {
     const ctx = await jqlContext(projectId, userId, access.key, await peopleFilterFor(access, userId));
+    ctx.publicCommentsOnly = isClientScoped(access); // K-1: khách chỉ dò trong bình luận PUBLIC
     const compiled = compileJql(parseJql(query.slice(0, 4000)), ctx);
     return { access, ...compiled };
   } catch (err) {
@@ -80,7 +81,7 @@ export async function search(userId: number, projectId: number, query: string, o
     prisma.workIssue.count({ where: full }),
     prisma.workIssue.findMany({ where: full, orderBy, skip: offset, take: limit, select: CARD_SELECT }),
   ]);
-  return { total, items: rows.map((r) => scrubCardForClient(toCard(r), scoped)), offset, limit };
+  return { total, items: rows.map((r) => clientCard(r, scoped)), offset, limit };
 }
 
 /**

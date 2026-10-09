@@ -14,6 +14,7 @@ import { Clock, Plus, Trash2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import { userName, workApi, workError, type IssueDetail, type ProjectConfig, type Worklog } from '@/lib/work-api';
+import { TL_ACTIVITIES, WORK_PRODUCTS, workCtw4Api, workCtw4Keys } from '@/lib/work-ctw4-api';
 import { wk } from './hooks';
 import { ConfirmDialog } from './settings/shared';
 import { Dialog, Spinner, UserAvatar, relativeTime } from './ui';
@@ -69,14 +70,27 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
   const [note, setNote] = useState('');
   const [mode, setMode] = useState<RemainingMode>('auto');
   const [remainingText, setRemainingText] = useState('');
+  // CTW đợt 4 (A24): Activity + Work Product theo sheet TimeLogs — mặc định gợi ý từ tiêu đề thẻ.
+  const [activity, setActivity] = useState('');
+  const [workProduct, setWorkProduct] = useState('');
+  const defaults = useQuery({ queryKey: workCtw4Keys.worklogDefaults(pid, issue.number), queryFn: () => workCtw4Api.worklogDefaults(pid, issue.number), enabled: open, staleTime: 60_000 });
+  useEffect(() => {
+    if (!open || !defaults.data) return;
+    setActivity((a) => a || defaults.data!.activity);
+    setWorkProduct((w) => w || defaults.data!.workProduct);
+  }, [open, defaults.data]);
 
   useEffect(() => {
     if (!open) return;
+    // Hiệu ứng gợi ý mặc định chạy TRƯỚC hiệu ứng này ⇒ đặt lại theo gợi ý (nếu đã có trong bộ đệm), không xoá trắng.
+    setActivity(defaults.data?.activity ?? '');
+    setWorkProduct(defaults.data?.workProduct ?? '');
     setSpent('');
     setStarted(nowLocalInput());
     setNote('');
     setMode('auto');
     setRemainingText('');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   const minutes = parseDuration(spent);
@@ -92,6 +106,8 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
       startedAt: new Date(started).toISOString(),
       note: note.trim() || null,
       remaining: mode === 'set' ? remainingMin! : mode,
+      activity: activity || null,
+      workProduct: workProduct.trim() || null,
     }),
     onSuccess: () => {
       toast.success(`Logged ${fmtMinutes(minutes)}`);
@@ -173,6 +189,22 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
           </div>
         </fieldset>
 
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label className="w-label" htmlFor="w-lt-activity">Activity</label>
+            <select id="w-lt-activity" className="w-input" value={activity} onChange={(e) => setActivity(e.target.value)}>
+              <option value="">Not set</option>
+              {TL_ACTIVITIES.map((a) => <option key={a} value={a}>{a}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="w-label" htmlFor="w-lt-product">Work product</label>
+            <input id="w-lt-product" list="w-lt-products" maxLength={120} className="w-input" placeholder="Report3 (SRS) or a module" value={workProduct} onChange={(e) => setWorkProduct(e.target.value)} />
+            <datalist id="w-lt-products">{WORK_PRODUCTS.map((x) => <option key={x} value={x} />)}</datalist>
+          </div>
+        </div>
+        <p className="-mt-2 text-[12px] text-[var(--w-text-3)]">Used for the TimeLogs sheet of the FPT Project Tracking file.</p>
+
         <div>
           <label className="w-label" htmlFor="w-lt-note">Work description</label>
           <textarea id="w-lt-note" rows={3} maxLength={1000} className="w-input !h-auto py-2" placeholder="What did you work on? (optional)" value={note} onChange={(e) => setNote(e.target.value)} />
@@ -237,9 +269,14 @@ export function TimeTrackingBlock({ pid, issue, config }: { pid: number; issue: 
 
 // ─── Danh sách worklog (tab "Work log" trong phần hoạt động) ─────
 
-function WorklogItem({ log, pid, num, canDelete }: { log: Worklog; pid: number; num: number; canDelete: boolean }) {
+function WorklogItem({ log, pid, num, canDelete, canEditMeta }: { log: Worklog; pid: number; num: number; canDelete: boolean; canEditMeta: boolean }) {
   const qc = useQueryClient();
   const [confirm, setConfirm] = useState(false);
+  const meta = useMutation({
+    mutationFn: (activity: string | null) => workCtw4Api.setWorklogMeta(pid, num, log.id, { activity }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: wk.worklogs(pid, num) }); qc.invalidateQueries({ queryKey: workCtw4Keys.timeByActivity(pid) }); },
+    onError: (err) => toast.error(workError(err, 'Could not change the activity')),
+  });
   const del = useMutation({
     mutationFn: () => workApi.deleteWorklog(pid, num, log.id),
     onSuccess: () => {
@@ -270,6 +307,17 @@ function WorklogItem({ log, pid, num, canDelete }: { log: Worklog; pid: number; 
               <Trash2 size={12} />
             </button>
           )}
+        </div>
+        <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11.5px]">
+          {canEditMeta ? (
+            <select aria-label="Activity" className="w-input !h-[24px] !w-auto !py-0 !text-[11.5px]" value={log.activity ?? ''} disabled={meta.isPending} onChange={(e) => meta.mutate(e.target.value || null)}>
+              <option value="">Activity: not set</option>
+              {TL_ACTIVITIES.map((a) => <option key={a} value={a}>{a}</option>)}
+            </select>
+          ) : log.activity ? (
+            <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 font-medium text-[var(--w-text-2)]">{log.activity}</span>
+          ) : null}
+          {log.workProduct && <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 text-[var(--w-text-2)]" title="Work product">{log.workProduct}</span>}
         </div>
         {log.note && <p className="mt-0.5 whitespace-pre-wrap break-words text-[13px] text-[var(--w-text-2)]">{log.note}</p>}
       </div>
@@ -312,7 +360,7 @@ export function WorklogList({ pid, num, config }: { pid: number; num: number; co
       ) : (
         <ol className="space-y-3">
           {logs.map((l) => (
-            <WorklogItem key={l.id} log={l} pid={pid} num={num} canDelete={canLog && (l.userId === meId || config.role === 'ADMIN')} />
+            <WorklogItem key={l.id} log={l} pid={pid} num={num} canDelete={canLog && (l.userId === meId || config.role === 'ADMIN')} canEditMeta={canLog && (l.userId === meId || config.role === 'ADMIN')} />
           ))}
         </ol>
       )}

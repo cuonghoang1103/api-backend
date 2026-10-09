@@ -18,6 +18,7 @@ import { EmptyState, Spinner, UserAvatar } from '@/components/work/ui';
 import { cn } from '@/lib/utils';
 import { addDays, vnToday } from './TimeTab';
 import { Card, fmtDay, num, SectionTitle, StatCell, useAllSprints } from './shared';
+import { signalText } from '../ui';
 
 /** "Sep 24" hoặc "Sep 24 – 26". */
 function fmtSpan(start: string, end: string): string {
@@ -39,7 +40,7 @@ function UtilBar({ row }: { row: CapacityRow }) {
       <div className="h-1.5 w-full min-w-[60px] overflow-hidden rounded-full bg-[var(--w-sunken)]" role="img" aria-label={`${num(u)}% utilised`}>
         <div className="h-full rounded-full" style={{ width: `${Math.min(100, Math.max(0, u))}%`, background: utilTone(u) }} />
       </div>
-      <span className="w-11 shrink-0 text-right text-[12px] font-medium tabular-nums" style={{ color: utilTone(u) }}>{num(u)}%</span>
+      <span className="w-11 shrink-0 text-right text-[12px] font-medium tabular-nums" style={{ color: signalText(utilTone(u)) }}>{num(u)}%</span>
     </div>
   );
 }

@@ -59,7 +59,10 @@ describe('CTW-6 — JQL ~ không phân biệt dấu; CTW-11 — flagged', () => 
   it('summary/description/text ~ so trên cột đã bỏ dấu', () => {
     assert.deepEqual(w('summary ~ "Địa Cầu"'), { titleFold: { contains: 'dia cau' } });
     assert.deepEqual(w('description ~ "dia cau"'), { descriptionFold: { contains: 'dia cau' } });
-    assert.deepEqual(w('text ~ "đêm"'), { OR: [{ titleFold: { contains: 'dem' } }, { descriptionFold: { contains: 'dem' } }] });
+    // CTW đợt 5b K-1: `text ~` tìm cả trong bình luận (gồm phiên âm voice note); `comment ~` chỉ trong bình luận.
+    const inComments = (t: string) => ({ comments: { some: { deletedAt: null, bodyText: { contains: t, mode: 'insensitive' } } } });
+    assert.deepEqual(w('text ~ "đêm"'), { OR: [{ titleFold: { contains: 'dem' } }, { descriptionFold: { contains: 'dem' } }, inComments('đêm')] });
+    assert.deepEqual(w('comment ~ "Safari"'), inComments('Safari'));
     assert.deepEqual(w('summary !~ "x"'), { NOT: { titleFold: { contains: 'x' } } });
   });
   it('flagged = true/false, IS EMPTY', () => {

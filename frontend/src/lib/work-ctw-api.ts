@@ -50,24 +50,27 @@ export function errorCodeOf(err: unknown): string | null {
 
 // ─── CTW-23: nhận diện dự án / không gian ────────────────────────
 
-export const BRAND_MAX_BYTES = 2 * 1024 * 1024;
+export const BRAND_MAX_BYTES = 5 * 1024 * 1024;
 export const BRAND_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
 
-async function uploadBrand(presignPath: string, completePath: string, file: File): Promise<Record<string, string | null>> {
+/**
+ * UX-D (09/10/2026): gửi BYTE ảnh cho backend (POST …/upload) thay vì presign → PUT thẳng endpoint R2. Đường cũ báo
+ * "Failed to fetch" trên production: app desktop chặn R2 ở CSP `connect-src`, web phụ thuộc CORS của bucket. Backend
+ * kiểm bằng sharp, thu ≤ 512px, lưu PNG. Không FormData (instance axios đặt cứng JSON sẽ biến FormData thành `{}`).
+ */
+async function uploadBrand(uploadPath: string, file: File): Promise<Record<string, string | null>> {
   if (!BRAND_IMAGE_TYPES.includes(file.type)) throw new Error('Use a PNG, JPEG, WebP or GIF image');
-  if (file.size > BRAND_MAX_BYTES) throw new Error('Images must be 2 MB or smaller');
-  const pre = await d<{ uploadUrl: string; key: string; headers: Record<string, string> }>(api.post(presignPath, { contentType: file.type, size: file.size }));
-  const put = await fetch(pre.uploadUrl, { method: 'PUT', headers: pre.headers, body: file });
-  if (!put.ok) throw new Error(`Upload failed (${put.status})`);
-  return d<Record<string, string | null>>(api.post(completePath, { key: pre.key }));
+  if (file.size > BRAND_MAX_BYTES) throw new Error('Images must be 5 MB or smaller');
+  const buf = await file.arrayBuffer();
+  return d<Record<string, string | null>>(api.post(uploadPath, buf, { headers: { 'Content-Type': file.type }, timeout: 60_000, transformRequest: [(x) => x] }));
 }
 
 export const workBrandApi = {
   /** Emoji + màu (#rrggbb); null = gỡ. */
   update: (pid: number, body: { iconEmoji?: string | null; color?: string | null }) => d(api.patch(`${B}/projects/${pid}`, body)),
-  uploadAvatar: (pid: number, file: File) => uploadBrand(`${B}/projects/${pid}/avatar/presign`, `${B}/projects/${pid}/avatar/complete`, file),
+  uploadAvatar: (pid: number, file: File) => uploadBrand(`${B}/projects/${pid}/avatar/upload`, file),
   removeAvatar: (pid: number) => d(api.delete(`${B}/projects/${pid}/avatar`)),
-  uploadLogo: (wsId: number, file: File) => uploadBrand(`${B}/workspaces/${wsId}/logo/presign`, `${B}/workspaces/${wsId}/logo/complete`, file),
+  uploadLogo: (wsId: number, file: File) => uploadBrand(`${B}/workspaces/${wsId}/logo/upload`, file),
   removeLogo: (wsId: number) => d(api.delete(`${B}/workspaces/${wsId}/logo`)),
 };
 

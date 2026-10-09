@@ -79,11 +79,12 @@ export const RAID_THRESHOLDS = { HIGH: 15, MEDIUM: 8 } as const;
 
 /** Trạng thái hợp lệ theo loại — giả định có bộ riêng. */
 export function raidStatusesFor(type: RaidType): readonly string[] {
+  if (type === 'QUESTION') return ['OPEN', 'ANSWERED', 'CANCELLED'];
   return type === 'ASSUMPTION' ? ['UNVALIDATED', 'VALIDATED', 'INVALID'] : ['OPEN', 'MONITORING', 'MITIGATED', 'CLOSED'];
 }
 export const raidDefaultStatus = (type: RaidType) => (type === 'ASSUMPTION' ? 'UNVALIDATED' : 'OPEN');
 /** Dòng đã "đóng" (không còn nhắc xem lại, không vào top rủi ro). */
-export const raidClosed = (status: string) => status === 'CLOSED' || status === 'VALIDATED' || status === 'INVALID';
+export const raidClosed = (status: string) => status === 'CLOSED' || status === 'VALIDATED' || status === 'INVALID' || status === 'ANSWERED' || status === 'CANCELLED';
 
 export function riskScore(p: number | null | undefined, i: number | null | undefined): number | null {
   if (!p || !i) return null;
@@ -114,7 +115,7 @@ export function reviewDue(r: { status: string; reviewDate: string | null }, toda
 }
 
 /** Tiền tố hiển thị: R-12, A-3, I-7, D-9 (một bộ đếm chung cho cả sổ). */
-export const RAID_PREFIX: Record<RaidType, string> = { RISK: 'R', ASSUMPTION: 'A', ISSUE: 'I', DEPENDENCY: 'D' };
+export const RAID_PREFIX: Record<RaidType, string> = { RISK: 'R', ASSUMPTION: 'A', ISSUE: 'I', DEPENDENCY: 'D', QUESTION: 'Q' };
 
 /**
  * Rủi ro mẫu từ so-dang-ky-rui-ro.md: các dòng bảng có ID dạng R01. Cột:

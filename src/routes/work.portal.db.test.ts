@@ -312,8 +312,9 @@ describe('CT Work — cổng khách S2b (HTTP + DB thật)', { skip: !RUN }, () 
     assert.deepEqual(reqs, [i1, i2, req.data.number]);
     const det = (await call(clientA, 'GET', `/projects/${aPid}/portal/requests/${i1}`)).data;
     assert.ok(!JSON.stringify(det).includes(SECRET));
-    assert.equal(det.parent.title, 'Internal epic codename', 'epic chứa thẻ: chỉ tên');
-    assert.equal(det.parent.number, null, 'epic chưa chia sẻ ⇒ không có số để mở');
+    // Đợt 6a (D8): tiêu đề epic CHƯA chia sẻ là tiêu đề thẻ nội bộ ⇒ không hiện cả tên (trước đây hiện tên, ẩn số).
+    assert.equal(det.parent, null, 'epic chưa chia sẻ ⇒ không tên, không số');
+    assert.ok(!JSON.stringify(det).includes('Internal epic codename'));
     assert.deepEqual(det.attachments.map((a: any) => a.id), [attShared]);
     assert.equal((await call(clientA, 'GET', `/projects/${aPid}/portal/requests/${i3}`)).status, 404);
 

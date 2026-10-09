@@ -2,12 +2,19 @@
 
 /**
  * Hoạt động của thẻ: bình luận (có @nhắc tên) và lịch sử thay đổi.
+ *
+ * CTW đợt 5b K-1: trả lời theo luồng (một cấp, thu/mở), tệp + voice note ngay trong bình luận (kéo-thả / chọn / ghi
+ * âm — comments/CommentFiles.tsx), phiên âm hiện dưới voice note, và hiện diện "ai đang xem / gõ / sửa" (K16).
  */
 
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Bot, Flag, Pencil, Trash2 } from 'lucide-react';
+import { Bot, ChevronDown, ChevronRight, CornerDownRight, Flag, Paperclip, Pencil, Reply, Trash2 } from 'lucide-react';
+import { connectSocket } from '@/lib/socket';
+import { workCommentsApi, type ThreadComment } from '@/lib/work-comments-api';
+import { CommentAttachments, DraftChips, useCommentDrafts, VoiceRecorder } from './comments/CommentFiles';
+import { usePresenceFlag } from './comments/IssuePresence';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import {
@@ -22,38 +29,87 @@ import { ReactionBar, ReactionPickerButton, useCommentReactionsRealtime, useTogg
 import { ClientPill, CommentModeToggle, InternalPill, portalStaff } from './portal/ClientShare';
 import type { CommentVisibility } from '@/lib/work-api';
 
-function CommentComposer({ config, pid, num, clientShared }: { config: ProjectConfig; pid: number; num: number; clientShared: boolean }) {
+function CommentComposer({ config, pid, num, clientShared, parent, onDone }: {
+  config: ProjectConfig; pid: number; num: number; clientShared: boolean;
+  /** K-1: soạn TRẢ LỜI cho bình luận này (luồng một cấp — server gắn vào gốc). */
+  parent?: { id: number; name: string; visibility?: CommentVisibility } | null;
+  onDone?: () => void;
+}) {
   const qc = useQueryClient();
   const [doc, setDoc] = useState<TiptapDoc | null>(null);
   const [key, setKey] = useState(0);
-  const [focused, setFocused] = useState(false);
-  // Cổng khách (S2b): mặc định GHI CHÚ NỘI BỘ; "Reply to client" phải chọn chủ động.
+  const [focused, setFocused] = useState(!!parent);
+  const [dragOver, setDragOver] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+  // Cổng khách (S2b): mặc định GHI CHÚ NỘI BỘ; "Reply to client" phải chọn chủ động. Trả lời một bình luận cho khách
+  // ⇒ mặc định cũng là trả lời khách (đúng chỗ khách đang đọc).
   const portal = portalStaff(config);
-  const [mode, setMode] = useState<CommentVisibility>('INTERNAL');
+  const [mode, setMode] = useState<CommentVisibility>(parent?.visibility === 'PUBLIC' ? 'PUBLIC' : 'INTERNAL');
   const toClient = portal && mode === 'PUBLIC' && clientShared;
+  const drafts = useCommentDrafts(pid, num);
+  const canAttach = config.permissions.attach;
   const add = useMutation({
-    mutationFn: () => workApi.addComment(pid, num, doc!, portal ? (toClient ? 'PUBLIC' : 'INTERNAL') : undefined),
+    mutationFn: () => workCommentsApi.add(pid, num, {
+      bodyJson: doc ?? { type: 'doc', content: [] },
+      ...(portal ? { visibility: toClient ? 'PUBLIC' : 'INTERNAL' } : {}),
+      ...(parent ? { parentId: parent.id } : {}),
+      ...(drafts.ids.length ? { attachmentIds: drafts.ids } : {}),
+    }),
     onSuccess: () => {
       setDoc(null);
       setKey((k) => k + 1);
       setFocused(false);
       setMode('INTERNAL');
+      drafts.clear();
       qc.invalidateQueries({ queryKey: wk.comments(pid, num) });
       qc.invalidateQueries({ queryKey: wk.issue(pid, num) });
+      onDone?.();
     },
     onError: (err) => toast.error(workError(err, 'Could not post the comment')),
   });
-  const empty = isDocEmpty(doc);
-  const submit = () => !empty && !add.isPending && add.mutate();
+  const empty = isDocEmpty(doc) && !drafts.ids.length;
+  const submit = () => !empty && !drafts.uploading && !add.isPending && add.mutate();
   const me = useAuthStore((s) => s.user);
   // Lấy đúng bản ghi thành viên của dự án (cùng nguồn với board/bình luận) — authStore có thể đặt displayName = username.
   const meMember = me ? config.members.find((m) => m.id === me.id) : undefined;
   const meUser = meMember ?? (me ? { username: me.username, fullName: me.fullName ?? null, displayName: me.displayName ?? null, avatarUrl: me.avatarUrl ?? null } : null);
+  // K16: đang gõ (có chữ / đang ghi âm) ⇒ người khác thấy "… is typing a comment".
+  usePresenceFlag(pid, num, 'typing', focused && (!isDocEmpty(doc) || recording));
+  const onRecorded = useCallback((f: File, ms: number) => drafts.addVoice(f, ms), [drafts]);
+  const cancel = () => {
+    for (const d of drafts.drafts) drafts.remove(d.key);
+    setFocused(false); setDoc(null); setKey((k) => k + 1);
+    onDone?.();
+  };
+  const hasFiles = (e: React.DragEvent) => Array.from(e.dataTransfer?.types ?? []).includes('Files');
 
   return (
     <div className="flex gap-3">
-      <UserAvatar user={meUser} size={26} className="mt-1" />
-      <div className="min-w-0 flex-1" onFocusCapture={() => setFocused(true)}>
+      <UserAvatar user={meUser} size={parent ? 22 : 26} className="mt-1" />
+      <div
+        className={cn('min-w-0 flex-1 rounded-[8px]', dragOver && 'w-drop-target')}
+        onFocusCapture={() => setFocused(true)}
+        onDragOver={(e) => { if (canAttach && hasFiles(e)) { e.preventDefault(); setDragOver(true); } }}
+        onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragOver(false); }}
+        onDropCapture={(e) => {
+          setDragOver(false);
+          if (!canAttach || !hasFiles(e)) return;
+          const all = Array.from(e.dataTransfer.files);
+          // Chỉ có ảnh ⇒ để trình soạn chèn ảnh vào nội dung (đợt 3A). Có tệp khác ⇒ mọi tệp thành tệp đính kèm.
+          if (!all.length || all.every((f) => f.type.startsWith('image/'))) return;
+          e.preventDefault();
+          e.stopPropagation();
+          setFocused(true);
+          drafts.addFiles(all);
+        }}
+        data-testid={parent ? 'reply-composer' : 'comment-composer'}
+      >
+        {parent && (
+          <div className="mb-1.5 flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">
+            <CornerDownRight size={12} aria-hidden="true" /> Replying to <span className="font-medium text-[var(--w-text-2)]">{parent.name}</span>
+          </div>
+        )}
         {portal && (
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <CommentModeToggle value={toClient ? 'PUBLIC' : 'INTERNAL'} onChange={setMode} shared={clientShared} />
@@ -69,19 +125,31 @@ function CommentComposer({ config, pid, num, clientShared }: { config: ProjectCo
           onChange={(d) => setDoc(d)}
           members={config.members}
           projectId={pid}
-          placeholder={toClient ? 'Write a reply the client will read…' : 'Add a comment… Type @ to mention someone'}
+          placeholder={toClient ? 'Write a reply the client will read…' : parent ? 'Write a reply…' : 'Add a comment… Type @ to mention someone'}
           minHeight={focused ? 72 : 36}
           toolbar={focused}
           onSubmit={submit}
+          autoFocus={!!parent}
+          onEscape={parent ? cancel : undefined}
         />
         </div>
-        {focused && (
-          <div className="mt-2 flex items-center gap-2">
-            <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={empty || add.isPending} onClick={submit}>
-              {add.isPending ? 'Saving…' : toClient ? 'Reply to client' : portal ? 'Add internal note' : 'Comment'}
+        <DraftChips drafts={drafts.drafts} onRemove={drafts.remove} />
+        {(focused || drafts.drafts.length > 0 || recording) && (
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={empty || drafts.uploading || add.isPending || recording} onClick={submit}>
+              {add.isPending ? 'Saving…' : drafts.uploading ? 'Uploading…' : toClient ? 'Reply to client' : parent ? 'Reply' : portal ? 'Add internal note' : 'Comment'}
             </button>
-            <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => { setFocused(false); setDoc(null); setKey((k) => k + 1); }}>Cancel</button>
-            <span className="ml-auto text-[11px] text-[var(--w-text-3)]"><span className="w-kbd">⌘</span> <span className="w-kbd">↵</span> to send</span>
+            <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={cancel}>Cancel</button>
+            {canAttach && (
+              <>
+                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Attach files" title="Attach files (or drop them here) — up to 25 MB each" onClick={() => fileRef.current?.click()}>
+                  <Paperclip size={14} />
+                </button>
+                <input ref={fileRef} type="file" multiple hidden aria-hidden="true" tabIndex={-1} onChange={(e) => { if (e.target.files?.length) drafts.addFiles(e.target.files); e.target.value = ''; }} />
+                <VoiceRecorder onRecorded={onRecorded} onActive={setRecording} disabled={add.isPending} />
+              </>
+            )}
+            <span className="ml-auto hidden text-[11px] text-[var(--w-text-3)] sm:inline"><span className="w-kbd">⌘</span> <span className="w-kbd">↵</span> to send</span>
           </div>
         )}
       </div>
@@ -134,7 +202,7 @@ function ReportCommentDialog({ open, onClose, pid, num, cid }: { open: boolean; 
   );
 }
 
-function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectConfig; pid: number; num: number }) {
+function CommentItem({ c, config, pid, num, onReply, reply }: { c: ThreadComment; config: ProjectConfig; pid: number; num: number; onReply?: () => void; reply?: boolean }) {
   const qc = useQueryClient();
   const meId = useAuthStore((s) => s.user?.id);
   const [editing, setEditing] = useState(false);
@@ -143,6 +211,9 @@ function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectC
   const [draft, setDraft] = useState<TiptapDoc>(c.bodyJson);
   const mine = !!c.author && c.author.id === meId;
   const canDelete = (mine && config.permissions.comment) || config.role === 'ADMIN';
+  const files = c.attachments ?? [];
+  // K16: đang sửa bình luận ⇒ người khác thấy "… is editing".
+  usePresenceFlag(pid, num, 'editing', editing);
   // Cảm xúc: ai bình luận được thì bấm được (VIEWER chỉ xem chip).
   const canReact = config.permissions.comment;
   const reactions = c.reactions ?? [];
@@ -163,16 +234,16 @@ function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectC
   });
 
   return (
-    <div id={`comment-${c.id}`} className="group flex gap-3">
+    <div id={`comment-${c.id}`} className="group flex gap-3" data-testid={reply ? 'comment-reply' : 'comment'}>
       {c.isAi ? (
-        <span className="mt-0.5 flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]"><Bot size={14} /></span>
+        <span className={cn('mt-0.5 flex shrink-0 items-center justify-center rounded-full bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]', reply ? 'h-[22px] w-[22px]' : 'h-[26px] w-[26px]')}><Bot size={14} /></span>
       ) : (
-        <UserAvatar user={c.author} size={26} className="mt-0.5" />
+        <UserAvatar user={c.author} size={reply ? 22 : 26} className="mt-0.5" />
       )}
       <div className="min-w-0 flex-1">
-        <div className="mb-1 flex items-center gap-2 text-[12px]">
-          <span className="font-semibold text-[var(--w-text)]">{c.isAi ? 'CT Work AI' : userName(c.author)}</span>
-          <span className="text-[var(--w-text-3)]" title={new Date(c.createdAt).toLocaleString('en-US')}>{relativeTime(c.createdAt)}</span>
+        <div className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px]">
+          <span className="whitespace-nowrap font-semibold text-[var(--w-text)]">{c.isAi ? 'CT Work AI' : userName(c.author)}</span>
+          <span className="whitespace-nowrap text-[var(--w-text-3)]" title={new Date(c.createdAt).toLocaleString('en-US')}>{relativeTime(c.createdAt)}</span>
           {c.editedAt && <span className="text-[var(--w-text-3)]">(edited)</span>}
           {portalStaff(config) && (c.visibility === 'PUBLIC' ? <ClientPill label="Reply to client" /> : <InternalPill label="Internal note" />)}
           {!editing && canReact && (
@@ -182,7 +253,10 @@ function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectC
             </span>
           )}
           {!editing && (
-            <span className={cn('flex gap-0.5 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100', !canReact && 'ml-auto')}>
+            <span className={cn('flex gap-0.5 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100', !canReact && 'ml-auto')}>
+              {onReply && config.permissions.comment && (
+                <button type="button" title="Reply" aria-label={`Reply to ${c.isAi ? 'CT Work AI' : userName(c.author)}`} onClick={onReply} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Reply size={12} /></button>
+              )}
               {!mine && (
                 <button type="button" title="Report comment" aria-label="Report comment" onClick={() => setReporting(true)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Flag size={12} /></button>
               )}
@@ -199,13 +273,14 @@ function CommentItem({ c, config, pid, num }: { c: WorkComment; config: ProjectC
           <>
             <RichEditor value={draft} onChange={(d) => setDraft(d)} members={config.members} projectId={config.id} autoFocus onSubmit={() => save.mutate()} onEscape={() => setEditing(false)} />
             <div className="mt-2 flex gap-2">
-              <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={save.isPending || isDocEmpty(draft)} onClick={() => save.mutate()}>Save</button>
+              <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={save.isPending || (isDocEmpty(draft) && !files.length)} onClick={() => save.mutate()}>Save</button>
               <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setEditing(false)}>Cancel</button>
             </div>
           </>
         ) : (
           <>
-            <RichView value={c.bodyJson} />
+            {!isDocEmpty(c.bodyJson) && <RichView value={c.bodyJson} />}
+            <CommentAttachments pid={pid} num={num} files={files} canRetry={() => mine || config.role === 'ADMIN'} />
             <ReactionBar reactions={reactions} meId={meId} canReact={canReact} onToggle={toggleReaction} />
           </>
         )}
@@ -301,10 +376,81 @@ const ACTIVITY_TABS = [
   { id: 'worklog', label: 'Work log' },
 ] as const;
 
+/** K-1: phiên âm voice note xong (chạy nền trên server) ⇒ tải lại bình luận của thẻ đang mở. */
+function useCommentVoiceRealtime(pid: number, num: number) {
+  const qc = useQueryClient();
+  useEffect(() => {
+    let alive = true;
+    let socket: Awaited<ReturnType<typeof connectSocket>> | null = null;
+    const handler = (e: { projectId: number; number: number }) => {
+      if (e.projectId === pid && e.number === num) qc.invalidateQueries({ queryKey: wk.comments(pid, num) });
+    };
+    connectSocket().then((s) => { if (!alive) return; socket = s; s.on('work:comment-voice', handler); }).catch(() => {});
+    return () => { alive = false; socket?.off('work:comment-voice', handler); };
+  }, [pid, num, qc]);
+}
+
+/** Gom bình luận phẳng thành luồng một cấp (khớp buildThreads ở server). Trả lời mồ côi đứng như gốc. */
+function threadsOf(list: ThreadComment[]) {
+  const roots = new Map<number, { root: ThreadComment; replies: ThreadComment[]; orphan: boolean }>();
+  const out: Array<{ root: ThreadComment; replies: ThreadComment[]; orphan: boolean }> = [];
+  for (const c of list) if (!c.parentId) { const t = { root: c, replies: [], orphan: false }; roots.set(c.id, t); out.push(t); }
+  for (const c of list) {
+    if (!c.parentId) continue;
+    const t = roots.get(c.parentId);
+    if (t) t.replies.push(c); else out.push({ root: c, replies: [], orphan: true });
+  }
+  return out;
+}
+
+/** Một luồng: gốc + trả lời (thu/mở được) + ô trả lời. */
+function CommentThread({ t, config, pid, num, clientShared }: { t: ReturnType<typeof threadsOf>[number]; config: ProjectConfig; pid: number; num: number; clientShared: boolean }) {
+  const [open, setOpen] = useState(t.replies.length <= 3);
+  const [replying, setReplying] = useState<ThreadComment | null>(null);
+  const name = (c: ThreadComment) => (c.isAi ? 'CT Work AI' : userName(c.author));
+  const n = t.replies.length;
+  return (
+    <div data-testid="comment-thread">
+      {t.orphan && <p className="mb-1 ml-[38px] text-[11.5px] text-[var(--w-text-3)]">Reply to a deleted comment</p>}
+      <CommentItem c={t.root} config={config} pid={pid} num={num} onReply={() => setReplying(t.root)} />
+      {(n > 0 || replying) && (
+        <div className="ml-[13px] mt-2 border-l-2 border-[var(--w-border)] pl-[22px]">
+          {n > 0 && (
+            <button
+              type="button"
+              className="mb-2 flex items-center gap-1 text-[12px] font-medium text-[var(--w-accent-text)] hover:underline"
+              aria-expanded={open}
+              onClick={() => setOpen((o) => !o)}
+            >
+              {open ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
+              {open ? `Hide ${n === 1 ? 'reply' : `${n} replies`}` : `Show ${n === 1 ? '1 reply' : `${n} replies`}`}
+            </button>
+          )}
+          {open && n > 0 && (
+            <div className="space-y-4">
+              {t.replies.map((r) => <CommentItem key={r.id} c={r} config={config} pid={pid} num={num} reply onReply={() => setReplying(r)} />)}
+            </div>
+          )}
+          {replying && config.permissions.comment && (
+            <div className={cn(n > 0 && open && 'mt-4')}>
+              <CommentComposer
+                config={config} pid={pid} num={num} clientShared={clientShared}
+                parent={{ id: replying.id, name: name(replying), visibility: replying.visibility }}
+                onDone={() => { setReplying(null); setOpen(true); }}
+              />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function IssueActivity({ pid, num, config, lk, clientShared = false }: { pid: number; num: number; config: ProjectConfig; lk: Lookups; clientShared?: boolean }) {
   const [tab, setTab] = useState<(typeof ACTIVITY_TABS)[number]['id']>('comments');
-  const comments = useQuery({ queryKey: wk.comments(pid, num), queryFn: () => workApi.comments(pid, num) });
+  const comments = useQuery({ queryKey: wk.comments(pid, num), queryFn: () => workApi.comments(pid, num) as Promise<ThreadComment[]> });
   useCommentReactionsRealtime(pid, num);
+  useCommentVoiceRealtime(pid, num);
   return (
     <section>
       <div className="mb-4 flex items-center gap-1 border-b border-[var(--w-border)]">
@@ -322,7 +468,7 @@ export default function IssueActivity({ pid, num, config, lk, clientShared = fal
       {tab === 'comments' ? (
         <div className="space-y-5">
           {comments.isLoading && <Spinner />}
-          {comments.data?.map((c) => <CommentItem key={c.id} c={c} config={config} pid={pid} num={num} />)}
+          {threadsOf(comments.data ?? []).map((t) => <CommentThread key={t.root.id} t={t} config={config} pid={pid} num={num} clientShared={clientShared} />)}
           {config.permissions.comment ? (
             <CommentComposer config={config} pid={pid} num={num} clientShared={clientShared} />
           ) : (

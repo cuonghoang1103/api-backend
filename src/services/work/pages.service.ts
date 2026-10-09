@@ -632,6 +632,7 @@ export async function issuePages(userId: number, projectId: number, issueNumber:
 
 const COMMENT_SELECT = {
   id: true, bodyJson: true, bodyText: true, createdAt: true, editedAt: true, authorId: true, author: { select: PUBLIC_USER },
+  parentId: true, // CTW đợt 5b K-1: luồng trả lời một cấp
 } satisfies Prisma.WorkPageCommentSelect;
 
 export async function listComments(userId: number, projectId: number, num: number) {
@@ -641,20 +642,29 @@ export async function listComments(userId: number, projectId: number, num: numbe
   return rows.map((c) => ({ ...c, canDelete: canModifyComment(ctx.access.role, userId, c.authorId) }));
 }
 
-export async function addComment(userId: number, projectId: number, num: number, bodyJson: unknown) {
+export async function addComment(userId: number, projectId: number, num: number, bodyJson: unknown, parentIdIn?: number | null) {
   const ctx = await docCtx(userId, projectId);
   if (!can(ctx.access.role, 'comment.create')) throw new ForbiddenError('You cannot comment in this project');
   const p = await findPage(ctx, num);
   const { json, text } = normDoc(bodyJson);
   if (!text.trim()) throw new BadRequestError('Write something first', 'VALIDATION_ERROR');
-  const c = await prisma.workPageComment.create({ data: { pageId: p.id, authorId: userId, bodyJson: json, bodyText: text.slice(0, 20_000) }, select: COMMENT_SELECT });
+  // K-1: trả lời theo luồng — một cấp (trả lời một trả lời ⇒ gắn vào gốc).
+  let parentId: number | null = null;
+  let parentAuthor: number | null = null;
+  if (parentIdIn) {
+    const par = await prisma.workPageComment.findFirst({ where: { id: parentIdIn, pageId: p.id, deletedAt: null }, select: { id: true, parentId: true, authorId: true } });
+    if (!par) throw new BadRequestError('The comment you are replying to was not found', 'WORK_BAD_PARENT');
+    parentId = par.parentId ?? par.id;
+    parentAuthor = par.authorId;
+  }
+  const c = await prisma.workPageComment.create({ data: { pageId: p.id, authorId: userId, bodyJson: json, bodyText: text.slice(0, 20_000), parentId }, select: COMMENT_SELECT });
   emitPage(projectId, p.id, p.number, 'comment', userId);
-  await notifyComment(ctx, p, c.id, json, text, userId);
+  await notifyComment(ctx, p, c.id, json, text, userId, parentAuthor);
   return { ...c, canDelete: true };
 }
 
 /** @nhắc tên ⇒ WORK_MENTION (chỉ người ĐỌC được trang); chủ trang ⇒ WORK_COMMENT. */
-async function notifyComment(ctx: DocCtx, p: { id: number; number: number; title: string; ownerId: number | null; visibility: string }, commentId: number, json: unknown, text: string, sender: number) {
+async function notifyComment(ctx: DocCtx, p: { id: number; number: number; title: string; ownerId: number | null; visibility: string }, commentId: number, json: unknown, text: string, sender: number, parentAuthor: number | null = null) {
   try {
     const ws = await prisma.workProject.findUnique({ where: { id: ctx.access.projectId }, select: { workspace: { select: { slug: true } } } });
     const url = `/work/${ws?.workspace.slug}/${ctx.access.key}/docs/${p.number}?comment=${commentId}`;
@@ -666,6 +676,14 @@ async function notifyComment(ctx: DocCtx, p: { id: number; number: number; title
       if (!a || !canViewPage(a.role, a.workspaceRole, p.visibility)) continue;
       told.add(uid);
       await notifyWork({ receiverId: uid, senderId: sender, type: 'WORK_MENTION', entityId: p.id, secondaryEntityId: commentId, payload });
+    }
+    // K-1: người được trả lời (tác giả bình luận gốc) — báo trước chủ trang.
+    if (parentAuthor && !told.has(parentAuthor)) {
+      const a = await loadProjectAccess(parentAuthor, ctx.access.projectId);
+      if (a && canViewPage(a.role, a.workspaceRole, p.visibility)) {
+        told.add(parentAuthor);
+        await notifyWork({ receiverId: parentAuthor, senderId: sender, type: 'WORK_COMMENT', entityId: p.id, secondaryEntityId: commentId, payload: { ...payload, reply: true } });
+      }
     }
     if (p.ownerId && !told.has(p.ownerId)) {
       const a = await loadProjectAccess(p.ownerId, ctx.access.projectId);

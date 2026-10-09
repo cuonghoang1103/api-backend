@@ -14,7 +14,6 @@ import Backlog from '@/components/work/Backlog';
 import { AgentLeasesProvider, AssigneeKindFilter, assigneeKindOk, type AssigneeKind } from '@/components/work/agents/leases';
 import CreateIssueDialog from '@/components/work/CreateIssueDialog';
 import IssueDrawer from '@/components/work/IssueDrawer';
-import GettingStartedCard from '@/components/work/onboarding/GettingStartedCard';
 import StartProjectButton from '@/components/work/onboarding/StartProjectButton';
 import ProjectHeader from '@/components/work/ProjectHeader';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
@@ -191,8 +190,7 @@ function BacklogView({ config, pid, slug }: { config: ProjectConfig; pid: number
           </aside>
         )}
         <div className="min-w-0 flex-1 overflow-y-auto">
-          {/* Danh sách "Getting started" nằm trong vùng cuộn để không chiếm chỗ cố định. */}
-          <GettingStartedCard config={config} slug={slug} onCreateIssue={config.permissions.createIssues ? () => setCreateOpen(true) : undefined} className="mx-4 mt-3" />
+          {/* UX-A: "Getting started" chỉ còn ở Board (không lặp ở đây). */}
           {backlog.isLoading ? (
             <PageLoading />
           ) : backlog.error ? (

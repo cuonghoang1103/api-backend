@@ -19,12 +19,12 @@
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import type { LucideIcon } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   ArrowLeft, CalendarRange, CircleHelp, KeyRound, FlaskConical, Rocket, BarChart3, ChevronDown, Columns3, Inbox, LayoutDashboard,
   List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check, Sparkles, PanelLeftClose, PanelLeftOpen, Milestone, BadgeCheck, Network, FileText,
-  BriefcaseBusiness, Gauge,
+  BriefcaseBusiness, Gauge, ListTree,
   Handshake, PackageCheck, Activity,
   CalendarClock, GitPullRequestArrow, ShieldAlert,
   Wallet, Receipt, FileBarChart,
@@ -115,25 +115,18 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
     group: 'Work',
     items: [
       { path: 'list', label: 'Issues', icon: List, match: (v) => v === 'list' || v === 'issue' },
-      { path: 'stages', label: 'Stages', icon: Milestone, match: (v) => v === 'stages', module: 'stages' },
-      { path: 'approvals', label: 'Approvals', icon: BadgeCheck, match: (v) => v === 'approvals', module: 'approvals' },
+      { path: 'tests', label: 'Tests', icon: FlaskConical, match: (v) => v === 'tests' },
       { path: 'docs', label: 'Docs', icon: FileText, match: (v) => v === 'docs', module: 'docs' },
       // Resources (06/10/2026): thư viện link của dự án — bật mặc định cho mọi loại dự án mới.
       { path: 'resources', label: 'Resources', icon: Library, match: (v) => v === 'resources', module: 'resources' },
-      { path: 'portal', label: 'Client portal', icon: Handshake, match: (v) => v === 'portal', module: 'clientPortal' },
-      // Đợt S3b: họp · yêu cầu thay đổi · sổ RAID (mỗi mục chỉ khi mô-đun của nó bật).
-      { path: 'meetings', label: 'Meetings', icon: CalendarClock, match: (v) => v === 'meetings', module: 'meetings' },
-      { path: 'changes', label: 'Changes', icon: GitPullRequestArrow, match: (v) => v === 'changes', module: 'changeRequests' },
-      { path: 'raid', label: 'RAID', icon: ShieldAlert, match: (v) => v === 'raid', module: 'raid' },
-      // Đợt S4: tài chính (đơn giá/chi phí chỉ ADMIN; MEMBER chỉ timesheet của mình — server quyết).
-      { path: 'finance', label: 'Finance', icon: Wallet, match: (v) => v === 'finance', module: 'finance', roles: ['ADMIN', 'MEMBER'] },
-      // Đợt S5a: service desk & SLA (hàng đợi, Problem, báo cáo SLA) — chỉ khi mô-đun serviceDesk bật.
-      { path: 'desk', label: 'Service desk', icon: Headset, match: (v) => v === 'desk', module: 'serviceDesk' },
-      { path: 'tests', label: 'Tests', icon: FlaskConical, match: (v) => v === 'tests' },
       // Đợt S6: Spec quality (Spec Fidelity) — đội dự án + giảng viên; khách không thấy.
       { path: 'spec', label: 'Spec quality', icon: Gauge, match: (v) => v === 'spec', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      // CTW đợt 4: SRS có cấu trúc (use case/actor/BR/màn/phân quyền) + RTM — đội dự án + giảng viên.
+      { path: 'requirements', label: 'Requirements', icon: ListTree, match: (v) => v === 'requirements', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
     ],
   },
+  // UX-A (09/10/2026): Insights đứng TRƯỚC nhóm studio. Dự án CLIENT bật đủ mô-đun có
+  // hơn 20 mục; ở màn cao 900px Reports từng nằm dưới nếp gấp.
   {
     group: 'Insights',
     items: [
@@ -143,7 +136,59 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'school', label: 'FPT reports', icon: FileSpreadsheet, match: (v) => v === 'school', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
     ],
   },
+  // Lớp studio (S1–S5): mỗi mục chỉ hiện khi mô-đun của nó bật. Nhóm gập được.
+  {
+    group: 'Studio',
+    items: [
+      { path: 'stages', label: 'Stages', icon: Milestone, match: (v) => v === 'stages', module: 'stages' },
+      { path: 'approvals', label: 'Approvals', icon: BadgeCheck, match: (v) => v === 'approvals', module: 'approvals' },
+      { path: 'portal', label: 'Client portal', icon: Handshake, match: (v) => v === 'portal', module: 'clientPortal' },
+      // Đợt S3b: họp · yêu cầu thay đổi · sổ RAID.
+      { path: 'meetings', label: 'Meetings', icon: CalendarClock, match: (v) => v === 'meetings', module: 'meetings' },
+      { path: 'changes', label: 'Changes', icon: GitPullRequestArrow, match: (v) => v === 'changes', module: 'changeRequests' },
+      { path: 'raid', label: 'RAID', icon: ShieldAlert, match: (v) => v === 'raid', module: 'raid' },
+      // Đợt S4: tài chính (đơn giá/chi phí chỉ ADMIN; MEMBER chỉ timesheet của mình — server quyết).
+      { path: 'finance', label: 'Finance', icon: Wallet, match: (v) => v === 'finance', module: 'finance', roles: ['ADMIN', 'MEMBER'] },
+      // Đợt S5a: service desk & SLA.
+      { path: 'desk', label: 'Service desk', icon: Headset, match: (v) => v === 'desk', module: 'serviceDesk' },
+    ],
+  },
 ];
+
+// ─── Nhóm gập được (UX-A) ────────────────────────────────────────
+// Nhớ theo tên nhóm (dùng chung mọi dự án) trong localStorage, bọc try/catch.
+const GROUPS_KEY = 'ctwork.sidebar.groups';
+function readGroups(): Record<string, boolean> {
+  try { return JSON.parse(window.localStorage.getItem(GROUPS_KEY) ?? '{}') as Record<string, boolean>; } catch { return {}; }
+}
+function useCollapsedGroups() {
+  const [map, setMap] = useState<Record<string, boolean>>({});
+  useEffect(() => { setMap(readGroups()); }, []);
+  const toggle = useCallback((g: string, now: boolean) => {
+    setMap((m) => {
+      const next = { ...m, [g]: !now };
+      try { window.localStorage.setItem(GROUPS_KEY, JSON.stringify(next)); } catch { /* cửa sổ riêng tư */ }
+      return next;
+    });
+  }, []);
+  return { collapsed: (g: string) => !!map[g], toggle };
+}
+
+function GroupToggle({ label, open, onToggle, count }: { label: string; open: boolean; onToggle: () => void; count: number }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={open}
+      className="w-rail-hide group flex h-6 w-full items-center gap-1 rounded-[5px] px-2 pt-2 text-left hover:text-[var(--w-text)]"
+      title={open ? `Collapse ${label}` : `Expand ${label} (${count})`}
+    >
+      <span className="w-eyebrow flex-1 group-hover:text-[var(--w-text-2)]">{label}</span>
+      {!open && <span className="text-[11px] tabular-nums text-[var(--w-text-3)]">{count}</span>}
+      <ChevronDown size={12} aria-hidden="true" className={cn('shrink-0 text-[var(--w-text-3)] opacity-0 transition-[transform,opacity] group-hover:opacity-100 group-focus-visible:opacity-100', !open && '-rotate-90 opacity-100')} />
+    </button>
+  );
+}
 
 /**
  * Mục cấp không gian. `module` = chỉ hiện khi ÍT NHẤT một dự án của không gian
@@ -235,7 +280,9 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
   const onMyWork = pathname === '/work' && homeTab !== 'workspaces';
   const onWorkspaces = pathname === '/work' && homeTab === 'workspaces';
 
-  // Mở dự án ⇒ cuộn khối của nó (tên + điều hướng con) vào vùng nhìn thấy của sidebar.
+  const groups = useCollapsedGroups();
+  // Mở dự án ⇒ cuộn khối của nó (tên + điều hướng con) vào vùng nhìn thấy của sidebar;
+  // rồi mục ĐANG CHỌN luôn nằm trọn trong khung (UX-A: Reports từng bị che nửa).
   const projectCount = projects.length;
   useEffect(() => {
     if (!key) return;
@@ -247,9 +294,16 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
       const c = sc.getBoundingClientRect();
       if (b.bottom > c.bottom - 8) sc.scrollTop += Math.min(b.bottom - c.bottom + 16, b.top - c.top - 8);
       else if (b.top < c.top) sc.scrollTop -= c.top - b.top + 8;
+      const cur = box.querySelector<HTMLElement>('[aria-current="page"]');
+      if (cur) {
+        const r = cur.getBoundingClientRect();
+        const c2 = sc.getBoundingClientRect();
+        if (r.bottom > c2.bottom - 12) sc.scrollTop += r.bottom - c2.bottom + 24;
+        else if (r.top < c2.top + 4) sc.scrollTop -= c2.top - r.top + 8;
+      }
     }, 60);
     return () => clearTimeout(t);
-  }, [key, projectCount]);
+  }, [key, projectCount, view]);
 
   /* AI — lối vào luôn thấy được (04/10/2026). Trước đây chỉ có nút nhỏ ở header
      của một dự án, nên người dùng kết luận "CT Work chưa có AI". Trong dự án: mở
@@ -353,18 +407,21 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
 
         {slug ? (
           <>
-            <GroupLabel>Workspace</GroupLabel>
-            <div className="space-y-0.5">
-              {WORKSPACE_NAV.filter((n) => (!portalOnly || !n.path) && (!n.staffOnly || (!!ws.data && ws.data.role !== 'GUEST')) && (!n.module || (ws.data?.role !== 'GUEST' && projects.some((p) => p.modules?.[n.module!])))).map((n) => (
-                <NavItem
-                  key={n.label}
-                  href={`/work/${slug}${n.path}`}
-                  icon={n.icon}
-                  label={n.label}
-                  active={n.path ? pathname.startsWith(`/work/${slug}${n.path}`) : pathname === `/work/${slug}`}
-                />
-              ))}
-            </div>
+            {(() => {
+              const items = WORKSPACE_NAV.filter((n) => (!portalOnly || !n.path) && (!n.staffOnly || (!!ws.data && ws.data.role !== 'GUEST')) && (!n.module || (ws.data?.role !== 'GUEST' && projects.some((p) => p.modules?.[n.module!]))));
+              const isOn = (n: (typeof items)[number]) => (n.path ? pathname.startsWith(`/work/${slug}${n.path}`) : pathname === `/work/${slug}`);
+              const open = rail || items.some(isOn) || !groups.collapsed('Workspace');
+              return (
+                <div role="group" aria-label="Workspace" className="mt-3">
+                  <GroupToggle label="Workspace" open={open} count={items.length} onToggle={() => groups.toggle('Workspace', open)} />
+                  <div className="space-y-0.5">
+                    {open && items.map((n) => (
+                      <NavItem key={n.label} href={`/work/${slug}${n.path}`} icon={n.icon} label={n.label} active={isOn(n)} />
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
 
             <GroupLabel
               action={ws.data && ws.data.role !== 'GUEST' ? (
@@ -402,14 +459,21 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                     )}
                     {open && !isPortalClient(p) && (
                       <div className="w-subnav mb-2 ml-[18px] mt-0.5 border-l border-[var(--w-border)] pl-1.5">
-                        {PROJECT_NAV.map((g) => (
-                          <div key={g.group}>
-                            <div className="w-eyebrow w-rail-hide px-2 pb-0.5 pt-2">{g.group}</div>
-                            {g.items.filter((n) => (!n.module || p.modules?.[n.module]) && (!n.roles || n.roles.includes(String(p.role)))).map((n) => (
-                              <NavItem key={n.path} href={`${base}/${n.path}`} icon={n.icon} label={n.label} active={n.match(view)} indent />
-                            ))}
-                          </div>
-                        ))}
+                        {PROJECT_NAV.map((g) => {
+                          const items = g.items.filter((n) => (!n.module || p.modules?.[n.module]) && (!n.roles || n.roles.includes(String(p.role))));
+                          if (!items.length) return null;
+                          const hasActive = items.some((n) => n.match(view));
+                          // Nhóm chứa trang đang mở luôn mở; thanh icon (rail) bỏ qua gập.
+                          const open = rail || hasActive || !groups.collapsed(g.group);
+                          return (
+                            <div key={g.group} role="group" aria-label={g.group}>
+                              <GroupToggle label={g.group} open={open} count={items.length} onToggle={() => groups.toggle(g.group, open)} />
+                              {open && items.map((n) => (
+                                <NavItem key={n.path} href={`${base}/${n.path}`} icon={n.icon} label={n.label} active={n.match(view)} indent />
+                              ))}
+                            </div>
+                          );
+                        })}
                         {p.modules?.resources && <SidebarPinnedLinks pid={p.id} />}
                         <div className="my-1.5 border-t border-[var(--w-border)]" />
                         <NavItem href={`${base}/settings`} icon={Settings} label="Project settings" active={view === 'settings'} indent />

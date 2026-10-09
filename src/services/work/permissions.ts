@@ -481,6 +481,8 @@ const CLIENT_ROUTES: Array<[method: string, re: RegExp]> = [
   ['GET', /^\/pages\/search$/],
   ['GET', /^\/pages\/\d+$/],
   ['GET', /^\/pages\/\d+\/markdown$/],
+  // Đợt 6a: ảnh trong tài liệu/mô tả/bình luận — docs3a.readImage chỉ trả ảnh nằm trong nội dung ĐÃ chia sẻ.
+  ['GET', /^\/images\/\d+$/],
 ];
 
 /** `sub` = phần đường dẫn SAU /projects/:pid ('' cho chính dự án). Hàm thuần — test bằng bảng. */

@@ -9,7 +9,7 @@
  */
 
 import {
-  forwardRef, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState,
+  forwardRef, useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState,
   type ReactNode, type RefObject,
 } from 'react';
 import { createPortal } from 'react-dom';
@@ -272,7 +272,37 @@ export function Dialog({
 // ─── Người ───────────────────────────────────────────────────────
 
 /** Bảng màu dễ chịu, đủ tương phản với chữ trắng ở cả hai theme. */
-const AVATAR_COLORS = ['#5e6ad2', '#2f8f65', '#c8612f', '#b83f6f', '#2a6fd1', '#8a4fd1', '#0f8a86', '#a8741a', '#c9423e', '#56627a'];
+// UX-A P0-3: mọi màu ≥ 4.5:1 với chữ trắng (trước đây 4 màu xanh lá/cam/xanh ngọc/vàng chỉ đạt 4.0–4.2).
+const AVATAR_COLORS = ['#5e6ad2', '#2a8159', '#a9561f', '#b83f6f', '#2a6fd1', '#8a4fd1', '#0d7a76', '#8f6212', '#c9423e', '#56627a'];
+
+function relLum(hex: string): number | null {
+  const m = /^#?([0-9a-f]{6}|[0-9a-f]{3})$/i.exec(hex.trim());
+  if (!m) return null;
+  const h = m[1].length === 3 ? m[1].split('').map((c) => c + c).join('') : m[1];
+  const ch = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+}
+
+/**
+ * UX-A P0-3: màu tín hiệu (`var(--w-green)`…) dùng làm màu CHỮ ⇒ đổi sang token chữ
+ * `var(--w-green-text)` (≥ 4.5:1). Màu khác (hex, --w-text-*) trả nguyên.
+ */
+export function signalText(color: string): string {
+  return color.replace(/^var\(--w-(green|yellow|orange|red|blue|epic)\)$/, 'var(--w-$1-text)');
+}
+
+/**
+ * Nền + chữ cho một ô màu đậm có chữ (mã dự án). Chữ trắng nếu đạt 4.5:1; không thì
+ * chữ gần đen nếu đạt; không thì làm nền tối đi 30% (màu do người dùng chọn có thể
+ * là tông giữa — không trắng không đen nào đạt). Màu không phải hex ⇒ giữ nguyên.
+ */
+export function readableMark(bg: string): { background: string; color: string } {
+  const L = relLum(bg);
+  if (L === null) return { background: bg, color: '#ffffff' };
+  if (1.05 / (L + 0.05) >= 4.5) return { background: bg, color: '#ffffff' };
+  if ((L + 0.05) / (0.0105 + 0.05) >= 4.5) return { background: bg, color: '#1a1a17' };
+  return { background: `color-mix(in srgb, ${bg} 70%, #000)`, color: '#ffffff' };
+}
 
 function hashStr(s: string): number {
   let h = 0;
@@ -304,6 +334,7 @@ export function UserAvatar({ user, size = 22, className }: { user: Pick<WorkUser
   if (!user) {
     return (
       <span
+        role="img"
         title="Unassigned"
         aria-label="Unassigned"
         style={{ width: size, height: size }}
@@ -392,11 +423,12 @@ export function ProjectMark({ k, size = 20, letters = 1, brand }: { k: string; s
       </span>
     );
   }
+  const tone = readableMark(bg);
   return (
     <span
       aria-hidden="true"
-      style={{ background: bg, width: size, height: size, fontSize: Math.round(size * (letters === 2 ? 0.38 : 0.52)) }}
-      className="inline-flex shrink-0 items-center justify-center rounded-[5px] font-bold leading-none tracking-[-0.02em] text-white shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]"
+      style={{ ...tone, width: size, height: size, fontSize: Math.round(size * (letters === 2 ? 0.38 : 0.52)) }}
+      className="inline-flex shrink-0 items-center justify-center rounded-[5px] font-bold leading-none tracking-[-0.02em] shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]"
     >
       {k.slice(0, letters)}
     </span>
@@ -588,9 +620,26 @@ export function EmptyState({ title, body, action, icon }: { title: string; body?
 }
 
 export const Field = forwardRef<HTMLDivElement, { label: string; children: ReactNode; hint?: string }>(function Field({ label, children, hint }, ref) {
+  // UX-A ARIA: nhãn trước đây không gắn với ô (axe "label" ở 8 trang). Gắn ô nhập ĐẦU TIÊN
+  // chưa có tên bằng aria-labelledby — một chỗ cho 260+ nơi dùng Field.
+  const labelId = useId();
+  const boxRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = boxRef.current?.querySelector<HTMLElement>('input:not([type=hidden]), select, textarea');
+    if (el && !el.getAttribute('aria-label') && !el.getAttribute('aria-labelledby') && !el.closest('label')) {
+      el.setAttribute('aria-labelledby', labelId);
+    }
+  });
   return (
-    <div ref={ref} className="mb-4">
-      <label className="w-label">{label}</label>
+    <div
+      ref={(node) => {
+        boxRef.current = node;
+        if (typeof ref === 'function') ref(node);
+        else if (ref) ref.current = node;
+      }}
+      className="mb-4"
+    >
+      <label className="w-label" id={labelId}>{label}</label>
       {children}
       {hint && <p className="mt-1 text-[12px] text-[var(--w-text-3)]">{hint}</p>}
     </div>

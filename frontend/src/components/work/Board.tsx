@@ -71,6 +71,11 @@ function SortableCard({ issue, lk, onOpen, disabled, subtasks, inDone, showParen
       style={{ transform: CSS.Translate.toString(transform), transition }}
       className={cn('cursor-grab rounded-[8px] outline-none focus-visible:ring-2 focus-visible:ring-[var(--w-accent-border)] active:cursor-grabbing', isDragging && 'opacity-35 [&>div]:border-dashed [&>div]:shadow-none')}
       {...attributes}
+      // UX-A ARIA: dnd-kit gán role=button, mà thẻ có nút sub-task bên trong (nested-interactive).
+      // Thẻ là một NHÓM có tên (mã + tiêu đề); Enter mở thẻ, Space nhấc lên kéo như cũ.
+      role="group"
+      aria-roledescription="draggable issue card"
+      aria-label={`${lk.issueKey(issue.number)} ${issue.title}`}
       // Không kéo được (chỉ xem / đang khoá chỉnh sửa) vẫn MỞ thẻ được ⇒ không phải "disabled".
       aria-disabled={undefined}
       {...listeners}

@@ -30,7 +30,8 @@ import * as pages from './pages.service.js';
 import { can, isClientScoped, requireProject, type ProjectAccess } from './permissions.js';
 import { AI_SOURCE } from './provenance.js';
 import {
-  acceptanceCriteria, aiReviewRuleOf, analyze, appendAcceptanceCriteria, computeScores, DEFAULT_GATE_STAGE_SLUG, evaluateGate, gateAppliesTo,
+  acceptanceCriteria, aiReviewRuleOf, analyze, appendAcceptanceCriteria, computeScores, DEFAULT_GATE_STAGE_SLUG, disabledRulesOf, DOC_KIND_LABEL, docKindOf, evaluateGate, gateAppliesTo,
+  type DocKind,
   hasEdgeCase, isMeasurable, issueRefsIn, norm, pageStatements, replaceTextInDoc, sanitizeAiFindings, specGateOf,
   type Finding, type ReviewStats, type Scores, type SpecGateConfig, type SpecItem, type UntracedItem,
 } from './specFidelity.js';
@@ -134,7 +135,7 @@ At most 12 findings, most important first. Return {"findings":[]} if the require
 
 interface SemanticOut { status: 'OK' | 'UNAVAILABLE' | 'SKIPPED'; findings: Finding[]; model: string | null; reason?: string }
 
-async function semanticReview(userId: number, access: ProjectAccess, items: SpecItem[], scopeLabel: string, pageNumber: number | undefined, wanted: boolean): Promise<SemanticOut> {
+async function semanticReview(userId: number, access: ProjectAccess, items: SpecItem[], scopeLabel: string, pageNumber: number | undefined, wanted: boolean, docKind?: DocKind): Promise<SemanticOut> {
   if (!wanted) return { status: 'SKIPPED', findings: [], model: null };
   if (!can(access.role, 'ai.use')) return { status: 'SKIPPED', findings: [], model: null, reason: 'AI review needs a member or admin role' };
   if (!items.length) return { status: 'SKIPPED', findings: [], model: null, reason: 'Nothing to review' };
@@ -147,7 +148,9 @@ async function semanticReview(userId: number, access: ProjectAccess, items: Spec
     budget -= line.length;
     lines.push(line);
   }
-  const user = `Scope: ${scopeLabel}\nRequirements (${lines.length}):\n\n${lines.join('\n\n')}`;
+  // CTW-12: nói rõ loại tài liệu — GDD/SDD không bị đòi phần chỉ SRS mới có.
+  const kindLine = docKind && docKind !== 'SRS' ? `Document type: ${DOC_KIND_LABEL[docKind]} — judge it as that kind of document, not as an SRS.\n` : '';
+  const user = `${kindLine}Scope: ${scopeLabel}\nRequirements (${lines.length}):\n\n${lines.join('\n\n')}`;
   try {
     let text: string;
     let model: string | null = null;
@@ -221,10 +224,13 @@ async function present(projectId: number, id: number) {
 async function persist(userId: number, access: ProjectAccess, input: {
   scope: 'PAGE' | 'ISSUES'; pageId?: number | null; pageVersion?: number | null; stageId?: number | null; epicNumber?: number | null; scopeLabel: string;
   items: SpecItem[]; headings?: string[]; pageNumber?: number; semantic: boolean; extraUntraced?: UntracedItem[];
+  docKind?: DocKind; docKindAuto?: boolean;
 }) {
   const testing = await testingEnabled(access.projectId);
-  const det = analyze({ scope: input.scope, items: input.items, headings: input.headings, pageNumber: input.pageNumber, testingEnabled: testing });
-  const sem = await semanticReview(userId, access, input.items, input.scopeLabel, input.pageNumber, input.semantic);
+  const settings = (await prisma.workProject.findUnique({ where: { id: access.projectId }, select: { settings: true } }))?.settings;
+  const disabledRules = disabledRulesOf(settings);
+  const det = analyze({ scope: input.scope, items: input.items, headings: input.headings, pageNumber: input.pageNumber, testingEnabled: testing, docKind: input.docKind, disabledRules });
+  const sem = await semanticReview(userId, access, input.items, input.scopeLabel, input.pageNumber, input.semantic, input.docKind);
   const findings: Finding[] = [...det.findings, ...sem.findings];
   const scores = computeScores(findings, det.stats);
   const untraced = [...det.untraced];
@@ -237,7 +243,10 @@ async function persist(userId: number, access: ProjectAccess, input: {
       itemCount: input.items.length,
       findings: findings as unknown as Prisma.InputJsonValue,
       untraced: untraced as unknown as Prisma.InputJsonValue,
-      stats: { ...det.stats, verifiabilityRules: scores.verifiabilityRules, ...(sem.reason ? { semanticReason: sem.reason } : {}) } as Prisma.InputJsonValue,
+      stats: {
+        ...det.stats, verifiabilityRules: scores.verifiabilityRules, ...(sem.reason ? { semanticReason: sem.reason } : {}),
+        ...(input.docKind ? { docKind: input.docKind, docKindAuto: input.docKindAuto !== false } : {}), ...(disabledRules.length ? { disabledRules } : {}),
+      } as Prisma.InputJsonValue,
       semantic: sem.status, model: sem.model, createdById: userId,
     },
     select: { id: true },
@@ -248,7 +257,7 @@ async function persist(userId: number, access: ProjectAccess, input: {
 
 // ─── Chạy ─────────────────────────────────────────────────────────
 
-export async function reviewPage(userId: number, projectId: number, pageNumber: number, opts: { semantic?: boolean } = {}) {
+export async function reviewPage(userId: number, projectId: number, pageNumber: number, opts: { semantic?: boolean; docType?: DocKind | 'AUTO' } = {}) {
   const access = await specAccess(userId, projectId, 'run');
   const page = await pages.getPage(userId, projectId, pageNumber); // docs bật + được đọc trang (không thì 403/404)
   const { statements, headings, blocks } = pageStatements(page.contentJson ?? { type: 'doc', content: [] });
@@ -288,9 +297,13 @@ export async function reviewPage(userId: number, projectId: number, pageNumber: 
     .filter((r) => REQ_TYPES.includes(r.type.key) && linkedNumbers.includes(r.number) && r.linksIn.length === 0)
     .map((r) => ({ ref: `${access.key}-${r.number}`, title: clip(r.title, 200), hasAcceptanceCriteria: byNumber.get(r.number)!.hasAcceptanceCriteria, target: { kind: 'ISSUE', issueNumber: r.number } }));
 
+  // CTW-12: khung chấm theo LOẠI trang — người chọn, không thì tự nhận từ mẫu/tiêu đề/đề mục (không đoán được ⇒ OTHER).
+  const auto = !opts.docType || opts.docType === 'AUTO';
+  const docKind: DocKind = auto ? docKindOf({ templateKey: page.templateKey, title: page.title, headings }) : (opts.docType as DocKind);
   return persist(userId, access, {
     scope: 'PAGE', pageId: page.id, pageVersion: page.currentVersion ?? null, stageId: page.stageId ?? null,
     scopeLabel: `Doc ${page.number}: ${page.title}`, items, headings, pageNumber: page.number, semantic: opts.semantic !== false, extraUntraced,
+    docKind, docKindAuto: auto,
   });
 }
 
@@ -427,6 +440,8 @@ export async function getSettings(userId: number, projectId: number) {
   return {
     specGate: specGateOf(p.settings),
     aiReview: aiReviewRuleOf(p.settings),
+    /** CTW-12: luật đã tắt cho dự án. */
+    rules: { disabled: disabledRulesOf(p.settings) },
     stagesOn: access.modules.stages,
     approvalsOn: access.modules.approvals,
     stages,
@@ -435,7 +450,7 @@ export async function getSettings(userId: number, projectId: number) {
   };
 }
 
-export async function updateSettings(userId: number, projectId: number, input: { specGate?: Partial<SpecGateConfig>; aiReview?: { requireIndependentReviewer?: boolean } }) {
+export async function updateSettings(userId: number, projectId: number, input: { specGate?: Partial<SpecGateConfig>; aiReview?: { requireIndependentReviewer?: boolean }; rules?: { disabled: string[] } }) {
   await specAccess(userId, projectId, 'configure');
   const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { settings: true } });
   const settings = { ...((p.settings as Record<string, unknown>) ?? {}) };
@@ -454,6 +469,11 @@ export async function updateSettings(userId: number, projectId: number, input: {
     const next = { requireIndependentReviewer: input.aiReview.requireIndependentReviewer === true };
     settings.aiReview = next;
     parts.push(`AI-assisted work needs an independent reviewer: ${next.requireIndependentReviewer ? 'on' : 'off'}`);
+  }
+  if (input.rules) {
+    const next = disabledRulesOf({ specRules: { disabled: input.rules.disabled } });
+    settings.specRules = { disabled: next };
+    parts.push(`Spec Fidelity rules turned off: ${next.join(', ') || 'none'}`);
   }
   await prisma.workProject.update({ where: { id: projectId }, data: { settings: settings as Prisma.InputJsonValue } });
   if (parts.length) await auditProject(projectId, { actorId: userId, action: 'spec.settings', targetType: 'project', targetId: projectId, summary: parts.join(' · ') });

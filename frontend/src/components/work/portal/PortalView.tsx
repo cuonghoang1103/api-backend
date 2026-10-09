@@ -27,9 +27,11 @@ import {
 } from '@/lib/work-api';
 import RichEditor, { isDocEmpty, RichView } from '../RichEditor';
 import { Dialog, EmptyState, formatBytes, formatDate, PageLoading, ProjectMark, relativeTime, Spinner, StatusBadge, UserAvatar } from '../ui';
+import ProjectCover from '../cover/ProjectCover'; // UX-D
 import { Select } from '../settings/shared';
 import { Pill, STAGE_STATUS } from '../studio/shared';
 import { ClientPill } from './ClientShare';
+import { CommentAttachments } from '../comments/CommentFiles'; // CTW đợt 5b K-1: tệp + voice note của trả lời PUBLIC
 import { ApprovalsTab, PortalApprovalDialog } from './PortalApprovals';
 import { StaffPanel } from './PortalStaff';
 import { MeetingsTab, PortalMeetingDialog } from './PortalMeetings';
@@ -90,7 +92,7 @@ function SectionTitle({ children, action }: { children: ReactNode; action?: Reac
 
 function Bar({ value }: { value: number }) {
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--w-sunken)]" role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={100}>
+    <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--w-sunken)]" role="progressbar" aria-label="Progress" aria-valuenow={value} aria-valuemin={0} aria-valuemax={100}>
       <div className="h-full rounded-full bg-[var(--w-accent)] transition-[width] duration-500" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
     </div>
   );
@@ -362,7 +364,8 @@ export function RequestDialog({ pid, num, asClient, onClose, deskOn }: { pid: nu
                       {c.author && r.clientIds.includes(c.author.id) ? <span className="text-[var(--w-text-3)]">client</span> : <span className="text-[var(--w-text-3)]">team</span>}
                       <span className="text-[var(--w-text-3)]">{relativeTime(c.createdAt)}</span>
                     </div>
-                    <RichView value={c.bodyJson} />
+                    {!isDocEmpty(c.bodyJson) && <RichView value={c.bodyJson} />}
+                    {num && <CommentAttachments pid={pid} num={num} files={(c.attachments ?? []).map((a) => ({ ...a, commentId: c.id }))} canRetry={() => false} />}
                   </div>
                 </div>
               ))}
@@ -530,7 +533,11 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
           <button type="button" className="w-btn w-btn-sm" onClick={() => p.set({ preview: null })} data-testid="portal-exit-preview"><ArrowLeft size={13} /> Exit preview</button>
         </div>
       )}
-      <div className="mx-auto w-full max-w-[1120px] px-4 py-5 md:px-6">
+      <div className="w-page">
+        {/* UX-D: ảnh bìa dự án đầu cổng khách (thương hiệu của chính dự án). */}
+        {(overview.data?.project.coverUrl ?? config.coverUrl) && (
+          <ProjectCover brand={{ key: config.key, coverUrl: overview.data?.project.coverUrl ?? config.coverUrl, coverPositionY: overview.data?.project.coverPositionY ?? config.coverPositionY, color: overview.data?.project.color ?? config.color }} className="mb-5 h-[96px] rounded-[12px] md:h-[128px]" />
+        )}
         <div className="mb-5 flex min-w-0 items-start gap-3">
           {/* CTW-23: nhận diện dự án trong cổng khách. */}
           <span className="mt-1 shrink-0"><ProjectMark k={config.key} size={44} letters={2} brand={overview.data?.project ?? config} /></span>

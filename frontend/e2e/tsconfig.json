@@ -1,0 +1,17 @@
+{
+  "//": "E2E CT Work (đợt 6a): kiểu của spec chạy bằng tsx từ gốc repo (playwright, @prisma/client, jszip nằm ở node_modules GỐC). `npm run typecheck:e2e` ở gốc. Frontend tsconfig loại e2e/** (CI frontend không cài deps gốc).",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "typeRoots": ["../../node_modules/@types"],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true
+  },
+  "include": ["work/**/*.ts"]
+}

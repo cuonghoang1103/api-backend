@@ -309,6 +309,11 @@ export interface JqlContext {
    * đây — nơi gọi chỉ báo lỗi khi tên đó vắng mặt ở MỌI dự án.
    */
   onMissing?: (m: JqlMiss) => void;
+  /**
+   * CTW đợt 5b K-1: `comment ~` / `text ~` tìm trong bình luận (gồm phiên âm voice note). Khách cổng bị cách ly
+   * chỉ được dò trong bình luận PUBLIC — không thì đoán được chữ trong ghi chú nội bộ.
+   */
+  publicCommentsOnly?: boolean;
 }
 
 /** Một tên không tra được trong dự án đang dịch (xem JqlContext.onMissing). */
@@ -324,7 +329,7 @@ type W = Prisma.WorkIssueWhereInput;
 const FIELD_ALIASES: Record<string, string> = {
   issue: 'key', issuekey: 'key', key: 'key', id: 'key',
   summary: 'summary', title: 'summary',
-  description: 'description', text: 'text',
+  description: 'description', text: 'text', comment: 'comment', comments: 'comment',
   status: 'status', statuscategory: 'statuscategory', category: 'statuscategory',
   type: 'type', issuetype: 'type',
   priority: 'priority',
@@ -373,7 +378,7 @@ export function projectScope(q: JqlQuery): { include: string[] | null; exclude: 
 }
 
 export const JQL_FIELDS = [
-  'key', 'summary', 'description', 'text', 'status', 'statusCategory', 'type', 'priority', 'assignee', 'reporter',
+  'key', 'summary', 'description', 'text', 'comment', 'status', 'statusCategory', 'type', 'priority', 'assignee', 'reporter',
   'labels', 'component', 'sprint', 'parent', 'points', 'created', 'updated', 'due', 'resolved', 'watcher', 'project',
   'team', 'stage', 'fixVersion', 'flagged', 'assigneeKind',
 ];
@@ -502,14 +507,18 @@ export function compileJql(q: JqlQuery, ctx: JqlContext): { where: W; orderBy: P
       }
       case 'summary':
       case 'description':
+      case 'comment':
       case 'text': {
         if (op !== '~' && op !== '!~' && op !== '=' && op !== '!=') return fail(`Use ~ to search text`, pos);
         const t = lit(values[0], pos);
         // CTW-6: ~ không phân biệt dấu tiếng Việt — so trên cột sinh tự động đã bỏ dấu (fold.ts).
         const contains = { contains: foldVi(t) };
+        // K-1: bình luận (chữ gõ + phiên âm voice note trong body_text) — không có cột bỏ dấu ⇒ so không phân biệt hoa thường.
+        const inComments: W = { comments: { some: { deletedAt: null, bodyText: { contains: t, mode: 'insensitive' }, ...(ctx.publicCommentsOnly ? { visibility: 'PUBLIC' } : {}) } } };
         const m: W = field === 'summary' ? (op === '=' || op === '!=' ? { title: { equals: t, mode: 'insensitive' } } : { titleFold: contains })
           : field === 'description' ? { descriptionFold: contains }
-            : { OR: [{ titleFold: contains }, { descriptionFold: contains }] };
+            : field === 'comment' ? inComments
+              : { OR: [{ titleFold: contains }, { descriptionFold: contains }, inComments] };
         return op.startsWith('!') ? { NOT: m } : m;
       }
       case 'status': {

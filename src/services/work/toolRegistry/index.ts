@@ -19,13 +19,14 @@ import type { McpCtx } from '../../../mcp/context.js';
 import { READ_TOOLS } from '../../../mcp/tools/read.js';
 import { WRITE_TOOLS } from '../../../mcp/tools/write.js';
 import { PLANNING_COMMANDS } from './planning.js';
+import { SRS_COMMANDS } from './srs.js';
 import { TEST_COMMANDS } from './tests.js';
 import { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 export { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 /** Thứ tự = thứ tự trong tools/list: 21 tool cũ trước (client cũ thấy y hệt), lệnh mới sau. */
-export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS];
+export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS, ...SRS_COMMANDS];
 
 const BY_NAME = new Map(COMMANDS.map((t) => [t.name, t]));
 if (BY_NAME.size !== COMMANDS.length) throw new Error('toolRegistry: trùng tên lệnh');

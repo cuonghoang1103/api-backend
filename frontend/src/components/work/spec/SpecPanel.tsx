@@ -18,11 +18,12 @@ import { toast } from 'sonner';
 import { AlertTriangle, Bot, Check, ChevronDown, ChevronRight, CircleSlash, ExternalLink, FlaskConical, Gauge, RefreshCw, Sparkles, Undo2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workError, type ProjectConfig } from '@/lib/work-api';
+import { workCtw4Api } from '@/lib/work-ctw4-api'; // CTW đợt 4: phát hiện ⇒ Bug một chạm
 import {
   DIMENSION_INFO, SPEC_DIMENSIONS, workS6Api, workS6Keys,
   type SpecDimension, type SpecFinding, type SpecGateStatus, type SpecReview, type SpecReviewSummary, type SpecScores,
 } from '@/lib/work-s6-api';
-import { Spinner, relativeTime } from '../ui';
+import { Spinner, relativeTime, signalText } from '../ui';
 
 const SEV_LABEL: Record<SpecFinding['severity'], string> = { high: 'High', medium: 'Medium', low: 'Low' };
 const SEV_COLOR: Record<SpecFinding['severity'], string> = { high: 'var(--w-red)', medium: 'var(--w-orange)', low: 'var(--w-text-3)' };
@@ -39,7 +40,7 @@ export function ScoreBars({ s, compact, threshold }: { s: SpecScores; compact?: 
         <div key={d} className="min-w-0" title={DIMENSION_INFO[d].body}>
           <div className="mb-1 flex items-baseline justify-between gap-2 text-[12px]">
             <span className="truncate text-[var(--w-text-2)]">{DIMENSION_INFO[d].label}</span>
-            <span className="tabular font-semibold" style={{ color: scoreColor(s[d]) }}>{s[d]}</span>
+            <span className="tabular font-semibold" style={{ color: signalText(scoreColor(s[d])) }}>{s[d]}</span>
           </div>
           <div className="relative h-1.5 overflow-hidden rounded-full bg-[var(--w-sunken)]" role="meter" aria-label={DIMENSION_INFO[d].label} aria-valuenow={s[d]} aria-valuemin={0} aria-valuemax={100}>
             <span className="block h-full rounded-full" style={{ width: `${s[d]}%`, background: scoreColor(s[d]) }} />
@@ -55,7 +56,7 @@ export function OverallBadge({ n, size = 44 }: { n: number; size?: number }) {
   return (
     <span
       className="inline-flex shrink-0 flex-col items-center justify-center rounded-full border-[3px] font-semibold tabular leading-none"
-      style={{ width: size, height: size, borderColor: scoreColor(n), color: scoreColor(n), fontSize: size * 0.34 }}
+      style={{ width: size, height: size, borderColor: scoreColor(n), color: signalText(scoreColor(n)), fontSize: size * 0.34 }}
       aria-label={`Overall ${n} out of 100`}
     >
       {n}
@@ -81,7 +82,7 @@ export function SpecSparkline({ items, height = 44 }: { items: SpecReviewSummary
         {pts.map((p, i) => <circle key={p.id} cx={i * step} cy={y(p.overall)} r={2.6} fill={scoreColor(p.overall)}><title>{`${p.overall} · ${new Date(p.createdAt).toLocaleString()}`}</title></circle>)}
       </svg>
       <figcaption className="mt-0.5 text-[11.5px] text-[var(--w-text-3)]">
-        {pts.length} checks · {first} → <b className="font-semibold" style={{ color: scoreColor(last) }}>{last}</b>{last > first ? ` (+${last - first})` : last < first ? ` (${last - first})` : ''}
+        {pts.length} checks · {first} → <b className="font-semibold" style={{ color: signalText(scoreColor(last)) }}>{last}</b>{last > first ? ` (+${last - first})` : last < first ? ` (${last - first})` : ''}
       </figcaption>
     </figure>
   );
@@ -106,6 +107,12 @@ function FindingRow({ f, config, review, onJump, onChanged, canAct }: {
     onSuccess: onChanged,
     onError: (err) => toast.error(workError(err, 'Could not update the finding')),
   });
+  // CTW đợt 4 (A16): phát hiện ⇒ Bug trong defect log (Activity Review), bấm lại trả Bug cũ.
+  const bug = useMutation({
+    mutationFn: async () => { const b = await workCtw4Api.bugFromFinding(config.id, review.id, f.id); return { b, r: await workS6Api.review(config.id, review.id) }; },
+    onSuccess: ({ b, r }) => { toast.success(b.created ? `Logged as ${b.key}` : `Already logged as ${b.key}`); onChanged(r); },
+    onError: (err) => toast.error(workError(err, 'Could not log the bug')),
+  });
   // Phát hiện cấp tài liệu (thiếu mục, không failure mode…) không có đoạn văn để nhảy tới.
   const jumpable = f.target && (f.target.kind === 'ISSUE' || (f.target.kind === 'PAGE' && f.target.blockIndex !== undefined));
   const done = f.status !== 'open';
@@ -117,7 +124,7 @@ function FindingRow({ f, config, review, onJump, onChanged, canAct }: {
         </button>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11.5px]">
-            <span className="inline-flex items-center gap-1 font-medium" style={{ color: SEV_COLOR[f.severity] }}>
+            <span className="inline-flex items-center gap-1 font-medium" style={{ color: signalText(SEV_COLOR[f.severity]) }}>
               <span className="h-1.5 w-1.5 rounded-full" style={{ background: SEV_COLOR[f.severity] }} aria-hidden="true" />{SEV_LABEL[f.severity]}
             </span>
             <span className="text-[var(--w-text-3)]">{DIMENSION_INFO[f.dimension].label}</span>
@@ -156,6 +163,11 @@ function FindingRow({ f, config, review, onJump, onChanged, canAct }: {
               )}
               {f.status === 'open' && (
                 <button type="button" className="w-btn w-btn-sm" disabled={dismiss.isPending} onClick={() => dismiss.mutate(true)}><CircleSlash size={12} /> Dismiss</button>
+              )}
+              {f.bugNumber ? (
+                <Link href={`${base}/issue/${f.bugNumber}`} className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 font-mono text-[11.5px] text-[var(--w-accent-text)] hover:underline">Bug {config.key}-{f.bugNumber}</Link>
+              ) : (
+                <button type="button" className="w-btn w-btn-sm" disabled={bug.isPending} onClick={() => bug.mutate()} data-testid="spec-log-bug">{bug.isPending ? <Spinner size={11} /> : null} Log as bug</button>
               )}
               {f.status === 'dismissed' && (
                 <button type="button" className="w-btn w-btn-sm" disabled={dismiss.isPending} onClick={() => dismiss.mutate(false)}><Undo2 size={12} /> Restore</button>
@@ -230,6 +242,11 @@ export function SpecPanel({ config, review, history, running, onRun, onJump, onC
           </div>
           {review.stale && (
             <p className="flex items-center gap-1.5 rounded-[6px] bg-[color-mix(in_srgb,var(--w-orange)_9%,transparent)] px-2 py-1.5 text-[12px]"><AlertTriangle size={12} className="text-[var(--w-orange)]" /> The page changed after this check (now v{review.currentPageVersion}). Check again for a current score.</p>
+          )}
+          {review.stats.docKind && (
+            <p className="text-[12px] text-[var(--w-text-2)]" data-testid="spec-doc-kind">
+              Checked as <b className="font-medium text-[var(--w-text)]">{({ SRS: 'an SRS (ISO/IEC/IEEE 29148)', SDD: 'a design description (IEEE 1016)', GDD: 'a game design document', OTHER: 'a general document (no section checks)' } as const)[review.stats.docKind]}</b>{review.stats.docKindAuto ? ' — auto-detected' : ''}.
+            </p>
           )}
           <ScoreBars s={review} threshold={gateThreshold} />
           <p className="text-[11.5px] text-[var(--w-text-3)]">
@@ -319,10 +336,12 @@ export function DocSpecDrawer({ open, onClose, config, pageNumber, beforeRun, on
   const hist = useQuery({ queryKey: workS6Keys.reviews(pid, { page: pageNumber }), queryFn: () => workS6Api.reviews(pid, { page: pageNumber, limit: 30 }), enabled: open });
   const latestId = hist.data?.items[0]?.id;
   const [current, setCurrent] = useState<SpecReview | null>(null);
+  // CTW-12: khung chấm theo loại trang (Auto = nhận từ mẫu/tiêu đề/đề mục).
+  const [docType, setDocType] = useState<'AUTO' | 'SRS' | 'SDD' | 'GDD' | 'OTHER'>('AUTO');
   const latest = useQuery({ queryKey: workS6Keys.review(pid, latestId ?? 0), queryFn: () => workS6Api.review(pid, latestId!), enabled: open && !!latestId && !current });
   const review = current ?? latest.data ?? null;
   const run = useMutation({
-    mutationFn: async (semantic: boolean) => { await beforeRun?.(); return workS6Api.reviewPage(pid, pageNumber, { semantic }); },
+    mutationFn: async (semantic: boolean) => { await beforeRun?.(); return workS6Api.reviewPage(pid, pageNumber, { semantic, docType }); },
     onSuccess: (r) => {
       setCurrent(r);
       qc.invalidateQueries({ queryKey: workS6Keys.allReviews(pid) });
@@ -344,6 +363,14 @@ export function DocSpecDrawer({ open, onClose, config, pageNumber, beforeRun, on
         <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Close" onClick={onClose}><X size={15} /></button>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto p-4">
+        {canRun && (
+          <div className="mb-3 flex items-center gap-2">
+            <label htmlFor={`w-spec-doctype-${pageNumber}`} className="text-[12px] text-[var(--w-text-2)]">Document type</label>
+            <select id={`w-spec-doctype-${pageNumber}`} className="w-input !h-7 !w-auto !py-0 text-[12.5px]" value={docType} onChange={(e) => setDocType(e.target.value as typeof docType)} data-testid="spec-doc-type">
+              <option value="AUTO">Auto-detect</option><option value="SRS">SRS (requirements)</option><option value="SDD">SDD / SDS (design)</option><option value="GDD">GDD (game design)</option><option value="OTHER">Other document</option>
+            </select>
+          </div>
+        )}
         <SpecPanel
           config={config}
           review={review}

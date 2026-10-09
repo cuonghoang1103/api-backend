@@ -36,7 +36,8 @@ export type WorkEvent =
   | { type: 'issue.created'; projectId: number; issueId: number; actor: WorkActor }
   | { type: 'issue.updated'; projectId: number; issueId: number; actor: WorkActor; changes: FieldChange[] }
   | { type: 'issue.deleted'; projectId: number; issueId: number; actor: WorkActor }
-  | { type: 'comment.created'; projectId: number; issueId: number; commentId: number; actor: WorkActor }
+  // K-1 (đợt 5b): replyTo = người viết bình luận ĐƯỢC trả lời (nhận "New reply", không nhận thêm WORK_COMMENT).
+  | { type: 'comment.created'; projectId: number; issueId: number; commentId: number; actor: WorkActor; replyTo?: number | null }
   | { type: 'sprint.updated'; projectId: number; sprintId: number; actor: WorkActor }
   | { type: 'project.updated'; projectId: number; actor: WorkActor }
   // Lớp studio (đợt S1). Cố ý KHÔNG có trường `issueId` ở approval/stage: các

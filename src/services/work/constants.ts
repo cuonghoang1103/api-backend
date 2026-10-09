@@ -129,12 +129,14 @@ export type CrUrgency = (typeof CR_URGENCY)[number];
 export const CR_LINK_ROLES = ['AFFECTED', 'IMPLEMENTS'] as const;
 export type CrLinkRole = (typeof CR_LINK_ROLES)[number];
 
-/** Sổ RAID: Risk · Assumption · Issue · Dependency. */
-export const RAID_TYPES = ['RISK', 'ASSUMPTION', 'ISSUE', 'DEPENDENCY'] as const;
+/** Sổ RAID: Risk · Assumption · Issue · Dependency · (CTW đợt 4, A22) Question = Q&A log với GV/khách. */
+export const RAID_TYPES = ['RISK', 'ASSUMPTION', 'ISSUE', 'DEPENDENCY', 'QUESTION'] as const;
 export type RaidType = (typeof RAID_TYPES)[number];
 export const RAID_STATUSES = ['OPEN', 'MONITORING', 'MITIGATED', 'CLOSED'] as const;
 export const ASSUMPTION_STATUSES = ['UNVALIDATED', 'VALIDATED', 'INVALID'] as const;
-export type RaidStatus = (typeof RAID_STATUSES)[number] | (typeof ASSUMPTION_STATUSES)[number];
+/** CTW đợt 4 (A22): trạng thái riêng của câu hỏi Q&A — xuất ra Open · Closed · Cancelled như mẫu. */
+export const QUESTION_STATUSES = ['OPEN', 'ANSWERED', 'CANCELLED'] as const;
+export type RaidStatus = (typeof RAID_STATUSES)[number] | (typeof ASSUMPTION_STATUSES)[number] | (typeof QUESTION_STATUSES)[number];
 /** Phản ứng với rủi ro (PMBOK / ISO 31000): tránh · giảm · chuyển giao · chấp nhận. */
 export const RAID_RESPONSES = ['AVOID', 'MITIGATE', 'TRANSFER', 'ACCEPT'] as const;
 export type RaidResponse = (typeof RAID_RESPONSES)[number];

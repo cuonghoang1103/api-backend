@@ -12,6 +12,7 @@ import * as issues from '../services/work/issues.service.js';
 import { getCustomValues } from '../services/work/customize.service.js';
 import { agentOptionsOf } from '../services/work/permissions.js';
 import { untrusted } from './protocol.js';
+import { buildThreads, transcriptNote } from '../services/work/commentThreads.js';
 import type { McpCtx, ProjectHit } from './context.js';
 
 export const ISSUE_INCLUDES = ['comments', 'history', 'subtasks', 'attachments', 'links', 'worklogs'] as const;
@@ -129,9 +130,23 @@ export async function issueMarkdown(ctx: McpCtx, p: ProjectHit, number: number, 
     body.push(`## Attachments\n${d.attachments.map((a: any) => `- #${a.id} ${a.fileName} (${a.mime}, ${a.size} bytes)`).join('\n')}`);
   }
   if (comments) {
+    // CTW đợt 5b K-1: luồng trả lời (một cấp) + tệp + PHIÊN ÂM voice note. "comment #<id>" là id dùng cho reply_to.
     body.push(`## Comments (${comments.length})`);
-    for (const c of comments.slice(-50)) {
-      body.push(`### ${c.author ? who(c.author) : 'someone'} · ${c.createdAt.toISOString()} · ${c.visibility}${c.isAi ? ' · AI-drafted' : ''}\n${md(c.bodyJson) || '(empty)'}`);
+    const threads = buildThreads(comments.slice(-50));
+    const one = (c: (typeof comments)[number], reply: boolean) => {
+      const head = `${reply ? '#### ↳ reply' : '###'} comment #${c.id} · ${c.author ? who(c.author) : 'someone'} · ${c.createdAt.toISOString()} · ${c.visibility}${c.isAi ? ' · AI-drafted' : ''}`;
+      const lines = [md(c.bodyJson) || (c.attachments.length ? '' : '(empty)')];
+      for (const f of c.attachments) {
+        if (f.voice) {
+          const secs = Math.round(f.voice.durationMs / 1000);
+          lines.push(`🎙 Voice note #${f.id} (${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')})${f.voice.transcriptStatus === 'DONE' && f.voice.transcript ? ` — transcript: ${f.voice.transcript}` : ` — ${transcriptNote(f.voice.transcriptStatus) || 'no transcript'}`}`);
+        } else lines.push(`📎 File #${f.id} ${f.fileName} (${f.mime}, ${f.size} bytes)`);
+      }
+      return `${head}\n${lines.filter(Boolean).join('\n')}`;
+    };
+    for (const t of threads) {
+      body.push(`${t.orphan ? '(reply to a removed comment) ' : ''}${one(t, false)}`);
+      for (const r of t.replies) body.push(one(r, true));
     }
   }
   if (history) {

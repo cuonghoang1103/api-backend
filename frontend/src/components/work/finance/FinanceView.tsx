@@ -187,7 +187,7 @@ function OverviewTab({ config }: { config: ProjectConfig }) {
 
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="w-card p-4"><h3 className="w-section-title mb-2">By stage</h3>
-          <Table head={['Stage', 'Budget', 'Actual']} empty="No budget or costs linked to stages." rows={d.byStage.map((r) => [r.label, fmtMoney(r.budget, d.currency), <span key="a" style={r.budget && r.actual > r.budget ? { color: 'var(--w-red)' } : undefined}>{fmtMoney(r.actual, d.currency)}</span>])} />
+          <Table head={['Stage', 'Budget', 'Actual']} empty="No budget or costs linked to stages." rows={d.byStage.map((r) => [r.label, fmtMoney(r.budget, d.currency), <span key="a" style={r.budget && r.actual > r.budget ? { color: 'var(--w-red-text)' } : undefined}>{fmtMoney(r.actual, d.currency)}</span>])} />
         </div>
         <div className="w-card p-4"><h3 className="w-section-title mb-2">By category</h3>
           <Table head={['Category', 'Budget', 'Actual']} empty="—" rows={d.byCategory.map((r) => [r.category[0] + r.category.slice(1).toLowerCase(), fmtMoney(r.budget, d.currency), fmtMoney(r.actual, d.currency)])} />
@@ -630,7 +630,7 @@ export default function FinanceView({ config }: { config: ProjectConfig }) {
         </div>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-        <div className="mx-auto w-full max-w-[1100px] px-4 py-5">
+        <div className="w-page">
           {tab === 'overview' && <OverviewTab config={config} />}
           {tab === 'timesheet' && <TimesheetTab config={config} />}
           {tab === 'approvals' && <ApprovalsTab config={config} />}

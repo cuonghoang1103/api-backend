@@ -60,7 +60,7 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
     assert.doesNotMatch(sig, /project/);
     const cat = r.commandCatalog([r.commandByName('fpt_unit_get')!, r.commandByName('raid_create')!]);
     assert.match(cat, /- fpt_unit_get\(function:int\|string\) — /);
-    assert.match(cat, /raid_create\(type:"RISK"\|"ASSUMPTION"\|"ISSUE"\|"DEPENDENCY", title:string/);
+    assert.match(cat, /raid_create\(type:"RISK"\|"ASSUMPTION"\|"ISSUE"\|"DEPENDENCY"\|"QUESTION", title:string/);
     assert.match(cat, /\[WRITE\]/);
   });
 

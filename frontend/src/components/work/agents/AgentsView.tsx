@@ -225,7 +225,7 @@ export default function AgentsView({ ws, meId }: { ws: WorkspaceDetail; meId?: n
   const base = `/work/${ws.slug}/agents`;
 
   return (
-    <div className="mx-auto w-full max-w-[1100px] px-4 py-6 md:px-6">
+    <div className="w-page">
       <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 max-w-[640px]">
           <p className="text-[13px] leading-relaxed text-[var(--w-text-2)]">

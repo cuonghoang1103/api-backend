@@ -77,9 +77,19 @@ export async function middleware(request: NextRequest) {
  // xem được "ai mời mình vào đâu" trước khi đăng ký (trang đó tự mời đăng nhập).
  // Và TRỪ link chia sẻ chỉ đọc /work/share/* (giảng viên, khách hàng không có tài khoản).
  if ((pathname === '/work' || pathname.startsWith('/work/')) && !pathname.startsWith('/work/invite/') && !pathname.startsWith('/work/share/')) {
+ // UX-D: ảnh xem trước (/…/opengraph-image, /…/twitter-image) và bot xem trước link (Messenger, Zalo, Slack…)
+ // KHÔNG bị đẩy sang /login — nếu bị đẩy, ô xem trước hiện ảnh trang đăng nhập/ảnh chung của site. Không lộ gì:
+ // ảnh/metadata ở đây chỉ có tên workspace + "Sign in to view"; HTML là vỏ client, dữ liệu vẫn cần đăng nhập.
+ if (/\/(opengraph-image|twitter-image)(-[\w-]+)?$/.test(pathname) || isLinkPreviewBot(request)) return NextResponse.next();
  return handleLearnRoute(request, pathname);
  }
  return NextResponse.next();
+}
+
+/** Bot dựng ô xem trước link (UX-D) — chỉ để KHÔNG chuyển hướng sang /login; giả UA cũng chỉ thấy vỏ trang + tên workspace. */
+const LINK_PREVIEW_BOT = /facebookexternalhit|facebookcatalog|Facebot|meta-externalagent|Zalo|Twitterbot|Slackbot|Discordbot|TelegramBot|LinkedInBot|WhatsApp|SkypeUriPreview|Microsoft Teams|Googlebot|bingbot|Applebot|redditbot|Embedly|Iframely|vkShare|Pinterest/i;
+function isLinkPreviewBot(request: NextRequest): boolean {
+  return LINK_PREVIEW_BOT.test(request.headers.get('user-agent') ?? '');
 }
 
 function readCookie(request: NextRequest, name: string): string {

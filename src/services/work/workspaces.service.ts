@@ -16,11 +16,13 @@ import { prisma } from '../../config/database.js';
 import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { notifyWorkInvite } from './notify.js';
 import {
-  displayName, frontendUrl, PUBLIC_USER, randomToken, sendWorkEmail, sha256, slugify,
+  displayName, frontendUrl, PUBLIC_USER, randomToken, sha256, slugify,
 } from './common.js';
 import type { ProjectRole, WorkspaceRole } from './constants.js';
 import { evictFromProject } from './events.js';
 import { clientPeopleIds } from './clientPeople.js';
+import { inviteCardOf } from './publicCards.service.js'; // UX-D
+import { buildInviteEmail, deliverWorkEmail } from './workEmail.js'; // UX-D
 import { assertHumanActor, clientScopedProjectIds, loadProjectAccess, principalOf, requireWorkspace } from './permissions.js';
 
 const INVITE_TTL_DAYS = 7;
@@ -269,11 +271,24 @@ export async function inviteByEmail(userId: number, workspaceId: number, input: 
   const emails = [...new Set((input.emails ?? []).map((e) => e.trim().toLowerCase()).filter(Boolean))].slice(0, 50);
   if (!emails.length) throw new BadRequestError('Enter at least one email', 'WORK_EMAIL_REQUIRED');
 
-  const [ws, inviter] = await Promise.all([
+  const [ws, inviter, inviterMail, brand] = await Promise.all([
     prisma.workSpace.findUniqueOrThrow({ where: { id: workspaceId }, select: { name: true, slug: true } }),
     prisma.user.findUniqueOrThrow({ where: { id: userId }, select: PUBLIC_USER }),
+    prisma.user.findUnique({ where: { id: userId }, select: { email: true } }),
+    // UX-D: thư mời có bìa + tên dự án.
+    project ? prisma.workProject.findUnique({ where: { id: project.id }, select: { name: true, coverUrl: true, color: true } }) : null,
   ]);
   const results: Array<{ email: string; status: 'ADDED' | 'ALREADY_MEMBER' | 'INVITED' }> = [];
+  // UX-D (09/10/2026): thư mời có thương hiệu, song ngữ (workEmail.ts) — From "CT Work · CuongThai", Reply-To = người mời.
+  const sendInvite = (to: string, kind: 'INVITE' | 'ADDED', url: string, expiresAt: Date | null) => {
+    const mail = buildInviteEmail({
+      kind, portal: !!clientPortal, to,
+      inviter: { name: displayName(inviter), avatarUrl: inviter.avatarUrl },
+      workspace: ws.name, project: brand ? { name: brand.name, coverUrl: brand.coverUrl, color: brand.color } : null,
+      role: project?.role ?? input.role, url, expiresAt,
+    });
+    void deliverWorkEmail({ to, ...mail, replyTo: inviterMail?.email ?? null, refId: `ctw-invite-${workspaceId}-${Date.now().toString(36)}` });
+  };
 
   for (const email of emails) {
     const user = await prisma.user.findFirst({ where: { email: { equals: email, mode: 'insensitive' } }, select: { id: true, email: true, kind: true } });
@@ -282,67 +297,22 @@ export async function inviteByEmail(userId: number, workspaceId: number, input: 
     if (user) {
       const added = await prisma.$transaction((tx) => addMember(tx, workspaceId, user.id, input.role, project));
       results.push({ email, status: added ? 'ADDED' : 'ALREADY_MEMBER' });
-      if (added && clientPortal) {
-        // Thư mời KHÁCH: giọng chuyên nghiệp, vào thẳng cổng khách — không nhắc tới "workspace".
+      if (added) {
         await notifyWorkInvite(user.id, userId, workspaceId, ws.name, ws.slug);
-        void sendWorkEmail({
-          to: user.email,
-          subject: `${displayName(inviter)} invited you to the client portal for ${clientPortal.name}`,
-          heading: `Your client portal for ${clientPortal.name}`,
-          lines: [
-            `${displayName(inviter)} gave you access to the client portal for "${clientPortal.name}".`,
-            'There you can follow progress by stage, send requests and feedback, approve deliverables and download files.',
-          ],
-          cta: { label: 'Open client portal', url: frontendUrl(clientPortal.path) },
-          brand: `${clientPortal.name} · Client portal`,
-          footer: 'You received this email because the project team added you as a client.',
-        });
-      } else if (added) {
-        await notifyWorkInvite(user.id, userId, workspaceId, ws.name, ws.slug);
-        void sendWorkEmail({
-          to: user.email,
-          subject: `${displayName(inviter)} added you to ${ws.name} on CT Work`,
-          heading: `You were added to ${ws.name}`,
-          lines: [`${displayName(inviter)} added you to the workspace "${ws.name}" on CT Work.`],
-          cta: { label: 'Open workspace', url: frontendUrl(`/work/${ws.slug}`) },
-        });
+        // Khách cổng ⇒ vào thẳng cổng khách (không nhắc "workspace"); còn lại ⇒ không gian.
+        sendInvite(user.email, 'ADDED', frontendUrl(clientPortal ? clientPortal.path : `/work/${ws.slug}`), null);
       }
       continue;
     }
     const token = randomToken();
+    const expiresAt = new Date(Date.now() + INVITE_TTL_DAYS * 86_400_000);
     await prisma.workInvite.create({
       data: {
         workspaceId, email, role: input.role, projectId: project?.id ?? null, projectRole: project?.role ?? null,
-        tokenHash: sha256(token), invitedById: userId, maxUses: 1,
-        expiresAt: new Date(Date.now() + INVITE_TTL_DAYS * 86_400_000),
+        tokenHash: sha256(token), invitedById: userId, maxUses: 1, expiresAt,
       },
     });
-    if (clientPortal) {
-      void sendWorkEmail({
-        to: email,
-        subject: `${displayName(inviter)} invited you to the client portal for ${clientPortal.name}`,
-        heading: `Your client portal for ${clientPortal.name}`,
-        lines: [
-          `${displayName(inviter)} invited you to the client portal for "${clientPortal.name}".`,
-          `Create a free account with this email address (or sign in) and open the link below. The link expires in ${INVITE_TTL_DAYS} days.`,
-        ],
-        cta: { label: 'Accept invitation', url: frontendUrl(`/work/invite/${token}`) },
-        brand: `${clientPortal.name} · Client portal`,
-        footer: 'You received this email because the project team invited you as a client.',
-      });
-      results.push({ email, status: 'INVITED' });
-      continue;
-    }
-    void sendWorkEmail({
-      to: email,
-      subject: `${displayName(inviter)} invited you to ${ws.name} on CT Work`,
-      heading: `Join ${ws.name} on CT Work`,
-      lines: [
-        `${displayName(inviter)} invited you to collaborate in "${ws.name}".`,
-        `Create a free account (or sign in) and open the link below. The link expires in ${INVITE_TTL_DAYS} days.`,
-      ],
-      cta: { label: 'Accept invitation', url: frontendUrl(`/work/invite/${token}`) },
-    });
+    sendInvite(email, 'INVITE', frontendUrl(`/work/invite/${token}`), expiresAt);
     results.push({ email, status: 'INVITED' });
   }
   return results;
@@ -428,6 +398,8 @@ export async function previewInvite(token: string) {
     role: invite.role,
     invitedBy: inviter ? displayName(inviter) : null,
     restrictedToEmail: !!invite.email,
+    // UX-D: thẻ xem trước (bìa dự án, ảnh người mời, số thành viên) — cùng dữ liệu với ảnh OG của link mời.
+    card: await inviteCardOf(invite),
   };
 }
 

@@ -27,6 +27,7 @@ import {
   RAG_RULES, RAG_RULE_TEXT, WORKLOAD_RULES, addDays, daysBetween, issueHours, loadTone, mondayOf, personWeeks, ragOf, weeksOf,
   type HoursSource,
 } from './portfolioRules.js';
+import { countedIssueWhere } from './openIssues.js';
 import { activeSprintPace } from './sprintPace.js';
 import { vnDay } from './sprints.service.js';
 import { modulesOf, projectKindOf } from './studio.js';
@@ -99,7 +100,8 @@ export async function portfolio(userId: number, workspaceId: number, opts: { inc
     };
   }
 
-  const issueBase = { projectId: { in: ids }, deletedAt: null, type: { level: 0 } };
+  // UX-A P0-2: cùng phạm vi đếm với thẻ dự án (openIssues.ts) — trước đây `level = 0` bỏ cả epic ⇒ 19 so với 27.
+  const issueBase = { projectId: { in: ids }, ...countedIssueWhere() };
   const [openG, overdueG, doneG, approvalsG, versions, stages, links] = await Promise.all([
     prisma.workIssue.groupBy({ by: ['projectId'], where: { ...issueBase, resolvedAt: null }, _count: { _all: true } }),
     prisma.workIssue.groupBy({ by: ['projectId'], where: { ...issueBase, resolvedAt: null, dueDate: { lt: dbDate(today) } }, _count: { _all: true } }),

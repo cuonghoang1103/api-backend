@@ -21,6 +21,7 @@ import { fptApi, fptKeys, IT_STATUSES, pct, roundsOf, type ItCase, type ItKind, 
 import FptDocDialog from './FptDocDialog';
 import FptImportDialog from './FptImportDialog';
 import { ExportButton, InlineText, ResultBar, SaveState, shortDate, Stat, todayIso } from './shared';
+import { KpiRow } from '../../KpiTile';
 
 const currentOf = (rounds: ItRound[]): ItStatus => {
   for (let i = rounds.length - 1; i >= 0; i--) if (rounds[i]?.status) return rounds[i].status!;
@@ -58,20 +59,20 @@ export default function IntegrationTab({ config, pid, kind = 'INT' }: { config: 
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-[var(--w-border)] px-4 py-3">
+      <div className="flex flex-wrap items-start gap-3 border-b border-[var(--w-border)] px-4 py-3">
         {s && (
-          <>
+          <KpiRow min={96} className="min-w-0 flex-1" label="Integration test summary">
             <Stat label={T.units} value={mods.length} />
             <Stat label="Test cases" value={s.total} />
-            <Stat label="Passed" value={s.passed} tone="green" />
+            <Stat label="Passed" value={s.passed} tone={s.passed ? 'green' : 'muted'} />
             <Stat label="Failed" value={s.failed} tone={s.failed ? 'red' : 'muted'} />
             <Stat label="Pending" value={s.pending} tone="muted" />
             <Stat label="N/A" value={s.na} tone="muted" />
             <Stat label="Coverage" value={pct(s.coverage)} hint="(Passed + Failed) / (Total − N/A)" />
             <Stat label="Success" value={pct(s.successCoverage)} hint="Passed / (Total − N/A)" />
-          </>
+          </KpiRow>
         )}
-        <div className="ml-auto flex flex-wrap gap-2">
+        <div className="ml-auto flex shrink-0 flex-wrap justify-end gap-2">
           <button type="button" className="w-btn w-btn-sm" onClick={() => setDocOpen(true)}><FileText size={13} /> <span className="hidden sm:inline">Cover &amp; changes</span></button>
           {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}><FileUp size={13} /> <span className="hidden sm:inline">Import</span></button>}
           <ExportButton pid={pid} report={T.report} label={T.exportLabel} />

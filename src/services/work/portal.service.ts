@@ -89,7 +89,7 @@ export async function overview(userId: number, projectId: number, opts: { asClie
   const ctx = await portalCtx(userId, projectId, opts);
   const pid = projectId;
   const [project, stages, stageIssues, versions, pending, sharedOpen, sharedDone, fromClientOpen] = await Promise.all([
-    prisma.workProject.findUniqueOrThrow({ where: { id: pid }, select: { key: true, name: true, description: true, avatarUrl: true, iconEmoji: true, color: true, workspace: { select: { name: true, slug: true, logoUrl: true } }, clientRequest: { select: { organization: true, code: true } } } }),
+    prisma.workProject.findUniqueOrThrow({ where: { id: pid }, select: { key: true, name: true, description: true, avatarUrl: true, iconEmoji: true, color: true, coverUrl: true, coverPositionY: true, workspace: { select: { name: true, slug: true, logoUrl: true } }, clientRequest: { select: { organization: true, code: true } } } }),
     ctx.access.modules.stages
       ? prisma.workStage.findMany({ where: { projectId: pid }, orderBy: { n: 'asc' }, select: { id: true, n: true, slug: true, name: true, status: true, startedAt: true, completedAt: true } })
       : Promise.resolve([]),
@@ -135,7 +135,7 @@ export async function overview(userId: number, projectId: number, opts: { asClie
     project: {
       key: project.key, name: project.name, description: ctx.clientView ? null : project.description, workspaceName: project.workspace.name, organization: project.clientRequest?.organization ?? null,
       // CTW-23: cổng khách mang nhận diện dự án + logo studio.
-      avatarUrl: project.avatarUrl, iconEmoji: project.iconEmoji, color: project.color, workspaceLogoUrl: project.workspace.logoUrl,
+      avatarUrl: project.avatarUrl, iconEmoji: project.iconEmoji, color: project.color, workspaceLogoUrl: project.workspace.logoUrl, coverUrl: project.coverUrl, coverPositionY: project.coverPositionY,
     },
     viewer: viewerInfo(ctx),
     stages: stageRows,
@@ -207,13 +207,21 @@ export async function getRequest(userId: number, projectId: number, number: numb
       type: { select: { key: true, name: true, icon: true, color: true } },
       status: { select: { name: true, category: true, color: true } },
       stage: { select: { n: true, name: true, status: true } },
-      // Epic chứa thẻ: chỉ TÊN (khách không mở được epic chưa chia sẻ).
+      // Epic chứa thẻ: chỉ khi epic ĐÃ chia sẻ (đợt 6a — tiêu đề epic nội bộ là tiêu đề thẻ chưa chia sẻ).
       parent: { select: { number: true, title: true, clientVisible: true } },
       fixVersion: { select: { name: true, releaseDate: true, status: true } },
       reporter: { select: PUBLIC_USER },
       labels: { select: { label: { select: { name: true } } } },
       attachments: { where: { clientVisible: true }, orderBy: { createdAt: 'asc' }, select: { id: true, fileName: true, mime: true, size: true, createdAt: true, deliverable: true, uploader: { select: PUBLIC_USER } } },
-      comments: { where: { deletedAt: null, visibility: 'PUBLIC' }, orderBy: { createdAt: 'asc' }, take: 500, select: { id: true, bodyJson: true, createdAt: true, editedAt: true, isAi: true, author: { select: PUBLIC_USER } } },
+      comments: {
+        where: { deletedAt: null, visibility: 'PUBLIC' }, orderBy: { createdAt: 'asc' }, take: 500,
+        select: {
+          id: true, bodyJson: true, createdAt: true, editedAt: true, isAi: true, author: { select: PUBLIC_USER },
+          // CTW đợt 5b K-1: luồng + tệp/voice note của bình luận PUBLIC (tải qua /attachments/:id/url — đã kiểm PUBLIC).
+          parentId: true,
+          attachments: { orderBy: { id: 'asc' }, select: { id: true, fileName: true, mime: true, size: true, createdAt: true, voice: { select: { durationMs: true, transcriptStatus: true, transcript: true } } } },
+        },
+      },
     },
   });
   if (!i) throw new NotFoundError('Issue not found');
@@ -222,10 +230,14 @@ export async function getRequest(userId: number, projectId: number, number: numb
     ...rest,
     reporter: maskUser(rest.reporter, ctx.people),
     attachments: rest.attachments.map((a) => ({ ...a, uploader: maskUser(a.uploader, ctx.people) })),
-    comments: rest.comments.map((c) => ({ ...c, author: maskUser(c.author, ctx.people) })),
+    comments: rest.comments.map((c, _i, all) => ({
+      ...c, author: maskUser(c.author, ctx.people),
+      // K-1: gốc nội bộ ẩn ⇒ trả lời PUBLIC đứng như gốc (không lộ có ghi chú ẩn).
+      parentId: c.parentId !== null && all.some((x) => x.id === c.parentId) ? c.parentId : null,
+    })),
     key: `${ctx.access.key}-${i.number}`,
     fromClient: labels.some((l) => l.label.name === FROM_CLIENT_LABEL),
-    parent: parent ? { title: parent.title, number: parent.clientVisible ? parent.number : null } : null,
+    parent: parent?.clientVisible ? { title: parent.title, number: parent.number } : null,
     viewer: viewerInfo(ctx),
     clientIds: ctx.clientIds,
   };
@@ -401,7 +413,8 @@ async function uatDetail(ctx: PortalCtx, u: NonNullable<PortalApprovalRow['uat']
     ? await Promise.all([
       prisma.workPage.findMany({ where: { projectId: ctx.access.projectId, number: { in: (u.pageNumbers as number[]) ?? [] }, deletedAt: null, ...(ctx.clientView ? { visibility: 'CLIENT' } : {}) }, select: { number: true, title: true, status: true } }),
       prisma.workAttachment.findMany({ where: { id: { in: (u.attachmentIds as number[]) ?? [] }, ...(ctx.clientView ? { clientVisible: true, issue: { clientVisible: true } } : {}) }, select: { id: true, fileName: true, size: true } }),
-      prisma.workIssue.findMany({ where: { id: { in: created }, deletedAt: null }, orderBy: { number: 'asc' }, select: { number: true, title: true, type: { select: { key: true, name: true } }, status: { select: { name: true, category: true } } } }),
+      // Đợt 6a: thẻ sinh từ lời từ chối mà sau đó bị bỏ chia sẻ ⇒ không còn trong biên bản của khách.
+      prisma.workIssue.findMany({ where: { id: { in: created }, deletedAt: null, ...(ctx.clientView ? { clientVisible: true } : {}) }, orderBy: { number: 'asc' }, select: { number: true, title: true, type: { select: { key: true, name: true } }, status: { select: { name: true, category: true } } } }),
     ])
     : [[], [], []];
   return {

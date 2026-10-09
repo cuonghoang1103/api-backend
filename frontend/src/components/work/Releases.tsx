@@ -305,7 +305,7 @@ export function ReleasesList({ config, pid, onOpenVersion }: { config: ProjectCo
   }, [versions]);
 
   return (
-    <div className="mx-auto w-full max-w-[1100px] px-4 py-5">
+    <div className="w-page">
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <div className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]" role="group" aria-label="Filter by status">
           {TABS.map((t) => (
@@ -577,7 +577,7 @@ export function VersionDetail({ config, pid, lk, versionId, onBack, onOpenIssue 
   const total = detail.data.issues.length;
 
   return (
-    <div className="mx-auto w-full max-w-[1100px] px-4 py-5">
+    <div className="w-page">
       <button type="button" onClick={onBack} className="mb-3 inline-flex items-center gap-1 text-[12.5px] text-[var(--w-text-2)] hover:text-[var(--w-text)]">
         <ArrowLeft size={13} /> All versions
       </button>

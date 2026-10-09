@@ -8,6 +8,7 @@ import { Field, Spinner } from '../ui';
 import { PROJECT_TYPE_LABEL, Section, Select, Switch } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
 import { ProjectIdentity } from './ProjectIdentity';
+import { ProjectCoverPicker } from './ProjectCoverPicker'; // UX-D
 
 const TEMPLATE_LABEL: Record<ProjectConfig['template'], string> = {
   BLANK: 'Blank project',
@@ -93,6 +94,7 @@ export default function ProjectDetails({ config, slug }: { config: ProjectConfig
         )}
       </form>
     </Section>
+    <ProjectCoverPicker config={config} slug={slug} />
     <ProjectIdentity config={config} slug={slug} />
     <AiGuidelines config={config} slug={slug} />
     <DefinitionOfDone config={config} slug={slug} />

@@ -1,0 +1,104 @@
+name: CT Work E2E (Playwright)
+
+# Đợt 6a (D2): E2E giao diện /work — CHỈ chạy tay (Actions → Run workflow). Không chạy theo push:
+# dựng cả backend + frontend + Postgres mất ~10–15 phút, và push vào main không được kéo theo việc nặng.
+# Mọi thứ chạy trong runner (Postgres dựng tạm) — không chạm VPS, không cần secret nào.
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: work-e2e
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: CT Work E2E
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ctwork_e2e
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ctwork_e2e"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ctwork_e2e?schema=public
+      JWT_SECRET: ci-work-e2e-secret-not-for-production-0123456789
+      AUTH_SECRET: ci-work-e2e-auth-secret-not-for-production-0123
+      REDIS_HOST: localhost
+      REDIS_PORT: '6379'
+      WORK_EMAIL_NOTIFICATIONS: 'false'
+      LLM_BACKGROUND_ENABLED: 'false'
+      E2E_BASE_URL: http://localhost:3000
+      E2E_SHOTS_DIR: ${{ github.workspace }}/e2e-shots
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+      - name: Install backend deps
+        run: npm ci --no-audit --no-fund
+      - name: Install frontend deps
+        run: npm ci --no-audit --no-fund
+        working-directory: frontend
+      - name: Prisma generate + migrate deploy
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+      - name: Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Type-check E2E specs
+        run: npm run typecheck:e2e
+      - name: Start backend (:3001)
+        run: |
+          nohup env NODE_ENV=test PORT=3001 RATE_LIMIT_MAX=1000000 npx tsx src/index.ts > backend.log 2>&1 &
+          for _ in $(seq 1 60); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/work/workspaces || true)
+            [ "$code" = "401" ] && echo "backend up" && exit 0
+            sleep 2
+          done
+          cat backend.log; exit 1
+      - name: Build + start frontend (:3000)
+        working-directory: frontend
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3001
+          INTERNAL_BACKEND_URL: http://localhost:3001
+          NODE_OPTIONS: --max-old-space-size=6144
+        run: |
+          npm run build
+          nohup npx next start -p 3000 > ../frontend.log 2>&1 &
+          for _ in $(seq 1 60); do
+            curl -s -o /dev/null http://localhost:3000/login && echo "frontend up" && exit 0
+            sleep 2
+          done
+          cat ../frontend.log; exit 1
+      - name: Run E2E
+        run: |
+          mkdir -p "$E2E_SHOTS_DIR"
+          npm run test:e2e:work
+      - name: Upload screenshots + logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: work-e2e-${{ github.run_id }}
+          path: |
+            e2e-shots/
+            backend.log
+            frontend.log
+          retention-days: 7

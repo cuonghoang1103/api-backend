@@ -11,7 +11,10 @@
  *   4. người CÓ tương tác công khai với khách: tác giả trả lời PUBLIC trên thẻ đã
  *      chia sẻ · assignee của thẻ đã chia sẻ · người duyệt + người gửi của phê duyệt
  *      có khách đứng tên · (đợt S3b) người tổ chức + người được mời của cuộc họp CÓ
- *      MỜI khách (khách đã thấy nhau trong lời mời họp).
+ *      MỜI khách (khách đã thấy nhau trong lời mời họp) · (đợt 6a) người được @nhắc trong nội dung
+ *      khách đọc được — mô tả thẻ đã chia sẻ, bình luận PUBLIC trên thẻ đã chia sẻ, trang CLIENT (nhãn
+ *      @nhắc mang tên thật, và nhân viên tự chọn nêu tên người đó với khách — che ở danh sách thành viên
+ *      mà để lộ trong nội dung thì vô nghĩa và khó hiểu).
  * Ai khác (kể cả khi dự án mở cho cả không gian) ⇒ không bao giờ xuất hiện; chỗ nào
  * cần hiện "một người" thì hiện `TEAM_USER` ("Project team", id 0). Không bao giờ email
  * (mọi select dùng PUBLIC_USER — không có cột email).
@@ -33,7 +36,7 @@ export const TEAM_NAME = 'The team';
 export async function clientPeopleIds(projectId: number, viewerId: number | null): Promise<Set<number>> {
   const sharedIssue = { projectId, deletedAt: null, clientVisible: true };
   const clients = await clientMemberIds(projectId);
-  const [project, authors, assignees, approvals, meetings] = await Promise.all([
+  const [project, authors, assignees, approvals, meetings, mentioned] = await Promise.all([
     prisma.workProject.findUnique({ where: { id: projectId }, select: { leadId: true } }),
     prisma.workComment.findMany({ where: { deletedAt: null, visibility: 'PUBLIC', isAi: false, issue: sharedIssue }, distinct: ['authorId'], select: { authorId: true } }),
     prisma.workIssue.findMany({ where: { ...sharedIssue, assigneeId: { not: null } }, distinct: ['assigneeId'], select: { assigneeId: true } }),
@@ -52,8 +55,10 @@ export async function clientPeopleIds(projectId: number, viewerId: number | null
         take: 500,
       })
       : Promise.resolve([]),
+    publicMentionIds(projectId),
   ]);
   const out = new Set<number>(clients);
+  for (const id of mentioned) out.add(id);
   if (viewerId) out.add(viewerId);
   if (project?.leadId) out.add(project.leadId);
   for (const c of authors) if (c.authorId) out.add(c.authorId);
@@ -72,6 +77,24 @@ export async function clientPeopleIds(projectId: number, viewerId: number | null
     for (const a of agents) if (a.id !== viewerId) out.delete(a.id);
   }
   return out;
+}
+
+/** Id người được @nhắc (node `mention`, attrs.id) trong nội dung khách của dự án đọc được. */
+async function publicMentionIds(projectId: number): Promise<number[]> {
+  const rows = await prisma.$queryRaw<Array<{ id: string | null }>>`
+    SELECT DISTINCT (m->'attrs'->>'id') AS id FROM (
+      SELECT description_json AS j FROM work_issues
+        WHERE project_id = ${projectId} AND deleted_at IS NULL AND client_visible = true AND description_json IS NOT NULL
+      UNION ALL
+      SELECT c.body_json FROM work_comments c JOIN work_issues i ON i.id = c.issue_id
+        WHERE i.project_id = ${projectId} AND i.deleted_at IS NULL AND i.client_visible = true AND c.deleted_at IS NULL AND c.visibility = 'PUBLIC'
+      UNION ALL
+      SELECT content_json FROM work_pages
+        WHERE project_id = ${projectId} AND deleted_at IS NULL AND visibility = 'CLIENT' AND content_json IS NOT NULL
+    ) s, LATERAL jsonb_path_query(s.j, 'strict $.**') m
+    WHERE jsonb_typeof(m) = 'object' AND m->>'type' = 'mention'
+    LIMIT 500`;
+  return rows.map((r) => Number(r.id)).filter((n) => Number.isInteger(n) && n > 0);
 }
 
 /** Bộ lọc người cho một người xem: null = không lọc (nhân viên). */

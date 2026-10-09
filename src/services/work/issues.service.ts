@@ -26,6 +26,9 @@ import { assertModule } from './studio.js';
 import { tiptapToText } from './tiptapText.js';
 import { foldVi } from './fold.js';
 import { logger } from '../../utils/logger.js';
+// CTW đợt 5b K-1: luồng trả lời + tệp/voice note trong bình luận.
+import { threadRootOf } from './commentThreads.js';
+import { assertCommentFileRoom, attachDrafts, COMMENT_FILE_SELECT, commentFilesFor, queueTranscriptions, refreshCommentText } from './commentFiles.service.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
 /**
@@ -90,7 +93,8 @@ export const CARD_SELECT = {
   priority: true, assigneeId: true, reporterId: true, storyPoints: true, dueDate: true, rank: true, version: true,
   resolvedAt: true, createdAt: true, updatedAt: true,
   labels: { select: { labelId: true } },
-  parent: { select: { number: true } },
+  // Đợt 6a: cờ chia sẻ của thẻ cha — khách không được thấy số/id của epic CHƯA chia sẻ (clientCard).
+  parent: { select: { number: true, clientVisible: true } },
   _count: { select: { children: { where: { deletedAt: null } }, comments: { where: { deletedAt: null } }, attachments: true } },
 } satisfies Prisma.WorkIssueSelect;
 
@@ -132,6 +136,15 @@ export function scrubCardForClient<T extends Record<string, unknown>>(card: T, s
   if (!scoped) return card;
   // CTW-11: cờ chặn + lý do là ghi chú nội bộ của đội.
   return { ...card, commentCount: null, attachmentCount: null, subtaskCount: null, storyPoints: null, teamId: null, version: 0, flaggedAt: null, flagReason: null };
+}
+
+/**
+ * Thẻ cho người xem: như scrubCardForClient, thêm luật đợt 6a — thẻ đã chia sẻ có thẻ cha CHƯA chia
+ * sẻ (epic nội bộ) ⇒ khách không thấy parentId/parentNumber (không dò được epic ẩn).
+ */
+export function clientCard(r: CardRow, scoped: boolean) {
+  const card = scrubCardForClient(toCard(r), scoped);
+  return scoped && r.parent && r.parent.clientVisible !== true ? { ...card, parentId: null, parentNumber: null } : card;
 }
 
 /** Như findIssue, nhưng thẻ chưa chia sẻ ⇒ 404 với khách bị cách ly (không lộ là thẻ tồn tại). */
@@ -211,7 +224,7 @@ export async function listIssues(userId: number, projectId: number, f: IssueFilt
     select: CARD_SELECT,
   });
   const hasMore = rows.length > limit;
-  const items = rows.slice(0, limit).map((r) => scrubCardForClient(toCard(r), isClientScoped(access)));
+  const items = rows.slice(0, limit).map((r) => clientCard(r, isClientScoped(access)));
   return { items, total, nextCursor: hasMore ? items[items.length - 1].rank : null };
 }
 
@@ -248,7 +261,7 @@ export async function getBoard(userId: number, projectId: number, sprintId?: num
   const rows = await prisma.workIssue.findMany({ where, orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: BOARD_LIMIT + 1, select: CARD_SELECT });
   const truncated = rows.length > BOARD_LIMIT;
   const total = truncated ? await prisma.workIssue.count({ where }) : rows.length;
-  return { mode: project.type, sprint, fallback, issues: rows.slice(0, BOARD_LIMIT).map((r) => scrubCardForClient(toCard(r), isClientScoped(access))), truncated, total, limit: BOARD_LIMIT };
+  return { mode: project.type, sprint, fallback, issues: rows.slice(0, BOARD_LIMIT).map((r) => clientCard(r, isClientScoped(access))), truncated, total, limit: BOARD_LIMIT };
 }
 
 export async function getIssueDetail(userId: number, projectId: number, number: number) {
@@ -264,7 +277,7 @@ export async function getIssueDetail(userId: number, projectId: number, number: 
       aiModel: true, aiAssistedAt: true, aiAppliedById: true,
       assignee: { select: PUBLIC_USER },
       reporter: { select: PUBLIC_USER },
-      parent: { select: { id: true, number: true, title: true, typeId: true, statusId: true } },
+      parent: { select: { id: true, number: true, title: true, typeId: true, statusId: true, clientVisible: true } },
       children: {
         where: { deletedAt: null, ...(scoped ? { clientVisible: true } : {}) },
         orderBy: [{ rank: 'asc' }, { id: 'asc' }],
@@ -274,7 +287,8 @@ export async function getIssueDetail(userId: number, projectId: number, number: 
       linksOut: { select: { id: true, type: true, toIssue: { select: { id: true, number: true, title: true, statusId: true, typeId: true, deletedAt: true, projectId: true, clientVisible: true, project: { select: { key: true } } } } } },
       linksIn: { select: { id: true, type: true, fromIssue: { select: { id: true, number: true, title: true, statusId: true, typeId: true, deletedAt: true, projectId: true, clientVisible: true, project: { select: { key: true } } } } } },
       attachments: {
-        where: scoped ? { clientVisible: true } : {},
+        // K-1: tệp tải từ ô bình luận nằm trong bình luận, không lẫn vào khối Attachments của thẻ.
+        where: { forComment: false, ...(scoped ? { clientVisible: true } : {}) },
         orderBy: { createdAt: 'asc' },
         select: { id: true, fileName: true, mime: true, size: true, createdAt: true, clientVisible: true, deliverable: true, uploader: { select: PUBLIC_USER } },
       },
@@ -298,10 +312,12 @@ export async function getIssueDetail(userId: number, projectId: number, number: 
       assignee: maskUser(issue.assignee, f),
       reporter: maskUser(issue.reporter, f),
       attachments: issue.attachments.map((a) => ({ ...a, uploader: maskUser(a.uploader, f) })),
+      // Đợt 6a: thẻ cha (epic) chưa chia sẻ ⇒ không lộ số/tiêu đề.
+      parent: issue.parent?.clientVisible ? issue.parent : null,
     });
   }
   return {
-    ...scrubCardForClient(toCard(rest as unknown as CardRow), scoped),
+    ...clientCard(rest as unknown as CardRow, scoped),
     ...detail,
     clientSharedAt: issue.clientSharedAt,
     componentIds: scoped ? [] : components.map((c) => c.componentId),
@@ -575,15 +591,17 @@ export async function listHistory(userId: number, projectId: number, number: num
 
 const MAX_COMMENT_TEXT = 20_000;
 
-function commentBody(bodyJson: unknown) {
+function commentBody(bodyJson: unknown, allowEmpty = false) {
   const text = tiptapToText(bodyJson);
-  if (!text.trim()) throw new BadRequestError('Comment is empty', 'WORK_EMPTY_COMMENT');
+  // K-1: bình luận chỉ có tệp/voice note (thân trống) là hợp lệ.
+  if (!text.trim() && !allowEmpty) throw new BadRequestError('Comment is empty', 'WORK_EMPTY_COMMENT');
   if (text.length > MAX_COMMENT_TEXT) throw new BadRequestError('Comment is too long', 'WORK_COMMENT_TOO_LONG');
   return text;
 }
 
 const COMMENT_SELECT = {
   id: true, bodyJson: true, isAi: true, visibility: true, createdAt: true, editedAt: true, author: { select: PUBLIC_USER },
+  parentId: true, // K-1
 } satisfies Prisma.WorkCommentSelect;
 
 export async function listComments(userId: number, projectId: number, number: number) {
@@ -595,30 +613,55 @@ export async function listComments(userId: number, projectId: number, number: nu
     orderBy: { createdAt: 'asc' }, take: 500, select: COMMENT_SELECT,
   });
   // Một lượt đọc cảm xúc cho MỌI bình luận của thẻ (không N+1).
-  const byComment = await reactionSummaries(comments.map((c) => c.id), userId);
+  const [byComment, files] = await Promise.all([reactionSummaries(comments.map((c) => c.id), userId), commentFilesFor(comments.map((c) => c.id))]);
   // Khách: người thả cảm xúc ngoài phạm vi ⇒ "Project team" (vẫn đếm, không lộ tên).
   const f = await peopleFilterFor(access, userId);
-  return comments.map((c) => ({ ...c, author: maskUser(c.author, f), reactions: maskReactions(byComment.get(c.id) ?? [], f) }));
+  // K-1: khách không thấy gốc nội bộ ⇒ trả lời PUBLIC của nó đứng như gốc (không lộ là có ghi chú ẩn).
+  const shown = new Set(comments.map((c) => c.id));
+  return comments.map((c) => ({
+    ...c, author: maskUser(c.author, f), reactions: maskReactions(byComment.get(c.id) ?? [], f),
+    parentId: c.parentId !== null && (shown.has(c.parentId) || !isClientScoped(access)) ? c.parentId : null,
+    attachments: (files.get(c.id) ?? []).map((a) => ({ ...a, uploader: maskUser(a.uploader, f) })),
+  }));
 }
 
 export async function addComment(
   userId: number, projectId: number, number: number, bodyJson: Prisma.InputJsonValue, via: Via = 'USER', visibility?: CommentVisibility,
+  // K-1: trả lời theo luồng + tệp/voice note đã tải lên từ ô bình luận (bản nháp của chính người gửi).
+  opts: { parentId?: number | null; attachmentIds?: number[] } = {},
 ) {
   const access = await requireProject(userId, projectId, 'comment.create');
   const issue = await findVisibleIssue(access, number);
   const { id } = issue;
   // Trợ lý AI luôn soạn ghi chú NỘI BỘ — không bao giờ tự trả lời khách.
   const vis = commentVisibilityFor(access, issue.clientVisible, via === 'AI' ? 'INTERNAL' : visibility);
-  const bodyText = commentBody(bodyJson);
+  const attachmentIds = opts.attachmentIds ?? [];
+  const bodyText = commentBody(bodyJson, attachmentIds.length > 0);
+  let parentId: number | null = null;
+  let replyTo: number | null = null;
+  if (opts.parentId) {
+    const p = await prisma.workComment.findUnique({ where: { id: opts.parentId }, select: { id: true, issueId: true, parentId: true, deletedAt: true, visibility: true, authorId: true, isAi: true } });
+    replyTo = p && !p.isAi ? p.authorId : null;
+    // Khách chỉ trả lời được bình luận họ thấy (PUBLIC) — không dò ra id ghi chú nội bộ.
+    parentId = p && (!isClientScoped(access) || p.visibility === 'PUBLIC') ? threadRootOf(p, id) : null;
+    if (!parentId) throw new BadRequestError('The comment you are replying to was not found', 'WORK_BAD_PARENT');
+  }
+  let voiceIds: number[] = [];
   const comment = await prisma.$transaction(async (tx) => {
     // Bình luận AI soạn: vẫn ghi người đã duyệt (authorId) nhưng đánh dấu isAi —
     // hiện là "CT Work AI" và không tính vào số bình luận của ai.
-    const c = await tx.workComment.create({ data: { issueId: id, authorId: userId, isAi: via === 'AI', bodyJson, bodyText, visibility: vis }, select: COMMENT_SELECT });
+    const c = await tx.workComment.create({ data: { issueId: id, authorId: userId, isAi: via === 'AI', bodyJson, bodyText, visibility: vis, parentId }, select: COMMENT_SELECT });
+    if (attachmentIds.length) {
+      voiceIds = (await attachDrafts(tx, { userId, issueId: id, commentId: c.id, attachmentIds })).voiceIds;
+      await refreshCommentText(c.id, tx);
+    }
     // Bình luận vào thẻ nào thì tự theo dõi thẻ đó (như Jira).
     await tx.workWatcher.createMany({ data: [{ issueId: id, userId }], skipDuplicates: true });
     return c;
   });
-  emitWorkEvent({ type: 'comment.created', projectId, issueId: id, commentId: comment.id, actor: actorOf(userId, via) });
+  // Phiên âm chạy nền sau khi gửi (bản nháp bỏ đi không tốn lượt Groq).
+  queueTranscriptions(voiceIds);
+  emitWorkEvent({ type: 'comment.created', projectId, issueId: id, commentId: comment.id, actor: actorOf(userId, via), replyTo });
   // Đợt S5a: trả lời PUBLIC đầu tiên của đội ⇒ first response; khách trả lời ⇒ hết "chờ khách". Lỗi chỉ ghi log.
   if (access.modules.serviceDesk) {
     await import('./serviceDesk.service.js')
@@ -631,15 +674,17 @@ export async function addComment(
 export async function editComment(userId: number, projectId: number, number: number, commentId: number, bodyJson: Prisma.InputJsonValue) {
   const access = await requireProject(userId, projectId, 'project.view');
   const { id } = await findVisibleIssue(access, number);
-  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null, ...(isClientScoped(access) ? { visibility: 'PUBLIC' } : {}) }, select: { authorId: true } });
+  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null, ...(isClientScoped(access) ? { visibility: 'PUBLIC' } : {}) }, select: { authorId: true, _count: { select: { attachments: true } } } });
   if (!c) throw new NotFoundError('Comment not found');
   // Sửa lời người khác là giả mạo — ADMIN chỉ được XOÁ, không được sửa.
   if (c.authorId !== userId || !canModifyComment(access.role, userId, c.authorId)) {
     throw new ForbiddenError('You can only edit your own comments');
   }
   const updated = await prisma.workComment.update({
-    where: { id: commentId }, data: { bodyJson, bodyText: commentBody(bodyJson), editedAt: new Date() }, select: COMMENT_SELECT,
+    where: { id: commentId }, data: { bodyJson, bodyText: commentBody(bodyJson, c._count.attachments > 0), editedAt: new Date() }, select: COMMENT_SELECT,
   });
+  // K-1: giữ phiên âm voice note + tên tệp trong chữ tìm kiếm sau khi sửa.
+  if (c._count.attachments) await refreshCommentText(commentId);
   emitWorkEvent({ type: 'issue.updated', projectId, issueId: id, actor: userActor(userId), changes: [] });
   return updated;
 }
@@ -814,14 +859,16 @@ function attachmentPrefix(projectId: number, issueId: number) {
   return `work/${projectId}/${issueId}/`;
 }
 
-export async function presignAttachment(userId: number, projectId: number, number: number, input: { fileName: string; contentType: string; size: number }) {
+export async function presignAttachment(userId: number, projectId: number, number: number, input: { fileName: string; contentType: string; size: number; forComment?: boolean }) {
   const access = await requireProject(userId, projectId, 'attachment.add');
   assertR2();
   const { id } = await findVisibleIssue(access, number);
   if (!Number.isFinite(input.size) || input.size <= 0 || input.size > MAX_ATTACHMENT_BYTES) {
     throw new BadRequestError('Files must be 25 MB or smaller', 'WORK_FILE_TOO_LARGE');
   }
-  const count = await prisma.workAttachment.count({ where: { issueId: id } });
+  // K-1: tệp từ ô bình luận có trần riêng (commentFiles.service) — không ăn vào 50 tệp của thẻ.
+  if (input.forComment) await assertCommentFileRoom(id, userId);
+  const count = input.forComment ? 0 : await prisma.workAttachment.count({ where: { issueId: id, forComment: false } });
   if (count >= MAX_ATTACHMENTS_PER_ISSUE) throw new BadRequestError('This issue has too many attachments', 'WORK_LIMIT');
   const safeName = input.fileName.replace(/[^\w.\- ]+/g, '_').slice(-120) || 'file';
   const key = `${attachmentPrefix(projectId, id)}${crypto.randomUUID()}/${safeName}`;
@@ -830,7 +877,7 @@ export async function presignAttachment(userId: number, projectId: number, numbe
   return { uploadUrl, key, headers: { 'Content-Type': contentType } };
 }
 
-export async function completeAttachment(userId: number, projectId: number, number: number, input: { key: string; fileName: string; runId?: number | null }) {
+export async function completeAttachment(userId: number, projectId: number, number: number, input: { key: string; fileName: string; runId?: number | null; forComment?: boolean }) {
   const access = await requireProject(userId, projectId, 'attachment.add');
   assertR2();
   const { id } = await findVisibleIssue(access, number);
@@ -851,6 +898,14 @@ export async function completeAttachment(userId: number, projectId: number, numb
     await deleteObject(input.key);
     throw new BadRequestError('Files must be 25 MB or smaller', 'WORK_FILE_TOO_LARGE');
   }
+  if (input.forComment) {
+    // K-1: bản nháp của ô bình luận — gắn vào bình luận khi gửi (addComment.attachmentIds). Không ghi lịch sử thẻ,
+    // không chia sẻ khách theo cờ tệp (khách thấy nó qua bình luận PUBLIC chứa nó).
+    return prisma.workAttachment.create({
+      data: { issueId: id, uploaderId: userId, r2Key: input.key, fileName: input.fileName.slice(0, 255) || 'file', mime: head.contentType.slice(0, 100), size: head.size, forComment: true, clientVisible: false },
+      select: COMMENT_FILE_SELECT,
+    });
+  }
   const att = await prisma.workAttachment.create({
     data: { issueId: id, runId: fromClient ? null : input.runId ?? null, uploaderId: userId, r2Key: input.key, fileName: input.fileName.slice(0, 255) || 'file', mime: head.contentType.slice(0, 100), size: head.size, clientVisible: fromClient },
     select: { id: true, fileName: true, mime: true, size: true, createdAt: true, clientVisible: true, deliverable: true, uploader: { select: PUBLIC_USER } },
@@ -869,7 +924,11 @@ export async function attachmentDownloadUrl(userId: number, projectId: number, a
   // Khách bị cách ly: chỉ tệp đã chia sẻ, trên thẻ đã chia sẻ.
   const scoped = isClientScoped(access);
   const att = await prisma.workAttachment.findFirst({
-    where: { id: attachmentId, issue: { projectId, deletedAt: null, ...(scoped ? { clientVisible: true } : {}) }, ...(scoped ? { clientVisible: true } : {}) },
+    where: {
+      id: attachmentId, issue: { projectId, deletedAt: null, ...(scoped ? { clientVisible: true } : {}) },
+      // K-1: khách nghe/tải được tệp/voice note của bình luận PUBLIC (còn sống) trên thẻ đã chia sẻ — không gì khác.
+      ...(scoped ? { OR: [{ clientVisible: true, forComment: false }, { comment: { visibility: 'PUBLIC', deletedAt: null } }] } : {}),
+    },
     select: { r2Key: true, fileName: true },
   });
   if (!att) throw new NotFoundError('Attachment not found');

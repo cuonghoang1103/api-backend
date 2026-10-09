@@ -101,13 +101,25 @@ export async function routeForClient<T extends WorkNotifyLike>(args: T): Promise
     if (args.type === 'WORK_ALERT' && typeof args.payload.approvalId === 'number') {
       const a = await prisma.workApproval.findFirst({
         where: { id: args.payload.approvalId, projectId: project.id, steps: { some: { approverId: args.receiverId } } },
-        select: { id: true, title: true, targetType: true },
+        select: {
+          id: true, title: true, targetType: true, description: true, clientNote: true, issueId: true, pageId: true, changeRequestId: true,
+          issue: { select: { number: true, title: true, clientVisible: true } },
+          page: { select: { number: true, title: true, visibility: true } },
+          changeRequest: { select: { number: true, title: true, clientVisible: true } },
+          stage: { select: { n: true, name: true } },
+        },
       });
       if (!a) return null;
+      // Đợt 6a: đối tượng đã bị BỎ chia sẻ (vd chuỗi SEQUENTIAL tới lượt khách sau khi thẻ bị thu
+      // hồi) ⇒ không báo — khách không duyệt được, và tiêu đề lưu lúc gửi mang mã + tiêu đề thẻ.
+      // Còn chia sẻ ⇒ tiêu đề theo đúng bản khách đọc (cổng giai đoạn chỉ tên giai đoạn).
+      const { approvalForClient, approvalTargetSharedWithClient } = await import('./approvals.service.js');
+      if (!approvalTargetSharedWithClient(a)) return null;
+      const shown = approvalForClient(a);
       const message = typeof args.payload.message === 'string' && /requested/i.test(args.payload.message)
         ? (a.targetType === 'UAT' ? 'Your UAT sign-off is requested' : 'Your approval is requested')
         : 'An approval request was updated';
-      return { ...args, payload: { ...base, title: a.title, message, approvalId: a.id, portalKind: a.targetType === 'UAT' ? 'uat' : 'approval', url: `${portalPath(slug, project.key, 'approvals')}&approval=${a.id}` } };
+      return { ...args, payload: { ...base, title: shown.title, message, approvalId: a.id, portalKind: a.targetType === 'UAT' ? 'uat' : 'approval', url: `${portalPath(slug, project.key, 'approvals')}&approval=${a.id}` } };
     }
   } catch (err) {
     logger.warn('[work] lọc thông báo khách lỗi — bỏ thông báo', { err: (err as Error).message });

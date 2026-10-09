@@ -160,6 +160,8 @@ export const EXPORT_TABLES: Array<[name: string, load: Loader]> = [
   ['comments', (_pid, c) => prisma.workComment.findMany({ where: byIssue(c) }) as unknown as Promise<Rows>],
   ['commentReactions', (_pid, c) => prisma.workCommentReaction.findMany({ where: { comment: byIssue(c) } }) as unknown as Promise<Rows>],
   ['attachments', (_pid, c) => prisma.workAttachment.findMany({ where: byIssue(c) }) as unknown as Promise<Rows>],
+  // CTW đợt 5b K-1: độ dài + phiên âm voice note (audio đi cùng tệp đính kèm).
+  ['voiceNotes', (_pid, c) => prisma.workVoiceNote.findMany({ where: { attachment: byIssue(c) } }) as unknown as Promise<Rows>],
   ['history', (_pid, c) => prisma.workHistory.findMany({ where: byIssue(c), orderBy: { id: 'asc' } }) as unknown as Promise<Rows>],
   ['watchers', (_pid, c) => prisma.workWatcher.findMany({ where: byIssue(c) }) as unknown as Promise<Rows>],
   ['worklogs', (_pid, c) => prisma.workWorklog.findMany({ where: byIssue(c) }) as unknown as Promise<Rows>],

@@ -19,6 +19,8 @@ import {
 import { financeAccess } from './financeRules.js';
 import { clientPeopleIds, filterPeople } from './clientPeople.js';
 import { seedProjectConfig } from './templates.js';
+import { openIssueWhere } from './openIssues.js';
+import { defaultCoverFor } from './covers.js'; // UX-D
 
 const MAX_PROJECTS_PER_WORKSPACE = 100;
 
@@ -56,6 +58,7 @@ export async function createProject(
           workspaceId, key, name: name.slice(0, 120), description: input.description?.trim() || null,
           type: input.type, template: input.template, visibility: input.visibility ?? 'WORKSPACE', leadId: userId,
           kind: input.kind ?? kindFromTemplate(input.template),
+          coverUrl: defaultCoverFor(input.template, input.kind ?? kindFromTemplate(input.template)), // UX-D: bìa hợp mẫu
         },
       });
       // Người tạo luôn là ADMIN của dự án mình tạo — kể cả khi chỉ là MEMBER của không gian.
@@ -97,10 +100,12 @@ export async function listProjects(userId: number, workspaceId: number) {
       id: true, key: true, name: true, description: true, type: true, template: true, visibility: true, archivedAt: true,
       // CTW-23: nhận diện dự án (sidebar, danh sách dự án).
       avatarUrl: true, iconEmoji: true, color: true,
+      coverUrl: true, coverPositionY: true, // UX-D: ảnh bìa trên thẻ dự án
       kind: true, settings: true, clientRequest: { select: { id: true } },
       lead: { select: PUBLIC_USER },
       members: { where: { userId }, select: { role: true } },
-      _count: { select: { issues: { where: { deletedAt: null, resolvedAt: null } } } },
+      // UX-A P0-2: một định nghĩa "open" dùng chung (openIssues.ts) — không đếm sub-task.
+      _count: { select: { issues: { where: openIssueWhere() } } },
     },
   });
   const out = [];
@@ -115,7 +120,7 @@ export async function listProjects(userId: number, workspaceId: number) {
     const modules = modulesOf(settings);
     // Khách bị cách ly (cổng khách S2b): chỉ đếm thẻ đã chia sẻ — không lộ quy mô việc nội bộ.
     const openIssues = isClientScoped({ role, modules })
-      ? await prisma.workIssue.count({ where: { projectId: p.id, deletedAt: null, resolvedAt: null, clientVisible: true } })
+      ? await prisma.workIssue.count({ where: { ...openIssueWhere(), projectId: p.id, clientVisible: true } })
       : _count.issues;
     out.push({
       ...rest, role, openIssues,
@@ -150,6 +155,7 @@ export async function getProjectConfig(userId: number, projectId: number) {
       settings: true, archivedAt: true, createdAt: true, leadId: true, kind: true,
       // CTW-23: nhận diện dự án + logo không gian.
       avatarUrl: true, iconEmoji: true, color: true,
+      coverUrl: true, coverPositionY: true, // UX-D
       workspace: { select: { id: true, name: true, slug: true, logoUrl: true } },
       // CTW-5: phiên bản cho gợi ý JQL `fixVersion = …`.
       versions: { where: { status: { not: 'ARCHIVED' } }, orderBy: [{ position: 'asc' }, { id: 'asc' }], take: 200, select: { id: true, name: true, status: true } },

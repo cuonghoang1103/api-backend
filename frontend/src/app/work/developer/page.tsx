@@ -222,7 +222,8 @@ function TokenList({ onCreate }: { onCreate: () => void }) {
 function Code({ children }: { children: string }) {
   return (
     <div className="group relative">
-      <pre className="overflow-x-auto rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2.5 pr-10 font-mono text-[12px] leading-relaxed text-[var(--w-text)]">
+      {/* UX-A ARIA: khối cuộn ngang phải tới được bằng bàn phím. */}
+      <pre tabIndex={0} className="overflow-x-auto rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2.5 pr-10 font-mono text-[12px] leading-relaxed text-[var(--w-text)]">
         <code>{children}</code>
       </pre>
       <button

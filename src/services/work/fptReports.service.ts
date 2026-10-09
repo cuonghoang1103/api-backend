@@ -21,11 +21,12 @@ import { displayName, frontendUrl } from './common.js';
 import { emitWorkEvent } from './events.js';
 import {
   activityOf, buildAiUsageSheets, buildSep490Sheets, buildWbs, buildWeeklySheets, COMPLEXITIES, ddmmyyyy, emptyWeekly, iterationLabel,
-  mondayOf, normalizeMatrix, phaseOf, phasesOf, productOf, SDLC_PHASES, WBS_KINDS, weekNumber, workTypeOf,
+  mondayOf, normalizeMatrix, phaseOf, phasesOf, PRODUCTS, productOf, SDLC_PHASES, WBS_KINDS, weekNumber, workTypeOf,
   type AiUsageDocData, type AiUsageRow, type DefectRow, type EstimationMatrix, type IssueLogRow, type QaRow, type ScopeRow,
   type Sep490Input, type TimeLogRow, type WbsResult, type WbsSourceIssue, type WeeklyData,
 } from './fptReports.js';
 import { requireProject } from './permissions.js';
+import { loadQuestions } from './qna.service.js';
 import { projectMembers } from './projects.service.js';
 import { addDays, dayInZone, projectTimezone, zonedMidnight } from './projectTime.js';
 import { writeXlsx } from './xlsxStyled.js';
@@ -331,10 +332,15 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
   };
   const closed = (s: string) => s === 'CLOSED' || s === 'VALIDATED' || s === 'INVALID';
   const isQa = (r: { category: string | null }) => !!r.category && /^(q\s*&\s*a|qa|question)/i.test(r.category.trim());
-  const qa: QaRow[] = raid.filter(isQa).map((r) => ({
-    date: dayInZone(r.createdAt, tz), question: r.title, by: nameOf(r.createdBy), to: nameOf(r.owner), priority: prio(r),
-    due: iso(r.reviewDate), status: r.status === 'INVALID' ? 'Cancelled' : closed(r.status) ? 'Closed' : 'Open', notes: r.mitigation ?? r.description ?? '',
-  }));
+  // CTW đợt 4 (A22): câu hỏi thật (RAID loại QUESTION — Q&A log) + dòng cũ nhóm "Q&A" (giữ tương thích, đọc như trước).
+  const qaRows = await loadQuestions(projectId);
+  const legacyById = new Map(raid.filter(isQa).map((r) => [r.number, r]));
+  const qa: QaRow[] = qaRows.map((x) => {
+    const old = x.legacy ? legacyById.get(x.number) : undefined;
+    return old
+      ? { date: dayInZone(old.createdAt, tz), question: old.title, by: nameOf(old.createdBy), to: nameOf(old.owner), priority: prio(old), due: iso(old.reviewDate), status: old.status === 'INVALID' ? 'Cancelled' : closed(old.status) ? 'Closed' : 'Open', notes: old.mitigation ?? old.description ?? '' }
+      : { date: x.askedOn, question: x.question, by: x.askedBy ?? '', to: x.askedTo ?? '', priority: x.priorityText, due: x.due, status: x.statusText, notes: [x.answer, x.answer ? null : x.details].filter(Boolean).join('\n').slice(0, 4000) };
+  });
   const issuesLog: IssueLogRow[] = raid.filter((r) => r.type === 'ISSUE' && !isQa(r)).map((r) => ({
     date: dayInZone(r.createdAt, tz), issue: r.title, type: r.category ?? '', priority: prio(r), created: nameOf(r.createdBy), owner: nameOf(r.owner),
     due: iso(r.reviewDate), status: r.status === 'INVALID' ? 'Cancelled' : closed(r.status) ? 'Closed' : r.status === 'MONITORING' ? 'In Progress' : 'Open',
@@ -348,7 +354,7 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
       orderBy: { startedAt: 'asc' },
       take: 10_000,
       select: {
-        minutes: true, startedAt: true, note: true, createdAt: true, userId: true,
+        minutes: true, startedAt: true, note: true, createdAt: true, userId: true, activity: true, workProduct: true,
         user: { select: { username: true, fullName: true, displayName: true } },
         issue: { select: { number: true, title: true, type: { select: { key: true } }, stage: { select: { name: true } }, parent: { select: { title: true } } } },
       },
@@ -362,8 +368,10 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
     const text = `${l.issue.title} ${l.issue.stage?.name ?? ''} ${l.issue.parent?.title ?? ''}`;
     return {
       date: day, reporter: nameOf(l.user), task: `${p.key}-${l.issue.number} ${l.issue.title}`, hours: Math.round((l.minutes / 60) * 100) / 100,
-      activity: activityOf(l.issue.title, l.issue.type.key), type: workTypeOf(l.issue.title), product: productOf(text),
-      workProduct: l.issue.stage?.name ?? l.issue.parent?.title ?? '', status: st === 'APPROVED' ? 'Approved' : st === 'RETURNED' ? 'Rejected' : 'Submitted',
+      // CTW đợt 4 (A24): Activity / Work Product người ghi giờ chọn thắng phần suy từ tiêu đề thẻ.
+      activity: l.activity ?? activityOf(l.issue.title, l.issue.type.key), type: workTypeOf(l.issue.title),
+      product: l.workProduct && (PRODUCTS as readonly string[]).includes(l.workProduct) ? l.workProduct : productOf(`${l.workProduct ?? ''} ${text}`),
+      workProduct: l.workProduct ?? l.issue.stage?.name ?? l.issue.parent?.title ?? '', status: st === 'APPROVED' ? 'Approved' : st === 'RETURNED' ? 'Rejected' : 'Submitted',
       updated: dayInZone(l.createdAt, tz), notes: l.note ?? '',
     };
   });
@@ -379,6 +387,7 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
       reporter: { select: { username: true, fullName: true, displayName: true } }, assignee: { select: { username: true, fullName: true, displayName: true } },
       labels: { select: { label: { select: { name: true } } } }, components: { select: { component: { select: { name: true } } } },
       defectOf: { select: { runId: true }, take: 1 },
+      defectInfo: { select: { severity: true, activity: true, product: true, productDetails: true, sourceReviewId: true } },
     },
   });
   const defects: DefectRow[] = bugs.map((b) => {
@@ -390,10 +399,14 @@ export async function loadSep490(projectId: number): Promise<Sep490Input> {
       : b.status.category === 'DONE' ? 'Closed'
       : /fixed|resolved|verify|review|qa/i.test(b.status.name) ? 'Fixed'
       : b.status.category === 'IN_PROGRESS' ? 'Fixing' : b.assigneeId ? 'Assigned' : 'Pending';
+    // CTW đợt 4 (A16 + B5): trường defect log của Bug (Activity/Product/Product details/Severity) thắng phần suy từ nhãn.
+    const di = b.defectInfo;
+    const sev = di?.severity ? `Severity: ${di.severity.charAt(0)}${di.severity.slice(1).toLowerCase()}` : '';
     return {
-      date: dayInZone(b.createdAt, tz), description: `${p.key}-${b.number} ${b.title}`, activity, product: productOf(`${b.title} ${labels.join(' ')} ${comps.join(' ')}`),
-      productDetails: comps.join(', '), assigner: nameOf(b.reporter), assignee: nameOf(b.assignee), status, updated: dayInZone(b.updatedAt, tz),
-      notes: b.defectOf.length ? 'Found in a test run' : '',
+      date: dayInZone(b.createdAt, tz), description: `${p.key}-${b.number} ${b.title}`, activity: di?.activity ?? activity,
+      product: di?.product ?? productOf(`${b.title} ${labels.join(' ')} ${comps.join(' ')}`),
+      productDetails: di?.productDetails ?? comps.join(', '), assigner: nameOf(b.reporter), assignee: nameOf(b.assignee), status, updated: dayInZone(b.updatedAt, tz),
+      notes: [sev, b.defectOf.length ? 'Found in a test run' : '', di?.sourceReviewId ? 'Found in a spec review' : ''].filter(Boolean).join(' · '),
     };
   });
 

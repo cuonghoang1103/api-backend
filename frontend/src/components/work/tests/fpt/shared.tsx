@@ -9,24 +9,11 @@ import { cn } from '@/lib/utils';
 import { workError } from '@/lib/work-api';
 import { Spinner } from '../../ui';
 import { fptApi, saveBlob, type ReportKind } from './fptApi';
+import KpiTile from '../../KpiTile';
 
+/** Ô số liệu của 5.1/5.2 — nay là `KpiTile` cỡ nhỏ (UX-A: bỏ dải chữ HOA, kiểu KPI thứ ba). */
 export function Stat({ label, value, tone, hint }: { label: string; value: ReactNode; tone?: 'green' | 'red' | 'yellow' | 'muted'; hint?: string }) {
-  return (
-    <div className="min-w-[72px]" title={hint}>
-      <div className="text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{label}</div>
-      <div
-        className={cn(
-          'text-[17px] font-semibold tabular-nums leading-tight',
-          tone === 'green' && 'text-[var(--w-green)]',
-          tone === 'red' && 'text-[var(--w-red)]',
-          tone === 'yellow' && 'text-[var(--w-yellow)]',
-          tone === 'muted' && 'text-[var(--w-text-2)]',
-        )}
-      >
-        {value}
-      </div>
-    </div>
-  );
+  return <KpiTile size="sm" label={label} value={value} tone={tone} title={hint} hint={hint} />;
 }
 
 /** Thanh tỉ lệ Passed / Failed / còn lại. */

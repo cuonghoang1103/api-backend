@@ -361,6 +361,8 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/:ws/:key/desk', nap: () => import('@/app/work/[ws]/[key]/desk/page') },
   /* Đợt S6 (05/10/2026): Spec quality — chấm Spec Fidelity tập thẻ yêu cầu + lịch sử. */
   { mau: '/work/:ws/:key/spec', nap: () => import('@/app/work/[ws]/[key]/spec/page') },
+  /* CTW đợt 4 (09/10/2026): Requirements — SRS có cấu trúc (UC/actor/BR/màn/phân quyền) + RTM. */
+  { mau: '/work/:ws/:key/requirements', nap: () => import('@/app/work/[ws]/[key]/requirements/page') },
   /* Resources (06/10/2026): thư viện link của dự án. */
   { mau: '/work/:ws/:key/resources', nap: () => import('@/app/work/[ws]/[key]/resources/page') },
   { mau: '/work/:ws/:key/tests/:num', nap: () => import('@/app/work/[ws]/[key]/tests/[num]/page') },

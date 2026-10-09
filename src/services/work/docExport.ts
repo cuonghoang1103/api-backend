@@ -38,6 +38,21 @@ export interface ExportMeta {
   date: Date;
   /** Trang thuộc bộ mẫu FPT Capstone ⇒ bìa "CAPSTONE PROJECT REPORT" như bản gốc. */
   capstone: boolean;
+  /**
+   * CTW đợt 4 (A18): bìa của Report 7 Final như tệp gốc `Report7_Final Project Report.docx` — "MINISTRY OF EDUCATION AND
+   * TRAINING / FPT UNIVERSITY / Capstone Project Document / <tên dự án>" + bảng mã nhóm · Group Members · Supervisor ·
+   * Ext Supervisor + "– <nơi>, <tháng năm> –". Có thì thay bìa capstone thường.
+   */
+  finalCover?: FinalCover | null;
+}
+
+export interface FinalCover {
+  projectTitle: string;
+  groupCode: string | null;
+  members: string[];
+  supervisor: string | null;
+  extSupervisor?: string | null;
+  place?: string | null;
 }
 
 export interface ExportOptions {
@@ -311,7 +326,31 @@ export async function renderDocx(doc: unknown, meta: ExportMeta, opts: ExportOpt
       alignment: AlignmentType.CENTER, spacing: { before: opts2.before ?? 0, after: 200 },
       children: [new TextRun({ text, size, bold: opts2.bold, color: opts2.color, font: FONT })],
     });
-    if (meta.capstone) {
+    if (meta.finalCover) {
+      const fc = meta.finalCover;
+      front.push(big('MINISTRY OF EDUCATION AND TRAINING', 24, { before: 600 }));
+      front.push(big('FPT UNIVERSITY', 32, { bold: true }));
+      front.push(big('Capstone Project Document', 40, { bold: true, before: 1200 }));
+      front.push(big(fc.projectTitle, 36, { bold: true, color: 'C00000' }));
+      const coverRow = (label: string, value: string) => new TableRow({
+        children: [
+          new TableCell({ width: { size: 35, type: WidthType.PERCENTAGE }, children: [new Paragraph({ children: [new TextRun({ text: label, bold: true, font: FONT })] })] }),
+          new TableCell({ width: { size: 65, type: WidthType.PERCENTAGE }, children: (value ? value.split('\n') : ['']).map((v) => new Paragraph({ children: [new TextRun({ text: v, font: FONT })] })) }),
+        ],
+      });
+      front.push(new Paragraph({ spacing: { before: 600 }, children: [] }));
+      front.push(new Table({
+        width: { size: 80, type: WidthType.PERCENTAGE }, alignment: AlignmentType.CENTER,
+        borders: { top: CELL_BORDER, bottom: CELL_BORDER, left: CELL_BORDER, right: CELL_BORDER, insideHorizontal: CELL_BORDER, insideVertical: CELL_BORDER },
+        rows: [
+          coverRow(fc.groupCode || meta.projectKey, fc.groupCode || meta.projectKey),
+          coverRow('Group Members', fc.members.join('\n')),
+          coverRow('Supervisor', fc.supervisor ?? ''),
+          coverRow('Ext Supervisor', fc.extSupervisor ?? ''),
+        ],
+      }));
+      front.push(big(`– ${fc.place || 'Hanoi'}, ${['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][meta.date.getMonth()]} ${meta.date.getFullYear()} –`, 24, { before: 1200 }));
+    } else if (meta.capstone) {
       front.push(big('CAPSTONE PROJECT REPORT', 44, { bold: true, before: 2400 }));
       front.push(big(meta.title, 36, { bold: true, color: 'C00000' }));
       front.push(big(meta.projectName, 28));
@@ -614,7 +653,24 @@ export async function renderPdf(doc: unknown, meta: ExportMeta, opts: ExportOpti
   if (opts.cover ?? true) {
     const w = width(d);
     d.y = 200;
-    if (meta.capstone) {
+    if (meta.finalCover) {
+      const fc = meta.finalCover;
+      d.y = 120;
+      d.font('vi').fontSize(12).fillColor(C.text).text('MINISTRY OF EDUCATION AND TRAINING', left(d), d.y, { width: w, align: 'center' }).moveDown(0.3);
+      d.font('vi-bold').fontSize(16).text('FPT UNIVERSITY', { width: w, align: 'center' }).moveDown(2.5);
+      d.font('vi-bold').fontSize(20).text('Capstone Project Document', { width: w, align: 'center' }).moveDown(0.6);
+      d.font('vi-bold').fontSize(18).fillColor(C.h1).text(pdfSafe(fc.projectTitle), { width: w, align: 'center' }).moveDown(2);
+      d.fillColor(C.text);
+      const rows: Array<[string, string]> = [[fc.groupCode || meta.projectKey, ''], ['Group Members', fc.members.join('\n')], ['Supervisor', fc.supervisor ?? ''], ['Ext Supervisor', fc.extSupervisor ?? '']];
+      for (const [k, v] of rows) {
+        const y = d.y;
+        d.font('vi-bold').fontSize(11).text(pdfSafe(k), left(d) + 60, y, { width: 140 });
+        const yk = d.y;
+        d.font('vi').fontSize(11).text(pdfSafe(v), left(d) + 210, y, { width: w - 270 });
+        d.y = Math.max(yk, d.y) + 6;
+      }
+      d.moveDown(3).font('vi').fontSize(12).text(`– ${fc.place || 'Hanoi'}, ${['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][meta.date.getMonth()]} ${meta.date.getFullYear()} –`, left(d), d.y, { width: w, align: 'center' });
+    } else if (meta.capstone) {
       d.font('vi-bold').fontSize(24).fillColor(C.text).text('CAPSTONE PROJECT REPORT', left(d), d.y, { width: w, align: 'center' }).moveDown(0.8);
       d.font('vi-bold').fontSize(20).fillColor(C.h1).text(meta.title, { width: w, align: 'center' }).moveDown(0.6);
       d.font('vi').fontSize(14).fillColor(C.text).text(meta.projectName, { width: w, align: 'center' }).moveDown(3);

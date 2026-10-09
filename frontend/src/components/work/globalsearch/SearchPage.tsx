@@ -332,30 +332,31 @@ export default function GlobalSearchPage() {
       {mode === 'basic' && <MatchingDocs text={basic.text} />}
 
       {/* Kết quả */}
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      {/* UX-A ARIA: hàng kết quả cần vai cha table. */}
+      <div className="min-h-0 flex-1 overflow-y-auto" role="table" aria-label="Search results">
         <ResultsHeader sort={sort} onSort={onSort} />
         {results.isLoading ? (
           <SkeletonRows />
         ) : jqlError ? (
-          <EmptyState
+          <div role="row"><div role="cell"><EmptyState
             title="Fix the query to see results"
             body={mode === 'jql' ? 'Check the highlighted part of your query, or open Syntax help for fields and examples.' : jqlError.message}
-          />
+          /></div></div>
         ) : results.isError ? (
-          <EmptyState
+          <div role="row"><div role="cell"><EmptyState
             title="Couldn't search issues"
             body={workError(results.error)}
             action={<button type="button" className="w-btn" onClick={() => results.refetch()}>Try again</button>}
-          />
+          /></div></div>
         ) : !items.length ? (
           filtered ? (
-            <EmptyState
+            <div role="row"><div role="cell"><EmptyState
               title="No issues match"
               body={mode === 'jql' ? 'Try widening the query: remove a clause, or check the project and status names.' : 'Try different words or remove some filters.'}
               action={mode === 'basic' ? <button type="button" className="w-btn" onClick={clearBasic}>Clear filters</button> : undefined}
-            />
+            /></div></div>
           ) : (
-            <EmptyState title="No issues yet" body="Issues from every project you can see will show up here." />
+            <div role="row"><div role="cell"><EmptyState title="No issues yet" body="Issues from every project you can see will show up here." /></div></div>
           )
         ) : (
           <div ref={rowsRef} role="rowgroup">
@@ -368,13 +369,13 @@ export default function GlobalSearchPage() {
               ))
               : renderRows(items)}
             {results.hasNextPage && (
-              <div className="flex justify-center py-3">
+              <div role="row" className="flex justify-center py-3"><div role="cell">
                 <button type="button" className="w-btn w-btn-sm" disabled={results.isFetchingNextPage} onClick={() => results.fetchNextPage()}>
                   {results.isFetchingNextPage && <Spinner size={12} />}
                   Load more
                   <span className="text-[var(--w-text-3)]">· {items.length} of {total.toLocaleString('en-US')}</span>
                 </button>
-              </div>
+              </div></div>
             )}
             {!results.hasNextPage && total > items.length && (
               <p className="px-4 py-3 text-center text-[12px] text-[var(--w-text-3)]">Showing the first {items.length.toLocaleString('en-US')} results. Narrow the search to see the rest.</p>

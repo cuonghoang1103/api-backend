@@ -20,6 +20,7 @@ import FptDocDialog from './FptDocDialog';
 import FptImportDialog from './FptImportDialog';
 import { ExportButton, InlineText, ResultBar, Stat } from './shared';
 import UnitMatrix from './UnitMatrix';
+import { KpiRow } from '../../KpiTile';
 
 export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: number }) {
   const router = useRouter();
@@ -49,12 +50,12 @@ export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: n
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-[var(--w-border)] px-4 py-3">
+      <div className="flex flex-wrap items-start gap-3 border-b border-[var(--w-border)] px-4 py-3">
         {s && (
-          <>
+          <KpiRow min={96} className="min-w-0 flex-1" label="Unit test summary">
             <Stat label="Functions" value={s.functions} />
             <Stat label="Test cases" value={s.total} />
-            <Stat label="Passed" value={s.passed} tone="green" />
+            <Stat label="Passed" value={s.passed} tone={s.passed ? 'green' : 'muted'} />
             <Stat label="Failed" value={s.failed} tone={s.failed ? 'red' : 'muted'} />
             <Stat label="Untested" value={s.untested} tone="muted" />
             <Stat label="Coverage" value={pct(s.coverage)} hint="(Passed + Failed) / Total" />
@@ -65,9 +66,9 @@ export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: n
               value={s.meetsNorm === null ? <span className="text-[13px] font-normal">add LOC</span> : `${s.casesWithLoc}/${s.requiredCases}`}
               hint={s.meetsNorm === null ? 'Fill in "Lines of code" for functions to check the test-case norm.' : `KLOC ${s.kloc} — ${s.belowNorm} function(s) below the norm${s.functionsWithoutLoc ? `, ${s.functionsWithoutLoc} without LOC` : ''}`}
             />
-          </>
+          </KpiRow>
         )}
-        <div className="ml-auto flex flex-wrap gap-2">
+        <div className="ml-auto flex shrink-0 flex-wrap justify-end gap-2">
           <button type="button" className="w-btn w-btn-sm" onClick={() => setDocOpen(true)}><FileText size={13} /> <span className="hidden sm:inline">Cover &amp; changes</span></button>
           {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}><FileUp size={13} /> <span className="hidden sm:inline">Import</span></button>}
           <ExportButton pid={pid} report="unit" label="Export 5.1 (.xlsx)" />

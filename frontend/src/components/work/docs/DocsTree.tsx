@@ -268,7 +268,8 @@ export default function DocsTree({ config, list, activeNum, onNew, onNavigate }:
           </button>
         )}
       </div>
-      <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-4" role="tree" aria-label="Project documents">
+      {/* UX-A ARIA: chỉ là "tree" khi có mục (cây rỗng thiếu treeitem bắt buộc). */}
+      <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-4" role={(matches ? matches.length : tree.length) ? 'tree' : undefined} aria-label={(matches ? matches.length : tree.length) ? 'Project documents' : undefined}>
         {matches ? (
           matches.length ? matches.map((p) => renderRow(p, 0, false, false)) : <p className="px-3 py-6 text-center text-[12px] text-[var(--w-text-3)]">No page title matches “{filter}”.</p>
         ) : tree.length ? (

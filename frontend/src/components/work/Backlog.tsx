@@ -124,6 +124,7 @@ function Row({ issue, lk, unit, selected, onSelect, onOpen, editable, epicTitle,
         isDragging && 'opacity-40',
       )}
     >
+      <div role="gridcell" className="flex h-full min-w-0 flex-1 items-center gap-2">
       <input
         type="checkbox"
         aria-label={`Select ${lk.issueKey(issue.number)}`}
@@ -149,6 +150,7 @@ function Row({ issue, lk, unit, selected, onSelect, onOpen, editable, epicTitle,
       <EstimateCell issue={issue} unit={unit} editable={editable} onSave={(v) => onEstimate(issue, v)} />
       <PriorityWithTip priority={issue.priority} size={13} />
       <UserAvatar user={issue.assigneeId ? lk.members.get(issue.assigneeId) : null} size={20} />
+      </div>
     </div>
   );
 }
@@ -158,12 +160,15 @@ function Row({ issue, lk, unit, selected, onSelect, onOpen, editable, epicTitle,
 function Box({ id, children, empty }: { id: Container; children: ReactNode; empty: ReactNode }) {
   const { setNodeRef, isOver } = useDroppable({ id: cid(id) });
   return (
+    // UX-A ARIA: hàng (role=row) phải nằm trong grid › rowgroup; ô trống cũng là một hàng.
     <div
       ref={setNodeRef}
+      role="grid"
+      aria-label={id === 'backlog' ? 'Backlog issues' : 'Sprint issues'}
       className={cn('overflow-hidden rounded-[8px] border border-[var(--w-border)] transition-colors', isOver && 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]')}
     >
-      {children}
-      {empty}
+      <div role="rowgroup">{children}</div>
+      {empty && <div role="row"><div role="gridcell">{empty}</div></div>}
     </div>
   );
 }
@@ -532,7 +537,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
                   ) : null}
                 >
                   {renderRows(s.id)}
-                  {canEdit && <QuickCreate onCreate={create(s.id)} />}
+                  {canEdit && <div role="row"><div role="gridcell"><QuickCreate onCreate={create(s.id)} /></div></div>}
                 </Box>
               )}
             </section>
@@ -572,7 +577,7 @@ export default function Backlog({ config, lk, data, onOpen, filter }: {
               ) : null}
             >
               {renderRows('backlog')}
-              {(canEdit || config.permissions.createIssues) && <QuickCreate onCreate={create(null)} />}
+              {(canEdit || config.permissions.createIssues) && <div role="row"><div role="gridcell"><QuickCreate onCreate={create(null)} /></div></div>}
             </Box>
           )}
         </section>

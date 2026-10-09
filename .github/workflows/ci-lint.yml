@@ -10,6 +10,7 @@ on:
       - 'frontend/src/**'
       - 'eval/**'
       - 'prisma/**'
+      - 'scripts/test-work-db.mjs'
       - 'package.json'
       - 'package-lock.json'
       - 'frontend/package.json'
@@ -65,6 +66,54 @@ jobs:
       - name: ESLint (informational)
         continue-on-error: true
         run: npm run lint 2>&1 | tail -30 || echo "(lint warnings — pre-existing)"
+
+  work-db-tests:
+    # Đợt 6a (D1): test DB của CT Work CHẠY THẬT (trước đây mọi tệp *.db.test.ts tự SKIP vì CI không
+    # đặt WORK_DB_TEST=1). Postgres dựng tạm trong job — không bao giờ chạm CSDL production.
+    # Ảnh pgvector/pgvector:pg16: migration cần `vector` + `pg_trgm` (có sẵn trong contrib), không cần PostGIS.
+    name: CT Work DB tests (Postgres)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ctwork_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ctwork_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ctwork_test?schema=public
+      JWT_SECRET: ci-work-db-test-secret-not-for-production-0123456789
+      REDIS_HOST: localhost
+      REDIS_PORT: '6379'
+      WORK_EMAIL_NOTIFICATIONS: 'false'
+      LLM_BACKGROUND_ENABLED: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+      - name: Prisma generate
+        run: npx prisma generate
+      - name: Apply migrations (prisma migrate deploy — không cần shadow DB)
+        run: npx prisma migrate deploy
+      - name: CT Work DB tests (WORK_DB_TEST=1, tuần tự từng tệp)
+        run: npm run test:work-db
 
   frontend-lint:
     name: Frontend Type Check

@@ -12,7 +12,7 @@ import { Bug, Download, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, workError, type Coverage, type IssueRef, type ProjectConfig } from '@/lib/work-api';
 import { useLookups, wk } from '../hooks';
-import { EmptyState, IssueTypeIcon, Spinner, StatusBadge } from '../ui';
+import { EmptyState, IssueTypeIcon, Spinner, StatusBadge, signalText } from '../ui';
 import { downloadCsv, RUN_META, RunStatusPill, safeFileName } from './runStatus';
 
 const COVERAGE_META: Record<Coverage, { label: string; color: string; help: string }> = {
@@ -185,7 +185,7 @@ function Card({ label, value, sub, pct, color }: { label: string; value: number 
   return (
     <div className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2">
       <div className="text-[11px] text-[var(--w-text-3)]">{label}</div>
-      <div className="text-[18px] font-semibold tabular" style={color ? { color } : undefined}>{value}</div>
+      <div className="text-[18px] font-semibold tabular" style={color ? { color: color === 'var(--w-accent)' ? 'var(--w-accent-text)' : signalText(color) } : undefined}>{value}</div>
       {pct !== undefined && (
         <div className="mt-1 h-1 overflow-hidden rounded-full bg-[var(--w-sunken)]"><div className="h-full" style={{ width: `${pct}%`, background: color }} /></div>
       )}

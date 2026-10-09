@@ -141,3 +141,21 @@ describe('personWeeks — tải theo tuần', () => {
     assert.equal(w[1].overloaded, true);
   });
 });
+
+describe('openIssues — một định nghĩa "open" cho Projects / Portfolio / Dashboard (UX-A P0-2)', async () => {
+  const { OPEN_ISSUES_DEFINITION, OPEN_ISSUES_JQL, isOpenIssue, openIssueWhere, countedIssueWhere } = await import('./openIssues.js');
+  it('chưa Done + không phải sub-task ⇒ open; epic (level 1) và test vẫn tính', () => {
+    assert.equal(isOpenIssue({ resolvedAt: null, typeLevel: 0 }), true);
+    assert.equal(isOpenIssue({ resolvedAt: null, typeLevel: 1 }), true, 'epic tính');
+    assert.equal(isOpenIssue({ resolvedAt: null, typeLevel: -1 }), false, 'sub-task không tính');
+    assert.equal(isOpenIssue({ resolvedAt: new Date(), typeLevel: 0 }), false, 'Done không tính');
+    assert.equal(isOpenIssue({ resolvedAt: null, typeLevel: 0, deletedAt: new Date() }), false, 'đã xoá không tính');
+  });
+  it('điều kiện Prisma và JQL nói cùng một điều', () => {
+    assert.deepEqual(openIssueWhere(), { deletedAt: null, resolvedAt: null, type: { level: { gte: 0 } } });
+    assert.deepEqual(countedIssueWhere(), { deletedAt: null, type: { level: { gte: 0 } } });
+    assert.match(OPEN_ISSUES_JQL, /statusCategory != Done/);
+    assert.match(OPEN_ISSUES_JQL, /type != "Sub-task"/);
+    assert.match(OPEN_ISSUES_DEFINITION, /excluding sub-tasks/);
+  });
+});

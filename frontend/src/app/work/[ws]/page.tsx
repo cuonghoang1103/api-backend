@@ -13,6 +13,8 @@ import { wk } from '@/components/work/hooks';
 import { avatarColor, EmptyState, PageLoading, ProjectMark, StatusGlyph, UserAvatar, useToggle } from '@/components/work/ui';
 import { PageHeader, PROJECT_ROLE_LABEL, PROJECT_TYPE_LABEL, WorkspaceMark, WS_ROLE_LABEL } from '@/components/work/settings/shared';
 import CreateProjectDialog from '@/components/work/workspace/CreateProjectDialog';
+import { OPEN_ISSUES_DEFINITION } from '@/components/work/openIssues';
+import ProjectCover from '@/components/work/cover/ProjectCover'; // UX-D
 
 /** Thẻ dự án: ô màu theo khoá, tên, loại, vai trò, người phụ trách, số việc đang mở. */
 function ProjectCard({ p, slug, muted }: { p: ProjectSummary; slug: string; muted?: boolean }) {
@@ -21,8 +23,10 @@ function ProjectCard({ p, slug, muted }: { p: ProjectSummary; slug: string; mute
       href={`/work/${slug}/${p.key}/board`}
       className={cn('w-card group relative flex min-w-0 flex-col overflow-hidden p-4 pl-5', muted && 'opacity-70')}
     >
-      {/* Dải màu dự án bên trái — nhận ra dự án bằng màu trước khi đọc chữ. */}
-      <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[3px]" style={{ background: p.color || avatarColor(p.key) }} />
+      {/* UX-D: có ảnh bìa ⇒ dải bìa trên đầu thẻ; không có ⇒ dải màu dự án bên trái như cũ. */}
+      {p.coverUrl
+        ? <ProjectCover brand={p} className="-ml-5 -mr-4 -mt-4 mb-3 h-[60px]" />
+        : <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[3px]" style={{ background: p.color || avatarColor(p.key) }} />}
       <div className="flex items-start gap-3">
         <ProjectMark k={p.key} size={36} letters={2} brand={p} />
         <div className="min-w-0 flex-1">
@@ -51,7 +55,7 @@ function ProjectCard({ p, slug, muted }: { p: ProjectSummary; slug: string; mute
         ) : (
           <span className="text-[var(--w-text-3)]">No lead</span>
         )}
-        <span className="flex shrink-0 items-center gap-1.5 tabular-nums" title={`${p.openIssues} open issues`}>
+        <span className="flex shrink-0 items-center gap-1.5 tabular-nums" title={`${p.openIssues} open issues. ${OPEN_ISSUES_DEFINITION}`}>
           <StatusGlyph category="IN_PROGRESS" size={13} />
           <span className="font-semibold text-[var(--w-text)]">{p.openIssues}</span> open
         </span>
@@ -155,8 +159,8 @@ function WorkspaceOverview() {
                 <dd className="text-[18px] font-semibold tabular-nums">{active.length}</dd>
               </div>
               <div className="border-x border-[var(--w-border)] px-3 py-2">
-                <dt className="text-[12px] text-[var(--w-text-3)]">Open issues</dt>
-                <dd className="text-[18px] font-semibold tabular-nums">{openIssues}</dd>
+                <dt className="text-[12px] text-[var(--w-text-3)]" title={OPEN_ISSUES_DEFINITION}>Open issues</dt>
+                <dd className="text-[18px] font-semibold tabular-nums" title={OPEN_ISSUES_DEFINITION}>{openIssues}</dd>
               </div>
               <div className="px-3 py-2">
                 <dt className="text-[12px] text-[var(--w-text-3)]">Your role</dt>

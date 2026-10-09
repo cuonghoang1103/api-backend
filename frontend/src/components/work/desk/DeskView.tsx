@@ -507,7 +507,7 @@ function ReportsTab({ config }: { config: ProjectConfig }) {
                   <td className="px-2 py-2 text-right tabular-nums">{c.tickets}</td>
                   <td className="px-2 py-2"><Bar v={c.frPercent} /></td>
                   <td className="px-2 py-2"><Bar v={c.resPercent} /></td>
-                  <td className="px-2 py-2 text-right tabular-nums" style={c.breaches ? { color: 'var(--w-red)' } : undefined}>{c.breaches}</td>
+                  <td className="px-2 py-2 text-right tabular-nums" style={c.breaches ? { color: 'var(--w-red-text)' } : undefined}>{c.breaches}</td>
                   <td className="px-2 py-2 text-right tabular-nums">{hours(c.mttrMin)}</td>
                   <td className="px-3 py-2 text-right tabular-nums">{c.csatAvg === null ? '—' : c.csatAvg}</td>
                 </tr>
@@ -809,7 +809,7 @@ export default function DeskView({ config }: { config: ProjectConfig }) {
         </div>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-        <div className="mx-auto w-full max-w-[1240px] px-4 py-5">
+        <div className="w-page">
           {tab === 'queues' && <QueuesTab config={config} />}
           {tab === 'problems' && <ProblemsTab config={config} />}
           {tab === 'reports' && <ReportsTab config={config} />}

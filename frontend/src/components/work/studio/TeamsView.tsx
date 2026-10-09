@@ -194,7 +194,7 @@ export default function TeamsView({ ws }: { ws: WorkspaceDetail }) {
   if (q.isLoading) return <PageLoading rows={5} />;
   if (q.error) return <EmptyState title="Could not load the teams" body={workError(q.error)} />;
   return (
-    <div className="mx-auto w-full max-w-[1120px] px-4 py-5 md:px-6">
+    <div className="w-page">
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <p className="min-w-0 flex-1 text-[13px] leading-relaxed text-[var(--w-text-2)]">
           Teams are departments shared by every project in <b className="font-medium text-[var(--w-text)]">{ws.name}</b>. Issues get a Team field in projects with the Teams module on

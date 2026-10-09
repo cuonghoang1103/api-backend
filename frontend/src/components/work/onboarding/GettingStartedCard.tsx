@@ -1,7 +1,11 @@
 'use client';
 
 /**
- * Thẻ "Getting started" trên Board/Backlog cho tới khi bị ẩn hoặc làm xong.
+ * Thẻ "Getting started" — CHỈ trên Board (UX-A: trước đây lặp ở cả Backlog), cho tới
+ * khi bị ẩn hoặc làm xong. Mặc định là MỘT DÒNG (tiến độ + bước kế tiếp + nút làm
+ * ngay); bấm "Show steps" mới mở lưới 6 bước (~300px — ở khổ app desktop 1180×800
+ * nó từng đẩy board xuống chỉ còn một hàng thẻ). Mở/gập nhớ theo dự án; tắt (×) và
+ * làm xong cũng được nhớ ⇒ không gọi API nữa.
  * Mỗi bước đọc từ DỮ LIỆU THẬT (GET /projects/:pid/onboarding), nên làm theo
  * đường khác (kéo thẻ trên board, mời ở trang thành viên…) vẫn được tích.
  * Trạng thái "đã ẩn" lưu theo dự án trong localStorage (bọc try/catch).
@@ -19,7 +23,7 @@ import { openHelp } from '../help/store';
 import { Spinner } from '../ui';
 
 const DISMISS_KEY = (pid: number) => `work.gettingStarted.dismissed.${pid}`;
-const COLLAPSE_KEY = 'work.gettingStarted.collapsed';
+const COLLAPSE_KEY = (pid: number) => `work.gettingStarted.expanded.${pid}`;
 
 export const onboardingKey = (pid: number) => [...wk.reports(pid), 'onboarding'] as const;
 
@@ -54,10 +58,8 @@ export default function GettingStartedCard({
   const [collapsed, setCollapsed] = useState(false);
   useEffect(() => {
     setDismissed(readFlag(DISMISS_KEY(pid)));
-    // Chưa từng chọn ⇒ điện thoại mặc định GẬP (6 bước chiếm trọn màn 390px, đẩy board xuống dưới).
-    let saved: string | null = null;
-    try { saved = localStorage.getItem(COLLAPSE_KEY); } catch { /* bị chặn */ }
-    setCollapsed(saved === null ? window.innerWidth < 640 : saved === '1');
+    // Mặc định GẬP thành một dòng; chỉ mở khi người dùng đã chọn mở cho dự án này.
+    setCollapsed(!readFlag(COLLAPSE_KEY(pid)));
   }, [pid]);
 
   const q = useQuery({
@@ -85,6 +87,11 @@ export default function GettingStartedCard({
     onSuccess: (r) => { toast.success(`Removed ${r.issues} sample issues`); refresh(); },
     onError: (err) => toast.error(workError(err, 'Could not remove sample data')),
   });
+
+  // Làm xong ⇒ nhớ luôn (lần sau không hiện, không gọi API).
+  useEffect(() => {
+    if (q.data?.completed) writeFlag(DISMISS_KEY(pid), true);
+  }, [q.data?.completed, pid]);
 
   if (dismissed || !q.data || q.data.completed) return null;
   const d = q.data;
@@ -134,42 +141,48 @@ export default function GettingStartedCard({
 
   const dismiss = () => { writeFlag(DISMISS_KEY(pid), true); setDismissed(true); };
   const toggle = () => setCollapsed((v) => {
-    try { localStorage.setItem(COLLAPSE_KEY, v ? '0' : '1'); } catch { /* bị chặn */ }
+    writeFlag(COLLAPSE_KEY(pid), v); // v = đang gập ⇒ giờ mở
     return !v;
   });
+  const next = steps.find((s) => !s.done);
 
   return (
     <section
       aria-label="Getting started"
       className={cn('overflow-hidden rounded-[10px] border border-[var(--w-border)] bg-[var(--w-raised)] shadow-[var(--w-shadow-card)]', className)}
     >
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-2 px-4 py-2.5">
-        <div className="min-w-0 flex-1 max-sm:basis-full">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-            <h2 className="text-[13px] font-semibold">Getting started</h2>
-            <span className="text-[12px] tabular-nums text-[var(--w-text-3)]">{doneCount} of {steps.length} done</span>
-          </div>
-          <div className="mt-1.5 h-1 max-w-[260px] overflow-hidden rounded-full bg-[var(--w-sunken)]" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
-            <div className="h-full rounded-full bg-[var(--w-green)] transition-[width]" style={{ width: `${pct}%` }} />
-          </div>
+      <div className="flex min-h-[40px] flex-wrap items-center gap-x-2.5 gap-y-1.5 px-3 py-1.5">
+        <h2 className="text-[13px] font-semibold">Getting started</h2>
+        <span className="text-[12px] tabular-nums text-[var(--w-text-3)]">{doneCount} of {steps.length} done</span>
+        <div className="h-1 w-[72px] shrink-0 overflow-hidden rounded-full bg-[var(--w-sunken)]" role="progressbar" aria-label="Getting started progress" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
+          <div className="h-full rounded-full bg-[var(--w-green)] transition-[width]" style={{ width: `${pct}%` }} />
         </div>
-        {admin && d.canAddSample && (
+        {collapsed && next && (
+          <span className="flex min-w-0 flex-1 items-center gap-2 text-[12.5px] text-[var(--w-text-2)] max-sm:basis-full">
+            <span className="min-w-0 truncate"><span className="text-[var(--w-text-3)]">Next:</span> {next.title}</span>
+            {next.action && <span className="shrink-0">{next.action}</span>}
+          </span>
+        )}
+        {!collapsed && <span className="flex-1" />}
+        {!collapsed && admin && d.canAddSample && (
           <button type="button" className="w-btn w-btn-sm" disabled={addSample.isPending} onClick={() => addSample.mutate()} title="Fill this project with realistic example issues you can remove later">
             {addSample.isPending ? <Spinner size={12} /> : <Sparkles size={13} />} Add sample data
           </button>
         )}
-        {admin && d.sampleData && (
+        {!collapsed && admin && d.sampleData && (
           <button type="button" className="w-btn w-btn-sm" disabled={removeSample.isPending} onClick={() => removeSample.mutate()} title="Delete only the sample issues, labels and sprint that were added for you">
             {removeSample.isPending ? <Spinner size={12} /> : <Trash2 size={13} />} Remove sample data
           </button>
         )}
-        <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => openHelp('getting-started')}>
-          <BookOpen size={13} /> Guide
+        {!collapsed && (
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => openHelp('getting-started')}>
+            <BookOpen size={13} /> Guide
+          </button>
+        )}
+        <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={toggle} aria-expanded={!collapsed}>
+          {collapsed ? <ChevronDown size={14} /> : <ChevronUp size={14} />} {collapsed ? 'Show steps' : 'Hide steps'}
         </button>
-        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={toggle} aria-label={collapsed ? 'Show steps' : 'Hide steps'} aria-expanded={!collapsed}>
-          {collapsed ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
-        </button>
-        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={dismiss} aria-label="Dismiss getting started" title="Dismiss">
+        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={dismiss} aria-label="Dismiss getting started" title="Dismiss — you can reopen the guide from Help">
           <X size={14} />
         </button>
       </div>

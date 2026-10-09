@@ -154,12 +154,16 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
 
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title={sprint ? sprint.name : 'Board'}>
-        {sprint && left !== null && (
-          <span className={cn('hidden text-[12px] sm:inline', left < 0 ? 'text-[var(--w-red)]' : 'text-[var(--w-text-3)]')}>
+      <ProjectHeader
+        config={config}
+        title={sprint ? sprint.name : 'Board'}
+        // UX-A: "x days left" là thông tin của sprint ⇒ đứng cạnh tên sprint, không chiếm chỗ của nút.
+        extra={sprint && left !== null ? (
+          <span className={cn('shrink-0 whitespace-nowrap text-[12px] max-sm:!hidden', left < 0 ? 'text-[var(--w-red)]' : 'text-[var(--w-text-3)]')}>
             {left < 0 ? `${-left} days overdue` : left === 0 ? 'Ends today' : `${left} days left`}
           </span>
-        )}
+        ) : undefined}
+      >
         {sprint?.state === 'ACTIVE' && config.permissions.manageSprints && (
           <button type="button" className="w-btn w-btn-sm" onClick={() => setCompleteOpen(true)}>
             <CheckCircle2 size={13} /> <span className="hidden sm:inline">Complete sprint</span>

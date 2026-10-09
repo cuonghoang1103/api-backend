@@ -65,8 +65,8 @@ function install() {
 }
 install();
 
-/** Nút khoá / mở khoá trên thanh đầu trang dự án. */
-export function EditLockButton({ config }: { config: ProjectConfig }) {
+/** Trạng thái khoá + bật/tắt — dùng chung cho nút và mục trong menu "More" (UX-A). */
+export function useEditLock(config: ProjectConfig) {
   const pid = config.id;
   const qc = useQueryClient();
   const q = useQuery({ queryKey: lockKey(pid), queryFn: () => workApi.editLock(pid), staleTime: 60_000 });
@@ -93,23 +93,25 @@ export function EditLockButton({ config }: { config: ProjectConfig }) {
     },
     onError: (err) => toast.error(workError(err, 'Could not change the edit lock')),
   });
+  return { ready: !!q.data, locked, pending: toggle.isPending, toggle: () => toggle.mutate(!locked) };
+}
 
-  if (!q.data) return null;
+/** Nút khoá / mở khoá (bản nút rời — header dự án nay đặt nó trong menu "More"). */
+export function EditLockButton({ config }: { config: ProjectConfig }) {
+  const l = useEditLock(config);
+  if (!l.ready) return null;
   return (
     <button
       type="button"
-      onClick={() => toggle.mutate(!locked)}
-      disabled={toggle.isPending}
-      aria-pressed={locked}
-      aria-label={locked ? 'Editing is locked — click to unlock' : 'Lock editing'}
-      title={locked ? 'Editing is locked for you in this project. Click to unlock.' : 'Lock editing so you can browse without changing anything by accident'}
-      className={cn(
-        'w-btn shrink-0',
-        locked && 'w-btn-warn',
-      )}
+      onClick={l.toggle}
+      disabled={l.pending}
+      aria-pressed={l.locked}
+      aria-label={l.locked ? 'Editing is locked — click to unlock' : 'Lock editing'}
+      title={l.locked ? 'Editing is locked for you in this project. Click to unlock.' : 'Lock editing so you can browse without changing anything by accident'}
+      className={cn('w-btn shrink-0', l.locked && 'w-btn-warn')}
     >
-      {locked ? <Lock size={14} /> : <LockOpen size={14} className="text-[var(--w-text-2)]" />}
-      <span className="max-xl:hidden">{locked ? 'Locked' : 'Lock'}</span>
+      {l.locked ? <Lock size={14} /> : <LockOpen size={14} className="text-[var(--w-text-2)]" />}
+      <span className="max-xl:hidden">{l.locked ? 'Locked' : 'Lock'}</span>
     </button>
   );
 }

@@ -66,7 +66,7 @@ export function ProjectIdentity({ config, slug }: { config: ProjectConfig; slug:
             {canEdit && config.avatarUrl && <button type="button" className="w-btn w-btn-sm w-btn-ghost" disabled={remove.isPending} onClick={() => remove.mutate()}><Trash2 size={13} /> Remove picture</button>}
           </div>
           {picker.input}
-          <p className="basis-full text-[12px] text-[var(--w-text-3)]">PNG, JPEG, WebP or GIF up to 2 MB. Square images look best.</p>
+          <p className="basis-full text-[12px] text-[var(--w-text-3)]">PNG, JPEG, WebP or GIF up to 5 MB. Square images look best.</p>
         </div>
         <Field label="Emoji">
           <div className="flex flex-wrap items-center gap-1.5">
@@ -120,7 +120,7 @@ export function WorkspaceLogo({ wsId, name, logoUrl, canEdit, onChanged }: { wsI
         {canEdit && <button type="button" className="w-btn w-btn-sm" disabled={upload.isPending} onClick={picker.open}>{upload.isPending ? <Spinner size={11} /> : <ImagePlus size={13} />} {logoUrl ? 'Change logo' : 'Upload logo'}</button>}
         {canEdit && logoUrl && <button type="button" className="w-btn w-btn-sm w-btn-ghost" disabled={remove.isPending} onClick={() => remove.mutate()}><Trash2 size={13} /> Remove</button>}
         {picker.input}
-        <p className="basis-full text-[12px] text-[var(--w-text-3)]">PNG, JPEG, WebP or GIF up to 2 MB.</p>
+        <p className="basis-full text-[12px] text-[var(--w-text-3)]">PNG, JPEG, WebP or GIF up to 5 MB.</p>
       </div>
     </Section>
   );

@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import { getServerApiBaseUrl } from '@/lib/server-api';
 import { pickLang } from '@/lib/utils';
 import CoursePageClient from './CoursePageClient';
+import { OG_SITE, ogImageOr } from '@/lib/og/pickImage'; // UX-D
 
 // SEO / social-share metadata rendered SERVER-side; the interactive course
 // page stays client-side and fetches its own data as before. `force-dynamic`
@@ -64,13 +65,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url,
       type: 'article',
-      images: image ? [image] : undefined,
+      images: ogImageOr(image, url), // UX-D: không có ảnh PNG/JPEG ⇒ ảnh động opengraph-image.tsx
+      ...OG_SITE,
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image', // UX-D: luôn ảnh lớn — opengraph-image.tsx cùng thư mục có tiêu đề thật
       title: rawTitle,
       description,
-      images: image ? [image] : undefined,
+      images: ogImageOr(image, url),
     },
   };
 }

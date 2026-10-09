@@ -16,6 +16,7 @@
 import { Router, type Request, type Response } from 'express';
 import { z, ZodError } from 'zod';
 import { asyncHandler, BadRequestError, UnauthorizedError } from '../middleware/errorHandler.js';
+import { TOGGLEABLE_RULES } from '../services/work/specFidelity.js';
 import * as spec from '../services/work/specReview.service.js';
 
 const router = Router();
@@ -46,7 +47,8 @@ const P = (req: Request, name: string) => parse(id, req.params[name]);
 const fid = (req: Request) => parse(z.string().regex(/^[ar]\d{1,4}$/), req.params.fid);
 
 router.post('/projects/:pid/spec-reviews/page/:num', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ semantic: z.boolean().optional() }), req.body ?? {});
+  // CTW-12: docType chọn khung chấm (SRS/SDD/GDD/OTHER), mặc định AUTO.
+  const body = parse(z.object({ semantic: z.boolean().optional(), docType: z.enum(['AUTO', 'SRS', 'SDD', 'GDD', 'OTHER']).optional() }), req.body ?? {});
   ok(res, await spec.reviewPage(callerId(req), P(req, 'pid'), P(req, 'num'), body), 201);
 }));
 router.post('/projects/:pid/spec-reviews/issues', asyncHandler(async (req, res) => {
@@ -84,6 +86,7 @@ router.put('/projects/:pid/spec-settings', asyncHandler(async (req, res) => {
       minDimension: z.number().int().min(0).max(100).optional(),
     }).optional(),
     aiReview: z.object({ requireIndependentReviewer: z.boolean() }).optional(),
+    rules: z.object({ disabled: z.array(z.enum(TOGGLEABLE_RULES)).max(20) }).optional(),
   }), req.body ?? {});
   ok(res, await spec.updateSettings(callerId(req), P(req, 'pid'), body));
 }));

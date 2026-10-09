@@ -7,6 +7,7 @@ import type { Post } from '@/types';
 import PostActions from './PostActions';
 import PostBody from './PostBody';
 import PostComments from './PostComments';
+import { OG_SITE, ogImageOr } from '@/lib/og/pickImage'; // UX-D
 
 /**
  * Resource post detail — source-code drops and course announcements.
@@ -146,13 +147,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       publishedTime: post.publishedAt || undefined,
       modifiedTime: post.updatedAt || undefined,
       tags: post.tagNames,
-      images: image ? [image] : ['/opengraph-image'],
+      images: ogImageOr(image, url), // UX-D: không có ảnh PNG/JPEG ⇒ ảnh động opengraph-image.tsx
+      ...OG_SITE,
     },
     twitter: {
-      card: image ? 'summary_large_image' : 'summary',
+      card: 'summary_large_image', // UX-D: luôn ảnh lớn — opengraph-image.tsx cùng thư mục có tiêu đề thật
       title: post.title,
       description,
-      images: image ? [image] : undefined,
+      images: ogImageOr(image, url),
     },
   };
 }

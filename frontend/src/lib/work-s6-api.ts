@@ -32,6 +32,8 @@ export interface SpecFinding {
   status: 'open' | 'applied' | 'dismissed';
   appliedAt?: string;
   appliedBy?: SpecPerson | null;
+  /** CTW đợt 4: phát hiện đã ghi thành Bug (số thẻ). */
+  bugNumber?: number;
 }
 
 export interface SpecUntraced { ref: string; title: string; hasAcceptanceCriteria: boolean; target: SpecTarget | null }
@@ -60,6 +62,8 @@ export interface SpecReview extends SpecReviewSummary {
   stats: {
     items: number; withAcceptanceCriteria: number; withTests: number; measurable: number; acPct: number; testPct: number;
     verifiabilityRules: number; testingEnabled: boolean; semanticReason?: string;
+    /** CTW-12: khung chấm theo loại trang. */
+    docKind?: 'SRS' | 'SDD' | 'GDD' | 'OTHER'; docKindAuto?: boolean;
   };
   currentPageVersion: number | null;
   stale: boolean;
@@ -96,7 +100,7 @@ export const workS6Keys = {
 };
 
 export const workS6Api = {
-  reviewPage: (pid: number, num: number, body: { semantic?: boolean } = {}) =>
+  reviewPage: (pid: number, num: number, body: { semantic?: boolean; docType?: 'AUTO' | 'SRS' | 'SDD' | 'GDD' | 'OTHER' } = {}) =>
     d<SpecReview>(api.post(`${B}/projects/${pid}/spec-reviews/page/${num}`, body, { timeout: 120_000 })),
   reviewIssues: (pid: number, body: { epicNumber?: number | null; stageId?: number | null; semantic?: boolean } = {}) =>
     d<SpecReview>(api.post(`${B}/projects/${pid}/spec-reviews/issues`, body, { timeout: 120_000 })),

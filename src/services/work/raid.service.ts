@@ -64,7 +64,7 @@ export async function listRaid(userId: number, projectId: number, q: { type?: Ra
   const all = rows.map((r) => present(r, today));
   const items = all.filter((r) => (!q.type || r.type === q.type) && (!q.status || r.status === q.status)
     && (!q.probability || r.probability === q.probability) && (!q.impact || r.impact === q.impact));
-  const counts = Object.fromEntries((['RISK', 'ASSUMPTION', 'ISSUE', 'DEPENDENCY'] as const).map((t) => [t, {
+  const counts = Object.fromEntries((['RISK', 'ASSUMPTION', 'ISSUE', 'DEPENDENCY', 'QUESTION'] as const).map((t) => [t, {
     total: all.filter((r) => r.type === t).length,
     open: all.filter((r) => r.type === t && !r.closed).length,
   }]));
@@ -332,7 +332,7 @@ export async function runRaidReviewReminders(now = new Date()): Promise<number> 
   const todayDate = new Date(`${today}T00:00:00Z`);
   const rows = await prisma.workRaidItem.findMany({
     where: {
-      deletedAt: null, reviewDate: { lte: todayDate }, status: { notIn: ['CLOSED', 'VALIDATED', 'INVALID'] },
+      deletedAt: null, reviewDate: { lte: todayDate }, status: { notIn: ['CLOSED', 'VALIDATED', 'INVALID', 'ANSWERED', 'CANCELLED'] },
       project: { deletedAt: null, archivedAt: null, workspace: { deletedAt: null } },
     },
     take: 2000,

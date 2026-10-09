@@ -10150,37 +10150,42 @@ model WorkInvite {
 
 /// Một dự án. `key` là tiền tố mã thẻ (SWP → SWP-12), duy nhất trong không gian.
 model WorkProject {
-  id           Int       @id @default(autoincrement())
-  workspaceId  Int       @map("workspace_id")
-  key          String    @db.VarChar(10)
-  name         String    @db.VarChar(120)
-  description  String?   @db.Text
+  id             Int       @id @default(autoincrement())
+  workspaceId    Int       @map("workspace_id")
+  key            String    @db.VarChar(10)
+  name           String    @db.VarChar(120)
+  description    String?   @db.Text
   /// SCRUM | KANBAN | TESTING
-  type         String    @default("SCRUM") @db.VarChar(16)
+  type           String    @default("SCRUM") @db.VarChar(16)
   /// Mẫu đã dùng lúc tạo (BLANK | SWR302 | SWT301 | SWP391 | FREELANCE | COMPANY).
   /// Chỉ để hiển thị — cấu hình thật đã được chép vào các bảng con.
-  template     String    @default("BLANK") @db.VarChar(32)
+  template       String    @default("BLANK") @db.VarChar(32)
   /// Loại dự án (04/10/2026): PERSONAL | SCHOOL | SOFTWARE | CLIENT. NULL = dự án
   /// tạo trước lớp studio ⇒ suy ra từ `template` lúc đọc (studio.ts projectKindOf),
   /// KHÔNG ghi ngược vào DB. Mô-đun bật/tắt nằm ở settings.modules, không suy từ đây.
-  kind         String?   @db.VarChar(16)
+  kind           String?   @db.VarChar(16)
   /// WORKSPACE: thành viên không gian vào được (quyền MEMBER).
   /// PRIVATE: chỉ người có tên trong work_project_members.
-  visibility   String    @default("WORKSPACE") @db.VarChar(16)
+  visibility     String    @default("WORKSPACE") @db.VarChar(16)
   /// Bộ đếm cấp số thẻ. Tăng bằng UPDATE … RETURNING trong transaction nên
   /// hai người tạo thẻ cùng lúc không bao giờ trùng số.
-  issueCounter Int       @default(0) @map("issue_counter")
-  leadId       Int?      @map("lead_id")
+  issueCounter   Int       @default(0) @map("issue_counter")
+  leadId         Int?      @map("lead_id")
   /// Cấu hình nhỏ không đáng một cột: đơn vị ước lượng, Definition of Done…
-  settings     Json      @default("{}")
+  settings       Json      @default("{}")
   /// CTW-23: nhận diện dự án — ảnh (URL công khai trên R2), emoji, màu (#rrggbb).
-  avatarUrl    String?   @map("avatar_url") @db.VarChar(500)
-  iconEmoji    String?   @map("icon_emoji") @db.VarChar(16)
-  color        String?   @db.VarChar(16)
-  archivedAt   DateTime? @map("archived_at")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
-  deletedAt    DateTime? @map("deleted_at")
+  avatarUrl      String?   @map("avatar_url") @db.VarChar(500)
+  iconEmoji      String?   @map("icon_emoji") @db.VarChar(16)
+  color          String?   @db.VarChar(16)
+  // ── UX-D ── ảnh bìa dự án (09/10/2026): "preset:<id>" (thư viện có sẵn, frontend/public/images/work-covers)
+  // hoặc URL công khai của ảnh người dùng tải lên (R2, JPEG đã nén lại). coverPositionY = điểm lấy nét dọc 0–100 (%).
+  coverUrl       String?   @map("cover_url") @db.VarChar(500)
+  coverPositionY Int?      @map("cover_position_y")
+  // ── hết UX-D ──
+  archivedAt     DateTime? @map("archived_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
 
   workspace         WorkSpace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   lead              User?                  @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
@@ -10248,6 +10253,14 @@ model WorkProject {
   aiUsageLogs       WorkAiUsageLog[]
   /// CTW đợt 3A: ảnh chèn trong trình soạn thảo (Docs, mô tả thẻ, bình luận).
   docImages         WorkDocImage[]
+  /// CTW đợt 4: SRS có cấu trúc (actor, UC, BR, màn, phân quyền màn, Non-UI), truy vết tay, defect log.
+  srsActors         WorkSrsActor[]
+  useCases          WorkUseCase[]
+  businessRules     WorkBusinessRule[]
+  srsScreens        WorkSrsScreen[]
+  srsFunctions      WorkSrsFunction[]
+  traceLinks        WorkTraceLink[]
+  defectInfos       WorkDefectInfo[]
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
   clientRequest     ProjectRequest?
 
@@ -10466,6 +10479,11 @@ model WorkIssue {
   webLinks       WorkIssueWebLink[]
   /// CTW đợt 3B (A3): thuộc tính WBS/ước lượng.
   wbsItem        WorkWbsItem?
+  /// CTW đợt 4: UC/màn/Non-UI đặc tả thẻ này (RTM) + phần defect log của thẻ Bug.
+  useCases       WorkUseCase[]           @relation("WorkUseCaseIssue")
+  srsScreens     WorkSrsScreen[]         @relation("WorkSrsScreenIssue")
+  srsFunctions   WorkSrsFunction[]       @relation("WorkSrsFunctionIssue")
+  defectInfo     WorkDefectInfo?         @relation("WorkDefectInfoIssue")
 
   @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
   @@index([projectId, statusId, rank], name: "idx_work_issue_board")
@@ -10564,12 +10582,19 @@ model WorkComment {
   createdAt  DateTime  @default(now()) @map("created_at")
   editedAt   DateTime? @map("edited_at")
   deletedAt  DateTime? @map("deleted_at")
+  /// CTW đợt 5b K-1: trả lời theo luồng — MỘT cấp như Jira/GitHub (trả lời một trả lời ⇒ server gắn vào gốc).
+  parentId   Int?      @map("parent_id")
 
-  issue     WorkIssue             @relation(fields: [issueId], references: [id], onDelete: Cascade)
-  author    User?                 @relation("WorkCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
-  reactions WorkCommentReaction[]
+  issue       WorkIssue             @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  author      User?                 @relation("WorkCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  reactions   WorkCommentReaction[]
+  /// CTW đợt 5b K-1: luồng trả lời + tệp/voice note gắn trong bình luận.
+  parent      WorkComment?          @relation("WorkCommentThread", fields: [parentId], references: [id], onDelete: SetNull)
+  replies     WorkComment[]         @relation("WorkCommentThread")
+  attachments WorkAttachment[]      @relation("WorkCommentAttachment")
 
   @@index([issueId, createdAt], name: "idx_work_comment_issue")
+  @@index([parentId], map: "idx_work_comment_parent")
   @@map("work_comments")
 }
 
@@ -10606,13 +10631,20 @@ model WorkAttachment {
   deliverable   Boolean   @default(false)
   deliveredAt   DateTime? @map("delivered_at")
   createdAt     DateTime  @default(now()) @map("created_at")
+  /// CTW đợt 5b K-1: tệp tải lên từ Ô BÌNH LUẬN (kể cả lúc chưa gửi) — không hiện ở khối Attachments của thẻ,
+  /// không tính trần 50 tệp/thẻ. commentId = bình luận chứa nó (null = bản nháp chưa gửi).
+  forComment    Boolean   @default(false) @map("for_comment")
+  commentId     Int?      @map("comment_id")
 
-  issue    WorkIssue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
-  uploader User?        @relation("WorkAttachmentUploader", fields: [uploaderId], references: [id], onDelete: SetNull)
-  run      WorkTestRun? @relation(fields: [runId], references: [id], onDelete: SetNull)
+  issue    WorkIssue      @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  uploader User?          @relation("WorkAttachmentUploader", fields: [uploaderId], references: [id], onDelete: SetNull)
+  run      WorkTestRun?   @relation(fields: [runId], references: [id], onDelete: SetNull)
+  comment  WorkComment?   @relation("WorkCommentAttachment", fields: [commentId], references: [id], onDelete: SetNull)
+  voice    WorkVoiceNote?
 
   @@index([issueId], name: "idx_work_attachment_issue")
   @@index([runId], name: "idx_work_attachment_run")
+  @@index([commentId], map: "idx_work_attachment_comment")
   @@map("work_attachments")
 }
 
@@ -11253,15 +11285,19 @@ model WorkVersion {
 
 /// Một lần ghi giờ làm. Tổng minutes = work_issues.time_spent_min (giữ khớp trong transaction).
 model WorkWorklog {
-  id        Int      @id @default(autoincrement())
-  issueId   Int      @map("issue_id")
-  userId    Int      @map("user_id")
-  minutes   Int
-  startedAt DateTime @map("started_at")
-  note      String?  @db.VarChar(1000)
+  id          Int      @id @default(autoincrement())
+  issueId     Int      @map("issue_id")
+  userId      Int      @map("user_id")
+  minutes     Int
+  startedAt   DateTime @map("started_at")
+  note        String?  @db.VarChar(1000)
   /// CTW-28: MANUAL (người/agent tự ghi) | AGENT_AUTO (timesheet agent sinh từ lease — GĐ1 A12).
-  source    String   @default("MANUAL") @db.VarChar(10)
-  createdAt DateTime @default(now()) @map("created_at")
+  source      String   @default("MANUAL") @db.VarChar(10)
+  /// CTW đợt 4 (A24): hoạt động theo sheet TimeLogs của mẫu (Training | Analyzing | Designing | Coding | Testing | Deploying)
+  /// và sản phẩm công việc (Report1…7 / mô-đun). null ⇒ bản xuất suy từ tiêu đề thẻ như trước.
+  activity    String?  @db.VarChar(16)
+  workProduct String?  @map("work_product") @db.VarChar(120)
+  createdAt   DateTime @default(now()) @map("created_at")
 
   issue WorkIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
   user  User      @relation("WorkWorklogUser", fields: [userId], references: [id], onDelete: Cascade)
@@ -12041,11 +12077,16 @@ model WorkPageComment {
   createdAt DateTime  @default(now()) @map("created_at")
   editedAt  DateTime? @map("edited_at")
   deletedAt DateTime? @map("deleted_at")
+  /// CTW đợt 5b K-1: trả lời theo luồng (một cấp) — như bình luận thẻ.
+  parentId  Int?      @map("parent_id")
 
-  page   WorkPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  author User?    @relation("WorkPageCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  page    WorkPage          @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  author  User?             @relation("WorkPageCommentAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  parent  WorkPageComment?  @relation("WorkPageCommentThread", fields: [parentId], references: [id], onDelete: SetNull)
+  replies WorkPageComment[] @relation("WorkPageCommentThread")
 
   @@index([pageId, createdAt], name: "idx_work_page_comment_page")
+  @@index([parentId], map: "idx_work_page_comment_parent")
   @@map("work_page_comments")
 }
 
@@ -12208,6 +12249,8 @@ model WorkRaidItem {
   createdBy User?             @relation("WorkRaidCreator", fields: [createdById], references: [id], onDelete: SetNull)
   links     WorkRaidLink[]
   history   WorkRaidHistory[]
+  /// CTW đợt 4 (A22): phần riêng của câu hỏi Q&A (type QUESTION).
+  question  WorkRaidQuestion?
 
   @@unique([projectId, number], name: "uk_work_raid_number", map: "uk_work_raid_number")
   @@index([projectId, type, status], name: "idx_work_raid_project")
@@ -13235,3 +13278,260 @@ model WorkBuiltinBudget {
 }
 
 // ── hết CTW đợt 3C ──
+
+// ── CTW đợt 4 ── (09/10/2026) SRS CÓ CẤU TRÚC & TRUY VẾT: actor / use case / business rule / màn hình / phân quyền màn
+// (Report 3 FPT), liên kết truy vết tay (RTM), phần defect log của thẻ Bug (Severity…), Q&A log (RAID loại QUESTION).
+// Mọi khoá ngoại tới work_issues: DEFERRABLE INITIALLY DEFERRED (luật 20260923131000_ct_work_issue_fk_deferred).
+
+/// A6 — tác nhân (bảng "1.3.1 Actors" của Report 3). kind: PERSON (người dùng) | SYSTEM (hệ thống ngoài, timer…).
+model WorkSrsActor {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  name        String   @db.VarChar(120)
+  description String?  @db.Text
+  kind        String   @default("PERSON") @db.VarChar(12)
+  position    Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  project    WorkProject         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  primaryOf  WorkUseCase[]       @relation("WorkUseCasePrimaryActor")
+  screenAuth WorkSrsScreenAuth[]
+
+  @@unique([projectId, name], name: "uk_work_srs_actor_name", map: "uk_work_srs_actor_name")
+  @@map("work_srs_actors")
+}
+
+/// A6 — một Use Case (UC-<number>): dòng bảng "1.3.2 Use Cases" + bảng đặc tả ở "2. Use Case Specifications".
+/// Luồng (normal/alternative/exception) là chữ nhiều dòng đánh số như mẫu ("1. …", "2A. …", "3E. …").
+/// status: PROPOSED (AI/agent đề xuất — chờ người duyệt, KHÔNG vào bản xuất) | DRAFT | APPROVED.
+/// issueId: thẻ REQUIREMENT/STORY/EPIC mà UC đặc tả (truy vết RTM).
+model WorkUseCase {
+  id                Int      @id @default(autoincrement())
+  projectId         Int      @map("project_id")
+  number            Int
+  name              String   @db.VarChar(200)
+  feature           String?  @db.VarChar(120)
+  primaryActorId    Int?     @map("primary_actor_id")
+  /// Id tác nhân phụ (WorkSrsActor) — mảng, không FK (actor bị xoá ⇒ lọc khi đọc).
+  secondaryActorIds Int[]    @default([]) @map("secondary_actor_ids")
+  trigger           String?  @db.Text
+  description       String?  @db.Text
+  preconditions     String?  @db.Text
+  postconditions    String?  @db.Text
+  normalFlow        String?  @map("normal_flow") @db.Text
+  alternativeFlows  String?  @map("alternative_flows") @db.Text
+  exceptionFlows    String?  @map("exception_flows") @db.Text
+  /// HIGH | MEDIUM | LOW
+  priority          String   @default("MEDIUM") @db.VarChar(8)
+  status            String   @default("DRAFT") @db.VarChar(10)
+  issueId           Int?     @map("issue_id")
+  aiModel           String?  @map("ai_model") @db.VarChar(80)
+  createdById       Int?     @map("created_by_id")
+  updatedById       Int?     @map("updated_by_id")
+  version           Int      @default(0)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  project      WorkProject       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  primaryActor WorkSrsActor?     @relation("WorkUseCasePrimaryActor", fields: [primaryActorId], references: [id], onDelete: SetNull)
+  issue        WorkIssue?        @relation("WorkUseCaseIssue", fields: [issueId], references: [id], onDelete: SetNull)
+  rules        WorkUseCaseRule[]
+
+  @@unique([projectId, number], name: "uk_work_use_case_number", map: "uk_work_use_case_number")
+  @@index([issueId], map: "idx_work_use_case_issue")
+  @@map("work_use_cases")
+}
+
+/// A7 — sổ Business Rules (BR-<number>, bảng "5.1 Business Rules" của Report 3).
+model WorkBusinessRule {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  number      Int
+  name        String   @db.VarChar(200)
+  definition  String?  @db.Text
+  category    String?  @db.VarChar(60)
+  status      String   @default("DRAFT") @db.VarChar(10)
+  aiModel     String?  @map("ai_model") @db.VarChar(80)
+  createdById Int?     @map("created_by_id")
+  version     Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  project  WorkProject       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  useCases WorkUseCaseRule[]
+
+  @@unique([projectId, number], name: "uk_work_business_rule_number", map: "uk_work_business_rule_number")
+  @@map("work_business_rules")
+}
+
+/// UC tham chiếu BR (nhiều–nhiều).
+model WorkUseCaseRule {
+  useCaseId Int @map("use_case_id")
+  ruleId    Int @map("rule_id")
+
+  useCase WorkUseCase      @relation(fields: [useCaseId], references: [id], onDelete: Cascade)
+  rule    WorkBusinessRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@id([useCaseId, ruleId])
+  @@index([ruleId], map: "idx_work_use_case_rule_rule")
+  @@map("work_use_case_rules")
+}
+
+/// A6 — một màn hình (Screens Flow + hàng của ma trận Screen Authorization).
+model WorkSrsScreen {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  name        String   @db.VarChar(160)
+  feature     String?  @db.VarChar(120)
+  description String?  @db.Text
+  position    Int      @default(0)
+  issueId     Int?     @map("issue_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  project  WorkProject         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issue    WorkIssue?          @relation("WorkSrsScreenIssue", fields: [issueId], references: [id], onDelete: SetNull)
+  linksOut WorkSrsScreenLink[] @relation("WorkSrsScreenFrom")
+  linksIn  WorkSrsScreenLink[] @relation("WorkSrsScreenTo")
+  auth     WorkSrsScreenAuth[]
+
+  @@unique([projectId, name], name: "uk_work_srs_screen_name", map: "uk_work_srs_screen_name")
+  @@map("work_srs_screens")
+}
+
+/// Mũi tên của Screens Flow: từ màn này sang màn kia (nhãn = hành động).
+model WorkSrsScreenLink {
+  id     Int     @id @default(autoincrement())
+  fromId Int     @map("from_id")
+  toId   Int     @map("to_id")
+  label  String? @db.VarChar(120)
+
+  from WorkSrsScreen @relation("WorkSrsScreenFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  to   WorkSrsScreen @relation("WorkSrsScreenTo", fields: [toId], references: [id], onDelete: Cascade)
+
+  @@unique([fromId, toId], name: "uk_work_srs_screen_link", map: "uk_work_srs_screen_link")
+  @@index([toId], map: "idx_work_srs_screen_link_to")
+  @@map("work_srs_screen_links")
+}
+
+/// Ô "X" của ma trận Screen Authorization (màn × tác nhân).
+model WorkSrsScreenAuth {
+  screenId Int @map("screen_id")
+  actorId  Int @map("actor_id")
+
+  screen WorkSrsScreen @relation(fields: [screenId], references: [id], onDelete: Cascade)
+  actor  WorkSrsActor  @relation(fields: [actorId], references: [id], onDelete: Cascade)
+
+  @@id([screenId, actorId])
+  @@index([actorId], map: "idx_work_srs_screen_auth_actor")
+  @@map("work_srs_screen_auth")
+}
+
+/// A6 — chức năng không giao diện (bảng "1.4.3 Non-UI Functions": Feature · System Function · Description).
+model WorkSrsFunction {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  feature     String?  @db.VarChar(120)
+  name        String   @db.VarChar(200)
+  description String?  @db.Text
+  position    Int      @default(0)
+  issueId     Int?     @map("issue_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  issue   WorkIssue?  @relation("WorkSrsFunctionIssue", fields: [issueId], references: [id], onDelete: SetNull)
+
+  @@index([projectId, position], map: "idx_work_srs_function_project")
+  @@map("work_srs_functions")
+}
+
+/// A19 — liên kết truy vết đặt TAY (bổ sung cho phần tự dò): nguồn (UC | ISSUE | BR) ⇒ đích
+/// SRS | SDS (trang Docs số `pageNumber` + đề mục `heading`) · UNIT (hàm 5.1) · IT (module 5.2) · ST (workflow 5.3)
+/// (`targetId`) · CODE (lớp.phương thức / đường dẫn ở `ref`). Đa hình ⇒ không FK tới nguồn/đích, chỉ tới dự án.
+model WorkTraceLink {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  sourceKind  String   @map("source_kind") @db.VarChar(8)
+  sourceId    Int      @map("source_id")
+  targetKind  String   @map("target_kind") @db.VarChar(8)
+  targetId    Int?     @map("target_id")
+  pageNumber  Int?     @map("page_number")
+  heading     String?  @db.VarChar(255)
+  ref         String?  @db.VarChar(300)
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, sourceKind, sourceId], map: "idx_work_trace_link_source")
+  @@map("work_trace_links")
+}
+
+/// A16 + B5 — phần DEFECT LOG của một thẻ Bug (sheet Defects của Project Tracking): Severity (khác Priority),
+/// Activity (Review | UT | IT | ST | AT), Product (Software Package | Report1…7), Product details.
+/// sourceReviewId/sourceFindingId: bug sinh từ một phát hiện của spec review (một chạm) — không FK (lịch sử).
+model WorkDefectInfo {
+  issueId         Int      @id @map("issue_id")
+  projectId       Int      @map("project_id")
+  severity        String?  @db.VarChar(10)
+  activity        String?  @db.VarChar(8)
+  product         String?  @db.VarChar(40)
+  productDetails  String?  @map("product_details") @db.VarChar(300)
+  sourceReviewId  Int?     @map("source_review_id")
+  sourceFindingId String?  @map("source_finding_id") @db.VarChar(20)
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  issue   WorkIssue   @relation("WorkDefectInfoIssue", fields: [issueId], references: [id], onDelete: Cascade)
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], map: "idx_work_defect_info_project")
+  @@index([sourceReviewId], map: "idx_work_defect_info_review")
+  @@map("work_defect_info")
+}
+
+/// A22 — phần riêng của dòng RAID loại QUESTION (Q&A log, sheet Q&A của Project Tracking): hỏi ai, ai hỏi,
+/// ưu tiên, trả lời. Ngày = askedOn; hạn = WorkRaidItem.reviewDate; câu hỏi = WorkRaidItem.title.
+model WorkRaidQuestion {
+  raidId       Int       @id @map("raid_id")
+  askedOn      DateTime  @map("asked_on") @db.Date
+  askedBy      String?   @map("asked_by") @db.VarChar(120)
+  askedTo      String?   @map("asked_to") @db.VarChar(120)
+  /// LOW | MEDIUM | HIGH (đúng danh sách của mẫu).
+  priority     String    @default("MEDIUM") @db.VarChar(8)
+  answer       String?   @db.Text
+  answeredAt   DateTime? @map("answered_at")
+  answeredById Int?      @map("answered_by_id")
+
+  raid WorkRaidItem @relation(fields: [raidId], references: [id], onDelete: Cascade)
+
+  @@map("work_raid_questions")
+}
+
+// ── hết CTW đợt 4 ──
+
+// ── CTW đợt 5b K-1 ── (10/10/2026) BÌNH LUẬN ĐẦY ĐỦ + VOICE NOTE: luồng trả lời (WorkComment.parentId,
+// WorkPageComment.parentId), tệp trong bình luận (WorkAttachment.commentId/forComment) và phần riêng của voice note.
+
+/// Voice note = một WorkAttachment (audio/*, nằm trong bình luận) + dòng này: độ dài và bản phiên âm (Groq Whisper
+/// qua interview/voice/stt.ts). Phiên âm cũng được nối vào WorkComment.bodyText để JQL `text ~` / `comment ~` tìm được.
+/// transcriptStatus: PENDING (chờ/đang chạy) · DONE · NO_SPEECH (Whisper không nghe ra lời / bị lọc bịa) ·
+/// NO_KEY (máy chủ chưa có GROQ_API_KEY — vẫn lưu audio) · LIMIT (hết trần lượt/ngày của dự án) · FAILED.
+model WorkVoiceNote {
+  attachmentId     Int       @id @map("attachment_id")
+  durationMs       Int       @map("duration_ms")
+  transcriptStatus String    @default("PENDING") @map("transcript_status") @db.VarChar(12)
+  transcript       String?   @db.Text
+  /// Mã ISO-639-1 Whisper tự dò (vi/en/…).
+  language         String?   @db.VarChar(12)
+  transcribedAt    DateTime? @map("transcribed_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  attachment WorkAttachment @relation(fields: [attachmentId], references: [id], onDelete: Cascade)
+
+  @@index([transcriptStatus, transcribedAt], map: "idx_work_voice_note_status")
+  @@map("work_voice_notes")
+}
+
+// ── hết CTW đợt 5b K-1 ──

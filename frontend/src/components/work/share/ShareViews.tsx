@@ -484,6 +484,14 @@ export function ShareIssuePanel({ token, number, summary, lk, onClose, onOpen }:
                     {i.description.trim()
                       ? <div className="whitespace-pre-wrap break-words text-[13px] leading-relaxed text-[var(--w-text)]">{i.description}</div>
                       : <p className="text-[13px] text-[var(--w-text-3)]">No description.</p>}
+                    {(i.images ?? []).length > 0 && (
+                      <div className="mt-3 flex flex-col gap-3">
+                        {(i.images ?? []).map((src, n) => (
+                          // eslint-disable-next-line @next/next/no-img-element -- ảnh qua API của link, không qua next/image
+                          <img key={src} src={src} alt={`Image ${n + 1} in the description`} loading="lazy" className="max-w-full rounded-[6px] border border-[var(--w-border)]" />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ) : !summary.options.descriptions && (
                   <p className="mt-6 text-[12px] text-[var(--w-text-3)]">Descriptions are not included in this shared view.</p>

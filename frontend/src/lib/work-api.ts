@@ -65,6 +65,9 @@ export interface ProjectSummary {
   avatarUrl?: string | null;
   iconEmoji?: string | null;
   color?: string | null;
+  /** UX-D: ảnh bìa ("preset:<id>" | URL) + điểm lấy nét dọc 0–100. */
+  coverUrl?: string | null;
+  coverPositionY?: number | null;
 }
 
 export interface WorkspaceDetail {
@@ -153,6 +156,9 @@ export interface ProjectConfig {
   avatarUrl?: string | null;
   iconEmoji?: string | null;
   color?: string | null;
+  /** UX-D: ảnh bìa ("preset:<id>" | URL) + điểm lấy nét dọc 0–100. */
+  coverUrl?: string | null;
+  coverPositionY?: number | null;
   /** CTW-5: phiên bản (chưa lưu trữ) — gợi ý JQL `fixVersion`. */
   versions?: Array<{ id: number; name: string; status: string }>;
   workflows: WorkWorkflow[];
@@ -252,6 +258,8 @@ export type CommentVisibility = 'INTERNAL' | 'PUBLIC';
 
 export interface WorkComment {
   id: number;
+  /** CTW đợt 5b K-1: trả lời theo luồng (id gốc) — đầy đủ ở lib/work-comments-api.ts (ThreadComment). */
+  parentId?: number | null;
   bodyJson: TiptapDoc;
   isAi: boolean;
   visibility?: CommentVisibility;
@@ -627,7 +635,7 @@ export interface CapacityRow {
 }
 export interface CapacityData { from: string; to: string; unit: EstimationUnit; sprintId: number | null; members: CapacityRow[] }
 export interface TimeOffEntry { id: number; userId: number; startDate: string; endDate: string; note: string | null; user: WorkUser }
-export interface Worklog { id: number; minutes: number; startedAt: string; note: string | null; createdAt: string; userId: number; user: WorkUser }
+export interface Worklog { id: number; minutes: number; startedAt: string; note: string | null; createdAt: string; userId: number; user: WorkUser; /** CTW đợt 4 (A24) */ activity?: string | null; workProduct?: string | null }
 export interface TimeReport {
   from: string; to: string; totalMin: number;
   people: Array<{ user: WorkUser; name: string; totalMin: number; byDay: Record<string, number>; issues: Array<{ number: number; title: string; minutes: number }>; userKind?: 'HUMAN' | 'AGENT'; autoMin?: number }>;
@@ -724,6 +732,8 @@ export interface ShareIssue {
 }
 export interface ShareIssueDetail extends ShareIssue {
   description: string | null; startDate: string | null; createdAt: string; parent: { number: number; title: string } | null;
+  /** Đợt 6a: ảnh trong mô tả, qua đường ảnh riêng của link (/api/v1/work/share/:token/images/:id). */
+  images?: string[];
   children: Array<{ number: number; title: string; statusId: number }>;
 }
 export interface ShareReports {
@@ -795,7 +805,7 @@ export const workApi = {
     d<{ id: number; url: string; expiresAt: string; maxUses: number }>(api.post(`${B}/workspaces/${wsId}/invite-links`, body)),
   revokeInvite: (wsId: number, inviteId: number) => d(api.delete(`${B}/workspaces/${wsId}/invites/${inviteId}`)),
   previewInvite: (token: string) =>
-    d<{ workspace: { name: string; slug: string }; role: WorkspaceRole; invitedBy: string | null; restrictedToEmail: boolean }>(api.get(`${B}/invites/${encodeURIComponent(token)}`)),
+    d<{ workspace: { name: string; slug: string }; role: WorkspaceRole; invitedBy: string | null; restrictedToEmail: boolean; card?: import('./work-uxd-api').InviteCard }>(api.get(`${B}/invites/${encodeURIComponent(token)}`)),
   acceptInvite: (token: string) => d<{ slug: string; portalPath?: string }>(api.post(`${B}/invites/${encodeURIComponent(token)}/accept`)),
 
   // Dự án
@@ -1026,7 +1036,7 @@ export const workApi = {
   addTimeOff: (wsId: number, body: { userId?: number; startDate: string; endDate: string; note?: string | null }) => d(api.post(`${B}/workspaces/${wsId}/time-off`, body)),
   deleteTimeOff: (wsId: number, id: number) => d(api.delete(`${B}/workspaces/${wsId}/time-off/${id}`)),
   worklogs: (pid: number, num: number) => d<Worklog[]>(api.get(`${B}/projects/${pid}/issues/${num}/worklogs`)),
-  addWorklog: (pid: number, num: number, body: { minutes: number; startedAt?: string; note?: string | null; remaining?: 'auto' | 'keep' | number }) =>
+  addWorklog: (pid: number, num: number, body: { minutes: number; startedAt?: string; note?: string | null; remaining?: 'auto' | 'keep' | number; activity?: string | null; workProduct?: string | null }) =>
     d<Worklog>(api.post(`${B}/projects/${pid}/issues/${num}/worklogs`, body)),
   deleteWorklog: (pid: number, num: number, logId: number) => d(api.delete(`${B}/projects/${pid}/issues/${num}/worklogs/${logId}`)),
   timeReport: (pid: number, q: { from: string; to: string; userId?: number; principal?: 'HUMAN' | 'AGENT' | 'ALL' }) => d<TimeReport>(api.get(`${B}/projects/${pid}/reports/time${params(q)}`)),
@@ -1197,7 +1207,7 @@ export interface GlobalIssueHit {
   /** /work/<slug>/<KEY>/issue/<n> */
   url: string;
   /** Chỉ có khi tìm bằng q: khớp ở đâu. */
-  match?: 'key' | 'title' | 'description';
+  match?: 'key' | 'title' | 'description' | 'comment'; // 'comment' — K-1 (đợt 5b)
 }
 
 export interface GlobalSearchResult {
@@ -1564,6 +1574,8 @@ export interface PageComment {
   authorId: number | null;
   author: WorkUser | null;
   canDelete: boolean;
+  /** CTW đợt 5b K-1: trả lời theo luồng (id gốc). */
+  parentId?: number | null;
 }
 export interface DocTemplateInfo {
   key: string;
@@ -1628,6 +1640,7 @@ export interface PortalOverview {
     key: string; name: string; description: string | null; workspaceName: string; organization: string | null;
     /** CTW-23: nhận diện dự án + logo studio. */
     avatarUrl?: string | null; iconEmoji?: string | null; color?: string | null; workspaceLogoUrl?: string | null;
+    coverUrl?: string | null; coverPositionY?: number | null; // UX-D
   };
   viewer: PortalViewer;
   stages: Array<{ id: number; n: number; name: string; status: 'NOT_STARTED' | 'ACTIVE' | 'GATE_REVIEW' | 'DONE'; percent: number; startedAt: string | null; completedAt: string | null }>;
@@ -1651,7 +1664,7 @@ export interface PortalRequestDetail {
   fixVersion: { name: string; releaseDate: string | null; status: string } | null;
   reporter: WorkUser | null; fromClient: boolean;
   attachments: Array<{ id: number; fileName: string; mime: string; size: number; createdAt: string; deliverable: boolean; uploader: WorkUser | null }>;
-  comments: Array<{ id: number; bodyJson: TiptapDoc; createdAt: string; editedAt: string | null; isAi: boolean; author: WorkUser | null }>;
+  comments: Array<{ id: number; bodyJson: TiptapDoc; createdAt: string; editedAt: string | null; isAi: boolean; author: WorkUser | null; parentId?: number | null; attachments?: import('./work-comments-api').CommentFile[] }>; // K-1: luồng + tệp/voice
   viewer: PortalViewer; clientIds: number[];
 }
 export interface PortalUat {

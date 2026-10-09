@@ -73,6 +73,10 @@ import fptTestRoutes from './work.fpt.routes.js';
 import docs3aRoutes from './work.docs3a.routes.js';
 import fptReportRoutes from './work.fptReports.routes.js';
 import ctw3cRoutes from './work.ctw3c.routes.js';
+import ctw5bRoutes from './work.ctw5b.routes.js'; // CTW đợt 5b K-1: tệp/voice note trong bình luận
+import ctw4Routes from './work.ctw4.routes.js';
+import uxdRoutes, { uxdPublicRoutes } from './work.uxd.routes.js'; // UX-D: ảnh xem trước link + ảnh bìa dự án
+import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
 
@@ -157,6 +161,9 @@ const tiptapDoc = z
 
 // ═══ Công khai (trước authenticate) ════════════════════════════════
 
+// UX-D: thẻ OG công khai (rate-limit riêng) — gắn trước /invites/:token để trần lượt gọi áp cả cho tuyến đó.
+router.use(uxdPublicRoutes);
+
 // Xem trước lời mời — trang /work/invite/:token hiện tên không gian cho người chưa đăng nhập.
 router.get('/invites/:token', asyncHandler(async (req, res) => {
   ok(res, await workspaces.previewInvite(String(req.params.token)));
@@ -204,6 +211,17 @@ router.get('/share/:token/reports', asyncHandler(async (req, res) => {
 }));
 router.get('/share/:token/tests', asyncHandler(async (req, res) => {
   ok(res, await share.publicTests(String(req.params.token)));
+}));
+// Đợt 6a: ảnh trong mô tả thẻ qua link công khai — chỉ ảnh của thẻ link đọc được (share.publicImage).
+router.get('/share/:token/images/:iid', asyncHandler(async (req, res) => {
+  const img = await share.publicImage(String(req.params.token), idParam(req, 'iid'));
+  res.setHeader('Content-Type', img.mime);
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Content-Disposition', `inline; filename="${img.fileName.replace(/[^\x20-\x7e]/g, '_')}"`);
+  // Link có thể bị thu hồi ⇒ cache ngắn, không chia sẻ giữa người dùng.
+  res.setHeader('Cache-Control', 'private, max-age=300');
+  res.setHeader('X-Robots-Tag', 'noindex');
+  res.send(img.buffer);
 }));
 
 // Đợt S4: tải tệp xuất trọn dự án qua link ký HMAC hạn 15 phút — không cần đăng nhập (đứng TRƯỚC authenticate).
@@ -657,8 +675,12 @@ router.get('/projects/:pid/issues/:num/comments', asyncHandler(async (req, res) 
 }));
 router.post('/projects/:pid/issues/:num/comments', asyncHandler(async (req, res) => {
   // visibility (cổng khách S2b): INTERNAL = ghi chú nội bộ (mặc định) · PUBLIC = trả lời khách.
-  const { bodyJson, visibility } = parse(z.object({ bodyJson: tiptapDoc, visibility: z.enum(COMMENT_VISIBILITY).optional() }), req.body);
-  ok(res, await issues.addComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), bodyJson, 'USER', visibility), 201);
+  // K-1 (đợt 5b): parentId = trả lời theo luồng · attachmentIds = tệp/voice note đã tải từ ô bình luận.
+  const { bodyJson, visibility, parentId, attachmentIds } = parse(z.object({
+    bodyJson: tiptapDoc, visibility: z.enum(COMMENT_VISIBILITY).optional(),
+    parentId: id.nullable().optional(), attachmentIds: z.array(id).max(10).optional(),
+  }), req.body);
+  ok(res, await issues.addComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), bodyJson, 'USER', visibility, { parentId, attachmentIds }), 201);
 }));
 router.patch('/projects/:pid/issues/:num/comments/:cid', asyncHandler(async (req, res) => {
   const { bodyJson } = parse(z.object({ bodyJson: tiptapDoc }), req.body);
@@ -674,11 +696,11 @@ router.delete('/projects/:pid/issues/:num/comments/:cid', asyncHandler(async (re
 }));
 
 router.post('/projects/:pid/issues/:num/attachments/presign', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ fileName: z.string().min(1).max(255), contentType: z.string().max(100), size: z.number().int().positive() }), req.body);
+  const body = parse(z.object({ fileName: z.string().min(1).max(255), contentType: z.string().max(100), size: z.number().int().positive(), forComment: z.boolean().optional() }), req.body);
   ok(res, await issues.presignAttachment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body));
 }));
 router.post('/projects/:pid/issues/:num/attachments/complete', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ key: z.string().min(1).max(500), fileName: z.string().min(1).max(255), runId: id.nullable().optional() }), req.body);
+  const body = parse(z.object({ key: z.string().min(1).max(500), fileName: z.string().min(1).max(255), runId: id.nullable().optional(), forComment: z.boolean().optional() }), req.body);
   ok(res, await issues.completeAttachment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body), 201);
 }));
 // Trả URL ký sẵn (không 302): client dùng cho cả <img> xem trước lẫn nút tải.
@@ -1203,6 +1225,7 @@ router.post('/projects/:pid/issues/:num/worklogs', asyncHandler(async (req, res)
   const body = parse(z.object({
     minutes: z.number().int().min(1).max(1440), startedAt: z.string().datetime({ offset: true }).optional(), note: z.string().max(1000).nullable().optional(),
     remaining: z.union([z.enum(['auto', 'keep']), z.number().int().min(0).max(100_000)]).optional(),
+    activity: z.enum(TL_ACTIVITIES).nullable().optional(), workProduct: z.string().max(120).nullable().optional(), // CTW đợt 4 (A24)
   }), req.body);
   ok(res, await planning.addWorklog(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), body), 201);
 }));
@@ -1847,8 +1870,8 @@ router.get('/projects/:pid/pages/:num/comments', asyncHandler(async (req, res) =
   ok(res, await pages.listComments(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
 }));
 router.post('/projects/:pid/pages/:num/comments', asyncHandler(async (req, res) => {
-  const { bodyJson } = parse(z.object({ bodyJson: tiptapDoc }), req.body);
-  ok(res, await pages.addComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), bodyJson), 201);
+  const { bodyJson, parentId } = parse(z.object({ bodyJson: tiptapDoc, parentId: id.nullable().optional() }), req.body); // K-1: parentId
+  ok(res, await pages.addComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), bodyJson, parentId), 201);
 }));
 router.delete('/projects/:pid/pages/:num/comments/:cid', asyncHandler(async (req, res) => {
   ok(res, await pages.deleteComment(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'cid')));
@@ -1974,5 +1997,10 @@ router.use(docs3aRoutes);
 router.use(fptReportRoutes);
 // CTW đợt 3C (09/10/2026): agent dựng sẵn (BUILTIN) — lượt chạy, dừng, trần chi phí; link tải Word/PDF — work.ctw3c.routes.ts.
 router.use(ctw3cRoutes);
+// CTW đợt 5b K-1: tệp + voice note trong bình luận (work.ctw5b.routes.ts).
+router.use(ctw5bRoutes);
+// CTW đợt 4: SRS có cấu trúc, RTM, defect log, Q&A, Report 7, activity worklog (work.ctw4.routes.ts).
+router.use(ctw4Routes);
+router.use(uxdRoutes); // UX-D: ảnh bìa dự án (chỉ ADMIN dự án)
 
 export default router;

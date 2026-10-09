@@ -114,7 +114,7 @@ export function ResultRow({ it, index, highlighted, onHover, showProject = true 
       </span>
       <span role="cell" className="hidden min-w-0 items-center gap-2 md:flex">
         <span className="truncate font-medium text-[var(--w-text)]">{it.title}</span>
-        {it.match === 'description' && <span className="shrink-0 rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-3)]">in description</span>}
+        {(it.match === 'description' || it.match === 'comment') && <span className="shrink-0 rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-3)]">{it.match === 'comment' ? 'in comments' : 'in description'}</span>}
       </span>
       <span role="cell" className="hidden min-w-0 items-center md:flex"><StatusBadge status={it.status} /></span>
       <span role="cell" className="hidden min-w-0 items-center md:flex"><PriorityIcon priority={it.priority} size={14} showLabel className="[&>span]:!text-[12.5px] [&>span]:!text-[var(--w-text-2)]" /></span>

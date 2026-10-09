@@ -4,8 +4,7 @@
 
 import crypto from 'node:crypto';
 import { config } from '../../config/env.js';
-import { emailService } from '../email.service.js';
-import { logger } from '../../utils/logger.js';
+import { deliverWorkEmail, renderWorkEmail } from './workEmail.js'; // UX-D
 
 /** Trường công khai của một người — KHÔNG bao giờ trả email của người khác. */
 export const PUBLIC_USER = {
@@ -65,28 +64,15 @@ export async function sendWorkEmail(opts: {
   footer?: string;
   /** Tệp đính kèm, `content` base64 (lời mời họp .ics — đợt S3b). */
   attachments?: Array<{ filename: string; content: string; contentType?: string }>;
+  /** UX-D: Reply-To (vd. email người mời). */
+  replyTo?: string | null;
 }): Promise<void> {
-  const body = opts.lines.map((l) => `<p>${escapeHtml(l)}</p>`).join('\n');
-  const cta = opts.cta
-    ? `<p style="margin:28px 0"><a href="${escapeHtml(opts.cta.url)}" style="display:inline-block;padding:12px 24px;background:#2563eb;color:#fff;text-decoration:none;border-radius:8px;font-weight:600">${escapeHtml(opts.cta.label)}</a></p>
-       <p style="color:#64748b;font-size:12px;word-break:break-all">${escapeHtml(opts.cta.url)}</p>`
-    : '';
-  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"></head>
-<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8fafc;color:#0f172a;padding:32px 0">
-  <div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:32px">
-    <div style="font-weight:700;color:#2563eb;margin-bottom:16px">${escapeHtml(opts.brand ?? 'CT Work')}</div>
-    <h1 style="font-size:20px;margin:0 0 16px">${escapeHtml(opts.heading)}</h1>
-    ${body}
-    ${cta}
-    <p style="color:#94a3b8;font-size:12px;margin-top:32px">${escapeHtml(opts.footer ?? 'You received this email because of activity in CT Work.')}</p>
-  </div>
-</body></html>`;
-  const text = [opts.heading, '', ...opts.lines, ...(opts.cta ? ['', `${opts.cta.label}: ${opts.cta.url}`] : [])].join('\n');
-  try {
-    await emailService.send({ to: opts.to, subject: opts.subject, html, text, ...(opts.attachments?.length ? { attachments: opts.attachments } : {}) });
-  } catch (err) {
-    logger.warn('[work] gửi email thất bại', { err });
-  }
+  // UX-D (09/10/2026): khung thư có thương hiệu (bảng, logo PNG, dark mode, chân thư đủ) — workEmail.ts.
+  const { html, text } = renderWorkEmail({
+    lang: 'en', heading: opts.heading, lines: opts.lines, cta: opts.cta ?? null, brand: opts.brand,
+    preheader: opts.lines[0], reason: opts.footer ?? 'You received this email because of activity in CT Work.',
+  });
+  await deliverWorkEmail({ to: opts.to, subject: opts.subject, html, text, replyTo: opts.replyTo, attachments: opts.attachments });
 }
 
 /** Chuẩn hoá chuỗi thành slug a-z0-9-. */

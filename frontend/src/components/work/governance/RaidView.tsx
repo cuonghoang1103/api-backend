@@ -45,31 +45,33 @@ function Matrix({ m, cell, onCell }: { m: number[][]; cell: { p: number; i: numb
           <span className="-rotate-90 whitespace-nowrap text-[11px] font-medium text-[var(--w-text-3)]">Probability →</span>
         </div>
         <div className="min-w-0 flex-1">
-          <div className="grid grid-cols-5 gap-1" role="grid" aria-label="Probability by impact">
-            {[5, 4, 3, 2, 1].map((p) => [1, 2, 3, 4, 5].map((i) => {
-              const n = m[p - 1]?.[i - 1] ?? 0;
-              const lv = levelOf(p * i)!;
-              const on = cell?.p === p && cell?.i === i;
-              return (
-                <button
-                  key={`${p}-${i}`}
-                  type="button"
-                  role="gridcell"
-                  aria-label={`Probability ${p} (${P_LABEL[p - 1]}), impact ${i} (${I_LABEL[i - 1]}): ${n} open risk${n === 1 ? '' : 's'}`}
-                  aria-pressed={on}
-                  onClick={() => onCell(on ? null : { p, i })}
-                  data-testid={`raid-cell-${p}-${i}`}
-                  className={cn('relative flex aspect-square min-h-[34px] items-center justify-center rounded-[6px] text-[13px] font-semibold tabular-nums transition-[box-shadow]', on && 'ring-2 ring-[var(--w-accent)] ring-offset-1 ring-offset-[var(--w-panel)]')}
-                  style={{
-                    background: `color-mix(in srgb, ${LEVEL_COLOR[lv]} ${n ? 30 : 10}%, var(--w-panel))`,
-                    color: n ? 'var(--w-text)' : 'var(--w-text-3)',
-                  }}
-                >
-                  {n || ''}
-                  <span className="absolute left-1 top-0.5 text-[9px] font-normal opacity-60">{p * i}</span>
-                </button>
-              );
-            }))}
+          {/* UX-A: lưới ARIA đúng cấu trúc grid › row › gridcell › button; số điểm dùng màu chữ thường (trước 2.3:1). */}
+          <div className="flex flex-col gap-1" role="grid" aria-label="Probability by impact">
+            {[5, 4, 3, 2, 1].map((p) => (
+              <div key={p} role="row" className="grid grid-cols-5 gap-1">
+                {[1, 2, 3, 4, 5].map((i) => {
+                  const n = m[p - 1]?.[i - 1] ?? 0;
+                  const lv = levelOf(p * i)!;
+                  const on = cell?.p === p && cell?.i === i;
+                  return (
+                    <div key={i} role="gridcell" className="min-w-0">
+                      <button
+                        type="button"
+                        aria-label={`Probability ${p} (${P_LABEL[p - 1]}), impact ${i} (${I_LABEL[i - 1]}): ${n} open risk${n === 1 ? '' : 's'}`}
+                        aria-pressed={on}
+                        onClick={() => onCell(on ? null : { p, i })}
+                        data-testid={`raid-cell-${p}-${i}`}
+                        className={cn('relative flex aspect-square min-h-[34px] w-full items-center justify-center rounded-[6px] text-[13px] font-semibold tabular-nums text-[var(--w-text)] transition-[box-shadow]', on && 'ring-2 ring-[var(--w-accent)] ring-offset-1 ring-offset-[var(--w-panel)]')}
+                        style={{ background: `color-mix(in srgb, ${LEVEL_COLOR[lv]} ${n ? 30 : 12}%, var(--w-panel))` }}
+                      >
+                        {n || ''}
+                        <span aria-hidden="true" className="absolute left-1 top-0.5 text-[10px] font-medium text-[var(--w-text-2)]">{p * i}</span>
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
           <div className="mt-1 text-center text-[11px] font-medium text-[var(--w-text-3)]">Impact →</div>
         </div>
@@ -354,7 +356,7 @@ export default function RaidView({ config }: { config: ProjectConfig }) {
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-      <div className="mx-auto w-full max-w-[1180px] px-4 py-5 md:px-6">
+      <div className="w-page">
         <nav className="-mx-4 mb-4 overflow-x-auto px-4 md:mx-0 md:px-0" aria-label="RAID sections">
           <div className="inline-flex min-w-max gap-1 border-b border-[var(--w-border)]" role="tablist">
             {RAID_TYPES.map((t) => (

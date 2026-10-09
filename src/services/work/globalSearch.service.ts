@@ -263,7 +263,7 @@ function parseOrThrow(jql: string): JqlQuery {
 
 export interface GlobalSearchInput { jql?: string; q?: string; limit?: number; offset?: number }
 
-export type MatchKind = 'key' | 'title' | 'description';
+export type MatchKind = 'key' | 'title' | 'description' | 'comment';
 
 export async function globalSearch(userId: number, input: GlobalSearchInput) {
   const limit = Math.min(Math.max(input.limit ?? 50, 1), MAX_LIMIT);
@@ -357,6 +357,7 @@ export async function globalSearch(userId: number, input: GlobalSearchInput) {
   // CTW-6: chữ tự do so trên cột sinh tự động đã bỏ dấu (fold.ts) — "dia cau" khớp "Địa cầu".
   const fq = foldVi(q);
   const contains = (s: string) => ({ contains: foldVi(s) });
+  const inComments = (s: string): W => ({ comments: { some: { deletedAt: null, bodyText: { contains: s, mode: 'insensitive' } } } });
   const keyWhere = (ids: number[]): W | null => {
     if (keyMatch) {
       const pids = ids.filter((id) => lc(byId.get(id)!.key) === lc(keyMatch[1]));
@@ -367,7 +368,8 @@ export async function globalSearch(userId: number, input: GlobalSearchInput) {
   const textWhere = (ids: number[]): W | null => {
     if (!q) return null;
     const k = keyWhere(ids);
-    return { OR: [...(k ? [k] : []), { titleFold: contains(q) }, { descriptionFold: contains(q) }] };
+    // K-1 (đợt 5b): cả chữ trong bình luận + phiên âm voice note (dự án khách bị cách ly đã bị loại khỏi tìm xuyên dự án).
+    return { OR: [...(k ? [k] : []), { titleFold: contains(q) }, { descriptionFold: contains(q) }, inComments(q)] };
   };
 
   const scoreOf = (r: Row): { score: number; match: MatchKind } => {
@@ -404,7 +406,7 @@ export async function globalSearch(userId: number, input: GlobalSearchInput) {
     const uniq = new Map(got.map((r) => [r.id, r]));
     if (uniq.size < need) {
       const rest = await prisma.workIssue.findMany({
-        where: { AND: [base, { descriptionFold: contains(q) }, { NOT: { titleFold: contains(q) } }] },
+        where: { AND: [base, { OR: [{ descriptionFold: contains(q) }, inComments(q)] }, { NOT: { titleFold: contains(q) } }] },
         orderBy: byUpdated, take: need, select: ROW_SELECT,
       });
       rest.forEach((r) => uniq.set(r.id, r));
@@ -417,6 +419,12 @@ export async function globalSearch(userId: number, input: GlobalSearchInput) {
   const merged = results.flatMap((r) => r.rows).map((r) => ({ r, ...(q ? scoreOf(r) : { score: 0, match: undefined }) }));
   merged.sort((a, b) => (ranked ? b.score - a.score : 0) || cmp(a.r, b.r));
   const page = merged.slice(offset, offset + limit);
+  // K-1: thẻ khớp ngoài tiêu đề ⇒ khớp ở mô tả hay chỉ ở bình luận (nhãn "in comments" ở bảng kết quả).
+  const loose = page.filter((x) => x.match === 'description').map((x) => x.r.id);
+  if (loose.length) {
+    const inDesc = new Set((await prisma.workIssue.findMany({ where: { id: { in: loose }, descriptionFold: contains(q) }, select: { id: true } })).map((r) => r.id));
+    for (const x of page) if (x.match === 'description' && !inDesc.has(x.r.id)) x.match = 'comment';
+  }
 
   return {
     items: page.map(({ r, match }) => {

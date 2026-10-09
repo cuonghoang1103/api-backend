@@ -24,7 +24,7 @@ import {
   type ChangeRow, type StageLite,
 } from './docFill.js';
 import { docCtx, getPage, updatePage } from './pages.service.js';
-import { requireProject } from './permissions.js';
+import { docAccess, isClientScoped, requireProject } from './permissions.js';
 
 export const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
 const MAX_IMAGES_PER_PROJECT = 5000;
@@ -73,8 +73,70 @@ export async function uploadImage(userId: number, projectId: number, body: Buffe
   return { id: row.id, url: imageUrl(projectId, row.id), width: row.width, height: row.height };
 }
 
+/**
+ * Đợt 6a — xem ảnh theo ĐÚNG phạm vi đã chia sẻ (không mở rộng quyền):
+ *   - nhân viên (đọc được mọi trang) ⇒ mọi ảnh của dự án như cũ;
+ *   - khách bị cách ly (cổng khách) ⇒ chỉ ảnh nằm trong trang CLIENT, mô tả thẻ ĐÃ chia sẻ, hoặc bình luận
+ *     PUBLIC trên thẻ đã chia sẻ — thu hồi chia sẻ là ảnh thôi hiện;
+ *   - người đọc hạn chế khác (GUEST, CLIENT ở dự án tắt cổng) ⇒ trang CLIENT + mô tả/bình luận thẻ (họ đọc
+ *     được mọi thẻ), KHÔNG ảnh chỉ nằm trong trang nội bộ.
+ * Ảnh không được tham chiếu ở chỗ người xem đọc được ⇒ 404 (không cho biết ảnh tồn tại).
+ */
 export async function readImage(userId: number, projectId: number, imageId: number) {
-  await requireProject(userId, projectId, 'project.view');
+  const access = await requireProject(userId, projectId, 'project.view');
+  const img = await prisma.workDocImage.findFirst({ where: { id: imageId, projectId }, select: { r2Key: true, mime: true, fileName: true } });
+  if (!img) throw new NotFoundError('Image not found');
+  const scoped = isClientScoped(access);
+  if (scoped || docAccess(access.role, access.workspaceRole).view !== 'ALL') {
+    if (!(await imageReferenced(projectId, imageId, { pages: true, issues: scoped ? 'SHARED' : 'ALL', comments: scoped ? 'PUBLIC_SHARED' : 'ALL' }))) {
+      throw new NotFoundError('Image not found');
+    }
+  }
+  return { buffer: await store.read(img.r2Key), mime: img.mime, fileName: img.fileName };
+}
+
+/** Ảnh (của dự án `projectId`) có nằm trong nội dung theo phạm vi cho trước không — so chuỗi src đúng y trong JSON. */
+export async function imageReferenced(
+  projectId: number, imageId: number,
+  scope: { pages: boolean; issues: 'SHARED' | 'ALL' | null; comments: 'PUBLIC_SHARED' | 'ALL' | null },
+): Promise<boolean> {
+  // jsonb::text in chuỗi kèm dấu nháy ⇒ `"…/images/12"` không khớp nhầm `…/images/123`. Không có % hay _ trong mẫu.
+  const pat = `%"${imageUrl(projectId, imageId)}"%`;
+  const checks: Array<Promise<Array<{ ok: number }>>> = [];
+  if (scope.pages) {
+    checks.push(prisma.$queryRaw`SELECT 1 AS ok FROM work_pages WHERE project_id = ${projectId} AND deleted_at IS NULL AND visibility = 'CLIENT' AND content_json::text LIKE ${pat} LIMIT 1`);
+  }
+  if (scope.issues) {
+    const shared = scope.issues === 'SHARED';
+    checks.push(prisma.$queryRaw`SELECT 1 AS ok FROM work_issues WHERE project_id = ${projectId} AND deleted_at IS NULL AND (${!shared} OR client_visible = true) AND description_json::text LIKE ${pat} LIMIT 1`);
+  }
+  if (scope.comments) {
+    const pub = scope.comments === 'PUBLIC_SHARED';
+    checks.push(prisma.$queryRaw`SELECT 1 AS ok FROM work_comments c JOIN work_issues i ON i.id = c.issue_id
+      WHERE i.project_id = ${projectId} AND i.deleted_at IS NULL AND c.deleted_at IS NULL
+        AND (${!pub} OR (i.client_visible = true AND c.visibility = 'PUBLIC')) AND c.body_json::text LIKE ${pat} LIMIT 1`);
+  }
+  return (await Promise.all(checks)).some((r) => r.length > 0);
+}
+
+/** Id ảnh của CHÍNH dự án trong một JSON TipTap (theo thứ tự, không trùng). */
+export function imageIdsIn(doc: unknown, projectId: number): number[] {
+  const out: number[] = [];
+  const walk = (n: unknown) => {
+    if (!n || typeof n !== 'object') return;
+    const node = n as { type?: string; attrs?: { src?: unknown }; content?: unknown[] };
+    if (node.type === 'image' && typeof node.attrs?.src === 'string') {
+      const m = DOC_IMAGE_SRC_RE.exec(node.attrs.src.trim());
+      if (m && Number(m[1]) === projectId && !out.includes(Number(m[2]))) out.push(Number(m[2]));
+    }
+    if (Array.isArray(node.content)) node.content.forEach(walk);
+  };
+  walk(doc);
+  return out;
+}
+
+/** Đọc thẳng byte ảnh (người gọi đã tự kiểm quyền — link công khai, share.service). */
+export async function readImageBytes(projectId: number, imageId: number) {
   const img = await prisma.workDocImage.findFirst({ where: { id: imageId, projectId }, select: { r2Key: true, mime: true, fileName: true } });
   if (!img) throw new NotFoundError('Image not found');
   return { buffer: await store.read(img.r2Key), mime: img.mime, fileName: img.fileName };

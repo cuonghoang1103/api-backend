@@ -136,7 +136,15 @@ export async function projectTrackingXlsx(userId: number, projectId: number, var
   if (variant === 'SEP490') {
     const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { key: true } });
     const input = await loadSep490(projectId);
-    return { file: `${p.key}_Report2_Project_Tracking_${stamp}`, buffer: writeXlsx(buildSep490Sheets(input), { title: `${p.key} — Project Tracking` }), count: input.wbs.length };
+    const sheets = buildSep490Sheets(input);
+    // CTW đợt 4 (A19): dự án có SRS có cấu trúc (use case) ⇒ thêm sheet RTM ở CUỐI tệp (hướng dẫn RTM: không chèn giữa 6 sheet mẫu).
+    if (await prisma.workUseCase.count({ where: { projectId, status: { not: 'PROPOSED' } } })) {
+      const { loadRtm } = await import('./rtm.service.js');
+      const { rtmTrackingSheet } = await import('./rtm.js');
+      const r = await loadRtm(projectId);
+      sheets.push(rtmTrackingSheet(r.rows, r.projectName));
+    }
+    return { file: `${p.key}_Report2_Project_Tracking_${stamp}`, buffer: writeXlsx(sheets, { title: `${p.key} — Project Tracking` }), count: input.wbs.length };
   }
   if (variant === 'SWP391_T1') return template1Xlsx(projectId, stamp);
   if (variant === 'ISSUES') return issuesReportXlsx(projectId, stamp);

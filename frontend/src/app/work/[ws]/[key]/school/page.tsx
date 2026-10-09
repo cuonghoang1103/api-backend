@@ -7,6 +7,7 @@
  *   • Project tracking (A23) — SEP490 Report2 / SWP391 Template1 / Template4 / Product+Summary.
  *   • Weekly report (A21) — mỗi tuần một kỳ lưu được, tự điền, xuất "Week n".
  *   • AI usage (A29)      — nhật ký dùng AI theo SWP391 Template0.
+ *   • Q&A log (A22, đợt 4) — câu hỏi với GV/khách ⇒ sheet Q&A của Project Tracking.
  *   • Course              — mã môn, lớp, GV, nhóm, tuần 1, danh sách sinh viên.
  */
 
@@ -22,12 +23,14 @@ import WbsTab from '@/components/work/school/WbsTab';
 import { CourseTab, TrackingTab } from '@/components/work/school/TrackingTab';
 import WeeklyTab from '@/components/work/school/WeeklyTab';
 import AiUsageTab from '@/components/work/school/AiUsageTab';
+import QnaTab from '@/components/work/school/QnaTab';
 
 const TABS = [
   { id: 'wbs', label: 'WBS & estimates' },
   { id: 'tracking', label: 'Project tracking' },
   { id: 'weekly', label: 'Weekly report' },
   { id: 'ai', label: 'AI usage' },
+  { id: 'qna', label: 'Q&A log' },
   { id: 'course', label: 'Course & group' },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
@@ -73,6 +76,7 @@ function SchoolView({ config, pid }: { config: ProjectConfig; pid: number }) {
         {tab === 'tracking' && <TrackingTab pid={pid} />}
         {tab === 'weekly' && <WeeklyTab pid={pid} canEdit={canEdit} />}
         {tab === 'ai' && <AiUsageTab pid={pid} canEdit={canEdit} />}
+        {tab === 'qna' && <QnaTab pid={pid} canEdit={canEdit} />}
         {tab === 'course' && <CourseTab pid={pid} />}
       </div>
       <IssueDrawer pid={pid} num={issue} onClose={() => setIssue(null)} onOpenIssue={(n) => setIssue(n)} />

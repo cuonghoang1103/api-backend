@@ -33,10 +33,12 @@ import {
 } from './fields';
 import { useLookups, wk, type Lookups } from './hooks';
 import IssueActivity from './IssueActivity';
+import { IssuePresenceStrip, usePresenceFlag } from './comments/IssuePresence'; // CTW đợt 5b K16: ai đang xem/gõ/sửa
 import { MobileNavButton } from './shell/mobileNav';
 import HeaderTools from './shell/HeaderTools';
 import { Crumb, CrumbSep } from './ProjectHeader';
 import { TimeTrackingBlock } from './TimeTracking';
+import DefectPanel from './DefectPanel'; // CTW đợt 4 (A16+B5): Severity/Activity/Product của thẻ Bug
 import DevelopmentPanel from './DevelopmentPanel';
 import IssueAgentActivity from './agents/IssueAgentActivity';
 import { IssueApprovals, IssueHandoffs, MoveIssueDialog, StagePicker, TeamPicker } from './studio/IssueStudio';
@@ -85,6 +87,7 @@ function TitleEditor({ value, editable, onSave }: { value: string; editable: boo
   };
   return (
     <textarea
+      aria-label="Issue title"
       value={draft ?? value}
       rows={1}
       maxLength={255}
@@ -108,6 +111,7 @@ function Description({ issue, config, editable, onSave, saving }: {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<TiptapDoc | null>(issue.descriptionJson);
   const empty = isDocEmpty(issue.descriptionJson);
+  usePresenceFlag(config.id, issue.number, 'editing', editing);
   const start = () => { setDraft(issue.descriptionJson); setEditing(true); };
   const save = async () => {
     await onSave(isDocEmpty(draft) ? null : draft);
@@ -547,6 +551,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         <Prop label="Components"><ComponentsPicker config={config} value={issue.componentIds} onChange={(componentIds) => set({ componentIds })} bare disabled={!editable} /></Prop>
       )}
       <CustomFieldsGroup pid={pid} num={num} typeKey={type?.key} config={config} editable={editable} />
+      {type?.key === 'BUG' && <DefectPanel pid={pid} num={num} editable={editable} />}
       <TimeTrackingBlock pid={pid} issue={issue} config={config} />
       <DevelopmentPanel pid={pid} num={num} issueKey={lk.issueKey(num)} />
       <div className="mt-4 space-y-1 border-t border-[var(--w-border)] pt-3 text-[12px] text-[var(--w-text-3)]">
@@ -653,6 +658,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           <div className={cn('min-w-0 flex-1 space-y-7', variant === 'page' && 'max-w-[820px]')}>
             <TitleEditor value={issue.title} editable={editable} onSave={(title) => set({ title })} />
             <IssueClientShare config={config} pid={pid} issue={issue} />
+            <IssuePresenceStrip pid={pid} num={issue.number} enabled={config.role !== 'CLIENT'} />
             <div className="xl:hidden">{variant === 'drawer' && properties}</div>
             {variant === 'page' && (
               // Dưới lg: thuộc tính nằm ngay dưới tiêu đề (không bị đẩy xuống sau mọi bình luận).

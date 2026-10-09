@@ -32,6 +32,16 @@ export function aliasDesktop(goc: string): Record<string, string> {
      * Chúng import theo `@/...`, nên alias này là thứ duy nhất cần để chúng
      * biên dịch được ở đây.
      */
+    /**
+     * `@/lib/og/*` của web chỉ chạy ở máy chủ (node:fs, next/headers) — app không dựng ảnh OG.
+     * PHẢI đứng TRƯỚC `@` (alias khớp theo thứ tự). Xem `src/renderer/shims/web-og.ts`.
+     */
+    // Liệt kê TỪNG tệp: alias chuỗi thay TIỀN TỐ, `'@/lib/og'` sẽ biến `@/lib/og/og` thành `<shim>/og`.
+    '@/lib/og/og': o('src/renderer/shims/web-og.ts'),
+    '@/lib/og/siteCards': o('src/renderer/shims/web-og.ts'),
+    '@/lib/og/ctWorkCards': o('src/renderer/shims/web-og.ts'),
+    '@/lib/og/workMeta': o('src/renderer/shims/web-og.ts'),
+    '@/lib/og/pickImage': o('src/renderer/shims/web-og.ts'),
     '@': path.resolve(goc, '../frontend/src'),
 
     /**

@@ -410,7 +410,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   interview_generate: 'claude-sonnet-5',
 
   language_tutor: 'claude-sonnet-5',
-  language_bulk: 'gpt-5.4-mini',
+  language_bulk: 'gpt-6-sol',
 
   // Gia sư LAB211 (giảng đề + chat hỏi tiếp + vấn đáp + đối chiếu code) chạy
   // model MẠNH NHẤT theo yêu cầu: hiểu đề + 4 tính chất OOP + review code cần độ
@@ -419,7 +419,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // codeLab.explain/coach.service ĐÃ truyền purpose:'codelab_coach' để vào đây;
   // codelab_bulk (sinh bài hàng loạt, chạy nền) vẫn giữ model rẻ.
   codelab_coach: 'claude-opus-4-8',
-  codelab_bulk: 'gpt-5.4-mini',
+  codelab_bulk: 'gpt-6-sol',
   // Gia sư Academy (hỏi trong từng bài học): chat NHỎ (≤4000 token) nên Opus 4.8
   // KHÔNG dính rate-limit như bản giảng dài — cùng lý do codelab_coach chạy Opus.
   course_tutor: 'claude-opus-4-8',
@@ -446,7 +446,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * Vặn bằng `LLM_MODEL_WORK_ASSISTANT` / `LLM_MODEL_WORK_DIGEST`.
    */
   work_assistant: 'claude-sonnet-5',
-  work_digest: 'gpt-5.4-mini',
+  work_digest: 'gpt-6-sol',
   /**
    * CT Work đợt 3C (09/10/2026) — agent BUILTIN: vòng lặp ≤ 12 bước, mỗi bước model trả JSON {call|done}, mã chạy lệnh
    * của registry. Việc này chạy NỀN (không ai ngồi chờ) và nhân theo số bước ⇒ model RẺ mà gọi lệnh ĐÚNG THAM SỐ.
@@ -536,7 +536,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   cv_parse: 'gpt-6-sol',
 
   exam_grade: 'claude-sonnet-5',
-  exphub_doc: 'gpt-5.4-mini',
+  exphub_doc: 'gpt-6-sol',
   /**
    * OCR đề thi lấy model MẠNH NHẤT, không hạ để tiết kiệm.
    *
@@ -545,7 +545,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * thi sai là lỗ.
    */
   doc_ocr: 'gpt-6-sol',
-  news_bulletin: 'gpt-5.4-mini',
+  news_bulletin: 'gpt-6-sol',
   /**
    * Xem lại kế hoạch trong ngày. Model RẺ NHẤT, có chủ ý.
    *
@@ -557,7 +557,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * Thấy lời khuyên nhạt thì vặn bằng env, không cần deploy:
    * `LLM_MODEL_PLAN_REVIEW=claude-sonnet-4-6`.
    */
-  plan_review: 'gpt-5.4-mini',
+  plan_review: 'gpt-6-sol',
   /**
    * Robot Maker Lab khi đi CỔNG (máy nhà chết, ghim 'cong', hay câu khó ở chế
    * độ tự động — xem `makerlab/chonNao.ts`). Trước là `gpt-5.4-mini`, và

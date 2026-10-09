@@ -45,7 +45,9 @@ vi.mock('@/lib/api', () => {
     defaults: { baseURL: '', headers: { common: {} } },
     interceptors: { request: { use: () => 0 }, response: { use: () => 0 } },
   };
-  return { default: api, api };
+  // WorkShell (i18n CT Work) đọc ngôn ngữ đã chọn qua preferencesApi — treo như các lệnh khác.
+  const preferencesApi = { get: treo, update: treo };
+  return { default: api, api, preferencesApi };
 });
 
 vi.mock('@/lib/socket', () => ({

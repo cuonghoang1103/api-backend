@@ -103,7 +103,7 @@ const routeOnly = (path: string) => path.replace(/\?.*$/, '');
 
 const exportFile = defineTool({
   name: 'export_file', title: 'Get a download link', group: 'export',
-  description: 'Returns a download link for a file CT Work generates in the official FPT templates: unit_test / integration_test / system_test (Reports 5.1–5.3, Excel), project_tracking (variant SWP391 | SEP490 | SWP391_T1 | ISSUES), weekly_report, ai_usage, wbs, page_docx / page_pdf (one Docs page as Word or PDF), rtm (traceability matrix, Excel), report3_docx / report3_pdf (Report 3 SRS from the structured requirements), final_docx / final_pdf (Report 7 Final). The link needs the same login (web cookie, or Authorization: Bearer <token>).',
+  description: 'Returns a download link for a file CT Work generates in the official FPT templates: unit_test / integration_test / system_test (Reports 5.1–5.3, Excel), project_tracking (variant SWP391 | SEP490 | SWP391_T1 | ISSUES), weekly_report, ai_usage, wbs, page_docx / page_pdf (one Docs page as Word or PDF), rtm (traceability matrix, Excel), report3_docx / report3_pdf (Report 3 SRS from the structured requirements), final_docx / final_pdf (Report 7 Final). The link needs the same login (web cookie, or Authorization: Bearer <token>). LIMITATION of page_docx / page_pdf: Mermaid diagram blocks come out as their source code with a caption, not as pictures (the server cannot render Mermaid); Excalidraw diagrams and uploaded images are pictures. Tell the user to export from the page in the web app (Export → Word/PDF) when they need the Mermaid diagrams drawn.',
   write: false,
   input: z.object({
     project: projectArg, kind: z.enum(EXPORT_KINDS),

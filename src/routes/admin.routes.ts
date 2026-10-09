@@ -739,7 +739,22 @@ router.delete('/users/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
     }
 
     // Cascade deletes via Prisma relations (UserRole, ChatSession, MusicHistory, etc.)
-    await prisma.user.delete({ where: { id } });
+    try {
+      await prisma.user.delete({ where: { id } });
+    } catch (e) {
+      // Lưới đỡ (QA 10/10, P2-2): một khoá ngoại RESTRICT còn sót đâu đó (dữ liệu người này đang được bảng khác giữ)
+      // trước đây nổ thành 500 trần. Báo 409 rõ ràng thay vì để admin đoán; KHÔNG tự xoá dây chuyền thứ đang được giữ.
+      if ((e as { code?: string }).code === 'P2003') {
+        const field = String((e as { meta?: { field_name?: string } }).meta?.field_name ?? '');
+        res.status(409).json({
+          success: false,
+          message: `Không thể xóa tài khoản: dữ liệu của người này đang được bảng khác tham chiếu${field ? ` (${field})` : ''}. Hãy chuyển/xử lý dữ liệu đó trước, hoặc vô hiệu hoá tài khoản thay vì xoá.`,
+          code: 'USER_DELETE_REFERENCED',
+        });
+        return;
+      }
+      throw e;
+    }
     res.json({ success: true, message: 'User deleted permanently' });
   } catch (error) { next(error); }
 });

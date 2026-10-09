@@ -17,7 +17,9 @@ import { PrismaClient } from '@prisma/client';
 export const BASE = (process.env.E2E_BASE_URL || 'http://localhost:3000').replace(/\/+$/, '');
 export const HEADED = process.env.E2E_HEADED === '1';
 export const SHOTS = process.env.E2E_SHOTS_DIR || '';
-export const tag = `e2e${Date.now().toString(36)}`;
+// Mili-giây + số ngẫu nhiên: node --test chạy mỗi tệp spec trong một tiến trình riêng, hai tiến trình khởi động cùng
+// mili-giây từng sinh trùng tag ⇒ trùng slug không gian ⇒ 409 "workspace URL is taken" (QA 10/10, P2-1c).
+export const tag = `e2e${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 export const PASSWORD = 'E2e-Test-Pass-2026!';
 
 const host = new URL(BASE).hostname;
@@ -82,7 +84,9 @@ export async function registerUser(ctx: BrowserContext, name: string): Promise<E
   const email = `${username}@e2e.local`;
   const r = await api(ctx, 'POST', '/auth/register', { username, email, password: PASSWORD, fullName: `E2E ${name}` });
   if (r.status !== 201) throw new Error(`register ${name}: ${r.status} ${JSON.stringify(r.raw).slice(0, 300)}`);
-  const u = await prisma().user.update({ where: { email }, data: { emailVerified: true, emailVerifiedAt: new Date() }, select: { id: true } });
+  // Đặt sẵn `work.locale = en` (i18n GĐ1): không có nó, hộp "Tiếng Việt hay English?" lần đầu phủ toàn trang
+  // (`fixed inset-0`) và chặn mọi click của spec (QA 10/10, P2-1a). Các spec khớp nhãn tiếng Anh.
+  const u = await prisma().user.update({ where: { email }, data: { emailVerified: true, emailVerifiedAt: new Date(), preferences: { work: { locale: 'en' } } }, select: { id: true } });
   createdUsers.push(u.id);
   await ctx.clearCookies();
   return { id: u.id, username, email };
@@ -111,6 +115,8 @@ export async function userSession(browser: Browser, name: string) {
   const ctx = await newContext(browser);
   const user = await registerUser(ctx, name);
   const page = await ctx.newPage();
+  // Lưới đỡ thứ hai: nếu hộp chọn ngôn ngữ lần đầu vẫn hiện (vd người dùng không tạo qua registerUser) thì chọn English.
+  await page.addLocatorHandler(page.locator('[role="dialog"] button[lang="en"]'), async (b) => { await b.click(); });
   await loginUi(page, user);
   return { ctx, page, user };
 }

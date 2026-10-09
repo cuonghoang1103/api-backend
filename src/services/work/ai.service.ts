@@ -1006,8 +1006,10 @@ export async function insights(userId: number, projectId: number) {
   const sprintEnd = activeSprints.map((s) => s.endAt?.getTime() ?? 0).reduce((a, b) => Math.max(a, b), 0);
   const daysLeft = workingDaysLeft(new Date(now), new Date(activeSprints.length ? (sprintEnd > now ? sprintEnd : now) : windowEnd - day));
   const loadScope = activeSprints.length
-    ? { kind: 'sprint' as const, label: `active sprint ${activeSprints.map((s) => `"${s.name}"`).join(', ')}`, workingDaysLeft: daysLeft }
-    : { kind: 'window' as const, label: `in progress or due in the next ${LOAD_WINDOW_DAYS} days`, workingDaysLeft: daysLeft };
+    // `label` là tiếng Anh cho prompt AI. Giao diện dịch từ `sprints`/`windowDays` (QA 10/10 P2-3: ghép thẳng `label`
+    // vào câu tiếng Việt từng ra "Tính việc in progress or due in the next 14 days").
+    ? { kind: 'sprint' as const, label: `active sprint ${activeSprints.map((s) => `"${s.name}"`).join(', ')}`, sprints: activeSprints.map((s) => s.name), workingDaysLeft: daysLeft }
+    : { kind: 'window' as const, label: `in progress or due in the next ${LOAD_WINDOW_DAYS} days`, windowDays: LOAD_WINDOW_DAYS, workingDaysLeft: daysLeft };
   const team = members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER');
   const caps = new Map((await prisma.workProjectMember.findMany({ where: { projectId, userId: { in: team.map((m) => m.id) } }, select: { userId: true, capacityHours: true } })).map((c) => [c.userId, c.capacityHours]));
   const loads = computeLoads({

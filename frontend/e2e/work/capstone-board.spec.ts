@@ -54,15 +54,24 @@ describe('CT Work E2E — Capstone: dự án mẫu → thẻ → kéo sang Done'
     await cd.locator('button.w-btn-primary', { hasText: /^Create/ }).click();
     await cd.waitFor({ state: 'detached' }).catch(() => undefined);
     await page.goto(`/work/${ws.slug}/CAPE/board`);
+    // Chờ mạng yên: thanh "Getting started" và các khối khác hiện SAU khi tải ⇒ đẩy board xuống; đo toạ độ trước lúc đó
+    // thì chuột thả trượt (QA 10/10).
+    await page.waitForLoadState('networkidle').catch(() => undefined);
     const card = page.locator('[aria-roledescription="draggable issue card"]', { hasText: 'E2E drag me to Done' });
     await card.waitFor();
+    // Mẫu Capstone gieo sẵn 16 thẻ To Do ⇒ thẻ mới nằm dưới đáy cột, ngoài khung nhìn; kéo từ toạ độ ngoài màn hình
+    // chỉ bôi đen chữ (QA 10/10, P2-1b). Cuộn thẻ vào khung nhìn rồi mới đo toạ độ.
+    await card.scrollIntoViewIfNeeded();
     await shot(page, 'cap-board-before');
 
     // Cột Done rỗng có ô đích "Drop finished work here".
     const doneCol = page.getByText('Drop finished work here');
     const cb = (await card.boundingBox())!;
     const db = (await doneCol.boundingBox())!;
-    await dragTo(page, { x: cb.x + cb.width / 2, y: cb.y + 12 }, { x: db.x + db.width / 2, y: db.y + db.height / 2 });
+    // Thẻ mới nằm cuối cột To Do (dưới 16 thẻ mẫu) còn ô "Drop finished work here" ở ĐẦU cột Done ⇒ không thể cùng nằm
+    // trong khung nhìn. Thả vào THÂN cột Done ngang hàng thẻ (cột kéo dài hết chiều cao board, cả cột là vùng thả).
+    const to = db.y >= 0 && db.y + db.height <= 900 ? { x: db.x + db.width / 2, y: db.y + db.height / 2 } : { x: db.x + db.width / 2, y: cb.y + cb.height / 2 };
+    await dragTo(page, { x: cb.x + cb.width / 2, y: cb.y + 12 }, to);
     await page.waitForTimeout(1500);
     await shot(page, 'cap-board-after');
 

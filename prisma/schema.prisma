@@ -14049,7 +14049,11 @@ model WorkClassStudent {
 /// label, description }] }] — trọng số cộng 100. scaleMax = thang điểm (10).
 model WorkRubric {
   id          Int       @id @default(autoincrement())
-  ownerId     Int       @map("owner_id")
+  /// Người tạo. NULL = tài khoản người tạo đã bị xoá (QA 10/10, P2-2): rubric MỒ CÔI vẫn sống vì `WorkGrade.rubric`
+  /// là Restrict — xoá rubric theo người (Cascade như trước) làm admin xoá giảng viên ra P2003, còn đổi điểm sang
+  /// Cascade thì mất ĐIỂM ĐÃ CÔNG BỐ của sinh viên. SET NULL giữ nguyên điểm + lịch sử; rubric mồ côi không ai sửa
+  /// được (mọi lối sửa lọc `ownerId = userId`) nhưng vẫn hiện kèm điểm và giảng viên khác của dự án vẫn chấm tiếp được.
+  ownerId     Int?      @map("owner_id")
   name        String    @db.VarChar(120)
   subject     String?   @db.VarChar(16)
   description String?   @db.Text
@@ -14060,7 +14064,7 @@ model WorkRubric {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  owner  User        @relation("WorkRubricOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  owner  User?       @relation("WorkRubricOwner", fields: [ownerId], references: [id], onDelete: SetNull)
   grades WorkGrade[]
 
   @@index([ownerId], map: "idx_work_rubric_owner")

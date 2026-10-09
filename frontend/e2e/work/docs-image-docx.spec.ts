@@ -25,10 +25,16 @@ describe('CT Work E2E — Docs: chèn ảnh + xuất .docx', () => {
     const num = pg.data.number;
 
     await page.goto(`/work/${ws.slug}/DOC/docs/${num}`);
-    const editor = page.locator('.ProseMirror[contenteditable="true"]').first();
+    // Trình soạn của TRANG là ProseMirror đầu tiên trong doc-view; nó chỉ bật contenteditable sau khi phiên đồng soạn
+    // (K-3b) nối xong. Chọn `.ProseMirror[contenteditable="true"]` ngay lúc tải từng vớ nhầm ô BÌNH LUẬN bên dưới (QA 10/10)
+    // ⇒ chờ đúng trình soạn của trang bật lên rồi mới gõ.
+    const editor = page.locator('[data-testid="doc-view"] .ProseMirror').first();
+    await editor.waitFor();
+    for (let i = 0; i < 60 && (await editor.getAttribute('contenteditable')) !== 'true'; i++) await page.waitForTimeout(500);
+    assert.equal(await editor.getAttribute('contenteditable'), 'true', 'trình soạn của trang bật chỉnh sửa');
     await editor.click();
     await page.keyboard.type('Context diagram below.');
-    await page.setInputFiles('[data-testid="rich-editor-image-input"]', { name: 'context.png', mimeType: 'image/png', buffer: tinyPng() });
+    await page.locator('[data-testid="rich-editor-image-input"]').first().setInputFiles({ name: 'context.png', mimeType: 'image/png', buffer: tinyPng() });
     const img = editor.locator(`img[src^="/api/v1/work/projects/${pid}/images/"]`);
     await img.waitFor({ timeout: 30_000 });
     // Ảnh tải được qua proxy (không phải ảnh hỏng).

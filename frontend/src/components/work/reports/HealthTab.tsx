@@ -179,7 +179,7 @@ function Workload({ d, unit }: { d: InsightsData; unit: string }) {
   return (
     <Card>
       <SectionTitle right={over.size ? <span className="text-[12px] font-medium text-[var(--w-orange)]">{wt('rep.nOverloaded', { n: over.size })}</span> : null}>{wt('rep.workload')}</SectionTitle>
-      {d.loadScope && <p className="-mt-1 mb-2 text-[12px] text-[var(--w-text-3)]">{wt('rep.countingWork', { where: d.loadScope.kind === 'sprint' ? wt('rep.inThe', { s: d.loadScope.label }) : d.loadScope.label, count: d.loadScope.workingDaysLeft })}</p>}
+      {d.loadScope && <p className="-mt-1 mb-2 text-[12px] text-[var(--w-text-3)]">{wt('rep.countingWork', { where: d.loadScope.kind === 'sprint' ? wt('rep.inActiveSprint', { s: (d.loadScope.sprints ?? []).map((n) => `“${n}”`).join(', ') || d.loadScope.label }) : wt('rep.inProgressOrDue', { days: d.loadScope.windowDays ?? 14 }), count: d.loadScope.workingDaysLeft })}</p>}
       {!loads.length ? (
         <div className="flex items-center gap-2 text-[13px] text-[var(--w-text-2)]">
           <CheckCircle2 size={14} className="shrink-0 text-[var(--w-green)]" /> {wt('rep.noOpenAssigned')}

@@ -59,6 +59,7 @@ export const dev: Strings<typeof En> = {
   ep10: 'Ghi công theo phút (1–1440). Tuỳ chọn: startedAt (ngày giờ ISO), note, remaining ("auto", "keep" hoặc số phút).',
   ep11: 'Tải thẻ dạng csv, xlsx hoặc pdf, có thể lọc bằng JQL.',
   ep12: 'typeId, title, priority (1 Cao nhất … 5 Thấp nhất), assigneeId, statusId, sprintId, parentId, storyPoints, dueDate (YYYY-MM-DD), labelIds',
+  ep13: 'Tải một trang Docs dạng Word hoặc PDF (giống lệnh export_file, kind page_docx / page_pdf). Giới hạn: sơ đồ Mermaid được xuất dưới dạng MÃ NGUỒN kèm chú thích, không phải ảnh — máy chủ không có trình duyệt để vẽ. Muốn có ảnh: xuất từ trang trên web (Xuất → Word/PDF), hoặc vẽ sơ đồ bằng Excalidraw — ảnh PNG xem trước đã lưu sẽ được xuất thành ảnh.',
   note13: 'MCP từ xa qua HTTP. Cursor đọc ${env:CTW_TOKEN} từ biến môi trường — hoặc dán token vào.',
   note14: 'httpUrl = HTTP streamable. Gemini CLI lấy $CTW_TOKEN từ biến môi trường. Kiểm bằng /mcp trong gemini.',
   note15: 'Codex chạy cầu nối stdio như một server cục bộ. Kiểm bằng `codex mcp list`, rồi nhờ Codex gọi fpt_unit_list.',

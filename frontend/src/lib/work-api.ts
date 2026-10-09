@@ -577,7 +577,7 @@ export interface InsightsData {
   overdue: InsightIssue[]; dueSoon: InsightIssue[]; stale: Array<InsightIssue & { idleDays: number }>; unassignedUrgent: InsightIssue[];
   overloaded: Array<InsightLoad>; loads: Array<InsightLoad>;
   /** CTW-9: phạm vi tính tải (sprint đang chạy, hoặc việc đang làm/có hạn 14 ngày tới) — tuỳ chọn cho backend cũ. */
-  loadScope?: { kind: 'sprint' | 'window'; label: string; workingDaysLeft: number };
+  loadScope?: { kind: 'sprint' | 'window'; label: string; sprints?: string[]; windowDays?: number; workingDaysLeft: number };
   sprintRisk: null | {
     sprint: string; remaining: number; daysLeft: number; neededPerDay: number; recentPerDay: number; atRisk: boolean;
     // Thêm 23/09 (sprintPace.ts) — tuỳ chọn để tương thích bản backend cũ.
@@ -1171,7 +1171,10 @@ export const workApi = {
 
 /** Thông điệp lỗi đọc được từ lỗi axios. */
 export function workError(err: unknown, fallback?: string): string {
-  const e = err as { response?: { status?: number; data?: { error?: string; message?: string; code?: string } }; request?: unknown; code?: string; message?: string };
+  const e = err as { response?: { status?: number; data?: { error?: string; message?: string; code?: string; data?: { en?: unknown; vi?: unknown } } }; request?: unknown; code?: string; message?: string };
+  // Máy chủ gửi sẵn câu song ngữ (vd 422 WORK_DIAGRAM_NO_SOURCE: message = "EN / VI", data.en + data.vi) ⇒ lấy đúng một vế.
+  const both = e?.response?.data?.data;
+  if (both && typeof both.en === 'string' && typeof both.vi === 'string') return currentWorkLocale() === 'vi' ? both.vi : both.en;
   const server = e?.response?.data?.error || e?.response?.data?.message;
   // i18n 10/10: câu theo ngôn ngữ CT Work cho các mã/câu hay gặp (components/work/i18n/errors.ts). Máy chủ không đổi.
   const network = !e?.response && (e?.code === 'ERR_NETWORK' || !!e?.request);

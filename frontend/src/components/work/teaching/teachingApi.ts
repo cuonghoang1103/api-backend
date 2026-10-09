@@ -45,7 +45,7 @@ export interface RubricLevel { score: number; label: string; description: string
 export interface RubricCriterion { key: string; name: string; weight: number; description: string; levels: RubricLevel[] }
 export interface Rubric {
   id: number; name: string; subject: string | null; description: string | null; criteria: RubricCriterion[]; scaleMax: number;
-  templateKey: string | null; archivedAt: string | null; createdAt: string; updatedAt: string; ownerId: number; gradeCount?: number;
+  templateKey: string | null; archivedAt: string | null; createdAt: string; updatedAt: string; /** null = tài khoản người tạo đã bị xoá (rubric mồ côi, điểm vẫn giữ). */ ownerId: number | null; gradeCount?: number;
 }
 export interface RubricTemplate { key: string; name: string; subject: string; description: string; milestones: string[]; criteria: RubricCriterion[]; scaleMax: number }
 export interface RubricInput { templateKey?: string; name?: string; subject?: string | null; description?: string | null; criteria?: Array<Partial<RubricCriterion> & { name: string; weight: number }>; scaleMax?: number }

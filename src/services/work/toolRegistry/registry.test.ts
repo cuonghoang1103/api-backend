@@ -84,6 +84,11 @@ describe('export_file: tuyến tải đúng mẫu', async () => {
     assert.throws(() => exportRoute('page_docx', {}), /page/);
     assert.equal(agentRouteAllowed('GET', '/export/project-tracking'), false);
     assert.equal(agentRouteAllowed('GET', '/fpt-tests/export'), true);
+  });  it('mô tả export_file nói rõ giới hạn Mermaid khi xuất page_docx/page_pdf (QA 10/10 P2-6)', async () => {
+    const r = await import('./index.js');
+    const d = r.commandByName('export_file')!.description;
+    assert.match(d, /Mermaid diagram blocks come out as their source code/);
+    assert.match(d, /export from the page in the web app/);
   });
 });
 

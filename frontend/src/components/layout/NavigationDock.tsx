@@ -16,6 +16,7 @@ import {
   AudioLines, ScanText, Terminal, Target
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
+import { adminCheckUserKey, useAdminCheck } from '@/lib/useAdminCheck';
 import { useAuthStore } from '@/store/authStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
 import { useMusicAccess } from '@/hooks/useMusicAccess';
@@ -247,31 +248,12 @@ export default function NavigationDock() {
   const { user: backendUser, isAuthenticated: isBackendAuth } = useAuthStore();
   const { data: session } = useSession();
   const [mounted, setMounted] = useState(false);
-  const [verifiedAdmin, setVerifiedAdmin] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // Admin check — only for signed-in users; guests can't be admins and
-  // the unconditional call fired a guaranteed-401 on every anonymous
-  // page view (audit 2026-07-05).
-  useEffect(() => {
-    if (!mounted) return;
-    if (!isBackendAuth && !session) return;
-    const verifyAdmin = async () => {
-      try {
-        const res = await fetch('/api/auth/admin-check', { credentials: 'include', cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
-          const isAdmin = (data.data?.roles ?? []).some(
-            (r: string) => (r || '').replace('ROLE_', '').toUpperCase() === 'ADMIN',
-          );
-          setVerifiedAdmin(isAdmin);
-        }
-      } catch {}
-    };
-    verifyAdmin();
-    // isBackendAuth/session in deps so the check re-runs when auth hydrates
-    // after mount (persisted-store rehydration or a fresh login).
-  }, [mounted, isBackendAuth, session]);
+  // Admin check — QA 10/10 P2-5: dùng chung một lượt hỏi với Navbar, nhớ theo người dùng trong phiên (lib/useAdminCheck).
+  // Khách (chưa đăng nhập) ⇒ key null ⇒ không gọi (audit 2026-07-05: từng bắn 401 chắc chắn mỗi lượt xem trang).
+  const adminKey = mounted && (isBackendAuth || session) ? adminCheckUserKey(isBackendAuth ? backendUser : null, session) : { key: null, hint: false };
+  const verifiedAdmin = useAdminCheck(adminKey.key, adminKey.hint);
 
   const isAuthenticated = mounted && (isBackendAuth || !!session);
   const displayUser = mounted

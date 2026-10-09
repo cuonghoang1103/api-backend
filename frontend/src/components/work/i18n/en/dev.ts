@@ -56,6 +56,7 @@ export const dev = {
   ep10: 'Log work in minutes (1–1440). Optional: startedAt (ISO date-time), note, remaining ("auto", "keep" or minutes).',
   ep11: 'Download issues as csv, xlsx or pdf, optionally filtered by JQL.',
   ep12: 'typeId, title, priority (1 Highest … 5 Lowest), assigneeId, statusId, sprintId, parentId, storyPoints, dueDate (YYYY-MM-DD), labelIds',
+  ep13: 'Download one Docs page as Word or PDF (same as the export_file tool, kind page_docx / page_pdf). Limitation: Mermaid diagrams are exported as their source code with a caption, not as pictures — the server has no browser to draw them. For pictures, export from the page in the web app (Export → Word/PDF), or draw the diagram in Excalidraw, whose saved PNG preview is exported as an image.',
   note13: 'Remote MCP over HTTP. Cursor reads ${env:CTW_TOKEN} from your environment — or paste the token instead.',
   note14: 'httpUrl = streamable HTTP. Gemini CLI expands $CTW_TOKEN from the environment. Check with /mcp inside gemini.',
   note15: 'Codex starts the stdio bridge as a local server. Check with `codex mcp list`, then ask Codex to call fpt_unit_list.',

@@ -295,6 +295,11 @@ const ENDPOINTS: Endpoint[] = [
     method: 'GET', path: '/projects/{projectId}/export?format=csv&jql=…', get title() { return wt('dev.ep11'); },
     curl: (b) => `curl -G ${H} -o issues.csv \\\n  --data-urlencode 'format=csv' --data-urlencode 'jql=sprint in openSprints()' \\\n  ${b}/projects/42/export`,
   },
+  {
+    // QA 10/10 P2-6: xuất Docs qua API/MCP in khối Mermaid dạng MÃ (máy chủ không có trình duyệt để vẽ) — ghi rõ ở đây.
+    method: 'GET', path: '/projects/{projectId}/pages/{number}/export.docx', get title() { return wt('dev.ep13'); },
+    curl: (b) => `curl ${H} -o page.docx \\\n  ${b}/projects/42/pages/3/export.docx`,
+  },
 ];
 
 function ApiReference() {

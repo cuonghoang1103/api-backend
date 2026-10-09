@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useChromeAutoHide } from '@/hooks/useChromeAutoHide';
 import { useSession, signOut } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { adminCheckUserKey, useAdminCheck } from '@/lib/useAdminCheck';
 import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import { useMessagingStore } from '@/store/messagingStore';
@@ -133,75 +134,9 @@ export default function Navbar() {
   useEffect(() => { setUserMenuOpen(false); }, [pathname]);
 
   // ── Admin verification ──────────────────────────────────────────────────
-  const [verifiedAdmin, setVerifiedAdmin] = useState(false);
-
-  const verifyAdmin = useCallback(async () => {
-    let cachedAdmin = false;
-    let anyAuthEvidence = false;
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = localStorage.getItem('user');
-        if (stored) {
-          anyAuthEvidence = true;
-          const user = JSON.parse(stored);
-          cachedAdmin = (user?.roles || []).some(
-            (r: string) => (r || '').replace('ROLE_', '').toUpperCase() === 'ADMIN',
-          );
-          if (cachedAdmin) setVerifiedAdmin(true);
-        }
-      } catch {}
-    }
-    // Guests can't be admins — skip the network round-trip entirely
-    // (it fired a guaranteed-401 on every anonymous page view; audit
-    // 2026-07-05). The login/role-updated event below re-invokes this
-    // after sign-in, at which point the store/localStorage are populated.
-    if (!anyAuthEvidence && !useAuthStore.getState().isAuthenticated) {
-      setVerifiedAdmin(false);
-      return;
-    }
-    try {
-      const res = await fetch('/api/auth/admin-check', { credentials: 'include', cache: 'no-store' });
-      if (res.ok) {
-        const data = await res.json();
-        const isAdmin = (data.data?.roles ?? []).some(
-          (r: string) => (r || '').replace('ROLE_', '').toUpperCase() === 'ADMIN',
-        );
-        setVerifiedAdmin(isAdmin);
-      } else {
-        setVerifiedAdmin(cachedAdmin);
-      }
-    } catch {
-      setVerifiedAdmin(cachedAdmin);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    verifyAdmin();
-    // isBackendAuth/session in deps: re-run when auth hydrates after mount
-    // (persisted-store rehydration or OAuth session arriving) so admins
-    // still get verified even though the guest short-circuit above bailed
-    // on the very first run.
-  }, [mounted, verifyAdmin, isBackendAuth, session]);
-
-  useEffect(() => {
-    if (!mounted) return;
-    const handler = (e: Event) => {
-      const { action, roles, role } = (e as CustomEvent<{ action?: string; role?: string; roles?: string[] }>).detail ?? {};
-      const isAdmin = role === 'ADMIN' || (roles ?? []).some(
-        (r: string) => (r || '').replace('ROLE_', '').toUpperCase() === 'ADMIN',
-      );
-      if (action === 'login' || action === 'role-updated' || isAdmin) {
-        setTimeout(verifyAdmin, 150);
-      }
-    };
-    window.addEventListener('auth-changed', handler);
-    window.addEventListener('auth-updated', handler as EventListener);
-    return () => {
-      window.removeEventListener('auth-changed', handler);
-      window.removeEventListener('auth-updated', handler as EventListener);
-    };
-  }, [mounted, verifyAdmin]);
+  // QA 10/10 P2-5: một lượt hỏi cho mỗi người dùng mỗi phiên, dùng chung với NavigationDock (lib/useAdminCheck).
+  const adminKey = mounted ? adminCheckUserKey(isBackendAuth ? backendUser : null, session) : { key: null, hint: false };
+  const verifiedAdmin = useAdminCheck(adminKey.key, adminKey.hint);
 
   // ── Auth state ──────────────────────────────────────────────────────────
   const isAuthenticated = mounted && (isBackendAuth || !!session);

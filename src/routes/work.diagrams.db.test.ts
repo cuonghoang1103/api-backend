@@ -240,7 +240,37 @@ describe('CT Work — Diagram Studio + AI vẽ sơ đồ (HTTP + DB thật)', { 
     assert.match(erd.data.diagram.source, /Lab \|\|--o\{ Booking/);
     assert.equal(calls, 0);
     repo._setRepoForTests(async () => null);
-    assert.equal((await call(staff, 'POST', D('/generate'), { type: 'CLASS' })).status, 400);
+    const cls = await call(staff, 'POST', D('/generate'), { type: 'CLASS' });
+    assert.deepEqual([cls.status, cls.code], [422, 'WORK_DIAGRAM_NO_REPO'], 'chưa có kho mã ⇒ 422 song ngữ');
+    assert.ok(cls.raw.data?.vi && cls.raw.data?.en);
+  });
+
+  // QA 10/10 P2-4: AI vẽ USE_CASE/SEQUENCE/SCREEN_FLOW khi CHƯA có dữ liệu nguồn từng ra sơ đồ rỗng (chỉ khung SYSTEM)
+  // gắn nhãn "AI đề xuất / Nhận". Giờ: 422 WORK_DIAGRAM_NO_SOURCE + câu song ngữ chỉ chỗ thêm, và KHÔNG tạo sơ đồ nào.
+  it('chưa có dữ liệu nguồn ⇒ 422 song ngữ, không tạo sơ đồ rỗng (USE_CASE / SEQUENCE / SCREEN_FLOW / ACTIVITY / feature lạ)', async () => {
+    const e = await call(owner, 'POST', `/workspaces/${wsId}/projects`, { key: 'EMP', name: 'Empty SRS', template: 'CAPSTONE', kind: 'SCHOOL' });
+    assert.equal(e.status, 201, JSON.stringify(e.raw));
+    const ep = e.data.id;
+    const E = (path = '') => `/projects/${ep}/diagrams${path}`;
+    const before = await prisma.workDiagram.count({ where: { projectId: ep } });
+    for (const body of [{ type: 'USE_CASE' }, { type: 'SEQUENCE', useCase: 'UC-01' }, { type: 'SEQUENCE' }, { type: 'SCREEN_FLOW' }, { type: 'ACTIVITY', useCase: 1 }]) {
+      const r = await call(owner, 'POST', E('/generate'), body);
+      assert.deepEqual([r.status, r.code], [422, 'WORK_DIAGRAM_NO_SOURCE'], `${JSON.stringify(body)} ⇒ ${JSON.stringify(r.raw)}`);
+      assert.match(r.raw.data.vi, /Chưa có (use case|màn hình)/);
+      assert.match(r.raw.data.en, /No (use cases|screens) yet/);
+      assert.equal(r.raw.data.fix, 'requirements');
+      assert.ok(r.raw.message.includes(r.raw.data.en) && r.raw.message.includes(r.raw.data.vi), 'message mang cả hai ngôn ngữ cho API/MCP');
+    }
+    // Chỉ có use case còn là ĐỀ XUẤT ⇒ vẫn chưa vẽ (sơ đồ use case bỏ qua đề xuất ⇒ sẽ rỗng).
+    await prisma.workUseCase.create({ data: { projectId: ep, number: 1, name: 'Proposed only', status: 'PROPOSED' } as any });
+    const prop = await call(owner, 'POST', E('/generate'), { type: 'USE_CASE' });
+    assert.deepEqual([prop.status, prop.code], [422, 'WORK_DIAGRAM_NO_SOURCE']);
+    assert.match(prop.raw.data.vi, /đề xuất/);
+    assert.equal(await prisma.workDiagram.count({ where: { projectId: ep } }), before, 'không tạo sơ đồ nào');
+    // Dự án có dữ liệu nhưng lọc tính năng không khớp ⇒ 422 thay vì sơ đồ trống.
+    const nf = await call(staff, 'POST', D('/generate'), { type: 'USE_CASE', feature: 'Nope' });
+    assert.deepEqual([nf.status, nf.code], [422, 'WORK_DIAGRAM_NO_SOURCE']);
+    assert.match(nf.raw.data.vi, /"Nope"/);
   });
 
   it('nhập draw.io + Excalidraw', async () => {
@@ -308,6 +338,9 @@ describe('CT Work — Diagram Studio + AI vẽ sơ đồ (HTTP + DB thật)', { 
     const one = await r.runForPerson(viewer.id, pid, 'diagram_get', { diagram: `D-${seq}` }, 'read');
     assert.match(one.text, /sequenceDiagram/);
     await assert.rejects(r.runForPerson(staff.id, pid, 'diagram_generate', { type: 'USE_CASE' }, 'read'), /propose it as an action/);
+    // Không màn hình ⇒ lệnh báo thiếu nguồn (không đề xuất sơ đồ rỗng); thêm một màn hình rồi mới đề xuất được.
+    await assert.rejects(r.runForPerson(staff.id, pid, 'diagram_generate', { type: 'SCREEN_FLOW' }, 'apply'), /No screens yet/);
+    assert.equal((await call(staff, 'POST', `/projects/${pid}/srs/screens`, { name: 'Booking page' })).status, 201);
     const ap = await r.runForPerson(staff.id, pid, 'diagram_generate', { type: 'SCREEN_FLOW' }, 'apply');
     assert.match(ap.text, /proposed/);
   });

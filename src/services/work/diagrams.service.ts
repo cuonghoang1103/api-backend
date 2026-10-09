@@ -669,6 +669,16 @@ async function dataDictionary(projectId: number, access: ProjectAccess): Promise
   return null;
 }
 
+/**
+ * QA 10/10 P2-4: thiếu dữ liệu nguồn để dựng sơ đồ ⇒ 422 + câu SONG NGỮ chỉ chỗ thêm dữ liệu, KHÔNG tạo sơ đồ rỗng
+ * (trước đây USE_CASE trên dự án chưa có use case vẫn ra một khung SYSTEM trống gắn nhãn "AI đề xuất / Nhận").
+ * `message` = "EN / VI" cho API/MCP/agent đọc thẳng; `data.en` / `data.vi` để giao diện chọn đúng một ngôn ngữ;
+ * `data.fix` = tab/trang cần mở (requirements | workflow | repo | docs).
+ */
+export function noDiagramSource(en: string, vi: string, fix?: 'requirements' | 'workflow' | 'repo' | 'docs', code = 'WORK_DIAGRAM_NO_SOURCE'): AppError {
+  return new AppError(`${en} / ${vi}`, 422, code, { en, vi, ...(fix ? { fix } : {}) });
+}
+
 async function systemNameOf(projectId: number) {
   const p = await prisma.workProject.findUniqueOrThrow({ where: { id: projectId }, select: { name: true, key: true } });
   return p.name.trim().slice(0, 60) || p.key;
@@ -683,6 +693,7 @@ async function buildFor(userId: number, projectId: number, ctx: DiagramCtx, inpu
   const plain = (built: BuiltDiagram, more: Partial<Generated> = {}): Generated => ({ built, check: finalize(built), usedAi: false, model: null, repaired: false, useCaseId: null, issueId: null, ...more });
 
   const needUc = () => {
+    if (!srs.useCases.length) throw noDiagramSource('No use cases yet — add them on Requirements › Use cases first, then draw this diagram.', 'Chưa có use case — thêm ở Requirements › Use cases trước rồi hãy vẽ sơ đồ này.', 'requirements');
     const n = refNumber(input.useCase, 'UC');
     if (!n) throw new BadRequestError('Choose a use case (e.g. "UC-05") for this diagram', 'VALIDATION_ERROR');
     const uc = srs.useCases.find((u) => u.number === n);
@@ -691,8 +702,27 @@ async function buildFor(userId: number, projectId: number, ctx: DiagramCtx, inpu
   };
 
   switch (input.type) {
-    case 'USE_CASE': return plain(useCaseDiagram({ actors: srs.actors, useCases: srs.useCases, systemName, feature: input.feature }));
-    case 'SCREEN_FLOW': return plain(screenFlowDiagram({ screens: srs.screens, links: srs.links, systemName, feature: input.feature }));
+    case 'USE_CASE': {
+      const live = srs.useCases.filter((u) => u.status !== 'PROPOSED');
+      if (!live.length) {
+        throw noDiagramSource(
+          srs.useCases.length ? 'Every use case is still a proposal — accept at least one on Requirements › Use cases first.' : 'No use cases yet — add actors and use cases on Requirements › Use cases first.',
+          srs.useCases.length ? 'Mọi use case vẫn đang là đề xuất — nhận ít nhất một cái ở Requirements › Use cases trước.' : 'Chưa có use case — thêm actor và use case ở Requirements › Use cases trước.',
+          'requirements',
+        );
+      }
+      if (input.feature && !live.some((u) => (u.feature ?? '') === input.feature)) {
+        throw noDiagramSource(`No use case belongs to feature "${input.feature}" — pick another feature or tag use cases with it on Requirements.`, `Không có use case nào thuộc tính năng "${input.feature}" — chọn tính năng khác hoặc gắn tính năng cho use case ở Requirements.`, 'requirements');
+      }
+      return plain(useCaseDiagram({ actors: srs.actors, useCases: srs.useCases, systemName, feature: input.feature }));
+    }
+    case 'SCREEN_FLOW': {
+      if (!srs.screens.length) throw noDiagramSource('No screens yet — add them on Requirements › Screens flow first.', 'Chưa có màn hình nào — thêm ở Requirements › Screens flow trước.', 'requirements');
+      if (input.feature && !srs.screens.some((x) => (x.feature ?? '') === input.feature)) {
+        throw noDiagramSource(`No screen belongs to feature "${input.feature}" — pick another feature or tag screens with it on Requirements.`, `Không có màn hình nào thuộc tính năng "${input.feature}" — chọn tính năng khác hoặc gắn tính năng cho màn hình ở Requirements.`, 'requirements');
+      }
+      return plain(screenFlowDiagram({ screens: srs.screens, links: srs.links, systemName, feature: input.feature }));
+    }
     case 'ACTIVITY': {
       if (input.useCase) {
         const uc = needUc();
@@ -709,13 +739,16 @@ async function buildFor(userId: number, projectId: number, ctx: DiagramCtx, inpu
       const entity = input.entities?.[0]?.trim();
       if (!entity || input.source === 'workflow') return plain(stateFromWorkflow(await defaultWorkflow(projectId)));
       const { handle, error } = await repoFor(projectId);
-      if (!handle) throw new BadRequestError(`To draw the states of "${entity}", ${error}`, 'WORK_DIAGRAM_NO_REPO');
+      if (!handle) throw noDiagramSource(`To draw the states of "${entity}", ${error}`, `Để vẽ trạng thái của "${entity}" cần kho mã của dự án (${error}) — kết nối GitHub/GitLab ở Cài đặt dự án, hoặc vẽ theo workflow.`, 'repo', 'WORK_DIAGRAM_NO_REPO');
       const prismaFiles = await readMany(handle, findPrisma(handle.paths), 3);
       const javaFiles = prismaFiles.length ? [] : await readMany(handle, findEntityCandidates(handle.paths), 80);
       const enums = [...prismaFiles.flatMap((f) => parsePrismaSchema(f.text, f.path).enums), ...parseJpaEntities(javaFiles).enums];
       const want = entity.toLowerCase().replace(/status$/, '');
       const en = enums.find((e) => e.name.toLowerCase() === entity.toLowerCase()) ?? enums.find((e) => e.name.toLowerCase() === `${want}status`) ?? enums.find((e) => e.name.toLowerCase().startsWith(want) && /status|state/i.test(e.name));
-      if (!en) throw new BadRequestError(`No enum like "${entity}Status" found in ${handle.repo} (${enums.map((e) => e.name).slice(0, 10).join(', ') || 'no enums'})`, 'WORK_DIAGRAM_NO_SOURCE');
+      if (!en) {
+        const seen = enums.map((e) => e.name).slice(0, 10).join(', ');
+        throw noDiagramSource(`No enum like "${entity}Status" found in ${handle.repo} (${seen || 'no enums'})`, `Không thấy enum kiểu "${entity}Status" trong ${handle.repo} (${seen || 'không có enum nào'}) — kiểm tra tên thực thể.`, 'repo');
+      }
       const skeleton = stateSkeleton({ entity: en.name, values: en.values, file: `${en.file ?? handle.repo}` });
       if (!aiReady()) return plain({ ...skeleton, notes: ['AI is not available — only the states are drawn; add the transitions by hand.'] });
       const ask = await askerFor(userId, ctx);
@@ -802,15 +835,15 @@ async function buildFor(userId: number, projectId: number, ctx: DiagramCtx, inpu
           return { built: r.result.built, check: r.result.c, usedAi: true, model: r.model, repaired: r.repaired, useCaseId: null, issueId: null };
         }
       }
-      throw new BadRequestError(`No data model to draw from. Tried — ${tried.join(' · ')}`, 'WORK_DIAGRAM_NO_SOURCE');
+      throw noDiagramSource(`No data model to draw from. Tried — ${tried.join(' · ')}`, 'Chưa có mô hình dữ liệu để vẽ ERD — kết nối kho mã (schema.prisma / SQL migration / @Entity), hoặc thêm Data Dictionary, hoặc viết trang Docs mô tả dữ liệu.', 'docs');
     }
     case 'CLASS': {
       const { handle, error } = await repoFor(projectId);
-      if (!handle) throw new BadRequestError(`A class diagram is drawn from the code: ${error}`, 'WORK_DIAGRAM_NO_REPO');
+      if (!handle) throw noDiagramSource(`A class diagram is drawn from the code: ${error}`, `Sơ đồ lớp được dựng từ mã nguồn — chưa có kho mã (${error}). Kết nối GitHub/GitLab ở Cài đặt dự án trước.`, 'repo', 'WORK_DIAGRAM_NO_REPO');
       const filter = input.feature ?? input.entities?.[0] ?? null;
       const files = await readMany(handle, findClassCandidates(handle.paths, filter), 60);
       const classes = parseClasses(files);
-      if (!classes.length) throw new BadRequestError(`No Java/TypeScript classes found in ${handle.repo}${filter ? ` matching "${filter}"` : ''}`, 'WORK_DIAGRAM_NO_SOURCE');
+      if (!classes.length) throw noDiagramSource(`No Java/TypeScript classes found in ${handle.repo}${filter ? ` matching "${filter}"` : ''}`, `Không thấy lớp Java/TypeScript nào trong ${handle.repo}${filter ? ` khớp "${filter}"` : ''}.`, 'repo');
       return plain({ ...classDiagram(classes, { title: input.title?.trim() || `Class diagram${filter ? ` — ${filter}` : ''}`, sourceLabel: `${files.length} file(s) @ ${handle.repo}@${handle.branch}`, filter }), feature: input.feature ?? null });
     }
     case 'DEPLOYMENT':
@@ -834,7 +867,7 @@ async function buildFor(userId: number, projectId: number, ctx: DiagramCtx, inpu
         `System: ${systemName}`,
         corpus.text,
       ].filter(Boolean).join('\n\n');
-      if (!corpus.text && !composeText) throw new BadRequestError('Nothing describes the architecture yet — write Report 4 §1.1 (Software Architecture) or connect a repository with a docker-compose file', 'WORK_DIAGRAM_NO_SOURCE');
+      if (!corpus.text && !composeText) throw noDiagramSource('Nothing describes the architecture yet — write Report 4 §1.1 (Software Architecture) or connect a repository with a docker-compose file', 'Chưa có gì mô tả kiến trúc — viết Report 4 §1.1 (Software Architecture) trong Docs, hoặc kết nối kho mã có tệp docker-compose.', 'docs');
       if (!aiReady()) throw new AppError('The AI assistant is temporarily unavailable. Please try again later.', 503, 'WORK_AI_UNAVAILABLE');
       const ask = await askerFor(userId, ctx);
       const kind = input.type;
@@ -857,7 +890,7 @@ async function buildFor(userId: number, projectId: number, ctx: DiagramCtx, inpu
 
 async function defaultWorkflow(projectId: number) {
   const wf = await prisma.workWorkflow.findFirst({ where: { projectId }, orderBy: [{ isDefault: 'desc' }, { id: 'asc' }], select: { name: true, statuses: { select: { id: true, name: true, category: true, position: true } }, transitions: { select: { fromStatusId: true, toStatusId: true, name: true } } } });
-  if (!wf) throw new BadRequestError('This project has no workflow', 'WORK_DIAGRAM_NO_SOURCE');
+  if (!wf) throw noDiagramSource('This project has no workflow — set one up in Project settings › Workflow first.', 'Dự án chưa có workflow — tạo ở Cài đặt dự án › Workflow trước.', 'workflow');
   return wf;
 }
 

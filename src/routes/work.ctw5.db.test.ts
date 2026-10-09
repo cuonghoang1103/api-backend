@@ -434,4 +434,27 @@ describe('CTW đợt 5 — lớp học, hub giảng viên, rubric/điểm, việ
     assert.equal(by.subject.variant, 'requirements');
     assert.equal(w.data.class.classCode, 'SE1840');
   });
+
+  // QA 10/10 P2-2: admin xoá giảng viên đã chấm (DELETE /admin/users/:id = prisma.user.delete) từng nổ P2003
+  // work_grades_rubric_id_fkey — rubric Cascade theo người tạo, điểm Restrict theo rubric. Giờ rubric SET NULL người tạo.
+  it('xoá tài khoản giảng viên đã chấm + công bố ⇒ xoá được; điểm đã công bố + lịch sử của sinh viên còn nguyên', async () => {
+    const before = await prisma.workGrade.findMany({ where: { projectId: pidA }, select: { id: true, publishedAt: true, total: true, rubricId: true } });
+    assert.ok(before.some((g) => g.publishedAt), 'có điểm đã công bố trước khi xoá');
+    const histBefore = await prisma.workGradeHistory.count({ where: { gradeId: { in: before.map((g) => g.id) } } });
+
+    await prisma.user.delete({ where: { id: teacher.id } }); // từng ném P2003
+
+    const after = await prisma.workGrade.findMany({ where: { projectId: pidA }, select: { id: true, publishedAt: true, total: true, rubricId: true } });
+    assert.deepEqual(after, before, 'không mất / đổi điểm nào');
+    assert.equal(await prisma.workGradeHistory.count({ where: { gradeId: { in: before.map((g) => g.id) } } }), histBefore);
+    const rb = await prisma.workRubric.findUniqueOrThrow({ where: { id: rubricId }, select: { ownerId: true } });
+    assert.equal(rb.ownerId, null, 'rubric mồ côi, không bị xoá');
+    // Sinh viên vẫn đọc được điểm đã công bố (kèm rubric), người chấm hiện null.
+    const a = await call(alice, 'GET', `/projects/${pidA}/grades`);
+    assert.equal(a.status, 200, JSON.stringify(a.raw));
+    assert.equal(a.data.grades.length, 1);
+    assert.equal(a.data.grades[0].rubric.id, rubricId);
+    assert.equal(a.data.grades[0].rubric.ownerId, null);
+    assert.equal(a.data.grades[0].grader, null);
+  });
 });

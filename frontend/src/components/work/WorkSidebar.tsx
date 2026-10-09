@@ -277,6 +277,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
   const ws = useQuery({ queryKey: wk.workspace(slug ?? ''), queryFn: () => workApi.workspaceBySlug(slug!), enabled: !!slug, staleTime: 30_000 });
   const current = workspaces.data?.find((w) => w.slug === slug);
   const currentName = current?.name ?? ws.data?.name;
+  const currentLogo = current?.logoUrl ?? ws.data?.logoUrl ?? null;
   const projects = (ws.data?.projects ?? []).filter((p) => !p.archivedAt);
   const homeTab = search?.get('tab');
   const onMyWork = pathname === '/work' && homeTab !== 'workspaces';
@@ -344,7 +345,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
           className="w-nav-row flex h-10 min-w-0 flex-1 items-center gap-2.5 rounded-[8px] px-2 text-left transition-colors hover:bg-[var(--w-hover)]"
         >
           {currentName ? (
-            <span className="w-keep flex"><WorkspaceMark name={currentName} size={26} /></span>
+            <span className="w-keep flex"><WorkspaceMark name={currentName} logoUrl={currentLogo} size={26} /></span>
           ) : (
             <span className="w-keep flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[7px] bg-[var(--w-accent)] text-[11px] font-bold text-white">CT</span>
           )}
@@ -367,7 +368,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                 onClick={() => { switcher.close(); onNavigate?.(); }}
                 className="flex h-9 items-center gap-2.5 rounded-[6px] px-2 hover:bg-[var(--w-hover)]"
               >
-                <WorkspaceMark name={w.name} size={22} />
+                <WorkspaceMark name={w.name} logoUrl={w.logoUrl} size={22} />
                 <span className="min-w-0 flex-1 truncate">{w.name}</span>
                 {w.slug === slug && <Check size={14} className="text-[var(--w-accent-text)]" />}
               </Link>
@@ -497,7 +498,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
             <div className="space-y-0.5">
               {workspaces.data.map((w) => (
                 <Link key={w.id} href={`/work/${w.slug}`} title={w.name} className={cn(ROW, ROW_IDLE)}>
-                  <span className="w-keep flex"><WorkspaceMark name={w.name} size={20} /></span>
+                  <span className="w-keep flex"><WorkspaceMark name={w.name} logoUrl={w.logoUrl} size={20} /></span>
                   <span className="min-w-0 flex-1 truncate">{w.name}</span>
                 </Link>
               ))}

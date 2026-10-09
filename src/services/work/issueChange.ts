@@ -23,6 +23,7 @@ import { agentOptionsOf, can, loadProjectAccess, principalOf } from './permissio
 import { rankAfter, rankBetween, rankInitial } from './rank.js';
 import { tiptapToText } from './tiptapText.js';
 import { assertModule, hasRules, stableStringify, transitionRulesOf } from './studio.js';
+import { cutText } from './common.js';
 import { currentTargetHash, signedHash } from './approvalContent.js';
 // Đợt S6: nguồn gốc AI + luật "AI-assisted work needs an independent reviewer".
 import { AI_SOURCE, assertAiIndependentReview, assistantModel, provenanceValue } from './provenance.js';
@@ -415,11 +416,11 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, rawAc
       const newText = 'descriptionText' in d ? d.descriptionText : null;
       if ((before.descriptionText ?? null) !== newText) {
         // Mô tả dài: lịch sử chỉ giữ 500 ký tự đầu, đủ để biết đã đổi gì.
-        changes.push({ field: 'description', from: before.descriptionText?.slice(0, 500) ?? null, to: newText?.slice(0, 500) ?? null });
+        changes.push({ field: 'description', from: (before.descriptionText != null ? cutText(before.descriptionText, 500) : null), to: newText != null ? cutText(newText, 500) : null });
       } else if (stableStringify(before.descriptionJson ?? null) !== stableStringify(patch.descriptionJson ?? null)) {
         // CTW đợt 3A: chữ y nguyên nhưng nội dung khác (chèn ẢNH / sơ đồ, đổi định dạng) — trước đây bị coi là "không đổi"
         // nên PATCH trả 200 mà ảnh không được lưu.
-        changes.push({ field: 'description', from: before.descriptionText?.slice(0, 500) ?? null, to: `${(newText ?? '').slice(0, 470)} [content updated]` });
+        changes.push({ field: 'description', from: (before.descriptionText != null ? cutText(before.descriptionText, 500) : null), to: `${cutText(newText ?? '', 470)} [content updated]` });
       }
       Object.assign(data, d);
     }

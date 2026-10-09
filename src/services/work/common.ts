@@ -75,6 +75,19 @@ export async function sendWorkEmail(opts: {
   await deliverWorkEmail({ to: opts.to, subject: opts.subject, html, text, replyTo: opts.replyTo, attachments: opts.attachments });
 }
 
+/**
+ * Cắt chuỗi tối đa `max` đơn vị UTF-16 mà KHÔNG xé đôi một cặp surrogate (emoji, ký tự ngoài BMP).
+ * `str.slice(0, n)` rơi đúng giữa emoji để lại nửa surrogate lẻ ⇒ Postgres từ chối chuỗi UTF-8 hỏng ⇒ PATCH thẻ
+ * trả 500 "InvalidArg" (gặp thật 09/10/2026 khi mô tả thẻ có emoji ở vị trí 470/500).
+ */
+export function cutText(s: string, max: number): string {
+  if (s.length <= max) return s;
+  let out = s.slice(0, max);
+  const last = out.charCodeAt(out.length - 1);
+  if (last >= 0xd800 && last <= 0xdbff) out = out.slice(0, -1);
+  return out;
+}
+
 /** Chuẩn hoá chuỗi thành slug a-z0-9-. */
 export function slugify(s: string, max = 50): string {
   const base = s

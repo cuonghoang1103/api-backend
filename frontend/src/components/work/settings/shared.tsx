@@ -233,8 +233,9 @@ export const PROJECT_ROLE_HELP: Record<'ADMIN' | 'MEMBER' | 'VIEWER' | 'TEACHER'
   CLIENT: 'Can view, comment and report issues',
 };
 
-/** Ô vuông chữ tắt cho không gian. */
-export function WorkspaceMark({ name, size = 32 }: { name: string; size?: number }) {
+/** Ô vuông đại diện không gian: logo đã tải lên (nếu có), không thì chữ tắt trên màu riêng. */
+export function WorkspaceMark({ name, size = 32, logoUrl }: { name: string; size?: number; logoUrl?: string | null }) {
+  const [broken, setBroken] = useState(false);
   const initials = name
     .split(/\s+/)
     .filter(Boolean)
@@ -242,6 +243,20 @@ export function WorkspaceMark({ name, size = 32 }: { name: string; size?: number
     .map((w) => w[0])
     .join('')
     .toUpperCase() || '?';
+  if (logoUrl && !broken) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- ảnh R2 công khai, app desktop không có next/image thật
+      <img
+        src={logoUrl}
+        alt=""
+        width={size}
+        height={size}
+        onError={() => setBroken(true)}
+        style={{ width: size, height: size }}
+        className="inline-block shrink-0 rounded-[7px] bg-[var(--w-surface-2)] object-cover"
+      />
+    );
+  }
   return (
     <span
       style={{ width: size, height: size, fontSize: Math.round(size * 0.38), background: avatarColor(name) }}

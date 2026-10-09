@@ -160,7 +160,7 @@ function WorkspacesHome() {
                 {workspaces.map((w) => (
                   <Link key={w.id} href={`/work/${w.slug}`} className="w-card group flex flex-col p-4">
                     <div className="flex items-start gap-3">
-                      <WorkspaceMark name={w.name} size={40} />
+                      <WorkspaceMark name={w.name} logoUrl={w.logoUrl} size={40} />
                       <div className="min-w-0 flex-1">
                         <div className="truncate text-[15px] font-semibold">{w.name}</div>
                         <span className="mt-1 inline-flex rounded-full border border-[var(--w-border-strong)] px-2 text-[12px] leading-[20px] text-[var(--w-text-2)]">
@@ -263,7 +263,7 @@ function NewProjectButton({ workspaces, onNewWorkspace }: { workspaces: Workspac
           <div className="w-eyebrow px-2 pb-1 pt-1.5">Create in workspace</div>
           {workspaces.map((w) => (
             <button key={w.id} type="button" role="menuitem" onClick={() => { pop.close(); go(w.slug); }} className="flex h-9 w-full items-center gap-2.5 rounded-[6px] px-2 text-left text-[13px] hover:bg-[var(--w-hover)]">
-              <WorkspaceMark name={w.name} size={22} />
+              <WorkspaceMark name={w.name} logoUrl={w.logoUrl} size={22} />
               <span className="min-w-0 flex-1 truncate">{w.name}</span>
             </button>
           ))}

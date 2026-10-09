@@ -144,7 +144,7 @@ function WorkspaceOverview() {
         <div className="mx-auto w-full max-w-[1120px] px-4 py-6 md:px-8 md:py-8">
           <div className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end">
             <div className="flex min-w-0 flex-1 items-start gap-4">
-              <WorkspaceMark name={ws.name} size={48} />
+              <WorkspaceMark name={ws.name} logoUrl={ws.logoUrl} size={48} />
               <div className="min-w-0 flex-1">
                 <h2 className="text-[24px] font-semibold leading-tight tracking-[-0.02em] [overflow-wrap:anywhere]">{ws.name}</h2>
                 <p className="mt-1 max-w-[560px] text-[14px] text-[var(--w-text-2)]">

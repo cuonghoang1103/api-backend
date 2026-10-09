@@ -27,6 +27,7 @@ import { Dialog, EmptyState, Field, Popover, Spinner, useToggle, PageLoading } f
 import { ConfirmDialog } from '@/components/work/settings/shared';
 import { defaultWidgets, WIDGET_META, WidgetBody } from '@/components/work/dashboards/widgets';
 import WidgetDialog from '@/components/work/dashboards/WidgetDialog';
+import { wt } from '@/components/work/i18n';
 
 // useSearchParams bắt buộc nằm trong <Suspense> — thiếu là Next 14 báo lỗi lúc build.
 export default function DashboardsPage() {
@@ -42,7 +43,7 @@ function DashboardsPageInner() {
   const { pid, config, isLoading, error } = useProject(decodeURIComponent(params.ws), decodeURIComponent(params.key).toUpperCase());
   if (isLoading) return <PageLoading />;
   if (error || !config || !pid) {
-    return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
+    return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : wt('dash.mayDeleted')} />;
   }
   return <DashboardsView config={config} pid={pid} />;
 }
@@ -89,7 +90,7 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
       qc.invalidateQueries({ queryKey: wk.dashboards(pid) });
       setParams({ d: String(d.id) });
     },
-    onError: (err) => toast.error(workError(err, 'Could not save the dashboard')),
+    onError: (err) => toast.error(workError(err, wt('dash.saveFailed'))),
   });
   const del = useMutation({
     mutationFn: (id: number) => workApi.deleteDashboard(pid, id),
@@ -97,9 +98,9 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
       qc.setQueryData<WorkDashboard[]>(wk.dashboards(pid), (old) => old?.filter((x) => x.id !== id));
       qc.invalidateQueries({ queryKey: wk.dashboards(pid) });
       setParams({ d: null });
-      toast.success('Dashboard deleted');
+      toast.success(wt('dash.deleted'));
     },
-    onError: (err) => toast.error(workError(err, 'Could not delete the dashboard')),
+    onError: (err) => toast.error(workError(err, wt('dash.deleteFailed'))),
   });
 
   const [nameDialog, setNameDialog] = useState<null | 'create' | 'rename'>(null);
@@ -113,13 +114,13 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
   const createDashboard = (name: string, shared: boolean, seed: boolean) =>
     save.mutate(
       { name, shared, widgets: seed ? defaultWidgets() : [] },
-      { onSuccess: (d) => { setNameDialog(null); toast.success(`Dashboard “${d.name}” created`); if (!seed) setDraft(startEdit(d)); } },
+      { onSuccess: (d) => { setNameDialog(null); toast.success(wt('dash.dashCreated', { n: d.name })); if (!seed) setDraft(startEdit(d)); } },
     );
 
   const saveDraft = () => {
     if (!current || !draft) return;
     save.mutate({ id: current.id, name: draft.name, shared: draft.shared, widgets: draft.widgets }, {
-      onSuccess: () => { setDraft(null); toast.success('Dashboard saved'); },
+      onSuccess: () => { setDraft(null); toast.success(wt('dash.saved')); },
     });
   };
 
@@ -135,16 +136,16 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
   const remove = (i: number) => setDraft((d) => (d ? { ...d, widgets: d.widgets.filter((_, k) => k !== i) } : d));
 
   const ownerName = (d: WorkDashboard) => {
-    if (d.ownerId === meId) return 'You';
+    if (d.ownerId === meId) return wt('dash.you');
     const m = lk.members.get(d.ownerId);
-    return m ? userName(m) : 'a former member';
+    return m ? userName(m) : wt('dash.formerMember');
   };
 
   // ── Hiển thị ──
   if (list.isLoading) {
     return (
       <div className="flex h-full flex-col">
-        <ProjectHeader config={config} title="Dashboards" />
+        <ProjectHeader config={config} title={wt('dash.dashboards')} />
         <div className="flex flex-1 items-center justify-center"><Spinner size={20} /></div>
       </div>
     );
@@ -152,17 +153,17 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
 
   return (
     <div className="flex h-full min-w-0 flex-col">
-      <ProjectHeader config={config} title="Dashboards" />
+      <ProjectHeader config={config} title={wt('dash.dashboards')} />
 
       {list.isError ? (
-        <EmptyState title="Couldn't load dashboards" body={workError(list.error)} action={<button type="button" className="w-btn" onClick={() => list.refetch()}>Try again</button>} />
+        <EmptyState title={wt('dash.couldntLoad2')} body={workError(list.error)} action={<button type="button" className="w-btn" onClick={() => list.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : !current ? (
         <EmptyState
-          title="No dashboards yet"
-          body="Dashboards put charts, counts and issue lists for this project on one page. Start with a recommended layout and adjust it to your team."
+          title={wt('dash.noDash')}
+          body={wt('dash.noDashBody')}
           action={
-            <button type="button" className="w-btn w-btn-primary" disabled={save.isPending} onClick={() => createDashboard('Project overview', true, true)}>
-              {save.isPending ? <Spinner size={12} /> : <Plus size={14} />} Create dashboard
+            <button type="button" className="w-btn w-btn-primary" disabled={save.isPending} onClick={() => createDashboard(wt('dash.projectOverview'), true, true)}>
+              {save.isPending ? <Spinner size={12} /> : <Plus size={14} />} {wt('dash.createDashboard')}
             </button>
           }
         />
@@ -176,20 +177,20 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
                   value={draft.name}
                   maxLength={100}
                   onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-                  aria-label="Dashboard name"
+                  aria-label={wt('dash.dashName')}
                   className="w-input !h-[28px] w-full min-w-0 !text-[13px] font-medium sm:w-[240px]"
                 />
                 <label className="flex h-[28px] cursor-pointer select-none items-center gap-1.5 px-1 text-[12px] text-[var(--w-text-2)]">
                   <input type="checkbox" checked={draft.shared} onChange={(e) => setDraft({ ...draft, shared: e.target.checked })} className="h-3.5 w-3.5 accent-[var(--w-accent)]" />
-                  Shared with project
+                  {wt('dash.sharedWithProject')}
                 </label>
                 <div className="flex-1" />
                 <button type="button" className="w-btn w-btn-sm" onClick={() => setWidgetDialog({ index: null })} disabled={draft.widgets.length >= 30}>
-                  <Plus size={13} /> Add widget
+                  <Plus size={13} /> {wt('dash.addWidget')}
                 </button>
-                <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setDraft(null)} disabled={save.isPending}>Cancel</button>
+                <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setDraft(null)} disabled={save.isPending}>{wt('common.cancel')}</button>
                 <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={saveDraft} disabled={save.isPending || !draft.name.trim()}>
-                  {save.isPending && <Spinner size={12} />} Save
+                  {save.isPending && <Spinner size={12} />} {wt('common.save')}
                 </button>
               </>
             ) : (
@@ -206,37 +207,37 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
                   <span className="truncate">{current.name}</span>
                   <ChevronDown size={13} className="shrink-0 text-[var(--w-text-3)]" />
                 </button>
-                <span className="inline-flex items-center gap-1 text-[12px] text-[var(--w-text-3)]" title={current.shared ? 'Everyone in this project can see it' : 'Only you can see it'}>
+                <span className="inline-flex items-center gap-1 text-[12px] text-[var(--w-text-3)]" title={current.shared ? wt('dash.everyoneSees') : wt('dash.onlyYou')}>
                   {current.shared ? <Users size={12} /> : <Lock size={12} />}
-                  {current.shared ? 'Shared' : 'Private'}
+                  {current.shared ? wt('dash.shared') : wt('dash.private')}
                   <span className="max-sm:!hidden">· by {ownerName(current)}</span>
                 </span>
                 <div className="flex-1" />
                 {canEdit && (
                   <button type="button" className="w-btn w-btn-sm" onClick={() => setDraft(startEdit(current))}>
-                    <Pencil size={13} /> Edit dashboard
+                    <Pencil size={13} /> {wt('dash.editDashboard')}
                   </button>
                 )}
                 {canEdit && (
                   <>
-                    <button ref={moreRef} type="button" onClick={more.toggle} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="More dashboard actions">
+                    <button ref={moreRef} type="button" onClick={more.toggle} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('dash.moreActions')}>
                       <MoreHorizontal size={14} />
                     </button>
                     <Popover open={more.on} onClose={more.close} anchorRef={moreRef} width={220} align="end">
                       <div className="p-1">
-                        <MenuItem onClick={() => { more.close(); setNameDialog('rename'); }}><Pencil size={13} /> Rename</MenuItem>
+                        <MenuItem onClick={() => { more.close(); setNameDialog('rename'); }}><Pencil size={13} /> {wt('common.rename')}</MenuItem>
                         <MenuItem
                           onClick={() => {
                             more.close();
                             save.mutate({ id: current.id, name: current.name, shared: !current.shared, widgets: current.widgets }, {
-                              onSuccess: (d) => toast.success(d.shared ? 'Dashboard shared with the project' : 'Dashboard is now private'),
+                              onSuccess: (d) => toast.success(d.shared ? wt('dash.sharedToast') : wt('dash.nowPrivate')),
                             });
                           }}
                         >
-                          {current.shared ? <Lock size={13} /> : <Users size={13} />} {current.shared ? 'Make private' : 'Share with project'}
+                          {current.shared ? <Lock size={13} /> : <Users size={13} />} {current.shared ? wt('dash.makePrivate') : wt('dash.shareWithProject')}
                         </MenuItem>
                         <div className="my-1 border-t border-[var(--w-border)]" />
-                        <MenuItem danger onClick={() => { more.close(); setConfirmDel(true); }}><Trash2 size={13} /> Delete dashboard</MenuItem>
+                        <MenuItem danger onClick={() => { more.close(); setConfirmDel(true); }}><Trash2 size={13} /> {wt('dash.deleteDashboard')}</MenuItem>
                       </div>
                     </Popover>
                   </>
@@ -256,12 +257,12 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
                 >
                   <span className="w-3.5 shrink-0">{d.id === current.id && <Check size={13} className="text-[var(--w-accent-text)]" />}</span>
                   <span className="min-w-0 flex-1 truncate text-[13px]">{d.name}</span>
-                  <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{d.shared ? (d.ownerId === meId ? 'Shared' : ownerName(d)) : 'Private'}</span>
+                  <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{d.shared ? (d.ownerId === meId ? wt('dash.shared') : ownerName(d)) : wt('dash.private')}</span>
                 </button>
               ))}
             </div>
             <div className="border-t border-[var(--w-border)] p-1">
-              <MenuItem onClick={() => { switcher.close(); setNameDialog('create'); }}><Plus size={13} /> Create dashboard</MenuItem>
+              <MenuItem onClick={() => { switcher.close(); setNameDialog('create'); }}><Plus size={13} /> {wt('dash.createDashboard')}</MenuItem>
             </div>
           </Popover>
 
@@ -270,14 +271,14 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
             <div className="mx-auto w-full max-w-[1200px] px-3 py-4 md:px-4">
               {!widgets.length ? (
                 <EmptyState
-                  title="This dashboard is empty"
-                  body={canEdit ? 'Add widgets to track counts, charts and issue lists for this project.' : 'The owner hasn’t added any widgets yet.'}
+                  title={wt('dash.empty')}
+                  body={canEdit ? wt('dash.emptyEdit') : wt('dash.ownerNoWidgets')}
                   action={canEdit ? (
                     <button type="button" className="w-btn w-btn-primary" onClick={() => {
                       if (!draft) setDraft(startEdit(current));
                       setWidgetDialog({ index: null });
                     }}>
-                      <Plus size={14} /> Add widget
+                      <Plus size={14} /> {wt('dash.addWidget')}
                     </button>
                   ) : undefined}
                 />
@@ -300,10 +301,10 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
                         <h3 className="min-w-0 flex-1 truncate text-[13px] font-semibold" title={w.query || undefined}>{w.title || WIDGET_META[w.kind]?.defaultTitle}</h3>
                         {editing && (
                           <div className="flex shrink-0 items-center">
-                            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" title="Move up" aria-label="Move up" disabled={i === 0} onClick={() => move(i, -1)}><ArrowUp size={13} /></button>
-                            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" title="Move down" aria-label="Move down" disabled={i === widgets.length - 1} onClick={() => move(i, 1)}><ArrowDown size={13} /></button>
-                            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" title="Edit widget" aria-label="Edit widget" onClick={() => setWidgetDialog({ index: i })}><Pencil size={13} /></button>
-                            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" title="Remove widget" aria-label="Remove widget" onClick={() => remove(i)}><Trash2 size={13} /></button>
+                            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" title={wt('studio.moveUp')} aria-label={wt('studio.moveUp')} disabled={i === 0} onClick={() => move(i, -1)}><ArrowUp size={13} /></button>
+                            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" title={wt('studio.moveDown')} aria-label={wt('studio.moveDown')} disabled={i === widgets.length - 1} onClick={() => move(i, 1)}><ArrowDown size={13} /></button>
+                            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" title={wt('dash.editWidget')} aria-label={wt('dash.editWidget')} onClick={() => setWidgetDialog({ index: i })}><Pencil size={13} /></button>
+                            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" title={wt('dash.removeWidget')} aria-label={wt('dash.removeWidget')} onClick={() => remove(i)}><Trash2 size={13} /></button>
                           </div>
                         )}
                       </div>
@@ -328,7 +329,7 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
         onSubmit={(name, shared, seed) => {
           if (nameDialog === 'rename' && current) {
             save.mutate({ id: current.id, name, shared: current.shared, widgets: current.widgets }, {
-              onSuccess: () => { setNameDialog(null); toast.success('Dashboard renamed'); },
+              onSuccess: () => { setNameDialog(null); toast.success(wt('dash.renamed')); },
             });
           } else {
             createDashboard(name, shared, seed);
@@ -339,9 +340,9 @@ function DashboardsView({ config, pid }: { config: ProjectConfig; pid: number })
         open={confirmDel}
         onClose={() => setConfirmDel(false)}
         onConfirm={() => { if (current) del.mutate(current.id, { onSettled: () => setConfirmDel(false) }); }}
-        title="Delete dashboard"
-        body={<>“{current?.name}” and its widgets will be deleted{current?.shared ? ' for everyone in this project' : ''}. Issues are not affected.</>}
-        confirmLabel="Delete dashboard"
+        title={wt('dash.deleteDashboard')}
+        body={wt('dash.deleteBody', { n: current?.name ?? '', s: current?.shared ? wt('dash.forEveryone') : '' })}
+        confirmLabel={wt('dash.deleteDashboard')}
         pending={del.isPending}
       />
       <WidgetDialog
@@ -395,35 +396,35 @@ function NameDialog({ open, mode, initialName, pending, onClose, onSubmit }: {
     <Dialog
       open={open}
       onClose={onClose}
-      title={mode === 'create' ? 'Create dashboard' : 'Rename dashboard'}
+      title={mode === 'create' ? wt('dash.createDashboard') : wt('dash.renameDashboard')}
       width={460}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="submit" form="work-dashboard-form" className="w-btn w-btn-primary" disabled={!ok}>
-            {pending && <Spinner size={12} />} {mode === 'create' ? 'Create dashboard' : 'Save'}
+            {pending && <Spinner size={12} />} {mode === 'create' ? wt('dash.createDashboard') : wt('common.save')}
           </button>
         </>
       }
     >
       <form id="work-dashboard-form" onSubmit={(e) => { e.preventDefault(); if (ok) onSubmit(name.trim(), shared, seed); }}>
-        <Field label="Name">
-          <input autoFocus value={name} maxLength={100} onChange={(e) => setName(e.target.value)} placeholder="e.g. Sprint overview" className="w-input" />
+        <Field label={wt('common.name')}>
+          <input autoFocus value={name} maxLength={100} onChange={(e) => setName(e.target.value)} placeholder={wt('dash.namePh')} className="w-input" />
         </Field>
         {mode === 'create' && (
           <div className="space-y-3">
             <label className="flex cursor-pointer select-none items-start gap-2 text-[13px]">
               <input type="checkbox" checked={shared} onChange={(e) => setShared(e.target.checked)} className="mt-0.5 h-3.5 w-3.5 accent-[var(--w-accent)]" />
               <span>
-                Share with project
-                <span className="block text-[12px] text-[var(--w-text-3)]">Everyone in this project can view it. Only you and project admins can change it.</span>
+                {wt('dash.shareWithProject')}
+                <span className="block text-[12px] text-[var(--w-text-3)]">{wt('dash.everyoneView')}</span>
               </span>
             </label>
             <label className="flex cursor-pointer select-none items-start gap-2 text-[13px]">
               <input type="checkbox" checked={seed} onChange={(e) => setSeed(e.target.checked)} className="mt-0.5 h-3.5 w-3.5 accent-[var(--w-accent)]" />
               <span>
-                Start with recommended widgets
-                <span className="block text-[12px] text-[var(--w-text-3)]">Open and overdue counts, status and assignee charts, created vs resolved, your open issues and project health.</span>
+                {wt('dash.startRecommended')}
+                <span className="block text-[12px] text-[var(--w-text-3)]">{wt('dash.recommendedBody')}</span>
               </span>
             </label>
           </div>

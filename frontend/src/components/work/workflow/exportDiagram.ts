@@ -5,6 +5,7 @@
  */
 
 import type { Rect } from './graph';
+import { wt } from '@/components/work/i18n';
 
 const PAD = 32;
 
@@ -67,17 +68,17 @@ export async function downloadPng(svg: SVGSVGElement, bounds: Rect, title: strin
   const url = URL.createObjectURL(new Blob([markup], { type: 'image/svg+xml;charset=utf-8' }));
   try {
     const img = new Image();
-    await new Promise<void>((res, rej) => { img.onload = () => res(); img.onerror = () => rej(new Error('Could not render the diagram')); img.src = url; });
+    await new Promise<void>((res, rej) => { img.onload = () => res(); img.onerror = () => rej(new Error(wt('wf.renderFailed'))); img.src = url; });
     const scale = 2;
     const canvas = document.createElement('canvas');
     canvas.width = w * scale;
     canvas.height = h * scale;
     const ctx = canvas.getContext('2d');
-    if (!ctx) throw new Error('Canvas is not available');
+    if (!ctx) throw new Error(wt('wf.noCanvas'));
     ctx.scale(scale, scale);
     ctx.drawImage(img, 0, 0, w, h);
     const blob = await new Promise<Blob | null>((res) => canvas.toBlob(res, 'image/png'));
-    if (!blob) throw new Error('Could not create the PNG');
+    if (!blob) throw new Error(wt('wf.pngFailed'));
     download(blob, `${safeName(title)}.png`);
   } finally {
     URL.revokeObjectURL(url);

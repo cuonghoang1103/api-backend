@@ -371,4 +371,6 @@ export const tests: Strings<typeof En> = {
   testNo: 'Test #',
   error: 'Lỗi',
   rowN: 'dòng {n}',
+  failsStep: '{t} — bước {n} lỗi',
+  failsT: '{t} lỗi',
 };

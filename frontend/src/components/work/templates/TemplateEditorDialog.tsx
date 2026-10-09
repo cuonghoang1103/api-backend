@@ -14,15 +14,17 @@ import { workApi, workError, type IssueTemplate, type ProjectConfig, type Tiptap
 import { wk } from '../hooks';
 import RichEditor, { isDocEmpty, RichView } from '../RichEditor';
 import { Dialog, IssueTypeIcon, Spinner } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 const EMPTY: TiptapDoc = { type: 'doc', content: [] };
 
 export function TemplateBadge({ t }: { t: IssueTemplate }) {
-  const label = !t.doc ? 'None' : t.isDefault ? 'Default' : 'Custom';
+  const kind = !t.doc ? 'none' : t.isDefault ? 'default' : 'custom';
+  const label = kind === 'none' ? wt('common.none') : kind === 'default' ? wt('tpl.default') : wt('tpl.custom');
   return (
     <span
       className={
-        label === 'Custom'
+        kind === 'custom'
           ? 'rounded-[4px] border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-1.5 text-[11px] leading-[18px] text-[var(--w-accent-text)]'
           : 'rounded-[4px] border border-[var(--w-border-strong)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-3)]'
       }
@@ -59,13 +61,13 @@ export default function TemplateEditorDialog({ open, onClose, config, template, 
   };
   const save = useMutation({
     mutationFn: () => workApi.setIssueTemplate(config.id, template!.typeKey, draft && !isDocEmpty(draft) ? draft : EMPTY),
-    onSuccess: () => done(draft && !isDocEmpty(draft) ? `Template for ${template!.typeName} saved` : `Template for ${template!.typeName} turned off`),
-    onError: (err) => toast.error(workError(err, 'Could not save the template')),
+    onSuccess: () => done(draft && !isDocEmpty(draft) ? wt('tpl.savedT', { t: template!.typeName }) : wt('tpl.offT', { t: template!.typeName })),
+    onError: (err) => toast.error(workError(err, wt('tpl.saveFailed'))),
   });
   const reset = useMutation({
     mutationFn: () => workApi.setIssueTemplate(config.id, template!.typeKey, null),
-    onSuccess: () => done(template!.hasDefault ? 'Template reset to the default' : 'Template removed'),
-    onError: (err) => toast.error(workError(err, 'Could not reset the template')),
+    onSuccess: () => done(template!.hasDefault ? wt('tpl.resetDone') : wt('tpl.removed')),
+    onError: (err) => toast.error(workError(err, wt('tpl.resetFailed'))),
   });
 
   if (!template) return null;
@@ -73,7 +75,7 @@ export default function TemplateEditorDialog({ open, onClose, config, template, 
   const pending = save.isPending || reset.isPending;
   const guardedClose = () => {
     if (pending) return;
-    if (dirty && !window.confirm('Discard your changes to this template?')) return;
+    if (dirty && !window.confirm(wt('tpl.discardQ'))) return;
     onClose();
   };
 
@@ -95,26 +97,26 @@ export default function TemplateEditorDialog({ open, onClose, config, template, 
             {!template.isDefault && (
               <button type="button" className="w-btn w-btn-ghost" disabled={pending} onClick={() => reset.mutate()}>
                 {reset.isPending ? <Spinner size={12} /> : <RotateCcw size={13} />}
-                {template.hasDefault ? 'Reset to default' : 'Remove template'}
+                {template.hasDefault ? wt('tpl.resetDefault') : wt('tpl.removeTpl')}
               </button>
             )}
           </div>
           <div className="flex gap-2">
-            <button type="button" className="w-btn w-btn-ghost" disabled={pending} onClick={guardedClose}>Cancel</button>
+            <button type="button" className="w-btn w-btn-ghost" disabled={pending} onClick={guardedClose}>{wt('common.cancel')}</button>
             <button type="button" className="w-btn w-btn-primary" disabled={pending || !dirty} onClick={() => save.mutate()}>
-              {save.isPending && <Spinner size={12} />} Save
+              {save.isPending && <Spinner size={12} />} {wt('common.save')}
             </button>
           </div>
         </div>
       ) : (
-        <button type="button" className="w-btn" onClick={onClose}>Close</button>
+        <button type="button" className="w-btn" onClick={onClose}>{wt('common.close')}</button>
       )}
     >
       <p className="mb-3 text-[13px] text-[var(--w-text-2)]">
-        Pre-fills the description when someone creates a <span className="font-medium text-[var(--w-text)]">{template.typeName}</span>.
+        {wt('tpl.prefills')} <span className="font-medium text-[var(--w-text)]">{template.typeName}</span>.
         {canEdit
-          ? ' Leave it empty to turn the template off for this type.'
-          : ' Only project admins can change it.'}
+          ? wt('tpl.leaveEmpty')
+          : wt('tpl.onlyAdmins')}
       </p>
       {canEdit ? (
         <RichEditor
@@ -123,7 +125,7 @@ export default function TemplateEditorDialog({ open, onClose, config, template, 
           onChange={(d) => { setDraft(d); setDirty(true); }}
           members={config.members}
           minHeight={260}
-          placeholder="No template — the description starts empty."
+          placeholder={wt('tpl.noTplPh')}
           onSubmit={() => dirty && !pending && save.mutate()}
         />
       ) : template.doc ? (
@@ -131,10 +133,10 @@ export default function TemplateEditorDialog({ open, onClose, config, template, 
           <RichView value={template.doc} />
         </div>
       ) : (
-        <p className="rounded-[6px] border border-dashed border-[var(--w-border-strong)] px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">This type has no template.</p>
+        <p className="rounded-[6px] border border-dashed border-[var(--w-border-strong)] px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">{wt('tpl.noTpl')}</p>
       )}
       {template.isDefault && template.doc && canEdit && (
-        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">You are looking at the CT Work default. Saving creates a custom copy for this project.</p>
+        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{wt('tpl.lookingDefault')}</p>
       )}
     </Dialog>
   );

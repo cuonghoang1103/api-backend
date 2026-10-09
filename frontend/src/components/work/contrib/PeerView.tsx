@@ -17,6 +17,8 @@ import { Dialog, EmptyState, PageLoading, UserAvatar } from '@/components/work/u
 import { cn } from '@/lib/utils';
 import { Card, SectionTitle } from '../reports/shared';
 import { fmtDayShort } from './shared';
+import { trCriterion, trPeerReason } from './serverText';
+import { wt } from '@/components/work/i18n';
 
 export default function PeerView({ pid, sprints, stages, roundId, onRound }: { pid: number; sprints: SprintFull[]; stages: StageSummary[]; roundId: number | null; onRound: (id: number) => void }) {
   const qc = useQueryClient();
@@ -27,25 +29,25 @@ export default function PeerView({ pid, sprints, stages, roundId, onRound }: { p
   const refresh = () => qc.invalidateQueries({ queryKey: contribKeys.peer(pid) });
 
   if (list.isLoading) return <PageLoading rows={5} />;
-  if (list.error || !list.data) return <EmptyState title="Could not load peer reviews" body={list.error ? workError(list.error) : undefined} />;
+  if (list.error || !list.data) return <EmptyState title={wt('contrib.loadPeerFailed')} body={list.error ? workError(list.error) : undefined} />;
   const { rounds, canManage } = list.data;
 
   return (
     <div className="grid gap-3 lg:grid-cols-[260px_minmax(0,1fr)]">
       <div className="space-y-2">
-        {canManage && <button type="button" className="w-btn w-btn-primary w-btn-sm w-full justify-center" onClick={() => setCreating(true)}><Plus size={13} /> New peer review</button>}
-        {!rounds.length && <p className="rounded-[8px] border border-dashed border-[var(--w-border)] p-3 text-[12px] text-[var(--w-text-3)]">{canManage ? 'Open a peer review at the end of a sprint or stage. Members rate each other anonymously.' : 'No peer review has been opened yet.'}</p>}
-        <ul className="space-y-1" aria-label="Peer reviews">
+        {canManage && <button type="button" className="w-btn w-btn-primary w-btn-sm w-full justify-center" onClick={() => setCreating(true)}><Plus size={13} /> {wt('contrib.newPeer')}</button>}
+        {!rounds.length && <p className="rounded-[8px] border border-dashed border-[var(--w-border)] p-3 text-[12px] text-[var(--w-text-3)]">{canManage ? wt('contrib.openPeerHint') : wt('contrib.noPeerYet')}</p>}
+        <ul className="space-y-1" aria-label={wt('contrib.peerReviews')}>
           {rounds.map((r) => (
             <li key={r.id}>
               <button type="button" onClick={() => onRound(r.id)} aria-current={r.id === selected ? 'true' : undefined}
                 className={cn('w-full rounded-[8px] border px-3 py-2 text-left', r.id === selected ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' : 'border-[var(--w-border)] hover:bg-[var(--w-hover)]')}>
                 <div className="flex items-center gap-1.5 text-[13px] font-medium">
-                  {r.status === 'OPEN' ? <Unlock size={12} className="text-[var(--w-green-text)]" aria-label="Open" /> : <Lock size={12} className="text-[var(--w-text-3)]" aria-label="Closed" />}
+                  {r.status === 'OPEN' ? <Unlock size={12} className="text-[var(--w-green-text)]" aria-label={wt('common.open')} /> : <Lock size={12} className="text-[var(--w-text-3)]" aria-label={wt('desk.psClosed')} />}
                   <span className="truncate">{r.title}</span>
                 </div>
                 <div className="mt-0.5 text-[11px] text-[var(--w-text-3)]">
-                  {r.submitted}/{r.expected} ratings{r.mine ? ` · you ${r.mine.done}/${r.mine.total}` : ''}{r.closesAt && r.status === 'OPEN' ? ` · closes ${fmtDayShort(r.closesAt)}` : ''}
+                  {wt('contrib.ratingsLine', { a: r.submitted, b: r.expected })}{r.mine ? wt('contrib.youDone', { a: r.mine.done, b: r.mine.total }) : ''}{r.closesAt && r.status === 'OPEN' ? wt('contrib.closesOn', { d: fmtDayShort(r.closesAt) }) : ''}
                 </div>
               </button>
             </li>
@@ -54,7 +56,7 @@ export default function PeerView({ pid, sprints, stages, roundId, onRound }: { p
       </div>
       <div className="min-w-0">
         {!selected ? null : round.isLoading ? <PageLoading rows={5} /> : round.error || !round.data ? (
-          <EmptyState title="Could not load this peer review" body={round.error ? workError(round.error) : undefined} />
+          <EmptyState title={wt('contrib.loadRoundFailed')} body={round.error ? workError(round.error) : undefined} />
         ) : <RoundPanel pid={pid} r={round.data} onChanged={refresh} />}
       </div>
       <CreateRound open={creating} onClose={() => setCreating(false)} pid={pid} sprints={sprints} stages={stages} defaults={list.data.defaultCriteria}
@@ -74,27 +76,27 @@ function RoundPanel({ pid, r, onChanged }: { pid: number; r: PeerRound; onChange
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
         <h2 className="text-[16px] font-semibold">{r.title}</h2>
-        <span className={cn('rounded-full border px-2 py-0.5 text-[11px]', r.status === 'OPEN' ? 'border-[var(--w-green-text)] text-[var(--w-green-text)]' : 'border-[var(--w-border-strong)] text-[var(--w-text-2)]')}>{r.status === 'OPEN' ? 'Open' : 'Closed'}</span>
+        <span className={cn('rounded-full border px-2 py-0.5 text-[11px]', r.status === 'OPEN' ? 'border-[var(--w-green-text)] text-[var(--w-green-text)]' : 'border-[var(--w-border-strong)] text-[var(--w-text-2)]')}>{r.status === 'OPEN' ? wt('common.open') : wt('desk.psClosed')}</span>
         {r.canManage && (
           <button type="button" className="w-btn w-btn-sm ml-auto" disabled={status.isPending} onClick={() => status.mutate(r.status === 'OPEN' ? 'CLOSED' : 'OPEN')}>
-            {r.status === 'OPEN' ? <><Lock size={12} /> Close</> : <><Unlock size={12} /> Reopen</>}
+            {r.status === 'OPEN' ? <><Lock size={12} /> {wt('common.close')}</> : <><Unlock size={12} /> {wt('gov.reopen')}</>}
           </button>
         )}
       </div>
       <p className="text-[12px] text-[var(--w-text-2)]">
-        Ratings are anonymous: nobody — not the team lead, not the teacher — can see who gave which score. Comments are shown to admins and teachers without names.
+        {wt('contrib.anonNote')}
       </p>
       {r.canParticipate && r.toReview.length > 0 && <Forms pid={pid} r={r} />}
-      {!r.canParticipate && r.mine.length > 0 && <p className="text-[12px] text-[var(--w-text-3)]">You submitted {r.mine.length} rating{r.mine.length === 1 ? '' : 's'} in this round.</p>}
+      {!r.canParticipate && r.mine.length > 0 && <p className="text-[12px] text-[var(--w-text-3)]">{wt('contrib.youSubmitted', { count: r.mine.length })}</p>}
       {r.myResult && (
         <Card>
-          <SectionTitle>Your result</SectionTitle>
+          <SectionTitle>{wt('contrib.yourResult')}</SectionTitle>
           {r.myResult.byCriterion ? (
             <dl className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-              {r.criteria.map((c) => <div key={c.key}><dt className="text-[11.5px] text-[var(--w-text-2)]">{c.label}</dt><dd className="text-[18px] font-semibold tabular-nums">{r.myResult!.byCriterion![c.key]}</dd></div>)}
-              <div><dt className="text-[11.5px] text-[var(--w-text-2)]">Overall ({r.myResult.count} ratings)</dt><dd className="text-[18px] font-semibold tabular-nums">{r.myResult.overall}</dd></div>
+              {r.criteria.map((c) => <div key={c.key}><dt className="text-[11.5px] text-[var(--w-text-2)]">{trCriterion(c).label}</dt><dd className="text-[18px] font-semibold tabular-nums">{r.myResult!.byCriterion![c.key]}</dd></div>)}
+              <div><dt className="text-[11.5px] text-[var(--w-text-2)]">{wt('contrib.overallN', { n: r.myResult.count })}</dt><dd className="text-[18px] font-semibold tabular-nums">{r.myResult.overall}</dd></div>
             </dl>
-          ) : <p className="text-[12px] text-[var(--w-text-3)]">{r.myResult.hiddenReason}</p>}
+          ) : <p className="text-[12px] text-[var(--w-text-3)]">{trPeerReason(r.myResult.hiddenReason)}</p>}
         </Card>
       )}
       {r.results && <Results r={r} />}
@@ -109,15 +111,15 @@ function Forms({ pid, r }: { pid: number; r: PeerRound }) {
     <Card className="!p-0">
       <div className="flex items-center gap-2 border-b border-[var(--w-border)] px-4 py-2.5">
         <Users size={14} aria-hidden="true" className="text-[var(--w-text-3)]" />
-        <span className="text-[13px] font-semibold">Rate your teammates</span>
-        <span className="ml-auto text-[12px] text-[var(--w-text-2)]">{done.size}/{r.toReview.length} done</span>
+        <span className="text-[13px] font-semibold">{wt('contrib.rateTeammates')}</span>
+        <span className="ml-auto text-[12px] text-[var(--w-text-2)]">{wt('contrib.nDone', { a: done.size, b: r.toReview.length })}</span>
       </div>
       <ul>
         {r.toReview.map((u) => (
           <li key={u.id} className="border-b border-[var(--w-border)] last:border-0">
             <button type="button" aria-expanded={open === u.id} onClick={() => setOpen(open === u.id ? null : u.id)} className="flex w-full items-center gap-2 px-4 py-2 text-left hover:bg-[var(--w-hover)]">
               <UserAvatar user={u} size={22} /><span className="text-[13px] font-medium">{userName(u)}</span>
-              {done.has(u.id) && <span className="ml-auto inline-flex items-center gap-1 text-[11.5px] text-[var(--w-green-text)]"><Check size={12} aria-hidden="true" /> Submitted</span>}
+              {done.has(u.id) && <span className="ml-auto inline-flex items-center gap-1 text-[11.5px] text-[var(--w-green-text)]"><Check size={12} aria-hidden="true" /> {wt('contrib.submitted')}</span>}
             </button>
             {open === u.id && <ReviewForm pid={pid} r={r} u={u} onDone={() => setOpen(r.toReview.find((x) => x.id !== u.id && !done.has(x.id))?.id ?? null)} />}
           </li>
@@ -136,16 +138,16 @@ function ReviewForm({ pid, r, u, onDone }: { pid: number; r: PeerRound; u: WorkU
   const complete = r.criteria.every((c) => scores[c.key] >= 1);
   const save = useMutation({
     mutationFn: () => workContribApi.review(pid, r.id, u.id, { scores, comment: comment.trim() || null }),
-    onSuccess: () => { toast.success(`Saved your rating for ${userName(u)}`); qc.invalidateQueries({ queryKey: contribKeys.peer(pid) }); onDone(); },
+    onSuccess: () => { toast.success(wt('contrib.savedRating', { name: userName(u) })); qc.invalidateQueries({ queryKey: contribKeys.peer(pid) }); onDone(); },
     onError: (e) => toast.error(workError(e)),
   });
   return (
     <form className="space-y-3 bg-[var(--w-sunken)] px-4 py-3" onSubmit={(e) => { e.preventDefault(); if (complete) save.mutate(); }}>
       {r.criteria.map((c) => (
         <fieldset key={c.key} className="grid items-center gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
-          <legend className="sr-only">{c.label}</legend>
-          <div className="min-w-0"><div className="text-[13px] font-medium">{c.label}</div><div className="text-[11.5px] text-[var(--w-text-2)]">{c.description}</div></div>
-          <div className="flex gap-1" role="radiogroup" aria-label={`${c.label} for ${userName(u)}`}>
+          <legend className="sr-only">{trCriterion(c).label}</legend>
+          <div className="min-w-0"><div className="text-[13px] font-medium">{trCriterion(c).label}</div><div className="text-[11.5px] text-[var(--w-text-2)]">{trCriterion(c).description}</div></div>
+          <div className="flex gap-1" role="radiogroup" aria-label={wt('contrib.critFor', { c: trCriterion(c).label, name: userName(u) })}>
             {[1, 2, 3, 4, 5].map((v) => (
               <button key={v} type="button" role="radio" aria-checked={scores[c.key] === v} onClick={() => setScores((s) => ({ ...s, [c.key]: v }))}
                 className={cn('h-8 w-8 rounded-[6px] border text-[13px] font-medium tabular-nums', scores[c.key] === v ? 'border-[var(--w-accent)] bg-[var(--w-accent)] text-white' : 'border-[var(--w-border)] bg-[var(--w-panel)] text-[var(--w-text-2)] hover:border-[var(--w-border-strong)]')}>{v}</button>
@@ -154,12 +156,12 @@ function ReviewForm({ pid, r, u, onDone }: { pid: number; r: PeerRound; u: WorkU
         </fieldset>
       ))}
       <div>
-        <label htmlFor={`peer-c-${u.id}`} className="text-[12px] font-medium">Comment <span className="font-normal text-[var(--w-text-3)]">(optional, shown without your name to admins and teachers)</span></label>
-        <textarea id={`peer-c-${u.id}`} value={comment} onChange={(e) => setComment(e.target.value)} maxLength={2000} rows={2} className="w-input mt-1 text-[13px]" placeholder="What went well, what could be better" />
+        <label htmlFor={`peer-c-${u.id}`} className="text-[12px] font-medium">{wt('contrib.commentL')} <span className="font-normal text-[var(--w-text-3)]">{wt('contrib.commentOpt')}</span></label>
+        <textarea id={`peer-c-${u.id}`} value={comment} onChange={(e) => setComment(e.target.value)} maxLength={2000} rows={2} className="w-input mt-1 text-[13px]" placeholder={wt('contrib.wentWell')} />
       </div>
       <div className="flex items-center justify-end gap-2">
-        <span className="text-[11.5px] text-[var(--w-text-3)]">1 = rarely · 3 = as expected · 5 = beyond expectations</span>
-        <button type="submit" className="w-btn w-btn-primary w-btn-sm" disabled={!complete || save.isPending}>{prev ? 'Update rating' : 'Submit rating'}</button>
+        <span className="text-[11.5px] text-[var(--w-text-3)]">{wt('contrib.scale')}</span>
+        <button type="submit" className="w-btn w-btn-primary w-btn-sm" disabled={!complete || save.isPending}>{prev ? wt('contrib.updateRating') : wt('contrib.submitRating')}</button>
       </div>
     </form>
   );
@@ -170,14 +172,14 @@ function Results({ r }: { r: PeerRound }) {
   return (
     <>
       <Card className="!p-0">
-        <div className="px-4 pt-3"><SectionTitle right={<span className="text-[11px] text-[var(--w-text-3)]">team average {r.teamAverage ?? '—'}</span>}>Results (1–5, averages)</SectionTitle></div>
-        {r.resultsHiddenReason && <p className="px-4 pb-2 text-[12px] text-[var(--w-text-2)]">{r.resultsHiddenReason}</p>}
+        <div className="px-4 pt-3"><SectionTitle right={<span className="text-[11px] text-[var(--w-text-3)]">{wt('contrib.teamAvg', { v: r.teamAverage ?? '—' })}</span>}>{wt('contrib.results15')}</SectionTitle></div>
+        {r.resultsHiddenReason && <p className="px-4 pb-2 text-[12px] text-[var(--w-text-2)]">{trPeerReason(r.resultsHiddenReason)}</p>}
         <div className="overflow-x-auto">
           <table className="w-full min-w-[620px] text-[13px]">
             <thead><tr className="border-b border-[var(--w-border)] text-left text-[11.5px] text-[var(--w-text-3)]">
-              <th scope="col" className="px-4 py-2 font-medium">Member</th>
-              {r.criteria.map((c) => <th key={c.key} scope="col" className="px-3 py-2 text-right font-medium" title={c.description}>{c.label}</th>)}
-              <th scope="col" className="px-3 py-2 text-right font-medium">Overall</th><th scope="col" className="px-3 py-2 text-right font-medium">Ratings</th>
+              <th scope="col" className="px-4 py-2 font-medium">{wt('common.member')}</th>
+              {r.criteria.map((c) => <th key={c.key} scope="col" className="px-3 py-2 text-right font-medium" title={trCriterion(c).description}>{trCriterion(c).label}</th>)}
+              <th scope="col" className="px-3 py-2 text-right font-medium">{wt('contrib.overall')}</th><th scope="col" className="px-3 py-2 text-right font-medium">{wt('contrib.ratings')}</th>
             </tr></thead>
             <tbody>
               {res.map((x) => (
@@ -194,7 +196,7 @@ function Results({ r }: { r: PeerRound }) {
       </Card>
       <div className="grid gap-3 lg:grid-cols-2">
         <Card>
-          <SectionTitle>Who has submitted</SectionTitle>
+          <SectionTitle>{wt('contrib.whoSubmitted')}</SectionTitle>
           <ul className="space-y-1 text-[12.5px]">
             {(r.completion ?? []).map((c) => (
               <li key={c.user.id} className="flex items-center gap-2">
@@ -203,17 +205,17 @@ function Results({ r }: { r: PeerRound }) {
               </li>
             ))}
           </ul>
-          <p className="mt-2 text-[11px] text-[var(--w-text-3)]">Shows who still needs to fill in the form — never what they answered.</p>
+          <p className="mt-2 text-[11px] text-[var(--w-text-3)]">{wt('contrib.whoNote')}</p>
         </Card>
         <Card>
-          <SectionTitle>Comments (anonymous)</SectionTitle>
+          <SectionTitle>{wt('contrib.commentsAnon')}</SectionTitle>
           {res.some((x) => x.comments.length) ? (
             <ul className="max-h-[260px] space-y-2 overflow-y-auto text-[12.5px]">
               {res.filter((x) => x.comments.length).map((x) => (
-                <li key={x.user.id}><div className="font-medium">About {userName(x.user)}</div><ul className="ml-3 list-disc text-[var(--w-text-2)]">{x.comments.map((c, i) => <li key={i}>{c}</li>)}</ul></li>
+                <li key={x.user.id}><div className="font-medium">{wt('contrib.aboutX', { name: userName(x.user) })}</div><ul className="ml-3 list-disc text-[var(--w-text-2)]">{x.comments.map((c, i) => <li key={i}>{c}</li>)}</ul></li>
               ))}
             </ul>
-          ) : <p className="text-[12px] text-[var(--w-text-3)]">No comments yet.</p>}
+          ) : <p className="text-[12px] text-[var(--w-text-3)]">{wt('contrib.noComments')}</p>}
         </Card>
       </div>
     </>
@@ -239,48 +241,48 @@ function CreateRound({ open, onClose, pid, sprints, stages, defaults, onCreated 
   const [title, setTitle] = useState('');
   const [closes, setCloses] = useState('');
   const [criteria, setCriteria] = useState<PeerCriterion[]>(defaults);
-  useEffect(() => { if (open) { setCriteria(defaults); setSprintId(sprints[0]?.id ?? null); setStageId(stages[0]?.id ?? null); setTitle(''); setCloses(''); } }, [open, defaults, sprints, stages]);
-  const autoTitle = scope === 'sprint' ? `${sprints.find((s) => s.id === sprintId)?.name ?? 'Sprint'} peer review` : scope === 'stage' ? `${stages.find((s) => s.id === stageId)?.name ?? 'Stage'} peer review` : 'Peer review';
+  useEffect(() => { if (open) { setCriteria(defaults.map((c) => ({ ...c, ...trCriterion(c) }))); setSprintId(sprints[0]?.id ?? null); setStageId(stages[0]?.id ?? null); setTitle(''); setCloses(''); } }, [open, defaults, sprints, stages]);
+  const autoTitle = scope === 'sprint' ? wt('contrib.peerReviewT', { x: sprints.find((s) => s.id === sprintId)?.name ?? 'Sprint' }) : scope === 'stage' ? wt('contrib.peerReviewT', { x: stages.find((s) => s.id === stageId)?.name ?? wt('finance.stage') }) : wt('contrib.sPeer');
   const create = useMutation({
     mutationFn: () => workContribApi.createRound(pid, {
       title: title.trim() || autoTitle, sprintId: scope === 'sprint' ? sprintId : null, stageId: scope === 'stage' ? stageId : null,
       criteria: criteria.filter((c) => c.label.trim()).map((c) => ({ label: c.label.trim(), description: c.description })),
       closesAt: closes ? new Date(`${closes}T23:59:00`).toISOString() : null,
     }),
-    onSuccess: (r) => { toast.success('Peer review opened'); onCreated(r.id); },
+    onSuccess: (r) => { toast.success(wt('contrib.peerOpened')); onCreated(r.id); },
     onError: (e) => toast.error(workError(e)),
   });
   return (
-    <Dialog open={open} onClose={onClose} title="New peer review" width={560} footer={<>
-      <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
-      <button type="button" className="w-btn w-btn-primary" disabled={create.isPending || criteria.filter((c) => c.label.trim()).length < 3} onClick={() => create.mutate()}>Open for ratings</button>
+    <Dialog open={open} onClose={onClose} title={wt('contrib.newPeer')} width={560} footer={<>
+      <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
+      <button type="button" className="w-btn w-btn-primary" disabled={create.isPending || criteria.filter((c) => c.label.trim()).length < 3} onClick={() => create.mutate()}>{wt('contrib.openRatings')}</button>
     </>}>
       <div className="space-y-3 text-[13px]">
         <div className="flex gap-2">
           {(['sprint', 'stage', 'custom'] as const).map((s) => (
-            <label key={s} className="inline-flex items-center gap-1.5"><input type="radio" name="peer-scope" checked={scope === s} onChange={() => setScope(s)} disabled={s === 'stage' && !stages.length} />{s === 'sprint' ? 'Sprint' : s === 'stage' ? 'Stage' : 'Other period'}</label>
+            <label key={s} className="inline-flex items-center gap-1.5"><input type="radio" name="peer-scope" checked={scope === s} onChange={() => setScope(s)} disabled={s === 'stage' && !stages.length} />{s === 'sprint' ? 'Sprint' : s === 'stage' ? wt('finance.stage') : wt('contrib.otherPeriod')}</label>
           ))}
         </div>
         {scope === 'sprint' && (
-          <select aria-label="Sprint" className="w-input" value={sprintId ?? ''} onChange={(e) => setSprintId(Number(e.target.value))}>{sprints.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select>
+          <select aria-label={wt('common.sprint')} className="w-input" value={sprintId ?? ''} onChange={(e) => setSprintId(Number(e.target.value))}>{sprints.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select>
         )}
         {scope === 'stage' && (
-          <select aria-label="Stage" className="w-input" value={stageId ?? ''} onChange={(e) => setStageId(Number(e.target.value))}>{stages.map((s) => <option key={s.id} value={s.id}>{s.n}. {s.name}</option>)}</select>
+          <select aria-label={wt('finance.stage')} className="w-input" value={stageId ?? ''} onChange={(e) => setStageId(Number(e.target.value))}>{stages.map((s) => <option key={s.id} value={s.id}>{s.n}. {s.name}</option>)}</select>
         )}
-        <label className="block"><span className="text-[12px] font-medium">Title</span><input className="w-input mt-1" value={title} placeholder={autoTitle} onChange={(e) => setTitle(e.target.value)} maxLength={160} /></label>
-        <label className="block"><span className="text-[12px] font-medium">Closes on (optional)</span><input type="date" className="w-input mt-1 w-[180px]" value={closes} onChange={(e) => setCloses(e.target.value)} /></label>
+        <label className="block"><span className="text-[12px] font-medium">{wt('common.title')}</span><input className="w-input mt-1" value={title} placeholder={autoTitle} onChange={(e) => setTitle(e.target.value)} maxLength={160} /></label>
+        <label className="block"><span className="text-[12px] font-medium">{wt('contrib.closesOpt')}</span><input type="date" className="w-input mt-1 w-[180px]" value={closes} onChange={(e) => setCloses(e.target.value)} /></label>
         <fieldset>
-          <legend className="text-[12px] font-medium">Criteria (3–6, scored 1–5)</legend>
+          <legend className="text-[12px] font-medium">{wt('contrib.criteria')}</legend>
           <div className="mt-1 space-y-1.5">
             {criteria.map((c, i) => (
               <div key={i} className="flex gap-1.5">
-                <input aria-label={`Criterion ${i + 1} name`} className="w-input w-[150px]" value={c.label} onChange={(e) => setCriteria((cs) => cs.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))} />
-                <input aria-label={`Criterion ${i + 1} description`} className="w-input flex-1" value={c.description} onChange={(e) => setCriteria((cs) => cs.map((x, j) => (j === i ? { ...x, description: e.target.value } : x)))} />
-                <button type="button" className="w-btn w-btn-ghost w-btn-sm" aria-label={`Remove ${c.label || 'criterion'}`} disabled={criteria.length <= 3} onClick={() => setCriteria((cs) => cs.filter((_, j) => j !== i))}>×</button>
+                <input aria-label={wt('contrib.critName', { n: i + 1 })} className="w-input w-[150px]" value={c.label} onChange={(e) => setCriteria((cs) => cs.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))} />
+                <input aria-label={wt('contrib.critDesc', { n: i + 1 })} className="w-input flex-1" value={c.description} onChange={(e) => setCriteria((cs) => cs.map((x, j) => (j === i ? { ...x, description: e.target.value } : x)))} />
+                <button type="button" className="w-btn w-btn-ghost w-btn-sm" aria-label={wt('contrib.removeX', { x: c.label || wt('contrib.criterionLc') })} disabled={criteria.length <= 3} onClick={() => setCriteria((cs) => cs.filter((_, j) => j !== i))}>×</button>
               </div>
             ))}
           </div>
-          {criteria.length < 6 && <button type="button" className="w-btn w-btn-ghost w-btn-sm mt-1" onClick={() => setCriteria((cs) => [...cs, { key: '', label: 'Communication', description: 'Kept the team informed about progress and blockers.' }])}><Plus size={12} /> Add criterion</button>}
+          {criteria.length < 6 && <button type="button" className="w-btn w-btn-ghost w-btn-sm mt-1" onClick={() => setCriteria((cs) => [...cs, { key: '', label: wt('contrib.newCritLabel'), description: wt('contrib.newCritDesc') }])}><Plus size={12} /> {wt('contrib.addCriterion')}</button>}
         </fieldset>
       </div>
     </Dialog>

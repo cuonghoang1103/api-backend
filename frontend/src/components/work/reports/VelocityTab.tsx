@@ -6,15 +6,16 @@ import { workApi, workError } from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
 import { EmptyState, formatDate, Spinner } from '@/components/work/ui';
 import { axisTick, Card, ChartTooltip, Legend, num, SectionTitle, unitLabel } from './shared';
+import { wt } from '@/components/work/i18n';
 
 export default function VelocityTab({ pid }: { pid: number }) {
   const q = useQuery({ queryKey: [...wk.reports(pid), 'velocity'], queryFn: () => workApi.velocity(pid) });
 
   if (q.isLoading) return <div className="flex justify-center py-16"><Spinner size={20} /></div>;
-  if (q.error) return <EmptyState title="Could not load velocity" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />;
+  if (q.error) return <EmptyState title={wt('rep.loadVelFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />;
   const d = q.data;
   if (!d || !d.sprints.length) {
-    return <EmptyState title="No completed sprints yet" body="Velocity appears once your team completes its first sprint." />;
+    return <EmptyState title={wt('rep.noCompleted')} body={wt('rep.noCompletedBody')} />;
   }
   const u = unitLabel(d.unit);
   const shown = Math.min(3, d.sprints.length);
@@ -22,16 +23,16 @@ export default function VelocityTab({ pid }: { pid: number }) {
   return (
     <div className="space-y-4">
       <div>
-        <div className="text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">Average velocity</div>
+        <div className="text-[12px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{wt('rep.avgVelocity')}</div>
         <div className="mt-0.5 text-[22px] font-semibold tabular-nums">
           {d.average === null ? '—' : `${num(d.average)} ${u}`}
-          <span className="ml-2 text-[13px] font-normal text-[var(--w-text-3)]">(last {shown} {shown === 1 ? 'sprint' : 'sprints'})</span>
+          <span className="ml-2 text-[13px] font-normal text-[var(--w-text-3)]">{wt('rep.lastN', { count: shown })}</span>
         </div>
       </div>
 
       <Card>
         <div className="mb-3">
-          <Legend items={[{ label: 'Committed', color: 'var(--w-text-3)' }, { label: 'Completed', color: 'var(--w-accent)' }]} />
+          <Legend items={[{ label: wt('rep.committed'), color: 'var(--w-text-3)' }, { label: wt('rep.completed'), color: 'var(--w-accent)' }]} />
         </div>
         <div className="h-[280px] w-full min-w-0">
           <ResponsiveContainer width="100%" height="100%">
@@ -42,24 +43,24 @@ export default function VelocityTab({ pid }: { pid: number }) {
               <YAxis tick={axisTick} tickLine={false} axisLine={false} allowDecimals={false} width={48}
                 label={{ value: u, angle: -90, position: 'insideLeft', offset: 18, fill: 'var(--w-text-3)', fontSize: 11 }} />
               <Tooltip content={<ChartTooltip unit={d.unit} />} cursor={{ fill: 'var(--w-hover)' }} />
-              <Bar dataKey="committedPoints" name="Committed" fill="var(--w-text-3)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
-              <Bar dataKey="completedPoints" name="Completed" fill="var(--w-chart-1)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
+              <Bar dataKey="committedPoints" name={wt('rep.committed')} fill="var(--w-text-3)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
+              <Bar dataKey="completedPoints" name={wt('rep.completed')} fill="var(--w-chart-1)" radius={[3, 3, 0, 0]} maxBarSize={28} isAnimationActive={false} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </Card>
 
       <div>
-        <SectionTitle>Sprints</SectionTitle>
+        <SectionTitle>{wt('rep.sprints')}</SectionTitle>
         <div className="overflow-x-auto rounded-[var(--w-radius-lg)] border border-[var(--w-border)] bg-[var(--w-panel)]">
           <table className="w-full min-w-[480px] text-[13px]">
             <thead>
               <tr className="border-b border-[var(--w-border)] text-left text-[11px] uppercase tracking-wide text-[var(--w-text-3)]">
                 <th className="px-3 py-2 font-medium">Sprint</th>
-                <th className="px-3 py-2 font-medium">Completed on</th>
-                <th className="px-3 py-2 text-right font-medium">Committed</th>
-                <th className="px-3 py-2 text-right font-medium">Completed</th>
-                <th className="px-3 py-2 text-right font-medium">% completed</th>
+                <th className="px-3 py-2 font-medium">{wt('rep.completedOn')}</th>
+                <th className="px-3 py-2 text-right font-medium">{wt('rep.committed')}</th>
+                <th className="px-3 py-2 text-right font-medium">{wt('rep.completed')}</th>
+                <th className="px-3 py-2 text-right font-medium">{wt('rep.pctCompleted')}</th>
               </tr>
             </thead>
             <tbody>

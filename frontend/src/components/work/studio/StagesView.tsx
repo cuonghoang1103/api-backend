@@ -28,6 +28,7 @@ import { ProcessGuideLink, StagePill, STAGE_STATUS, studioOn, useStudioInvalidat
 import { SpecGateBox } from '../spec/SpecPanel';
 import { specGateError, workS6Api, workS6Keys } from '@/lib/work-s6-api';
 import { gateOpenIssuesOf } from '@/lib/work-ctw-api';
+import { wt } from '@/components/work/i18n';
 
 interface Blocked { stageId: number; blocker: { id: number; n: number; name: string; status: string } }
 
@@ -49,10 +50,10 @@ function StageRail({ stages, onJump }: { stages: StageSummary[]; onJump: (id: nu
   return (
     <div className="border-b border-[var(--w-border)] px-4 py-3 md:px-6">
       <div className="mb-2 flex items-center gap-2 text-[12px] text-[var(--w-text-3)]">
-        <span className="font-medium text-[var(--w-text-2)]">{done} of {stages.length} stages done</span>
+        <span className="font-medium text-[var(--w-text-2)]">{wt('studio.stagesDone', { a: done, b: stages.length })}</span>
         <span className="h-1 w-28 overflow-hidden rounded-full bg-[var(--w-sunken)]"><span className="block h-full bg-[var(--w-green)]" style={{ width: `${stages.length ? (done / stages.length) * 100 : 0}%` }} /></span>
       </div>
-      <ol className="flex items-center gap-0 overflow-x-auto pb-1 [scrollbar-width:thin]" aria-label="Stages overview">
+      <ol className="flex items-center gap-0 overflow-x-auto pb-1 [scrollbar-width:thin]" aria-label={wt('studio.stagesOverview')}>
         {stages.map((s, i) => (
           <li key={s.id} className="flex shrink-0 items-center">
             {i > 0 && <span aria-hidden="true" className="h-px w-4 md:w-6" style={{ background: s.status === 'NOT_STARTED' ? 'var(--w-border-strong)' : DOT_COLOR[s.status] }} />}
@@ -99,11 +100,11 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
 
   const activate = useMutation({
     mutationFn: (override?: { reason: string }) => workStudioApi.activateStage(config.id, s.id, override),
-    onSuccess: (_r, override) => { toast.success(override ? `Stage ${s.n} activated — override recorded in the audit log` : `Stage ${s.n} is active`); onBlocked(null); setReason(''); invalidate(); },
+    onSuccess: (_r, override) => { toast.success(override ? wt('studio.activatedOverride', { n: s.n }) : wt('studio.stageActive', { n: s.n })); onBlocked(null); setReason(''); invalidate(); },
     onError: (err) => {
       const b = blockedOf(err);
       if (b) onBlocked(b);
-      else toast.error(workError(err, 'Could not activate the stage'));
+      else toast.error(workError(err, wt('studio.activateFailed')));
     },
   });
   const [ovReason, setOvReason] = useState('');
@@ -126,7 +127,7 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
       ...(openWarn ? { acknowledgeOpen: true, openReason: openReason.trim() || null } : {}),
     }),
     onSuccess: (r) => {
-      toast.success(r.approval.specReview && specBlocked ? `Gate review requested for stage ${s.n} — Spec Fidelity override recorded in the audit log` : `Gate review requested for stage ${s.n}`);
+      toast.success(r.approval.specReview && specBlocked ? wt('studio.gateReqSpec', { n: s.n }) : wt('studio.gateReq', { n: s.n }));
       setGateOpen(false); setGateNote(''); setGateDue(''); setOvReason(''); setClientNote(''); setPinText(''); setOpenWarn(null); setOpenReason('');
       invalidate(); onOpenApproval(r.approval.id);
     },
@@ -134,7 +135,7 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
       const ow = gateOpenIssuesOf(err);
       if (ow) { setOpenWarn(ow); return; }
       if (specGateError(err)) void specGate.refetch();
-      toast.error(workError(err, 'Could not request the gate review'));
+      toast.error(workError(err, wt('studio.gateReqFailed')));
     },
   });
 
@@ -151,37 +152,37 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-            <h2 className="min-w-0 text-[15px] font-semibold tracking-[-0.01em] [overflow-wrap:anywhere]"><span className="sr-only">Stage {s.n}: </span>{s.name}</h2>
+            <h2 className="min-w-0 text-[15px] font-semibold tracking-[-0.01em] [overflow-wrap:anywhere]"><span className="sr-only">{wt('studio.stageNC', { n: s.n })}</span>{s.name}</h2>
             <StagePill status={s.status} />
             <ProcessGuideLink slug={s.slug} />
             {perms.manageStages && (
               <>
-                <button ref={menuRef} type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm ml-auto" onClick={menu.toggle} aria-label={`More actions for stage ${s.n}`}><MoreHorizontal size={14} /></button>
+                <button ref={menuRef} type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm ml-auto" onClick={menu.toggle} aria-label={wt('studio.moreStage', { n: s.n })}><MoreHorizontal size={14} /></button>
                 <Popover open={menu.on} onClose={menu.close} anchorRef={menuRef} width={180} align="end">
                   <div className="p-1">
-                    <button type="button" onClick={() => { menu.close(); onEdit(); }} className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]"><Pencil size={13} /> Edit stage</button>
-                    <button type="button" onClick={() => { menu.close(); onDelete(); }} className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] text-[var(--w-red)] hover:bg-[var(--w-hover)]"><Trash2 size={13} /> Delete stage</button>
+                    <button type="button" onClick={() => { menu.close(); onEdit(); }} className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]"><Pencil size={13} /> {wt('studio.editStage')}</button>
+                    <button type="button" onClick={() => { menu.close(); onDelete(); }} className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] text-[var(--w-red)] hover:bg-[var(--w-hover)]"><Trash2 size={13} /> {wt('studio.deleteStage')}</button>
                   </div>
                 </Popover>
               </>
             )}
           </div>
           <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-[var(--w-text-3)]">
-            <Link href={`${base}/list?stage=${s.id}&done=1`} className="flex items-center gap-1.5 hover:text-[var(--w-text)]" title="Open these issues in the list">
+            <Link href={`${base}/list?stage=${s.id}&done=1`} className="flex items-center gap-1.5 hover:text-[var(--w-text)]" title={wt('studio.openInList')}>
               <span className="h-1.5 w-20 overflow-hidden rounded-full bg-[var(--w-sunken)]"><span className="block h-full bg-[var(--w-green)]" style={{ width: `${pct}%` }} /></span>
-              <span className="tabular">{s.doneCount}/{s.issueCount} issues done</span>
+              <span className="tabular">{wt('studio.issuesDone', { a: s.doneCount, b: s.issueCount })}</span>
             </Link>
             {s.gateIssueKey && s.gateIssue && (
-              <Link href={`${base}/issue/${s.gateIssue.number}`} className="flex items-center gap-1 hover:text-[var(--w-text)]" title={`Gate issue: ${s.gateIssue.title}`}>
+              <Link href={`${base}/issue/${s.gateIssue.number}`} className="flex items-center gap-1 hover:text-[var(--w-text)]" title={wt('studio.gateIssueT', { t: s.gateIssue.title })}>
                 <Flag size={11} /> <span className="font-mono">{s.gateIssueKey}</span>
               </Link>
             )}
-            {s.startedAt && <span>Started {formatDate(s.startedAt)}</span>}
-            {s.completedAt && <span>Done {formatDate(s.completedAt)}</span>}
+            {s.startedAt && <span>{wt('studio.startedD', { d: formatDate(s.startedAt) })}</span>}
+            {s.completedAt && <span>{wt('studio.doneD', { d: formatDate(s.completedAt) })}</span>}
           </div>
 
           {docs && docs.length > 0 && (
-            <div className="mt-2.5 flex min-w-0 flex-wrap items-center gap-1.5" aria-label={`Documents for stage ${s.n}`}>
+            <div className="mt-2.5 flex min-w-0 flex-wrap items-center gap-1.5" aria-label={wt('studio.docsForStage', { n: s.n })}>
               {docs.slice(0, 6).map((d) => (
                 <Link
                   key={d.id}
@@ -202,25 +203,25 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {s.status === 'NOT_STARTED' && perms.manageStages && !blocked && (
               <button type="button" className="w-btn w-btn-sm" disabled={activate.isPending} onClick={() => activate.mutate(undefined)}>
-                {activate.isPending ? <Spinner size={11} /> : <Play size={12} />} Activate
+                {activate.isPending ? <Spinner size={11} /> : <Play size={12} />} {wt('studio.activate')}
               </button>
             )}
-            {s.status === 'NOT_STARTED' && !perms.manageStages && <span className="flex items-center gap-1 text-[12px] text-[var(--w-text-3)]"><CircleDashed size={12} /> Not started — a project admin activates it.</span>}
+            {s.status === 'NOT_STARTED' && !perms.manageStages && <span className="flex items-center gap-1 text-[12px] text-[var(--w-text-3)]"><CircleDashed size={12} /> {wt('studio.notStartedAdmin')}</span>}
             {s.status === 'ACTIVE' && perms.requestGate && approvalsOn && (
-              <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => { setOpenWarn(null); setGateOpen(true); }}><Send size={12} /> Request gate review</button>
+              <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => { setOpenWarn(null); setGateOpen(true); }}><Send size={12} /> {wt('studio.reqGate')}</button>
             )}
             {s.status === 'ACTIVE' && !approvalsOn && (
-              <span className="text-[12px] text-[var(--w-text-3)]">Turn on <b className="font-medium">Approvals</b> in Project settings → Project type &amp; modules to close stages through a gate review.</span>
+              <span className="text-[12px] text-[var(--w-text-3)]">{wt('studio.turnOnA')} <b className="font-medium">{wt('studio.mod_approvals')}</b> {wt('studio.turnOnB')}</span>
             )}
             {s.status === 'GATE_REVIEW' && (
               <>
-                <span className="text-[12px] text-[var(--w-text-2)]">Waiting for the gate approval.</span>
+                <span className="text-[12px] text-[var(--w-text-2)]">{wt('studio.waitingGate')}</span>
                 {s.pendingApprovalId && (
-                  <button type="button" className="w-btn w-btn-sm" onClick={() => onOpenApproval(s.pendingApprovalId!)}>View approval</button>
+                  <button type="button" className="w-btn w-btn-sm" onClick={() => onOpenApproval(s.pendingApprovalId!)}>{wt('studio.viewApproval')}</button>
                 )}
               </>
             )}
-            {s.status === 'DONE' && <span className="flex items-center gap-1 text-[12px] text-[var(--w-green)]"><Check size={12} /> Gate passed</span>}
+            {s.status === 'DONE' && <span className="flex items-center gap-1 text-[12px] text-[var(--w-green)]"><Check size={12} /> {wt('studio.gatePassed')}</span>}
           </div>
 
           {blocked && s.status === 'NOT_STARTED' && (
@@ -228,17 +229,17 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
               <div className="flex items-start gap-2">
                 <Lock size={14} className="mt-0.5 shrink-0 text-[var(--w-orange)]" />
                 <div className="min-w-0">
-                  <div className="font-semibold">Blocked by stage {blocked.n}. {blocked.name}</div>
+                  <div className="font-semibold">{wt('studio.blockedBy', { n: blocked.n, s: blocked.name })}</div>
                   <p className="mt-0.5 text-[12px] text-[var(--w-text-2)]">
-                    It is {STAGE_STATUS[blocked.status as keyof typeof STAGE_STATUS]?.label.toLowerCase() ?? blocked.status.toLowerCase()}. Stages open in order — finish its gate review first, or override with a reason (recorded in the audit log).
+                    {wt('studio.itIs', { s: STAGE_STATUS[blocked.status as keyof typeof STAGE_STATUS]?.label.toLowerCase() ?? blocked.status.toLowerCase() })}
                   </p>
                 </div>
               </div>
               <div className="mt-2.5 flex flex-col gap-2 sm:flex-row">
-                <input className="w-input !h-8" value={reason} maxLength={1000} onChange={(e) => setReason(e.target.value)} placeholder="Reason for starting early" aria-label="Override reason" />
+                <input className="w-input !h-8" value={reason} maxLength={1000} onChange={(e) => setReason(e.target.value)} placeholder={wt('studio.reasonEarly')} aria-label={wt('studio.overrideReason')} />
                 <div className="flex shrink-0 gap-2">
-                  <button type="button" className="w-btn w-btn-sm" onClick={() => document.getElementById(`stage-${blocked.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}>Go to stage {blocked.n}</button>
-                  <button type="button" className="w-btn w-btn-sm w-btn-warn" disabled={reason.trim().length < 3 || activate.isPending} onClick={() => activate.mutate({ reason: reason.trim() })}>Activate anyway</button>
+                  <button type="button" className="w-btn w-btn-sm" onClick={() => document.getElementById(`stage-${blocked.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}>{wt('studio.goToStage', { n: blocked.n })}</button>
+                  <button type="button" className="w-btn w-btn-sm w-btn-warn" disabled={reason.trim().length < 3 || activate.isPending} onClick={() => activate.mutate({ reason: reason.trim() })}>{wt('studio.activateAnyway')}</button>
                 </div>
               </div>
             </div>
@@ -249,41 +250,41 @@ function StageRow({ s, config, base, blocked, onBlocked, onOpenApproval, onEdit,
       <Dialog
         open={gateOpen}
         onClose={() => setGateOpen(false)}
-        title={`Request gate review · ${s.n}. ${s.name}`}
+        title={wt('studio.reqGateT', { n: s.n, s: s.name })}
         width={480}
         footer={
           <>
-            <button type="button" className="w-btn" onClick={() => setGateOpen(false)}>Cancel</button>
+            <button type="button" className="w-btn" onClick={() => setGateOpen(false)}>{wt('common.cancel')}</button>
             <button type="button" className={cn('w-btn', specBlocked ? 'w-btn-warn' : 'w-btn-primary')} disabled={gate.isPending || specGate.isLoading || (specBlocked && !(isAdmin && ovReason.trim().length >= 3))} onClick={() => gate.mutate()} data-testid="stage-send-gate">
-              {gate.isPending ? <Spinner size={12} /> : <Send size={13} />} {specBlocked ? 'Override and send' : openWarn ? 'Send anyway' : 'Send for review'}
+              {gate.isPending ? <Spinner size={12} /> : <Send size={13} />} {specBlocked ? wt('studio.overrideSend') : openWarn ? wt('studio.sendAnyway') : wt('studio.sendReview')}
             </button>
           </>
         }
       >
         <SpecGateBox config={config} stageId={s.id} gate={specGate.data} isAdmin={isAdmin} reason={ovReason} onReason={setOvReason} />
         <p className="mb-4 text-[13px] leading-relaxed text-[var(--w-text-2)]">
-          The stage moves to <b className="font-medium">Gate review</b> and the gate approvers set in Project settings (by default the project admin) are asked to sign off. It becomes Done only when they approve.
+          {wt('studio.gateMoves')} <b className="font-medium">{wt('rep.rdGateReview')}</b> {wt('studio.gateMovesB')}
         </p>
-        <Field label="What should reviewers check? (optional)"><textarea className="w-input" rows={3} maxLength={5000} value={gateNote} onChange={(e) => setGateNote(e.target.value)} placeholder="e.g. Survey report and signed minutes are attached to the gate issue" /></Field>
+        <Field label={wt('studio.reviewersCheck')}><textarea className="w-input" rows={3} maxLength={5000} value={gateNote} onChange={(e) => setGateNote(e.target.value)} placeholder={wt('studio.gateNotePh')} /></Field>
         {portalOn && (
-          <Field label="Message to the client (shown in the client portal)" hint="Your note above stays internal. Shared issues, shared files marked as deliverables and client documents of this stage are shown to the client as evidence.">
-            <textarea className="w-input" rows={3} maxLength={5000} value={clientNote} onChange={(e) => setClientNote(e.target.value)} placeholder="e.g. Please review the v3 renders and the globe prototype before approving." data-testid="gate-client-note" />
+          <Field label={wt('studio.msgClientLabel')} hint={wt('studio.msgClientHint')}>
+            <textarea className="w-input" rows={3} maxLength={5000} value={clientNote} onChange={(e) => setClientNote(e.target.value)} placeholder={wt('studio.clientNotePh')} data-testid="gate-client-note" />
           </Field>
         )}
-        <Field label="Pin issues as evidence (optional)" hint={pinned.length ? `${pinned.length} issue${pinned.length === 1 ? '' : 's'}: ${pinned.map((n) => `${config.key}-${n}`).join(', ')}` : `Issue keys, e.g. ${config.key}-12, ${config.key}-15 — issues of this stage are included automatically.`}>
+        <Field label={wt('studio.pinLabel')} hint={pinned.length ? wt('studio.pinnedHint', { count: pinned.length, s: pinned.map((n) => `${config.key}-${n}`).join(', ') }) : wt('studio.pinKeysHint', { k: config.key })}>
           <input className="w-input" value={pinText} onChange={(e) => setPinText(e.target.value)} placeholder={`${config.key}-12, ${config.key}-15`} data-testid="gate-pin-issues" />
         </Field>
-        <Field label="Due (optional)"><input type="date" className="w-input sm:max-w-[200px]" value={gateDue} onChange={(e) => setGateDue(e.target.value)} /></Field>
+        <Field label={wt('studio.dueOpt')}><input type="date" className="w-input sm:max-w-[200px]" value={gateDue} onChange={(e) => setGateDue(e.target.value)} /></Field>
         {openWarn && (
           <div role="alert" className="mt-2 rounded-[8px] border border-[color-mix(in_srgb,var(--w-orange)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_8%,transparent)] p-3 text-[13px]" data-testid="gate-open-warning">
-            <div className="font-semibold">{openWarn.openIssues} issue{openWarn.openIssues === 1 ? ' is' : 's are'} still open in this stage</div>
+            <div className="font-semibold">{wt('studio.stillOpen', { count: openWarn.openIssues })}</div>
             <ul className="my-2 max-h-36 space-y-0.5 overflow-auto text-[12.5px]">
               {openWarn.issues.map((i) => (
                 <li key={i.number} className="flex min-w-0 gap-2"><Link href={`${base}/issue/${i.number}`} className="shrink-0 font-mono text-[var(--w-accent-text)] hover:underline">{i.key}</Link><span className="min-w-0 flex-1 truncate">{i.title}</span><span className="shrink-0 text-[var(--w-text-3)]">{i.status}</span></li>
               ))}
-              {openWarn.openIssues > openWarn.issues.length && <li className="text-[var(--w-text-3)]">+{openWarn.openIssues - openWarn.issues.length} more</li>}
+              {openWarn.openIssues > openWarn.issues.length && <li className="text-[var(--w-text-3)]">{wt('studio.nMore', { n: openWarn.openIssues - openWarn.issues.length })}</li>}
             </ul>
-            <input className="w-input !h-8" value={openReason} maxLength={1000} onChange={(e) => setOpenReason(e.target.value)} placeholder="Why send now? (optional — shown to your team on the approval)" aria-label="Reason for sending with open issues" />
+            <input className="w-input !h-8" value={openReason} maxLength={1000} onChange={(e) => setOpenReason(e.target.value)} placeholder={wt('studio.whyNow')} aria-label={wt('studio.reasonOpen')} />
           </div>
         )}
       </Dialog>
@@ -307,28 +308,28 @@ function StageDialog({ open, onClose, config, stage, nextN }: { open: boolean; o
     mutationFn: () => (stage
       ? workStudioApi.updateStage(config.id, stage.id, { name: name.trim(), slug, n })
       : workStudioApi.createStage(config.id, { name: name.trim(), slug, n })),
-    onSuccess: () => { toast.success(stage ? 'Stage updated' : 'Stage added'); invalidate(); onClose(); },
-    onError: (err) => toast.error(workError(err, 'Could not save the stage')),
+    onSuccess: () => { toast.success(stage ? wt('studio.stageUpdated') : wt('studio.stageAdded')); invalidate(); onClose(); },
+    onError: (err) => toast.error(workError(err, wt('studio.saveStageFailed'))),
   });
   const ok = name.trim() && /^[a-z0-9][a-z0-9-]{0,79}$/.test(slug);
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      title={stage ? `Edit stage ${stage.n}` : 'Add stage'}
+      title={stage ? wt('studio.editStageN', { n: stage.n }) : wt('studio.addStage')}
       width={460}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
-          <button type="button" className="w-btn w-btn-primary" disabled={!ok || save.isPending} onClick={() => save.mutate()}>{save.isPending && <Spinner size={12} />} {stage ? 'Save' : 'Add stage'}</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
+          <button type="button" className="w-btn w-btn-primary" disabled={!ok || save.isPending} onClick={() => save.mutate()}>{save.isPending && <Spinner size={12} />} {stage ? wt('common.save') : wt('studio.addStage')}</button>
         </>
       }
     >
       <div className="grid grid-cols-[72px_1fr] gap-x-3">
-        <Field label="No."><input type="number" className="w-input" min={0} max={999} value={n} onChange={(e) => setN(Math.max(0, Math.min(999, Number(e.target.value) || 0)))} /></Field>
-        <Field label="Name"><input autoFocus className="w-input" maxLength={160} value={name} onChange={(e) => { setName(e.target.value); if (!slugTouched) setSlug(slugify(e.target.value)); }} placeholder="e.g. Discovery" /></Field>
+        <Field label={wt('studio.no')}><input type="number" className="w-input" min={0} max={999} value={n} onChange={(e) => setN(Math.max(0, Math.min(999, Number(e.target.value) || 0)))} /></Field>
+        <Field label={wt('common.name')}><input autoFocus className="w-input" maxLength={160} value={name} onChange={(e) => { setName(e.target.value); if (!slugTouched) setSlug(slugify(e.target.value)); }} placeholder={wt('studio.stageNamePh')} /></Field>
       </div>
-      <Field label="Slug" hint="Lowercase letters, digits and dashes. A slug that matches a CuongThai process stage (e.g. khao-sat) links to its process guide.">
+      <Field label="Slug" hint={wt('studio.slugHint')}>
         <input className="w-input font-mono" maxLength={80} value={slug} onChange={(e) => { setSlugTouched(true); setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')); }} />
       </Field>
     </Dialog>
@@ -361,12 +362,12 @@ export default function StagesView({ config }: { config: ProjectConfig }) {
   const [deleting, setDeleting] = useState<StageSummary | null>(null);
   const del = useMutation({
     mutationFn: (s: StageSummary) => workStudioApi.deleteStage(config.id, s.id),
-    onSuccess: () => { toast.success('Stage deleted'); setDeleting(null); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not delete the stage')),
+    onSuccess: () => { toast.success(wt('studio.stageDeleted')); setDeleting(null); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('studio.deleteStageFailed'))),
   });
 
   if (q.isLoading) return <PageLoading rows={5} />;
-  if (q.error || !q.data) return <EmptyState title="Could not load the stages" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />;
+  if (q.error || !q.data) return <EmptyState title={wt('studio.loadStagesFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />;
   const stages = q.data;
   const nextN = stages.length ? Math.max(...stages.map((s) => s.n)) + 1 : 0;
   const jump = (id: number) => document.getElementById(`stage-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -378,9 +379,9 @@ export default function StagesView({ config }: { config: ProjectConfig }) {
         <div className="mx-auto w-full max-w-[920px] px-4 py-5 md:px-6">
           <div className="mb-4 flex flex-wrap items-center gap-2">
             <p className="min-w-0 flex-1 text-[13px] leading-relaxed text-[var(--w-text-2)]">
-              Stages open in order. Close a stage by sending it for a gate review — it is done only when the gate approvers sign off.
+              {wt('studio.stagesIntro')}
             </p>
-            {config.permissions.manageStages && <button type="button" className="w-btn w-btn-sm" onClick={() => setEditing('new')}><Plus size={13} /> Add stage</button>}
+            {config.permissions.manageStages && <button type="button" className="w-btn w-btn-sm" onClick={() => setEditing('new')}><Plus size={13} /> {wt('studio.addStage')}</button>}
           </div>
           {stages.length ? (
             <ol className="space-y-2.5">
@@ -401,9 +402,9 @@ export default function StagesView({ config }: { config: ProjectConfig }) {
             </ol>
           ) : (
             <EmptyState
-              title="No stages yet"
-              body="Break the project into stages such as Discovery, Design, Build and Handover. Each stage closes with a gate review."
-              action={config.permissions.manageStages ? <button type="button" className="w-btn w-btn-primary" onClick={() => setEditing('new')}><Plus size={13} /> Add the first stage</button> : undefined}
+              title={wt('studio.noStagesYet')}
+              body={wt('studio.stagesEmptyBody')}
+              action={config.permissions.manageStages ? <button type="button" className="w-btn w-btn-primary" onClick={() => setEditing('new')}><Plus size={13} /> {wt('studio.addFirstStage')}</button> : undefined}
             />
           )}
         </div>
@@ -414,9 +415,9 @@ export default function StagesView({ config }: { config: ProjectConfig }) {
         onClose={() => setDeleting(null)}
         onConfirm={() => deleting && del.mutate(deleting)}
         pending={del.isPending}
-        title={`Delete stage ${deleting?.n}. ${deleting?.name ?? ''}`}
-        body="Issues in this stage keep everything else but lose their stage. A pending gate approval for it is removed."
-        confirmLabel="Delete stage"
+        title={wt('studio.deleteStageT', { n: deleting?.n ?? '', s: deleting?.name ?? '' })}
+        body={wt('studio.deleteStageBody')}
+        confirmLabel={wt('studio.deleteStage')}
       />
       <ApprovalDialog pid={config.id} approvalId={approvalId} config={config} onClose={() => setApprovalId(null)} />
     </div>

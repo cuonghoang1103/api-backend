@@ -24,8 +24,13 @@ import {
   type SpecDimension, type SpecFinding, type SpecGateStatus, type SpecReview, type SpecReviewSummary, type SpecScores,
 } from '@/lib/work-s6-api';
 import { Spinner, relativeTime, signalText } from '../ui';
+import { wfmt, wt } from '@/components/work/i18n';
 
-const SEV_LABEL: Record<SpecFinding['severity'], string> = { high: 'High', medium: 'Medium', low: 'Low' };
+const SEV_LABEL: Record<SpecFinding['severity'], string> = {
+  get high() { return wt('pspec.sevHigh'); },
+  get medium() { return wt('pspec.sevMedium'); },
+  get low() { return wt('pspec.sevLow'); },
+};
 const SEV_COLOR: Record<SpecFinding['severity'], string> = { high: 'var(--w-red)', medium: 'var(--w-orange)', low: 'var(--w-text-3)' };
 
 /** Màu theo điểm: ≥ 80 xanh lá, ≥ 50 cam, dưới đỏ (cùng ngưỡng mặc định của cổng: mỗi chiều ≥ 50). */
@@ -57,7 +62,7 @@ export function OverallBadge({ n, size = 44 }: { n: number; size?: number }) {
     <span
       className="inline-flex shrink-0 flex-col items-center justify-center rounded-full border-[3px] font-semibold tabular leading-none"
       style={{ width: size, height: size, borderColor: scoreColor(n), color: signalText(scoreColor(n)), fontSize: size * 0.34 }}
-      aria-label={`Overall ${n} out of 100`}
+      aria-label={wt('pspec.overallAria', { n })}
     >
       {n}
     </span>
@@ -76,7 +81,7 @@ export function SpecSparkline({ items, height = 44 }: { items: SpecReviewSummary
   const last = pts[pts.length - 1].overall;
   return (
     <figure className="min-w-0" data-testid="spec-history">
-      <svg viewBox={`-4 0 ${w + 8} ${height}`} className="h-[44px] w-full max-w-[260px]" role="img" aria-label={`Overall score over ${pts.length} checks: from ${first} to ${last}`}>
+      <svg viewBox={`-4 0 ${w + 8} ${height}`} className="h-[44px] w-full max-w-[260px]" role="img" aria-label={wt('pspec.sparkAria', { n: pts.length, a: first, b: last })}>
         <line x1={0} x2={w} y1={y(70)} y2={y(70)} stroke="var(--w-border-strong)" strokeDasharray="3 3" />
         <path d={path} fill="none" stroke="var(--w-accent)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
         {pts.map((p, i) => <circle key={p.id} cx={i * step} cy={y(p.overall)} r={2.6} fill={scoreColor(p.overall)}><title>{`${p.overall} · ${new Date(p.createdAt).toLocaleString()}`}</title></circle>)}
@@ -99,19 +104,19 @@ function FindingRow({ f, config, review, onJump, onChanged, canAct }: {
   const base = `/work/${config.workspace.slug}/${config.key}`;
   const apply = useMutation({
     mutationFn: () => workS6Api.apply(config.id, review.id, f.id, text.trim() || null),
-    onSuccess: (r) => { toast.success(f.target?.kind === 'PAGE' ? 'Applied — saved as a new version of the page. Check again to update the score.' : 'Applied to the issue. Check again to update the score.'); onChanged(r); },
-    onError: (err) => toast.error(workError(err, 'Could not apply the suggestion')),
+    onSuccess: (r) => { toast.success(f.target?.kind === 'PAGE' ? wt('pspec.appliedPage') : wt('pspec.appliedIssue')); onChanged(r); },
+    onError: (err) => toast.error(workError(err, wt('pspec.applyFailed'))),
   });
   const dismiss = useMutation({
     mutationFn: (v: boolean) => workS6Api.dismiss(config.id, review.id, f.id, v),
     onSuccess: onChanged,
-    onError: (err) => toast.error(workError(err, 'Could not update the finding')),
+    onError: (err) => toast.error(workError(err, wt('pspec.updateFindingFailed'))),
   });
   // CTW đợt 4 (A16): phát hiện ⇒ Bug trong defect log (Activity Review), bấm lại trả Bug cũ.
   const bug = useMutation({
     mutationFn: async () => { const b = await workCtw4Api.bugFromFinding(config.id, review.id, f.id); return { b, r: await workS6Api.review(config.id, review.id) }; },
-    onSuccess: ({ b, r }) => { toast.success(b.created ? `Logged as ${b.key}` : `Already logged as ${b.key}`); onChanged(r); },
-    onError: (err) => toast.error(workError(err, 'Could not log the bug')),
+    onSuccess: ({ b, r }) => { toast.success(b.created ? wt('pspec.loggedAs', { k: b.key }) : wt('pspec.alreadyLogged', { k: b.key })); onChanged(r); },
+    onError: (err) => toast.error(workError(err, wt('pspec.logBugFailed'))),
   });
   // Phát hiện cấp tài liệu (thiếu mục, không failure mode…) không có đoạn văn để nhảy tới.
   const jumpable = f.target && (f.target.kind === 'ISSUE' || (f.target.kind === 'PAGE' && f.target.blockIndex !== undefined));
@@ -119,7 +124,7 @@ function FindingRow({ f, config, review, onJump, onChanged, canAct }: {
   return (
     <li className={cn('rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)]', done && 'opacity-70')} data-testid="spec-finding" data-rule={f.rule}>
       <div className="flex items-start gap-2 px-2.5 py-2">
-        <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} className="mt-0.5 shrink-0 text-[var(--w-text-3)]" aria-label={open ? 'Collapse' : 'Expand'}>
+        <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} className="mt-0.5 shrink-0 text-[var(--w-text-3)]" aria-label={open ? wt('pspec.collapse') : wt('pspec.expand')}>
           {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
         </button>
         <div className="min-w-0 flex-1">
@@ -133,9 +138,9 @@ function FindingRow({ f, config, review, onJump, onChanged, canAct }: {
                 ? <Link href={`${base}/issue/${f.target!.issueNumber}`} className="font-mono text-[var(--w-accent-text)] hover:underline">{f.ref}</Link>
                 : <button type="button" onClick={() => onJump?.(f)} className="font-mono text-[var(--w-accent-text)] hover:underline" data-testid="spec-jump">{f.ref}</button>
             ) : <span className="font-mono text-[var(--w-text-2)]">{f.ref}</span>}
-            {f.source === 'ai' && <span className="inline-flex items-center gap-0.5 rounded-[4px] bg-[var(--w-accent-soft)] px-1 text-[10.5px] font-medium text-[var(--w-accent-text)]" title="Semantic finding from the AI review"><Sparkles size={9} /> AI</span>}
-            {f.status === 'applied' && <span className="inline-flex items-center gap-0.5 text-[var(--w-green)]"><Check size={11} /> Applied{f.appliedBy ? ` by ${f.appliedBy.name}` : ''}</span>}
-            {f.status === 'dismissed' && <span className="text-[var(--w-text-3)]">Dismissed</span>}
+            {f.source === 'ai' && <span className="inline-flex items-center gap-0.5 rounded-[4px] bg-[var(--w-accent-soft)] px-1 text-[10.5px] font-medium text-[var(--w-accent-text)]" title={wt('pspec.aiFindingTitle')}><Sparkles size={9} /> AI</span>}
+            {f.status === 'applied' && <span className="inline-flex items-center gap-0.5 text-[var(--w-green)]"><Check size={11} /> {wt('pspec.appliedBy', { b: f.appliedBy ? wt('pspec.byN', { n: f.appliedBy.name }) : '' })}</span>}
+            {f.status === 'dismissed' && <span className="text-[var(--w-text-3)]">{wt('pspec.dismissed')}</span>}
           </div>
           <p className="mt-0.5 text-[13px] leading-snug text-[var(--w-text)] [overflow-wrap:anywhere]">{f.why}</p>
           {f.excerpt && !open && <p className="mt-0.5 truncate text-[12px] italic text-[var(--w-text-3)]">“{f.excerpt}”</p>}
@@ -144,35 +149,35 @@ function FindingRow({ f, config, review, onJump, onChanged, canAct }: {
       {open && (
         <div className="space-y-2 border-t border-[var(--w-border)] px-3 py-2.5 text-[12.5px]">
           {f.excerpt && <blockquote className="border-l-2 border-[var(--w-border-strong)] pl-2 text-[var(--w-text-2)] [overflow-wrap:anywhere]">{f.excerpt}</blockquote>}
-          <p className="text-[var(--w-text-2)]"><b className="font-medium text-[var(--w-text)]">Suggestion:</b> {f.suggestion}</p>
+          <p className="text-[var(--w-text-2)]"><b className="font-medium text-[var(--w-text)]">{wt('pspec.suggestion')}</b> {f.suggestion}</p>
           {f.rewrite !== null && f.status === 'open' && canAct && (
             <div>
               <label className="mb-1 block text-[11.5px] font-medium text-[var(--w-text-3)]" htmlFor={`rw-${review.id}-${f.id}`}>
-                {f.rule === 'missing_ac' ? 'Acceptance criteria to add (one per line) — edit before applying' : 'Rewrite — edit before applying'}
+                {f.rule === 'missing_ac' ? wt('pspec.acToAdd') : wt('pspec.rewriteEdit')}
               </label>
               <textarea id={`rw-${review.id}-${f.id}`} className="w-input !min-h-[64px] text-[12.5px]" rows={f.rule === 'missing_ac' ? 3 : 2} maxLength={4000} value={text} onChange={(e) => setText(e.target.value)} data-testid="spec-rewrite" />
             </div>
           )}
-          {f.status === 'applied' && f.rewrite && <p className="text-[var(--w-text-3)]">Applied text: <span className="text-[var(--w-text-2)]">{f.rewrite}</span></p>}
+          {f.status === 'applied' && f.rewrite && <p className="text-[var(--w-text-3)]">{wt('pspec.appliedText')} <span className="text-[var(--w-text-2)]">{f.rewrite}</span></p>}
           {canAct && (
             <div className="flex flex-wrap items-center gap-2">
               {f.status === 'open' && f.rewrite !== null && f.target && (
                 <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={apply.isPending || !text.trim()} onClick={() => apply.mutate()} data-testid="spec-apply">
-                  {apply.isPending ? <Spinner size={11} /> : <Check size={12} />} Apply
+                  {apply.isPending ? <Spinner size={11} /> : <Check size={12} />} {wt('pspec.apply')}
                 </button>
               )}
               {f.status === 'open' && (
-                <button type="button" className="w-btn w-btn-sm" disabled={dismiss.isPending} onClick={() => dismiss.mutate(true)}><CircleSlash size={12} /> Dismiss</button>
+                <button type="button" className="w-btn w-btn-sm" disabled={dismiss.isPending} onClick={() => dismiss.mutate(true)}><CircleSlash size={12} /> {wt('pspec.dismiss')}</button>
               )}
               {f.bugNumber ? (
-                <Link href={`${base}/issue/${f.bugNumber}`} className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 font-mono text-[11.5px] text-[var(--w-accent-text)] hover:underline">Bug {config.key}-{f.bugNumber}</Link>
+                <Link href={`${base}/issue/${f.bugNumber}`} className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 font-mono text-[11.5px] text-[var(--w-accent-text)] hover:underline">{wt('pspec.bugK', { k: `${config.key}-${f.bugNumber}` })}</Link>
               ) : (
-                <button type="button" className="w-btn w-btn-sm" disabled={bug.isPending} onClick={() => bug.mutate()} data-testid="spec-log-bug">{bug.isPending ? <Spinner size={11} /> : null} Log as bug</button>
+                <button type="button" className="w-btn w-btn-sm" disabled={bug.isPending} onClick={() => bug.mutate()} data-testid="spec-log-bug">{bug.isPending ? <Spinner size={11} /> : null} {wt('pspec.logAsBug')}</button>
               )}
               {f.status === 'dismissed' && (
-                <button type="button" className="w-btn w-btn-sm" disabled={dismiss.isPending} onClick={() => dismiss.mutate(false)}><Undo2 size={12} /> Restore</button>
+                <button type="button" className="w-btn w-btn-sm" disabled={dismiss.isPending} onClick={() => dismiss.mutate(false)}><Undo2 size={12} /> {wt('pspec.restore')}</button>
               )}
-              {f.source === 'ai' && f.status === 'open' && f.rewrite !== null && <span className="text-[11.5px] text-[var(--w-text-3)]">Applying marks the {f.target?.kind === 'ISSUE' ? 'issue' : 'page'} as AI-assisted.</span>}
+              {f.source === 'ai' && f.status === 'open' && f.rewrite !== null && <span className="text-[11.5px] text-[var(--w-text-3)]">{wt('pspec.applyingMarks', { w: f.target?.kind === 'ISSUE' ? wt('pspec.wIssue') : wt('pspec.wPage') })}</span>}
             </div>
           )}
         </div>
@@ -213,19 +218,19 @@ export function SpecPanel({ config, review, history, running, onRun, onJump, onC
       <div className="flex flex-wrap items-center gap-2">
         {canRun && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={running} onClick={() => onRun(semantic)} data-testid="spec-run">
-            {running ? <Spinner size={11} /> : review ? <RefreshCw size={12} /> : <Gauge size={12} />} {review ? 'Check again' : 'Check spec quality'}
+            {running ? <Spinner size={11} /> : review ? <RefreshCw size={12} /> : <Gauge size={12} />} {review ? wt('pspec.checkAgain') : wt('pspec.checkQuality')}
           </button>
         )}
         {canRun && config.permissions.useAi && (
-          <label className="flex items-center gap-1.5 text-[12px] text-[var(--w-text-2)]" title="Code checks always run. The AI adds semantic findings (contradictions, missing edge cases).">
-            <input type="checkbox" checked={semantic} onChange={(e) => setSemantic(e.target.checked)} /> Include AI semantic review
+          <label className="flex items-center gap-1.5 text-[12px] text-[var(--w-text-2)]" title={wt('pspec.aiTitle')}>
+            <input type="checkbox" checked={semantic} onChange={(e) => setSemantic(e.target.checked)} /> {wt('pspec.inclAi')}
           </label>
         )}
       </div>
 
       {!review ? (
         <p className="text-[13px] leading-relaxed text-[var(--w-text-2)]">
-          {running ? 'Checking…' : 'Not checked yet. The check scores four dimensions of ISO/IEC/IEEE 29148 — completeness, consistency, unambiguity and verifiability — and lists what to fix.'}
+          {running ? wt('pspec.checking') : wt('pspec.notChecked')}
         </p>
       ) : (
         <>
@@ -241,41 +246,41 @@ export function SpecPanel({ config, review, history, running, onRun, onJump, onC
             {history && <SpecSparkline items={history} />}
           </div>
           {review.stale && (
-            <p className="flex items-center gap-1.5 rounded-[6px] bg-[color-mix(in_srgb,var(--w-orange)_9%,transparent)] px-2 py-1.5 text-[12px]"><AlertTriangle size={12} className="text-[var(--w-orange)]" /> The page changed after this check (now v{review.currentPageVersion}). Check again for a current score.</p>
+            <p className="flex items-center gap-1.5 rounded-[6px] bg-[color-mix(in_srgb,var(--w-orange)_9%,transparent)] px-2 py-1.5 text-[12px]"><AlertTriangle size={12} className="text-[var(--w-orange)]" /> {wt('pspec.pageChanged', { v: review.currentPageVersion ?? '' })}</p>
           )}
           {review.stats.docKind && (
             <p className="text-[12px] text-[var(--w-text-2)]" data-testid="spec-doc-kind">
-              Checked as <b className="font-medium text-[var(--w-text)]">{({ SRS: 'an SRS (ISO/IEC/IEEE 29148)', SDD: 'a design description (IEEE 1016)', GDD: 'a game design document', OTHER: 'a general document (no section checks)' } as const)[review.stats.docKind]}</b>{review.stats.docKindAuto ? ' — auto-detected' : ''}.
+              {wt('pspec.checkedAs')} <b className="font-medium text-[var(--w-text)]">{({ SRS: wt('pspec.asSrs'), SDD: wt('pspec.asSdd'), GDD: wt('pspec.asGdd'), OTHER: wt('pspec.asOther') })[review.stats.docKind]}</b>{review.stats.docKindAuto ? wt('pspec.autoDetected') : ''}.
             </p>
           )}
           <ScoreBars s={review} threshold={gateThreshold} />
           <p className="text-[11.5px] text-[var(--w-text-3)]">
-            Verifiability = 40% acceptance criteria ({review.stats.acPct}%) + 30% linked tests ({review.stats.testPct}%) + 30% measurable wording ({review.stats.verifiabilityRules}).
-            {' '}{review.semantic === 'OK' ? <span className="inline-flex items-center gap-0.5"><Bot size={11} /> AI semantic review included{review.model ? ` (${review.model})` : ''}.</span>
-              : review.semantic === 'UNAVAILABLE' ? <b className="font-medium text-[var(--w-orange)]">Semantic review unavailable — {review.stats.semanticReason ?? 'the AI call failed'}; code checks are complete.</b>
-                : 'Code checks only.'}
+            {wt('pspec.verifFormula', { a: review.stats.acPct, b: review.stats.testPct, c: review.stats.verifiabilityRules })}
+            {' '}{review.semantic === 'OK' ? <span className="inline-flex items-center gap-0.5"><Bot size={11} /> {wt('pspec.aiIncluded', { m: review.model ? ` (${review.model})` : '' })}</span>
+              : review.semantic === 'UNAVAILABLE' ? <b className="font-medium text-[var(--w-orange)]">{wt('pspec.semUnavail', { r: review.stats.semanticReason ?? wt('pspec.aiFailed') })}</b>
+                : wt('pspec.codeOnly')}
           </p>
 
-          <div className="flex flex-wrap items-center gap-1" role="tablist" aria-label="Filter findings by dimension">
+          <div className="flex flex-wrap items-center gap-1" role="tablist" aria-label={wt('pspec.filterDim')}>
             {(['all', ...SPEC_DIMENSIONS] as const).map((k) => (
               <button
                 key={k} type="button" role="tab" aria-selected={dim === k} onClick={() => setDim(k)}
                 className={cn('h-7 rounded-[6px] border px-2 text-[12px]', dim === k ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border)] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}
                 data-testid={`spec-filter-${k}`}
               >
-                {k === 'all' ? 'All' : DIMENSION_INFO[k].short} <span className="tabular opacity-70">{counts[k] ?? 0}</span>
+                {k === 'all' ? wt('common.all') : DIMENSION_INFO[k].short} <span className="tabular opacity-70">{counts[k] ?? 0}</span>
               </button>
             ))}
-            <label className="ml-auto flex items-center gap-1 text-[11.5px] text-[var(--w-text-3)]"><input type="checkbox" checked={showClosed} onChange={(e) => setShowClosed(e.target.checked)} /> Show applied/dismissed</label>
+            <label className="ml-auto flex items-center gap-1 text-[11.5px] text-[var(--w-text-3)]"><input type="checkbox" checked={showClosed} onChange={(e) => setShowClosed(e.target.checked)} /> {wt('pspec.showClosed')}</label>
           </div>
           {shown.length ? (
             <ul className="space-y-1.5">
               {shown.map((f) => <FindingRow key={`${review.id}-${f.id}`} f={f} config={config} review={review} onJump={onJump} onChanged={onChanged} canAct={canRun} />)}
             </ul>
-          ) : <p className="flex items-center gap-1.5 text-[13px] text-[var(--w-green)]"><Check size={13} /> Nothing open{dim !== 'all' ? ` for ${DIMENSION_INFO[dim].label.toLowerCase()}` : ''}.</p>}
+          ) : <p className="flex items-center gap-1.5 text-[13px] text-[var(--w-green)]"><Check size={13} /> {wt('pspec.nothingOpen', { f: dim !== 'all' ? wt('pspec.forDim', { d: DIMENSION_INFO[dim].label.toLowerCase() }) : '' })}</p>}
 
-          <section aria-label="Requirements without tests">
-            <h3 className="mb-1.5 flex items-center gap-1.5 text-[12.5px] font-semibold"><FlaskConical size={13} /> Not traced to a test <span className="tabular font-normal text-[var(--w-text-3)]">· {review.untraced.length}</span></h3>
+          <section aria-label={wt('pspec.reqNoTests')}>
+            <h3 className="mb-1.5 flex items-center gap-1.5 text-[12.5px] font-semibold"><FlaskConical size={13} /> {wt('pspec.notTraced')} <span className="tabular font-normal text-[var(--w-text-3)]">· {review.untraced.length}</span></h3>
             {review.untraced.length ? (
               <ul className="max-h-[220px] space-y-0.5 overflow-y-auto text-[12.5px]">
                 {review.untraced.map((u) => (
@@ -284,13 +289,13 @@ export function SpecPanel({ config, review, history, running, onRun, onJump, onC
                       ? <Link href={`${base}/issue/${u.target.issueNumber}`} className="shrink-0 font-mono text-[var(--w-accent-text)] hover:underline">{u.ref}</Link>
                       : <button type="button" className="shrink-0 font-mono text-[var(--w-accent-text)] hover:underline" onClick={() => onJump?.({ target: u.target, excerpt: u.title } as SpecFinding)}>{u.ref}</button>}
                     <span className="min-w-0 truncate text-[var(--w-text-2)]">{u.title}</span>
-                    {!u.hasAcceptanceCriteria && <span className="ml-auto shrink-0 text-[11px] text-[var(--w-orange)]">no criteria</span>}
+                    {!u.hasAcceptanceCriteria && <span className="ml-auto shrink-0 text-[11px] text-[var(--w-orange)]">{wt('pspec.noCriteria')}</span>}
                   </li>
                 ))}
               </ul>
-            ) : <p className="text-[12.5px] text-[var(--w-green)]">Every requirement has a linked test.</p>}
-            {!review.stats.testingEnabled && <p className="mt-1 text-[11.5px] text-[var(--w-text-3)]">Test management is off in this project — turn it on under Tests to link test cases.</p>}
-            {review.scope === 'PAGE' && <p className="mt-1 text-[11.5px] text-[var(--w-text-3)]">A sentence is traced when it names a requirement issue (e.g. {config.key}-12) that has a linked test.</p>}
+            ) : <p className="text-[12.5px] text-[var(--w-green)]">{wt('pspec.everyReq')}</p>}
+            {!review.stats.testingEnabled && <p className="mt-1 text-[11.5px] text-[var(--w-text-3)]">{wt('pspec.testsOff')}</p>}
+            {review.scope === 'PAGE' && <p className="mt-1 text-[11.5px] text-[var(--w-text-3)]">{wt('pspec.sentenceTraced', { k: config.key })}</p>}
           </section>
         </>
       )}
@@ -345,29 +350,29 @@ export function DocSpecDrawer({ open, onClose, config, pageNumber, beforeRun, on
     onSuccess: (r) => {
       setCurrent(r);
       qc.invalidateQueries({ queryKey: workS6Keys.allReviews(pid) });
-      toast.success(`Spec Fidelity ${r.overall}/100`);
+      toast.success(wt('pspec.fidelityToast', { n: r.overall }));
     },
-    onError: (err) => toast.error(workError(err, 'Could not check the page')),
+    onError: (err) => toast.error(workError(err, wt('pspec.checkPageFailed'))),
   });
   const canRun = ['ADMIN', 'MEMBER', 'TEACHER'].includes(config.role);
   if (!open) return null;
   return (
     <aside
       className="fixed bottom-0 right-0 top-0 z-[60] flex w-full max-w-[460px] flex-col border-l border-[var(--w-border)] bg-[var(--w-panel)] shadow-[var(--w-shadow-pop,0_10px_40px_rgba(0,0,0,.18))]"
-      aria-label="Spec quality" data-testid="spec-drawer"
+      aria-label={wt('pspec.specQuality')} data-testid="spec-drawer"
     >
       <div className="flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-4">
         <Gauge size={15} className="text-[var(--w-accent-text)]" />
-        <h2 className="min-w-0 flex-1 truncate text-[14px] font-semibold">Spec quality</h2>
-        <Link href={`/work/${config.workspace.slug}/${config.key}/spec`} className="w-btn w-btn-ghost w-btn-sm" title="All checks in this project"><ExternalLink size={12} /> <span className="max-sm:hidden">All checks</span></Link>
-        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Close" onClick={onClose}><X size={15} /></button>
+        <h2 className="min-w-0 flex-1 truncate text-[14px] font-semibold">{wt('pspec.specQuality')}</h2>
+        <Link href={`/work/${config.workspace.slug}/${config.key}/spec`} className="w-btn w-btn-ghost w-btn-sm" title={wt('pspec.allChecksTitle')}><ExternalLink size={12} /> <span className="max-sm:hidden">{wt('pspec.allChecks')}</span></Link>
+        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('common.close')} onClick={onClose}><X size={15} /></button>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto p-4">
         {canRun && (
           <div className="mb-3 flex items-center gap-2">
-            <label htmlFor={`w-spec-doctype-${pageNumber}`} className="text-[12px] text-[var(--w-text-2)]">Document type</label>
+            <label htmlFor={`w-spec-doctype-${pageNumber}`} className="text-[12px] text-[var(--w-text-2)]">{wt('pspec.docType')}</label>
             <select id={`w-spec-doctype-${pageNumber}`} className="w-input !h-7 !w-auto !py-0 text-[12.5px]" value={docType} onChange={(e) => setDocType(e.target.value as typeof docType)} data-testid="spec-doc-type">
-              <option value="AUTO">Auto-detect</option><option value="SRS">SRS (requirements)</option><option value="SDD">SDD / SDS (design)</option><option value="GDD">GDD (game design)</option><option value="OTHER">Other document</option>
+              <option value="AUTO">{wt('pspec.docOpts')}</option><option value="SRS">{wt('pspec.optSrs')}</option><option value="SDD">{wt('pspec.optSdd')}</option><option value="GDD">{wt('pspec.optGdd')}</option><option value="OTHER">{wt('pspec.optOther')}</option>
             </select>
           </div>
         )}
@@ -381,7 +386,7 @@ export function DocSpecDrawer({ open, onClose, config, pageNumber, beforeRun, on
           onJump={(f) => {
             if (f.target?.kind === 'ISSUE') { window.location.href = `/work/${config.workspace.slug}/${config.key}/issue/${f.target.issueNumber}`; return; }
             const ok = jumpToText(document.querySelector(rootSelector), f);
-            if (!ok) toast.info('That text is no longer in the page — check again.');
+            if (!ok) toast.info(wt('pspec.textGone'));
             else if (window.innerWidth < 900) onClose();
           }}
           onChanged={(r) => { setCurrent(r); if (r.findings.some((x) => x.status === 'applied')) onApplied?.(); }}
@@ -397,10 +402,10 @@ export function AiAssistedBadge({ model, at, className }: { model?: string | nul
   return (
     <span
       className={cn('inline-flex h-[20px] shrink-0 items-center gap-1 rounded-[5px] border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-1.5 text-[11.5px] font-medium text-[var(--w-accent-text)]', className)}
-      title={`AI-assisted${model ? ` · ${model}` : ''}${at ? ` · ${new Date(at).toLocaleString()}` : ''} — needs a human reviewer before release`}
+      title={wt('pspec.aiAssistedT', { m: model ? ` · ${model}` : '', a: at ? ` · ${new Date(at).toLocaleString(wfmt.intl())}` : '' })}
       data-testid="ai-assisted"
     >
-      <Sparkles size={10} /> AI-assisted
+      <Sparkles size={10} /> {wt('pspec.aiAssisted')}
     </span>
   );
 }
@@ -409,11 +414,11 @@ export function AiAssistedBadge({ model, at, className }: { model?: string | nul
 export function AiAssistedControl({ on, model, at, editable, onToggle }: { on: boolean; model?: string | null; at?: string | null; editable: boolean; onToggle: (v: boolean) => void }) {
   return (
     <div className="flex min-w-0 flex-wrap items-center gap-1.5 px-2 text-[12.5px]">
-      {on ? <AiAssistedBadge model={model} at={at} /> : <span className="text-[var(--w-text-3)]">No</span>}
+      {on ? <AiAssistedBadge model={model} at={at} /> : <span className="text-[var(--w-text-3)]">{wt('common.no')}</span>}
       {on && model && <span className="min-w-0 truncate text-[11.5px] text-[var(--w-text-3)]" title={model}>{model}</span>}
       {editable && (
         <button type="button" className="text-[12px] text-[var(--w-accent-text)] hover:underline" onClick={() => onToggle(!on)} data-testid="ai-assisted-toggle">
-          {on ? 'Remove' : 'Mark'}
+          {on ? wt('common.remove') : wt('pspec.mark')}
         </button>
       )}
     </div>
@@ -432,22 +437,22 @@ export function SpecGateBox({ config, stageId, gate, isAdmin, reason, onReason }
       <div className="flex items-start gap-2.5">
         {gate.review ? <OverallBadge n={gate.review.scores.overall} size={36} /> : <Gauge size={18} className="mt-0.5 shrink-0 text-[var(--w-orange)]" />}
         <div className="min-w-0 flex-1">
-          <div className="font-semibold">Spec Fidelity gate {gate.pass ? '— passed' : '— not met'}</div>
+          <div className="font-semibold">{wt('pspec.gateT', { s: gate.pass ? wt('pspec.passed') : wt('pspec.notMet') })}</div>
           <p className="mt-0.5 text-[12px] text-[var(--w-text-2)]">
-            Needs overall ≥ {gate.config.minOverall} and every dimension ≥ {gate.config.minDimension}.
-            {gate.review ? ` Latest check: ${gate.review.scopeLabel}, ${relativeTime(gate.review.createdAt)}${gate.review.stale ? ' (document changed since)' : ''}. It is attached to the approval.` : ''}
+            {wt('pspec.needsOverall', { a: gate.config.minOverall, b: gate.config.minDimension })}
+            {gate.review ? wt('pspec.latestCheck', { s: gate.review.scopeLabel, t: relativeTime(gate.review.createdAt), c: gate.review.stale ? wt('pspec.docChanged') : '' }) : ''}
           </p>
           {!gate.pass && <ul className="mt-1 list-disc pl-4 text-[12px]">{gate.reasons.map((r) => <li key={r}>{r}</li>)}</ul>}
           {gate.review && <div className="mt-2"><ScoreBars s={gate.review.scores} compact threshold={gate.config.minDimension} /></div>}
           {!gate.pass && (
-            <Link href={`${base}/spec?stage=${stageId}`} className="mt-2 inline-flex items-center gap-1 text-[12.5px] font-medium text-[var(--w-accent-text)] hover:underline"><Gauge size={12} /> Check spec quality for this stage</Link>
+            <Link href={`${base}/spec?stage=${stageId}`} className="mt-2 inline-flex items-center gap-1 text-[12.5px] font-medium text-[var(--w-accent-text)] hover:underline"><Gauge size={12} /> {wt('pspec.checkStage')}</Link>
           )}
         </div>
       </div>
       {!gate.pass && isAdmin && (
         <label className="mt-2.5 block">
-          <span className="mb-1 block text-[12px] text-[var(--w-text-2)]">Admin override — reason (recorded in the audit log)</span>
-          <input className="w-input !h-8" value={reason} maxLength={1000} onChange={(e) => onReason(e.target.value)} placeholder="e.g. Client accepted the open questions in the kickoff meeting" data-testid="spec-gate-reason" />
+          <span className="mb-1 block text-[12px] text-[var(--w-text-2)]">{wt('pspec.adminOverride')}</span>
+          <input className="w-input !h-8" value={reason} maxLength={1000} onChange={(e) => onReason(e.target.value)} placeholder={wt('pspec.overridePh')} data-testid="spec-gate-reason" />
         </label>
       )}
     </div>

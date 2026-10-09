@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { workError } from '@/lib/work-api';
 import { SEVERITY_LABEL, workCtw4Api, workCtw4Keys, type Severity } from '@/lib/work-ctw4-api';
 import { wk } from './hooks';
+import { wt } from '@/components/work/i18n';
 
 const ACTIVITY_LABEL: Record<string, string> = { Review: 'Review (documents)', UT: 'UT — unit test', IT: 'IT — integration test', ST: 'ST — system test', AT: 'AT — acceptance test' };
 
@@ -35,7 +36,7 @@ export default function DefectPanel({ pid, num, editable }: { pid: number; num: 
       qc.setQueryData(workCtw4Keys.defect(pid, num), d);
       qc.invalidateQueries({ queryKey: wk.history(pid, num) });
     },
-    onError: (err) => toast.error(workError(err, 'Could not save the defect fields')),
+    onError: (err) => toast.error(workError(err, wt('detail.defSaveFailed'))),
   });
   if (!q.data?.isBug) return null;
   const d = q.data;
@@ -43,29 +44,29 @@ export default function DefectPanel({ pid, num, editable }: { pid: number; num: 
   return (
     <section aria-labelledby={`w-defect-${num}`} className="mt-4 border-t border-[var(--w-border)] pt-3">
       <div className="mb-1 flex items-baseline gap-2">
-        <span id={`w-defect-${num}`} className="text-[12px] font-medium text-[var(--w-text-2)]">Defect</span>
-        {d.source && <span className="text-[11.5px] text-[var(--w-text-2)]">From spec review #{d.source.reviewId}</span>}
+        <span id={`w-defect-${num}`} className="text-[12px] font-medium text-[var(--w-text-2)]">{wt('detail.defect')}</span>
+        {d.source && <span className="text-[11.5px] text-[var(--w-text-2)]">{wt('detail.fromSpec', { n: d.source.reviewId })}</span>}
       </div>
-      <Row label="Severity" id={`w-def-sev-${num}`}>
+      <Row label={wt('detail.defSeverity')} id={`w-def-sev-${num}`}>
         <select id={`w-def-sev-${num}`} className={sel} disabled={!editable || save.isPending} value={d.severity ?? ''} onChange={(e) => save.mutate({ severity: (e.target.value || null) as Severity | null })}>
-          <option value="">Not set</option>
+          <option value="">{wt('common.notSet')}</option>
           {d.options.severities.map((s) => <option key={s} value={s}>{SEVERITY_LABEL[s]}</option>)}
         </select>
       </Row>
-      <Row label="Activity" id={`w-def-act-${num}`}>
+      <Row label={wt('detail.defActivity')} id={`w-def-act-${num}`}>
         <select id={`w-def-act-${num}`} className={sel} disabled={!editable || save.isPending} value={d.activity ?? ''} onChange={(e) => save.mutate({ activity: e.target.value || null })}>
-          <option value="">Not set</option>
+          <option value="">{wt('common.notSet')}</option>
           {d.options.activities.map((a) => <option key={a} value={a}>{ACTIVITY_LABEL[a] ?? a}</option>)}
         </select>
       </Row>
-      <Row label="Product" id={`w-def-prod-${num}`}>
+      <Row label={wt('detail.defProduct')} id={`w-def-prod-${num}`}>
         <select id={`w-def-prod-${num}`} className={sel} disabled={!editable || save.isPending} value={d.product ?? ''} onChange={(e) => save.mutate({ product: e.target.value || null })}>
-          <option value="">Not set</option>
+          <option value="">{wt('common.notSet')}</option>
           {d.options.products.map((p) => <option key={p} value={p}>{p}</option>)}
         </select>
       </Row>
-      <Row label="Product details" id={`w-def-det-${num}`}>
-        <input id={`w-def-det-${num}`} className={sel} maxLength={300} disabled={!editable} placeholder="Screen, module or section" value={details}
+      <Row label={wt('detail.defDetails')} id={`w-def-det-${num}`}>
+        <input id={`w-def-det-${num}`} className={sel} maxLength={300} disabled={!editable} placeholder={wt('detail.defDetailsPh')} value={details}
           onChange={(e) => setDetails(e.target.value)}
           onBlur={() => { if (details.trim() !== (d.productDetails ?? '')) save.mutate({ productDetails: details.trim() || null }); }} />
       </Row>

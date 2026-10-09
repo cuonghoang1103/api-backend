@@ -6,6 +6,9 @@
 
 import { api } from '@/lib/api';
 import { workApi, type CommentVisibility, type TiptapDoc, type WorkComment, type WorkUser } from '@/lib/work-api';
+import { translate as wtr, type WKey } from '@/components/work/i18n/core';
+import { currentWorkLocale } from '@/components/work/i18n/store';
+const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 type Env<T> = { success: boolean; data: T };
 const d = <T,>(p: Promise<{ data: Env<T> }>) => p.then((r) => r.data.data);
@@ -35,11 +38,11 @@ export type ThreadComment = WorkComment & { parentId?: number | null; attachment
 /** Câu cho người đọc theo trạng thái phiên âm (khớp transcriptNote ở server). */
 export function transcriptNote(s: TranscriptStatus): string {
   switch (s) {
-    case 'PENDING': return 'Transcribing…';
-    case 'NO_SPEECH': return 'No speech detected';
-    case 'NO_KEY': return 'Transcription is not available on this server — the audio is saved';
-    case 'LIMIT': return 'Transcription skipped: the project reached today’s limit';
-    case 'FAILED': return 'Transcription failed';
+    case 'PENDING': return wt('chat.trPending');
+    case 'NO_SPEECH': return wt('chat.trNoSpeech');
+    case 'NO_KEY': return wt('chat.trNoKey');
+    case 'LIMIT': return wt('chat.trLimit');
+    case 'FAILED': return wt('chat.trFailed');
     default: return '';
   }
 }

@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * "Web links" trong chi tiết thẻ (Resources, 06/10/2026 — kiểu Jira): link ngoài gắn vào thẻ, chọn từ thư viện
+ * wt('res.webLinks') trong chi tiết thẻ (Resources, 06/10/2026 — kiểu Jira): link ngoài gắn vào thẻ, chọn từ thư viện
  * Resources của dự án hoặc dán URL + tiêu đề; link dán thẳng có nút "Save to Resources". Chỉ hiện khi mô-đun
  * resources bật và người xem không phải khách bị cách ly (khách: tuyến bị chặn ở server).
  */
@@ -15,6 +15,7 @@ import { openResourceLink, resApi, resKeys } from '@/lib/work-resources-api';
 import { Dialog, Field, PickerList, Popover, Spinner } from '../ui';
 import { studioOn } from '../studio/shared';
 import { Favicon } from './shared';
+import { wt } from '@/components/work/i18n';
 
 export function IssueWebLinks({ config, issueNumber }: { config: ProjectConfig; issueNumber: number }) {
   const on = studioOn(config, 'resources') && !config.clientView;
@@ -41,7 +42,7 @@ function Inner({ config, issueNumber }: { config: ProjectConfig; issueNumber: nu
   const del = useMutation({ mutationFn: (lid: number) => resApi.deleteWebLink(pid, issueNumber, lid), onSuccess: done, onError: (e) => toast.error(workError(e)) });
   const save = useMutation({
     mutationFn: (lid: number) => resApi.saveWebLink(pid, issueNumber, lid),
-    onSuccess: () => { toast.success('Saved to Resources'); qc.invalidateQueries({ queryKey: resKeys.all(pid) }); },
+    onSuccess: () => { toast.success(wt('res.savedToRes')); qc.invalidateQueries({ queryKey: resKeys.all(pid) }); },
     onError: (e) => toast.error(workError(e)),
   });
 
@@ -54,11 +55,11 @@ function Inner({ config, issueNumber }: { config: ProjectConfig; issueNumber: nu
   return (
     <section data-testid="issue-web-links">
       <div className="mb-2 flex items-center gap-1">
-        <h3 className="w-section-title">Web links</h3>
+        <h3 className="w-section-title">{wt('res.webLinks')}</h3>
         {canEdit && (
           <div className="ml-auto flex items-center gap-1">
-            <button ref={pickRef} type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setPicking(true)}><Library size={13} /> From Resources</button>
-            <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setTyping(true)}><Plus size={13} /> Add URL</button>
+            <button ref={pickRef} type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setPicking(true)}><Library size={13} /> {wt('res.fromRes')}</button>
+            <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setTyping(true)}><Plus size={13} /> {wt('res.addUrl')}</button>
           </div>
         )}
       </div>
@@ -71,13 +72,13 @@ function Inner({ config, issueNumber }: { config: ProjectConfig; issueNumber: nu
                 onClick={(e) => { if (l.resourceId) { e.preventDefault(); openResourceLink(pid, { id: l.resourceId, url: l.url }); } }}>
                 {l.title}
               </a>
-              {l.inResources ? <span title="In Resources"><Library size={12} className="shrink-0 text-[var(--w-text-3)]" /></span>
+              {l.inResources ? <span title={wt('res.inRes')}><Library size={12} className="shrink-0 text-[var(--w-text-3)]" /></span>
                 : canEdit && (
-                  <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm opacity-0 focus:opacity-100 group-hover:opacity-100 max-md:opacity-100" aria-label={`Save ${l.title} to Resources`} title="Save to Resources"
+                  <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm opacity-0 focus:opacity-100 group-hover:opacity-100 max-md:opacity-100" aria-label={wt('res.saveTToRes', { t: l.title })} title={wt('res.saveToRes')}
                     disabled={save.isPending} onClick={() => save.mutate(l.id)}><BookmarkPlus size={12} /></button>
                 )}
               {l.canDelete && (
-                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm opacity-0 focus:opacity-100 group-hover:opacity-100 max-md:opacity-100" aria-label={`Remove ${l.title}`} onClick={() => del.mutate(l.id)}>
+                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm opacity-0 focus:opacity-100 group-hover:opacity-100 max-md:opacity-100" aria-label={wt('res.removeT', { t: l.title })} onClick={() => del.mutate(l.id)}>
                   <X size={12} />
                 </button>
               )}
@@ -85,7 +86,7 @@ function Inner({ config, issueNumber }: { config: ProjectConfig; issueNumber: nu
           ))}
         </ul>
       ) : (
-        <p className="text-[12px] text-[var(--w-text-3)]">Link the repo, design, spec or reference this issue needs.</p>
+        <p className="text-[12px] text-[var(--w-text-3)]">{wt('res.linkRepo')}</p>
       )}
       <Popover open={picking} onClose={() => setPicking(false)} anchorRef={pickRef} width={340} align="end">
         <PickerList
@@ -94,24 +95,24 @@ function Inner({ config, issueNumber }: { config: ProjectConfig; issueNumber: nu
           }))}
           selected={[]}
           onPick={(id) => { add.mutate({ resourceId: id }); setPicking(false); }}
-          placeholder="Find a resource…"
-          empty={lib.isLoading ? 'Loading…' : 'No resource found'}
+          placeholder={wt('res.findRes')}
+          empty={lib.isLoading ? wt('common.loading') : wt('res.noResFound')}
         />
       </Popover>
-      <Dialog open={typing} onClose={() => setTyping(false)} title="Add web link" width={460}
+      <Dialog open={typing} onClose={() => setTyping(false)} title={wt('res.addWebLink')} width={460}
         footer={(
           <>
-            <button type="button" className="w-btn" onClick={() => setTyping(false)}>Cancel</button>
+            <button type="button" className="w-btn" onClick={() => setTyping(false)}>{wt('common.cancel')}</button>
             <button type="button" className="w-btn w-btn-primary" disabled={!url.trim() || add.isPending} onClick={() => add.mutate({ url: url.trim(), title: title.trim() || null })}>
-              {add.isPending && <Spinner size={12} />}Add link
+              {add.isPending && <Spinner size={12} />}{wt('res.addLink')}
             </button>
           </>
         )}
       >
         <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); if (url.trim()) add.mutate({ url: url.trim(), title: title.trim() || null }); }}>
           <Field label="URL"><input className="w-input" value={url} autoFocus onChange={(e) => setUrl(e.target.value)} placeholder="https://…" /></Field>
-          <Field label="Link text" hint="Optional — taken from Resources or the URL"><input className="w-input" value={title} maxLength={200} onChange={(e) => setTitle(e.target.value)} /></Field>
-          <p className="flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><Globe size={12} /> A URL that is already in Resources is linked to it automatically.</p>
+          <Field label={wt('res.linkText')} hint={wt('res.linkTextHint')}><input className="w-input" value={title} maxLength={200} onChange={(e) => setTitle(e.target.value)} /></Field>
+          <p className="flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><Globe size={12} /> {wt('res.autoLinked')}</p>
           <button type="submit" hidden />
         </form>
       </Dialog>

@@ -13,27 +13,28 @@ import { cn } from '@/lib/utils';
 import { workApi, workError, type ProjectConfig, type ShareLink, type ShareOptions } from '@/lib/work-api';
 import { Dialog, EmptyState, Field, formatDate, relativeTime, Spinner } from '../ui';
 import { ConfirmDialog, ReadOnlyNotice, Section, Select } from './shared';
+import { wt } from '@/components/work/i18n';
 
 const SECTION_LABEL: Array<{ key: keyof ShareOptions; label: string; hint: string }> = [
-  { key: 'board', label: 'Board', hint: 'Cards in the active sprint, by status' },
-  { key: 'backlog', label: 'Backlog', hint: 'Open issues grouped by sprint' },
-  { key: 'reports', label: 'Reports', hint: 'Progress totals, burndown and velocity' },
-  { key: 'tests', label: 'Tests', hint: 'Test cycles with pass rates' },
+  { key: 'board', get label() { return wt('share.secBoard'); }, get hint() { return wt('share.secBoardH'); } },
+  { key: 'backlog', get label() { return 'Backlog'; }, get hint() { return wt('share.secBacklogH'); } },
+  { key: 'reports', get label() { return wt('desk.reports'); }, get hint() { return wt('share.secReportsH'); } },
+  { key: 'tests', get label() { return wt('share.secTests'); }, get hint() { return wt('share.secTestsH'); } },
 ];
 
 const EXPIRY: Array<{ value: string; label: string }> = [
-  { value: '', label: 'Never' },
-  { value: '7', label: '7 days' },
-  { value: '30', label: '30 days' },
-  { value: '90', label: '90 days' },
+  { value: '', get label() { return wt('dev.never'); } },
+  { value: '7', get label() { return wt('common.days', { count: 7 }); } },
+  { value: '30', get label() { return wt('common.days', { count: 30 }); } },
+  { value: '90', get label() { return wt('common.days', { count: 90 }); } },
 ];
 
-export async function copyText(text: string, what = 'Link') {
+export async function copyText(text: string, what = wt('share.linkWord')) {
   try {
     await navigator.clipboard.writeText(text);
-    toast.success(`${what} copied`);
+    toast.success(wt('git.xCopied', { x: what }));
   } catch {
-    toast.error('Could not copy — select the text and copy it manually');
+    toast.error(wt('share.copyManual'));
   }
 }
 
@@ -58,18 +59,18 @@ function CreateLinkDialog({ open, onClose, pid, onCreated }: { open: boolean; on
   const create = useMutation({
     mutationFn: () => workApi.createShareLink(pid, { label: label.trim() || null, options: { ...opts, descriptions: opts.descriptions && (opts.board || opts.backlog) }, expiresInDays: expiry ? Number(expiry) : null }),
     onSuccess: (l) => { onCreated(l); onClose(); },
-    onError: (err) => toast.error(workError(err, 'Could not create the link')),
+    onError: (err) => toast.error(workError(err, wt('share.createFailed'))),
   });
 
   return (
-    <Dialog open={open} onClose={onClose} title="Create public link" width={500}>
+    <Dialog open={open} onClose={onClose} title={wt('share.createTitle')} width={500}>
       <form onSubmit={(e) => { e.preventDefault(); if (anySection && !create.isPending) create.mutate(); }}>
-        <Field label="Label" hint="Only you and other project admins see this — e.g. “Lecturer — SWP391 review”.">
-          <input className="w-input" value={label} maxLength={100} onChange={(e) => setLabel(e.target.value)} placeholder="Who is this link for?" autoFocus />
+        <Field label={wt('share.label')} hint={wt('share.labelHint')}>
+          <input className="w-input" value={label} maxLength={100} onChange={(e) => setLabel(e.target.value)} placeholder={wt('share.labelPh')} autoFocus />
         </Field>
 
         <div className="mb-4">
-          <label className="w-label">Sections to share</label>
+          <label className="w-label">{wt('share.sections')}</label>
           <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
             {SECTION_LABEL.map((s) => (
               <label key={s.key} className="flex cursor-pointer items-start gap-2.5 border-b border-[var(--w-border)] px-3 py-2 last:border-b-0 hover:bg-[var(--w-hover)]">
@@ -81,7 +82,7 @@ function CreateLinkDialog({ open, onClose, pid, onCreated }: { open: boolean; on
               </label>
             ))}
           </div>
-          {!anySection && <p className="mt-1 text-[12px] text-[var(--w-red)]">Choose at least one section.</p>}
+          {!anySection && <p className="mt-1 text-[12px] text-[var(--w-red)]">{wt('share.chooseOne')}</p>}
           <label className={cn('mt-3 flex cursor-pointer items-start gap-2.5', !(opts.board || opts.backlog) && 'cursor-not-allowed opacity-60')}>
             <input
               type="checkbox"
@@ -91,23 +92,23 @@ function CreateLinkDialog({ open, onClose, pid, onCreated }: { open: boolean; on
               onChange={(e) => setOpts((o) => ({ ...o, descriptions: e.target.checked }))}
             />
             <span className="min-w-0">
-              <span className="block text-[13px] font-medium">Include issue descriptions</span>
-              <span className="block text-[12px] text-[var(--w-text-3)]">Off by default — descriptions often contain internal notes.</span>
+              <span className="block text-[13px] font-medium">{wt('share.inclDesc')}</span>
+              <span className="block text-[12px] text-[var(--w-text-3)]">{wt('share.inclDescHint')}</span>
             </span>
           </label>
         </div>
 
-        <Field label="Expires">
+        <Field label={wt('settings.expires')}>
           <Select value={expiry} onChange={(e) => setExpiry(e.target.value)}>
             {EXPIRY.map((x) => <option key={x.value} value={x.value}>{x.label}</option>)}
           </Select>
         </Field>
 
         <div className="mt-5 flex justify-end gap-2">
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="submit" className="w-btn w-btn-primary" disabled={!anySection || create.isPending}>
             {create.isPending && <Spinner size={12} />}
-            Create link
+            {wt('share.createLink')}
           </button>
         </div>
       </form>
@@ -120,31 +121,31 @@ function LinkRow({ link, canEdit, onRevoke }: { link: ShareLink; canEdit: boolea
     <div className="flex flex-col gap-2 border-b border-[var(--w-border)] px-3 py-3 last:border-b-0 sm:flex-row sm:items-center">
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="truncate text-[13px] font-medium">{link.label || 'Untitled link'}</span>
+          <span className="truncate text-[13px] font-medium">{link.label || wt('share.untitledLink')}</span>
           {link.expired ? (
-            <span className="rounded-[4px] border border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] px-1.5 text-[11px] font-medium leading-[18px] text-[var(--w-red)]">Expired</span>
+            <span className="rounded-[4px] border border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] px-1.5 text-[11px] font-medium leading-[18px] text-[var(--w-red)]">{wt('share.expired')}</span>
           ) : link.options.descriptions && (link.options.board || link.options.backlog) ? (
-            <span className="rounded-[4px] border border-[var(--w-border-strong)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-2)]">With descriptions</span>
+            <span className="rounded-[4px] border border-[var(--w-border-strong)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-2)]">{wt('share.withDesc')}</span>
           ) : null}
         </div>
         <div className="mt-0.5 text-[12px] text-[var(--w-text-2)]">{sectionsOf(link.options)}</div>
         <div className="mt-0.5 flex flex-wrap gap-x-2 text-[12px] text-[var(--w-text-3)]">
-          <span>Created {formatDate(link.createdAt)}</span>
+          <span>{wt('share.createdOn', { d: formatDate(link.createdAt) })}</span>
           <span>·</span>
-          <span>{link.expiresAt ? `${link.expired ? 'Expired' : 'Expires'} ${formatDate(link.expiresAt)}` : 'Never expires'}</span>
+          <span>{link.expiresAt ? `${link.expired ? wt('share.expired') : wt('settings.expires')} ${formatDate(link.expiresAt)}` : wt('dev.neverExpires')}</span>
           <span>·</span>
-          <span>{link.viewCount} {link.viewCount === 1 ? 'view' : 'views'}{link.lastViewedAt ? ` · last viewed ${relativeTime(link.lastViewedAt)}` : ''}</span>
+          <span>{wt('share.views', { count: link.viewCount })}{link.lastViewedAt ? wt('share.lastViewed', { t: relativeTime(link.lastViewedAt) }) : ''}</span>
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-1.5">
         <button type="button" className="w-btn w-btn-sm" onClick={() => copyText(link.url)} disabled={link.expired}>
-          <Copy size={13} /> Copy link
+          <Copy size={13} /> {wt('common.copyLink')}
         </button>
-        <a href={link.url} target="_blank" rel="noopener noreferrer" className={cn('w-btn w-btn-ghost w-btn-icon w-btn-sm', link.expired && 'pointer-events-none opacity-50')} aria-label="Open shared view" title="Open shared view">
+        <a href={link.url} target="_blank" rel="noopener noreferrer" className={cn('w-btn w-btn-ghost w-btn-icon w-btn-sm', link.expired && 'pointer-events-none opacity-50')} aria-label={wt('share.openShared')} title={wt('share.openShared')}>
           <ExternalLink size={13} />
         </a>
         {canEdit && (
-          <button type="button" className="w-btn w-btn-sm w-btn-danger" onClick={onRevoke}>Revoke</button>
+          <button type="button" className="w-btn w-btn-sm w-btn-danger" onClick={onRevoke}>{wt('settings.revoke')}</button>
         )}
       </div>
     </div>
@@ -164,26 +165,25 @@ export default function ProjectShare({ config }: { config: ProjectConfig; slug: 
   const revoke = useMutation({
     mutationFn: (id: number) => workApi.revokeShareLink(config.id, id),
     onSuccess: (_d, id) => {
-      toast.success('Link revoked — it stops working immediately');
+      toast.success(wt('share.revoked'));
       setRevoking(null);
       if (justCreated?.id === id) setJustCreated(null);
       qc.invalidateQueries({ queryKey: key });
     },
-    onError: (err) => toast.error(workError(err, 'Could not revoke the link')),
+    onError: (err) => toast.error(workError(err, wt('share.revokeFailed'))),
   });
 
   const intro = (
     <>
-      Give lecturers, clients or stakeholders a read-only view of this project — <span className="font-medium text-[var(--w-text)]">no account needed</span>.
-      You choose what each link shows (board, backlog, reports, tests). Comments, attachments, activity history and email addresses are never shared;
-      people appear by display name only. Anyone with the link can view it, so revoke links you no longer need.
+      {wt('share.introA')} <span className="font-medium text-[var(--w-text)]">{wt('share.noAccount')}</span>.
+      {wt('share.introB')}
     </>
   );
 
   if (!canEdit) {
     return (
-      <Section title="Public links" description={intro}>
-        <ReadOnlyNotice>Only project admins can create and manage public links.</ReadOnlyNotice>
+      <Section title={wt('share.publicLinks')} description={intro}>
+        <ReadOnlyNotice>{wt('share.onlyAdmins')}</ReadOnlyNotice>
       </Section>
     );
   }
@@ -192,22 +192,22 @@ export default function ProjectShare({ config }: { config: ProjectConfig; slug: 
 
   return (
     <Section
-      title="Public links"
+      title={wt('share.publicLinks')}
       description={intro}
       action={
         <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreating(true)}>
-          <Plus size={14} /> Create link
+          <Plus size={14} /> {wt('share.createLink')}
         </button>
       }
     >
       {justCreated && (
         <div className="mb-4 rounded-[8px] border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-3 py-3">
           <div className="mb-2 flex items-center gap-1.5 text-[13px] font-medium">
-            <Check size={14} className="text-[var(--w-green)]" /> Link created — share it with anyone who should see this project
+            <Check size={14} className="text-[var(--w-green)]" /> {wt('share.created')}
           </div>
           <div className="flex gap-2">
-            <input className="w-input min-w-0 flex-1 !bg-[var(--w-panel)] font-mono !text-[12px]" readOnly value={justCreated.url} onFocus={(e) => e.currentTarget.select()} aria-label="Public link" />
-            <button type="button" className="w-btn w-btn-primary shrink-0" onClick={() => copyText(justCreated.url)}><Copy size={13} /> Copy</button>
+            <input className="w-input min-w-0 flex-1 !bg-[var(--w-panel)] font-mono !text-[12px]" readOnly value={justCreated.url} onFocus={(e) => e.currentTarget.select()} aria-label={wt('share.publicLink')} />
+            <button type="button" className="w-btn w-btn-primary shrink-0" onClick={() => copyText(justCreated.url)}><Copy size={13} /> {wt('common.copy')}</button>
           </div>
         </div>
       )}
@@ -215,12 +215,12 @@ export default function ProjectShare({ config }: { config: ProjectConfig; slug: 
       {q.isLoading ? (
         <div className="flex justify-center py-10"><Spinner size={18} /></div>
       ) : q.error ? (
-        <EmptyState title="Could not load links" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('share.loadFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : !links.length ? (
         <div className="flex flex-col items-center rounded-[8px] border border-dashed border-[var(--w-border)] px-6 py-10 text-center">
           <Link2 size={20} className="mb-2 text-[var(--w-text-3)]" />
-          <div className="text-[13px] font-medium">No active links</div>
-          <p className="mt-1 max-w-[380px] text-[12px] text-[var(--w-text-3)]">Create a link to let someone follow progress without joining the workspace.</p>
+          <div className="text-[13px] font-medium">{wt('share.noActive')}</div>
+          <p className="mt-1 max-w-[380px] text-[12px] text-[var(--w-text-3)]">{wt('share.noActiveBody')}</p>
         </div>
       ) : (
         <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
@@ -233,7 +233,7 @@ export default function ProjectShare({ config }: { config: ProjectConfig; slug: 
         onClose={() => setCreating(false)}
         pid={config.id}
         onCreated={(l) => {
-          toast.success('Public link created');
+          toast.success(wt('share.createdToast'));
           setJustCreated(l);
           qc.invalidateQueries({ queryKey: key });
         }}
@@ -241,9 +241,9 @@ export default function ProjectShare({ config }: { config: ProjectConfig; slug: 
       <ConfirmDialog
         open={!!revoking}
         onClose={() => setRevoking(null)}
-        title="Revoke link?"
-        body={<>Anyone using <span className="font-medium text-[var(--w-text)]">{revoking?.label || 'this link'}</span> will lose access immediately. This can&apos;t be undone — you can create a new link later.</>}
-        confirmLabel="Revoke link"
+        title={wt('share.revokeQ')}
+        body={wt('share.revokeBody', { x: revoking?.label || wt('share.thisLink') })}
+        confirmLabel={wt('share.revokeLink')}
         pending={revoke.isPending}
         onConfirm={() => revoking && revoke.mutate(revoking.id)}
       />

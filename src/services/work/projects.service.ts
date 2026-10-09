@@ -4,6 +4,7 @@
 
 import { Prisma } from '@prisma/client';
 import { CAPSTONE_MODULES, seedCapstone } from './capstone.service.js';
+import { SWR302_MODULES, seedSwr302 } from './swr302Project.service.js';
 import { prisma } from '../../config/database.js';
 import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { PUBLIC_USER } from './common.js';
@@ -68,6 +69,8 @@ export async function createProject(
       // CTW đợt 3A: mẫu CAPSTONE bật sẵn mô-đun đồ án (giai đoạn, duyệt, Docs, RAID, họp) — ghi đè của người tạo vẫn thắng.
       const baseModules = input.kind ? defaultModulesFor(input.kind) : noModules();
       if (input.template === 'CAPSTONE') for (const m of CAPSTONE_MODULES) baseModules[m] = true;
+      // CTW đợt 4b (R27): mẫu SWR302 bật sẵn giai đoạn (tuần 2→9), Docs, RAID, họp, Resources.
+      if (input.template === 'SWR302') for (const m of SWR302_MODULES) baseModules[m] = true;
       const modules = mergeModules(baseModules, input.modules ?? {});
       const cur = await tx.workProject.findUniqueOrThrow({ where: { id: project.id }, select: { settings: true } });
       await tx.workProject.update({
@@ -80,6 +83,11 @@ export async function createProject(
     if (input.template === 'CAPSTONE') {
       const ws = await prisma.workSpace.findUniqueOrThrow({ where: { id: workspaceId }, select: { slug: true } });
       await seedCapstone(userId, created.id, { wsSlug: ws.slug, key: created.key });
+    }
+    // CTW đợt 4b (R27): tuần 2→9, epic theo 8 deliverable, trang gói SWR302 (lịch, RACI, sáu liên kết) + 5 trang mẫu Wiegers.
+    if (input.template === 'SWR302') {
+      const ws = await prisma.workSpace.findUniqueOrThrow({ where: { id: workspaceId }, select: { slug: true } });
+      await seedSwr302(userId, created.id, { wsSlug: ws.slug, key: created.key });
     }
     return created;
   } catch (err) {

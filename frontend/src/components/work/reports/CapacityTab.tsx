@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 import { addDays, vnToday } from './TimeTab';
 import { Card, fmtDay, num, SectionTitle, StatCell, useAllSprints } from './shared';
 import { signalText } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 /** "Sep 24" hoặc "Sep 24 – 26". */
 function fmtSpan(start: string, end: string): string {
@@ -32,12 +33,12 @@ function utilTone(u: number) {
 }
 
 function UtilBar({ row }: { row: CapacityRow }) {
-  if (row.hoursPerDay === null) return <span className="text-[12px] text-[var(--w-text-3)]">Unset</span>;
-  if (row.utilization === null) return <span className="text-[12px] text-[var(--w-text-3)]">No capacity</span>;
+  if (row.hoursPerDay === null) return <span className="text-[12px] text-[var(--w-text-3)]">{wt('rep.unset')}</span>;
+  if (row.utilization === null) return <span className="text-[12px] text-[var(--w-text-3)]">{wt('rep.noCapacity')}</span>;
   const u = row.utilization;
   return (
     <div className="flex items-center gap-2">
-      <div className="h-1.5 w-full min-w-[60px] overflow-hidden rounded-full bg-[var(--w-sunken)]" role="img" aria-label={`${num(u)}% utilised`}>
+      <div className="h-1.5 w-full min-w-[60px] overflow-hidden rounded-full bg-[var(--w-sunken)]" role="img" aria-label={wt('rep.utilised', { p: num(u) })}>
         <div className="h-full rounded-full" style={{ width: `${Math.min(100, Math.max(0, u))}%`, background: utilTone(u) }} />
       </div>
       <span className="w-11 shrink-0 text-right text-[12px] font-medium tabular-nums" style={{ color: signalText(utilTone(u)) }}>{num(u)}%</span>
@@ -52,21 +53,21 @@ function HoursInput({ row, pid }: { row: CapacityRow; pid: number }) {
   const save = useMutation({
     mutationFn: (v: number | null) => workApi.setCapacity(pid, row.user.id, v),
     onSuccess: () => { setDraft(null); qc.invalidateQueries({ queryKey: wk.capacity(pid) }); },
-    onError: (err) => { toast.error(workError(err, 'Could not save capacity')); setDraft(null); },
+    onError: (err) => { toast.error(workError(err, wt('rep.saveCapFailed'))); setDraft(null); },
   });
   const commit = () => {
     if (draft === null) return;
     const t = draft.trim();
     const v = t === '' ? null : Number(t);
-    if (v !== null && (!Number.isFinite(v) || v < 0 || v > 24)) { toast.error('Hours per day must be 0–24'); setDraft(null); return; }
+    if (v !== null && (!Number.isFinite(v) || v < 0 || v > 24)) { toast.error(wt('rep.hours024')); setDraft(null); return; }
     if (v === row.hoursPerDay) { setDraft(null); return; }
     save.mutate(v);
   };
   return (
     <input
       inputMode="decimal"
-      aria-label={`Hours per day for ${userName(row.user)}`}
-      placeholder="Unset"
+      aria-label={wt('rep.hoursFor', { n: userName(row.user) })}
+      placeholder={wt('rep.unset')}
       value={draft ?? (row.hoursPerDay === null ? '' : String(row.hoursPerDay))}
       disabled={save.isPending}
       onChange={(e) => setDraft(e.target.value)}
@@ -101,21 +102,21 @@ function TimeOffSection({ config, meId }: { config: ProjectConfig; meId: number 
   };
   const add = useMutation({
     mutationFn: () => workApi.addTimeOff(wsId, { userId: isAdmin && userId ? userId : undefined, startDate: start, endDate: end, note: note.trim() || null }),
-    onSuccess: () => { toast.success('Time off added'); setNote(''); refresh(); },
-    onError: (err) => toast.error(workError(err, 'Could not add time off')),
+    onSuccess: () => { toast.success(wt('rep.timeOffAdded')); setNote(''); refresh(); },
+    onError: (err) => toast.error(workError(err, wt('rep.addTimeOffFailed'))),
   });
   const del = useMutation({
     mutationFn: (id: number) => workApi.deleteTimeOff(wsId, id),
-    onSuccess: () => { toast.success('Time off removed'); setRemoving(null); refresh(); },
-    onError: (err) => toast.error(workError(err, 'Could not remove time off')),
+    onSuccess: () => { toast.success(wt('rep.timeOffRemoved')); setRemoving(null); refresh(); },
+    onError: (err) => toast.error(workError(err, wt('rep.removeTimeOffFailed'))),
   });
   const valid = !!start && !!end && start <= end;
 
   return (
     <Card>
-      <SectionTitle>Time off</SectionTitle>
+      <SectionTitle>{wt('rep.timeOff')}</SectionTitle>
       <p className="mb-3 text-[12px] text-[var(--w-text-3)]">
-        Time off applies across the whole workspace and is subtracted from working days. {isAdmin ? 'As a workspace admin you can add it for anyone.' : 'You can add and remove your own.'}
+        {wt('rep.timeOffDesc')} {isAdmin ? wt('rep.adminAny') : wt('rep.ownOnly')}
       </p>
       <form
         className="mb-3 flex flex-wrap items-end gap-2"
@@ -123,7 +124,7 @@ function TimeOffSection({ config, meId }: { config: ProjectConfig; meId: number 
       >
         {isAdmin && (
           <div className="min-w-0">
-            <label className="w-label" htmlFor="w-to-user">Person</label>
+            <label className="w-label" htmlFor="w-to-user">{wt('finance.person')}</label>
             <select id="w-to-user" className="w-input !h-[30px] !w-auto max-w-full pr-7" value={userId} onChange={(e) => setUserId(e.target.value ? Number(e.target.value) : '')}>
               <option value="">Me</option>
               {config.members.filter((m) => m.id !== meId).map((m) => <option key={m.id} value={m.id}>{userName(m)}</option>)}
@@ -131,7 +132,7 @@ function TimeOffSection({ config, meId }: { config: ProjectConfig; meId: number 
           </div>
         )}
         <div>
-          <label className="w-label" htmlFor="w-to-start">From</label>
+          <label className="w-label" htmlFor="w-to-start">{wt('agents.from')}</label>
           <input id="w-to-start" type="date" className="w-input !h-[30px] !w-auto" value={start} onChange={(e) => { setStart(e.target.value); if (e.target.value > end) setEnd(e.target.value); }} />
         </div>
         <div>
@@ -139,17 +140,17 @@ function TimeOffSection({ config, meId }: { config: ProjectConfig; meId: number 
           <input id="w-to-end" type="date" className="w-input !h-[30px] !w-auto" value={end} min={start} onChange={(e) => setEnd(e.target.value)} />
         </div>
         <div className="min-w-[140px] flex-1">
-          <label className="w-label" htmlFor="w-to-note">Note</label>
-          <input id="w-to-note" className="w-input !h-[30px]" maxLength={200} placeholder="Optional, e.g. Holiday" value={note} onChange={(e) => setNote(e.target.value)} />
+          <label className="w-label" htmlFor="w-to-note">{wt('rep.note')}</label>
+          <input id="w-to-note" className="w-input !h-[30px]" maxLength={200} placeholder={wt('rep.notePh')} value={note} onChange={(e) => setNote(e.target.value)} />
         </div>
         <button type="submit" className="w-btn" disabled={!valid || add.isPending}>
-          {add.isPending ? <Spinner size={12} /> : <Plus size={13} />} Add
+          {add.isPending ? <Spinner size={12} /> : <Plus size={13} />} {wt('common.add')}
         </button>
       </form>
       {q.isLoading ? (
         <Spinner />
       ) : !entries.length ? (
-        <p className="text-[12px] text-[var(--w-text-3)]">No upcoming time off.</p>
+        <p className="text-[12px] text-[var(--w-text-3)]">{wt('rep.noUpcoming')}</p>
       ) : (
         <ul className="divide-y divide-[var(--w-border)] rounded-[6px] border border-[var(--w-border)]">
           {entries.map((t) => {
@@ -161,7 +162,7 @@ function TimeOffSection({ config, meId }: { config: ProjectConfig; meId: number 
                 <span className="shrink-0 tabular-nums text-[var(--w-text-2)]">{fmtSpan(t.startDate, t.endDate)}</span>
                 {t.note && <span className="min-w-0 flex-1 truncate text-[var(--w-text-3)]">{t.note}</span>}
                 {canRemove && (
-                  <button type="button" onClick={() => setRemoving(t)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm ml-auto shrink-0" aria-label="Remove time off" title="Remove time off">
+                  <button type="button" onClick={() => setRemoving(t)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm ml-auto shrink-0" aria-label={wt('rep.removeTimeOff')} title={wt('rep.removeTimeOff')}>
                     <X size={12} />
                   </button>
                 )}
@@ -173,9 +174,9 @@ function TimeOffSection({ config, meId }: { config: ProjectConfig; meId: number 
       <ConfirmDialog
         open={!!removing}
         onClose={() => setRemoving(null)}
-        title="Remove time off?"
-        body={removing ? <>{userName(removing.user)} · {fmtSpan(removing.startDate, removing.endDate)} will count as working days again.</> : null}
-        confirmLabel="Remove"
+        title={wt('rep.removeQ')}
+        body={removing ? wt('rep.removeBody', { n: userName(removing.user), s: fmtSpan(removing.startDate, removing.endDate) }) : null}
+        confirmLabel={wt('common.remove')}
         pending={del.isPending}
         onConfirm={() => removing && del.mutate(removing.id)}
       />
@@ -222,50 +223,50 @@ export default function CapacityTab({ pid, config }: { pid: number; config: Proj
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        <select aria-label="Sprint or range" value={effective} onChange={(e) => setChoice(e.target.value)} className="w-input h-[28px] w-auto max-w-full py-0 pr-7 text-[12px]">
-          {sprints.map((s) => <option key={s.id} value={s.id}>{s.name}{s.state === 'ACTIVE' ? ' (active)' : ' (planned)'}</option>)}
-          <option value="range">Custom date range</option>
+        <select aria-label={wt('rep.sprintOrRange')} value={effective} onChange={(e) => setChoice(e.target.value)} className="w-input h-[28px] w-auto max-w-full py-0 pr-7 text-[12px]">
+          {sprints.map((s) => <option key={s.id} value={s.id}>{s.name}{s.state === 'ACTIVE' ? wt('contrib.activeParen') : wt('rep.activePlanned')}</option>)}
+          <option value="range">{wt('rep.customRange')}</option>
         </select>
         {effective === 'range' && (
           <div className="flex flex-wrap items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">
-            <input type="date" aria-label="From" value={from} max={to} onChange={(e) => e.target.value && setFrom(e.target.value)} className="w-input !h-[28px] !w-auto py-0 text-[12px]" />
-            <span>to</span>
-            <input type="date" aria-label="To" value={to} min={from} onChange={(e) => e.target.value && setTo(e.target.value)} className="w-input !h-[28px] !w-auto py-0 text-[12px]" />
+            <input type="date" aria-label={wt('agents.from')} value={from} max={to} onChange={(e) => e.target.value && setFrom(e.target.value)} className="w-input !h-[28px] !w-auto py-0 text-[12px]" />
+            <span>{wt('agents.toLc')}</span>
+            <input type="date" aria-label={wt('agents.to')} value={to} min={from} onChange={(e) => e.target.value && setTo(e.target.value)} className="w-input !h-[28px] !w-auto py-0 text-[12px]" />
           </div>
         )}
-        {data && <span className="text-[12px] tabular-nums text-[var(--w-text-3)] sm:ml-auto">{fmtSpan(data.from, data.to)} · weekdays only</span>}
+        {data && <span className="text-[12px] tabular-nums text-[var(--w-text-3)] sm:ml-auto">{wt('rep.weekdaysOnly', { s: fmtSpan(data.from, data.to) })}</span>}
       </div>
 
       {sprintsQ.isLoading || q.isLoading ? (
         <div className="flex justify-center py-16"><Spinner size={20} /></div>
       ) : q.error ? (
-        <EmptyState title="Could not load capacity" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('rep.loadCapFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : !data || !data.members.length ? (
-        <EmptyState title="No members to plan for" body="Capacity lists project admins and members." />
+        <EmptyState title={wt('rep.noMembersPlan')} body={wt('rep.capListsBody')} />
       ) : (
         <>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <StatCell label="Team capacity" value={`${num(totals.cap)} h`} hint={totals.unset ? `${totals.unset} ${totals.unset === 1 ? 'person' : 'people'} unset` : undefined} />
-            <StatCell label="Load" value={unit === 'HOURS' ? `${num(totals.loadH)} h` : `${num(totals.loadP)} pts`} hint={unit === 'POINTS' && totals.loadH ? `${num(totals.loadH)} h estimated` : undefined} />
+            <StatCell label={wt('rep.teamCap')} value={`${num(totals.cap)} h`} hint={totals.unset ? wt('rep.nUnset', { count: totals.unset }) : undefined} />
+            <StatCell label={wt('rep.load')} value={unit === 'HOURS' ? `${num(totals.loadH)} h` : wt('rep.pts', { n: num(totals.loadP) })} hint={unit === 'POINTS' && totals.loadH ? wt('rep.hEstimated', { n: num(totals.loadH) }) : undefined} />
             <StatCell
-              label="Utilization"
+              label={wt('rep.utilization')}
               value={totals.util === null ? '—' : `${num(totals.util)}%`}
               tone={totals.util === null ? undefined : totals.util > 100 ? 'red' : totals.util < 80 ? 'green' : undefined}
             />
-            <StatCell label="Open issues" value={data.members.reduce((s, r) => s + r.issues, 0)} hint="Assigned, unresolved" />
+            <StatCell label={wt('rep.openIssues')} value={data.members.reduce((s, r) => s + r.issues, 0)} hint={wt('rep.assignedUnresolved')} />
           </div>
 
           <div className="overflow-x-auto rounded-[var(--w-radius-lg)] border border-[var(--w-border)] bg-[var(--w-panel)]">
             <table className="w-full min-w-[820px] text-[13px]">
               <thead>
                 <tr className="border-b border-[var(--w-border)] text-left text-[11px] uppercase tracking-wide text-[var(--w-text-3)]">
-                  <th className="px-3 py-2 font-medium">Member</th>
-                  <th className="px-3 py-2 text-right font-medium">Hours / day</th>
-                  <th className="px-3 py-2 text-right font-medium">Working days</th>
-                  <th className="px-3 py-2 font-medium">Time off</th>
-                  <th className="px-3 py-2 text-right font-medium">Capacity</th>
-                  <th className="px-3 py-2 text-right font-medium">Load</th>
-                  <th className="w-[180px] px-3 py-2 font-medium">Utilization</th>
+                  <th className="px-3 py-2 font-medium">{wt('common.member')}</th>
+                  <th className="px-3 py-2 text-right font-medium">{wt('rep.hoursDay')}</th>
+                  <th className="px-3 py-2 text-right font-medium">{wt('rep.workingDays')}</th>
+                  <th className="px-3 py-2 font-medium">{wt('rep.timeOff')}</th>
+                  <th className="px-3 py-2 text-right font-medium">{wt('rep.capacity')}</th>
+                  <th className="px-3 py-2 text-right font-medium">{wt('rep.load')}</th>
+                  <th className="w-[180px] px-3 py-2 font-medium">{wt('rep.utilization')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -281,7 +282,7 @@ export default function CapacityTab({ pid, config }: { pid: number; config: Proj
                       </div>
                     </td>
                     <td className="px-3 py-2 text-right">
-                      {canManage ? <HoursInput row={r} pid={pid} /> : <span className={cn('tabular-nums', r.hoursPerDay === null && 'text-[var(--w-text-3)]')}>{r.hoursPerDay === null ? 'Unset' : `${num(r.hoursPerDay)} h`}</span>}
+                      {canManage ? <HoursInput row={r} pid={pid} /> : <span className={cn('tabular-nums', r.hoursPerDay === null && 'text-[var(--w-text-3)]')}>{r.hoursPerDay === null ? wt('rep.unset') : `${num(r.hoursPerDay)} h`}</span>}
                     </td>
                     <td className="px-3 py-2 text-right tabular-nums">{r.workingDays}</td>
                     <td className="px-3 py-2">
@@ -295,8 +296,8 @@ export default function CapacityTab({ pid, config }: { pid: number; config: Proj
                     </td>
                     <td className="px-3 py-2 text-right tabular-nums">{r.capacityHours === null ? <span className="text-[var(--w-text-3)]">—</span> : `${num(r.capacityHours)} h`}</td>
                     <td className="px-3 py-2 text-right tabular-nums">
-                      {unit === 'HOURS' ? `${num(r.loadHours)} h` : `${num(r.loadPoints)} pts`}
-                      {unit === 'POINTS' && r.loadHours > 0 && <div className="text-[11px] text-[var(--w-text-3)]">{num(r.loadHours)} h est.</div>}
+                      {unit === 'HOURS' ? `${num(r.loadHours)} h` : wt('rep.pts', { n: num(r.loadPoints) })}
+                      {unit === 'POINTS' && r.loadHours > 0 && <div className="text-[11px] text-[var(--w-text-3)]">{wt('rep.hEst', { n: num(r.loadHours) })}</div>}
                     </td>
                     <td className="px-3 py-2"><UtilBar row={r} /></td>
                   </tr>
@@ -305,9 +306,9 @@ export default function CapacityTab({ pid, config }: { pid: number; config: Proj
             </table>
           </div>
           <p className="text-[12px] leading-relaxed text-[var(--w-text-3)]">
-            Load counts unresolved issues assigned in {sprintId ? 'this sprint' : 'the range (due in range or in the active sprint)'}. Utilization compares their remaining hour estimates with capacity
-            {unit === 'POINTS' ? ' — this project estimates in story points, so add hour estimates to issues to see utilization.' : '.'}
-            {canManage ? ' Set hours per day to include a person in capacity.' : ''}
+            {wt('rep.loadNote', { where: sprintId ? wt('rep.thisSprint') : wt('rep.theRange') })}
+            {unit === 'POINTS' ? wt('rep.pointsNote') : '.'}
+            {canManage ? wt('rep.setHours') : ''}
           </p>
         </>
       )}

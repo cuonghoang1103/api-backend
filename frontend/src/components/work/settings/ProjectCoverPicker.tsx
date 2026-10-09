@@ -20,6 +20,7 @@ import { ProjectMark, Spinner } from '../ui';
 import ProjectCover from '../cover/ProjectCover';
 import { Section } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
+import { wt } from '@/components/work/i18n';
 
 export function ProjectCoverPicker({ config, slug }: { config: ProjectConfig; slug: string }) {
   const invalidate = useProjectInvalidate(config.id, slug);
@@ -30,9 +31,9 @@ export function ProjectCoverPicker({ config, slug }: { config: ProjectConfig; sl
   useEffect(() => setY(config.coverPositionY ?? 50), [config.coverPositionY, config.coverUrl]);
   const after = (msg?: string) => { if (msg) toast.success(msg); invalidate(); void qc.invalidateQueries({ queryKey: ['work'] }); };
 
-  const pick = useMutation({ mutationFn: (preset: string | null) => workCoverApi.setCover(config.id, { preset }), onSuccess: (_d, p) => after(p ? 'Cover updated' : 'Cover removed'), onError: (e) => toast.error(workError(e, 'Could not change the cover')) });
-  const move = useMutation({ mutationFn: (positionY: number) => workCoverApi.setCover(config.id, { positionY }), onSuccess: () => after(), onError: (e) => toast.error(workError(e, 'Could not move the cover')) });
-  const upload = useMutation({ mutationFn: (f: File) => workCoverApi.uploadCover(config.id, f, 50), onSuccess: () => after('Cover uploaded'), onError: (e) => toast.error(workError(e, 'Could not upload the cover')) });
+  const pick = useMutation({ mutationFn: (preset: string | null) => workCoverApi.setCover(config.id, { preset }), onSuccess: (_d, p) => after(p ? wt('cover.updated') : wt('cover.removed')), onError: (e) => toast.error(workError(e, wt('cover.changeFailed'))) });
+  const move = useMutation({ mutationFn: (positionY: number) => workCoverApi.setCover(config.id, { positionY }), onSuccess: () => after(), onError: (e) => toast.error(workError(e, wt('cover.moveFailed'))) });
+  const upload = useMutation({ mutationFn: (f: File) => workCoverApi.uploadCover(config.id, f, 50), onSuccess: () => after(wt('cover.uploaded')), onError: (e) => toast.error(workError(e, wt('cover.uploadFailed'))) });
   const fileRef = useRef<HTMLInputElement>(null);
 
   // Kéo dọc trên ảnh xem trước ⇒ đổi điểm lấy nét (kéo xuống = thấy phần trên của ảnh, như Notion).
@@ -53,7 +54,7 @@ export function ProjectCoverPicker({ config, slug }: { config: ProjectConfig; sl
   const uploaded = !!config.coverUrl && !config.coverUrl.startsWith('preset:');
 
   return (
-    <Section title="Cover image" description="Shown on the project card, at the top of project pages, in the client portal, and in link previews for invitations and public links.">
+    <Section title={wt('cover.title')} description={wt('cover.desc')}>
       <div className="flex max-w-[720px] flex-col gap-4" data-testid="project-cover-picker">
         <div
           className={cn('relative h-[132px] select-none overflow-hidden rounded-[10px] border border-[var(--w-border)]', canEdit && config.coverUrl && 'cursor-ns-resize touch-none')}
@@ -64,7 +65,7 @@ export function ProjectCoverPicker({ config, slug }: { config: ProjectConfig; sl
             <ProjectMark k={config.key} size={32} letters={2} brand={config} />
             <span className="truncate text-[16px] font-semibold text-white drop-shadow">{config.name}</span>
           </div>
-          {canEdit && config.coverUrl && <span className="absolute right-2 top-2 rounded-[6px] bg-black/55 px-2 py-0.5 text-[11px] text-white">Drag to reposition</span>}
+          {canEdit && config.coverUrl && <span className="absolute right-2 top-2 rounded-[6px] bg-black/55 px-2 py-0.5 text-[11px] text-white">{wt('cover.drag')}</span>}
           {busy && <div className="absolute inset-0 flex items-center justify-center bg-black/25"><Spinner size={18} /></div>}
         </div>
 
@@ -72,18 +73,18 @@ export function ProjectCoverPicker({ config, slug }: { config: ProjectConfig; sl
           <>
             <div className="flex flex-wrap items-center gap-2">
               <input ref={fileRef} type="file" accept={COVER_IMAGE_TYPES.join(',')} className="hidden" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) upload.mutate(f); }} />
-              <button type="button" className="w-btn w-btn-sm" disabled={busy} onClick={() => fileRef.current?.click()} data-testid="project-cover-upload"><ImagePlus size={13} /> Upload image</button>
-              {config.coverUrl && <button type="button" className="w-btn w-btn-sm w-btn-ghost" disabled={busy} onClick={() => pick.mutate(null)}><Trash2 size={13} /> Remove cover</button>}
+              <button type="button" className="w-btn w-btn-sm" disabled={busy} onClick={() => fileRef.current?.click()} data-testid="project-cover-upload"><ImagePlus size={13} /> {wt('cover.uploadImg')}</button>
+              {config.coverUrl && <button type="button" className="w-btn w-btn-sm w-btn-ghost" disabled={busy} onClick={() => pick.mutate(null)}><Trash2 size={13} /> {wt('cover.removeCover')}</button>}
               {config.coverUrl && (
                 <label className="ml-auto flex items-center gap-2 text-[12px] text-[var(--w-text-2)]">
-                  Vertical position
+                  {wt('cover.vertical')}
                   <input type="range" min={0} max={100} value={y} onChange={(e) => setY(Number(e.target.value))} onPointerUp={() => move.mutate(y)} onKeyUp={() => move.mutate(y)} className="w-28 accent-[var(--w-accent)]" aria-valuetext={`${y}%`} />
                 </label>
               )}
-              <p className="basis-full text-[12px] text-[var(--w-text-3)]">PNG, JPEG or WebP up to 8 MB. Wide images (about 1600 × 640) look best{uploaded ? ' — you are using your own image' : ''}.</p>
+              <p className="basis-full text-[12px] text-[var(--w-text-3)]">{wt('cover.hint', { own: uploaded ? wt('cover.own') : '' })}</p>
             </div>
             <div>
-              <div role="tablist" aria-label="Cover collections" className="mb-2 flex flex-wrap gap-1">
+              <div role="tablist" aria-label={wt('cover.collections')} className="mb-2 flex flex-wrap gap-1">
                 {COVER_GROUPS.map((g) => (
                   <button key={g.key} type="button" role="tab" aria-selected={group === g.key} onClick={() => setGroup(g.key)}
                     className={cn('rounded-[6px] px-2.5 py-1 text-[12px] font-medium', group === g.key ? 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}>
@@ -95,7 +96,7 @@ export function ProjectCoverPicker({ config, slug }: { config: ProjectConfig; sl
                 {COVERS.filter((c) => c.group === group).map((c) => {
                   const on = config.coverUrl === `preset:${c.id}`;
                   return (
-                    <button key={c.id} type="button" disabled={busy} onClick={() => pick.mutate(c.id)} aria-pressed={on} aria-label={`${c.label} cover`}
+                    <button key={c.id} type="button" disabled={busy} onClick={() => pick.mutate(c.id)} aria-pressed={on} aria-label={wt('cover.xCover', { x: c.label })}
                       className={cn('group relative h-[58px] overflow-hidden rounded-[8px] border-2 transition-colors', on ? 'border-[var(--w-accent)]' : 'border-transparent hover:border-[var(--w-border-strong,var(--w-border))]')}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={coverSrc(`preset:${c.id}`)!} alt="" className="h-full w-full object-cover" loading="lazy" />
@@ -108,7 +109,7 @@ export function ProjectCoverPicker({ config, slug }: { config: ProjectConfig; sl
             </div>
           </>
         ) : (
-          <p className="text-[12px] text-[var(--w-text-3)]">Only project admins can change the cover.</p>
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('cover.onlyAdmins')}</p>
         )}
       </div>
     </Section>

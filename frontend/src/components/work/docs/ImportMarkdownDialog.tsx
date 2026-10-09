@@ -15,6 +15,7 @@ import { workDocsKeys, workError, type ProjectConfig } from '@/lib/work-api';
 import { workDocsImportApi } from '@/lib/work-ctw-api';
 import { Dialog, Field, Spinner, formatBytes } from '../ui';
 import { docsBase } from './shared';
+import { wt } from '@/components/work/i18n';
 
 const MAX = 1_000_000;
 
@@ -34,16 +35,16 @@ export default function ImportMarkdownDialog({ open, onClose, config, parentNumb
     mutationFn: () => workDocsImportApi.create(config.id, { markdown: md, ...(title.trim() ? { title: title.trim() } : {}), parentNumber: parentNumber ?? null, stageId: stageId ?? null }),
     onSuccess: (p) => {
       qc.invalidateQueries({ queryKey: workDocsKeys.all(config.id) });
-      toast.success(`Imported “${p.title}”`);
+      toast.success(wt('docs.imported', { t: p.title }));
       onClose();
       router.push(`${docsBase(config)}/${p.number}`);
     },
-    onError: (err) => toast.error(workError(err, 'Could not import the Markdown')),
+    onError: (err) => toast.error(workError(err, wt('docs.importFailed'))),
   });
 
   const pickFile = async (f: File | undefined) => {
     if (!f) return;
-    if (f.size > MAX) { toast.error(`The file is ${formatBytes(f.size)} — Markdown imports are limited to 1 MB`); return; }
+    if (f.size > MAX) { toast.error(wt('docs.mdTooBig', { s: formatBytes(f.size) })); return; }
     setMd(await f.text());
     setFileName(f.name);
     if (!title.trim()) setTitle('');
@@ -53,29 +54,29 @@ export default function ImportMarkdownDialog({ open, onClose, config, parentNumb
     <Dialog
       open={open}
       onClose={onClose}
-      title="Import Markdown"
+      title={wt('docs.importMd')}
       width={680}
       footer={(
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="button" className="w-btn w-btn-primary" disabled={!md.trim() || md.length > MAX || create.isPending} onClick={() => create.mutate()} data-testid="docs-import-md-submit">
-            {create.isPending ? <Spinner size={12} /> : <Upload size={13} />} Create page
+            {create.isPending ? <Spinner size={12} /> : <Upload size={13} />} {wt('docs.createPage')}
           </button>
         </>
       )}
     >
       <p className="mb-3 text-[12.5px] leading-relaxed text-[var(--w-text-2)]">
-        Headings, lists, checklists, tables, code blocks and links are converted to a normal page you can edit. Raw HTML is not imported.
+        {wt('docs.mdIntro')}
       </p>
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <input ref={fileRef} type="file" accept=".md,.markdown,.txt,text/markdown,text/plain" className="hidden" onChange={(e) => { void pickFile(e.target.files?.[0]); e.target.value = ''; }} />
-        <button type="button" className="w-btn w-btn-sm" onClick={() => fileRef.current?.click()}><FileUp size={13} /> Choose a .md file</button>
+        <button type="button" className="w-btn w-btn-sm" onClick={() => fileRef.current?.click()}><FileUp size={13} /> {wt('docs.chooseMd')}</button>
         {fileName && <span className="truncate text-[12px] text-[var(--w-text-3)]">{fileName}</span>}
       </div>
-      <Field label="Title (optional)" hint={!title.trim() && h1 ? `Uses the first heading: “${h1}”` : undefined}>
-        <input className="w-input" value={title} maxLength={255} onChange={(e) => setTitle(e.target.value)} placeholder={h1 || 'Untitled'} />
+      <Field label={wt('docs.titleOpt')} hint={!title.trim() && h1 ? wt('docs.usesHeading', { h: h1 }) : undefined}>
+        <input className="w-input" value={title} maxLength={255} onChange={(e) => setTitle(e.target.value)} placeholder={h1 || wt('common.untitled')} />
       </Field>
-      <Field label="Markdown" hint={md.length > MAX ? 'Too large — 1 MB max' : md ? `${md.length.toLocaleString('en-US')} characters` : undefined}>
+      <Field label="Markdown" hint={md.length > MAX ? wt('docs.tooLarge') : md ? wt('docs.nChars', { n: md.length }) : undefined}>
         <textarea className="w-input font-mono text-[12.5px]" rows={14} value={md} onChange={(e) => setMd(e.target.value)} placeholder={'# Game design document\n\n## Goals\n\n- Day/night globe\n- Moon phases\n\n| Item | Owner |\n|---|---|\n| Globe | Client |'} data-testid="docs-import-md" />
       </Field>
     </Dialog>

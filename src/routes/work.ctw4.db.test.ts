@@ -296,7 +296,7 @@ describe('CT Work — đợt 4: SRS có cấu trúc & truy vết (HTTP + DB th�
     const x = await download(viewer, `/projects/${pid}/rtm/export.xlsx`);
     assert.equal(x.status, 200);
     const sh = readXlsx(x.buf);
-    assert.deepEqual(sh.map((s) => s.name), ['RTM', 'BR Coverage', 'Untraced Tests', 'Summary']);
+    assert.deepEqual(sh.map((s) => s.name), ['RTM', 'BR Coverage', 'Untraced Tests', 'Summary', 'Six links']);
     assert.equal(sh[0].text(2, 1), 'Req ID');
     assert.equal(sh[0].text(2, 7), 'SDS §');
     assert.equal(sh[0].text(3, 1), 'UC-01');

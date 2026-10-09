@@ -166,6 +166,18 @@ export function startCronJobs(): void {
     }
   });
 
+  // CTW đợt 5 (C12): việc định kỳ — HẰNG GIỜ (phút 20) để tôn trọng giờ + múi giờ của từng dự án; khoá dedup_key
+  // trong work_recurring_runs chặn tạo trùng kể cả khi hai tiến trình cùng chạy.
+  cron.schedule('20 * * * *', async () => {
+    try {
+      const { runRecurringRules } = await import('./work/recurring.service.js');
+      const n = await runRecurringRules();
+      if (n) logger.info('[work] recurring issues created', { issues: n });
+    } catch (err) {
+      logger.warn('[work] recurring issues failed', { error: (err as Error).message });
+    }
+  });
+
   // CT Work: luật tự động chạy theo lịch + thư gộp email, 08:00 giờ VN.
   // Thư gộp tự tắt khi WORK_EMAIL_NOTIFICATIONS=false.
   cron.schedule('10 1 * * *', async () => {

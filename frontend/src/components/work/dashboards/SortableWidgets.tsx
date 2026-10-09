@@ -15,6 +15,7 @@ import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordi
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { wt } from '@/components/work/i18n';
 
 function Item({ id, className, disabled, children }: {
   id: string; className?: string; disabled: boolean; children: (handle: ReactNode) => ReactNode;
@@ -26,8 +27,8 @@ function Item({ id, className, disabled, children }: {
       ref={setActivatorNodeRef}
       {...attributes}
       {...listeners}
-      title="Drag to reorder"
-      aria-label="Drag to reorder widget"
+      title={wt('dash.dragTitle')}
+      aria-label={wt('dash.dragAria')}
       className="w-btn w-btn-ghost w-btn-icon w-btn-sm cursor-grab touch-none active:cursor-grabbing"
     >
       <GripVertical size={13} />

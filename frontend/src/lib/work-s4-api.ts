@@ -5,6 +5,9 @@
  */
 import { api } from './api';
 import type { WorkUser } from './work-api';
+import { translate as wtr, type WKey } from '@/components/work/i18n/core';
+import { currentWorkLocale } from '@/components/work/i18n/store';
+const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 const B = '/work';
 type Env<T> = { data: T };
@@ -265,15 +268,15 @@ export function fmtMoney(n: number | null | undefined, currency: string | null |
   if (n === null || n === undefined) return '—';
   const cur = currency ?? '';
   const digits = cur === 'VND' ? 0 : 2;
-  return `${new Intl.NumberFormat('en-US', { minimumFractionDigits: 0, maximumFractionDigits: digits }).format(n)}${cur ? ` ${cur}` : ''}`;
+  return `${new Intl.NumberFormat(currentWorkLocale() === 'vi' ? 'vi-VN' : 'en-US', { minimumFractionDigits: 0, maximumFractionDigits: digits }).format(n)}${cur ? ` ${cur}` : ''}`;
 }
 
 export const fmtHours = (min: number) => `${Math.round((min / 60) * 10) / 10} h`;
 
 export const NO_INVOICE_NOTICE = 'CT Work only tracks project money. It does not issue invoices — in Vietnam, e-invoices must be issued through a licensed e-invoice provider. Record the invoice number from that system here.';
 
-export const PAYMENT_STATUS_LABEL: Record<PaymentStatus, string> = { PLANNED: 'Planned', DUE: 'Due', INVOICED: 'Invoiced', PAID: 'Paid' };
-export const TIMESHEET_STATUS_LABEL: Record<TimesheetStatus, string> = { SUBMITTED: 'Submitted', APPROVED: 'Approved', RETURNED: 'Returned', REOPENED: 'Reopened' };
+export const PAYMENT_STATUS_LABEL: Record<PaymentStatus, string> = { get PLANNED() { return wt('finance.psPlanned'); }, get DUE() { return wt('finance.psDue'); }, get INVOICED() { return wt('finance.psInvoiced'); }, get PAID() { return wt('finance.psPaid'); } };
+export const TIMESHEET_STATUS_LABEL: Record<TimesheetStatus, string> = { get SUBMITTED() { return wt('finance.tsSubmitted'); }, get APPROVED() { return wt('finance.tsApprovedSt'); }, get RETURNED() { return wt('finance.tsReturned'); }, get REOPENED() { return wt('finance.tsReopened'); } };
 export const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 /** Thứ Hai của tuần chứa ngày `day` (YYYY-MM-DD). */

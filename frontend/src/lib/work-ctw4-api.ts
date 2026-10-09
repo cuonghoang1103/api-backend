@@ -65,6 +65,8 @@ export interface RtmData {
   rules: Array<{ key: string; name: string; usedIn: string[]; unit: string[]; integration: string[]; system: string[]; covered: boolean }>;
   orphans: Array<{ kind: 'XRAY' | 'UNIT' | 'IT' | 'ST'; ref: string; name: string }>;
   gapLabels: Record<GapCode, string>;
+  /** CTW đợt 4b: tóm tắt sáu liên kết SWR302 (chi tiết ở trang Wiegers). null = không tính được. */
+  sixLinks?: { passed: number; ok: boolean; links: Array<{ n: number; key: string; title: string; ok: boolean; errors: number }> } | null;
 }
 export type TraceTargetKind = 'SRS' | 'SDS' | 'UNIT' | 'IT' | 'ST' | 'CODE';
 export interface TraceLinkInput {

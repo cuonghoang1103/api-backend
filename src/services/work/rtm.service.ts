@@ -317,13 +317,19 @@ export async function getRtm(userId: number, projectId: number, q: z.infer<typeo
     rules: d.rules,
     orphans: d.orphans,
     gapLabels: GAP_LABEL,
+    // CTW đợt 4b (R23): sáu liên kết người chấm SWR302 dò — tóm tắt cạnh RTM, chi tiết ở trang Wiegers.
+    sixLinks: await (await import('./swr.service.js')).sixLinksData(projectId).then((x) => ({ passed: x.passed, ok: x.ok, links: x.links.map((l) => ({ n: l.n, key: l.key, title: l.title, ok: l.ok, errors: l.gaps.filter((g) => g.severity === 'error').length })) })).catch(() => null),
   };
 }
 
 export async function exportRtm(userId: number, projectId: number) {
   await srsCtx(userId, projectId, 'view');
   const d = await loadRtm(projectId);
-  const buffer = writeXlsx(buildRtmSheets({ projectName: d.projectName, rows: d.rows, rules: d.rules, orphans: d.orphans, generated: new Date().toISOString().slice(0, 10) }), { title: `RTM — ${d.projectName}`, creator: 'CT Work' });
+  // CTW đợt 4b (R23): sheet "Six links" cuối tệp — bảng kiểm sáu liên kết + chỗ đứt (phụ lục RTM của bài SWR302).
+  const swr = await import('./swr.service.js');
+  const { sixLinksSheet } = await import('./swr.js');
+  const six = await swr.sixLinksData(projectId);
+  const buffer = writeXlsx([...buildRtmSheets({ projectName: d.projectName, rows: d.rows, rules: d.rules, orphans: d.orphans, generated: new Date().toISOString().slice(0, 10) }), sixLinksSheet(six, d.projectName)], { title: `RTM — ${d.projectName}`, creator: 'CT Work' });
   return { buffer, file: `${d.key}_RTM.xlsx` };
 }
 

@@ -3,6 +3,9 @@
  * + src/services/work/builtinAgent.service.ts. Tách file riêng để không giẫm work-api.ts / work-agents-api.ts.
  */
 import { api } from './api';
+import { translate as wtr, type WKey } from '@/components/work/i18n/core';
+import { currentWorkLocale } from '@/components/work/i18n/store';
+const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 const B = '/work';
 type Env<T> = { data: T };
@@ -12,7 +15,7 @@ export type RunStatus = 'QUEUED' | 'RUNNING' | 'DONE' | 'FAILED' | 'CANCELLED' |
 export const BUILTIN_TASKS = ['WRITE_TESTS', 'WRITE_SPEC', 'ANALYZE', 'SPLIT_EPIC', 'TRIAGE_DESK', 'CUSTOM', 'DRAW_DIAGRAM'] as const;
 export type BuiltinTask = (typeof BUILTIN_TASKS)[number];
 export const TASK_LABEL: Record<BuiltinTask, string> = {
-  WRITE_TESTS: 'Write test cases', WRITE_SPEC: 'Write the spec', ANALYZE: 'Analyse', SPLIT_EPIC: 'Split into issues', TRIAGE_DESK: 'Triage', CUSTOM: 'Do what the issue says', DRAW_DIAGRAM: 'Draw a diagram',
+  get WRITE_TESTS() { return wt('agents.tkTests'); }, get WRITE_SPEC() { return wt('agents.tkSpec'); }, get ANALYZE() { return wt('agents.tkAnalyze'); }, get SPLIT_EPIC() { return wt('agents.tkSplit'); }, get TRIAGE_DESK() { return wt('agents.tkTriage'); }, get CUSTOM() { return wt('agents.tkCustom'); }, get DRAW_DIAGRAM() { return wt('agents.tkDiagram'); },
 };
 
 export interface AgentRunStep { at: string; step: number; text: string }
@@ -56,5 +59,5 @@ export const builtinKeys = {
 };
 
 export const RUN_LABEL: Record<RunStatus, string> = {
-  QUEUED: 'Queued', RUNNING: 'Running', DONE: 'Done', FAILED: 'Failed', CANCELLED: 'Stopped', CAPPED: 'Cost cap reached',
+  get QUEUED() { return wt('agents.rsQueued'); }, get RUNNING() { return wt('agents.rsRunning'); }, get DONE() { return wt('common.done'); }, get FAILED() { return wt('agents.rsFailed'); }, get CANCELLED() { return wt('agents.rsStopped'); }, get CAPPED() { return wt('agents.rsCapped'); },
 };

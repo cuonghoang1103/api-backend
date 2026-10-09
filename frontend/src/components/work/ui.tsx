@@ -369,7 +369,7 @@ export function UserAvatar({ user, size = 22, className }: { user: Pick<WorkUser
     face = (
       <span
         role="img"
-        aria-label={isAgent ? `${name} (AI agent)` : name}
+        aria-label={isAgent ? `${name} (${wt('jql.aiAgent')})` : name}
         title={title}
         style={{ width: size, height: size, fontSize: fs, background: avatarColor(user.username || name) }}
         className={cn('inline-flex shrink-0 select-none items-center justify-center overflow-hidden font-semibold leading-none tracking-[-0.01em] text-white', shape, !isAgent && className, isAgent && info?.status === 'PAUSED' && 'opacity-60')}

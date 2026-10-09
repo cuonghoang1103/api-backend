@@ -298,7 +298,9 @@ describe('khopTuyenWeb', () => {
     // 09/10/2026: +1 CT Work đợt 4 (requirements — SRS có cấu trúc + RTM). Trước dòng này tệp đã đỏ 154≠151 (+3 trang của phiên khác chưa ghi số).
     // 10/10/2026: +1 CT Work K-3 (chat — kênh chat dự án).
     // 10/10/2026: +1 CT Work Diagram (diagrams — Diagram Studio).
-    expect(thay.size).toBe(157);
+    // 10/10/2026: +2 CT Work đợt 5 (/work/teaching — hub giảng viên, /work/classes — lớp học).
+    // 10/10/2026: +1 CT Work đợt 4b (wiegers — hồ sơ SWR302: feature, loại yêu cầu, ưu tiên, glossary, DD, sáu liên kết).
+    expect(thay.size).toBe(160);
   });
 });
 

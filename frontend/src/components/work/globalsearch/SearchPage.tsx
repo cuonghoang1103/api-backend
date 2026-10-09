@@ -26,6 +26,7 @@ import {
   applySuggestion, basicToJql, facetsConfig, hasBasicFilters, jqlSuggestionOf, jqlWithSort, nextSort, readBasic, readSort,
   sortOfJql, type BasicState, type SortCol,
 } from './query';
+import { wfmt, wt } from '@/components/work/i18n';
 
 const PAGE = 50;
 
@@ -39,8 +40,8 @@ function MatchingDocs({ text }: { text: string }) {
   const hits = q.data ?? [];
   if (t.length < 2 || !hits.length) return null;
   return (
-    <div className="shrink-0 border-b border-[var(--w-border)] px-3 py-2 md:px-4" aria-label="Matching documents">
-      <div className="mb-1 text-[12px] font-medium text-[var(--w-text-3)]">Docs · {hits.length} matching page{hits.length === 1 ? '' : 's'}</div>
+    <div className="shrink-0 border-b border-[var(--w-border)] px-3 py-2 md:px-4" aria-label={wt('gs.matchingDocs')}>
+      <div className="mb-1 text-[12px] font-medium text-[var(--w-text-3)]">{wt('gs.docsN', { count: hits.length })}</div>
       <ul className="flex min-w-0 flex-wrap gap-1.5">
         {hits.slice(0, 6).map((h) => (
           <li key={h.id} className="min-w-0 max-w-full">
@@ -235,8 +236,8 @@ export default function GlobalSearchPage() {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <PageHeader
-        title="Search issues"
-        sub="Across all your projects"
+        title={wt('gs.searchIssues')}
+        sub={wt('gs.acrossAll')}
         actions={<HelpButton />}
       />
 
@@ -254,7 +255,7 @@ export default function GlobalSearchPage() {
               config={config}
               error={jqlError}
               ranQuery={jqlParam}
-              placeholder='e.g. project IN (SHOP, QA) AND assignee = currentUser() ORDER BY updated DESC'
+              placeholder={wt('gs.jqlPh')}
             />
           ) : (
             <BasicFilters
@@ -269,10 +270,10 @@ export default function GlobalSearchPage() {
           )}
           <div className="order-first shrink-0 sm:order-none">
           <Segmented
-            label="Search mode"
+            label={wt('gs.searchMode')}
             value={mode}
             onChange={switchMode}
-            options={[{ value: 'basic', label: 'Basic', icon: ListFilter }, { value: 'jql', label: 'JQL', icon: Code2 }]}
+            options={[{ value: 'basic', label: wt('gs.basic'), icon: ListFilter }, { value: 'jql', label: 'JQL', icon: Code2 }]}
           />
           </div>
         </div>
@@ -287,9 +288,9 @@ export default function GlobalSearchPage() {
                 setParams({ mode: 'jql', jql: next });
               }}
             >
-              <Wand2 size={12} /> Use {suggestion}
+              <Wand2 size={12} /> {wt('gs.useS', { s: suggestion })}
             </button>
-            <span className="text-[var(--w-text-3)]">Replace the highlighted value and search again.</span>
+            <span className="text-[var(--w-text-3)]">{wt('gs.replaceHl')}</span>
           </div>
         )}
       </div>
@@ -298,13 +299,13 @@ export default function GlobalSearchPage() {
       <div className="flex h-10 shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 text-[12.5px] text-[var(--w-text-2)] md:px-4">
         <span className="flex min-w-0 items-center gap-2 truncate" aria-live="polite">
           {results.isLoading ? (
-            <span className="text-[var(--w-text-3)]">Searching…</span>
+            <span className="text-[var(--w-text-3)]">{wt('gs.searching')}</span>
           ) : first ? (
             <>
-              <span className="font-medium tabular-nums text-[var(--w-text)]">{total.toLocaleString('en-US')} {total === 1 ? 'issue' : 'issues'}</span>
+              <span className="font-medium tabular-nums text-[var(--w-text)]">{wt('gs.nIssues', { n: total.toLocaleString(wfmt.intl()), count: total })}</span>
               <span className="truncate text-[var(--w-text-3)]">
-                {filtered ? 'matching' : 'recently updated'} · {first.projectsSearched} {first.projectsSearched === 1 ? 'project' : 'projects'}
-                {first.ranked ? ' · best match first' : ''}
+                {wt('gs.summaryLine', { w: filtered ? wt('gs.matching') : wt('gs.recent'), count: first.projectsSearched })}
+                {first.ranked ? wt('gs.bestFirst') : ''}
               </span>
             </>
           ) : null}
@@ -316,16 +317,16 @@ export default function GlobalSearchPage() {
             onClick={() => setParams({ group: grouped ? null : 'project' })}
             aria-pressed={grouped}
             className={cn('w-btn w-btn-ghost w-btn-sm', grouped && '!bg-[var(--w-accent-soft)] !text-[var(--w-accent-text)]')}
-            title={grouped ? 'Show a flat list' : 'Group results by project'}
+            title={grouped ? wt('gs.flatList') : wt('gs.groupResults')}
           >
             {grouped ? <Layers size={13} /> : <Rows3 size={13} />}
-            <span className="max-sm:!hidden">{grouped ? 'Grouped by project' : 'Group by project'}</span>
+            <span className="max-sm:!hidden">{grouped ? wt('gs.groupedBy') : wt('gs.groupBy')}</span>
           </button>
         </span>
       </div>
       {first?.truncated && (
         <div className="shrink-0 border-b border-[var(--w-border)] bg-[color-mix(in_srgb,var(--w-yellow)_10%,transparent)] px-4 py-1.5 text-[12px] text-[var(--w-text-2)]">
-          You can see more than 200 projects — only the 200 most recently active were searched. Add <span className="font-mono">project = KEY</span> to narrow it down.
+          {wt('gs.over200')} <span className="font-mono">project = KEY</span> {wt('gs.toNarrow')}
         </div>
       )}
 
@@ -333,30 +334,30 @@ export default function GlobalSearchPage() {
 
       {/* Kết quả */}
       {/* UX-A ARIA: hàng kết quả cần vai cha table. */}
-      <div className="min-h-0 flex-1 overflow-y-auto" role="table" aria-label="Search results">
+      <div className="min-h-0 flex-1 overflow-y-auto" role="table" aria-label={wt('gs.searchResults')}>
         <ResultsHeader sort={sort} onSort={onSort} />
         {results.isLoading ? (
           <SkeletonRows />
         ) : jqlError ? (
           <div role="row"><div role="cell"><EmptyState
-            title="Fix the query to see results"
-            body={mode === 'jql' ? 'Check the highlighted part of your query, or open Syntax help for fields and examples.' : jqlError.message}
+            title={wt('gs.fixQuery')}
+            body={mode === 'jql' ? wt('gs.checkHl') : jqlError.message}
           /></div></div>
         ) : results.isError ? (
           <div role="row"><div role="cell"><EmptyState
-            title="Couldn't search issues"
+            title={wt('gs.couldntSearch')}
             body={workError(results.error)}
-            action={<button type="button" className="w-btn" onClick={() => results.refetch()}>Try again</button>}
+            action={<button type="button" className="w-btn" onClick={() => results.refetch()}>{wt('common.tryAgain')}</button>}
           /></div></div>
         ) : !items.length ? (
           filtered ? (
             <div role="row"><div role="cell"><EmptyState
-              title="No issues match"
-              body={mode === 'jql' ? 'Try widening the query: remove a clause, or check the project and status names.' : 'Try different words or remove some filters.'}
-              action={mode === 'basic' ? <button type="button" className="w-btn" onClick={clearBasic}>Clear filters</button> : undefined}
+              title={wt('gs.noMatch')}
+              body={mode === 'jql' ? wt('gs.widen') : wt('gs.tryWords')}
+              action={mode === 'basic' ? <button type="button" className="w-btn" onClick={clearBasic}>{wt('gs.clearFilters')}</button> : undefined}
             /></div></div>
           ) : (
-            <div role="row"><div role="cell"><EmptyState title="No issues yet" body="Issues from every project you can see will show up here." /></div></div>
+            <div role="row"><div role="cell"><EmptyState title={wt('gs.noIssuesYet')} body={wt('gs.noIssuesBody')} /></div></div>
           )
         ) : (
           <div ref={rowsRef} role="rowgroup">
@@ -372,19 +373,19 @@ export default function GlobalSearchPage() {
               <div role="row" className="flex justify-center py-3"><div role="cell">
                 <button type="button" className="w-btn w-btn-sm" disabled={results.isFetchingNextPage} onClick={() => results.fetchNextPage()}>
                   {results.isFetchingNextPage && <Spinner size={12} />}
-                  Load more
-                  <span className="text-[var(--w-text-3)]">· {items.length} of {total.toLocaleString('en-US')}</span>
+                  {wt('studio.loadMore')}
+                  <span className="text-[var(--w-text-3)]">· {wt('gs.aOfB', { a: items.length, b: total.toLocaleString(wfmt.intl()) })}</span>
                 </button>
               </div></div>
             )}
             {!results.hasNextPage && total > items.length && (
-              <p className="px-4 py-3 text-center text-[12px] text-[var(--w-text-3)]">Showing the first {items.length.toLocaleString('en-US')} results. Narrow the search to see the rest.</p>
+              <p className="px-4 py-3 text-center text-[12px] text-[var(--w-text-3)]">{wt('gs.showingFirst', { n: items.length.toLocaleString(wfmt.intl()) })}</p>
             )}
             <div className="hidden items-center gap-3 px-4 py-3 text-[11px] text-[var(--w-text-3)] md:flex">
-              <span className="flex items-center gap-1"><kbd className="w-kbd">J</kbd><kbd className="w-kbd">K</kbd> move</span>
-              <span className="flex items-center gap-1"><kbd className="w-kbd">↵</kbd> open</span>
-              <span className="flex items-center gap-1"><kbd className="w-kbd">/</kbd> search</span>
-              <span className="flex items-center gap-1"><kbd className="w-kbd">⌘</kbd><kbd className="w-kbd">K</kbd> jump anywhere</span>
+              <span className="flex items-center gap-1"><kbd className="w-kbd">J</kbd><kbd className="w-kbd">K</kbd> {wt('gs.kMove')}</span>
+              <span className="flex items-center gap-1"><kbd className="w-kbd">↵</kbd> {wt('gs.kOpen')}</span>
+              <span className="flex items-center gap-1"><kbd className="w-kbd">/</kbd> {wt('gs.kSearch')}</span>
+              <span className="flex items-center gap-1"><kbd className="w-kbd">⌘</kbd><kbd className="w-kbd">K</kbd> {wt('gs.kJump')}</span>
             </div>
           </div>
         )}

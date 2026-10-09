@@ -13,8 +13,10 @@ import { contribKeys, workContribApi } from '@/lib/work-contrib-api';
 import { EmptyState, PageLoading, StatusBadge, UserAvatar } from '@/components/work/ui';
 import { Card, SectionTitle } from '../reports/shared';
 import { fmtDayShort, fmtWhen } from './shared';
+import { trEvent } from './serverText';
+import { wt } from '@/components/work/i18n';
 
-const KIND: Record<string, string> = { created: 'Created', update: 'Changed', comment: 'Comment', voice: 'Voice note', worklog: 'Time', code: 'Code', test: 'Test', review: 'Review' };
+const KIND: Record<string, string> = { get created() { return wt('contrib.kCreated'); }, get update() { return wt('contrib.kChanged'); }, get comment() { return wt('contrib.kComment'); }, get voice() { return wt('chat.voiceNote'); }, get worklog() { return wt('contrib.kTime'); }, get code() { return wt('contrib.fCode'); }, get test() { return wt('contrib.kTest'); }, get review() { return wt('contrib.fReviews'); } };
 
 export default function TaskView({ pid, config, num, onPick, onOpenMember }: { pid: number; config: ProjectConfig; num: number | null; onPick: (n: number) => void; onOpenMember: (id: number) => void }) {
   const [text, setText] = useState('');
@@ -35,11 +37,11 @@ export default function TaskView({ pid, config, num, onPick, onOpenMember }: { p
   return (
     <div className="space-y-3">
       <form onSubmit={onSubmit} className="relative max-w-[520px]" role="search">
-        <label htmlFor="contrib-task" className="sr-only">Find an issue</label>
+        <label htmlFor="contrib-task" className="sr-only">{wt('contrib.findIssue')}</label>
         <Search size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" aria-hidden="true" />
-        <input id="contrib-task" value={text} onChange={(e) => setText(e.target.value)} placeholder={`Issue number or title, e.g. ${config.key}-12`} className="w-input h-[32px] pl-8 text-[13px]" autoComplete="off" />
+        <input id="contrib-task" value={text} onChange={(e) => setText(e.target.value)} placeholder={wt('contrib.issuePh', { k: `${config.key}-12` })} className="w-input h-[32px] pl-8 text-[13px]" autoComplete="off" />
         {text.trim() && pickQ.data && pickQ.data.items.length > 0 && (
-          <ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-[8px] border border-[var(--w-border)] bg-[var(--w-raised)] shadow-[var(--w-shadow-pop)]" role="listbox" aria-label="Matching issues">
+          <ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-[8px] border border-[var(--w-border)] bg-[var(--w-raised)] shadow-[var(--w-shadow-pop)]" role="listbox" aria-label={wt('contrib.matching')}>
             {pickQ.data.items.map((i) => (
               <li key={i.id} role="option" aria-selected={i.number === num}>
                 <button type="button" className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]" onClick={() => { onPick(i.number); setText(''); }}>
@@ -52,9 +54,9 @@ export default function TaskView({ pid, config, num, onPick, onOpenMember }: { p
       </form>
 
       {!num ? (
-        <EmptyState title="Pick an issue" body="See everyone who worked on it: changes, time logged, comments and voice notes, commits, test runs and reviews." />
+        <EmptyState title={wt('contrib.pickIssue')} body={wt('contrib.pickIssueBody')} />
       ) : q.isLoading ? <PageLoading rows={6} /> : q.error || !q.data ? (
-        <EmptyState title="Could not load this issue" body={q.error ? workError(q.error) : undefined} />
+        <EmptyState title={wt('contrib.loadIssueFailed')} body={q.error ? workError(q.error) : undefined} />
       ) : (
         <>
           <Card className="!p-3">
@@ -63,18 +65,18 @@ export default function TaskView({ pid, config, num, onPick, onOpenMember }: { p
               <StatusBadge status={{ name: q.data.issue.status.name, category: q.data.issue.status.category as 'TODO' | 'IN_PROGRESS' | 'DONE' }} />
             </div>
             <p className="mt-1 text-[12px] text-[var(--w-text-2)]">
-              {q.data.issue.type.name} · assignee {userName(q.data.issue.assignee)} · created {fmtDayShort(q.data.issue.createdAt)}
-              {q.data.issue.dueDate && <> · due {fmtDayShort(q.data.issue.dueDate)}</>}
-              {q.data.issue.resolvedAt && <> · done {fmtDayShort(q.data.issue.resolvedAt)} ({q.data.issue.leadDays} d lead{q.data.issue.onTime === null ? '' : q.data.issue.onTime ? ', on time' : ', late'})</>}
+              {wt('contrib.taskLine', { type: q.data.issue.type.name, a: userName(q.data.issue.assignee), c: fmtDayShort(q.data.issue.createdAt) })}
+              {q.data.issue.dueDate && <>{wt('contrib.dueX', { d: fmtDayShort(q.data.issue.dueDate) })}</>}
+              {q.data.issue.resolvedAt && <>{wt('contrib.doneX', { d: fmtDayShort(q.data.issue.resolvedAt), n: q.data.issue.leadDays, s: q.data.issue.onTime === null ? '' : q.data.issue.onTime ? wt('contrib.onTimeC') : wt('contrib.lateC') })}</>}
             </p>
           </Card>
           <Card className="!p-0">
-            <div className="px-4 pt-3"><SectionTitle>Who worked on it</SectionTitle></div>
+            <div className="px-4 pt-3"><SectionTitle>{wt('contrib.whoWorked')}</SectionTitle></div>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[620px] text-[13px]">
                 <thead><tr className="border-b border-[var(--w-border)] text-left text-[11.5px] text-[var(--w-text-3)]">
-                  <th scope="col" className="px-4 py-2 font-medium">Person</th><th scope="col" className="px-3 py-2 text-right font-medium">Changes</th><th scope="col" className="px-3 py-2 text-right font-medium">Comments</th>
-                  <th scope="col" className="px-3 py-2 text-right font-medium">Hours</th><th scope="col" className="px-3 py-2 text-right font-medium">Commits</th><th scope="col" className="px-3 py-2 font-medium">First → last</th>
+                  <th scope="col" className="px-4 py-2 font-medium">{wt('finance.person')}</th><th scope="col" className="px-3 py-2 text-right font-medium">{wt('contrib.changes')}</th><th scope="col" className="px-3 py-2 text-right font-medium">{wt('contrib.ml_comments')}</th>
+                  <th scope="col" className="px-3 py-2 text-right font-medium">{wt('finance.hoursH')}</th><th scope="col" className="px-3 py-2 text-right font-medium">Commit</th><th scope="col" className="px-3 py-2 font-medium">{wt('contrib.firstLast')}</th>
                 </tr></thead>
                 <tbody>
                   {q.data.people.map((p, i) => (
@@ -82,7 +84,7 @@ export default function TaskView({ pid, config, num, onPick, onOpenMember }: { p
                       <td className="px-4 py-2">
                         {p.who.user ? (
                           <button type="button" className="flex items-center gap-2 hover:underline" onClick={() => onOpenMember(p.who.user!.id)}><UserAvatar user={p.who.user} size={22} />{userName(p.who.user)}</button>
-                        ) : <span className="text-[var(--w-text-2)]" title="Git author not matched to a project member">{p.who.label} <span className="text-[11px] text-[var(--w-text-3)]">(git author)</span></span>}
+                        ) : <span className="text-[var(--w-text-2)]" title={wt('contrib.gitNotMatched')}>{p.who.label} <span className="text-[11px] text-[var(--w-text-3)]">{wt('contrib.gitAuthor')}</span></span>}
                       </td>
                       <td className="px-3 py-2 text-right tabular-nums">{p.actions}</td><td className="px-3 py-2 text-right tabular-nums">{p.comments}</td>
                       <td className="px-3 py-2 text-right tabular-nums">{p.hours || '—'}</td><td className="px-3 py-2 text-right tabular-nums">{p.commits || '—'}</td>
@@ -94,14 +96,14 @@ export default function TaskView({ pid, config, num, onPick, onOpenMember }: { p
             </div>
           </Card>
           <Card>
-            <SectionTitle>History ({q.data.events.length})</SectionTitle>
+            <SectionTitle>{wt('contrib.historyN', { n: q.data.events.length })}</SectionTitle>
             <ol className="max-h-[480px] overflow-y-auto">
               {q.data.events.map((e, i) => (
                 <li key={i} className="flex min-w-0 items-baseline gap-2 border-b border-[var(--w-border)] py-1.5 text-[12.5px] last:border-0">
                   <time className="w-[92px] shrink-0 text-[11px] tabular-nums text-[var(--w-text-3)]" dateTime={e.at}>{fmtWhen(e.at)}</time>
                   <span className="w-20 shrink-0 text-[11px] font-medium text-[var(--w-text-2)]">{KIND[e.kind] ?? e.kind}</span>
-                  <span className="min-w-0 flex-1 truncate"><span className="font-medium">{e.who.user ? userName(e.who.user) : e.who.label}</span> {e.text}</span>
-                  {e.url && <a href={e.url} target="_blank" rel="noreferrer" aria-label="Open" className="shrink-0 text-[var(--w-text-3)]"><ExternalLink size={12} /></a>}
+                  <span className="min-w-0 flex-1 truncate"><span className="font-medium">{e.who.user ? userName(e.who.user) : e.who.label}</span> {trEvent(e.text)}</span>
+                  {e.url && <a href={e.url} target="_blank" rel="noreferrer" aria-label={wt('common.open')} className="shrink-0 text-[var(--w-text-3)]"><ExternalLink size={12} /></a>}
                 </li>
               ))}
             </ol>

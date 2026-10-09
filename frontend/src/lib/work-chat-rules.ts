@@ -1,3 +1,4 @@
+import { translate, type WorkLocale } from '../components/work/i18n/core';
 /**
  * CT Work K-3 — luật THUẦN phía client của kênh chat (không React, không mạng) ⇒ test bằng bảng:
  *   npx tsx --test frontend/src/lib/work-chat-rules.test.ts
@@ -42,18 +43,18 @@ export function titleWithBadge(title: string, count: number): string {
 }
 
 /** Nhãn tắt tiếng cho menu / tooltip. */
-export function muteLabel(until: string | null | undefined, forever: boolean, now = new Date()): string | null {
+export function muteLabel(until: string | null | undefined, forever: boolean, now = new Date(), locale: WorkLocale = 'en'): string | null {
   if (!until) return null;
   const d = new Date(until);
   if (Number.isNaN(d.getTime()) || d.getTime() <= now.getTime()) return null;
-  if (forever || d.getUTCFullYear() >= 2999) return 'Muted until you turn it back on';
+  if (forever || d.getUTCFullYear() >= 2999) return translate(locale, 'chat.mutedForever');
   const sameDay = d.toDateString() === now.toDateString();
-  const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-  if (sameDay) return `Muted until ${time}`;
+  const time = d.toLocaleTimeString(locale === 'vi' ? 'vi-VN' : 'en-GB', { hour: '2-digit', minute: '2-digit' });
+  if (sameDay) return translate(locale, 'chat.mutedUntil', { t: time });
   const tomorrow = new Date(now);
   tomorrow.setDate(now.getDate() + 1);
-  if (d.toDateString() === tomorrow.toDateString()) return `Muted until tomorrow ${time}`;
-  return `Muted until ${d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} ${time}`;
+  if (d.toDateString() === tomorrow.toDateString()) return translate(locale, 'chat.mutedTomorrow', { t: time });
+  return translate(locale, 'chat.mutedUntil', { t: `${d.toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-GB', { day: 'numeric', month: 'short' })} ${time}` });
 }
 
 /** Ô gõ: đang gõ "@abc" ngay trước con trỏ? ⇒ vị trí "@" + chữ đã gõ (để gợi ý người). */
@@ -110,9 +111,9 @@ export function newClientKey(): string {
 }
 
 /** Đoạn dài dòng trạng thái "đang gõ": 1 người / 2 người / nhiều người. */
-export function typingLine(names: string[]): string | null {
+export function typingLine(names: string[], locale: WorkLocale = 'en'): string | null {
   if (!names.length) return null;
-  if (names.length === 1) return `${names[0]} is typing…`;
-  if (names.length === 2) return `${names[0]} and ${names[1]} are typing…`;
-  return `${names[0]} and ${names.length - 1} others are typing…`;
+  if (names.length === 1) return translate(locale, 'chat.typing1', { a: names[0] });
+  if (names.length === 2) return translate(locale, 'chat.typing2', { a: names[0], b: names[1] });
+  return translate(locale, 'chat.typingN', { a: names[0], n: names.length - 1 });
 }

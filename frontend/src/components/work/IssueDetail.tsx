@@ -59,13 +59,14 @@ import {
   formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, ProjectMark, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
   EmptyState,
   publicOrigin, PageLoading} from './ui';
+import { wt } from '@/components/work/i18n';
 
 const LINK_PHRASE: Record<LinkType, [string, string]> = {
-  BLOCKS: ['blocks', 'is blocked by'],
-  RELATES: ['relates to', 'relates to'],
-  DUPLICATES: ['duplicates', 'is duplicated by'],
-  CLONES: ['clones', 'is cloned by'],
-  TESTS: ['tests', 'is tested by'],
+  get BLOCKS(): [string, string] { return [wt('detail.lBlocks'), wt('detail.lBlockedBy')]; },
+  get RELATES(): [string, string] { return [wt('detail.lRelates'), wt('detail.lRelates')]; },
+  get DUPLICATES(): [string, string] { return [wt('detail.lDuplicates'), wt('detail.lDuplicatedBy')]; },
+  get CLONES(): [string, string] { return [wt('detail.lClones'), wt('detail.lClonedBy')]; },
+  get TESTS(): [string, string] { return [wt('detail.lTests'), wt('detail.lTestedBy')]; },
 };
 
 function Prop({ label, children }: { label: string; children: ReactNode }) {
@@ -89,7 +90,7 @@ function TitleEditor({ value, editable, onSave }: { value: string; editable: boo
   };
   return (
     <textarea
-      aria-label="Issue title"
+      aria-label={wt('detail.issueTitle')}
       value={draft ?? value}
       rows={1}
       maxLength={255}
@@ -124,8 +125,8 @@ function Description({ issue, config, editable, onSave, saving }: {
       <div>
         <RichEditor value={draft} onChange={(d) => setDraft(d)} members={config.members} projectId={config.id} autoFocus minHeight={140} onSubmit={save} onEscape={() => setEditing(false)} />
         <div className="mt-2 flex gap-2">
-          <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={saving} onClick={save}>{saving ? 'Saving…' : 'Save'}</button>
-          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setEditing(false)}>Cancel</button>
+          <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={saving} onClick={save}>{saving ? wt('common.saving') : wt('common.save')}</button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setEditing(false)}>{wt('common.cancel')}</button>
         </div>
       </div>
     );
@@ -133,9 +134,9 @@ function Description({ issue, config, editable, onSave, saving }: {
   if (empty) {
     return editable ? (
       <button type="button" onClick={start} className="w-full rounded-[6px] px-2 py-2 text-left text-[13px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)]">
-        Add a description…
+        {wt('detail.addDesc')}
       </button>
-    ) : <p className="text-[13px] text-[var(--w-text-3)]">No description.</p>;
+    ) : <p className="text-[13px] text-[var(--w-text-3)]">{wt('detail.noDesc')}</p>;
   }
   return (
     <div
@@ -160,17 +161,17 @@ function Subtasks({ issue, config, lk, onOpen, onAdd }: { issue: TIssueDetail; c
   return (
     <section>
       <div className="mb-2 flex items-center gap-2">
-        <h3 className="text-[13px] font-semibold">{isEpic ? 'Issues in this epic' : 'Sub-tasks'}</h3>
+        <h3 className="text-[13px] font-semibold">{isEpic ? wt('detail.inEpic') : wt('detail.subtasks')}</h3>
         {kids.length > 0 && (
           <>
             <div className="h-1.5 w-24 overflow-hidden rounded-full bg-[var(--w-sunken)]">
               <div className="h-full bg-[var(--w-green)]" style={{ width: `${(done / kids.length) * 100}%` }} />
             </div>
-            <span className="text-[12px] text-[var(--w-text-3)] tabular">{done}/{kids.length} done</span>
+            <span className="text-[12px] text-[var(--w-text-3)] tabular">{wt('detail.nDone', { a: done, b: kids.length })}</span>
           </>
         )}
         {!isEpic && hasSubtaskType && config.permissions.editIssues && (
-          <button type="button" onClick={onAdd} className="w-btn w-btn-ghost w-btn-sm ml-auto"><Plus size={13} /> Add sub-task</button>
+          <button type="button" onClick={onAdd} className="w-btn w-btn-ghost w-btn-sm ml-auto"><Plus size={13} /> {wt('detail.addSubtask')}</button>
         )}
       </div>
       {kids.length > 0 && (
@@ -207,12 +208,12 @@ function Links({ issue, pid, lk, editable, onOpenKey }: { issue: TIssueDetail; p
   const add = useMutation({
     mutationFn: () => workApi.addLink(pid, issue.number, { type, targetKey: target.trim() }),
     onSuccess: () => { setTarget(''); setAdding(false); refresh(); },
-    onError: (err) => toast.error(workError(err, 'Could not link the issue')),
+    onError: (err) => toast.error(workError(err, wt('detail.linkFailed'))),
   });
   const remove = useMutation({
     mutationFn: (linkId: number) => workApi.removeLink(pid, issue.number, linkId),
     onSuccess: refresh,
-    onError: (err) => toast.error(workError(err, 'Could not remove the link')),
+    onError: (err) => toast.error(workError(err, wt('detail.removeLinkFailed'))),
   });
   if (!issue.links.length && !editable) return null;
   const groups = new Map<string, typeof issue.links>();
@@ -223,17 +224,17 @@ function Links({ issue, pid, lk, editable, onOpenKey }: { issue: TIssueDetail; p
   return (
     <section>
       <div className="mb-2 flex items-center">
-        <h3 className="text-[13px] font-semibold">Linked issues</h3>
-        {editable && !adding && <button type="button" onClick={() => setAdding(true)} className="w-btn w-btn-ghost w-btn-sm ml-auto"><Link2 size={13} /> Link issue</button>}
+        <h3 className="text-[13px] font-semibold">{wt('detail.linkedIssues')}</h3>
+        {editable && !adding && <button type="button" onClick={() => setAdding(true)} className="w-btn w-btn-ghost w-btn-sm ml-auto"><Link2 size={13} /> {wt('detail.linkIssue')}</button>}
       </div>
       {adding && (
         <form className="mb-3 flex flex-wrap gap-2" onSubmit={(e) => { e.preventDefault(); if (target.trim()) add.mutate(); }}>
           <select value={type} onChange={(e) => setType(e.target.value as LinkType)} className="w-input w-auto">
             {(Object.keys(LINK_PHRASE) as LinkType[]).map((t) => <option key={t} value={t}>{LINK_PHRASE[t][0]}</option>)}
           </select>
-          <input autoFocus value={target} onChange={(e) => setTarget(e.target.value)} placeholder={`e.g. ${lk.issueKey(1)}`} className="w-input w-[140px] font-mono uppercase" />
-          <button type="submit" className="w-btn w-btn-primary" disabled={!target.trim() || add.isPending}>Link</button>
-          <button type="button" className="w-btn w-btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+          <input autoFocus value={target} onChange={(e) => setTarget(e.target.value)} placeholder={wt('detail.egKey', { k: lk.issueKey(1) })} className="w-input w-[140px] font-mono uppercase" />
+          <button type="submit" className="w-btn w-btn-primary" disabled={!target.trim() || add.isPending}>{wt('desk.link')}</button>
+          <button type="button" className="w-btn w-btn-ghost" onClick={() => setAdding(false)}>{wt('common.cancel')}</button>
         </form>
       )}
       {[...groups.entries()].map(([phrase, links]) => (
@@ -247,7 +248,7 @@ function Links({ issue, pid, lk, editable, onOpenKey }: { issue: TIssueDetail; p
                 <span className="min-w-0 flex-1 truncate">{l.issue.title}</span>
                 <StatusBadge status={lk.statuses.get(l.issue.statusId)} />
                 {editable && (
-                  <button type="button" title="Remove link" onClick={() => remove.mutate(l.id)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm opacity-0 group-hover:opacity-100"><X size={12} /></button>
+                  <button type="button" title={wt('detail.removeLink')} onClick={() => remove.mutate(l.id)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm opacity-0 group-hover:opacity-100"><X size={12} /></button>
                 )}
               </div>
             ))}
@@ -274,13 +275,13 @@ function AttachmentItem({ a, pid, canDelete, onDeleted, share }: { a: IssueAttac
     try {
       window.open(await workApi.attachmentUrl(pid, a.id), '_blank', 'noopener');
     } catch (err) {
-      toast.error(workError(err, 'Could not download'));
+      toast.error(workError(err, wt('chat.downloadFailed')));
     }
   };
   const [confirmDel, setConfirmDel] = useState(false);
   const del = async () => {
     setConfirmDel(false);
-    try { await workApi.deleteAttachment(pid, a.id); onDeleted(); } catch (err) { toast.error(workError(err, 'Could not remove')); }
+    try { await workApi.deleteAttachment(pid, a.id); onDeleted(); } catch (err) { toast.error(workError(err, wt('detail.removeFailed'))); }
   };
   return (
     <div className="group relative w-[148px] overflow-hidden rounded-[6px] border border-[var(--w-border)]">
@@ -298,10 +299,10 @@ function AttachmentItem({ a, pid, canDelete, onDeleted, share }: { a: IssueAttac
       </div>
       {share}
       <div className="absolute right-1 top-1 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-        <button type="button" title="Download" onClick={download} className="w-btn w-btn-icon w-btn-sm"><Download size={12} /></button>
-        {canDelete && <button type="button" title="Remove" onClick={() => setConfirmDel(true)} className="w-btn w-btn-icon w-btn-sm"><Trash2 size={12} /></button>}
+        <button type="button" title={wt('common.download')} onClick={download} className="w-btn w-btn-icon w-btn-sm"><Download size={12} /></button>
+        {canDelete && <button type="button" title={wt('common.remove')} onClick={() => setConfirmDel(true)} className="w-btn w-btn-icon w-btn-sm"><Trash2 size={12} /></button>}
       </div>
-      <ConfirmDialog open={confirmDel} onClose={() => setConfirmDel(false)} onConfirm={del} title="Remove attachment" body={`${a.fileName} will be removed from this issue.`} confirmLabel="Remove" />
+      <ConfirmDialog open={confirmDel} onClose={() => setConfirmDel(false)} onConfirm={del} title={wt('detail.removeAttachment')} body={wt('detail.removeAttBody', { f: a.fileName })} confirmLabel={wt('common.remove')} />
     </div>
   );
 }
@@ -316,12 +317,12 @@ function Attachments({ issue, pid, config }: { issue: TIssueDetail; pid: number;
 
   const upload = async (files: FileList | File[]) => {
     for (const file of Array.from(files)) {
-      if (file.size > 25 * 1024 * 1024) { toast.error(`${file.name} is larger than 25 MB`); continue; }
+      if (file.size > 25 * 1024 * 1024) { toast.error(wt('detail.tooBig25', { f: file.name })); continue; }
       setUploads((u) => [...u, { name: file.name, pct: 0 }]);
       try {
         await workApi.uploadAttachment(pid, issue.number, file, (pct) => setUploads((u) => u.map((x) => (x.name === file.name ? { ...x, pct } : x))));
       } catch (err) {
-        toast.error(workError(err, `Could not upload ${file.name}`));
+        toast.error(workError(err, wt('detail.uploadX', { f: file.name })));
       } finally {
         setUploads((u) => u.filter((x) => x.name !== file.name));
         refresh();
@@ -338,10 +339,10 @@ function Attachments({ issue, pid, config }: { issue: TIssueDetail; pid: number;
       className={cn('rounded-[8px] transition-colors', drag && 'bg-[var(--w-accent-soft)] outline-dashed outline-1 outline-[var(--w-accent-border)]')}
     >
       <div className="mb-2 flex items-center">
-        <h3 className="text-[13px] font-semibold">Attachments {issue.attachments.length > 0 && <span className="font-normal text-[var(--w-text-3)]">{issue.attachments.length}</span>}</h3>
+        <h3 className="text-[13px] font-semibold">{wt('detail.attachments')} {issue.attachments.length > 0 && <span className="font-normal text-[var(--w-text-3)]">{issue.attachments.length}</span>}</h3>
         {config.permissions.attach && (
           <>
-            <button type="button" onClick={() => inputRef.current?.click()} className="w-btn w-btn-ghost w-btn-sm ml-auto"><Paperclip size={13} /> Attach</button>
+            <button type="button" onClick={() => inputRef.current?.click()} className="w-btn w-btn-ghost w-btn-sm ml-auto"><Paperclip size={13} /> {wt('detail.attach')}</button>
             <input ref={inputRef} type="file" multiple hidden onChange={(e) => { if (e.target.files) void upload(e.target.files); e.target.value = ''; }} />
           </>
         )}
@@ -361,7 +362,7 @@ function Attachments({ issue, pid, config }: { issue: TIssueDetail; pid: number;
           </div>
         ))}
         {!issue.attachments.length && !uploads.length && (
-          <p className="text-[12px] text-[var(--w-text-3)]">Drop files here or click Attach (max 25 MB each).</p>
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('detail.dropHint')}</p>
         )}
       </div>
     </section>
@@ -410,7 +411,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
   useEffect(() => {
     if (!moved) return;
     const projectKey = moved.key.slice(0, moved.key.lastIndexOf('-'));
-    toast.info(`${config.key}-${num} moved to ${moved.key}`);
+    toast.info(wt('detail.movedTo', { a: `${config.key}-${num}`, b: moved.key }));
     router.replace(`/work/${config.workspace.slug}/${projectKey}/issue/${moved.number}`);
   }, [moved?.key]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -424,10 +425,10 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
     },
     onError: (err) => {
       if (workErrorStatus(err) === 409) {
-        toast.error('Someone else just changed this issue. Showing the latest version.');
+        toast.error(wt('detail.someoneChanged'));
         qc.invalidateQueries({ queryKey: wk.issue(pid, num) });
       } else {
-        toast.error(workError(err, 'Could not save the change'));
+        toast.error(workError(err, wt('detail.saveChangeFailed')));
       }
     },
   });
@@ -445,7 +446,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
       qc.invalidateQueries({ queryKey: wk.issues(pid) });
       onClose?.();
     },
-    onError: (err) => toast.error(workError(err, 'Could not delete')),
+    onError: (err) => toast.error(workError(err, wt('common.couldNotDelete'))),
   });
 
   const clone = useMutation({
@@ -455,9 +456,9 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
       qc.invalidateQueries({ queryKey: wk.issues(pid) });
       qc.invalidateQueries({ queryKey: wk.backlog(pid) });
       qc.invalidateQueries({ queryKey: wk.issue(pid, num) });
-      toast.success(`Cloned as ${lk.issueKey(copy.number)}`, { action: { label: 'Open', onClick: () => onOpenIssue(copy.number) } });
+      toast.success(wt('detail.clonedAs', { k: lk.issueKey(copy.number) }), { action: { label: wt('common.open'), onClick: () => onOpenIssue(copy.number) } });
     },
-    onError: (err) => toast.error(workError(err, 'Could not clone the issue')),
+    onError: (err) => toast.error(workError(err, wt('detail.cloneFailed'))),
   });
 
   const subtaskDefaults = useMemo(() => (issue ? { parent: { id: issue.id, number: issue.number, title: issue.title } } : undefined), [issue]);
@@ -473,7 +474,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
     return (
       <div className="flex h-full flex-col">
         {onClose && <div className="flex justify-end p-2"><button type="button" onClick={onClose} className="w-btn w-btn-ghost w-btn-icon"><X size={16} /></button></div>}
-        <EmptyState title="Issue not found" body={workErrorStatus(q.error) === 404 ? 'It may have been deleted or you no longer have access.' : workError(q.error)} />
+        <EmptyState title={wt('detail.notFound')} body={workErrorStatus(q.error) === 404 ? wt('detail.notFoundBody') : workError(q.error)} />
       </div>
     );
   }
@@ -486,22 +487,22 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
       <div className="mb-3">
         <StatusPicker lk={lk} issue={issue} onChange={(statusId) => set({ statusId })} disabled={!config.permissions.transition} />
       </div>
-      <Prop label="Assignee">
+      <Prop label={wt('common.assignee')}>
         <AssigneePicker config={config} value={issue.assigneeId} onChange={(assigneeId) => set({ assigneeId })} meId={meId} bare disabled={!editable} />
         {editable && issue.assigneeId !== meId && config.members.some((m) => m.id === meId && (m.role === 'ADMIN' || m.role === 'MEMBER')) && (
-          <button type="button" onClick={() => set({ assigneeId: meId })} className="px-2 text-[12px] text-[var(--w-accent-text)] hover:underline">Assign to me</button>
+          <button type="button" onClick={() => set({ assigneeId: meId })} className="px-2 text-[12px] text-[var(--w-accent-text)] hover:underline">{wt('detail.assignMe')}</button>
         )}
       </Prop>
       {studioOn(config, 'teams') && (
-        <Prop label="Team"><TeamPicker config={config} value={issue.teamId} onChange={(teamId) => set({ teamId })} disabled={!editable} /></Prop>
+        <Prop label={wt('detail.team')}><TeamPicker config={config} value={issue.teamId} onChange={(teamId) => set({ teamId })} disabled={!editable} /></Prop>
       )}
       {studioOn(config, 'stages') && (
-        <Prop label="Stage"><StagePicker config={config} value={issue.stageId} onChange={(stageId) => set({ stageId })} disabled={!editable} /></Prop>
+        <Prop label={wt('detail.stage')}><StagePicker config={config} value={issue.stageId} onChange={(stageId) => set({ stageId })} disabled={!editable} /></Prop>
       )}
-      <Prop label="Reporter">
-        <div className="flex items-center gap-2 px-2 text-[13px]"><UserAvatar user={issue.reporter} size={18} /><span className="truncate">{issue.reporter ? (issue.reporter.displayName || issue.reporter.fullName || issue.reporter.username) : 'Unknown'}</span></div>
+      <Prop label={wt('common.reporter')}>
+        <div className="flex items-center gap-2 px-2 text-[13px]"><UserAvatar user={issue.reporter} size={18} /><span className="truncate">{issue.reporter ? (issue.reporter.displayName || issue.reporter.fullName || issue.reporter.username) : wt('detail.unknown')}</span></div>
       </Prop>
-      <Prop label="AI-assisted">
+      <Prop label={wt('detail.aiAssisted')}>
         <AiAssistedControl
           on={!!(issue as typeof issue & AiProvenance).aiAssisted}
           model={(issue as AiProvenance).aiModel}
@@ -510,16 +511,16 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           onToggle={(v) => set({ aiAssisted: v } as unknown as IssuePatch)}
         />
       </Prop>
-      <Prop label="Priority"><PriorityPicker value={issue.priority} onChange={(priority) => set({ priority })} bare disabled={!editable} /></Prop>
+      <Prop label={wt('common.priority')}><PriorityPicker value={issue.priority} onChange={(priority) => set({ priority })} bare disabled={!editable} /></Prop>
       {/* CTW-11: cờ "Bị chặn" (khách không thấy). */}
       {!config.clientView && (
-        <Prop label="Blocked">
+        <Prop label={wt('detail.blocked')}>
           <FlagControl pid={pid} num={issue.number} flaggedAt={issue.flaggedAt} reason={issue.flagReason} editable={editable} onChanged={() => void qc.invalidateQueries({ queryKey: wk.issue(pid, issue.number) })} />
         </Prop>
       )}
-      <Prop label="Labels"><LabelsPicker config={config} value={issue.labelIds} onChange={(labelIds) => set({ labelIds })} bare disabled={!editable} /></Prop>
+      <Prop label={wt('common.labels')}><LabelsPicker config={config} value={issue.labelIds} onChange={(labelIds) => set({ labelIds })} bare disabled={!editable} /></Prop>
       {type && type.level !== 1 && (
-        <Prop label={type.level === -1 ? 'Parent' : 'Epic'}>
+        <Prop label={type.level === -1 ? wt('common.parent') : wt('common.epic')}>
           <ParentPicker
             config={config} lk={lk} childLevel={type.level} excludeId={issue.id}
             value={issue.parent ? { id: issue.parent.id, number: issue.parent.number, title: issue.parent.title } : null}
@@ -529,11 +530,11 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         </Prop>
       )}
       {config.type !== 'KANBAN' && type?.level === 0 && (
-        <Prop label="Sprint"><SprintPicker config={config} value={issue.sprintId} onChange={(sprintId) => set({ sprintId })} bare disabled={!editable} /></Prop>
+        <Prop label={wt('common.sprint')}><SprintPicker config={config} value={issue.sprintId} onChange={(sprintId) => set({ sprintId })} bare disabled={!editable} /></Prop>
       )}
-      <Prop label="Fix version"><FixVersionPicker config={config} value={issue.fixVersionId} onChange={(fixVersionId) => set({ fixVersionId })} bare disabled={!editable} /></Prop>
+      <Prop label={wt('detail.fixVersion')}><FixVersionPicker config={config} value={issue.fixVersionId} onChange={(fixVersionId) => set({ fixVersionId })} bare disabled={!editable} /></Prop>
       {type?.level !== 1 && (
-        <Prop label={config.settings?.estimation === 'HOURS' ? 'Estimate (h)' : 'Story points'}>
+        <Prop label={config.settings?.estimation === 'HOURS' ? wt('detail.estimateH') : wt('common.storyPoints')}>
           {config.settings?.estimation === 'HOURS' ? (
             <NumberInput
               value={issue.originalEstimateMin === null ? null : Math.round((issue.originalEstimateMin / 60) * 10) / 10}
@@ -545,30 +546,30 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           )}
         </Prop>
       )}
-      <Prop label="Start date"><DateInput value={issue.startDate} onChange={(startDate) => set({ startDate })} disabled={!editable} /></Prop>
-      <Prop label="Due date">
+      <Prop label={wt('common.startDate')}><DateInput value={issue.startDate} onChange={(startDate) => set({ startDate })} disabled={!editable} /></Prop>
+      <Prop label={wt('common.dueDate')}>
         <div className="flex min-w-0 items-center">
         <DateInput value={issue.dueDate} onChange={(dueDate) => set({ dueDate })} disabled={!editable} />
         {/* CTW-25: thêm hạn thẻ vào Google Calendar / Outlook (deep link). */}
         {issue.dueDate && (
           <AddToCalendar
-            label="Calendar" className="ml-1 !h-6 !px-1.5 text-[11.5px]"
-            event={{ title: `Due: ${lk.issueKey(issue.number)} ${issue.title}`, start: issue.dueDate.slice(0, 10), allDay: true, details: `${config.name}\n${typeof window !== 'undefined' ? window.location.origin : ''}${base}/issue/${issue.number}` }}
+            label={wt('detail.calendar')} className="ml-1 !h-6 !px-1.5 text-[11.5px]"
+            event={{ title: wt('detail.dueTitle', { k: lk.issueKey(issue.number), t: issue.title }), start: issue.dueDate.slice(0, 10), allDay: true, details: `${config.name}\n${typeof window !== 'undefined' ? window.location.origin : ''}${base}/issue/${issue.number}` }}
           />
         )}
         </div>
       </Prop>
       {config.components.length > 0 && (
-        <Prop label="Components"><ComponentsPicker config={config} value={issue.componentIds} onChange={(componentIds) => set({ componentIds })} bare disabled={!editable} /></Prop>
+        <Prop label={wt('common.components')}><ComponentsPicker config={config} value={issue.componentIds} onChange={(componentIds) => set({ componentIds })} bare disabled={!editable} /></Prop>
       )}
       <CustomFieldsGroup pid={pid} num={num} typeKey={type?.key} config={config} editable={editable} />
       {type?.key === 'BUG' && <DefectPanel pid={pid} num={num} editable={editable} />}
       <TimeTrackingBlock pid={pid} issue={issue} config={config} />
       <DevelopmentPanel pid={pid} num={num} issueKey={lk.issueKey(num)} />
       <div className="mt-4 space-y-1 border-t border-[var(--w-border)] pt-3 text-[12px] text-[var(--w-text-3)]">
-        <div>Created {formatDate(issue.createdAt)} · {relativeTime(issue.createdAt)}</div>
-        <div>Updated {relativeTime(issue.updatedAt)}</div>
-        {issue.resolvedAt && <div>Resolved {formatDate(issue.resolvedAt)}</div>}
+        <div>{wt('detail.createdLine', { d: formatDate(issue.createdAt), r: relativeTime(issue.createdAt) })}</div>
+        <div>{wt('detail.updatedLine', { r: relativeTime(issue.updatedAt) })}</div>
+        {issue.resolvedAt && <div>{wt('detail.resolvedLine', { d: formatDate(issue.resolvedAt) })}</div>}
       </div>
     </div>
   );
@@ -580,7 +581,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         {/* Trang riêng: nút ☰ của điện thoại nằm ở header này (thay thanh dự phòng của layout). */}
         {variant === 'page' && <MobileNavButton />}
         {variant === 'page' && (
-          <nav aria-label="Breadcrumb" className="flex min-w-0 shrink items-center gap-1.5 text-[13px] max-md:!hidden">
+          <nav aria-label={wt('detail.breadcrumb')} className="flex min-w-0 shrink items-center gap-1.5 text-[13px] max-md:!hidden">
             <Crumb href={`/work/${config.workspace.slug}`} className="max-w-[160px] max-lg:!hidden">{config.workspace.name}</Crumb>
             <CrumbSep className="max-lg:!hidden" />
             <Crumb href={`${base}/board`} className="max-w-[200px]">
@@ -608,22 +609,22 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           {type && <AiIssueMenu config={config} issueNumber={issue.number} typeKey={type.key} />}
           <button
             type="button"
-            title={issue.isWatching ? 'Stop watching' : 'Watch — get notified about changes'}
+            title={issue.isWatching ? wt('detail.stopWatching') : wt('detail.watch')}
             onClick={() => watch.mutate(!issue.isWatching)}
             className="w-btn w-btn-ghost w-btn-sm"
           >
             <Eye size={13} className={issue.isWatching ? 'text-[var(--w-accent-text)]' : undefined} />
             <span className={cn('tabular', issue.isWatching && 'text-[var(--w-accent-text)]')}>{issue.watcherCount}</span>
           </button>
-          <button type="button" title="Copy link" onClick={() => { void navigator.clipboard.writeText(url); toast.success('Link copied'); }} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Copy size={13} /></button>
+          <button type="button" title={wt('common.copyLink')} onClick={() => { void navigator.clipboard.writeText(url); toast.success(wt('common.linkCopied')); }} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Copy size={13} /></button>
           {/* CTW K-3: chia sẻ thẻ vào kênh chat (thẻ xem trước theo quyền người xem). Khách không có kênh nội bộ. */}
           {config.role !== 'CLIENT' && <ShareToChannelButton pid={config.id} path={`/work/${config.workspace.slug}/${config.key}/issue/${issue.number}`} label={`${lk.issueKey(issue.number)}: ${issue.title}`} wsSlug={config.workspace.slug} projectKey={config.key} compact className="w-btn-ghost" />}
           {variant === 'drawer' && (
-            <Link href={`${base}/issue/${num}`} title="Open full page" className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><ExternalLink size={13} /></Link>
+            <Link href={`${base}/issue/${num}`} title={wt('detail.openFull')} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><ExternalLink size={13} /></Link>
           )}
           {(issue.canDelete || config.permissions.createIssues) && (
             <>
-              <button ref={menuRef} type="button" onClick={menu.toggle} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="More actions"><MoreHorizontal size={14} /></button>
+              <button ref={menuRef} type="button" onClick={menu.toggle} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('common.moreActions')}><MoreHorizontal size={14} /></button>
               <Popover open={menu.on} onClose={menu.close} anchorRef={menuRef} width={230} align="end">
                 <div className="p-1">
                   {config.permissions.createIssues && (
@@ -631,20 +632,20 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
                       type="button"
                       disabled={clone.isPending}
                       onClick={() => { menu.close(); clone.mutate(); }}
-                      title="Create a copy with the same fields, labels and description"
+                      title={wt('detail.cloneTip')}
                       className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)] disabled:opacity-50"
                     >
-                      <CopyPlus size={13} /> Clone
+                      <CopyPlus size={13} /> {wt('detail.clone')}
                     </button>
                   )}
                   {issue.canDelete && (
                     <button
                       type="button"
                       onClick={() => { menu.close(); setMoving(true); }}
-                      title="Move this issue to another project in the same workspace"
+                      title={wt('detail.moveTip')}
                       className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]"
                     >
-                      <ArrowRightLeft size={13} /> Move to another project
+                      <ArrowRightLeft size={13} /> {wt('detail.moveProject')}
                     </button>
                   )}
                   {issue.canDelete && (
@@ -653,16 +654,16 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
                       onClick={() => { menu.close(); setConfirmDelete(true); }}
                       className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] text-[var(--w-red)] hover:bg-[var(--w-hover)]"
                     >
-                      <Trash2 size={13} /> Delete issue
+                      <Trash2 size={13} /> {wt('detail.deleteIssue')}
                     </button>
                   )}
                 </div>
               </Popover>
             </>
           )}
-          {onClose && <button type="button" onClick={onClose} title="Close (Esc)" className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><X size={15} /></button>}
+          {onClose && <button type="button" onClick={onClose} title={wt('detail.closeEsc')} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><X size={15} /></button>}
           {variant === 'page' && sidePane.mode !== 'drawer' && (
-            <PaneToggle pane={sidePane} side="right" label="Details" shortcut="]" showLabel={false} className="w-btn-ghost" />
+            <PaneToggle pane={sidePane} side="right" label={wt('common.details')} shortcut="]" showLabel={false} className="w-btn-ghost" />
           )}
         </div>
         {variant === 'page' && <HeaderTools />}
@@ -703,7 +704,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
                 mà người xem không xử lý được). Đặt TRƯỚC mô tả: với yêu cầu của khách, đồng hồ là thứ cần thấy đầu tiên. */}
             <IssueDesk config={config} issueNumber={issue.number} />
             <section>
-              <h3 className="w-section-title mb-2">Description</h3>
+              <h3 className="w-section-title mb-2">{wt('common.description')}</h3>
               <Description issue={issue} config={config} editable={editable} onSave={(d) => set({ descriptionJson: d })} saving={update.isPending} />
             </section>
             <Subtasks issue={issue} config={config} lk={lk} onOpen={onOpenIssue} onAdd={() => setSubtaskOpen(true)} />
@@ -722,7 +723,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             <IssueActivity pid={pid} num={num} config={config} lk={lk} clientShared={!!issue.clientVisible} />
           </div>
           {(variant !== 'page' || sideOn) && (
-          <aside aria-label="Issue details" className={cn('shrink-0', variant === 'page' ? 'w-[320px]' : 'hidden xl:block xl:w-[290px]')} data-testid={variant === 'page' ? 'issue-details-pane' : undefined}>
+          <aside aria-label={wt('detail.issueDetails')} className={cn('shrink-0', variant === 'page' ? 'w-[320px]' : 'hidden xl:block xl:w-[290px]')} data-testid={variant === 'page' ? 'issue-details-pane' : undefined}>
             <div className={cn('rounded-[12px] border border-[var(--w-border)] bg-[var(--w-raised)] p-3.5 shadow-[var(--w-shadow-card)]', variant === 'page' && 'sticky top-0')}>
               {properties}
             </div>
@@ -735,9 +736,9 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         open={confirmDelete}
         onClose={() => setConfirmDelete(false)}
         onConfirm={() => { setConfirmDelete(false); del.mutate(); }}
-        title={`Delete ${lk.issueKey(num)}`}
-        body="The issue and its sub-tasks will be deleted. Comments and history go with it."
-        confirmLabel="Delete issue"
+        title={wt('detail.deleteKey', { k: lk.issueKey(num) })}
+        body={wt('detail.deleteBody')}
+        confirmLabel={wt('detail.deleteIssue')}
         pending={del.isPending}
       />
       {issue.canDelete && <MoveIssueDialog open={moving} onClose={() => setMoving(false)} config={config} issue={issue} lk={lk} />}

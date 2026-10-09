@@ -9,16 +9,17 @@ import { useProject, useProjectRealtime } from '@/components/work/hooks';
 import { EmptyState, PageLoading } from '@/components/work/ui';
 import ChatView from '@/components/work/chat/ChatView';
 import { workError } from '@/lib/work-api';
+import { wt } from '@/components/work/i18n';
 
 function Inner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   useProjectRealtime(pid);
   if (isLoading) return <PageLoading />;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : undefined} />;
+  if (error || !config || !pid) return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : undefined} />;
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Chat" />
+      <ProjectHeader config={config} title={wt('pages.chat')} />
       <div className="min-h-0 flex-1"><ChatView config={config} /></div>
     </div>
   );

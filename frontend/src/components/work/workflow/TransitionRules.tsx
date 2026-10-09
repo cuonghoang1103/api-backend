@@ -16,6 +16,7 @@ import type { ProjectConfig } from '@/lib/work-api';
 import { PickerList, Popover, useToggle } from '../ui';
 import { TeamChip, studioOn, useWorkspaceTeams } from '../studio/shared';
 import type { TransitionDraft } from './useTransitionDraft';
+import { wt } from '@/components/work/i18n';
 
 export function rulesAvailable(config: ProjectConfig): boolean {
   return studioOn(config, 'approvals') || studioOn(config, 'teams');
@@ -35,26 +36,26 @@ export default function TransitionRulesFields({ config, draft, edgeKey, canEdit 
 
   return (
     <div className="space-y-2.5">
-      {!restricted && <p className="text-[12px] text-[var(--w-text-3)]">Rules apply once the workflow only allows the moves you choose.</p>}
+      {!restricted && <p className="text-[12px] text-[var(--w-text-3)]">{wt('wf.rulesApply')}</p>}
       {approvalsOn && (
         <label className={`flex items-start gap-2 text-[13px] ${canEdit && restricted ? 'cursor-pointer' : ''}`}>
           <input type="checkbox" className="mt-0.5 accent-[var(--w-accent)]" checked={!!r.requireApproval} disabled={!canEdit || !restricted} onChange={(e) => set({ requireApproval: e.target.checked })} />
           <span>
-            Require an approved approval
-            <span className="block text-[12px] text-[var(--w-text-3)]">The issue needs an approval request that was approved. Admins cannot skip this.</span>
+            {wt('wf.requireApproval')}
+            <span className="block text-[12px] text-[var(--w-text-3)]">{wt('wf.requireApprovalDesc')}</span>
           </span>
         </label>
       )}
       {teamsOn && (
         <div>
-          <div className="mb-1 text-[13px]">Only these teams can make this move</div>
+          <div className="mb-1 text-[13px]">{wt('wf.onlyTeams')}</div>
           <div className="flex flex-wrap items-center gap-1.5">
             {picked.map((t) => <TeamChip key={t.id} team={t} full />)}
-            {!picked.length && <span className="text-[12px] text-[var(--w-text-3)]">Anyone who can move issues</span>}
+            {!picked.length && <span className="text-[12px] text-[var(--w-text-3)]">{wt('wf.anyoneMove')}</span>}
             {canEdit && restricted && (
               <>
                 <button ref={ref} type="button" className="w-btn w-btn-sm" onClick={pop.toggle} aria-haspopup="listbox" aria-expanded={pop.on}>
-                  Teams <ChevronDown size={12} className="opacity-60" />
+                  {wt('wf.teams')} <ChevronDown size={12} className="opacity-60" />
                 </button>
                 <Popover open={pop.on} onClose={pop.close} anchorRef={ref} width={240}>
                   <PickerList
@@ -62,14 +63,14 @@ export default function TransitionRulesFields({ config, draft, edgeKey, canEdit 
                     options={(teams.data ?? []).filter((t) => !t.archivedAt).map((t) => ({ value: t.id, label: t.name, hint: t.key, keywords: t.key, icon: <span className="h-2 w-2 rounded-full" style={{ background: t.color }} /> }))}
                     selected={r.teamIds ?? []}
                     onPick={(id) => set({ teamIds: r.teamIds?.includes(id) ? r.teamIds.filter((x) => x !== id) : [...(r.teamIds ?? []), id] })}
-                    placeholder="Find a team…"
-                    empty="No teams in this workspace yet"
+                    placeholder={wt('wf.findTeam')}
+                    empty={wt('wf.noTeams')}
                   />
                 </Popover>
               </>
             )}
           </div>
-          <p className="mt-1 text-[12px] text-[var(--w-text-3)]">Project admins can still make the move.</p>
+          <p className="mt-1 text-[12px] text-[var(--w-text-3)]">{wt('wf.adminsStill')}</p>
         </div>
       )}
     </div>
@@ -81,7 +82,7 @@ export function rulesSummary(config: ProjectConfig, draft: TransitionDraft, key:
   const r = draft.rules.get(key);
   if (!r) return '';
   const parts: string[] = [];
-  if (r.requireApproval && studioOn(config, 'approvals')) parts.push('Needs approval');
-  if (r.teamIds?.length && studioOn(config, 'teams')) parts.push(`Only ${r.teamIds.map((id) => teamKeys.get(id) ?? '?').join(', ')}`);
+  if (r.requireApproval && studioOn(config, 'approvals')) parts.push(wt('wf.needsApproval'));
+  if (r.teamIds?.length && studioOn(config, 'teams')) parts.push(wt('wf.onlyX', { x: r.teamIds.map((id) => teamKeys.get(id) ?? '?').join(', ') }));
   return parts.join(' · ');
 }

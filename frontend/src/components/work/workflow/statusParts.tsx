@@ -9,8 +9,9 @@ import { Plus } from 'lucide-react';
 import { workApi, workError, type StatusCategory, type WorkStatus } from '@/lib/work-api';
 import { Dialog, Field, Spinner } from '../ui';
 import { Select } from '../settings/shared';
+import { wt } from '@/components/work/i18n';
 
-export const CATEGORY_LABEL: Record<StatusCategory, string> = { TODO: 'To do', IN_PROGRESS: 'In progress', DONE: 'Done' };
+export const CATEGORY_LABEL: Record<StatusCategory, string> = { get TODO() { return wt('status.catTodo'); }, get IN_PROGRESS() { return wt('status.catInProgress'); }, get DONE() { return wt('status.catDone'); } };
 export const CATEGORIES: StatusCategory[] = ['TODO', 'IN_PROGRESS', 'DONE'];
 export const DEFAULT_COLOR: Record<StatusCategory, string> = { TODO: '#64748b', IN_PROGRESS: '#2563eb', DONE: '#16a34a' };
 
@@ -30,8 +31,8 @@ export function WipInput({ value, onCommit, disabled, label }: { value: number |
       min={1}
       inputMode="numeric"
       className="w-input !h-7 !w-[88px] shrink-0 !px-2 text-[12px] disabled:opacity-60"
-      placeholder="No limit"
-      title="WIP limit (leave empty for no limit)"
+      placeholder={wt('wf.noLimit')}
+      title={wt('wf.wipTip')}
       aria-label={label}
       value={text}
       disabled={disabled}
@@ -47,7 +48,7 @@ export function useStatusUpdate(pid: number, statusId: number, onChanged: () => 
   return useMutation({
     mutationFn: (body: { name?: string; category?: StatusCategory; color?: string; wipLimit?: number | null }) => workApi.updateStatus(pid, statusId, body),
     onSuccess: () => onChanged(),
-    onError: (err) => { toast.error(workError(err, 'Could not update the status')); onError?.(); },
+    onError: (err) => { toast.error(workError(err, wt('wf.updateStatusFailed'))); onError?.(); },
   });
 }
 
@@ -64,31 +65,30 @@ export function DeleteStatusDialog({ status, statuses, pid, onClose, onDone }: {
 
   const del = useMutation({
     mutationFn: () => workApi.deleteStatus(pid, status!.id, moveTo || undefined),
-    onSuccess: () => { toast.success(`Status “${status?.name}” deleted`); onDone(); onClose(); },
-    onError: (err) => toast.error(workError(err, 'Could not delete the status')),
+    onSuccess: () => { toast.success(wt('wf.statusDeleted', { n: status?.name ?? '' })); onDone(); onClose(); },
+    onError: (err) => toast.error(workError(err, wt('wf.deleteStatusFailed'))),
   });
 
   return (
     <Dialog
       open={!!status}
       onClose={onClose}
-      title="Delete status?"
+      title={wt('wf.deleteStatusQ')}
       width={440}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="button" className="w-btn w-btn-danger-solid" disabled={!moveTo || del.isPending} onClick={() => del.mutate()}>
             {del.isPending && <Spinner size={12} />}
-            Delete status
+            {wt('wf.deleteStatus')}
           </button>
         </>
       }
     >
       <p className="mb-4 text-[13px] leading-relaxed text-[var(--w-text-2)]">
-        The status <span className="font-medium text-[var(--w-text)]">{status?.name}</span> will be removed from this workflow, along with any transitions that use it.
-        Issues currently in it will be moved to the status you choose.
+        {wt('wf.deleteStatusBody', { n: status?.name ?? '' })}
       </p>
-      <Field label="Move issues to">
+      <Field label={wt('wf.moveIssuesTo')}>
         <Select value={moveTo} onChange={(e) => setMoveTo(e.target.value ? Number(e.target.value) : '')}>
           {others.map((s) => <option key={s.id} value={s.id}>{s.name} ({CATEGORY_LABEL[s.category]})</option>)}
         </Select>
@@ -103,8 +103,8 @@ export function AddStatusForm({ pid, wfId, onAdded, compact, autoFocus }: { pid:
   const [cat, setCat] = useState<StatusCategory>('IN_PROGRESS');
   const add = useMutation({
     mutationFn: () => workApi.addStatus(pid, wfId, { name: name.trim(), category: cat, color: DEFAULT_COLOR[cat] }),
-    onSuccess: (s) => { toast.success(`Status “${s.name}” added`); setName(''); onAdded(s); },
-    onError: (err) => toast.error(workError(err, 'Could not add the status')),
+    onSuccess: (s) => { toast.success(wt('wf.statusAdded', { n: s.name })); setName(''); onAdded(s); },
+    onError: (err) => toast.error(workError(err, wt('wf.addStatusFailed'))),
   });
   return (
     <form
@@ -113,20 +113,20 @@ export function AddStatusForm({ pid, wfId, onAdded, compact, autoFocus }: { pid:
     >
       <input
         className="w-input !h-7 min-w-0 flex-1 text-[13px]"
-        placeholder="New status name"
+        placeholder={wt('wf.newStatusName')}
         value={name}
         maxLength={60}
         autoFocus={autoFocus}
         onChange={(e) => setName(e.target.value)}
-        aria-label="New status name"
+        aria-label={wt('wf.newStatusName')}
       />
       <div className="flex items-center gap-2">
-        <Select className={compact ? '!h-7 min-w-0 flex-1 text-[12px]' : '!h-7 !w-[118px] text-[12px]'} value={cat} onChange={(e) => setCat(e.target.value as StatusCategory)} aria-label="New status category">
+        <Select className={compact ? '!h-7 min-w-0 flex-1 text-[12px]' : '!h-7 !w-[118px] text-[12px]'} value={cat} onChange={(e) => setCat(e.target.value as StatusCategory)} aria-label={wt('wf.newStatusCat')}>
           {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABEL[c]}</option>)}
         </Select>
         <button type="submit" className="w-btn w-btn-sm shrink-0" disabled={!name.trim() || add.isPending}>
           {add.isPending ? <Spinner size={12} /> : <Plus size={13} />}
-          Add status
+          {wt('wf.addStatus')}
         </button>
       </div>
     </form>

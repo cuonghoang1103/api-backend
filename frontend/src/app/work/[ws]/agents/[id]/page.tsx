@@ -10,6 +10,7 @@ import { EmptyState, PageLoading } from '@/components/work/ui';
 import { PageHeader } from '@/components/work/settings/shared';
 import { Crumb, CrumbSep } from '@/components/work/ProjectHeader';
 import AgentDetail from '@/components/work/agents/AgentDetail';
+import { wt } from '@/components/work/i18n';
 
 export default function AgentPage() {
   const params = useParams<{ ws: string; id: string }>();
@@ -25,17 +26,17 @@ export default function AgentPage() {
           <>
             <Crumb href={`/work/${slug}`} className="max-w-[200px] font-normal max-sm:!hidden">{ws.name}</Crumb>
             <CrumbSep className="mx-1.5 max-sm:!hidden" />
-            <Crumb href={`/work/${slug}/agents`} className="font-normal">AI agents</Crumb>
+            <Crumb href={`/work/${slug}/agents`} className="font-normal">{wt('pages.aiAgents')}</Crumb>
           </>
-        ) : 'AI agent'}
+        ) : wt('jql.aiAgent')}
       />
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         {!ws ? (
-          <EmptyState title="Workspace not found" body={workError(q.error, 'This workspace does not exist or you no longer have access to it.')} />
+          <EmptyState title={wt('pages.wsNotFound')} body={workError(q.error, wt('pages.wsNotFoundBody'))} />
         ) : ws.role === 'GUEST' ? (
-          <EmptyState title="AI agents are for workspace members" body="Guests (clients, teachers) only see the projects they are added to." />
+          <EmptyState title={wt('pages.agentsMembers')} body={wt('pages.guests')} />
         ) : !Number.isInteger(agentId) || agentId <= 0 ? (
-          <EmptyState title="Agent not found" />
+          <EmptyState title={wt('pages.agentNotFound')} />
         ) : (
           <AgentDetail ws={ws} agentId={agentId} />
         )}

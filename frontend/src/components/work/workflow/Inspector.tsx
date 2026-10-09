@@ -12,10 +12,11 @@ import { ColorPicker } from '../settings/ProjectLabels';
 import { CATEGORIES, CATEGORY_LABEL, WipInput, useStatusUpdate } from './statusParts';
 import { pairKey, parsePair, type Warning } from './graph';
 import type { TransitionDraft } from './useTransitionDraft';
+import { wt } from '@/components/work/i18n';
 
 const AnyPill = () => (
   <span className="inline-flex h-[22px] items-center rounded-full border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-2 text-[12px] font-medium text-[var(--w-accent-text)]">
-    Any status
+    {wt('wf.anyStatus')}
   </span>
 );
 
@@ -29,7 +30,7 @@ function PanelShell({ eyebrow, onClose, children }: { eyebrow: string; onClose: 
     >
       <div className="flex h-10 shrink-0 items-center justify-between border-b border-[var(--w-border)] pl-3.5 pr-1.5">
         <span className="w-eyebrow">{eyebrow}</span>
-        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onClose} aria-label="Close panel"><X size={14} /></button>
+        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onClose} aria-label={wt('wf.closePanel')}><X size={14} /></button>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto px-3.5 py-3 text-[13px]">{children}</div>
     </aside>
@@ -85,10 +86,10 @@ export function NodeInspector({
   );
 
   return (
-    <PanelShell eyebrow="Status" onClose={onClose}>
+    <PanelShell eyebrow={wt('wf.eyStatus')} onClose={onClose}>
       {canEdit ? (
         <>
-          <label className="w-label" htmlFor={`wf-st-name-${status.id}`}>Name</label>
+          <label className="w-label" htmlFor={`wf-st-name-${status.id}`}>{wt('common.name')}</label>
           <input
             id={`wf-st-name-${status.id}`}
             className="w-input !h-8 text-[13px]"
@@ -105,26 +106,26 @@ export function NodeInspector({
           />
           <div className="mt-3 flex items-end gap-2">
             <div className="min-w-0 flex-1">
-              <label className="w-label">Category</label>
-              <Select className="!h-8 text-[12px]" value={status.category} disabled={locked} onChange={(e) => update.mutate({ category: e.target.value as StatusCategory })} aria-label="Status category">
+              <label className="w-label">{wt('wf.category')}</label>
+              <Select className="!h-8 text-[12px]" value={status.category} disabled={locked} onChange={(e) => update.mutate({ category: e.target.value as StatusCategory })} aria-label={wt('wf.statusCategory')}>
                 {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABEL[c]}</option>)}
               </Select>
             </div>
             <div>
               <label className="w-label">WIP</label>
-              <WipInput value={status.wipLimit} disabled={locked} label={`WIP limit for ${status.name}`} onCommit={(v) => update.mutate({ wipLimit: v })} />
+              <WipInput value={status.wipLimit} disabled={locked} label={wt('wf.wipFor', { n: status.name })} onCommit={(v) => update.mutate({ wipLimit: v })} />
             </div>
             <div>
-              <label className="w-label">Colour</label>
-              <ColorPicker value={status.color} ariaLabel="Status colour" disabled={locked} onChange={(c) => update.mutate({ color: c })} />
+              <label className="w-label">{wt('wf.colour')}</label>
+              <ColorPicker value={status.color} ariaLabel={wt('wf.statusColour')} disabled={locked} onChange={(c) => update.mutate({ color: c })} />
             </div>
           </div>
-          {update.isPending && <div className="mt-2 flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><Spinner size={11} /> Saving…</div>}
+          {update.isPending && <div className="mt-2 flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><Spinner size={11} /> {wt('common.saving')}</div>}
         </>
       ) : (
         <div className="flex flex-col gap-1.5">
           <StatusBadge status={status} className="self-start" />
-          <div className="text-[12px] text-[var(--w-text-2)]">{CATEGORY_LABEL[status.category]} · {status.wipLimit ? `WIP limit ${status.wipLimit}` : 'No WIP limit'}</div>
+          <div className="text-[12px] text-[var(--w-text-2)]">{CATEGORY_LABEL[status.category]} · {status.wipLimit ? wt('wf.wipLimitN', { n: status.wipLimit }) : wt('wf.noWip')}</div>
         </div>
       )}
 
@@ -139,24 +140,24 @@ export function NodeInspector({
         </ul>
       )}
 
-      <SubHead>Transitions</SubHead>
+      <SubHead>{wt('wf.transitions')}</SubHead>
       {!restricted ? (
-        <p className="text-[12px] leading-relaxed text-[var(--w-text-2)]">Free workflow — issues can move from this status to any other status.</p>
+        <p className="text-[12px] leading-relaxed text-[var(--w-text-2)]">{wt('wf.freeNote')}</p>
       ) : (
         <>
           <label className={`mb-2 flex items-center gap-2 text-[13px] ${canEdit ? 'cursor-pointer' : ''}`}>
             <input type="checkbox" className="accent-[var(--w-accent)]" checked={fromAny} disabled={!canEdit} onChange={() => draft.toggle(null, status.id)} />
-            Reachable from any status
+            {wt('wf.reachable')}
           </label>
-          <div className="text-[12px] text-[var(--w-text-3)]">Moves to</div>
+          <div className="text-[12px] text-[var(--w-text-3)]">{wt('wf.movesTo')}</div>
           <ul className="mb-2 mt-0.5">
             {outgoing.map((e) => row(e.k, byId.get(e.to)!, 'out'))}
-            {!outgoing.length && <li className="py-0.5 text-[12px] italic text-[var(--w-text-3)]">None</li>}
+            {!outgoing.length && <li className="py-0.5 text-[12px] italic text-[var(--w-text-3)]">{wt('common.none')}</li>}
           </ul>
-          <div className="text-[12px] text-[var(--w-text-3)]">Comes from</div>
+          <div className="text-[12px] text-[var(--w-text-3)]">{wt('wf.comesFrom')}</div>
           <ul className="mt-0.5">
             {incoming.map((e) => row(e.k, byId.get(e.from!)!, 'in'))}
-            {!incoming.length && <li className="py-0.5 text-[12px] italic text-[var(--w-text-3)]">{fromAny ? 'Any status' : 'None'}</li>}
+            {!incoming.length && <li className="py-0.5 text-[12px] italic text-[var(--w-text-3)]">{fromAny ? wt('wf.anyStatus') : wt('common.none')}</li>}
           </ul>
         </>
       )}
@@ -164,10 +165,10 @@ export function NodeInspector({
         <Select
           className="mt-3 !h-8 text-[12px]"
           value=""
-          aria-label={`Add transition from ${status.name} to…`}
+          aria-label={wt('wf.addFrom', { n: status.name })}
           onChange={(e) => { if (e.target.value) onAdd(status.id, Number(e.target.value)); }}
         >
-          <option value="">Add transition to…</option>
+          <option value="">{wt('wf.addTo')}</option>
           {targets.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
         </Select>
       )}
@@ -175,7 +176,7 @@ export function NodeInspector({
       {canEdit && (
         <button type="button" className="w-btn w-btn-sm w-btn-danger mt-5 w-full" disabled={statuses.length <= 1} onClick={onDelete}>
           <Trash2 size={13} />
-          Delete status
+          {wt('wf.deleteStatus')}
         </button>
       )}
     </PanelShell>
@@ -199,20 +200,20 @@ export function EdgeInspector({
   const reverse = from === null ? null : pairKey(to, from);
   const hasReverse = !!reverse && draft.pairs.has(reverse);
   return (
-    <PanelShell eyebrow="Transition" onClose={onClose}>
+    <PanelShell eyebrow={wt('wf.eyTransition')} onClose={onClose}>
       <div className="flex flex-wrap items-center gap-1.5">
         {a ? <StatusBadge status={a} /> : <AnyPill />}
         <ArrowRight size={14} className="shrink-0 text-[var(--w-text-3)]" />
         <StatusBadge status={b} />
       </div>
       <p className="mt-3 text-[12px] leading-relaxed text-[var(--w-text-2)]">
-        {a ? <>Issues in <b className="font-medium text-[var(--w-text)]">{a.name}</b> can move to <b className="font-medium text-[var(--w-text)]">{b.name}</b>.</>
-          : <>Issues in <b className="font-medium text-[var(--w-text)]">any status</b> can move to <b className="font-medium text-[var(--w-text)]">{b.name}</b> — Jira calls this a global transition.</>}
-        {hasReverse && ' They can also move back.'}
+        {a ? wt('wf.issuesIn', { a: a.name, b: b.name })
+          : wt('wf.issuesAny', { b: b.name })}
+        {hasReverse && wt('wf.moveBack')}
       </p>
       {config && rulesAvailable(config) && (
         <>
-          <SubHead>Rules</SubHead>
+          <SubHead>{wt('wf.rules')}</SubHead>
           <TransitionRulesFields config={config} draft={draft} edgeKey={edgeKey} canEdit={canEdit} />
         </>
       )}
@@ -221,14 +222,14 @@ export function EdgeInspector({
           {reverse && !hasReverse && (
             <button type="button" className="w-btn w-btn-sm w-full" onClick={() => { draft.add(to, from!); onSelectEdge(reverse); }}>
               <ArrowLeftRight size={13} />
-              Allow moving back ({b.name} → {a!.name})
+              {wt('wf.allowBack', { b: b.name, a: a!.name })}
             </button>
           )}
           <button type="button" className="w-btn w-btn-sm w-btn-danger w-full" onClick={() => { draft.remove(edgeKey); onClose(); }}>
             <Trash2 size={13} />
-            Delete transition
+            {wt('wf.deleteTransition')}
           </button>
-          <p className="text-[11px] text-[var(--w-text-3)]">Tip: select an arrow and press Delete.</p>
+          <p className="text-[11px] text-[var(--w-text-3)]">{wt('wf.tip')}</p>
         </div>
       )}
     </PanelShell>

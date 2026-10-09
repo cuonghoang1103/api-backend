@@ -22,7 +22,7 @@ import {
   type HelpArticle, type HelpBlock, type HelpLang, type HelpPageLink, type LText,
 } from './content';
 import { openContextualHelp, useHelp } from './store';
-import { currentWorkLocale } from '@/components/work/i18n';
+import { currentWorkLocale, wt } from '@/components/work/i18n';
 
 // ─── Lưu trữ cục bộ ──────────────────────────────────────────────
 
@@ -110,8 +110,8 @@ function Rich({ text }: { text: string }) {
 // ─── Khối nội dung ───────────────────────────────────────────────
 
 function Cell({ text }: { text: string }) {
-  if (text === '✓') return <span className="font-semibold text-[var(--w-green)]" aria-label="yes">✓</span>;
-  if (text === '—') return <span className="text-[var(--w-text-3)]" aria-label="no">—</span>;
+  if (text === '✓') return <span className="font-semibold text-[var(--w-green)]" aria-label={wt('common.yes')}>✓</span>;
+  if (text === '—') return <span className="text-[var(--w-text-3)]" aria-label={wt('common.no')}>—</span>;
   return <Rich text={text} />;
 }
 

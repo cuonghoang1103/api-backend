@@ -21,6 +21,7 @@ import { useAuthStore } from '@/store/authStore';
 import { Popover } from '../ui';
 import { ConfirmDialog } from '../settings/shared';
 import { StatusDot, VisibilityBadge, buildTree, docsBase, type TreeNode } from './shared';
+import { wt } from '@/components/work/i18n';
 
 type Zone = 'before' | 'after' | 'inside';
 
@@ -98,21 +99,21 @@ export default function DocsTree({ config, list, activeNum, onNew, onNavigate, o
   const move = useMutation({
     mutationFn: (v: { num: number; parentNumber: number | null; index: number }) => workDocsApi.move(pid, v.num, v.parentNumber, v.index),
     onSuccess: (l) => { setList(l); qc.invalidateQueries({ queryKey: workDocsKeys.all(pid) }); },
-    onError: (err) => toast.error(workError(err, 'Could not move the page')),
+    onError: (err) => toast.error(workError(err, wt('docs.moveFailed'))),
   });
   const rename = useMutation({
     mutationFn: (v: { num: number; title: string }) => workDocsApi.update(pid, v.num, { title: v.title }),
     onSuccess: () => qc.invalidateQueries({ queryKey: workDocsKeys.all(pid) }),
-    onError: (err) => toast.error(workError(err, 'Could not rename the page')),
+    onError: (err) => toast.error(workError(err, wt('docs.renameFailed'))),
   });
   const remove = useMutation({
     mutationFn: (num: number) => workDocsApi.remove(pid, num),
     onSuccess: (r) => {
-      toast.success(r.deleted > 1 ? `Deleted the page and ${r.deleted - 1} sub-page${r.deleted > 2 ? 's' : ''}` : 'Page deleted');
+      toast.success(r.deleted > 1 ? wt('docs.deletedSub', { n: r.deleted - 1 }) : wt('docs.pageDeleted'));
       setConfirmDel(null);
       qc.invalidateQueries({ queryKey: workDocsKeys.all(pid) });
     },
-    onError: (err) => toast.error(workError(err, 'Could not delete the page')),
+    onError: (err) => toast.error(workError(err, wt('docs.deleteFailed'))),
   });
 
   /** Anh em (cùng cha), theo thứ tự hiển thị. */
@@ -188,7 +189,7 @@ export default function DocsTree({ config, list, activeNum, onNew, onNavigate, o
         <button
           type="button"
           onClick={() => hasKids && toggle(p.id)}
-          aria-label={hasKids ? (isOpen ? `Collapse ${p.title}` : `Expand ${p.title}`) : undefined}
+          aria-label={hasKids ? (isOpen ? wt('docs.collapseX', { t: p.title }) : wt('docs.expandX', { t: p.title })) : undefined}
           aria-hidden={!hasKids}
           tabIndex={hasKids ? 0 : -1}
           className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-[4px] text-[var(--w-text-3)]', hasKids ? 'hover:bg-[var(--w-hover)]' : 'invisible')}
@@ -220,13 +221,13 @@ export default function DocsTree({ config, list, activeNum, onNew, onNavigate, o
         )}
         {canEdit && renaming !== p.id && (
           <span className="absolute right-1 top-1/2 hidden -translate-y-1/2 items-center rounded-[6px] bg-[var(--w-raised)] shadow-[0_0_0_1px_var(--w-border)] focus-within:flex group-hover:flex max-md:static max-md:flex max-md:translate-y-0 max-md:bg-transparent max-md:shadow-none">
-            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`Add a page inside ${p.title}`} title="Add a sub-page" onClick={() => onNew(p.number)}>
+            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('docs.addInside', { t: p.title })} title={wt('docs.addSubpage')} onClick={() => onNew(p.number)}>
               <Plus size={13} />
             </button>
             <button
               type="button"
               className="w-btn w-btn-ghost w-btn-icon w-btn-sm"
-              aria-label={`More actions for ${p.title}`}
+              aria-label={wt('docs.moreFor', { t: p.title })}
               onClick={(e) => { menuAnchor.current = e.currentTarget; setMenu(p.id); }}
             >
               <MoreHorizontal size={13} />
@@ -257,33 +258,33 @@ export default function DocsTree({ config, list, activeNum, onNew, onNavigate, o
             className="w-input !h-8 !pl-7"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            placeholder="Filter pages"
-            aria-label="Filter pages by title"
+            placeholder={wt('docs.filterPages')}
+            aria-label={wt('docs.filterPagesAria')}
           />
           {filter && (
-            <button type="button" className="absolute right-1 top-1/2 -translate-y-1/2 rounded p-1 text-[var(--w-text-3)] hover:text-[var(--w-text)]" aria-label="Clear filter" onClick={() => setFilter('')}><X size={12} /></button>
+            <button type="button" className="absolute right-1 top-1/2 -translate-y-1/2 rounded p-1 text-[var(--w-text-3)] hover:text-[var(--w-text)]" aria-label={wt('docs.clearFilter')} onClick={() => setFilter('')}><X size={12} /></button>
           )}
         </div>
         {canEdit && (
-          <button type="button" className="w-btn w-btn-icon !h-8 !w-8" aria-label="New page" title="New page" onClick={() => onNew(null)}>
+          <button type="button" className="w-btn w-btn-icon !h-8 !w-8" aria-label={wt('docs.newPage')} title={wt('docs.newPage')} onClick={() => onNew(null)}>
             <Plus size={14} />
           </button>
         )}
         {onHide && (
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon !h-8 !w-8" aria-label="Hide pages ([)" title="Hide pages ([)" onClick={onHide} data-testid="docs-tree-hide">
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon !h-8 !w-8" aria-label={wt('docs.hidePages')} title={wt('docs.hidePages')} onClick={onHide} data-testid="docs-tree-hide">
             <PanelLeftClose size={14} />
           </button>
         )}
       </div>
       {/* UX-A ARIA: chỉ là "tree" khi có mục (cây rỗng thiếu treeitem bắt buộc). */}
-      <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-4" role={(matches ? matches.length : tree.length) ? 'tree' : undefined} aria-label={(matches ? matches.length : tree.length) ? 'Project documents' : undefined}>
+      <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-4" role={(matches ? matches.length : tree.length) ? 'tree' : undefined} aria-label={(matches ? matches.length : tree.length) ? wt('docs.projectDocs') : undefined}>
         {matches ? (
-          matches.length ? matches.map((p) => renderRow(p, 0, false, false)) : <p className="px-3 py-6 text-center text-[12px] text-[var(--w-text-3)]">No page title matches “{filter}”.</p>
+          matches.length ? matches.map((p) => renderRow(p, 0, false, false)) : <p className="px-3 py-6 text-center text-[12px] text-[var(--w-text-3)]">{wt('docs.noTitleMatch', { q: filter })}</p>
         ) : tree.length ? (
           renderNodes(tree)
         ) : (
           <p className="px-3 py-6 text-center text-[12px] leading-relaxed text-[var(--w-text-3)]">
-            {canEdit ? 'No pages yet. Start from a template — SRS, SOW, test plan, runbook…' : 'No documents have been shared with you yet.'}
+            {canEdit ? wt('docs.noPagesYet') : wt('docs.noneShared')}
           </p>
         )}
         {canEdit && tree.length > 0 && !matches && (
@@ -298,7 +299,7 @@ export default function DocsTree({ config, list, activeNum, onNew, onNavigate, o
             }}
             className={cn('mt-1 h-8 rounded-[6px] border border-dashed border-transparent text-center text-[11px] leading-8 text-[var(--w-text-3)]', drag !== null && 'border-[var(--w-border-strong)]')}
           >
-            {drag !== null ? 'Drop here to move to the top level' : ''}
+            {drag !== null ? wt('docs.dropTop') : ''}
           </div>
         )}
       </div>
@@ -307,12 +308,12 @@ export default function DocsTree({ config, list, activeNum, onNew, onNavigate, o
         {menuPage && (
           <div className="p-1" role="menu">
             {[
-              { label: 'Rename', run: () => setRenaming(menuPage.id) },
-              { label: 'Add a sub-page', run: () => onNew(menuPage.number) },
-              { label: 'Move up', run: () => nudge(menuPage, -1) },
-              { label: 'Move down', run: () => nudge(menuPage, 1) },
-              ...(menuPage.parentId !== null && byId.has(menuPage.parentId) ? [{ label: 'Move out one level', run: () => outdent(menuPage) }] : []),
-              ...(list.canManage || (meId !== undefined && menuPage.ownerId === meId) ? [{ label: 'Delete…', danger: true, run: () => setConfirmDel(menuPage) }] : []),
+              { label: wt('common.rename'), run: () => setRenaming(menuPage.id) },
+              { label: wt('docs.addSubpage'), run: () => onNew(menuPage.number) },
+              { label: wt('docs.moveUp'), run: () => nudge(menuPage, -1) },
+              { label: wt('docs.moveDown'), run: () => nudge(menuPage, 1) },
+              ...(menuPage.parentId !== null && byId.has(menuPage.parentId) ? [{ label: wt('docs.moveOut'), run: () => outdent(menuPage) }] : []),
+              ...(list.canManage || (meId !== undefined && menuPage.ownerId === meId) ? [{ label: wt('docs.deleteDots'), danger: true, run: () => setConfirmDel(menuPage) }] : []),
             ].map((it) => (
               <button
                 key={it.label}
@@ -332,9 +333,9 @@ export default function DocsTree({ config, list, activeNum, onNew, onNavigate, o
         onClose={() => setConfirmDel(null)}
         onConfirm={() => confirmDel && remove.mutate(confirmDel.number)}
         pending={remove.isPending}
-        title="Delete page"
-        body={confirmDel ? `“${confirmDel.title}” and every page inside it will be deleted. Only the page owner or a project admin can do this.` : ''}
-        confirmLabel="Delete"
+        title={wt('docs.deletePage')}
+        body={confirmDel ? wt('docs.deleteTreeBody', { t: confirmDel.title }) : ''}
+        confirmLabel={wt('common.delete')}
       />
     </div>
   );
@@ -350,7 +351,7 @@ function RenameInput({ initial, onDone }: { initial: string; onDone: (title: str
       className="w-input !h-7 min-w-0 flex-1 !px-1.5"
       value={v}
       maxLength={255}
-      aria-label="Page title"
+      aria-label={wt('docs.pageTitle')}
       onChange={(e) => setV(e.target.value)}
       onBlur={() => onDone(v.trim() || null)}
       onKeyDown={(e) => {

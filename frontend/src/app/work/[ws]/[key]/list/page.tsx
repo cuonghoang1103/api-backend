@@ -141,7 +141,7 @@ function ModeToggle({ mode, onChange }: { mode: 'basic' | 'jql'; onChange: (m: '
             mode === m ? 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'text-[var(--w-text-2)] hover:text-[var(--w-text)]',
           )}
         >
-          {m === 'basic' ? 'Basic' : 'JQL'}
+          {m === 'basic' ? wt('gs.basic') : 'JQL'}
         </button>
       ))}
     </div>
@@ -918,7 +918,7 @@ function IssueRow({
         {selectable && (
           <input
             type="checkbox"
-            aria-label={`Select ${ctx.lk.issueKey(issue.number)}`}
+            aria-label={wt('gs.selectK', { k: ctx.lk.issueKey(issue.number) })}
             checked={selected}
             onClick={(e) => { e.stopPropagation(); onToggle(e.shiftKey); }}
             onChange={() => {}}

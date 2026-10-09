@@ -4,6 +4,9 @@
  */
 
 import { api } from './api';
+import { translate as wtr, type WKey } from '@/components/work/i18n/core';
+import { currentWorkLocale } from '@/components/work/i18n/store';
+const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 const B = '/work';
 type Env<T> = { data: T };
@@ -59,8 +62,8 @@ export const BRAND_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'imag
  * kiểm bằng sharp, thu ≤ 512px, lưu PNG. Không FormData (instance axios đặt cứng JSON sẽ biến FormData thành `{}`).
  */
 async function uploadBrand(uploadPath: string, file: File): Promise<Record<string, string | null>> {
-  if (!BRAND_IMAGE_TYPES.includes(file.type)) throw new Error('Use a PNG, JPEG, WebP or GIF image');
-  if (file.size > BRAND_MAX_BYTES) throw new Error('Images must be 5 MB or smaller');
+  if (!BRAND_IMAGE_TYPES.includes(file.type)) throw new Error(wt('detail.imgTypes'));
+  if (file.size > BRAND_MAX_BYTES) throw new Error(wt('detail.img5mb'));
   const buf = await file.arrayBuffer();
   return d<Record<string, string | null>>(api.post(uploadPath, buf, { headers: { 'Content-Type': file.type }, timeout: 60_000, transformRequest: [(x) => x] }));
 }

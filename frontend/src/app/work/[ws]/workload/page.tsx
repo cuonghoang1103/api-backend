@@ -13,6 +13,7 @@ import { Crumb, CrumbSep } from '@/components/work/ProjectHeader';
 import WorkloadView from '@/components/work/portfolio/WorkloadView';
 import { WorkspaceAgentsDashboard } from '@/components/work/agents/PeopleVsAgents';
 import { cn } from '@/lib/utils';
+import { wt } from '@/components/work/i18n';
 
 export default function WorkloadPage() {
   return <Suspense fallback={<PageLoading />}><WorkloadInner /></Suspense>;
@@ -31,16 +32,16 @@ function WorkloadInner() {
   if (q.isLoading) return <PageLoading />;
   return (
     <div className="flex h-full flex-col">
-      <PageHeader title={ws ? <><Crumb href={`/work/${slug}`} className="max-w-[220px] font-normal">{ws.name}</Crumb><CrumbSep className="mx-1.5" />Workload</> : 'Workload'} />
+      <PageHeader title={ws ? <><Crumb href={`/work/${slug}`} className="max-w-[220px] font-normal">{ws.name}</Crumb><CrumbSep className="mx-1.5" />{wt('pages.workload')}</> : wt('pages.workload')} />
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         {!ws ? (
-          <EmptyState title="Workspace not found" body={workError(q.error, 'This workspace does not exist or you no longer have access to it.')} />
+          <EmptyState title={wt('pages.wsNotFound')} body={workError(q.error, wt('pages.wsNotFoundBody'))} />
         ) : ws.role === 'GUEST' ? (
-          <EmptyState title="Workload is for workspace members" body="Guests (clients, teachers) only see the projects they are added to." />
+          <EmptyState title={wt('pages.workloadMembers')} body={wt('pages.guests')} />
         ) : (
           <>
-            <div className="shrink-0 border-b border-[var(--w-border)] px-4" role="tablist" aria-label="Workload views">
-              {([['load', 'Workload'], ['agents', 'People vs Agents']] as const).map(([id, label]) => (
+            <div className="shrink-0 border-b border-[var(--w-border)] px-4" role="tablist" aria-label={wt('pages.workloadViews')}>
+              {([['load', wt('pages.workload')], ['agents', wt('pages.peopleVsAgents')]] as const).map(([id, label]) => (
                 <button
                   key={id}
                   type="button"

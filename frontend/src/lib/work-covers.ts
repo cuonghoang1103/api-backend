@@ -4,16 +4,19 @@ import { anhTuyetDoi } from '@/lib/anhTuyetDoi';
  * `coverUrl` của dự án: "preset:<id>" | URL ảnh tải lên | null. Danh sách id khớp src/services/work/covers.ts (backend).
  */
 import catalog from './work-covers.json';
+import { translate as wtr, type WKey } from '@/components/work/i18n/core';
+import { currentWorkLocale } from '@/components/work/i18n/store';
+const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 export type CoverGroup = 'professional' | 'theme' | 'cute' | 'school';
 export interface CoverPreset { id: string; group: CoverGroup; label: string; colors: [string, string]; tone: 'light' | 'dark' }
 
 export const COVERS = catalog as CoverPreset[];
 export const COVER_GROUPS: Array<{ key: CoverGroup; label: string }> = [
-  { key: 'professional', label: 'Professional' },
-  { key: 'theme', label: 'Themes' },
-  { key: 'cute', label: 'Cute' },
-  { key: 'school', label: 'School' },
+  { key: 'professional', get label() { return wt('cover.gPro'); } },
+  { key: 'theme', get label() { return wt('cover.gTheme'); } },
+  { key: 'cute', get label() { return wt('cover.gCute'); } },
+  { key: 'school', get label() { return wt('cover.gSchool'); } },
 ];
 
 export const presetOf = (coverUrl?: string | null): CoverPreset | null =>

@@ -14,11 +14,12 @@ import { AlarmClock, CheckCircle2, CircleAlert, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { signalText } from '../ui';
 import type { DeskPriority, SlaStatus, SlaTarget } from '@/lib/work-s5a-api';
+import { wt, wfmt } from '@/components/work/i18n';
 
 export const P_COLOR: Record<DeskPriority, string> = { P1: 'var(--w-red)', P2: 'var(--w-orange)', P3: 'var(--w-blue)', P4: 'var(--w-status-todo)' };
 /** Màu CHỮ của huy hiệu (UX-A P0-3: trước 3.1–3.9:1). P4 dùng chữ phụ mức 2 thay vì xám glyph. */
 export const P_TEXT: Record<DeskPriority, string> = { P1: 'var(--w-red-text)', P2: 'var(--w-orange-text)', P3: 'var(--w-blue-text)', P4: 'var(--w-text-2)' };
-export const P_LABEL: Record<DeskPriority, string> = { P1: 'Critical', P2: 'High', P3: 'Medium', P4: 'Low' };
+export const P_LABEL: Record<DeskPriority, string> = { get P1() { return wt('desk.pCritical'); }, get P2() { return wt('status.prioHigh'); }, get P3() { return wt('status.prioMedium'); }, get P4() { return wt('status.prioLow'); } };
 
 export function PriorityBadge({ p, className, long }: { p: DeskPriority; className?: string; long?: boolean }) {
   return (
@@ -34,7 +35,7 @@ export function PriorityBadge({ p, className, long }: { p: DeskPriority; classNa
 }
 
 const STATUS_COLOR: Record<SlaStatus, string> = { ON_TRACK: 'var(--w-green)', AT_RISK: 'var(--w-orange)', BREACHED: 'var(--w-red)', MET: 'var(--w-green)' };
-export const SLA_STATUS_LABEL: Record<SlaStatus, string> = { ON_TRACK: 'On track', AT_RISK: 'At risk', BREACHED: 'Breached', MET: 'Met' };
+export const SLA_STATUS_LABEL: Record<SlaStatus, string> = { get ON_TRACK() { return wt('desk.onTrack'); }, get AT_RISK() { return wt('desk.atRisk'); }, get BREACHED() { return wt('desk.breached'); }, get MET() { return wt('desk.met'); } };
 
 function fmtMin(min: number): string {
   const m = Math.round(Math.abs(min));
@@ -67,14 +68,14 @@ export function SlaClock({ t, fetchedAt, compact, label }: { t: SlaTarget; fetch
   const status: SlaStatus = t.stopped ? t.status : breached ? 'BREACHED' : t.status;
   const color = STATUS_COLOR[status];
   const used = Math.min(100, Math.max(0, ((t.goalMin - remaining) / t.goalMin) * 100));
-  const text = t.stopped ? (t.status === 'MET' ? 'Met' : `Breached by ${fmtMin(t.elapsedMin - t.goalMin)}`)
-    : t.paused ? (compact ? 'Paused' : `Paused · ${fmtMin(Math.max(0, remaining))} left`)
-      : remaining >= 0 ? `${fmtMin(remaining)} left` : `${fmtMin(-remaining)} over`;
+  const text = t.stopped ? (t.status === 'MET' ? wt('desk.met') : wt('desk.breachedBy', { t: fmtMin(t.elapsedMin - t.goalMin) }))
+    : t.paused ? (compact ? wt('desk.paused') : wt('desk.pausedLeft', { t: fmtMin(Math.max(0, remaining)) }))
+      : remaining >= 0 ? wt('desk.left', { t: fmtMin(remaining) }) : wt('desk.over', { t: fmtMin(-remaining) });
   const Icon = t.stopped ? (t.status === 'MET' ? CheckCircle2 : CircleAlert) : t.paused ? Pause : breached ? CircleAlert : AlarmClock;
   const title = [
-    label, `Goal ${fmtMin(t.goalMin)}${t.calendar === 'BUSINESS' ? ' (business hours)' : ' (24/7)'}`, `Used ${fmtMin(t.elapsedMin)}`,
-    t.dueAt && !t.stopped && !t.paused ? `Due ${new Date(t.dueAt).toLocaleString()}` : null,
-    t.breachedAt ? `Breached at ${new Date(t.breachedAt).toLocaleString()}` : null,
+    label, `${wt('desk.goalTip', { t: fmtMin(t.goalMin) })}${t.calendar === 'BUSINESS' ? wt('desk.businessHoursParen') : ' (24/7)'}`, wt('desk.usedTip', { t: fmtMin(t.elapsedMin) }),
+    t.dueAt && !t.stopped && !t.paused ? wt('desk.dueTip', { t: new Date(t.dueAt).toLocaleString(wfmt.intl()) }) : null,
+    t.breachedAt ? wt('desk.breachedAtTip', { t: new Date(t.breachedAt).toLocaleString(wfmt.intl()) }) : null,
   ].filter(Boolean).join(' · ');
   return (
     <div className={cn('min-w-0', compact ? 'w-[118px]' : 'w-full')} title={title} data-sla-status={status}>
@@ -90,11 +91,11 @@ export function SlaClock({ t, fetchedAt, compact, label }: { t: SlaTarget; fetch
 }
 
 export const VIEW_LABEL: Record<string, string> = {
-  open: 'All open', unassigned: 'Unassigned', mine: 'My open', at_risk: 'At risk', breached: 'Breached', waiting: 'Waiting for customer', team: 'By team', resolved: 'Resolved',
+  get open() { return wt('desk.vOpen'); }, get unassigned() { return wt('common.unassigned'); }, get mine() { return wt('desk.vMine'); }, get at_risk() { return wt('desk.atRisk'); }, get breached() { return wt('desk.breached'); }, get waiting() { return wt('desk.waitingCustomer'); }, get team() { return wt('desk.vTeam'); }, get resolved() { return wt('common.resolved'); },
 };
 
 export const EVENT_LABEL: Record<string, string> = {
-  START: 'Clock started', PAUSE: 'Paused — waiting for customer', RESUME: 'Resumed', FIRST_RESPONSE: 'First response', RESOLVE: 'Resolved', REOPEN: 'Reopened', PRIORITY: 'Priority changed',
+  get START() { return wt('desk.evStart'); }, get PAUSE() { return wt('desk.evPause'); }, get RESUME() { return wt('desk.evResume'); }, get FIRST_RESPONSE() { return wt('desk.firstResponse'); }, get RESOLVE() { return wt('common.resolved'); }, get REOPEN() { return wt('desk.evReopen'); }, get PRIORITY() { return wt('desk.evPriority'); },
 };
 
 /** Phút ⇄ chữ gọn cho ô nhập mục tiêu ("90" ⇒ "1h 30m"). */

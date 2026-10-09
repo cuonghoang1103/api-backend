@@ -5,6 +5,9 @@
  */
 import { api } from './api';
 import type { StatusCategory, WorkUser } from './work-api';
+import { translate as wtr, type WKey } from '@/components/work/i18n/core';
+import { currentWorkLocale } from '@/components/work/i18n/store';
+const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 const B = '/work';
 type Env<T> = { data: T };
@@ -29,8 +32,8 @@ export type ProblemStatus = 'OPEN' | 'INVESTIGATING' | 'KNOWN_ERROR' | 'RESOLVED
 export const DESK_PRIORITIES: DeskPriority[] = ['P1', 'P2', 'P3', 'P4'];
 export const DESK_LEVELS: DeskLevel[] = ['HIGH', 'MEDIUM', 'LOW'];
 export const PROBLEM_STATUSES: ProblemStatus[] = ['OPEN', 'INVESTIGATING', 'KNOWN_ERROR', 'RESOLVED', 'CLOSED'];
-export const PROBLEM_STATUS_LABEL: Record<ProblemStatus, string> = { OPEN: 'Open', INVESTIGATING: 'Investigating', KNOWN_ERROR: 'Known error', RESOLVED: 'Resolved', CLOSED: 'Closed' };
-export const LEVEL_LABEL: Record<DeskLevel, string> = { HIGH: 'High', MEDIUM: 'Medium', LOW: 'Low' };
+export const PROBLEM_STATUS_LABEL: Record<ProblemStatus, string> = { get OPEN() { return wt('desk.psOpen'); }, get INVESTIGATING() { return wt('desk.psInvestigating'); }, get KNOWN_ERROR() { return wt('desk.psKnownError'); }, get RESOLVED() { return wt('common.resolved'); }, get CLOSED() { return wt('desk.psClosed'); } };
+export const LEVEL_LABEL: Record<DeskLevel, string> = { get HIGH() { return wt('status.prioHigh'); }, get MEDIUM() { return wt('status.prioMedium'); }, get LOW() { return wt('status.prioLow'); } };
 
 export interface RequestField { key: string; label: string; kind: 'text' | 'textarea' | 'date'; required: boolean }
 export interface RequestTypeConfig {

@@ -33,6 +33,7 @@ import DocsTree from './DocsTree';
 import NewPageDialog from './NewPageDialog';
 import ImportMarkdownDialog from './ImportMarkdownDialog';
 import { PAGE_STATUS, PageStatusPill, VisibilityBadge, docsBase, useDocsList } from './shared';
+import { wt } from '@/components/work/i18n';
 
 /** Bề ngang cột cây trang / Details và chỗ tối thiểu cho nội dung (gồm lề 2×32px + khe 40px). */
 const TREE_W = 272;
@@ -72,37 +73,37 @@ export default function DocsShell({ config, num }: { config: ProjectConfig; num?
     <div className="flex h-full flex-col">
       <ProjectHeader config={config} title={active ? active.title : 'Docs'}>
         {on && list.data && !mobileIndex && (
-          <PaneToggle pane={tree} side="left" label="Pages" shortcut="[" showLabel={tree.mode === 'drawer'} />
+          <PaneToggle pane={tree} side="left" label={wt('docs.pages')} shortcut="[" showLabel={tree.mode === 'drawer'} />
         )}
         {on && num && list.data && <FocusToggle on={focus} onToggle={onFocus} compact={panes.frame < 768} />}
         {on && canEdit && !focus && (
-          <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)} data-testid="docs-import-md-open" title="Create a page from Markdown (paste or .md file)">
-            <FileUp size={13} /> <span className="max-lg:hidden">Import Markdown</span>
+          <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)} data-testid="docs-import-md-open" title={wt('docs.importTip')}>
+            <FileUp size={13} /> <span className="max-lg:hidden">{wt('docs.importMd')}</span>
           </button>
         )}
         {on && canEdit && !focus && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setNewFor({ parent: null })} data-testid="docs-new">
-            <FilePlus2 size={13} /> <span className="max-sm:hidden">New page</span>
+            <FilePlus2 size={13} /> <span className="max-sm:hidden">{wt('docs.newPage')}</span>
           </button>
         )}
       </ProjectHeader>
       {!on ? (
-        <div className="min-h-0 flex-1 overflow-y-auto"><ModuleOff config={config} label="Docs" /></div>
+        <div className="min-h-0 flex-1 overflow-y-auto"><ModuleOff config={config} label={wt('studio.mod_docs')} /></div>
       ) : list.isLoading ? <PageLoading /> : !list.data ? (
-        <EmptyState title="Could not load documents" />
+        <EmptyState title={wt('docs.loadDocsFailed')} />
       ) : (
         <div ref={panes.ref} className="flex min-h-0 flex-1">
           {(mobileIndex || tree.mode === 'inline') && (
             <aside
               className={cn('shrink-0 border-r border-[var(--w-border)] bg-[var(--w-bg)]', mobileIndex ? 'w-full border-r-0' : '')}
               style={mobileIndex ? undefined : { width: TREE_W }}
-              aria-label="Document tree"
+              aria-label={wt('docs.docTree')}
               data-testid="docs-tree-pane"
             >
               <DocsTree config={config} list={list.data} activeNum={num} onNew={(p) => setNewFor({ parent: p })} onHide={mobileIndex ? undefined : tree.close} />
             </aside>
           )}
-          {!mobileIndex && tree.mode === 'strip' && <PaneStrip label="Pages" shortcut="[" onOpen={tree.toggle} />}
+          {!mobileIndex && tree.mode === 'strip' && <PaneStrip label={wt('docs.pages')} shortcut="[" onOpen={tree.toggle} />}
           {!mobileIndex && (
             <main className="min-w-0 flex-1 overflow-y-auto" data-testid="docs-main">
               {num ? <DocView key={num} config={config} num={num} details={details} focus={focus} /> : <DocsHome config={config} list={list.data} onNew={() => setNewFor({ parent: null })} />}
@@ -113,7 +114,7 @@ export default function DocsShell({ config, num }: { config: ProjectConfig; num?
       <ImportMarkdownDialog open={importOpen} onClose={() => setImportOpen(false)} config={config} />
       <NewPageDialog open={!!newFor} onClose={() => setNewFor(null)} config={config} parentNumber={newFor?.parent ?? null} parentTitle={parent?.title ?? null} stageId={parent?.stageId ?? null} />
       {list.data && (
-        <PaneDrawer open={tree.drawerOpen} onClose={tree.close} side="left" label="Pages" width={320}>
+        <PaneDrawer open={tree.drawerOpen} onClose={tree.close} side="left" label={wt('docs.pages')} width={320}>
           <div className="h-full">
             <DocsTree config={config} list={list.data} activeNum={num} onNew={(p) => { tree.close(); setNewFor({ parent: p }); }} onNavigate={tree.close} />
           </div>
@@ -145,9 +146,9 @@ function DocsHome({ config, list, onNew }: { config: ProjectConfig; list: WorkPa
     return (
       <EmptyState
         icon={<FileText size={20} />}
-        title={canEdit ? 'No documents yet' : 'Nothing shared with you yet'}
-        body={canEdit ? 'Write requirements, contracts, test plans and runbooks next to the issues they describe. Start blank or from one of 36 studio templates.' : 'Documents the team shares with you will appear here.'}
-        action={canEdit ? <button type="button" className="w-btn w-btn-primary" onClick={onNew}><FilePlus2 size={13} /> New page</button> : undefined}
+        title={canEdit ? wt('docs.noDocsYet') : wt('docs.nothingShared')}
+        body={canEdit ? wt('docs.noDocsBody') : wt('docs.sharedAppear')}
+        action={canEdit ? <button type="button" className="w-btn w-btn-primary" onClick={onNew}><FilePlus2 size={13} /> {wt('docs.newPage')}</button> : undefined}
       />
     );
   }
@@ -155,19 +156,19 @@ function DocsHome({ config, list, onNew }: { config: ProjectConfig; list: WorkPa
   return (
     <div className="mx-auto w-full max-w-[880px] px-4 py-6 md:px-8">
       <div className="flex flex-wrap items-center gap-2">
-        <h2 className="text-[20px] font-semibold tracking-[-0.01em]">Project documents</h2>
+        <h2 className="text-[20px] font-semibold tracking-[-0.01em]">{wt('docs.projectDocs')}</h2>
         {/* Đợt S5c: AI soạn SRS từ requirement/story/epic ⇒ ĐỀ XUẤT draft_page, người dùng Apply mới tạo trang. */}
         {canEdit && config.permissions.useAi && (
           <button type="button" className="w-btn w-btn-sm ml-auto" onClick={() => openAiPanel({ pid: config.id, quick: { task: 'draft_srs' } })}>
-            <Sparkles size={13} /> Draft SRS with AI
+            <Sparkles size={13} /> {wt('docs.draftSrsAi')}
           </button>
         )}
       </div>
-      <p className="mt-1 text-[13px] text-[var(--w-text-2)]">{list.pages.length} page{list.pages.length === 1 ? '' : 's'} · pick one on the left, or search the text of every page.</p>
+      <p className="mt-1 text-[13px] text-[var(--w-text-2)]">{wt('docs.nPages', { count: list.pages.length })}</p>
 
       <div className="relative mt-4">
         <Search size={14} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
-        <input className="w-input !h-10 !pl-9" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search inside documents" aria-label="Search inside documents" />
+        <input className="w-input !h-10 !pl-9" value={q} onChange={(e) => setQ(e.target.value)} placeholder={wt('docs.searchInside')} aria-label={wt('docs.searchInside')} />
       </div>
 
       {term.length >= 2 ? (
@@ -183,7 +184,7 @@ function DocsHome({ config, list, onNew }: { config: ProjectConfig; list: WorkPa
                 </li>
               ))}
             </ul>
-          ) : <p className="py-6 text-center text-[13px] text-[var(--w-text-3)]">No page mentions “{term}”.</p>}
+          ) : <p className="py-6 text-center text-[13px] text-[var(--w-text-3)]">{wt('docs.noMention', { q: term })}</p>}
         </section>
       ) : (
         <>
@@ -196,7 +197,7 @@ function DocsHome({ config, list, onNew }: { config: ProjectConfig; list: WorkPa
             ))}
           </div>
           <section className="mt-6">
-            <h3 className="w-section-title mb-2">Recently updated</h3>
+            <h3 className="w-section-title mb-2">{wt('docs.recentlyUpdated')}</h3>
             <ul className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
               {recent.map((p) => (
                 <li key={p.id} className="border-b border-[var(--w-border)] last:border-b-0">

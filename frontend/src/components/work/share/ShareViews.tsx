@@ -19,6 +19,7 @@ import {
 } from '../ui';
 import { axisTick, Card, ChartTooltip, fmtDay, Legend, num, SectionTitle, StatCell, unitLabel } from '../reports/shared';
 import { CycleStateBadge, RUN_META, RUN_ORDER, StatusBar } from '../tests/runStatus';
+import { wt } from '@/components/work/i18n';
 
 // ─── Tra cứu ─────────────────────────────────────────────────────
 
@@ -58,7 +59,7 @@ function asUser(m: SharedMember) {
 function Assignee({ id, lk, withName }: { id: number | null; lk: ShareLookups; withName?: boolean }) {
   const m = id !== null ? lk.members.get(id) : undefined;
   // Người được giao không phải ADMIN/MEMBER (vd khách hàng) không có trong danh sách công khai.
-  const name = id === null ? 'Unassigned' : m?.name ?? 'Team member';
+  const name = id === null ? wt('common.unassigned') : m?.name ?? wt('share.vMember');
   return (
     <span className="inline-flex min-w-0 items-center gap-1.5" title={name}>
       {m ? <UserAvatar user={asUser(m)} size={20} /> : <UserAvatar user={null} size={20} />}
@@ -72,7 +73,7 @@ function Loading() {
 }
 
 function LoadError({ error, retry, what }: { error: unknown; retry: () => void; what: string }) {
-  return <EmptyState title={`Could not load the ${what}`} body={workError(error)} action={<button type="button" className="w-btn" onClick={retry}>Try again</button>} />;
+  return <EmptyState title={wt('share.vLoadFailed', { what })} body={workError(error)} action={<button type="button" className="w-btn" onClick={retry}>{wt('common.tryAgain')}</button>} />;
 }
 
 const isOverdue = (i: ShareIssue, lk: ShareLookups) =>
@@ -94,13 +95,13 @@ function BoardCard({ issue, lk, onOpen }: { issue: ShareIssue; lk: ShareLookups;
         <IssueTypeIcon type={lk.types.get(issue.typeId)} size={13} />
         <span className="font-mono">{issue.key}</span>
         {issue.dueDate && (
-          <span className={cn('flex items-center gap-0.5', overdue && 'font-medium text-[var(--w-red)]')} title={overdue ? 'Overdue' : 'Due date'}>
+          <span className={cn('flex items-center gap-0.5', overdue && 'font-medium text-[var(--w-red)]')} title={overdue ? wt('common.overdue') : wt('common.dueDate')}>
             <CalendarDays size={11} />{formatDate(issue.dueDate)}
           </span>
         )}
         <span className="ml-auto flex items-center gap-1.5">
           {issue.storyPoints !== null && (
-            <span className="rounded-full bg-[var(--w-sunken)] px-1.5 py-px font-medium tabular text-[var(--w-text-2)]" title="Story points">{issue.storyPoints} {issue.storyPoints === 1 ? 'pt' : 'pts'}</span>
+            <span className="rounded-full bg-[var(--w-sunken)] px-1.5 py-px font-medium tabular text-[var(--w-text-2)]" title={wt('share.vSp')}>{wt('share.vPts', { count: issue.storyPoints })}</span>
           )}
           <PriorityIcon priority={issue.priority} size={14} />
           <Assignee id={issue.assigneeId} lk={lk} />
@@ -154,8 +155,8 @@ export function ShareBoard({ token, summary, lk, onOpen }: { token: string; summ
   }, [q.data, lk]);
 
   if (q.isLoading) return <Loading />;
-  if (q.error) return <LoadError error={q.error} retry={() => q.refetch()} what="board" />;
-  if (!lk.columns.length) return <EmptyState title="No workflow configured" />;
+  if (q.error) return <LoadError error={q.error} retry={() => q.refetch()} what={wt('share.wBoard')} />;
+  if (!lk.columns.length) return <EmptyState title={wt('share.vNoWorkflow')} />;
 
   const active = summary.sprints.find((s) => s.state === 'ACTIVE');
 
@@ -164,8 +165,8 @@ export function ShareBoard({ token, summary, lk, onOpen }: { token: string; summ
       {active && (
         <div className="mb-3 text-[13px] text-[var(--w-text-2)]">
           <span className="font-medium text-[var(--w-text)]">{active.name}</span>
-          {active.endAt && <span className="text-[var(--w-text-3)]"> · ends {formatDate(active.endAt)}</span>}
-          {active.goal && <span className="block truncate sm:inline"><span className="hidden sm:inline"> · </span>Goal: {active.goal}</span>}
+          {active.endAt && <span className="text-[var(--w-text-3)]">{wt('share.vEnds', { d: formatDate(active.endAt) })}</span>}
+          {active.goal && <span className="block truncate sm:inline"><span className="hidden sm:inline"> · </span>{wt('share.vGoal', { g: active.goal })}</span>}
         </div>
       )}
       <p className="mb-2 text-[12px] text-[var(--w-text-3)]">
@@ -182,11 +183,11 @@ export function ShareBoard({ token, summary, lk, onOpen }: { token: string; summ
                 <div className="mb-2 flex h-7 items-center gap-2 px-1">
                   <span className="truncate text-[12px] font-semibold uppercase tracking-[0.03em] text-[var(--w-text-2)]">{c.name}</span>
                   <span className="text-[12px] tabular text-[var(--w-text-3)]">{items.length}</span>
-                  {points > 0 && <span className="ml-auto text-[11px] tabular text-[var(--w-text-3)]" title="Story points">{num(points)} pts</span>}
+                  {points > 0 && <span className="ml-auto text-[11px] tabular text-[var(--w-text-3)]" title={wt('share.vSp')}>{wt('rep.pts', { n: num(points) })}</span>}
                 </div>
                 <div className="flex min-h-[120px] flex-col gap-1.5 rounded-[8px] bg-[var(--w-sunken)] p-1.5">
                   {items.map((i) => <BoardCard key={i.number} issue={i} lk={lk} onOpen={onOpen} />)}
-                  {!items.length && <div className="px-2 py-4 text-center text-[12px] text-[var(--w-text-3)]">No issues</div>}
+                  {!items.length && <div className="px-2 py-4 text-center text-[12px] text-[var(--w-text-3)]">{wt('share.vNoIssues')}</div>}
                 </div>
               </div>
             );
@@ -211,7 +212,7 @@ function BacklogRow({ issue, lk, onOpen }: { issue: ShareIssue; lk: ShareLookups
       <span className="min-w-0 flex-1 truncate">{issue.title}</span>
       <StatusBadge status={lk.statuses.get(issue.statusId)} className="hidden shrink-0 sm:inline-flex" />
       <span className="hidden shrink-0 sm:inline-flex"><PriorityIcon priority={issue.priority} size={14} /></span>
-      <span className="w-7 shrink-0 text-right text-[12px] tabular text-[var(--w-text-2)]" title="Story points">{issue.storyPoints ?? ''}</span>
+      <span className="w-7 shrink-0 text-right text-[12px] tabular text-[var(--w-text-2)]" title={wt('share.vSp')}>{issue.storyPoints ?? ''}</span>
       <Assignee id={issue.assigneeId} lk={lk} />
     </button>
   );
@@ -226,13 +227,13 @@ export function ShareBacklog({ token, summary, lk, onOpen }: { token: string; su
     const rows = q.data ?? [];
     return [
       ...sprints.map((s) => ({ id: `s${s.id}`, name: s.name, sprint: s, items: rows.filter((i) => i.sprintId === s.id) })),
-      { id: 'backlog', name: 'Backlog', sprint: null, items: rows.filter((i) => i.sprintId === null || !known.has(i.sprintId)) },
+      { id: 'backlog', name: wt('share.vBacklog'), sprint: null, items: rows.filter((i) => i.sprintId === null || !known.has(i.sprintId)) },
     ];
   }, [q.data, summary.sprints]);
 
   if (q.isLoading) return <Loading />;
-  if (q.error) return <LoadError error={q.error} retry={() => q.refetch()} what="backlog" />;
-  if (!q.data?.length) return <EmptyState title="Nothing in the backlog" body="All open work is done, or nothing has been planned yet." />;
+  if (q.error) return <LoadError error={q.error} retry={() => q.refetch()} what={wt('share.wBacklog')} />;
+  if (!q.data?.length) return <EmptyState title={wt('share.vNothingBacklog')} body={wt('share.vNothingBacklogBody')} />;
 
   return (
     <div className="space-y-5">
@@ -243,19 +244,19 @@ export function ShareBacklog({ token, summary, lk, onOpen }: { token: string; su
             <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 px-1">
               <h3 className="text-[13px] font-semibold">{g.name}</h3>
               {g.sprint?.state === 'ACTIVE' && (
-                <span className="rounded-[4px] border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-1.5 text-[11px] font-medium leading-[18px] text-[var(--w-accent-text)]">Active</span>
+                <span className="rounded-[4px] border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-1.5 text-[11px] font-medium leading-[18px] text-[var(--w-accent-text)]">{wt('studio.stActive')}</span>
               )}
               {g.sprint && (g.sprint.startAt || g.sprint.endAt) && (
                 <span className="text-[12px] text-[var(--w-text-3)]">{formatDate(g.sprint.startAt)} – {formatDate(g.sprint.endAt)}</span>
               )}
               <span className="text-[12px] text-[var(--w-text-3)]">
-                {g.items.length} {g.items.length === 1 ? 'issue' : 'issues'}{points > 0 ? ` · ${num(points)} pts` : ''}
+                {wt('rep.nIssues', { count: g.items.length })}{points > 0 ? ` · ${wt('rep.pts', { n: num(points) })}` : ''}
               </span>
             </div>
-            {g.sprint?.goal && <p className="mb-2 px-1 text-[12px] text-[var(--w-text-2)]">Goal: {g.sprint.goal}</p>}
+            {g.sprint?.goal && <p className="mb-2 px-1 text-[12px] text-[var(--w-text-2)]">{wt('share.vGoal', { g: g.sprint.goal })}</p>}
             <div className={cn('overflow-hidden rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)]', !g.items.length && 'border-dashed')}>
               {g.items.map((i) => <BacklogRow key={i.number} issue={i} lk={lk} onOpen={onOpen} />)}
-              {!g.items.length && <div className="px-3 py-5 text-center text-[12px] text-[var(--w-text-3)]">No open issues in this sprint.</div>}
+              {!g.items.length && <div className="px-3 py-5 text-center text-[12px] text-[var(--w-text-3)]">{wt('share.vNoOpenSprint')}</div>}
             </div>
           </section>
         );
@@ -269,7 +270,7 @@ export function ShareBacklog({ token, summary, lk, onOpen }: { token: string; su
 export function ShareReportsView({ token }: { token: string }) {
   const q = useQuery({ queryKey: shareKey(token, 'reports'), queryFn: () => workApi.shareReports(token), retry: 1 });
   if (q.isLoading) return <Loading />;
-  if (q.error || !q.data) return <LoadError error={q.error} retry={() => q.refetch()} what="reports" />;
+  if (q.error || !q.data) return <LoadError error={q.error} retry={() => q.refetch()} what={wt('share.wReports')} />;
   const { totals, burndown, velocity, unit } = q.data;
   const pct = totals.issues ? Math.round((totals.done / totals.issues) * 100) : 0;
   const pctPts = totals.points ? Math.round((totals.donePoints / totals.points) * 100) : 0;
@@ -278,25 +279,25 @@ export function ShareReportsView({ token }: { token: string }) {
   return (
     <div className="space-y-5">
       <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-        <StatCell label="Issues done" value={`${totals.done} / ${totals.issues}`} hint={`${pct}% complete`} tone="green" />
-        <StatCell label="Open issues" value={totals.issues - totals.done} />
-        <StatCell label={unit === 'HOURS' ? 'Hours done' : 'Points done'} value={`${num(totals.donePoints)} / ${num(totals.points)}`} hint={`${pctPts}% of the estimate`} tone="accent" />
-        <StatCell label="Average velocity" value={velocity?.average != null ? `${num(velocity.average)} ${u}` : '—'} hint={velocity?.sprints.length ? 'Last 3 sprints' : 'No completed sprints'} />
+        <StatCell label={wt('share.vIssuesDone')} value={`${totals.done} / ${totals.issues}`} hint={wt('share.vPctComplete', { n: pct })} tone="green" />
+        <StatCell label={wt('rep.openIssues')} value={totals.issues - totals.done} />
+        <StatCell label={unit === 'HOURS' ? wt('share.vHoursDone') : wt('share.vPointsDone')} value={`${num(totals.donePoints)} / ${num(totals.points)}`} hint={wt('share.vPctEst', { n: pctPts })} tone="accent" />
+        <StatCell label={wt('share.vAvgVel')} value={velocity?.average != null ? `${num(velocity.average)} ${u}` : '—'} hint={velocity?.sprints.length ? wt('share.vLast3') : wt('share.vNoCompleted')} />
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--w-sunken)]" title={`${pct}% of issues done`}>
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--w-sunken)]" title={wt('share.vPctIssuesDone', { n: pct })}>
         <div className="h-full rounded-full bg-[var(--w-green)]" style={{ width: `${pct}%` }} />
       </div>
 
       <div>
-        <SectionTitle right={burndown ? <span className="text-[12px] text-[var(--w-text-3)]">{burndown.sprint.name}</span> : undefined}>Sprint burndown</SectionTitle>
+        <SectionTitle right={burndown ? <span className="text-[12px] text-[var(--w-text-3)]">{burndown.sprint.name}</span> : undefined}>{wt('share.vBurndown')}</SectionTitle>
         <Card>
           {!burndown ? (
-            <EmptyState title="No active sprint" body="The burndown appears while a sprint is in progress." />
+            <EmptyState title={wt('pf.noActiveSprint')} body={wt('share.vBurndownBody')} />
           ) : !burndown.points.length ? (
-            <EmptyState title="No data for this sprint yet" body="Numbers are recorded once a day after the sprint starts." />
+            <EmptyState title={wt('share.vNoData')} body={wt('share.vNoDataBody')} />
           ) : (
             <>
-              <div className="mb-3"><Legend items={[{ label: 'Remaining', color: 'var(--w-accent)' }, { label: 'Guideline', color: 'var(--w-text-3)', dashed: true }]} /></div>
+              <div className="mb-3"><Legend items={[{ label: wt('share.vRemaining'), color: 'var(--w-accent)' }, { label: wt('share.vGuideline'), color: 'var(--w-text-3)', dashed: true }]} /></div>
               <div className="h-[260px] w-full min-w-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={burndown.points} margin={{ top: 8, right: 12, bottom: 0, left: -8 }}>
@@ -318,13 +319,13 @@ export function ShareReportsView({ token }: { token: string }) {
       </div>
 
       <div>
-        <SectionTitle>Velocity</SectionTitle>
+        <SectionTitle>{wt('share.vVelocity')}</SectionTitle>
         <Card>
           {!velocity || !velocity.sprints.length ? (
-            <EmptyState title="No completed sprints yet" body="Velocity appears once the team completes its first sprint." />
+            <EmptyState title={wt('share.vNoSprintsYet')} body={wt('share.vVelBody')} />
           ) : (
             <>
-              <div className="mb-3"><Legend items={[{ label: 'Committed', color: 'var(--w-text-3)' }, { label: 'Completed', color: 'var(--w-accent)' }]} /></div>
+              <div className="mb-3"><Legend items={[{ label: wt('share.vCommitted'), color: 'var(--w-text-3)' }, { label: wt('rep.completed'), color: 'var(--w-accent)' }]} /></div>
               <div className="h-[260px] w-full min-w-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={velocity.sprints} margin={{ top: 8, right: 8, bottom: 0, left: -8 }} barGap={3} barCategoryGap="24%">
@@ -351,35 +352,35 @@ export function ShareReportsView({ token }: { token: string }) {
 export function ShareTestsView({ token }: { token: string }) {
   const q = useQuery({ queryKey: shareKey(token, 'tests'), queryFn: () => workApi.shareTests(token), retry: 1 });
   if (q.isLoading) return <Loading />;
-  if (q.error) return <LoadError error={q.error} retry={() => q.refetch()} what="test results" />;
-  if (!q.data?.length) return <EmptyState title="No test cycles yet" body="Test execution results appear here once a test cycle is created." />;
+  if (q.error) return <LoadError error={q.error} retry={() => q.refetch()} what={wt('share.wTests')} />;
+  if (!q.data?.length) return <EmptyState title={wt('share.vNoCycles')} body={wt('share.vNoCyclesBody')} />;
 
   return (
     <div className="overflow-x-auto rounded-[var(--w-radius-lg)] border border-[var(--w-border)] bg-[var(--w-panel)]">
       <table className="w-full min-w-[640px] text-[13px]">
         <thead>
           <tr className="border-b border-[var(--w-border)] text-left text-[11px] uppercase tracking-wide text-[var(--w-text-3)]">
-            <th className="px-3 py-2 font-medium">Test cycle</th>
-            <th className="px-3 py-2 font-medium">State</th>
-            <th className="w-[200px] px-3 py-2 font-medium">Progress</th>
-            <th className="px-3 py-2 text-right font-medium">Pass rate</th>
-            <th className="px-3 py-2 font-medium">Results</th>
+            <th className="px-3 py-2 font-medium">{wt('share.vCycle')}</th>
+            <th className="px-3 py-2 font-medium">{wt('share.vState')}</th>
+            <th className="w-[200px] px-3 py-2 font-medium">{wt('common.progress')}</th>
+            <th className="px-3 py-2 text-right font-medium">{wt('share.vPassRate')}</th>
+            <th className="px-3 py-2 font-medium">{wt('share.vResults')}</th>
           </tr>
         </thead>
         <tbody>
           {q.data.map((c) => {
             const counts = c.counts as Record<RunStatus, number>;
-            const meta = [c.environment, c.build && `Build ${c.build}`].filter(Boolean).join(' · ');
+            const meta = [c.environment, c.build && wt('share.vBuild', { b: c.build })].filter(Boolean).join(' · ');
             return (
               <tr key={c.id} className="border-b border-[var(--w-border)] align-top last:border-0">
                 <td className="px-3 py-2.5">
                   <div className="font-medium">{c.name}</div>
-                  <div className="mt-0.5 text-[12px] text-[var(--w-text-3)]">{meta || `Created ${formatDate(c.createdAt)}`}</div>
+                  <div className="mt-0.5 text-[12px] text-[var(--w-text-3)]">{meta || wt('share.vCreated', { d: formatDate(c.createdAt) })}</div>
                 </td>
                 <td className="px-3 py-2.5"><CycleStateBadge state={c.state} /></td>
                 <td className="px-3 py-2.5">
                   <StatusBar counts={counts} total={c.total} className="mt-1.5" />
-                  <div className="mt-1 text-[11px] tabular text-[var(--w-text-3)]">{c.executed} of {c.total} executed</div>
+                  <div className="mt-1 text-[11px] tabular text-[var(--w-text-3)]">{wt('share.vExecuted', { a: c.executed, b: c.total })}</div>
                 </td>
                 <td className="px-3 py-2.5 text-right tabular">
                   {c.passRate === null ? <span className="text-[var(--w-text-3)]">—</span> : (
@@ -394,7 +395,7 @@ export function ShareTestsView({ token }: { token: string }) {
                         {RUN_META[s].label} <span className="tabular font-medium text-[var(--w-text)]">{counts[s]}</span>
                       </span>
                     ))}
-                    {!c.total && <span className="text-[var(--w-text-3)]">No tests in this cycle</span>}
+                    {!c.total && <span className="text-[var(--w-text-3)]">{wt('share.vNoTests')}</span>}
                   </div>
                 </td>
               </tr>
@@ -439,19 +440,19 @@ export function ShareIssuePanel({ token, number, summary, lk, onClose, onOpen }:
         <aside
           role="dialog"
           aria-modal="true"
-          aria-label={i ? `${i.key} ${i.title}` : 'Issue'}
+          aria-label={i ? `${i.key} ${i.title}` : wt('common.issue')}
           style={{ boxShadow: 'var(--w-shadow-pop)' }}
           className="absolute inset-y-0 right-0 flex w-full max-w-[560px] flex-col border-l border-[var(--w-border)] bg-[var(--w-panel)]"
         >
           <div className="flex h-12 shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-4">
             {i && <IssueTypeIcon type={type} size={14} />}
             <span className="font-mono text-[12px] text-[var(--w-text-2)]">{i?.key ?? `${number}`}</span>
-            <span className="ml-1 rounded-[4px] border border-[var(--w-border-strong)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-3)]">Read-only</span>
-            <button type="button" onClick={onClose} className="w-btn w-btn-ghost w-btn-icon w-btn-sm ml-auto" aria-label="Close"><X size={15} /></button>
+            <span className="ml-1 rounded-[4px] border border-[var(--w-border-strong)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-3)]">{wt('share.vReadOnly')}</span>
+            <button type="button" onClick={onClose} className="w-btn w-btn-ghost w-btn-icon w-btn-sm ml-auto" aria-label={wt('common.close')}><X size={15} /></button>
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
             {q.isLoading ? <Loading /> : q.error || !i ? (
-              <EmptyState title="Issue unavailable" body={workError(q.error, 'This issue could not be loaded.')} />
+              <EmptyState title={wt('share.vUnavailable')} body={workError(q.error, wt('share.vCouldNot'))} />
             ) : (
               <>
                 {i.parent && (
@@ -464,42 +465,42 @@ export function ShareIssuePanel({ token, number, summary, lk, onClose, onOpen }:
                 <h2 className="text-[18px] font-semibold leading-snug">{i.title}</h2>
 
                 <div className="mt-4 rounded-[8px] border border-[var(--w-border)] px-3 py-2">
-                  <Row label="Status"><StatusBadge status={lk.statuses.get(i.statusId)} /></Row>
-                  <Row label="Type"><span className="inline-flex items-center gap-1.5"><IssueTypeIcon type={type} size={13} />{type?.name ?? '—'}</span></Row>
-                  <Row label="Priority"><span className="inline-flex items-center gap-1.5"><PriorityIcon priority={i.priority} size={14} />{priority?.label ?? 'Medium'}</span></Row>
-                  <Row label="Assignee"><Assignee id={i.assigneeId} lk={lk} withName /></Row>
-                  {sprint && <Row label="Sprint">{sprint.name}</Row>}
-                  {i.storyPoints !== null && <Row label="Story points"><span className="tabular">{num(i.storyPoints)}</span></Row>}
-                  {i.startDate && <Row label="Start date">{formatDate(i.startDate)}</Row>}
-                  <Row label="Due date">
-                    {i.dueDate ? <span className={cn(isOverdue(i, lk) && 'font-medium text-[var(--w-red)]')}>{formatDate(i.dueDate)}{isOverdue(i, lk) ? ' · overdue' : ''}</span> : <span className="text-[var(--w-text-3)]">None</span>}
+                  <Row label={wt('common.status')}><StatusBadge status={lk.statuses.get(i.statusId)} /></Row>
+                  <Row label={wt('common.type')}><span className="inline-flex items-center gap-1.5"><IssueTypeIcon type={type} size={13} />{type?.name ?? '—'}</span></Row>
+                  <Row label={wt('common.priority')}><span className="inline-flex items-center gap-1.5"><PriorityIcon priority={i.priority} size={14} />{priority?.label ?? wt('pspec.sevMedium')}</span></Row>
+                  <Row label={wt('common.assignee')}><Assignee id={i.assigneeId} lk={lk} withName /></Row>
+                  {sprint && <Row label={wt('common.sprint')}>{sprint.name}</Row>}
+                  {i.storyPoints !== null && <Row label={wt('common.storyPoints')}><span className="tabular">{num(i.storyPoints)}</span></Row>}
+                  {i.startDate && <Row label={wt('common.startDate')}>{formatDate(i.startDate)}</Row>}
+                  <Row label={wt('common.dueDate')}>
+                    {i.dueDate ? <span className={cn(isOverdue(i, lk) && 'font-medium text-[var(--w-red)]')}>{formatDate(i.dueDate)}{isOverdue(i, lk) ? wt('share.vOverdueSp') : ''}</span> : <span className="text-[var(--w-text-3)]">{wt('common.none')}</span>}
                   </Row>
-                  {i.resolvedAt && <Row label="Resolved">{formatDate(i.resolvedAt)}</Row>}
-                  <Row label="Created">{formatDate(i.createdAt)}</Row>
+                  {i.resolvedAt && <Row label={wt('common.resolved')}>{formatDate(i.resolvedAt)}</Row>}
+                  <Row label={wt('common.created')}>{formatDate(i.createdAt)}</Row>
                 </div>
 
                 {i.description !== null ? (
                   <div className="mt-6">
-                    <h3 className="mb-2 text-[13px] font-semibold">Description</h3>
+                    <h3 className="mb-2 text-[13px] font-semibold">{wt('common.description')}</h3>
                     {i.description.trim()
                       ? <div className="whitespace-pre-wrap break-words text-[13px] leading-relaxed text-[var(--w-text)]">{i.description}</div>
-                      : <p className="text-[13px] text-[var(--w-text-3)]">No description.</p>}
+                      : <p className="text-[13px] text-[var(--w-text-3)]">{wt('portal.noDescription')}</p>}
                     {(i.images ?? []).length > 0 && (
                       <div className="mt-3 flex flex-col gap-3">
                         {(i.images ?? []).map((src, n) => (
                           // eslint-disable-next-line @next/next/no-img-element -- ảnh qua API của link, không qua next/image
-                          <img key={src} src={src} alt={`Image ${n + 1} in the description`} loading="lazy" className="max-w-full rounded-[6px] border border-[var(--w-border)]" />
+                          <img key={src} src={src} alt={wt('share.vImageN', { n: n + 1 })} loading="lazy" className="max-w-full rounded-[6px] border border-[var(--w-border)]" />
                         ))}
                       </div>
                     )}
                   </div>
                 ) : !summary.options.descriptions && (
-                  <p className="mt-6 text-[12px] text-[var(--w-text-3)]">Descriptions are not included in this shared view.</p>
+                  <p className="mt-6 text-[12px] text-[var(--w-text-3)]">{wt('share.vNoDesc')}</p>
                 )}
 
                 {i.children.length > 0 && (
                   <div className="mt-6">
-                    <h3 className="mb-2 text-[13px] font-semibold">Child issues <span className="font-normal text-[var(--w-text-3)]">{i.children.length}</span></h3>
+                    <h3 className="mb-2 text-[13px] font-semibold">{wt('share.vChildIssues')} <span className="font-normal text-[var(--w-text-3)]">{i.children.length}</span></h3>
                     <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
                       {i.children.map((c) => (
                         <button

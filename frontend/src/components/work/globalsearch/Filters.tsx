@@ -11,7 +11,9 @@ import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
 import { userName, type GlobalSearchFacets, type StatusCategory } from '@/lib/work-api';
 import { CATEGORY_DOT, IssueTypeIcon, PickerList, Popover, UserAvatar, useToggle, type PickOption } from '../ui';
-import { CATEGORY_LABEL, type BasicState } from './query';
+import { type BasicState } from './query';
+import { CATEGORY_LABEL } from '../workflow/statusParts';
+import { wt } from '@/components/work/i18n';
 
 const summaryOf = (xs: string[]) => (xs.length === 1 ? `: ${xs[0]}` : xs.length ? ` · ${xs.length}` : '');
 
@@ -44,7 +46,7 @@ function FilterMenu<T extends string>({ label, options, selected, onToggle, summ
         <ChevronDown size={12} className="opacity-60" />
       </button>
       <Popover open={pop.on} onClose={pop.close} anchorRef={ref as RefObject<HTMLElement>} width={width}>
-        <PickerList options={options} selected={selected} onPick={onToggle} multi placeholder={`Filter by ${label.toLowerCase()}…`} />
+        <PickerList options={options} selected={selected} onPick={onToggle} multi placeholder={wt('gs.filterBy', { l: label.toLowerCase() })} />
       </Popover>
     </>
   );
@@ -68,7 +70,7 @@ export const BasicFilters = forwardRef<HTMLInputElement, {
       value: p.key,
       label: p.name,
       keywords: `${p.key} ${p.workspace.name}`,
-      hint: p.archived ? `${p.key} · archived` : p.key,
+      hint: p.archived ? wt('gs.archivedK', { k: p.key }) : p.key,
       icon: <FolderKanban size={13} className="text-[var(--w-text-3)]" />,
     }));
   }, [facets]);
@@ -84,10 +86,10 @@ export const BasicFilters = forwardRef<HTMLInputElement, {
   const me = useAuthStore((s) => s.user);
   const assigneeOpts = useMemo<PickOption<string>[]>(() => [
     {
-      value: 'me', label: 'Me', keywords: 'current user mine',
+      value: 'me', label: wt('gs.me'), keywords: 'current user mine',
       icon: <UserAvatar user={me ? { username: me.username, fullName: me.fullName ?? null, displayName: me.displayName ?? null, avatarUrl: me.avatarUrl ?? null } : null} size={16} />,
     },
-    { value: 'none', label: 'Unassigned', keywords: 'empty nobody', icon: <UserAvatar user={null} size={16} /> },
+    { value: 'none', label: wt('common.unassigned'), keywords: 'empty nobody', icon: <UserAvatar user={null} size={16} /> },
     ...(facets?.assignees ?? []).map((u) => ({ value: u.username, label: userName(u), hint: `@${u.username}`, keywords: u.username, icon: <UserAvatar user={u} size={16} /> })),
   ], [facets, me]);
 
@@ -108,12 +110,12 @@ export const BasicFilters = forwardRef<HTMLInputElement, {
               else (e.target as HTMLInputElement).blur();
             }
           }}
-          placeholder="Search by key, title or description…"
-          aria-label="Search text"
+          placeholder={wt('gs.searchTextPh')}
+          aria-label={wt('gs.searchText')}
           className="w-input !h-[28px] !pl-7 !pr-7 !text-[12.5px]"
         />
         {text ? (
-          <button type="button" onClick={() => onText('')} className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-[var(--w-text-3)] hover:text-[var(--w-text)]" aria-label="Clear search text">
+          <button type="button" onClick={() => onText('')} className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-[var(--w-text-3)] hover:text-[var(--w-text)]" aria-label={wt('gs.clearText')}>
             <X size={12} />
           </button>
         ) : (
@@ -121,16 +123,16 @@ export const BasicFilters = forwardRef<HTMLInputElement, {
         )}
       </div>
       <FilterMenu
-        label="Project"
+        label={wt('common.project')}
         options={projectOpts}
         selected={state.projects}
         onToggle={(v) => onChange({ projects: toggleIn(state.projects, v) })}
         summary={summaryOf(state.projects)}
         width={300}
       />
-      <FilterMenu label="Type" options={typeOpts} selected={state.types} onToggle={(v) => onChange({ types: toggleIn(state.types, v) })} summary={summaryOf(state.types)} />
+      <FilterMenu label={wt('common.type')} options={typeOpts} selected={state.types} onToggle={(v) => onChange({ types: toggleIn(state.types, v) })} summary={summaryOf(state.types)} />
       <FilterMenu
-        label="Status"
+        label={wt('common.status')}
         options={catOpts}
         selected={state.cats}
         onToggle={(v) => onChange({ cats: toggleIn(state.cats, v) })}
@@ -138,7 +140,7 @@ export const BasicFilters = forwardRef<HTMLInputElement, {
         width={220}
       />
       <FilterMenu
-        label="Assignee"
+        label={wt('common.assignee')}
         options={assigneeOpts}
         selected={state.assignees}
         onToggle={(v) => onChange({ assignees: toggleIn(state.assignees, v) })}
@@ -146,7 +148,7 @@ export const BasicFilters = forwardRef<HTMLInputElement, {
       />
       {any && (
         <button type="button" onClick={onClear} className="w-btn w-btn-ghost w-btn-sm">
-          <X size={12} /> Clear
+          <X size={12} /> {wt('common.clear')}
         </button>
       )}
     </div>

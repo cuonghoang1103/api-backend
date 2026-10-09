@@ -12,16 +12,17 @@ import { Dialog, Field, IssueTypeIcon, Spinner } from '../ui';
 import { ConfirmDialog, Section, Select } from './shared';
 import { ColorPicker, LABEL_COLORS } from './ProjectLabels';
 import { useProjectInvalidate } from './useProjectInvalidate';
+import { wt } from '@/components/work/i18n';
 
 export const KIND_LABEL: Record<CustomKind, string> = {
-  TEXT: 'Text',
-  NUMBER: 'Number',
-  DATE: 'Date',
-  SELECT: 'Select list',
-  MULTISELECT: 'Multi-select',
-  USER: 'User',
+  get TEXT() { return wt('pfields.kText'); },
+  get NUMBER() { return wt('pfields.kNumber'); },
+  get DATE() { return wt('pfields.kDate'); },
+  get SELECT() { return wt('pfields.kSelect'); },
+  get MULTISELECT() { return wt('pfields.kMulti'); },
+  get USER() { return wt('pfields.kUser'); },
   URL: 'URL',
-  CHECKBOX: 'Checkbox',
+  get CHECKBOX() { return wt('pfields.kCheckbox'); },
 };
 const KINDS = Object.keys(KIND_LABEL) as CustomKind[];
 const hasOptions = (k: CustomKind) => k === 'SELECT' || k === 'MULTISELECT';
@@ -66,43 +67,43 @@ function FieldDialog({ editing, onClose, config, onSaved }: { editing: Editing; 
         : workApi.createCustomField(config.id, { ...body, kind });
     },
     onSuccess: () => {
-      toast.success(editing?.mode === 'edit' ? 'Field updated' : `Field “${name.trim()}” created`);
+      toast.success(editing?.mode === 'edit' ? wt('pfields.updated') : wt('pfields.created', { n: name.trim() }));
       onSaved();
       onClose();
     },
-    onError: (err) => toast.error(workError(err, 'Could not save the field')),
+    onError: (err) => toast.error(workError(err, wt('pfields.saveFailed'))),
   });
 
   const patchOpt = (u: string, p: Partial<DraftOption>) => setOptions((os) => os.map((o) => (o.uid === u ? { ...o, ...p } : o)));
   const toggleType = (k: string) => setTypeKeys((ks) => (ks.includes(k) ? ks.filter((x) => x !== k) : [...ks, k]));
 
   return (
-    <Dialog open={!!editing} onClose={onClose} title={editing?.mode === 'edit' ? 'Edit field' : 'New field'} width={500}>
+    <Dialog open={!!editing} onClose={onClose} title={editing?.mode === 'edit' ? wt('pfields.editField') : wt('pfields.newField')} width={500}>
       <form onSubmit={(e) => { e.preventDefault(); if (!invalid && !save.isPending) save.mutate(); }}>
-        <Field label="Name">
-          <input className="w-input" value={name} maxLength={60} onChange={(e) => setName(e.target.value)} autoFocus placeholder="e.g. Environment, Customer, Severity" />
+        <Field label={wt('common.name')}>
+          <input className="w-input" value={name} maxLength={60} onChange={(e) => setName(e.target.value)} autoFocus placeholder={wt('pfields.namePh')} />
         </Field>
-        <Field label="Field type" hint={editing?.mode === 'edit' ? 'The type of a field cannot be changed after it is created.' : undefined}>
+        <Field label={wt('pfields.fieldType')} hint={editing?.mode === 'edit' ? wt('pfields.typeLocked') : undefined}>
           <Select value={kind} disabled={editing?.mode === 'edit'} onChange={(e) => setKind(e.target.value as CustomKind)}>
             {KINDS.map((k) => <option key={k} value={k}>{KIND_LABEL[k]}</option>)}
           </Select>
         </Field>
 
         {hasOptions(kind) && (
-          <Field label="Options" hint={dupOpt ? undefined : editing?.mode === 'edit' ? 'Removing an option clears it from issues that use it.' : undefined}>
+          <Field label={wt('pfields.options')} hint={dupOpt ? undefined : editing?.mode === 'edit' ? wt('pfields.removeClears') : undefined}>
             <div className="flex flex-col gap-1.5">
               {options.map((o, i) => (
                 <div key={o.uid} className="flex items-center gap-2">
-                  <ColorPicker value={o.color} ariaLabel="Option colour" onChange={(c) => patchOpt(o.uid, { color: c })} />
+                  <ColorPicker value={o.color} ariaLabel={wt('pfields.optColour')} onChange={(c) => patchOpt(o.uid, { color: c })} />
                   <input
                     className="w-input min-w-0 flex-1"
                     value={o.label}
                     maxLength={60}
-                    placeholder={`Option ${i + 1}`}
+                    placeholder={wt('pfields.optionN', { n: i + 1 })}
                     onChange={(e) => patchOpt(o.uid, { label: e.target.value })}
-                    aria-label={`Option ${i + 1}`}
+                    aria-label={wt('pfields.optionN', { n: i + 1 })}
                   />
-                  <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={options.length <= 1} onClick={() => setOptions((os) => os.filter((x) => x.uid !== o.uid))} aria-label="Remove option" title="Remove option">
+                  <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={options.length <= 1} onClick={() => setOptions((os) => os.filter((x) => x.uid !== o.uid))} aria-label={wt('pfields.removeOpt')} title={wt('pfields.removeOpt')}>
                     <X size={13} />
                   </button>
                 </div>
@@ -114,21 +115,21 @@ function FieldDialog({ editing, onClose, config, onSaved }: { editing: Editing; 
               onClick={() => setOptions((os) => [...os, { uid: uid(), label: '', color: LABEL_COLORS[os.length % LABEL_COLORS.length] }])}
             >
               <Plus size={13} />
-              Add option
+              {wt('pfields.addOpt')}
             </button>
-            {dupOpt && <p className="mt-1 text-[12px] text-[var(--w-red)]">Option labels must be unique.</p>}
+            {dupOpt && <p className="mt-1 text-[12px] text-[var(--w-red)]">{wt('pfields.uniqueOpt')}</p>}
           </Field>
         )}
 
-        <Field label="Applies to">
+        <Field label={wt('pfields.appliesTo')}>
           <div className="flex flex-col gap-1.5 text-[13px]">
             <label className="flex cursor-pointer items-center gap-2">
               <input type="radio" name="applies" checked={allTypes} onChange={() => setAllTypes(true)} className="accent-[var(--w-accent)]" />
-              All issue types
+              {wt('pfields.allTypes')}
             </label>
             <label className="flex cursor-pointer items-center gap-2">
               <input type="radio" name="applies" checked={!allTypes} onChange={() => setAllTypes(false)} className="accent-[var(--w-accent)]" />
-              Only these issue types
+              {wt('pfields.onlyTypes')}
             </label>
             {!allTypes && (
               <div className="ml-6 mt-1 flex flex-wrap gap-x-4 gap-y-1.5">
@@ -146,14 +147,14 @@ function FieldDialog({ editing, onClose, config, onSaved }: { editing: Editing; 
 
         <label className="mb-2 flex cursor-pointer items-center gap-2 text-[13px]">
           <input type="checkbox" checked={required} onChange={(e) => setRequired(e.target.checked)} className="accent-[var(--w-accent)]" />
-          Required — the field cannot be cleared once set
+          {wt('pfields.required')}
         </label>
 
         <div className="mt-4 flex justify-end gap-2">
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="submit" className="w-btn w-btn-primary" disabled={invalid || save.isPending}>
             {save.isPending && <Spinner size={12} />}
-            {editing?.mode === 'edit' ? 'Save changes' : 'Create field'}
+            {editing?.mode === 'edit' ? wt('common.saveChanges') : wt('pfields.createField')}
           </button>
         </div>
       </form>
@@ -165,7 +166,7 @@ function FieldRow({ field, config, canEdit, onEdit, onDelete, onChanged }: { fie
   const toggleRequired = useMutation({
     mutationFn: (v: boolean) => workApi.updateCustomField(config.id, field.id, { required: v }),
     onSuccess: () => onChanged(),
-    onError: (err) => toast.error(workError(err, 'Could not update the field')),
+    onError: (err) => toast.error(workError(err, wt('pfields.updateFailed'))),
   });
   const types = field.typeKeys?.length ? config.issueTypes.filter((t) => field.typeKeys!.includes(t.key)) : null;
 
@@ -186,16 +187,16 @@ function FieldRow({ field, config, canEdit, onEdit, onDelete, onChanged }: { fie
           <span className="inline-flex items-center gap-1">
             {types ? (
               <>
-                Applies to
+                {wt('pfields.appliesTo')}
                 {types.map((t) => (
                   <span key={t.id} className="inline-flex items-center gap-1 text-[var(--w-text-2)]">
                     <IssueTypeIcon type={t} size={11} />
                     {t.name}
                   </span>
                 ))}
-                {!types.length && <span className="italic">no active issue type</span>}
+                {!types.length && <span className="italic">{wt('pfields.noActiveType')}</span>}
               </>
-            ) : 'Applies to all issue types'}
+            ) : wt('pfields.appliesAll')}
           </span>
         </div>
       </div>
@@ -213,10 +214,10 @@ function FieldRow({ field, config, canEdit, onEdit, onDelete, onChanged }: { fie
         {toggleRequired.isPending && <Spinner size={12} />}
         {canEdit && (
           <>
-            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onEdit} aria-label={`Edit field ${field.name}`} title="Edit field">
+            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onEdit} aria-label={wt('pfields.editFieldX', { n: field.name })} title={wt('pfields.editField')}>
               <Pencil size={13} />
             </button>
-            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onDelete} aria-label={`Delete field ${field.name}`} title="Delete field">
+            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onDelete} aria-label={wt('pfields.deleteFieldX', { n: field.name })} title={wt('pfields.deleteField')}>
               <Trash2 size={13} />
             </button>
           </>
@@ -234,20 +235,20 @@ export default function ProjectFields({ config, slug }: { config: ProjectConfig;
 
   const del = useMutation({
     mutationFn: (id: number) => workApi.deleteCustomField(config.id, id),
-    onSuccess: () => { toast.success('Field deleted'); setDeleting(null); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not delete the field')),
+    onSuccess: () => { toast.success(wt('pfields.deleted')); setDeleting(null); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('pfields.deleteFailed'))),
   });
 
   const fields = [...(config.customFields ?? [])].sort((a, b) => a.position - b.position || a.id - b.id);
 
   return (
     <Section
-      title="Custom fields"
-      description="Extra fields shown on issues in this project — for example Environment, Customer or Severity."
+      title={wt('pfields.customFields')}
+      description={wt('pfields.customDesc')}
       action={canEdit ? (
-        <button type="button" className="w-btn" onClick={() => setEditing({ mode: 'create' })} aria-label="New field">
+        <button type="button" className="w-btn" onClick={() => setEditing({ mode: 'create' })} aria-label={wt('pfields.newField')}>
           <Plus size={14} />
-          <span className="hidden sm:inline">New field</span>
+          <span className="hidden sm:inline">{wt('pfields.newField')}</span>
         </button>
       ) : undefined}
     >
@@ -263,15 +264,15 @@ export default function ProjectFields({ config, slug }: { config: ProjectConfig;
             onChanged={invalidate}
           />
         ))}
-        {!fields.length && <div className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">No custom fields yet.</div>}
+        {!fields.length && <div className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">{wt('pfields.noCustom')}</div>}
       </div>
       <FieldDialog editing={editing} onClose={() => setEditing(null)} config={config} onSaved={invalidate} />
       <ConfirmDialog
         open={!!deleting}
         onClose={() => setDeleting(null)}
-        title="Delete field?"
-        body={<>The field <span className="font-medium text-[var(--w-text)]">{deleting?.name}</span> and every value stored in it will be permanently removed from all issues.</>}
-        confirmLabel="Delete field"
+        title={wt('pfields.deleteQ')}
+        body={wt('pfields.deleteBody', { n: deleting?.name ?? '' })}
+        confirmLabel={wt('pfields.deleteField')}
         pending={del.isPending}
         onConfirm={() => deleting && del.mutate(deleting.id)}
       />

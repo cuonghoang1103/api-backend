@@ -32,7 +32,7 @@ const MAX_MEMBERS_PER_WORKSPACE = 200;
 // ─── Không gian ──────────────────────────────────────────────────
 
 /** Đoạn đường dẫn tĩnh dưới /work — không gian mang tên này sẽ bị trang tĩnh che mất. */
-const RESERVED_SLUGS = new Set(['invite', 'share', 'developer', 'search', 'new', 'settings', 'api', 'me']);
+const RESERVED_SLUGS = new Set(['invite', 'share', 'developer', 'search', 'new', 'settings', 'api', 'me', 'teaching', 'classes']); // CTW đợt 5: + teaching, classes
 
 async function uniqueSlug(name: string): Promise<string> {
   const base = slugify(name, 40);

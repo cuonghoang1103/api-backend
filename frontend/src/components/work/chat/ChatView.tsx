@@ -34,6 +34,7 @@ import { ChatSettingsDialog, ChannelMembersDialog, ChannelMuteMenu, CreateChanne
 import { Composer, type ComposerHandle } from './Composer';
 import { MessageItem, type MessageActions } from './MessageItem';
 import { useChannelRoom, useOnline, useTyping, type ChatEvent } from './realtime';
+import { currentWorkLocale, wt, wfmt } from '@/components/work/i18n';
 
 const LIST_W = 248;
 const THREAD_W = 400;
@@ -46,9 +47,9 @@ function dayLabel(iso: string): string {
   const now = new Date();
   const y = new Date(now);
   y.setDate(now.getDate() - 1);
-  if (d.toDateString() === now.toDateString()) return 'Today';
-  if (d.toDateString() === y.toDateString()) return 'Yesterday';
-  return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', ...(d.getFullYear() !== now.getFullYear() ? { year: 'numeric' } : {}) });
+  if (d.toDateString() === now.toDateString()) return wt('common.today');
+  if (d.toDateString() === y.toDateString()) return wt('common.yesterday');
+  return d.toLocaleDateString(wfmt.intl(), { weekday: 'long', day: 'numeric', month: 'long', ...(d.getFullYear() !== now.getFullYear() ? { year: 'numeric' } : {}) });
 }
 
 /** Chèn / thay một tin: bỏ bản nháp cục bộ cùng clientKey, không trùng id, giữ thứ tự id. */
@@ -78,16 +79,16 @@ function ChannelList({ channels, active, onPick, onCreate, canCreate, onSettings
   channels: ChatChannel[]; active: number | null; onPick: (id: number) => void; onCreate?: () => void; canCreate: boolean; onSettings: () => void;
 }) {
   const groups: Array<[string, ChatChannel[]]> = [
-    ['Channels', channels.filter((c) => c.kind === 'PUBLIC')],
-    ['Private', channels.filter((c) => c.kind === 'PRIVATE')],
-    ['With clients', channels.filter((c) => c.kind === 'CLIENT')],
+    [wt('chat.channels'), channels.filter((c) => c.kind === 'PUBLIC')],
+    [wt('chat.privateG'), channels.filter((c) => c.kind === 'PRIVATE')],
+    [wt('chat.withClients'), channels.filter((c) => c.kind === 'CLIENT')],
   ];
   return (
-    <nav className="flex h-full flex-col" aria-label="Channels">
+    <nav className="flex h-full flex-col" aria-label={wt('chat.channels')}>
       <div className="flex h-11 shrink-0 items-center gap-1 border-b border-[var(--w-border)] px-3">
-        <span className="flex-1 text-[13px] font-semibold">Channels</span>
-        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Chat notification settings" title="Chat notification settings" onClick={onSettings}><Settings2 size={14} /></button>
-        {canCreate && onCreate && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Create channel" title="Create channel" onClick={onCreate} data-testid="chat-create-channel"><Plus size={15} /></button>}
+        <span className="flex-1 text-[13px] font-semibold">{wt('chat.channels')}</span>
+        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('chat.notifSettings')} title={wt('chat.notifSettings')} onClick={onSettings}><Settings2 size={14} /></button>
+        {canCreate && onCreate && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('chat.createChannel')} title={wt('chat.createChannel')} onClick={onCreate} data-testid="chat-create-channel"><Plus size={15} /></button>}
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto p-1.5">
         {groups.map(([label, list]) => list.length > 0 && (
@@ -110,12 +111,12 @@ function ChannelList({ channels, active, onPick, onCreate, canCreate, onSettings
                     >
                       <KindIcon kind={c.kind} />
                       <span className="min-w-0 flex-1 truncate">{c.name}</span>
-                      {c.call && <Phone size={12} className="shrink-0 text-[var(--w-green-text)]" aria-label="Call in progress" />}
-                      {c.muted && <BellOff size={12} className="shrink-0 text-[var(--w-text-3)]" aria-label={muteLabel(c.mutedUntil, c.mutedForever) ?? 'Muted'} />}
+                      {c.call && <Phone size={12} className="shrink-0 text-[var(--w-green-text)]" aria-label={wt('chat.callInProgress')} />}
+                      {c.muted && <BellOff size={12} className="shrink-0 text-[var(--w-text-3)]" aria-label={muteLabel(c.mutedUntil, c.mutedForever, undefined, currentWorkLocale()) ?? wt('chat.muted')} />}
                       {c.mentions > 0 ? (
-                        <span className="inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[var(--w-accent)] px-1.5 text-[11px] font-semibold text-[var(--w-on-accent,#fff)]" aria-label={`${c.mentions} mentions`}>@{c.mentions}</span>
+                        <span className="inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[var(--w-accent)] px-1.5 text-[11px] font-semibold text-[var(--w-on-accent,#fff)]" aria-label={wt('chat.nMentions', { n: c.mentions })}>@{c.mentions}</span>
                       ) : c.unread > 0 && !c.muted ? (
-                        <span className="w-count" aria-label={`${c.unread} unread`}>{c.unread > 99 ? '99+' : c.unread}</span>
+                        <span className="w-count" aria-label={wt('chat.nUnread', { n: c.unread })}>{c.unread > 99 ? '99+' : c.unread}</span>
                       ) : null}
                     </button>
                   </li>
@@ -250,7 +251,7 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
         });
       }
     } catch (err) {
-      if (seq === loadSeq.current) toast.error(workError(err, 'Could not load messages'));
+      if (seq === loadSeq.current) toast.error(workError(err, wt('chat.loadMsgFailed')));
     } finally {
       if (seq === loadSeq.current) setLoading(false);
     }
@@ -300,7 +301,7 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
   // Luồng (?t=)
   const loadThread = useCallback(async (root: number) => {
     if (!cid) return;
-    try { setThread(await chatApi.thread(pid, cid, root)); } catch (err) { toast.error(workError(err, 'Could not open the thread')); go(cid); }
+    try { setThread(await chatApi.thread(pid, cid, root)); } catch (err) { toast.error(workError(err, wt('chat.openThreadFailed'))); go(cid); }
   }, [pid, cid, go]);
   useEffect(() => { if (urlT && cid) void loadThread(urlT); else setThread(null); }, [urlT, cid, loadThread]);
 
@@ -384,7 +385,7 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
         if (!local.parentId) writeQueue(pid, cid, next);
         return next;
       });
-      if (status) toast.error(workError(err, 'Could not send the message'));
+      if (status) toast.error(workError(err, wt('chat.sendFailed')));
     }
   }, [pid, cid, scrollToBottom]);
   useEffect(() => {
@@ -407,12 +408,12 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
       setThread((t) => (t ? { ...t, replies: [...t.replies, local] } : t));
       void chatApi.send(pid, cid, { body: input.body, fileIds: input.fileIds, parentId, clientKey: local.clientKey })
         .then((m) => setThread((t) => (t ? { ...t, replies: upsert(t.replies, m, local.clientKey) } : t)))
-        .catch((err) => { setThread((t) => (t ? { ...t, replies: t.replies.map((r) => (r.clientKey === local.clientKey ? { ...r, local: 'failed' } : r)) } : t)); toast.error(workError(err, 'Could not send the reply')); });
+        .catch((err) => { setThread((t) => (t ? { ...t, replies: t.replies.map((r) => (r.clientKey === local.clientKey ? { ...r, local: 'failed' } : r)) } : t)); toast.error(workError(err, wt('chat.replyFailed'))); });
       return;
     }
     if (!online) {
       setMessages((list) => { const next = [...list, { ...local, local: 'failed' as const }]; writeQueue(pid, cid, next); return next; });
-      toast.info('You are offline — the message will be sent when you reconnect');
+      toast.info(wt('chat.offlineQueued'));
       return;
     }
     void sendNow(local, input.fileIds);
@@ -426,7 +427,7 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
       else setMessages((list) => upsert(list, r));
       setEditing(null);
       setThreadEditing(null);
-    } catch (err) { toast.error(workError(err, 'Could not save the edit')); }
+    } catch (err) { toast.error(workError(err, wt('chat.editFailed'))); }
   }, [pid, cid]);
 
   const actions: MessageActions = useMemo(() => ({
@@ -436,21 +437,21 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
         const apply = (x: ChatMessage) => (x.id === r.messageId ? { ...x, reactions: r.reactions } : x);
         setMessages((list) => list.map(apply));
         setThread((t) => (t ? { root: apply(t.root), replies: t.replies.map(apply) } : t));
-      }).catch((err) => toast.error(workError(err, 'Could not react')));
+      }).catch((err) => toast.error(workError(err, wt('chat.reactFailed'))));
     },
     onReply: (m) => go(cid, { t: m.parentId ?? m.id }),
     onEdit: (m) => (m.parentId ? setThreadEditing(m) : setEditing(m)),
     onDelete: (m) => setConfirmDel(m),
     onPin: (m, pinned) => {
       if (!cid) return;
-      void chatApi.pin(pid, cid, m.id, pinned).then(() => { void refetchOne(m.id, m.parentId); void qc.invalidateQueries({ queryKey: chatKeys.pinned(pid, cid) }); toast.success(pinned ? 'Pinned to the channel' : 'Unpinned'); })
-        .catch((err) => toast.error(workError(err, 'Could not pin')));
+      void chatApi.pin(pid, cid, m.id, pinned).then(() => { void refetchOne(m.id, m.parentId); void qc.invalidateQueries({ queryKey: chatKeys.pinned(pid, cid) }); toast.success(pinned ? wt('chat.pinned') : wt('chat.unpinned')); })
+        .catch((err) => toast.error(workError(err, wt('chat.pinFailed'))));
     },
     onCreateIssue: (m) => setIssueOf(m),
     onForward: (m) => setForwardOf(m),
     onCopyLink: (m) => {
       const url = `${window.location.origin}${chatPath(ws, config.key, cid ?? undefined, m.id, m.parentId)}`;
-      void navigator.clipboard?.writeText(url).then(() => toast.success('Link copied')).catch(() => toast.error('Could not copy'));
+      void navigator.clipboard?.writeText(url).then(() => toast.success(wt('common.linkCopied'))).catch(() => toast.error(wt('chat.copyFailed')));
     },
     onRetry: (m) => void sendNow(m, []),
     onDiscard: (m) => setMessages((list) => { const next = list.filter((x) => x !== m); if (cid) writeQueue(pid, cid, next); return next; }),
@@ -472,7 +473,7 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
       void qc.invalidateQueries({ queryKey: chatKeys.channels(pid) });
     } catch (err) {
       w?.close();
-      toast.error(workError(err, 'Could not start the call'));
+      toast.error(workError(err, wt('chat.callFailed')));
     }
   };
 
@@ -499,7 +500,7 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
     } catch { /* thử lại khi cuộn lần sau */ } finally { setLoadingOlder(false); }
   };
 
-  const typingText = typingLine(typers.filter((t) => !t.threadId).map((t) => userName(t.user)));
+  const typingText = typingLine(typers.filter((t) => !t.threadId).map((t) => userName(t.user)), currentWorkLocale());
   const threadTyping = typingLine(typers.filter((t) => thread && t.threadId === thread.root.id).map((t) => userName(t.user)));
   const firstNew = useMemo(() => firstUnreadId(messages.filter((m) => !m.local).map((m) => ({ id: m.id, authorId: m.author?.id ?? null })), divider, meId), [messages, divider, meId]);
   const onlineCount = members.filter((m) => m.online).length;
@@ -509,12 +510,12 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
 
   // ─── Vẽ ────────────────────────────────────────────────────────
   if (chQ.isLoading) return <PageLoading />;
-  if (chQ.error) return <EmptyState title="Could not load chat" body={workError(chQ.error)} />;
+  if (chQ.error) return <EmptyState title={wt('chat.loadChatFailed')} body={workError(chQ.error)} />;
   if (!channels.length) {
     return (
       <EmptyState
-        title={chQ.data?.me.audience === 'CLIENT' ? 'No chat with your team yet' : 'No channels yet'}
-        body={chQ.data?.me.audience === 'CLIENT' ? 'Your project team has not opened a client channel. Use Requests in the client portal to reach them.' : 'Create the first channel to start talking.'}
+        title={chQ.data?.me.audience === 'CLIENT' ? wt('chat.noTeamChat') : wt('chat.noChannels')}
+        body={chQ.data?.me.audience === 'CLIENT' ? wt('chat.noTeamChatBody') : wt('chat.createFirst')}
       />
     );
   }
@@ -532,7 +533,7 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
         out.push(<div key={`d-${m.id}`} className="my-2 flex items-center gap-3 px-5 text-[11.5px] font-medium text-[var(--w-text-3)]" role="separator"><span className="h-px flex-1 bg-[var(--w-border)]" />{dayLabel(m.createdAt)}<span className="h-px flex-1 bg-[var(--w-border)]" /></div>);
         prev = null;
       }
-      if (!opts.inThread && firstNew === m.id) out.push(<div key={`n-${m.id}`} id={`chat-new-${m.id}`} className="w-chat-new" role="separator" aria-label="New messages">New messages</div>);
+      if (!opts.inThread && firstNew === m.id) out.push(<div key={`n-${m.id}`} id={`chat-new-${m.id}`} className="w-chat-new" role="separator" aria-label={wt('chat.newMessages')}>{wt('chat.newMessages')}</div>);
       const cont = !(firstNew === m.id) && isContinuation(prev && { authorId: prev.author?.id ?? null, createdAt: prev.createdAt, kind: prev.kind }, { authorId: m.author?.id ?? null, createdAt: m.createdAt, kind: m.kind });
       out.push(
         <MessageItem key={m.local ? `l-${m.clientKey}` : m.id} m={m} pid={pid} meId={meId} meUsername={me?.username} known={known} continuation={cont}
@@ -544,11 +545,11 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
   };
 
   const threadPanel = thread && ch && (
-    <div className="flex h-full min-h-0 flex-col" aria-label="Thread">
+    <div className="flex h-full min-h-0 flex-col" aria-label={wt('chat.thread')}>
       {threadInline && (
         <div className="flex h-11 shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3">
-          <span className="flex-1 text-[13.5px] font-semibold">Thread <span className="font-normal text-[var(--w-text-3)]">#{ch.name}</span></span>
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Close thread (Esc)" onClick={() => go(cid)}><X size={15} /></button>
+          <span className="flex-1 text-[13.5px] font-semibold">{wt('chat.thread')} <span className="font-normal text-[var(--w-text-3)]">#{ch.name}</span></span>
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('chat.closeThread')} onClick={() => go(cid)}><X size={15} /></button>
         </div>
       )}
       <div className="min-h-0 flex-1 overflow-y-auto py-2">
@@ -565,45 +566,45 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
   return (
     <div ref={panes.ref} className="flex h-full min-h-0" data-testid="chat-view">
       {left.mode === 'inline' && <aside className="shrink-0 border-r border-[var(--w-border)] bg-[var(--w-bg)]" style={{ width: LIST_W }}>{list}</aside>}
-      {left.mode === 'strip' && !narrow && <PaneStrip label="Channels" shortcut="[" onOpen={left.toggle} />}
+      {left.mode === 'strip' && !narrow && <PaneStrip label={wt('chat.channels')} shortcut="[" onOpen={left.toggle} />}
 
-      <section className="flex min-w-0 flex-1 flex-col" aria-label={ch ? `#${ch.name}` : 'Chat'}>
+      <section className="flex min-w-0 flex-1 flex-col" aria-label={ch ? `#${ch.name}` : wt('chat.chat')}>
         {ch && (
           <header className="flex min-h-11 shrink-0 flex-wrap items-center gap-1.5 border-b border-[var(--w-border)] px-3 py-1.5 sm:px-4">
-            {left.mode !== 'inline' && <PaneToggle pane={left} side="left" label="Channels" shortcut="[" showLabel={false} />}
-            <button type="button" className="flex min-w-0 items-center gap-1.5 rounded-[6px] px-1 py-0.5 text-left hover:bg-[var(--w-hover)]" onClick={() => setSwitcher(true)} title="Switch channel (⌘K)">
+            {left.mode !== 'inline' && <PaneToggle pane={left} side="left" label={wt('chat.channels')} shortcut="[" showLabel={false} />}
+            <button type="button" className="flex min-w-0 items-center gap-1.5 rounded-[6px] px-1 py-0.5 text-left hover:bg-[var(--w-hover)]" onClick={() => setSwitcher(true)} title={wt('chat.switchChannel')}>
               <KindIcon kind={ch.kind} size={15} />
               <h2 className="truncate text-[15px] font-semibold">{ch.name}</h2>
             </button>
             {ch.topic && <span className="hidden min-w-0 max-w-[40%] truncate text-[12.5px] text-[var(--w-text-2)] lg:inline" title={ch.topic}>{ch.topic}</span>}
-            {ch.muted && <span className="inline-flex items-center gap-1 text-[11.5px] text-[var(--w-text-3)]" title={muteLabel(ch.mutedUntil, ch.mutedForever) ?? undefined}><BellOff size={12} aria-hidden="true" /><span className="max-md:hidden">Muted</span></span>}
+            {ch.muted && <span className="inline-flex items-center gap-1 text-[11.5px] text-[var(--w-text-3)]" title={muteLabel(ch.mutedUntil, ch.mutedForever, undefined, currentWorkLocale()) ?? undefined}><BellOff size={12} aria-hidden="true" /><span className="max-md:hidden">{wt('chat.muted')}</span></span>}
             <div className="ml-auto flex items-center gap-1">
-              {!online && <span className="inline-flex items-center gap-1 rounded-full bg-[var(--w-sunken)] px-2 py-0.5 text-[11.5px] text-[var(--w-orange-text)]" role="status"><WifiOff size={12} />Offline</span>}
-              <button type="button" className="w-btn w-btn-sm" onClick={() => setMembersOpen(true)} aria-label={`${members.length} members, ${onlineCount} online`} title="Members">
+              {!online && <span className="inline-flex items-center gap-1 rounded-full bg-[var(--w-sunken)] px-2 py-0.5 text-[11.5px] text-[var(--w-orange-text)]" role="status"><WifiOff size={12} />{wt('chat.offline')}</span>}
+              <button type="button" className="w-btn w-btn-sm" onClick={() => setMembersOpen(true)} aria-label={wt('chat.membersOnline', { n: members.length, o: onlineCount })} title={wt('common.members')}>
                 <Users size={14} /><span className="tabular-nums">{members.length}</span>
                 {onlineCount > 0 && <span className="inline-flex items-center gap-1 text-[11.5px] text-[var(--w-green-text)] max-sm:hidden"><span className="h-1.5 w-1.5 rounded-full bg-[var(--w-green)]" />{onlineCount}</span>}
               </button>
-              <button ref={pinsBtn} type="button" className="w-btn w-btn-sm" onClick={() => setPinsOpen((o) => !o)} aria-label={`${pinsQ.data?.length ?? 0} pinned messages`} title="Pinned messages" aria-expanded={pinsOpen}>
+              <button ref={pinsBtn} type="button" className="w-btn w-btn-sm" onClick={() => setPinsOpen((o) => !o)} aria-label={wt('chat.nPinned', { n: pinsQ.data?.length ?? 0 })} title={wt('chat.pinnedMessages')} aria-expanded={pinsOpen}>
                 <Pin size={14} /><span className="tabular-nums">{pinsQ.data?.length ?? 0}</span>
               </button>
-              <button type="button" className={cn('w-btn w-btn-sm w-btn-icon', searchOpen && 'w-btn-on')} aria-label="Search in channel" title="Search in channel" aria-pressed={searchOpen} onClick={() => setSearchOpen((o) => !o)}><Search size={14} /></button>
+              <button type="button" className={cn('w-btn w-btn-sm w-btn-icon', searchOpen && 'w-btn-on')} aria-label={wt('chat.searchChannel')} title={wt('chat.searchChannel')} aria-pressed={searchOpen} onClick={() => setSearchOpen((o) => !o)}><Search size={14} /></button>
               {ch.canPost && (
                 ch.call ? (
-                  <a href={ch.call.url} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-sm border-[var(--w-green)] text-[var(--w-green-text)]" title="A call is in progress — join it" data-testid="chat-join-call"><Video size={14} /><span className="max-sm:hidden">Join call</span></a>
+                  <a href={ch.call.url} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-sm border-[var(--w-green)] text-[var(--w-green-text)]" title={wt('chat.joinCallTip')} data-testid="chat-join-call"><Video size={14} /><span className="max-sm:hidden">{wt('chat.joinCall')}</span></a>
                 ) : (
-                  <button ref={callBtn} type="button" className="w-btn w-btn-sm" onClick={() => setCallOpen((o) => !o)} aria-expanded={callOpen} title="Start a team call" data-testid="chat-call"><Phone size={14} /><span className="max-sm:hidden">Call</span></button>
+                  <button ref={callBtn} type="button" className="w-btn w-btn-sm" onClick={() => setCallOpen((o) => !o)} aria-expanded={callOpen} title={wt('chat.startTeamCall')} data-testid="chat-call"><Phone size={14} /><span className="max-sm:hidden">{wt('chat.call')}</span></button>
                 )
               )}
               <ChannelMuteMenu pid={pid} ch={ch} />
-              <button ref={moreBtn} type="button" className="w-btn w-btn-sm w-btn-icon" aria-label="Channel options" aria-haspopup="menu" aria-expanded={moreOpen} onClick={() => setMoreOpen((o) => !o)}><MoreHorizontal size={14} /></button>
+              <button ref={moreBtn} type="button" className="w-btn w-btn-sm w-btn-icon" aria-label={wt('chat.channelOptions')} aria-haspopup="menu" aria-expanded={moreOpen} onClick={() => setMoreOpen((o) => !o)}><MoreHorizontal size={14} /></button>
             </div>
           </header>
         )}
 
         {/* Thanh ghim: tài nguyên đã ghim của dự án (Resources) — bấm là mở. */}
         {(resQ.data?.items.length ?? 0) > 0 && (
-          <div className="flex shrink-0 items-center gap-1.5 overflow-x-auto border-b border-[var(--w-border)] px-3 py-1.5 sm:px-4" aria-label="Pinned project links" data-testid="chat-pinned-links">
-            <span className="w-eyebrow shrink-0">Pinned</span>
+          <div className="flex shrink-0 items-center gap-1.5 overflow-x-auto border-b border-[var(--w-border)] px-3 py-1.5 sm:px-4" aria-label={wt('chat.pinnedLinks')} data-testid="chat-pinned-links">
+            <span className="w-eyebrow shrink-0">{wt('chat.pinnedE')}</span>
             {resQ.data!.items.map((r) => (
               <a key={r.id} href={r.url} target="_blank" rel="noopener noreferrer" onClick={() => { void resApi.open(pid, r.id).catch(() => undefined); }}
                 className="inline-flex h-7 max-w-[220px] shrink-0 items-center gap-1.5 rounded-[6px] border border-[var(--w-border)] px-2 text-[12.5px] hover:bg-[var(--w-hover)]" title={r.url}>
@@ -618,21 +619,21 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
         {searchOpen && (
           <div className="shrink-0 border-b border-[var(--w-border)] px-3 py-2 sm:px-4">
             <div className="flex items-center gap-2">
-              <label className="sr-only" htmlFor="chat-search">Search messages</label>
-              <input id="chat-search" className="w-input h-8" autoFocus value={term} onChange={(e) => setTerm(e.target.value)} placeholder={`Search #${ch?.name ?? ''} (messages, files, voice transcripts)`}
+              <label className="sr-only" htmlFor="chat-search">{wt('chat.searchMessages')}</label>
+              <input id="chat-search" className="w-input h-8" autoFocus value={term} onChange={(e) => setTerm(e.target.value)} placeholder={wt('chat.searchPh', { name: ch?.name ?? '' })}
                 onKeyDown={(e) => { if (e.key === 'Escape') { e.stopPropagation(); setSearchOpen(false); } }} />
-              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Close search" onClick={() => setSearchOpen(false)}><X size={14} /></button>
+              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('chat.closeSearch')} onClick={() => setSearchOpen(false)}><X size={14} /></button>
             </div>
             {term.trim().length >= 2 && (
               <div className="mt-2 max-h-[45vh] overflow-y-auto rounded-[8px] border border-[var(--w-border)]" aria-live="polite">
-                {searchQ.isLoading ? <div className="flex justify-center p-3"><Spinner /></div> : !searchQ.data?.length ? <p className="p-3 text-[13px] text-[var(--w-text-2)]">No messages match.</p> : (
+                {searchQ.isLoading ? <div className="flex justify-center p-3"><Spinner /></div> : !searchQ.data?.length ? <p className="p-3 text-[13px] text-[var(--w-text-2)]">{wt('chat.noMatch')}</p> : (
                   <ul>
                     {searchQ.data.map((m) => (
                       <li key={m.id}>
                         <button type="button" className="flex w-full items-start gap-2 px-3 py-2 text-left hover:bg-[var(--w-hover)]" onClick={() => { setSearchOpen(false); if (m.parentId) go(cid, { t: m.parentId }); else void load({ around: m.id }); }}>
                           <UserAvatar user={m.author} size={20} />
                           <span className="min-w-0 flex-1">
-                            <span className="block text-[12px] text-[var(--w-text-3)]">{m.author ? userName(m.author) : 'Someone'} · {new Date(m.createdAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+                            <span className="block text-[12px] text-[var(--w-text-3)]">{m.author ? userName(m.author) : wt('chat.someone')} · {new Date(m.createdAt).toLocaleString(wfmt.intl(), { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
                             <span className="line-clamp-2 text-[13px]">{m.body || m.files.map((f) => f.voice?.transcript ?? f.fileName).join(', ')}</span>
                           </span>
                         </button>
@@ -646,20 +647,20 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
         )}
 
         <div className="relative min-h-0 flex-1">
-          <div ref={scroller} onScroll={onScroll} className="h-full overflow-y-auto pb-2" data-testid="chat-messages" aria-live="polite" aria-relevant="additions" role="log" aria-label={ch ? `Messages in #${ch.name}` : 'Messages'}>
+          <div ref={scroller} onScroll={onScroll} className="h-full overflow-y-auto pb-2" data-testid="chat-messages" aria-live="polite" aria-relevant="additions" role="log" aria-label={ch ? wt('chat.messagesIn', { name: ch.name }) : wt('chat.messages')}>
             {loadingOlder && <div className="flex justify-center py-2"><Spinner size={14} /></div>}
             {!hasMore && !loading && ch && (
               <div className="px-5 pb-3 pt-6">
                 <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-[10px] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]"><KindIcon kind={ch.kind} size={20} /></div>
-                <p className="text-[16px] font-semibold">Welcome to #{ch.name}</p>
-                <p className="text-[13px] text-[var(--w-text-2)]">{ch.topic ?? (ch.kind === 'CLIENT' ? 'This channel is shared with the project’s clients.' : ch.kind === 'PRIVATE' ? 'Only invited members can see this channel.' : 'Everyone on the project team can read this channel.')}</p>
+                <p className="text-[16px] font-semibold">{wt('chat.welcome', { name: ch.name })}</p>
+                <p className="text-[13px] text-[var(--w-text-2)]">{ch.topic ?? (ch.kind === 'CLIENT' ? wt('chat.clientChannelDesc') : ch.kind === 'PRIVATE' ? wt('chat.privateDesc') : wt('chat.publicDesc'))}</p>
               </div>
             )}
             {loading && !messages.length ? <div className="flex justify-center py-10"><Spinner /></div> : renderList(messages)}
           </div>
           {newBelow > 0 && (
             <button type="button" className="absolute bottom-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-[var(--w-accent)] px-3 py-1.5 text-[12.5px] font-medium text-[var(--w-on-accent,#fff)] shadow" onClick={() => scrollToBottom(true)}>
-              <ArrowDown size={13} />{newBelow} new {newBelow === 1 ? 'message' : 'messages'}
+              <ArrowDown size={13} />{wt('chat.newBelow', { count: newBelow })}
             </button>
           )}
         </div>
@@ -669,7 +670,7 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
         {ch && (
           <Composer
             ref={composer} pid={pid} cid={ch.id} channelName={ch.name} members={members} canPost={ch.canPost}
-            readOnlyReason={ch.archived ? 'This channel is archived.' : 'You can read this channel but not post in it (your role is view-only).'}
+            readOnlyReason={ch.archived ? wt('chat.archivedRo') : wt('chat.viewOnlyRo')}
             editing={editing} onSend={(i) => send(i)} onSaveEdit={(m, b) => void saveEdit(m, b)} onCancelEdit={() => setEditing(null)}
             onEditLast={editLast} onTyping={() => ping(null)}
           />
@@ -677,16 +678,16 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
       </section>
 
       {threadInline && <aside className="shrink-0 border-l border-[var(--w-border)] bg-[var(--w-panel)]" style={{ width: THREAD_W }}>{threadPanel}</aside>}
-      <PaneDrawer open={!!thread && right.mode === 'drawer'} onClose={() => go(cid)} side="right" label={`Thread in #${ch?.name ?? ''}`} width={narrow ? 900 : THREAD_W + 20}>
+      <PaneDrawer open={!!thread && right.mode === 'drawer'} onClose={() => go(cid)} side="right" label={wt('chat.threadIn', { name: ch?.name ?? '' })} width={narrow ? 900 : THREAD_W + 20}>
         {threadPanel}
       </PaneDrawer>
-      <PaneDrawer open={left.drawerOpen} onClose={left.close} side="left" label="Channels" width={300}>{list}</PaneDrawer>
+      <PaneDrawer open={left.drawerOpen} onClose={left.close} side="left" label={wt('chat.channels')} width={300}>{list}</PaneDrawer>
 
       {/* Lớp nổi */}
       <Popover open={pinsOpen} onClose={() => setPinsOpen(false)} anchorRef={pinsBtn} width={360} align="end">
-        <div className="max-h-[420px] overflow-y-auto p-1" aria-label="Pinned messages">
-          <p className="w-eyebrow px-2 pb-1 pt-1.5">Pinned messages</p>
-          {!pinsQ.data?.length ? <p className="px-2 pb-2 text-[13px] text-[var(--w-text-2)]">Nothing pinned yet. Use ⋯ → Pin on a message.</p> : pinsQ.data.map((m) => (
+        <div className="max-h-[420px] overflow-y-auto p-1" aria-label={wt('chat.pinnedMessages')}>
+          <p className="w-eyebrow px-2 pb-1 pt-1.5">{wt('chat.pinnedMessages')}</p>
+          {!pinsQ.data?.length ? <p className="px-2 pb-2 text-[13px] text-[var(--w-text-2)]">{wt('chat.nothingPinned')}</p> : pinsQ.data.map((m) => (
             <button key={m.id} type="button" className="flex w-full items-start gap-2 rounded-[6px] px-2 py-1.5 text-left hover:bg-[var(--w-hover)]" onClick={() => { setPinsOpen(false); if (m.parentId) go(cid, { t: m.parentId }); else if (messages.some((x) => x.id === m.id)) jumpTo(m.id); else void load({ around: m.id }); }}>
               <UserAvatar user={m.author} size={18} />
               <span className="min-w-0 flex-1"><span className="block text-[11.5px] text-[var(--w-text-3)]">{m.author ? userName(m.author) : ''}</span><span className="line-clamp-2 text-[13px]">{m.body || m.files.map((f) => f.fileName).join(', ')}</span></span>
@@ -699,30 +700,30 @@ export default function ChatView({ config }: { config: ProjectConfig }) {
       </Popover>
       <Popover open={moreOpen} onClose={() => setMoreOpen(false)} anchorRef={moreBtn} width={230} align="end">
         <div role="menu" className="p-1">
-          <MenuItem icon={CheckCheck} label="Mark all channels read" onClick={() => { setMoreOpen(false); void chatApi.readAll(pid).then(() => { void qc.invalidateQueries({ queryKey: chatKeys.channels(pid) }); void qc.invalidateQueries({ queryKey: chatKeys.unread }); }); }} />
-          <MenuItem icon={Users} label="Members" onClick={() => { setMoreOpen(false); setMembersOpen(true); }} />
-          {ch?.canManage && <MenuItem icon={Pencil} label={ch.isGeneral ? 'Edit topic' : 'Rename / topic'} onClick={() => { setMoreOpen(false); setRenameOpen(true); }} />}
-          {ch?.canManage && !ch.isGeneral && <MenuItem icon={Archive} label="Archive channel" danger onClick={() => {
+          <MenuItem icon={CheckCheck} label={wt('chat.markAllRead')} onClick={() => { setMoreOpen(false); void chatApi.readAll(pid).then(() => { void qc.invalidateQueries({ queryKey: chatKeys.channels(pid) }); void qc.invalidateQueries({ queryKey: chatKeys.unread }); }); }} />
+          <MenuItem icon={Users} label={wt('common.members')} onClick={() => { setMoreOpen(false); setMembersOpen(true); }} />
+          {ch?.canManage && <MenuItem icon={Pencil} label={ch.isGeneral ? wt('chat.editTopic') : wt('chat.renameTopic')} onClick={() => { setMoreOpen(false); setRenameOpen(true); }} />}
+          {ch?.canManage && !ch.isGeneral && <MenuItem icon={Archive} label={wt('chat.archiveChannel')} danger onClick={() => {
             setMoreOpen(false);
             void chatApi.updateChannel(pid, ch.id, { archived: true }).then(() => { toast.success(`#${ch.name} archived`); void qc.invalidateQueries({ queryKey: chatKeys.channels(pid) }); go(null); })
-              .catch((err) => toast.error(workError(err, 'Could not archive')));
+              .catch((err) => toast.error(workError(err, wt('chat.archiveFailed'))));
           }} />}
-          <MenuItem icon={Settings2} label="Chat notification settings" onClick={() => { setMoreOpen(false); setSettingsOpen(true); }} />
+          <MenuItem icon={Settings2} label={wt('chat.notifSettings')} onClick={() => { setMoreOpen(false); setSettingsOpen(true); }} />
         </div>
       </Popover>
 
       <ChannelSwitcher open={switcher} onClose={() => setSwitcher(false)} channels={channels} onPick={(id) => { setSwitcher(false); go(id); setTimeout(() => composer.current?.focus(), 50); }} />
-      <Dialog open={!!confirmDel} onClose={() => setConfirmDel(null)} title="Delete message?" width={420}
-        footer={<><button type="button" className="w-btn" onClick={() => setConfirmDel(null)}>Cancel</button><button type="button" className="w-btn w-btn-danger-solid" onClick={() => {
+      <Dialog open={!!confirmDel} onClose={() => setConfirmDel(null)} title={wt('chat.deleteMsgQ')} width={420}
+        footer={<><button type="button" className="w-btn" onClick={() => setConfirmDel(null)}>{wt('common.cancel')}</button><button type="button" className="w-btn w-btn-danger-solid" onClick={() => {
           const m = confirmDel!;
           setConfirmDel(null);
           if (!cid) return;
           void chatApi.remove(pid, cid, m.id).then(() => {
             setMessages((list) => list.filter((x) => x.id !== m.id || x.replyCount > 0).map((x) => (x.id === m.id ? { ...x, deleted: true, body: '' } : x)));
             setThread((t) => (t ? { ...t, replies: t.replies.filter((r) => r.id !== m.id) } : t));
-          }).catch((err) => toast.error(workError(err, 'Could not delete')));
-        }}>Delete</button></>}>
-        <p className="text-[13.5px] text-[var(--w-text-2)]">{confirmDel?.author?.id === meId ? 'This removes the message for everyone. Files and voice notes in it are deleted too.' : 'You are removing someone else’s message as a project admin. This is recorded in the audit log.'}</p>
+          }).catch((err) => toast.error(workError(err, wt('common.couldNotDelete'))));
+        }}>{wt('common.delete')}</button></>}>
+        <p className="text-[13.5px] text-[var(--w-text-2)]">{confirmDel?.author?.id === meId ? wt('chat.delOwn') : wt('chat.delOther')}</p>
       </Dialog>
       <ForwardDialog open={!!forwardOf} onClose={() => setForwardOf(null)} pid={pid} from={forwardOf} channels={channels} />
       <CreateIssueFromMessageDialog open={!!issueOf} onClose={() => setIssueOf(null)} pid={pid} msg={issueOf} config={config} />
@@ -746,13 +747,13 @@ function CallMenu({ onJitsi, onMeet }: { onJitsi: () => void; onMeet: (url: stri
   const [url, setUrl] = useState('');
   return (
     <div className="space-y-2 p-2">
-      <button type="button" className="w-btn w-btn-primary w-full justify-center" onClick={onJitsi} data-testid="chat-call-jitsi"><Video size={14} />Start a Jitsi call</button>
-      <p className="text-[11.5px] text-[var(--w-text-3)]">Free, no account needed. Posts “started a call” in the channel so everyone can join.</p>
+      <button type="button" className="w-btn w-btn-primary w-full justify-center" onClick={onJitsi} data-testid="chat-call-jitsi"><Video size={14} />{wt('chat.startJitsi')}</button>
+      <p className="text-[11.5px] text-[var(--w-text-3)]">{wt('chat.jitsiNote')}</p>
       <div className="border-t border-[var(--w-border)] pt-2">
-        <label className="w-label mb-1 block" htmlFor="chat-meet-url">Or use your Meet / Zoom / Teams link</label>
+        <label className="w-label mb-1 block" htmlFor="chat-meet-url">{wt('chat.orMeet')}</label>
         <div className="flex gap-1.5">
           <input id="chat-meet-url" className="w-input h-8" placeholder="https://meet.google.com/…" value={url} onChange={(e) => setUrl(e.target.value)} />
-          <button type="button" className="w-btn w-btn-sm" disabled={!/^https:\/\//.test(url)} onClick={() => onMeet(url)}>Post</button>
+          <button type="button" className="w-btn w-btn-sm" disabled={!/^https:\/\//.test(url)} onClick={() => onMeet(url)}>{wt('chat.post')}</button>
         </div>
       </div>
     </div>
@@ -765,15 +766,15 @@ function ChannelSwitcher({ open, onClose, channels, onPick }: { open: boolean; o
   useEffect(() => { if (open) { setQ(''); setSel(0); } }, [open]);
   const list = channels.filter((c) => !q || c.name.includes(q.toLowerCase().replace(/^#/, '')) || (c.topic ?? '').toLowerCase().includes(q.toLowerCase()));
   return (
-    <Dialog open={open} onClose={onClose} title="Jump to a channel" width={460}>
-      <label className="sr-only" htmlFor="chat-switch">Channel name</label>
-      <input id="chat-switch" className="w-input" autoFocus value={q} placeholder="Type a channel name…" onChange={(e) => { setQ(e.target.value); setSel(0); }}
+    <Dialog open={open} onClose={onClose} title={wt('chat.jumpChannel')} width={460}>
+      <label className="sr-only" htmlFor="chat-switch">{wt('chat.channelName')}</label>
+      <input id="chat-switch" className="w-input" autoFocus value={q} placeholder={wt('chat.typeChannel')} onChange={(e) => { setQ(e.target.value); setSel(0); }}
         onKeyDown={(e) => {
           if (e.key === 'ArrowDown') { e.preventDefault(); setSel((s) => Math.min(s + 1, list.length - 1)); }
           if (e.key === 'ArrowUp') { e.preventDefault(); setSel((s) => Math.max(s - 1, 0)); }
           if (e.key === 'Enter' && list[sel]) { e.preventDefault(); onPick(list[sel].id); }
         }} />
-      <ul className="mt-2 max-h-[320px] overflow-y-auto" role="listbox" aria-label="Channels">
+      <ul className="mt-2 max-h-[320px] overflow-y-auto" role="listbox" aria-label={wt('chat.channels')}>
         {list.map((c, i) => (
           <li key={c.id} role="option" aria-selected={i === sel}>
             <button type="button" className={cn('flex h-9 w-full items-center gap-2 rounded-[6px] px-2 text-left text-[13.5px]', i === sel ? 'bg-[var(--w-active)]' : 'hover:bg-[var(--w-hover)]')} onClick={() => onPick(c.id)}>
@@ -782,7 +783,7 @@ function ChannelSwitcher({ open, onClose, channels, onPick }: { open: boolean; o
             </button>
           </li>
         ))}
-        {!list.length && <li className="px-2 py-2 text-[13px] text-[var(--w-text-2)]">No channel matches.</li>}
+        {!list.length && <li className="px-2 py-2 text-[13px] text-[var(--w-text-2)]">{wt('chat.noChannelMatch')}</li>}
       </ul>
     </Dialog>
   );
@@ -798,14 +799,14 @@ function RenameDialog({ open, onClose, pid, ch }: { open: boolean; onClose: () =
       await chatApi.updateChannel(pid, ch.id, { ...(ch.isGeneral ? {} : { name }), topic: topic || null });
       void qc.invalidateQueries({ queryKey: chatKeys.channels(pid) });
       onClose();
-    } catch (err) { toast.error(workError(err, 'Could not save')); }
+    } catch (err) { toast.error(workError(err, wt('common.couldNotSave'))); }
   };
   return (
-    <Dialog open={open} onClose={onClose} title={`Edit #${ch.name}`} width={460}
-      footer={<><button type="button" className="w-btn" onClick={onClose}>Cancel</button><button type="button" className="w-btn w-btn-primary" onClick={() => void save()}>Save</button></>}>
+    <Dialog open={open} onClose={onClose} title={wt('chat.editX', { name: ch.name })} width={460}
+      footer={<><button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" onClick={() => void save()}>{wt('common.save')}</button></>}>
       <div className="space-y-3">
-        {!ch.isGeneral && <Field label="Name"><input className="w-input" value={name} onChange={(e) => setName(e.target.value)} maxLength={60} /></Field>}
-        <Field label="Topic"><input className="w-input" value={topic} onChange={(e) => setTopic(e.target.value)} maxLength={250} /></Field>
+        {!ch.isGeneral && <Field label={wt('common.name')}><input className="w-input" value={name} onChange={(e) => setName(e.target.value)} maxLength={60} /></Field>}
+        <Field label={wt('chat.topic')}><input className="w-input" value={topic} onChange={(e) => setTopic(e.target.value)} maxLength={250} /></Field>
       </div>
     </Dialog>
   );

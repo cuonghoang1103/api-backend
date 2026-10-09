@@ -18,6 +18,7 @@ import { TL_ACTIVITIES, WORK_PRODUCTS, workCtw4Api, workCtw4Keys } from '@/lib/w
 import { wk } from './hooks';
 import { ConfirmDialog } from './settings/shared';
 import { Dialog, Spinner, UserAvatar, relativeTime } from './ui';
+import { wt, wfmt } from '@/components/work/i18n';
 
 // ─── Định dạng thời lượng ────────────────────────────────────────
 
@@ -95,7 +96,7 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
 
   const minutes = parseDuration(spent);
   const remainingMin = mode === 'set' ? parseDuration(remainingText) : null;
-  const spentError = spent.trim() && minutes === null ? 'Use a format like 2h 30m, 45m or 1d' : minutes !== null && (minutes < 1 || minutes > 1440) ? 'Time spent must be between 1 minute and 24 hours' : null;
+  const spentError = spent.trim() && minutes === null ? wt('time.formatHint') : minutes !== null && (minutes < 1 || minutes > 1440) ? wt('time.range') : null;
   const valid = minutes !== null && !spentError && (mode !== 'set' || remainingMin !== null) && !!started;
 
   const autoPreview = issue.remainingEstimateMin === null ? null : Math.max(0, issue.remainingEstimateMin - (minutes ?? 0));
@@ -110,24 +111,24 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
       workProduct: workProduct.trim() || null,
     }),
     onSuccess: () => {
-      toast.success(`Logged ${fmtMinutes(minutes)}`);
+      toast.success(wt('time.logged', { t: fmtMinutes(minutes) }));
       qc.invalidateQueries({ queryKey: wk.issue(pid, issue.number) });
       qc.invalidateQueries({ queryKey: wk.history(pid, issue.number) });
       qc.invalidateQueries({ queryKey: wk.reports(pid) });
       onClose();
     },
-    onError: (err) => toast.error(workError(err, 'Could not log time')),
+    onError: (err) => toast.error(workError(err, wt('time.logFailed'))),
   });
 
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      title="Log time"
+      title={wt('time.logTime')}
       width={480}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="submit" form="w-log-time" className="w-btn w-btn-primary" disabled={!valid || save.isPending}>
             {save.isPending && <Spinner size={12} />}
             Save
@@ -138,12 +139,12 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
       <form id="w-log-time" onSubmit={(e) => { e.preventDefault(); if (valid && !save.isPending) save.mutate(); }} className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
-            <label className="w-label" htmlFor="w-lt-spent">Time spent</label>
+            <label className="w-label" htmlFor="w-lt-spent">{wt('time.spent')}</label>
             <input
               id="w-lt-spent"
               autoFocus
               className={cn('w-input', spentError && '!border-[var(--w-red)]')}
-              placeholder="e.g. 2h 30m"
+              placeholder={wt('time.egSpent')}
               value={spent}
               onChange={(e) => setSpent(e.target.value)}
             />
@@ -152,35 +153,35 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
             </p>
           </div>
           <div>
-            <label className="w-label" htmlFor="w-lt-start">Date started</label>
+            <label className="w-label" htmlFor="w-lt-start">{wt('time.dateStarted')}</label>
             <input id="w-lt-start" type="datetime-local" className="w-input" value={started} onChange={(e) => setStarted(e.target.value)} />
           </div>
         </div>
 
         <fieldset>
-          <legend className="w-label">Remaining estimate</legend>
+          <legend className="w-label">{wt('time.remaining')}</legend>
           <div className="space-y-1.5 text-[13px]">
             <label className="flex cursor-pointer items-center gap-2">
               <input type="radio" name="w-lt-rem" checked={mode === 'auto'} onChange={() => setMode('auto')} />
-              <span>Adjust automatically</span>
+              <span>{wt('time.auto')}</span>
               <span className="text-[12px] text-[var(--w-text-3)]">
-                {autoPreview === null ? '(no estimate set)' : `→ ${fmtMinutes(autoPreview)}`}
+                {autoPreview === null ? wt('time.noEstimateSet') : `→ ${fmtMinutes(autoPreview)}`}
               </span>
             </label>
             <label className="flex cursor-pointer items-center gap-2">
               <input type="radio" name="w-lt-rem" checked={mode === 'keep'} onChange={() => setMode('keep')} />
-              <span>Leave unchanged</span>
+              <span>{wt('time.keep')}</span>
               {issue.remainingEstimateMin !== null && <span className="text-[12px] text-[var(--w-text-3)]">({fmtMinutes(issue.remainingEstimateMin)})</span>}
             </label>
             <div className="flex flex-wrap items-center gap-2">
               <label className="flex cursor-pointer items-center gap-2">
                 <input type="radio" name="w-lt-rem" checked={mode === 'set'} onChange={() => setMode('set')} />
-                <span>Set to</span>
+                <span>{wt('time.setTo')}</span>
               </label>
               <input
-                aria-label="New remaining estimate"
+                aria-label={wt('time.newRemaining')}
                 className={cn('w-input !h-[28px] !w-[120px]', mode === 'set' && remainingText.trim() && remainingMin === null && '!border-[var(--w-red)]')}
-                placeholder="e.g. 4h"
+                placeholder={wt('time.eg4h')}
                 value={remainingText}
                 onFocus={() => setMode('set')}
                 onChange={(e) => setRemainingText(e.target.value)}
@@ -191,30 +192,30 @@ export function LogTimeDialog({ open, onClose, pid, issue }: { open: boolean; on
 
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
-            <label className="w-label" htmlFor="w-lt-activity">Activity</label>
+            <label className="w-label" htmlFor="w-lt-activity">{wt('time.activity')}</label>
             <select id="w-lt-activity" className="w-input" value={activity} onChange={(e) => setActivity(e.target.value)}>
-              <option value="">Not set</option>
+              <option value="">{wt('common.notSet')}</option>
               {TL_ACTIVITIES.map((a) => <option key={a} value={a}>{a}</option>)}
             </select>
           </div>
           <div>
-            <label className="w-label" htmlFor="w-lt-product">Work product</label>
-            <input id="w-lt-product" list="w-lt-products" maxLength={120} className="w-input" placeholder="Report3 (SRS) or a module" value={workProduct} onChange={(e) => setWorkProduct(e.target.value)} />
+            <label className="w-label" htmlFor="w-lt-product">{wt('time.workProduct')}</label>
+            <input id="w-lt-product" list="w-lt-products" maxLength={120} className="w-input" placeholder={wt('time.productPh')} value={workProduct} onChange={(e) => setWorkProduct(e.target.value)} />
             <datalist id="w-lt-products">{WORK_PRODUCTS.map((x) => <option key={x} value={x} />)}</datalist>
           </div>
         </div>
-        <p className="-mt-2 text-[12px] text-[var(--w-text-3)]">Used for the TimeLogs sheet of the FPT Project Tracking file.</p>
+        <p className="-mt-2 text-[12px] text-[var(--w-text-3)]">{wt('time.productHint')}</p>
 
         <div>
-          <label className="w-label" htmlFor="w-lt-note">Work description</label>
-          <textarea id="w-lt-note" rows={3} maxLength={1000} className="w-input !h-auto py-2" placeholder="What did you work on? (optional)" value={note} onChange={(e) => setNote(e.target.value)} />
+          <label className="w-label" htmlFor="w-lt-note">{wt('time.workDesc')}</label>
+          <textarea id="w-lt-note" rows={3} maxLength={1000} className="w-input !h-auto py-2" placeholder={wt('time.notePh')} value={note} onChange={(e) => setNote(e.target.value)} />
         </div>
       </form>
     </Dialog>
   );
 }
 
-// ─── Khối "Time tracking" trong cột thuộc tính ───────────────────
+// ─── Khối wt('time.timeTracking') trong cột thuộc tính ───────────────────
 
 export function TimeTrackingBlock({ pid, issue, config }: { pid: number; issue: IssueDetail; config: ProjectConfig }) {
   const [open, setOpen] = useState(false);
@@ -230,21 +231,21 @@ export function TimeTrackingBlock({ pid, issue, config }: { pid: number; issue: 
   return (
     <div className="mt-4 border-t border-[var(--w-border)] pt-3">
       <div className="mb-2 flex items-center">
-        <span className="text-[12px] font-medium text-[var(--w-text-2)]">Time tracking</span>
+        <span className="text-[12px] font-medium text-[var(--w-text-2)]">{wt('time.timeTracking')}</span>
         {canLog && (
           <button type="button" onClick={() => setOpen(true)} className="w-btn w-btn-ghost w-btn-sm ml-auto">
-            <Clock size={12} /> Log time
+            <Clock size={12} /> {wt('time.logTime')}
           </button>
         )}
       </div>
       {empty ? (
-        <p className="text-[12px] text-[var(--w-text-3)]">No time logged.</p>
+        <p className="text-[12px] text-[var(--w-text-3)]">{wt('time.noTime')}</p>
       ) : (
         <>
           <div
             className="flex h-1.5 overflow-hidden rounded-full bg-[var(--w-sunken)]"
             role="img"
-            aria-label={`${fmtMinutes(spent)} logged, ${remaining === null ? 'no' : fmtMinutes(remaining)} remaining`}
+            aria-label={wt('time.barAria', { a: fmtMinutes(spent), b: remaining === null ? '—' : fmtMinutes(remaining) })}
           >
             <div className={cn('h-full', over ? 'bg-[var(--w-orange)]' : 'bg-[var(--w-accent)]')} style={{ width: `${(spent / scale) * 100}%` }} />
             {remaining !== null && remaining > 0 && (
@@ -253,11 +254,11 @@ export function TimeTrackingBlock({ pid, issue, config }: { pid: number; issue: 
           </div>
           <div className="mt-1.5 flex flex-wrap justify-between gap-x-3 text-[12px] tabular text-[var(--w-text-2)]">
             <span>{fmtMinutes(spent)} logged</span>
-            <span>{remaining === null ? 'No estimate' : `${fmtMinutes(remaining)} remaining`}</span>
+            <span>{remaining === null ? wt('time.noEstimate') : wt('time.nRemaining', { t: fmtMinutes(remaining) })}</span>
           </div>
           {original !== null && (
             <div className={cn('mt-0.5 text-[12px] tabular', over ? 'text-[var(--w-orange)]' : 'text-[var(--w-text-3)]')}>
-              Original estimate {fmtMinutes(original)}{over ? ` · over by ${fmtMinutes(spent - original)}` : ''}
+              {wt('time.original', { t: fmtMinutes(original) })}{over ? wt('time.overBy', { t: fmtMinutes(spent - original) }) : ''}
             </div>
           )}
         </>
@@ -275,18 +276,18 @@ function WorklogItem({ log, pid, num, canDelete, canEditMeta }: { log: Worklog; 
   const meta = useMutation({
     mutationFn: (activity: string | null) => workCtw4Api.setWorklogMeta(pid, num, log.id, { activity }),
     onSuccess: () => { qc.invalidateQueries({ queryKey: wk.worklogs(pid, num) }); qc.invalidateQueries({ queryKey: workCtw4Keys.timeByActivity(pid) }); },
-    onError: (err) => toast.error(workError(err, 'Could not change the activity')),
+    onError: (err) => toast.error(workError(err, wt('time.activityFailed'))),
   });
   const del = useMutation({
     mutationFn: () => workApi.deleteWorklog(pid, num, log.id),
     onSuccess: () => {
-      toast.success('Work log deleted');
+      toast.success(wt('time.deleted'));
       setConfirm(false);
       qc.invalidateQueries({ queryKey: wk.issue(pid, num) });
       qc.invalidateQueries({ queryKey: wk.history(pid, num) });
       qc.invalidateQueries({ queryKey: wk.reports(pid) });
     },
-    onError: (err) => toast.error(workError(err, 'Could not delete the work log')),
+    onError: (err) => toast.error(workError(err, wt('time.deleteFailed'))),
   });
   return (
     <li className="group flex gap-3 text-[13px]">
@@ -294,13 +295,13 @@ function WorklogItem({ log, pid, num, canDelete, canEditMeta }: { log: Worklog; 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-x-2 text-[12px]">
           <span className="font-semibold text-[var(--w-text)]">{userName(log.user)}</span>
-          <span className="text-[var(--w-text-2)]">logged <span className="font-medium tabular text-[var(--w-text)]">{fmtMinutes(log.minutes)}</span></span>
-          <span className="text-[var(--w-text-3)]" title={new Date(log.startedAt).toLocaleString('en-US')}>{relativeTime(log.startedAt)}</span>
+          <span className="text-[var(--w-text-2)]">{wt('time.loggedWord')} <span className="font-medium tabular text-[var(--w-text)]">{fmtMinutes(log.minutes)}</span></span>
+          <span className="text-[var(--w-text-3)]" title={new Date(log.startedAt).toLocaleString(wfmt.intl())}>{relativeTime(log.startedAt)}</span>
           {canDelete && (
             <button
               type="button"
-              title="Delete work log"
-              aria-label="Delete work log"
+              title={wt('time.deleteLog')}
+              aria-label={wt('time.deleteLog')}
               onClick={() => setConfirm(true)}
               className="w-btn w-btn-ghost w-btn-icon w-btn-sm ml-auto opacity-0 transition-opacity focus:opacity-100 group-hover:opacity-100"
             >
@@ -310,14 +311,14 @@ function WorklogItem({ log, pid, num, canDelete, canEditMeta }: { log: Worklog; 
         </div>
         <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11.5px]">
           {canEditMeta ? (
-            <select aria-label="Activity" className="w-input !h-[24px] !w-auto !py-0 !text-[11.5px]" value={log.activity ?? ''} disabled={meta.isPending} onChange={(e) => meta.mutate(e.target.value || null)}>
-              <option value="">Activity: not set</option>
+            <select aria-label={wt('time.activity')} className="w-input !h-[24px] !w-auto !py-0 !text-[11.5px]" value={log.activity ?? ''} disabled={meta.isPending} onChange={(e) => meta.mutate(e.target.value || null)}>
+              <option value="">{wt('time.activityNotSet')}</option>
               {TL_ACTIVITIES.map((a) => <option key={a} value={a}>{a}</option>)}
             </select>
           ) : log.activity ? (
             <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 font-medium text-[var(--w-text-2)]">{log.activity}</span>
           ) : null}
-          {log.workProduct && <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 text-[var(--w-text-2)]" title="Work product">{log.workProduct}</span>}
+          {log.workProduct && <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 text-[var(--w-text-2)]" title={wt('time.workProduct')}>{log.workProduct}</span>}
         </div>
         {log.note && <p className="mt-0.5 whitespace-pre-wrap break-words text-[13px] text-[var(--w-text-2)]">{log.note}</p>}
       </div>
@@ -325,9 +326,9 @@ function WorklogItem({ log, pid, num, canDelete, canEditMeta }: { log: Worklog; 
         open={confirm}
         onClose={() => setConfirm(false)}
         onConfirm={() => del.mutate()}
-        title="Delete work log?"
-        body={`${fmtMinutes(log.minutes)} will be removed from the time spent on this issue. The remaining estimate is not changed.`}
-        confirmLabel="Delete"
+        title={wt('time.deleteLogQ')}
+        body={wt('time.deleteLogBody', { t: fmtMinutes(log.minutes) })}
+        confirmLabel={wt('common.delete')}
         pending={del.isPending}
       />
     </li>
@@ -348,15 +349,15 @@ export function WorklogList({ pid, num, config }: { pid: number; num: number; co
   return (
     <div>
       <div className="mb-3 flex items-center gap-2 text-[12px] text-[var(--w-text-3)]">
-        {logs.length > 0 && <span className="tabular">{logs.length} {logs.length === 1 ? 'entry' : 'entries'} · {fmtMinutes(total)} total</span>}
+        {logs.length > 0 && <span className="tabular">{wt('time.entries', { count: logs.length, t: fmtMinutes(total) })}</span>}
         {canLog && issue && (
-          <button type="button" onClick={() => setOpen(true)} className="w-btn w-btn-ghost w-btn-sm ml-auto"><Plus size={12} /> Log time</button>
+          <button type="button" onClick={() => setOpen(true)} className="w-btn w-btn-ghost w-btn-sm ml-auto"><Plus size={12} /> {wt('time.logTime')}</button>
         )}
       </div>
       {q.error ? (
-        <p className="text-[13px] text-[var(--w-red)]">{workError(q.error, 'Could not load work logs')}</p>
+        <p className="text-[13px] text-[var(--w-red)]">{workError(q.error, wt('time.loadFailed'))}</p>
       ) : !logs.length ? (
-        <p className="text-[13px] text-[var(--w-text-3)]">No work logged yet.</p>
+        <p className="text-[13px] text-[var(--w-text-3)]">{wt('time.noneYet')}</p>
       ) : (
         <ol className="space-y-3">
           {logs.map((l) => (

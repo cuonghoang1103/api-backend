@@ -92,7 +92,7 @@ export const useTeamLookup = () => useContext(TeamsCtx);
 export function TeamChip({ team, className, full }: { team: Pick<WorkTeam, 'key' | 'name' | 'color'>; className?: string; full?: boolean }) {
   return (
     <span
-      title={`Team: ${team.name}`}
+      title={wt('studio.teamT', { n: team.name })}
       className={cn('inline-flex h-[18px] max-w-[140px] shrink-0 items-center gap-1 rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] font-semibold text-[var(--w-text-2)] shadow-[inset_0_0_0_1px_var(--w-border)]', className)}
     >
       <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: team.color }} aria-hidden="true" />
@@ -127,22 +127,22 @@ export function Pill({ tone, children, className, title }: { tone: Tone; childre
 }
 
 export const STAGE_STATUS: Record<StageStatus, { label: string; tone: Tone }> = {
-  NOT_STARTED: { label: 'Not started', tone: 'neutral' },
-  ACTIVE: { label: 'Active', tone: 'blue' },
-  GATE_REVIEW: { label: 'Gate review', tone: 'orange' },
-  DONE: { label: 'Done', tone: 'green' },
+  NOT_STARTED: { get label() { return wt('rep.rdNotStarted'); }, tone: 'neutral' },
+  ACTIVE: { get label() { return wt('studio.stActive'); }, tone: 'blue' },
+  GATE_REVIEW: { get label() { return wt('rep.rdGateReview'); }, tone: 'orange' },
+  DONE: { get label() { return wt('common.done'); }, tone: 'green' },
 };
 export const APPROVAL_STATUS: Record<ApprovalStatus, { label: string; tone: Tone }> = {
-  PENDING: { label: 'Pending', tone: 'orange' },
-  APPROVED: { label: 'Approved', tone: 'green' },
-  REJECTED: { label: 'Rejected', tone: 'red' },
-  CANCELLED: { label: 'Cancelled', tone: 'neutral' },
+  PENDING: { get label() { return wt('studio.stPending'); }, tone: 'orange' },
+  APPROVED: { get label() { return wt('portal.stApproved'); }, tone: 'green' },
+  REJECTED: { get label() { return wt('portal.stRejected'); }, tone: 'red' },
+  CANCELLED: { get label() { return wt('gov.cancelled'); }, tone: 'neutral' },
 };
 export const HANDOFF_STATUS: Record<HandoffStatus, { label: string; tone: Tone }> = {
-  PENDING: { label: 'Waiting', tone: 'orange' },
-  ACCEPTED: { label: 'Accepted', tone: 'green' },
-  RETURNED: { label: 'Returned', tone: 'red' },
-  CANCELLED: { label: 'Cancelled', tone: 'neutral' },
+  PENDING: { get label() { return wt('portal.waiting'); }, tone: 'orange' },
+  ACCEPTED: { get label() { return wt('studio.stAccepted'); }, tone: 'green' },
+  RETURNED: { get label() { return wt('studio.stReturned'); }, tone: 'red' },
+  CANCELLED: { get label() { return wt('gov.cancelled'); }, tone: 'neutral' },
 };
 
 export const StagePill = ({ status }: { status: StageStatus }) => <Pill tone={STAGE_STATUS[status].tone}>{STAGE_STATUS[status].label}</Pill>;
@@ -166,9 +166,9 @@ export function ProcessGuideLink({ slug, className }: { slug: string; className?
       target="_blank"
       rel="noopener noreferrer"
       className={cn('inline-flex items-center gap-1 text-[12px] font-medium text-[var(--w-accent-text)] hover:underline', className)}
-      title="Open the process guide for this stage in a new tab"
+      title={wt('studio.guideTitle')}
     >
-      Process guide <ExternalLink size={11} aria-hidden="true" />
+      {wt('studio.processGuide')} <ExternalLink size={11} aria-hidden="true" />
     </a>
   );
 }
@@ -191,12 +191,12 @@ export function fmtDateTime(iso: string | null | undefined): string {
 }
 
 /** "Showing 2,000 of 2,413 issues — use filters or the list view" (board cắt ở 2000, backlog 3000). */
-export function TruncatedStrip({ data, what = 'issues' }: { data: { truncated?: boolean; total?: number; limit?: number }; what?: string }) {
+export function TruncatedStrip({ data, what = wt('studio.issuesLc') }: { data: { truncated?: boolean; total?: number; limit?: number }; what?: string }) {
   if (!data.truncated) return null;
   const n = (x: number | undefined) => (x ?? 0).toLocaleString(wfmt.intl());
   return (
     <WarnStrip>
-      Showing <b className="font-semibold">{n(data.limit)}</b> of <b className="font-semibold">{n(data.total)}</b> {what} — use filters or the list view to see the rest.
+      {wt('studio.showing')} <b className="font-semibold">{n(data.limit)}</b> {wt('studio.ofW')} <b className="font-semibold">{n(data.total)}</b> {what} {wt('studio.useFilters')}
     </WarnStrip>
   );
 }
@@ -207,11 +207,11 @@ export function ModuleOff({ config, label }: { config: ProjectConfig; label: str
   return (
     <div className="flex flex-col items-center justify-center px-6 py-14 text-center md:py-20">
       <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[12px] border border-[var(--w-border)] bg-[var(--w-sunken)] text-[var(--w-text-3)]"><PowerOff size={20} /></div>
-      <div className="text-[16px] font-semibold tracking-[-0.01em]">{label} is turned off for this project</div>
+      <div className="text-[16px] font-semibold tracking-[-0.01em]">{wt('studio.moduleOff', { label })}</div>
       <p className="mt-1.5 max-w-[440px] text-[14px] leading-relaxed text-[var(--w-text-2)]">
-        {config.permissions.configureStudio ? 'Turn it on in Project settings → Project type & modules.' : 'A project admin can turn it on in Project settings → Project type & modules.'}
+        {config.permissions.configureStudio ? wt('studio.turnOnAdmin') : wt('studio.turnOnAsk')}
       </p>
-      {config.permissions.configureStudio && <Link href={href} className="w-btn w-btn-primary mt-5">Open project type &amp; modules</Link>}
+      {config.permissions.configureStudio && <Link href={href} className="w-btn w-btn-primary mt-5">{wt('studio.openTypeModules')}</Link>}
     </div>
   );
 }

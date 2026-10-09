@@ -10,18 +10,19 @@ import { EmptyState, PageLoading } from '@/components/work/ui';
 import { ModuleOff, studioOn } from '@/components/work/studio/shared';
 import DeskView from '@/components/work/desk/DeskView';
 import { workError } from '@/lib/work-api';
+import { wt } from '@/components/work/i18n';
 
 function Inner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   useProjectRealtime(pid);
   if (isLoading) return <PageLoading />;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : undefined} />;
+  if (error || !config || !pid) return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : undefined} />;
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Service desk" />
-      {!studioOn(config, 'serviceDesk') ? <ModuleOff config={config} label="The service desk" />
-        : !config.permissions.viewDesk ? <EmptyState title="Only for the project team" body="Clients send requests and follow them in the client portal." />
+      <ProjectHeader config={config} title={wt('studio.mod_serviceDesk')} />
+      {!studioOn(config, 'serviceDesk') ? <ModuleOff config={config} label={wt('studio.mod_serviceDesk')} />
+        : !config.permissions.viewDesk ? <EmptyState title={wt('pages.onlyTeam')} body={wt('pages.deskTeam')} />
           : <DeskView config={config} />}
     </div>
   );

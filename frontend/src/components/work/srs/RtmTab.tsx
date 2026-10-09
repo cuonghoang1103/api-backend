@@ -6,6 +6,8 @@
  * xuất .xlsx (RTM + BR Coverage + Untraced Tests + Summary).
  */
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Download, Link2 } from 'lucide-react';
@@ -62,6 +64,7 @@ function TraceDialog({ pid, row, onClose }: { pid: number; row: RtmRow | null; o
 
 export default function RtmTab({ pid, onOpenIssue, onOpenUc }: { pid: number; onOpenIssue: (n: number) => void; onOpenUc: (n: number) => void }) {
   const q = useQuery({ queryKey: workCtw4Keys.rtm(pid), queryFn: () => workCtw4Api.rtm(pid) });
+  const pathname = usePathname();
   const [gap, setGap] = useState<GapCode | 'ANY' | null>(null);
   const [status, setStatus] = useState('');
   const [kind, setKind] = useState('');
@@ -77,6 +80,7 @@ export default function RtmTab({ pid, onOpenIssue, onOpenUc }: { pid: number; on
   if (!q.data) return <EmptyState title={wt('srs.matrixFailed')} body={q.error ? workError(q.error) : undefined} />;
   const s = q.data.summary;
   const labels = q.data.gapLabels;
+  const sixHref = `${(pathname ?? '').replace(/\/requirements\/?$/, '/wiegers')}?tab=six-links`;
   const exportX = async () => {
     setBusy(true);
     try { const f = await workCtw4Api.exportRtm(pid); saveBlob(f.blob, f.fileName); toast.success(wt('srs.downloaded', { name: f.fileName })); } catch (e) { toast.error(workError(e, wt('fpt.exportFailed'))); } finally { setBusy(false); }
@@ -89,6 +93,14 @@ export default function RtmTab({ pid, onOpenIssue, onOpenUc }: { pid: number; on
         <KpiTile label={wt('srs.fullyTested')} value={s.passing} hint={wt('srs.runPassing')} tone={s.passing ? 'green' : undefined} />
         <KpiTile label={wt('srs.withGaps')} value={s.withGaps} tone={s.withGaps ? 'orange' : 'green'} onClick={() => setGap(gap === 'ANY' ? null : 'ANY')} pressed={gap === 'ANY'} title={wt('srs.onlyGaps')} />
       </div>
+      {q.data.sixLinks && (
+        // CTW đợt 4b (R23): sáu liên kết người chấm SWR302 dò — cùng bảng nằm ở sheet "Six links" của tệp xuất.
+        <p className="flex flex-wrap items-center gap-2 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2 text-[12.5px]">
+          <span className="font-medium" style={{ color: q.data.sixLinks.ok ? 'var(--w-green-text)' : 'var(--w-orange-text)' }}>{wt('swr.rtmSixTitle', { n: q.data.sixLinks.passed })}</span>
+          <span className="text-[var(--w-text-2)]">{q.data.sixLinks.links.map((l) => `#${l.n} ${l.ok ? '✓' : '✗'}`).join(' · ')}</span>
+          <Link className="text-[var(--w-accent-text)] hover:underline" href={sixHref}>{wt('swr.rtmSixOpen')}</Link>
+        </p>
+      )}
       <div className="flex flex-wrap gap-1.5" role="group" aria-label={wt('srs.filterGap')}>
         {GAP_CODES.filter((g) => s.gaps[g] > 0 || gap === g).map((g) => (
           <button key={g} type="button" aria-pressed={gap === g} onClick={() => setGap(gap === g ? null : g)}

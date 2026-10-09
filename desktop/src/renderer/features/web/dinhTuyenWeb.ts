@@ -312,6 +312,9 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/developer', nap: () => import('@/app/work/developer/page') },
   /* Tìm thẻ mọi dự án (24/09) — tĩnh, phải đứng TRƯỚC `/work/:ws`. */
   { mau: '/work/search', nap: () => import('@/app/work/search/page') },
+  /* CTW đợt 5 (10/10/2026): hub giảng viên + lớp học — tĩnh, phải đứng TRƯỚC `/work/:ws` (không thì "teaching" thành slug). */
+  { mau: '/work/teaching', nap: () => import('@/app/work/teaching/page') },
+  { mau: '/work/classes', nap: () => import('@/app/work/classes/page') },
   { mau: '/work/invite/:token', nap: () => import('@/app/work/invite/[token]/page') },
   { mau: '/work/share/:token', nap: () => import('@/app/work/share/[token]/page') },
   { mau: '/work/:ws', nap: () => import('@/app/work/[ws]/page') },
@@ -369,6 +372,8 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/:ws/:key/chat', nap: () => import('@/app/work/[ws]/[key]/chat/page') },
   /* CTW Diagram (10/10/2026): Diagram Studio (?d= mở một sơ đồ). */
   { mau: '/work/:ws/:key/diagrams', nap: () => import('@/app/work/[ws]/[key]/diagrams/page') },
+  /* CTW đợt 4b (10/10/2026): hồ sơ SWR302 theo Wiegers (?tab= overview|features|requirements|priority|glossary|dictionary|six-links). */
+  { mau: '/work/:ws/:key/wiegers', nap: () => import('@/app/work/[ws]/[key]/wiegers/page') },
   { mau: '/work/:ws/:key/tests/:num', nap: () => import('@/app/work/[ws]/[key]/tests/[num]/page') },
   { mau: '/work/:ws/:key/issue/:num', nap: () => import('@/app/work/[ws]/[key]/issue/[num]/page') },
   { mau: '/work/:ws/:key/tests/cycles/:cycleId', nap: () => import('@/app/work/[ws]/[key]/tests/cycles/[cycleId]/page') },

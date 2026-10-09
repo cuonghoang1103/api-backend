@@ -16,6 +16,7 @@ import { EmptyState, Spinner, UserAvatar } from '@/components/work/ui';
 import { cn } from '@/lib/utils';
 import { fmtDay, StatCell } from './shared';
 import { AssigneeKindFilter, type AssigneeKind } from '../agents/leases';
+import { wt, wfmt } from '@/components/work/i18n';
 
 // ─── Ngày theo giờ Việt Nam ──────────────────────────────────────
 
@@ -42,7 +43,7 @@ export function daysBetween(from: string, to: string): string[] {
 }
 
 const isWeekend = (day: string) => [0, 6].includes(new Date(`${day}T00:00:00Z`).getUTCDay());
-const weekday = (day: string) => new Date(`${day}T00:00:00Z`).toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' });
+const weekday = (day: string) => new Date(`${day}T00:00:00Z`).toLocaleDateString(wfmt.intl(), { weekday: 'short', timeZone: 'UTC' });
 
 /** Quá 31 ngày thì bảng theo ngày quá rộng — chỉ hiện tổng. */
 const MAX_DAY_COLUMNS = 31;
@@ -83,52 +84,52 @@ export default function TimeTab({ pid, config, onOpenIssue }: { pid: number; con
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
         <div className="flex items-center">
-          <button type="button" className="w-btn w-btn-sm w-btn-icon !rounded-r-none" onClick={() => shiftWeek(-1)} aria-label="Previous week" title="Previous week"><ChevronLeft size={13} /></button>
-          <button type="button" className="w-btn w-btn-sm !rounded-none !border-x-0" onClick={thisWeek}>This week</button>
-          <button type="button" className="w-btn w-btn-sm w-btn-icon !rounded-l-none" onClick={() => shiftWeek(1)} aria-label="Next week" title="Next week"><ChevronRight size={13} /></button>
+          <button type="button" className="w-btn w-btn-sm w-btn-icon !rounded-r-none" onClick={() => shiftWeek(-1)} aria-label={wt('finance.prevWeek')} title={wt('finance.prevWeek')}><ChevronLeft size={13} /></button>
+          <button type="button" className="w-btn w-btn-sm !rounded-none !border-x-0" onClick={thisWeek}>{wt('finance.thisWeek')}</button>
+          <button type="button" className="w-btn w-btn-sm w-btn-icon !rounded-l-none" onClick={() => shiftWeek(1)} aria-label={wt('finance.nextWeek')} title={wt('finance.nextWeek')}><ChevronRight size={13} /></button>
         </div>
         <div className="flex flex-wrap items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">
-          <input type="date" aria-label="From" value={from} max={to} onChange={(e) => e.target.value && setFrom(e.target.value)} className="w-input !h-[28px] !w-auto py-0 text-[12px]" />
-          <span>to</span>
-          <input type="date" aria-label="To" value={to} min={from} onChange={(e) => e.target.value && setTo(e.target.value)} className="w-input !h-[28px] !w-auto py-0 text-[12px]" />
+          <input type="date" aria-label={wt('agents.from')} value={from} max={to} onChange={(e) => e.target.value && setFrom(e.target.value)} className="w-input !h-[28px] !w-auto py-0 text-[12px]" />
+          <span>{wt('agents.toLc')}</span>
+          <input type="date" aria-label={wt('agents.to')} value={to} min={from} onChange={(e) => e.target.value && setTo(e.target.value)} className="w-input !h-[28px] !w-auto py-0 text-[12px]" />
         </div>
         <AssigneeKindFilter config={config} value={kind} onChange={setKind} />
-        <span className="text-[12px] text-[var(--w-text-3)] sm:ml-auto">Days in Vietnam time (UTC+7)</span>
+        <span className="text-[12px] text-[var(--w-text-3)] sm:ml-auto">{wt('rep.vnDays')}</span>
       </div>
 
       {!validRange ? (
-        <EmptyState title="Pick a valid range" body="The start date must be on or before the end date." />
+        <EmptyState title={wt('rep.pickValid')} body={wt('rep.pickValidBody')} />
       ) : q.isLoading ? (
         <div className="flex justify-center py-16"><Spinner size={20} /></div>
       ) : q.error ? (
-        <EmptyState title="Could not load time report" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('rep.loadTimeFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : !data || !data.people.length ? (
-        <EmptyState title="No time logged in this range" body="Log time from an issue (Time tracking → Log time) and it will show up here." />
+        <EmptyState title={wt('rep.noTime')} body={wt('rep.noTimeBody')} />
       ) : (
         <>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <StatCell label="Total logged" value={fmtMinutes(data.totalMin)} tone="accent" />
+            <StatCell label={wt('rep.totalLogged')} value={fmtMinutes(data.totalMin)} tone="accent" />
             <StatCell
-              label={kind === 'AGENT' ? 'Agents' : 'People'}
+              label={kind === 'AGENT' ? wt('agents.agents') : wt('agents.people')}
               value={data.people.length}
-              hint={data.byPrincipal && kind === 'ALL' && data.byPrincipal.AGENT > 0 ? `people ${fmtMinutes(data.byPrincipal.HUMAN)} · agents ${fmtMinutes(data.byPrincipal.AGENT)}` : undefined}
+              hint={data.byPrincipal && kind === 'ALL' && data.byPrincipal.AGENT > 0 ? wt('rep.peopleAgents', { a: fmtMinutes(data.byPrincipal.HUMAN), b: fmtMinutes(data.byPrincipal.AGENT) }) : undefined}
             />
-            <StatCell label="Days with logs" value={`${activeDays} / ${days.length}`} />
-            <StatCell label="Per person" value={fmtMinutes(data.totalMin / data.people.length)} hint="Average" />
+            <StatCell label={wt('rep.daysWithLogs')} value={`${activeDays} / ${days.length}`} />
+            <StatCell label={wt('rep.perPerson')} value={fmtMinutes(data.totalMin / data.people.length)} hint={wt('rep.average')} />
           </div>
 
           <div className="overflow-x-auto rounded-[var(--w-radius-lg)] border border-[var(--w-border)] bg-[var(--w-panel)]">
             <table className="w-full text-[12.5px]" style={{ minWidth: showDays ? 240 + days.length * 64 : 420 }}>
               <thead>
                 <tr className="border-b border-[var(--w-border)] text-left text-[11px] text-[var(--w-text-3)]">
-                  <th className="sticky left-0 z-[1] bg-[var(--w-panel)] px-3 py-2 font-medium uppercase tracking-wide">Member</th>
+                  <th className="sticky left-0 z-[1] bg-[var(--w-panel)] px-3 py-2 font-medium uppercase tracking-wide">{wt('common.member')}</th>
                   {showDays && days.map((d) => (
                     <th key={d} className={cn('px-2 py-2 text-right font-medium', isWeekend(d) && 'bg-[var(--w-sunken)]')}>
                       <div className="uppercase tracking-wide">{weekday(d)}</div>
                       <div className="font-normal tabular-nums">{fmtDay(d)}</div>
                     </th>
                   ))}
-                  <th className="px-3 py-2 text-right font-medium uppercase tracking-wide">Total</th>
+                  <th className="px-3 py-2 text-right font-medium uppercase tracking-wide">{wt('common.total')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -142,7 +143,7 @@ export default function TimeTab({ pid, config, onOpenIssue }: { pid: number; con
                             <ChevronDown size={13} className={cn('shrink-0 text-[var(--w-text-3)] transition-transform', !expanded && '-rotate-90')} />
                             <UserAvatar user={p.user} size={20} />
                             <span className="max-w-[160px] truncate font-medium">{p.name}</span>
-                            {!!p.autoMin && <span className="shrink-0 text-[11px] text-[var(--w-text-3)]" title="Logged automatically from the agent's leases">{fmtMinutes(p.autoMin)} auto</span>}
+                            {!!p.autoMin && <span className="shrink-0 text-[11px] text-[var(--w-text-3)]" title={wt('rep.autoLeases')}>{wt('rep.autoSuffix', { t: fmtMinutes(p.autoMin) })}</span>}
                           </button>
                         </td>
                         {showDays && days.map((d) => (
@@ -175,7 +176,7 @@ export default function TimeTab({ pid, config, onOpenIssue }: { pid: number; con
               </tbody>
               <tfoot>
                 <tr className="text-[var(--w-text-2)]">
-                  <td className="sticky left-0 z-[1] bg-[var(--w-panel)] px-3 py-2 text-[11px] font-medium uppercase tracking-wide">Total</td>
+                  <td className="sticky left-0 z-[1] bg-[var(--w-panel)] px-3 py-2 text-[11px] font-medium uppercase tracking-wide">{wt('common.total')}</td>
                   {showDays && days.map((d) => (
                     <td key={d} className={cn('px-2 py-2 text-right font-medium tabular-nums', isWeekend(d) && 'bg-[var(--w-sunken)]')}>
                       {dayTotals[d] ? fmtMinutes(dayTotals[d]) : ''}
@@ -186,7 +187,7 @@ export default function TimeTab({ pid, config, onOpenIssue }: { pid: number; con
               </tfoot>
             </table>
           </div>
-          {!showDays && <p className="text-[12px] text-[var(--w-text-3)]">The per-day breakdown is hidden for ranges longer than {MAX_DAY_COLUMNS} days.</p>}
+          {!showDays && <p className="text-[12px] text-[var(--w-text-3)]">{wt('rep.hiddenDays', { n: MAX_DAY_COLUMNS })}</p>}
         </>
       )}
     </div>

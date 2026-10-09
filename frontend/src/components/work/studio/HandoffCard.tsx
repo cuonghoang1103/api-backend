@@ -16,9 +16,10 @@ import { cn } from '@/lib/utils';
 import { userName, workError, workStudioApi, type MyHandoff, type WorkHandoff, type WorkUser } from '@/lib/work-api';
 import { Dialog, Spinner, UserAvatar, relativeTime } from '../ui';
 import { HandoffPill, TeamChip, useStudioInvalidate } from './shared';
+import { wt } from '@/components/work/i18n';
 
 function Party({ team, user }: { team: WorkHandoff['toTeam']; user: WorkUser | null }) {
-  if (!team && !user) return <span className="text-[var(--w-text-3)]">No one</span>;
+  if (!team && !user) return <span className="text-[var(--w-text-3)]">{wt('studio.noOne')}</span>;
   return (
     <span className="inline-flex min-w-0 items-center gap-1.5">
       {team && <TeamChip team={team} />}
@@ -44,18 +45,18 @@ export default function HandoffCard({ h, issueHref, compact }: {
 
   const accept = useMutation({
     mutationFn: () => workStudioApi.acceptHandoff(h.projectId, h.id, ticks),
-    onSuccess: () => { toast.success(`Accepted ${h.issueKey}`); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not accept the handoff')),
+    onSuccess: () => { toast.success(wt('studio.acceptedK', { k: h.issueKey })); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('studio.acceptFailed'))),
   });
   const ret = useMutation({
     mutationFn: () => workStudioApi.returnHandoff(h.projectId, h.id, reason.trim()),
-    onSuccess: () => { toast.success(`Returned ${h.issueKey}`); setReturning(false); setReason(''); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not return the handoff')),
+    onSuccess: () => { toast.success(wt('studio.returnedK', { k: h.issueKey })); setReturning(false); setReason(''); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('studio.returnFailed'))),
   });
   const cancel = useMutation({
     mutationFn: () => workStudioApi.cancelHandoff(h.projectId, h.id),
-    onSuccess: () => { toast.success('Handoff cancelled'); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not cancel the handoff')),
+    onSuccess: () => { toast.success(wt('studio.hoCancelled')); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('studio.cancelFailed'))),
   });
 
   if (compact && !pending) {
@@ -87,13 +88,13 @@ export default function HandoffCard({ h, issueHref, compact }: {
         <Party team={h.fromTeam} user={h.fromUser} />
         <ArrowRight size={13} className="shrink-0 text-[var(--w-text-3)]" />
         <Party team={h.toTeam} user={h.toUser} />
-        <span className="ml-auto shrink-0 text-[12px] text-[var(--w-text-3)]">by {userName(h.createdBy)} · {relativeTime(h.createdAt)}</span>
+        <span className="ml-auto shrink-0 text-[12px] text-[var(--w-text-3)]">{wt('studio.byT', { n: userName(h.createdBy), t: relativeTime(h.createdAt) })}</span>
       </div>
       {h.note && <p className="whitespace-pre-wrap text-[13px] leading-relaxed text-[var(--w-text-2)] [overflow-wrap:anywhere]">{h.note}</p>}
       {h.checklist.length > 0 && (
         <div className="rounded-[6px] border border-[var(--w-border)]">
           <div className="flex items-center justify-between border-b border-[var(--w-border)] px-2.5 py-1.5 text-[12px] text-[var(--w-text-3)]">
-            <span className="font-medium text-[var(--w-text-2)]">Handoff checklist</span>
+            <span className="font-medium text-[var(--w-text-2)]">{wt('studio.hoChecklist')}</span>
             <span className="tabular">{done}/{ticks.length}</span>
           </div>
           <ul className="py-1">
@@ -115,21 +116,21 @@ export default function HandoffCard({ h, issueHref, compact }: {
         </div>
       )}
       {h.status === 'RETURNED' && h.returnReason && (
-        <p className="rounded-[6px] border-l-2 border-[var(--w-red)] bg-[var(--w-sunken)] px-2.5 py-1.5 text-[13px] [overflow-wrap:anywhere]"><b className="font-medium">Returned:</b> {h.returnReason}</p>
+        <p className="rounded-[6px] border-l-2 border-[var(--w-red)] bg-[var(--w-sunken)] px-2.5 py-1.5 text-[13px] [overflow-wrap:anywhere]"><b className="font-medium">{wt('studio.returnedC')}</b> {h.returnReason}</p>
       )}
       {pending && (h.canDecide || h.canCancel) && (
         <div className="flex flex-wrap items-center justify-end gap-2">
           {h.canCancel && (
             <button type="button" className="w-btn w-btn-ghost w-btn-sm mr-auto" disabled={cancel.isPending} onClick={() => cancel.mutate()}>
-              <Undo2 size={12} /> Cancel handoff
+              <Undo2 size={12} /> {wt('studio.cancelHo')}
             </button>
           )}
           {h.canDecide && (
             <>
-              {!allTicked && <span className="text-[12px] text-[var(--w-text-3)]">Tick every item to accept</span>}
-              <button type="button" className="w-btn w-btn-sm" onClick={() => setReturning(true)}><CornerUpLeft size={12} /> Return</button>
+              {!allTicked && <span className="text-[12px] text-[var(--w-text-3)]">{wt('studio.tickAll')}</span>}
+              <button type="button" className="w-btn w-btn-sm" onClick={() => setReturning(true)}><CornerUpLeft size={12} /> {wt('studio.return')}</button>
               <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={!allTicked || accept.isPending} onClick={() => accept.mutate()}>
-                {accept.isPending ? <Spinner size={11} /> : <Check size={12} />} Accept
+                {accept.isPending ? <Spinner size={11} /> : <Check size={12} />} {wt('studio.accept')}
               </button>
             </>
           )}
@@ -138,20 +139,20 @@ export default function HandoffCard({ h, issueHref, compact }: {
       <Dialog
         open={returning}
         onClose={() => setReturning(false)}
-        title={`Return ${h.issueKey}`}
+        title={wt('studio.returnK', { k: h.issueKey })}
         width={460}
         footer={
           <>
-            <button type="button" className="w-btn" onClick={() => setReturning(false)}>Cancel</button>
+            <button type="button" className="w-btn" onClick={() => setReturning(false)}>{wt('common.cancel')}</button>
             <button type="button" className="w-btn w-btn-danger-solid" disabled={reason.trim().length < 3 || ret.isPending} onClick={() => ret.mutate()}>
-              {ret.isPending && <Spinner size={12} />} Return handoff
+              {ret.isPending && <Spinner size={12} />} {wt('studio.returnHo')}
             </button>
           </>
         }
       >
-        <label className="w-label" htmlFor={`ho-r-${h.id}`}>Why are you returning it?</label>
-        <textarea id={`ho-r-${h.id}`} autoFocus className="w-input" rows={4} maxLength={5000} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="What is missing before your team can take it over?" />
-        <p className="mt-1.5 text-[12px] text-[var(--w-text-3)]">The sender is notified. The issue stays with its current team and assignee.</p>
+        <label className="w-label" htmlFor={`ho-r-${h.id}`}>{wt('studio.whyReturn')}</label>
+        <textarea id={`ho-r-${h.id}`} autoFocus className="w-input" rows={4} maxLength={5000} value={reason} onChange={(e) => setReason(e.target.value)} placeholder={wt('studio.whyReturnPh')} />
+        <p className="mt-1.5 text-[12px] text-[var(--w-text-3)]">{wt('studio.senderNotified')}</p>
       </Dialog>
     </div>
   );

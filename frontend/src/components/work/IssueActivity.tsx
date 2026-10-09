@@ -24,10 +24,12 @@ import { wk, type Lookups } from './hooks';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 import { Dialog, PRIORITIES, relativeTime, Spinner, UserAvatar, formatDate } from './ui';
 import { ConfirmDialog } from './settings/shared';
+import { statusName } from './i18n/names';
 import { WorklogList } from './TimeTracking';
 import { ReactionBar, ReactionPickerButton, useCommentReactionsRealtime, useToggleReaction } from './comments/CommentReactions';
 import { ClientPill, CommentModeToggle, InternalPill, portalStaff } from './portal/ClientShare';
 import type { CommentVisibility } from '@/lib/work-api';
+import { wt, wfmt } from '@/components/work/i18n';
 
 function CommentComposer({ config, pid, num, clientShared, parent, onDone }: {
   config: ProjectConfig; pid: number; num: number; clientShared: boolean;
@@ -66,7 +68,7 @@ function CommentComposer({ config, pid, num, clientShared, parent, onDone }: {
       qc.invalidateQueries({ queryKey: wk.issue(pid, num) });
       onDone?.();
     },
-    onError: (err) => toast.error(workError(err, 'Could not post the comment')),
+    onError: (err) => toast.error(workError(err, wt('detail.postFailed'))),
   });
   const empty = isDocEmpty(doc) && !drafts.ids.length;
   const submit = () => !empty && !drafts.uploading && !add.isPending && add.mutate();
@@ -107,15 +109,15 @@ function CommentComposer({ config, pid, num, clientShared, parent, onDone }: {
       >
         {parent && (
           <div className="mb-1.5 flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">
-            <CornerDownRight size={12} aria-hidden="true" /> Replying to <span className="font-medium text-[var(--w-text-2)]">{parent.name}</span>
+            <CornerDownRight size={12} aria-hidden="true" /> {wt('detail.replyingTo')} <span className="font-medium text-[var(--w-text-2)]">{parent.name}</span>
           </div>
         )}
         {portal && (
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <CommentModeToggle value={toClient ? 'PUBLIC' : 'INTERNAL'} onChange={setMode} shared={clientShared} />
             {toClient
-              ? <span className="text-[11.5px] text-[var(--w-yellow)]">Visible to client — they get an email</span>
-              : <span className="text-[11.5px] text-[var(--w-text-3)]">Only the team sees internal notes</span>}
+              ? <span className="text-[11.5px] text-[var(--w-yellow)]">{wt('detail.visibleClientEmail')}</span>
+              : <span className="text-[11.5px] text-[var(--w-text-3)]">{wt('detail.internalNotes')}</span>}
           </div>
         )}
         <div className={cn(toClient && 'w-reply-client')}>
@@ -125,7 +127,7 @@ function CommentComposer({ config, pid, num, clientShared, parent, onDone }: {
           onChange={(d) => setDoc(d)}
           members={config.members}
           projectId={pid}
-          placeholder={toClient ? 'Write a reply the client will read…' : parent ? 'Write a reply…' : 'Add a comment… Type @ to mention someone'}
+          placeholder={toClient ? wt('detail.phClient') : parent ? wt('detail.phReply') : wt('detail.phComment')}
           minHeight={focused ? 72 : 36}
           toolbar={focused}
           onSubmit={submit}
@@ -137,19 +139,19 @@ function CommentComposer({ config, pid, num, clientShared, parent, onDone }: {
         {(focused || drafts.drafts.length > 0 || recording) && (
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={empty || drafts.uploading || add.isPending || recording} onClick={submit}>
-              {add.isPending ? 'Saving…' : drafts.uploading ? 'Uploading…' : toClient ? 'Reply to client' : parent ? 'Reply' : portal ? 'Add internal note' : 'Comment'}
+              {add.isPending ? wt('common.saving') : drafts.uploading ? wt('detail.uploading') : toClient ? wt('detail.replyClient') : parent ? wt('docs.reply') : portal ? wt('detail.addInternal') : wt('docs.comment')}
             </button>
-            <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={cancel}>Cancel</button>
+            <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={cancel}>{wt('common.cancel')}</button>
             {canAttach && (
               <>
-                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Attach files" title="Attach files (or drop them here) — up to 25 MB each" onClick={() => fileRef.current?.click()}>
+                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('detail.attachFiles')} title={wt('detail.attachTip')} onClick={() => fileRef.current?.click()}>
                   <Paperclip size={14} />
                 </button>
                 <input ref={fileRef} type="file" multiple hidden aria-hidden="true" tabIndex={-1} onChange={(e) => { if (e.target.files?.length) drafts.addFiles(e.target.files); e.target.value = ''; }} />
                 <VoiceRecorder onRecorded={onRecorded} onActive={setRecording} disabled={add.isPending} />
               </>
             )}
-            <span className="ml-auto hidden text-[11px] text-[var(--w-text-3)] sm:inline"><span className="w-kbd">⌘</span> <span className="w-kbd">↵</span> to send</span>
+            <span className="ml-auto hidden text-[11px] text-[var(--w-text-3)] sm:inline"><span className="w-kbd">⌘</span> <span className="w-kbd">↵</span> {wt('detail.toSend')}</span>
           </div>
         )}
       </div>
@@ -158,12 +160,12 @@ function CommentComposer({ config, pid, num, clientShared, parent, onDone }: {
 }
 
 const REPORT_REASONS: Array<{ value: CommentReportReason; label: string }> = [
-  { value: 'spam', label: 'Spam or advertising' },
-  { value: 'harassment', label: 'Harassment or bullying' },
-  { value: 'hate', label: 'Hate speech' },
-  { value: 'sexual', label: 'Sexual content' },
-  { value: 'violence', label: 'Violence or threats' },
-  { value: 'other', label: 'Something else' },
+  { value: 'spam', get label() { return wt('detail.rSpam'); } },
+  { value: 'harassment', get label() { return wt('detail.rHarass'); } },
+  { value: 'hate', get label() { return wt('detail.rHate'); } },
+  { value: 'sexual', get label() { return wt('detail.rSexual'); } },
+  { value: 'violence', get label() { return wt('detail.rViolence'); } },
+  { value: 'other', get label() { return wt('detail.rOther'); } },
 ];
 
 /** Báo cáo bình luận vi phạm — ADMIN dự án nhận cảnh báo, ghi vào audit log. */
@@ -172,23 +174,23 @@ function ReportCommentDialog({ open, onClose, pid, num, cid }: { open: boolean; 
   const [details, setDetails] = useState('');
   const send = useMutation({
     mutationFn: () => workApi.reportComment(pid, num, cid, { reason, details: details.trim() || null }),
-    onSuccess: (r) => { toast.success(r.duplicate ? 'You already reported this comment' : 'Thanks — project admins have been notified'); onClose(); },
-    onError: (err) => toast.error(workError(err, 'Could not send the report')),
+    onSuccess: (r) => { toast.success(r.duplicate ? wt('detail.alreadyReported') : wt('detail.reportThanks')); onClose(); },
+    onError: (err) => toast.error(workError(err, wt('detail.reportFailed'))),
   });
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      title="Report comment"
+      title={wt('detail.reportComment')}
       width={440}
       footer={(
         <>
-          <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>Cancel</button>
-          <button type="button" className="w-btn w-btn-danger-solid" disabled={send.isPending} onClick={() => send.mutate()}>{send.isPending && <Spinner size={12} />} Report</button>
+          <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>{wt('common.cancel')}</button>
+          <button type="button" className="w-btn w-btn-danger-solid" disabled={send.isPending} onClick={() => send.mutate()}>{send.isPending && <Spinner size={12} />} {wt('detail.report')}</button>
         </>
       )}
     >
-      <p className="mb-3 text-[13px] text-[var(--w-text-2)]">Project admins will review this comment and remove it if it breaks the rules.</p>
+      <p className="mb-3 text-[13px] text-[var(--w-text-2)]">{wt('detail.reportIntro')}</p>
       <div className="space-y-1.5">
         {REPORT_REASONS.map((r) => (
           <label key={r.value} className="flex cursor-pointer items-center gap-2 text-[13px]">
@@ -197,7 +199,7 @@ function ReportCommentDialog({ open, onClose, pid, num, cid }: { open: boolean; 
           </label>
         ))}
       </div>
-      <textarea className="w-input mt-3 !h-auto min-h-[72px] w-full py-2" maxLength={1000} placeholder="Add details (optional)" value={details} onChange={(e) => setDetails(e.target.value)} />
+      <textarea className="w-input mt-3 !h-auto min-h-[72px] w-full py-2" maxLength={1000} placeholder={wt('detail.detailsOpt')} value={details} onChange={(e) => setDetails(e.target.value)} />
     </Dialog>
   );
 }
@@ -218,19 +220,19 @@ function CommentItem({ c, config, pid, num, onReply, reply }: { c: ThreadComment
   const canReact = config.permissions.comment;
   const reactions = c.reactions ?? [];
   const meMember = meId ? config.members.find((m) => m.id === meId) : undefined;
-  const react = useToggleReaction(pid, num, meId ? { id: meId, name: meMember ? userName(meMember) : 'You' } : null);
+  const react = useToggleReaction(pid, num, meId ? { id: meId, name: meMember ? userName(meMember) : wt('ai.you') } : null);
   const toggleReaction = (emoji: ReactionEmoji, active: boolean) => react.mutate({ cid: c.id, emoji, active });
 
   const refresh = () => qc.invalidateQueries({ queryKey: wk.comments(pid, num) });
   const save = useMutation({
     mutationFn: () => workApi.editComment(pid, num, c.id, draft),
     onSuccess: () => { setEditing(false); refresh(); },
-    onError: (err) => toast.error(workError(err, 'Could not save')),
+    onError: (err) => toast.error(workError(err, wt('common.couldNotSave'))),
   });
   const del = useMutation({
     mutationFn: () => workApi.deleteComment(pid, num, c.id),
     onSuccess: () => { refresh(); qc.invalidateQueries({ queryKey: wk.issue(pid, num) }); },
-    onError: (err) => toast.error(workError(err, 'Could not delete')),
+    onError: (err) => toast.error(workError(err, wt('common.couldNotDelete'))),
   });
 
   return (
@@ -244,8 +246,8 @@ function CommentItem({ c, config, pid, num, onReply, reply }: { c: ThreadComment
         <div className="mb-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px]">
           <span className="whitespace-nowrap font-semibold text-[var(--w-text)]">{c.isAi ? 'CT Work AI' : userName(c.author)}</span>
           <span className="whitespace-nowrap text-[var(--w-text-3)]" title={new Date(c.createdAt).toLocaleString('en-US')}>{relativeTime(c.createdAt)}</span>
-          {c.editedAt && <span className="text-[var(--w-text-3)]">(edited)</span>}
-          {portalStaff(config) && (c.visibility === 'PUBLIC' ? <ClientPill label="Reply to client" /> : <InternalPill label="Internal note" />)}
+          {c.editedAt && <span className="text-[var(--w-text-3)]">{wt('detail.edited')}</span>}
+          {portalStaff(config) && (c.visibility === 'PUBLIC' ? <ClientPill label={wt('detail.replyClient')} /> : <InternalPill label={wt('detail.internalNote')} />)}
           {!editing && canReact && (
             // Nút cảm xúc hiện sẵn trên màn hình cảm ứng (không có hover).
             <span className="ml-auto flex opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
@@ -255,16 +257,16 @@ function CommentItem({ c, config, pid, num, onReply, reply }: { c: ThreadComment
           {!editing && (
             <span className={cn('flex gap-0.5 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100', !canReact && 'ml-auto')}>
               {onReply && config.permissions.comment && (
-                <button type="button" title="Reply" aria-label={`Reply to ${c.isAi ? 'CT Work AI' : userName(c.author)}`} onClick={onReply} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Reply size={12} /></button>
+                <button type="button" title={wt('docs.reply')} aria-label={wt('detail.replyToX', { name: c.isAi ? 'CT Work AI' : userName(c.author) })} onClick={onReply} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Reply size={12} /></button>
               )}
               {!mine && (
-                <button type="button" title="Report comment" aria-label="Report comment" onClick={() => setReporting(true)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Flag size={12} /></button>
+                <button type="button" title={wt('detail.reportComment')} aria-label={wt('detail.reportComment')} onClick={() => setReporting(true)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Flag size={12} /></button>
               )}
               {mine && (
-                <button type="button" title="Edit" onClick={() => { setDraft(c.bodyJson); setEditing(true); }} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Pencil size={12} /></button>
+                <button type="button" title={wt('common.edit')} onClick={() => { setDraft(c.bodyJson); setEditing(true); }} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Pencil size={12} /></button>
               )}
               {canDelete && (
-                <button type="button" title="Delete" onClick={() => setConfirmDel(true)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Trash2 size={12} /></button>
+                <button type="button" title={wt('common.delete')} onClick={() => setConfirmDel(true)} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Trash2 size={12} /></button>
               )}
             </span>
           )}
@@ -273,8 +275,8 @@ function CommentItem({ c, config, pid, num, onReply, reply }: { c: ThreadComment
           <>
             <RichEditor value={draft} onChange={(d) => setDraft(d)} members={config.members} projectId={config.id} autoFocus onSubmit={() => save.mutate()} onEscape={() => setEditing(false)} />
             <div className="mt-2 flex gap-2">
-              <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={save.isPending || (isDocEmpty(draft) && !files.length)} onClick={() => save.mutate()}>Save</button>
-              <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setEditing(false)}>Cancel</button>
+              <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={save.isPending || (isDocEmpty(draft) && !files.length)} onClick={() => save.mutate()}>{wt('common.save')}</button>
+              <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setEditing(false)}>{wt('common.cancel')}</button>
             </div>
           </>
         ) : (
@@ -290,9 +292,9 @@ function CommentItem({ c, config, pid, num, onReply, reply }: { c: ThreadComment
         open={confirmDel}
         onClose={() => setConfirmDel(false)}
         onConfirm={() => { setConfirmDel(false); del.mutate(); }}
-        title="Delete comment"
-        body="This comment will be removed for everyone."
-        confirmLabel="Delete"
+        title={wt('detail.deleteComment')}
+        body={wt('detail.deleteCommentBody')}
+        confirmLabel={wt('common.delete')}
         pending={del.isPending}
       />
     </div>
@@ -302,59 +304,59 @@ function CommentItem({ c, config, pid, num, onReply, reply }: { c: ThreadComment
 // ─── Lịch sử ─────────────────────────────────────────────────────
 
 const FIELD_LABEL: Record<string, string> = {
-  title: 'title', description: 'description', statusId: 'status', assigneeId: 'assignee', priority: 'priority',
-  storyPoints: 'story points', originalEstimateMin: 'original estimate', remainingEstimateMin: 'remaining estimate',
-  startDate: 'start date', dueDate: 'due date', parentId: 'parent', sprintId: 'sprint', labels: 'labels', components: 'components',
-  timeSpentMin: 'time spent', fixVersionId: 'fix version',
+  get title() { return wt('detail.fTitle'); }, get description() { return wt('detail.fDesc'); }, get statusId() { return wt('detail.fStatus'); }, get assigneeId() { return wt('detail.fAssignee'); }, get priority() { return wt('detail.fPriority'); },
+  get storyPoints() { return wt('detail.fPoints'); }, get originalEstimateMin() { return wt('detail.fOrigEst'); }, get remainingEstimateMin() { return wt('detail.fRemEst'); },
+  get startDate() { return wt('detail.fStart'); }, get dueDate() { return wt('detail.fDue'); }, get parentId() { return wt('detail.fParent'); }, get sprintId() { return 'sprint'; }, get labels() { return wt('detail.fLabels'); }, get components() { return wt('detail.fComponents'); },
+  get timeSpentMin() { return wt('detail.fSpent'); }, get fixVersionId() { return wt('detail.fFixVersion'); },
 };
 
 function describe(h: HistoryEntry, lk: Lookups, config: ProjectConfig): { text: string; from?: string; to?: string } {
-  const status = (v: string | null) => (v ? lk.statuses.get(Number(v))?.name ?? 'Unknown' : 'None');
-  const person = (v: string | null) => (v ? userName(lk.members.get(Number(v))) : 'Unassigned');
-  const prio = (v: string | null) => PRIORITIES.find((p) => String(p.value) === v)?.label ?? v ?? 'None';
-  const sprint = (v: string | null) => (v ? config.sprints.find((s) => String(s.id) === v)?.name ?? `Sprint #${v}` : 'Backlog');
-  const minutes = (v: string | null) => (v ? `${Math.round(Number(v) / 60 * 10) / 10}h` : 'None');
+  const status = (v: string | null) => (v ? statusName(lk.statuses.get(Number(v))?.name ?? wt('detail.unknown')) : wt('common.none'));
+  const person = (v: string | null) => (v ? userName(lk.members.get(Number(v))) : wt('common.unassigned'));
+  const prio = (v: string | null) => PRIORITIES.find((p) => String(p.value) === v)?.label ?? v ?? wt('common.none');
+  const sprint = (v: string | null) => (v ? config.sprints.find((s) => String(s.id) === v)?.name ?? `Sprint #${v}` : wt('share.vBacklog'));
+  const minutes = (v: string | null) => (v ? `${Math.round(Number(v) / 60 * 10) / 10}h` : wt('common.none'));
   switch (h.field) {
-    case 'created': return { text: 'created the issue' };
-    case 'deleted': return { text: 'deleted the issue' };
-    case 'link': return { text: `linked ${h.toValue?.toLowerCase() ?? ''}` };
-    case 'attachment': return h.toValue ? { text: `attached ${h.toValue}` } : { text: `removed attachment ${h.fromValue}` };
-    case 'description': return { text: 'updated the description' };
-    case 'statusId': return { text: 'changed the status', from: status(h.fromValue), to: status(h.toValue) };
-    case 'assigneeId': return { text: 'changed the assignee', from: person(h.fromValue), to: person(h.toValue) };
-    case 'priority': return { text: 'changed the priority', from: prio(h.fromValue), to: prio(h.toValue) };
-    case 'sprintId': return { text: 'moved the issue', from: sprint(h.fromValue), to: sprint(h.toValue) };
+    case 'created': return { text: wt('contrib.evCreated') };
+    case 'deleted': return { text: wt('detail.hDeleted') };
+    case 'link': return { text: wt('detail.hLinked', { x: h.toValue?.toLowerCase() ?? '' }) };
+    case 'attachment': return h.toValue ? { text: wt('detail.hAttached', { f: h.toValue }) } : { text: wt('detail.hRemovedAtt', { f: h.fromValue ?? '' }) };
+    case 'description': return { text: wt('detail.hDesc') };
+    case 'statusId': return { text: wt('detail.hStatus'), from: status(h.fromValue), to: status(h.toValue) };
+    case 'assigneeId': return { text: wt('detail.hAssignee'), from: person(h.fromValue), to: person(h.toValue) };
+    case 'priority': return { text: wt('detail.hPriority'), from: prio(h.fromValue), to: prio(h.toValue) };
+    case 'sprintId': return { text: wt('detail.hMoved'), from: sprint(h.fromValue), to: sprint(h.toValue) };
     case 'originalEstimateMin':
     case 'remainingEstimateMin':
-    case 'timeSpentMin': return { text: `changed the ${FIELD_LABEL[h.field]}`, from: minutes(h.fromValue), to: minutes(h.toValue) };
+    case 'timeSpentMin': return { text: wt('detail.hChangedThe', { f: FIELD_LABEL[h.field] }), from: minutes(h.fromValue), to: minutes(h.toValue) };
     case 'startDate':
-    case 'dueDate': return { text: `changed the ${FIELD_LABEL[h.field]}`, from: formatDate(h.fromValue) || 'None', to: formatDate(h.toValue) || 'None' };
-    case 'fixVersionId': return { text: h.toValue ? 'changed the fix version' : 'removed the fix version' };
-    case 'parentId': return { text: h.toValue ? 'changed the parent' : 'removed the parent' };
+    case 'dueDate': return { text: wt('detail.hChangedThe', { f: FIELD_LABEL[h.field] }), from: formatDate(h.fromValue) || wt('common.none'), to: formatDate(h.toValue) || wt('common.none') };
+    case 'fixVersionId': return { text: h.toValue ? wt('detail.hFixV') : wt('detail.hFixVRemoved') };
+    case 'parentId': return { text: h.toValue ? wt('detail.hParent') : wt('detail.hParentRemoved') };
     // CTW-28: agent kéo Done ⇒ server đổi đích sang cột Review (thiết kế §3.4).
-    case 'agentReview': return { text: `moved it to ${h.toValue ?? 'review'} instead of ${h.fromValue ?? 'Done'} — agent work needs a person's review` };
-    case 'clientVisible': return { text: h.toValue === 'true' ? 'shared the issue with the client' : 'stopped sharing the issue with the client' };
+    case 'agentReview': return { text: wt('detail.hAgentReview', { to: statusName(h.toValue ?? 'review'), from: statusName(h.fromValue ?? 'Done') }) };
+    case 'clientVisible': return { text: h.toValue === 'true' ? wt('detail.hShared') : wt('detail.hUnshared') };
     case 'deliverable':
-    case 'attachmentShared': return { text: `changed client sharing of ${h.toValue ?? 'a file'}` };
-    default: return { text: `changed the ${FIELD_LABEL[h.field] ?? h.field}`, from: h.fromValue ?? 'None', to: h.toValue ?? 'None' };
+    case 'attachmentShared': return { text: wt('detail.hSharing', { f: h.toValue ?? wt('detail.aFile') }) };
+    default: return { text: wt('detail.hChangedThe', { f: FIELD_LABEL[h.field] ?? h.field }), from: h.fromValue ?? wt('common.none'), to: h.toValue ?? wt('common.none') };
   }
 }
 
 function HistoryList({ pid, num, config, lk }: { pid: number; num: number; config: ProjectConfig; lk: Lookups }) {
   const q = useQuery({ queryKey: wk.history(pid, num), queryFn: () => workApi.history(pid, num) });
   if (q.isLoading) return <div className="py-4"><Spinner /></div>;
-  if (!q.data?.length) return <p className="text-[13px] text-[var(--w-text-3)]">No history yet.</p>;
+  if (!q.data?.length) return <p className="text-[13px] text-[var(--w-text-3)]">{wt('detail.noHistory')}</p>;
   return (
     <ol className="space-y-3">
       {q.data.map((h) => {
         const d = describe(h, lk, config);
-        const who = h.actorKind === 'AI' ? 'CT Work AI' : h.actorKind === 'AUTOMATION' ? 'Automation' : h.actorKind === 'SYSTEM' ? 'System' : userName(h.actor);
+        const who = h.actorKind === 'AI' ? 'CT Work AI' : h.actorKind === 'AUTOMATION' ? wt('detail.automation') : h.actorKind === 'SYSTEM' ? wt('detail.system') : userName(h.actor);
         return (
           <li key={h.id} className="flex gap-3 text-[13px]">
             <UserAvatar user={h.actor} size={20} className="mt-0.5" />
             <div className="min-w-0 flex-1 leading-relaxed text-[var(--w-text-2)]">
               <span className="font-medium text-[var(--w-text)]">{who}</span> {d.text}
-              <span className="ml-2 text-[12px] text-[var(--w-text-3)]" title={new Date(h.createdAt).toLocaleString('en-US')}>{relativeTime(h.createdAt)}</span>
+              <span className="ml-2 text-[12px] text-[var(--w-text-3)]" title={new Date(h.createdAt).toLocaleString(wfmt.intl())}>{relativeTime(h.createdAt)}</span>
               {d.from !== undefined && (
                 <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[12px]">
                   <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 line-through decoration-[var(--w-text-3)]">{d.from}</span>
@@ -371,9 +373,9 @@ function HistoryList({ pid, num, config, lk }: { pid: number; num: number; confi
 }
 
 const ACTIVITY_TABS = [
-  { id: 'comments', label: 'Comments' },
-  { id: 'history', label: 'History' },
-  { id: 'worklog', label: 'Work log' },
+  { id: 'comments', get label() { return wt('detail.tComments'); } },
+  { id: 'history', get label() { return wt('docs.history'); } },
+  { id: 'worklog', get label() { return wt('detail.tWorklog'); } },
 ] as const;
 
 /** K-1: phiên âm voice note xong (chạy nền trên server) ⇒ tải lại bình luận của thẻ đang mở. */
@@ -411,7 +413,7 @@ function CommentThread({ t, config, pid, num, clientShared }: { t: ReturnType<ty
   const n = t.replies.length;
   return (
     <div data-testid="comment-thread">
-      {t.orphan && <p className="mb-1 ml-[38px] text-[11.5px] text-[var(--w-text-3)]">Reply to a deleted comment</p>}
+      {t.orphan && <p className="mb-1 ml-[38px] text-[11.5px] text-[var(--w-text-3)]">{wt('detail.orphan')}</p>}
       <CommentItem c={t.root} config={config} pid={pid} num={num} onReply={() => setReplying(t.root)} />
       {(n > 0 || replying) && (
         <div className="ml-[13px] mt-2 border-l-2 border-[var(--w-border)] pl-[22px]">
@@ -423,7 +425,7 @@ function CommentThread({ t, config, pid, num, clientShared }: { t: ReturnType<ty
               onClick={() => setOpen((o) => !o)}
             >
               {open ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
-              {open ? `Hide ${n === 1 ? 'reply' : `${n} replies`}` : `Show ${n === 1 ? '1 reply' : `${n} replies`}`}
+              {open ? wt('detail.hideReplies', { count: n }) : wt('detail.showReplies', { count: n })}
             </button>
           )}
           {open && n > 0 && (
@@ -472,7 +474,7 @@ export default function IssueActivity({ pid, num, config, lk, clientShared = fal
           {config.permissions.comment ? (
             <CommentComposer config={config} pid={pid} num={num} clientShared={clientShared} />
           ) : (
-            <p className="text-[12px] text-[var(--w-text-3)]">You have view-only access to this project.</p>
+            <p className="text-[12px] text-[var(--w-text-3)]">{wt('detail.viewOnly')}</p>
           )}
         </div>
       ) : tab === 'history' ? (

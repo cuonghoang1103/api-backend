@@ -11,6 +11,7 @@ import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { cn } from '@/lib/utils';
+import { wt } from '@/components/work/i18n';
 
 /** Đổi @tên (người thật trong kênh) thành link `#mention-<tên>` — bỏ qua khối code. */
 function linkMentions(md: string, known: Set<string>): string {
@@ -41,7 +42,7 @@ function ChatMarkdownImpl({ text, known, meUsername, className }: { text: string
             return <a href={h} target="_blank" rel="noopener noreferrer nofollow" className="text-[var(--w-accent-text)] underline-offset-2 hover:underline">{children}</a>;
           },
           img: ({ src, alt }) => (
-            <a href={typeof src === 'string' ? src : '#'} target="_blank" rel="noopener noreferrer nofollow" className="text-[var(--w-accent-text)] underline">{alt || 'image link'}</a>
+            <a href={typeof src === 'string' ? src : '#'} target="_blank" rel="noopener noreferrer nofollow" className="text-[var(--w-accent-text)] underline">{alt || wt('chat.imageLink')}</a>
           ),
           p: ({ children }) => <p className="my-0.5">{children as ReactNode}</p>,
           ul: ({ children }) => <ul className="my-1 list-disc pl-5">{children}</ul>,

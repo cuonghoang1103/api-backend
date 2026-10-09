@@ -14,39 +14,40 @@ import { workApi, workError, workErrorStatus, type AuditItem } from '@/lib/work-
 import { wk } from '../hooks';
 import { EmptyState, relativeTime, Spinner } from '../ui';
 import { Section, Select } from './shared';
+import { wt, wfmt } from '@/components/work/i18n';
 
 type Group = 'members' | 'projects' | 'sharing' | 'integrations' | 'data' | 'other';
 
 const GROUPS: Record<Group, { label: string; Icon: LucideIcon; color: string }> = {
-  members: { label: 'Members', Icon: Users, color: 'var(--w-blue)' },
-  projects: { label: 'Projects & workspace', Icon: FolderKanban, color: 'var(--w-accent-text)' },
-  sharing: { label: 'Sharing', Icon: Share2, color: 'var(--w-green)' },
-  integrations: { label: 'Integrations', Icon: Plug, color: 'var(--w-orange)' },
-  data: { label: 'Data', Icon: Database, color: 'var(--w-red)' },
-  other: { label: 'Other', Icon: Database, color: 'var(--w-text-3)' },
+  members: { get label() { return wt('audit.gMembers'); }, Icon: Users, color: 'var(--w-blue)' },
+  projects: { get label() { return wt('audit.gProjects'); }, Icon: FolderKanban, color: 'var(--w-accent-text)' },
+  sharing: { get label() { return wt('audit.gSharing'); }, Icon: Share2, color: 'var(--w-green)' },
+  integrations: { get label() { return wt('audit.gIntegrations'); }, Icon: Plug, color: 'var(--w-orange)' },
+  data: { get label() { return wt('audit.gData'); }, Icon: Database, color: 'var(--w-red)' },
+  other: { get label() { return wt('audit.gOther'); }, Icon: Database, color: 'var(--w-text-3)' },
 };
 
 /** Mã hành động ⇒ nhãn + nhóm. Mã lạ vẫn hiện được (nhóm đoán theo tiền tố). */
 const ACTIONS: Record<string, { label: string; group: Group }> = {
-  'workspace.member_role': { label: 'Changed workspace role', group: 'members' },
-  'workspace.member_remove': { label: 'Removed workspace member', group: 'members' },
-  'project.member_role': { label: 'Changed project role', group: 'members' },
-  'project.member_remove': { label: 'Removed project member', group: 'members' },
-  'workspace.delete': { label: 'Deleted workspace', group: 'projects' },
-  'workspace.restore': { label: 'Restored workspace', group: 'projects' },
-  'project.delete': { label: 'Deleted project', group: 'projects' },
-  'project.restore': { label: 'Restored project', group: 'projects' },
-  'project.archive': { label: 'Archived project', group: 'projects' },
-  'project.unarchive': { label: 'Unarchived project', group: 'projects' },
-  'share.create': { label: 'Created public link', group: 'sharing' },
-  'share.revoke': { label: 'Revoked public link', group: 'sharing' },
-  'github.connect': { label: 'Connected GitHub', group: 'integrations' },
-  'github.disconnect': { label: 'Disconnected GitHub', group: 'integrations' },
-  'github.rotate_secret': { label: 'Rotated GitHub secret', group: 'integrations' },
-  'project.import': { label: 'Imported issues', group: 'data' },
-  'issue.delete': { label: 'Moved issue to trash', group: 'data' },
-  'issue.restore': { label: 'Restored issue', group: 'data' },
-  'issue.purge': { label: 'Permanently deleted issue', group: 'data' },
+  'workspace.member_role': { get label() { return wt('audit.aWsRole'); }, group: 'members' },
+  'workspace.member_remove': { get label() { return wt('audit.aWsRemove'); }, group: 'members' },
+  'project.member_role': { get label() { return wt('audit.aProjRole'); }, group: 'members' },
+  'project.member_remove': { get label() { return wt('audit.aProjRemove'); }, group: 'members' },
+  'workspace.delete': { get label() { return wt('audit.aWsDelete'); }, group: 'projects' },
+  'workspace.restore': { get label() { return wt('audit.aWsRestore'); }, group: 'projects' },
+  'project.delete': { get label() { return wt('audit.aProjDelete'); }, group: 'projects' },
+  'project.restore': { get label() { return wt('audit.aProjRestore'); }, group: 'projects' },
+  'project.archive': { get label() { return wt('audit.aProjArchive'); }, group: 'projects' },
+  'project.unarchive': { get label() { return wt('audit.aProjUnarchive'); }, group: 'projects' },
+  'share.create': { get label() { return wt('audit.aShareCreate'); }, group: 'sharing' },
+  'share.revoke': { get label() { return wt('audit.aShareRevoke'); }, group: 'sharing' },
+  'github.connect': { get label() { return wt('audit.aGhConnect'); }, group: 'integrations' },
+  'github.disconnect': { get label() { return wt('audit.aGhDisconnect'); }, group: 'integrations' },
+  'github.rotate_secret': { get label() { return wt('audit.aGhRotate'); }, group: 'integrations' },
+  'project.import': { get label() { return wt('audit.aImport'); }, group: 'data' },
+  'issue.delete': { get label() { return wt('audit.aIssueDelete'); }, group: 'data' },
+  'issue.restore': { get label() { return wt('audit.aIssueRestore'); }, group: 'data' },
+  'issue.purge': { get label() { return wt('audit.aIssuePurge'); }, group: 'data' },
 };
 
 function describe(action: string): { label: string; group: Group } {
@@ -69,22 +70,22 @@ function describe(action: string): { label: string; group: Group } {
  */
 const FILTERS: Array<{ group: Group; options: Array<{ value: string; label: string }> }> = [
   { group: 'members', options: [
-    { value: 'workspace.member_', label: 'Workspace member changes' },
-    { value: 'project.member_', label: 'Project member changes' },
+    { value: 'workspace.member_', get label() { return wt('audit.fWsMember'); } },
+    { value: 'project.member_', get label() { return wt('audit.fProjMember'); } },
   ] },
   { group: 'projects', options: [
-    { value: 'project.delete', label: 'Deleted project' },
-    { value: 'project.restore', label: 'Restored project' },
-    { value: 'project.archive', label: 'Archived project' },
-    { value: 'project.unarchive', label: 'Unarchived project' },
-    { value: 'workspace.delete', label: 'Deleted workspace' },
-    { value: 'workspace.restore', label: 'Restored workspace' },
+    { value: 'project.delete', get label() { return wt('audit.aProjDelete'); } },
+    { value: 'project.restore', get label() { return wt('audit.aProjRestore'); } },
+    { value: 'project.archive', get label() { return wt('audit.aProjArchive'); } },
+    { value: 'project.unarchive', get label() { return wt('audit.aProjUnarchive'); } },
+    { value: 'workspace.delete', get label() { return wt('audit.aWsDelete'); } },
+    { value: 'workspace.restore', get label() { return wt('audit.aWsRestore'); } },
   ] },
-  { group: 'sharing', options: [{ value: 'share.', label: 'All sharing events' }] },
-  { group: 'integrations', options: [{ value: 'github.', label: 'All GitHub events' }] },
+  { group: 'sharing', options: [{ value: 'share.', get label() { return wt('audit.fSharing'); } }] },
+  { group: 'integrations', options: [{ value: 'github.', get label() { return wt('audit.fGithub'); } }] },
   { group: 'data', options: [
-    { value: 'project.import', label: 'Imported issues' },
-    { value: 'issue.', label: 'Issue deletions and restores' },
+    { value: 'project.import', get label() { return wt('audit.aImport'); } },
+    { value: 'issue.', get label() { return wt('audit.fIssue'); } },
   ] },
 ];
 
@@ -93,7 +94,7 @@ const PAGE = 50;
 function Row({ item }: { item: AuditItem }) {
   const d = describe(item.action);
   const g = GROUPS[d.group];
-  const exact = new Date(item.createdAt).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+  const exact = new Date(item.createdAt).toLocaleString(wfmt.intl(), { dateStyle: 'medium', timeStyle: 'short' });
   return (
     <tr className="border-t border-[var(--w-border)] align-top">
       <td className="whitespace-nowrap px-3 py-2 text-[var(--w-text-2)]">
@@ -101,7 +102,7 @@ function Row({ item }: { item: AuditItem }) {
       </td>
       <td className="px-3 py-2">
         <span className="block max-w-[160px] truncate" title={item.actorName ?? undefined}>
-          {item.actorName ?? <span className="text-[var(--w-text-3)]">System</span>}
+          {item.actorName ?? <span className="text-[var(--w-text-3)]">{wt('detail.system')}</span>}
         </span>
       </td>
       <td className="px-3 py-2">
@@ -119,7 +120,7 @@ function Row({ item }: { item: AuditItem }) {
             <span className="truncate">{item.project.key}</span>
           </span>
         ) : (
-          <span className="text-[12px] text-[var(--w-text-3)]">Workspace</span>
+          <span className="text-[12px] text-[var(--w-text-3)]">{wt('common.workspace')}</span>
         )}
       </td>
     </tr>
@@ -154,7 +155,7 @@ export default function WorkspaceAudit({ workspaceId }: { workspaceId: number })
 
   if (q.isError && workErrorStatus(q.error) === 403) {
     return (
-      <Section title="Audit log">
+      <Section title={wt('audit.auditLog')}>
         <div className="flex items-start gap-2.5 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-4 py-3 text-[13px] text-[var(--w-text-2)]">
           <Lock size={14} className="mt-0.5 shrink-0" />
           <span>Only workspace owners and admins can view the audit log. Ask an admin if you need to know who changed something.</span>
@@ -167,16 +168,16 @@ export default function WorkspaceAudit({ workspaceId }: { workspaceId: number })
 
   return (
     <Section
-      title="Audit log"
-      description="Administrative changes across the workspace — roles, deletions and restores, public links, integrations and imports. Everyday issue edits are in each issue’s history."
+      title={wt('audit.auditLog')}
+      description={wt('audit.auditDesc')}
     >
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <Select value={projectId ?? ''} onChange={(e) => setProjectId(e.target.value ? Number(e.target.value) : null)} aria-label="Filter by project" className="w-full sm:w-[220px]">
-          <option value="">All projects</option>
+        <Select value={projectId ?? ''} onChange={(e) => setProjectId(e.target.value ? Number(e.target.value) : null)} aria-label={wt('audit.byProject')} className="w-full sm:w-[220px]">
+          <option value="">{wt('audit.allProjects')}</option>
           {projects.map((p) => <option key={p.id} value={p.id}>{p.key} — {p.name}</option>)}
         </Select>
-        <Select value={action} onChange={(e) => setAction(e.target.value)} aria-label="Filter by action" className="w-full sm:w-[260px]">
-          <option value="">All actions</option>
+        <Select value={action} onChange={(e) => setAction(e.target.value)} aria-label={wt('audit.byAction')} className="w-full sm:w-[260px]">
+          <option value="">{wt('audit.allActions')}</option>
           {FILTERS.map((f) => (
             <optgroup key={f.group} label={GROUPS[f.group].label}>
               {f.options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -184,17 +185,17 @@ export default function WorkspaceAudit({ workspaceId }: { workspaceId: number })
           ))}
         </Select>
         {filtered && (
-          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => { setProjectId(null); setAction(''); }}>Clear filters</button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => { setProjectId(null); setAction(''); }}>{wt('issues.clearFilters')}</button>
         )}
       </div>
 
       {q.isLoading ? (
         <div className="flex justify-center py-10"><Spinner /></div>
       ) : q.isError ? (
-        <p className="text-[13px] text-[var(--w-red)]">{workError(q.error, 'Could not load the audit log')}</p>
+        <p className="text-[13px] text-[var(--w-red)]">{workError(q.error, wt('audit.loadFailed'))}</p>
       ) : !items.length ? (
         <div className="rounded-[8px] border border-dashed border-[var(--w-border-strong)]">
-          <EmptyState title={filtered ? 'No matching events' : 'No events yet'} body={filtered ? 'Try another project or action.' : 'Administrative changes will be recorded here.'} />
+          <EmptyState title={filtered ? wt('audit.noMatching') : wt('audit.noEvents')} body={filtered ? wt('audit.tryAnother') : wt('audit.recordedHere')} />
         </div>
       ) : (
         <>
@@ -202,11 +203,11 @@ export default function WorkspaceAudit({ workspaceId }: { workspaceId: number })
             <table className="w-full min-w-[760px] border-collapse text-[12.5px]">
               <thead className="bg-[var(--w-sunken)] text-left text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
                 <tr>
-                  <th className="w-[96px] px-3 py-2">Time</th>
-                  <th className="w-[150px] px-3 py-2">Actor</th>
-                  <th className="w-[220px] px-3 py-2">Action</th>
-                  <th className="px-3 py-2">Details</th>
-                  <th className="w-[100px] px-3 py-2">Project</th>
+                  <th className="w-[96px] px-3 py-2">{wt('audit.time')}</th>
+                  <th className="w-[150px] px-3 py-2">{wt('audit.actor')}</th>
+                  <th className="w-[220px] px-3 py-2">{wt('audit.action')}</th>
+                  <th className="px-3 py-2">{wt('common.details')}</th>
+                  <th className="w-[100px] px-3 py-2">{wt('common.project')}</th>
                 </tr>
               </thead>
               <tbody>{items.map((i) => <Row key={i.id} item={i} />)}</tbody>

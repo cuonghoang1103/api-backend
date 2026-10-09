@@ -63,4 +63,5 @@ export const shell: Strings<typeof En> = {
   tourBody: 'Tạo không gian làm việc, mở dự án từ mẫu, mời nhóm và chạy sprint đầu tiên. Có bản tiếng Anh và Tiếng Việt.',
   startTour: 'Bắt đầu xem',
   dismiss: 'Ẩn',
+  focus: 'Tập trung',
 };

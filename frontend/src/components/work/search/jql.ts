@@ -7,59 +7,60 @@
  */
 
 import type { ProjectConfig } from '@/lib/work-api';
+import { wt } from '@/components/work/i18n';
 
-export const JQL_FIELDS: Array<{ name: string; hint: string }> = [
-  { name: 'project', hint: 'Project key' },
-  { name: 'status', hint: 'Status name' },
-  { name: 'statusCategory', hint: 'To Do · In Progress · Done' },
-  { name: 'assignee', hint: 'Username, currentUser(), EMPTY' },
-  { name: 'reporter', hint: 'Username, currentUser()' },
-  { name: 'type', hint: 'Issue type' },
-  { name: 'priority', hint: 'Highest … Lowest' },
-  { name: 'labels', hint: 'Label name' },
-  { name: 'component', hint: 'Component name' },
-  { name: 'sprint', hint: 'Sprint name, openSprints()' },
-  { name: 'parent', hint: 'Parent or epic key' },
-  { name: 'points', hint: 'Story points' },
-  { name: 'summary', hint: 'Title text (~)' },
-  { name: 'description', hint: 'Description text (~)' },
-  { name: 'text', hint: 'Title, description or comments (~)' },
-  { name: 'comment', hint: 'Comments, incl. voice note transcripts (~)' },
-  { name: 'key', hint: 'Issue key' },
-  { name: 'created', hint: 'Date' },
-  { name: 'updated', hint: 'Date' },
-  { name: 'due', hint: 'Date' },
-  { name: 'resolved', hint: 'Date' },
-  { name: 'watcher', hint: 'Username, currentUser()' },
+export const JQL_FIELDS: Array<{ name: string; readonly hint: string }> = [
+  { name: 'project', get hint() { return wt('jql.h1'); } },
+  { name: 'status', get hint() { return wt('jql.h2'); } },
+  { name: 'statusCategory', get hint() { return wt('jql.h3'); } },
+  { name: 'assignee', get hint() { return wt('jql.h4'); } },
+  { name: 'reporter', get hint() { return wt('jql.h5'); } },
+  { name: 'type', get hint() { return wt('jql.h6'); } },
+  { name: 'priority', get hint() { return wt('jql.h7'); } },
+  { name: 'labels', get hint() { return wt('jql.h8'); } },
+  { name: 'component', get hint() { return wt('jql.h9'); } },
+  { name: 'sprint', get hint() { return wt('jql.h10'); } },
+  { name: 'parent', get hint() { return wt('jql.h11'); } },
+  { name: 'points', get hint() { return wt('jql.h12'); } },
+  { name: 'summary', get hint() { return wt('jql.h13'); } },
+  { name: 'description', get hint() { return wt('jql.h14'); } },
+  { name: 'text', get hint() { return wt('jql.h15'); } },
+  { name: 'comment', get hint() { return wt('jql.h16'); } },
+  { name: 'key', get hint() { return wt('jql.h17'); } },
+  { name: 'created', get hint() { return wt('jql.h18'); } },
+  { name: 'updated', get hint() { return wt('jql.h18'); } },
+  { name: 'due', get hint() { return wt('jql.h18'); } },
+  { name: 'resolved', get hint() { return wt('jql.h18'); } },
+  { name: 'watcher', get hint() { return wt('jql.h5'); } },
   // CTW-5 / CTW-11.
-  { name: 'fixVersion', hint: 'Version name, unreleasedVersions(), EMPTY' },
-  { name: 'flagged', hint: 'true · false — blocked issues' },
+  { name: 'fixVersion', get hint() { return wt('jql.h19'); } },
+  { name: 'flagged', get hint() { return wt('jql.h20'); } },
   // CTW-28: người hay AI agent.
-  { name: 'assigneeKind', hint: 'AGENT · HUMAN — work done by AI agents' },
+  { name: 'assigneeKind', get hint() { return wt('jql.h21'); } },
 ];
 
 export const JQL_OPERATORS: Array<{ op: string; hint: string }> = [
-  { op: '=', hint: 'equals' },
-  { op: '!=', hint: 'does not equal' },
-  { op: 'IN ()', hint: 'any of' },
-  { op: 'NOT IN ()', hint: 'none of' },
-  { op: '~', hint: 'contains text' },
-  { op: '!~', hint: 'does not contain' },
-  { op: '>  >=  <  <=', hint: 'compare dates, numbers, priority' },
-  { op: 'IS EMPTY', hint: 'has no value' },
-  { op: 'IS NOT EMPTY', hint: 'has a value' },
+  { op: '=', get hint() { return wt('jql.h22'); } },
+  { op: '!=', get hint() { return wt('jql.h23'); } },
+  { op: 'IN ()', get hint() { return wt('jql.h24'); } },
+  { op: 'NOT IN ()', get hint() { return wt('jql.h25'); } },
+  { op: '~', get hint() { return wt('jql.h26'); } },
+  { op: '!~', get hint() { return wt('jql.h27'); } },
+  { op: '>  >=  <  <=', get hint() { return wt('jql.h28'); } },
+  { op: 'IS EMPTY', get hint() { return wt('jql.h29'); } },
+  { op: 'IS NOT EMPTY', get hint() { return wt('jql.h30'); } },
 ];
 
 export const JQL_FUNCTIONS = ['currentUser()', 'agents()', 'people()', 'openSprints()', 'closedSprints()', 'futureSprints()', 'releasedVersions()', 'unreleasedVersions()', 'now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfDay()', 'endOfWeek()', 'endOfMonth()'];
 
 export const JQL_EXAMPLES: Array<{ q: string; hint: string }> = [
-  { q: 'assignee = currentUser() AND statusCategory != Done', hint: 'My open work' },
-  { q: 'sprint IN openSprints() ORDER BY priority', hint: 'Current sprint by priority' },
-  { q: 'created >= -7d ORDER BY created DESC', hint: 'Created in the last 7 days' },
-  { q: 'due < now() AND statusCategory != Done', hint: 'Overdue' },
-  { q: 'summary ~ "login" OR description ~ "login"', hint: 'Text search' },
-  { q: 'assignee IS EMPTY AND priority >= High', hint: 'Urgent and unassigned' },
-  { q: 'assigneeKind = AGENT AND statusCategory != Done', hint: 'Open work of AI agents' },
+  { q: 'assignee = currentUser() AND statusCategory != Done', get hint() { return wt('jql.h31'); } },
+  { q: 'sprint IN openSprints() ORDER BY priority', get hint() { return wt('jql.h32'); } },
+  { q: 'created >= -7d ORDER BY created DESC', get hint() { return wt('jql.h33'); } },
+  { q: 'due < now() AND statusCategory != Done', get hint() { return wt('jql.h34'); } },
+  { q: 'summary ~ "login" OR description ~ "login"', get hint() { return wt('jql.h35'); } },
+  { q: 'assignee IS EMPTY AND priority >= High', get hint() { return wt('jql.h36'); } },
+  { q: 'assigneeKind = AGENT AND statusCategory != Done', get hint() { return wt('jql.h37'); } },
 ];
 
 const ORDERABLE = ['key', 'rank', 'priority', 'created', 'updated', 'due', 'resolved', 'points', 'summary', 'status', 'assignee'];
@@ -73,7 +74,7 @@ export function quote(v: string): string {
 export function jqlErrorOf(err: unknown): { message: string; position: number } | null {
   const r = (err as { response?: { status?: number; data?: { code?: string; message?: string; data?: { position?: number } } } })?.response;
   if (r?.status !== 400 || r.data?.code !== 'WORK_JQL_ERROR') return null;
-  return { message: r.data.message ?? 'Invalid query', position: Number(r.data.data?.position ?? 0) };
+  return { message: r.data.message ?? wt('jql.invalid'), position: Number(r.data.data?.position ?? 0) };
 }
 
 
@@ -113,22 +114,22 @@ function valuesFor(field: string, cfg: JqlSuggestConfig): Suggestion[] {
   const f = field.toLowerCase();
   const uniq = (xs: string[]) => [...new Set(xs)];
   const lit = (xs: string[], hint?: string) => xs.map((x) => ({ label: x, insert: quote(x), hint }));
-  const fn = (xs: string[]) => xs.map((x) => ({ label: x, insert: x, hint: 'function' }));
+  const fn = (xs: string[]) => xs.map((x) => ({ label: x, insert: x, hint: wt('jql.function') }));
   switch (f) {
-    case 'project': return lit(uniq(cfg.projectKeys ?? (cfg.key ? [cfg.key] : [])), 'Project');
+    case 'project': return lit(uniq(cfg.projectKeys ?? (cfg.key ? [cfg.key] : [])), wt('common.project'));
     case 'status': return lit(uniq(cfg.workflows.flatMap((w) => w.statuses.map((s) => s.name))));
     case 'statuscategory': case 'category': return lit(['To Do', 'In Progress', 'Done']);
     case 'type': case 'issuetype': return lit(cfg.issueTypes.map((t) => t.name));
     case 'priority': return lit(['Highest', 'High', 'Medium', 'Low', 'Lowest']);
     case 'assignee': case 'reporter': case 'watcher': case 'watchers':
       return [...fn(['currentUser()', ...(f === 'assignee' || f === 'reporter' ? ['agents()', 'people()'] : [])]), ...(f === 'assignee' ? [{ label: 'EMPTY', insert: 'EMPTY' }] : []),
-        ...cfg.members.map((m) => ({ label: m.username, insert: quote(m.username), hint: m.kind === 'AGENT' ? `🤖 ${m.displayName || m.fullName || 'AI agent'}` : m.displayName || m.fullName || undefined }))];
+        ...cfg.members.map((m) => ({ label: m.username, insert: quote(m.username), hint: m.kind === 'AGENT' ? `🤖 ${m.displayName || m.fullName || wt('jql.aiAgent')}` : m.displayName || m.fullName || undefined }))];
     case 'assigneekind': case 'assignee kind': case 'assigneetype': return [...lit(['AGENT', 'HUMAN']), { label: 'EMPTY', insert: 'EMPTY' }];
     case 'labels': case 'label': return lit(cfg.labels.map((l) => l.name));
     case 'component': case 'components': return lit(cfg.components.map((c) => c.name));
     case 'sprint': return [...fn(['openSprints()', 'closedSprints()', 'futureSprints()']), ...lit(cfg.sprints.map((s) => s.name))];
     case 'fixversion': case 'fixversions': case 'version': case 'release':
-      return [...fn(['unreleasedVersions()', 'releasedVersions()']), { label: 'EMPTY', insert: 'EMPTY' }, ...lit(uniq((cfg.versions ?? []).map((v) => v.name)), 'Version')];
+      return [...fn(['unreleasedVersions()', 'releasedVersions()']), { label: 'EMPTY', insert: 'EMPTY' }, ...lit(uniq((cfg.versions ?? []).map((v) => v.name)), wt('jql.version'))];
     case 'flagged': case 'flag': case 'blocked': return lit(['true', 'false']);
     case 'created': case 'updated': case 'due': case 'duedate': case 'resolved':
       return [...lit(['-1d', '-7d', '-30d']), ...fn(['now()', 'startOfDay()', 'startOfWeek()', 'startOfMonth()', 'endOfWeek()', 'endOfMonth()'])];
@@ -158,9 +159,9 @@ export function suggest(text: string, caret: number, cfg: JqlSuggestConfig): { f
 
   const fields = (): Suggestion[] => [
     ...JQL_FIELDS.map((x) => ({ label: x.name, insert: x.name, hint: x.hint })),
-    ...cfg.customFields.map((c) => ({ label: c.name, insert: quote(c.name), hint: `Custom · ${c.kind.toLowerCase()}` })),
-    { label: 'ORDER BY', insert: 'ORDER BY', hint: 'sort results' },
-    { label: 'NOT', insert: 'NOT', hint: 'negate' },
+    ...cfg.customFields.map((c) => ({ label: c.name, insert: quote(c.name), hint: wt('jql.custom', { k: c.kind.toLowerCase() }) })),
+    { label: 'ORDER BY', insert: 'ORDER BY', hint: wt('jql.sortResults') },
+    { label: 'NOT', insert: 'NOT', hint: wt('jql.negate') },
   ];
 
   let items: Suggestion[] = [];

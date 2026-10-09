@@ -646,7 +646,7 @@ function CreateBugDialog({ config, pid, run, failedStep, testKey, onClose, onCre
   onClose: () => void; onCreated: (num: number) => void;
 }) {
   const [title, setTitle] = useState(
-    failedStep ? `${run.testCase.issue.title} — step ${failedStep.position + 1} fails` : `${run.testCase.issue.title} fails`,
+    failedStep ? wt('tests.failsStep', { t: run.testCase.issue.title, n: failedStep.position + 1 }) : wt('tests.failsT', { t: run.testCase.issue.title }),
   );
   const [priority, setPriority] = useState(2);
   const [assigneeId, setAssigneeId] = useState<number | null>(null);

@@ -632,7 +632,10 @@ async function docsCorpus(projectId: number, access: ProjectAccess, re: RegExp):
 }
 
 async function dataDictionary(projectId: number, access: ProjectAccess): Promise<{ model: DataModel; page: string } | null> {
-  const pages = await prisma.workPage.findMany({ where: { projectId, deletedAt: null, title: { contains: 'data dictionary', mode: 'insensitive' } }, take: 5, select: { number: true, title: true, visibility: true, contentJson: true } });
+  // CTW đợt 4b (R16): Data Dictionary CÓ CẤU TRÚC (Requirements → Wiegers → Data dictionary) đi trước trang Docs.
+  const structured = await (await import('./swr.service.js')).dictionaryModel(projectId);
+  if (structured) return { model: structured, page: `structured Data Dictionary (${structured.tables.length} structure${structured.tables.length === 1 ? '' : 's'})` };
+  const pages =await prisma.workPage.findMany({ where: { projectId, deletedAt: null, title: { contains: 'data dictionary', mode: 'insensitive' } }, take: 5, select: { number: true, title: true, visibility: true, contentJson: true } });
   for (const p of pages) {
     if (!canViewPage(access.role, access.workspaceRole, p.visibility)) continue;
     const blocks = ((p.contentJson as unknown as PmNode | null)?.content ?? []);
@@ -782,7 +785,7 @@ async function buildFor(userId: number, projectId: number, ctx: DiagramCtx, inpu
         } else if (src === 'dictionary') {
           const dd = await dataDictionary(projectId, ctx.access);
           if (dd) return plain(erdFromModel(dd.model, { title: input.title?.trim() || 'Entity relationship diagram', sourceLabel: `Data Dictionary — ${dd.page}`, entities: input.entities ?? undefined }));
-          tried.push('Data Dictionary: no page titled "Data Dictionary" with field tables');
+          tried.push('Data Dictionary: no data structures in the Data Dictionary register and no page titled "Data Dictionary" with field tables');
         } else if (src === 'docs') {
           const corpus = await docsCorpus(projectId, ctx.access, /data|database|entity|erd|design|dictionary|report\s*[34]|sds|srs|csdl|cơ sở dữ liệu/i);
           if (!corpus.text) { tried.push('Docs: no document describes the data'); continue; }

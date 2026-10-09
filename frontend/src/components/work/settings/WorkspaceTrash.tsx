@@ -9,6 +9,7 @@ import { workApi, workError, type WorkspaceDetail } from '@/lib/work-api';
 import { wk } from '../hooks';
 import { EmptyState, relativeTime, Spinner } from '../ui';
 import { ReadOnlyNotice, Section } from './shared';
+import { wt } from '@/components/work/i18n';
 
 export default function WorkspaceTrash({ ws }: { ws: WorkspaceDetail }) {
   const canManage = ws.role === 'OWNER' || ws.role === 'ADMIN';
@@ -20,20 +21,20 @@ export default function WorkspaceTrash({ ws }: { ws: WorkspaceDetail }) {
     mutationFn: (pid: number) => workApi.restoreProject(ws.id, pid),
     onSuccess: (_d, pid) => {
       const p = q.data?.find((x) => x.id === pid);
-      toast.success(p ? `Project ${p.key} restored` : 'Project restored');
+      toast.success(p ? wt('trash.projRestored', { k: p.key }) : wt('settings.projRestored'));
       qc.invalidateQueries({ queryKey: key });
       qc.invalidateQueries({ queryKey: wk.workspace(ws.slug) });
       qc.invalidateQueries({ queryKey: wk.workspaces });
     },
-    onError: (err) => toast.error(workError(err, 'Could not restore the project')),
+    onError: (err) => toast.error(workError(err, wt('trash.projRestoreFailed'))),
   });
 
-  const description = 'Deleted projects are kept here with all their issues, sprints and settings. Restore a project to bring it back for everyone who had access.';
+  const description = wt('trash.wsDesc');
 
   if (!canManage) {
     return (
-      <Section title="Trash" description={description}>
-        <ReadOnlyNotice>Only workspace admins can view and restore deleted projects.</ReadOnlyNotice>
+      <Section title={wt('trash.trash')} description={description}>
+        <ReadOnlyNotice>{wt('trash.onlyWsAdmins')}</ReadOnlyNotice>
       </Section>
     );
   }
@@ -41,16 +42,16 @@ export default function WorkspaceTrash({ ws }: { ws: WorkspaceDetail }) {
   const rows = q.data ?? [];
 
   return (
-    <Section title="Trash" description={description}>
+    <Section title={wt('trash.trash')} description={description}>
       {q.isLoading ? (
         <div className="flex justify-center py-10"><Spinner size={18} /></div>
       ) : q.error ? (
-        <EmptyState title="Could not load the trash" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('trash.loadFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : !rows.length ? (
         <div className="flex flex-col items-center rounded-[8px] border border-dashed border-[var(--w-border)] px-6 py-10 text-center">
           <FolderX size={20} className="mb-2 text-[var(--w-text-3)]" />
-          <div className="text-[13px] font-medium">No deleted projects</div>
-          <p className="mt-1 text-[12px] text-[var(--w-text-3)]">Projects deleted from this workspace will appear here.</p>
+          <div className="text-[13px] font-medium">{wt('trash.noDeletedProj')}</div>
+          <p className="mt-1 text-[12px] text-[var(--w-text-3)]">{wt('trash.projAppear')}</p>
         </div>
       ) : (
         <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
@@ -66,7 +67,7 @@ export default function WorkspaceTrash({ ws }: { ws: WorkspaceDetail }) {
                   </div>
                 </div>
                 <button type="button" className="w-btn w-btn-sm shrink-0" disabled={pending} onClick={() => restore.mutate(p.id)}>
-                  {pending ? <Spinner size={11} /> : <RotateCcw size={13} />} Restore
+                  {pending ? <Spinner size={11} /> : <RotateCcw size={13} />} {wt('common.restore')}
                 </button>
               </div>
             );

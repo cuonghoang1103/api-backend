@@ -14,21 +14,22 @@ import { Dialog, EmptyState, PageLoading, formatDate, relativeTime } from '../ui
 import { Pill } from '../studio/shared';
 import ReportDocument from '../reports/ReportDocument';
 import { usePrintReport } from '../reports/S4ReportTabs';
+import { wt } from '@/components/work/i18n';
 
 const TONE: Record<PaymentStatus, 'neutral' | 'orange' | 'blue' | 'green'> = { PLANNED: 'neutral', DUE: 'orange', INVOICED: 'blue', PAID: 'green' };
 
 export function PaymentsTab({ pid, asClient }: { pid: number; asClient: boolean }) {
   const q = useQuery({ queryKey: s4Keys.portalPayments(pid, asClient), queryFn: () => s4Api.portalPayments(pid, asClient) });
   if (q.isLoading) return <PageLoading rows={3} />;
-  if (!q.data) return <EmptyState title="Could not load payments" body={workError(q.error)} />;
-  if (!q.data.items.length) return <EmptyState icon={<Receipt size={20} />} title="No payment milestones shared yet" body="Your project team shares the payment schedule here." />;
+  if (!q.data) return <EmptyState title={wt('portal.loadPaymentsFailed')} body={workError(q.error)} />;
+  if (!q.data.items.length) return <EmptyState icon={<Receipt size={20} />} title={wt('portal.noPayments')} body={wt('portal.noPaymentsBody')} />;
   const total = q.data.items.reduce((s, m) => s + (m.amount ?? 0), 0);
   const paid = q.data.items.filter((m) => m.status === 'PAID').reduce((s, m) => s + (m.amount ?? 0), 0);
   return (
     <div className="space-y-3" data-testid="portal-payments">
       <div className="w-card flex flex-wrap gap-x-6 gap-y-1 p-4 text-[13px]">
-        <span>Total shared: <b className="tabular-nums">{fmtMoney(total, q.data.currency)}</b></span>
-        <span>Paid: <b className="tabular-nums">{fmtMoney(paid, q.data.currency)}</b></span>
+        <span>{wt('portal.totalShared')} <b className="tabular-nums">{fmtMoney(total, q.data.currency)}</b></span>
+        <span>{wt('portal.paid')} <b className="tabular-nums">{fmtMoney(paid, q.data.currency)}</b></span>
       </div>
       <ul className="space-y-2">
         {q.data.items.map((m) => (
@@ -36,7 +37,7 @@ export function PaymentsTab({ pid, asClient }: { pid: number; asClient: boolean 
             <div className="min-w-0 flex-1 basis-[200px]">
               <div className="truncate text-[13.5px] font-medium">{m.name}</div>
               <div className="text-[12px] text-[var(--w-text-3)]">
-                {m.percent ? `${m.percent}% of the contract` : 'Fixed amount'}{m.dueDate ? ` · due ${formatDate(m.dueDate)}` : ''}{m.invoiceNumber ? ` · invoice ${m.invoiceNumber}` : ''}{m.paidAt ? ` · paid ${formatDate(m.paidAt)}` : ''}
+                {m.percent ? wt('portal.pctContract', { n: m.percent }) : wt('portal.fixedAmount')}{m.dueDate ? wt('portal.dueSp', { d: formatDate(m.dueDate) }) : ''}{m.invoiceNumber ? wt('portal.invoiceSp', { n: m.invoiceNumber }) : ''}{m.paidAt ? wt('portal.paidSp', { d: formatDate(m.paidAt) }) : ''}
               </div>
             </div>
             <span className="text-[14px] font-semibold tabular-nums">{fmtMoney(m.amount, q.data!.currency)}</span>
@@ -44,7 +45,7 @@ export function PaymentsTab({ pid, asClient }: { pid: number; asClient: boolean 
           </li>
         ))}
       </ul>
-      <p className="text-[12px] text-[var(--w-text-3)]">Invoices are issued by your supplier’s licensed e-invoice provider; this page only tracks the schedule.</p>
+      <p className="text-[12px] text-[var(--w-text-3)]">{wt('portal.invoiceNote')}</p>
     </div>
   );
 }
@@ -54,10 +55,10 @@ export function ReportsTab({ pid, asClient, openId, setOpenId }: { pid: number; 
   const one = useQuery({ queryKey: s4Keys.portalReport(pid, openId ?? 0, asClient), queryFn: () => s4Api.portalReport(pid, openId!, asClient), enabled: !!openId });
   const { print, node } = usePrintReport();
   if (q.isLoading) return <PageLoading rows={3} />;
-  if (!q.data) return <EmptyState title="Could not load reports" body={workError(q.error)} />;
+  if (!q.data) return <EmptyState title={wt('portal.loadReportsFailed')} body={workError(q.error)} />;
   return (
     <div className="space-y-3" data-testid="portal-reports">
-      {!q.data.items.length ? <EmptyState title="No reports yet" body="Weekly updates from your project team will be kept here." /> : (
+      {!q.data.items.length ? <EmptyState title={wt('portal.noReports')} body={wt('portal.noReportsBody')} /> : (
         <ul className="w-card divide-y divide-[var(--w-border)]">
           {q.data.items.map((r) => (
             <li key={r.id}>
@@ -69,8 +70,8 @@ export function ReportsTab({ pid, asClient, openId, setOpenId }: { pid: number; 
           ))}
         </ul>
       )}
-      <Dialog open={!!openId} onClose={() => setOpenId(null)} width={860} title={one.data?.title ?? 'Report'}
-        footer={one.data && <button type="button" className="w-btn" onClick={() => print({ data: one.data!.data, polished: one.data!.aiPolished ? one.data!.bodyMarkdown : null })}><Printer size={14} />Print / PDF</button>}>
+      <Dialog open={!!openId} onClose={() => setOpenId(null)} width={860} title={one.data?.title ?? wt('rep.report')}
+        footer={one.data && <button type="button" className="w-btn" onClick={() => print({ data: one.data!.data, polished: one.data!.aiPolished ? one.data!.bodyMarkdown : null })}><Printer size={14} />{wt('rep.printPdf')}</button>}>
         {!one.data ? <PageLoading rows={3} /> : <ReportDocument data={one.data.data} polished={one.data.aiPolished ? one.data.bodyMarkdown : null} />}
       </Dialog>
       {node}

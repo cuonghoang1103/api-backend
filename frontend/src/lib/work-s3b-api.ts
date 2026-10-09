@@ -5,6 +5,9 @@
  */
 import { api } from './api';
 import type { ApprovalMode, StatusCategory, TiptapDoc, WorkApproval, WorkUser } from './work-api';
+import { translate as wtr, type WKey } from '@/components/work/i18n/core';
+import { currentWorkLocale } from '@/components/work/i18n/store';
+const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 const B = '/work';
 type Env<T> = { data: T };
@@ -356,19 +359,19 @@ export const govApi = {
 // ═══ Nhãn ═════════════════════════════════════════════════════════
 
 export const CR_STATUS_LABEL: Record<CrStatus, string> = {
-  DRAFT: 'Draft', SUBMITTED: 'Submitted', UNDER_REVIEW: 'Under review', APPROVED: 'Approved', REJECTED: 'Rejected', IMPLEMENTED: 'Implemented',
+  get DRAFT() { return wt('gov.crDraft'); }, get SUBMITTED() { return wt('gov.crSubmitted'); }, get UNDER_REVIEW() { return wt('gov.crReview'); }, get APPROVED() { return wt('gov.crApproved'); }, get REJECTED() { return wt('gov.crRejected'); }, get IMPLEMENTED() { return wt('gov.crImplemented'); },
 };
 export const CR_STATUSES: CrStatus[] = ['DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'APPROVED', 'REJECTED', 'IMPLEMENTED'];
 export const RAID_LABEL: Record<RaidType, { one: string; many: string }> = {
-  RISK: { one: 'Risk', many: 'Risks' }, ASSUMPTION: { one: 'Assumption', many: 'Assumptions' },
-  ISSUE: { one: 'Issue', many: 'Issues' }, DEPENDENCY: { one: 'Dependency', many: 'Dependencies' },
+  RISK: { get one() { return wt('gov.risk'); }, get many() { return wt('gov.risks'); } }, ASSUMPTION: { get one() { return wt('gov.assumption'); }, get many() { return wt('gov.assumptions'); } },
+  ISSUE: { get one() { return wt('gov.issueR'); }, get many() { return wt('gov.issuesR'); } }, DEPENDENCY: { get one() { return wt('gov.dependency'); }, get many() { return wt('gov.dependencies'); } },
 };
 export const RAID_TYPES: RaidType[] = ['RISK', 'ASSUMPTION', 'ISSUE', 'DEPENDENCY'];
 export const RAID_STATUS_LABEL: Record<string, string> = {
-  OPEN: 'Open', MONITORING: 'Monitoring', MITIGATED: 'Mitigated', CLOSED: 'Closed', UNVALIDATED: 'Unvalidated', VALIDATED: 'Validated', INVALID: 'Invalid',
+  get OPEN() { return wt('gov.rsOpen'); }, get MONITORING() { return wt('gov.rsMonitoring'); }, get MITIGATED() { return wt('gov.rsMitigated'); }, get CLOSED() { return wt('gov.rsClosed'); }, get UNVALIDATED() { return wt('gov.rsUnvalidated'); }, get VALIDATED() { return wt('gov.rsValidated'); }, get INVALID() { return wt('gov.rsInvalid'); },
 };
-export const RAID_RESPONSE_LABEL: Record<RaidResponse, string> = { AVOID: 'Avoid', MITIGATE: 'Mitigate', TRANSFER: 'Transfer', ACCEPT: 'Accept' };
+export const RAID_RESPONSE_LABEL: Record<RaidResponse, string> = { get AVOID() { return wt('gov.rrAvoid'); }, get MITIGATE() { return wt('gov.rrMitigate'); }, get TRANSFER() { return wt('gov.rrTransfer'); }, get ACCEPT() { return wt('gov.rrAccept'); } };
 export const MEETING_TYPE_LABEL: Record<MeetingType, string> = {
-  KICKOFF: 'Kick-off', DAILY: 'Daily stand-up', WEEKLY: 'Weekly', DEMO: 'Demo', RETRO: 'Retrospective', STEERING: 'Steering committee', CLIENT: 'Client meeting', OTHER: 'Other',
+  get KICKOFF() { return wt('gov.mtKickoff'); }, get DAILY() { return wt('gov.mtDaily'); }, get WEEKLY() { return wt('gov.mtWeekly'); }, get DEMO() { return wt('gov.mtDemo'); }, get RETRO() { return wt('gov.mtRetro'); }, get STEERING() { return wt('gov.mtSteering'); }, get CLIENT() { return wt('gov.mtClient'); }, get OTHER() { return wt('gov.mtOther'); },
 };
 export const MEETING_TYPES: MeetingType[] = ['KICKOFF', 'DAILY', 'WEEKLY', 'DEMO', 'RETRO', 'STEERING', 'CLIENT', 'OTHER'];

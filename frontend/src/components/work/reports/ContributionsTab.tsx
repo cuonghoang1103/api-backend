@@ -8,6 +8,7 @@ import { wk } from '@/components/work/hooks';
 import { EmptyState, Spinner, UserAvatar } from '@/components/work/ui';
 import { cn } from '@/lib/utils';
 import { num, unitLabel, useAllSprints, useReportableSprints } from './shared';
+import { wt } from '@/components/work/i18n';
 
 type SortKey = 'name' | 'resolved' | 'points' | 'subtasks' | 'created' | 'comments' | 'updates' | 'open';
 
@@ -31,10 +32,10 @@ export default function ContributionsTab({ pid, config }: { pid: number; config:
   }, [range]);
 
   const rangeName = useMemo(() => {
-    if (range === '7d') return 'Last 7 days';
-    if (range === '30d') return 'Last 30 days';
+    if (range === '7d') return wt('contrib.p7d');
+    if (range === '30d') return wt('contrib.p30d');
     if (range.startsWith('s:')) return sprints.find((s) => s.id === Number(range.slice(2)))?.name ?? 'Sprint';
-    return 'All time';
+    return wt('agents.allTime');
   }, [range, sprints]);
 
   const q = useQuery({
@@ -106,49 +107,49 @@ export default function ContributionsTab({ pid, config }: { pid: number; config:
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
         <select aria-label="Time range" value={range} onChange={(e) => setRange(e.target.value)} className="w-input h-[28px] w-auto max-w-full py-0 pr-7 text-[12px]">
-          <option value="all">All time</option>
-          <option value="7d">Last 7 days</option>
-          <option value="30d">Last 30 days</option>
+          <option value="all">{wt('agents.allTime')}</option>
+          <option value="7d">{wt('contrib.p7d')}</option>
+          <option value="30d">{wt('contrib.p30d')}</option>
           {sprints.length > 0 && (
             <optgroup label="Sprints">
               {sprints.map((s) => (
-                <option key={s.id} value={`s:${s.id}`}>{s.name}{s.state === 'ACTIVE' ? ' (active)' : ''}</option>
+                <option key={s.id} value={`s:${s.id}`}>{s.name}{s.state === 'ACTIVE' ? wt('contrib.activeParen') : ''}</option>
               ))}
             </optgroup>
           )}
         </select>
         <div className="ml-auto flex items-center gap-2">
           <button type="button" className="w-btn w-btn-sm" onClick={copyText} disabled={!rows.length}>
-            {copied ? <Check size={12} /> : <Copy size={12} />} {copied ? 'Copied' : 'Copy as text'}
+            {copied ? <Check size={12} /> : <Copy size={12} />} {copied ? wt('common.copied') : wt('rep.copyText')}
           </button>
           <button type="button" className="w-btn w-btn-sm" onClick={exportCsv} disabled={!rows.length}>
-            <Download size={12} /> Export CSV
+            <Download size={12} /> {wt('rep.exportCsv')}
           </button>
         </div>
       </div>
       <p className="text-[12px] text-[var(--w-text-3)]">
-        Counts come from issue history. Work done by the AI assistant or automation is not credited to anyone.
+        {wt('rep.countsNote')}
       </p>
 
       {q.isLoading ? (
         <div className="flex justify-center py-16"><Spinner size={20} /></div>
       ) : q.error ? (
-        <EmptyState title="Could not load contributions" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('rep.loadContribFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : !rows.length ? (
-        <EmptyState title="No activity in this range" body="Try a wider time range." />
+        <EmptyState title={wt('rep.noActivity')} body={wt('rep.wider')} />
       ) : (
         <div className="overflow-x-auto rounded-[var(--w-radius-lg)] border border-[var(--w-border)] bg-[var(--w-panel)]">
           <table className="w-full min-w-[860px] text-[13px]">
             <thead>
               <tr className="border-b border-[var(--w-border)] text-left text-[11px] text-[var(--w-text-3)]">
-                {th('name', 'Member')}
-                {th('resolved', 'Completed', true)}
-                {th('points', 'Points')}
-                {th('subtasks', 'Sub-tasks', true)}
-                {th('created', 'Created', true)}
-                {th('comments', 'Comments', true)}
-                {th('updates', 'Updates', true)}
-                {th('open', 'Open now', true)}
+                {th('name', wt('common.member'))}
+                {th('resolved', wt('rep.completed'), true)}
+                {th('points', wt('common.points'))}
+                {th('subtasks', wt('detail.subtasks'), true)}
+                {th('created', wt('common.created'), true)}
+                {th('comments', wt('docs.comments'), true)}
+                {th('updates', wt('rep.updates'), true)}
+                {th('open', wt('rep.openNow'), true)}
               </tr>
             </thead>
             <tbody>
@@ -167,7 +168,7 @@ export default function ContributionsTab({ pid, config }: { pid: number; config:
                   <td className="w-[200px] px-3 py-2">
                     <div className="flex items-center gap-2">
                       <span className="w-14 shrink-0 tabular-nums">{num(r.points)} {u}</span>
-                      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--w-sunken)]" title={`${r.share}% of team ${u === 'h' ? 'hours' : 'points'}`}>
+                      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--w-sunken)]" title={wt('rep.shareOf', { p: r.share, u: u === 'h' ? wt('finance.hoursH').toLowerCase() : wt('common.points').toLowerCase() })}>
                         <div className="h-full rounded-full bg-[var(--w-accent)]" style={{ width: `${Math.min(100, Math.max(0, r.share))}%` }} />
                       </div>
                       <span className="w-9 shrink-0 text-right text-[11px] tabular-nums text-[var(--w-text-3)]">{r.share}%</span>

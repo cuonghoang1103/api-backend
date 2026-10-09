@@ -30,12 +30,13 @@ import { Select } from '../settings/shared';
 import { Pill } from '../studio/shared';
 import { PersonSelect } from '../governance/shared';
 import { PriorityBadge, SlaClock, VIEW_LABEL, minutesText } from './shared';
+import { wt } from '@/components/work/i18n';
 
 type Tab = 'queues' | 'problems' | 'reports' | 'settings';
 const VIEWS: QueueView[] = ['open', 'unassigned', 'mine', 'at_risk', 'breached', 'waiting', 'team', 'resolved'];
 const TYPE_KEYS: RequestTypeKey[] = ['INCIDENT', 'SERVICE_REQUEST', 'QUESTION', 'CHANGE'];
-const TYPE_SHORT: Record<RequestTypeKey, string> = { INCIDENT: 'Incident', SERVICE_REQUEST: 'Service request', QUESTION: 'Question', CHANGE: 'Change' };
-const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const TYPE_SHORT: Record<RequestTypeKey, string> = { get INCIDENT() { return wt('desk.typeIncident'); }, get SERVICE_REQUEST() { return wt('desk.typeServiceRequest'); }, get QUESTION() { return wt('desk.typeQuestion'); }, get CHANGE() { return wt('desk.typeChange'); } };
+const dayNames = () => wt('desk.dayNames').split(',');
 
 function useDeskInvalidate(pid: number) {
   const qc = useQueryClient();
@@ -87,7 +88,7 @@ function QueuesTab({ config }: { config: ProjectConfig }) {
   return (
     <div>
       <div className="-mx-4 mb-3 overflow-x-auto px-4">
-        <div className="flex gap-1.5" role="tablist" aria-label="Queues">
+        <div className="flex gap-1.5" role="tablist" aria-label={wt('desk.queues')}>
           {VIEWS.map((v) => {
             const n = q.data?.counts[v];
             const alert = (v === 'breached' || v === 'at_risk') && !!n;
@@ -107,34 +108,34 @@ function QueuesTab({ config }: { config: ProjectConfig }) {
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <label className="relative min-w-[180px] flex-1 sm:max-w-[280px]">
           <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
-          <input className="w-input !h-8 !pl-7" placeholder="Search key or title" value={text} onChange={(e) => setText(e.target.value)} aria-label="Search requests" />
+          <input className="w-input !h-8 !pl-7" placeholder={wt('desk.searchKeyTitle')} value={text} onChange={(e) => setText(e.target.value)} aria-label={wt('desk.searchRequests')} />
         </label>
         {view === 'team' && (
-          <Select aria-label="Team" className="!h-8 !w-auto" value={teamId ?? ''} onChange={(e) => setTeamId(e.target.value ? Number(e.target.value) : null)}>
-            <option value="">All teams</option>
+          <Select aria-label={wt('desk.team')} className="!h-8 !w-auto" value={teamId ?? ''} onChange={(e) => setTeamId(e.target.value ? Number(e.target.value) : null)}>
+            <option value="">{wt('desk.allTeams')}</option>
             {(q.data?.teams ?? []).map((t) => <option key={t.id} value={t.id}>{t.key} · {t.name}</option>)}
           </Select>
         )}
-        <Select aria-label="Request type" className="!h-8 !w-auto" value={type} onChange={(e) => setType(e.target.value as RequestTypeKey | '')}>
-          <option value="">All types</option>
+        <Select aria-label={wt('desk.requestType')} className="!h-8 !w-auto" value={type} onChange={(e) => setType(e.target.value as RequestTypeKey | '')}>
+          <option value="">{wt('desk.allTypes')}</option>
           {TYPE_KEYS.map((k) => <option key={k} value={k}>{TYPE_SHORT[k]}</option>)}
         </Select>
-        <Select aria-label="Priority" className="!h-8 !w-auto" value={prio} onChange={(e) => setPrio(e.target.value as DeskPriority | '')}>
-          <option value="">All priorities</option>
+        <Select aria-label={wt('common.priority')} className="!h-8 !w-auto" value={prio} onChange={(e) => setPrio(e.target.value as DeskPriority | '')}>
+          <option value="">{wt('desk.allPriorities')}</option>
           {DESK_PRIORITIES.map((p) => <option key={p} value={p}>{p}</option>)}
         </Select>
-        <Select aria-label="Sort" className="!h-8 !w-auto" value={sort} onChange={(e) => setSort(e.target.value)}>
-          <option value="sla">Sort: SLA (most urgent)</option>
-          <option value="priority">Sort: priority</option>
-          <option value="created">Sort: newest</option>
-          <option value="updated">Sort: recently updated</option>
+        <Select aria-label={wt('common.sort')} className="!h-8 !w-auto" value={sort} onChange={(e) => setSort(e.target.value)}>
+          <option value="sla">{wt('desk.sortSla')}</option>
+          <option value="priority">{wt('desk.sortPriority')}</option>
+          <option value="created">{wt('desk.sortNewest')}</option>
+          <option value="updated">{wt('desk.sortUpdated')}</option>
         </Select>
         {config.permissions.workDesk && (
-          <button type="button" className="w-btn w-btn-primary w-btn-sm ml-auto" onClick={() => setCreating(true)} data-testid="desk-new"><Plus size={14} /> New request</button>
+          <button type="button" className="w-btn w-btn-primary w-btn-sm ml-auto" onClick={() => setCreating(true)} data-testid="desk-new"><Plus size={14} /> {wt('desk.newRequest')}</button>
         )}
       </div>
-      {q.isLoading ? <PageLoading rows={5} /> : q.error ? <EmptyState title="Could not load the queue" body={workError(q.error)} /> : !q.data?.items.length ? (
-        <EmptyState icon={<Inbox size={20} />} title={view === 'breached' ? 'No breached requests' : view === 'at_risk' ? 'Nothing at risk' : 'No requests here'} body="Requests from the client portal and ones the team logs land in these queues, each with its SLA clocks." />
+      {q.isLoading ? <PageLoading rows={5} /> : q.error ? <EmptyState title={wt('desk.loadQueueFailed')} body={workError(q.error)} /> : !q.data?.items.length ? (
+        <EmptyState icon={<Inbox size={20} />} title={view === 'breached' ? wt('desk.noBreached') : view === 'at_risk' ? wt('desk.nothingAtRisk') : wt('desk.noRequests')} body={wt('desk.noRequestsBody')} />
       ) : (
         <>
           {/* Bảng ≥ lg */}
@@ -142,14 +143,14 @@ function QueuesTab({ config }: { config: ProjectConfig }) {
             <table className="w-full min-w-[980px] text-[13px]">
               <thead>
                 <tr className="border-b border-[var(--w-border)] text-left text-[11.5px] font-medium uppercase tracking-[0.04em] text-[var(--w-text-3)]">
-                  <th className="px-3 py-2">Request</th>
+                  <th className="px-3 py-2">{wt('desk.request')}</th>
                   <th className="px-2 py-2">P</th>
-                  <th className="px-2 py-2">Requester</th>
-                  <th className="px-2 py-2">Assignee</th>
-                  <th className="px-2 py-2">Status</th>
-                  <th className="px-2 py-2">First response</th>
-                  <th className="px-2 py-2">Resolution</th>
-                  <th className="px-3 py-2 text-right">Created</th>
+                  <th className="px-2 py-2">{wt('desk.requester')}</th>
+                  <th className="px-2 py-2">{wt('common.assignee')}</th>
+                  <th className="px-2 py-2">{wt('common.status')}</th>
+                  <th className="px-2 py-2">{wt('desk.firstResponse')}</th>
+                  <th className="px-2 py-2">{wt('desk.resolution')}</th>
+                  <th className="px-3 py-2 text-right">{wt('common.created')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -162,16 +163,16 @@ function QueuesTab({ config }: { config: ProjectConfig }) {
                           <span className="truncate font-medium">{r.title}</span>
                         </span>
                         <span className="mt-0.5 flex items-center gap-1.5 text-[11.5px] text-[var(--w-text-3)]">
-                          {r.requestTypeName}{r.channel === 'PORTAL' && ' · portal'}{r.waiting && <Pill tone="neutral" className="!h-[18px] !px-1.5 !text-[11px]">Waiting for customer</Pill>}
+                          {r.requestTypeName}{r.channel === 'PORTAL' && wt('desk.portalSuffix')}{r.waiting && <Pill tone="neutral" className="!h-[18px] !px-1.5 !text-[11px]">{wt('desk.waitingCustomer')}</Pill>}
                         </span>
                       </Link>
                     </td>
                     <td className="px-2 py-2"><PriorityBadge p={r.priority} /></td>
                     <td className="px-2 py-2"><Person u={r.requester} /></td>
-                    <td className="px-2 py-2"><Person u={r.assignee} empty="Unassigned" /></td>
+                    <td className="px-2 py-2"><Person u={r.assignee} empty={wt('common.unassigned')} /></td>
                     <td className="px-2 py-2"><StatusBadge status={r.status} /></td>
-                    <td className="px-2 py-2"><SlaClock t={r.firstResponse} fetchedAt={fetchedAt} compact label="First response" /></td>
-                    <td className="px-2 py-2"><SlaClock t={r.resolution} fetchedAt={fetchedAt} compact label="Resolution" /></td>
+                    <td className="px-2 py-2"><SlaClock t={r.firstResponse} fetchedAt={fetchedAt} compact label={wt('desk.firstResponse')} /></td>
+                    <td className="px-2 py-2"><SlaClock t={r.resolution} fetchedAt={fetchedAt} compact label={wt('desk.resolution')} /></td>
                     <td className="whitespace-nowrap px-3 py-2 text-right text-[12px] text-[var(--w-text-3)]">{relativeTime(r.createdAt)}</td>
                   </tr>
                 ))}
@@ -182,7 +183,7 @@ function QueuesTab({ config }: { config: ProjectConfig }) {
           <ul className="space-y-2 lg:hidden" data-testid="desk-queue-cards">
             {q.data.items.map((r) => <QueueCard key={r.number} r={r} base={base} fetchedAt={fetchedAt} />)}
           </ul>
-          {q.data.truncated && <p className="mt-2 text-[12px] text-[var(--w-text-3)]">Showing the first 500 — narrow the filters to see the rest.</p>}
+          {q.data.truncated && <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{wt('desk.showingFirst500')}</p>}
         </>
       )}
       <NewRequestDialog config={config} open={creating} onClose={() => setCreating(false)} />
@@ -207,12 +208,12 @@ function QueueCard({ r, base, fetchedAt }: { r: QueueItem; base: string; fetched
         <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-[var(--w-text-3)]">
           <StatusBadge status={r.status} />
           <span>{r.requestTypeName}</span>
-          {r.waiting && <span>· waiting for customer</span>}
-          <span>· {r.assignee ? userName(r.assignee) : 'Unassigned'}</span>
+          {r.waiting && <span>{wt('desk.waitingCustomerDot')}</span>}
+          <span>· {r.assignee ? userName(r.assignee) : wt('common.unassigned')}</span>
         </div>
         <div className="mt-2.5 grid grid-cols-2 gap-3">
-          <div><div className="mb-0.5 text-[11px] text-[var(--w-text-3)]">First response</div><SlaClock t={r.firstResponse} fetchedAt={fetchedAt} /></div>
-          <div><div className="mb-0.5 text-[11px] text-[var(--w-text-3)]">Resolution</div><SlaClock t={r.resolution} fetchedAt={fetchedAt} /></div>
+          <div><div className="mb-0.5 text-[11px] text-[var(--w-text-3)]">{wt('desk.firstResponse')}</div><SlaClock t={r.firstResponse} fetchedAt={fetchedAt} /></div>
+          <div><div className="mb-0.5 text-[11px] text-[var(--w-text-3)]">{wt('desk.resolution')}</div><SlaClock t={r.resolution} fetchedAt={fetchedAt} /></div>
         </div>
       </Link>
     </li>
@@ -239,37 +240,37 @@ export function NewRequestDialog({ config, open, onClose, issueNumber }: { confi
   const create = useMutation({
     mutationFn: () => deskApi.createTicket(pid, { requestType: type, impact, urgency, requesterId: requester, fields, ...(issueNumber ? { issueNumber } : { title, description: desc || null }) }),
     onSuccess: () => {
-      toast.success(issueNumber ? 'Added to the service desk' : 'Request logged');
+      toast.success(issueNumber ? wt('desk.addedToDesk') : wt('desk.requestLogged'));
       invalidate();
       onClose();
       if (!issueNumber) router.refresh();
     },
-    onError: (err) => toast.error(workError(err, 'Could not save the request')),
+    onError: (err) => toast.error(workError(err, wt('desk.saveRequestFailed'))),
   });
   return (
-    <Dialog open={open} onClose={onClose} title={issueNumber ? 'Add to service desk' : 'Log a request'} width={600}
+    <Dialog open={open} onClose={onClose} title={issueNumber ? wt('desk.addToDesk') : wt('desk.logRequestTitle')} width={600}
       footer={<>
-        <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+        <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
         <button type="button" className="w-btn w-btn-primary" disabled={create.isPending || (!issueNumber && !title.trim())} onClick={() => create.mutate()} data-testid="desk-create">
-          {create.isPending ? <Spinner size={12} /> : <Plus size={13} />} {issueNumber ? 'Add' : 'Log request'}
+          {create.isPending ? <Spinner size={12} /> : <Plus size={13} />} {issueNumber ? wt('common.add') : wt('desk.logRequest')}
         </button>
       </>}>
       {settings.isLoading ? <PageLoading rows={3} /> : (
         <div className="space-y-1">
           <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
-            <Field label="Request type">
-              <Select aria-label="Request type" value={type} onChange={(e) => setType(e.target.value as RequestTypeKey)}>
-                {(settings.data?.requestTypes ?? []).map((x) => <option key={x.key} value={x.key}>{x.name}{x.enabled ? '' : ' (hidden from portal)'}</option>)}
+            <Field label={wt('desk.requestType')}>
+              <Select aria-label={wt('desk.requestType')} value={type} onChange={(e) => setType(e.target.value as RequestTypeKey)}>
+                {(settings.data?.requestTypes ?? []).map((x) => <option key={x.key} value={x.key}>{x.name}{x.enabled ? '' : wt('desk.hiddenFromPortal')}</option>)}
               </Select>
             </Field>
-            <Field label="Requester" hint="Who asked — they get the CSAT survey">
-              <PersonSelect config={config} value={requester} onChange={setRequester} label="Requester" empty="Not recorded" />
+            <Field label={wt('desk.requester')} hint={wt('desk.requesterHint')}>
+              <PersonSelect config={config} value={requester} onChange={setRequester} label={wt('desk.requester')} empty={wt('desk.notRecorded')} />
             </Field>
           </div>
           {!issueNumber && (
             <>
-              <Field label="Title"><input className="w-input" value={title} maxLength={255} onChange={(e) => setTitle(e.target.value)} autoFocus data-testid="desk-title" /></Field>
-              <Field label="Details"><textarea className="w-input min-h-[80px] py-2" value={desc} onChange={(e) => setDesc(e.target.value)} /></Field>
+              <Field label={wt('common.title')}><input className="w-input" value={title} maxLength={255} onChange={(e) => setTitle(e.target.value)} autoFocus data-testid="desk-title" /></Field>
+              <Field label={wt('desk.details')}><textarea className="w-input min-h-[80px] py-2" value={desc} onChange={(e) => setDesc(e.target.value)} /></Field>
             </>
           )}
           {t?.fields.map((f) => (
@@ -280,11 +281,11 @@ export function NewRequestDialog({ config, open, onClose, issueNumber }: { confi
             </Field>
           ))}
           <div className="grid grid-cols-2 gap-x-3 sm:grid-cols-[1fr_1fr_auto]">
-            <Field label="Impact"><Select aria-label="Impact" value={impact} onChange={(e) => setImpact(e.target.value as DeskLevel)}>{DESK_LEVELS.map((l) => <option key={l} value={l}>{LEVEL_LABEL[l]}</option>)}</Select></Field>
-            <Field label="Urgency"><Select aria-label="Urgency" value={urgency} onChange={(e) => setUrgency(e.target.value as DeskLevel)}>{DESK_LEVELS.map((l) => <option key={l} value={l}>{LEVEL_LABEL[l]}</option>)}</Select></Field>
-            <Field label="Priority"><div className="flex h-9 items-center">{p && <PriorityBadge p={p} long />}</div></Field>
+            <Field label={wt('desk.impact')}><Select aria-label={wt('desk.impact')} value={impact} onChange={(e) => setImpact(e.target.value as DeskLevel)}>{DESK_LEVELS.map((l) => <option key={l} value={l}>{LEVEL_LABEL[l]}</option>)}</Select></Field>
+            <Field label={wt('desk.urgency')}><Select aria-label={wt('desk.urgency')} value={urgency} onChange={(e) => setUrgency(e.target.value as DeskLevel)}>{DESK_LEVELS.map((l) => <option key={l} value={l}>{LEVEL_LABEL[l]}</option>)}</Select></Field>
+            <Field label={wt('common.priority')}><div className="flex h-9 items-center">{p && <PriorityBadge p={p} long />}</div></Field>
           </div>
-          {p && settings.data && <p className="text-[12px] text-[var(--w-text-3)]">Respond within {settings.data.targetsText[p].respond} · resolve within {settings.data.targetsText[p].resolve}.</p>}
+          {p && settings.data && <p className="text-[12px] text-[var(--w-text-3)]">{wt('desk.respondWithin', { a: settings.data.targetsText[p].respond, b: settings.data.targetsText[p].resolve })}</p>}
         </div>
       )}
     </Dialog>
@@ -308,11 +309,11 @@ function ProblemsTab({ config }: { config: ProjectConfig }) {
   return (
     <div>
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <p className="min-w-0 flex-1 text-[13px] text-[var(--w-text-2)]">A problem is the underlying cause behind one or more incidents (ITIL). Link the incidents, record the root cause and workaround, then write a blameless postmortem.</p>
-        {q.data?.canWork && <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreating(true)} data-testid="problem-new"><Plus size={14} /> New problem</button>}
+        <p className="min-w-0 flex-1 text-[13px] text-[var(--w-text-2)]">{wt('desk.problemIntro')}</p>
+        {q.data?.canWork && <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreating(true)} data-testid="problem-new"><Plus size={14} /> {wt('desk.newProblem')}</button>}
       </div>
-      {q.isLoading ? <PageLoading rows={3} /> : q.error ? <EmptyState title="Could not load problems" body={workError(q.error)} /> : !q.data?.items.length ? (
-        <EmptyState icon={<Siren size={20} />} title="No problems recorded" body="When several incidents share a cause, group them under a problem." />
+      {q.isLoading ? <PageLoading rows={3} /> : q.error ? <EmptyState title={wt('desk.loadProblemsFailed')} body={workError(q.error)} /> : !q.data?.items.length ? (
+        <EmptyState icon={<Siren size={20} />} title={wt('desk.noProblems')} body={wt('desk.noProblemsBody')} />
       ) : (
         <ul className="w-card overflow-hidden" data-testid="problem-list">
           {q.data.items.map((p) => (
@@ -320,8 +321,8 @@ function ProblemsTab({ config }: { config: ProjectConfig }) {
               <button type="button" onClick={() => setOpen(p.number)} className="flex w-full min-w-0 flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 text-left hover:bg-[var(--w-hover)]">
                 <span className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">{p.key}</span>
                 <span className="min-w-0 flex-1 truncate text-[13.5px] font-medium">{p.title}</span>
-                <span className="text-[12px] text-[var(--w-text-3)]">{p.incidentCount} incident{p.incidentCount === 1 ? '' : 's'}</span>
-                {p.postmortem && <span className="flex items-center gap-1 text-[12px] text-[var(--w-text-3)]"><FileText size={12} />postmortem</span>}
+                <span className="text-[12px] text-[var(--w-text-3)]">{wt('desk.nIncidents', { count: p.incidentCount })}</span>
+                {p.postmortem && <span className="flex items-center gap-1 text-[12px] text-[var(--w-text-3)]"><FileText size={12} />{wt('desk.postmortem')}</span>}
                 <Pill tone={PROBLEM_TONE[p.status]}>{PROBLEM_STATUS_LABEL[p.status]}</Pill>
               </button>
             </li>
@@ -342,15 +343,15 @@ function NewProblemDialog({ config, open, onClose, onCreated }: { config: Projec
   useEffect(() => { if (open) { setTitle(''); setDesc(''); setIncidents(''); } }, [open]);
   const create = useMutation({
     mutationFn: () => deskApi.createProblem(config.id, { title, description: desc || null, incidentNumbers: parseNums(incidents) }),
-    onSuccess: (p) => { toast.success(`${p.key} created`); invalidate(); onClose(); onCreated(p.number); },
-    onError: (err) => toast.error(workError(err, 'Could not create the problem')),
+    onSuccess: (p) => { toast.success(wt('desk.keyCreated', { key: p.key })); invalidate(); onClose(); onCreated(p.number); },
+    onError: (err) => toast.error(workError(err, wt('desk.createProblemFailed'))),
   });
   return (
-    <Dialog open={open} onClose={onClose} title="New problem" width={560}
-      footer={<><button type="button" className="w-btn" onClick={onClose}>Cancel</button><button type="button" className="w-btn w-btn-primary" disabled={!title.trim() || create.isPending} onClick={() => create.mutate()} data-testid="problem-create">{create.isPending ? <Spinner size={12} /> : <Plus size={13} />} Create</button></>}>
-      <Field label="Title"><input className="w-input" value={title} maxLength={255} autoFocus onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Payment gateway times out under load" data-testid="problem-title" /></Field>
-      <Field label="Description"><textarea className="w-input min-h-[72px] py-2" value={desc} onChange={(e) => setDesc(e.target.value)} /></Field>
-      <Field label="Incidents" hint={`Keys or numbers, e.g. ${config.key}-12, ${config.key}-15`}><input className="w-input" value={incidents} onChange={(e) => setIncidents(e.target.value)} data-testid="problem-incidents" /></Field>
+    <Dialog open={open} onClose={onClose} title={wt('desk.newProblem')} width={560}
+      footer={<><button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" disabled={!title.trim() || create.isPending} onClick={() => create.mutate()} data-testid="problem-create">{create.isPending ? <Spinner size={12} /> : <Plus size={13} />} {wt('common.create')}</button></>}>
+      <Field label={wt('common.title')}><input className="w-input" value={title} maxLength={255} autoFocus onChange={(e) => setTitle(e.target.value)} placeholder={wt('desk.problemTitlePh')} data-testid="problem-title" /></Field>
+      <Field label={wt('common.description')}><textarea className="w-input min-h-[72px] py-2" value={desc} onChange={(e) => setDesc(e.target.value)} /></Field>
+      <Field label={wt('desk.incidents')} hint={wt('desk.incidentsHint', { a: `${config.key}-12`, b: `${config.key}-15` })}><input className="w-input" value={incidents} onChange={(e) => setIncidents(e.target.value)} data-testid="problem-incidents" /></Field>
     </Dialog>
   );
 }
@@ -367,44 +368,44 @@ function ProblemDialog({ config, num, onClose }: { config: ProjectConfig; num: n
   const base = `/work/${config.workspace.slug}/${config.key}`;
   const saveP = useMutation({
     mutationFn: () => deskApi.updateProblem(pid, num!, { title: f.title, description: f.description || null, rootCause: f.rootCause || null, workaround: f.workaround || null, status: f.status, ownerId: f.ownerId }),
-    onSuccess: () => { toast.success('Saved'); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not save')),
+    onSuccess: () => { toast.success(wt('common.saved')); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('common.couldNotSave'))),
   });
-  const linkM = useMutation({ mutationFn: () => deskApi.linkIncidents(pid, num!, parseNums(link)), onSuccess: () => { setLink(''); invalidate(); }, onError: (err) => toast.error(workError(err, 'Could not link')) });
+  const linkM = useMutation({ mutationFn: () => deskApi.linkIncidents(pid, num!, parseNums(link)), onSuccess: () => { setLink(''); invalidate(); }, onError: (err) => toast.error(workError(err, wt('desk.linkFailed'))) });
   const unlink = useMutation({ mutationFn: (n: number) => deskApi.unlinkIncident(pid, num!, n), onSuccess: () => invalidate(), onError: (err) => toast.error(workError(err)) });
   const pm = useMutation({
     mutationFn: () => deskApi.postmortem(pid, num!),
-    onSuccess: (r) => { toast.success('Postmortem created in Docs'); invalidate(); router.push(`${base}/docs/${r.pageNumber}`); },
-    onError: (err) => toast.error(workError(err, 'Could not create the postmortem')),
+    onSuccess: (r) => { toast.success(wt('desk.postmortemCreated')); invalidate(); router.push(`${base}/docs/${r.pageNumber}`); },
+    onError: (err) => toast.error(workError(err, wt('desk.createPostmortemFailed'))),
   });
   const ro = !p?.canWork;
   const fetchedAt = q.dataUpdatedAt || Date.now();
   return (
-    <Dialog open={!!num} onClose={onClose} width={760} title={p ? <span className="flex min-w-0 items-center gap-2"><span className="font-mono text-[13px] text-[var(--w-accent-text)]">{p.key}</span><span className="truncate">{p.title}</span></span> : 'Loading…'}
+    <Dialog open={!!num} onClose={onClose} width={760} title={p ? <span className="flex min-w-0 items-center gap-2"><span className="font-mono text-[13px] text-[var(--w-accent-text)]">{p.key}</span><span className="truncate">{p.title}</span></span> : wt('common.loading')}
       footer={p && !ro ? <>
         {p.postmortem
-          ? <Link href={`${base}/docs/${p.postmortem.number}`} className="w-btn mr-auto"><FileText size={13} /> Open postmortem</Link>
-          : p.docsEnabled && <button type="button" className="w-btn mr-auto" disabled={pm.isPending} onClick={() => pm.mutate()} data-testid="problem-postmortem">{pm.isPending ? <Spinner size={12} /> : <FileText size={13} />} Create postmortem</button>}
-        <button type="button" className="w-btn w-btn-primary" disabled={!f.title.trim() || saveP.isPending} onClick={() => saveP.mutate()} data-testid="problem-save">{saveP.isPending ? <Spinner size={12} /> : <Save size={13} />} Save</button>
+          ? <Link href={`${base}/docs/${p.postmortem.number}`} className="w-btn mr-auto"><FileText size={13} /> {wt('desk.openPostmortem')}</Link>
+          : p.docsEnabled && <button type="button" className="w-btn mr-auto" disabled={pm.isPending} onClick={() => pm.mutate()} data-testid="problem-postmortem">{pm.isPending ? <Spinner size={12} /> : <FileText size={13} />} {wt('desk.createPostmortem')}</button>}
+        <button type="button" className="w-btn w-btn-primary" disabled={!f.title.trim() || saveP.isPending} onClick={() => saveP.mutate()} data-testid="problem-save">{saveP.isPending ? <Spinner size={12} /> : <Save size={13} />} {wt('common.save')}</button>
       </> : undefined}>
       {q.isLoading || !p ? <PageLoading rows={4} /> : (
         <div className="space-y-4">
           <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[1fr_180px_180px]">
-            <Field label="Title"><input className="w-input" value={f.title} disabled={ro} onChange={(e) => setF({ ...f, title: e.target.value })} /></Field>
-            <Field label="Status">
-              <Select aria-label="Status" value={f.status} disabled={ro} onChange={(e) => setF({ ...f, status: e.target.value as ProblemStatus })}>
+            <Field label={wt('common.title')}><input className="w-input" value={f.title} disabled={ro} onChange={(e) => setF({ ...f, title: e.target.value })} /></Field>
+            <Field label={wt('common.status')}>
+              <Select aria-label={wt('common.status')} value={f.status} disabled={ro} onChange={(e) => setF({ ...f, status: e.target.value as ProblemStatus })}>
                 {PROBLEM_STATUSES.map((s) => <option key={s} value={s}>{PROBLEM_STATUS_LABEL[s]}</option>)}
               </Select>
             </Field>
-            <Field label="Owner"><PersonSelect config={config} value={f.ownerId} onChange={(v) => setF({ ...f, ownerId: v })} label="Owner" staffOnly disabled={ro} /></Field>
+            <Field label={wt('desk.owner')}><PersonSelect config={config} value={f.ownerId} onChange={(v) => setF({ ...f, ownerId: v })} label={wt('desk.owner')} staffOnly disabled={ro} /></Field>
           </div>
-          <Field label="Description"><textarea className="w-input min-h-[60px] py-2" disabled={ro} value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} /></Field>
+          <Field label={wt('common.description')}><textarea className="w-input min-h-[60px] py-2" disabled={ro} value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} /></Field>
           <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
-            <Field label="Root cause"><textarea className="w-input min-h-[70px] py-2" disabled={ro} value={f.rootCause} onChange={(e) => setF({ ...f, rootCause: e.target.value })} placeholder="Why it happened — the system, not a person" /></Field>
-            <Field label="Workaround"><textarea className="w-input min-h-[70px] py-2" disabled={ro} value={f.workaround} onChange={(e) => setF({ ...f, workaround: e.target.value })} /></Field>
+            <Field label={wt('desk.rootCause')}><textarea className="w-input min-h-[70px] py-2" disabled={ro} value={f.rootCause} onChange={(e) => setF({ ...f, rootCause: e.target.value })} placeholder={wt('desk.rootCausePh')} /></Field>
+            <Field label={wt('desk.workaround')}><textarea className="w-input min-h-[70px] py-2" disabled={ro} value={f.workaround} onChange={(e) => setF({ ...f, workaround: e.target.value })} /></Field>
           </div>
           <section>
-            <h3 className="w-section-title mb-2">Linked incidents</h3>
+            <h3 className="w-section-title mb-2">{wt('desk.linkedIncidents')}</h3>
             {p.incidents.length ? (
               <ul className="overflow-hidden rounded-[8px] border border-[var(--w-border)]" data-testid="problem-incidents-list">
                 {p.incidents.map((i) => (
@@ -414,20 +415,20 @@ function ProblemDialog({ config, num, onClose }: { config: ProjectConfig; num: n
                       <span className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">{i.key}</span>
                       <span className="truncate">{i.title}</span>
                     </Link>
-                    <div className="hidden sm:block"><SlaClock t={i.firstResponse} fetchedAt={fetchedAt} compact label="First response" /></div>
-                    <div className="hidden sm:block"><SlaClock t={i.resolution} fetchedAt={fetchedAt} compact label="Resolution" /></div>
-                    {!ro && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`Unlink ${i.key}`} onClick={() => unlink.mutate(i.number)}><Unlink size={13} /></button>}
+                    <div className="hidden sm:block"><SlaClock t={i.firstResponse} fetchedAt={fetchedAt} compact label={wt('desk.firstResponse')} /></div>
+                    <div className="hidden sm:block"><SlaClock t={i.resolution} fetchedAt={fetchedAt} compact label={wt('desk.resolution')} /></div>
+                    {!ro && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('desk.unlinkKey', { key: i.key })} onClick={() => unlink.mutate(i.number)}><Unlink size={13} /></button>}
                   </li>
                 ))}
               </ul>
-            ) : <p className="text-[13px] text-[var(--w-text-3)]">No incidents linked yet.</p>}
+            ) : <p className="text-[13px] text-[var(--w-text-3)]">{wt('desk.noIncidentsLinked')}</p>}
             {!ro && (
               <div className="mt-2 flex gap-2">
-                <input className="w-input !h-8" placeholder={`${config.key}-12, ${config.key}-15`} value={link} onChange={(e) => setLink(e.target.value)} aria-label="Incidents to link" />
-                <button type="button" className="w-btn w-btn-sm shrink-0" disabled={!parseNums(link).length || linkM.isPending} onClick={() => linkM.mutate()}><Link2 size={13} /> Link</button>
+                <input className="w-input !h-8" placeholder={`${config.key}-12, ${config.key}-15`} value={link} onChange={(e) => setLink(e.target.value)} aria-label={wt('desk.incidentsToLink')} />
+                <button type="button" className="w-btn w-btn-sm shrink-0" disabled={!parseNums(link).length || linkM.isPending} onClick={() => linkM.mutate()}><Link2 size={13} /> {wt('desk.link')}</button>
               </div>
             )}
-            {!p.docsEnabled && <p className="mt-2 text-[12px] text-[var(--w-text-3)]">Turn on the Docs module to create a postmortem from the template.</p>}
+            {!p.docsEnabled && <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{wt('desk.turnOnDocs')}</p>}
           </section>
         </div>
       )}
@@ -461,41 +462,41 @@ function ReportsTab({ config }: { config: ProjectConfig }) {
   const base = `/work/${config.workspace.slug}/${config.key}`;
   const exportX = async () => {
     setExporting(true);
-    try { save(await deskApi.reportXlsx(pid, months), `${config.key}-service-desk-sla.xlsx`); } catch (err) { toast.error(workError(err, 'Could not export')); } finally { setExporting(false); }
+    try { save(await deskApi.reportXlsx(pid, months), `${config.key}-service-desk-sla.xlsx`); } catch (err) { toast.error(workError(err, wt('desk.exportFailed'))); } finally { setExporting(false); }
   };
   if (q.isLoading) return <PageLoading rows={5} />;
-  if (q.error || !q.data) return <EmptyState title="Could not load the report" body={workError(q.error)} />;
+  if (q.error || !q.data) return <EmptyState title={wt('desk.loadReportFailed')} body={workError(q.error)} />;
   const r = q.data;
   const tot = r.byPriority[p];
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        <div className="flex gap-1" role="tablist" aria-label="Priority">
+        <div className="flex gap-1" role="tablist" aria-label={wt('common.priority')}>
           {(['ALL', ...DESK_PRIORITIES] as const).map((x) => (
             <button key={x} type="button" role="tab" aria-selected={p === x} onClick={() => setP(x)}
               className={cn('h-8 rounded-[7px] border px-2.5 text-[12.5px] font-medium', p === x ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border)] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}>
-              {x === 'ALL' ? 'All priorities' : x}
+              {x === 'ALL' ? wt('desk.allPriorities') : x}
             </button>
           ))}
         </div>
-        <Select aria-label="Period" className="!h-8 !w-auto" value={months} onChange={(e) => setMonths(Number(e.target.value))}>
-          {[3, 6, 12].map((n) => <option key={n} value={n}>Last {n} months</option>)}
+        <Select aria-label={wt('desk.period')} className="!h-8 !w-auto" value={months} onChange={(e) => setMonths(Number(e.target.value))}>
+          {[3, 6, 12].map((n) => <option key={n} value={n}>{wt('desk.lastNMonths', { n })}</option>)}
         </Select>
-        <button type="button" className="w-btn w-btn-sm ml-auto" disabled={exporting} onClick={() => void exportX()} data-testid="desk-export">{exporting ? <Spinner size={12} /> : <FileDown size={13} />} Export .xlsx</button>
+        <button type="button" className="w-btn w-btn-sm ml-auto" disabled={exporting} onClick={() => void exportX()} data-testid="desk-export">{exporting ? <Spinner size={12} /> : <FileDown size={13} />} {wt('desk.exportXlsx')}</button>
       </div>
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <Kpi label="Responded on time" value={pct(tot.frPercent)} sub={`${tot.frMet}/${tot.frDone} with an outcome`} tone={toneOf(tot.frPercent)} />
-        <Kpi label="Resolved on time" value={pct(tot.resPercent)} sub={`${tot.resMet}/${tot.resDone} with an outcome`} tone={toneOf(tot.resPercent)} />
-        <Kpi label="MTTR" value={hours(tot.mttrMin)} sub="mean time to resolve (wall clock)" />
-        <Kpi label="Breaches" value={tot.breaches} sub={`${tot.tickets} requests`} tone={tot.breaches ? 'red' : undefined} />
+        <Kpi label={wt('desk.respondedOnTime')} value={pct(tot.frPercent)} sub={wt('desk.withOutcome', { a: tot.frMet, b: tot.frDone })} tone={toneOf(tot.frPercent)} />
+        <Kpi label={wt('desk.resolvedOnTime')} value={pct(tot.resPercent)} sub={wt('desk.withOutcome', { a: tot.resMet, b: tot.resDone })} tone={toneOf(tot.resPercent)} />
+        <Kpi label="MTTR" value={hours(tot.mttrMin)} sub={wt('desk.mttrSub')} />
+        <Kpi label={wt('desk.breaches')} value={tot.breaches} sub={wt('desk.nRequests', { count: tot.tickets })} tone={tot.breaches ? 'red' : undefined} />
         <Kpi label="CSAT" value={tot.csatAvg === null ? '—' : `${tot.csatAvg}/5`} sub={`${tot.csatCount} rating${tot.csatCount === 1 ? '' : 's'}`} />
       </div>
       <section className="w-card overflow-x-auto">
         <table className="w-full min-w-[640px] text-[13px]" data-testid="desk-report-table">
           <thead>
             <tr className="border-b border-[var(--w-border)] text-left text-[11.5px] font-medium uppercase tracking-[0.04em] text-[var(--w-text-3)]">
-              <th className="px-3 py-2">Month</th><th className="px-2 py-2 text-right">Requests</th><th className="px-2 py-2">First response met</th><th className="px-2 py-2">Resolution met</th>
-              <th className="px-2 py-2 text-right">Breaches</th><th className="px-2 py-2 text-right">MTTR</th><th className="px-3 py-2 text-right">CSAT</th>
+              <th className="px-3 py-2">{wt('desk.month')}</th><th className="px-2 py-2 text-right">{wt('desk.requests')}</th><th className="px-2 py-2">{wt('desk.frMet')}</th><th className="px-2 py-2">{wt('desk.resMet')}</th>
+              <th className="px-2 py-2 text-right">{wt('desk.breaches')}</th><th className="px-2 py-2 text-right">MTTR</th><th className="px-3 py-2 text-right">CSAT</th>
             </tr>
           </thead>
           <tbody>
@@ -518,7 +519,7 @@ function ReportsTab({ config }: { config: ProjectConfig }) {
       </section>
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="w-card p-4">
-          <h2 className="w-section-title mb-2">Recent breaches</h2>
+          <h2 className="w-section-title mb-2">{wt('desk.recentBreaches')}</h2>
           {r.breaches.length ? (
             <ul className="space-y-1.5 text-[13px]">
               {r.breaches.map((b, i) => (
@@ -526,14 +527,14 @@ function ReportsTab({ config }: { config: ProjectConfig }) {
                   <PriorityBadge p={b.priority} />
                   <Link href={`${base}/issue/${b.number}`} className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">{b.key}</Link>
                   <span className="min-w-0 flex-1 truncate">{b.title}</span>
-                  <span className="shrink-0 text-[12px] text-[var(--w-text-3)]">{b.target === 'FIRST_RESPONSE' ? 'response' : 'resolution'} · {formatDate(b.at)}</span>
+                  <span className="shrink-0 text-[12px] text-[var(--w-text-3)]">{b.target === 'FIRST_RESPONSE' ? wt('desk.responseLc') : wt('desk.resolutionLc')} · {formatDate(b.at)}</span>
                 </li>
               ))}
             </ul>
-          ) : <p className="text-[13px] text-[var(--w-text-3)]">No breaches in this period.</p>}
+          ) : <p className="text-[13px] text-[var(--w-text-3)]">{wt('desk.noBreachesPeriod')}</p>}
         </section>
         <section className="w-card p-4">
-          <h2 className="w-section-title mb-2">Customer feedback</h2>
+          <h2 className="w-section-title mb-2">{wt('desk.customerFeedback')}</h2>
           {r.feedback.length ? (
             <ul className="space-y-2 text-[13px]">
               {r.feedback.map((f) => (
@@ -543,10 +544,10 @@ function ReportsTab({ config }: { config: ProjectConfig }) {
                 </li>
               ))}
             </ul>
-          ) : <p className="text-[13px] text-[var(--w-text-3)]">No CSAT answers yet. Requesters are asked when their request is resolved.</p>}
+          ) : <p className="text-[13px] text-[var(--w-text-3)]">{wt('desk.noCsat')}</p>}
         </section>
       </div>
-      <p className="text-[12px] text-[var(--w-text-3)]">% met counts targets with an outcome (met, or breached — including still-open ones that already breached). Times in {r.timezone}.</p>
+      <p className="text-[12px] text-[var(--w-text-3)]">{wt('desk.metNote', { tz: r.timezone })}</p>
     </div>
   );
 }
@@ -563,7 +564,7 @@ function Bar({ v }: { v: number | null }) {
 }
 
 export function Stars({ n }: { n: number }) {
-  return <span className="shrink-0 tabular-nums text-[var(--w-orange)]" aria-label={`${n} out of 5`}>{'★'.repeat(n)}<span className="text-[var(--w-text-3)] opacity-50">{'★'.repeat(5 - n)}</span></span>;
+  return <span className="shrink-0 tabular-nums text-[var(--w-orange)]" aria-label={wt('desk.outOf5', { n })}>{'★'.repeat(n)}<span className="text-[var(--w-text-3)] opacity-50">{'★'.repeat(5 - n)}</span></span>;
 }
 
 // ═══ Settings ══════════════════════════════════════════════════════
@@ -576,9 +577,9 @@ function goalText(min: number, cal: SlaGoal['calendar'], perDay: number): string
   if (min >= perDay) {
     const d = Math.floor(min / perDay);
     const r = min - d * perDay;
-    return `${d} business day${d === 1 ? '' : 's'}${r ? ` ${minutesText(r)}` : ''}`;
+    return `${wt('desk.businessDays', { count: d })}${r ? ` ${minutesText(r)}` : ''}`;
   }
-  return `${minutesText(min)} business`;
+  return wt('desk.businessSuffix', { t: minutesText(min) });
 }
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').replace(/^(\d)/, 'f$1').slice(0, 32) || 'field';
 
@@ -595,8 +596,8 @@ function SettingsTab({ config }: { config: ProjectConfig }) {
       holidays: holidayText.split(/[\s,]+/).map((x) => x.trim()).filter(Boolean),
       goals: s!.goals, matrix: s!.matrix, requestTypes: s!.requestTypes, pauseStatusIds: s!.pauseStatusIds, responseStatusIds: s!.responseStatusIds, atRiskPercent: s!.atRiskPercent,
     }),
-    onSuccess: () => { toast.success('Service desk settings saved'); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not save')),
+    onSuccess: () => { toast.success(wt('desk.settingsSaved')); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('common.couldNotSave'))),
   });
   if (q.isLoading || !s) return <PageLoading rows={6} />;
   const ro = !s.canConfigure;
@@ -613,18 +614,18 @@ function SettingsTab({ config }: { config: ProjectConfig }) {
   };
   return (
     <div className="space-y-4">
-      {ro && <p className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px] text-[var(--w-text-2)]">Only a project admin can change these settings.</p>}
-      {!s.saved && <p className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px] text-[var(--w-text-2)]">Using the default settings. Save once to make them this project’s own.</p>}
+      {ro && <p className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px] text-[var(--w-text-2)]">{wt('desk.onlyAdmin')}</p>}
+      {!s.saved && <p className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px] text-[var(--w-text-2)]">{wt('desk.usingDefaults')}</p>}
 
       <section className="w-card p-4 md:p-5">
-        <h2 className="w-section-title mb-3 flex items-center gap-2"><CalendarClock size={15} /> Working hours</h2>
+        <h2 className="w-section-title mb-3 flex items-center gap-2"><CalendarClock size={15} /> {wt('desk.workingHours')}</h2>
         <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-[1fr_120px_120px]">
-          <Field label="Time zone" hint="IANA name, e.g. Asia/Ho_Chi_Minh"><input className="w-input" disabled={ro} value={s.calendar.timezone} onChange={(e) => setCal({ timezone: e.target.value })} /></Field>
-          <Field label="Start"><input type="time" className="w-input" disabled={ro} value={toHm(s.calendar.startMin)} onChange={(e) => setCal({ startMin: fromHm(e.target.value) })} /></Field>
-          <Field label="End"><input type="time" className="w-input" disabled={ro} value={toHm(s.calendar.endMin === 1440 ? 1439 : s.calendar.endMin)} onChange={(e) => setCal({ endMin: fromHm(e.target.value) })} /></Field>
+          <Field label={wt('desk.timeZone')} hint={wt('desk.timeZoneHint')}><input className="w-input" disabled={ro} value={s.calendar.timezone} onChange={(e) => setCal({ timezone: e.target.value })} /></Field>
+          <Field label={wt('desk.start')}><input type="time" className="w-input" disabled={ro} value={toHm(s.calendar.startMin)} onChange={(e) => setCal({ startMin: fromHm(e.target.value) })} /></Field>
+          <Field label={wt('desk.end')}><input type="time" className="w-input" disabled={ro} value={toHm(s.calendar.endMin === 1440 ? 1439 : s.calendar.endMin)} onChange={(e) => setCal({ endMin: fromHm(e.target.value) })} /></Field>
         </div>
-        <div className="mb-3 flex flex-wrap gap-1.5" role="group" aria-label="Working days">
-          {DAY_NAMES.map((n, i) => {
+        <div className="mb-3 flex flex-wrap gap-1.5" role="group" aria-label={wt('desk.workingDays')}>
+          {dayNames().map((n, i) => {
             const on = s.calendar.workDays.includes(i + 1);
             return (
               <button key={n} type="button" disabled={ro} aria-pressed={on} onClick={() => setCal({ workDays: on ? s.calendar.workDays.filter((d) => d !== i + 1) : [...s.calendar.workDays, i + 1].sort() })}
@@ -632,26 +633,26 @@ function SettingsTab({ config }: { config: ProjectConfig }) {
             );
           })}
         </div>
-        <Field label="Public holidays" hint="One date per line (YYYY-MM-DD). Lunar holidays (Tết, Hùng Kings) change every year — add them yourself.">
+        <Field label={wt('desk.holidays')} hint={wt('desk.holidaysHint')}>
           <textarea className="w-input min-h-[90px] py-2 font-mono text-[12.5px]" disabled={ro} value={holidayText} onChange={(e) => setHolidayText(e.target.value)} />
         </Field>
-        {!ro && <button type="button" className="w-btn w-btn-sm" onClick={addVnHolidays}><Plus size={13} /> Add Vietnam fixed-date holidays</button>}
+        {!ro && <button type="button" className="w-btn w-btn-sm" onClick={addVnHolidays}><Plus size={13} /> {wt('desk.addVnHolidays')}</button>}
       </section>
 
       <section className="w-card p-4 md:p-5">
-        <h2 className="w-section-title mb-3 flex items-center gap-2"><BarChart3 size={15} /> SLA goals</h2>
+        <h2 className="w-section-title mb-3 flex items-center gap-2"><BarChart3 size={15} /> {wt('desk.slaGoals')}</h2>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] text-[13px]">
-            <thead><tr className="text-left text-[11.5px] uppercase tracking-[0.04em] text-[var(--w-text-3)]"><th className="py-1.5 pr-2">Priority</th><th className="px-2 py-1.5">First response (min)</th><th className="px-2 py-1.5">Resolution (min)</th><th className="px-2 py-1.5">Clock</th></tr></thead>
+            <thead><tr className="text-left text-[11.5px] uppercase tracking-[0.04em] text-[var(--w-text-3)]"><th className="py-1.5 pr-2">{wt('common.priority')}</th><th className="px-2 py-1.5">{wt('desk.frMin')}</th><th className="px-2 py-1.5">{wt('desk.resMin')}</th><th className="px-2 py-1.5">{wt('desk.clock')}</th></tr></thead>
             <tbody>
               {DESK_PRIORITIES.map((p) => (
                 <tr key={p} className="border-t border-[var(--w-border)]">
                   <td className="py-2 pr-2"><PriorityBadge p={p} long /></td>
-                  <td className="px-2 py-2"><input type="number" min={1} className="w-input !h-8 !w-[110px]" disabled={ro} value={s.goals[p].firstResponseMin} onChange={(e) => setGoal(p, { firstResponseMin: Number(e.target.value) })} aria-label={`${p} first response minutes`} /> <span className="text-[12px] text-[var(--w-text-3)]">{goalText(s.goals[p].firstResponseMin, s.goals[p].calendar, perDay)}</span></td>
-                  <td className="px-2 py-2"><input type="number" min={1} className="w-input !h-8 !w-[110px]" disabled={ro} value={s.goals[p].resolutionMin} onChange={(e) => setGoal(p, { resolutionMin: Number(e.target.value) })} aria-label={`${p} resolution minutes`} /> <span className="text-[12px] text-[var(--w-text-3)]">{goalText(s.goals[p].resolutionMin, s.goals[p].calendar, perDay)}</span></td>
+                  <td className="px-2 py-2"><input type="number" min={1} className="w-input !h-8 !w-[110px]" disabled={ro} value={s.goals[p].firstResponseMin} onChange={(e) => setGoal(p, { firstResponseMin: Number(e.target.value) })} aria-label={wt('desk.pFrMinutes', { p })} /> <span className="text-[12px] text-[var(--w-text-3)]">{goalText(s.goals[p].firstResponseMin, s.goals[p].calendar, perDay)}</span></td>
+                  <td className="px-2 py-2"><input type="number" min={1} className="w-input !h-8 !w-[110px]" disabled={ro} value={s.goals[p].resolutionMin} onChange={(e) => setGoal(p, { resolutionMin: Number(e.target.value) })} aria-label={wt('desk.pResMinutes', { p })} /> <span className="text-[12px] text-[var(--w-text-3)]">{goalText(s.goals[p].resolutionMin, s.goals[p].calendar, perDay)}</span></td>
                   <td className="px-2 py-2">
-                    <Select aria-label={`${p} clock`} className="!h-8 !w-auto" disabled={ro} value={s.goals[p].calendar} onChange={(e) => setGoal(p, { calendar: e.target.value as SlaGoal['calendar'] })}>
-                      <option value="BUSINESS">Working hours</option>
+                    <Select aria-label={wt('desk.pClock', { p })} className="!h-8 !w-auto" disabled={ro} value={s.goals[p].calendar} onChange={(e) => setGoal(p, { calendar: e.target.value as SlaGoal['calendar'] })}>
+                      <option value="BUSINESS">{wt('desk.workingHours')}</option>
                       <option value="ALWAYS">24/7</option>
                     </Select>
                   </td>
@@ -661,25 +662,25 @@ function SettingsTab({ config }: { config: ProjectConfig }) {
           </table>
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-[13px]">
-          <span>At risk when</span>
-          <input type="number" min={10} max={99} className="w-input !h-8 !w-[80px]" disabled={ro} value={s.atRiskPercent} onChange={(e) => setS({ ...s, atRiskPercent: Number(e.target.value) })} aria-label="At-risk threshold" />
-          <span>% of the goal is used.</span>
+          <span>{wt('desk.atRiskWhen')}</span>
+          <input type="number" min={10} max={99} className="w-input !h-8 !w-[80px]" disabled={ro} value={s.atRiskPercent} onChange={(e) => setS({ ...s, atRiskPercent: Number(e.target.value) })} aria-label={wt('desk.atRiskThreshold')} />
+          <span>{wt('desk.goalUsed')}</span>
         </div>
       </section>
 
       <section className="w-card p-4 md:p-5">
-        <h2 className="w-section-title mb-1">Priority matrix (impact × urgency)</h2>
-        <p className="mb-3 text-[12.5px] text-[var(--w-text-3)]">Clients only describe who is affected and how badly — the matrix turns that into P1–P4.</p>
+        <h2 className="w-section-title mb-1">{wt('desk.matrixTitle')}</h2>
+        <p className="mb-3 text-[12.5px] text-[var(--w-text-3)]">{wt('desk.matrixDesc')}</p>
         <div className="overflow-x-auto">
           <table className="text-[13px]">
-            <thead><tr><th className="p-1.5 text-left text-[11.5px] uppercase text-[var(--w-text-3)]">Impact ↓ / Urgency →</th>{DESK_LEVELS.map((u) => <th key={u} className="p-1.5 text-[12px] font-medium">{LEVEL_LABEL[u]}</th>)}</tr></thead>
+            <thead><tr><th className="p-1.5 text-left text-[11.5px] uppercase text-[var(--w-text-3)]">{wt('desk.matrixHead')}</th>{DESK_LEVELS.map((u) => <th key={u} className="p-1.5 text-[12px] font-medium">{LEVEL_LABEL[u]}</th>)}</tr></thead>
             <tbody>
               {DESK_LEVELS.map((i) => (
                 <tr key={i}>
                   <th className="p-1.5 text-left text-[12px] font-medium">{LEVEL_LABEL[i]}</th>
                   {DESK_LEVELS.map((u) => (
                     <td key={u} className="p-1.5">
-                      <Select aria-label={`Impact ${i}, urgency ${u}`} className="!h-8 !w-[76px]" disabled={ro} value={s.matrix[i][u]} onChange={(e) => setCell(i, u, e.target.value as DeskPriority)}>
+                      <Select aria-label={wt('desk.cellAria', { i: LEVEL_LABEL[i], u: LEVEL_LABEL[u] })} className="!h-8 !w-[76px]" disabled={ro} value={s.matrix[i][u]} onChange={(e) => setCell(i, u, e.target.value as DeskPriority)}>
                         {DESK_PRIORITIES.map((p) => <option key={p} value={p}>{p}</option>)}
                       </Select>
                     </td>
@@ -692,44 +693,44 @@ function SettingsTab({ config }: { config: ProjectConfig }) {
       </section>
 
       <section className="w-card p-4 md:p-5">
-        <h2 className="w-section-title mb-3">Request types</h2>
+        <h2 className="w-section-title mb-3">{wt('desk.requestTypes')}</h2>
         <div className="space-y-3">
           {s.requestTypes.map((t) => (
             <div key={t.key} className="rounded-[10px] border border-[var(--w-border)] p-3">
               <div className="flex flex-wrap items-center gap-2">
                 <label className="flex items-center gap-2 text-[13px] font-medium"><input type="checkbox" disabled={ro} checked={t.enabled} onChange={(e) => setType(t.key, { enabled: e.target.checked })} />{TYPE_SHORT[t.key]}</label>
-                <span className="text-[12px] text-[var(--w-text-3)]">{t.enabled ? 'shown in the client portal' : 'hidden'}</span>
+                <span className="text-[12px] text-[var(--w-text-3)]">{t.enabled ? wt('desk.shownInPortal') : wt('desk.hidden')}</span>
               </div>
               <div className="mt-2 grid grid-cols-1 gap-x-3 sm:grid-cols-2">
-                <Field label="Name (what clients see)"><input className="w-input" disabled={ro} value={t.name} maxLength={60} onChange={(e) => setType(t.key, { name: e.target.value })} /></Field>
-                <Field label="Description"><input className="w-input" disabled={ro} value={t.description} maxLength={200} onChange={(e) => setType(t.key, { description: e.target.value })} /></Field>
+                <Field label={wt('desk.nameClients')}><input className="w-input" disabled={ro} value={t.name} maxLength={60} onChange={(e) => setType(t.key, { name: e.target.value })} /></Field>
+                <Field label={wt('common.description')}><input className="w-input" disabled={ro} value={t.description} maxLength={200} onChange={(e) => setType(t.key, { description: e.target.value })} /></Field>
               </div>
               <div className="grid grid-cols-2 gap-x-3 sm:grid-cols-[1fr_1fr_auto]">
-                <Field label="Default impact"><Select aria-label="Default impact" disabled={ro} value={t.defaultImpact} onChange={(e) => setType(t.key, { defaultImpact: e.target.value as DeskLevel })}>{DESK_LEVELS.map((l) => <option key={l} value={l}>{LEVEL_LABEL[l]}</option>)}</Select></Field>
-                <Field label="Default urgency"><Select aria-label="Default urgency" disabled={ro} value={t.defaultUrgency} onChange={(e) => setType(t.key, { defaultUrgency: e.target.value as DeskLevel })}>{DESK_LEVELS.map((l) => <option key={l} value={l}>{LEVEL_LABEL[l]}</option>)}</Select></Field>
-                <Field label="Default P"><div className="flex h-9 items-center"><PriorityBadge p={s.matrix[t.defaultImpact][t.defaultUrgency]} /></div></Field>
+                <Field label={wt('desk.defaultImpact')}><Select aria-label={wt('desk.defaultImpact')} disabled={ro} value={t.defaultImpact} onChange={(e) => setType(t.key, { defaultImpact: e.target.value as DeskLevel })}>{DESK_LEVELS.map((l) => <option key={l} value={l}>{LEVEL_LABEL[l]}</option>)}</Select></Field>
+                <Field label={wt('desk.defaultUrgency')}><Select aria-label={wt('desk.defaultUrgency')} disabled={ro} value={t.defaultUrgency} onChange={(e) => setType(t.key, { defaultUrgency: e.target.value as DeskLevel })}>{DESK_LEVELS.map((l) => <option key={l} value={l}>{LEVEL_LABEL[l]}</option>)}</Select></Field>
+                <Field label={wt('desk.defaultP')}><div className="flex h-9 items-center"><PriorityBadge p={s.matrix[t.defaultImpact][t.defaultUrgency]} /></div></Field>
               </div>
-              <label className="flex items-center gap-2 text-[12.5px]"><input type="checkbox" disabled={ro} checked={t.askImpact} onChange={(e) => setType(t.key, { askImpact: e.target.checked })} />Ask the client who is affected and how urgent it is</label>
-              {t.key === 'CHANGE' && <label className="mt-1 flex items-center gap-2 text-[12.5px]"><input type="checkbox" disabled={ro} checked={t.useChangeRequest !== false} onChange={(e) => setType(t.key, { useChangeRequest: e.target.checked })} />Also open a draft change request (when the Change requests module is on)</label>}
+              <label className="flex items-center gap-2 text-[12.5px]"><input type="checkbox" disabled={ro} checked={t.askImpact} onChange={(e) => setType(t.key, { askImpact: e.target.checked })} />{wt('desk.askImpact')}</label>
+              {t.key === 'CHANGE' && <label className="mt-1 flex items-center gap-2 text-[12.5px]"><input type="checkbox" disabled={ro} checked={t.useChangeRequest !== false} onChange={(e) => setType(t.key, { useChangeRequest: e.target.checked })} />{wt('desk.alsoCr')}</label>}
               <div className="mt-2">
-                <div className="mb-1 text-[12px] font-medium text-[var(--w-text-3)]">Form fields</div>
+                <div className="mb-1 text-[12px] font-medium text-[var(--w-text-3)]">{wt('desk.formFields')}</div>
                 {t.fields.map((f, idx) => (
                   <div key={idx} className="mb-1.5 flex flex-wrap items-center gap-1.5">
-                    <input className="w-input !h-8 min-w-[160px] flex-1" disabled={ro} value={f.label} onChange={(e) => setType(t.key, { fields: t.fields.map((x, j) => (j === idx ? { ...x, label: e.target.value } : x)) })} aria-label="Field label" />
-                    <Select aria-label="Field kind" className="!h-8 !w-auto" disabled={ro} value={f.kind} onChange={(e) => setType(t.key, { fields: t.fields.map((x, j) => (j === idx ? { ...x, kind: e.target.value as typeof f.kind } : x)) })}>
-                      <option value="text">Short text</option><option value="textarea">Long text</option><option value="date">Date</option>
+                    <input className="w-input !h-8 min-w-[160px] flex-1" disabled={ro} value={f.label} onChange={(e) => setType(t.key, { fields: t.fields.map((x, j) => (j === idx ? { ...x, label: e.target.value } : x)) })} aria-label={wt('desk.fieldLabel')} />
+                    <Select aria-label={wt('desk.fieldKind')} className="!h-8 !w-auto" disabled={ro} value={f.kind} onChange={(e) => setType(t.key, { fields: t.fields.map((x, j) => (j === idx ? { ...x, kind: e.target.value as typeof f.kind } : x)) })}>
+                      <option value="text">{wt('desk.shortText')}</option><option value="textarea">{wt('desk.longText')}</option><option value="date">{wt('desk.date')}</option>
                     </Select>
-                    <label className="flex items-center gap-1 text-[12px]"><input type="checkbox" disabled={ro} checked={f.required} onChange={(e) => setType(t.key, { fields: t.fields.map((x, j) => (j === idx ? { ...x, required: e.target.checked } : x)) })} />required</label>
-                    {!ro && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Remove field" onClick={() => setType(t.key, { fields: t.fields.filter((_, j) => j !== idx) })}><Trash2 size={13} /></button>}
+                    <label className="flex items-center gap-1 text-[12px]"><input type="checkbox" disabled={ro} checked={f.required} onChange={(e) => setType(t.key, { fields: t.fields.map((x, j) => (j === idx ? { ...x, required: e.target.checked } : x)) })} />{wt('desk.required')}</label>
+                    {!ro && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('desk.removeField')} onClick={() => setType(t.key, { fields: t.fields.filter((_, j) => j !== idx) })}><Trash2 size={13} /></button>}
                   </div>
                 ))}
                 {!ro && t.fields.length < 8 && (
                   <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => {
-                    const label = 'New field';
+                    const label = wt('desk.newField');
                     let key = slug(label); let n = 2;
                     while (t.fields.some((f) => f.key === key)) key = `${slug(label)}_${n++}`;
                     setType(t.key, { fields: [...t.fields, { key, label, kind: 'text', required: false }] });
-                  }}><Plus size={13} /> Add field</button>
+                  }}><Plus size={13} /> {wt('desk.addField')}</button>
                 )}
               </div>
             </div>
@@ -738,12 +739,12 @@ function SettingsTab({ config }: { config: ProjectConfig }) {
       </section>
 
       <section className="w-card p-4 md:p-5">
-        <h2 className="w-section-title mb-1">Statuses</h2>
-        <p className="mb-3 text-[12.5px] text-[var(--w-text-3)]">Moving a request into a “waiting” status pauses its clock (the customer’s reply resumes it and moves it back). A “response” status counts as the first response.</p>
+        <h2 className="w-section-title mb-1">{wt('desk.statuses')}</h2>
+        <p className="mb-3 text-[12.5px] text-[var(--w-text-3)]">{wt('desk.statusesDesc')}</p>
         <div className="grid gap-4 sm:grid-cols-2">
           {(['pauseStatusIds', 'responseStatusIds'] as const).map((k) => (
             <div key={k}>
-              <div className="mb-1.5 text-[12.5px] font-medium">{k === 'pauseStatusIds' ? 'Waiting for customer (pauses)' : 'Counts as first response'}</div>
+              <div className="mb-1.5 text-[12.5px] font-medium">{k === 'pauseStatusIds' ? wt('desk.pausesLabel') : wt('desk.countsFr')}</div>
               <ul className="max-h-[220px] space-y-1 overflow-y-auto rounded-[8px] border border-[var(--w-border)] p-2">
                 {s.statuses.map((st) => (
                   <li key={st.id}>
@@ -761,13 +762,13 @@ function SettingsTab({ config }: { config: ProjectConfig }) {
       </section>
 
       <section className="w-card p-4 md:p-5">
-        <h2 className="w-section-title mb-2">How is SLA computed?</h2>
+        <h2 className="w-section-title mb-2">{wt('desk.howSla')}</h2>
         <ul className="list-disc space-y-1 pl-5 text-[13px] text-[var(--w-text-2)]">{s.rules.map((r) => <li key={r}>{r}</li>)}</ul>
       </section>
 
       {!ro && (
         <div className="sticky bottom-0 -mx-4 flex justify-end border-t border-[var(--w-border)] bg-[var(--w-bg)] px-4 py-3">
-          <button type="button" className="w-btn w-btn-primary" disabled={saveM.isPending} onClick={() => saveM.mutate()} data-testid="desk-settings-save">{saveM.isPending ? <Spinner size={12} /> : <Save size={13} />} Save settings</button>
+          <button type="button" className="w-btn w-btn-primary" disabled={saveM.isPending} onClick={() => saveM.mutate()} data-testid="desk-settings-save">{saveM.isPending ? <Spinner size={12} /> : <Save size={13} />} {wt('desk.saveSettings')}</button>
         </div>
       )}
     </div>
@@ -782,10 +783,10 @@ export default function DeskView({ config }: { config: ProjectConfig }) {
   const search = useSearchParams();
   const tabs = useMemo(() => {
     const t: Array<{ id: Tab; label: string; icon: typeof Headset }> = [
-      { id: 'queues', label: 'Queues', icon: Inbox },
-      { id: 'problems', label: 'Problems', icon: Siren },
-      { id: 'reports', label: 'Reports', icon: BarChart3 },
-      { id: 'settings', label: 'Settings', icon: Settings2 },
+      { id: 'queues', label: wt('desk.queues'), icon: Inbox },
+      { id: 'problems', label: wt('desk.problems'), icon: Siren },
+      { id: 'reports', label: wt('desk.reports'), icon: BarChart3 },
+      { id: 'settings', label: wt('common.settings'), icon: Settings2 },
     ];
     return t;
   }, []);
@@ -799,7 +800,7 @@ export default function DeskView({ config }: { config: ProjectConfig }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="shrink-0 overflow-x-auto border-b border-[var(--w-border)] px-4">
-        <div className="flex gap-1" role="tablist" aria-label="Service desk">
+        <div className="flex gap-1" role="tablist" aria-label={wt('desk.serviceDesk')}>
           {tabs.map((t) => (
             <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)} data-testid={`desk-tab-${t.id}`}
               className={cn('-mb-px flex items-center gap-1.5 whitespace-nowrap border-b-2 px-2.5 py-2.5 text-[13px] font-medium transition-colors', tab === t.id ? 'border-[var(--w-accent)] text-[var(--w-text)]' : 'border-transparent text-[var(--w-text-2)] hover:text-[var(--w-text)]')}>

@@ -16,6 +16,7 @@ import { connectSocket } from '@/lib/socket';
 import { useAuthStore } from '@/store/authStore';
 import { userName, type WorkUser } from '@/lib/work-api';
 import { UserAvatar } from '../ui';
+import { wt, type WKey } from '@/components/work/i18n';
 
 type State = 'viewing' | 'typing' | 'editing';
 type Peer = { user: Pick<WorkUser, 'id' | 'username' | 'fullName' | 'displayName' | 'avatarUrl'>; state: State; at: number };
@@ -137,13 +138,13 @@ export function IssuePresenceStrip({ pid, num, enabled = true }: { pid: number; 
   return <PresenceBar peers={peers} />;
 }
 
-const VERB: Record<State, string> = { viewing: 'viewing', typing: 'typing a comment', editing: 'editing' };
+const VERB: Record<State, WKey> = { viewing: 'chat.isViewing', typing: 'chat.isTyping', editing: 'chat.isEditing' };
 
 /** Dải nhỏ "An is typing a comment · Bình is viewing". Rỗng ⇒ không chiếm chỗ. */
 export function PresenceBar({ peers }: { peers: Peer[] }) {
   if (!peers.length) return null;
   const active = peers.filter((p) => p.state !== 'viewing');
-  const text = (active.length ? active : peers).slice(0, 3).map((p) => `${userName(p.user)} is ${VERB[p.state]}`).join(' · ');
+  const text = (active.length ? active : peers).slice(0, 3).map((p) => wt(VERB[p.state], { name: userName(p.user) })).join(' · ');
   const more = (active.length ? active : peers).length - 3;
   return (
     <div className="flex min-w-0 items-center gap-2 text-[12px] text-[var(--w-text-2)]" role="status" aria-live="polite" data-testid="issue-presence">

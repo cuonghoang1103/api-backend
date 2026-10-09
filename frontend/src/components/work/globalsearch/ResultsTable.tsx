@@ -12,17 +12,18 @@ import { cn } from '@/lib/utils';
 import { userName, type GlobalIssueHit } from '@/lib/work-api';
 import { IssueTypeIcon, PriorityIcon, StatusBadge, UserAvatar, avatarColor, relativeTime } from '../ui';
 import type { SortCol, SortState } from './query';
+import { wt } from '@/components/work/i18n';
 
 const GRID = 'md:grid md:grid-cols-[112px_minmax(120px,160px)_minmax(0,1fr)_minmax(110px,150px)_84px_minmax(120px,170px)_88px] md:items-center md:gap-x-3';
 
 const COLS: Array<{ id: SortCol; label: string; align?: 'right' }> = [
-  { id: 'key', label: 'Key' },
-  { id: 'project', label: 'Project' },
-  { id: 'title', label: 'Title' },
-  { id: 'status', label: 'Status' },
-  { id: 'priority', label: 'Priority' },
-  { id: 'assignee', label: 'Assignee' },
-  { id: 'updated', label: 'Updated', align: 'right' },
+  { id: 'key', get label() { return wt('common.key'); } },
+  { id: 'project', get label() { return wt('common.project'); } },
+  { id: 'title', get label() { return wt('common.title'); } },
+  { id: 'status', get label() { return wt('common.status'); } },
+  { id: 'priority', get label() { return wt('common.priority'); } },
+  { id: 'assignee', get label() { return wt('common.assignee'); } },
+  { id: 'updated', get label() { return wt('common.updated'); }, align: 'right' },
 ];
 
 export function ProjectChip({ k, name, className }: { k: string; name?: string; className?: string }) {
@@ -55,7 +56,7 @@ export function ResultsHeader({ sort, onSort }: { sort: SortState | null; onSort
             role="columnheader"
             aria-sort={active ? (sort!.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
             onClick={() => onSort(c.id)}
-            title={`Sort by ${c.label.toLowerCase()}`}
+            title={wt('gs.sortBy', { l: c.label.toLowerCase() })}
             className={cn(
               'flex h-full min-w-0 items-center gap-1 transition-colors hover:text-[var(--w-text)]',
               c.align === 'right' && 'justify-end',
@@ -114,13 +115,13 @@ export function ResultRow({ it, index, highlighted, onHover, showProject = true 
       </span>
       <span role="cell" className="hidden min-w-0 items-center gap-2 md:flex">
         <span className="truncate font-medium text-[var(--w-text)]">{it.title}</span>
-        {(it.match === 'description' || it.match === 'comment') && <span className="shrink-0 rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-3)]">{it.match === 'comment' ? 'in comments' : 'in description'}</span>}
+        {(it.match === 'description' || it.match === 'comment') && <span className="shrink-0 rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-3)]">{it.match === 'comment' ? wt('gs.inComments') : wt('gs.inDesc')}</span>}
       </span>
       <span role="cell" className="hidden min-w-0 items-center md:flex"><StatusBadge status={it.status} /></span>
       <span role="cell" className="hidden min-w-0 items-center md:flex"><PriorityIcon priority={it.priority} size={14} showLabel className="[&>span]:!text-[12.5px] [&>span]:!text-[var(--w-text-2)]" /></span>
       <span role="cell" className="hidden min-w-0 items-center gap-2 md:flex">
         <UserAvatar user={it.assignee} size={20} />
-        <span className={cn('truncate text-[12.5px]', it.assignee ? 'text-[var(--w-text-2)]' : 'text-[var(--w-text-3)]')}>{it.assignee ? userName(it.assignee) : 'Unassigned'}</span>
+        <span className={cn('truncate text-[12.5px]', it.assignee ? 'text-[var(--w-text-2)]' : 'text-[var(--w-text-3)]')}>{it.assignee ? userName(it.assignee) : wt('common.unassigned')}</span>
       </span>
       <span role="cell" className="hidden items-center justify-end whitespace-nowrap text-[12px] tabular-nums text-[var(--w-text-3)] md:flex" title={new Date(it.updatedAt).toLocaleString()}>
         {relativeTime(it.updatedAt)}
@@ -139,7 +140,7 @@ export function ResultRow({ it, index, highlighted, onHover, showProject = true 
           <StatusBadge status={it.status} className="max-w-[55%]" />
           <PriorityIcon priority={it.priority} size={14} />
           <span className="ml-auto flex min-w-0 items-center gap-1.5 text-[12px] text-[var(--w-text-2)]">
-            <span className="truncate">{it.assignee ? userName(it.assignee) : 'Unassigned'}</span>
+            <span className="truncate">{it.assignee ? userName(it.assignee) : wt('common.unassigned')}</span>
             <UserAvatar user={it.assignee} size={20} />
           </span>
         </span>
@@ -150,7 +151,7 @@ export function ResultRow({ it, index, highlighted, onHover, showProject = true 
 
 export function SkeletonRows({ n = 10 }: { n?: number }) {
   return (
-    <div aria-busy="true" aria-label="Loading results">
+    <div role="row" aria-busy="true"><div role="cell"><span className="sr-only">{wt('gs.loadingResults')}</span>
       {Array.from({ length: n }).map((_, i) => (
         <div key={i} className="flex h-14 items-center gap-3 border-b border-[var(--w-border)] px-4 md:h-10">
           <span className="h-4 w-4 shrink-0 rounded-[4px] bg-[var(--w-sunken)]" />
@@ -161,6 +162,6 @@ export function SkeletonRows({ n = 10 }: { n?: number }) {
           <span className="hidden h-5 w-5 rounded-full bg-[var(--w-sunken)] md:block" />
         </div>
       ))}
-    </div>
+    </div></div>
   );
 }

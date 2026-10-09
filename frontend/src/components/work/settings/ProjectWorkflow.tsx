@@ -22,6 +22,7 @@ import { parsePair } from '../workflow/graph';
 import TransitionRulesFields, { rulesAvailable, rulesSummary } from '../workflow/TransitionRules';
 import { studioOn, useWorkspaceTeams } from '../studio/shared';
 import WorkflowDiagram from '../workflow/WorkflowDiagram';
+import { wt } from '@/components/work/i18n';
 
 export { CATEGORY_LABEL, WipInput };
 
@@ -64,15 +65,15 @@ function StatusRow({
       <div className="flex min-w-0 flex-1 items-center gap-2">
         {canEdit && (
           <div className="flex shrink-0 flex-col">
-            <button type="button" className="flex h-3.5 w-5 items-center justify-center text-[var(--w-text-3)] hover:text-[var(--w-text)] disabled:opacity-30" disabled={busy || index === 0} onClick={() => onMove(-1)} aria-label={`Move ${status.name} up`}>
+            <button type="button" className="flex h-3.5 w-5 items-center justify-center text-[var(--w-text-3)] hover:text-[var(--w-text)] disabled:opacity-30" disabled={busy || index === 0} onClick={() => onMove(-1)} aria-label={wt('wf.moveUp', { n: status.name })}>
               <ArrowUp size={12} />
             </button>
-            <button type="button" className="flex h-3.5 w-5 items-center justify-center text-[var(--w-text-3)] hover:text-[var(--w-text)] disabled:opacity-30" disabled={busy || index === count - 1} onClick={() => onMove(1)} aria-label={`Move ${status.name} down`}>
+            <button type="button" className="flex h-3.5 w-5 items-center justify-center text-[var(--w-text-3)] hover:text-[var(--w-text)] disabled:opacity-30" disabled={busy || index === count - 1} onClick={() => onMove(1)} aria-label={wt('wf.moveDown', { n: status.name })}>
               <ArrowDown size={12} />
             </button>
           </div>
         )}
-        <ColorPicker value={status.color} ariaLabel="Status colour" disabled={locked} onChange={(c) => update.mutate({ color: c })} />
+        <ColorPicker value={status.color} ariaLabel={wt('wf.statusColour')} disabled={locked} onChange={(c) => update.mutate({ color: c })} />
         {canEdit ? (
           <input
             className="h-7 min-w-0 flex-1 rounded-[5px] border border-transparent bg-transparent px-2 text-[13px] outline-none hover:border-[var(--w-border)] focus:border-[var(--w-accent-border)]"
@@ -85,7 +86,7 @@ function StatusRow({
               if (e.key === 'Enter') e.currentTarget.blur();
               if (e.key === 'Escape') { setName(status.name); e.currentTarget.blur(); }
             }}
-            aria-label="Status name"
+            aria-label={wt('wf.statusName')}
           />
         ) : (
           <span className="min-w-0 flex-1 truncate px-2 text-[13px]">{status.name}</span>
@@ -98,13 +99,13 @@ function StatusRow({
           value={status.category}
           disabled={locked}
           onChange={(e) => update.mutate({ category: e.target.value as StatusCategory })}
-          aria-label="Status category"
+          aria-label={wt('wf.statusCategory')}
         >
           {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABEL[c]}</option>)}
         </Select>
-        <WipInput value={status.wipLimit} disabled={locked} label={`WIP limit for ${status.name}`} onCommit={(v) => update.mutate({ wipLimit: v })} />
+        <WipInput value={status.wipLimit} disabled={locked} label={wt('wf.wipFor', { n: status.name })} onCommit={(v) => update.mutate({ wipLimit: v })} />
         {canEdit && (
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onDelete} disabled={count <= 1} aria-label={`Delete status ${status.name}`} title="Delete status">
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onDelete} disabled={count <= 1} aria-label={wt('wf.deleteStatusX', { n: status.name })} title={wt('wf.deleteStatus')}>
             <Trash2 size={13} />
           </button>
         )}
@@ -119,12 +120,12 @@ function RulesList({ config, statuses, draft, canEdit }: { config: ProjectConfig
   const [open, setOpen] = useState<string | null>(null);
   const teams = useWorkspaceTeams(config.workspace.id, studioOn(config, 'teams'));
   const teamKeys = new Map((teams.data ?? []).map((t) => [t.id, t.key]));
-  const name = (id: number | null) => (id === null ? 'Any status' : statuses.find((s) => s.id === id)?.name ?? '?');
+  const name = (id: number | null) => (id === null ? wt('wf.anyStatus') : statuses.find((s) => s.id === id)?.name ?? '?');
   const keys = [...draft.pairs].sort();
   return (
     <div className="mt-4">
-      <h4 className="w-section-title mb-1">Transition rules</h4>
-      <p className="mb-2 text-[12px] text-[var(--w-text-3)]">Require an approval, or limit a move to certain teams. Saved with the transitions.</p>
+      <h4 className="w-section-title mb-1">{wt('wf.rulesTitle')}</h4>
+      <p className="mb-2 text-[12px] text-[var(--w-text-3)]">{wt('wf.rulesDesc')}</p>
       <ul className="divide-y divide-[var(--w-border)] overflow-hidden rounded-[8px] border border-[var(--w-border)]">
         {keys.map((k) => {
           const { from, to } = parsePair(k);
@@ -135,7 +136,7 @@ function RulesList({ config, statuses, draft, canEdit }: { config: ProjectConfig
                 <span className={cn('min-w-0 truncate', from === null && 'italic text-[var(--w-text-2)]')}>{name(from)}</span>
                 <span aria-hidden="true" className="shrink-0 text-[var(--w-text-3)]">→</span>
                 <span className="min-w-0 truncate">{name(to)}</span>
-                <span className={cn('ml-auto shrink-0 text-[12px]', sum ? 'font-medium text-[var(--w-accent-text)]' : 'text-[var(--w-text-3)]')}>{sum || 'No rules'}</span>
+                <span className={cn('ml-auto shrink-0 text-[12px]', sum ? 'font-medium text-[var(--w-accent-text)]' : 'text-[var(--w-text-3)]')}>{sum || wt('wf.noRules')}</span>
               </button>
               {open === k && <div className="border-t border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-3"><TransitionRulesFields config={config} draft={draft} edgeKey={k} canEdit={canEdit} /></div>}
             </li>
@@ -157,19 +158,19 @@ function TransitionsEditor({ wf, statuses, canEdit, draft, config }: { wf: WorkW
     if (m === 'restricted' && !pairs.size) draft.setPairs(new Set(statuses.map((s) => `any:${s.id}`)));
   };
 
-  const rows: Array<{ id: number | null; name: string }> = [{ id: null, name: 'From any status' }, ...statuses.map((s) => ({ id: s.id, name: s.name }))];
+  const rows: Array<{ id: number | null; name: string }> = [{ id: null, name: wt('wf.fromAny') }, ...statuses.map((s) => ({ id: s.id, name: s.name }))];
   const has = (from: number | null, to: number) => pairs.has(`${from ?? 'any'}:${to}`);
 
   return (
     <div className="mt-4">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-        <h4 className="w-section-title">Transitions</h4>
+        <h4 className="w-section-title">{wt('wf.transitions')}</h4>
         {canEdit && draft.dirty && (
           <div className="flex items-center gap-2">
-            <button type="button" className="w-btn w-btn-sm" onClick={draft.discard}>Discard</button>
+            <button type="button" className="w-btn w-btn-sm" onClick={draft.discard}>{wt('common.discard')}</button>
             <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={draft.saving || draft.invalid} onClick={draft.save}>
               {draft.saving && <Spinner size={12} />}
-              Save transitions
+              {wt('wf.saveTransitions')}
             </button>
           </div>
         )}
@@ -177,11 +178,11 @@ function TransitionsEditor({ wf, statuses, canEdit, draft, config }: { wf: WorkW
       <div className="mb-3 flex flex-col gap-1.5 text-[13px]">
         <label className={cn('flex items-center gap-2', canEdit ? 'cursor-pointer' : 'cursor-default')}>
           <input type="radio" name={`tmode-${wf.id}`} checked={mode === 'free'} disabled={!canEdit} onChange={() => switchMode('free')} className="accent-[var(--w-accent)]" />
-          Allow any status to move to any status
+          {wt('wf.allowAny')}
         </label>
         <label className={cn('flex items-center gap-2', canEdit ? 'cursor-pointer' : 'cursor-default')}>
           <input type="radio" name={`tmode-${wf.id}`} checked={mode === 'restricted'} disabled={!canEdit} onChange={() => switchMode('restricted')} className="accent-[var(--w-accent)]" />
-          Only allow the moves checked below
+          {wt('wf.onlyChecked')}
         </label>
       </div>
       {mode === 'restricted' && (
@@ -190,7 +191,7 @@ function TransitionsEditor({ wf, statuses, canEdit, draft, config }: { wf: WorkW
             <table className="w-full border-collapse text-[12px]">
               <thead>
                 <tr className="bg-[var(--w-sunken)]">
-                  <th className="sticky left-0 z-[1] min-w-[140px] bg-[var(--w-sunken)] px-3 py-2 text-left font-medium text-[var(--w-text-3)]">From ↓ / To →</th>
+                  <th className="sticky left-0 z-[1] min-w-[140px] bg-[var(--w-sunken)] px-3 py-2 text-left font-medium text-[var(--w-text-3)]">{wt('wf.fromTo')}</th>
                   {statuses.map((s) => (
                     <th key={s.id} className="min-w-[84px] px-2 py-2 text-center font-medium text-[var(--w-text-2)]">
                       <span className="line-clamp-2 break-words">{s.name}</span>
@@ -215,7 +216,7 @@ function TransitionsEditor({ wf, statuses, canEdit, draft, config }: { wf: WorkW
                               checked={has(r.id, s.id)}
                               disabled={!canEdit}
                               onChange={() => draft.toggle(r.id, s.id)}
-                              aria-label={`${r.id === null ? 'Any status' : r.name} to ${s.name}`}
+                              aria-label={wt('wf.xToY', { a: r.id === null ? wt('wf.anyStatus') : r.name, b: s.name })}
                             />
                           )}
                         </td>
@@ -227,7 +228,7 @@ function TransitionsEditor({ wf, statuses, canEdit, draft, config }: { wf: WorkW
             </table>
           </div>
           <p className="mt-2 text-[12px] text-[var(--w-text-3)]">
-            {pairs.size ? `${pairs.size} allowed move${pairs.size === 1 ? '' : 's'}. “From any status” lets issues reach that status from anywhere.` : 'Check at least one move, or allow all moves.'}
+            {pairs.size ? wt('wf.allowedMoves', { count: pairs.size }) : wt('wf.checkOne')}
           </p>
           {rulesAvailable(config) && pairs.size > 0 && <RulesList config={config} statuses={statuses} draft={draft} canEdit={canEdit} />}
         </>
@@ -255,7 +256,7 @@ function WorkflowPanel({
   const reorder = useMutation({
     mutationFn: (ids: number[]) => workApi.reorderStatuses(config.id, wf.id, ids),
     onSuccess: () => invalidate(),
-    onError: (err) => toast.error(workError(err, 'Could not reorder the statuses')),
+    onError: (err) => toast.error(workError(err, wt('wf.reorderFailed'))),
   });
 
   const move = (i: number, dir: -1 | 1) => {
@@ -270,13 +271,13 @@ function WorkflowPanel({
     <div>
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <h3 className="text-[13px] font-semibold">{wf.name}</h3>
-        {wf.isDefault && <span className="rounded-[4px] border border-[var(--w-border-strong)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-2)]">Default</span>}
+        {wf.isDefault && <span className="rounded-[4px] border border-[var(--w-border-strong)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-2)]">{wt('wf.default')}</span>}
         <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] leading-[18px] text-[var(--w-text-2)]">
-          {statuses.length} statuses · {draft.initialMode === 'free' ? 'free' : `${draft.initialPairs.size} transitions`}
+          {wt('wf.statusesN', { n: statuses.length, m: draft.initialMode === 'free' ? wt('wf.freeLc') : wt('wf.nTransitions', { n: draft.initialPairs.size }) })}
         </span>
         {reorder.isPending && <Spinner size={12} />}
         <span className="flex flex-wrap items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">
-          {types.length ? `Used by ${types.length} issue type${types.length === 1 ? '' : 's'}:` : 'Not used by any issue type'}
+          {types.length ? wt('wf.usedBy', { count: types.length }) : wt('wf.notUsed')}
           {types.map((t) => (
             <span key={t.id} className="inline-flex items-center gap-1 text-[var(--w-text-2)]">
               <IssueTypeIcon type={t} size={12} />
@@ -314,7 +315,7 @@ function WorkflowPanel({
             ))}
             {canEdit && <AddStatusForm pid={config.id} wfId={wf.id} onAdded={() => invalidate()} />}
           </div>
-          <p className="mt-2 text-[12px] text-[var(--w-text-3)]">Statuses appear on the board in this order. Every workflow needs at least one “To do” and one “Done” status.</p>
+          <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{wt('wf.orderNote')}</p>
           <TransitionsEditor wf={wf} statuses={statuses} canEdit={canEdit} draft={draft} config={config} />
         </>
       )}
@@ -338,30 +339,30 @@ function NewWorkflowDialog({ open, onClose, config, onCreated }: { open: boolean
   const create = useMutation({
     mutationFn: () => workApi.createWorkflow(config.id, { name: name.trim(), copyFrom: copyFrom || null }),
     onSuccess: (wf) => {
-      toast.success(`Workflow “${name.trim()}” created`, { description: 'Assign it to an issue type in the Issue types tab.' });
+      toast.success(wt('wf.created', { n: name.trim() }), { description: wt('wf.assignHint') });
       onCreated(wf.id);
       onClose();
     },
-    onError: (err) => toast.error(workError(err, 'Could not create the workflow')),
+    onError: (err) => toast.error(workError(err, wt('wf.createFailed'))),
   });
 
   return (
-    <Dialog open={open} onClose={onClose} title="New workflow" width={460}>
+    <Dialog open={open} onClose={onClose} title={wt('wf.newWorkflow')} width={460}>
       <form onSubmit={(e) => { e.preventDefault(); if (name.trim() && !create.isPending) create.mutate(); }}>
-        <Field label="Name">
-          <input className="w-input" value={name} maxLength={80} onChange={(e) => setName(e.target.value)} autoFocus placeholder="e.g. Bug lifecycle" />
+        <Field label={wt('common.name')}>
+          <input className="w-input" value={name} maxLength={80} onChange={(e) => setName(e.target.value)} autoFocus placeholder={wt('wf.namePh')} />
         </Field>
-        <Field label="Start from" hint="Copies the statuses and transitions of the chosen workflow.">
+        <Field label={wt('wf.startFrom')} hint={wt('wf.startFromHint')}>
           <Select value={copyFrom} onChange={(e) => setCopyFrom(e.target.value ? Number(e.target.value) : '')}>
-            <option value="">Blank — To Do, In Progress, Done</option>
-            {config.workflows.map((w) => <option key={w.id} value={w.id}>Copy of {w.name}</option>)}
+            <option value="">{wt('wf.blank')}</option>
+            {config.workflows.map((w) => <option key={w.id} value={w.id}>{wt('wf.copyOf', { n: w.name })}</option>)}
           </Select>
         </Field>
         <div className="mt-2 flex justify-end gap-2">
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="submit" className="w-btn w-btn-primary" disabled={!name.trim() || create.isPending}>
             {create.isPending && <Spinner size={12} />}
-            Create workflow
+            {wt('wf.createWorkflow')}
           </button>
         </div>
       </form>
@@ -404,19 +405,19 @@ export default function ProjectWorkflow({ config, slug }: { config: ProjectConfi
 
   return (
     <Section
-      title="Workflows"
-      description="The statuses an issue moves through and which moves between them are allowed. Assign workflows to issue types in the Issue types tab."
+      title={wt('wf.workflows')}
+      description={wt('wf.workflowsDesc')}
       action={canEdit ? (
-        <button type="button" className="w-btn" onClick={() => setCreating(true)} aria-label="New workflow">
+        <button type="button" className="w-btn" onClick={() => setCreating(true)} aria-label={wt('wf.newWorkflow')}>
           <Plus size={14} />
-          <span className="hidden sm:inline">New workflow</span>
+          <span className="hidden sm:inline">{wt('wf.newWorkflow')}</span>
         </button>
       ) : undefined}
     >
       {workflows.length > 0 && active && (
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
           {workflows.length > 1 ? (
-            <div role="tablist" aria-label="Workflows" className="-mx-1 flex max-w-full gap-1 overflow-x-auto px-1">
+            <div role="tablist" aria-label={wt('wf.workflows')} className="-mx-1 flex max-w-full gap-1 overflow-x-auto px-1">
               {workflows.map((w) => {
                 const on = w.id === active.id;
                 return (
@@ -434,14 +435,14 @@ export default function ProjectWorkflow({ config, slug }: { config: ProjectConfi
                     )}
                   >
                     {w.name}
-                    {w.isDefault && <span className="text-[11px] text-[var(--w-text-3)]">Default</span>}
+                    {w.isDefault && <span className="text-[11px] text-[var(--w-text-3)]">{wt('wf.default')}</span>}
                   </button>
                 );
               })}
             </div>
           ) : <span />}
-          <div role="group" aria-label="View" className="flex shrink-0 rounded-[7px] border border-[var(--w-border-strong)] p-0.5">
-            {([['diagram', 'Diagram', Network], ['list', 'List', List]] as const).map(([k, label, Icon]) => (
+          <div role="group" aria-label={wt('wf.view')} className="flex shrink-0 rounded-[7px] border border-[var(--w-border-strong)] p-0.5">
+            {([['diagram', wt('wf.diagram'), Network], ['list', wt('wf.list'), List]] as const).map(([k, label, Icon]) => (
               <button
                 key={k}
                 type="button"
@@ -461,7 +462,7 @@ export default function ProjectWorkflow({ config, slug }: { config: ProjectConfi
       )}
       {narrow && canEdit && (
         <p className="mb-3 rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12px] text-[var(--w-text-2)]">
-          Open on a larger screen to edit the diagram. {view === 'diagram' ? 'Here you can view it — drag to pan, use + / − to zoom.' : 'You can still edit statuses and transitions in this list.'}
+          {wt('wf.largerScreen')} {view === 'diagram' ? wt('wf.viewHere') : wt('wf.editList')}
         </p>
       )}
 
@@ -477,16 +478,16 @@ export default function ProjectWorkflow({ config, slug }: { config: ProjectConfi
           onDirtyChange={setDirty}
         />
       )}
-      {!workflows.length && <p className="text-[13px] text-[var(--w-text-3)]">This project has no workflow.</p>}
+      {!workflows.length && <p className="text-[13px] text-[var(--w-text-3)]">{wt('wf.noWorkflow')}</p>}
 
       <NewWorkflowDialog open={creating} onClose={() => setCreating(false)} config={config} onCreated={(id) => { invalidate(); if (!dirty) setActiveId(id); }} />
       <ConfirmDialog
         open={pendingSwitch !== null}
         onClose={() => setPendingSwitch(null)}
         onConfirm={() => { setActiveId(pendingSwitch); setPendingSwitch(null); }}
-        title="Discard unsaved transitions?"
-        confirmLabel="Discard and switch"
-        body="You have transition changes in this workflow that are not saved yet. Switching to another workflow will discard them."
+        title={wt('wf.discardQ')}
+        confirmLabel={wt('wf.discardSwitch')}
+        body={wt('wf.discardBody')}
       />
     </Section>
   );

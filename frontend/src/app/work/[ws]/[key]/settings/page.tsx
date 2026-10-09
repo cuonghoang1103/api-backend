@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
-  Archive, Blocks, Bot, Boxes, Columns3, Download, Gauge, GitMerge, Github, Link2, MessageSquareShare, Shapes, SlidersHorizontal, Tag, TextCursorInput, Trash2, TriangleAlert, Upload, Users, Workflow, Zap,
+  Archive, Blocks, Bot, Boxes, CalendarClock, Columns3, Download, Gauge, GitMerge, Github, Link2, MessageSquareShare, Shapes, SlidersHorizontal, Tag, TextCursorInput, Trash2, TriangleAlert, Upload, Users, Workflow, Zap,
 } from 'lucide-react';
 import { workError } from '@/lib/work-api';
 import { useProject } from '@/components/work/hooks';
@@ -23,6 +23,7 @@ import ProjectBoard from '@/components/work/settings/ProjectBoard';
 import ProjectIssueTypes from '@/components/work/settings/ProjectIssueTypes';
 import ProjectFields from '@/components/work/settings/ProjectFields';
 import ProjectAutomation from '@/components/work/settings/ProjectAutomation';
+import ProjectRecurring from '@/components/work/settings/ProjectRecurring'; // CTW đợt 5: việc định kỳ
 import ProjectGithub from '@/components/work/settings/ProjectGithub';
 import ProjectGitlab from '@/components/work/settings/ProjectGitlab';
 import ProjectChat from '@/components/work/settings/ProjectChat';
@@ -37,7 +38,7 @@ import ProjectSpecQuality from '@/components/work/settings/ProjectSpecQuality';
 import ProjectAgents from '@/components/work/settings/ProjectAgents';
 import { wt } from '@/components/work/i18n';
 
-type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'agents' | 'automation' | 'github' | 'gitlab' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
+type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'agents' | 'automation' | 'recurring' | 'github' | 'gitlab' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
 
 function ProjectSettings() {
   const params = useParams<{ ws: string; key: string }>();
@@ -64,10 +65,11 @@ function ProjectSettings() {
       { key: 'types', get label() { return wt('settings.tIssueTypes'); }, icon: Shapes },
       { key: 'fields', get label() { return wt('settings.tFields'); }, icon: TextCursorInput },
       ...(config && config.role !== 'CLIENT' ? [{ key: 'quality' as const, get label() { return wt('settings.tSpecQualityAi'); }, icon: Gauge }] : []),
-      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'agents' as const, label: 'AI agents', icon: Bot }] : []),
+      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'agents' as const, label: wt('pages.aiAgents'), icon: Bot }] : []),
     ] },
     { get label() { return wt('settings.tAutomationIntegrations'); }, tabs: [
       { key: 'automation', get label() { return wt('settings.tAutomation'); }, icon: Zap },
+      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'recurring' as const, get label() { return wt('classroom.tabRecurring'); }, icon: CalendarClock }] : []), // CTW đợt 5
       { key: 'github', get label() { return wt('settings.tGithub'); }, icon: Github },
       { key: 'gitlab', get label() { return wt('settings.tGitlab'); }, icon: GitMerge },
       ...(perms?.settings ? [{ key: 'chat' as const, get label() { return wt('settings.tChatNotifications'); }, icon: MessageSquareShare }] : []),
@@ -131,6 +133,7 @@ function ProjectSettings() {
         {tab === 'quality' && <ProjectSpecQuality config={config} slug={slug} />}
         {tab === 'agents' && <ProjectAgents config={config} slug={slug} />}
         {tab === 'automation' && <ProjectAutomation config={config} slug={slug} />}
+        {tab === 'recurring' && <ProjectRecurring config={config} />}
         {tab === 'github' && <ProjectGithub config={config} slug={slug} />}
         {tab === 'gitlab' && <ProjectGitlab config={config} slug={slug} />}
         {tab === 'chat' && <ProjectChat config={config} slug={slug} />}

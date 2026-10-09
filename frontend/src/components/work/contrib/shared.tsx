@@ -11,6 +11,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowDownRight, ArrowUpRight, Info } from 'lucide-react';
 import type { ContribRange, RangePreset } from '@/lib/work-contrib-api';
 import { cn } from '@/lib/utils';
+import { wt, wfmt } from '@/components/work/i18n';
 
 const PRESETS: RangePreset[] = ['today', '7d', '30d', 'week', 'sprint', 'stage', 'project', 'custom'];
 
@@ -56,9 +57,9 @@ export function Delta({ value, good = 'up', className, label }: { value: number 
   const tone = good === 'none' ? 'text-[var(--w-text-2)]' : (up === (good === 'up')) ? 'text-[var(--w-green-text)]' : 'text-[var(--w-red-text)]';
   const Icon = up ? ArrowUpRight : ArrowDownRight;
   return (
-    <span className={cn('inline-flex items-center gap-0.5 text-[11px] font-medium tabular-nums', tone, className)} title={label ?? 'Change vs the previous period'}>
+    <span className={cn('inline-flex items-center gap-0.5 text-[11px] font-medium tabular-nums', tone, className)} title={label ?? wt('contrib.changeVsPrev')}>
       <Icon size={11} aria-hidden="true" />
-      <span className="sr-only">{up ? 'up' : 'down'} </span>{Math.abs(value)}%
+      <span className="sr-only">{up ? wt('contrib.up') : wt('contrib.down')} </span>{Math.abs(value)}%
     </span>
   );
 }
@@ -71,7 +72,7 @@ export function Sparkline({ data, color = 'var(--w-chart-1)', width = 96, height
   const pts = data.map((v, i) => `${((i / (n - 1)) * (width - 2) + 1).toFixed(1)},${(height - 2 - (v / max) * (height - 4)).toFixed(1)}`);
   const total = data.reduce((a, b) => a + b, 0);
   return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${label}: ${total} actions, peak ${max} per ${n > 35 ? 'week' : 'bucket'}`} className="block">
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={wt('contrib.sparkAria', { label, total, max, unit: n > 35 ? wt('contrib.weekLc') : wt('contrib.bucketLc') })} className="block">
       <polyline points={`1,${height - 1} ${pts.join(' ')} ${width - 1},${height - 1}`} fill={color} fillOpacity={0.12} stroke="none" />
       <polyline points={pts.join(' ')} fill="none" stroke={color} strokeWidth={1.5} strokeLinejoin="round" strokeLinecap="round" />
     </svg>
@@ -119,7 +120,7 @@ export function Heatmap({ data, label }: { data: Array<[string, number]>; label:
               <div key={ci} className="flex flex-col gap-[3px]">
                 {Array.from({ length: 7 }, (_, di) => {
                   const c = col[di];
-                  return <span key={di} className="block h-[10px] w-[10px] rounded-[2px]" style={{ background: c ? FILL[levels(c[1])] : 'transparent', outline: c && c[1] === 0 ? '1px solid var(--w-border)' : undefined, outlineOffset: -1 }} title={c ? `${c[0]}: ${c[1]} action${c[1] === 1 ? '' : 's'}` : undefined} />;
+                  return <span key={di} className="block h-[10px] w-[10px] rounded-[2px]" style={{ background: c ? FILL[levels(c[1])] : 'transparent', outline: c && c[1] === 0 ? '1px solid var(--w-border)' : undefined, outlineOffset: -1 }} title={c ? wt('contrib.dayActions', { d: c[0], count: c[1] }) : undefined} />;
                 })}
               </div>
             ))}
@@ -127,8 +128,8 @@ export function Heatmap({ data, label }: { data: Array<[string, number]>; label:
         </div>
       </div>
       <figcaption className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[var(--w-text-3)]">
-        <span>{total} actions · {active} active days in {data.length} days</span>
-        <span className="ml-auto inline-flex items-center gap-1" aria-hidden="true">Less {FILL.map((f, i) => <span key={i} className="inline-block h-[10px] w-[10px] rounded-[2px]" style={{ background: f, outline: i === 0 ? '1px solid var(--w-border)' : undefined, outlineOffset: -1 }} />)} More</span>
+        <span>{wt('contrib.heatSummary', { total, active, days: data.length })}</span>
+        <span className="ml-auto inline-flex items-center gap-1" aria-hidden="true">{wt('contrib.less')} {FILL.map((f, i) => <span key={i} className="inline-block h-[10px] w-[10px] rounded-[2px]" style={{ background: f, outline: i === 0 ? '1px solid var(--w-border)' : undefined, outlineOffset: -1 }} />)} {wt('contrib.more')}</span>
       </figcaption>
       <table className="sr-only">
         <caption>{label}</caption>
@@ -152,13 +153,13 @@ export function MetricLabel({ label, how, className }: { label: string; how?: st
 
 export const fmtN = (n: number | null | undefined, digits = 1) => (n === null || n === undefined ? '—' : String(Math.round(n * 10 ** digits) / 10 ** digits));
 export const fmtPct = (n: number | null | undefined) => (n === null || n === undefined ? '—' : `${n}%`);
-export const fmtDayShort = (d: string) => new Date(`${d.slice(0, 10)}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
-export const fmtWhen = (iso: string) => new Date(iso).toLocaleString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+export const fmtDayShort = (d: string) => new Date(`${d.slice(0, 10)}T00:00:00Z`).toLocaleDateString(wfmt.intl(), { month: 'short', day: 'numeric', timeZone: 'UTC' });
+export const fmtWhen = (iso: string) => new Date(iso).toLocaleString(wfmt.intl(), { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 
 /** Nhãn trạng thái — quan sát trung tính, KHÔNG BAO GIỜ đánh giá người. */
 export const STATUS_LABEL: Record<'attention' | 'watch' | 'ok' | 'idle', { text: string; cls: string }> = {
-  attention: { text: 'Needs attention', cls: 'border-[var(--w-red-text)] text-[var(--w-red-text)]' },
-  watch: { text: 'Worth a look', cls: 'border-[var(--w-yellow-text)] text-[var(--w-yellow-text)]' },
-  ok: { text: 'On track', cls: 'border-[var(--w-border-strong)] text-[var(--w-text-2)]' },
-  idle: { text: 'No work in range', cls: 'border-[var(--w-border)] text-[var(--w-text-3)]' },
+  attention: { get text() { return wt('contrib.stAttention'); }, cls: 'border-[var(--w-red-text)] text-[var(--w-red-text)]' },
+  watch: { get text() { return wt('contrib.stWatch'); }, cls: 'border-[var(--w-yellow-text)] text-[var(--w-yellow-text)]' },
+  ok: { get text() { return wt('contrib.stOk'); }, cls: 'border-[var(--w-border-strong)] text-[var(--w-text-2)]' },
+  idle: { get text() { return wt('contrib.stIdle'); }, cls: 'border-[var(--w-border)] text-[var(--w-text-3)]' },
 };

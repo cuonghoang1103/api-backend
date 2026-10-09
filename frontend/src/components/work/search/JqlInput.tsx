@@ -77,7 +77,7 @@ export const JqlInput = forwardRef<JqlInputHandle, {
             autoCapitalize="off"
             aria-label={wt('issues.jqlQuery')}
             aria-invalid={!!error}
-            placeholder={placeholder ?? 'e.g. assignee = currentUser() AND statusCategory != Done'}
+            placeholder={placeholder ?? wt('jql.placeholderEg')}
             onChange={(e) => { onChange(e.target.value); setCaret(e.target.selectionStart ?? e.target.value.length); setDismissed(false); }}
             onKeyUp={syncCaret}
             onClick={syncCaret}

@@ -7,18 +7,19 @@ import { BookOpenCheck, Bug, FileText, FlaskConical, MessageCircleQuestion, Spar
 import type { AiQuickTask, ProjectConfig } from '@/lib/work-api';
 import { Popover, useToggle } from '../ui';
 import { openAiPanel } from './store';
+import { wt } from '@/components/work/i18n';
 
 interface Item { label: string; icon: ReactNode; task?: AiQuickTask }
 
 function itemsFor(typeKey: string): Item[] {
   const t = typeKey.toUpperCase();
-  const items: Item[] = [{ label: 'Summarize', icon: <FileText size={14} />, task: 'summarize' }];
-  if (t === 'EPIC') items.push({ label: 'Break into stories', icon: <Split size={14} />, task: 'split' });
-  if (t === 'STORY' || t === 'TASK' || t === 'BUG') items.push({ label: 'Split into sub-tasks', icon: <Split size={14} />, task: 'split' });
-  if (t === 'STORY' || t === 'REQUIREMENT') items.push({ label: 'Generate test cases', icon: <FlaskConical size={14} />, task: 'generate_tests' });
-  if (t === 'BUG') items.push({ label: 'Improve bug report', icon: <Bug size={14} />, task: 'improve_bug' });
-  if (t === 'STORY' || t === 'REQUIREMENT') items.push({ label: 'Review story quality', icon: <BookOpenCheck size={14} />, task: 'review_story' });
-  items.push({ label: 'Ask about this issue', icon: <MessageCircleQuestion size={14} /> });
+  const items: Item[] = [{ label: wt('ai.qSummarize'), icon: <FileText size={14} />, task: 'summarize' }];
+  if (t === 'EPIC') items.push({ label: wt('ai.breakStories'), icon: <Split size={14} />, task: 'split' });
+  if (t === 'STORY' || t === 'TASK' || t === 'BUG') items.push({ label: wt('ai.qSplit'), icon: <Split size={14} />, task: 'split' });
+  if (t === 'STORY' || t === 'REQUIREMENT') items.push({ label: wt('ai.qTests'), icon: <FlaskConical size={14} />, task: 'generate_tests' });
+  if (t === 'BUG') items.push({ label: wt('ai.qBug'), icon: <Bug size={14} />, task: 'improve_bug' });
+  if (t === 'STORY' || t === 'REQUIREMENT') items.push({ label: wt('ai.qReviewStory'), icon: <BookOpenCheck size={14} />, task: 'review_story' });
+  items.push({ label: wt('ai.askIssue'), icon: <MessageCircleQuestion size={14} /> });
   return items;
 }
 
@@ -46,7 +47,7 @@ export default function AiIssueMenu({ config, issueNumber, typeKey }: { config: 
         onClick={menu.toggle}
         aria-haspopup="menu"
         aria-expanded={menu.on}
-        title="AI actions"
+        title={wt('ai.aiActions')}
       >
         <Sparkles size={13} className="text-[var(--w-accent-text)]" />
         <span className="max-md:hidden">AI</span>
@@ -54,7 +55,7 @@ export default function AiIssueMenu({ config, issueNumber, typeKey }: { config: 
       <Popover open={menu.on} onClose={menu.close} anchorRef={anchor} width={224} align="end">
         <div
           role="menu"
-          aria-label={`AI actions for ${config.key}-${issueNumber}`}
+          aria-label={wt('ai.aiActionsFor', { key: `${config.key}-${issueNumber}` })}
           className="p-1"
           onKeyDown={(e) => {
             if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;

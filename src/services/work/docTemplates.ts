@@ -91,10 +91,12 @@ async function load(): Promise<Map<string, DocTemplate>> {
     const { doc } = markdownToTiptap(markdown, { dropTitle: true });
     out.set(c.key, {
       key: c.key, title: c.titleEn, titleVi: c.titleVi, stages: stagesOf(c.key),
-      sections: (markdown.match(/^#{2,6} /gm) ?? []).length,
+      // Mẫu Wiegers dùng đề mục mức 1 như bản gốc ("# 1. Business Requirements") ⇒ đếm mọi đề mục trừ tiêu đề.
+      sections: c.group === 'SWR302 (Wiegers)' ? Math.max(0, (markdown.match(/^#{1,6} /gm) ?? []).length - 1) : (markdown.match(/^#{2,6} /gm) ?? []).length,
       summary: summaryOf(markdown),
       group: c.group ?? null,
-      pageTitle: c.titleEn.replace(/^FPT Capstone — /, '').replace(/^Report (\d)\.?: /, 'Report $1 – '),
+      // CTW đợt 4b: mẫu Wiegers ⇒ tiêu đề trang = tiêu đề bìa của mẫu ("Vision and Scope Document for <Project>" — <Project> thay bằng tên dự án khi điền).
+      pageTitle: c.group === 'SWR302 (Wiegers)' ? (/^#\s+(.+)$/m.exec(markdown)?.[1]?.trim() ?? c.titleEn.replace(/^SWR302 \(Wiegers\) — /, '')) : c.titleEn.replace(/^FPT Capstone — /, '').replace(/^Report (\d)\.?: /, 'Report $1 – '),
       markdown, doc,
     });
   }

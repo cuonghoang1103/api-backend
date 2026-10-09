@@ -29,22 +29,23 @@ import { ProjectAgentsReport } from '@/components/work/agents/PeopleVsAgents';
 import { projectHasAgents } from '@/components/work/agents/leases';
 import Link from 'next/link';
 import { Presentation } from 'lucide-react';
+import { wt } from '@/components/work/i18n';
 
 const TABS = [
-  { id: 'health', label: 'Health' },
-  { id: 'weekly', label: 'Weekly report' },
-  { id: 'burndown', label: 'Burndown' },
-  { id: 'velocity', label: 'Velocity' },
-  { id: 'sprint', label: 'Sprint report' },
-  { id: 'epics', label: 'Epics' },
-  { id: 'contributions', label: 'Contributions' },
-  { id: 'time', label: 'Time' },
-  { id: 'capacity', label: 'Capacity' },
+  { id: 'health', get label() { return wt('rep.tab_health'); } },
+  { id: 'weekly', get label() { return wt('rep.tab_weekly'); } },
+  { id: 'burndown', get label() { return wt('rep.tab_burndown'); } },
+  { id: 'velocity', get label() { return wt('rep.tab_velocity'); } },
+  { id: 'sprint', get label() { return wt('rep.tab_sprint'); } },
+  { id: 'epics', get label() { return wt('rep.tab_epics'); } },
+  { id: 'contributions', get label() { return wt('rep.tab_contributions'); } },
+  { id: 'time', get label() { return wt('rep.tab_time'); } },
+  { id: 'capacity', get label() { return wt('rep.tab_capacity'); } },
   // CTW-28 A15: chỉ hiện khi dự án có AI agent (lọc trong ReportsView).
-  { id: 'agents', label: 'People vs Agents' },
+  { id: 'agents', get label() { return wt('rep.tab_agents'); } },
   // Đợt S4 (mô-đun reports): chỉ hiện khi bật + người của đội (lọc trong ReportsView).
-  { id: 'client', label: 'Client weekly' },
-  { id: 'steering', label: 'Steering' },
+  { id: 'client', get label() { return wt('rep.tab_client'); } },
+  { id: 'steering', get label() { return wt('rep.tab_steering'); } },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 const S4_TABS: ReadonlySet<string> = new Set(['client', 'steering']);
@@ -84,14 +85,14 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
 
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Reports">
+      <ProjectHeader config={config} title={wt('portal.tReports')}>
         {reportsOn && (
-          <Link href={`/work/${config.workspace.slug}/${config.key}/present`} className="w-btn w-btn-sm" data-testid="header-present"><Presentation size={14} />Present</Link>
+          <Link href={`/work/${config.workspace.slug}/${config.key}/present`} className="w-btn w-btn-sm" data-testid="header-present"><Presentation size={14} />{wt('rep.present')}</Link>
         )}
       </ProjectHeader>
 
       <div className="shrink-0 overflow-x-auto border-b border-[var(--w-border)] px-4">
-        <div className="flex gap-1" role="tablist" aria-label="Reports">
+        <div className="flex gap-1" role="tablist" aria-label={wt('portal.tReports')}>
           {tabs.map((t) => (
             <button
               key={t.id}
@@ -147,7 +148,7 @@ function ReportsPageInner() {
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   if (isLoading) return <PageLoading />;
   if (error || !config || !pid) {
-    return <EmptyState title="Project not found" body={error ? workError(error) : 'It may have been deleted, or you do not have access.'} />;
+    return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : wt('dash.mayDeleted')} />;
   }
   return <ReportsView config={config} pid={pid} />;
 }

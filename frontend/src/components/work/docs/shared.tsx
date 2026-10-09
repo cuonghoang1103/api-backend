@@ -15,12 +15,13 @@ import {
   workDocsApi, workDocsKeys, type PageStatus, type PageVisibility, type ProjectConfig, type WorkPageItem,
 } from '@/lib/work-api';
 import { Pill } from '../studio/shared';
+import { wt } from '@/components/work/i18n';
 
 export const PAGE_STATUS: Record<PageStatus, { label: string; tone: 'neutral' | 'orange' | 'green' | 'blue' }> = {
-  DRAFT: { label: 'Draft', tone: 'neutral' },
-  IN_REVIEW: { label: 'In review', tone: 'orange' },
-  APPROVED: { label: 'Approved', tone: 'green' },
-  ARCHIVED: { label: 'Archived', tone: 'neutral' },
+  DRAFT: { get label() { return wt('docs.stDraft'); }, tone: 'neutral' },
+  IN_REVIEW: { get label() { return wt('docs.stReview'); }, tone: 'orange' },
+  APPROVED: { get label() { return wt('docs.stApproved'); }, tone: 'green' },
+  ARCHIVED: { get label() { return wt('docs.stArchived'); }, tone: 'neutral' },
 };
 
 export const PageStatusPill = ({ status, className }: { status: PageStatus; className?: string }) => (
@@ -37,15 +38,15 @@ export function StatusDot({ status }: { status: PageStatus }) {
 export function VisibilityBadge({ visibility, compact }: { visibility: PageVisibility; compact?: boolean }) {
   if (visibility === 'CLIENT') {
     return (
-      <span title="Visible to the client" className="inline-flex shrink-0 items-center gap-1 rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 text-[11px] font-medium leading-[18px] text-[var(--w-accent-text)]">
-        <Eye size={11} aria-hidden="true" />{!compact && 'Client'}
+      <span title={wt('docs.visibleClient')} className="inline-flex shrink-0 items-center gap-1 rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 text-[11px] font-medium leading-[18px] text-[var(--w-accent-text)]">
+        <Eye size={11} aria-hidden="true" />{!compact && wt('docs.clientTag')}
       </span>
     );
   }
   if (compact) return null;
   return (
-    <span title="Only the project team can see this page" className="inline-flex shrink-0 items-center gap-1 rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] font-medium leading-[18px] text-[var(--w-text-2)]">
-      <Lock size={11} aria-hidden="true" />Internal
+    <span title={wt('docs.onlyTeam')} className="inline-flex shrink-0 items-center gap-1 rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] font-medium leading-[18px] text-[var(--w-text-2)]">
+      <Lock size={11} aria-hidden="true" />{wt('docs.internalTag')}
     </span>
   );
 }

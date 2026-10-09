@@ -274,7 +274,9 @@ export async function addSampleData(userId: number, projectId: number) {
     },
   });
   if (readRecord(project.settings)) throw new ConflictError('Sample data is already in this project. Remove it first.');
-  const existing = await prisma.workIssue.count({ where: { projectId, deletedAt: null } });
+  // CTW đợt 4b: mẫu SWR302/CAPSTONE tự dựng epic theo deliverable/Report — không tính là "dự án đã có việc".
+  const seededEpics = project.template === 'SWR302' || project.template === 'CAPSTONE';
+  const existing = await prisma.workIssue.count({ where: { projectId, deletedAt: null, ...(seededEpics ? { type: { key: { not: 'EPIC' } } } : {}) } });
   if (existing >= SAMPLE_MAX_EXISTING) {
     throw new BadRequestError('Sample data can only be added to a new project (fewer than 3 issues)', 'WORK_SAMPLE_NOT_EMPTY');
   }

@@ -13,6 +13,7 @@ import AiMarkdown from '@/components/work/ai/AiMarkdown';
 import UpgradeDialog from '@/components/work/ai/UpgradeDialog';
 import { cn } from '@/lib/utils';
 import { Card, num, SectionTitle, SprintSelect, unitLabel, useAllSprints, useReportableSprints } from './shared';
+import { currentWorkLocale, wt } from '@/components/work/i18n';
 
 export default function SprintReportTab({ pid, config, lk }: { pid: number; config: ProjectConfig; lk: Lookups }) {
   const sprintsQ = useAllSprints(pid);
@@ -38,8 +39,8 @@ export default function SprintReportTab({ pid, config, lk }: { pid: number; conf
   }, [q.data]);
 
   if (sprintsQ.isLoading) return <div className="flex justify-center py-16"><Spinner size={20} /></div>;
-  if (sprintsQ.error) return <EmptyState title="Could not load sprints" body={workError(sprintsQ.error)} />;
-  if (!sprints.length) return <EmptyState title="No sprints yet" body="Start a sprint from the Backlog to see its report." />;
+  if (sprintsQ.error) return <EmptyState title={wt('rep.loadSprintsFailed')} body={workError(sprintsQ.error)} />;
+  if (!sprints.length) return <EmptyState title={wt('rep.noSprints')} body={wt('rep.noSprintsReport')} />;
 
   const href = (n: number) => `/work/${config.workspace.slug}/${config.key}/issue/${n}`;
   const d = q.data;
@@ -51,7 +52,7 @@ export default function SprintReportTab({ pid, config, lk }: { pid: number; conf
   const issueRow = (n: number, item?: SprintReportItem) => (
     <li key={n} className="flex min-w-0 items-center gap-3 border-b border-[var(--w-border)] px-3 py-2 last:border-0">
       <Link href={href(n)} className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)] hover:underline">{lk.issueKey(n)}</Link>
-      <Link href={href(n)} className="min-w-0 flex-1 truncate text-[13px] hover:underline">{item?.title ?? <span className="text-[var(--w-text-3)]">Open issue</span>}</Link>
+      <Link href={href(n)} className="min-w-0 flex-1 truncate text-[13px] hover:underline">{item?.title ?? <span className="text-[var(--w-text-3)]">{wt('rep.openIssue')}</span>}</Link>
       {item && <span className="shrink-0 text-[12px] tabular-nums text-[var(--w-text-3)]">{num(item.points)} {u}</span>}
     </li>
   );
@@ -76,8 +77,8 @@ export default function SprintReportTab({ pid, config, lk }: { pid: number; conf
         {d && (
           <span className="text-[12px] text-[var(--w-text-3)]">
             {d.sprint.state === 'CLOSED'
-              ? `Completed ${d.sprint.completedAt ? formatDate(d.sprint.completedAt) : ''} · snapshot at completion`
-              : 'In progress · live data'}
+              ? wt('rep.completedSnap', { d: d.sprint.completedAt ? formatDate(d.sprint.completedAt) : '' })
+              : wt('rep.inProgressLive')}
           </span>
         )}
       </div>
@@ -85,28 +86,28 @@ export default function SprintReportTab({ pid, config, lk }: { pid: number; conf
       {q.isLoading ? (
         <div className="flex justify-center py-16"><Spinner size={20} /></div>
       ) : q.error ? (
-        <EmptyState title="Could not load the sprint report" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('rep.loadReportFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : r ? (
         <>
           <div className="flex flex-wrap items-center gap-2">
             <div className="text-[15px] font-semibold">
-              {r.completed.length} of {total} {total === 1 ? 'issue' : 'issues'} completed
+              {wt('rep.nOfCompleted', { a: r.completed.length, count: total })}
               <span className="text-[var(--w-text-3)]"> · </span>
-              {num(r.completedPoints)} of {num(r.committedPoints)} {u}
+              {wt('rep.ptsOf', { a: num(r.completedPoints), b: num(r.committedPoints), u })}
             </div>
             {scopeChanged && (
               <span className="rounded-full border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-2 py-0.5 text-[11px] font-medium text-[var(--w-accent-text)]">
-                Scope changed · +{r.added.length} / −{r.removed.length}
+                {wt('rep.scopeChanged', { a: r.added.length, b: r.removed.length })}
               </span>
             )}
           </div>
           {d?.sprint.goal && (
-            <div className="text-[13px] text-[var(--w-text-2)]"><span className="font-medium text-[var(--w-text)]">Sprint goal:</span> {d.sprint.goal}</div>
+            <div className="text-[13px] text-[var(--w-text-2)]"><span className="font-medium text-[var(--w-text)]">{wt('rep.sprintGoal')}</span> {d.sprint.goal}</div>
           )}
-          {section('Completed issues', r.completed.map((i) => i.number), 'No issues were completed.', r.completed)}
-          {section('Not completed', r.incomplete.map((i) => i.number), 'Everything in this sprint was completed.', r.incomplete)}
-          {section('Added after sprint start', r.added, 'No issues were added after the sprint started.')}
-          {section('Removed from sprint', r.removed, 'No issues were removed from the sprint.')}
+          {section(wt('rep.secCompleted'), r.completed.map((i) => i.number), wt('rep.noneCompleted'), r.completed)}
+          {section(wt('rep.secNot'), r.incomplete.map((i) => i.number), wt('rep.allCompleted'), r.incomplete)}
+          {section(wt('rep.secAdded'), r.added, wt('rep.noneAdded'))}
+          {section(wt('rep.secRemoved'), r.removed, wt('rep.noneRemoved'))}
           {sprintId !== null && <RetroCard key={sprintId} pid={pid} config={config} sprintId={sprintId} />}
         </>
       ) : null}
@@ -129,7 +130,7 @@ const LANGS: Array<{ id: Lang; label: string }> = [
 function RetroCard({ pid, config, sprintId }: { pid: number; config: ProjectConfig; sprintId: number }) {
   const canUse = config.permissions.useAi;
   const [notes, setNotes] = useState('');
-  const [language, setLanguage] = useState<Lang>('en');
+  const [language, setLanguage] = useState<Lang>(() => currentWorkLocale());
   const [summary, setSummary] = useState<string | null>(null);
   const [items, setItems] = useState<ActionItem[]>([]);
   const [upgrade, setUpgrade] = useState(false);
@@ -142,7 +143,7 @@ function RetroCard({ pid, config, sprintId }: { pid: number; config: ProjectConf
     },
     onError: (err) => {
       if (isAiQuotaError(err)) setUpgrade(true);
-      else toast.error(workError(err, 'Could not generate the retrospective'));
+      else toast.error(workError(err, wt('rep.retroFailed')));
     },
   });
   const onUpdate = useCallback((id: string, patch: Partial<ActionItem>) => {
@@ -153,12 +154,12 @@ function RetroCard({ pid, config, sprintId }: { pid: number; config: ProjectConf
     <Card className="p-0">
       <div className="flex flex-wrap items-center gap-2 px-4 pb-2 pt-3">
         <Sparkles size={14} className="text-[var(--w-accent-text)]" />
-        <h3 className="text-[13px] font-semibold">Retrospective (AI)</h3>
+        <h3 className="text-[13px] font-semibold">{wt('rep.retroAi')}</h3>
         <span className="text-[12px] text-[var(--w-text-3)]">What went well, what didn&apos;t, and action items</span>
       </div>
       <div className="space-y-3 border-t border-[var(--w-border)] px-4 py-3">
         <div>
-          <label htmlFor={`retro-notes-${sprintId}`} className="w-label">Team notes (optional)</label>
+          <label htmlFor={`retro-notes-${sprintId}`} className="w-label">{wt('rep.teamNotes')}</label>
           <textarea
             id={`retro-notes-${sprintId}`}
             className="w-input text-[13px]"
@@ -167,13 +168,13 @@ function RetroCard({ pid, config, sprintId }: { pid: number; config: ProjectConf
             value={notes}
             disabled={!canUse}
             onChange={(e) => setNotes(e.target.value)}
-            placeholder="Paste sticky notes or comments from the retro meeting — one per line works well."
+            placeholder={wt('rep.notesPh')}
           />
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="min-w-0">
-            <div className="w-label">Language</div>
-            <div role="radiogroup" aria-label="Language" className="inline-flex max-w-full rounded-[var(--w-radius)] border border-[var(--w-border-strong)] bg-[var(--w-sunken)] p-0.5">
+            <div className="w-label">{wt('common.language')}</div>
+            <div role="radiogroup" aria-label={wt('common.language')} className="inline-flex max-w-full rounded-[var(--w-radius)] border border-[var(--w-border-strong)] bg-[var(--w-sunken)] p-0.5">
               {LANGS.map((o) => (
                 <button
                   key={o.id}
@@ -193,14 +194,14 @@ function RetroCard({ pid, config, sprintId }: { pid: number; config: ProjectConf
           </div>
           <button type="button" className="w-btn w-btn-primary w-full sm:ml-auto sm:w-auto" disabled={!canUse || gen.isPending} onClick={() => gen.mutate()}>
             {gen.isPending ? <Spinner size={14} /> : <Sparkles size={14} />}
-            {gen.isPending ? 'Writing…' : summary ? 'Regenerate retro' : 'Generate retro'}
+            {gen.isPending ? wt('rep.writing') : summary ? wt('rep.regenRetro') : wt('rep.genRetro')}
           </button>
         </div>
         <p className="text-[12px] leading-relaxed text-[var(--w-text-3)]">
-          Sprint numbers come from your project data; AI only writes the text. Action items are suggestions — nothing is created until you apply them. Uses 1 AI request.
+          {wt('rep.retroNote')}
         </p>
         {!canUse && (
-          <p className="text-[12px] text-[var(--w-orange)]">You don&apos;t have permission to use AI in this project. Ask a project admin to enable it for your role.</p>
+          <p className="text-[12px] text-[var(--w-orange)]">{wt('rep.noAiPerm')}</p>
         )}
       </div>
 
@@ -209,7 +210,7 @@ function RetroCard({ pid, config, sprintId }: { pid: number; config: ProjectConf
           <AiMarkdown text={summary} />
           {items.length > 0 && (
             <div className="mt-4">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]">Proposed action items</div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]">{wt('rep.proposed')}</div>
               <ActionGroup config={config} items={items} onUpdate={onUpdate} />
             </div>
           )}

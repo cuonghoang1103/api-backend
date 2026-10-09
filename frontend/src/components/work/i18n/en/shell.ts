@@ -60,4 +60,5 @@ export const shell = {
   tourBody: 'Create a workspace, start a project from a template, invite your team and run your first sprint. Available in English and Tiếng Việt.',
   startTour: 'Start the tour',
   dismiss: 'Dismiss',
+  focus: 'Focus',
 };

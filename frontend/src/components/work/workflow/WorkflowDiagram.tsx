@@ -28,6 +28,7 @@ import { AddStatusForm, CATEGORY_LABEL } from './statusParts';
 import { EdgeInspector, NodeInspector } from './Inspector';
 import { downloadPng, downloadSvg } from './exportDiagram';
 import type { TransitionDraft } from './useTransitionDraft';
+import { wt } from '@/components/work/i18n';
 
 type Sel = { kind: 'node'; id: number } | { kind: 'edge'; key: string } | null;
 interface View { x: number; y: number; k: number }
@@ -218,7 +219,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
         return { ...old, settings: { ...old.settings, workflowLayout: layout } };
       });
     },
-    onError: (err) => toast.error(workError(err, 'Could not save the diagram layout')),
+    onError: (err) => toast.error(workError(err, wt('wf.layoutFailed'))),
   });
   const saveTimer = useRef<ReturnType<typeof setTimeout>>();
   const posRef = useRef(positions);
@@ -248,7 +249,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
     if (from === to) return;
     if (draft.mode === 'free') { setConfirm({ pending: { from, to } }); return; }
     const k = pairKey(from, to);
-    if (draft.pairs.has(k)) toast.message('That transition already exists');
+    if (draft.pairs.has(k)) toast.message(wt('wf.exists'));
     else draft.add(from, to);
     if (from === null) setShowAny(true);
     setSel({ kind: 'edge', key: k });
@@ -368,11 +369,11 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
     // Đợi hai khung hình để bỏ trạng thái chọn/rê khỏi bản xuất.
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
-      const title = `${config.name} — ${wf.name} workflow`;
+      const title = wt('wf.exportTitle', { p: config.name, w: wf.name });
       if (kind === 'svg') downloadSvg(svg, contentBounds(), title);
       else await downloadPng(svg, contentBounds(), title);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Could not export the diagram');
+      toast.error(err instanceof Error ? err.message : wt('wf.exportFailed'));
     } finally {
       setExporting(false);
       setSel(prevSel);
@@ -396,7 +397,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
     <div
       className={cn(fullscreen && 'fixed inset-0 z-[60] flex flex-col bg-[var(--w-bg)] p-3 md:p-4')}
       role={fullscreen ? 'dialog' : undefined}
-      aria-label={fullscreen ? `${wf.name} workflow diagram` : undefined}
+      aria-label={fullscreen ? wt('wf.diagramOf', { w: wf.name }) : undefined}
     >
       {/* Thanh công cụ */}
       <div className="mb-2 flex flex-wrap items-center gap-1.5">
@@ -404,7 +405,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
         {canEdit && (
           <>
             <button ref={addRef} type="button" className="w-btn w-btn-sm" onClick={addPop.toggle} aria-expanded={addPop.on}>
-              <Plus size={13} /> Status
+              <Plus size={13} /> {wt('wf.statusBtn')}
             </button>
             <Popover open={addPop.on} onClose={addPop.close} anchorRef={addRef} width={280}>
               <AddStatusForm compact autoFocus pid={pid} wfId={wf.id} onAdded={(s) => { addPop.close(); invalidate(); setSel({ kind: 'node', id: s.id }); }} />
@@ -417,34 +418,34 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
           onClick={() => setShowAny((v) => !v)}
           aria-pressed={showAny}
           disabled={!anyEdgeCount && !canEdit}
-          title="Transitions that can be used from any status (Jira's global transitions)"
+          title={wt('wf.anyTip')}
         >
-          {showAny ? 'Hide' : 'Show'} “Any status” arrows{anyEdgeCount ? ` (${anyEdgeCount})` : ''}
+          {wt('wf.anyArrows', { a: showAny ? wt('common.hide') : wt('common.show'), n: anyEdgeCount ? ` (${anyEdgeCount})` : '' })}
         </button>
-        <button type="button" className="w-btn w-btn-sm" onClick={autoArrange} title="Lay statuses out left to right by category">
-          <Wand2 size={13} /> Auto-arrange
+        <button type="button" className="w-btn w-btn-sm" onClick={autoArrange} title={wt('wf.arrangeTip')}>
+          <Wand2 size={13} /> {wt('wf.autoArrange')}
         </button>
         {canEdit && restricted && (
-          <button type="button" className="w-btn w-btn-sm" onClick={() => { draft.setMode('free'); setSel(null); }} title="Let any status move to any status">
-            <Unlock size={13} /> Make free again
+          <button type="button" className="w-btn w-btn-sm" onClick={() => { draft.setMode('free'); setSel(null); }} title={wt('wf.freeTip')}>
+            <Unlock size={13} /> {wt('wf.makeFree')}
           </button>
         )}
         <div className="ml-auto flex items-center gap-1.5">
-          {layoutMut.isPending && <span className="flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><Spinner size={11} /> Saving layout</span>}
+          {layoutMut.isPending && <span className="flex items-center gap-1.5 text-[12px] text-[var(--w-text-3)]"><Spinner size={11} /> {wt('wf.savingLayout')}</span>}
           <button ref={exportRef} type="button" className="w-btn w-btn-sm" onClick={exportPop.toggle} disabled={exporting} aria-expanded={exportPop.on}>
-            {exporting ? <Spinner size={12} /> : <Download size={13} />} Export
+            {exporting ? <Spinner size={12} /> : <Download size={13} />} {wt('common.export')}
           </button>
           <Popover open={exportPop.on} onClose={exportPop.close} anchorRef={exportRef} width={200} align="end">
             <div className="p-1">
               <button type="button" className="flex w-full flex-col rounded-[5px] px-2 py-1.5 text-left hover:bg-[var(--w-hover)]" onClick={() => doExport('png')}>
-                <span>Download PNG</span><span className="text-[11px] text-[var(--w-text-3)]">For reports and slides</span>
+                <span>{wt('wf.dlPng')}</span><span className="text-[11px] text-[var(--w-text-3)]">{wt('wf.forReports')}</span>
               </button>
               <button type="button" className="flex w-full flex-col rounded-[5px] px-2 py-1.5 text-left hover:bg-[var(--w-hover)]" onClick={() => doExport('svg')}>
-                <span>Download SVG</span><span className="text-[11px] text-[var(--w-text-3)]">Scalable, editable</span>
+                <span>{wt('wf.dlSvg')}</span><span className="text-[11px] text-[var(--w-text-3)]">{wt('wf.scalable')}</span>
               </button>
             </div>
           </Popover>
-          <button type="button" className="w-btn w-btn-sm w-btn-icon" onClick={() => toggleFullscreen()} aria-label={fullscreen ? 'Exit full screen' : 'Full screen'} title={fullscreen ? 'Exit full screen (Esc)' : 'Full screen'}>
+          <button type="button" className="w-btn w-btn-sm w-btn-icon" onClick={() => toggleFullscreen()} aria-label={fullscreen ? wt('wf.exitFull') : wt('wf.fullScreen')} title={fullscreen ? wt('wf.exitFullEsc') : wt('wf.fullScreen')}>
             {fullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
           </button>
         </div>
@@ -463,7 +464,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
           className="block h-full w-full select-none outline-none"
           style={{ touchAction: 'none', cursor: drag.current?.type === 'pan' ? 'grabbing' : 'default' }}
           tabIndex={0}
-          aria-label={`${wf.name} workflow diagram — ${statuses.length} statuses, ${restricted ? `${draft.pairs.size} transitions` : 'free workflow'}`}
+          aria-label={wt('wf.svgAria', { w: wf.name, n: statuses.length, m: restricted ? wt('wf.nTransitions', { n: draft.pairs.size }) : wt('wf.freeWorkflow') })}
           onPointerMove={onMove}
           onPointerUp={onUp}
           onPointerCancel={() => { drag.current = null; setConnect(null); }}
@@ -485,19 +486,19 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
             {/* Chấm "Create" → trạng thái đầu (nơi thẻ mới sinh ra) */}
             {startPos && initial && (
               <g aria-hidden="true">
-                <title>New issues start in “{initial.name}”</title>
+                <title>{wt('wf.startIn', { n: initial.name })}</title>
                 <line x1={startPos.x + START_R} y1={startPos.y} x2={rects[initial.id].x - 3} y2={startPos.y} style={{ stroke: 'var(--w-text-3)' }} strokeWidth={1.5} markerEnd={`url(#${uid}-ma)`} />
                 <circle cx={startPos.x} cy={startPos.y} r={START_R} style={{ fill: 'var(--w-text-2)' }} />
-                <text x={startPos.x} y={startPos.y - 15} textAnchor="middle" fontSize={11} style={{ fill: 'var(--w-text-3)' }}>Create</text>
+                <text x={startPos.x} y={startPos.y - 15} textAnchor="middle" fontSize={11} style={{ fill: 'var(--w-text-3)' }}>{wt('wf.create')}</text>
               </g>
             )}
 
             {/* Nút "Any status" */}
             {showAny && restricted && (
               <g>
-                <title>Any status — transitions from here can be used from every status</title>
+                <title>{wt('wf.anyTitle')}</title>
                 <rect x={anyRect.x} y={anyRect.y} width={ANY_W} height={ANY_H} rx={ANY_H / 2} strokeWidth={1.25} strokeDasharray="4 3" style={{ fill: 'var(--w-raised)', stroke: 'var(--w-accent-border)' }} />
-                <text x={anyRect.x + ANY_W / 2} y={anyRect.y + ANY_H / 2 + 4} textAnchor="middle" fontSize={12} fontWeight={600} style={{ fill: 'var(--w-accent-text)' }}>Any status</text>
+                <text x={anyRect.x + ANY_W / 2} y={anyRect.y + ANY_H / 2 + 4} textAnchor="middle" fontSize={12} fontWeight={600} style={{ fill: 'var(--w-accent-text)' }}>{wt('wf.anyStatusSvg')}</text>
                 {canEdit && (
                   <circle
                     data-export="skip"
@@ -505,7 +506,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
                     style={{ fill: 'var(--w-panel)', stroke: 'var(--w-accent)', cursor: 'crosshair' }}
                     onPointerDown={(e) => onHandleDown(e, null)}
                   >
-                    <title>Drag to a status to add a transition from any status</title>
+                    <title>{wt('wf.dragAny')}</title>
                   </circle>
                 )}
               </g>
@@ -560,7 +561,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
                   transform={`translate(${r.x},${r.y})`}
                   tabIndex={0}
                   role="button"
-                  aria-label={`${s.name}, ${CATEGORY_LABEL[s.category]}${s.wipLimit ? `, WIP limit ${s.wipLimit}` : ''}${warn ? `, ${warn.length} warning${warn.length > 1 ? 's' : ''}` : ''}`}
+                  aria-label={wt('wf.nodeAria', { n: s.name, c: CATEGORY_LABEL[s.category], wip: s.wipLimit ? `, ${wt('wf.wipLimitN', { n: s.wipLimit })}` : '', warn: warn ? `, ${wt('wf.nWarnings', { count: warn.length })}` : '' })}
                   className="outline-none"
                   style={{ cursor: canEdit ? 'move' : 'pointer', opacity: dim && !connect ? 0.55 : 1, transition: 'opacity 120ms' }}
                   onFocus={() => { if (!drag.current) setSel({ kind: 'node', id: s.id }); }}
@@ -578,7 +579,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
                   <text x={12} y={47} fontSize={10.5} fontWeight={600} letterSpacing={0.5} style={{ fill: 'var(--w-text-3)' }}>{CATEGORY_LABEL[s.category].toUpperCase()}</text>
                   {s.wipLimit != null && (
                     <g>
-                      <title>WIP limit {s.wipLimit}</title>
+                      <title>{wt('wf.wipLimitN', { n: s.wipLimit })}</title>
                       <rect x={NODE_W - 58} y={37} width={48} height={16} rx={4} strokeWidth={1} style={{ fill: 'var(--w-sunken)', stroke: 'var(--w-border-strong)' }} />
                       <text x={NODE_W - 34} y={48.5} textAnchor="middle" fontSize={10.5} fontWeight={600} style={{ fill: 'var(--w-text-2)' }}>WIP {s.wipLimit}</text>
                     </g>
@@ -594,7 +595,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
                   )}
                   {anyTargets.has(s.id) && (
                     <g transform="translate(10,-9)">
-                      <title>Issues can move here from any status</title>
+                      <title>{wt('wf.fromAnyTitle')}</title>
                       <rect width={40} height={17} rx={8.5} strokeWidth={1} style={{ fill: 'var(--w-panel)', stroke: 'var(--w-accent-border)' }} />
                       <text x={20} y={12} textAnchor="middle" fontSize={10} fontWeight={700} letterSpacing={0.6} style={{ fill: 'var(--w-accent-text)' }}>ANY</text>
                     </g>
@@ -607,7 +608,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
                       style={{ fill: 'var(--w-panel)', stroke: 'var(--w-accent)', cursor: 'crosshair' }}
                       onPointerDown={(e) => onHandleDown(e, s.id)}
                     >
-                      <title>Drag to another status to add a transition</title>
+                      <title>{wt('wf.dragOther')}</title>
                     </circle>
                   ))}
                 </g>
@@ -637,11 +638,11 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
             <div className="w-card pointer-events-auto flex max-w-[560px] flex-wrap items-center gap-x-3 gap-y-2 px-3 py-2 text-[12.5px] leading-snug text-[var(--w-text-2)]" onPointerDown={(e) => e.stopPropagation()}>
               <Info size={14} className="shrink-0 text-[var(--w-accent-text)]" />
               <span className="min-w-0 flex-1">
-                <b className="font-medium text-[var(--w-text)]">Any status can move to any status</b> (free workflow).
-                {canEdit && ' Add a transition to switch to a restricted workflow.'}
+                <b className="font-medium text-[var(--w-text)]">{wt('wf.anyToAny')}</b> {wt('wf.freeParen')}
+                {canEdit && wt('wf.addToRestrict')}
               </span>
               {canEdit && (
-                <button type="button" className="w-btn w-btn-sm shrink-0" onClick={() => setConfirm({ pending: null })}>Start from a linear flow</button>
+                <button type="button" className="w-btn w-btn-sm shrink-0" onClick={() => setConfirm({ pending: null })}>{wt('wf.startLinear')}</button>
               )}
             </div>
           </div>
@@ -657,17 +658,17 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
               aria-expanded={showWarnings}
             >
               <AlertTriangle size={13} className="text-[var(--w-yellow)]" />
-              {warnCount} status{warnCount > 1 ? 'es' : ''} need{warnCount > 1 ? '' : 's'} attention
+              {wt('wf.needAttention', { count: warnCount })}
             </button>
             {showWarnings && (
               <div className="w-card mt-1.5 max-h-[300px] w-[300px] overflow-y-auto p-1" style={{ boxShadow: 'var(--w-shadow-pop)' }}>
                 {Object.entries(warnings).map(([id, ws]) => (
                   <button key={id} type="button" className="flex w-full flex-col gap-0.5 rounded-[5px] px-2 py-1.5 text-left hover:bg-[var(--w-hover)]" onClick={() => focusNode(Number(id))}>
                     <span className="text-[13px] font-medium">{byId.get(Number(id))?.name}</span>
-                    {ws.map((w) => <span key={w.kind} className="text-[12px] leading-snug text-[var(--w-text-2)]">{w.kind === 'unreachable' ? 'Unreachable' : 'Dead end'} — {w.text.split('—')[1]?.trim() ?? w.text}</span>)}
+                    {ws.map((w) => <span key={w.kind} className="text-[12px] leading-snug text-[var(--w-text-2)]">{w.kind === 'unreachable' ? wt('wf.unreachable') : wt('wf.deadEnd')} — {w.text.split('—')[1]?.trim() ?? w.text}</span>)}
                   </button>
                 ))}
-                <p className="px-2 pb-1 pt-1.5 text-[11px] text-[var(--w-text-3)]">Warnings don’t block saving.</p>
+                <p className="px-2 pb-1 pt-1.5 text-[11px] text-[var(--w-text-3)]">{wt('wf.noBlock')}</p>
               </div>
             )}
           </div>
@@ -675,13 +676,13 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
 
         {/* Phóng to / thu nhỏ */}
         <div className="w-card absolute bottom-2 left-2 flex items-center p-0.5" onPointerDown={(e) => e.stopPropagation()}>
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => zoomCenter(1 / 1.2)} aria-label="Zoom out" title="Zoom out (−)"><Minus size={13} /></button>
-          <button type="button" className="tabular h-[26px] min-w-[46px] rounded-[5px] px-1 text-[12px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]" onClick={() => zoomAt(size.w / 2, size.h / 2, 1 / view.k)} title="Reset to 100%">
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => zoomCenter(1 / 1.2)} aria-label={wt('wf.zoomOut')} title={wt('wf.zoomOutT')}><Minus size={13} /></button>
+          <button type="button" className="tabular h-[26px] min-w-[46px] rounded-[5px] px-1 text-[12px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]" onClick={() => zoomAt(size.w / 2, size.h / 2, 1 / view.k)} title={wt('wf.reset100')}>
             {Math.round(view.k * 100)}%
           </button>
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => zoomCenter(1.2)} aria-label="Zoom in" title="Zoom in (+)"><Plus size={13} /></button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => zoomCenter(1.2)} aria-label={wt('wf.zoomIn')} title={wt('wf.zoomInT')}><Plus size={13} /></button>
           <span className="mx-0.5 h-4 w-px bg-[var(--w-border)]" />
-          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={fit} title="Fit to screen (0)"><Scan size={13} /> Fit</button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={fit} title={wt('wf.fitTip')}><Scan size={13} /> {wt('wf.fit')}</button>
         </div>
 
         {/* Gợi ý / chú giải */}
@@ -690,7 +691,7 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
             {(['TODO', 'IN_PROGRESS', 'DONE'] as const).map((c) => (
               <span key={c} className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-[3px] border" style={{ borderColor: CATEGORY_DOT[c], background: `color-mix(in srgb, ${CATEGORY_DOT[c]} 15%, transparent)` }} />{CATEGORY_LABEL[c]}</span>
             ))}
-            {canEdit && <span className="border-l border-[var(--w-border)] pl-3">Drag a ○ handle to connect · ⌘/Ctrl + scroll to zoom</span>}
+            {canEdit && <span className="border-l border-[var(--w-border)] pl-3">{wt('wf.dragHint')}</span>}
           </div>
         )}
 
@@ -699,13 +700,13 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
           <div className="pointer-events-none absolute inset-x-2 bottom-12 flex justify-center">
             <div className="w-card pointer-events-auto flex items-center gap-2 py-1.5 pl-3 pr-1.5 text-[13px]" style={{ boxShadow: 'var(--w-shadow-pop)' }} onPointerDown={(e) => e.stopPropagation()}>
               <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--w-orange)]" />
-              <span className="font-medium">{draft.invalid ? 'No transitions — issues couldn’t move' : 'Unsaved changes'}</span>
+              <span className="font-medium">{draft.invalid ? wt('wf.noTransitions') : wt('docs.unsaved')}</span>
               <span className="hidden text-[12px] text-[var(--w-text-3)] sm:inline">
-                {draft.mode === 'free' ? '· free workflow' : `· ${draft.pairs.size} transition${draft.pairs.size === 1 ? '' : 's'}`}
+                {draft.mode === 'free' ? wt('wf.freeDot') : `· ${wt('wf.nTransitions', { n: draft.pairs.size })}`}
               </span>
-              <button type="button" className="w-btn w-btn-sm" onClick={() => { draft.discard(); setSel(null); }} disabled={draft.saving}>Discard</button>
-              <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={draft.save} disabled={draft.saving || draft.invalid} title={draft.invalid ? 'Draw at least one transition, or make the workflow free again' : undefined}>
-                {draft.saving && <Spinner size={12} />} Save
+              <button type="button" className="w-btn w-btn-sm" onClick={() => { draft.discard(); setSel(null); }} disabled={draft.saving}>{wt('common.discard')}</button>
+              <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={draft.save} disabled={draft.saving || draft.invalid} title={draft.invalid ? wt('wf.drawOne') : undefined}>
+                {draft.saving && <Spinner size={12} />} {wt('common.save')}
               </button>
             </div>
           </div>
@@ -747,14 +748,14 @@ export default function WorkflowDiagram({ wf, config, draft, canEdit, invalidate
         onClose={() => setConfirm(null)}
         onConfirm={applyRestrict}
         danger={false}
-        title="Switch to a restricted workflow?"
-        confirmLabel="Switch to restricted"
+        title={wt('wf.restrictQ')}
+        confirmLabel={wt('wf.restrictBtn')}
         body={
           <>
-            <p>Today any status can move to any status. After this, <b className="font-medium text-[var(--w-text)]">issues will only move along the arrows you draw</b>.</p>
+            <p>{wt('wf.restrictA')} <b className="font-medium text-[var(--w-text)]">{wt('wf.restrictB')}</b>.</p>
             <p className="mt-2">
-              To keep work moving, the diagram starts from a linear flow — each status to the next one in board order, and any status back to
-              {' '}“{statuses[0]?.name}”{confirm?.pending ? ', plus the transition you just drew' : ''}. Edit it freely; nothing is saved until you click <b className="font-medium text-[var(--w-text)]">Save</b>.
+              {wt('wf.restrictC')}
+              {' '}“{statuses[0]?.name}”{confirm?.pending ? wt('wf.plusDrawn') : ''}. {wt('wf.editFreely')} <b className="font-medium text-[var(--w-text)]">{wt('common.save')}</b>.
             </p>
           </>
         }

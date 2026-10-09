@@ -10,17 +10,18 @@ import { workError } from '@/lib/work-api';
 import { openResourceLink, resApi, resKeys } from '@/lib/work-resources-api';
 import { EmptyState, PageLoading } from '../ui';
 import { Favicon, kindLabel } from './shared';
+import { wt } from '@/components/work/i18n';
 
 export default function PortalResources({ pid, asClient }: { pid: number; asClient: boolean }) {
   const q = useQuery({ queryKey: resKeys.portal(pid, asClient), queryFn: () => resApi.portal(pid, asClient) });
   if (q.isLoading) return <PageLoading rows={4} />;
-  if (q.error) return <EmptyState title="Could not load links" body={workError(q.error)} />;
+  if (q.error) return <EmptyState title={wt('res.loadLinksFailed')} body={workError(q.error)} />;
   const d = q.data;
   if (!d?.enabled || !d.items.length) {
-    return <EmptyState title="No shared links yet" body={d?.staffView ? 'Mark a link “Visible to the client” in Resources to show it here.' : 'Links the team shares with you — staging builds, designs, documents — will appear here.'} />;
+    return <EmptyState title={wt('res.noSharedLinks')} body={d?.staffView ? wt('res.markVisible') : wt('res.linksShared')} />;
   }
   const sections = [...d.groups.map((g) => ({ key: String(g.id), name: g.name, icon: g.icon, items: d.items.filter((r) => r.groupId === g.id) })),
-    { key: 'none', name: 'Other links', icon: null, items: d.items.filter((r) => r.groupId === null) }].filter((s) => s.items.length);
+    { key: 'none', name: wt('res.otherLinks'), icon: null, items: d.items.filter((r) => r.groupId === null) }].filter((s) => s.items.length);
   return (
     <div className="space-y-5" data-testid="portal-resources">
       {sections.map((s) => (

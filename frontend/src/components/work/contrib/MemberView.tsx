@@ -15,8 +15,10 @@ import { EmptyState, PageLoading, UserAvatar } from '@/components/work/ui';
 import { useAuthStore } from '@/store/authStore';
 import { Card, SectionTitle, axisTick } from '../reports/shared';
 import { Delta, fmtDayShort, fmtN, fmtPct, fmtWhen, Heatmap, MetricLabel } from './shared';
+import { trDef, trSignal, trTimeline, trWindowLabel } from './serverText';
+import { wt } from '@/components/work/i18n';
 
-const KIND_LABEL: Record<string, string> = { created: 'Created', update: 'Updated', comment: 'Comment', worklog: 'Time', doc: 'Docs', test: 'Test', review: 'Review', code: 'Code', chat: 'Chat', meeting: 'Meeting' };
+const KIND_LABEL: Record<string, string> = { get created() { return wt('contrib.kCreated'); }, get update() { return wt('contrib.kUpdated'); }, get comment() { return wt('contrib.kComment'); }, get worklog() { return wt('contrib.kTime'); }, get doc() { return wt('contrib.fDocs'); }, get test() { return wt('contrib.kTest'); }, get review() { return wt('contrib.fReviews'); }, get code() { return wt('contrib.fCode'); }, get chat() { return 'Chat'; }, get meeting() { return wt('contrib.kMeeting'); } };
 
 export default function MemberView({ pid, config, range, memberId, summary, onPick, onOpenTask }: {
   pid: number; config: ProjectConfig; range: ContribRange; memberId: number | null; summary: ContribSummary | undefined;
@@ -36,7 +38,7 @@ export default function MemberView({ pid, config, range, memberId, summary, onPi
   return (
     <div className="space-y-3">
       {all && summary && (
-        <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Pick a member">
+        <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label={wt('contrib.pickMember')}>
           {summary.members.map((r) => (
             <button key={r.user.id} type="button" aria-pressed={r.user.id === uid} onClick={() => onPick(r.user.id)}
               className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[12px] ${r.user.id === uid ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-text)]' : 'border-[var(--w-border)] text-[var(--w-text-2)] hover:text-[var(--w-text)]'}`}>
@@ -46,19 +48,19 @@ export default function MemberView({ pid, config, range, memberId, summary, onPi
         </div>
       )}
       {q.isLoading || !uid ? <PageLoading rows={8} /> : q.error || !q.data ? (
-        <EmptyState title="Could not load this member" body={q.error ? workError(q.error) : undefined} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
-      ) : <Detail d={q.data} defs={summary?.definitions ?? {}} base={base} onOpenTask={onOpenTask} />}
+        <EmptyState title={wt('contrib.loadMemberFailed')} body={q.error ? workError(q.error) : undefined} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
+      ) : <Detail d={q.data} defs={Object.fromEntries(Object.entries(summary?.definitions ?? {}).map(([k, x]) => [k, trDef(k, x) ?? x]))} base={base} onOpenTask={onOpenTask} />}
     </div>
   );
 }
 
 function Detail({ d, defs, base, onOpenTask }: { d: MemberDetail; defs: Record<string, { label: string; how: string }>; base: string; onOpenTask: (n: number) => void }) {
   const m = d.metrics;
-  const unit = d.unit === 'HOURS' ? 'h' : 'pts';
+  const unit = d.unit === 'HOURS' ? 'h' : wt('contrib.pts');
   const acts = Object.entries(m.hoursByActivity).sort((a, b) => b[1] - a[1]).map(([name, hours]) => ({ name, hours }));
   const trend = d.trend.keys.map((k, i) => ({ k, actions: d.trend.actions[i] ?? 0 }));
   const issueLink = (n: number, title: string) => (
-    <button type="button" className="min-w-0 truncate text-left hover:underline" onClick={() => onOpenTask(n)} title="See who did what on this issue">
+    <button type="button" className="min-w-0 truncate text-left hover:underline" onClick={() => onOpenTask(n)} title={wt('contrib.seeWho')}>
       <span className="font-medium text-[var(--w-text-2)]">#{n}</span> {title}
     </button>
   );
@@ -67,43 +69,43 @@ function Detail({ d, defs, base, onOpenTask }: { d: MemberDetail; defs: Record<s
       <div className="flex flex-wrap items-center gap-3">
         <UserAvatar user={d.user} size={40} />
         <div className="min-w-0">
-          <h2 className="truncate text-[17px] font-semibold tracking-[-0.01em]">{userName(d.user)}{d.self && <span className="ml-2 text-[12px] font-normal text-[var(--w-text-3)]">(you)</span>}</h2>
-          <p className="text-[12px] text-[var(--w-text-3)]">{d.user.isAgent ? 'AI agent' : d.user.role.toLowerCase()} · @{d.user.username} · {d.window.label} ({d.window.fromDay} → {d.window.toDay}) · last active {m.lastActiveDay ? fmtDayShort(m.lastActiveDay) : 'never'}</p>
+          <h2 className="truncate text-[17px] font-semibold tracking-[-0.01em]">{userName(d.user)}{d.self && <span className="ml-2 text-[12px] font-normal text-[var(--w-text-3)]">{wt('contrib.youParen')}</span>}</h2>
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('contrib.memberLine', { role: d.user.isAgent ? 'AI agent' : d.user.role === 'ADMIN' ? wt('common.admin') : d.user.role === 'MEMBER' ? wt('common.member') : d.user.role === 'TEACHER' ? wt('contrib.teacher') : d.user.role.toLowerCase(), u: d.user.username, w: trWindowLabel(d.window.label), a: d.window.fromDay, b: d.window.toDay, last: m.lastActiveDay ? fmtDayShort(m.lastActiveDay) : wt('contrib.never') })}</p>
         </div>
       </div>
 
       {d.signals.length > 0 && (
-        <ul className="flex flex-wrap gap-1.5" aria-label="Signals">
+        <ul className="flex flex-wrap gap-1.5" aria-label={wt('contrib.signals')}>
           {d.signals.map((s) => (
-            <li key={s.code} className={`rounded-full border px-2 py-0.5 text-[12px] ${s.level === 'warn' ? 'border-[var(--w-red-text)] text-[var(--w-red-text)]' : 'border-[var(--w-yellow-text)] text-[var(--w-yellow-text)]'}`}>{s.text}</li>
+            <li key={s.code} className={`rounded-full border px-2 py-0.5 text-[12px] ${s.level === 'warn' ? 'border-[var(--w-red-text)] text-[var(--w-red-text)]' : 'border-[var(--w-yellow-text)] text-[var(--w-yellow-text)]'}`}>{trSignal(s)}</li>
           ))}
         </ul>
       )}
 
-      <KpiRow min={140} label="Member metrics">
-        <KpiTile label={<MetricLabel label="Completed" how={defs.completed?.how} />} value={m.completed} hint={<span className="inline-flex gap-1.5">{fmtN(m.points)} {unit}{m.subtasksDone ? ` · +${m.subtasksDone} sub-tasks` : ''}<Delta value={d.delta.completed} /></span>} />
-        <KpiTile label={<MetricLabel label="On time" how={defs.onTimeRate?.how} />} value={fmtPct(m.onTimeRate)} hint={m.withDue ? `${m.onTime}/${m.withDue} · avg ${fmtN(m.avgLateDays)} d late` : 'no dated issues'} />
-        <KpiTile label={<MetricLabel label="Overdue now" how={defs.overdueOpen?.how} />} value={m.overdueOpen} tone={m.overdueOpen ? 'red' : undefined} hint={`${m.assigned} assigned in range`} />
-        <KpiTile label={<MetricLabel label="Cycle / lead" how={`${defs.cycleDays?.how} ${defs.leadDays?.how}`} />} value={`${fmtN(m.cycleDays)} / ${fmtN(m.leadDays)}`} hint="days, average" />
-        <KpiTile label={<MetricLabel label="Hours logged" how={defs.hours?.how} />} value={fmtN(m.hours)} hint={<span className="inline-flex gap-1.5">{fmtN(m.hoursThisWeek)} h this week<Delta value={d.delta.hours} good="none" /></span>} />
-        <KpiTile label={<MetricLabel label="Conversation" how={`${defs.comments?.how} ${defs.responseHours?.how}`} />} value={m.comments + (m.chatMessages ?? 0)} hint={`${m.comments} comments · ${m.chatMessages ?? '—'} chat · ${m.voiceNotes} voice`} />
-        <KpiTile label={<MetricLabel label="@mentions" how={defs.responseHours?.how} />} value={`${m.mentionsAnswered}/${m.mentions}`} hint={`answered · median ${fmtN(m.responseHours)} h`} />
-        <KpiTile label={<MetricLabel label="Reviews" how={`${defs.reviewsDone?.how} ${defs.reviewRequests?.how}`} />} value={m.reviewsDone} hint={`${m.reviewRequests} requested`} />
-        <KpiTile label={<MetricLabel label="Code" how={`${defs.commits?.how} ${defs.lines?.how}`} />} value={m.commits + m.prs} hint={`${m.commits} commits · ${m.prs} PRs${m.additions !== null ? ` · +${m.additions}/−${m.deletions}` : ''}`} />
-        <KpiTile label={<MetricLabel label="Docs" how={defs.docVersions?.how} />} value={m.docVersions} hint={`${m.pagesEdited} pages · ${m.pagesCreated} new`} />
-        <KpiTile label={<MetricLabel label="Testing" how={`${defs.testRuns?.how} ${defs.utcid?.how} ${defs.defectsFound?.how}`} />} value={m.testRuns + m.utcidExecuted + m.itExecuted} hint={`${m.testCasesCreated + m.utcidCreated} cases · ${m.defectsFound} defects · ${m.bugsReported} bugs`} />
-        <KpiTile label={<MetricLabel label="Meetings" how={defs.meetings?.how} />} value={m.meetingsInvited ? `${m.meetingsAttended}/${m.meetingsInvited}` : '—'} hint="attended / invited" />
-        <KpiTile label={<MetricLabel label="Active days" how={defs.activeDays?.how} />} value={`${m.activeDays}/${d.window.days}`} hint={`longest streak ${m.longestStreak} · longest gap ${m.longestSilence}`} />
+      <KpiRow min={140} label={wt('contrib.memberMetrics')}>
+        <KpiTile label={<MetricLabel label={wt('contrib.kCompleted')} how={defs.completed?.how} />} value={m.completed} hint={<span className="inline-flex gap-1.5">{fmtN(m.points)} {unit}{m.subtasksDone ? wt('contrib.subtasksPlus', { n: m.subtasksDone }) : ''}<Delta value={d.delta.completed} /></span>} />
+        <KpiTile label={<MetricLabel label={wt('contrib.kOnTime')} how={defs.onTimeRate?.how} />} value={fmtPct(m.onTimeRate)} hint={m.withDue ? wt('contrib.avgLate', { a: m.onTime, b: m.withDue, d: fmtN(m.avgLateDays) }) : wt('contrib.noDatedIssues')} />
+        <KpiTile label={<MetricLabel label={wt('contrib.kOverdue')} how={defs.overdueOpen?.how} />} value={m.overdueOpen} tone={m.overdueOpen ? 'red' : undefined} hint={wt('contrib.assignedRange', { n: m.assigned })} />
+        <KpiTile label={<MetricLabel label={wt('contrib.cycleLead')} how={`${defs.cycleDays?.how} ${defs.leadDays?.how}`} />} value={`${fmtN(m.cycleDays)} / ${fmtN(m.leadDays)}`} hint={wt('contrib.daysAvg')} />
+        <KpiTile label={<MetricLabel label={wt('contrib.kHours')} how={defs.hours?.how} />} value={fmtN(m.hours)} hint={<span className="inline-flex gap-1.5">{wt('contrib.hThisWeek', { v: fmtN(m.hoursThisWeek) })}<Delta value={d.delta.hours} good="none" /></span>} />
+        <KpiTile label={<MetricLabel label={wt('contrib.kConv')} how={`${defs.comments?.how} ${defs.responseHours?.how}`} />} value={m.comments + (m.chatMessages ?? 0)} hint={wt('contrib.convHint', { a: m.comments, b: m.chatMessages ?? '—', c: m.voiceNotes })} />
+        <KpiTile label={<MetricLabel label={wt('contrib.mentionsL')} how={defs.responseHours?.how} />} value={`${m.mentionsAnswered}/${m.mentions}`} hint={wt('contrib.answeredMedian', { v: fmtN(m.responseHours) })} />
+        <KpiTile label={<MetricLabel label={wt('contrib.fReviews')} how={`${defs.reviewsDone?.how} ${defs.reviewRequests?.how}`} />} value={m.reviewsDone} hint={wt('contrib.nRequested', { n: m.reviewRequests })} />
+        <KpiTile label={<MetricLabel label={wt('contrib.fCode')} how={`${defs.commits?.how} ${defs.lines?.how}`} />} value={m.commits + m.prs} hint={`${wt('contrib.commitsPrs', { a: m.commits, b: m.prs })}${m.additions !== null ? ` · +${m.additions}/−${m.deletions}` : ''}`} />
+        <KpiTile label={<MetricLabel label={wt('contrib.fDocs')} how={defs.docVersions?.how} />} value={m.docVersions} hint={wt('contrib.pagesNew', { a: m.pagesEdited, b: m.pagesCreated })} />
+        <KpiTile label={<MetricLabel label={wt('contrib.fTests')} how={`${defs.testRuns?.how} ${defs.utcid?.how} ${defs.defectsFound?.how}`} />} value={m.testRuns + m.utcidExecuted + m.itExecuted} hint={wt('contrib.testHint', { a: m.testCasesCreated + m.utcidCreated, b: m.defectsFound, c: m.bugsReported })} />
+        <KpiTile label={<MetricLabel label={wt('contrib.fMeet')} how={defs.meetings?.how} />} value={m.meetingsInvited ? `${m.meetingsAttended}/${m.meetingsInvited}` : '—'} hint={wt('contrib.attendedInvited')} />
+        <KpiTile label={<MetricLabel label={wt('contrib.kActive')} how={defs.activeDays?.how} />} value={`${m.activeDays}/${d.window.days}`} hint={wt('contrib.streakGap', { a: m.longestStreak, b: m.longestSilence })} />
       </KpiRow>
 
       <div className="grid gap-3 lg:grid-cols-2">
         <Card>
-          <SectionTitle>Activity — last 26 weeks</SectionTitle>
-          <Heatmap data={d.heatmap} label={`${userName(d.user)}: actions per day over the last 26 weeks`} />
+          <SectionTitle>{wt('contrib.activity26')}</SectionTitle>
+          <Heatmap data={d.heatmap} label={wt('contrib.activity26Aria', { name: userName(d.user) })} />
         </Card>
         <Card>
-          <SectionTitle>Actions per {d.trend.bucket}</SectionTitle>
-          <div className="h-[150px]" role="img" aria-label={`Actions per ${d.trend.bucket} in the range`}>
+          <SectionTitle>{wt('contrib.actionsPer', { u: d.trend.bucket === 'week' ? wt('contrib.weekLc') : wt('common.day').toLowerCase() })}</SectionTitle>
+          <div className="h-[150px]" role="img" aria-label={wt('contrib.actionsPerRange', { u: d.trend.bucket === 'week' ? wt('contrib.weekLc') : wt('common.day').toLowerCase() })}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={trend} margin={{ top: 4, right: 4, left: -10, bottom: 0 }}>
                 <CartesianGrid stroke="var(--w-chart-grid)" vertical={false} />
@@ -116,7 +118,7 @@ function Detail({ d, defs, base, onOpenTask }: { d: MemberDetail; defs: Record<s
           </div>
           {acts.length > 0 && (
             <div className="mt-3">
-              <div className="mb-1 text-[11.5px] text-[var(--w-text-2)]">Hours by activity</div>
+              <div className="mb-1 text-[11.5px] text-[var(--w-text-2)]">{wt('contrib.hoursByAct')}</div>
               <ul className="space-y-1">
                 {acts.map((a) => (
                   <li key={a.name} className="flex items-center gap-2 text-[12px]">
@@ -133,7 +135,7 @@ function Detail({ d, defs, base, onOpenTask }: { d: MemberDetail; defs: Record<s
 
       <div className="grid gap-3 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
         <Card className="min-w-0">
-          <SectionTitle right={<span className="text-[11px] text-[var(--w-text-3)]">{d.timelineTotal > d.timeline.length ? `latest ${d.timeline.length} of ${d.timelineTotal}` : `${d.timelineTotal} events`}</span>}>Timeline</SectionTitle>
+          <SectionTitle right={<span className="text-[11px] text-[var(--w-text-3)]">{d.timelineTotal > d.timeline.length ? wt('contrib.latestOf', { a: d.timeline.length, b: d.timelineTotal }) : wt('contrib.nEvents', { n: d.timelineTotal })}</span>}>{wt('contrib.timeline')}</SectionTitle>
           {d.timeline.length ? (
             <ol className="max-h-[440px] space-y-0 overflow-y-auto pr-1">
               {d.timeline.map((e, i) => (
@@ -141,57 +143,57 @@ function Detail({ d, defs, base, onOpenTask }: { d: MemberDetail; defs: Record<s
                   <time className="w-[92px] shrink-0 tabular-nums text-[11px] text-[var(--w-text-3)]" dateTime={e.at}>{fmtWhen(e.at)}</time>
                   <span className="w-16 shrink-0 text-[11px] font-medium text-[var(--w-text-2)]">{KIND_LABEL[e.kind] ?? e.kind}</span>
                   <span className="min-w-0 flex-1 truncate">
-                    {e.text}{e.issue && <>{/ of$/.test(e.text) ? ' ' : ' · '}{issueLink(e.issue.number, e.issue.title)}</>}
-                    {e.url && e.kind === 'doc' && <a className="ml-1 text-[var(--w-accent-text)] hover:underline" href={`${base}/${e.url}`}>open</a>}
+                    {trTimeline(e.text)}{e.issue && <>{/ of$/.test(e.text) ? ' ' : ' · '}{issueLink(e.issue.number, e.issue.title)}</>}
+                    {e.url && e.kind === 'doc' && <a className="ml-1 text-[var(--w-accent-text)] hover:underline" href={`${base}/${e.url}`}>{wt('common.open').toLowerCase()}</a>}
                   </span>
                 </li>
               ))}
             </ol>
-          ) : <p className="py-8 text-center text-[12px] text-[var(--w-text-3)]">No recorded actions in this range.</p>}
+          ) : <p className="py-8 text-center text-[12px] text-[var(--w-text-3)]">{wt('contrib.noActions')}</p>}
         </Card>
 
         <div className="min-w-0 space-y-3">
           <Card>
-            <SectionTitle>Overdue now ({d.overdue.length})</SectionTitle>
+            <SectionTitle>{wt('contrib.overdueN', { n: d.overdue.length })}</SectionTitle>
             {d.overdue.length ? (
               <ul className="space-y-1 text-[12.5px]">
-                {d.overdue.slice(0, 12).map((x) => <li key={x.number} className="flex min-w-0 items-center gap-2">{issueLink(x.number, x.title)}<span className="ml-auto shrink-0 text-[11px] text-[var(--w-red-text)]">{x.daysLate} d late</span></li>)}
+                {d.overdue.slice(0, 12).map((x) => <li key={x.number} className="flex min-w-0 items-center gap-2">{issueLink(x.number, x.title)}<span className="ml-auto shrink-0 text-[11px] text-[var(--w-red-text)]">{wt('contrib.dLate', { n: x.daysLate })}</span></li>)}
               </ul>
-            ) : <p className="text-[12px] text-[var(--w-text-3)]">Nothing overdue.</p>}
+            ) : <p className="text-[12px] text-[var(--w-text-3)]">{wt('contrib.nothingOverdue')}</p>}
             {d.lateDone.length > 0 && (
               <>
-                <div className="mb-1 mt-3 text-[11.5px] text-[var(--w-text-2)]">Finished late in this range</div>
+                <div className="mb-1 mt-3 text-[11.5px] text-[var(--w-text-2)]">{wt('contrib.finishedLate')}</div>
                 <ul className="space-y-1 text-[12.5px]">
-                  {d.lateDone.slice(0, 8).map((x) => <li key={x.number} className="flex min-w-0 items-center gap-2">{issueLink(x.number, x.title)}<span className="ml-auto shrink-0 text-[11px] text-[var(--w-text-3)]">due {fmtDayShort(x.dueDate)} · +{x.daysLate} d</span></li>)}
+                  {d.lateDone.slice(0, 8).map((x) => <li key={x.number} className="flex min-w-0 items-center gap-2">{issueLink(x.number, x.title)}<span className="ml-auto shrink-0 text-[11px] text-[var(--w-text-3)]">{wt('contrib.dueLate', { d: fmtDayShort(x.dueDate), n: x.daysLate })}</span></li>)}
                 </ul>
               </>
             )}
           </Card>
           <Card>
-            <SectionTitle>Code ({d.code.length})</SectionTitle>
+            <SectionTitle>{wt('contrib.codeN', { n: d.code.length })}</SectionTitle>
             {d.code.length ? (
               <ul className="space-y-1 text-[12.5px]">
                 {d.code.slice(0, 10).map((c, i) => (
                   <li key={i} className="flex min-w-0 items-center gap-2">
-                    {c.kind === 'PR' ? <GitPullRequest size={13} className="shrink-0 text-[var(--w-text-3)]" aria-label="Pull request" /> : <GitCommitHorizontal size={13} className="shrink-0 text-[var(--w-text-3)]" aria-label="Commit" />}
+                    {c.kind === 'PR' ? <GitPullRequest size={13} className="shrink-0 text-[var(--w-text-3)]" aria-label={wt('contrib.tlPr')} /> : <GitCommitHorizontal size={13} className="shrink-0 text-[var(--w-text-3)]" aria-label="Commit" />}
                     <span className="min-w-0 flex-1 truncate">{c.title}</span>
                     {c.additions !== null && <span className="shrink-0 text-[11px] tabular-nums text-[var(--w-text-2)]">+{c.additions} −{c.deletions}</span>}
-                    {c.url && <a href={c.url} target="_blank" rel="noreferrer" aria-label="Open on the git host" className="shrink-0 text-[var(--w-text-3)] hover:text-[var(--w-text)]"><ExternalLink size={12} /></a>}
+                    {c.url && <a href={c.url} target="_blank" rel="noreferrer" aria-label={wt('contrib.openGit')} className="shrink-0 text-[var(--w-text-3)] hover:text-[var(--w-text)]"><ExternalLink size={12} /></a>}
                   </li>
                 ))}
               </ul>
-            ) : <p className="text-[12px] text-[var(--w-text-3)]">No commits matched to this person. Admins can map unknown git authors in settings.</p>}
+            ) : <p className="text-[12px] text-[var(--w-text-3)]">{wt('contrib.noCommitsMatched')}</p>}
           </Card>
           <Card>
-            <SectionTitle>Docs & meetings</SectionTitle>
+            <SectionTitle>{wt('contrib.docsMeetings')}</SectionTitle>
             {d.docs.length ? (
               <ul className="space-y-1 text-[12.5px]">
-                {d.docs.slice(0, 8).map((p) => <li key={p.number} className="flex min-w-0 items-center gap-2"><a href={`${base}/docs/${p.number}`} className="min-w-0 flex-1 truncate hover:underline">{p.title}</a><span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{p.versions} versions</span></li>)}
+                {d.docs.slice(0, 8).map((p) => <li key={p.number} className="flex min-w-0 items-center gap-2"><a href={`${base}/docs/${p.number}`} className="min-w-0 flex-1 truncate hover:underline">{p.title}</a><span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{wt('contrib.nVersions', { n: p.versions })}</span></li>)}
               </ul>
-            ) : <p className="text-[12px] text-[var(--w-text-3)]">No doc edits in this range.</p>}
+            ) : <p className="text-[12px] text-[var(--w-text-3)]">{wt('contrib.noDocEdits')}</p>}
             {d.meetings.length > 0 && (
               <ul className="mt-2 space-y-1 border-t border-[var(--w-border)] pt-2 text-[12.5px]">
-                {d.meetings.map((x) => <li key={x.number} className="flex min-w-0 items-center gap-2"><span className="min-w-0 flex-1 truncate">{x.title}</span><span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{fmtDayShort(x.startsAt)} · {x.attended ? 'attended' : x.status === 'DONE' ? 'missed' : 'upcoming'}</span></li>)}
+                {d.meetings.map((x) => <li key={x.number} className="flex min-w-0 items-center gap-2"><span className="min-w-0 flex-1 truncate">{x.title}</span><span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{fmtDayShort(x.startsAt)} · {x.attended ? wt('contrib.attended') : x.status === 'DONE' ? wt('contrib.missed') : wt('contrib.upcomingLc')}</span></li>)}
               </ul>
             )}
           </Card>

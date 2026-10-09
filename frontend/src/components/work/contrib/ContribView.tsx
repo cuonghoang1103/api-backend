@@ -23,12 +23,13 @@ import MemberView from './MemberView';
 import TaskView from './TaskView';
 import PeerView from './PeerView';
 import SettingsDialog from './SettingsDialog';
+import { wt } from '@/components/work/i18n';
 
 const PRESET_LABEL: Record<RangePreset, string> = {
-  today: 'Today', '7d': 'Last 7 days', '30d': 'Last 30 days', week: 'This week', sprint: 'Sprint…', stage: 'Stage…', project: 'Whole project', custom: 'Custom dates…',
+  get today() { return wt('common.today'); }, get '7d'() { return wt('contrib.p7d'); }, get '30d'() { return wt('contrib.p30d'); }, get week() { return wt('finance.thisWeek'); }, get sprint() { return wt('contrib.pSprint'); }, get stage() { return wt('contrib.pStage'); }, get project() { return wt('ai.focusAll'); }, get custom() { return wt('contrib.pCustom'); },
 };
 const SUBS: Array<{ id: ContribSub; label: string }> = [
-  { id: 'team', label: 'Team' }, { id: 'member', label: 'Member' }, { id: 'task', label: 'By task' }, { id: 'peer', label: 'Peer review' },
+  { id: 'team', get label() { return wt('contrib.sTeam'); } }, { id: 'member', get label() { return wt('common.member'); } }, { id: 'task', get label() { return wt('contrib.sTask'); } }, { id: 'peer', get label() { return wt('contrib.sPeer'); } },
 ];
 
 export default function ContribView({ pid, config }: { pid: number; config: ProjectConfig }) {
@@ -73,7 +74,7 @@ export default function ContribView({ pid, config }: { pid: number; config: Proj
       const f = kind === 'xlsx' ? await workContribApi.exportXlsx(pid, range) : await workContribApi.exportPdf(pid, range);
       saveBlob(f.blob, f.fileName);
     } catch (err) {
-      toast.error(workError(err, 'Could not export the report'));
+      toast.error(workError(err, wt('contrib.exportFailed')));
     } finally {
       setBusy(null);
     }
@@ -82,7 +83,7 @@ export default function ContribView({ pid, config }: { pid: number; config: Proj
   return (
     <div className="space-y-3" data-testid="contrib-view">
       <div className="flex flex-wrap items-center gap-2">
-        <div className="flex gap-0.5 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] p-0.5" role="tablist" aria-label="Contribution views">
+        <div className="flex gap-0.5 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] p-0.5" role="tablist" aria-label={wt('contrib.views')}>
           {SUBS.map((s) => (
             <button key={s.id} type="button" role="tab" aria-selected={sub === s.id}
               onClick={() => url.set({ cv: s.id === 'team' ? null : s.id })}
@@ -94,32 +95,32 @@ export default function ContribView({ pid, config }: { pid: number; config: Proj
 
         {sub !== 'task' && sub !== 'peer' && (
           <div className="flex flex-wrap items-center gap-1.5">
-            <select aria-label="Time range" value={range.preset} onChange={(e) => onPreset(e.target.value as RangePreset)} className="w-input h-[28px] w-auto py-0 pr-7 text-[12px]">
+            <select aria-label={wt('contrib.timeRange')} value={range.preset} onChange={(e) => onPreset(e.target.value as RangePreset)} className="w-input h-[28px] w-auto py-0 pr-7 text-[12px]">
               {(Object.keys(PRESET_LABEL) as RangePreset[]).filter((p) => p !== 'stage' || stagesOn).map((p) => <option key={p} value={p}>{PRESET_LABEL[p]}</option>)}
             </select>
             {range.preset === 'sprint' && (
-              <select aria-label="Sprint" value={range.sprintId ?? ''} onChange={(e) => setRange({ sprintId: Number(e.target.value) })} className="w-input h-[28px] w-auto py-0 pr-7 text-[12px]">
-                {!sprints.length && <option value="">No started sprints</option>}
-                {sprints.map((s) => <option key={s.id} value={s.id}>{s.name}{s.state === 'ACTIVE' ? ' (active)' : ''}</option>)}
+              <select aria-label={wt('common.sprint')} value={range.sprintId ?? ''} onChange={(e) => setRange({ sprintId: Number(e.target.value) })} className="w-input h-[28px] w-auto py-0 pr-7 text-[12px]">
+                {!sprints.length && <option value="">{wt('contrib.noStartedSprints')}</option>}
+                {sprints.map((s) => <option key={s.id} value={s.id}>{s.name}{s.state === 'ACTIVE' ? wt('contrib.activeParen') : ''}</option>)}
               </select>
             )}
             {range.preset === 'stage' && (
-              <select aria-label="Stage" value={range.stageId ?? ''} onChange={(e) => setRange({ stageId: Number(e.target.value) })} className="w-input h-[28px] w-auto py-0 pr-7 text-[12px]">
-                {!stages.length && <option value="">No started stages</option>}
+              <select aria-label={wt('finance.stage')} value={range.stageId ?? ''} onChange={(e) => setRange({ stageId: Number(e.target.value) })} className="w-input h-[28px] w-auto py-0 pr-7 text-[12px]">
+                {!stages.length && <option value="">{wt('contrib.noStartedStages')}</option>}
                 {stages.map((s) => <option key={s.id} value={s.id}>{s.n}. {s.name}</option>)}
               </select>
             )}
             {range.preset === 'custom' && (
               <>
-                <input type="date" aria-label="From" value={range.from ?? ''} max={range.to} onChange={(e) => setRange({ from: e.target.value })} className="w-input h-[28px] w-[136px] py-0 text-[12px]" />
+                <input type="date" aria-label={wt('agents.from')} value={range.from ?? ''} max={range.to} onChange={(e) => setRange({ from: e.target.value })} className="w-input h-[28px] w-[136px] py-0 text-[12px]" />
                 <span className="text-[12px] text-[var(--w-text-3)]" aria-hidden="true">→</span>
-                <input type="date" aria-label="To" value={range.to ?? ''} min={range.from} onChange={(e) => setRange({ to: e.target.value })} className="w-input h-[28px] w-[136px] py-0 text-[12px]" />
+                <input type="date" aria-label={wt('agents.to')} value={range.to ?? ''} min={range.from} onChange={(e) => setRange({ to: e.target.value })} className="w-input h-[28px] w-[136px] py-0 text-[12px]" />
               </>
             )}
             {range.preset !== 'project' && (
               <label className="inline-flex cursor-pointer items-center gap-1.5 text-[12px] text-[var(--w-text-2)]">
                 <input type="checkbox" checked={range.compare !== false} onChange={(e) => setRange({ compare: e.target.checked })} />
-                Compare with previous
+                {wt('contrib.compare')}
               </label>
             )}
           </div>
@@ -129,15 +130,15 @@ export default function ContribView({ pid, config }: { pid: number; config: Proj
           {access?.export && (
             <>
               <button type="button" className="w-btn w-btn-sm" onClick={() => void exportFile('xlsx')} disabled={busy !== null} data-testid="contrib-export-xlsx">
-                <Download size={12} /> {busy === 'xlsx' ? 'Exporting…' : 'Excel'}
+                <Download size={12} /> {busy === 'xlsx' ? wt('contrib.exporting') : 'Excel'}
               </button>
-              <button type="button" className="w-btn w-btn-sm" onClick={() => void exportFile('pdf')} disabled={busy !== null} title="One-page summary for the teacher">
-                <FileText size={12} /> {busy === 'pdf' ? 'Exporting…' : 'PDF summary'}
+              <button type="button" className="w-btn w-btn-sm" onClick={() => void exportFile('pdf')} disabled={busy !== null} title={wt('contrib.pdfTip')}>
+                <FileText size={12} /> {busy === 'pdf' ? wt('contrib.exporting') : wt('contrib.pdfSummary')}
               </button>
             </>
           )}
           {access?.manage && (
-            <button type="button" className="w-btn w-btn-sm w-btn-icon" aria-label="Contribution settings" title="Contribution settings" onClick={() => setSettingsOpen(true)}>
+            <button type="button" className="w-btn w-btn-sm w-btn-icon" aria-label={wt('contrib.settings')} title={wt('contrib.settings')} onClick={() => setSettingsOpen(true)}>
               <Settings2 size={13} />
             </button>
           )}

@@ -15,6 +15,7 @@ import { workApi, workError, type ProjectConfig } from '@/lib/work-api';
 import { s4Api, s4Keys } from '@/lib/work-s4-api';
 import { Spinner } from '../ui';
 import { Section } from './shared';
+import { wt } from '@/components/work/i18n';
 
 function save(blob: Blob, fileName: string) {
   const url = URL.createObjectURL(blob);
@@ -37,9 +38,9 @@ export default function ProjectExport({ config }: { config: ProjectConfig; slug:
     try {
       const { blob, fileName } = await workApi.exportProjectTracking(config.id);
       save(blob, fileName);
-      toast.success('Project Tracking downloaded');
+      toast.success(wt('pexport.downloaded'));
     } catch (err) {
-      toast.error(workError(err, 'Could not export Project Tracking'));
+      toast.error(workError(err, wt('pexport.failed')));
     } finally {
       setBusy(false);
     }
@@ -49,22 +50,22 @@ export default function ProjectExport({ config }: { config: ProjectConfig; slug:
     <>
       <Section
         title="Project Tracking (SWP391)"
-        description="The Excel file your lecturer asks for each iteration, built from this board — no more copying by hand."
+        description={wt('pexport.ptDesc')}
       >
         <div className="max-w-[640px] space-y-3 text-[13px] text-[var(--w-text-2)]">
           <ul className="list-disc space-y-1 pl-5">
-            <li><span className="font-medium text-[var(--w-text)]">Product</span> — one row per requirement (issues labelled <code className="rounded bg-[var(--w-sunken)] px-1 font-mono text-[12px]">Req</code> or with a Screen ID): PIC, iteration, Complexity, Planned LOC, Quality, Graded LOC, status, progress of SRS · SDS · Coding · Test · Integrate, Evidence.</li>
-            <li><span className="font-medium text-[var(--w-text)]">Summary</span> — per person: requirements, done, planned LOC per iteration, graded LOC, and how many reached Quality L2 or better.</li>
+            <li><span className="font-medium text-[var(--w-text)]">Product</span> {wt('pexport.product')} <code className="rounded bg-[var(--w-sunken)] px-1 font-mono text-[12px]">Req</code> {wt('pexport.productB')}</li>
+            <li><span className="font-medium text-[var(--w-text)]">Summary</span> {wt('pexport.summaryDesc')}</li>
           </ul>
           {missing.length > 0 && (
             <p className="rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px]">
-              This project has no {missing.join(', ')} field yet — those columns will be empty. Add them in Settings → Fields (names must match).
+              {wt('pexport.missing', { f: missing.join(', ') })}
             </p>
           )}
           <button type="button" className="w-btn w-btn-primary" onClick={run} disabled={busy}>
-            {busy ? <Spinner size={12} /> : <FileSpreadsheet size={14} />} Download Project Tracking (.xlsx)
+            {busy ? <Spinner size={12} /> : <FileSpreadsheet size={14} />} {wt('pexport.downloadPt')}
           </button>
-          <p className="text-[12px] text-[var(--w-text-3)]">Rename it to {'{Class}_{Group}_{System}_ProjectTracking.xlsx'} before you submit. For a plain list of issues, use Export on the Issues page.</p>
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('pexport.renameHint', { f: '{Class}_{Group}_{System}_ProjectTracking.xlsx' })}</p>
         </div>
       </Section>
       {config.permissions.exportProject && <FullExport pid={config.id} />}
@@ -87,7 +88,7 @@ function FullExport({ pid }: { pid: number }) {
   });
   const start = useMutation({
     mutationFn: () => s4Api.startExport(pid, withFiles),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: s4Keys.exports(pid) }); toast.success('Export started — it runs in the background'); },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: s4Keys.exports(pid) }); toast.success(wt('pexport.started')); },
     onError: (e) => toast.error(workError(e)),
   });
   const download = async (id: number) => {
@@ -105,11 +106,11 @@ function FullExport({ pid }: { pid: number }) {
   };
   const running = q.data?.items.some((e) => e.status === 'QUEUED' || e.status === 'RUNNING');
   return (
-    <Section title="Export the whole project (backup)" description="A ZIP with every table of this project as JSON — issues, comments, history, worklogs, sprints, versions, stages, approvals, handoffs, docs and their versions, change requests, RAID, meetings, finance and reports — plus a manifest of attachments. Project admins only; each export and download is in the audit log.">
+    <Section title={wt('pexport.wholeTitle')} description={wt('pexport.wholeDesc')}>
       <div className="max-w-[720px] space-y-3 text-[13px] text-[var(--w-text-2)]" data-testid="full-export">
         <label className="flex items-start gap-2">
           <input type="checkbox" className="mt-0.5" checked={withFiles} onChange={(e) => setWithFiles(e.target.checked)} />
-          <span>Include attachment files {q.data ? `(when they total ${fmtSize(q.data.maxFileBytes)} or less — otherwise only the list is included)` : ''}</span>
+          <span>{wt('pexport.inclFiles')} {q.data ? wt('pexport.whenTotal', { s: fmtSize(q.data.maxFileBytes) }) : ''}</span>
         </label>
         <button type="button" className="w-btn w-btn-primary" disabled={start.isPending || running} onClick={() => start.mutate()} data-testid="export-start">
           {start.isPending || running ? <Spinner size={12} /> : <Archive size={14} />} Export project (.zip)
@@ -119,22 +120,22 @@ function FullExport({ pid }: { pid: number }) {
           <ul className="divide-y divide-[var(--w-border)] rounded-[8px] border border-[var(--w-border)]" data-testid="export-list">
             {q.data.items.map((e) => (
               <li key={e.id} className="flex flex-wrap items-center gap-x-3 gap-y-1.5 px-3 py-2">
-                <span className="min-w-0 flex-1 truncate text-[var(--w-text)]">{e.fileName ?? `Export #${e.id}`}</span>
+                <span className="min-w-0 flex-1 truncate text-[var(--w-text)]">{e.fileName ?? wt('pexport.exportN', { n: e.id })}</span>
                 <span className="text-[12px] text-[var(--w-text-3)]">{new Date(e.createdAt).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}</span>
                 {(e.status === 'QUEUED' || e.status === 'RUNNING') && (
-                  <span className="flex min-w-[160px] items-center gap-2" role="progressbar" aria-valuenow={e.progress} aria-valuemin={0} aria-valuemax={100} aria-label="Export progress">
+                  <span className="flex min-w-[160px] items-center gap-2" role="progressbar" aria-valuenow={e.progress} aria-valuemin={0} aria-valuemax={100} aria-label={wt('pexport.progress')}>
                     <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--w-sunken)]"><span className="block h-full rounded-full bg-[var(--w-accent)] transition-[width]" style={{ width: `${e.progress}%` }} /></span>
                     <span className="text-[12px] tabular-nums">{e.progress}%</span>
                   </span>
                 )}
                 {e.status === 'DONE' && (
                   <>
-                    <span className="text-[12px] text-[var(--w-text-3)]">{fmtSize(e.size)}{e.includeFiles ? ` · ${e.filesIncluded}/${e.attachmentCount} files` : ` · ${e.attachmentCount} attachments listed`}</span>
-                    <button type="button" className="w-btn w-btn-sm" onClick={() => download(e.id)} data-testid={`export-download-${e.id}`}><Download size={13} /> Download</button>
+                    <span className="text-[12px] text-[var(--w-text-3)]">{fmtSize(e.size)}{e.includeFiles ? wt('pexport.filesLine', { a: e.filesIncluded, b: e.attachmentCount }) : wt('pexport.listed', { n: e.attachmentCount })}</span>
+                    <button type="button" className="w-btn w-btn-sm" onClick={() => download(e.id)} data-testid={`export-download-${e.id}`}><Download size={13} /> {wt('common.download')}</button>
                   </>
                 )}
-                {e.status === 'FAILED' && <span className="text-[12px] text-[var(--w-red)]">Failed: {e.error}</span>}
-                {e.status === 'EXPIRED' && <span className="text-[12px] text-[var(--w-text-3)]">Expired</span>}
+                {e.status === 'FAILED' && <span className="text-[12px] text-[var(--w-red)]">{wt('pexport.failedX')} {e.error}</span>}
+                {e.status === 'EXPIRED' && <span className="text-[12px] text-[var(--w-text-3)]">{wt('share.expired')}</span>}
               </li>
             ))}
           </ul>

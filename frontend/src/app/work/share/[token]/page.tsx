@@ -19,13 +19,14 @@ import { CtWorkMark } from '@/components/work/brand/CtWorkMark';
 import {
   ShareBacklog, ShareBoard, ShareIssuePanel, ShareReportsView, ShareTestsView, useShareLookups,
 } from '@/components/work/share/ShareViews';
+import { wt } from '@/components/work/i18n';
 
 type Section = 'board' | 'backlog' | 'reports' | 'tests';
 const SECTIONS: Array<{ key: Section; label: string }> = [
-  { key: 'board', label: 'Board' },
-  { key: 'backlog', label: 'Backlog' },
-  { key: 'reports', label: 'Reports' },
-  { key: 'tests', label: 'Tests' },
+  { key: 'board', get label() { return wt('share.sBoard'); } },
+  { key: 'backlog', get label() { return wt('share.vBacklog'); } },
+  { key: 'reports', get label() { return wt('portal.tReports'); } },
+  { key: 'tests', get label() { return wt('share.sTests'); } },
 ];
 
 function Unavailable({ notFound, message, retry }: { notFound: boolean; message?: string; retry?: () => void }) {
@@ -37,16 +38,16 @@ function Unavailable({ notFound, message, retry }: { notFound: boolean; message?
           <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[var(--w-sunken)] text-[var(--w-text-2)]">
             <LinkIcon size={18} />
           </span>
-          <h1 className="text-[16px] font-semibold">{notFound ? 'This link is no longer available' : 'Could not load this shared view'}</h1>
+          <h1 className="text-[16px] font-semibold">{notFound ? wt('share.sNoLonger') : wt('share.sCouldNot')}</h1>
           <p className="mt-2 text-[13px] leading-relaxed text-[var(--w-text-2)]">
             {notFound
-              ? 'The link may have expired or been revoked by the project owner. Ask the person who shared it with you for a new link.'
-              : message || 'Please check your connection and try again.'}
+              ? wt('share.sExpired')
+              : message || wt('share.sCheckConn')}
           </p>
           {retry ? (
-            <button type="button" className="w-btn mt-6" onClick={retry}>Try again</button>
+            <button type="button" className="w-btn mt-6" onClick={retry}>{wt('common.tryAgain')}</button>
           ) : (
-            <Link href="/" className="w-btn mt-6">Go to homepage</Link>
+            <Link href="/" className="w-btn mt-6">{wt('share.sHome')}</Link>
           )}
         </div>
       </div>
@@ -94,9 +95,9 @@ export default function SharedProjectPage() {
         <div className="mx-auto flex h-11 w-full max-w-[1280px] items-center gap-2 px-4 md:px-6">
           <span className="flex items-center gap-2 text-[13px] font-semibold tracking-tight"><CtWorkMark size={20} />CT Work</span>
           <span className="text-[13px] text-[var(--w-text-3)]">·</span>
-          <span className="truncate text-[13px] text-[var(--w-text-2)]">Shared view</span>
+          <span className="truncate text-[13px] text-[var(--w-text-2)]">{wt('share.sSharedView')}</span>
           <span className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full border border-[var(--w-border-strong)] bg-[var(--w-sunken)] px-2 text-[11px] font-medium leading-[20px] text-[var(--w-text-2)]">
-            <Eye size={12} /> Read-only
+            <Eye size={12} /> {wt('share.vReadOnly')}
           </span>
         </div>
       </header>
@@ -112,9 +113,9 @@ export default function SharedProjectPage() {
             <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] text-[var(--w-text-3)]">
               <span className="truncate">{project.workspace}</span>
               {summary.label && <><span>·</span><span className="truncate">{summary.label}</span></>}
-              {project.archived && <><span>·</span><span>Archived project</span></>}
+              {project.archived && <><span>·</span><span>{wt('share.sArchived')}</span></>}
               <span>·</span>
-              <span>{summary.expiresAt ? `Link expires ${formatDate(summary.expiresAt)}` : 'Link does not expire'}</span>
+              <span>{summary.expiresAt ? wt('share.sExpires', { d: formatDate(summary.expiresAt) }) : wt('share.sNoExpire')}</span>
             </div>
           </div>
         </div>
@@ -124,7 +125,7 @@ export default function SharedProjectPage() {
 
         {/* Tab — chỉ các phần được chia sẻ */}
         <div className="mt-5 overflow-x-auto border-b border-[var(--w-border)]">
-          <div className="flex gap-1" role="tablist" aria-label="Shared sections">
+          <div className="flex gap-1" role="tablist" aria-label={wt('share.sSections')}>
             {enabled.map((s) => (
               <button
                 key={s.key}

@@ -22,6 +22,7 @@ import { EmptyState, PageLoading, relativeTime } from '@/components/work/ui';
 import { Select } from '@/components/work/settings/shared';
 import { studioOn } from '@/components/work/studio/shared';
 import { OverallBadge, SpecPanel, SpecSparkline, scoreColor } from '@/components/work/spec/SpecPanel';
+import { wt } from '@/components/work/i18n';
 
 type Scope = 'all' | 'epic' | 'stage';
 
@@ -62,9 +63,9 @@ function SpecView({ config }: { config: ProjectConfig }) {
       setCurrent(r);
       if (reviewParam) router.replace(`${base}/spec`);
       qc.invalidateQueries({ queryKey: workS6Keys.allReviews(pid) });
-      toast.success(`Spec Fidelity ${r.overall}/100`);
+      toast.success(wt('pspec.fidelityToast', { n: r.overall }));
     },
-    onError: (err) => toast.error(workError(err, 'Could not run the check')),
+    onError: (err) => toast.error(workError(err, wt('pspec.runFailed'))),
   });
   const canRun = ['ADMIN', 'MEMBER', 'TEACHER'].includes(config.role);
   const scopeReady = scope === 'all' || (scope === 'epic' ? !!epic : !!stageId);
@@ -75,34 +76,34 @@ function SpecView({ config }: { config: ProjectConfig }) {
     <div className="mx-auto grid w-full max-w-[1240px] gap-6 px-4 pb-16 pt-5 md:px-8 lg:grid-cols-[minmax(0,1fr)_320px]">
       <section className="min-w-0 space-y-4">
         <div className="rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)] p-4">
-          <h2 className="flex items-center gap-2 text-[15px] font-semibold"><ListChecks size={15} /> Requirements quality</h2>
+          <h2 className="flex items-center gap-2 text-[15px] font-semibold"><ListChecks size={15} /> {wt('pspec.reqQuality')}</h2>
           <p className="mt-1 text-[12.5px] leading-relaxed text-[var(--w-text-2)]">
-            Checks every Requirement and Story issue in the scope: acceptance criteria, failure cases, vague wording, duplicates and linked tests (traceability).
-            To check a document (SRS), open it in Docs and use <b className="font-medium">Check spec quality</b>.
+            {wt('pspec.reqIntro')}
+            {wt('pspec.toCheckDoc')} <b className="font-medium">{wt('pspec.checkQuality')}</b>.
           </p>
           <div className="mt-3 flex flex-wrap items-end gap-2">
             <label className="min-w-[150px]">
-              <span className="mb-1 block text-[11.5px] text-[var(--w-text-3)]">Scope</span>
-              <Select value={scope} onChange={(e) => setScope(e.target.value as Scope)} className="!h-8" aria-label="Scope">
-                <option value="all">All requirements</option>
-                {epicType && <option value="epic">One epic</option>}
-                {stagesOn && <option value="stage">One stage</option>}
+              <span className="mb-1 block text-[11.5px] text-[var(--w-text-3)]">{wt('pspec.scope')}</span>
+              <Select value={scope} onChange={(e) => setScope(e.target.value as Scope)} className="!h-8" aria-label={wt('pspec.scope')}>
+                <option value="all">{wt('pspec.allReqs')}</option>
+                {epicType && <option value="epic">{wt('pspec.oneEpic')}</option>}
+                {stagesOn && <option value="stage">{wt('pspec.oneStage')}</option>}
               </Select>
             </label>
             {scope === 'epic' && (
               <label className="min-w-[220px] flex-1">
-                <span className="mb-1 block text-[11.5px] text-[var(--w-text-3)]">Epic</span>
-                <Select value={epic ?? ''} onChange={(e) => setEpic(Number(e.target.value) || null)} className="!h-8" aria-label="Epic">
-                  <option value="">Choose an epic…</option>
+                <span className="mb-1 block text-[11.5px] text-[var(--w-text-3)]">{wt('common.epic')}</span>
+                <Select value={epic ?? ''} onChange={(e) => setEpic(Number(e.target.value) || null)} className="!h-8" aria-label={wt('common.epic')}>
+                  <option value="">{wt('pspec.chooseEpic')}</option>
                   {(epics.data?.items ?? []).map((i) => <option key={i.id} value={i.number}>{config.key}-{i.number} {i.title}</option>)}
                 </Select>
               </label>
             )}
             {scope === 'stage' && (
               <label className="min-w-[220px] flex-1">
-                <span className="mb-1 block text-[11.5px] text-[var(--w-text-3)]">Stage</span>
-                <Select value={stageId ?? ''} onChange={(e) => setStageId(Number(e.target.value) || null)} className="!h-8" aria-label="Stage">
-                  <option value="">Choose a stage…</option>
+                <span className="mb-1 block text-[11.5px] text-[var(--w-text-3)]">{wt('pf.stage')}</span>
+                <Select value={stageId ?? ''} onChange={(e) => setStageId(Number(e.target.value) || null)} className="!h-8" aria-label={wt('pf.stage')}>
+                  <option value="">{wt('pspec.chooseStage')}</option>
                   {(stages.data ?? []).map((s) => <option key={s.id} value={s.id}>{String(s.n).padStart(2, '0')}. {s.name}</option>)}
                 </Select>
               </label>
@@ -115,7 +116,7 @@ function SpecView({ config }: { config: ProjectConfig }) {
             review={review}
             history={hist.data?.items}
             running={run.isPending}
-            onRun={(s) => { if (!scopeReady) { toast.error('Choose the epic or stage first'); return; } run.mutate(s); }}
+            onRun={(s) => { if (!scopeReady) { toast.error(wt('pspec.chooseFirst')); return; } run.mutate(s); }}
             canRun={canRun && scopeReady}
             gateThreshold={gate?.enabled ? gate.minDimension : undefined}
             onChanged={(r) => { setCurrent(r); qc.invalidateQueries({ queryKey: ['work', 'issues', pid] }); }}
@@ -123,15 +124,15 @@ function SpecView({ config }: { config: ProjectConfig }) {
         </div>
       </section>
 
-      <aside className="min-w-0 space-y-4" aria-label="Spec checks in this project">
+      <aside className="min-w-0 space-y-4" aria-label={wt('pspec.checksAside')}>
         <div className="rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)] p-4">
-          <h2 className="mb-2 text-[13px] font-semibold">Gate</h2>
+          <h2 className="mb-2 text-[13px] font-semibold">{wt('pspec.gate')}</h2>
           {gate?.enabled ? (
-            <p className="text-[12.5px] text-[var(--w-text-2)]">Spec Fidelity gate is on: overall ≥ {gate.minOverall}, every dimension ≥ {gate.minDimension} before the {gate.stageIds.length ? 'chosen stages' : '“Requirements specification” stage'} can be sent for gate review.</p>
-          ) : <p className="text-[12.5px] text-[var(--w-text-3)]">No Spec Fidelity gate. {settings.data?.canConfigure ? <Link href={`${base}/settings?tab=quality`} className="text-[var(--w-accent-text)] hover:underline">Set one up</Link> : 'A project admin can turn it on.'}</p>}
+            <p className="text-[12.5px] text-[var(--w-text-2)]">{wt('pspec.gateOn', { a: gate.minOverall, b: gate.minDimension, s: gate.stageIds.length ? wt('pspec.chosenStages') : wt('pspec.reqSpecStage') })}</p>
+          ) : <p className="text-[12.5px] text-[var(--w-text-3)]">{wt('pspec.noGate')} {settings.data?.canConfigure ? <Link href={`${base}/settings?tab=quality`} className="text-[var(--w-accent-text)] hover:underline">{wt('pspec.setOneUp')}</Link> : wt('pspec.adminCanTurn')}</p>}
         </div>
         <div className="rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)] p-4">
-          <h2 className="mb-2 flex items-center gap-1.5 text-[13px] font-semibold"><FileText size={13} /> Document checks</h2>
+          <h2 className="mb-2 flex items-center gap-1.5 text-[13px] font-semibold"><FileText size={13} /> {wt('pspec.docChecks')}</h2>
           {pageReviews.length ? (
             <ul className="space-y-1.5">
               {[...new Map(pageReviews.map((r) => [r.pageId, r])).values()].slice(0, 12).map((r) => (
@@ -144,10 +145,10 @@ function SpecView({ config }: { config: ProjectConfig }) {
                 </li>
               ))}
             </ul>
-          ) : <p className="text-[12.5px] text-[var(--w-text-3)]">No document checked yet.</p>}
+          ) : <p className="text-[12.5px] text-[var(--w-text-3)]">{wt('pspec.noDocChecked')}</p>}
         </div>
         <div className="rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)] p-4">
-          <h2 className="mb-2 text-[13px] font-semibold">History · this scope</h2>
+          <h2 className="mb-2 text-[13px] font-semibold">{wt('pspec.historyScope')}</h2>
           {hist.data?.items.length ? (
             <>
               <SpecSparkline items={hist.data.items} />
@@ -163,7 +164,7 @@ function SpecView({ config }: { config: ProjectConfig }) {
                 ))}
               </ul>
             </>
-          ) : <p className="text-[12.5px] text-[var(--w-text-3)]">Not checked yet.</p>}
+          ) : <p className="text-[12.5px] text-[var(--w-text-3)]">{wt('pspec.notCheckedYet')}</p>}
         </div>
       </aside>
     </div>
@@ -175,13 +176,13 @@ function SpecPage() {
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   useProjectRealtime(pid);
   if (isLoading) return <PageLoading />;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : undefined} />;
+  if (error || !config || !pid) return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : undefined} />;
   const restricted = config.role === 'CLIENT';
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Spec quality" />
+      <ProjectHeader config={config} title={wt('pspec.specQuality')} />
       <div className="min-h-0 flex-1 overflow-y-auto">
-        {restricted ? <EmptyState title="Not available" body="Spec quality checks are for the project team." icon={<Gauge size={20} />} /> : <SpecView config={config} />}
+        {restricted ? <EmptyState title={wt('diagram.notAvail')} body={wt('pspec.forTeam')} icon={<Gauge size={20} />} /> : <SpecView config={config} />}
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import { workApi, workError, type ProjectConfig } from '@/lib/work-api';
 import { Spinner } from '../ui';
 import { Section, Select } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
+import { wt } from '@/components/work/i18n';
 
 interface DraftCol { uid: string; name: string; wip: string }
 interface Draft { mode: 'status' | 'custom'; cols: DraftCol[]; assign: Record<number, string> }
@@ -57,8 +58,8 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
       }));
       return workApi.setBoardColumns(config.id, columns);
     },
-    onSuccess: () => { toast.success('Board columns saved'); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not save the board columns')),
+    onSuccess: () => { toast.success(wt('pboard.saved')); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('pboard.saveFailed'))),
   });
 
   const patchCol = (u: string, p: Partial<DraftCol>) => setDraft((d) => ({ ...d, cols: d.cols.map((c) => (c.uid === u ? { ...c, ...p } : c)) }));
@@ -78,22 +79,22 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
     for (const k of Object.keys(assign)) if (assign[Number(k)] === u && fallback) assign[Number(k)] = fallback;
     return { ...d, cols: rest, assign };
   });
-  const addCol = () => setDraft((d) => ({ ...d, cols: [...d.cols, { uid: uid(), name: 'New column', wip: '' }] }));
+  const addCol = () => setDraft((d) => ({ ...d, cols: [...d.cols, { uid: uid(), name: wt('pboard.newColumn'), wip: '' }] }));
 
   return (
     <Section
-      title="Board columns"
-      description="Choose how statuses map to columns on the board. Group several statuses into one column, or keep one column per status."
+      title={wt('pboard.title')}
+      description={wt('pboard.desc')}
     >
       <div className="max-w-[640px]">
         <div className="mb-4 flex flex-col gap-1.5 text-[13px]">
           <label className={cn('flex items-center gap-2', canEdit ? 'cursor-pointer' : 'cursor-default')}>
             <input type="radio" name="board-mode" checked={draft.mode === 'status'} disabled={!canEdit} onChange={() => setDraft((d) => ({ ...d, mode: 'status' }))} className="accent-[var(--w-accent)]" />
-            Use one column per status
+            {wt('pboard.perStatus')}
           </label>
           <label className={cn('flex items-center gap-2', canEdit ? 'cursor-pointer' : 'cursor-default')}>
             <input type="radio" name="board-mode" checked={draft.mode === 'custom'} disabled={!canEdit} onChange={() => setDraft((d) => ({ ...d, mode: 'custom' }))} className="accent-[var(--w-accent)]" />
-            Use custom columns
+            {wt('pboard.custom')}
           </label>
         </div>
 
@@ -103,22 +104,22 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
               ? config.boardColumns.map((c) => (
                 <span key={c.key} className="inline-flex h-7 items-center rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-2.5 text-[12px] text-[var(--w-text-2)]">{c.name}</span>
               ))
-              : <p className="text-[13px] text-[var(--w-text-3)]">Each status of the default workflow becomes a column. Statuses of other workflows join the closest matching column.</p>}
+              : <p className="text-[13px] text-[var(--w-text-3)]">{wt('pboard.eachStatus')}</p>}
           </div>
         )}
 
         {draft.mode === 'custom' && (
           <>
-            <h4 className="mb-2 text-[12px] font-semibold text-[var(--w-text-2)]">Columns</h4>
+            <h4 className="mb-2 text-[12px] font-semibold text-[var(--w-text-2)]">{wt('pboard.columns')}</h4>
             <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
               {draft.cols.map((c, i) => (
                 <div key={c.uid} className="flex items-center gap-2 border-b border-[var(--w-border)] px-3 py-2 last:border-b-0">
                   {canEdit && (
                     <div className="flex shrink-0 flex-col">
-                      <button type="button" className="flex h-3.5 w-5 items-center justify-center text-[var(--w-text-3)] hover:text-[var(--w-text)] disabled:opacity-30" disabled={i === 0} onClick={() => moveCol(i, -1)} aria-label={`Move ${c.name} up`}>
+                      <button type="button" className="flex h-3.5 w-5 items-center justify-center text-[var(--w-text-3)] hover:text-[var(--w-text)] disabled:opacity-30" disabled={i === 0} onClick={() => moveCol(i, -1)} aria-label={wt('pboard.moveUp', { n: c.name })}>
                         <ArrowUp size={12} />
                       </button>
-                      <button type="button" className="flex h-3.5 w-5 items-center justify-center text-[var(--w-text-3)] hover:text-[var(--w-text)] disabled:opacity-30" disabled={i === draft.cols.length - 1} onClick={() => moveCol(i, 1)} aria-label={`Move ${c.name} down`}>
+                      <button type="button" className="flex h-3.5 w-5 items-center justify-center text-[var(--w-text-3)] hover:text-[var(--w-text)] disabled:opacity-30" disabled={i === draft.cols.length - 1} onClick={() => moveCol(i, 1)} aria-label={wt('pboard.moveDown', { n: c.name })}>
                         <ArrowDown size={12} />
                       </button>
                     </div>
@@ -129,25 +130,25 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
                     maxLength={40}
                     disabled={!canEdit}
                     onChange={(e) => patchCol(c.uid, { name: e.target.value })}
-                    aria-label="Column name"
+                    aria-label={wt('pboard.colName')}
                   />
                   <input
                     type="number"
                     min={1}
                     inputMode="numeric"
                     className="w-input !h-7 !w-[72px] shrink-0 !px-2 text-[12px] disabled:opacity-60"
-                    placeholder="No limit"
-                    title="WIP limit (leave empty for no limit)"
+                    placeholder={wt('pboard.noLimit')}
+                    title={wt('pboard.wipTip')}
                     value={c.wip}
                     disabled={!canEdit}
                     onChange={(e) => patchCol(c.uid, { wip: e.target.value })}
-                    aria-label={`WIP limit for ${c.name}`}
+                    aria-label={wt('pboard.wipFor', { n: c.name })}
                   />
                   <span className="hidden w-[64px] shrink-0 text-right text-[12px] text-[var(--w-text-3)] sm:inline">
                     {allStatuses.filter((s) => draft.assign[s.id] === c.uid).length} status{allStatuses.filter((s) => draft.assign[s.id] === c.uid).length === 1 ? '' : 'es'}
                   </span>
                   {canEdit && (
-                    <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={draft.cols.length <= 1} onClick={() => removeCol(c.uid)} aria-label={`Remove column ${c.name}`} title="Remove column">
+                    <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={draft.cols.length <= 1} onClick={() => removeCol(c.uid)} aria-label={wt('pboard.removeCol', { n: c.name })} title={wt('pboard.removeColT')}>
                       <Trash2 size={13} />
                     </button>
                   )}
@@ -157,11 +158,11 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
             {canEdit && (
               <button type="button" className="w-btn w-btn-sm mt-2" onClick={addCol}>
                 <Plus size={13} />
-                Add column
+                {wt('pboard.addColumn')}
               </button>
             )}
 
-            <h4 className="mb-2 mt-6 text-[12px] font-semibold text-[var(--w-text-2)]">Status mapping</h4>
+            <h4 className="mb-2 mt-6 text-[12px] font-semibold text-[var(--w-text-2)]">{wt('pboard.mapping')}</h4>
             <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
               {workflows.map((w) => (
                 <div key={w.id}>
@@ -179,10 +180,10 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
                           value={missing ? '' : draft.assign[s.id]}
                           disabled={!canEdit}
                           onChange={(e) => setDraft((d) => ({ ...d, assign: { ...d.assign, [s.id]: e.target.value } }))}
-                          aria-label={`Column for ${s.name}`}
+                          aria-label={wt('pboard.colFor', { n: s.name })}
                         >
-                          {missing && <option value="">Choose a column…</option>}
-                          {draft.cols.map((c) => <option key={c.uid} value={c.uid}>{c.name.trim() || 'Untitled column'}</option>)}
+                          {missing && <option value="">{wt('pboard.chooseCol')}</option>}
+                          {draft.cols.map((c) => <option key={c.uid} value={c.uid}>{c.name.trim() || wt('pboard.untitledCol')}</option>)}
                         </Select>
                       </div>
                     );
@@ -193,7 +194,7 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
             {unassigned.length > 0 && (
               <p className="mt-2 flex items-center gap-1.5 text-[12px] text-[var(--w-red)]">
                 <AlertTriangle size={12} className="shrink-0" />
-                {unassigned.length} status{unassigned.length === 1 ? ' is' : 'es are'} not on any column — issues in them would disappear from the board.
+                {wt('pboard.unassigned', { count: unassigned.length })}
               </p>
             )}
           </>
@@ -201,7 +202,7 @@ export default function ProjectBoard({ config, slug }: { config: ProjectConfig; 
 
         {canEdit && dirty && (
           <div className="mt-5 flex items-center justify-end gap-2">
-            <button type="button" className="w-btn" onClick={() => setDraft(initial)}>Discard</button>
+            <button type="button" className="w-btn" onClick={() => setDraft(initial)}>{wt('common.discard')}</button>
             <button
               type="button"
               className="w-btn w-btn-primary"

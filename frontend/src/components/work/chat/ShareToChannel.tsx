@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { workError } from '@/lib/work-api';
 import { chatApi, chatKeys } from '@/lib/work-chat-api';
 import { Dialog, Field, Spinner } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 export function ShareToChannelButton({ pid, path, label, className, compact, wsSlug, projectKey }: {
   pid: number; path: string; label: string; className?: string; compact?: boolean; wsSlug: string; projectKey: string;
@@ -21,9 +22,9 @@ export function ShareToChannelButton({ pid, path, label, className, compact, wsS
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button type="button" className={cn('w-btn w-btn-sm', compact && 'w-btn-icon', className)} onClick={() => setOpen(true)} title="Share to a chat channel" aria-label="Share to channel" data-testid="share-to-channel">
+      <button type="button" className={cn('w-btn w-btn-sm', compact && 'w-btn-icon', className)} onClick={() => setOpen(true)} title={wt('chat.shareTip')} aria-label={wt('chat.shareToChannel')} data-testid="share-to-channel">
         <MessageSquareShare size={14} />
-        {!compact && <span className="max-md:hidden">Share to channel</span>}
+        {!compact && <span className="max-md:hidden">{wt('chat.shareToChannel')}</span>}
       </button>
       <ShareToChannelDialog open={open} onClose={() => setOpen(false)} pid={pid} path={path} label={label} wsSlug={wsSlug} projectKey={projectKey} />
     </>
@@ -44,26 +45,26 @@ export function ShareToChannelDialog({ open, onClose, pid, path, label, wsSlug, 
     mutationFn: () => chatApi.send(pid, cid!, { body: `${note.trim() ? `${note.trim()}\n\n` : ''}[${label.replace(/[[\]]/g, '')}](${path})` }),
     onSuccess: (msg) => {
       const ch = channels.find((c) => c.id === cid);
-      toast.success(`Shared to #${ch?.name ?? 'channel'}`, { action: { label: 'Open', onClick: () => router.push(`/work/${wsSlug}/${projectKey}/chat?c=${cid}&m=${msg.id}`) } });
+      toast.success(wt('chat.sharedTo', { name: ch?.name ?? '' }), { action: { label: wt('common.open'), onClick: () => router.push(`/work/${wsSlug}/${projectKey}/chat?c=${cid}&m=${msg.id}`) } });
       onClose();
     },
-    onError: (err) => toast.error(workError(err, 'Could not share')),
+    onError: (err) => toast.error(workError(err, wt('chat.shareFailed'))),
   });
   return (
-    <Dialog open={open} onClose={onClose} title="Share to channel" width={460}
-      footer={<><button type="button" className="w-btn" onClick={onClose}>Cancel</button><button type="button" className="w-btn w-btn-primary" disabled={!cid || m.isPending} onClick={() => m.mutate()}>{m.isPending && <Spinner size={12} />}Share</button></>}>
+    <Dialog open={open} onClose={onClose} title={wt('chat.shareToChannel')} width={460}
+      footer={<><button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" disabled={!cid || m.isPending} onClick={() => m.mutate()}>{m.isPending && <Spinner size={12} />}{wt('chat.shareBtn')}</button></>}>
       {q.isLoading ? <div className="flex justify-center py-4"><Spinner /></div> : !channels.length ? (
-        <p className="text-[13px] text-[var(--w-text-2)]">There is no channel you can post in yet.</p>
+        <p className="text-[13px] text-[var(--w-text-2)]">{wt('chat.noPostChannel')}</p>
       ) : (
         <div className="space-y-3">
           <p className="truncate rounded-[6px] bg-[var(--w-sunken)] px-2.5 py-1.5 text-[13px]" title={label}>{label}</p>
-          <Field label="Channel">
+          <Field label={wt('chat.channel')}>
             <select className="w-input" value={cid ?? ''} onChange={(e) => setCid(Number(e.target.value))}>
-              {channels.map((c) => <option key={c.id} value={c.id}>#{c.name}{c.kind === 'PRIVATE' ? ' (private)' : c.kind === 'CLIENT' ? ' (client)' : ''}</option>)}
+              {channels.map((c) => <option key={c.id} value={c.id}>#{c.name}{c.kind === 'PRIVATE' ? wt('chat.privateParen') : c.kind === 'CLIENT' ? wt('gov.clientParen') : ''}</option>)}
             </select>
           </Field>
-          <Field label="Message (optional)"><textarea className="w-input min-h-[64px] py-2" value={note} onChange={(e) => setNote(e.target.value)} maxLength={2000} placeholder="Add context for the team…" /></Field>
-          <p className="text-[12px] text-[var(--w-text-3)]">Only people who can open it see the preview card.</p>
+          <Field label={wt('chat.messageOpt')}><textarea className="w-input min-h-[64px] py-2" value={note} onChange={(e) => setNote(e.target.value)} maxLength={2000} placeholder={wt('chat.contextPh')} /></Field>
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('chat.previewNote')}</p>
         </div>
       )}
     </Dialog>

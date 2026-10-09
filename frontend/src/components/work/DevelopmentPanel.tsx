@@ -13,12 +13,13 @@ import { cn } from '@/lib/utils';
 import { workApi, type DevItem } from '@/lib/work-api';
 import { wk } from './hooks';
 import { relativeTime, Spinner } from './ui';
+import { wt } from '@/components/work/i18n';
 
 const PR_STATE: Record<string, { label: string; cls: string }> = {
-  open: { label: 'Open', cls: 'text-[var(--w-green)] border-[color-mix(in_srgb,var(--w-green)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-green)_12%,transparent)]' },
-  draft: { label: 'Draft', cls: 'text-[var(--w-text-2)] border-[var(--w-border-strong)] bg-[var(--w-sunken)]' },
-  merged: { label: 'Merged', cls: 'text-[var(--w-accent-text)] border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' },
-  closed: { label: 'Closed', cls: 'text-[var(--w-red)] border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-red)_10%,transparent)]' },
+  open: { get label() { return wt('common.open'); }, cls: 'text-[var(--w-green)] border-[color-mix(in_srgb,var(--w-green)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-green)_12%,transparent)]' },
+  draft: { get label() { return wt('common.draft'); }, cls: 'text-[var(--w-text-2)] border-[var(--w-border-strong)] bg-[var(--w-sunken)]' },
+  merged: { get label() { return wt('dev.prMerged'); }, cls: 'text-[var(--w-accent-text)] border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' },
+  closed: { get label() { return wt('dev.prClosed'); }, cls: 'text-[var(--w-red)] border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-red)_10%,transparent)]' },
 };
 
 export function PrStateChip({ state }: { state: string | null }) {
@@ -81,30 +82,30 @@ export default function DevelopmentPanel({ pid, num, issueKey }: { pid: number; 
 
   const counts = d
     ? [
-        d.branches.length && plural(d.branches.length, 'branch', 'branches'),
-        d.commits.length && plural(d.commits.length, 'commit', 'commits'),
-        d.pullRequests.length && plural(d.pullRequests.length, 'pull request', 'pull requests'),
+        d.branches.length && wt('dev.nBranches', { count: d.branches.length }),
+        d.commits.length && wt('dev.nCommits', { count: d.commits.length }),
+        d.pullRequests.length && wt('dev.nPrs', { count: d.pullRequests.length }),
       ].filter(Boolean).join(' · ')
     : '';
 
   return (
     <div className="mt-4 border-t border-[var(--w-border)] pt-3">
       <div className="mb-1.5 flex items-center gap-2">
-        <span className="text-[12px] font-medium text-[var(--w-text-2)]">Development</span>
+        <span className="text-[12px] font-medium text-[var(--w-text-2)]">{wt('dev.development')}</span>
         {dev.isFetching && <Spinner size={10} />}
       </div>
       {dev.isLoading ? null : dev.isError ? (
-        <p className="text-[12px] text-[var(--w-text-3)]">Could not load development activity.</p>
+        <p className="text-[12px] text-[var(--w-text-3)]">{wt('dev.devLoadFailed')}</p>
       ) : !total ? (
         <p className="text-[12px] leading-relaxed text-[var(--w-text-3)]">
-          Include <span className="font-mono text-[var(--w-text-2)]">{issueKey}</span> in a branch, commit or PR to link it here.
+          {wt('dev.includeKey', { k: issueKey })}
         </p>
       ) : (
         <>
           <p className="mb-1 px-1.5 text-[12px] text-[var(--w-text-2)]">{counts}</p>
           <Group
             icon={<GitPullRequest size={13} />}
-            title={plural(d!.pullRequests.length, 'pull request', 'pull requests')}
+            title={wt('dev.nPrs', { count: d!.pullRequests.length })}
             items={d!.pullRequests}
             render={(p) => (
               <ItemLink d={p}>
@@ -118,7 +119,7 @@ export default function DevelopmentPanel({ pid, num, issueKey }: { pid: number; 
           />
           <Group
             icon={<GitBranch size={13} />}
-            title={plural(d!.branches.length, 'branch', 'branches')}
+            title={wt('dev.nBranches', { count: d!.branches.length })}
             items={d!.branches}
             render={(b) => (
               <ItemLink d={b}>
@@ -129,7 +130,7 @@ export default function DevelopmentPanel({ pid, num, issueKey }: { pid: number; 
           />
           <Group
             icon={<GitCommitHorizontal size={13} />}
-            title={plural(d!.commits.length, 'commit', 'commits')}
+            title={wt('dev.nCommits', { count: d!.commits.length })}
             items={d!.commits}
             render={(c) => (
               <ItemLink d={c}>

@@ -13,13 +13,14 @@ import { ColorPicker, LABEL_COLORS } from './ProjectLabels';
 import { useProjectInvalidate } from './useProjectInvalidate';
 import TemplateEditorDialog, { TemplateBadge } from '../templates/TemplateEditorDialog';
 import { useIssueTemplates } from '../templates/useIssueTemplates';
+import { wt } from '@/components/work/i18n';
 
 const LEVELS: Array<{ value: 0 | -1 | 1; label: string; help: string }> = [
-  { value: 1, label: 'Epic level', help: 'Groups standard issues' },
-  { value: 0, label: 'Standard', help: 'Stories, tasks, bugs' },
-  { value: -1, label: 'Subtask', help: 'Lives under a standard issue' },
+  { value: 1, get label() { return wt('ptypes.lEpic'); }, get help() { return wt('ptypes.lEpicH'); } },
+  { value: 0, get label() { return wt('ptypes.lStd'); }, get help() { return wt('ptypes.lStdH'); } },
+  { value: -1, get label() { return wt('ptypes.lSub'); }, get help() { return wt('ptypes.lSubH'); } },
 ];
-const levelLabel = (l: number) => LEVELS.find((x) => x.value === l)?.label ?? 'Standard';
+const levelLabel = (l: number) => LEVELS.find((x) => x.value === l)?.label ?? wt('ptypes.lStd');
 
 function TypeRow({ type, config, canEdit, onChanged, onArchive, template, onTemplate }: {
   type: WorkIssueType; config: ProjectConfig; canEdit: boolean; onChanged: () => void; onArchive: () => void;
@@ -33,7 +34,7 @@ function TypeRow({ type, config, canEdit, onChanged, onArchive, template, onTemp
   const update = useMutation({
     mutationFn: (body: { name?: string; color?: string; workflowId?: number | null }) => workApi.updateIssueType(config.id, type.id, body),
     onSuccess: () => onChanged(),
-    onError: (err) => { toast.error(workError(err, 'Could not update the issue type')); setName(type.name); },
+    onError: (err) => { toast.error(workError(err, wt('ptypes.updateFailed'))); setName(type.name); },
   });
 
   const commitName = () => {
@@ -59,7 +60,7 @@ function TypeRow({ type, config, canEdit, onChanged, onArchive, template, onTemp
               if (e.key === 'Enter') e.currentTarget.blur();
               if (e.key === 'Escape') { setName(type.name); e.currentTarget.blur(); }
             }}
-            aria-label="Issue type name"
+            aria-label={wt('ptypes.typeName')}
           />
         ) : (
           <span className="min-w-0 flex-1 truncate px-2 text-[13px]">{type.name}</span>
@@ -68,16 +69,16 @@ function TypeRow({ type, config, canEdit, onChanged, onArchive, template, onTemp
       </div>
       <div className="flex shrink-0 items-center gap-2 pl-6 sm:pl-0">
         {update.isPending && <Spinner size={12} />}
-        <ColorPicker value={type.color} ariaLabel="Issue type colour" disabled={locked} onChange={(c) => update.mutate({ color: c })} />
+        <ColorPicker value={type.color} ariaLabel={wt('ptypes.typeColour')} disabled={locked} onChange={(c) => update.mutate({ color: c })} />
         <Select
           className="!h-7 !w-[170px] text-[12px]"
           value={type.workflowId ?? ''}
           disabled={locked}
           onChange={(e) => update.mutate({ workflowId: e.target.value ? Number(e.target.value) : null })}
-          aria-label={`Workflow for ${type.name}`}
+          aria-label={wt('ptypes.workflowFor', { n: type.name })}
           title="Workflow"
         >
-          <option value="">{def ? `${def.name} (default)` : 'Default workflow'}</option>
+          <option value="">{def ? wt('ptypes.defaultSuffix', { n: def.name }) : wt('ptypes.defaultWf')}</option>
           {config.workflows.filter((w) => w.id !== def?.id || type.workflowId === w.id).map((w) => <option key={w.id} value={w.id}>{w.name}</option>)}
         </Select>
         {template && (
@@ -85,16 +86,16 @@ function TypeRow({ type, config, canEdit, onChanged, onArchive, template, onTemp
             type="button"
             className="w-btn w-btn-ghost w-btn-sm gap-1.5"
             onClick={onTemplate}
-            title={canEdit ? 'Edit the description template' : 'View the description template'}
-            aria-label={`Description template for ${type.name}`}
+            title={canEdit ? wt('ptypes.editTpl') : wt('ptypes.viewTpl')}
+            aria-label={wt('ptypes.tplFor', { n: type.name })}
           >
             <FileText size={13} />
-            <span className="hidden md:inline">Template</span>
+            <span className="hidden md:inline">{wt('ptypes.template')}</span>
             <TemplateBadge t={template} />
           </button>
         )}
         {canEdit && (
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onArchive} aria-label={`Archive ${type.name}`} title="Archive issue type">
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onArchive} aria-label={wt('ptypes.archiveX', { n: type.name })} title={wt('ptypes.archiveType')}>
             <Archive size={13} />
           </button>
         )}
@@ -118,21 +119,21 @@ export default function ProjectIssueTypes({ config, slug }: { config: ProjectCon
 
   const create = useMutation({
     mutationFn: () => workApi.addIssueType(config.id, { name: newName.trim(), level: newLevel, color: newColor }),
-    onSuccess: () => { toast.success(`Issue type “${newName.trim()}” created`); setNewName(''); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not create the issue type')),
+    onSuccess: () => { toast.success(wt('ptypes.created', { n: newName.trim() })); setNewName(''); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('ptypes.createFailed'))),
   });
   const archive = useMutation({
     mutationFn: (id: number) => workApi.updateIssueType(config.id, id, { archived: true }),
-    onSuccess: () => { toast.success('Issue type archived'); setArchiving(null); invalidate(); },
-    onError: (err) => toast.error(workError(err, 'Could not archive the issue type')),
+    onSuccess: () => { toast.success(wt('ptypes.archived')); setArchiving(null); invalidate(); },
+    onError: (err) => toast.error(workError(err, wt('ptypes.archiveFailed'))),
   });
 
   const types = [...config.issueTypes].sort((a, b) => b.level - a.level);
 
   return (
     <Section
-      title="Issue types"
-      description="The kinds of work this project tracks. Each type follows a workflow — changing it is only possible while the type has no issues."
+      title={wt('ptypes.title')}
+      description={wt('ptypes.desc')}
     >
       <div className="max-w-[720px]">
         {canEdit && (
@@ -140,14 +141,14 @@ export default function ProjectIssueTypes({ config, slug }: { config: ProjectCon
             className="mb-3 flex flex-wrap items-center gap-2 sm:flex-nowrap"
             onSubmit={(e) => { e.preventDefault(); if (newName.trim() && !create.isPending) create.mutate(); }}
           >
-            <ColorPicker value={newColor} ariaLabel="New issue type colour" onChange={setNewColor} />
-            <input className="w-input min-w-0 flex-[1_1_160px]" placeholder="New issue type name" value={newName} maxLength={40} onChange={(e) => setNewName(e.target.value)} aria-label="New issue type name" />
-            <Select className="!w-[140px]" value={newLevel} onChange={(e) => setNewLevel(Number(e.target.value) as 0 | -1 | 1)} aria-label="Level">
+            <ColorPicker value={newColor} ariaLabel={wt('ptypes.newColour')} onChange={setNewColor} />
+            <input className="w-input min-w-0 flex-[1_1_160px]" placeholder={wt('ptypes.newName')} value={newName} maxLength={40} onChange={(e) => setNewName(e.target.value)} aria-label={wt('ptypes.newName')} />
+            <Select className="!w-[140px]" value={newLevel} onChange={(e) => setNewLevel(Number(e.target.value) as 0 | -1 | 1)} aria-label={wt('ptypes.level')}>
               {LEVELS.map((l) => <option key={l.value} value={l.value} title={l.help}>{l.label}</option>)}
             </Select>
             <button type="submit" className="w-btn shrink-0" disabled={!newName.trim() || create.isPending}>
               {create.isPending ? <Spinner size={12} /> : <Plus size={14} />}
-              Add
+              {wt('common.add')}
             </button>
           </form>
         )}
@@ -164,9 +165,9 @@ export default function ProjectIssueTypes({ config, slug }: { config: ProjectCon
               onTemplate={() => setEditingTemplate(t.key)}
             />
           ))}
-          {!types.length && <div className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">No issue types.</div>}
+          {!types.length && <div className="px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">{wt('ptypes.noTypes')}</div>}
         </div>
-        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">Epic-level types group standard issues; subtasks live under a standard issue. A description template pre-fills new issues of that type.</p>
+        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{wt('ptypes.levelsNote')}</p>
       </div>
       <TemplateEditorDialog
         open={!!openTemplate}
@@ -178,9 +179,9 @@ export default function ProjectIssueTypes({ config, slug }: { config: ProjectCon
       <ConfirmDialog
         open={!!archiving}
         onClose={() => setArchiving(null)}
-        title="Archive issue type?"
-        body={<><span className="font-medium text-[var(--w-text)]">{archiving?.name}</span> will no longer be offered when creating issues. Existing issues of this type are kept.</>}
-        confirmLabel="Archive type"
+        title={wt('ptypes.archiveQ')}
+        body={<><span className="font-medium text-[var(--w-text)]">{archiving?.name}</span> {wt('ptypes.archiveBody')}</>}
+        confirmLabel={wt('ptypes.archiveTypeBtn')}
         pending={archive.isPending}
         onConfirm={() => archiving && archive.mutate(archiving.id)}
       />

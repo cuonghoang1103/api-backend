@@ -21,6 +21,7 @@ import {
 import { dongHo, useGhiAm } from '../../messaging/useGhiAm';
 import { Dialog, formatBytes, Spinner } from '../ui';
 import { wk } from '../hooks';
+import { wt } from '@/components/work/i18n';
 
 const isImage = (m: string) => /^image\/(png|jpe?g|gif|webp|avif|bmp)$/i.test(m);
 const isPdf = (m: string, name: string) => m === 'application/pdf' || /\.pdf$/i.test(name);
@@ -75,7 +76,7 @@ export function VoiceNotePlayer({ pid, num, file, canRetry }: { pid: number; num
         a.src = fresh;
         await a.play();
       } catch (e2) {
-        toast.error(workError(e2, 'Could not play this voice note'));
+        toast.error(workError(e2, wt('chat.playFailed')));
       }
     }
   };
@@ -89,7 +90,7 @@ export function VoiceNotePlayer({ pid, num, file, canRetry }: { pid: number; num
   const retry = useMutation({
     mutationFn: () => workCommentsApi.retryTranscription(pid, file.id),
     onSuccess: () => qc.invalidateQueries({ queryKey: wk.comments(pid, num) }),
-    onError: (err) => toast.error(workError(err, 'Could not transcribe')),
+    onError: (err) => toast.error(workError(err, wt('chat.transcribeFailed'))),
   });
 
   const status = v.transcriptStatus;
@@ -100,7 +101,7 @@ export function VoiceNotePlayer({ pid, num, file, canRetry }: { pid: number; num
         <button
           type="button"
           className="w-btn w-btn-icon w-btn-sm w-voice-play"
-          aria-label={playing ? 'Pause voice note' : 'Play voice note'}
+          aria-label={playing ? wt('chat.pauseVoice') : wt('chat.playVoice')}
           onClick={() => void toggle()}
           disabled={loading}
         >
@@ -114,14 +115,14 @@ export function VoiceNotePlayer({ pid, num, file, canRetry }: { pid: number; num
           value={Math.min(pos, total)}
           onChange={(e) => seek(Number(e.target.value))}
           className="w-voice-seek min-w-0 flex-1"
-          aria-label="Seek voice note"
+          aria-label={wt('chat.seekVoice')}
           aria-valuetext={`${dongHo(pos)} of ${dongHo(total)}`}
         />
         <span className="shrink-0 font-mono text-[11.5px] tabular-nums text-[var(--w-text-2)]">{dongHo(pos)} / {clock(v.durationMs)}</span>
         <button
           type="button"
           className="w-btn w-btn-ghost w-btn-sm shrink-0 px-1.5 font-mono text-[11px]"
-          aria-label={`Playback speed ${rate}×`}
+          aria-label={wt('chat.playbackSpeed', { r: rate })}
           onClick={() => {
             const next = rate === 1 ? 1.5 : rate === 1.5 ? 2 : 1;
             setRate(next);
@@ -142,7 +143,7 @@ export function VoiceNotePlayer({ pid, num, file, canRetry }: { pid: number; num
       </div>
       {status === 'DONE' && v.transcript ? (
         <p className="mt-1.5 whitespace-pre-wrap text-[12.5px] leading-relaxed text-[var(--w-text-2)]" data-testid="voice-transcript">
-          <span className="sr-only">Transcript: </span>{v.transcript}
+          <span className="sr-only">{wt('chat.transcript')} </span>{v.transcript}
         </p>
       ) : note ? (
         <p className="mt-1.5 flex flex-wrap items-center gap-2 text-[12px] text-[var(--w-text-3)]" data-testid="voice-transcript-status">
@@ -150,7 +151,7 @@ export function VoiceNotePlayer({ pid, num, file, canRetry }: { pid: number; num
           <span>{note}</span>
           {canRetry && (status === 'FAILED' || status === 'NO_KEY' || status === 'LIMIT') && (
             <button type="button" className="w-btn w-btn-ghost w-btn-sm h-6 px-1.5 text-[12px]" disabled={retry.isPending} onClick={() => retry.mutate()}>
-              <RotateCcw size={11} /> Retry
+              <RotateCcw size={11} /> {wt('chat.retry')}
             </button>
           )}
         </p>
@@ -167,7 +168,7 @@ function ImageThumb({ pid, file, onOpen }: { pid: number; file: CommentFile; onO
     <button
       type="button"
       className="w-comment-thumb"
-      aria-label={`Preview image ${file.fileName}`}
+      aria-label={wt('chat.previewImage', { name: file.fileName })}
       onClick={() => q.data && onOpen(q.data)}
       disabled={!q.data}
     >
@@ -183,7 +184,7 @@ export function CommentAttachments({ pid, num, files, canRetry }: { pid: number;
   const images = files.filter((f) => !f.voice && isImage(f.mime));
   const others = files.filter((f) => !f.voice && !isImage(f.mime));
   const download = async (f: CommentFile) => {
-    try { window.open(await workCommentsApi.url(pid, f.id), '_blank', 'noopener'); } catch (err) { toast.error(workError(err, 'Could not download')); }
+    try { window.open(await workCommentsApi.url(pid, f.id), '_blank', 'noopener'); } catch (err) { toast.error(workError(err, wt('chat.downloadFailed'))); }
   };
   const openPdf = async (f: CommentFile) => {
     try {
@@ -191,7 +192,7 @@ export function CommentAttachments({ pid, num, files, canRetry }: { pid: number;
       if (inDesktopApp()) window.open(url, '_blank', 'noopener');
       else setPreview({ kind: 'pdf', url, name: f.fileName });
     } catch (err) {
-      toast.error(workError(err, 'Could not open the PDF'));
+      toast.error(workError(err, wt('chat.openPdfFailed')));
     }
   };
   return (
@@ -203,23 +204,23 @@ export function CommentAttachments({ pid, num, files, canRetry }: { pid: number;
         </div>
       )}
       {others.length > 0 && (
-        <ul className="flex flex-wrap gap-1.5" aria-label="Files">
+        <ul className="flex flex-wrap gap-1.5" aria-label={wt('chat.files')}>
           {others.map((f) => (
             <li key={f.id} className="w-file-chip">
               <FileText size={13} className="shrink-0 text-[var(--w-text-3)]" aria-hidden="true" />
               <span className="min-w-0 truncate" title={f.fileName}>{f.fileName}</span>
               <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{formatBytes(f.size)}</span>
               {isPdf(f.mime, f.fileName) && (
-                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label={`Preview ${f.fileName}`} onClick={() => void openPdf(f)}><Eye size={12} /></button>
+                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label={wt('chat.previewX', { name: f.fileName })} onClick={() => void openPdf(f)}><Eye size={12} /></button>
               )}
-              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label={`Download ${f.fileName}`} onClick={() => void download(f)}><Download size={12} /></button>
+              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label={wt('chat.downloadX', { name: f.fileName })} onClick={() => void download(f)}><Download size={12} /></button>
             </li>
           ))}
         </ul>
       )}
       <Dialog open={!!preview} onClose={() => setPreview(null)} width={preview?.kind === 'pdf' ? 960 : 880} title={<span className="block max-w-[60vw] truncate">{preview?.name}</span>}>
         {preview?.kind === 'image' && <img src={preview.url} alt={preview.name} className="mx-auto max-h-[70vh] max-w-full rounded-[6px]" />}
-        {preview?.kind === 'pdf' && <iframe src={preview.url} title={`PDF preview: ${preview.name}`} className="h-[72vh] w-full rounded-[6px] border border-[var(--w-border)]" />}
+        {preview?.kind === 'pdf' && <iframe src={preview.url} title={wt('chat.pdfPreview', { name: preview.name })} className="h-[72vh] w-full rounded-[6px] border border-[var(--w-border)]" />}
       </Dialog>
     </div>
   );
@@ -237,22 +238,22 @@ export function useCommentDrafts(pid: number, num: number) {
 
   const addFiles = (list: FileList | File[]) => {
     const files = Array.from(list).slice(0, Math.max(0, room()));
-    if (Array.from(list).length > files.length) toast.error(`A comment can have at most ${MAX_FILES_PER_COMMENT} files`);
+    if (Array.from(list).length > files.length) toast.error(wt('chat.maxFilesComment', { n: MAX_FILES_PER_COMMENT }));
     for (const f of files) {
       const key = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
       setDrafts((ds) => [...ds, { key, name: f.name, pct: 0 }]);
       workCommentsApi.uploadFile(pid, num, f, (pct) => patch(key, { pct }))
         .then((file) => patch(key, { file, pct: 100 }))
-        .catch((err) => { patch(key, { error: workError(err, 'Upload failed') }); toast.error(workError(err, `Could not upload ${f.name}`)); });
+        .catch((err) => { patch(key, { error: workError(err, wt('chat.uploadFailed')) }); toast.error(workError(err, wt('chat.uploadX', { name: f.name }))); });
     }
   };
   const addVoice = (f: File, ms: number) => {
-    if (room() <= 0) { toast.error(`A comment can have at most ${MAX_FILES_PER_COMMENT} files`); return; }
+    if (room() <= 0) { toast.error(wt('chat.maxFilesComment', { n: MAX_FILES_PER_COMMENT })); return; }
     const key = `v${Date.now()}`;
-    setDrafts((ds) => [...ds, { key, name: 'Voice note', pct: 0, voiceMs: ms }]);
+    setDrafts((ds) => [...ds, { key, name: wt('chat.voiceNote'), pct: 0, voiceMs: ms }]);
     workCommentsApi.uploadVoice(pid, num, f, ms)
       .then((file) => patch(key, { file, pct: 100 }))
-      .catch((err) => { patch(key, { error: workError(err, 'Upload failed') }); toast.error(workError(err, 'Could not save the voice note')); });
+      .catch((err) => { patch(key, { error: workError(err, wt('chat.uploadFailed')) }); toast.error(workError(err, wt('chat.voiceFailed'))); });
   };
   const remove = (key: string) => {
     const d = drafts.find((x) => x.key === key);
@@ -267,14 +268,14 @@ export function useCommentDrafts(pid: number, num: number) {
 export function DraftChips({ drafts, onRemove }: { drafts: Draft[]; onRemove: (key: string) => void }) {
   if (!drafts.length) return null;
   return (
-    <ul className="mt-2 flex flex-wrap gap-1.5" aria-label="Files to send" data-testid="comment-drafts">
+    <ul className="mt-2 flex flex-wrap gap-1.5" aria-label={wt('chat.filesToSend')} data-testid="comment-drafts">
       {drafts.map((d) => (
         <li key={d.key} className={cn('w-file-chip', d.error && 'w-file-chip-error')}>
           {d.voiceMs !== undefined ? <Mic size={13} className="shrink-0 text-[var(--w-accent-text)]" aria-hidden="true" /> : <Paperclip size={13} className="shrink-0 text-[var(--w-text-3)]" aria-hidden="true" />}
-          <span className="min-w-0 truncate">{d.voiceMs !== undefined ? `Voice note · ${clock(d.voiceMs)}` : d.name}</span>
-          {d.error ? <span className="shrink-0 text-[11px] text-[var(--w-red-text)]">Failed</span>
+          <span className="min-w-0 truncate">{d.voiceMs !== undefined ? `${wt('chat.voiceNote')} · ${clock(d.voiceMs)}` : d.name}</span>
+          {d.error ? <span className="shrink-0 text-[11px] text-[var(--w-red-text)]">{wt('chat.failed')}</span>
             : !d.file ? <span className="shrink-0 text-[11px] tabular-nums text-[var(--w-text-3)]" aria-live="polite">{d.pct}%</span> : null}
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-5 w-5" aria-label={`Remove ${d.voiceMs !== undefined ? 'voice note' : d.name}`} onClick={() => onRemove(d.key)}><X size={11} /></button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-5 w-5" aria-label={wt('chat.removeX', { name: d.voiceMs !== undefined ? wt('chat.voiceNote') : d.name })} onClick={() => onRemove(d.key)}><X size={11} /></button>
         </li>
       ))}
     </ul>
@@ -282,10 +283,10 @@ export function DraftChips({ drafts, onRemove }: { drafts: Draft[]; onRemove: (k
 }
 
 const MIC_ERROR: Record<string, string> = {
-  'khong-ho-tro': 'This browser cannot record audio',
-  'bi-tu-choi': 'Microphone access was blocked — allow it in your browser or system settings',
-  'khong-co-micro': 'No microphone found on this device',
-  khac: 'Could not start the microphone',
+  get 'khong-ho-tro'() { return wt('chat.micUnsupported'); },
+  get 'bi-tu-choi'() { return wt('chat.micBlocked'); },
+  get 'khong-co-micro'() { return wt('chat.micNone'); },
+  get khac() { return wt('chat.micFailed'); },
 };
 
 /**
@@ -313,7 +314,7 @@ export function VoiceRecorder({ onRecorded, onActive, disabled }: { onRecorded: 
     t0.current = 0;
     stopping.current = false;
     if (f) onRecorded(f, Math.max(ms, rec.giay * 1000, 500));
-    else toast.info('Recording was too short');
+    else toast.info(wt('chat.tooShort'));
   }, [rec, onRecorded]);
 
   // Chạm trần 3 phút ⇒ máy ghi đã tự dừng; gom tệp ngay.
@@ -323,19 +324,19 @@ export function VoiceRecorder({ onRecorded, onActive, disabled }: { onRecorded: 
 
   if (rec.trangThai === 'roi') {
     return (
-      <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Record a voice note" title={`Record a voice note (up to ${VOICE_MAX_SECONDS / 60} min)`} disabled={disabled} onClick={() => { t0.current = 0; void rec.batDau(); }} data-testid="voice-record">
+      <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('chat.recordVoice')} title={wt('chat.recordUpTo', { m: VOICE_MAX_SECONDS / 60 })} disabled={disabled} onClick={() => { t0.current = 0; void rec.batDau(); }} data-testid="voice-record">
         <Mic size={14} />
       </button>
     );
   }
   return (
-    <div className="w-recording" role="group" aria-label="Recording voice note" data-testid="voice-recording">
+    <div className="w-recording" role="group" aria-label={wt('chat.recording')} data-testid="voice-recording">
       <span className="w-rec-dot" aria-hidden="true" />
       <span className="font-mono text-[12px] tabular-nums" aria-live="off">{dongHo(rec.giay)} / {dongHo(VOICE_MAX_SECONDS)}</span>
       {rec.trangThai === 'dang-xu-ly' ? <Spinner size={12} /> : (
         <>
-          <button type="button" className="w-btn w-btn-primary w-btn-sm h-6 px-2" onClick={() => void stop()} data-testid="voice-stop"><Square size={10} /> Stop</button>
-          <button type="button" className="w-btn w-btn-ghost w-btn-sm h-6 px-2" onClick={() => { t0.current = 0; rec.huy(); }}>Cancel</button>
+          <button type="button" className="w-btn w-btn-primary w-btn-sm h-6 px-2" onClick={() => void stop()} data-testid="voice-stop"><Square size={10} /> {wt('chat.stopRec')}</button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm h-6 px-2" onClick={() => { t0.current = 0; rec.huy(); }}>{wt('common.cancel')}</button>
         </>
       )}
     </div>

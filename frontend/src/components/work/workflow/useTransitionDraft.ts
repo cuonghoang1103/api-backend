@@ -10,6 +10,7 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { workApi, workError, type TransitionRules, type WorkWorkflow } from '@/lib/work-api';
 import { pairKey, parsePair } from './graph';
+import { wt } from '@/components/work/i18n';
 
 export type TransitionMode = 'free' | 'restricted';
 
@@ -100,8 +101,8 @@ export function useTransitionDraft(wf: WorkWorkflow, pid: number, onSaved: () =>
       if (mode === 'free') return workApi.setTransitions(pid, wf.id, { mode: 'free' });
       return workApi.setTransitions(pid, wf.id, { mode: 'restricted', transitions: [...pairs].map((k) => ({ ...parsePair(k), rules: rules.get(k) ?? null })) });
     },
-    onSuccess: () => { toast.success(mode === 'free' ? 'Workflow is free again — any status can move to any status' : 'Transitions saved'); onSaved(); },
-    onError: (err) => toast.error(workError(err, 'Could not save the transitions')),
+    onSuccess: () => { toast.success(mode === 'free' ? wt('wf.freeAgain') : wt('wf.saved')); onSaved(); },
+    onError: (err) => toast.error(workError(err, wt('wf.saveFailed'))),
   });
 
   return {

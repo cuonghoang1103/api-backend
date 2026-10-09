@@ -18,6 +18,7 @@ import { applyMention, mentionQuery } from '@/lib/work-chat-rules';
 import EmojiPickerPopover from '../../messaging/EmojiPickerPopover';
 import { VoiceRecorder } from '../comments/CommentFiles';
 import { Spinner, UserAvatar } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 interface Draft { key: string; name: string; pct: number; voiceMs?: number; file?: ChatFile; error?: string }
 
@@ -107,22 +108,22 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
   const addFiles = useCallback((list: FileList | File[]) => {
     const arr = Array.from(list);
     const files = arr.slice(0, Math.max(0, CHAT_MAX_FILES - drafts.filter((d) => !d.error).length));
-    if (arr.length > files.length) toast.error(`A message can have at most ${CHAT_MAX_FILES} files`);
+    if (arr.length > files.length) toast.error(wt('chat.maxFiles', { n: CHAT_MAX_FILES }));
     for (const f of files) {
       const key = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
       setDrafts((ds) => [...ds, { key, name: f.name || 'pasted-image.png', pct: 0 }]);
       chatApi.uploadFile(pid, cid, f, (pct) => patch(key, { pct }))
         .then((file) => patch(key, { file, pct: 100 }))
-        .catch((err) => { patch(key, { error: workError(err, 'Upload failed') }); toast.error(workError(err, `Could not upload ${f.name}`)); });
+        .catch((err) => { patch(key, { error: workError(err, wt('chat.uploadFailed')) }); toast.error(workError(err, wt('chat.uploadX', { name: f.name }))); });
     }
   }, [pid, cid, drafts]);
   const addVoice = useCallback((f: File, ms: number) => {
-    if (room() <= 0) { toast.error(`A message can have at most ${CHAT_MAX_FILES} files`); return; }
+    if (room() <= 0) { toast.error(wt('chat.maxFiles', { n: CHAT_MAX_FILES })); return; }
     const key = `v${Date.now()}`;
-    setDrafts((ds) => [...ds, { key, name: 'Voice note', pct: 0, voiceMs: ms }]);
+    setDrafts((ds) => [...ds, { key, name: wt('chat.voiceNote'), pct: 0, voiceMs: ms }]);
     chatApi.uploadVoice(pid, cid, f, ms)
       .then((file) => patch(key, { file, pct: 100 }))
-      .catch((err) => { patch(key, { error: workError(err, 'Upload failed') }); toast.error(workError(err, 'Could not save the voice note')); });
+      .catch((err) => { patch(key, { error: workError(err, wt('chat.uploadFailed')) }); toast.error(workError(err, wt('chat.voiceFailed'))); });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pid, cid, drafts]);
   const removeDraft = (key: string) => {
@@ -138,7 +139,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
   const submit = () => {
     if (editing) {
       if (text.trim() === editing.body.trim()) { onCancelEdit(); return; }
-      if (!text.trim() && !editing.files.length) { toast.error('A message cannot be empty — delete it instead'); return; }
+      if (!text.trim() && !editing.files.length) { toast.error(wt('chat.emptyMsg')); return; }
       onSaveEdit(editing, text);
       return;
     }
@@ -185,7 +186,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
   if (!canPost) {
     return (
       <div className="border-t border-[var(--w-border)] px-4 py-3 text-center text-[13px] text-[var(--w-text-2)] sm:px-5" role="status">
-        {readOnlyReason ?? 'You can read this channel but not post in it.'}
+        {readOnlyReason ?? wt('chat.cannotPost')}
       </div>
     );
   }
@@ -198,7 +199,7 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
       onDrop={onDrop}
     >
       {mention && suggestions.length > 0 && (
-        <ul role="listbox" aria-label="Mention someone" className="absolute bottom-full left-3 right-3 z-20 mb-1 max-h-[260px] overflow-y-auto rounded-[8px] border border-[var(--w-border)] bg-[var(--w-raised)] p-1 sm:left-4 sm:right-auto sm:w-[320px]" style={{ boxShadow: 'var(--w-shadow-pop)' }}>
+        <ul role="listbox" aria-label={wt('chat.mentionSomeone')} className="absolute bottom-full left-3 right-3 z-20 mb-1 max-h-[260px] overflow-y-auto rounded-[8px] border border-[var(--w-border)] bg-[var(--w-raised)] p-1 sm:left-4 sm:right-auto sm:w-[320px]" style={{ boxShadow: 'var(--w-shadow-pop)' }}>
           {suggestions.map((m, i) => (
             <li key={m.id} role="option" aria-selected={i === sel}>
               <button type="button" className={cn('flex h-9 w-full items-center gap-2 rounded-[6px] px-2 text-left text-[13px]', i === sel ? 'bg-[var(--w-active)]' : 'hover:bg-[var(--w-hover)]')}
@@ -215,31 +216,31 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
       <div className={cn('rounded-[10px] border bg-[var(--w-panel)] transition-colors', dragging ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' : 'border-[var(--w-border-strong)] focus-within:border-[var(--w-accent-border)] focus-within:shadow-[0_0_0_3px_var(--w-accent-soft)]')}>
         {editing && (
           <div className="flex items-center gap-2 border-b border-[var(--w-border)] px-3 py-1.5 text-[12px] text-[var(--w-text-2)]">
-            <span className="font-medium text-[var(--w-accent-text)]">Editing message</span>
-            <span className="text-[var(--w-text-3)]">Enter to save · Esc to cancel</span>
-            <button type="button" className="ml-auto w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label="Cancel editing" onClick={onCancelEdit}><X size={12} /></button>
+            <span className="font-medium text-[var(--w-accent-text)]">{wt('chat.editingMsg')}</span>
+            <span className="text-[var(--w-text-3)]">{wt('chat.enterSave')}</span>
+            <button type="button" className="ml-auto w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label={wt('chat.cancelEdit')} onClick={onCancelEdit}><X size={12} /></button>
           </div>
         )}
         {drafts.length > 0 && (
-          <ul className="flex flex-wrap gap-1.5 px-2.5 pt-2" aria-label="Files to send">
+          <ul className="flex flex-wrap gap-1.5 px-2.5 pt-2" aria-label={wt('chat.filesToSend')}>
             {drafts.map((d) => (
               <li key={d.key} className={cn('w-file-chip', d.error && 'w-file-chip-error')}>
                 {d.voiceMs !== undefined ? <Mic size={13} className="shrink-0 text-[var(--w-accent-text)]" aria-hidden="true" /> : <Paperclip size={13} className="shrink-0 text-[var(--w-text-3)]" aria-hidden="true" />}
-                <span className="min-w-0 max-w-[200px] truncate">{d.voiceMs !== undefined ? `Voice note · ${Math.round(d.voiceMs / 1000)}s` : d.name}</span>
-                {d.error ? <span className="shrink-0 text-[11px] text-[var(--w-red-text)]">Failed</span> : !d.file ? <span className="shrink-0 text-[11px] tabular-nums text-[var(--w-text-3)]" aria-live="polite">{d.pct}%</span> : null}
-                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-5 w-5" aria-label={`Remove ${d.name}`} onClick={() => removeDraft(d.key)}><X size={11} /></button>
+                <span className="min-w-0 max-w-[200px] truncate">{d.voiceMs !== undefined ? wt('chat.voiceS', { s: Math.round(d.voiceMs / 1000) }) : d.name}</span>
+                {d.error ? <span className="shrink-0 text-[11px] text-[var(--w-red-text)]">{wt('chat.failed')}</span> : !d.file ? <span className="shrink-0 text-[11px] tabular-nums text-[var(--w-text-3)]" aria-live="polite">{d.pct}%</span> : null}
+                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-5 w-5" aria-label={wt('chat.removeX', { name: d.name })} onClick={() => removeDraft(d.key)}><X size={11} /></button>
               </li>
             ))}
           </ul>
         )}
-        <label className="sr-only" htmlFor={`chat-input-${cid}-${threadId ?? 0}`}>{threadId ? 'Reply in thread' : `Message #${channelName}`}</label>
+        <label className="sr-only" htmlFor={`chat-input-${cid}-${threadId ?? 0}`}>{threadId ? wt('chat.replyThread') : wt('chat.messageX', { name: channelName })}</label>
         <textarea
           id={`chat-input-${cid}-${threadId ?? 0}`}
           ref={ta}
           value={text}
           rows={1}
           maxLength={CHAT_MAX_BODY + 50}
-          placeholder={threadId ? 'Reply…' : `Message #${channelName}`}
+          placeholder={threadId ? wt('chat.replyDots') : wt('chat.messageX', { name: channelName })}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={onKeyDown}
           onPaste={onPaste}
@@ -253,26 +254,26 @@ export const Composer = forwardRef<ComposerHandle, ComposerProps>(function Compo
         <div className="flex items-center gap-0.5 px-1.5 pb-1.5">
           {!editing && (
             <>
-              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Attach files" title="Attach files (or drop / paste)" onClick={() => fileInput.current?.click()}><Paperclip size={15} /></button>
+              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('chat.attachFiles')} title={wt('chat.attachTip')} onClick={() => fileInput.current?.click()}><Paperclip size={15} /></button>
               <input ref={fileInput} type="file" multiple className="hidden" onChange={(e) => { if (e.target.files?.length) addFiles(e.target.files); e.target.value = ''; }} />
               <VoiceRecorder onRecorded={addVoice} onActive={setRecording} />
             </>
           )}
-          <button ref={emojiBtn} type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label="Insert emoji" title="Emoji" aria-expanded={emoji} onClick={() => setEmoji((o) => !o)}><Smile size={15} /></button>
+          <button ref={emojiBtn} type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('chat.insertEmoji')} title={wt('chat.emoji')} aria-expanded={emoji} onClick={() => setEmoji((o) => !o)}><Smile size={15} /></button>
           <EmojiPickerPopover open={emoji} onClose={() => setEmoji(false)} anchorRef={emojiBtn} onPick={(e) => { insertAt(e); setEmoji(false); }} />
           <span id={`chat-hint-${cid}-${threadId ?? 0}`} className="ml-1 hidden truncate text-[11px] text-[var(--w-text-3)] md:inline">
-            {text.length > CHAT_MAX_BODY - 400 ? `${text.length}/${CHAT_MAX_BODY}` : 'Enter to send · Shift+Enter for a new line · ↑ to edit your last message · **bold** `code`'}
+            {text.length > CHAT_MAX_BODY - 400 ? `${text.length}/${CHAT_MAX_BODY}` : wt('chat.composerHint')}
           </span>
           <button
             type="button"
             className="w-btn w-btn-primary w-btn-sm ml-auto h-8 gap-1.5 px-3"
             disabled={editing ? false : !canSend || recording}
             onClick={submit}
-            aria-label={editing ? 'Save edit' : 'Send message'}
+            aria-label={editing ? wt('chat.saveEdit') : wt('chat.sendMessage')}
             data-testid="chat-send"
           >
             {uploading ? <Spinner size={12} /> : <SendHorizontal size={14} />}
-            <span className="max-sm:hidden">{editing ? 'Save' : 'Send'}</span>
+            <span className="max-sm:hidden">{editing ? wt('common.save') : wt('ai.send')}</span>
           </button>
         </div>
       </div>

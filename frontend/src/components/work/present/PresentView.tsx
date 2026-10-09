@@ -19,10 +19,16 @@ import { cn } from '@/lib/utils';
 import { workError, type ProjectConfig } from '@/lib/work-api';
 import { fmtMoney, s4Api, s4Keys, type PresentPayload } from '@/lib/work-s4-api';
 import { EmptyState, PageLoading } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 type Slide = { id: string; title: string; body: ReactNode };
 
-const STAGE_LABEL: Record<string, string> = { NOT_STARTED: 'Not started', ACTIVE: 'In progress', GATE_REVIEW: 'Gate review', DONE: 'Done' };
+const STAGE_LABEL: Record<string, string> = {
+  get NOT_STARTED() { return wt('rep.rdNotStarted'); },
+  get ACTIVE() { return wt('rep.rdInProgress'); },
+  get GATE_REVIEW() { return wt('rep.rdGateReview'); },
+  get DONE() { return wt('common.done'); },
+};
 
 function Big({ label, value }: { label: string; value: ReactNode }) {
   return (
@@ -58,7 +64,7 @@ export function buildSlides(p: PresentPayload, demo: number[], projectName: stri
     id: 'title', title: projectName,
     body: (
       <div className="flex h-full flex-col justify-center">
-        <div className="text-[clamp(12px,1.3vw,18px)] font-semibold uppercase tracking-[0.16em] text-[var(--w-accent-text)]">{p.mode === 'client' ? 'Project update' : 'Steering review'}</div>
+        <div className="text-[clamp(12px,1.3vw,18px)] font-semibold uppercase tracking-[0.16em] text-[var(--w-accent-text)]">{p.mode === 'client' ? wt('rep.pvProjectUpdate') : wt('rep.pvSteering')}</div>
         <h1 className="mt-3 text-[clamp(30px,6vw,84px)] font-semibold leading-[1.02] tracking-[-0.03em] [overflow-wrap:anywhere]">{projectName}</h1>
         <p className="mt-4 text-[clamp(14px,1.8vw,24px)] text-[var(--w-text-2)]">{d.period.from} → {d.period.to}</p>
         {p.description && p.mode === 'internal' && <p className="mt-6 max-w-[60ch] text-[clamp(13px,1.4vw,19px)] leading-relaxed text-[var(--w-text-2)] [overflow-wrap:anywhere]">{p.description}</p>}
@@ -66,20 +72,20 @@ export function buildSlides(p: PresentPayload, demo: number[], projectName: stri
     ),
   });
   slides.push({
-    id: 'overview', title: 'Where we are',
+    id: 'overview', title: wt('rep.pvWhere'),
     body: (
       <div className="grid grid-cols-2 gap-[clamp(8px,1.5vw,20px)] lg:grid-cols-4">
-        <Big label="Completed" value={d.counts.completed} />
-        <Big label="In progress" value={d.counts.inProgress} />
-        <Big label="Overall progress" value={d.overallPercent === null ? '—' : `${d.overallPercent}%`} />
-        <Big label={p.mode === 'client' ? 'Waiting on you' : 'Waiting on client'} value={d.waitingOnClient.length} />
-        {d.currentStage && <div className="col-span-2 text-[clamp(15px,1.8vw,26px)] lg:col-span-4">Current stage: <b>{d.currentStage.n}. {d.currentStage.name}</b> <span className="text-[var(--w-text-3)]">({d.currentStage.percent}%)</span></div>}
+        <Big label={wt('rep.completed')} value={d.counts.completed} />
+        <Big label={wt('rep.rdInProgress')} value={d.counts.inProgress} />
+        <Big label={wt('rep.rdOverall')} value={d.overallPercent === null ? '—' : `${d.overallPercent}%`} />
+        <Big label={p.mode === 'client' ? wt('rep.rdWaitingYou') : wt('rep.rdWaitingClient')} value={d.waitingOnClient.length} />
+        {d.currentStage && <div className="col-span-2 text-[clamp(15px,1.8vw,26px)] lg:col-span-4">{wt('rep.pvCurStage')} <b>{d.currentStage.n}. {d.currentStage.name}</b> <span className="text-[var(--w-text-3)]">({d.currentStage.percent}%)</span></div>}
       </div>
     ),
   });
   if (d.stages?.length) {
     slides.push({
-      id: 'stages', title: 'Stages',
+      id: 'stages', title: wt('rep.rdStages'),
       body: (
         <ol className="grid gap-x-10 gap-y-[clamp(6px,0.9vw,12px)] md:grid-cols-2">
           {d.stages.map((s) => (
@@ -96,15 +102,15 @@ export function buildSlides(p: PresentPayload, demo: number[], projectName: stri
     });
   }
   const ms = [
-    ...d.upcoming.versions.map((v) => ({ title: v.name, note: `${v.releaseDate ?? 'no date'} · ${v.done}/${v.items} done` })),
-    ...(d.upcoming.payments ?? []).map((m) => ({ title: `Payment: ${m.name}`, note: `${fmtMoney(m.amount, d.currency)}${m.dueDate ? ` · due ${m.dueDate}` : ''} · ${m.status.toLowerCase()}` })),
+    ...d.upcoming.versions.map((v) => ({ title: v.name, note: wt('rep.pvNoteVer', { d: v.releaseDate ?? wt('rep.pvNoDate'), a: v.done, b: v.items }) })),
+    ...(d.upcoming.payments ?? []).map((m) => ({ title: wt('rep.pvPayment', { n: m.name }), note: `${fmtMoney(m.amount, d.currency)}${m.dueDate ? wt('rep.rdDueSp', { d: m.dueDate }) : ''} · ${m.status.toLowerCase()}` })),
   ];
-  slides.push({ id: 'milestones', title: 'Milestones', body: <Lines items={ms} empty="No upcoming milestones." /> });
+  slides.push({ id: 'milestones', title: wt('rep.pvMilestones'), body: <Lines items={ms} empty={wt('rep.pvNoMs')} /> });
   const chosen = p.demoCandidates.filter((c) => demo.includes(c.number));
   for (let i = 0; i < chosen.length; i += 4) {
     const page = chosen.slice(i, i + 4);
     slides.push({
-      id: `demo-${i}`, title: chosen.length > 4 ? `Demo (${i / 4 + 1}/${Math.ceil(chosen.length / 4)})` : 'Demo',
+      id: `demo-${i}`, title: chosen.length > 4 ? `${wt('rep.pvDemo')} (${i / 4 + 1}/${Math.ceil(chosen.length / 4)})` : wt('rep.pvDemo'),
       body: (
         <div className="grid gap-[clamp(8px,1.4vw,18px)] md:grid-cols-2">
           {page.map((c) => (
@@ -119,28 +125,28 @@ export function buildSlides(p: PresentPayload, demo: number[], projectName: stri
     });
   }
   const risks = p.mode === 'internal' && d.internal?.raid
-    ? d.internal.raid.top.map((r) => ({ key: r.key, title: r.title, note: [r.score ? `score ${r.score}` : null, r.owner].filter(Boolean).join(' · ') }))
+    ? d.internal.raid.top.map((r) => ({ key: r.key, title: r.title, note: [r.score ? wt('rep.pvScore', { n: r.score }) : null, r.owner].filter(Boolean).join(' · ') }))
     : (d.risks ?? []).map((r) => ({ key: r.key, title: r.title, note: [r.level?.toLowerCase(), r.mitigation].filter(Boolean).join(' — ') }));
-  if (risks.length || p.mode === 'internal') slides.push({ id: 'risks', title: 'Risks', body: <Lines items={risks} empty="No open risks to report." /> });
-  if (d.changes?.length) slides.push({ id: 'changes', title: 'Approved changes', body: <Lines items={d.changes.map((c) => ({ key: `CR-${c.number}`, title: c.title, note: [c.scheduleDays ? `${c.scheduleDays > 0 ? '+' : ''}${c.scheduleDays} days` : null, c.costAmount ? fmtMoney(c.costAmount, c.costCurrency) : null].filter(Boolean).join(' · ') }))} empty="" /> });
+  if (risks.length || p.mode === 'internal') slides.push({ id: 'risks', title: wt('rep.rdRisks'), body: <Lines items={risks} empty={wt('rep.pvNoRisks')} /> });
+  if (d.changes?.length) slides.push({ id: 'changes', title: wt('rep.rdApprovedChanges'), body: <Lines items={d.changes.map((c) => ({ key: `CR-${c.number}`, title: c.title, note: [c.scheduleDays ? wt('rep.pvDays', { s: c.scheduleDays > 0 ? '+' : '', count: c.scheduleDays }) : null, c.costAmount ? fmtMoney(c.costAmount, c.costCurrency) : null].filter(Boolean).join(' · ') }))} empty="" /> });
   const f = d.internal?.finance;
   if (p.mode === 'internal' && p.financeIncluded && f) {
     slides.push({
-      id: 'finance', title: 'Finance',
+      id: 'finance', title: wt('rep.rdFinance'),
       body: (
         <div className="grid grid-cols-2 gap-[clamp(8px,1.5vw,20px)] lg:grid-cols-4">
-          <Big label="Budget" value={fmtMoney(f.bac, f.currency)} />
-          <Big label="Actual" value={fmtMoney(f.actual, f.currency)} />
-          <Big label="Burn / week" value={fmtMoney(f.burnRatePerWeek, f.currency)} />
-          <Big label="Forecast (EAC)" value={fmtMoney(f.eac, f.currency)} />
-          <p className="col-span-2 text-[clamp(13px,1.4vw,20px)] text-[var(--w-text-2)] lg:col-span-4">{f.percentUsed !== null ? `${f.percentUsed}% of the budget used. ` : ''}Payments due {fmtMoney(f.payments.due, f.currency)}, paid {fmtMoney(f.payments.paid, f.currency)}.{f.alerts.length ? ` Alerts: ${f.alerts.join(', ')}.` : ''}</p>
+          <Big label={wt('rep.rdBudget')} value={fmtMoney(f.bac, f.currency)} />
+          <Big label={wt('rep.rdActual')} value={fmtMoney(f.actual, f.currency)} />
+          <Big label={wt('rep.rdBurn')} value={fmtMoney(f.burnRatePerWeek, f.currency)} />
+          <Big label={wt('rep.rdForecast')} value={fmtMoney(f.eac, f.currency)} />
+          <p className="col-span-2 text-[clamp(13px,1.4vw,20px)] text-[var(--w-text-2)] lg:col-span-4">{wt('rep.pvFinLine', { u: f.percentUsed !== null ? wt('rep.pvUsed', { n: f.percentUsed }) : '', a: fmtMoney(f.payments.due, f.currency), b: fmtMoney(f.payments.paid, f.currency), al: f.alerts.length ? wt('rep.pvAlerts', { s: f.alerts.join(', ') }) : '' })}</p>
         </div>
       ),
     });
   }
   slides.push({
-    id: 'next', title: 'Next steps',
-    body: <Lines items={[...d.waitingOnClient.map((w) => ({ title: `${w.kind === 'UAT' ? 'UAT sign-off' : 'Approval'}: ${w.title}`, note: p.mode === 'client' ? 'waiting on you' : 'waiting on the client' })), ...d.nextSteps]} empty="To be agreed together." />,
+    id: 'next', title: wt('rep.rdNextSteps'),
+    body: <Lines items={[...d.waitingOnClient.map((w) => ({ title: `${w.kind === 'UAT' ? wt('rep.rdUatSignoff') : wt('rep.rdApproval')}: ${w.title}`, note: p.mode === 'client' ? wt('rep.pvWaitYou') : wt('rep.pvWaitClient') })), ...d.nextSteps]} empty={wt('rep.pvAgreed')} />,
   });
   return slides;
 }
@@ -183,7 +189,7 @@ export default function PresentView({ config }: { config: ProjectConfig }) {
   }, [playing, go, slides.length, toggleFull]);
 
   if (q.isLoading) return <PageLoading />;
-  if (!q.data) return <EmptyState title="Could not prepare the presentation" body={workError(q.error)} />;
+  if (!q.data) return <EmptyState title={wt('rep.pvPrepFailed')} body={workError(q.error)} />;
   const p = q.data;
 
   if (!playing) {
@@ -191,28 +197,28 @@ export default function PresentView({ config }: { config: ProjectConfig }) {
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         <div className="mx-auto w-full max-w-[860px] space-y-4 px-4 py-6">
           <div>
-            <div className="w-eyebrow">Present mode</div>
+            <div className="w-eyebrow">{wt('rep.pvMode')}</div>
             <h1 className="mt-1 text-[22px] font-semibold tracking-[-0.02em]">{config.name}</h1>
-            <p className="mt-1 text-[13px] text-[var(--w-text-2)]">Full-screen slides from live project data: overview, stages, milestones, demo items, risks, changes{p.financeIncluded ? ', finance' : ''} and next steps. Keys: ← → to move, F for full screen, Esc to leave.</p>
+            <p className="mt-1 text-[13px] text-[var(--w-text-2)]">{wt('rep.pvIntro', { f: p.financeIncluded ? wt('rep.pvFinance') : '' })}</p>
           </div>
           <div className="w-card p-4">
-            <h2 className="w-section-title mb-2">Audience</h2>
-            <div className="w-seg" role="group" aria-label="Audience">
-              <button type="button" aria-pressed={mode === 'internal'} onClick={() => setMode('internal')} data-testid="present-internal">Internal</button>
-              <button type="button" aria-pressed={mode === 'client'} onClick={() => setMode('client')} data-testid="present-client">Client-safe</button>
+            <h2 className="w-section-title mb-2">{wt('rep.audience')}</h2>
+            <div className="w-seg" role="group" aria-label={wt('rep.audience')}>
+              <button type="button" aria-pressed={mode === 'internal'} onClick={() => setMode('internal')} data-testid="present-internal">{wt('docs.internalTag')}</button>
+              <button type="button" aria-pressed={mode === 'client'} onClick={() => setMode('client')} data-testid="present-client">{wt('rep.pvClientSafe')}</button>
             </div>
             <p className="mt-2 flex items-start gap-1.5 text-[12.5px] text-[var(--w-text-2)]">
               <ShieldCheck size={14} className="mt-0.5 shrink-0 text-[var(--w-green)]" />
-              {mode === 'client' ? 'Only shared data: shared issues, stages, shared milestones and payments, approved shared changes and risks marked for client reports. No internal names, hours or costs.' : `Everything the team sees.${config.modules?.finance ? (p.financeIncluded ? ' Finance is included (you can see costs).' : ' Finance is hidden — only project admins see it.') : ''}`}
+              {mode === 'client' ? wt('rep.pvClientOnly') : `${wt('rep.pvEverything')}${config.modules?.finance ? (p.financeIncluded ? wt('rep.pvFinIncl') : wt('rep.pvFinHidden')) : ''}`}
             </p>
           </div>
           <div className="w-card p-4">
             <div className="mb-2 flex flex-wrap items-center gap-2">
-              <h2 className="w-section-title">Demo items</h2>
-              <span className="text-[12px] text-[var(--w-text-3)]">Finished in the last two weeks{mode === 'client' ? ' and shared with the client' : ''}. Pick what you will show.</span>
-              {p.demoCandidates.length > 0 && <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => setDemo(demo.length ? [] : p.demoCandidates.slice(0, 8).map((c) => c.number))}>{demo.length ? 'Clear' : 'Pick first 8'}</button>}
+              <h2 className="w-section-title">{wt('rep.pvDemoItems')}</h2>
+              <span className="text-[12px] text-[var(--w-text-3)]">{wt('rep.pvFinished', { c: mode === 'client' ? wt('rep.pvSharedClient') : '' })}</span>
+              {p.demoCandidates.length > 0 && <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => setDemo(demo.length ? [] : p.demoCandidates.slice(0, 8).map((c) => c.number))}>{demo.length ? wt('common.clear') : wt('rep.pvPick8')}</button>}
             </div>
-            {!p.demoCandidates.length ? <p className="text-[13px] text-[var(--w-text-3)]">Nothing finished in this period.</p> : (
+            {!p.demoCandidates.length ? <p className="text-[13px] text-[var(--w-text-3)]">{wt('rep.pvNothingFinished')}</p> : (
               <ul className="max-h-[320px] space-y-0.5 overflow-y-auto" data-testid="demo-list">
                 {p.demoCandidates.map((c) => (
                   <li key={c.number}>
@@ -227,10 +233,10 @@ export default function PresentView({ config }: { config: ProjectConfig }) {
             )}
           </div>
           <div className="flex flex-wrap gap-2">
-            <button type="button" className="w-btn w-btn-primary" onClick={() => { setI(0); setPlaying(true); }} data-testid="present-start"><Play size={14} />Start presenting ({slides.length} slides)</button>
-            <Link href={`/work/${config.workspace.slug}/${config.key}/reports?tab=steering`} className="w-btn"><ArrowLeft size={14} />Back to reports</Link>
+            <button type="button" className="w-btn w-btn-primary" onClick={() => { setI(0); setPlaying(true); }} data-testid="present-start"><Play size={14} />{wt('rep.pvStart', { count: slides.length })}</button>
+            <Link href={`/work/${config.workspace.slug}/${config.key}/reports?tab=steering`} className="w-btn"><ArrowLeft size={14} />{wt('rep.pvBack')}</Link>
           </div>
-          <p className="text-[12px] text-[var(--w-text-3)]">PowerPoint export is not available — use Reports → Print / PDF for a document.</p>
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('rep.pvNoPpt')}</p>
         </div>
       </div>
     );
@@ -238,12 +244,12 @@ export default function PresentView({ config }: { config: ProjectConfig }) {
 
   const s = slides[i];
   return (
-    <div ref={stage} className="fixed inset-0 z-[80] flex flex-col bg-[var(--w-panel)] text-[var(--w-text)]" role="region" aria-roledescription="presentation" aria-label={`${config.name} presentation`} data-testid="present-stage">
+    <div ref={stage} className="fixed inset-0 z-[80] flex flex-col bg-[var(--w-panel)] text-[var(--w-text)]" role="region" aria-roledescription="presentation" aria-label={wt('rep.pvAria', { n: config.name })} data-testid="present-stage">
       <div className="flex shrink-0 items-center gap-2 px-[clamp(12px,3vw,40px)] pt-[clamp(10px,2vw,24px)]">
-        <span className="min-w-0 truncate text-[clamp(11px,1vw,14px)] font-medium text-[var(--w-text-3)]">{config.name} · {p.mode === 'client' ? 'Client-safe' : 'Internal'}</span>
+        <span className="min-w-0 truncate text-[clamp(11px,1vw,14px)] font-medium text-[var(--w-text-3)]">{config.name} · {p.mode === 'client' ? wt('rep.pvClientSafe') : wt('docs.internalTag')}</span>
         <span className="ml-auto text-[12px] tabular-nums text-[var(--w-text-3)]" data-testid="slide-counter">{i + 1} / {slides.length}</span>
-        <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" aria-label="Full screen (F)" onClick={toggleFull}><Maximize2 size={14} /></button>
-        <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" aria-label="Leave (Esc)" onClick={() => { if (document.fullscreenElement) void document.exitFullscreen().catch(() => {}); setPlaying(false); }}><X size={15} /></button>
+        <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" aria-label={wt('rep.pvFull')} onClick={toggleFull}><Maximize2 size={14} /></button>
+        <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" aria-label={wt('rep.pvLeave')} onClick={() => { if (document.fullscreenElement) void document.exitFullscreen().catch(() => {}); setPlaying(false); }}><X size={15} /></button>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto px-[clamp(16px,6vw,96px)] py-[clamp(12px,3vw,40px)]" key={s.id}>
         {s.id !== 'title' && <h2 className="mb-[clamp(14px,2.4vw,36px)] text-[clamp(22px,3.4vw,52px)] font-semibold tracking-[-0.025em]" data-testid="slide-title">{s.title}</h2>}
@@ -251,11 +257,11 @@ export default function PresentView({ config }: { config: ProjectConfig }) {
         <div className="h-[calc(100%-1px)]">{s.body}</div>
       </div>
       <div className="flex shrink-0 items-center gap-3 px-[clamp(12px,3vw,40px)] pb-[clamp(10px,2vw,24px)]">
-        <button type="button" className="w-btn w-btn-sm" aria-label="Previous slide" disabled={i === 0} onClick={() => go(-1)}><ChevronLeft size={15} /></button>
+        <button type="button" className="w-btn w-btn-sm" aria-label={wt('rep.pvPrev')} disabled={i === 0} onClick={() => go(-1)}><ChevronLeft size={15} /></button>
         <div className="flex min-w-0 flex-1 justify-center gap-1.5" aria-hidden="true">
           {slides.map((x, n) => <span key={x.id} className={cn('h-1.5 rounded-full transition-all', n === i ? 'w-5 bg-[var(--w-accent)]' : 'w-1.5 bg-[var(--w-border-strong)]')} />)}
         </div>
-        <button type="button" className="w-btn w-btn-sm" aria-label="Next slide" disabled={i === slides.length - 1} onClick={() => go(1)} data-testid="slide-next"><ChevronRight size={15} /></button>
+        <button type="button" className="w-btn w-btn-sm" aria-label={wt('rep.pvNext')} disabled={i === slides.length - 1} onClick={() => go(1)} data-testid="slide-next"><ChevronRight size={15} /></button>
       </div>
     </div>
   );

@@ -428,6 +428,12 @@ model User {
   workPeerReceived       WorkPeerReview[]        @relation("WorkPeerReviewee")
   workGitIdentities      WorkGitIdentity[]       @relation("WorkGitIdentityUser")
   // ── hết CTW Đóng góp ──
+  // ── CTW đợt 5 ── lớp học + rubric của giảng viên
+  workClassesOwned       WorkClass[]             @relation("WorkClassOwner")
+  workClassesTaught      WorkClass[]             @relation("WorkClassTeacher")
+  workClassSeats         WorkClassStudent[]      @relation("WorkClassStudentUser")
+  workRubrics            WorkRubric[]            @relation("WorkRubricOwner")
+  // ── hết CTW đợt 5 ──
   workAttachments        WorkAttachment[]        @relation("WorkAttachmentUploader")
   workHistory            WorkHistory[]           @relation("WorkHistoryActor")
   workWatching           WorkWatcher[]           @relation("WorkWatcherUser")
@@ -10282,6 +10288,17 @@ model WorkProject {
   peerRounds        WorkPeerRound[]
   /// CTW Diagram: sơ đồ của dự án (Mermaid/Excalidraw) + phiên bản + bình luận.
   diagrams          WorkDiagram[]
+  // ── CTW đợt 4b ── SWR302 (Wiegers): feature FE-n, bảng ưu tiên, glossary, data dictionary, cấu hình
+  swrFeatures       WorkFeature[]
+  swrPriorityRows   WorkPriorityRow[]
+  swrGlossary       WorkGlossaryTerm[]
+  swrDataElements   WorkDataElement[]
+  swrSettings       WorkSwrSettings?
+  requirementInfos  WorkRequirementInfo[]
+  // ── hết CTW đợt 4b ──
+  /// CTW đợt 5: nhóm của lớp học sinh ra dự án này (tối đa một) + điểm rubric theo mốc.
+  classGroup        WorkClassGroup?        @relation("WorkClassGroupProject")
+  grades            WorkGrade[]            @relation("WorkGradeProject")
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
   clientRequest     ProjectRequest?
 
@@ -10456,55 +10473,57 @@ model WorkIssue {
   updatedAt            DateTime  @updatedAt @map("updated_at")
   deletedAt            DateTime? @map("deleted_at")
 
-  project        WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project         WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
   // NoAction chứ KHÔNG Restrict: Postgres kiểm RESTRICT ngay lập tức, nên xoá
   // dự án (cascade xuống loại thẻ, trạng thái VÀ thẻ) bị chặn khi loại thẻ bị
   // xoá trước thẻ. NO ACTION kiểm ở cuối câu lệnh — xoá dây chuyền chạy được,
   // còn xoá riêng một trạng thái đang có thẻ vẫn bị chặn. Bắt được bằng test DB.
-  type           WorkIssueType           @relation(fields: [typeId], references: [id], onDelete: NoAction)
-  status         WorkStatus              @relation(fields: [statusId], references: [id], onDelete: NoAction)
-  parent         WorkIssue?              @relation("WorkIssueParent", fields: [parentId], references: [id], onDelete: SetNull)
-  children       WorkIssue[]             @relation("WorkIssueParent")
-  sprint         WorkSprint?             @relation(fields: [sprintId], references: [id], onDelete: SetNull)
-  fixVersion     WorkVersion?            @relation(fields: [fixVersionId], references: [id], onDelete: SetNull)
-  team           WorkTeam?               @relation(fields: [teamId], references: [id], onDelete: SetNull)
-  stage          WorkStage?              @relation("WorkIssueStage", fields: [stageId], references: [id], onDelete: SetNull)
-  gateOf         WorkStage[]             @relation("WorkStageGateIssue")
-  approvals      WorkApproval[]
-  handoffs       WorkHandoff[]
-  aliases        WorkIssueAlias[]
-  pageLinks      WorkPageIssueLink[]
+  type            WorkIssueType           @relation(fields: [typeId], references: [id], onDelete: NoAction)
+  status          WorkStatus              @relation(fields: [statusId], references: [id], onDelete: NoAction)
+  parent          WorkIssue?              @relation("WorkIssueParent", fields: [parentId], references: [id], onDelete: SetNull)
+  children        WorkIssue[]             @relation("WorkIssueParent")
+  sprint          WorkSprint?             @relation(fields: [sprintId], references: [id], onDelete: SetNull)
+  fixVersion      WorkVersion?            @relation(fields: [fixVersionId], references: [id], onDelete: SetNull)
+  team            WorkTeam?               @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  stage           WorkStage?              @relation("WorkIssueStage", fields: [stageId], references: [id], onDelete: SetNull)
+  gateOf          WorkStage[]             @relation("WorkStageGateIssue")
+  approvals       WorkApproval[]
+  handoffs        WorkHandoff[]
+  aliases         WorkIssueAlias[]
+  pageLinks       WorkPageIssueLink[]
   /// Đợt S3b: CR sinh từ thẻ này · liên kết CR/RAID · việc từ biên bản họp.
-  crSourceOf     WorkChangeRequest[]     @relation("WorkCrSourceIssue")
-  crLinks        WorkChangeRequestLink[]
-  raidLinks      WorkRaidLink[]
-  meetingActions WorkMeetingAction[]
+  crSourceOf      WorkChangeRequest[]     @relation("WorkCrSourceIssue")
+  crLinks         WorkChangeRequestLink[]
+  raidLinks       WorkRaidLink[]
+  meetingActions  WorkMeetingAction[]
   /// Đợt S5a: phần service desk của thẻ (loại yêu cầu, P1–P4, SLA, CSAT) — chỉ thẻ đi qua service desk.
-  deskTicket     WorkDeskTicket?
-  assignee       User?                   @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
-  reporter       User?                   @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
-  linksOut       WorkIssueLink[]         @relation("WorkIssueLinkFrom")
-  linksIn        WorkIssueLink[]         @relation("WorkIssueLinkTo")
-  labels         WorkIssueLabel[]
-  components     WorkIssueComponent[]
-  comments       WorkComment[]
-  attachments    WorkAttachment[]
-  history        WorkHistory[]
-  watchers       WorkWatcher[]
-  testCase       WorkTestCase?
-  defectOf       WorkTestRunDefect[]
-  customValues   WorkCustomValue[]
-  worklogs       WorkWorklog[]
-  devActivity    WorkDevActivity[]
+  deskTicket      WorkDeskTicket?
+  assignee        User?                   @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  reporter        User?                   @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
+  linksOut        WorkIssueLink[]         @relation("WorkIssueLinkFrom")
+  linksIn         WorkIssueLink[]         @relation("WorkIssueLinkTo")
+  labels          WorkIssueLabel[]
+  components      WorkIssueComponent[]
+  comments        WorkComment[]
+  attachments     WorkAttachment[]
+  history         WorkHistory[]
+  watchers        WorkWatcher[]
+  testCase        WorkTestCase?
+  defectOf        WorkTestRunDefect[]
+  customValues    WorkCustomValue[]
+  worklogs        WorkWorklog[]
+  devActivity     WorkDevActivity[]
   /// Resources (06/10/2026): "Web links" kiểu Jira trên chi tiết thẻ.
-  webLinks       WorkIssueWebLink[]
+  webLinks        WorkIssueWebLink[]
   /// CTW đợt 3B (A3): thuộc tính WBS/ước lượng.
-  wbsItem        WorkWbsItem?
+  wbsItem         WorkWbsItem?
   /// CTW đợt 4: UC/màn/Non-UI đặc tả thẻ này (RTM) + phần defect log của thẻ Bug.
-  useCases       WorkUseCase[]           @relation("WorkUseCaseIssue")
-  srsScreens     WorkSrsScreen[]         @relation("WorkSrsScreenIssue")
-  srsFunctions   WorkSrsFunction[]       @relation("WorkSrsFunctionIssue")
-  defectInfo     WorkDefectInfo?         @relation("WorkDefectInfoIssue")
+  useCases        WorkUseCase[]           @relation("WorkUseCaseIssue")
+  srsScreens      WorkSrsScreen[]         @relation("WorkSrsScreenIssue")
+  srsFunctions    WorkSrsFunction[]       @relation("WorkSrsFunctionIssue")
+  defectInfo      WorkDefectInfo?         @relation("WorkDefectInfoIssue")
+  // ── CTW đợt 4b ── phân loại + thuộc tính + vòng đời của thẻ REQUIREMENT (Wiegers)
+  requirementInfo WorkRequirementInfo?    @relation("WorkRequirementInfoIssue")
 
   @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
   @@index([projectId, statusId, rank], name: "idx_work_issue_board")
@@ -11343,8 +11362,10 @@ model WorkAutomationRule {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  project WorkProject         @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  logs    WorkAutomationLog[]
+  project       WorkProject         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  logs          WorkAutomationLog[]
+  /// CTW đợt 5: lần tạo thẻ của việc định kỳ (trigger scheduled.recurring) — khoá chống trùng.
+  recurringRuns WorkRecurringRun[]
 
   @@index([projectId, trigger], name: "idx_work_automation_trigger")
   @@map("work_automation_rules")
@@ -13911,3 +13932,325 @@ model WorkDiagramComment {
 }
 
 // ── hết CTW Diagram ──
+
+// ── CTW đợt 5 ── (10/10/2026) GIẢNG VIÊN & LỚP HỌC: lớp (mã lớp/link mời, danh sách MSSV, nhóm ⇒ dự án theo mẫu môn),
+// rubric chấm của giảng viên + điểm theo mốc (nhóm / từng thành viên, công bố mới thấy, lịch sử), và việc định kỳ
+// (luật tự động trigger `scheduled.recurring` ⇒ chống tạo trùng bằng `dedup_key`). Mỗi nhóm ở KHÔNG GIAN RIÊNG của nhóm
+// (giảng viên vào với vai GUEST + TEACHER dự án) ⇒ nhóm khác không thấy nhau; hub giảng viên đọc xuyên không gian.
+
+/// Một lớp học phần (vd SWP391 · SE1840 · FA26). joinCode = mã lớp người dùng gõ (8 ký tự, không lẫn 0/O/1/I) — lưu
+/// trần vì giảng viên cần xem lại; đổi mã = tạo mã mới (mã cũ hết hiệu lực ngay). teacherEmail: lớp do trưởng nhóm tạo
+/// ⇒ giảng viên nhận vai khi tự mở link bằng đúng email này.
+model WorkClass {
+  id            Int       @id @default(autoincrement())
+  name          String    @db.VarChar(120)
+  /// SWP391 | SWT301 | SWR302 | SEP490 | ISP490 | OTHER — quyết định mẫu dự án của nhóm.
+  subject       String    @db.VarChar(16)
+  classCode     String    @map("class_code") @db.VarChar(32)
+  term          String    @db.VarChar(16)
+  ownerId       Int       @map("owner_id")
+  teacherId     Int?      @map("teacher_id")
+  teacherEmail  String?   @map("teacher_email") @db.VarChar(100)
+  joinCode      String    @unique(map: "uk_work_class_join_code") @map("join_code") @db.VarChar(16)
+  joinExpiresAt DateTime? @map("join_expires_at")
+  joinOpen      Boolean   @default(true) @map("join_open")
+  maxGroupSize  Int       @default(6) @map("max_group_size")
+  timezone      String    @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
+  week1Start    DateTime? @map("week1_start") @db.Date
+  archivedAt    DateTime? @map("archived_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  owner    User               @relation("WorkClassOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  teacher  User?              @relation("WorkClassTeacher", fields: [teacherId], references: [id], onDelete: SetNull)
+  groups   WorkClassGroup[]
+  students WorkClassStudent[]
+
+  @@index([ownerId], map: "idx_work_class_owner")
+  @@index([teacherId], map: "idx_work_class_teacher")
+  @@map("work_classes")
+}
+
+/// Một nhóm trong lớp ⇒ đúng một dự án (ở không gian riêng của nhóm). projectId null = dự án đã bị xoá.
+model WorkClassGroup {
+  id        Int      @id @default(autoincrement())
+  classId   Int      @map("class_id")
+  number    Int
+  name      String   @db.VarChar(80)
+  projectId Int?     @unique(map: "uk_work_class_group_project") @map("project_id")
+  leaderId  Int?     @map("leader_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  class    WorkClass          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  project  WorkProject?       @relation("WorkClassGroupProject", fields: [projectId], references: [id], onDelete: SetNull)
+  students WorkClassStudent[]
+
+  @@unique([classId, number], map: "uk_work_class_group_number")
+  @@map("work_class_groups")
+}
+
+/// Một sinh viên của lớp: dòng nhập từ danh sách (ROSTER: MSSV/họ tên/email, chưa có tài khoản cũng được) hoặc tự vào
+/// bằng mã (JOIN). Vào lớp bằng tài khoản có email trùng dòng ROSTER ⇒ gắn vào đúng dòng đó (không sinh dòng mới).
+model WorkClassStudent {
+  id          Int       @id @default(autoincrement())
+  classId     Int       @map("class_id")
+  userId      Int?      @map("user_id")
+  email       String?   @db.VarChar(100)
+  studentCode String?   @map("student_code") @db.VarChar(20)
+  fullName    String?   @map("full_name") @db.VarChar(120)
+  groupId     Int?      @map("group_id")
+  source      String    @default("ROSTER") @db.VarChar(8)
+  invitedAt   DateTime? @map("invited_at")
+  inviteCount Int       @default(0) @map("invite_count")
+  joinedAt    DateTime? @map("joined_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  class WorkClass       @relation(fields: [classId], references: [id], onDelete: Cascade)
+  user  User?           @relation("WorkClassStudentUser", fields: [userId], references: [id], onDelete: SetNull)
+  group WorkClassGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+
+  @@unique([classId, email], map: "uk_work_class_student_email")
+  @@unique([classId, userId], map: "uk_work_class_student_user")
+  @@unique([classId, studentCode], map: "uk_work_class_student_code")
+  @@index([userId], map: "idx_work_class_student_user")
+  @@map("work_class_students")
+}
+
+/// Rubric chấm của MỘT giảng viên (dùng lại cho mọi nhóm). criteria = [{ key, name, weight, description, levels: [{ score,
+/// label, description }] }] — trọng số cộng 100. scaleMax = thang điểm (10).
+model WorkRubric {
+  id          Int       @id @default(autoincrement())
+  ownerId     Int       @map("owner_id")
+  name        String    @db.VarChar(120)
+  subject     String?   @db.VarChar(16)
+  description String?   @db.Text
+  criteria    Json      @default("[]")
+  scaleMax    Float     @default(10) @map("scale_max")
+  templateKey String?   @map("template_key") @db.VarChar(32)
+  archivedAt  DateTime? @map("archived_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  owner  User        @relation("WorkRubricOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  grades WorkGrade[]
+
+  @@index([ownerId], map: "idx_work_rubric_owner")
+  @@map("work_rubrics")
+}
+
+/// Điểm theo MỐC (milestone = "SWP-M1", "Report 3"…; stageId gắn giai đoạn nếu có, không FK) cho cả nhóm (subjectKey
+/// 'TEAM') hoặc một thành viên ('U<userId>'). Sinh viên chỉ thấy khi publishedAt khác null. graderId / subjectUserId
+/// không FK — như nhật ký, người rời dự án thì điểm đã chấm vẫn đứng.
+model WorkGrade {
+  id            Int       @id @default(autoincrement())
+  projectId     Int       @map("project_id")
+  rubricId      Int       @map("rubric_id")
+  milestone     String    @db.VarChar(80)
+  stageId       Int?      @map("stage_id")
+  subjectKey    String    @map("subject_key") @db.VarChar(24)
+  subjectUserId Int?      @map("subject_user_id")
+  scores        Json      @default("{}")
+  notes         Json      @default("{}")
+  comment       String?   @db.Text
+  total         Float?
+  graderId      Int       @map("grader_id")
+  publishedAt   DateTime? @map("published_at")
+  version       Int       @default(1)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject        @relation("WorkGradeProject", fields: [projectId], references: [id], onDelete: Cascade)
+  rubric  WorkRubric         @relation(fields: [rubricId], references: [id], onDelete: Restrict)
+  history WorkGradeHistory[]
+
+  @@unique([projectId, rubricId, milestone, subjectKey], map: "uk_work_grade_subject")
+  @@map("work_grades")
+}
+
+/// Lịch sử điểm: mỗi lần lưu / công bố / thu hồi một dòng (bản chụp điểm + nhận xét lúc đó).
+model WorkGradeHistory {
+  id          Int       @id @default(autoincrement())
+  gradeId     Int       @map("grade_id")
+  action      String    @db.VarChar(12)
+  scores      Json      @default("{}")
+  total       Float?
+  comment     String?   @db.Text
+  publishedAt DateTime? @map("published_at")
+  actorId     Int       @map("actor_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  grade WorkGrade @relation(fields: [gradeId], references: [id], onDelete: Cascade)
+
+  @@index([gradeId, createdAt], map: "idx_work_grade_history")
+  @@map("work_grade_history")
+}
+
+/// Việc định kỳ (C12): mỗi lần luật `scheduled.recurring` tạo thẻ ghi một dòng với dedup_key = "rec:<ruleId>:<ngày>"
+/// (UNIQUE) — hai tiến trình cùng chạy / chạy lại sau sự cố cũng không bao giờ tạo trùng thẻ cho cùng một lần lặp.
+model WorkRecurringRun {
+  id         Int      @id @default(autoincrement())
+  ruleId     Int      @map("rule_id")
+  dedupKey   String   @unique(map: "uk_work_recurring_dedup") @map("dedup_key") @db.VarChar(120)
+  occurrence String   @db.VarChar(10)
+  issueId    Int?     @map("issue_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  rule WorkAutomationRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([ruleId, createdAt], map: "idx_work_recurring_run_rule")
+  @@map("work_recurring_runs")
+}
+
+// ── hết CTW đợt 5 ──
+
+// ── CTW đợt 4b ── (10/10/2026) SWR302 — HỒ SƠ WIEGERS + DỮ LIỆU & SÁU LIÊN KẾT (rà soát R4/R5/R6/R12/R16/R23/R27):
+// sổ Feature FE-n (gốc của chuỗi FE → UC → FR), phân loại + thuộc tính + vòng đời của thẻ REQUIREMENT (lịch sử ghi vào
+// work_history của thẻ), bảng ưu tiên Wiegers (benefit/penalty/cost/risk + trọng số), Glossary, Data Dictionary (phần tử
+// nguyên thuỷ + cấu trúc "A + B + 1:n{C}"), cấu hình SWR của dự án (trọng số, số đếm đã khai trong Estimation Tool, danh từ
+// bỏ qua khi kiểm liên kết #4). Liên kết feature ↔ UC/thẻ đa hình (không FK tới đích, lọc khi đọc) như work_trace_links.
+
+/// R5 — một Feature (FE-<number>) của Vision & Scope §2.1. scope: IN (trong phạm vi) | OUT (Limitations & Exclusions §2.4).
+/// versionId = bản phát hành (WorkVersion) của feature — KHÔNG FK (bản phát hành bị xoá ⇒ coi như chưa xếp, lọc khi đọc).
+/// epicIssueId = epic hiện thực feature — KHÔNG FK (thẻ xoá mềm). priority: HIGH | MEDIUM | LOW.
+model WorkFeature {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  number      Int
+  name        String   @db.VarChar(160)
+  description String?  @db.Text
+  scope       String   @default("IN") @db.VarChar(4)
+  priority    String?  @db.VarChar(8)
+  versionId   Int?     @map("version_id")
+  epicIssueId Int?     @map("epic_issue_id")
+  position    Int      @default(0)
+  createdById Int?     @map("created_by_id")
+  rev         Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  project WorkProject       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  links   WorkFeatureLink[]
+
+  @@unique([projectId, number], name: "uk_work_feature_number", map: "uk_work_feature_number")
+  @@map("work_features")
+}
+
+/// FE-n ⇒ đích: UC (WorkUseCase.id) | ISSUE (WorkIssue.id — yêu cầu/story/epic). Đa hình ⇒ không FK tới đích.
+model WorkFeatureLink {
+  id        Int      @id @default(autoincrement())
+  featureId Int      @map("feature_id")
+  kind      String   @db.VarChar(8)
+  targetId  Int      @map("target_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  feature WorkFeature @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  @@unique([featureId, kind, targetId], name: "uk_work_feature_link", map: "uk_work_feature_link")
+  @@index([kind, targetId], map: "idx_work_feature_link_target")
+  @@map("work_feature_links")
+}
+
+/// R6 — phần Wiegers của một thẻ REQUIREMENT: reqType BUSINESS | USER | FUNCTIONAL | QUALITY | CONSTRAINT |
+/// EXTERNAL_INTERFACE | DATA; subtype = nhóm chất lượng (QUALITY) hoặc loại giao tiếp (EXTERNAL_INTERFACE);
+/// lifecycle PROPOSED → APPROVED → IMPLEMENTED → VERIFIED, DELETED / REJECTED; reqVersion tăng mỗi lần sửa thuộc tính.
+model WorkRequirementInfo {
+  issueId    Int      @id @map("issue_id")
+  projectId  Int      @map("project_id")
+  reqType    String   @default("FUNCTIONAL") @map("req_type") @db.VarChar(20)
+  subtype    String?  @db.VarChar(24)
+  priority   String?  @db.VarChar(8)
+  lifecycle  String   @default("PROPOSED") @db.VarChar(12)
+  source     String?  @db.VarChar(300)
+  ownerId    Int?     @map("owner_id")
+  rationale  String?  @db.Text
+  stability  String?  @db.VarChar(8)
+  reqVersion Int      @default(1) @map("req_version")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  issue   WorkIssue   @relation("WorkRequirementInfoIssue", fields: [issueId], references: [id], onDelete: Cascade)
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, reqType], map: "idx_work_requirement_info_type")
+  @@map("work_requirement_info")
+}
+
+/// R12 — một dòng của bảng ưu tiên Wiegers: đích FE (WorkFeature.id) | UC (WorkUseCase.id); 4 điểm 1–9.
+model WorkPriorityRow {
+  id         Int      @id @default(autoincrement())
+  projectId  Int      @map("project_id")
+  targetKind String   @map("target_kind") @db.VarChar(8)
+  targetId   Int      @map("target_id")
+  benefit    Int      @default(1)
+  penalty    Int      @default(1)
+  cost       Int      @default(1)
+  risk       Int      @default(1)
+  note       String?  @db.VarChar(300)
+  position   Int      @default(0)
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, targetKind, targetId], name: "uk_work_priority_row", map: "uk_work_priority_row")
+  @@map("work_priority_rows")
+}
+
+/// R16 — một thuật ngữ của Glossary (aliases = cách gọi khác cần thống nhất, vd "FC", "warehouse").
+model WorkGlossaryTerm {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  term        String   @db.VarChar(160)
+  definition  String   @db.Text
+  aliases     String[] @default([])
+  source      String?  @db.VarChar(200)
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, term], name: "uk_work_glossary_term", map: "uk_work_glossary_term")
+  @@map("work_glossary_terms")
+}
+
+/// R16 — một phần tử của Data Dictionary (mẫu Wiegers ch.13): kind PRIMITIVE (dataType/length/values) | STRUCTURE
+/// (composition "Request ID + Requester + (Vendor) + 1:10{Requested Chemical}"). isKey = định danh của cấu trúc (ERD).
+model WorkDataElement {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  name        String   @db.VarChar(120)
+  description String?  @db.Text
+  kind        String   @default("PRIMITIVE") @db.VarChar(10)
+  composition String?  @db.Text
+  dataType    String?  @map("data_type") @db.VarChar(60)
+  length      String?  @db.VarChar(20)
+  values      String?  @db.Text
+  isKey       Boolean  @default(false) @map("is_key")
+  position    Int      @default(0)
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, name], name: "uk_work_data_element", map: "uk_work_data_element")
+  @@map("work_data_elements")
+}
+
+/// Cấu hình SWR302 của dự án: trọng số bảng ưu tiên (mặc định 1/1/1/1 như sheet Template của Wiegers), số đếm đã khai
+/// trong Requirements Estimation Tool (liên kết #6), danh từ bỏ qua khi kiểm liên kết #4.
+model WorkSwrSettings {
+  projectId      Int      @id @map("project_id")
+  weightBenefit  Float    @default(1) @map("weight_benefit")
+  weightPenalty  Float    @default(1) @map("weight_penalty")
+  weightCost     Float    @default(1) @map("weight_cost")
+  weightRisk     Float    @default(1) @map("weight_risk")
+  declaredCounts Json?    @map("declared_counts")
+  ignoredNouns   String[] @default([]) @map("ignored_nouns")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("work_swr_settings")
+}
+
+// ── hết CTW đợt 4b ──

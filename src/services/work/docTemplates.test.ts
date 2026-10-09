@@ -144,3 +144,88 @@ describe('bộ mẫu FPT Capstone — đề mục theo bản gốc', () => {
     assert.equal(plainText(raci), 'RACI Chart: R~Responsible, A~Accountable, C~Consulted, I~Informed');
   });
 });
+
+/**
+ * CTW đợt 4b (R25) — BỘ MẪU "SWR302 (Wiegers)". WIEGERS_OUTLINE = đề mục đọc bằng python-docx từ bộ mẫu gốc của môn
+ * (~/Documents/Slide-Document/SWR302/Document_GuideLines/: Chapter 5 Vision and Scope Template, Chapter 8 Use Case Template,
+ * Chapter 10 Software Requirements Specification Template, Chapter 13 Guidance for Data Dictionaries, Appendix C COS Business
+ * Rules — 10/10/2026), số thứ tự BỎ (bản gốc đánh số tự động). Mẫu của CT Work phải chứa ĐỦ, ĐÚNG MỨC, ĐÚNG THỨ TỰ.
+ */
+const WIEGERS_OUTLINE: Record<string, string[]> = {
+  'swr-vision-scope': [
+    '1|Revision History', '1|Business Requirements', '2|Background', '2|Business Opportunity', '2|Business Objectives', '2|Success Metrics',
+    '2|Vision Statement', '2|Business Risks', '2|Business Assumptions and Dependencies', '1|Scope and Limitations', '2|Major Features',
+    '2|Scope of Initial Release', '2|Scope of Subsequent Releases', '2|Limitations and Exclusions', '1|Business Context',
+    '2|Stakeholder Profiles', '2|Project Priorities', '2|Deployment Considerations',
+  ],
+  'swr-use-cases': [
+    '1|Revision History', '2|Use Case ID and Name', '2|Author and Date Created', '2|Primary and Secondary Actors', '2|Trigger', '2|Description',
+    '2|Preconditions', '2|Postconditions', '2|Normal Flow', '2|Alternative Flows', '2|Exceptions', '2|Priority', '2|Frequency of Use',
+    '2|Business Rules', '2|Other Information', '2|Assumptions', '1|Use Case List', '1|Use Case Template',
+  ],
+  'swr-srs': [
+    '1|Revision History', '1|Introduction', '2|Purpose', '2|Document Conventions', '2|Project Scope', '2|References', '1|Overall Description',
+    '2|Product Perspective', '2|User Classes and Characteristics', '2|Operating Environment', '2|Design and Implementation Constraints',
+    '2|Assumptions and Dependencies', '1|System Features', '2|System Feature X', '3|Description', '3|Functional Requirements', '1|Data Requirements',
+    '2|Logical Data Model', '2|Data Dictionary', '2|Reports', '2|Data Acquisition, Integrity, Retention, and Disposal', '1|External Interface Requirements',
+    '2|User Interfaces', '2|Software Interfaces', '2|Hardware Interfaces', '2|Communications Interfaces', '1|Quality Attributes', '2|Usability',
+    '2|Performance', '2|Security', '2|Safety', '2|[Others as relevant]', '1|Internationalization and Localization Requirements', '1|Other Requirements',
+    '1|Appendix A: Glossary', '1|Appendix B: Analysis Models',
+  ],
+  'swr-business-rules': ['1|Revision History', '1|Business Rules for <Project>'],
+  'swr-data-dictionary': ['1|Revision History', '1|Data Dictionary for <Project>'],
+};
+const WKEYS = Object.keys(WIEGERS_OUTLINE);
+const unnum = (s: string) => s.replace(/^(?:\d+(?:\.\d+)*\.?)\s+/, '');
+
+describe('bộ mẫu SWR302 (Wiegers) — đề mục theo bản gốc (R25)', () => {
+  for (const key of WKEYS) {
+    it(key, async () => {
+      const t = await getTemplate(key);
+      const hs = outline(t.doc).map((h) => { const [lv, ...rest] = h.split('|'); return `${lv}|${unnum(rest.join('|'))}`; });
+      let at = 0;
+      for (const h of WIEGERS_OUTLINE[key]) {
+        const i = hs.indexOf(h, at);
+        assert.ok(i >= 0, `thiếu hoặc sai thứ tự: "${h}" (sau "${hs[at - 1] ?? '—'}")`);
+        at = i + 1;
+      }
+      assert.equal(t.doc.content?.[0]?.type, 'blockquote');
+      assert.ok(isGuideNote(t.doc.content![0]));
+      assert.ok(t.summary.startsWith('SWR302 Deliverable'), t.summary);
+      assert.match(t.title, /^SWR302 \(Wiegers\) — /);
+      assert.ok(t.sections > 0);
+      assert.ok(!t.pageTitle.startsWith('SWR302'), t.pageTitle);
+    });
+  }
+
+  it('bảng đúng cột của bản gốc: Revision History, V&S Stakeholder/Priorities, UC List + 15 hàng, BR, Data Dictionary', async () => {
+    const head = async (key: string, after: RegExp) => {
+      const blocks = (await getTemplate(key)).doc.content ?? [];
+      const i = blocks.findIndex((b) => b.type === 'heading' && after.test(unnum(plainText(b))));
+      assert.ok(i >= 0, `${key}: ${after}`);
+      const tb = blocks.slice(i + 1).find((b) => b.type === 'table')!;
+      return (tb.content?.[0]?.content ?? []).map((c) => plainText(c));
+    };
+    for (const k of WKEYS) assert.deepEqual(await head(k, /^Revision History$/), ['Name', 'Date', 'Reason For Changes', 'Version'], k);
+    assert.deepEqual(await head('swr-vision-scope', /^Stakeholder Profiles$/), ['Stakeholder', 'Major Value', 'Attitudes', 'Major Interests', 'Constraints']);
+    assert.deepEqual(await head('swr-vision-scope', /^Project Priorities$/), ['Dimension', 'Driver (state objective)', 'Constraint (state limits)', 'Degree of Freedom (state allowable range)']);
+    assert.deepEqual(await head('swr-use-cases', /^Use Case List$/), ['Primary Actor', 'Secondary actor', 'Use Case name', 'Description']);
+    assert.deepEqual(await head('swr-business-rules', /^Business Rules for /), ['ID', 'Rule Definition', 'Type of Rule', 'Static or Dynamic', 'Source']);
+    assert.deepEqual(await head('swr-data-dictionary', /^Data Dictionary for /), ['Data Element', 'Description', 'Composition or Data Type', 'Length', 'Values']);
+    assert.deepEqual(await head('swr-srs', /^Data Dictionary$/), ['Data Element', 'Description', 'Composition or Data Type', 'Length', 'Values']);
+    const blocks = (await getTemplate('swr-use-cases')).doc.content ?? [];
+    const i = blocks.findIndex((b) => b.type === 'heading' && plainText(b) === 'Use Case Template');
+    const uc = blocks.slice(i + 1).find((b) => b.type === 'table')!;
+    const { WIEGERS_UC_ROWS } = await import('./swr.js');
+    assert.deepEqual(uc.content!.map((r) => plainText(r.content![0])), [...WIEGERS_UC_ROWS]);
+    assert.deepEqual(uc.content!.slice(1, 3).map((r) => plainText(r.content![2])), ['Date Created:', 'Secondary Actors:']);
+  });
+
+  it('thư viện mẫu có nhóm "SWR302 (Wiegers)" đủ 5 mẫu; bản sao frontend/public giống hệt', async () => {
+    const list = await listTemplates();
+    assert.deepEqual(list.filter((t) => t.group === 'SWR302 (Wiegers)').map((t) => t.key).sort(), [...WKEYS].sort());
+    for (const k of WKEYS) {
+      assert.equal(fs.readFileSync(path.resolve(`frontend/public/quy-trinh/mau/${k}.md`), 'utf8'), fs.readFileSync(path.resolve(`content/quy-trinh/mau/${k}.md`), 'utf8'));
+    }
+  });
+});

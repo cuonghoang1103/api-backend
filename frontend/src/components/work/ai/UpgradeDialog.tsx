@@ -5,6 +5,7 @@
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
 import { Dialog } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 export default function UpgradeDialog({ open, onClose, limit }: { open: boolean; onClose: () => void; limit?: number | null }) {
   const n = limit && limit > 0 ? limit : null;
@@ -13,22 +14,20 @@ export default function UpgradeDialog({ open, onClose, limit }: { open: boolean;
       open={open}
       onClose={onClose}
       width={440}
-      title={<span className="inline-flex items-center gap-2"><Sparkles size={16} className="text-[var(--w-accent-text)]" />You&apos;re out of free AI requests</span>}
+      title={<span className="inline-flex items-center gap-2"><Sparkles size={16} className="text-[var(--w-accent-text)]" />{wt('ai.outOfFree')}</span>}
       footer={(
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Maybe later</button>
-          <Link href="/pro" className="w-btn w-btn-primary" onClick={onClose}>Upgrade to Pro</Link>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('ai.maybeLater')}</button>
+          <Link href="/pro" className="w-btn w-btn-primary" onClick={onClose}>{wt('ai.upgradePro')}</Link>
         </>
       )}
     >
       <div className="space-y-3 text-[13px] leading-relaxed text-[var(--w-text-2)]">
         <p>
-          Free accounts get {n ? <strong className="text-[var(--w-text)]">{n} AI request{n === 1 ? '' : 's'}</strong> : 'a few AI requests'} per day.
-          Your allowance resets tomorrow.
+          {wt('ai.freeGetN', { n: n ?? wt('ai.aFew') })} {wt('ai.resetsTomorrow')}
         </p>
         <p>
-          <strong className="text-[var(--w-text)]">Pro</strong> gives you unlimited use of the assistant: planning help, user stories,
-          test cases, bug-report cleanup and sprint check-ins, whenever you need them.
+          <strong className="text-[var(--w-text)]">Pro</strong> {wt('ai.proGives')}
         </p>
       </div>
     </Dialog>

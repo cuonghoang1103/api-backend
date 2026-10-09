@@ -24,7 +24,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
   ArrowLeft, CalendarRange, CircleHelp, KeyRound, FlaskConical, Rocket, BarChart3, ChevronDown, Columns3, Inbox, LayoutDashboard,
   List, ListOrdered, Plus, Search, Settings, Users, LayoutGrid, Check, Sparkles, PanelLeftClose, PanelLeftOpen, Milestone, BadgeCheck, Network, FileText,
-  BriefcaseBusiness, Gauge, ListTree, Shapes,
+  BriefcaseBusiness, Gauge, ListTree, Shapes, BookOpenCheck,
   Handshake, PackageCheck, Activity,
   CalendarClock, GitPullRequestArrow, ShieldAlert,
   Wallet, Receipt, FileBarChart,
@@ -47,8 +47,12 @@ import RailTooltip from './shell/RailTooltip';
 import { CtWorkMark } from './brand/CtWorkMark';
 import { ChatNavBadge } from './chat/ChatNotifier';
 import { chatApi, chatKeys } from '@/lib/work-chat-api';
+// CTW đợt 5: hub giảng viên + lớp học (link chỉ hiện với người có vai TEACHER / có lớp).
+import { GraduationCap, School } from 'lucide-react';
+import { teachingApi, teachingKeys } from './teaching/teachingApi';
+import { wt } from './i18n';
 
-const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search']);
+const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes']); // CTW đợt 5: + teaching, classes
 const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents']);
 
 export function useWorkPath() {
@@ -99,6 +103,8 @@ interface NavDef {
   module?: StudioModule;
   /** Đợt S4: chỉ hiện với các vai này trong dự án (Finance: ADMIN thấy tiền, MEMBER ghi giờ). Server vẫn kiểm. */
   roles?: string[];
+  /** CTW đợt 4b: chỉ hiện ở dự án tạo từ các mẫu này (Wiegers ⇒ SWR302 + Capstone). Trang vẫn mở được bằng đường dẫn. */
+  templates?: string[];
 }
 
 /**
@@ -110,28 +116,30 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
   {
     group: 'Planning',
     items: [
-      { path: 'board', label: 'Board', icon: Columns3, match: (v) => v === 'board' || v === undefined },
-      { path: 'backlog', label: 'Backlog', icon: ListOrdered, match: (v) => v === 'backlog' },
-      { path: 'timeline', label: 'Timeline', icon: CalendarRange, match: (v) => v === 'timeline' },
-      { path: 'releases', label: 'Releases', icon: Rocket, match: (v) => v === 'releases' },
+      { path: 'board', get label() { return wt('nav.n_Board'); }, icon: Columns3, match: (v) => v === 'board' || v === undefined },
+      { path: 'backlog', get label() { return wt('nav.n_Backlog'); }, icon: ListOrdered, match: (v) => v === 'backlog' },
+      { path: 'timeline', get label() { return wt('nav.n_Timeline'); }, icon: CalendarRange, match: (v) => v === 'timeline' },
+      { path: 'releases', get label() { return wt('nav.n_Releases'); }, icon: Rocket, match: (v) => v === 'releases' },
     ],
   },
   {
     group: 'Work',
     items: [
-      { path: 'list', label: 'Issues', icon: List, match: (v) => v === 'list' || v === 'issue' },
+      { path: 'list', get label() { return wt('nav.n_Issues'); }, icon: List, match: (v) => v === 'list' || v === 'issue' },
       // CTW K-3: kênh chat dự án (badge số chưa đọc). Khách (CLIENT) chỉ thấy kênh khách — mục riêng trong cổng khách.
-      { path: 'chat', label: 'Chat', icon: MessagesSquare, match: (v) => v === 'chat', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
-      { path: 'tests', label: 'Tests', icon: FlaskConical, match: (v) => v === 'tests' },
-      { path: 'docs', label: 'Docs', icon: FileText, match: (v) => v === 'docs', module: 'docs' },
+      { path: 'chat', get label() { return wt('nav.n_Chat'); }, icon: MessagesSquare, match: (v) => v === 'chat', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      { path: 'tests', get label() { return wt('nav.n_Tests'); }, icon: FlaskConical, match: (v) => v === 'tests' },
+      { path: 'docs', get label() { return wt('nav.n_Docs'); }, icon: FileText, match: (v) => v === 'docs', module: 'docs' },
       // Resources (06/10/2026): thư viện link của dự án — bật mặc định cho mọi loại dự án mới.
-      { path: 'resources', label: 'Resources', icon: Library, match: (v) => v === 'resources', module: 'resources' },
+      { path: 'resources', get label() { return wt('nav.n_Resources'); }, icon: Library, match: (v) => v === 'resources', module: 'resources' },
       // Đợt S6: Spec quality (Spec Fidelity) — đội dự án + giảng viên; khách không thấy.
-      { path: 'spec', label: 'Spec quality', icon: Gauge, match: (v) => v === 'spec', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      { path: 'spec', get label() { return wt('nav.n_Specquality'); }, icon: Gauge, match: (v) => v === 'spec', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       // CTW đợt 4: SRS có cấu trúc (use case/actor/BR/màn/phân quyền) + RTM — đội dự án + giảng viên.
-      { path: 'requirements', label: 'Requirements', icon: ListTree, match: (v) => v === 'requirements', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      { path: 'requirements', get label() { return wt('nav.n_Requirements'); }, icon: ListTree, match: (v) => v === 'requirements', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       // CTW Diagram: Diagram Studio (Mermaid/Excalidraw, AI vẽ từ dữ liệu dự án) — đội dự án + giảng viên.
-      { path: 'diagrams', label: 'Diagrams', icon: Shapes, match: (v) => v === 'diagrams', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      { path: 'diagrams', get label() { return wt('nav.n_Diagrams'); }, icon: Shapes, match: (v) => v === 'diagrams', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      // CTW đợt 4b: hồ sơ SWR302 theo Wiegers (feature FE-n, loại yêu cầu, ưu tiên, glossary, DD, sáu liên kết) — chỉ dự án mẫu SWR302.
+      { path: 'wiegers', get label() { return wt('swr.navWiegers'); }, icon: BookOpenCheck, match: (v) => v === 'wiegers', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'], templates: ['SWR302', 'CAPSTONE'] },
     ],
   },
   // UX-A (09/10/2026): Insights đứng TRƯỚC nhóm studio. Dự án CLIENT bật đủ mô-đun có
@@ -139,27 +147,27 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
   {
     group: 'Insights',
     items: [
-      { path: 'reports', label: 'Reports', icon: BarChart3, match: (v) => v === 'reports' },
-      { path: 'dashboards', label: 'Dashboards', icon: LayoutDashboard, match: (v) => v === 'dashboards' },
+      { path: 'reports', get label() { return wt('nav.n_Reports'); }, icon: BarChart3, match: (v) => v === 'reports' },
+      { path: 'dashboards', get label() { return wt('nav.n_Dashboards'); }, icon: LayoutDashboard, match: (v) => v === 'dashboards' },
       // CTW đợt 3B: tệp Excel nộp trường (WBS, Project Tracking, Weekly Report, AI Usage) — đội dự án + giảng viên.
-      { path: 'school', label: 'FPT reports', icon: FileSpreadsheet, match: (v) => v === 'school', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      { path: 'school', get label() { return wt('nav.n_FPTreports'); }, icon: FileSpreadsheet, match: (v) => v === 'school', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
     ],
   },
   // Lớp studio (S1–S5): mỗi mục chỉ hiện khi mô-đun của nó bật. Nhóm gập được.
   {
     group: 'Studio',
     items: [
-      { path: 'stages', label: 'Stages', icon: Milestone, match: (v) => v === 'stages', module: 'stages' },
-      { path: 'approvals', label: 'Approvals', icon: BadgeCheck, match: (v) => v === 'approvals', module: 'approvals' },
-      { path: 'portal', label: 'Client portal', icon: Handshake, match: (v) => v === 'portal', module: 'clientPortal' },
+      { path: 'stages', get label() { return wt('nav.n_Stages'); }, icon: Milestone, match: (v) => v === 'stages', module: 'stages' },
+      { path: 'approvals', get label() { return wt('nav.n_Approvals'); }, icon: BadgeCheck, match: (v) => v === 'approvals', module: 'approvals' },
+      { path: 'portal', get label() { return wt('nav.n_Clientportal'); }, icon: Handshake, match: (v) => v === 'portal', module: 'clientPortal' },
       // Đợt S3b: họp · yêu cầu thay đổi · sổ RAID.
-      { path: 'meetings', label: 'Meetings', icon: CalendarClock, match: (v) => v === 'meetings', module: 'meetings' },
-      { path: 'changes', label: 'Changes', icon: GitPullRequestArrow, match: (v) => v === 'changes', module: 'changeRequests' },
-      { path: 'raid', label: 'RAID', icon: ShieldAlert, match: (v) => v === 'raid', module: 'raid' },
+      { path: 'meetings', get label() { return wt('nav.n_Meetings'); }, icon: CalendarClock, match: (v) => v === 'meetings', module: 'meetings' },
+      { path: 'changes', get label() { return wt('nav.n_Changes'); }, icon: GitPullRequestArrow, match: (v) => v === 'changes', module: 'changeRequests' },
+      { path: 'raid', get label() { return wt('nav.n_RAID'); }, icon: ShieldAlert, match: (v) => v === 'raid', module: 'raid' },
       // Đợt S4: tài chính (đơn giá/chi phí chỉ ADMIN; MEMBER chỉ timesheet của mình — server quyết).
-      { path: 'finance', label: 'Finance', icon: Wallet, match: (v) => v === 'finance', module: 'finance', roles: ['ADMIN', 'MEMBER'] },
+      { path: 'finance', get label() { return wt('nav.n_Finance'); }, icon: Wallet, match: (v) => v === 'finance', module: 'finance', roles: ['ADMIN', 'MEMBER'] },
       // Đợt S5a: service desk & SLA.
-      { path: 'desk', label: 'Service desk', icon: Headset, match: (v) => v === 'desk', module: 'serviceDesk' },
+      { path: 'desk', get label() { return wt('nav.n_Servicedesk'); }, icon: Headset, match: (v) => v === 'desk', module: 'serviceDesk' },
     ],
   },
 ];
@@ -183,6 +191,9 @@ function useCollapsedGroups() {
   return { collapsed: (g: string) => !!map[g], toggle };
 }
 
+/** Tên hiển thị của nhóm — khoá lưu trạng thái gập vẫn là tên tiếng Anh. */
+const groupLabel = (g: string) => (g === 'Planning' ? wt('nav.g_Planning') : g === 'Work' ? wt('nav.g_Work') : g === 'Insights' ? wt('nav.g_Insights') : g === 'Studio' ? wt('nav.g_Studio') : g === 'Workspace' ? wt('nav.g_Workspace') : g);
+
 function GroupToggle({ label, open, onToggle, count }: { label: string; open: boolean; onToggle: () => void; count: number }) {
   return (
     <button
@@ -190,7 +201,7 @@ function GroupToggle({ label, open, onToggle, count }: { label: string; open: bo
       onClick={onToggle}
       aria-expanded={open}
       className="w-rail-hide group flex h-6 w-full items-center gap-1 rounded-[5px] px-2 pt-2 text-left hover:text-[var(--w-text)]"
-      title={open ? `Collapse ${label}` : `Expand ${label} (${count})`}
+      title={open ? wt('nav.collapseL', { l: label }) : wt('nav.expandL', { l: label, n: count })}
     >
       <span className="w-eyebrow flex-1 group-hover:text-[var(--w-text-2)]">{label}</span>
       {!open && <span className="text-[11px] tabular-nums text-[var(--w-text-3)]">{count}</span>}
@@ -208,29 +219,29 @@ function GroupToggle({ label, open, onToggle, count }: { label: string; open: bo
  * của cổng (đường dẫn /portal?tab=…). Dữ liệu, như PROJECT_NAV.
  */
 const PORTAL_NAV: { tab: string; label: string; icon: LucideIcon; module?: StudioModule }[] = [
-  { tab: 'overview', label: 'Overview', icon: LayoutDashboard },
-  { tab: 'requests', label: 'Requests', icon: Inbox },
-  { tab: 'approvals', label: 'Approvals', icon: BadgeCheck },
-  { tab: 'documents', label: 'Documents', icon: FileText },
-  { tab: 'deliverables', label: 'Deliverables', icon: PackageCheck },
-  { tab: 'meetings', label: 'Meetings', icon: CalendarClock, module: 'meetings' },
+  { tab: 'overview', get label() { return wt('nav.n_Overview'); }, icon: LayoutDashboard },
+  { tab: 'requests', get label() { return wt('nav.n_Requests'); }, icon: Inbox },
+  { tab: 'approvals', get label() { return wt('nav.n_Approvals'); }, icon: BadgeCheck },
+  { tab: 'documents', get label() { return wt('nav.n_Documents'); }, icon: FileText },
+  { tab: 'deliverables', get label() { return wt('nav.n_Deliverables'); }, icon: PackageCheck },
+  { tab: 'meetings', get label() { return wt('nav.n_Meetings'); }, icon: CalendarClock, module: 'meetings' },
   // Đợt S4: mốc thanh toán đã chia sẻ + lịch sử báo cáo tuần.
-  { tab: 'payments', label: 'Payments', icon: Receipt, module: 'finance' },
-  { tab: 'reports', label: 'Reports', icon: FileBarChart, module: 'reports' },
+  { tab: 'payments', get label() { return wt('nav.n_Payments'); }, icon: Receipt, module: 'finance' },
+  { tab: 'reports', get label() { return wt('nav.n_Reports'); }, icon: FileBarChart, module: 'reports' },
   // Resources (06/10/2026): link dự án đã chia sẻ với khách.
-  { tab: 'resources', label: 'Resources', icon: Library, module: 'resources' },
-  { tab: 'activity', label: 'Activity', icon: Activity },
+  { tab: 'resources', get label() { return wt('nav.n_Resources'); }, icon: Library, module: 'resources' },
+  { tab: 'activity', get label() { return wt('nav.n_Activity'); }, icon: Activity },
 ];
 
 const WORKSPACE_NAV: { path: string; label: string; icon: LucideIcon; module?: StudioModule; staffOnly?: boolean }[] = [
-  { path: '', label: 'Projects', icon: LayoutGrid },
-  { path: '/teams', label: 'Teams', icon: Network, module: 'teams' },
+  { path: '', get label() { return wt('nav.n_Projects'); }, icon: LayoutGrid },
+  { path: '/teams', get label() { return wt('nav.n_Teams'); }, icon: Network, module: 'teams' },
   // Đợt S3a — chỉ người trong đội (không phải khách GUEST); phạm vi dữ liệu do server quyết.
-  { path: '/portfolio', label: 'Portfolio', icon: BriefcaseBusiness, staffOnly: true },
-  { path: '/workload', label: 'Workload', icon: Gauge, staffOnly: true },
+  { path: '/portfolio', get label() { return wt('nav.n_Portfolio'); }, icon: BriefcaseBusiness, staffOnly: true },
+  { path: '/workload', get label() { return wt('nav.n_Workload'); }, icon: Gauge, staffOnly: true },
   // CTW-28 (A14): AI agent thành viên — tạo, token, webhook, hộp thư.
-  { path: '/agents', label: 'AI agents', icon: Bot, staffOnly: true },
-  { path: '/settings', label: 'Members & settings', icon: Users },
+  { path: '/agents', get label() { return wt('nav.n_AIagents'); }, icon: Bot, staffOnly: true },
+  { path: '/settings', get label() { return wt('nav.n_Memberssettings'); }, icon: Users },
 ];
 
 /**
@@ -243,7 +254,7 @@ function SidebarPinnedLinks({ pid }: { pid: number }) {
   if (!items.length) return null;
   return (
     <div data-testid="sidebar-pinned-links">
-      <div className="w-eyebrow w-rail-hide px-2 pb-0.5 pt-2">Pinned links</div>
+      <div className="w-eyebrow w-rail-hide px-2 pb-0.5 pt-2">{wt('nav.pinnedLinks')}</div>
       {items.map((r) => (
         <a
           key={r.id}
@@ -251,7 +262,7 @@ function SidebarPinnedLinks({ pid }: { pid: number }) {
           target="_blank"
           rel="noopener noreferrer"
           title={`${r.title} — ${r.url}`}
-          aria-label={`${r.title} (opens in a new tab)`}
+          aria-label={wt('nav.opensNewTab', { t: r.title })}
           onClick={() => { void resApi.open(pid, r.id).catch(() => undefined); }}
           className={cn(ROW, 'pl-3', ROW_IDLE, 'group')}
         >
@@ -271,7 +282,7 @@ function SidebarPinnedLinks({ pid }: { pid: number }) {
 function PortalChatLink({ pid, href, active }: { pid: number; href: string; active: boolean }) {
   const q = useQuery({ queryKey: chatKeys.channels(pid), queryFn: () => chatApi.channels(pid), staleTime: 60_000, retry: false });
   if (!q.data?.channels.length) return null;
-  return <NavItem href={href} icon={MessagesSquare} label="Chat" active={active} indent badge={<ChatNavBadge pid={pid} />} />;
+  return <NavItem href={href} icon={MessagesSquare} label={wt('nav.n_Chat')} active={active} indent badge={<ChatNavBadge pid={pid} />} />;
 }
 
 export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void }) {
@@ -290,6 +301,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
 
   const workspaces = useQuery({ queryKey: wk.workspaces, queryFn: workApi.workspaces, staleTime: 60_000 });
   const ws = useQuery({ queryKey: wk.workspace(slug ?? ''), queryFn: () => workApi.workspaceBySlug(slug!), enabled: !!slug, staleTime: 30_000 });
+  const teaching = useQuery({ queryKey: teachingKeys.access, queryFn: teachingApi.access, staleTime: 5 * 60_000, retry: false }); // CTW đợt 5
   const current = workspaces.data?.find((w) => w.slug === slug);
   const currentName = current?.name ?? ws.data?.name;
   const currentLogo = current?.logoUrl ?? ws.data?.logoUrl ?? null;
@@ -367,7 +379,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
           )}
           <span className="min-w-0 flex-1 leading-tight">
             <span className="block truncate text-[14px] font-semibold">{currentName ?? 'CT Work'}</span>
-            <span className="block truncate text-[12px] text-[var(--w-text-3)]">{currentName ? 'Workspace' : 'Choose a workspace'}</span>
+            <span className="block truncate text-[12px] text-[var(--w-text-3)]">{currentName ? wt('nav.workspace') : wt('nav.chooseWs')}</span>
           </span>
           <ChevronDown size={14} className="w-rail-hide shrink-0 text-[var(--w-text-3)]" />
         </button>
@@ -375,7 +387,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
         {inDrawer && <WorkInbox onNavigate={onNavigate} />}
         <Popover open={switcher.on} onClose={switcher.close} anchorRef={switcherRef} width={260}>
           <div className="p-1" role="menu">
-            <div className="w-eyebrow px-2 pb-1 pt-1.5">Workspaces</div>
+            <div className="w-eyebrow px-2 pb-1 pt-1.5">{wt('common.workspaces')}</div>
             {workspaces.data?.map((w) => (
               <Link
                 key={w.id}
@@ -389,13 +401,13 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                 {w.slug === slug && <Check size={14} className="text-[var(--w-accent-text)]" />}
               </Link>
             ))}
-            {workspaces.data && !workspaces.data.length && <p className="px-2 py-1.5 text-[13px] text-[var(--w-text-3)]">No workspaces yet.</p>}
+            {workspaces.data && !workspaces.data.length && <p className="px-2 py-1.5 text-[13px] text-[var(--w-text-3)]">{wt('nav.noWs')}</p>}
             <div className="my-1 border-t border-[var(--w-border)]" />
             <Link href="/work?new=1" role="menuitem" onClick={() => { switcher.close(); onNavigate?.(); }} className="flex h-9 items-center gap-2.5 rounded-[6px] px-2 text-[var(--w-text-2)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]">
-              <Plus size={15} /> Create workspace
+              <Plus size={15} /> {wt('nav.createWs')}
             </Link>
             <Link href="/work?tab=workspaces" role="menuitem" onClick={() => { switcher.close(); onNavigate?.(); }} className="flex h-9 items-center gap-2.5 rounded-[6px] px-2 text-[var(--w-text-2)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]">
-              <LayoutGrid size={15} /> All workspaces
+              <LayoutGrid size={15} /> {wt('nav.allWs')}
             </Link>
           </div>
         </Popover>
@@ -407,20 +419,22 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
       <div ref={scrollRef} className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 pb-3">
         {/* "My work" luôn tới được, kể cả khi đang trong một dự án. */}
         <div className="mt-1 space-y-0.5">
-          {!portalOnly && <NavItem href="/work?tab=my-work" icon={Inbox} label="My work" active={onMyWork} />}
+          {!portalOnly && <NavItem href="/work?tab=my-work" icon={Inbox} label={wt('shell.myWork')} active={onMyWork} />}
           {/* Tìm thẻ mọi dự án. Không gán phím "/" toàn cục: list/board đã dùng nó — ⌘K là đủ. */}
-          {!portalOnly && <NavItem href="/work/search" icon={Search} label="Search" active={pathname.startsWith('/work/search')} />}
-          {!slug && <NavItem href="/work?tab=workspaces" icon={LayoutGrid} label="Workspaces" active={onWorkspaces} />}
+          {!portalOnly && <NavItem href="/work/search" icon={Search} label={wt('common.search')} active={pathname.startsWith('/work/search')} />}
+          {!portalOnly && teaching.data?.teaching && <NavItem href="/work/teaching" icon={GraduationCap} label={wt('teacher.navTeaching')} active={pathname.startsWith('/work/teaching')} />}
+          {!portalOnly && !slug && <NavItem href="/work/classes" icon={School} label={wt('classroom.navClasses')} active={pathname.startsWith('/work/classes')} />}
+          {!slug && <NavItem href="/work?tab=workspaces" icon={LayoutGrid} label={wt('common.workspaces')} active={onWorkspaces} />}
           {aiPid != null && (
             <button
               type="button"
               onClick={() => (aiOpen ? useAiPanel.getState().closeAiPanel() : openAiPanel({ pid: aiPid }))}
               aria-pressed={aiOpen}
               className={cn(ROW, 'w-full text-left', aiOpen ? ROW_ON : ROW_IDLE)}
-              title={duAnMo ? `Ask AI about ${duAnMo.name}` : 'Ask AI (last project)'}
+              title={duAnMo ? wt('nav.askAiAbout', { n: duAnMo.name }) : wt('nav.askAiLast')}
             >
               <Sparkles size={15} className="shrink-0 text-[var(--w-accent-text)]" />
-              <span className="min-w-0 flex-1 truncate">Ask AI{duAnMo ? '' : ' · last project'}</span>
+              <span className="min-w-0 flex-1 truncate">{wt('nav.askAi')}{duAnMo ? '' : wt('nav.lastProject')}</span>
               <kbd className="w-kbd max-md:!hidden">⌘J</kbd>
             </button>
           )}
@@ -433,8 +447,8 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
               const isOn = (n: (typeof items)[number]) => (n.path ? pathname.startsWith(`/work/${slug}${n.path}`) : pathname === `/work/${slug}`);
               const open = rail || items.some(isOn) || !groups.collapsed('Workspace');
               return (
-                <div role="group" aria-label="Workspace" className="mt-3">
-                  <GroupToggle label="Workspace" open={open} count={items.length} onToggle={() => groups.toggle('Workspace', open)} />
+                <div role="group" aria-label={wt('nav.g_Workspace')} className="mt-3">
+                  <GroupToggle label={wt('nav.g_Workspace')} open={open} count={items.length} onToggle={() => groups.toggle('Workspace', open)} />
                   <div className="space-y-0.5">
                     {open && items.map((n) => (
                       <NavItem key={n.label} href={`/work/${slug}${n.path}`} icon={n.icon} label={n.label} active={isOn(n)} />
@@ -446,7 +460,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
 
             <GroupLabel
               action={ws.data && ws.data.role !== 'GUEST' ? (
-                <Link href={`/work/${slug}?newProject=1`} className="flex h-6 w-6 items-center justify-center rounded-[5px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]" title="Create project" aria-label="Create project">
+                <Link href={`/work/${slug}?newProject=1`} className="flex h-6 w-6 items-center justify-center rounded-[5px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]" title={wt('nav.createProject')} aria-label={wt('nav.createProject')}>
                   <Plus size={14} />
                 </Link>
               ) : undefined}
@@ -471,7 +485,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                     </Link>
                     {open && isPortalClient(p) && (
                       <div className="w-subnav mb-2 ml-[18px] mt-0.5 border-l border-[var(--w-border)] pl-1.5">
-                        <div className="w-eyebrow w-rail-hide px-2 pb-0.5 pt-2">Client portal</div>
+                        <div className="w-eyebrow w-rail-hide px-2 pb-0.5 pt-2">{wt('nav.n_Clientportal')}</div>
                         {PORTAL_NAV.filter((n) => !n.module || p.modules?.[n.module]).map((n) => {
                           const cur = view === 'portal' && (search?.get('tab') ?? 'overview') === n.tab;
                           return <NavItem key={n.tab} href={`${base}/portal${n.tab === 'overview' ? '' : `?tab=${n.tab}`}`} icon={n.icon} label={n.label} active={cur} indent />;
@@ -482,14 +496,14 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                     {open && !isPortalClient(p) && (
                       <div className="w-subnav mb-2 ml-[18px] mt-0.5 border-l border-[var(--w-border)] pl-1.5">
                         {PROJECT_NAV.map((g) => {
-                          const items = g.items.filter((n) => (!n.module || p.modules?.[n.module]) && (!n.roles || n.roles.includes(String(p.role))));
+                          const items = g.items.filter((n) => (!n.module || p.modules?.[n.module]) && (!n.roles || n.roles.includes(String(p.role))) && (!n.templates || n.templates.includes(String((p as { template?: string }).template))));
                           if (!items.length) return null;
                           const hasActive = items.some((n) => n.match(view));
                           // Nhóm chứa trang đang mở luôn mở; thanh icon (rail) bỏ qua gập.
                           const open = rail || hasActive || !groups.collapsed(g.group);
                           return (
-                            <div key={g.group} role="group" aria-label={g.group}>
-                              <GroupToggle label={g.group} open={open} count={items.length} onToggle={() => groups.toggle(g.group, open)} />
+                            <div key={g.group} role="group" aria-label={groupLabel(g.group)}>
+                              <GroupToggle label={groupLabel(g.group)} open={open} count={items.length} onToggle={() => groups.toggle(g.group, open)} />
                               {open && items.map((n) => (
                                 <NavItem key={n.path} href={`${base}/${n.path}`} icon={n.icon} label={n.label} active={n.match(view)} indent badge={n.path === 'chat' ? <ChatNavBadge pid={p.id} /> : undefined} />
                               ))}
@@ -498,20 +512,20 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                         })}
                         {p.modules?.resources && <SidebarPinnedLinks pid={p.id} />}
                         <div className="my-1.5 border-t border-[var(--w-border)]" />
-                        <NavItem href={`${base}/settings`} icon={Settings} label="Project settings" active={view === 'settings'} indent />
+                        <NavItem href={`${base}/settings`} icon={Settings} label={wt('palette.projectSettings')} active={view === 'settings'} indent />
                       </div>
                     )}
                   </div>
                 );
               })}
               {ws.data && !projects.length && (
-                <p className="w-rail-hide px-2 py-1 text-[13px] text-[var(--w-text-3)]">No projects yet.</p>
+                <p className="w-rail-hide px-2 py-1 text-[13px] text-[var(--w-text-3)]">{wt('nav.noProjects')}</p>
               )}
             </div>
           </>
         ) : workspaces.data?.length ? (
           <>
-            <GroupLabel>Your workspaces</GroupLabel>
+            <GroupLabel>{wt('nav.yourWs')}</GroupLabel>
             <div className="space-y-0.5">
               {workspaces.data.map((w) => (
                 <Link key={w.id} href={`/work/${w.slug}`} title={w.name} className={cn(ROW, ROW_IDLE)}>
@@ -529,29 +543,29 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
         <button
           type="button"
           onClick={() => { onNavigate?.(); openHelp(); }}
-          title="Help & guide"
+          title={wt('nav.helpGuide')}
           className={cn(ROW, ROW_IDLE, 'w-full text-left')}
         >
           <CircleHelp size={15} className="shrink-0 opacity-80" />
-          <span className="min-w-0 flex-1 truncate">Help &amp; guide</span>
+          <span className="min-w-0 flex-1 truncate">{wt('nav.helpGuide')}</span>
           <kbd className="w-kbd max-md:!hidden">?</kbd>
         </button>
-        <NavItem href="/work/developer" icon={KeyRound} label="API tokens" active={pathname.startsWith('/work/developer')} />
-        <Link href="/" title="Back to CuongThai" className={cn(ROW, ROW_IDLE)}>
-          <ArrowLeft size={15} className="shrink-0 opacity-80" /> <span className="min-w-0 flex-1 truncate">Back to CuongThai</span>
+        <NavItem href="/work/developer" icon={KeyRound} label={wt('dev.apiTokens')} active={pathname.startsWith('/work/developer')} />
+        <Link href="/" title={wt('shell.backToSite')} className={cn(ROW, ROW_IDLE)}>
+          <ArrowLeft size={15} className="shrink-0 opacity-80" /> <span className="min-w-0 flex-1 truncate">{wt('shell.backToSite')}</span>
         </Link>
         {!inDrawer && (
           <button
             type="button"
             onClick={toggleRail}
-            title={rail ? 'Expand sidebar (⌘\\)' : 'Collapse sidebar (⌘\\)'}
-            aria-label={rail ? 'Expand sidebar' : 'Collapse sidebar'}
+            title={rail ? wt('nav.expandSb') : wt('nav.collapseSb')}
+            aria-label={rail ? wt('nav.expandSbA') : wt('nav.collapseSbA')}
             aria-keyshortcuts="Meta+Backslash Control+Backslash"
             aria-expanded={!rail}
             className={cn(ROW, ROW_IDLE, 'w-full text-left')}
           >
             {rail ? <PanelLeftOpen size={15} className="shrink-0 opacity-80" /> : <PanelLeftClose size={15} className="shrink-0 opacity-80" />}
-            <span className="min-w-0 flex-1 truncate">Collapse sidebar</span>
+            <span className="min-w-0 flex-1 truncate">{wt('nav.collapseSbA')}</span>
             <kbd className="w-kbd max-md:!hidden">{'⌘\\'}</kbd>
           </button>
         )}

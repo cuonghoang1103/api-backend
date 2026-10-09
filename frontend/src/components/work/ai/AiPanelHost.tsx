@@ -33,6 +33,7 @@ import { ActionGroup, type ActionItem } from './ActionCard';
 import UpgradeDialog from './UpgradeDialog';
 import { openAiPanel, useAiPanel, type AiQuickRequest } from './store';
 import { useLayoutPrefs } from '../shell/panes';
+import { wt, wfmt } from '@/components/work/i18n';
 
 // ─── Kiểu + lưu trữ ──────────────────────────────────────────────
 
@@ -41,17 +42,17 @@ const threadKey = (pid: number, tid: number) => ['work', 'ai-thread', pid, tid] 
 const threadsKey = (pid: number) => ['work', 'ai-threads', pid] as const;
 
 export const QUICK_TITLES: Record<AiQuickTask, string> = {
-  write_story: 'Write a user story',
-  split: 'Split into sub-tasks',
-  generate_tests: 'Generate test cases',
-  improve_bug: 'Improve bug report',
-  summarize: 'Summarize',
-  review_story: 'Review story quality',
-  meeting_notes: 'Meeting notes to tasks',
-  req_review: 'Requirement check before submitting',
-  team_health: 'Team health check',
-  draft_srs: 'Draft SRS from requirements',
-  summarize_page: 'Summarize page',
+  get write_story() { return wt('ai.qWriteStory'); },
+  get split() { return wt('ai.qSplit'); },
+  get generate_tests() { return wt('ai.qTests'); },
+  get improve_bug() { return wt('ai.qBug'); },
+  get summarize() { return wt('ai.qSummarize'); },
+  get review_story() { return wt('ai.qReviewStory'); },
+  get meeting_notes() { return wt('ai.qMeeting'); },
+  get req_review() { return wt('ai.qReqReview'); },
+  get team_health() { return wt('ai.qHealth'); },
+  get draft_srs() { return wt('ai.qDraftSrs'); },
+  get summarize_page() { return wt('ai.qSummarizePage'); },
 };
 
 /**
@@ -79,9 +80,9 @@ function storedItems(m: AiMessage): ActionItem[] {
     id: `${m.id}:${a.index}`,
     action: a.action,
     status: a.status,
-    summary: a.status === 'done' ? `${a.summary ?? 'Applied'}${a.byName ? ` · by @${a.byName}` : ''}` : a.summary,
+    summary: a.status === 'done' ? (a.byName ? wt('ai.appliedBy', { s: a.summary ?? wt('ai.applied'), name: a.byName }) : a.summary ?? wt('ai.applied')) : a.summary,
     number: a.number,
-    error: a.status === 'applying' && a.byName ? `@${a.byName} is applying this…` : a.error,
+    error: a.status === 'applying' && a.byName ? wt('ai.applyingBy', { name: a.byName }) : a.error,
   }));
 }
 
@@ -218,7 +219,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   const handleError = useCallback((err: unknown) => {
     if (isAiQuotaError(err)) setUpgrade(true);
     else if (workErrorStatus(err) === 503) setUnavailable(true);
-    else toast.error(workError(err, 'The AI assistant could not answer'));
+    else toast.error(workError(err, wt('ai.couldNotAnswer')));
     qc.invalidateQueries({ queryKey: QUOTA_KEY });
   }, [qc]);
 
@@ -254,7 +255,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
       const saved = fresh?.messages.slice(-3).some((m) => m.role === 'user' && m.content === message);
       if (!saved) setDraft((d) => d || message);
       if (ctrl.signal.aborted) {
-        toast.message('Stopped waiting. If the AI still answers, the reply is saved in this conversation.');
+        toast.message(wt('ai.stoppedWaiting'));
         qc.invalidateQueries({ queryKey: QUOTA_KEY });
       } else handleError(err);
     } finally {
@@ -267,7 +268,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   const retry = useCallback(async (mid: number) => {
     if (waiting || !threadId) return;
     const gen = ++waitGen.current;
-    setWaiting('Asking again');
+    setWaiting(wt('ai.askingAgain'));
     setUnavailable(false);
     try {
       const a = await workApi.aiRetry(pid, mid);
@@ -303,7 +304,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
     let tid: number | null = threadId;
     (async () => {
       try {
-        tid = await ensureThread(`${title}${quick.issueNumber && key ? ` · ${key}-${quick.issueNumber}` : ''}${quick.pageNumber ? ` · document ${quick.pageNumber}` : ''}`);
+        tid = await ensureThread(`${title}${quick.issueNumber && key ? ` · ${key}-${quick.issueNumber}` : ''}${quick.pageNumber ? wt('ai.docN', { n: quick.pageNumber }) : ''}`);
         const a = await workApi.aiQuick(pid, { task: quick.task, issueNumber: quick.issueNumber ?? null, pageNumber: quick.pageNumber ?? null, text: quick.text ?? null, threadId: tid, label: title });
         onQuota(a.quota);
       } catch (err) {
@@ -343,7 +344,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   const startDefense = useCallback(async (focus: string) => {
     if (waiting) return;
     const gen = ++waitGen.current;
-    setWaiting('Starting defense practice');
+    setWaiting(wt('ai.startingDefense'));
     setUnavailable(false);
     try {
       const t = await workApi.aiStartDefense(pid, { focus });
@@ -379,8 +380,8 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
       const t = await workApi.aiUpdateThread(pid, thread.id, { visibility: thread.visibility === 'PRIVATE' ? 'PROJECT' : 'PRIVATE' });
       qc.setQueryData(threadKey(pid, t.id), t);
       qc.invalidateQueries({ queryKey: threadsKey(pid) });
-      toast.success(t.visibility === 'PRIVATE' ? 'Only you can see this conversation now' : 'Everyone in this project can see this conversation now');
-    } catch (err) { toast.error(workError(err, 'Could not change who can see this')); }
+      toast.success(t.visibility === 'PRIVATE' ? wt('ai.nowPrivate') : wt('ai.nowShared'));
+    } catch (err) { toast.error(workError(err, wt('ai.visFailed'))); }
   };
 
   const deleteThread = async () => {
@@ -389,8 +390,8 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
       await workApi.aiDeleteThread(pid, thread.id);
       qc.invalidateQueries({ queryKey: threadsKey(pid) });
       selectThread(null);
-      toast.success('Conversation deleted');
-    } catch (err) { toast.error(workError(err, 'Could not delete this conversation')); }
+      toast.success(wt('ai.convDeleted'));
+    } catch (err) { toast.error(workError(err, wt('ai.convDelFailed'))); }
   };
 
   const fill = (text: string) => {
@@ -404,12 +405,12 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   };
 
   const suggestions = [
-    'What should I work on next?',
-    'Is our sprint on track?',
-    'Write user stories for a login feature',
-    'Turn these meeting notes into tasks:\n\n',
-    'Who is overloaded right now?',
-    issueKey ? `Draft test cases for ${issueKey}` : 'Draft test cases for the selected issue',
+    wt('ai.sugNext'),
+    wt('ai.sugSprint'),
+    wt('ai.sugLogin'),
+    `${wt('ai.sugMeeting')}\n\n`,
+    wt('ai.sugOverload'),
+    issueKey ? wt('ai.sugTestsKey', { key: issueKey }) : wt('ai.sugTests'),
   ];
 
   const aiOff = unavailable || quota?.available === false;
@@ -422,7 +423,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
         ref={panelRef}
         role="dialog"
         aria-modal="false"
-        aria-label="AI assistant"
+        aria-label={wt('ai.assistant')}
         className={cn('fixed inset-y-0 right-0 z-[66] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-bg)] transition-[width] duration-150', wide ? 'sm:w-[min(760px,92vw)]' : 'sm:w-[440px]')}
         data-wide={wide || undefined}
         style={{ boxShadow: 'var(--w-shadow-pop)' }}
@@ -435,20 +436,20 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <h2 className="truncate text-[14px] font-semibold" title={view === 'chat' && thread ? thread.title : undefined}>
-                {view === 'history' ? 'Team conversations' : thread ? thread.title : 'AI assistant'}
+                {view === 'history' ? wt('ai.teamConvs') : thread ? thread.title : wt('ai.assistant')}
               </h2>
               {key && <span className="shrink-0 rounded-[4px] bg-[var(--w-sunken)] px-1.5 font-mono text-[11px] text-[var(--w-text-2)]">{key}</span>}
             </div>
             <div className="mt-0.5 flex h-[18px] items-center gap-2 text-[12px] text-[var(--w-text-3)]">
               {view === 'chat' && thread?.createdBy ? (
-                <span className="truncate">Started by {thread.createdById === meId ? 'you' : `@${thread.createdBy.username}`} · {relativeTime(thread.createdAt)}</span>
+                <span className="truncate">{wt('ai.startedBy', { who: thread.createdById === meId ? wt('common.you') : `@${thread.createdBy.username}`, when: relativeTime(thread.createdAt) })}</span>
               ) : quota ? <QuotaChip quota={quota} /> : null}
             </div>
           </div>
-          <button type="button" className={cn('w-btn w-btn-ghost w-btn-icon w-btn-sm', view === 'history' && 'w-btn-on')} onClick={() => setView(view === 'history' ? 'chat' : 'history')} aria-label="Conversation history" title="Team conversations">
+          <button type="button" className={cn('w-btn w-btn-ghost w-btn-icon w-btn-sm', view === 'history' && 'w-btn-on')} onClick={() => setView(view === 'history' ? 'chat' : 'history')} aria-label={wt('ai.convHistory')} title={wt('ai.teamConvs')}>
             <History size={14} />
           </button>
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={newConversation} disabled={!!waiting} aria-label="New conversation" title="New conversation">
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={newConversation} disabled={!!waiting} aria-label={wt('ai.newConv')} title={wt('ai.newConv')}>
             <SquarePen size={14} />
           </button>
           <button
@@ -456,13 +457,13 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
             className="w-btn w-btn-ghost w-btn-icon w-btn-sm max-sm:!hidden"
             onClick={() => useLayoutPrefs.getState().setAiWide(!wide)}
             aria-pressed={wide}
-            aria-label={wide ? 'Narrow the AI panel' : 'Widen the AI panel'}
-            title={wide ? 'Narrow panel' : 'Widen panel — easier to read long answers'}
+            aria-label={wide ? wt('ai.narrow') : wt('ai.widen')}
+            title={wide ? wt('ai.narrowT') : wt('ai.widenT')}
             data-testid="ai-panel-wide"
           >
             {wide ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
           </button>
-          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onClose} aria-label="Close AI assistant" title="Close (Esc)">
+          <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onClose} aria-label={wt('ai.closeAi')} title={wt('ai.closeEsc')}>
             <X size={15} />
           </button>
         </div>
@@ -475,24 +476,24 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
             {thread && (
               <div className="flex shrink-0 items-center gap-2 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-4 py-1.5 text-[12px] text-[var(--w-text-2)]">
                 {thread.mode === 'DEFENSE' && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[var(--w-accent-soft)] px-2 py-0.5 text-[11.5px] font-medium text-[var(--w-accent-text)]"><GraduationCap size={12} /> Defense practice</span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-[var(--w-accent-soft)] px-2 py-0.5 text-[11.5px] font-medium text-[var(--w-accent-text)]"><GraduationCap size={12} /> {wt('ai.defense')}</span>
                 )}
                 {thread.visibility === 'PRIVATE'
-                  ? <span className="inline-flex items-center gap-1"><Lock size={12} /> Only you</span>
-                  : <span className="inline-flex items-center gap-1"><Users size={12} /> Shared with the project</span>}
+                  ? <span className="inline-flex items-center gap-1"><Lock size={12} /> {wt('ai.onlyYou')}</span>
+                  : <span className="inline-flex items-center gap-1"><Users size={12} /> {wt('ai.sharedProject')}</span>}
                 <span className="text-[var(--w-text-3)]">· {thread.messageCount} message{thread.messageCount === 1 ? '' : 's'}</span>
                 {thread.canManage && (
                   <span className="ml-auto flex items-center gap-1">
                     <button type="button" className="w-btn w-btn-ghost w-btn-sm !h-6 !px-1.5 text-[12px]" onClick={toggleVisibility}>
-                      {thread.visibility === 'PRIVATE' ? <><Users size={12} /> Share</> : <><Lock size={12} /> Make private</>}
+                      {thread.visibility === 'PRIVATE' ? <><Users size={12} /> {wt('ai.share')}</> : <><Lock size={12} /> {wt('ai.makePrivate')}</>}
                     </button>
                     {confirmDelete ? (
                       <>
-                        <button type="button" className="w-btn w-btn-sm !h-6 !px-1.5 text-[12px] text-[var(--w-red)]" onClick={deleteThread}>Delete</button>
-                        <button type="button" className="w-btn w-btn-ghost w-btn-sm !h-6 !px-1.5 text-[12px]" onClick={() => setConfirmDelete(false)}>Keep</button>
+                        <button type="button" className="w-btn w-btn-sm !h-6 !px-1.5 text-[12px] text-[var(--w-red)]" onClick={deleteThread}>{wt('common.delete')}</button>
+                        <button type="button" className="w-btn w-btn-ghost w-btn-sm !h-6 !px-1.5 text-[12px]" onClick={() => setConfirmDelete(false)}>{wt('ai.keep')}</button>
                       </>
                     ) : (
-                      <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm !h-6 !w-6" onClick={() => setConfirmDelete(true)} aria-label="Delete conversation" title="Delete conversation">
+                      <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm !h-6 !w-6" onClick={() => setConfirmDelete(true)} aria-label={wt('ai.deleteConv')} title={wt('ai.deleteConv')}>
                         <Trash2 size={12} />
                       </button>
                     )}
@@ -519,9 +520,9 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                             <Sparkles size={11} /> {m.title}
                           </div>
                         )}
-                        {m.content ? <AiMarkdown text={m.content} /> : <span className="text-[13px] text-[var(--w-text-3)]">No answer.</span>}
+                        {m.content ? <AiMarkdown text={m.content} /> : <span className="text-[13px] text-[var(--w-text-3)]">{wt('ai.noAnswer')}</span>}
                       </div>
-                      <div className="mt-1 px-1 text-[11px] text-[var(--w-text-3)]" title={new Date(m.createdAt).toLocaleString('en-US')}>{relativeTime(m.createdAt)}</div>
+                      <div className="mt-1 px-1 text-[11px] text-[var(--w-text-3)]" title={new Date(m.createdAt).toLocaleString(wfmt.intl())}>{relativeTime(m.createdAt)}</div>
                       {config && m.actions.length ? (
                         <ActionGroup
                           config={config}
@@ -532,7 +533,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                             const edited = overlay[it.id]?.action;
                             try {
                               const r = await workApi.aiApplyStored(pid, m.id, idx, edited);
-                              return { summary: `${r.summary ?? 'Applied'}${r.byName ? ` · by @${r.byName}` : ''}`, number: r.number };
+                              return { summary: r.byName ? wt('ai.appliedBy', { s: r.summary ?? wt('ai.applied'), name: r.byName }) : r.summary ?? wt('ai.applied'), number: r.number };
                             } finally {
                               refresh(m.threadId);
                             }
@@ -560,14 +561,14 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
               {aiOff && (
                 <div className="mb-2 flex items-start gap-2 rounded-[6px] border border-[color-mix(in_srgb,var(--w-orange)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-orange)_10%,transparent)] px-2.5 py-2 text-[12px] text-[var(--w-text)]">
                   <AlertTriangle size={14} className="mt-[1px] shrink-0 text-[var(--w-orange)]" />
-                  AI is temporarily unavailable. Your question is kept — press Retry on it in a little while.
+                  {wt('ai.unavailable')}
                 </div>
               )}
               <div className="mb-2 flex flex-wrap items-center gap-1.5">
                 {issueKey && (
                   <span className="inline-flex h-[22px] items-center gap-1 rounded-full border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] pl-2 pr-0.5 text-[11.5px] text-[var(--w-accent-text)]">
-                    About <span className="font-mono">{issueKey}</span>
-                    <button type="button" onClick={onClearIssue} aria-label={`Stop asking about ${issueKey}`} className="inline-flex h-[18px] w-[18px] items-center justify-center rounded-full hover:bg-[var(--w-hover)]">
+                    {wt('ai.about')} <span className="font-mono">{issueKey}</span>
+                    <button type="button" onClick={onClearIssue} aria-label={wt('ai.stopAsking', { key: issueKey })} className="inline-flex h-[18px] w-[18px] items-center justify-center rounded-full hover:bg-[var(--w-hover)]">
                       <X size={11} />
                     </button>
                   </span>
@@ -577,9 +578,9 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                     type="button"
                     onClick={() => setNewPrivate((v) => !v)}
                     className={cn('inline-flex h-[22px] items-center gap-1 rounded-full border px-2 text-[11.5px]', newPrivate ? 'border-[var(--w-border-strong)] bg-[var(--w-sunken)] text-[var(--w-text)]' : 'border-[var(--w-border)] text-[var(--w-text-2)]')}
-                    title="Choose who can see this new conversation"
+                    title={wt('ai.chooseWho')}
                   >
-                    {newPrivate ? <><Lock size={11} /> Private — only you</> : <><Users size={11} /> Shared with the project</>}
+                    {newPrivate ? <><Lock size={11} /> {wt('ai.privateOnly')}</> : <><Users size={11} /> {wt('ai.sharedProject')}</>}
                   </button>
                 )}
               </div>
@@ -599,22 +600,22 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                   disabled={!!waiting}
                   rows={3}
                   maxLength={8000}
-                  placeholder={thread?.mode === 'DEFENSE' ? 'Type your answer to the panel…' : thread ? 'Continue this conversation…' : issueKey ? `Ask about ${issueKey}…` : 'Ask anything about this project…'}
-                  aria-label="Message the AI assistant"
+                  placeholder={thread?.mode === 'DEFENSE' ? wt('ai.phDefense') : thread ? wt('ai.phContinue') : issueKey ? wt('ai.phAboutKey', { key: issueKey }) : wt('ai.phAsk')}
+                  aria-label={wt('ai.messageAi')}
                   className="max-h-[200px] min-h-[64px] flex-1 resize-none bg-transparent px-1.5 py-1 text-[13.5px] leading-relaxed text-[var(--w-text)] outline-none placeholder:text-[var(--w-text-3)] disabled:opacity-60"
                 />
                 {waiting ? (
-                  <button type="button" className="w-btn w-btn-icon !h-[30px] !w-[30px] shrink-0" onClick={cancel} aria-label="Stop waiting" title="Stop waiting">
+                  <button type="button" className="w-btn w-btn-icon !h-[30px] !w-[30px] shrink-0" onClick={cancel} aria-label={wt('ai.stopWaiting')} title={wt('ai.stopWaiting')}>
                     <Square size={11} fill="currentColor" />
                   </button>
                 ) : (
-                  <button type="button" className="w-btn w-btn-primary w-btn-icon !h-[30px] !w-[30px] shrink-0" onClick={() => send(draft)} disabled={!draft.trim()} aria-label="Send" title="Send (Enter)">
+                  <button type="button" className="w-btn w-btn-primary w-btn-icon !h-[30px] !w-[30px] shrink-0" onClick={() => send(draft)} disabled={!draft.trim()} aria-label={wt('ai.send')} title={wt('ai.sendEnter')}>
                     <ArrowUp size={15} />
                   </button>
                 )}
               </div>
               <p className="mt-1.5 text-[11px] leading-snug text-[var(--w-text-3)]">
-                {isPrivate ? 'Saved privately for you.' : 'Saved for your team — anyone in this project can read and continue it.'} Don&apos;t paste passwords or keys. The AI only suggests changes; nothing happens until someone clicks Apply.
+                {isPrivate ? wt('ai.savedPrivate') : wt('ai.savedTeam')} {wt('ai.noSecrets')}
               </p>
             </div>
           </>
@@ -629,13 +630,13 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
 // ─── Lượt hỏi (có tên người hỏi — hội thoại dùng chung) ───────────
 
 function UserTurn({ m, mine, projectKey, onRetry, busy }: { m: AiMessage; mine: boolean; projectKey: string; onRetry: () => void; busy: boolean }) {
-  const name = mine ? 'You' : m.author ? `@${m.author.username}` : 'Former member';
+  const name = mine ? wt('ai.you') : m.author ? `@${m.author.username}` : wt('ai.formerMember');
   return (
     <div className={cn('flex flex-col', mine ? 'items-end' : 'items-start')}>
       <div className={cn('mb-1 flex items-center gap-1.5 px-1 text-[11.5px] text-[var(--w-text-3)]', mine && 'flex-row-reverse')}>
         <UserAvatar user={m.author} size={16} />
         <span className="font-medium text-[var(--w-text-2)]">{name}</span>
-        <span title={new Date(m.createdAt).toLocaleString('en-US')}>{relativeTime(m.createdAt)}</span>
+        <span title={new Date(m.createdAt).toLocaleString(wfmt.intl())}>{relativeTime(m.createdAt)}</span>
         {m.issueNumber && projectKey ? <span className="rounded-[4px] bg-[var(--w-sunken)] px-1 font-mono text-[10.5px]">{projectKey}-{m.issueNumber}</span> : null}
       </div>
       <div className={cn(
@@ -647,9 +648,9 @@ function UserTurn({ m, mine, projectKey, onRetry, busy }: { m: AiMessage; mine: 
       {m.error && (
         <div className="mt-1 flex max-w-[85%] items-center gap-2 px-1 text-[12px] text-[var(--w-red)]">
           <AlertTriangle size={12} className="shrink-0" />
-          <span className="min-w-0">Not answered yet — the question is saved.</span>
+          <span className="min-w-0">{wt('ai.notAnswered')}</span>
           <button type="button" className="w-btn w-btn-sm !h-6 shrink-0" onClick={onRetry} disabled={busy}>
-            <RotateCcw size={12} /> Retry
+            <RotateCcw size={12} /> {wt('ai.retry')}
           </button>
         </div>
       )}
@@ -684,29 +685,29 @@ function ThreadList({ pid, projectKey, meId, currentId, onOpen, onNew }: {
             id="ai-thread-search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search questions and answers…"
+            placeholder={wt('ai.searchQa')}
             className="h-8 flex-1 bg-transparent text-[13px] outline-none placeholder:text-[var(--w-text-3)]"
-            aria-label="Search conversations"
+            aria-label={wt('ai.searchConvs')}
           />
         </div>
-        <div className="flex items-center gap-1" role="tablist" aria-label="Which conversations">
+        <div className="flex items-center gap-1" role="tablist" aria-label={wt('ai.whichConvs')}>
           {(['all', 'mine'] as const).map((s) => (
             <button key={s} type="button" role="tab" aria-selected={scope === s} onClick={() => setScope(s)}
               className={cn('rounded-[5px] px-2.5 py-1 text-[12.5px]', scope === s ? 'bg-[var(--w-active)] font-medium text-[var(--w-text)]' : 'text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}>
-              {s === 'all' ? 'Everyone' : 'I took part'}
+              {s === 'all' ? wt('ai.everyone') : wt('ai.iTookPart')}
             </button>
           ))}
-          <button type="button" className="w-btn w-btn-sm ml-auto" onClick={onNew}><SquarePen size={12} /> New</button>
+          <button type="button" className="w-btn w-btn-sm ml-auto" onClick={onNew}><SquarePen size={12} /> {wt('ai.newBtn')}</button>
         </div>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
         {isLoading ? (
           <div className="flex justify-center pt-10"><Spinner size={16} /></div>
         ) : isError ? (
-          <p className="px-4 pt-8 text-center text-[13px] text-[var(--w-text-2)]">Could not load conversations. Try again in a moment.</p>
+          <p className="px-4 pt-8 text-center text-[13px] text-[var(--w-text-2)]">{wt('ai.loadConvsFailed')}</p>
         ) : !data?.length ? (
           <p className="px-6 pt-10 text-center text-[13px] leading-relaxed text-[var(--w-text-2)]">
-            {debounced ? `Nothing matches “${debounced}”.` : scope === 'mine' ? 'You have not asked the AI anything in this project yet.' : 'No conversations yet. Questions anyone asks here are saved for the whole team.'}
+            {debounced ? wt('ai.nothingMatches', { q: debounced }) : scope === 'mine' ? wt('ai.noneMine') : wt('ai.noneAll')}
           </p>
         ) : (
           <ul className="divide-y divide-[var(--w-border)]">
@@ -715,7 +716,7 @@ function ThreadList({ pid, projectKey, meId, currentId, onOpen, onNew }: {
                 <button type="button" onClick={() => onOpen(t.id)}
                   className={cn('flex w-full flex-col gap-1 px-4 py-2.5 text-left hover:bg-[var(--w-hover)]', t.id === currentId && 'bg-[var(--w-accent-soft)]')}>
                   <span className="flex items-center gap-1.5">
-                    {t.visibility === 'PRIVATE' && <Lock size={12} className="shrink-0 text-[var(--w-text-3)]" aria-label="Private" />}
+                    {t.visibility === 'PRIVATE' && <Lock size={12} className="shrink-0 text-[var(--w-text-3)]" aria-label={wt('ai.private')} />}
                     <span className="line-clamp-2 text-[13.5px] font-medium text-[var(--w-text)]">{t.title}</span>
                   </span>
                   <span className="flex items-center gap-2 text-[11.5px] text-[var(--w-text-3)]">
@@ -723,8 +724,8 @@ function ThreadList({ pid, projectKey, meId, currentId, onOpen, onNew }: {
                       {t.participants.slice(0, 4).map((u) => <UserAvatar key={u.id} user={u} size={16} className="ring-2 ring-[var(--w-bg)]" />)}
                     </span>
                     <span className="truncate">
-                      {t.createdById === meId ? 'You' : t.createdBy ? `@${t.createdBy.username}` : 'Former member'}
-                      {t.participants.length > 1 ? ` + ${t.participants.length - 1}` : ''} · {t.messageCount} msg · {relativeTime(t.lastMessageAt)}
+                      {t.createdById === meId ? wt('ai.you') : t.createdBy ? `@${t.createdBy.username}` : wt('ai.formerMember')}
+                      {t.participants.length > 1 ? ` + ${t.participants.length - 1}` : ''} · {wt('ai.msgCount', { n: t.messageCount })} · {relativeTime(t.lastMessageAt)}
                     </span>
                     {t.issueNumber && projectKey ? <span className="ml-auto shrink-0 rounded-[4px] bg-[var(--w-sunken)] px-1 font-mono text-[10.5px]">{projectKey}-{t.issueNumber}</span> : null}
                   </span>
@@ -752,7 +753,7 @@ function QuotaChip({ quota }: { quota: AiQuota }) {
   const left = Math.max(0, quota.remaining ?? quota.limit - quota.used);
   return (
     <span className={cn('text-[12px]', left === 0 ? 'text-[var(--w-red)]' : 'text-[var(--w-text-3)]')}>
-      {left} of {quota.limit} free request{quota.limit === 1 ? '' : 's'} left today
+      {wt('ai.freeLeft', { left, count: quota.limit })}
     </span>
   );
 }
@@ -762,9 +763,9 @@ const CHAT_WAIT = 'chat';
 
 /** Các giai đoạn hiển thị theo thời gian chờ — model không báo tiến độ thật. */
 function stageOf(sec: number): string {
-  if (sec < 3) return 'Reading your project…';
-  if (sec < 10) return 'Thinking…';
-  return 'Writing the answer…';
+  if (sec < 3) return wt('ai.stReading');
+  if (sec < 10) return wt('ai.stThinking');
+  return wt('ai.stWriting');
 }
 
 function Typing({ label, onCancel }: { label: string; onCancel: () => void }) {
@@ -787,14 +788,14 @@ function Typing({ label, onCancel }: { label: string; onCancel: () => void }) {
         <span className="ml-1 tabular-nums">{sec}s</span>
       </span>
       <button type="button" onClick={onCancel} className="rounded-[4px] px-1.5 py-0.5 text-[12px] text-[var(--w-accent-text)] hover:bg-[var(--w-hover)]">
-        Cancel
+        {wt('common.cancel')}
       </button>
-      {sec >= 30 && <span className="w-full text-[11.5px]">Big projects can take up to a minute.</span>}
+      {sec >= 30 && <span className="w-full text-[11.5px]">{wt('ai.bigProjects')}</span>}
     </div>
   );
 }
 
-const DEFENSE_FOCUS: Array<[string, string]> = [['me', 'My screens'], ['C1', 'C1'], ['C2', 'C2'], ['C3', 'C3'], ['C4', 'C4'], ['C5', 'C5'], ['all', 'Whole project']];
+const defenseFocus = (): Array<[string, string]> => [['me', wt('ai.focusMe')], ['C1', 'C1'], ['C2', 'C2'], ['C3', 'C3'], ['C4', 'C4'], ['C5', 'C5'], ['all', wt('ai.focusAll')]];
 
 function EmptyState({ suggestions, onPick, disabled, onBrowse, onTool, onDefense, docsTools }: {
   suggestions: string[]; onPick: (s: string) => void; disabled?: boolean; onBrowse?: () => void;
@@ -808,9 +809,9 @@ function EmptyState({ suggestions, onPick, disabled, onBrowse, onTool, onDefense
       <span className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]">
         <Sparkles size={19} />
       </span>
-      <div className="mt-3 text-[14px] font-semibold">How can I help with this project?</div>
+      <div className="mt-3 text-[14px] font-semibold">{wt('ai.howHelp')}</div>
       <p className="mt-1 max-w-[320px] text-[12.5px] leading-relaxed text-[var(--w-text-2)]">
-        I can plan work, write stories and test cases, and check sprint health. I&apos;ll propose changes for you to review.
+        {wt('ai.iCan')}
       </p>
       <div className="mt-5 flex w-full flex-col gap-1.5">
         {suggestions.map((s) => (
@@ -827,19 +828,19 @@ function EmptyState({ suggestions, onPick, disabled, onBrowse, onTool, onDefense
       </div>
       {(onTool || onDefense) && (
         <div className="mt-5 w-full text-left">
-          <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.04em] text-[var(--w-text-3)]">Project tools</div>
+          <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.04em] text-[var(--w-text-3)]">{wt('ai.projectTools')}</div>
           <div className="flex flex-col gap-1.5">
             {onDefense && (
               <div className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)]">
                 <button type="button" disabled={disabled} onClick={() => setPicking((v) => !v)} aria-expanded={picking}
                   className="flex w-full items-start gap-2.5 px-3 py-2 text-left hover:bg-[var(--w-hover)] disabled:opacity-50">
                   <GraduationCap size={15} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />
-                  <span><span className="block text-[13px] font-medium">Practice the defense</span><span className="block text-[12px] text-[var(--w-text-2)]">The AI plays the 2-lecturer panel: one question at a time, a score out of 10, what was missing and a model answer.</span></span>
+                  <span><span className="block text-[13px] font-medium">{wt('ai.practiceDefense')}</span><span className="block text-[12px] text-[var(--w-text-2)]">{wt('ai.practiceDesc')}</span></span>
                 </button>
                 {picking && (
                   <div className="flex flex-wrap gap-1.5 border-t border-[var(--w-border)] px-3 py-2">
-                    <span className="w-full text-[11.5px] text-[var(--w-text-3)]">Whose screens should the panel ask about?</span>
-                    {DEFENSE_FOCUS.map(([v, label]) => (
+                    <span className="w-full text-[11.5px] text-[var(--w-text-3)]">{wt('ai.whoseScreens')}</span>
+                    {defenseFocus().map(([v, label]) => (
                       <button key={v} type="button" onClick={() => { setPicking(false); onDefense(v); }} className="inline-flex h-7 items-center rounded-full border border-[var(--w-border)] px-2.5 text-[12.5px] hover:border-[var(--w-accent-border)] hover:bg-[var(--w-accent-soft)]">{label}</button>
                     ))}
                   </div>
@@ -851,19 +852,19 @@ function EmptyState({ suggestions, onPick, disabled, onBrowse, onTool, onDefense
                 <button type="button" disabled={disabled} onClick={() => onTool('req_review')}
                   className="flex items-start gap-2.5 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2 text-left hover:bg-[var(--w-hover)] disabled:opacity-50">
                   <ClipboardCheck size={15} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />
-                  <span><span className="block text-[13px] font-medium">Check requirements before submitting</span><span className="block text-[12px] text-[var(--w-text-2)]">Finds every Req in this iteration missing a PIC, unhappy cases, Quality L2, Evidence or finished SRS/SDS/Code/Test — and what to fix first.</span></span>
+                  <span><span className="block text-[13px] font-medium">{wt('ai.checkReq')}</span><span className="block text-[12px] text-[var(--w-text-2)]">{wt('ai.checkReqDesc')}</span></span>
                 </button>
                 {docsTools && (
                   <button type="button" disabled={disabled} onClick={() => onTool('draft_srs')}
                     className="flex items-start gap-2.5 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2 text-left hover:bg-[var(--w-hover)] disabled:opacity-50">
                     <FileText size={15} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />
-                    <span><span className="block text-[13px] font-medium">Draft SRS from requirements</span><span className="block text-[12px] text-[var(--w-text-2)]">Turns this project&apos;s requirements, stories and epics into an SRS document you review before it is created.</span></span>
+                    <span><span className="block text-[13px] font-medium">{wt('ai.qDraftSrs')}</span><span className="block text-[12px] text-[var(--w-text-2)]">{wt('ai.draftSrsDesc')}</span></span>
                   </button>
                 )}
                 <button type="button" disabled={disabled} onClick={() => onTool('team_health')}
                   className="flex items-start gap-2.5 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2 text-left hover:bg-[var(--w-hover)] disabled:opacity-50">
                   <Activity size={15} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />
-                  <span><span className="block text-[13px] font-medium">Team health check</span><span className="block text-[12px] text-[var(--w-text-2)]">Who is behind on planned LOC, work stuck for 3+ days with no commits, and overdue issues.</span></span>
+                  <span><span className="block text-[13px] font-medium">{wt('ai.qHealth')}</span><span className="block text-[12px] text-[var(--w-text-2)]">{wt('ai.healthDesc')}</span></span>
                 </button>
               </>
             )}
@@ -872,7 +873,7 @@ function EmptyState({ suggestions, onPick, disabled, onBrowse, onTool, onDefense
       )}
       {onBrowse && (
         <button type="button" onClick={onBrowse} className="mt-4 inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[var(--w-accent-text)] hover:underline">
-          <History size={13} /> See what your team already asked
+          <History size={13} /> {wt('ai.seeAsked')}
         </button>
       )}
     </div>

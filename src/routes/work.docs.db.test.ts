@@ -130,7 +130,7 @@ describe('CT Work — tài liệu dự án S2a (HTTP + DB thật)', { skip: !RUN
   it('thư viện mẫu + tạo trang từ mẫu SRS (tiêu đề tiếng Anh, có đề mục + bảng, phiên bản 1 CREATE)', async () => {
     const lib = await call(member, 'GET', `/projects/${clPid}/doc-templates`);
     assert.equal(lib.status, 200);
-    assert.equal(lib.data.length, 45); // CTW đợt 3A: +7 mẫu FPT Capstone
+    assert.equal(lib.data.length, 50); // CTW đợt 3A: +7 mẫu FPT Capstone · đợt 4b: +5 mẫu SWR302 (Wiegers)
     const srsInfo = lib.data.find((t: any) => t.key === 'srs');
     assert.equal(srsInfo.title, 'Software requirements specification (SRS)');
     const prev = await call(member, 'GET', `/projects/${clPid}/doc-templates/srs`);

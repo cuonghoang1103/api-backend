@@ -368,4 +368,6 @@ export const tests = {
   testNo: 'Test #',
   error: 'Error',
   rowN: 'row {n}',
+  failsStep: '{t} — step {n} fails',
+  failsT: '{t} fails',
 };

@@ -722,6 +722,8 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['*', /^\/chat(\/.*)?$/],
   // CTW Đóng góp: số liệu đóng góp + đánh giá chéo của NGƯỜI — agent không đọc, không chấm (contribGate cũng chặn).
   ['*', /^\/contrib(\/.*)?$/],
+  // CTW đợt 5: điểm rubric của sinh viên — agent không đọc, không chấm (teaching.service gradeGate cũng chặn).
+  ['*', /^\/grades(\/.*)?$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

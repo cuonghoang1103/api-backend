@@ -6,6 +6,9 @@
 
 import { api } from '@/lib/api';
 import type { TiptapDoc, WorkPageDetail } from '@/lib/work-api';
+import { translate as wtr, type WKey } from '@/components/work/i18n/core';
+import { currentWorkLocale } from '@/components/work/i18n/store';
+const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 type Env<T> = { success: boolean; data: T };
 const d = <T,>(p: Promise<{ data: Env<T> }>) => p.then((r) => r.data.data);
@@ -21,7 +24,7 @@ export const IMAGE_SRC_RE = /^\/api\/v1\/work\/projects\/\d+\/images\/\d+$/;
 export const workDocs3aApi = {
   /** Gửi BYTE ảnh làm thân request (không FormData — instance axios đặt cứng JSON sẽ biến FormData thành `{}`). */
   uploadImage: async (pid: number, file: Blob, name = 'image'): Promise<UploadedImage> => {
-    if (file.size > MAX_IMAGE_BYTES) throw new Error('Images must be 10 MB or smaller');
+    if (file.size > MAX_IMAGE_BYTES) throw new Error(wt('detail.img10mb'));
     const buf = await file.arrayBuffer();
     return d<UploadedImage>(api.post(`${B}/${pid}/images?${new URLSearchParams({ name: name.slice(0, 180) })}`, buf, {
       headers: { 'Content-Type': file.type || 'application/octet-stream' }, timeout: 120_000, transformRequest: [(x) => x],

@@ -23,9 +23,10 @@ import {
 import { Dialog, EmptyState, PageLoading, Popover, UserAvatar, useToggle, signalText } from '../ui';
 import { fmtDay } from '../reports/shared';
 import { TeamChip } from '../studio/shared';
+import { wt } from '@/components/work/i18n';
 
 const LEVEL: Record<LoadLevel, { bg: string; fg: string; label: string }> = {
-  none: { bg: 'transparent', fg: 'var(--w-text-3)', label: 'Free' },
+  none: { bg: 'transparent', fg: 'var(--w-text-3)', get label() { return wt('wl.free'); } },
   low: { bg: 'color-mix(in srgb, var(--w-green) 10%, transparent)', fg: 'var(--w-text-2)', label: '< 50%' },
   ok: { bg: 'color-mix(in srgb, var(--w-green) 22%, transparent)', fg: 'var(--w-text)', label: '50–84%' },
   high: { bg: 'color-mix(in srgb, var(--w-orange) 24%, transparent)', fg: 'var(--w-text)', label: '85–100%' },
@@ -33,11 +34,11 @@ const LEVEL: Record<LoadLevel, { bg: string; fg: string; label: string }> = {
 };
 
 const SOURCE: Record<WorkloadIssue['source'], string> = {
-  remaining: 'remaining estimate',
-  original: 'original − logged',
-  points: 'from story points',
-  none: 'not estimated',
-  children: 'counted on sub-tasks',
+  get remaining() { return wt('wl.srcRemaining'); },
+  get original() { return wt('wl.srcOriginal'); },
+  get points() { return wt('wl.srcPoints'); },
+  get none() { return wt('wl.srcNone'); },
+  get children() { return wt('wl.srcChildren'); },
 };
 
 /** Thứ Hai của tuần làm việc hiện tại theo giờ VN (khớp server). Thứ Bảy/CN ⇒ tuần tới — tuần đã hết ngày làm thì năng lực 0, nhìn vô ích. */
@@ -57,7 +58,7 @@ function LoadCell({ w, onOpen, label }: { w: WorkloadWeek; onOpen?: () => void; 
     <>
       <span className="block text-[13px] font-semibold tabular-nums" style={{ color: signalText(lv.fg) }}>{w.hours ? `${h1(w.hours)}h` : '—'}</span>
       <span className="block text-[11px] tabular-nums text-[var(--w-text-3)]">
-        {w.capacity ? `${w.pct ?? 0}% of ${h1(w.capacity)}h` : w.hours ? 'no capacity' : 'off'}
+        {w.capacity ? wt('wl.pctOf', { p: w.pct ?? 0, h: h1(w.capacity) }) : w.hours ? wt('wl.noCapacity') : wt('wl.off')}
       </span>
     </>
   );
@@ -104,7 +105,7 @@ export default function WorkloadView({ ws }: { ws: WorkspaceDetail }) {
   }, [data]);
 
   if (q.isLoading && !data) return <PageLoading rows={6} />;
-  if (q.error && !data) return <EmptyState title="Could not load the workload" body={workError(q.error)} />;
+  if (q.error && !data) return <EmptyState title={wt('wl.loadFailed')} body={workError(q.error)} />;
   if (!data) return null;
 
   const overloaded = data.people.filter((p) => p.overloaded).length;
@@ -123,67 +124,67 @@ export default function WorkloadView({ ws }: { ws: WorkspaceDetail }) {
       )}
 
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-1" role="group" aria-label="Weeks">
-          <button type="button" className="w-btn w-btn-sm w-btn-icon" onClick={() => setOffset((o) => o - 1)} aria-label="Previous week"><ChevronLeft size={14} /></button>
-          <button type="button" className={cn('w-btn w-btn-sm', offset === 0 && 'w-btn-on')} onClick={() => setOffset(0)}>This week</button>
-          <button type="button" className="w-btn w-btn-sm w-btn-icon" onClick={() => setOffset((o) => o + 1)} aria-label="Next week"><ChevronRight size={14} /></button>
+        <div className="flex items-center gap-1" role="group" aria-label={wt('wl.weeks')}>
+          <button type="button" className="w-btn w-btn-sm w-btn-icon" onClick={() => setOffset((o) => o - 1)} aria-label={wt('wl.prevWeek')}><ChevronLeft size={14} /></button>
+          <button type="button" className={cn('w-btn w-btn-sm', offset === 0 && 'w-btn-on')} onClick={() => setOffset(0)}>{wt('wl.thisWeek')}</button>
+          <button type="button" className="w-btn w-btn-sm w-btn-icon" onClick={() => setOffset((o) => o + 1)} aria-label={wt('wl.nextWeek')}><ChevronRight size={14} /></button>
         </div>
-        <select aria-label="Weeks shown" className="w-input h-8 w-auto py-0 pr-7 text-[13px]" value={span} onChange={(e) => setSpan(Number(e.target.value))}>
-          {[2, 4, 8, 12].map((n) => <option key={n} value={n}>{n} weeks</option>)}
+        <select aria-label={wt('wl.weeksShown')} className="w-input h-8 w-auto py-0 pr-7 text-[13px]" value={span} onChange={(e) => setSpan(Number(e.target.value))}>
+          {[2, 4, 8, 12].map((n) => <option key={n} value={n}>{wt('wl.nWeeks', { n })}</option>)}
         </select>
         {data.teamOptions.length > 0 && (
-          <select aria-label="Team" className="w-input h-8 w-auto max-w-full py-0 pr-7 text-[13px]" value={teamId ?? ''} onChange={(e) => setTeamId(e.target.value ? Number(e.target.value) : undefined)}>
-            <option value="">All teams</option>
+          <select aria-label={wt('wl.team')} className="w-input h-8 w-auto max-w-full py-0 pr-7 text-[13px]" value={teamId ?? ''} onChange={(e) => setTeamId(e.target.value ? Number(e.target.value) : undefined)}>
+            <option value="">{wt('wl.allTeams')}</option>
             {data.teamOptions.map((t) => <option key={t.id} value={t.id}>{t.key} · {t.name}</option>)}
           </select>
         )}
-        <select aria-label="Project" className="w-input h-8 w-auto max-w-full py-0 pr-7 text-[13px]" value={projectId ?? ''} onChange={(e) => setProjectId(e.target.value ? Number(e.target.value) : undefined)}>
-          <option value="">All projects</option>
+        <select aria-label={wt('common.project')} className="w-input h-8 w-auto max-w-full py-0 pr-7 text-[13px]" value={projectId ?? ''} onChange={(e) => setProjectId(e.target.value ? Number(e.target.value) : undefined)}>
+          <option value="">{wt('pf.allProjects')}</option>
           {data.projectOptions.map((p) => <option key={p.id} value={p.id}>{p.key} · {p.name}</option>)}
         </select>
-        <select aria-label="Hours per story point" className="w-input h-8 w-auto py-0 pr-7 text-[13px]" value={hpp ?? data.hoursPerPoint} onChange={(e) => setHpp(Number(e.target.value))}>
-          {[1, 2, 4, 6, 8].map((n) => <option key={n} value={n}>1 pt = {n}h</option>)}
+        <select aria-label={wt('wl.hpp')} className="w-input h-8 w-auto py-0 pr-7 text-[13px]" value={hpp ?? data.hoursPerPoint} onChange={(e) => setHpp(Number(e.target.value))}>
+          {[1, 2, 4, 6, 8].map((n) => <option key={n} value={n}>{wt('wl.ptEq', { n })}</option>)}
         </select>
         <span className="flex-1" />
-        <button ref={helpBtn} type="button" className="w-btn w-btn-sm" onClick={help.toggle} aria-expanded={help.on}><CircleHelp size={13} /> How is load computed?</button>
+        <button ref={helpBtn} type="button" className="w-btn w-btn-sm" onClick={help.toggle} aria-expanded={help.on}><CircleHelp size={13} /> {wt('wl.howLoad')}</button>
         <Popover open={help.on} onClose={help.close} anchorRef={helpBtn} width={360} align="end">
           <div className="p-3 text-[12.5px] leading-snug">
-            <p className="mb-1.5 font-semibold">Load = open, assigned work due in the week ÷ capacity</p>
+            <p className="mb-1.5 font-semibold">{wt('wl.loadFormula')}</p>
             <ul className="ml-3.5 list-disc space-y-1 text-[var(--w-text-2)]">
               {data.rules.conversion.map((c, i) => <li key={i}>{c}</li>)}
-              <li>Overloaded = more than {data.rules.overloadPct}% of a week’s capacity, or work in a week with no capacity.</li>
+              <li>{wt('wl.overloadedRule', { p: data.rules.overloadPct })}</li>
             </ul>
           </div>
         </Popover>
       </div>
 
       <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12px] text-[var(--w-text-2)]">
-        <span className="tabular-nums"><b className="font-semibold text-[var(--w-text)]">{data.people.length}</b> {data.people.length === 1 ? 'person' : 'people'}</span>
+        <span className="tabular-nums"><b className="font-semibold text-[var(--w-text)]">{data.people.length}</b> {wt('wl.nPeople', { count: data.people.length })}</span>
         <span className={cn('flex items-center gap-1 tabular-nums', overloaded && 'font-semibold text-[var(--w-red)]')}>
-          {overloaded > 0 && <AlertTriangle size={13} />} {overloaded} overloaded
+          {overloaded > 0 && <AlertTriangle size={13} />} {wt('wl.nOverloaded', { n: overloaded })}
         </span>
-        <span className="flex flex-wrap items-center gap-2" aria-label="Legend">
+        <span className="flex flex-wrap items-center gap-2" aria-label={wt('wl.legend')}>
           {(['low', 'ok', 'high', 'over'] as const).map((lv) => (
             <span key={lv} className="inline-flex items-center gap-1"><span className="h-3 w-4 rounded-[3px] border border-[var(--w-border)]" style={{ background: LEVEL[lv].bg }} />{LEVEL[lv].label}</span>
           ))}
         </span>
-        {data.truncated && <span className="text-[var(--w-orange)]">Showing the first 5000 issues.</span>}
+        {data.truncated && <span className="text-[var(--w-orange)]">{wt('wl.first5000')}</span>}
       </div>
 
       {data.people.length === 0 ? (
-        <EmptyState title="No one to show" body="Nobody in this view has open, assigned work." />
+        <EmptyState title={wt('wl.noOne')} body={wt('wl.noOneBody')} />
       ) : (
-        <div className="overflow-x-auto rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)]" role="region" aria-label="Workload grid" tabIndex={0}>
+        <div className="overflow-x-auto rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)]" role="region" aria-label={wt('wl.grid')} tabIndex={0}>
           <table className="w-full border-collapse text-[13px]" style={{ minWidth: 150 + data.weeks.length * 104 }}>
             <thead>
               <tr className="bg-[var(--w-sunken)] text-[11px] font-medium uppercase tracking-[0.04em] text-[var(--w-text-3)]">
-                <th scope="col" className="sticky left-0 z-[1] w-[150px] min-w-[150px] bg-[var(--w-sunken)] px-3 py-2 text-left font-medium md:w-[220px] md:min-w-[220px]">Person</th>
+                <th scope="col" className="sticky left-0 z-[1] w-[150px] min-w-[150px] bg-[var(--w-sunken)] px-3 py-2 text-left font-medium md:w-[220px] md:min-w-[220px]">{wt('finance.person')}</th>
                 {data.weeks.map((w) => (
                   <th key={w.start} scope="col" className={cn('min-w-[104px] px-1.5 py-2 text-left font-medium', w.start <= data.today && data.today <= w.end && 'text-[var(--w-accent-text)]')}>
                     {fmtDay(w.start)}<span className="font-normal normal-case"> – {fmtDay(w.end)}</span>
                   </th>
                 ))}
-                <th scope="col" className="min-w-[88px] px-2 py-2 text-left font-medium">Total</th>
+                <th scope="col" className="min-w-[88px] px-2 py-2 text-left font-medium">{wt('common.total')}</th>
               </tr>
             </thead>
             <tbody>
@@ -193,7 +194,7 @@ export default function WorkloadView({ ws }: { ws: WorkspaceDetail }) {
                     <tr className="border-t border-[var(--w-border)] bg-[var(--w-bg)]">
                       <th scope="rowgroup" className="sticky left-0 z-[1] bg-[var(--w-bg)] px-3 py-1.5 text-left">
                         {g.team ? <span className="flex min-w-0 items-center gap-1.5"><TeamChip team={g.team} /><span className="truncate text-[12px] font-medium text-[var(--w-text-2)]">{g.team.name}</span></span>
-                          : <span className="text-[12px] font-medium text-[var(--w-text-3)]">No team</span>}
+                          : <span className="text-[12px] font-medium text-[var(--w-text-3)]">{wt('studio.noTeam')}</span>}
                       </th>
                       {g.team ? g.team.weeks.map((w, i) => (
                         <td key={i} className="px-1.5 py-1"><span className="text-[12px] tabular-nums text-[var(--w-text-2)]">{h1(w.hours)}h <span className="text-[var(--w-text-3)]">/ {h1(w.capacity)}h</span></span></td>
@@ -209,17 +210,17 @@ export default function WorkloadView({ ws }: { ws: WorkspaceDetail }) {
                           <span className="min-w-0 flex-1">
                             <span className="block truncate font-medium">{userName(p.user)}</span>
                             <span className="block truncate text-[11px] text-[var(--w-text-3)]">
-                              {h1(p.hoursPerDay)}h/day{p.capacitySource === 'default' ? ' (default)' : ''}{p.unscheduled ? ` · ${p.unscheduled} no due date` : ''}
+                              {wt('wl.hDay', { h: h1(p.hoursPerDay), d: p.capacitySource === 'default' ? wt('wl.defaultP') : '', u: p.unscheduled ? wt('wl.noDue', { n: p.unscheduled }) : '' })}
                             </span>
                           </span>
-                          {p.overloaded && <AlertTriangle size={13} className="shrink-0 text-[var(--w-red)]" aria-label="Overloaded" />}
+                          {p.overloaded && <AlertTriangle size={13} className="shrink-0 text-[var(--w-red)]" aria-label={wt('wl.overloaded')} />}
                         </button>
                       </th>
                       {p.weeks.map((w, i) => (
                         <td key={w.start} className="p-1">
                           <LoadCell
                             w={w}
-                            label={`${userName(p.user)}, week of ${fmtDay(w.start)}: ${h1(w.hours)} of ${h1(w.capacity)} hours${w.overloaded ? ', overloaded' : ''}`}
+                            label={wt('wl.cellLabel', { n: userName(p.user), w: fmtDay(w.start), a: h1(w.hours), b: h1(w.capacity), o: w.overloaded ? wt('wl.overloadedC') : '' })}
                             onOpen={w.issueIds.length ? () => setOpen({ person: p, week: i }) : undefined}
                           />
                         </td>
@@ -244,7 +245,7 @@ export default function WorkloadView({ ws }: { ws: WorkspaceDetail }) {
         title={open ? (
           <span className="flex min-w-0 items-center gap-2">
             <UserAvatar user={open.person.user} size={20} />
-            <span className="truncate">{userName(open.person.user)}{open.week !== null ? ` · week of ${fmtDay(open.person.weeks[open.week].start)}` : ' · all open work'}</span>
+            <span className="truncate">{userName(open.person.user)}{open.week !== null ? wt('wl.weekOf', { w: fmtDay(open.person.weeks[open.week].start) }) : wt('wl.allOpen')}</span>
           </span>
         ) : undefined}
       >
@@ -255,11 +256,11 @@ export default function WorkloadView({ ws }: { ws: WorkspaceDetail }) {
             <div className="space-y-3">
               {w && (
                 <p className={cn('text-[13px]', w.overloaded ? 'font-medium text-[var(--w-red)]' : 'text-[var(--w-text-2)]')}>
-                  {h1(w.hours)}h planned vs {h1(w.capacity)}h capacity ({w.workingDays} working day{w.workingDays === 1 ? '' : 's'} × {h1(open.person.hoursPerDay)}h){w.pct !== null ? ` — ${w.pct}%` : ''}.
+                  {wt('wl.planned', { a: h1(w.hours), b: h1(w.capacity), count: w.workingDays, h: h1(open.person.hoursPerDay), p: w.pct !== null ? ` — ${w.pct}%` : '' })}
                 </p>
               )}
               {open.person.timeOff.length > 0 && (
-                <p className="text-[12px] text-[var(--w-text-3)]">Time off: {open.person.timeOff.map((t) => (t.start === t.end ? fmtDay(t.start) : `${fmtDay(t.start)} – ${fmtDay(t.end)}`)).join(', ')}</p>
+                <p className="text-[12px] text-[var(--w-text-3)]">{wt('wl.timeOff', { s: open.person.timeOff.map((t) => (t.start === t.end ? fmtDay(t.start) : `${fmtDay(t.start)} – ${fmtDay(t.end)}`)).join(', ') })}</p>
               )}
               <ul className="divide-y divide-[var(--w-border)] overflow-hidden rounded-[8px] border border-[var(--w-border)]">
                 {list.map((i) => (
@@ -268,11 +269,11 @@ export default function WorkloadView({ ws }: { ws: WorkspaceDetail }) {
                     <span className="min-w-0 flex-1 truncate" title={i.title}>{i.title}</span>
                     <span className="shrink-0 text-[12px] tabular-nums text-[var(--w-text-2)]" title={SOURCE[i.source]}>{i.hours ? `${h1(i.hours)}h` : '—'} <span className="text-[var(--w-text-3)]">· {SOURCE[i.source]}</span></span>
                     <span className={cn('w-full text-[12px] tabular-nums sm:w-auto', i.overdue ? 'font-medium text-[var(--w-red)]' : 'text-[var(--w-text-3)]')}>
-                      {i.due ? `${i.overdue ? 'Overdue · ' : 'Due '}${fmtDay(i.due)}` : 'No due date'} · {i.status.name}
+                      {i.due ? `${i.overdue ? wt('wl.overdueDot') : wt('wl.dueSp')}${fmtDay(i.due)}` : wt('wl.noDueDate')} · {i.status.name}
                     </span>
                   </li>
                 ))}
-                {!list.length && <li className="px-3 py-3 text-[13px] text-[var(--w-text-3)]">No issues.</li>}
+                {!list.length && <li className="px-3 py-3 text-[13px] text-[var(--w-text-3)]">{wt('wl.noIssues')}</li>}
               </ul>
             </div>
           );

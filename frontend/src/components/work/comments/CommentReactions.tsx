@@ -23,6 +23,7 @@ import {
 } from '@/lib/work-api';
 import { wk } from '../hooks';
 import { Popover } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 // ─── Dữ liệu ─────────────────────────────────────────────────────
 
@@ -66,7 +67,7 @@ export function useToggleReaction(pid: number, num: number, me: { id: number; na
     },
     onError: (err, _v, ctx) => {
       if (ctx?.prev) qc.setQueryData(key, ctx.prev);
-      toast.error(workError(err, 'Could not update the reaction'));
+      toast.error(workError(err, wt('chat.reactionFailed')));
     },
     onSuccess: (r) => {
       // Còn lượt bấm khác đang chờ thì giữ bản lạc quan — lấy số của server lúc này sẽ nháy ngược.
@@ -107,16 +108,17 @@ export function useCommentReactionsRealtime(pid: number, num: number) {
 
 /** "You, Linh and 2 others reacted with 👍" */
 export function reactionSummary(r: CommentReaction, meId: number | undefined): string {
-  const names = r.users.map((u) => (u.id === meId ? 'You' : u.name));
-  if (r.mine && !names.includes('You')) names.unshift('You');
-  const ordered = [...names.filter((n) => n === 'You'), ...names.filter((n) => n !== 'You')];
+  const you = wt('ai.you');
+  const names = r.users.map((u) => (u.id === meId ? you : u.name));
+  if (r.mine && !names.includes(you)) names.unshift(you);
+  const ordered = [...names.filter((n) => n === you), ...names.filter((n) => n !== you)];
   const shown = ordered.slice(0, 3);
   const others = Math.max(0, r.count - shown.length);
   let who: string;
-  if (others > 0) who = `${shown.join(', ')} and ${others} other${others === 1 ? '' : 's'}`;
-  else if (shown.length <= 1) who = shown[0] ?? 'Someone';
-  else who = `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}`;
-  return `${who} reacted with ${r.emoji}`;
+  if (others > 0) who = `${shown.join(', ')}${wt('chat.andOthers', { n: others })}`;
+  else if (shown.length <= 1) who = shown[0] ?? wt('chat.someone');
+  else who = `${shown.slice(0, -1).join(', ')} ${wt('chat.and')} ${shown[shown.length - 1]}`;
+  return wt('chat.reactedLabel', { names: who, more: '', emoji: r.emoji });
 }
 
 // ─── Bảng chọn emoji ─────────────────────────────────────────────
@@ -139,7 +141,7 @@ function EmojiGrid({ reactions, onPick }: { reactions: CommentReaction[]; onPick
     if (next >= 0) { e.preventDefault(); refs.current[next]?.focus(); }
   };
   return (
-    <div role="toolbar" aria-label="Pick a reaction" className="flex items-center gap-0.5 p-1.5" onKeyDown={onKey}>
+    <div role="toolbar" aria-label={wt('chat.pickReaction')} className="flex items-center gap-0.5 p-1.5" onKeyDown={onKey}>
       {REACTION_EMOJIS.map((emoji, i) => {
         const mine = reactions.some((r) => r.emoji === emoji && r.mine);
         return (
@@ -184,8 +186,8 @@ export function ReactionPickerButton({ reactions, onPick, variant = 'icon', clas
       <button
         ref={anchor}
         type="button"
-        title="Add reaction"
-        aria-label="Add reaction"
+        title={wt('chat.addReaction')}
+        aria-label={wt('chat.addReaction')}
         aria-haspopup="true"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
@@ -217,7 +219,7 @@ export function ReactionBar({ reactions, meId, canReact, onToggle }: {
 }) {
   if (!reactions.length) return null;
   return (
-    <div className="mt-2 flex flex-wrap items-center gap-1.5" aria-label="Reactions">
+    <div className="mt-2 flex flex-wrap items-center gap-1.5" aria-label={wt('chat.reactions')}>
       {reactions.map((r) => {
         const summary = reactionSummary(r, meId);
         const cls = cn(

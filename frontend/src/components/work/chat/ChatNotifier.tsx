@@ -25,6 +25,7 @@ import { useAuthStore } from '@/store/authStore';
 import { usePreferencesStore } from '@/store/preferencesStore';
 import { chatApi, chatKeys, type ChatNotify } from '@/lib/work-chat-api';
 import { localAlert, titleWithBadge } from '@/lib/work-chat-rules';
+import { wt } from '@/components/work/i18n';
 
 // ─── Kênh đang xem (ChatView đặt) ────────────────────────────────
 
@@ -76,7 +77,7 @@ export function ChatNavBadge({ pid }: { pid: number }) {
   return (
     <span
       className="w-rail-hide ml-auto inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[var(--w-accent)] px-1.5 text-[11px] font-semibold tabular-nums text-[var(--w-on-accent,#fff)]"
-      aria-label={`${n} unread${p.mentions ? `, ${p.mentions} mentioning you` : ''}`}
+      aria-label={`${wt('chat.badgeAria', { n })}${p.mentions ? wt('chat.mentioningYou', { m: p.mentions }) : ''}`}
       data-testid="chat-nav-badge"
     >
       {n > 99 ? '99+' : n}
@@ -140,14 +141,14 @@ export function ChatNotifierHost({ go }: { go?: (url: string) => void }) {
       const focused = typeof document !== 'undefined' && document.visibilityState === 'visible' && document.hasFocus();
       const what = localAlert(n, { viewingChannelId: viewing.pid === n.projectId ? viewing.cid : null, focused, osAllowed: osAllowed() }, n.channelId);
       const head = `${n.mention ? '@' : '#'}${n.channelName} · ${n.projectKey}`;
-      const body = `${n.authorName}: ${n.excerpt || 'sent a message'}`;
+      const body = `${n.authorName}: ${n.excerpt || wt('chat.sentMessage')}`;
       if (what.sound) playChatBlip();
       if (what.toast) {
-        toast(head, { description: body.slice(0, 160), action: { label: 'Open', onClick: () => goRef.current(n.url) }, duration: 6000 });
+        toast(head, { description: body.slice(0, 160), action: { label: wt('common.open'), onClick: () => goRef.current(n.url) }, duration: 6000 });
       }
       if (what.os) {
         try {
-          const note = new Notification(`${n.mention ? 'Mentioned in ' : ''}#${n.channelName} — ${n.projectName}`, { body: body.slice(0, 180), tag: `ctw-chat-${n.channelId}`, silent: true });
+          const note = new Notification(`${n.mention ? wt('chat.mentionedIn') : ''}#${n.channelName} — ${n.projectName}`, { body: body.slice(0, 180), tag: `ctw-chat-${n.channelId}`, silent: true });
           note.onclick = () => { try { window.focus(); } catch { /* */ } goRef.current(n.url); note.close(); };
         } catch { /* trình duyệt không cho tạo — bỏ qua */ }
       }

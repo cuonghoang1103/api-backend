@@ -8,8 +8,9 @@ import { workApi, type EstimationUnit, type SprintFull } from '@/lib/work-api';
 import { wk } from '@/components/work/hooks';
 import { cn } from '@/lib/utils';
 import KpiTile from '../KpiTile';
+import { wt, wfmt } from '@/components/work/i18n';
 
-export const unitLabel = (u: EstimationUnit | undefined) => (u === 'HOURS' ? 'h' : 'pts');
+export const unitLabel = (u: EstimationUnit | undefined) => (u === 'HOURS' ? 'h' : wt('contrib.pts'));
 
 /** 12 → "12", 12.5 → "12.5". */
 export const num = (n: number | null | undefined) => (n === null || n === undefined ? '—' : String(Math.round(n * 10) / 10));
@@ -21,7 +22,7 @@ export const fmtValue = (n: number | null | undefined, u: EstimationUnit | undef
 export function fmtDay(day: string): string {
   const d = new Date(day.length === 10 ? `${day}T00:00:00Z` : day);
   if (Number.isNaN(d.getTime())) return day;
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+  return d.toLocaleDateString(wfmt.intl(), { month: 'short', day: 'numeric', timeZone: 'UTC' });
 }
 
 /** Mọi sprint kể cả đã đóng — khoá nằm dưới wk.sprints nên sự kiện sprint.updated làm tươi nó. */
@@ -44,14 +45,14 @@ export function useReportableSprints(sprints: SprintFull[] | undefined) {
 export function SprintSelect({ sprints, value, onChange, className }: { sprints: SprintFull[]; value: number | null; onChange: (id: number) => void; className?: string }) {
   return (
     <select
-      aria-label="Sprint"
+      aria-label={wt('common.sprint')}
       value={value ?? ''}
       onChange={(e) => onChange(Number(e.target.value))}
       className={cn('w-input h-[28px] w-auto max-w-full py-0 pr-7 text-[12px]', className)}
     >
       {sprints.map((s) => (
         <option key={s.id} value={s.id}>
-          {s.name}{s.state === 'ACTIVE' ? ' (active)' : ''}
+          {s.name}{s.state === 'ACTIVE' ? wt('contrib.activeParen') : ''}
         </option>
       ))}
     </select>

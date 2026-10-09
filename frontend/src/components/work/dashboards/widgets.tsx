@@ -25,33 +25,34 @@ import { axisTick, fmtDay, fmtValue, Legend, unitLabel, useAllSprints, useReport
 import { jqlErrorOf, jqlListUrl } from '../search/jql';
 import { govApi, govKeys } from '@/lib/work-s3b-api';
 import { ScoreBadge } from '../governance/shared';
+import { wt } from '@/components/work/i18n';
 
 // ─── Danh mục widget ─────────────────────────────────────────────
 
 export const WIDGET_META: Record<WidgetKind, { label: string; description: string; defaultTitle: string; usesQuery: boolean }> = {
-  filter: { label: 'Filter results', description: 'A list of issues matching a query', defaultTitle: 'Filter results', usesQuery: true },
-  counter: { label: 'Issue count', description: 'One big number for a query', defaultTitle: 'Issue count', usesQuery: true },
-  pie: { label: 'Pie chart', description: 'Share of issues by a field', defaultTitle: 'Issues breakdown', usesQuery: true },
-  bar: { label: 'Bar chart', description: 'Issues per value of a field', defaultTitle: 'Issues breakdown', usesQuery: true },
-  created_resolved: { label: 'Created vs resolved', description: 'Daily created and resolved issues', defaultTitle: 'Created vs resolved', usesQuery: true },
-  burndown: { label: 'Sprint burndown', description: 'Remaining work in a sprint', defaultTitle: 'Sprint burndown', usesQuery: false },
-  my_issues: { label: 'My open issues', description: 'Open issues assigned to the viewer', defaultTitle: 'My open issues', usesQuery: false },
-  health: { label: 'Project health', description: 'Overdue, due soon, stuck and unassigned work', defaultTitle: 'Project health', usesQuery: false },
-  text: { label: 'Text', description: 'Notes, links or instructions for the team', defaultTitle: 'Notes', usesQuery: false },
-  top_risks: { label: 'Top risks', description: 'Open risks from the RAID log with the highest probability × impact', defaultTitle: 'Top risks', usesQuery: false },
+  filter: { get label() { return wt('dash.l_filter'); }, get description() { return wt('dash.d_filter'); }, get defaultTitle() { return wt('dash.t_filter'); }, usesQuery: true },
+  counter: { get label() { return wt('dash.l_counter'); }, get description() { return wt('dash.d_counter'); }, get defaultTitle() { return wt('dash.t_counter'); }, usesQuery: true },
+  pie: { get label() { return wt('dash.l_pie'); }, get description() { return wt('dash.d_pie'); }, get defaultTitle() { return wt('dash.t_pie'); }, usesQuery: true },
+  bar: { get label() { return wt('dash.l_bar'); }, get description() { return wt('dash.d_bar'); }, get defaultTitle() { return wt('dash.t_bar'); }, usesQuery: true },
+  created_resolved: { get label() { return wt('dash.l_created_resolved'); }, get description() { return wt('dash.d_created_resolved'); }, get defaultTitle() { return wt('dash.t_created_resolved'); }, usesQuery: true },
+  burndown: { get label() { return wt('dash.l_burndown'); }, get description() { return wt('dash.d_burndown'); }, get defaultTitle() { return wt('dash.t_burndown'); }, usesQuery: false },
+  my_issues: { get label() { return wt('dash.l_my_issues'); }, get description() { return wt('dash.d_my_issues'); }, get defaultTitle() { return wt('dash.t_my_issues'); }, usesQuery: false },
+  health: { get label() { return wt('dash.l_health'); }, get description() { return wt('dash.d_health'); }, get defaultTitle() { return wt('dash.t_health'); }, usesQuery: false },
+  text: { get label() { return wt('dash.l_text'); }, get description() { return wt('dash.d_text'); }, get defaultTitle() { return wt('dash.t_text'); }, usesQuery: false },
+  top_risks: { get label() { return wt('dash.l_top_risks'); }, get description() { return wt('dash.d_top_risks'); }, get defaultTitle() { return wt('dash.t_top_risks'); }, usesQuery: false },
 };
 
 export const WIDGET_KINDS: WidgetKind[] = ['filter', 'counter', 'pie', 'bar', 'created_resolved', 'burndown', 'my_issues', 'health', 'top_risks', 'text'];
 
 export const GROUP_BY_OPTIONS: Array<{ value: GroupBy; label: string }> = [
-  { value: 'status', label: 'Status' },
-  { value: 'statusCategory', label: 'Status category' },
-  { value: 'assignee', label: 'Assignee' },
-  { value: 'type', label: 'Issue type' },
-  { value: 'priority', label: 'Priority' },
-  { value: 'label', label: 'Label' },
-  { value: 'sprint', label: 'Sprint' },
-  { value: 'component', label: 'Component' },
+  { value: 'status', get label() { return wt('common.status'); } },
+  { value: 'statusCategory', get label() { return wt('dash.gb_statusCategory'); } },
+  { value: 'assignee', get label() { return wt('common.assignee'); } },
+  { value: 'type', get label() { return wt('dash.gb_type'); } },
+  { value: 'priority', get label() { return wt('common.priority'); } },
+  { value: 'label', get label() { return wt('dash.gb_label'); } },
+  { value: 'sprint', get label() { return wt('common.sprint'); } },
+  { value: 'component', get label() { return wt('dash.gb_component'); } },
 ];
 
 export const newWidgetId = () => Math.random().toString(36).slice(2, 10);
@@ -59,13 +60,13 @@ export const newWidgetId = () => Math.random().toString(36).slice(2, 10);
 /** Bộ widget khởi đầu — chỉ dùng JQL chung chung để dự án nào cũng hợp lệ. */
 export function defaultWidgets(): DashboardWidget[] {
   return [
-    { id: newWidgetId(), kind: 'counter', title: 'Open issues', query: OPEN_ISSUES_JQL, size: 'half' },
-    { id: newWidgetId(), kind: 'counter', title: 'Overdue', query: `due < now() AND ${OPEN_ISSUES_JQL}`, size: 'half' },
-    { id: newWidgetId(), kind: 'pie', title: 'Issues by status', query: '', groupBy: 'status', size: 'half' },
-    { id: newWidgetId(), kind: 'bar', title: 'Open issues by assignee', query: OPEN_ISSUES_JQL, groupBy: 'assignee', size: 'half' },
-    { id: newWidgetId(), kind: 'created_resolved', title: 'Created vs resolved (30 days)', query: '', days: 30, size: 'full' },
-    { id: newWidgetId(), kind: 'my_issues', title: 'My open issues', size: 'half' },
-    { id: newWidgetId(), kind: 'health', title: 'Project health', size: 'half' },
+    { id: newWidgetId(), kind: 'counter', title: wt('rep.openIssues'), query: OPEN_ISSUES_JQL, size: 'half' },
+    { id: newWidgetId(), kind: 'counter', title: wt('common.overdue'), query: `due < now() AND ${OPEN_ISSUES_JQL}`, size: 'half' },
+    { id: newWidgetId(), kind: 'pie', title: wt('dash.tIssuesByStatus'), query: '', groupBy: 'status', size: 'half' },
+    { id: newWidgetId(), kind: 'bar', title: wt('dash.tOpenByAssignee'), query: OPEN_ISSUES_JQL, groupBy: 'assignee', size: 'half' },
+    { id: newWidgetId(), kind: 'created_resolved', title: wt('dash.tCr30'), query: '', days: 30, size: 'full' },
+    { id: newWidgetId(), kind: 'my_issues', title: wt('dash.t_my_issues'), size: 'half' },
+    { id: newWidgetId(), kind: 'health', title: wt('dash.t_health'), size: 'half' },
   ];
 }
 
@@ -118,9 +119,9 @@ function WidgetError({ err, onRetry }: { err: unknown; onRetry: () => void }) {
   const jql = jqlErrorOf(err);
   return (
     <div className="flex min-h-[120px] flex-col items-center justify-center gap-2 px-2 text-center">
-      <div className="text-[13px] font-medium">{jql ? 'This widget’s query is invalid' : 'Couldn’t load this widget'}</div>
+      <div className="text-[13px] font-medium">{jql ? wt('dash.invalidQ') : wt('dash.couldntLoad')}</div>
       <p className="max-w-[360px] text-[12px] text-[var(--w-text-2)]">{jql ? jql.message : workError(err)}</p>
-      {!jql && <button type="button" className="w-btn w-btn-sm" onClick={onRetry}>Try again</button>}
+      {!jql && <button type="button" className="w-btn w-btn-sm" onClick={onRetry}>{wt('common.tryAgain')}</button>}
     </div>
   );
 }
@@ -189,8 +190,8 @@ function IssueListWidget({ pid, jql, lk, config, onOpenIssue, emptyText }: {
     <div>
       <IssueRows items={q.data.items} lk={lk} onOpenIssue={onOpenIssue} />
       <div className="mt-2 flex items-center justify-between text-[12px] text-[var(--w-text-3)]">
-        <span className="tabular">{q.data.items.length < q.data.total ? `Showing ${q.data.items.length} of ${q.data.total}` : `${q.data.total} ${q.data.total === 1 ? 'issue' : 'issues'}`}</span>
-        <Link href={jqlListUrl(config.workspace.slug, config.key, jql)} className="text-[var(--w-accent-text)] hover:underline">View in Issues</Link>
+        <span className="tabular">{q.data.items.length < q.data.total ? wt('dash.showingAofB', { a: q.data.items.length, b: q.data.total }) : wt('rep.nIssues', { count: q.data.total })}</span>
+        <Link href={jqlListUrl(config.workspace.slug, config.key, jql)} className="text-[var(--w-accent-text)] hover:underline">{wt('dash.viewInIssues')}</Link>
       </div>
     </div>
   );
@@ -239,7 +240,7 @@ function PieWidget({ pid, jql, groupBy }: { pid: number; jql: string; groupBy: G
   }, [q.data, groupBy]);
   if (q.isLoading) return <Loading />;
   if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
-  if (!q.data.total) return <Empty>No issues match this query.</Empty>;
+  if (!q.data.total) return <Empty>{wt('dash.noMatch')}</Empty>;
   return (
     <div className="flex min-w-0 items-center gap-4">
       <div className="relative h-[168px] w-[168px] shrink-0 max-[380px]:h-[132px] max-[380px]:w-[132px]">
@@ -281,7 +282,7 @@ function BarWidget({ pid, jql, groupBy }: { pid: number; jql: string; groupBy: G
   }, [q.data, groupBy]);
   if (q.isLoading) return <Loading />;
   if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
-  if (!q.data.total) return <Empty>No issues match this query.</Empty>;
+  if (!q.data.total) return <Empty>{wt('dash.noMatch')}</Empty>;
   const height = Math.max(140, data.length * 30 + 24);
   return (
     <div className="w-full min-w-0" style={{ height }}>
@@ -318,8 +319,8 @@ function CreatedResolvedWidget({ pid, jql, days }: { pid: number; jql: string; d
   return (
     <div className="min-w-0">
       <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1">
-        <Legend items={[{ label: `Created · ${totals.created}`, color: 'var(--w-chart-1)' }, { label: `Resolved · ${totals.resolved}`, color: 'var(--w-green)' }]} />
-        <span className="ml-auto text-[11px] text-[var(--w-text-3)]">Last {days} days</span>
+        <Legend items={[{ label: wt('dash.createdN', { n: totals.created }), color: 'var(--w-chart-1)' }, { label: wt('dash.resolvedN', { n: totals.resolved }), color: 'var(--w-green)' }]} />
+        <span className="ml-auto text-[11px] text-[var(--w-text-3)]">{wt('dash.lastNDays', { n: days })}</span>
       </div>
       <div className="h-[200px] w-full min-w-0">
         <ResponsiveContainer width="100%" height="100%">
@@ -351,7 +352,7 @@ function BurndownWidget({ pid, sprintId }: { pid: number; sprintId: number | nul
   });
   if (sprintsQ.isLoading || (chosen && q.isLoading)) return <Loading />;
   if (sprintsQ.error) return <WidgetError err={sprintsQ.error} onRetry={() => sprintsQ.refetch()} />;
-  if (!chosen) return <Empty>No started sprints yet. Start a sprint from the Backlog to see its burndown.</Empty>;
+  if (!chosen) return <Empty>{wt('dash.noStarted')}</Empty>;
   if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
   const d = q.data;
   const last = [...d.points].reverse().find((p) => p.remaining !== null);
@@ -359,11 +360,11 @@ function BurndownWidget({ pid, sprintId }: { pid: number; sprintId: number | nul
     <div className="min-w-0">
       <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px]">
         <span className="font-medium">{d.sprint.name}</span>
-        {d.sprint.state === 'ACTIVE' && <span className="rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 text-[10px] font-semibold uppercase text-[var(--w-accent-text)]">Active</span>}
-        <span className="ml-auto text-[var(--w-text-3)]">Remaining <span className="font-medium tabular-nums text-[var(--w-text)]">{fmtValue(last?.remaining ?? null, d.unit)}</span></span>
+        {d.sprint.state === 'ACTIVE' && <span className="rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 text-[10px] font-semibold uppercase text-[var(--w-accent-text)]">{wt('studio.stActive')}</span>}
+        <span className="ml-auto text-[var(--w-text-3)]">{wt('dash.remaining')} <span className="font-medium tabular-nums text-[var(--w-text)]">{fmtValue(last?.remaining ?? null, d.unit)}</span></span>
       </div>
       {!d.points.length ? (
-        <Empty>Numbers are recorded once a day after the sprint starts.</Empty>
+        <Empty>{wt('share.vNoDataBody')}</Empty>
       ) : (
         <div className="h-[200px] w-full min-w-0">
           <ResponsiveContainer width="100%" height="100%">
@@ -392,12 +393,12 @@ function HealthWidget({ pid, onOpenIssue }: { pid: number; onOpenIssue: (n: numb
   if (q.error || !q.data) return <WidgetError err={q.error} onRetry={() => q.refetch()} />;
   const d = q.data;
   const cells: { label: string; n: number; tone: KpiTone }[] = [
-    { label: 'Overdue', n: d.overdue.length, tone: 'red' },
-    { label: 'Due in 3 days', n: d.dueSoon.length, tone: 'accent' },
-    { label: 'Stuck > 5 days', n: d.stale.length, tone: 'orange' },
-    { label: 'Urgent, no owner', n: d.unassignedUrgent.length, tone: 'red' },
+    { label: wt('common.overdue'), n: d.overdue.length, tone: 'red' },
+    { label: wt('rep.due3'), n: d.dueSoon.length, tone: 'accent' },
+    { label: wt('rep.stuck5'), n: d.stale.length, tone: 'orange' },
+    { label: wt('dash.urgentNoOwner'), n: d.unassignedUrgent.length, tone: 'red' },
   ];
-  const attention = [...d.overdue.map((i) => ({ ...i, why: `Due ${formatDate(i.dueDate)}` })), ...d.stale.map((i) => ({ ...i, why: `Idle ${i.idleDays}d` }))].slice(0, 4);
+  const attention = [...d.overdue.map((i) => ({ ...i, why: wt('rep.dueD', { d: formatDate(i.dueDate) }) })), ...d.stale.map((i) => ({ ...i, why: wt('dash.idleD', { n: i.idleDays ?? '?' }) }))].slice(0, 4);
   const risk = d.sprintRisk;
   return (
     <div className="min-w-0 space-y-3">
@@ -406,8 +407,8 @@ function HealthWidget({ pid, onOpenIssue }: { pid: number; onOpenIssue: (n: numb
       </div>
       {risk && (
         <p className={cn('text-[12px]', risk.atRisk ? 'text-[var(--w-red)]' : 'text-[var(--w-text-2)]')}>
-          {risk.sprint}: {risk.remaining} {unitLabel(d.unit)} left, {risk.daysLeft} {risk.daysLeft === 1 ? 'day' : 'days'} to go
-          {risk.atRisk ? ' — at risk at the current pace.' : ' — on track.'}
+          {wt('dash.riskLine', { s: risk.sprint, n: risk.remaining, u: unitLabel(d.unit), count: risk.daysLeft })}
+          {risk.atRisk ? wt('dash.atRiskPace') : wt('dash.onTrackDot')}
         </p>
       )}
       {attention.length > 0 && (
@@ -429,7 +430,7 @@ function HealthWidget({ pid, onOpenIssue }: { pid: number; onOpenIssue: (n: numb
 
 function TextWidget({ text }: { text: string | undefined }) {
   const paras = (text ?? '').split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
-  if (!paras.length) return <Empty>No text yet. Edit the dashboard to add notes.</Empty>;
+  if (!paras.length) return <Empty>{wt('dash.noText')}</Empty>;
   return (
     <div className="space-y-2 break-words text-[13px] leading-relaxed text-[var(--w-text-2)]">
       {paras.map((p, i) => <p key={i} className="whitespace-pre-line">{p}</p>)}
@@ -444,8 +445,8 @@ export function WidgetBody({ w, pid, config, lk, onOpenIssue }: {
 }) {
   const jql = w.query ?? '';
   switch (w.kind) {
-    case 'filter': return <IssueListWidget pid={pid} jql={jql} lk={lk} config={config} onOpenIssue={onOpenIssue} emptyText="No issues match this query." />;
-    case 'my_issues': return <IssueListWidget pid={pid} jql={MY_ISSUES_JQL} lk={lk} config={config} onOpenIssue={onOpenIssue} emptyText="Nothing open is assigned to you." />;
+    case 'filter': return <IssueListWidget pid={pid} jql={jql} lk={lk} config={config} onOpenIssue={onOpenIssue} emptyText={wt('dash.noMatch')} />;
+    case 'my_issues': return <IssueListWidget pid={pid} jql={MY_ISSUES_JQL} lk={lk} config={config} onOpenIssue={onOpenIssue} emptyText={wt('dash.nothingMine')} />;
     case 'counter': return <CounterWidget pid={pid} jql={jql} config={config} />;
     case 'pie': return <PieWidget pid={pid} jql={jql} groupBy={w.groupBy ?? 'status'} />;
     case 'bar': return <BarWidget pid={pid} jql={jql} groupBy={w.groupBy ?? 'status'} />;
@@ -454,7 +455,7 @@ export function WidgetBody({ w, pid, config, lk, onOpenIssue }: {
     case 'health': return <HealthWidget pid={pid} onOpenIssue={onOpenIssue} />;
     case 'text': return <TextWidget text={w.text} />;
     case 'top_risks': return <TopRisksWidget pid={pid} config={config} />;
-    default: return <Empty>Unknown widget.</Empty>;
+    default: return <Empty>{wt('dash.unknown')}</Empty>;
   }
 }
 
@@ -463,8 +464,8 @@ export function WidgetBody({ w, pid, config, lk, onOpenIssue }: {
 function TopRisksWidget({ pid, config }: { pid: number; config: ProjectConfig }) {
   const q = useQuery({ queryKey: govKeys.topRisks(pid), queryFn: () => govApi.topRisks(pid, 5), staleTime: 30_000 });
   if (q.isLoading) return <div className="flex h-24 items-center justify-center"><Spinner /></div>;
-  if (!q.data?.enabled) return <Empty>Turn on the RAID log module to see top risks here.</Empty>;
-  if (!q.data.items.length) return <Empty>No open, scored risks. Nice.</Empty>;
+  if (!q.data?.enabled) return <Empty>{wt('dash.raidOff')}</Empty>;
+  if (!q.data.items.length) return <Empty>{wt('dash.noRisks')}</Empty>;
   const base = `/work/${config.workspace.slug}/${config.key}/raid`;
   return (
     <ul className="divide-y divide-[var(--w-border)]" data-testid="widget-top-risks">

@@ -15,24 +15,25 @@ import { ConfirmDialog, ReadOnlyNotice, Section } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
 import DocsTrash from './DocsTrash';
 import { studioOn } from '../studio/shared';
+import { wt } from '@/components/work/i18n';
 
 /** Đợt S5c: Trash có hai tab — Issues (như cũ) · Docs (khi mô-đun docs bật và người xem sửa được tài liệu). */
 export default function ProjectTrash({ config, slug }: { config: ProjectConfig; slug: string }) {
   const docsOn = studioOn(config, 'docs') && !!config.permissions.editDocs;
   const [kind, setKind] = useState<'issues' | 'docs'>('issues');
   const tabs = docsOn ? (
-    <div role="tablist" aria-label="Trash contents" className="mb-3 inline-flex rounded-[8px] border border-[var(--w-border)] p-0.5">
+    <div role="tablist" aria-label={wt('trash.contents')} className="mb-3 inline-flex rounded-[8px] border border-[var(--w-border)] p-0.5">
       {(['issues', 'docs'] as const).map((k) => (
         <button key={k} type="button" role="tab" aria-selected={kind === k} onClick={() => setKind(k)}
           className={`rounded-[6px] px-3 py-1 text-[12.5px] font-medium ${kind === k ? 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'text-[var(--w-text-2)] hover:bg-[var(--w-hover)]'}`}>
-          {k === 'issues' ? 'Issues' : 'Docs'}
+          {k === 'issues' ? wt('common.issues') : 'Docs'}
         </button>
       ))}
     </div>
   ) : null;
   if (docsOn && kind === 'docs') {
     return (
-      <Section title="Trash" description="Deleted documents stay here until an admin deletes them permanently. Restoring brings back the whole page tree that was deleted with it.">
+      <Section title={wt('trash.trash')} description={wt('trash.docsDesc')}>
         {tabs}
         <DocsTrash config={config} />
       </Section>
@@ -62,22 +63,22 @@ function IssueTrash({ config, slug, tabs }: { config: ProjectConfig; slug: strin
 
   const restore = useMutation({
     mutationFn: (num: number) => workApi.restoreIssue(config.id, num),
-    onSuccess: (_d, num) => { toast.success(`${config.key}-${num} restored`); refresh(); },
-    onError: (err) => toast.error(workError(err, 'Could not restore the issue')),
+    onSuccess: (_d, num) => { toast.success(wt('trash.restored', { k: `${config.key}-${num}` })); refresh(); },
+    onError: (err) => toast.error(workError(err, wt('trash.restoreFailed'))),
   });
   const purge = useMutation({
     mutationFn: (num: number) => workApi.purgeIssue(config.id, num),
-    onSuccess: (_d, num) => { toast.success(`${config.key}-${num} permanently deleted`); setPurging(null); qc.invalidateQueries({ queryKey: key }); },
-    onError: (err) => toast.error(workError(err, 'Could not delete the issue')),
+    onSuccess: (_d, num) => { toast.success(wt('trash.purged', { k: `${config.key}-${num}` })); setPurging(null); qc.invalidateQueries({ queryKey: key }); },
+    onError: (err) => toast.error(workError(err, wt('trash.deleteFailed'))),
   });
 
-  const description = 'Deleted issues stay here until an admin deletes them permanently. Restoring an issue brings back its sub-tasks, comments, attachments and history.';
+  const description = wt('trash.issuesDesc');
 
   if (!canRestore) {
     return (
-      <Section title="Trash" description={description}>
+      <Section title={wt('trash.trash')} description={description}>
         {tabs}
-        <ReadOnlyNotice>You need permission to delete issues to view and restore the trash.</ReadOnlyNotice>
+        <ReadOnlyNotice>{wt('trash.needPerm')}</ReadOnlyNotice>
       </Section>
     );
   }
@@ -85,27 +86,27 @@ function IssueTrash({ config, slug, tabs }: { config: ProjectConfig; slug: strin
   const rows = q.data ?? [];
 
   return (
-    <Section title="Trash" description={description}>
+    <Section title={wt('trash.trash')} description={description}>
       {tabs}
       {q.isLoading ? (
         <div className="flex justify-center py-10"><Spinner size={18} /></div>
       ) : q.error ? (
-        <EmptyState title="Could not load the trash" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('trash.loadFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : !rows.length ? (
         <div className="flex flex-col items-center rounded-[8px] border border-dashed border-[var(--w-border)] px-6 py-10 text-center">
           <Trash2 size={20} className="mb-2 text-[var(--w-text-3)]" />
-          <div className="text-[13px] font-medium">Trash is empty</div>
-          <p className="mt-1 text-[12px] text-[var(--w-text-3)]">Issues you delete will appear here.</p>
+          <div className="text-[13px] font-medium">{wt('trash.empty')}</div>
+          <p className="mt-1 text-[12px] text-[var(--w-text-3)]">{wt('trash.issuesAppear')}</p>
         </div>
       ) : (
         <div className="overflow-x-auto rounded-[8px] border border-[var(--w-border)]">
           <table className="w-full min-w-[560px] text-[13px]">
             <thead>
               <tr className="border-b border-[var(--w-border)] text-left text-[11px] uppercase tracking-wide text-[var(--w-text-3)]">
-                <th className="px-3 py-2 font-medium">Issue</th>
-                <th className="px-3 py-2 font-medium">Deleted by</th>
-                <th className="px-3 py-2 font-medium">Deleted</th>
-                <th className="px-3 py-2" aria-label="Actions" />
+                <th className="px-3 py-2 font-medium">{wt('common.issue')}</th>
+                <th className="px-3 py-2 font-medium">{wt('trash.deletedBy')}</th>
+                <th className="px-3 py-2 font-medium">{wt('trash.deleted')}</th>
+                <th className="px-3 py-2" aria-label={wt('common.actions')} />
               </tr>
             </thead>
             <tbody>
@@ -127,10 +128,10 @@ function IssueTrash({ config, slug, tabs }: { config: ProjectConfig; slug: strin
                   <td className="px-3 py-2">
                     <div className="flex justify-end gap-1.5">
                       <button type="button" className="w-btn w-btn-sm" disabled={restore.isPending && restore.variables === r.number} onClick={() => restore.mutate(r.number)}>
-                        {restore.isPending && restore.variables === r.number ? <Spinner size={11} /> : <RotateCcw size={13} />} Restore
+                        {restore.isPending && restore.variables === r.number ? <Spinner size={11} /> : <RotateCcw size={13} />} {wt('common.restore')}
                       </button>
                       {canPurge && (
-                        <button type="button" className="w-btn w-btn-sm w-btn-danger" onClick={() => setPurging(r)}>Delete permanently</button>
+                        <button type="button" className="w-btn w-btn-sm w-btn-danger" onClick={() => setPurging(r)}>{wt('trash.deletePerm')}</button>
                       )}
                     </div>
                   </td>
@@ -144,14 +145,13 @@ function IssueTrash({ config, slug, tabs }: { config: ProjectConfig; slug: strin
       <ConfirmDialog
         open={!!purging}
         onClose={() => setPurging(null)}
-        title="Delete issue permanently?"
+        title={wt('trash.purgeQ')}
         body={
           <>
-            <span className="font-medium text-[var(--w-text)]">{config.key}-{purging?.number} {purging?.title}</span> will be erased forever, together with its
-            deleted sub-tasks, comments, attachments, work logs and history. <span className="font-medium text-[var(--w-red)]">This cannot be undone.</span>
+            <span className="font-medium text-[var(--w-text)]">{config.key}-{purging?.number} {purging?.title}</span> {wt('trash.purgeBody')} <span className="font-medium text-[var(--w-red)]">{wt('trash.noUndo')}</span>
           </>
         }
-        confirmLabel="Delete permanently"
+        confirmLabel={wt('trash.deletePerm')}
         pending={purge.isPending}
         onConfirm={() => purging && purge.mutate(purging.number)}
       />

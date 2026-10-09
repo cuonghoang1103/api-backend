@@ -48,7 +48,7 @@ export default function WeeklyTab({ pid, canEdit }: { pid: number; canEdit: bool
         {reports.map((r) => (
           <button key={r.id} type="button" onClick={() => select(r.id)} aria-current={selected === r.id}
             className={cn('block w-full px-3 py-2 text-left', selected === r.id ? 'bg-[var(--w-active)]' : 'hover:bg-[var(--w-hover)]')}>
-            <div className="text-[13px] font-medium">{r.weekNo ? `Week ${r.weekNo}` : wt('school.weekOf', { d: ddmm(r.weekStart) })}</div>
+            <div className="text-[13px] font-medium">{r.weekNo ? wt('school.weekN', { n: r.weekNo }) : wt('school.weekOf', { d: ddmm(r.weekStart) })}</div>
             <div className="text-[11.5px] text-[var(--w-text-3)]">{ddmm(r.weekStart)} – {ddmm(addDaysIso(r.weekStart, 6))} · {wt('school.nTasks', { n: r.counts.status })} · {wt('school.nIssues', { n: r.counts.issues })}</div>
           </button>
         ))}
@@ -131,7 +131,7 @@ function WeekEditor({ pid, id, canEdit, onDeleted }: { pid: number; id: number; 
   return (
     <div className="mx-auto max-w-[1200px]">
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <h2 className="text-[16px] font-semibold">{w.weekNo ? `Week ${w.weekNo}` : wt('school.tabWeeklyReport')} <span className="font-normal text-[var(--w-text-2)]">· {ddmm(w.weekStart)} – {ddmm(addDaysIso(w.weekStart, 6))}</span></h2>
+        <h2 className="text-[16px] font-semibold">{w.weekNo ? wt('school.weekN', { n: w.weekNo }) : wt('school.tabWeeklyReport')} <span className="font-normal text-[var(--w-text-2)]">· {ddmm(w.weekStart)} – {ddmm(addDaysIso(w.weekStart, 6))}</span></h2>
         <span className="text-[12px] text-[var(--w-text-3)]" aria-live="polite">{{ idle: '', dirty: wt('issues.unsaved'), saving: wt('common.saving'), saved: wt('fpt.allSaved'), error: wt('fpt.notSaved') }[state]}</span>
         <div className="ml-auto flex flex-wrap gap-2">
           {canEdit && (

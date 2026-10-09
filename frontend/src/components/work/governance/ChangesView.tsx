@@ -19,6 +19,7 @@ import { Dialog, EmptyState, Field, PageLoading, Spinner, UserAvatar, relativeTi
 import { Select } from '../settings/shared';
 import { Pill } from '../studio/shared';
 import { CrStatusPill, fmtCost, fmtDays, useGovInvalidate } from './shared';
+import { wt } from '@/components/work/i18n';
 
 export function NewChangeDialog({ config, open, onClose, sourceIssueNumber }: { config: ProjectConfig; open: boolean; onClose: () => void; sourceIssueNumber?: number }) {
   const router = useRouter();
@@ -36,42 +37,42 @@ export function NewChangeDialog({ config, open, onClose, sourceIssueNumber }: { 
       setTitle(''); setReason('');
       router.push(`/work/${config.workspace.slug}/${config.key}/changes/${cr.number}`);
     },
-    onError: (err) => toast.error(workError(err, 'Could not create the change request')),
+    onError: (err) => toast.error(workError(err, wt('gov.createCrFailed'))),
   });
   return (
     <Dialog
       open={open}
       onClose={onClose}
-      title="New change request"
+      title={wt('gov.newCr')}
       width={540}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="button" className="w-btn w-btn-primary" disabled={!title.trim() || create.isPending} onClick={() => create.mutate()} data-testid="cr-create">
-            {create.isPending ? <Spinner size={12} /> : <Plus size={13} />} Create
+            {create.isPending ? <Spinner size={12} /> : <Plus size={13} />} {wt('common.create')}
           </button>
         </>
       }
     >
-      <Field label="What should change?">
-        <input className="w-input" value={title} maxLength={255} autoFocus onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Add PayPal to checkout" data-testid="cr-title" />
+      <Field label={wt('gov.whatChange')}>
+        <input className="w-input" value={title} maxLength={255} autoFocus onChange={(e) => setTitle(e.target.value)} placeholder={wt('gov.crTitlePh')} data-testid="cr-title" />
       </Field>
-      <Field label="Why (business value)">
-        <textarea className="w-input" rows={3} maxLength={10000} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Who asked for it and what it is worth" />
+      <Field label={wt('gov.why')}>
+        <textarea className="w-input" rows={3} maxLength={10000} value={reason} onChange={(e) => setReason(e.target.value)} placeholder={wt('gov.whyPh2')} />
       </Field>
       <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
-        <Field label="Urgency">
-          <Select aria-label="Urgency" value={urgency} onChange={(e) => setUrgency(e.target.value as CrUrgency)}>
-            <option value="LOW">Low</option><option value="MEDIUM">Medium</option><option value="HIGH">High</option>
+        <Field label={wt('gov.urgency')}>
+          <Select aria-label={wt('gov.urgency')} value={urgency} onChange={(e) => setUrgency(e.target.value as CrUrgency)}>
+            <option value="LOW">{wt('status.prioLow')}</option><option value="MEDIUM">{wt('status.prioMedium')}</option><option value="HIGH">{wt('status.prioHigh')}</option>
           </Select>
         </Field>
-        <Field label="Description">
+        <Field label={wt('common.description')}>
           <label className="flex h-9 items-center gap-2 text-[13px]">
-            <input type="checkbox" checked={useTemplate} onChange={(e) => setUseTemplate(e.target.checked)} /> Start from the change request form
+            <input type="checkbox" checked={useTemplate} onChange={(e) => setUseTemplate(e.target.checked)} /> {wt('gov.startCrForm')}
           </label>
         </Field>
       </div>
-      <p className="text-[12px] text-[var(--w-text-3)]">You fill in the impact analysis (scope, schedule, cost, risks, alternatives) on the next page, then send it for approval.</p>
+      <p className="text-[12px] text-[var(--w-text-3)]">{wt('gov.fillNext')}</p>
     </Dialog>
   );
 }
@@ -83,7 +84,7 @@ export default function ChangesView({ config }: { config: ProjectConfig }) {
   const q = useQuery({ queryKey: govKeys.changes(pid), queryFn: () => govApi.changes(pid) });
   const base = `/work/${config.workspace.slug}/${config.key}/changes`;
   if (q.isLoading) return <PageLoading rows={5} />;
-  if (q.error || !q.data) return <EmptyState title="Could not load change requests" body={workError(q.error)} />;
+  if (q.error || !q.data) return <EmptyState title={wt('gov.loadCrsFailed')} body={workError(q.error)} />;
   const { totals } = q.data;
   const items = q.data.items.filter((r) => !status || r.status === status);
 
@@ -92,28 +93,28 @@ export default function ChangesView({ config }: { config: ProjectConfig }) {
       <div className="w-page">
         <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4" data-testid="cr-totals">
           <div className="w-card p-3">
-            <div className="w-eyebrow">Approved</div>
+            <div className="w-eyebrow">{wt('gov.approvedE')}</div>
             <div className="mt-1 text-[20px] font-semibold tabular-nums">{totals.approvedCount}</div>
           </div>
           <div className="w-card p-3">
-            <div className="w-eyebrow">Schedule impact</div>
+            <div className="w-eyebrow">{wt('gov.scheduleImpactE')}</div>
             <div className="mt-1 text-[20px] font-semibold tabular-nums">{fmtDays(totals.approvedDays)}</div>
           </div>
           <div className="w-card p-3">
-            <div className="w-eyebrow">Approved cost</div>
+            <div className="w-eyebrow">{wt('gov.approvedCost')}</div>
             <div className="mt-1 min-w-0 text-[15px] font-semibold tabular-nums [overflow-wrap:anywhere]">
               {totals.approvedCost.length ? totals.approvedCost.map((c) => <div key={c.currency}>{fmtCost(c.amount, c.currency === '—' ? null : c.currency)}</div>) : '—'}
             </div>
           </div>
           <div className="w-card p-3">
-            <div className="w-eyebrow">Waiting for decision</div>
+            <div className="w-eyebrow">{wt('gov.waitingDecision')}</div>
             <div className={cn('mt-1 text-[20px] font-semibold tabular-nums', totals.pending > 0 && 'text-[var(--w-orange)]')}>{totals.pending}</div>
           </div>
         </div>
 
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          <div className="-mx-1 flex min-w-0 flex-1 flex-wrap gap-1 px-1" role="tablist" aria-label="Filter by status">
-            <button type="button" role="tab" aria-selected={!status} onClick={() => setStatus('')} className={cn('w-btn w-btn-sm', !status && 'w-btn-on')}>All <span className="w-count">{q.data.items.length}</span></button>
+          <div className="-mx-1 flex min-w-0 flex-1 flex-wrap gap-1 px-1" role="tablist" aria-label={wt('gov.filterStatus')}>
+            <button type="button" role="tab" aria-selected={!status} onClick={() => setStatus('')} className={cn('w-btn w-btn-sm', !status && 'w-btn-on')}>{wt('common.all')} <span className="w-count">{q.data.items.length}</span></button>
             {CR_STATUSES.map((s) => (
               <button key={s} type="button" role="tab" aria-selected={status === s} onClick={() => setStatus(status === s ? '' : s)} className={cn('w-btn w-btn-sm', status === s && 'w-btn-on')}>
                 {CR_STATUS_LABEL[s]} {totals.byStatus[s] ? <span className="w-count">{totals.byStatus[s]}</span> : null}
@@ -121,15 +122,15 @@ export default function ChangesView({ config }: { config: ProjectConfig }) {
             ))}
           </div>
           {q.data.canEdit && (
-            <button type="button" className="w-btn w-btn-primary" onClick={() => setCreating(true)} data-testid="cr-new"><Plus size={14} /> New change request</button>
+            <button type="button" className="w-btn w-btn-primary" onClick={() => setCreating(true)} data-testid="cr-new"><Plus size={14} /> {wt('gov.newCr')}</button>
           )}
         </div>
 
         {!items.length ? (
           <EmptyState
             icon={<GitPullRequestArrow size={20} />}
-            title={status ? `No ${CR_STATUS_LABEL[status].toLowerCase()} change requests` : 'No change requests yet'}
-            body="Anything outside the signed scope goes here first: describe it, analyse the impact on scope, schedule and cost, then get it approved — by your client too."
+            title={status ? wt('gov.noStatusCrs', { s: CR_STATUS_LABEL[status].toLowerCase() }) : wt('gov.noCrs')}
+            body={wt('gov.crsEmptyBody')}
           />
         ) : (
           <>
@@ -137,12 +138,12 @@ export default function ChangesView({ config }: { config: ProjectConfig }) {
             <table className="w-full table-fixed text-[13px]" data-testid="cr-table">
               <thead className="bg-[var(--w-sunken)] text-left text-[12px] text-[var(--w-text-3)]">
                 <tr>
-                  <th className="w-[84px] px-3 py-2 font-medium">Key</th>
-                  <th className="px-3 py-2 font-medium">Title</th>
-                  <th className="w-[130px] px-3 py-2 font-medium">Status</th>
-                  <th className="w-[96px] px-3 py-2 text-right font-medium">Schedule</th>
-                  <th className="w-[130px] px-3 py-2 text-right font-medium">Cost</th>
-                  <th className="w-[150px] px-3 py-2 font-medium">Owner</th>
+                  <th className="w-[84px] px-3 py-2 font-medium">{wt('common.key')}</th>
+                  <th className="px-3 py-2 font-medium">{wt('common.title')}</th>
+                  <th className="w-[130px] px-3 py-2 font-medium">{wt('common.status')}</th>
+                  <th className="w-[96px] px-3 py-2 text-right font-medium">{wt('gov.schedule')}</th>
+                  <th className="w-[130px] px-3 py-2 text-right font-medium">{wt('gov.cost')}</th>
+                  <th className="w-[150px] px-3 py-2 font-medium">{wt('gov.owner')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -152,7 +153,7 @@ export default function ChangesView({ config }: { config: ProjectConfig }) {
                     <td className="min-w-0 px-3 py-2.5">
                       <Link href={`${base}/${r.number}`} className="block truncate font-medium hover:underline">{r.title}</Link>
                       <span className="flex flex-wrap items-center gap-1.5 text-[12px] text-[var(--w-text-3)]">
-                        {r.clientVisible && <Pill tone="accent">Shared</Pill>}
+                        {r.clientVisible && <Pill tone="accent">{wt('gov.shared')}</Pill>}
                         {r.waitingDays !== null && <span className={cn(r.waitingDays > 5 && 'font-medium text-[var(--w-orange)]')}>waiting {r.waitingDays}d</span>}
                         <span>updated {relativeTime(r.updatedAt)}</span>
                       </span>

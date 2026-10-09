@@ -16,15 +16,16 @@ import { isAiQuotaError, workApi, workError, type ProjectConfig } from '@/lib/wo
 import { Spinner } from '@/components/work/ui';
 import { cn } from '@/lib/utils';
 import { Card } from './shared';
+import { currentWorkLocale, wfmt, wt } from '@/components/work/i18n';
 
 type Audience = 'teacher' | 'client' | 'team';
 type Lang = 'en' | 'vi';
 interface Saved { report: string; facts: string; audience: Audience; language: Lang; at: string }
 
-const AUDIENCES: Array<{ id: Audience; label: string; hint: string }> = [
-  { id: 'teacher', label: 'Lecturer', hint: 'Progress, who did what, and evidence of process' },
-  { id: 'client', label: 'Client', hint: 'Outcomes, delivered features and upcoming milestones' },
-  { id: 'team', label: 'Team', hint: 'Blockers, risks and what to focus on next week' },
+const audiences = (): Array<{ id: Audience; label: string; hint: string }> => [
+  { id: 'teacher', label: wt('rep.audLecturer'), hint: wt('rep.audLecturerHint') },
+  { id: 'client', label: wt('rep.audClient'), hint: wt('rep.audClientHint') },
+  { id: 'team', label: wt('rep.audTeam'), hint: wt('rep.audTeamHint') },
 ];
 const LANGS: Array<{ id: Lang; label: string }> = [
   { id: 'en', label: 'English' },
@@ -75,7 +76,7 @@ function Segmented<T extends string>({ label, options, value, onChange }: { labe
 
 export default function WeeklyReportTab({ pid, config }: { pid: number; config: ProjectConfig }) {
   const [audience, setAudience] = useState<Audience>('teacher');
-  const [language, setLanguage] = useState<Lang>('en');
+  const [language, setLanguage] = useState<Lang>(() => currentWorkLocale());
   const [saved, setSaved] = useState<Saved | null>(null);
   const [copied, setCopied] = useState(false);
   const [factsOpen, setFactsOpen] = useState(false);
@@ -126,50 +127,50 @@ export default function WeeklyReportTab({ pid, config }: { pid: number; config: 
   };
 
   const quotaHit = gen.error && isAiQuotaError(gen.error);
-  const audienceHint = AUDIENCES.find((a) => a.id === audience)?.hint;
+  const audienceHint = audiences().find((a) => a.id === audience)?.hint;
 
   return (
     <div className="space-y-4">
       <Card>
         <div className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-end">
           <div className="min-w-0">
-            <div className="w-label">Audience</div>
-            <Segmented label="Audience" options={AUDIENCES} value={audience} onChange={setAudience} />
+            <div className="w-label">{wt('rep.audience')}</div>
+            <Segmented label={wt('rep.audience')} options={audiences()} value={audience} onChange={setAudience} />
           </div>
           <div className="min-w-0">
-            <div className="w-label">Language</div>
-            <Segmented label="Language" options={LANGS} value={language} onChange={setLanguage} />
+            <div className="w-label">{wt('common.language')}</div>
+            <Segmented label={wt('common.language')} options={LANGS} value={language} onChange={setLanguage} />
           </div>
           <div className="md:ml-auto">
             <button type="button" className="w-btn w-btn-primary w-full md:w-auto" disabled={!canUse || gen.isPending} onClick={() => gen.mutate()}>
               {gen.isPending ? <Spinner size={14} /> : <Sparkles size={14} />}
-              {gen.isPending ? 'Writing…' : saved ? 'Regenerate' : 'Generate'}
+              {gen.isPending ? wt('rep.writing') : saved ? wt('rep.regenerate') : wt('rep.generate')}
             </button>
           </div>
         </div>
         <p className="mt-3 text-[12px] leading-relaxed text-[var(--w-text-3)]">
-          {audienceHint}. Numbers come from your project data; AI only writes the text. Uses 1 AI request.
+          {audienceHint}. {wt('rep.weeklyNote')}
         </p>
         {!canUse && (
-          <p className="mt-2 text-[12px] text-[var(--w-orange)]">You don&apos;t have permission to use AI in this project. Ask a project admin to enable it for your role.</p>
+          <p className="mt-2 text-[12px] text-[var(--w-orange)]">{wt('rep.noAiPerm')}</p>
         )}
       </Card>
 
       {quotaHit ? (
         <div className="rounded-[var(--w-radius-lg)] border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-4 py-3">
-          <div className="text-[14px] font-semibold">You&apos;ve used all your free AI requests</div>
-          <p className="mt-1 text-[13px] text-[var(--w-text-2)]">Upgrade to Pro for more AI requests every day. Health and other reports stay free.</p>
-          <Link href="/pro" className="w-btn w-btn-primary w-btn-sm mt-3 inline-flex">Upgrade to Pro</Link>
+          <div className="text-[14px] font-semibold">{wt('rep.usedAll')}</div>
+          <p className="mt-1 text-[13px] text-[var(--w-text-2)]">{wt('rep.upgradeBody')}</p>
+          <Link href="/pro" className="w-btn w-btn-primary w-btn-sm mt-3 inline-flex">{wt('rep.upgradePro')}</Link>
         </div>
       ) : gen.error ? (
         <div className="rounded-[var(--w-radius-lg)] border border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] px-4 py-3 text-[13px] text-[var(--w-red)]">
-          {workError(gen.error, 'Could not generate the report')}
+          {workError(gen.error, wt('rep.reportFailed'))}
         </div>
       ) : null}
 
       {gen.isPending && !saved && (
         <Card className="flex items-center justify-center gap-2 py-12 text-[13px] text-[var(--w-text-2)]">
-          <Spinner size={16} /> Gathering facts and writing your report…
+          <Spinner size={16} /> {wt('rep.gathering')}
         </Card>
       )}
 
@@ -177,14 +178,14 @@ export default function WeeklyReportTab({ pid, config }: { pid: number; config: 
         <Card className={cn('p-0', gen.isPending && 'opacity-60')}>
           <div className="flex flex-wrap items-center gap-2 border-b border-[var(--w-border)] px-4 py-2.5">
             <div className="min-w-0 flex-1 text-[12px] text-[var(--w-text-3)]">
-              {AUDIENCES.find((a) => a.id === saved.audience)?.label} · {saved.language === 'vi' ? 'Tiếng Việt' : 'English'} ·{' '}
-              {new Date(saved.at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+              {audiences().find((a) => a.id === saved.audience)?.label} · {saved.language === 'vi' ? 'Tiếng Việt' : 'English'} ·{' '}
+              {new Date(saved.at).toLocaleString(wfmt.intl(), { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
             </div>
             <button type="button" className="w-btn w-btn-sm" onClick={copy}>
-              {copied ? <Check size={13} /> : <Copy size={13} />} {copied ? 'Copied' : 'Copy'}
+              {copied ? <Check size={13} /> : <Copy size={13} />} {copied ? wt('common.copied') : wt('common.copy')}
             </button>
             <button type="button" className="w-btn w-btn-sm" onClick={download}>
-              <Download size={13} /> Download .md
+              <Download size={13} /> {wt('rep.downloadMd')}
             </button>
           </div>
           <div className="w-prose min-w-0 overflow-x-hidden px-4 py-4">
@@ -210,8 +211,8 @@ export default function WeeklyReportTab({ pid, config }: { pid: number; config: 
               className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-[12px] font-medium text-[var(--w-text-2)] hover:bg-[var(--w-hover)]"
             >
               <ChevronDown size={14} className={cn('transition-transform', !factsOpen && '-rotate-90')} />
-              Facts used
-              <span className="font-normal text-[var(--w-text-3)]">— the data the AI was given, so you can check nothing was invented</span>
+              {wt('rep.factsUsed')}
+              <span className="font-normal text-[var(--w-text-3)]">{wt('rep.factsHint')}</span>
             </button>
             {factsOpen && (
               <pre className="mx-4 mb-4 max-h-[360px] overflow-auto whitespace-pre-wrap break-words rounded-[var(--w-radius)] border border-[var(--w-border)] bg-[var(--w-sunken)] p-3 font-mono text-[12px] leading-relaxed text-[var(--w-text-2)]">
@@ -223,9 +224,9 @@ export default function WeeklyReportTab({ pid, config }: { pid: number; config: 
       ) : (
         !gen.isPending && (
           <Card className="py-10 text-center">
-            <div className="text-[14px] font-semibold">No report yet</div>
+            <div className="text-[14px] font-semibold">{wt('rep.noReportYet')}</div>
             <p className="mx-auto mt-1 max-w-[420px] text-[13px] text-[var(--w-text-2)]">
-              Pick who it&apos;s for and press Generate. You get a ready-to-send summary of this week&apos;s progress.
+              {wt('rep.pickWho')}
             </p>
           </Card>
         )

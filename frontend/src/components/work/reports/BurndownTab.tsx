@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import {
   axisTick, Card, ChartTooltip, fmtDay, fmtValue, Legend, SprintSelect, StatCell, unitLabel, useAllSprints, useReportableSprints,
 } from './shared';
+import { wt } from '@/components/work/i18n';
 
 export default function BurndownTab({ pid }: { pid: number }) {
   const sprintsQ = useAllSprints(pid);
@@ -40,25 +41,25 @@ export default function BurndownTab({ pid }: { pid: number }) {
   }, [q.data]);
 
   if (sprintsQ.isLoading) return <div className="flex justify-center py-16"><Spinner size={20} /></div>;
-  if (sprintsQ.error) return <EmptyState title="Could not load sprints" body={workError(sprintsQ.error)} />;
-  if (!sprints.length) return <EmptyState title="No sprints yet" body="Start a sprint from the Backlog to see its burndown." />;
+  if (sprintsQ.error) return <EmptyState title={wt('rep.loadSprintsFailed')} body={workError(sprintsQ.error)} />;
+  if (!sprints.length) return <EmptyState title={wt('rep.noSprints')} body={wt('rep.noSprintsBody')} />;
 
   const d = q.data;
   const unit = d?.unit;
   const sprint = d?.sprint;
-  let lastCell: { label: string; value: string; tone?: 'red' } = { label: 'Days left', value: '—' };
+  let lastCell: { label: string; value: string; tone?: 'red' } = { label: wt('rep.daysLeft'), value: '—' };
   if (sprint?.state === 'CLOSED') {
-    lastCell = { label: 'Completed on', value: sprint.completedAt ? formatDate(sprint.completedAt) : '—' };
+    lastCell = { label: wt('rep.completedOn'), value: sprint.completedAt ? formatDate(sprint.completedAt) : '—' };
   } else if (sprint?.endAt) {
     const left = Math.ceil((new Date(sprint.endAt).getTime() - Date.now()) / 86_400_000);
-    lastCell = left < 0 ? { label: 'Overdue by', value: `${-left} ${-left === 1 ? 'day' : 'days'}`, tone: 'red' } : { label: 'Days left', value: String(left) };
+    lastCell = left < 0 ? { label: wt('rep.overdueBy'), value: wt('common.days', { count: -left }), tone: 'red' } : { label: wt('rep.daysLeft'), value: String(left) };
   }
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
         <SprintSelect sprints={sprints} value={sprintId} onChange={setSprintId} />
-        <div className="ml-auto inline-flex rounded-[var(--w-radius)] border border-[var(--w-border-strong)] p-0.5" role="tablist" aria-label="Chart type">
+        <div className="ml-auto inline-flex rounded-[var(--w-radius)] border border-[var(--w-border-strong)] p-0.5" role="tablist" aria-label={wt('rep.chartType')}>
           {(['burndown', 'burnup'] as const).map((m) => (
             <button
               key={m}
@@ -80,30 +81,30 @@ export default function BurndownTab({ pid }: { pid: number }) {
       {q.isLoading ? (
         <div className="flex justify-center py-16"><Spinner size={20} /></div>
       ) : q.error ? (
-        <EmptyState title="Could not load the burndown" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('rep.loadBdFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : d && stats ? (
         <>
           <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-            <StatCell label="Committed" value={fmtValue(stats.committed, unit)} hint="At sprint start" />
-            <StatCell label="Completed" value={fmtValue(stats.completed, unit)} tone="green" />
-            <StatCell label="Remaining" value={fmtValue(stats.remaining, unit)} />
-            <StatCell label={lastCell.label} value={lastCell.value} tone={lastCell.tone} hint={sprint?.endAt ? `Ends ${formatDate(sprint.endAt)}` : undefined} />
+            <StatCell label={wt('rep.committed')} value={fmtValue(stats.committed, unit)} hint={wt('rep.atStart')} />
+            <StatCell label={wt('rep.completed')} value={fmtValue(stats.completed, unit)} tone="green" />
+            <StatCell label={wt('rep.remaining')} value={fmtValue(stats.remaining, unit)} />
+            <StatCell label={lastCell.label} value={lastCell.value} tone={lastCell.tone} hint={sprint?.endAt ? wt('rep.endsOn', { d: formatDate(sprint.endAt) }) : undefined} />
           </div>
           {d.sprint.goal && (
             <div className="text-[13px] text-[var(--w-text-2)]">
-              <span className="font-medium text-[var(--w-text)]">Sprint goal:</span> {d.sprint.goal}
+              <span className="font-medium text-[var(--w-text)]">{wt('rep.sprintGoal')}</span> {d.sprint.goal}
             </div>
           )}
           <Card>
             {!d.points.length ? (
-              <EmptyState title="No data for this sprint yet" body="Numbers are recorded once a day after the sprint starts." />
+              <EmptyState title={wt('rep.noData')} body={wt('rep.noDataBody')} />
             ) : (
               <>
                 <div className="mb-3">
                   <Legend
                     items={mode === 'burndown'
-                      ? [{ label: 'Remaining', color: 'var(--w-accent)' }, { label: 'Guideline', color: 'var(--w-text-3)', dashed: true }]
-                      : [{ label: 'Completed', color: 'var(--w-green)' }, { label: 'Scope', color: 'var(--w-text-2)' }]}
+                      ? [{ label: wt('rep.remaining'), color: 'var(--w-accent)' }, { label: wt('rep.guideline'), color: 'var(--w-text-3)', dashed: true }]
+                      : [{ label: wt('rep.completed'), color: 'var(--w-green)' }, { label: wt('rep.scope'), color: 'var(--w-text-2)' }]}
                   />
                 </div>
                 <div className="h-[300px] w-full min-w-0">
@@ -118,13 +119,13 @@ export default function BurndownTab({ pid }: { pid: number }) {
                       <Tooltip content={<ChartTooltip unit={unit} labelFormat={fmtDay} />} cursor={{ stroke: 'var(--w-border-strong)' }} />
                       {mode === 'burndown' ? (
                         <>
-                          <Line type="linear" dataKey="ideal" name="Guideline" stroke="var(--w-text-3)" strokeDasharray="5 4" strokeWidth={1.5} dot={false} isAnimationActive={false} />
-                          <Line type="stepAfter" dataKey="remaining" name="Remaining" stroke="var(--w-chart-1)" strokeWidth={2} dot={d.points.filter((x) => x.remaining !== null).length < 3 ? { r: 3.5, fill: 'var(--w-chart-1)', strokeWidth: 0 } : false} activeDot={{ r: 4 }} isAnimationActive={false} />
+                          <Line type="linear" dataKey="ideal" name={wt('rep.guideline')} stroke="var(--w-text-3)" strokeDasharray="5 4" strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                          <Line type="stepAfter" dataKey="remaining" name={wt('rep.remaining')} stroke="var(--w-chart-1)" strokeWidth={2} dot={d.points.filter((x) => x.remaining !== null).length < 3 ? { r: 3.5, fill: 'var(--w-chart-1)', strokeWidth: 0 } : false} activeDot={{ r: 4 }} isAnimationActive={false} />
                         </>
                       ) : (
                         <>
-                          <Line type="stepAfter" dataKey="total" name="Scope" stroke="var(--w-text-2)" strokeWidth={1.5} dot={d.points.filter((x) => x.total !== null).length < 3 ? { r: 3, fill: 'var(--w-text-2)', strokeWidth: 0 } : false} isAnimationActive={false} />
-                          <Line type="stepAfter" dataKey="done" name="Completed" stroke="var(--w-green)" strokeWidth={2} dot={d.points.filter((x) => x.done !== null).length < 3 ? { r: 3.5, fill: 'var(--w-green)', strokeWidth: 0 } : false} activeDot={{ r: 4 }} isAnimationActive={false} />
+                          <Line type="stepAfter" dataKey="total" name={wt('rep.scope')} stroke="var(--w-text-2)" strokeWidth={1.5} dot={d.points.filter((x) => x.total !== null).length < 3 ? { r: 3, fill: 'var(--w-text-2)', strokeWidth: 0 } : false} isAnimationActive={false} />
+                          <Line type="stepAfter" dataKey="done" name={wt('rep.completed')} stroke="var(--w-green)" strokeWidth={2} dot={d.points.filter((x) => x.done !== null).length < 3 ? { r: 3.5, fill: 'var(--w-green)', strokeWidth: 0 } : false} activeDot={{ r: 4 }} isAnimationActive={false} />
                         </>
                       )}
                     </LineChart>

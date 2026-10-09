@@ -52,7 +52,7 @@ function walk(n: PmNode, fn: (n: PmNode) => void) {
 
 describe('mẫu tài liệu: Markdown → TipTap (36 mẫu thật)', () => {
   // CTW đợt 3A: +7 mẫu FPT Capstone (Report 1, 2, 3, 4, 5.0, 6, 7) — xem docTemplates.test.ts.
-  it('có đủ 45 tệp mẫu', () => assert.equal(mdFiles.length, 45));
+  it('có đủ 50 tệp mẫu (+5 Wiegers SWR302 — đợt 4b)', () => assert.equal(mdFiles.length, 50));
 
   for (const f of mdFiles) {
     it(f, () => {
@@ -124,7 +124,7 @@ describe('nguồn mẫu cho backend (ảnh Docker không có frontend/public)', 
 
   it('thư viện mẫu: 36 mẫu, tên tiếng Anh; 35 mẫu của quy trình đều thuộc ít nhất một giai đoạn', async () => {
     const list = await listTemplates();
-    assert.equal(list.length, 45);
+    assert.equal(list.length, 50);
     assert.ok(list.every((t) => t.title && t.sections > 0));
     const stageMap = await stageTemplateMap();
     assert.equal(stageMap.size, 21);

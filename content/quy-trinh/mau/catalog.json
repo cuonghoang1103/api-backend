@@ -232,6 +232,36 @@
       "titleVi": "FPT Capstone — Report 7: Báo cáo tổng kết",
       "titleEn": "FPT Capstone — Report 7: Final Project Report",
       "group": "FPT Capstone"
+    },
+    {
+      "key": "swr-vision-scope",
+      "titleVi": "SWR302 (Wiegers) — Tài liệu Tầm nhìn & Phạm vi",
+      "titleEn": "SWR302 (Wiegers) — Vision and Scope Document",
+      "group": "SWR302 (Wiegers)"
+    },
+    {
+      "key": "swr-use-cases",
+      "titleVi": "SWR302 (Wiegers) — Đặc tả Use Case",
+      "titleEn": "SWR302 (Wiegers) — Use Cases",
+      "group": "SWR302 (Wiegers)"
+    },
+    {
+      "key": "swr-business-rules",
+      "titleVi": "SWR302 (Wiegers) — Quy tắc nghiệp vụ",
+      "titleEn": "SWR302 (Wiegers) — Business Rules",
+      "group": "SWR302 (Wiegers)"
+    },
+    {
+      "key": "swr-srs",
+      "titleVi": "SWR302 (Wiegers) — Đặc tả yêu cầu phần mềm",
+      "titleEn": "SWR302 (Wiegers) — Software Requirements Specification",
+      "group": "SWR302 (Wiegers)"
+    },
+    {
+      "key": "swr-data-dictionary",
+      "titleVi": "SWR302 (Wiegers) — Từ điển dữ liệu",
+      "titleEn": "SWR302 (Wiegers) — Data Dictionary",
+      "group": "SWR302 (Wiegers)"
     }
   ]
 }

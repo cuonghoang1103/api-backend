@@ -26,49 +26,50 @@ import { JqlInput } from '../search/JqlInput';
 import { jqlErrorOf, quote } from '../search/jql';
 import { Dialog, EmptyState, PickerList, Popover, PRIORITIES, Spinner, relativeTime, useToggle } from '../ui';
 import { ConfirmDialog, Section, Select, Switch } from './shared';
+import { wt, wfmt } from '@/components/work/i18n';
 
 // ─── Từ điển ─────────────────────────────────────────────────────
 
 const TRIGGERS: Array<{ id: RuleTrigger; label: string; help: string }> = [
-  { id: 'issue.created', label: 'Issue created', help: 'Runs when a new issue is created.' },
-  { id: 'issue.transitioned', label: 'Issue transitioned', help: 'Runs when an issue moves between statuses.' },
-  { id: 'issue.assigned', label: 'Issue assigned', help: 'Runs when an issue gets an assignee.' },
-  { id: 'field.changed', label: 'Field value changed', help: 'Runs when one of the selected fields changes.' },
-  { id: 'comment.added', label: 'Comment added', help: 'Runs when someone comments on an issue.' },
-  { id: 'scheduled.daily', label: 'Scheduled — daily at 08:00', help: 'Runs every day at 08:00 (Vietnam time) on each issue matching the JQL (up to 200).' },
+  { id: 'issue.created', get label() { return wt('auto.tCreated'); }, get help() { return wt('auto.tCreatedH'); } },
+  { id: 'issue.transitioned', get label() { return wt('auto.tTransitioned'); }, get help() { return wt('auto.tTransitionedH'); } },
+  { id: 'issue.assigned', get label() { return wt('auto.tAssigned'); }, get help() { return wt('auto.tAssignedH'); } },
+  { id: 'field.changed', get label() { return wt('auto.tField'); }, get help() { return wt('auto.tFieldH'); } },
+  { id: 'comment.added', get label() { return wt('auto.tComment'); }, get help() { return wt('auto.tCommentH'); } },
+  { id: 'scheduled.daily', get label() { return wt('auto.tDaily'); }, get help() { return wt('auto.tDailyH'); } },
 ];
 
 const FIELDS: Array<{ id: string; label: string }> = [
-  { id: 'priority', label: 'Priority' },
-  { id: 'assigneeId', label: 'Assignee' },
-  { id: 'storyPoints', label: 'Story points' },
-  { id: 'dueDate', label: 'Due date' },
-  { id: 'startDate', label: 'Start date' },
-  { id: 'sprintId', label: 'Sprint' },
-  { id: 'fixVersionId', label: 'Fix version' },
-  { id: 'parentId', label: 'Parent' },
-  { id: 'title', label: 'Summary' },
-  { id: 'description', label: 'Description' },
+  { id: 'priority', get label() { return wt('common.priority'); } },
+  { id: 'assigneeId', get label() { return wt('common.assignee'); } },
+  { id: 'storyPoints', get label() { return wt('common.storyPoints'); } },
+  { id: 'dueDate', get label() { return wt('common.dueDate'); } },
+  { id: 'startDate', get label() { return wt('common.startDate'); } },
+  { id: 'sprintId', get label() { return wt('common.sprint'); } },
+  { id: 'fixVersionId', get label() { return wt('detail.fixVersion'); } },
+  { id: 'parentId', get label() { return wt('common.parent'); } },
+  { id: 'title', get label() { return wt('common.summary'); } },
+  { id: 'description', get label() { return wt('common.description'); } },
 ];
 
 const ACTIONS: Array<{ id: RuleActionKind; label: string }> = [
-  { id: 'transition', label: 'Transition issue' },
-  { id: 'assign', label: 'Assign issue' },
-  { id: 'set_priority', label: 'Set priority' },
-  { id: 'add_label', label: 'Add label' },
-  { id: 'comment', label: 'Add comment' },
-  { id: 'move_to_active_sprint', label: 'Move to active sprint' },
-  { id: 'notify', label: 'Send notification' },
-  { id: 'create_subtask', label: 'Create sub-task' },
+  { id: 'transition', get label() { return wt('auto.aTransition'); } },
+  { id: 'assign', get label() { return wt('auto.aAssign'); } },
+  { id: 'set_priority', get label() { return wt('auto.aPriority'); } },
+  { id: 'add_label', get label() { return wt('auto.aLabel'); } },
+  { id: 'comment', get label() { return wt('auto.aComment'); } },
+  { id: 'move_to_active_sprint', get label() { return wt('auto.aSprint'); } },
+  { id: 'notify', get label() { return wt('auto.aNotify'); } },
+  { id: 'create_subtask', get label() { return wt('auto.aSubtask'); } },
 ];
 
 const LOG_STATUS: Record<RuleLogStatus, { label: string; cls: string }> = {
-  SUCCESS: { label: 'Success', cls: 'text-[var(--w-green)] bg-[color-mix(in_srgb,var(--w-green)_12%,transparent)] border-[color-mix(in_srgb,var(--w-green)_35%,transparent)]' },
-  NO_MATCH: { label: 'No match', cls: 'text-[var(--w-text-2)] bg-[var(--w-sunken)] border-[var(--w-border-strong)]' },
-  FAILED: { label: 'Failed', cls: 'text-[var(--w-red)] bg-[color-mix(in_srgb,var(--w-red)_12%,transparent)] border-[color-mix(in_srgb,var(--w-red)_35%,transparent)]' },
-  LOOP_BLOCKED: { label: 'Loop blocked', cls: 'text-[var(--w-orange)] bg-[color-mix(in_srgb,var(--w-orange)_12%,transparent)] border-[color-mix(in_srgb,var(--w-orange)_35%,transparent)]' },
-  THROTTLED: { label: 'Throttled', cls: 'text-[var(--w-orange)] bg-[color-mix(in_srgb,var(--w-orange)_12%,transparent)] border-[color-mix(in_srgb,var(--w-orange)_35%,transparent)]' },
-  DRY_RUN: { label: 'Dry run', cls: 'text-[var(--w-text-2)] bg-[var(--w-sunken)] border-[var(--w-border-strong)]' },
+  SUCCESS: { get label() { return wt('auto.lSuccess'); }, cls: 'text-[var(--w-green)] bg-[color-mix(in_srgb,var(--w-green)_12%,transparent)] border-[color-mix(in_srgb,var(--w-green)_35%,transparent)]' },
+  NO_MATCH: { get label() { return wt('auto.lNoMatch'); }, cls: 'text-[var(--w-text-2)] bg-[var(--w-sunken)] border-[var(--w-border-strong)]' },
+  FAILED: { get label() { return wt('auto.lFailed'); }, cls: 'text-[var(--w-red)] bg-[color-mix(in_srgb,var(--w-red)_12%,transparent)] border-[color-mix(in_srgb,var(--w-red)_35%,transparent)]' },
+  LOOP_BLOCKED: { get label() { return wt('auto.lLoop'); }, cls: 'text-[var(--w-orange)] bg-[color-mix(in_srgb,var(--w-orange)_12%,transparent)] border-[color-mix(in_srgb,var(--w-orange)_35%,transparent)]' },
+  THROTTLED: { get label() { return wt('auto.lThrottled'); }, cls: 'text-[var(--w-orange)] bg-[color-mix(in_srgb,var(--w-orange)_12%,transparent)] border-[color-mix(in_srgb,var(--w-orange)_35%,transparent)]' },
+  DRY_RUN: { get label() { return wt('auto.lDry'); }, cls: 'text-[var(--w-text-2)] bg-[var(--w-sunken)] border-[var(--w-border-strong)]' },
 };
 
 function StatusPill({ status }: { status: RuleLogStatus }) {
@@ -89,41 +90,41 @@ type Statuses = ReturnType<typeof useStatuses>;
 // ─── Tóm tắt một luật thành câu ──────────────────────────────────
 
 function names(ids: number[] | undefined, statuses: Statuses): string {
-  return (ids ?? []).map((id) => statuses.find((s) => s.id === id)?.name ?? 'Unknown').join(' or ');
+  return (ids ?? []).map((id) => statuses.find((s) => s.id === id)?.name ?? wt('auto.unknown')).join(wt('auto.or'));
 }
 
 function whenSummary(trigger: RuleTrigger, cfg: RuleConfig, statuses: Statuses): string {
   switch (trigger) {
-    case 'issue.created': return 'When an issue is created';
-    case 'issue.assigned': return 'When an issue is assigned';
-    case 'comment.added': return 'When a comment is added';
+    case 'issue.created': return wt('auto.wCreated');
+    case 'issue.assigned': return wt('auto.wAssigned');
+    case 'comment.added': return wt('auto.wComment');
     case 'field.changed': {
       const f = (cfg.fields ?? []).map((x) => FIELDS.find((y) => y.id === x)?.label ?? x);
-      return f.length ? `When ${f.join(', ')} changes` : 'When a field changes';
+      return f.length ? wt('auto.wFieldX', { f: f.join(', ') }) : wt('auto.wField');
     }
     case 'issue.transitioned': {
       const from = names(cfg.fromStatusIds, statuses);
       const to = names(cfg.toStatusIds, statuses);
-      if (from && to) return `When an issue moves from ${from} to ${to}`;
-      if (to) return `When an issue moves to ${to}`;
-      if (from) return `When an issue leaves ${from}`;
-      return 'When an issue is transitioned';
+      if (from && to) return wt('auto.wFromTo', { a: from, b: to });
+      if (to) return wt('auto.wTo', { b: to });
+      if (from) return wt('auto.wLeaves', { a: from });
+      return wt('auto.wTransitioned');
     }
-    case 'scheduled.daily': return 'Every day at 08:00';
+    case 'scheduled.daily': return wt('auto.wDaily');
     default: return trigger;
   }
 }
 
 function actionSummary(a: RuleAction, config: ProjectConfig, statuses: Statuses): string {
   switch (a.kind) {
-    case 'transition': return `move to ${statuses.find((s) => s.id === a.statusId)?.name ?? '…'}`;
-    case 'assign': return a.assignee === null || a.assignee === undefined ? 'unassign' : a.assignee === 'reporter' ? 'assign to reporter' : `assign to ${userName(config.members.find((m) => m.id === a.assignee))}`;
-    case 'set_priority': return `set priority ${PRIORITIES.find((p) => p.value === a.priority)?.label ?? '…'}`;
-    case 'add_label': return `add label ${config.labels.find((l) => l.id === a.labelId)?.name ?? '…'}`;
-    case 'comment': return 'add a comment';
-    case 'move_to_active_sprint': return 'move to the active sprint';
-    case 'notify': return 'send a notification';
-    case 'create_subtask': return 'create a sub-task';
+    case 'transition': return wt('auto.sMove', { x: statuses.find((s) => s.id === a.statusId)?.name ?? '…' });
+    case 'assign': return a.assignee === null || a.assignee === undefined ? wt('auto.sUnassign') : a.assignee === 'reporter' ? wt('auto.sToReporter') : wt('auto.sAssignTo', { x: userName(config.members.find((m) => m.id === a.assignee)) });
+    case 'set_priority': return wt('auto.sPriority', { x: PRIORITIES.find((p) => p.value === a.priority)?.label ?? '…' });
+    case 'add_label': return wt('auto.sLabel', { x: config.labels.find((l) => l.id === a.labelId)?.name ?? '…' });
+    case 'comment': return wt('auto.sComment');
+    case 'move_to_active_sprint': return wt('auto.sSprint');
+    case 'notify': return wt('auto.sNotify');
+    case 'create_subtask': return wt('auto.sSubtask');
     default: return a.kind;
   }
 }
@@ -135,50 +136,50 @@ interface Draft { id?: number; name: string; enabled: boolean; trigger: RuleTrig
 const TEMPLATES: Array<{ id: string; title: string; body: string; icon: ReactNode; build: (config: ProjectConfig, statuses: Statuses) => Draft | string }> = [
   {
     id: 'bug-priority',
-    title: 'Prioritise new bugs',
-    body: 'When a bug is created → set priority to High.',
+    get title() { return wt('auto.tplBug'); },
+    get body() { return wt('auto.tplBugB'); },
     icon: <AlertTriangle size={14} />,
     build: (config) => {
       const bug = config.issueTypes.find((t) => t.key === 'BUG');
-      if (!bug) return 'This project has no Bug issue type.';
-      return { name: 'Prioritise new bugs', enabled: true, trigger: 'issue.created', config: { conditions: [{ jql: `type = ${quote(bug.name)}` }], actions: [{ kind: 'set_priority', priority: 2 }] } };
+      if (!bug) return wt('auto.noBug');
+      return { name: wt('auto.tplBug'), enabled: true, trigger: 'issue.created', config: { conditions: [{ jql: `type = ${quote(bug.name)}` }], actions: [{ kind: 'set_priority', priority: 2 }] } };
     },
   },
   {
     id: 'done-comment',
-    title: 'Comment when resolved',
-    body: 'When an issue moves to Done → add the comment “Resolved”.',
+    get title() { return wt('auto.tplDone'); },
+    get body() { return wt('auto.tplDoneB'); },
     icon: <MessageSquare size={14} />,
     build: (_config, statuses) => {
       const done = statuses.filter((s) => s.category === 'DONE').map((s) => s.id);
-      if (!done.length) return 'This project has no Done status.';
-      return { name: 'Comment when resolved', enabled: true, trigger: 'issue.transitioned', config: { toStatusIds: done, actions: [{ kind: 'comment', text: 'Resolved' }] } };
+      if (!done.length) return wt('auto.noDone');
+      return { name: wt('auto.tplDone'), enabled: true, trigger: 'issue.transitioned', config: { toStatusIds: done, actions: [{ kind: 'comment', text: wt('auto.resolvedText') }] } };
     },
   },
   {
     id: 'assigned-start',
-    title: 'Start work on assignment',
-    body: 'When an issue is assigned → move it to In Progress.',
+    get title() { return wt('auto.tplStart'); },
+    get body() { return wt('auto.tplStartB'); },
     icon: <UserCheck size={14} />,
     build: (_config, statuses) => {
       const target = statuses.find((s) => s.category === 'IN_PROGRESS' && s.workflowDefault) ?? statuses.find((s) => s.category === 'IN_PROGRESS');
-      if (!target) return 'This project has no In Progress status.';
+      if (!target) return wt('auto.noProgress');
       return {
-        name: 'Start work on assignment', enabled: true, trigger: 'issue.assigned',
+        name: wt('auto.tplStart'), enabled: true, trigger: 'issue.assigned',
         config: { conditions: [{ jql: 'statusCategory = "To Do"' }], actions: [{ kind: 'transition', statusId: target.id }] },
       };
     },
   },
   {
     id: 'overdue-daily',
-    title: 'Daily overdue reminder',
-    body: 'Every morning → notify the assignee of each overdue issue.',
+    get title() { return wt('auto.tplOverdue'); },
+    get body() { return wt('auto.tplOverdueB'); },
     icon: <CalendarClock size={14} />,
     build: () => ({
-      name: 'Daily overdue reminder', enabled: true, trigger: 'scheduled.daily',
+      name: wt('auto.tplOverdue'), enabled: true, trigger: 'scheduled.daily',
       config: {
         jql: 'due < startOfDay() AND statusCategory != Done',
-        actions: [{ kind: 'notify', to: ['assignee'], text: 'This issue is overdue. Please update its status or due date.' }],
+        actions: [{ kind: 'notify', to: ['assignee'], text: wt('auto.overdueText') }],
       },
     }),
   },
@@ -233,11 +234,11 @@ function JqlField({ config, value, onChange, disabled }: { config: ProjectConfig
     if (!jql) return;
     try {
       const r = await workApi.search(config.id, jql, { limit: 1 });
-      setResult(`Valid · ${r.total} ${r.total === 1 ? 'issue matches' : 'issues match'} right now`);
+      setResult(wt('auto.valid', { count: r.total }));
     } catch (err) {
       const je = jqlErrorOf(err);
       if (je) setError(je);
-      else setResult(workError(err, 'Could not check the query'));
+      else setResult(workError(err, wt('auto.checkFailed')));
     }
   };
   if (disabled) return <div className="rounded-[6px] bg-[var(--w-sunken)] px-2 py-1.5 font-mono text-[12.5px] break-words">{value || '—'}</div>;
@@ -250,8 +251,8 @@ function JqlField({ config, value, onChange, disabled }: { config: ProjectConfig
         onRun={check}
         error={error}
         ranQuery={ran}
-        runLabel="Check"
-        placeholder="e.g. type = Bug AND priority >= High"
+        runLabel={wt('auto.check')}
+        placeholder={wt('auto.jqlPh')}
       />
       {result && !error && <p className="mt-1 text-[12px] text-[var(--w-text-3)]">{result}</p>}
     </div>
@@ -280,54 +281,54 @@ function ActionEditor({ action, onChange, config, statuses, disabled }: {
   switch (action.kind) {
     case 'transition':
       return (
-        <Select aria-label="Target status" value={action.statusId ?? ''} disabled={disabled} onChange={(e) => onChange({ ...action, statusId: Number(e.target.value) })}>
+        <Select aria-label={wt('auto.targetStatus')} value={action.statusId ?? ''} disabled={disabled} onChange={(e) => onChange({ ...action, statusId: Number(e.target.value) })}>
           {statuses.map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
         </Select>
       );
     case 'assign':
       return (
         <Select
-          aria-label="Assignee"
+          aria-label={wt('common.assignee')}
           disabled={disabled}
           value={action.assignee === null || action.assignee === undefined ? '' : String(action.assignee)}
           onChange={(e) => onChange({ ...action, assignee: e.target.value === '' ? null : e.target.value === 'reporter' ? 'reporter' : Number(e.target.value) })}
         >
-          <option value="reporter">Reporter</option>
-          <option value="">Unassigned</option>
-          <optgroup label="Members">
+          <option value="reporter">{wt('common.reporter')}</option>
+          <option value="">{wt('common.unassigned')}</option>
+          <optgroup label={wt('common.members')}>
             {assignable.map((m) => <option key={m.id} value={m.id}>{userName(m)}</option>)}
           </optgroup>
         </Select>
       );
     case 'set_priority':
       return (
-        <Select aria-label="Priority" value={action.priority ?? 3} disabled={disabled} onChange={(e) => onChange({ ...action, priority: Number(e.target.value) })}>
+        <Select aria-label={wt('common.priority')} value={action.priority ?? 3} disabled={disabled} onChange={(e) => onChange({ ...action, priority: Number(e.target.value) })}>
           {PRIORITIES.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
         </Select>
       );
     case 'add_label':
       return config.labels.length ? (
-        <Select aria-label="Label" value={action.labelId ?? ''} disabled={disabled} onChange={(e) => onChange({ ...action, labelId: Number(e.target.value) })}>
+        <Select aria-label={wt('issues.label')} value={action.labelId ?? ''} disabled={disabled} onChange={(e) => onChange({ ...action, labelId: Number(e.target.value) })}>
           {config.labels.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
         </Select>
       ) : (
-        <p className="text-[12px] text-[var(--w-text-3)]">This project has no labels yet. Create one in the Labels tab first.</p>
+        <p className="text-[12px] text-[var(--w-text-3)]">{wt('auto.noLabels')}</p>
       );
     case 'comment':
       return (
         <textarea
-          aria-label="Comment text"
+          aria-label={wt('auto.commentText')}
           rows={2}
           maxLength={2000}
           disabled={disabled}
           className="w-input !h-auto py-2"
-          placeholder="The comment is posted as “Automation”."
+          placeholder={wt('auto.commentPh')}
           value={action.text ?? ''}
           onChange={(e) => onChange({ ...action, text: e.target.value })}
         />
       );
     case 'move_to_active_sprint':
-      return <p className="text-[12px] text-[var(--w-text-3)]">Adds standard issues (not epics or sub-tasks) to the sprint that is running. Skipped when no sprint is active.</p>;
+      return <p className="text-[12px] text-[var(--w-text-3)]">{wt('auto.sprintNote')}</p>;
     case 'notify': {
       const to = action.to ?? [];
       const roles = (['assignee', 'reporter', 'watchers'] as const);
@@ -344,7 +345,7 @@ function ActionEditor({ action, onChange, config, statuses, disabled }: {
                   checked={to.includes(r)}
                   onChange={(e) => setTo(e.target.checked ? [...to, r] : to.filter((x) => x !== r))}
                 />
-                {r === 'assignee' ? 'Assignee' : r === 'reporter' ? 'Reporter' : 'Watchers'}
+                {r === 'assignee' ? wt('common.assignee') : r === 'reporter' ? wt('common.reporter') : wt('auto.watchers')}
               </label>
             ))}
           </div>
@@ -352,16 +353,16 @@ function ActionEditor({ action, onChange, config, statuses, disabled }: {
             options={config.members.map((m) => ({ value: m.id, label: userName(m) }))}
             value={people}
             disabled={disabled}
-            placeholder="Also notify specific people…"
+            placeholder={wt('auto.alsoNotify')}
             onChange={(ids) => setTo([...to.filter((x) => typeof x !== 'number'), ...ids])}
           />
           <textarea
-            aria-label="Notification message"
+            aria-label={wt('auto.notifMsg')}
             rows={2}
             maxLength={2000}
             disabled={disabled}
             className="w-input !h-auto py-2"
-            placeholder="Message"
+            placeholder={wt('auto.message')}
             value={action.text ?? ''}
             onChange={(e) => onChange({ ...action, text: e.target.value })}
           />
@@ -371,16 +372,16 @@ function ActionEditor({ action, onChange, config, statuses, disabled }: {
     case 'create_subtask':
       return config.issueTypes.some((t) => t.level === -1) ? (
         <input
-          aria-label="Sub-task title"
+          aria-label={wt('auto.subtaskTitle')}
           maxLength={255}
           disabled={disabled}
           className="w-input"
-          placeholder="Sub-task title"
+          placeholder={wt('auto.subtaskTitle')}
           value={action.title ?? ''}
           onChange={(e) => onChange({ ...action, title: e.target.value })}
         />
       ) : (
-        <p className="text-[12px] text-[var(--w-text-3)]">This project has no sub-task issue type.</p>
+        <p className="text-[12px] text-[var(--w-text-3)]">{wt('auto.noSubtaskType')}</p>
       );
     default:
       return null;
@@ -425,11 +426,11 @@ function RuleEditor({ open, initial, onClose, config, canEdit }: { open: boolean
       },
     }),
     onSuccess: (r) => {
-      toast.success(initial?.id ? `Rule “${r.name}” saved` : `Rule “${r.name}” created`);
+      toast.success(initial?.id ? wt('auto.ruleSaved', { n: r.name }) : wt('auto.ruleCreated', { n: r.name }));
       qc.invalidateQueries({ queryKey: wk.automation(config.id) });
       onClose();
     },
-    onError: (err) => toast.error(workError(err, 'Could not save the rule')),
+    onError: (err) => toast.error(workError(err, wt('auto.saveFailed'))),
   });
 
   if (!d) return null;
@@ -452,14 +453,14 @@ function RuleEditor({ open, initial, onClose, config, canEdit }: { open: boolean
       open={open}
       onClose={onClose}
       width={680}
-      title={ro ? 'View rule' : d.id ? 'Edit rule' : 'Create rule'}
+      title={ro ? wt('auto.viewRule') : d.id ? wt('auto.editRule') : wt('auto.createRule')}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose}>{ro ? 'Close' : 'Cancel'}</button>
+          <button type="button" className="w-btn" onClick={onClose}>{ro ? wt('common.close') : wt('common.cancel')}</button>
           {!ro && (
             <button type="button" className="w-btn w-btn-primary" disabled={!valid || save.isPending} onClick={() => save.mutate(d)}>
               {save.isPending && <Spinner size={12} />}
-              {d.id ? 'Save rule' : 'Create rule'}
+              {d.id ? wt('auto.saveRule') : wt('auto.createRule')}
             </button>
           )}
         </>
@@ -467,18 +468,18 @@ function RuleEditor({ open, initial, onClose, config, canEdit }: { open: boolean
     >
       <div className="mb-4 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
         <div>
-          <label className="w-label" htmlFor="w-rule-name">Rule name</label>
-          <input id="w-rule-name" className="w-input" maxLength={100} disabled={ro} autoFocus={!d.id && !ro} placeholder="e.g. Prioritise new bugs" value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} />
+          <label className="w-label" htmlFor="w-rule-name">{wt('auto.ruleName')}</label>
+          <input id="w-rule-name" className="w-input" maxLength={100} disabled={ro} autoFocus={!d.id && !ro} placeholder={wt('auto.ruleNamePh')} value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} />
         </div>
         <label className="flex h-[32px] items-center gap-2 text-[13px] text-[var(--w-text-2)]">
-          <Switch checked={d.enabled} disabled={ro} onChange={(enabled) => setD({ ...d, enabled })} label="Rule enabled" />
-          Enabled
+          <Switch checked={d.enabled} disabled={ro} onChange={(enabled) => setD({ ...d, enabled })} label={wt('auto.ruleEnabled')} />
+          {wt('auto.enabledWord')}
         </label>
       </div>
 
-      <Block label="When" tone="var(--w-accent)" icon={<Zap size={12} />}>
+      <Block label={wt('auto.when')} tone="var(--w-accent)" icon={<Zap size={12} />}>
         <Select
-          aria-label="Trigger"
+          aria-label={wt('auto.trigger')}
           value={d.trigger}
           disabled={ro}
           onChange={(e) => setD({ ...d, trigger: e.target.value as RuleTrigger })}
@@ -490,24 +491,24 @@ function RuleEditor({ open, initial, onClose, config, canEdit }: { open: boolean
         {d.trigger === 'issue.transitioned' && (
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label className="w-label">From status</label>
-              <MultiPick options={statusOpts} value={cfg.fromStatusIds ?? []} disabled={ro} placeholder="Any status" onChange={(fromStatusIds) => setCfg({ fromStatusIds })} />
+              <label className="w-label">{wt('auto.fromStatus')}</label>
+              <MultiPick options={statusOpts} value={cfg.fromStatusIds ?? []} disabled={ro} placeholder={wt('auto.anyStatus')} onChange={(fromStatusIds) => setCfg({ fromStatusIds })} />
             </div>
             <div>
-              <label className="w-label">To status</label>
-              <MultiPick options={statusOpts} value={cfg.toStatusIds ?? []} disabled={ro} placeholder="Any status" onChange={(toStatusIds) => setCfg({ toStatusIds })} />
+              <label className="w-label">{wt('auto.toStatus')}</label>
+              <MultiPick options={statusOpts} value={cfg.toStatusIds ?? []} disabled={ro} placeholder={wt('auto.anyStatus')} onChange={(toStatusIds) => setCfg({ toStatusIds })} />
             </div>
           </div>
         )}
         {d.trigger === 'field.changed' && (
           <div>
-            <label className="w-label">Fields to watch</label>
-            <MultiPick options={FIELDS.map((f) => ({ value: f.id, label: f.label }))} value={cfg.fields ?? []} disabled={ro} placeholder="Pick one or more fields" onChange={(fields) => setCfg({ fields })} />
+            <label className="w-label">{wt('auto.fieldsWatch')}</label>
+            <MultiPick options={FIELDS.map((f) => ({ value: f.id, label: f.label }))} value={cfg.fields ?? []} disabled={ro} placeholder={wt('auto.pickFields')} onChange={(fields) => setCfg({ fields })} />
           </div>
         )}
         {d.trigger === 'scheduled.daily' && (
           <div>
-            <label className="w-label">Run on issues matching</label>
+            <label className="w-label">{wt('auto.runOn')}</label>
             <JqlField config={config} value={cfg.jql ?? ''} disabled={ro} onChange={(jql) => setCfg({ jql })} />
           </div>
         )}
@@ -515,15 +516,15 @@ function RuleEditor({ open, initial, onClose, config, canEdit }: { open: boolean
 
       <Connector />
 
-      <Block label="If" tone="var(--w-orange)" icon={<FlaskConical size={12} />}>
-        {!conditions.length && <p className="text-[12px] text-[var(--w-text-3)]">No conditions — the rule runs on every matching event.</p>}
+      <Block label={wt('auto.ifW')} tone="var(--w-orange)" icon={<FlaskConical size={12} />}>
+        {!conditions.length && <p className="text-[12px] text-[var(--w-text-3)]">{wt('auto.noConditions')}</p>}
         {conditions.map((c, i) => (
           <div key={i} className="flex items-start gap-2">
             <div className="min-w-0 flex-1">
               <JqlField config={config} value={c.jql} disabled={ro} onChange={(jql) => setCfg({ conditions: conditions.map((x, j) => (j === i ? { jql } : x)) })} />
             </div>
             {!ro && (
-              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm mt-0.5" aria-label="Remove condition" title="Remove condition" onClick={() => setCfg({ conditions: conditions.filter((_, j) => j !== i) })}>
+              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm mt-0.5" aria-label={wt('auto.removeCond')} title={wt('auto.removeCond')} onClick={() => setCfg({ conditions: conditions.filter((_, j) => j !== i) })}>
                 <X size={13} />
               </button>
             )}
@@ -531,21 +532,21 @@ function RuleEditor({ open, initial, onClose, config, canEdit }: { open: boolean
         ))}
         {!ro && conditions.length < 10 && (
           <button type="button" className="w-btn w-btn-sm" onClick={() => setCfg({ conditions: [...conditions, { jql: '' }] })}>
-            <Plus size={12} /> Add JQL condition
+            <Plus size={12} /> {wt('auto.addJql')}
           </button>
         )}
-        {conditions.length > 1 && <p className="text-[12px] text-[var(--w-text-3)]">The issue must match every condition.</p>}
+        {conditions.length > 1 && <p className="text-[12px] text-[var(--w-text-3)]">{wt('auto.matchEvery')}</p>}
       </Block>
 
       <Connector />
 
-      <Block label="Then" tone="var(--w-green)" icon={<Bell size={12} />}>
+      <Block label={wt('auto.then')} tone="var(--w-green)" icon={<Bell size={12} />}>
         {cfg.actions.map((a, i) => (
           <div key={i} className="rounded-[6px] border border-[var(--w-border)] p-2.5">
             <div className="mb-2 flex items-center gap-2">
               <span className="w-5 shrink-0 text-center text-[12px] tabular text-[var(--w-text-3)]">{i + 1}.</span>
               <Select
-                aria-label={`Action ${i + 1}`}
+                aria-label={wt('auto.actionN', { n: i + 1 })}
                 value={a.kind}
                 disabled={ro}
                 onChange={(e) => setAction(i, defaultAction(e.target.value as RuleActionKind, config, statuses))}
@@ -555,9 +556,9 @@ function RuleEditor({ open, initial, onClose, config, canEdit }: { open: boolean
               </Select>
               {!ro && (
                 <div className="flex shrink-0">
-                  <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={i === 0} onClick={() => moveAction(i, -1)} aria-label="Move up" title="Move up"><ArrowUp size={12} /></button>
-                  <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={i === cfg.actions.length - 1} onClick={() => moveAction(i, 1)} aria-label="Move down" title="Move down"><ArrowDown size={12} /></button>
-                  <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => setCfg({ actions: cfg.actions.filter((_, j) => j !== i) })} aria-label="Remove action" title="Remove action"><X size={13} /></button>
+                  <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={i === 0} onClick={() => moveAction(i, -1)} aria-label={wt('auto.moveUp')} title={wt('auto.moveUp')}><ArrowUp size={12} /></button>
+                  <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" disabled={i === cfg.actions.length - 1} onClick={() => moveAction(i, 1)} aria-label={wt('auto.moveDown')} title={wt('auto.moveDown')}><ArrowDown size={12} /></button>
+                  <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={() => setCfg({ actions: cfg.actions.filter((_, j) => j !== i) })} aria-label={wt('auto.removeAction')} title={wt('auto.removeAction')}><X size={13} /></button>
                 </div>
               )}
             </div>
@@ -566,10 +567,10 @@ function RuleEditor({ open, initial, onClose, config, canEdit }: { open: boolean
             </div>
           </div>
         ))}
-        {!cfg.actions.length && <p className="text-[12px] text-[var(--w-red)]">Add at least one action.</p>}
+        {!cfg.actions.length && <p className="text-[12px] text-[var(--w-red)]">{wt('auto.addOne')}</p>}
         {!ro && cfg.actions.length < 10 && (
           <button type="button" className="w-btn w-btn-sm" onClick={() => setCfg({ actions: [...cfg.actions, defaultAction('comment', config, statuses)] })}>
-            <Plus size={12} /> Add action
+            <Plus size={12} /> {wt('auto.addAction')}
           </button>
         )}
       </Block>
@@ -596,27 +597,27 @@ function TestDialog({ rule, onClose, config }: { rule: AutomationRule | null; on
       qc.invalidateQueries({ queryKey: wk.automation(config.id) });
       qc.invalidateQueries({ queryKey: wk.issue(config.id, number!) });
     },
-    onError: (err) => toast.error(workError(err, 'Could not run the test')),
+    onError: (err) => toast.error(workError(err, wt('auto.testFailed'))),
   });
   return (
-    <Dialog open={!!rule} onClose={onClose} title="Test rule" width={460}>
+    <Dialog open={!!rule} onClose={onClose} title={wt('auto.testRule')} width={460}>
       <form onSubmit={(e) => { e.preventDefault(); if (number && !run.isPending) run.mutate(false); }}>
         <p className="mb-3 text-[13px] leading-relaxed text-[var(--w-text-2)]">
-          Dry-runs <span className="font-medium text-[var(--w-text)]">{rule?.name}</span> on one issue, skipping the trigger but checking its conditions. <span className="text-[var(--w-text)]">Nothing is changed</span> — you see what the rule would do, then choose whether to apply it.
+          {wt('auto.dryRunsA')} <span className="font-medium text-[var(--w-text)]">{rule?.name}</span> {wt('auto.dryRunsB')} <span className="text-[var(--w-text)]">{wt('auto.nothingChanged')}</span> {wt('auto.dryRunsC')}
         </p>
-        <label className="w-label" htmlFor="w-test-issue">Issue</label>
+        <label className="w-label" htmlFor="w-test-issue">{wt('common.issue')}</label>
         <div className="flex gap-2">
           <input id="w-test-issue" autoFocus className="w-input min-w-0 flex-1 font-mono uppercase" placeholder={`${config.key}-1`} value={text} onChange={(e) => { setText(e.target.value); setResult(null); }} />
           <button type="submit" className="w-btn w-btn-primary shrink-0" disabled={!number || run.isPending}>
             {run.isPending && <Spinner size={12} />}
-            Run test
+            {wt('auto.runTest')}
           </button>
         </div>
         {result && (
           <div className="mt-4 rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[13px]">
             <div className="flex items-start gap-2">
               <StatusPill status={result.status} />
-              <span className="min-w-0 break-words text-[var(--w-text-2)]">{result.dryRun && result.actions.length ? 'Dry run — nothing was changed. The rule would:' : (result.message || '—')}</span>
+              <span className="min-w-0 break-words text-[var(--w-text-2)]">{result.dryRun && result.actions.length ? wt('auto.dryResult') : (result.message || '—')}</span>
             </div>
             {result.dryRun && result.actions.length > 0 && (
               <>
@@ -627,7 +628,7 @@ function TestDialog({ rule, onClose, config }: { rule: AutomationRule | null; on
                 </ul>
                 {result.actions.some((a) => a.willChange) && (
                   <button type="button" className="w-btn w-btn-sm mt-2" disabled={run.isPending} onClick={() => run.mutate(true)}>
-                    Apply for real on {config.key}-{number}
+                    {wt('auto.applyReal', { k: `${config.key}-${number}` })}
                   </button>
                 )}
               </>
@@ -652,37 +653,37 @@ function AuditLog({ config, slug, rules, ruleFilter, setRuleFilter }: {
   return (
     <div>
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <Select aria-label="Filter by rule" value={ruleFilter ?? ''} onChange={(e) => setRuleFilter(e.target.value ? Number(e.target.value) : null)} className="!h-[28px] w-auto max-w-full py-0 text-[12px]">
-          <option value="">All rules</option>
+        <Select aria-label={wt('auto.filterRule')} value={ruleFilter ?? ''} onChange={(e) => setRuleFilter(e.target.value ? Number(e.target.value) : null)} className="!h-[28px] w-auto max-w-full py-0 text-[12px]">
+          <option value="">{wt('auto.allRules')}</option>
           {rules.map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
         </Select>
-        <span className="text-[12px] text-[var(--w-text-3)]">Last 100 runs</span>
+        <span className="text-[12px] text-[var(--w-text-3)]">{wt('auto.last100')}</span>
         <button type="button" className="w-btn w-btn-sm ml-auto" onClick={() => q.refetch()} disabled={q.isFetching}>
-          <RefreshCw size={12} className={cn(q.isFetching && 'animate-spin')} /> Refresh
+          <RefreshCw size={12} className={cn(q.isFetching && 'animate-spin')} /> {wt('auto.refresh')}
         </button>
       </div>
       {q.isLoading ? (
         <div className="flex justify-center py-10"><Spinner /></div>
       ) : q.error ? (
-        <EmptyState title="Could not load the audit log" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('auto.logFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : !logs.length ? (
-        <div className="rounded-[8px] border border-dashed border-[var(--w-border)] px-3 py-8 text-center text-[13px] text-[var(--w-text-3)]">No runs yet.</div>
+        <div className="rounded-[8px] border border-dashed border-[var(--w-border)] px-3 py-8 text-center text-[13px] text-[var(--w-text-3)]">{wt('auto.noRuns')}</div>
       ) : (
         <div className="overflow-x-auto rounded-[8px] border border-[var(--w-border)]">
           <table className="w-full min-w-[680px] text-[13px]">
             <thead>
               <tr className="border-b border-[var(--w-border)] text-left text-[11px] text-[var(--w-text-3)]">
-                <th className="px-3 py-2 font-medium">Time</th>
-                <th className="px-3 py-2 font-medium">Rule</th>
-                <th className="px-3 py-2 font-medium">Issue</th>
-                <th className="px-3 py-2 font-medium">Status</th>
-                <th className="px-3 py-2 font-medium">Details</th>
+                <th className="px-3 py-2 font-medium">{wt('auto.time')}</th>
+                <th className="px-3 py-2 font-medium">{wt('auto.rule')}</th>
+                <th className="px-3 py-2 font-medium">{wt('common.issue')}</th>
+                <th className="px-3 py-2 font-medium">{wt('common.status')}</th>
+                <th className="px-3 py-2 font-medium">{wt('common.details')}</th>
               </tr>
             </thead>
             <tbody>
               {logs.map((l) => (
                 <tr key={l.id} className="border-b border-[var(--w-border)] align-top last:border-0">
-                  <td className="whitespace-nowrap px-3 py-2 text-[var(--w-text-2)]" title={new Date(l.createdAt).toLocaleString('en-US')}>{relativeTime(l.createdAt)}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-[var(--w-text-2)]" title={new Date(l.createdAt).toLocaleString(wfmt.intl())}>{relativeTime(l.createdAt)}</td>
                   <td className="max-w-[180px] truncate px-3 py-2">{l.ruleName}</td>
                   <td className="whitespace-nowrap px-3 py-2">
                     {l.issue ? (
@@ -719,15 +720,15 @@ function RuleRow({ rule, config, canEdit, statuses, onEdit, onTest, onDelete, on
       // Lạc quan: công tắc đổi ngay, lỗi thì tải lại.
       qc.setQueryData<AutomationRule[]>(wk.automation(config.id), (old) => old?.map((r) => (r.id === rule.id ? { ...r, enabled } : r)));
     },
-    onSuccess: (_d, enabled) => toast.success(enabled ? `“${rule.name}” enabled` : `“${rule.name}” disabled`),
-    onError: (err) => toast.error(workError(err, 'Could not update the rule')),
+    onSuccess: (_d, enabled) => toast.success(enabled ? wt('auto.enabledToast', { n: rule.name }) : wt('auto.disabledToast', { n: rule.name })),
+    onError: (err) => toast.error(workError(err, wt('auto.updateFailed'))),
     onSettled: () => qc.invalidateQueries({ queryKey: wk.automation(config.id) }),
   });
   const then = rule.config.actions.map((a) => actionSummary(a, config, statuses)).join(', ');
   return (
     <div className={cn('flex items-start gap-3 border-b border-[var(--w-border)] px-3 py-3 last:border-b-0', !rule.enabled && 'opacity-70')}>
       <div className="pt-0.5">
-        <Switch checked={rule.enabled} disabled={!canEdit || toggle.isPending} onChange={(v) => toggle.mutate(v)} label={rule.enabled ? 'Disable rule' : 'Enable rule'} />
+        <Switch checked={rule.enabled} disabled={!canEdit || toggle.isPending} onChange={(v) => toggle.mutate(v)} label={rule.enabled ? wt('auto.disableRule') : wt('auto.enableRule')} />
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
@@ -736,10 +737,10 @@ function RuleRow({ rule, config, canEdit, statuses, onEdit, onTest, onDelete, on
             <button
               type="button"
               onClick={onShowLog}
-              title="Show in audit log"
+              title={wt('auto.showLog')}
               className="inline-flex h-[18px] items-center gap-1 rounded-full bg-[var(--w-red)] px-1.5 text-[10.5px] font-semibold text-white"
             >
-              <AlertTriangle size={10} /> {rule.recentProblems} {rule.recentProblems === 1 ? 'problem' : 'problems'} · 24h
+              <AlertTriangle size={10} /> {wt('auto.problems', { count: rule.recentProblems })}
             </button>
           )}
         </div>
@@ -748,17 +749,17 @@ function RuleRow({ rule, config, canEdit, statuses, onEdit, onTest, onDelete, on
           {then && <span className="text-[var(--w-text-3)]"> → {then}</span>}
         </div>
         <div className="mt-0.5 text-[11.5px] tabular text-[var(--w-text-3)]">
-          {rule.runCount ? `Ran ${rule.runCount} ${rule.runCount === 1 ? 'time' : 'times'}` : 'Never run'}
-          {rule.lastRunAt && <> · last {relativeTime(rule.lastRunAt)}</>}
+          {rule.runCount ? wt('auto.ranN', { count: rule.runCount }) : wt('auto.neverRun')}
+          {rule.lastRunAt && <> {wt('auto.lastAgo', { t: relativeTime(rule.lastRunAt) })}</>}
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-0.5">
         {canEdit && (
           <>
-            <button type="button" className="w-btn w-btn-ghost w-btn-sm max-sm:!hidden" onClick={onTest} title="Test on an issue"><FlaskConical size={12} /> Test</button>
-            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm sm:!hidden" onClick={onTest} aria-label="Test on an issue" title="Test on an issue"><FlaskConical size={13} /></button>
-            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onEdit} aria-label="Edit rule" title="Edit rule"><Pencil size={13} /></button>
-            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onDelete} aria-label="Delete rule" title="Delete rule"><Trash2 size={13} /></button>
+            <button type="button" className="w-btn w-btn-ghost w-btn-sm max-sm:!hidden" onClick={onTest} title={wt('auto.testOn')}><FlaskConical size={12} /> {wt('agents.test')}</button>
+            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm sm:!hidden" onClick={onTest} aria-label={wt('auto.testOn')} title={wt('auto.testOn')}><FlaskConical size={13} /></button>
+            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onEdit} aria-label={wt('auto.editRule')} title={wt('auto.editRule')}><Pencil size={13} /></button>
+            <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" onClick={onDelete} aria-label={wt('auto.deleteRule')} title={wt('auto.deleteRule')}><Trash2 size={13} /></button>
           </>
         )}
       </div>
@@ -781,8 +782,8 @@ export default function ProjectAutomation({ config, slug }: { config: ProjectCon
 
   const del = useMutation({
     mutationFn: (id: number) => workApi.deleteAutomationRule(config.id, id),
-    onSuccess: () => { toast.success('Rule deleted'); setDeleting(null); qc.invalidateQueries({ queryKey: wk.automation(config.id) }); },
-    onError: (err) => toast.error(workError(err, 'Could not delete the rule')),
+    onSuccess: () => { toast.success(wt('auto.ruleDeleted')); setDeleting(null); qc.invalidateQueries({ queryKey: wk.automation(config.id) }); },
+    onError: (err) => toast.error(workError(err, wt('auto.deleteFailed'))),
   });
 
   const blank = (): Draft => ({ name: '', enabled: true, trigger: 'issue.created', config: { conditions: [], actions: [defaultAction('comment', config, statuses)] } });
@@ -798,8 +799,8 @@ export default function ProjectAutomation({ config, slug }: { config: ProjectCon
   };
 
   const viewTabs = (
-    <div role="tablist" aria-label="Automation view" className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]">
-      {([['rules', 'Rules'], ['log', 'Audit log']] as const).map(([id, label], i) => (
+    <div role="tablist" aria-label={wt('auto.viewTabs')} className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]">
+      {([['rules', wt('auto.rulesTab')], ['log', wt('audit.auditLog')]] as const).map(([id, label], i) => (
         <button
           key={id}
           type="button"
@@ -817,14 +818,14 @@ export default function ProjectAutomation({ config, slug }: { config: ProjectCon
   return (
     <>
       <Section
-        title="Automation"
-        description="Automate repetitive work: when something happens to an issue, check optional conditions, then run actions. Changes made by rules appear in issue history as “Automation”."
-        action={canEdit && view === 'rules' ? <button type="button" className="w-btn w-btn-primary" onClick={() => setEditing(blank())}><Plus size={14} /> Create rule</button> : undefined}
+        title={wt('auto.title')}
+        description={wt('auto.desc')}
+        action={canEdit && view === 'rules' ? <button type="button" className="w-btn w-btn-primary" onClick={() => setEditing(blank())}><Plus size={14} /> {wt('auto.createRule')}</button> : undefined}
       >
         <div className="mb-4 flex flex-wrap items-center gap-3">
           {viewTabs}
           <p className="min-w-0 flex-1 text-[12px] text-[var(--w-text-3)]">
-            Loop protection: a rule never re-triggers itself, chains stop after 3 rules in a row, and each rule runs at most 200 times an hour.
+            {wt('auto.loop')}
           </p>
         </div>
 
@@ -833,7 +834,7 @@ export default function ProjectAutomation({ config, slug }: { config: ProjectCon
         ) : q.isLoading ? (
           <div className="flex justify-center py-10"><Spinner /></div>
         ) : q.error ? (
-          <EmptyState title="Could not load rules" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+          <EmptyState title={wt('auto.loadFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
         ) : (
           <>
             <div className={cn('overflow-hidden rounded-[8px] border border-[var(--w-border)]', !rules.length && 'border-dashed')}>
@@ -852,14 +853,14 @@ export default function ProjectAutomation({ config, slug }: { config: ProjectCon
               ))}
               {!rules.length && (
                 <div className="px-3 py-8 text-center text-[13px] text-[var(--w-text-3)]">
-                  No rules yet.{canEdit && ' Start from a template below or create your own.'}
+                  {wt('auto.noRules')}{canEdit && wt('auto.startTpl')}
                 </div>
               )}
             </div>
 
             {canEdit && (
               <div className="mt-6">
-                <h3 className="mb-2 text-[12px] font-semibold text-[var(--w-text-2)]">Templates</h3>
+                <h3 className="mb-2 text-[12px] font-semibold text-[var(--w-text-2)]">{wt('auto.templates')}</h3>
                 <div className="grid gap-2 sm:grid-cols-2">
                   {TEMPLATES.map((t) => (
                     <button
@@ -887,9 +888,9 @@ export default function ProjectAutomation({ config, slug }: { config: ProjectCon
       <ConfirmDialog
         open={!!deleting}
         onClose={() => setDeleting(null)}
-        title="Delete rule?"
-        body={<>The rule <span className="font-medium text-[var(--w-text)]">{deleting?.name}</span> and its audit log will be deleted. Changes it already made to issues stay.</>}
-        confirmLabel="Delete rule"
+        title={wt('auto.deleteQ')}
+        body={wt('auto.deleteBody', { n: deleting?.name ?? '' })}
+        confirmLabel={wt('auto.deleteRule')}
         pending={del.isPending}
         onConfirm={() => deleting && del.mutate(deleting.id)}
       />

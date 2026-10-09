@@ -73,7 +73,8 @@ const RULE_SELECT = {
 
 export async function listRules(userId: number, projectId: number) {
   await requireProject(userId, projectId, 'project.view');
-  const rules = await prisma.workAutomationRule.findMany({ where: { projectId }, orderBy: { id: 'asc' }, select: RULE_SELECT });
+  // CTW đợt 5: việc định kỳ (trigger scheduled.recurring) có trang riêng (recurring.service.ts) — không hiện ở đây.
+  const rules = await prisma.workAutomationRule.findMany({ where: { projectId, trigger: { not: 'scheduled.recurring' } }, orderBy: { id: 'asc' }, select: RULE_SELECT });
   // Lần chạy gần nhất có lỗi — hiện chấm đỏ bên cạnh luật.
   const failing = await prisma.workAutomationLog.groupBy({
     by: ['ruleId'],

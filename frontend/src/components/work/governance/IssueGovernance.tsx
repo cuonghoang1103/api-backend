@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Khu "Change requests" + "Risks" trong CHI TIẾT THẺ (đợt S3b). Một lời gọi
+ * Khu wt('gov.changeRequests') + "Risks" trong CHI TIẾT THẺ (đợt S3b). Một lời gọi
  * GET /issues/:n/governance — mô-đun tắt / người xem không phải người của đội ⇒ phần đó
  * null ⇒ không vẽ gì (dự án cũ thấy thẻ y như trước).
  */
@@ -14,6 +14,7 @@ import type { ProjectConfig } from '@/lib/work-api';
 import { RAID_LABEL, govApi, govKeys } from '@/lib/work-s3b-api';
 import { NewChangeDialog } from './ChangesView';
 import { CrStatusPill, RaidStatusPill, ScoreBadge, fmtDays } from './shared';
+import { wt } from '@/components/work/i18n';
 
 export function IssueGovernance({ config, issueNumber }: { config: ProjectConfig; issueNumber: number }) {
   const enabled = !!config.permissions.viewGovernance && !!(config.modules?.changeRequests || config.modules?.raid);
@@ -28,8 +29,8 @@ export function IssueGovernance({ config, issueNumber }: { config: ProjectConfig
       {crs && (crs.length > 0 || canRaise) && (
         <section data-testid="issue-crs">
           <div className="mb-2 flex items-center">
-            <h3 className="w-section-title">Change requests</h3>
-            {canRaise && <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => setRaising(true)}><Plus size={13} /> Raise change request</button>}
+            <h3 className="w-section-title">{wt('gov.changeRequests')}</h3>
+            {canRaise && <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-auto" onClick={() => setRaising(true)}><Plus size={13} /> {wt('gov.raiseCr')}</button>}
           </div>
           {crs.length ? (
             <ul className="overflow-hidden rounded-[6px] border border-[var(--w-border)]">
@@ -39,13 +40,13 @@ export function IssueGovernance({ config, issueNumber }: { config: ProjectConfig
                     <GitPullRequestArrow size={13} className="shrink-0 text-[var(--w-text-3)]" />
                     <span className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">CR-{c.number}</span>
                     <span className="min-w-0 flex-1 truncate">{c.title}</span>
-                    <span className="text-[12px] text-[var(--w-text-3)]">{c.role === 'IMPLEMENTS' ? 'implements' : 'affected'} · {fmtDays(c.scheduleDays)}</span>
+                    <span className="text-[12px] text-[var(--w-text-3)]">{c.role === 'IMPLEMENTS' ? wt('gov.implementsLc') : wt('gov.affectedLc')} · {fmtDays(c.scheduleDays)}</span>
                     <CrStatusPill status={c.status} />
                   </Link>
                 </li>
               ))}
             </ul>
-          ) : <p className="text-[12px] text-[var(--w-text-3)]">Out-of-scope request? Raise a change request so its impact gets analysed and approved.</p>}
+          ) : <p className="text-[12px] text-[var(--w-text-3)]">{wt('gov.outOfScope')}</p>}
           <NewChangeDialog config={config} open={raising} onClose={() => setRaising(false)} sourceIssueNumber={issueNumber} />
         </section>
       )}

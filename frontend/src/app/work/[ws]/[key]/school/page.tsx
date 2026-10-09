@@ -25,6 +25,8 @@ import { CourseTab, TrackingTab } from '@/components/work/school/TrackingTab';
 import WeeklyTab from '@/components/work/school/WeeklyTab';
 import AiUsageTab from '@/components/work/school/AiUsageTab';
 import QnaTab from '@/components/work/school/QnaTab';
+import GradesTab from '@/components/work/teaching/GradesTab'; // CTW đợt 5: điểm rubric
+import Week1Tab from '@/components/work/classroom/Week1Tab'; // CTW đợt 5: tuần 1 làm gì
 import { wt } from '@/components/work/i18n';
 
 const TABS = [
@@ -34,6 +36,9 @@ const TABS = [
   { id: 'ai', get label() { return wt('school.tabAiUsage'); } },
   { id: 'qna', get label() { return wt('school.tabQALog'); } },
   { id: 'course', get label() { return wt('school.tabCourseGroup'); } },
+  // CTW đợt 5: "Tuần 1 làm gì" + điểm rubric (giảng viên chấm, sinh viên xem khi đã công bố).
+  { id: 'week1', get label() { return wt('classroom.week1Tab'); } },
+  { id: 'grades', get label() { return wt('teacher.tabGrades'); } },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -80,6 +85,8 @@ function SchoolView({ config, pid }: { config: ProjectConfig; pid: number }) {
         {tab === 'ai' && <AiUsageTab pid={pid} canEdit={canEdit} />}
         {tab === 'qna' && <QnaTab pid={pid} canEdit={canEdit} />}
         {tab === 'course' && <CourseTab pid={pid} />}
+        {tab === 'week1' && <Week1Tab pid={pid} />}
+        {tab === 'grades' && <GradesTab pid={pid} />}
       </div>
       <IssueDrawer pid={pid} num={issue} onClose={() => setIssue(null)} onOpenIssue={(n) => setIssue(n)} />
     </div>

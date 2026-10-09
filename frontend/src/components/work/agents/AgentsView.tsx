@@ -24,13 +24,14 @@ import { AgentStatusPill, TokenRevealDialog, usd } from './AgentBits';
 import { BuiltinBudgetCard, ProUpsell } from './BuiltinBits';
 import { builtinApi, builtinKeys } from '@/lib/work-builtin-api';
 import { useAgentDirectory } from './directory';
+import { wt } from '@/components/work/i18n';
 
 const isAdminRole = (r: string) => r === 'OWNER' || r === 'ADMIN';
 
 function ModelInput({ value, onChange, id }: { value: string; onChange: (v: string) => void; id: string }) {
   return (
     <>
-      <input className="w-input" list={`${id}-models`} value={value} maxLength={80} onChange={(e) => onChange(e.target.value)} placeholder="e.g. claude-sonnet-5" />
+      <input className="w-input" list={`${id}-models`} value={value} maxLength={80} onChange={(e) => onChange(e.target.value)} placeholder={wt('agents.modelPh')} />
       <datalist id={`${id}-models`}>{AGENT_MODELS.map((m) => <option key={m} value={m} />)}</datalist>
     </>
   );
@@ -70,21 +71,21 @@ function NewAgentDialog({ ws, meId, open, onClose, onCreated }: {
       qc.invalidateQueries({ queryKey: agentKeys.list(ws.id) });
       qc.invalidateQueries({ queryKey: builtinKeys.budget(ws.id) });
       setName(''); setRoleText(''); setProjectIds([]);
-      if (r.agent.runtime === 'BUILTIN') toast.success('Built-in agent created — assign it an issue with “Assign to AI”');
+      if (r.agent.runtime === 'BUILTIN') toast.success(wt('agents.builtinCreated'));
       onCreated(r.agent, r.token);
     },
-    onError: (err) => toast.error(workError(err, 'Could not create the agent')),
+    onError: (err) => toast.error(workError(err, wt('agents.createFailed'))),
   });
   const projects = ws.projects.filter((p) => !p.archivedAt);
   return (
-    <Dialog open={open} onClose={onClose} title="New AI agent" width={560}>
+    <Dialog open={open} onClose={onClose} title={wt('agents.newAiAgent')} width={560}>
       <form onSubmit={(e) => { e.preventDefault(); if (name.trim() && (builtin || model.trim()) && !builtinBlocked && !create.isPending) create.mutate(); }} data-testid="new-agent-form">
         <fieldset className="mb-4">
-          <legend className="w-label">How it runs</legend>
-          <div className="grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="How the agent runs">
+          <legend className="w-label">{wt('agents.howRuns')}</legend>
+          <div className="grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label={wt('agents.howRunsAria')}>
             {([
-              ['EXTERNAL', 'Your own AI', 'Claude Code, Cursor, Gemini CLI, Codex… connects with a token (MCP).'],
-              ['BUILTIN', 'Built-in · runs on CT Work', 'CT Work runs it on its own AI. No token. Pro or admin.'],
+              ['EXTERNAL', wt('agents.yourOwnAi'), wt('agents.yourOwnAiBody')],
+              ['BUILTIN', wt('agents.builtinBadge'), wt('agents.builtinBody')],
             ] as const).map(([v, title, body]) => (
               <label key={v} className={cn('flex cursor-pointer gap-2.5 rounded-[8px] border px-3 py-2.5', runtime === v ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' : 'border-[var(--w-border)] hover:bg-[var(--w-hover)]')}>
                 <input type="radio" name="agent-runtime" className="mt-0.5 accent-[var(--w-accent)]" checked={runtime === v} onChange={() => setRuntime(v)} data-testid={`runtime-${v.toLowerCase()}`} />
@@ -95,27 +96,27 @@ function NewAgentDialog({ ws, meId, open, onClose, onCreated }: {
         </fieldset>
         {builtin && budget.data && !budget.data.canUse && <div className="mb-4"><ProUpsell /></div>}
         {builtin && budget.data?.canUse && budget.data.builtinAgents >= budget.data.defaults.perWorkspace && (
-          <p className="mb-4 text-[12.5px] text-[var(--w-red)]">This workspace already has {budget.data.defaults.perWorkspace} built-in agents — retire one first.</p>
+          <p className="mb-4 text-[12.5px] text-[var(--w-red)]">{wt('agents.alreadyN', { n: budget.data.defaults.perWorkspace })}</p>
         )}
         <div className="grid gap-x-3 sm:grid-cols-2">
-          <Field label="Name"><input className="w-input" autoFocus value={name} maxLength={100} onChange={(e) => setName(e.target.value)} placeholder={builtin ? 'e.g. Test writer' : 'e.g. Client Unity'} /></Field>
+          <Field label={wt('common.name')}><input className="w-input" autoFocus value={name} maxLength={100} onChange={(e) => setName(e.target.value)} placeholder={builtin ? wt('agents.testWriterPh') : wt('agents.clientUnityPh')} /></Field>
           {builtin ? (
-            <Field label="Model" hint="Chosen by CT Work for cost and tool use.">
+            <Field label={wt('agents.model')} hint={wt('agents.modelChosen')}>
               <div className="flex h-[32px] items-center rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-2.5 font-mono text-[12.5px] text-[var(--w-text-2)]">{budget.data?.model ?? '…'}</div>
             </Field>
-          ) : <Field label="Model"><ModelInput id="new" value={model} onChange={setModel} /></Field>}
-          <Field label="Owner" hint="The person responsible for what this agent does. Gets its alerts and reviews its work.">
+          ) : <Field label={wt('agents.model')}><ModelInput id="new" value={model} onChange={setModel} /></Field>}
+          <Field label={wt('agents.owner')} hint={wt('agents.ownerHint2')}>
             <Select value={ownerId === '' ? String(meId ?? '') : String(ownerId)} onChange={(e) => setOwnerId(Number(e.target.value))}>
-              {humans.map((m) => <option key={m.id} value={m.id}>{userName(m)}{m.id === meId ? ' (you)' : ''}</option>)}
+              {humans.map((m) => <option key={m.id} value={m.id}>{userName(m)}{m.id === meId ? wt('agents.youParen') : ''}</option>)}
             </Select>
           </Field>
-          <Field label="Role" hint="Shown next to its name, e.g. “Agent · Unity client”.">
-            <input className="w-input" value={roleText} maxLength={300} onChange={(e) => setRoleText(e.target.value)} placeholder="What it works on" />
+          <Field label={wt('common.role')} hint={wt('agents.roleHint')}>
+            <input className="w-input" value={roleText} maxLength={300} onChange={(e) => setRoleText(e.target.value)} placeholder={wt('agents.rolePh')} />
           </Field>
         </div>
         {projects.length > 0 && (
           <fieldset className="mb-4">
-            <legend className="w-label">Add to projects</legend>
+            <legend className="w-label">{wt('agents.addToProjects')}</legend>
             <div className="grid max-h-[150px] gap-1 overflow-y-auto rounded-[8px] border border-[var(--w-border)] p-2 sm:grid-cols-2">
               {projects.map((p) => (
                 <label key={p.id} className="flex min-w-0 cursor-pointer items-center gap-2 rounded-[5px] px-1.5 py-1 text-[13px] hover:bg-[var(--w-hover)]">
@@ -125,23 +126,23 @@ function NewAgentDialog({ ws, meId, open, onClose, onCreated }: {
                 </label>
               ))}
             </div>
-            <p className="mt-1 text-[12px] text-[var(--w-text-3)]">Joins as Member. Projects open to the whole workspace are visible anyway.</p>
+            <p className="mt-1 text-[12px] text-[var(--w-text-3)]">{wt('agents.joinsMember')}</p>
           </fieldset>
         )}
         {builtin ? (
           <p className="mb-1 text-[12px] leading-relaxed text-[var(--w-text-3)]">
-            Spends at most {usd(budget.data?.defaults.agentDailyUsd ?? 5)} a day (change it on its page) and {usd(budget.data?.runCapUsd ?? 2)} per issue. Same rules as any agent: it can never approve, delete, change settings, touch finance or reach clients, and its “Done” goes to review.
+            {wt('agents.spendsAtMost', { day: usd(budget.data?.defaults.agentDailyUsd ?? 5), run: usd(budget.data?.runCapUsd ?? 2) })}
           </p>
         ) : (
           <label className="mb-1 flex cursor-pointer items-start gap-2 text-[13px]">
             <input type="checkbox" className="mt-0.5 accent-[var(--w-accent)]" checked={write} onChange={(e) => setWrite(e.target.checked)} />
-            <span>Token can make changes <span className="block text-[12px] text-[var(--w-text-3)]">Off = read only. Agents can never approve, delete, change settings, touch finance or send anything to clients.</span></span>
+            <span>{wt('agents.tokenCanChange')} <span className="block text-[12px] text-[var(--w-text-3)]">{wt('agents.offReadOnly')}</span></span>
           </label>
         )}
         <div className="mt-5 flex justify-end gap-2">
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="submit" className="w-btn w-btn-primary" disabled={!name.trim() || (!builtin && !model.trim()) || !!builtinBlocked || create.isPending} data-testid="create-agent">
-            {create.isPending && <Spinner size={12} />} Create agent
+            {create.isPending && <Spinner size={12} />} {wt('agents.createAgent')}
           </button>
         </div>
       </form>
@@ -166,36 +167,35 @@ function ConvertDialog({ ws, meId, open, onClose, onDone }: {
     onSuccess: (r) => {
       qc.invalidateQueries({ queryKey: agentKeys.list(ws.id) });
       qc.invalidateQueries({ queryKey: ['work', 'ws-members', ws.id] });
-      const extra = [r.demotedProjectRoles ? `${r.demotedProjectRoles} project role(s) lowered to Member` : '', r.revokedTokens ? `${r.revokedTokens} personal token(s) revoked` : '', r.pendingApprovalSteps ? `${r.pendingApprovalSteps} pending approval step(s) need a new approver` : ''].filter(Boolean);
-      toast.success(`Converted into an AI agent${extra.length ? ` — ${extra.join(' · ')}` : ''}`);
+      const extra = [r.demotedProjectRoles ? wt('agents.demoted', { n: r.demotedProjectRoles }) : '', r.revokedTokens ? wt('agents.revokedN', { n: r.revokedTokens }) : '', r.pendingApprovalSteps ? wt('agents.pendingSteps', { n: r.pendingApprovalSteps }) : ''].filter(Boolean);
+      toast.success(wt('agents.converted', { extra: extra.length ? ` — ${extra.join(' · ')}` : '' }));
       onDone(r.agent, r.token);
     },
-    onError: (err) => toast.error(workError(err, 'Could not convert this account')),
+    onError: (err) => toast.error(workError(err, wt('agents.convertFailed'))),
   });
   return (
-    <Dialog open={open} onClose={onClose} title="Convert an account into an agent" width={520}>
+    <Dialog open={open} onClose={onClose} title={wt('agents.convertTitle')} width={520}>
       <p className="mb-4 text-[13px] leading-relaxed text-[var(--w-text-2)]">
-        For bot accounts that used to sign in with a password. The account keeps its id, so every issue, comment, work log and history entry stays attached to it.
-        Its password, 2FA and personal tokens are removed and it gets an agent token instead.
+        {wt('agents.convertBodyA')} {wt('agents.convertBodyB')}
       </p>
-      <Field label="Account">
+      <Field label={wt('agents.account')}>
         <Select value={String(userId)} onChange={(e) => setUserId(e.target.value ? Number(e.target.value) : '')} data-testid="convert-user">
-          <option value="">Choose a member…</option>
+          <option value="">{wt('settings.chooseMember')}</option>
           {candidates.map((m) => <option key={m.id} value={m.id}>{userName(m)} (@{m.username})</option>)}
         </Select>
       </Field>
       <div className="grid gap-x-3 sm:grid-cols-2">
-        <Field label="Owner">
+        <Field label={wt('agents.owner')}>
           <Select value={ownerId === '' ? String(meId ?? '') : String(ownerId)} onChange={(e) => setOwnerId(Number(e.target.value))}>
-            {humans.filter((m) => m.id !== userId).map((m) => <option key={m.id} value={m.id}>{userName(m)}{m.id === meId ? ' (you)' : ''}</option>)}
+            {humans.filter((m) => m.id !== userId).map((m) => <option key={m.id} value={m.id}>{userName(m)}{m.id === meId ? wt('agents.youParen') : ''}</option>)}
           </Select>
         </Field>
-        <Field label="Model"><ModelInput id="convert" value={model} onChange={setModel} /></Field>
+        <Field label={wt('agents.model')}><ModelInput id="convert" value={model} onChange={setModel} /></Field>
       </div>
       <div className="mt-2 flex justify-end gap-2">
-        <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+        <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
         <button type="button" className="w-btn w-btn-primary" disabled={!userId || !model.trim() || convert.isPending} onClick={() => convert.mutate()}>
-          {convert.isPending && <Spinner size={12} />} Convert
+          {convert.isPending && <Spinner size={12} />} {wt('agents.convert')}
         </button>
       </div>
     </Dialog>
@@ -229,42 +229,41 @@ export default function AgentsView({ ws, meId }: { ws: WorkspaceDetail; meId?: n
       <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 max-w-[640px]">
           <p className="text-[13px] leading-relaxed text-[var(--w-text-2)]">
-            AI agents are members of the team: they take issues, comment, log work and report their cost — through their own token, never a password.
-            Every agent has a person who owns it. Agents cannot approve, delete, change settings, touch finance or talk to clients, and their “Done” goes to review first.
+            {wt('agents.introA')} {wt('agents.introB')}
           </p>
         </div>
         <div className="flex min-w-0 flex-wrap gap-2">
           <label className="flex h-[30px] cursor-pointer items-center gap-1.5 px-1 text-[12px] text-[var(--w-text-2)]">
-            <input type="checkbox" className="accent-[var(--w-accent)]" checked={showRetired} onChange={(e) => setShowRetired(e.target.checked)} /> Show retired
+            <input type="checkbox" className="accent-[var(--w-accent)]" checked={showRetired} onChange={(e) => setShowRetired(e.target.checked)} /> {wt('agents.showRetired')}
           </label>
-          {admin && <button type="button" className="w-btn" onClick={() => setConvertOpen(true)}><ArrowRightLeft size={13} /> Convert an account</button>}
-          {admin && <button type="button" className="w-btn w-btn-primary" onClick={() => setNewOpen(true)} data-testid="new-agent"><Plus size={14} /> New agent</button>}
+          {admin && <button type="button" className="w-btn" onClick={() => setConvertOpen(true)}><ArrowRightLeft size={13} /> {wt('agents.convertAccount')}</button>}
+          {admin && <button type="button" className="w-btn w-btn-primary" onClick={() => setNewOpen(true)} data-testid="new-agent"><Plus size={14} /> {wt('agents.newAgent')}</button>}
         </div>
       </div>
 
       <BuiltinBudgetCard wsId={ws.id} />
 
       {q.isLoading ? <PageLoading rows={4} /> : q.error ? (
-        <EmptyState title="Could not load agents" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />
+        <EmptyState title={wt('agents.loadFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />
       ) : !rows.length ? (
         <div className="w-card flex flex-col items-center px-6 py-14 text-center">
           <span className="flex h-11 w-11 items-center justify-center rounded-[30%] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]"><Bot size={22} /></span>
-          <div className="mt-3 text-[15px] font-semibold">No AI agents yet</div>
+          <div className="mt-3 text-[15px] font-semibold">{wt('agents.noAgents')}</div>
           <p className="mt-1.5 max-w-[460px] text-[13px] leading-relaxed text-[var(--w-text-2)]">
-            Create an agent, paste one command into Claude Code, and it can pick up the issues you assign to it.
+            {wt('agents.noAgentsBody')}
           </p>
           {admin ? (
-            <button type="button" className="w-btn w-btn-primary mt-4" onClick={() => setNewOpen(true)}><Plus size={14} /> New agent</button>
+            <button type="button" className="w-btn w-btn-primary mt-4" onClick={() => setNewOpen(true)}><Plus size={14} /> {wt('agents.newAgent')}</button>
           ) : (
-            <p className="mt-3 text-[12px] text-[var(--w-text-3)]">Ask a workspace admin to create one.</p>
+            <p className="mt-3 text-[12px] text-[var(--w-text-3)]">{wt('agents.askAdmin')}</p>
           )}
         </div>
       ) : (
-        <div className="w-card overflow-hidden" role="table" aria-label="AI agents">
+        <div className="w-card overflow-hidden" role="table" aria-label={wt('agents.aiAgents')}>
           <div role="row" className="hidden grid-cols-[minmax(0,2.2fr)_minmax(0,1.2fr)_minmax(0,1.3fr)_90px_110px_90px_80px_20px] items-center gap-3 border-b border-[var(--w-border)] bg-[var(--w-sunken)] px-4 py-2 text-[11.5px] font-medium text-[var(--w-text-3)] md:grid">
-            <span role="columnheader">Agent</span><span role="columnheader">Model</span><span role="columnheader">Owner</span>
-            <span role="columnheader">Status</span><span role="columnheader">Last seen</span><span role="columnheader">Working on</span>
-            <span role="columnheader" className="text-right" title="Self-reported by the agent unless measured by CT Work">Cost 7d</span><span />
+            <span role="columnheader">{wt('agents.agent')}</span><span role="columnheader">{wt('agents.model')}</span><span role="columnheader">{wt('agents.owner')}</span>
+            <span role="columnheader">{wt('common.status')}</span><span role="columnheader">{wt('agents.lastSeen')}</span><span role="columnheader">{wt('agents.workingOn')}</span>
+            <span role="columnheader" className="text-right" title={wt('agents.selfReported2')}>{wt('agents.cost7d')}</span><span />
           </div>
           {rows.map((a) => (
             <Link
@@ -282,17 +281,17 @@ export default function AgentsView({ ws, meId }: { ws: WorkspaceDetail; meId?: n
                 </span>
               </span>
               <span role="cell" className="flex min-w-0 items-center gap-1.5 max-md:hidden">
-                {a.runtime === 'BUILTIN' && <span className="shrink-0 rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 py-px text-[10.5px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]" title="Runs on CT Work">Built-in</span>}
+                {a.runtime === 'BUILTIN' && <span className="shrink-0 rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 py-px text-[10.5px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]" title={wt('agents.runsOnCtw')}>{wt('agents.builtin')}</span>}
                 <span className="truncate font-mono text-[12px] text-[var(--w-text-2)]">{a.model}</span>
               </span>
               <span role="cell" className="flex min-w-0 items-center gap-1.5 text-[13px] max-md:hidden"><UserAvatar user={a.owner} size={18} /><span className="truncate">{userName(a.owner)}</span></span>
               <span role="cell" className="justify-self-end md:justify-self-start"><AgentStatusPill status={a.status} /></span>
               <span role="cell" className="text-[12px] text-[var(--w-text-2)] max-md:col-span-2 max-md:text-[var(--w-text-3)]">
-                <span className="md:hidden">{a.model} · owner {userName(a.owner)} · </span>
-                {a.lastSeenAt ? relativeTime(a.lastSeenAt) : 'Never connected'}
+                <span className="md:hidden">{wt('agents.ownerMobile', { model: a.model, name: userName(a.owner) })}</span>
+                {a.lastSeenAt ? relativeTime(a.lastSeenAt) : wt('agents.neverConnected')}
               </span>
               <span role="cell" className="text-[12px] tabular-nums text-[var(--w-text-2)] max-md:hidden">
-                {(a.activeLeases?.length ?? 0) > 0 ? `${a.activeLeases!.length} issue${a.activeLeases!.length === 1 ? '' : 's'}` : '—'}
+                {(a.activeLeases?.length ?? 0) > 0 ? wt('agents.nIssues', { count: a.activeLeases!.length }) : '—'}
               </span>
               <span role="cell" className="text-right text-[12px] tabular-nums text-[var(--w-text-2)] max-md:hidden">{dash.data ? usd(cost7.get(a.id) ?? 0) : '—'}</span>
               <ChevronRight size={14} className="text-[var(--w-text-3)] max-md:hidden" />

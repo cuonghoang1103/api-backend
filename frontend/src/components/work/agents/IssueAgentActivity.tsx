@@ -21,6 +21,7 @@ import { useAgentDirectory, useWorkspaceAgents } from './directory';
 import { LeaseBadge, projectHasAgents } from './leases';
 import { IssueBuiltinRuns, ProUpsell } from './BuiltinBits';
 import { builtinApi, builtinKeys } from '@/lib/work-builtin-api';
+import { wt } from '@/components/work/i18n';
 
 type LeaseRow = Activity['leases'][number];
 
@@ -29,10 +30,10 @@ function agentUser(a: LeaseRow['agent']) {
 }
 
 function leaseLine(l: LeaseRow) {
-  if (l.status === 'ACTIVE') return `heartbeat ${relativeTime(l.heartbeatAt)} · claimed ${relativeTime(l.claimedAt)}`;
+  if (l.status === 'ACTIVE') return wt('agents.leaseActive', { a: relativeTime(l.heartbeatAt), b: relativeTime(l.claimedAt) });
   const mins = Math.max(1, Math.round((new Date(l.releasedAt ?? l.heartbeatAt).getTime() - new Date(l.claimedAt).getTime()) / 60_000));
   const dur = mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins}m`;
-  return `${l.status === 'EXPIRED' ? 'expired' : 'released'} ${relativeTime(l.releasedAt ?? l.expiresAt)} · worked ${dur}`;
+  return wt('agents.leaseDone', { st: l.status === 'EXPIRED' ? wt('agents.expiredLc') : wt('agents.releasedLc'), t: relativeTime(l.releasedAt ?? l.expiresAt), d: dur });
 }
 
 /**
@@ -74,28 +75,28 @@ function AssignToAi({ config, issue }: { config: ProjectConfig; issue: IssueDeta
       qc.invalidateQueries({ queryKey: wk.issues(config.id) });
       qc.invalidateQueries({ queryKey: builtinKeys.issueRuns(config.id, issue.number) });
       qc.invalidateQueries({ queryKey: agentKeys.issueActivity(config.id, issue.number) });
-      toast.success(dir[a.id]?.runtime === 'BUILTIN' ? `${userName(a)} started — CT Work runs it now; it moves the issue to review when done` : `Assigned to ${userName(a)} — it will pick the issue up from its queue`);
+      toast.success(dir[a.id]?.runtime === 'BUILTIN' ? wt('agents.startedRuns', { name: userName(a) }) : wt('agents.assignedQueue', { name: userName(a) }));
       setOpen(false); setNote(''); setPick(null);
     },
-    onError: (err) => toast.error(workError(err, 'Could not assign the issue')),
+    onError: (err) => toast.error(workError(err, wt('agents.assignFailed'))),
   });
   if (!agents.length || !config.permissions.editIssues) return null;
   return (
     <>
       <button type="button" className="w-btn w-btn-sm" onClick={() => { setPick(agents[0]?.id ?? null); setOpen(true); }} data-testid="assign-to-ai">
-        <Sparkles size={12} /> Assign to AI
+        <Sparkles size={12} /> {wt('agents.assignToAi')}
       </button>
-      <Dialog open={open} onClose={() => setOpen(false)} title="Assign to an AI agent" width={480}>
+      <Dialog open={open} onClose={() => setOpen(false)} title={wt('agents.assignToAgent')} width={480}>
         <p className="mb-3 text-[13px] leading-relaxed text-[var(--w-text-2)]">
           The agent gets the issue in its queue and claims it when it starts. Its “Done” goes to review first; you stay in charge of closing it.
         </p>
-        <div className="mb-3 space-y-1" role="radiogroup" aria-label="Agent">
+        <div className="mb-3 space-y-1" role="radiogroup" aria-label={wt('agents.agent')}>
           {agents.map((m) => (
             <label key={m.id} className={cn('flex cursor-pointer items-center gap-2.5 rounded-[8px] border px-3 py-2', pick === m.id ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' : 'border-[var(--w-border)] hover:bg-[var(--w-hover)]')}>
               <input type="radio" name="ai-agent" className="accent-[var(--w-accent)]" checked={pick === m.id} onChange={() => setPick(m.id)} />
               <UserAvatar user={m} size={22} />
               <span className="min-w-0 flex-1 truncate text-[13px] font-medium">{userName(m)}</span>
-              {dir[m.id]?.runtime === 'BUILTIN' && <span className="shrink-0 rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 py-px text-[10.5px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]">Built-in</span>}
+              {dir[m.id]?.runtime === 'BUILTIN' && <span className="shrink-0 rounded-[4px] bg-[var(--w-accent-soft)] px-1.5 py-px text-[10.5px] font-semibold uppercase tracking-[0.03em] text-[var(--w-accent-text)]">{wt('agents.builtin')}</span>}
               <span className="shrink-0 font-mono text-[11px] text-[var(--w-text-3)]">{dir[m.id]?.model}</span>
             </label>
           ))}
@@ -106,16 +107,16 @@ function AssignToAi({ config, issue }: { config: ProjectConfig; issue: IssueDeta
           <>
             {pickedBuiltin && (
               <p className="mb-3 text-[12.5px] leading-relaxed text-[var(--w-text-2)]">
-                Built-in: CT Work runs it now on its own AI — at most {budget.data?.maxSteps ?? 12} steps and {budget.data ? `$${budget.data.runCapUsd}` : 'the run cap'} for this issue. You can stop it any time.
+                {wt('agents.builtinRunsNow', { steps: budget.data?.maxSteps ?? 12, cap: budget.data ? `$${budget.data.runCapUsd}` : wt('agents.theRunCap') })}
               </p>
             )}
-            <label className="w-label" htmlFor="ai-note">Instructions (optional)</label>
-            <textarea id="ai-note" className="w-input min-h-[72px] py-2" maxLength={2000} value={note} onChange={(e) => setNote(e.target.value)} placeholder={pickedBuiltin ? 'Anything it should know, e.g. “Write 5.1 test cases for OrderService.total”.' : 'Anything it should know — posted as an internal comment that @mentions the agent.'} />
+            <label className="w-label" htmlFor="ai-note">{wt('agents.instructions')}</label>
+            <textarea id="ai-note" className="w-input min-h-[72px] py-2" maxLength={2000} value={note} onChange={(e) => setNote(e.target.value)} placeholder={pickedBuiltin ? wt('agents.notePhBuiltin') : wt('agents.notePhExt')} />
           </>
         )}
         <div className="mt-4 flex justify-end gap-2">
-          <button type="button" className="w-btn" onClick={() => setOpen(false)}>Cancel</button>
-          <button type="button" className="w-btn w-btn-primary" disabled={!pick || go.isPending || (pickedBuiltin && budget.data?.canUse === false)} onClick={() => go.mutate()} data-testid="assign-to-ai-go">{go.isPending && <Spinner size={12} />} {pickedBuiltin ? 'Assign and start' : 'Assign'}</button>
+          <button type="button" className="w-btn" onClick={() => setOpen(false)}>{wt('common.cancel')}</button>
+          <button type="button" className="w-btn w-btn-primary" disabled={!pick || go.isPending || (pickedBuiltin && budget.data?.canUse === false)} onClick={() => go.mutate()} data-testid="assign-to-ai-go">{go.isPending && <Spinner size={12} />} {pickedBuiltin ? wt('agents.assignStart') : wt('agents.assign')}</button>
         </div>
       </Dialog>
     </>
@@ -155,7 +156,7 @@ export default function IssueAgentActivity({ config, issue, done }: { config: Pr
   return (
     <section data-testid="issue-agent-activity">
       <div className="mb-2 flex items-center gap-2">
-        <h3 className="w-section-title flex items-center gap-1.5"><Bot size={14} className="text-[var(--w-accent-text)]" /> Agent activity</h3>
+        <h3 className="w-section-title flex items-center gap-1.5"><Bot size={14} className="text-[var(--w-accent-text)]" /> {wt('agents.activity')}</h3>
         {!done && !active && !assignedToAgent && <span className="ml-auto"><AssignToAi config={config} issue={issue} /></span>}
       </div>
       <div className="w-card divide-y divide-[var(--w-border)] overflow-hidden">
@@ -170,7 +171,7 @@ export default function IssueAgentActivity({ config, issue, done }: { config: Pr
         ) : assignedToAgent && !assignedBuiltin ? (
           <div className="flex items-center gap-2.5 px-3 py-2.5 text-[13px] text-[var(--w-text-2)]">
             <UserAvatar user={assignee} size={22} />
-            <span>Assigned to <b className="font-medium text-[var(--w-text)]">{userName(assignee)}</b> — waiting for it to pick the issue up.</span>
+            <span>{wt('agents.assignedWaiting', { name: userName(assignee) })}</span>
           </div>
         ) : null}
 
@@ -184,7 +185,7 @@ export default function IssueAgentActivity({ config, issue, done }: { config: Pr
         {past.length > 0 && (
           <div className="px-3 py-2">
             <button type="button" onClick={() => setMore((v) => !v)} aria-expanded={more} className="flex items-center gap-1 text-[12px] text-[var(--w-text-3)] hover:text-[var(--w-text-2)]">
-              {more ? <ChevronDown size={12} /> : <ChevronRight size={12} />} {past.length} earlier {past.length === 1 ? 'session' : 'sessions'}
+              {more ? <ChevronDown size={12} /> : <ChevronRight size={12} />} {wt('agents.earlierSessions', { count: past.length })}
             </button>
             {more && (
               <ul className="mt-1.5 space-y-1">
@@ -205,9 +206,9 @@ export default function IssueAgentActivity({ config, issue, done }: { config: Pr
           <div className="px-3 py-2.5" data-testid="issue-agent-cost">
             <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
               <span className="flex items-center gap-1.5 text-[13px] font-medium"><Coins size={13} className="text-[var(--w-text-3)]" /> {usd(t.costUsd)}</span>
-              <span className="text-[12px] tabular-nums text-[var(--w-text-2)]">{tokensFmt(t.inputTokens)} in · {tokensFmt(t.outputTokens)} out{t.cacheReadTokens ? ` · ${tokensFmt(t.cacheReadTokens)} cached` : ''}</span>
-              <span className="text-[11.5px] text-[var(--w-text-3)]" title="Reported = the agent declared it through report_usage. Measured = CT Work ran the model itself (phase 2).">
-                {t.reported > 0 && t.gateway > 0 ? `${usd(t.reported)} self-reported · ${usd(t.gateway)} measured` : t.gateway > 0 ? 'measured by CT Work' : 'self-reported by the agent · estimate'}
+              <span className="text-[12px] tabular-nums text-[var(--w-text-2)]">{wt('agents.tokLine', { a: tokensFmt(t.inputTokens), b: tokensFmt(t.outputTokens) })}{t.cacheReadTokens ? wt('agents.cached', { c: tokensFmt(t.cacheReadTokens) }) : ''}</span>
+              <span className="text-[11.5px] text-[var(--w-text-3)]" title={wt('agents.reportedTip')}>
+                {t.reported > 0 && t.gateway > 0 ? wt('agents.srcBoth', { a: usd(t.reported), b: usd(t.gateway) }) : t.gateway > 0 ? wt('agents.srcMeasured') : wt('agents.srcSelf1')}
               </span>
             </div>
             {usage!.byAgent.length > 1 && (

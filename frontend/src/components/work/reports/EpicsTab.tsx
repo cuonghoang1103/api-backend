@@ -7,14 +7,15 @@ import { wk, type Lookups } from '@/components/work/hooks';
 import { EmptyState, formatDate, Spinner, StatusBadge } from '@/components/work/ui';
 import { cn } from '@/lib/utils';
 import { num, unitLabel } from './shared';
+import { wt } from '@/components/work/i18n';
 
 export default function EpicsTab({ pid, config, lk }: { pid: number; config: ProjectConfig; lk: Lookups }) {
   const q = useQuery({ queryKey: [...wk.reports(pid), 'epics'], queryFn: () => workApi.epicReport(pid) });
 
   if (q.isLoading) return <div className="flex justify-center py-16"><Spinner size={20} /></div>;
-  if (q.error) return <EmptyState title="Could not load epics" body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>Try again</button>} />;
+  if (q.error) return <EmptyState title={wt('rep.loadEpicsFailed')} body={workError(q.error)} action={<button type="button" className="w-btn" onClick={() => q.refetch()}>{wt('common.tryAgain')}</button>} />;
   const d = q.data;
-  if (!d || !d.epics.length) return <EmptyState title="No epics yet" body="Create an epic and link issues to it to track progress across sprints." />;
+  if (!d || !d.epics.length) return <EmptyState title={wt('rep.noEpics')} body={wt('rep.noEpicsBody')} />;
 
   const u = unitLabel(d.unit);
   const today = new Date().toISOString().slice(0, 10);
@@ -26,10 +27,10 @@ export default function EpicsTab({ pid, config, lk }: { pid: number; config: Pro
         <thead>
           <tr className="border-b border-[var(--w-border)] text-left text-[11px] uppercase tracking-wide text-[var(--w-text-3)]">
             <th className="px-3 py-2 font-medium">Epic</th>
-            <th className="px-3 py-2 font-medium">Status</th>
-            <th className="w-[200px] px-3 py-2 font-medium">Progress</th>
-            <th className="px-3 py-2 text-right font-medium">{u === 'h' ? 'Hours' : 'Points'}</th>
-            <th className="px-3 py-2 text-right font-medium">Due</th>
+            <th className="px-3 py-2 font-medium">{wt('common.status')}</th>
+            <th className="w-[200px] px-3 py-2 font-medium">{wt('common.progress')}</th>
+            <th className="px-3 py-2 text-right font-medium">{u === 'h' ? wt('finance.hoursH') : wt('common.points')}</th>
+            <th className="px-3 py-2 text-right font-medium">{wt('issues.colDue')}</th>
           </tr>
         </thead>
         <tbody>
@@ -65,7 +66,7 @@ export default function EpicsTab({ pid, config, lk }: { pid: number; config: Pro
                 <td className="whitespace-nowrap px-3 py-2.5 text-right tabular-nums text-[var(--w-text-2)]">{num(e.pointsDone)} / {num(e.points)} {u}</td>
                 <td className={cn('whitespace-nowrap px-3 py-2.5 text-right', overdue ? 'font-medium text-[var(--w-red)]' : 'text-[var(--w-text-2)]')}>
                   {e.dueDate ? formatDate(e.dueDate) : '—'}
-                  {overdue && <div className="text-[11px] font-normal">Overdue</div>}
+                  {overdue && <div className="text-[11px] font-normal">{wt('common.overdue')}</div>}
                 </td>
               </tr>
             );

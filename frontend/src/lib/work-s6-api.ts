@@ -5,6 +5,9 @@
  */
 import { api } from './api';
 import type { WorkApproval, WorkStage } from './work-api';
+import { translate as wtr, type WKey } from '@/components/work/i18n/core';
+import { currentWorkLocale } from '@/components/work/i18n/store';
+const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 const B = '/work';
 type Env<T> = { data: T };
@@ -132,8 +135,8 @@ export function specGateError(err: unknown): SpecGateStatus | null {
 }
 
 export const DIMENSION_INFO: Record<SpecDimension, { label: string; short: string; body: string }> = {
-  completeness: { label: 'Completeness', short: 'Complete', body: 'Everything needed is there: sections, edge cases, failure modes, no TBD.' },
-  consistency: { label: 'Consistency', short: 'Consistent', body: 'No duplicates, no contradictions, every ID defined once.' },
-  unambiguity: { label: 'Unambiguity', short: 'Unambiguous', body: 'Each requirement has one reading — no "fast", "user-friendly", "etc".' },
-  verifiability: { label: 'Verifiability', short: 'Verifiable', body: 'Each requirement has a pass/fail criterion and a linked test.' },
+  completeness: { get label() { return wt('pspec.dim_completeness'); }, get short() { return wt('pspec.dimS_completeness'); }, get body() { return wt('pspec.dimB_completeness'); } },
+  consistency: { get label() { return wt('pspec.dim_consistency'); }, get short() { return wt('pspec.dimS_consistency'); }, get body() { return wt('pspec.dimB_consistency'); } },
+  unambiguity: { get label() { return wt('pspec.dim_unambiguity'); }, get short() { return wt('pspec.dimS_unambiguity'); }, get body() { return wt('pspec.dimB_unambiguity'); } },
+  verifiability: { get label() { return wt('pspec.dim_verifiability'); }, get short() { return wt('pspec.dimS_verifiability'); }, get body() { return wt('pspec.dimB_verifiability'); } },
 };

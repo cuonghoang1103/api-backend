@@ -6,6 +6,9 @@
  */
 import { api } from './api';
 import type { WorkUser } from './work-api';
+import { translate as wtr, type WKey } from '@/components/work/i18n/core';
+import { currentWorkLocale } from '@/components/work/i18n/store';
+const wt = (k: WKey, v?: Record<string, string | number>) => wtr(currentWorkLocale(), k, v);
 
 const B = '/work';
 type Env<T> = { data: T };
@@ -229,13 +232,13 @@ export function mcpAddCommand(token: string, origin: string) {
 export const AGENT_MODELS = ['claude-sonnet-5', 'claude-opus-5', 'claude-opus-4-8', 'gpt-6-sol', 'gpt-5.4-mini', 'custom'];
 
 export const INBOX_EVENT_LABEL: Record<string, string> = {
-  'issue.assigned': 'Assigned',
-  'comment.mention': 'Mentioned',
-  'comment.on_my_issue': 'Comment on its issue',
-  'issue.returned': 'Returned',
-  'handoff.received': 'Handoff received',
-  'approval.decided': 'Approval decided',
-  'issue.flag': 'Flag changed',
-  'lease.expired': 'Lease expired',
+  get 'issue.assigned'() { return wt('agents.evAssigned'); },
+  get 'comment.mention'() { return wt('agents.evMention'); },
+  get 'comment.on_my_issue'() { return wt('agents.evComment'); },
+  get 'issue.returned'() { return wt('agents.evReturned'); },
+  get 'handoff.received'() { return wt('agents.evHandoff'); },
+  get 'approval.decided'() { return wt('agents.evApproval'); },
+  get 'issue.flag'() { return wt('agents.evFlag'); },
+  get 'lease.expired'() { return wt('agents.evLease'); },
 };
 export const WEBHOOK_EVENT_OPTIONS = Object.keys(INBOX_EVENT_LABEL);

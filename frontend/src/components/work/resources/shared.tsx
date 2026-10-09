@@ -17,6 +17,7 @@ import { workError } from '@/lib/work-api';
 import { KIND_LABEL, resApi, type ResourceGroup, type ResourceInput, type ResourceVisibility, type UrlPreview, type WorkResource } from '@/lib/work-resources-api';
 import { Dialog, Field, Spinner } from '../ui';
 import { Select } from '../settings/shared';
+import { wt } from '@/components/work/i18n';
 
 const KIND_ICON: Record<string, LucideIcon> = {
   github: Github, gitlab: Gitlab, bitbucket: Code2, figma: Figma, gdrive: FolderOpen, gdocs: FileText, gsheets: FileSpreadsheet, gslides: Presentation,
@@ -46,7 +47,7 @@ export function Favicon({ r, size = 18 }: { r: { faviconUrl: string | null; kind
   );
 }
 
-export const kindLabel = (k: string) => KIND_LABEL[k] ?? 'Link';
+export const kindLabel = (k: string) => (k === 'meet' ? wt('res.kMeet') : k === 'calendar' ? wt('res.kCalendar') : k === 'mail' ? wt('res.kMail') : KIND_LABEL[k] && k !== 'link' ? KIND_LABEL[k] : wt('res.kLink'));
 
 /** "12k" cho số sao. */
 export function compactNumber(n: number): string {
@@ -122,7 +123,7 @@ export function ResourceDialog({
       };
       return editing ? resApi.update(pid, editing.id, body) : resApi.create(pid, body);
     },
-    onSuccess: (r) => { toast.success(editing ? 'Link updated' : 'Link added'); onSaved(r); onClose(); },
+    onSuccess: (r) => { toast.success(editing ? wt('res.linkUpdated') : wt('res.linkAdded')); onSaved(r); onClose(); },
     onError: (e) => toast.error(workError(e)),
   });
 
@@ -130,19 +131,19 @@ export function ResourceDialog({
     <Dialog
       open={open}
       onClose={onClose}
-      title={editing ? 'Edit link' : 'Add link'}
+      title={editing ? wt('res.editLink') : wt('res.addLink')}
       width={560}
       footer={(
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="button" className="w-btn w-btn-primary" disabled={!f.url.trim() || save.isPending} onClick={() => save.mutate()} data-testid="resource-save">
-            {save.isPending && <Spinner size={12} />}{editing ? 'Save' : 'Add link'}
+            {save.isPending && <Spinner size={12} />}{editing ? wt('common.save') : wt('res.addLink')}
           </button>
         </>
       )}
     >
       <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); if (f.url.trim()) save.mutate(); }}>
-        <Field label="URL" hint="Paste a link — the title fills in by itself. http(s) or mailto.">
+        <Field label="URL" hint={wt('res.urlHint')}>
           <div className="relative">
             <input
               className="w-input pr-8" value={f.url} autoFocus={!editing} maxLength={2100} placeholder="https://github.com/your-team/repo"
@@ -155,33 +156,33 @@ export function ResourceDialog({
           </div>
         </Field>
         {preview?.duplicateOf && (!editing || preview.duplicateOf.id !== editing.id) && (
-          <p className="rounded-[6px] bg-[var(--w-hover)] px-3 py-2 text-[12.5px] text-[var(--w-text-2)]">Already in Resources as “{preview.duplicateOf.title}”.</p>
+          <p className="rounded-[6px] bg-[var(--w-hover)] px-3 py-2 text-[12.5px] text-[var(--w-text-2)]">{wt('res.alreadyIn', { t: preview.duplicateOf.title })}</p>
         )}
         {preview?.github && (
           <p className="text-[12.5px] text-[var(--w-text-2)]">★ {compactNumber(preview.github.stars)} · {preview.github.defaultBranch ?? 'main'}{preview.github.language ? ` · ${preview.github.language}` : ''}</p>
         )}
-        <Field label="Title">
-          <input className="w-input" value={f.title} maxLength={200} onChange={(e) => { titleTouched.current = true; set({ title: e.target.value }); }} placeholder="Filled in from the page" data-testid="resource-title" />
+        <Field label={wt('common.title')}>
+          <input className="w-input" value={f.title} maxLength={200} onChange={(e) => { titleTouched.current = true; set({ title: e.target.value }); }} placeholder={wt('res.filledIn')} data-testid="resource-title" />
         </Field>
-        <Field label="Description">
+        <Field label={wt('common.description')}>
           <textarea className="w-input" rows={2} maxLength={4000} value={f.description} onChange={(e) => { descTouched.current = true; set({ description: e.target.value }); }} />
         </Field>
         <div className="grid gap-3 sm:grid-cols-2">
-          <Field label="Group">
+          <Field label={wt('res.group')}>
             <Select value={f.groupId} onChange={(e) => set({ groupId: e.target.value })}>
-              <option value="">Ungrouped</option>
+              <option value="">{wt('res.ungrouped')}</option>
               {groups.map((g) => <option key={g.id} value={g.id}>{g.icon ? `${g.icon} ` : ''}{g.name}</option>)}
             </Select>
           </Field>
-          <Field label="Tags" hint="Comma separated">
+          <Field label={wt('res.tags')} hint={wt('res.commaSep')}>
             <input className="w-input" value={f.tags} onChange={(e) => set({ tags: e.target.value })} placeholder="frontend, sfx" />
           </Field>
         </div>
         <div className="flex flex-wrap gap-x-5 gap-y-2 pt-1 text-[13px]">
-          <label className="flex items-center gap-2"><input type="checkbox" checked={f.pinned} onChange={(e) => set({ pinned: e.target.checked })} /> Star (show at the top)</label>
-          <label className="flex items-center gap-2"><input type="checkbox" checked={f.pinnedToSidebar} onChange={(e) => set({ pinnedToSidebar: e.target.checked })} /> Pin to project sidebar</label>
+          <label className="flex items-center gap-2"><input type="checkbox" checked={f.pinned} onChange={(e) => set({ pinned: e.target.checked })} /> {wt('res.starTop')}</label>
+          <label className="flex items-center gap-2"><input type="checkbox" checked={f.pinnedToSidebar} onChange={(e) => set({ pinnedToSidebar: e.target.checked })} /> {wt('res.pinSidebar')}</label>
           {(clientPortal || editing?.visibility === 'CLIENT') && (
-            <label className="flex items-center gap-2"><input type="checkbox" checked={f.visibility === 'CLIENT'} onChange={(e) => set({ visibility: e.target.checked ? 'CLIENT' : 'TEAM' })} /> Visible to the client</label>
+            <label className="flex items-center gap-2"><input type="checkbox" checked={f.visibility === 'CLIENT'} onChange={(e) => set({ visibility: e.target.checked ? 'CLIENT' : 'TEAM' })} /> {wt('res.visibleClient')}</label>
           )}
         </div>
         <button type="submit" hidden />
@@ -207,20 +208,20 @@ export function GroupDialog({ open, onClose, initial, onSubmit, pending }: {
     setColor(initial?.color ?? null);
   }, [open, initial]);
   return (
-    <Dialog open={open} onClose={onClose} title={initial ? 'Edit group' : 'New group'} width={420}
+    <Dialog open={open} onClose={onClose} title={initial ? wt('res.editGroup') : wt('res.newGroup')} width={420}
       footer={(
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
-          <button type="button" className="w-btn w-btn-primary" disabled={!name.trim() || pending} onClick={() => onSubmit({ name: name.trim(), icon: icon.trim() || null, color })}>{pending && <Spinner size={12} />}{initial ? 'Save' : 'Create group'}</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
+          <button type="button" className="w-btn w-btn-primary" disabled={!name.trim() || pending} onClick={() => onSubmit({ name: name.trim(), icon: icon.trim() || null, color })}>{pending && <Spinner size={12} />}{initial ? wt('common.save') : wt('res.createGroup')}</button>
         </>
       )}
     >
       <div className="space-y-3">
         <div className="grid grid-cols-[72px_1fr] gap-3">
-          <Field label="Icon"><input className="w-input text-center" value={icon} maxLength={8} onChange={(e) => setIcon(e.target.value)} placeholder="🎧" /></Field>
-          <Field label="Name"><input className="w-input" value={name} maxLength={80} autoFocus onChange={(e) => setName(e.target.value)} placeholder="Audio" /></Field>
+          <Field label={wt('res.icon')}><input className="w-input text-center" value={icon} maxLength={8} onChange={(e) => setIcon(e.target.value)} placeholder="🎧" /></Field>
+          <Field label={wt('common.name')}><input className="w-input" value={name} maxLength={80} autoFocus onChange={(e) => setName(e.target.value)} placeholder="Audio" /></Field>
         </div>
-        <Field label="Colour">
+        <Field label={wt('studio.colour')}>
           <div className="flex flex-wrap gap-1.5">
             {GROUP_COLORS.map((c) => (
               <button key={c} type="button" aria-label={c} aria-pressed={color === c} onClick={() => setColor(color === c ? null : c)}

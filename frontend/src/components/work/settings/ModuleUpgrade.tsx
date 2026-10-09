@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Cài đặt dự án → Project type & modules → "Available modules" (đợt S5c).
+ * Cài đặt dự án → Project type & modules → wt('modup.available') (đợt S5c).
  *
  * Dự án tạo trước khi một mô-đun có tính năng thật giữ mô-đun đó TẮT (luật "dự án cũ y nguyên"). Khối này liệt kê
  * mô-đun đang tắt kèm mô tả, đánh dấu cái được khuyên cho loại dự án và cái "mới từ khi dự án được tạo", và cho
@@ -16,6 +16,11 @@ import { workError, type ProjectConfig } from '@/lib/work-api';
 import { workS5cApi, workS5cKeys } from '@/lib/work-s5c-api';
 import { Spinner } from '../ui';
 import { KIND_INFO } from '../studio/shared';
+import type { WKey } from '../i18n';
+import { wt } from '@/components/work/i18n';
+/** Nhãn/mô tả mô-đun do máy chủ gửi (tiếng Anh) ⇒ dùng bản dịch của studio.mod_* nếu có. */
+const modLabel = (k: string, fb: string) => { const s = wt(`studio.mod_${k}` as WKey); return s.startsWith('studio.') ? fb : s; };
+const modBody = (k: string, fb: string) => { const s = wt(`studio.modBody_${k}` as WKey); return s.startsWith('studio.') ? fb : s; };
 
 export default function ModuleUpgrade({ config, onChanged }: { config: ProjectConfig; onChanged: () => void }) {
   const canEdit = !!config.permissions.configureStudio;
@@ -23,11 +28,11 @@ export default function ModuleUpgrade({ config, onChanged }: { config: ProjectCo
   const apply = useMutation({
     mutationFn: () => workS5cApi.applyDefaults(config.id),
     onSuccess: (r) => {
-      toast.success(r.enabled.length ? `Turned on ${r.enabled.length} module${r.enabled.length === 1 ? '' : 's'}` : 'Nothing new to turn on');
+      toast.success(r.enabled.length ? wt('modup.turnedOn', { count: r.enabled.length }) : wt('modup.nothingNew'));
       q.refetch();
       onChanged();
     },
-    onError: (err) => toast.error(workError(err, 'Could not turn the modules on')),
+    onError: (err) => toast.error(workError(err, wt('modup.failed'))),
   });
 
   if (!q.data) return null;
@@ -41,16 +46,16 @@ export default function ModuleUpgrade({ config, onChanged }: { config: ProjectCo
       <div className="flex flex-wrap items-start gap-3">
         <Sparkles size={16} className="mt-0.5 shrink-0 text-[var(--w-accent-text)]" />
         <div className="min-w-0 flex-1">
-          <h3 id="available-modules" className="text-[13.5px] font-semibold">Available modules</h3>
+          <h3 id="available-modules" className="text-[13.5px] font-semibold">{wt('modup.available')}</h3>
           <p className="mt-0.5 text-[12.5px] leading-relaxed text-[var(--w-text-2)]">
-            {off.length} module{off.length === 1 ? ' is' : 's are'} available but turned off in this project.
-            {will.size ? ` ${will.size} ${will.size === 1 ? 'is' : 'are'} recommended for ${kindLabel} projects and arrived after this project was created.` : ''}
-            {' '}Nothing changes until you turn something on.
+            {wt('modup.offLine', { count: off.length })}
+            {will.size ? ` ${wt('modup.recommendedLine', { count: will.size, kind: kindLabel })}` : ''}
+            {' '}{wt('modup.nothingChanges')}
           </p>
         </div>
         {canEdit && will.size > 0 && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm shrink-0" disabled={apply.isPending} onClick={() => apply.mutate()}>
-            {apply.isPending && <Spinner size={11} />} Enable all recommended for this project type
+            {apply.isPending && <Spinner size={11} />} {wt('modup.enableAll')}
           </button>
         )}
       </div>
@@ -58,15 +63,15 @@ export default function ModuleUpgrade({ config, onChanged }: { config: ProjectCo
         {off.map((m) => (
           <li key={m.key} className="min-w-0 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2">
             <div className="flex flex-wrap items-center gap-1.5 text-[13px] font-medium">
-              {m.label}
-              {m.recommended && <span className="rounded-full bg-[var(--w-accent-soft)] px-1.5 text-[11px] font-normal text-[var(--w-accent-text)]">Recommended</span>}
-              {will.has(m.key) && <span className="rounded-full bg-[var(--w-sunken)] px-1.5 text-[11px] font-normal text-[var(--w-text-3)]">New since this project was created</span>}
+              {modLabel(m.key, m.label)}
+              {m.recommended && <span className="rounded-full bg-[var(--w-accent-soft)] px-1.5 text-[11px] font-normal text-[var(--w-accent-text)]">{wt('modup.recommended')}</span>}
+              {will.has(m.key) && <span className="rounded-full bg-[var(--w-sunken)] px-1.5 text-[11px] font-normal text-[var(--w-text-3)]">{wt('modup.newSince')}</span>}
             </div>
-            <p className="mt-0.5 text-[12px] leading-snug text-[var(--w-text-2)]">{m.body}</p>
+            <p className="mt-0.5 text-[12px] leading-snug text-[var(--w-text-2)]">{modBody(m.key, m.body)}</p>
           </li>
         ))}
       </ul>
-      {!canEdit && <p className="mt-2 text-[12px] text-[var(--w-text-3)]">A project admin can turn these on.</p>}
+      {!canEdit && <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{wt('modup.adminCan')}</p>}
     </section>
   );
 }

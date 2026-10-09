@@ -318,7 +318,7 @@ export function FocusToggle({ on, onToggle, className, compact }: { on: boolean;
       data-testid="focus-toggle"
     >
       {on ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-      {!compact && <span className="max-md:hidden">{on ? wt('shell.exitFocus') : 'Focus'}</span>}
+      {!compact && <span className="max-md:hidden">{on ? wt('shell.exitFocus') : wt('shell.focus')}</span>}
     </button>
   );
 }

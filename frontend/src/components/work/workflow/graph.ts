@@ -4,6 +4,7 @@
  */
 
 import type { StatusCategory, WorkStatus } from '@/lib/work-api';
+import { wt } from '@/components/work/i18n';
 
 export interface Pos { x: number; y: number }
 export interface Rect { x: number; y: number; w: number; h: number }
@@ -205,10 +206,10 @@ export function validate(statuses: WorkStatus[], pairs: Set<string>, mode: 'free
   for (const s of sorted) {
     const w: Warning[] = [];
     if (s.id !== initial && !incoming.has(s.id) && !anyTargets.has(s.id)) {
-      w.push({ kind: 'unreachable', text: 'No transition leads here — issues can only land in this status when they are created in it.' });
+      w.push({ kind: 'unreachable', text: wt('wf.wUnreach') });
     }
     if (!done.has(s.id) && !canFinish.has(s.id)) {
-      w.push({ kind: 'deadend', text: 'Dead end — issues in this status can never reach a Done status.' });
+      w.push({ kind: 'deadend', text: wt('wf.wDead') });
     }
     if (w.length) out[s.id] = w;
   }

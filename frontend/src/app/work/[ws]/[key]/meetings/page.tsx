@@ -10,18 +10,19 @@ import { EmptyState, PageLoading } from '@/components/work/ui';
 import { ModuleOff, studioOn } from '@/components/work/studio/shared';
 import MeetingsView from '@/components/work/governance/MeetingsView';
 import { workError } from '@/lib/work-api';
+import { wt } from '@/components/work/i18n';
 
 function Inner() {
   const params = useParams<{ ws: string; key: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   useProjectRealtime(pid);
   if (isLoading) return <PageLoading />;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : undefined} />;
+  if (error || !config || !pid) return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : undefined} />;
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Meetings" />
-      {!studioOn(config, 'meetings') ? <ModuleOff config={config} label="The Meetings module" />
-        : !config.permissions.viewGovernance ? <EmptyState title="Only for the project team" body="Meeting minutes and action items are internal to the team. Meetings you are invited to appear in the client portal." />
+      <ProjectHeader config={config} title={wt('studio.mod_meetings')} />
+      {!studioOn(config, 'meetings') ? <ModuleOff config={config} label={wt('studio.mod_meetings')} />
+        : !config.permissions.viewGovernance ? <EmptyState title={wt('pages.onlyTeam')} body={wt('pages.meetingsInternal')} />
           : <MeetingsView config={config} />}
     </div>
   );

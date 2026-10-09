@@ -6,8 +6,9 @@
  */
 import { api } from './api';
 import { localizeError } from '@/components/work/i18n/errors';
-import { translate } from '@/components/work/i18n/core';
+import { translate, type WKey } from '@/components/work/i18n/core';
 import { currentWorkLocale } from '@/components/work/i18n/store';
+const wt = (k: WKey, v?: Record<string, string | number>) => translate(currentWorkLocale(), k, v);
 
 // ─── Kiểu ────────────────────────────────────────────────────────
 
@@ -35,7 +36,7 @@ export interface WorkUser {
 }
 
 export const userName = (u: Pick<WorkUser, 'username' | 'fullName' | 'displayName'> | null | undefined) =>
-  u ? u.displayName || u.fullName || u.username : 'Unassigned';
+  u ? u.displayName || u.fullName || u.username : wt('common.unassigned');
 
 export interface WorkspaceSummary {
   id: number;
@@ -277,7 +278,8 @@ export interface WorkComment {
 export const REACTION_EMOJIS = ['👍', '👎', '😄', '🎉', '😕', '❤️', '🚀', '👀'] as const;
 export type ReactionEmoji = (typeof REACTION_EMOJIS)[number];
 export const REACTION_LABELS: Record<ReactionEmoji, string> = {
-  '👍': 'Thumbs up', '👎': 'Thumbs down', '😄': 'Laugh', '🎉': 'Hooray', '😕': 'Confused', '❤️': 'Heart', '🚀': 'Rocket', '👀': 'Eyes',
+  get '👍'() { return wt('detail.rxThumbsUp'); }, get '👎'() { return wt('detail.rxThumbsDown'); }, get '😄'() { return wt('detail.rxLaugh'); }, get '🎉'() { return wt('detail.rxHooray'); },
+  get '😕'() { return wt('detail.rxConfused'); }, get '❤️'() { return wt('detail.rxHeart'); }, get '🚀'() { return wt('detail.rxRocket'); }, get '👀'() { return wt('detail.rxEyes'); },
 };
 
 export interface CommentReaction {
@@ -1133,8 +1135,8 @@ export const workApi = {
       xhr.open('PUT', pre.uploadUrl);
       Object.entries(pre.headers).forEach(([k, v]) => xhr.setRequestHeader(k, v));
       xhr.upload.onprogress = (e) => e.lengthComputable && onProgress?.(Math.round((e.loaded / e.total) * 100));
-      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`Upload failed (${xhr.status})`)));
-      xhr.onerror = () => reject(new Error('Upload failed. Check your connection.'));
+      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(wt('detail.uploadFailedN', { n: xhr.status }))));
+      xhr.onerror = () => reject(new Error(wt('detail.uploadFailedConn')));
       xhr.send(file);
     });
     return d<IssueAttachment>(api.post(`${B}/projects/${pid}/issues/${testNumber}/attachments/complete`, { key: pre.key, fileName: file.name, runId }));
@@ -1156,8 +1158,8 @@ export const workApi = {
       xhr.open('PUT', pre.uploadUrl);
       Object.entries(pre.headers).forEach(([k, v]) => xhr.setRequestHeader(k, v));
       xhr.upload.onprogress = (e) => e.lengthComputable && onProgress?.(Math.round((e.loaded / e.total) * 100));
-      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`Upload failed (${xhr.status})`)));
-      xhr.onerror = () => reject(new Error('Upload failed. Check your connection.'));
+      xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(wt('detail.uploadFailedN', { n: xhr.status }))));
+      xhr.onerror = () => reject(new Error(wt('detail.uploadFailedConn')));
       xhr.send(file);
     });
     return d<IssueAttachment>(api.post(`${B}/projects/${pid}/issues/${num}/attachments/complete`, { key: pre.key, fileName: file.name }));

@@ -12,6 +12,7 @@ import { Crumb, CrumbSep } from '@/components/work/ProjectHeader';
 import TeamQueueView from '@/components/work/studio/TeamQueueView';
 import { TeamChip } from '@/components/work/studio/shared';
 import { useAuthStore } from '@/store/authStore';
+import { wt } from '@/components/work/i18n';
 
 export default function TeamQueuePage() {
   const params = useParams<{ ws: string; teamId: string }>();
@@ -29,15 +30,15 @@ export default function TeamQueuePage() {
           <>
             <Crumb href={`/work/${slug}`} className="max-w-[160px] font-normal max-md:!hidden">{ws.name}</Crumb>
             <CrumbSep className="mx-1.5 max-md:!hidden" />
-            <Crumb href={`/work/${slug}/teams`} className="font-normal">Teams</Crumb>
+            <Crumb href={`/work/${slug}/teams`} className="font-normal">{wt('studio.mod_teams')}</Crumb>
             <CrumbSep className="mx-1.5" />
-            {team.data ? <span className="flex min-w-0 items-center gap-2"><TeamChip team={team.data} /><span className="truncate">{team.data.name}</span></span> : 'Team'}
+            {team.data ? <span className="flex min-w-0 items-center gap-2"><TeamChip team={team.data} /><span className="truncate">{team.data.name}</span></span> : wt('studio.team')}
           </>
-        ) : 'Team'}
+        ) : wt('studio.team')}
       />
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         {!ws || !Number.isInteger(teamId) ? (
-          <EmptyState title="Team not found" body={workError(q.error, 'This workspace does not exist or you no longer have access to it.')} />
+          <EmptyState title={wt('studio.teamNotFound')} body={workError(q.error, wt('pages.wsNotFoundBody'))} />
         ) : (
           <TeamQueueView ws={ws} teamId={teamId} meId={meId} />
         )}

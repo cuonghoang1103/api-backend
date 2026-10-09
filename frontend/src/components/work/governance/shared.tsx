@@ -13,6 +13,7 @@ import { userName, type ProjectConfig } from '@/lib/work-api';
 import { CR_STATUS_LABEL, RAID_STATUS_LABEL, type CrStatus, type RiskLevel } from '@/lib/work-s3b-api';
 import { Select } from '../settings/shared';
 import { Pill } from '../studio/shared';
+import { wt, wfmt } from '@/components/work/i18n';
 
 type Tone = 'neutral' | 'blue' | 'green' | 'red' | 'orange' | 'accent';
 
@@ -40,11 +41,11 @@ export function levelOf(score: number | null): RiskLevel | null {
 export function ScoreBadge({ score, title, className }: { score: number | null; title?: string; className?: string }) {
   const lv = levelOf(score);
   if (score === null || !lv) {
-    return <span className={cn('inline-flex h-[22px] min-w-[30px] items-center justify-center rounded-[6px] border border-dashed border-[var(--w-border-strong)] px-1.5 text-[11.5px] text-[var(--w-text-3)]', className)} title={title ?? 'Not scored'}>—</span>;
+    return <span className={cn('inline-flex h-[22px] min-w-[30px] items-center justify-center rounded-[6px] border border-dashed border-[var(--w-border-strong)] px-1.5 text-[11.5px] text-[var(--w-text-3)]', className)} title={title ?? wt('gov.notScored')}>—</span>;
   }
   return (
     <span
-      title={title ?? `Score ${score} (${lv.toLowerCase()})`}
+      title={title ?? wt('gov.scoreTip', { s: score, lv: lv === 'HIGH' ? wt('status.prioHigh') : lv === 'MEDIUM' ? wt('status.prioMedium') : wt('status.prioLow') })}
       className={cn('inline-flex h-[22px] min-w-[30px] items-center justify-center rounded-[6px] px-1.5 text-[12px] font-semibold tabular-nums', className)}
       style={{ color: LEVEL_TEXT[lv], background: `color-mix(in srgb, ${LEVEL_COLOR[lv]} 12%, transparent)`, boxShadow: `inset 0 0 0 1px color-mix(in srgb, ${LEVEL_COLOR[lv]} 35%, transparent)` }}
     >
@@ -56,26 +57,26 @@ export function ScoreBadge({ score, title, className }: { score: number | null; 
 /** "+5 days" · "−2 days" · "—". */
 export function fmtDays(n: number | null | undefined): string {
   if (n === null || n === undefined) return '—';
-  if (n === 0) return '0 days';
-  return `${n > 0 ? '+' : '−'}${Math.abs(n)} day${Math.abs(n) === 1 ? '' : 's'}`;
+  if (n === 0) return wt('common.days', { count: 0 });
+  return `${n > 0 ? '+' : '−'}${wt('common.days', { count: Math.abs(n) })}`;
 }
 
 /** Chi phí ghi tự do: số + đơn vị (không quy đổi). */
 export function fmtCost(amount: number | null | undefined, currency: string | null | undefined): string {
   if (amount === null || amount === undefined) return '—';
-  const n = amount.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  const n = amount.toLocaleString(wfmt.intl(), { maximumFractionDigits: 2 });
   return currency?.trim() ? `${n} ${currency.trim().toUpperCase()}` : n;
 }
 
 /** Ô chọn người trong dự án (chỉ người của đội khi `staffOnly`). */
-export function PersonSelect({ config, value, onChange, label, staffOnly, empty = 'Nobody', disabled }: {
+export function PersonSelect({ config, value, onChange, label, staffOnly, empty = wt('gov.nobody'), disabled }: {
   config: ProjectConfig; value: number | null; onChange: (v: number | null) => void; label: string; staffOnly?: boolean; empty?: string; disabled?: boolean;
 }) {
   const people = config.members.filter((m) => !staffOnly || (m.role !== 'CLIENT'));
   return (
     <Select aria-label={label} value={value ?? ''} disabled={disabled} onChange={(e) => onChange(e.target.value ? Number(e.target.value) : null)}>
       <option value="">{empty}</option>
-      {people.map((m) => <option key={m.id} value={m.id}>{userName(m)}{m.role === 'CLIENT' ? ' (client)' : ''}</option>)}
+      {people.map((m) => <option key={m.id} value={m.id}>{userName(m)}{m.role === 'CLIENT' ? wt('gov.clientParen') : ''}</option>)}
     </Select>
   );
 }
@@ -104,11 +105,11 @@ export function useGovInvalidate(pid: number) {
 /** "Mon, Oct 5 · 09:00–10:30 (Asia/Ho_Chi_Minh)" theo múi giờ của cuộc họp. */
 export function fmtMeetingTime(startsAt: string, endsAt: string, tz: string): string {
   try {
-    const day = new Intl.DateTimeFormat('en-US', { timeZone: tz, weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(startsAt));
+    const day = new Intl.DateTimeFormat(wfmt.intl(), { timeZone: tz, weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(startsAt));
     const t = (s: string) => new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit' }).format(new Date(s));
     return `${day} · ${t(startsAt)}–${t(endsAt)}`;
   } catch {
-    return new Date(startsAt).toLocaleString();
+    return new Date(startsAt).toLocaleString(wfmt.intl());
   }
 }
 

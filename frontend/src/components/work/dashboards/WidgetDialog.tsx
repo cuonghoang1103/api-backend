@@ -13,6 +13,7 @@ import { JqlInput } from '../search/JqlInput';
 import { jqlErrorOf } from '../search/jql';
 import { useAllSprints } from '../reports/shared';
 import { GROUP_BY_OPTIONS, newWidgetId, WIDGET_KINDS, WIDGET_META } from './widgets';
+import { wt } from '@/components/work/i18n';
 
 const DAY_OPTIONS = [7, 14, 30, 60, 90];
 
@@ -70,7 +71,7 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
       const j = jqlErrorOf(err);
       setTested(null);
       if (j) setJqlErr({ ...j, q });
-      else setOtherErr('Could not check the query. Try again.');
+      else setOtherErr(wt('dash.checkFailed'));
       return false;
     } finally {
       setChecking(false);
@@ -99,18 +100,18 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
     <Dialog
       open={open}
       onClose={onClose}
-      title={initial ? 'Edit widget' : 'Add widget'}
+      title={initial ? wt('dash.editWidget') : wt('dash.addWidget')}
       width={560}
       footer={
         <>
-          <button type="button" className="w-btn" onClick={onClose}>Cancel</button>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('common.cancel')}</button>
           <button type="button" className="w-btn w-btn-primary" disabled={checking} onClick={() => void submit()}>
-            {checking && <Spinner size={12} />} {initial ? 'Update widget' : 'Add widget'}
+            {checking && <Spinner size={12} />} {initial ? wt('dash.updateWidget') : wt('dash.addWidget')}
           </button>
         </>
       }
     >
-      <Field label="Widget type">
+      <Field label={wt('dash.widgetType')}>
         <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-3">
           {WIDGET_KINDS.map((k) => (
             <button
@@ -133,12 +134,12 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
         <p className="mt-1.5 text-[12px] text-[var(--w-text-3)]">{meta.description}.</p>
       </Field>
 
-      <Field label="Title">
+      <Field label={wt('common.title')}>
         <input value={title} maxLength={80} onChange={(e) => setTitle(e.target.value)} placeholder={meta.defaultTitle} className="w-input" />
       </Field>
 
       {meta.usesQuery && (
-        <Field label="Query (JQL)" hint={jqlErr ? undefined : 'Leave empty to include every issue in the project.'}>
+        <Field label={wt('dash.queryJql')} hint={jqlErr ? undefined : wt('dash.leaveEmpty')}>
           <JqlInput
             value={query}
             onChange={(v) => { setQuery(v); setTested(null); }}
@@ -146,18 +147,18 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
             config={config}
             error={jqlErr}
             ranQuery={jqlErr?.q}
-            runLabel="Test"
-            placeholder="e.g. statusCategory != Done"
+            runLabel={wt('dash.test')}
+            placeholder={wt('dash.qPh')}
           />
           {tested && tested.q === query.trim() && (
-            <p className="mt-1 text-[12px] text-[var(--w-green)]">Valid query · {tested.total} {tested.total === 1 ? 'issue matches' : 'issues match'}</p>
+            <p className="mt-1 text-[12px] text-[var(--w-green)]">{wt('dash.validQ', { count: tested.total })}</p>
           )}
           {otherErr && <p className="mt-1 text-[12px] text-[var(--w-red)]">{otherErr}</p>}
         </Field>
       )}
 
       {(kind === 'pie' || kind === 'bar') && (
-        <Field label="Group by">
+        <Field label={wt('dash.groupBy')}>
           <select value={groupBy} onChange={(e) => setGroupBy(e.target.value as GroupBy)} className="w-input">
             {GROUP_BY_OPTIONS.map((g) => <option key={g.value} value={g.value}>{g.label}</option>)}
           </select>
@@ -165,30 +166,30 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
       )}
 
       {kind === 'created_resolved' && (
-        <Field label="Period">
+        <Field label={wt('dash.period')}>
           <select value={days} onChange={(e) => setDays(Number(e.target.value))} className="w-input">
-            {DAY_OPTIONS.map((d) => <option key={d} value={d}>Last {d} days</option>)}
+            {DAY_OPTIONS.map((d) => <option key={d} value={d}>{wt('dash.lastNDays', { n: d })}</option>)}
           </select>
         </Field>
       )}
 
       {kind === 'burndown' && (
-        <Field label="Sprint" hint="The active sprint follows your team from sprint to sprint.">
+        <Field label={wt('common.sprint')} hint={wt('dash.sprintHint')}>
           <select value={sprintId ?? ''} onChange={(e) => setSprintId(e.target.value ? Number(e.target.value) : null)} className="w-input">
-            <option value="">Active sprint (automatic)</option>
-            {reportable.map((s) => <option key={s.id} value={s.id}>{s.name}{s.state === 'ACTIVE' ? ' (active)' : ''}</option>)}
+            <option value="">{wt('dash.activeAuto')}</option>
+            {reportable.map((s) => <option key={s.id} value={s.id}>{s.name}{s.state === 'ACTIVE' ? wt('contrib.activeParen') : ''}</option>)}
           </select>
         </Field>
       )}
 
       {kind === 'text' && (
-        <Field label="Text" hint="Plain text. Leave a blank line between paragraphs.">
-          <textarea value={text} maxLength={5000} rows={6} onChange={(e) => setText(e.target.value)} className="w-input" placeholder="Team agreements, links, release notes…" />
+        <Field label={wt('dash.textL')} hint={wt('dash.plainText')}>
+          <textarea value={text} maxLength={5000} rows={6} onChange={(e) => setText(e.target.value)} className="w-input" placeholder={wt('dash.textPh')} />
         </Field>
       )}
 
-      <Field label="Width">
-        <div className="inline-flex rounded-[var(--w-radius)] border border-[var(--w-border-strong)] p-0.5" role="radiogroup" aria-label="Width">
+      <Field label={wt('dash.width')}>
+        <div className="inline-flex rounded-[var(--w-radius)] border border-[var(--w-border-strong)] p-0.5" role="radiogroup" aria-label={wt('dash.width')}>
           {(['half', 'full'] as const).map((s) => (
             <button
               key={s}
@@ -201,7 +202,7 @@ export default function WidgetDialog({ open, onClose, config, initial, onSubmit 
                 size === s ? 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'text-[var(--w-text-2)] hover:text-[var(--w-text)]',
               )}
             >
-              {s === 'half' ? 'Half width' : 'Full width'}
+              {s === 'half' ? wt('dash.halfWidth') : wt('dash.fullWidth')}
             </button>
           ))}
         </div>

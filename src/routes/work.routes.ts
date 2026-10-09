@@ -75,10 +75,12 @@ import fptReportRoutes from './work.fptReports.routes.js';
 import ctw3cRoutes from './work.ctw3c.routes.js';
 import ctw5bRoutes from './work.ctw5b.routes.js'; // CTW đợt 5b K-1: tệp/voice note trong bình luận
 import ctw4Routes from './work.ctw4.routes.js';
+import ctw4bRoutes from './work.ctw4b.routes.js'; // CTW đợt 4b: SWR302 hồ sơ Wiegers + sáu liên kết
 import ctwk3Routes from './work.ctwk3.routes.js'; // CTW K-3: kênh chat dự án
 import uxdRoutes, { uxdPublicRoutes } from './work.uxd.routes.js'; // UX-D: ảnh xem trước link + ảnh bìa dự án
 import contribRoutes from './work.contrib.routes.js'; // CTW Đóng góp: chỉ số thành viên + đánh giá chéo
 import diagramRoutes from './work.diagrams.routes.js'; // CTW Diagram: Diagram Studio + AI vẽ sơ đồ
+import ctw5Routes from './work.ctw5.routes.js'; // CTW đợt 5: hub giảng viên, lớp học, rubric/điểm, việc định kỳ
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
@@ -2004,6 +2006,8 @@ router.use(ctw3cRoutes);
 router.use(ctw5bRoutes);
 // CTW đợt 4: SRS có cấu trúc, RTM, defect log, Q&A, Report 7, activity worklog (work.ctw4.routes.ts).
 router.use(ctw4Routes);
+// CTW đợt 4b: SWR302 — feature FE-n, phân loại/vòng đời yêu cầu, bảng ưu tiên Wiegers, glossary, data dictionary, sáu liên kết, mẫu Wiegers.
+router.use(ctw4bRoutes);
 router.use(uxdRoutes); // UX-D: ảnh bìa dự án (chỉ ADMIN dự án)
 // CTW Đóng góp (A26/A27): đóng góp & hiệu suất thành viên, đánh giá chéo, xuất xlsx/PDF (work.contrib.routes.ts).
 router.use(contribRoutes);
@@ -2011,5 +2015,7 @@ router.use(contribRoutes);
 router.use(ctwk3Routes);
 // CTW Diagram: Diagram Studio (sơ đồ Mermaid/Excalidraw, phiên bản, AI vẽ từ dữ liệu dự án) — work.diagrams.routes.ts.
 router.use(diagramRoutes);
+// CTW đợt 5: hub giảng viên (/teaching), lớp học (/classes), rubric + điểm, tuần 1, việc định kỳ — work.ctw5.routes.ts.
+router.use(ctw5Routes);
 
 export default router;

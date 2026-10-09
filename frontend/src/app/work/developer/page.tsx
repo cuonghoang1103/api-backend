@@ -76,7 +76,7 @@ function CreateTokenDialog({ open, onClose }: { open: boolean; onClose: () => vo
         </div>
         <label className="w-label">{created.name}</label>
         <div className="flex gap-2">
-          <input className="w-input min-w-0 flex-1 font-mono !text-[12px]" readOnly value={created.token} onFocus={(e) => e.currentTarget.select()} aria-label="API token" />
+          <input className="w-input min-w-0 flex-1 font-mono !text-[12px]" readOnly value={created.token} onFocus={(e) => e.currentTarget.select()} aria-label={wt('dev.apiTokenAria')} />
           <button type="button" className="w-btn w-btn-primary shrink-0" onClick={copy}>
             {copied ? <Check size={13} /> : <Copy size={13} />} {copied ? wt('common.copied') : wt('common.copy')}
           </button>
@@ -251,48 +251,48 @@ const J = '-H "Content-Type: application/json"';
 
 const ENDPOINTS: Endpoint[] = [
   {
-    method: 'GET', path: '/workspaces', title: 'List the workspaces you belong to.',
+    method: 'GET', path: '/workspaces', get title() { return wt('dev.ep1'); },
     curl: (b) => `curl ${H} \\\n  ${b}/workspaces`,
   },
   {
-    method: 'GET', path: '/workspaces/{workspaceId}/projects', title: 'List projects in a workspace (each has an id and a key).',
+    method: 'GET', path: '/workspaces/{workspaceId}/projects', get title() { return wt('dev.ep2'); },
     curl: (b) => `curl ${H} \\\n  ${b}/workspaces/12/projects`,
   },
   {
-    method: 'GET', path: '/resolve/{workspaceSlug}/{projectKey}', title: 'Turn a web URL such as /work/acme/SHOP into a project id. Returns { projectId }.',
+    method: 'GET', path: '/resolve/{workspaceSlug}/{projectKey}', get title() { return wt('dev.ep3'); },
     curl: (b) => `curl ${H} \\\n  ${b}/resolve/acme/SHOP`,
   },
   {
-    method: 'GET', path: '/projects/{projectId}', title: 'Project configuration: workflows and status ids, issue types, sprints, labels, members.',
+    method: 'GET', path: '/projects/{projectId}', get title() { return wt('dev.ep4'); },
     curl: (b) => `curl ${H} \\\n  ${b}/projects/42`,
   },
   {
-    method: 'GET', path: '/projects/{projectId}/search?jql=…&limit=&offset=', title: 'Search issues with JQL. Returns { total, items, offset, limit }; limit is at most 500.',
+    method: 'GET', path: '/projects/{projectId}/search?jql=…&limit=&offset=', get title() { return wt('dev.ep5'); },
     curl: (b) => `curl -G ${H} \\\n  --data-urlencode 'jql=status != Done AND assignee = currentUser() ORDER BY priority' \\\n  ${b}/projects/42/search`,
   },
   {
-    method: 'GET', path: '/projects/{projectId}/issues/{number}', title: 'Get one issue by its number (SHOP-128 → 128), with fields, sub-tasks and links.',
+    method: 'GET', path: '/projects/{projectId}/issues/{number}', get title() { return wt('dev.ep6'); },
     curl: (b) => `curl ${H} \\\n  ${b}/projects/42/issues/128`,
   },
   {
-    method: 'POST', path: '/projects/{projectId}/issues', title: 'Create an issue. typeId and title are required; take ids from the project configuration.',
-    body: 'typeId, title, priority (1 Highest … 5 Lowest), assigneeId, statusId, sprintId, parentId, storyPoints, dueDate (YYYY-MM-DD), labelIds',
+    method: 'POST', path: '/projects/{projectId}/issues', get title() { return wt('dev.ep7'); },
+    get body() { return wt('dev.ep12'); },
     curl: (b) => `curl -X POST ${H} ${J} \\\n  -d '{"typeId": 3, "title": "Checkout fails on Safari", "priority": 2, "assigneeId": 7}' \\\n  ${b}/projects/42/issues`,
   },
   {
-    method: 'PATCH', path: '/projects/{projectId}/issues/{number}', title: 'Update any subset of fields. Send "version" from the last read to avoid overwriting someone else’s change (409 on conflict).',
+    method: 'PATCH', path: '/projects/{projectId}/issues/{number}', get title() { return wt('dev.ep8'); },
     curl: (b) => `curl -X PATCH ${H} ${J} \\\n  -d '{"statusId": 5, "storyPoints": 3}' \\\n  ${b}/projects/42/issues/128`,
   },
   {
-    method: 'POST', path: '/projects/{projectId}/issues/{number}/comments', title: 'Add a comment. The body is a rich-text document (TipTap/ProseMirror JSON) in bodyJson.',
+    method: 'POST', path: '/projects/{projectId}/issues/{number}/comments', get title() { return wt('dev.ep9'); },
     curl: (b) => `curl -X POST ${H} ${J} \\\n  -d '{"bodyJson": {"type": "doc", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Deployed to staging."}]}]}}' \\\n  ${b}/projects/42/issues/128/comments`,
   },
   {
-    method: 'POST', path: '/projects/{projectId}/issues/{number}/worklogs', title: 'Log work in minutes (1–1440). Optional: startedAt (ISO date-time), note, remaining ("auto", "keep" or minutes).',
+    method: 'POST', path: '/projects/{projectId}/issues/{number}/worklogs', get title() { return wt('dev.ep10'); },
     curl: (b) => `curl -X POST ${H} ${J} \\\n  -d '{"minutes": 90, "note": "Pairing on the payment bug"}' \\\n  ${b}/projects/42/issues/128/worklogs`,
   },
   {
-    method: 'GET', path: '/projects/{projectId}/export?format=csv&jql=…', title: 'Download issues as csv, xlsx or pdf, optionally filtered by JQL.',
+    method: 'GET', path: '/projects/{projectId}/export?format=csv&jql=…', get title() { return wt('dev.ep11'); },
     curl: (b) => `curl -G ${H} -o issues.csv \\\n  --data-urlencode 'format=csv' --data-urlencode 'jql=sprint in openSprints()' \\\n  ${b}/projects/42/export`,
   },
 ];
@@ -306,14 +306,14 @@ function ApiReference() {
     <div className="space-y-6">
       <div className="space-y-3 text-[13px] leading-relaxed text-[var(--w-text-2)]">
         <p>
-          Base URL: <code className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 font-mono text-[12px] text-[var(--w-text)]">{base}</code>.
-          Send your token in the <code className="font-mono text-[12px] text-[var(--w-text)]">Authorization</code> header on every request.
-          Examples below assume it is stored in an environment variable:
+          {wt('dev.baseUrl')} <code className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 font-mono text-[12px] text-[var(--w-text)]">{base}</code>.
+          {wt('dev.sendToken')} <code className="font-mono text-[12px] text-[var(--w-text)]">Authorization</code>{wt('dev.sendTokenB')}
+          {wt('dev.examplesEnv')}
         </p>
         <Code>{'export CTW_TOKEN="ctw_xxxxxxxx_…"'}</Code>
         <p>
-          Successful responses are JSON shaped <code className="font-mono text-[12px] text-[var(--w-text)]">{'{ "success": true, "data": … }'}</code>. Errors use the HTTP status
-          (400 invalid input, 401 missing or revoked token, 403 not allowed or read-only token, 404 not found, 409 conflict, 429 rate limited) with a body like{' '}
+          {wt('dev.respShape')} <code className="font-mono text-[12px] text-[var(--w-text)]">{'{ "success": true, "data": … }'}</code>{wt('dev.errorsUse')}
+          {wt('dev.errorCodes')}{' '}
           <code className="font-mono text-[12px] text-[var(--w-text)]">{'{ "success": false, "message": "…", "code": "…" }'}</code>.
         </p>
       </div>
@@ -326,7 +326,7 @@ function ApiReference() {
               <code className="break-all font-mono text-[12.5px] font-medium text-[var(--w-text)]">{e.path}</code>
             </div>
             <p className="mb-2 text-[13px] text-[var(--w-text-2)]">{e.title}</p>
-            {e.body && <p className="mb-2 text-[12px] text-[var(--w-text-3)]"><span className="font-medium text-[var(--w-text-2)]">Body fields:</span> {e.body}</p>}
+            {e.body && <p className="mb-2 text-[12px] text-[var(--w-text-3)]"><span className="font-medium text-[var(--w-text-2)]">{wt('dev.bodyFields')}</span> {e.body}</p>}
             <Code>{e.curl(base)}</Code>
           </div>
         ))}
@@ -339,16 +339,16 @@ function ApiReference() {
           <code className="break-all font-mono text-[12.5px] font-medium text-[var(--w-text)]">{base}/mcp</code>
         </div>
         <p className="mb-2 text-[13px] text-[var(--w-text-2)]">
-          Use CT Work from Claude Code or any MCP client: read issues, comment, move cards and log work with your own permissions.
-          For an AI agent that works on its own, create it under <span className="font-medium">AI agents</span> in your workspace instead — it gets its own token and an owner.
+          {wt('dev.mcpUse')}
+          {wt('dev.mcpAgentA')} <span className="font-medium">{wt('pages.aiAgents')}</span> {wt('dev.mcpAgentB')}
         </p>
         <Code>{`claude mcp add --transport http ctwork ${base}/mcp \\\n  --header "Authorization: Bearer $CTW_TOKEN"`}</Code>
-        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">Clients that only speak stdio: <code className="font-mono">CTWORK_TOKEN=$CTW_TOKEN npx -y @cuongthai/ctwork-mcp</code>.</p>
+        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{wt('dev.stdioOnly')} <code className="font-mono">CTWORK_TOKEN=$CTW_TOKEN npx -y @cuongthai/ctwork-mcp</code>.</p>
       </div>
 
       <p className="text-[12px] leading-relaxed text-[var(--w-text-3)]">
-        Every other endpoint the web app uses under <code className="font-mono">/api/v1/work</code> also accepts tokens, within the token’s access level.
-        Creating, listing and revoking API tokens is only possible here on the website — requests to those endpoints made with a token are refused.
+        {wt('dev.everyOther')} <code className="font-mono">/api/v1/work</code> {wt('dev.everyOtherB')}
+        {wt('dev.onlyWebsite')}
       </p>
     </div>
   );
@@ -358,42 +358,42 @@ function ApiReference() {
 
 type ClientId = 'claude-code' | 'claude-desktop' | 'cursor' | 'gemini' | 'codex' | 'http';
 const CLIENTS: Array<{ id: ClientId; name: string; where: string }> = [
-  { id: 'cursor', name: 'Cursor', where: '~/.cursor/mcp.json (or .cursor/mcp.json in a project)' },
-  { id: 'gemini', name: 'Gemini CLI', where: '~/.gemini/settings.json (or .gemini/settings.json in a project)' },
+  { id: 'cursor', name: 'Cursor', get where() { return wt('dev.wCursor'); } },
+  { id: 'gemini', name: 'Gemini CLI', get where() { return wt('dev.wGemini'); } },
   { id: 'codex', name: 'Codex CLI', where: '~/.codex/config.toml' },
   { id: 'claude-desktop', name: 'Claude Desktop', where: 'Settings → Developer → Edit Config (claude_desktop_config.json)' },
   { id: 'claude-code', name: 'Claude Code', where: 'terminal' },
-  { id: 'http', name: 'Any client / script', where: 'plain HTTP (JSON-RPC 2.0)' },
+  { id: 'http', get name() { return wt('dev.nAny'); }, get where() { return wt('dev.wPlain'); } },
 ];
 
 function clientConfig(id: ClientId, mcp: string): { lang: string; text: string; note: string } {
   switch (id) {
     case 'cursor':
       return {
-        lang: 'json', note: 'Remote MCP over HTTP. Cursor reads ${env:CTW_TOKEN} from your environment — or paste the token instead.',
+        lang: 'json', note: wt('dev.note13'),
         text: JSON.stringify({ mcpServers: { ctwork: { url: mcp, headers: { Authorization: 'Bearer ${env:CTW_TOKEN}' } } } }, null, 2),
       };
     case 'gemini':
       return {
-        lang: 'json', note: 'httpUrl = streamable HTTP. Gemini CLI expands $CTW_TOKEN from the environment. Check with /mcp inside gemini.',
+        lang: 'json', note: wt('dev.note14'),
         text: JSON.stringify({ mcpServers: { ctwork: { httpUrl: mcp, headers: { Authorization: 'Bearer $CTW_TOKEN' }, timeout: 90000 } } }, null, 2),
       };
     case 'codex':
       return {
-        lang: 'toml', note: 'Codex starts the stdio bridge as a local server. Check with `codex mcp list`, then ask Codex to call fpt_unit_list.',
+        lang: 'toml', note: wt('dev.note15'),
         text: `[mcp_servers.ctwork]\ncommand = "npx"\nargs = ["-y", "@cuongthai/ctwork-mcp"]\nenv = { CTWORK_TOKEN = "ctw_…", CTWORK_URL = "${mcp}" }`,
       };
     case 'claude-desktop':
       return {
-        lang: 'json', note: 'Claude Desktop starts local (stdio) servers, so it uses the bridge. Restart Claude Desktop after saving.',
+        lang: 'json', note: wt('dev.note16'),
         text: JSON.stringify({ mcpServers: { ctwork: { command: 'npx', args: ['-y', '@cuongthai/ctwork-mcp'], env: { CTWORK_TOKEN: 'ctw_…', CTWORK_URL: mcp } } } }, null, 2),
       };
     case 'claude-code':
-      return { lang: 'sh', note: 'Talks to the server directly (no bridge).', text: `claude mcp add --transport http ctwork ${mcp} \\\n  --header "Authorization: Bearer $CTW_TOKEN"` };
+      return { lang: 'sh', note: wt('dev.note17'), text: `claude mcp add --transport http ctwork ${mcp} \\\n  --header "Authorization: Bearer $CTW_TOKEN"` };
     case 'http':
     default:
       return {
-        lang: 'sh', note: 'Stateless: one JSON-RPC message per POST, no session. 120 tool calls per minute per token.',
+        lang: 'sh', note: wt('dev.note18'),
         text: `curl -s ${mcp} -H "Authorization: Bearer $CTW_TOKEN" \\\n  -H "Content-Type: application/json" \\\n  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"fpt_unit_list","arguments":{"project":"FP"}}}'`,
       };
   }
@@ -410,11 +410,11 @@ function McpClientsGuide() {
   return (
     <div className="space-y-4" data-testid="mcp-clients-guide">
       <p className="text-[13px] leading-relaxed text-[var(--w-text-2)]">
-        CT Work does not depend on one AI vendor. Any MCP client can read and update your projects with the same commands the in-app
-        <span className="font-medium"> Ask AI</span> uses — issues, Docs, FPT test reports 5.1/5.2/5.3, Xray tests, meetings, RAID, weekly reports and download links.
-        Use a <span className="font-medium">personal token</span> (above) to act as yourself, or an <span className="font-medium">AI agent token</span> (workspace → AI agents) for an agent with its own guardrails.
+        {wt('dev.vendorA')}
+        <span className="font-medium"> Ask AI</span> {wt('dev.vendorB')}
+        {wt('dev.useA')} <span className="font-medium">{wt('dev.personalToken')}</span> {wt('dev.useB')} <span className="font-medium">{wt('dev.agentToken')}</span> {wt('dev.useC')}
       </p>
-      <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="MCP client">
+      <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={wt('dev.mcpClient')}>
         {CLIENTS.map((x) => (
           <button
             key={x.id}
@@ -431,17 +431,17 @@ function McpClientsGuide() {
       </div>
       <div role="tabpanel" aria-label={c.name}>
         <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-2">
-          <span className="text-[12.5px] text-[var(--w-text-2)]">Put this in <span className="font-mono text-[12px] text-[var(--w-text)]">{c.where}</span></span>
+          <span className="text-[12.5px] text-[var(--w-text-2)]">{wt('dev.putThis')} <span className="font-mono text-[12px] text-[var(--w-text)]">{c.where}</span></span>
           <span className="font-mono text-[11px] uppercase text-[var(--w-text-3)]">{cfg.lang}</span>
         </div>
         <Code>{cfg.text}</Code>
         <p className="mt-2 text-[12px] leading-relaxed text-[var(--w-text-3)]">{cfg.note}</p>
       </div>
       <ul className="list-disc space-y-1 pl-5 text-[12.5px] leading-relaxed text-[var(--w-text-2)]">
-        <li>Keep the token out of files you commit — store it in an environment variable (<code className="font-mono">CTW_TOKEN</code>) where the client supports it.</li>
-        <li>Writes made through a person&apos;s token are yours; through an agent token they follow agent rules (no approving, deleting, settings, finance or clients; Done goes to review).</li>
-        <li>The stdio bridge <code className="font-mono">@cuongthai/ctwork-mcp</code> has no dependencies (Node 18+). Until it is on npm, run it from the repo: <code className="font-mono">node packages/ctwork-mcp/bin/ctwork-mcp.js</code>.</li>
-        <li>No AI subscription at all? Workspace → AI agents → <span className="font-medium">Built-in</span> agent runs on CT Work itself (Pro).</li>
+        <li>{wt('dev.keepOut')}<code className="font-mono">CTW_TOKEN</code>{wt('dev.keepOutB')}</li>
+        <li>{wt('dev.writesAre')}</li>
+        <li>{wt('dev.bridgeA')} <code className="font-mono">@cuongthai/ctwork-mcp</code> {wt('dev.bridgeB')} <code className="font-mono">node packages/ctwork-mcp/bin/ctwork-mcp.js</code>.</li>
+        <li>{wt('dev.noSub')} <span className="font-medium">Built-in</span> {wt('dev.noSubB')}</li>
       </ul>
     </div>
   );
@@ -453,11 +453,11 @@ export default function DeveloperPage() {
   const [creating, setCreating] = useState(false);
   return (
     <div className="flex h-full flex-col">
-      <PageHeader title="API tokens" sub={wt('dev.developer')} />
+      <PageHeader title={wt('dev.apiTokens')} sub={wt('dev.developer')} />
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         <div className="mx-auto w-full max-w-[960px] px-4 py-6 md:px-6">
           <Section
-            title="API tokens"
+            title={wt('dev.apiTokens')}
             description={
               <>
                 {wt('dev.introA')}{' '}

@@ -16,25 +16,26 @@ import { workApi, workError, type ImportPreviewRow, type ImportResult, type Proj
 import { wk } from '../hooks';
 import { formatBytes, Spinner } from '../ui';
 import { ConfirmDialog, Section } from './shared';
+import { wt, wfmt } from '@/components/work/i18n';
 
 const MAX_BYTES = 8 * 1024 * 1024;
 const MAX_ROWS = 2000;
 
-const COLUMNS: Array<[string, string]> = [
-  ['Summary', 'Required. Also accepts “Title”'],
-  ['Issue key', 'Used to link parents inside the file'],
-  ['Issue Type', 'Epic, Story, Task, Bug, Sub-task… (unknown ⇒ Task)'],
-  ['Status', 'Matched by name (unknown ⇒ first status)'],
-  ['Priority', 'Highest … Lowest, or Jira names like Blocker, Major, Minor'],
-  ['Assignee / Reporter', 'Username or display name of a project member'],
-  ['Description', 'Plain text'],
-  ['Labels', 'Repeated columns or comma-separated; missing labels are created'],
-  ['Story Points', 'Number'],
-  ['Due date / Start date', '2026-09-23, 23/Sep/26 or 23/09/2026'],
-  ['Parent', 'Issue key in the file, or an existing key such as KEY-12. Also “Epic Link”'],
-  ['Sprint', 'Name of an open sprint (missing ⇒ backlog)'],
-  ['Original Estimate', 'Seconds (Jira) or hours with the “(h)” header'],
-  ['Created', 'Keeps the original creation date'],
+const columns = (): Array<[string, string]> => [
+  ['Summary', wt('pimport.col0')],
+  ['Issue key', wt('pimport.col1')],
+  ['Issue Type', wt('pimport.col2')],
+  ['Status', wt('pimport.col3')],
+  ['Priority', wt('pimport.col4')],
+  ['Assignee / Reporter', wt('pimport.col5')],
+  ['Description', wt('pimport.col6')],
+  ['Labels', wt('pimport.col7')],
+  ['Story Points', wt('pimport.col8')],
+  ['Due date / Start date', wt('pimport.col9')],
+  ['Parent', wt('pimport.col10')],
+  ['Sprint', wt('pimport.col11')],
+  ['Original Estimate', wt('pimport.col12')],
+  ['Created', wt('pimport.col13')],
 ];
 
 function csvCell(v: string): string {
@@ -80,19 +81,19 @@ function PreviewTable({ rows }: { rows: ImportPreviewRow[] }) {
       <table className="w-full min-w-[720px] border-collapse text-[12.5px]">
         <thead className="sticky top-0 z-[1] bg-[var(--w-sunken)] text-left text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
           <tr>
-            <th className="w-[56px] px-3 py-2">Row</th>
-            <th className="px-3 py-2">Summary</th>
-            <th className="w-[96px] px-3 py-2">Type</th>
-            <th className="w-[120px] px-3 py-2">Status</th>
-            <th className="w-[90px] px-3 py-2">Parent</th>
-            <th className="w-[240px] px-3 py-2">Problems</th>
+            <th className="w-[56px] px-3 py-2">{wt('pimport.row')}</th>
+            <th className="px-3 py-2">{wt('common.summary')}</th>
+            <th className="w-[96px] px-3 py-2">{wt('common.type')}</th>
+            <th className="w-[120px] px-3 py-2">{wt('common.status')}</th>
+            <th className="w-[90px] px-3 py-2">{wt('common.parent')}</th>
+            <th className="w-[240px] px-3 py-2">{wt('pimport.problems')}</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => (
             <tr key={r.row} className={cn('border-t border-[var(--w-border)] align-top', r.errors.length > 0 && 'bg-[color-mix(in_srgb,var(--w-red)_4%,transparent)]')}>
               <td className="tabular px-3 py-2 text-[var(--w-text-3)]">{r.row}</td>
-              <td className="px-3 py-2">{r.summary || <span className="italic text-[var(--w-text-3)]">(empty)</span>}</td>
+              <td className="px-3 py-2">{r.summary || <span className="italic text-[var(--w-text-3)]">{wt('pimport.empty')}</span>}</td>
               <td className="px-3 py-2 text-[var(--w-text-2)]">{r.type}</td>
               <td className="px-3 py-2 text-[var(--w-text-2)]">{r.status}</td>
               <td className="px-3 py-2 font-mono text-[11.5px] text-[var(--w-text-2)]">{r.parent ?? ''}</td>
@@ -103,7 +104,7 @@ function PreviewTable({ rows }: { rows: ImportPreviewRow[] }) {
                     {r.warnings.map((w) => <Chip key={`w${w}`} tone="warning">{w}</Chip>)}
                   </div>
                 ) : (
-                  <span className="inline-flex items-center gap-1 text-[12px] text-[var(--w-green)]"><CheckCircle2 size={12} /> Ready</span>
+                  <span className="inline-flex items-center gap-1 text-[12px] text-[var(--w-green)]"><CheckCircle2 size={12} /> {wt('pimport.ready')}</span>
                 )}
               </td>
             </tr>
@@ -134,7 +135,7 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
   const dry = useMutation({
     mutationFn: (csv: string) => workApi.importIssues(pid, { csv, dryRun: true }),
     onSuccess: (r) => { if (r.dryRun) { setPreview(r); setOnlyProblems(r.valid < r.total); } },
-    onError: (err) => toast.error(workError(err, 'Could not read the file')),
+    onError: (err) => toast.error(workError(err, wt('pimport.readFailed'))),
   });
   const run = useMutation({
     mutationFn: (csv: string) => workApi.importIssues(pid, { csv, dryRun: false }),
@@ -142,17 +143,17 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
       setConfirm(false);
       if (!r.dryRun) {
         setDone(r);
-        toast.success(`${r.created} ${r.created === 1 ? 'issue' : 'issues'} imported`);
+        toast.success(wt('pimport.nImported', { count: r.created }));
       }
       for (const k of [wk.board(pid), wk.issues(pid), wk.backlog(pid), wk.project(pid), wk.reports(pid)]) qc.invalidateQueries({ queryKey: k });
     },
-    onError: (err) => { setConfirm(false); toast.error(workError(err, 'Import failed')); },
+    onError: (err) => { setConfirm(false); toast.error(workError(err, wt('pimport.importFailed'))); },
   });
 
   const pick = (f: File | undefined) => {
     if (!f) return;
-    if (!/\.csv$/i.test(f.name) && f.type !== 'text/csv') { toast.error('Choose a .csv file'); return; }
-    if (f.size > MAX_BYTES) { toast.error(`The file is ${formatBytes(f.size)} — the limit is 8 MB`); return; }
+    if (!/\.csv$/i.test(f.name) && f.type !== 'text/csv') { toast.error(wt('pimport.chooseCsv')); return; }
+    if (f.size > MAX_BYTES) { toast.error(wt('pimport.tooBig', { s: formatBytes(f.size) })); return; }
     const reader = new FileReader();
     reader.onload = () => {
       // Bỏ BOM của Excel để cột đầu tiên khớp tên.
@@ -162,7 +163,7 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
       setDone(null);
       dry.mutate(text);
     };
-    reader.onerror = () => toast.error('Could not read the file');
+    reader.onerror = () => toast.error(wt('pimport.readFailed'));
     reader.readAsText(f);
   };
 
@@ -175,8 +176,8 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
 
   if (!canImport) {
     return (
-      <Section title="Import issues" description="Bring issues in from a CSV file exported by CT Work or Jira.">
-        <p className="text-[13px] text-[var(--w-text-3)]">Only project admins can import issues.</p>
+      <Section title={wt('pimport.importIssues')} description={wt('pimport.bringIn')}>
+        <p className="text-[13px] text-[var(--w-text-3)]">{wt('pimport.onlyAdmins')}</p>
       </Section>
     );
   }
@@ -184,13 +185,13 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
   // ── Bước 3: kết quả ──
   if (done) {
     return (
-      <Section title="Import complete">
+      <Section title={wt('pimport.complete')}>
         <div className="max-w-[640px] space-y-4">
           <div className="grid grid-cols-3 gap-2">
             {[
-              { n: done.created, label: 'Created', cls: 'text-[var(--w-green)]' },
-              { n: done.skipped, label: 'Skipped (errors)', cls: done.skipped ? 'text-[var(--w-orange)]' : '' },
-              { n: done.failures.length, label: 'Failed', cls: done.failures.length ? 'text-[var(--w-red)]' : '' },
+              { n: done.created, label: wt('pimport.sCreated'), cls: 'text-[var(--w-green)]' },
+              { n: done.skipped, label: wt('pimport.sSkipped'), cls: done.skipped ? 'text-[var(--w-orange)]' : '' },
+              { n: done.failures.length, label: wt('pimport.sFailed'), cls: done.failures.length ? 'text-[var(--w-red)]' : '' },
             ].map((s) => (
               <div key={s.label} className="rounded-[8px] border border-[var(--w-border)] px-3 py-2.5">
                 <div className={cn('tabular text-[20px] font-semibold', s.cls)}>{s.n}</div>
@@ -200,11 +201,11 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
           </div>
           {done.failures.length > 0 && (
             <div className="rounded-[8px] border border-[var(--w-border)]">
-              <div className="border-b border-[var(--w-border)] px-3 py-2 text-[12px] font-medium text-[var(--w-text-2)]">Rows that could not be created</div>
+              <div className="border-b border-[var(--w-border)] px-3 py-2 text-[12px] font-medium text-[var(--w-text-2)]">{wt('pimport.notCreated')}</div>
               <ul className="max-h-[260px] overflow-y-auto">
                 {done.failures.map((f) => (
                   <li key={f.row} className="flex gap-3 border-b border-[var(--w-border)] px-3 py-1.5 text-[12.5px] last:border-b-0">
-                    <span className="tabular w-[52px] shrink-0 text-[var(--w-text-3)]">Row {f.row}</span>
+                    <span className="tabular w-[52px] shrink-0 text-[var(--w-text-3)]">{wt('pimport.rowN', { n: f.row })}</span>
                     <span className="min-w-0 break-words text-[var(--w-red)]">{f.error}</span>
                   </li>
                 ))}
@@ -212,8 +213,8 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
             </div>
           )}
           <div className="flex flex-wrap gap-2">
-            <Link href={`/work/${slug}/${config.key}/list`} className="w-btn w-btn-primary">View issues</Link>
-            <button type="button" className="w-btn" onClick={reset}>Import another file</button>
+            <Link href={`/work/${slug}/${config.key}/list`} className="w-btn w-btn-primary">{wt('pimport.viewIssues')}</Link>
+            <button type="button" className="w-btn" onClick={reset}>{wt('pimport.another')}</button>
           </div>
         </div>
       </Section>
@@ -224,11 +225,11 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
   if (file && (preview || dry.isPending)) {
     return (
       <Section
-        title="Review the import"
-        description={<>Nothing has been created yet. Rows with errors are skipped; rows with warnings are imported with the noted adjustments.</>}
+        title={wt('pimport.review')}
+        description={wt('pimport.reviewDesc')}
         action={
           <button type="button" className="w-btn w-btn-sm" onClick={reset} disabled={run.isPending}>
-            <ArrowLeft size={13} /> Choose another file
+            <ArrowLeft size={13} /> {wt('pimport.chooseAnother')}
           </button>
         }
       >
@@ -238,37 +239,37 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
           <span className="shrink-0 text-[var(--w-text-3)]">{formatBytes(file.size)}</span>
         </div>
         {dry.isPending || !preview ? (
-          <div className="flex items-center gap-2 py-8 text-[13px] text-[var(--w-text-2)]"><Spinner size={14} /> Checking every row…</div>
+          <div className="flex items-center gap-2 py-8 text-[13px] text-[var(--w-text-2)]"><Spinner size={14} /> {wt('pimport.checking')}</div>
         ) : (
           <>
             <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2">
               <div className="text-[13px]">
-                <span className="tabular font-semibold">{preview.total}</span> {preview.total === 1 ? 'row' : 'rows'}
+                <span className="tabular font-semibold">{preview.total}</span> {wt('pimport.rowsWord', { count: preview.total }).replace(/^\S+\s/, '')}
                 <span className="mx-1.5 text-[var(--w-text-3)]">·</span>
-                <span className="tabular font-semibold text-[var(--w-green)]">{preview.valid}</span> ready
+                <span className="tabular font-semibold text-[var(--w-green)]">{preview.valid}</span> {wt('pimport.readyLc')}
                 <span className="mx-1.5 text-[var(--w-text-3)]">·</span>
-                <span className={cn('tabular font-semibold', errorRows && 'text-[var(--w-red)]')}>{errorRows}</span> with errors
+                <span className={cn('tabular font-semibold', errorRows && 'text-[var(--w-red)]')}>{errorRows}</span> {wt('pimport.withErrors')}
                 {warnRows > 0 && (
                   <>
                     <span className="mx-1.5 text-[var(--w-text-3)]">·</span>
-                    <span className="tabular font-semibold text-[var(--w-orange)]">{warnRows}</span> with warnings
+                    <span className="tabular font-semibold text-[var(--w-orange)]">{warnRows}</span> {wt('pimport.withWarnings')}
                   </>
                 )}
               </div>
               <label className="ml-auto flex cursor-pointer items-center gap-1.5 text-[12.5px] text-[var(--w-text-2)]">
                 <input type="checkbox" checked={onlyProblems} onChange={(e) => setOnlyProblems(e.target.checked)} className="accent-[var(--w-accent)]" />
-                Only problems
+                {wt('pimport.onlyProblems')}
               </label>
             </div>
             {rows.length ? <PreviewTable rows={rows} /> : (
-              <div className="rounded-[8px] border border-dashed border-[var(--w-border-strong)] px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">No problems found — every row is ready.</div>
+              <div className="rounded-[8px] border border-dashed border-[var(--w-border-strong)] px-3 py-6 text-center text-[13px] text-[var(--w-text-3)]">{wt('pimport.noProblems')}</div>
             )}
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <button type="button" className="w-btn w-btn-primary" disabled={!preview.valid || run.isPending} onClick={() => setConfirm(true)}>
                 {run.isPending ? <Spinner size={12} /> : <Upload size={14} />}
-                Import {preview.valid} {preview.valid === 1 ? 'issue' : 'issues'}
+                {wt('pimport.importN', { count: preview.valid })}
               </button>
-              {!preview.valid && <span className="text-[12px] text-[var(--w-red)]">Every row has an error. Fix the file and try again.</span>}
+              {!preview.valid && <span className="text-[12px] text-[var(--w-red)]">{wt('pimport.allErrors')}</span>}
             </div>
           </>
         )}
@@ -276,14 +277,13 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
           open={confirm}
           onClose={() => !run.isPending && setConfirm(false)}
           danger={false}
-          title={`Import ${preview?.valid ?? 0} issues?`}
+          title={wt('pimport.importQ', { n: preview?.valid ?? 0 })}
           body={
             <>
-              {preview?.valid} {preview?.valid === 1 ? 'issue' : 'issues'} will be created in <span className="font-medium text-[var(--w-text)]">{config.name}</span>
-              {errorRows ? <> and {errorRows} {errorRows === 1 ? 'row' : 'rows'} with errors will be skipped</> : null}. Missing labels are created. This can take a minute for large files.
+              {wt('pimport.confirmBody', { n: preview?.valid ?? 0, name: config.name, skip: errorRows ? wt('pimport.skipN', { n: errorRows }) : '' })}
             </>
           }
-          confirmLabel={run.isPending ? 'Importing…' : 'Import'}
+          confirmLabel={run.isPending ? wt('pimport.importing') : wt('common.import')}
           pending={run.isPending}
           onConfirm={() => run.mutate(file.text)}
         />
@@ -294,7 +294,7 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
   // ── Bước 1: chọn file ──
   return (
     <>
-      <Section title="Import issues" description={`Create issues in bulk from a CSV file — up to ${MAX_ROWS.toLocaleString('en-US')} rows and 8 MB per file. You review every row before anything is created.`}>
+      <Section title={wt('pimport.importIssues')} description={wt('pimport.bulkDesc', { n: MAX_ROWS.toLocaleString(wfmt.intl()) })}>
         <div
           role="button"
           tabIndex={0}
@@ -309,35 +309,35 @@ export default function ProjectImport({ config, slug }: { config: ProjectConfig;
           )}
         >
           <FileUp size={22} className="text-[var(--w-text-3)]" />
-          <div className="text-[13px] font-medium">Drop a .csv file here, or <span className="text-[var(--w-accent-text)]">browse</span></div>
-          <div className="text-[12px] text-[var(--w-text-3)]">UTF-8 CSV with a header row</div>
+          <div className="text-[13px] font-medium">{wt('pimport.drop')} <span className="text-[var(--w-accent-text)]">{wt('pimport.browse')}</span></div>
+          <div className="text-[12px] text-[var(--w-text-3)]">{wt('pimport.utf8')}</div>
           <input ref={inputRef} type="file" accept=".csv,text/csv" className="hidden" onChange={(e) => pick(e.target.files?.[0])} />
         </div>
         {file && !preview && !dry.isPending && (
-          <button type="button" className="w-btn w-btn-ghost w-btn-sm mt-2" onClick={reset}><X size={12} /> Clear</button>
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm mt-2" onClick={reset}><X size={12} /> {wt('common.clear')}</button>
         )}
       </Section>
 
       <Section
-        title="Supported files"
+        title={wt('pimport.supported')}
         action={
           <button type="button" className="w-btn w-btn-sm" onClick={() => downloadTemplate(config.key)}>
-            <Download size={13} /> Download a template
+            <Download size={13} /> {wt('pimport.template')}
           </button>
         }
       >
         <ul className="mb-4 max-w-[640px] list-disc space-y-1 pl-5 text-[13px] text-[var(--w-text-2)]">
-          <li><span className="font-medium text-[var(--w-text)]">CT Work export</span> — the CSV from Issues → Export in any project.</li>
-          <li><span className="font-medium text-[var(--w-text)]">Jira</span> — in Jira, open Filters → Export → <span className="font-medium text-[var(--w-text)]">Export CSV (all fields)</span>.</li>
-          <li>Any spreadsheet saved as CSV, as long as it has a <span className="font-medium text-[var(--w-text)]">Summary</span> column.</li>
+          <li><span className="font-medium text-[var(--w-text)]">CT Work export</span> {wt('pimport.srcCtw')}</li>
+          <li><span className="font-medium text-[var(--w-text)]">Jira</span> {wt('pimport.srcJira')} <span className="font-medium text-[var(--w-text)]">Export CSV (all fields)</span>.</li>
+          <li>{wt('pimport.srcAny')} <span className="font-medium text-[var(--w-text)]">Summary</span>{wt('pimport.srcAnyEnd')}</li>
         </ul>
         <div className="max-w-[640px] overflow-x-auto rounded-[8px] border border-[var(--w-border)]">
           <table className="w-full min-w-[480px] border-collapse text-[12.5px]">
             <thead className="bg-[var(--w-sunken)] text-left text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
-              <tr><th className="w-[180px] px-3 py-2">Column</th><th className="px-3 py-2">How it is read</th></tr>
+              <tr><th className="w-[180px] px-3 py-2">{wt('pimport.column')}</th><th className="px-3 py-2">{wt('pimport.howRead')}</th></tr>
             </thead>
             <tbody>
-              {COLUMNS.map(([c, h]) => (
+              {columns().map(([c, h]) => (
                 <tr key={c} className="border-t border-[var(--w-border)]">
                   <td className="px-3 py-1.5 font-medium">{c}</td>
                   <td className="px-3 py-1.5 text-[var(--w-text-2)]">{h}</td>

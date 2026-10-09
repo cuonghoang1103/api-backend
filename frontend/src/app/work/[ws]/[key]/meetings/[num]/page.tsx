@@ -12,22 +12,23 @@ import { ModuleOff, studioOn } from '@/components/work/studio/shared';
 import MeetingDetail from '@/components/work/governance/MeetingDetail';
 import { ShareToChannelButton } from '@/components/work/chat/ShareToChannel';
 import { workError } from '@/lib/work-api';
+import { wt } from '@/components/work/i18n';
 
 function Inner() {
   const params = useParams<{ ws: string; key: string; num: string }>();
   const { pid, config, isLoading, error } = useProject(params.ws, params.key);
   useProjectRealtime(pid);
   if (isLoading) return <PageLoading />;
-  if (error || !config || !pid) return <EmptyState title="Project not found" body={error ? workError(error) : undefined} />;
+  if (error || !config || !pid) return <EmptyState title={wt('common.projectNotFound')} body={error ? workError(error) : undefined} />;
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title="Meeting">
+      <ProjectHeader config={config} title={wt('pages.meeting')}>
         {/* CTW K-3: chia sẻ cuộc họp vào kênh chat. */}
-        {config.permissions.viewGovernance && <ShareToChannelButton pid={config.id} path={`/work/${config.workspace.slug}/${config.key}/meetings/${params.num}`} label={`Meeting ${params.num}`} wsSlug={config.workspace.slug} projectKey={config.key} />}
+        {config.permissions.viewGovernance && <ShareToChannelButton pid={config.id} path={`/work/${config.workspace.slug}/${config.key}/meetings/${params.num}`} label={wt('pages.meetingN', { n: params.num })} wsSlug={config.workspace.slug} projectKey={config.key} />}
         <PageFocusButton scope="meeting" />
       </ProjectHeader>
-      {!studioOn(config, 'meetings') ? <ModuleOff config={config} label="The Meetings module" />
-        : !config.permissions.viewGovernance ? <EmptyState title="Only for the project team" body="Meeting minutes and action items are internal to the team. Meetings you are invited to appear in the client portal." />
+      {!studioOn(config, 'meetings') ? <ModuleOff config={config} label={wt('studio.mod_meetings')} />
+        : !config.permissions.viewGovernance ? <EmptyState title={wt('pages.onlyTeam')} body={wt('pages.meetingsInternal')} />
           : <MeetingDetail config={config} num={Number(params.num)} key={params.num} />}
     </div>
   );

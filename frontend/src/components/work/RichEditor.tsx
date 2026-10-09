@@ -34,6 +34,7 @@ import { cn } from '@/lib/utils';
 import { userName, type TiptapDoc, type WorkUser } from '@/lib/work-api';
 import { UserAvatar, WorkPortal, khungFixed } from './ui';
 import { IMAGE_SRC_RE, MAX_IMAGE_BYTES, renderMermaidSvg, workDocs3aApi } from '@/lib/work-docs3a-api';
+import { wt } from '@/components/work/i18n';
 
 /** ~35 ngôn ngữ phổ biến (java, ts, sql, bash, yaml, json…) — tạo một lần cho cả trang. */
 const LOWLIGHT = createLowlight(common);
@@ -69,7 +70,7 @@ const DocTable = Table.extend({
     // scrollable-region-focusable). Khi đang soạn thì KHÔNG: tabindex bên trong contenteditable
     // giành tiêu điểm khỏi editor lúc bấm vào ô. Đọc `options.editable` (view chưa có lúc dựng schema).
     const readOnly = this.editor?.options.editable === false;
-    const attrs = readOnly ? { class: 'w-table-wrap', tabindex: '0', role: 'region', 'aria-label': 'Table — scroll sideways' } : { class: 'w-table-wrap' };
+    const attrs = readOnly ? { class: 'w-table-wrap', tabindex: '0', role: 'region', 'aria-label': wt('editor.tableScroll') } : { class: 'w-table-wrap' };
     return ['div', attrs, spec] as unknown as ReturnType<NonNullable<typeof this.parent>>;
   },
 }).configure({ resizable: false, HTMLAttributes: { class: 'w-table' } });
@@ -101,7 +102,7 @@ function MermaidPreview({ source }: { source: string }) {
     }, 400);
     return () => { alive = false; clearTimeout(t); };
   }, [source]);
-  if (err) return <p className="mb-1 text-[12px] text-[var(--w-red)]" contentEditable={false}>Diagram error: {err}</p>;
+  if (err) return <p className="mb-1 text-[12px] text-[var(--w-red)]" contentEditable={false}>{wt('editor.diagramError')} {err}</p>;
   if (!svg) return null;
   // SVG do mermaid sinh với securityLevel 'strict' (không HTML/script từ mã nguồn).
   return <div className="w-mermaid" contentEditable={false} data-testid="mermaid-diagram" dangerouslySetInnerHTML={{ __html: svg }} />;
@@ -117,7 +118,7 @@ function CodeBlockView({ node, editor }: NodeViewProps) {
       {mermaid && <MermaidPreview source={node.textContent} />}
       {mermaid && !editable && (
         <button type="button" contentEditable={false} className="mb-1 text-[11.5px] text-[var(--w-text-3)] hover:text-[var(--w-text)]" onClick={() => setShowSource((v) => !v)}>
-          {showSource ? 'Hide source' : 'Show source'}
+          {showSource ? wt('editor.hideSource') : wt('editor.showSource')}
         </button>
       )}
       <pre className={cn('w-code', mermaid && !editable && !showSource && 'hidden')}>
@@ -138,12 +139,12 @@ function imageFiles(list: FileList | null | undefined): File[] {
 /** Tải ảnh lên dự án rồi chèn tại `pos` (mặc định: chỗ con trỏ). Mỗi ảnh một toast. */
 async function insertImages(view: EditorView, projectId: number, files: File[], pos?: number) {
   for (const f of files) {
-    if (f.size > MAX_IMAGE_BYTES) { toast.error(`${f.name || 'Image'} is larger than 10 MB`); continue; }
-    const id = toast.loading(`Uploading ${f.name || 'image'}…`);
+    if (f.size > MAX_IMAGE_BYTES) { toast.error(wt('editor.imgTooBig', { name: f.name || wt('editor.image') })); continue; }
+    const id = toast.loading(wt('editor.uploadingX', { name: f.name || wt('editor.image').toLowerCase() }));
     try {
       const up = await workDocs3aApi.uploadImage(projectId, f, f.name || 'pasted-image.png');
       const node = view.state.schema.nodes.image?.create({ src: up.url, alt: (f.name || '').replace(/\.[a-z0-9]+$/i, '') || null });
-      if (!node) throw new Error('This editor cannot hold images');
+      if (!node) throw new Error(wt('editor.cannotHold'));
       // Ảnh là KHỐI: chèn giữa một đoạn chữ sẽ cắt đôi đoạn đó ("Delet" | ảnh | "ed") ⇒ đặt ảnh SAU đoạn đang đứng;
       // đoạn trống thì thay luôn đoạn đó.
       const at = Math.min(pos ?? view.state.selection.from, view.state.doc.content.size);
@@ -153,10 +154,10 @@ async function insertImages(view: EditorView, projectId: number, files: File[], 
       else if ($p.depth > 0 && $p.parent.isTextblock) tr.insert($p.after(), node);
       else tr.insert(at, node);
       view.dispatch(tr);
-      toast.success('Image added', { id });
+      toast.success(wt('editor.imageAdded'), { id });
     } catch (err) {
       const msg = (err as { response?: { data?: { message?: string; error?: { message?: string } } } })?.response?.data;
-      toast.error(msg?.message ?? msg?.error?.message ?? (err as Error)?.message ?? 'Could not upload the image', { id });
+      toast.error(msg?.message ?? msg?.error?.message ?? (err as Error)?.message ?? wt('editor.uploadImgFailed'), { id });
     }
   }
 }
@@ -208,7 +209,7 @@ export interface RichEditorProps {
 }
 
 export default function RichEditor({
-  value, onChange, editable = true, placeholder = 'Write something…', members = [], autoFocus, onSubmit, onEscape,
+  value, onChange, editable = true, placeholder = wt('editor.writePh'), members = [], autoFocus, onSubmit, onEscape,
   minHeight = 80, toolbar = true, className, editorRef, docs = false, projectId, spellCheck = true,
 }: RichEditorProps) {
   const pidRef = useRef(projectId);
@@ -366,24 +367,24 @@ export default function RichEditor({
     <div className={cn(editable && 'rounded-[6px] border border-[var(--w-border-strong)] bg-[var(--w-panel)] focus-within:border-[var(--w-accent-border)] focus-within:shadow-[0_0_0_3px_var(--w-accent-soft)]', className)}>
       {editable && toolbar && editor && (
         // UX-E: trang tài liệu dài ⇒ thanh công cụ DÍNH đầu vùng cuộn; luôn xuống dòng khi hẹp (không bị cắt).
-        <div className={cn('flex flex-wrap items-center gap-0.5 border-b border-[var(--w-border)] px-1.5 py-1', docs && 'sticky top-0 z-[2] rounded-t-[8px] bg-[var(--w-panel)]')} role="toolbar" aria-label="Formatting">
+        <div className={cn('flex flex-wrap items-center gap-0.5 border-b border-[var(--w-border)] px-1.5 py-1', docs && 'sticky top-0 z-[2] rounded-t-[8px] bg-[var(--w-panel)]')} role="toolbar" aria-label={wt('editor.formatting')}>
           {docs && (
             <>
-              {btn(editor.isActive('heading', { level: 2 }), () => editor.chain().focus().toggleHeading({ level: 2 }).run(), Heading2, 'Heading')}
-              {btn(editor.isActive('heading', { level: 3 }), () => editor.chain().focus().toggleHeading({ level: 3 }).run(), Heading3, 'Subheading')}
+              {btn(editor.isActive('heading', { level: 2 }), () => editor.chain().focus().toggleHeading({ level: 2 }).run(), Heading2, wt('editor.heading'))}
+              {btn(editor.isActive('heading', { level: 3 }), () => editor.chain().focus().toggleHeading({ level: 3 }).run(), Heading3, wt('editor.subheading'))}
               <span className="mx-1 h-4 w-px bg-[var(--w-border)]" />
             </>
           )}
-          {btn(editor.isActive('bold'), () => editor.chain().focus().toggleBold().run(), Bold, 'Bold (⌘B)')}
-          {btn(editor.isActive('italic'), () => editor.chain().focus().toggleItalic().run(), Italic, 'Italic (⌘I)')}
-          {btn(editor.isActive('code'), () => editor.chain().focus().toggleCode().run(), Code, 'Inline code')}
+          {btn(editor.isActive('bold'), () => editor.chain().focus().toggleBold().run(), Bold, wt('editor.bold'))}
+          {btn(editor.isActive('italic'), () => editor.chain().focus().toggleItalic().run(), Italic, wt('editor.italic'))}
+          {btn(editor.isActive('code'), () => editor.chain().focus().toggleCode().run(), Code, wt('editor.inlineCode'))}
           <span className="mx-1 h-4 w-px bg-[var(--w-border)]" />
-          {btn(editor.isActive('bulletList'), () => editor.chain().focus().toggleBulletList().run(), List, 'Bulleted list')}
-          {btn(editor.isActive('orderedList'), () => editor.chain().focus().toggleOrderedList().run(), ListOrdered, 'Numbered list')}
-          {btn(editor.isActive('taskList'), () => editor.chain().focus().toggleTaskList().run(), ListChecks, 'Checklist')}
+          {btn(editor.isActive('bulletList'), () => editor.chain().focus().toggleBulletList().run(), List, wt('editor.bullets'))}
+          {btn(editor.isActive('orderedList'), () => editor.chain().focus().toggleOrderedList().run(), ListOrdered, wt('editor.numbered'))}
+          {btn(editor.isActive('taskList'), () => editor.chain().focus().toggleTaskList().run(), ListChecks, wt('editor.checklist'))}
           <span className="mx-1 h-4 w-px bg-[var(--w-border)]" />
-          {btn(editor.isActive('blockquote'), () => editor.chain().focus().toggleBlockquote().run(), Quote, 'Quote')}
-          {btn(editor.isActive('codeBlock') && editor.getAttributes('codeBlock').language !== 'mermaid', () => editor.chain().focus().toggleCodeBlock().run(), SquareCode, 'Code block')}
+          {btn(editor.isActive('blockquote'), () => editor.chain().focus().toggleBlockquote().run(), Quote, wt('editor.quote'))}
+          {btn(editor.isActive('codeBlock') && editor.getAttributes('codeBlock').language !== 'mermaid', () => editor.chain().focus().toggleCodeBlock().run(), SquareCode, wt('editor.codeBlock'))}
           {/* CTW đợt 3A: sơ đồ Mermaid (UC, ERD, class, sequence…) — khối code ngôn ngữ "mermaid", vẽ ngay trên trang. */}
           {btn(editor.isActive('codeBlock', { language: 'mermaid' }), () => {
             if (editor.isActive('codeBlock', { language: 'mermaid' })) return;
@@ -393,23 +394,23 @@ export default function RichEditor({
             if ($f.depth > 0 && $f.parent.isTextblock && $f.parent.content.size === 0) editor.chain().focus().insertContentAt({ from: $f.before(), to: $f.after() }, block).run();
             else if ($f.depth > 0 && $f.parent.isTextblock) editor.chain().focus().insertContentAt($f.after(), block).run();
             else editor.chain().focus().insertContent(block).run();
-          }, Workflow, 'Diagram (Mermaid)')}
-          {projectId && btn(false, () => fileRef.current?.click(), ImagePlus, 'Image (or paste / drop one)')}
+          }, Workflow, wt('editor.diagram'))}
+          {projectId && btn(false, () => fileRef.current?.click(), ImagePlus, wt('editor.imageBtn'))}
           {btn(editor.isActive('link'), () => {
             if (editor.isActive('link')) { editor.chain().focus().unsetLink().run(); return; }
-            const url = window.prompt('Link URL');
+            const url = window.prompt(wt('editor.linkUrl'));
             if (url && (/^https?:\/\//i.test(url) || (docs && url.startsWith('/')))) editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-          }, Link2, 'Link')}
+          }, Link2, wt('editor.link'))}
           {docs && (
             <>
               <span className="mx-1 h-4 w-px bg-[var(--w-border)]" />
-              {btn(false, () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), Table2, 'Insert table')}
+              {btn(false, () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(), Table2, wt('editor.insertTable'))}
               {editor.isActive('table') && (
                 <>
-                  {btn(false, () => editor.chain().focus().addRowAfter().run(), Rows3, 'Add row below')}
-                  {btn(false, () => editor.chain().focus().addColumnAfter().run(), Columns3, 'Add column right')}
-                  {btn(false, () => editor.chain().focus().deleteRow().run(), Trash2, 'Delete row')}
-                  <button type="button" className="ml-0.5 h-6 rounded-[4px] px-1.5 text-[11px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-red)]" onMouseDown={(e) => { e.preventDefault(); editor.chain().focus().deleteTable().run(); }}>Delete table</button>
+                  {btn(false, () => editor.chain().focus().addRowAfter().run(), Rows3, wt('editor.addRow'))}
+                  {btn(false, () => editor.chain().focus().addColumnAfter().run(), Columns3, wt('editor.addCol'))}
+                  {btn(false, () => editor.chain().focus().deleteRow().run(), Trash2, wt('editor.deleteRow'))}
+                  <button type="button" className="ml-0.5 h-6 rounded-[4px] px-1.5 text-[11px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-red)]" onMouseDown={(e) => { e.preventDefault(); editor.chain().focus().deleteTable().run(); }}>{wt('editor.deleteTable')}</button>
                 </>
               )}
             </>

@@ -19,21 +19,22 @@ import { portfolioKeys, workPortfolioApi, type PortfolioProject, type Rag } from
 import { EmptyState, PageLoading, Popover, ProjectMark, UserAvatar, useToggle } from '../ui';
 import { fmtDay } from '../reports/shared';
 import { KIND_INFO, Pill } from '../studio/shared';
-import { OPEN_ISSUES_DEFINITION } from '../openIssues';
+import { openIssuesDefinition } from '../openIssues';
 import KpiTile, { KpiRow } from '../KpiTile';
+import { wt } from '@/components/work/i18n';
 
 export const RAG_META: Record<Rag, { label: string; color: string; tone: 'red' | 'orange' | 'green'; rank: number }> = {
-  RED: { label: 'Off track', color: 'var(--w-red)', tone: 'red', rank: 0 },
-  AMBER: { label: 'At risk', color: 'var(--w-yellow)', tone: 'orange', rank: 1 },
-  GREEN: { label: 'On track', color: 'var(--w-green)', tone: 'green', rank: 2 },
+  RED: { get label() { return wt('pf.offTrack'); }, color: 'var(--w-red)', tone: 'red', rank: 0 },
+  AMBER: { get label() { return wt('pf.atRisk'); }, color: 'var(--w-yellow)', tone: 'orange', rank: 1 },
+  GREEN: { get label() { return wt('pf.onTrack'); }, color: 'var(--w-green)', tone: 'green', rank: 2 },
 };
 
 const PACE_LABEL: Record<string, { label: string; tone: 'red' | 'orange' | 'green' | 'neutral' | 'blue' }> = {
-  AT_RISK: { label: 'At risk', tone: 'red' },
-  ON_TRACK: { label: 'On track', tone: 'green' },
-  DONE: { label: 'Done', tone: 'green' },
-  TOO_EARLY: { label: 'Too early', tone: 'neutral' },
-  NO_ESTIMATES: { label: 'No estimates', tone: 'neutral' },
+  AT_RISK: { get label() { return wt('pf.atRisk'); }, tone: 'red' },
+  ON_TRACK: { get label() { return wt('pf.onTrack'); }, tone: 'green' },
+  DONE: { get label() { return wt('common.done'); }, tone: 'green' },
+  TOO_EARLY: { get label() { return wt('pf.tooEarly'); }, tone: 'neutral' },
+  NO_ESTIMATES: { get label() { return wt('pf.noEstimates'); }, tone: 'neutral' },
 };
 
 type SortKey = 'health' | 'name' | 'overdue' | 'milestone' | 'open';
@@ -49,7 +50,7 @@ function RagDot({ p, withLabel }: { p: PortfolioProject; withLabel?: boolean }) 
         ref={ref}
         type="button"
         data-rag={p.health.rag}
-        aria-label={`Health: ${meta.label}. Show reasons`}
+        aria-label={wt('pf.healthAria', { l: meta.label })}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         // Rê chuột mở; chạm (touch) thì đi đường onClick — không để mouseenter giả lập của cảm ứng bật rồi click tắt ngay.
@@ -88,7 +89,7 @@ function Bar({ pct, color = 'var(--w-accent)' }: { pct: number; color?: string }
   );
 }
 
-const whenText = (days: number) => (days < 0 ? `${-days}d late` : days === 0 ? 'today' : `in ${days}d`);
+const whenText = (days: number) => (days < 0 ? wt('pf.dLate', { n: -days }) : days === 0 ? wt('pf.todayLc') : wt('pf.inD', { n: days }));
 
 /** Một dự án — bảng ở ≥lg, thẻ ở màn hẹp (cùng một DOM). */
 function ProjectRow({ p }: { p: PortfolioProject }) {
@@ -104,8 +105,8 @@ function ProjectRow({ p }: { p: PortfolioProject }) {
             <span className="font-mono">{p.key}</span>
             <span aria-hidden="true">·</span>
             <span className="truncate">{KIND_INFO[p.kind]?.short ?? p.kind}</span>
-            {p.archivedAt && <><span aria-hidden="true">·</span><span>Archived</span></>}
-            {p.lead && <><span aria-hidden="true">·</span><span className="flex min-w-0 items-center gap-1" title={`Lead: ${userName(p.lead)}`}><UserAvatar user={p.lead} size={14} /><span className="truncate">{userName(p.lead)}</span></span></>}
+            {p.archivedAt && <><span aria-hidden="true">·</span><span>{wt('common.archived')}</span></>}
+            {p.lead && <><span aria-hidden="true">·</span><span className="flex min-w-0 items-center gap-1" title={wt('pf.leadT', { n: userName(p.lead) })}><UserAvatar user={p.lead} size={14} /><span className="truncate">{userName(p.lead)}</span></span></>}
           </div>
         </div>
         <span className="lg:hidden"><RagDot p={p} withLabel /></span>
@@ -113,26 +114,26 @@ function ProjectRow({ p }: { p: PortfolioProject }) {
 
       <div className="max-lg:hidden"><RagDot p={p} withLabel /></div>
 
-      <Cell label="Issues">
-        <span className="tabular-nums" title={OPEN_ISSUES_DEFINITION}><b className="font-semibold text-[var(--w-text)]">{p.counts.open}</b> open</span>
+      <Cell label={wt('common.issues')}>
+        <span className="tabular-nums" title={openIssuesDefinition()}><b className="font-semibold text-[var(--w-text)]">{p.counts.open}</b> {wt('pf.openLc')}</span>
         <span className="text-[12px] text-[var(--w-text-3)]">
-          <span className={cn('whitespace-nowrap tabular-nums', p.counts.overdue > 0 && 'font-semibold text-[var(--w-red)]')}>{p.counts.overdue} overdue</span> · <span className="whitespace-nowrap tabular-nums" title="Done in the last 14 days">{p.counts.done14} done 14d</span>
+          <span className={cn('whitespace-nowrap tabular-nums', p.counts.overdue > 0 && 'font-semibold text-[var(--w-red)]')}>{wt('pf.nOverdue', { n: p.counts.overdue })}</span> · <span className="whitespace-nowrap tabular-nums" title={wt('pf.done14Title')}>{wt('pf.done14', { n: p.counts.done14 })}</span>
         </span>
       </Cell>
 
-      <Cell label="Sprint">
+      <Cell label={wt('common.sprint')}>
         {p.sprint ? (
           <>
             <span className="flex min-w-0 items-center gap-1.5">
               <span className="truncate">{p.sprint.name}</span>
               <Pill tone={PACE_LABEL[p.sprint.status].tone} className="!h-[18px] !px-1.5 !text-[11px]" title={p.sprint.summary}>{PACE_LABEL[p.sprint.status].label}</Pill>
             </span>
-            <span className="text-[12px] text-[var(--w-text-3)] tabular-nums">{p.sprint.remaining} {unit} left · {p.sprint.daysLeft}d</span>
+            <span className="text-[12px] text-[var(--w-text-3)] tabular-nums">{wt('pf.leftD', { n: p.sprint.remaining, u: unit, d: p.sprint.daysLeft })}</span>
           </>
-        ) : <span className="text-[var(--w-text-3)]">No active sprint</span>}
+        ) : <span className="text-[var(--w-text-3)]">{wt('pf.noActiveSprint')}</span>}
       </Cell>
 
-      <Cell label="Stage">
+      <Cell label={wt('pf.stage')}>
         {p.stage ? (
           <>
             <span className="truncate">{p.stage.current ? `${p.stage.current.n}. ${p.stage.current.name}` : '—'}</span>
@@ -141,7 +142,7 @@ function ProjectRow({ p }: { p: PortfolioProject }) {
         ) : <span className="text-[var(--w-text-3)]">—</span>}
       </Cell>
 
-      <Cell label="Next milestone">
+      <Cell label={wt('pf.nextMs')}>
         {ms ? (
           <>
             <span className="truncate">{ms.name}</span>
@@ -150,11 +151,11 @@ function ProjectRow({ p }: { p: PortfolioProject }) {
         ) : <span className="text-[var(--w-text-3)]">—</span>}
       </Cell>
 
-      <Cell label="Waiting">
+      <Cell label={wt('pf.waiting')}>
         <span className="text-[12px] tabular-nums text-[var(--w-text-2)]">
-          {p.approvals.pending ? <>{p.approvals.pending} approval{p.approvals.pending === 1 ? '' : 's'}</> : <span className="text-[var(--w-text-3)]">0 approvals</span>}
+          {p.approvals.pending ? <>{wt('pf.nApprovals', { count: p.approvals.pending })}</> : <span className="text-[var(--w-text-3)]">{wt('pf.nApprovals', { count: 0 })}</span>}
         </span>
-        <span className={cn('text-[12px] tabular-nums', p.dependencies.blockedBy ? 'font-semibold text-[var(--w-orange)]' : 'text-[var(--w-text-3)]')}>{p.dependencies.blockedBy} blocked</span>
+        <span className={cn('text-[12px] tabular-nums', p.dependencies.blockedBy ? 'font-semibold text-[var(--w-orange)]' : 'text-[var(--w-text-3)]')}>{wt('pf.nBlocked', { n: p.dependencies.blockedBy })}</span>
       </Cell>
 
     </li>
@@ -211,15 +212,15 @@ export default function PortfolioView({ ws }: { ws: WorkspaceDetail }) {
   }, [data, rag, kind, lead, sort]);
 
   if (q.isLoading) return <PageLoading rows={6} />;
-  if (q.error || !data) return <EmptyState title="Could not load the portfolio" body={workError(q.error)} />;
+  if (q.error || !data) return <EmptyState title={wt('pf.loadFailed')} body={workError(q.error)} />;
   if (!data.projects.length) {
-    return <EmptyState title="No projects to show" body="The portfolio lists every project you can open in this workspace. Projects you are not a member of stay hidden." />;
+    return <EmptyState title={wt('pf.noProjects')} body={wt('pf.noProjectsBody')} />;
   }
 
   return (
     <div className="w-page">
       {/* Số tổng theo màu — bấm để lọc. */}
-      <KpiRow min={150} className="mb-4" label="Filter by health">
+      <KpiRow min={150} className="mb-4" label={wt('pf.filterHealth')}>
         {(['ALL', 'RED', 'AMBER', 'GREEN'] as const).map((k) => {
           const on = rag === k;
           const n = k === 'ALL' ? data.projects.length : counts[k];
@@ -227,7 +228,7 @@ export default function PortfolioView({ ws }: { ws: WorkspaceDetail }) {
             <KpiTile
               key={k}
               size="sm"
-              label={k === 'ALL' ? 'All projects' : RAG_META[k].label}
+              label={k === 'ALL' ? wt('pf.allProjects') : RAG_META[k].label}
               value={n}
               dot={k === 'ALL' ? undefined : RAG_META[k].color}
               pressed={on}
@@ -238,56 +239,56 @@ export default function PortfolioView({ ws }: { ws: WorkspaceDetail }) {
       </KpiRow>
 
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <select aria-label="Project type" className="w-input h-8 w-auto max-w-full py-0 pr-7 text-[13px]" value={kind} onChange={(e) => setKind(e.target.value as ProjectKind | 'ALL')}>
-          <option value="ALL">All types</option>
+        <select aria-label={wt('pf.projectType')} className="w-input h-8 w-auto max-w-full py-0 pr-7 text-[13px]" value={kind} onChange={(e) => setKind(e.target.value as ProjectKind | 'ALL')}>
+          <option value="ALL">{wt('res.allTypes')}</option>
           {kinds.map((k) => <option key={k} value={k}>{KIND_INFO[k]?.short ?? k}</option>)}
         </select>
-        <select aria-label="Lead" className="w-input h-8 w-auto max-w-full py-0 pr-7 text-[13px]" value={lead} onChange={(e) => setLead(e.target.value === 'ALL' ? 'ALL' : Number(e.target.value))}>
-          <option value="ALL">Any lead</option>
+        <select aria-label={wt('studio.lead')} className="w-input h-8 w-auto max-w-full py-0 pr-7 text-[13px]" value={lead} onChange={(e) => setLead(e.target.value === 'ALL' ? 'ALL' : Number(e.target.value))}>
+          <option value="ALL">{wt('pf.anyLead')}</option>
           {leads.map((u) => <option key={u.id} value={u.id}>{userName(u)}</option>)}
         </select>
-        <select aria-label="Sort" className="w-input h-8 w-auto max-w-full py-0 pr-7 text-[13px]" value={sort} onChange={(e) => setSort(e.target.value as SortKey)}>
-          <option value="health">Sort: Health (worst first)</option>
-          <option value="milestone">Sort: Next milestone</option>
-          <option value="overdue">Sort: Most overdue</option>
-          <option value="open">Sort: Most open</option>
-          <option value="name">Sort: Name</option>
+        <select aria-label={wt('pf.sort')} className="w-input h-8 w-auto max-w-full py-0 pr-7 text-[13px]" value={sort} onChange={(e) => setSort(e.target.value as SortKey)}>
+          <option value="health">{wt('pf.sHealth')}</option>
+          <option value="milestone">{wt('pf.sMs')}</option>
+          <option value="overdue">{wt('pf.sOverdue')}</option>
+          <option value="open">{wt('pf.sOpen')}</option>
+          <option value="name">{wt('pf.sName')}</option>
         </select>
         <label className="flex h-8 items-center gap-1.5 px-1 text-[13px] text-[var(--w-text-2)]">
-          <input type="checkbox" checked={archived.on} onChange={archived.toggle} /> Archived
+          <input type="checkbox" checked={archived.on} onChange={archived.toggle} /> {wt('common.archived')}
         </label>
         <span className="flex-1" />
         <button ref={rulesBtn} type="button" className="w-btn w-btn-sm" onClick={rules.toggle} aria-expanded={rules.on}>
-          <CircleHelp size={13} /> How is health computed?
+          <CircleHelp size={13} /> {wt('pf.howHealth')}
         </button>
         <Popover open={rules.on} onClose={rules.close} anchorRef={rulesBtn} width={340} align="end">
           <div className="space-y-2 p-3 text-[12.5px] leading-snug">
-            <p className="text-[var(--w-text-2)]">Fixed rules on live data — no AI, no guesses. The worst rule that matches sets the colour; every match is listed as a reason.</p>
+            <p className="text-[var(--w-text-2)]">{wt('pf.fixedRules')}</p>
             {(['RED', 'AMBER'] as const).map((lv) => (
               <div key={lv}>
-                <div className="mb-1 flex items-center gap-1.5 font-semibold"><span className="h-2 w-2 rounded-full" style={{ background: RAG_META[lv].color }} />{RAG_META[lv].label} when…</div>
+                <div className="mb-1 flex items-center gap-1.5 font-semibold"><span className="h-2 w-2 rounded-full" style={{ background: RAG_META[lv].color }} />{wt('pf.whenDots', { l: RAG_META[lv].label })}</div>
                 <ul className="ml-3.5 list-disc space-y-0.5 text-[var(--w-text-2)]">
                   {data.rules.filter((r) => r.level === lv).map((r, i) => <li key={i}>{r.text}</li>)}
                 </ul>
               </div>
             ))}
-            <p className="text-[var(--w-text-2)]"><b className="font-semibold text-[var(--w-text)]">On track</b> when nothing above matches.</p>
+            <p className="text-[var(--w-text-2)]"><b className="font-semibold text-[var(--w-text)]">{wt('pf.onTrack')}</b> {wt('pf.onTrackWhen')}</p>
           </div>
         </Popover>
       </div>
 
-      <section aria-label="Projects" className="overflow-hidden rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)]">
+      <section aria-label={wt('common.projects')} className="overflow-hidden rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)]">
         <div className="hidden border-b border-[var(--w-border)] bg-[var(--w-sunken)] px-4 py-2 text-[11px] font-medium uppercase tracking-[0.04em] text-[var(--w-text-3)] lg:grid lg:grid-cols-[minmax(0,1.7fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,0.7fr)] lg:gap-x-4">
-          <span>Project</span><span>Health</span><span>Issues</span><span>Sprint</span><span>Stage</span><span>Next milestone</span><span>Waiting</span>
+          <span>{wt('common.project')}</span><span>{wt('pf.health')}</span><span>{wt('common.issues')}</span><span>{wt('common.sprint')}</span><span>{wt('pf.stage')}</span><span>{wt('pf.nextMs')}</span><span>{wt('pf.waiting')}</span>
         </div>
         {rows.length ? <ul>{rows.map((p) => <ProjectRow key={p.id} p={p} />)}</ul> : (
-          <p className="px-4 py-8 text-center text-[13px] text-[var(--w-text-3)]">No project matches these filters.</p>
+          <p className="px-4 py-8 text-center text-[13px] text-[var(--w-text-3)]">{wt('pf.noMatch')}</p>
         )}
       </section>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-2">
         <section aria-labelledby="pf-ms" className="min-w-0">
-          <h2 id="pf-ms" className="mb-2 flex items-center gap-2 text-[14px] font-semibold"><CalendarClock size={15} className="text-[var(--w-text-3)]" /> Upcoming milestones</h2>
+          <h2 id="pf-ms" className="mb-2 flex items-center gap-2 text-[14px] font-semibold"><CalendarClock size={15} className="text-[var(--w-text-3)]" /> {wt('pf.upcomingMs')}</h2>
           {data.milestones.length ? (
             <ol className="relative space-y-0 overflow-hidden rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)]">
               {data.milestones.map((m) => (
@@ -305,11 +306,11 @@ export default function PortfolioView({ ws }: { ws: WorkspaceDetail }) {
                 </li>
               ))}
             </ol>
-          ) : <p className="rounded-[10px] border border-dashed border-[var(--w-border-strong)] px-4 py-5 text-[13px] text-[var(--w-text-3)]">No dated, unreleased versions in the next 90 days. Add a release date under Releases.</p>}
+          ) : <p className="rounded-[10px] border border-dashed border-[var(--w-border-strong)] px-4 py-5 text-[13px] text-[var(--w-text-3)]">{wt('pf.noMs')}</p>}
         </section>
 
         <section aria-labelledby="pf-dep" className="min-w-0">
-          <h2 id="pf-dep" className="mb-2 flex items-center gap-2 text-[14px] font-semibold"><Link2 size={15} className="text-[var(--w-text-3)]" /> Blocked across projects</h2>
+          <h2 id="pf-dep" className="mb-2 flex items-center gap-2 text-[14px] font-semibold"><Link2 size={15} className="text-[var(--w-text-3)]" /> {wt('pf.blockedAcross')}</h2>
           {data.blockers.length ? (
             <ul className="overflow-hidden rounded-[10px] border border-[var(--w-border)] bg-[var(--w-panel)]">
               {data.blockers.map((b) => (
@@ -320,7 +321,7 @@ export default function PortfolioView({ ws }: { ws: WorkspaceDetail }) {
                 </li>
               ))}
             </ul>
-          ) : <p className="rounded-[10px] border border-dashed border-[var(--w-border-strong)] px-4 py-5 text-[13px] text-[var(--w-text-3)]">Nothing is blocked by unfinished work in another project. Link issues with “blocks” to see them here.</p>}
+          ) : <p className="rounded-[10px] border border-dashed border-[var(--w-border-strong)] px-4 py-5 text-[13px] text-[var(--w-text-3)]">{wt('pf.nothingBlocked')}</p>}
         </section>
       </div>
     </div>
@@ -330,8 +331,8 @@ export default function PortfolioView({ ws }: { ws: WorkspaceDetail }) {
 function DepChip({ side, slug }: { side: import('@/lib/work-portfolio-api').DepSide; slug: string }) {
   if (side.hidden) {
     return (
-      <span className="inline-flex min-w-0 items-center gap-1.5 text-[var(--w-text-3)]" title="An issue in a project you cannot open">
-        <Lock size={12} /> <span className="italic">Issue in another project</span>
+      <span className="inline-flex min-w-0 items-center gap-1.5 text-[var(--w-text-3)]" title={wt('pf.issueNoAccess')}>
+        <Lock size={12} /> <span className="italic">{wt('pf.issueOther')}</span>
       </span>
     );
   }

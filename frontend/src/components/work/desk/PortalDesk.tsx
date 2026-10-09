@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 import { workError, workPortalKeys } from '@/lib/work-api';
 import { deskApi, deskKeys, type DeskLevel, type PortalDeskForm, type RequestTypeKey } from '@/lib/work-s5a-api';
 import { Dialog, PageLoading, Spinner } from '../ui';
+import { wt } from '@/components/work/i18n';
 
 export function DeskRequestDialog({ pid, open, onClose, onCreated }: { pid: number; open: boolean; onClose: () => void; onCreated: (n: number) => void }) {
   const qc = useQueryClient();
@@ -36,27 +37,27 @@ export function DeskRequestDialog({ pid, open, onClose, onCreated }: { pid: numb
   const send = useMutation({
     mutationFn: () => deskApi.portalSubmit(pid, { requestType: type!, title, description: desc || null, impact, urgency, fields: answers }),
     onSuccess: (r) => {
-      toast.success(`Sent as ${r.key}. We’ll respond within ${r.respondWithin}.`);
+      toast.success(wt('desk.sentAs', { key: r.key, t: r.respondWithin }));
       qc.invalidateQueries({ queryKey: workPortalKeys.all(pid) });
       onClose();
       onCreated(r.number);
     },
-    onError: (err) => toast.error(workError(err, 'Could not send your request')),
+    onError: (err) => toast.error(workError(err, wt('desk.sendRequestFailed'))),
   });
   const canSend = !!t && !!title.trim() && !missing.length && (!t.askImpact || (!!impact && !!urgency));
   return (
-    <Dialog open={open} onClose={onClose} title="New request" width={600} footer={(
+    <Dialog open={open} onClose={onClose} title={wt('desk.newRequest')} width={600} footer={(
       <>
-        {p && f && <span className="mr-auto flex items-center gap-1.5 text-[12.5px] text-[var(--w-text-2)]" data-testid="desk-promise"><Clock size={13} /> We’ll respond within {f.targets[p].respond}</span>}
-        <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>Cancel</button>
+        {p && f && <span className="mr-auto flex items-center gap-1.5 text-[12.5px] text-[var(--w-text-2)]" data-testid="desk-promise"><Clock size={13} /> {wt('desk.respondWithinT', { t: f.targets[p].respond })}</span>}
+        <button type="button" className="w-btn w-btn-ghost" onClick={onClose}>{wt('common.cancel')}</button>
         <button type="button" className="w-btn w-btn-primary" disabled={!canSend || send.isPending} onClick={() => send.mutate()} data-testid="portal-send-request">
-          {send.isPending ? <Spinner size={12} /> : <Send size={13} />} Send to the team
+          {send.isPending ? <Spinner size={12} /> : <Send size={13} />} {wt('desk.sendToTeam')}
         </button>
       </>
     )}>
       {form.isLoading || !f ? <PageLoading rows={3} /> : (
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-2 max-sm:grid-cols-1" role="radiogroup" aria-label="Type of request">
+          <div className="grid grid-cols-2 gap-2 max-sm:grid-cols-1" role="radiogroup" aria-label={wt('desk.typeOfRequest')}>
             {f.requestTypes.map((k) => (
               <button key={k.key} type="button" role="radio" aria-checked={type === k.key} onClick={() => { setType(k.key); setAnswers({}); }} data-testid={`desk-type-${k.key}`}
                 className={cn('rounded-[8px] border px-3 py-2 text-left', type === k.key ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)]' : 'border-[var(--w-border)] hover:bg-[var(--w-hover)]')}>
@@ -66,8 +67,8 @@ export function DeskRequestDialog({ pid, open, onClose, onCreated }: { pid: numb
             ))}
           </div>
           <label className="block">
-            <span className="mb-1 block text-[12.5px] font-medium">Title</span>
-            <input className="w-input" value={title} maxLength={255} onChange={(e) => setTitle(e.target.value)} placeholder="Short summary" data-testid="portal-request-title" />
+            <span className="mb-1 block text-[12.5px] font-medium">{wt('common.title')}</span>
+            <input className="w-input" value={title} maxLength={255} onChange={(e) => setTitle(e.target.value)} placeholder={wt('desk.shortSummary')} data-testid="portal-request-title" />
           </label>
           {t?.fields.map((x) => (
             <label key={x.key} className="block">
@@ -78,13 +79,13 @@ export function DeskRequestDialog({ pid, open, onClose, onCreated }: { pid: numb
             </label>
           ))}
           <label className="block">
-            <span className="mb-1 block text-[12.5px] font-medium">Details</span>
-            <textarea className="w-input min-h-[90px] py-2" value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="What happened, and what did you expect?" />
+            <span className="mb-1 block text-[12.5px] font-medium">{wt('desk.details')}</span>
+            <textarea className="w-input min-h-[90px] py-2" value={desc} onChange={(e) => setDesc(e.target.value)} placeholder={wt('desk.whatHappened')} />
           </label>
           {t?.askImpact && (
             <div className="grid gap-3 sm:grid-cols-2">
-              <Choice label="Who is affected?" options={f.impact} value={impact} onChange={setImpact} testid="impact" />
-              <Choice label="How urgent is it?" options={f.urgency} value={urgency} onChange={setUrgency} testid="urgency" />
+              <Choice label={wt('desk.whoAffected')} options={f.impact} value={impact} onChange={setImpact} testid="impact" />
+              <Choice label={wt('desk.howUrgent')} options={f.urgency} value={urgency} onChange={setUrgency} testid="urgency" />
             </div>
           )}
         </div>
@@ -118,8 +119,8 @@ export function PortalSlaPanel({ pid, num, asClient }: { pid: number; num: numbe
   const [comment, setComment] = useState('');
   const send = useMutation({
     mutationFn: () => deskApi.submitCsat(pid, num, { rating, comment: comment || null }),
-    onSuccess: () => { toast.success('Thank you for your feedback'); qc.invalidateQueries({ queryKey: deskKeys.portalTicket(pid, num, asClient) }); },
-    onError: (err) => toast.error(workError(err, 'Could not send your rating')),
+    onSuccess: () => { toast.success(wt('desk.thanksFeedback')); qc.invalidateQueries({ queryKey: deskKeys.portalTicket(pid, num, asClient) }); },
+    onError: (err) => toast.error(workError(err, wt('desk.sendRatingFailed'))),
   });
   const t = q.data?.ticket;
   if (!t) return null;
@@ -128,30 +129,30 @@ export function PortalSlaPanel({ pid, num, asClient }: { pid: number; num: numbe
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px]">
         <span className="font-medium">{t.requestTypeName}</span>
         {t.resolved
-          ? <span className="flex items-center gap-1.5 text-[var(--w-green)]"><CheckCircle2 size={14} /> Resolved</span>
+          ? <span className="flex items-center gap-1.5 text-[var(--w-green)]"><CheckCircle2 size={14} /> {wt('common.resolved')}</span>
           : t.responded
-            ? <span className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[var(--w-green)]" /> The team has responded · target resolution within {t.resolveWithin}</span>
-            : <span className="flex items-center gap-1.5" data-testid="portal-promise"><Clock size={14} className="text-[var(--w-text-3)]" /> We’ll respond within {t.respondWithin} · target resolution within {t.resolveWithin}</span>}
+            ? <span className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[var(--w-green)]" /> {wt('desk.teamResponded', { t: t.resolveWithin })}</span>
+            : <span className="flex items-center gap-1.5" data-testid="portal-promise"><Clock size={14} className="text-[var(--w-text-3)]" /> {wt('desk.promiseBoth', { a: t.respondWithin, b: t.resolveWithin })}</span>}
       </div>
       {t.csat.rating !== null && t.csat.rating !== undefined ? (
         <p className="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-[var(--w-text-2)]" data-testid="csat-done">
-          Your rating: <span className="text-[var(--w-orange)]">{'★'.repeat(t.csat.rating)}<span className="opacity-30">{'★'.repeat(5 - t.csat.rating)}</span></span>{t.csat.comment && <span>“{t.csat.comment}”</span>}
+          {wt('desk.yourRating')} <span className="text-[var(--w-orange)]">{'★'.repeat(t.csat.rating)}<span className="opacity-30">{'★'.repeat(5 - t.csat.rating)}</span></span>{t.csat.comment && <span>“{t.csat.comment}”</span>}
         </p>
       ) : t.csat.canAnswer ? (
         <div className="mt-3 border-t border-[var(--w-border)] pt-3" data-testid="csat-form">
-          <div className="mb-1.5 text-[13px] font-medium">How did we do?</div>
-          <div className="flex items-center gap-1" role="radiogroup" aria-label="Rating from 1 to 5">
+          <div className="mb-1.5 text-[13px] font-medium">{wt('desk.howDidWeDo')}</div>
+          <div className="flex items-center gap-1" role="radiogroup" aria-label={wt('desk.rating1to5')}>
             {[1, 2, 3, 4, 5].map((n) => (
-              <button key={n} type="button" role="radio" aria-checked={rating === n} aria-label={`${n} out of 5`} onClick={() => setRating(n)} data-testid={`csat-${n}`}
+              <button key={n} type="button" role="radio" aria-checked={rating === n} aria-label={wt('desk.outOf5', { n })} onClick={() => setRating(n)} data-testid={`csat-${n}`}
                 className="flex h-9 w-9 items-center justify-center rounded-[8px] hover:bg-[var(--w-hover)]">
                 <Star size={20} style={{ color: n <= rating ? 'var(--w-orange)' : 'var(--w-text-3)', fill: n <= rating ? 'var(--w-orange)' : 'transparent' }} />
               </button>
             ))}
-            <span className="ml-2 text-[12px] text-[var(--w-text-3)]">{['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent'][rating]}</span>
+            <span className="ml-2 text-[12px] text-[var(--w-text-3)]">{wt('desk.ratingWords').split(',')[rating]}</span>
           </div>
-          <textarea className="w-input mt-2 min-h-[60px] py-2" placeholder="Anything we should know? (optional)" value={comment} maxLength={2000} onChange={(e) => setComment(e.target.value)} data-testid="csat-comment" />
+          <textarea className="w-input mt-2 min-h-[60px] py-2" placeholder={wt('desk.anythingElse')} value={comment} maxLength={2000} onChange={(e) => setComment(e.target.value)} data-testid="csat-comment" />
           <div className="mt-2 flex justify-end">
-            <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={!rating || send.isPending} onClick={() => send.mutate()} data-testid="csat-send">{send.isPending ? <Spinner size={12} /> : <Send size={13} />} Send rating</button>
+            <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={!rating || send.isPending} onClick={() => send.mutate()} data-testid="csat-send">{send.isPending ? <Spinner size={12} /> : <Send size={13} />} {wt('desk.sendRating')}</button>
           </div>
         </div>
       ) : null}

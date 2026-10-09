@@ -15,6 +15,7 @@ import { workApi, workError, type AiAction, type ProjectConfig } from '@/lib/wor
 import { cn } from '@/lib/utils';
 import { IssueTypeIcon, PRIORITIES, PriorityIcon, Spinner, UserAvatar } from '../ui';
 import { closeAiPanel } from './store';
+import { wt } from '@/components/work/i18n';
 
 export type ActionStatus = 'pending' | 'applying' | 'done' | 'error' | 'dismissed';
 
@@ -35,20 +36,20 @@ export function blockedReason(action: AiAction, config: ProjectConfig): string |
   switch (action.type) {
     case 'create_issue':
     case 'create_test':
-      return p.createIssues ? null : 'You don’t have permission to create issues in this project';
+      return p.createIssues ? null : wt('ai.noPermCreate');
     case 'add_comment':
-      return p.comment ? null : 'You don’t have permission to comment in this project';
+      return p.comment ? null : wt('ai.noPermComment');
     case 'update_issue':
     case 'move_to_sprint':
-      return p.editIssues ? null : 'You don’t have permission to edit issues in this project';
+      return p.editIssues ? null : wt('ai.noPermEdit');
     // Đợt S5c — tài liệu: server kiểm lại (docs bật + quyền sửa trang).
     case 'draft_page':
     case 'update_page_section':
-      return p.editDocs ? null : 'You don’t have permission to edit documents in this project';
+      return p.editDocs ? null : wt('ai.noPermDocs');
     // Đợt 3C: lệnh dùng chung — tài liệu cần quyền Docs, còn lại quyền sửa thẻ; server kiểm lại đúng quyền của lệnh.
     case 'command':
-      return action.command.startsWith('docs_') ? (p.editDocs ? null : 'You don’t have permission to edit documents in this project')
-        : p.editIssues ? null : 'You don’t have permission to make this change in this project';
+      return action.command.startsWith('docs_') ? (p.editDocs ? null : wt('ai.noPermDocs'))
+        : p.editIssues ? null : wt('ai.noPermChange');
     default:
       return null;
   }
@@ -112,7 +113,7 @@ export function ActionGroup({ config, items, onUpdate, applyFn, dismissFn }: {
       onUpdate(item.id, { status: 'done', summary: r.summary, number: r.number });
       return true;
     } catch (err) {
-      onUpdate(item.id, { status: 'error', error: workError(err, 'Could not apply this change') });
+      onUpdate(item.id, { status: 'error', error: workError(err, wt('ai.applyFailed')) });
       return false;
     }
   }, [pid, onUpdate, applyFn]);
@@ -145,9 +146,9 @@ export function ActionGroup({ config, items, onUpdate, applyFn, dismissFn }: {
       {visible.length >= 2 && (
         <div className="flex items-center justify-between gap-2 px-0.5">
           <span className="text-[12px] text-[var(--w-text-3)]">
-            {visible.length} proposed change{visible.length === 1 ? '' : 's'}
-            {doneCount > 0 && ` · ${doneCount} applied`}
-            {failCount > 0 && <span className="text-[var(--w-red)]"> · {failCount} failed</span>}
+            {wt('ai.nProposed', { count: visible.length })}
+            {doneCount > 0 && wt('ai.nApplied', { n: doneCount })}
+            {failCount > 0 && <span className="text-[var(--w-red)]"> {wt('ai.nFailed', { n: failCount })}</span>}
           </span>
           {applicable.length >= 2 && (
             <button type="button" className="w-btn w-btn-sm" disabled={bulk} onClick={applyAll}>
@@ -167,7 +168,7 @@ export function ActionGroup({ config, items, onUpdate, applyFn, dismissFn }: {
           onApply={() => apply(it)}
           onDismiss={() => {
             if (!dismissFn) { onUpdate(it.id, { status: 'dismissed' }); return; }
-            dismissFn(it).then(() => onUpdate(it.id, { status: 'dismissed' }), (err) => onUpdate(it.id, { status: 'error', error: workError(err, 'Could not dismiss') }));
+            dismissFn(it).then(() => onUpdate(it.id, { status: 'dismissed' }), (err) => onUpdate(it.id, { status: 'error', error: workError(err, wt('ai.dismissFailed')) }));
           }}
           onOpen={() => openResult(it)}
         />
@@ -179,24 +180,37 @@ export function ActionGroup({ config, items, onUpdate, applyFn, dismissFn }: {
 // ─── Một thẻ ─────────────────────────────────────────────────────
 
 const TITLES: Record<AiAction['type'], string> = {
-  create_issue: 'Create issue',
-  update_issue: 'Update issue',
-  add_comment: 'Add comment',
-  move_to_sprint: 'Move to sprint',
-  create_test: 'Create test case',
-  draft_page: 'Create document',
-  update_page_section: 'Update document section',
-  command: 'Run command',
+  get create_issue() { return wt('ai.tCreateIssue'); },
+  get update_issue() { return wt('ai.tUpdateIssue'); },
+  get add_comment() { return wt('ai.tAddComment'); },
+  get move_to_sprint() { return wt('ai.tMoveSprint'); },
+  get create_test() { return wt('ai.tCreateTest'); },
+  get draft_page() { return wt('ai.tCreateDoc'); },
+  get update_page_section() { return wt('ai.tUpdateSection'); },
+  get command() { return wt('ai.tRunCommand'); },
 };
 
 /** Tên lệnh ⇒ nhãn đọc được ("fpt_unit_add_cases" ⇒ "Unit test: add cases"). */
 const COMMAND_LABEL: Record<string, string> = {
-  fpt_unit_create_function: 'Unit test (5.1): add function', fpt_unit_add_cases: 'Unit test (5.1): add test cases', fpt_unit_mark: 'Unit test (5.1): set “O” marks',
-  fpt_unit_record_results: 'Unit test (5.1): record results', fpt_it_create_module: 'Integration/System test: add sheet', fpt_it_add_cases: 'Integration/System test: add cases',
-  fpt_it_record_round: 'Integration/System test: record round', test_create: 'Create test case', test_cycle_create: 'Create test cycle', test_run_record: 'Record test run',
-  docs_draft_page: 'Create document', docs_update_section: 'Update document section', meeting_add_actions: 'Meeting: add action items',
-  meeting_create_issues: 'Meeting: create issues', raid_create: 'Add RAID item', raid_update: 'Update RAID item', weekly_report_generate: 'Generate weekly report',
-  transition: 'Change status', log_work: 'Log work',
+  get fpt_unit_create_function() { return wt('ai.cUnitFn'); },
+  get fpt_unit_add_cases() { return wt('ai.cUnitCases'); },
+  get fpt_unit_mark() { return wt('ai.cUnitMark'); },
+  get fpt_unit_record_results() { return wt('ai.cUnitResults'); },
+  get fpt_it_create_module() { return wt('ai.cItSheet'); },
+  get fpt_it_add_cases() { return wt('ai.cItCases'); },
+  get fpt_it_record_round() { return wt('ai.cItRound'); },
+  get test_create() { return wt('ai.tCreateTest'); },
+  get test_cycle_create() { return wt('ai.cCycle'); },
+  get test_run_record() { return wt('ai.cRun'); },
+  get docs_draft_page() { return wt('ai.tCreateDoc'); },
+  get docs_update_section() { return wt('ai.tUpdateSection'); },
+  get meeting_add_actions() { return wt('ai.cMeetActions'); },
+  get meeting_create_issues() { return wt('ai.cMeetIssues'); },
+  get raid_create() { return wt('ai.cRaidAdd'); },
+  get raid_update() { return wt('ai.cRaidUpd'); },
+  get weekly_report_generate() { return wt('ai.cWeekly'); },
+  get transition() { return wt('ai.cTransition'); },
+  get log_work() { return wt('ai.cLogWork'); },
 };
 const commandLabel = (c: string) => COMMAND_LABEL[c] ?? c.replace(/_/g, ' ');
 
@@ -236,11 +250,11 @@ export function ActionCard({ config, item, busy, onEdit, onApply, onDismiss, onO
           <>
             <span className="inline-flex min-w-0 flex-1 items-center gap-1.5 text-[12px] text-[var(--w-green)]">
               <Check size={14} className="shrink-0" />
-              <span className="truncate">{item.summary ?? 'Applied'}</span>
+              <span className="truncate">{item.summary ?? wt('ai.applied')}</span>
             </span>
             {item.number ? (
               <button type="button" className="w-btn w-btn-sm w-btn-ghost" onClick={onOpen}>
-                Open <ExternalLink size={12} />
+                {wt('common.open')} <ExternalLink size={12} />
               </button>
             ) : null}
           </>
@@ -248,7 +262,7 @@ export function ActionCard({ config, item, busy, onEdit, onApply, onDismiss, onO
           <>
             <span className="min-w-0 flex-1 text-[12px] text-[var(--w-red)]">{status === 'error' ? item.error : ''}</span>
             <button type="button" className="w-btn w-btn-sm w-btn-ghost" onClick={onDismiss} disabled={status === 'applying' || busy}>
-              Dismiss
+              {wt('ai.dismiss')}
             </button>
             <span title={blocked ?? undefined}>
               <button
@@ -256,10 +270,10 @@ export function ActionCard({ config, item, busy, onEdit, onApply, onDismiss, onO
                 className="w-btn w-btn-sm w-btn-primary"
                 onClick={onApply}
                 disabled={!!blocked || status === 'applying' || busy}
-                aria-label={blocked ? `Apply (${blocked})` : undefined}
+                aria-label={blocked ? `${wt('common.apply')} (${blocked})` : undefined}
               >
                 {status === 'applying' ? <Spinner size={12} /> : <Check size={13} />}
-                {status === 'error' ? 'Retry' : 'Apply'}
+                {status === 'error' ? wt('ai.retry') : wt('common.apply')}
               </button>
             </span>
           </>
@@ -289,7 +303,7 @@ function EditableTitle({ value, editable, onChange, icon }: { value: string; edi
           <input
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            aria-label="Title"
+            aria-label={wt('common.title')}
             maxLength={255}
             className="w-input w-input-bare !h-[28px] min-w-0 flex-1 !px-1.5 text-[13.5px] font-medium"
           />
@@ -309,7 +323,7 @@ function Assignee({ config, username }: { config: ProjectConfig; username: strin
     <span className="inline-flex items-center gap-1.5">
       {m && <UserAvatar user={m} size={16} />}
       @{u}
-      {!m && <span className="text-[11px] text-[var(--w-orange)]">(not a member)</span>}
+      {!m && <span className="text-[11px] text-[var(--w-orange)]">{wt('ai.notMember')}</span>}
     </span>
   );
 }
@@ -350,19 +364,19 @@ function ActionBody({ config, action, editable, onEdit }: { config: ProjectConfi
           {action.description ? <div className="px-1.5 text-[12.5px]"><Clamp text={action.description} /></div> : null}
           {action.acceptanceCriteria?.length ? (
             <div className="px-1.5">
-              <div className="mb-0.5 text-[11px] font-semibold uppercase tracking-[0.03em] text-[var(--w-text-3)]">Acceptance criteria</div>
+              <div className="mb-0.5 text-[11px] font-semibold uppercase tracking-[0.03em] text-[var(--w-text-3)]">{wt('ai.acceptance')}</div>
               <ul className="list-disc space-y-0.5 pl-4 text-[12.5px] text-[var(--w-text-2)]">
                 {action.acceptanceCriteria.map((c, i) => <li key={i}>{c}</li>)}
               </ul>
             </div>
           ) : null}
           <div className="px-1.5 pt-0.5">
-            <Row label="Type">{type?.name ?? action.issueType}</Row>
-            {action.priority ? <Row label="Priority"><Priority value={action.priority} /></Row> : null}
-            {action.assignee ? <Row label="Assignee"><Assignee config={config} username={action.assignee} /></Row> : null}
-            {action.storyPoints != null ? <Row label="Points">{action.storyPoints}</Row> : null}
-            {action.parent ? <Row label="Parent"><span className="font-mono">{k(action.parent)}</span></Row> : null}
-            {action.sprint ? <Row label="Sprint">{action.sprint}</Row> : null}
+            <Row label={wt('common.type')}>{type?.name ?? action.issueType}</Row>
+            {action.priority ? <Row label={wt('common.priority')}><Priority value={action.priority} /></Row> : null}
+            {action.assignee ? <Row label={wt('common.assignee')}><Assignee config={config} username={action.assignee} /></Row> : null}
+            {action.storyPoints != null ? <Row label={wt('common.points')}>{action.storyPoints}</Row> : null}
+            {action.parent ? <Row label={wt('common.parent')}><span className="font-mono">{k(action.parent)}</span></Row> : null}
+            {action.sprint ? <Row label={wt('common.sprint')}>{action.sprint}</Row> : null}
           </div>
         </div>
       );
@@ -370,19 +384,19 @@ function ActionBody({ config, action, editable, onEdit }: { config: ProjectConfi
 
     case 'update_issue': {
       const rows: Array<[string, ReactNode]> = [];
-      if (action.title) rows.push(['Title', action.title]);
-      if (action.description) rows.push(['Description', <Clamp key="d" text={action.description} />]);
-      if (action.priority) rows.push(['Priority', <Priority key="p" value={action.priority} />]);
-      if (action.assignee) rows.push(['Assignee', <Assignee key="a" config={config} username={action.assignee} />]);
-      if (action.storyPoints != null) rows.push(['Points', action.storyPoints]);
-      if (action.status) rows.push(['Status', action.status]);
-      if (action.sprint) rows.push(['Sprint', action.sprint]);
-      if (action.dueDate) rows.push(['Due date', action.dueDate]);
+      if (action.title) rows.push([wt('common.title'), action.title]);
+      if (action.description) rows.push([wt('common.description'), <Clamp key="d" text={action.description} />]);
+      if (action.priority) rows.push([wt('common.priority'), <Priority key="p" value={action.priority} />]);
+      if (action.assignee) rows.push([wt('common.assignee'), <Assignee key="a" config={config} username={action.assignee} />]);
+      if (action.storyPoints != null) rows.push([wt('common.points'), action.storyPoints]);
+      if (action.status) rows.push([wt('common.status'), action.status]);
+      if (action.sprint) rows.push([wt('common.sprint'), action.sprint]);
+      if (action.dueDate) rows.push([wt('common.dueDate'), action.dueDate]);
       return (
         <div>
           {rows.length ? rows.map(([label, v]) => (
             <Row key={label} label={label}><span className="inline-flex items-start gap-1"><ArrowRight size={12} className="mt-[3px] shrink-0 text-[var(--w-text-3)]" /><span className="min-w-0">{v}</span></span></Row>
-          )) : <span className="text-[12px] text-[var(--w-text-3)]">No field changes</span>}
+          )) : <span className="text-[12px] text-[var(--w-text-3)]">{wt('ai.noFieldChanges')}</span>}
         </div>
       );
     }
@@ -419,10 +433,10 @@ function ActionBody({ config, action, editable, onEdit }: { config: ProjectConfi
           />
           {action.requirement ? (
             <div className="flex items-center gap-1 px-1.5 text-[12px] text-[var(--w-text-3)]">
-              <CornerDownRight size={12} /> Verifies <span className="font-mono text-[var(--w-text-2)]">{k(action.requirement)}</span>
+              <CornerDownRight size={12} /> {wt('ai.verifies')} <span className="font-mono text-[var(--w-text-2)]">{k(action.requirement)}</span>
             </div>
           ) : null}
-          {action.preconditions ? <div className="px-1.5 text-[12.5px]"><Row label="Preconditions"><Clamp text={action.preconditions} /></Row></div> : null}
+          {action.preconditions ? <div className="px-1.5 text-[12.5px]"><Row label={wt('ai.preconditions')}><Clamp text={action.preconditions} /></Row></div> : null}
           {action.steps?.length ? (
             <ol className="space-y-1.5 px-1.5">
               {action.steps.map((s, i) => (
@@ -430,7 +444,7 @@ function ActionBody({ config, action, editable, onEdit }: { config: ProjectConfi
                   <span className="mt-[1px] flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-[var(--w-sunken)] text-[10.5px] font-semibold text-[var(--w-text-2)]">{i + 1}</span>
                   <div className="min-w-0 flex-1">
                     <div>{s.action}</div>
-                    {s.data ? <div className="text-[12px] text-[var(--w-text-3)]">Data: <span className="font-mono">{s.data}</span></div> : null}
+                    {s.data ? <div className="text-[12px] text-[var(--w-text-3)]">{wt('ai.data')} <span className="font-mono">{s.data}</span></div> : null}
                     {s.expected ? (
                       <div className="flex items-start gap-1 text-[12px] text-[var(--w-green)]">
                         <FlaskConical size={11} className="mt-[3px] shrink-0" /> <span className="min-w-0">{s.expected}</span>
@@ -448,21 +462,21 @@ function ActionBody({ config, action, editable, onEdit }: { config: ProjectConfi
       return (
         <div className="space-y-1.5">
           <EditableTitle value={action.title} editable={editable} onChange={(title) => onEdit({ ...action, title })} icon={<FileText size={14} className="shrink-0 text-[var(--w-text-3)]" />} />
-          {action.parent ? <div className="px-1.5 text-[12px] text-[var(--w-text-3)]">Under document #{action.parent}</div> : null}
+          {action.parent ? <div className="px-1.5 text-[12px] text-[var(--w-text-3)]">{wt('ai.underDoc', { n: action.parent })}</div> : null}
           <MarkdownPreview text={action.markdown} />
-          <div className="px-1.5 text-[11.5px] text-[var(--w-text-3)]">Applying creates a new Draft document (version 1). Nothing is saved before you apply.</div>
+          <div className="px-1.5 text-[11.5px] text-[var(--w-text-3)]">{wt('ai.draftNote')}</div>
         </div>
       );
 
     case 'update_page_section':
       return (
         <div className="space-y-1.5">
-          <Row label="Section">
+          <Row label={wt('ai.section')}>
             <span className="font-medium">{action.heading}</span>
-            <span className="ml-1.5 text-[11.5px] text-[var(--w-text-3)]">{action.mode === 'append' ? '(add to the end)' : '(replace)'}</span>
+            <span className="ml-1.5 text-[11.5px] text-[var(--w-text-3)]">{action.mode === 'append' ? wt('ai.addEnd') : wt('ai.replaceParen')}</span>
           </Row>
           <MarkdownPreview text={action.markdown} />
-          <div className="px-1.5 text-[11.5px] text-[var(--w-text-3)]">Applying saves a new version of document #{action.number}; you can compare or restore it from History.</div>
+          <div className="px-1.5 text-[11.5px] text-[var(--w-text-3)]">{wt('ai.sectionNote', { n: action.number })}</div>
         </div>
       );
 
@@ -479,11 +493,11 @@ function ActionBody({ config, action, editable, onEdit }: { config: ProjectConfi
               </Row>
             ))}
           </div>
-          <div className="px-1.5 text-[11.5px] text-[var(--w-text-3)]">Same command external AI agents use (<span className="font-mono">{action.command}</span>). Nothing changes until you apply it, and it runs with your permissions.</div>
+          <div className="px-1.5 text-[11.5px] text-[var(--w-text-3)]">{wt('ai.cmdNoteA')}<span className="font-mono">{action.command}</span>{wt('ai.cmdNoteB')}</div>
         </div>
       );
 
     default:
-      return <span className="text-[12px] text-[var(--w-text-3)]"><X size={12} className="inline" /> Unsupported suggestion</span>;
+      return <span className="text-[12px] text-[var(--w-text-3)]"><X size={12} className="inline" /> {wt('ai.unsupported')}</span>;
   }
 }

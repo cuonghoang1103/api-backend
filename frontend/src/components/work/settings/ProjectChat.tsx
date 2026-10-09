@@ -16,23 +16,24 @@ import { cn } from '@/lib/utils';
 import { wk } from '../hooks';
 import { relativeTime, Spinner } from '../ui';
 import { ConfirmDialog, Section, Select, Switch } from './shared';
+import { wt } from '@/components/work/i18n';
 
 const KINDS: Array<{ kind: ChatHookKind; label: string; how: string; placeholder: string }> = [
-  { kind: 'DISCORD', label: 'Discord', how: 'In Discord: Server settings → Integrations → Webhooks → New Webhook → pick the channel → Copy Webhook URL.', placeholder: 'https://discord.com/api/webhooks/…' },
-  { kind: 'SLACK', label: 'Slack', how: 'In Slack: create an app at api.slack.com/apps → Incoming Webhooks → On → Add New Webhook to Workspace → pick the channel → copy the URL.', placeholder: 'https://hooks.slack.com/services/…' },
-  { kind: 'GOOGLE_CHAT', label: 'Google Chat', how: 'In Google Chat: open the space → Apps & integrations → Webhooks → Add webhook → copy the URL.', placeholder: 'https://chat.googleapis.com/v1/spaces/…/messages?key=…' },
+  { kind: 'DISCORD', label: 'Discord', get how() { return wt('pchat.howDiscord'); }, placeholder: 'https://discord.com/api/webhooks/…' },
+  { kind: 'SLACK', label: 'Slack', get how() { return wt('pchat.howSlack'); }, placeholder: 'https://hooks.slack.com/services/…' },
+  { kind: 'GOOGLE_CHAT', label: 'Google Chat', get how() { return wt('pchat.howGchat'); }, placeholder: 'https://chat.googleapis.com/v1/spaces/…/messages?key=…' },
 ];
 const EVENTS: Array<{ ev: ChatHookEvent; label: string }> = [
-  { ev: 'issue.created', label: 'New issues' },
-  { ev: 'issue.assigned', label: 'Assignments' },
-  { ev: 'issue.done', label: 'Moved to Done' },
-  { ev: 'comment.created', label: 'New comments' },
+  { ev: 'issue.created', get label() { return wt('pchat.evCreated'); } },
+  { ev: 'issue.assigned', get label() { return wt('pchat.evAssigned'); } },
+  { ev: 'issue.done', get label() { return wt('pchat.evDone'); } },
+  { ev: 'comment.created', get label() { return wt('pchat.evComment'); } },
 ];
 const kindLabel = (k: ChatHookKind) => KINDS.find((x) => x.kind === k)?.label ?? k;
 
 function EventChips({ value, onChange, disabled }: { value: ChatHookEvent[]; onChange: (v: ChatHookEvent[]) => void; disabled?: boolean }) {
   return (
-    <div className="flex flex-wrap gap-1.5" role="group" aria-label="Which events to send">
+    <div className="flex flex-wrap gap-1.5" role="group" aria-label={wt('pchat.whichEvents')}>
       {EVENTS.map(({ ev, label }) => {
         const on = value.includes(ev);
         return (
@@ -63,27 +64,27 @@ export default function ProjectChat({ config }: { config: ProjectConfig; slug: s
   const create = useMutation({
     mutationFn: () => workApi.createChatHook(pid, { kind, url: url.trim(), name: name.trim() || undefined, events }),
     onSuccess: async (h) => {
-      toast.success(`${kindLabel(h.kind)} channel added — sending a test message…`);
+      toast.success(wt('pchat.added', { k: kindLabel(h.kind) }));
       setAdding(false); setUrl(''); setName('');
       refresh();
-      try { await workApi.testChatHook(pid, h.id); toast.success('Test message sent. Check your channel.'); } catch (err) { toast.error(workError(err, 'The test message failed')); refresh(); }
+      try { await workApi.testChatHook(pid, h.id); toast.success(wt('pchat.testSent')); } catch (err) { toast.error(workError(err, wt('pchat.testFailed'))); refresh(); }
     },
-    onError: (err) => toast.error(workError(err, 'Could not add this channel')),
+    onError: (err) => toast.error(workError(err, wt('pchat.addFailed'))),
   });
   const update = useMutation({
     mutationFn: ({ id, body }: { id: number; body: { events?: ChatHookEvent[]; enabled?: boolean } }) => workApi.updateChatHook(pid, id, body),
     onSuccess: () => refresh(),
-    onError: (err) => toast.error(workError(err, 'Could not save')),
+    onError: (err) => toast.error(workError(err, wt('common.couldNotSave'))),
   });
   const test = useMutation({
     mutationFn: (id: number) => workApi.testChatHook(pid, id),
-    onSuccess: () => { toast.success('Test message sent. Check your channel.'); refresh(); },
-    onError: (err) => { toast.error(workError(err, 'The test message failed')); refresh(); },
+    onSuccess: () => { toast.success(wt('pchat.testSent')); refresh(); },
+    onError: (err) => { toast.error(workError(err, wt('pchat.testFailed'))); refresh(); },
   });
   const remove = useMutation({
     mutationFn: (id: number) => workApi.deleteChatHook(pid, id),
-    onSuccess: () => { setRemoving(null); toast.success('Channel removed'); refresh(); },
-    onError: (err) => toast.error(workError(err, 'Could not remove this channel')),
+    onSuccess: () => { setRemoving(null); toast.success(wt('pchat.removed')); refresh(); },
+    onError: (err) => toast.error(workError(err, wt('pchat.removeFailed'))),
   });
 
   const pick = KINDS.find((k) => k.kind === kind)!;
@@ -91,40 +92,40 @@ export default function ProjectChat({ config }: { config: ProjectConfig; slug: s
   return (
     <>
       <Section
-        title="Chat notifications"
-        description="Post project updates to your team’s chat so nobody has to keep CT Work open. Zalo has no public webhook, so it can’t be connected — Discord is the easiest alternative."
-        action={!adding && <button type="button" className="w-btn w-btn-sm w-btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Add channel</button>}
+        title={wt('pchat.title')}
+        description={wt('pchat.desc')}
+        action={!adding && <button type="button" className="w-btn w-btn-sm w-btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> {wt('pchat.addChannel')}</button>}
       >
         {adding && (
           <form className="mb-4 max-w-[640px] space-y-3 rounded-[8px] border border-[var(--w-border)] p-4" onSubmit={(e) => { e.preventDefault(); if (url.trim() && events.length && !create.isPending) create.mutate(); }}>
             <div className="flex flex-wrap gap-2">
-              <Select id="chat-kind" value={kind} onChange={(e) => setKind(e.target.value as ChatHookKind)} aria-label="Chat service" className="w-[180px]">
+              <Select id="chat-kind" value={kind} onChange={(e) => setKind(e.target.value as ChatHookKind)} aria-label={wt('pchat.service')} className="w-[180px]">
                 {KINDS.map((k) => <option key={k.kind} value={k.kind}>{k.label}</option>)}
               </Select>
-              <input id="chat-name" className="w-input min-w-0 flex-1" placeholder="Name (e.g. #swp391-team)" maxLength={80} value={name} onChange={(e) => setName(e.target.value)} aria-label="Channel name" />
+              <input id="chat-name" className="w-input min-w-0 flex-1" placeholder={wt('pchat.namePh')} maxLength={80} value={name} onChange={(e) => setName(e.target.value)} aria-label={wt('pchat.channelName')} />
             </div>
             <p className="text-[12.5px] leading-relaxed text-[var(--w-text-2)]">{pick.how}</p>
-            <input id="chat-url" className="w-input w-full font-mono !text-[12px]" placeholder={pick.placeholder} value={url} onChange={(e) => setUrl(e.target.value)} aria-label="Webhook URL" spellCheck={false} autoComplete="off" required />
+            <input id="chat-url" className="w-input w-full font-mono !text-[12px]" placeholder={pick.placeholder} value={url} onChange={(e) => setUrl(e.target.value)} aria-label={wt('pchat.webhookUrl')} spellCheck={false} autoComplete="off" required />
             <div>
-              <div className="mb-1.5 text-[12.5px] font-medium">Send</div>
+              <div className="mb-1.5 text-[12.5px] font-medium">{wt('pchat.send')}</div>
               <EventChips value={events} onChange={setEvents} />
             </div>
             <div className="flex gap-2">
-              <button type="submit" className="w-btn w-btn-primary" disabled={!url.trim() || !events.length || create.isPending}>{create.isPending && <Spinner size={12} />} Add and send a test</button>
-              <button type="button" className="w-btn" onClick={() => setAdding(false)}>Cancel</button>
+              <button type="submit" className="w-btn w-btn-primary" disabled={!url.trim() || !events.length || create.isPending}>{create.isPending && <Spinner size={12} />} {wt('pchat.addTest')}</button>
+              <button type="button" className="w-btn" onClick={() => setAdding(false)}>{wt('common.cancel')}</button>
             </div>
-            <p className="text-[11.5px] text-[var(--w-text-3)]">Treat the webhook URL like a password — anyone who has it can post to your channel. Only project admins can see this page.</p>
+            <p className="text-[11.5px] text-[var(--w-text-3)]">{wt('pchat.password')}</p>
           </form>
         )}
 
         {q.isLoading ? (
           <div className="flex justify-center py-6"><Spinner /></div>
         ) : q.isError ? (
-          <p className="text-[13px] text-[var(--w-red)]">{workError(q.error, 'Could not load the chat channels')}</p>
+          <p className="text-[13px] text-[var(--w-red)]">{workError(q.error, wt('pchat.loadFailed'))}</p>
         ) : !q.data?.length && !adding ? (
           <div className="max-w-[640px] rounded-[8px] border border-dashed border-[var(--w-border-strong)] px-4 py-6 text-center text-[13px] text-[var(--w-text-2)]">
             <MessageSquareShare size={20} className="mx-auto mb-2 text-[var(--w-text-3)]" />
-            No channels yet. Add one to get new issues, assignments, finished work and comments in Discord, Slack or Google Chat.
+            {wt('pchat.noChannels')}
           </div>
         ) : (
           <ul className="max-w-[720px] space-y-2.5">
@@ -135,17 +136,17 @@ export default function ProjectChat({ config }: { config: ProjectConfig; slug: s
                   <span className="text-[13.5px] font-medium">{h.name}</span>
                   <span className="font-mono text-[11.5px] text-[var(--w-text-3)]">{h.urlMasked}</span>
                   <span className="ml-auto flex items-center gap-2">
-                    <Switch checked={h.enabled} label={`Send to ${h.name}`} disabled={update.isPending} onChange={(v) => update.mutate({ id: h.id, body: { enabled: v } })} />
-                    <button type="button" className="w-btn w-btn-sm" disabled={test.isPending} onClick={() => test.mutate(h.id)}><Send size={12} /> Test</button>
-                    <button type="button" className="w-btn w-btn-sm w-btn-ghost w-btn-icon" onClick={() => setRemoving(h)} aria-label={`Remove ${h.name}`}><Trash2 size={13} /></button>
+                    <Switch checked={h.enabled} label={wt('pchat.sendTo', { n: h.name })} disabled={update.isPending} onChange={(v) => update.mutate({ id: h.id, body: { enabled: v } })} />
+                    <button type="button" className="w-btn w-btn-sm" disabled={test.isPending} onClick={() => test.mutate(h.id)}><Send size={12} /> {wt('agents.test')}</button>
+                    <button type="button" className="w-btn w-btn-sm w-btn-ghost w-btn-icon" onClick={() => setRemoving(h)} aria-label={wt('chat.removeX', { name: h.name })}><Trash2 size={13} /></button>
                   </span>
                 </div>
                 <div className="mt-2.5"><EventChips value={h.events} disabled={update.isPending} onChange={(v) => update.mutate({ id: h.id, body: { events: v } })} /></div>
                 <div className="mt-2 text-[12px]">
                   {h.lastError
-                    ? <span className="text-[var(--w-red)]">Last delivery failed: {h.lastError}</span>
-                    : h.lastSentAt ? <span className="text-[var(--w-text-3)]">Last message sent {relativeTime(h.lastSentAt)}</span>
-                    : <span className="text-[var(--w-text-3)]">Nothing sent yet</span>}
+                    ? <span className="text-[var(--w-red)]">{wt('pchat.lastFailed')} {h.lastError}</span>
+                    : h.lastSentAt ? <span className="text-[var(--w-text-3)]">{wt('pchat.lastSent', { t: relativeTime(h.lastSentAt) })}</span>
+                    : <span className="text-[var(--w-text-3)]">{wt('pchat.nothingSent')}</span>}
                 </div>
               </li>
             ))}
@@ -153,13 +154,13 @@ export default function ProjectChat({ config }: { config: ProjectConfig; slug: s
         )}
       </Section>
 
-      <Section title="What gets posted" description="Each message links straight to the issue. Changes made by imports or the system are not posted, and each channel is capped at 30 messages a minute so bulk edits don’t flood it. Mentions like @everyone in issue titles never ping anyone.">
+      <Section title={wt('pchat.whatPosted')} description={wt('pchat.whatPostedDesc')}>
         <></>
       </Section>
 
-      <ConfirmDialog open={!!removing} onClose={() => setRemoving(null)} title={`Remove ${removing?.name ?? 'this channel'}?`}
-        body="CT Work stops posting to this channel. You can add it again later with the same webhook URL."
-        confirmLabel="Remove" pending={remove.isPending} onConfirm={() => removing && remove.mutate(removing.id)} />
+      <ConfirmDialog open={!!removing} onClose={() => setRemoving(null)} title={wt('pchat.removeQ', { n: removing?.name ?? wt('pchat.thisChannel') })}
+        body={wt('pchat.removeBody')}
+        confirmLabel={wt('common.remove')} pending={remove.isPending} onConfirm={() => removing && remove.mutate(removing.id)} />
     </>
   );
 }

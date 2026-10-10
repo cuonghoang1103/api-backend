@@ -36,11 +36,11 @@
   --w-s-1: 4px;  --w-s-2: 8px;  --w-s-3: 12px; --w-s-4: 16px; --w-s-5: 20px;
   --w-s-6: 24px; --w-s-8: 32px; --w-s-10: 40px;
 
-  /* Bán kính */
-  --w-r-xs: 4px;
-  --w-r-sm: 6px;
-  --w-r-md: 8px;
-  --w-r-lg: 12px;
+  /* Bán kính — mềm hơn kiểu iOS (UX 11/10): sm 8px cho nút/ô, md 10px cho thẻ, lg 14px cho panel/modal */
+  --w-r-xs: 6px;
+  --w-r-sm: 8px;
+  --w-r-md: 10px;
+  --w-r-lg: 14px;
   --w-radius: var(--w-r-sm);      /* tên cũ — giữ cho mã đang dùng */
   --w-radius-lg: var(--w-r-md);
 
@@ -218,11 +218,15 @@ html.theme-dark .work-root {
 .work-root .text-\[22px\] { font-size: var(--w-fs-xl); }
 .work-root .text-\[26px\] { font-size: var(--w-fs-2xl); }
 
-.work-root .rounded-\[3px\] { border-radius: var(--w-r-xs); }
-.work-root .rounded-\[5px\] { border-radius: var(--w-r-sm); }
+.work-root .rounded-\[3px\],
+.work-root .rounded-\[4px\] { border-radius: var(--w-r-xs); }
+.work-root .rounded-\[5px\],
+.work-root .rounded-\[6px\] { border-radius: var(--w-r-sm); }
 .work-root .rounded-\[7px\],
+.work-root .rounded-\[8px\],
 .work-root .rounded-\[9px\] { border-radius: var(--w-r-md); }
 .work-root .rounded-\[10px\],
+.work-root .rounded-\[12px\],
 .work-root .rounded-\[14px\] { border-radius: var(--w-r-lg); }
 
 /* Đầu bảng: chữ thường-kiểu-câu 12px như danh sách Issues — bản 1 có bảng
@@ -239,7 +243,8 @@ html.theme-dark .work-root {
   box-shadow: var(--w-shadow-card);
 }
 a.w-card, button.w-card { transition: border-color 140ms var(--w-ease), box-shadow 140ms var(--w-ease), transform 140ms var(--w-ease); }
-a.w-card:hover, button.w-card:hover { border-color: var(--w-border-strong); box-shadow: var(--w-shadow-lift); }
+a.w-card:hover, button.w-card:hover { border-color: var(--w-border-strong); box-shadow: var(--w-shadow-lift); transform: translateY(-1px); }
+@media (prefers-reduced-motion: reduce) { a.w-card:hover, button.w-card:hover { transform: none; } }
 a.w-card:focus-visible, button.w-card:focus-visible { outline: 2px solid var(--w-accent-border); outline-offset: 1px; }
 
 /* Nhãn nhóm nhỏ (sidebar, danh mục cài đặt). Viết thường-kiểu-câu, không
@@ -279,7 +284,11 @@ html.theme-dark .work-root .w-skel { background-image: linear-gradient(90deg, rg
   font-size: 13px; font-weight: 500; line-height: 1; white-space: nowrap;
   border: 1px solid var(--w-border-strong); background: var(--w-raised); color: var(--w-text);
   box-shadow: 0 1px 0 rgba(30, 28, 22, 0.04);
-  transition: background-color 120ms var(--w-ease), border-color 120ms var(--w-ease), color 120ms var(--w-ease), box-shadow 120ms var(--w-ease);
+  transition: background-color 120ms var(--w-ease), border-color 120ms var(--w-ease), color 120ms var(--w-ease), box-shadow 120ms var(--w-ease), transform 90ms var(--w-ease);
+}
+/* UX 11/10: nút lún nhẹ khi bấm — cảm giác chạm kiểu iOS (tắt khi người dùng giảm chuyển động) */
+.w-btn:active:not(:disabled) { transform: scale(0.97); }
+@media (prefers-reduced-motion: reduce) { .w-btn:active:not(:disabled) { transform: none; }
 }
 html.theme-dark .work-root .w-btn { box-shadow: none; }
 .w-btn:hover:not(:disabled) { background-image: linear-gradient(var(--w-hover), var(--w-hover)); }

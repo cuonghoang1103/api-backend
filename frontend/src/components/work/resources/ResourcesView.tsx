@@ -24,7 +24,7 @@ import {
 import { Dialog, EmptyState, PageLoading, Popover, Spinner, relativeTime, useToggle } from '../ui';
 import { ConfirmDialog, Select } from '../settings/shared';
 import { studioOn } from '../studio/shared';
-import { Favicon, GroupDialog, KindIcon, ResourceDialog, compactNumber, kindLabel } from './shared';
+import { Favicon, GroupDialog, KindIcon, ResourceDialog, ResourcePreviewDialog, compactNumber, kindLabel } from './shared';
 import { wt } from '@/components/work/i18n';
 
 const VIEW_KEY = 'ctw-resources-view';
@@ -75,13 +75,13 @@ function ItemMenu({ r, canEdit, onEdit, onDelete, onToggle, onRefresh }: {
 
 interface ItemProps {
   r: WorkResource; pid: number; compact: boolean; dragging: boolean; canDrag: boolean;
-  onEdit: () => void; onDelete: () => void; onRefresh: () => void;
+  onEdit: () => void; onDelete: () => void; onRefresh: () => void; onPreview: () => void;
   onToggle: (p: Partial<Pick<WorkResource, 'pinned' | 'pinnedToSidebar'>>) => void;
   onTag: (t: string) => void;
   onDragStart: () => void; onDragEnd: () => void; onDropBefore: () => void;
 }
 
-function ResourceItem({ r, pid, compact, dragging, canDrag, onEdit, onDelete, onRefresh, onToggle, onTag, onDragStart, onDragEnd, onDropBefore }: ItemProps) {
+function ResourceItem({ r, pid, compact, dragging, canDrag, onEdit, onDelete, onRefresh, onPreview, onToggle, onTag, onDragStart, onDragEnd, onDropBefore }: ItemProps) {
   const [over, setOver] = useState(false);
   const canEdit = !!r.canEdit;
   const dnd = {
@@ -102,6 +102,13 @@ function ResourceItem({ r, pid, compact, dragging, canDrag, onEdit, onDelete, on
     </button>
   );
   const open = () => openResourceLink(pid, r);
+  const preview = r.embeddable ? (
+    <button type="button" aria-label={wt('res.previewOf', { t: r.title })} title={wt('res.preview')}
+      onClick={(e) => { e.stopPropagation(); onPreview(); }}
+      className="w-btn w-btn-ghost w-btn-icon w-btn-sm" data-testid={`resource-preview-${r.id}`}>
+      <Eye size={14} />
+    </button>
+  ) : null;
 
   if (compact) {
     return (
@@ -112,6 +119,7 @@ function ResourceItem({ r, pid, compact, dragging, canDrag, onEdit, onDelete, on
         {r.tags.slice(0, 3).map((t) => <button key={t} type="button" onClick={() => onTag(t)} className="hidden rounded-full bg-[var(--w-hover)] px-1.5 text-[11px] text-[var(--w-text-2)] sm:inline">#{t}</button>)}
         <StatusDot r={r} />
         {r.visibility === 'CLIENT' && <span title={wt('res.visibleClient')}><Eye size={13} className="text-[var(--w-text-3)]" /></span>}
+        {preview}
         {star}
         <ItemMenu r={r} canEdit={canEdit} onEdit={onEdit} onDelete={onDelete} onToggle={onToggle} onRefresh={onRefresh} />
       </div>
@@ -129,7 +137,7 @@ function ResourceItem({ r, pid, compact, dragging, canDrag, onEdit, onDelete, on
             <KindIcon kind={r.kind} size={11} /> {kindLabel(r.kind)} · <span className="truncate">{r.url.replace(/^(https?:\/\/|mailto:)(www\.)?/, '')}</span>
           </div>
         </div>
-        <div className="flex shrink-0 items-center">{star}<ItemMenu r={r} canEdit={canEdit} onEdit={onEdit} onDelete={onDelete} onToggle={onToggle} onRefresh={onRefresh} /></div>
+        <div className="flex shrink-0 items-center">{preview}{star}<ItemMenu r={r} canEdit={canEdit} onEdit={onEdit} onDelete={onDelete} onToggle={onToggle} onRefresh={onRefresh} /></div>
       </div>
       {(r.description || r.github?.description) && <p className="line-clamp-2 text-[12.5px] leading-snug text-[var(--w-text-2)]">{r.description || r.github?.description}</p>}
       {r.github && (
@@ -242,6 +250,7 @@ export default function ResourcesView({ config }: { config: ProjectConfig }) {
 
   const [adding, setAdding] = useState<{ groupId: number | null } | null>(null);
   const [editing, setEditing] = useState<WorkResource | null>(null);
+  const [previewing, setPreviewing] = useState<WorkResource | null>(null);
   const [deleting, setDeleting] = useState<WorkResource | null>(null);
   const [importing, setImporting] = useState(false);
   const [groupDlg, setGroupDlg] = useState<{ group: ResourceGroup | null } | null>(null);
@@ -327,7 +336,7 @@ export default function ResourcesView({ config }: { config: ProjectConfig }) {
 
   const itemProps = (r: WorkResource, gid: number | null) => ({
     r, pid, compact, dragging: dragId !== null, canDrag: dragOn && (canManage || !!r.canEdit),
-    onEdit: () => setEditing(r), onDelete: () => setDeleting(r), onRefresh: () => refresh.mutate(r.id),
+    onEdit: () => setEditing(r), onDelete: () => setDeleting(r), onRefresh: () => refresh.mutate(r.id), onPreview: () => setPreviewing(r),
     onToggle: (p: Partial<Pick<WorkResource, 'pinned' | 'pinnedToSidebar'>>) => patch.mutate({ id: r.id, body: p }),
     onTag: (t: string) => setTag(t),
     onDragStart: () => setDragId(r.id), onDragEnd: () => setDragId(null), onDropBefore: () => dropInto(gid, r.id),
@@ -438,6 +447,7 @@ export default function ResourcesView({ config }: { config: ProjectConfig }) {
 
       <ResourceDialog pid={pid} open={!!adding || !!editing} onClose={() => { setAdding(null); setEditing(null); }} groups={data.groups} editing={editing}
         defaultGroupId={adding?.groupId ?? null} clientPortal={clientPortal} onSaved={invalidate} />
+      <ResourcePreviewDialog pid={pid} resource={previewing} onClose={() => setPreviewing(null)} />
       <ImportDialog pid={pid} open={importing} onClose={() => setImporting(false)} onDone={invalidate} />
       <GroupDialog open={!!groupDlg} onClose={() => setGroupDlg(null)} initial={groupDlg?.group ?? null} pending={saveGroup.isPending}
         onSubmit={(v) => saveGroup.mutate({ ...v, id: groupDlg?.group?.id })} />

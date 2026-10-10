@@ -166,6 +166,83 @@ export function titleFromUrl(url: string): string {
   }
 }
 
+// ─── Nhúng / xem trước inline ────────────────────────────────────
+
+export type EmbedAspect = '16:9' | '4:3' | 'auto';
+export interface EmbedInfo { embeddable: boolean; embedUrl: string | null; aspect?: EmbedAspect }
+
+const NO_EMBED: EmbedInfo = { embeddable: false, embedUrl: null };
+
+/** id YouTube từ watch?v= / youtu.be/<id> / /embed/<id> / /shorts/<id> / /live/<id>. */
+function youtubeId(u: URL): string | null {
+  const h = u.hostname.toLowerCase().replace(/^www\./, '');
+  let id: string | null = null;
+  if (h === 'youtu.be') {
+    id = u.pathname.split('/').filter(Boolean)[0] ?? null;
+  } else if (h === 'youtube.com' || h.endsWith('.youtube.com')) {
+    const v = u.searchParams.get('v');
+    if (v) id = v;
+    else {
+      const p = u.pathname.split('/').filter(Boolean);
+      if ((p[0] === 'embed' || p[0] === 'shorts' || p[0] === 'live') && p[1]) id = p[1];
+    }
+  }
+  return id && /^[A-Za-z0-9_-]{5,20}$/.test(id) ? id : null;
+}
+
+/** id Google Drive từ /file/d/<id>/… hoặc ?id=<id> (open?id=, uc?id=). */
+function gdriveId(u: URL): string | null {
+  const m = /\/file\/d\/([A-Za-z0-9_-]+)/.exec(u.pathname) ?? /\/d\/([A-Za-z0-9_-]+)/.exec(u.pathname);
+  const id = m?.[1] ?? u.searchParams.get('id');
+  return id && /^[A-Za-z0-9_-]+$/.test(id) ? id : null;
+}
+
+/**
+ * Link nhúng/xem-trước inline (iframe) cho một tài nguyên. THUẦN, không chạm mạng/DB. Chỉ sinh embedUrl cho các nhà
+ * cung cấp cho phép nhúng; mọi thứ khác (github, notion riêng tư, mail, link chung) ⇒ không nhúng được.
+ * Host đích luôn là tên miền công khai cố định (youtube-nocookie / figma / docs|drive.google / canva / vimeo / loom),
+ * nhưng vẫn soi địa chỉ nguồn qua chốt chống SSRF — không bao giờ sinh embedUrl cho host nội bộ.
+ */
+export function embedInfoFor(kind: string, url: string): EmbedInfo {
+  let u: URL;
+  try { u = new URL(url); } catch { return NO_EMBED; }
+  if (u.protocol !== 'http:' && u.protocol !== 'https:') return NO_EMBED;
+  const host = u.hostname.replace(/^\[|\]$/g, '');
+  if (blockedHostname(host) || (isIP(host) && blockedAddress(host))) return NO_EMBED;
+  const h = host.toLowerCase().replace(/^www\./, '');
+
+  if (kind === 'youtube') {
+    const id = youtubeId(u);
+    return id ? { embeddable: true, embedUrl: `https://www.youtube-nocookie.com/embed/${id}`, aspect: '16:9' } : NO_EMBED;
+  }
+  if (kind === 'figma') {
+    return { embeddable: true, embedUrl: `https://www.figma.com/embed?embed_host=ctwork&url=${encodeURIComponent(u.toString())}`, aspect: 'auto' };
+  }
+  if (kind === 'gdrive') {
+    const id = gdriveId(u);
+    return id ? { embeddable: true, embedUrl: `https://drive.google.com/file/d/${id}/preview`, aspect: 'auto' } : NO_EMBED;
+  }
+  if ((kind === 'gdocs' || kind === 'gsheets' || kind === 'gslides') && h === 'docs.google.com') {
+    const base = u.pathname.replace(/\/(edit|view|htmlview|preview|comment)?\/?$/, '');
+    return { embeddable: true, embedUrl: `https://docs.google.com${base}/preview`, aspect: 'auto' };
+  }
+  if (kind === 'canva') {
+    const m = /\/design\/([A-Za-z0-9_-]+)/.exec(u.pathname);
+    return m ? { embeddable: true, embedUrl: `https://www.canva.com/design/${m[1]}/view?embed`, aspect: '16:9' } : NO_EMBED;
+  }
+  // Vimeo / Loom KHÔNG phải loại riêng (detectKind ⇒ 'link'), nhận theo host.
+  if (h === 'vimeo.com' || h === 'player.vimeo.com') {
+    const m = /(\d{6,})/.exec(u.pathname);
+    return m ? { embeddable: true, embedUrl: `https://player.vimeo.com/video/${m[1]}`, aspect: '16:9' } : NO_EMBED;
+  }
+  if (h === 'loom.com') {
+    const p = u.pathname.split('/').filter(Boolean);
+    const id = (p[0] === 'share' || p[0] === 'embed') ? p[1] : null;
+    return id && /^[A-Za-z0-9]+$/.test(id) ? { embeddable: true, embedUrl: `https://www.loom.com/embed/${id}`, aspect: '16:9' } : NO_EMBED;
+  }
+  return NO_EMBED;
+}
+
 // ─── Nhãn ────────────────────────────────────────────────────────
 
 /** Bỏ '#', cắt khoảng trắng, bỏ trùng (không phân biệt hoa thường), tối đa 20 nhãn × 40 ký tự. */

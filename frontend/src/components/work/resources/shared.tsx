@@ -9,12 +9,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  Box, Calendar, Code2, Figma, FileSpreadsheet, FileText, Film, FolderOpen, Github, Gitlab, Globe, Image as ImageIcon, Link2, Mail,
-  Music, Package, Presentation, StickyNote, Video, type LucideIcon,
+  Box, Calendar, Code2, ExternalLink, Figma, FileSpreadsheet, FileText, Film, FolderOpen, Github, Gitlab, Globe, Image as ImageIcon,
+  Link2, Mail, Music, Package, Presentation, StickyNote, Video, type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workError } from '@/lib/work-api';
-import { KIND_LABEL, resApi, type ResourceGroup, type ResourceInput, type ResourceVisibility, type UrlPreview, type WorkResource } from '@/lib/work-resources-api';
+import { KIND_LABEL, openResourceLink, resApi, type ResourceGroup, type ResourceInput, type ResourceVisibility, type UrlPreview, type WorkResource } from '@/lib/work-resources-api';
 import { Dialog, Field, Spinner } from '../ui';
 import { Select } from '../settings/shared';
 import { wt } from '@/components/work/i18n';
@@ -187,6 +187,65 @@ export function ResourceDialog({
         </div>
         <button type="submit" hidden />
       </form>
+    </Dialog>
+  );
+}
+
+// ─── Xem trước inline (nhúng iframe) ─────────────────────────────
+
+/**
+ * Hộp xem trước inline một tài nguyên nhúng được (YouTube/Figma/Drive/Docs/Vimeo/Loom/Canva…). iframe chỉ gắn khi
+ * hộp MỞ (Dialog trả null lúc đóng ⇒ tự lười tải) + `loading="lazy"`. Nhà cung cấp từ chối nhúng (X-Frame-Options)
+ * hoặc link không nhúng được ⇒ rơi về favicon + tiêu đề + nút "Mở tab mới". sandbox tối thiểu cho trình phát chạy.
+ */
+export function ResourcePreviewDialog({ pid, resource, onClose }: { pid: number; resource: WorkResource | null; onClose: () => void }) {
+  const [failed, setFailed] = useState(false);
+  const r = resource;
+  useEffect(() => { setFailed(false); }, [r?.id]);
+  const canEmbed = !!r?.embeddable && !!r.embedUrl && !failed;
+  const aspect = r?.embedAspect === '16:9' ? '16 / 9' : r?.embedAspect === '4:3' ? '4 / 3' : null;
+  return (
+    <Dialog
+      open={!!r}
+      onClose={onClose}
+      width={960}
+      title={r ? (
+        <div className="flex min-w-0 items-center gap-2 pr-2">
+          <Favicon r={r} size={16} />
+          <span className="truncate">{r.title}</span>
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm ml-1 shrink-0" onClick={() => openResourceLink(pid, r)}>
+            <ExternalLink size={13} /> {wt('res.openInNew')}
+          </button>
+        </div>
+      ) : undefined}
+    >
+      {r && (canEmbed ? (
+        <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)] bg-[var(--w-hover)]"
+          style={aspect ? { aspectRatio: aspect } : { height: 'min(72vh, 680px)' }}>
+          <iframe
+            key={r.embedUrl ?? r.id}
+            src={r.embedUrl ?? undefined}
+            title={r.title}
+            className="h-full w-full border-0"
+            loading="lazy"
+            referrerPolicy="no-referrer"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+            allow="fullscreen; picture-in-picture; clipboard-write"
+            allowFullScreen
+            onError={() => setFailed(true)}
+            data-testid="resource-preview-iframe"
+          />
+        </div>
+      ) : (
+        <div className="flex flex-col items-center gap-3 rounded-[8px] border border-dashed border-[var(--w-border)] px-6 py-10 text-center">
+          <Favicon r={r} size={28} />
+          <p className="text-[14px] font-medium">{r.title}</p>
+          <p className="max-w-[420px] text-[12.5px] text-[var(--w-text-2)]">{wt('res.cannotEmbed')}</p>
+          <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => openResourceLink(pid, r)}>
+            <ExternalLink size={13} /> {wt('res.openInNew')}
+          </button>
+        </div>
+      ))}
     </Dialog>
   );
 }

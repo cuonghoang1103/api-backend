@@ -113,4 +113,8 @@ export const res: Strings<typeof En> = {
   deleteLinkBody: 'Xoá {t}? Thẻ liên kết tới nó vẫn giữ bản sao URL.',
   deleteGroup: 'Xoá nhóm',
   deleteGroupBody: 'Xoá nhóm {n}? {count} liên kết của nó chuyển sang Chưa xếp nhóm — không mất gì.',
+  preview: 'Xem trước',
+  previewOf: 'Xem trước {t}',
+  openInNew: 'Mở tab mới',
+  cannotEmbed: 'Liên kết này không hiển thị inline được. Hãy mở trong tab mới.',
 };

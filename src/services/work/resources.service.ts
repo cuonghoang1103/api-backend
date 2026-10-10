@@ -32,8 +32,8 @@ import type { ResourceVisibility } from './constants.js';
 import { emitWorkEvent } from './events.js';
 import { can, canModifyResource, isClientScoped, requireProject, resourceAccess, type ProjectAccess } from './permissions.js';
 import {
-  DEFAULT_GROUPS, RESOURCE_TITLE_MAX, blockedAddress, blockedHostname, detectKind, extractPageInfo, faviconFor, githubRepoOf,
-  linkStatusFrom, matchesQuery, normTags, normalizeUrl, parseImport, titleFromUrl,
+  DEFAULT_GROUPS, RESOURCE_TITLE_MAX, blockedAddress, blockedHostname, detectKind, embedInfoFor, extractPageInfo, faviconFor,
+  githubRepoOf, linkStatusFrom, matchesQuery, normTags, normalizeUrl, parseImport, titleFromUrl,
 } from './resourceRules.js';
 import { assertModule, modulesOf } from './studio.js';
 
@@ -100,10 +100,12 @@ async function creatorNames(ids: Array<number | null>): Promise<Map<number, stri
 function present(ctx: ResCtx, r: ResRow, names: Map<number, string>, groupName: string | null) {
   const m = metaOf(r);
   const github = (m.github ?? null) as GithubMeta | null;
+  const embed = embedInfoFor(r.kind, r.url);
   const base = {
     id: r.id, groupId: r.groupId, groupName, title: r.title, url: r.url, description: r.description, tags: r.tags ?? [], kind: r.kind,
     faviconUrl: r.faviconUrl, pinned: r.pinned, pinnedToSidebar: r.pinnedToSidebar, visibility: r.visibility, rank: r.rank,
-    github, createdAt: r.createdAt, updatedAt: r.updatedAt,
+    github, embeddable: embed.embeddable, embedUrl: embed.embedUrl, embedAspect: embed.embeddable ? embed.aspect ?? 'auto' : null,
+    createdAt: r.createdAt, updatedAt: r.updatedAt,
   };
   if (ctx.ra.view !== 'ALL') return base;
   return {

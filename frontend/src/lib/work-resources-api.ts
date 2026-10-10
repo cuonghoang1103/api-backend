@@ -34,6 +34,10 @@ export interface WorkResource {
   visibility: ResourceVisibility;
   rank: number;
   github: ResourceGithub | null;
+  /** Nhúng/xem-trước inline (iframe) — backend tính từ kind + url (embedInfoFor). */
+  embeddable: boolean;
+  embedUrl: string | null;
+  embedAspect: '16:9' | '4:3' | 'auto' | null;
   createdAt: string;
   updatedAt: string;
   // Chỉ người của đội thấy (khách: không có).

@@ -7,8 +7,8 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { canModifyResource, clientPortalRouteAllowed, resourceAccess } from './permissions.js';
 import {
-  blockedAddress, blockedHostname, detectKind, extractPageInfo, faviconFor, githubRepoOf, linkStatusFrom, matchesQuery, normTags,
-  normalizeUrl, parseImport, titleFromUrl,
+  blockedAddress, blockedHostname, detectKind, embedInfoFor, extractPageInfo, faviconFor, githubRepoOf, linkStatusFrom, matchesQuery,
+  normTags, normalizeUrl, parseImport, titleFromUrl,
 } from './resourceRules.js';
 
 describe('Resources — URL', () => {
@@ -88,6 +88,64 @@ describe('Resources — chống SSRF + trạng thái link', () => {
     assert.equal(linkStatusFrom({ error: 'DNS' }, 'link'), 'BROKEN');
     assert.equal(linkStatusFrom({ error: 'TIMEOUT' }, 'link'), 'UNKNOWN');
     assert.equal(linkStatusFrom({ status: 503 }, 'link'), 'UNKNOWN');
+  });
+});
+
+describe('Resources — nhúng / xem trước inline (embedInfoFor)', () => {
+  // Gọi đúng như service: kind = detectKind(url).
+  const info = (url: string) => embedInfoFor(detectKind(url), url);
+
+  it('YouTube ⇒ youtube-nocookie/embed/<id>, 16:9 (watch?v / youtu.be / /embed / /shorts)', () => {
+    for (const u of [
+      'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'https://youtu.be/dQw4w9WgXcQ',
+      'https://www.youtube.com/embed/dQw4w9WgXcQ', 'https://www.youtube.com/shorts/dQw4w9WgXcQ',
+    ]) {
+      assert.deepEqual(info(u), { embeddable: true, embedUrl: 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ', aspect: '16:9' }, u);
+    }
+    // Không có id ⇒ không nhúng.
+    assert.deepEqual(info('https://www.youtube.com/'), { embeddable: false, embedUrl: null });
+  });
+
+  it('Figma ⇒ www.figma.com/embed?embed_host=ctwork&url=<encoded>, auto', () => {
+    const src = 'https://www.figma.com/file/ABC123/Design';
+    assert.deepEqual(info(src), {
+      embeddable: true, embedUrl: `https://www.figma.com/embed?embed_host=ctwork&url=${encodeURIComponent('https://www.figma.com/file/ABC123/Design')}`, aspect: 'auto',
+    });
+  });
+
+  it('Google Drive file ⇒ /file/d/<id>/preview; Docs/Sheets/Slides ⇒ /preview, auto', () => {
+    assert.deepEqual(info('https://drive.google.com/file/d/1AbC_dEf/view?usp=sharing'),
+      { embeddable: true, embedUrl: 'https://drive.google.com/file/d/1AbC_dEf/preview', aspect: 'auto' });
+    assert.deepEqual(info('https://docs.google.com/document/d/1xYz/edit#heading=h.1'),
+      { embeddable: true, embedUrl: 'https://docs.google.com/document/d/1xYz/preview', aspect: 'auto' });
+    assert.deepEqual(info('https://docs.google.com/spreadsheets/d/1xYz/edit'),
+      { embeddable: true, embedUrl: 'https://docs.google.com/spreadsheets/d/1xYz/preview', aspect: 'auto' });
+  });
+
+  it('Canva ⇒ /design/<id>/view?embed, 16:9', () => {
+    assert.deepEqual(info('https://www.canva.com/design/DAFabc123/edit'),
+      { embeddable: true, embedUrl: 'https://www.canva.com/design/DAFabc123/view?embed', aspect: '16:9' });
+  });
+
+  it('Vimeo / Loom ⇒ trình phát nhúng, 16:9 (nhận theo host, kind = link)', () => {
+    assert.deepEqual(info('https://vimeo.com/123456789'),
+      { embeddable: true, embedUrl: 'https://player.vimeo.com/video/123456789', aspect: '16:9' });
+    assert.deepEqual(info('https://www.loom.com/share/abcDEF123'),
+      { embeddable: true, embedUrl: 'https://www.loom.com/embed/abcDEF123', aspect: '16:9' });
+  });
+
+  it('GitHub / mail / link chung ⇒ KHÔNG nhúng', () => {
+    for (const u of ['https://github.com/vercel/next.js', 'mailto:team@studio.vn', 'https://example.com/page', 'https://notion.so/x']) {
+      assert.deepEqual(info(u), { embeddable: false, embedUrl: null }, u);
+    }
+  });
+
+  it('host nội bộ / SSRF ⇒ KHÔNG nhúng dù trông giống nhà cung cấp', () => {
+    // kind ép thành 'youtube' nhưng host là nội bộ ⇒ chốt SSRF chặn trước.
+    assert.deepEqual(embedInfoFor('youtube', 'http://localhost/watch?v=dQw4w9WgXcQ'), { embeddable: false, embedUrl: null });
+    assert.deepEqual(embedInfoFor('gdrive', 'http://127.0.0.1/file/d/1AbC/view'), { embeddable: false, embedUrl: null });
+    assert.deepEqual(embedInfoFor('figma', 'http://169.254.169.254/file/x'), { embeddable: false, embedUrl: null });
+    assert.deepEqual(embedInfoFor('youtube', 'javascript:alert(1)'), { embeddable: false, embedUrl: null });
   });
 });
 

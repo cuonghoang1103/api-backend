@@ -110,4 +110,8 @@ export const res = {
   deleteLinkBody: 'Delete {t}? Issues that link to it keep a copy of the URL.',
   deleteGroup: 'Delete group',
   deleteGroupBody: 'Delete the group {n}? Its {count} link moves to Ungrouped — nothing is lost.|Delete the group {n}? Its {count} links move to Ungrouped — nothing is lost.',
+  preview: 'Preview',
+  previewOf: 'Preview {t}',
+  openInNew: 'Open in new tab',
+  cannotEmbed: 'This link can’t be shown inline. Open it in a new tab instead.',
 };

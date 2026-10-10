@@ -322,6 +322,9 @@ const nextConfig = {
               // Khối "Nhúng" của Notes (17/08/2026) thêm các nguồn dưới đây.
               // 30/09/2026: + onedrive.live.com, *.sharepoint.com — xem trước Word/Excel của trường ở trường
               // "📎 Link tài liệu" của CT Work (CustomFields.tsx) và khối Nhúng của Notes (provider Microsoft 365).
+              // 11/10/2026: + www.canva.com, canva.com — nút "Xem trước" inline của CT Work Resources
+              // (ResourcesView): nhúng thiết kế Canva ngay trong trang. YouTube/Figma/Drive/Docs/Vimeo/Loom/
+              // CodeSandbox mà nút này dùng đều đã có sẵn ở trên, chỉ Canva là thiếu.
               // Đây là DANH SÁCH ĐÓNG, cố ý: `frame-src` mở rộng nghĩa là mọi
               // trang trong danh sách được nhúng vào bất cứ đâu trên web này,
               // nên mỗi mục là một quyết định chứ không phải một tiện nghi.
@@ -329,7 +332,7 @@ const nextConfig = {
               // thẻ xem trước (bookmark) — xem NoteEmbed.tsx. Nếu để nó vẫn vẽ
               // iframe thì CSP chặn ÂM THẦM: khung trắng, không báo lỗi, và
               // người dùng tưởng tính năng hỏng.
-              "frame-src 'self' blob: https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://player.vimeo.com https://www.figma.com https://embed.figma.com https://docs.google.com https://www.google.com https://codesandbox.io https://codepen.io https://www.loom.com https://open.spotify.com https://miro.com https://drive.google.com https://onedrive.live.com https://*.sharepoint.com",
+              "frame-src 'self' blob: https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://player.vimeo.com https://www.figma.com https://embed.figma.com https://docs.google.com https://www.google.com https://codesandbox.io https://codepen.io https://www.loom.com https://open.spotify.com https://miro.com https://drive.google.com https://onedrive.live.com https://*.sharepoint.com https://www.canva.com https://canva.com",
               // `media-src` controls <audio>/<video> elements and
               // the Web Audio API. R2 music tracks are streamed
               // directly from the CDN (no backend hop), so the

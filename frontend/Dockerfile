@@ -53,7 +53,11 @@ WORKDIR /app
 # đo thật trên máy nhà. Nâng 6144: deploy-nha.sh build ở máy nhà 31GB nên dư.
 # Đường lùi deploy.sh build trên VPS (~6GB trống) sẽ sát trần — nếu nó chết
 # exit 137 thì đó là chỗ đầu tiên cần nhìn.
-ENV NODE_OPTIONS="--max-old-space-size=6144"
+# 2026-10-11: 6144 cũng hết heap (exit 134, "Ineffective mark-compacts near heap
+# limit") ở commit 6df2f9cb — CT Work thêm ~40 trang. Trần thành build-arg:
+# mặc định giữ 6144 cho đường lùi VPS; deploy-nha.sh (máy nhà 31GB) truyền 12288.
+ARG NODE_HEAP_MB=6144
+ENV NODE_OPTIONS="--max-old-space-size=${NODE_HEAP_MB}"
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Copy cached node_modules from deps stage

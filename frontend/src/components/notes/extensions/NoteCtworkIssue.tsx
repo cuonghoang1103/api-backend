@@ -136,7 +136,7 @@ function ChipView({ node }: NodeViewProps) {
           target="_blank"
           rel="noopener noreferrer"
           onMouseDown={(e) => e.stopPropagation()}
-          className="inline-flex max-w-[22rem] items-center gap-1.5 rounded-[5px] border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[12.5px] leading-tight text-slate-700 no-underline transition-colors hover:border-slate-300 hover:bg-slate-100 dark:border-white/10 dark:bg-white/[0.05] dark:text-slate-200 dark:hover:bg-white/[0.08]"
+          className="inline-flex max-w-[22rem] items-center gap-1.5 rounded-[5px] border border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.05] dark:text-slate-200 px-1.5 py-0.5 text-[12.5px] leading-tight text-slate-700 no-underline transition-colors hover:border-slate-300 hover:bg-slate-100 dark:hover:bg-white/[0.08]"
           title={statusName ? `${key} · ${title} · ${statusName}` : `${key}${title ? ` · ${title}` : ''}`}
         >
           {!loaded && <CircleDashed className="h-3 w-3 animate-spin opacity-50" />}

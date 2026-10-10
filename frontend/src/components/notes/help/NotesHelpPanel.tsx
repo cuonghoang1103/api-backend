@@ -296,7 +296,7 @@ function Home({ lang, onOpen }: { lang: HelpLang; onOpen: (id: string) => void }
             key={a.id}
             type="button"
             onClick={() => onOpen(a.id)}
-            className="group rounded-lg border border-slate-200 bg-white px-3.5 py-3 text-left transition-colors hover:border-teal-500/50 hover:bg-teal-500/[0.06] dark:border-white/10 dark:bg-white/[0.02] dark:hover:border-teal-400/40"
+            className="group rounded-lg border border-slate-200 bg-white dark:border-white/10 dark:bg-white/[0.02] px-3.5 py-3 text-left transition-colors hover:border-teal-500/50 hover:bg-teal-500/[0.06] dark:hover:border-teal-400/40 dark:hover:bg-white/[0.04]"
           >
             <div className="flex items-start justify-between gap-2 text-[14px] font-semibold leading-snug text-slate-900 dark:text-slate-100">
               {a.title[lang]}

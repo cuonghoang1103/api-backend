@@ -14,6 +14,7 @@
  */
 
 import { prisma } from '../../config/database.js';
+import { projectCached } from './projectCache.js';
 import { AppError, BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
 import { PUBLIC_USER, displayName, type PublicUser } from './common.js';
 import { chatMessages, chatVoiceNotes, type ChatMessageRow } from './contribChat.js';
@@ -171,22 +172,37 @@ interface Raw {
   joinedDay: Map<number, string>;
 }
 
+/**
+ * Đợt 6 (D3): thẻ của dự án bằng SQL thô + bảng loại thẻ — giữ NGUYÊN hình dạng cũ (`type: {level, key}`, `testCase`)
+ * nhưng bỏ hai truy vấn con kèm 10k tham số của Prisma (10k thẻ: ~125 ms ⇒ ~35 ms).
+ */
+async function contribIssues(projectId: number) {
+  type R = { id: number; number: number; title: string; assigneeId: number | null; reporterId: number | null; createdAt: Date; resolvedAt: Date | null; dueDate: Date | null; storyPoints: number | null; originalEstimateMin: number | null; statusId: number; sprintId: number | null; typeId: number; testCaseId: number | null };
+  const [rows, types] = await Promise.all([
+    prisma.$queryRaw<R[]>`
+      SELECT i.id, i.number, i.title, i.assignee_id AS "assigneeId", i.reporter_id AS "reporterId", i.created_at AS "createdAt", i.resolved_at AS "resolvedAt",
+             i.due_date AS "dueDate", i.story_points AS "storyPoints", i.original_estimate_min AS "originalEstimateMin", i.status_id AS "statusId",
+             i.sprint_id AS "sprintId", i.type_id AS "typeId", c.id AS "testCaseId"
+      FROM work_issues i LEFT JOIN work_test_cases c ON c.issue_id = i.id
+      WHERE i.project_id = ${projectId} AND i.deleted_at IS NULL`,
+    prisma.workIssueType.findMany({ where: { projectId }, select: { id: true, level: true, key: true } }),
+  ]);
+  const typeOf = new Map(types.map((t) => [t.id, { level: t.level, key: t.key }]));
+  return rows.map(({ typeId, testCaseId, ...r }) => ({ ...r, type: typeOf.get(typeId) ?? { level: 0, key: 'TASK' }, testCase: testCaseId ? { id: testCaseId } : null }));
+}
+
 async function loadRaw(projectId: number, people: Array<PublicUser & { email?: string | null }>, spanFrom: Date, spanTo: Date, tz: string, now: Date): Promise<Raw> {
   const mode = await estimationOf(projectId);
   const inSpan = { gte: spanFrom, lte: spanTo };
   const [issues, statuses, history, comments, voice, worklogs, pageVersions, runs, defects, steps, approvals, contribs, devActs, meetings, chat, chatVoice, units, its, identities, emails] = await Promise.all([
-    prisma.workIssue.findMany({
-      where: { projectId, deletedAt: null },
-      select: {
-        id: true, number: true, title: true, assigneeId: true, reporterId: true, createdAt: true, resolvedAt: true, dueDate: true, storyPoints: true,
-        originalEstimateMin: true, statusId: true, sprintId: true, type: { select: { level: true, key: true } }, testCase: { select: { id: true } },
-      },
-    }),
+    contribIssues(projectId),
     prisma.workStatus.findMany({ where: { workflow: { projectId } }, select: { id: true, category: true } }),
-    prisma.workHistory.findMany({
-      where: { issue: { projectId, deletedAt: null }, actorKind: { in: ['USER', 'AGENT'] }, actorId: { not: null }, createdAt: inSpan },
-      select: { actorId: true, issueId: true, field: true, createdAt: true },
-    }),
+    // Đợt 6 (D3): SQL thô (JOIN thay cho IN (SELECT…) + giải mã Prisma) — 28k dòng: ~88 ms ⇒ ~30 ms.
+    prisma.$queryRaw<Array<{ actorId: number | null; issueId: number; field: string; createdAt: Date }>>`
+      SELECT h.actor_id AS "actorId", h.issue_id AS "issueId", h.field, h.created_at AS "createdAt"
+      FROM work_history h JOIN work_issues i ON i.id = h.issue_id
+      WHERE i.project_id = ${projectId} AND i.deleted_at IS NULL AND h.actor_kind IN ('USER', 'AGENT') AND h.actor_id IS NOT NULL
+        AND h.created_at >= ${spanFrom} AND h.created_at <= ${spanTo}`,
     prisma.workComment.findMany({
       where: { issue: { projectId, deletedAt: null }, isAi: false, deletedAt: null, authorId: { not: null }, createdAt: inSpan },
       select: { id: true, authorId: true, issueId: true, createdAt: true, bodyJson: true, bodyText: true },
@@ -250,7 +266,7 @@ async function loadRaw(projectId: number, people: Array<PublicUser & { email?: s
   // Cycle time: cần lịch sử trạng thái của thẻ đã xong trong khoảng gộp (kể cả đổi trạng thái TRƯỚC khoảng).
   const doneIds = issues.filter((i) => i.resolvedAt && i.resolvedAt >= spanFrom && i.resolvedAt <= spanTo).map((i) => i.id);
   const sh = doneIds.length
-    ? await prisma.workHistory.findMany({ where: { issueId: { in: doneIds }, field: 'statusId' }, select: { issueId: true, toValue: true, createdAt: true }, orderBy: { createdAt: 'asc' } })
+    ? await prisma.$queryRaw<Array<{ issueId: number; toValue: string | null; createdAt: Date }>>`SELECT issue_id AS "issueId", to_value AS "toValue", created_at AS "createdAt" FROM work_history WHERE issue_id = ANY(${doneIds}::int[]) AND field = 'statusId' ORDER BY created_at ASC` // đợt 6 (D3): một tham số mảng thay 3k+ tham số IN
     : [];
   const statusHist = new Map<number, Array<{ to: number; at: Date }>>();
   for (const h of sh) {
@@ -598,7 +614,9 @@ export async function summary(userId: number, projectId: number, q: ContribQuery
   const heatFrom = startOfDay(addDays(cur.toDay, -(HEATMAP_DAYS - 1)), tz);
   const spanFrom = new Date(Math.min(cur.from.getTime(), heatFrom.getTime(), comparePrev?.from.getTime() ?? Infinity));
   const spanTo = new Date(Math.min(now.getTime(), cur.to.getTime() + MENTION_WINDOW_H * HOUR));
-  const raw = await loadRaw(projectId, people, spanFrom, spanTo, tz, now);
+  // Đợt 6 (D3): dữ liệu thô không phụ thuộc người xem ⇒ đệm ngắn theo dự án (khoá làm tròn phút; xoá khi dự án đổi).
+  const minute = (d: Date) => Math.floor(d.getTime() / 60_000);
+  const raw = await projectCached(projectId, `contribRaw:${minute(spanFrom)}:${minute(spanTo)}:${tz}:${people.map((p) => p.id).join(',')}`, () => loadRaw(projectId, people, spanFrom, spanTo, tz, now));
 
   const ids = people.map((p) => p.id);
   const curM = metricsFor(raw, cur, ids);

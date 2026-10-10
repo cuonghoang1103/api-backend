@@ -3,8 +3,16 @@ name: CT Work E2E (Playwright)
 # Đợt 6a (D2): E2E giao diện /work — CHỈ chạy tay (Actions → Run workflow). Không chạy theo push:
 # dựng cả backend + frontend + Postgres mất ~10–15 phút, và push vào main không được kéo theo việc nặng.
 # Mọi thứ chạy trong runner (Postgres dựng tạm) — không chạm VPS, không cần secret nào.
+# Đợt 6: chọn bộ chạy — `all` (mọi spec) hoặc `light` (đăng nhập + chat/diagram + đồng soạn + chất lượng đợt 6, ~5 phút).
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: 'all | light (auth + chat/diagram + docs collab + quality đợt 6)'
+        required: false
+        default: all
+        type: choice
+        options: [all, light]
 
 concurrency:
   group: work-e2e
@@ -43,6 +51,8 @@ jobs:
       LLM_BACKGROUND_ENABLED: 'false'
       E2E_BASE_URL: http://localhost:3000
       E2E_SHOTS_DIR: ${{ github.workspace }}/e2e-shots
+      # Bản build production chạy local nối socket thẳng cổng backend (:3001) — CSP thật chỉ mở wss cùng gốc (nginx).
+      E2E_BYPASS_CSP: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -89,9 +99,16 @@ jobs:
           done
           cat ../frontend.log; exit 1
       - name: Run E2E
+        env:
+          SUITE: ${{ inputs.suite || 'all' }}
         run: |
           mkdir -p "$E2E_SHOTS_DIR"
-          npm run test:e2e:work
+          if [ "$SUITE" = "light" ]; then
+            npx tsx --test --test-concurrency=1 frontend/e2e/work/00-warmup.spec.ts frontend/e2e/work/auth.spec.ts \
+              frontend/e2e/work/chat-diagram.spec.ts frontend/e2e/work/docs-collab.spec.ts frontend/e2e/work/quality.spec.ts
+          else
+            npm run test:e2e:work
+          fi
       - name: Upload screenshots + logs
         if: always()
         uses: actions/upload-artifact@v4

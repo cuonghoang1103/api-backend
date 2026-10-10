@@ -28,6 +28,8 @@ export interface PlacedDiagram {
   feature?: string | null;
   useCase?: { number: number; name: string } | null;
   previewImageId?: number | null;
+  /** CTW đợt 6b: sơ đồ là mô hình SRS nào (CONTEXT | DFD1 | STATE | ACTIVITY | FEATURE_TREE) — work_srs_models. */
+  srsModel?: string | null;
 }
 
 const t = (text: string): PmNode => ({ type: 'text', text });
@@ -131,7 +133,7 @@ function fillDetailedDesign(doc: PmNode, classes: PlacedDiagram[], sequences: Pl
 }
 
 export const FILL_LABEL = {
-  useCaseDiagrams: 'Use Case Diagrams', erd: 'Entity Relationship Diagram', workflows: 'Main Workflows',
+  context: 'Context Diagram', useCaseDiagrams: 'Use Case Diagrams', erd: 'Entity Relationship Diagram', workflows: 'Main Workflows',
   architecture: 'Software Architecture', database: 'Database Design', detailedDesign: 'Detailed Design (class + sequence)',
 } as const;
 export type FillPart = keyof typeof FILL_LABEL;
@@ -141,11 +143,13 @@ export function applyDiagramFill(doc: PmNode, report: 3 | 4, diagrams: PlacedDia
   const of = (...types: DiagramType[]) => diagrams.filter((d) => types.includes(d.type));
   const done: FillPart[] = [];
   if (report === 3) {
+    if (fillSection(doc, /^Context Diagram$/i, diagrams.filter((d) => d.srsModel === 'CONTEXT'), projectId)) done.push('context');
     if (fillSection(doc, /^Use Case Diagrams?$/i, of('USE_CASE'), projectId)) done.push('useCaseDiagrams');
     if (fillSection(doc, /^(Entity Relationship Diagram|ERD|Conceptual Data Model)$/i, of('ERD'), projectId)) done.push('erd');
     if (fillSection(doc, /^Main Workflows?$/i, of('ACTIVITY', 'SWIMLANE').filter((d) => !d.useCase), projectId)) done.push('workflows');
   } else {
-    if (fillSection(doc, /^Software Architecture$/i, of('DEPLOYMENT', 'ARCHITECTURE', 'DATA_FLOW'), projectId)) done.push('architecture');
+    // Mô hình phân tích của SRS (context/DFD — CTW đợt 6b) không phải kiến trúc phần mềm ⇒ không đặt vào Report 4.
+    if (fillSection(doc, /^Software Architecture$/i, of('DEPLOYMENT', 'ARCHITECTURE', 'DATA_FLOW').filter((d) => !d.srsModel), projectId)) done.push('architecture');
     if (fillSection(doc, /^Database Design$/i, of('ERD'), projectId)) done.push('database');
     if (fillDetailedDesign(doc, of('CLASS'), of('SEQUENCE'), projectId)) done.push('detailedDesign');
   }

@@ -525,7 +525,9 @@ export async function syncEmbeds(userId: number, projectId: number, diagramId: n
 export async function approvedDiagrams(projectId: number): Promise<PlacedDiagram[]> {
   const rows = await prisma.workDiagram.findMany({ where: { projectId, deletedAt: null, status: 'APPROVED', approvedVersion: { not: null } }, orderBy: { number: 'asc' }, take: 200, select: ROW });
   const out: PlacedDiagram[] = [];
-  for (const r of rows) { const p = await placedOf(r, r.approvedVersion); if (p) out.push(p); }
+  // CTW đợt 6b: đánh dấu sơ đồ là mô hình SRS (context ⇒ Report 3 §1.1; không vào kiến trúc Report 4).
+  const models = rows.length ? await (await import('./srsDeep.service.js')).srsModelKinds(projectId) : new Map<number, string>();
+  for (const r of rows) { const p = await placedOf(r, r.approvedVersion); if (p) out.push({ ...p, srsModel: models.get(r.id) ?? null }); }
   return out;
 }
 

@@ -182,7 +182,7 @@ export interface RaidPatch {
   clientVisible?: boolean;
 }
 
-export type MeetingType = 'KICKOFF' | 'DAILY' | 'WEEKLY' | 'DEMO' | 'RETRO' | 'STEERING' | 'CLIENT' | 'OTHER';
+export type MeetingType = 'KICKOFF' | 'DAILY' | 'WEEKLY' | 'DEMO' | 'RETRO' | 'STEERING' | 'CLIENT' | 'ELICITATION' | 'OTHER';
 export type MeetingStatus = 'SCHEDULED' | 'DONE' | 'CANCELLED';
 
 export interface MeetingRow {
@@ -372,6 +372,6 @@ export const RAID_STATUS_LABEL: Record<string, string> = {
 };
 export const RAID_RESPONSE_LABEL: Record<RaidResponse, string> = { get AVOID() { return wt('gov.rrAvoid'); }, get MITIGATE() { return wt('gov.rrMitigate'); }, get TRANSFER() { return wt('gov.rrTransfer'); }, get ACCEPT() { return wt('gov.rrAccept'); } };
 export const MEETING_TYPE_LABEL: Record<MeetingType, string> = {
-  get KICKOFF() { return wt('gov.mtKickoff'); }, get DAILY() { return wt('gov.mtDaily'); }, get WEEKLY() { return wt('gov.mtWeekly'); }, get DEMO() { return wt('gov.mtDemo'); }, get RETRO() { return wt('gov.mtRetro'); }, get STEERING() { return wt('gov.mtSteering'); }, get CLIENT() { return wt('gov.mtClient'); }, get OTHER() { return wt('gov.mtOther'); },
+  get KICKOFF() { return wt('gov.mtKickoff'); }, get DAILY() { return wt('gov.mtDaily'); }, get WEEKLY() { return wt('gov.mtWeekly'); }, get DEMO() { return wt('gov.mtDemo'); }, get RETRO() { return wt('gov.mtRetro'); }, get STEERING() { return wt('gov.mtSteering'); }, get CLIENT() { return wt('gov.mtClient'); }, get ELICITATION() { return wt('gov.mtElicitation'); }, get OTHER() { return wt('gov.mtOther'); },
 };
-export const MEETING_TYPES: MeetingType[] = ['KICKOFF', 'DAILY', 'WEEKLY', 'DEMO', 'RETRO', 'STEERING', 'CLIENT', 'OTHER'];
+export const MEETING_TYPES: MeetingType[] = ['KICKOFF', 'DAILY', 'WEEKLY', 'DEMO', 'RETRO', 'STEERING', 'CLIENT', 'ELICITATION', 'OTHER'];

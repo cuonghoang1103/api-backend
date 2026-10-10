@@ -25,6 +25,7 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, HeadObjectCommand, DeleteObjectsCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { config } from './env.js';
+import { assertNotRealEndpointInTests, sandboxRequestHandler } from './storageSandbox.js';
 
 let cachedClient: S3Client | null = null;
 
@@ -41,6 +42,30 @@ export function getR2Client(): S3Client {
     );
   }
   if (cachedClient) return cachedClient;
+
+  // Đợt 6 — sandbox: SDK vẫn dựng + ký request S3 như thật, nhưng requestHandler giả trả lời từ kho trong RAM /
+  // thư mục tạm, không mở socket nào. MinIO (`endpoint`) thì là S3 thật nhưng cục bộ, path-style.
+  if (config.r2.sandbox === 'memory' || config.r2.sandbox === 'dir') {
+    cachedClient = new S3Client({
+      region: 'auto',
+      endpoint: config.r2.endpoint,
+      credentials: { accessKeyId: config.r2.accessKeyId, secretAccessKey: config.r2.secretAccessKey },
+      forcePathStyle: true,
+      requestChecksumCalculation: 'WHEN_REQUIRED',
+      responseChecksumValidation: 'WHEN_REQUIRED',
+      requestHandler: sandboxRequestHandler() as never,
+    });
+    return cachedClient;
+  }
+  if (config.r2.sandbox === 'endpoint') {
+    cachedClient = new S3Client({
+      region: config.r2.region, endpoint: config.r2.endpoint, forcePathStyle: true,
+      credentials: { accessKeyId: config.r2.accessKeyId, secretAccessKey: config.r2.secretAccessKey },
+    });
+    return cachedClient;
+  }
+  // Chốt chặn cuối: tới đây là client trỏ bucket THẬT — trong lúc test thì không bao giờ được phép.
+  assertNotRealEndpointInTests(config.r2.endpoint);
 
   cachedClient = new S3Client({
     region: config.r2.region,
@@ -129,10 +154,10 @@ export async function getSignedUploadUrl(
     Key: key,
     ContentType: contentType,
   });
-  return getSignedUrl(client, cmd, {
+  return sandboxReachable(key, await getSignedUrl(client, cmd, {
     expiresIn: expiresInSeconds,
     signableHeaders: new Set(['content-type']),
-  });
+  }));
 }
 
 /**
@@ -262,7 +287,20 @@ export async function getSignedDownloadUrl(
         }
       : {}),
   });
-  return getSignedUrl(client, cmd, { expiresIn: expiresInSeconds });
+  return sandboxReachable(key, await getSignedUrl(client, cmd, { expiresIn: expiresInSeconds }));
+}
+
+/**
+ * Sandbox (đợt 6): ký URL vẫn chạy thật (thuần cục bộ, không gọi mạng) — chỉ đổi gốc `https://r2-sandbox.invalid/<bucket>/`
+ * sang tuyến `/__r2-sandbox/` của backend local để trình duyệt mở/PUT được. Ngoài sandbox ⇒ giữ nguyên.
+ */
+function sandboxReachable(key: string, signed: string): string {
+  if (config.r2.sandbox !== 'memory' && config.r2.sandbox !== 'dir') return signed;
+  // Giữ nguyên đường dẫn ĐÃ MÃ HOÁ của URL ký (khoá có dấu cách/ký tự lạ) — chỉ thay gốc + bucket.
+  const u = new URL(signed);
+  const prefix = `/${encodeURIComponent(config.r2.bucketName)}/`;
+  const path = u.pathname.startsWith(prefix) ? u.pathname.slice(prefix.length) : key.split('/').map(encodeURIComponent).join('/');
+  return `${config.r2.publicUrl}/${path}${u.search}`;
 }
 
 /**

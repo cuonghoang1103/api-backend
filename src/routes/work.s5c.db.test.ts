@@ -260,6 +260,13 @@ describe('CT Work — đợt S5c: hoàn thiện (HTTP + DB thật)', { skip: !RU
     const att = await prisma.workAttachment.create({ data: { issueId: sRow.id, r2Key: `work/${pid}/${sRow.id}/spec.txt`, fileName: 'spec.txt', mime: 'text/plain', size: 11 } });
     await prisma.workAttachment.create({ data: { issueId: sRow.id, r2Key: `work/${pid}/${sRow.id}/gone.png`, fileName: 'gone.png', mime: 'image/png', size: 5 } });
     fakeR2.set(att.r2Key, Buffer.from('hello specs'));
+    // Đợt 6 (D9): luật tự động mang id trạng thái/nhãn/người + phê duyệt có chữ ký của staff.
+    const doneSt = await prisma.workStatus.findFirstOrThrow({ where: { workflow: { projectId: pid }, category: 'DONE' } });
+    const lbl = await prisma.workLabel.create({ data: { projectId: pid, name: 'd9-label' } });
+    await prisma.workAutomationRule.create({ data: { projectId: pid, name: 'D9 rule', trigger: 'issue.transitioned', config: { toStatusIds: [doneSt.id], actions: [{ kind: 'transition', statusId: doneSt.id }, { kind: 'add_label', labelId: lbl.id }, { kind: 'assign', assignee: staff.id }, { kind: 'notify', to: ['assignee', staff.id] }] } } });
+    const apr = await call(owner, 'POST', `/projects/${pid}/approvals`, { targetType: 'ISSUE', issueNumber: story.number, approverIds: [staff.id] });
+    assert.equal(apr.status, 201, JSON.stringify(apr.raw));
+    assert.equal((await call(staff, 'POST', `/projects/${pid}/approvals/${apr.data.id}/decide`, { decision: 'APPROVE', comment: 'LGTM' })).status, 200);
 
     // Xuất (kèm tệp).
     const st = await call(owner, 'POST', `/projects/${pid}/exports`, { includeFiles: true });
@@ -374,11 +381,30 @@ describe('CT Work — đợt S5c: hoàn thiện (HTTP + DB thật)', { skip: !RU
     assert.equal(s2.assigneeId, null);
     assert.equal(s2.reporterId, null);
     assert.ok(await prisma.workHistory.findFirst({ where: { issueId: s2.id, field: 'imported', toValue: { contains: 'Imported from' } } }));
-    const cm = await prisma.workComment.findFirstOrThrow({ where: { issueId: s2.id } });
+    const cm = await prisma.workComment.findFirstOrThrow({ where: { issueId: s2.id }, orderBy: { id: 'asc' } });
     assert.match(cm.bodyText, /^Imported from /);
     assert.equal(cm.isAi, false);
     assert.equal(await prisma.workWorklog.count({ where: { issue: { projectId: p2 } } }), 0, 'giờ làm của người không có ⇒ bỏ');
     assert.ok(j2.result.tables.worklogs.skipped >= 1);
+    // Đợt 6 (D9): giờ làm của người không có ⇒ GHI CHÚ trên thẻ (không cộng cho ai); chữ ký ⇒ mô tả phê duyệt; luật ⇒ id mới.
+    const note = await prisma.workComment.findFirstOrThrow({ where: { issueId: s2.id, bodyText: { startsWith: 'Imported work log' } } });
+    assert.match(note.bodyText, /1h 30m/);
+    assert.equal(note.authorId, null);
+    assert.ok(j2.result.orphanWorklogs >= 1 && j2.result.orphanSignatures >= 1);
+    const a2 = await prisma.workApproval.findFirstOrThrow({ where: { projectId: p2, issueId: s2.id } });
+    assert.match(a2.description ?? '', /Signatures by people who are not in this workspace[\s\S]*APPROVED[\s\S]*LGTM/);
+    const rule2 = await prisma.workAutomationRule.findFirstOrThrow({ where: { projectId: p2, name: 'D9 rule' } });
+    assert.equal(rule2.enabled, false);
+    const ruleCfg = rule2.config as any;
+    const done2 = await prisma.workStatus.findFirstOrThrow({ where: { workflow: { projectId: p2 }, name: doneSt.name } });
+    const lbl2 = await prisma.workLabel.findFirstOrThrow({ where: { projectId: p2, name: 'd9-label' } });
+    assert.deepEqual(ruleCfg.toStatusIds, [done2.id]);
+    assert.deepEqual(ruleCfg.actions.map((a: any) => a.kind), ['transition', 'add_label', 'notify'], 'assign tới người không có ⇒ bỏ hành động');
+    assert.equal(ruleCfg.actions[0].statusId, done2.id);
+    assert.equal(ruleCfg.actions[1].labelId, lbl2.id);
+    assert.deepEqual(ruleCfg.actions[2].to, ["assignee"]);
+    assert.ok(ruleCfg._import.dropped.length >= 2);
+    assert.ok(j2.result.warnings.some((w: string) => /Automation rule “D9 rule”/.test(w)));
     assert.ok(await prisma.workTeam.findFirst({ where: { workspaceId: ws2, key: 'QA' } }), 'bộ phận tạo mới trong không gian đích');
     assert.equal((await call(owner, 'GET', `/workspaces/${ws2}/imports`)).status, 404, 'người ngoài không thấy');
   });

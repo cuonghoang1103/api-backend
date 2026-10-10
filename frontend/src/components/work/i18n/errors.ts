@@ -32,6 +32,10 @@ const BY_CODE: Record<string, WKey> = {
   WORK_URL_BLOCKED: 'errors.urlBlocked',
   WORK_WEB_LINK_DUPLICATE: 'errors.duplicateLink',
   WORK_APPROVAL_NOT_YOUR_TURN: 'errors.notYourTurn',
+  // CTW đợt 6
+  WORK_BASELINED: 'q6.errBaselined',
+  WORK_REVIEW_NOT_READY: 'q6.errReviewNotReady',
+  WORK_REVIEW_REINSPECT: 'q6.errReviewReinspect',
   PAYLOAD_TOO_LARGE: 'errors.tooLarge',
   UNAUTHORIZED: 'errors.unauthorized',
 };

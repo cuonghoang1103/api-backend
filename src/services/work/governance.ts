@@ -142,7 +142,7 @@ export function starterRisksFromTemplate(md: string): Array<{ title: string; cat
 
 export const MEETING_LABEL: Record<MeetingType, string> = {
   KICKOFF: 'Kick-off', DAILY: 'Daily stand-up', WEEKLY: 'Weekly', DEMO: 'Demo', RETRO: 'Retrospective',
-  STEERING: 'Steering committee', CLIENT: 'Client meeting', OTHER: 'Meeting',
+  STEERING: 'Steering committee', CLIENT: 'Client meeting', ELICITATION: 'Requirements elicitation', OTHER: 'Meeting',
 };
 
 /**

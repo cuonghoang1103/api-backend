@@ -300,7 +300,9 @@ describe('khopTuyenWeb', () => {
     // 10/10/2026: +1 CT Work Diagram (diagrams — Diagram Studio).
     // 10/10/2026: +2 CT Work đợt 5 (/work/teaching — hub giảng viên, /work/classes — lớp học).
     // 10/10/2026: +1 CT Work đợt 4b (wiegers — hồ sơ SWR302: feature, loại yêu cầu, ưu tiên, glossary, DD, sáu liên kết).
-    expect(thay.size).toBe(160);
+    // 11/10/2026: +1 CT Work đợt 6 (reviews — phiên review/inspection + baseline yêu cầu). (+1 team của UX-C ghi riêng.)
+    // 11/10/2026: +1 UX-C (team — Team overview), +2 đợt 6b (/work/survey/:token, /work/mockup-review/:token).
+    expect(thay.size).toBe(164);
   });
 });
 

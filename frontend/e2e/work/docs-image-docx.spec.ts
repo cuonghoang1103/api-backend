@@ -32,6 +32,9 @@ describe('CT Work E2E — Docs: chèn ảnh + xuất .docx', () => {
     await editor.waitFor();
     for (let i = 0; i < 60 && (await editor.getAttribute('contenteditable')) !== 'true'; i++) await page.waitForTimeout(500);
     assert.equal(await editor.getAttribute('contenteditable'), 'true', 'trình soạn của trang bật chỉnh sửa');
+    // Đợt 6: gõ TRƯỚC khi phiên đồng soạn đồng bộ xong thì trạng thái Yjs tải về đè mất chữ vừa gõ (ảnh chèn sau vẫn còn)
+    // ⇒ chờ chỉ báo "live" của đồng soạn rồi mới gõ. Dự án tắt đồng soạn ⇒ không có chỉ báo, bỏ qua sau 20 s.
+    await page.getByTestId('docs-collab-live').waitFor({ timeout: 20_000 }).catch(() => undefined);
     await editor.click();
     await page.keyboard.type('Context diagram below.');
     await page.locator('[data-testid="rich-editor-image-input"]').first().setInputFiles({ name: 'context.png', mimeType: 'image/png', buffer: tinyPng() });

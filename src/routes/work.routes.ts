@@ -81,9 +81,12 @@ import ctwk3bRoutes from './work.ctwk3b.routes.js'; // CTW K-3b: đồng soạn 
 import uxdRoutes, { uxdPublicRoutes } from './work.uxd.routes.js'; // UX-D: ảnh xem trước link + ảnh bìa dự án
 import contribRoutes from './work.contrib.routes.js'; // CTW Đóng góp: chỉ số thành viên + đánh giá chéo
 import uxbRoutes from './work.uxb.routes.js'; // UX-B: CFD, cycle time, throughput, aging WIP, release burnup, KPI, dashboard overview
+import uxcRoutes from './work.uxc.routes.js'; // UX-C: Team overview, mốc + baseline Timeline, kéo-thả WBS
 import diagramRoutes from './work.diagrams.routes.js'; // CTW Diagram: Diagram Studio + AI vẽ sơ đồ
 import ctw5Routes from './work.ctw5.routes.js'; // CTW đợt 5: hub giảng viên, lớp học, rubric/điểm, việc định kỳ
 import ctwk2Routes from './work.ctwk2.routes.js'; // CTW K-2: họp ghi âm → phiên âm → AI biên bản, RSVP, điểm danh
+import ctw6Routes from './work.ctw6.routes.js'; // CTW đợt 6: chất lượng (RV + TST-1)
+import ctw6bRoutes, { ctw6bPublicRoutes } from './work.ctw6b.routes.js'; // CTW đợt 6b: SRS chuyên sâu + elicitation & stakeholder
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
@@ -234,6 +237,8 @@ router.get('/share/:token/images/:iid', asyncHandler(async (req, res) => {
 
 // Đợt S4: tải tệp xuất trọn dự án qua link ký HMAC hạn 15 phút — không cần đăng nhập (đứng TRƯỚC authenticate).
 router.use(s4PublicRoutes);
+// CTW đợt 6b: khảo sát công khai + link khách xác nhận prototype (chỉ tin token, có trần lượt gọi).
+router.use(ctw6bPublicRoutes);
 
 // CTW-28 A9: MCP server (Streamable HTTP, không phiên) — tự xác thực bằng token ctw_ và tự chốt từng tool (src/mcp).
 // Đứng TRƯỚC apiTokenAuth: MCP luôn POST nên chốt "POST = ghi" của REST dời xuống từng tool ghi (không nới).
@@ -2017,6 +2022,8 @@ router.use(uxdRoutes); // UX-D: ảnh bìa dự án (chỉ ADMIN dự án)
 router.use(contribRoutes);
 // UX-B: báo cáo dòng chảy + KPI + dashboard "Project overview" (work.uxb.routes.ts — số liệu ở flowReports.service.ts).
 router.use(uxbRoutes);
+// UX-C: Team overview + mốc/baseline Timeline + kéo-thả WBS (work.uxc.routes.ts — số liệu ở uxc.service.ts).
+router.use(uxcRoutes);
 // CTW K-3: kênh chat dự án (work.ctwk3.routes.ts — quyền trong chat.service.ts).
 router.use(ctwk3Routes);
 // CTW K-3b: đồng soạn thảo Docs (Yjs) + bình luận gắn đoạn văn (work.ctwk3b.routes.ts).
@@ -2027,5 +2034,9 @@ router.use(diagramRoutes);
 router.use(ctw5Routes);
 // CTW K-2: agenda có cấu trúc, RSVP, điểm danh, ghi âm có đồng ý, phiên âm, biên bản AI (work.ctwk2.routes.ts).
 router.use(ctwk2Routes);
+// CTW đợt 6b: stakeholder/RACI, phiên elicitation (+ AI đề xuất yêu cầu), khảo sát, mô hình SRS, prototype, checklist chất lượng, NFR
+router.use(ctw6bRoutes);
+// CTW đợt 6: review/inspection + baseline + CR↔yêu cầu; thiết kế test, giám sát test, rủi ro, TSR, thăm dò (work.ctw6.routes.ts).
+router.use(ctw6Routes);
 
 export default router;

@@ -23,6 +23,7 @@ import UnitMatrix from './UnitMatrix';
 import { KpiRow } from '../../KpiTile';
 import { PaneStrip, usePaneKeys, usePanes } from '../../shell/panes';
 import { wt } from '@/components/work/i18n';
+import DataTable from '../../table/DataTable';
 
 export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: number }) {
   const router = useRouter();
@@ -44,6 +45,14 @@ export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: n
   const modules = useMemo(() => [...new Set(fns.map((f) => f.moduleName))], [fns]);
   const shown = fns.filter((f) => (!module || f.moduleName === module) && (!q || `${f.moduleName} ${f.methodName} ${f.sheetName ?? ''}`.toLowerCase().includes(q.toLowerCase())));
   const selected = Number(search?.get('fn')) || shown[0]?.id || null;
+  // UX-C: chế độ BẢNG cho danh sách hàm (sắp xếp/lọc/xuất) — `?view=table`; bấm một dòng ⇒ mở hàm ở chế độ chi tiết.
+  const tableView = search?.get('view') === 'table';
+  const setView = (v: 'detail' | 'table', fn?: number) => {
+    const p = new URLSearchParams(search?.toString());
+    if (v === 'table') p.set('view', 'table'); else p.delete('view');
+    if (fn) p.set('fn', String(fn));
+    router.replace(`${pathname}?${p}`, { scroll: false });
+  };
   const select = (id: number) => {
     const p = new URLSearchParams(search?.toString());
     p.set('fn', String(id));
@@ -74,6 +83,16 @@ export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: n
           </KpiRow>
         )}
         <div className="ml-auto flex shrink-0 flex-wrap justify-end gap-2">
+          {fns.length > 0 && (
+            <div className="inline-flex overflow-hidden rounded-[6px] border border-[var(--w-border-strong)]" role="group" aria-label={wt('uxc.fnView')}>
+              {(['detail', 'table'] as const).map((v) => (
+                <button key={v} type="button" aria-pressed={(v === 'table') === tableView} onClick={() => setView(v)}
+                  className={cn('h-[26px] px-2.5 text-[12px] font-medium', (v === 'table') === tableView ? 'bg-[var(--w-active)] text-[var(--w-text)]' : 'text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}>
+                  {v === 'table' ? wt('uxc.fnTable') : wt('uxc.fnDetail')}
+                </button>
+              ))}
+            </div>
+          )}
           <button type="button" className="w-btn w-btn-sm" onClick={() => setDocOpen(true)}><FileText size={13} /> <span className="hidden sm:inline">{wt('fpt.coverChanges')}</span></button>
           {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}><FileUp size={13} /> <span className="hidden sm:inline">{wt('common.import')}</span></button>}
           <ExportButton pid={pid} report="unit" label={wt('fpt.export51')} />
@@ -93,6 +112,36 @@ export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: n
             ) : undefined}
           />
         </div>
+      ) : tableView ? (
+        <DataTable
+          id="fpt-unit-functions"
+          label={wt('fpt.functions')}
+          rows={fns}
+          rowKey={(f) => f.id}
+          onRowOpen={(f) => setView('detail', f.id)}
+          rowActive={(f) => f.id === selected}
+          exportName={`${config.key}-unit-functions`}
+          testId="fpt-unit-table"
+          toolbarLeft={canEdit ? <button type="button" className="w-btn w-btn-sm" onClick={() => setNewOpen(true)}><Plus size={13} /> {wt('fpt.addFunction')}</button> : undefined}
+          columns={[
+            { id: 'module', header: wt('uxc.colModule'), width: 160, value: (f) => f.moduleName },
+            { id: 'method', header: wt('uxc.colMethod'), width: 220, grow: true, required: true, value: (f) => f.methodName,
+              cell: (f) => <span className="flex min-w-0 items-center gap-1.5"><span className="truncate font-medium">{f.methodName}</span>{f.belowNorm && <span title={wt('fpt.belowNorm', { n: f.stats.total, req: f.requiredCases ?? 0 })}><AlertTriangle size={12} className="text-[var(--w-yellow-text)]" aria-label={wt('uxc.belowNormShort')} /></span>}</span> },
+            { id: 'sheet', header: wt('uxc.colSheet'), width: 140, defaultHidden: true, value: (f) => f.sheetName },
+            { id: 'loc', header: 'LOC', width: 72, align: 'right', value: (f) => f.loc },
+            { id: 'cases', header: 'Test case', width: 90, align: 'right', value: (f) => f.stats.total },
+            { id: 'required', header: wt('uxc.colRequired'), width: 90, align: 'right', value: (f) => f.requiredCases },
+            { id: 'passed', header: 'Passed', width: 80, align: 'right', value: (f) => f.stats.passed },
+            { id: 'failed', header: 'Failed', width: 80, align: 'right', value: (f) => f.stats.failed,
+              cell: (f) => <span className={cn(f.stats.failed > 0 && 'font-medium text-[var(--w-red-text)]')}>{f.stats.failed}</span> },
+            { id: 'untested', header: wt('fpt.untested'), width: 90, align: 'right', value: (f) => f.stats.untested },
+            { id: 'nab', header: 'N · A · B', width: 100, align: 'right', value: (f) => f.stats.n, exportValue: (f) => `${f.stats.n}/${f.stats.a}/${f.stats.b}`,
+              cell: (f) => <span className="tabular-nums text-[12px] text-[var(--w-text-2)]">{f.stats.n} · {f.stats.a} · {f.stats.b}</span> },
+            { id: 'progress', header: wt('common.progress'), width: 140, sortable: false, export: false, hideBelow: 'md',
+              cell: (f) => <ResultBar className="w-full" passed={f.stats.passed} failed={f.stats.failed} total={f.stats.total} /> },
+            { id: 'executedBy', header: wt('uxc.colExecutedBy'), width: 130, defaultHidden: true, value: (f) => f.executedBy },
+          ]}
+        />
       ) : (
         <div ref={panes.ref} className="flex min-h-0 flex-1 max-md:flex-col">
           {panes.left.mode === 'strip' && <PaneStrip label={wt('fpt.functions')} shortcut="[" onOpen={panes.left.toggle} />}

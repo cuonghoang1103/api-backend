@@ -26,6 +26,7 @@ import { RequestApprovalDialog } from '../studio/IssueStudio';
 import { ApprovalPill, Pill, useStudioInvalidate } from '../studio/shared';
 import { CrStatusPill, Kv, PersonSelect, ScoreBadge, Section, fmtCost, fmtDays, useGovInvalidate } from './shared';
 import { wt } from '@/components/work/i18n';
+import { CrAffected } from '../quality/BaselinesTab'; // CTW đợt 6
 
 type Form = Required<Pick<CrPatch, 'title' | 'reason' | 'urgency' | 'impactScope' | 'scheduleDays' | 'costAmount' | 'costCurrency' | 'impactRisk' | 'alternatives' | 'ownerId' | 'requesterId'>>;
 
@@ -348,6 +349,8 @@ export default function ChangeDetail({ config, num }: { config: ProjectConfig; n
         <Approvals config={config} cr={cr} openId={openId} setOpenId={setOpenId} />
         <Implementation config={config} cr={cr} />
         <Affected config={config} cr={cr} />
+        {/* CTW đợt 6 (R22): CR ↔ yêu cầu/UC/BR/tài liệu bị ảnh hưởng — mở khoá sửa mục đã baseline khi CR được duyệt. */}
+        {config.role !== 'CLIENT' && !config.clientView && <CrAffected pid={pid} crNumber={num} canEdit={config.permissions.editIssues} />}
         <Description config={config} cr={cr} />
         {cr.risks.length > 0 && (
           <Section title={wt('gov.relatedRisks')}>

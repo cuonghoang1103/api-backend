@@ -39,6 +39,7 @@ import {
   type ReqType, type RevisionRow, type VsSection, type WiegersData, type WiegersDoc,
 } from './swr.js';
 import { writeXlsx } from './xlsxStyled.js';
+import { applySrsDeepFill, stakeholderProfiles, type SrsDeepData } from './swr6b.js';
 
 type Tx = Prisma.TransactionClient;
 const clean = (s: string | null | undefined, n: number) => { const v = (s ?? '').trim(); return v ? v.slice(0, n) : null; };
@@ -769,15 +770,17 @@ async function revisionsOf(pageId: number): Promise<RevisionRow[]> {
   }));
 }
 
-async function wiegersData(projectId: number, pageId: number | null): Promise<WiegersData & { vs: Parameters<typeof applyVisionScopeFill>[1] }> {
+async function wiegersData(projectId: number, pageId: number | null): Promise<WiegersData & { vs: Parameters<typeof applyVisionScopeFill>[1]; deep: SrsDeepData }> {
   const p = await projectInfo(projectId);
-  const [srs, { features, links }, reqs, elements, glossary, raid, versions, ucMeta, revisions] = await Promise.all([
+  const [srs, { features, links }, reqs, elements, glossary, raid, versions, ucMeta, revisions, deep] = await Promise.all([
     loadSrs(projectId), loadFeatures(projectId), requirementsLite(projectId, p.key), loadDictionary(projectId),
     prisma.workGlossaryTerm.findMany({ where: { projectId }, orderBy: { term: 'asc' }, select: { term: true, definition: true, aliases: true } }),
     prisma.workRaidItem.findMany({ where: { projectId, deletedAt: null, type: { in: ['RISK', 'ASSUMPTION', 'DEPENDENCY'] }, status: { not: 'CLOSED' } }, orderBy: { number: 'asc' }, take: 200, select: { number: true, type: true, title: true, description: true, probability: true, impact: true, mitigation: true } }),
     prisma.workVersion.findMany({ where: { projectId }, select: { id: true, name: true, releaseDate: true, status: true, position: true } }),
     prisma.workUseCase.findMany({ where: { projectId }, select: { id: true, issueId: true, createdAt: true, createdById: true } }),
     pageId ? revisionsOf(pageId) : Promise.resolve([] as RevisionRow[]),
+    // CTW đợt 6b: mô hình đã duyệt, NFR có số đo, sổ stakeholder, prototype đã xác nhận (srsDeep.service).
+    (async () => (await import('./srsDeep.service.js')).srsDeepData(projectId))(),
   ]);
   const people = new Map((await prisma.user.findMany({ where: { id: { in: [...new Set(ucMeta.map((u) => u.createdById).filter((x): x is number => !!x))] } }, select: { id: true, username: true, fullName: true, displayName: true } })).map((u) => [u.id, displayName(u)]));
   const raidLite: RaidLite[] = raid.map((r) => ({ ...r }));
@@ -790,9 +793,11 @@ async function wiegersData(projectId: number, pageId: number | null): Promise<Wi
     vs: {
       features, releases: sortReleases(versions), risks: raidLite.filter((r) => r.type === 'RISK'), assumptions: raidLite.filter((r) => r.type !== 'RISK'),
       objectives: reqs.filter((q) => q.reqType === 'BUSINESS' && isLive(q.lifecycle)).map((q) => ({ key: q.key, title: q.title, source: q.source, rationale: q.rationale })),
-      stakeholders: srs.actors.filter((a) => a.kind !== 'SYSTEM').map((a) => ({ name: a.name, description: a.description })),
+      // Sổ stakeholder (đợt 6b) có người ⇒ dùng sổ (giá trị, thái độ, quan tâm, ràng buộc); chưa có ⇒ actor là người như 4b.
+      stakeholders: deep.stakeholders.length ? stakeholderProfiles(deep.stakeholders) : srs.actors.filter((a) => a.kind !== 'SYSTEM').map((a) => ({ name: a.name, description: a.description })),
       useCaseCount: new Map([...ucCount.entries()].map(([k, v]) => [k, v.length])),
     },
+    deep,
   };
 }
 
@@ -802,6 +807,7 @@ function fillDoc(kind: DocKind, doc: PmNode, d: Awaited<ReturnType<typeof wieger
   const filled: string[] = [];
   if (kind === 'vision-scope') filled.push(...applyVisionScopeFill(doc, d.vs, opts.sections));
   filled.push(...applyWiegersFill(templateKeyOf(kind), doc, d, { erd: erdOf, forExport: opts.forExport }));
+  if (kind === 'srs') filled.push(...applySrsDeepFill(doc, d.deep));
   return filled;
 }
 

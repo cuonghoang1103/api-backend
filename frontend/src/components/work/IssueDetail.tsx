@@ -33,7 +33,7 @@ import {
   StatusPicker,
 } from './fields';
 import { useLookups, wk, type Lookups } from './hooks';
-import IssueActivity from './IssueActivity';
+import IssueActivity, { type ActivityView } from './IssueActivity';
 import { IssuePresenceStrip, usePresenceFlag } from './comments/IssuePresence'; // CTW đợt 5b K16: ai đang xem/gõ/sửa
 import { MobileNavButton } from './shell/mobileNav';
 import HeaderTools from './shell/HeaderTools';
@@ -57,7 +57,7 @@ import type { AiProvenance } from '@/lib/work-s6-api';
 import { PaneToggle, usePaneKeys, usePanes } from './shell/panes'; // UX-E: cột Details ẩn/hiện
 import {
   formatBytes, formatDate, IssueTypeIcon, Popover, PriorityIcon, ProjectMark, relativeTime, Spinner, StatusBadge, UserAvatar, useToggle,
-  EmptyState,
+  EmptyState, isTyping,
   publicOrigin, PageLoading} from './ui';
 import { wt } from '@/components/work/i18n';
 
@@ -69,11 +69,32 @@ const LINK_PHRASE: Record<LinkType, [string, string]> = {
   get TESTS(): [string, string] { return [wt('detail.lTests'), wt('detail.lTestedBy')]; },
 };
 
-function Prop({ label, children }: { label: string; children: ReactNode }) {
+function Prop({ label, children, field, kbd }: { label: string; children: ReactNode; field?: string; kbd?: string }) {
   return (
-    <div className="grid grid-cols-[108px_1fr] items-center gap-2 py-0.5">
-      <div className="text-[12px] text-[var(--w-text-3)]">{label}</div>
+    <div className="group/prop grid grid-cols-[108px_1fr] items-center gap-2 py-0.5" data-field={field}>
+      <div className="flex items-center gap-1 text-[12px] text-[var(--w-text-3)]">
+        <span className="truncate">{label}</span>
+        {kbd && <kbd className="w-kbd hidden !h-[16px] !min-w-[16px] !px-1 !text-[10px] opacity-0 transition-opacity group-hover/prop:opacity-100 md:inline-flex" aria-hidden="true">{kbd}</kbd>}
+      </div>
       <div className="min-w-0">{children}</div>
+    </div>
+  );
+}
+
+/** UX-C: nhóm thuộc tính (Details / Planning / More) — tiêu đề nhỏ, gập được, nhớ theo trình duyệt. */
+function PropGroup({ id, title, children, defaultOpen = true }: { id: string; title: string; children: ReactNode; defaultOpen?: boolean }) {
+  const key = `ctwork:issue-group:${id}`;
+  const [open, setOpen] = useState(defaultOpen);
+  useEffect(() => {
+    try { const v = window.localStorage.getItem(key); if (v === '0' || v === '1') setOpen(v === '1'); } catch { /* riêng tư */ }
+  }, [key]);
+  const toggle = () => setOpen((o) => { try { window.localStorage.setItem(key, o ? '0' : '1'); } catch { /* bỏ qua */ } return !o; });
+  return (
+    <div className="border-t border-[var(--w-border)] pt-2 first:border-t-0 first:pt-0">
+      <button type="button" onClick={toggle} aria-expanded={open} className="mb-1 flex w-full items-center gap-1 text-left text-[12px] font-semibold text-[var(--w-text-2)] hover:text-[var(--w-text)]">
+        {open ? <ChevronDown size={12} /> : <ChevronRight size={12} />} {title}
+      </button>
+      {open && <div className="space-y-0.5 pb-1">{children}</div>}
     </div>
   );
 }
@@ -150,49 +171,84 @@ function Description({ issue, config, editable, onSave, saving }: {
 
 // ─── Việc con ────────────────────────────────────────────────────
 
-function Subtasks({ issue, config, lk, onOpen, onAdd }: { issue: TIssueDetail; config: ProjectConfig; lk: Lookups; onOpen: (n: number) => void; onAdd: () => void }) {
-  const hasSubtaskType = config.issueTypes.some((t) => t.level === -1);
+function Subtasks({ issue, config, lk, onOpen, onAdd, pid }: { issue: TIssueDetail; config: ProjectConfig; lk: Lookups; onOpen: (n: number) => void; onAdd: () => void; pid: number }) {
+  const qc = useQueryClient();
+  const [quick, setQuick] = useState('');
+  const [adding, setAdding] = useState(false);
+  const subType = config.issueTypes.find((t) => t.level === -1);
+  const hasSubtaskType = !!subType;
   const type = lk.types.get(issue.typeId);
   if (!type || type.level === -1) return null;
   const isEpic = type.level === 1;
   const kids = issue.children;
   const done = kids.filter((k) => lk.statuses.get(k.statusId)?.category === 'DONE').length;
-  if (!kids.length && (isEpic || !hasSubtaskType || !config.permissions.editIssues)) return null;
+  const canAdd = !isEpic && hasSubtaskType && config.permissions.editIssues && config.permissions.createIssues;
+  if (!kids.length && !canAdd) return null;
+  const pct = kids.length ? Math.round((done / kids.length) * 100) : 0;
+  // UX-C: thêm nhanh việc con ngay tại chỗ (Enter) — như checklist; "Chi tiết…" vẫn mở hộp thoại đầy đủ.
+  const quickAdd = async () => {
+    const title = quick.trim();
+    if (!title || !subType || adding) return;
+    setAdding(true);
+    try {
+      await workApi.createIssue(pid, { typeId: subType.id, title, parentId: issue.id });
+      setQuick('');
+      qc.invalidateQueries({ queryKey: wk.issue(pid, issue.number) });
+      qc.invalidateQueries({ queryKey: wk.board(pid) });
+      qc.invalidateQueries({ queryKey: wk.issues(pid) });
+    } catch (err) {
+      toast.error(workError(err, wt('uxc.subtaskFailed')));
+    } finally { setAdding(false); }
+  };
   return (
-    <section>
+    <section aria-label={isEpic ? wt('detail.inEpic') : wt('detail.subtasks')}>
       <div className="mb-2 flex items-center gap-2">
         <h3 className="text-[13px] font-semibold">{isEpic ? wt('detail.inEpic') : wt('detail.subtasks')}</h3>
         {kids.length > 0 && (
           <>
-            <div className="h-1.5 w-24 overflow-hidden rounded-full bg-[var(--w-sunken)]">
-              <div className="h-full bg-[var(--w-green)]" style={{ width: `${(done / kids.length) * 100}%` }} />
+            <div className="h-1.5 w-28 overflow-hidden rounded-full bg-[var(--w-sunken)]" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={wt('uxc.subtaskProgress')}>
+              <div className="h-full bg-[var(--w-green)]" style={{ width: `${pct}%` }} />
             </div>
-            <span className="text-[12px] text-[var(--w-text-3)] tabular">{wt('detail.nDone', { a: done, b: kids.length })}</span>
+            <span className="text-[12px] text-[var(--w-text-3)] tabular">{wt('detail.nDone', { a: done, b: kids.length })} · {pct}%</span>
           </>
         )}
-        {!isEpic && hasSubtaskType && config.permissions.editIssues && (
-          <button type="button" onClick={onAdd} className="w-btn w-btn-ghost w-btn-sm ml-auto"><Plus size={13} /> {wt('detail.addSubtask')}</button>
+        {canAdd && (
+          <button type="button" onClick={onAdd} className="w-btn w-btn-ghost w-btn-sm ml-auto" title={wt('uxc.subtaskDetailsTip')}><Plus size={13} /> {wt('uxc.subtaskDetails')}</button>
         )}
       </div>
-      {kids.length > 0 && (
-        <div className="overflow-hidden rounded-[6px] border border-[var(--w-border)]">
-          {kids.map((k) => (
+      <div className="overflow-hidden rounded-[6px] border border-[var(--w-border)]">
+        {kids.map((k) => {
+          const st = lk.statuses.get(k.statusId);
+          const isDone = st?.category === 'DONE';
+          return (
             <button
               key={k.id}
               type="button"
               onClick={() => onOpen(k.number)}
               className="flex w-full items-center gap-2 border-b border-[var(--w-border)] px-2.5 py-1.5 text-left text-[13px] last:border-b-0 hover:bg-[var(--w-hover)]"
             >
-              <IssueTypeIcon type={lk.types.get(k.typeId)} size={12} />
+              <span aria-hidden="true" className={cn('flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] border text-[10px]', isDone ? 'border-[var(--w-green)] bg-[var(--w-green)] text-white' : st?.category === 'IN_PROGRESS' ? 'border-[var(--w-accent)]' : 'border-[var(--w-border-strong)]')}>{isDone ? '✓' : ''}</span>
               <span className="shrink-0 font-mono text-[11px] text-[var(--w-text-3)]">{lk.issueKey(k.number)}</span>
-              <span className={cn('min-w-0 flex-1 truncate', lk.statuses.get(k.statusId)?.category === 'DONE' && 'text-[var(--w-text-3)] line-through')}>{k.title}</span>
+              <span className={cn('min-w-0 flex-1 truncate', isDone && 'text-[var(--w-text-3)] line-through')}>{k.title}</span>
               <PriorityIcon priority={k.priority} size={13} />
               <UserAvatar user={k.assigneeId ? lk.members.get(k.assigneeId) : null} size={18} />
-              <StatusBadge status={lk.statuses.get(k.statusId)} />
+              <StatusBadge status={st} />
             </button>
-          ))}
-        </div>
-      )}
+          );
+        })}
+        {canAdd && (
+          <form className="flex items-center gap-2 px-2.5 py-1" onSubmit={(e) => { e.preventDefault(); void quickAdd(); }}>
+            <Plus size={13} className="shrink-0 text-[var(--w-text-3)]" aria-hidden="true" />
+            <input
+              value={quick} onChange={(e) => setQuick(e.target.value)} maxLength={255} disabled={adding}
+              placeholder={wt('uxc.quickSubtaskPh')} aria-label={wt('uxc.quickSubtask')}
+              className="h-7 min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-[var(--w-text-3)]"
+              data-testid="quick-subtask"
+            />
+            {quick.trim() && <button type="submit" className="w-btn w-btn-sm w-btn-primary" disabled={adding}>{adding ? <Spinner size={11} /> : wt('common.add')}</button>}
+          </form>
+        )}
+      </div>
     </section>
   );
 }
@@ -369,6 +425,18 @@ function Attachments({ issue, pid, config }: { issue: TIssueDetail; pid: number;
   );
 }
 
+// ─── Tab dưới thân thẻ (UX-C) ────────────────────────────────────
+
+type DetailTab = 'activity' | 'comments' | 'history' | 'worklog' | 'links' | 'agent';
+const DETAIL_TABS: Array<{ id: DetailTab; label: string }> = [
+  { id: 'activity', get label() { return wt('uxc.tActivity'); } },
+  { id: 'comments', get label() { return wt('detail.tComments'); } },
+  { id: 'history', get label() { return wt('docs.history'); } },
+  { id: 'worklog', get label() { return wt('detail.tWorklog'); } },
+  { id: 'links', get label() { return wt('uxc.tLinks'); } },
+  { id: 'agent', get label() { return wt('uxc.tAgent'); } },
+];
+
 // ─── Thẻ ─────────────────────────────────────────────────────────
 
 export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, variant = 'drawer' }: {
@@ -403,6 +471,47 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
 
   const q = useQuery({ queryKey: wk.issue(pid, num), queryFn: () => workApi.issue(pid, num), retry: (n, err) => workErrorStatus(err) !== 404 && n < 2 });
   const issue = q.data;
+
+  // UX-C: tab dưới thân thẻ (Activity / Comments / History / Work log / Links / Agent) — nhớ lựa chọn (trình duyệt).
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [tab, setTabState] = useState<DetailTab>('activity');
+  useEffect(() => {
+    try { const v = window.localStorage.getItem('ctwork:issue-tab') as DetailTab | null; if (v && DETAIL_TABS.some((t) => t.id === v)) setTabState(v); } catch { /* riêng tư */ }
+  }, []);
+  const setTab = (t: DetailTab) => { setTabState(t); try { window.localStorage.setItem('ctwork:issue-tab', t); } catch { /* bỏ qua */ } };
+
+  // UX-C: phím tắt sửa nhanh trường — a người làm · s trạng thái · p ưu tiên · l nhãn · d hạn · e ước lượng · i giao cho tôi.
+  // Ngăn kéo: luôn nhận (nó là lớp trên cùng); trang riêng: khi focus ở trong thẻ hoặc ở body. Có hộp thoại thật ⇒ nhường.
+  const meRef = useRef<{ id?: number; canTake: boolean }>({ canTake: false });
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+      if (isTyping(e.target)) return;
+      const root = rootRef.current;
+      if (!root || !q.data) return;
+      if (document.querySelector('[role="dialog"]')) return;
+      const ae = document.activeElement;
+      if (variant === 'page' && ae && ae !== document.body && !root.contains(ae)) return;
+      const k = e.key.toLowerCase();
+      if (k === 'i') {
+        if (!meRef.current.canTake || !meRef.current.id) return;
+        e.preventDefault();
+        void set({ assigneeId: meRef.current.id });
+        return;
+      }
+      const f = ({ a: 'assignee', s: 'status', p: 'priority', l: 'labels', d: 'due', e: 'estimate' } as Record<string, string>)[k];
+      if (!f) return;
+      const el = root.querySelector<HTMLElement>(`[data-field="${f}"] button:not([disabled]), [data-field="${f}"] input:not([disabled])`)
+        ?? (f === 'status' ? root.querySelector<HTMLElement>('[data-field="status-head"] button:not([disabled])') : null);
+      if (!el) return;
+      e.preventDefault();
+      el.focus();
+      if (el.tagName === 'BUTTON') el.click();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `set` đổi mỗi lần render; đọc qua q.data/meRef
+  }, [q.data, variant]);
   const editable = config.permissions.editIssues;
   const base = `/work/${config.workspace.slug}/${config.key}`;
 
@@ -482,100 +591,110 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
   const type = lk.types.get(issue.typeId);
   const url = `${publicOrigin()}${base}/issue/${num}`;
 
+  // UX-C: thuộc tính NHÓM LẠI (Details / Planning / More), mỗi trường có phím tắt (a s p l d e i) — xem useFieldKeys.
+  const meCanTake = editable && issue.assigneeId !== meId && config.members.some((m) => m.id === meId && (m.role === 'ADMIN' || m.role === 'MEMBER'));
+  meRef.current = { id: meId, canTake: meCanTake };
   const properties = (
-    <div className="space-y-0.5">
-      <div className="mb-3">
+    <div className="space-y-2">
+      <div className="mb-2" data-field="status">
         <StatusPicker lk={lk} issue={issue} onChange={(statusId) => set({ statusId })} disabled={!config.permissions.transition} />
       </div>
-      <Prop label={wt('common.assignee')}>
-        <AssigneePicker config={config} value={issue.assigneeId} onChange={(assigneeId) => set({ assigneeId })} meId={meId} bare disabled={!editable} />
-        {editable && issue.assigneeId !== meId && config.members.some((m) => m.id === meId && (m.role === 'ADMIN' || m.role === 'MEMBER')) && (
-          <button type="button" onClick={() => set({ assigneeId: meId })} className="px-2 text-[12px] text-[var(--w-accent-text)] hover:underline">{wt('detail.assignMe')}</button>
-        )}
-      </Prop>
-      {studioOn(config, 'teams') && (
-        <Prop label={wt('detail.team')}><TeamPicker config={config} value={issue.teamId} onChange={(teamId) => set({ teamId })} disabled={!editable} /></Prop>
-      )}
-      {studioOn(config, 'stages') && (
-        <Prop label={wt('detail.stage')}><StagePicker config={config} value={issue.stageId} onChange={(stageId) => set({ stageId })} disabled={!editable} /></Prop>
-      )}
-      <Prop label={wt('common.reporter')}>
-        <div className="flex items-center gap-2 px-2 text-[13px]"><UserAvatar user={issue.reporter} size={18} /><span className="truncate">{issue.reporter ? (issue.reporter.displayName || issue.reporter.fullName || issue.reporter.username) : wt('detail.unknown')}</span></div>
-      </Prop>
-      <Prop label={wt('detail.aiAssisted')}>
-        <AiAssistedControl
-          on={!!(issue as typeof issue & AiProvenance).aiAssisted}
-          model={(issue as AiProvenance).aiModel}
-          at={(issue as AiProvenance).aiAssistedAt}
-          editable={editable}
-          onToggle={(v) => set({ aiAssisted: v } as unknown as IssuePatch)}
-        />
-      </Prop>
-      <Prop label={wt('common.priority')}><PriorityPicker value={issue.priority} onChange={(priority) => set({ priority })} bare disabled={!editable} /></Prop>
-      {/* CTW-11: cờ "Bị chặn" (khách không thấy). */}
-      {!config.clientView && (
-        <Prop label={wt('detail.blocked')}>
-          <FlagControl pid={pid} num={issue.number} flaggedAt={issue.flaggedAt} reason={issue.flagReason} editable={editable} onChanged={() => void qc.invalidateQueries({ queryKey: wk.issue(pid, issue.number) })} />
-        </Prop>
-      )}
-      <Prop label={wt('common.labels')}><LabelsPicker config={config} value={issue.labelIds} onChange={(labelIds) => set({ labelIds })} bare disabled={!editable} /></Prop>
-      {type && type.level !== 1 && (
-        <Prop label={type.level === -1 ? wt('common.parent') : wt('common.epic')}>
-          <ParentPicker
-            config={config} lk={lk} childLevel={type.level} excludeId={issue.id}
-            value={issue.parent ? { id: issue.parent.id, number: issue.parent.number, title: issue.parent.title } : null}
-            onChange={(p) => set({ parentId: p?.id ?? null })}
-            bare disabled={!editable}
-          />
-        </Prop>
-      )}
-      {config.type !== 'KANBAN' && type?.level === 0 && (
-        <Prop label={wt('common.sprint')}><SprintPicker config={config} value={issue.sprintId} onChange={(sprintId) => set({ sprintId })} bare disabled={!editable} /></Prop>
-      )}
-      <Prop label={wt('detail.fixVersion')}><FixVersionPicker config={config} value={issue.fixVersionId} onChange={(fixVersionId) => set({ fixVersionId })} bare disabled={!editable} /></Prop>
-      {type?.level !== 1 && (
-        <Prop label={config.settings?.estimation === 'HOURS' ? wt('detail.estimateH') : wt('common.storyPoints')}>
-          {config.settings?.estimation === 'HOURS' ? (
-            <NumberInput
-              value={issue.originalEstimateMin === null ? null : Math.round((issue.originalEstimateMin / 60) * 10) / 10}
-              onCommit={(v) => set({ originalEstimateMin: v === null ? null : Math.round(v * 60) })}
-              disabled={!editable}
-            />
-          ) : (
-            <NumberInput value={issue.storyPoints} onCommit={(storyPoints) => set({ storyPoints })} disabled={!editable} />
+      <PropGroup id="details" title={wt('uxc.gDetails')}>
+        <Prop label={wt('common.assignee')} field="assignee" kbd="A">
+          <AssigneePicker config={config} value={issue.assigneeId} onChange={(assigneeId) => set({ assigneeId })} meId={meId} bare disabled={!editable} />
+          {meCanTake && (
+            <button type="button" onClick={() => set({ assigneeId: meId })} className="px-2 text-[12px] text-[var(--w-accent-text)] hover:underline" title={wt('uxc.kAssignMe')}>{wt('detail.assignMe')}</button>
           )}
         </Prop>
-      )}
-      <Prop label={wt('common.startDate')}><DateInput value={issue.startDate} onChange={(startDate) => set({ startDate })} disabled={!editable} /></Prop>
-      <Prop label={wt('common.dueDate')}>
-        <div className="flex min-w-0 items-center">
-        <DateInput value={issue.dueDate} onChange={(dueDate) => set({ dueDate })} disabled={!editable} />
-        {/* CTW-25: thêm hạn thẻ vào Google Calendar / Outlook (deep link). */}
-        {issue.dueDate && (
-          <AddToCalendar
-            label={wt('detail.calendar')} className="ml-1 !h-6 !px-1.5 text-[11.5px]"
-            event={{ title: wt('detail.dueTitle', { k: lk.issueKey(issue.number), t: issue.title }), start: issue.dueDate.slice(0, 10), allDay: true, details: `${config.name}\n${typeof window !== 'undefined' ? window.location.origin : ''}${base}/issue/${issue.number}` }}
-          />
+        <Prop label={wt('common.reporter')}>
+          <div className="flex items-center gap-2 px-2 text-[13px]"><UserAvatar user={issue.reporter} size={18} /><span className="truncate">{issue.reporter ? (issue.reporter.displayName || issue.reporter.fullName || issue.reporter.username) : wt('detail.unknown')}</span></div>
+        </Prop>
+        <Prop label={wt('common.priority')} field="priority" kbd="P"><PriorityPicker value={issue.priority} onChange={(priority) => set({ priority })} bare disabled={!editable} /></Prop>
+        <Prop label={wt('common.labels')} field="labels" kbd="L"><LabelsPicker config={config} value={issue.labelIds} onChange={(labelIds) => set({ labelIds })} bare disabled={!editable} /></Prop>
+        {/* CTW-11: cờ "Bị chặn" (khách không thấy). */}
+        {!config.clientView && (
+          <Prop label={wt('detail.blocked')}>
+            <FlagControl pid={pid} num={issue.number} flaggedAt={issue.flaggedAt} reason={issue.flagReason} editable={editable} onChanged={() => void qc.invalidateQueries({ queryKey: wk.issue(pid, issue.number) })} />
+          </Prop>
         )}
-        </div>
-      </Prop>
-      {config.components.length > 0 && (
-        <Prop label={wt('common.components')}><ComponentsPicker config={config} value={issue.componentIds} onChange={(componentIds) => set({ componentIds })} bare disabled={!editable} /></Prop>
-      )}
-      <CustomFieldsGroup pid={pid} num={num} typeKey={type?.key} config={config} editable={editable} />
-      {type?.key === 'BUG' && <DefectPanel pid={pid} num={num} editable={editable} />}
-      <TimeTrackingBlock pid={pid} issue={issue} config={config} />
-      <DevelopmentPanel pid={pid} num={num} issueKey={lk.issueKey(num)} />
-      <div className="mt-4 space-y-1 border-t border-[var(--w-border)] pt-3 text-[12px] text-[var(--w-text-3)]">
+      </PropGroup>
+      <PropGroup id="planning" title={wt('uxc.gPlanning')}>
+        {type && type.level !== 1 && (
+          <Prop label={type.level === -1 ? wt('common.parent') : wt('common.epic')}>
+            <ParentPicker
+              config={config} lk={lk} childLevel={type.level} excludeId={issue.id}
+              value={issue.parent ? { id: issue.parent.id, number: issue.parent.number, title: issue.parent.title } : null}
+              onChange={(p) => set({ parentId: p?.id ?? null })}
+              bare disabled={!editable}
+            />
+          </Prop>
+        )}
+        {config.type !== 'KANBAN' && type?.level === 0 && (
+          <Prop label={wt('common.sprint')}><SprintPicker config={config} value={issue.sprintId} onChange={(sprintId) => set({ sprintId })} bare disabled={!editable} /></Prop>
+        )}
+        <Prop label={wt('detail.fixVersion')}><FixVersionPicker config={config} value={issue.fixVersionId} onChange={(fixVersionId) => set({ fixVersionId })} bare disabled={!editable} /></Prop>
+        {type?.level !== 1 && (
+          <Prop label={config.settings?.estimation === 'HOURS' ? wt('detail.estimateH') : wt('common.storyPoints')} field="estimate" kbd="E">
+            {config.settings?.estimation === 'HOURS' ? (
+              <NumberInput
+                value={issue.originalEstimateMin === null ? null : Math.round((issue.originalEstimateMin / 60) * 10) / 10}
+                onCommit={(v) => set({ originalEstimateMin: v === null ? null : Math.round(v * 60) })}
+                disabled={!editable}
+              />
+            ) : (
+              <NumberInput value={issue.storyPoints} onCommit={(storyPoints) => set({ storyPoints })} disabled={!editable} />
+            )}
+          </Prop>
+        )}
+        <Prop label={wt('common.startDate')}><DateInput value={issue.startDate} onChange={(startDate) => set({ startDate })} disabled={!editable} /></Prop>
+        <Prop label={wt('common.dueDate')} field="due" kbd="D">
+          <div className="flex min-w-0 items-center">
+          <DateInput value={issue.dueDate} onChange={(dueDate) => set({ dueDate })} disabled={!editable} />
+          {/* CTW-25: thêm hạn thẻ vào Google Calendar / Outlook (deep link). */}
+          {issue.dueDate && (
+            <AddToCalendar
+              label={wt('detail.calendar')} className="ml-1 !h-6 !px-1.5 text-[11.5px]"
+              event={{ title: wt('detail.dueTitle', { k: lk.issueKey(issue.number), t: issue.title }), start: issue.dueDate.slice(0, 10), allDay: true, details: `${config.name}\n${typeof window !== 'undefined' ? window.location.origin : ''}${base}/issue/${issue.number}` }}
+            />
+          )}
+          </div>
+        </Prop>
+        {studioOn(config, 'teams') && (
+          <Prop label={wt('detail.team')}><TeamPicker config={config} value={issue.teamId} onChange={(teamId) => set({ teamId })} disabled={!editable} /></Prop>
+        )}
+        {studioOn(config, 'stages') && (
+          <Prop label={wt('detail.stage')}><StagePicker config={config} value={issue.stageId} onChange={(stageId) => set({ stageId })} disabled={!editable} /></Prop>
+        )}
+        {config.components.length > 0 && (
+          <Prop label={wt('common.components')}><ComponentsPicker config={config} value={issue.componentIds} onChange={(componentIds) => set({ componentIds })} bare disabled={!editable} /></Prop>
+        )}
+      </PropGroup>
+      <PropGroup id="more" title={wt('uxc.gMore')}>
+        <Prop label={wt('detail.aiAssisted')}>
+          <AiAssistedControl
+            on={!!(issue as typeof issue & AiProvenance).aiAssisted}
+            model={(issue as AiProvenance).aiModel}
+            at={(issue as AiProvenance).aiAssistedAt}
+            editable={editable}
+            onToggle={(v) => set({ aiAssisted: v } as unknown as IssuePatch)}
+          />
+        </Prop>
+        <CustomFieldsGroup pid={pid} num={num} typeKey={type?.key} config={config} editable={editable} />
+        {type?.key === 'BUG' && <DefectPanel pid={pid} num={num} editable={editable} />}
+        <TimeTrackingBlock pid={pid} issue={issue} config={config} />
+        <DevelopmentPanel pid={pid} num={num} issueKey={lk.issueKey(num)} />
+      </PropGroup>
+      <div className="mt-3 space-y-1 border-t border-[var(--w-border)] pt-3 text-[12px] text-[var(--w-text-3)]">
         <div>{wt('detail.createdLine', { d: formatDate(issue.createdAt), r: relativeTime(issue.createdAt) })}</div>
         <div>{wt('detail.updatedLine', { r: relativeTime(issue.updatedAt) })}</div>
         {issue.resolvedAt && <div>{wt('detail.resolvedLine', { d: formatDate(issue.resolvedAt) })}</div>}
+        {editable && <div className="hidden pt-1 md:block" data-testid="issue-field-keys">{wt('uxc.fieldKeys')}</div>}
       </div>
     </div>
   );
 
   return (
-    <div className="flex h-full flex-col">
+    <div ref={rootRef} className="flex h-full flex-col">
       {/* Thanh trên */}
       <div className={cn('w-header flex shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-4', variant === 'page' ? 'h-[52px] md:px-5' : 'h-12')}>
         {/* Trang riêng: nút ☰ của điện thoại nằm ở header này (thay thanh dự phòng của layout). */}
@@ -603,6 +722,10 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
           )}
           <IssueTypeIcon type={type} size={12} />
           <span className="font-mono text-[var(--w-text-2)]">{lk.issueKey(issue.number)}</span>
+        </div>
+        {/* UX-C: đổi trạng thái ngay trên thanh đầu (phím S). */}
+        <div className="ml-1 hidden w-auto max-w-[200px] shrink-0 sm:block" data-field="status-head" data-testid="issue-status-head">
+          <StatusPicker lk={lk} issue={issue} onChange={(statusId) => set({ statusId })} bare disabled={!config.permissions.transition} />
         </div>
         <div className="w-header-actions ml-auto flex items-center gap-1">
           <EditLockPill config={config} />
@@ -707,20 +830,55 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
               <h3 className="w-section-title mb-2">{wt('common.description')}</h3>
               <Description issue={issue} config={config} editable={editable} onSave={(d) => set({ descriptionJson: d })} saving={update.isPending} />
             </section>
-            <Subtasks issue={issue} config={config} lk={lk} onOpen={onOpenIssue} onAdd={() => setSubtaskOpen(true)} />
-            <Links issue={issue} pid={pid} lk={lk} editable={editable} onOpenKey={openKey} />
-            {/* CTW-28: agent đang làm / đã làm thẻ này + chi phí của thẻ (tự ẩn khi thẻ chưa từng dính agent). */}
-            <IssueAgentActivity config={config} issue={issue} done={lk.statuses.get(issue.statusId)?.category === 'DONE'} />
+            <Subtasks issue={issue} config={config} lk={lk} onOpen={onOpenIssue} onAdd={() => setSubtaskOpen(true)} pid={pid} />
             {studioOn(config, 'approvals') && <IssueApprovals config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
-            {studioOn(config, 'handoffs') && <IssueHandoffs config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
-            {studioOn(config, 'docs') && <LinkedDocs config={config} issueNumber={issue.number} />}
-            {/* Resources (06/10/2026): Web links kiểu Jira (tự ẩn khi mô-đun tắt / khách). */}
-            <IssueWebLinks config={config} issueNumber={issue.number} />
-            {/* Đợt S3b: CR liên quan + rủi ro liên quan (tự ẩn khi mô-đun tắt / khách). */}
-            <IssueGovernance config={config} issueNumber={issue.number} />
             <IssueDesk config={config} issueNumber={issue.number} show="add" />
             <Attachments issue={issue} pid={pid} config={config} />
-            <IssueActivity pid={pid} num={num} config={config} lk={lk} clientShared={!!issue.clientVisible} />
+            {/* UX-C: các khối hay trống (liên kết, tài liệu, CR/rủi ro, agent, bàn giao) vào TAB — không còn 5 khối trống
+                ~80px đẩy Activity xuống xa. Tab nào không có gì thì hiện một dòng gợi ý. */}
+            <section aria-label={wt('uxc.issueTabs')}>
+              <div className="mb-4 flex items-center gap-1 overflow-x-auto border-b border-[var(--w-border)]" role="tablist" aria-label={wt('uxc.issueTabs')}>
+                {DETAIL_TABS.map((t) => (
+                  <button
+                    key={t.id} type="button" role="tab" id={`itab-${t.id}`} aria-selected={tab === t.id} aria-controls={`ipanel-${t.id}`}
+                    onClick={() => setTab(t.id)}
+                    className={cn('-mb-px whitespace-nowrap border-b-2 px-2 pb-2 text-[13px] font-medium', tab === t.id ? 'border-[var(--w-accent)] text-[var(--w-text)]' : 'border-transparent text-[var(--w-text-3)] hover:text-[var(--w-text-2)]')}
+                    data-testid={`issue-tab-${t.id}`}
+                  >
+                    {t.label}
+                    {t.id === 'links' && issue.links.length > 0 && <span className="ml-1.5 text-[var(--w-text-3)]">{issue.links.length}</span>}
+                  </button>
+                ))}
+              </div>
+              <div role="tabpanel" id={`ipanel-${tab}`} aria-labelledby={`itab-${tab}`}>
+                {(tab === 'activity' || tab === 'comments' || tab === 'history' || tab === 'worklog') && (
+                  <IssueActivity pid={pid} num={num} config={config} lk={lk} clientShared={!!issue.clientVisible} view={(tab === 'activity' ? 'all' : tab) as ActivityView} />
+                )}
+                {tab === 'links' && (
+                  <>
+                    <div className="peer space-y-6">
+                      <Links issue={issue} pid={pid} lk={lk} editable={editable} onOpenKey={openKey} />
+                      {studioOn(config, 'docs') && <LinkedDocs config={config} issueNumber={issue.number} />}
+                      {/* Resources (06/10/2026): Web links kiểu Jira (tự ẩn khi mô-đun tắt / khách). */}
+                      <IssueWebLinks config={config} issueNumber={issue.number} />
+                      {/* Đợt S3b: CR liên quan + rủi ro liên quan (tự ẩn khi mô-đun tắt / khách). */}
+                      <IssueGovernance config={config} issueNumber={issue.number} />
+                    </div>
+                    <p className="hidden text-[13px] text-[var(--w-text-3)] peer-empty:block">{wt('uxc.noLinks')}</p>
+                  </>
+                )}
+                {tab === 'agent' && (
+                  <>
+                    <div className="peer space-y-6">
+                      {/* CTW-28: agent đang làm / đã làm thẻ này + chi phí của thẻ (tự ẩn khi thẻ chưa từng dính agent). */}
+                      <IssueAgentActivity config={config} issue={issue} done={lk.statuses.get(issue.statusId)?.category === 'DONE'} />
+                      {studioOn(config, 'handoffs') && <IssueHandoffs config={config} issue={issue} issueKey={lk.issueKey(issue.number)} />}
+                    </div>
+                    <p className="hidden text-[13px] text-[var(--w-text-3)] peer-empty:block">{wt('uxc.noAgent')}</p>
+                  </>
+                )}
+              </div>
+            </section>
           </div>
           {(variant !== 'page' || sideOn) && (
           <aside aria-label={wt('detail.issueDetails')} className={cn('shrink-0', variant === 'page' ? 'w-[320px]' : 'hidden xl:block xl:w-[290px]')} data-testid={variant === 'page' ? 'issue-details-pane' : undefined}>

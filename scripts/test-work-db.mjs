@@ -14,7 +14,8 @@
  * localhost/127.0.0.1/postgres trừ khi đặt WORK_DB_TEST_ALLOW_REMOTE=1).
  */
 import { spawnSync } from 'node:child_process';
-import { readdirSync, statSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -57,6 +58,10 @@ try {
 } catch { /* .env không có — để prisma tự báo */ }
 
 const tsx = path.join(root, 'node_modules/.bin/tsx');
+// Đợt 6: dây bẫy R2 — mọi tiến trình test nạp scripts/r2-tripwire.mjs; kết nối nào tới endpoint R2 THẬT bị chặn + ghi
+// vào tệp này. Cuối bộ: tệp có dòng nào ⇒ cả bộ ĐỎ (rác thử từng lên bucket production — 10/10 dọn tay 98 tệp).
+const tripLog = path.join(mkdtempSync(path.join(os.tmpdir(), 'ctw-r2-trip-')), 'hits.jsonl');
+const tripImport = `--import=${path.join(root, 'scripts/r2-tripwire.mjs')}`;
 const results = [];
 const t0 = Date.now();
 for (const f of files) {
@@ -64,7 +69,7 @@ for (const f of files) {
   process.stdout.write(`\n━━ ${f}\n`);
   const r = spawnSync(tsx, ['--test', '--test-reporter=dot', f], {
     cwd: root, stdio: 'inherit', timeout: PER_FILE_TIMEOUT_MS,
-    env: { ...process.env, WORK_DB_TEST: '1' },
+    env: { ...process.env, WORK_DB_TEST: '1', R2_TRIPWIRE_LOG: tripLog, NODE_OPTIONS: [process.env.NODE_OPTIONS, tripImport].filter(Boolean).join(' ') },
   });
   const ok = r.status === 0;
   const why = r.error?.code === 'ETIMEDOUT' ? `quá ${PER_FILE_TIMEOUT_MS / 1000}s` : r.signal ? `tín hiệu ${r.signal}` : `exit ${r.status}`;
@@ -73,6 +78,14 @@ for (const f of files) {
 }
 
 const failed = results.filter((r) => !r.ok);
-console.log(`\n══ test:work-db — ${results.length - failed.length}/${results.length} tệp xanh trong ${((Date.now() - t0) / 1000).toFixed(0)}s`);
+const hits = existsSync(tripLog) ? readFileSync(tripLog, 'utf8').trim().split('\n').filter(Boolean) : [];
+if (hits.length) {
+  console.log(`\n✗ r2-tripwire: ${hits.length} kết nối tới R2 THẬT bị chặn trong lúc test:`);
+  for (const h of hits.slice(0, 20)) console.log(`  ${h}`);
+  failed.push({ f: 'r2-tripwire', why: `${hits.length} kết nối tới R2 thật` });
+} else {
+  console.log('\n✓ r2-tripwire: 0 kết nối tới endpoint R2 thật');
+}
+console.log(`\n══ test:work-db — ${results.filter((r) => r.ok).length}/${results.length} tệp xanh trong ${((Date.now() - t0) / 1000).toFixed(0)}s`);
 for (const r of failed) console.log(`  ✗ ${r.f} — ${r.why}`);
 process.exit(failed.length ? 1 : 0);

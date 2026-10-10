@@ -133,7 +133,7 @@ function mondayOf(day: string): string {
 export interface GroupRow {
   projectId: number; key: string; name: string; href: string; workspace: string; archived: boolean;
   subject: string; classCode: string | null; term: string | null; groupCode: string | null; classId: number | null; className: string | null;
-  members: Array<{ id: number; name: string; username: string; role: string; status: string | null; signals: string[] }>;
+  members: Array<{ id: number; name: string; username: string; role: string; status: string | null; signals: string[]; signalItems?: Array<{ code: string; text: string; level?: string }> }>;
   issues: { open: number; overdue: number; done14: number };
   sprint: { name: string; status: string; done: number; total: number; daysLeft: number; atRisk: boolean } | null;
   stage: { n: number; name: string; total: number; completed: number } | null;
@@ -202,7 +202,7 @@ async function buildRows(userId: number, ids: number[]): Promise<GroupRow[]> {
       const docsMissing = [...expectedSet].filter((d) => raw[d] === 'MISSING').length;
       const memberRows = team.map((m) => {
         const row = contrib?.members.find((x) => x.user.id === m.id);
-        return { id: m.id, name: displayName(m), username: m.username, role: m.role, status: row?.status ?? null, signals: row?.signals.map((s) => s.text) ?? [] };
+        return { id: m.id, name: displayName(m), username: m.username, role: m.role, status: row?.status ?? null, signals: row?.signals.map((s) => s.text) ?? [], signalItems: row?.signals.map((s) => ({ code: s.code, text: s.text, level: s.level })) ?? [] };
       });
       const issues = { open: cnt(openG, id), overdue: cnt(overdueG, id), done14: cnt(doneG, id) };
       const oldestDays = q.length ? Math.floor((now.getTime() - Math.min(...q.map((x) => x.createdAt.getTime()))) / DAY) : 0;
@@ -228,6 +228,14 @@ async function buildRows(userId: number, ids: number[]): Promise<GroupRow[]> {
   };
   await Promise.all([work(), work(), work(), work()]);
   return rows.sort((a, b) => (a.classCode ?? '').localeCompare(b.classCode ?? '') || (a.groupCode ?? a.key).localeCompare(b.groupCode ?? b.key) || a.name.localeCompare(b.name));
+}
+
+/**
+ * UX-C (11/10/2026): một hàng "sức khoẻ nhóm" cho MỘT dự án — trang Team overview của trưởng nhóm dùng lại đúng phép
+ * tính của hub giảng viên (hồ sơ FPT, Q&A, rủi ro, đóng góp, health) thay vì tính lặp. KHÔNG kiểm quyền — nơi gọi kiểm.
+ */
+export async function groupRowOf(userId: number, projectId: number): Promise<GroupRow | null> {
+  return (await buildRows(userId, [projectId]))[0] ?? null;
 }
 
 const norm = (s: string | null | undefined) => (s ?? '').trim().toUpperCase();

@@ -71,6 +71,11 @@ import { tpl } from './tpl';
 import { nav } from './nav';
 import { charts } from './charts'; // UX-B
 import { meeting2 } from './meeting2';
+import { elic } from './elic'; // CTW đợt 6b
+import { srsx } from './srsx'; // CTW đợt 6b
+import { table } from './table'; // UX-C
+import { uxc } from './uxc'; // UX-C
+import { q6 } from './q6'; // CTW đợt 6: chất lượng (review, baseline, test chuyên sâu)
 
 /** Mọi miền và mọi khoá của bản tiếng Anh phải có ở đây (thiếu/thừa ⇒ lỗi tsc). */
-export const vi: { [D in keyof typeof En]: Strings<(typeof En)[D]> } = { common, agents, ai, audit, backlog, board, chat, classroom, contrib, cover, collab, create, desk, detail, dev, diagram, docs, editor, errors, fields, finance, fpt, git, gov, home, invite, issues, modup, notify, onboard, palette, pchat, pexport, pimport, releases, school, settings, share, shell, sprint, srs, status, swr, studio, teacher, tests, time, timeline, trash, pboard, pfields, pspec, ptypes, wf, pagents, pstudio, auto, rep, portal, res, pf, wl, gs, jql, dash, pages, uat, tpl, nav, meeting2, charts };
+export const vi: { [D in keyof typeof En]: Strings<(typeof En)[D]> } = { common, agents, ai, audit, backlog, board, chat, classroom, contrib, cover, collab, create, desk, detail, dev, diagram, docs, editor, errors, fields, finance, fpt, git, gov, home, invite, issues, modup, notify, onboard, palette, pchat, pexport, pimport, releases, school, settings, share, shell, sprint, srs, status, swr, studio, teacher, tests, time, timeline, trash, pboard, pfields, pspec, ptypes, wf, pagents, pstudio, auto, rep, portal, res, pf, wl, gs, jql, dash, pages, uat, tpl, nav, meeting2, elic, srsx, charts, table, uxc, q6 };

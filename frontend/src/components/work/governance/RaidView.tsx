@@ -25,6 +25,7 @@ import { Pill } from '../studio/shared';
 import { LEVEL_COLOR, PersonSelect, RaidStatusPill, ScoreBadge, levelOf, useGovInvalidate } from './shared';
 import { wt } from '@/components/work/i18n';
 import ChartFrame from '../charts/ChartFrame';
+import DataTable, { type DataColumn } from '../table/DataTable';
 import { resolveColor } from '../charts/exportChart';
 
 const STATUSES: Record<RaidType, string[]> = {
@@ -343,6 +344,39 @@ function RaidItemDialog({ config, num, onClose }: { config: ProjectConfig; num: 
 
 // ─── Trang ───────────────────────────────────────────────────────
 
+// ─── Cột bảng (UX-C DataTable) ──────────────────────────────────
+
+function raidColumns(tab: RaidType, open: (n: number) => void): DataColumn<RaidItem>[] {
+  return [
+    ...(tab !== 'ASSUMPTION' ? [{
+      id: 'score', header: wt('uxc.colScore'), width: 72, align: 'center' as const, value: (r: RaidItem) => r.score,
+      headerTitle: wt('uxc.colScoreTip'),
+      cell: (r: RaidItem) => <ScoreBadge score={r.score} />,
+    }] : []),
+    { id: 'key', header: wt('common.key'), width: 84, value: (r) => r.number, exportValue: (r) => r.key, text: (r) => r.key,
+      cell: (r) => <span className="font-mono text-[12px] text-[var(--w-accent-text)]">{r.key}</span> },
+    { id: 'title', header: wt('common.title'), width: 260, grow: true, required: true, value: (r) => r.title,
+      cell: (r) => (
+        <button type="button" onClick={() => open(r.number)} className="min-w-0 truncate text-left text-[13px] font-medium hover:underline" data-testid={`raid-row-${r.number}`} title={r.title}>
+          {r.title}
+        </button>
+      ) },
+    { id: 'status', header: wt('common.status'), width: 130, value: (r) => RAID_STATUS_LABEL[r.status] ?? r.status, cell: (r) => <RaidStatusPill status={r.status} /> },
+    ...(tab !== 'ASSUMPTION' ? [{
+      id: 'response', header: wt('uxc.colResponse'), width: 110, hideBelow: 'md' as const,
+      value: (r: RaidItem) => (r.response ? RAID_RESPONSE_LABEL[r.response] : null),
+    }] : []),
+    { id: 'category', header: wt('uxc.colCategory'), width: 120, defaultHidden: true, value: (r) => r.category },
+    { id: 'review', header: wt('uxc.colReview'), width: 130, hideBelow: 'md', value: (r) => r.reviewDate,
+      cell: (r) => (r.reviewDue ? <Pill tone="orange"><AlarmClock size={11} /> {wt('gov.reviewDue')}</Pill> : r.reviewDate ? <span className="text-[12px] text-[var(--w-text-2)]">{formatDate(r.reviewDate)}</span> : <span className="text-[var(--w-text-3)]">—</span>) },
+    { id: 'owner', header: wt('common.owner'), width: 150, hideBelow: 'sm', value: (r) => (r.owner ? userName(r.owner) : null),
+      cell: (r) => <span className="flex min-w-0 items-center gap-1.5 text-[12.5px]">{r.owner && <UserAvatar user={r.owner} size={18} />}<span className="truncate">{r.owner ? userName(r.owner) : <span className="text-[var(--w-text-3)]">{wt('gov.noOwner')}</span>}</span></span> },
+    { id: 'links', header: wt('uxc.colLinks'), width: 70, align: 'right', defaultHidden: true, value: (r) => r.linkCount },
+    { id: 'updated', header: wt('common.updated'), width: 110, defaultHidden: true, value: (r) => r.updatedAt?.slice(0, 10) ?? null,
+      cell: (r) => <span className="text-[12px] text-[var(--w-text-2)]">{relativeTime(r.updatedAt)}</span> },
+  ];
+}
+
 export default function RaidView({ config }: { config: ProjectConfig }) {
   const pid = config.id;
   const router = useRouter();
@@ -377,26 +411,6 @@ export default function RaidView({ config }: { config: ProjectConfig }) {
   if (q.error || !q.data) return <EmptyState title={wt('gov.loadRaidFailed')} body={workError(q.error)} />;
   const d = q.data;
 
-  const row = (r: RaidItem) => (
-    <li key={r.id}>
-      <button type="button" onClick={() => setParams({ item: String(r.number) })} className={cn('flex w-full min-w-0 items-start gap-3 px-3 py-2.5 text-left hover:bg-[var(--w-hover)] md:items-center', r.closed && 'opacity-70')} data-testid={`raid-row-${r.number}`}>
-        {tab !== 'ASSUMPTION' ? <ScoreBadge score={r.score} className="mt-0.5 md:mt-0" /> : null}
-        <span className="min-w-0 flex-1 md:flex md:items-center md:gap-3">
-          <span className="flex min-w-0 items-center gap-2 md:flex-1">
-            <span className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">{r.key}</span>
-            <span className="truncate text-[13.5px] font-medium">{r.title}</span>
-          </span>
-          <span className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1 text-[12px] text-[var(--w-text-3)] md:mt-0 md:shrink-0 md:flex-nowrap">
-            <RaidStatusPill status={r.status} />
-            {r.response && <span>{RAID_RESPONSE_LABEL[r.response]}</span>}
-            {r.reviewDue ? <Pill tone="orange"><AlarmClock size={11} /> {wt('gov.reviewDue')}</Pill> : r.reviewDate ? <span>{wt('gov.reviewOn', { d: formatDate(r.reviewDate) })}</span> : null}
-            <span className="flex items-center gap-1">{r.owner && <UserAvatar user={r.owner} size={16} />}<span className="max-w-[110px] truncate">{r.owner ? userName(r.owner) : wt('gov.noOwner')}</span></span>
-          </span>
-        </span>
-      </button>
-    </li>
-  );
-
   return (
     <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
       <div className="w-page">
@@ -425,7 +439,22 @@ export default function RaidView({ config }: { config: ProjectConfig }) {
               </span>
             </div>
             {items.length ? (
-              <ul className="w-card divide-y divide-[var(--w-border)] overflow-hidden" data-testid="raid-list">{items.map(row)}</ul>
+              // UX-C: bảng chung (sắp xếp, cột, lọc nhanh, xuất CSV/xlsx, bàn phím). Thứ tự mặc định giữ như cũ
+              // (đang mở trước, điểm cao trước) — bấm tiêu đề cột để sắp lại.
+              <div className="w-card overflow-hidden">
+                <DataTable
+                  id={`raid:${tab}`}
+                  label={RAID_LABEL[tab].many}
+                  rows={items}
+                  columns={raidColumns(tab, (n) => setParams({ item: String(n) }))}
+                  rowKey={(r) => r.id}
+                  height="auto"
+                  onRowOpen={(r) => setParams({ item: String(r.number) })}
+                  rowClassName={(r) => (r.closed ? 'opacity-70' : undefined)}
+                  exportName={`${config.key}-raid-${tab.toLowerCase()}`}
+                  testId="raid-list"
+                />
+              </div>
             ) : (
               <EmptyState
                 icon={<ShieldAlert size={20} />}

@@ -313,6 +313,7 @@ export async function updateUseCase(userId: number, projectId: number, number: n
   const ctx = await srsCtx(userId, projectId, 'edit');
   const cur = await prisma.workUseCase.findFirst({ where: { projectId, number } });
   if (!cur) throw new NotFoundError(`${ucKey(number)} not found`);
+  await (await import('./quality.service.js')).assertBaselineEditAllowed(projectId, 'UC', cur.id, ucKey(number)); // đợt 6 (R21)
   if (ctx.isAgent && cur.status !== 'PROPOSED') throw new ForbiddenError('An AI agent can only change its own proposals — propose a new use case instead');
   if (input.status !== undefined && input.status !== cur.status) {
     if (ctx.isAgent) throw new ForbiddenError('An AI agent cannot change the status of a use case');
@@ -395,6 +396,7 @@ export async function updateRule(userId: number, projectId: number, number: numb
   const ctx = await srsCtx(userId, projectId, 'edit');
   const cur = await prisma.workBusinessRule.findFirst({ where: { projectId, number } });
   if (!cur) throw new NotFoundError(`${brKey(number)} not found`);
+  await (await import('./quality.service.js')).assertBaselineEditAllowed(projectId, 'BR', cur.id, brKey(number)); // đợt 6 (R21)
   if (ctx.isAgent && cur.status !== 'PROPOSED') throw new ForbiddenError('An AI agent can only change its own proposals');
   if (input.status !== undefined && input.status !== cur.status && (ctx.isAgent || !ctx.canApprove)) throw new ForbiddenError('Only project members and lecturers can approve requirements');
   const r = await prisma.workBusinessRule.updateMany({

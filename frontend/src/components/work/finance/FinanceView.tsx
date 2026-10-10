@@ -33,6 +33,7 @@ import ChartFrame from '../charts/ChartFrame';
 import { AXIS_TICK, SERIES } from '../charts/chartColors';
 import { FlowTooltip } from '../charts/FlowCharts';
 import { fmtDay } from '../reports/shared';
+import DataTable from '../table/DataTable';
 
 type Tab = 'overview' | 'timesheet' | 'approvals' | 'rates' | 'budget' | 'payments';
 
@@ -383,6 +384,22 @@ function ApprovalsTab({ config }: { config: ProjectConfig }) {
   const q = useQuery({ queryKey: s4Keys.timesheets(pid, status), queryFn: () => s4Api.timesheets(pid, status || undefined) });
   const [open, setOpen] = useState<Timesheet | null>(null);
   const manage = !!config.permissions.manageFinance;
+  const inv = useInvalidate(pid);
+  const bulkApprove = useMutation({
+    mutationFn: async (ids: number[]) => {
+      let ok = 0;
+      const errors: string[] = [];
+      for (const id of ids) {
+        try { await s4Api.approveWeek(pid, id); ok += 1; } catch (e) { errors.push(workError(e)); }
+      }
+      return { ok, errors };
+    },
+    onSuccess: (r) => {
+      if (r.ok) toast.success(wt('uxc.approvedN', { count: r.ok }));
+      if (r.errors.length) toast.error(wt('uxc.approveFailedN', { count: r.errors.length }), { description: [...new Set(r.errors)].slice(0, 2).join(' · ') });
+      inv();
+    },
+  });
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
@@ -392,19 +409,38 @@ function ApprovalsTab({ config }: { config: ProjectConfig }) {
         <span className="text-[12.5px] text-[var(--w-text-3)]">{q.data?.access.review === 'TEAM' ? wt('finance.teamsYouLead') : wt('finance.everyoneProject')}</span>
       </div>
       {q.isLoading ? <PageLoading rows={3} /> : !q.data?.items.length ? <EmptyState title={status === 'SUBMITTED' ? wt('finance.nothingWaiting') : wt('finance.noTimesheets')} body={wt('finance.submittedAppear')} /> : (
-        <ul className="w-card divide-y divide-[var(--w-border)]" data-testid="ts-queue">
-          {q.data.items.map((t) => (
-            <li key={t.id}>
-              <button type="button" className="flex w-full flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 text-left hover:bg-[var(--w-hover)]" onClick={() => setOpen(t)}>
-                <span className="min-w-0 flex-1 truncate text-[13.5px] font-medium">{t.userName}</span>
-                <span className="text-[12.5px] text-[var(--w-text-3)]">{wt('finance.weekOfLc', { d: formatDate(t.weekStart) })}</span>
-                <span className="w-[64px] text-right text-[13px] tabular-nums">{fmtHours(t.totalMinutes)}</span>
-                {manage && t.approvedCost !== undefined && t.approvedCost !== null && <span className="text-[12.5px] tabular-nums text-[var(--w-text-2)]">{t.approvedCost.toLocaleString(wfmt.intl())}</span>}
-                <StatusLine t={t} />
-              </button>
-            </li>
-          ))}
-        </ul>
+        // UX-C: bảng chung — sắp xếp, cột, xuất; chọn nhiều ⇒ duyệt hàng loạt (máy chủ vẫn kiểm từng tuần: tuần chưa hết / không có quyền thì báo lỗi riêng).
+        <div className="w-card overflow-hidden">
+          <DataTable
+            id="finance-timesheets"
+            label={wt('uxc.timesheets')}
+            rows={q.data.items}
+            rowKey={(t) => t.id}
+            height="auto"
+            selectable={q.data.items.some((t) => t.status === 'SUBMITTED')}
+            onRowOpen={(t) => setOpen(t)}
+            exportName={`${config.key}-timesheets`}
+            testId="ts-queue"
+            columns={[
+              { id: 'person', header: wt('finance.person'), width: 200, grow: true, required: true, value: (t) => t.userName,
+                cell: (t) => <button type="button" className="truncate text-left text-[13.5px] font-medium hover:underline" onClick={() => setOpen(t)}>{t.userName}</button> },
+              { id: 'week', header: wt('uxc.colWeek'), width: 150, value: (t) => t.weekStart, exportValue: (t) => t.weekStart, cell: (t) => <span className="text-[12.5px] text-[var(--w-text-2)]">{wt('finance.weekOfLc', { d: formatDate(t.weekStart) })}</span> },
+              { id: 'hours', header: wt('uxc.colHours'), width: 90, align: 'right', value: (t) => Math.round((t.totalMinutes / 60) * 100) / 100, cell: (t) => <span className="tabular-nums">{fmtHours(t.totalMinutes)}</span> },
+              ...(manage ? [{ id: 'cost', header: wt('finance.cost'), width: 120, align: 'right' as const, value: (t: Timesheet) => t.approvedCost ?? null,
+                cell: (t: Timesheet) => <span className="tabular-nums text-[12.5px] text-[var(--w-text-2)]">{t.approvedCost != null ? t.approvedCost.toLocaleString(wfmt.intl()) : '—'}</span> }] : []),
+              { id: 'status', header: wt('common.status'), width: 130, value: (t) => TIMESHEET_STATUS_LABEL[t.status], cell: (t) => <StatusLine t={t} /> },
+              { id: 'submitted', header: wt('uxc.colSubmitted'), width: 120, defaultHidden: true, value: (t) => t.submittedAt?.slice(0, 10) ?? null },
+            ]}
+            bulkActions={(rows, clear) => {
+              const ready = rows.filter((t) => t.status === 'SUBMITTED');
+              return (
+                <button type="button" className="w-btn w-btn-sm w-btn-primary" disabled={!ready.length || bulkApprove.isPending} onClick={() => bulkApprove.mutate(ready.map((t) => t.id), { onSuccess: clear })}>
+                  {bulkApprove.isPending ? <Spinner size={12} /> : <CheckCircle2 size={13} />} {wt('uxc.approveN', { count: ready.length })}
+                </button>
+              );
+            }}
+          />
+        </div>
       )}
       <ReviewDialog config={config} ts={open} onClose={() => setOpen(null)} />
     </div>
@@ -520,8 +556,31 @@ function BudgetTab({ config }: { config: ProjectConfig }) {
         </div>
         <button type="button" className="w-btn w-btn-primary" disabled={!e.description.trim() || !e.amount || Number.isNaN(Number(e.amount)) || addExp.isPending} onClick={() => addExp.mutate()} data-testid="ex-add"><Plus size={14} />{wt('finance.recordCost')}</button>
         <div className="mt-3">
-          <Table head={[wt('finance.cost'), wt('finance.date'), wt('finance.amount'), '']} empty={wt('finance.noOtherCosts')}
-            rows={(exp.data ?? []).map((x) => [<span key="n">{x.description}<span className="text-[var(--w-text-3)]"> · {cap(x.category)}{x.vendor ? ` · ${x.vendor}` : ''}</span></span>, formatDate(x.spentOn), fmtMoney(x.amount, cur), <button key="d" type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" aria-label={wt('finance.removeCost')} onClick={() => setConfirm({ kind: 'expense', id: x.id })}><Trash2 size={13} /></button>])} />
+          {/* UX-C: bảng chung — sắp xếp/lọc/xuất CSV-xlsx các khoản chi. */}
+          <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)]">
+            <DataTable
+              id="finance-expenses"
+              label={wt('finance.otherCosts')}
+              rows={exp.data ?? []}
+              rowKey={(x) => x.id}
+              height="auto"
+              loading={exp.isLoading}
+              defaultDensity="compact"
+              exportName={`${config.key}-expenses`}
+              empty={<p className="px-3 py-4 text-[13px] text-[var(--w-text-3)]">{wt('finance.noOtherCosts')}</p>}
+              columns={[
+                { id: 'desc', header: wt('finance.cost'), width: 220, grow: true, required: true, value: (x) => x.description },
+                { id: 'category', header: wt('finance.category'), width: 120, value: (x) => cap(x.category) },
+                { id: 'vendor', header: wt('finance.vendor'), width: 140, hideBelow: 'md', value: (x) => x.vendor },
+                { id: 'line', header: wt('finance.budgetLine'), width: 140, defaultHidden: true, value: (x) => x.budgetLine?.name ?? null },
+                { id: 'stage', header: wt('finance.stage'), width: 120, defaultHidden: true, value: (x) => (x.stage ? `${x.stage.n}. ${x.stage.name}` : null) },
+                { id: 'date', header: wt('finance.date'), width: 120, value: (x) => x.spentOn, cell: (x) => <span className="text-[12.5px]">{formatDate(x.spentOn)}</span> },
+                { id: 'amount', header: wt('finance.amount'), width: 130, align: 'right', value: (x) => x.amount, cell: (x) => <span className="tabular-nums">{fmtMoney(x.amount, cur)}</span> },
+                { id: 'actions', header: '', width: 52, sortable: false, export: false, required: true,
+                  cell: (x) => <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" aria-label={wt('finance.removeCost')} onClick={() => setConfirm({ kind: 'expense', id: x.id })}><Trash2 size={13} /></button> },
+              ]}
+            />
+          </div>
         </div>
       </div>
       <ConfirmDialog open={!!confirm} onClose={() => setConfirm(null)} onConfirm={() => confirm && del.mutate(confirm)} pending={del.isPending} title={confirm?.kind === 'line' ? wt('finance.removeLineQ') : wt('finance.removeCostQ')} body={wt('finance.auditNote')} confirmLabel={wt('common.remove')} />

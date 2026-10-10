@@ -14,7 +14,8 @@ import { workError } from '@/lib/work-api';
 import { workSwrApi, workSwrKeys, type Feature, type P3 } from '@/lib/work-swr-api';
 import { wt } from '@/components/work/i18n';
 import { Dialog, EmptyState, Field, PageLoading, Spinner } from '../ui';
-import { Chip, Clip, downloadXlsx, P3_KEY, RowActions, TableFrame, TabIntro, TD, TextArea, TH, useSwrRefresh } from './shared';
+import { Chip, downloadXlsx, P3_KEY, RowActions, TabIntro, TextArea, useSwrRefresh } from './shared';
+import DataTable from '../table/DataTable';
 
 const EMPTY = { name: '', description: '', scope: 'IN' as 'IN' | 'OUT', priority: '' as '' | P3, versionId: '', epic: '' };
 
@@ -56,36 +57,44 @@ export default function FeaturesTab({ pid, onOpenIssue }: { pid: number; onOpenI
         {data.canEdit && <button type="button" className="w-btn w-btn-sm w-btn-primary" onClick={() => setEdit('new')}><Plus size={14} /> {wt('swr.addFeature')}</button>}
       </TabIntro>
       {!data.features.length ? <EmptyState title={wt('swr.noFeatures')} body={wt('swr.noFeaturesBody')} /> : (
-        <TableFrame label={wt('swr.tabFeatures')}>
-          <table className="w-full min-w-[980px] border-separate border-spacing-0">
-            <thead><tr>{['ID', wt('swr.hFeature'), wt('swr.hScope'), wt('swr.hRelease'), wt('common.priority'), wt('swr.hUseCases'), wt('swr.hRequirements'), wt('common.epic'), ''].map((h, i) => <th key={i} scope="col" className={TH}>{h}</th>)}</tr></thead>
-            <tbody>
-              {data.features.map((fe) => (
-                <tr key={fe.id} className="hover:bg-[var(--w-hover)]">
-                  <td className={`${TD} font-mono text-[12px]`}>{fe.key}</td>
-                  <td className={`${TD} max-w-[320px]`}><span className="font-medium">{fe.name}</span><Clip text={fe.description} /></td>
-                  <td className={TD}><Chip tone={fe.scope === 'OUT' ? 'muted' : 'green'}>{fe.scope === 'OUT' ? wt('swr.outOfScope') : wt('swr.inScope')}</Chip></td>
-                  <td className={TD}>{fe.release ?? <span className="text-[var(--w-text-2)]">{wt('swr.notScheduled')}</span>}</td>
-                  <td className={TD}>{fe.priority ? wt(P3_KEY[fe.priority]) : '—'}</td>
-                  <td className={`${TD} text-[12px]`}>
+        // UX-C: bảng chung — sắp xếp/lọc/cột/xuất CSV-xlsx (nút .xlsx ở trên vẫn là mẫu sổ feature của máy chủ).
+        <div className="w-card overflow-hidden">
+          <DataTable
+            id="swr-features"
+            label={wt('swr.tabFeatures')}
+            rows={data.features}
+            rowKey={(fe) => fe.id}
+            height="auto"
+            exportName="features"
+            columns={[
+              { id: 'key', header: 'ID', width: 80, value: (fe) => fe.key, cell: (fe) => <span className="font-mono text-[12px]">{fe.key}</span> },
+              { id: 'name', header: wt('swr.hFeature'), width: 260, grow: true, required: true, value: (fe) => fe.name,
+                cell: (fe) => <span className="min-w-0"><span className="block truncate font-medium" title={fe.name}>{fe.name}</span>{fe.description ? <span className="block truncate text-[11.5px] text-[var(--w-text-3)]" title={fe.description}>{fe.description}</span> : null}</span> },
+              { id: 'scope', header: wt('swr.hScope'), width: 120, value: (fe) => (fe.scope === 'OUT' ? wt('swr.outOfScope') : wt('swr.inScope')),
+                cell: (fe) => <Chip tone={fe.scope === 'OUT' ? 'muted' : 'green'}>{fe.scope === 'OUT' ? wt('swr.outOfScope') : wt('swr.inScope')}</Chip> },
+              { id: 'release', header: wt('swr.hRelease'), width: 120, value: (fe) => fe.release, cell: (fe) => (fe.release ? <span className="truncate">{fe.release}</span> : <span className="text-[var(--w-text-2)]">{wt('swr.notScheduled')}</span>) },
+              { id: 'priority', header: wt('common.priority'), width: 100, value: (fe) => (fe.priority ? wt(P3_KEY[fe.priority]) : null) },
+              { id: 'uc', header: wt('swr.hUseCases'), width: 150, hideBelow: 'md', value: (fe) => fe.useCases.map((u) => u.key).join(', ') || null,
+                cell: (fe) => (
+                  <span className="truncate text-[12px]">
                     {fe.useCases.length ? fe.useCases.map((u) => <span key={u.number} className="mr-1.5 inline-block font-mono" title={u.name}>{u.key}{!u.manual && <span className="ml-0.5 text-[var(--w-text-2)]">({wt('swr.auto')})</span>}</span>)
                       : fe.scope === 'OUT' ? '—' : <Chip tone="red">{wt('swr.noUc')}</Chip>}
-                  </td>
-                  <td className={`${TD} text-[12px]`}>{fe.issues.length ? fe.issues.map((i) => <button key={i.linkId} type="button" className="mr-1.5 font-mono text-[var(--w-accent-text)] hover:underline" title={i.title} onClick={() => onOpenIssue(i.number)}>{i.key}</button>) : '—'}</td>
-                  <td className={`${TD} text-[12px]`}>{fe.epic ? <button type="button" className="font-mono text-[var(--w-accent-text)] hover:underline" title={fe.epic.title} onClick={() => onOpenIssue(fe.epic!.number)}>{fe.epic.key}</button> : '—'}</td>
-                  <td className={`${TD} w-28`}>
-                    {data.canEdit && (
-                      <span className="flex justify-end gap-1">
-                        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`${wt('swr.links')} ${fe.key}`} title={wt('swr.links')} onClick={() => setLinkFor(fe)}><Link2 size={13} /></button>
-                        <RowActions label={fe.key} onEdit={() => setEdit(fe)} onDelete={() => window.confirm(wt('swr.deleteQ', { name: `${fe.key} ${fe.name}` })) && del.mutate(fe.key)} />
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </TableFrame>
+                  </span>
+                ) },
+              { id: 'reqs', header: wt('swr.hRequirements'), width: 150, hideBelow: 'lg', value: (fe) => fe.issues.map((i) => i.key).join(', ') || null,
+                cell: (fe) => <span className="truncate text-[12px]">{fe.issues.length ? fe.issues.map((i) => <button key={i.linkId} type="button" className="mr-1.5 font-mono text-[var(--w-accent-text)] hover:underline" title={i.title} onClick={() => onOpenIssue(i.number)}>{i.key}</button>) : '—'}</span> },
+              { id: 'epic', header: wt('common.epic'), width: 90, value: (fe) => fe.epic?.key ?? null,
+                cell: (fe) => (fe.epic ? <button type="button" className="font-mono text-[12px] text-[var(--w-accent-text)] hover:underline" title={fe.epic.title} onClick={() => onOpenIssue(fe.epic!.number)}>{fe.epic.key}</button> : <span>—</span>) },
+              ...(data.canEdit ? [{ id: 'actions', header: '', width: 112, sortable: false, export: false, required: true,
+                cell: (fe: Feature) => (
+                  <span className="flex w-full justify-end gap-1">
+                    <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`${wt('swr.links')} ${fe.key}`} title={wt('swr.links')} onClick={() => setLinkFor(fe)}><Link2 size={13} /></button>
+                    <RowActions label={fe.key} onEdit={() => setEdit(fe)} onDelete={() => window.confirm(wt('swr.deleteQ', { name: `${fe.key} ${fe.name}` })) && del.mutate(fe.key)} />
+                  </span>
+                ) }] : []),
+            ]}
+          />
+        </div>
       )}
 
       <Dialog open={!!edit} onClose={() => setEdit(null)} title={edit === 'new' ? wt('swr.addFeature') : `${wt('common.edit')} ${(edit as Feature | null)?.key ?? ''}`} width={560}

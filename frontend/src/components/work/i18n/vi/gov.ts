@@ -34,6 +34,7 @@ export const gov: Strings<typeof En> = {
   mtRetro: 'Retrospective',
   mtSteering: 'Họp ban chỉ đạo',
   mtClient: 'Họp với khách',
+  mtElicitation: 'Khơi gợi yêu cầu (elicitation)',
   mtOther: 'Khác',
   notScored: 'Chưa chấm điểm',
   scoreTip: 'Điểm {s} ({lv})',

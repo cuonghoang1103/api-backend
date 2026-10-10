@@ -29,7 +29,7 @@ import {
   CalendarClock, GitPullRequestArrow, ShieldAlert,
   Wallet, Receipt, FileBarChart,
   Headset, Library, ExternalLink, Bot,
-  FileSpreadsheet, MessagesSquare,
+  FileSpreadsheet, MessagesSquare, UsersRound, ClipboardCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
@@ -134,6 +134,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'resources', get label() { return wt('nav.n_Resources'); }, icon: Library, match: (v) => v === 'resources', module: 'resources' },
       // Đợt S6: Spec quality (Spec Fidelity) — đội dự án + giảng viên; khách không thấy.
       { path: 'spec', get label() { return wt('nav.n_Specquality'); }, icon: Gauge, match: (v) => v === 'spec', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      // CTW đợt 6: phiên review/inspection (tài liệu + mã) + baseline yêu cầu — đội dự án + giảng viên.
+      { path: 'reviews', get label() { return wt('q6.navReviews'); }, icon: ClipboardCheck, match: (v) => v === 'reviews', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       // CTW đợt 4: SRS có cấu trúc (use case/actor/BR/màn/phân quyền) + RTM — đội dự án + giảng viên.
       { path: 'requirements', get label() { return wt('nav.n_Requirements'); }, icon: ListTree, match: (v) => v === 'requirements', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       // CTW Diagram: Diagram Studio (Mermaid/Excalidraw, AI vẽ từ dữ liệu dự án) — đội dự án + giảng viên.
@@ -147,6 +149,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
   {
     group: 'Insights',
     items: [
+      // UX-C: tổng quan nhóm cho trưởng nhóm (ai làm gì, tải, trễ/kẹt, review, họp, hồ sơ FPT, Q&A) — đội dự án + giảng viên.
+      { path: 'team', get label() { return wt('uxc.navTeam'); }, icon: UsersRound, match: (v) => v === 'team', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       { path: 'reports', get label() { return wt('nav.n_Reports'); }, icon: BarChart3, match: (v) => v === 'reports' },
       { path: 'dashboards', get label() { return wt('nav.n_Dashboards'); }, icon: LayoutDashboard, match: (v) => v === 'dashboards' },
       // CTW đợt 3B: tệp Excel nộp trường (WBS, Project Tracking, Weekly Report, AI Usage) — đội dự án + giảng viên.

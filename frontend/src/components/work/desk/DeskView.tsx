@@ -31,6 +31,7 @@ import { Pill } from '../studio/shared';
 import { PersonSelect } from '../governance/shared';
 import { PriorityBadge, SlaClock, VIEW_LABEL, minutesText } from './shared';
 import { wt } from '@/components/work/i18n';
+import DataTable, { type DataColumn } from '../table/DataTable';
 
 type Tab = 'queues' | 'problems' | 'reports' | 'settings';
 const VIEWS: QueueView[] = ['open', 'unassigned', 'mine', 'at_risk', 'breached', 'waiting', 'team', 'resolved'];
@@ -138,46 +139,20 @@ function QueuesTab({ config }: { config: ProjectConfig }) {
         <EmptyState icon={<Inbox size={20} />} title={view === 'breached' ? wt('desk.noBreached') : view === 'at_risk' ? wt('desk.nothingAtRisk') : wt('desk.noRequests')} body={wt('desk.noRequestsBody')} />
       ) : (
         <>
-          {/* Bảng ≥ lg */}
-          <div className="w-card hidden overflow-x-auto lg:block" data-testid="desk-queue">
-            <table className="w-full min-w-[980px] text-[13px]">
-              <thead>
-                <tr className="border-b border-[var(--w-border)] text-left text-[11.5px] font-medium uppercase tracking-[0.04em] text-[var(--w-text-3)]">
-                  <th className="px-3 py-2">{wt('desk.request')}</th>
-                  <th className="px-2 py-2">P</th>
-                  <th className="px-2 py-2">{wt('desk.requester')}</th>
-                  <th className="px-2 py-2">{wt('common.assignee')}</th>
-                  <th className="px-2 py-2">{wt('common.status')}</th>
-                  <th className="px-2 py-2">{wt('desk.firstResponse')}</th>
-                  <th className="px-2 py-2">{wt('desk.resolution')}</th>
-                  <th className="px-3 py-2 text-right">{wt('common.created')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {q.data.items.map((r) => (
-                  <tr key={r.number} className="border-b border-[var(--w-border)] last:border-b-0 hover:bg-[var(--w-hover)]" data-testid={`desk-row-${r.number}`}>
-                    <td className="max-w-[340px] px-3 py-2">
-                      <Link href={`${base}/issue/${r.number}`} className="block min-w-0">
-                        <span className="flex min-w-0 items-center gap-2">
-                          <span className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">{r.key}</span>
-                          <span className="truncate font-medium">{r.title}</span>
-                        </span>
-                        <span className="mt-0.5 flex items-center gap-1.5 text-[11.5px] text-[var(--w-text-3)]">
-                          {r.requestTypeName}{r.channel === 'PORTAL' && wt('desk.portalSuffix')}{r.waiting && <Pill tone="neutral" className="!h-[18px] !px-1.5 !text-[11px]">{wt('desk.waitingCustomer')}</Pill>}
-                        </span>
-                      </Link>
-                    </td>
-                    <td className="px-2 py-2"><PriorityBadge p={r.priority} /></td>
-                    <td className="px-2 py-2"><Person u={r.requester} /></td>
-                    <td className="px-2 py-2"><Person u={r.assignee} empty={wt('common.unassigned')} /></td>
-                    <td className="px-2 py-2"><StatusBadge status={r.status} /></td>
-                    <td className="px-2 py-2"><SlaClock t={r.firstResponse} fetchedAt={fetchedAt} compact label={wt('desk.firstResponse')} /></td>
-                    <td className="px-2 py-2"><SlaClock t={r.resolution} fetchedAt={fetchedAt} compact label={wt('desk.resolution')} /></td>
-                    <td className="whitespace-nowrap px-3 py-2 text-right text-[12px] text-[var(--w-text-3)]">{relativeTime(r.createdAt)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {/* Bảng ≥ lg — UX-C: bảng chung (sắp xếp theo cột, chọn/ẩn cột, xuất CSV/xlsx, bàn phím). Thứ tự gốc vẫn theo ô "Sort". */}
+          <div className="w-card hidden overflow-hidden lg:block">
+            <DataTable
+              id="desk-queue"
+              label={VIEW_LABEL[view]}
+              rows={q.data.items}
+              columns={deskColumns(base, fetchedAt)}
+              rowKey={(r) => r.number}
+              height="auto"
+              quickFilter={false}
+              onRowOpen={(r) => router.push(`${base}/issue/${r.number}`)}
+              exportName={`${config.key}-desk-${view}`}
+              testId="desk-queue"
+            />
           </div>
           {/* Thẻ < lg */}
           <ul className="space-y-2 lg:hidden" data-testid="desk-queue-cards">
@@ -189,6 +164,40 @@ function QueuesTab({ config }: { config: ProjectConfig }) {
       <NewRequestDialog config={config} open={creating} onClose={() => setCreating(false)} />
     </div>
   );
+}
+
+const PRIO_RANK: Record<string, number> = { P1: 1, P2: 2, P3: 3, P4: 4 };
+/** Phút còn lại của đồng hồ SLA (đã dừng ⇒ cuối danh sách). */
+const slaLeft = (t: QueueItem['firstResponse']) => (t.stopped ? null : t.remainingMin);
+
+function deskColumns(base: string, fetchedAt: number): DataColumn<QueueItem>[] {
+  return [
+    {
+      id: 'request', header: wt('desk.request'), width: 320, grow: true, required: true,
+      value: (r) => r.title, text: (r) => `${r.key} ${r.title} ${r.requestTypeName}`, exportValue: (r) => `${r.key} ${r.title}`,
+      cell: (r) => (
+        <Link href={`${base}/issue/${r.number}`} className="block min-w-0" data-testid={`desk-row-${r.number}`}>
+          <span className="flex min-w-0 items-center gap-2">
+            <span className="shrink-0 font-mono text-[12px] text-[var(--w-accent-text)]">{r.key}</span>
+            <span className="truncate font-medium">{r.title}</span>
+          </span>
+          <span className="mt-0.5 flex items-center gap-1.5 text-[11.5px] text-[var(--w-text-3)]">
+            {r.requestTypeName}{r.channel === 'PORTAL' && wt('desk.portalSuffix')}{r.waiting && <Pill tone="neutral" className="!h-[18px] !px-1.5 !text-[11px]">{wt('desk.waitingCustomer')}</Pill>}
+          </span>
+        </Link>
+      ),
+    },
+    { id: 'priority', header: 'P', width: 56, headerTitle: wt('common.priority'), value: (r) => PRIO_RANK[r.priority] ?? 9, exportValue: (r) => r.priority, cell: (r) => <PriorityBadge p={r.priority} /> },
+    { id: 'type', header: wt('desk.requestType'), width: 140, defaultHidden: true, value: (r) => r.requestTypeName },
+    { id: 'team', header: wt('desk.team'), width: 110, defaultHidden: true, value: (r) => r.team?.key ?? null },
+    { id: 'requester', header: wt('desk.requester'), width: 150, value: (r) => (r.requester ? userName(r.requester) : null), cell: (r) => <Person u={r.requester} /> },
+    { id: 'assignee', header: wt('common.assignee'), width: 150, value: (r) => (r.assignee ? userName(r.assignee) : null), cell: (r) => <Person u={r.assignee} empty={wt('common.unassigned')} /> },
+    { id: 'status', header: wt('common.status'), width: 130, value: (r) => r.status.name, cell: (r) => <StatusBadge status={r.status} /> },
+    { id: 'first', header: wt('desk.firstResponse'), width: 140, value: (r) => slaLeft(r.firstResponse), exportValue: (r) => r.firstResponse.label, cell: (r) => <SlaClock t={r.firstResponse} fetchedAt={fetchedAt} compact label={wt('desk.firstResponse')} /> },
+    { id: 'resolution', header: wt('desk.resolution'), width: 140, value: (r) => slaLeft(r.resolution), exportValue: (r) => r.resolution.label, cell: (r) => <SlaClock t={r.resolution} fetchedAt={fetchedAt} compact label={wt('desk.resolution')} /> },
+    { id: 'created', header: wt('common.created'), width: 110, align: 'right', value: (r) => r.createdAt, exportValue: (r) => r.createdAt.slice(0, 10), cell: (r) => <span className="whitespace-nowrap text-[12px] text-[var(--w-text-3)]">{relativeTime(r.createdAt)}</span> },
+    { id: 'updated', header: wt('common.updated'), width: 110, align: 'right', defaultHidden: true, value: (r) => r.updatedAt, exportValue: (r) => r.updatedAt.slice(0, 10), cell: (r) => <span className="whitespace-nowrap text-[12px] text-[var(--w-text-3)]">{relativeTime(r.updatedAt)}</span> },
+  ];
 }
 
 function Person({ u, empty = '—' }: { u: QueueItem['assignee']; empty?: string }) {

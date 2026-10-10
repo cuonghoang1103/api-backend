@@ -6,9 +6,11 @@
  * Dự án cỡ LFD (~400 thẻ, vài nghìn dòng lịch sử) đo dưới 300 ms mỗi tuyến (flowReports.db.test.ts in số đo).
  */
 
+import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
 import { BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
 import { openIssueWhere } from './openIssues.js';
+import { projectCached } from './projectCache.js';
 import { requireProject } from './permissions.js';
 import { activeSprintPace } from './sprintPace.js';
 import { estimateOf, estimationOf, vnDay } from './sprints.service.js';
@@ -31,8 +33,29 @@ async function loadStatuses(projectId: number): Promise<FlowStatus[]> {
   return rows.map((s) => ({ id: s.id, name: s.name, category: s.category, position: s.position, color: s.color, isDefaultWorkflow: s.workflow.isDefault }));
 }
 
+/**
+ * Đợt 6 (D3): đường nhanh SQL thô cho hai bộ lọc hay gặp (không lọc thêm / `resolvedAt >= from`) — 10k thẻ: 65 ms (Prisma,
+ * hai truy vấn con type + testCase) ⇒ ~28 ms. Bộ lọc khác (WIP, release) vẫn đi Prisma như cũ.
+ */
+async function loadFlowIssuesFast(projectId: number, resolvedFrom: Date | null) {
+  type R = { id: number; number: number; title: string; createdAt: Date; resolvedAt: Date | null; statusId: number; assigneeId: number | null; fixVersionId: number | null; storyPoints: number | null; originalEstimateMin: number | null };
+  const since = resolvedFrom ? Prisma.sql`AND i.resolved_at >= ${resolvedFrom}` : Prisma.empty;
+  return prisma.$queryRaw<R[]>`
+    SELECT i.id, i.number, i.title, i.created_at AS "createdAt", i.resolved_at AS "resolvedAt", i.status_id AS "statusId",
+           i.assignee_id AS "assigneeId", i.fix_version_id AS "fixVersionId", i.story_points AS "storyPoints", i.original_estimate_min AS "originalEstimateMin"
+    FROM work_issues i JOIN work_issue_types t ON t.id = i.type_id
+    WHERE i.project_id = ${projectId} AND i.deleted_at IS NULL AND t.level = 0
+      AND NOT EXISTS (SELECT 1 FROM work_test_cases c WHERE c.issue_id = i.id) ${since}`;
+}
+
 async function loadFlowIssues(projectId: number, extra: Record<string, unknown> = {}) {
   const mode = await estimationOf(projectId);
+  const keys = Object.keys(extra);
+  const gte = (extra.resolvedAt as { gte?: unknown } | undefined)?.gte;
+  if (!keys.length || (keys.length === 1 && gte instanceof Date && Object.keys(extra.resolvedAt as object).length === 1)) {
+    const rows = await loadFlowIssuesFast(projectId, keys.length ? (gte as Date) : null);
+    return { issues: rows.map((r): FlowIssue => ({ ...r, estimate: estimateOf(r, mode) })), unit: mode };
+  }
   const rows = await prisma.workIssue.findMany({
     where: { projectId, ...FLOW_ISSUE_WHERE, ...extra },
     select: {
@@ -49,12 +72,11 @@ async function loadFlowIssues(projectId: number, extra: Record<string, unknown> 
 
 async function loadChanges(issueIds: number[], field: 'statusId' | 'fixVersionId'): Promise<FieldChange[]> {
   if (!issueIds.length) return [];
-  const rows = await prisma.workHistory.findMany({
-    where: { issueId: { in: issueIds }, field },
-    select: { issueId: true, fromValue: true, toValue: true, createdAt: true },
-    orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
-  });
-  return rows.map((r) => ({ issueId: r.issueId, from: r.fromValue, to: r.toValue, at: r.createdAt }));
+  // Đợt 6 (D3): một tham số mảng (`= ANY`) thay cho 10k tham số `IN (…)` của Prisma — 15k dòng: 70 ms ⇒ ~40 ms.
+  return prisma.$queryRaw<FieldChange[]>`
+    SELECT issue_id AS "issueId", from_value AS "from", to_value AS "to", created_at AS "at"
+    FROM work_history WHERE issue_id = ANY(${issueIds}::int[]) AND field = ${field}
+    ORDER BY created_at ASC, id ASC`;
 }
 
 const catMap = (statuses: FlowStatus[]) => new Map(statuses.map((s) => [s.id, s.category]));
@@ -72,11 +94,14 @@ export async function cfd(userId: number, projectId: number, q: { days?: number 
   const now = new Date();
   const today = vnDay(now);
   const range = dayRange(addDays(today, -(days - 1)), today);
-  const [statuses, { issues }] = await Promise.all([loadStatuses(projectId), loadFlowIssues(projectId)]);
-  // Thẻ đã xong TRƯỚC khoảng vẫn nằm trong dải Done (đúng nghĩa "tích luỹ").
-  const statusChanges = await loadChanges(issues.map((i) => i.id), 'statusId');
-  const r = computeCfd({ days: range, tz: FLOW_TZ, now, statuses, issues, statusChanges });
-  return { scope: FLOW_SCOPE_TEXT, days, from: range[0], to: today, bands: r.bands.map(({ statusIds: _s, ...b }) => b), points: r.points };
+  // Đợt 6 (D3): kết quả không phụ thuộc người xem ⇒ đệm ngắn theo dự án (single-flight + xoá khi dự án đổi).
+  return projectCached(projectId, `cfd:${days}:${today}`, async () => {
+    const [statuses, { issues }] = await Promise.all([loadStatuses(projectId), loadFlowIssues(projectId)]);
+    // Thẻ đã xong TRƯỚC khoảng vẫn nằm trong dải Done (đúng nghĩa "tích luỹ").
+    const statusChanges = await loadChanges(issues.map((i) => i.id), 'statusId');
+    const r = computeCfd({ days: range, tz: FLOW_TZ, now, statuses, issues, statusChanges });
+    return { scope: FLOW_SCOPE_TEXT, days, from: range[0], to: today, bands: r.bands.map(({ statusIds: _s, ...b }) => b), points: r.points };
+  });
 }
 
 // ─── Cycle / lead time ───────────────────────────────────────────
@@ -86,10 +111,12 @@ export async function cycleTime(userId: number, projectId: number, q: { days?: n
   const days = clampDays(q.days, 90, 14, 365);
   const now = new Date();
   const from = new Date(now.getTime() - days * DAY_MS);
-  const [statuses, { issues }] = await Promise.all([loadStatuses(projectId), loadFlowIssues(projectId, { resolvedAt: { gte: from } })]);
-  const statusChanges = await loadChanges(issues.map((i) => i.id), 'statusId');
-  const r = computeCycleTimes({ issues, statusChanges, statusCat: catMap(statuses), tz: FLOW_TZ, from });
-  return { scope: FLOW_SCOPE_TEXT, days, from: dayKey(from, FLOW_TZ), to: vnDay(now), ...r };
+  return projectCached(projectId, `cycle:${days}:${vnDay(now)}`, async () => {
+    const [statuses, { issues }] = await Promise.all([loadStatuses(projectId), loadFlowIssues(projectId, { resolvedAt: { gte: from } })]);
+    const statusChanges = await loadChanges(issues.map((i) => i.id), 'statusId');
+    const r = computeCycleTimes({ issues, statusChanges, statusCat: catMap(statuses), tz: FLOW_TZ, from });
+    return { scope: FLOW_SCOPE_TEXT, days, from: dayKey(from, FLOW_TZ), to: vnDay(now), ...r };
+  });
 }
 
 // ─── Throughput ──────────────────────────────────────────────────

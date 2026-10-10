@@ -12,7 +12,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { AlertTriangle, CalendarPlus, ChevronDown, ChevronRight, Crosshair, Filter, PanelLeft, Route, X } from 'lucide-react';
+import { AlertTriangle, CalendarPlus, Camera, ChevronDown, ChevronRight, Crosshair, Filter, Flag, Layers, PanelLeft, Route, Trash2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   userName, workApi, workError, workErrorStatus,
@@ -22,13 +22,18 @@ import { wk, type Lookups } from './hooks';
 import { EmptyState, IssueTypeIcon, PickerList, Popover, UserAvatar, useToggle, type PickOption, PageLoading } from './ui';
 import { wt } from '@/components/work/i18n';
 import { statusName } from '@/components/work/i18n/names';
+import { uxcApi, uxcKeys, type BaselineCompare } from '@/lib/work-uxc-api';
+import { exportTimelinePng } from './timeline/exportTimeline';
 
 const DAY = 86_400_000;
 const ROW_H = 36;
 const HEADER_H = 48;
+/** Dải mốc (sprint / version / giai đoạn) dưới thang thời gian — UX-C. */
+const MARK_H = 22;
 
-type Zoom = 'weeks' | 'months' | 'quarters';
+type Zoom = 'days' | 'weeks' | 'months' | 'quarters';
 const ZOOMS: Array<{ id: Zoom; label: string; dw: number }> = [
+  { id: 'days', get label() { return wt('uxc.zDays'); }, dw: 56 },
   { id: 'weeks', get label() { return wt('timeline.weeks'); }, dw: 32 },
   { id: 'months', get label() { return wt('timeline.months'); }, dw: 10 },
   { id: 'quarters', get label() { return wt('timeline.quarters'); }, dw: 3.5 },
@@ -52,6 +57,8 @@ type Row =
   | { kind: 'issue'; item: TimelineItem; nested: boolean };
 
 interface Span { start: number; end: number }
+type SpanX = Span & { derived?: boolean; open?: boolean; fallback?: 'sprint' | 'version' }
+const zoomKey = (pid: number) => `ctwork:timeline:${pid}`;
 interface Drag { id: number; mode: 'move' | 'start' | 'end'; x0: number; orig: Span; cur: Span; moved: boolean }
 
 export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectConfig; pid: number; lk: Lookups; onOpen: (num: number) => void }) {
@@ -71,6 +78,33 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
   const [drag, setDrag] = useState<Drag | null>(null);
   const [hoverRow, setHoverRow] = useState<number | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
+  // UX-C: mốc trên trục, baseline (C5), ẩn thẻ chưa lên lịch, tập trung đường găng, nổi phụ thuộc khi rê chuột.
+  const markers = useQuery({ queryKey: uxcKeys.markers(pid), queryFn: () => uxcApi.markers(pid), staleTime: 60_000 });
+  const baselines = useQuery({ queryKey: uxcKeys.baselines(pid), queryFn: () => uxcApi.baselines(pid), staleTime: 60_000 });
+  const [baselineId, setBaselineId] = useState<number | null>(null);
+  const cmp = useQuery({ queryKey: uxcKeys.compare(pid, baselineId ?? 0), queryFn: () => uxcApi.compare(pid, baselineId!), enabled: !!baselineId });
+  const [hideUnscheduled, setHideUnscheduled] = useState(false);
+  const [critFocus, setCritFocus] = useState(false);
+  const [hoverBar, setHoverBar] = useState<number | null>(null);
+  const [exporting, setExporting] = useState(false);
+  // Nhớ mức zoom + baseline đang so theo dự án (localStorage, bọc try/catch).
+  useEffect(() => {
+    try {
+      const v = JSON.parse(window.localStorage.getItem(zoomKey(pid)) ?? 'null') as { zoom?: Zoom; baselineId?: number | null } | null;
+      if (v?.zoom && ZOOMS.some((z) => z.id === v.zoom)) setZoom(v.zoom);
+      if (typeof v?.baselineId === 'number') setBaselineId(v.baselineId);
+    } catch { /* riêng tư */ }
+  }, [pid]);
+  const remember = useCallback((patch: { zoom?: Zoom; baselineId?: number | null }) => {
+    try {
+      const cur = JSON.parse(window.localStorage.getItem(zoomKey(pid)) ?? '{}') as object;
+      window.localStorage.setItem(zoomKey(pid), JSON.stringify({ ...cur, ...patch }));
+    } catch { /* bỏ qua */ }
+  }, [pid]);
+  // Baseline đã bị xoá ⇒ bỏ chọn.
+  useEffect(() => {
+    if (baselineId && baselines.data && !baselines.data.some((b) => b.id === baselineId)) { setBaselineId(null); remember({ baselineId: null }); }
+  }, [baselineId, baselines.data, remember]);
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 639px)');
@@ -84,13 +118,36 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
   const data = q.data;
   const today = toDay(todayStr());
 
+  // UX-C: thẻ chưa có ngày nhưng thuộc sprint / version có ngày ⇒ thanh "lùi" theo sprint/version (nét đứt).
+  const fallback = useMemo(() => {
+    const m = new Map<number, Span & { fallback: 'sprint' | 'version'; label: string }>();
+    const mk = markers.data;
+    if (!data || !mk) return m;
+    const sprint = new Map(mk.sprints.filter((x) => x.start && x.end).map((x) => [x.id, x]));
+    const version = new Map(mk.versions.filter((x) => x.release).map((x) => [x.id, x]));
+    for (const i of data.items) {
+      if (i.start || i.due || i.level >= 1) continue;
+      const sp = i.sprintId ? sprint.get(i.sprintId) : undefined;
+      if (sp) { m.set(i.id, { start: toDay(sp.start!), end: Math.max(toDay(sp.start!), toDay(sp.end!)), fallback: 'sprint', label: sp.name }); continue; }
+      const v = i.fixVersionId ? version.get(i.fixVersionId) : undefined;
+      if (v) {
+        const end = toDay(v.release!);
+        m.set(i.id, { start: v.start ? Math.min(toDay(v.start), end) : end - 13, end, fallback: 'version', label: v.name });
+      }
+    }
+    return m;
+  }, [data, markers.data]);
+  const isTest = useCallback((i: TimelineItem) => lk.types.get(i.typeId)?.key === 'TEST', [lk]);
+
   // ── Cây hàng ────────────────────────────────────────────────
   const { rows, visibleIds } = useMemo(() => {
     const out: Row[] = [];
     if (!data) return { rows: out, visibleIds: new Set<number>() };
     const match = (i: TimelineItem) =>
-      (!people.length || people.includes(i.assigneeId ?? 0)) && (versionId === null || i.fixVersionId === versionId);
-    const filtering = people.length > 0 || versionId !== null;
+      !isTest(i)
+      && (!hideUnscheduled || !!(i.start || i.due || fallback.has(i.id)))
+      && (!people.length || people.includes(i.assigneeId ?? 0)) && (versionId === null || i.fixVersionId === versionId);
+    const filtering = people.length > 0 || versionId !== null || hideUnscheduled;
     const epics = data.items.filter((i) => i.level >= 1);
     const epicIds = new Set(epics.map((e) => e.id));
     const children = new Map<number, TimelineItem[]>();
@@ -117,17 +174,18 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
     const ids = new Set<number>();
     out.forEach((r) => r.kind !== 'group' && ids.add(r.item.id));
     return { rows: out, visibleIds: ids };
-  }, [data, people, versionId, collapsed]);
+  }, [data, people, versionId, collapsed, isTest, hideUnscheduled, fallback]);
 
   // Khoảng ngày của từng thẻ (đã tính cả thanh đang kéo + epic suy từ con).
   const spans = useMemo(() => {
-    const m = new Map<number, Span & { derived?: boolean; open?: boolean }>();
+    const m = new Map<number, SpanX>();
     if (!data) return m;
     for (const i of data.items) {
       if (drag && drag.id === i.id) { m.set(i.id, drag.cur); continue; }
       if (i.start && i.due) m.set(i.id, { start: toDay(i.start), end: Math.max(toDay(i.start), toDay(i.due)) });
       else if (i.due) m.set(i.id, { start: toDay(i.due), end: toDay(i.due) });
       else if (i.start) m.set(i.id, { start: toDay(i.start), end: toDay(i.start), open: true });
+      else if (fallback.has(i.id)) { const f = fallback.get(i.id)!; m.set(i.id, { start: f.start, end: f.end, fallback: f.fallback }); }
     }
     // Epic không có ngày: thanh phủ min(start)..max(due) của con — chỉ để nhìn.
     for (const e of data.items) {
@@ -136,19 +194,20 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
       if (kids.length) m.set(e.id, { start: Math.min(...kids.map((k) => k.start)), end: Math.max(...kids.map((k) => k.end)), derived: true });
     }
     return m;
-  }, [data, drag]);
+  }, [data, drag, fallback]);
 
   // ── Khoảng hiển thị: bao mọi thanh + hôm nay, căn về thứ Hai ─────
   const range = useMemo(() => {
     let lo = today - 30, hi = today + 90;
     for (const s of spans.values()) { lo = Math.min(lo, s.start - 14); hi = Math.max(hi, s.end + 30); }
+    for (const v of markers.data?.versions ?? []) if (v.release) hi = Math.max(hi, toDay(v.release) + 7);
     const pad = zoom === 'quarters' ? 60 : zoom === 'months' ? 21 : 7;
     lo -= pad; hi += pad;
     lo -= (utc(lo).getUTCDay() + 6) % 7; // về thứ Hai
     return { start: lo, days: hi - lo + 1 };
     // Không phụ thuộc drag: kéo thanh ra mép không được làm cả lưới nhảy.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, today, zoom]);
+  }, [data, today, zoom, markers.data, fallback]);
   const gridW = range.days * dw;
   const xOf = useCallback((day: number) => (day - range.start) * dw, [range.start, dw]);
 
@@ -190,6 +249,10 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
         const wkStart = n - ((dow + 6) % 7);
         push(bottom, `w${wkStart}`, n, String(utc(wkStart).getUTCDate()));
         if (dow === 1) lines.push(xOf(n));
+      } else if (zoom === 'days') {
+        push(top, `${y}-${mo}`, n, `${months()[mo]} ${y}`);
+        bottom.push({ x: xOf(n), w: dw, label: `${wt('uxc.weekdays').split(',')[dow]} ${dd}`, dim: dow === 0 || dow === 6 });
+        lines.push(xOf(n));
       } else {
         push(top, `${y}-${mo}`, n, `${months()[mo]} ${y}`);
         bottom.push({ x: xOf(n), w: dw, label: String(dd), dim: dow === 0 || dow === 6 });
@@ -296,9 +359,66 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
         path = `M${x1},${y1} H${x1 + gap} V${my} H${x2 - gap} V${y2} H${x2 - 2}`;
       }
       const key = `${d.from}>${d.to}`;
-      return [{ key, path, conflict: conflictEdges.has(key), critical: showCritical && critical.edges.has(key), from: d.from, to: d.to }];
+      return [{ key, path, conflict: conflictEdges.has(key), critical: showCritical && critical.edges.has(key), from: d.from, to: d.to, hot: hoverBar !== null && (d.from === hoverBar || d.to === hoverBar) }];
     });
-  }, [data, rowIndex, spans, visibleIds, xOf, conflictEdges, critical, showCritical]);
+  }, [data, rowIndex, spans, visibleIds, xOf, conflictEdges, critical, showCritical, hoverBar]);
+
+  // ── Baseline (C5): thanh mờ "kế hoạch gốc" dưới thanh hiện tại + số ngày trễ ──
+  const base = useMemo(() => {
+    const m = new Map<number, Span & { slip: number | null; state: BaselineCompare['rows'][number]['state'] }>();
+    const c = cmp.data;
+    if (!c) return m;
+    const st = new Map(c.rows.map((r) => [r.id, r]));
+    for (const i of c.items) {
+      const a = i.start ?? i.due;
+      const b = i.due ?? i.start;
+      if (!a || !b) continue;
+      const r = st.get(i.id);
+      m.set(i.id, { start: toDay(a), end: Math.max(toDay(a), toDay(b)), slip: r?.slipDays ?? null, state: r?.state ?? 'ON_PLAN' });
+    }
+    return m;
+  }, [cmp.data]);
+  const saveBaseline = async (name: string) => {
+    try {
+      const b = await uxcApi.createBaseline(pid, { name });
+      toast.success(wt('uxc.baselineSaved', { name: b.name, count: b.itemCount }));
+      await qc.invalidateQueries({ queryKey: uxcKeys.baselines(pid) });
+      setBaselineId(b.id);
+      remember({ baselineId: b.id });
+    } catch (err) { toast.error(workError(err, wt('uxc.baselineFailed'))); }
+  };
+  const deleteBaseline = async (id: number) => {
+    if (!window.confirm(wt('uxc.baselineDeleteQ'))) return;
+    try {
+      await uxcApi.deleteBaseline(pid, id);
+      if (baselineId === id) { setBaselineId(null); remember({ baselineId: null }); }
+      qc.invalidateQueries({ queryKey: uxcKeys.baselines(pid) });
+    } catch (err) { toast.error(workError(err)); }
+  };
+  const baselineBtn = useRef<HTMLButtonElement>(null);
+  const baselinePop = useToggle();
+  const [baselineName, setBaselineName] = useState('');
+  const unscheduledCount = useMemo(() => (data?.items ?? []).filter((i) => i.level < 1 && !isTest(i) && !i.start && !i.due && !fallback.has(i.id)).length, [data, isTest, fallback]);
+  const doExport = async () => {
+    if (!data) return;
+    setExporting(true);
+    try {
+      await exportTimelinePng({
+        root: scroller.current ?? document.body,
+        title: `${config.key} — ${wt('timeline.title')}`,
+        rows: rows.map((r) => (r.kind === 'group'
+          ? { kind: 'group' as const, label: r.label }
+          : { kind: r.kind, id: r.item.id, key: lk.issueKey(r.item.number), title: r.item.title, color: lk.types.get(r.item.typeId)?.color ?? null, done: r.item.done })),
+        spans, base, deps: arrows.map((a) => ({ from: a.from, to: a.to, critical: a.critical, conflict: a.conflict })),
+        critical: showCritical ? critical.ids : new Set<number>(),
+        today, range, zoom, months: months(),
+        markers: markers.data ?? null,
+        fileName: `${config.key}-timeline`,
+      });
+    } catch (err) {
+      toast.error(wt('charts.exportFailed'), { description: (err as Error).message });
+    } finally { setExporting(false); }
+  };
 
   // ── Bộ lọc ───────────────────────────────────────────────────
   const peopleBtn = useRef<HTMLButtonElement>(null);
@@ -328,6 +448,9 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
   }
 
   const bodyH = Math.max(rows.length * ROW_H, 120);
+  const mk = markers.data;
+  const hasMarks = !!mk && (mk.sprints.some((x) => x.start && x.end) || mk.versions.some((x) => x.release) || mk.stages.some((x) => x.start));
+  const headH = HEADER_H + (hasMarks ? MARK_H : 0);
   const weekendBg = zoom === 'quarters'
     ? undefined
     : `repeating-linear-gradient(to right, transparent 0 ${5 * dw}px, var(--tl-weekend) ${5 * dw}px ${7 * dw}px)`;
@@ -344,7 +467,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
             <button
               key={z.id}
               type="button"
-              onClick={() => setZoom(z.id)}
+              onClick={() => { setZoom(z.id); remember({ zoom: z.id }); }}
               aria-pressed={zoom === z.id}
               className={cn('h-[26px] px-2.5 text-[12px] font-medium', zoom === z.id ? 'bg-[var(--w-active)] text-[var(--w-text)]' : 'text-[var(--w-text-2)] hover:bg-[var(--w-hover)]')}
             >
@@ -385,7 +508,53 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
           <button type="button" onClick={() => { setPeople([]); setVersionId(null); }} className="w-btn w-btn-ghost w-btn-sm"><X size={12} /> {wt('board.clear')}</button>
         )}
 
+        {unscheduledCount > 0 && (
+          <button type="button" onClick={() => setHideUnscheduled((v) => !v)} aria-pressed={hideUnscheduled} className={cn('w-btn w-btn-sm', hideUnscheduled && 'w-btn-on')} title={wt('uxc.unscheduledTip')} data-testid="tl-unscheduled">
+            <CalendarPlus size={12} /> {hideUnscheduled ? wt('uxc.showUnscheduled', { count: unscheduledCount }) : wt('uxc.hideUnscheduled', { count: unscheduledCount })}
+          </button>
+        )}
+
         <div className="ml-auto flex flex-wrap items-center gap-2">
+          {/* Baseline (C5): lưu kế hoạch gốc, so với hiện tại */}
+          <button ref={baselineBtn} type="button" onClick={baselinePop.toggle} className={cn('w-btn w-btn-sm max-w-[260px]', baselineId && 'w-btn-on')} aria-haspopup="dialog" aria-expanded={baselinePop.on} data-testid="tl-baseline">
+            <Layers size={13} />
+            <span className="truncate">{baselineId && cmp.data ? wt('uxc.baselineVs', { name: cmp.data.baseline.name }) : wt('uxc.baseline')}</span>
+            <ChevronDown size={12} className="shrink-0" />
+          </button>
+          <Popover open={baselinePop.on} onClose={baselinePop.close} anchorRef={baselineBtn} width={300} align="end">
+            <div className="p-2" role="dialog" aria-label={wt('uxc.baseline')}>
+              <p className="mb-2 px-1 text-[12px] text-[var(--w-text-2)]">{wt('uxc.baselineHelp')}</p>
+              <div className="max-h-[220px] overflow-y-auto" role="radiogroup" aria-label={wt('uxc.baseline')}>
+                <label className="flex cursor-pointer items-center gap-2 rounded-[5px] px-1.5 py-1 text-[13px] hover:bg-[var(--w-hover)]">
+                  <input type="radio" name="tl-baseline" checked={!baselineId} onChange={() => { setBaselineId(null); remember({ baselineId: null }); }} />
+                  {wt('uxc.noBaseline')}
+                </label>
+                {(baselines.data ?? []).map((b) => (
+                  <div key={b.id} className="flex items-center gap-1 rounded-[5px] px-1.5 py-1 hover:bg-[var(--w-hover)]">
+                    <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 text-[13px]">
+                      <input type="radio" name="tl-baseline" checked={baselineId === b.id} onChange={() => { setBaselineId(b.id); remember({ baselineId: b.id }); }} />
+                      <span className="min-w-0">
+                        <span className="block truncate">{b.name}</span>
+                        <span className="block truncate text-[11px] text-[var(--w-text-3)]">{shortDate(toDay(b.createdAt.slice(0, 10)))} · {wt('uxc.nItems', { count: b.itemCount })}</span>
+                      </span>
+                    </label>
+                    {canEdit && <button type="button" className="w-btn w-btn-ghost w-btn-sm w-btn-icon" aria-label={wt('uxc.deleteBaseline', { name: b.name })} onClick={() => void deleteBaseline(b.id)}><Trash2 size={12} /></button>}
+                  </div>
+                ))}
+              </div>
+              {canEdit && (
+                <form className="mt-2 flex gap-1.5 border-t border-[var(--w-border)] pt-2" onSubmit={(e) => { e.preventDefault(); if (baselineName.trim()) { void saveBaseline(baselineName.trim()); setBaselineName(''); } }}>
+                  <input className="w-input !h-[28px] min-w-0 flex-1 !text-[12.5px]" placeholder={wt('uxc.baselineNamePh')} aria-label={wt('uxc.baselineName')} value={baselineName} maxLength={120} onChange={(e) => setBaselineName(e.target.value)} />
+                  <button type="submit" className="w-btn w-btn-primary w-btn-sm" disabled={!baselineName.trim()}>{wt('uxc.saveBaseline')}</button>
+                </form>
+              )}
+            </div>
+          </Popover>
+          {baselineId && cmp.data && (
+            <span className={cn('inline-flex h-[24px] items-center gap-1 rounded-full border px-2 text-[12px]', cmp.data.summary.slipped ? 'border-[var(--w-red-text)] text-[var(--w-red-text)]' : 'border-[var(--w-border-strong)] text-[var(--w-text-2)]')} title={wt('uxc.baselineSummaryTip', { a: cmp.data.summary.ahead, o: cmp.data.summary.onPlan, n: cmp.data.summary.added, r: cmp.data.summary.removed + cmp.data.summary.unscheduled })} data-testid="tl-baseline-summary">
+              {cmp.data.summary.slipped ? wt('uxc.slipped', { count: cmp.data.summary.slipped, d: cmp.data.summary.maxSlip }) : wt('uxc.onPlanAll')}
+            </span>
+          )}
           {data.conflicts.length > 0 && (
             <span className="inline-flex h-[24px] items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] px-2 text-[12px] text-[var(--w-red)]" title={wt('timeline.conflictTitle')}>
               <AlertTriangle size={12} /> {wt('timeline.conflicts', { count: data.conflicts.length })}
@@ -402,9 +571,27 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
               <button type="button" onClick={() => setShowCritical((v) => !v)} aria-pressed={showCritical} className={cn('w-btn w-btn-sm', showCritical && 'w-btn-on')}>
                 <Route size={13} /> <span className="hidden sm:inline">{wt('timeline.showCritical')}</span>
               </button>
+              {showCritical && (
+                <button type="button" onClick={() => setCritFocus((v) => !v)} aria-pressed={critFocus} className={cn('w-btn w-btn-sm', critFocus && 'w-btn-on')} title={wt('uxc.critFocusTip', { path: data.criticalPath.map((id) => lk.issueKey(itemById.get(id)?.number ?? 0)).join(' → ') })}>
+                  {wt('uxc.critFocus')}
+                </button>
+              )}
             </>
           )}
+          <button type="button" className="w-btn w-btn-sm w-btn-icon" onClick={() => void doExport()} disabled={exporting || !rows.length} aria-label={wt('uxc.exportPng')} title={wt('uxc.exportPng')} data-testid="tl-export">
+            {exporting ? <span className="h-3 w-3 animate-spin rounded-full border-2 border-[var(--w-text-3)] border-t-transparent" /> : <Camera size={13} />}
+          </button>
         </div>
+      </div>
+      {/* Chú giải (UX-C): đọc được ngay mũi tên / viền đỏ / thanh mờ nghĩa là gì */}
+      <div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-1 border-b border-[var(--w-border)] px-4 py-1 text-[11.5px] text-[var(--w-text-3)]" aria-label={wt('uxc.legend')}>
+        <span className="inline-flex items-center gap-1.5"><svg width="22" height="8" aria-hidden="true"><path d="M0 4 H18" stroke="var(--w-text-3)" strokeWidth="1.5" /><path d="M16 1 L21 4 L16 7z" fill="var(--w-text-3)" /></svg>{wt('uxc.lgDep')}</span>
+        {data.criticalPath.length > 1 && <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-4 rounded-[3px] shadow-[0_0_0_2px_var(--w-orange)]" aria-hidden="true" />{wt('uxc.lgCritical')}</span>}
+        {data.conflicts.length > 0 && <span className="inline-flex items-center gap-1.5"><svg width="22" height="8" aria-hidden="true"><path d="M0 4 H20" stroke="var(--w-red)" strokeWidth="2" strokeDasharray="4 3" /></svg>{wt('uxc.lgConflict')}</span>}
+        {fallback.size > 0 && <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-4 rounded-[3px] border border-dashed border-[var(--w-text-3)]" aria-hidden="true" />{wt('uxc.lgFallback')}</span>}
+        {baselineId && <span className="inline-flex items-center gap-1.5"><span className="h-[4px] w-4 rounded-full bg-[var(--w-text-3)] opacity-60" aria-hidden="true" />{wt('uxc.lgBaseline')}</span>}
+        <span className="inline-flex items-center gap-1.5"><span className="h-3 w-[2px] bg-[var(--w-accent)]" aria-hidden="true" />{wt('common.today')}</span>
+        {(markers.data?.versions.length ?? 0) > 0 && <span className="inline-flex items-center gap-1.5"><Flag size={11} className="text-[var(--w-epic,var(--w-accent))]" aria-hidden="true" />{wt('uxc.lgRelease')}</span>}
       </div>
 
       {!rows.length ? (
@@ -416,7 +603,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
         <div ref={scroller} className="relative min-h-0 min-w-0 flex-1 overflow-auto overscroll-contain">
           <div className="relative" style={{ width: treeW + gridW, minHeight: '100%' }}>
             {/* Tiêu đề (dính trên) */}
-            <div className="sticky top-0 z-20 flex border-b border-[var(--w-border)] bg-[var(--w-panel)]" style={{ height: HEADER_H }}>
+            <div className="sticky top-0 z-20 flex border-b border-[var(--w-border)] bg-[var(--w-panel)]" style={{ height: headH }}>
               <div className="sticky left-0 z-30 flex shrink-0 items-end border-r border-[var(--w-border)] bg-[var(--w-panel)] px-3 pb-1.5 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]" style={{ width: treeW }}>
                 {narrowTree ? wt('common.issue') : wt('timeline.work')}
               </div>
@@ -429,13 +616,31 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                 {scale.bottom.map((s) => (
                   <div
                     key={`b${s.x}`}
-                    className={cn('absolute bottom-0 flex h-6 items-center justify-center overflow-hidden whitespace-nowrap text-[10.5px] tabular', s.dim ? 'text-[var(--w-text-3)]' : 'text-[var(--w-text-2)]', zoom !== 'weeks' && 'justify-start border-l border-[var(--w-border)] pl-1')}
-                    style={{ left: s.x, width: s.w }}
+                    className={cn('absolute flex h-6 items-center justify-center overflow-hidden whitespace-nowrap text-[10.5px] tabular', s.dim ? 'text-[var(--w-text-3)]' : 'text-[var(--w-text-2)]', zoom !== 'weeks' && zoom !== 'days' && 'justify-start border-l border-[var(--w-border)] pl-1')}
+                    style={{ left: s.x, width: s.w, top: 24 }}
                   >
                     {s.w >= 14 ? s.label : ''}
                   </div>
                 ))}
-                <div className="absolute bottom-0 h-6 w-[2px] -translate-x-1/2 rounded-full bg-[var(--w-accent)]" style={{ left: xOf(today) + dw / 2 }} title={wt('common.today')} />
+                <div className="absolute h-6 w-[2px] -translate-x-1/2 rounded-full bg-[var(--w-accent)]" style={{ left: xOf(today) + dw / 2, top: 24 }} title={wt('common.today')} />
+                {/* UX-C: dải mốc — sprint (dải), giai đoạn (dải viền), version (cờ ở ngày phát hành) */}
+                {hasMarks && mk && (
+                  <div className="absolute inset-x-0 bottom-0 border-t border-[var(--w-border)]" style={{ height: MARK_H }} aria-label={wt('uxc.markersLane')} role="group">
+                    {mk.stages.filter((x) => x.start).map((st) => {
+                      const a = toDay(st.start!), b = st.end ? toDay(st.end) : Math.max(a, today);
+                      return <span key={`st${st.id}`} className="absolute top-[3px] flex h-[16px] items-center overflow-hidden whitespace-nowrap rounded-[4px] border border-[var(--w-border-strong)] px-1 text-[10.5px] text-[var(--w-text-2)]" style={{ left: xOf(a), width: Math.max(dw, (b - a + 1) * dw) }} title={`${wt('uxc.stage')} ${st.n}. ${st.name}`}>{st.n}. {st.name}</span>;
+                    })}
+                    {mk.sprints.filter((x) => x.start && x.end).map((sp) => {
+                      const a = toDay(sp.start!), b = Math.max(a, toDay(sp.end!));
+                      return <span key={`sp${sp.id}`} className={cn('absolute top-[3px] flex h-[16px] items-center overflow-hidden whitespace-nowrap rounded-[4px] px-1 text-[10.5px]', sp.status === 'ACTIVE' ? 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'bg-[var(--w-sunken)] text-[var(--w-text-2)]')} style={{ left: xOf(a), width: Math.max(dw, (b - a + 1) * dw) }} title={`${sp.name} · ${shortDate(a)} – ${shortDate(b)}`}>{sp.name}</span>;
+                    })}
+                    {mk.versions.filter((x) => x.release).map((v) => (
+                      <span key={`v${v.id}`} className="absolute top-[2px] z-[1] flex h-[18px] -translate-x-1/2 items-center gap-0.5 whitespace-nowrap rounded-[4px] bg-[var(--w-panel)] px-1 text-[10.5px] font-medium text-[var(--w-text)] shadow-[0_0_0_1px_var(--w-border-strong)]" style={{ left: xOf(toDay(v.release!)) + dw / 2 }} title={`${v.name} · ${shortDate(toDay(v.release!))}${v.status === 'RELEASED' ? ` · ${wt('timeline.released')}` : ''}`}>
+                        <Flag size={10} aria-hidden="true" className={v.status === 'RELEASED' ? 'text-[var(--w-green-text)]' : 'text-[var(--w-epic,var(--w-accent))]'} />{zoom === 'quarters' ? '' : v.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -495,6 +700,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                     onMouseLeave={() => setHoverRow((h) => (h === idx ? null : h))}
                   >
                     {r.kind !== 'group' && !spans.has(r.item.id) && canEdit && (
+                      // UX-C: nhãn "Chưa lên lịch" chỉ hiện khi rê chuột (trước đây dòng nào cũng có ⇒ nhiễu); đếm chung ở nút trên thanh công cụ.
                       <div
                         role="button"
                         tabIndex={-1}
@@ -502,19 +708,17 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                         title={wt('timeline.clickDay')}
                         onClick={(e) => clickEmptyRow(e, r.item)}
                       >
-                        {/* Luôn thấy (không chỉ khi rê chuột): thẻ chưa có ngày trông như dòng trống bị lỗi. */}
-                        <span
-                          className={cn(
-                            'pointer-events-none sticky mt-[5px] inline-flex items-center gap-1 rounded-[5px] border border-dashed px-2 text-[11.5px]',
-                            hoverRow === idx ? 'border-[var(--w-accent-border)] text-[var(--w-accent-text)]' : 'border-[var(--w-border-strong)] text-[var(--w-text-3)]',
-                          )}
-                          style={{ left: treeW + 8, height: ROW_H - 10 }}
-                        >
-                          <CalendarPlus size={12} /> {hoverRow === idx ? wt('timeline.clickStart') : wt('timeline.notScheduledAdd')}
-                        </span>
+                        {hoverRow === idx && (
+                          <span
+                            className="pointer-events-none sticky mt-[5px] inline-flex items-center gap-1 rounded-[5px] border border-dashed border-[var(--w-accent-border)] px-2 text-[11.5px] text-[var(--w-accent-text)]"
+                            style={{ left: treeW + 8, height: ROW_H - 10 }}
+                          >
+                            <CalendarPlus size={12} /> {wt('timeline.clickStart')}
+                          </span>
+                        )}
                       </div>
                     )}
-                    {r.kind !== 'group' && !spans.has(r.item.id) && !canEdit && (
+                    {r.kind !== 'group' && !spans.has(r.item.id) && !canEdit && hoverRow === idx && (
                       <span
                         className="pointer-events-none sticky mt-[5px] inline-flex items-center gap-1 rounded-[5px] border border-dashed border-[var(--w-border-strong)] px-2 text-[11.5px] text-[var(--w-text-3)]"
                         style={{ left: treeW + 8, height: ROW_H - 10 }}
@@ -527,24 +731,29 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
 
                 {/* Đường hôm nay */}
                 <div className="pointer-events-none absolute inset-y-0 z-[3] w-[2px] -translate-x-1/2 bg-[var(--w-accent)] opacity-70" style={{ left: xOf(today) + dw / 2 }} />
+                {/* Mốc version (UX-C): vạch đứt ở ngày phát hành */}
+                {(mk?.versions ?? []).filter((v) => v.release).map((v) => (
+                  <div key={`vl${v.id}`} className="pointer-events-none absolute inset-y-0 z-[2] w-0 border-l border-dashed border-[var(--w-epic,var(--w-accent))] opacity-60" style={{ left: xOf(toDay(v.release!)) + dw / 2 }} />
+                ))}
 
                 {/* Mũi tên phụ thuộc */}
                 <svg className="pointer-events-none absolute left-0 top-0 z-[4]" width={gridW} height={bodyH} aria-hidden="true">
                   <defs>
-                    {(['n', 'c', 'x'] as const).map((k) => (
+                    {(['n', 'c', 'x', 'h'] as const).map((k) => (
                       <marker key={k} id={`tl-arrow-${k}`} viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                        <path d="M0,0 L8,4 L0,8 z" fill={k === 'x' ? 'var(--w-red)' : k === 'c' ? 'var(--w-orange)' : 'var(--w-text-3)'} />
+                        <path d="M0,0 L8,4 L0,8 z" fill={k === 'x' ? 'var(--w-red)' : k === 'c' ? 'var(--w-orange)' : k === 'h' ? 'var(--w-accent)' : 'var(--w-text-3)'} />
                       </marker>
                     ))}
                   </defs>
                   {arrows.map((a) => {
-                    const color = a.conflict ? 'var(--w-red)' : a.critical ? 'var(--w-orange)' : 'var(--w-text-3)';
+                    const color = a.hot ? 'var(--w-accent)' : a.conflict ? 'var(--w-red)' : a.critical ? 'var(--w-orange)' : 'var(--w-text-3)';
+                    const dim = hoverBar !== null && !a.hot;
                     const tip = a.conflict
                       ? wt('timeline.blocksConflict', { a: lk.issueKey(itemById.get(a.from)?.number ?? 0), b: lk.issueKey(itemById.get(a.to)?.number ?? 0) })
                       : wt('timeline.blocks', { a: lk.issueKey(itemById.get(a.from)?.number ?? 0), b: lk.issueKey(itemById.get(a.to)?.number ?? 0) });
                     return (
                       <g key={a.key}>
-                        <path d={a.path} fill="none" stroke={color} strokeWidth={a.critical || a.conflict ? 2 : 1.25} strokeDasharray={a.conflict ? '4 3' : undefined} markerEnd={`url(#tl-arrow-${a.conflict ? 'x' : a.critical ? 'c' : 'n'})`} opacity={a.critical || a.conflict ? 1 : 0.75} />
+                        <path d={a.path} fill="none" stroke={color} strokeWidth={a.hot ? 2.25 : a.critical || a.conflict ? 2 : 1.4} strokeDasharray={a.conflict ? '4 3' : undefined} markerEnd={`url(#tl-arrow-${a.hot ? 'h' : a.conflict ? 'x' : a.critical ? 'c' : 'n'})`} opacity={dim ? 0.25 : a.hot || a.critical || a.conflict ? 1 : 0.8} />
                         {/* Vùng bấm rộng để hiện tooltip (chỉ đường này nhận chuột) */}
                         <path d={a.path} fill="none" stroke="transparent" strokeWidth={10} style={{ pointerEvents: 'stroke' }}><title>{tip}</title></path>
                       </g>
@@ -556,11 +765,22 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                 {rows.map((r, idx) => {
                   if (r.kind === 'group') return null;
                   const it = r.item;
-                  const s = spans.get(it.id) as (Span & { derived?: boolean; open?: boolean }) | undefined;
-                  if (!s) return null;
+                  const s = spans.get(it.id) as SpanX | undefined;
+                  const bl = base.get(it.id);
+                  const baseBar = bl && (
+                    <div
+                      key={`base${it.id}`}
+                      className="pointer-events-none absolute z-[4] rounded-full"
+                      style={{ left: xOf(bl.start), width: Math.max((bl.end - bl.start + 1) * dw, 4), top: idx * ROW_H + ROW_H - 7, height: 4, background: 'color-mix(in srgb, var(--w-text-3) 55%, transparent)' }}
+                      title={wt('uxc.baselineBar', { a: shortDate(bl.start), b: shortDate(bl.end) })}
+                    />
+                  );
+                  if (!s) return baseBar ?? null;
                   const isEpic = r.kind === 'epic';
                   const derived = !!s.derived;
+                  const fb = s.fallback;
                   const draggable = canEdit && !derived;
+                  const slip = bl?.slip ?? null;
                   const left = xOf(s.start);
                   const width = Math.max((s.end - s.start + 1) * dw, 6);
                   const type = lk.types.get(it.typeId);
@@ -569,23 +789,38 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                   const isConflict = conflictIds.has(it.id);
                   const dragging = drag?.id === it.id;
                   const status = lk.statuses.get(it.statusId);
-                  const label = `${lk.issueKey(it.number)} ${it.title}\n${shortDate(s.start)} – ${shortDate(s.end)}${derived ? wt('timeline.fromChildren') : ''}${status ? `\n${statusName(status.name)}` : ''}${it.progress > 0 && it.progress < 1 ? ` · ${wt('timeline.pctDone', { n: Math.round(it.progress * 100) })}` : ''}`;
+                  const preds = data.dependencies.filter((d2) => d2.to === it.id).length;
+                  const succs = data.dependencies.filter((d2) => d2.from === it.id).length;
+                  const label = `${lk.issueKey(it.number)} ${it.title}\n${shortDate(s.start)} – ${shortDate(s.end)}${derived ? wt('timeline.fromChildren') : ''}${fb ? ` ${wt(fb === 'sprint' ? 'uxc.fromSprint' : 'uxc.fromVersion', { n: fallback.get(it.id)?.label ?? '' })}` : ''}${status ? `\n${statusName(status.name)}` : ''}${it.progress > 0 && it.progress < 1 ? ` · ${wt('timeline.pctDone', { n: Math.round(it.progress * 100) })}` : ''}${preds || succs ? `\n${wt('uxc.depsLine', { a: preds, b: succs })}` : ''}${slip !== null && slip !== 0 ? `\n${slip > 0 ? wt('uxc.lateVsBaseline', { n: slip }) : wt('uxc.earlyVsBaseline', { n: -slip })}` : ''}`;
+                  const dimmed = critFocus && showCritical && critical.ids.size > 0 && !isCrit;
                   return (
+                    <div key={`barw${it.id}`}>
+                    {baseBar}
+                    {/* Trễ so với baseline — đặt NGOÀI thanh (thanh xong mờ 50% sẽ làm chữ đỏ thiếu tương phản). */}
+                    {slip !== null && slip > 0 && (
+                      <span
+                        className="pointer-events-none absolute z-[5] whitespace-nowrap rounded-[3px] px-1 text-[10.5px] font-medium leading-[16px] tabular-nums text-[var(--w-red-text)]"
+                        style={{ left: xOf(s.start) + Math.max((s.end - s.start + 1) * dw, 6) + 6, top: idx * ROW_H + 10, background: 'var(--w-panel)' }}
+                      >+{slip}d</span>
+                    )}
                     <div
                       key={`bar${it.id}`}
+                      onMouseEnter={() => setHoverBar(it.id)}
+                      onMouseLeave={() => setHoverBar((h) => (h === it.id ? null : h))}
                       className={cn(
                         'group/bar absolute z-[5] flex items-center overflow-visible rounded-[5px] text-[11.5px] font-medium select-none touch-none',
                         draggable ? (dragging ? 'cursor-grabbing' : 'cursor-grab') : 'cursor-pointer',
                         it.done && 'opacity-50',
+                        dimmed && 'opacity-30',
                         dragging && 'z-[6] shadow-lg',
                       )}
                       style={{
                         left, width,
                         top: idx * ROW_H + (isEpic ? 9 : 8),
                         height: ROW_H - (isEpic ? 18 : 16),
-                        background: derived ? `color-mix(in srgb, ${color} 14%, transparent)` : `color-mix(in srgb, ${color} 26%, var(--w-panel))`,
-                        border: `1px ${derived || s.open ? 'dashed' : 'solid'} ${isConflict ? 'var(--w-red)' : `color-mix(in srgb, ${color} 70%, transparent)`}`,
-                        boxShadow: isCrit ? '0 0 0 2px var(--w-orange)' : undefined,
+                        background: derived || fb ? `color-mix(in srgb, ${color} 12%, transparent)` : `color-mix(in srgb, ${color} 26%, var(--w-panel))`,
+                        border: `1px ${derived || s.open || fb ? 'dashed' : 'solid'} ${isConflict ? 'var(--w-red)' : `color-mix(in srgb, ${color} 70%, transparent)`}`,
+                        boxShadow: isCrit ? '0 0 0 2px var(--w-orange)' : hoverBar === it.id ? '0 0 0 2px var(--w-accent-border)' : undefined,
                       }}
                       title={label}
                       onPointerDown={(e) => (draggable ? startDrag(e, it, 'move') : undefined)}
@@ -602,7 +837,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                         <div className="pointer-events-none absolute bottom-0 left-0 h-[3px] rounded-bl-[4px]" style={{ width: `${Math.round(it.progress * 100)}%`, background: color }} />
                       )}
                       {width > 48 && (
-                        <span className="pointer-events-none relative truncate px-1.5 text-[var(--w-text)]">{it.title}</span>
+                        <span className={cn('pointer-events-none relative truncate px-1.5 text-[var(--w-text)]', fb && 'italic text-[var(--w-text-2)]')}>{it.title}</span>
                       )}
                       {width <= 48 && zoom !== 'quarters' && (
                         <span className="pointer-events-none absolute left-full ml-1.5 whitespace-nowrap text-[11px] text-[var(--w-text-2)]">{lk.issueKey(it.number)}</span>
@@ -627,6 +862,7 @@ export default function Timeline({ config, pid, lk, onOpen }: { config: ProjectC
                           {shortDate(drag.cur.start)} – {shortDate(drag.cur.end)}
                         </span>
                       )}
+                    </div>
                     </div>
                   );
                 })}

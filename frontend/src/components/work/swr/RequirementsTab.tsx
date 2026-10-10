@@ -15,7 +15,8 @@ import { workError } from '@/lib/work-api';
 import { REQ_TYPES, workSwrApi, workSwrKeys, type Lifecycle, type P3, type ReqType, type Requirement } from '@/lib/work-swr-api';
 import { wfmt, wt } from '@/components/work/i18n';
 import { Dialog, EmptyState, Field, PageLoading, Spinner } from '../ui';
-import { caps, Chip, Clip, LIFECYCLE_KEY, LifecycleChip, P3_KEY, TableFrame, TabIntro, TD, TextArea, TH, TYPE_KEY, useSwrRefresh } from './shared';
+import { caps, Chip, LIFECYCLE_KEY, LifecycleChip, P3_KEY, TabIntro, TextArea, TYPE_KEY, useSwrRefresh } from './shared';
+import DataTable from '../table/DataTable';
 
 type Filter = ReqType | 'ALL' | 'UNCLASSIFIED';
 const EMPTY = { reqType: 'FUNCTIONAL' as ReqType, subtype: '', priority: '' as '' | P3, source: '', ownerId: '', rationale: '', stability: '' as '' | P3 };
@@ -45,6 +46,14 @@ export default function RequirementsTab({ pid, onOpenIssue }: { pid: number; onO
     onSuccess: (r) => { refresh(); toast.success(wt('swr.statusNow', { key: r.key, s: wt(LIFECYCLE_KEY[r.lifecycle]) })); },
     onError: (e) => toast.error(workError(e, wt('swr.statusFailed'))),
   });
+  const bulkMove = useMutation({
+    mutationFn: async (x: { nums: number[]; to: Lifecycle }) => {
+      let ok = 0;
+      for (const num of x.nums) { try { await workSwrApi.setLifecycle(pid, num, x.to); ok += 1; } catch { /* đếm lỗi */ } }
+      return { ok, failed: x.nums.length - ok };
+    },
+    onSuccess: (r) => { refresh(); if (r.ok) toast.success(wt('uxc.movedN', { count: r.ok })); if (r.failed) toast.error(wt('uxc.moveFailedN', { count: r.failed })); },
+  });
   const rows = useMemo(() => (q.data?.requirements ?? []).filter((r) => filter === 'ALL' || (filter === 'UNCLASSIFIED' ? !r.classified : r.reqType === filter)), [q.data, filter]);
 
   if (q.isLoading) return <PageLoading rows={5} />;
@@ -65,42 +74,64 @@ export default function RequirementsTab({ pid, onOpenIssue }: { pid: number; onO
         ))}
       </div>
       {!data.requirements.length ? <EmptyState title={wt('swr.noReqs')} body={wt('swr.noReqsBody')} /> : (
-        <TableFrame label={wt('swr.tabRequirements')}>
-          <table className="w-full min-w-[1080px] border-separate border-spacing-0">
-            <thead><tr>{['ID', wt('swr.hRequirement'), wt('common.type'), wt('swr.hCategory'), wt('common.priority'), wt('common.status'), wt('swr.hSource'), wt('swr.hVersion'), ''].map((x, i) => <th key={i} scope="col" className={TH}>{x}</th>)}</tr></thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.issueId} className="hover:bg-[var(--w-hover)]">
-                  <td className={`${TD} whitespace-nowrap`}><button type="button" className="font-mono text-[12px] text-[var(--w-accent-text)] hover:underline" onClick={() => onOpenIssue(r.number)}>{r.key}</button></td>
-                  <td className={`${TD} max-w-[340px]`}><span className="font-medium">{r.title}</span>{r.rationale ? <Clip text={r.rationale} lines={1} /> : null}</td>
-                  <td className={TD}>{r.reqType ? <Chip tone="blue">{wt(TYPE_KEY[r.reqType])}</Chip> : <Chip tone="yellow">{wt('swr.unclassified')}</Chip>}</td>
-                  <td className={TD}>{caps(r.subtype) || '—'}</td>
-                  <td className={TD}>{r.priority ? wt(P3_KEY[r.priority]) : '—'}</td>
-                  <td className={TD}>
-                    <span className="flex items-center gap-1.5">
-                      <LifecycleChip lc={r.lifecycle} />
-                      {(data.canEdit || data.canApprove) && r.next.length > 0 && (
-                        <select className="w-input h-7 w-auto py-0 text-[12px]" aria-label={wt('swr.moveTo', { key: r.key })} value="" disabled={move.isPending}
-                          onChange={(e) => e.target.value && move.mutate({ num: r.number, to: e.target.value as Lifecycle })}>
-                          <option value="">{wt('swr.moveShort')}</option>
-                          {r.next.map((n) => <option key={n} value={n}>{wt(LIFECYCLE_KEY[n])}</option>)}
-                        </select>
-                      )}
-                    </span>
-                  </td>
-                  <td className={`${TD} max-w-[200px]`}><Clip text={r.source} lines={1} /></td>
-                  <td className={`${TD} tabular-nums`}>{r.classified ? `v${r.reqVersion}` : '—'}</td>
-                  <td className={`${TD} w-20`}>
-                    <span className="flex justify-end gap-1">
-                      <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`${wt('swr.history')} ${r.key}`} title={wt('swr.history')} onClick={() => setHist(r)}><History size={13} /></button>
-                      {data.canEdit && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`${wt('swr.classify')} ${r.key}`} title={wt('swr.classify')} onClick={() => setEdit(r)}><SlidersHorizontal size={13} /></button>}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </TableFrame>
+        // UX-C: bảng chung — sắp xếp/lọc nhanh/cột/xuất; chọn nhiều ⇒ chuyển vòng đời hàng loạt (chỉ áp cho dòng cho phép bước đó).
+        <div className="w-card overflow-hidden">
+          <DataTable
+            id="swr-requirements"
+            label={wt('swr.tabRequirements')}
+            rows={rows}
+            rowKey={(r) => r.issueId}
+            height="auto"
+            selectable={data.canEdit || data.canApprove}
+            exportName="requirements"
+            columns={[
+              { id: 'key', header: 'ID', width: 96, value: (r) => r.number, exportValue: (r) => r.key, text: (r) => r.key,
+                cell: (r) => <button type="button" className="font-mono text-[12px] text-[var(--w-accent-text)] hover:underline" onClick={() => onOpenIssue(r.number)}>{r.key}</button> },
+              { id: 'title', header: wt('swr.hRequirement'), width: 300, grow: true, required: true, value: (r) => r.title,
+                cell: (r) => <span className="min-w-0"><span className="block truncate font-medium" title={r.title}>{r.title}</span>{r.rationale ? <span className="block truncate text-[11.5px] text-[var(--w-text-3)]" title={r.rationale}>{r.rationale}</span> : null}</span> },
+              { id: 'type', header: wt('common.type'), width: 150, value: (r) => (r.reqType ? wt(TYPE_KEY[r.reqType]) : wt('swr.unclassified')),
+                cell: (r) => (r.reqType ? <Chip tone="blue">{wt(TYPE_KEY[r.reqType])}</Chip> : <Chip tone="yellow">{wt('swr.unclassified')}</Chip>) },
+              { id: 'subtype', header: wt('swr.hCategory'), width: 130, hideBelow: 'md', value: (r) => caps(r.subtype) || null },
+              { id: 'priority', header: wt('common.priority'), width: 100, value: (r) => (r.priority ? wt(P3_KEY[r.priority]) : null) },
+              { id: 'status', header: wt('common.status'), width: 220, value: (r) => wt(LIFECYCLE_KEY[r.lifecycle]),
+                cell: (r) => (
+                  <span className="flex items-center gap-1.5">
+                    <LifecycleChip lc={r.lifecycle} />
+                    {(data.canEdit || data.canApprove) && r.next.length > 0 && (
+                      <select className="w-input h-7 w-auto py-0 text-[12px]" aria-label={wt('swr.moveTo', { key: r.key })} value="" disabled={move.isPending}
+                        onChange={(e) => e.target.value && move.mutate({ num: r.number, to: e.target.value as Lifecycle })}>
+                        <option value="">{wt('swr.moveShort')}</option>
+                        {r.next.map((n) => <option key={n} value={n}>{wt(LIFECYCLE_KEY[n])}</option>)}
+                      </select>
+                    )}
+                  </span>
+                ) },
+              { id: 'source', header: wt('swr.hSource'), width: 170, hideBelow: 'lg', value: (r) => r.source },
+              { id: 'version', header: wt('swr.hVersion'), width: 80, align: 'right', value: (r) => (r.classified ? r.reqVersion : null), cell: (r) => <span className="tabular-nums">{r.classified ? `v${r.reqVersion}` : '—'}</span> },
+              { id: 'actions', header: '', width: 84, sortable: false, export: false, required: true,
+                cell: (r) => (
+                  <span className="flex w-full justify-end gap-1">
+                    <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`${wt('swr.history')} ${r.key}`} title={wt('swr.history')} onClick={() => setHist(r)}><History size={13} /></button>
+                    {data.canEdit && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={`${wt('swr.classify')} ${r.key}`} title={wt('swr.classify')} onClick={() => setEdit(r)}><SlidersHorizontal size={13} /></button>}
+                  </span>
+                ) },
+            ]}
+            bulkActions={(sel, clear) => {
+              const targets = [...new Set(sel.flatMap((r) => r.next))];
+              return (
+                <select className="w-input h-7 w-auto py-0 text-[12px]" aria-label={wt('uxc.bulkLifecycle')} value="" disabled={bulkMove.isPending || !targets.length}
+                  onChange={(e) => {
+                    const to = e.target.value as Lifecycle;
+                    if (!to) return;
+                    bulkMove.mutate({ nums: sel.filter((r) => r.next.includes(to)).map((r) => r.number), to }, { onSuccess: clear });
+                  }}>
+                  <option value="">{wt('uxc.bulkLifecycle')}</option>
+                  {targets.map((n) => <option key={n} value={n}>{wt(LIFECYCLE_KEY[n])} ({sel.filter((r) => r.next.includes(n)).length})</option>)}
+                </select>
+              );
+            }}
+          />
+        </div>
       )}
 
       <Dialog open={!!edit} onClose={() => setEdit(null)} title={edit ? wt('swr.classifyTitle', { key: edit.key }) : ''} width={600}

@@ -16,6 +16,27 @@ Full-stack application:
 - Local DB: PostgreSQL via `docker compose up -d postgres` (or local install)
 - Env files: `.env` (backend), `frontend/.env.local` — NEVER commit these
 
+### Chạy local an toàn với R2 (đợt 6, 10/10/2026)
+
+`.env` local mang khoá R2 **THẬT** (bucket production `cuongthai-media-storage`). Trước đợt 6 mỗi lượt test/dev
+tải ảnh lên là rác nằm trên bucket thật (10/10 phải dọn tay 98 tệp). Nay có **storage sandbox**
+(`src/config/storageSandbox.ts`, cắm ở `getR2Client()` tầng `requestHandler` ⇒ mọi `getR2Client().send` trong repo
+đều đi vào kho giả, không mở socket):
+
+- **Chạy test ⇒ sandbox BẮT BUỘC, tự bật.** `WORK_DB_TEST=1`, `NODE_ENV=test` hoặc tiến trình con của `node --test`
+  ⇒ kho trong RAM. Đặt `STORAGE_SANDBOX=0` lúc test ⇒ **ném lỗi** ngay lúc nạp cấu hình; client R2 thật mở trong lúc
+  test ⇒ **ném lỗi** (`assertNotRealEndpointInTests`). `npm test` và `npm run test:work-db` nạp thêm dây bẫy
+  `scripts/r2-tripwire.mjs` (chặn mọi kết nối tới `*.r2.cloudflarestorage.com`); `test:work-db` báo
+  `✓ r2-tripwire: 0 kết nối tới endpoint R2 thật` hoặc ĐỎ cả bộ.
+- **Dev local không đụng bucket thật:** `STORAGE_SANDBOX=1 npm run dev` ⇒ kho trong thư mục tạm
+  (`$TMPDIR/ctw-r2-sandbox`, đổi bằng `STORAGE_SANDBOX_DIR`); tệp phục vụ ở `http://localhost:<PORT>/__r2-sandbox/<key>`
+  (URL ký sẵn cũng trỏ về đó). Backend log `STORAGE SANDBOX đang bật` khi khởi động.
+- **Muốn S3 thật nhưng cục bộ:** MinIO — `STORAGE_SANDBOX=1 STORAGE_SANDBOX_ENDPOINT=http://localhost:9000`
+  (+ `STORAGE_SANDBOX_BUCKET` / `_ACCESS_KEY` / `_SECRET_KEY`). Host không phải localhost/127.0.0.1/minio ⇒ ném lỗi.
+- **Production không bao giờ sandbox:** `NODE_ENV=production` + `STORAGE_SANDBOX=1` ⇒ backend từ chối khởi động.
+- Chỉ khi CỐ Ý cần chạm bucket thật từ máy local (script upload tài nguyên khoá học…) mới chạy không có cờ — và
+  không bao giờ trong lúc test.
+
 ---
 
 ## NEVER DO - Forbidden Actions

@@ -52,7 +52,7 @@ export async function collabModeFor(userId: number, projectId: number, pageId: n
   ]);
   if (!access || !page) return { mode: 'deny', reason: 'Document not found' };
   const da = docAccess(access.role, access.workspaceRole);
-  return collabRoomMode({
+  const room = collabRoomMode({
     role: access.role,
     principal: access.principal,
     clientScoped: isClientScoped(access),
@@ -65,6 +65,12 @@ export async function collabModeFor(userId: number, projectId: number, pageId: n
     editLocked: !!lock,
     collabEnabled: projectCollabOn(project?.settings) && !page.collab?.disabled,
   });
+  // Đợt 6 (R21): trang thuộc baseline đang khoá (chưa có CR APPROVED) ⇒ vào phòng chỉ xem.
+  if (room.mode === 'edit') {
+    const locked = await (await import('./quality.service.js')).baselineLockReason(projectId, 'DOC', pageId);
+    if (locked) return { mode: 'read', reason: locked };
+  }
+  return room;
 }
 
 // ─── Phiên ───────────────────────────────────────────────────────

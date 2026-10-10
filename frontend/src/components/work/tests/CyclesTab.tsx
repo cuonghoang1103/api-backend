@@ -19,6 +19,7 @@ import { Select } from '../settings/shared';
 import TestPicker from './TestPicker';
 import { CycleStateBadge, CYCLE_STATE_META, StatusBar } from './runStatus';
 import { wt, wfmt } from '@/components/work/i18n';
+import DataTable from '../table/DataTable';
 
 export default function CyclesTab({ config, pid }: { config: ProjectConfig; pid: number }) {
   // Realtime do trang /tests gọi (gọi thêm ở đây thì rời tab sẽ `work:leave` mất phòng của trang).
@@ -61,7 +62,7 @@ export default function CyclesTab({ config, pid }: { config: ProjectConfig; pid:
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-[var(--w-border)] px-4 py-2">
         <div className="relative">
           <Search size={13} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={wt('tests.searchCycles')} className="w-input !h-[28px] w-[180px] pl-7 text-[12px]" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={wt('tests.searchCycles')} aria-label={wt('tests.searchCycles')} className="w-input !h-[28px] w-[180px] pl-7 text-[12px]" />
         </div>
         <div className="flex flex-wrap items-center gap-1">
           {(['ALL', 'PLANNED', 'IN_PROGRESS', 'DONE'] as const).map((s) => (
@@ -83,7 +84,7 @@ export default function CyclesTab({ config, pid }: { config: ProjectConfig; pid:
         )}
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {cycles.isLoading ? (
           <div className="flex h-full items-center justify-center py-16"><Spinner size={20} /></div>
         ) : cycles.error ? (
@@ -97,41 +98,48 @@ export default function CyclesTab({ config, pid }: { config: ProjectConfig; pid:
         ) : !list.length ? (
           <EmptyState title={wt('tests.noMatchCycles')} body={wt('tests.noMatchCyclesBody')} />
         ) : (
-          <div className="min-w-[760px]">
-            <div className="sticky top-0 z-[1] grid grid-cols-[minmax(220px,2fr)_minmax(140px,1fr)_110px_minmax(200px,1.4fr)_90px] gap-3 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-4 py-2 text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">
-              <span>{wt('tests.cycle')}</span><span>{wt('tests.envBuild')}</span><span>{wt('tests.state')}</span><span>{wt('common.progress')}</span><span className="text-right">{wt('tests.passRate')}</span>
-            </div>
-            {list.map((c) => (
-              <Link
-                key={c.id}
-                href={cycleHref(c.id)}
-                className="grid grid-cols-[minmax(220px,2fr)_minmax(140px,1fr)_110px_minmax(200px,1.4fr)_90px] items-center gap-3 border-b border-[var(--w-border)] px-4 py-2.5 hover:bg-[var(--w-hover)] focus-visible:bg-[var(--w-hover)] focus-visible:outline-none"
-              >
-                <div className="min-w-0">
-                  <div className="truncate text-[13px] font-medium">{c.name}</div>
-                  <div className="truncate text-[12px] text-[var(--w-text-3)]">
-                    {c.plan ? wt('tests.planName', { name: c.plan.name }) : wt('tests.noPlan')} · {wt('tests.createdAgo', { when: relativeTime(c.createdAt) })}
-                  </div>
-                </div>
-                <div className="min-w-0 text-[12px] text-[var(--w-text-2)]">
-                  <div className="truncate">{c.environment || <span className="text-[var(--w-text-3)]">{wt('tests.noEnv')}</span>}</div>
-                  {c.build && <div className="truncate text-[var(--w-text-3)]">{wt('tests.buildN', { b: c.build })}</div>}
-                </div>
-                <div><CycleStateBadge state={c.state} /></div>
-                <div className="min-w-0">
-                  <StatusBar counts={c.counts} total={c.total} />
-                  <div className="mt-1 text-[12px] tabular text-[var(--w-text-3)]">
-                    {wt('tests.executedOf', { done: c.executed, total: c.total })}
-                    {c.counts.FAIL > 0 && <span className="text-[var(--w-red)]"> · {wt('tests.nFailed', { n: c.counts.FAIL })}</span>}
-                    {c.counts.BLOCKED > 0 && <span className="text-[var(--w-orange)]"> · {wt('tests.nBlocked', { n: c.counts.BLOCKED })}</span>}
-                  </div>
-                </div>
-                <div className="text-right text-[13px] font-semibold tabular">
-                  {c.passRate === null ? <span className="font-normal text-[var(--w-text-3)]">—</span> : `${c.passRate}%`}
-                </div>
-              </Link>
-            ))}
-          </div>
+          // UX-C: bảng chung — sắp xếp theo tiến độ/tỉ lệ đạt, cột, xuất.
+          <DataTable
+            id="tests-cycles"
+            label={wt('uxc.testCycles')}
+            rows={list}
+            rowKey={(c) => c.id}
+            quickFilter={false}
+            onRowOpen={(c) => router.push(cycleHref(c.id))}
+            exportName={`${config.key}-test-cycles`}
+            testId="tests-cycles"
+            columns={[
+              { id: 'name', header: wt('tests.cycle'), width: 260, grow: true, required: true, value: (c) => c.name,
+                cell: (c) => (
+                  <Link href={cycleHref(c.id)} className="block min-w-0">
+                    <span className="block truncate text-[13px] font-medium">{c.name}</span>
+                    <span className="block truncate text-[12px] text-[var(--w-text-3)]">{c.plan ? wt('tests.planName', { name: c.plan.name }) : wt('tests.noPlan')} · {wt('tests.createdAgo', { when: relativeTime(c.createdAt) })}</span>
+                  </Link>
+                ) },
+              { id: 'env', header: wt('tests.envBuild'), width: 170, hideBelow: 'md', value: (c) => [c.environment, c.build].filter(Boolean).join(' · ') || null,
+                cell: (c) => (
+                  <span className="min-w-0 text-[12px] text-[var(--w-text-2)]">
+                    <span className="block truncate">{c.environment || <span className="text-[var(--w-text-3)]">{wt('tests.noEnv')}</span>}</span>
+                    {c.build && <span className="block truncate text-[var(--w-text-3)]">{wt('tests.buildN', { b: c.build })}</span>}
+                  </span>
+                ) },
+              { id: 'state', header: wt('tests.state'), width: 120, value: (c) => CYCLE_STATE_META[c.state].label, cell: (c) => <CycleStateBadge state={c.state} /> },
+              { id: 'progress', header: wt('common.progress'), width: 230, value: (c) => (c.total ? c.executed / c.total : 0), exportValue: (c) => `${c.executed}/${c.total}`,
+                cell: (c) => (
+                  <span className="block min-w-0 flex-1">
+                    <StatusBar counts={c.counts} total={c.total} />
+                    <span className="mt-1 block truncate text-[12px] tabular text-[var(--w-text-3)]">
+                      {wt('tests.executedOf', { done: c.executed, total: c.total })}
+                      {c.counts.FAIL > 0 && <span className="text-[var(--w-red-text)]"> · {wt('tests.nFailed', { n: c.counts.FAIL })}</span>}
+                      {c.counts.BLOCKED > 0 && <span className="text-[var(--w-orange-text)]"> · {wt('tests.nBlocked', { n: c.counts.BLOCKED })}</span>}
+                    </span>
+                  </span>
+                ) },
+              { id: 'failed', header: wt('uxc.colFailed'), width: 80, align: 'right', defaultHidden: true, value: (c) => c.counts.FAIL },
+              { id: 'pass', header: wt('tests.passRate'), width: 100, align: 'right', value: (c) => c.passRate,
+                cell: (c) => <span className="text-[13px] font-semibold tabular">{c.passRate === null ? <span className="font-normal text-[var(--w-text-3)]">—</span> : `${c.passRate}%`}</span> },
+            ]}
+          />
         )}
       </div>
 

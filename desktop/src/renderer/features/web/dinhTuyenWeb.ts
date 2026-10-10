@@ -317,6 +317,8 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/classes', nap: () => import('@/app/work/classes/page') },
   { mau: '/work/invite/:token', nap: () => import('@/app/work/invite/[token]/page') },
   { mau: '/work/share/:token', nap: () => import('@/app/work/share/[token]/page') },
+  { mau: '/work/survey/:token', nap: () => import('@/app/work/survey/[token]/page') }, // 6b: khảo sát công khai
+  { mau: '/work/mockup-review/:token', nap: () => import('@/app/work/mockup-review/[token]/page') }, // 6b: khách duyệt prototype
   { mau: '/work/:ws', nap: () => import('@/app/work/[ws]/page') },
   { mau: '/work/:ws/settings', nap: () => import('@/app/work/[ws]/settings/page') },
   /* Lớp studio Đợt S1 (04/10/2026): bộ phận — tĩnh "teams" phải đứng TRƯỚC
@@ -341,6 +343,7 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/:ws/:key/tests', nap: () => import('@/app/work/[ws]/[key]/tests/page') },
   /* CTW đợt 3B (09/10/2026): báo cáo Excel nộp trường (WBS, Project Tracking, Weekly Report, AI Usage). */
   { mau: '/work/:ws/:key/school', nap: () => import('@/app/work/[ws]/[key]/school/page') },
+  { mau: '/work/:ws/:key/team', nap: () => import('@/app/work/[ws]/[key]/team/page') }, // UX-C: Team overview
   { mau: '/work/:ws/:key/settings', nap: () => import('@/app/work/[ws]/[key]/settings/page') },
   // Lớp studio Đợt S1: giai đoạn & cổng, phê duyệt có chữ ký.
   { mau: '/work/:ws/:key/stages', nap: () => import('@/app/work/[ws]/[key]/stages/page') },
@@ -374,6 +377,7 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/:ws/:key/diagrams', nap: () => import('@/app/work/[ws]/[key]/diagrams/page') },
   /* CTW đợt 4b (10/10/2026): hồ sơ SWR302 theo Wiegers (?tab= overview|features|requirements|priority|glossary|dictionary|six-links). */
   { mau: '/work/:ws/:key/wiegers', nap: () => import('@/app/work/[ws]/[key]/wiegers/page') },
+  { mau: '/work/:ws/:key/reviews', nap: () => import('@/app/work/[ws]/[key]/reviews/page') }, // CTW đợt 6: review/inspection + baseline
   { mau: '/work/:ws/:key/tests/:num', nap: () => import('@/app/work/[ws]/[key]/tests/[num]/page') },
   { mau: '/work/:ws/:key/issue/:num', nap: () => import('@/app/work/[ws]/[key]/issue/[num]/page') },
   { mau: '/work/:ws/:key/tests/cycles/:cycleId', nap: () => import('@/app/work/[ws]/[key]/tests/cycles/[cycleId]/page') },

@@ -23,6 +23,12 @@ import CyclesTab from '@/components/work/tests/CyclesTab';
 import TraceabilityTab from '@/components/work/tests/TraceabilityTab';
 import UnitTab from '@/components/work/tests/fpt/UnitTab';
 import IntegrationTab from '@/components/work/tests/fpt/IntegrationTab';
+// CTW đợt 6 (TST-1 + B2): thiết kế test có công cụ, giám sát & TSR, kiểm thử theo rủi ro, thăm dò, phân tích lỗi.
+import DesignTab from '@/components/work/quality/DesignTab';
+import QualityTab from '@/components/work/quality/QualityTab';
+import RisksTab from '@/components/work/quality/RisksTab';
+import ExploratoryTab from '@/components/work/quality/ExploratoryTab';
+import DefectsTab from '@/components/work/quality/DefectsTab';
 import { wt } from '@/components/work/i18n';
 
 const TABS = [
@@ -35,6 +41,11 @@ const TABS = [
   { id: 'integration', get label() { return wt('tests.tabIntegration52'); } },
   // Đợt 3B (09/10/2026): Report 5.3 System Test — mỗi workflow một sheet, Round 1–3.
   { id: 'system', get label() { return wt('tests.tabSystemTests53'); } },
+  { id: 'design', get label() { return wt('q6.tabDesign'); } },
+  { id: 'quality', get label() { return wt('q6.tabQuality'); } },
+  { id: 'risks', get label() { return wt('q6.tabRisks'); } },
+  { id: 'exploratory', get label() { return wt('q6.tabExploratory'); } },
+  { id: 'defects', get label() { return wt('q6.tabDefects'); } },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -121,6 +132,11 @@ function TestsView({ config, pid }: { config: ProjectConfig; pid: number }) {
             {tab === 'unit' && <UnitTab config={config} pid={pid} />}
             {tab === 'integration' && <IntegrationTab config={config} pid={pid} />}
             {tab === 'system' && <IntegrationTab key="sys" config={config} pid={pid} kind="SYS" />}
+            {tab === 'design' && <div className="min-h-0 flex-1 overflow-y-auto"><DesignTab config={config} pid={pid} /></div>}
+            {tab === 'quality' && <div className="min-h-0 flex-1 overflow-y-auto"><QualityTab config={config} pid={pid} /></div>}
+            {tab === 'risks' && <div className="min-h-0 flex-1 overflow-y-auto"><RisksTab config={config} pid={pid} onOpenIssue={openIssue} /></div>}
+            {tab === 'exploratory' && <div className="min-h-0 flex-1 overflow-y-auto"><ExploratoryTab config={config} pid={pid} onOpenIssue={openIssue} /></div>}
+            {tab === 'defects' && <div className="min-h-0 flex-1 overflow-y-auto"><DefectsTab config={config} pid={pid} onOpenIssue={openIssue} /></div>}
             {tab === 'traceability' && (
               <div className="min-h-0 flex-1 overflow-hidden"><TraceabilityTab config={config} pid={pid} /></div>
             )}

@@ -110,6 +110,10 @@ export interface WbsSourceIssue {
   /** Tiến độ 5 việc con của mẫu Req (SRS, SDS, Coding, Test, Integrate) — '' | 'To do' | 'Doing' | 'Done'. */
   phases: string[];
   wbs: WbsAttrs | null;
+  /** UX-C: tầng loại thẻ (epic 1 · thường 0 · sub-task −1) + ngày — cho kéo-thả và Gantt nhỏ theo nhánh. */
+  level?: number;
+  startDate?: string | null;
+  dueDate?: string | null;
 }
 export interface WbsRow {
   wbs: string; depth: number; issueId: number; number: number; key: string; title: string; typeKey: string; description: string;
@@ -121,6 +125,8 @@ export interface WbsRow {
   /** Gồm cả cây con (để xem ở dòng cha). */
   plannedTotal: number; actualDays: number; actualTotal: number;
   iteration: string; status: WbsStatus; statusName: string; assignee: string; note: string; childCount: number;
+  /** UX-C: số của thẻ cha trong WBS (null = gốc), tầng loại thẻ, ngày bắt đầu/hạn (YYYY-MM-DD). */
+  parentNumber: number | null; level: number; start: string | null; due: string | null;
 }
 export interface WbsResult {
   rows: WbsRow[];
@@ -199,6 +205,9 @@ export function buildWbs(issues: WbsSourceIssue[], matrix: EstimationMatrix): Wb
       plannedDays, plannedSource, plannedTotal: 0, actualDays, actualTotal: 0,
       iteration: iterationLabel(i.iteration), status: wbsStatusOf(i), statusName: i.statusName, assignee: i.assignee, note: w?.note ?? '',
       childCount: kids.get(i.id)?.length ?? 0,
+      parentNumber: i.parentId && byId.has(i.parentId) ? byId.get(i.parentId)!.number : null,
+      level: i.level ?? (i.typeKey === 'EPIC' ? 1 : i.typeKey === 'SUBTASK' ? -1 : 0),
+      start: i.startDate ?? null, due: i.dueDate ?? null,
     };
     rows.push(row);
     let p = plannedDays ?? 0, a = actualDays;

@@ -7,7 +7,7 @@
  * âm — comments/CommentFiles.tsx), phiên âm hiện dưới voice note, và hiện diện "ai đang xem / gõ / sửa" (K16).
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Bot, ChevronDown, ChevronRight, CornerDownRight, Flag, Paperclip, Pencil, Reply, Trash2 } from 'lucide-react';
@@ -342,32 +342,35 @@ function describe(h: HistoryEntry, lk: Lookups, config: ProjectConfig): { text: 
   }
 }
 
+/** Một dòng lịch sử (dùng chung cho tab History và luồng Activity gộp — UX-C). */
+function HistoryItem({ h, lk, config }: { h: HistoryEntry; lk: Lookups; config: ProjectConfig }) {
+  const d = describe(h, lk, config);
+  const who = h.actorKind === 'AI' ? 'CT Work AI' : h.actorKind === 'AUTOMATION' ? wt('detail.automation') : h.actorKind === 'SYSTEM' ? wt('detail.system') : userName(h.actor);
+  return (
+    <li className="flex gap-3 text-[13px]">
+      <UserAvatar user={h.actor} size={20} className="mt-0.5" />
+      <div className="min-w-0 flex-1 leading-relaxed text-[var(--w-text-2)]">
+        <span className="font-medium text-[var(--w-text)]">{who}</span> {d.text}
+        <span className="ml-2 text-[12px] text-[var(--w-text-3)]" title={new Date(h.createdAt).toLocaleString(wfmt.intl())}>{relativeTime(h.createdAt)}</span>
+        {d.from !== undefined && (
+          <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[12px]">
+            <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 line-through decoration-[var(--w-text-3)]">{d.from}</span>
+            <span className="text-[var(--w-text-3)]">→</span>
+            <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 text-[var(--w-text)]">{d.to}</span>
+          </div>
+        )}
+      </div>
+    </li>
+  );
+}
+
 function HistoryList({ pid, num, config, lk }: { pid: number; num: number; config: ProjectConfig; lk: Lookups }) {
   const q = useQuery({ queryKey: wk.history(pid, num), queryFn: () => workApi.history(pid, num) });
   if (q.isLoading) return <div className="py-4"><Spinner /></div>;
   if (!q.data?.length) return <p className="text-[13px] text-[var(--w-text-3)]">{wt('detail.noHistory')}</p>;
   return (
     <ol className="space-y-3">
-      {q.data.map((h) => {
-        const d = describe(h, lk, config);
-        const who = h.actorKind === 'AI' ? 'CT Work AI' : h.actorKind === 'AUTOMATION' ? wt('detail.automation') : h.actorKind === 'SYSTEM' ? wt('detail.system') : userName(h.actor);
-        return (
-          <li key={h.id} className="flex gap-3 text-[13px]">
-            <UserAvatar user={h.actor} size={20} className="mt-0.5" />
-            <div className="min-w-0 flex-1 leading-relaxed text-[var(--w-text-2)]">
-              <span className="font-medium text-[var(--w-text)]">{who}</span> {d.text}
-              <span className="ml-2 text-[12px] text-[var(--w-text-3)]" title={new Date(h.createdAt).toLocaleString(wfmt.intl())}>{relativeTime(h.createdAt)}</span>
-              {d.from !== undefined && (
-                <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[12px]">
-                  <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 line-through decoration-[var(--w-text-3)]">{d.from}</span>
-                  <span className="text-[var(--w-text-3)]">→</span>
-                  <span className="rounded-[4px] bg-[var(--w-sunken)] px-1.5 py-0.5 text-[var(--w-text)]">{d.to}</span>
-                </div>
-              )}
-            </div>
-          </li>
-        );
-      })}
+      {q.data.map((h) => <HistoryItem key={h.id} h={h} lk={lk} config={config} />)}
     </ol>
   );
 }
@@ -448,11 +451,47 @@ function CommentThread({ t, config, pid, num, clientShared }: { t: ReturnType<ty
   );
 }
 
-export default function IssueActivity({ pid, num, config, lk, clientShared = false }: { pid: number; num: number; config: ProjectConfig; lk: Lookups; clientShared?: boolean }) {
+export type ActivityView = 'all' | 'comments' | 'history' | 'worklog';
+
+export default function IssueActivity({ pid, num, config, lk, clientShared = false, view }: {
+  pid: number; num: number; config: ProjectConfig; lk: Lookups; clientShared?: boolean;
+  /** UX-C: chi tiết thẻ tự vẽ thanh tab (Activity / Comments / History / Links / Agent) ⇒ truyền `view`, ở đây không vẽ tab. */
+  view?: ActivityView;
+}) {
   const [tab, setTab] = useState<(typeof ACTIVITY_TABS)[number]['id']>('comments');
   const comments = useQuery({ queryKey: wk.comments(pid, num), queryFn: () => workApi.comments(pid, num) as Promise<ThreadComment[]> });
+  const history = useQuery({ queryKey: wk.history(pid, num), queryFn: () => workApi.history(pid, num), enabled: view === 'all' });
   useCommentReactionsRealtime(pid, num);
   useCommentVoiceRealtime(pid, num);
+  if (view) {
+    const composer = config.permissions.comment
+      ? <CommentComposer config={config} pid={pid} num={num} clientShared={clientShared} />
+      : <p className="text-[12px] text-[var(--w-text-3)]">{wt('detail.viewOnly')}</p>;
+    if (view === 'history') return <HistoryList pid={pid} num={num} config={config} lk={lk} />;
+    if (view === 'worklog') return <WorklogList pid={pid} num={num} config={config} />;
+    if (view === 'comments') {
+      return (
+        <div className="space-y-5">
+          {comments.isLoading && <Spinner />}
+          {threadsOf(comments.data ?? []).map((t) => <CommentThread key={t.root.id} t={t} config={config} pid={pid} num={num} clientShared={clientShared} />)}
+          {composer}
+        </div>
+      );
+    }
+    // Activity: bình luận (theo luồng) + lịch sử đổi trường, xếp theo thời gian (cũ → mới, ô viết ở cuối như Jira).
+    const feed: Array<{ at: string; key: string; node: ReactNode }> = [
+      ...threadsOf(comments.data ?? []).map((t) => ({ at: t.root.createdAt, key: `c${t.root.id}`, node: <CommentThread t={t} config={config} pid={pid} num={num} clientShared={clientShared} /> })),
+      ...(history.data ?? []).map((h) => ({ at: h.createdAt, key: `h${h.id}`, node: <ol><HistoryItem h={h} lk={lk} config={config} /></ol> })),
+    ].sort((a, b) => a.at.localeCompare(b.at));
+    return (
+      <div className="space-y-4" data-testid="issue-activity-all">
+        {(comments.isLoading || history.isLoading) && <Spinner />}
+        {feed.map((f) => <div key={f.key}>{f.node}</div>)}
+        {!feed.length && !comments.isLoading && !history.isLoading && <p className="text-[13px] text-[var(--w-text-3)]">{wt('uxc.noActivity')}</p>}
+        {composer}
+      </div>
+    );
+  }
   return (
     <section>
       <div className="mb-4 flex items-center gap-1 border-b border-[var(--w-border)]">

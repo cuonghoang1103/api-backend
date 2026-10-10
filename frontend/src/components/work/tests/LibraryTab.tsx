@@ -10,13 +10,13 @@ import { useRouter } from 'next/navigation';
 import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 import { FileUp, ListPlus, PlayCircle, Search, X } from 'lucide-react';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
-import { workApi, workError, type ProjectConfig, type TestListItem } from '@/lib/work-api';
+import { userName, workApi, workError, type ProjectConfig } from '@/lib/work-api';
 import { useLookups, wk } from '../hooks';
 import { EmptyState, PickerList, Popover, PriorityIcon, relativeTime, Spinner, UserAvatar } from '../ui';
 import ImportTestsDialog from './ImportTestsDialog';
 import { RunStatusPill } from './testing-ui';
 import { wt, wfmt } from '@/components/work/i18n';
+import DataTable from '../table/DataTable';
 
 export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
   config: ProjectConfig;
@@ -36,6 +36,8 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
   const [planOpen, setPlanOpen] = useState(false);
   const [adding, setAdding] = useState(false);
   const planBtn = useRef<HTMLButtonElement>(null);
+  const [ctl, setCtl] = useState<HTMLElement | null>(null);
+  const selectedSet = useMemo(() => new Set<number>(selected), [selected]);
 
   useEffect(() => {
     const t = setTimeout(() => setQ(input.trim()), 250);
@@ -57,9 +59,6 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
     setSelected((s) => (s.every((n) => nums.has(n)) ? s : s.filter((n) => nums.has(n))));
   }, [list.data]);
 
-  const allSelected = items.length > 0 && items.every((t) => selected.includes(t.number));
-  const toggle = (n: number) => setSelected((s) => (s.includes(n) ? s.filter((x) => x !== n) : [...s, n]));
-  const toggleAll = () => setSelected(allSelected ? [] : items.map((t) => t.number));
   const canEdit = config.permissions.editIssues;
 
   const addToPlan = async (planId: number | null, newName?: string) => {
@@ -88,8 +87,6 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
     router.push(`${base}?${p.toString()}`);
   };
 
-  const th = 'whitespace-nowrap px-2.5 py-2 text-left text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]';
-
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-[var(--w-border)] px-4 py-2">
@@ -100,6 +97,7 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Escape' && setInput('')}
             placeholder={wt('tests.searchPh')}
+            aria-label={wt('tests.searchPh')}
             className="w-input !h-[28px] pl-7 text-[12px] sm:!w-[260px]"
           />
           {list.isFetching && q && <span className="absolute right-2 top-1/2 -translate-y-1/2"><Spinner size={11} /></span>}
@@ -119,13 +117,10 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
             )}
             <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setSelected([])}><X size={12} /> {wt('board.clear')}</button>
           </div>
-        ) : (
-          <span className="hidden text-[12px] text-[var(--w-text-3)] md:inline">
-            {list.data ? wt('tests.nTests', { count: items.length }) : ''}
-          </span>
-        )}
+        ) : null}
+        <span ref={setCtl} className="ml-auto flex items-center" />
         {config.permissions.createIssues && (
-          <button type="button" className="w-btn w-btn-sm ml-auto" onClick={() => setImportOpen(true)}>
+          <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}>
             <FileUp size={13} /> <span className="max-sm:hidden">{wt('tests.importCsv')}</span>
           </button>
         )}
@@ -146,7 +141,7 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
         )}
       </Popover>
 
-      <div className="min-h-0 flex-1 overflow-auto">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {list.isLoading ? (
           <div className="flex h-40 items-center justify-center"><Spinner size={20} /></div>
         ) : list.error ? (
@@ -167,38 +162,52 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
             />
           )
         ) : (
-          <table className="w-full min-w-[980px] border-collapse text-[13px]">
-            <thead className="sticky top-0 z-[1] bg-[var(--w-panel)] shadow-[inset_0_-1px_0_var(--w-border)]">
-              <tr>
-                <th className="w-[36px] px-2.5 py-2">
-                  <input type="checkbox" aria-label={wt('tests.selectAll')} checked={allSelected} onChange={toggleAll} className="accent-[var(--w-accent)]" />
-                </th>
-                <th className={cn(th, 'w-[90px]')}>{wt('common.key')}</th>
-                <th className={th}>{wt('common.title')}</th>
-                <th className={cn(th, 'w-[80px]')}>{wt('common.type')}</th>
-                <th className={cn(th, 'w-[64px] text-right')}>{wt('tests.steps')}</th>
-                <th className={cn(th, 'w-[160px]')}>{wt('tests.requirements')}</th>
-                <th className={cn(th, 'w-[110px]')}>{wt('tests.lastResult')}</th>
-                <th className={cn(th, 'w-[70px]')}>{wt('common.priority')}</th>
-                <th className={cn(th, 'w-[70px]')}>{wt('common.assignee')}</th>
-                <th className={cn(th, 'w-[96px]')}>{wt('common.updated')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((t) => (
-                <Row
-                  key={t.id}
-                  t={t}
-                  issueKey={lk.issueKey}
-                  assignee={t.assigneeId ? lk.members.get(t.assigneeId) : undefined}
-                  selected={selected.includes(t.number)}
-                  onToggle={() => toggle(t.number)}
-                  onOpen={() => router.push(`${base}/${t.number}`)}
-                  onOpenIssue={onOpenIssue}
-                />
-              ))}
-            </tbody>
-          </table>
+          // UX-C: bảng chung — tiêu đề dính, sắp xếp, cột, độ rộng, xuất CSV/xlsx, bàn phím, Shift chọn dải.
+          <DataTable
+            id="tests-library"
+            label={wt('uxc.testLibrary')}
+            rows={items}
+            rowKey={(t) => t.number}
+            quickFilter={false}
+            toolbar={false}
+            controlsTarget={ctl}
+            selectable
+            selected={selectedSet}
+            onSelectedChange={(k) => setSelected([...k].map(Number))}
+            onRowOpen={(t) => router.push(`${base}/${t.number}`)}
+            exportName={`${config.key}-tests`}
+            testId="tests-library"
+            columns={[
+              { id: 'key', header: wt('common.key'), width: 96, value: (t) => t.number, exportValue: (t) => lk.issueKey(t.number), text: (t) => lk.issueKey(t.number),
+                cell: (t) => <span className="whitespace-nowrap font-mono text-[12px] text-[var(--w-text-2)]">{lk.issueKey(t.number)}</span> },
+              { id: 'title', header: wt('common.title'), width: 300, grow: true, required: true, value: (t) => t.title,
+                cell: (t) => <span className="truncate font-medium" title={t.title}>{t.title}</span> },
+              { id: 'kind', header: wt('common.type'), width: 90, value: (t) => (t.kind === 'GHERKIN' ? 'Gherkin' : wt('tests.manual')),
+                cell: (t) => <span className="inline-flex h-[20px] items-center rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] text-[var(--w-text-2)]">{t.kind === 'GHERKIN' ? 'Gherkin' : wt('tests.manual')}</span> },
+              { id: 'steps', header: wt('tests.steps'), width: 72, align: 'right', value: (t) => (t.kind === 'GHERKIN' ? null : t.stepCount) },
+              { id: 'reqs', header: wt('tests.requirements'), width: 170, hideBelow: 'md', value: (t) => t.requirements.map((r) => lk.issueKey(r.number)).join(', ') || null,
+                cell: (t) => (t.requirements.length ? (
+                  <div className="flex min-w-0 flex-wrap gap-1 overflow-hidden">
+                    {t.requirements.slice(0, 3).map((r) => (
+                      <button key={r.number} type="button" title={r.title} onClick={() => onOpenIssue(r.number)}
+                        className="rounded-[4px] border border-[var(--w-border)] px-1 font-mono text-[11px] text-[var(--w-accent-text)] hover:bg-[var(--w-hover)]">
+                        {lk.issueKey(r.number)}
+                      </button>
+                    ))}
+                    {t.requirements.length > 3 && <span className="text-[11px] text-[var(--w-text-3)]" title={t.requirements.slice(3).map((r) => lk.issueKey(r.number)).join(', ')}>+{t.requirements.length - 3}</span>}
+                  </div>
+                ) : <span className="text-[12px] text-[var(--w-text-3)]">{wt('common.none')}</span>) },
+              { id: 'last', header: wt('tests.lastResult'), width: 120, value: (t) => t.lastRun?.status ?? null,
+                cell: (t) => (t.lastRun
+                  ? <RunStatusPill status={t.lastRun.status} title={`${t.lastRun.cycleName}${t.lastRun.executedAt ? ` · ${new Date(t.lastRun.executedAt).toLocaleString(wfmt.intl(), { dateStyle: 'medium', timeStyle: 'short' })}` : ''}`} />
+                  : <span className="text-[12px] text-[var(--w-text-3)]">{wt('tests.rsNotRun')}</span>) },
+              { id: 'priority', header: wt('common.priority'), width: 80, value: (t) => t.priority, cell: (t) => <PriorityIcon priority={t.priority} /> },
+              { id: 'assignee', header: wt('common.assignee'), width: 90, hideBelow: 'sm', value: (t) => (t.assigneeId ? userName(lk.members.get(t.assigneeId)) : null),
+                cell: (t) => <UserAvatar user={t.assigneeId ? lk.members.get(t.assigneeId) ?? null : null} size={22} /> },
+              { id: 'updated', header: wt('common.updated'), width: 104, value: (t) => t.updatedAt, exportValue: (t) => t.updatedAt.slice(0, 10),
+                cell: (t) => <span className="whitespace-nowrap text-[12px] text-[var(--w-text-3)]" title={new Date(t.updatedAt).toLocaleString(wfmt.intl())}>{relativeTime(t.updatedAt)}</span> },
+            ]}
+          />
         )}
       </div>
 
@@ -206,63 +215,3 @@ export default function LibraryTab({ config, pid, onOpenIssue, onNewTest }: {
     </div>
   );
 }
-
-function Row({ t, issueKey, assignee, selected, onToggle, onOpen, onOpenIssue }: {
-  t: TestListItem;
-  issueKey: (n: number) => string;
-  assignee: Parameters<typeof UserAvatar>[0]['user'] | undefined;
-  selected: boolean;
-  onToggle: () => void;
-  onOpen: () => void;
-  onOpenIssue: (n: number) => void;
-}) {
-  const td = 'px-2.5 py-2 align-middle';
-  const runTitle = t.lastRun
-    ? `${t.lastRun.cycleName}${t.lastRun.executedAt ? ` · ${new Date(t.lastRun.executedAt).toLocaleString(wfmt.intl(), { dateStyle: 'medium', timeStyle: 'short' })}` : ''}`
-    : undefined;
-  return (
-    <tr
-      onClick={onOpen}
-      className={cn('cursor-pointer border-b border-[var(--w-border)] hover:bg-[var(--w-hover)]', selected && 'bg-[var(--w-accent-soft)] hover:bg-[var(--w-accent-soft)]')}
-    >
-      <td className={td} onClick={(e) => e.stopPropagation()}>
-        <input type="checkbox" aria-label={wt('tests.selectKey', { key: issueKey(t.number) })} checked={selected} onChange={onToggle} className="accent-[var(--w-accent)]" />
-      </td>
-      <td className={cn(td, 'whitespace-nowrap font-mono text-[12px] text-[var(--w-text-2)]')}>{issueKey(t.number)}</td>
-      <td className={cn(td, 'max-w-[380px]')}><span className="line-clamp-2 font-medium">{t.title}</span></td>
-      <td className={td}>
-        <span className="inline-flex h-[20px] items-center rounded-[4px] bg-[var(--w-sunken)] px-1.5 text-[11px] text-[var(--w-text-2)]">
-          {t.kind === 'GHERKIN' ? 'Gherkin' : wt('tests.manual')}
-        </span>
-      </td>
-      <td className={cn(td, 'text-right tabular text-[var(--w-text-2)]')}>{t.kind === 'GHERKIN' ? '—' : t.stepCount}</td>
-      <td className={td} onClick={(e) => e.stopPropagation()}>
-        {t.requirements.length ? (
-          <div className="flex flex-wrap gap-1">
-            {t.requirements.slice(0, 3).map((r) => (
-              <button
-                key={r.number}
-                type="button"
-                title={r.title}
-                onClick={() => onOpenIssue(r.number)}
-                className="rounded-[4px] border border-[var(--w-border)] px-1 font-mono text-[11px] text-[var(--w-accent-text)] hover:bg-[var(--w-hover)]"
-              >
-                {issueKey(r.number)}
-              </button>
-            ))}
-            {t.requirements.length > 3 && <span className="text-[11px] text-[var(--w-text-3)]" title={t.requirements.slice(3).map((r) => issueKey(r.number)).join(', ')}>+{t.requirements.length - 3}</span>}
-          </div>
-        ) : (
-          <span className="text-[12px] text-[var(--w-text-3)]">{wt('common.none')}</span>
-        )}
-      </td>
-      <td className={td}>
-        {t.lastRun ? <RunStatusPill status={t.lastRun.status} title={runTitle} /> : <span className="text-[12px] text-[var(--w-text-3)]">{wt('tests.rsNotRun')}</span>}
-      </td>
-      <td className={td}><PriorityIcon priority={t.priority} /></td>
-      <td className={td}><UserAvatar user={assignee ?? null} size={22} /></td>
-      <td className={cn(td, 'whitespace-nowrap text-[12px] text-[var(--w-text-3)]')} title={new Date(t.updatedAt).toLocaleString(wfmt.intl())}>{relativeTime(t.updatedAt)}</td>
-    </tr>
-  );
-}
-

@@ -729,6 +729,12 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['*', /^\/meetings\/\d+\/(recordings|attendance|rsvp|join|leave|recording-link)(\/.*)?$/],
   ['*', /^\/meeting-settings$/],
   ['POST', /^\/meetings\/\d+\/minutes-ai\/\d+\/(apply|dismiss)$/],
+  // CTW đợt 6b: agent không mở/đóng khảo sát công khai, không gửi link khách, không xác nhận prototype, không nhận/bỏ đề xuất
+  // yêu cầu, không đổi RACI (service chặn lần nữa). Đọc + đề xuất vẫn mở qua registry.
+  ['POST', /^\/swr\/surveys\/(?:SV-?)?\d+\/(status|rotate)$/i],
+  ['POST', /^\/swr\/mockups\/\d+\/review$/],
+  ['POST', /^\/swr\/elicitation\/(?:ELC-?)?\d+\/proposals\/\d+\/decide$/i],
+  ['POST', /^\/swr\/raci(\/.*)?$/], ['PUT', /^\/swr\/raci(\/.*)?$/], ['DELETE', /^\/swr\/raci(\/.*)?$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

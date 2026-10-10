@@ -138,7 +138,8 @@ export async function loadWbsSource(projectId: number): Promise<{ key: string; m
     select: {
       id: true, number: true, title: true, parentId: true, rank: true, descriptionText: true, resolution: true,
       originalEstimateMin: true, timeSpentMin: true,
-      type: { select: { key: true } }, status: { select: { name: true, category: true } },
+      type: { select: { key: true, level: true } }, status: { select: { name: true, category: true } },
+      startDate: true, dueDate: true,
       assignee: { select: { username: true, fullName: true, displayName: true } },
       fixVersion: { select: { name: true } }, sprint: { select: { name: true } },
       labels: { select: { label: { select: { name: true } } } },
@@ -163,6 +164,7 @@ export async function loadWbsSource(projectId: number): Promise<{ key: string; m
       fieldComplexity: cxValue((r as { customValues?: Array<{ value: unknown }> }).customValues?.[0]?.value),
       phases: phasesOf(r.children.map((c) => ({ title: c.title, category: c.status.category }))),
       wbs: w ? { kind: w.kind, complexity: w.complexity, fields: w.fields, transactions: w.transactions, feature: w.feature, subFeature: w.subFeature, plannedDays: w.plannedDays, note: w.note } : null,
+      level: r.type.level, startDate: r.startDate ? r.startDate.toISOString().slice(0, 10) : null, dueDate: r.dueDate ? r.dueDate.toISOString().slice(0, 10) : null,
     };
   });
   return { key: p.key, matrix: matrixOf(p.settings), issues, truncated };

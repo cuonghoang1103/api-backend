@@ -13,7 +13,7 @@ import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart,
   ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
-import { AlertTriangle, ArrowDown, ArrowUp, ChevronRight, EyeOff, Info } from 'lucide-react';
+import { AlertTriangle, ChevronRight, EyeOff, Info } from 'lucide-react';
 import { userName, workError, type ProjectConfig } from '@/lib/work-api';
 import type { ContribSummary, MemberRow } from '@/lib/work-contrib-api';
 import KpiTile, { KpiRow } from '@/components/work/KpiTile';
@@ -23,8 +23,7 @@ import { Card, SectionTitle, axisTick } from '../reports/shared';
 import { colorMap, Delta, fmtDayShort, fmtN, fmtPct, Heatmap, MetricLabel, Sparkline, STATUS_LABEL } from './shared';
 import { trDef, trNote, trSignal, trWindowLabel } from './serverText';
 import { wt } from '@/components/work/i18n';
-
-type SortKey = 'name' | 'status' | 'completed' | 'points' | 'onTimeRate' | 'overdueOpen' | 'hours' | 'talk' | 'reviewsDone' | 'code' | 'docVersions' | 'tests' | 'meetings' | 'activeDays';
+import DataTable, { type DataColumn } from '../table/DataTable';
 
 const talk = (r: MemberRow) => r.metrics.comments + (r.metrics.chatMessages ?? 0) + r.metrics.voiceNotes;
 const tests = (r: MemberRow) => r.metrics.testRuns + r.metrics.testCasesCreated + r.metrics.utcidCreated + r.metrics.utcidExecuted + r.metrics.itExecuted;
@@ -48,36 +47,16 @@ function TipBox({ active, payload, label, fmt }: { active?: boolean; payload?: A
 }
 
 export default function TeamView({ q, onOpenMember }: { pid: number; config: ProjectConfig; q: UseQueryResult<ContribSummary>; onOpenMember: (id: number) => void }) {
-  const [sort, setSort] = useState<{ key: SortKey; dir: 'asc' | 'desc' }>({ key: 'points', dir: 'desc' });
   const [showDefs, setShowDefs] = useState(false);
   const [radarIds, setRadarIds] = useState<number[] | null>(null);
   const data = q.data;
   const def = Object.fromEntries(Object.entries(data?.definitions ?? {}).map(([k, d]) => [k, trDef(k, d) ?? d]));
   const colors = useMemo(() => colorMap((data?.members ?? []).map((r) => r.user.id)), [data]);
 
-  const rows = useMemo(() => {
-    const list = [...(data?.members ?? [])];
-    const val = (r: MemberRow): number | string => {
-      switch (sort.key) {
-        case 'name': return userName(r.user).toLowerCase();
-        case 'status': return STATUS_ORDER[r.status];
-        case 'talk': return talk(r);
-        case 'code': return code(r);
-        case 'tests': return tests(r);
-        case 'meetings': return r.metrics.meetingsAttended;
-        default: return (r.metrics[sort.key] as number | null) ?? -1;
-      }
-    };
-    list.sort((a, b) => {
-      if (a.user.isAgent !== b.user.isAgent) return a.user.isAgent ? 1 : -1;
-      const x = val(a), y = val(b);
-      const c = x < y ? -1 : x > y ? 1 : 0;
-      return sort.dir === 'asc' ? c : -c;
-    });
-    return list;
-  }, [data, sort]);
+  const rows = useMemo(() => data?.members ?? [], [data]);
 
-  const humans = rows.filter((r) => !r.user.isAgent);
+  // Thứ tự mặc định cho biểu đồ/radar: điểm cao trước (bảng tự sắp riêng theo lựa chọn người dùng).
+  const humans = useMemo(() => rows.filter((r) => !r.user.isAgent).sort((a, b) => b.metrics.points - a.metrics.points), [rows]);
   const facets = useMemo(() => {
     // Radar: mỗi mặt chuẩn hoá theo người cao nhất nhóm (0–100) — chỉ so TƯƠNG ĐỐI trong nhóm, không phải điểm.
     const F: Array<{ key: string; label: string; get: (r: MemberRow) => number }> = [
@@ -110,18 +89,55 @@ export default function TeamView({ q, onOpenMember }: { pid: number; config: Pro
   const mix = humans.map((r) => ({ name: userName(r.user), done: r.mix.done, inProgress: r.mix.inProgress, todo: r.mix.todo, overdue: r.mix.overdue }));
   const onTime = humans.filter((r) => r.metrics.withDue > 0).map((r) => ({ name: userName(r.user), rate: r.metrics.onTimeRate ?? 0, of: r.metrics.withDue }));
 
-  const th = (k: SortKey, label: string, how?: string, right = true) => {
-    const on = sort.key === k;
-    return (
-      <th key={k} scope="col" className={cn('whitespace-nowrap px-2.5 py-2 font-medium', right && 'text-right', k === 'name' && 'sticky left-0 z-[1] bg-[var(--w-panel)] text-left')} aria-sort={on ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none'}>
-        <button type="button" onClick={() => setSort((s) => ({ key: k, dir: s.key === k ? (s.dir === 'asc' ? 'desc' : 'asc') : k === 'name' || k === 'status' ? 'asc' : 'desc' }))}
-          className={cn('inline-flex items-center gap-1 hover:text-[var(--w-text)]', on && 'text-[var(--w-text)]')}>
-          <MetricLabel label={label} how={how} />
-          {on && (sort.dir === 'asc' ? <ArrowUp size={11} /> : <ArrowDown size={11} />)}
+  const roleText = (r: MemberRow) => (r.user.isAgent ? 'AI agent' : r.user.role === 'ADMIN' ? wt('common.admin') : r.user.role === 'MEMBER' ? wt('common.member') : r.user.role === 'TEACHER' ? wt('contrib.teacher') : r.user.role === 'VIEWER' ? wt('common.viewer') : r.user.role.toLowerCase());
+  const num = (n: number | null | undefined) => (n === null || n === undefined ? null : n);
+  const contribColumns = (): DataColumn<MemberRow>[] => [
+    { id: 'name', header: wt('common.member'), width: 230, required: true, value: (r) => userName(r.user), text: (r) => `${userName(r.user)} ${r.user.username}`,
+      cell: (r) => (
+        <button type="button" onClick={() => onOpenMember(r.user.id)} className="group/m flex min-w-0 items-center gap-2 text-left" aria-label={wt('contrib.openDetails', { name: userName(r.user) })}>
+          <span className="h-6 w-1 shrink-0 rounded-full" style={{ background: colors.get(r.user.id) }} aria-hidden="true" />
+          <UserAvatar user={r.user} size={24} />
+          <span className="min-w-0">
+            <span className="block truncate font-medium">{userName(r.user)}</span>
+            <span className="block truncate text-[11px] text-[var(--w-text-3)]">{roleText(r)} · @{r.user.username}</span>
+          </span>
+          <ChevronRight size={13} className="shrink-0 opacity-0 group-hover/m:opacity-60" aria-hidden="true" />
         </button>
-      </th>
-    );
-  };
+      ) },
+    { id: 'status', header: wt('common.status'), headerTitle: wt('contrib.statusHow'), width: 110, value: (r) => STATUS_ORDER[r.status], exportValue: (r) => STATUS_LABEL[r.status].text,
+      cell: (r) => {
+        const sl = STATUS_LABEL[r.status];
+        return (
+          <span className={cn('inline-flex whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-medium', sl.cls)} title={r.signals.map(trSignal).join('\n') || wt('contrib.noSignals')}>
+            {sl.text}{r.signals.length > 0 && <span className="sr-only">: {r.signals.map(trSignal).join('; ')}</span>}
+          </span>
+        );
+      } },
+    { id: 'completed', header: wt('common.done'), headerTitle: def.completed?.how, width: 84, align: 'right', value: (r) => r.metrics.completed,
+      cell: (r) => <span className="leading-tight">{r.metrics.completed}{r.metrics.subtasksDone > 0 && <span className="text-[11px] text-[var(--w-text-3)]"> +{r.metrics.subtasksDone}</span>}<span className="block"><Delta value={r.delta.completed} /></span></span> },
+    { id: 'points', header: wt('common.points'), headerTitle: def.points?.how, width: 84, align: 'right', value: (r) => r.metrics.points,
+      cell: (r) => <span className="leading-tight">{fmtN(r.metrics.points)}<span className="block text-[11px] text-[var(--w-text-3)]">{t.points ? `${Math.round((r.metrics.points / t.points) * 100)}%` : ''}</span></span> },
+    { id: 'onTimeRate', header: wt('contrib.kOnTime'), headerTitle: def.onTimeRate?.how, width: 92, align: 'right', value: (r) => num(r.metrics.onTimeRate),
+      cell: (r) => <span className="leading-tight">{fmtPct(r.metrics.onTimeRate)}<span className="block text-[11px] text-[var(--w-text-3)]">{r.metrics.withDue ? `${r.metrics.onTime}/${r.metrics.withDue}` : ''}</span></span> },
+    { id: 'overdueOpen', header: wt('common.overdue'), headerTitle: def.overdueOpen?.how, width: 84, align: 'right', value: (r) => r.metrics.overdueOpen,
+      cell: (r) => <span className={cn(r.metrics.overdueOpen > 0 && 'font-medium text-[var(--w-red-text)]')}>{r.metrics.overdueOpen}</span> },
+    { id: 'hours', header: wt('finance.hoursH'), headerTitle: def.hours?.how, width: 76, align: 'right', value: (r) => num(r.metrics.hours), cell: (r) => <span>{fmtN(r.metrics.hours)}</span> },
+    { id: 'talk', header: wt('contrib.talk'), headerTitle: `${def.comments?.how ?? ''} ${def.chatMessages?.how ?? ''} ${def.voiceNotes?.how ?? ''}`.trim(), width: 84, align: 'right', value: talk,
+      cell: (r) => <span title={wt('contrib.talkTip', { a: r.metrics.comments, b: r.metrics.chatMessages ?? '—', c: r.metrics.voiceNotes, d: r.metrics.responseHours ?? '—' })}>{talk(r)}</span> },
+    { id: 'reviewsDone', header: wt('contrib.fReviews'), headerTitle: def.reviewsDone?.how, width: 84, align: 'right', value: (r) => r.metrics.reviewsDone,
+      cell: (r) => <span title={wt('contrib.reviewTip', { a: r.metrics.reviewsDone, b: r.metrics.reviewRequests })}>{r.metrics.reviewsDone}</span> },
+    { id: 'code', header: wt('contrib.fCode'), headerTitle: def.commits?.how, width: 76, align: 'right', value: code,
+      cell: (r) => <span title={`${wt('contrib.commitsPrs', { a: r.metrics.commits, b: r.metrics.prs })}${r.metrics.additions !== null ? ` · +${r.metrics.additions} −${r.metrics.deletions}` : ''}`}>{code(r)}</span> },
+    { id: 'docVersions', header: wt('contrib.fDocs'), headerTitle: def.docVersions?.how, width: 76, align: 'right', value: (r) => r.metrics.docVersions },
+    { id: 'tests', header: wt('contrib.testsCol'), headerTitle: `${def.testRuns?.how ?? ''} ${def.utcid?.how ?? ''}`.trim(), width: 76, align: 'right', value: tests },
+    { id: 'meetings', header: wt('contrib.fMeet'), headerTitle: def.meetings?.how, width: 84, align: 'right', value: (r) => r.metrics.meetingsAttended,
+      exportValue: (r) => (r.metrics.meetingsInvited ? `${r.metrics.meetingsAttended}/${r.metrics.meetingsInvited}` : ''),
+      cell: (r) => <span>{r.metrics.meetingsInvited ? `${r.metrics.meetingsAttended}/${r.metrics.meetingsInvited}` : '—'}</span> },
+    { id: 'activeDays', header: wt('contrib.activeCol'), headerTitle: def.activeDays?.how, width: 84, align: 'right', value: (r) => r.metrics.activeDays,
+      cell: (r) => <span>{r.metrics.activeDays}<span className="text-[11px] text-[var(--w-text-3)]">/{data.window.days}</span></span> },
+    { id: 'trend', header: wt('contrib.trend'), headerTitle: wt('contrib.trendHow'), width: 120, sortable: false, export: false,
+      cell: (r) => <Sparkline data={r.spark} color={colors.get(r.user.id)} label={wt('contrib.activityOf', { name: userName(r.user) })} /> },
+  ];
 
   return (
     <div className="space-y-4">
@@ -172,83 +188,33 @@ export default function TeamView({ q, onOpenMember }: { pid: number; config: Pro
         </Card>
       )}
 
-      <div className="overflow-x-auto rounded-[var(--w-radius-lg)] border border-[var(--w-border)] bg-[var(--w-panel)]">
-        <table className="w-full min-w-[1080px] text-[13px]" data-testid="contrib-table">
-          <caption className="sr-only">{wt('contrib.perMember', { w: trWindowLabel(data.window.label) })}</caption>
-          <thead className="sticky top-0 z-[2] bg-[var(--w-panel)]">
-            <tr className="border-b border-[var(--w-border)] text-left text-[11.5px] text-[var(--w-text-3)]">
-              {th('name', wt('common.member'), undefined, false)}
-              {th('status', wt('common.status'), wt('contrib.statusHow'), false)}
-              {th('completed', wt('common.done'), def.completed?.how)}
-              {th('points', wt('common.points'), def.points?.how)}
-              {th('onTimeRate', wt('contrib.kOnTime'), def.onTimeRate?.how)}
-              {th('overdueOpen', wt('common.overdue'), def.overdueOpen?.how)}
-              {th('hours', wt('finance.hoursH'), def.hours?.how)}
-              {th('talk', wt('contrib.talk'), `${def.comments?.how} ${def.chatMessages?.how} ${def.voiceNotes?.how}`)}
-              {th('reviewsDone', wt('contrib.fReviews'), def.reviewsDone?.how)}
-              {th('code', wt('contrib.fCode'), def.commits?.how)}
-              {th('docVersions', wt('contrib.fDocs'), def.docVersions?.how)}
-              {th('tests', wt('contrib.testsCol'), `${def.testRuns?.how} ${def.utcid?.how}`)}
-              {th('meetings', wt('contrib.fMeet'), def.meetings?.how)}
-              {th('activeDays', wt('contrib.activeCol'), def.activeDays?.how)}
-              <th scope="col" className="px-2.5 py-2 text-left font-medium"><MetricLabel label={wt('contrib.trend')} how={wt('contrib.trendHow')} /></th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => {
-              const m = r.metrics;
-              const sl = STATUS_LABEL[r.status];
-              return (
-                <tr key={r.user.id} className="group border-b border-[var(--w-border)] last:border-0 hover:bg-[var(--w-hover)]">
-                  <td className="sticky left-0 z-[1] bg-[var(--w-panel)] px-2.5 py-2 group-hover:bg-[var(--w-hover)]">
-                    <button type="button" onClick={() => onOpenMember(r.user.id)} className="flex min-w-0 max-w-[200px] items-center gap-2 text-left" aria-label={wt('contrib.openDetails', { name: userName(r.user) })}>
-                      <span className="h-6 w-1 shrink-0 rounded-full" style={{ background: colors.get(r.user.id) }} aria-hidden="true" />
-                      <UserAvatar user={r.user} size={24} />
-                      <span className="min-w-0">
-                        <span className="block truncate font-medium">{userName(r.user)}</span>
-                        <span className="block truncate text-[11px] text-[var(--w-text-3)]">{r.user.isAgent ? 'AI agent' : r.user.role === 'ADMIN' ? wt('common.admin') : r.user.role === 'MEMBER' ? wt('common.member') : r.user.role === 'TEACHER' ? wt('contrib.teacher') : r.user.role === 'VIEWER' ? wt('common.viewer') : r.user.role.toLowerCase()} · @{r.user.username}</span>
-                      </span>
-                      <ChevronRight size={13} className="shrink-0 opacity-0 group-hover:opacity-60" aria-hidden="true" />
-                    </button>
-                  </td>
-                  <td className="px-2.5 py-2">
-                    <span className={cn('inline-flex whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-medium', sl.cls)} title={r.signals.map(trSignal).join('\n') || wt('contrib.noSignals')}>
-                      {sl.text}{r.signals.length > 0 && <span className="sr-only">: {r.signals.map(trSignal).join('; ')}</span>}
-                    </span>
-                  </td>
-                  <td className="px-2.5 py-2 text-right tabular-nums">{m.completed}{m.subtasksDone > 0 && <span className="text-[11px] text-[var(--w-text-3)]"> +{m.subtasksDone}</span>}<div><Delta value={r.delta.completed} /></div></td>
-                  <td className="px-2.5 py-2 text-right tabular-nums">{fmtN(m.points)}<div className="text-[11px] text-[var(--w-text-3)]">{t.points ? `${Math.round((m.points / t.points) * 100)}%` : ''}</div></td>
-                  <td className="px-2.5 py-2 text-right tabular-nums">{fmtPct(m.onTimeRate)}<div className="text-[11px] text-[var(--w-text-3)]">{m.withDue ? `${m.onTime}/${m.withDue}` : ''}</div></td>
-                  <td className={cn('px-2.5 py-2 text-right tabular-nums', m.overdueOpen > 0 && 'font-medium text-[var(--w-red-text)]')}>{m.overdueOpen}</td>
-                  <td className="px-2.5 py-2 text-right tabular-nums">{fmtN(m.hours)}</td>
-                  <td className="px-2.5 py-2 text-right tabular-nums" title={wt('contrib.talkTip', { a: m.comments, b: m.chatMessages ?? '—', c: m.voiceNotes, d: m.responseHours ?? '—' })}>{talk(r)}</td>
-                  <td className="px-2.5 py-2 text-right tabular-nums" title={wt('contrib.reviewTip', { a: m.reviewsDone, b: m.reviewRequests })}>{m.reviewsDone}</td>
-                  <td className="px-2.5 py-2 text-right tabular-nums" title={`${wt('contrib.commitsPrs', { a: m.commits, b: m.prs })}${m.additions !== null ? ` · +${m.additions} −${m.deletions}` : ''}`}>{code(r)}</td>
-                  <td className="px-2.5 py-2 text-right tabular-nums">{m.docVersions}</td>
-                  <td className="px-2.5 py-2 text-right tabular-nums">{tests(r)}</td>
-                  <td className="px-2.5 py-2 text-right tabular-nums">{m.meetingsInvited ? `${m.meetingsAttended}/${m.meetingsInvited}` : '—'}</td>
-                  <td className="px-2.5 py-2 text-right tabular-nums">{m.activeDays}<span className="text-[11px] text-[var(--w-text-3)]">/{data.window.days}</span></td>
-                  <td className="px-2.5 py-2"><Sparkline data={r.spark} color={colors.get(r.user.id)} label={wt('contrib.activityOf', { name: userName(r.user) })} /></td>
-                </tr>
-              );
-            })}
-            {!all && (
-              <tr className="bg-[var(--w-sunken)] text-[var(--w-text-2)]">
-                <td className="sticky left-0 bg-[var(--w-sunken)] px-2.5 py-2" colSpan={2}>
-                  <span className="inline-flex items-center gap-1.5 text-[12px]"><EyeOff size={13} aria-hidden="true" /> {wt('contrib.teamMedian', { n: data.team.humans, h: data.hiddenMembers })}</span>
-                </td>
-                <td className="px-2.5 py-2 text-right tabular-nums">{fmtN(data.team.medians.completed)}</td>
-                <td className="px-2.5 py-2 text-right tabular-nums">{fmtN(data.team.medians.points)}</td>
-                <td className="px-2.5 py-2 text-right tabular-nums">{fmtPct(t.onTimeRate)}</td>
-                <td className="px-2.5 py-2 text-right tabular-nums" colSpan={1}>—</td>
-                <td className="px-2.5 py-2 text-right tabular-nums">{fmtN(data.team.medians.hours)}</td>
-                <td className="px-2.5 py-2 text-[11px]" colSpan={6}>{wt('contrib.onlyAdminsSee')}</td>
-                <td className="px-2.5 py-2 text-right tabular-nums">{fmtN(data.team.medians.activeDays)}</td>
-                <td />
-              </tr>
-            )}
-          </tbody>
-        </table>
+      {/* UX-C: bảng chung — sắp xếp, chọn/ẩn cột, độ rộng, ghim cột Thành viên, xuất CSV/xlsx, bàn phím. Agent luôn ở cuối. */}
+      <div className="overflow-hidden rounded-[var(--w-radius-lg)] border border-[var(--w-border)] bg-[var(--w-panel)]">
+        <DataTable
+          id="contrib-team"
+          label={wt('contrib.perMember', { w: trWindowLabel(data.window.label) })}
+          rows={rows}
+          rowKey={(r) => r.user.id}
+          height="auto"
+          quickFilter={rows.length > 8}
+          defaultSort={{ col: 'points', dir: 'desc' }}
+          sortGroup={(r) => (r.user.isAgent ? 1 : 0)}
+          onRowOpen={(r) => onOpenMember(r.user.id)}
+          exportName={`contributions-${data.window.fromDay}_${data.window.toDay}`}
+          testId="contrib-table"
+          columns={contribColumns()}
+          footer={!all ? (
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12px] text-[var(--w-text-2)]">
+              <span className="inline-flex items-center gap-1.5"><EyeOff size={13} aria-hidden="true" /> {wt('contrib.teamMedian', { n: data.team.humans, h: data.hiddenMembers })}</span>
+              <span>{wt('common.done')}: <b className="tabular-nums">{fmtN(data.team.medians.completed)}</b></span>
+              <span>{wt('common.points')}: <b className="tabular-nums">{fmtN(data.team.medians.points)}</b></span>
+              <span>{wt('contrib.kOnTime')}: <b className="tabular-nums">{fmtPct(t.onTimeRate)}</b></span>
+              <span>{wt('finance.hoursH')}: <b className="tabular-nums">{fmtN(data.team.medians.hours)}</b></span>
+              <span>{wt('contrib.activeCol')}: <b className="tabular-nums">{fmtN(data.team.medians.activeDays)}</b></span>
+              <span className="text-[11px]">{wt('contrib.onlyAdminsSee')}</span>
+            </div>
+          ) : undefined}
+        />
       </div>
       {!rows.length && <EmptyState title={wt('contrib.noMembers')} body={wt('contrib.noMembersBody')} />}
 

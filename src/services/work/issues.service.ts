@@ -399,6 +399,10 @@ export async function updateIssueAs(
   const access = await requireProject(userId, projectId, onlyStatus ? 'issue.transition' : 'issue.edit');
   const { id } = await findIssue(projectId, number);
   const { labelIds, componentIds, ...patch } = body;
+  // Đợt 6 (R21): yêu cầu đã baseline + khoá ⇒ đổi nội dung phải có CR APPROVED liệt kê nó.
+  if ('title' in patch || 'descriptionJson' in patch) {
+    await (await import('./quality.service.js')).assertBaselineEditAllowed(projectId, 'REQ', id, `${access.key}-${number}`);
+  }
   await assertAgentIssueEdit(access, userId, id, patch as Record<string, unknown>, { labels: labelIds !== undefined || componentIds !== undefined });
   const res = await applyIssueChange(id, patch, actorOf(userId, via, model), { expectedVersion });
   if (labelIds !== undefined || componentIds !== undefined) {

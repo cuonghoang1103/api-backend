@@ -404,6 +404,13 @@ if (config.nodeEnv === 'development' || config.nodeEnv === 'test') {
   );
 }
 
+// Đợt 6: kho R2 giả (STORAGE_SANDBOX=1 / chạy test) — phục vụ tệp đã "tải lên" + nhận PUT từ URL ký sẵn. Không bao giờ ở prod.
+if (config.r2.sandbox && config.nodeEnv !== 'production') {
+  const { default: storageSandboxRoutes } = await import('./routes/storageSandbox.routes.js');
+  app.use('/__r2-sandbox', storageSandboxRoutes);
+  logger.warn(`[storage] STORAGE SANDBOX đang bật (${config.r2.sandbox}) — mọi lệnh R2 đi vào kho giả, không chạm bucket thật`);
+}
+
 // ─── 8. Rate Limiting ───────────────────────────────────────
 // Rate-limit key: the RIGHTMOST X-Forwarded-For entry — the one our
 // own Nginx appended — falling back to req.ip. The first/leftmost

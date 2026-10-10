@@ -2,7 +2,8 @@
 
 /**
  * CT Work đợt 4b (10/10/2026) — /work/<slug>/<KEY>/wiegers: hồ sơ SWR302 theo sách Wiegers & Beatty.
- * Tab trong `?tab=` (overview | features | requirements | priority | glossary | dictionary | six-links) để chia sẻ link;
+ * Tab trong `?tab=` (overview | features | requirements | priority | glossary | dictionary | six-links | đợt 6b: stakeholders |
+ * elicitation | surveys | models | prototypes | quality | nfr) để chia sẻ link;
  * `?issue=N` mở ngăn kéo thẻ. Năm tài liệu Wiegers (V&S, Use Cases, Business Rules, SRS, Data Dictionary) điền từ dữ liệu
  * dự án + xuất Word/PDF ở tab Tổng quan; bảng ưu tiên / glossary / data dictionary / feature / sáu liên kết xuất .xlsx.
  */
@@ -22,6 +23,14 @@ import RequirementsTab from '@/components/work/swr/RequirementsTab';
 import PriorityTab from '@/components/work/swr/PriorityTab';
 import { DictionaryTab, GlossaryTab } from '@/components/work/swr/DataTabs';
 import SixLinksTab from '@/components/work/swr/SixLinksTab';
+// CTW đợt 6b: SWR-4 elicitation & stakeholder + SWR-3 SRS chuyên sâu
+import StakeholdersTab from '@/components/work/swr6b/StakeholdersTab';
+import ElicitationTab from '@/components/work/swr6b/ElicitationTab';
+import SurveysTab from '@/components/work/swr6b/SurveysTab';
+import ModelsTab from '@/components/work/swr6b/ModelsTab';
+import PrototypesTab from '@/components/work/swr6b/PrototypesTab';
+import QualityTab from '@/components/work/swr6b/QualityTab';
+import NfrTab from '@/components/work/swr6b/NfrTab';
 import { wt } from '@/components/work/i18n';
 
 const TABS = [
@@ -32,6 +41,13 @@ const TABS = [
   { id: 'glossary', get label() { return wt('swr.tabGlossary'); } },
   { id: 'dictionary', get label() { return wt('swr.tabDictionary'); } },
   { id: 'six-links', get label() { return wt('swr.tabSixLinks'); } },
+  { id: 'stakeholders', get label() { return wt('elic.tabStakeholders'); } },
+  { id: 'elicitation', get label() { return wt('elic.tabElicitation'); } },
+  { id: 'surveys', get label() { return wt('elic.tabSurveys'); } },
+  { id: 'models', get label() { return wt('srsx.tabModels'); } },
+  { id: 'prototypes', get label() { return wt('srsx.tabPrototypes'); } },
+  { id: 'quality', get label() { return wt('srsx.tabQuality'); } },
+  { id: 'nfr', get label() { return wt('srsx.tabNfr'); } },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -78,6 +94,13 @@ function WiegersView({ config, pid }: { config: ProjectConfig; pid: number }) {
           {tab === 'glossary' && <GlossaryTab pid={pid} />}
           {tab === 'dictionary' && <DictionaryTab pid={pid} base={base} />}
           {tab === 'six-links' && <SixLinksTab pid={pid} onTab={setTab} onUcRules={() => router.push(`${base}/requirements`)} />}
+          {tab === 'stakeholders' && <StakeholdersTab pid={pid} />}
+          {tab === 'elicitation' && <ElicitationTab pid={pid} base={base} onOpenIssue={openIssue} />}
+          {tab === 'surveys' && <SurveysTab pid={pid} />}
+          {tab === 'models' && <ModelsTab pid={pid} base={base} />}
+          {tab === 'prototypes' && <PrototypesTab pid={pid} base={base} />}
+          {tab === 'quality' && <QualityTab pid={pid} onOpenIssue={openIssue} />}
+          {tab === 'nfr' && <NfrTab pid={pid} onOpenIssue={openIssue} />}
         </div>
       </div>
       <IssueDrawer pid={pid} num={issue} onClose={() => setParam({ issue: null }, true)} onOpenIssue={openIssue} />

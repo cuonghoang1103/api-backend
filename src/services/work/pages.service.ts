@@ -359,6 +359,9 @@ export async function updatePage(userId: number, projectId: number, num: number,
   const ctx = await docCtx(userId, projectId);
   requireEdit(ctx);
   const p = await findPage(ctx, num);
+  if (input.title !== undefined || input.contentJson !== undefined) {
+    await (await import('./quality.service.js')).assertBaselineEditAllowed(projectId, 'DOC', p.id, `Doc ${num}`); // đợt 6 (R21)
+  }
   const manage = canManagePage(ctx.access.role, ctx.access.workspaceRole, userId, p.ownerId);
   const data: Prisma.WorkPageUncheckedUpdateInput = {};
   const audits: string[] = [];

@@ -31,6 +31,7 @@ export const gov = {
   mtRetro: 'Retrospective',
   mtSteering: 'Steering committee',
   mtClient: 'Client meeting',
+  mtElicitation: 'Requirements elicitation',
   mtOther: 'Other',
   notScored: 'Not scored',
   scoreTip: 'Score {s} ({lv})',

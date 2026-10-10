@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { z } from 'zod';
+import { applyStorageSandbox } from './storageSandbox.js';
 
 dotenv.config();
 
@@ -294,7 +295,8 @@ export const config = {
   publicBaseUrl: env.PUBLIC_BASE_URL,
 
   // Cloudflare R2
-  r2: {
+  // Đợt 6: chạy test / STORAGE_SANDBOX=1 ⇒ thay toàn bộ bằng kho giả (config/storageSandbox.ts) — không chạm bucket thật.
+  r2: applyStorageSandbox({
     bucketName: env.R2_BUCKET_NAME,
     publicUrl: (env.R2_PUBLIC_URL ?? '').replace(/\/$/, ''), // strip trailing slash
     endpoint: env.R2_ENDPOINT_URL,
@@ -304,7 +306,7 @@ export const config = {
     enabled: Boolean(
       env.R2_BUCKET_NAME && env.R2_ENDPOINT_URL && env.R2_ACCESS_KEY_ID && env.R2_SECRET_ACCESS_KEY,
     ),
-  },
+  }),
 
   // Sentry
   sentryDsn: env.SENTRY_DSN,

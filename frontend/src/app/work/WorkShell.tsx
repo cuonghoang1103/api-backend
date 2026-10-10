@@ -49,7 +49,9 @@ function useMainRole(): [(el: HTMLElement | null) => void, 'main' | undefined] {
 
 export default function WorkShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';
-  const isPublic = pathname.startsWith('/work/invite/') || pathname.startsWith('/work/share/');
+  const isPublic = pathname.startsWith('/work/invite/') || pathname.startsWith('/work/share/')
+    // CTW đợt 6b: khảo sát công khai + link khách xác nhận prototype
+    || pathname.startsWith('/work/survey/') || pathname.startsWith('/work/mockup-review/');
   const { daDangNhap, sanSang } = useDaDangNhap();
   const mobileNav = useMobileNav((s) => s.open);
   const setMobileNav = useMobileNav((s) => s.setOpen);

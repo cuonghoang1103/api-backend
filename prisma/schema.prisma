@@ -10206,103 +10206,117 @@ model WorkProject {
   updatedAt      DateTime  @updatedAt @map("updated_at")
   deletedAt      DateTime? @map("deleted_at")
 
-  workspace         WorkSpace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  lead              User?                  @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
-  members           WorkProjectMember[]
-  invites           WorkInvite[]
-  workflows         WorkWorkflow[]
-  issueTypes        WorkIssueType[]
-  issues            WorkIssue[]
-  labels            WorkLabel[]
-  components        WorkComponent[]
-  sprints           WorkSprint[]
-  testPlans         WorkTestPlan[]
-  testCycles        WorkTestCycle[]
-  customFields      WorkCustomField[]
-  savedFilters      WorkSavedFilter[]
-  dashboards        WorkDashboard[]
-  versions          WorkVersion[]
-  automations       WorkAutomationRule[]
-  github            WorkGithubConnection?
-  devActivity       WorkDevActivity[]
-  publicLinks       WorkPublicLink[]
-  aiThreads         WorkAiThread[]
-  chatHooks         WorkChatHook[]
-  gitlab            WorkGitlabConnection?
-  editLocks         WorkEditLock[]
-  stages            WorkStage[]
-  approvals         WorkApproval[]
-  handoffs          WorkHandoff[]
-  issueAliases      WorkIssueAlias[]
+  workspace           WorkSpace                @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  lead                User?                    @relation("WorkProjectLead", fields: [leadId], references: [id], onDelete: SetNull)
+  members             WorkProjectMember[]
+  invites             WorkInvite[]
+  workflows           WorkWorkflow[]
+  issueTypes          WorkIssueType[]
+  issues              WorkIssue[]
+  labels              WorkLabel[]
+  components          WorkComponent[]
+  sprints             WorkSprint[]
+  testPlans           WorkTestPlan[]
+  testCycles          WorkTestCycle[]
+  customFields        WorkCustomField[]
+  savedFilters        WorkSavedFilter[]
+  dashboards          WorkDashboard[]
+  versions            WorkVersion[]
+  automations         WorkAutomationRule[]
+  github              WorkGithubConnection?
+  devActivity         WorkDevActivity[]
+  publicLinks         WorkPublicLink[]
+  aiThreads           WorkAiThread[]
+  chatHooks           WorkChatHook[]
+  gitlab              WorkGitlabConnection?
+  editLocks           WorkEditLock[]
+  stages              WorkStage[]
+  approvals           WorkApproval[]
+  handoffs            WorkHandoff[]
+  issueAliases        WorkIssueAlias[]
   /// Tài liệu dự án kiểu Confluence (đợt S2a, mô-đun `docs`).
-  pages             WorkPage[]
+  pages               WorkPage[]
   /// Nghiệm thu UAT (đợt S2b, mô-đun `clientPortal`).
-  uatRequests       WorkUatRequest[]
+  uatRequests         WorkUatRequest[]
   /// Đợt S3b: yêu cầu thay đổi (CR), sổ RAID, cuộc họp.
-  changeRequests    WorkChangeRequest[]
-  raidItems         WorkRaidItem[]
-  meetings          WorkMeeting[]
+  changeRequests      WorkChangeRequest[]
+  raidItems           WorkRaidItem[]
+  meetings            WorkMeeting[]
   /// Đợt S4: tài chính dự án (mô-đun finance), báo cáo khách tự động (mô-đun reports), xuất trọn dự án.
-  financeSettings   WorkFinanceSettings?
-  rates             WorkRate[]
-  timesheets        WorkTimesheet[]
-  budgetLines       WorkBudgetLine[]
-  expenses          WorkExpense[]
-  paymentMilestones WorkPaymentMilestone[]
-  reportSchedule    WorkReportSchedule?
-  clientReports     WorkClientReport[]
-  exports           WorkProjectExport[]
+  financeSettings     WorkFinanceSettings?
+  rates               WorkRate[]
+  timesheets          WorkTimesheet[]
+  budgetLines         WorkBudgetLine[]
+  expenses            WorkExpense[]
+  paymentMilestones   WorkPaymentMilestone[]
+  reportSchedule      WorkReportSchedule?
+  clientReports       WorkClientReport[]
+  exports             WorkProjectExport[]
   /// Đợt S5a: service desk & SLA (mô-đun serviceDesk) — cấu hình + bản ghi Problem.
-  deskSettings      WorkDeskSettings?
-  deskProblems      WorkDeskProblem[]
+  deskSettings        WorkDeskSettings?
+  deskProblems        WorkDeskProblem[]
   /// Đợt S6: lịch sử chấm Spec Fidelity (trang tài liệu / tập thẻ yêu cầu).
-  specReviews       WorkSpecReview[]
+  specReviews         WorkSpecReview[]
   /// Resources (06/10/2026): thư viện link/tài nguyên của dự án (mô-đun resources).
-  resourceGroups    WorkResourceGroup[]
-  resources         WorkResource[]
+  resourceGroups      WorkResourceGroup[]
+  resources           WorkResource[]
   /// Đợt 1b (08/10/2026): tài liệu kiểm thử chuẩn FPT — Report 5.1 Unit + 5.2 Integration.
-  fptTestDoc        WorkFptTestDoc?
-  fptChanges        WorkFptChange[]
-  unitFunctions     WorkUnitFunction[]
-  itModules         WorkItModule[]
+  fptTestDoc          WorkFptTestDoc?
+  fptChanges          WorkFptChange[]
+  unitFunctions       WorkUnitFunction[]
+  itModules           WorkItModule[]
   /// CTW đợt 3B: WBS + ước lượng, thông tin môn học, Weekly Report, AI Usage Report.
-  wbsItems          WorkWbsItem[]
-  fptReportDoc      WorkFptReportDoc?
-  weeklyReports     WorkWeeklyReport[]
-  aiUsageLogs       WorkAiUsageLog[]
+  wbsItems            WorkWbsItem[]
+  /// UX-C: baseline của Timeline (kế hoạch gốc để so với hiện tại — C5).
+  timelineBaselines   WorkTimelineBaseline[]
+  fptReportDoc        WorkFptReportDoc?
+  weeklyReports       WorkWeeklyReport[]
+  aiUsageLogs         WorkAiUsageLog[]
   /// CTW đợt 3A: ảnh chèn trong trình soạn thảo (Docs, mô tả thẻ, bình luận).
-  docImages         WorkDocImage[]
+  docImages           WorkDocImage[]
   /// CTW đợt 4: SRS có cấu trúc (actor, UC, BR, màn, phân quyền màn, Non-UI), truy vết tay, defect log.
-  srsActors         WorkSrsActor[]
-  useCases          WorkUseCase[]
-  businessRules     WorkBusinessRule[]
-  srsScreens        WorkSrsScreen[]
-  srsFunctions      WorkSrsFunction[]
-  traceLinks        WorkTraceLink[]
-  defectInfos       WorkDefectInfo[]
+  srsActors           WorkSrsActor[]
+  useCases            WorkUseCase[]
+  businessRules       WorkBusinessRule[]
+  srsScreens          WorkSrsScreen[]
+  srsFunctions        WorkSrsFunction[]
+  traceLinks          WorkTraceLink[]
+  defectInfos         WorkDefectInfo[]
   /// CTW K-3: kênh chat của dự án (xoá dự án ⇒ xoá kênh + tin + tệp theo dây chuyền).
-  channels          WorkChannel[]
+  channels            WorkChannel[]
   /// CTW Đóng góp: commit/PR từ webhook (cả commit không nhắc mã thẻ), danh tính git ↔ người, phiếu đánh giá chéo.
-  devContributions  WorkDevContribution[]
-  gitIdentities     WorkGitIdentity[]
-  peerRounds        WorkPeerRound[]
+  devContributions    WorkDevContribution[]
+  gitIdentities       WorkGitIdentity[]
+  peerRounds          WorkPeerRound[]
   /// CTW Diagram: sơ đồ của dự án (Mermaid/Excalidraw) + phiên bản + bình luận.
-  diagrams          WorkDiagram[]
+  diagrams            WorkDiagram[]
   // ── CTW đợt 4b ── SWR302 (Wiegers): feature FE-n, bảng ưu tiên, glossary, data dictionary, cấu hình
-  swrFeatures       WorkFeature[]
-  swrPriorityRows   WorkPriorityRow[]
-  swrGlossary       WorkGlossaryTerm[]
-  swrDataElements   WorkDataElement[]
-  swrSettings       WorkSwrSettings?
-  requirementInfos  WorkRequirementInfo[]
+  swrFeatures         WorkFeature[]
+  swrPriorityRows     WorkPriorityRow[]
+  swrGlossary         WorkGlossaryTerm[]
+  swrDataElements     WorkDataElement[]
+  swrSettings         WorkSwrSettings?
+  requirementInfos    WorkRequirementInfo[]
   // ── hết CTW đợt 4b ──
+  // ── CTW đợt 6b ── SWR-3/SWR-4: stakeholder, RACI, phiên elicitation, khảo sát, mô hình SRS
+  swrStakeholders     WorkStakeholder[]
+  swrRaciActivities   WorkRaciActivity[]
+  elicitations        WorkElicitationSession[]
+  swrSurveys          WorkSurvey[]
+  srsModels           WorkSrsModel[]
   /// CTW K-2: cấu hình họp (hạn lưu audio, trần phiên âm/ngày, nhắc họp).
-  meetingSettings   WorkMeetingSettings?
+  meetingSettings     WorkMeetingSettings?
   /// CTW đợt 5: nhóm của lớp học sinh ra dự án này (tối đa một) + điểm rubric theo mốc.
-  classGroup        WorkClassGroup?        @relation("WorkClassGroupProject")
-  grades            WorkGrade[]            @relation("WorkGradeProject")
+  classGroup          WorkClassGroup?          @relation("WorkClassGroupProject")
+  grades              WorkGrade[]              @relation("WorkGradeProject")
   /// Phiếu yêu cầu của khách đã sinh ra dự án này (tối đa một).
-  clientRequest     ProjectRequest?
+  clientRequest       ProjectRequest?
+  // ── CTW đợt 6 ── review/inspection, baseline, CR ↔ yêu cầu, thiết kế test, kiểm thử thăm dò
+  reviewSessions      WorkReviewSession[]
+  baselines           WorkBaseline[]
+  crAffectedRefs      WorkCrAffectedRef[]
+  testDesigns         WorkTestDesign[]
+  exploratorySessions WorkExploratorySession[]
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -10475,57 +10489,61 @@ model WorkIssue {
   updatedAt            DateTime  @updatedAt @map("updated_at")
   deletedAt            DateTime? @map("deleted_at")
 
-  project         WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project            WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
   // NoAction chứ KHÔNG Restrict: Postgres kiểm RESTRICT ngay lập tức, nên xoá
   // dự án (cascade xuống loại thẻ, trạng thái VÀ thẻ) bị chặn khi loại thẻ bị
   // xoá trước thẻ. NO ACTION kiểm ở cuối câu lệnh — xoá dây chuyền chạy được,
   // còn xoá riêng một trạng thái đang có thẻ vẫn bị chặn. Bắt được bằng test DB.
-  type            WorkIssueType           @relation(fields: [typeId], references: [id], onDelete: NoAction)
-  status          WorkStatus              @relation(fields: [statusId], references: [id], onDelete: NoAction)
-  parent          WorkIssue?              @relation("WorkIssueParent", fields: [parentId], references: [id], onDelete: SetNull)
-  children        WorkIssue[]             @relation("WorkIssueParent")
-  sprint          WorkSprint?             @relation(fields: [sprintId], references: [id], onDelete: SetNull)
-  fixVersion      WorkVersion?            @relation(fields: [fixVersionId], references: [id], onDelete: SetNull)
-  team            WorkTeam?               @relation(fields: [teamId], references: [id], onDelete: SetNull)
-  stage           WorkStage?              @relation("WorkIssueStage", fields: [stageId], references: [id], onDelete: SetNull)
-  gateOf          WorkStage[]             @relation("WorkStageGateIssue")
-  approvals       WorkApproval[]
-  handoffs        WorkHandoff[]
-  aliases         WorkIssueAlias[]
-  pageLinks       WorkPageIssueLink[]
+  type               WorkIssueType           @relation(fields: [typeId], references: [id], onDelete: NoAction)
+  status             WorkStatus              @relation(fields: [statusId], references: [id], onDelete: NoAction)
+  parent             WorkIssue?              @relation("WorkIssueParent", fields: [parentId], references: [id], onDelete: SetNull)
+  children           WorkIssue[]             @relation("WorkIssueParent")
+  sprint             WorkSprint?             @relation(fields: [sprintId], references: [id], onDelete: SetNull)
+  fixVersion         WorkVersion?            @relation(fields: [fixVersionId], references: [id], onDelete: SetNull)
+  team               WorkTeam?               @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  stage              WorkStage?              @relation("WorkIssueStage", fields: [stageId], references: [id], onDelete: SetNull)
+  gateOf             WorkStage[]             @relation("WorkStageGateIssue")
+  approvals          WorkApproval[]
+  handoffs           WorkHandoff[]
+  aliases            WorkIssueAlias[]
+  pageLinks          WorkPageIssueLink[]
   /// Đợt S3b: CR sinh từ thẻ này · liên kết CR/RAID · việc từ biên bản họp.
-  crSourceOf      WorkChangeRequest[]     @relation("WorkCrSourceIssue")
-  crLinks         WorkChangeRequestLink[]
-  raidLinks       WorkRaidLink[]
-  meetingActions  WorkMeetingAction[]
+  crSourceOf         WorkChangeRequest[]     @relation("WorkCrSourceIssue")
+  crLinks            WorkChangeRequestLink[]
+  raidLinks          WorkRaidLink[]
+  meetingActions     WorkMeetingAction[]
   /// Đợt S5a: phần service desk của thẻ (loại yêu cầu, P1–P4, SLA, CSAT) — chỉ thẻ đi qua service desk.
-  deskTicket      WorkDeskTicket?
-  assignee        User?                   @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
-  reporter        User?                   @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
-  linksOut        WorkIssueLink[]         @relation("WorkIssueLinkFrom")
-  linksIn         WorkIssueLink[]         @relation("WorkIssueLinkTo")
-  labels          WorkIssueLabel[]
-  components      WorkIssueComponent[]
-  comments        WorkComment[]
-  attachments     WorkAttachment[]
-  history         WorkHistory[]
-  watchers        WorkWatcher[]
-  testCase        WorkTestCase?
-  defectOf        WorkTestRunDefect[]
-  customValues    WorkCustomValue[]
-  worklogs        WorkWorklog[]
-  devActivity     WorkDevActivity[]
+  deskTicket         WorkDeskTicket?
+  assignee           User?                   @relation("WorkIssueAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  reporter           User?                   @relation("WorkIssueReporter", fields: [reporterId], references: [id], onDelete: SetNull)
+  linksOut           WorkIssueLink[]         @relation("WorkIssueLinkFrom")
+  linksIn            WorkIssueLink[]         @relation("WorkIssueLinkTo")
+  labels             WorkIssueLabel[]
+  components         WorkIssueComponent[]
+  comments           WorkComment[]
+  attachments        WorkAttachment[]
+  history            WorkHistory[]
+  watchers           WorkWatcher[]
+  testCase           WorkTestCase?
+  defectOf           WorkTestRunDefect[]
+  customValues       WorkCustomValue[]
+  worklogs           WorkWorklog[]
+  devActivity        WorkDevActivity[]
   /// Resources (06/10/2026): "Web links" kiểu Jira trên chi tiết thẻ.
-  webLinks        WorkIssueWebLink[]
+  webLinks           WorkIssueWebLink[]
   /// CTW đợt 3B (A3): thuộc tính WBS/ước lượng.
-  wbsItem         WorkWbsItem?
+  wbsItem            WorkWbsItem?
   /// CTW đợt 4: UC/màn/Non-UI đặc tả thẻ này (RTM) + phần defect log của thẻ Bug.
-  useCases        WorkUseCase[]           @relation("WorkUseCaseIssue")
-  srsScreens      WorkSrsScreen[]         @relation("WorkSrsScreenIssue")
-  srsFunctions    WorkSrsFunction[]       @relation("WorkSrsFunctionIssue")
-  defectInfo      WorkDefectInfo?         @relation("WorkDefectInfoIssue")
+  useCases           WorkUseCase[]           @relation("WorkUseCaseIssue")
+  srsScreens         WorkSrsScreen[]         @relation("WorkSrsScreenIssue")
+  srsFunctions       WorkSrsFunction[]       @relation("WorkSrsFunctionIssue")
+  defectInfo         WorkDefectInfo?         @relation("WorkDefectInfoIssue")
   // ── CTW đợt 4b ── phân loại + thuộc tính + vòng đời của thẻ REQUIREMENT (Wiegers)
-  requirementInfo WorkRequirementInfo?    @relation("WorkRequirementInfoIssue")
+  requirementInfo    WorkRequirementInfo?    @relation("WorkRequirementInfoIssue")
+  // ── CTW đợt 6b ── NFR có số đo (ISO 25010), checklist chất lượng, nguồn yêu cầu (phiên elicitation / stakeholder)
+  nfrSpec            WorkNfrSpec?            @relation("WorkNfrSpecIssue")
+  reqQuality         WorkReqQuality?         @relation("WorkReqQualityIssue")
+  requirementOrigins WorkRequirementOrigin[] @relation("WorkRequirementOriginIssue")
 
   @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
   @@index([projectId, statusId, rank], name: "idx_work_issue_board")
@@ -10785,6 +10803,12 @@ model WorkTestCase {
   kind          String   @default("MANUAL") @db.VarChar(16)
   preconditions String?  @db.Text
   gherkin       String?  @db.Text
+  /// Đợt 6 (T1/T5/B2): cấp test COMPONENT | INTEGRATION | SYSTEM | ACCEPTANCE · loại FUNCTIONAL | NON_FUNCTIONAL |
+  /// STRUCTURAL | CONFIRMATION | REGRESSION | SMOKE · kỹ thuật thiết kế (EP/BVA/DT/ST/PAIRWISE/EXPLORATORY…) · phút ước lượng.
+  level         String?  @db.VarChar(16)
+  testType      String?  @map("test_type") @db.VarChar(16)
+  technique     String?  @db.VarChar(16)
+  estimateMin   Int?     @map("estimate_min")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
   issue WorkIssue          @relation(fields: [issueId], references: [id], onDelete: Cascade)
@@ -10815,6 +10839,9 @@ model WorkTestPlan {
   projectId   Int       @map("project_id")
   name        String    @db.VarChar(120)
   description String?   @db.Text
+  /// Đợt 6 (T6/B6/T5): Test Plan IEEE 829 có cấu trúc {scopeIn, scopeOut, approach, environment, suspension,
+  /// resumption, deliverables, schedule, risks, criteria: {passRate, maxOpenCritical, maxOpenMajor, reqCoverage}, estimation}.
+  settings    Json?
   createdById Int?      @map("created_by_id")
   archivedAt  DateTime? @map("archived_at")
   createdAt   DateTime  @default(now()) @map("created_at")
@@ -11131,6 +11158,26 @@ model WorkWbsItem {
 
   @@index([projectId], name: "idx_work_wbs_item_project")
   @@map("work_wbs_items")
+}
+
+/// UX-C (11/10/2026): ảnh chụp kế hoạch Timeline ("baseline", C5) — ngày bắt đầu/hạn của từng thẻ lúc chụp,
+/// để vẽ thanh mờ "kế hoạch gốc" dưới thanh hiện tại và đếm thẻ trễ so với gốc. Dữ liệu chụp là JSON
+/// [{ id, number, start, due }] (tối đa 1.500 thẻ như timeline) — không cần khoá ngoại tới từng thẻ: thẻ đã xoá
+/// chỉ đơn giản không còn hàng để so.
+model WorkTimelineBaseline {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  name        String   @db.VarChar(120)
+  note        String?  @db.VarChar(500)
+  items       Json
+  itemCount   Int      @default(0) @map("item_count")
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt], name: "idx_work_tl_baseline_project")
+  @@map("work_timeline_baselines")
 }
 
 /// Thông tin môn học/nhóm dùng chung cho Weekly Report + AI Usage Report (sheet 0.Overview).
@@ -12286,6 +12333,8 @@ model WorkRaidItem {
   /// Đợt S4: rủi ro được phép nêu trong BÁO CÁO TUẦN cho khách (chỉ tiêu đề + mức + hướng xử lý),
   /// và chỉ khi lịch báo cáo bật "include risks". Sổ RAID vẫn không bao giờ mở cho khách.
   clientVisible     Boolean   @default(false) @map("client_visible")
+  /// Đợt 6 (T9): rủi ro PRODUCT (chất lượng sản phẩm ⇒ kiểm thử theo rủi ro) | PROJECT. Null = chưa phân loại.
+  riskKind          String?   @map("risk_kind") @db.VarChar(8)
   createdById       Int?      @map("created_by_id")
   closedAt          DateTime? @map("closed_at")
   version           Int       @default(0)
@@ -13466,6 +13515,8 @@ model WorkSrsScreen {
   linksOut WorkSrsScreenLink[] @relation("WorkSrsScreenFrom")
   linksIn  WorkSrsScreenLink[] @relation("WorkSrsScreenTo")
   auth     WorkSrsScreenAuth[]
+  /// CTW đợt 6b (R15): prototype / wireframe của màn (ảnh hoặc link Figma/Excalidraw) + xác nhận.
+  mockups  WorkScreenMockup[]
 
   @@unique([projectId, name], name: "uk_work_srs_screen_name", map: "uk_work_srs_screen_name")
   @@map("work_srs_screens")
@@ -13552,6 +13603,14 @@ model WorkDefectInfo {
   productDetails  String?  @map("product_details") @db.VarChar(300)
   sourceReviewId  Int?     @map("source_review_id")
   sourceFindingId String?  @map("source_finding_id") @db.VarChar(20)
+  /// Đợt 6 (T8/T12/RV): nguyên nhân gốc · pha gây lỗi · công cụ phát hiện · cấp test · cách sửa + bằng chứng sau sửa ·
+  /// phiên review sinh ra lỗi (WorkReviewSession.id, không FK).
+  rootCause       String?  @map("root_cause") @db.VarChar(24)
+  injectedPhase   String?  @map("injected_phase") @db.VarChar(16)
+  detectedByTool  String?  @map("detected_by_tool") @db.VarChar(120)
+  testLevel       String?  @map("test_level") @db.VarChar(16)
+  fixNote         String?  @map("fix_note") @db.Text
+  reviewSessionId Int?     @map("review_session_id")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
   issue   WorkIssue   @relation("WorkDefectInfoIssue", fields: [issueId], references: [id], onDelete: Cascade)
@@ -13581,6 +13640,193 @@ model WorkRaidQuestion {
 }
 
 // ── hết CTW đợt 4 ──
+
+// ── CTW đợt 6 ── (11/10/2026) RV review/inspection + baseline (R18–R22, T2, T13) · TST-1 quản lý test chuyên sâu
+// (T1, T5–T9, T12, B2, B6, B9). Người dùng tham chiếu bằng Int KHÔNG FK (như nhật ký) — xoá người không làm mất biên bản.
+
+/// Phiên review/inspection (IEEE 1028 · Wiegers Ch17 · SWT301 Ch3). kind DOC | CODE; method INFORMAL | WALKTHROUGH |
+/// TECHNICAL | INSPECTION; status PLANNING → PREPARATION → MEETING → REWORK → FOLLOW_UP → CLOSED (5 hoạt động review +
+/// đóng). decision ACCEPT | ACCEPT_WITH_CHANGES | REINSPECT (chỉ khi đóng). size = số trang (DOC) / LOC (CODE) được soát.
+model WorkReviewSession {
+  id             Int       @id @default(autoincrement())
+  projectId      Int       @map("project_id")
+  number         Int
+  title          String    @db.VarChar(200)
+  kind           String    @default("DOC") @db.VarChar(8)
+  method         String    @default("INSPECTION") @db.VarChar(16)
+  checklistKey   String    @map("checklist_key") @db.VarChar(40)
+  /// Tài liệu được soát (trang Docs) — không FK (trang xoá mềm; biên bản vẫn giữ).
+  pageId         Int?      @map("page_id")
+  workProduct    String?   @map("work_product") @db.VarChar(200)
+  prUrl          String?   @map("pr_url") @db.VarChar(500)
+  size           Float?
+  sizeUnit       String    @default("PAGE") @map("size_unit") @db.VarChar(8)
+  status         String    @default("PLANNING") @db.VarChar(12)
+  decision       String?   @db.VarChar(20)
+  meetingAt      DateTime? @map("meeting_at")
+  meetingMinutes Int?      @map("meeting_minutes")
+  reworkMinutes  Int?      @map("rework_minutes")
+  entryCriteria  String?   @map("entry_criteria") @db.Text
+  exitCriteria   String?   @map("exit_criteria") @db.Text
+  notes          String?   @db.Text
+  createdById    Int?      @map("created_by_id")
+  closedAt       DateTime? @map("closed_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  project      WorkProject             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  participants WorkReviewParticipant[]
+  items        WorkReviewItem[]
+
+  @@unique([projectId, number], name: "uk_work_review_session_number", map: "uk_work_review_session_number")
+  @@map("work_review_sessions")
+}
+
+/// Vai trong phiên: MODERATOR | AUTHOR | REVIEWER | SCRIBE | READER. prepMinutes = công chuẩn bị (số đo hiệu suất).
+model WorkReviewParticipant {
+  id          Int    @id @default(autoincrement())
+  sessionId   Int    @map("session_id")
+  userId      Int    @map("user_id")
+  role        String @db.VarChar(12)
+  prepMinutes Int?   @map("prep_minutes")
+
+  session WorkReviewSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, userId, role], name: "uk_work_review_participant", map: "uk_work_review_participant")
+  @@map("work_review_participants")
+}
+
+/// Một câu checklist đã chạy (Result OK | NG | NA · DefectID · Line · Note — đúng cột Java_Simple_Checklist).
+/// defectIssueId = thẻ Bug sinh ra (đi vào defect log thống nhất, activity Review) — không FK.
+model WorkReviewItem {
+  id            Int     @id @default(autoincrement())
+  sessionId     Int     @map("session_id")
+  position      Int
+  section       String  @db.VarChar(120)
+  question      String  @db.Text
+  result        String? @db.VarChar(4)
+  line          String? @db.VarChar(60)
+  note          String? @db.Text
+  severity      String? @db.VarChar(10)
+  defectIssueId Int?    @map("defect_issue_id")
+
+  session WorkReviewSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, position], map: "idx_work_review_item_session")
+  @@map("work_review_items")
+}
+
+/// Baseline bộ yêu cầu/tài liệu (Wiegers Ch27 · bài 7.1): ảnh chụp REQ/UC/BR/Docs + hash. status DRAFT → PENDING →
+/// APPROVED (đóng băng, `locked`) | REJECTED; APPROVED cũ ⇒ SUPERSEDED khi baseline mới được duyệt.
+model WorkBaseline {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @map("project_id")
+  number      Int
+  name        String    @db.VarChar(160)
+  description String?   @db.Text
+  snapshot    Json
+  hash        String    @db.VarChar(64)
+  itemCount   Int       @map("item_count")
+  status      String    @default("DRAFT") @db.VarChar(12)
+  locked      Boolean   @default(false)
+  createdById Int?      @map("created_by_id")
+  approvedAt  DateTime? @map("approved_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  project  WorkProject           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  signoffs WorkBaselineSignoff[]
+
+  @@unique([projectId, number], name: "uk_work_baseline_number", map: "uk_work_baseline_number")
+  @@index([projectId, status], map: "idx_work_baseline_project")
+  @@map("work_baselines")
+}
+
+/// Chữ ký phê duyệt baseline: decision PENDING | APPROVED | REJECTED, kèm hash nội dung lúc ký + IP.
+model WorkBaselineSignoff {
+  id          Int       @id @default(autoincrement())
+  baselineId  Int       @map("baseline_id")
+  userId      Int       @map("user_id")
+  decision    String    @default("PENDING") @db.VarChar(10)
+  comment     String?   @db.Text
+  contentHash String?   @map("content_hash") @db.VarChar(64)
+  ip          String?   @db.VarChar(64)
+  decidedAt   DateTime? @map("decided_at")
+
+  baseline WorkBaseline @relation(fields: [baselineId], references: [id], onDelete: Cascade)
+
+  @@unique([baselineId, userId], name: "uk_work_baseline_signoff", map: "uk_work_baseline_signoff")
+  @@map("work_baseline_signoffs")
+}
+
+/// R22 — CR ↔ mục yêu cầu bị ảnh hưởng: kind REQ (thẻ) | UC | BR | DOC (trang), refId = id bản ghi. Mục thuộc baseline
+/// đã khoá chỉ sửa được khi có CR APPROVED liệt kê nó ở đây.
+model WorkCrAffectedRef {
+  id              Int      @id @default(autoincrement())
+  projectId       Int      @map("project_id")
+  changeRequestId Int      @map("change_request_id")
+  kind            String   @db.VarChar(4)
+  refId           Int      @map("ref_id")
+  createdById     Int?     @map("created_by_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([changeRequestId, kind, refId], name: "uk_work_cr_affected_ref", map: "uk_work_cr_affected_ref")
+  @@index([projectId, kind, refId], map: "idx_work_cr_affected_ref_target")
+  @@map("work_cr_affected_refs")
+}
+
+/// B2 — một bảng thiết kế test có công cụ: technique EP_BVA | DECISION_TABLE | STATE_TRANSITION | PAIRWISE;
+/// input = mô hình (miền / điều kiện-hành động / máy trạng thái / tham số), cases = case sinh ra (lưu lại để xuất).
+/// exported = [{target: XRAY|UNIT, at, numbers|functionId}].
+model WorkTestDesign {
+  id             Int      @id @default(autoincrement())
+  projectId      Int      @map("project_id")
+  number         Int
+  name           String   @db.VarChar(160)
+  technique      String   @db.VarChar(20)
+  requirementKey String?  @map("requirement_key") @db.VarChar(40)
+  input          Json
+  cases          Json     @default("[]")
+  exported       Json     @default("[]")
+  createdById    Int?     @map("created_by_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, number], name: "uk_work_test_design_number", map: "uk_work_test_design_number")
+  @@map("work_test_designs")
+}
+
+/// B11 (kéo sớm) — phiên kiểm thử thăm dò: charter (Explore … with … to discover …), hộp thời gian, ghi chú theo
+/// thời gian [{at, kind NOTE|BUG|QUESTION|IDEA|RISK, text, bugNumber?}]. status PLANNED | RUNNING | DONE.
+model WorkExploratorySession {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @map("project_id")
+  number      Int
+  charter     String    @db.Text
+  area        String?   @db.VarChar(160)
+  timeboxMin  Int       @default(60) @map("timebox_min")
+  testerId    Int?      @map("tester_id")
+  cycleId     Int?      @map("cycle_id")
+  status      String    @default("PLANNED") @db.VarChar(10)
+  startedAt   DateTime? @map("started_at")
+  endedAt     DateTime? @map("ended_at")
+  notes       Json      @default("[]")
+  summary     String?   @db.Text
+  createdById Int?      @map("created_by_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, number], name: "uk_work_exploratory_number", map: "uk_work_exploratory_number")
+  @@map("work_exploratory_sessions")
+}
+
+// ── hết CTW đợt 6 ──
 
 // ── CTW đợt 5b K-1 ── (10/10/2026) BÌNH LUẬN ĐẦY ĐỦ + VOICE NOTE: luồng trả lời (WorkComment.parentId,
 // WorkPageComment.parentId), tệp trong bình luận (WorkAttachment.commentId/forComment) và phần riêng của voice note.
@@ -14447,3 +14693,309 @@ model WorkPageAnchor {
 }
 
 // ── hết CTW K-3b ──
+
+// ── CTW đợt 6b ── (11/10/2026) SWR-3 "SRS chuyên sâu" + SWR-4 "Elicitation & stakeholder" (rà soát R1/R2/R3/R7/R14/R15/R24/R28):
+// sổ stakeholder (lưới quyền lực × quan tâm, champion, quyền quyết định) + ma trận RACI theo hoạt động; phiên elicitation
+// (6 kỹ thuật, kế hoạch, câu hỏi soạn trước, người tham gia + vai đóng, ghi chú, nối họp K-2 để ghi âm/phiên âm) ⇒ AI đề
+// xuất yêu cầu có bằng chứng ⇒ người duyệt thì mới thành thẻ REQUIREMENT (nguồn = phiên); khảo sát có link công khai;
+// prototype gắn màn + xác nhận; NFR có số đo theo ISO 25010 (Planguage); checklist chất lượng yêu cầu; mô hình SRS
+// (context/DFD/state/activity/feature tree) là sơ đồ trong Diagram Studio, bảng work_srs_models chỉ đánh dấu loại.
+
+/// R3 — một stakeholder (SH-<number>). kind: PERSON | GROUP | ORG. influence/interest 1–5 (≥ 4 = cao ⇒ lưới 2×2).
+/// attitude: CHAMPION | SUPPORTER | NEUTRAL | CRITIC | BLOCKER. actorId = actor SRS tương ứng (lớp người dùng) — KHÔNG FK.
+/// userId = thành viên dự án nếu là người trong hệ thống — KHÔNG FK.
+model WorkStakeholder {
+  id             Int      @id @default(autoincrement())
+  projectId      Int      @map("project_id")
+  number         Int
+  name           String   @db.VarChar(160)
+  role           String?  @db.VarChar(160)
+  organization   String?  @db.VarChar(160)
+  kind           String   @default("PERSON") @db.VarChar(8)
+  userClass      String?  @map("user_class") @db.VarChar(120)
+  influence      Int      @default(3)
+  interest       Int      @default(3)
+  attitude       String?  @db.VarChar(10)
+  isChampion     Boolean  @default(false) @map("is_champion")
+  decisionRights String?  @map("decision_rights") @db.Text
+  /// V&S §3.1 Stakeholder Profiles: Major Value · Major Interests · Constraints.
+  majorValue     String?  @map("major_value") @db.Text
+  interests      String?  @db.Text
+  constraints    String?  @db.Text
+  contact        String?  @db.VarChar(200)
+  notes          String?  @db.Text
+  actorId        Int?     @map("actor_id")
+  userId         Int?     @map("user_id")
+  position       Int      @default(0)
+  createdById    Int?     @map("created_by_id")
+  rev            Int      @default(0)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  project   WorkProject                  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  raci      WorkRaciCell[]
+  sessions  WorkElicitationParticipant[]
+  proposals WorkReqProposal[]
+  origins   WorkRequirementOrigin[]
+
+  @@unique([projectId, number], name: "uk_work_stakeholder_number", map: "uk_work_stakeholder_number")
+  @@map("work_stakeholders")
+}
+
+/// Hàng của ma trận RACI (hoạt động yêu cầu: Elicit, Specify, Approve baseline…).
+model WorkRaciActivity {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  name      String   @db.VarChar(160)
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project WorkProject    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  cells   WorkRaciCell[]
+
+  @@unique([projectId, name], name: "uk_work_raci_activity", map: "uk_work_raci_activity")
+  @@map("work_raci_activities")
+}
+
+/// Ô RACI: role R | A | C | I.
+model WorkRaciCell {
+  activityId    Int    @map("activity_id")
+  stakeholderId Int    @map("stakeholder_id")
+  role          String @db.VarChar(1)
+
+  activity    WorkRaciActivity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  stakeholder WorkStakeholder  @relation(fields: [stakeholderId], references: [id], onDelete: Cascade)
+
+  @@id([activityId, stakeholderId])
+  @@index([stakeholderId], map: "idx_work_raci_cell_stakeholder")
+  @@map("work_raci_cells")
+}
+
+/// R1 — một phiên elicitation (ELC-<number>). technique: INTERVIEW | WORKSHOP | SURVEY | OBSERVATION | DOCUMENT_ANALYSIS |
+/// PROTOTYPE. status: PLANNED | DONE | CANCELLED. questions = [{ id, text, answer }]. meetingId = cuộc họp K-2 (ghi âm,
+/// phiên âm) — KHÔNG FK (họp xoá mềm). surveyId = khảo sát của phiên (kỹ thuật SURVEY) — KHÔNG FK.
+/// aiSimulated = R28: phỏng vấn với AI đóng vai stakeholder (giữ transcript làm bằng chứng, gắn nhãn).
+model WorkElicitationSession {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @map("project_id")
+  number      Int
+  title       String    @db.VarChar(200)
+  technique   String    @db.VarChar(20)
+  status      String    @default("PLANNED") @db.VarChar(10)
+  scheduledAt DateTime? @map("scheduled_at")
+  durationMin Int?      @map("duration_min")
+  location    String?   @db.VarChar(200)
+  objective   String?   @db.Text
+  plan        String?   @db.Text
+  questions   Json      @default("[]")
+  notes       String?   @db.Text
+  outcome     String?   @db.Text
+  meetingId   Int?      @map("meeting_id")
+  surveyId    Int?      @map("survey_id")
+  aiSimulated Boolean   @default(false) @map("ai_simulated")
+  createdById Int?      @map("created_by_id")
+  rev         Int       @default(0)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  project      WorkProject                  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  participants WorkElicitationParticipant[]
+  proposals    WorkReqProposal[]
+  origins      WorkRequirementOrigin[]
+
+  @@unique([projectId, number], name: "uk_work_elicitation_number", map: "uk_work_elicitation_number")
+  @@map("work_elicitation_sessions")
+}
+
+/// Người tham gia phiên + vai đóng ("Fulfillment Manager", "Product champion"…).
+model WorkElicitationParticipant {
+  sessionId     Int     @map("session_id")
+  stakeholderId Int     @map("stakeholder_id")
+  rolePlayed    String? @map("role_played") @db.VarChar(120)
+
+  session     WorkElicitationSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  stakeholder WorkStakeholder        @relation(fields: [stakeholderId], references: [id], onDelete: Cascade)
+
+  @@id([sessionId, stakeholderId])
+  @@index([stakeholderId], map: "idx_work_elicitation_participant_sh")
+  @@map("work_elicitation_participants")
+}
+
+/// Yêu cầu AI (hoặc người) rút ra từ một phiên — CHƯA là yêu cầu: status PENDING | ACCEPTED | DISMISSED.
+/// Nhận ⇒ tạo thẻ REQUIREMENT (issueId) + nguồn (work_requirement_origins). evidence = [{ line, quote }] từ transcript/ghi chú.
+model WorkReqProposal {
+  id            Int       @id @default(autoincrement())
+  projectId     Int       @map("project_id")
+  sessionId     Int       @map("session_id")
+  title         String    @db.VarChar(300)
+  text          String?   @db.Text
+  reqType       String    @default("FUNCTIONAL") @map("req_type") @db.VarChar(20)
+  priority      String?   @db.VarChar(8)
+  stakeholderId Int?      @map("stakeholder_id")
+  evidence      Json      @default("[]")
+  status        String    @default("PENDING") @db.VarChar(10)
+  issueId       Int?      @map("issue_id")
+  model         String?   @db.VarChar(80)
+  createdById   Int?      @map("created_by_id")
+  decidedById   Int?      @map("decided_by_id")
+  decidedAt     DateTime? @map("decided_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  session     WorkElicitationSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  stakeholder WorkStakeholder?       @relation(fields: [stakeholderId], references: [id], onDelete: SetNull)
+
+  @@index([sessionId, status], map: "idx_work_req_proposal_session")
+  @@map("work_req_proposals")
+}
+
+/// Truy vết nguồn: yêu cầu (thẻ) ↔ phiên elicitation ↔ stakeholder (ai nói, ở buổi nào).
+model WorkRequirementOrigin {
+  id            Int      @id @default(autoincrement())
+  projectId     Int      @map("project_id")
+  issueId       Int      @map("issue_id")
+  sessionId     Int?     @map("session_id")
+  stakeholderId Int?     @map("stakeholder_id")
+  note          String?  @db.VarChar(300)
+  createdById   Int?     @map("created_by_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  issue       WorkIssue               @relation("WorkRequirementOriginIssue", fields: [issueId], references: [id], onDelete: Cascade)
+  session     WorkElicitationSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  stakeholder WorkStakeholder?        @relation(fields: [stakeholderId], references: [id], onDelete: SetNull)
+
+  @@index([issueId], map: "idx_work_requirement_origin_issue")
+  @@index([projectId], map: "idx_work_requirement_origin_project")
+  @@map("work_requirement_origins")
+}
+
+/// R2 — khảo sát (SV-<number>) có link công khai `/work/survey/<token>`. status DRAFT | OPEN | CLOSED.
+/// questions = [{ id, kind: TEXT|LONG_TEXT|SINGLE|MULTI|SCALE|YES_NO, text, required, options[], scaleMax }].
+model WorkSurvey {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  number       Int
+  title        String    @db.VarChar(200)
+  description  String?   @db.Text
+  sessionId    Int?      @map("session_id")
+  token        String?   @unique(map: "uk_work_survey_token") @db.VarChar(48)
+  status       String    @default("DRAFT") @db.VarChar(10)
+  questions    Json      @default("[]")
+  collectName  Boolean   @default(false) @map("collect_name")
+  closesAt     DateTime? @map("closes_at")
+  maxResponses Int?      @map("max_responses")
+  createdById  Int?      @map("created_by_id")
+  rev          Int       @default(0)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  project   WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  responses WorkSurveyResponse[]
+
+  @@unique([projectId, number], name: "uk_work_survey_number", map: "uk_work_survey_number")
+  @@map("work_surveys")
+}
+
+/// Một lượt trả lời khảo sát (answers = { [questionId]: string | string[] | number | boolean }). ipHash = SHA-256 IP + muối.
+model WorkSurveyResponse {
+  id             Int      @id @default(autoincrement())
+  surveyId       Int      @map("survey_id")
+  answers        Json
+  respondentName String?  @map("respondent_name") @db.VarChar(120)
+  ipHash         String?  @map("ip_hash") @db.VarChar(64)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  survey WorkSurvey @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+
+  @@index([surveyId, createdAt], map: "idx_work_survey_response_survey")
+  @@map("work_survey_responses")
+}
+
+/// R15 — prototype / wireframe của một màn: kind IMAGE (imageId = WorkDocImage — KHÔNG FK) | LINK (Figma/Excalidraw/…).
+/// status DRAFT | SUBMITTED | APPROVED | CHANGES (giảng viên/khách xác nhận trước khi code). reviewToken = link xác nhận
+/// cho khách (không cần tài khoản). reviewerRole LECTURER | CLIENT | ADMIN.
+model WorkScreenMockup {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  screenId     Int       @map("screen_id")
+  kind         String    @db.VarChar(8)
+  imageId      Int?      @map("image_id")
+  url          String?   @db.VarChar(1000)
+  provider     String?   @db.VarChar(16)
+  title        String?   @db.VarChar(200)
+  status       String    @default("DRAFT") @db.VarChar(12)
+  reviewToken  String?   @unique(map: "uk_work_screen_mockup_token") @map("review_token") @db.VarChar(48)
+  reviewerName String?   @map("reviewer_name") @db.VarChar(120)
+  reviewerRole String?   @map("reviewer_role") @db.VarChar(10)
+  reviewedById Int?      @map("reviewed_by_id")
+  reviewNote   String?   @map("review_note") @db.Text
+  reviewedAt   DateTime? @map("reviewed_at")
+  createdById  Int?      @map("created_by_id")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  screen WorkSrsScreen @relation(fields: [screenId], references: [id], onDelete: Cascade)
+
+  @@index([screenId], map: "idx_work_screen_mockup_screen")
+  @@map("work_screen_mockups")
+}
+
+/// R7 — NFR có số đo cho thẻ REQUIREMENT loại QUALITY: đặc tính ISO/IEC 25010 + đặc tính con, Planguage (Scale = thước đo,
+/// Meter = cách đo, Must/Plan/Wish = ngưỡng tối thiểu / mục tiêu / mong muốn), comparator <= | >= | =, điều kiện đo,
+/// cách kiểm (TEST | ANALYSIS | INSPECTION | DEMONSTRATION).
+model WorkNfrSpec {
+  issueId           Int      @id @map("issue_id")
+  projectId         Int      @map("project_id")
+  characteristic    String   @db.VarChar(32)
+  subCharacteristic String?  @map("sub_characteristic") @db.VarChar(48)
+  scale             String   @db.Text
+  meter             String   @db.Text
+  unit              String?  @db.VarChar(24)
+  comparator        String   @default("<=") @db.VarChar(2)
+  mustValue         Float?   @map("must_value")
+  planValue         Float?   @map("plan_value")
+  wishValue         Float?   @map("wish_value")
+  conditions        String?  @db.Text
+  verification      String   @default("TEST") @db.VarChar(14)
+  updatedById       Int?     @map("updated_by_id")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  issue WorkIssue @relation("WorkNfrSpecIssue", fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], map: "idx_work_nfr_spec_project")
+  @@map("work_nfr_specs")
+}
+
+/// Checklist chất lượng của một yêu cầu: manual = { feasible, necessary, … : true|false|null } (tiêu chí người tự chấm),
+/// aiSuggestion = { rewrite, notes[] } AI đề xuất sửa (chỉ gợi ý — người tự áp).
+model WorkReqQuality {
+  issueId      Int      @id @map("issue_id")
+  projectId    Int      @map("project_id")
+  manual       Json     @default("{}")
+  aiSuggestion Json?    @map("ai_suggestion")
+  aiModel      String?  @map("ai_model") @db.VarChar(80)
+  checkedById  Int?     @map("checked_by_id")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  issue WorkIssue @relation("WorkReqQualityIssue", fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], map: "idx_work_req_quality_project")
+  @@map("work_req_quality")
+}
+
+/// R14 — sơ đồ Diagram Studio đóng vai mô hình SRS nào: kind CONTEXT | DFD1 | STATE | ACTIVITY | FEATURE_TREE;
+/// subject = thực thể (STATE) / UC-nn (ACTIVITY) / '' . diagramId KHÔNG FK (sơ đồ xoá mềm ⇒ lọc khi đọc).
+model WorkSrsModel {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  kind      String   @db.VarChar(16)
+  subject   String   @default("") @db.VarChar(160)
+  diagramId Int      @map("diagram_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, kind, subject], name: "uk_work_srs_model", map: "uk_work_srs_model")
+  @@map("work_srs_models")
+}
+
+// ── hết CTW đợt 6b ──

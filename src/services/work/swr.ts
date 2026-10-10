@@ -516,7 +516,8 @@ export interface VisionScopeData {
   risks: RaidLite[];
   assumptions: RaidLite[];
   objectives: Array<{ key: string; title: string; source: string | null; rationale: string | null }>;
-  stakeholders: Array<{ name: string; description: string | null }>;
+  /** CTW đợt 6b: sổ stakeholder thêm thái độ / quan tâm / ràng buộc (actor 4b chỉ có tên + mô tả). */
+  stakeholders: Array<{ name: string; description: string | null; attitude?: string; interests?: string; constraints?: string }>;
   useCaseCount: Map<number, number>;
 }
 
@@ -577,7 +578,7 @@ export function applyVisionScopeFill(doc: PmNode, d: VisionScopeData, only?: VsS
     if (rows.length && replaceTableAfterHeading(doc, /^Limitations and Exclusions$/i, (old) => mergeByKey(old, ['ID', 'Limitation / Exclusion', 'Rationale'], rows))) done.push('limitations');
   }
   if (want('stakeholders') && d.stakeholders.length) {
-    const rows = d.stakeholders.map((s) => [s.name, s.description ?? '', '', '', '']);
+    const rows = d.stakeholders.map((s) => [s.name, s.description ?? '', s.attitude ?? '', s.interests ?? '', s.constraints ?? '']);
     if (replaceTableAfterHeading(doc, /^Stakeholder Profiles$/i, (old) => mergeByKey(old, ['Stakeholder', 'Major Value', 'Attitudes', 'Major Interests', 'Constraints'], rows))) done.push('stakeholders');
   }
   return done;

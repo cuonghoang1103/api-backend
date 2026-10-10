@@ -52,6 +52,7 @@ import { PROJECT_KEY_RE } from './constants.js';
 import { requireWorkspace } from './permissions.js';
 import { GENERATED_FIELDS } from './fold.js';
 import { EXPORT_FORMAT, EXPORT_FORMAT_VERSION, EXPORT_TABLES, emailHash, exportStore, sha256Hex } from './projectExport.service.js';
+import { orphanSignatureLines, orphanWorklogNote, remapAutomationConfig } from './importRemap.js';
 
 export const IMPORT_MAX_BYTES = 200 * 1024 * 1024;
 const MAX_RUNNING_GLOBAL = 2;
@@ -265,11 +266,11 @@ export async function buildPlan(a: Analysis, workspaceId: number): Promise<Impor
   const warnings: string[] = [];
   const unmapped = people.filter((p) => !p.mappedTo);
   if (unmapped.length) {
-    warnings.push(`${unmapped.length} ${unmapped.length === 1 ? 'person is' : 'people are'} not in this workspace (${unmapped.slice(0, 6).map((p) => p.name).join(', ')}${unmapped.length > 6 ? '…' : ''}): their fields are left empty and marked “Imported from …”; their memberships, work logs, reactions, watches and approval signatures are skipped.`);
+    warnings.push(`${unmapped.length} ${unmapped.length === 1 ? 'person is' : 'people are'} not in this workspace (${unmapped.slice(0, 6).map((p) => p.name).join(', ')}${unmapped.length > 6 ? '…' : ''}): their fields are left empty and marked “Imported from …”; their memberships, reactions and watches are skipped; their work logs and approval signatures are kept as notes (not credited to anyone).`);
   }
   if (!salt && exportedPeople.length) warnings.push('This export was made before people could be matched by email — only accounts that are the very same account on this server are matched. Invite the rest to the workspace first if you want them matched.');
   if (files.missing) warnings.push(`${files.missing} of ${files.total} attachments have no file content in this ZIP — they are imported as broken links (export again with “Include files” to bring the files).`);
-  if ((a.tables.automationRules ?? []).length) warnings.push('Automation rules are imported turned OFF — review them before turning them on (they may point to old statuses or people).');
+  if ((a.tables.automationRules ?? []).length) warnings.push('Automation rules are imported turned OFF; their statuses, labels and people are re-linked to this project and anything that does not exist here is removed — review them before turning them on.');
   const pendingApprovals = (a.tables.approvals ?? []).filter((x) => x.status === 'PENDING').length;
   if (pendingApprovals) warnings.push(`${pendingApprovals} approval request${pendingApprovals === 1 ? ' was' : 's were'} still waiting — they are imported as Cancelled; send them again if needed.`);
   const createdTeams = teams.filter((t) => t.action === 'create').length;
@@ -421,6 +422,9 @@ interface Ctx {
   notes: Map<number, string[]>; // thẻ mới ⇒ người không khớp
   createdTeams: number[];
   warnings: string[];
+  /** Đợt 6 (D9): worklog / chữ ký của người không thuộc workspace — giữ thành ghi chú thay vì bỏ im lặng. */
+  orphanLogs: Array<{ issueOld: number; name: string; minutes: number; startedAt: string; note: string | null }>;
+  orphanSigns: Array<{ approvalOld: number; name: string; decision: string; decidedAt: string | null; comment: string | null; contentHash: string | null }>;
 }
 
 const DATE = (v: unknown) => (typeof v === 'string' || v instanceof Date ? new Date(v as string) : v);
@@ -510,10 +514,27 @@ async function tableHook(ctx: Ctx, table: string, row: Row, b: Built): Promise<B
       if (d.status === 'PENDING') { d.status = 'CANCELLED'; d.decidedAt = new Date(); }
       return b;
     case 'approvalSteps':
+      if (b.skip && typeof row.approverId === 'number' && personOf(ctx, row.approverId) === null && row.decision !== 'PENDING') {
+        ctx.orphanSigns.push({ approvalOld: Number(row.approvalId), name: ctx.names.get(row.approverId) ?? `user #${row.approverId}`, decision: String(row.decision), decidedAt: (row.decidedAt as string | null) ?? null, comment: (row.comment as string | null) ?? null, contentHash: (row.contentHash as string | null) ?? null });
+      }
       if (d.decision === 'PENDING') d.decision = 'SKIPPED';
       return b;
-    case 'automationRules':
+    case 'automationRules': {
       d.enabled = false;
+      // Đợt 6 (D9): id cũ trong config (trạng thái/nhãn/người/loại thẻ…) ⇒ id mới; không đổi được ⇒ bỏ + ghi lại.
+      const m = (model: string) => (old: number) => ctx.ids.get(model)?.get(old);
+      const { config, dropped } = remapAutomationConfig(row.config, {
+        status: m('WorkStatus'), label: m('WorkLabel'), user: (old) => personOf(ctx, old), type: m('WorkIssueType'), sprint: m('WorkSprint'),
+        component: m('WorkComponent'), version: m('WorkVersion'), issue: m('WorkIssue'),
+      });
+      d.config = config as Prisma.InputJsonValue;
+      if (dropped.length) ctx.warnings.push(`Automation rule “${String(row.name ?? '')}”: ${dropped.length} reference(s) to records that do not exist here were removed — review it before turning it on.`);
+      return b;
+    }
+    case 'worklogs':
+      if (b.skip && typeof row.userId === 'number' && personOf(ctx, row.userId) === null) {
+        ctx.orphanLogs.push({ issueOld: Number(row.issueId), name: ctx.names.get(row.userId) ?? `user #${row.userId}`, minutes: Number(row.minutes) || 0, startedAt: String(row.startedAt), note: (row.note as string | null) ?? null });
+      }
       return b;
     case 'rates':
       if (row.scope === 'USER' && row.userId && d.userId === null) return { ...b, skip: 'rate for a person not in this workspace' };
@@ -544,7 +565,7 @@ export async function runImport(importId: number): Promise<void> {
   let projectId = 0;
   const ctx: Ctx = {
     workspaceId: job.workspaceId, projectId: 0, importerId: job.requestedById ?? 0, ids: new Map(), done: new Set(), people: new Map(),
-    names: new Map(), deferred: [], counts: {}, notes: new Map(), createdTeams: [], warnings: [],
+    names: new Map(), deferred: [], counts: {}, notes: new Map(), createdTeams: [], warnings: [], orphanLogs: [], orphanSigns: [],
   };
   const tmpDir = path.join(os.tmpdir(), `ctwork-import-${importId}-${process.pid}`);
   try {
@@ -660,6 +681,28 @@ export async function runImport(importId: number): Promise<void> {
       await (prisma as unknown as Record<string, { update: (a: unknown) => Promise<unknown> }>)[d.delegate].update({ where: { id: d.id }, data: { [d.field]: mapped } });
     }
 
+    // 3b) Đợt 6 (D9): worklog + chữ ký của người không thuộc workspace ⇒ ghi chú (không gán cho ai khác).
+    const logsByIssue = new Map<number, typeof ctx.orphanLogs>();
+    for (const l of ctx.orphanLogs) {
+      const to = ctx.ids.get('WorkIssue')?.get(l.issueOld);
+      if (to !== undefined) logsByIssue.set(to, [...(logsByIssue.get(to) ?? []), l]);
+    }
+    for (const [issueId, rows] of logsByIssue) {
+      const n = orphanWorklogNote(rows);
+      await prisma.workComment.create({ data: { issueId, authorId: null, bodyJson: n.doc as Prisma.InputJsonValue, bodyText: n.text, visibility: 'INTERNAL' } });
+    }
+    const signsByApproval = new Map<number, typeof ctx.orphanSigns>();
+    for (const sg of ctx.orphanSigns) {
+      const to = ctx.ids.get('WorkApproval')?.get(sg.approvalOld);
+      if (to !== undefined) signsByApproval.set(to, [...(signsByApproval.get(to) ?? []), sg]);
+    }
+    for (const [approvalId, rows] of signsByApproval) {
+      const cur = await prisma.workApproval.findUnique({ where: { id: approvalId }, select: { description: true } });
+      await prisma.workApproval.update({ where: { id: approvalId }, data: { description: [cur?.description, orphanSignatureLines(rows)].filter(Boolean).join('\n\n') } });
+    }
+    if (ctx.orphanLogs.length) ctx.warnings.push(`${ctx.orphanLogs.length} work log entr${ctx.orphanLogs.length === 1 ? 'y' : 'ies'} by people outside this workspace were kept as notes on ${logsByIssue.size} issue(s) — not credited to anyone.`);
+    if (ctx.orphanSigns.length) ctx.warnings.push(`${ctx.orphanSigns.length} approval signature(s) by people outside this workspace were kept in the approval description.`);
+
     // 4) Bộ đếm số thẻ; sự kiện "imported" cho thẻ có người không khớp; hiện dự án.
     const maxNum = await prisma.workIssue.aggregate({ where: { projectId }, _max: { number: true } });
     for (const [issueId, names] of ctx.notes) {
@@ -667,7 +710,7 @@ export async function runImport(importId: number): Promise<void> {
     }
     await prisma.workProject.update({ where: { id: projectId }, data: { issueCounter: Math.max(maxNum._max.number ?? 0, Number(src.issueCounter ?? 0)), deletedAt: null } });
 
-    const result = { tables: ctx.counts, warnings: plan.warnings, people: plan.people.filter((p) => p.mappedTo).length, peopleUnmatched: plan.people.filter((p) => !p.mappedTo).length, teamsCreated: ctx.createdTeams.length };
+    const result = { tables: ctx.counts, warnings: [...plan.warnings, ...ctx.warnings], orphanWorklogs: ctx.orphanLogs.length, orphanSignatures: ctx.orphanSigns.length, people: plan.people.filter((p) => p.mappedTo).length, peopleUnmatched: plan.people.filter((p) => !p.mappedTo).length, teamsCreated: ctx.createdTeams.length };
     await prisma.workProjectImport.update({
       where: { id: importId },
       data: { status: 'DONE', progress: 100, stage: 'Done', result: result as unknown as Prisma.InputJsonValue, finishedAt: new Date(), filePath: null },

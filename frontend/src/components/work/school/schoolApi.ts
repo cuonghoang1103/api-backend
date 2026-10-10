@@ -34,6 +34,8 @@ export interface WbsRow {
   kind: string; feature: string; subFeature: string; complexity: Complexity | null; complexitySource: 'set' | 'derived' | 'field' | null;
   fields: number | null; transactions: number | null; plannedDays: number | null; plannedSource: 'override' | 'matrix' | 'estimate' | null;
   plannedTotal: number; actualDays: number; actualTotal: number; iteration: string; status: string; statusName: string; assignee: string; note: string; childCount: number;
+  /** UX-C: cha trong WBS (null = gốc), tầng loại thẻ (1 epic · 0 · −1 sub-task), ngày bắt đầu/hạn. Máy chủ cũ không có ⇒ undefined. */
+  parentNumber?: number | null; level?: number; start?: string | null; due?: string | null;
 }
 export interface WbsTotals {
   plannedDays: number; actualDays: number; functions: number; unestimated: number;
@@ -100,6 +102,9 @@ export const schoolApi = {
   setMatrix: (pid: number, body: EstimationMatrix) => d<WbsData>(api.put(`${P(pid)}/wbs/matrix`, body)),
   setItem: (pid: number, num: number, body: WbsItemInput) => d<{ row: WbsRow | null; totals: WbsTotals }>(api.put(`${P(pid)}/wbs/items/${num}`, body)),
   exportWbs: (pid: number) => download(`${P(pid)}/wbs/export`, 'WBS.xlsx'),
+  /** UX-C: kéo-thả trong WBS — đổi cha và/hoặc thứ tự (rank). */
+  moveItem: (pid: number, num: number, body: { parentNumber: number | null; beforeNumber?: number | null; afterNumber?: number | null }) =>
+    d<{ number: number; rank: string; version: number }>(api.put(`${P(pid)}/wbs/items/${num}/move`, body)),
   exportTracking: (pid: number, variant: TrackingVariant) => download(`${P(pid)}/export/project-tracking?variant=${variant}`, 'ProjectTracking.xlsx'),
 
   weeklyList: (pid: number) => d<{ reports: WeeklyListItem[]; week1Start: string | null; group: string; canEdit: boolean }>(api.get(`${R(pid)}/weekly`)),

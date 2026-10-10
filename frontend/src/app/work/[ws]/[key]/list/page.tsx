@@ -33,8 +33,9 @@ import { ConfirmDialog } from '@/components/work/settings/shared';
 import BulkBar from '@/components/work/board/BulkBar';
 import { bulkSetStatusByName, type BulkResult } from '@/components/work/board/bulk';
 import {
-  COLUMNS, ColumnsMenu, DEFAULT_COLUMNS, gridTemplates, jqlOrder, withOrder, type ColId, type ListCtx,
+  COLUMN_ORDER, COLUMNS, DEFAULT_COLUMNS, jqlOrder, withOrder, type ColId, type ListCtx,
 } from '@/components/work/search/columns';
+import DataTable, { type DataColumn } from '@/components/work/table/DataTable';
 import IssueDrawer from '@/components/work/IssueDrawer';
 import CreateIssueDialog from '@/components/work/CreateIssueDialog';
 import { JqlInput, type JqlInputHandle } from '@/components/work/search/JqlInput';
@@ -53,17 +54,25 @@ const ME = -1; // giá trị "Me" trong picker; trên URL là chữ `me`
 const CATEGORY_ORDER: Record<StatusCategory, number> = { TODO: 0, IN_PROGRESS: 1, DONE: 2 };
 
 // Lưới: mẫu cột nằm trong biến CSS (--cols-m điện thoại, --cols-d từ md) vì cột ẩn/hiện được.
-const GRID = 'grid items-center gap-x-2.5 [grid-template-columns:var(--cols-m)] md:[grid-template-columns:var(--cols-d)]';
 
-function readCols(pid: number): ColId[] {
+/** Cột đang hiện — nhớ THEO NGƯỜI (UX-C), đọc lùi khoá cũ theo dự án để không mất lựa chọn đã có. */
+function readCols(pid: number, uid: number | undefined): ColId[] {
   try {
-    const v = JSON.parse(window.localStorage.getItem(`ctwork:list:${pid}:cols`) ?? 'null') as ColId[] | null;
+    const raw = window.localStorage.getItem(`ctwork:list:${pid}:cols:u${uid ?? 'anon'}`) ?? window.localStorage.getItem(`ctwork:list:${pid}:cols`);
+    const v = JSON.parse(raw ?? 'null') as ColId[] | null;
     if (Array.isArray(v)) {
       const ok = v.filter((c) => c in COLUMNS);
       if (ok.length) return ok.includes('title') ? ok : ['title', ...ok];
     }
   } catch { /* cửa sổ riêng tư */ }
   return DEFAULT_COLUMNS;
+}
+
+/** Rãnh lưới cũ ('84px' / 'minmax(220px,1fr)') ⇒ độ rộng + cột co giãn cho DataTable. */
+function trackWidth(track: string): { width: number; grow: boolean } {
+  const m = /minmax\((\d+)px/.exec(track);
+  if (m) return { width: Number(m[1]), grow: true };
+  return { width: Number.parseInt(track, 10) || 120, grow: false };
 }
 
 // ─── URL ⇄ bộ lọc ────────────────────────────────────────────────
@@ -301,12 +310,12 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
 
   // ── Cột (lưu theo dự án) ──
   const [cols, setColsState] = useState<ColId[]>(DEFAULT_COLUMNS);
-  useEffect(() => { if (pid) setColsState(readCols(pid)); }, [pid]);
+  useEffect(() => { if (pid) setColsState(readCols(pid, meId)); }, [pid, meId]);
   const setCols = (c: ColId[]) => {
-    setColsState(c);
-    try { window.localStorage.setItem(`ctwork:list:${pid}:cols`, JSON.stringify(c)); } catch { /* bỏ qua */ }
+    const next = (c.includes('title') ? c : ['title', ...c]) as ColId[];
+    setColsState(next);
+    try { window.localStorage.setItem(`ctwork:list:${pid}:cols:u${meId ?? 'anon'}`, JSON.stringify(next)); } catch { /* bỏ qua */ }
   };
-  const tpl = useMemo(() => gridTemplates(cols), [cols]);
   const versionsQ = useQuery({
     queryKey: wk.versions(pid ?? 0),
     queryFn: () => workApi.versions(pid!),
@@ -351,6 +360,29 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
     return clientSort.dir === 'desc' ? sorted.reverse() : sorted;
   }, [items, clientSort, ctx]);
 
+  // ── Cột cho bảng chung (UX-C) ──
+  const tableColumns = useMemo<DataColumn<IssueCard>[]>(() => (ctx ? COLUMN_ORDER.map((c) => {
+    const def = COLUMNS[c];
+    const t = trackWidth(def.track);
+    return {
+      id: c,
+      header: c === 'type' ? wt('common.type') : def.label,
+      width: t.width,
+      grow: t.grow,
+      minWidth: Math.min(def.min, t.width),
+      align: def.align,
+      required: !!def.fixed,
+      hideBelow: def.mobile ? undefined : 'md' as const,
+      // Điện thoại: rãnh hẹp để tiêu đề còn chỗ (như gridTemplates cũ — người chỉ còn avatar).
+      narrowWidth: ({ type: 28, key: 64, title: 140, status: 104, assignee: 36 } as Partial<Record<ColId, number>>)[c],
+      sortable: true,
+      export: false,
+      headerTitle: `${wt('issues.sortBy', { col: def.label.toLowerCase() })}${jqlMode && def.jql ? wt('issues.sortJql') : jqlMode ? wt('issues.sortLoaded') : ''}`,
+      cell: (i: IssueCard) => def.cell(i, ctx),
+    };
+  }) : []), [ctx, jqlMode]);
+  const [controlsEl, setControlsEl] = useState<HTMLElement | null>(null);
+
   // ── Chọn nhiều + sửa hàng loạt ──
   const qc = useQueryClient();
   const [selected, setSelected] = useState<Set<number>>(new Set());
@@ -376,8 +408,6 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
     });
     lastPicked.current = id;
   };
-  const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.id));
-  const someSelected = !allSelected && rows.some((r) => selected.has(r.id));
   const [bulkDelete, setBulkDelete] = useState(false);
   const bulk = useMutation({
     mutationFn: async (v: { patch?: BulkPatch; status?: string; label: string }): Promise<BulkResult & { label: string }> => {
@@ -426,12 +456,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
 
   // ── Bàn phím ──
   const [hi, setHi] = useState(-1);
-  const rowsRef = useRef<HTMLDivElement>(null);
   useEffect(() => setHi(-1), [queryKeyStr, jqlParam, jqlMode]);
-  useEffect(() => {
-    if (hi < 0) return;
-    rowsRef.current?.querySelector<HTMLElement>(`[data-row="${hi}"]`)?.scrollIntoView({ block: 'nearest' });
-  }, [hi]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -562,7 +587,6 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
   }
 
   const countLabel = list.isLoading || list.isError ? '' : jqlMode && jqlTotal !== undefined ? String(jqlTotal) : `${items.length}${list.hasNextPage ? '+' : ''}`;
-  const gridVars = { '--cols-d': tpl.d, '--cols-m': tpl.m } as React.CSSProperties;
   const canBulk = config.permissions.editIssues || config.permissions.transition || config.permissions.deleteIssues;
 
   return (
@@ -583,7 +607,6 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
           onLoad={loadFilter}
           onSaved={loadFilter}
         />
-        <ColumnsMenu value={cols} onChange={setCols} />
         <ExportMenu pid={config.id} getJql={() => (jqlMode ? jqlParam : currentBasicJql())} />
         {/* Đợt S6: chấm chất lượng đặc tả của thẻ Requirement/Story (trang Spec quality). */}
         {['ADMIN', 'MEMBER', 'TEACHER'].includes(config.role) && (
@@ -601,7 +624,8 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
 
       {/* Thanh lọc */}
       {jqlMode ? (
-        <div className="shrink-0 border-b border-[var(--w-border)] px-3 py-2 md:px-4">
+        <div className="flex shrink-0 items-start gap-2 border-b border-[var(--w-border)] px-3 py-2 md:px-4">
+          <div className="min-w-0 flex-1">
           <JqlInput
             ref={jqlRef}
             value={jqlDraft}
@@ -611,6 +635,8 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
             error={jqlError}
             ranQuery={jqlParam}
           />
+          </div>
+          <span ref={setControlsEl} className="flex shrink-0 items-center pt-0.5" />
         </div>
       ) : (
       <div className="flex shrink-0 flex-wrap items-center gap-1.5 border-b border-[var(--w-border)] px-3 py-2 md:px-4">
@@ -701,81 +727,29 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
             <X size={12} /> {wt('issues.clearFilters')}
           </button>
         )}
+        <span ref={setControlsEl} className="ml-auto flex items-center" />
       </div>
       )}
 
-      {/* Bảng */}
-      <div className="min-h-0 flex-1 overflow-auto">
-       {/* UX-A ARIA: hàng (row) và nhóm hàng (rowgroup) cần vai cha table. */}
-       <div style={{ ...gridVars, minWidth: tpl.minWidth }} className="max-md:!min-w-0" role="table" aria-label={wt('issues.title')}>
-        <div
-          role="row"
-          className={cn(GRID, 'sticky top-0 z-[1] h-9 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-3 text-[12px] font-medium text-[var(--w-text-3)] shadow-[0_1px_0_var(--w-border)] md:px-4')}
-        >
-          <span className="flex items-center" role="columnheader" aria-label={wt('common.select')}>
-            {canBulk && (
-              <input
-                type="checkbox"
-                aria-label={allSelected ? wt('board.clearSel') : wt('issues.selectAllLoaded')}
-                title={allSelected ? wt('board.clearSel') : wt('issues.selectAllLoaded')}
-                checked={allSelected}
-                ref={(el) => { if (el) el.indeterminate = someSelected; }}
-                onChange={() => setSelected(allSelected ? new Set() : new Set(rows.map((r) => r.id)))}
-                className="h-3.5 w-3.5 accent-[var(--w-accent)]"
-              />
-            )}
-          </span>
-          {cols.map((c) => {
-            const def = COLUMNS[c];
-            const active = sortState?.col === c;
-            return (
-              <button
-                key={c}
-                type="button"
-                role="columnheader"
-                aria-sort={active ? (sortState!.dir === 'asc' ? 'ascending' : 'descending') : 'none'}
-                onClick={() => onSort(c)}
-                title={`${wt('issues.sortBy', { col: def.label.toLowerCase() })}${jqlMode && def.jql ? wt('issues.sortJql') : jqlMode ? wt('issues.sortLoaded') : ''}`}
-                className={cn(
-                  'flex h-full min-w-0 items-center gap-1 hover:text-[var(--w-text)]',
-                  def.align === 'right' && 'justify-end',
-                  !def.mobile && 'max-md:hidden',
-                  active && 'text-[var(--w-text)]',
-                )}
-              >
-                <span className="truncate">{c === 'type' ? wt('common.type') : def.label}</span>
-                {active && (sortState!.dir === 'asc' ? <ArrowUp size={11} /> : <ArrowDown size={11} />)}
-              </button>
-            );
-          })}
-        </div>
-
-        {list.isLoading || !ready ? (
-          <div aria-busy="true">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="flex h-9 items-center gap-3 border-b border-[var(--w-border)] px-3 md:px-4">
-                <span className="w-skel h-4 w-4 !rounded-[4px]" />
-                <span className="w-skel h-3 w-12" />
-                <span className="w-skel h-3" style={{ width: `${30 + ((i * 37) % 40)}%` }} />
-                <span className="w-skel h-4 w-16 !rounded-full" />
-              </div>
-            ))}
-          </div>
-        ) : jqlError ? (
-          <EmptyState title={wt('issues.fixQuery')} body={wt('issues.fixQueryBody')} />
-        ) : list.isError ? (
+      {/* Bảng — UX-C: DataTable chung (tiêu đề dính, cột ghim, đổi độ rộng, mật độ, cuộn ảo cho hàng nghìn dòng,
+          ARIA grid + bàn phím). Sắp xếp vẫn do trang điều khiển: JQL ⇒ viết lại ORDER BY (máy chủ), Basic ⇒ trên thẻ đã tải. */}
+      {jqlError ? (
+        <div className="min-h-0 flex-1 overflow-auto"><EmptyState title={wt('issues.fixQuery')} body={wt('issues.fixQueryBody')} /></div>
+      ) : list.isError ? (
+        <div className="min-h-0 flex-1 overflow-auto">
           <EmptyState
             title={wt('issues.loadFailed')}
             body={workError(list.error)}
             action={<button type="button" className="w-btn" onClick={() => list.refetch()}>{wt('common.tryAgain')}</button>}
           />
-        ) : !items.length && jqlMode ? (
-          <EmptyState
-            title={wt('issues.noMatchQuery')}
-            body={jqlParam ? wt('issues.widenQuery') : wt('issues.noIssuesProject')}
-          />
-        ) : !items.length ? (
-          hasFilters ? (
+        </div>
+      ) : !(list.isLoading || !ready) && !items.length && jqlMode ? (
+        <div className="min-h-0 flex-1 overflow-auto">
+          <EmptyState title={wt('issues.noMatchQuery')} body={jqlParam ? wt('issues.widenQuery') : wt('issues.noIssuesProject')} />
+        </div>
+      ) : !(list.isLoading || !ready) && !items.length ? (
+        <div className="min-h-0 flex-1 overflow-auto">
+          {hasFilters ? (
             <EmptyState
               title={wt('issues.noMatchFilters')}
               body={showDone ? wt('issues.tryDifferent') : wt('issues.tryDifferentDone')}
@@ -789,11 +763,7 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
           ) : (
             <EmptyState
               title={showDone ? wt('issues.noIssuesYet') : wt('issues.noOpen')}
-              body={
-                showDone
-                  ? wt('issues.noIssuesBody')
-                  : wt('issues.noOpenBody')
-              }
+              body={showDone ? wt('issues.noIssuesBody') : wt('issues.noOpenBody')}
               action={
                 <div className="flex gap-2">
                   {canCreate && (
@@ -805,46 +775,56 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
                 </div>
               }
             />
-          )
-        ) : (
-          <div ref={rowsRef} role="rowgroup">
-            {ctx && rows.map((it, i) => (
-              <IssueRow
-                key={it.id}
-                issue={it}
-                index={i}
-                highlighted={i === hi || it.number === openNum}
-                selected={selected.has(it.id)}
-                selectable={canBulk}
-                onToggle={(shift) => toggleRow(it.id, shift)}
-                cols={cols}
-                ctx={ctx}
-                onOpen={() => {
-                  setHi(i);
-                  openIssue(it.number);
-                }}
-              />
-            ))}
-            {list.hasNextPage && (
-              <div className="flex justify-center py-3">
-                <button type="button" className="w-btn w-btn-sm" disabled={list.isFetchingNextPage} onClick={() => list.fetchNextPage()}>
-                  {list.isFetchingNextPage ? <Spinner size={12} /> : null}
-                  {wt('issues.loadMore')}
-                </button>
+          )}
+        </div>
+      ) : (
+        <DataTable
+          id={`issues:${config.id}`}
+          label={wt('issues.title')}
+          rows={rows}
+          columns={tableColumns}
+          rowKey={(i) => i.id}
+          loading={list.isLoading || !ready}
+          sort={sortState ? { col: sortState.col, dir: sortState.dir } : null}
+          onSortChange={(st) => onSort((st?.col ?? sortState?.col ?? 'key') as ColId)}
+          quickFilter={false}
+          toolbar={false}
+          controlsTarget={controlsEl}
+          showCount={false}
+          exportable={false}
+          pinColumns={2}
+          selectable={canBulk}
+          selected={selected}
+          onSelectedChange={(k) => setSelected(new Set([...k].map(Number)))}
+          onRowOpen={(i, idx) => { setHi(idx); openIssue(i.number); }}
+          rowActive={(i) => i.number === openNum || rows[hi]?.id === i.id}
+          scrollToIndex={hi}
+          columnVisibility={{ visible: cols, onChange: (v) => setCols(v as ColId[]) }}
+          onEndReached={() => { if (list.hasNextPage && !list.isFetchingNextPage) list.fetchNextPage(); }}
+          description={wt('table.keysHint')}
+          testId="issues-table"
+          footer={(
+            <>
+              {list.hasNextPage && (
+                <div className="flex justify-center py-3">
+                  <button type="button" className="w-btn w-btn-sm" disabled={list.isFetchingNextPage} onClick={() => list.fetchNextPage()}>
+                    {list.isFetchingNextPage ? <Spinner size={12} /> : null}
+                    {wt('issues.loadMore')}
+                  </button>
+                </div>
+              )}
+              <div className="hidden items-center gap-3 px-4 py-3 text-[11px] text-[var(--w-text-3)] md:flex">
+                <span className="flex items-center gap-1"><kbd className="w-kbd">J</kbd><kbd className="w-kbd">K</kbd> {wt('issues.kMove')}</span>
+                <span className="flex items-center gap-1"><kbd className="w-kbd">↵</kbd> {wt('issues.kOpen')}</span>
+                {canBulk && <span className="flex items-center gap-1"><kbd className="w-kbd">X</kbd> {wt('issues.kSelect')}</span>}
+                {clientSort && list.hasNextPage && <span>{wt('issues.sortedLoaded')}</span>}
+                {canCreate && <span className="flex items-center gap-1"><kbd className="w-kbd">C</kbd> {wt('issues.kCreate')}</span>}
+                <span className="flex items-center gap-1"><kbd className="w-kbd">/</kbd> {wt('issues.kSearch')}</span>
               </div>
-            )}
-            <div className="hidden items-center gap-3 px-4 py-3 text-[11px] text-[var(--w-text-3)] md:flex">
-              <span className="flex items-center gap-1"><kbd className="w-kbd">J</kbd><kbd className="w-kbd">K</kbd> {wt('issues.kMove')}</span>
-              <span className="flex items-center gap-1"><kbd className="w-kbd">↵</kbd> {wt('issues.kOpen')}</span>
-              {canBulk && <span className="flex items-center gap-1"><kbd className="w-kbd">X</kbd> {wt('issues.kSelect')}</span>}
-              {clientSort && list.hasNextPage && <span>{wt('issues.sortedLoaded')}</span>}
-              {canCreate && <span className="flex items-center gap-1"><kbd className="w-kbd">C</kbd> {wt('issues.kCreate')}</span>}
-              <span className="flex items-center gap-1"><kbd className="w-kbd">/</kbd> {wt('issues.kSearch')}</span>
-            </div>
-          </div>
-        )}
-       </div>
-      </div>
+            </>
+          )}
+        />
+      )}
 
       {selected.size > 0 && (
         <BulkBar
@@ -880,60 +860,5 @@ function IssuesList({ slug, projectKey }: { slug: string; projectKey: string }) 
       )}
     </div>
     </AgentLeasesProvider>
-  );
-}
-
-// ─── Một dòng ────────────────────────────────────────────────────
-
-function IssueRow({
-  issue, index, highlighted, selected, selectable, onToggle, cols, ctx, onOpen,
-}: {
-  issue: IssueCard;
-  index: number;
-  highlighted: boolean;
-  selected: boolean;
-  selectable: boolean;
-  onToggle: (shift: boolean) => void;
-  cols: ColId[];
-  ctx: ListCtx;
-  onOpen: () => void;
-}) {
-  return (
-    <div
-      role="row"
-      aria-selected={selected}
-      data-row={index}
-      tabIndex={-1}
-      onClick={(e) => {
-        if (selectable && (e.metaKey || e.ctrlKey || e.shiftKey)) onToggle(e.shiftKey);
-        else onOpen();
-      }}
-      className={cn(
-        GRID,
-        'group h-9 cursor-pointer border-b border-[var(--w-border)] px-3 text-[13px] md:px-4',
-        selected ? 'bg-[var(--w-accent-soft)] shadow-[inset_2px_0_0_var(--w-accent)]' : highlighted ? 'bg-[var(--w-active)] shadow-[inset_2px_0_0_var(--w-accent-border)]' : 'hover:bg-[var(--w-hover)]',
-      )}
-    >
-      <span className="flex items-center" role="cell">
-        {selectable && (
-          <input
-            type="checkbox"
-            aria-label={wt('gs.selectK', { k: ctx.lk.issueKey(issue.number) })}
-            checked={selected}
-            onClick={(e) => { e.stopPropagation(); onToggle(e.shiftKey); }}
-            onChange={() => {}}
-            className={cn('h-3.5 w-3.5 accent-[var(--w-accent)]', !selected && 'md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100')}
-          />
-        )}
-      </span>
-      {cols.map((c) => {
-        const def = COLUMNS[c];
-        return (
-          <span key={c} role="cell" className={cn('flex min-w-0 items-center', def.align === 'right' && 'justify-end', !def.mobile && 'max-md:hidden')}>
-            {def.cell(issue, ctx)}
-          </span>
-        );
-      })}
-    </div>
   );
 }

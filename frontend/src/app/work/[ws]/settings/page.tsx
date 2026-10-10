@@ -38,7 +38,7 @@ function WorkspaceSettings() {
       { key: 'members', get label() { return wt('settings.tMembers'); }, icon: Users },
       ...(canManage ? [{ key: 'invitations' as const, get label() { return wt('settings.tInvitations'); }, icon: MailPlus }] : []),
       // CTW đợt 7c (C17): ép 2FA + ai chưa bật.
-      ...(canManage ? [{ key: 'security' as const, get label() { return wt('c7c.tabSecurity'); }, icon: ShieldCheck }] : []),
+      ...(canManage && process.env.NEXT_PUBLIC_CTW_ENFORCE_2FA === 'true' ? [{ key: 'security' as const, get label() { return wt('c7c.tabSecurity'); }, icon: ShieldCheck }] : []),
     ] },
     { get label() { return wt('settings.tData'); }, tabs: canManage ? [
       { key: 'audit' as const, get label() { return wt('settings.tAuditLog'); }, icon: ScrollText },

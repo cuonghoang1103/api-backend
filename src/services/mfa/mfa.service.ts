@@ -12,6 +12,7 @@ import { logger } from '../../utils/logger.js';
 import { base32Decode, base32Encode, kiemTotp, otpauthUri, sinhKhoaTotp } from './totp.js';
 import { bamMaKhoiPhuc, chuanHoaMaKhoiPhuc, giaiMaSecret, maHoaSecret, sinhMaKhoiPhuc } from './maHoa.js';
 import { cauHinhMfa, hanMfaAt, mfaAtConHieuLuc, type MfaClaims } from './adminMfa.js';
+import { workTwoFactorEnabled } from '../work/twoFactor.js';
 
 const ISSUER = process.env.MFA_ISSUER?.trim() || 'CuongThai';
 
@@ -121,6 +122,8 @@ function laAdmin(u: { roles: { role: { name: string } }[] }): boolean {
  */
 async function duocTuBatMfa(u: UserMfa): Promise<boolean> {
   if (laAdmin(u)) return true;
+  // Công tắc tổng tắt (mặc định) ⇒ như trước 7c: chỉ admin site tự bật 2FA. Xem `workTwoFactorEnabled`.
+  if (!workTwoFactorEnabled()) return false;
   const n = await prisma.workMember.count({ where: { userId: u.id, user: { kind: { not: 'AGENT' } }, workspace: { deletedAt: null } } });
   return n > 0;
 }

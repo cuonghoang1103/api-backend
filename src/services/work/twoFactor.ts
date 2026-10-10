@@ -36,6 +36,14 @@ export type TwoFactorState = 'OK' | 'GRACE' | 'SETUP_REQUIRED' | 'VERIFY_REQUIRE
 export const WORK_2FA_SETUP_URL = '/work/security';
 export const GRACE_DAYS_MAX = 30;
 
+/**
+ * CÔNG TẮC TỔNG (11/10/2026, theo yêu cầu người dùng): ép 2FA theo không gian MẶC ĐỊNH TẮT — nhiều thành viên không
+ * muốn dùng 2FA, ép là tốn thời gian của cả nhóm. Tắt ⇒ cổng không chặn ai (kể cả không gian đã lưu require2fa=true),
+ * không ai bật được chính sách, thành viên thường KHÔNG được tự bật 2FA (về như trước 7c: chỉ admin site).
+ * Bật lại: `CTW_ENFORCE_2FA=true` (backend, runtime) + `NEXT_PUBLIC_CTW_ENFORCE_2FA=true` (frontend, lúc build).
+ */
+export const workTwoFactorEnabled = (): boolean => process.env.CTW_ENFORCE_2FA === 'true';
+
 export interface PolicyLite { require2fa: boolean; graceUntil: Date | null }
 export interface UserMfaLite { mfaEnabled: boolean | null; mfaEnabledAt: Date | null }
 
@@ -111,6 +119,7 @@ export function gatedWorkspaceIds(userId: number): number[] {
 
 /** Trạng thái 2FA của người gọi ở mọi không gian đang ép (đọc DB một lượt). Không có không gian nào ép ⇒ Map rỗng. */
 export async function loadGate(userId: number, claims: MfaClaims | null | undefined, now = new Date()): Promise<Map<number, GateEntry>> {
+  if (!workTwoFactorEnabled()) return new Map();
   const policies = await prisma.workSecurityPolicy.findMany({
     where: { require2fa: true, workspace: { deletedAt: null, members: { some: { userId } } } },
     select: { workspaceId: true, graceUntil: true, require2fa: true, workspace: { select: { name: true } } },

@@ -118,3 +118,9 @@ Nguồn: Gemini đánh giá repo; Claude đã đo lại (schema 13.537 dòng/459
   Google `openid email profile calendar.events drive.file spreadsheets` (drive.file để tránh scope restricted); Notion public integration.
 - Google app ở chế độ Testing ⇒ tối đa 100 test user, phải thêm email; lên Production cần Google xác minh (calendar.events là sensitive).
 - Tài khoản trường (FPT, tenant Entra) có thể chặn người dùng tự cấp quyền app chưa xác minh nhà phát hành ⇒ tài khoản Outlook cá nhân chắc chắn chạy.
+
+## 11/10/2026 — Ép 2FA TẮT theo yêu cầu user
+User: "đừng để thành viên hoặc bắt buộc thành viên bật — nhiều thành viên không muốn dùng". Công tắc tổng
+`CTW_ENFORCE_2FA` (backend) + `NEXT_PUBLIC_CTW_ENFORCE_2FA` (frontend build) mặc định TẮT: cổng không chặn ai, tab
+Security ẩn, PUT require2fa ⇒ 409 WORK_2FA_DISABLED, thành viên thường KHÔNG tự bật 2FA (về như trước 7c: chỉ admin
+site). Mã 7c giữ nguyên để bật lại sau nếu user muốn. ĐỪNG tự bật lại.

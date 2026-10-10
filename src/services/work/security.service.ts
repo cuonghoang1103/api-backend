@@ -16,7 +16,7 @@ import { audit } from './audit.js';
 import { displayName, PUBLIC_USER } from './common.js';
 import { notifyWork } from './notify.js';
 import { assertHumanActor, requireWorkspace } from './permissions.js';
-import { GRACE_DAYS_MAX, graceUntilFrom, loadGate, twoFactorState, WORK_2FA_SETUP_URL } from './twoFactor.js';
+import { GRACE_DAYS_MAX, graceUntilFrom, loadGate, twoFactorState, WORK_2FA_SETUP_URL, workTwoFactorEnabled } from './twoFactor.js';
 
 export interface PolicyView {
   workspaceId: number;
@@ -88,6 +88,9 @@ export async function setSecurity(userId: number, workspaceId: number, input: { 
   const graceDays = input.graceDays ?? cur?.graceDays ?? 7;
   if (!Number.isInteger(graceDays) || graceDays < 0 || graceDays > GRACE_DAYS_MAX) throw new BadRequestError(`Grace period must be 0–${GRACE_DAYS_MAX} days`, 'VALIDATION_ERROR');
   const turningOn = input.require2fa === true && !cur?.require2fa;
+  if (input.require2fa === true && !workTwoFactorEnabled()) {
+    throw new AppError('Two-factor enforcement is turned off on this site. / Tính năng ép 2FA đang tắt trên trang này.', 409, 'WORK_2FA_DISABLED');
+  }
   const turningOff = input.require2fa === false && !!cur?.require2fa;
   if (turningOn) {
     const me = await prisma.user.findUnique({ where: { id: userId }, select: { mfaEnabled: true } });

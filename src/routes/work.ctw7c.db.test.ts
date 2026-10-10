@@ -137,6 +137,27 @@ describe('CT Work — đợt 7c: ép 2FA, sổ tài sản, test tự động, au
     let memberToken = '';
     let agentToken = '';
 
+    it('công tắc tổng TẮT (mặc định): thành viên không tự bật 2FA được, không ai bật được ép 2FA, cổng không chặn', async () => {
+      delete process.env.CTW_ENFORCE_2FA;
+      const mfa = await import('../services/mfa/mfa.service.js');
+      await assert.rejects(() => mfa.batDauThietLap(viewer.id), { code: 'FORBIDDEN' });
+      const a = await mfa.batDauThietLap(siteAdmin.id);
+      assert.match(a.secret, /^[A-Z2-7]+$/);
+      await prisma.user.update({ where: { id: siteAdmin.id }, data: { mfaSecret: null } });
+      const r = await call(owner, 'PUT', `/workspaces/${wsId}/security`, { require2fa: true });
+      assert.equal(r.status, 409);
+      // Chính sách cũ còn lưu trong DB (bật trước khi tắt công tắc) cũng không chặn ai.
+      await prisma.workSecurityPolicy.upsert({
+        where: { workspaceId: wsId },
+        create: { workspaceId: wsId, require2fa: true, graceDays: 0, enforcedAt: new Date(0), graceUntil: new Date(0) },
+        update: { require2fa: true, graceDays: 0, enforcedAt: new Date(0), graceUntil: new Date(0) },
+      });
+      ok(await call(member, 'GET', `/projects/${pid}/issues`));
+      await prisma.workSecurityPolicy.delete({ where: { workspaceId: wsId } });
+      // Các ca dưới kiểm hành vi khi BẬT công tắc.
+      process.env.CTW_ENFORCE_2FA = 'true';
+    });
+
     it('hồi quy MFA: admin site vẫn thiết lập được; người ngoài CT Work vẫn 403; thành viên CT Work nay thiết lập được', async () => {
       const mfa = await import('../services/mfa/mfa.service.js');
       const a = await mfa.batDauThietLap(siteAdmin.id);

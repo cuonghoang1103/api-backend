@@ -31,6 +31,7 @@ import * as ai from '../services/work/ai.service.js';
 import * as helpGuide from '../services/work/helpGuide.js';
 import * as aiThreads from '../services/work/aiThreads.service.js';
 import { myWork } from '../services/work/myWork.service.js';
+import * as noteLinks from '../services/work/noteLinks.service.js';
 import * as custom from '../services/work/customize.service.js';
 import * as searchSvc from '../services/work/search.service.js';
 import * as globalSearch from '../services/work/globalSearch.service.js';
@@ -690,6 +691,20 @@ router.post('/projects/:pid/issues/:num/links', asyncHandler(async (req, res) =>
 router.delete('/projects/:pid/issues/:num/links/:linkId', asyncHandler(async (req, res) => {
   await issues.removeLink(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'linkId'));
   ok(res, { removed: true });
+}));
+
+// ─── Ghi chú liên kết (mô-đun Notes ↔ thẻ) — chiều B ────────────────
+// Ghi chú là RIÊNG TƯ: mỗi người chỉ thấy liên kết tới ghi chú của chính mình
+// (noteLinks.service lọc theo note.userId). Kiểm quyền hai đầu trong service.
+router.get('/projects/:pid/issues/:num/notes', asyncHandler(async (req, res) => {
+  ok(res, await noteLinks.listIssueNotes(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+router.post('/projects/:pid/issues/:num/notes', asyncHandler(async (req, res) => {
+  const { noteId } = parse(z.object({ noteId: id }).strict(), req.body);
+  ok(res, await noteLinks.linkIssueNote(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), noteId), 201);
+}));
+router.delete('/projects/:pid/issues/:num/notes/:noteId', asyncHandler(async (req, res) => {
+  ok(res, await noteLinks.unlinkIssueNote(callerId(req), idParam(req, 'pid'), idParam(req, 'num'), idParam(req, 'noteId')));
 }));
 
 // CTW-11: cờ "Bị chặn" — PUT cắm (bắt buộc lý do), DELETE gỡ.

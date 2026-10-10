@@ -13,8 +13,10 @@
  * sửa ở đây nghĩa là hai chỗ phải hiểu 17 kiểu cột, và chỗ này sẽ tụt lại.
  */
 import { useEffect, useState } from 'react';
-import { CircleCheck, CircleDashed, Clock, Loader2, RefreshCw } from 'lucide-react';
+import Link from 'next/link';
+import { CircleCheck, CircleDashed, Clock, Loader2, RefreshCw, SquareKanban } from 'lucide-react';
 import { noteDatabaseApi, type MyTask } from '@/lib/api';
+import { workApi } from '@/lib/work-api';
 
 const DAY_MS = 86_400_000;
 
@@ -55,9 +57,12 @@ export default function MyTasksPanel({ onOpenDatabase }: { onOpenDatabase?: (dat
 
   if (tasks === null) {
     return (
-      <p className="flex items-center gap-2 px-3 py-6 text-[13px] text-slate-500">
-        <Loader2 size={14} className="animate-spin" aria-hidden /> Đang gom việc…
-      </p>
+      <div className="space-y-3">
+        <p className="flex items-center gap-2 px-3 py-6 text-[13px] text-slate-500">
+          <Loader2 size={14} className="animate-spin" aria-hidden /> Đang gom việc…
+        </p>
+        <CtworkAssigned />
+      </div>
     );
   }
 
@@ -65,6 +70,7 @@ export default function MyTasksPanel({ onOpenDatabase }: { onOpenDatabase?: (dat
   const visible = showDone ? tasks : tasks.filter((t) => t.statusGroup !== 'done');
 
   return (
+   <div className="space-y-3">
     <section className="rounded-xl border border-slate-200 bg-white dark:border-white/[0.07] dark:bg-white/[0.02]">
       <header className="flex items-center gap-2 border-b border-slate-100 px-3 py-2 dark:border-white/[0.05]">
         <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">Việc của tôi</h3>
@@ -143,6 +149,61 @@ export default function MyTasksPanel({ onOpenDatabase }: { onOpenDatabase?: (dat
           })}
         </ul>
       )}
+    </section>
+    <CtworkAssigned />
+   </div>
+  );
+}
+
+// ─── Thẻ CT Work được giao cho tôi (chỉ đọc) ─────────────────────────
+// Dùng lại endpoint "My work" của CT Work (GET /work/me/work). Ẩn hẳn khi người
+// dùng không có thẻ nào — không làm rối Notes của người không dùng CT Work.
+type CtworkItem = Awaited<ReturnType<typeof workApi.myWork>>['items'][number];
+
+function CtworkAssigned() {
+  const [items, setItems] = useState<CtworkItem[] | null>(null);
+  useEffect(() => {
+    let alive = true;
+    workApi.myWork()
+      .then((r) => { if (alive) setItems(r.items); })
+      .catch(() => { if (alive) setItems([]); });
+    return () => { alive = false; };
+  }, []);
+
+  // Đang tải hoặc không có thẻ ⇒ không hiện gì.
+  if (!items || items.length === 0) return null;
+
+  return (
+    <section className="rounded-xl border border-slate-200 bg-white dark:border-white/[0.07] dark:bg-white/[0.02]">
+      <header className="flex items-center gap-2 border-b border-slate-100 px-3 py-2 dark:border-white/[0.05]">
+        <SquareKanban size={15} className="text-slate-500" aria-hidden />
+        <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">CT Work giao cho tôi</h3>
+        <span className="text-[11.5px] text-slate-500">{items.length} thẻ</span>
+      </header>
+      <ul className="divide-y divide-slate-100 dark:divide-white/[0.05]">
+        {items.map((it) => {
+          const due = dueLabel(it.dueDate);
+          return (
+            <li key={it.key}>
+              <Link
+                href={it.url}
+                className="flex w-full items-center gap-2 px-3 py-2 text-left hover:bg-slate-50 dark:hover:bg-white/[0.03]"
+              >
+                <span className="shrink-0 font-medium tabular-nums text-[11px] text-slate-500 dark:text-slate-400">{it.key}</span>
+                <span className="min-w-0 flex-1 truncate text-[13px] text-slate-800 dark:text-slate-100">{it.title}</span>
+                {due && (
+                  <span className={`flex shrink-0 items-center gap-0.5 text-[11px] ${TONE_CLASS[due.tone]}`}>
+                    <Clock size={10} aria-hidden /> {due.text}
+                  </span>
+                )}
+                <span className="hidden shrink-0 text-[10.5px] text-slate-400 sm:inline">
+                  {it.workspace.name} · {it.project.name}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }

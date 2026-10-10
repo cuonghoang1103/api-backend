@@ -33,8 +33,9 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import {
   ChevronRight, ChevronDown, Plus, Trash2, FileText, FolderPlus, Pin, X, PanelRight,
   Star, Archive, AlertCircle, FolderTree, Share2, PinOff, Smile, Pencil, MoreHorizontal,
-  Search, ListFilter, Home, FilePlus2, Library, FolderInput, ExternalLink,
+  Search, ListFilter, Home, FilePlus2, Library, FolderInput, ExternalLink, CircleHelp,
 } from 'lucide-react';
+import { openNotesHelp } from './help/store';
 import {
   DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors, closestCenter,
   type DragEndEvent,
@@ -609,6 +610,15 @@ export default function NotesSidebar({
             <Search className="h-4 w-4" />
           </button>
         )}
+        <button
+          type="button"
+          onClick={() => openNotesHelp()}
+          title="Trợ giúp / Help (nhấn ?)"
+          aria-label="Trợ giúp"
+          className="flex h-9 w-9 items-center justify-center rounded-md text-slate-500 hover:bg-black/[0.05] hover:text-slate-800 dark:text-slate-400 dark:hover:bg-white/[0.06] dark:hover:text-slate-200 sm:h-8 sm:w-8"
+        >
+          <CircleHelp className="h-4 w-4" />
+        </button>
         <button
           type="button"
           onClick={(e) => openNewMenu(e.currentTarget)}

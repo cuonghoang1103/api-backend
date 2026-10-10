@@ -1651,6 +1651,27 @@ export const workDocsApi = {
   template: (pid: number, key: string) => d<DocTemplateInfo & { contentJson: TiptapDoc }>(api.get(`${B}/projects/${pid}/doc-templates/${key}`)),
 };
 
+// ─── Ghi chú liên kết (mô-đun Notes ↔ thẻ) — chiều B trên chi tiết thẻ ──
+// Ghi chú là RIÊNG TƯ: backend chỉ trả ghi chú CỦA NGƯỜI GỌI liên kết với thẻ này.
+export interface IssueLinkedNote {
+  linkId: number;
+  id: number;
+  title: string;
+  subject: { id: number; name: string; color: string | null } | null;
+  updatedAt: string;
+  url: string;
+}
+
+export const workIssueNotesKeys = {
+  list: (pid: number, issueNum: number) => ['work', 'issue-notes', pid, issueNum] as const,
+};
+
+export const workIssueNotesApi = {
+  list: (pid: number, issueNum: number) => d<{ notes: IssueLinkedNote[] }>(api.get(`${B}/projects/${pid}/issues/${issueNum}/notes`)),
+  link: (pid: number, issueNum: number, noteId: number) => d<{ notes: IssueLinkedNote[] }>(api.post(`${B}/projects/${pid}/issues/${issueNum}/notes`, { noteId })),
+  unlink: (pid: number, issueNum: number, noteId: number) => d<{ notes: IssueLinkedNote[] }>(api.delete(`${B}/projects/${pid}/issues/${issueNum}/notes/${noteId}`)),
+};
+
 // ─── Cổng khách (đợt S2b, mô-đun clientPortal) ───────────────────
 // Backend: src/services/work/portal.service.ts. `asClient` = "Preview as client"
 // (nhân viên xem đúng như khách, chỉ đọc).

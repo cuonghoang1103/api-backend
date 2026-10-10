@@ -10,6 +10,7 @@
 import { Router, type Response, type Request } from 'express';
 import { authenticate } from '../middleware/auth.js';
 import ghiNhanhRouter from './ghiNhanh.routes.js';
+import { searchIssuesForNote, resolveIssueChip } from '../services/work/noteLinks.service.js';
 import type { ApiResponse } from '../types/index.js';
 import {
   getTree,
@@ -471,6 +472,25 @@ router.get('/tags', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const tags = await listTags(req.userId!);
     res.json({ success: true, data: tags });
+  } catch (err) { next(err); }
+});
+
+// ─── Cầu nối CT Work (chip "@CT Work issue" trong trang) — chiều A ───
+// Bộ chọn + dữ liệu sống của chip. Dùng lại luật quyền của CT Work (noteLinks.service):
+// chỉ ra/giải được thẻ người gọi thật sự thấy.
+router.get('/ctwork/issues', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const q = typeof req.query.q === 'string' ? req.query.q : '';
+    const limit = req.query.limit ? Number(req.query.limit) : undefined;
+    res.json({ success: true, data: await searchIssuesForNote(req.userId!, q, limit) });
+  } catch (err) { next(err); }
+});
+
+router.get('/ctwork/issues/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const chip = await resolveIssueChip(req.userId!, Number(req.params.id));
+    if (!chip) { res.status(404).json({ success: false, message: 'Issue not found or no access' }); return; }
+    res.json({ success: true, data: chip });
   } catch (err) { next(err); }
 });
 

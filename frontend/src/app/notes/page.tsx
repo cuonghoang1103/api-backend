@@ -34,6 +34,7 @@ import NoteCommentsPanel from '@/components/notes/NoteCommentsPanel';
 import NoteBacklinksPanel from '@/components/notes/NoteBacklinksPanel';
 import NoteAssistantPanel from '@/components/notes/NoteAssistantPanel';
 import NoteBreadcrumb, { type BreadcrumbEntry } from '@/components/notes/NoteBreadcrumb';
+import NotesHelpPanelHost from '@/components/notes/help/NotesHelpPanel';
 import { exportNoteAsPdf } from '@/lib/notesPdf';
 import { NotesThemeProvider, useNotesTheme } from '@/components/notes/NotesThemeProvider';
 import { Sparkles } from 'lucide-react';
@@ -1530,6 +1531,9 @@ function NotesPageInner() {
   </>
   )}
   </AnimatePresence>
+
+  {/* Trợ giúp Sổ tay — gắn MỘT lần ở đây; mở bằng nút ở sidebar hoặc phím ? */}
+  <NotesHelpPanelHost />
   </div>
  );
 }

@@ -4931,6 +4931,9 @@ model Note {
   incomingReferences    NoteReference[]            @relation("NoteReferenceTarget")
   databaseRow           NoteDatabaseRow?           @relation("NoteDatabaseRowPage")
   NoteEmbedding         NoteEmbedding[]
+  // Tham chiếu tới thẻ CT Work nhúng trong trang (chip "@CT Work issue"). THAM
+  // CHIẾU, không sao chép: chỉ lưu id thẻ, dữ liệu sống đọc lại mỗi lần hiển thị.
+  workIssueLinks        NoteWorkIssueLink[]
 
   // Postgres cho phép NHIỀU hàng NULL trong một UNIQUE, nên mọi ghi chú cũ
   // (clientId = NULL) không hề vướng ràng buộc này.
@@ -10589,6 +10592,8 @@ model WorkIssue {
   krLinks            WorkKeyResultLink[]     @relation("WorkKrLinkIssue")
   pokerItems         WorkPokerItem[]         @relation("WorkPokerItemIssue")
   timers             WorkTimer[]             @relation("WorkTimerIssue")
+  /// Ghi chú cá nhân (mô-đun Notes) tham chiếu tới thẻ này — xem NoteWorkIssueLink.
+  noteLinks          NoteWorkIssueLink[]
 
   @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
   @@index([projectId, statusId, rank], name: "idx_work_issue_board")
@@ -12215,6 +12220,32 @@ model WorkPageIssueLink {
   @@unique([pageId, issueId], name: "uk_work_page_issue", map: "uk_work_page_issue")
   @@index([issueId], name: "idx_work_page_issue_issue")
   @@map("work_page_issue_links")
+}
+
+/// Ghi chú cá nhân (mô-đun Notes) ↔ thẻ CT Work — liên kết HAI CHIỀU, chỉ THAM CHIẾU.
+///
+///   Chiều A: chip "@CT Work issue" nhúng trong trang ghi chú. Khi lưu trang,
+///            notes.service đồng bộ bảng này theo đúng các chip còn trong nội dung.
+///   Chiều B: mục "Ghi chú liên kết" trên chi tiết thẻ CT Work.
+///
+/// Ghi chú là RIÊNG TƯ của một người (Note.userId). Vì thế mỗi người chỉ thấy liên
+/// kết tới ghi chú CỦA MÌNH (mọi truy vấn phía thẻ lọc theo note.userId = người gọi).
+/// Không bao giờ sao chép nội dung thẻ vào ghi chú hay ngược lại — chỉ nối hai bản ghi.
+model NoteWorkIssueLink {
+  id          Int      @id @default(autoincrement())
+  noteId      Int      @map("note_id")
+  workIssueId Int      @map("work_issue_id")
+  /// Người tạo liên kết (luôn là chủ ghi chú). Không FK — như nhật ký; ghi chú bị
+  /// xoá sẽ cascade xoá liên kết, nên không cần ràng buộc tới users.
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  note  Note      @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  issue WorkIssue @relation(fields: [workIssueId], references: [id], onDelete: Cascade)
+
+  @@unique([noteId, workIssueId], name: "uk_note_work_issue", map: "uk_note_work_issue")
+  @@index([workIssueId], name: "idx_note_work_issue_issue")
+  @@map("note_work_issue_links")
 }
 
 /// Bình luận trên trang (@nhắc tên ⇒ WORK_MENTION như bình luận thẻ).
@@ -14283,41 +14314,41 @@ model WorkDiagramComment {
 /// trần vì giảng viên cần xem lại; đổi mã = tạo mã mới (mã cũ hết hiệu lực ngay). teacherEmail: lớp do trưởng nhóm tạo
 /// ⇒ giảng viên nhận vai khi tự mở link bằng đúng email này.
 model WorkClass {
-  id            Int       @id @default(autoincrement())
-  name          String    @db.VarChar(120)
+  id               Int       @id @default(autoincrement())
+  name             String    @db.VarChar(120)
   /// SWP391 | SWT301 | SWR302 | SEP490 | ISP490 | OTHER — quyết định mẫu dự án của nhóm.
-  subject       String    @db.VarChar(16)
-  classCode     String    @map("class_code") @db.VarChar(32)
-  term          String    @db.VarChar(16)
-  ownerId       Int       @map("owner_id")
-  teacherId     Int?      @map("teacher_id")
-  teacherEmail  String?   @map("teacher_email") @db.VarChar(100)
-  joinCode      String    @unique(map: "uk_work_class_join_code") @map("join_code") @db.VarChar(16)
-  joinExpiresAt DateTime? @map("join_expires_at")
-  joinOpen      Boolean   @default(true) @map("join_open")
-  maxGroupSize  Int       @default(6) @map("max_group_size")
-  timezone      String    @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
-  week1Start    DateTime? @map("week1_start") @db.Date
-  archivedAt    DateTime? @map("archived_at")
+  subject          String    @db.VarChar(16)
+  classCode        String    @map("class_code") @db.VarChar(32)
+  term             String    @db.VarChar(16)
+  ownerId          Int       @map("owner_id")
+  teacherId        Int?      @map("teacher_id")
+  teacherEmail     String?   @map("teacher_email") @db.VarChar(100)
+  joinCode         String    @unique(map: "uk_work_class_join_code") @map("join_code") @db.VarChar(16)
+  joinExpiresAt    DateTime? @map("join_expires_at")
+  joinOpen         Boolean   @default(true) @map("join_open")
+  maxGroupSize     Int       @default(6) @map("max_group_size")
+  timezone         String    @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
+  week1Start       DateTime? @map("week1_start") @db.Date
+  archivedAt       DateTime? @map("archived_at")
   /// CTW 9a: sinh viên được bình luận trên Stream (GV tắt ⇒ chỉ GV/OWNER bình luận).
   streamComments   Boolean   @default(true) @map("stream_comments")
   /// CTW 9a: ngưỡng cảnh báo vắng (%) — vượt ⇒ cờ đỏ ở thống kê điểm danh.
   absenceThreshold Int       @default(20) @map("absence_threshold")
   /// CTW 9a: điểm danh bằng mã sau giờ bắt đầu buổi quá N phút ⇒ LATE.
   lateAfterMin     Int       @default(10) @map("late_after_min")
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
 
-  owner         User                    @relation("WorkClassOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  teacher       User?                   @relation("WorkClassTeacher", fields: [teacherId], references: [id], onDelete: SetNull)
+  owner         User                     @relation("WorkClassOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  teacher       User?                    @relation("WorkClassTeacher", fields: [teacherId], references: [id], onDelete: SetNull)
   groups        WorkClassGroup[]
   students      WorkClassStudent[]
   /// CTW đợt 9b: bài tập + cấu hình sổ điểm.
-  assignments   WorkClassAssignment[]   @relation("WorkClassAssignments")
-  gradebook     WorkClassGradebook?     @relation("WorkClassGradebook")
+  assignments   WorkClassAssignment[]    @relation("WorkClassAssignments")
+  gradebook     WorkClassGradebook?      @relation("WorkClassGradebook")
   /// CTW đợt 9c: quiz + ngân hàng câu hỏi.
-  quizzes       WorkClassQuiz[]         @relation("WorkClassQuizzes")
-  quizQuestions WorkClassQuizQuestion[] @relation("WorkClassQuizQuestions")
+  quizzes       WorkClassQuiz[]          @relation("WorkClassQuizzes")
+  quizQuestions WorkClassQuizQuestion[]  @relation("WorkClassQuizQuestions")
   /// CTW đợt 9a: bảng tin, tài liệu, lịch lớp + điểm danh.
   posts         WorkClassPost[]
   streamFiles   WorkClassStreamFile[]
@@ -14366,9 +14397,9 @@ model WorkClassStudent {
   joinedAt    DateTime? @map("joined_at")
   createdAt   DateTime  @default(now()) @map("created_at")
 
-  class WorkClass       @relation(fields: [classId], references: [id], onDelete: Cascade)
-  user  User?           @relation("WorkClassStudentUser", fields: [userId], references: [id], onDelete: SetNull)
-  group WorkClassGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  class      WorkClass             @relation(fields: [classId], references: [id], onDelete: Cascade)
+  user       User?                 @relation("WorkClassStudentUser", fields: [userId], references: [id], onDelete: SetNull)
+  group      WorkClassGroup?       @relation(fields: [groupId], references: [id], onDelete: SetNull)
   /// CTW đợt 9a: điểm danh theo buổi.
   attendance WorkClassAttendance[]
 
@@ -16441,8 +16472,8 @@ model WorkClassPost {
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
 
-  class    WorkClass          @relation(fields: [classId], references: [id], onDelete: Cascade)
-  author   User?              @relation("WorkClassPostAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  class    WorkClass             @relation(fields: [classId], references: [id], onDelete: Cascade)
+  author   User?                 @relation("WorkClassPostAuthor", fields: [authorId], references: [id], onDelete: SetNull)
   comments WorkClassComment[]
   files    WorkClassStreamFile[]
 

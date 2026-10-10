@@ -501,6 +501,23 @@ export interface NotePaletteResult {
   chapters: { id: number; title: string; subjectId: number; subjectName: string; subjectEmoji: string | null }[];
 }
 
+/** Dữ liệu sống của một chip "@CT Work issue" (GET /notes/ctwork/issues/:id). */
+export interface CtworkIssueChip {
+  id: number;
+  key: string;
+  number: number;
+  title: string;
+  status: { name: string; category: string; color: string };
+  statusColor: string;
+  typeKey: string;
+  url: string;
+}
+/** Một dòng trong bộ chọn thẻ cho chip (GET /notes/ctwork/issues?q=). */
+export interface CtworkIssuePick extends CtworkIssueChip {
+  project: { key: string; name: string };
+  workspace: { slug: string; name: string };
+}
+
 export const notesApi = {
   // Tree (sidebar) + recent rail
   getTree: () =>
@@ -723,6 +740,14 @@ export const notesApi = {
     api.get<{ data: NotePaletteResult }>('/notes/search/palette', { params: { q }, signal }),
   getTags: () =>
     api.get<{ data: string[] }>('/notes/tags'),
+
+  // ── Cầu nối CT Work (chip "@CT Work issue" nhúng trong trang) ──
+  /** Bộ chọn thẻ CT Work cho chip — tìm trên MỌI không gian người dùng có quyền xem. */
+  ctworkIssues: (q: string, signal?: AbortSignal) =>
+    api.get<{ data: CtworkIssuePick[] }>('/notes/ctwork/issues', { params: { q }, signal }),
+  /** Dữ liệu SỐNG của một chip theo id thẻ (404 nếu mất quyền ⇒ chip tự xám đi). */
+  ctworkIssue: (id: number) =>
+    api.get<{ data: CtworkIssueChip }>(`/notes/ctwork/issues/${id}`),
 
   // ── Phase 3a: vocabulary (per note) ──
   listVocab: (noteId: number) =>

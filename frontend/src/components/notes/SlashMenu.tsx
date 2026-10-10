@@ -40,7 +40,7 @@ import {
   Lightbulb, StickyNote, TriangleAlert, Sigma, SquareRadical, Minus,
   Table2, Quote, ImagePlus, GripHorizontal, Search,
   ChevronRight, Clapperboard, Paperclip, Bookmark, Frame, Database, Unlink,
-  NotebookPen, Keyboard, Bug,
+  NotebookPen, Keyboard, Bug, SquareKanban,
   type LucideIcon,
 } from 'lucide-react';
 import { ghiNhanhApi, type MauTrang, type MauTrangKey } from '@/lib/api';
@@ -67,6 +67,8 @@ interface Props {
   onPickVideo?: () => void;
   /** Chọn tệp đính kèm bất kỳ. */
   onPickFile?: () => void;
+  /** Mở bộ chọn thẻ CT Work để chèn chip nội tuyến (NoteEditor dựng modal). */
+  onPickCtworkIssue?: () => void;
   /**
    * Người dùng bấm Esc để bỏ qua. NoteEditor ghi nhớ vị trí "/" này và
    * không mở lại bảng cho tới khi rời khỏi nó — nếu không, gõ thêm một
@@ -114,6 +116,7 @@ function buildItems(
   onPickImage?: () => void,
   onPickVideo?: () => void,
   onPickFile?: () => void,
+  onPickCtworkIssue?: () => void,
 ): Item[] {
   // Editor được nới sang `any` để gọi được các lệnh của extension nhà
   // trồng (setCallout, …) mà không vướng kiểu hẹp ChainedCommands.
@@ -209,6 +212,12 @@ function buildItems(
       label: 'Tệp đính kèm', hint: 'Tải tệp bất kỳ lên', icon: Paperclip, group: 'Khối nội dung' as Group,
       keywords: ['file', 'tep', 'dinh kem', 'attach', 'pdf', 'tai lieu', 'upload'],
       run: (ed: Editor, r: SlashRange) => { at(ed, r).run(); onPickFile(); },
+    }] : []),
+    ...(onPickCtworkIssue ? [{
+      label: 'CT Work issue', hint: 'Chèn chip tham chiếu một thẻ CT Work', icon: SquareKanban, group: 'Nâng cao' as Group,
+      keywords: ['ct work', 'ctwork', 'thẻ', 'the', 'issue', 'task', 'jira', 'viec', 'công việc', 'cong viec', 'ticket'],
+      // Xoá "/" trước rồi mới mở modal — con trỏ ở đúng chỗ khi chèn chip sau khi chọn.
+      run: (ed: Editor, r: SlashRange) => { at(ed, r).run(); onPickCtworkIssue(); },
     }] : []),
     {
       label: 'Bookmark', hint: 'Thẻ xem trước một liên kết', icon: Bookmark, group: 'Khối nội dung',
@@ -330,7 +339,7 @@ const GAP = 8;          // cách con trỏ
 const DESIRED_H = 380;  // chiều cao "thoải mái" của bảng
 const MIN_H = 160;      // dưới mức này thì cuộn trong bảng
 
-const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor, onPickImage, onPickVideo, onPickFile, onDismiss }, ref) => {
+const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor, onPickImage, onPickVideo, onPickFile, onPickCtworkIssue, onDismiss }, ref) => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
@@ -363,8 +372,8 @@ const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor, onPickImage, onPick
   }), []);
 
   const allItems = useMemo(
-    () => buildItems(onPickImage, onPickVideo, onPickFile),
-    [onPickImage, onPickVideo, onPickFile],
+    () => buildItems(onPickImage, onPickVideo, onPickFile, onPickCtworkIssue),
+    [onPickImage, onPickVideo, onPickFile, onPickCtworkIssue],
   );
 
   const matches = useMemo(() => {

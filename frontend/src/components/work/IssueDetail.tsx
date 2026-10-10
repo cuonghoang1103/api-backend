@@ -45,6 +45,7 @@ import IssueAgentActivity from './agents/IssueAgentActivity';
 import { IssueApprovals, IssueHandoffs, MoveIssueDialog, StagePicker, TeamPicker } from './studio/IssueStudio';
 import { studioOn } from './studio/shared';
 import { LinkedDocs } from './docs/LinkedDocs';
+import { LinkedNotes } from './notes/LinkedNotes';
 import { IssueGovernance } from './governance/IssueGovernance';
 import { IssueDesk } from './desk/IssueDesk';
 import { IssueWebLinks } from './resources/IssueWebLinks';
@@ -860,6 +861,8 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
                     <div className="peer space-y-6">
                       <Links issue={issue} pid={pid} lk={lk} editable={editable} onOpenKey={openKey} />
                       {studioOn(config, 'docs') && <LinkedDocs config={config} issueNumber={issue.number} />}
+                      {/* Ghi chú cá nhân liên kết với thẻ (mô-đun Notes) — chỉ ghi chú của người đang xem. */}
+                      <LinkedNotes pid={pid} issueNumber={issue.number} />
                       {/* Resources (06/10/2026): Web links kiểu Jira (tự ẩn khi mô-đun tắt / khách). */}
                       <IssueWebLinks config={config} issueNumber={issue.number} />
                       {/* CTW đợt 8a: tệp OneDrive/SharePoint/Google Drive gắn dưới dạng liên kết (ẩn với khách). */}

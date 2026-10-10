@@ -13,6 +13,7 @@ import StarterKit from '@tiptap/starter-kit';
 import NoteCodeBlock from '@/components/notes/extensions/NoteCodeBlock';
 import NoteCallout from '@/components/notes/extensions/NoteCallout';
 import NoteMath from '@/components/notes/extensions/NoteMath';
+import NoteCtworkIssue from '@/components/notes/extensions/NoteCtworkIssue';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
 import Table from '@tiptap/extension-table';
@@ -49,6 +50,7 @@ export default function SharedNoteViewer({
       NoteCodeBlock,
       NoteCallout,
       NoteMath,
+      NoteCtworkIssue,
       TaskList.configure({ HTMLAttributes: { class: 'note-task-list' } }),
       TaskItem.configure({ nested: true, HTMLAttributes: { class: 'note-task-item' } }),
       Table.configure({ resizable: false, HTMLAttributes: { class: 'note-table' } }),

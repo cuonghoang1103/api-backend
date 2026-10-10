@@ -573,6 +573,12 @@ export async function updateNote(
        * dung là chấp nhận được — trợ lý không cần đúng tới từng giây. */
       const { capNhatNhung } = await import('./noteEmbedding.service.js');
       void capNhatNhung(id).catch(() => { /* máy nhúng tắt — trợ lý tự lùi về từ khoá */ });
+
+      /* Chip "@CT Work issue" ⇒ liên kết ghi chú ↔ thẻ. Giữ chiều B (mục "Ghi chú
+       * liên kết" trên thẻ) khớp với các chip CÒN trong nội dung. Cũng là chỉ mục
+       * dẫn xuất — KHÔNG được làm hỏng việc lưu. */
+      const { syncNoteIssueLinks } = await import('./work/noteLinks.service.js');
+      void syncNoteIssueLinks(userId, id, data.contentJson ?? null).catch(() => { /* bỏ qua: liên kết tự khớp ở lần lưu sau */ });
     }
     if (data.title !== undefined) {
       // Nếu ghi chú này là thân trang của một dòng database, đổi tên trang

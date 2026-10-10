@@ -53,6 +53,8 @@ import NoteBookmark from '@/components/notes/extensions/NoteBookmark';
 import NoteEmbed from '@/components/notes/extensions/NoteEmbed';
 import NoteDatabaseBlock from '@/components/notes/extensions/NoteDatabaseBlock';
 import NoteSyncedBlock from '@/components/notes/extensions/NoteSyncedBlock';
+import NoteCtworkIssue from '@/components/notes/extensions/NoteCtworkIssue';
+import NoteCtworkIssuePicker from '@/components/notes/NoteCtworkIssuePicker';
 import SlashMenu, { type SlashMenuRef } from '@/components/notes/SlashMenu';
 import NoteTableOfContents from '@/components/notes/NoteTableOfContents';
 import NotePropertiesPanel from '@/components/notes/NotePropertiesPanel';
@@ -122,6 +124,8 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const slashRef = useRef<SlashMenuRef>(null);
+  /** Mở bộ chọn thẻ CT Work (chip nội tuyến) từ slash menu. */
+  const [ctworkPicker, setCtworkPicker] = useState(false);
   /** Vị trí dấu "/" mà người dùng đã bấm Esc để bỏ qua (xem handleSlashTrigger). */
   const slashDismissedAt = useRef<number | null>(null);
   // Track the note id so switching notes resets local state instead
@@ -321,6 +325,7 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
       // ghi chú thì đổi khi người dùng bấm sang trang khác.
       NoteDatabaseBlock.configure({ getSubjectId: () => noteRef.current?.subjectId ?? null }),
       NoteSyncedBlock,
+      NoteCtworkIssue,
       TaskList.configure({ HTMLAttributes: { class: 'note-task-list' } }),
       TaskItem.configure({ nested: true, HTMLAttributes: { class: 'note-task-item' } }),
       Table.configure({ resizable: false, HTMLAttributes: { class: 'note-table' } }),
@@ -948,8 +953,25 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
         onPickImage={() => imageInputRef.current?.click()}
         onPickVideo={() => videoInputRef.current?.click()}
         onPickFile={() => attachInputRef.current?.click()}
+        onPickCtworkIssue={() => setCtworkPicker(true)}
         onDismiss={(range) => { slashDismissedAt.current = range.from; }}
       />
+
+      {/* Bộ chọn thẻ CT Work — chèn chip THAM CHIẾU (slash "/CT Work issue"). */}
+      {ctworkPicker && (
+        <NoteCtworkIssuePicker
+          onClose={() => setCtworkPicker(false)}
+          onPick={(issue) => {
+            setCtworkPicker(false);
+            if (!editor) return;
+            // Lệnh của extension nhà trồng — nới kiểu như các chỗ khác trong editor.
+            (editor as unknown as { chain: () => any }).chain().focus()
+              .insertCtworkIssue({ issueId: issue.id, key: issue.key, title: issue.title, statusColor: issue.statusColor })
+              .insertContent(' ')
+              .run();
+          }}
+        />
+      )}
 
       {/* Đầu vào ảnh cho mục "Ảnh" trong slash menu. Ẩn hoàn toàn —
           chỉ mở bằng .click() từ menu. */}

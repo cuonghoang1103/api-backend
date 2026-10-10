@@ -36,6 +36,13 @@ const BY_CODE: Record<string, WKey> = {
   WORK_BASELINED: 'q6.errBaselined',
   WORK_REVIEW_NOT_READY: 'q6.errReviewNotReady',
   WORK_REVIEW_REINSPECT: 'q6.errReviewReinspect',
+  // CTW đợt 9c: quiz lớp học
+  WORK_QUIZ_TIME_UP: 'c9c.timeUp',
+  WORK_QUIZ_NOT_OPEN: 'c9c.errNotOpen',
+  WORK_QUIZ_CLOSED: 'c9c.closedMsg',
+  WORK_QUIZ_NO_ATTEMPTS: 'c9c.noAttemptsLeft',
+  WORK_QUIZ_SUBMITTED: 'c9c.errSubmitted',
+  WORK_QUIZ_HAS_ATTEMPTS: 'c9c.cannotUnpublish',
   PAYLOAD_TOO_LARGE: 'errors.tooLarge',
   UNAUTHORIZED: 'errors.unauthorized',
 };

@@ -432,6 +432,12 @@ model User {
   workClassesOwned       WorkClass[]             @relation("WorkClassOwner")
   workClassesTaught      WorkClass[]             @relation("WorkClassTeacher")
   workClassSeats         WorkClassStudent[]      @relation("WorkClassStudentUser")
+  // CTW đợt 9a — bảng tin, tài liệu lớp
+  workClassPosts         WorkClassPost[]         @relation("WorkClassPostAuthor")
+  workClassComments      WorkClassComment[]      @relation("WorkClassCommentAuthor")
+  workClassStreamFiles   WorkClassStreamFile[]   @relation("WorkClassFileUploader")
+  workClassMaterials     WorkClassMaterial[]     @relation("WorkClassMaterialAuthor")
+  workClassMaterialViews WorkClassMaterialView[] @relation("WorkClassMaterialViewUser")
   workRubrics            WorkRubric[]            @relation("WorkRubricOwner")
   // ── hết CTW đợt 5 ──
   workAttachments        WorkAttachment[]        @relation("WorkAttachmentUploader")
@@ -14293,13 +14299,33 @@ model WorkClass {
   timezone      String    @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
   week1Start    DateTime? @map("week1_start") @db.Date
   archivedAt    DateTime? @map("archived_at")
+  /// CTW 9a: sinh viên được bình luận trên Stream (GV tắt ⇒ chỉ GV/OWNER bình luận).
+  streamComments   Boolean   @default(true) @map("stream_comments")
+  /// CTW 9a: ngưỡng cảnh báo vắng (%) — vượt ⇒ cờ đỏ ở thống kê điểm danh.
+  absenceThreshold Int       @default(20) @map("absence_threshold")
+  /// CTW 9a: điểm danh bằng mã sau giờ bắt đầu buổi quá N phút ⇒ LATE.
+  lateAfterMin     Int       @default(10) @map("late_after_min")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  owner    User               @relation("WorkClassOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  teacher  User?              @relation("WorkClassTeacher", fields: [teacherId], references: [id], onDelete: SetNull)
-  groups   WorkClassGroup[]
-  students WorkClassStudent[]
+  owner         User                    @relation("WorkClassOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  teacher       User?                   @relation("WorkClassTeacher", fields: [teacherId], references: [id], onDelete: SetNull)
+  groups        WorkClassGroup[]
+  students      WorkClassStudent[]
+  /// CTW đợt 9b: bài tập + cấu hình sổ điểm.
+  assignments   WorkClassAssignment[]   @relation("WorkClassAssignments")
+  gradebook     WorkClassGradebook?     @relation("WorkClassGradebook")
+  /// CTW đợt 9c: quiz + ngân hàng câu hỏi.
+  quizzes       WorkClassQuiz[]         @relation("WorkClassQuizzes")
+  quizQuestions WorkClassQuizQuestion[] @relation("WorkClassQuizQuestions")
+  /// CTW đợt 9a: bảng tin, tài liệu, lịch lớp + điểm danh.
+  posts         WorkClassPost[]
+  streamFiles   WorkClassStreamFile[]
+  topics        WorkClassTopic[]
+  materials     WorkClassMaterial[]
+  sessionSeries WorkClassSessionSeries[]
+  sessions      WorkClassSession[]
+  calendarItems WorkClassCalendarItem[]
 
   @@index([ownerId], map: "idx_work_class_owner")
   @@index([teacherId], map: "idx_work_class_teacher")
@@ -14343,6 +14369,8 @@ model WorkClassStudent {
   class WorkClass       @relation(fields: [classId], references: [id], onDelete: Cascade)
   user  User?           @relation("WorkClassStudentUser", fields: [userId], references: [id], onDelete: SetNull)
   group WorkClassGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  /// CTW đợt 9a: điểm danh theo buổi.
+  attendance WorkClassAttendance[]
 
   @@unique([classId, email], map: "uk_work_class_student_email")
   @@unique([classId, userId], map: "uk_work_class_student_user")
@@ -14370,8 +14398,10 @@ model WorkRubric {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  owner  User?       @relation("WorkRubricOwner", fields: [ownerId], references: [id], onDelete: SetNull)
-  grades WorkGrade[]
+  owner            User?                 @relation("WorkRubricOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  grades           WorkGrade[]
+  /// CTW đợt 9b: bài tập lớp chấm theo rubric này.
+  classAssignments WorkClassAssignment[] @relation("WorkClassAssignmentRubric")
 
   @@index([ownerId], map: "idx_work_rubric_owner")
   @@map("work_rubrics")
@@ -16119,3 +16149,493 @@ model WorkDiagramRender {
 }
 
 // ── hết CTW đợt 8c ──
+
+// ── CTW đợt 9b ── (13/10/2026) LỚP HỌC: BÀI TẬP (Classwork) + NỘP BÀI + TRẢ BÀI + SỔ ĐIỂM.
+// Bài tập thuộc LỚP (không thuộc dự án nhóm): cá nhân hoặc nhóm (nhóm lớp sẵn có ⇒ một bài nộp chung, điểm chỉnh được
+// từng người). Điểm NHÁP (`points`/`scores`) chỉ giảng viên thấy; sinh viên chỉ thấy bản ĐÃ TRẢ (`returned*`). Nộp lại
+// giữ lịch sử (`work_class_submission_versions`). Sổ điểm gộp bài tập + nguồn khác (quiz 9c) qua `classGradebookSources.ts`.
+// Người dùng lưu dạng id trần (như work_grade_history.actor_id) — không thêm quan hệ ngược vào User.
+
+/// Một bài tập của lớp. publishAt null = bản nháp; > now = đã lên lịch giao; <= now = đã giao (sinh viên thấy).
+/// announcedAt: đã đăng bảng tin + chuông (đúng một lần). remindedAt: đã nhắc hạn 24h (đúng một lần).
+/// Đối tượng: targetAll, hoặc targetGroupIds (work_class_groups.id) + targetStudentIds (work_class_students.id).
+model WorkClassAssignment {
+  id                Int       @id @default(autoincrement())
+  classId           Int       @map("class_id")
+  authorId          Int?      @map("author_id")
+  title             String    @db.VarChar(200)
+  description       Json?
+  descriptionText   String?   @map("description_text") @db.Text
+  /// INDIVIDUAL | GROUP
+  kind              String    @default("INDIVIDUAL") @db.VarChar(12)
+  category          String    @default("Assignment") @db.VarChar(40)
+  topic             String?   @db.VarChar(80)
+  maxPoints         Float     @default(10) @map("max_points")
+  rubricId          Int?      @map("rubric_id")
+  dueAt             DateTime? @map("due_at")
+  publishAt         DateTime? @map("publish_at")
+  announcedAt       DateTime? @map("announced_at")
+  remindedAt        DateTime? @map("reminded_at")
+  allowLate         Boolean   @default(true) @map("allow_late")
+  /// % trừ cho mỗi ngày (bắt đầu) muộn; trần ở latePenaltyMaxPct.
+  latePenaltyPct    Float     @default(0) @map("late_penalty_pct")
+  latePenaltyMaxPct Float     @default(100) @map("late_penalty_max_pct")
+  targetAll         Boolean   @default(true) @map("target_all")
+  targetGroupIds    Int[]     @default([]) @map("target_group_ids")
+  targetStudentIds  Int[]     @default([]) @map("target_student_ids")
+  deletedAt         DateTime? @map("deleted_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  class       WorkClass             @relation("WorkClassAssignments", fields: [classId], references: [id], onDelete: Cascade)
+  rubric      WorkRubric?           @relation("WorkClassAssignmentRubric", fields: [rubricId], references: [id], onDelete: Restrict)
+  submissions WorkClassSubmission[]
+  files       WorkClassFile[]
+
+  @@index([classId, publishAt], map: "idx_work_class_assignment_class")
+  @@index([dueAt, remindedAt], map: "idx_work_class_assignment_due")
+  @@map("work_class_assignments")
+}
+
+/// Bài nộp: ownerKey = 'U<userId>' (cá nhân) | 'G<groupId>' (nhóm). status ASSIGNED | TURNED_IN | RETURNED.
+model WorkClassSubmission {
+  id                   Int       @id @default(autoincrement())
+  assignmentId         Int       @map("assignment_id")
+  ownerKey             String    @map("owner_key") @db.VarChar(16)
+  userId               Int?      @map("user_id")
+  groupId              Int?      @map("group_id")
+  status               String    @default("ASSIGNED") @db.VarChar(12)
+  text                 String?   @db.Text
+  links                Json      @default("[]")
+  submittedAt          DateTime? @map("submitted_at")
+  submittedById        Int?      @map("submitted_by_id")
+  late                 Boolean   @default(false)
+  version              Int       @default(0)
+  points               Float?
+  scores               Json      @default("{}")
+  memberPoints         Json      @default("{}") @map("member_points")
+  penaltyPct           Float     @default(0) @map("penalty_pct")
+  gradedAt             DateTime? @map("graded_at")
+  graderId             Int?      @map("grader_id")
+  returnedAt           DateTime? @map("returned_at")
+  returnedPoints       Float?    @map("returned_points")
+  returnedScores       Json?     @map("returned_scores")
+  returnedMemberPoints Json?     @map("returned_member_points")
+  returnedPenaltyPct   Float?    @map("returned_penalty_pct")
+  returnCount          Int       @default(0) @map("return_count")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+
+  assignment WorkClassAssignment          @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  versions   WorkClassSubmissionVersion[]
+  comments   WorkClassSubmissionComment[]
+  files      WorkClassFile[]
+
+  @@unique([assignmentId, ownerKey], map: "uk_work_class_submission_owner")
+  @@index([userId], map: "idx_work_class_submission_user")
+  @@index([groupId], map: "idx_work_class_submission_group")
+  @@map("work_class_submissions")
+}
+
+/// Lịch sử nộp: mỗi lần nộp / huỷ nộp một dòng (nội dung chụp lại tại thời điểm đó).
+model WorkClassSubmissionVersion {
+  id           Int      @id @default(autoincrement())
+  submissionId Int      @map("submission_id")
+  version      Int
+  /// TURN_IN | UNSUBMIT
+  action       String   @db.VarChar(12)
+  text         String?  @db.Text
+  links        Json     @default("[]")
+  fileIds      Int[]    @default([]) @map("file_ids")
+  late         Boolean  @default(false)
+  actorId      Int      @map("actor_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  submission WorkClassSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId, createdAt], map: "idx_work_class_submission_version")
+  @@map("work_class_submission_versions")
+}
+
+/// Nhận xét RIÊNG TƯ hai chiều giảng viên ↔ sinh viên/nhóm trên một bài nộp.
+model WorkClassSubmissionComment {
+  id           Int      @id @default(autoincrement())
+  submissionId Int      @map("submission_id")
+  authorId     Int      @map("author_id")
+  body         String   @db.Text
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  submission WorkClassSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId, createdAt], map: "idx_work_class_submission_comment")
+  @@map("work_class_submission_comments")
+}
+
+/// Tệp của bài tập (đề) hoặc bài nộp. Khoá R2 `work/class/<lớp>/…`. detachedAt: đã gỡ khỏi bản nháp nhưng còn nằm
+/// trong một phiên bản đã nộp ⇒ giữ để lịch sử mở được.
+model WorkClassFile {
+  id           Int       @id @default(autoincrement())
+  classId      Int       @map("class_id")
+  assignmentId Int?      @map("assignment_id")
+  submissionId Int?      @map("submission_id")
+  uploaderId   Int       @map("uploader_id")
+  r2Key        String    @map("r2_key") @db.VarChar(500)
+  fileName     String    @map("file_name") @db.VarChar(255)
+  mime         String    @db.VarChar(100)
+  size         Int
+  detachedAt   DateTime? @map("detached_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  assignment WorkClassAssignment? @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  submission WorkClassSubmission? @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([assignmentId], map: "idx_work_class_file_assignment")
+  @@index([submissionId], map: "idx_work_class_file_submission")
+  @@map("work_class_files")
+}
+
+/// Cấu hình sổ điểm của lớp. mode POINTS (cộng điểm) | CATEGORY | TOPIC (trọng số % theo loại / chủ đề).
+model WorkClassGradebook {
+  classId       Int      @id @map("class_id")
+  mode          String   @default("POINTS") @db.VarChar(12)
+  weights       Json     @default("{}")
+  missingAsZero Boolean  @default(false) @map("missing_as_zero")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  class WorkClass @relation("WorkClassGradebook", fields: [classId], references: [id], onDelete: Cascade)
+
+  @@map("work_class_gradebooks")
+}
+
+// ── hết CTW đợt 9b ──
+
+// ── CTW đợt 9c ── (13/10/2026) LỚP HỌC: QUIZ TRẮC NGHIỆM TỰ CHẤM.
+// Ngân hàng câu hỏi theo LỚP (chủ đề = topic), quiz lấy câu cố định hoặc rút ngẫu nhiên N câu theo chủ đề. Mỗi lượt làm
+// CHỤP LẠI đề (paper: câu + phương án đã trộn + đáp án) ở máy chủ ⇒ sửa câu hỏi sau đó không đổi bài đang/đã làm; đáp án
+// trong `answer` / `paper` KHÔNG BAO GIỜ gửi xuống sinh viên khi chưa được phép (quizRules.studentPaper). Đồng hồ tính ở
+// máy chủ (deadline_at). Người dùng lưu id trần như 9b — không thêm quan hệ ngược vào User. Logic: quizRules.ts + quiz.service.ts.
+
+/// Câu hỏi trong ngân hàng của lớp. type SINGLE | MULTI | TRUE_FALSE | SHORT | MATCH. options: [{id,text}] hoặc cặp
+/// [{id,left,right}]; answer: { correct[] | value | accepted[] }; settings: { partial, caseSensitive, accentSensitive }.
+/// aiDraft + approvedAt null = nháp AI chưa được giảng viên duyệt (không đưa vào quiz đã giao được).
+model WorkClassQuizQuestion {
+  id          Int       @id @default(autoincrement())
+  classId     Int       @map("class_id")
+  authorId    Int?      @map("author_id")
+  topic       String    @default("General") @db.VarChar(60)
+  type        String    @db.VarChar(12)
+  prompt      String    @db.Text
+  imageUrl    String?   @map("image_url") @db.VarChar(500)
+  points      Float     @default(1)
+  explanation String?   @db.Text
+  options     Json      @default("[]")
+  answer      Json      @default("{}")
+  settings    Json      @default("{}")
+  aiDraft     Boolean   @default(false) @map("ai_draft")
+  approvedAt  DateTime? @map("approved_at")
+  archivedAt  DateTime? @map("archived_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  class WorkClass @relation("WorkClassQuizQuestions", fields: [classId], references: [id], onDelete: Cascade)
+
+  @@index([classId, topic], map: "idx_work_class_quiz_question_topic")
+  @@map("work_class_quiz_questions")
+}
+
+/// Một quiz của lớp. status DRAFT | PUBLISHED. items: [{kind:'Q',questionId,points?} | {kind:'DRAW',topic,count,points?}].
+/// layout ALL | ONE_PER_PAGE; showAnswers IMMEDIATE | AFTER_DUE | NEVER; scoring HIGHEST | LAST | AVERAGE.
+/// announcedAt: đã đăng bảng tin (đúng một lần).
+model WorkClassQuiz {
+  id               Int       @id @default(autoincrement())
+  classId          Int       @map("class_id")
+  authorId         Int?      @map("author_id")
+  title            String    @db.VarChar(200)
+  description      String?   @db.Text
+  topic            String?   @db.VarChar(80)
+  status           String    @default("DRAFT") @db.VarChar(12)
+  items            Json      @default("[]")
+  openAt           DateTime? @map("open_at")
+  closeAt          DateTime? @map("close_at")
+  timeLimitMin     Int?      @map("time_limit_min")
+  maxAttempts      Int       @default(1) @map("max_attempts")
+  shuffleQuestions Boolean   @default(true) @map("shuffle_questions")
+  shuffleOptions   Boolean   @default(true) @map("shuffle_options")
+  layout           String    @default("ALL") @db.VarChar(16)
+  showAnswers      String    @default("AFTER_DUE") @map("show_answers") @db.VarChar(12)
+  scoring          String    @default("HIGHEST") @db.VarChar(10)
+  publishedAt      DateTime? @map("published_at")
+  announcedAt      DateTime? @map("announced_at")
+  deletedAt        DateTime? @map("deleted_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  class    WorkClass              @relation("WorkClassQuizzes", fields: [classId], references: [id], onDelete: Cascade)
+  attempts WorkClassQuizAttempt[]
+
+  @@index([classId, status], map: "idx_work_class_quiz_class")
+  @@map("work_class_quizzes")
+}
+
+/// Một lượt làm. status IN_PROGRESS | SUBMITTED. paper = bản chụp đề (CÓ đáp án — chỉ máy chủ đọc). responses: { key: trả lời }.
+/// results: { key: { earned, max, correct, partial, answered, manual } }. manual: { key: điểm giảng viên chỉnh tay }.
+/// blurCount/blurLog: số lần rời tab (chỉ ghi nhận, không cấm). deadlineAt null = không giới hạn thời gian.
+model WorkClassQuizAttempt {
+  id            Int       @id @default(autoincrement())
+  quizId        Int       @map("quiz_id")
+  userId        Int       @map("user_id")
+  number        Int
+  seed          Int
+  status        String    @default("IN_PROGRESS") @db.VarChar(12)
+  paper         Json      @default("[]")
+  responses     Json      @default("{}")
+  results       Json      @default("{}")
+  manual        Json      @default("{}")
+  score         Float?
+  maxScore      Float     @default(0) @map("max_score")
+  startedAt     DateTime  @default(now()) @map("started_at")
+  deadlineAt    DateTime? @map("deadline_at")
+  submittedAt   DateTime? @map("submitted_at")
+  autoSubmitted Boolean   @default(false) @map("auto_submitted")
+  lastSavedAt   DateTime? @map("last_saved_at")
+  blurCount     Int       @default(0) @map("blur_count")
+  blurLog       Json      @default("[]") @map("blur_log")
+  gradedById    Int?      @map("graded_by_id")
+  gradedAt      DateTime? @map("graded_at")
+
+  quiz WorkClassQuiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@unique([quizId, userId, number], map: "uk_work_class_quiz_attempt")
+  @@index([userId], map: "idx_work_class_quiz_attempt_user")
+  @@map("work_class_quiz_attempts")
+}
+
+// ── hết CTW đợt 9c ──
+
+// ═══ CTW đợt 9a (13/10/2026) — LỚP HỌC: bảng tin, tài liệu lớp, lịch lớp + điểm danh ═══════════════════════════════
+
+/// Một dòng trên Stream của lớp. ANNOUNCEMENT = thông báo GV viết (bodyJson TipTap); ASSIGNMENT/QUIZ/MATERIAL = dòng tự
+/// sinh khi 9b/9c/9a đăng bài (postStreamItem — refType+refId chống trùng). audienceGroupIds rỗng = cả lớp.
+/// publishAt = giờ hẹn đăng; publishedAt = lúc ĐÃ đăng (cron chiếm bằng UPDATE … WHERE published_at IS NULL ⇒ đúng một lần).
+model WorkClassPost {
+  id               Int       @id @default(autoincrement())
+  classId          Int       @map("class_id")
+  authorId         Int?      @map("author_id")
+  kind             String    @default("ANNOUNCEMENT") @db.VarChar(16)
+  title            String?   @db.VarChar(255)
+  bodyJson         Json?     @map("body_json")
+  bodyText         String?   @map("body_text") @db.Text
+  links            Json      @default("[]")
+  refType          String?   @map("ref_type") @db.VarChar(16)
+  refId            Int?      @map("ref_id")
+  url              String?   @db.VarChar(500)
+  audienceGroupIds Json      @default("[]") @map("audience_group_ids")
+  commentsOff      Boolean   @default(false) @map("comments_off")
+  /// Dòng do 9b/9c đẩy vào với notify=false ⇒ hiện trên Stream nhưng KHÔNG chuông/email (họ tự báo).
+  silent           Boolean   @default(false)
+  pinnedAt         DateTime? @map("pinned_at")
+  publishAt        DateTime  @default(now()) @map("publish_at")
+  publishedAt      DateTime? @map("published_at")
+  editedAt         DateTime? @map("edited_at")
+  deletedAt        DateTime? @map("deleted_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  class    WorkClass          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  author   User?              @relation("WorkClassPostAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  comments WorkClassComment[]
+  files    WorkClassStreamFile[]
+
+  @@unique([classId, refType, refId], map: "uk_work_class_post_ref")
+  @@index([classId, publishedAt], map: "idx_work_class_post_class")
+  @@index([publishedAt, publishAt], map: "idx_work_class_post_due")
+  @@map("work_class_posts")
+}
+
+/// Bình luận trên một dòng Stream (văn bản thuần ≤ 2000). hiddenAt = GV ẩn (sinh viên không thấy nữa, GV vẫn thấy + bỏ ẩn được).
+model WorkClassComment {
+  id         Int       @id @default(autoincrement())
+  postId     Int       @map("post_id")
+  authorId   Int       @map("author_id")
+  body       String    @db.Text
+  hiddenAt   DateTime? @map("hidden_at")
+  hiddenById Int?      @map("hidden_by_id")
+  deletedAt  DateTime? @map("deleted_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  post   WorkClassPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User          @relation("WorkClassCommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt], map: "idx_work_class_comment_post")
+  @@map("work_class_comments")
+}
+
+/// Tệp của lớp (R2, private): gắn vào thông báo (postId) hoặc tài liệu (materialId). Cả hai null = bản nháp của người
+/// tải lên (dọn sau 24 giờ). Xem/tải qua URL ký sẵn ngắn hạn, kiểm quyền thấy bài mỗi lần.
+model WorkClassStreamFile {
+  id         Int      @id @default(autoincrement())
+  classId    Int      @map("class_id")
+  uploaderId Int      @map("uploader_id")
+  postId     Int?     @map("post_id")
+  materialId Int?     @map("material_id")
+  r2Key      String   @map("r2_key") @db.VarChar(500)
+  fileName   String   @map("file_name") @db.VarChar(255)
+  mime       String   @db.VarChar(100)
+  size       Int
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  class    WorkClass          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  uploader User               @relation("WorkClassFileUploader", fields: [uploaderId], references: [id], onDelete: Cascade)
+  post     WorkClassPost?     @relation(fields: [postId], references: [id], onDelete: SetNull)
+  material WorkClassMaterial? @relation(fields: [materialId], references: [id], onDelete: SetNull)
+
+  @@index([classId], map: "idx_work_class_sfile_class")
+  @@index([postId], map: "idx_work_class_sfile_post")
+  @@index([materialId], map: "idx_work_class_sfile_material")
+  @@map("work_class_stream_files")
+}
+
+/// Chủ đề / tuần của tài liệu lớp (kéo-thả bằng position).
+model WorkClassTopic {
+  id        Int      @id @default(autoincrement())
+  classId   Int      @map("class_id")
+  title     String   @db.VarChar(120)
+  week      Int?
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  class     WorkClass           @relation(fields: [classId], references: [id], onDelete: Cascade)
+  materials WorkClassMaterial[]
+
+  @@index([classId, position], map: "idx_work_class_topic_class")
+  @@map("work_class_topics")
+}
+
+/// Một mục tài liệu: SLIDE | SYLLABUS | FILE | LINK | VIDEO. links = [{ url, title, kind, faviconUrl }] (thẻ link của
+/// Resources). draft = GV soạn chưa cho sinh viên thấy.
+model WorkClassMaterial {
+  id          Int       @id @default(autoincrement())
+  classId     Int       @map("class_id")
+  topicId     Int?      @map("topic_id")
+  authorId    Int?      @map("author_id")
+  kind        String    @default("FILE") @db.VarChar(12)
+  title       String    @db.VarChar(255)
+  description String?   @db.Text
+  links       Json      @default("[]")
+  position    Int       @default(0)
+  draft       Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  class  WorkClass               @relation(fields: [classId], references: [id], onDelete: Cascade)
+  topic  WorkClassTopic?         @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  author User?                   @relation("WorkClassMaterialAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  files  WorkClassStreamFile[]
+  views  WorkClassMaterialView[]
+
+  @@index([classId, topicId, position], map: "idx_work_class_material_class")
+  @@map("work_class_materials")
+}
+
+/// Sinh viên đã xem tài liệu (một dòng / người / mục) — GV thấy tỉ lệ xem.
+model WorkClassMaterialView {
+  id         Int      @id @default(autoincrement())
+  materialId Int      @map("material_id")
+  userId     Int      @map("user_id")
+  viewedAt   DateTime @default(now()) @map("viewed_at")
+
+  material WorkClassMaterial @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  user     User              @relation("WorkClassMaterialViewUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([materialId, userId], map: "uk_work_class_material_view")
+  @@map("work_class_material_views")
+}
+
+/// Buổi học định kỳ của lớp — luật lặp `Recurrence` dùng chung với việc/họp định kỳ (teachingRules.ts). Sinh trọn các
+/// buổi tới endDate (trần 120 buổi; không endDate ⇒ 20 tuần).
+model WorkClassSessionSeries {
+  id          Int      @id @default(autoincrement())
+  classId     Int      @map("class_id")
+  title       String   @db.VarChar(120)
+  recurrence  Json
+  rrule       String   @db.VarChar(300)
+  durationMin Int      @default(90) @map("duration_min")
+  location    String?  @db.VarChar(255)
+  meetingUrl  String?  @map("meeting_url") @db.VarChar(500)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  class    WorkClass          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  sessions WorkClassSession[]
+
+  @@index([classId], map: "idx_work_class_series_class")
+  @@map("work_class_session_series")
+}
+
+/// Một buổi học. checkinCode = mã 6 số đang mở (null = đóng); đổi mã ⇒ mã cũ hết hiệu lực ngay.
+model WorkClassSession {
+  id               Int       @id @default(autoincrement())
+  classId          Int       @map("class_id")
+  seriesId         Int?      @map("series_id")
+  occurrenceDay    String?   @map("occurrence_day") @db.VarChar(10)
+  title            String    @db.VarChar(120)
+  startsAt         DateTime  @map("starts_at")
+  endsAt           DateTime  @map("ends_at")
+  location         String?   @db.VarChar(255)
+  meetingUrl       String?   @map("meeting_url") @db.VarChar(500)
+  status           String    @default("SCHEDULED") @db.VarChar(12)
+  checkinCode      String?   @map("checkin_code") @db.VarChar(6)
+  checkinOpenedAt  DateTime? @map("checkin_opened_at")
+  checkinExpiresAt DateTime? @map("checkin_expires_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  class      WorkClass               @relation(fields: [classId], references: [id], onDelete: Cascade)
+  series     WorkClassSessionSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+  attendance WorkClassAttendance[]
+
+  @@unique([seriesId, occurrenceDay], map: "uk_work_class_session_occurrence")
+  @@index([classId, startsAt], map: "idx_work_class_session_class")
+  @@map("work_class_sessions")
+}
+
+/// Điểm danh: một dòng / buổi / ghế sinh viên. PRESENT | LATE | EXCUSED | ABSENT; source CODE (tự nhập mã/QR) | MANUAL.
+model WorkClassAttendance {
+  id          Int       @id @default(autoincrement())
+  sessionId   Int       @map("session_id")
+  studentId   Int       @map("student_id")
+  status      String    @db.VarChar(8)
+  source      String    @default("MANUAL") @db.VarChar(8)
+  checkedInAt DateTime? @map("checked_in_at")
+  markedById  Int?      @map("marked_by_id")
+  note        String?   @db.VarChar(255)
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  session WorkClassSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student WorkClassStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, studentId], map: "uk_work_class_attendance")
+  @@index([studentId], map: "idx_work_class_attendance_student")
+  @@map("work_class_attendance")
+}
+
+/// Mục lịch lớp do mô-đun khác đẩy vào (hạn bài 9b, quiz 9c…) qua `addCalendarItem()` — upsert theo (lớp, refType, refId).
+model WorkClassCalendarItem {
+  id               Int       @id @default(autoincrement())
+  classId          Int       @map("class_id")
+  kind             String    @default("DUE") @db.VarChar(12)
+  refType          String    @map("ref_type") @db.VarChar(16)
+  refId            Int       @map("ref_id")
+  title            String    @db.VarChar(255)
+  startsAt         DateTime  @map("starts_at")
+  endsAt           DateTime? @map("ends_at")
+  url              String?   @db.VarChar(500)
+  audienceGroupIds Json      @default("[]") @map("audience_group_ids")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  class WorkClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, refType, refId], map: "uk_work_class_calendar_ref")
+  @@index([classId, startsAt], map: "idx_work_class_calendar_class")
+  @@map("work_class_calendar_items")
+}

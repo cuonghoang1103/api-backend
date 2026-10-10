@@ -134,6 +134,18 @@ export function startCronJobs(): void {
       logger.error('cron crm due tasks failed', { error: (err as Error).message });
     }
   });
+  // CT Work đợt 9b: bài tập lớp — đăng bài đã tới giờ lên lịch + nhắc hạn 24h cho người chưa nộp. Mỗi bài đúng MỘT
+  // lần cho mỗi việc (giành cờ announced_at / reminded_at bằng updateMany có điều kiện). Không LLM.
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      const { runScheduledAnnouncements, runDueReminders } = await import('./work/classwork.service.js');
+      const posted = await runScheduledAnnouncements();
+      const reminded = await runDueReminders();
+      if (posted || reminded) logger.info('[work] classwork cron', { posted, reminded });
+    } catch (err) {
+      logger.warn('[work] classwork cron failed', { error: (err as Error).message });
+    }
+  });
   // CRM: tóm tắt deal "stale" (> 14 ngày không hoạt động) — 08:30 giờ VN (01:30 UTC), tối đa một tin/ngày.
   cron.schedule('30 1 * * *', async () => {
     try {
@@ -301,6 +313,16 @@ export function startCronJobs(): void {
       if (n) logger.info('[work] meeting reminders sent', { people: n });
     } catch (err) {
       logger.warn('[work] meeting reminders failed', { error: (err as Error).message });
+    }
+  });
+  // CTW đợt 9a: đăng thông báo lớp đã tới giờ hẹn (mỗi phút) — mỗi bài được CHIẾM một lần ⇒ chuông/email đúng một lần.
+  cron.schedule('* * * * *', async () => {
+    try {
+      const { publishDue } = await import('./work/classStream.service.js');
+      const n = await publishDue();
+      if (n) logger.info('[work] scheduled class posts published', { posts: n });
+    } catch (err) {
+      logger.warn('[work] scheduled class posts failed', { error: (err as Error).message });
     }
   });
   cron.schedule('*/5 * * * *', async () => {

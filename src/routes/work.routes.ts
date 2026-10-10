@@ -94,6 +94,9 @@ import ctw7cRoutes from './work.ctw7c.routes.js'; // CTW đợt 7c: bảo mật 
 import ctw8aRoutes, { ctw8aPublicRoutes } from './work.ctw8a.routes.js'; // CTW đợt 8a: kết nối Microsoft 365 / Google (OAuth theo người)
 import ctw8bRoutes, { ctw8bPublicRoutes } from './work.ctw8b.routes.js'; // CTW đợt 8b: Notion, Slack, trình soạn báo cáo + lịch tự gửi
 import ctw8cRoutes from './work.ctw8c.routes.js'; // CTW đợt 8c: họp định kỳ + mẫu, RSVP cổng khách, ảnh Mermaid, SARIF/V(G), SWR R13/R24/R26/R28
+import ctw9aRoutes from './work.ctw9a.routes.js'; // CTW đợt 9a: lớp học — bảng tin, tài liệu lớp, lịch lớp + điểm danh
+import ctw9bRoutes from './work.ctw9b.routes.js'; // CTW đợt 9b: lớp học — bài tập, nộp/trả bài, sổ điểm
+import ctw9cRoutes from './work.ctw9c.routes.js'; // CTW đợt 9c: lớp học — quiz trắc nghiệm tự chấm
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
@@ -2079,5 +2082,11 @@ router.use(ctw8aRoutes);
 router.use(ctw8bRoutes);
 // CTW đợt 8c: họp định kỳ RRULE + mẫu chương trình, RSVP khách, ảnh Mermaid vẽ sẵn, phân tích tĩnh + V(G), SWR302 (work.ctw8c.routes.ts).
 router.use(ctw8cRoutes);
+// CTW đợt 9a: Stream lớp (thông báo hẹn giờ, bình luận, tệp), tài liệu theo chủ đề/tuần, buổi học định kỳ + điểm danh mã/QR — work.ctw9a.routes.ts.
+router.use(ctw9aRoutes);
+// CTW đợt 9b: bài tập lớp (giao/nộp/chấm/trả, nhận xét riêng) + sổ điểm (xlsx vào/ra) — work.ctw9b.routes.ts.
+router.use(ctw9bRoutes);
+// CTW đợt 9c: quiz trắc nghiệm tự chấm — ngân hàng câu hỏi, nhập xlsx/Aiken/GIFT, AI nháp, lượt làm, thống kê (work.ctw9c.routes.ts).
+router.use(ctw9cRoutes);
 
 export default router;

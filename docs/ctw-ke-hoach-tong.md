@@ -156,3 +156,29 @@ Làm:
 5. Rà Notes so với Notion hiện tại, làm phần thiếu (form vào database, automation database, xuất bản web,
    chart view…); sửa notesRealtimeSchema thiếu toggle/media/bookmark/embed/database/synced block (ghi chú 26/09).
 Không gộp hai hệ: Notes = sổ cá nhân/học tập, CT Work = nhóm/dự án.
+
+## ⏸ ĐIỂM DỪNG 11/10/2026 chiều (sắp hết limit) — ĐỌC ĐẦU TIÊN khi làm tiếp
+User: "làm nốt đợt 9, kiểm tra + test thử full rồi deploy + phát hành app, nghỉ. Đợt 10 và 11 lưu lại đầy đủ, sau làm tiếp."
+Trạng thái lúc dừng:
+- Prod: đợt 1→8 (đợt 8 = 03f83375, app 0.5.180 nếu phát hành xong — kiểm `gh release view -R cuonghoang1103/cuongthai-desktop`).
+- Đợt 9 (Lớp học đầy đủ) = 3 agent 9a/9b/9c — xem mục "Đợt 9" ở trên. Phiên chính ghép, kiểm worktree sạch bằng
+  `bash scripts/kiem-ci-truoc-push.sh <SHA>`, test 2 tài khoản GV+SV, deploy, phát hành.
+- Ép 2FA ĐÃ TẮT theo user (công tắc mặc định tắt) — đừng bật lại.
+- Email: hộp thư giả ngoài production (CLAUDE.md) — agent đã từng gửi nhầm thư thật (bounce).
+Việc LÀM TIẾP theo thứ tự:
+1. **Đợt 10 — Notes ↔ CT Work + Notes theo kịp Notion** (chi tiết ở mục "Đợt 10" phía trên).
+2. **Đợt 11 — App iOS cho CT Work** (user dặn "iOS làm sau cùng"): xem dự án iOS hiện có (memory project_ios_*),
+   làm CT Work trên iOS: board/backlog/thẻ, chat + thông báo đẩy, lớp học (bảng tin/bài tập/quiz/điểm danh QR),
+   họp, timer; tái dùng API sẵn có; TestFlight.
+3. Treo nhỏ: gateway purposes `work_diagram`/`work_minutes`/`work_elicitation`; `GITHUB_API_TOKEN` trên VPS cho ERD
+   repo private; K-2 IndexedDB hàng đợi đoạn ghi âm; áp PLAN-GAPS ("[Bổ sung]") vào dự án LF thật; Excalidraw lưu qua UI
+   chưa thử; thử thật upload Notion/Slack khi có tài khoản; build trên VPS/GitHub vẫn heap 6144 (đường lùi có thể OOM).
+4. Chờ USER: đăng ký app Microsoft/Google/Notion (hướng dẫn đã gửi 11/10; redirect URI ở mục Đợt 8) rồi gửi 3 Client
+   ID ⇒ ghi `CTW_*_CLIENT_ID` vào /opt/cuonghoangdev/.env (secret user tự ghi bằng pbpaste), bật API Google, thêm
+   test users; Slack cần thêm `CTW_SLACK_*`. Zalo OA / Discord / MX email: user tự đăng ký khi cần (docs ctw-dot-7b).
+- **TREO (11/10): `scripts/kiem-ci-truoc-push.sh` báo `test:work-db` HỎNG GIẢ** — mọi tệp DB lỗi "table public.users
+  does not exist" trong ~2s/tệp. Cùng SHA, cùng `db-test-tu-migration.mjs`, worktree có node_modules symlink NGUYÊN KHỐI
+  ⇒ xanh (agents 23/23; cả bộ 54/54 ở cây chính trên CSDL mới). Nghi phần "node_modules symlink từng mục + chép
+  @prisma/client + generate" của script (client sinh ra không đọc đúng URL/CSDL tạm), hoặc bước dựng CSDL không chạy (nhật
+  ký phép hỏng không có dòng nào của trình dựng). Xem bằng `KIEM_CI_GIU_LOG=<dir>`. Tới khi sửa: deploy-nha sẽ KHÔNG
+  push ⇒ push tay `git push origin <SHA>:main` SAU khi tự kiểm (đợt 8 đã push qua phat-hanh).

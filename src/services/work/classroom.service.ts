@@ -58,7 +58,8 @@ export function _resetJoinRate() { joinFails.clear(); }
 
 export type ClassRole = 'OWNER' | 'TEACHER' | 'STUDENT';
 
-async function classRole(userId: number, classId: number): Promise<{ role: ClassRole; cls: NonNullable<Awaited<ReturnType<typeof loadClass>>> } | null> {
+/** Vai của người trong lớp (null = không thuộc lớp). Dùng chung cho 9a/9b/9c. */
+export async function classRole(userId: number, classId: number): Promise<{ role: ClassRole; cls: NonNullable<Awaited<ReturnType<typeof loadClass>>> } | null> {
   const cls = await loadClass(classId);
   if (!cls) return null;
   if (cls.ownerId === userId) return { role: 'OWNER', cls };
@@ -74,7 +75,7 @@ function loadClass(classId: number) {
   });
 }
 
-async function requireClass(userId: number, classId: number, manage: boolean) {
+export async function requireClass(userId: number, classId: number, manage: boolean) {
   const r = await classRole(userId, classId);
   if (!r) throw new NotFoundError('Class not found');
   if (manage && r.role === 'STUDENT') throw new ForbiddenError('Only the lecturer and the class owner can do this');

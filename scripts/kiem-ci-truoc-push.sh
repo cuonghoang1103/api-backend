@@ -99,6 +99,8 @@ chay_kiem() {
     else
         canh "  ✗ ${ten} — HỎNG ($((SECONDS - t0))s)"
         tail -15 "$NHAT_KY" | sed 's/^/      /'
+        # KIEM_CI_GIU_LOG=<thư mục> ⇒ giữ nguyên nhật ký phép hỏng (worktree bị dọn khi thoát nên tail ở trên là tất cả).
+        if [ -n "${KIEM_CI_GIU_LOG:-}" ]; then mkdir -p "$KIEM_CI_GIU_LOG" && cp "$NHAT_KY" "$KIEM_CI_GIU_LOG/${ten//[^A-Za-z0-9_-]/_}.log"; fi
         KIEM_HONG="${KIEM_HONG} ${ten}"
     fi
 }

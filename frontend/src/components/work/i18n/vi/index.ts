@@ -82,6 +82,9 @@ import { c7c } from './c7c'; // CTW đợt 7c: ép 2FA, sổ tài sản, test t�
 import { c8a } from './c8a'; // CTW đợt 8a: kết nối Microsoft 365 / Google
 import { c8b } from './c8b'; // CTW đợt 8b: Reports → Builder, lịch tự gửi, Notion, Slack
 import { c8c } from './c8c'; // CTW đợt 8c: họp định kỳ, RSVP khách, phân tích tĩnh + V(G), SWR302 ước lượng/gói nộp, stakeholder AI
+import { c9a } from './c9a'; // CTW đợt 9a: trang lớp có tab — Stream, tài liệu lớp, lịch lớp + điểm danh
+import { c9b } from './c9b'; // CTW đợt 9b: bài tập lớp (giao/nộp/chấm/trả) + sổ điểm
+import { c9c } from './c9c'; // CTW đợt 9c: quiz trắc nghiệm tự chấm — ngân hàng câu hỏi, làm bài, thống kê
 
 /** Mọi miền và mọi khoá của bản tiếng Anh phải có ở đây (thiếu/thừa ⇒ lỗi tsc). */
-export const vi: { [D in keyof typeof En]: Strings<(typeof En)[D]> } = { common, agents, ai, audit, backlog, board, chat, classroom, contrib, cover, collab, create, desk, detail, dev, diagram, docs, editor, errors, fields, finance, fpt, git, gov, home, invite, issues, modup, notify, onboard, palette, pchat, pexport, pimport, releases, school, settings, share, shell, sprint, srs, status, swr, studio, teacher, tests, time, timeline, trash, pboard, pfields, pspec, ptypes, wf, pagents, pstudio, auto, rep, portal, res, pf, wl, gs, jql, dash, pages, uat, tpl, nav, meeting2, elic, srsx, charts, table, uxc, q6, agile, c7b, c7c, c8a, c8b, c8c };
+export const vi: { [D in keyof typeof En]: Strings<(typeof En)[D]> } = { common, agents, ai, audit, backlog, board, chat, classroom, contrib, cover, collab, create, desk, detail, dev, diagram, docs, editor, errors, fields, finance, fpt, git, gov, home, invite, issues, modup, notify, onboard, palette, pchat, pexport, pimport, releases, school, settings, share, shell, sprint, srs, status, swr, studio, teacher, tests, time, timeline, trash, pboard, pfields, pspec, ptypes, wf, pagents, pstudio, auto, rep, portal, res, pf, wl, gs, jql, dash, pages, uat, tpl, nav, meeting2, elic, srsx, charts, table, uxc, q6, agile, c7b, c7c, c8a, c8b, c8c, c9a, c9b, c9c };

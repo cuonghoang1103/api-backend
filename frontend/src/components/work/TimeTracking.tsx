@@ -19,6 +19,7 @@ import { wk } from './hooks';
 import { ConfirmDialog } from './settings/shared';
 import { Dialog, Spinner, UserAvatar, relativeTime } from './ui';
 import { wt, wfmt } from '@/components/work/i18n';
+import { IssueTimer } from './agile/Timer'; // CTW đợt 7a: bấm giờ trên thẻ
 
 // ─── Định dạng thời lượng ────────────────────────────────────────
 
@@ -263,6 +264,7 @@ export function TimeTrackingBlock({ pid, issue, config }: { pid: number; issue: 
           )}
         </>
       )}
+      <IssueTimer pid={pid} issue={issue} canLog={canLog} />
       <LogTimeDialog open={open} onClose={() => setOpen(false)} pid={pid} issue={issue} />
     </div>
   );

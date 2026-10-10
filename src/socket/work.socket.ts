@@ -15,6 +15,7 @@ import { prisma } from '../config/database.js';
 import { clientRoom, projectRoom } from '../services/work/events.js';
 import { isClientScoped, loadProjectAccess } from '../services/work/permissions.js';
 import { parsePresence } from '../services/work/commentThreads.js';
+import { withTwoFactorGate } from '../services/work/twoFactor.js';
 
 /** Một tab mở vài dự án là cùng; trần để client lỗi không nhét socket vào hàng nghìn phòng. */
 const MAX_PROJECT_ROOMS = 20;
@@ -24,7 +25,10 @@ type Ack = (res: { ok: boolean; role?: string; error?: string }) => void;
 /** K16: trần tin hiện diện mỗi socket (10 giây) — client lỗi không spam phòng. */
 const PRESENCE_BURST = 30;
 
-export function registerWorkRealtime(_io: IOServer, socket: Socket, user: { id: number }) {
+export function registerWorkRealtime(_io: IOServer, socket: Socket, user: { id: number; mfaAt?: number }) {
+  // CTW đợt 7c (C17): kiểm quyền lúc join chạy TRONG cổng 2FA của chính người này — không gian ép 2FA mà phiên chưa đạt
+  // ⇒ loadProjectAccess ném 403 ⇒ trả lỗi, không vào phòng (cùng luật với REST, xem services/work/twoFactor.ts).
+  const gated = <T,>(fn: () => Promise<T>) => withTwoFactorGate(user.id, { mfaAt: user.mfaAt }, fn);
   const joined = new Set<number>();
   /** Phòng NHÂN VIÊN đã vào (khách cổng / agent không gửi-nhận hiện diện). */
   const staff = new Set<number>();
@@ -40,7 +44,7 @@ export function registerWorkRealtime(_io: IOServer, socket: Socket, user: { id: 
     if (!Number.isInteger(pid) || pid <= 0) return reply({ ok: false, error: 'Invalid project' });
     if (!joined.has(pid) && joined.size >= MAX_PROJECT_ROOMS) return reply({ ok: false, error: 'Too many open projects' });
     try {
-      const access = await loadProjectAccess(user.id, pid);
+      const access = await gated(() => loadProjectAccess(user.id, pid));
       // Không phân biệt "không tồn tại" với "không có quyền" — như REST trả 404.
       if (!access) return reply({ ok: false, error: 'Project not found' });
       // CTW-28: AI agent không vào phòng board (phòng mang giá trị thay đổi của mọi thẻ, kể cả ngoài phạm vi token) —
@@ -102,7 +106,7 @@ export function registerWorkRealtime(_io: IOServer, socket: Socket, user: { id: 
     if (chatRooms.size >= 30) return reply({ ok: false, error: 'Too many open channels' });
     try {
       const { canJoinChannel, chatRoom } = await import('../services/work/chatSocket.js');
-      if (!(await canJoinChannel(user.id, pid, cid))) return reply({ ok: false, error: 'Channel not found' });
+      if (!(await gated(() => canJoinChannel(user.id, pid, cid)))) return reply({ ok: false, error: 'Channel not found' });
       const room = chatRoom(pid, cid);
       await socket.join(room);
       chatRooms.add(room);

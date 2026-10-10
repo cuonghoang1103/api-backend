@@ -78,7 +78,9 @@ export async function middleware(request: NextRequest) {
  // Và TRỪ link chia sẻ chỉ đọc /work/share/* (giảng viên, khách hàng không có tài khoản).
  if ((pathname === '/work' || pathname.startsWith('/work/')) && !pathname.startsWith('/work/invite/') && !pathname.startsWith('/work/share/')
     // CTW đợt 6b: khảo sát công khai + link khách xác nhận prototype (không tài khoản — chỉ tin token).
-    && !pathname.startsWith('/work/survey/') && !pathname.startsWith('/work/mockup-review/')) {
+    && !pathname.startsWith('/work/survey/') && !pathname.startsWith('/work/mockup-review/')
+    // CTW đợt 7b: điền form công khai (không tài khoản — chỉ tin token; form nội bộ tự mời đăng nhập).
+    && !pathname.startsWith('/work/form/')) {
  // UX-D: ảnh xem trước (/…/opengraph-image, /…/twitter-image) và bot xem trước link (Messenger, Zalo, Slack…)
  // KHÔNG bị đẩy sang /login — nếu bị đẩy, ô xem trước hiện ảnh trang đăng nhập/ảnh chung của site. Không lộ gì:
  // ảnh/metadata ở đây chỉ có tên workspace + "Sign in to view"; HTML là vỏ client, dữ liệu vẫn cần đăng nhập.

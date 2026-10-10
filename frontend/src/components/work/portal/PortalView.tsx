@@ -18,7 +18,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
   Activity, ArrowLeft, BadgeCheck, CalendarClock, CheckCircle2, Circle, CircleDot, Download, Eye, FileText, Flag, Inbox, LayoutDashboard, MessageSquare,
-  PackageCheck, Paperclip, Plus, Rocket, Send, Receipt, FileBarChart, Library,
+  PackageCheck, Paperclip, Plus, Rocket, Send, Receipt, FileBarChart, Library, LifeBuoy,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -39,6 +39,7 @@ import { PaymentsTab, ReportsTab } from './PortalS4';
 import { DeskRequestDialog, PortalSlaPanel } from '../desk/PortalDesk';
 import { AddToCalendar } from '../ctw';
 import PortalResources from '../resources/PortalResources';
+import { KbHelpTab, KbSuggest } from '../intake7b/KbView'; // CTW đợt 7b: knowledge base + gợi ý khi gửi yêu cầu
 import { wfmt, wt } from '@/components/work/i18n';
 
 export const PORTAL_TABS: Array<{ id: PortalTab; label: string; icon: typeof Inbox }> = [
@@ -54,6 +55,8 @@ export const PORTAL_TABS: Array<{ id: PortalTab; label: string; icon: typeof Inb
   { id: 'reports', get label() { return wt('portal.tReports'); }, icon: FileBarChart },
   // Resources (06/10/2026) — link đội đã chia sẻ (mô-đun resources).
   { id: 'resources', get label() { return wt('portal.tResources'); }, icon: Library },
+  // CTW đợt 7b: knowledge base (bài Docs đội chia sẻ cho khách) — luôn hiện; trống thì nói rõ.
+  { id: 'help', get label() { return wt('c7b.helpTab'); }, icon: LifeBuoy },
   { id: 'activity', get label() { return wt('portal.tActivity'); }, icon: Activity },
 ];
 
@@ -239,6 +242,7 @@ function NewRequestDialog({ pid, open, onClose, onCreated }: { pid: number; open
           <span className="mb-1 block text-[12.5px] font-medium">{wt('common.title')}</span>
           <input className="w-input" value={title} maxLength={255} onChange={(e) => setTitle(e.target.value)} placeholder={wt('portal.shortSummary')} data-testid="portal-request-title" />
         </label>
+        <KbSuggest pid={pid} text={`${title} ${desc}`} onSolved={() => { setTitle(''); setDesc(''); onClose(); }} />
         <label className="block">
           <span className="mb-1 block text-[12.5px] font-medium">{wt('portal.details')}</span>
           <textarea className="w-input min-h-[110px] py-2" value={desc} onChange={(e) => setDesc(e.target.value)} placeholder={wt('portal.detailsPh')} />
@@ -581,6 +585,7 @@ export default function PortalView({ config, pid }: { config: ProjectConfig; pid
         {p.tab === 'payments' && financeOn && <PaymentsTab pid={pid} asClient={asClient} />}
         {p.tab === 'reports' && reportsOn && <ReportsTab pid={pid} asClient={asClient} openId={p.report} setOpenId={(id) => p.set({ report: id ? String(id) : null })} />}
         {p.tab === 'resources' && resourcesOn && <PortalResources pid={pid} asClient={asClient} />}
+        {p.tab === 'help' && <KbHelpTab pid={pid} asClient={asClient} />}
         {p.tab === 'activity' && <ActivityTab pid={pid} asClient={asClient} go={p.set} />}
         {!isClient && !asClient && (
           <p className="mt-6 text-[12px] text-[var(--w-text-3)]">

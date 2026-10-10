@@ -209,6 +209,15 @@ api.interceptors.response.use(
           window.location.assign(TRANG_THIET_LAP_MFA);
         }
       }
+      // CTW đợt 7c (C17): không gian CT Work ép 2FA mà tài khoản chưa bật ⇒ trang thiết lập 2FA cho thành viên
+      // (/work/security — cùng API /auth/mfa/* của site), quay lại trang cũ sau khi bật. Đã bật nhưng phiên chưa xác
+      // minh thì backend trả MFA_REQUIRED ⇒ nhánh step-up ở trên lo.
+      else if (errCode === 'WORK_2FA_SETUP_REQUIRED' && typeof window !== 'undefined') {
+        if (!window.location.pathname.startsWith('/work/security')) {
+          const next = window.location.pathname + window.location.search;
+          window.location.assign(`/work/security?next=${encodeURIComponent(next)}`);
+        }
+      }
     }
     // Auto-heal an expired session ONCE, then replay the request. Skip
     // /auth/* so a genuinely-invalid login/refresh doesn't loop.

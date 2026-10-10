@@ -13,10 +13,12 @@ import { frontendUrl, sendWorkEmail } from './common.js';
 import { clientScopedProjectIds, effectiveProjectRole, effectiveWorkspaceRole, portalOnlyWorkspaceIds } from './permissions.js';
 import type { ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
 import { vnDay } from './sprints.service.js';
+import { gatedWorkspaceIds } from './twoFactor.js';
 
 export async function visibleProjectIds(userId: number): Promise<number[]> {
   const ws = await prisma.workMember.findMany({
-    where: { userId, workspace: { deletedAt: null } },
+    // CTW đợt 7c: không gian đang chặn phiên này vì chưa đạt 2FA ⇒ không vào My work (twoFactor.gatedWorkspaceIds).
+    where: { userId, workspace: { deletedAt: null }, workspaceId: { notIn: gatedWorkspaceIds(userId) } },
     select: {
       role: true,
       workspaceId: true,

@@ -310,6 +310,8 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
         // — đổi công tắc có hiệu lực từ lần nối kế tiếp, đủ tốt và tránh một
         // lượt truy vấn cho mỗi lần phát presence.
         showActiveStatus: user.showActiveStatus,
+        // CTW đợt 7c: claim step-up MFA của phiên (không gian CT Work ép 2FA kiểm khi join phòng — work.socket.ts).
+        mfaAt: typeof (decoded as { mfaAt?: unknown }).mfaAt === 'number' ? (decoded as { mfaAt: number }).mfaAt : undefined,
       };
       return next();
     } catch (err) {
@@ -318,7 +320,7 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
   });
 
   io.on('connection', (socket: Socket) => {
-    const user = socket.data.user as { id: number; username: string; roles: string[]; showActiveStatus: boolean };
+    const user = socket.data.user as { id: number; username: string; roles: string[]; showActiveStatus: boolean; mfaAt?: number };
     socket.join(`user:${user.id}`);
     if (user.roles.includes('ADMIN')) {
       socket.join(`admin:${user.id}`);

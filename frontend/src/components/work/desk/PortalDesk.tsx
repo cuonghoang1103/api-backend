@@ -18,6 +18,7 @@ import { workError, workPortalKeys } from '@/lib/work-api';
 import { deskApi, deskKeys, type DeskLevel, type PortalDeskForm, type RequestTypeKey } from '@/lib/work-s5a-api';
 import { Dialog, PageLoading, Spinner } from '../ui';
 import { wt } from '@/components/work/i18n';
+import { KbSuggest } from '../intake7b/KbView';
 
 export function DeskRequestDialog({ pid, open, onClose, onCreated }: { pid: number; open: boolean; onClose: () => void; onCreated: (n: number) => void }) {
   const qc = useQueryClient();
@@ -70,6 +71,8 @@ export function DeskRequestDialog({ pid, open, onClose, onCreated }: { pid: numb
             <span className="mb-1 block text-[12.5px] font-medium">{wt('common.title')}</span>
             <input className="w-input" value={title} maxLength={255} onChange={(e) => setTitle(e.target.value)} placeholder={wt('desk.shortSummary')} data-testid="portal-request-title" />
           </label>
+          {/* CTW đợt 7b: gợi ý bài knowledge base trước khi gửi (deflection) */}
+          <KbSuggest pid={pid} text={`${title} ${desc}`} onSolved={onClose} />
           {t?.fields.map((x) => (
             <label key={x.key} className="block">
               <span className="mb-1 block text-[12.5px] font-medium">{x.label}{x.required && <span className="text-[var(--w-red)]"> *</span>}</span>

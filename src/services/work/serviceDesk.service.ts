@@ -22,6 +22,7 @@
 
 import type { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
+import { emitAutomationSignal } from './automationSignals.js';
 import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
 import { auditProject } from './audit.js';
@@ -909,6 +910,8 @@ export async function runSlaChecks(now = new Date()): Promise<{ checked: number;
           ? `SLA breached: ${what} (${r.priority}, goal ${compactMinutes(target.goalMin)})`
           : `SLA at risk: ${what} due in ${compactMinutes(Math.max(0, target.remainingMin))} (${r.priority})`;
         const url = `/work/${t.issue.project.workspace.slug}/${t.issue.project.key}/issue/${t.issue.number}`;
+        // CTW đợt 7c (C13): mốc BREACHED (đã "giành" mốc ở trên ⇒ đúng một lần) ⇒ tín hiệu cho luật "SLA breached".
+        if (level === 2) emitAutomationSignal({ signal: 'sla.breached', projectId: t.issue.projectId, issueIds: [t.issue.id], data: { target: what, priority: r.priority, goal: compactMinutes(target.goalMin) } });
         for (const receiver of await alertReceivers(t.issue.projectId, t.issue.assigneeId, t.issue.teamId)) {
           const sender = await otherUser(t.issue.projectId, receiver);
           const payload = { issueKey: key, title: t.issue.title, message, url, sla: true };

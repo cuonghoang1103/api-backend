@@ -286,3 +286,13 @@ async function countFailure(webhookId: number, agentId: number) {
   }
 }
 
+
+// ─── CTW đợt 7c (C13): action "Call webhook" của luật tự động dùng CHUNG đường gửi ─────────────
+// Cùng chốt SSRF (https:443, IP công khai lúc lưu VÀ lúc gửi), cùng chữ ký HMAC X-CTWork-Signature, không theo redirect,
+// trần 10 s — không viết đường gửi thứ hai.
+export const postSignedWebhook = post;
+export async function assertWebhookTarget(raw: string): Promise<string> {
+  const u = parseWebhookUrl(raw);
+  await assertPublicTarget(u);
+  return u.toString();
+}

@@ -46,6 +46,7 @@ import * as editLock from '../services/work/editLock.service.js';
 import * as exchange from '../services/work/exchange.service.js';
 import * as share from '../services/work/share.service.js';
 import * as apiTokens from '../services/work/apiTokens.service.js';
+import * as twoFactor from '../services/work/twoFactor.js'; // CTW đợt 7c: ép 2FA theo không gian
 import * as calendar from '../services/work/calendar.service.js';
 import * as trash from '../services/work/trash.service.js';
 import * as onboarding from '../services/work/onboarding.service.js';
@@ -87,6 +88,9 @@ import ctw5Routes from './work.ctw5.routes.js'; // CTW đợt 5: hub giảng vi�
 import ctwk2Routes from './work.ctwk2.routes.js'; // CTW K-2: họp ghi âm → phiên âm → AI biên bản, RSVP, điểm danh
 import ctw6Routes from './work.ctw6.routes.js'; // CTW đợt 6: chất lượng (RV + TST-1)
 import ctw6bRoutes, { ctw6bPublicRoutes } from './work.ctw6b.routes.js'; // CTW đợt 6b: SRS chuyên sâu + elicitation & stakeholder
+import ctw7aRoutes from './work.ctw7a.routes.js'; // CTW đợt 7a: OKR, planning poker, retro board, timer
+import ctw7bRoutes, { ctw7bPublicRoutes } from './work.ctw7b.routes.js'; // CTW đợt 7b: forms, nhập Trello/Asana/Jira/CSV, kênh ngoài → đề xuất, knowledge base
+import ctw7cRoutes from './work.ctw7c.routes.js'; // CTW đợt 7c: bảo mật & quản trị + test tự động
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
@@ -239,6 +243,8 @@ router.get('/share/:token/images/:iid', asyncHandler(async (req, res) => {
 router.use(s4PublicRoutes);
 // CTW đợt 6b: khảo sát công khai + link khách xác nhận prototype (chỉ tin token, có trần lượt gọi).
 router.use(ctw6bPublicRoutes);
+// CTW đợt 7b: form công khai + webhook kênh ngoài (email Resend / Discord / Zalo OA) — chỉ tin token + chữ ký, có trần IP.
+router.use(ctw7bPublicRoutes);
 
 // CTW-28 A9: MCP server (Streamable HTTP, không phiên) — tự xác thực bằng token ctw_ và tự chốt từng tool (src/mcp).
 // Đứng TRƯỚC apiTokenAuth: MCP luôn POST nên chốt "POST = ghi" của REST dời xuống từng tool ghi (không nới).
@@ -247,6 +253,9 @@ router.use('/mcp', mcpRoutes);
 // API token cá nhân (Bearer ctw_…) đi trước; không phải token thì JWT như cũ.
 router.use(apiTokens.apiTokenAuth);
 router.use((req, res, next) => (req.workToken ? next() : authenticate(req, res, next)));
+// CTW đợt 7c (C17): không gian bật "ép 2FA" ⇒ phiên người chưa bật/chưa xác minh 2FA bị chặn khỏi không gian đó
+// (sau ân hạn). Token API / token agent đi thẳng — xem services/work/twoFactor.ts.
+router.use(twoFactor.workTwoFactorGate);
 // Khoá chỉnh sửa cá nhân: lệnh ghi trong dự án đang khoá ⇒ 423 (xem editLock.service.ts).
 router.use(editLock.editLockGuard());
 
@@ -301,19 +310,25 @@ router.get('/workspaces', asyncHandler(async (req, res) => {
   const out = [];
   // MEMBER chỉ là khách cổng ⇒ GUEST (permissions.portalOnlyWorkspaceIds) — cùng luật với loadWorkspaceRole.
   const portalOnlyWs = await portalOnlyWorkspaceIds(userId);
+  // CTW đợt 7c: trạng thái cổng 2FA từng không gian (GRACE / SETUP_REQUIRED / VERIFY_REQUIRED) — giao diện khoá thẻ + băng nhắc.
+  const gate = req.workToken ? new Map<number, twoFactor.GateEntry>() : await twoFactor.loadGate(userId, req.user);
   for (const r of rows) {
     let projectCount = r.workspace._count.projects;
     let memberCount = r.workspace._count.members;
     const role = effectiveWorkspaceRole(r.role as WorkspaceRole, portalOnlyWs.has(r.workspace.id));
     // Khách của cổng (S2b): không lộ quy mô không gian — chỉ đếm những gì họ thấy được.
-    const only = role === 'GUEST' ? await workspaces.guestPeopleScope(userId, r.workspace.id, role) : null;
+    const g = gate.get(r.workspace.id) ?? null;
+    const gated = !!g && g.state !== 'GRACE';
+    // Không gian đang bị cổng 2FA chặn: chỉ hiện tên + trạng thái (không đếm số qua cửa đọc quyền — cửa đó sẽ ném 403).
+    const only = role === 'GUEST' && !gated ? await workspaces.guestPeopleScope(userId, r.workspace.id, role) : null;
     if (only) {
       memberCount = only.length;
       projectCount = (await projects.listProjects(userId, r.workspace.id)).length;
     }
     out.push({
       id: r.workspace.id, name: r.workspace.name, slug: r.workspace.slug, description: r.workspace.description, logoUrl: r.workspace.logoUrl,
-      role, projectCount, memberCount,
+      role, projectCount: gated ? 0 : projectCount, memberCount: gated ? 0 : memberCount,
+      twoFactor: g ? { state: g.state, graceUntil: g.graceUntil } : null,
     });
   }
   ok(res, out);
@@ -1258,10 +1273,14 @@ const ruleAction = z.object({
   assignee: z.union([id, z.literal('reporter'), z.null()]).optional(), priority: z.number().int().min(1).max(5).optional(),
   labelId: id.optional(), text: z.string().max(2000).optional(), title: z.string().max(255).optional(),
   to: z.array(z.union([z.enum(['assignee', 'reporter', 'watchers']), id])).max(20).optional(),
+  // CTW đợt 7c (C13): gửi chat kênh · gọi webhook · gán theo vòng · tạo thẻ con theo mẫu.
+  channel: z.string().max(40).nullable().optional(), url: z.string().max(600).optional(), secret: z.string().max(200).optional(),
+  pool: z.array(id).max(20).optional(), titles: z.array(z.string().max(255)).max(15).optional(), template: z.string().max(40).optional(),
 });
 const ruleConfig = z.object({
   toStatusIds: z.array(id).max(50).optional(), fromStatusIds: z.array(id).max(50).optional(),
   fields: z.array(z.string().max(40)).max(20).optional(), jql: z.string().max(4000).optional(),
+  dueInDays: z.number().int().min(1).max(30).optional(),
   conditions: z.array(z.object({ jql: z.string().min(1).max(4000) })).max(10).optional(),
   actions: z.array(ruleAction).min(1).max(10),
 });
@@ -1482,7 +1501,9 @@ router.get('/me/api-tokens', asyncHandler(async (req, res) => {
   ok(res, await apiTokens.listTokens(callerId(req)));
 }));
 router.post('/me/api-tokens', asyncHandler(async (req, res) => {
-  const body = parse(z.object({ name: z.string().min(1).max(100), scopes: z.array(z.enum(apiTokens.TOKEN_SCOPES)).max(2).default(['read']), expiresInDays: z.number().int().min(1).max(365).nullable().optional() }), req.body);
+  // CTW đợt 7c: đang bị cổng 2FA chặn ở một không gian ⇒ không tạo token mới (token không thành lối vòng qua chính sách).
+  await twoFactor.assertNoGateForNewCredential(callerId(req), req.user);
+  const body = parse(z.object({ name: z.string().min(1).max(100), scopes: z.array(z.enum(apiTokens.TOKEN_SCOPES)).max(3).default(['read']), expiresInDays: z.number().int().min(1).max(365).nullable().optional() }), req.body);
   ok(res, await apiTokens.createToken(callerId(req), body), 201);
 }));
 router.delete('/me/api-tokens/:tokenId', asyncHandler(async (req, res) => {
@@ -1495,6 +1516,7 @@ router.get('/me/calendar-link', asyncHandler(async (req, res) => {
   ok(res, await calendar.calendarLinkStatus(callerId(req)));
 }));
 router.post('/me/calendar-link', asyncHandler(async (req, res) => {
+  await twoFactor.assertNoGateForNewCredential(callerId(req), req.user); // CTW đợt 7c: như token API
   ok(res, await calendar.createCalendarLink(callerId(req)), 201);
 }));
 router.delete('/me/calendar-link', asyncHandler(async (req, res) => {
@@ -2038,5 +2060,11 @@ router.use(ctwk2Routes);
 router.use(ctw6bRoutes);
 // CTW đợt 6: review/inspection + baseline + CR↔yêu cầu; thiết kế test, giám sát test, rủi ro, TSR, thăm dò (work.ctw6.routes.ts).
 router.use(ctw6Routes);
+// CTW đợt 7a: OKR (không gian + dự án), planning poker, retro board, timer trên thẻ (work.ctw7a.routes.ts).
+router.use(ctw7aRoutes);
+// CTW đợt 7b: forms → thẻ, nhập Trello/Asana/Jira/CSV–Excel, kênh ngoài → đề xuất chờ duyệt, knowledge base (work.ctw7b.routes.ts).
+router.use(ctw7bRoutes);
+// CTW đợt 7c: ép 2FA (chính sách không gian), sổ tài sản/giấy phép, nhập kết quả test tự động (CI), widget mới (work.ctw7c.routes.ts).
+router.use(ctw7cRoutes);
 
 export default router;

@@ -16,6 +16,7 @@
 import crypto from 'node:crypto';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
+import { emitAutomationSignal } from './automationSignals.js';
 import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { notifyWork } from '../notification.service.js';
 import { logger } from '../../utils/logger.js';
@@ -399,6 +400,8 @@ export async function createBaseline(userId: number, projectId: number, input: {
     return n;
   });
   await auditProject(projectId, { actorId: userId, action: 'baseline.create', targetType: 'baseline', targetId: number, summary: `Captured baseline BL-${number} "${input.name}" (${items.length} items, ${hash.slice(0, 12)})` });
+  // CTW đợt 7c (C13): luật "Baseline changed".
+  emitAutomationSignal({ signal: 'baseline.changed', projectId, issueIds: [], actorUserId: userId, data: { baseline: `BL-${number}`, name: input.name.slice(0, 160), change: 'captured', items: items.length } });
   await notifySigners(projectId, number, userId);
   return getBaseline(userId, projectId, number);
 }
@@ -464,6 +467,9 @@ export async function signBaseline(userId: number, projectId: number, number: nu
     }
     return outcome;
   });
+  if (out === 'APPROVED' || out === 'REJECTED') {
+    emitAutomationSignal({ signal: 'baseline.changed', projectId, issueIds: [], actorUserId: userId, data: { baseline: `BL-${number}`, name: '', change: out === 'APPROVED' ? 'approved and locked' : 'rejected', items: null } });
+  }
   await auditProject(projectId, { actorId: userId, action: input.decision === 'APPROVE' ? 'baseline.approve' : 'baseline.reject', targetType: 'baseline', targetId: number, summary: `${input.decision === 'APPROVE' ? 'Signed' : 'Rejected'} baseline BL-${number}${out !== 'PENDING' ? ` (baseline is now ${out})` : ''}`, detail: { ip: meta.ip ?? null, comment } });
   return getBaseline(userId, projectId, number);
 }

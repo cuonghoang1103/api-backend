@@ -1014,3 +1014,14 @@ export async function postSystemNotice(projectId: number, actorId: number, text:
   const ch = await prisma.workChannel.findFirstOrThrow({ where: { projectId, isGeneral: true }, select: { id: true, projectId: true } });
   return systemMessage(ch, actorId, text, meta);
 }
+
+/**
+ * CTW đợt 7c (C13): action "Post to chat" của luật tự động — tin HỆ THỐNG vào kênh theo TÊN (null ⇒ #general).
+ * `actorId` = người tạo luật (tác giả hiển thị). Kênh lưu trữ / không còn ⇒ rơi về #general (luật không chết câm).
+ */
+export async function postAutomationNotice(projectId: number, channelName: string | null, actorId: number, text: string, meta: Record<string, unknown>): Promise<number> {
+  const name = channelName?.trim().replace(/^#/, '');
+  const ch = name ? await prisma.workChannel.findFirst({ where: { projectId, name, archivedAt: null }, select: { id: true, projectId: true } }) : null;
+  if (ch) return systemMessage(ch, actorId, text, meta);
+  return postSystemNotice(projectId, actorId, text, meta);
+}

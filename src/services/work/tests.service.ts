@@ -21,6 +21,7 @@ import { emitWorkEvent, onWorkEvent, type WorkActor } from './events.js';
 import { addLink, createIssueAs, updateIssueAs } from './issues.service.js';
 import { requireProject } from './permissions.js';
 import { logger } from '../../utils/logger.js';
+import { emitAutomationSignal } from './automationSignals.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
 
@@ -515,7 +516,15 @@ export async function updateRun(userId: number, projectId: number, runId: number
     if (Object.keys(data).length) await tx.workTestRun.update({ where: { id: runId }, data });
   });
   touch(projectId, userId);
+  if (input.status === 'FAIL' && r.status !== 'FAIL') await signalTestFailed(projectId, userId, r);
   return getRun(userId, projectId, runId);
+}
+
+/** CTW đợt 7c (C13): lần chạy vừa sang FAIL (tay) ⇒ tín hiệu "Test failed" cho luật tự động. */
+async function signalTestFailed(projectId: number, userId: number, r: { testCaseId: number; cycle: { name: string; build: string | null } }) {
+  const tc = await prisma.workTestCase.findUnique({ where: { id: r.testCaseId }, select: { issue: { select: { id: true, title: true } } } });
+  if (!tc) return;
+  emitAutomationSignal({ signal: 'test.failed', projectId, issueIds: [tc.issue.id], actorUserId: userId, data: { test: tc.issue.title.slice(0, 200), message: '', cycle: r.cycle.name, build: r.cycle.build ?? '' } });
 }
 
 export async function updateStepResult(userId: number, projectId: number, runId: number, stepId: number, input: { status?: StepStatus; actual?: string | null }) {
@@ -523,6 +532,7 @@ export async function updateStepResult(userId: number, projectId: number, runId:
   const r = await findRun(projectId, runId);
   const step = await prisma.workTestStepResult.findFirst({ where: { id: stepId, runId }, select: { id: true } });
   if (!step) throw new NotFoundError('Step not found');
+  let derived: RunStatus | null = null;
   await prisma.$transaction(async (tx) => {
     await tx.workTestStepResult.update({
       where: { id: stepId },
@@ -530,10 +540,12 @@ export async function updateStepResult(userId: number, projectId: number, runId:
     });
     if (input.status !== undefined) {
       const all = await tx.workTestStepResult.findMany({ where: { runId }, select: { status: true } });
-      await markExecuted(tx, runId, r.cycleId, userId, deriveRunStatus(all.map((s) => s.status)));
+      derived = deriveRunStatus(all.map((s) => s.status));
+      await markExecuted(tx, runId, r.cycleId, userId, derived);
     }
   });
   touch(projectId, userId);
+  if (derived === 'FAIL' && r.status !== 'FAIL') await signalTestFailed(projectId, userId, r);
   return getRun(userId, projectId, runId);
 }
 

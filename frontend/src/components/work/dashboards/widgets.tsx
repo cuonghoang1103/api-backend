@@ -31,6 +31,7 @@ import { jqlErrorOf, jqlListUrl } from '../search/jql';
 import { govApi, govKeys } from '@/lib/work-s3b-api';
 import { ScoreBadge } from '../governance/shared';
 import { wt } from '@/components/work/i18n';
+import { LicenseWidget, MyTimerWidget, OkrWidget, PassRateWidget, SeverityWidget } from './widgets7c'; // CTW đợt 7c
 
 // ─── Danh mục widget ─────────────────────────────────────────────
 
@@ -55,11 +56,18 @@ export const WIDGET_META: Record<WidgetKind, { label: string; description: strin
   release_burnup: { get label() { return wt('charts.releaseBurnup'); }, get description() { return wt('charts.wd_release'); }, get defaultTitle() { return wt('charts.releaseBurnup'); }, usesQuery: false },
   workload: { get label() { return wt('charts.workload'); }, get description() { return wt('charts.wd_workload'); }, get defaultTitle() { return wt('charts.workload'); }, usesQuery: false },
   overdue: { get label() { return wt('charts.overdueIssues'); }, get description() { return wt('charts.wd_overdue'); }, get defaultTitle() { return wt('charts.overdueIssues'); }, usesQuery: false },
+  // CTW đợt 7c (C3): widgets7c.tsx.
+  test_pass_rate: { get label() { return wt('c7c.wl_pass'); }, get description() { return wt('c7c.wd_pass'); }, get defaultTitle() { return wt('c7c.wl_pass'); }, usesQuery: false },
+  defects_by_severity: { get label() { return wt('c7c.wl_sev'); }, get description() { return wt('c7c.wd_sev'); }, get defaultTitle() { return wt('c7c.wl_sev'); }, usesQuery: false },
+  license_expiring: { get label() { return wt('c7c.wl_lic'); }, get description() { return wt('c7c.wd_lic'); }, get defaultTitle() { return wt('c7c.wl_lic'); }, usesQuery: false },
+  my_timer: { get label() { return wt('c7c.wl_timer'); }, get description() { return wt('c7c.wd_timer'); }, get defaultTitle() { return wt('c7c.wl_timer'); }, usesQuery: false },
+  okr: { get label() { return wt('c7c.wl_okr'); }, get description() { return wt('c7c.wd_okr'); }, get defaultTitle() { return wt('c7c.wl_okr'); }, usesQuery: false },
 };
 
 export const WIDGET_KINDS: WidgetKind[] = [
   'kpis', 'burndown', 'cfd', 'throughput', 'cycle_time', 'aging_wip', 'velocity', 'release_burnup', 'workload', 'overdue',
   'filter', 'counter', 'pie', 'bar', 'created_resolved', 'my_issues', 'health', 'top_risks', 'text',
+  'okr', 'test_pass_rate', 'defects_by_severity', 'license_expiring', 'my_timer',
 ];
 
 export const GROUP_BY_OPTIONS: Array<{ value: GroupBy; label: string }> = [
@@ -477,6 +485,11 @@ export function WidgetBody({ w, pid, config, lk, onOpenIssue }: {
     case 'velocity': return <VelocityChart pid={pid} bare height={220} />;
     case 'release_burnup': return <ReleaseBurnupChart pid={pid} versionId={w.versionId} bare height={220} />;
     case 'workload': return <LoadByPersonChart pid={pid} bare />;
+    case 'test_pass_rate': return <PassRateWidget pid={pid} config={config} />;
+    case 'defects_by_severity': return <SeverityWidget pid={pid} />;
+    case 'license_expiring': return <LicenseWidget pid={pid} config={config} />;
+    case 'my_timer': return <MyTimerWidget pid={pid} />;
+    case 'okr': return <OkrWidget pid={pid} config={config} />;
     default: return <Empty>{wt('dash.unknown')}</Empty>;
   }
 }

@@ -15,6 +15,7 @@ import { openHelp } from '../help/store';
 import WorkInbox from './WorkInbox';
 import { wt } from '../i18n';
 import { WorkLanguageChip } from '../i18n/LanguageSwitch';
+import { TimerChip } from '../agile/Timer'; // CTW đợt 7a: đồng hồ đang chạy
 
 /** Sự kiện mở bảng lệnh ⌘K từ một nút (CommandPalette lắng nghe). */
 export const OPEN_PALETTE_EVENT = 'work:open-palette';
@@ -96,6 +97,7 @@ export default function HeaderTools() {
     <div className="w-tools flex shrink-0 items-center gap-1.5 max-md:!hidden">
       {/* Vạch ngăn chỉ hiện khi ngay trước nó là cụm nút KHÔNG rỗng của trang (.w-header-actions) — work.css. */}
       <span aria-hidden="true" className="w-tools-sep mx-1 h-5 w-px bg-[var(--w-border)]" />
+      <TimerChip />
       <SearchTrigger />
       <WorkInbox align="end" />
       <UserMenu />

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE foo [ <!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
+<testsuites name="labflow" tests="5" failures="2" errors="0" skipped="1" time="3.250">
+  <!-- Maven Surefire -->
+  <testsuite name="com.labflow.auth.LoginServiceTest" tests="3" failures="1" time="1.5" file="src/test/java/com/labflow/auth/LoginServiceTest.java">
+    <testcase classname="com.labflow.auth.LoginServiceTest" name="loginWithValidPassword" time="0.120"/>
+    <testcase classname="com.labflow.auth.LoginServiceTest" name="lockAfterFiveFailures" time="0.310">
+      <failure message="expected: &lt;LOCKED&gt; but was: &lt;ACTIVE&gt;" type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: expected: <LOCKED> but was: <ACTIVE>
+	at com.labflow.auth.LoginServiceTest.lockAfterFiveFailures(LoginServiceTest.java:42)]]></failure>
+    </testcase>
+    <testcase classname="com.labflow.auth.LoginServiceTest" name="resetPasswordEmail" time="0.000">
+      <skipped message="SMTP not configured"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="com.labflow.lab.BookingTest" tests="2" failures="1" time="1.75">
+    <testcase classname="com.labflow.lab.BookingTest" name="bookFreeSlot" time="0.800">
+      <flakyFailure message="Timeout" type="java.util.concurrent.TimeoutException"/>
+    </testcase>
+    <testcase classname="com.labflow.lab.BookingTest" name="rejectDoubleBooking" time="0.950">
+      <error message="NullPointerException: room is null" type="java.lang.NullPointerException">java.lang.NullPointerException: room is null</error>
+    </testcase>
+  </testsuite>
+</testsuites>

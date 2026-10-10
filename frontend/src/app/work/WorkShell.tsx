@@ -29,6 +29,7 @@ import { isTyping } from '@/components/work/ui';
 import { useWorkLocaleStore, wt } from '@/components/work/i18n';
 import { FirstRunLanguagePrompt, WorkLangSync } from '@/components/work/i18n/LanguageSwitch';
 import { CtWorkMark } from '@/components/work/brand/CtWorkMark';
+import TwoFactorBanner from '@/components/work/security/TwoFactorBanner'; // CTW đợt 7c: ép 2FA
 
 /**
  * UX-B (c): vùng nội dung CT Work là `<div>` mang `role="main"` CHỈ KHI chưa nằm trong một `<main>` khác.
@@ -51,7 +52,9 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';
   const isPublic = pathname.startsWith('/work/invite/') || pathname.startsWith('/work/share/')
     // CTW đợt 6b: khảo sát công khai + link khách xác nhận prototype
-    || pathname.startsWith('/work/survey/') || pathname.startsWith('/work/mockup-review/');
+    || pathname.startsWith('/work/survey/') || pathname.startsWith('/work/mockup-review/')
+    // CTW đợt 7b: điền form (công khai / nội bộ — trang tự mời đăng nhập khi cần)
+    || pathname.startsWith('/work/form/');
   const { daDangNhap, sanSang } = useDaDangNhap();
   const mobileNav = useMobileNav((s) => s.open);
   const setMobileNav = useMobileNav((s) => s.setOpen);
@@ -144,6 +147,8 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
                 <span className="flex items-center gap-2 text-[15px] font-semibold"><CtWorkMark size={22} />CT Work</span>
               </div>
             )}
+            {/* CTW đợt 7c: nhắc / báo chặn khi không gian ép 2FA mà tài khoản chưa đạt. */}
+            <TwoFactorBanner />
             <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
           </div>
           <CommandPalette />

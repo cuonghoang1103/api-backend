@@ -310,6 +310,8 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
      đoạn nên không đụng `/work/:ws/:key/tests/:num` (5 đoạn). */
   { mau: '/work', nap: () => import('@/app/work/page') },
   { mau: '/work/developer', nap: () => import('@/app/work/developer/page') },
+  /* CTW đợt 7c (11/10/2026): 2FA cho thành viên — tĩnh, phải đứng TRƯỚC `/work/:ws` (không thì "security" thành slug). */
+  { mau: '/work/security', nap: () => import('@/app/work/security/page') },
   /* Tìm thẻ mọi dự án (24/09) — tĩnh, phải đứng TRƯỚC `/work/:ws`. */
   { mau: '/work/search', nap: () => import('@/app/work/search/page') },
   /* CTW đợt 5 (10/10/2026): hub giảng viên + lớp học — tĩnh, phải đứng TRƯỚC `/work/:ws` (không thì "teaching" thành slug). */
@@ -318,6 +320,7 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/invite/:token', nap: () => import('@/app/work/invite/[token]/page') },
   { mau: '/work/share/:token', nap: () => import('@/app/work/share/[token]/page') },
   { mau: '/work/survey/:token', nap: () => import('@/app/work/survey/[token]/page') }, // 6b: khảo sát công khai
+  { mau: '/work/form/:token', nap: () => import('@/app/work/form/[token]/page') }, // 7b: điền biểu mẫu (tĩnh, trước /:ws/:key)
   { mau: '/work/mockup-review/:token', nap: () => import('@/app/work/mockup-review/[token]/page') }, // 6b: khách duyệt prototype
   { mau: '/work/:ws', nap: () => import('@/app/work/[ws]/page') },
   { mau: '/work/:ws/settings', nap: () => import('@/app/work/[ws]/settings/page') },
@@ -328,6 +331,7 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   /* Đợt S3a (04/10/2026): danh mục dự án + khối lượng việc — tĩnh, phải đứng TRƯỚC `/work/:ws/:key`. */
   { mau: '/work/:ws/portfolio', nap: () => import('@/app/work/[ws]/portfolio/page') },
   { mau: '/work/:ws/workload', nap: () => import('@/app/work/[ws]/workload/page') },
+  { mau: '/work/:ws/okrs', nap: () => import('@/app/work/[ws]/okrs/page') }, // CTW đợt 7a: OKR không gian (tĩnh, trước /:key)
   /* CTW-28 A14 (09/10/2026): AI agent thành viên — tĩnh, phải đứng TRƯỚC `/work/:ws/:key`; `/agents/:id` (4 đoạn) cũng
      trước `/:key/board` (cùng 4 đoạn — "agents" không bao giờ là mã dự án vì mã VIẾT HOA). */
   { mau: '/work/:ws/agents', nap: () => import('@/app/work/[ws]/agents/page') },
@@ -378,6 +382,16 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   /* CTW đợt 4b (10/10/2026): hồ sơ SWR302 theo Wiegers (?tab= overview|features|requirements|priority|glossary|dictionary|six-links). */
   { mau: '/work/:ws/:key/wiegers', nap: () => import('@/app/work/[ws]/[key]/wiegers/page') },
   { mau: '/work/:ws/:key/reviews', nap: () => import('@/app/work/[ws]/[key]/reviews/page') }, // CTW đợt 6: review/inspection + baseline
+  { mau: '/work/:ws/:key/assets', nap: () => import('@/app/work/[ws]/[key]/assets/page') }, // CTW đợt 7c: sổ tài sản & giấy phép
+  /* CTW đợt 7b (11/10/2026): biểu mẫu → thẻ · kênh ngoài → đề xuất (?tab=inbox|channels) · nhập Trello/Asana/Jira/CSV · knowledge base. */
+  { mau: '/work/:ws/:key/forms', nap: () => import('@/app/work/[ws]/[key]/forms/page') },
+  { mau: '/work/:ws/:key/intake', nap: () => import('@/app/work/[ws]/[key]/intake/page') },
+  { mau: '/work/:ws/:key/import', nap: () => import('@/app/work/[ws]/[key]/import/page') },
+  { mau: '/work/:ws/:key/kb', nap: () => import('@/app/work/[ws]/[key]/kb/page') },
+  /* CTW đợt 7a (11/10/2026): OKR dự án · planning poker (?s= phòng) · retro board (?r= bảng). */
+  { mau: '/work/:ws/:key/okrs', nap: () => import('@/app/work/[ws]/[key]/okrs/page') },
+  { mau: '/work/:ws/:key/poker', nap: () => import('@/app/work/[ws]/[key]/poker/page') },
+  { mau: '/work/:ws/:key/retros', nap: () => import('@/app/work/[ws]/[key]/retros/page') },
   { mau: '/work/:ws/:key/tests/:num', nap: () => import('@/app/work/[ws]/[key]/tests/[num]/page') },
   { mau: '/work/:ws/:key/issue/:num', nap: () => import('@/app/work/[ws]/[key]/issue/[num]/page') },
   { mau: '/work/:ws/:key/tests/cycles/:cycleId', nap: () => import('@/app/work/[ws]/[key]/tests/cycles/[cycleId]/page') },

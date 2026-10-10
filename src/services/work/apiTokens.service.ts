@@ -18,7 +18,12 @@ import { AppError, BadRequestError, ForbiddenError, NotFoundError, UnauthorizedE
 import { sha256 } from './common.js';
 import { agentTopRouteAllowed } from './permissions.js';
 
-export const TOKEN_SCOPES = ['read', 'write'] as const;
+export const TOKEN_SCOPES = ['read', 'write', 'tests:write'] as const;
+/**
+ * CTW đợt 7c (TST-2): scope HẸP cho CI — chỉ được GHI đúng một tuyến: nhập kết quả test tự động. Mọi lệnh ghi khác ⇒ 403
+ * như token chỉ đọc. MCP không coi nó là 'write' (context.ts kiểm `includes('write')` đúng chữ).
+ */
+export const TESTS_WRITE_ROUTE = /^\/projects\/\d+\/tests\/automation\/import\/?$/;
 /** 'agent' chỉ có trên token gắn AI agent (CTW-28) — không có thì middleware từ chối gắn req.agent. */
 export type TokenScope = (typeof TOKEN_SCOPES)[number] | 'agent';
 const MAX_TOKENS = 20;
@@ -183,7 +188,11 @@ export async function xacThucTokenCtw(
     }
   }
   if (!row.user.enabled || !row.user.accountNonLocked) throw new ForbiddenError('Account is disabled');
-  if (opts.ghi && !scopes.includes('write')) throw new ForbiddenError('This API token is read-only');
+  if (opts.ghi && !scopes.includes('write')) {
+    // CTW đợt 7c: 'tests:write' chỉ mở POST nhập kết quả test (TESTS_WRITE_ROUTE) — không nới gì khác.
+    const testsOnly = scopes.includes('tests:write') && req.method === 'POST' && TESTS_WRITE_ROUTE.test(req.path);
+    if (!testsOnly) throw new ForbiddenError(scopes.includes('tests:write') ? 'This API token can only upload test results' : 'This API token is read-only');
+  }
   // Token không được quản lý token.
   if (req.path.startsWith('/me/api-tokens') || req.path.startsWith('/me/calendar-link')) throw new ForbiddenError('Manage API tokens from the CT Work website');
   req.userId = row.userId;

@@ -13,6 +13,7 @@
 
 import crypto from 'node:crypto';
 import { prisma } from '../../config/database.js';
+import { emitAutomationSignal } from './automationSignals.js';
 import { BadRequestError, NotFoundError, UnauthorizedError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
 import { auditProject } from './audit.js';
@@ -154,6 +155,16 @@ export async function handleWebhook(projectId: number, token: string | undefined
         emitWorkEvent({ type: 'issue.updated', projectId, issueId: issue.id, actor: { kind: 'SYSTEM', userId: null }, changes: [] });
       }
     }
+  }
+  // CTW đợt 7c (C13): MR vừa merge (action "merge") ⇒ tín hiệu cho luật tự động "PR merged".
+  if (body?.object_kind === 'merge_request' && body.object_attributes?.action === 'merge') {
+    const mr = body.object_attributes;
+    const nums = issueNumbersIn(`${mr.title ?? ''} ${mr.source_branch ?? ''} ${mr.description ?? ''}`, conn.project.key);
+    const ids = nums.length ? (await prisma.workIssue.findMany({ where: { projectId, number: { in: nums }, deletedAt: null }, select: { id: true } })).map((i) => i.id) : [];
+    emitAutomationSignal({
+      signal: 'pr.merged', projectId, issueIds: ids,
+      data: { title: String(mr.title ?? '').slice(0, 200), url: String(mr.url ?? '').slice(0, 300), author: String(body.user?.username ?? '').slice(0, 80), branch: String(mr.source_branch ?? '').slice(0, 120), repo: repo ?? '' },
+    });
   }
   return { ok: true, linked };
 }

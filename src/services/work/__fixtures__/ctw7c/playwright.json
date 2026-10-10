@@ -1,0 +1,31 @@
+{
+  "config": { "projects": [{ "name": "chromium" }] },
+  "suites": [
+    {
+      "title": "login.spec.ts", "file": "login.spec.ts",
+      "specs": [],
+      "suites": [
+        {
+          "title": "Login page", "file": "login.spec.ts",
+          "specs": [
+            { "title": "shows an error for a wrong password", "file": "login.spec.ts", "line": 12,
+              "tests": [{ "projectName": "chromium", "status": "expected", "results": [{ "status": "passed", "duration": 812, "retry": 0 }] }] },
+            { "title": "redirects to the dashboard", "file": "login.spec.ts", "line": 30,
+              "tests": [{ "projectName": "chromium", "status": "unexpected", "results": [
+                { "status": "failed", "duration": 5012, "retry": 0, "error": { "message": "\u001b[31mError: expect(page).toHaveURL(expected)\u001b[39m\n\nExpected: /dashboard/\nReceived: /login", "stack": "Error: expect(page).toHaveURL(expected)\n    at login.spec.ts:33:20" } },
+                { "status": "failed", "duration": 5003, "retry": 1, "error": { "message": "Error: expect(page).toHaveURL(expected)\n\nExpected: /dashboard/\nReceived: /login" } }
+              ] }] },
+            { "title": "remembers the user", "file": "login.spec.ts", "line": 48,
+              "tests": [{ "projectName": "chromium", "status": "flaky", "results": [
+                { "status": "failed", "duration": 900, "retry": 0, "error": { "message": "Timeout 5000ms exceeded" } },
+                { "status": "passed", "duration": 700, "retry": 1 }
+              ] }] },
+            { "title": "SSO login", "file": "login.spec.ts", "line": 60,
+              "tests": [{ "projectName": "chromium", "status": "skipped", "results": [{ "status": "skipped", "duration": 0, "retry": 0 }] }] }
+          ]
+        }
+      ]
+    }
+  ],
+  "stats": { "duration": 12345.6, "expected": 1, "unexpected": 1, "flaky": 1, "skipped": 1 }
+}

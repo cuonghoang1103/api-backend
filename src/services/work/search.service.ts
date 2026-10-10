@@ -221,6 +221,8 @@ export async function createdVsResolved(userId: number, projectId: number, days:
 export const WIDGET_KINDS = [
   'filter', 'pie', 'bar', 'counter', 'created_resolved', 'burndown', 'my_issues', 'text', 'health', 'top_risks',
   'kpis', 'cfd', 'throughput', 'cycle_time', 'aging_wip', 'velocity', 'release_burnup', 'workload', 'overdue',
+  // CTW đợt 7c (C3): tỉ lệ đạt test, lỗi theo mức nghiêm trọng, giấy phép sắp hết hạn, đồng hồ của tôi, OKR (API đợt 7a).
+  'test_pass_rate', 'defects_by_severity', 'license_expiring', 'my_timer', 'okr',
 ] as const;
 export interface Widget {
   id: string;

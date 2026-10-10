@@ -151,6 +151,8 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     // Xuất / nhập / tích hợp
     ['GET', '/export'], ['GET', '/export/project-tracking'], ['POST', '/exports'], ['POST', '/exports/1/link'], ['POST', '/import'],
     ['POST', '/chat-hooks'], ['POST', '/github'], ['DELETE', '/gitlab'], ['POST', '/automation'], ['PATCH', '/automation/4'],
+    // CTW đợt 7c: sổ tài sản — agent chỉ đọc; xuất tệp giấy phép cấm.
+    ['POST', '/assets'], ['PATCH', '/assets/3'], ['DELETE', '/assets/3'], ['PUT', '/assets/3/links'], ['GET', '/assets-export'],
     // Cấu hình / thành viên / xoá
     ['PATCH', ''], ['DELETE', ''], ['POST', '/archive'], ['PUT', '/members/8'], ['DELETE', '/members/8'],
     ['POST', '/labels'], ['PATCH', '/components/1'], ['POST', '/workflows'], ['PUT', '/workflows/1/transitions'], ['PATCH', '/statuses/3'],
@@ -167,6 +169,9 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/meetings/3/recordings'], ['POST', '/meetings/3/recordings/2/chunks'], ['GET', '/meetings/3/recordings/2/chunks/0/audio'],
     ['DELETE', '/meetings/3/recordings/2/audio'], ['PUT', '/meetings/3/attendance'], ['POST', '/meetings/3/rsvp'], ['POST', '/meetings/3/join'],
     ['PUT', '/meeting-settings'], ['POST', '/meetings/3/minutes-ai/4/apply'], ['POST', '/meetings/3/minutes-ai/4/dismiss'],
+    // CTW đợt 7b
+    ['POST', '/forms/F-1/status'], ['POST', '/forms/2/rotate'], ['DELETE', '/forms/F-1'], ['POST', '/imports'], ['GET', '/intake/channels'],
+    ['POST', '/intake/channels/3/simulate'], ['POST', '/intake/proposals/4/decide'], ['POST', '/kb/articles'], ['DELETE', '/kb/categories/2'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [
@@ -177,6 +182,7 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/handoffs/3/accept'], ['GET', '/pages'], ['GET', '/pages/2/markdown'], ['GET', '/search'], ['GET', '/raid'],
     ['GET', '/meetings/3'], ['GET', '/reports/burndown'], ['HEAD', '/board'],
     ['GET', '/meetings/3/transcript'], ['POST', '/meetings/3/minutes-ai'], ['GET', '/meetings/3/room'],
+    ['GET', '/forms'], ['POST', '/forms'], ['GET', '/forms/F-1/responses'], ['GET', '/intake/proposals'], ['GET', '/kb'],
   ];
   it(`${denied.length} tuyến đối ngoại ⇒ cấm`, () => {
     assert.ok(denied.length >= 25);

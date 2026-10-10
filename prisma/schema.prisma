@@ -10110,14 +10110,18 @@ model WorkSpace {
   /// bằng một cú bấm nhầm là mất cả kỳ đồ án của cả nhóm.
   deletedAt   DateTime? @map("deleted_at")
 
-  owner    User           @relation("WorkSpaceOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  members  WorkMember[]
-  invites  WorkInvite[]
-  projects WorkProject[]
-  timeOff  WorkTimeOff[]
-  audit    WorkAuditLog[]
-  teams    WorkTeam[]
-  agents   WorkAgent[]
+  owner          User                @relation("WorkSpaceOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members        WorkMember[]
+  invites        WorkInvite[]
+  projects       WorkProject[]
+  timeOff        WorkTimeOff[]
+  audit          WorkAuditLog[]
+  teams          WorkTeam[]
+  agents         WorkAgent[]
+  /// CTW đợt 7a: chu kỳ OKR (quý) của không gian.
+  okrCycles      WorkOkrCycle[]
+  /// CTW đợt 7c (C17): chính sách bảo mật (ép 2FA).
+  securityPolicy WorkSecurityPolicy?
 
   @@index([ownerId], name: "idx_work_space_owner")
   @@map("work_spaces")
@@ -10317,6 +10321,22 @@ model WorkProject {
   crAffectedRefs      WorkCrAffectedRef[]
   testDesigns         WorkTestDesign[]
   exploratorySessions WorkExploratorySession[]
+  // ── CTW đợt 7b ── forms, kênh ngoài → đề xuất thẻ, nhập Trello/Asana/Jira/CSV, knowledge base
+  forms               WorkForm[]
+  intakeChannels      WorkIntakeChannel[]
+  intakeProposals     WorkIntakeProposal[]
+  importRecords       WorkImportRecord[]
+  importRuns          WorkImportRun[]
+  kbCategories        WorkKbCategory[]
+  kbArticles          WorkKbArticle[]
+  // ── CTW đợt 7a ── OKR cấp dự án, planning poker, retro board
+  objectives          WorkObjective[]          @relation("WorkObjectiveProject")
+  pokerSessions       WorkPokerSession[]
+  retros              WorkRetro[]
+  // ── CTW đợt 7c ── sổ tài sản/giấy phép, kết quả test tự động (CI)
+  assets              WorkAsset[]
+  autoTests           WorkAutoTest[]
+  testImports         WorkTestImport[]
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -10544,6 +10564,10 @@ model WorkIssue {
   nfrSpec            WorkNfrSpec?            @relation("WorkNfrSpecIssue")
   reqQuality         WorkReqQuality?         @relation("WorkReqQualityIssue")
   requirementOrigins WorkRequirementOrigin[] @relation("WorkRequirementOriginIssue")
+  // ── CTW đợt 7a ── KR liên kết thẻ/epic · thẻ trong phòng planning poker · timer đang chạy trên thẻ
+  krLinks            WorkKeyResultLink[]     @relation("WorkKrLinkIssue")
+  pokerItems         WorkPokerItem[]         @relation("WorkPokerItemIssue")
+  timers             WorkTimer[]             @relation("WorkTimerIssue")
 
   @@unique([projectId, number], name: "uk_work_issue_number", map: "uk_work_issue_number")
   @@index([projectId, statusId, rank], name: "idx_work_issue_board")
@@ -14999,3 +15023,641 @@ model WorkSrsModel {
 }
 
 // ── hết CTW đợt 6b ──
+
+// ── CTW đợt 7b ── Forms (C8) · kênh ngoài → đề xuất thẻ (C14/CTW-26) · nhập Trello/Asana/Jira/CSV (C15) · KB (C21)
+
+/// Biểu mẫu tạo thẻ (tổng quát hoá loại yêu cầu của service desk). Mỗi lần gửi ⇒ một thẻ theo `mapping`.
+model WorkForm {
+  id             Int       @id @default(autoincrement())
+  projectId      Int       @map("project_id")
+  number         Int
+  title          String    @db.VarChar(200)
+  description    String?   @db.Text
+  /// [{ id, kind: text|longtext|select|number|date|file|user, label, required, options[], showIf: { field, equals } }]
+  fields         Json      @default("[]")
+  /// { typeKey, titleTemplate, labelIds[], assigneeId, priority, customFields: { <fieldId>: <form field id> } }
+  mapping        Json      @default("{}")
+  /// PUBLIC (ai có link) · INTERNAL (thành viên dự án đăng nhập)
+  access         String    @default("PUBLIC") @db.VarChar(16)
+  /// DRAFT · OPEN · CLOSED
+  status         String    @default("DRAFT") @db.VarChar(16)
+  token          String?   @unique(map: "uk_work_form_token") @db.VarChar(48)
+  confirmMessage String?   @map("confirm_message") @db.VarChar(500)
+  collectEmail   Boolean   @default(false) @map("collect_email")
+  maxResponses   Int?      @map("max_responses")
+  closesAt       DateTime? @map("closes_at")
+  rev            Int       @default(0)
+  createdById    Int?      @map("created_by_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  project   WorkProject        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  responses WorkFormResponse[]
+
+  @@unique([projectId, number], name: "uk_work_form_number", map: "uk_work_form_number")
+  @@map("work_forms")
+}
+
+model WorkFormResponse {
+  id              Int      @id @default(autoincrement())
+  formId          Int      @map("form_id")
+  /// Thẻ sinh ra (không khoá ngoại — thẻ xoá mềm vẫn giữ số).
+  issueId         Int?     @map("issue_id")
+  issueNumber     Int?     @map("issue_number")
+  answers         Json     @default("{}")
+  userId          Int?     @map("user_id")
+  respondentName  String?  @map("respondent_name") @db.VarChar(120)
+  respondentEmail String?  @map("respondent_email") @db.VarChar(200)
+  ipHash          String?  @map("ip_hash") @db.VarChar(64)
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  form WorkForm @relation(fields: [formId], references: [id], onDelete: Cascade)
+
+  @@index([formId, createdAt], map: "idx_work_form_response_form")
+  @@index([formId, ipHash, createdAt], map: "idx_work_form_response_ip")
+  @@map("work_form_responses")
+}
+
+/// Kênh ngoài (EMAIL qua webhook inbound Resend · DISCORD slash command · ZALO OA webhook) ⇒ ĐỀ XUẤT thẻ chờ duyệt.
+model WorkIntakeChannel {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @map("project_id")
+  kind        String    @db.VarChar(16)
+  name        String    @db.VarChar(80)
+  enabled     Boolean   @default(true)
+  /// Mảnh bí mật trong URL webhook (/intake/<kind>/<token>) — chọn kênh, KHÔNG thay chữ ký.
+  token       String    @unique(map: "uk_work_intake_channel_token") @db.VarChar(48)
+  /// Cấu hình không bí mật (địa chỉ nhận thư, public key Discord, app/OA id Zalo, tiền tố…).
+  config      Json      @default("{}")
+  /// Bí mật ký (whsec_ của Resend, OA secret key của Zalo) — MÃ HOÁ AES-GCM (intakeCrypto), không bao giờ trả về client.
+  secretEnc   String?   @map("secret_enc") @db.Text
+  createdById Int?      @map("created_by_id")
+  lastEventAt DateTime? @map("last_event_at")
+  lastError   String?   @map("last_error") @db.VarChar(300)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  project   WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  proposals WorkIntakeProposal[]
+  nonces    WorkIntakeNonce[]
+
+  @@index([projectId], map: "idx_work_intake_channel_project")
+  @@map("work_intake_channels")
+}
+
+model WorkIntakeProposal {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  channelId    Int?      @map("channel_id")
+  source       String    @db.VarChar(16)
+  /// Mã tin/thư bên nguồn — chống tạo đôi khi dịch vụ gửi lại.
+  externalId   String    @map("external_id") @db.VarChar(200)
+  senderName   String?   @map("sender_name") @db.VarChar(160)
+  senderHandle String?   @map("sender_handle") @db.VarChar(200)
+  senderUserId Int?      @map("sender_user_id")
+  title        String    @db.VarChar(255)
+  body         String?   @db.Text
+  meta         Json?
+  /// PENDING · ACCEPTED · REJECTED
+  status       String    @default("PENDING") @db.VarChar(16)
+  issueId      Int?      @map("issue_id")
+  issueNumber  Int?      @map("issue_number")
+  decidedById  Int?      @map("decided_by_id")
+  decidedAt    DateTime? @map("decided_at")
+  decisionNote String?   @map("decision_note") @db.VarChar(300)
+  simulated    Boolean   @default(false)
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  project WorkProject        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  channel WorkIntakeChannel? @relation(fields: [channelId], references: [id], onDelete: SetNull)
+
+  @@unique([projectId, source, externalId], map: "uk_work_intake_proposal_ext")
+  @@index([projectId, status, createdAt], map: "idx_work_intake_proposal_status")
+  @@map("work_intake_proposals")
+}
+
+/// Chống phát lại: mỗi id sự kiện (svix-id, interaction id, msg_id) chỉ được nhận MỘT lần mỗi kênh.
+model WorkIntakeNonce {
+  id        Int      @id @default(autoincrement())
+  channelId Int      @map("channel_id")
+  nonce     String   @db.VarChar(200)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  channel WorkIntakeChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@unique([channelId, nonce], map: "uk_work_intake_nonce")
+  @@index([createdAt], map: "idx_work_intake_nonce_created")
+  @@map("work_intake_nonces")
+}
+
+/// Bản đồ "mục bên nguồn ⇒ thẻ đã nhập" — nhập lại cùng tệp không tạo trùng.
+model WorkImportRecord {
+  id         Int      @id @default(autoincrement())
+  projectId  Int      @map("project_id")
+  /// TRELLO · ASANA · JIRA · CSV
+  source     String   @db.VarChar(16)
+  /// ISSUE · SUBTASK
+  kind       String   @default("ISSUE") @db.VarChar(16)
+  externalId String   @map("external_id") @db.VarChar(200)
+  issueId    Int      @map("issue_id")
+  runId      Int?     @map("run_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, source, kind, externalId], map: "uk_work_import_record")
+  @@map("work_import_records")
+}
+
+model WorkImportRun {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  source      String   @db.VarChar(16)
+  fileName    String?  @map("file_name") @db.VarChar(255)
+  createdById Int?     @map("created_by_id")
+  created     Int      @default(0)
+  duplicates  Int      @default(0)
+  failed      Int      @default(0)
+  /// { subtasks, comments, labels, unmatchedPeople[], warnings[], failures[] }
+  report      Json     @default("{}")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt], map: "idx_work_import_run_project")
+  @@map("work_import_runs")
+}
+
+/// Knowledge base cho service desk / cổng khách: bài viết = một trang Docs, xếp theo chuyên mục.
+model WorkKbCategory {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  name        String   @db.VarChar(80)
+  description String?  @db.VarChar(300)
+  position    Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  project  WorkProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  articles WorkKbArticle[]
+
+  @@unique([projectId, name], map: "uk_work_kb_category")
+  @@map("work_kb_categories")
+}
+
+model WorkKbArticle {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  /// Trang Docs (không khoá ngoại — trang xoá mềm thì bài tự ẩn).
+  pageId      Int      @map("page_id")
+  categoryId  Int?     @map("category_id")
+  /// CLIENT (khách cổng thấy — trang phải visibility CLIENT) · INTERNAL (chỉ đội dự án)
+  audience    String   @default("CLIENT") @db.VarChar(16)
+  published   Boolean  @default(true)
+  keywords    String?  @db.VarChar(500)
+  views       Int      @default(0)
+  helpful     Int      @default(0)
+  notHelpful  Int      @default(0) @map("not_helpful")
+  /// Số lần khách bấm "Bài này giải quyết được" ngay trong form tạo yêu cầu (deflection).
+  deflected   Int      @default(0)
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  project  WorkProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  category WorkKbCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  votes    WorkKbVote[]
+
+  @@unique([projectId, pageId], map: "uk_work_kb_article_page")
+  @@map("work_kb_articles")
+}
+
+model WorkKbVote {
+  id        Int      @id @default(autoincrement())
+  articleId Int      @map("article_id")
+  userId    Int      @map("user_id")
+  helpful   Boolean
+  createdAt DateTime @default(now()) @map("created_at")
+
+  article WorkKbArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([articleId, userId], map: "uk_work_kb_vote")
+  @@map("work_kb_votes")
+}
+
+// ── hết CTW đợt 7b ──
+
+// ── CTW đợt 7a: OKR · planning poker · retro board · timer ──
+
+/// Chu kỳ OKR của KHÔNG GIAN (thường một quý). status ACTIVE | CLOSED — đóng ⇒ khoá check-in, KR chưa chấm được chấm
+/// bằng tiến độ cuối. Objective cấp không gian (projectId null) và cấp dự án dùng chung chu kỳ.
+model WorkOkrCycle {
+  id          Int       @id @default(autoincrement())
+  workspaceId Int       @map("workspace_id")
+  name        String    @db.VarChar(80)
+  startDate   DateTime  @map("start_date") @db.Date
+  endDate     DateTime  @map("end_date") @db.Date
+  status      String    @default("ACTIVE") @db.VarChar(10)
+  createdById Int?      @map("created_by_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  closedAt    DateTime? @map("closed_at")
+
+  workspace  WorkSpace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  objectives WorkObjective[]
+
+  @@index([workspaceId, startDate], map: "idx_work_okr_cycle_ws")
+  @@map("work_okr_cycles")
+}
+
+/// Objective. projectId null ⇒ cấp không gian. parentId = căn chỉnh (objective dự án đóng góp cho objective không gian).
+/// score = điểm cuối kỳ 0–1 (null = chưa chấm).
+model WorkObjective {
+  id          Int       @id @default(autoincrement())
+  cycleId     Int       @map("cycle_id")
+  projectId   Int?      @map("project_id")
+  parentId    Int?      @map("parent_id")
+  title       String    @db.VarChar(200)
+  description String?   @db.Text
+  ownerId     Int?      @map("owner_id")
+  position    Int       @default(0)
+  score       Float?
+  scoreNote   String?   @map("score_note") @db.VarChar(1000)
+  scoredAt    DateTime? @map("scored_at")
+  createdById Int?      @map("created_by_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  cycle      WorkOkrCycle    @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  project    WorkProject?    @relation("WorkObjectiveProject", fields: [projectId], references: [id], onDelete: Cascade)
+  parent     WorkObjective?  @relation("WorkObjectiveAlign", fields: [parentId], references: [id], onDelete: SetNull)
+  children   WorkObjective[] @relation("WorkObjectiveAlign")
+  keyResults WorkKeyResult[]
+
+  @@index([cycleId, projectId], map: "idx_work_objective_cycle")
+  @@map("work_objectives")
+}
+
+/// Key result có số đo. metric PERCENT | NUMBER | BOOLEAN; source MANUAL (nhập tay qua check-in) | ISSUES (thẻ xong /
+/// tổng thẻ liên kết) | POINTS (điểm xong / tổng điểm). score = điểm cuối kỳ 0–1.
+model WorkKeyResult {
+  id           Int      @id @default(autoincrement())
+  objectiveId  Int      @map("objective_id")
+  title        String   @db.VarChar(200)
+  metric       String   @default("NUMBER") @db.VarChar(8)
+  unit         String?  @db.VarChar(16)
+  startValue   Float    @default(0) @map("start_value")
+  targetValue  Float    @default(100) @map("target_value")
+  currentValue Float    @default(0) @map("current_value")
+  source       String   @default("MANUAL") @db.VarChar(8)
+  ownerId      Int?     @map("owner_id")
+  position     Int      @default(0)
+  score        Float?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  objective WorkObjective       @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
+  links     WorkKeyResultLink[]
+  checkins  WorkOkrCheckin[]
+
+  @@index([objectiveId], map: "idx_work_kr_objective")
+  @@map("work_key_results")
+}
+
+/// KR ↔ thẻ (ISSUE), epic (EPIC — thẻ + thẻ con) hoặc sprint (SPRINT — sprintId KHÔNG FK, sprint xoá ⇒ lọc khi đọc).
+model WorkKeyResultLink {
+  id          Int      @id @default(autoincrement())
+  keyResultId Int      @map("key_result_id")
+  kind        String   @db.VarChar(8)
+  issueId     Int?     @map("issue_id")
+  sprintId    Int?     @map("sprint_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  keyResult WorkKeyResult @relation(fields: [keyResultId], references: [id], onDelete: Cascade)
+  issue     WorkIssue?    @relation("WorkKrLinkIssue", fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@index([keyResultId], map: "idx_work_kr_link_kr")
+  @@index([issueId], map: "idx_work_kr_link_issue")
+  @@map("work_key_result_links")
+}
+
+/// Check-in hằng tuần của một KR: giá trị + tiến độ chụp lại + độ tự tin 0–10. Một dòng mỗi tuần (thứ Hai, giờ VN) —
+/// check-in lại trong tuần thì ghi đè.
+model WorkOkrCheckin {
+  id          Int      @id @default(autoincrement())
+  keyResultId Int      @map("key_result_id")
+  userId      Int      @map("user_id")
+  weekStart   DateTime @map("week_start") @db.Date
+  value       Float
+  progress    Float
+  confidence  Int
+  note        String?  @db.VarChar(2000)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  keyResult WorkKeyResult @relation(fields: [keyResultId], references: [id], onDelete: Cascade)
+
+  @@unique([keyResultId, weekStart], map: "uk_work_okr_checkin_week")
+  @@map("work_okr_checkins")
+}
+
+/// Phòng planning poker. deck FIBONACCI | TSHIRT. status OPEN | CLOSED. currentItemId = thẻ đang ước lượng (KHÔNG FK).
+/// timerEndsAt: hết giờ ⇒ máy chủ tự lật bài ở lần đọc kế tiếp.
+model WorkPokerSession {
+  id            Int       @id @default(autoincrement())
+  projectId     Int       @map("project_id")
+  title         String    @db.VarChar(120)
+  deck          String    @default("FIBONACCI") @db.VarChar(10)
+  sprintId      Int?      @map("sprint_id")
+  status        String    @default("OPEN") @db.VarChar(8)
+  currentItemId Int?      @map("current_item_id")
+  timerEndsAt   DateTime? @map("timer_ends_at")
+  createdById   Int?      @map("created_by_id")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  closedAt      DateTime? @map("closed_at")
+
+  project WorkProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  items   WorkPokerItem[]
+
+  @@index([projectId, status], map: "idx_work_poker_project")
+  @@map("work_poker_sessions")
+}
+
+/// Một thẻ trong phòng poker. state PENDING | VOTING | REVEALED | ESTIMATED | SKIPPED. round tăng mỗi lần bỏ phiếu lại.
+model WorkPokerItem {
+  id             Int       @id @default(autoincrement())
+  sessionId      Int       @map("session_id")
+  issueId        Int       @map("issue_id")
+  position       Int       @default(0)
+  state          String    @default("PENDING") @db.VarChar(10)
+  round          Int       @default(1)
+  finalValue     String?   @map("final_value") @db.VarChar(8)
+  finalPoints    Float?    @map("final_points")
+  previousPoints Float?    @map("previous_points")
+  estimatedById  Int?      @map("estimated_by_id")
+  estimatedAt    DateTime? @map("estimated_at")
+  revealedAt     DateTime? @map("revealed_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  session WorkPokerSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  issue   WorkIssue        @relation("WorkPokerItemIssue", fields: [issueId], references: [id], onDelete: Cascade)
+  votes   WorkPokerVote[]
+
+  @@unique([sessionId, issueId], map: "uk_work_poker_item")
+  @@index([issueId], map: "idx_work_poker_item_issue")
+  @@map("work_poker_items")
+}
+
+/// Lá bài của một người trong một vòng. Giá trị KHÔNG BAO GIỜ trả cho người khác trước khi lật (poker.service).
+model WorkPokerVote {
+  id        Int      @id @default(autoincrement())
+  itemId    Int      @map("item_id")
+  round     Int
+  userId    Int      @map("user_id")
+  value     String   @db.VarChar(8)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  item WorkPokerItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([itemId, round, userId], map: "uk_work_poker_vote")
+  @@map("work_poker_votes")
+}
+
+/// Retro board. template SSC (Start/Stop/Continue) | MSG (Mad/Sad/Glad) | FOUR_L. anonymous = thẻ ghi chú ẨN DANH THẬT:
+/// authorId không bao giờ ra API cho người khác; bật rồi không tắt được. lockAt = hạn (qua hạn ⇒ khoá ghi), lockedAt = khoá tay.
+model WorkRetro {
+  id             Int       @id @default(autoincrement())
+  projectId      Int       @map("project_id")
+  title          String    @db.VarChar(120)
+  template       String    @default("SSC") @db.VarChar(8)
+  sprintId       Int?      @map("sprint_id")
+  anonymous      Boolean   @default(false)
+  votesPerPerson Int       @default(5) @map("votes_per_person")
+  lockAt         DateTime? @map("lock_at")
+  lockedAt       DateTime? @map("locked_at")
+  summary        String?   @db.Text
+  summaryAt      DateTime? @map("summary_at")
+  createdById    Int?      @map("created_by_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  cards   WorkRetroCard[]
+  actions WorkRetroAction[]
+
+  @@index([projectId], map: "idx_work_retro_project")
+  @@map("work_retros")
+}
+
+/// Thẻ ghi chú. groupId = thẻ đầu nhóm (gom nhóm). authorId không FK (người rời dự án vẫn giữ thẻ, ẩn danh vẫn ẩn).
+model WorkRetroCard {
+  id        Int      @id @default(autoincrement())
+  retroId   Int      @map("retro_id")
+  column    String   @db.VarChar(16)
+  body      String   @db.VarChar(1000)
+  authorId  Int      @map("author_id")
+  groupId   Int?     @map("group_id")
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  retro   WorkRetro       @relation(fields: [retroId], references: [id], onDelete: Cascade)
+  group   WorkRetroCard?  @relation("WorkRetroCardGroup", fields: [groupId], references: [id], onDelete: SetNull)
+  members WorkRetroCard[] @relation("WorkRetroCardGroup")
+  votes   WorkRetroVote[]
+
+  @@index([retroId], map: "idx_work_retro_card_retro")
+  @@map("work_retro_cards")
+}
+
+/// Dot vote: count chấm của một người trên một thẻ (tổng mỗi người ≤ votesPerPerson của retro).
+model WorkRetroVote {
+  id     Int @id @default(autoincrement())
+  cardId Int @map("card_id")
+  userId Int @map("user_id")
+  count  Int @default(1)
+
+  card WorkRetroCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@unique([cardId, userId], map: "uk_work_retro_vote")
+  @@map("work_retro_votes")
+}
+
+/// Hành động rút ra từ retro ⇒ thẻ (issueId KHÔNG FK — thẻ xoá ⇒ lọc khi đọc).
+model WorkRetroAction {
+  id          Int      @id @default(autoincrement())
+  retroId     Int      @map("retro_id")
+  cardId      Int?     @map("card_id")
+  title       String   @db.VarChar(255)
+  assigneeId  Int?     @map("assignee_id")
+  issueId     Int?     @map("issue_id")
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  retro WorkRetro @relation(fields: [retroId], references: [id], onDelete: Cascade)
+
+  @@index([retroId], map: "idx_work_retro_action_retro")
+  @@map("work_retro_actions")
+}
+
+/// Bấm giờ trên thẻ — MỘT timer mỗi người (khoá duy nhất userId). runningSince null = đang tạm dừng; accumulatedSec =
+/// giây đã chạy trước lần tiếp tục gần nhất. Dừng ⇒ tạo worklog (activity đợt 4) rồi xoá dòng này. Lưu máy chủ ⇒ web và
+/// app desktop thấy cùng một timer.
+model WorkTimer {
+  id             Int       @id @default(autoincrement())
+  userId         Int       @unique(map: "uk_work_timer_user") @map("user_id")
+  projectId      Int       @map("project_id")
+  issueId        Int       @map("issue_id")
+  startedAt      DateTime  @map("started_at")
+  runningSince   DateTime? @map("running_since")
+  accumulatedSec Int       @default(0) @map("accumulated_sec")
+  activity       String?   @db.VarChar(16)
+  note           String?   @db.VarChar(1000)
+  remindedAt     DateTime? @map("reminded_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  issue WorkIssue @relation("WorkTimerIssue", fields: [issueId], references: [id], onDelete: Cascade)
+
+  @@index([issueId], map: "idx_work_timer_issue")
+  @@map("work_timers")
+}
+
+// ── hết CTW đợt 7a ──
+
+// ── CTW đợt 7c (11/10/2026) ── bảo mật & quản trị (ép 2FA), sổ tài sản/giấy phép, kết quả test tự động (TST-2)
+// Liên kết tới người/thẻ/trang/cycle: KHÔNG FK (xoá mềm / lịch sử) — lọc khi đọc, như work_trace_links.
+
+/// C17: chính sách bảo mật của không gian. require2fa ⇒ thành viên NGƯỜI (đăng nhập bằng phiên) phải bật 2FA + xác minh
+/// (claim mfaAt còn hạn) mới vào được không gian; hết `graceUntil` mới chặn. Token API / token agent KHÔNG bị ảnh hưởng.
+model WorkSecurityPolicy {
+  workspaceId Int       @id @map("workspace_id")
+  require2fa  Boolean   @default(false) @map("require_2fa")
+  graceDays   Int       @default(7) @map("grace_days")
+  enforcedAt  DateTime? @map("enforced_at")
+  graceUntil  DateTime? @map("grace_until")
+  updatedById Int?      @map("updated_by_id")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  workspace WorkSpace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([require2fa], map: "idx_work_security_policy_req")
+  @@map("work_security_policies")
+}
+
+/// C25 / CTW-21: sổ tài sản & giấy phép của dự án (phần mềm, license, tài khoản dịch vụ, thiết bị, font/ảnh/âm thanh…).
+/// KHÔNG BAO GIỜ lưu mật khẩu / khoá bí mật ở đây — chỉ ghi "ai giữ, để ở đâu".
+model WorkAsset {
+  id                  Int       @id @default(autoincrement())
+  projectId           Int       @map("project_id")
+  number              Int
+  name                String    @db.VarChar(160)
+  category            String    @db.VarChar(16)
+  licenseType         String    @map("license_type") @db.VarChar(24)
+  licenseName         String?   @map("license_name") @db.VarChar(120)
+  licenseUrl          String?   @map("license_url") @db.VarChar(500)
+  source              String?   @db.VarChar(300)
+  sourceUrl           String?   @map("source_url") @db.VarChar(500)
+  version             String?   @db.VarChar(60)
+  ownerId             Int?      @map("owner_id")
+  status              String    @default("ACTIVE") @db.VarChar(12)
+  expiresAt           DateTime? @map("expires_at") @db.Date
+  remindDays          Int       @default(30) @map("remind_days")
+  /// Hạn đã nhắc (mỗi hạn nhắc ĐÚNG MỘT lần — gia hạn ⇒ hạn mới ⇒ nhắc lại).
+  remindedFor         DateTime? @map("reminded_for") @db.Date
+  cost                Decimal?  @db.Decimal(14, 2)
+  currency            String    @default("VND") @db.VarChar(3)
+  billing             String    @default("ONE_TIME") @db.VarChar(10)
+  seats               Int?
+  attributionRequired Boolean   @default(false) @map("attribution_required")
+  attribution         String?   @db.Text
+  notes               String?   @db.Text
+  createdById         Int?      @map("created_by_id")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+  deletedAt           DateTime? @map("deleted_at")
+
+  project WorkProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  links   WorkAssetLink[]
+
+  @@unique([projectId, number], map: "uk_work_asset_number")
+  @@index([projectId, expiresAt], map: "idx_work_asset_expiry")
+  @@map("work_assets")
+}
+
+/// Tài sản ↔ thẻ / trang Docs dùng nó (issueId XOR pageId).
+model WorkAssetLink {
+  id        Int      @id @default(autoincrement())
+  assetId   Int      @map("asset_id")
+  issueId   Int?     @map("issue_id")
+  pageId    Int?     @map("page_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  asset WorkAsset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@unique([assetId, issueId], map: "uk_work_asset_link_issue")
+  @@unique([assetId, pageId], map: "uk_work_asset_link_page")
+  @@map("work_asset_links")
+}
+
+/// TST-2 (B10): một test tự động (khoá = suite::tên) ↔ test case Xray. history = kết quả gần nhất (P/F/S, mới nhất ở CUỐI).
+model WorkAutoTest {
+  id             Int      @id @default(autoincrement())
+  projectId      Int      @map("project_id")
+  keyHash        String   @map("key_hash") @db.VarChar(64)
+  key            String   @db.Text
+  suite          String?  @db.VarChar(300)
+  name           String   @db.VarChar(500)
+  file           String?  @db.VarChar(500)
+  testCaseId     Int?     @map("test_case_id")
+  history        String   @default("") @db.VarChar(40)
+  lastStatus     String?  @map("last_status") @db.VarChar(8)
+  lastDurationMs Int?     @map("last_duration_ms")
+  flaky          Boolean  @default(false)
+  flakyScore     Int      @default(0) @map("flaky_score")
+  bugIssueId     Int?     @map("bug_issue_id")
+  failSignature  String?  @map("fail_signature") @db.VarChar(64)
+  firstSeenAt    DateTime @default(now()) @map("first_seen_at")
+  lastSeenAt     DateTime @default(now()) @map("last_seen_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, keyHash], map: "uk_work_auto_test")
+  @@index([testCaseId], map: "idx_work_auto_test_case")
+  @@map("work_auto_tests")
+}
+
+/// TST-2: một lần nhập kết quả (JUnit XML / Playwright JSON / Jest JSON) + độ phủ (lcov / JaCoCo / Cobertura) nếu có.
+model WorkTestImport {
+  id                Int      @id @default(autoincrement())
+  projectId         Int      @map("project_id")
+  cycleId           Int?     @map("cycle_id")
+  format            String   @db.VarChar(12)
+  source            String   @default("API") @db.VarChar(8)
+  build             String?  @db.VarChar(80)
+  branch            String?  @db.VarChar(120)
+  commitSha         String?  @map("commit_sha") @db.VarChar(64)
+  runUrl            String?  @map("run_url") @db.VarChar(500)
+  total             Int      @default(0)
+  passed            Int      @default(0)
+  failed            Int      @default(0)
+  skipped           Int      @default(0)
+  flaky             Int      @default(0)
+  durationMs        Int?     @map("duration_ms")
+  newBugs           Int      @default(0) @map("new_bugs")
+  linkedBugs        Int      @default(0) @map("linked_bugs")
+  coveragePct       Decimal? @map("coverage_pct") @db.Decimal(5, 2)
+  coverageBranchPct Decimal? @map("coverage_branch_pct") @db.Decimal(5, 2)
+  coverageFormat    String?  @map("coverage_format") @db.VarChar(12)
+  coverageDetail    Json?    @map("coverage_detail")
+  tokenId           Int?     @map("token_id")
+  createdById       Int?     @map("created_by_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt], map: "idx_work_test_import_project")
+  @@map("work_test_imports")
+}
+
+// ── hết CTW đợt 7c ──

@@ -105,3 +105,16 @@ Nguồn: Gemini đánh giá repo; Claude đã đo lại (schema 13.537 dòng/459
 
 - 10/10 06:3x: ĐÃ DỌN rác R2 (98 tệp thử: work/<id≥2400>/*, branding p4500/p4505/w2172/w2176); giữ work/2,3,5,6 + branding p5/w5. Nguyên nhân gốc: backend local + DB test dùng chung `.env` ⇒ ghi R2 THẬT — đưa vào đợt 6: test/local dùng R2 giả (MinIO hoặc prefix `test/` + chặn ghi bucket thật khi WORK_DB_TEST=1).
 - Người dùng dặn 10/10: **iOS làm SAU CÙNG** (sau cả thư viện sơ đồ AI Code/Chat và điều phối đa agent).
+
+## Đợt 8 — Kết nối ngoài (chốt 11/10/2026, đã hướng dẫn user đăng ký app)
+- Redirect URI CỐ ĐỊNH (mã phải khớp đúng từng ký tự):
+  - Microsoft: `https://cuongthai.com/api/v1/work/integrations/microsoft/callback`
+  - Google:    `https://cuongthai.com/api/v1/work/integrations/google/callback`
+  - Notion:    `https://cuongthai.com/api/v1/work/integrations/notion/callback`
+  - Local dev: thay gốc bằng `http://localhost:4000` (đăng ký thêm cùng đường).
+- Env (VPS `/opt/cuonghoangdev/.env`): `CTW_MS_CLIENT_ID`, `CTW_MS_CLIENT_SECRET`, `CTW_GOOGLE_CLIENT_ID`,
+  `CTW_GOOGLE_CLIENT_SECRET`, `CTW_NOTION_CLIENT_ID`, `CTW_NOTION_CLIENT_SECRET`. Thiếu ⇒ nút kết nối ẩn + ghi chú, không lỗi.
+- Phạm vi: MS Graph delegated `openid profile email offline_access User.Read Calendars.ReadWrite OnlineMeetings.ReadWrite Files.ReadWrite`;
+  Google `openid email profile calendar.events drive.file spreadsheets` (drive.file để tránh scope restricted); Notion public integration.
+- Google app ở chế độ Testing ⇒ tối đa 100 test user, phải thêm email; lên Production cần Google xác minh (calendar.events là sensitive).
+- Tài khoản trường (FPT, tenant Entra) có thể chặn người dùng tự cấp quyền app chưa xác minh nhà phát hành ⇒ tài khoản Outlook cá nhân chắc chắn chạy.

@@ -29,8 +29,7 @@ import {
   CalendarClock, GitPullRequestArrow, ShieldAlert,
   Wallet, Receipt, FileBarChart,
   Headset, Library, ExternalLink, Bot,
-  FileSpreadsheet, MessagesSquare, UsersRound, ClipboardCheck,
-} from 'lucide-react';
+  FileSpreadsheet, MessagesSquare, UsersRound, ClipboardCheck, Package } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
 import { resApi, resKeys } from '@/lib/work-resources-api';
@@ -49,11 +48,13 @@ import { ChatNavBadge } from './chat/ChatNotifier';
 import { chatApi, chatKeys } from '@/lib/work-chat-api';
 // CTW đợt 5: hub giảng viên + lớp học (link chỉ hiện với người có vai TEACHER / có lớp).
 import { GraduationCap, School } from 'lucide-react';
+import { Crosshair, Spade, MessageSquareHeart } from 'lucide-react'; // CTW đợt 7a
+import { ClipboardList, Inbox as InboxIcon, FileInput, BookOpen as BookOpenKb } from 'lucide-react'; // CTW đợt 7b
 import { teachingApi, teachingKeys } from './teaching/teachingApi';
 import { wt } from './i18n';
 
-const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes']); // CTW đợt 5: + teaching, classes
-const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents']);
+const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes', 'security']); // CTW đợt 5: + teaching, classes · đợt 7c: + security (2FA)
+const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents', 'okrs']);
 
 export function useWorkPath() {
   const pathname = usePathname() ?? '';
@@ -120,6 +121,10 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'backlog', get label() { return wt('nav.n_Backlog'); }, icon: ListOrdered, match: (v) => v === 'backlog' },
       { path: 'timeline', get label() { return wt('nav.n_Timeline'); }, icon: CalendarRange, match: (v) => v === 'timeline' },
       { path: 'releases', get label() { return wt('nav.n_Releases'); }, icon: Rocket, match: (v) => v === 'releases' },
+      // CTW đợt 7a: OKR dự án, planning poker, retro — đội dự án + giảng viên (khách không thấy; server cũng chặn).
+      { path: 'okrs', get label() { return wt('agile.navOkrs'); }, icon: Crosshair, match: (v) => v === 'okrs', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      { path: 'poker', get label() { return wt('agile.navPoker'); }, icon: Spade, match: (v) => v === 'poker', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      { path: 'retros', get label() { return wt('agile.navRetros'); }, icon: MessageSquareHeart, match: (v) => v === 'retros', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
     ],
   },
   {
@@ -136,6 +141,12 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'spec', get label() { return wt('nav.n_Specquality'); }, icon: Gauge, match: (v) => v === 'spec', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       // CTW đợt 6: phiên review/inspection (tài liệu + mã) + baseline yêu cầu — đội dự án + giảng viên.
       { path: 'reviews', get label() { return wt('q6.navReviews'); }, icon: ClipboardCheck, match: (v) => v === 'reviews', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      // CTW đợt 7c (C25): sổ tài sản & giấy phép (phần mềm, font/ảnh, tài khoản dịch vụ, thiết bị) — đội dự án + giảng viên.
+      { path: 'assets', get label() { return wt('c7c.navAssets'); }, icon: Package, match: (v) => v === 'assets', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      // CTW đợt 7b: biểu mẫu → thẻ · kênh ngoài (email/Discord/Zalo) → đề xuất chờ duyệt · nhập Trello/Asana/Jira/CSV (ADMIN).
+      { path: 'forms', get label() { return wt('c7b.navForms'); }, icon: ClipboardList, match: (v) => v === 'forms', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      { path: 'intake', get label() { return wt('c7b.navIntake'); }, icon: InboxIcon, match: (v) => v === 'intake', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      { path: 'import', get label() { return wt('c7b.navImport'); }, icon: FileInput, match: (v) => v === 'import', roles: ['ADMIN'] },
       // CTW đợt 4: SRS có cấu trúc (use case/actor/BR/màn/phân quyền) + RTM — đội dự án + giảng viên.
       { path: 'requirements', get label() { return wt('nav.n_Requirements'); }, icon: ListTree, match: (v) => v === 'requirements', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       // CTW Diagram: Diagram Studio (Mermaid/Excalidraw, AI vẽ từ dữ liệu dự án) — đội dự án + giảng viên.
@@ -172,6 +183,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'finance', get label() { return wt('nav.n_Finance'); }, icon: Wallet, match: (v) => v === 'finance', module: 'finance', roles: ['ADMIN', 'MEMBER'] },
       // Đợt S5a: service desk & SLA.
       { path: 'desk', get label() { return wt('nav.n_Servicedesk'); }, icon: Headset, match: (v) => v === 'desk', module: 'serviceDesk' },
+      // CTW đợt 7b: knowledge base cho desk / cổng khách (bài = trang Docs).
+      { path: 'kb', get label() { return wt('c7b.navKb'); }, icon: BookOpenKb, match: (v) => v === 'kb', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
     ],
   },
 ];
@@ -243,6 +256,8 @@ const WORKSPACE_NAV: { path: string; label: string; icon: LucideIcon; module?: S
   // Đợt S3a — chỉ người trong đội (không phải khách GUEST); phạm vi dữ liệu do server quyết.
   { path: '/portfolio', get label() { return wt('nav.n_Portfolio'); }, icon: BriefcaseBusiness, staffOnly: true },
   { path: '/workload', get label() { return wt('nav.n_Workload'); }, icon: Gauge, staffOnly: true },
+  // CTW đợt 7a: OKR cấp không gian (+ objective các dự án người xem thấy).
+  { path: '/okrs', get label() { return wt('agile.navOkrs'); }, icon: Crosshair, staffOnly: true },
   // CTW-28 (A14): AI agent thành viên — tạo, token, webhook, hộp thư.
   { path: '/agents', get label() { return wt('nav.n_AIagents'); }, icon: Bot, staffOnly: true },
   { path: '/settings', get label() { return wt('nav.n_Memberssettings'); }, icon: Users },

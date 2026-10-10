@@ -31,7 +31,7 @@ const EXPIRY = [
 function CreateTokenDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const qc = useQueryClient();
   const [name, setName] = useState('');
-  const [scope, setScope] = useState<'read' | 'write'>('read');
+  const [scope, setScope] = useState<'read' | 'write' | 'tests'>('read');
   const [expiry, setExpiry] = useState('90');
   const [created, setCreated] = useState<(ApiToken & { token: string }) | null>(null);
   const [copied, setCopied] = useState(false);
@@ -44,7 +44,8 @@ function CreateTokenDialog({ open, onClose }: { open: boolean; onClose: () => vo
   const create = useMutation({
     mutationFn: () => workApi.createApiToken({
       name: name.trim(),
-      scopes: (scope === 'write' ? ['read', 'write'] : ['read']) as TokenScope[],
+      // CTW đợt 7c: 'tests' = chỉ được tải kết quả test lên (CI) — scope tests:write, mọi lệnh ghi khác bị chặn.
+      scopes: (scope === 'write' ? ['read', 'write'] : scope === 'tests' ? ['read', 'tests:write'] : ['read']) as TokenScope[],
       expiresInDays: expiry ? Number(expiry) : null,
     }),
     onSuccess: (t) => { setCreated(t); qc.invalidateQueries({ queryKey: TOKENS_KEY }); },
@@ -82,7 +83,7 @@ function CreateTokenDialog({ open, onClose }: { open: boolean; onClose: () => vo
           </button>
         </div>
         <p className="mt-3 text-[12px] text-[var(--w-text-3)]">
-          {created.scopes.includes('write') ? wt('dev.rw') : wt('dev.ro')} · {created.expiresAt ? wt('dev.expiresOn', { date: formatDate(created.expiresAt) }) : wt('dev.neverExpires')}
+          {created.scopes.includes('write') ? wt('dev.rw') : created.scopes.includes('tests:write') ? wt('c7c.devTests') : wt('dev.ro')} · {created.expiresAt ? wt('dev.expiresOn', { date: formatDate(created.expiresAt) }) : wt('dev.neverExpires')}
         </p>
       </Dialog>
     );
@@ -100,6 +101,7 @@ function CreateTokenDialog({ open, onClose }: { open: boolean; onClose: () => vo
             {([
               { v: 'read', t: wt('dev.ro'), d: wt('dev.roDesc') },
               { v: 'write', t: wt('dev.rw'), d: wt('dev.rwDesc') },
+              { v: 'tests', t: wt('c7c.devTests'), d: wt('c7c.devTestsDesc') },
             ] as const).map((o) => (
               <label key={o.v} className={cn('flex cursor-pointer items-start gap-2.5 border-b border-[var(--w-border)] px-3 py-2.5 last:border-b-0', scope === o.v ? 'bg-[var(--w-accent-soft)]' : 'hover:bg-[var(--w-hover)]')}>
                 <input type="radio" name="scope" className="mt-0.5 accent-[var(--w-accent)]" checked={scope === o.v} onChange={() => setScope(o.v)} />
@@ -181,7 +183,7 @@ function TokenList({ onCreate }: { onCreate: () => void }) {
                       'rounded-[4px] border px-1.5 text-[11px] font-medium leading-[18px]',
                       t.scopes.includes('write') ? 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'border-[var(--w-border-strong)] text-[var(--w-text-2)]',
                     )}>
-                      {t.scopes.includes('write') ? wt('dev.rw') : wt('dev.ro')}
+                      {t.scopes.includes('write') ? wt('dev.rw') : t.scopes.includes('tests:write') ? wt('c7c.devTests') : wt('dev.ro')}
                     </span>
                   </td>
                   <td className="whitespace-nowrap px-3 py-2 text-[var(--w-text-2)]">{formatDate(t.createdAt)}</td>
@@ -473,6 +475,8 @@ export default function DeveloperPage() {
             action={<button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setCreating(true)}><Plus size={14} /> {wt('dev.createToken')}</button>}
           >
             <TokenList onCreate={() => setCreating(true)} />
+            {/* CTW đợt 7c (C17): token không bị chính sách ép 2FA chặn — ghi rõ ở đây. */}
+            <p className="mt-3 rounded-[6px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px] leading-relaxed text-[var(--w-text-2)]" data-testid="c7c-dev-2fa-note">{wt('c7c.dev2faNote')}</p>
           </Section>
           <Section title={wt('dev.mcpTitle')} description={wt('dev.mcpDesc')}>
             <McpClientsGuide />

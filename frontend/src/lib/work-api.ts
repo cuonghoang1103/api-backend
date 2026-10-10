@@ -48,6 +48,8 @@ export interface WorkspaceSummary {
   memberCount: number;
   /** CTW-23: logo không gian. */
   logoUrl?: string | null;
+  /** CTW đợt 7c: không gian ép 2FA mà phiên này chưa đạt (GRACE = còn ân hạn). null = không ảnh hưởng. */
+  twoFactor?: { state: 'GRACE' | 'SETUP_REQUIRED' | 'VERIFY_REQUIRED'; graceUntil: string | null } | null;
 }
 
 export interface ProjectSummary {
@@ -615,7 +617,9 @@ export interface StatsData { unit: EstimationUnit; total: number; groups: StatsG
 export interface SavedFilter { id: number; name: string; query: string; shared: boolean; ownerId: number; updatedAt: string; owner: { username: string } }
 export type WidgetKind = 'filter' | 'pie' | 'bar' | 'counter' | 'created_resolved' | 'burndown' | 'my_issues' | 'text' | 'health' | 'top_risks'
   // UX-B: biểu đồ dòng chảy + KPI + tải theo người + việc trễ (số liệu ở work-uxb-api.ts).
-  | 'kpis' | 'cfd' | 'throughput' | 'cycle_time' | 'aging_wip' | 'velocity' | 'release_burnup' | 'workload' | 'overdue';
+  | 'kpis' | 'cfd' | 'throughput' | 'cycle_time' | 'aging_wip' | 'velocity' | 'release_burnup' | 'workload' | 'overdue'
+  // CTW đợt 7c (C3): số liệu ở work-c7c-api.ts (OKR + đồng hồ đọc API đợt 7a).
+  | 'test_pass_rate' | 'defects_by_severity' | 'license_expiring' | 'my_timer' | 'okr';
 export interface DashboardWidget {
   id: string; kind: WidgetKind; title: string; query?: string; groupBy?: GroupBy; sprintId?: number | null; versionId?: number | null; days?: number; text?: string; size?: 'half' | 'full';
 }
@@ -651,13 +655,19 @@ export interface TimeReport {
   principal?: 'HUMAN' | 'AGENT' | 'ALL';
   byPrincipal?: { HUMAN: number; AGENT: number };
 }
-export type RuleTrigger = 'issue.created' | 'issue.transitioned' | 'issue.assigned' | 'field.changed' | 'comment.added' | 'scheduled.daily';
-export type RuleActionKind = 'transition' | 'assign' | 'set_priority' | 'add_label' | 'comment' | 'move_to_active_sprint' | 'notify' | 'create_subtask';
+export type RuleTrigger = 'issue.created' | 'issue.transitioned' | 'issue.assigned' | 'field.changed' | 'comment.added' | 'scheduled.daily'
+  // CTW đợt 7c (C13)
+  | 'issue.due_soon' | 'test.failed' | 'pr.merged' | 'sla.breached' | 'baseline.changed';
+export type RuleActionKind = 'transition' | 'assign' | 'set_priority' | 'add_label' | 'comment' | 'move_to_active_sprint' | 'notify' | 'create_subtask'
+  // CTW đợt 7c (C13)
+  | 'post_chat' | 'webhook' | 'assign_round_robin' | 'create_subtasks';
 export interface RuleAction {
   kind: RuleActionKind; statusId?: number; assignee?: number | 'reporter' | null; priority?: number; labelId?: number; text?: string;
   to?: Array<'assignee' | 'reporter' | 'watchers' | number>; title?: string;
+  /** CTW đợt 7c: post_chat (kênh, '' = #general) · webhook (url, secret chỉ GỬI lên, server che khi trả về) · vòng · mẫu thẻ con. */
+  channel?: string | null; url?: string; secret?: string; secretSet?: boolean; pool?: number[]; titles?: string[]; template?: string;
 }
-export interface RuleConfig { toStatusIds?: number[]; fromStatusIds?: number[]; fields?: string[]; jql?: string; conditions?: Array<{ jql: string }>; actions: RuleAction[] }
+export interface RuleConfig { toStatusIds?: number[]; fromStatusIds?: number[]; fields?: string[]; jql?: string; dueInDays?: number; conditions?: Array<{ jql: string }>; actions: RuleAction[] }
 export interface AutomationRule {
   id: number; name: string; enabled: boolean; trigger: RuleTrigger; config: RuleConfig; createdById: number | null; runCount: number;
   lastRunAt: string | null; createdAt: string; updatedAt: string; recentProblems: number;
@@ -722,7 +732,7 @@ export interface ShareLink {
   id: number; token: string; url: string; label: string | null; options: ShareOptions; expiresAt: string | null; expired: boolean;
   viewCount: number; lastViewedAt: string | null; createdAt: string;
 }
-export type TokenScope = 'read' | 'write';
+export type TokenScope = 'read' | 'write' | 'tests:write';
 export interface CalendarLinkStatus { active: boolean; createdAt: string | null; lastUsedAt: string | null; prefix: string | null }
 
 export interface ApiToken { id: number; name: string; prefix: string; scopes: TokenScope[]; expiresAt: string | null; lastUsedAt: string | null; lastUsedIp: string | null; createdAt: string }
@@ -1643,7 +1653,7 @@ export const workDocsApi = {
 // Backend: src/services/work/portal.service.ts. `asClient` = "Preview as client"
 // (nhân viên xem đúng như khách, chỉ đọc).
 
-export type PortalTab = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity' | 'meetings' | 'payments' | 'reports' | 'resources';
+export type PortalTab = 'overview' | 'requests' | 'approvals' | 'documents' | 'deliverables' | 'activity' | 'meetings' | 'payments' | 'reports' | 'resources' | 'help'; // 'help' = CTW đợt 7b: knowledge base
 export type PortalRequestKind = 'BUG' | 'CHANGE' | 'QUESTION' | 'FEEDBACK';
 
 export interface PortalViewer {

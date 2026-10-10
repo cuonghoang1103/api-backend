@@ -1,0 +1,15 @@
+{
+  "numTotalTests": 4, "numPassedTests": 2, "numFailedTests": 1, "numPendingTests": 1, "success": false, "startTime": 1760140800000,
+  "testResults": [
+    {
+      "name": "/repo/src/utils/price.test.ts", "status": "failed", "startTime": 1760140800000, "endTime": 1760140801200, "message": "",
+      "assertionResults": [
+        { "ancestorTitles": ["price", "formatVnd"], "title": "adds thousands separators", "fullName": "price formatVnd adds thousands separators", "status": "passed", "duration": 4, "failureMessages": [] },
+        { "ancestorTitles": ["price", "formatVnd"], "title": "rounds half up", "fullName": "price formatVnd rounds half up", "status": "failed", "duration": 6,
+          "failureMessages": ["Error: \u001b[2mexpect(\u001b[22mreceived\u001b[2m).toBe(\u001b[22mexpected\u001b[2m)\u001b[22m\n\nExpected: \"1.000 ₫\"\nReceived: \"999 ₫\"\n    at Object.<anonymous> (/repo/src/utils/price.test.ts:14:30)"] },
+        { "ancestorTitles": ["price"], "title": "handles negative numbers", "fullName": "price handles negative numbers", "status": "pending", "duration": null, "failureMessages": [] },
+        { "ancestorTitles": [], "title": "retried then passed", "fullName": "retried then passed", "status": "passed", "duration": 9, "failureMessages": [], "invocations": 2 }
+      ]
+    }
+  ]
+}

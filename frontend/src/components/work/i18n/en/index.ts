@@ -75,5 +75,8 @@ import { srsx } from './srsx'; // CTW đợt 6b
 import { table } from './table'; // UX-C
 import { uxc } from './uxc'; // UX-C
 import { q6 } from './q6'; // CTW đợt 6: chất lượng (review, baseline, test chuyên sâu)
+import { agile } from './agile'; // CTW đợt 7a: OKR, planning poker, retro, timer
+import { c7b } from './c7b'; // CTW đợt 7b: forms, intake, import, knowledge base
+import { c7c } from './c7c'; // CTW đợt 7c: ép 2FA, sổ tài sản, test tự động, automation thêm, widget
 
-export const en = { common, agents, ai, audit, backlog, board, chat, classroom, contrib, cover, collab, create, desk, detail, dev, diagram, docs, editor, errors, fields, finance, fpt, git, gov, home, invite, issues, modup, notify, onboard, palette, pchat, pexport, pimport, releases, school, settings, share, shell, sprint, srs, status, swr, studio, teacher, tests, time, timeline, trash, pboard, pfields, pspec, ptypes, wf, pagents, pstudio, auto, rep, portal, res, pf, wl, gs, jql, dash, pages, uat, tpl, nav, meeting2, elic, srsx, charts, table, uxc, q6 };
+export const en = { common, agents, ai, audit, backlog, board, chat, classroom, contrib, cover, collab, create, desk, detail, dev, diagram, docs, editor, errors, fields, finance, fpt, git, gov, home, invite, issues, modup, notify, onboard, palette, pchat, pexport, pimport, releases, school, settings, share, shell, sprint, srs, status, swr, studio, teacher, tests, time, timeline, trash, pboard, pfields, pspec, ptypes, wf, pagents, pstudio, auto, rep, portal, res, pf, wl, gs, jql, dash, pages, uat, tpl, nav, meeting2, elic, srsx, charts, table, uxc, q6, agile, c7b, c7c };

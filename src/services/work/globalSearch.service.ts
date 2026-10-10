@@ -19,6 +19,7 @@
 
 import type { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
+import { gatedWorkspaceIds } from './twoFactor.js';
 import { PUBLIC_USER } from './common.js';
 import type { ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
 import {
@@ -51,7 +52,8 @@ export interface VisibleProject {
 /** Mọi dự án (kể cả lưu trữ) người gọi có vai trò — cùng luật với loadProjectAccess. */
 export async function visibleProjects(userId: number): Promise<VisibleProject[]> {
   const ms = await prisma.workMember.findMany({
-    where: { userId, workspace: { deletedAt: null } },
+    // CTW đợt 7c: loại không gian đang chặn phiên này vì chưa đạt 2FA (twoFactor.gatedWorkspaceIds).
+    where: { userId, workspace: { deletedAt: null }, workspaceId: { notIn: gatedWorkspaceIds(userId) } },
     select: {
       role: true,
       workspace: {

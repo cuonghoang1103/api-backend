@@ -3,7 +3,7 @@
 /** /work/<slug>/settings — cài đặt không gian: General · Members · Invitations · Audit log · Import project (S5c) · Trash. */
 
 import { Suspense } from 'react';
-import { FileUp, MailPlus, ScrollText, SlidersHorizontal, Trash2, Users } from 'lucide-react';
+import { FileUp, MailPlus, ScrollText, ShieldCheck, SlidersHorizontal, Trash2, Users } from 'lucide-react';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { workApi, workError } from '@/lib/work-api';
@@ -17,9 +17,10 @@ import WorkspaceInvitations from '@/components/work/settings/WorkspaceInvitation
 import WorkspaceTrash from '@/components/work/settings/WorkspaceTrash';
 import WorkspaceAudit from '@/components/work/settings/WorkspaceAudit';
 import WorkspaceImport from '@/components/work/settings/WorkspaceImport';
+import WorkspaceSecurity from '@/components/work/settings/WorkspaceSecurity'; // CTW đợt 7c: ép 2FA
 import { wt } from '@/components/work/i18n';
 
-type Tab = 'general' | 'members' | 'invitations' | 'audit' | 'import' | 'trash';
+type Tab = 'general' | 'members' | 'invitations' | 'security' | 'audit' | 'import' | 'trash';
 
 function WorkspaceSettings() {
   const params = useParams<{ ws: string }>();
@@ -36,6 +37,8 @@ function WorkspaceSettings() {
       { key: 'general', get label() { return wt('settings.tGeneral'); }, icon: SlidersHorizontal },
       { key: 'members', get label() { return wt('settings.tMembers'); }, icon: Users },
       ...(canManage ? [{ key: 'invitations' as const, get label() { return wt('settings.tInvitations'); }, icon: MailPlus }] : []),
+      // CTW đợt 7c (C17): ép 2FA + ai chưa bật.
+      ...(canManage ? [{ key: 'security' as const, get label() { return wt('c7c.tabSecurity'); }, icon: ShieldCheck }] : []),
     ] },
     { get label() { return wt('settings.tData'); }, tabs: canManage ? [
       { key: 'audit' as const, get label() { return wt('settings.tAuditLog'); }, icon: ScrollText },
@@ -70,6 +73,7 @@ function WorkspaceSettings() {
         {tab === 'general' && <WorkspaceGeneral ws={ws} />}
         {tab === 'members' && <WorkspaceMembers ws={ws} />}
         {tab === 'invitations' && <WorkspaceInvitations ws={ws} />}
+        {tab === 'security' && <WorkspaceSecurity ws={ws} />}
         {tab === 'audit' && <WorkspaceAudit workspaceId={ws.id} />}
         {tab === 'import' && <WorkspaceImport ws={ws} />}
         {tab === 'trash' && <WorkspaceTrash ws={ws} />}

@@ -195,6 +195,14 @@ export function startCronJobs(): void {
     } catch (err) {
       logger.warn('[work] daily AI briefs failed', { error: (err as Error).message });
     }
+    // CTW đợt 7c (C25): nhắc giấy phép/tài sản sắp hết hạn — mỗi hạn đúng một lần (không LLM).
+    try {
+      const { runAssetReminders } = await import('./work/assets.service.js');
+      const n = await runAssetReminders();
+      if (n) logger.info('[work] asset expiry reminders', { sent: n });
+    } catch (err) {
+      logger.warn('[work] asset expiry reminders failed', { error: (err as Error).message });
+    }
     // CT Work đợt S3b: nhắc người phụ trách dòng RAID tới hạn xem lại (không dùng LLM).
     try {
       const { runRaidReviewReminders } = await import('./work/raid.service.js');

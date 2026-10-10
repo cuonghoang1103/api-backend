@@ -13,8 +13,8 @@ import { useMemo, useRef, useState, type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  AlertTriangle, ArrowDown, ArrowUp, Bell, CalendarClock, ChevronDown, FlaskConical, MessageSquare, Pencil, Plus, RefreshCw,
-  Trash2, UserCheck, X, Zap,
+  AlertTriangle, ArrowDown, ArrowUp, Bell, CalendarClock, ChevronDown, FlaskConical, GitMerge, ListChecks, MessageSquare, Pencil, Plus, RefreshCw,
+  Repeat, Trash2, UserCheck, X, Zap,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -37,6 +37,12 @@ const TRIGGERS: Array<{ id: RuleTrigger; label: string; help: string }> = [
   { id: 'field.changed', get label() { return wt('auto.tField'); }, get help() { return wt('auto.tFieldH'); } },
   { id: 'comment.added', get label() { return wt('auto.tComment'); }, get help() { return wt('auto.tCommentH'); } },
   { id: 'scheduled.daily', get label() { return wt('auto.tDaily'); }, get help() { return wt('auto.tDailyH'); } },
+  // CTW đợt 7c (C13)
+  { id: 'issue.due_soon', get label() { return wt('c7c.trDueSoon'); }, get help() { return wt('c7c.trDueSoonH'); } },
+  { id: 'test.failed', get label() { return wt('c7c.trTestFailed'); }, get help() { return wt('c7c.trTestFailedH'); } },
+  { id: 'pr.merged', get label() { return wt('c7c.trPrMerged'); }, get help() { return wt('c7c.trPrMergedH'); } },
+  { id: 'sla.breached', get label() { return wt('c7c.trSla'); }, get help() { return wt('c7c.trSlaH'); } },
+  { id: 'baseline.changed', get label() { return wt('c7c.trBaseline'); }, get help() { return wt('c7c.trBaselineH'); } },
 ];
 
 const FIELDS: Array<{ id: string; label: string }> = [
@@ -61,6 +67,20 @@ const ACTIONS: Array<{ id: RuleActionKind; label: string }> = [
   { id: 'move_to_active_sprint', get label() { return wt('auto.aSprint'); } },
   { id: 'notify', get label() { return wt('auto.aNotify'); } },
   { id: 'create_subtask', get label() { return wt('auto.aSubtask'); } },
+  // CTW đợt 7c (C13)
+  { id: 'create_subtasks', get label() { return wt('c7c.acSubtasks'); } },
+  { id: 'assign_round_robin', get label() { return wt('c7c.acRoundRobin'); } },
+  { id: 'post_chat', get label() { return wt('c7c.acChat'); } },
+  { id: 'webhook', get label() { return wt('c7c.acWebhook'); } },
+];
+
+/** CTW đợt 7c: mẫu thẻ con (khớp SUBTASK_TEMPLATES ở automation.service.ts — server mở ra danh sách tiêu đề khi lưu). */
+const SUBTASK_TEMPLATES: Array<{ id: string; label: string }> = [
+  { id: 'dod', get label() { return wt('c7c.stDod'); } },
+  { id: 'bugfix', get label() { return wt('c7c.stBugfix'); } },
+  { id: 'release', get label() { return wt('c7c.stRelease'); } },
+  { id: 'report', get label() { return wt('c7c.stReport'); } },
+  { id: 'usecase', get label() { return wt('c7c.stUsecase'); } },
 ];
 
 const LOG_STATUS: Record<RuleLogStatus, { label: string; cls: string }> = {
@@ -111,6 +131,11 @@ function whenSummary(trigger: RuleTrigger, cfg: RuleConfig, statuses: Statuses):
       return wt('auto.wTransitioned');
     }
     case 'scheduled.daily': return wt('auto.wDaily');
+    case 'issue.due_soon': return wt('c7c.wDueSoon', { count: cfg.dueInDays ?? 2 });
+    case 'test.failed': return wt('c7c.wTestFailed');
+    case 'pr.merged': return wt('c7c.wPrMerged');
+    case 'sla.breached': return wt('c7c.wSla');
+    case 'baseline.changed': return wt('c7c.wBaseline');
     default: return trigger;
   }
 }
@@ -125,6 +150,10 @@ function actionSummary(a: RuleAction, config: ProjectConfig, statuses: Statuses)
     case 'move_to_active_sprint': return wt('auto.sSprint');
     case 'notify': return wt('auto.sNotify');
     case 'create_subtask': return wt('auto.sSubtask');
+    case 'create_subtasks': return wt('c7c.sSubtasks', { count: a.titles?.length ?? 0 });
+    case 'assign_round_robin': return wt('c7c.sRoundRobin', { x: (a.pool ?? []).map((id) => userName(config.members.find((m) => m.id === id))).join(' → ') });
+    case 'post_chat': return wt('c7c.sChat', { x: a.channel || 'general' });
+    case 'webhook': { let host = '…'; try { host = new URL(a.url ?? '').host; } catch { /* nháp */ } return wt('c7c.sWebhook', { x: host }); }
     default: return a.kind;
   }
 }
@@ -182,6 +211,61 @@ const TEMPLATES: Array<{ id: string; title: string; body: string; icon: ReactNod
         actions: [{ kind: 'notify', to: ['assignee'], text: wt('auto.overdueText') }],
       },
     }),
+  },
+];
+
+// ─── CTW đợt 7c: thư viện mẫu luật cho ĐỒ ÁN SINH VIÊN ─────────────
+type Tpl = (typeof TEMPLATES)[number];
+const team = (config: ProjectConfig) => config.members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER').map((m) => m.id);
+const typeCond = (config: ProjectConfig, key: string) => { const ty = config.issueTypes.find((x) => x.key === key); return ty ? [{ jql: `type = ${quote(ty.name)}` }] : null; };
+const STUDENT_TEMPLATES: Tpl[] = [
+  {
+    id: 'stu-due', get title() { return wt('c7c.tpDue'); }, get body() { return wt('c7c.tpDueB'); }, icon: <CalendarClock size={14} />,
+    build: () => ({ name: wt('c7c.tpDue'), enabled: true, trigger: 'issue.due_soon', config: { dueInDays: 2, actions: [{ kind: 'notify', to: ['assignee'], text: wt('c7c.tpDueText') }] } }),
+  },
+  {
+    id: 'stu-story-dod', get title() { return wt('c7c.tpDod'); }, get body() { return wt('c7c.tpDodB'); }, icon: <ListChecks size={14} />,
+    build: (config) => {
+      const cond = typeCond(config, 'STORY');
+      if (!cond) return wt('c7c.tpNoStory');
+      if (!config.issueTypes.some((x) => x.level === -1)) return wt('auto.noSubtaskType');
+      return { name: wt('c7c.tpDod'), enabled: true, trigger: 'issue.created', config: { conditions: cond, actions: [{ kind: 'create_subtasks', template: 'dod', titles: [] }] } };
+    },
+  },
+  {
+    id: 'stu-bug-rr', get title() { return wt('c7c.tpBugRr'); }, get body() { return wt('c7c.tpBugRrB'); }, icon: <Repeat size={14} />,
+    build: (config) => {
+      const cond = typeCond(config, 'BUG');
+      if (!cond) return wt('auto.noBug');
+      const pool = team(config);
+      if (pool.length < 2) return wt('c7c.tpNeedTwo');
+      return { name: wt('c7c.tpBugRr'), enabled: true, trigger: 'issue.created', config: { conditions: cond, actions: [{ kind: 'assign_round_robin', pool }] } };
+    },
+  },
+  {
+    id: 'stu-ci-red', get title() { return wt('c7c.tpCi'); }, get body() { return wt('c7c.tpCiB'); }, icon: <FlaskConical size={14} />,
+    build: () => ({ name: wt('c7c.tpCi'), enabled: true, trigger: 'test.failed', config: { actions: [{ kind: 'post_chat', channel: '', text: wt('c7c.tpCiText') }] } }),
+  },
+  {
+    id: 'stu-pr', get title() { return wt('c7c.tpPr'); }, get body() { return wt('c7c.tpPrB'); }, icon: <GitMerge size={14} />,
+    build: () => ({ name: wt('c7c.tpPr'), enabled: true, trigger: 'pr.merged', config: { actions: [{ kind: 'post_chat', channel: '', text: wt('c7c.tpPrText') }] } }),
+  },
+  {
+    id: 'stu-baseline', get title() { return wt('c7c.tpBaseline'); }, get body() { return wt('c7c.tpBaselineB'); }, icon: <MessageSquare size={14} />,
+    build: () => ({ name: wt('c7c.tpBaseline'), enabled: true, trigger: 'baseline.changed', config: { actions: [{ kind: 'post_chat', channel: '', text: wt('c7c.tpBaselineText') }] } }),
+  },
+  {
+    id: 'stu-uc', get title() { return wt('c7c.tpUc'); }, get body() { return wt('c7c.tpUcB'); }, icon: <ListChecks size={14} />,
+    build: (config) => {
+      const cond = typeCond(config, 'REQUIREMENT') ?? typeCond(config, 'STORY');
+      if (!cond) return wt('c7c.tpNoStory');
+      if (!config.issueTypes.some((x) => x.level === -1)) return wt('auto.noSubtaskType');
+      return { name: wt('c7c.tpUc'), enabled: false, trigger: 'issue.created', config: { conditions: cond, actions: [{ kind: 'create_subtasks', template: 'usecase', titles: [] }] } };
+    },
+  },
+  {
+    id: 'stu-sla', get title() { return wt('c7c.tpSla'); }, get body() { return wt('c7c.tpSlaB'); }, icon: <AlertTriangle size={14} />,
+    build: () => ({ name: wt('c7c.tpSla'), enabled: true, trigger: 'sla.breached', config: { actions: [{ kind: 'set_priority', priority: 1 }, { kind: 'notify', to: ['assignee'], text: wt('c7c.tpSlaText') }] } }),
   },
 ];
 
@@ -270,6 +354,10 @@ function defaultAction(kind: RuleActionKind, config: ProjectConfig, statuses: St
     case 'comment': return { kind, text: '' };
     case 'notify': return { kind, to: ['assignee'], text: '' };
     case 'create_subtask': return { kind, title: '' };
+    case 'create_subtasks': return { kind, template: 'dod', titles: [] };
+    case 'assign_round_robin': return { kind, pool: config.members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER').slice(0, 2).map((m) => m.id) };
+    case 'post_chat': return { kind, channel: '', text: '{{issue.key}} {{issue.title}}' };
+    case 'webhook': return { kind, url: '', text: '' };
     default: return { kind };
   }
 }
@@ -383,6 +471,47 @@ function ActionEditor({ action, onChange, config, statuses, disabled }: {
       ) : (
         <p className="text-[12px] text-[var(--w-text-3)]">{wt('auto.noSubtaskType')}</p>
       );
+    // ── CTW đợt 7c ──
+    case 'create_subtasks':
+      return config.issueTypes.some((t) => t.level === -1) ? (
+        <div className="space-y-2">
+          <Select aria-label={wt('c7c.stTemplate')} value={action.titles?.length ? '' : action.template ?? 'dod'} disabled={disabled}
+            onChange={(e) => onChange({ ...action, template: e.target.value || undefined, titles: e.target.value ? [] : (action.titles?.length ? action.titles : ['']) })}>
+            {SUBTASK_TEMPLATES.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
+            <option value="">{wt('c7c.stCustom')}</option>
+          </Select>
+          {!!action.titles?.length && (
+            <textarea aria-label={wt('c7c.stTitles')} rows={4} maxLength={4000} disabled={disabled} className="w-input !h-auto py-2" placeholder={wt('c7c.stTitlesPh')}
+              value={action.titles.join('\n')} onChange={(e) => onChange({ ...action, titles: e.target.value.split('\n').slice(0, 15) })} />
+          )}
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('c7c.stNote')}</p>
+        </div>
+      ) : <p className="text-[12px] text-[var(--w-text-3)]">{wt('auto.noSubtaskType')}</p>;
+    case 'assign_round_robin':
+      return (
+        <div className="space-y-1">
+          <MultiPick options={assignable.map((m) => ({ value: m.id, label: userName(m) }))} value={action.pool ?? []} disabled={disabled} placeholder={wt('c7c.rrPick')} onChange={(pool) => onChange({ ...action, pool })} />
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('c7c.rrNote')}</p>
+        </div>
+      );
+    case 'post_chat':
+      return (
+        <div className="space-y-2">
+          <input aria-label={wt('c7c.chatChannel')} className="w-input" maxLength={40} disabled={disabled} placeholder={wt('c7c.chatChannelPh')} value={action.channel ?? ''} onChange={(e) => onChange({ ...action, channel: e.target.value.replace(/^#/, '') })} />
+          <textarea aria-label={wt('c7c.chatText')} rows={2} maxLength={2000} disabled={disabled} className="w-input !h-auto py-2" value={action.text ?? ''} onChange={(e) => onChange({ ...action, text: e.target.value })} />
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('c7c.varsHelp')}</p>
+        </div>
+      );
+    case 'webhook':
+      return (
+        <div className="space-y-2">
+          <input aria-label={wt('c7c.whUrl')} type="url" className="w-input font-mono" maxLength={600} disabled={disabled} placeholder="https://hooks.slack.com/services/…" value={action.url ?? ''} onChange={(e) => onChange({ ...action, url: e.target.value })} />
+          <input aria-label={wt('c7c.whSecret')} type="password" autoComplete="new-password" className="w-input font-mono" maxLength={200} disabled={disabled}
+            placeholder={action.secretSet ? wt('c7c.whSecretKept') : wt('c7c.whSecretPh')} value={action.secret ?? ''} onChange={(e) => onChange({ ...action, secret: e.target.value })} />
+          <textarea aria-label={wt('c7c.whText')} rows={2} maxLength={2000} disabled={disabled} className="w-input !h-auto py-2" placeholder={wt('c7c.whTextPh')} value={action.text ?? ''} onChange={(e) => onChange({ ...action, text: e.target.value })} />
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('c7c.whNote')}</p>
+        </div>
+      );
     default:
       return null;
   }
@@ -421,8 +550,10 @@ function RuleEditor({ open, initial, onClose, config, canEdit }: { open: boolean
         ...(x.trigger === 'issue.transitioned' ? { fromStatusIds: x.config.fromStatusIds ?? [], toStatusIds: x.config.toStatusIds ?? [] } : {}),
         ...(x.trigger === 'field.changed' ? { fields: x.config.fields ?? [] } : {}),
         ...(x.trigger === 'scheduled.daily' ? { jql: x.config.jql?.trim() ?? '' } : {}),
+        ...(x.trigger === 'issue.due_soon' ? { dueInDays: x.config.dueInDays ?? 2 } : {}),
         conditions: (x.config.conditions ?? []).map((c) => ({ jql: c.jql.trim() })).filter((c) => c.jql),
-        actions: x.config.actions,
+        // CTW đợt 7c: secretSet chỉ là cờ hiển thị; secret rỗng ⇒ server giữ bí mật cũ.
+        actions: x.config.actions.map(({ secretSet: _s, ...a }) => (a.kind === 'webhook' && !a.secret ? { ...a, secret: undefined } : a)),
       },
     }),
     onSuccess: (r) => {
@@ -505,6 +636,15 @@ function RuleEditor({ open, initial, onClose, config, canEdit }: { open: boolean
             <label className="w-label">{wt('auto.fieldsWatch')}</label>
             <MultiPick options={FIELDS.map((f) => ({ value: f.id, label: f.label }))} value={cfg.fields ?? []} disabled={ro} placeholder={wt('auto.pickFields')} onChange={(fields) => setCfg({ fields })} />
           </div>
+        )}
+        {d.trigger === 'issue.due_soon' && (
+          <div>
+            <label className="w-label" htmlFor="c7c-due-days">{wt('c7c.dueDays')}</label>
+            <input id="c7c-due-days" type="number" min={1} max={30} className="w-input w-[110px]" disabled={ro} value={cfg.dueInDays ?? 2} onChange={(e) => setCfg({ dueInDays: Math.min(30, Math.max(1, Number(e.target.value) || 2)) })} />
+          </div>
+        )}
+        {(d.trigger === 'test.failed' || d.trigger === 'pr.merged' || d.trigger === 'sla.breached' || d.trigger === 'baseline.changed' || d.trigger === 'issue.due_soon') && (
+          <p className="text-[12px] text-[var(--w-text-3)]">{wt('c7c.eventVars')}</p>
         )}
         {d.trigger === 'scheduled.daily' && (
           <div>
@@ -792,7 +932,7 @@ export default function ProjectAutomation({ config, slug }: { config: ProjectCon
     // Chép sâu để sửa nháp không đụng vào dữ liệu trong bộ nhớ đệm.
     config: JSON.parse(JSON.stringify({ conditions: [], ...r.config })) as RuleConfig,
   });
-  const applyTemplate = (t: (typeof TEMPLATES)[number]) => {
+  const applyTemplate = (t: Tpl) => {
     const d = t.build(config, statuses);
     if (typeof d === 'string') toast.error(d);
     else setEditing(d);
@@ -863,6 +1003,24 @@ export default function ProjectAutomation({ config, slug }: { config: ProjectCon
                 <h3 className="mb-2 text-[12px] font-semibold text-[var(--w-text-2)]">{wt('auto.templates')}</h3>
                 <div className="grid gap-2 sm:grid-cols-2">
                   {TEMPLATES.map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => applyTemplate(t)}
+                      className="flex items-start gap-2.5 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] p-3 text-left transition-colors hover:border-[var(--w-accent-border)] hover:bg-[var(--w-hover)]"
+                    >
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-[6px] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]">{t.icon}</span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-medium">{t.title}</span>
+                        <span className="mt-0.5 block text-[12px] leading-relaxed text-[var(--w-text-2)]">{t.body}</span>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                {/* CTW đợt 7c: thư viện mẫu cho đồ án sinh viên (trigger + action mới). */}
+                <h3 className="mb-2 mt-5 text-[12px] font-semibold text-[var(--w-text-2)]">{wt('c7c.tplStudents')}</h3>
+                <div className="grid gap-2 sm:grid-cols-2" data-testid="c7c-student-templates">
+                  {STUDENT_TEMPLATES.map((t) => (
                     <button
                       key={t.id}
                       type="button"

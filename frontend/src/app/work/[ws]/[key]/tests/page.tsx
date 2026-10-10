@@ -29,6 +29,7 @@ import QualityTab from '@/components/work/quality/QualityTab';
 import RisksTab from '@/components/work/quality/RisksTab';
 import ExploratoryTab from '@/components/work/quality/ExploratoryTab';
 import DefectsTab from '@/components/work/quality/DefectsTab';
+import AutomationTab from '@/components/work/tests/AutomationTab';
 import { wt } from '@/components/work/i18n';
 
 const TABS = [
@@ -46,6 +47,8 @@ const TABS = [
   { id: 'risks', get label() { return wt('q6.tabRisks'); } },
   { id: 'exploratory', get label() { return wt('q6.tabExploratory'); } },
   { id: 'defects', get label() { return wt('q6.tabDefects'); } },
+  // CTW đợt 7c (TST-2): kết quả test tự động từ CI (JUnit/Playwright/Jest), flaky, độ phủ code.
+  { id: 'automation', get label() { return wt('c7c.tabAutomation'); } },
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -136,6 +139,7 @@ function TestsView({ config, pid }: { config: ProjectConfig; pid: number }) {
             {tab === 'quality' && <div className="min-h-0 flex-1 overflow-y-auto"><QualityTab config={config} pid={pid} /></div>}
             {tab === 'risks' && <div className="min-h-0 flex-1 overflow-y-auto"><RisksTab config={config} pid={pid} onOpenIssue={openIssue} /></div>}
             {tab === 'exploratory' && <div className="min-h-0 flex-1 overflow-y-auto"><ExploratoryTab config={config} pid={pid} onOpenIssue={openIssue} /></div>}
+            {tab === 'automation' && <div className="min-h-0 flex-1 overflow-y-auto"><AutomationTab config={config} pid={pid} onOpenIssue={openIssue} /></div>}
             {tab === 'defects' && <div className="min-h-0 flex-1 overflow-y-auto"><DefectsTab config={config} pid={pid} onOpenIssue={openIssue} /></div>}
             {tab === 'traceability' && (
               <div className="min-h-0 flex-1 overflow-hidden"><TraceabilityTab config={config} pid={pid} /></div>

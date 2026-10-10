@@ -113,6 +113,18 @@ function laAdmin(u: { roles: { role: { name: string } }[] }): boolean {
   return u.roles.some((r) => r.role.name.toUpperCase().replace(/^ROLE_/, '') === 'ADMIN');
 }
 
+/**
+ * CTW đợt 7c (C17): ai ĐƯỢC tự bật 2FA. Trước đây chỉ admin site. Nay thêm: NGƯỜI (không phải agent) là thành viên của
+ * ít nhất một không gian CT Work — không gian có thể ép 2FA, nên thành viên phải tự bật được. Không nới gì khác: người
+ * ngoài CT Work (không admin) vẫn 403 như cũ; bật 2FA chỉ THÊM lớp bảo vệ cho chính tài khoản đó (đăng nhập không đổi —
+ * mô hình step-up), và step-up admin (`quyetDinhMfaAdmin`) vẫn chỉ áp cho admin.
+ */
+async function duocTuBatMfa(u: UserMfa): Promise<boolean> {
+  if (laAdmin(u)) return true;
+  const n = await prisma.workMember.count({ where: { userId: u.id, user: { kind: { not: 'AGENT' } }, workspace: { deletedAt: null } } });
+  return n > 0;
+}
+
 function khoaCuaUser(u: UserMfa): Buffer {
   if (!u.mfaSecret) throw new AppError('Chưa có khoá MFA. / No MFA secret.', 400, 'MFA_NOT_SET_UP');
   try {
@@ -178,7 +190,7 @@ export async function trangThai(userId: number, claims: MfaClaims | undefined) {
 /** Sinh secret TẠM (chưa bật). Gọi lại thì thay secret tạm cũ. */
 export async function batDauThietLap(userId: number, ip?: string) {
   const u = await taiUser(userId);
-  if (!laAdmin(u)) throw new AppError('Chỉ tài khoản admin. / Admins only.', 403, 'FORBIDDEN');
+  if (!(await duocTuBatMfa(u))) throw new AppError('Chỉ tài khoản admin. / Admins only.', 403, 'FORBIDDEN');
   if (u.mfaEnabled) {
     throw new AppError('MFA đang bật — tắt trước khi thiết lập lại. / MFA already enabled.', 409, 'MFA_ALREADY_ENABLED');
   }
@@ -195,7 +207,7 @@ export async function batDauThietLap(userId: number, ip?: string) {
 export async function batMfa(userId: number, code: string, ip?: string) {
   await chanNeuDangKhoa(userId);
   const u = await taiUser(userId);
-  if (!laAdmin(u)) throw new AppError('Chỉ tài khoản admin. / Admins only.', 403, 'FORBIDDEN');
+  if (!(await duocTuBatMfa(u))) throw new AppError('Chỉ tài khoản admin. / Admins only.', 403, 'FORBIDDEN');
   if (u.mfaEnabled) throw new AppError('MFA đã bật. / MFA already enabled.', 409, 'MFA_ALREADY_ENABLED');
   if (!u.mfaSecret) throw new AppError('Hãy tạo khoá trước (bước setup). / Run setup first.', 400, 'MFA_NOT_SET_UP');
 

@@ -164,6 +164,7 @@ describe('khopTuyenWeb', () => {
     const cap: [string, string, Record<string, string>][] = [
       ['/work', '/work', {}],
       ['/work/developer', '/work/developer', {}],
+      ['/work/security', '/work/security', {}],
       ['/work/search', '/work/search', {}],
       ['/work/invite/abc123', '/work/invite/:token', { token: 'abc123' }],
       ['/work/share/tok-9', '/work/share/:token', { token: 'tok-9' }],
@@ -302,7 +303,10 @@ describe('khopTuyenWeb', () => {
     // 10/10/2026: +1 CT Work đợt 4b (wiegers — hồ sơ SWR302: feature, loại yêu cầu, ưu tiên, glossary, DD, sáu liên kết).
     // 11/10/2026: +1 CT Work đợt 6 (reviews — phiên review/inspection + baseline yêu cầu). (+1 team của UX-C ghi riêng.)
     // 11/10/2026: +1 UX-C (team — Team overview), +2 đợt 6b (/work/survey/:token, /work/mockup-review/:token).
-    expect(thay.size).toBe(164);
+    // 11/10/2026: +4 CT Work đợt 7a (/work/:ws/okrs, /work/:ws/:key/okrs|poker|retros).
+    // 11/10/2026: +5 CT Work đợt 7b (/work/form/:token, /work/:ws/:key/forms|intake|import|kb).
+    // 11/10/2026: +2 CT Work đợt 7c (/work/security — 2FA thành viên, /work/:ws/:key/assets — sổ tài sản & giấy phép).
+    expect(thay.size).toBe(175);
   });
 });
 

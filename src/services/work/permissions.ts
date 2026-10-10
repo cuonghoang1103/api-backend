@@ -16,6 +16,7 @@ import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import type { CommentVisibility, ProjectKind, ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
 import { modulesOf, projectKindOf, type ModuleMap } from './studio.js';
+import { assertTwoFactorGate } from './twoFactor.js';
 
 /** Mọi hành động có kiểm quyền. Thêm hành động mới thì thêm vào đây VÀ vào MATRIX. */
 export type ProjectAction =
@@ -393,6 +394,9 @@ export async function loadProjectAccess(userId: number, projectId: number): Prom
     visibility: project.visibility as ProjectVisibility,
   });
   if (!role || !workspaceRole) return null;
+  // CTW đợt 7c (C17): không gian ép 2FA mà phiên của CHÍNH người này chưa đạt (hết ân hạn) ⇒ 403 (chỉ sau khi đã biết là
+  // thành viên — người lạ vẫn 404). Ngoài request REST/socket (cron, listener của người khác) không có ngữ cảnh ⇒ bỏ qua.
+  assertTwoFactorGate(userId, project.workspaceId);
   return {
     projectId: project.id, workspaceId: project.workspaceId, key: project.key, role, workspaceRole,
     principal, agentOptions: agentOptionsOf(project.settings),
@@ -428,6 +432,7 @@ export async function loadWorkspaceAccess(userId: number, workspaceId: number): 
     select: { role: true, user: { select: { kind: true } } },
   });
   if (!m) return null;
+  assertTwoFactorGate(userId, workspaceId); // CTW đợt 7c (C17) — xem loadProjectAccess
   let role = m.role as WorkspaceRole;
   if (role === 'MEMBER' && (await portalOnlyWorkspaceIds(userId, workspaceId)).has(workspaceId)) role = 'GUEST';
   return { role, principal: m.user.kind === 'AGENT' ? 'AGENT' : 'HUMAN' };
@@ -706,6 +711,8 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['*', /^\/exports?(\/.*)?$/], ['POST', /^\/import$/],
   ['*', /^\/chat-hooks(\/.*)?$/], ['*', /^\/webhooks(\/.*)?$/], ['*', /^\/github(\/.*)?$/], ['*', /^\/gitlab(\/.*)?$/],
   ['*', /^\/automation(\/.*)?$/],
+  // CTW đợt 7c: sổ tài sản/giấy phép (chi phí, hợp đồng) — agent chỉ ĐỌC; xuất tệp giấy phép là xuất dữ liệu.
+  ['POST', /^\/assets(\/.*)?$/], ['PATCH', /^\/assets(\/.*)?$/], ['PUT', /^\/assets(\/.*)?$/], ['DELETE', /^\/assets(\/.*)?$/], ['GET', /^\/assets-export$/],
   // Cấu hình dự án / quyền / thành viên / xoá
   ['*', /^\/members(\/.*)?$/], ['PATCH', /^$/], ['DELETE', /^$/], ['*', /^\/archive$/],
   ['*', /^\/(labels|components|workflows|statuses|issue-types|issue-templates|custom-fields|board-columns|studio|desk\/settings|spec-settings|agent-settings|avatar|sample-data|onboarding)(\/.*)?$/],
@@ -735,6 +742,11 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['POST', /^\/swr\/mockups\/\d+\/review$/],
   ['POST', /^\/swr\/elicitation\/(?:ELC-?)?\d+\/proposals\/\d+\/decide$/i],
   ['POST', /^\/swr\/raci(\/.*)?$/], ['PUT', /^\/swr\/raci(\/.*)?$/], ['DELETE', /^\/swr\/raci(\/.*)?$/],
+  // CTW đợt 7b: agent không mở/đổi link form (đối ngoại), không xoá form, không nhập hàng loạt, không cấu hình kênh ngoài,
+  // không nhận/bỏ đề xuất từ kênh ngoài, không cấu hình knowledge base (service chặn lần nữa). Đọc + soạn nháp form vẫn mở.
+  ['POST', /^\/forms\/(?:F-?)?\d+\/(status|rotate)$/i], ['DELETE', /^\/forms\/(?:F-?)?\d+$/i],
+  ['POST', /^\/imports$/], ['*', /^\/intake\/channels(\/.*)?$/], ['POST', /^\/intake\/proposals\/\d+\/decide$/],
+  ['POST', /^\/kb(\/.*)?$/], ['PATCH', /^\/kb(\/.*)?$/], ['DELETE', /^\/kb(\/.*)?$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

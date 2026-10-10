@@ -21,6 +21,7 @@ import OverviewTab from '@/components/work/swr/OverviewTab';
 import FeaturesTab from '@/components/work/swr/FeaturesTab';
 import RequirementsTab from '@/components/work/swr/RequirementsTab';
 import PriorityTab from '@/components/work/swr/PriorityTab';
+import SwrPackTab from '@/components/work/c8c/SwrPackTab';
 import { DictionaryTab, GlossaryTab } from '@/components/work/swr/DataTabs';
 import SixLinksTab from '@/components/work/swr/SixLinksTab';
 // CTW đợt 6b: SWR-4 elicitation & stakeholder + SWR-3 SRS chuyên sâu
@@ -48,6 +49,7 @@ const TABS = [
   { id: 'prototypes', get label() { return wt('srsx.tabPrototypes'); } },
   { id: 'quality', get label() { return wt('srsx.tabQuality'); } },
   { id: 'nfr', get label() { return wt('srsx.tabNfr'); } },
+  { id: 'estimation', get label() { return wt('c8c.tabEstimation'); } }, // CTW đợt 8c: R13 ước lượng BA + R24 trạng thái + R26 gói nộp
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
@@ -91,6 +93,7 @@ function WiegersView({ config, pid }: { config: ProjectConfig; pid: number }) {
           {tab === 'features' && <FeaturesTab pid={pid} onOpenIssue={openIssue} />}
           {tab === 'requirements' && <RequirementsTab pid={pid} onOpenIssue={openIssue} />}
           {tab === 'priority' && <PriorityTab pid={pid} />}
+          {tab === 'estimation' && <SwrPackTab pid={pid} />}
           {tab === 'glossary' && <GlossaryTab pid={pid} />}
           {tab === 'dictionary' && <DictionaryTab pid={pid} base={base} />}
           {tab === 'six-links' && <SixLinksTab pid={pid} onTab={setTab} onUcRules={() => router.push(`${base}/requirements`)} />}

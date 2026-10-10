@@ -19,6 +19,8 @@ import type { ReqType } from '@/lib/work-swr-api';
 import { useWT, wt, type WKey } from '@/components/work/i18n';
 import { Dialog, EmptyState, Field, PageLoading, Spinner } from '../ui';
 import { Chip, downloadFile, fmtDay, LifecycleChip, Note, Section, TabIntro, TableFrame, TD, TextArea, TH, TYPE_KEY, use6bRefresh } from './shared';
+import AiStakeholderPanel from '../c8c/AiStakeholderPanel';
+import type { AiTurn } from '@/lib/work-c8c-api';
 
 export const TECH_KEY: Record<Technique, WKey> = {
   INTERVIEW: 'elic.tInterview', WORKSHOP: 'elic.tWorkshop', SURVEY: 'elic.tSurvey', OBSERVATION: 'elic.tObservation', DOCUMENT_ANALYSIS: 'elic.tDocument', PROTOTYPE: 'elic.tPrototype',
@@ -234,6 +236,13 @@ function SessionPanel({ pid, n, base, onOpenIssue, onDeleted }: { pid: number; n
         {d.survey && <p className="text-[12.5px] text-[var(--w-text-2)]">{wt('elic.linkedSurvey', { key: d.survey.key, title: d.survey.title, count: d.survey.responses })}</p>}
       </Section>
 
+      {/* CTW đợt 8c (R28): phỏng vấn stakeholder do AI đóng vai — transcript là nguồn cho "Extract requirements" ngay dưới. */}
+      <AiStakeholderPanel
+        pid={pid} elc={d.key} readOnly={ro} onChanged={refresh}
+        stakeholders={(sh.data?.stakeholders ?? []).map((x) => ({ key: x.key, name: x.name, role: x.role }))}
+        initial={(d as unknown as { aiTranscript?: AiTurn[] }).aiTranscript ?? []}
+        persona={(d as unknown as { aiPersona?: { key: string; name: string; role: string | null } | null }).aiPersona ?? null}
+      />
       <Section id="elc-ai" title={wt('elic.proposals')} actions={!ro ? <button type="button" className="w-btn w-btn-sm" disabled={propose.isPending || dirty} title={dirty ? wt('elic.saveFirst') : undefined} onClick={() => propose.mutate()}>{propose.isPending ? <Spinner size={12} /> : <Bot size={13} />} {wt('elic.extract')}</button> : undefined}>
         <p className="text-[12.5px] text-[var(--w-text-2)]">{wt('elic.proposalsIntro')}</p>
         {!d.proposals.length ? <p className="text-[12.5px] text-[var(--w-text-3)]">{wt('elic.noProposals')}</p> : (

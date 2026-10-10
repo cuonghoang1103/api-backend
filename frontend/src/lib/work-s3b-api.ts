@@ -182,7 +182,7 @@ export interface RaidPatch {
   clientVisible?: boolean;
 }
 
-export type MeetingType = 'KICKOFF' | 'DAILY' | 'WEEKLY' | 'DEMO' | 'RETRO' | 'STEERING' | 'CLIENT' | 'ELICITATION' | 'OTHER';
+export type MeetingType = 'KICKOFF' | 'DAILY' | 'WEEKLY' | 'DEMO' | 'RETRO' | 'STEERING' | 'CLIENT' | 'ELICITATION' | 'PLANNING' | 'MENTOR' | 'OTHER'; // PLANNING/MENTOR: CTW đợt 8c
 export type MeetingStatus = 'SCHEDULED' | 'DONE' | 'CANCELLED';
 
 export interface MeetingRow {
@@ -206,6 +206,10 @@ export interface MeetingRow {
   attendees: WorkUser[];
   actionCount: number;
   actionsOpen: number;
+  /** CTW đợt 8c: buổi của chuỗi định kỳ / mẫu chương trình đã áp. */
+  seriesId?: number | null;
+  seriesDetached?: boolean;
+  templateKey?: string | null;
 }
 
 export interface MeetingAction {
@@ -234,6 +238,8 @@ export interface MeetingDetail extends Omit<MeetingRow, 'attendees'> {
   canCreateIssues: boolean;
   canUseAi: boolean;
   portalOn: boolean;
+  /** CTW đợt 8c: thông tin chuỗi họp định kỳ (null = họp lẻ). */
+  series?: { id: number; title: string; rrule: string; summary: string; summaryVi: string; ended: boolean; occurrenceDate: string | null; detached: boolean } | null;
 }
 
 export interface MeetingPatch {
@@ -331,7 +337,7 @@ export const govApi = {
   meetings: (pid: number, scope: 'upcoming' | 'past' | 'all' = 'all') =>
     d<{ items: MeetingRow[]; canEdit: boolean; portalOn: boolean; now: string }>(api.get(`${B}/projects/${pid}/meetings${q({ scope })}`)),
   meeting: (pid: number, num: number) => d<MeetingDetail>(api.get(`${B}/projects/${pid}/meetings/${num}`)),
-  createMeeting: (pid: number, body: MeetingPatch & { title: string; startsAt: string; endsAt: string; attendeeIds?: number[]; useTemplate?: boolean; sendInvites?: boolean }) =>
+  createMeeting: (pid: number, body: MeetingPatch & { title: string; startsAt: string; endsAt: string; attendeeIds?: number[]; useTemplate?: boolean; sendInvites?: boolean; templateKey?: string | null }) =>
     d<MeetingDetail>(api.post(`${B}/projects/${pid}/meetings`, body)),
   updateMeeting: (pid: number, num: number, body: MeetingPatch & { version?: number }) => d<MeetingDetail>(api.patch(`${B}/projects/${pid}/meetings/${num}`, body)),
   deleteMeeting: (pid: number, num: number) => d<{ deleted: true }>(api.delete(`${B}/projects/${pid}/meetings/${num}`)),
@@ -372,6 +378,6 @@ export const RAID_STATUS_LABEL: Record<string, string> = {
 };
 export const RAID_RESPONSE_LABEL: Record<RaidResponse, string> = { get AVOID() { return wt('gov.rrAvoid'); }, get MITIGATE() { return wt('gov.rrMitigate'); }, get TRANSFER() { return wt('gov.rrTransfer'); }, get ACCEPT() { return wt('gov.rrAccept'); } };
 export const MEETING_TYPE_LABEL: Record<MeetingType, string> = {
-  get KICKOFF() { return wt('gov.mtKickoff'); }, get DAILY() { return wt('gov.mtDaily'); }, get WEEKLY() { return wt('gov.mtWeekly'); }, get DEMO() { return wt('gov.mtDemo'); }, get RETRO() { return wt('gov.mtRetro'); }, get STEERING() { return wt('gov.mtSteering'); }, get CLIENT() { return wt('gov.mtClient'); }, get ELICITATION() { return wt('gov.mtElicitation'); }, get OTHER() { return wt('gov.mtOther'); },
+  get KICKOFF() { return wt('gov.mtKickoff'); }, get DAILY() { return wt('gov.mtDaily'); }, get WEEKLY() { return wt('gov.mtWeekly'); }, get DEMO() { return wt('gov.mtDemo'); }, get RETRO() { return wt('gov.mtRetro'); }, get STEERING() { return wt('gov.mtSteering'); }, get CLIENT() { return wt('gov.mtClient'); }, get ELICITATION() { return wt('gov.mtElicitation'); }, get PLANNING() { return wt('c8c.mtPlanning'); }, get MENTOR() { return wt('c8c.mtMentor'); }, get OTHER() { return wt('gov.mtOther'); },
 };
-export const MEETING_TYPES: MeetingType[] = ['KICKOFF', 'DAILY', 'WEEKLY', 'DEMO', 'RETRO', 'STEERING', 'CLIENT', 'ELICITATION', 'OTHER'];
+export const MEETING_TYPES: MeetingType[] = ['KICKOFF', 'DAILY', 'WEEKLY', 'PLANNING', 'DEMO', 'RETRO', 'STEERING', 'CLIENT', 'MENTOR', 'ELICITATION', 'OTHER'];

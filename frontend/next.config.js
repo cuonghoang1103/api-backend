@@ -281,7 +281,8 @@ const nextConfig = {
               // `public/`: VPS từng đầy đĩa tới mức Postgres chết, và mỗi bản
               // dựng Docker sẽ mang thêm chừng ấy. Người dùng web thì vốn đang
               // online. (App desktop thì ngược lại — nó bọc sẵn để chạy offline.)
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com https://cdn.jsdelivr.net",
+              // apis.google.com: Google Picker (CTW đợt 8a — chọn tệp Drive gắn vào thẻ; khung chọn nằm ở docs.google.com, đã có trong frame-src).
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://www.youtube.com https://cdn.jsdelivr.net https://apis.google.com",
               // fonts.googleapis.com: stylesheet @font-face của bộ sách /books
               // (Source Serif 4 / Source Sans 3 / JetBrains Mono). Cặp với
               // fonts.gstatic.com ở font-src. Thiếu → font rơi về hệ thống.

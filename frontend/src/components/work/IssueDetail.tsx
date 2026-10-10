@@ -48,6 +48,7 @@ import { LinkedDocs } from './docs/LinkedDocs';
 import { IssueGovernance } from './governance/IssueGovernance';
 import { IssueDesk } from './desk/IssueDesk';
 import { IssueWebLinks } from './resources/IssueWebLinks';
+import { IssueCloudFiles } from './cloud/IssueCloudFiles'; // CTW đợt 8a
 import { AttachmentClientControls, IssueClientShare } from './portal/ClientShare';
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 // Đợt S6: nhãn nguồn gốc AI (AI-assisted) của thẻ.
@@ -861,6 +862,8 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
                       {studioOn(config, 'docs') && <LinkedDocs config={config} issueNumber={issue.number} />}
                       {/* Resources (06/10/2026): Web links kiểu Jira (tự ẩn khi mô-đun tắt / khách). */}
                       <IssueWebLinks config={config} issueNumber={issue.number} />
+                      {/* CTW đợt 8a: tệp OneDrive/SharePoint/Google Drive gắn dưới dạng liên kết (ẩn với khách). */}
+                      <IssueCloudFiles config={config} issueNumber={issue.number} />
                       {/* Đợt S3b: CR liên quan + rủi ro liên quan (tự ẩn khi mô-đun tắt / khách). */}
                       <IssueGovernance config={config} issueNumber={issue.number} />
                     </div>

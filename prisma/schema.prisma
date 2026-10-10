@@ -481,6 +481,8 @@ model User {
   workAgentsOwned        WorkAgent[]             @relation("WorkAgentOwner")
   // CRM nhẹ của studio (đợt S5b, 05/10/2026) — /admin/crm
   crmDealsOwned          CrmDeal[]               @relation("CrmDealOwner")
+  // CTW đợt 8a: kết nối OAuth theo người (Microsoft 365 / Google; 8b: Notion / Slack)
+  workOAuthConnections   WorkOAuthConnection[]   @relation("WorkOAuthConnectionUser")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -10122,6 +10124,8 @@ model WorkSpace {
   okrCycles      WorkOkrCycle[]
   /// CTW đợt 7c (C17): chính sách bảo mật (ép 2FA).
   securityPolicy WorkSecurityPolicy?
+  /// CTW đợt 8b: app Slack đã cài cho không gian (một workspace Slack).
+  slackInstall   WorkSlackInstall?
 
   @@index([ownerId], name: "idx_work_space_owner")
   @@map("work_spaces")
@@ -10337,6 +10341,17 @@ model WorkProject {
   assets              WorkAsset[]
   autoTests           WorkAutoTest[]
   testImports         WorkTestImport[]
+  // ── CTW đợt 8b ── trình soạn báo cáo + lịch tự gửi, kênh Slack của dự án
+  reportTemplates     WorkReportTemplate[]
+  reportSendPlans     WorkReportSendPlan[]
+  reportDeliveries    WorkReportDelivery[]
+  slackChannels       WorkSlackChannel[]
+  // ── CTW đợt 8c ── họp định kỳ, phân tích tĩnh (SARIF) + độ phức tạp, ảnh sơ đồ Mermaid vẽ sẵn
+  meetingSeries       WorkMeetingSeries[]
+  staticImports       WorkStaticImport[]
+  staticFindings      WorkStaticFinding[]
+  codeComplexity      WorkCodeComplexity[]
+  diagramRenders      WorkDiagramRender[]
 
   @@unique([workspaceId, key], name: "uk_work_project_key", map: "uk_work_project_key")
   @@map("work_projects")
@@ -10833,6 +10848,8 @@ model WorkTestCase {
   testType      String?  @map("test_type") @db.VarChar(16)
   technique     String?  @db.VarChar(16)
   estimateMin   Int?     @map("estimate_min")
+  /// CTW đợt 8c (T10): phiên bản nội dung test (tăng khi bước/Gherkin/điều kiện đổi). Run ghi lại số này lúc tạo + lúc chạy.
+  version       Int      @default(1)
   updatedAt     DateTime @updatedAt @map("updated_at")
 
   issue WorkIssue          @relation(fields: [issueId], references: [id], onDelete: Cascade)
@@ -10892,17 +10909,24 @@ model WorkTestPlanCase {
 /// Một đợt chạy test (vd "Sprint 3 — Chrome", "UAT with client").
 /// state: PLANNED | IN_PROGRESS | DONE.
 model WorkTestCycle {
-  id          Int       @id @default(autoincrement())
-  projectId   Int       @map("project_id")
-  planId      Int?      @map("plan_id")
-  name        String    @db.VarChar(120)
-  environment String?   @db.VarChar(120)
-  build       String?   @db.VarChar(80)
-  state       String    @default("PLANNED") @db.VarChar(16)
-  startAt     DateTime? @map("start_at")
-  endAt       DateTime? @map("end_at")
-  createdById Int?      @map("created_by_id")
-  createdAt   DateTime  @default(now()) @map("created_at")
+  id               Int       @id @default(autoincrement())
+  projectId        Int       @map("project_id")
+  planId           Int?      @map("plan_id")
+  name             String    @db.VarChar(120)
+  environment      String?   @db.VarChar(120)
+  build            String?   @db.VarChar(80)
+  state            String    @default("PLANNED") @db.VarChar(16)
+  startAt          DateTime? @map("start_at")
+  endAt            DateTime? @map("end_at")
+  createdById      Int?      @map("created_by_id")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  /// CTW đợt 8c — cycle gộp nhiều job CI: tự đóng (DONE) khi đủ `expectedJobs` lần nhập, hoặc khi im lặng
+  /// `autoCloseMinutes` phút kể từ lần nhập cuối (cron), hoặc khi job cuối gửi `close=true`. closedReason: JOBS|IDLE|CLOSE|MANUAL.
+  autoCloseMinutes Int?      @map("auto_close_minutes")
+  expectedJobs     Int?      @map("expected_jobs")
+  importCount      Int       @default(0) @map("import_count")
+  lastImportAt     DateTime? @map("last_import_at")
+  closedReason     String?   @map("closed_reason") @db.VarChar(8)
 
   project WorkProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
   plan    WorkTestPlan? @relation(fields: [planId], references: [id], onDelete: SetNull)
@@ -10916,18 +10940,20 @@ model WorkTestCycle {
 /// status: TODO | IN_PROGRESS | PASS | FAIL | BLOCKED | SKIP | RETEST.
 /// RETEST = bug gây ra lỗi vừa được chuyển sang Retest ⇒ cần chạy lại.
 model WorkTestRun {
-  id           Int       @id @default(autoincrement())
-  cycleId      Int       @map("cycle_id")
-  testCaseId   Int       @map("test_case_id")
-  status       String    @default("TODO") @db.VarChar(16)
-  assigneeId   Int?      @map("assignee_id")
-  executedById Int?      @map("executed_by_id")
-  executedAt   DateTime? @map("executed_at")
-  comment      String?   @db.Text
+  id              Int       @id @default(autoincrement())
+  cycleId         Int       @map("cycle_id")
+  testCaseId      Int       @map("test_case_id")
+  status          String    @default("TODO") @db.VarChar(16)
+  assigneeId      Int?      @map("assignee_id")
+  executedById    Int?      @map("executed_by_id")
+  executedAt      DateTime? @map("executed_at")
+  comment         String?   @db.Text
   /// Chụp lại Gherkin lúc tạo lần chạy (test sửa về sau không đổi lần chạy cũ).
-  gherkin      String?   @db.Text
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  gherkin         String?   @db.Text
+  /// CTW đợt 8c (T10): WorkTestCase.version lúc tạo run; ghi lại lúc chạy ⇒ "chạy bản test nào trên build nào".
+  testCaseVersion Int?      @map("test_case_version")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
 
   cycle      WorkTestCycle        @relation(fields: [cycleId], references: [id], onDelete: Cascade)
   testCase   WorkTestCase         @relation(fields: [testCaseId], references: [id], onDelete: Cascade)
@@ -12468,6 +12494,16 @@ model WorkMeeting {
   minutesDrafts WorkMeetingMinutesDraft[]
   // ── hết CTW K-2 ──
 
+  // ── CTW đợt 8c ── buổi của một chuỗi họp định kỳ (RRULE). occurrenceDate = ngày GỐC của buổi theo luật (YYYY-MM-DD,
+  // múi giờ chuỗi) — giữ nguyên khi buổi bị dời ⇒ không sinh trùng. seriesDetached = buổi đã sửa riêng (ngoại lệ):
+  // sửa cả chuỗi không ghi đè buổi này. templateKey = mẫu chương trình đã áp (daily, sprint-planning…).
+  seriesId       Int?               @map("series_id")
+  occurrenceDate String?            @map("occurrence_date") @db.VarChar(10)
+  seriesDetached Boolean            @default(false) @map("series_detached")
+  templateKey    String?            @map("template_key") @db.VarChar(24)
+  series         WorkMeetingSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+
+  @@unique([seriesId, occurrenceDate], map: "uk_work_meeting_occurrence")
   @@unique([projectId, number], name: "uk_work_meeting_number", map: "uk_work_meeting_number")
   @@index([projectId, startsAt], name: "idx_work_meeting_project")
   @@map("work_meetings")
@@ -14549,6 +14585,8 @@ model WorkSwrSettings {
   weightRisk     Float    @default(1) @map("weight_risk")
   declaredCounts Json?    @map("declared_counts")
   ignoredNouns   String[] @default([]) @map("ignored_nouns")
+  /// CTW đợt 8c (R13): công cụ ước lượng BA — phút/hệ số người sửa theo hoạt động, số đếm ghi đè, cách tính headcount.
+  estimation     Json?    @map("estimation")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
   project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
@@ -14800,27 +14838,31 @@ model WorkRaciCell {
 /// phiên âm) — KHÔNG FK (họp xoá mềm). surveyId = khảo sát của phiên (kỹ thuật SURVEY) — KHÔNG FK.
 /// aiSimulated = R28: phỏng vấn với AI đóng vai stakeholder (giữ transcript làm bằng chứng, gắn nhãn).
 model WorkElicitationSession {
-  id          Int       @id @default(autoincrement())
-  projectId   Int       @map("project_id")
-  number      Int
-  title       String    @db.VarChar(200)
-  technique   String    @db.VarChar(20)
-  status      String    @default("PLANNED") @db.VarChar(10)
-  scheduledAt DateTime? @map("scheduled_at")
-  durationMin Int?      @map("duration_min")
-  location    String?   @db.VarChar(200)
-  objective   String?   @db.Text
-  plan        String?   @db.Text
-  questions   Json      @default("[]")
-  notes       String?   @db.Text
-  outcome     String?   @db.Text
-  meetingId   Int?      @map("meeting_id")
-  surveyId    Int?      @map("survey_id")
-  aiSimulated Boolean   @default(false) @map("ai_simulated")
-  createdById Int?      @map("created_by_id")
-  rev         Int       @default(0)
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  number       Int
+  title        String    @db.VarChar(200)
+  technique    String    @db.VarChar(20)
+  status       String    @default("PLANNED") @db.VarChar(10)
+  scheduledAt  DateTime? @map("scheduled_at")
+  durationMin  Int?      @map("duration_min")
+  location     String?   @db.VarChar(200)
+  objective    String?   @db.Text
+  plan         String?   @db.Text
+  questions    Json      @default("[]")
+  notes        String?   @db.Text
+  outcome      String?   @db.Text
+  meetingId    Int?      @map("meeting_id")
+  surveyId     Int?      @map("survey_id")
+  aiSimulated  Boolean   @default(false) @map("ai_simulated")
+  /// CTW đợt 8c (R28): hỏi–đáp với stakeholder do AI đóng vai — [{ role: 'analyst'|'stakeholder', text, at }] — giữ làm bằng chứng nguồn.
+  aiTranscript Json      @default("[]") @map("ai_transcript")
+  /// Stakeholder (WorkStakeholder.id) AI đang đóng vai — không FK: xoá stakeholder vẫn giữ transcript.
+  aiPersonaId  Int?      @map("ai_persona_id")
+  createdById  Int?      @map("created_by_id")
+  rev          Int       @default(0)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
 
   project      WorkProject                  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   participants WorkElicitationParticipant[]
@@ -15661,3 +15703,419 @@ model WorkTestImport {
 }
 
 // ── hết CTW đợt 7c ──
+
+// ── CTW đợt 8a (12/10/2026) — kết nối Microsoft 365 / Google Workspace theo NGƯỜI ──
+// Khung OAuth chung ở src/services/work/oauth/ (8b cắm Notion/Slack bằng registerProvider()).
+
+/// Một kết nối OAuth của MỘT người với MỘT nhà cung cấp. Token mã hoá AES-256-GCM (AAD = "<provider>:<userId>"),
+/// không bao giờ trả về client. status ERROR = refresh hỏng ⇒ người dùng phải kết nối lại.
+model WorkOAuthConnection {
+  id              Int       @id @default(autoincrement())
+  userId          Int       @map("user_id")
+  provider        String    @db.VarChar(24)
+  status          String    @default("ACTIVE") @db.VarChar(12)
+  accountId       String?   @map("account_id") @db.VarChar(200)
+  accountEmail    String?   @map("account_email") @db.VarChar(320)
+  accountName     String?   @map("account_name") @db.VarChar(200)
+  /// Scope nhà cung cấp thực sự cấp (cách nhau bởi dấu cách).
+  scopes          String    @default("") @db.Text
+  accessTokenEnc  String?   @map("access_token_enc") @db.Text
+  refreshTokenEnc String?   @map("refresh_token_enc") @db.Text
+  expiresAt       DateTime? @map("expires_at")
+  /// Lịch: { calendarId, calendarName, syncIssues, syncMeetings, enabled } (calendarSync.ts).
+  settings        Json      @default("{}")
+  /// deltaLink (Graph) / nextSyncToken (Google) của lịch đích.
+  syncCursor      String?   @map("sync_cursor") @db.Text
+  lastSyncAt      DateTime? @map("last_sync_at")
+  lastError       String?   @map("last_error") @db.VarChar(500)
+  lastErrorAt     DateTime? @map("last_error_at")
+  lastUsedAt      DateTime? @map("last_used_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  user          User               @relation("WorkOAuthConnectionUser", fields: [userId], references: [id], onDelete: Cascade)
+  calendarLinks WorkCalendarLink[]
+
+  @@unique([userId, provider], map: "uk_work_oauth_user_provider")
+  @@map("work_oauth_connections")
+}
+
+/// State OAuth đang chờ callback: nonce ngẫu nhiên (state = nonce + HMAC), PKCE verifier mã hoá, hạn 10 phút, dùng MỘT lần.
+model WorkOAuthState {
+  nonce       String    @id @db.VarChar(64)
+  userId      Int       @map("user_id")
+  provider    String    @db.VarChar(24)
+  verifierEnc String    @map("verifier_enc") @db.Text
+  returnTo    String?   @map("return_to") @db.VarChar(500)
+  expiresAt   DateTime  @map("expires_at")
+  usedAt      DateTime? @map("used_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@index([expiresAt], map: "idx_work_oauth_state_exp")
+  @@map("work_oauth_states")
+}
+
+/// Nhật ký kết nối của người dùng (kết nối/ngắt/làm mới/đẩy/kéo/xung đột/lỗi) — trang "Kết nối của tôi" đọc.
+/// Không FK: còn lại sau khi ngắt kết nối (truy vết).
+model WorkOAuthLog {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  provider     String   @db.VarChar(24)
+  connectionId Int?     @map("connection_id")
+  kind         String   @db.VarChar(16)
+  entityType   String?  @map("entity_type") @db.VarChar(12)
+  entityId     Int?     @map("entity_id")
+  projectId    Int?     @map("project_id")
+  summary      String   @db.VarChar(500)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([userId, createdAt], map: "idx_work_oauth_log_user")
+  @@map("work_oauth_logs")
+}
+
+/// Một sự kiện lịch ngoài ↔ một hạn thẻ (ISSUE) / cuộc họp (MEETING). pushedHash = dấu nội dung đã đẩy — chống
+/// vòng lặp (kéo về thấy đúng thứ mình vừa đẩy ⇒ bỏ qua). detachedAt = người dùng xoá sự kiện bên lịch ⇒ thôi đẩy.
+model WorkCalendarLink {
+  id              Int       @id @default(autoincrement())
+  connectionId    Int       @map("connection_id")
+  entityType      String    @map("entity_type") @db.VarChar(12)
+  entityId        Int       @map("entity_id")
+  calendarId      String    @map("calendar_id") @db.VarChar(500)
+  eventId         String    @map("event_id") @db.VarChar(500)
+  pushedHash      String?   @map("pushed_hash") @db.VarChar(64)
+  pushedStart     DateTime? @map("pushed_start")
+  pushedEnd       DateTime? @map("pushed_end")
+  pushedAt        DateTime? @map("pushed_at")
+  remoteUpdatedAt DateTime? @map("remote_updated_at")
+  detachedAt      DateTime? @map("detached_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  connection WorkOAuthConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+
+  @@unique([connectionId, entityType, entityId], map: "uk_work_cal_link_entity")
+  @@index([connectionId, eventId], map: "idx_work_cal_link_event")
+  @@index([entityType, entityId], map: "idx_work_cal_link_target")
+  @@map("work_calendar_links")
+}
+
+/// Tệp OneDrive/SharePoint/Google Drive gắn vào thẻ DƯỚI DẠNG LIÊN KẾT (không chép nội dung). Không FK (như web link).
+model WorkIssueCloudFile {
+  id             Int       @id @default(autoincrement())
+  projectId      Int       @map("project_id")
+  issueId        Int       @map("issue_id")
+  provider       String    @db.VarChar(24)
+  fileId         String    @map("file_id") @db.VarChar(300)
+  driveId        String?   @map("drive_id") @db.VarChar(300)
+  name           String    @db.VarChar(300)
+  mimeType       String?   @map("mime_type") @db.VarChar(200)
+  iconUrl        String?   @map("icon_url") @db.VarChar(500)
+  webUrl         String    @map("web_url") @db.VarChar(2000)
+  sizeBytes      BigInt?   @map("size_bytes")
+  lastModifiedBy String?   @map("last_modified_by") @db.VarChar(200)
+  lastModifiedAt DateTime? @map("last_modified_at")
+  attachedById   Int?      @map("attached_by_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@unique([issueId, provider, fileId], map: "uk_work_issue_cloud_file")
+  @@index([projectId], map: "idx_work_issue_cloud_file_project")
+  @@map("work_issue_cloud_files")
+}
+
+/// Bảng tính xuất MỘT CHIỀU CT Work → Google Sheet / Excel trên OneDrive. "Đồng bộ lại" ghi đè vùng dữ liệu.
+model WorkCloudSheet {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  userId       Int       @map("user_id")
+  provider     String    @db.VarChar(24)
+  /// issues | report
+  kind         String    @db.VarChar(12)
+  title        String    @db.VarChar(200)
+  jql          String?   @db.Text
+  fileId       String    @map("file_id") @db.VarChar(300)
+  fileUrl      String    @map("file_url") @db.VarChar(2000)
+  sheetName    String    @default("CT Work") @map("sheet_name") @db.VarChar(64)
+  rowCount     Int       @default(0) @map("row_count")
+  lastSyncedAt DateTime? @map("last_synced_at")
+  lastError    String?   @map("last_error") @db.VarChar(500)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@index([projectId], map: "idx_work_cloud_sheet_project")
+  @@map("work_cloud_sheets")
+}
+
+// ── hết CTW đợt 8a ──
+
+// ── CTW đợt 8b (12/10/2026) — Notion + Slack + trình soạn báo cáo + lịch tự gửi ──
+// Token Notion/Slack nằm trong khung OAuth của 8a (work_oauth_connections) — KHÔNG có bảng token thứ hai.
+
+/// Mẫu báo cáo tự soạn (Reports → Builder): bố cục khối kéo-thả (reportBuilder.ts layoutSchema).
+model WorkReportTemplate {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  name        String   @db.VarChar(120)
+  description String?  @db.VarChar(500)
+  layout      Json
+  createdById Int?     @map("created_by_id")
+  updatedById Int?     @map("updated_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  project   WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  schedules WorkReportSendPlan[]
+
+  @@index([projectId], map: "idx_work_report_template_project")
+  @@map("work_report_templates")
+}
+
+/// Lịch tự gửi báo cáo: WEEKLY (thứ + giờ + múi giờ) hoặc SPRINT (khi sprint đóng). Người nhận ngoài hệ thống
+/// (không phải thành viên dự án) phải được OWNER/ADMIN duyệt (recipients[].status = APPROVED) mới được gửi.
+model WorkReportSendPlan {
+  id              Int       @id @default(autoincrement())
+  projectId       Int       @map("project_id")
+  templateId      Int?      @map("template_id")
+  /// Mẫu sẵn (weekly|sprint|lecturer|client) khi không dùng mẫu tự soạn.
+  builtinKey      String?   @map("builtin_key") @db.VarChar(24)
+  name            String    @db.VarChar(120)
+  cadence         String    @default("WEEKLY") @db.VarChar(12)
+  weekday         Int       @default(5)
+  hour            Int       @default(16)
+  timezone        String    @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
+  format          String    @default("pdf") @db.VarChar(8)
+  /// [{ email, userId|null, external, status: APPROVED|PENDING|REJECTED, decidedById, decidedAt }]
+  recipients      Json      @default("[]")
+  /// Id webhook chat của dự án (work_chat_hooks) để đăng tóm tắt.
+  chatHookIds     Json      @default("[]") @map("chat_hook_ids")
+  /// Id kênh Slack của dự án (work_slack_channels) để đăng tệp báo cáo.
+  slackChannelIds Json      @default("[]") @map("slack_channel_ids")
+  enabled         Boolean   @default(true)
+  createdById     Int?      @map("created_by_id")
+  lastRunAt       DateTime? @map("last_run_at")
+  lastPeriodKey   String?   @map("last_period_key") @db.VarChar(80)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  project    WorkProject          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  template   WorkReportTemplate?  @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  deliveries WorkReportDelivery[]
+
+  @@index([projectId], map: "idx_work_report_send_plan_project")
+  @@map("work_report_send_plans")
+}
+
+/// Nhật ký gửi: một dòng mỗi lần gửi. UNIQUE (lịch, kỳ) ⇒ mỗi kỳ chỉ gửi MỘT lần dù cron chạy chồng.
+model WorkReportDelivery {
+  id            Int       @id @default(autoincrement())
+  projectId     Int       @map("project_id")
+  scheduleId    Int?      @map("schedule_id")
+  periodKey     String    @map("period_key") @db.VarChar(80)
+  trigger       String    @db.VarChar(12)
+  status        String    @default("RUNNING") @db.VarChar(12)
+  title         String    @db.VarChar(255)
+  /// [{ channel: email|chat|slack, target, ok, error }]
+  detail        Json      @default("[]")
+  fileName      String?   @map("file_name") @db.VarChar(255)
+  fileKey       String?   @map("file_key") @db.VarChar(400)
+  triggeredById Int?      @map("triggered_by_id")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  finishedAt    DateTime? @map("finished_at")
+
+  project  WorkProject         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  schedule WorkReportSendPlan? @relation(fields: [scheduleId], references: [id], onDelete: SetNull)
+
+  @@unique([scheduleId, periodKey], map: "uk_work_report_delivery_period")
+  @@index([projectId, createdAt], map: "idx_work_report_delivery_project")
+  @@map("work_report_deliveries")
+}
+
+/// App Slack đã cài cho MỘT không gian CT Work. Token bot nằm ở kết nối OAuth "slack" của người cài (connectionId).
+model WorkSlackInstall {
+  id            Int      @id @default(autoincrement())
+  workspaceId   Int      @unique(map: "uk_work_slack_install_ws") @map("workspace_id")
+  connectionId  Int      @map("connection_id")
+  installedById Int      @map("installed_by_id")
+  teamId        String   @map("team_id") @db.VarChar(32)
+  teamName      String   @map("team_name") @db.VarChar(160)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  workspace WorkSpace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  channels  WorkSlackChannel[]
+
+  @@index([teamId], map: "idx_work_slack_install_team")
+  @@map("work_slack_installs")
+}
+
+/// Kênh Slack gắn với dự án: nhận thông báo (events) và/hoặc nhận lệnh /ctwork new (intake ⇒ đề xuất chờ duyệt).
+model WorkSlackChannel {
+  id          Int       @id @default(autoincrement())
+  projectId   Int       @map("project_id")
+  installId   Int       @map("install_id")
+  channelId   String    @map("channel_id") @db.VarChar(32)
+  channelName String    @map("channel_name") @db.VarChar(160)
+  events      Json      @default("[]")
+  intake      Boolean   @default(true)
+  enabled     Boolean   @default(true)
+  lastSentAt  DateTime? @map("last_sent_at")
+  lastError   String?   @map("last_error") @db.VarChar(300)
+  createdById Int?      @map("created_by_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  project WorkProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  install WorkSlackInstall @relation(fields: [installId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, channelId], map: "uk_work_slack_channel")
+  @@index([installId, channelId], map: "idx_work_slack_channel_install")
+  @@map("work_slack_channels")
+}
+
+/// Nonce chống phát lại cho webhook không gắn kênh intake (Slack): gửi lại đúng gói đã nhận ⇒ 409.
+model WorkExtNonce {
+  id        Int      @id @default(autoincrement())
+  source    String   @db.VarChar(16)
+  nonce     String   @db.VarChar(200)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([source, nonce], map: "uk_work_ext_nonce")
+  @@index([createdAt], map: "idx_work_ext_nonce_created")
+  @@map("work_ext_nonces")
+}
+
+// ── hết CTW đợt 8b ──
+
+// ── CTW đợt 8c (12/10/2026) — họp định kỳ RRULE, phân tích tĩnh SARIF + V(G), ảnh sơ đồ Mermaid ──
+// Xem src/services/work/{meetingSeries,staticAnalysis,diagramRender}.ts.
+
+/// Chuỗi họp định kỳ. recurrence = Recurrence của teachingRules.ts (FREQ DAILY|WEEKLY|MONTHLY, INTERVAL, BYDAY,
+/// BYMONTHDAY, giờ:phút, ngày bắt đầu/kết thúc theo `timezone`); rrule = chuỗi RFC 5545 tương ứng (để xem/xuất).
+/// Các buổi được SINH SẴN thành WorkMeeting tới `generatedUntil` (cửa sổ ~10 tuần, tự nới khi mở danh sách/cron).
+/// exdates = ngày GỐC đã bỏ (EXDATE) ⇒ không sinh lại. Sửa "từ buổi này về sau" ⇒ cắt chuỗi cũ (endDate) + chuỗi mới.
+model WorkMeetingSeries {
+  id             Int       @id @default(autoincrement())
+  projectId      Int       @map("project_id")
+  title          String    @db.VarChar(255)
+  type           String    @default("OTHER") @db.VarChar(16)
+  timezone       String    @default("Asia/Ho_Chi_Minh") @db.VarChar(64)
+  recurrence     Json
+  rrule          String    @db.VarChar(300)
+  durationMin    Int       @default(60) @map("duration_min")
+  location       String?   @db.VarChar(255)
+  meetingUrl     String?   @map("meeting_url") @db.VarChar(500)
+  templateKey    String?   @map("template_key") @db.VarChar(24)
+  agendaItems    Json      @default("[]") @map("agenda_items")
+  agendaJson     Json?     @map("agenda_json")
+  attendeeIds    Json      @default("[]") @map("attendee_ids")
+  exdates        Json      @default("[]")
+  generatedUntil String?   @map("generated_until") @db.VarChar(10)
+  organizerId    Int?      @map("organizer_id")
+  /// Chuỗi sinh ra khi tách "từ buổi này về sau".
+  splitFromId    Int?      @map("split_from_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  endedAt        DateTime? @map("ended_at")
+
+  project  WorkProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  meetings WorkMeeting[]
+
+  @@index([projectId], map: "idx_work_meeting_series_project")
+  @@map("work_meeting_series")
+}
+
+/// Một lần nhập kết quả phân tích tĩnh (SARIF 2.1 — ESLint/Semgrep/CodeQL/SpotBugs/PMD/SonarQube xuất SARIF) hoặc báo cáo
+/// độ phức tạp (JaCoCo XML COMPLEXITY, lizard CSV). Token `tests:write` dùng được (cùng tuyến nhóm automation).
+model WorkStaticImport {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  kind        String   @db.VarChar(12)
+  tools       String?  @db.VarChar(200)
+  source      String   @default("API") @db.VarChar(8)
+  build       String?  @db.VarChar(80)
+  branch      String?  @db.VarChar(120)
+  commitSha   String?  @map("commit_sha") @db.VarChar(64)
+  total       Int      @default(0)
+  newCount    Int      @default(0) @map("new_count")
+  fixedCount  Int      @default(0) @map("fixed_count")
+  issuesMade  Int      @default(0) @map("issues_made")
+  units       Int      @default(0)
+  tokenId     Int?     @map("token_id")
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt], map: "idx_work_static_import_project")
+  @@map("work_static_imports")
+}
+
+/// Một phát hiện phân tích tĩnh, CHỐNG TRÙNG theo `fingerprint` (công cụ + rule + tệp + dòng mã chuẩn hoá). status: OPEN
+/// (còn thấy ở lần nhập gần nhất của công cụ đó) | FIXED (lần nhập sau không còn) | IGNORED (người bấm bỏ qua) | ISSUE (đã
+/// thành thẻ Bug — issueId). Mức error ⇒ có thể tự thành thẻ khi gửi `createIssues=true` (trần 20/lần), còn lại là đề xuất.
+model WorkStaticFinding {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  fingerprint  String    @db.VarChar(64)
+  tool         String    @db.VarChar(80)
+  ruleId       String    @map("rule_id") @db.VarChar(200)
+  level        String    @db.VarChar(8)
+  message      String    @db.Text
+  file         String?   @db.VarChar(500)
+  line         Int?
+  helpUri      String?   @map("help_uri") @db.VarChar(500)
+  status       String    @default("OPEN") @db.VarChar(8)
+  issueId      Int?      @map("issue_id")
+  seenCount    Int       @default(1) @map("seen_count")
+  firstSeenAt  DateTime  @default(now()) @map("first_seen_at")
+  lastSeenAt   DateTime  @default(now()) @map("last_seen_at")
+  fixedAt      DateTime? @map("fixed_at")
+  lastImportId Int?      @map("last_import_id")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, fingerprint], map: "uk_work_static_finding")
+  @@index([projectId, status], map: "idx_work_static_finding_status")
+  @@map("work_static_findings")
+}
+
+/// T4 — độ phức tạp chu trình V(G) theo hàm/phương thức, đọc từ báo cáo có sẵn (JaCoCo COMPLEXITY, lizard CCN, rule
+/// complexity của ESLint/PMD trong SARIF). Một dòng mỗi (tệp, tên); lần nhập sau ghi đè. V(G) = số đường cơ sở tối thiểu.
+model WorkCodeComplexity {
+  id        Int      @id @default(autoincrement())
+  projectId Int      @map("project_id")
+  unitKey   String   @map("unit_key") @db.VarChar(64)
+  name      String   @db.VarChar(300)
+  file      String?  @db.VarChar(500)
+  line      Int?
+  vg        Int
+  source    String   @db.VarChar(12)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, unitKey], map: "uk_work_code_complexity")
+  @@index([projectId, vg], map: "idx_work_code_complexity_vg")
+  @@map("work_code_complexity")
+}
+
+/// Ảnh sơ đồ Mermaid VẼ SẴN (SVG + PNG) theo mã băm nguồn — để API/MCP và xuất Docs có ảnh mà máy chủ không cần trình
+/// duyệt. Trình duyệt của thành viên vẽ (mermaid.js) rồi gửi lên khi mở/lưu sơ đồ hoặc trang; máy chủ chỉ KIỂM (SVG
+/// không script/foreignObject lạ, PNG đúng định dạng, trần cỡ). hash = sha256(nguồn đã chuẩn hoá).
+model WorkDiagramRender {
+  id          Int      @id @default(autoincrement())
+  projectId   Int      @map("project_id")
+  hash        String   @db.VarChar(64)
+  svg         String?  @db.Text
+  png         Bytes?
+  width       Int?
+  height      Int?
+  createdById Int?     @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, hash], map: "uk_work_diagram_render")
+  @@map("work_diagram_renders")
+}
+
+// ── hết CTW đợt 8c ──

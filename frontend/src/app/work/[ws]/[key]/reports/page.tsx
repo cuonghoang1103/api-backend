@@ -30,7 +30,7 @@ import { studioOn } from '@/components/work/studio/shared';
 import { ProjectAgentsReport } from '@/components/work/agents/PeopleVsAgents';
 import { projectHasAgents } from '@/components/work/agents/leases';
 import Link from 'next/link';
-import { Presentation } from 'lucide-react';
+import { LayoutTemplate, Presentation } from 'lucide-react';
 import { wt } from '@/components/work/i18n';
 
 const TABS = [
@@ -91,6 +91,10 @@ function ReportsView({ config, pid }: { config: ProjectConfig; pid: number }) {
   return (
     <div className="flex h-full flex-col">
       <ProjectHeader config={config} title={wt('portal.tReports')}>
+        {/* CTW đợt 8b: trình soạn báo cáo kéo-thả + lịch tự gửi (đội dự án). */}
+        {teamSide && (
+          <Link href={`/work/${config.workspace.slug}/${config.key}/reports/builder`} className="w-btn w-btn-sm" data-testid="header-report-builder"><LayoutTemplate size={14} />{wt('c8b.tabBuilder')}</Link>
+        )}
         {reportsOn && (
           <Link href={`/work/${config.workspace.slug}/${config.key}/present`} className="w-btn w-btn-sm" data-testid="header-present"><Presentation size={14} />{wt('rep.present')}</Link>
         )}

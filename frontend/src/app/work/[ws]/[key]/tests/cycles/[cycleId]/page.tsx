@@ -285,6 +285,8 @@ function CycleView({ config, pid, cycleId }: { config: ProjectConfig; pid: numbe
                   <div className="flex min-w-0 items-center gap-2">
                     <span className="shrink-0 text-[12px] font-medium text-[var(--w-text-2)]">{lk.issueKey(r.test.number)}</span>
                     <span className="min-w-0 truncate">{r.test.title}</span>
+                    {/* CTW đợt 8c (T10): bản test đã chạy; lệch bản hiện tại ⇒ cảnh báo. */}
+                    {r.testVersion != null && <span className={cn('shrink-0 rounded-[4px] px-1 text-[11px] tabular-nums', r.outdated ? 'bg-[var(--w-orange-bg,var(--w-sunken))] text-[var(--w-orange-text,var(--w-text-2))]' : 'text-[var(--w-text-3)]')} title={r.outdated ? wt('c8c.runOutdated', { a: r.testVersion, b: r.currentVersion ?? r.testVersion }) : wt('c8c.runVersion', { v: r.testVersion })}>v{r.testVersion}{r.outdated ? ` → v${r.currentVersion}` : ''}</span>}
                     {r.comment && <span title={r.comment} className="shrink-0 text-[var(--w-text-3)]"><MessageSquare size={12} /></span>}
                   </div>
                   <div className="flex items-center gap-1 text-[12px] text-[var(--w-text-2)]"><PriorityIcon priority={r.test.priority} size={14} /></div>

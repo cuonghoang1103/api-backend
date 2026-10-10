@@ -8,7 +8,7 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, CircleHelp, Inbox, KeyRound, Search } from 'lucide-react';
+import { ArrowLeft, CircleHelp, Inbox, KeyRound, PlugZap, Search } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { Popover, UserAvatar, useToggle } from '../ui';
 import { openHelp } from '../help/store';
@@ -77,6 +77,7 @@ function UserMenu() {
           <div className="my-1 border-t border-[var(--w-border)]" />
           <Link role="menuitem" href="/work?tab=my-work" onClick={pop.close} className={item}><Inbox size={14} /> {wt('shell.myWork')}</Link>
           <Link role="menuitem" href="/work/developer" onClick={pop.close} className={item}><KeyRound size={14} /> {wt('shell.apiTokens')}</Link>
+          <Link role="menuitem" href="/work/connections" onClick={pop.close} className={item}><PlugZap size={14} /> {wt('c8a.navConnections')}</Link>
           <button role="menuitem" type="button" onClick={() => { pop.close(); openHelp(); }} className={item}><CircleHelp size={14} /> {wt('shell.helpGuide')}</button>
           <div className="my-1 border-t border-[var(--w-border)]" />
           <div className="flex items-center justify-between gap-2 px-2 py-1">

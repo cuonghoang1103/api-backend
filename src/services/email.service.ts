@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import { Resend } from 'resend';
 import { config } from '../config/env.js';
 import { logger } from '../utils/logger.js';
@@ -26,6 +29,32 @@ export function withFromName(from: string, name: string): string {
   return safe ? `"${safe}" <${addr}>` : addr;
 }
 
+/**
+ * HỘP THƯ GIẢ (11/10/2026). `.env` local mang khoá Resend THẬT, nên mọi lượt test/E2E/dev trước đây gửi thư thật:
+ * 10/10 một lượt chụp ảnh của agent gửi báo cáo PDF tới `giangvien@fpt.edu.vn` (may là bounce), cùng hàng chục thư
+ * xác thực tới `*@e2e.local` — bounce dồn lại làm xấu uy tín tên miền gửi. Nay:
+ *   - Ngoài production ⇒ KHÔNG gửi, ghi thư ra `$TMPDIR/ctw-email-sandbox/*.html` (+ log tiêu đề). Cần gửi thật từ
+ *     máy local (hiếm) ⇒ `EMAIL_SANDBOX=0`.
+ *   - Ở MỌI môi trường, địa chỉ thuộc tên miền dành riêng (.local/.test/.invalid/.example/example.com…) không bao giờ
+ *     được gửi tới Resend — chúng chỉ có thể bounce.
+ */
+const RESERVED_DOMAIN = /@(?:[^@]+\.)?(?:local|localhost|test|invalid|example|example\.(?:com|net|org))$/i;
+export function emailSandboxReason(to: string, env: NodeJS.ProcessEnv = process.env): string | null {
+  if (RESERVED_DOMAIN.test(to.trim())) return 'reserved-domain';
+  if (env.NODE_ENV !== 'production' && env.EMAIL_SANDBOX !== '0') return 'non-production';
+  return null;
+}
+function writeSandboxEmail(payload: EmailPayload, reason: string): { success: boolean; id: string } {
+  const id = `sandbox-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  try {
+    const dir = path.join(os.tmpdir(), 'ctw-email-sandbox');
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, `${id}.html`), `<!-- to: ${payload.to} | subject: ${payload.subject} | reason: ${reason} -->\n${payload.html}`);
+  } catch { /* chỉ là bản lưu để xem — không chặn luồng */ }
+  logger.info('Email sandbox — không gửi thật', { reason, subject: payload.subject, id });
+  return { success: true, id };
+}
+
 export class EmailService {
   /**
    * Send email via Resend. Returns true on success, false on failure.
@@ -33,6 +62,8 @@ export class EmailService {
    * to block user registration/login.
    */
   async send(payload: EmailPayload): Promise<{ success: boolean; error?: string; id?: string }> {
+    const sandbox = emailSandboxReason(payload.to);
+    if (sandbox) return writeSandboxEmail(payload, sandbox);
     if (!resend) {
  logger.warn('RESEND_API_KEY not set — email not sent', {
  to: payload.to,

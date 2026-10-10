@@ -1,0 +1,35 @@
+{
+  "schema": [
+    { "name": "Name", "type": "title" },
+    { "name": "Status", "type": "status" },
+    { "name": "Assignee", "type": "people" },
+    { "name": "Due", "type": "date" },
+    { "name": "Tags", "type": "multi_select" },
+    { "name": "Priority", "type": "select" },
+    { "name": "Points", "type": "number" },
+    { "name": "Notes", "type": "rich_text" },
+    { "name": "Attachments", "type": "files" }
+  ],
+  "rows": [
+    { "id": "aaaaaaaa-0000-0000-0000-000000000001", "properties": {
+      "Name": { "type": "title", "title": [ { "plain_text": "Thiết kế màn đăng nhập" } ] },
+      "Status": { "type": "status", "status": { "name": "In progress" } },
+      "Assignee": { "type": "people", "people": [ { "name": "Staff", "person": { "email": "__STAFF_EMAIL__" } } ] },
+      "Due": { "type": "date", "date": { "start": "2026-10-20" } },
+      "Tags": { "type": "multi_select", "multi_select": [ { "name": "ui" }, { "name": "auth" } ] },
+      "Priority": { "type": "select", "select": { "name": "High" } },
+      "Points": { "type": "number", "number": 3 },
+      "Notes": { "type": "rich_text", "rich_text": [ { "plain_text": "Theo mẫu Figma" } ] },
+      "Attachments": { "type": "files", "files": [] } } },
+    { "id": "aaaaaaaa-0000-0000-0000-000000000002", "properties": {
+      "Name": { "type": "title", "title": [ { "plain_text": "Viết API đăng ký" } ] },
+      "Status": { "type": "status", "status": { "name": "Done" } },
+      "Assignee": { "type": "people", "people": [ { "name": "Người lạ", "person": { "email": "stranger@nowhere.test" } } ] },
+      "Due": { "type": "date", "date": null },
+      "Tags": { "type": "multi_select", "multi_select": [] },
+      "Priority": { "type": "select", "select": null },
+      "Points": { "type": "number", "number": null },
+      "Notes": { "type": "rich_text", "rich_text": [] },
+      "Attachments": { "type": "files", "files": [] } } }
+  ]
+}

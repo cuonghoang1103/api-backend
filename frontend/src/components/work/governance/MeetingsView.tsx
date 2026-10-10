@@ -11,7 +11,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { CalendarClock, CalendarPlus, MapPin, Plus, Video } from 'lucide-react';
+import { CalendarClock, CalendarPlus, MapPin, Plus, Repeat, Video } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { userName, workError, type ProjectConfig } from '@/lib/work-api';
 import { MEETING_TYPES, MEETING_TYPE_LABEL, govApi, govKeys, type MeetingRow, type MeetingType } from '@/lib/work-s3b-api';
@@ -22,6 +22,7 @@ import { Pill } from '../studio/shared';
 import { fmtMeetingTime, fromLocalInput, toLocalInput, useGovInvalidate } from './shared';
 import { wt, wfmt } from '@/components/work/i18n';
 import AttendanceReport from '../meetings2/AttendanceReport'; // CTW K-2: tab Chuyên cần
+import { SeriesTab, TemplateSelect } from '../c8c/RecurringMeetings'; // CTW đợt 8c: họp định kỳ + mẫu chương trình
 
 const PROVIDER: Record<string, string> = { MEET: 'Google Meet', ZOOM: 'Zoom', TEAMS: 'Microsoft Teams', JITSI: 'Jitsi Meet', get OTHER() { return wt('gov.videoLink'); } };
 const COMMON_TZ = ['Asia/Ho_Chi_Minh', 'Asia/Singapore', 'Asia/Tokyo', 'Europe/London', 'Europe/Berlin', 'America/New_York', 'America/Los_Angeles', 'UTC'];
@@ -66,13 +67,15 @@ export function NewMeetingDialog({ config, open, onClose, portalOn }: { config: 
   const [ids, setIds] = useState<number[]>([]);
   const [template, setTemplate] = useState(true);
   const [invites, setInvites] = useState(true);
-  useEffect(() => { if (open) { setTitle(''); setIds([]); setStart(toLocalInput(initStart())); } }, [open]);
+  const [agendaTpl, setAgendaTpl] = useState(''); // CTW đợt 8c
+  useEffect(() => { if (open) { setTitle(''); setIds([]); setStart(toLocalInput(initStart())); setAgendaTpl(''); } }, [open]);
   const create = useMutation({
     mutationFn: () => {
       const s = fromLocalInput(start);
       return govApi.createMeeting(config.id, {
         title: title.trim() || MEETING_TYPE_LABEL[type], type, startsAt: s, endsAt: new Date(new Date(s).getTime() + minutes * 60_000).toISOString(),
         timezone: tz, location: location.trim() || null, meetingUrl: url.trim() || null, attendeeIds: ids, useTemplate: type === 'KICKOFF' ? template : undefined, sendInvites: invites,
+        templateKey: agendaTpl || null,
       });
     },
     onSuccess: (m) => {
@@ -125,6 +128,9 @@ export function NewMeetingDialog({ config, open, onClose, portalOn }: { config: 
           </div>
         </Field>
       </div>
+      <Field label={wt('c8c.template')} hint={agendaTpl ? wt(`c8c.tplDesc_${agendaTpl.replace(/-/g, '_')}` as never) : wt('c8c.templateHint')}>
+        <TemplateSelect pid={config.id} value={agendaTpl} onChange={(k, x) => { setAgendaTpl(k); if (x) { setType(x.type as MeetingType); setMinutes(x.durationMin); } }} testId="meeting-template" />
+      </Field>
       <Field label={wt('gov.invite')} hint={portalOn ? wt('gov.clientsSeeOnly') : wt('gov.turnOnPortal')}>
         <AttendeePicker config={config} value={ids} onChange={setIds} portalOn={portalOn} />
       </Field>
@@ -155,6 +161,7 @@ function MeetingItem({ m, base }: { m: MeetingRow; base: string }) {
             <span className="flex items-center gap-1"><CalendarClock size={12} />{fmtMeetingTime(m.startsAt, m.endsAt, m.timezone)}</span>
             {m.provider && <span className="flex items-center gap-1"><Video size={12} />{PROVIDER[m.provider]}</span>}
             {m.location && <span className="flex min-w-0 items-center gap-1"><MapPin size={12} /><span className="max-w-[160px] truncate">{m.location}</span></span>}
+            {m.seriesId && <span className="flex items-center gap-1" title={wt('c8c.recurring')}><Repeat size={12} />{m.seriesDetached ? wt('c8c.exception') : wt('c8c.recurring')}</span>}
             {m.minutesShared && <Pill tone="accent">{wt('gov.notesShared')}</Pill>}
             {m.actionsOpen > 0 && <span>{wt('gov.actionsNoIssue', { count: m.actionsOpen })}</span>}
           </span>
@@ -167,9 +174,9 @@ function MeetingItem({ m, base }: { m: MeetingRow; base: string }) {
 
 export default function MeetingsView({ config }: { config: ProjectConfig }) {
   const pid = config.id;
-  const [scope, setScope] = useState<'upcoming' | 'past' | 'attendance'>('upcoming');
+  const [scope, setScope] = useState<'upcoming' | 'past' | 'recurring' | 'attendance'>('upcoming');
   const [creating, setCreating] = useState(false);
-  const listScope = scope === 'attendance' ? 'past' : scope;
+  const listScope = scope === 'attendance' ? 'past' : scope === 'recurring' ? 'upcoming' : scope;
   const q = useQuery({ queryKey: govKeys.meetings(pid, listScope), queryFn: () => govApi.meetings(pid, listScope) });
   const base = `/work/${config.workspace.slug}/${config.key}/meetings`;
   return (
@@ -177,15 +184,15 @@ export default function MeetingsView({ config }: { config: ProjectConfig }) {
       <div className="w-page">
         <div className="mb-4 flex flex-wrap items-center gap-2">
           <div className="inline-flex rounded-[7px] border border-[var(--w-border-strong)] p-0.5" role="tablist" aria-label={wt('gov.meetings')}>
-            {(['upcoming', 'past', 'attendance'] as const).map((k) => (
+            {(['upcoming', 'past', 'recurring', 'attendance'] as const).map((k) => (
               <button key={k} type="button" role="tab" aria-selected={scope === k} onClick={() => setScope(k)} className={cn('flex h-7 items-center rounded-[5px] px-3 text-[13px] font-medium', scope === k ? 'bg-[var(--w-active)] text-[var(--w-text)]' : 'text-[var(--w-text-2)] hover:text-[var(--w-text)]')}>
-                {k === 'upcoming' ? wt('gov.upcoming') : k === 'past' ? wt('gov.past') : wt('meeting2.tabAttendance')}
+                {k === 'upcoming' ? wt('gov.upcoming') : k === 'past' ? wt('gov.past') : k === 'recurring' ? wt('c8c.recurring') : wt('meeting2.tabAttendance')}
               </button>
             ))}
           </div>
-          {q.data?.canEdit && <button type="button" className="w-btn w-btn-primary ml-auto" onClick={() => setCreating(true)} data-testid="meeting-new"><Plus size={14} /> {wt('gov.scheduleMeeting')}</button>}
+          {q.data?.canEdit && scope !== 'recurring' && <button type="button" className="w-btn w-btn-primary ml-auto" onClick={() => setCreating(true)} data-testid="meeting-new"><Plus size={14} /> {wt('gov.scheduleMeeting')}</button>}
         </div>
-        {scope === 'attendance' ? <AttendanceReport config={config} /> : q.isLoading ? <PageLoading rows={4} /> : q.error || !q.data ? <EmptyState title={wt('gov.loadMeetingsFailed')} body={workError(q.error)} /> : q.data.items.length ? (
+        {scope === 'recurring' ? <SeriesTab config={config} portalOn={!!q.data?.portalOn} /> : scope === 'attendance' ? <AttendanceReport config={config} /> : q.isLoading ? <PageLoading rows={4} /> : q.error || !q.data ? <EmptyState title={wt('gov.loadMeetingsFailed')} body={workError(q.error)} /> : q.data.items.length ? (
           <ul className="w-card divide-y divide-[var(--w-border)] overflow-hidden" data-testid="meeting-list">{q.data.items.map((m) => <MeetingItem key={m.id} m={m} base={base} />)}</ul>
         ) : (
           <EmptyState

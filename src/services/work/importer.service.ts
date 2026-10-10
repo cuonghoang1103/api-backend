@@ -47,7 +47,7 @@ export const importInput = z.object({
 });
 export type ImportInput = z.infer<typeof importInput>;
 
-const SOURCE_LABEL: Record<ImportSource, string> = { TRELLO: 'Trello', ASANA: 'Asana', JIRA: 'Jira', CSV: 'CSV/Excel' };
+const SOURCE_LABEL: Record<ImportSource, string> = { TRELLO: 'Trello', ASANA: 'Asana', JIRA: 'Jira', CSV: 'CSV/Excel', NOTION: 'Notion' };
 const MAX_REPORT_LINES = 300;
 
 // ─── Đọc tệp ─────────────────────────────────────────────────────
@@ -131,10 +131,11 @@ interface Plan {
   parentNote: string | null;
 }
 
-export async function runImport(userId: number, projectId: number, input: ImportInput) {
+/** `preparsed` (CTW đợt 8b): nguồn đã đọc sẵn ngoài tệp (database Notion) — bỏ qua parseUpload, còn lại y nguyên. */
+export async function runImport(userId: number, projectId: number, input: ImportInput, preparsed?: ParsedImport) {
   const access = await requireProject(userId, projectId, 'project.settings');
   if (access.principal === 'AGENT') throw new ForbiddenError('Agents cannot run bulk imports');
-  const parsed = parseUpload(input);
+  const parsed = preparsed ?? parseUpload(input);
   const items = parsed.items;
   if (!items.length) throw new BadRequestError('The file has no items to import', 'WORK_IMPORT_EMPTY');
   crossCheck(items);

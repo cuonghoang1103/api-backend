@@ -48,6 +48,7 @@ import type { AiProvenance } from '@/lib/work-s6-api';
 import { FileDown, Gauge, Wand2 } from 'lucide-react';
 // CTW đợt 3A: xuất Word/PDF (sơ đồ Mermaid vẽ sẵn PNG ở trình duyệt) + điền Report từ dữ liệu dự án.
 import { mermaidPngsOf, saveBlob, workDocs3aApi } from '@/lib/work-docs3a-api';
+import { useStoreDocMermaid } from '../c8c/mermaidRender';
 import { SRS_SECTION_LABEL, workCtw4Api } from '@/lib/work-ctw4-api'; // CTW đợt 4: Report 3 từ SRS có cấu trúc, ghép Report 7
 import { ListTree, Layers, PanelRightClose, PanelRightOpen, SpellCheck } from 'lucide-react';
 import { PaneDrawer, useLayoutPrefs, type PaneState } from '../shell/panes';
@@ -91,6 +92,8 @@ export default function DocView({ config, num, details, focus = false }: { confi
   titleRef.current = title;
   const docRef = useRef(doc);
   docRef.current = doc;
+  // CTW đợt 8c: ảnh các khối Mermaid của bản ĐÃ LƯU ⇒ máy chủ (API/MCP + xuất Word/PDF qua API có hình).
+  useStoreDocMermaid(pid, page?.contentJson, !!page && page.canEdit !== false);
 
   const [history, setHistory] = useState(false);
   const [specOpen, setSpecOpen] = useState(false);

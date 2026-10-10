@@ -165,6 +165,7 @@ describe('khopTuyenWeb', () => {
       ['/work', '/work', {}],
       ['/work/developer', '/work/developer', {}],
       ['/work/security', '/work/security', {}],
+      ['/work/connections', '/work/connections', {}],
       ['/work/search', '/work/search', {}],
       ['/work/invite/abc123', '/work/invite/:token', { token: 'abc123' }],
       ['/work/share/tok-9', '/work/share/:token', { token: 'tok-9' }],
@@ -306,7 +307,9 @@ describe('khopTuyenWeb', () => {
     // 11/10/2026: +4 CT Work đợt 7a (/work/:ws/okrs, /work/:ws/:key/okrs|poker|retros).
     // 11/10/2026: +5 CT Work đợt 7b (/work/form/:token, /work/:ws/:key/forms|intake|import|kb).
     // 11/10/2026: +2 CT Work đợt 7c (/work/security — 2FA thành viên, /work/:ws/:key/assets — sổ tài sản & giấy phép).
-    expect(thay.size).toBe(175);
+    // 12/10/2026: +1 CT Work đợt 8a (/work/connections — kết nối Microsoft 365 / Google của tôi).
+    // 12/10/2026: +2 CT Work đợt 8b (/work/:ws/:key/reports/builder — Builder + lịch gửi, /work/:ws/:key/connect — Notion & Slack).
+    expect(thay.size).toBe(178);
   });
 });
 

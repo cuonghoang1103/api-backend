@@ -63,6 +63,27 @@ export interface ExportOptions {
   resolveImage: (src: string) => Promise<ExportImage | null>;
   /** PNG của các khối Mermaid, theo thứ tự xuất hiện. null = client không vẽ được khối đó. */
   diagrams?: Array<ExportImage | null>;
+  /**
+   * CTW đợt 8c: ảnh Mermaid VẼ SẴN theo nguồn (diagramRender.service — trình duyệt thành viên vẽ rồi gửi lên) cho khối mà
+   * `diagrams` không có ảnh (xuất qua API/MCP, hoặc client vẽ hỏng). undefined ⇒ dùng bộ tra đã đăng ký; null ⇒ tắt.
+   */
+  resolveMermaid?: ((source: string) => Promise<ExportImage | null>) | null;
+}
+
+let mermaidResolver: ((source: string) => Promise<ExportImage | null>) | null = null;
+/** diagramRender.service đăng ký khi được nạp (máy chủ); test thuần không nạp ⇒ không đụng CSDL. */
+export function registerMermaidResolver(fn: ((source: string) => Promise<ExportImage | null>) | null): void { mermaidResolver = fn; }
+
+/** Lấp ảnh còn thiếu của các khối Mermaid (theo thứ tự trong `p.mermaidIndex`) bằng ảnh vẽ sẵn. */
+async function fillMermaid(p: Prepared, opts: ExportOptions): Promise<Array<ExportImage | null>> {
+  const out = [...(opts.diagrams ?? [])];
+  const resolve = opts.resolveMermaid === undefined ? mermaidResolver : opts.resolveMermaid;
+  if (!resolve) return out;
+  for (const [n, i] of p.mermaidIndex) {
+    if (out[i]) continue;
+    try { out[i] = await resolve(plainText(n)); } catch { out[i] = null; }
+  }
+  return out;
 }
 
 // ─── Chuẩn bị ────────────────────────────────────────────────────
@@ -317,7 +338,7 @@ function docxBlock(n: PmNode, ctx: DocxCtx, list?: { ref: 'ctw-bullet' | 'ctw-nu
 export async function renderDocx(doc: unknown, meta: ExportMeta, opts: ExportOptions): Promise<Buffer> {
   const p = prepareDoc(doc, { stripGuides: opts.stripGuides ?? true });
   const images = await loadImages(p, opts.resolveImage);
-  const ctx: DocxCtx = { p, images, diagrams: opts.diagrams ?? [], listInstance: 0 };
+  const ctx: DocxCtx = { p, images, diagrams: await fillMermaid(p, opts), listInstance: 0 };
   const body = docxBlocks(p.blocks, ctx);
 
   const front: Array<Paragraph | Table | TableOfContents> = [];
@@ -690,7 +711,7 @@ export async function renderPdf(doc: unknown, meta: ExportMeta, opts: ExportOpti
   if (tocPages || (opts.cover ?? true)) d.addPage();
   const bodyStart = d.bufferedPageRange().count - 1;
 
-  const ctx: PdfCtx = { doc: d, p, images, diagrams: opts.diagrams ?? [], headingPage: new Map() };
+  const ctx: PdfCtx = { doc: d, p, images, diagrams: await fillMermaid(p, opts), headingPage: new Map() };
   pdfBlocks(d, p.blocks, ctx);
 
   // Mục lục có số trang thật + outline cho trình đọc PDF.

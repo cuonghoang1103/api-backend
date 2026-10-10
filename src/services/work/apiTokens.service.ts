@@ -23,7 +23,8 @@ export const TOKEN_SCOPES = ['read', 'write', 'tests:write'] as const;
  * CTW đợt 7c (TST-2): scope HẸP cho CI — chỉ được GHI đúng một tuyến: nhập kết quả test tự động. Mọi lệnh ghi khác ⇒ 403
  * như token chỉ đọc. MCP không coi nó là 'write' (context.ts kiểm `includes('write')` đúng chữ).
  */
-export const TESTS_WRITE_ROUTE = /^\/projects\/\d+\/tests\/automation\/import\/?$/;
+// CTW đợt 8c: thêm /static (SARIF / JaCoCo / lizard) — cùng nhóm "nhập kết quả từ CI", không nới gì khác.
+export const TESTS_WRITE_ROUTE = /^\/projects\/\d+\/tests\/automation\/(import|static)\/?$/;
 /** 'agent' chỉ có trên token gắn AI agent (CTW-28) — không có thì middleware từ chối gắn req.agent. */
 export type TokenScope = (typeof TOKEN_SCOPES)[number] | 'agent';
 const MAX_TOKENS = 20;

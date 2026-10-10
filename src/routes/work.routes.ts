@@ -91,6 +91,9 @@ import ctw6bRoutes, { ctw6bPublicRoutes } from './work.ctw6b.routes.js'; // CTW 
 import ctw7aRoutes from './work.ctw7a.routes.js'; // CTW đợt 7a: OKR, planning poker, retro board, timer
 import ctw7bRoutes, { ctw7bPublicRoutes } from './work.ctw7b.routes.js'; // CTW đợt 7b: forms, nhập Trello/Asana/Jira/CSV, kênh ngoài → đề xuất, knowledge base
 import ctw7cRoutes from './work.ctw7c.routes.js'; // CTW đợt 7c: bảo mật & quản trị + test tự động
+import ctw8aRoutes, { ctw8aPublicRoutes } from './work.ctw8a.routes.js'; // CTW đợt 8a: kết nối Microsoft 365 / Google (OAuth theo người)
+import ctw8bRoutes, { ctw8bPublicRoutes } from './work.ctw8b.routes.js'; // CTW đợt 8b: Notion, Slack, trình soạn báo cáo + lịch tự gửi
+import ctw8cRoutes from './work.ctw8c.routes.js'; // CTW đợt 8c: họp định kỳ + mẫu, RSVP cổng khách, ảnh Mermaid, SARIF/V(G), SWR R13/R24/R26/R28
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
@@ -245,6 +248,10 @@ router.use(s4PublicRoutes);
 router.use(ctw6bPublicRoutes);
 // CTW đợt 7b: form công khai + webhook kênh ngoài (email Resend / Discord / Zalo OA) — chỉ tin token + chữ ký, có trần IP.
 router.use(ctw7bPublicRoutes);
+// CTW đợt 8a: callback OAuth Microsoft/Google (tin state ký HMAC + cookie gắn trình duyệt, không tin phiên).
+router.use(ctw8aPublicRoutes);
+// CTW đợt 8b: webhook Slack (/intake/slack/commands|events) — chỉ tin chữ ký v0, thân RAW.
+router.use(ctw8bPublicRoutes);
 
 // CTW-28 A9: MCP server (Streamable HTTP, không phiên) — tự xác thực bằng token ctw_ và tự chốt từng tool (src/mcp).
 // Đứng TRƯỚC apiTokenAuth: MCP luôn POST nên chốt "POST = ghi" của REST dời xuống từng tool ghi (không nới).
@@ -2066,5 +2073,11 @@ router.use(ctw7aRoutes);
 router.use(ctw7bRoutes);
 // CTW đợt 7c: ép 2FA (chính sách không gian), sổ tài sản/giấy phép, nhập kết quả test tự động (CI), widget mới (work.ctw7c.routes.ts).
 router.use(ctw7cRoutes);
+// CTW đợt 8a: kết nối của tôi, lịch hai chiều, Teams/Meet, tệp OneDrive/Drive trên thẻ, xuất Sheets/Excel (work.ctw8a.routes.ts).
+router.use(ctw8aRoutes);
+// CTW đợt 8b: Notion ⇄ Docs/thẻ, Slack (cài app, kênh, /ctwork, unfurl), Reports → Builder, lịch tự gửi + nhật ký (work.ctw8b.routes.ts).
+router.use(ctw8bRoutes);
+// CTW đợt 8c: họp định kỳ RRULE + mẫu chương trình, RSVP khách, ảnh Mermaid vẽ sẵn, phân tích tĩnh + V(G), SWR302 (work.ctw8c.routes.ts).
+router.use(ctw8cRoutes);
 
 export default router;

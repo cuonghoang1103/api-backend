@@ -11,6 +11,7 @@ on:
       - 'eval/**'
       - 'prisma/**'
       - 'scripts/test-work-db.mjs'
+      - 'scripts/db-test-tu-migration.mjs'
       - 'package.json'
       - 'package-lock.json'
       - 'frontend/package.json'
@@ -62,6 +63,9 @@ jobs:
           LLM_MODEL_REPORT: ${{ secrets.LLM_MODEL_REPORT }}
         run: npm run eval:cv-fabrication
       - name: Unit tests — money math + payment signature (required)
+        # Đợt 8c: auth.mfa.test ký JWT ⇒ cần JWT_SECRET (máy có .env nên xanh, CI thì đỏ từ 10/10).
+        env:
+          JWT_SECRET: ci-unit-test-secret-not-for-production-0123456789
         run: npm test
       - name: ESLint (informational)
         continue-on-error: true
@@ -98,7 +102,7 @@ jobs:
       JWT_SECRET: ci-work-db-test-secret-not-for-production-0123456789
       REDIS_HOST: localhost
       REDIS_PORT: '6379'
-      WORK_EMAIL_NOTIFICATIONS: 'false'
+      # Đợt 8c: KHÔNG tắt WORK_EMAIL_NOTIFICATIONS — portal/s3b/s5a/planning kiểm email đi (hộp thư giả của test).
       LLM_BACKGROUND_ENABLED: 'false'
     steps:
       - uses: actions/checkout@v4
@@ -110,8 +114,11 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Prisma generate
         run: npx prisma generate
-      - name: Apply migrations (prisma migrate deploy — không cần shadow DB)
-        run: npx prisma migrate deploy
+      # Đợt 8c: KHÔNG `prisma migrate deploy` — lịch sử migration không phát lại được trên CSDL trống (P3018 ở
+      # 20260706130000_add_music_and_profile + vài bảng từng tạo ngoài migration) nên bước này đỏ từ đợt 6a.
+      # Script phát lại từng migration bằng psql rồi lấp phần THIẾU bằng `prisma migrate diff` (xem đầu tệp).
+      - name: Build test DB from migrations (scripts/db-test-tu-migration.mjs)
+        run: node scripts/db-test-tu-migration.mjs
       - name: CT Work DB tests (WORK_DB_TEST=1, tuần tự từng tệp)
         run: npm run test:work-db
 

@@ -29,7 +29,7 @@ import {
   CalendarClock, GitPullRequestArrow, ShieldAlert,
   Wallet, Receipt, FileBarChart,
   Headset, Library, ExternalLink, Bot,
-  FileSpreadsheet, MessagesSquare, UsersRound, ClipboardCheck, Package } from 'lucide-react';
+  FileSpreadsheet, MessagesSquare, UsersRound, ClipboardCheck, Package, Plug } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workApi, type StudioModule } from '@/lib/work-api';
 import { resApi, resKeys } from '@/lib/work-resources-api';
@@ -50,10 +50,11 @@ import { chatApi, chatKeys } from '@/lib/work-chat-api';
 import { GraduationCap, School } from 'lucide-react';
 import { Crosshair, Spade, MessageSquareHeart } from 'lucide-react'; // CTW đợt 7a
 import { ClipboardList, Inbox as InboxIcon, FileInput, BookOpen as BookOpenKb } from 'lucide-react'; // CTW đợt 7b
+import { PlugZap } from 'lucide-react'; // CTW đợt 8a
 import { teachingApi, teachingKeys } from './teaching/teachingApi';
 import { wt } from './i18n';
 
-const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes', 'security']); // CTW đợt 5: + teaching, classes · đợt 7c: + security (2FA)
+const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes', 'security', 'connections']); // CTW đợt 5: + teaching, classes · đợt 7c: + security (2FA) · đợt 8a: + connections
 const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents', 'okrs']);
 
 export function useWorkPath() {
@@ -147,6 +148,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'forms', get label() { return wt('c7b.navForms'); }, icon: ClipboardList, match: (v) => v === 'forms', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       { path: 'intake', get label() { return wt('c7b.navIntake'); }, icon: InboxIcon, match: (v) => v === 'intake', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       { path: 'import', get label() { return wt('c7b.navImport'); }, icon: FileInput, match: (v) => v === 'import', roles: ['ADMIN'] },
+      // CTW đợt 8b: Notion (nhập/xuất Docs, database ⇒ thẻ) + Slack (kênh, /ctwork, unfurl) — đội dự án.
+      { path: 'connect', get label() { return wt('c8b.navConnect'); }, icon: Plug, match: (v) => v === 'connect', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       // CTW đợt 4: SRS có cấu trúc (use case/actor/BR/màn/phân quyền) + RTM — đội dự án + giảng viên.
       { path: 'requirements', get label() { return wt('nav.n_Requirements'); }, icon: ListTree, match: (v) => v === 'requirements', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       // CTW Diagram: Diagram Studio (Mermaid/Excalidraw, AI vẽ từ dữ liệu dự án) — đội dự án + giảng viên.
@@ -570,6 +573,8 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
           <kbd className="w-kbd max-md:!hidden">?</kbd>
         </button>
         <NavItem href="/work/developer" icon={KeyRound} label={wt('dev.apiTokens')} active={pathname.startsWith('/work/developer')} />
+        {/* CTW đợt 8a: kết nối Microsoft 365 / Google của tôi */}
+        <NavItem href="/work/connections" icon={PlugZap} label={wt('c8a.navConnections')} active={pathname.startsWith('/work/connections')} />
         <Link href="/" title={wt('shell.backToSite')} className={cn(ROW, ROW_IDLE)}>
           <ArrowLeft size={15} className="shrink-0 opacity-80" /> <span className="min-w-0 flex-1 truncate">{wt('shell.backToSite')}</span>
         </Link>

@@ -109,7 +109,8 @@ export interface IntakeChannel {
 }
 export interface ChannelBody { kind?: IntakeKind; name?: string; enabled?: boolean; address?: string; publicKey?: string; applicationId?: string; appId?: string; oaId?: string; prefix?: string; secret?: string }
 export interface Proposal {
-  id: number; source: IntakeKind; channelId: number | null; title: string; body: string | null; senderName: string | null; senderHandle: string | null; sender: string | null;
+  // CTW đợt 8b: + SLACK (lệnh /ctwork new — không có kênh intake riêng, channelId null).
+  id: number; source: IntakeKind | 'SLACK'; channelId: number | null; title: string; body: string | null; senderName: string | null; senderHandle: string | null; sender: string | null;
   status: 'PENDING' | 'ACCEPTED' | 'REJECTED'; simulated: boolean; createdAt: string; issue: { number: number; key: string } | null;
   decidedBy: string | null; decidedAt: string | null; decisionNote: string | null; meta: Record<string, unknown> | null;
 }

@@ -163,7 +163,8 @@ export const workContribApi = {
   summary: (pid: number, r: ContribRange) => d<ContribSummary>(api.get(`${B}/projects/${pid}/contrib/summary?${qs(r)}`)),
   member: (pid: number, uid: number, r: ContribRange) => d<MemberDetail>(api.get(`${B}/projects/${pid}/contrib/members/${uid}?${qs(r)}`)),
   task: (pid: number, num: number) => d<TaskContrib>(api.get(`${B}/projects/${pid}/contrib/issues/${num}`)),
-  exportXlsx: (pid: number, r: ContribRange) => file(`${B}/projects/${pid}/contrib/export.xlsx?${qs(r)}`),
+  // CTW đợt 8c: lang=vi ⇒ sheet Definitions ("how") bằng tiếng Việt.
+  exportXlsx: (pid: number, r: ContribRange, lang: 'en' | 'vi' = 'en') => file(`${B}/projects/${pid}/contrib/export.xlsx?${qs(r)}${lang === 'vi' ? '&lang=vi' : ''}`),
   exportPdf: (pid: number, r: ContribRange) => file(`${B}/projects/${pid}/contrib/export.pdf?${qs(r)}`),
   saveSettings: (pid: number, body: Partial<ContribSettings>) => d<ContribSettings>(api.put(`${B}/projects/${pid}/contrib/settings`, body)),
   gitAuthors: (pid: number) => d<{ authors: GitAuthor[]; people: WorkUser[] }>(api.get(`${B}/projects/${pid}/contrib/git-authors`)),

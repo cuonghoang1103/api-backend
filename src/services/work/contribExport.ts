@@ -10,7 +10,7 @@ import { AppError } from '../../middleware/errorHandler.js';
 import { notoSansViBoldBuffer, notoSansViBuffer } from '../cv/export/font.js';
 import { displayName } from './common.js';
 import { summary, type ContribQuery } from './contrib.service.js';
-import { FAIRNESS_NOTE, METRIC_DEFINITIONS } from './contribRules.js';
+import { FAIRNESS_NOTE, FAIRNESS_NOTE_VI, metricDefinitions } from './contribRules.js';
 import { peerSummaryForExport } from './contribPeer.service.js';
 import { writeXlsx, XSheet, type XStyle } from './xlsxStyled.js';
 
@@ -29,7 +29,7 @@ async function load(userId: number, projectId: number, q: ContribQuery) {
   return s;
 }
 
-export async function exportXlsx(userId: number, projectId: number, q: ContribQuery): Promise<{ buf: Buffer; fileName: string }> {
+export async function exportXlsx(userId: number, projectId: number, q: ContribQuery & { lang?: 'en' | 'vi' }): Promise<{ buf: Buffer; fileName: string }> {
   const s = await load(userId, projectId, q);
   const peer = s.access.peerAdmin ? await peerSummaryForExport(projectId) : [];
   const unit = s.unit === 'HOURS' ? 'h' : 'pts';
@@ -121,10 +121,13 @@ export async function exportXlsx(userId: number, projectId: number, q: ContribQu
   // ── Definitions
   const def = new XSheet('Definitions');
   def.width(1, 22).width(2, 110);
-  def.set(1, 1, 'Metric', H).set(1, 2, 'How it is counted', H);
-  Object.values(METRIC_DEFINITIONS).forEach((d, i) => def.set(i + 2, 1, d.label, C).set(i + 2, 2, d.how, { ...C, align: { wrap: true, v: 'top' } }));
-  const last = Object.keys(METRIC_DEFINITIONS).length + 3;
-  def.set(last, 1, 'Note', { font: { b: true } }).set(last, 2, FAIRNESS_NOTE, MUTED);
+  // CTW đợt 8c: sheet định nghĩa theo ngôn ngữ người xuất (?lang=vi) — phần "how" trước chỉ có tiếng Anh.
+  const vi = q.lang === 'vi';
+  const defs = metricDefinitions(vi ? 'vi' : 'en');
+  def.set(1, 1, vi ? 'Chỉ số' : 'Metric', H).set(1, 2, vi ? 'Cách tính' : 'How it is counted', H);
+  Object.values(defs).forEach((d, i) => def.set(i + 2, 1, d.label, C).set(i + 2, 2, d.how, { ...C, align: { wrap: true, v: 'top' } }));
+  const last = Object.keys(defs).length + 3;
+  def.set(last, 1, vi ? 'Lưu ý' : 'Note', { font: { b: true } }).set(last, 2, vi ? FAIRNESS_NOTE_VI : FAIRNESS_NOTE, MUTED);
   sheets.push(def);
 
   return { buf: writeXlsx(sheets, { title: `${s.project.key} contributions`, creator: 'CT Work' }), fileName: `${s.project.key}-contributions-${fileSafe(s.window.fromDay)}_${fileSafe(s.window.toDay)}.xlsx` };

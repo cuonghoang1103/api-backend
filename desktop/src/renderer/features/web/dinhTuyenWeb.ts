@@ -312,6 +312,8 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/developer', nap: () => import('@/app/work/developer/page') },
   /* CTW đợt 7c (11/10/2026): 2FA cho thành viên — tĩnh, phải đứng TRƯỚC `/work/:ws` (không thì "security" thành slug). */
   { mau: '/work/security', nap: () => import('@/app/work/security/page') },
+  /* CTW đợt 8a (12/10/2026): kết nối Microsoft 365 / Google của tôi — tĩnh, TRƯỚC `/work/:ws`. */
+  { mau: '/work/connections', nap: () => import('@/app/work/connections/page') },
   /* Tìm thẻ mọi dự án (24/09) — tĩnh, phải đứng TRƯỚC `/work/:ws`. */
   { mau: '/work/search', nap: () => import('@/app/work/search/page') },
   /* CTW đợt 5 (10/10/2026): hub giảng viên + lớp học — tĩnh, phải đứng TRƯỚC `/work/:ws` (không thì "teaching" thành slug). */
@@ -343,6 +345,9 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/work/:ws/:key/timeline', nap: () => import('@/app/work/[ws]/[key]/timeline/page') },
   { mau: '/work/:ws/:key/releases', nap: () => import('@/app/work/[ws]/[key]/releases/page') },
   { mau: '/work/:ws/:key/reports', nap: () => import('@/app/work/[ws]/[key]/reports/page') },
+  /* CTW đợt 8b (12/10/2026): Reports → Builder (?tab=builder|plans|log) + Notion & Slack (?tab=notion|slack). */
+  { mau: '/work/:ws/:key/reports/builder', nap: () => import('@/app/work/[ws]/[key]/reports/builder/page') },
+  { mau: '/work/:ws/:key/connect', nap: () => import('@/app/work/[ws]/[key]/connect/page') },
   { mau: '/work/:ws/:key/dashboards', nap: () => import('@/app/work/[ws]/[key]/dashboards/page') },
   { mau: '/work/:ws/:key/tests', nap: () => import('@/app/work/[ws]/[key]/tests/page') },
   /* CTW đợt 3B (09/10/2026): báo cáo Excel nộp trường (WBS, Project Tracking, Weekly Report, AI Usage). */

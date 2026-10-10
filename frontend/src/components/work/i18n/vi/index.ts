@@ -79,6 +79,9 @@ import { q6 } from './q6'; // CTW đợt 6: chất lượng (review, baseline, t
 import { agile } from './agile'; // CTW đợt 7a: OKR, planning poker, retro, timer
 import { c7b } from './c7b'; // CTW đợt 7b: forms, intake, import, knowledge base
 import { c7c } from './c7c'; // CTW đợt 7c: ép 2FA, sổ tài sản, test tự động, automation thêm, widget
+import { c8a } from './c8a'; // CTW đợt 8a: kết nối Microsoft 365 / Google
+import { c8b } from './c8b'; // CTW đợt 8b: Reports → Builder, lịch tự gửi, Notion, Slack
+import { c8c } from './c8c'; // CTW đợt 8c: họp định kỳ, RSVP khách, phân tích tĩnh + V(G), SWR302 ước lượng/gói nộp, stakeholder AI
 
 /** Mọi miền và mọi khoá của bản tiếng Anh phải có ở đây (thiếu/thừa ⇒ lỗi tsc). */
-export const vi: { [D in keyof typeof En]: Strings<(typeof En)[D]> } = { common, agents, ai, audit, backlog, board, chat, classroom, contrib, cover, collab, create, desk, detail, dev, diagram, docs, editor, errors, fields, finance, fpt, git, gov, home, invite, issues, modup, notify, onboard, palette, pchat, pexport, pimport, releases, school, settings, share, shell, sprint, srs, status, swr, studio, teacher, tests, time, timeline, trash, pboard, pfields, pspec, ptypes, wf, pagents, pstudio, auto, rep, portal, res, pf, wl, gs, jql, dash, pages, uat, tpl, nav, meeting2, elic, srsx, charts, table, uxc, q6, agile, c7b, c7c };
+export const vi: { [D in keyof typeof En]: Strings<(typeof En)[D]> } = { common, agents, ai, audit, backlog, board, chat, classroom, contrib, cover, collab, create, desk, detail, dev, diagram, docs, editor, errors, fields, finance, fpt, git, gov, home, invite, issues, modup, notify, onboard, palette, pchat, pexport, pimport, releases, school, settings, share, shell, sprint, srs, status, swr, studio, teacher, tests, time, timeline, trash, pboard, pfields, pspec, ptypes, wf, pagents, pstudio, auto, rep, portal, res, pf, wl, gs, jql, dash, pages, uat, tpl, nav, meeting2, elic, srsx, charts, table, uxc, q6, agile, c7b, c7c, c8a, c8b, c8c };

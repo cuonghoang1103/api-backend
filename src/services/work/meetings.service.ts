@@ -44,6 +44,7 @@ const MAX_ACTIONS = 100;
 const MEETING_LIST_SELECT = {
   id: true, number: true, title: true, type: true, status: true, startsAt: true, endsAt: true, timezone: true, location: true, meetingUrl: true,
   minutesShared: true, createdAt: true, updatedAt: true,
+  seriesId: true, seriesDetached: true, templateKey: true, // CTW đợt 8c
   organizer: { select: PUBLIC_USER },
   attendees: { orderBy: { id: 'asc' }, select: { user: { select: PUBLIC_USER } } },
   actions: { select: { id: true, issueId: true } },
@@ -66,6 +67,8 @@ function listRow(m: ListRow) {
 
 export async function listMeetings(userId: number, projectId: number, q: { scope?: 'upcoming' | 'past' | 'all' } = {}) {
   const ctx = await govCtx(userId, projectId, 'meetings');
+  // CTW đợt 8c: nới các chuỗi họp định kỳ sắp hết chân trời (rẻ — chỉ chuỗi cần nới; lỗi không chặn danh sách).
+  await import('./meetingSeries.service.js').then((x) => x.extendProjectSeries(projectId)).catch(() => 0);
   const now = new Date();
   const scope = q.scope ?? 'all';
   const rows = await prisma.workMeeting.findMany({
@@ -86,7 +89,7 @@ export async function listMeetings(userId: number, projectId: number, q: { scope
  * Người được mời phải vào được dự án: người của đội (governanceAccess.view), hoặc KHÁCH của cổng
  * (vai CLIENT + clientPortal bật). Khách ở dự án không bật cổng thì không có chỗ xem cuộc họp ⇒ từ chối.
  */
-async function assertAttendees(projectId: number, ids: number[]) {
+export async function assertAttendees(projectId: number, ids: number[]) {
   if (ids.length > MAX_ATTENDEES) throw new BadRequestError(`At most ${MAX_ATTENDEES} attendees`, 'WORK_LIMIT');
   for (const uid of ids) {
     const a = await loadProjectAccess(uid, projectId);
@@ -147,7 +150,7 @@ async function kickoffTemplate(): Promise<{ agenda: Prisma.InputJsonValue | null
 
 export async function createMeeting(
   userId: number, projectId: number,
-  rawInput: MeetingInput & { title: string; startsAt: Date; endsAt: Date; attendeeIds?: number[]; useTemplate?: boolean; sendInvites?: boolean },
+  rawInput: MeetingInput & { title: string; startsAt: Date; endsAt: Date; attendeeIds?: number[]; useTemplate?: boolean; sendInvites?: boolean; templateKey?: string | null },
 ) {
   await govCtx(userId, projectId, 'meetings', { edit: true });
   const input = resolveMeetingUrl(rawInput);
@@ -187,6 +190,8 @@ export async function createMeeting(
   await auditProject(projectId, { actorId: userId, action: 'meeting.create', targetType: 'meeting', targetId: created.id, summary: `Scheduled meeting M-${created.number}: ${title}`.slice(0, 300) });
   await notifyInvited(created.id, userId, attendeeIds, 'invited');
   if (input.sendInvites !== false && attendeeIds.length) await emailInvites(created.id, userId, attendeeIds).catch((e) => logger.warn('[work] gửi lời mời họp lỗi', { err: (e as Error).message }));
+  // CTW đợt 8c: mẫu chương trình (daily, sprint planning, review, retro, giảng viên, khách).
+  if (input.templateKey) return (await import('./meetingSeries.service.js')).applyTemplate(userId, projectId, created.number, { key: input.templateKey });
   return getMeeting(userId, projectId, created.number);
 }
 
@@ -204,6 +209,7 @@ export async function getMeeting(userId: number, projectId: number, number: numb
       ...MEETING_LIST_SELECT,
       agendaJson: true, minutesJson: true, decisions: true, minutesSharedAt: true, sequence: true, version: true, organizerId: true,
       previous: { select: { number: true, title: true, startsAt: true, deletedAt: true } },
+      occurrenceDate: true, series: { select: { id: true, title: true, rrule: true, recurrence: true, timezone: true, endedAt: true } }, // CTW đợt 8c
       next: { where: { deletedAt: null }, select: { number: true, title: true, startsAt: true }, take: 3 },
       actions: {
         orderBy: [{ position: 'asc' }, { id: 'asc' }],
@@ -217,8 +223,12 @@ export async function getMeeting(userId: number, projectId: number, number: numb
   });
   if (!m) throw new NotFoundError('Meeting not found');
   const clientIds = new Set((await prisma.workProjectMember.findMany({ where: { projectId, role: 'CLIENT' }, select: { userId: true } })).map((x) => x.userId));
-  const { actions, previous, ...rest } = m;
+  const { actions, previous, series, occurrenceDate, ...rest } = m;
   const base = listRow({ ...rest, actions: actions.map((a) => ({ id: a.id, issueId: a.issueId })) });
+  const { describeRecurrence, normalizeRecurrence } = await import('./meetingSeries.js');
+  const seriesInfo = series ? (() => {
+    try { const rec = normalizeRecurrence(series.recurrence); return { id: series.id, title: series.title, rrule: series.rrule, summary: describeRecurrence(rec, 'en'), summaryVi: describeRecurrence(rec, 'vi'), ended: !!series.endedAt, occurrenceDate, detached: m.seriesDetached }; } catch { return null; }
+  })() : null;
   return {
     ...base,
     agendaJson: m.agendaJson, minutesJson: m.minutesJson, minutesSharedAt: m.minutesSharedAt, sequence: m.sequence, version: m.version,
@@ -231,6 +241,7 @@ export async function getMeeting(userId: number, projectId: number, number: numb
     })),
     previous: previous && !previous.deletedAt ? { number: previous.number, title: previous.title, startsAt: previous.startsAt } : null,
     next: m.next,
+    series: seriesInfo,
     canEdit: ctx.canEdit,
     canDelete: canDeleteGovernance(ctx.access.role, ctx.access.workspaceRole, userId, m.organizerId),
     canCreateIssues: ctx.canEdit && can(ctx.access.role, 'issue.create'),
@@ -272,6 +283,8 @@ export async function updateMeeting(userId: number, projectId: number, number: n
       ...richFields(input.minutesJson, 'minutes'),
       ...(input.decisions !== undefined ? { decisions: input.decisions.map((d) => d.trim().slice(0, 500)).filter(Boolean).slice(0, 50) } : {}),
       ...(calChanged ? { sequence: { increment: 1 } } : {}),
+      // CTW đợt 8c: buổi của chuỗi định kỳ bị sửa riêng (giờ/tên/link/loại) ⇒ NGOẠI LỆ — sửa cả chuỗi không đè lên nó.
+      ...(cur.seriesId && (calChanged || (input.type !== undefined && input.type !== cur.type)) ? { seriesDetached: true } : {}),
       version: { increment: 1 },
     },
   });
@@ -501,6 +514,8 @@ export async function deleteMeeting(userId: number, projectId: number, number: n
   const m = await findMeeting(projectId, number);
   if (!canDeleteGovernance(ctx.access.role, ctx.access.workspaceRole, userId, m.organizerId)) throw new ForbiddenError('Only the organizer or a project admin can delete this meeting');
   await prisma.workMeeting.update({ where: { id: m.id }, data: { deletedAt: new Date() } });
+  // CTW đợt 8c: buổi của chuỗi định kỳ ⇒ EXDATE (không sinh lại ngày đó).
+  if (m.seriesId) await import('./meetingSeries.service.js').then((x) => x.addExdate(m.seriesId!, m.occurrenceDate));
   emitWorkEvent({ type: 'governance.updated', projectId, entity: 'meeting', number, action: 'deleted', actor: { kind: 'USER', userId } });
   await auditProject(projectId, { actorId: userId, action: 'meeting.delete', targetType: 'meeting', targetId: m.id, summary: `Deleted meeting M-${number}: ${m.title}`.slice(0, 300) });
   return { deleted: true };
@@ -551,7 +566,7 @@ export async function meetingIcs(userId: number, projectId: number, number: numb
 }
 
 /** Email lời mời kèm .ics cho người được mời (mặc định: mọi người được mời trừ người gửi). Tôn trọng WORK_EMAIL_NOTIFICATIONS + email OFF. */
-async function emailInvites(meetingId: number, senderId: number, ids: number[]) {
+export async function emailInvites(meetingId: number, senderId: number, ids: number[]) {
   if (process.env.WORK_EMAIL_NOTIFICATIONS === 'false') return 0;
   const m = await prisma.workMeeting.findUniqueOrThrow({ where: { id: meetingId }, select: { projectId: true, title: true, startsAt: true, timezone: true, meetingUrl: true, location: true, project: { select: { name: true } } } });
   const { getNotifySettings } = await import('./notify.js');
@@ -602,7 +617,7 @@ async function invitedClients(projectId: number, meetingId: number): Promise<num
  * Chuông cho người được mời (KHÔNG email — lời mời đã có email riêng kèm .ics). Khách nhận bản
  * cổng khách (payload.portal) đi qua routeForClient — cửa cuối của S2b.
  */
-async function notifyInvited(meetingId: number, senderId: number, ids: number[], kind: 'invited' | 'notes') {
+export async function notifyInvited(meetingId: number, senderId: number, ids: number[], kind: 'invited' | 'notes') {
   try {
     const m = await prisma.workMeeting.findUniqueOrThrow({ where: { id: meetingId }, select: { id: true, number: true, title: true, projectId: true, project: { select: { key: true, name: true, workspace: { select: { slug: true } } } } } });
     const clients = new Set(await invitedClients(m.projectId, meetingId));
@@ -637,12 +652,17 @@ export async function portalMeetings(userId: number, projectId: number, opts: { 
   const where = portalMeetingWhere(ctx);
   if (!where) return { enabled: true, items: [] };
   const rows = await prisma.workMeeting.findMany({ where, orderBy: { startsAt: 'desc' }, take: 200, select: MEETING_LIST_SELECT });
+  // CTW đợt 8c: câu trả lời RSVP của CHÍNH khách đang xem (xem trước của nhân viên ⇒ null).
+  const mine = ctx.clientView && !ctx.preview
+    ? new Map((await prisma.workMeetingAttendee.findMany({ where: { userId, meetingId: { in: rows.map((m) => m.id) } }, select: { meetingId: true, rsvp: true } })).map((a) => [a.meetingId, a.rsvp]))
+    : null;
   return {
     enabled: true,
     staffView: !ctx.clientView,
+    canRsvp: !!mine,
     items: rows.map((m) => {
       const r = listRow(m);
-      return { ...r, organizer: maskUser(r.organizer, ctx.people), attendees: r.attendees.map((a) => maskUser(a, ctx.people)).filter((a, i, arr) => arr.findIndex((x) => x?.id === a?.id) === i) };
+      return { ...r, myRsvp: mine?.get(m.id) ?? null, organizer: maskUser(r.organizer, ctx.people), attendees: r.attendees.map((a) => maskUser(a, ctx.people)).filter((a, i, arr) => arr.findIndex((x) => x?.id === a?.id) === i) };
     }),
   };
 }
@@ -670,8 +690,13 @@ export async function portalMeeting(userId: number, projectId: number, number: n
   if (!m) throw new NotFoundError('Meeting not found');
   const r = listRow({ ...m, actions: m.actions.map((a) => ({ id: a.id, issueId: a.issueId })) });
   const shared = m.minutesShared;
+  const me = ctx.clientView && !ctx.preview
+    ? await prisma.workMeetingAttendee.findUnique({ where: { uk_work_meeting_attendee: { meetingId: m.id, userId } }, select: { rsvp: true, rsvpNote: true, rsvpAt: true } })
+    : null;
   return {
     ...r,
+    // CTW đợt 8c: RSVP của khách trên cổng (chỉ khách THẬT được mời; họp chưa diễn ra, chưa huỷ).
+    me: me ? { rsvp: me.rsvp, rsvpNote: me.rsvpNote, rsvpAt: me.rsvpAt, canRsvp: m.status !== 'CANCELLED' && m.endsAt.getTime() > Date.now() } : null,
     organizer: maskUser(r.organizer, ctx.people),
     attendees: r.attendees.map((a) => maskUser(a, ctx.people)),
     shared,
@@ -693,4 +718,35 @@ export async function portalMeetingIcs(userId: number, projectId: number, number
   if (!m) throw new NotFoundError('Meeting not found');
   const r = await buildIcs(m.id, userId, { clientView: ctx.clientView, people: ctx.people });
   return { body: r.body, filename: r.filename };
+}
+
+/**
+ * CTW đợt 8c — khách trả lời lời mời họp NGAY TRÊN CỔNG (Có / Không / Chưa chắc + lý do). Chỉ khách THẬT có tên trong
+ * danh sách mời; nhân viên "Xem trước như khách" ⇒ 403 (chỉ đọc). Họp đã huỷ / đã diễn ra ⇒ 400. Báo chủ trì khi khách
+ * từ chối/chưa chắc (giống RSVP nội bộ K-2). Nội dung trả về đi qua `portalMeeting` (đã che tên người theo luật cổng).
+ */
+export async function portalRsvp(userId: number, projectId: number, number: number, input: { rsvp: 'YES' | 'NO' | 'MAYBE'; note?: string | null }) {
+  const ctx = await portalCtx(userId, projectId, { asClient: true });
+  if (!ctx.access.modules.meetings) throw new NotFoundError('Meeting not found');
+  if (!ctx.clientView || ctx.preview) throw new ForbiddenError('Team members reply from the meeting page; preview as client is read-only');
+  const m = await prisma.workMeeting.findFirst({
+    where: { projectId, number, deletedAt: null, attendees: { some: { userId } } },
+    select: { id: true, number: true, title: true, status: true, endsAt: true, organizerId: true, project: { select: { key: true, name: true, workspace: { select: { slug: true } } } } },
+  });
+  if (!m) throw new NotFoundError('Meeting not found');
+  if (m.status === 'CANCELLED') throw new BadRequestError('This meeting was cancelled', 'WORK_MEETING_CANCELLED');
+  if (m.endsAt.getTime() <= Date.now()) throw new BadRequestError('This meeting has already taken place', 'WORK_MEETING_PAST');
+  const note = input.note?.trim().slice(0, 300) || null;
+  await prisma.workMeetingAttendee.update({ where: { uk_work_meeting_attendee: { meetingId: m.id, userId } }, data: { rsvp: input.rsvp, rsvpNote: note, rsvpAt: new Date() } });
+  emitWorkEvent({ type: 'governance.updated', projectId, entity: 'meeting', number, action: 'rsvp', actor: { kind: 'USER', userId } });
+  await auditProject(projectId, { actorId: userId, action: 'meeting.rsvp_portal', targetType: 'meeting', targetId: m.id, summary: `Client replied ${input.rsvp} to meeting M-${number}` });
+  if (m.organizerId && m.organizerId !== userId) {
+    const u = await prisma.user.findUnique({ where: { id: userId }, select: PUBLIC_USER });
+    const word = input.rsvp === 'YES' ? 'Yes' : input.rsvp === 'NO' ? 'No' : 'Maybe';
+    await pushWork({
+      receiverId: m.organizerId, senderId: userId, type: 'WORK_ALERT', entityId: m.id,
+      payload: { issueKey: `${m.project.key} · M-${m.number}`, title: m.title, message: `${u ? displayName(u) : 'A client'} (client) replied ${word}${note ? `: ${note}` : ''}`.slice(0, 200), url: `/work/${m.project.workspace.slug}/${m.project.key}/meetings/${m.number}` },
+    }).catch(() => {});
+  }
+  return portalMeeting(userId, projectId, number, { asClient: true });
 }

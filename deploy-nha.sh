@@ -227,7 +227,13 @@ echo ""
 
 # ─── 0. Mã nguồn: CHỈ những gì đã commit ───────────────────────────────
 cd "$(dirname "${BASH_SOURCE[0]}")"
-SHA=$(git rev-parse --short HEAD) || { fail "không đọc được git HEAD"; exit 1; }
+# KHOÁ commit ngay từ đầu (đợt 8c, 12/10/2026). Mọi bước sau — đẩy mã sang máy
+# nhà, nhánh tạm GitHub, nginx.conf, mốc da-len-prod, bộ kiểm CI và PUSH main —
+# dùng ${SHA_DU}, KHÔNG đọc lại HEAD: deploy dài 15–30 phút, phiên khác commit
+# vào main giữa chừng thì HEAD lúc cuối đã là thứ chưa từng build (23/09 đẩy nhầm
+# 26 commit chưa lên prod lên GitHub — bộ nhớ feedback_deploy_nha_push_head…).
+SHA_DU=$(git rev-parse HEAD) || { fail "không đọc được git HEAD"; exit 1; }
+SHA=$(git rev-parse --short "$SHA_DU")
 NHANH=$(git rev-parse --abbrev-ref HEAD)
 
 BAN=$(git status --porcelain | grep -vE '^\?\?' | head -20)
@@ -281,17 +287,17 @@ if [ "$CHO_LUI" != true ]; then
         warn "(phiên khác deploy từ nhánh chưa fetch?) — bỏ qua chốt chống lùi."
     elif [ "$SHA_PROD" = "$SHA" ]; then
         ok "Production đã chạy đúng commit này rồi (${SHA_PROD}) — deploy lại cho chắc."
-    elif git merge-base --is-ancestor "$SHA_PROD" HEAD 2>/dev/null; then
+    elif git merge-base --is-ancestor "$SHA_PROD" "$SHA_DU" 2>/dev/null; then
         ok "Bản này CHỨA mã production đang chạy (${SHA_PROD}) — tiến lên, không mất gì."
     else
         echo ""
         fail "⛔ DỪNG — lượt deploy này sẽ XOÁ công việc đang chạy trên production."
         fail ""
         fail "    production đang chạy : ${SHA_PROD}  $(git log -1 --format=%s "$SHA_PROD" 2>/dev/null | cut -c1-60)"
-        fail "    bạn sắp deploy       : ${SHA}  $(git log -1 --format=%s HEAD | cut -c1-60)"
+        fail "    bạn sắp deploy       : ${SHA}  $(git log -1 --format=%s "$SHA_DU" | cut -c1-60)"
         fail ""
         fail "${SHA} KHÔNG chứa ${SHA_PROD}. Những commit sau sẽ BIẾN MẤT khỏi production:"
-        git log --oneline "HEAD..${SHA_PROD}" 2>/dev/null | head -10 | sed 's/^/             /'
+        git log --oneline "${SHA_DU}..${SHA_PROD}" 2>/dev/null | head -10 | sed 's/^/             /'
         fail ""
         fail "Gần như chắc chắn bạn đang deploy từ một nhánh tách ra trước đó."
         fail "CÁCH SỬA (chọn một):"
@@ -365,7 +371,7 @@ dung_anh_tren_github() {
     # Workflow chạy theo bản file Ở CHÍNH commit được dispatch, nên commit đó
     # phải có nó. Thường chỉ thiếu khi CỐ Ý lùi (--cho-lui) về commit cũ hơn
     # ngày 03/10/2026.
-    if ! git cat-file -e "HEAD:.github/workflows/${WF_DUNG_ANH}" 2>/dev/null; then
+    if ! git cat-file -e "${SHA_DU}:.github/workflows/${WF_DUNG_ANH}" 2>/dev/null; then
         fail "Commit ${SHA} không có .github/workflows/${WF_DUNG_ANH} — chế độ --build-github không dựng được nó."
         fail "(commit cũ hơn lúc thêm chế độ này?) Dùng máy nhà, hoặc cherry-pick workflow vào rồi deploy commit mới."
         exit 1
@@ -398,7 +404,7 @@ dung_anh_tren_github() {
 
     info "Đẩy commit ${SHA} lên nhánh tạm ${NHANH_TAM} (KHÔNG phải main)..."
     DA_DAY_NHANH_TAM=true
-    if ! chay_gh git push --quiet --force origin "HEAD:refs/heads/${NHANH_TAM}"; then
+    if ! chay_gh git push --quiet --force origin "${SHA_DU}:refs/heads/${NHANH_TAM}"; then
         fail "Không đẩy được nhánh tạm lên origin."
         exit 1
     fi
@@ -555,7 +561,7 @@ sshnha "mkdir -p ${THU_MUC_NHA} && [ -d \$HOME/${KHO_TUONG_DOI} ] || git init --
 # trên mọi bản bash.
 TUY_CHON_DAY=()
 [ "$CHO_LUI" = true ] && TUY_CHON_DAY=(--push-option=cho-lui)
-if ! git push --quiet --force ${TUY_CHON_DAY[@]+"${TUY_CHON_DAY[@]}"} "${MAY_NHA}:${KHO_TUONG_DOI}" "HEAD:refs/heads/deploy"; then
+if ! git push --quiet --force ${TUY_CHON_DAY[@]+"${TUY_CHON_DAY[@]}"} "${MAY_NHA}:${KHO_TUONG_DOI}" "${SHA_DU}:refs/heads/deploy"; then
     lui_ve_vps "Đẩy mã sang máy nhà thất bại"
 fi
 if ! sshnha "rm -rf ${DICH} && mkdir -p ${DICH} && git --git-dir=\$HOME/${KHO_TUONG_DOI} archive ${SHA} | tar x -C ${DICH}"; then
@@ -984,7 +990,7 @@ fi
 # tắc của cả file này: CHỈ thứ đã commit mới lên production.
 info "Kiểm nginx.conf trên VPS..."
 NGINX_TMP=$(mktemp)
-if ! git show "HEAD:nginx/nginx.conf" > "$NGINX_TMP" 2>/dev/null; then
+if ! git show "${SHA_DU}:nginx/nginx.conf" > "$NGINX_TMP" 2>/dev/null; then
     rm -f "$NGINX_TMP"
     warn "Không đọc được nginx/nginx.conf ở commit ${SHA} — bỏ qua bước nginx."
     warn "(Ảnh backend/frontend ĐÃ tráo xong và smoke-test sạch.)"
@@ -1185,30 +1191,36 @@ fi
 # CI chặn mà Docker không chặn.
 if [ "$KHONG_HOI" != true ]; then
     git fetch --quiet origin "$NHANH" 2>/dev/null || true
-    CHUA_DAY=$(git rev-list --count "origin/${NHANH}..HEAD" 2>/dev/null || echo 0)
+    # Đếm và đẩy ĐÚNG commit đã deploy (${SHA_DU}), không phải HEAD lúc này.
+    CHUA_DAY=$(git rev-list --count "origin/${NHANH}..${SHA_DU}" 2>/dev/null || echo 0)
+    HEAD_NAY=$(git rev-parse HEAD 2>/dev/null)
+    if [ "$HEAD_NAY" != "$SHA_DU" ]; then
+        warn "HEAD đã đổi trong lúc deploy (${SHA} → ${HEAD_NAY:0:8}): phiên khác commit giữa chừng."
+        warn "CHỈ đẩy ${SHA} (bản đã chạy trên prod); các commit sau nó ở lại máy, deploy kế sẽ mang lên."
+    fi
     if [ "$CHUA_DAY" = "0" ]; then
         info "GitHub đã có commit này rồi — không cần push."
     else
-        info "Chạy bộ kiểm BẮT BUỘC của CI trước khi push (${CHUA_DAY} commit)..."
-        KIEM_HONG=""
-        # Đúng thứ tự và đúng lệnh của `.github/workflows/ci-lint.yml`, chỉ lấy
-        # những bước đánh dấu (required) — bỏ ESLint vì CI ghi rõ là
-        # (informational) và nó đang có cảnh báo tồn từ trước.
-        chay_kiem() {
-            local ten="$1"; shift
-            if "$@" >/tmp/deploy-kiem.log 2>&1; then
-                ok "  ✓ ${ten}"
-            else
-                warn "  ✗ ${ten} — HỎNG"
-                tail -12 /tmp/deploy-kiem.log | sed 's/^/      /'
-                KIEM_HONG="${KIEM_HONG} ${ten}"
-            fi
-        }
-        chay_kiem "backend tsc"        npx tsc --noEmit
-        chay_kiem "eval:grader"        npm run eval:grader
-        chay_kiem "eval:cv-linter"     npm run eval:cv-linter
-        chay_kiem "npm test"           npm test
-        chay_kiem "frontend tsc"       bash -c 'cd frontend && npx tsc --noEmit --skipLibCheck'
+        info "Chạy bộ kiểm BẮT BUỘC của CI trên worktree SẠCH của ${SHA} (${CHUA_DAY} commit)..."
+        # ⚠️ Đợt 8c (12/10/2026): trước đây bộ kiểm chạy trên CÂY LÀM VIỆC — đỏ giả
+        # vì đồ dở của phiên khác (09/10), xanh giả vì tệp chưa commit, và kiểm
+        # một thứ rồi đẩy thứ khác. Nay `scripts/kiem-ci-truoc-push.sh` dựng một
+        # `git worktree` tạm của đúng SHA đã deploy, chạy đủ các bước (required)
+        # của ci-lint.yml + test:work-db trên CSDL tạm (không có Postgres cục bộ
+        # thì bỏ qua có cảnh báo), rồi dọn. Lấy script từ CHÍNH commit đó.
+        KIEM_KQ=$(mktemp)
+        KIEM_SCRIPT=$(mktemp)
+        if git show "${SHA_DU}:scripts/kiem-ci-truoc-push.sh" > "$KIEM_SCRIPT" 2>/dev/null; then
+            KIEM_CI_KET_QUA="$KIEM_KQ" bash "$KIEM_SCRIPT" "$SHA_DU"
+            MA_KIEM=$?
+        else
+            # Commit cũ hơn đợt 8c (CỐ Ý lùi) không có script — dùng bản trên đĩa.
+            KIEM_CI_KET_QUA="$KIEM_KQ" bash scripts/kiem-ci-truoc-push.sh "$SHA_DU"
+            MA_KIEM=$?
+        fi
+        KIEM_HONG=$(tr -d '\n' < "$KIEM_KQ" 2>/dev/null)
+        [ "$MA_KIEM" -ne 0 ] && [ -z "$KIEM_HONG" ] && KIEM_HONG=" dựng-worktree(exit ${MA_KIEM})"
+        rm -f "$KIEM_KQ" "$KIEM_SCRIPT"
 
         if [ -n "$KIEM_HONG" ]; then
             # ⚠️ KHÔNG push khi có phép kiểm hỏng. Production vẫn chạy bình
@@ -1216,15 +1228,15 @@ if [ "$KHONG_HOI" != true ]; then
             # đồng bộ, và đó là điều ĐÚNG: đẩy một commit làm đỏ CI lên nhánh
             # chung thì người sau phải dọn.
             warn "Có phép kiểm hỏng:${KIEM_HONG} — KHÔNG push."
-            warn "Production vẫn chạy ${SHA} bình thường. Sửa xong thì: git push origin ${NHANH}"
+            warn "Production vẫn chạy ${SHA} bình thường. Sửa xong thì: git push origin ${SHA_DU}:${NHANH}"
             # ⚠️ BÁO ra ngoài. Đây chính là ca dễ trôi qua im lặng: deploy vẫn
             # kết thúc THÀNH CÔNG, log không đỏ, và commit lại bắt đầu dồn —
             # đúng cách bước hỏi-duyệt cũ đã âm thầm gom tới 288 commit.
             sshnha "test -x \$HOME/bin/bao-tin.sh && bash \$HOME/bin/bao-tin.sh $(printf %q "⚠️ Deploy xong (prod chạy ${SHA}) nhưng KHÔNG push: bộ kiểm CI hỏng —${KIEM_HONG}. Còn ${CHUA_DAY} commit chưa lên GitHub.")" 2>/dev/null || true
         else
-            ok "Bộ kiểm của CI xanh hết — đang push lên GitHub..."
-            # KHÔNG --force, không bao giờ.
-            if git push origin "HEAD:${NHANH}"; then
+            ok "Bộ kiểm của CI xanh hết — đang push ${SHA} lên GitHub..."
+            # KHÔNG --force, không bao giờ. Đẩy SHA đã deploy, KHÔNG phải HEAD.
+            if git push origin "${SHA_DU}:refs/heads/${NHANH}"; then
                 ok "Đã push ${SHA} lên origin/${NHANH} (${CHUA_DAY} commit)"
             else
                 fail "Push hỏng — production vẫn đang chạy bình thường, chỉ GitHub là chưa đồng bộ."
@@ -1306,7 +1318,7 @@ ok "Container đang chạy ĐÚNG ảnh ${SHA} (đã so mã băm, không phải 
 if [ -z "$MAY_NHA" ]; then
     warn "Máy nhà không với tới — CHƯA ghi mốc 'đã lên production' (hook kho trần dùng mốc cũ;"
     warn "chốt 0a vẫn đọc thẳng từ VPS nên không ảnh hưởng). Lần deploy bằng máy nhà sau sẽ ghi lại."
-elif git push --quiet --force "${MAY_NHA}:${KHO_TUONG_DOI}" "HEAD:refs/heads/da-len-prod" 2>/dev/null; then
+elif git push --quiet --force "${MAY_NHA}:${KHO_TUONG_DOI}" "${SHA_DU}:refs/heads/da-len-prod" 2>/dev/null; then
     ok "Đã ghi mốc 'đã lên production' = ${SHA} (chốt chống lùi dùng mốc này)"
 else
     warn "Không ghi được mốc 'đã lên production' — chốt sẽ dùng mốc cũ hơn."

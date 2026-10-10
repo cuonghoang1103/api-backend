@@ -102,7 +102,8 @@ describe('CT Work — đợt 7c: ép 2FA, sổ tài sản, test tự động, au
     server = app.listen(0);
     base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
     [owner, member, viewer, outsider, siteAdmin] = await Promise.all(['owner', 'member', 'viewer', 'outsider', 'siteadmin'].map((n) => mkUser(n)));
-    const role = await prisma.role.findFirstOrThrow({ where: { name: 'ROLE_ADMIN' } });
+    // Đợt 8c: CSDL test dựng từ migration (CI) chưa có dòng roles của seed ⇒ upsert thay vì findFirstOrThrow.
+    const role = await prisma.role.upsert({ where: { name: 'ROLE_ADMIN' }, create: { name: 'ROLE_ADMIN' }, update: {} });
     await prisma.userRole.create({ data: { userId: siteAdmin.id, roleId: role.id } });
     wsId = (await call(owner, 'POST', '/workspaces', { name: `CTW7c ${tag}` })).data.id;
     wsIds.push(wsId);

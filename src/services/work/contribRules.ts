@@ -489,3 +489,41 @@ export const METRIC_DEFINITIONS: Record<string, { label: string; how: string }> 
 
 /** Ghi chú công bằng — in trên trang và trong tệp xuất. */
 export const FAIRNESS_NOTE = 'Counts show activity, not quality or effort. Pair programming, research, design on paper and helping teammates leave no trace here. Use these numbers to start a conversation, never as a grade on their own.';
+/**
+ * CTW đợt 8c: bản tiếng Việt của METRIC_DEFINITIONS + ghi chú công bằng — cho tệp xuất (xlsx sheet Definitions) khi người
+ * xuất chọn tiếng Việt. Cùng câu với từ điển giao diện (frontend i18n vi/contrib.ts, khoá ml_* / mh_*) — test giữ hai bên khớp khoá.
+ */
+export const METRIC_DEFINITIONS_VI: Record<string, { label: string; how: string }> = {
+  assigned: { label: 'Được giao', how: 'Thẻ (không tính epic, test case) đang giao cho thành viên và từng mở trong khoảng này.' },
+  completed: { label: 'Hoàn thành', how: 'Story, task, bug và yêu cầu được giải quyết trong khoảng này, tính cho người đang được giao. Việc con tính riêng.' },
+  points: { label: 'Điểm đã xong', how: 'Story point (hoặc ước lượng gốc theo giờ, nếu dự án ước lượng theo giờ) của các thẻ đã hoàn thành.' },
+  onTimeRate: { label: 'Đúng hạn', how: 'Trong các thẻ đã hoàn thành có hạn chót: tỉ lệ xong trước hoặc đúng ngày đó (theo múi giờ dự án).' },
+  avgLateDays: { label: 'Số ngày trễ TB', how: 'Số ngày lịch trễ trung bình so với hạn chót, trên các thẻ xong trễ trong khoảng này.' },
+  overdueOpen: { label: 'Đang quá hạn', how: 'Thẻ đang mở giao cho thành viên đã qua hạn chót (tính tới hôm nay).' },
+  cycleDays: { label: 'Cycle time', how: 'Số ngày trung bình từ lần đầu chuyển sang trạng thái "Đang làm" tới khi xong, với thẻ hoàn thành trong khoảng này.' },
+  leadDays: { label: 'Lead time', how: 'Số ngày trung bình từ lúc tạo tới khi xong, với thẻ hoàn thành trong khoảng này.' },
+  hours: { label: 'Giờ đã ghi', how: 'Tổng nhật ký giờ có ngày làm rơi vào khoảng này, chia theo hoạt động (Coding, Testing…).' },
+  comments: { label: 'Bình luận', how: 'Bình luận thành viên viết trên thẻ. Không tính bình luận do trợ lý AI soạn.' },
+  voiceNotes: { label: 'Ghi âm', how: 'Ghi âm trong bình luận thẻ và chat dự án.' },
+  chatMessages: { label: 'Tin nhắn chat', how: 'Tin nhắn thành viên đăng trong các kênh chat dự án (không tính tin hệ thống). Hiện — cho tới khi dự án bật chat.' },
+  responseHours: { label: 'Thời gian phản hồi', how: 'Trung vị số giờ từ lúc bị @nhắc tới bình luận, thay đổi hay tin nhắn kế tiếp của thành viên ở cùng chỗ (trong 48 giờ).' },
+  reviewsDone: { label: 'Review đã làm', how: 'Các bước phê duyệt thành viên đã duyệt hoặc từ chối trong khoảng này.' },
+  reviewRequests: { label: 'Yêu cầu review', how: 'Yêu cầu phê duyệt / review thành viên tạo trong khoảng này.' },
+  commits: { label: 'Commit', how: 'Commit đẩy lên repo GitHub/GitLab đã kết nối, khớp với thành viên theo tài khoản, email hoặc tên (quản trị gán được tác giả chưa khớp).' },
+  prs: { label: 'Pull request', how: 'Pull / merge request thành viên mở trong khoảng này.' },
+  lines: { label: 'Dòng + / −', how: 'Số dòng thêm và xoá, lấy từ sự kiện pull request (GitHub chỉ gửi số dòng cho pull request). — nghĩa là repo không báo số này.' },
+  docVersions: { label: 'Phiên bản tài liệu', how: 'Phiên bản đã lưu của trang Docs do thành viên viết (các lần lưu liên tiếp nhanh được gộp thành một).' },
+  pagesEdited: { label: 'Trang đã sửa', how: 'Số trang Docs khác nhau thành viên tạo hoặc sửa trong khoảng này.' },
+  testRuns: { label: 'Lượt chạy test', how: 'Lượt chạy test case (pass/fail/blocked) thành viên ghi trong test cycle.' },
+  testCasesCreated: { label: 'Test case', how: 'Test case (kiểu Xray) thành viên tạo.' },
+  utcid: { label: 'UTCID (5.1)', how: 'Unit test case trong Report 5.1, tính theo tên "Created by" / "Executed by" của hàm.' },
+  itExecuted: { label: 'Lượt 5.2 / 5.3', how: 'Vòng integration / system test được đánh Passed hoặc Failed với thành viên là tester.' },
+  defectsFound: { label: 'Lỗi phát hiện', how: 'Bug gắn với lượt chạy test thất bại do thành viên thực hiện.' },
+  bugsReported: { label: 'Bug đã báo', how: 'Thẻ Bug thành viên báo trong khoảng này.' },
+  meetings: { label: 'Cuộc họp', how: 'Cuộc họp đã xong mà thành viên được mời (hoặc tổ chức), trên tổng số cuộc họp không huỷ họ được mời.' },
+  activeDays: { label: 'Ngày hoạt động', how: 'Số ngày trong khoảng có ít nhất một hành động: đổi thẻ, bình luận, tin nhắn chat, ghi giờ, sửa tài liệu, chạy test, review hoặc commit.' },
+  streak: { label: 'Chuỗi ngày', how: 'Chuỗi ngày hoạt động liên tiếp dài nhất trong khoảng này.' },
+  silent: { label: 'Ngày im lặng', how: 'Số ngày liên tiếp không có hành động nào tính tới hôm nay.' },
+};
+export const FAIRNESS_NOTE_VI = 'Số đếm cho thấy hoạt động, không phải chất lượng hay công sức. Lập trình cặp, tìm hiểu, thiết kế trên giấy và giúp đồng đội không để lại dấu vết ở đây. Dùng các số này để bắt đầu một cuộc trò chuyện, đừng bao giờ dùng riêng chúng để chấm điểm.';
+export const metricDefinitions = (lang: 'en' | 'vi' = 'en') => (lang === 'vi' ? METRIC_DEFINITIONS_VI : METRIC_DEFINITIONS);

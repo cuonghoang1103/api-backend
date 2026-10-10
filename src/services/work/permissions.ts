@@ -747,6 +747,16 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['POST', /^\/forms\/(?:F-?)?\d+\/(status|rotate)$/i], ['DELETE', /^\/forms\/(?:F-?)?\d+$/i],
   ['POST', /^\/imports$/], ['*', /^\/intake\/channels(\/.*)?$/], ['POST', /^\/intake\/proposals\/\d+\/decide$/],
   ['POST', /^\/kb(\/.*)?$/], ['PATCH', /^\/kb(\/.*)?$/], ['DELETE', /^\/kb(\/.*)?$/],
+  // CTW đợt 8a: tệp OneDrive/Drive, Teams/Meet, bảng tính Sheets/Excel đi bằng kết nối OAuth của NGƯỜI — agent không dùng được.
+  ['*', /^\/cloud(\/.*)?$/],
+  // CTW đợt 8b: Notion/Slack đi bằng kết nối OAuth của NGƯỜI + đăng ra ngoài; trình soạn báo cáo (xuất tệp, AI) và lịch tự
+  // gửi (email/chat/Slack ra ngoài) — agent bị cấm hẳn (service chặn lần nữa).
+  ['*', /^\/notion(\/.*)?$/], ['*', /^\/slack(\/.*)?$/], ['*', /^\/report-builder(\/.*)?$/], ['*', /^\/report-plans(\/.*)?$/],
+  // CTW đợt 8c: chuỗi họp định kỳ mời người (chuông + email lời mời) ⇒ agent không tạo/sửa/xoá; phỏng vấn stakeholder do AI
+  // đóng vai tiêu lượt AI của web và là việc của NGƯỜI phân tích; gói nộp SWR302 là xuất dữ liệu; cấu hình ước lượng BA
+  // là quyết định của nhóm (đọc vẫn mở). Đọc chuỗi họp, ảnh sơ đồ, phân tích tĩnh, báo cáo trạng thái vẫn mở.
+  ['POST', /^\/meeting-series$/], ['PATCH', /^\/meeting-series\/\d+$/], ['DELETE', /^\/meeting-series\/\d+$/],
+  ['*', /^\/swr\/elicitation\/[^/]+\/ai-stakeholder$/], ['GET', /^\/swr\/package\.zip$/], ['PUT', /^\/swr\/estimation$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

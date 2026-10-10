@@ -50,6 +50,27 @@ export interface ImportInput {
   cycle?: string | null;
   createBugs?: boolean;
   coverage?: { report: string; format?: CoverageFormat | 'AUTO' } | null;
+  /**
+   * CTW đợt 8c — cycle GỘP nhiều job (`cycle` có tên) tự đóng: `close=true` (job cuối) đóng ngay; `jobs=N` đóng khi đủ N
+   * lần nhập; `closeAfterMin=M` đóng khi im lặng M phút kể từ lần nhập cuối (cron 5 phút). Không gửi gì ⇒ mặc định
+   * đóng sau 120 phút im lặng (trước đây cycle gộp nằm IN_PROGRESS mãi).
+   */
+  close?: boolean;
+  jobs?: number | null;
+  closeAfterMin?: number | null;
+}
+
+export const DEFAULT_CLOSE_AFTER_MIN = 120;
+
+/** Quyết định đóng cycle gộp sau một lần nhập — THUẦN (test ở ctw8c.test.ts). */
+export function cycleCloseDecision(c: { importCount: number; expectedJobs: number | null }, input: { close?: boolean }): 'CLOSE' | 'JOBS' | null {
+  if (input.close) return 'CLOSE';
+  if (c.expectedJobs && c.importCount >= c.expectedJobs) return 'JOBS';
+  return null;
+}
+/** Cycle gộp im lặng quá hạn ⇒ đóng (cron). THUẦN. */
+export function cycleIdleExpired(c: { state: string; autoCloseMinutes: number | null; lastImportAt: Date | null }, now: Date): boolean {
+  return c.state !== 'DONE' && !!c.autoCloseMinutes && !!c.lastImportAt && now.getTime() - c.lastImportAt.getTime() >= c.autoCloseMinutes * 60_000;
 }
 
 export interface ImportMeta { source: 'API' | 'UPLOAD'; tokenId?: number | null }
@@ -196,16 +217,30 @@ async function doImport(
     ? await prisma.workTestCycle.findFirst({ where: { projectId, name: cycleName, state: { not: 'DONE' } }, orderBy: { id: 'desc' }, select: { id: true } })
     : null;
   const newCycle = !cycle;
+  const merged = !!input.cycle?.trim();
   if (!cycle) {
     cycle = await prisma.workTestCycle.create({
       data: {
         projectId, name: cycleName, environment: cleanStr(input.environment, 120) ?? (input.branch ? `branch ${input.branch}`.slice(0, 120) : null),
-        build: cleanStr(input.build ?? input.commit?.slice(0, 12), 80), state: input.cycle?.trim() ? 'IN_PROGRESS' : 'DONE',
-        startAt: now, endAt: input.cycle?.trim() ? null : now, createdById: userId,
+        build: cleanStr(input.build ?? input.commit?.slice(0, 12), 80), state: merged ? 'IN_PROGRESS' : 'DONE',
+        startAt: now, endAt: merged ? null : now, createdById: userId, ...(merged ? {} : { closedReason: 'CLOSE' }),
       },
       select: { id: true },
     });
   }
+  // CTW đợt 8c: đếm lần nhập + luật tự đóng của cycle gộp.
+  const cyc = await prisma.workTestCycle.update({
+    where: { id: cycle.id },
+    data: {
+      importCount: { increment: 1 }, lastImportAt: now,
+      ...(merged ? {
+        autoCloseMinutes: input.closeAfterMin === null ? null : Math.min(Math.max(input.closeAfterMin ?? DEFAULT_CLOSE_AFTER_MIN, 5), 7 * 24 * 60),
+        ...(input.jobs ? { expectedJobs: Math.min(Math.max(input.jobs, 1), 200) } : {}),
+      } : {}),
+    },
+    select: { importCount: true, expectedJobs: true, state: true },
+  });
+  const closeWhy = merged && cyc.state !== 'DONE' ? cycleCloseDecision(cyc, input) : null;
 
   // 3. Run + lịch sử + flaky + bug.
   const createBugs = input.createBugs !== false;
@@ -272,8 +307,8 @@ async function doImport(
         : r.retried ? 'Passed after a retry (possible flaky test)' : r.status === 'SKIP' ? (r.message ?? 'Skipped') : null;
       const run = await prisma.workTestRun.upsert({
         where: { uk_work_test_run: { cycleId: cycle.id, testCaseId: at.testCaseId } },
-        create: { cycleId: cycle.id, testCaseId: at.testCaseId, status: r.status, executedById: userId, executedAt: now, comment },
-        update: { status: r.status, executedById: userId, executedAt: now, comment },
+        create: { cycleId: cycle.id, testCaseId: at.testCaseId, status: r.status, executedById: userId, executedAt: now, comment, testCaseVersion: await caseVersion(at.testCaseId) },
+        update: { status: r.status, executedById: userId, executedAt: now, comment, testCaseVersion: await caseVersion(at.testCaseId) },
         select: { id: true },
       });
       if (bug) await prisma.workTestRunDefect.createMany({ data: [{ runId: run.id, issueId: bug.id }], skipDuplicates: true });
@@ -282,6 +317,7 @@ async function doImport(
     report.push({ key: `${r.suite ?? ''}::${r.name}`.slice(0, 300), name: r.name, status: r.status, flaky: fl.flaky, bug: bug?.number ?? null, newBug: isNewBug });
   }
 
+  if (closeWhy) await prisma.workTestCycle.update({ where: { id: cycle.id }, data: { state: 'DONE', endAt: now, closedReason: closeWhy } });
   const sum = summarize(rows.map((x) => x.r));
   const imp = await prisma.workTestImport.create({
     data: {
@@ -309,11 +345,27 @@ async function doImport(
     });
   }
   return {
-    importId: imp.id, cycleId: cycle.id, cycleName, newCycle, format,
+    importId: imp.id, cycleId: cycle.id, cycleName, newCycle, format, cycleClosed: !merged || !!closeWhy, closedReason: closeWhy,
     ...sum, flaky: flakyNow, newTestCases: newCases, deferredTestCases: deferredCases, newBugs, linkedBugs, bugsNotCreated: bugCapHit,
     coverage: coverage ? { format: coverage.format, linePct: coverage.linePct, branchPct: coverage.branchPct } : null,
     tests: report.slice(0, 200),
   };
+}
+
+async function caseVersion(testCaseId: number): Promise<number | null> {
+  return (await prisma.workTestCase.findUnique({ where: { id: testCaseId }, select: { version: true } }))?.version ?? null;
+}
+
+/** Cron (5 phút): đóng cycle CI gộp đã im lặng quá `autoCloseMinutes`. Trả số cycle đã đóng. */
+export async function closeIdleCycles(now = new Date()): Promise<number> {
+  const rows = await prisma.workTestCycle.findMany({ where: { state: { not: 'DONE' }, autoCloseMinutes: { not: null }, lastImportAt: { not: null } }, select: { id: true, state: true, autoCloseMinutes: true, lastImportAt: true }, take: 500 });
+  let n = 0;
+  for (const c of rows) {
+    if (!cycleIdleExpired(c, now)) continue;
+    const r = await prisma.workTestCycle.updateMany({ where: { id: c.id, state: { not: 'DONE' } }, data: { state: 'DONE', endAt: now, closedReason: 'IDLE' } });
+    n += r.count;
+  }
+  return n;
 }
 
 function safeUrl(u: string | null | undefined): string | null {

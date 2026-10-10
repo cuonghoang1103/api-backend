@@ -17,6 +17,8 @@ import { Pill } from '../studio/shared';
 import { fmtMeetingTime } from '../governance/shared';
 import { AddToCalendar, JoinMeetingButton } from '../ctw';
 import { wt } from '@/components/work/i18n';
+import PortalRsvp from '../c8c/PortalRsvp';
+import type { PortalMe } from '@/lib/work-c8c-api';
 
 export function MeetingsTab({ pid, asClient, openMeeting }: { pid: number; asClient: boolean; openMeeting: (n: number) => void }) {
   const q = useQuery({ queryKey: govKeys.portalMeetings(pid, asClient), queryFn: () => govApi.portalMeetings(pid, asClient) });
@@ -37,6 +39,7 @@ export function MeetingsTab({ pid, asClient, openMeeting }: { pid: number; asCli
                 <span>{fmtMeetingTime(m.startsAt, m.endsAt, m.timezone)}</span>
                 {m.status === 'CANCELLED' ? <Pill tone="neutral">{wt('gov.cancelled')}</Pill> : m.status === 'DONE' ? <Pill tone="green">{wt('portal.held')}</Pill> : <Pill tone="blue">{wt('gov.scheduled')}</Pill>}
                 {m.minutesShared && <Pill tone="accent">{wt('portal.notesAvail')}</Pill>}
+                {(m as { myRsvp?: string | null }).myRsvp && <Pill tone="neutral">{wt('c8c.rsvpYouSaid', { a: wt(`c8c.rsvp${(m as { myRsvp?: string }).myRsvp === 'YES' ? 'Yes' : (m as { myRsvp?: string }).myRsvp === 'NO' ? 'No' : 'Maybe'}` as never) })}</Pill>}
               </span>
             </span>
           </button>
@@ -70,6 +73,8 @@ export function PortalMeetingDialog({ pid, num, asClient, onClose }: { pid: numb
               event={{ title: m.title, start: m.startsAt, end: m.endsAt, location: m.meetingUrl || m.location, details: m.meetingUrl ? wt('portal.joinDetails', { u: m.meetingUrl }) : null }}
             />
           </div>
+          {/* CTW đợt 8c: khách trả lời lời mời ngay trên cổng (chỉ khách thật được mời). */}
+          <PortalRsvp pid={pid} num={m.number} me={(m as { me?: PortalMe | null }).me} />
           <section>
             <h3 className="w-section-title mb-2">{wt('gov.attendees')}</h3>
             <ul className="flex flex-wrap gap-2">

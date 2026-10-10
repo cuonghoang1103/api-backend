@@ -153,6 +153,13 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/chat-hooks'], ['POST', '/github'], ['DELETE', '/gitlab'], ['POST', '/automation'], ['PATCH', '/automation/4'],
     // CTW đợt 7c: sổ tài sản — agent chỉ đọc; xuất tệp giấy phép cấm.
     ['POST', '/assets'], ['PATCH', '/assets/3'], ['DELETE', '/assets/3'], ['PUT', '/assets/3/links'], ['GET', '/assets-export'],
+    // CTW đợt 8a: kết nối OAuth của người (tệp đám mây, Teams/Meet, Sheets/Excel) — agent không dùng.
+    ['GET', '/cloud/issues/3/files'], ['POST', '/cloud/issues/3/files'], ['POST', '/cloud/meetings/2/online'], ['POST', '/cloud/sheets'], ['POST', '/cloud/sheets/1/sync'],
+    // CTW đợt 8b: Notion/Slack (kết nối của người, đăng ra ngoài), Builder (xuất tệp, AI), lịch tự gửi — agent cấm hẳn.
+    ['POST', '/notion/import-page'], ['POST', '/notion/export-page'], ['POST', '/notion/import-database'],
+    ['GET', '/slack'], ['POST', '/slack/channels'], ['DELETE', '/slack/channels/2'], ['POST', '/slack/channels/2/test'],
+    ['GET', '/report-builder/templates'], ['POST', '/report-builder/export'], ['POST', '/report-builder/ai'],
+    ['GET', '/report-plans'], ['POST', '/report-plans'], ['POST', '/report-plans/3/send'], ['POST', '/report-plans/3/recipients/decide'],
     // Cấu hình / thành viên / xoá
     ['PATCH', ''], ['DELETE', ''], ['POST', '/archive'], ['PUT', '/members/8'], ['DELETE', '/members/8'],
     ['POST', '/labels'], ['PATCH', '/components/1'], ['POST', '/workflows'], ['PUT', '/workflows/1/transitions'], ['PATCH', '/statuses/3'],
@@ -172,6 +179,9 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     // CTW đợt 7b
     ['POST', '/forms/F-1/status'], ['POST', '/forms/2/rotate'], ['DELETE', '/forms/F-1'], ['POST', '/imports'], ['GET', '/intake/channels'],
     ['POST', '/intake/channels/3/simulate'], ['POST', '/intake/proposals/4/decide'], ['POST', '/kb/articles'], ['DELETE', '/kb/categories/2'],
+    // CTW đợt 8c: chuỗi họp (mời người), RSVP cổng khách, phỏng vấn stakeholder AI, gói nộp SWR302, cấu hình ước lượng
+    ['POST', '/meeting-series'], ['PATCH', '/meeting-series/4'], ['DELETE', '/meeting-series/4'], ['POST', '/portal/meetings/3/rsvp'],
+    ['POST', '/swr/elicitation/ELC-2/ai-stakeholder'], ['DELETE', '/swr/elicitation/2/ai-stakeholder'], ['GET', '/swr/package.zip'], ['PUT', '/swr/estimation'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [
@@ -183,6 +193,9 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['GET', '/meetings/3'], ['GET', '/reports/burndown'], ['HEAD', '/board'],
     ['GET', '/meetings/3/transcript'], ['POST', '/meetings/3/minutes-ai'], ['GET', '/meetings/3/room'],
     ['GET', '/forms'], ['POST', '/forms'], ['GET', '/forms/F-1/responses'], ['GET', '/intake/proposals'], ['GET', '/kb'],
+    // CTW đợt 8c: đọc chuỗi họp, ảnh sơ đồ, phân tích tĩnh, báo cáo trạng thái yêu cầu, ước lượng
+    ['GET', '/meeting-series'], ['GET', '/meeting-series/4'], ['GET', '/diagrams/3/image.svg'], ['POST', '/diagram-renders'],
+    ['GET', '/static-analysis'], ['GET', '/swr/status-report'], ['GET', '/swr/estimation'], ['POST', '/meetings/3/apply-template'],
   ];
   it(`${denied.length} tuyến đối ngoại ⇒ cấm`, () => {
     assert.ok(denied.length >= 25);
@@ -212,7 +225,9 @@ describe('AI agent — tuyến ngoài dự án là DANH SÁCH TRẮNG (agentTopR
       ['GET', '/workspaces/3/agents'], ['POST', '/workspaces/3/agents'], ['POST', '/workspaces/3/agents/1/tokens'], ['GET', '/workspaces/3/audit'],
       ['DELETE', '/workspaces/3/members/9'], ['POST', '/invites/abc/accept'], ['GET', '/me/api-tokens'], ['POST', '/me/calendar-link'],
       ['PUT', '/me/notify-settings'], ['GET', '/workspaces/3/workload'], ['POST', '/workspaces/3/transfer'], ['GET', '/ai/quota'],
-      ['GET', '/workspaces/3/builtin-budget'], ['PUT', '/workspaces/3/builtin-budget'], ['GET', '/workspaces/3/agents/1/runs']] as const) {
+      ['GET', '/workspaces/3/builtin-budget'], ['PUT', '/workspaces/3/builtin-budget'], ['GET', '/workspaces/3/agents/1/runs'],
+      // CTW đợt 8a: kết nối OAuth của người
+      ['GET', '/integrations'], ['GET', '/integrations/google/start'], ['GET', '/integrations/google/picker'], ['GET', '/integrations/microsoft/files'], ['POST', '/integrations/microsoft/sync']] as const) {
       assert.equal(agentTopRouteAllowed(m, p), false, `${m} ${p}`);
     }
   });

@@ -34,6 +34,7 @@ import {
   TECHNIQUES, validateAnswers, QUESTION_BANK, type ReportData, type SessionQuestion, type StakeholderLite, type Technique, elcNumber,
 } from './swr6b.js';
 import { LIFECYCLE_LABEL, PRIORITY3, REQ_TYPES, type Lifecycle } from './swr.js';
+import { AI_TURNS_MAX, parseTurns, stakeholderPrompt, turnsAsTranscript, type AiTurn } from './swrPack.js';
 import { writeXlsx } from './xlsxStyled.js';
 
 const clean = (s: string | null | undefined, n: number) => { const v = (s ?? '').trim(); return v ? v.slice(0, n) : null; };
@@ -376,6 +377,8 @@ export async function getSession(userId: number, projectId: number, ref: number 
     number: s.number, key: elcKey(s.number), title: s.title, technique: s.technique, status: s.status, scheduledAt: s.scheduledAt, durationMin: s.durationMin,
     location: s.location, objective: s.objective, plan: s.plan, questions: normalizeQuestions(s.questions), notes: s.notes, outcome: s.outcome,
     aiSimulated: s.aiSimulated, rev: s.rev, meeting, survey, sourceText: sourceText(s),
+    // CTW đợt 8c (R28): hỏi–đáp với stakeholder do AI đóng vai (bằng chứng nguồn, ghi rõ AI-simulated).
+    aiTranscript: parseTurns(s.aiTranscript), aiPersona: await personaRef(projectId, s.aiPersonaId),
     participants: participants.map((p) => ({ stakeholderId: p.stakeholder.id, key: shKey(p.stakeholder.number), name: p.stakeholder.name, role: p.stakeholder.role, rolePlayed: p.rolePlayed, userId: p.stakeholder.userId })),
     proposals: proposals.map((p) => ({
       id: p.id, title: p.title, text: p.text, reqType: p.reqType, priority: p.priority, status: p.status, model: p.model,
@@ -480,7 +483,10 @@ export async function proposeRequirements(userId: number, projectId: number, ref
     prisma.workIssue.findMany({ where: { projectId, deletedAt: null, type: { key: 'REQUIREMENT' } }, select: { title: true }, take: 400 }),
   ]);
   const questions = normalizeQuestions(s.questions);
-  const src = sourceLines({ transcript: [...transcript, ...survey.map((x) => ({ text: x.text, who: null }))], questions, notes: s.notes, outcome: s.outcome });
+  // CTW đợt 8c (R28): transcript hỏi–đáp với stakeholder do AI đóng vai cũng là nguồn (dòng ghi "(AI-simulated)").
+  const aiTurns = parseTurns(s.aiTranscript);
+  const aiWho = aiTurns.length ? (await personaRef(projectId, s.aiPersonaId))?.name ?? 'Stakeholder' : '';
+  const src = sourceLines({ transcript: [...transcript, ...turnsAsTranscript(aiTurns, aiWho), ...survey.map((x) => ({ text: x.text, who: null }))], questions, notes: s.notes, outcome: s.outcome });
   if (!src.lines.length) throw new BadRequestError('There is nothing to read yet — record the session (meeting), answer the questions or write notes first', 'WORK_ELC_NO_SOURCE');
   const pending = await prisma.workReqProposal.findMany({ where: { sessionId: s.id, status: { in: ['PENDING', 'ACCEPTED'] } }, select: { title: true } });
   const existing = [...existingReqs.map((r) => r.title), ...pending.map((x) => x.title)];
@@ -883,4 +889,75 @@ export async function exportReport(userId: number, projectId: number, format: 'd
   const buffer = format === 'docx' ? await renderDocx(doc, meta, opts) : await renderPdf(doc, meta, opts);
   await auditProject(projectId, { actorId: userId, action: 'swr.elicitation.export', targetType: 'project', targetId: projectId, summary: `Exported the elicitation report (${format})` });
   return { buffer, file: `${p.key}_Elicitation_Report.${format}` };
+}
+
+// ═══ CTW đợt 8c — R28 STAKEHOLDER DO AI ĐÓNG VAI ════════════════════
+//
+// Đề SWR302 cho phép "AI-assisted inquiry" nếu GIỮ transcript làm bằng chứng nguồn. Người phân tích hỏi, AI trả lời trong
+// vai một stakeholder ĐÃ CÓ trong sổ (R3: vai, giá trị, mối quan tâm, ràng buộc, thái độ). Transcript lưu ngay trong phiên
+// elicitation (`ai_transcript`), phiên được đánh dấu AI-simulated, và "AI đề xuất yêu cầu" đọc transcript đó như mọi nguồn
+// khác — mỗi yêu cầu phải trích dòng có thật. Agent ngoài (MCP) không dùng tuyến này (không tiêu lượt AI của web).
+
+async function personaRef(projectId: number, id: number | null) {
+  if (!id) return null;
+  const sh = await prisma.workStakeholder.findFirst({ where: { id, projectId }, select: { number: true, name: true, role: true } });
+  return sh ? { key: shKey(sh.number), name: sh.name, role: sh.role } : null;
+}
+
+export const stakeholderAskInput = z.object({
+  stakeholder: z.union([z.number().int().positive(), z.string().min(1).max(12)]).nullable().optional(),
+  question: z.string().trim().min(1).max(2000),
+  language: z.enum(['vi', 'en']).optional(),
+});
+
+export async function askStakeholder(userId: number, projectId: number, ref: number | string, input: z.infer<typeof stakeholderAskInput>) {
+  const ctx = await edit(userId, projectId, { noAgent: 'An AI agent cannot run the simulated stakeholder interview — a person interviews' });
+  const s = await sessionByRef(projectId, ref);
+  // Vai: stakeholder gửi kèm ⇒ đổi vai (chỉ khi transcript còn trống, tránh một nhân vật "đổi người" giữa chừng).
+  let personaId = s.aiPersonaId;
+  const turns = parseTurns(s.aiTranscript);
+  if (input.stakeholder !== undefined && input.stakeholder !== null) {
+    const n = shNumber(input.stakeholder);
+    const sh = n ? await prisma.workStakeholder.findFirst({ where: { projectId, number: n }, select: { id: true } }) : null;
+    if (!sh) throw new BadRequestError(`Stakeholder ${String(input.stakeholder)} not found — add them to the register first`, 'WORK_BAD_STAKEHOLDER');
+    if (turns.length && personaId && sh.id !== personaId) throw new ConflictError('This interview already has a stakeholder — clear the transcript to talk to someone else');
+    personaId = sh.id;
+  }
+  if (!personaId) {
+    const first = await prisma.workElicitationParticipant.findFirst({ where: { sessionId: s.id }, orderBy: { stakeholderId: 'asc' }, select: { stakeholderId: true } });
+    personaId = first?.stakeholderId ?? null;
+  }
+  if (!personaId) throw new BadRequestError('Pick the stakeholder the AI should play (from the stakeholder register)', 'WORK_ELC_NO_PERSONA');
+  if (turns.length >= AI_TURNS_MAX - 1) throw new BadRequestError(`This interview reached ${AI_TURNS_MAX / 2} questions — start another session for more`, 'WORK_LIMIT');
+  const persona = await prisma.workStakeholder.findFirstOrThrow({ where: { id: personaId, projectId } });
+  const p = await projectInfo(projectId);
+  const prompt = stakeholderPrompt({
+    persona: { name: persona.name, role: persona.role, organization: persona.organization, userClass: persona.userClass, attitude: persona.attitude, majorValue: persona.majorValue, interests: persona.interests, constraints: persona.constraints, decisionRights: persona.decisionRights, notes: persona.notes },
+    systemName: p.name, objective: s.objective, language: input.language ?? 'en', turns, question: input.question,
+  });
+  let answer: string;
+  if (askOverride) {
+    answer = await askOverride(prompt.system, prompt.messages.map((m) => `${m.role}: ${m.content}`).join('\n'));
+  } else {
+    // Cùng cổng quota/AI của "AI đề xuất yêu cầu" (askerFor ném lỗi nếu hết lượt / không có quyền AI).
+    await askerFor(userId, ctx.isAgent, can(ctx.access.role, 'ai.use', ctx.access.options, ctx.access.principal));
+    const { llmComplete } = await import('../interview/llm/index.js');
+    const r = await llmComplete({ step: 'report', system: prompt.system, messages: prompt.messages, maxTokens: 600, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 60_000, maxRetries: 1 });
+    answer = r.text;
+  }
+  answer = String(answer ?? '').trim().slice(0, 4000) || '…';
+  const now = new Date().toISOString();
+  const next: AiTurn[] = [...turns, { role: 'analyst', text: input.question.trim(), at: now }, { role: 'stakeholder', text: answer, at: now }];
+  await prisma.workElicitationSession.update({ where: { id: s.id }, data: { aiTranscript: next as unknown as Prisma.InputJsonValue, aiPersonaId: personaId, aiSimulated: true, rev: { increment: 1 } } });
+  touch(projectId, userId);
+  return { turns: next, persona: await personaRef(projectId, personaId), answer };
+}
+
+export async function clearStakeholderTranscript(userId: number, projectId: number, ref: number | string) {
+  await edit(userId, projectId, { noAgent: 'An AI agent cannot change the simulated stakeholder interview' });
+  const s = await sessionByRef(projectId, ref);
+  await prisma.workElicitationSession.update({ where: { id: s.id }, data: { aiTranscript: [], aiPersonaId: null, rev: { increment: 1 } } });
+  await auditProject(projectId, { actorId: userId, action: 'swr.elicitation.ai_clear', targetType: 'elicitation', targetId: s.id, summary: `Cleared the AI-simulated stakeholder transcript of ${elcKey(s.number)}` });
+  touch(projectId, userId);
+  return { cleared: true };
 }

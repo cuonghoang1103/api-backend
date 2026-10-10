@@ -25,6 +25,8 @@ import ProjectFields from '@/components/work/settings/ProjectFields';
 import ProjectAutomation from '@/components/work/settings/ProjectAutomation';
 import ProjectRecurring from '@/components/work/settings/ProjectRecurring'; // CTW đợt 5: việc định kỳ
 import ProjectGithub from '@/components/work/settings/ProjectGithub';
+import ProjectCloud from '@/components/work/settings/ProjectCloud'; // CTW đợt 8a
+import { Cloud } from 'lucide-react'; // CTW đợt 8a
 import ProjectGitlab from '@/components/work/settings/ProjectGitlab';
 import ProjectChat from '@/components/work/settings/ProjectChat';
 import ProjectExport from '@/components/work/settings/ProjectExport';
@@ -38,7 +40,7 @@ import ProjectSpecQuality from '@/components/work/settings/ProjectSpecQuality';
 import ProjectAgents from '@/components/work/settings/ProjectAgents';
 import { wt } from '@/components/work/i18n';
 
-type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'agents' | 'automation' | 'recurring' | 'github' | 'gitlab' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
+type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'agents' | 'automation' | 'recurring' | 'github' | 'gitlab' | 'cloud' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
 
 function ProjectSettings() {
   const params = useParams<{ ws: string; key: string }>();
@@ -72,6 +74,8 @@ function ProjectSettings() {
       ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'recurring' as const, get label() { return wt('classroom.tabRecurring'); }, icon: CalendarClock }] : []), // CTW đợt 5
       { key: 'github', get label() { return wt('settings.tGithub'); }, icon: Github },
       { key: 'gitlab', get label() { return wt('settings.tGitlab'); }, icon: GitMerge },
+      // CTW đợt 8a: xuất Google Sheets / Excel (một chiều) — chỉ đội dự án, không khách.
+      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'cloud' as const, get label() { return wt('c8a.tabCloud'); }, icon: Cloud }] : []),
       ...(perms?.settings ? [{ key: 'chat' as const, get label() { return wt('settings.tChatNotifications'); }, icon: MessageSquareShare }] : []),
       { key: 'share', get label() { return wt('settings.tPublicLinks'); }, icon: Link2 },
     ] },
@@ -136,6 +140,7 @@ function ProjectSettings() {
         {tab === 'recurring' && <ProjectRecurring config={config} />}
         {tab === 'github' && <ProjectGithub config={config} slug={slug} />}
         {tab === 'gitlab' && <ProjectGitlab config={config} slug={slug} />}
+        {tab === 'cloud' && <ProjectCloud config={config} slug={slug} />}
         {tab === 'chat' && <ProjectChat config={config} slug={slug} />}
         {tab === 'export' && <ProjectExport config={config} slug={slug} />}
         {tab === 'share' && <ProjectShare config={config} slug={slug} />}

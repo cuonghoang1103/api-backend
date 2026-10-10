@@ -118,9 +118,41 @@ Nguồn: Gemini đánh giá repo; Claude đã đo lại (schema 13.537 dòng/459
   Google `openid email profile calendar.events drive.file spreadsheets` (drive.file để tránh scope restricted); Notion public integration.
 - Google app ở chế độ Testing ⇒ tối đa 100 test user, phải thêm email; lên Production cần Google xác minh (calendar.events là sensitive).
 - Tài khoản trường (FPT, tenant Entra) có thể chặn người dùng tự cấp quyền app chưa xác minh nhà phát hành ⇒ tài khoản Outlook cá nhân chắc chắn chạy.
+- **8b — Slack** (12/10/2026): env `CTW_SLACK_CLIENT_ID`, `CTW_SLACK_CLIENT_SECRET`, `CTW_SLACK_SIGNING_SECRET`.
+  Redirect `https://cuongthai.com/api/v1/work/integrations/slack/callback`; Slash Command `/ctwork` ⇒ Request URL
+  `https://cuongthai.com/api/v1/work/intake/slack/commands`; Event Subscriptions (sự kiện bot `link_shared`, App unfurl domain
+  `cuongthai.com`) ⇒ `https://cuongthai.com/api/v1/work/intake/slack/events`. Bot scope: `chat:write chat:write.public
+  channels:read groups:read commands links:read links:write files:write`. Chi tiết: `docs/ctw-dot-8b-notion-slack-bao-cao.md`.
+- **8b — Notion** dùng `CTW_NOTION_*` ở trên (public integration, capability đọc + chèn + sửa nội dung).
 
 ## 11/10/2026 — Ép 2FA TẮT theo yêu cầu user
 User: "đừng để thành viên hoặc bắt buộc thành viên bật — nhiều thành viên không muốn dùng". Công tắc tổng
 `CTW_ENFORCE_2FA` (backend) + `NEXT_PUBLIC_CTW_ENFORCE_2FA` (frontend build) mặc định TẮT: cổng không chặn ai, tab
 Security ẩn, PUT require2fa ⇒ 409 WORK_2FA_DISABLED, thành viên thường KHÔNG tự bật 2FA (về như trước 7c: chỉ admin
 site). Mã 7c giữ nguyên để bật lại sau nếu user muốn. ĐỪNG tự bật lại.
+
+## Đợt 9 — LỚP HỌC ĐẦY ĐỦ kiểu Google Classroom (user chốt 11/10/2026, làm NGAY SAU đợt 8, trước iOS)
+Nền đã có: classroom.service (lớp, mã join, roster, nhóm → không gian riêng), teaching hub, rubric, chấm điểm, đóng góp.
+Thêm (dùng lại Form/khảo sát 7b, lịch/ics, đính kèm R2, notify, chat, i18n):
+1. Bảng tin lớp (Stream): thông báo của GV, bình luận, ghim, lên lịch đăng, đính kèm.
+2. Bài tập (Classwork): cá nhân HOẶC nhóm, hạn nộp, nộp file/link/văn bản, nộp muộn (đánh dấu), nộp lại,
+   trả bài + nhận xét riêng, điểm theo rubric, sổ điểm lớp xuất xlsx.
+3. Tài liệu lớp theo chủ đề/tuần (slide, đề cương, link), sắp xếp kéo-thả.
+4. Quiz trắc nghiệm tự chấm (một/nhiều đáp án, đúng/sai, điền ngắn), hạn giờ, trộn câu, xem đáp án sau hạn.
+5. Lịch lớp (buổi học, hạn bài) + điểm danh theo buổi (mã/QR ngắn hạn), thống kê vắng.
+Quyền: GV/OWNER của lớp quản lý; SV chỉ thấy bài của mình; agent cấm ghi; không lộ email/MSSV giữa SV.
+Không thêm bước bảo mật bắt buộc (xem quyết định tắt ép 2FA).
+
+## Đợt 10 — Notes ↔ CT Work + Notes theo kịp Notion (user chốt 11/10/2026: làm SAU đợt 9, trước iOS)
+Hiện trạng (rà 11/10): Notes KHÔNG có liên kết nào với CT Work. Notes đã có: slash/kéo khối, callout, toggle, code,
+math, media, bookmark, embed, synced block, TOC, cây trang, backlinks, thuộc tính, lịch sử phiên bản, thùng rác, ⌘K,
+database 6 view (table/board/calendar/gallery/list/timeline) + formula/rollup/mẫu, realtime, bình luận, chia sẻ,
+AI hỏi ghi chú + Sắp xếp lại, ghi nhanh ⌥⇧N, flashcard, sổ tay khoá, xuất.
+Làm:
+1. `@` nhắc thẻ CT Work trong Notes (chip trạng thái sống); thẻ CT Work gắn trang Notes.
+2. Bôi đen → "Tạo thẻ CT Work" (chọn dự án).
+3. "Việc của tôi" trong Notes gộp việc được giao bên CT Work.
+4. Chuyển trang Notes ↔ Docs dự án (hai chiều, giữ khối).
+5. Rà Notes so với Notion hiện tại, làm phần thiếu (form vào database, automation database, xuất bản web,
+   chart view…); sửa notesRealtimeSchema thiếu toggle/media/bookmark/embed/database/synced block (ghi chú 26/09).
+Không gộp hai hệ: Notes = sổ cá nhân/học tập, CT Work = nhóm/dự án.

@@ -34,6 +34,10 @@ tải ảnh lên là rác nằm trên bucket thật (10/10 phải dọn tay 98 t
 - **Muốn S3 thật nhưng cục bộ:** MinIO — `STORAGE_SANDBOX=1 STORAGE_SANDBOX_ENDPOINT=http://localhost:9000`
   (+ `STORAGE_SANDBOX_BUCKET` / `_ACCESS_KEY` / `_SECRET_KEY`). Host không phải localhost/127.0.0.1/minio ⇒ ném lỗi.
 - **Production không bao giờ sandbox:** `NODE_ENV=production` + `STORAGE_SANDBOX=1` ⇒ backend từ chối khởi động.
+- **Email cũng có hộp thư giả (11/10/2026).** `.env` local mang khoá Resend THẬT; ngoài `NODE_ENV=production`,
+  `email.service.ts` KHÔNG gửi mà ghi thư ra `$TMPDIR/ctw-email-sandbox/*.html` (mã xác thực xem ở đó). Gửi thật từ
+  local: `EMAIL_SANDBOX=0`. Địa chỉ tên miền dành riêng (`.local/.test/.invalid/example.com`) bị chặn ở MỌI môi trường.
+  Lý do: 10/10 lượt chụp ảnh của agent gửi báo cáo PDF thật tới `giangvien@fpt.edu.vn` + hàng chục thư bounce `@e2e.local`.
 - Chỉ khi CỐ Ý cần chạm bucket thật từ máy local (script upload tài nguyên khoá học…) mới chạy không có cờ — và
   không bao giờ trong lúc test.
 
@@ -197,11 +201,26 @@ Rationale: auto-resolving partially-applied migrations can silently corrupt sche
 
 ⚠️⚠️ **Deploying IS pushing (verified in the script 2026-09-07).** The old wording
 here said "wait for the user to test production, then push with confirmation" —
-that is **not what happens**. `deploy-nha.sh:699-746` runs the required CI checks
-itself (backend `tsc`, `eval:grader`, `eval:cv-linter`, `npm test`, frontend
-`tsc`) and then **`git push origin HEAD:main` with no prompt** (`:740`). It skips
-the push **only** when one of those checks fails — in which case production still
-runs the freshly swapped image and only GitHub lags, deliberately (`:726-736`).
+that is **not what happens**. `deploy-nha.sh` step 8 runs the required CI checks
+itself and then **pushes with no prompt**. It skips the push **only** when one of
+those checks fails — in which case production still runs the freshly swapped image
+and only GitHub lags, deliberately.
+
+**Since đợt 8c (12/10/2026) the checks run on a CLEAN `git worktree` of exactly the
+deployed SHA, not on the working tree** (`scripts/kiem-ci-truoc-push.sh <SHA>`, runnable
+by hand). Before, they ran on the working tree: half-written files of a parallel
+session made them red for no reason (10/10: deploy `a531e43e` skipped the push because
+`tsc` tripped on another agent's unfinished `work.ctw8b.routes.ts`; the same SHA is
+green in a clean worktree), and they pushed `HEAD` *at push time*, not the deployed
+commit (23/09: 26 un-deployed commits reached GitHub). Now: the SHA is locked at the
+start (`SHA_DU`, also used for the home-machine push, nginx.conf and `da-len-prod`),
+the push is `git push origin <SHA_DU>:refs/heads/main`, and the worktree gets symlinked
+`node_modules` (root per entry + its own `prisma generate` for the SHA's schema;
+frontend/desktop whole), a symlinked `.env`, frontend `tsc` runs **before** the root
+`node_modules` exists (like the Docker build), and `npm run test:work-db` runs on a
+throw-away database built by `scripts/db-test-tu-migration.mjs` then dropped (~4 min;
+no local Postgres ⇒ skipped with a warning). The worktree and database are removed on
+exit. Full check ≈ 7–8 min. `--khong-hoi` skips step 8 entirely.
 
 So when the user says "deploy đi", the truthful reading is **"deploy and push"**.
 Tell them that before running it, and never promise "nothing is pushed until you

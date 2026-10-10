@@ -15,6 +15,7 @@ import { workApi, workError, workStudioApi, workStudioKeys, type ProjectConfig }
 import { contribKeys, workContribApi, type ContribRange, type RangePreset } from '@/lib/work-contrib-api';
 import { saveBlob } from '@/components/work/tests/fpt/fptApi';
 import { wk } from '@/components/work/hooks';
+import { currentWorkLocale } from '@/components/work/i18n';
 import { studioOn } from '@/components/work/studio/shared';
 import { cn } from '@/lib/utils';
 import { useContribUrl, type ContribSub } from './shared';
@@ -71,7 +72,7 @@ export default function ContribView({ pid, config }: { pid: number; config: Proj
   const exportFile = async (kind: 'xlsx' | 'pdf') => {
     setBusy(kind);
     try {
-      const f = kind === 'xlsx' ? await workContribApi.exportXlsx(pid, range) : await workContribApi.exportPdf(pid, range);
+      const f = kind === 'xlsx' ? await workContribApi.exportXlsx(pid, range, currentWorkLocale()) : await workContribApi.exportPdf(pid, range);
       saveBlob(f.blob, f.fileName);
     } catch (err) {
       toast.error(workError(err, wt('contrib.exportFailed')));

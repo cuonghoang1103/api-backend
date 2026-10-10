@@ -132,6 +132,8 @@ const importQuery = z.object({
   build: z.string().max(80).optional(), branch: z.string().max(120).optional(), commit: z.string().max(64).optional(),
   runUrl: z.string().max(500).optional(), environment: z.string().max(120).optional(), cycle: z.string().max(120).optional(),
   createBugs: z.enum(['true', 'false', '1', '0']).optional(),
+  // CTW đợt 8c: cycle gộp tự đóng — close=true (job cuối) · jobs=N · closeAfterMin=M (0 = không tự đóng theo giờ)
+  close: z.enum(['true', 'false', '1', '0']).optional(), jobs: z.coerce.number().int().min(1).max(200).optional(), closeAfterMin: z.coerce.number().int().min(0).max(10_080).optional(),
 });
 const importJson = z.object({
   report: z.union([z.string().max(11_000_000), z.record(z.unknown())]),
@@ -139,6 +141,7 @@ const importJson = z.object({
   build: z.string().max(80).nullable().optional(), branch: z.string().max(120).nullable().optional(), commit: z.string().max(64).nullable().optional(),
   runUrl: z.string().max(500).nullable().optional(), environment: z.string().max(120).nullable().optional(), cycle: z.string().max(120).nullable().optional(),
   createBugs: z.boolean().optional(),
+  close: z.boolean().optional(), jobs: z.number().int().min(1).max(200).nullable().optional(), closeAfterMin: z.number().int().min(0).max(10_080).nullable().optional(),
   coverage: z.object({ report: z.string().max(11_000_000), format: z.enum(['lcov', 'jacoco', 'cobertura', 'istanbul', 'auto']).optional() }).nullable().optional(),
 }).strict();
 const FMT = { junit: 'JUNIT', playwright: 'PLAYWRIGHT', jest: 'JEST', auto: 'AUTO' } as const;
@@ -155,11 +158,12 @@ router.post('/projects/:pid/tests/automation/import', rawText, asyncHandler(asyn
     input = {
       report: req.body, format: q.format ? FMT[q.format] : 'AUTO', build: q.build, branch: q.branch, commit: q.commit, runUrl: q.runUrl,
       environment: q.environment, cycle: q.cycle, createBugs: q.createBugs === undefined ? undefined : q.createBugs === 'true' || q.createBugs === '1',
+      close: q.close === 'true' || q.close === '1', jobs: q.jobs, closeAfterMin: q.closeAfterMin === 0 ? null : q.closeAfterMin,
     };
   } else {
     const b = parse(importJson, req.body);
     input = {
-      ...b, report: b.report, format: b.format ? FMT[b.format] : 'AUTO',
+      ...b, report: b.report, format: b.format ? FMT[b.format] : 'AUTO', closeAfterMin: b.closeAfterMin === 0 ? null : b.closeAfterMin,
       coverage: b.coverage ? { report: b.coverage.report, format: b.coverage.format ? CFMT[b.coverage.format] : 'AUTO' } : null,
     };
   }

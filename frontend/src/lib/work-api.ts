@@ -514,6 +514,8 @@ export interface TestCycleSummary extends CycleCounts {
 export interface TestRunRow {
   id: number; status: RunStatus; executedAt: string | null; comment: string | null; assigneeId: number | null; executedBy: WorkUser | null;
   stepCount: number; test: { number: number; title: string; priority: number }; defects: IssueRef[];
+  /** CTW đợt 8c (T10): phiên bản test case đã chạy / hiện tại; outdated = test đã sửa sau khi run được tạo. */
+  testVersion?: number | null; currentVersion?: number; outdated?: boolean;
 }
 export interface TestCycleDetail extends TestCycleSummary { runs: TestRunRow[] }
 export interface TestRunDetail {

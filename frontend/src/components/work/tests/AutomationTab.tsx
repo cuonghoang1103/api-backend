@@ -22,6 +22,7 @@ import KpiTile from '../KpiTile';
 import { Badge, Card, Tbl, Td, Th } from '../quality/qui';
 import { copyText } from '../settings/ProjectShare';
 import { useWT, type WKey } from '../i18n';
+import StaticAnalysisPanel from '../c8c/StaticAnalysisPanel';
 
 const DOT: Record<string, string> = { P: 'var(--w-green)', R: 'var(--w-yellow)', F: 'var(--w-red)', S: 'var(--w-border-strong)' };
 
@@ -44,6 +45,7 @@ export function ciSnippets(origin: string, pid: number) {
           CTWORK_TOKEN: \${{ secrets.CTWORK_TOKEN }}   # API token with the "Upload test results" scope
         run: |
           # One file per test class (Maven Surefire / Gradle) ⇒ send each into the SAME cycle (cycle=…).
+          # The cycle closes by itself after 120 idle minutes; add &close=true on the last upload (or &jobs=N) to close it now.
           for f in target/surefire-reports/TEST-*.xml; do
             curl -sS --fail-with-body -X POST \\
               "${url}?format=junit&cycle=CI%20%23\${{ github.run_number }}&build=\${{ github.run_number }}&branch=\${{ github.ref_name }}&commit=\${{ github.sha }}&runUrl=\${{ github.server_url }}/\${{ github.repository }}/actions/runs/\${{ github.run_id }}" \\
@@ -188,6 +190,8 @@ export default function AutomationTab({ config, pid, onOpenIssue }: { config: Pr
           </Tbl>
         )}
       </Card>
+      {/* CTW đợt 8c: phân tích tĩnh (SARIF) + V(G) (T3/T4). */}
+      <StaticAnalysisPanel config={config} pid={pid} onOpenIssue={onOpenIssue} />
     </div>
   );
 }

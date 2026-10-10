@@ -17,7 +17,8 @@
 import crypto from 'node:crypto';
 import { parseCsv, parseDay } from './exchange.service.js';
 
-export const IMPORT_SOURCES = ['TRELLO', 'ASANA', 'JIRA', 'CSV'] as const;
+// CTW đợt 8b: + NOTION (database Notion ⇒ bảng ⇒ parseTable; notion.service.ts gọi runImport với bản đã đọc sẵn).
+export const IMPORT_SOURCES = ['TRELLO', 'ASANA', 'JIRA', 'CSV', 'NOTION'] as const;
 export type ImportSource = (typeof IMPORT_SOURCES)[number];
 export type StatusCat = 'TODO' | 'IN_PROGRESS' | 'DONE';
 

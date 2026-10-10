@@ -53,6 +53,7 @@ const rangeQ = z.object({
   sprintId: id.optional(),
   stageId: id.optional(),
   compare: z.enum(['0', '1', 'true', 'false']).optional().transform((v) => (v === undefined ? undefined : v === '1' || v === 'true')),
+  lang: z.enum(['en', 'vi']).optional(), // CTW đợt 8c: ngôn ngữ sheet định nghĩa khi xuất
 });
 const range = (req: Request): contrib.ContribQuery => parse(rangeQ, req.query);
 
@@ -76,7 +77,7 @@ router.get('/projects/:pid/contrib/issues/:num', asyncHandler(async (req, res) =
 }));
 
 router.get('/projects/:pid/contrib/export.xlsx', asyncHandler(async (req, res) => {
-  fileOut(res, await exportXlsx(callerId(req), P(req, 'pid'), range(req)), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  fileOut(res, await exportXlsx(callerId(req), P(req, 'pid'), { ...range(req), lang: req.query.lang === 'vi' ? 'vi' : 'en' }), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 }));
 
 router.get('/projects/:pid/contrib/export.pdf', asyncHandler(async (req, res) => {

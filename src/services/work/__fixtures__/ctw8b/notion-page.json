@@ -1,0 +1,46 @@
+{
+  "page": {
+    "object": "page", "id": "11111111-2222-3333-4444-555555555555",
+    "properties": { "title": { "type": "title", "title": [ { "type": "text", "plain_text": "Kế hoạch dự án — Sprint 3", "text": { "content": "Kế hoạch dự án — Sprint 3" } } ] } }
+  },
+  "blocks": [
+    { "id": "b1", "type": "heading_1", "heading_1": { "rich_text": [ { "type": "text", "plain_text": "Mục tiêu", "text": { "content": "Mục tiêu" } } ] } },
+    { "id": "b2", "type": "paragraph", "paragraph": { "rich_text": [
+      { "type": "text", "plain_text": "Hoàn thành ", "text": { "content": "Hoàn thành " } },
+      { "type": "text", "plain_text": "đăng nhập", "text": { "content": "đăng nhập" }, "annotations": { "bold": true, "italic": false, "strikethrough": false, "underline": true, "code": false, "color": "red" } },
+      { "type": "text", "plain_text": " và xem ", "text": { "content": " và xem " } },
+      { "type": "text", "plain_text": "tài liệu", "text": { "content": "tài liệu", "link": { "url": "https://example.com/spec" } }, "href": "https://example.com/spec", "annotations": { "italic": true } },
+      { "type": "text", "plain_text": " bỏ ", "text": { "content": " bỏ " } },
+      { "type": "text", "plain_text": "js:", "text": { "content": "js:", "link": { "url": "javascript:alert(1)" } } },
+      { "type": "mention", "plain_text": "@Lan Pham", "mention": { "type": "user" } },
+      { "type": "equation", "plain_text": "E=mc^2", "equation": { "expression": "E=mc^2" } }
+    ] } },
+    { "id": "b3", "type": "bulleted_list_item", "bulleted_list_item": { "rich_text": [ { "type": "text", "plain_text": "Việc A", "text": { "content": "Việc A" } } ] }, "has_children": true,
+      "children": [ { "id": "b3a", "type": "bulleted_list_item", "bulleted_list_item": { "rich_text": [ { "type": "text", "plain_text": "Việc A.1", "text": { "content": "Việc A.1" } } ] } } ] },
+    { "id": "b4", "type": "bulleted_list_item", "bulleted_list_item": { "rich_text": [ { "type": "text", "plain_text": "Việc B", "text": { "content": "Việc B" } } ] } },
+    { "id": "b5", "type": "numbered_list_item", "numbered_list_item": { "rich_text": [ { "type": "text", "plain_text": "Bước một", "text": { "content": "Bước một" } } ] } },
+    { "id": "b6", "type": "numbered_list_item", "numbered_list_item": { "rich_text": [ { "type": "text", "plain_text": "Bước hai", "text": { "content": "Bước hai" } } ] } },
+    { "id": "b7", "type": "to_do", "to_do": { "checked": true, "rich_text": [ { "type": "text", "plain_text": "Viết SRS", "text": { "content": "Viết SRS" } } ] } },
+    { "id": "b8", "type": "to_do", "to_do": { "checked": false, "rich_text": [ { "type": "text", "plain_text": "Vẽ ERD", "text": { "content": "Vẽ ERD" } } ] } },
+    { "id": "b9", "type": "code", "code": { "language": "mermaid", "rich_text": [ { "type": "text", "plain_text": "graph TD\n  A-->B", "text": { "content": "graph TD\n  A-->B" } } ] } },
+    { "id": "b10", "type": "code", "code": { "language": "plain text", "rich_text": [ { "type": "text", "plain_text": "npm test", "text": { "content": "npm test" } } ] } },
+    { "id": "b11", "type": "quote", "quote": { "rich_text": [ { "type": "text", "plain_text": "Chất lượng trước tốc độ", "text": { "content": "Chất lượng trước tốc độ" } } ] } },
+    { "id": "b12", "type": "callout", "callout": { "icon": { "type": "emoji", "emoji": "⚠️" }, "rich_text": [ { "type": "text", "plain_text": "Hạn nộp 20/10", "text": { "content": "Hạn nộp 20/10" } } ] } },
+    { "id": "b13", "type": "toggle", "toggle": { "rich_text": [ { "type": "text", "plain_text": "Chi tiết rủi ro", "text": { "content": "Chi tiết rủi ro" } } ] }, "has_children": true,
+      "children": [ { "id": "b13a", "type": "paragraph", "paragraph": { "rich_text": [ { "type": "text", "plain_text": "Thiếu người test", "text": { "content": "Thiếu người test" } } ] } } ] },
+    { "id": "b14", "type": "divider", "divider": {} },
+    { "id": "b15", "type": "table", "table": { "table_width": 3, "has_column_header": true, "has_row_header": false }, "has_children": true, "children": [
+      { "id": "r1", "type": "table_row", "table_row": { "cells": [ [ { "type": "text", "plain_text": "Mã", "text": { "content": "Mã" } } ], [ { "type": "text", "plain_text": "Tên", "text": { "content": "Tên" } } ], [ { "type": "text", "plain_text": "Trạng thái", "text": { "content": "Trạng thái" } } ] ] } },
+      { "id": "r2", "type": "table_row", "table_row": { "cells": [ [ { "type": "text", "plain_text": "UC-01", "text": { "content": "UC-01" } } ], [ { "type": "text", "plain_text": "Đăng nhập", "text": { "content": "Đăng nhập" } } ] ] } }
+    ] },
+    { "id": "img-ok", "type": "image", "image": { "type": "file", "file": { "url": "https://prod-files-secure.s3.us-west-2.amazonaws.com/a/b/shot.png?X-Amz-Signature=x", "expiry_time": "2026-10-12T00:00:00.000Z" }, "caption": [ { "type": "text", "plain_text": "Màn hình chính", "text": { "content": "Màn hình chính" } } ] } },
+    { "id": "img-bad", "type": "image", "image": { "type": "external", "external": { "url": "https://images.example.com/x.png" }, "caption": [] } },
+    { "id": "b16", "type": "bookmark", "bookmark": { "url": "https://cuongthai.com", "caption": [] } },
+    { "id": "b17", "type": "child_page", "child_page": { "title": "Biên bản họp 1" } },
+    { "id": "b18", "type": "column_list", "column_list": {}, "has_children": true, "children": [
+      { "id": "c1", "type": "column", "column": {}, "has_children": true, "children": [ { "id": "c1p", "type": "paragraph", "paragraph": { "rich_text": [ { "type": "text", "plain_text": "Cột trái", "text": { "content": "Cột trái" } } ] } } ] }
+    ] },
+    { "id": "b19", "type": "ai_block", "ai_block": {} },
+    { "id": "b20", "type": "paragraph", "paragraph": { "rich_text": [] } }
+  ]
+}

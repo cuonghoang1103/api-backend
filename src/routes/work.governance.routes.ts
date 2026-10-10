@@ -225,6 +225,7 @@ router.post('/projects/:pid/meetings', asyncHandler(async (req, res) => {
     attendeeIds: z.array(id).max(100).optional(),
     useTemplate: z.boolean().optional(),
     sendInvites: z.boolean().optional(),
+    templateKey: z.string().max(24).nullable().optional(), // CTW đợt 8c: mẫu chương trình (daily, sprint-planning…)
   }), req.body);
   ok(res, await meetings.createMeeting(callerId(req), P(req, 'pid'), body), 201);
 }));

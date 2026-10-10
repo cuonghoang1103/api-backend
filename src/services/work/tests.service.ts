@@ -170,6 +170,8 @@ export interface TestInput {
 }
 
 async function writeTestBody(tx: Prisma.TransactionClient, testCaseId: number, input: TestInput) {
+  // CTW đợt 8c (T10): nội dung test đổi (loại, điều kiện, Gherkin, bước) ⇒ version + 1. Run chụp version lúc tạo.
+  const before = await tx.workTestCase.findUnique({ where: { id: testCaseId }, select: { kind: true, preconditions: true, gherkin: true, steps: { orderBy: { position: 'asc' }, select: { action: true, data: true, expected: true } } } });
   const data: Prisma.WorkTestCaseUpdateInput = {};
   if (input.kind !== undefined) data.kind = input.kind;
   if (input.preconditions !== undefined) data.preconditions = input.preconditions?.trim() || null;
@@ -182,6 +184,16 @@ async function writeTestBody(tx: Prisma.TransactionClient, testCaseId: number, i
       await tx.workTestStep.createMany({ data: steps.map((s, i) => ({ testCaseId, position: i, action: s.action, data: s.data, expected: s.expected })) });
     }
   }
+  if (before) {
+    const after = await tx.workTestCase.findUniqueOrThrow({ where: { id: testCaseId }, select: { kind: true, preconditions: true, gherkin: true, steps: { orderBy: { position: 'asc' }, select: { action: true, data: true, expected: true } } } });
+    const hadContent = !!(before.preconditions || before.gherkin || before.steps.length);
+    if (hadContent && testContentKey(before) !== testContentKey(after)) await tx.workTestCase.update({ where: { id: testCaseId }, data: { version: { increment: 1 } } });
+  }
+}
+
+/** Khoá nội dung test để so phiên bản (T10) — thuần, test ở ctw8c.test.ts. */
+export function testContentKey(t: { kind: string; preconditions: string | null; gherkin: string | null; steps: Array<{ action: string; data: string | null; expected: string | null }> }): string {
+  return JSON.stringify([t.kind, (t.preconditions ?? '').trim(), (t.gherkin ?? '').trim(), t.steps.map((x) => [x.action.trim(), (x.data ?? '').trim(), (x.expected ?? '').trim()])]);
 }
 
 export async function createTest(userId: number, projectId: number, input: TestInput & { title: string }) {
@@ -314,13 +326,13 @@ export async function deletePlan(userId: number, projectId: number, planId: numb
 async function createRun(tx: Prisma.TransactionClient, cycleId: number, testCaseId: number) {
   const tc = await tx.workTestCase.findUniqueOrThrow({
     where: { id: testCaseId },
-    select: { kind: true, gherkin: true, steps: { orderBy: { position: 'asc' } }, issue: { select: { assigneeId: true } } },
+    select: { kind: true, gherkin: true, version: true, steps: { orderBy: { position: 'asc' } }, issue: { select: { assigneeId: true } } },
   });
   const exists = await tx.workTestRun.findUnique({ where: { uk_work_test_run: { cycleId, testCaseId } }, select: { id: true } });
   if (exists) return exists.id;
   const run = await tx.workTestRun.create({
     data: {
-      cycleId, testCaseId, assigneeId: tc.issue.assigneeId,
+      cycleId, testCaseId, assigneeId: tc.issue.assigneeId, testCaseVersion: tc.version,
       gherkin: tc.kind === 'GHERKIN' ? tc.gherkin : null,
       steps: { create: tc.steps.map((s) => ({ position: s.position, action: s.action, data: s.data, expected: s.expected })) },
     },
@@ -385,6 +397,7 @@ export async function listCycles(userId: number, projectId: number) {
     orderBy: { createdAt: 'desc' },
     select: {
       id: true, name: true, environment: true, build: true, state: true, startAt: true, endAt: true, createdAt: true,
+      autoCloseMinutes: true, expectedJobs: true, importCount: true, lastImportAt: true, closedReason: true, // CTW đợt 8c
       plan: { select: { id: true, name: true } },
       runs: { select: { status: true } },
     },
@@ -399,13 +412,14 @@ export async function getCycle(userId: number, projectId: number, cycleId: numbe
     where: { id: cycleId },
     select: {
       id: true, name: true, environment: true, build: true, state: true, startAt: true, endAt: true, createdAt: true,
+      autoCloseMinutes: true, expectedJobs: true, importCount: true, lastImportAt: true, closedReason: true, // CTW đợt 8c
       plan: { select: { id: true, name: true } },
       runs: {
         orderBy: { id: 'asc' },
         select: {
-          id: true, status: true, executedAt: true, comment: true, assigneeId: true,
+          id: true, status: true, executedAt: true, comment: true, assigneeId: true, testCaseVersion: true,
           executedBy: { select: PUBLIC_USER },
-          testCase: { select: { issue: { select: { number: true, title: true, priority: true, deletedAt: true } } } },
+          testCase: { select: { version: true, issue: { select: { number: true, title: true, priority: true, deletedAt: true } } } },
           _count: { select: { steps: true } },
           defects: { select: { issue: { select: { number: true, title: true, statusId: true, deletedAt: true } } } },
         },
@@ -415,6 +429,8 @@ export async function getCycle(userId: number, projectId: number, cycleId: numbe
   const runs = c.runs.filter((r) => !r.testCase.issue.deletedAt).map((r) => ({
     id: r.id, status: r.status, executedAt: r.executedAt, comment: r.comment, assigneeId: r.assigneeId, executedBy: r.executedBy,
     stepCount: r._count.steps,
+    // T10: bản test đã chạy (chụp lúc tạo run) so với bản hiện tại — lệch ⇒ "test đã sửa sau khi chạy".
+    testVersion: r.testCaseVersion, currentVersion: r.testCase.version, outdated: r.testCaseVersion !== null && r.testCaseVersion < r.testCase.version,
     test: { number: r.testCase.issue.number, title: r.testCase.issue.title, priority: r.testCase.issue.priority },
     defects: r.defects.filter((d) => !d.issue.deletedAt).map((d) => d.issue),
   }));
@@ -440,6 +456,7 @@ export async function updateCycle(
     data.state = input.state;
     if (input.state !== 'PLANNED' && !c.startAt) data.startAt = new Date();
     data.endAt = input.state === 'DONE' ? new Date() : null;
+    data.closedReason = input.state === 'DONE' ? 'MANUAL' : null; // CTW đợt 8c
   }
   const add = await testCaseIdsFor(projectId, input.addNumbers ?? []);
   await prisma.$transaction(async (tx) => {
@@ -472,10 +489,10 @@ export async function getRun(userId: number, projectId: number, runId: number) {
   const r = await prisma.workTestRun.findUniqueOrThrow({
     where: { id: runId },
     select: {
-      id: true, status: true, comment: true, gherkin: true, executedAt: true, assigneeId: true,
+      id: true, status: true, comment: true, gherkin: true, executedAt: true, assigneeId: true, testCaseVersion: true,
       executedBy: { select: PUBLIC_USER },
       cycle: { select: { id: true, name: true, environment: true, build: true, state: true } },
-      testCase: { select: { preconditions: true, kind: true, issue: { select: { number: true, title: true, priority: true } } } },
+      testCase: { select: { preconditions: true, kind: true, version: true, issue: { select: { number: true, title: true, priority: true } } } },
       steps: { orderBy: { position: 'asc' }, select: { id: true, position: true, action: true, data: true, expected: true, status: true, actual: true } },
       defects: { select: { issue: { select: { number: true, title: true, statusId: true, deletedAt: true } } } },
       evidence: { orderBy: { createdAt: 'asc' }, select: { id: true, fileName: true, mime: true, size: true, createdAt: true, uploader: { select: PUBLIC_USER } } },

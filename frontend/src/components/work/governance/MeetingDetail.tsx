@@ -26,9 +26,11 @@ import { Pill } from '../studio/shared';
 import { AttendeePicker, meetingStatusPill } from './MeetingsView';
 import { PersonSelect, Section, fmtMeetingTime, useGovInvalidate } from './shared';
 import { AddToCalendar, JoinMeetingButton } from '../ctw';
+import { CloudMeetingButtons } from '../cloud/CloudMeetingButtons'; // CTW đợt 8a
 import { usePanes } from '../shell/panes';
 import { wt, wfmt } from '@/components/work/i18n';
 import { MeetingK2Main, MeetingK2Side } from '../meetings2/MeetingRoom'; // CTW K-2: điểm danh, ghi âm, transcript, biên bản AI
+import { MeetingExtras } from '../c8c/RecurringMeetings';
 
 function RichBlock({ config, m, field, title, empty }: { config: ProjectConfig; m: MD; field: 'agendaJson' | 'minutesJson'; title: string; empty: string }) {
   const invalidate = useGovInvalidate(config.id);
@@ -277,6 +279,8 @@ export default function MeetingDetail({ config, num }: { config: ProjectConfig; 
           {!m.meetingUrl && m.canEdit && m.status === 'SCHEDULED' && (
             <button type="button" className="w-btn w-btn-primary" disabled={room.isPending} onClick={() => room.mutate()} data-testid="meeting-create-link">{room.isPending ? <Spinner size={12} /> : <Video size={14} />} {wt('gov.createMeetingLink')}</button>
           )}
+          {/* CTW đợt 8a: phòng Teams / Google Meet bằng kết nối của chính người xem (ẩn khi chưa kết nối). */}
+          {!m.meetingUrl && m.canEdit && m.status === 'SCHEDULED' && <CloudMeetingButtons pid={pid} num={num} onDone={invalidate} />}
           <AddToCalendar
             size="md" onIcs={() => ics.mutate()}
             event={{ title: `${config.key} · ${m.title}`, start: m.startsAt, end: m.endsAt, location: m.meetingUrl || m.location, details: [m.meetingUrl ? `Join: ${m.meetingUrl}` : '', config.name].filter(Boolean).join('\n') }}
@@ -293,6 +297,8 @@ export default function MeetingDetail({ config, num }: { config: ProjectConfig; 
           )}
           {m.canDelete && <button type="button" className="w-btn w-btn-ghost w-btn-danger ml-auto" onClick={() => setConfirmDel(true)}><Trash2 size={14} /> {wt('common.delete')}</button>}
         </div>
+        {/* CTW đợt 8c: chuỗi họp định kỳ (sửa buổi này / từ đây / cả chuỗi, dừng) + áp mẫu chương trình. */}
+        <MeetingExtras config={config} meeting={m} canEdit={m.canEdit} onChanged={invalidate} />
 
         <div className={cn('grid grid-cols-1 gap-4', twoCol && 'grid-cols-[minmax(0,1fr)_300px]')}>
           <div className="min-w-0 space-y-4">

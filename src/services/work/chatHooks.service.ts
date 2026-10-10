@@ -115,7 +115,7 @@ export async function testHook(userId: number, projectId: number, hookId: number
 
 // ─── Gửi ─────────────────────────────────────────────────────────
 
-interface Message { title: string; text?: string; url: string; color: number; footer: string }
+export interface Message { title: string; text?: string; url: string; color: number; footer: string }
 
 /** Nội dung theo định dạng từng dịch vụ. Chữ của người dùng luôn được thoát/khoá ping. */
 export function formatPayload(kind: ChatKind, m: Message): unknown {
@@ -138,6 +138,11 @@ const MAX_PER_WINDOW = 30;
 const sent = new Map<number, number[]>();
 
 type HookRow = { id: number; kind: string; url: string };
+
+/** CTW đợt 8b: lịch gửi báo cáo đăng tóm tắt lên webhook chat qua CÙNG đường gửi (trần, chống SSRF, lastError). */
+export async function deliverHook(h: HookRow, m: Message, bypassLimit = false) {
+  return deliver(h, m, bypassLimit);
+}
 
 async function deliver(h: HookRow, m: Message, bypassLimit = false): Promise<{ ok: boolean; error?: string }> {
   const now = Date.now();
@@ -173,7 +178,8 @@ async function hooksOf(projectId: number) {
 }
 
 /** Sự kiện CT Work ⇒ (loại tin, thẻ nào). Null = không gửi. */
-async function toMessage(e: WorkEvent): Promise<{ event: ChatEvent; msg: Message } | null> {
+/** CTW đợt 8b: xuất ra để kênh Slack (slack.service.ts) dùng CÙNG cách dựng tin với webhook chat. */
+export async function toMessage(e: WorkEvent): Promise<{ event: ChatEvent; msg: Message } | null> {
   if (!('issueId' in e)) return null;
   // Việc do hệ thống / nhập hàng loạt tạo ra không đổ vào kênh chat.
   if (e.actor.kind === 'SYSTEM') return null;

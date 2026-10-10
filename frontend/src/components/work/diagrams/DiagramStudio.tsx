@@ -35,6 +35,7 @@ import MermaidEditor from './MermaidEditor';
 import type { ExcalidrawHandle } from './ExcalidrawEditor';
 import { GenerateDialog, ImportDialog, InsertDialog, NewDialog, typeKey } from './dialogs';
 import { download, fileSlug, isDarkTheme, renderDiagramSvg, standaloneSvg, svgToPngBlob, type ParseResult, type Variant } from './render';
+import { useStoreMermaidRender } from '../c8c/mermaidRender';
 
 const ExcalidrawEditor = dynamic(() => import('./ExcalidrawEditor'), { ssr: false, loading: () => <div className="grid h-full place-items-center"><Spinner /></div> });
 
@@ -191,6 +192,8 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged }: { pid: nu
   const source = viewing ? viewing.source : draft ?? d?.source ?? '';
   const readOnly = !d?.canEdit || !!viewing;
   const set = (x: DiagramDetail) => { qc.setQueryData(workDiagramKeys.one(pid, number), x); onChanged(); };
+  // CTW đợt 8c: gửi ảnh vẽ sẵn của bản ĐÃ LƯU (hoặc phiên bản đang xem) ⇒ GET …/diagrams/:n/image.(svg|png) + MCP diagram_get.
+  useStoreMermaidRender(pid, d?.format === 'MERMAID' && !d?.isAgent ? (viewing ? viewing.source : draft === null ? d.source : null) : null);
 
   const save = useMutation({
     mutationFn: async () => {

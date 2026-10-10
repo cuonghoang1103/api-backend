@@ -141,7 +141,7 @@ export type RaidStatus = (typeof RAID_STATUSES)[number] | (typeof ASSUMPTION_STA
 export const RAID_RESPONSES = ['AVOID', 'MITIGATE', 'TRANSFER', 'ACCEPT'] as const;
 export type RaidResponse = (typeof RAID_RESPONSES)[number];
 
-export const MEETING_TYPES = ['KICKOFF', 'DAILY', 'WEEKLY', 'DEMO', 'RETRO', 'STEERING', 'CLIENT', 'ELICITATION', 'OTHER'] as const; // ELICITATION: CTW đợt 6b (phiên elicitation SWR302)
+export const MEETING_TYPES = ['KICKOFF', 'DAILY', 'WEEKLY', 'DEMO', 'RETRO', 'STEERING', 'CLIENT', 'ELICITATION', 'PLANNING', 'MENTOR', 'OTHER'] as const; // PLANNING/MENTOR: CTW đợt 8c (mẫu sprint planning, họp giảng viên) // ELICITATION: CTW đợt 6b (phiên elicitation SWR302)
 export type MeetingType = (typeof MEETING_TYPES)[number];
 export const MEETING_STATUSES = ['SCHEDULED', 'DONE', 'CANCELLED'] as const;
 export type MeetingStatus = (typeof MEETING_STATUSES)[number];

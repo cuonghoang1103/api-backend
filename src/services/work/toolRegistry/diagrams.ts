@@ -50,13 +50,17 @@ const diagramList = defineTool({
 
 const diagramGet = defineTool({
   name: 'diagram_get', title: 'Read one diagram', group: 'docs',
-  description: 'Reads one diagram: its Mermaid source (current version), syntax check, where it came from (sources, assumptions), linked use case/issue/page, pending AI proposals and open comments.',
+  description: 'Reads one diagram: its Mermaid source (current version), syntax check, where it came from (sources, assumptions), linked use case/issue/page, pending AI proposals, open comments, and links to the drawn SVG/PNG image when available.',
   write: false,
   input: z.object({ project: projectArg, diagram: dRef }),
   run: async (ctx, a) => {
     const n = dNo(a.diagram);
     const p = await projectFor(ctx, a.project, [['GET', `/diagrams/${n}`]]);
-    return untrusted(`diagram D-${n}`, json({ ...(await dg.diagramForAi(ctx.userId, p.id, n)), url: url(p, n) }));
+    const d = await dg.diagramForAi(ctx.userId, p.id, n);
+    // CTW đợt 8c: ảnh vẽ sẵn (SVG/PNG) — tải bằng GET /api/v1/work/projects/<id>/diagrams/<n>/image.(svg|png) với cùng token.
+    const img = d.format === 'MERMAID' ? await import('../diagramRender.service.js').then((x) => x.renderStatus(d.source)) : null;
+    const api = `/api/v1/work/projects/${p.id}/diagrams/${n}/image`;
+    return untrusted(`diagram D-${n}`, json({ ...d, url: url(p, n), image: img ? { svg: img.svg ? `${api}.svg?version=${d.version}` : null, png: img.png ? `${api}.png?version=${d.version}` : null, drawn: img.svg || img.png, note: img.svg || img.png ? 'Image of the current version (same token). Without ?version the approved version is returned.' : 'Not drawn yet — someone has to open the diagram once in CT Work.' } : null }));
   },
 });
 

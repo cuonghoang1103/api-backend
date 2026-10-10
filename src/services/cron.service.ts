@@ -178,6 +178,27 @@ export function startCronJobs(): void {
     }
   });
 
+  // CTW đợt 8c: họp định kỳ — nới các buổi sinh sẵn (HẰNG GIỜ, phút 25; UNIQUE (series_id, occurrence_date) chặn trùng) và
+  // đóng cycle CI gộp đã im lặng quá autoCloseMinutes (5 phút một lần).
+  cron.schedule('25 * * * *', async () => {
+    try {
+      const { extendAllSeries } = await import('./work/meetingSeries.service.js');
+      const n = await extendAllSeries();
+      if (n) logger.info('[work] recurring meetings generated', { meetings: n });
+    } catch (err) {
+      logger.warn('[work] recurring meetings failed', { error: (err as Error).message });
+    }
+  });
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      const { closeIdleCycles } = await import('./work/testAutomation.service.js');
+      const n = await closeIdleCycles();
+      if (n) logger.info('[work] idle CI test cycles closed', { cycles: n });
+    } catch (err) {
+      logger.warn('[work] closing idle CI cycles failed', { error: (err as Error).message });
+    }
+  });
+
   // CT Work: luật tự động chạy theo lịch + thư gộp email, 08:00 giờ VN.
   // Thư gộp tự tắt khi WORK_EMAIL_NOTIFICATIONS=false.
   cron.schedule('10 1 * * *', async () => {
@@ -261,6 +282,14 @@ export function startCronJobs(): void {
       if (n) logger.info('[work] expired project exports removed', { files: n });
     } catch (err) {
       logger.warn('[work] project export purge failed', { error: (err as Error).message });
+    }
+    // CTW đợt 8b: lịch tự gửi báo cáo của Builder (tuần / theo sprint) — mỗi kỳ đúng một lần (UNIQUE lịch + kỳ).
+    try {
+      const { runDueReportPlans } = await import('./work/reportSchedule.service.js');
+      const n = await runDueReportPlans();
+      if (n) logger.info('[work] scheduled builder reports sent', { plans: n });
+    } catch (err) {
+      logger.warn('[work] scheduled builder reports failed', { error: (err as Error).message });
     }
   });
 

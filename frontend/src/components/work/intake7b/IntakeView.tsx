@@ -9,7 +9,7 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Check, Copy, FlaskConical, Mail, MessageCircle, Plus, RefreshCw, Send, Trash2, X } from 'lucide-react';
+import { Check, Copy, FlaskConical, Hash, Mail, MessageCircle, Plus, RefreshCw, Send, Trash2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workError, type ProjectConfig } from '@/lib/work-api';
 import { workIntakeApi, type IntakeChannel, type IntakeKind, type Proposal } from '@/lib/work-ctw7b-api';
@@ -51,14 +51,14 @@ function Inbox({ config, pid }: { config: ProjectConfig; pid: number }) {
       {q.data.proposals.length ? (
         <ul className="space-y-2" data-testid="c7b-proposals">
           {q.data.proposals.map((p) => {
-            const Icon = KIND_ICON[p.source];
+            const Icon = p.source === 'SLACK' ? Hash : KIND_ICON[p.source];
             return (
               <li key={p.id} className="w-card p-3">
                 <div className="flex flex-wrap items-start gap-2">
                   <Icon size={15} className="mt-0.5 shrink-0 text-[var(--w-text-3)]" aria-hidden="true" />
                   <div className="min-w-0 flex-1">
                     <p className="text-[13.5px] font-medium">{p.title}{p.simulated && <span className="ml-2 rounded bg-[var(--w-sunken)] px-1.5 py-0.5 text-[11px] text-[var(--w-text-3)]">{t('c7b.testMsg')}</span>}</p>
-                    <p className="text-[12px] text-[var(--w-text-3)]">{t(KIND_LABEL[p.source])} · {p.sender ?? p.senderName ?? p.senderHandle ?? t('c7b.unknownSender')} · {fmtDateTime(p.createdAt)}</p>
+                    <p className="text-[12px] text-[var(--w-text-3)]">{p.source === 'SLACK' ? 'Slack' : t(KIND_LABEL[p.source])} · {p.sender ?? p.senderName ?? p.senderHandle ?? t('c7b.unknownSender')} · {fmtDateTime(p.createdAt)}</p>
                     {p.body && <p className="mt-1.5 line-clamp-4 whitespace-pre-line text-[13px] text-[var(--w-text-2)]">{p.body}</p>}
                     {p.status !== 'PENDING' && <p className="mt-1.5 text-[12px] text-[var(--w-text-3)]">{p.status === 'ACCEPTED' ? t('c7b.acceptedAs', { key: p.issue?.key ?? '—', who: p.decidedBy ?? '' }) : t('c7b.rejectedBy', { who: p.decidedBy ?? '' })}{p.decisionNote ? ` — ${p.decisionNote}` : ''}</p>}
                   </div>

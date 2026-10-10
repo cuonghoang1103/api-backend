@@ -12,9 +12,10 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import {
-  ArrowLeft, ArrowRight, BookOpen, ChevronRight, CircleHelp, ExternalLink, Lightbulb, Search, TriangleAlert, X,
+  ArrowLeft, ArrowRight, BookOpen, ChevronRight, CircleHelp, ExternalLink, Lightbulb, Loader2, Search, Send, Sparkles, TriangleAlert, X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { workHelpApi, type HelpAskLink } from '@/lib/work-api';
 import { isTyping, WorkPortal } from '../ui';
 import { useWorkPath } from '../WorkSidebar';
 import {
@@ -72,6 +73,21 @@ const UI: Record<string, LText> = {
   startHere: { en: 'Start here', vi: 'Bắt đầu từ đây' },
   close: { en: 'Close (Esc)', vi: 'Đóng (Esc)' },
   shortcut: { en: 'Press ? to open or close', vi: 'Nhấn ? để mở hoặc đóng' },
+  askTab: { en: 'Ask AI', vi: 'Hỏi AI' },
+  askTitle: { en: 'Ask AI how to use CT Work', vi: 'Hỏi AI cách dùng CT Work' },
+  askIntro: {
+    en: 'Describe what you want to do and the assistant explains how, with links to the right page.',
+    vi: 'Mô tả việc bạn muốn làm, trợ lý sẽ hướng dẫn cách làm kèm link tới đúng trang.',
+  },
+  askPlaceholder: { en: 'e.g. How do I take attendance in a class?', vi: 'vd: Làm sao để điểm danh trong lớp học?' },
+  askSend: { en: 'Ask', vi: 'Hỏi' },
+  askThinking: { en: 'Thinking…', vi: 'Đang trả lời…' },
+  askError: { en: 'Could not get an answer. Please try again.', vi: 'Không lấy được câu trả lời. Vui lòng thử lại.' },
+  askLinks: { en: 'Open the right page', vi: 'Mở đúng trang' },
+  askDisclaimer: {
+    en: 'AI can be wrong — check the linked page. This answers how to use CT Work, not questions about your data.',
+    vi: 'AI có thể sai — hãy xem trang được dẫn. Phần này hướng dẫn cách dùng CT Work, không trả lời về dữ liệu của bạn.',
+  },
   uiNote: {
     en: 'Labels in quotes are the English button names. If your CT Work is set to Tiếng Việt, the screen shows the Vietnamese name instead.',
     vi: 'Nhãn trong ngoặc kép là tên nút tiếng Anh. Khi CT Work đặt Tiếng Việt, trên màn hình là tên tiếng Việt tương ứng (đổi ngôn ngữ ở menu tài khoản).',
@@ -416,6 +432,106 @@ function ArticleView({ a, lang, onOpen, onNavigate }: { a: HelpArticle; lang: He
   );
 }
 
+// ─── "Hỏi AI" — trợ lý hướng dẫn ─────────────────────────────────
+
+function AskAi({ lang, onNavigate }: { lang: HelpLang; onNavigate: () => void }) {
+  const hrefOf = usePageHref();
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [answer, setAnswer] = useState<string | null>(null);
+  const [links, setLinks] = useState<HelpAskLink[]>([]);
+  const [error, setError] = useState(false);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => { inputRef.current?.focus(); }, []);
+
+  const send = useCallback(async () => {
+    const q = input.trim();
+    if (!q || loading) return;
+    setLoading(true);
+    setError(false);
+    setAnswer(null);
+    setLinks([]);
+    try {
+      // Trang đang xem (gợi ý ngữ cảnh cho trợ lý) — đọc lúc gửi.
+      const page = typeof window !== 'undefined' ? window.location.pathname : undefined;
+      const r = await workHelpApi.ask({ q, lang, page });
+      setAnswer(r.answer || '');
+      setLinks(r.links ?? []);
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, [input, lang, loading]);
+
+  // Chỉ giữ các link dựng được href (trong dự án/không gian đang mở, hoặc toàn cục).
+  const resolved = links
+    .map((l) => ({ l, href: hrefOf(l as unknown as HelpPageLink) }))
+    .filter((x): x is { l: HelpAskLink; href: string } => !!x.href);
+
+  return (
+    <div>
+      <div className="flex items-center gap-2.5">
+        <span className="inline-flex h-9 w-9 items-center justify-center rounded-[9px] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]">
+          <Sparkles size={18} />
+        </span>
+        <h2 className="text-[19px] font-semibold leading-tight text-[var(--w-text)]">{UI.askTitle[lang]}</h2>
+      </div>
+      <p className="mt-3 text-[var(--w-text-2)]">{UI.askIntro[lang]}</p>
+
+      <div className="mt-4">
+        <textarea
+          ref={inputRef}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void send(); }
+          }}
+          placeholder={UI.askPlaceholder[lang]}
+          aria-label={UI.askTitle[lang]}
+          rows={3}
+          className="w-input min-h-[76px] w-full resize-y !text-[14px]"
+        />
+        <div className="mt-2 flex justify-end">
+          <button type="button" onClick={() => void send()} disabled={loading || !input.trim()} className="w-btn w-btn-primary w-btn-sm">
+            {loading ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
+            {loading ? UI.askThinking[lang] : UI.askSend[lang]}
+          </button>
+        </div>
+      </div>
+
+      {error && (
+        <div className="mt-4 flex gap-3 rounded-[8px] border border-[var(--w-orange)]/30 bg-[var(--w-orange)]/10 px-3.5 py-3 text-[14px]">
+          <TriangleAlert size={16} className="mt-[3px] shrink-0 text-[var(--w-orange)]" />
+          <span className="min-w-0 flex-1">{UI.askError[lang]}</span>
+        </div>
+      )}
+
+      {answer !== null && !error && (
+        <div className="mt-5 border-t border-[var(--w-border)] pt-4">
+          <div className="whitespace-pre-wrap text-[14.5px] leading-[1.65] text-[var(--w-text-2)]">{answer}</div>
+          {resolved.length > 0 && (
+            <div className="mt-5">
+              <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.05em] text-[var(--w-text-3)]">{UI.askLinks[lang]}</div>
+              <div className="flex flex-wrap gap-2">
+                {resolved.map(({ l, href }, i) => (
+                  <Link key={`${href}-${i}`} href={href} onClick={onNavigate} className="w-btn w-btn-sm" title={UI.open[lang]}>
+                    <ExternalLink size={12} className="text-[var(--w-accent-text)]" />
+                    {l.label[lang]}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      <p className="mt-6 text-[12.5px] text-[var(--w-text-3)]">{UI.askDisclaimer[lang]}</p>
+    </div>
+  );
+}
+
 // ─── Ngăn ────────────────────────────────────────────────────────
 
 function LangToggle({ lang, onChange }: { lang: HelpLang; onChange: (l: HelpLang) => void }) {
@@ -445,6 +561,7 @@ function HelpPanel({ requested, nonce, onClose }: { requested: string | null; no
   const [lang, setLangState] = useState<HelpLang>(readHelpLang);
   const [current, setCurrent] = useState<string | null>(() => (requested && HELP_BY_ID[requested] ? requested : readLast()));
   const [query, setQuery] = useState('');
+  const [ask, setAsk] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -454,6 +571,7 @@ function HelpPanel({ requested, nonce, onClose }: { requested: string | null; no
     const id = requested && HELP_BY_ID[requested] ? requested : readLast();
     setCurrent(id);
     setQuery('');
+    setAsk(false);
   }, [requested, nonce]);
 
   useEffect(() => {
@@ -488,12 +606,14 @@ function HelpPanel({ requested, nonce, onClose }: { requested: string | null; no
   const open = (id: string) => {
     setCurrent(id);
     setQuery('');
+    setAsk(false);
   };
   const results = useMemo(() => (query.trim() ? searchHelp(query) : []), [query]);
   const article = current ? HELP_BY_ID[current] : null;
 
   let body: ReactNode;
   if (query.trim()) body = <Results lang={lang} query={query} results={results} onOpen={open} />;
+  else if (ask) body = <AskAi lang={lang} onNavigate={onClose} />;
   else if (article) body = <ArticleView a={article} lang={lang} onOpen={open} onNavigate={onClose} />;
   else body = <Home lang={lang} onOpen={open} />;
 
@@ -513,11 +633,11 @@ function HelpPanel({ requested, nonce, onClose }: { requested: string | null; no
       >
         {/* Đầu ngăn */}
         <div className="flex h-12 shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 sm:px-4">
-          {(article || query) ? (
+          {(article || query || ask) ? (
             <button
               type="button"
               className="w-btn w-btn-ghost w-btn-sm md:!hidden"
-              onClick={() => { setQuery(''); setCurrent(null); }}
+              onClick={() => { setQuery(''); setCurrent(null); setAsk(false); }}
             >
               <ArrowLeft size={14} /> {UI.contents[lang]}
             </button>
@@ -529,7 +649,7 @@ function HelpPanel({ requested, nonce, onClose }: { requested: string | null; no
           )}
           <button
             type="button"
-            onClick={() => { setQuery(''); setCurrent(null); }}
+            onClick={() => { setQuery(''); setCurrent(null); setAsk(false); }}
             className="hidden min-w-0 items-center gap-2 rounded-[6px] px-1 py-0.5 hover:bg-[var(--w-hover)] md:flex"
             title={UI.contents[lang]}
           >
@@ -544,15 +664,15 @@ function HelpPanel({ requested, nonce, onClose }: { requested: string | null; no
           </div>
         </div>
 
-        {/* Ô tìm */}
-        <div className="shrink-0 border-b border-[var(--w-border)] px-3 py-2.5 sm:px-4">
-          <div className="relative">
+        {/* Ô tìm + nút Hỏi AI */}
+        <div className="flex shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-3 py-2.5 sm:px-4">
+          <div className="relative min-w-0 flex-1">
             <Search size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
             <input
               ref={searchRef}
               type="search"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => { setQuery(e.target.value); if (e.target.value) setAsk(false); }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && results[0]) { e.preventDefault(); open(results[0].id); }
               }}
@@ -561,6 +681,19 @@ function HelpPanel({ requested, nonce, onClose }: { requested: string | null; no
               className="w-input h-[36px] pl-8 !text-[14px]"
             />
           </div>
+          <button
+            type="button"
+            onClick={() => { setAsk(true); setQuery(''); }}
+            aria-pressed={ask}
+            className={cn(
+              'w-btn w-btn-sm shrink-0',
+              ask && 'border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]',
+            )}
+            title={UI.askTitle[lang]}
+          >
+            <Sparkles size={13} className="text-[var(--w-accent-text)]" />
+            <span className="max-sm:hidden">{UI.askTab[lang]}</span>
+          </button>
         </div>
 
         <div className="flex min-h-0 flex-1">

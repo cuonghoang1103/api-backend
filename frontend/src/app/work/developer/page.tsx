@@ -350,7 +350,7 @@ function ApiReference() {
           {wt('dev.mcpAgentA')} <span className="font-medium">{wt('pages.aiAgents')}</span> {wt('dev.mcpAgentB')}
         </p>
         <Code>{`claude mcp add --transport http ctwork ${base}/mcp \\\n  --header "Authorization: Bearer $CTW_TOKEN"`}</Code>
-        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{wt('dev.stdioOnly')} <code className="font-mono">CTWORK_TOKEN=$CTW_TOKEN npx -y @cuongthai/ctwork-mcp</code>.</p>
+        <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{wt('dev.stdioOnly')} <code className="font-mono">CTWORK_TOKEN=$CTW_TOKEN npx -y https://cuongthai.com/ctwork-mcp.tgz</code>.</p>
       </div>
 
       <p className="text-[12px] leading-relaxed text-[var(--w-text-3)]">
@@ -388,12 +388,12 @@ function clientConfig(id: ClientId, mcp: string): { lang: string; text: string; 
     case 'codex':
       return {
         lang: 'toml', note: wt('dev.note15'),
-        text: `[mcp_servers.ctwork]\ncommand = "npx"\nargs = ["-y", "@cuongthai/ctwork-mcp"]\nenv = { CTWORK_TOKEN = "ctw_…", CTWORK_URL = "${mcp}" }`,
+        text: `[mcp_servers.ctwork]\ncommand = "npx"\nargs = ["-y", "https://cuongthai.com/ctwork-mcp.tgz"]\nenv = { CTWORK_TOKEN = "ctw_…", CTWORK_URL = "${mcp}" }`,
       };
     case 'claude-desktop':
       return {
         lang: 'json', note: wt('dev.note16'),
-        text: JSON.stringify({ mcpServers: { ctwork: { command: 'npx', args: ['-y', '@cuongthai/ctwork-mcp'], env: { CTWORK_TOKEN: 'ctw_…', CTWORK_URL: mcp } } } }, null, 2),
+        text: JSON.stringify({ mcpServers: { ctwork: { command: 'npx', args: ['-y', 'https://cuongthai.com/ctwork-mcp.tgz'], env: { CTWORK_TOKEN: 'ctw_…', CTWORK_URL: mcp } } } }, null, 2),
       };
     case 'claude-code':
       return { lang: 'sh', note: wt('dev.note17'), text: `claude mcp add --transport http ctwork ${mcp} \\\n  --header "Authorization: Bearer $CTW_TOKEN"` };
@@ -447,7 +447,7 @@ function McpClientsGuide() {
       <ul className="list-disc space-y-1 pl-5 text-[12.5px] leading-relaxed text-[var(--w-text-2)]">
         <li>{wt('dev.keepOut')}<code className="font-mono">CTW_TOKEN</code>{wt('dev.keepOutB')}</li>
         <li>{wt('dev.writesAre')}</li>
-        <li>{wt('dev.bridgeA')} <code className="font-mono">@cuongthai/ctwork-mcp</code> {wt('dev.bridgeB')} <code className="font-mono">node packages/ctwork-mcp/bin/ctwork-mcp.js</code>.</li>
+        <li>{wt('dev.bridgeA')} <code className="font-mono">https://cuongthai.com/ctwork-mcp.tgz</code> {wt('dev.bridgeB')} <code className="font-mono">node packages/ctwork-mcp/bin/ctwork-mcp.js</code>.</li>
         <li>{wt('dev.noSub')} <span className="font-medium">Built-in</span> {wt('dev.noSubB')}</li>
       </ul>
     </div>

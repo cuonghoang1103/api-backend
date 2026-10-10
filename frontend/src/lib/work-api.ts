@@ -1774,3 +1774,11 @@ export const workPortalApi = {
   setIssueShared: (pid: number, num: number, visible: boolean) => d<{ number: number; clientVisible: boolean }>(api.put(`${B}/projects/${pid}/issues/${num}/client-visible`, { visible })),
   setAttachmentClient: (pid: number, aid: number, body: { clientVisible?: boolean; deliverable?: boolean }) => d(api.patch(`${B}/projects/${pid}/attachments/${aid}/client`, body)),
 };
+
+// ─── "Ask AI how to use" — trợ lý hướng dẫn trong ứng dụng (POST /work/help/ask) ───
+export interface HelpAskLink { scope: string; path: string; label: { en: string; vi: string } }
+export interface HelpAskResult { answer: string; links: HelpAskLink[] }
+export const workHelpApi = {
+  ask: (body: { q: string; lang: 'en' | 'vi'; page?: string }) =>
+    d<HelpAskResult>(api.post(`${B}/help/ask`, body)),
+};

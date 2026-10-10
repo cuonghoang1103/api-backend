@@ -28,6 +28,7 @@ import * as reports from '../services/work/reports.service.js';
 import * as sprints from '../services/work/sprints.service.js';
 import * as tests from '../services/work/tests.service.js';
 import * as ai from '../services/work/ai.service.js';
+import * as helpGuide from '../services/work/helpGuide.js';
 import * as aiThreads from '../services/work/aiThreads.service.js';
 import { myWork } from '../services/work/myWork.service.js';
 import * as custom from '../services/work/customize.service.js';
@@ -958,6 +959,16 @@ router.get('/projects/:pid/reports/traceability', asyncHandler(async (req, res) 
 
 router.get('/ai/quota', asyncHandler(async (req, res) => {
   ok(res, await ai.aiQuota(callerId(req)));
+}));
+// "Ask AI how to use" — trợ lý hướng dẫn trong ứng dụng. KHÔNG cần dự án: mọi thành viên
+// đã đăng nhập đều hỏi được (sibling của /ai/quota, ngoài /projects/:pid).
+router.post('/help/ask', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    q: z.string().min(1).max(500),
+    lang: z.enum(['en', 'vi']).default('vi'),
+    page: z.string().max(200).optional(),
+  }), req.body);
+  ok(res, await helpGuide.askHelp(callerId(req), body));
 }));
 router.post('/projects/:pid/ai/chat', asyncHandler(async (req, res) => {
   const body = parse(z.object({

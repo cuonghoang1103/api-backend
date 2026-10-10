@@ -2514,6 +2514,501 @@ export const HELP_ARTICLES: HelpArticle[] = [
     ],
     related: ['roles', 'workflow', 'ai', 'github'],
   },
+
+  // ═══ LỚP HỌC (đợt 9) ═══
+  {
+    id: 'classroom',
+    category: 'plan',
+    title: { en: 'Classroom: run a class', vi: 'Lớp học: điều hành một lớp' },
+    summary: {
+      en: 'Create a class with a Stream, materials by topic, a calendar with QR attendance, classwork and a gradebook — Google-Classroom style, inside CT Work.',
+      vi: 'Tạo lớp có bảng tin (Stream), tài liệu theo chủ đề, lịch có điểm danh QR, bài tập và sổ điểm — kiểu Google Classroom, ngay trong CT Work.',
+    },
+    keywords: ['class', 'classroom', 'stream', 'materials', 'attendance', 'qr', 'lecturer', 'student', 'lop hoc', 'bang tin', 'tai lieu', 'diem danh', 'giang vien', 'sinh vien'],
+    pages: [page('global', '/work/classes', 'Classes', 'Lớp học')],
+    blocks: [
+      p(
+        'A **class** sits next to your projects at **/work/classes** (a static page, not inside a workspace). It gives a lecturer one place for announcements, materials, a class calendar with attendance, assignments and grades, while each student group still gets its own CT Work project.',
+        'Một **lớp học** nằm cạnh các dự án, ở **/work/classes** (trang tĩnh, không nằm trong một không gian). Nó cho giảng viên một chỗ để thông báo, chia sẻ tài liệu, lịch lớp kèm điểm danh, bài tập và điểm — trong khi mỗi nhóm sinh viên vẫn có dự án CT Work riêng.',
+      ),
+      h('Create a class', 'Tạo lớp'),
+      steps(
+        ['Open **/work/classes** and click **"Create class"**.', 'Mở **/work/classes** và bấm **"Create class"**.'],
+        ['Pick a **Subject** (SWP391, SWT301, SWR302, Capstone… or "Other course"), type a **Class code** (e.g. "SE1840") and a **Term** (e.g. "FA26"). These two are required.', 'Chọn **Subject** (SWP391, SWT301, SWR302, Capstone… hoặc "Other course"), nhập **Class code** (vd "SE1840") và **Term** (vd "FA26"). Hai ô này bắt buộc.'],
+        ['Leave **"I am the lecturer of this class"** ticked if you teach it. Otherwise untick it and enter the **Lecturer email** — that person becomes Teacher when they open the class link with that email.', 'Giữ **"I am the lecturer of this class"** nếu bạn dạy lớp. Nếu không, bỏ tích và nhập **Lecturer email** — người đó thành Teacher khi mở link lớp bằng đúng email này.'],
+        ['Set **Max group size**, **Class code valid for (days)** and **Week 1 starts**, then click **Create**.', 'Đặt **Max group size**, **Class code valid for (days)** và **Week 1 starts**, rồi bấm **Create**.'],
+        ['Share the **8-character class code** (or the join link) with students. They join at **/work/classes** → **"Join a class"** → **Continue**.', 'Gửi **mã lớp 8 ký tự** (hoặc link mời) cho sinh viên. Họ vào ở **/work/classes** → **"Join a class"** → **Continue**.'],
+      ),
+      p(
+        'Students then **"Join"** an existing group, **"Create group & project"** (this provisions a workspace + a template project for the group), or **"Join without a group for now"**. The lecturer is added as **Teacher** in every group’s project automatically.',
+        'Sau đó sinh viên **"Join"** một nhóm có sẵn, **"Create group & project"** (tạo không gian + dự án mẫu cho nhóm), hoặc **"Join without a group for now"**. Giảng viên tự động được thêm làm **Teacher** trong dự án của mọi nhóm.',
+      ),
+      h('The five tabs', 'Năm tab'),
+      table(
+        [['Tab', 'Tab'], ['What it is for', 'Dùng để']],
+        [
+          ['Stream', ['Announcements, comments and auto-posts (new assignment / quiz / material)', 'Thông báo, bình luận và bài tự đăng (bài tập / quiz / tài liệu mới)']],
+          ['Classwork', ['Materials by topic + assignments and quizzes', 'Tài liệu theo chủ đề + bài tập và quiz']],
+          ['People', ['Groups and members of the class', 'Nhóm và thành viên lớp']],
+          ['Grades', ['The gradebook (weighted, exportable)', 'Sổ điểm (có trọng số, xuất được)']],
+          ['Calendar', ['Sessions (recurring) + attendance', 'Buổi học (lặp lại) + điểm danh']],
+        ],
+      ),
+      h('Stream', 'Bảng tin (Stream)'),
+      list(
+        ['Write **"New announcement"** and choose the audience under **"For"** — **"All students"** or specific groups. Add files or a link.', 'Viết **"New announcement"** và chọn người nhận ở **"For"** — **"All students"** hoặc nhóm cụ thể. Đính kèm file hoặc link.'],
+        ['**"Schedule for"** posts it later; **"Pin to top"** keeps it at the top (badge **"Pinned"**).', '**"Schedule for"** để đăng sau; **"Pin to top"** ghim lên đầu (nhãn **"Pinned"**).'],
+        ['Turn comments off per post (**"Turn off comments"**) or for the whole class (**"Students can comment"**). You can **"Hide from students"** a single comment; it shows **"Hidden from students"** to you.', 'Tắt bình luận theo từng bài (**"Turn off comments"**) hoặc cả lớp (**"Students can comment"**). Có thể **"Hide from students"** một bình luận; với bạn nó hiện **"Hidden from students"**.'],
+      ),
+      h('Materials (in Classwork)', 'Tài liệu (trong Classwork)'),
+      list(
+        ['**"Add topic"** to group materials by week or topic; **"Add material"** with a **Type**: **Slides, Syllabus, File, Link, Video**.', '**"Add topic"** để gom tài liệu theo tuần hoặc chủ đề; **"Add material"** với **Type**: **Slides, Syllabus, File, Link, Video**.'],
+        ['Drag to reorder (or **Alt + ↑ / ↓**). **"Save as draft"** hides a material from students until ready (badge **"Draft"**).', 'Kéo để sắp lại (hoặc **Alt + ↑ / ↓**). **"Save as draft"** ẩn tài liệu khỏi sinh viên cho tới khi sẵn sàng (nhãn **"Draft"**).'],
+        ['Students see **"Mark as viewed"**; you open **"Who viewed"** to see **"{n} of {total} students viewed this"**.', 'Sinh viên thấy **"Mark as viewed"**; bạn mở **"Who viewed"** để xem **"{n} of {total} students viewed this"**.'],
+      ),
+      h('Calendar & attendance', 'Lịch & điểm danh'),
+      steps(
+        ['Add **"Recurring sessions"** (a weekly schedule) or a **"One-off session"**: title, repeat days, start/end dates, time, room and an optional online link. Export with **"Export .ics"**.', 'Thêm **"Recurring sessions"** (lịch hằng tuần) hoặc **"One-off session"**: tiêu đề, ngày lặp, ngày bắt đầu/kết thúc, giờ, phòng và link online tuỳ chọn. Xuất bằng **"Export .ics"**.'],
+        ['On the day, open the session and press **"Start check-in"**, choose how long it is **"Valid for"**. A **6-digit code + QR** appears.', 'Tới buổi, mở session và bấm **"Start check-in"**, chọn mã **"Valid for"** bao lâu. Một **mã 6 chữ số + QR** hiện ra.'],
+        ['Students scan the QR or type the code in **"Check in"**. Each student checks in **once**; **5 wrong codes locks them for 10 minutes** (anti-proxy). Late check-ins are marked **"Late"**.', 'Sinh viên quét QR hoặc gõ mã ở **"Check in"**. Mỗi người điểm danh **một lần**; **sai 5 lần bị khoá 10 phút** (chống điểm danh hộ). Vào muộn bị đánh **"Late"**.'],
+        ['Mark the rest with **Present / Late / Excused / Absent**, or **"Mark the rest absent"**. The **"Attendance report"** flags anyone over the absence limit you set (**"Warn above (%)"**).', 'Đánh dấu phần còn lại bằng **Present / Late / Excused / Absent**, hoặc **"Mark the rest absent"**. **"Attendance report"** gắn cờ ai vượt ngưỡng vắng bạn đặt (**"Warn above (%)"**).'],
+      ),
+      warn(
+        'Only the class **Owner** (the creator) and its **Teacher** manage the class — students only see group names, their own materials and their own grades. AI agents cannot touch a class at all.',
+        'Chỉ **Owner** (người tạo) và **Teacher** của lớp quản lý lớp — sinh viên chỉ thấy tên nhóm, tài liệu và điểm của mình. AI agent hoàn toàn không đụng được vào lớp.',
+      ),
+      tip(
+        'A session that already has attendance cannot be deleted — **cancel** it instead. Cancelled sessions are skipped in the .ics export.',
+        'Một buổi đã có điểm danh không xoá được — hãy **Cancel** thay vì xoá. Buổi đã huỷ được bỏ qua khi xuất .ics.',
+      ),
+    ],
+    related: ['classwork', 'class-quiz', 'roles', 'getting-started'],
+  },
+
+  {
+    id: 'classwork',
+    category: 'plan',
+    title: { en: 'Classwork: assignments & gradebook', vi: 'Classwork: bài tập & sổ điểm' },
+    summary: {
+      en: 'Set assignments with file/link/text submissions, late penalties and rubrics; grade and return in bulk; keep a weighted gradebook you can import and export.',
+      vi: 'Giao bài tập nộp tệp/link/văn bản, trừ điểm muộn và chấm theo rubric; chấm và trả bài theo lô; giữ sổ điểm có trọng số, nhập và xuất được.',
+    },
+    keywords: ['assignment', 'classwork', 'submit', 'submission', 'rubric', 'late', 'penalty', 'gradebook', 'grade', 'xlsx', 'weighted', 'bai tap', 'nop bai', 'cham diem', 'so diem', 'rubric'],
+    pages: [page('global', '/work/classes', 'Classes', 'Lớp học')],
+    blocks: [
+      p(
+        'In a class, open **Classwork** and click **"Create assignment"**. Assignments, submissions and grades all live inside the class.',
+        'Trong lớp, mở **Classwork** và bấm **"Create assignment"**. Bài tập, bài nộp và điểm đều nằm trong lớp.',
+      ),
+      h('Create an assignment', 'Tạo bài tập'),
+      steps(
+        ['Choose **Type**: **Individual** or **Group** (one shared submission per group; you can still set each member’s points when grading).', 'Chọn **Type**: **Individual** (cá nhân) hoặc **Group** (một bài nộp chung mỗi nhóm; khi chấm vẫn đặt điểm riêng từng thành viên được).'],
+        ['Set **Assign to**: **All students**, **Some groups**, or **Some groups or students**.', 'Đặt **Assign to**: **All students**, **Some groups**, hoặc **Some groups or students**.'],
+        ['Fill **Title**, **Instructions**, **Attachments**, **Points**, **Due**, a **Grade category** (used for weights in Grades, e.g. "Lab", "Project") and a **Topic / week**.', 'Điền **Title**, **Instructions**, **Attachments**, **Points**, **Due**, một **Grade category** (dùng cho trọng số ở Grades, vd "Lab", "Project") và **Topic / week**.'],
+        ['**Late work**: tick **"Accept late work"**, then **"Deduct per late day (%)"** and a **"Maximum deduction (%)"**.', '**Late work**: tích **"Accept late work"**, rồi **"Deduct per late day (%)"** và **"Maximum deduction (%)"**.'],
+        ['Under **When**: **Assign now**, **Schedule** or **Save as draft**, then press **Assign / Schedule / Save draft**.', 'Ở **When**: **Assign now**, **Schedule** hoặc **Save as draft**, rồi bấm **Assign / Schedule / Save draft**.'],
+      ),
+      h('How students submit', 'Sinh viên nộp thế nào'),
+      list(
+        ['In **"Your work"** (or **"Your group’s work"**) they **"Add file"**, **"Add link"** or type a **Text answer**, then **"Turn in"**. They can **"Save draft"** first.', 'Ở **"Your work"** (hoặc **"Your group’s work"**) họ **"Add file"**, **"Add link"** hoặc gõ **Text answer**, rồi **"Turn in"**. Có thể **"Save draft"** trước.'],
+        ['Every turn-in and unsubmit is kept as a **version** under **"History"** — you see exactly what was turned in and when.', 'Mỗi lần nộp và rút bài được giữ thành **version** trong **"History"** — bạn thấy chính xác đã nộp gì, lúc nào.'],
+        ['**Private comments** between a student and the lecturer open once work starts or a grade is saved — only the two of you see them.', '**Private comments** giữa sinh viên và giảng viên mở khi bắt đầu làm hoặc đã lưu điểm — chỉ hai người thấy.'],
+      ),
+      h('Grade with a rubric', 'Chấm theo rubric'),
+      p(
+        'Pick a **Rubric** on the assignment (or **"No rubric (grade with points)"**). When grading, score each **Criterion** by its **Weight**; the **"Rubric total"** fills the points for you. Saved grades are a **draft** (**"private until returned"**) until you return them.',
+        'Chọn **Rubric** cho bài tập (hoặc **"No rubric (grade with points)"**). Khi chấm, cho điểm từng **Criterion** theo **Weight**; **"Rubric total"** tự điền điểm. Điểm đã lưu là **nháp** (**"private until returned"**) cho tới khi trả bài.',
+      ),
+      h('Return in bulk', 'Trả bài theo lô'),
+      list(
+        ['The grading table filters by **All / Turned in / Not turned in / Late / Returned**. Select rows and press **"Return"** to return them together.', 'Bảng chấm lọc theo **All / Turned in / Not turned in / Late / Returned**. Chọn nhiều dòng rồi bấm **"Return"** để trả cùng lúc.'],
+        ['A single submission: **"Save draft grade"** or **"Save & return"**. For group work, set **"Points per member"** (empty = use the group grade).', 'Một bài: **"Save draft grade"** hoặc **"Save & return"**. Với bài nhóm, đặt **"Points per member"** (để trống = dùng điểm nhóm).'],
+      ),
+      h('Gradebook (Grades tab)', 'Sổ điểm (tab Grades)'),
+      list(
+        ['Choose the **Overall grade** mode: **Total points**, **Weighted by category** or **Weighted by topic**. In **Weights**, each category’s weight must sum to **100%**, and you can **"Count missing work as 0"**.', 'Chọn chế độ **Overall grade**: **Total points**, **Weighted by category** hoặc **Weighted by topic**. Trong **Weights**, tổng trọng số các nhóm phải bằng **100%**, và có thể **"Count missing work as 0"**.'],
+        ['**"Export .xlsx"** downloads the gradebook. **"Import .xlsx"** reads a sheet with a **"Student code"** (or **"Email"**) column and one column per assignment, named exactly like the assignment — imported grades are drafts until you return them.', '**"Export .xlsx"** tải sổ điểm. **"Import .xlsx"** đọc một sheet có cột **"Student code"** (hoặc **"Email"**) và mỗi bài tập một cột, tên trùng đúng tên bài — điểm nhập vào là nháp cho tới khi trả bài.'],
+        ['Draft grades show in italics (**"students cannot see this yet"**). Students see **"My grades"** — only what you have returned.', 'Điểm nháp hiện nghiêng (**"students cannot see this yet"**). Sinh viên thấy **"My grades"** — chỉ những gì bạn đã trả.'],
+      ),
+      tip(
+        'A group assignment needs the student to be in a group first (**People** tab). The due date still shows a warning like **"marked late (−{pct}%)"** so students know the penalty before they turn in.',
+        'Bài nhóm cần sinh viên vào một nhóm trước (tab **People**). Khi quá hạn vẫn hiện cảnh báo như **"marked late (−{pct}%)"** để sinh viên biết mức trừ trước khi nộp.',
+      ),
+    ],
+    related: ['classroom', 'class-quiz'],
+  },
+
+  {
+    id: 'class-quiz',
+    category: 'plan',
+    title: { en: 'Quizzes in a class', vi: 'Quiz trong lớp' },
+    summary: {
+      en: 'Auto-graded quizzes with five question types, a reusable question bank with random draw, Aiken/GIFT import, a server-side timer, hidden answers and item statistics.',
+      vi: 'Quiz tự chấm với năm loại câu hỏi, ngân hàng câu hỏi dùng lại được và rút ngẫu nhiên, nhập Aiken/GIFT, đồng hồ phía máy chủ, giấu đáp án và thống kê câu hỏi.',
+    },
+    keywords: ['quiz', 'question', 'bank', 'aiken', 'gift', 'moodle', 'timer', 'auto grade', 'difficulty', 'discrimination', 'trac nghiem', 'cau hoi', 'ngan hang', 'tu cham', 'dong ho'],
+    pages: [page('global', '/work/classes', 'Classes', 'Lớp học')],
+    blocks: [
+      p(
+        'In a class, open **Classwork** → **Quizzes** → **"New quiz"**. Questions are auto-graded (short answers can be reviewed by hand), and the quiz runs against a **server clock** so the time limit cannot be cheated from the browser.',
+        'Trong lớp, mở **Classwork** → **Quizzes** → **"New quiz"**. Câu hỏi được tự chấm (câu trả lời ngắn có thể chấm tay), và quiz chạy theo **đồng hồ máy chủ** nên không gian lận giờ từ trình duyệt được.',
+      ),
+      h('Five question types', 'Năm loại câu hỏi'),
+      list(
+        ['**Single choice** · **Multiple answers** · **True / false** · **Short answer** · **Matching**.', '**Single choice** (một đáp án) · **Multiple answers** (nhiều đáp án) · **True / false** · **Short answer** (trả lời ngắn) · **Matching** (nối cặp).'],
+      ),
+      h('Question bank & random draw', 'Ngân hàng câu hỏi & rút ngẫu nhiên'),
+      list(
+        ['Build a **Question bank** per class. A question must be **approved** before a quiz can use it — AI-drafted questions show **"AI draft — review"** and need **"Approve"** first.', 'Dựng **Question bank** cho lớp. Một câu phải được **approve** trước khi quiz dùng được — câu do AI soạn hiện **"AI draft — review"** và cần **"Approve"**.'],
+        ['Add questions with **"Add from bank"**, or **"Draw at random"**: each student gets a different random set from a topic (only approved questions are drawn).', 'Thêm câu bằng **"Add from bank"**, hoặc **"Draw at random"**: mỗi sinh viên nhận một bộ ngẫu nhiên khác nhau theo chủ đề (chỉ rút câu đã approve).'],
+      ),
+      h('Import questions', 'Nhập câu hỏi'),
+      p(
+        'Click **"Import"** and choose a **Format**: **Spreadsheet (xlsx / CSV)**, **Aiken**, or **GIFT (Moodle)**. Paste the text or upload the file, press **"Check"**, then **"Import"** — the preview shows how many are ready and how many have errors.',
+        'Bấm **"Import"** và chọn **Format**: **Spreadsheet (xlsx / CSV)**, **Aiken**, hoặc **GIFT (Moodle)**. Dán văn bản hoặc tải file lên, bấm **"Check"**, rồi **"Import"** — xem trước cho biết bao nhiêu câu sẵn sàng và bao nhiêu lỗi.',
+      ),
+      h('Timing, attempts & answers', 'Giờ, lượt làm & đáp án'),
+      list(
+        ['Set **Opens**, **Closes (due)**, a **Time limit (minutes)**, **Attempts allowed** and a **Layout** (all on one page / one question per page).', 'Đặt **Opens**, **Closes (due)**, **Time limit (minutes)**, **Attempts allowed** và **Layout** (một trang / mỗi câu một trang).'],
+        ['**Show correct answers**: **Right after submitting**, **After the close time**, or **Never**. Also **Shuffle question order** and **Shuffle answer options**.', '**Show correct answers**: **ngay sau khi nộp**, **sau giờ đóng**, hoặc **không bao giờ**. Có thể **Shuffle question order** và **Shuffle answer options**.'],
+        ['The timer starts on **Start** and keeps running even if the student leaves; answers auto-save (even offline) and submit automatically when time is up. **Tab switches are counted** and shown to you.', 'Đồng hồ chạy khi **Start** và vẫn chạy nếu sinh viên rời trang; câu trả lời tự lưu (kể cả offline) và tự nộp khi hết giờ. **Số lần chuyển tab được đếm** và hiện cho bạn.'],
+      ),
+      h('Results & statistics', 'Kết quả & thống kê'),
+      p(
+        'The quiz editor has **Questions & settings**, **Results** and **Statistics** tabs. Statistics show **Average**, **Median**, a score distribution and per-question **Difficulty (p)** and **Discrimination (D)** — p below 0.3 is hard, D below 0.2 means the question does not separate strong and weak students. Export everything with **"Export .xlsx"**.',
+        'Trình soạn quiz có tab **Questions & settings**, **Results** và **Statistics**. Thống kê hiện **Average**, **Median**, phân bố điểm và từng câu có **Difficulty (p)** và **Discrimination (D)** — p dưới 0,3 là khó, D dưới 0,2 nghĩa là câu không phân loại được giỏi/yếu. Xuất tất cả bằng **"Export .xlsx"**.',
+      ),
+      warn(
+        'Once students have started a quiz you cannot unpublish it — set a **close time** instead. Short-answer responses that need a human check appear under **"Short answers to review"** where you set the **Points** by hand.',
+        'Khi sinh viên đã bắt đầu làm thì không gỡ xuất bản được — hãy đặt **giờ đóng** thay vì gỡ. Câu trả lời ngắn cần người chấm hiện ở **"Short answers to review"** để bạn đặt **Points** bằng tay.',
+      ),
+    ],
+    related: ['classwork', 'classroom'],
+  },
+
+  // ═══ AI AGENTS & MCP (CTW-28) ═══
+  {
+    id: 'ai-agents',
+    category: 'ai',
+    title: { en: 'AI agents (non-human teammates)', vi: 'AI agent (thành viên không phải người)' },
+    summary: {
+      en: 'An agent is a team member that works through an API token instead of a password — what it can and cannot do, and how its work is reviewed.',
+      vi: 'Agent là thành viên làm việc qua token API thay vì mật khẩu — nó làm được và không làm được gì, và việc của nó được rà soát ra sao.',
+    },
+    keywords: ['agent', 'ai agent', 'bot', 'owner', 'token', 'guardrail', 'review', 'lease', 'paused', 'retired', 'thanh vien ai', 'rao chan'],
+    pages: [page('workspace', 'agents', 'AI agents', 'AI agent')],
+    blocks: [
+      p(
+        'An **AI agent** is a member of the team like any person: it takes issues, comments, logs work and reports its cost — but through its **own token**, never a password. Each agent has an **owner** (the responsible human) and it **can never sign in**.',
+        'Một **AI agent** là thành viên của nhóm như mọi người: nhận issue, bình luận, ghi giờ và khai chi phí — nhưng qua **token riêng**, không bao giờ bằng mật khẩu. Mỗi agent có một **owner** (người chịu trách nhiệm) và nó **không bao giờ đăng nhập được**.',
+      ),
+      h('Create an agent', 'Tạo agent'),
+      steps(
+        ['Open **AI agents** at the workspace (/work/<workspace>/agents). Only workspace **Owners/Admins** create agents; an owner manages their own.', 'Mở **AI agents** ở không gian (/work/<không gian>/agents). Chỉ **Owner/Admin** không gian tạo agent; owner quản lý agent của mình.'],
+        ['Click **"New agent"**, give it a name and an **owner**, and pick a model (e.g. claude-sonnet-5). Or **"Convert an account"** to turn an existing bot account into an agent while keeping its id and history.', 'Bấm **"New agent"**, đặt tên và chọn **owner**, chọn model (vd claude-sonnet-5). Hoặc **"Convert an account"** để biến một tài khoản bot sẵn có thành agent mà giữ nguyên id và lịch sử.'],
+        ['On create you see the **Agent token** (starts with {{ctw_}}) **once** — copy it now. See "Connect Claude via MCP" to plug it into a tool.', 'Khi tạo, bạn thấy **Agent token** (bắt đầu bằng {{ctw_}}) **một lần** — sao chép ngay. Xem bài "Nối Claude qua MCP" để cắm vào công cụ.'],
+      ),
+      h('What an agent cannot do (guardrails)', 'Agent không làm được gì (rào chắn)'),
+      p(
+        'The server refuses agent actions regardless of the agent’s project role (error **WORK_AGENT_FORBIDDEN** — "Ask the agent’s owner to do this"). Agents **cannot**: approve, delete, moderate comments, plan/manage sprints, change project settings or members, configure studio/stages, touch **finance**, reach the **client portal**, or use the in-project AI. Their comments are **always internal** — a client in the portal never sees an agent; it shows as **"Project team"**.',
+        'Máy chủ từ chối thao tác của agent bất kể vai trò dự án của nó (lỗi **WORK_AGENT_FORBIDDEN** — "Ask the agent’s owner to do this"). Agent **không thể**: phê duyệt, xoá, kiểm duyệt bình luận, lập/quản lý sprint, đổi cài đặt hay thành viên dự án, cấu hình studio/giai đoạn, đụng **tài chính**, vào **cổng khách**, hay dùng AI trong dự án. Bình luận của nó **luôn nội bộ** — khách trong cổng không bao giờ thấy agent; nó hiện là **"Project team"**.',
+      ),
+      h('"Done" goes to Review', '"Done" rơi vào Review'),
+      p(
+        'By default an agent can **never close an issue**: moving it to Done sends it to a **review status** instead, and the owner and reporter are notified. A person then moves it to Done. Change this in **Project settings → "AI agents"** (admins): **"Send agent work to review instead of Done"** and the **Review status**.',
+        'Mặc định agent **không bao giờ đóng được issue**: chuyển sang Done sẽ đưa vào một **trạng thái review**, và owner cùng reporter được báo. Người sẽ chuyển sang Done sau. Đổi ở **Project settings → "AI agents"** (admin): **"Send agent work to review instead of Done"** và **Review status**.',
+      ),
+      h('Pause, retire & leases', 'Tạm dừng, cho nghỉ & lease'),
+      list(
+        ['**Pause**: the token still reads, but every change returns **423** until you **Resume**. **Retire**: tokens are revoked and the agent leaves projects, but its history is kept.', '**Pause**: token vẫn đọc được, nhưng mọi thay đổi trả **423** cho tới khi **Resume**. **Retire**: thu hồi token và agent rời các dự án, nhưng lịch sử được giữ.'],
+        ['When an agent is actively working an issue it holds a **lease** — the board shows a **🤖 working · 72%** chip. If it stops sending heartbeats the lease expires after a minute, the issue is flagged **Blocked** and the owner is notified.', 'Khi agent đang làm một issue nó giữ một **lease** — board hiện chip **🤖 working · 72%**. Nếu nó ngừng gửi nhịp, lease hết hạn sau khoảng một phút, issue bị gắn cờ **Blocked** và owner được báo.'],
+      ),
+      tip(
+        'Prefer not to run your own tool? A **built-in agent** (**"Assign to AI"** on an issue) lets CT Work run the agent server-side on its own AI — no token or Claude account needed. It is a **Pro** feature (or ask an admin), capped by a daily budget.',
+        'Không muốn tự chạy công cụ? Một **built-in agent** (**"Assign to AI"** trên issue) để CT Work tự chạy agent phía máy chủ bằng AI của chính nó — không cần token hay tài khoản Claude. Đây là tính năng **Pro** (hoặc nhờ admin), có trần ngân sách theo ngày.',
+      ),
+    ],
+    related: ['connect-claude', 'roles', 'ai', 'api-tokens'],
+  },
+
+  {
+    id: 'connect-claude',
+    category: 'ai',
+    title: { en: 'Connect Claude via MCP', vi: 'Nối Claude qua MCP' },
+    summary: {
+      en: 'Issue an agent token, then connect Claude Code or Claude Desktop (and Cursor, Gemini CLI, Codex) to CT Work over MCP.',
+      vi: 'Cấp token agent, rồi nối Claude Code hoặc Claude Desktop (và Cursor, Gemini CLI, Codex) vào CT Work qua MCP.',
+    },
+    keywords: ['mcp', 'claude', 'claude code', 'claude desktop', 'cursor', 'gemini', 'codex', 'token', 'ctw_', 'bridge', 'noi claude', 'ket noi'],
+    pages: [page('workspace', 'agents', 'AI agents', 'AI agent'), page('global', '/work/developer', 'Developer', 'Nhà phát triển')],
+    blocks: [
+      p(
+        'CT Work speaks **MCP** (Model Context Protocol) at **{{POST /api/v1/work/mcp}}**. A tool connects with a **{{ctw_}}** token — an **agent token** (from the agent’s page) makes the tool act as that agent; a **personal token** (CT Work → **Developer**) makes it act as you.',
+        'CT Work nói **MCP** (Model Context Protocol) ở **{{POST /api/v1/work/mcp}}**. Công cụ kết nối bằng token **{{ctw_}}** — **token agent** (từ trang agent) khiến công cụ hành động như agent đó; **token cá nhân** (CT Work → **Developer**) khiến nó hành động như bạn.',
+      ),
+      h('Claude Code (a terminal)', 'Claude Code (dòng lệnh)'),
+      p(
+        'Paste one command into your terminal, with your token in place of {{ctw_…}}:',
+        'Dán một lệnh vào dòng lệnh, thay {{ctw_…}} bằng token của bạn:',
+      ),
+      code('claude mcp add --transport http ctwork https://cuongthai.com/api/v1/work/mcp \\\n  --header "Authorization: Bearer ctw_…"'),
+      h('Claude Desktop (the stdio bridge)', 'Claude Desktop (cầu nối stdio)'),
+      p(
+        'Claude Desktop needs a small bridge, **{{https://cuongthai.com/ctwork-mcp.tgz}}**, run via npx. In Claude Desktop open **Settings → Developer → Edit Config** ({{claude_desktop_config.json}}) and add:',
+        'Claude Desktop cần một cầu nối nhỏ, **{{https://cuongthai.com/ctwork-mcp.tgz}}**, chạy qua npx. Trong Claude Desktop mở **Settings → Developer → Edit Config** ({{claude_desktop_config.json}}) và thêm:',
+      ),
+      code('{\n  "mcpServers": {\n    "ctwork": {\n      "command": "npx",\n      "args": ["-y", "https://cuongthai.com/ctwork-mcp.tgz"],\n      "env": {\n        "CTWORK_TOKEN": "ctw_…",\n        "CTWORK_URL": "https://cuongthai.com/api/v1/work/mcp"\n      }\n    }\n  }\n}'),
+      p(
+        'The bridge reads **CTWORK_TOKEN** (required) and **CTWORK_URL** (default the URL above). It never prints the token. Cursor, Gemini CLI and Codex are configured the same way — CT Work → **Developer** shows a ready-made snippet for each.',
+        'Cầu nối đọc **CTWORK_TOKEN** (bắt buộc) và **CTWORK_URL** (mặc định là URL trên). Nó không in token ra. Cursor, Gemini CLI và Codex cấu hình tương tự — CT Work → **Developer** có sẵn đoạn mẫu cho từng cái.',
+      ),
+      h('What the tool can do', 'Công cụ làm được gì'),
+      p(
+        'Over MCP the tool can read your work and do its job: **my_work**, **get_issue**, **search_issues**, **claim_issue**, **comment**, **log_work**, **report_usage**, **transition** (an agent’s "done" lands in Review), **release_issue**, plus tools for tests, meetings, RAID, docs and weekly reports. The token only ever has **your** permissions (or the agent’s guardrails), checked on every call.',
+        'Qua MCP công cụ đọc được việc của bạn và làm việc của nó: **my_work**, **get_issue**, **search_issues**, **claim_issue**, **comment**, **log_work**, **report_usage**, **transition** ("done" của agent rơi vào Review), **release_issue**, cùng các tool cho test, họp, RAID, tài liệu và báo cáo tuần. Token chỉ có đúng quyền của **bạn** (hoặc rào chắn của agent), kiểm ở mọi lời gọi.',
+      ),
+      warn(
+        'Treat a token like a password — it is shown **once**. An agent has up to 5 active tokens; revoking one stops it immediately. The bridge is open source and hosted at {{https://cuongthai.com/ctwork-mcp.tgz}}, so {{npx -y https://cuongthai.com/ctwork-mcp.tgz}} downloads and runs it directly — no npm install needed.',
+        'Giữ token như mật khẩu — nó chỉ hiện **một lần**. Mỗi agent tối đa 5 token còn hiệu lực; thu hồi một cái là nó mất tác dụng ngay. Cầu nối là mã nguồn mở, host sẵn tại {{https://cuongthai.com/ctwork-mcp.tgz}}, nên {{npx -y https://cuongthai.com/ctwork-mcp.tgz}} tự tải về chạy thẳng — không cần cài qua npm.',
+      ),
+    ],
+    related: ['ai-agents', 'api-tokens', 'ai'],
+  },
+
+  // ═══ TÍCH HỢP (đợt 8) ═══
+  {
+    id: 'integrations-cloud',
+    category: 'connect',
+    title: { en: 'Microsoft 365 & Google Workspace', vi: 'Microsoft 365 & Google Workspace' },
+    summary: {
+      en: 'Connect your own Microsoft or Google account for two-way calendar sync, Teams/Meet links, OneDrive/Drive files on cards, and export to Excel/Sheets.',
+      vi: 'Nối tài khoản Microsoft hoặc Google của chính bạn để đồng bộ lịch hai chiều, link Teams/Meet, tệp OneDrive/Drive trên thẻ, và xuất ra Excel/Sheets.',
+    },
+    keywords: ['microsoft', 'office 365', 'outlook', 'teams', 'google', 'workspace', 'calendar', 'meet', 'onedrive', 'drive', 'excel', 'sheets', 'tich hop', 'lich', 'dong bo'],
+    pages: [page('global', '/work/connections', 'My connections', 'Kết nối của tôi'), page('project', 'settings?tab=cloud', 'Export to Excel/Sheets', 'Xuất Excel/Sheets')],
+    blocks: [
+      p(
+        'Open **"My connections"** (/work/connections) from the sidebar and click **"Connect Microsoft 365"** or **"Connect Google Workspace"**. **Each connection belongs to you only** — teammates connect their own, and AI agents cannot connect at all.',
+        'Mở **"My connections"** (/work/connections) ở sidebar và bấm **"Connect Microsoft 365"** hoặc **"Connect Google Workspace"**. **Mỗi kết nối chỉ thuộc về bạn** — đồng đội tự nối của họ, và AI agent không nối được.',
+      ),
+      warn(
+        'A server administrator must register the OAuth app first (environment keys like {{CTW_MS_CLIENT_ID}} / {{CTW_GOOGLE_CLIENT_ID}}). Until then the Connect button is hidden and you see **"Not available yet — an administrator has not configured this integration on the server."**',
+        'Quản trị viên máy chủ phải đăng ký app OAuth trước (khoá môi trường như {{CTW_MS_CLIENT_ID}} / {{CTW_GOOGLE_CLIENT_ID}}). Trước đó nút Connect bị ẩn và bạn thấy **"Not available yet — an administrator has not configured this integration on the server."**',
+      ),
+      h('Two-way calendar sync', 'Đồng bộ lịch hai chiều'),
+      list(
+        ['On the connection card turn on **"Calendar sync"**, pick a target **Calendar**, and choose what to sync: **Due dates** and/or **Meetings**.', 'Trên thẻ kết nối bật **"Calendar sync"**, chọn **Calendar** đích, và chọn đồng bộ gì: **Due dates** và/hoặc **Meetings**.'],
+        ['Due dates of issues assigned to you and meetings you organise/attend appear in your calendar. Moving an event there moves the due date or meeting time in CT Work. It runs every 5 minutes; **the most recent edit wins** on a conflict. Use **"Sync now"** or **"Resync all"** to force it.', 'Hạn của issue giao cho bạn và cuộc họp bạn tổ chức/tham dự hiện trong lịch. Dời sự kiện bên đó sẽ dời hạn hoặc giờ họp trong CT Work. Chạy mỗi 5 phút; khi xung đột thì **bản sửa mới nhất thắng**. Dùng **"Sync now"** hoặc **"Resync all"** để ép.'],
+      ),
+      h('Meeting links', 'Link cuộc họp'),
+      p(
+        'On a CT Work meeting press **"Teams meeting"** (Microsoft) or **"Google Meet"** (Google) to create an online meeting and fill in the Join link.',
+        'Trên một cuộc họp CT Work bấm **"Teams meeting"** (Microsoft) hoặc **"Google Meet"** (Google) để tạo cuộc họp online và điền link tham gia.',
+      ),
+      h('Cloud files on a card', 'Tệp đám mây trên thẻ'),
+      p(
+        'In the **"Cloud files"** section of an issue, **"Add file"** links a **OneDrive / SharePoint** or **Google Drive** file (by reference, not a copy) with a preview. The preview uses the viewer’s own connection; without one it just opens the link.',
+        'Trong mục **"Cloud files"** của issue, **"Add file"** gắn một tệp **OneDrive / SharePoint** hoặc **Google Drive** (dạng tham chiếu, không sao chép) kèm xem trước. Xem trước dùng kết nối của chính người xem; không có thì chỉ mở link.',
+      ),
+      h('Export to Excel / Google Sheets', 'Xuất ra Excel / Google Sheets'),
+      p(
+        'In **Project settings → "Microsoft 365 & Google"** (settings?tab=cloud), **"Export to Excel or Google Sheets"** creates a spreadsheet in your own drive from the **issue list** or a **workload report**. It is **one-way** (CT Work → spreadsheet); **"Resync"** overwrites the data and only the creator can run it.',
+        'Ở **Project settings → "Microsoft 365 & Google"** (settings?tab=cloud), **"Export to Excel or Google Sheets"** tạo một bảng tính trong drive của bạn từ **danh sách issue** hoặc **báo cáo khối lượng**. Đây là **một chiều** (CT Work → bảng tính); **"Resync"** ghi đè dữ liệu và chỉ người tạo chạy được.',
+      ),
+    ],
+    related: ['integrations-notion-slack', 'meetings', 'import-export'],
+  },
+
+  {
+    id: 'integrations-notion-slack',
+    category: 'connect',
+    title: { en: 'Notion & Slack', vi: 'Notion & Slack' },
+    summary: {
+      en: 'Import/export Notion pages and turn a database into cards; get Slack notifications, submit requests with /ctwork, and unfurl CT Work links.',
+      vi: 'Nhập/xuất trang Notion và biến database thành thẻ; nhận thông báo Slack, gửi yêu cầu bằng /ctwork, và mở rộng link CT Work.',
+    },
+    keywords: ['notion', 'slack', 'notification', 'ctwork', 'slash command', 'unfurl', 'import', 'export', 'database', 'tich hop', 'thong bao'],
+    pages: [page('project', 'connect', 'Notion & Slack', 'Notion & Slack'), page('global', '/work/connections', 'My connections', 'Kết nối của tôi')],
+    blocks: [
+      p(
+        'Open a project’s **Notion & Slack** page (in the sidebar). As with cloud accounts, a server administrator must add the keys first ({{CTW_NOTION_CLIENT_ID}}, {{CTW_SLACK_CLIENT_ID}}…) or you see "not set up on this server yet".',
+        'Mở trang **Notion & Slack** của dự án (ở sidebar). Giống tài khoản đám mây, quản trị viên máy chủ phải thêm khoá trước ({{CTW_NOTION_CLIENT_ID}}, {{CTW_SLACK_CLIENT_ID}}…) nếu không bạn thấy "not set up on this server yet".',
+      ),
+      h('Notion', 'Notion'),
+      p(
+        'Click **"Connect Notion"** — CT Work reads and writes only the pages you share with it, and the connection is yours. Then:',
+        'Bấm **"Connect Notion"** — CT Work chỉ đọc/ghi các trang bạn chia sẻ với nó, và kết nối là của riêng bạn. Rồi:',
+      ),
+      list(
+        ['**Import a Notion page into Docs** (headings, lists, to-dos, code, tables, callouts, toggles and images come across; optionally **"Include sub-pages"**).', '**Import a Notion page into Docs** (tiêu đề, danh sách, to-do, mã, bảng, callout, toggle và ảnh đều sang; tuỳ chọn **"Include sub-pages"**).'],
+        ['**Export a Docs page to Notion** under a Notion parent page.', '**Export a Docs page to Notion** dưới một trang cha trên Notion.'],
+        ['**Import a Notion database as issues**: match properties to fields, check the preview, then import. Importing again never creates duplicates.', '**Import a Notion database as issues**: khớp thuộc tính với trường, xem trước, rồi import. Import lại không bao giờ tạo bản trùng.'],
+      ),
+      h('Slack', 'Slack'),
+      steps(
+        ['A workspace owner/admin clicks **"Add to Slack"**, then **"Use {team} for this workspace"** to link the Slack team to this CT Work workspace.', 'Owner/Admin không gian bấm **"Add to Slack"**, rồi **"Use {team} for this workspace"** để nối Slack team với không gian CT Work này.'],
+        ['A project admin then **"Add channel"** and ticks which events it hears: **New issues**, **Assignments**, **Finished work**, **Comments**. Up to 10 channels per project. **"Send test"** checks it.', 'Admin dự án sau đó **"Add channel"** và tích các sự kiện kênh nghe: **New issues**, **Assignments**, **Finished work**, **Comments**. Tối đa 10 kênh mỗi dự án. **"Send test"** để kiểm.'],
+      ),
+      list(
+        ['In a connected channel, anyone can type **{{/ctwork new <short summary> | <details>}}** — it becomes a **proposal the team reviews in Intake**, not an issue directly. **{{/ctwork help}}** shows the usage.', 'Trong kênh đã nối, ai cũng có thể gõ **{{/ctwork new <tóm tắt> | <chi tiết>}}** — nó thành một **đề xuất để nhóm rà ở Intake**, không phải issue ngay. **{{/ctwork help}}** hiện cách dùng.'],
+        ['When a CT Work **issue link** is posted in Slack, the bot **unfurls** it into a card (key, title, status, type, assignee…) — only for the Slack team linked to that workspace.', 'Khi dán **link issue** CT Work vào Slack, bot **mở rộng** thành thẻ (mã, tiêu đề, trạng thái, loại, người làm…) — chỉ cho Slack team đã nối với không gian đó.'],
+      ),
+      tip(
+        'From the **Report builder** (Reports → Builder) you can schedule a PDF/Word report and tick **"Also post the file to Slack"**.',
+        'Từ **Report builder** (Reports → Builder) bạn hẹn giờ gửi báo cáo PDF/Word và tích **"Also post the file to Slack"**.',
+      ),
+      warn(
+        'Slack is both personal and shared: the bot token is the **installer’s** personal Slack connection. If that person disconnects Slack in **"My connections"**, the whole workspace link breaks.',
+        'Slack vừa cá nhân vừa dùng chung: token bot là kết nối Slack cá nhân của **người cài**. Nếu người đó ngắt Slack ở **"My connections"**, liên kết của cả không gian sẽ đứt.',
+      ),
+    ],
+    related: ['integrations-cloud', 'notifications', 'github'],
+  },
+
+  {
+    id: 'gitlab',
+    category: 'connect',
+    title: { en: 'GitLab integration', vi: 'Tích hợp GitLab' },
+    summary: {
+      en: 'Connect a GitLab project with a webhook so pushes and merge requests show on issues, feed contribution stats, and move issues automatically.',
+      vi: 'Nối một project GitLab bằng webhook để push và merge request hiện trên issue, nạp vào thống kê đóng góp, và tự chuyển trạng thái issue.',
+    },
+    keywords: ['gitlab', 'git', 'webhook', 'merge request', 'mr', 'push', 'self-hosted', 'token', 'tich hop'],
+    pages: [page('project', 'settings?tab=gitlab', 'GitLab settings', 'Cài đặt GitLab')],
+    blocks: [
+      p(
+        'Like GitHub, GitLab connects with a **project webhook** — no app or personal token needed, and it works with gitlab.com or your school’s self-hosted GitLab. Only project admins can connect, and only they can see the token.',
+        'Giống GitHub, GitLab nối bằng **webhook của project** — không cần app hay token cá nhân, và chạy được với gitlab.com hoặc GitLab tự dựng của trường. Chỉ admin dự án mới nối được, và chỉ họ thấy token.',
+      ),
+      h('Set up the webhook in GitLab', 'Thiết lập webhook trong GitLab'),
+      steps(
+        ['**Project settings → GitLab** → **"Connect GitLab"**. CT Work shows a **Webhook URL** and a **Secret token**.', '**Project settings → GitLab** → **"Connect GitLab"**. CT Work hiện **Webhook URL** và **Secret token**.'],
+        ['In GitLab open your project → **Settings → Webhooks → Add new webhook**. Paste the **URL** and the **Secret token**, and keep **Enable SSL verification** on.', 'Trong GitLab mở project → **Settings → Webhooks → Add new webhook**. Dán **URL** và **Secret token**, giữ **Enable SSL verification** bật.'],
+        ['Tick the triggers **"Push events (all branches)"** and **"Merge request events"**, then save.', 'Tích trigger **"Push events (all branches)"** và **"Merge request events"**, rồi lưu.'],
+        ['Back in GitLab click **"Test → Push events"** next to the webhook. A green **"Hook executed successfully"** means it works.', 'Quay lại GitLab bấm **"Test → Push events"** cạnh webhook. Màu xanh **"Hook executed successfully"** nghĩa là chạy được.'],
+      ),
+      h('Link work to issues', 'Gắn code vào issue'),
+      p(
+        'Mention the issue key (any case) in a branch name, commit message, or merge request title/description and it appears in the issue’s **Development** panel — e.g. {{SWP-12 Validate the login form}}.',
+        'Nhắc mã issue (hoa hay thường) trong tên nhánh, commit message, hoặc tiêu đề/mô tả merge request là nó hiện ở mục **Development** của issue — vd {{SWP-12 Validate the login form}}.',
+      ),
+      h('What it powers', 'Nó làm được gì'),
+      list(
+        ['Commits and merge requests feed **contribution stats** (even without a key mention).', 'Commit và merge request nạp vào **thống kê đóng góp** (kể cả khi không nhắc mã).'],
+        ['Set **"When a merge request is opened, move the issue to…"** and **"When a merge request is merged, move the issue to…"** (transitions follow the workflow; illegal moves are skipped).', 'Đặt **"When a merge request is opened, move the issue to…"** và **"When a merge request is merged, move the issue to…"** (chuyển theo workflow; nước đi không hợp lệ bị bỏ qua).'],
+        ['A merged MR also fires the **"PR merged"** automation signal, so an Automation rule can react to it.', 'MR đã merge còn phát tín hiệu automation **"PR merged"**, để một luật Automation phản ứng theo.'],
+      ),
+      warn(
+        '**"Rotate token"** if the token may have leaked (paste the new one into GitLab); **"Disconnect"** stops accepting events. A bad or missing token returns 401 and never reveals whether the project exists.',
+        '**"Rotate token"** nếu token có thể đã lộ (dán cái mới vào GitLab); **"Disconnect"** ngừng nhận sự kiện. Token sai hoặc thiếu trả 401 và không bao giờ tiết lộ project có tồn tại hay không.',
+      ),
+    ],
+    related: ['github', 'automation', 'reports'],
+  },
+
+  // ═══ OKR · POKER · RETRO (đợt 7a) ═══
+  {
+    id: 'okrs',
+    category: 'plan',
+    title: { en: 'OKRs (objectives & key results)', vi: 'OKR (mục tiêu & kết quả then chốt)' },
+    summary: {
+      en: 'Set objectives and measurable key results per cycle, link work to them, check in weekly, and score the cycle at the end.',
+      vi: 'Đặt mục tiêu và kết quả then chốt đo được theo từng chu kỳ, gắn công việc vào, check-in hằng tuần, và chấm điểm chu kỳ khi kết thúc.',
+    },
+    keywords: ['okr', 'objective', 'key result', 'kr', 'cycle', 'checkin', 'goal', 'score', 'muc tieu', 'ket qua then chot', 'chu ky'],
+    pages: [page('project', 'okrs', 'OKRs', 'OKR'), page('workspace', 'okrs', 'Workspace OKRs', 'OKR không gian')],
+    blocks: [
+      p(
+        'OKRs live both at the **workspace** (company-level) and in a **project** (where an objective can **contribute to** a workspace objective). The shape is: **Cycle → Objectives → Key results → weekly check-ins → end-of-cycle scoring**.',
+        'OKR có cả ở **không gian** (cấp công ty) và trong **dự án** (nơi một mục tiêu có thể **đóng góp cho** mục tiêu của không gian). Cấu trúc là: **Chu kỳ → Mục tiêu → Kết quả then chốt → check-in tuần → chấm điểm cuối chu kỳ**.',
+      ),
+      h('Set it up', 'Thiết lập'),
+      steps(
+        ['Pick or create a **Cycle** (**"New cycle"** → Name like "Q4 2026", Start/End dates).', 'Chọn hoặc tạo một **Cycle** (**"New cycle"** → Name như "Q4 2026", ngày Bắt đầu/Kết thúc).'],
+        ['**"New objective"**: write the objective, an optional description, and (in a project) what it **"Contributes to"**. Add **2–5 key results**.', '**"New objective"**: viết mục tiêu, mô tả tuỳ chọn, và (trong dự án) nó **"Contributes to"** gì. Thêm **2–5 key result**.'],
+        ['For each key result choose **"Progress from"**: **Manual check-ins**, **Linked issues done**, or **Linked story points done**. Manual KRs get a **Metric** (Number / Percent / Done-not-done) with **Start** and **Target**.', 'Mỗi key result chọn **"Progress from"**: **Manual check-ins**, **Linked issues done**, hoặc **Linked story points done**. KR thủ công có một **Metric** (Number / Percent / Done-not-done) với **Start** và **Target**.'],
+      ),
+      h('Track progress', 'Theo dõi tiến độ'),
+      list(
+        ['**"Check in"** once a week on manual KRs: enter the current value, a **Confidence** (0–10) and a note. Auto KRs read their progress from **Links** (an epic counts its children; a sprint counts its issues).', '**"Check in"** mỗi tuần một lần với KR thủ công: nhập giá trị hiện tại, **Confidence** (0–10) và ghi chú. KR tự động đọc tiến độ từ **Links** (epic tính cả con; sprint tính mọi issue trong đó).'],
+        ['Objective progress rolls up from its key results, with an **"Expected by now"** marker (straight-line pace). The **Dashboard** tab shows KPI tiles and progress-vs-plan charts.', 'Tiến độ mục tiêu cộng dồn từ các key result, kèm mốc **"Expected by now"** (nhịp đường thẳng). Tab **Dashboard** hiện ô KPI và biểu đồ tiến độ-so-với-kế-hoạch.'],
+        ['At the end, **"Close & score cycle"** — each KR is scored **0.0–1.0** (0.7+ is a success for an ambitious OKR; below 0.4 missed) and the objective score is the average.', 'Khi kết thúc, **"Close & score cycle"** — mỗi KR chấm **0,0–1,0** (0,7+ là thành công với OKR tham vọng; dưới 0,4 là trượt) và điểm mục tiêu là trung bình.'],
+      ),
+      tip(
+        'Only one check-in counts per week — checking in again this week replaces the earlier one. Keep KRs measurable: "increase paid pilots from 0 to 10", not "improve sales".',
+        'Mỗi tuần chỉ một check-in được tính — check-in lại trong tuần sẽ thay cái trước. Giữ KR đo được: "tăng pilot trả phí từ 0 lên 10", không phải "cải thiện doanh số".',
+      ),
+    ],
+    related: ['reports', 'backlog-sprints', 'portfolio-workload'],
+  },
+
+  {
+    id: 'planning-poker',
+    category: 'plan',
+    title: { en: 'Planning poker (team estimation)', vi: 'Planning poker (ước lượng nhóm)' },
+    summary: {
+      en: 'Estimate backlog items as a team: everyone votes in secret, the cards flip together, you reach consensus, then apply the agreed story points.',
+      vi: 'Ước lượng backlog cả nhóm: mọi người bỏ phiếu kín, lật bài cùng lúc, đạt đồng thuận, rồi áp story point đã thống nhất.',
+    },
+    keywords: ['poker', 'planning poker', 'estimate', 'estimation', 'story point', 'fibonacci', 't-shirt', 'vote', 'consensus', 'uoc luong', 'danh bai', 'dong thuan'],
+    pages: [page('project', 'poker', 'Planning poker', 'Planning poker')],
+    blocks: [
+      p(
+        'Open **Planning poker** in the project sidebar. Admins and members vote; viewers watch.',
+        'Mở **Planning poker** ở sidebar dự án. Admin và member bỏ phiếu; viewer chỉ xem.',
+      ),
+      h('Start a session', 'Bắt đầu một phiên'),
+      steps(
+        ['**"New session"** → **Title**, a **Deck** (**Fibonacci** 0,1,2,3,5,8,13,21 or **T-shirt** XS–XXL), and the issues: pick an **unfinished sprint** or type **issue numbers**.', '**"New session"** → **Title**, một **Deck** (**Fibonacci** 0,1,2,3,5,8,13,21 hoặc **T-shirt** XS–XXL), và các issue: chọn một **sprint chưa xong** hoặc gõ **số issue**.'],
+        ['In the room the **facilitator** picks an issue and clicks **"Start voting"**. Everyone picks a card under **"Your card"** — cards stay **face-down**; you only see who has voted.', 'Trong phòng, **facilitator** chọn một issue và bấm **"Start voting"**. Mọi người chọn một lá ở **"Your card"** — bài vẫn **úp**; bạn chỉ thấy ai đã bỏ phiếu.'],
+        ['The facilitator clicks **"Reveal cards"**: a distribution appears with the **Average**, **Median**, and (when votes diverge) **"Lowest … highest … — ask them to explain first."** Full agreement shows **"Consensus!"**.', 'Facilitator bấm **"Reveal cards"**: phân bố hiện ra với **Average**, **Median**, và (khi lệch nhau) **"Lowest … highest … — ask them to explain first."** Nhất trí hoàn toàn hiện **"Consensus!"**.'],
+        ['**"Vote again"** for another round, or click a value card (**"Save {v} as estimate"**) to write it to the issue’s **Story points**. The item moves to **Estimated**.', '**"Vote again"** để bỏ phiếu vòng nữa, hoặc bấm một lá giá trị (**"Save {v} as estimate"**) để ghi vào **Story points** của issue. Mục chuyển sang **Estimated**.'],
+      ),
+      tip(
+        'A **Timer** (30s–5m) auto-reveals when it ends. **"Suggest"** proposes a number from similar estimated issues — the team still decides. The {{?}} and {{☕}} cards mean "unsure" and "break" and carry no points.',
+        'Một **Timer** (30 giây–5 phút) tự lật khi hết giờ. **"Suggest"** gợi ý một con số từ các issue tương tự đã ước lượng — nhóm vẫn là người quyết. Lá {{?}} và {{☕}} nghĩa là "chưa chắc" và "nghỉ", không mang điểm.',
+      ),
+    ],
+    related: ['backlog-sprints', 'issues', 'retros'],
+  },
+
+  {
+    id: 'retros',
+    category: 'plan',
+    title: { en: 'Sprint retrospectives', vi: 'Retro cuối sprint' },
+    summary: {
+      en: 'Collect what to start, stop and continue, vote on what matters, turn the best ideas into action items (and issues), and export the board.',
+      vi: 'Thu thập điều nên bắt đầu, dừng và tiếp tục, bỏ phiếu cho điều quan trọng, biến ý tốt nhất thành action item (và issue), và xuất bảng.',
+    },
+    keywords: ['retro', 'retrospective', 'start stop continue', 'mad sad glad', '4l', 'sticky note', 'vote', 'action item', 'anonymous', 'rut kinh nghiem', 'bo phieu'],
+    pages: [page('project', 'retros', 'Retros', 'Retro')],
+    blocks: [
+      p(
+        'Open **Retros** in the project sidebar. This is the interactive retro board — different from the AI **"Generate retro"** summary under Reports → Sprint report.',
+        'Mở **Retros** ở sidebar dự án. Đây là bảng retro tương tác — khác với bản tóm tắt AI **"Generate retro"** ở Reports → Sprint report.',
+      ),
+      h('Create a retro', 'Tạo một retro'),
+      steps(
+        ['**"New retro"** → **Title**, a **Template** that sets the columns: **Start · Stop · Continue**, **Mad · Sad · Glad**, or **4L (Liked · Learned · Lacked · Longed for)**.', '**"New retro"** → **Title**, một **Template** quyết định các cột: **Start · Stop · Continue**, **Mad · Sad · Glad**, hoặc **4L (Liked · Learned · Lacked · Longed for)**.'],
+        ['Set **Votes per person** (default 5), an optional **Lock at** time, and **Anonymous notes** (on by default — nobody, not even admins, can see who wrote a note; this cannot be turned off later).', 'Đặt **Votes per person** (mặc định 5), tuỳ chọn **Lock at**, và **Anonymous notes** (mặc định bật — không ai, kể cả admin, thấy ai viết; không tắt lại được sau đó).'],
+      ),
+      h('Run the board', 'Chạy bảng'),
+      list(
+        ['Everyone adds **sticky notes** to the columns (Enter to add). Drag a card **"Group under…"** another to merge related notes; grouped votes sum into the parent.', 'Mọi người thêm **sticky note** vào các cột (Enter để thêm). Kéo một thẻ **"Group under…"** thẻ khác để gộp ý liên quan; phiếu của nhóm cộng vào thẻ cha.'],
+        ['Vote with **"Vote"** / **"Remove vote"** (dot voting); the header shows **"{n} votes left"** and cards sort by votes. The facilitator can **"Lock now"** to close notes and votes.', 'Bỏ phiếu bằng **"Vote"** / **"Remove vote"** (dot voting); đầu bảng hiện **"{n} votes left"** và thẻ xếp theo số phiếu. Facilitator có thể **"Lock now"** để đóng ghi chú và phiếu.'],
+      ),
+      h('Action items & export', 'Action item & xuất'),
+      list(
+        ['On a card, **"Make action item"** prefills the action input; set an **Assignee** and press **"Add & create issue"** to create a real issue (you get **"Created {KEY}-{n}"**).', 'Trên một thẻ, **"Make action item"** điền sẵn ô action; đặt **Assignee** và bấm **"Add & create issue"** để tạo một issue thật (bạn nhận **"Created {KEY}-{n}"**).'],
+        ['**"Summarize with AI"** sends the notes without names (with the sprint facts) and proposes action items you can add. **"Export .docx"** downloads the board as Word.', '**"Summarize with AI"** gửi ghi chú không kèm tên (cùng dữ kiện sprint) và đề xuất action item để bạn thêm. **"Export .docx"** tải bảng ra dạng Word.'],
+      ),
+      tip(
+        'Keep notes anonymous for honesty, timebox it to ~30 minutes, and make sure every chosen action item has an owner before you close — that is what turns a retro into change.',
+        'Giữ ghi chú ẩn danh cho thẳng thắn, giới hạn ~30 phút, và đảm bảo mỗi action item được chọn đều có người phụ trách trước khi đóng — đó là thứ biến retro thành thay đổi thật.',
+      ),
+    ],
+    related: ['backlog-sprints', 'planning-poker', 'reports'],
+  },
 ];
 
 export const HELP_BY_ID: Record<string, HelpArticle> = Object.fromEntries(HELP_ARTICLES.map((a) => [a.id, a]));
@@ -2606,7 +3101,8 @@ export function helpSnippet(a: HelpArticle, query: string, lang: HelpLang, max =
 // ─── Bài theo trang đang mở ──────────────────────────────────────
 
 const SETTINGS_TAB_ARTICLE: Record<string, string> = {
-  studio: 'project-types', members: 'roles', automation: 'automation', github: 'github', share: 'public-links',
+  studio: 'project-types', members: 'roles', automation: 'automation', github: 'github', gitlab: 'gitlab',
+  cloud: 'integrations-cloud', agents: 'ai-agents', share: 'public-links',
   import: 'import-export', trash: 'trash-audit', danger: 'trash-audit', fields: 'issues',
 };
 
@@ -2622,9 +3118,13 @@ export function helpArticleForPath(pathname: string, search = ''): string {
   if (parts[1] === 'invite') return 'workspaces';
   if (parts[1] === 'share') return 'public-links';
   if (parts[1] === 'search') return 'global-search';
+  if (parts[1] === 'classes') return 'classroom';
+  if (parts[1] === 'connections') return 'integrations-cloud';
   if (parts.length === 2) return 'templates';
   if (parts[2] === 'settings') return tab === 'audit' || tab === 'trash' ? 'trash-audit' : 'workspaces';
   if (parts[2] === 'teams') return 'teams';
+  if (parts[2] === 'agents') return 'ai-agents';
+  if (parts[2] === 'okrs') return 'okrs';
   if (parts[2] === 'portfolio' || parts[2] === 'workload') return 'portfolio-workload';
   const view = parts[3] ?? 'board';
   switch (view) {
@@ -2636,6 +3136,10 @@ export function helpArticleForPath(pathname: string, search = ''): string {
     case 'issue': return 'issues';
     case 'tests': return 'testing';
     case 'stages': return 'stages-gates';
+    case 'okrs': return 'okrs';
+    case 'poker': return 'planning-poker';
+    case 'retros': return 'retros';
+    case 'connect': return 'integrations-notion-slack';
     case 'approvals': return 'approvals';
     case 'portal': return parts[4] === 'uat' || tab === 'approvals' ? 'uat-signoff' : tab === 'meetings' ? 'meetings' : tab === 'payments' ? 'finance-timesheets' : tab === 'reports' ? 'client-reports' : tab === 'resources' ? 'resources' : 'client-portal';
     case 'changes': return 'change-requests';

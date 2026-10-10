@@ -90,7 +90,7 @@ export function TokenRevealDialog({ token, agentName, onClose }: { token: Issued
       <label className="w-label">{wt('agents.ccRun')}</label>
       <CodeBlock label={wt('dev.command')} secret>{cmd}</CodeBlock>
       <p className="mt-2 text-[12px] leading-relaxed text-[var(--w-text-3)]">
-        {wt('agents.bridgeA')} <code className="font-mono">CTWORK_TOKEN=… npx @cuongthai/ctwork-mcp</code>. {wt('agents.bridgeB')}
+        {wt('agents.bridgeA')} <code className="font-mono">CTWORK_TOKEN=… npx -y https://cuongthai.com/ctwork-mcp.tgz</code>. {wt('agents.bridgeB')}
         ({token.scopes.includes('write') ? wt('dev.rw').toLowerCase() : wt('dev.ro').toLowerCase()}, {token.expiresAt ? wt('dev.expiresOn', { date: formatDate(token.expiresAt) }) : wt('dev.neverExpires')}).
       </p>
     </Dialog>

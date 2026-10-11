@@ -227,10 +227,7 @@ function FunctionPane({ pid, id, canEdit, onDeleted, onOpen }: { pid: number; id
   };
 
   return (
-    // Dùng FULL chiều rộng khung (bỏ cap 1400px canh giữa): bảng ma trận 5.1 nhiều cột UTCID
-    // cần tối đa bề ngang; cap cũ làm nó bó giữa, chừa lề hai bên và che bớt trên màn rộng.
-    // Bảng tự cuộn ngang khi vượt màn (fpt-matrix-wrap overflow-auto trong UnitMatrix).
-    <div className="min-w-0">
+    <div className="mx-auto max-w-[1400px]">
       <div className="mb-3 flex flex-wrap items-start gap-3">
         <div className="min-w-0 flex-1">
           <div className="text-[12px] text-[var(--w-text-3)]">{wt('fpt.codeModule')}</div>

@@ -108,4 +108,22 @@ export const DEEP_DIVES: DeepDive[] = [
     blurb: 'What to look at first when the thing you shipped is on fire.',
     article: 'reading-production-logs-metrics-and-a-calm-head',
   },
+  // ── Hai sản phẩm chúng tôi tự dựng. KHÔNG có bài `article` cho chúng (chưa
+  //    soạn bài tech-trends), nên dẫn thẳng vào trang tính năng bằng `href` —
+  //    đúng kiểu đích thứ hai mô tả ở đầu file. `via` cho biết thẻ mở sản phẩm,
+  //    không phải một bài đọc.
+  {
+    logo: 'ct-work',
+    title: 'Building a Jira-style Project Tool (CT Work)',
+    blurb: 'A modular monolith: boards, sprints and issues, AI agents over MCP, calendar · Notion · Slack.',
+    href: '/work',
+    via: 'The product · open CT Work',
+  },
+  {
+    logo: 'ai-code',
+    title: 'AI Code on the Desktop: An Agent That Codes With You',
+    blurb: 'A Claude agent through a dedicated gateway, running inside an Electron app — real streaming, many models.',
+    href: '/download',
+    via: 'Desktop app · download',
+  },
 ];

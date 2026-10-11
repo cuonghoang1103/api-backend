@@ -14,6 +14,7 @@ export default function LandingExperience() {
   const copy = getLandingCopy(locale);
   const rails = getLandingRails(locale);
   const stats = useLandingStats();
+  const vi = locale === 'vi';
 
   // SÁU con số, tất cả đến từ `GET /api/v1/landing/stats`. Trước đây chỉ hiện
   // ba, tức là ba con số đã fetch về rồi vứt đi — mà bề rộng nội dung mới là
@@ -84,6 +85,106 @@ export default function LandingExperience() {
       </header>
 
       <DeepDives />
+
+      {/* ── Showcase hai sản phẩm chủ lực ───────────────────────────────────
+          CT Work (quản lý dự án kiểu Jira) + AI Code (agent lập trình trong app
+          desktop). Đặt NGAY SAU Deep Dives, trước các dải "duyệt" — để hai công
+          cụ mạnh nhất được khoe trước khi người đọc đi lướt danh mục. Toàn bộ
+          dùng token `--color-*` trong `.landing-root` nên tự đúng ở cả sáng/tối;
+          khung "mock" đứng thay cho ảnh/video demo thật (user sẽ thay sau). */}
+      <section className="landing-showcase" aria-labelledby="landing-showcase-title">
+        <div className="landing-showcase-head">
+          <p className="landing-showcase-eyebrow">{vi ? 'Sản phẩm chủ lực' : 'Flagship tools'}</p>
+          <h2 id="landing-showcase-title">
+            {vi ? 'Hai công cụ chúng tôi tự dựng và dùng mỗi ngày' : 'Two tools we built and use every day'}
+          </h2>
+          <p>
+            {vi
+              ? 'Không chỉ là bài học — đây là phần mềm thật: một không gian làm việc kiểu Jira và một agent lập trình chạy ngay trong app desktop.'
+              : 'Not just lessons — real software: a Jira-style workspace and a coding agent that runs right inside the desktop app.'}
+          </p>
+        </div>
+
+        <div className="landing-showcase-grid">
+          {/* ── CT Work ────────────────────────────────────────────────── */}
+          <article className="landing-showcase-card">
+            <div className="landing-showcase-mock">
+              <span className="landing-showcase-mock-bar" aria-hidden>
+                <i />
+                <i />
+                <i />
+              </span>
+              {/* TODO: ảnh/video demo CT Work */}
+              <img
+                className="landing-showcase-mock-logo"
+                src="/images/ct-work/ct-work.svg"
+                alt={vi ? 'Biểu trưng CT Work' : 'CT Work logo'}
+                width={72}
+                height={72}
+                loading="lazy"
+              />
+              <span className="landing-showcase-mock-tag">
+                {vi ? 'Bản xem trước demo sắp có' : 'Demo preview coming soon'}
+              </span>
+            </div>
+            <div className="landing-showcase-card-head">
+              <p className="landing-showcase-kicker">{vi ? 'Quản lý dự án & lớp học' : 'Projects & classrooms'}</p>
+              <h3>CT Work</h3>
+            </div>
+            <ul className="landing-showcase-list">
+              <li>{vi ? 'Board, sprint và issue kiểu Jira' : 'Jira-style boards, sprints & issues'}</li>
+              <li>{vi ? 'AI agent làm việc qua MCP' : 'AI agents that work through MCP'}</li>
+              <li>{vi ? 'Tích hợp Microsoft · Google · Notion · Slack' : 'Microsoft · Google · Notion · Slack integrations'}</li>
+              <li>{vi ? 'Báo cáo, lớp học và cổng khách' : 'Reports, classrooms and a client portal'}</li>
+            </ul>
+            <div className="landing-showcase-cta">
+              <Link href="/work" className="landing-primary-action">
+                <span>{vi ? 'Mở CT Work' : 'Open CT Work'}</span>
+                <ArrowRight aria-hidden size={17} />
+              </Link>
+            </div>
+          </article>
+
+          {/* ── AI Code (desktop) ──────────────────────────────────────── */}
+          <article className="landing-showcase-card">
+            <div className="landing-showcase-mock">
+              <span className="landing-showcase-mock-bar" aria-hidden>
+                <i />
+                <i />
+                <i />
+              </span>
+              {/* TODO: ảnh/video demo AI Code */}
+              <img
+                className="landing-showcase-mock-logo"
+                src="/logos/ai-code.svg"
+                alt={vi ? 'Biểu trưng AI Code' : 'AI Code logo'}
+                width={72}
+                height={72}
+                loading="lazy"
+              />
+              <span className="landing-showcase-mock-tag">
+                {vi ? 'Bản xem trước demo sắp có' : 'Demo preview coming soon'}
+              </span>
+            </div>
+            <div className="landing-showcase-card-head">
+              <p className="landing-showcase-kicker">{vi ? 'App desktop' : 'Desktop app'}</p>
+              <h3>AI Code</h3>
+            </div>
+            <ul className="landing-showcase-list">
+              <li>{vi ? 'Agent lập trình cùng bạn ngay trong app' : 'An agent that codes alongside you, in-app'}</li>
+              <li>{vi ? 'Claude qua cổng riêng, trả lời chảy dần' : 'Claude through a dedicated gateway, real streaming'}</li>
+              <li>{vi ? 'Nhiều model để chọn theo việc' : 'Multiple models to pick per task'}</li>
+              <li>{vi ? 'Chạy trong Electron, có chế độ ngoại tuyến' : 'Runs in Electron, with an offline mode'}</li>
+            </ul>
+            <div className="landing-showcase-cta">
+              <Link href="/download" className="landing-primary-action">
+                <span>{vi ? 'Tải app' : 'Get the app'}</span>
+                <ArrowRight aria-hidden size={17} />
+              </Link>
+            </div>
+          </article>
+        </div>
+      </section>
 
       <section id="discover" className="landing-directory-shell">
         {rails.map((rail, index) => (

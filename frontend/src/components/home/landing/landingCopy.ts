@@ -16,22 +16,22 @@ const EN_RAILS: LandingRail[] = [
       { name: 'Code Lab', href: '/code-lab', note: 'Graded exercises across every stack' },
       { name: 'Academy', href: '/academy', note: 'University subjects, worked end to end' },
       { name: 'Courses', href: '/courses', note: 'Long-form courses, chapter by chapter' },
-      { name: 'RoadMap', href: '/roadmap', note: 'What to learn, in what order' },
+      { name: 'IELTS', href: '/ielts', note: 'A 0→7.5 path with real tests' },
       { name: 'My Language', href: '/language', note: 'English · Japanese · Chinese' },
       { name: 'Exam Room', href: '/exam', note: 'Sit the real paper, timed' },
     ],
   },
   {
     label: 'Build',
-    title: 'Keep the tools beside the lesson',
-    blurb: 'Notes, snippets, diagrams, simulations and a CV that gets read — all within reach of the work.',
+    title: 'Tools that turn learning into work',
+    blurb: 'A Jira-style workspace, a desktop AI coding app, notes, diagrams and a CV that gets read — the things that turn study into output.',
     items: [
-      { name: 'Exp Hub', href: '/exp-hub', note: 'Snippets and notes worth keeping' },
-      { name: 'Simulation', href: '/simulation', note: 'Watch systems run, step by step' },
-      { name: 'Algorithms', href: '/algorithms', note: 'See the code while it executes' },
+      { name: 'CT Work', href: '/work', note: 'Jira-style projects & classrooms, AI agents, integrations' },
+      { name: 'AI Code', href: '/download', note: 'Desktop app: an AI agent codes with you, runs offline' },
       { name: 'CV Builder', href: '/cv', note: 'An IT résumé that survives the filter' },
       { name: 'Notes', href: '/notes', note: 'Write, organise and share' },
       { name: 'AI Chat', href: '/chat', note: 'Ask about code, documents and ideas' },
+      { name: 'Algorithms', href: '/algorithms', note: 'See the code while it executes' },
     ],
   },
   {
@@ -44,7 +44,7 @@ const EN_RAILS: LandingRail[] = [
       { name: 'Forum', href: '/forum', note: 'Ask, argue and help' },
       { name: 'Games', href: '/games', note: 'Short games, real leaderboards' },
       { name: 'Music', href: '/music', note: 'Listen together' },
-      { name: 'Feed', href: '/feed', note: 'See what people are building' },
+      { name: 'MoneyFlow', href: '/finance', note: 'Track spending and budgets' },
     ],
   },
 ];
@@ -58,22 +58,22 @@ const VI_RAILS: LandingRail[] = [
       { name: 'Code Lab', href: '/code-lab', note: 'Bài tập lập trình có chấm điểm' },
       { name: 'Academy', href: '/academy', note: 'Môn đại học, học từ đầu đến cuối' },
       { name: 'Khóa học', href: '/courses', note: 'Bài dài, chia theo từng chương' },
-      { name: 'RoadMap', href: '/roadmap', note: 'Biết nên học gì trước, gì sau' },
+      { name: 'IELTS', href: '/ielts', note: 'Lộ trình 0→7.5 có bài kiểm tra' },
       { name: 'Ngoại ngữ', href: '/language', note: 'Tiếng Anh · Nhật · Trung' },
       { name: 'Phòng thi', href: '/exam', note: 'Làm đề thật, có bấm giờ' },
     ],
   },
   {
     label: 'Làm',
-    title: 'Đặt công cụ ngay cạnh bài học',
-    blurb: 'Ghi chú, đoạn mã, sơ đồ, mô phỏng và CV — đủ gần để kiến thức không nằm lại trên trang giấy.',
+    title: 'Công cụ biến kiến thức thành việc thật',
+    blurb: 'Không gian làm việc kiểu Jira, app lập trình AI trên desktop, ghi chú, sơ đồ và CV — những thứ biến việc học thành sản phẩm.',
     items: [
-      { name: 'Exp Hub', href: '/exp-hub', note: 'Đoạn mã và ghi chú đáng giữ' },
-      { name: 'Mô phỏng', href: '/simulation', note: 'Xem hệ thống chạy từng bước' },
-      { name: 'Thuật toán', href: '/algorithms', note: 'Nhìn mã chạy thay vì chỉ đọc' },
+      { name: 'CT Work', href: '/work', note: 'Quản lý dự án & lớp học kiểu Jira, AI agent, tích hợp' },
+      { name: 'AI Code', href: '/download', note: 'App desktop: AI agent lập trình cùng bạn, chạy offline' },
       { name: 'CV Builder', href: '/cv', note: 'CV IT vượt qua vòng lọc' },
       { name: 'Ghi chú', href: '/notes', note: 'Viết, sắp xếp và chia sẻ' },
       { name: 'AI Chat', href: '/chat', note: 'Hỏi về code, tài liệu và ý tưởng' },
+      { name: 'Thuật toán', href: '/algorithms', note: 'Nhìn mã chạy thay vì chỉ đọc' },
     ],
   },
   {
@@ -86,7 +86,7 @@ const VI_RAILS: LandingRail[] = [
       { name: 'Diễn đàn', href: '/forum', note: 'Hỏi, tranh luận và giúp nhau' },
       { name: 'Trò chơi', href: '/games', note: 'Game ngắn, bảng xếp hạng thật' },
       { name: 'Âm nhạc', href: '/music', note: 'Nghe cùng nhau' },
-      { name: 'Bảng tin', href: '/feed', note: 'Xem mọi người đang làm gì' },
+      { name: 'MoneyFlow', href: '/finance', note: 'Quản lý chi tiêu, ngân sách' },
     ],
   },
 ];
@@ -140,6 +140,16 @@ const VI_DEEP_DIVES: Record<string, { title: string; blurb: string; via?: string
   'Reading Production: Logs, Metrics and a Calm Head': {
     title: 'Đọc production: log, metric và một cái đầu lạnh',
     blurb: 'Nên nhìn đâu trước khi thứ bạn vừa triển khai bắt đầu bốc cháy.',
+  },
+  'Building a Jira-style Project Tool (CT Work)': {
+    title: 'Dựng một công cụ quản lý dự án kiểu Jira (CT Work)',
+    blurb: 'Modular monolith: board, sprint và issue, AI agent qua MCP, tích hợp lịch · Notion · Slack.',
+    via: 'Sản phẩm · mở CT Work',
+  },
+  'AI Code on the Desktop: An Agent That Codes With You': {
+    title: 'AI Code trên app desktop: agent lập trình cùng bạn',
+    blurb: 'Agent Claude qua cổng riêng, chạy trong app Electron — trả lời chảy dần, nhiều model để chọn.',
+    via: 'App desktop · tải về',
   },
 };
 

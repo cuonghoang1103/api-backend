@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
   Wifi, Gauge, Home, BookOpen, FolderOpen, Music, MessagesSquare,
@@ -11,9 +11,9 @@ import {
   GraduationCap, ShoppingBag, Layers, ChevronRight,
   Github, Menu, X, NotebookPen, KanbanSquare, Languages, Wallet,
   Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
-  FileText, Newspaper, Radio, Code2, Binary, Map as MapIcon, ClipboardCheck,
+  FileText, Newspaper, Code2, Binary, Map as MapIcon, ClipboardCheck,
   Waypoints, Blocks, CircuitBoard,
-  AudioLines, ScanText, Terminal, Target
+  AudioLines, Terminal, Target, Search
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { adminCheckUserKey, useAdminCheck } from '@/lib/useAdminCheck';
@@ -79,7 +79,6 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   // 2026-08-05; /blog now 301s here (see next.config.js).
   { href: '/tech-trends', label: 'Blog', icon: BookOpen, section: 'social' },
   { href: '/forum', label: 'Diễn đàn', icon: Megaphone, section: 'social' },
-  { href: '/voice', label: 'Voice', icon: Radio, section: 'social' },
   { href: '/friends', label: 'Friends', icon: Users, section: 'social' },
   { href: '/messages', label: 'Messenger', icon: MessagesSquare, section: 'social', showUnread: true },
   // Code & Build
@@ -98,9 +97,9 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   // Huấn luyện học kỳ — AI giao việc, chấm bằng chứng, báo tỷ lệ trượt (02/10/2026).
   { href: '/hoc-tap', label: 'Học kỳ', icon: Target, section: 'learn' },
   { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'learn' },
-  { href: '/exam', label: 'Exam Room', icon: ClipboardCheck, section: 'learn' },
   { href: '/courses', label: 'Courses', icon: BookMarked, section: 'learn' },
   { href: '/my-courses', label: 'My Courses', icon: PlayCircle, section: 'learn' },
+  { href: '/exam', label: 'Exam Room', icon: ClipboardCheck, section: 'learn' },
   { href: '/language', label: 'My Language', icon: Languages, section: 'learn' },
   { href: '/interview', label: 'Interview', icon: Briefcase, section: 'learn' },
   { href: '/cv', label: 'CV Builder', icon: FileText, section: 'learn' },
@@ -108,7 +107,6 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/notes', label: 'Notes', icon: NotebookPen, section: 'tools' },
   // CT Work — quản lý dự án kiểu Jira (/work, 24/09/2026).
   { href: '/work', label: 'CT Work', icon: KanbanSquare, section: 'tools' },
-  { href: '/tools/image-to-doc', label: 'Ảnh → Word', icon: ScanText, section: 'tools' },
   { href: '/chat', label: 'AI Chat', icon: Sparkles, section: 'tools' },
   { href: '/music', label: 'Music', icon: Music, section: 'tools' },
   { href: '/finance', label: 'MoneyFlow', icon: Wallet, section: 'tools' },
@@ -142,15 +140,31 @@ const DOCK_ITEMS: DockItem[] = ALL_DOCK_ITEMS.filter((it) => {
   return true;
 });
 
+// Display order (2026-10-11): Navigate → Learn → Tools → Code & Build →
+// Social → Shop → Account. The order of these keys is cosmetic; the actual
+// render order is driven by the array in the `sections` useMemo below — keep
+// the two in sync.
 const SECTIONS = {
   navigate: { label: 'Navigate' },
-  social: { label: 'Social' },
-  code: { label: 'Code & Build' },
   learn: { label: 'Learn' },
   tools: { label: 'Tools' },
+  code: { label: 'Code & Build' },
+  social: { label: 'Social' },
   shop: { label: 'Shop' },
   account: { label: 'Account' },
 } as const;
+
+// Accent-insensitive fold for the search box: strip Vietnamese diacritics
+// (NFD + combining marks) and normalise đ/Đ, so "hoc ky" matches "Học kỳ".
+function foldText(s: string): string {
+  return s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .toLowerCase()
+    .trim();
+}
 
 // Magnify weights — iOS dock feel: hovered icon is the
 // biggest, the two immediate neighbours are noticeably
@@ -202,6 +216,7 @@ const rowVariants: Variants = {
 
 export default function NavigationDock() {
   const pathname = usePathname();
+  const router = useRouter();
 
   // ⚠️ ĐỪNG `return null` ở đây — phải đặt SAU tất cả hook (xem cuối hàm).
   //
@@ -240,6 +255,7 @@ export default function NavigationDock() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredHref, setHoveredHref] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
   const panelRef = useRef<HTMLElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -272,7 +288,7 @@ export default function NavigationDock() {
 
   const sections = useMemo(
     () =>
-      (['navigate', 'social', 'code', 'learn', 'tools', 'shop', 'account'] as const)
+      (['navigate', 'learn', 'tools', 'code', 'social', 'shop', 'account'] as const)
         .map((key, i) => ({
           key,
           index: i,
@@ -291,6 +307,7 @@ export default function NavigationDock() {
   const close = useCallback(() => {
     setIsOpen(false);
     setHoveredHref(null);
+    setQuery('');
   }, []);
   const toggle = useCallback(() => setIsOpen((v) => !v), []);
 
@@ -406,6 +423,30 @@ export default function NavigationDock() {
     return m;
   }, [flatItems]);
   const hoveredIdx = hoveredHref ? indexByHref.get(hoveredHref) ?? -1 : -1;
+
+  // ── Keyword search ────────────────────────────────────────────
+  // The search box filters EVERY nav item by label, accent-insensitive.
+  // `flatItems` already covers the grouped sections (including /pro in
+  // account); the account block is otherwise hand-written, so we append the
+  // few always-present account rows (and Admin only when the viewer is one)
+  // so they are reachable from search too.
+  const searchItems = useMemo(() => {
+    const base = flatItems.map((it) => ({ href: it.href, label: it.label, icon: it.icon }));
+    const accountExtras: { href: string; label: string; icon: React.ElementType }[] = [
+      { href: '/llm-key', label: 'CuongMini trên Terminal', icon: Terminal },
+      { href: '/kiem-tra-key', label: 'Kiểm tra hạn mức key', icon: Gauge },
+      ...(isAdmin ? [{ href: '/admin', label: 'Admin Dashboard', icon: Shield }] : []),
+      { href: '/profile', label: 'Profile', icon: User },
+      { href: '/settings', label: 'Cài đặt', icon: Settings },
+    ];
+    return [...base, ...accountExtras];
+  }, [flatItems, isAdmin]);
+
+  const folded = foldText(query);
+  const matches = folded
+    ? searchItems.filter((it) => foldText(it.label).includes(folded))
+    : [];
+  const isSearching = folded.length > 0;
 
   // /creator có thanh công cụ studio riêng; nút nổi của dock sẽ tranh chỗ
   // trên cùng bên trái với nó. Chặn ở ĐÂY — sau khi mọi hook đã chạy — chứ
@@ -615,6 +656,47 @@ export default function NavigationDock() {
               </p>
             </div>
 
+            {/* Keyword search — filters every nav item by label,
+                accent-insensitive. While typing, the grouped sections are
+                replaced by a flat list of matches. Enter opens the first
+                match. Clearing the box restores the grouped view. */}
+            <div className="shrink-0 px-5 pb-3">
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && matches.length > 0) {
+                      e.preventDefault();
+                      router.push(matches[0].href);
+                      close();
+                    } else if (e.key === 'Escape' && query) {
+                      // Clear the query first; a second Esc closes the panel.
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setQuery('');
+                    }
+                  }}
+                  placeholder="Tìm trang… / Search"
+                  aria-label="Tìm trang"
+                  autoComplete="off"
+                  className="h-10 w-full rounded-xl border border-white/10 bg-white/[0.05] pl-9 pr-9 text-sm text-slate-100 placeholder:text-slate-500 focus:border-[#22d3ee]/40 focus:outline-none focus:ring-2 focus:ring-[#22d3ee]/30"
+                />
+                {query && (
+                  <button
+                    type="button"
+                    onClick={() => setQuery('')}
+                    aria-label="Xoá tìm kiếm"
+                    className="absolute right-2 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 hover:bg-white/10 hover:text-slate-100"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+            </div>
+
             {/* Section list — the magnify magic happens
                 here. We render every section, and inside
                 each section we render the rows. The rows
@@ -626,7 +708,35 @@ export default function NavigationDock() {
               className="flex-1 min-h-0 overflow-y-auto overflow-x-visible overscroll-contain px-3 pb-3"
               style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
             >
-              {sections.map(({ key, items, index }) => (
+              {isSearching ? (
+                /* Flat, accent-insensitive search results. Clicking a row
+                   navigates via <Link> and the route-change effect closes
+                   the panel. */
+                matches.length === 0 ? (
+                  <p className="px-3 py-10 text-center text-sm text-text-muted">
+                    Không tìm thấy trang nào cho “{query.trim()}”.
+                  </p>
+                ) : (
+                  <div className="space-y-0.5 py-1">
+                    {matches.map((it) => (
+                      <DockRowLink
+                        key={it.href}
+                        href={it.href}
+                        Icon={it.icon}
+                        label={it.label}
+                        isActive={pathname === it.href}
+                        isHovered={hoveredHref === it.href}
+                        scale={1}
+                        onHover={() => setHoveredHref(it.href)}
+                        onLeave={() =>
+                          setHoveredHref((prev) => (prev === it.href ? null : prev))
+                        }
+                      />
+                    ))}
+                  </div>
+                )
+              ) : (
+              sections.map(({ key, items, index }) => (
                 <motion.div
                   key={key}
                   custom={index}
@@ -787,7 +897,8 @@ export default function NavigationDock() {
                     </>
                   )}
                 </motion.div>
-              ))}
+              ))
+              )}
             </div>
 
             {/* Panel footer — a small "Esc to close" hint. */}

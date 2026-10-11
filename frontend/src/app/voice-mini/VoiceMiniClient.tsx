@@ -16,7 +16,10 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Loader2, Play, Download, Mic2, AlertCircle, Upload, Sparkles, Trash2, X } from 'lucide-react';
+import {
+  Loader2, Play, Download, Mic2, AlertCircle, Upload, Sparkles, Trash2, X,
+  Clock, Zap, Gauge, ShieldCheck, Volume2, Wand2,
+} from 'lucide-react';
 import {
   cloneVoice,
   deleteVoice,
@@ -159,101 +162,145 @@ export default function VoiceMiniClient() {
     // pt-20 để tránh thanh nav CỐ ĐỊNH cao 64px — `py-10` cũ chỉ chừa
     // 40px nên tiêu đề chui xuống dưới thanh nav, đúng lỗi người dùng
     // thấy. Mọi trang khác trong web đều dùng đúng cặp `pt-20 sm:pt-24`.
-    <div className="mx-auto max-w-3xl px-4 pb-12 pt-20 sm:px-6 sm:pt-24">
-      <header className="mb-8">
-        <h1
-          className="flex items-center gap-2.5 text-3xl font-bold tracking-tight"
-          style={{ color: 'var(--text-primary)' }}
-        >
+    <div className="mx-auto max-w-3xl px-4 pb-16 pt-20 sm:px-6 sm:pt-24">
+      {/* ── Hero ──
+          Một tấm nền nhẹ để tiêu đề có chỗ thở, viền + gradient mờ theo
+          màu nhấn. Dùng toàn biến chủ đề nên sáng/tối đều ăn. */}
+      <header
+        className="relative mb-8 overflow-hidden rounded-3xl border p-6 sm:p-8"
+        style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}
+      >
+        {/* Vầng sáng trang trí ở góc — không bắt chuột, chỉ để đẹp. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-20 -top-24 h-56 w-56 rounded-full opacity-60 blur-3xl"
+          style={{ background: 'color-mix(in srgb, var(--accent, #6366f1) 22%, transparent)' }}
+        />
+        <div className="relative">
           <span
-            className="flex h-10 w-10 items-center justify-center rounded-xl"
-            // ⚠️ KHÔNG viết `var(--accent)18` để mong ra alpha hex — nối
-            // chuỗi vào sau var() cho ra một giá trị không hợp lệ, và CSS
-            // không hợp lệ thì trình duyệt BỎ QUA IM LẶNG. Ô nền biến mất
-            // mà không có lỗi nào ở console.
-            style={{ background: 'color-mix(in srgb, var(--accent, #6366f1) 16%, transparent)' }}
+            className="mb-4 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium"
+            style={{
+              borderColor: 'color-mix(in srgb, var(--accent, #6366f1) 35%, transparent)',
+              color: 'var(--accent, #6366f1)',
+              background: 'color-mix(in srgb, var(--accent, #6366f1) 10%, transparent)',
+            }}
           >
-            <Mic2 className="h-5 w-5" style={{ color: 'var(--accent, #6366f1)' }} />
+            <ShieldCheck className="h-3.5 w-3.5" />
+            Chạy trên máy chủ riêng — không gửi chữ ra ngoài
           </span>
-          Voice CuongMini
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          Dán văn bản, chọn giọng, bấm tạo. Máy đọc chạy ngay trên máy chủ của tôi — chữ của bạn
-          không đi đâu cả, và không có hạn mức.
-        </p>
 
-        {/* Ba con số ĐO THẬT, không phải khẩu hiệu. Người ta tin số hơn tin
-            tính từ, và ba con số này là lý do tồn tại của cả trang. */}
-        <dl className="mt-5 grid grid-cols-3 gap-3">
-          {[
-            { n: '0,19×', t: 'thời gian thực', g: 'sinh 5 giây tiếng mất chưa tới 1 giây' },
-            { n: '5.000', t: 'ký tự mỗi lượt', g: 'khoảng 5 phút đọc' },
-            { n: '0đ', t: 'không hạn mức', g: 'chạy trên máy riêng, không gọi ai' },
-          ].map((o) => (
-            <div
-              key={o.t}
-              className="rounded-xl border px-3 py-2.5"
-              style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}
-              title={o.g}
+          <h1
+            className="flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl"
+            style={{ color: 'var(--text-primary)' }}
+          >
+            <span
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-sm"
+              // ⚠️ KHÔNG viết `var(--accent)18` để mong ra alpha hex — nối
+              // chuỗi vào sau var() cho ra một giá trị không hợp lệ, và CSS
+              // không hợp lệ thì trình duyệt BỎ QUA IM LẶNG. Ô nền biến mất
+              // mà không có lỗi nào ở console.
+              style={{ background: 'color-mix(in srgb, var(--accent, #6366f1) 16%, transparent)' }}
             >
-              <dt className="text-lg font-bold tabular-nums" style={{ color: 'var(--text-primary)' }}>
-                {o.n}
-              </dt>
-              <dd className="text-[11px] leading-tight" style={{ color: 'var(--text-muted)' }}>
-                {o.t}
-              </dd>
-            </div>
-          ))}
-        </dl>
+              <Mic2 className="h-6 w-6" style={{ color: 'var(--accent, #6366f1)' }} />
+            </span>
+            Voice CuongMini
+          </h1>
+          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            Dán văn bản, chọn giọng, bấm tạo. Máy đọc chạy ngay trên máy chủ của tôi — chữ của bạn
+            không đi đâu cả, và không có hạn mức.
+          </p>
+
+          {/* Ba con số ĐO THẬT, không phải khẩu hiệu. Người ta tin số hơn tin
+              tính từ, và ba con số này là lý do tồn tại của cả trang. */}
+          <dl className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {[
+              { n: '0,19×', t: 'thời gian thực', g: 'sinh 5 giây tiếng mất chưa tới 1 giây', Icon: Zap },
+              { n: '5.000', t: 'ký tự mỗi lượt', g: 'khoảng 5 phút đọc', Icon: Gauge },
+              { n: '0đ', t: 'không hạn mức', g: 'chạy trên máy riêng, không gọi ai', Icon: ShieldCheck },
+            ].map((o) => (
+              <div
+                key={o.t}
+                className="group rounded-2xl border px-4 py-3 transition-shadow hover:shadow-md"
+                style={{ borderColor: 'var(--border-color)', background: 'var(--bg-secondary)' }}
+                title={o.g}
+              >
+                <div className="flex items-center gap-2">
+                  <o.Icon className="h-4 w-4" style={{ color: 'var(--accent, #6366f1)' }} />
+                  <dt className="text-xl font-bold tabular-nums" style={{ color: 'var(--text-primary)' }}>
+                    {o.n}
+                  </dt>
+                </div>
+                <dd className="mt-0.5 text-xs leading-tight" style={{ color: 'var(--text-muted)' }}>
+                  {o.t}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </header>
 
       {/* Thẻ chính. Gom ô nhập, chọn giọng và nút vào một khối có viền:
           trước đây chúng trôi tự do trên nền trang nên mắt không biết đâu
           là một việc, đâu là việc khác. */}
       <section
-        className="rounded-2xl border p-4 sm:p-5"
+        className="rounded-3xl border p-5 shadow-sm sm:p-6"
         style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}
       >
-      <label className="mb-2 block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
-        Văn bản
-      </label>
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <label className="flex items-center gap-2 text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+          <Wand2 className="h-4 w-4" style={{ color: 'var(--accent, #6366f1)' }} />
+          Văn bản cần đọc
+        </label>
+        <span
+          className="rounded-full px-2.5 py-1 text-[11px] font-medium tabular-nums"
+          style={{
+            color: quaDai ? '#ef4444' : 'var(--text-muted)',
+            background: quaDai
+              ? 'color-mix(in srgb, #ef4444 12%, transparent)'
+              : 'var(--bg-secondary)',
+          }}
+        >
+          {text.length.toLocaleString('vi-VN')} / {MAX_CHARS.toLocaleString('vi-VN')}
+        </span>
+      </div>
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         rows={10}
         placeholder="Paste or type the text to read aloud…"
-        className="w-full rounded-xl border p-3 text-sm leading-relaxed"
+        className="w-full resize-y rounded-2xl border p-4 text-sm leading-relaxed outline-none transition focus:ring-2"
         style={{
           borderColor: quaDai ? '#ef4444' : 'var(--border-color)',
           background: 'var(--bg-secondary)',
           color: 'var(--text-primary)',
-        }}
+          '--tw-ring-color': 'color-mix(in srgb, var(--accent, #6366f1) 40%, transparent)',
+        } as React.CSSProperties}
       />
-      <div className="mt-1 flex items-center justify-between text-xs">
-        <span style={{ color: quaDai ? '#ef4444' : 'var(--text-muted)' }}>
-          {text.length.toLocaleString('vi-VN')} / {MAX_CHARS.toLocaleString('vi-VN')} ký tự
-        </span>
+      <div className="mt-2 flex min-h-[1rem] items-center justify-end text-xs">
         {text.length > 0 && (
-          <span style={{ color: 'var(--text-muted)' }}>
+          <span className="flex items-center gap-1.5" style={{ color: 'var(--text-muted)' }}>
+            <Clock className="h-3.5 w-3.5" />
             ước chừng {Math.round(text.length / 15)} giây tiếng — và chừng đó thời gian chờ
           </span>
         )}
       </div>
 
-      <div className="mt-4 flex flex-wrap items-end gap-3">
-        <div className="min-w-[220px] flex-1">
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
+        <div className="min-w-0 flex-1">
+          <label className="mb-1.5 flex items-center gap-2 text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+            <Volume2 className="h-4 w-4" style={{ color: 'var(--accent, #6366f1)' }} />
             Giọng đọc
           </label>
           <select
             value={voice}
             onChange={(e) => setVoice(e.target.value)}
-            className="w-full rounded-lg border p-2.5 text-sm"
+            className="w-full cursor-pointer rounded-xl border p-3 text-sm outline-none transition focus:ring-2"
             style={{
               borderColor: 'var(--border-color)',
               background: 'var(--bg-secondary)',
               color: 'var(--text-primary)',
-            }}
+              '--tw-ring-color': 'color-mix(in srgb, var(--accent, #6366f1) 40%, transparent)',
+            } as React.CSSProperties}
           >
             {voices.length === 0 && <option value="">Đang tải danh sách giọng…</option>}
             {voices.map((v) => (
@@ -268,7 +315,7 @@ export default function VoiceMiniClient() {
           type="button"
           onClick={() => void tao()}
           disabled={!text.trim() || quaDai || dangChay || voices.length === 0}
-          className="flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold text-white transition disabled:opacity-40"
+          className="flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100"
           style={{ background: 'var(--accent, #6366f1)' }}
         >
           {dangChay ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
@@ -277,14 +324,27 @@ export default function VoiceMiniClient() {
       </div>
 
       {dangChay && (
-        <div className="mt-5">
-          <div className="h-2 w-full overflow-hidden rounded-full" style={{ background: 'var(--bg-secondary)' }}>
+        <div
+          className="mt-5 rounded-2xl border p-4"
+          style={{ borderColor: 'var(--border-color)', background: 'var(--bg-secondary)' }}
+        >
+          <div className="mb-2 flex items-center justify-between text-xs font-medium tabular-nums" style={{ color: 'var(--text-secondary)' }}>
+            <span className="flex items-center gap-1.5">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" style={{ color: 'var(--accent, #6366f1)' }} />
+              Đang sinh âm thanh…
+            </span>
+            <span>{Math.round(phanTram)}%</span>
+          </div>
+          <div className="h-2.5 w-full overflow-hidden rounded-full" style={{ background: 'color-mix(in srgb, var(--text-muted) 18%, transparent)' }}>
             <div
               className="h-full rounded-full transition-all duration-1000"
-              style={{ width: `${phanTram}%`, background: 'var(--accent, #6366f1)' }}
+              style={{
+                width: `${phanTram}%`,
+                background: 'linear-gradient(90deg, var(--accent, #6366f1), color-mix(in srgb, var(--accent, #6366f1) 55%, #22d3ee))',
+              }}
             />
           </div>
-          <p className="mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+          <p className="mt-2.5 text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
             Đã chờ {Math.round(daCho)} giây{uocTinh ? ` / ước chừng ${Math.round(uocTinh)} giây` : ''}. Cứ để
             tab này mở, đừng bấm lại — bấm thêm chỉ làm chậm hơn.
           </p>
@@ -293,8 +353,12 @@ export default function VoiceMiniClient() {
 
       {loi && (
         <div
-          className="mt-5 flex items-start gap-2 rounded-lg border p-3 text-sm"
-          style={{ borderColor: '#ef444455', color: '#ef4444' }}
+          className="mt-5 flex items-start gap-2.5 rounded-2xl border p-4 text-sm leading-relaxed"
+          style={{
+            borderColor: '#ef444455',
+            color: '#ef4444',
+            background: 'color-mix(in srgb, #ef4444 8%, transparent)',
+          }}
         >
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
           {loi}
@@ -303,24 +367,63 @@ export default function VoiceMiniClient() {
 
       {ketQua && (
         <div
-          className="mt-6 rounded-xl border p-4"
-          style={{ borderColor: 'var(--border-color)', background: 'var(--bg-secondary)' }}
+          className="mt-6 rounded-2xl border p-4 sm:p-5"
+          style={{
+            borderColor: 'color-mix(in srgb, var(--accent, #6366f1) 30%, var(--border-color))',
+            background: 'var(--bg-secondary)',
+          }}
         >
+          <div className="mb-3 flex items-center gap-2 text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+            <span
+              className="flex h-7 w-7 items-center justify-center rounded-lg"
+              style={{ background: 'color-mix(in srgb, var(--accent, #6366f1) 16%, transparent)' }}
+            >
+              <Volume2 className="h-4 w-4" style={{ color: 'var(--accent, #6366f1)' }} />
+            </span>
+            Kết quả
+          </div>
           <audio controls src={ketQua.url} className="w-full" />
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            <span className="flex items-center gap-1.5 text-xs tabular-nums" style={{ color: 'var(--text-muted)' }}>
+              <Clock className="h-3.5 w-3.5" />
               {ketQua.giay ? `${ketQua.giay} giây tiếng` : ''}
               {ketQua.sinhMs ? ` · sinh trong ${(ketQua.sinhMs / 1000).toFixed(1)} giây` : ''}
             </span>
             <a
               href={ketQua.url}
               download="voice-cuongmini.wav"
-              className="flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm"
-              style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+              className="flex items-center gap-1.5 rounded-xl border px-3.5 py-2 text-sm font-medium transition hover:brightness-110"
+              style={{
+                borderColor: 'color-mix(in srgb, var(--accent, #6366f1) 35%, transparent)',
+                color: 'var(--accent, #6366f1)',
+                background: 'color-mix(in srgb, var(--accent, #6366f1) 10%, transparent)',
+              }}
             >
               <Download className="h-3.5 w-3.5" /> Tải WAV
             </a>
           </div>
+        </div>
+      )}
+
+      {/* Trạng thái trống — lúc chưa làm gì, một gợi ý nhẹ để khung kết quả
+          không rỗng hoác. Chỉ hiện khi không chạy, không lỗi, chưa có kết quả. */}
+      {!dangChay && !loi && !ketQua && (
+        <div
+          className="mt-6 flex flex-col items-center gap-2 rounded-2xl border border-dashed px-4 py-8 text-center"
+          style={{ borderColor: 'var(--border-color)' }}
+        >
+          <span
+            className="flex h-11 w-11 items-center justify-center rounded-full"
+            style={{ background: 'var(--bg-secondary)' }}
+          >
+            <Play className="h-5 w-5" style={{ color: 'var(--text-muted)' }} />
+          </span>
+          <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+            Âm thanh sẽ hiện ở đây
+          </p>
+          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            Gõ hoặc dán chữ ở trên rồi bấm <strong>Tạo âm thanh</strong>.
+          </p>
         </div>
       )}
 
@@ -330,18 +433,32 @@ export default function VoiceMiniClient() {
           Đặt CUỐI trang, và gập lại sẵn: người vào lần đầu chỉ muốn dán
           chữ nghe thử, bắt họ đi qua một cái form tải file trước là mất
           họ ngay. Ai cần giọng riêng thì cuộn xuống mở ra. */}
-      <details className="mt-8 rounded-xl border" style={{ borderColor: 'var(--border-color)' }}>
+      <details
+        className="group mt-8 overflow-hidden rounded-3xl border"
+        style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}
+      >
         <summary
-          className="cursor-pointer p-4 text-sm font-semibold"
+          className="flex cursor-pointer list-none items-center gap-3 p-5 text-sm font-semibold transition hover:brightness-105"
           style={{ color: 'var(--text-primary)' }}
         >
-          <Sparkles className="mr-2 inline h-4 w-4" />
-          Nhân bản &amp; quản lý giọng của bạn
-          {giongCuaToi.length > 0 && (
-            <span className="ml-2 font-normal" style={{ color: 'var(--text-muted)' }}>
-              — đang có {giongCuaToi.length} giọng, mở ra để xoá bớt
-            </span>
-          )}
+          <span
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+            style={{ background: 'color-mix(in srgb, var(--accent, #6366f1) 14%, transparent)' }}
+          >
+            <Sparkles className="h-4 w-4" style={{ color: 'var(--accent, #6366f1)' }} />
+          </span>
+          <span className="min-w-0 flex-1">
+            Nhân bản &amp; quản lý giọng của bạn
+            {giongCuaToi.length > 0 && (
+              <span className="ml-2 font-normal" style={{ color: 'var(--text-muted)' }}>
+                — đang có {giongCuaToi.length} giọng, mở ra để xoá bớt
+              </span>
+            )}
+          </span>
+          <X
+            className="h-4 w-4 shrink-0 rotate-45 transition-transform group-open:rotate-0"
+            style={{ color: 'var(--text-muted)' }}
+          />
         </summary>
         <div className="border-t p-4" style={{ borderColor: 'var(--border-color)' }}>
           <p className="mb-3 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>

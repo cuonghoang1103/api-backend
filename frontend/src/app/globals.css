@@ -5333,6 +5333,7 @@ body:has(.landing-root) {
 
 .landing-hero-shell,
 .landing-deep-dives,
+.landing-showcase,
 .landing-directory-shell,
 .landing-statement-footer {
   width: min(100%, 76rem);
@@ -5571,6 +5572,80 @@ body:has(.landing-root) {
 .landing-deep-card-copy small { display: block; margin-top: var(--space-sm); color: var(--color-accent); font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.07em; text-transform: uppercase; }
 .landing-deep-card-action { display: inline-flex; align-items: center; gap: var(--space-xs); color: var(--color-ink-2); font-size: var(--text-xs); font-weight: 700; }
 
+/* ── Showcase: hai sản phẩm chủ lực (CT Work + AI Code) ─────────────────
+   Thêm 10/2026. Trang chủ phải KHOE hai công cụ mạnh nhất chứ không chỉ liệt
+   kê trong rail. Khung `.landing-showcase-mock` đứng THAY cho ảnh/video demo
+   thật (user sẽ thay sau — xem chú thích TODO trong JSX), nhưng vẫn trông
+   hoàn chỉnh nhờ thanh cửa sổ giả + logo + nhãn. Chỉ dùng token, không hex. */
+.landing-showcase { padding-block: 0 clamp(4.5rem, 9vw, 8rem); }
+.landing-showcase-head { max-width: 52ch; margin-bottom: var(--space-xl); }
+.landing-showcase-eyebrow { color: var(--color-accent); font-family: var(--font-body); font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase; }
+.landing-showcase-head h2 {
+  margin: var(--space-sm) 0 0;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 660;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.landing-showcase-head > p { max-width: 56ch; margin-top: var(--space-md); color: var(--color-ink-2); line-height: 1.68; }
+
+.landing-showcase-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-lg); }
+
+.landing-showcase-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-lg);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-card);
+  background: var(--color-paper-2);
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.landing-showcase-mock {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-image);
+  background:
+    radial-gradient(ellipse 72% 62% at 50% 0%, color-mix(in oklch, var(--color-accent) 13%, transparent), transparent 70%),
+    var(--color-paper-3);
+  padding: var(--space-lg);
+}
+.landing-showcase-mock-bar { position: absolute; top: var(--space-sm); left: var(--space-sm); display: inline-flex; gap: 0.32rem; }
+.landing-showcase-mock-bar i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: color-mix(in oklch, var(--color-ink) 26%, transparent); }
+.landing-showcase-mock-logo { width: clamp(3rem, 7vw, 4.5rem); height: clamp(3rem, 7vw, 4.5rem); }
+.landing-showcase-mock-tag {
+  position: absolute;
+  bottom: var(--space-sm);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--color-muted);
+  font-family: var(--font-outlier);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.landing-showcase-card-head { min-width: 0; }
+.landing-showcase-kicker { color: var(--color-muted); font-family: var(--font-outlier); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.landing-showcase-card-head h3 { margin: var(--space-3xs) 0 0; font-family: var(--font-display); font-size: clamp(1.4rem, 2.4vw, 1.9rem); font-weight: 680; line-height: 1.1; letter-spacing: -0.03em; }
+
+.landing-showcase-list { display: grid; gap: var(--space-sm); margin: 0; padding: 0; list-style: none; }
+.landing-showcase-list li { display: flex; gap: var(--space-sm); color: var(--color-ink-2); font-size: var(--text-sm); line-height: 1.5; }
+.landing-showcase-list li::before { content: ''; flex: 0 0 auto; margin-top: 0.5em; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--color-accent); }
+
+.landing-showcase-cta { margin-top: auto; }
+.landing-showcase-cta .landing-primary-action { width: fit-content; }
+
 .landing-directory-shell { border-top: var(--rule-hair) solid var(--color-rule); }
 
 .landing-rail {
@@ -5661,6 +5736,7 @@ body:has(.landing-root) {
   .landing-rail[data-reverse='true'] { grid-template-columns: minmax(0, 1fr); }
   .landing-rail[data-reverse='true'] .landing-rail-intro,
   .landing-rail[data-reverse='true'] .landing-directory-list { grid-column: 1; grid-row: auto; }
+  .landing-showcase-grid { grid-template-columns: minmax(0, 1fr); }
 
   .landing-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .landing-stat:not(:nth-child(3n + 1)) { border-left: 0; padding-left: 0; }

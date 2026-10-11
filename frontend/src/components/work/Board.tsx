@@ -17,8 +17,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  closestCorners, DndContext, DragOverlay, KeyboardSensor, PointerSensor, useDroppable, useSensor, useSensors,
-  type DragEndEvent, type DragOverEvent, type DragStartEvent,
+  closestCorners, DndContext, DragOverlay, KeyboardSensor, PointerSensor, pointerWithin, rectIntersection,
+  useDroppable, useSensor, useSensors,
+  type CollisionDetection, type DragEndEvent, type DragOverEvent, type DragStartEvent,
 } from '@dnd-kit/core';
 import {
   SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy,
@@ -47,6 +48,23 @@ export { CardBody } from './board/BoardCard';
 const COL_W = 284;
 /** Cột co giãn cho vừa màn hình: tối thiểu 260px (hẹp thì cuộn ngang), tối đa 380px. */
 const COL_STYLE = { flex: '1 0 0', minWidth: 260, maxWidth: 380 } as const;
+
+/**
+ * Bắt điểm thả kiểu kanban: ưu tiên droppable mà CON TRỎ đang nằm trong (`pointerWithin` —
+ * chính xác và nhạy, thả đúng cột con trỏ đang chỉ). Con trỏ ra ngoài mọi droppable (kéo nhanh)
+ * ⇒ lùi về `rectIntersection`; không có con trỏ (kéo bằng bàn phím) ⇒ `closestCorners`.
+ *
+ * `closestCorners` dùng MỘT MÌNH so "góc gần nhất" nên một cột GIỮA bị kẹp giữa hai cột khác
+ * nhận thẻ chập chờn (lúc được lúc không), trong khi cột ngoài cùng (Done) thì luôn trúng —
+ * đúng triệu chứng kéo vào In Progress/In Review lúc sang lúc không.
+ */
+const boardCollision: CollisionDetection = (args) => {
+  const byPointer = pointerWithin(args);
+  if (byPointer.length) return byPointer;
+  const byRect = rectIntersection(args);
+  if (byRect.length) return byRect;
+  return closestCorners(args);
+};
 
 // ─── Lưu lựa chọn theo dự án (localStorage có thể ném lỗi ở cửa sổ riêng tư) ──
 
@@ -467,7 +485,7 @@ export default function Board({ config, lk, data, visible, onOpen, toolbarLeadin
         leading={toolbarLeading}
       />
       <TruncatedStrip data={data} />
-      <DndContext sensors={sensors} collisionDetection={closestCorners} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
+      <DndContext sensors={sensors} collisionDetection={boardCollision} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
         <div className="min-h-0 flex-1 overflow-auto [scrollbar-gutter:stable]">
           <div className="flex min-h-full min-w-max flex-col px-4 pb-4">
             {/* Đầu cột — dính trên cùng khi cuộn dọc */}

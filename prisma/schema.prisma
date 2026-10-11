@@ -2552,14 +2552,6 @@ model SocialPost {
   // own category pill. Defaults to true so all existing rows and all
   // non-video posts keep today's behaviour unchanged.
   showInAll       Boolean    @default(true) @map("show_in_all")
-  // Multi-bot AI news network (2026-10-11): tags a feed post with ONE news
-  // channel so the home feed can filter per bot. NULL = a normal human/user
-  // post (the default — every existing row stays NULL and every feed query
-  // with NO newsCategory filter = "Tất cả" = everything, exactly as today).
-  // Known values: claude · codex · gemini · antigravity · tech · ai-compare.
-  // Plain VARCHAR (not a Prisma enum) so a new channel needs no migration,
-  // same rationale as SocialLike.type / SocialPost.type above.
-  newsCategory    String?    @map("news_category") @db.VarChar(20)
   // Instagram-style music attach (Phase 3 add). When set, the
   // PostCard renders a small "🎵 <track title> — <artist>" sticker
   // overlay on the first media tile. Tapping the sticker opens
@@ -2608,8 +2600,6 @@ model SocialPost {
   @@index([visibility, status, createdAt(sort: Desc)], name: "idx_social_posts_vis_status_created")
   // Powers per-category video filtering on the home feed.
   @@index([videoCategoryId, createdAt(sort: Desc)], name: "idx_social_posts_vidcat_created")
-  // Powers the per-bot news-channel filter (GET /posts?newsCategory=claude).
-  @@index([newsCategory, createdAt(sort: Desc)], name: "idx_social_posts_newscat_created")
   // GIN trigram index powering fast ILIKE/substring search on
   // post content (see social.service.ts). Requires the pg_trgm
   // extension. `map:` pins the DB index name to match the

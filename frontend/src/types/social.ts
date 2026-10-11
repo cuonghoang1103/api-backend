@@ -148,12 +148,6 @@ export interface SocialPost {
   musicEndSec?: number | null;
   musicTrack?: MusicTrackMini | null;
   viewCount: number;
-  // Multi-bot AI news network. When non-null, the post was authored by one
-  // of the automated news bots and belongs to that category
-  // (claude · codex · gemini · antigravity · tech · ai-compare). null (or
-  // absent on older cached shapes) = a normal human post. Drives the feed
-  // category filter and the "🤖 AI" badge on the card.
-  newsCategory?: string | null;
   createdAt: string;
   updatedAt: string;
   author: SocialAuthor;

@@ -25,8 +25,6 @@ import FeedTypeTabs, {
   writeFeedTypeToUrl,
   FEED_TYPE_URL_PARAM,
 } from '@/components/social/FeedTypeTabs';
-import NewsCategoryTabs from '@/components/social/NewsCategoryTabs';
-import { NEWS_CATEGORIES, type NewsCategory } from '@/lib/botRegistry';
 import FeedFileList from '@/components/social/FeedFileList';
 import FeedVideoGrid from '@/components/social/FeedVideoGrid';
 import FeedHasNewBanner from '@/components/social/FeedHasNewBanner';
@@ -127,25 +125,6 @@ export default function SocialPage() {
     if (next == null) url.searchParams.delete('vc');
     else url.searchParams.set('vc', String(next));
     window.history.replaceState({}, '', url.toString());
-    useSocialStore.setState({ posts: [], cursor: null, hasNextPage: true });
-  }, []);
-
-  // AI news-network category filter (claude · codex · gemini · antigravity ·
-  // tech · ai-compare). null = "Tất cả" (bot + human posts). Synced to ?news=
-  // so the picked topic survives reload + share-by-link.
-  const [newsCategory, setNewsCategory] = useState<NewsCategory | null>(() => {
-    if (typeof window === 'undefined') return null;
-    const raw = new URLSearchParams(window.location.search).get('news');
-    const found = NEWS_CATEGORIES.find((c) => c.key === raw);
-    return found ? found.key : null;
-  });
-  const onNewsCategoryChange = useCallback((next: NewsCategory | null) => {
-    setNewsCategory(next);
-    const url = new URL(window.location.href);
-    if (next == null) url.searchParams.delete('news');
-    else url.searchParams.set('news', next);
-    window.history.replaceState({}, '', url.toString());
-    // Fresh list per topic so the feed doesn't mix categories while paginating.
     useSocialStore.setState({ posts: [], cursor: null, hasNextPage: true });
   }, []);
 
@@ -262,8 +241,6 @@ export default function SocialPage() {
     type: feedTypeToParam(feedType),
     // Video-category filter applies on the Video tab and the "Tất cả" tab.
     videoCategoryId: (feedType === 'video' || feedType === 'all') ? (videoCategoryId ?? undefined) : undefined,
-    // AI news-network topic filter (undefined = "Tất cả").
-    newsCategory: newsCategory ?? undefined,
   });
 
   // Keep the Zustand feed scope in sync so infinite-scroll loadMore()
@@ -277,9 +254,8 @@ export default function SocialPage() {
       hashtag: activeHashtag ?? undefined,
       type: feedTypeToParam(feedType),
       videoCategoryId: (feedType === 'video' || feedType === 'all') ? (videoCategoryId ?? undefined) : undefined,
-      newsCategory: newsCategory ?? undefined,
     });
-  }, [effectiveSort, effectiveFollowing, activeHashtag, feedType, videoCategoryId, newsCategory]);
+  }, [effectiveSort, effectiveFollowing, activeHashtag, feedType, videoCategoryId]);
 
   // Hydrate Zustand store from TanStack Query cache so PostCard mutations work.
   // Invalidate the query after mutations to trigger a background refetch.
@@ -755,17 +731,6 @@ export default function SocialPage() {
             <div className="mt-4">
               <FeedTypeTabs active={feedType} onChange={onFeedTypeChange} counts={feedCounts} />
             </div>
-
-            {/* AI news-network topic filter (Claude / Codex / Gemini /
-                Antigravity / Tin công nghệ / So sánh AI). A horizontal
-                scrollable chip row — selecting one scopes the feed to that
-                bot category; "Tất cả" clears it. Shown on the post-style
-                feeds (not the Video grid / File list). */}
-            {(feedType === 'all' || feedType === 'post') && (
-              <div className="mt-3">
-                <NewsCategoryTabs active={newsCategory} onChange={onNewsCategoryChange} />
-              </div>
-            )}
 
             {/* Secondary control: all/following/popular filter. Only
                 meaningful for the post-style feeds, so we hide it on the

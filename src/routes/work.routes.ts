@@ -696,6 +696,12 @@ router.get('/projects/:pid/submissions/download', asyncHandler(async (req, res) 
   res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
   res.send(buffer);
 }));
+router.get('/projects/:pid/submissions/report.csv', asyncHandler(async (req, res) => {
+  const { csv, fileName } = await submit.submissionsCsv(callerId(req), idParam(req, 'pid'));
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+  res.send(csv);
+}));
 
 router.post('/projects/:pid/issues/:num/links', asyncHandler(async (req, res) => {
   const body = parse(z.object({ type: z.enum(LINK_TYPES), targetKey: z.string().min(3).max(20) }), req.body);

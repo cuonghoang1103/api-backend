@@ -52,6 +52,7 @@ export const board: Strings<typeof En> = {
   openSubtasks: '{count} việc con chưa xong',
   nComments: '{count} bình luận',
   nAttachments: '{count} tệp đính kèm',
+  needsSubmit: 'cần nộp',
   doneColOpenKids: 'Thẻ này ở cột Hoàn thành nhưng còn việc con chưa xong',
   parentIssue: 'Thẻ cha',
   visibleToClient: 'Khách hàng xem được',

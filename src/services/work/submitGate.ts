@@ -185,6 +185,31 @@ export async function listSubmissions(userId: number, projectId: number) {
   return { project: { key: project.key, name: project.name }, gate: cfg, canConfig: access.role === 'ADMIN', totals, members };
 }
 
+const csvCell = (v: unknown): string => {
+  const s = v === null || v === undefined ? '' : String(v);
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+};
+const csvRow = (cells: unknown[]): string => cells.map(csvCell).join(',');
+
+/** Báo cáo nộp bài dạng CSV (cho cô / đính kèm báo cáo): người × thẻ × đã nộp × đúng hạn. */
+export async function submissionsCsv(userId: number, projectId: number): Promise<{ csv: string; fileName: string }> {
+  const view = await listSubmissions(userId, projectId);
+  const head = ['Thành viên', 'Tài khoản', 'Mã thẻ', 'Tiêu đề', 'Loại', 'Trạng thái', 'Đã nộp', 'Số tệp', 'Hạn', 'Hoàn thành lúc', 'Đúng hạn'];
+  const lines = [csvRow(head)];
+  const fmt = (s: Date | string | null) => (s ? new Date(s).toISOString().slice(0, 10) : '');
+  for (const m of view.members) {
+    for (const it of m.items) {
+      lines.push(csvRow([
+        m.name, m.username ?? '', it.key, it.title, it.type, it.status,
+        it.submitted ? 'Có' : 'Chưa', it.attachmentCount, fmt(it.dueDate), fmt(it.resolvedAt),
+        it.onTime === null ? '' : it.onTime ? 'Đúng hạn' : 'Trễ',
+      ]));
+    }
+  }
+  // BOM để Excel mở đúng tiếng Việt UTF-8.
+  return { csv: `﻿${lines.join('\r\n')}\r\n`, fileName: `${view.project.key}-submissions.csv` };
+}
+
 /** Zip tất cả deliverable: AssigneeName/ISSUE-KEY/file. Trả Buffer + tên tệp. */
 export async function zipSubmissions(userId: number, projectId: number): Promise<{ buffer: Buffer; fileName: string }> {
   const access = await loadProjectAccess(userId, projectId);
@@ -224,6 +249,11 @@ export async function zipSubmissions(userId: number, projectId: number): Promise
     }
   }
   if (!added) throw new BadRequestError('No deliverables attached yet — nothing to download.', 'WORK_SUBMIT_EMPTY');
+  // Kèm INDEX.csv: toàn cảnh ai nộp gì, bao nhiêu tệp (để nhóm trưởng mở ra là thấy).
+  try {
+    const { csv } = await submissionsCsv(userId, projectId);
+    zip.file('INDEX.csv', csv);
+  } catch { /* INDEX chỉ là phụ — thiếu không chặn tải */ }
   const buffer = await zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' });
   return { buffer, fileName: `${project.key}-submissions.zip` };
 }

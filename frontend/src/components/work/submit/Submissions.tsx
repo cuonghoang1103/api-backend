@@ -8,7 +8,7 @@
 
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Download, PackageCheck, Settings2, Clock, CheckCircle2, AlertTriangle, Paperclip } from 'lucide-react';
+import { Download, FileSpreadsheet, PackageCheck, Settings2, Clock, CheckCircle2, AlertTriangle, Paperclip } from 'lucide-react';
 import { submitApi, submitKeys, type SubmitGateConfig, type SubmissionItem } from '@/lib/work-submit-api';
 import { workError, type ProjectConfig } from '@/lib/work-api';
 import { EmptyState, PageLoading } from '@/components/work/ui';
@@ -87,6 +87,11 @@ export default function Submissions({ pid, config }: { pid: number; config: Proj
     catch (e) { setErr(workError(e)); }
     finally { setDownloading(false); }
   }
+  async function exportCsv() {
+    setErr(null);
+    try { await submitApi.downloadReport(pid); }
+    catch (e) { setErr(workError(e)); }
+  }
 
   if (q.isLoading) return <PageLoading />;
   if (q.error || !q.data) return <EmptyState title="Không tải được trang Nộp bài" body={q.error ? workError(q.error) : undefined} />;
@@ -101,7 +106,10 @@ export default function Submissions({ pid, config }: { pid: number; config: Proj
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {d.canConfig ? <GatePanel pid={pid} gate={d.gate} onSaved={() => qc.invalidateQueries({ queryKey: submitKeys.all(pid) })} /> : null}
-          <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={downloading || !d.totals.files} onClick={downloadAll} title={d.totals.files ? 'Tải toàn bộ tệp đính kèm (zip)' : 'Chưa có tệp nào'}>
+          <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={exportCsv} title="Xuất CSV: ai nộp gì, đúng hạn không (mở bằng Excel)">
+            <FileSpreadsheet size={14} /> Xuất CSV
+          </button>
+          <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={downloading || !d.totals.files} onClick={downloadAll} title={d.totals.files ? 'Tải toàn bộ tệp đính kèm (zip, kèm INDEX.csv)' : 'Chưa có tệp nào'}>
             <Download size={14} /> {downloading ? 'Đang nén…' : `Tải tất cả (${d.totals.files})`}
           </button>
         </div>

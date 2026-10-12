@@ -62,6 +62,20 @@ export const submitApi = {
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 2000);
   },
+  /** Tải báo cáo CSV (người × thẻ × đã nộp × đúng hạn) — cho cô / đính kèm báo cáo. */
+  async downloadReport(pid: number): Promise<void> {
+    const res = await api.get(`${P(pid)}/submissions/report.csv`, { responseType: 'blob' });
+    const blob = new Blob([res.data as BlobPart], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const cd = (res.headers as Record<string, string> | undefined)?.['content-disposition'] ?? '';
+    a.download = /filename="?([^"]+)"?/.exec(cd)?.[1] ?? 'submissions.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  },
   /** Link tải một tệp đính kèm (dùng endpoint sẵn có). */
   fileUrl: (pid: number, attachmentId: number) => d<{ url: string }>(api.get(`${P(pid)}/attachments/${attachmentId}/url`)),
 };

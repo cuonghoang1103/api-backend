@@ -14,7 +14,7 @@ import { prisma } from '../../config/database.js';
 import { createIssue, applyIssueChange } from './issueChange.js';
 import { seedProjectConfig } from './templates.js';
 import { updateProject } from './projects.service.js';
-import { listSubmissions, submitGateOf, cleanSubmitGate, DEFAULT_SUBMIT_GATE } from './submitGate.js';
+import { listSubmissions, submissionsCsv, submitGateOf, cleanSubmitGate, DEFAULT_SUBMIT_GATE } from './submitGate.js';
 
 const RUN = process.env.WORK_DB_TEST === '1';
 const tag = `sg${Date.now().toString(36)}`;
@@ -99,5 +99,13 @@ describe('CT Work — cổng nộp bài (submitGate) trên DB thật', { skip: !
     const withFile = me!.items.find((x) => x.title === 'Need file');
     assert.ok(withFile && withFile.submitted && withFile.attachmentCount === 1);
     assert.equal(res.canConfig, true); // owner = ADMIN
+  });
+
+  it('xuất CSV: có tiêu đề + dòng thẻ đã nộp (BOM cho Excel)', async () => {
+    const { csv, fileName } = await submissionsCsv(owner, projectId);
+    assert.ok(csv.startsWith('﻿'), 'phải có BOM');
+    assert.ok(csv.includes('Thành viên') && csv.includes('Đúng hạn'), 'có tiêu đề');
+    assert.ok(/Need file/.test(csv) && /Có/.test(csv), 'có dòng thẻ đã nộp');
+    assert.match(fileName, /^SG-submissions\.csv$/);
   });
 });

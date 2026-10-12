@@ -708,7 +708,7 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   // Duyệt / quyết định
   ['POST', /^\/approvals\/\d+\/decide$/], ['POST', /^\/stages\/\d+\/(request-gate|activate)$/],
   // Xuất/nhập dữ liệu, tích hợp ra ngoài
-  ['*', /^\/exports?(\/.*)?$/], ['POST', /^\/import$/], ['GET', /^\/submissions\/(download|report\.csv)$/],
+  ['*', /^\/exports?(\/.*)?$/], ['POST', /^\/import$/],
   ['*', /^\/chat-hooks(\/.*)?$/], ['*', /^\/webhooks(\/.*)?$/], ['*', /^\/github(\/.*)?$/], ['*', /^\/gitlab(\/.*)?$/],
   ['*', /^\/automation(\/.*)?$/],
   // CTW đợt 7c: sổ tài sản/giấy phép (chi phí, hợp đồng) — agent chỉ ĐỌC; xuất tệp giấy phép là xuất dữ liệu.

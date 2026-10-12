@@ -24,7 +24,6 @@ import { rankAfter, rankBetween, rankInitial } from './rank.js';
 import { tiptapToText } from './tiptapText.js';
 import { assertModule, hasRules, stableStringify, transitionRulesOf } from './studio.js';
 import { cutText } from './common.js';
-import { assertSubmitGate } from './submitGate.js';
 import { currentTargetHash, signedHash } from './approvalContent.js';
 // Đợt S6: nguồn gốc AI + luật "AI-assisted work needs an independent reviewer".
 import { AI_SOURCE, assertAiIndependentReview, assistantModel, provenanceValue } from './provenance.js';
@@ -514,8 +513,6 @@ export async function applyIssueChange(issueId: number, patch: IssuePatch, rawAc
       if (target.category === 'DONE' && before.status.category !== 'DONE') {
         if (actor.kind === 'USER' || actor.kind === 'AI' || actor.kind === 'AGENT') {
           await assertDoneRequirements(tx, before.projectId, issueId, before.type.key, `${before.project.key}-${before.number}`);
-          // CTW cổng nộp bài: chế độ `hard` chặn Done khi thẻ chưa đủ tệp đính kèm (deliverable).
-          await assertSubmitGate(tx, before.projectId, issueId, before.type.key, `${before.project.key}-${before.number}`);
           // Đợt S6: thẻ AI-assisted + luật duyệt độc lập bật ⇒ cần người khác người tạo/người áp dụng AI duyệt.
           await assertAiIndependentReview(tx, before.projectId, before, `${before.project.key}-${before.number}`);
         }

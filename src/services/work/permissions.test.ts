@@ -150,7 +150,6 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/approvals/7/decide'], ['POST', '/stages/2/request-gate'], ['POST', '/stages/2/activate'],
     // Xuất / nhập / tích hợp
     ['GET', '/export'], ['GET', '/export/project-tracking'], ['POST', '/exports'], ['POST', '/exports/1/link'], ['POST', '/import'],
-    ['GET', '/submissions/download'], ['GET', '/submissions/report.csv'],
     ['POST', '/chat-hooks'], ['POST', '/github'], ['DELETE', '/gitlab'], ['POST', '/automation'], ['PATCH', '/automation/4'],
     // CTW đợt 7c: sổ tài sản — agent chỉ đọc; xuất tệp giấy phép cấm.
     ['POST', '/assets'], ['PATCH', '/assets/3'], ['DELETE', '/assets/3'], ['PUT', '/assets/3/links'], ['GET', '/assets-export'],

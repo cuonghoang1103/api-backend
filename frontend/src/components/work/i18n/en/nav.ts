@@ -12,7 +12,6 @@ export const nav = {
   n_Requirements: 'Requirements',
   n_Diagrams: 'Diagrams',
   n_Reports: 'Reports',
-  n_Submit: 'Submissions',
   n_Dashboards: 'Dashboards',
   n_FPTreports: 'FPT reports',
   n_Stages: 'Stages',

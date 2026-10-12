@@ -15,7 +15,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter } from 'next/navigation';
 import { connectSocket } from '@/lib/socket';
 import { workApi, type ProjectConfig, type WorkEvent, type WorkStatus } from '@/lib/work-api';
-import type { SubmitGateConfig } from '@/lib/work-submit-api';
 
 export const wk = {
   workspaces: ['work', 'workspaces'] as const,
@@ -116,17 +115,6 @@ export function useLookups(cfg: ProjectConfig | undefined) {
         return (t?.workflowId && cfg?.workflows.find((w) => w.id === t.workflowId)) || defaultWf;
       },
       issueKey: (num: number) => `${cfg?.key ?? ''}-${num}`,
-      // CTW cổng nộp bài: cấu hình đã bật (null = tắt) để board/backlog gắn chip "cần nộp".
-      submitGate: ((): SubmitGateConfig | null => {
-        const sg = (cfg?.settings as { submitGate?: Partial<SubmitGateConfig> } | undefined)?.submitGate;
-        if (!sg || sg.enabled !== true) return null;
-        return {
-          enabled: true,
-          mode: sg.mode === 'hard' ? 'hard' : 'soft',
-          minAttachments: typeof sg.minAttachments === 'number' && sg.minAttachments > 0 ? sg.minAttachments : 1,
-          typeKeys: Array.isArray(sg.typeKeys) && sg.typeKeys.length ? sg.typeKeys.map((x) => String(x)) : null,
-        };
-      })(),
     };
   }, [cfg]);
 }

@@ -353,6 +353,7 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   /* CTW đợt 3B (09/10/2026): báo cáo Excel nộp trường (WBS, Project Tracking, Weekly Report, AI Usage). */
   { mau: '/work/:ws/:key/school', nap: () => import('@/app/work/[ws]/[key]/school/page') },
   { mau: '/work/:ws/:key/team', nap: () => import('@/app/work/[ws]/[key]/team/page') }, // UX-C: Team overview
+  { mau: '/work/:ws/:key/submit', nap: () => import('@/app/work/[ws]/[key]/submit/page') }, // CTW cổng nộp bài
   { mau: '/work/:ws/:key/settings', nap: () => import('@/app/work/[ws]/[key]/settings/page') },
   // Lớp studio Đợt S1: giai đoạn & cổng, phê duyệt có chữ ký.
   { mau: '/work/:ws/:key/stages', nap: () => import('@/app/work/[ws]/[key]/stages/page') },

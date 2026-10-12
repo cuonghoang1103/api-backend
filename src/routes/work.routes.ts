@@ -50,6 +50,7 @@ import * as share from '../services/work/share.service.js';
 import * as apiTokens from '../services/work/apiTokens.service.js';
 import * as twoFactor from '../services/work/twoFactor.js'; // CTW đợt 7c: ép 2FA theo không gian
 import * as calendar from '../services/work/calendar.service.js';
+import * as submit from '../services/work/submitGate.js';
 import * as trash from '../services/work/trash.service.js';
 import * as onboarding from '../services/work/onboarding.service.js';
 import * as teams from '../services/work/teams.service.js';
@@ -682,6 +683,18 @@ router.post('/projects/:pid/issues/:num/clone', asyncHandler(async (req, res) =>
 
 router.get('/projects/:pid/issues/:num/history', asyncHandler(async (req, res) => {
   ok(res, await issues.listHistory(callerId(req), idParam(req, 'pid'), idParam(req, 'num')));
+}));
+
+// CTW — Cổng NỘP BÀI: trang gom deliverable theo người + "Tải tất cả" (zip). Cấu hình cổng
+// đi qua PATCH /projects/:pid { settings: { submitGate } } (gated project.settings).
+router.get('/projects/:pid/submissions', asyncHandler(async (req, res) => {
+  ok(res, await submit.listSubmissions(callerId(req), idParam(req, 'pid')));
+}));
+router.get('/projects/:pid/submissions/download', asyncHandler(async (req, res) => {
+  const { buffer, fileName } = await submit.zipSubmissions(callerId(req), idParam(req, 'pid'));
+  res.setHeader('Content-Type', 'application/zip');
+  res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+  res.send(buffer);
 }));
 
 router.post('/projects/:pid/issues/:num/links', asyncHandler(async (req, res) => {

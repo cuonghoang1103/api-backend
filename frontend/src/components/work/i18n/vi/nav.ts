@@ -15,6 +15,7 @@ export const nav: Strings<typeof En> = {
   n_Requirements: 'Yêu cầu',
   n_Diagrams: 'Sơ đồ',
   n_Reports: 'Báo cáo',
+  n_Submit: 'Nộp bài',
   n_Dashboards: 'Dashboard',
   n_FPTreports: 'Báo cáo FPT',
   n_Stages: 'Giai đoạn',

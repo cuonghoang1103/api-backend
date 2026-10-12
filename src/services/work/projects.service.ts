@@ -6,6 +6,7 @@ import { Prisma } from '@prisma/client';
 import { CAPSTONE_MODULES, seedCapstone } from './capstone.service.js';
 import { SWR302_MODULES, seedSwr302 } from './swr302Project.service.js';
 import { prisma } from '../../config/database.js';
+import { cleanSubmitGate } from './submitGate.js';
 import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { PUBLIC_USER } from './common.js';
 import {
@@ -380,6 +381,10 @@ export async function updateProject(
         const typeKeys = Array.isArray(raw?.typeKeys) ? raw.typeKeys.filter((x): x is string => typeof x === 'string').slice(0, 20) : null;
         input.settings = { ...input.settings, doneRequirements: { fieldIds: ids, typeKeys: typeKeys?.length ? typeKeys : null } };
       }
+    }
+    // CTW cổng nộp bài: chuẩn hoá cấu hình (mặc định TẮT; min 1–20; mode soft|hard).
+    if ('submitGate' in input.settings) {
+      input.settings = { ...input.settings, submitGate: cleanSubmitGate((input.settings as { submitGate?: unknown }).submitGate) };
     }
     // CTW-8/14: ngôn ngữ cho chữ máy chủ tự sinh (báo cáo AI cho khách, tiêu đề phê duyệt). null = tự đoán.
     if ('language' in input.settings) {

@@ -309,7 +309,8 @@ describe('khopTuyenWeb', () => {
     // 11/10/2026: +2 CT Work đợt 7c (/work/security — 2FA thành viên, /work/:ws/:key/assets — sổ tài sản & giấy phép).
     // 12/10/2026: +1 CT Work đợt 8a (/work/connections — kết nối Microsoft 365 / Google của tôi).
     // 12/10/2026: +2 CT Work đợt 8b (/work/:ws/:key/reports/builder — Builder + lịch gửi, /work/:ws/:key/connect — Notion & Slack).
-    expect(thay.size).toBe(178);
+    // 12/10/2026: +1 CT Work cổng Nộp bài (/work/:ws/:key/submit — gom deliverable + tải tất cả + bằng chứng đúng giờ).
+    expect(thay.size).toBe(179);
   });
 });
 

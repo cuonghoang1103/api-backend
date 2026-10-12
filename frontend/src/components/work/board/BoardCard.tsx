@@ -98,6 +98,11 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
   const assignee = issue.assigneeId ? lk.members.get(issue.assigneeId) : null;
   // Bộ phận (S1): chỉ có khi board cung cấp TeamsCtx — tức dự án bật mô-đun teams.
   const team = useTeamLookup()?.get(issue.teamId ?? 0);
+  // CTW cổng nộp bài: thẻ trong phạm vi cổng mà chưa đính kèm tệp ⇒ chip "cần nộp" (người nhận thấy sớm).
+  const cardType = lk.types.get(issue.typeId);
+  const needsSubmit = !!lk.submitGate && !done && issue.assigneeId != null
+    && issue.attachmentCount === 0 && (cardType?.level ?? 0) !== 1
+    && (!lk.submitGate.typeKeys || lk.submitGate.typeKeys.includes(cardType?.key ?? ''));
   return (
     <div
       className={cn(
@@ -143,6 +148,7 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
         {issue.flaggedAt && <FlagBadge reason={issue.flagReason} />}
         {issue.commentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={wt('board.nComments', { count: issue.commentCount })}><MessageSquare size={11} />{issue.commentCount}</span>}
         {issue.attachmentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={wt('board.nAttachments', { count: issue.attachmentCount })}><Paperclip size={11} />{issue.attachmentCount}</span>}
+        {needsSubmit && <span className="flex shrink-0 items-center gap-0.5 font-medium text-[var(--w-orange)]" title="Chưa đính kèm tệp nộp — cần nộp deliverable trước khi kéo sang Done"><Paperclip size={11} />{wt('board.needsSubmit')}</span>}
         <span className="ml-auto flex min-w-0 items-center gap-1.5">
           <DueChip issue={issue} lk={lk} />
           <PointsBadge points={issue.storyPoints} />

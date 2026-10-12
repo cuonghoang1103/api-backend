@@ -165,6 +165,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
     items: [
       // UX-C: tổng quan nhóm cho trưởng nhóm (ai làm gì, tải, trễ/kẹt, review, họp, hồ sơ FPT, Q&A) — đội dự án + giảng viên.
       { path: 'team', get label() { return wt('uxc.navTeam'); }, icon: UsersRound, match: (v) => v === 'team', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      // CTW cổng nộp bài: gom deliverable theo người + tải tất cả + bằng chứng đúng giờ — đội dự án + giảng viên.
+      { path: 'submit', get label() { return wt('nav.n_Submit'); }, icon: PackageCheck, match: (v) => v === 'submit', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
       { path: 'reports', get label() { return wt('nav.n_Reports'); }, icon: BarChart3, match: (v) => v === 'reports' },
       { path: 'dashboards', get label() { return wt('nav.n_Dashboards'); }, icon: LayoutDashboard, match: (v) => v === 'dashboards' },
       // CTW đợt 3B: tệp Excel nộp trường (WBS, Project Tracking, Weekly Report, AI Usage) — đội dự án + giảng viên.

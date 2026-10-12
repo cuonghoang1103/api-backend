@@ -49,6 +49,7 @@ export const board = {
   openSubtasks: '{count} open sub-task|{count} open sub-tasks',
   nComments: '{count} comment|{count} comments',
   nAttachments: '{count} attachment|{count} attachments',
+  needsSubmit: 'to submit',
   doneColOpenKids: 'This issue is in a Done column but some of its sub-tasks are still open',
   parentIssue: 'Parent issue',
   visibleToClient: 'Visible to client',

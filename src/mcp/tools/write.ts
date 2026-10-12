@@ -11,8 +11,10 @@ import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { prisma } from '../../config/database.js';
 import { putObject } from '../../config/r2.js';
-import { AppError, BadRequestError } from '../../middleware/errorHandler.js';
+import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import * as agents from '../../services/work/agents.service.js';
+import { PROJECT_TEMPLATES, PROJECT_TYPES } from '../../services/work/constants.js';
+import { createProject } from '../../services/work/projects.service.js';
 import { agentBus, listInbox } from '../../services/work/agentEvents.js';
 import * as approvals from '../../services/work/approvals.service.js';
 import { displayName } from '../../services/work/common.js';
@@ -464,7 +466,38 @@ const waitEvents = defineTool({
   },
 });
 
+// CTW: tạo project mới qua MCP. NGƯỜI dùng (token cá nhân) mới được; agent bị chặn tay ở đây vì
+// workspace.createProject cho cả MEMBER (agent là MEMBER ⇒ sẽ lọt nếu không chặn). Template SWR302/
+// SWT301/CAPSTONE tự seed khung đồ án (tuần, epic theo deliverable, trang mẫu) — xem projects.service.
+const createProjectTool = defineTool({
+  name: 'create_project',
+  title: 'Create project',
+  description: 'Creates a new project in one of your workspaces (by slug). PEOPLE only — agent tokens are refused. Template: "SWR302" auto-seeds the Requirements assignment (weeks 2→9, one epic per deliverable, the SWR302 package page and 5 Wiegers template pages); "SWT301" the testing lab; "CAPSTONE" a graduation project; "BLANK" stays empty. key = 2–10 letters/digits starting with a letter (e.g. "TP2"). Returns the project key and its web URL.',
+  write: true,
+  group: 'planning',
+  input: z.object({
+    workspace: z.string().min(1).max(80).describe('Workspace slug, e.g. "swr302"'),
+    key: z.string().min(2).max(10).describe('Project key, e.g. "TP2"'),
+    name: z.string().min(1).max(120),
+    type: z.enum(PROJECT_TYPES).default('SCRUM'),
+    template: z.enum(PROJECT_TEMPLATES).default('BLANK'),
+    description: z.string().max(5000).optional(),
+  }),
+  run: async (ctx, a) => {
+    if (ctx.agent) throw new ForbiddenError('Agents cannot create projects — ask the workspace owner to create it.');
+    const ws = await prisma.workSpace.findFirst({
+      where: { slug: a.workspace.trim(), deletedAt: null, members: { some: { userId: ctx.userId } } },
+      select: { id: true, slug: true },
+    });
+    if (!ws) throw new NotFoundError(`Workspace "${a.workspace}" not found, or you are not a member of it.`);
+    const p = await createProject(ctx.userId, ws.id, {
+      key: a.key, name: a.name, type: a.type, template: a.template, description: a.description ?? null,
+    });
+    return { projectKey: p.key, name: p.name, workspace: ws.slug, template: a.template, url: `/work/${ws.slug}/${p.key}` };
+  },
+});
+
 export const WRITE_TOOLS: ToolDef[] = [
   claimIssue, heartbeat, releaseIssue, comment, transition, updateIssue, createIssue, logWork, reportUsage,
-  attachFile, attachComplete, askLead, requestReview, waitEvents,
+  attachFile, attachComplete, askLead, requestReview, waitEvents, createProjectTool,
 ];

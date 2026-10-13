@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 580" width="700" height="580" role="img" aria-label="Kiến trúc AI Code: renderer chỉ vẽ sự kiện; main process của Electron giữ vòng lặp agent, chạy 41 tool trên máy cùng các chốt an toàn và MCP; backend Express không giữ trạng thái, nhận toàn bộ hội thoại mỗi lượt qua SSE, khai 46 tool và áp danh sách trắng model, trần bước, ví 5 giờ; backend gọi cổng riêng cho agent hoặc cổng LLM chính khi cổng riêng sập; khi mất mạng main nói thẳng với llama-server trên máy">
+  <defs>
+    <marker id="mui" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="580" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="579" rx="12" fill="none" stroke="#1e293b"/>
+
+  <!-- ── Renderer ─────────────────────────────────────────── -->
+  <rect x="24" y="24" width="652" height="64" rx="8" fill="#0a1120" stroke="#334155"/>
+  <text x="40" y="49" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">RENDERER · giao diện React</text>
+  <text x="40" y="72" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">chỉ VẼ sự kiện: chữ chảy, dòng tool, thẻ duyệt diff/lệnh — không tham gia vòng lặp</text>
+
+  <line x1="350" y1="88" x2="350" y2="116" stroke="#64748b" stroke-width="1.5" marker-end="url(#mui)"/>
+  <text x="362" y="107" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">IPC</text>
+
+  <!-- ── Main process ─────────────────────────────────────── -->
+  <rect x="24" y="120" width="652" height="158" rx="8" fill="#0a1120" stroke="#22d3ee"/>
+  <text x="40" y="145" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">MAIN PROCESS · Electron/Node — vòng lặp agent</text>
+  <text x="660" y="145" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#22d3ee">loop.ts</text>
+
+  <rect x="40" y="160" width="196" height="102" rx="6" fill="#0d1424" stroke="#4ade80"/>
+  <text x="52" y="182" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#4ade80">41 tool chạy trên máy</text>
+  <text x="52" y="204" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">đọc/sửa tệp · git</text>
+  <text x="52" y="224" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">lệnh · lệnh nền · PTY</text>
+  <text x="52" y="244" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">trình duyệt (9 tool)</text>
+
+  <rect x="248" y="160" width="196" height="102" rx="6" fill="#0d1424" stroke="#fb923c"/>
+  <text x="260" y="182" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#fb923c">Chốt an toàn</text>
+  <text x="260" y="204" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">nhà tù đường dẫn</text>
+  <text x="260" y="224" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">phân loại lệnh 3 mức</text>
+  <text x="260" y="244" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">5 chế độ quyền · hook</text>
+
+  <rect x="456" y="160" width="204" height="102" rx="6" fill="#0d1424" stroke="#a78bfa"/>
+  <text x="468" y="182" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#a78bfa">Cắm thêm</text>
+  <text x="468" y="204" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">MCP: ≤5 server, ≤40 tool</text>
+  <text x="468" y="224" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">kỹ năng · bộ nhớ bài học</text>
+  <text x="468" y="244" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">PATH thật từ shell</text>
+
+  <!-- ── Mũi tên xuống ────────────────────────────────────── -->
+  <line x1="200" y1="278" x2="200" y2="340" stroke="#64748b" stroke-width="1.5" marker-end="url(#mui)"/>
+  <text x="212" y="304" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">HTTPS · SSE</text>
+  <text x="212" y="322" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">gửi TOÀN BỘ hội thoại mỗi lượt</text>
+
+  <line x1="568" y1="278" x2="568" y2="340" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#mui)"/>
+  <text x="556" y="314" text-anchor="end" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#a78bfa">mất mạng</text>
+
+  <!-- ── Backend ──────────────────────────────────────────── -->
+  <rect x="24" y="344" width="420" height="110" rx="8" fill="#0a1120" stroke="#334155"/>
+  <text x="40" y="369" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">BACKEND · Express — KHÔNG giữ trạng thái</text>
+  <text x="40" y="392" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#fcd34d">POST /api/v1/agent/turn</text>
+  <text x="40" y="413" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">khai 46 tool theo khả năng app gửi · tự chạy 5 tool</text>
+  <text x="40" y="433" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">danh sách trắng model · trần bước · ví 5 giờ</text>
+
+  <!-- ── Ngoại tuyến ──────────────────────────────────────── -->
+  <rect x="464" y="344" width="212" height="110" rx="8" fill="#0a1120" stroke="#a78bfa" stroke-dasharray="4 3"/>
+  <text x="480" y="369" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#a78bfa">NGOẠI TUYẾN</text>
+  <text x="480" y="392" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#fcd34d">llama-server</text>
+  <text x="480" y="413" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">chạy trên chính máy bạn</text>
+  <text x="480" y="433" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">cùng bộ tool, cùng luật</text>
+
+  <line x1="170" y1="454" x2="170" y2="490" stroke="#64748b" stroke-width="1.5" marker-end="url(#mui)"/>
+  <line x1="400" y1="454" x2="400" y2="490" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#mui)"/>
+
+  <!-- ── Hai cổng ─────────────────────────────────────────── -->
+  <rect x="24" y="494" width="310" height="66" rx="8" fill="#0a1120" stroke="#4ade80"/>
+  <text x="40" y="519" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Cổng riêng cho agent</text>
+  <text x="40" y="542" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">giao thức Anthropic · 8 model Claude</text>
+
+  <rect x="346" y="494" width="330" height="66" rx="8" fill="#0a1120" stroke="#fb923c"/>
+  <text x="362" y="519" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Cổng LLM chính — khi cổng riêng sập</text>
+  <text x="362" y="542" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">cần vé mật khẩu · gpt-6-sol / gpt-6-astra</text>
+</svg>

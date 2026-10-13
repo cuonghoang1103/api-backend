@@ -6,7 +6,10 @@
  *   • 68 màn hình CT Work  — `grep -c "{ mau:" desktop/src/renderer/features/web/tuyenCtWork.ts`
  *   • 123 lệnh cho agent    — `COMMANDS.length` trong src/services/work/toolRegistry/index.ts
  *   • 243 bảng dữ liệu      — `grep -cE "^model Work" prisma/schema.prisma`
- *   • 37 công cụ AI Code    — các `case '…'` trong desktop/src/main/agent/tools.ts
+ *   • 8 model AI Code       — `MODEL_AGENT` trong src/services/agent/models.ts khi cổng riêng đang bật (prod)
+ *   • 46 công cụ AI Code    — số `name: '…'` khác nhau trong src/services/agent/tools.ts (sổ công cụ
+ *                             gửi cho model: 41 chạy trong app + 5 chạy ở máy chủ). ĐỪNG đếm `case` trong
+ *                             desktop/src/main/agent/tools.ts — tệp đó chỉ chứa một phần (ra 37, thiếu).
  * Đổi số thì đo lại bằng đúng lệnh đó, đừng ước.
  */
 
@@ -55,7 +58,12 @@ export function getFlagships(vi: boolean): Flagship[] {
         { value: '3', label: vi ? 'nơi dùng: web · app · app riêng' : 'places: web · app · standalone' },
       ],
       media: {
+        /* Video dựng từ thao tác THẬT (Remotion, ~/Documents/video-san-pham) — 1:52, 720p. */
+        video: 'https://media.cuongthai.com/videos/flagship/ct-work-v1.mp4',
         poster: '/images/flagship/ct-work-poster.jpg',
+        chapters: vi
+          ? [{ t: 14, label: 'Việc của tôi' }, { t: 22, label: 'Sprint & board' }, { t: 38, label: 'SRS & sơ đồ' }, { t: 50, label: 'Kiểm thử' }, { t: 57, label: 'Hỏi AI & agent' }, { t: 79, label: 'Ba nơi dùng' }]
+          : [{ t: 14, label: 'My work' }, { t: 22, label: 'Sprint & board' }, { t: 38, label: 'SRS & diagrams' }, { t: 50, label: 'Testing' }, { t: 57, label: 'AI & agents' }, { t: 79, label: 'Three places' }],
       },
       actions: [
         { href: '/work', label: vi ? 'Mở CT Work' : 'Open CT Work', primary: true },
@@ -146,12 +154,16 @@ export function getFlagships(vi: boolean): Flagship[] {
         ? ['Sinh viên làm lab & đồ án', 'Lập trình viên làm dự án thật', 'Người mới cần giải thích từng bước', 'Ai muốn agent mà không cài CLI']
         : ['Students doing labs & capstones', 'Developers on real projects', 'Beginners who want each step explained', 'Anyone who wants an agent without a CLI'],
       stats: [
-        { value: '37', label: vi ? 'công cụ cho agent' : 'agent tools' },
-        { value: '3', label: vi ? 'model chọn theo việc' : 'models to pick per task' },
+        { value: '46', label: vi ? 'công cụ cho agent' : 'agent tools' },
+        { value: '8', label: vi ? 'model để chọn theo việc' : 'models to pick per task' },
         { value: '3', label: vi ? 'hệ điều hành' : 'operating systems' },
       ],
       media: {
+        video: 'https://media.cuongthai.com/videos/flagship/ai-code-v1.mp4',
         poster: '/images/flagship/ai-code-poster.jpg',
+        chapters: vi
+          ? [{ t: 12, label: 'Giao việc' }, { t: 17, label: 'Đọc dự án' }, { t: 27, label: 'Kế hoạch & sửa' }, { t: 32, label: 'Xin phép' }, { t: 38, label: 'Chạy test' }, { t: 46, label: 'Tự kiểm' }, { t: 65, label: 'Chọn model' }]
+          : [{ t: 12, label: 'The task' }, { t: 17, label: 'Reading' }, { t: 27, label: 'Plan & edits' }, { t: 32, label: 'Permission' }, { t: 38, label: 'Tests' }, { t: 46, label: 'Self-check' }, { t: 65, label: 'Models' }],
       },
       actions: [
         { href: '/download', label: vi ? 'Tải app' : 'Get the app', primary: true },

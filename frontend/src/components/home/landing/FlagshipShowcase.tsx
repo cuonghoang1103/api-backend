@@ -21,7 +21,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowRight, ArrowUpRight, Bot, Briefcase, ClipboardCheck, FileText, Files, GitBranch,
-  Globe, GraduationCap, KanbanSquare, Pause, Play, Plug, ShieldCheck, SquareTerminal, Users,
+  Globe, GraduationCap, KanbanSquare, Pause, Play, Plug, ShieldCheck, SquareTerminal, Users, Volume2, VolumeX,
   type LucideIcon,
 } from 'lucide-react';
 import { getFlagships, type Flagship, type FlagshipMedia } from './flagshipData';
@@ -39,6 +39,7 @@ function fmtTime(s: number): string {
 function FlagshipMediaFrame({ media, name, vi }: { media: FlagshipMedia; name: string; vi: boolean }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [coTieng, setCoTieng] = useState(false);
 
   useEffect(() => {
     const v = ref.current;
@@ -71,14 +72,28 @@ function FlagshipMediaFrame({ media, name, vi }: { media: FlagshipMedia; name: s
               onPause={() => setPlaying(false)}
               aria-label={vi ? `Video giới thiệu ${name}` : `${name} demo video`}
             />
-            <button
-              type="button"
-              className="flag-media-toggle"
-              onClick={() => { const v = ref.current; if (v) { if (v.paused) void v.play(); else v.pause(); } }}
-              aria-label={playing ? (vi ? 'Tạm dừng' : 'Pause') : (vi ? 'Phát' : 'Play')}
-            >
-              {playing ? <Pause size={16} aria-hidden /> : <Play size={16} aria-hidden />}
-            </button>
+            <div className="flag-media-nut">
+              {/* Bật tiếng = xem có nhạc: tua về đầu cho người xem nghe trọn từ cảnh mở. */}
+              <button
+                type="button"
+                onClick={() => {
+                  const v = ref.current; if (!v) return;
+                  const bat = !coTieng; v.muted = !bat; setCoTieng(bat);
+                  if (bat) { v.currentTime = 0; void v.play(); }
+                }}
+                aria-label={coTieng ? (vi ? 'Tắt tiếng' : 'Mute') : (vi ? 'Xem có tiếng' : 'Play with sound')}
+              >
+                {coTieng ? <Volume2 size={16} aria-hidden /> : <VolumeX size={16} aria-hidden />}
+                {!coTieng && <span>{vi ? 'Xem có tiếng' : 'Sound on'}</span>}
+              </button>
+              <button
+                type="button"
+                onClick={() => { const v = ref.current; if (v) { if (v.paused) void v.play(); else v.pause(); } }}
+                aria-label={playing ? (vi ? 'Tạm dừng' : 'Pause') : (vi ? 'Phát' : 'Play')}
+              >
+                {playing ? <Pause size={16} aria-hidden /> : <Play size={16} aria-hidden />}
+              </button>
+            </div>
           </>
         ) : (
           <img className="flag-media-el" src={media.poster} alt={vi ? `Ảnh chụp ${name}` : `${name} screenshot`} loading="lazy" decoding="async" />

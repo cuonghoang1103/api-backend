@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 344" width="700" height="344" role="img" aria-label="Năm chế độ quyền của AI Code: Kế hoạch chỉ đọc; Hỏi từng việc thì sửa tệp, lệnh thường và lệnh nguy hiểm đều hỏi; Tự nhận sửa file thì sửa tệp tự chạy còn lệnh vẫn hỏi; Tự nhận cả lệnh an toàn thì chỉ lệnh cần kiểm và nguy hiểm còn hỏi; Bỏ qua tất cả thì không hỏi gì, phải qua cửa xác nhận và không bao giờ được làm mặc định">
+  <rect x="0" y="0" width="700" height="344" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="343" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="32" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#94a3b8" letter-spacing="1">5 CHẾ ĐỘ QUYỀN — MỖI TAB MỘT CHẾ ĐỘ</text>
+
+  <!-- tiêu đề cột -->
+  <text x="372" y="62" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">sửa tệp</text>
+  <text x="482" y="62" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">lệnh thường</text>
+  <text x="604" y="56" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">lệnh cần kiểm</text>
+  <text x="604" y="70" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">/ nguy hiểm</text>
+  <line x1="24" y1="80" x2="676" y2="80" stroke="#1e293b"/>
+
+  <!-- hàng 1 -->
+  <text x="24" y="106" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Kế hoạch</text>
+  <text x="96" y="106" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#4ade80">mặc định</text>
+  <text x="24" y="123" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">chỉ đọc, trình bày cách làm</text>
+  <text x="372" y="112" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">không có</text>
+  <text x="482" y="112" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">không có</text>
+  <text x="604" y="112" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">không có</text>
+  <line x1="24" y1="134" x2="676" y2="134" stroke="#1e293b"/>
+
+  <!-- hàng 2 -->
+  <text x="24" y="160" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Hỏi từng việc</text>
+  <text x="24" y="177" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">mỗi việc hiện ra để bạn duyệt</text>
+  <rect x="337" y="150" width="70" height="22" rx="11" fill="none" stroke="#fb923c"/>
+  <text x="372" y="166" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">hỏi</text>
+  <rect x="447" y="150" width="70" height="22" rx="11" fill="none" stroke="#fb923c"/>
+  <text x="482" y="166" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">hỏi</text>
+  <rect x="569" y="150" width="70" height="22" rx="11" fill="none" stroke="#fb923c"/>
+  <text x="604" y="166" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">hỏi</text>
+  <line x1="24" y1="188" x2="676" y2="188" stroke="#1e293b"/>
+
+  <!-- hàng 3 -->
+  <text x="24" y="214" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Tự nhận sửa file</text>
+  <rect x="337" y="204" width="70" height="22" rx="11" fill="#4ade80" fill-opacity="0.12" stroke="#4ade80"/>
+  <text x="372" y="220" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#4ade80">tự chạy</text>
+  <rect x="447" y="204" width="70" height="22" rx="11" fill="none" stroke="#fb923c"/>
+  <text x="482" y="220" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">hỏi</text>
+  <rect x="569" y="204" width="70" height="22" rx="11" fill="none" stroke="#fb923c"/>
+  <text x="604" y="220" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">hỏi</text>
+  <line x1="24" y1="236" x2="676" y2="236" stroke="#1e293b"/>
+
+  <!-- hàng 4 -->
+  <text x="24" y="262" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Tự nhận cả lệnh an toàn</text>
+  <rect x="337" y="252" width="70" height="22" rx="11" fill="#4ade80" fill-opacity="0.12" stroke="#4ade80"/>
+  <text x="372" y="268" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#4ade80">tự chạy</text>
+  <rect x="447" y="252" width="70" height="22" rx="11" fill="#4ade80" fill-opacity="0.12" stroke="#4ade80"/>
+  <text x="482" y="268" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#4ade80">tự chạy</text>
+  <rect x="569" y="252" width="70" height="22" rx="11" fill="none" stroke="#fb923c"/>
+  <text x="604" y="268" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">hỏi</text>
+  <line x1="24" y1="284" x2="676" y2="284" stroke="#1e293b"/>
+
+  <!-- hàng 5 -->
+  <text x="24" y="306" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#f43f5e">Bỏ qua tất cả</text>
+  <text x="24" y="322" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">phải xác nhận · không bao giờ là mặc định</text>
+  <rect x="337" y="294" width="70" height="22" rx="11" fill="#f43f5e" fill-opacity="0.12" stroke="#f43f5e"/>
+  <text x="372" y="310" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#f43f5e">tự chạy</text>
+  <rect x="447" y="294" width="70" height="22" rx="11" fill="#f43f5e" fill-opacity="0.12" stroke="#f43f5e"/>
+  <text x="482" y="310" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#f43f5e">tự chạy</text>
+  <rect x="569" y="294" width="70" height="22" rx="11" fill="#f43f5e" fill-opacity="0.12" stroke="#f43f5e"/>
+  <text x="604" y="310" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#f43f5e">tự chạy</text>
+</svg>

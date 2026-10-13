@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 344" width="700" height="344" role="img" aria-label="AI Code — agent lập trình trong app desktop CuongThai: một thẻ duyệt lệnh trước khi agent chạy npm test, cùng các con số đo thật: 46 tool, 174 commit, 196 bản phát hành, 1.002 phép kiểm">
+  <rect x="0" y="0" width="700" height="344" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="343" rx="12" fill="none" stroke="#1e293b"/>
+
+  <!-- ── Trái: tên + số ────────────────────────────────────── -->
+  <text x="32" y="58" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#22d3ee" letter-spacing="1.4">DEEP DIVE · APP DESKTOP</text>
+  <text x="32" y="104" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="40" font-weight="700" fill="#e2e8f0">AI Code</text>
+  <text x="32" y="134" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="15" fill="#94a3b8">agent lập trình chạy trên máy bạn —</text>
+  <text x="32" y="155" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="15" fill="#94a3b8">xin phép trước mỗi việc không lùi được</text>
+
+  <rect x="32" y="190" width="132" height="54" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="46" y="216" font-family="ui-monospace, Menlo, monospace" font-size="18" fill="#4ade80">46</text>
+  <text x="46" y="234" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">tool</text>
+  <rect x="174" y="190" width="132" height="54" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="188" y="216" font-family="ui-monospace, Menlo, monospace" font-size="18" fill="#22d3ee">174</text>
+  <text x="188" y="234" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">commit · 48 ngày</text>
+  <rect x="32" y="254" width="132" height="54" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="46" y="280" font-family="ui-monospace, Menlo, monospace" font-size="18" fill="#a78bfa">196</text>
+  <text x="46" y="298" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">bản phát hành</text>
+  <rect x="174" y="254" width="132" height="54" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="188" y="280" font-family="ui-monospace, Menlo, monospace" font-size="18" fill="#fcd34d">1.002</text>
+  <text x="188" y="298" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">phép kiểm xanh</text>
+
+  <!-- ── Phải: thẻ duyệt lệnh ─────────────────────────────── -->
+  <rect x="346" y="40" width="322" height="268" rx="10" fill="#0a1120" stroke="#334155"/>
+  <circle cx="366" cy="60" r="5" fill="#f43f5e"/>
+  <circle cx="382" cy="60" r="5" fill="#fcd34d"/>
+  <circle cx="398" cy="60" r="5" fill="#4ade80"/>
+  <text x="652" y="64" text-anchor="end" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">bước 7/60 · Cao</text>
+  <line x1="346" y1="78" x2="668" y2="78" stroke="#1e293b"/>
+
+  <text x="364" y="104" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#64748b">✓ read_file  src/auth.ts</text>
+  <text x="364" y="126" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#64748b">✓ edit_file  src/auth.ts  +4 −2</text>
+  <text x="364" y="148" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#94a3b8">… agent muốn chạy lệnh:</text>
+
+  <rect x="364" y="162" width="286" height="40" rx="6" fill="#0d1424" stroke="#fb923c"/>
+  <text x="378" y="187" font-family="ui-monospace, Menlo, monospace" font-size="15" fill="#4ade80">$ npm test -- auth</text>
+  <text x="364" y="224" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">lệnh thường · chế độ “Hỏi từng việc”</text>
+
+  <rect x="364" y="242" width="96" height="34" rx="6" fill="#4ade80" fill-opacity="0.14" stroke="#4ade80"/>
+  <text x="412" y="264" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#4ade80">Duyệt</text>
+  <rect x="470" y="242" width="96" height="34" rx="6" fill="none" stroke="#334155"/>
+  <text x="518" y="264" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#94a3b8">Từ chối</text>
+</svg>

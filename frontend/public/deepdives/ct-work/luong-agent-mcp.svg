@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 462" width="700" height="462" role="img" aria-label="Một lời gọi tool của AI agent đi qua máy chủ MCP của CT Work: xác thực token, tìm tool trong registry, trần 120 lời gọi mỗi phút, kiểm tham số và quyền, ghi qua cửa chung nơi Done bị đổi thành Review, rồi trả chữ người viết bọc trong khối không tin cậy. Nhánh bị cấm trả 403 kèm tên người chịu trách nhiệm.">
+  <rect width="700" height="462" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="461" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#64748b" letter-spacing="1">MỘT LỜI GỌI TOOL CỦA AGENT ĐI QUA ĐÂU</text>
+
+  <!-- agent -->
+  <rect x="24" y="44" width="200" height="50" rx="6" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="36" y="65" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Claude Code (agent)</text>
+  <text x="36" y="83" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#a78bfa">tools/call transition</text>
+  <line x1="224" y1="69" x2="246" y2="69" stroke="#a78bfa" stroke-width="1.6"/>
+  <path d="M 250 69 L 242 64 L 242 74 Z" fill="#a78bfa"/>
+
+  <rect x="250" y="44" width="426" height="50" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="262" y="65" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#fcd34d">POST /api/v1/work/mcp</text>
+  <text x="262" y="83" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">Bearer ctw_… · không phiên, mỗi request tự xác thực</text>
+
+  <!-- chuỗi kiểm -->
+  <g font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#e2e8f0">
+    <rect x="250" y="116" width="426" height="36" rx="6" fill="#0a1120" stroke="#334155"/>
+    <text x="262" y="139">1. token hợp lệ? agent ACTIVE? (PAUSED: chỉ đọc)</text>
+    <rect x="250" y="164" width="426" height="36" rx="6" fill="#0a1120" stroke="#334155"/>
+    <text x="262" y="187">2. tool có trong registry? (123 lệnh, lọc theo scope token)</text>
+    <rect x="250" y="212" width="426" height="36" rx="6" fill="#0a1120" stroke="#334155"/>
+    <text x="262" y="235">3. trần 120 lời gọi/phút/token ⇒ -32000 + retryAfterMs</text>
+    <rect x="250" y="260" width="426" height="36" rx="6" fill="#0a1120" stroke="#fb923c"/>
+    <text x="262" y="283">4. zod kiểm tham số → requireProject(): principal = AGENT</text>
+    <rect x="250" y="308" width="426" height="36" rx="6" fill="#0a1120" stroke="#4ade80"/>
+    <text x="262" y="331">5. applyIssueChange(): agent xin Done ⇒ đổi sang Review</text>
+    <rect x="250" y="356" width="426" height="36" rx="6" fill="#0a1120" stroke="#334155"/>
+    <text x="262" y="379">6. trả chữ người viết bọc &lt;ctwork-content untrusted="true"&gt;</text>
+  </g>
+  <g stroke="#334155" stroke-width="1.3">
+    <line x1="463" y1="94" x2="463" y2="116"/><line x1="463" y1="152" x2="463" y2="164"/>
+    <line x1="463" y1="200" x2="463" y2="212"/><line x1="463" y1="248" x2="463" y2="260"/>
+    <line x1="463" y1="296" x2="463" y2="308"/><line x1="463" y1="344" x2="463" y2="356"/>
+  </g>
+
+  <!-- nhánh cấm -->
+  <rect x="24" y="250" width="200" height="56" rx="6" fill="#0a1120" stroke="#f43f5e"/>
+  <text x="36" y="272" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#f43f5e">403 WORK_AGENT_FORBIDDEN</text>
+  <text x="36" y="292" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">kèm owner ⇒ gọi ask_lead</text>
+  <line x1="250" y1="278" x2="228" y2="278" stroke="#f43f5e" stroke-width="1.6"/>
+  <path d="M 224 278 L 232 273 L 232 283 Z" fill="#f43f5e"/>
+
+  <!-- người duyệt -->
+  <rect x="24" y="318" width="200" height="56" rx="6" fill="#0a1120" stroke="#4ade80"/>
+  <text x="36" y="340" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#e2e8f0">Người kéo Review → Done</text>
+  <text x="36" y="360" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">agent không tự đóng việc</text>
+  <line x1="250" y1="326" x2="228" y2="340" stroke="#4ade80" stroke-width="1.6"/>
+  <path d="M 224 342 L 229 334 L 233 343 Z" fill="#4ade80"/>
+
+  <line x1="24" y1="408" x2="676" y2="408" stroke="#1e293b"/>
+  <text x="24" y="430" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">Hai tầng chốt: tuyến (AGENT_DENIED_ROUTES — 72 mẫu cấm) và hành động (requireProject, assertHumanActor).</text>
+  <text x="24" y="449" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">Ngoài /projects/:pid là danh sách TRẮNG agentTopRouteAllowed: quên khai = bị chặn, không bị lộ.</text>
+</svg>

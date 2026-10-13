@@ -108,22 +108,21 @@ export const DEEP_DIVES: DeepDive[] = [
     blurb: 'What to look at first when the thing you shipped is on fire.',
     article: 'reading-production-logs-metrics-and-a-calm-head',
   },
-  // ── Hai sản phẩm chúng tôi tự dựng. KHÔNG có bài `article` cho chúng (chưa
-  //    soạn bài tech-trends), nên dẫn thẳng vào trang tính năng bằng `href` —
-  //    đúng kiểu đích thứ hai mô tả ở đầu file. `via` cho biết thẻ mở sản phẩm,
-  //    không phải một bài đọc.
+  // ── Hai sản phẩm chúng tôi tự dựng (13/10/2026: có bài đọc thật — dựng thế
+  //    nào, mã thật, lỗi đã sửa, dòng thời gian nâng cấp, mẹo dùng; cuối bài dẫn
+  //    tới chỗ tải). Bài nằm ở content/deepdives/<slug>.{md,mjs}, deploy tự seed.
   {
     logo: 'ct-work',
     title: 'Building a Jira-style Project Tool (CT Work)',
-    blurb: 'A modular monolith: boards, sprints and issues, AI agents over MCP, calendar · Notion · Slack.',
-    href: '/work',
-    via: 'The product · open CT Work',
+    blurb: 'How CT Work was built in 21 days: the code, the bugs we fixed, the timeline — and how to use it well.',
+    article: 'xay-dung-ct-work-cong-cu-quan-ly-du-an-kieu-jira',
+    via: 'Bài đọc · Tiếng Việt · tải app ở cuối bài',
   },
   {
     logo: 'ai-code',
     title: 'AI Code on the Desktop: An Agent That Codes With You',
-    blurb: 'A Claude agent through a dedicated gateway, running inside an Electron app — real streaming, many models.',
-    href: '/download',
-    via: 'Desktop app · download',
+    blurb: 'Inside the coding agent of the desktop app: the tool loop, safety, models by measured cost, bugs fixed.',
+    article: 'ai-code-agent-lap-trinh-trong-app-desktop',
+    via: 'Bài đọc · Tiếng Việt · tải app ở cuối bài',
   },
 ];

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 344" width="700" height="344" role="img" aria-label="Một board bốn cột To Do, In Progress, In Review, Done. Một thẻ do AI agent làm bị agent kéo vào Done, server chuyển nó về In Review để người duyệt đóng. Dưới cùng là các số đo của CT Work.">
+  <rect width="700" height="344" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="343" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="40" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="22" font-weight="700" fill="#e2e8f0">CT Work</text>
+  <text x="128" y="39" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#94a3b8">công cụ quản lý dự án kiểu Jira — tự xây trong 21 ngày</text>
+
+  <!-- 4 cột -->
+  <rect x="24" y="60" width="154" height="166" rx="8" fill="#0a1120" stroke="#1e293b"/>
+  <rect x="190" y="60" width="154" height="166" rx="8" fill="#0a1120" stroke="#1e293b"/>
+  <rect x="356" y="60" width="154" height="166" rx="8" fill="#0a1120" stroke="#1e293b"/>
+  <rect x="522" y="60" width="154" height="166" rx="8" fill="#0a1120" stroke="#1e293b"/>
+  <text x="36" y="82" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#94a3b8" letter-spacing="1">TO DO</text>
+  <text x="202" y="82" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#22d3ee" letter-spacing="1">IN PROGRESS</text>
+  <text x="368" y="82" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#a78bfa" letter-spacing="1">IN REVIEW</text>
+  <text x="534" y="82" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#4ade80" letter-spacing="1">DONE</text>
+
+  <!-- TO DO -->
+  <rect x="34" y="96" width="134" height="48" rx="6" fill="#111a2e" stroke="#334155"/>
+  <text x="44" y="115" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">PRJ-31</text>
+  <text x="44" y="134" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#e2e8f0">Đặc tả UC-03</text>
+  <rect x="34" y="152" width="134" height="48" rx="6" fill="#111a2e" stroke="#334155"/>
+  <text x="44" y="171" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">PRJ-32</text>
+  <text x="44" y="190" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#e2e8f0">Unit test 5.1</text>
+
+  <!-- IN PROGRESS -->
+  <rect x="200" y="96" width="134" height="48" rx="6" fill="#111a2e" stroke="#334155"/>
+  <text x="210" y="115" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">PRJ-27</text>
+  <text x="210" y="134" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#e2e8f0">API đăng nhập</text>
+  <rect x="200" y="152" width="134" height="48" rx="6" fill="#111a2e" stroke="#334155"/>
+  <text x="210" y="171" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">PRJ-29</text>
+  <text x="210" y="190" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#e2e8f0">Sơ đồ ERD</text>
+
+  <!-- IN REVIEW: thẻ của agent sau khi bị chuyển về -->
+  <rect x="366" y="96" width="134" height="48" rx="6" fill="#111a2e" stroke="#a78bfa"/>
+  <text x="376" y="115" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">PRJ-21</text>
+  <rect x="466" y="104" width="26" height="16" rx="4" fill="#a78bfa"/>
+  <text x="479" y="116" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" font-weight="700" fill="#0d1424">AI</text>
+  <text x="376" y="134" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#e2e8f0">Viết test 5.2</text>
+
+  <!-- DONE -->
+  <rect x="532" y="96" width="134" height="48" rx="6" fill="#111a2e" stroke="#4ade80"/>
+  <text x="542" y="115" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">PRJ-18</text>
+  <text x="542" y="134" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#e2e8f0">Báo cáo tuần</text>
+  <!-- chỗ agent định thả -->
+  <rect x="532" y="166" width="134" height="48" rx="6" fill="none" stroke="#f43f5e" stroke-dasharray="5 4"/>
+  <text x="542" y="185" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#f43f5e">PRJ-21</text>
+  <text x="542" y="204" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">agent xin Done</text>
+
+  <!-- mũi tên Done -> Review -->
+  <path d="M 532 190 C 512 190, 520 128, 504 124" fill="none" stroke="#fb923c" stroke-width="1.6"/>
+  <path d="M 503 124 L 511 119 L 510 128 Z" fill="#fb923c"/>
+  <text x="356" y="250" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">server đổi đích sang In Review —</text>
+  <text x="356" y="268" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">người duyệt mới đóng việc</text>
+
+  <line x1="24" y1="292" x2="676" y2="292" stroke="#1e293b"/>
+  <text x="24" y="318" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">243 model · 68 trang · 1.098 tuyến API · 123 tool MCP · 1.514 ca test</text>
+</svg>

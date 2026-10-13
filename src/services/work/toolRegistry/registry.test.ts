@@ -12,8 +12,10 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
   it('tên duy nhất; 21 tool MCP cũ đứng đầu, đúng thứ tự; tools/list của MCP = registry', async () => {
     const names = r.COMMANDS.map((t) => t.name);
     assert.equal(new Set(names).size, names.length);
-    assert.equal(r.LEGACY_MCP_TOOLS.length, 21);
-    assert.deepEqual(names.slice(0, 21), r.LEGACY_MCP_TOOLS);
+    // 12/10/2026 (0bde6e11): create_project vào nhóm ghi ⇒ 22 tool "cũ", đứng cuối nhóm đó.
+    assert.equal(r.LEGACY_MCP_TOOLS.length, 22);
+    assert.equal(r.LEGACY_MCP_TOOLS[21], 'create_project');
+    assert.deepEqual(names.slice(0, r.LEGACY_MCP_TOOLS.length), r.LEGACY_MCP_TOOLS);
     const { TOOLS } = await import('../../../mcp/server.js');
     assert.deepEqual(TOOLS.map((t) => t.name), r.mcpCommands().map((t) => t.name));
   });

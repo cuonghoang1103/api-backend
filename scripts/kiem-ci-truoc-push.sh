@@ -59,6 +59,7 @@ NHAT_KY="${TMP_GOC}/kiem.log"
 DB_TEN=""
 DB_URL_ADMIN=""
 KIEM_HONG=""
+REDIS_TAM=""
 
 don_dep() {
     local ma=$?
@@ -68,6 +69,7 @@ don_dep() {
             | (cd "$WT" && ./node_modules/.bin/prisma db execute --url "$DB_URL_ADMIN" --stdin >/dev/null 2>&1) \
             || canh "Không DROP được CSDL tạm ${DB_TEN} — xoá tay khi rảnh."
     fi
+    if [ -n "$REDIS_TAM" ]; then docker rm -f "$REDIS_TAM" >/dev/null 2>&1 || true; fi
     if [ -d "$WT" ]; then
         git -C "$ROOT" worktree remove --force "$WT" >/dev/null 2>&1 || rm -rf "$WT"
     fi
@@ -134,6 +136,16 @@ fi
 chay_kiem "backend tsc"     ./node_modules/.bin/tsc --noEmit
 chay_kiem "eval:grader"     npm run --silent eval:grader
 chay_kiem "eval:cv-linter"  npm run --silent eval:cv-linter
+# Redis: CI có dịch vụ redis:7-alpine; máy local mà Redis TẮT thì getRedis() (MFA, CRM, ép 2FA…) CHỜ MÃI —
+# 13/10/2026 crm.db/mfa.db treo 24 phút ở 0% CPU, ctw7c.db hết 600s. Cổng 6379 đóng ⇒ dựng Redis TẠM, dọn khi thoát.
+if ! node -e 'const s=require("net").connect(6379,"127.0.0.1");s.setTimeout(2000);s.on("connect",()=>{s.end();process.exit(0)});s.on("error",()=>process.exit(1));s.on("timeout",()=>process.exit(1))' 2>/dev/null; then
+    REDIS_TAM="ctw-kiem-ci-redis-$$"
+    if docker run -d --rm --name "$REDIS_TAM" -p 127.0.0.1:6379:6379 redis:7-alpine >/dev/null 2>&1; then
+        sleep 2; canh "  – Redis cục bộ đang tắt ⇒ dựng Redis tạm ${REDIS_TAM} cho lượt kiểm này"
+    else
+        REDIS_TAM=""; canh "  ✗ Redis cục bộ tắt và không dựng được Redis tạm (Docker?) — test MFA/CRM sẽ treo"; KIEM_HONG="${KIEM_HONG} redis"
+    fi
+fi
 chay_kiem "npm test"        npm test
 
 # ─── 4. test:work-db trên CSDL TẠM (job work-db-tests của CI) ───

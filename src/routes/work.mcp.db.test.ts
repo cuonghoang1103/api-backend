@@ -174,8 +174,10 @@ describe('CT Work — MCP + chi phí agent (A9–A12, HTTP + DB thật)', { skip
     const names = a.body.result.tools.map((t: any) => t.name);
     // Đợt 3C: tools/list sinh từ registry dùng chung — 21 tool cũ giữ nguyên tên, đứng đầu, rồi tới lệnh mới.
     const { LEGACY_MCP_TOOLS, mcpCommands } = await import('../services/work/toolRegistry/index.js');
-    assert.equal(LEGACY_MCP_TOOLS.length, 21);
-    assert.deepEqual(names.slice(0, 21), LEGACY_MCP_TOOLS);
+    // 12/10/2026 (0bde6e11): thêm create_project vào nhóm ghi ⇒ 22 tool "cũ", đứng cuối nhóm đó.
+    assert.equal(LEGACY_MCP_TOOLS.length, 22);
+    assert.equal(LEGACY_MCP_TOOLS[21], 'create_project');
+    assert.deepEqual(names.slice(0, LEGACY_MCP_TOOLS.length), LEGACY_MCP_TOOLS);
     assert.equal(names.length, mcpCommands().length);
     for (const t of a.body.result.tools) assert.equal(t.inputSchema.type, 'object', t.name);
     const getIssue = a.body.result.tools.find((t: any) => t.name === 'get_issue');

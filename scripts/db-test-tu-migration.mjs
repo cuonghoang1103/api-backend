@@ -25,7 +25,7 @@
  * (không có bảng nào trong schema public) — không bao giờ đè lên CSDL đang dùng.
  */
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -134,4 +134,7 @@ function main() {
   }
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+// So bằng ĐƯỜNG THẬT: Node trả import.meta.url đã giải symlink, còn argv[1] thì không. Trên macOS worktree tạm của
+// kiem-ci-truoc-push.sh nằm ở /var/folders/… (= symlink tới /private/var/…) ⇒ so path.resolve thì không bao giờ khớp,
+// main() không chạy, script thoát 0 IM LẶNG và test:work-db chạy trên CSDL TRỐNG (13/10/2026: mọi tệp "users does not exist").
+if (process.argv[1] && realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) main();

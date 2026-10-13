@@ -33,26 +33,49 @@ const ICONS: Record<string, LucideIcon> = {
 };
 
 function fmtTime(s: number): string {
-  return `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+  const r = Math.round(s);
+  return `${Math.floor(r / 60)}:${String(r % 60).padStart(2, '0')}`;
 }
 
 function FlagshipMediaFrame({ media, name, vi }: { media: FlagshipMedia; name: string; vi: boolean }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
   const [coTieng, setCoTieng] = useState(false);
+  /* Chọn nguồn SAU khi gắn (không có ở máy chủ ⇒ không lệch hydrate): màn hẹp hoặc bật tiết kiệm dữ
+     liệu ⇒ bản 720p60 (~14 MB) thay vì 1080p60 (~40 MB). Cả hai đều 60 fps nên chuyển động vẫn mượt. */
+  const [nguon, setNguon] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    if (!media.video) return;
+    const tietKiem = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+    setNguon(media.videoNhe && (window.innerWidth < 900 || tietKiem) ? media.videoNhe : media.video);
+  }, [media.video, media.videoNhe]);
 
   useEffect(() => {
     const v = ref.current;
-    if (!v || !media.video) return;
+    if (!v || !nguon) return;
     const giam = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    /* Tải TRƯỚC khi còn cách ~600px — cuộn tới nơi là đã có sẵn vài giây đệm, không khựng lúc bắt đầu
+       (đo 13/10: đợi tới khi thấy mới tải ⇒ ~2 giây đầu đứng hình chờ CDN). */
+    let dangThay = false;
+    /* ⚠️ `load()` HUỶ mọi `play()` đang chờ — cuộn thẳng tới video (bấm link, phím End) làm hai bộ quan sát
+       bắn cùng lúc và video đứng hình mãi (đo 13/10). Nên chỉ `load()` khi CHƯA thấy video, và `play()` bị huỷ
+       thì thử lại khi đủ dữ liệu. */
+    const phat = () => {
+      if (!dangThay || giam) return;
+      v.play().catch(() => v.addEventListener('canplay', () => { if (dangThay) void v.play().catch(() => {}); }, { once: true }));
+    };
+    const gan = new IntersectionObserver(([e]) => {
+      if (e?.isIntersecting && v.preload !== 'auto') { v.preload = 'auto'; if (!dangThay) v.load(); }
+    }, { rootMargin: '600px 0px' });
     const io = new IntersectionObserver(([e]) => {
       if (!e) return;
-      if (e.isIntersecting && !giam) void v.play().catch(() => {});
-      else v.pause();
+      dangThay = e.isIntersecting;
+      if (dangThay) phat(); else v.pause();
     }, { threshold: 0.45 });
+    gan.observe(v);
     io.observe(v);
-    return () => io.disconnect();
-  }, [media.video]);
+    return () => { gan.disconnect(); io.disconnect(); };
+  }, [nguon]);
 
   return (
     <figure className="flag-media">
@@ -62,7 +85,7 @@ function FlagshipMediaFrame({ media, name, vi }: { media: FlagshipMedia; name: s
             <video
               ref={ref}
               className="flag-media-el"
-              src={media.video}
+              src={nguon}
               poster={media.poster}
               muted
               loop

@@ -18,8 +18,10 @@ export interface FlagshipStat { value: string; label: string }
 export interface FlagshipStrength { title: string; body: string }
 export interface FlagshipAction { href: string; label: string; primary?: boolean; external?: boolean }
 export interface FlagshipMedia {
-  /** Video demo (R2/CDN). Chưa có ⇒ chỉ hiện poster. */
+  /** Video demo (R2/CDN), 1080p60. Chưa có ⇒ chỉ hiện poster. */
   video?: string;
+  /** Bản 720p60 nhẹ hơn — dùng khi màn hẹp hoặc người dùng bật tiết kiệm dữ liệu. */
+  videoNhe?: string;
   poster: string;
   /** Mốc chương trong video — bấm để tua. */
   chapters?: { t: number; label: string }[];
@@ -58,12 +60,14 @@ export function getFlagships(vi: boolean): Flagship[] {
         { value: '3', label: vi ? 'nơi dùng: web · app · app riêng' : 'places: web · app · standalone' },
       ],
       media: {
-        /* Video dựng từ thao tác THẬT (Remotion, ~/Documents/video-san-pham) — 1:52, 720p. */
-        video: 'https://media.cuongthai.com/videos/flagship/ct-work-v1.mp4',
+        /* Video dựng từ thao tác THẬT (Remotion, ~/Documents/video-san-pham), người dùng ghép nhạc (13/10/2026).
+           1:04, 1080p60 H.264 (SSIM 0,996 so với bản gốc HEVC). Mốc chương dò bằng so khung hình với bản dựng. */
+        video: 'https://media.cuongthai.com/videos/flagship/ct-work-v2-1080p60.mp4',
+        videoNhe: 'https://media.cuongthai.com/videos/flagship/ct-work-v2-720p60.mp4',
         poster: '/images/flagship/ct-work-poster.jpg',
         chapters: vi
-          ? [{ t: 14, label: 'Việc của tôi' }, { t: 22, label: 'Sprint & board' }, { t: 38, label: 'SRS & sơ đồ' }, { t: 50, label: 'Kiểm thử' }, { t: 57, label: 'Hỏi AI & agent' }, { t: 79, label: 'Ba nơi dùng' }]
-          : [{ t: 14, label: 'My work' }, { t: 22, label: 'Sprint & board' }, { t: 38, label: 'SRS & diagrams' }, { t: 50, label: 'Testing' }, { t: 57, label: 'AI & agents' }, { t: 79, label: 'Three places' }],
+          ? [{ t: 5.5, label: 'Việc của tôi' }, { t: 10.2, label: 'Sprint & board' }, { t: 20.9, label: 'SRS & sơ đồ' }, { t: 29.9, label: 'Kiểm thử' }, { t: 34.8, label: 'Hỏi AI' }, { t: 42.5, label: 'App desktop' }, { t: 49.1, label: 'Agent & MCP' }]
+          : [{ t: 5.5, label: 'My work' }, { t: 10.2, label: 'Sprint & board' }, { t: 20.9, label: 'SRS & diagrams' }, { t: 29.9, label: 'Testing' }, { t: 34.8, label: 'Ask AI' }, { t: 42.5, label: 'Desktop app' }, { t: 49.1, label: 'Agents & MCP' }],
       },
       actions: [
         { href: '/work', label: vi ? 'Mở CT Work' : 'Open CT Work', primary: true },
@@ -159,11 +163,12 @@ export function getFlagships(vi: boolean): Flagship[] {
         { value: '3', label: vi ? 'hệ điều hành' : 'operating systems' },
       ],
       media: {
-        video: 'https://media.cuongthai.com/videos/flagship/ai-code-v1.mp4',
+        video: 'https://media.cuongthai.com/videos/flagship/ai-code-v2-1080p60.mp4',
+        videoNhe: 'https://media.cuongthai.com/videos/flagship/ai-code-v2-720p60.mp4',
         poster: '/images/flagship/ai-code-poster.jpg',
         chapters: vi
-          ? [{ t: 12, label: 'Giao việc' }, { t: 17, label: 'Đọc dự án' }, { t: 27, label: 'Kế hoạch & sửa' }, { t: 32, label: 'Xin phép' }, { t: 38, label: 'Chạy test' }, { t: 46, label: 'Tự kiểm' }, { t: 65, label: 'Chọn model' }]
-          : [{ t: 12, label: 'The task' }, { t: 17, label: 'Reading' }, { t: 27, label: 'Plan & edits' }, { t: 32, label: 'Permission' }, { t: 38, label: 'Tests' }, { t: 46, label: 'Self-check' }, { t: 65, label: 'Models' }],
+          ? [{ t: 3.5, label: 'Giao việc' }, { t: 9.3, label: 'Đọc dự án' }, { t: 16.6, label: 'Kế hoạch' }, { t: 21.2, label: 'Xin phép' }, { t: 25.1, label: 'Chạy test' }, { t: 31.3, label: 'Tự kiểm' }, { t: 35.9, label: 'Kết quả' }, { t: 52.4, label: 'Chọn model' }]
+          : [{ t: 3.5, label: 'The task' }, { t: 9.3, label: 'Reading' }, { t: 16.6, label: 'Plan' }, { t: 21.2, label: 'Permission' }, { t: 25.1, label: 'Tests' }, { t: 31.3, label: 'Self-check' }, { t: 35.9, label: 'Result' }, { t: 52.4, label: 'Models' }],
       },
       actions: [
         { href: '/download', label: vi ? 'Tải app' : 'Get the app', primary: true },

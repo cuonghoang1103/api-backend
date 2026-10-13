@@ -170,8 +170,8 @@ check('Buffer không lộ ra renderer', !isolation.hasBuffer);
    thì thêm cả vào đây, đó chính là điều phép kiểm này muốn ép. */
 const expected = [
   'academy', 'agent', 'aiCucBo', 'app', 'auth', 'browser', 'duongCuaFile', 'manHinh',
-  'mau', 'music', 'notes', 'oauth', 'on', 'opencode', 'robot', 'robotGiaSu',
-  'settings', 'storage', 'terminal', 'update', 'xuongRemix',
+  'mangNha', 'mau', 'music', 'notes', 'oauth', 'on', 'opencode', 'pty', 'robot', 'robotGiaSu',
+  'settings', 'storage', 'terminal', 'troChoi', 'update', 'xuongRemix',
 ];
 console.log('\nCầu nối preload:');
 check('window.cuongthai tồn tại', isolation.bridgeKeys !== null);

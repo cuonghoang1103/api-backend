@@ -11,6 +11,10 @@
  *                                            bump mà chưa từng ship)
  *   thêm --dong-y  → khỏi hỏi lại trước khi push
  *   thêm --khong-cho → bắn workflow rồi thoát, không đứng chờ ~10 phút
+ *   thêm --ctwork  → phát hành app CT Work RIÊNG (13/10/2026) thay vì app
+ *                    CuongThai: số phiên bản `ctworkVersion`, workflow
+ *                    `ctwork-desktop-release.yml`, kho `ctwork-desktop`.
+ *   Cả hai app một lần: `npm run phat-hanh:ca-hai -- "mô tả"` (phat-hanh-ca-hai.mjs).
  *
  * ─── VÌ SAO CẦN FILE NÀY ───
  *
@@ -42,8 +46,14 @@ import { fileURLToPath } from 'node:url';
 
 const thuMucDesktop = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const gocKho = path.resolve(thuMucDesktop, '..');
-const KHO_PHAT_HANH = 'cuonghoang1103/cuongthai-desktop';
-const WORKFLOW = 'desktop-release.yml';
+/* `--ctwork` đọc thẳng từ argv ở đây (trước khối tham số bên dưới) vì ba hằng này
+   cần nó ngay. Xem src/shared/bienThe.ts về app CT Work riêng. */
+const LA_CTWORK = process.argv.includes('--ctwork');
+const KHO_PHAT_HANH = LA_CTWORK ? 'cuonghoang1103/ctwork-desktop' : 'cuonghoang1103/cuongthai-desktop';
+const WORKFLOW = LA_CTWORK ? 'ctwork-desktop-release.yml' : 'desktop-release.yml';
+/** Trường số phiên bản trong desktop/package.json — app CT Work đánh số riêng. */
+const TRUONG_PHIEN_BAN = LA_CTWORK ? 'ctworkVersion' : 'version';
+const TEN_APP = LA_CTWORK ? 'app CT Work' : 'app desktop';
 
 const do_ = (s) => `\x1b[31m${s}\x1b[0m`;
 const xanh = (s) => `\x1b[32m${s}\x1b[0m`;
@@ -108,6 +118,21 @@ if (banDesktop.length > 0) {
 }
 ok('`desktop/` sạch');
 
+/* App CT Work dựng phần lớn từ cây CT Work CỦA WEB (alias `@` → frontend/src).
+   Sửa dở ở đó cũng KHÔNG vào bản cài — cùng lý do với `desktop/` ở trên. */
+if (LA_CTWORK) {
+  const banWork = chay('git', ['status', '--porcelain', '--',
+    '../frontend/src/app/work', '../frontend/src/components/work'])
+    .split('\n').filter((d) => d.trim() && !d.startsWith('??'));
+  if (banWork.length > 0) {
+    chet('Cây CT Work của web còn thay đổi CHƯA COMMIT — chúng sẽ KHÔNG có trong app CT Work:',
+      ...banWork.map((d) => mo(`    ${d}`)),
+      '',
+      'Commit (và deploy web) rồi chạy lại.');
+  }
+  ok('Cây CT Work của web sạch');
+}
+
 // ─── 3. Đồng bộ với GitHub ────────────────────────────────────────
 thu('git', ['fetch', '--quiet', 'origin', 'main']);
 const truoc = Number(chay('git', ['rev-list', '--count', 'origin/main..HEAD']));
@@ -136,7 +161,7 @@ ok('Không có lượt dựng nào đang chạy');
 // ─── 5. Chọn số phiên bản ─────────────────────────────────────────
 const duongDanPkg = path.join(thuMucDesktop, 'package.json');
 const pkg = JSON.parse(readFileSync(duongDanPkg, 'utf8'));
-const hienTai = pkg.version;
+const hienTai = pkg[TRUONG_PHIEN_BAN];
 
 /** `false` = chưa có release · `true` = có và ĐÃ công bố · `'nhap'` = bản nháp. */
 function daPhatHanh(v) {
@@ -193,10 +218,10 @@ if (!DONG_Y_SAN) {
 
 // ─── 7. Bump + push ───────────────────────────────────────────────
 if (canBump) {
-  pkg.version = phienBanMoi;
+  pkg[TRUONG_PHIEN_BAN] = phienBanMoi;
   writeFileSync(duongDanPkg, `${JSON.stringify(pkg, null, 2)}\n`);
   chay('git', ['add', 'desktop/package.json']);
-  chay('git', ['commit', '-m', `chore(desktop): ${phienBanMoi} — ${moTa}`]);
+  chay('git', ['commit', '-m', `chore(${LA_CTWORK ? 'ctwork-desktop' : 'desktop'}): ${phienBanMoi} — ${moTa}`]);
   ok(`Đã commit bump ${phienBanMoi}`);
 }
 if (canBump || truoc > 0) {
@@ -248,7 +273,16 @@ ok('Dựng xong cả ba nền tảng');
  * một trong hai `.zip` của macOS, thì tự-cập-nhật chết CÂM — app cũ không bao
  * giờ thấy bản mới, mà release nhìn vẫn đầy đủ. Đã từng dính đúng vậy.
  */
-const CAN_CO = [
+const CAN_CO = LA_CTWORK ? [
+  /* Tên đặt tay trong electron-builder.ctwork.yml — x64 CŨNG có hậu tố kiến trúc. */
+  `CT-Work-${phienBanMoi}-arm64-mac.zip`,
+  `CT-Work-${phienBanMoi}-x64-mac.zip`,
+  `CT-Work-${phienBanMoi}-arm64.dmg`,
+  `CT-Work-Setup-${phienBanMoi}.exe`,
+  `CT-Work-${phienBanMoi}.AppImage`,
+  `CT-Work-${phienBanMoi}.deb`,
+  'latest.yml', 'latest-mac.yml', 'latest-linux.yml',
+] : [
   `CuongThai-${phienBanMoi}-arm64-mac.zip`,
   `CuongThai-${phienBanMoi}-mac.zip`,
   `CuongThai-${phienBanMoi}-arm64.dmg`,
@@ -266,5 +300,5 @@ if (thieu.length > 0) {
 }
 ok(`Đủ ${CAN_CO.length} file bắt buộc`);
 
-console.log(`\n${xanh('✓')} XONG — app desktop ${xanh(`v${phienBanMoi}`)} đã phát hành`);
+console.log(`\n${xanh('✓')} XONG — ${TEN_APP} ${xanh(`v${phienBanMoi}`)} đã phát hành`);
 console.log(`  ${mo(`https://github.com/${KHO_PHAT_HANH}/releases/tag/v${phienBanMoi}`)}\n`);

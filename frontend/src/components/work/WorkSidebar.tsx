@@ -51,6 +51,8 @@ import { GraduationCap, School } from 'lucide-react';
 import { Crosshair, Spade, MessageSquareHeart } from 'lucide-react'; // CTW đợt 7a
 import { ClipboardList, Inbox as InboxIcon, FileInput, BookOpen as BookOpenKb } from 'lucide-react'; // CTW đợt 7b
 import { PlugZap } from 'lucide-react'; // CTW đợt 8a
+import { Download } from 'lucide-react';
+import { laAppCtWork, trongAppDesktop } from '@/lib/appDesktop';
 import { teachingApi, teachingKeys } from './teaching/teachingApi';
 import { wt } from './i18n';
 
@@ -577,9 +579,17 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
         <NavItem href="/work/developer" icon={KeyRound} label={wt('dev.apiTokens')} active={pathname.startsWith('/work/developer')} />
         {/* CTW đợt 8a: kết nối Microsoft 365 / Google của tôi */}
         <NavItem href="/work/connections" icon={PlugZap} label={wt('c8a.navConnections')} active={pathname.startsWith('/work/connections')} />
-        <Link href="/" title={wt('shell.backToSite')} className={cn(ROW, ROW_IDLE)}>
-          <ArrowLeft size={15} className="shrink-0 opacity-80" /> <span className="min-w-0 flex-1 truncate">{wt('shell.backToSite')}</span>
-        </Link>
+        {/* 13/10/2026 — trên web: lối tải app CT Work riêng. Trong app desktop thì
+            không cần (đã ở trong app). Trong app CT Work riêng thì giấu luôn "Về
+            CuongThai": app này chỉ có CT Work, link về trang chính chỉ bật trình duyệt. */}
+        {!trongAppDesktop() && (
+          <NavItem href="/download/ct-work" icon={Download} label={wt('shell.downloadApp')} active={false} />
+        )}
+        {!laAppCtWork() && (
+          <Link href="/" title={wt('shell.backToSite')} className={cn(ROW, ROW_IDLE)}>
+            <ArrowLeft size={15} className="shrink-0 opacity-80" /> <span className="min-w-0 flex-1 truncate">{wt('shell.backToSite')}</span>
+          </Link>
+        )}
         {!inDrawer && (
           <button
             type="button"

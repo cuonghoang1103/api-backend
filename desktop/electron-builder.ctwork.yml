@@ -1,0 +1,137 @@
+# Cấu hình đóng gói — app desktop RIÊNG của CT Work (13/10/2026)
+#
+# Cùng mã nguồn với app CuongThai, dựng với CT_BIEN_THE=ctwork (xem
+# src/shared/bienThe.ts). KHÔNG gọi electron-builder trực tiếp với file này —
+# chạy qua script để biến thể, thư mục dựng và số phiên bản luôn đi cùng nhau:
+#
+#   npm run ctwork:pack         # thư mục chưa nén, để thử nhanh
+#   npm run ctwork:dist:mac     # CT-Work-<ver>-arm64.dmg / -x64.dmg (+ .zip cho tự cập nhật)
+#   npm run ctwork:dist:win     # CT-Work-Setup-<ver>.exe
+#   npm run ctwork:dist:linux   # .AppImage và .deb
+#
+# Đây là bản SAO CÓ CHỦ Ý của electron-builder.yml, không dùng `extends`: cách
+# electron-builder trộn MẢNG khi `extends` (thay hay nối?) là chỗ đặt sai một
+# dòng thì bản cài vẫn xanh mà thiếu tệp. Mọi lý do kỹ thuật (zip cho Squirrel,
+# ${arch} trong title dmg, hardenedRuntime, libsecret…) xem chú thích ở file gốc.
+#
+# Khác app CuongThai ở đúng những chỗ sau:
+#   • appId / productName / icon / scheme deep-link riêng ⇒ cài SONG SONG được.
+#   • Thư mục dựng `dist-ctwork/` (vite) và `release-ctwork/` (bản cài).
+#   • KHÔNG mang onnxruntime-node (247 MB, chỉ Xưởng Remix/AI ngoại tuyến dùng)
+#     và không có móc afterPack tỉa ONNX.
+#   • Phát hành ở kho PUBLIC riêng `cuonghoang1103/ctwork-desktop`.
+#   • Tên tệp KHÔNG có khoảng trắng (`CT-Work-…`): GitHub đổi khoảng trắng trong
+#     tên tệp đính kèm thành dấu chấm, và khi đó `latest*.yml` trỏ vào một tệp
+#     không tồn tại ⇒ tự cập nhật chết câm.
+
+appId: com.cuongthai.ctwork
+productName: CT Work
+copyright: © 2026 CuongHoangDev
+
+# Ghi đè package.json của BẢN CÀI: tệp chạy chính nằm trong dist-ctwork, và tên
+# gói riêng để thư mục cài trên Windows/Linux không trùng app CuongThai.
+extraMetadata:
+  name: ctwork-desktop
+  productName: CT Work
+  description: CT Work — quản lý dự án, đồ án và lớp học kiểu Jira
+  main: dist-ctwork/main/index.cjs
+
+directories:
+  output: release-ctwork
+  buildResources: build
+
+afterSign: scripts/notarize-hook.cjs
+
+files:
+  - dist-ctwork/**/*
+  - package.json
+  - '!**/*.map'
+  - '!node_modules/onnxruntime-node/**'
+  - '!node_modules/onnxruntime-common/**'
+  # Tài nguyên `public/` của app lớn mà Vite chép nguyên: Python trong trình duyệt
+  # (38 MB, chạy bài Code Lab) và trò chơi — CT Work không dùng.
+  - '!dist-ctwork/renderer/pyodide/**'
+  - '!dist-ctwork/renderer/games/**'
+
+asarUnpack:
+  - '**/node_modules/@lydell/**'
+
+# ── macOS ──────────────────────────────────────────────────
+mac:
+  category: public.app-category.productivity
+  icon: build/icon-ctwork.png
+  artifactName: 'CT-Work-${version}-${arch}-mac.${ext}'
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip
+      arch: [arm64, x64]
+  minimumSystemVersion: '11.0'
+  hardenedRuntime: true
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.inherit.plist
+  gatekeeperAssess: false
+  notarize: false
+  extendInfo:
+    NSMicrophoneUsageDescription: >-
+      CT Work dùng micro khi bạn ghi âm cuộc họp hoặc gọi trong nhóm. Micro chỉ
+      bật khi bạn bấm ghi và tắt ngay khi dừng.
+
+dmg:
+  title: '${productName} ${version} ${arch}'
+  artifactName: 'CT-Work-${version}-${arch}.${ext}'
+
+# ── Windows ────────────────────────────────────────────────
+win:
+  icon: build/icon-ctwork.png
+  target:
+    - target: nsis
+      arch: [x64]
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  perMachine: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: CT Work
+  artifactName: 'CT-Work-Setup-${version}.${ext}'
+
+# ── Linux ──────────────────────────────────────────────────
+linux:
+  icon: build/icon-ctwork.png
+  category: Office
+  synopsis: CT Work — quản lý dự án, đồ án và lớp học
+  executableName: ctwork
+  target:
+    - target: AppImage
+      arch: [x64]
+    - target: deb
+      arch: [x64]
+  desktop:
+    Name: CT Work
+    MimeType: x-scheme-handler/ctwork;
+
+appImage:
+  artifactName: 'CT-Work-${version}.${ext}'
+
+deb:
+  artifactName: 'CT-Work-${version}.${ext}'
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - xdg-utils
+    - libsecret-1-0
+
+# ── Phát hành ──────────────────────────────────────────────
+# Kho PUBLIC riêng (người dùng chốt 13/10/2026). Nháp trước, công bố ở bước cuối
+# của workflow — cùng lý do với app CuongThai (bản phát hành thiếu tệp lộ ra
+# giữa chừng ⇒ `Cannot find latest-mac.yml … 404`).
+publish:
+  provider: github
+  owner: cuonghoang1103
+  repo: ctwork-desktop
+  releaseType: draft

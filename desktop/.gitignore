@@ -1,6 +1,9 @@
 node_modules/
 dist/
 release/
+# Biến thể app riêng CT Work (13/10/2026) — xem src/shared/bienThe.ts.
+dist-ctwork/
+release-ctwork/
 out/
 *.log
 

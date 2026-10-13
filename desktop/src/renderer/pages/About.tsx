@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { AppInfo } from '../../shared/ipc';
 import { useDich } from '../i18n';
+import { LA_CTWORK } from '../../shared/bienThe';
 
 export function About() {
   const { dich } = useDich();
@@ -13,9 +14,11 @@ export function About() {
   return (
     <div className="ct-page">
       <div className="ct-panel">
-        <h1>CuongThai Desktop</h1>
+        <h1>{LA_CTWORK ? 'CT Work Desktop' : 'CuongThai Desktop'}</h1>
         <p className="ct-muted">
-          {dich('Ứng dụng desktop cho cuongthai.com — nền tảng CuongHoangDev.')}
+          {LA_CTWORK
+            ? dich('Ứng dụng desktop riêng của CT Work — quản lý dự án, đồ án và lớp học.')
+            : dich('Ứng dụng desktop cho cuongthai.com — nền tảng CuongHoangDev.')}
         </p>
 
         <dl className="ct-rows">

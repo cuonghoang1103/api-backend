@@ -27,6 +27,7 @@ import { Toaster } from 'sonner';
 import { LoiMoiDoiKhangHost } from './features/doiKhang/LoiMoiDoiKhangHost';
 import QuickCaptureHost from '@/components/notes/QuickCaptureHost';
 import { ThongBaoHost } from './features/thongBao/ThongBaoHost';
+import { LA_CTWORK } from '../shared/bienThe';
 
 function Content() {
   const { route } = useAppState();
@@ -71,9 +72,61 @@ function Content() {
   );
 }
 
+/**
+ * Toast của cây web — xem chú thích dài trong `Shell` (vì sao phải có, vì sao
+ * theo `resolvedTheme`, vì sao lề tính theo `--ct-titlebar-h`). Tách ra để vỏ
+ * app CT Work dùng chung đúng một cấu hình.
+ */
+function ToasterApp() {
+  const { resolvedTheme } = useAppState();
+  return (
+    <Toaster
+      position="top-right"
+      offset="calc(var(--ct-titlebar-h) + 12px)"
+      theme={resolvedTheme}
+      richColors
+      closeButton
+      toastOptions={{
+        style: {
+          background: 'var(--ct-surface)',
+          border: '1px solid var(--ct-border)',
+          color: 'var(--ct-text)',
+        },
+      }}
+    />
+  );
+}
+
+/**
+ * Vỏ của app CT Work RIÊNG (13/10/2026) — chỉ CT Work, không lẫn trang khác.
+ *
+ * Bỏ hẳn: thanh bên của app (CT Work có thanh bên riêng), bảng lệnh của app
+ * (CT Work có ⌘K riêng), nhạc, Odin, Ghi nhanh, lời mời Đối kháng. Giữ: thanh
+ * tiêu đề (vùng kéo cửa sổ + nút Cài đặt), thanh trạng thái (mạng, đồng bộ,
+ * cỡ chữ), toast, thông báo realtime, báo bản mới.
+ */
+function ShellCtWork() {
+  return (
+    <div className="ct-shell ct-shell-ctwork">
+      <div className="ct-main">
+        <TitleBar onOpenPalette={() => { /* app CT Work không có bảng lệnh của app */ }} />
+        <div className="ct-content">
+          <ErrorBoundary>
+            <Content />
+          </ErrorBoundary>
+        </div>
+        <StatusBar />
+      </div>
+      <UpdateToast />
+      <ToasterApp />
+      <ThongBaoHost />
+    </div>
+  );
+}
+
 function Shell() {
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const { settings, setSetting, resolvedTheme, route } = useAppState();
+  const { settings, setSetting, route } = useAppState();
   /* CT Work có bảng lệnh ⌘K RIÊNG (`components/work/CommandPalette`, nghe ở
      `document` — tới TRƯỚC `window` ở đây). Không nhường thì một cú ⌘K mở CẢ
      HAI bảng chồng lên nhau. Bảng của app vẫn mở được bằng nút trên thanh tiêu đề. */
@@ -165,20 +218,7 @@ function Shell() {
          * của web — app không có thanh nav đó, để nguyên thì toast rơi lên
          * thanh tiêu đề.
          */}
-        <Toaster
-          position="top-right"
-          offset="calc(var(--ct-titlebar-h) + 12px)"
-          theme={resolvedTheme}
-          richColors
-          closeButton
-          toastOptions={{
-            style: {
-              background: 'var(--ct-surface)',
-              border: '1px solid var(--ct-border)',
-              color: 'var(--ct-text)',
-            },
-          }}
-        />
+        <ToasterApp />
         {/*
          * ⚡ GHI NHANH (⌥⇧N / Alt+Shift+N) — bản nâng cấp Sổ tay 26/09/2026.
          *
@@ -263,6 +303,8 @@ function Gate() {
 
   useEffect(() => {
     if (phase !== 'da-dang-nhap' || !api) return;
+    /* App CT Work riêng: không robot, không lời nhắc học tập của Tổng quan. */
+    if (LA_CTWORK) return;
     void window.cuongthai?.settings.getAll().then((t) => {
       // Mặc định BẬT tiếng: người dùng xin âm thanh, nên im lặng mặc định là
       // giao tính năng ở trạng thái tắt và để họ tự đi tìm công tắc.
@@ -297,7 +339,7 @@ function Gate() {
   // nghĩa là có phiên đã lưu nhưng mất mạng nên chưa xác minh được — chặn ở đây
   // sẽ khoá người dùng khỏi chính dữ liệu ngoại tuyến của họ, đúng vào lúc
   // ngoại tuyến là thứ duy nhất họ cần.
-  return <Shell />;
+  return LA_CTWORK ? <ShellCtWork /> : <Shell />;
 }
 
 /**

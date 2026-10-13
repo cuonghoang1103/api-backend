@@ -20,6 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { UpdateStatus } from '../../shared/ipc';
 import { IS_DEV } from '../config';
+import { BIEN_THE, THONG_TIN_BIEN_THE } from '../../shared/bienThe';
 import { baoBanMoi } from '../robotTin';
 import { handle } from './index';
 
@@ -320,7 +321,8 @@ export function registerUpdateHandlers(): void {
  * Tải xong KHÔNG tự mở file: mở `.dmg` là gắn một ổ đĩa vào máy người dùng, đó
  * là việc của họ. Chỉ hiện file trong Finder.
  */
-const REPO_PHAT_HANH = 'https://github.com/cuonghoang1103/cuongthai-desktop/releases';
+/* Theo biến thể: app CT Work riêng phát hành ở kho `ctwork-desktop` (xem `shared/bienThe.ts`). */
+const REPO_PHAT_HANH = `https://github.com/${THONG_TIN_BIEN_THE.khoPhatHanh}/releases`;
 
 let duongFileCai: string | null = null;
 
@@ -331,13 +333,18 @@ let duongFileCai: string | null = null;
  * (electron-builder bỏ hậu tố kiến trúc ở bản x64 — không phải lỗi đánh máy).
  */
 export function tenFileZip(version: string, arch: string = process.arch): string {
+  /* App CT Work đặt `artifactName` TƯỜNG MINH có `${arch}` (electron-builder.ctwork.yml),
+     nên bản x64 cũng mang hậu tố kiến trúc — khác quy ước ngầm của app CuongThai. */
+  if (BIEN_THE === 'ctwork') {
+    return `${THONG_TIN_BIEN_THE.tienToTep}-${version}-${arch === 'x64' ? 'x64' : 'arm64'}-mac.zip`;
+  }
   return arch === 'x64' ? `CuongThai-${version}-mac.zip` : `CuongThai-${version}-arm64-mac.zip`;
 }
 
 export function tenFileCai(version: string, arch: string = process.arch): string {
   // Khớp `artifactName` của electron-builder: '${productName}-${version}-${arch}.${ext}'
   const a = arch === 'x64' ? 'x64' : 'arm64';
-  return `CuongThai-${version}-${a}.dmg`;
+  return `${THONG_TIN_BIEN_THE.tienToTep}-${version}-${a}.dmg`;
 }
 
 async function taiFileCai(): Promise<void> {
@@ -604,10 +611,11 @@ async function tuCapNhat(): Promise<void> {
       execFile('/usr/bin/ditto', ['-xk', fileZip, bung], (e) => (e ? hong(e) : xong()));
     });
 
-    const appMoi = path.join(bung, 'CuongThai.app');
+    /* Tên bó `.app` và tệp chạy = `productName` của biến thể (`CT Work.app/Contents/MacOS/CT Work`). */
+    const appMoi = path.join(bung, `${THONG_TIN_BIEN_THE.tenSanPham}.app`);
     // Kiểm TRƯỚC khi động vào bản đang chạy.
     const plist = path.join(appMoi, 'Contents', 'Info.plist');
-    if (!fs.existsSync(path.join(appMoi, 'Contents', 'MacOS', 'CuongThai')) || !fs.existsSync(plist)) {
+    if (!fs.existsSync(path.join(appMoi, 'Contents', 'MacOS', THONG_TIN_BIEN_THE.tenSanPham)) || !fs.existsSync(plist)) {
       throw new Error('Gói tải về không phải một app hợp lệ.');
     }
 

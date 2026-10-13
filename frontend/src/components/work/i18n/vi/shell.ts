@@ -15,6 +15,7 @@ export const shell: Strings<typeof En> = {
   apiTokens: 'API token',
   helpGuide: 'Hướng dẫn sử dụng',
   backToSite: 'Về CuongThai',
+  downloadApp: 'Tải app CT Work',
   skipToContent: 'Bỏ qua, tới nội dung',
   loading: 'Đang tải CT Work…',
   breadcrumb: 'Đường dẫn',

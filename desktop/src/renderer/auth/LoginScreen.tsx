@@ -11,6 +11,7 @@ import { Eye, EyeOff, LogIn, WifiOff } from 'lucide-react';
 import { ApiError } from '../api/client';
 import { useSession } from './session';
 import { useDich } from '../i18n';
+import { LA_CTWORK, THONG_TIN_BIEN_THE } from '../../shared/bienThe';
 
 export function LoginScreen({ online }: { online: boolean }) {
   const { dich } = useDich();
@@ -122,15 +123,15 @@ export function LoginScreen({ online }: { online: boolean }) {
        ⚠️ Icon lấy từ `public/icon.png` — CHÍNH tệp `build/icon.png` dùng làm
        icon app, chép sang để Vite gói vào bundle. Một bản sao khác là hai thứ
        sẽ lệch nhau vào ngày ai đó đổi icon app. */
-    <div className="ct-dangnhap">
+    <div className="ct-dangnhap" data-bien-the={LA_CTWORK ? 'ctwork' : undefined}>
       <div className="ct-dangnhap-nen" aria-hidden />
 
       <section className="ct-dangnhap-the">
         <div className="ct-dangnhap-hieu">
           {/* `alt=""` + `aria-hidden`: tên app nằm ngay dưới dạng chữ, đọc lại
               lần nữa qua ảnh là thừa với trình đọc màn hình. */}
-          <img className="ct-dangnhap-icon" src="/icon.png" alt="" aria-hidden />
-          <h1>CuongThai</h1>
+          <img className="ct-dangnhap-icon" src={LA_CTWORK ? '/icon-ctwork.png' : '/icon.png'} alt="" aria-hidden />
+          <h1>{THONG_TIN_BIEN_THE.tenSanPham}</h1>
           <p>{dich('Chào mừng trở lại')}</p>
         </div>
 

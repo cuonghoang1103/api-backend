@@ -22,6 +22,25 @@ import { registerIpcHandlers } from './ipc';
 import { createMainWindow } from './window';
 import { dangKyPhimMedia, goPhimMedia } from './phimMedia';
 import { dangKyPhimRobot, goPhimRobot } from './phimRobot';
+import { LA_CTWORK, THONG_TIN_BIEN_THE } from '../shared/bienThe';
+
+/*
+ * App CT Work RIÊNG (13/10/2026) — tên và thư mục dữ liệu riêng, đặt TRƯỚC mọi
+ * thứ đọc `userData` (khoá một-thực-thể ngay dưới, `store.ts`, phiên đăng nhập).
+ *
+ * Không đặt thì ở dev cả hai biến thể cùng chạy bằng một binary Electron ⇒ cùng
+ * `userData` ⇒ cùng `cuongthai-desktop.json` và cùng KHOÁ một-thực-thể: mở app
+ * này là app kia tự thoát. Bản đóng gói đã có `productName` riêng, dòng này chỉ
+ * làm cho dev đúng như bản đóng gói.
+ */
+if (LA_CTWORK) {
+  app.setName(THONG_TIN_BIEN_THE.tenSanPham);
+  /* `--user-data-dir` (smoke test dựng hồ sơ tạm) phải thắng — không thì phép thử
+     ghi vào thư mục dữ liệu THẬT của người dùng. */
+  if (!app.commandLine.hasSwitch('user-data-dir')) {
+    app.setPath('userData', path.join(app.getPath('appData'), THONG_TIN_BIEN_THE.tenSanPham));
+  }
+}
 
 registerSchemesAsPrivileged();
 
@@ -89,6 +108,31 @@ async function bootstrap(): Promise<void> {
   forbidChildProcesses();
 
   await app.whenReady();
+
+  /* App CT Work riêng: chỉ phần lõi — phiên, IPC, cửa sổ, mạng, tự cập nhật.
+     Không robot nổi, phím media, phím robot, MCP của AI Code, Xưởng Remix,
+     hộp thoại "Bạn không cần tôi nữa ư?". Không nạp PATH của shell: chỉ agent
+     AI Code cần, và nó tốn tới 3 giây lúc mở app. */
+  if (LA_CTWORK) {
+    applySessionPolicies();
+    registerAppProtocol(path.join(__dirname, '../renderer'));
+    await registerIpcHandlers();
+    mainWindow = createMainWindow();
+    watchNetwork();
+    const { scheduleUpdateChecks } = await import('./ipc/update');
+    scheduleUpdateChecks();
+    app.on('activate', () => {
+      const w = mainWindow && !mainWindow.isDestroyed() ? mainWindow : null;
+      if (w) {
+        if (w.isMinimized()) w.restore();
+        w.show();
+        w.focus();
+        return;
+      }
+      mainWindow = createMainWindow();
+    });
+    return;
+  }
 
   /*
    * NẠP PATH THẬT TRƯỚC MỌI THỨ KHÁC.

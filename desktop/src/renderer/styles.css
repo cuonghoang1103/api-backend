@@ -9885,9 +9885,13 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 /* Icon app THẬT (con panda), không phải một icon vector chung chung: người
    dùng nhận ra app bằng hình này trên Dock và trên iPhone. */
 .ct-dangnhap-icon {
+  /* `display: block` + lề tự động: preflight của Tailwind đặt mọi <img> là block,
+     nên `text-align: center` của khối cha KHÔNG căn được nó — icon nằm lệch trái
+     (thấy rõ trong ảnh smoke app CT Work 13/10/2026; app CuongThai cũng dính). */
+  display: block;
   width: 76px;
   height: 76px;
-  margin-bottom: 10px;
+  margin: 0 auto 10px;
   border-radius: 20px;
   background: #fff;
   box-shadow: 0 6px 20px rgb(0 0 0 / 0.18);
@@ -15515,3 +15519,14 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-avatar[data-anh='true'] { overflow: hidden; background: var(--ct-surface-2); }
 .ct-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .ct-sidebar .ct-usermenu .ct-avatar { width: 26px; height: 26px; }
+
+
+/* ── App CT Work riêng (13/10/2026): màn đăng nhập theo màu thương hiệu CT Work
+   (tím chàm → xanh, đúng dải màu của icon) thay cho hồng tím của CuongThai. ── */
+.ct-dangnhap[data-bien-the="ctwork"] .ct-dangnhap-hieu h1,
+.ct-dangnhap[data-bien-the="ctwork"] .ct-dangnhap-the button[type="submit"],
+.ct-dangnhap[data-bien-the="ctwork"] .ct-dangnhap-tab button[data-chon="1"] {
+  background-image: linear-gradient(90deg, #8a63ff, #4f5bd5, #2299e0);
+}
+.ct-dangnhap[data-bien-the="ctwork"] .ct-dangnhap-icon { background: transparent; box-shadow: none; }
+.ct-dangnhap[data-bien-the="ctwork"] .ct-dangnhap-lien button:hover { color: #4f5bd5; }

@@ -15,9 +15,13 @@ import { defineConfig } from 'vite';
 import path from 'node:path';
 import { builtinModules } from 'node:module';
 
+/* Biến thể app — xem `vite.config.ts` và `src/shared/bienThe.ts`. */
+const BIEN_THE = process.env.CT_BIEN_THE === 'ctwork' ? 'ctwork' : 'cuongthai';
+
 export default defineConfig({
+  define: { __CT_BIEN_THE__: JSON.stringify(BIEN_THE) },
   build: {
-    outDir: path.resolve(__dirname, 'dist'),
+    outDir: path.resolve(__dirname, BIEN_THE === 'ctwork' ? 'dist-ctwork' : 'dist'),
     emptyOutDir: false,
     sourcemap: true,
     target: 'node20',

@@ -362,3 +362,22 @@ describe('thuocCayWeb', () => {
     expect(thuocCayWeb('/chat')).toBe(false);
   });
 });
+
+/* 13/10/2026 — tuyến CT Work tách sang `tuyenCtWork.ts` để app CT Work riêng chỉ
+   gói đúng phần đó. Một tuyến `/work` thêm nhầm vào `dinhTuyenWeb.ts` vẫn chạy
+   trong app CuongThai nhưng THIẾU trong app CT Work — hỏng câm ở đúng một app. */
+import { _TUYEN_KHAC_CHO_KIEM_THU } from './dinhTuyenWeb';
+import { TUYEN_CTWORK } from './tuyenCtWork';
+
+describe('tách tuyến CT Work', () => {
+  it('không tuyến `/work` nào nằm ngoài tuyenCtWork.ts', () => {
+    const lac = _TUYEN_KHAC_CHO_KIEM_THU.filter((t) => t.mau === '/work' || t.mau.startsWith('/work/'));
+    expect(lac.map((t) => t.mau)).toEqual([]);
+  });
+  it('tuyenCtWork.ts chỉ chứa tuyến `/work`', () => {
+    expect(TUYEN_CTWORK.every((t) => t.mau === '/work' || t.mau.startsWith('/work/'))).toBe(true);
+  });
+  it('app CuongThai vẫn nhận đủ tuyến CT Work', () => {
+    for (const t of TUYEN_CTWORK) expect(TUYEN_WEB).toContain(t);
+  });
+});

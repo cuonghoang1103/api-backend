@@ -16,6 +16,7 @@ import WorkInbox from './WorkInbox';
 import { wt } from '../i18n';
 import { WorkLanguageChip } from '../i18n/LanguageSwitch';
 import { TimerChip } from '../agile/Timer'; // CTW đợt 7a: đồng hồ đang chạy
+import { laAppCtWork } from '@/lib/appDesktop';
 
 /** Sự kiện mở bảng lệnh ⌘K từ một nút (CommandPalette lắng nghe). */
 export const OPEN_PALETTE_EVENT = 'work:open-palette';
@@ -84,8 +85,13 @@ function UserMenu() {
             <span className="text-[12px] text-[var(--w-text-3)]">{wt('common.language')}</span>
             <WorkLanguageChip compact menu />
           </div>
-          <div className="my-1 border-t border-[var(--w-border)]" />
-          <Link role="menuitem" href="/" onClick={pop.close} className={item}><ArrowLeft size={14} /> {wt('shell.backToSite')}</Link>
+          {/* App CT Work riêng không có "trang chính" để quay về (13/10/2026). */}
+          {!laAppCtWork() && (
+            <>
+              <div className="my-1 border-t border-[var(--w-border)]" />
+              <Link role="menuitem" href="/" onClick={pop.close} className={item}><ArrowLeft size={14} /> {wt('shell.backToSite')}</Link>
+            </>
+          )}
         </div>
       </Popover>
     </>

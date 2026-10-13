@@ -7,6 +7,7 @@ import { APP_ORIGIN, DEV_SERVER_URL, IS_DEV, RENDERER_SOURCE } from './config';
 import { hardenWebContents } from './security';
 import { getSettings, getWindowState, setWindowState } from './store';
 import { ganCuaSoChinh } from './hoiThoat';
+import { LA_CTWORK } from '../shared/bienThe';
 
 /**
  * Kiểm tra cửa sổ có nằm trong một màn hình đang tồn tại không.
@@ -121,7 +122,8 @@ export function createMainWindow(): BrowserWindow {
     void window.loadURL(`${APP_ORIGIN}/index.html`);
   }
 
-  /* Đóng cửa sổ chính trên Windows/Linux = thoát ⇒ robot hỏi trước. */
-  ganCuaSoChinh(window);
+  /* Đóng cửa sổ chính trên Windows/Linux = thoát ⇒ robot hỏi trước.
+     App CT Work riêng không có robot: đóng là đóng, không hỏi. */
+  if (!LA_CTWORK) ganCuaSoChinh(window);
   return window;
 }

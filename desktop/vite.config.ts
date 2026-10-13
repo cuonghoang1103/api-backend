@@ -11,11 +11,38 @@ import react from '@vitejs/plugin-react';
 import { noiDungBai } from './vite.noi-dung-bai';
 import path from 'node:path';
 import { aliasDesktop } from './vite.alias';
+import type { Plugin } from 'vite';
+
+/* Biến thể app (13/10/2026) — `CT_BIEN_THE=ctwork` dựng app RIÊNG chỉ có CT Work
+   vào `dist-ctwork/` (xem `src/shared/bienThe.ts`). Thư mục ra RIÊNG: nhiều phiên
+   cùng làm repo này, dựng hai biến thể chung `dist/` là bản này đè bản kia giữa chừng. */
+const BIEN_THE = process.env.CT_BIEN_THE === 'ctwork' ? 'ctwork' : 'cuongthai';
+const THU_MUC_RA = BIEN_THE === 'ctwork' ? 'dist-ctwork' : 'dist';
+
+/**
+ * Bản dựng `ctwork`: thay `page-registry.ts` (import tĩnh MỌI trang của app) bằng
+ * `page-registry.ctwork.ts` (chỉ CT Work). Thay ở tầng phân giải module nên mọi
+ * chỗ import — `routes.ts`, `App.tsx` — nhận bản gọn mà không phải rẽ nhánh.
+ */
+function bienTheCtWork(): Plugin {
+  const goc = path.resolve(__dirname, 'src/renderer/page-registry.ts');
+  const thay = path.resolve(__dirname, 'src/renderer/page-registry.ctwork.ts');
+  return {
+    name: 'bien-the-ctwork',
+    enforce: 'pre',
+    async resolveId(source, importer, options) {
+      if (!importer || !source.includes('page-registry')) return null;
+      const r = await this.resolve(source, importer, { ...options, skipSelf: true });
+      return r && r.id === goc ? thay : null;
+    },
+  };
+}
 
 export default defineConfig({
   root: path.resolve(__dirname, 'src/renderer'),
   base: './',
-  plugins: [react(), noiDungBai(__dirname)],
+  plugins: [react(), noiDungBai(__dirname), ...(BIEN_THE === 'ctwork' ? [bienTheCtWork()] : [])],
+  define: { __CT_BIEN_THE__: JSON.stringify(BIEN_THE) },
   resolve: {
     alias: aliasDesktop(__dirname),
     /**
@@ -89,7 +116,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: path.resolve(__dirname, 'dist/renderer'),
+    outDir: path.resolve(__dirname, THU_MUC_RA, 'renderer'),
     emptyOutDir: true,
     /**
      * Bản đồ nguồn CHỈ ở máy nhà, không ở CI.
@@ -128,7 +155,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         index: path.resolve(__dirname, 'src/renderer/index.html'),
-        robot: path.resolve(__dirname, 'src/renderer/robot.html'),
+        /* App CT Work riêng không có robot nổi — không dựng trang của nó. */
+        ...(BIEN_THE === 'ctwork' ? {} : { robot: path.resolve(__dirname, 'src/renderer/robot.html') }),
       },
     },
   },

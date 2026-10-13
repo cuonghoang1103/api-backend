@@ -40,6 +40,13 @@ import { INTERNAL_ROUTES } from '../routes';
 import type { AppInfo, ThemeSetting } from '../../shared/ipc';
 import { useDich, type NgonNgu } from '../i18n';
 import '../features/settings/settings.css';
+import { LA_CTWORK } from '../../shared/bienThe';
+
+/* App CT Work riêng (13/10/2026) không có robot Odin, AI Code/AI Chat, thanh bên
+   của app, nhạc hay lời nhắc lịch học — giấu đúng những nhóm/mục đó, giữ nguyên
+   mọi khoá cài đặt dùng chung. */
+const NHOM_AN_CTWORK: ReadonlySet<string> = new Set(['odin', 'ai']);
+const MUC_AN_CTWORK: ReadonlySet<string> = new Set(['thanh-ben', 'am-thanh', 'nhac-lich', 'thanh-phat', 'robot', 'giong-odin', 'muc-dung', 'ai-ngoai-tuyen']);
 
 function formatBytes(bytes: number): string {
   if (bytes <= 0) return '0 B';
@@ -67,7 +74,7 @@ export function Settings() {
   const { theme, layThamSo, lanDieuHuong, navigate } = useAppState();
   const { dich, dichP } = useDich();
 
-  const NHOM: Nhom[] = [
+  const NHOM_DAY_DU: Nhom[] = [
     { ma: 'giao-dien', ten: dich('Giao diện'), moTa: dich('Chủ đề, ngôn ngữ, thanh bên, cỡ chữ'), icon: <Palette size={17} aria-hidden />, mau: '#8b9cff' },
     { ma: 'thong-bao', ten: dich('Thông báo & âm thanh'), moTa: dich('Tiếng chuông, lời nhắc, thanh phát nhạc'), icon: <Bell size={17} aria-hidden />, mau: '#e3a44f' },
     { ma: 'odin', ten: dich('Robot Odin'), moTa: dich('Hiện/ẩn robot, giọng đọc, tốc độ'), icon: <Bot size={17} aria-hidden />, mau: '#4fb6a8' },
@@ -77,11 +84,12 @@ export function Settings() {
     { ma: 'tai-khoan', ten: dich('Tài khoản'), moTa: dich('Người đang đăng nhập, đăng xuất'), icon: <UserRound size={17} aria-hidden />, mau: '#c98a6b' },
     { ma: 'cap-nhat', ten: dich('Cập nhật & giới thiệu'), moTa: dich('Phiên bản, bản mới, thông tin app'), icon: <Info size={17} aria-hidden />, mau: '#9a8cf0' },
   ];
+  const NHOM = LA_CTWORK ? NHOM_DAY_DU.filter((n) => !NHOM_AN_CTWORK.has(n.ma)) : NHOM_DAY_DU;
 
   /* Chỉ mục tìm kiếm. Mỗi dòng là MỘT thứ người dùng có thể muốn đổi — kể cả
      những thứ nằm trong khối có sẵn (giọng Odin, AI ngoại tuyến…), để gõ
      "giọng" ra đúng chỗ thay vì ra cả nhóm. */
-  const MUC_TIM: MucTim[] = [
+  const MUC_TIM_DAY_DU: MucTim[] = [
     { nhom: 'giao-dien', neo: 'chu-de', ten: dich('Chủ đề'), moTa: dich('Sáng, tối hoặc theo hệ thống'), tuKhoa: 'theme dark light sang toi mau nen' },
     { nhom: 'giao-dien', neo: 'ngon-ngu', ten: dich('Ngôn ngữ'), moTa: dich('Tiếng Việt hoặc tiếng Anh'), tuKhoa: 'language english tieng anh viet' },
     { nhom: 'giao-dien', neo: 'thanh-ben', ten: dich('Thanh bên'), moTa: dich('Đầy đủ, chỉ biểu tượng hoặc ẩn'), tuKhoa: 'sidebar menu thu gon an' },
@@ -103,6 +111,9 @@ export function Settings() {
     { nhom: 'cap-nhat', neo: 'cap-nhat', ten: dich('Cập nhật'), moTa: dich('Kiểm tra và cài bản mới'), tuKhoa: 'update phien ban moi version' },
     { nhom: 'cap-nhat', neo: 'gioi-thieu', ten: dich('Giới thiệu'), moTa: dich('Phiên bản app, Electron, máy chủ API'), tuKhoa: 'about version phien ban electron' },
   ];
+  const MUC_TIM = LA_CTWORK
+    ? MUC_TIM_DAY_DU.filter((m) => !NHOM_AN_CTWORK.has(m.nhom) && !MUC_AN_CTWORK.has(m.neo))
+    : MUC_TIM_DAY_DU;
 
   const [nhom, setNhom] = useState<MaNhom>('giao-dien');
   const [tim, setTim] = useState('');
@@ -428,6 +439,7 @@ function AmThanhUi({ sang }: { sang: string | undefined }) {
 function The({ id, ten, moTa, children, boc = false, sang }: {
   id: string; ten: string; moTa: string; children: ReactNode; boc?: boolean; sang?: string | undefined;
 }) {
+  if (LA_CTWORK && MUC_AN_CTWORK.has(id)) return null;
   return (
     <section className="st-the" id={`st-${id}`} data-sang={sang} data-boc={boc}>
       <div className="st-the-dau">
@@ -576,7 +588,7 @@ function ThePhimTat({ sang }: { sang?: string | undefined }) {
   const { dich } = useDich();
   const [phimRobot, datPhimRobot] = useState<string | null>(null);
   useEffect(() => { void window.cuongthai?.robot.phimTat().then(datPhimRobot); }, []);
-  const NHOM_PHIM: { ten: string; ds: [string, string][] }[] = [
+  const NHOM_PHIM_DAY_DU: { ten: string; ds: [string, string][] }[] = [
     {
       ten: dich('Toàn app'),
       ds: [
@@ -606,6 +618,8 @@ function ThePhimTat({ sang }: { sang?: string | undefined }) {
       ],
     },
   ];
+  /* App CT Work riêng: không thanh bên, Ghi chú, robot, nhạc — chỉ còn phím của CT Work. */
+  const NHOM_PHIM = LA_CTWORK ? NHOM_PHIM_DAY_DU.filter((n) => n.ten === 'CT Work') : NHOM_PHIM_DAY_DU;
   return (
     <section className="st-the" id="st-phim" data-sang={sang} data-boc="true">
       <div className="st-the-dau">
@@ -685,8 +699,10 @@ function TheGioiThieu({ sang, onMo }: { sang?: string | undefined; onMo: () => v
     <section className="st-the" id="st-gioi-thieu" data-sang={sang}>
       <div className="st-the-dau">
         <div className="st-the-chu">
-          <h3>CuongThai Desktop</h3>
-          <p>{dich('Ứng dụng desktop cho cuongthai.com — nền tảng CuongHoangDev.')}</p>
+          <h3>{LA_CTWORK ? 'CT Work Desktop' : 'CuongThai Desktop'}</h3>
+          <p>{LA_CTWORK
+            ? dich('Ứng dụng desktop riêng của CT Work — quản lý dự án, đồ án và lớp học.')
+            : dich('Ứng dụng desktop cho cuongthai.com — nền tảng CuongHoangDev.')}</p>
         </div>
         <div className="st-the-nut">
           <button type="button" className="ct-btn ct-btn-ghost" onClick={onMo}>

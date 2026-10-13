@@ -12,6 +12,7 @@ export const shell = {
   apiTokens: 'API tokens',
   helpGuide: 'Help & guide',
   backToSite: 'Back to CuongThai',
+  downloadApp: 'Get the CT Work app',
   skipToContent: 'Skip to content',
   loading: 'Loading CT Work…',
   breadcrumb: 'Breadcrumb',

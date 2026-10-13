@@ -10,11 +10,12 @@
  * được BÊN TRONG nó phải khai báo `no-drag`, nếu không con trỏ kéo cửa sổ thay
  * vì bấm nút — lỗi này rất hay gặp và trông như nút bị hỏng.
  */
-import { Bell, Search } from 'lucide-react';
+import { ArrowLeft, Bell, Search, Settings as SettingsIcon } from 'lucide-react';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useAppState } from '../app-state';
 import { findRoute, INTERNAL_ROUTES } from '../routes';
 import { useDich } from '../i18n';
+import { LA_CTWORK } from '../../shared/bienThe';
 
 /* ⚠️ Tiếng Việt Ở ĐÂY, dịch tại chỗ dựng — đây là hằng tầm mô-đun, tính đúng
    một lần lúc nạp tệp. Gọi `t()` ngay đây thì tiêu đề cửa sổ kẹt ở ngôn ngữ
@@ -41,6 +42,29 @@ export function TitleBar({ onOpenPalette }: { onOpenPalette: () => void }) {
   const title = nhan ? dich(nhan) : 'CuongThai';
 
   const isMac = navigator.userAgent.includes('Mac');
+
+  /* App CT Work riêng: không chuông của app (CT Work có hộp thư riêng ở thanh
+     bên), không bảng lệnh của app (CT Work có ⌘K riêng). Chỉ còn một nút: vào
+     Cài đặt — hoặc, khi đang ở Cài đặt/Giới thiệu, quay về CT Work. Không có
+     thanh bên của app thì đây là lối DUY NHẤT tới Cài đặt (cập nhật, chủ đề,
+     đăng xuất), nên nó phải luôn hiện. */
+  if (LA_CTWORK) {
+    const trongNoiBo = route === INTERNAL_ROUTES.settings || route === INTERNAL_ROUTES.about;
+    return (
+      <header className="ct-titlebar" data-mac={isMac}>
+        <div className="ct-titlebar-title">{trongNoiBo ? (TITLES[route] ? dich(TITLES[route]!) : 'CT Work') : 'CT Work'}</div>
+        <button
+          type="button"
+          className="ct-titlebar-chuong"
+          onClick={() => navigate(trongNoiBo ? '/work' : INTERNAL_ROUTES.settings)}
+          aria-label={trongNoiBo ? dich('Về CT Work') : dich('Cài đặt')}
+          title={trongNoiBo ? dich('Về CT Work') : dich('Cài đặt')}
+        >
+          {trongNoiBo ? <ArrowLeft size={15} aria-hidden /> : <SettingsIcon size={15} aria-hidden />}
+        </button>
+      </header>
+    );
+  }
 
   return (
     <header className="ct-titlebar" data-mac={isMac}>

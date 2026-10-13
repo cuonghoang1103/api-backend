@@ -60,7 +60,7 @@ export interface ReleaseInfo {
  */
 const NGUONG_CU_MS = 10 * 60 * 1000;
 
-type Platform = 'mac-arm' | 'mac-intel' | 'windows' | 'linux' | 'unknown';
+export type Platform = 'mac-arm' | 'mac-intel' | 'windows' | 'linux' | 'unknown';
 
 interface Build {
   id: Platform;
@@ -109,7 +109,7 @@ const buildsFor = (VERSION: string): Build[] => [
  * The most reliable browser-side signal is the WebGL renderer name — Apple
  * Silicon reports "Apple M…", Intel Macs report "Intel" or "AMD".
  */
-function detectPlatform(): Platform {
+export function detectPlatform(): Platform {
   if (typeof navigator === 'undefined') return 'unknown';
 
   const ua = navigator.userAgent;
@@ -203,7 +203,7 @@ cuongthai`,
   },
 ];
 
-function CopyBlock({ code }: { code: string }) {
+export function CopyBlock({ code }: { code: string }) {
   const [copied, setCopied] = useState(false);
 
   return (
@@ -314,6 +314,14 @@ export default function DownloadClient({ banPhatHanh }: { banPhatHanh: ReleaseIn
           Your workspace as a native app — with Odin the assistant, offline
           reading, and drafts that never get lost. Version {version}.
         </p>
+        {/* 13/10/2026 — app CT Work RIÊNG cho ai chỉ cần quản lý dự án/đồ án. */}
+        <Link
+          href="/download/ct-work"
+          className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] px-4 py-1.5 text-sm transition hover:border-indigo-500"
+        >
+          <img src="/images/ct-work/ct-work-32.png" alt="" width={18} height={18} />
+          Only need projects &amp; classrooms? Get the standalone <strong>CT Work</strong> app →
+        </Link>
       </header>
 
       <section className="mt-10">

@@ -926,6 +926,12 @@ export const TU_DIEN: Record<string, string> = {
     'This feature already exists on **cuongthai.com** but has not been brought into the desktop app yet. It is on the roadmap — see `docs/electron-implementation-plan.md`.',
   'Ứng dụng desktop cho cuongthai.com — nền tảng CuongHoangDev.':
     'The desktop app for cuongthai.com — the CuongHoangDev platform.',
+  // ── App CT Work riêng (13/10/2026) ────
+  'Ứng dụng desktop riêng của CT Work — quản lý dự án, đồ án và lớp học.':
+    'The standalone CT Work desktop app — projects, capstones and classrooms.',
+  'Trang này nằm ngoài CT Work — đã mở trên cuongthai.com.':
+    'This page lives outside CT Work — opened it on cuongthai.com.',
+  'Về CT Work': 'Back to CT Work',
   'Nền tảng': 'Platform',
   'Máy chủ API': 'API server',
   // ── Thanh "Odin đang…" (chuỗi do `viecDangLam` sinh) ────

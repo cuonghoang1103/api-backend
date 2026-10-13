@@ -22,6 +22,27 @@ import {
 } from 'react';
 import type { SettingKey, SettingValue, ThemeSetting } from '../shared/ipc';
 import { INTERNAL_ROUTES } from './routes';
+import { LA_CTWORK, THONG_TIN_BIEN_THE, thuocCtWork } from '../shared/bienThe';
+import { toast } from 'sonner';
+
+/**
+ * App CT Work riêng (13/10/2026): chỉ dựng cây `/work` và màn nội bộ (Cài đặt,
+ * Giới thiệu). Đường dẫn khác — trang hồ sơ, Tin nhắn, Ghi chú mà một link
+ * trong CT Work có thể trỏ tới — MỞ TRÊN WEB bằng trình duyệt, không dựng trong
+ * app. Đây là lời hứa của app này: "chỉ có CT Work, không lẫn trang khác".
+ *
+ * Trả `true` nếu đã mở ra ngoài (người gọi phải dừng, không đổi route).
+ */
+function moNgoaiNeuKhongThuocCtWork(path: string, thamSo?: string): boolean {
+  if (!LA_CTWORK) return false;
+  if (thuocCtWork(path)) return false;
+  if (Object.values(INTERNAL_ROUTES).some((r) => r === path)) return false;
+  const goc = (globalThis as { __ctWebOrigin?: string }).__ctWebOrigin ?? 'https://cuongthai.com';
+  const q = thamSo ? (thamSo.startsWith('?') ? thamSo : `?${thamSo}`) : '';
+  void window.cuongthai?.app.openExternal(`${goc}${path}${q}`);
+  toast(dich('Trang này nằm ngoài CT Work — đã mở trên cuongthai.com.'));
+  return true;
+}
 
 type Settings = Partial<Record<SettingKey, SettingValue>>;
 
@@ -52,7 +73,7 @@ interface AppState {
   hasBridge: boolean;
 }
 
-import { datNgonNgu } from './i18n';
+import { datNgonNgu, dich } from './i18n';
 
 const AppStateContext = createContext<AppState | null>(null);
 
@@ -76,7 +97,7 @@ export function AppStateProvider({
   const bridge = window.cuongthai;
 
   const [settings, setSettings] = useState<Settings>({});
-  const [route, setRoute] = useState<string>(tuyenBanDau ?? '/dashboard');
+  const [route, setRoute] = useState<string>(tuyenBanDau ?? THONG_TIN_BIEN_THE.trangDau);
   const [online, setOnline] = useState<boolean>(navigator.onLine);
   const [systemDark, setSystemDark] = useState<boolean>(systemPrefersDark);
 
@@ -88,7 +109,8 @@ export function AppStateProvider({
     void bridge.settings.getAll().then((loaded) => {
       setSettings(loaded);
       const last = loaded.lastRoute;
-      if (typeof last === 'string') setRoute(last);
+      // App CT Work riêng chỉ khôi phục trang thuộc CT Work.
+      if (typeof last === 'string' && (!LA_CTWORK || thuocCtWork(last))) setRoute(last);
     });
   }, [bridge]);
 
@@ -168,6 +190,7 @@ export function AppStateProvider({
     return bridge.on('app:navigate', (payload) => {
       const next = payload as { path?: string; query?: string };
       if (typeof next.path !== 'string') return;
+      if (moNgoaiNeuKhongThuocCtWork(next.path, next.query)) return;
       // Giữ query lại cho trang đích đọc. Đặt TRƯỚC `setRoute` để trang mở ra
       // đã thấy sẵn — đặt sau thì nó vẽ một lượt với tham số cũ rồi mới nhảy.
       viTri.current = typeof next.query === 'string' ? next.query : '';
@@ -232,6 +255,7 @@ export function AppStateProvider({
    */
   const navigate = useCallback(
     (path: string, thamSo?: string) => {
+      if (moNgoaiNeuKhongThuocCtWork(path, thamSo)) return;
       viTri.current = thamSo ?? '';
       setRoute(path);
       datLanDieuHuong((n) => n + 1);

@@ -17,6 +17,13 @@ import { App } from './App';
  */
 import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider';
 import './styles.css';
+import { BIEN_THE, THONG_TIN_BIEN_THE } from '../shared/bienThe';
+
+/* Biến thể app (13/10/2026) — cho mã DÙNG CHUNG với web biết mình đang chạy trong
+   app CT Work riêng (vd. thanh bên CT Work giấu "Về trang chính", vì app này không
+   có trang chính). Đặt TRƯỚC khi dựng cây React: không có nhịp nào đọc thấy rỗng. */
+(globalThis as { __ctBienThe?: string }).__ctBienThe = BIEN_THE;
+document.title = THONG_TIN_BIEN_THE.tenSanPham;
 
 const container = document.getElementById('root');
 if (!container) throw new Error('Không tìm thấy #root');

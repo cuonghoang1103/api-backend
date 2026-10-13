@@ -7,6 +7,7 @@
  * mà vẫn mang theo token của người dùng.
  */
 import { app } from 'electron';
+import { THONG_TIN_BIEN_THE } from '../shared/bienThe';
 
 export const IS_DEV = !app.isPackaged;
 
@@ -45,8 +46,18 @@ export const APP_SCHEME = 'app';
 export const APP_HOST = 'cuongthai';
 export const APP_ORIGIN = `${APP_SCHEME}://${APP_HOST}`;
 
-/** Scheme deep-link, dùng cho vòng OAuth quay lại app. */
-export const DEEP_LINK_SCHEME = 'cuongthai';
+/**
+ * Scheme deep-link, dùng cho vòng OAuth quay lại app.
+ *
+ * Theo BIẾN THỂ: app CT Work riêng là `ctwork://`. Hai app cài song song mà cùng
+ * khai `cuongthai://` thì hệ điều hành chỉ trao scheme cho MỘT app — link mở
+ * nhầm app kia, tuỳ app nào cài sau.
+ *
+ * ⚠️ `APP_HOST` bên trên thì GIỮ NGUYÊN `cuongthai` cho cả hai biến thể: origin
+ * `app://cuongthai` là thứ backend đã có trong CORS_ORIGINS. Đổi host là mọi lời
+ * gọi API của app CT Work bị CORS chặn trên production.
+ */
+export const DEEP_LINK_SCHEME = THONG_TIN_BIEN_THE.scheme;
 
 export const WEB_ORIGIN = 'https://cuongthai.com';
 export const API_ORIGIN = process.env.CUONGTHAI_API_ORIGIN ?? 'https://api.cuongthai.com';

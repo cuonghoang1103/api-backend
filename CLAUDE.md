@@ -412,6 +412,16 @@ Gỡ bỏ toàn bộ: xoá khối `Match` trong `~/.ssh/config`, và trên VPS
 
 ## Phát hành app desktop — MỘT CHỖ DUY NHẤT (20/08/2026)
 
+**Từ 13/10/2026 có HAI app desktop từ cùng mã `desktop/`:** app CuongThai (đầy đủ) và **app CT Work riêng**
+(biến thể dựng `CT_BIEN_THE=ctwork`, xem `desktop/src/shared/bienThe.ts` + `electron-builder.ctwork.yml`;
+appId/tên/thư mục dữ liệu/scheme `ctwork://` riêng, cài song song; phát hành ở kho public
+`cuonghoang1103/ctwork-desktop`, workflow `ctwork-desktop-release.yml`, số phiên bản `ctworkVersion`).
+- Sửa **giao diện CT Work** (`frontend/src/app/work`, `components/work`) ⇒ deploy web + `npm run phat-hanh:ca-hai -- "mô tả"`
+  (phát hành cả hai app — cả hai gói sẵn giao diện lúc dựng). Chỉ sửa backend ⇒ deploy là đủ, không phát hành app nào.
+- Sửa thứ chỉ có ở app CuongThai ⇒ `npm run phat-hanh` như cũ. Chỉ app CT Work ⇒ `npm run phat-hanh:ctwork`.
+- Thử app CT Work ở máy: `npm run ctwork:build && node scripts/smoke-ctwork.mjs` (đăng nhập tài khoản thử, kiểm
+  vỏ gọn, mở thẳng `/work`, đường ngoài CT Work mở trình duyệt).
+
 ```bash
 (cd desktop && npm run phat-hanh -- "mô tả ngắn")   # bump + push + dựng + KIỂM LẠI
 (cd desktop && npm run phat-hanh -- --tiep)          # ship số đang có, không bump
@@ -688,7 +698,7 @@ Thiết kế: `docs/ct-work-ai-agents-thiet-ke.md` · hợp đồng API đợt 2
    "ẩn UI không phải ẩn API").
 3. Tuyến NGOÀI `/projects/:pid` mà agent cần ⇒ mở rõ trong `agentTopRouteAllowed` (mặc định agent bị 403).
 4. Dữ liệu trả cho khách cổng ⇒ không lộ agent (assignee/actor agent ⇒ "Team").
-5. Trang mới dưới `app/work` ⇒ thêm tuyến app desktop (`desktop/src/renderer/features/web/dinhTuyenWeb.ts`, tĩnh TRƯỚC
+5. Trang mới dưới `app/work` ⇒ thêm tuyến app desktop (`desktop/src/renderer/features/web/tuyenCtWork.ts` — từ 13/10/2026 KHÔNG còn ở `dinhTuyenWeb.ts`, test chặn tuyến `/work` lọt vào đó; tĩnh TRƯỚC
    động); trang cấp không gian ⇒ thêm tên vào `WS_PAGES` trong `WorkSidebar.tsx` (không thì bị đọc thành mã dự án).
 
 ---

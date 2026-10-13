@@ -164,21 +164,23 @@ Người học: "chữ Hán của khoá thiếu nhiều so với bài cô giản
 
 | Bài | Chữ | Nguồn |
 |---|---|---|
-| 1 | 日本人名前国学生語何私会 | dự kiến |
+| 1 | 日本人学生語何私英員 | dự kiến |
 | 2 | 一二三四五六七八九十百千万円 | dự kiến |
-| 3 | 時分半今月火水木金土曜朝 | dự kiến |
-| 4 | 山川町駅東西南北大小高新 | dự kiến |
+| 3 | 時分月火水木金土曜朝晩 | dự kiến |
+| 4 | 京名前国男東女区市 | **slide** (13/10) |
 | 5 | 先週毎午後見食飲買物行休 | ✅ **khớp slide của cô** (29/09) |
-| 6 | 手歌近遠早広全部約束遊野 | dự kiến |
-| 7 | 上下中外横出入開閉使貸置 | dự kiến |
+| 6 | 来帰会社聞読書今話 | **slide** (13/10) |
+| 7 | 言貝田力門寺肉料理野半大小 | **slide** (13/10) |
 | 8 | 父母兄弟姉妹子目口耳足長 | dự kiến |
-| 9 | 読書聞話言泳乗習運転集描 | dự kiến |
-| 10 | 右左立座歩待持帰道橋危曲 | dự kiến |
+| 9 | 泳乗習運転集描歌遊 | dự kiến |
+| 10 | 右左立座歩待持近道橋危曲 | dự kiến |
 | 11 | 起寝働始終住通活初忘慣卒 | dự kiến |
 | 12 | 病院医者体頭薬熱痛歯悪治 | dự kiến |
-| 13 | 男女赤青黄色若売知場所品 | dự kiến |
-| 14 | 田空字思便利不同笑経験化 | dự kiến |
+| 13 | 赤青黄色若売知場所品全部 | dự kiến |
+| 14 | 空字思便利不同笑経験化手 | dự kiến |
 | 15 | 天気晴雨曇降台震事故急心 | dự kiến |
+
+Bài 4/6/7 khớp slide lớp JPD123 (13/10/2026, từ bộ slide "Chu Han Bai 4–7" — Bài 5 trùng khớp 12/12 với ảnh của người học nên bộ này đáng tin); chữ dự kiến trùng với bài có slide đã nhường đi.
 
 Dự kiến = chữ N5/N4 có trong từ vựng/ngữ pháp bài đó, không trùng bài khác (tài
 liệu trong `~/Documents/JPD123/` không có danh sách chữ Hán của lớp; sách không có

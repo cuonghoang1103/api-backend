@@ -1080,6 +1080,26 @@ const NGU_PHAP: Lesson = {
             { en: 'ビールはもうありません。ワインはどうですか。', ro: 'Biiru wa mou arimasen. Wain wa dou desu ka.', vi: 'Bia hết rồi. Rượu vang thì sao?' },
           ],
         },
+        {
+          formula: 'もう ＋ N／Adj です（ありません） ・ まだ ＋ N／Adj です',
+          vi: 'Cũng hay gặp trong slide ôn tập Bài 4–7 của lớp: **もう** = "đã … rồi / không còn … nữa" (sự việc ĐÃ chuyển sang trạng thái mới); **まだ** = "vẫn còn / mới chỉ" (CHƯA chuyển). Ghép được với danh từ (giờ giấc, tuổi…) và tính từ.',
+          examples: [
+            { en: 'もう{九時|くじ}です。{急|いそ}ぎましょう。', ro: 'Mou kuji desu. Isogimashou.', vi: 'Đã 9 giờ rồi. Nhanh lên thôi.' },
+            { en: 'まだ{八時|はちじ}です。{大丈夫|だいじょうぶ}ですよ。', ro: 'Mada hachiji desu. Daijoubu desu yo.', vi: 'Mới 8 giờ thôi. Không sao đâu.' },
+            { en: 'まだ{早|はや}いですから、コーヒーを{飲|の}みませんか。', ro: 'Mada hayai desu kara, koohii o nomimasen ka.', vi: 'Vẫn còn sớm, uống cà phê không?' },
+            { en: '{三月|さんがつ}ですから、もう{寒|さむ}くないです。', ro: 'Sangatsu desu kara, mou samukunai desu.', vi: 'Tháng 3 rồi nên không còn lạnh nữa.' },
+            { en: '{弟|おとうと}はまだ{学生|がくせい}です。{兄|あに}はもう{会社員|かいしゃいん}です。', ro: 'Otouto wa mada gakusei desu. Ani wa mou kaishain desu.', vi: 'Em trai tôi vẫn còn là sinh viên. Anh tôi thì đã đi làm rồi.' },
+          ],
+        },
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo phân biệt nhanh (hay ra trắc nghiệm)',
+      items: [
+        'Thấy câu nói về **trạng thái MỚI** (đã đến giờ, đã hết, hết lạnh, đã đi làm) → **もう**.',
+        'Thấy câu nói về **trạng thái CŨ vẫn kéo dài** (vẫn sớm, vẫn còn, vẫn là sinh viên, mới 8 giờ) → **まだ**.',
+        '**もう** + phủ định = "không … nữa" (もうありません, もう{寒|さむ}くないです). **まだ** + phủ định chỉ dùng với động từ ở Bài 10 (まだ～ていません) — ở Bài 6–7 trả lời "chưa" là **まだです**.',
       ],
     },
     {

@@ -3,7 +3,7 @@
  * bài `bN-kanji` sẵn có (bài cũ giữ nguyên để học thêm).
  *
  * Danh sách chữ mỗi bài:
- *  - `nguon: 'slide'`   = khớp ĐÚNG slide của cô (hiện có Bài 5: 先 週 毎 午 後 見 食 飲 買 物 行 休);
+ *  - `nguon: 'slide'`   = khớp ĐÚNG slide của cô (Bài 4, 5, 6, 7 — slide lớp JPD123; Bài 1–3 và 8–15 còn dự kiến);
  *  - `nguon: 'du-kien'` = dự kiến — chọn chữ Hán N5/N4 phổ biến trong từ vựng/ngữ pháp
  *    của bài, không trùng bài khác; sẽ sửa cho khớp slide khi người học gửi ảnh.
  * Chi tiết từng chữ (Hán Việt, On/Kun, cách nhớ, từ đi chung) ở hanTu.ts — tải chậm.
@@ -28,9 +28,9 @@ export type HanLopSoan = HanLopBai & {
 
 export const HAN_LOP: Record<number, HanLopSoan> = {
   1: {
-    chars: '日本人名前国学生語何私会',
+    chars: '日本人学生語何私英員',
     nguon: 'du-kien',
-    chuDe: 'giới thiệu bản thân: tên, nước, người, trường học, công ty',
+    chuDe: 'giới thiệu bản thân: người Nhật, học sinh, tiếng, tôi, tiếng Anh, nhân viên',
     doc: [
       { text: '{私|わたし}の{名前|なまえ}はマルコです。', ro: 'Watashi no namae wa Maruko desu.', vi: 'Tên tôi là Marco.' },
       { text: '{私|わたし}はイタリア{人|じん}です。', ro: 'Watashi wa Itaria-jin desu.', vi: 'Tôi là người Ý.' },
@@ -66,9 +66,9 @@ export const HAN_LOP: Record<number, HanLopSoan> = {
     ],
   },
   3: {
-    chars: '時分半今月火水木金土曜朝',
+    chars: '時分月火水木金土曜朝晩',
     nguon: 'du-kien',
-    chuDe: 'giờ giấc, buổi sáng và bảy ngày trong tuần',
+    chuDe: 'giờ giấc, buổi sáng/tối và bảy ngày trong tuần',
     doc: [
       { text: '{今|いま}、{何時|なんじ}ですか。', ro: 'Ima, nanji desu ka.', vi: 'Bây giờ là mấy giờ?' },
       { text: '{九時|くじ}{十分|じゅっぷん}です。', ro: 'Kuji juppun desu.', vi: 'Chín giờ mười phút.' },
@@ -85,22 +85,22 @@ export const HAN_LOP: Record<number, HanLopSoan> = {
     ],
   },
   4: {
-    chars: '山川町駅東西南北大小高新',
-    nguon: 'du-kien',
-    chuDe: 'đất nước, thành phố: phương hướng, núi sông, nhà ga, to nhỏ cao mới',
+    chars: '京名前国男東女区市',
+    nguon: 'slide',
+    chuDe: 'tên người, đất nước và thành phố (Tokyo, quận, thành phố, phía đông) và nam/nữ',
     doc: [
-      { text: '{私|わたし}の{町|まち}は{小|ちい}さいです。', ro: 'Watashi no machi wa chiisai desu.', vi: 'Thị trấn của tôi nhỏ.' },
-      { text: '{町|まち}の{北|きた}に{山|やま}があります。', ro: 'Machi no kita ni yama ga arimasu.', vi: 'Phía bắc thị trấn có núi.' },
-      { text: '{駅|えき}の{東|ひがし}に{大|おお}きい{川|かわ}があります。', ro: 'Eki no higashi ni ookii kawa ga arimasu.', vi: 'Phía đông nhà ga có một con sông lớn.' },
-      { text: '{富士山|ふじさん}はとても{高|たか}いです。', ro: 'Fujisan wa totemo takai desu.', vi: 'Núi Phú Sĩ rất cao.' },
-      { text: '{新|あたら}しい{駅|えき}はきれいです。', ro: 'Atarashii eki wa kirei desu.', vi: 'Nhà ga mới rất đẹp.' },
-      { text: 'ハノイはベトナムの{北|きた}にあります。', ro: 'Hanoi wa Betonamu no kita ni arimasu.', vi: 'Hà Nội ở phía bắc Việt Nam.' },
-      { text: 'ホーチミンはベトナムの{南|みなみ}にあります。', ro: 'Hoochimin wa Betonamu no minami ni arimasu.', vi: 'TP. Hồ Chí Minh ở phía nam Việt Nam.' },
-      { text: '{西|にし}の{町|まち}は{古|ふる}くて、きれいです。', ro: 'Nishi no machi wa furukute, kirei desu.', vi: 'Thị trấn phía tây cổ kính và đẹp.' },
+      { text: 'お{名前|なまえ}は{何|なん}ですか。', ro: 'O-namae wa nan desu ka.', vi: 'Tên bạn là gì?' },
+      { text: '{私|わたし}の{国|くに}はベトナムです。', ro: 'Watashi no kuni wa Betonamu desu.', vi: 'Nước tôi là Việt Nam.' },
       { text: '{東京|とうきょう}は{大|おお}きい{町|まち}です。', ro: 'Toukyou wa ookii machi desu.', vi: 'Tokyo là một thành phố lớn.' },
-      { text: '{新幹線|しんかんせん}は{高|たか}いです。', ro: 'Shinkansen wa takai desu.', vi: 'Tàu Shinkansen đắt.' },
-      { text: 'うちから{駅|えき}まで{二十分|にじゅっぷん}です。', ro: 'Uchi kara eki made nijuppun desu.', vi: 'Từ nhà đến ga mất 20 phút.' },
-      { text: 'この{町|まち}は{山|やま}も{川|かわ}もきれいです。', ro: 'Kono machi wa yama mo kawa mo kirei desu.', vi: 'Thị trấn này cả núi lẫn sông đều đẹp.' },
+      { text: '{京都|きょうと}は{古|ふる}くて、きれいな{町|まち}です。', ro: 'Kyouto wa furukute, kirei na machi desu.', vi: 'Kyoto là thành phố cổ và đẹp.' },
+      { text: 'あの{男|おとこ}の{人|ひと}はだれですか。', ro: 'Ano otoko no hito wa dare desu ka.', vi: 'Người đàn ông kia là ai vậy?' },
+      { text: 'あの{女|おんな}の{人|ひと}は{日本語|にほんご}の{先生|せんせい}です。', ro: 'Ano onna no hito wa nihongo no sensei desu.', vi: 'Người phụ nữ kia là cô giáo tiếng Nhật.' },
+      { text: '{新宿区|しんじゅくく}は{東京|とうきょう}の{区|く}です。', ro: 'Shinjuku-ku wa Toukyou no ku desu.', vi: 'Shinjuku là một quận của Tokyo.' },
+      { text: 'ハノイ{市|し}はベトナムの{首都|しゅと}です。', ro: 'Hanoi-shi wa Betonamu no shuto desu.', vi: 'Thành phố Hà Nội là thủ đô của Việt Nam.' },
+      { text: '{駅|えき}の{前|まえ}に{銀行|ぎんこう}があります。', ro: 'Eki no mae ni ginkou ga arimasu.', vi: 'Trước nhà ga có ngân hàng.' },
+      { text: '{中国|ちゅうごく}と{韓国|かんこく}の{友達|ともだち}がいます。', ro: 'Chuugoku to Kankoku no tomodachi ga imasu.', vi: 'Tôi có bạn người Trung Quốc và Hàn Quốc.' },
+      { text: '{東|ひがし}の{国|くに}、{日本|にほん}へようこそ。', ro: 'Higashi no kuni, Nihon e youkoso.', vi: 'Chào mừng đến Nhật Bản, đất nước phương Đông.' },
+      { text: '{男|おとこ}の{子|こ}と{女|おんな}の{子|こ}が{公園|こうえん}にいます。', ro: 'Otoko no ko to onna no ko ga kouen ni imasu.', vi: 'Có bé trai và bé gái ở công viên.' },
     ],
   },
   5: {
@@ -134,40 +134,64 @@ export const HAN_LOP: Record<number, HanLopSoan> = {
     ],
   },
   6: {
-    chars: '手歌近遠早広全部約束遊野',
-    nguon: 'du-kien',
-    chuDe: 'rủ nhau đi chơi, hẹn hò (hẹn, chơi, hát, gần/xa, sớm, rộng, tất cả, bóng chày)',
+    chars: '来帰会社聞読書今話',
+    nguon: 'slide',
+    chuDe: 'đến/về, gặp gỡ, công ty, nghe, đọc, viết, nói chuyện và bây giờ',
+    them: {
+      ghi: 'Từ ghép với chữ Hán Bài 6 hay gặp trong đề (chọn cách đọc/chọn chữ) mà danh sách từ mới chưa có — bổ sung ở đây.',
+      items: [
+        { w: '{来日|らいにち}します', pos: 'động từ nhóm 3', ipa: 'rainichi shimasu', vi: 'đến Nhật Bản', ex: 'リンさんは{去年|きょねん}{来日|らいにち}しました。', exRo: 'Rin-san wa kyonen rainichi shimashita.', exVi: 'Chị Linh đã đến Nhật năm ngoái.' },
+        { w: '{帰国|きこく}します', pos: 'động từ nhóm 3', ipa: 'kikoku shimasu', vi: 'về nước', ex: '{来月|らいげつ}、{帰国|きこく}します。', exRo: 'Raigetsu, kikoku shimasu.', exVi: 'Tháng sau tôi về nước.' },
+        { w: '{社会|しゃかい}', pos: 'danh từ', ipa: 'shakai', vi: 'xã hội', ex: '{日本|にほん}の{社会|しゃかい}について{話|はな}しました。', exRo: 'Nihon no shakai ni tsuite hanashimashita.', exVi: 'Chúng tôi đã nói chuyện về xã hội Nhật Bản.' },
+        { w: '{読書|どくしょ}', pos: 'danh từ', ipa: 'dokusho', vi: 'việc đọc sách', ex: '{趣味|しゅみ}は{読書|どくしょ}です。', exRo: 'Shumi wa dokusho desu.', exVi: 'Sở thích của tôi là đọc sách.' },
+        { w: '{会話|かいわ}', pos: 'danh từ', ipa: 'kaiwa', vi: 'hội thoại', ex: '{今日|きょう}は{会話|かいわ}の{練習|れんしゅう}をします。', exRo: 'Kyou wa kaiwa no renshuu o shimasu.', exVi: 'Hôm nay luyện hội thoại.' },
+        { w: '{今週|こんしゅう}', pos: 'danh từ (thời gian)', ipa: 'konshuu', vi: 'tuần này', ex: '{今週|こんしゅう}の{土曜日|どようび}、{会|あ}いませんか。', exRo: 'Konshuu no doyoubi, aimasen ka.', exVi: 'Thứ bảy tuần này gặp nhau không?' },
+      ],
+    },
     doc: [
-      { text: '{土曜日|どようび}、{一緒|いっしょ}に{遊|あそ}びに{行|い}きませんか。', ro: 'Doyoubi, issho ni asobi ni ikimasen ka.', vi: 'Thứ bảy, đi chơi cùng nhau không?' },
-      { text: 'すみません、{土曜日|どようび}は{約束|やくそく}があります。', ro: 'Sumimasen, doyoubi wa yakusoku ga arimasu.', vi: 'Xin lỗi, thứ bảy tôi có hẹn rồi.' },
-      { text: '{駅|えき}は{近|ちか}いですか。', ro: 'Eki wa chikai desu ka.', vi: 'Nhà ga có gần không?' },
-      { text: 'いいえ、ちょっと{遠|とお}いです。', ro: 'Iie, chotto tooi desu.', vi: 'Không, hơi xa.' },
-      { text: '{明日|あした}は{早|はや}いですから、{早|はや}く{寝|ね}ます。', ro: 'Ashita wa hayai desu kara, hayaku nemasu.', vi: 'Ngày mai phải dậy sớm nên tôi ngủ sớm.' },
-      { text: 'この{公園|こうえん}は{広|ひろ}いですね。', ro: 'Kono kouen wa hiroi desu ne.', vi: 'Công viên này rộng nhỉ.' },
-      { text: '{野球|やきゅう}の{試合|しあい}を{見|み}に{行|い}きましょう。', ro: 'Yakyuu no shiai o mi ni ikimashou.', vi: 'Cùng đi xem trận bóng chày nhé.' },
-      { text: '{私|わたし}は{歌|うた}が{好|す}きです。{日本|にほん}の{歌手|かしゅ}も{好|す}きです。', ro: 'Watashi wa uta ga suki desu. Nihon no kashu mo suki desu.', vi: 'Tôi thích hát. Tôi cũng thích ca sĩ Nhật.' },
-      { text: '{全部|ぜんぶ}でいくらですか。', ro: 'Zenbu de ikura desu ka.', vi: 'Tất cả bao nhiêu tiền?' },
-      { text: '{手|て}が{冷|つめ}たいです。', ro: 'Te ga tsumetai desu.', vi: 'Tay tôi lạnh.' },
-      { text: '{食|た}べ{放題|ほうだい}の{店|みせ}で{野菜|やさい}を{全部|ぜんぶ}{食|た}べました。', ro: 'Tabehoudai no mise de yasai o zenbu tabemashita.', vi: 'Ở quán ăn thả ga, tôi đã ăn hết chỗ rau.' },
+      { text: '{今|いま}、{何時|なんじ}ですか。', ro: 'Ima, nanji desu ka.', vi: 'Bây giờ là mấy giờ?' },
+      { text: '{来週|らいしゅう}、{友達|ともだち}が{日本|にほん}から{来|き}ます。', ro: 'Raishuu, tomodachi ga Nihon kara kimasu.', vi: 'Tuần sau bạn tôi từ Nhật sang.' },
+      { text: '{毎日|まいにち}{六時|ろくじ}にうちへ{帰|かえ}ります。', ro: 'Mainichi rokuji ni uchi e kaerimasu.', vi: 'Ngày nào tôi cũng về nhà lúc 6 giờ.' },
+      { text: '{昨日|きのう}、{駅|えき}で{先生|せんせい}に{会|あ}いました。', ro: 'Kinou, eki de sensei ni aimashita.', vi: 'Hôm qua tôi gặp cô giáo ở ga.' },
+      { text: '{兄|あに}の{会社|かいしゃ}は{東京|とうきょう}にあります。', ro: 'Ani no kaisha wa Toukyou ni arimasu.', vi: 'Công ty của anh tôi ở Tokyo.' },
+      { text: '{毎朝|まいあさ}、{新聞|しんぶん}を{読|よ}みます。', ro: 'Maiasa, shinbun o yomimasu.', vi: 'Sáng nào tôi cũng đọc báo.' },
+      { text: '{夜|よる}、{日本|にほん}の{音楽|おんがく}を{聞|き}きます。', ro: 'Yoru, Nihon no ongaku o kikimasu.', vi: 'Buổi tối tôi nghe nhạc Nhật.' },
+      { text: '{国|くに}の{母|はは}に{手紙|てがみ}を{書|か}きました。', ro: 'Kuni no haha ni tegami o kakimashita.', vi: 'Tôi đã viết thư cho mẹ ở quê nhà.' },
+      { text: '{先生|せんせい}と{日本語|にほんご}で{話|はな}しました。', ro: 'Sensei to nihongo de hanashimashita.', vi: 'Tôi đã nói chuyện với cô bằng tiếng Nhật.' },
+      { text: '{来年|らいねん}、{国|くに}へ{帰|かえ}ります。', ro: 'Rainen, kuni e kaerimasu.', vi: 'Năm sau tôi về nước.' },
+      { text: 'もう{昼|ひる}ご{飯|はん}を{食|た}べましたか。', ro: 'Mou hirugohan o tabemashita ka.', vi: 'Bạn ăn trưa chưa?' },
+      { text: '{今週|こんしゅう}の{日曜日|にちようび}、いっしょに{映画|えいが}を{見|み}ませんか。', ro: 'Konshuu no nichiyoubi, issho ni eiga o mimasen ka.', vi: 'Chủ nhật tuần này cùng đi xem phim không?' },
     ],
   },
   7: {
-    chars: '上下中外横出入開閉使貸置',
-    nguon: 'du-kien',
-    chuDe: 'vị trí (trên, dưới, trong, ngoài, cạnh) và nhờ vả trong nhà (ra/vào, mở/đóng, dùng, cho mượn, đặt)',
+    chars: '言貝田力門寺肉料理野半大小',
+    nguon: 'slide',
+    chuDe: 'nói, con sò, ruộng, sức lực, cổng, chùa; thịt, nấu ăn, rau, một nửa, to/nhỏ',
+    them: {
+      ghi: 'Từ ghép với chữ Hán Bài 7 hay gặp trong đề mà danh sách từ mới chưa có — bổ sung ở đây.',
+      items: [
+        { w: 'お{寺|てら}', pos: 'danh từ', ipa: 'otera', vi: 'ngôi chùa', ex: '{京都|きょうと}でお{寺|てら}を{見|み}ました。', exRo: 'Kyouto de otera o mimashita.', exVi: 'Tôi đã ngắm chùa ở Kyoto.' },
+        { w: '{半分|はんぶん}', pos: 'danh từ', ipa: 'hanbun', vi: 'một nửa', ex: 'ケーキを{半分|はんぶん}{食|た}べてください。', exRo: 'Keeki o hanbun tabete kudasai.', exVi: 'Hãy ăn một nửa cái bánh.' },
+        { w: '{小学生|しょうがくせい}', pos: 'danh từ', ipa: 'shougakusei', vi: 'học sinh tiểu học', ex: '{妹|いもうと}は{小学生|しょうがくせい}です。', exRo: 'Imouto wa shougakusei desu.', exVi: 'Em gái tôi là học sinh tiểu học.' },
+        { w: '{言|い}います', pos: 'động từ nhóm 1', ipa: 'iimasu', vi: 'nói (て形: 言って)', ex: 'もう{一度|いちど}{言|い}ってください。', exRo: 'Mou ichido itte kudasai.', exVi: 'Hãy nói lại một lần nữa.' },
+        { w: '{田|た}んぼ', pos: 'danh từ', ipa: 'tanbo', vi: 'ruộng lúa', ex: '{田|た}んぼに{水|みず}があります。', exRo: 'Tanbo ni mizu ga arimasu.', exVi: 'Ruộng có nước.' },
+        { w: '{力|ちから}', pos: 'danh từ', ipa: 'chikara', vi: 'sức lực, sức mạnh', ex: '{兄|あに}は{力|ちから}が{強|つよ}いです。', exRo: 'Ani wa chikara ga tsuyoi desu.', exVi: 'Anh tôi khoẻ.' },
+      ],
+    },
     doc: [
-      { text: '{机|つくえ}の{上|うえ}に{本|ほん}があります。', ro: 'Tsukue no ue ni hon ga arimasu.', vi: 'Trên bàn có quyển sách.' },
-      { text: 'ベッドの{下|した}に{猫|ねこ}がいます。', ro: 'Beddo no shita ni neko ga imasu.', vi: 'Dưới giường có con mèo.' },
-      { text: '{箱|はこ}の{中|なか}に{何|なに}がありますか。', ro: 'Hako no naka ni nani ga arimasu ka.', vi: 'Trong hộp có gì vậy?' },
-      { text: '{外|そと}は{寒|さむ}いですから、{窓|まど}を{閉|し}めてください。', ro: 'Soto wa samui desu kara, mado o shimete kudasai.', vi: 'Ngoài trời lạnh nên hãy đóng cửa sổ lại.' },
-      { text: 'すみません、{窓|まど}を{開|あ}けてください。', ro: 'Sumimasen, mado o akete kudasai.', vi: 'Xin lỗi, hãy mở cửa sổ ra.' },
-      { text: 'テレビの{横|よこ}に{写真|しゃしん}があります。', ro: 'Terebi no yoko ni shashin ga arimasu.', vi: 'Bên cạnh ti vi có bức ảnh.' },
-      { text: 'どうぞ、{中|なか}に{入|はい}ってください。', ro: 'Douzo, naka ni haitte kudasai.', vi: 'Mời vào trong.' },
-      { text: '{冷蔵庫|れいぞうこ}からジュースを{出|だ}してください。', ro: 'Reizouko kara juusu o dashite kudasai.', vi: 'Hãy lấy nước ép từ tủ lạnh ra.' },
-      { text: 'このペンを{使|つか}ってください。', ro: 'Kono pen o tsukatte kudasai.', vi: 'Hãy dùng cây bút này.' },
-      { text: 'すみません、{辞書|じしょ}を{貸|か}してください。', ro: 'Sumimasen, jisho o kashite kudasai.', vi: 'Xin lỗi, cho tôi mượn từ điển.' },
-      { text: 'かばんはここに{置|お}いてください。', ro: 'Kaban wa koko ni oite kudasai.', vi: 'Hãy để cặp ở đây.' },
-      { text: 'コップに{水|みず}を{入|い}れてください。', ro: 'Koppu ni mizu o irete kudasai.', vi: 'Hãy rót nước vào cốc.' },
+      { text: '{京都|きょうと}にはお{寺|てら}がたくさんあります。', ro: 'Kyouto ni wa otera ga takusan arimasu.', vi: 'Ở Kyoto có rất nhiều chùa.' },
+      { text: 'お{寺|てら}の{門|もん}の{前|まえ}で{写真|しゃしん}を{撮|と}ってください。', ro: 'Otera no mon no mae de shashin o totte kudasai.', vi: 'Hãy chụp ảnh trước cổng chùa.' },
+      { text: '「ありがとう」はベトナム{語|ご}で{何|なん}と{言|い}いますか。', ro: '"Arigatou" wa Betonamugo de nan to iimasu ka.', vi: '"Arigatou" tiếng Việt nói thế nào?' },
+      { text: '{田|た}んぼの{中|なか}に{水|みず}があります。', ro: 'Tanbo no naka ni mizu ga arimasu.', vi: 'Trong ruộng có nước.' },
+      { text: 'この{店|みせ}の{貝|かい}はおいしいです。', ro: 'Kono mise no kai wa oishii desu.', vi: 'Sò của quán này ngon.' },
+      { text: '{兄|あに}は{力|ちから}が{強|つよ}いです。', ro: 'Ani wa chikara ga tsuyoi desu.', vi: 'Anh tôi rất khoẻ.' },
+      { text: 'スーパーで{肉|にく}と{野菜|やさい}を{買|か}いました。', ro: 'Suupaa de niku to yasai o kaimashita.', vi: 'Tôi đã mua thịt và rau ở siêu thị.' },
+      { text: '{母|はは}は{料理|りょうり}が{上手|じょうず}です。', ro: 'Haha wa ryouri ga jouzu desu.', vi: 'Mẹ tôi nấu ăn giỏi.' },
+      { text: 'りんごを{半分|はんぶん}{食|た}べました。', ro: 'Ringo o hanbun tabemashita.', vi: 'Tôi đã ăn nửa quả táo.' },
+      { text: '{大|おお}きいかばんと{小|ちい}さいかばんがあります。', ro: 'Ookii kaban to chiisai kaban ga arimasu.', vi: 'Có cái cặp to và cái cặp nhỏ.' },
+      { text: '{大学|だいがく}の{門|もん}は{大|おお}きいです。', ro: 'Daigaku no mon wa ookii desu.', vi: 'Cổng trường đại học to.' },
+      { text: '{妹|いもうと}は{小学生|しょうがくせい}です。', ro: 'Imouto wa shougakusei desu.', vi: 'Em gái tôi là học sinh tiểu học.' },
+      { text: '{日本|にほん}{料理|りょうり}の{作|つく}り{方|かた}を{教|おし}えてください。', ro: 'Nihon ryouri no tsukurikata o oshiete kudasai.', vi: 'Hãy chỉ cho tôi cách nấu món Nhật.' },
     ],
   },
   8: {
@@ -190,9 +214,9 @@ export const HAN_LOP: Record<number, HanLopSoan> = {
     ],
   },
   9: {
-    chars: '読書聞話言泳乗習運転集描',
+    chars: '泳乗習運転集描歌遊',
     nguon: 'du-kien',
-    chuDe: 'sở thích và khả năng (đọc, viết, nghe, nói, bơi, lên xe, học, lái xe, sưu tầm, vẽ)',
+    chuDe: 'sở thích và khả năng (bơi, lên xe, học, lái xe, sưu tầm, vẽ, hát, chơi)',
     doc: [
       { text: '{私|わたし}の{趣味|しゅみ}は{本|ほん}を{読|よ}むことです。', ro: 'Watashi no shumi wa hon o yomu koto desu.', vi: 'Sở thích của tôi là đọc sách.' },
       { text: '{漢字|かんじ}を{書|か}くことができますか。', ro: 'Kanji o kaku koto ga dekimasu ka.', vi: 'Bạn có viết được chữ Hán không?' },
@@ -209,9 +233,9 @@ export const HAN_LOP: Record<number, HanLopSoan> = {
     ],
   },
   10: {
-    chars: '右左立座歩待持帰道橋危曲',
+    chars: '右左立座歩待持近道橋危曲',
     nguon: 'du-kien',
-    chuDe: 'hỏi đường và quy tắc khi đi tour (trái/phải, đứng/ngồi, đi bộ, chờ, mang, về, đường, cầu, nguy hiểm, rẽ)',
+    chuDe: 'hỏi đường và quy tắc khi đi tour (trái/phải, đứng/ngồi, đi bộ, chờ, mang, gần, đường, cầu, nguy hiểm, rẽ)',
     doc: [
       { text: 'あの{信号|しんごう}を{右|みぎ}に{曲|ま}がってください。', ro: 'Ano shingou o migi ni magatte kudasai.', vi: 'Hãy rẽ phải ở cái đèn giao thông kia.' },
       { text: '{二|ふた}つ{目|め}の{角|かど}を{左|ひだり}に{曲|ま}がります。', ro: 'Futatsume no kado o hidari ni magarimasu.', vi: 'Rẽ trái ở góc phố thứ hai.' },
@@ -266,9 +290,9 @@ export const HAN_LOP: Record<number, HanLopSoan> = {
     ],
   },
   13: {
-    chars: '男女赤青黄色若売知場所品',
+    chars: '赤青黄色若売知場所品全部',
     nguon: 'du-kien',
-    chuDe: 'tả người và đồ vật (nam, nữ, màu đỏ/xanh/vàng, trẻ) và giới thiệu nơi mua sắm (bán, biết, địa điểm, hàng hoá)',
+    chuDe: 'tả người và đồ vật (màu đỏ/xanh/vàng, trẻ, toàn bộ) và giới thiệu nơi mua sắm (bán, biết, địa điểm, hàng hoá)',
     doc: [
       { text: 'あの{赤|あか}いシャツを{着|き}ている{男|おとこ}の{人|ひと}はだれですか。', ro: 'Ano akai shatsu o kite iru otoko no hito wa dare desu ka.', vi: 'Người đàn ông đang mặc áo sơ mi đỏ kia là ai?' },
       { text: '{青|あお}い{帽子|ぼうし}をかぶっている{女|おんな}の{人|ひと}がパクさんです。', ro: 'Aoi boushi o kabutte iru onna no hito ga Paku-san desu.', vi: 'Người phụ nữ đang đội mũ xanh là chị Park.' },
@@ -285,9 +309,9 @@ export const HAN_LOP: Record<number, HanLopSoan> = {
     ],
   },
   14: {
-    chars: '田空字思便利不同笑経験化',
+    chars: '空字思便利不同笑経験化手',
     nguon: 'du-kien',
-    chuDe: 'so sánh quê và phố, nêu ý kiến (ruộng, không khí, chữ, nghĩ, tiện lợi, bất tiện, giống nhau) và kể trải nghiệm phong tục (cười, kinh nghiệm, văn hoá)',
+    chuDe: 'so sánh quê và phố, nêu ý kiến (không khí, chữ, nghĩ, tiện lợi, bất tiện, giống nhau) và kể trải nghiệm phong tục (cười, kinh nghiệm, văn hoá)',
     doc: [
       { text: '{田舎|いなか}は{空気|くうき}がきれいです。', ro: 'Inaka wa kuuki ga kirei desu.', vi: 'Ở quê không khí trong lành.' },
       { text: '{都会|とかい}は{便利|べんり}ですが、{少|すこ}しうるさいと{思|おも}います。', ro: 'Tokai wa benri desu ga, sukoshi urusai to omoimasu.', vi: 'Thành phố tiện lợi nhưng tôi nghĩ hơi ồn.' },

@@ -12,6 +12,7 @@ import { defineCourse } from '@/components/sach-hoc/course';
 import type { Day, Lesson } from '@/components/sach-hoc/types';
 import { loadBai } from './bai';
 import { MANIFEST } from './bai/manifest';
+import { DE_LUYEN_67 } from './bai/deLuyen67';
 
 export type { Ex, Block, Voice, Role, Kind, Lesson, Day } from '@/components/sach-hoc/types';
 
@@ -121,7 +122,7 @@ export const DEKIRU = defineCourse({
   shownNum: (n) => n - 1,
   badgeWord: 'Bài',
   intro: INTRO,
-  extras: [CHIA, ON_THE],
+  extras: [CHIA, ON_THE, DE_LUYEN_67],
   days: DAYS,
   // Chữ Hán: chữ của lớp (soạn tay) + chỉ mục từ đi chung (sinh lúc build) — tải chậm, 3 chunk.
   kanji: () =>

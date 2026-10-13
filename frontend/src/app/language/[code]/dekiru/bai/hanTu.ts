@@ -421,7 +421,7 @@ export const HAN_TU: Record<string, HanTu> = {
     ],
   },
 
-  /* ── Bài 4 — dự kiến ── */
+  /* ── (chữ dự kiến cũ của Bài 4 — nay một số chữ thuộc bài khác/không dùng) ── */
   '山': {
     hv: 'SƠN', nghia: 'núi', en: 'mountain',
     on: ['サン'], kun: ['やま'],
@@ -675,7 +675,7 @@ export const HAN_TU: Record<string, HanTu> = {
       { w: '{休日|きゅうじつ}', ro: 'kyuujitsu', vi: 'ngày nghỉ (trang trọng)' },
     ],
   },
-  /* ── Bài 6 — dự kiến ── */
+  /* ── (chữ dự kiến cũ của Bài 6 — nay một số chữ thuộc bài khác/không dùng) ── */
   '手': {
     hv: 'THỦ', nghia: 'tay', en: 'hand',
     on: ['シュ'], kun: ['て'],
@@ -797,7 +797,7 @@ export const HAN_TU: Record<string, HanTu> = {
     ],
   },
 
-  /* ── Bài 7 — dự kiến ── */
+  /* ── (chữ dự kiến cũ của Bài 7 — nay một số chữ thuộc bài khác/không dùng) ── */
   '上': {
     hv: 'THƯỢNG', nghia: 'trên', en: 'up / above',
     on: ['ジョウ'], kun: ['うえ', 'あ・げます'],
@@ -1887,6 +1887,162 @@ export const HAN_TU: Record<string, HanTu> = {
       { w: '{心配|しんぱい}', ro: 'shinpai', vi: 'lo lắng' },
       { w: '{心|こころ}', ro: 'kokoro', vi: 'trái tim, tấm lòng' },
       { w: '{安心|あんしん}', ro: 'anshin', vi: 'yên tâm' },
+    ],
+  },
+  /* ── Chữ mới khi khớp slide lớp JPD123 (13/10): Bài 4 京 区 市 · Bài 6 来 社 · Bài 7 貝 力 門 寺 肉 料 理
+        + chữ bù cho Bài 1 (英 員) và Bài 3 (晩) sau khi nhường chữ trùng cho bài có slide ── */
+  '京': {
+    hv: 'KINH', nghia: 'kinh đô, thủ đô', en: 'capital',
+    on: ['キョウ', 'ケイ'], kun: [],
+    nho: 'Mái nhà 亠 + toà 口 + cột 小: toà nhà cao chót vót chỉ có ở KINH ĐÔ. {東京|とうきょう} = kinh đô phía Đông.',
+    tu: [
+      { w: '{東京|とうきょう}', ro: 'toukyou', vi: 'Tokyo', bang: true },
+      { w: '{京都|きょうと}', ro: 'kyouto', vi: 'Kyoto' },
+      { w: '{東京駅|とうきょうえき}', ro: 'toukyou eki', vi: 'ga Tokyo' },
+    ],
+  },
+  '区': {
+    hv: 'KHU', nghia: 'khu, quận', en: 'ward / district',
+    on: ['ク'], kun: [],
+    nho: 'Khung 匚 khoanh lấy dấu メ: một vùng đất được KHOANH lại và đánh dấu = KHU, QUẬN.',
+    tu: [
+      { w: '{区|く}', ro: 'ku', vi: 'quận (ở thành phố lớn)' },
+      { w: '{新宿区|しんじゅくく}', ro: 'shinjuku-ku', vi: 'quận Shinjuku' },
+      { w: '{区役所|くやくしょ}', ro: 'kuyakusho', vi: 'uỷ ban quận' },
+    ],
+  },
+  '市': {
+    hv: 'THỊ', nghia: 'thành phố; chợ', en: 'city / market',
+    on: ['シ'], kun: ['いち'],
+    nho: 'Mái che 亠 trên tấm vải 巾 treo bán: chỗ treo hàng là CHỢ, chợ đông lên thành THÀNH PHỐ. Đừng nhầm với 布 (vải) và 巾.',
+    tu: [
+      { w: '{市|し}', ro: 'shi', vi: 'thành phố (đơn vị hành chính)' },
+      { w: 'ハノイ{市|し}', ro: 'hanoi-shi', vi: 'thành phố Hà Nội' },
+      { w: '{市場|いちば}', ro: 'ichiba', vi: 'cái chợ' },
+      { w: '{市役所|しやくしょ}', ro: 'shiyakusho', vi: 'toà thị chính' },
+    ],
+  },
+  '来': {
+    hv: 'LAI', nghia: 'đến, tới; (thời gian) tới', en: 'come / next',
+    on: ['ライ'], kun: ['き・ます', 'く・る'],
+    nho: 'Hình cây lúa mì (木 thêm hai hạt ở trên) — lúa mì được mang ĐẾN từ phương xa. 来週・来月・来年 = tuần/tháng/năm ĐẾN.',
+    tu: [
+      { w: '{来|き}ます', ro: 'kimasu', vi: 'đến', bang: true },
+      { w: '{来週|らいしゅう}', ro: 'raishuu', vi: 'tuần sau', bang: true },
+      { w: '{来月|らいげつ}', ro: 'raigetsu', vi: 'tháng sau' },
+      { w: '{来年|らいねん}', ro: 'rainen', vi: 'năm sau' },
+      { w: '{来日|らいにち}', ro: 'rainichi', vi: 'đến Nhật' },
+    ],
+  },
+  '社': {
+    hv: 'XÃ', nghia: 'công ty; xã hội; đền thờ', en: 'company / society',
+    on: ['シャ'], kun: ['やしろ'],
+    nho: '礻 (thần) + 土 (đất): nơi thờ thần đất, chỗ cả làng tụ họp → XÃ hội, rồi công ty (会社).',
+    tu: [
+      { w: '{会社|かいしゃ}', ro: 'kaisha', vi: 'công ty', bang: true },
+      { w: '{会社員|かいしゃいん}', ro: 'kaishain', vi: 'nhân viên công ty' },
+      { w: '{社会|しゃかい}', ro: 'shakai', vi: 'xã hội' },
+      { w: '{社長|しゃちょう}', ro: 'shachou', vi: 'giám đốc' },
+    ],
+  },
+  '貝': {
+    hv: 'BỐI', nghia: 'con sò, vỏ sò', en: 'shellfish',
+    on: [], kun: ['かい'],
+    nho: 'Hình con sò há vỏ, hai râu thò ra dưới đáy (八). Xưa vỏ sò là TIỀN nên chữ về tiền có 貝: 買 (mua). ⚠ Bẫy đề: 貝 (chân 八) ≠ 見 (chân 儿 — nhìn).',
+    tu: [
+      { w: '{貝|かい}', ro: 'kai', vi: 'con sò, ốc' },
+      { w: '{貝殻|かいがら}', ro: 'kaigara', vi: 'vỏ sò' },
+      { w: '{買|か}います', ro: 'kaimasu', vi: 'mua (có 貝 = tiền ở dưới)' },
+    ],
+  },
+  '力': {
+    hv: 'LỰC', nghia: 'sức lực, sức mạnh', en: 'power',
+    on: ['リョク', 'リキ'], kun: ['ちから'],
+    nho: 'Hình cánh tay gồng lên, cơ bắp cuộn lại: SỨC MẠNH. ⚠ Đừng nhầm với カ (chữ katakana "ka") — 力 có nét móc cao hơn.',
+    tu: [
+      { w: '{力|ちから}', ro: 'chikara', vi: 'sức lực' },
+      { w: '{協力|きょうりょく}', ro: 'kyouryoku', vi: 'hợp tác' },
+      { w: '{学力|がくりょく}', ro: 'gakuryoku', vi: 'học lực' },
+    ],
+  },
+  '門': {
+    hv: 'MÔN', nghia: 'cổng', en: 'gate',
+    on: ['モン'], kun: ['かど'],
+    nho: 'Hai cánh CỔNG đối xứng, mỗi cánh có then cài. 聞 (nghe) = tai 耳 áp vào cổng 門.',
+    tu: [
+      { w: '{門|もん}', ro: 'mon', vi: 'cổng' },
+      { w: '{正門|せいもん}', ro: 'seimon', vi: 'cổng chính' },
+      { w: '{専門|せんもん}', ro: 'senmon', vi: 'chuyên môn' },
+    ],
+  },
+  '寺': {
+    hv: 'TỰ', nghia: 'chùa', en: 'temple',
+    on: ['ジ'], kun: ['てら'],
+    nho: '土 (đất) trên 寸 (bàn tay): mảnh đất được bàn tay giữ gìn cẩn thận — đất CHÙA. Tên chùa đọc 〜じ: 東大寺.',
+    tu: [
+      { w: 'お{寺|てら}', ro: 'otera', vi: 'ngôi chùa' },
+      { w: '{東大寺|とうだいじ}', ro: 'toudaiji', vi: 'chùa Todaiji (Nara)' },
+      { w: '{金閣寺|きんかくじ}', ro: 'kinkakuji', vi: 'chùa Vàng (Kyoto)' },
+    ],
+  },
+  '肉': {
+    hv: 'NHỤC', nghia: 'thịt', en: 'meat',
+    on: ['ニク'], kun: [],
+    nho: 'Miếng THỊT treo trong khung, hai thớ thịt (人 人) chạy bên trong.',
+    tu: [
+      { w: '{肉|にく}', ro: 'niku', vi: 'thịt' },
+      { w: '{牛肉|ぎゅうにく}', ro: 'gyuuniku', vi: 'thịt bò' },
+      { w: '{豚肉|ぶたにく}', ro: 'butaniku', vi: 'thịt lợn' },
+      { w: '{鶏肉|とりにく}', ro: 'toriniku', vi: 'thịt gà' },
+    ],
+  },
+  '料': {
+    hv: 'LIỆU', nghia: 'nguyên liệu; phí', en: 'materials / fee',
+    on: ['リョウ'], kun: [],
+    nho: '米 (gạo) + 斗 (cái đấu đong): đong gạo làm NGUYÊN LIỆU nấu ăn; đong rồi tính tiền → PHÍ (料金).',
+    tu: [
+      { w: '{料理|りょうり}', ro: 'ryouri', vi: 'món ăn; nấu ăn' },
+      { w: '{料金|りょうきん}', ro: 'ryoukin', vi: 'cước phí' },
+      { w: '{日本料理|にほんりょうり}', ro: 'nihon ryouri', vi: 'món Nhật' },
+    ],
+  },
+  '理': {
+    hv: 'LÝ', nghia: 'lý lẽ; sắp xếp', en: 'reason / logic',
+    on: ['リ'], kun: [],
+    nho: '王 (ngọc) + 里 (làng): người thợ làng mài ngọc theo đúng thớ — làm theo LÝ lẽ. 料理 = sắp xếp nguyên liệu → món ăn.',
+    tu: [
+      { w: '{料理|りょうり}', ro: 'ryouri', vi: 'món ăn; nấu ăn' },
+      { w: '{理由|りゆう}', ro: 'riyuu', vi: 'lý do' },
+      { w: '{無理|むり}', ro: 'muri', vi: 'quá sức, không thể' },
+    ],
+  },
+  '英': {
+    hv: 'ANH', nghia: 'tinh anh; nước Anh', en: 'England / excellent',
+    on: ['エイ'], kun: [],
+    nho: '艹 (cỏ) + 央 (ở giữa): bông hoa nổi bật giữa đám cỏ → TINH ANH; mượn âm để gọi nước ANH.',
+    tu: [
+      { w: '{英語|えいご}', ro: 'eigo', vi: 'tiếng Anh' },
+      { w: '{英国|えいこく}', ro: 'eikoku', vi: 'nước Anh' },
+    ],
+  },
+  '員': {
+    hv: 'VIÊN', nghia: 'nhân viên, thành viên', en: 'member',
+    on: ['イン'], kun: [],
+    nho: '口 (miệng) trên 貝 (tiền): người có "miệng ăn" nhận tiền lương = NHÂN VIÊN.',
+    tu: [
+      { w: '{会社員|かいしゃいん}', ro: 'kaishain', vi: 'nhân viên công ty' },
+      { w: '{銀行員|ぎんこういん}', ro: 'ginkouin', vi: 'nhân viên ngân hàng' },
+      { w: '{店員|てんいん}', ro: 'ten-in', vi: 'nhân viên cửa hàng' },
+    ],
+  },
+  '晩': {
+    hv: 'VÃN', nghia: 'buổi tối', en: 'evening',
+    on: ['バン'], kun: [],
+    nho: '日 (mặt trời) + 免 (thoát đi): lúc mặt trời đã đi mất là BUỔI TỐI.',
+    tu: [
+      { w: '{毎晩|まいばん}', ro: 'maiban', vi: 'mỗi tối' },
+      { w: '{今晩|こんばん}', ro: 'konban', vi: 'tối nay' },
+      { w: '{晩|ばん}ご{飯|はん}', ro: 'bangohan', vi: 'bữa tối' },
     ],
   },
 };

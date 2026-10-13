@@ -17,7 +17,10 @@ import { sendWorkEmail } from './common.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const site = (config.frontendUrl || process.env.FRONTEND_URL || 'https://cuongthai.com').replace(/\/$/, '');
-const norm = (s: string) => s.split(site).join('{SITE}');
+// Link hiển thị trong thư chỉ có host (vd "localhost:3000/work/…", trên CI "cuongthai.com/work/…") ⇒ gom về {HOST}/work
+// để ảnh chụp không phụ thuộc .env của máy chạy (13/10/2026: snapshot chụp ở máy có FRONTEND_URL=localhost làm CI đỏ).
+const host = site.replace(/^https?:\/\//, '');
+const norm = (s: string) => s.split(site).join('{SITE}').split(`${host}/work`).join('{HOST}/work');
 function snapshot(name: string, html: string) {
   const file = path.join(here, '__snapshots__', name);
   if (process.env.UPDATE_SNAPSHOTS === '1' || !existsSync(file)) { writeFileSync(file, norm(html)); return; }

@@ -127,10 +127,13 @@ describe('Cổng LLM: purpose work_agent', async () => {
   const gw = await import('../../llm/gateway.js');
   it('có trong bảng, không phải Grok, vặn được bằng env, đi modelapi (không rambo)', () => {
     assert.ok(gw.LLM_PURPOSES.includes('work_agent'));
-    const old = process.env.LLM_MODEL_WORK_AGENT;
+    const old = process.env.LLM_MODEL_WORK_AGENT, oldG = process.env.LLM_GATEWAY_API_KEY_GPT;
     process.env.LLM_MODEL_WORK_AGENT = 'gpt-5.6-terra';
+    // Không có khoá nhóm GPT thì gateway LÙI về Claude (đúng thiết kế) ⇒ đặt khoá giả, không dựa vào .env của máy chạy.
+    process.env.LLM_GATEWAY_API_KEY_GPT = 'sk-test-gpt';
     try { assert.equal(gw.modelFor('work_agent', { root: 'x', key: 'k', local: false, label: 'cong' }), 'gpt-5.6-terra'); } finally {
       if (old === undefined) delete process.env.LLM_MODEL_WORK_AGENT; else process.env.LLM_MODEL_WORK_AGENT = old;
+      if (oldG === undefined) delete process.env.LLM_GATEWAY_API_KEY_GPT; else process.env.LLM_GATEWAY_API_KEY_GPT = oldG;
     }
     const oldB = process.env.AGENT_GATEWAY_BASE_URL, oldK = process.env.AGENT_GATEWAY_API_KEY;
     process.env.AGENT_GATEWAY_BASE_URL = 'https://rambo.example/api/claude'; process.env.AGENT_GATEWAY_API_KEY = 'x';

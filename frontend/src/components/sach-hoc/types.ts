@@ -91,7 +91,9 @@ export type Block =
    */
   | { t: 'hanlop'; bai: number }
   /** Công cụ chia động từ & tính từ tiếng Nhật (bảng quy tắc + ô tra nhanh + bài tập) — nhat/ChiaDongTu.tsx. */
-  | { t: 'chia' };
+  | { t: 'chia' }
+  /** Ôn tập bằng thẻ — 8 cách ôn kiểu Quizlet trên từ vựng/chữ Hán/ngữ pháp cả khoá Dekiru — nhat/OnTapThe.tsx. */
+  | { t: 'onthe' };
 
 /** `dan` = người dẫn bài nghe (giới thiệu, đánh số câu) — giọng riêng, khác mọi nhân vật. */
 export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam' | 'ja-nu' | 'ja-nam' | 'zh-nu' | 'zh-nam' | 'dan';

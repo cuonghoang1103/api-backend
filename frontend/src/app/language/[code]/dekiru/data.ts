@@ -69,6 +69,19 @@ const CHIA: Lesson = {
   blocks: [{ t: 'chia' }],
 };
 
+/** Ôn tập bằng thẻ — dữ liệu sinh từ chính các bài (`npm run dekiru:onthe`), `?bai=on-tap-the`. */
+const ON_THE: Lesson = {
+  id: 'on-tap-the',
+  kind: 'homework',
+  title: 'Ôn tập bằng thẻ — từ vựng, chữ Hán, ngữ pháp (8 cách ôn)',
+  goal: 'Ôn lại toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp của bất kỳ bài nào bằng 8 cách: thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra 20 câu và ôn lại từ sai theo hộp.',
+  minutes: 20,
+  blocks: [
+    { t: 'p', text: 'Chọn **bài** (mặc định Bài 4 + 5), **loại thẻ** và **chiều** hỏi, rồi chọn một trong 8 cách ôn. Thẻ bạn sai ở bất kỳ cách nào sẽ tự vào mục **🔁 Ôn từ sai** — ôn lại theo hộp (đúng thì lên hộp, giãn ngày; sai thì về hộp 1). Tiến độ lưu trên máy này.' },
+    { t: 'onthe' },
+  ],
+};
+
 type Stub = [Lesson['kind'], string];
 const stub = (n: number, i: number, [kind, title]: Stub): Lesson => ({ id: `b${n}-${i}`, kind, title, goal: '', minutes: 30 });
 
@@ -108,7 +121,7 @@ export const DEKIRU = defineCourse({
   shownNum: (n) => n - 1,
   badgeWord: 'Bài',
   intro: INTRO,
-  extras: [CHIA],
+  extras: [CHIA, ON_THE],
   days: DAYS,
   // Chữ Hán: chữ của lớp (soạn tay) + chỉ mục từ đi chung (sinh lúc build) — tải chậm, 3 chunk.
   kanji: () =>

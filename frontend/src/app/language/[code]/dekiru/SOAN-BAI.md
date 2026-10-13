@@ -147,6 +147,18 @@ Người học: "chữ Hán của khoá thiếu nhiều so với bài cô giản
   Thuật toán `nhat/chia.ts` (nhóm I/II/III + ngoại lệ 行く・ある・来る・帰る/入る/
   走る/知る/切る), kiểm thử `npm run dekiru:chia:test` (44 động từ + tra nhanh).
   Thêm động từ mới của sách → thêm vào `VERBS` (thể từ điển có furigana, nhóm, bài).
+- **Ôn tập bằng thẻ** (13/10/2026): mục tra cứu `?bai=on-tap-the` (`extras`, cạnh Chia
+  động từ), khối `onthe` → `components/sach-hoc/nhat/OnTapThe.tsx` (tải chậm). 8 cách
+  ôn: thẻ lật · học (đúng 2 lần: chọn rồi gõ) · trắc nghiệm 4 đáp án (+ câu `mcq` sẵn
+  có của sách) · gõ (kana/romaji/chữ Hán, nghĩa Việt không dấu) · nghe chọn/chép ·
+  ghép cặp bấm giờ · kiểm tra 20 câu · ôn từ sai (Leitner 5 hộp). Trạng thái lưu
+  localStorage `dekiru-onthe-v1` (dùng chung mọi chế độ). Dữ liệu **sinh từ chính các
+  bài**, không soạn tay: `npm run dekiru:onthe` → `bai/onTheData.ts` (khối `vocab` trừ
+  "câu mẫu", nhóm = tiêu đề `h` trước khối; chữ Hán = hanLop × hanTu; ngữ pháp = dòng
+  `patterns` của bài ngữ pháp; câu = khối `mcq` của bài ngữ pháp/chữ Hán/bài tập/từ
+  vựng, KHÔNG lấy bài nghe/hội thoại). Tự chạy ở `prebuild`; sửa bài xong thì chạy lại.
+  Chấm câu gõ: `nhat/onThe.ts`, kiểm thử `npm run dekiru:onthe:test`. Chữ Hán trông
+  giống (đáp án nhiễu) ở `LOOK` trong OnTapThe.tsx. KHÔNG đưa nguyên văn đề ôn của cô.
 
 ### Danh sách chữ của lớp — khớp slide hay dự kiến
 

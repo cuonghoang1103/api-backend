@@ -26,6 +26,8 @@ import s from './course.module.css';
 
 // Công cụ chia động từ chỉ có ở một mục tra cứu — tách chunk riêng.
 const ChiaDongTu = dynamic(() => import('./nhat/ChiaDongTu'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải…</div> });
+// Ôn tập bằng thẻ: kèm ~330 KB dữ liệu sinh (dekiru/bai/onTheData.ts) ⇒ chỉ tải khi mở mục.
+const OnTapThe = dynamic(() => import('./nhat/OnTapThe'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải bộ thẻ…</div> });
 // Tra cứu từ vựng cả khoá — cũng chỉ ở một mục tra cứu.
 const TraTuVung = dynamic(() => import('./TraTuVung'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải…</div> });
 
@@ -608,6 +610,7 @@ export function renderBlock2(b: Block, i: number) {
     case 'write': return ngonNguKhoa() === 'zh' ? <VietHanZh key={b.id} b={b} /> : <WriteBlock key={b.id} b={b} />;
     case 'hanlop': return <HanLop key={`hanlop-${b.bai}`} b={b} />;
     case 'chia': return <ChiaDongTu key="chia" />;
+    case 'onthe': return <OnTapThe key="onthe" />;
     case 'vocabAll': return <TraTuVung key="vocabAll" />;
     default: return null;
   }

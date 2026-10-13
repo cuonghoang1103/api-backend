@@ -38,6 +38,17 @@ async function main() {
   const tepHd = (await readdir(path.join(NGUON, 'huong-dan'))).filter((f) => /^p-\d{3}\.json$/.test(f)).sort();
   const tho0: HuongDanTrang[] = [];
   for (const f of tepHd) tho0.push(JSON.parse(await readFile(path.join(NGUON, 'huong-dan', f), 'utf8')));
+  // 🎓 Giảng chi tiết (soạn tay theo ảnh, 13/10/2026): giang/p-XXX.json → trường `giang` của đúng trang.
+  const tepGiang = await readdir(path.join(NGUON, 'giang')).catch(() => [] as string[]);
+  let soGiang = 0;
+  for (const f of tepGiang.filter((x) => /^p-\d{3}\.json$/.test(x))) {
+    const g = JSON.parse(await readFile(path.join(NGUON, 'giang', f), 'utf8')) as { trang: number; giang: HuongDanTrang['giang'] };
+    const h = tho0.find((x) => x.trang === g.trang);
+    if (!h) throw new Error(`giang/${f}: không có hướng dẫn trang ${g.trang} để ghép vào`);
+    h.giang = g.giang;
+    soGiang++;
+  }
+  console.log(`  ghép giảng chi tiết: ${soGiang} trang`);
   // Soát mục của từng trang (tên in trên sách thắng loại AI tự chọn) — xem chuanHoaMuc.
   const ds = chuanHoaMuc(tho0);
   const goi = maHoa(Buffer.from(JSON.stringify(ds)), khoa);

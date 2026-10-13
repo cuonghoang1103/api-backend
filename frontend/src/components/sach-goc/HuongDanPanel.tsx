@@ -13,6 +13,7 @@ import { Inline } from '@/components/sach-hoc/Blocks';
 import { play } from '@/components/sach-hoc/audio';
 import cs from '@/components/sach-hoc/course.module.css';
 import { TEN_MUC, nhanMuc, type HuongDan } from './useSachRieng';
+import { GiangPanel } from './GiangPanel';
 import st from './sachGoc.module.css';
 
 /** `{漢字|かな}` → chữ trần để đọc to. */
@@ -85,6 +86,8 @@ export function HuongDanPanel({
       <button type="button" className={st.nutHoi} onClick={onHoi}>
         <Sparkles size={16} /> Hỏi gia sư về trang này <small>AI nhìn đúng ảnh trang {p}</small>
       </button>
+
+      {!!hd.giang?.length && <GiangPanel p={p} giang={hd.giang} />}
 
       {!!hd.cau?.length && (
         <section className={st.phan}>

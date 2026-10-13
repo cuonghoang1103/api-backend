@@ -24,6 +24,31 @@ export type MucLuc = {
   trang: { p: number; bai: number | null; muc: MucTrang[]; tinCay: number | null; coHuongDan: boolean; point?: number[] }[];
 };
 
+/** Một câu tiếng Nhật kèm romaji + nghĩa (ai = người nói, vd "A", "B (từ chối)"). */
+export type CauGiang = { ai?: string; ja: string; ro?: string; vi: string };
+/**
+ * 🎓 Giảng chi tiết MỘT bài tập trên trang (13/10/2026 — người học: "đoạn thoại mẫu
+ * + tranh ①–④ phải giảng đầy đủ, hướng dẫn làm"). Soạn tay theo ảnh trang, ghép
+ * vào lúc tải lên (scripts/sach-rieng/dekiru-tai-len.mts đọc giang/p-XXX.json).
+ */
+export type GiangPhan = {
+  tieuDe: string;
+  gioiThieu?: string;
+  /** Hội thoại mẫu 例 đúng như sách. */
+  mau?: CauGiang[];
+  /** Giảng từng câu/cụm: trợ từ, chia động từ, ポイント. */
+  phanTich?: { ja: string; ro?: string; vi: string; giai: string }[];
+  /** Khung thay thế, chỗ trống ghi ［…］. */
+  khung?: { mau: string; giai?: string }[];
+  /** Các bước ghép câu từ gợi ý. */
+  buoc?: string[];
+  /** Từng gợi ý/tranh: 例 ①②③④ — từ cần dùng + câu hoàn chỉnh. */
+  tranh?: { so: string; goiY: string; tu?: { w: string; ro?: string; vi: string }[]; cau: CauGiang[]; ghiChu?: string }[];
+  loiSai?: string[];
+  /** Nói về bản thân người học. */
+  moRong?: CauGiang[];
+};
+
 export type HuongDan = {
   trang: number;
   bai: number | null;
@@ -38,6 +63,7 @@ export type HuongDan = {
   cachLam?: string[];
   cauHoiCo?: { ja: string; ro?: string; vi?: string; traLoi?: string; traLoiRo?: string; traLoiVi?: string }[];
   luuY?: string[];
+  giang?: GiangPhan[];
 };
 
 /** Nhãn + màu từng loại mục (khớp chữ in trên sách). */

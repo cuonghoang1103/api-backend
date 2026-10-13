@@ -344,6 +344,32 @@
 .cauHoi .nutNho { margin-top: 6px; }
 .dsLuuY li { padding-left: 22px; position: relative; }
 .dsLuuY li::before { content: '⚠️'; position: absolute; left: 0; font-size: 13px; }
+/* ── 🎓 Giảng chi tiết & cách làm (GiangPanel.tsx) ── */
+.giang h3 { color: var(--lh-accent); }
+.gPhan { margin: 0 0 12px; border: 1px solid var(--lh-line); border-radius: 12px; background: var(--lh-bg); overflow: hidden; }
+.gTieuDe { cursor: pointer; padding: 11px 14px; font-weight: 700; font-size: 15px; color: var(--lh-ink); background: var(--lh-surface-2); list-style-position: inside; }
+.gPhan[open] > .gTieuDe { border-bottom: 1px solid var(--lh-line); }
+.gGioiThieu { margin: 12px 14px 0; color: var(--lh-ink-2); line-height: 1.6; }
+.gKhoi { margin: 14px 14px 0; }
+.gKhoi:last-child { margin-bottom: 14px; }
+.gKhoi h4 { font-size: 13.5px; font-weight: 700; margin: 0 0 8px; color: var(--lh-ink); }
+.gKhoi .phanDau h4 { margin: 0; }
+.gCau { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; border-top: 1px dashed var(--lh-line); }
+.gCau:first-of-type { border-top: 0; }
+.gAi { flex: none; min-width: 26px; padding: 1px 7px; margin-top: 7px; border-radius: 999px; font-size: 12px; font-weight: 700; text-align: center; color: var(--lh-accent); background: var(--lh-accent-soft); white-space: nowrap; }
+.gCauNd { min-width: 0; flex: 1; }
+.gDsGiang { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 12px; }
+.gGiai { margin-top: 4px; padding: 8px 10px; border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0; background: var(--lh-surface-2); color: var(--lh-ink-2); font-size: 14px; line-height: 1.6; }
+.gDsTranh { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.gTranh { padding: 10px 12px; border: 1px solid var(--lh-line); border-left: 3px solid #ec4899; border-radius: 10px; }
+.gTranhDau { display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; }
+.gGoiY { font-size: 15px; line-height: 1.9; }
+.gTu { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.gTuChip { font-size: 13.5px; padding: 2px 9px; border-radius: 999px; background: var(--lh-surface-2); line-height: 1.9; }
+.gTranhCau { margin-top: 4px; }
+.gGhiChu { margin: 6px 0 0; font-size: 13.5px; color: var(--lh-ink-2); line-height: 1.6; }
+@media (max-width: 480px) { .gKhoi { margin-left: 10px; margin-right: 10px; } .gTieuDe { padding: 10px; } }
+
 .ghiChu { margin-top: 20px; font-size: 12px; color: var(--lh-ink-3); line-height: 1.5; }
 
 /* ── Không có quyền ── */

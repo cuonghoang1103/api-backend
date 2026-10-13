@@ -126,7 +126,7 @@ export default function CtWorkDownloadClient({ banPhatHanh }: { banPhatHanh: Rel
   ];
 
   return (
-    <main className="ctw-dl mx-auto max-w-4xl px-4 pb-20 pt-14 sm:px-6">
+    <main className="ctw-dl mx-auto max-w-4xl px-4 pb-20 pt-24 sm:px-6">
       <style>{`
         .ctw-dl { --ctw-a: #8a63ff; --ctw-b: #4f5bd5; --ctw-c: #2299e0; }
         .ctw-dl-grad { background-image: linear-gradient(100deg, var(--ctw-a), var(--ctw-b) 55%, var(--ctw-c)); }
@@ -257,8 +257,8 @@ export default function CtWorkDownloadClient({ banPhatHanh }: { banPhatHanh: Rel
         </h2>
         <p className="mt-2 text-[var(--text-secondary)]">
           {vi
-            ? 'App chưa ký số nên hệ điều hành cảnh báo như với mọi phần mềm chưa đăng ký. App không hỏng và không chứa mã độc; lệnh terminal ở trên đã tự xử lý việc này.'
-            : 'The app is not code-signed yet, so the OS warns about it like any unregistered software. It is not damaged; the terminal commands above handle this for you.'}
+            ? 'App chưa ký số nên hệ điều hành cảnh báo như với mọi phần mềm chưa đăng ký. App không hỏng và không chứa mã độc; lệnh cài bằng terminal đã tự xử lý việc này.'
+            : 'The app is not code-signed yet, so the OS warns about it like any unregistered software. It is not damaged; the terminal install commands handle this for you.'}
         </p>
         <p className="mt-3"><strong>macOS:</strong> {vi ? 'nếu báo "CT Work bị hỏng", chạy:' : 'if it says "CT Work is damaged", run:'}</p>
         <code className="mt-1 block overflow-x-auto rounded-lg bg-black/30 p-2 text-xs">xattr -dr com.apple.quarantine &quot;/Applications/CT Work.app&quot;</code>

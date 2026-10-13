@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <LegalShell title="Chính sách bảo mật" activeHref="/chinh-sach-bao-mat">
+    <LegalShell title="Chính sách bảo mật" activeHref="/chinh-sach-bao-mat" updated="2026-10-14">
       <p>
         CuongThai tôn trọng và bảo vệ thông tin cá nhân của người dùng, tuân thủ
         <b> Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15</b> và <b>Nghị định 356/2025/NĐ-CP</b> (hiệu lực từ 01/01/2026, thay thế Nghị định 13/2023/NĐ-CP). Chính sách này
@@ -61,6 +61,39 @@ export default function Page() {
         Mọi yêu cầu liên quan đến dữ liệu cá nhân, vui lòng liên hệ theo thông tin ở
         mục “Thông tin người bán” bên dưới.
       </p>
+
+      <h2 id="youtube">7. Dịch vụ API YouTube (YouTube API Services)</h2>
+      <p>
+        CuongThai đăng các video bài giảng do chính chúng tôi sản xuất lên kênh YouTube của CuongThai bằng một công cụ nội bộ
+        (“CuongThai Lesson Uploader”) sử dụng <b>YouTube API Services</b>, rồi nhúng các video đó vào trang bài học tương ứng trên website.
+      </p>
+      <div lang="en">
+        <p>
+          <b>English summary.</b> CuongThai uses <b>YouTube API Services</b>. Our internal API client “CuongThai Lesson Uploader”
+          is used only by the CuongThai channel owner to upload our own lesson videos (with title, description, captions,
+          thumbnail and playlist placement) to our own YouTube channel. Lesson pages on cuongthai.com may embed the YouTube player.
+          By watching embedded YouTube videos you agree to be bound by the{' '}
+          <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer">YouTube Terms of Service</a>, and
+          YouTube’s handling of data is described in the{' '}
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a>.
+        </p>
+        <ul>
+          <li><b>Information accessed:</b> only the OAuth 2.0 authorization of the CuongThai channel owner’s own Google account (scopes
+            for uploading videos and managing that channel’s captions, thumbnails and playlists). We do not access, collect or store
+            any YouTube data of website visitors or of any other channel.</li>
+          <li><b>Storage:</b> the owner’s OAuth tokens are stored only on the owner’s own computer, never on our servers. We store the
+            public video ID of each of our own uploaded lessons so the lesson page can embed it.</li>
+          <li><b>Sharing:</b> we do not share, sell or transfer any data obtained through YouTube API Services to third parties.</li>
+          <li><b>Cookies:</b> the embedded YouTube player is provided by YouTube and may store or read cookies or similar
+            technologies on your device in accordance with the Google Privacy Policy. CuongThai itself does not place cookies for
+            YouTube API purposes.</li>
+          <li><b>Revoking access &amp; deletion:</b> access granted to the API client can be revoked at any time via the{' '}
+            <a href="https://security.google.com/settings/security/permissions" target="_blank" rel="noopener noreferrer">Google
+            security settings page</a>. On revocation, or on request to the contact below, any stored authorization data is deleted
+            within 7 days, and API data we stored is refreshed or deleted within 30 days as required by the YouTube API Services
+            Developer Policies.</li>
+        </ul>
+      </div>
 
       <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
         * Thời hạn trong [dấu ngoặc] cần được người bán chốt theo thực tế trước khi công bố.

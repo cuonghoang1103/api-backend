@@ -42,6 +42,7 @@ export default function Footer() {
         ]
       : []),
     { label: 'Chính sách bảo mật', href: '/chinh-sach-bao-mat' },
+    { label: 'Điều khoản sử dụng', href: '/dieu-khoan-su-dung' },
   ];
 
   const footerLinks: Record<string, FooterLink[]> = {

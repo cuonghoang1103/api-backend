@@ -9,6 +9,7 @@ export const LEGAL_PAGES: { href: string; label: string }[] = [
   { href: '/chinh-sach-giao-hang', label: 'Chính sách giao hàng' },
   { href: '/chinh-sach-doi-tra', label: 'Chính sách đổi trả & hoàn tiền' },
   { href: '/chinh-sach-bao-mat', label: 'Chính sách bảo mật' },
+  { href: '/dieu-khoan-su-dung', label: 'Điều khoản sử dụng' },
 ];
 
 export default function LegalShell({

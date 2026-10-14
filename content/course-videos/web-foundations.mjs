@@ -45,11 +45,11 @@ export default {
     'wf-2-5-tables-media-a11y': { yt: 'elKGz9r5qGw', credit: 'CodeLucky — HTML Table Accessibility: A Beginner\'s Guide to Semantic Structure & Screen Readers', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-05-bang-media-tiep-can-3b87b1b3.mp4' }, defaultVideoTrack: 'VI'}, // HTML Table Accessibility: A Beginner's Guide to Semantic Structure & Screen Readers
 
     /* ── Chương 3 — CSS & thiết kế đáp ứng ── */
-    'wf-3-1-css-basics': { yt: 'TjMlfWpw7E0', credit: 'VirtualAddiction — CSS: The cascade, specificity and inheritance' }, // CSS: The cascade, specificity and inheritance
-    'wf-3-2-box-model': { yt: 'ZaiIDH0qp1c', credit: 'Coder Coder — CSS box model explained (padding, border, margin)' },  // CSS box model explained (padding, border, margin)
-    'wf-3-3-flexbox': { yt: 'wsTv9y931o8', credit: 'Coding2GO — Learn CSS Flexbox in 20 Minutes (Course)' },    // Learn CSS Flexbox in 20 Minutes (Course)
-    'wf-3-4-css-grid': { yt: 'dT3aujtzBe4', credit: 'CodeKinda — Responsive Web Design Tutorial:  Media Queries & CSS Grid' },   // Responsive Web Design Tutorial: Media Queries & CSS Grid
-    'wf-3-5-responsive': { yt: 'uiEdKv5Fyh0', credit: 'Infomax Computer Academy — Media Query in CSS | Responsive Web Design Tutorial for Beginners' }, // Media Query in CSS | Responsive Web Design Tutorial for Beginners
+    'wf-3-1-css-basics': { yt: 'TjMlfWpw7E0', credit: 'VirtualAddiction — CSS: The cascade, specificity and inheritance', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-01-css-can-ban-11bf5f6c.mp4' }, defaultVideoTrack: 'VI'}, // CSS: The cascade, specificity and inheritance
+    'wf-3-2-box-model': { yt: 'ZaiIDH0qp1c', credit: 'Coder Coder — CSS box model explained (padding, border, margin)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-02-box-model-59ea8288.mp4' }, defaultVideoTrack: 'VI'},  // CSS box model explained (padding, border, margin)
+    'wf-3-3-flexbox': { yt: 'wsTv9y931o8', credit: 'Coding2GO — Learn CSS Flexbox in 20 Minutes (Course)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-03-flexbox-df2c317e.mp4' }, defaultVideoTrack: 'VI'},    // Learn CSS Flexbox in 20 Minutes (Course)
+    'wf-3-4-css-grid': { yt: 'dT3aujtzBe4', credit: 'CodeKinda — Responsive Web Design Tutorial:  Media Queries & CSS Grid', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-04-css-grid-139de453.mp4' }, defaultVideoTrack: 'VI'},   // Responsive Web Design Tutorial: Media Queries & CSS Grid
+    'wf-3-5-responsive': { yt: 'uiEdKv5Fyh0', credit: 'Infomax Computer Academy — Media Query in CSS | Responsive Web Design Tutorial for Beginners', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-05-responsive-5a99ecdc.mp4' }, defaultVideoTrack: 'VI'}, // Media Query in CSS | Responsive Web Design Tutorial for Beginners
     'wf-4-1-variables-types': { yt: 'tY3EYcQJdY4', credit: 'LearnAwesome — JavaScript Variables & Data Types Explained – let, const, var (Beginner Guide)' },   // JavaScript Variables & Data Types Explained – let, const, var (Beginner Guide)
 
     /* ── Chương 4 — Nền tảng JavaScript ── */
@@ -101,6 +101,7 @@ export default {
     'wf-10-5-full-stack-picture': { yt: 'z102ahiA8DA', credit: 'College Wallah — Lecture 1: Intro to JavaScript, Variables, Data Types & Operators| Full Stack Free Course' },       // Lecture 1: Intro to JavaScript, Variables, Data Types & Operators | Full Stack Free Course
     'wf-0-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-00-slide-tong-quan-muc-0-78214476.mp4' }, defaultVideoTrack: 'VI'},
     'wf-1-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-00-slide-tong-quan-chuong-1-5b2b8524.mp4' }, defaultVideoTrack: 'VI'},
-    'wf-2-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-00-slide-tong-quan-chuong-2-113b6ec9.mp4' }, defaultVideoTrack: 'VI' },
+    'wf-2-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-00-slide-tong-quan-chuong-2-113b6ec9.mp4' }, defaultVideoTrack: 'VI'},
+    'wf-3-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-00-slide-tong-quan-chuong-3-d1f14e8c.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

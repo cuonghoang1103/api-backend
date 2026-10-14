@@ -274,7 +274,7 @@ export default {
 </ul>
 <h3>Create your first React app (Vite)</h3>
 <p>Modern React apps use <strong>Vite</strong> for a fast dev server. In a terminal:</p>
-<pre><code class="language-bash"><span class="tok-comment"># 1) Check Node is installed (need v18+)</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1) Check Node is installed (Vite 8 needs v20.19+ or v22.12+ — just install the latest LTS)</span>
 node -v
 npm -v
 <span class="tok-comment"># 2) Create a React app with Vite</span>
@@ -320,7 +320,7 @@ npm run dev</code></pre>
 </ul>
 <h3>Tạo app React đầu tiên (Vite)</h3>
 <p>App React hiện đại dùng <strong>Vite</strong> để có dev server nhanh. Trong terminal:</p>
-<pre><code class="language-bash"><span class="tok-comment"># 1) Kiểm tra Node đã cài (cần v18+)</span>
+<pre><code class="language-bash"><span class="tok-comment"># 1) Kiểm tra Node đã cài (Vite 8 cần v20.19+ hoặc v22.12+ — cứ cài bản LTS mới nhất)</span>
 node -v
 npm -v
 <span class="tok-comment"># 2) Tạo app React bằng Vite</span>

@@ -139,6 +139,13 @@ export function XuongGiong() {
   /** Hai chế độ: thu câu thật, hoặc luyện từng thuật ngữ trước. */
   const [cheDo, setCheDo] = useState<'thu' | 'luyen'>('thu');
   const [thietBi, setThietBi] = useState<MediaTrackSettings | null>(null);
+  // Chọn mic (15/10/2026): trước đây trang lấy mic MẶC ĐỊNH của máy — cắm mic USB (Maono…) mà macOS vẫn để
+  // mic MacBook làm mặc định thì thu bằng mic MacBook mà không ai biết. Nay chọn tại trang + hiện tên mic đang thu.
+  const [dsMic, setDsMic] = useState<MediaDeviceInfo[]>([]);
+  const [micChon, setMicChon] = useState<string>(() => {
+    try { return localStorage.getItem('xuong-mic') ?? ''; } catch { return ''; }
+  });
+  const [tenMic, setTenMic] = useState('');
   const [nenPhong, setNenPhong] = useState<{ rms: number; danh: string } | null>(null);
   const [dangDoPhong, setDangDoPhong] = useState(false);
   const [suaChu, setSuaChu] = useState<string | null>(null);
@@ -255,6 +262,7 @@ export function XuongGiong() {
     if (streamRef.current?.active) return streamRef.current;
     const s = await navigator.mediaDevices.getUserMedia({
       audio: {
+        ...(micChon ? { deviceId: { exact: micChon } } : {}),
         // Xem ghi chú đầu file — ba công tắc này phá dữ liệu TTS.
         echoCancellation: false,
         noiseSuppression: false,
@@ -266,7 +274,17 @@ export function XuongGiong() {
     streamRef.current = s;
     // ĐỌC LẠI cái thật sự đang chạy, không tin cái vừa xin.
     setThietBi(s.getAudioTracks()[0]?.getSettings() ?? null);
+    setTenMic(s.getAudioTracks()[0]?.label ?? '');
+    // Tên thiết bị chỉ đọc được SAU khi đã cấp quyền mic ⇒ liệt kê ở đây.
+    try { setDsMic((await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === 'audioinput')); } catch {}
     return s;
+  }, [micChon]);
+  const doiMic = useCallback((id: string) => {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+    setMicChon(id);
+    setNenPhong(null);
+    try { localStorage.setItem('xuong-mic', id); } catch {}
   }, []);
 
   /** Vẽ thanh mức + nhớ đỉnh. Dùng chung cho thu và đo phòng. */
@@ -814,6 +832,22 @@ export function XuongGiong() {
               </>
             )}
           </button>
+          <label className="flex items-center gap-2 text-sm text-white/70">
+            🎙️ Mic:
+            <select
+              value={micChon}
+              onChange={(e) => doiMic(e.target.value)}
+              onFocus={() => { if (!dsMic.length) void moMic().catch(() => {}); }}
+              disabled={dangThu || dangDoPhong}
+              className="max-w-[18rem] rounded-lg border border-white/15 bg-black/40 px-2 py-1 text-sm text-white"
+            >
+              <option value="">Mặc định của máy{!micChon && tenMic ? ` (${tenMic})` : ''}</option>
+              {dsMic.filter((d) => d.deviceId && d.deviceId !== 'default').map((d) => (
+                <option key={d.deviceId} value={d.deviceId}>{d.label || 'Mic không tên'}</option>
+              ))}
+            </select>
+          </label>
+          {tenMic && <span className="text-xs text-white/50">đang thu: <b className="text-white/80">{tenMic}</b></span>}
           {nenPhong && (
             <span
               className={`text-sm ${

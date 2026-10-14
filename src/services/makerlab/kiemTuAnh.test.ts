@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { docDanhSachTu, kiemTuAnh } from './kiemTuAnh.js';
+import { chamCauAnh, docDanhSachTu, kiemTuAnh } from './kiemTuAnh.js';
 
 const dung = (nghe: string, tu: string, nhan?: string[]) => kiemTuAnh(nghe, [{ tu, nhan }])[0].dung;
 
@@ -39,4 +39,37 @@ test('docDanhSachTu chặn dữ liệu rác và giới hạn kích thước', ()
     { tu: 'React' },
   ]);
   assert.equal(docDanhSachTu(Array.from({ length: 50 }, (_, i) => `t${i}`)).length, 12);
+});
+
+// ── chamCauAnh — câu thuần tiếng Anh (mục `anh`) ──
+
+test('câu Anh đọc đủ: 100%, bỏ qua hoa thường, dấu câu, dấu nháy', () => {
+  const r = chamCauAnh("Alright, let's get started with the first example.", 'alright lets get started with the first example');
+  assert.equal(r.diem, 1);
+  assert.deepEqual(r.sai, []);
+  assert.equal(r.tu[0].tu, 'Alright,');
+  assert.equal(r.tu.every((t) => t.dung), true);
+});
+
+test('câu Anh đọc sót / nghe lệch: chỉ đúng từ đó đỏ, không kéo lệch phần sau', () => {
+  const r = chamCauAnh(
+    'In this lesson, we will build a small counter with React.',
+    'In this lesson we build a small country with React.',
+  );
+  assert.deepEqual(r.sai, ['will', 'counter']);
+  assert.equal(r.tu.find((t) => t.tu === 'React.')?.dung, true);
+  assert.equal(Math.round(r.diem * 100), 82);
+  assert.deepEqual(r.thua, ['country']);
+});
+
+test('câu Anh: từ bị tách đôi và chữ số vẫn tính đúng', () => {
+  assert.equal(chamCauAnh('Open your browser and go to localhost.', 'Open your browser and go to local host.').diem, 1);
+  assert.equal(chamCauAnh('We need three things.', 'We need 3 things.').diem, 1);
+  assert.equal(chamCauAnh('We use the useState hook.', 'We use the use state hook.').diem, 1);
+});
+
+test('câu Anh: Whisper không nghe ra gì ⇒ 0, mọi từ đỏ', () => {
+  const r = chamCauAnh('Does that make sense to you so far?', '');
+  assert.equal(r.diem, 0);
+  assert.equal(r.sai.length, 8);
 });

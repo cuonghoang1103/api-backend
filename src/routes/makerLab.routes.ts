@@ -41,7 +41,7 @@ import multer from 'multer';
 import { createHash } from 'crypto';
 import { uploadGeneric } from '../storage/uploadService.js';
 import { logger } from '../utils/logger.js';
-import { docDanhSachTu, kiemTuAnh, type TuCanCham } from '../services/makerlab/kiemTuAnh.js';
+import { chamCauAnh, docDanhSachTu, kiemTuAnh, type TuCanCham } from '../services/makerlab/kiemTuAnh.js';
 
 /**
  * Bản build firmware tải lên.
@@ -980,6 +980,29 @@ async function chamTuAnh(
   }
 }
 
+/**
+ * Câu THUẦN tiếng Anh (mục `anh` — cờ `tiengAnh` ở kichban.py)?
+ *
+ * Client gửi cờ, và id `anh-…` cũng đủ: cờ quên gửi thì câu Anh bị nghe
+ * bằng Whisper `vi` có mớm — ra "khớp 100%" cho cả bản đọc sai.
+ */
+function laCauAnh(cid: string, co: unknown): boolean {
+  return String(co ?? '') === '1' || String(co ?? '') === 'true' || cid.startsWith('anh-');
+}
+
+/**
+ * Tuỳ chọn Whisper cho lượt nghe chính.
+ *
+ * Câu Anh: ÉP `en`, KHÔNG mớm câu gốc — mớm thì Whisper chép lại câu gốc
+ * bất kể người đọc nói gì, và điểm khớp chữ thành vô nghĩa. Câu Việt: giữ
+ * nguyên như cũ (`vi` + gợi ý từ vựng).
+ */
+function tuyChonNghe(anh: boolean, chu: string) {
+  return anh
+    ? { language: 'en', detail: true }
+    : { language: 'vi', hints: chu.slice(0, 300), detail: true };
+}
+
 adminRouter.post(
   '/ha-tang/xuong/cau/:cid',
   thuUpload.single('tieng'),
@@ -992,6 +1015,7 @@ adminRouter.post(
       }
       const cid = String(req.params.cid);
       const chuGoc = String(req.body?.chu ?? '');
+      const anh = laCauAnh(cid, req.body?.tiengAnh);
 
       // ⚠️ CẤT TRƯỚC, NGHE SAU — đổi thứ tự so với bản đầu, vì hai lý do.
       //
@@ -1023,18 +1047,18 @@ adminRouter.post(
       try {
         const { transcribeWithGroq } = await import('../services/interview/voice/stt.js');
         const { checkHeardSpeech } = await import('../services/makerlab/hallucination.js');
-        const kq = await transcribeWithGroq(f.buffer, 'thu.webm', f.mimetype || 'audio/webm', {
-          language: 'vi',
-          // Đưa câu trong kịch bản làm gợi ý từ vựng: Whisper bám vào đó
-          // với tên riêng và thuật ngữ, nên chỗ đọc đúng sẽ khớp đúng và
-          // chỗ đọc trượt mới lộ ra.
-          hints: chuGoc.slice(0, 300),
-          // ⚠️ BẮT BUỘC. Không có `detail` thì không có `noSpeechProb` —
-          // và đó là chỗ DUY NHẤT Whisper thừa nhận nó đang đoán. Thiếu
-          // nó, chốt chặn dưới đây chỉ còn xét được chữ, mất hẳn tầng
-          // bằng chứng mạnh nhất.
-          detail: true,
-        });
+        // Câu Việt: đưa câu kịch bản làm gợi ý từ vựng — Whisper bám vào đó
+        // với tên riêng và thuật ngữ, nên chỗ đọc đúng sẽ khớp đúng và chỗ
+        // đọc trượt mới lộ ra. Câu Anh: ép `en`, KHÔNG mớm (xem tuyChonNghe).
+        //
+        // ⚠️ `detail: true` BẮT BUỘC. Không có nó thì không có
+        // `noSpeechProb` — chỗ DUY NHẤT Whisper thừa nhận nó đang đoán.
+        const kq = await transcribeWithGroq(
+          f.buffer,
+          'thu.webm',
+          f.mimetype || 'audio/webm',
+          tuyChonNghe(anh, chuGoc),
+        );
         const t = (kq?.text ?? '').trim();
 
         // ⚠️ CHỐT CHẶN ĐÃ CÓ SẴN TRONG DỰ ÁN TỪ LÂU — `hallucination.ts`,
@@ -1058,18 +1082,21 @@ adminRouter.post(
 
       // Mục giảng bài: chấm thêm từng thuật ngữ tiếng Anh, rồi cất cả kết
       // quả soát lên máy nhà để lần sau mở trang vẫn thấy ✓/✗.
-      const dsTu = docDanhSachTu(req.body?.tuAnh);
+      const dsTu = anh ? [] : docDanhSachTu(req.body?.tuAnh);
       const cham = await chamTuAnh(f.buffer, 'thu.webm', f.mimetype || 'audio/webm', dsTu);
-      if (cham) {
+      // Câu Anh: chấm cả câu từng từ so với câu gốc. Điểm thấp VẪN LƯU —
+      // tiếng đã cất ở trên; đây chỉ là cờ để nghe lại.
+      const chamAnh = anh && nghe ? chamCauAnh(chuGoc, nghe) : null;
+      if (cham || (anh && !loiNghe)) {
         try {
           await goiMayNha(`/xuong/cau/${encodeURIComponent(cid)}/soat`, {
             method: 'PUT',
             body: JSON.stringify({
               nghe,
-              khop: nghe ? doKhopTu(chuGoc, nghe) : null,
+              khop: chamAnh ? chamAnh.diem : nghe && !anh ? doKhopTu(chuGoc, nghe) : null,
               biaRa,
-              kiemTu: cham.kiemTu,
-              ngheDa: cham.ngheDa,
+              ...(cham ? { kiemTu: cham.kiemTu, ngheDa: cham.ngheDa } : {}),
+              ...(anh ? { chamAnh } : {}),
             }),
             headers: { 'Content-Type': 'application/json' },
           });
@@ -1090,6 +1117,7 @@ adminRouter.post(
           loiNghe,
           kiemTu: cham?.kiemTu ?? null,
           ngheDa: cham?.ngheDa ?? '',
+          chamAnh,
         },
       });
     } catch (e) {
@@ -1169,6 +1197,10 @@ const NGUONG_SOAT: Record<string, number | null> = {
   // Cười giữa câu thì Whisper gần như luôn nghe hụt. Bắt lỗi ở đây là
   // phá đúng mục khó thu nhất.
   cuoi: 0.45,
+  // Câu thuần tiếng Anh đọc bởi người Việt: Whisper `en` nghe hụt cả chữ
+  // đọc đúng, nên ngưỡng thấp hơn mục Việt đọc rõ. Dưới mức này thường là
+  // sót/vấp thật.
+  anh: 0.75,
   // ⚠️ TẮT HẲN với tiếng miền Trung. Whisper không được huấn luyện cho
   // giọng này, nên con số nó cho ra không mang thông tin gì về việc
   // người dùng đọc tốt hay tệ. Một ngưỡng ở đây chỉ tạo báo động giả.
@@ -1217,13 +1249,10 @@ adminRouter.post('/ha-tang/xuong/soat-lai/:cid', async (req, res: Response<ApiRe
     }
     const wav = Buffer.from(than);
 
+    const anh = laCauAnh(cid, req.body?.tiengAnh);
     const { transcribeWithGroq } = await import('../services/interview/voice/stt.js');
     const { checkHeardSpeech } = await import('../services/makerlab/hallucination.js');
-    const kq = await transcribeWithGroq(wav, 'soat.wav', 'audio/wav', {
-      language: 'vi',
-      hints: chu.slice(0, 300),
-      detail: true,
-    });
+    const kq = await transcribeWithGroq(wav, 'soat.wav', 'audio/wav', tuyChonNghe(anh, chu));
     const t = (kq?.text ?? '').trim();
     // 16-bit mono 24 kHz + 44 byte đầu WAV → giây.
     const giay = Math.max(0, (wav.length - 44) / 2 / 24_000);
@@ -1235,15 +1264,20 @@ adminRouter.post('/ha-tang/xuong/soat-lai/:cid', async (req, res: Response<ApiRe
 
     const nghe = check.ok ? t : '';
     const biaRa = check.ok ? '' : (check.reason ?? 'máy nghe không ra');
-    const khop = nghe ? doKhopTu(chu, nghe) : null;
-    const nguong = nguongCuaMuc(muc);
-    const cham = await chamTuAnh(wav, 'soat.wav', 'audio/wav', docDanhSachTu(req.body?.tuAnh));
+    const chamAnh = anh && nghe ? chamCauAnh(chu, nghe) : null;
+    const khop = chamAnh ? chamAnh.diem : nghe ? doKhopTu(chu, nghe) : null;
+    const nguong = nguongCuaMuc(anh ? 'anh' : muc);
+    const cham = anh ? null : await chamTuAnh(wav, 'soat.wav', 'audio/wav', docDanhSachTu(req.body?.tuAnh));
 
     await goiMayNha(`/xuong/cau/${encodeURIComponent(cid)}/soat`, {
       method: 'PUT',
-      body: JSON.stringify(
-        cham ? { nghe, khop, biaRa, kiemTu: cham.kiemTu, ngheDa: cham.ngheDa } : { nghe, khop, biaRa },
-      ),
+      body: JSON.stringify({
+        nghe,
+        khop,
+        biaRa,
+        ...(cham ? { kiemTu: cham.kiemTu, ngheDa: cham.ngheDa } : {}),
+        ...(anh ? { chamAnh } : {}),
+      }),
       headers: { 'Content-Type': 'application/json' },
     });
     const saiTu = cham ? cham.kiemTu.filter((x) => !x.dung).length : 0;
@@ -1262,6 +1296,7 @@ adminRouter.post('/ha-tang/xuong/soat-lai/:cid', async (req, res: Response<ApiRe
         dangNgo: (nguong != null && khop != null && khop < nguong) || saiTu > 0,
         kiemTu: cham?.kiemTu ?? null,
         ngheDa: cham?.ngheDa ?? '',
+        chamAnh,
       },
     });
   } catch (e) {

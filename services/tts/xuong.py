@@ -184,6 +184,8 @@ def _muc_day_du() -> List[Dict[str, Any]]:
         {
             "khoa": m["khoa"], "ten": m["ten"], "dan": m["dan"],
             "lamMau": m["lamMau"], "tuThem": False,
+            # Mục câu thuần tiếng Anh — chấm Whisper `en`, xuất bộ dữ liệu riêng.
+            "tiengAnh": bool(m.get("tiengAnh")),
         }
         for m in KICH_BAN
     ]
@@ -357,6 +359,8 @@ async def kich_ban(x_token: Optional[str] = Header(None, alias="X-Token")):
             # Chấm từng thuật ngữ tiếng Anh (mục giang-*) — xem `luu_soat`.
             c["kiemTu"] = g.get("kiemTu")
             c["ngheDa"] = g.get("ngheDa")
+            # Chấm cả câu tiếng Anh (mục `anh`) — xem `luu_soat`.
+            c["chamAnh"] = g.get("chamAnh")
     tt = dict(tom_tat())
     tt["soCau"] = len(cau)
     tt["soTuThem"] = sum(1 for c in cau if c.get("tuThem"))
@@ -479,6 +483,30 @@ async def luu_soat(cid: str, req: Request, x_token: Optional[str] = Header(None,
         ]
     if "ngheDa" in b:
         meta[cid]["ngheDa"] = str(b.get("ngheDa") or "")[:600]
+    # ── Chấm cả câu THUẦN tiếng Anh (mục `anh`, thêm 14/10/2026) ──
+    #
+    # Backend nghe bằng Whisper ÉP `en`, KHÔNG mớm câu kịch bản (mớm thì nó
+    # chép lại câu gốc bất kể người đọc nói gì), rồi so từng từ với câu gốc
+    # (chữ thường, bỏ dấu câu): `diem` = tỉ lệ từ khớp, `tu` = từng từ của
+    # câu gốc đúng/sai (để tô xanh/đỏ), `sai` = các từ nghe lệch.
+    #
+    # Điểm thấp vẫn LƯU — người đọc không giỏi tiếng Anh, và Whisper nghe
+    # giọng Việt hụt cả chữ đọc đúng. Đây là cờ để nghe lại, không phải cửa.
+    ca = b.get("chamAnh")
+    if isinstance(ca, dict):
+        try:
+            diem = max(0.0, min(1.0, float(ca.get("diem"))))
+        except (TypeError, ValueError):
+            diem = None
+        meta[cid]["chamAnh"] = {
+            "diem": diem,
+            "tu": [
+                {"tu": str(x.get("tu") or "")[:40], "dung": bool(x.get("dung"))}
+                for x in (ca.get("tu") or [])[:80]
+                if isinstance(x, dict)
+            ],
+            "sai": [str(x)[:40] for x in (ca.get("sai") or [])[:40]],
+        }
     meta[cid]["soatLuc"] = int(time.time())
     _ghi_meta(meta)
     return {"id": cid}
@@ -544,6 +572,17 @@ async def xuat(x_token: Optional[str] = Header(None, alias="X-Token")):
         shutil.rmtree(xuat_dir)
     wavs.mkdir(parents=True)
 
+    # ⚠️ Câu THUẦN tiếng Anh (mục `tiengAnh`) KHÔNG đi vào bộ F5 tiếng Việt:
+    # trộn vào là dạy model đọc tiếng Việt bằng âm tiếng Anh. Chúng ra bộ
+    # RIÊNG `xuat-anh/` — giọng mẫu cho máy nhân bản giọng tiếng Anh
+    # (Chatterbox / F5 bản Anh). Nhận diện bằng cờ của câu, không bằng tên.
+    anh_ids = {c["id"] for c in ban_do.values() if c.get("tiengAnh")}
+    xuat_anh = GOC / "xuat-anh"
+    if xuat_anh.exists():
+        shutil.rmtree(xuat_anh)
+    dong_anh: List[str] = ["audio_file|text"]
+    giay_anh = 0.0
+
     dong: List[str] = ["audio_file|text"]
     bo_qua: List[Dict[str, str]] = []
     tong_giay = 0.0
@@ -562,6 +601,14 @@ async def xuat(x_token: Optional[str] = Header(None, alias="X-Token")):
             bo_qua.append({"id": cid, "vi": f"ngắn quá ({giay:.1f}s)"})
             continue
 
+        if cid in anh_ids:
+            (xuat_anh / "wavs").mkdir(parents=True, exist_ok=True)
+            dich = xuat_anh / "wavs" / f"{cid}.wav"
+            shutil.copy2(src, dich)
+            dong_anh.append(f"{dich.resolve()}|{chu.replace('|', ',')}")
+            giay_anh += giay
+            continue
+
         dich = wavs / f"{cid}.wav"
         shutil.copy2(src, dich)
         # ⚠️ Dấu `|` trong chữ sẽ cắt đôi dòng CSV. Đổi thành dấu phẩy —
@@ -569,16 +616,24 @@ async def xuat(x_token: Optional[str] = Header(None, alias="X-Token")):
         dong.append(f"{dich.resolve()}|{chu.replace('|', ',')}")
         tong_giay += giay
 
-    if len(dong) == 1:
+    if len(dong) == 1 and len(dong_anh) == 1:
         raise HTTPException(400, f"Không đoạn nào dùng được. Bỏ qua: {bo_qua[:5]}")
 
     (xuat_dir / "metadata.csv").write_text("\n".join(dong) + "\n", "utf-8")
+    if len(dong_anh) > 1:
+        (xuat_anh / "metadata.csv").write_text("\n".join(dong_anh) + "\n", "utf-8")
 
     return {
         "soDoan": len(dong) - 1,
         "tongPhut": round(tong_giay / 60, 1),
         "boQua": bo_qua,
         "thuMuc": str(xuat_dir),
+        # Bộ tiếng Anh riêng — KHÔNG nằm trong số đoạn ở trên.
+        "anh": (
+            {"soDoan": len(dong_anh) - 1, "tongPhut": round(giay_anh / 60, 1), "thuMuc": str(xuat_anh)}
+            if len(dong_anh) > 1
+            else None
+        ),
         # Bước tiếp theo chạy bằng script riêng chứ không gọi ở đây: nó
         # mất vài phút và cần cả GPU, mà một request HTTP treo vài phút
         # là một request sẽ chết giữa đường.

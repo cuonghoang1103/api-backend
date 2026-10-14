@@ -1,0 +1,764 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-5-1-event-loop",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-5-1-event-loop"
+  },
+  "exercises": [
+    {
+      "title": "Đoán thứ tự in: code đồng bộ chạy hết trước",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "code đồng bộ",
+        "setTimeout",
+        "task queue",
+        "thứ tự hẹn giờ"
+      ],
+      "prerequisites": [
+        "hàm",
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "event-loop",
+        "setTimeout"
+      ],
+      "problemHtml": "<p>Bài 5.1: <em>\"Đồng bộ chạy hết trước, rồi mới tới các callback trong hàng đợi.\"</em> Đọc hàm <code>doanMa()</code> dưới đây <strong>mà không chạy</strong>, rồi điền vào mảng <code>duDoan</code> thứ tự các chữ được in. Sau đó mới bấm Chạy để đối chiếu.</p>\n<pre><code>function doanMa() {\n  console.log(\"A\");\n  setTimeout(() => console.log(\"B\"), 0);\n  console.log(\"C\");\n  setTimeout(() => console.log(\"D\"), 10);\n  setTimeout(() => console.log(\"E\"), 0);\n  console.log(\"F\");\n}</code></pre>\n<p><em>Máy chấm dùng đồng hồ GIẢ: setTimeout không bắt bạn chờ thật, nhưng thứ tự và thời điểm chạy y như trình duyệt.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>duDoan</code> là mảng sáu chuỗi, theo đúng thứ tự in khi gọi <code>doanMa()</code>.</li>\n  <li>Không sửa hàm <code>doanMa</code> (máy chấm chạy nó để đối chiếu).</li>\n  <li>Điền giá trị bằng tay — không tính bằng code.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Không có — đọc code.",
+      "outputSpec": "const duDoan = [\"…\", …];",
+      "constraints": "duDoan chỉ chứa chuỗi một chữ cái in hoa.",
+      "examplesJson": [
+        {
+          "input": "console.log(\"x\"); setTimeout(() => console.log(\"y\"), 0); console.log(\"z\");",
+          "output": "[\"x\", \"z\", \"y\"]",
+          "explanation": "Ví dụ trong bài học: hẹn 0 ms vẫn in cuối cùng."
+        }
+      ],
+      "hintsJson": [
+        "Chia làm hai lượt: lượt 1 là mọi console.log nằm thẳng trong hàm (không trong callback); lượt 2 là các setTimeout.",
+        "Các setTimeout chạy theo thời điểm hẹn; cùng thời điểm thì theo thứ tự đã đăng ký. Hẹn 10 ms chạy sau mọi hẹn 0 ms."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Đoán thứ tự in. KHÔNG sửa doanMa.\nfunction doanMa() {\n  console.log(\"A\");\n  setTimeout(() => console.log(\"B\"), 0);\n  console.log(\"C\");\n  setTimeout(() => console.log(\"D\"), 10);\n  setTimeout(() => console.log(\"E\"), 0);\n  console.log(\"F\");\n}\n\n// Điền thứ tự bạn đoán, ví dụ [\"A\", \"B\", …]\nconst duDoan = [];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Đoán thứ tự in. KHÔNG sửa doanMa.\nfunction doanMa() {\n  console.log(\"A\");\n  setTimeout(() => console.log(\"B\"), 0);\n  console.log(\"C\");\n  setTimeout(() => console.log(\"D\"), 10);\n  setTimeout(() => console.log(\"E\"), 0);\n  console.log(\"F\");\n}\n\n// Lượt 1 (đồng bộ, chạy ngay):        A, C, F\n// Lượt 2 (hàng đợi, theo giờ hẹn):    B (0 ms), E (0 ms, đăng ký sau B), D (10 ms)\nconst duDoan = [\"A\", \"C\", \"F\", \"B\", \"E\", \"D\"];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>setTimeout</code> không chạy callback \"sau 0 ms\" mà \"đưa callback vào hàng đợi, sớm nhất sau 0 ms\". Event loop chỉ lấy việc từ hàng đợi khi call stack trống — tức khi <code>doanMa()</code> chạy xong cả ba lệnh in đồng bộ. Trong hàng đợi, các hẹn giờ ra theo thời điểm hẹn, cùng thời điểm thì theo thứ tự đăng ký: B rồi E, cuối cùng D (10 ms).</p>\n<p>Máy chấm chạy <code>doanMa()</code> thật (đồng hồ giả, thứ tự y như trình duyệt) để chắc hàm không bị sửa, rồi so mảng <code>duDoan</code> của bạn.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Xếp D trước E vì D được viết trước — thời điểm hẹn (10 ms) mới quyết định.</li>\n  <li>Xếp B ngay sau A vì \"0 ms là ngay lập tức\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.1 Đồng bộ, bất đồng bộ và event loop.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "doanMa() vẫn in đúng như bản gốc (không bị sửa)",
+            "so": "console",
+            "goi": "doanMa()",
+            "mongDoi": [
+              "A",
+              "C",
+              "F",
+              "B",
+              "E",
+              "D"
+            ]
+          },
+          {
+            "moTa": "Dự đoán của bạn khớp thứ tự in thật",
+            "goi": "duDoan",
+            "mongDoi": [
+              "A",
+              "C",
+              "F",
+              "B",
+              "E",
+              "D"
+            ]
+          },
+          {
+            "moTa": "Ba dòng đầu là phần đồng bộ",
+            "goi": "duDoan.slice(0, 3)",
+            "mongDoi": [
+              "A",
+              "C",
+              "F"
+            ]
+          },
+          {
+            "moTa": "Điền bằng tay, không tính bằng code",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "duDoan\\s*=\\s*\\[\\s*\"[A-Z]\""
+          }
+        ]
+      }
+    },
+    {
+      "title": "Đoán thứ tự in: microtask chen trước setTimeout",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "microtask",
+        "Promise.then",
+        "queueMicrotask",
+        "task (macrotask)"
+      ],
+      "prerequisites": [
+        "setTimeout"
+      ],
+      "tags": [
+        "javascript",
+        "event-loop",
+        "microtask"
+      ],
+      "problemHtml": "<p>Bài 5.1, đoạn <code>first / done sync / second / third</code>: <em>\"callback của promise nằm ở hàng đợi ưu tiên cao hơn hẹn giờ\"</em>. Đoán thứ tự in của:</p>\n<pre><code>function doanMa() {\n  console.log(\"1\");\n  setTimeout(() => console.log(\"2\"), 0);\n  Promise.resolve().then(() => console.log(\"3\"));\n  queueMicrotask(() => console.log(\"4\"));\n  Promise.resolve().then(() => console.log(\"5\"));\n  console.log(\"6\");\n}</code></pre>\n<p><em>Máy chấm dùng đồng hồ GIẢ: setTimeout không bắt bạn chờ thật, nhưng thứ tự và thời điểm chạy y như trình duyệt.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>duDoan</code>: mảng sáu chuỗi số theo thứ tự in.</li>\n  <li>Không sửa doanMa; điền giá trị bằng tay.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Không có — đọc code.",
+      "outputSpec": "const duDoan = [\"…\", …];",
+      "constraints": "duDoan chỉ chứa chuỗi một chữ số.",
+      "examplesJson": [
+        {
+          "input": "setTimeout(() => console.log(\"t\"), 0);\nPromise.resolve().then(() => console.log(\"p\"));",
+          "output": "[\"p\", \"t\"]",
+          "explanation": "Microtask (p) chạy hết trước khi event loop lấy task kế tiếp (t)."
+        }
+      ],
+      "hintsJson": [
+        "Ba tầng: đồng bộ → TẤT CẢ microtask (then, queueMicrotask) theo thứ tự đăng ký → task hẹn giờ.",
+        "queueMicrotask và Promise.resolve().then cùng vào MỘT hàng microtask."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Microtask và task. KHÔNG sửa doanMa.\nfunction doanMa() {\n  console.log(\"1\");\n  setTimeout(() => console.log(\"2\"), 0);\n  Promise.resolve().then(() => console.log(\"3\"));\n  queueMicrotask(() => console.log(\"4\"));\n  Promise.resolve().then(() => console.log(\"5\"));\n  console.log(\"6\");\n}\n\nconst duDoan = [];\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Microtask và task. KHÔNG sửa doanMa.\nfunction doanMa() {\n  console.log(\"1\");\n  setTimeout(() => console.log(\"2\"), 0);\n  Promise.resolve().then(() => console.log(\"3\"));\n  queueMicrotask(() => console.log(\"4\"));\n  Promise.resolve().then(() => console.log(\"5\"));\n  console.log(\"6\");\n}\n\n// Đồng bộ: 1, 6\n// Microtask (theo thứ tự đăng ký): 3, 4, 5\n// Task hẹn giờ: 2\nconst duDoan = [\"1\", \"6\", \"3\", \"4\", \"5\", \"2\"];\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Sau mỗi task (ở đây là lần chạy <code>doanMa</code>), event loop <strong>xả sạch hàng microtask</strong> rồi mới lấy task kế tiếp. Callback của <code>.then</code> và <code>queueMicrotask</code> là microtask; <code>setTimeout</code> là task. Nên dù hẹn 0 ms, \"2\" vẫn đứng sau cả ba microtask.</p>\n<p>Hệ quả thực tế: một chuỗi promise dài chạy liền một mạch không nhường chỗ cho hẹn giờ hay vẽ lại màn hình. Máy chấm chạy doanMa thật rồi so mảng của bạn.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Xếp \"4\" sau \"5\" vì nghĩ queueMicrotask là một hàng riêng — cùng một hàng.</li>\n  <li>Xếp \"2\" trước \"3\" vì setTimeout được viết trước.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.1 Đồng bộ, bất đồng bộ và event loop.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "doanMa() vẫn in như bản gốc",
+            "so": "console",
+            "goi": "doanMa()",
+            "mongDoi": [
+              "1",
+              "6",
+              "3",
+              "4",
+              "5",
+              "2"
+            ]
+          },
+          {
+            "moTa": "Dự đoán khớp thứ tự in thật",
+            "goi": "duDoan",
+            "mongDoi": [
+              "1",
+              "6",
+              "3",
+              "4",
+              "5",
+              "2"
+            ]
+          },
+          {
+            "moTa": "\"2\" (setTimeout) đứng cuối",
+            "goi": "duDoan[duDoan.length - 1]",
+            "mongDoi": "2"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Hoãn việc chậm ra sau: trang hiện trước, email gửi sau",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "setTimeout(…, 0)",
+        "nhường call stack",
+        "template literal"
+      ],
+      "prerequisites": [
+        "setTimeout"
+      ],
+      "tags": [
+        "javascript",
+        "event-loop",
+        "setTimeout"
+      ],
+      "problemHtml": "<p>Khi người dùng đăng ký, <code>dangKy(ten)</code> làm hai việc: báo <code>\"Đang xử lý &lt;ten&gt;\"</code> ngay lập tức, và \"gửi email chào mừng\" — một việc chậm không cần xong trước khi trang hiện. Code khởi đầu làm cả hai liền một mạch nên dòng <code>\"Trang đã hiện\"</code> của người gọi bị đẩy xuống sau. Dùng <code>setTimeout(…, 0)</code> để hoãn phần email ra sau mọi code đồng bộ đang chạy.</p>\n<p><em>Máy chấm dùng đồng hồ GIẢ: setTimeout không bắt bạn chờ thật, nhưng thứ tự và thời điểm chạy y như trình duyệt.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>dangKy(\"Lan\")</code> in ngay <code>\"Đang xử lý Lan\"</code>.</li>\n  <li><code>\"Đã gửi email cho Lan\"</code> được in SAU mọi code đồng bộ của người gọi — bằng <code>setTimeout</code>.</li>\n  <li>Gọi dangKy hai lần liền nhau: hai dòng \"Đang xử lý\" in trước, hai dòng email in sau, giữ thứ tự gọi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ten: string.",
+      "outputSpec": "Các dòng console theo thứ tự yêu cầu.",
+      "constraints": "Không đổi nội dung chữ của hai dòng in.",
+      "examplesJson": [
+        {
+          "input": "dangKy(\"Lan\");\nconsole.log(\"Trang đã hiện\");",
+          "output": "Đang xử lý Lan\nTrang đã hiện\nĐã gửi email cho Lan",
+          "explanation": "Phần email chờ trong hàng đợi tới khi call stack trống."
+        }
+      ],
+      "hintsJson": [
+        "Bọc đúng dòng in email trong setTimeout(() => { … }, 0).",
+        "setTimeout(() => console.log(`Đã gửi email cho ${ten}`), 0);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Hoãn việc chậm\nfunction dangKy(ten) {\n  console.log(`Đang xử lý ${ten}`);\n  console.log(`Đã gửi email cho ${ten}`);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Hoãn việc chậm\nfunction dangKy(ten) {\n  console.log(`Đang xử lý ${ten}`);           // phản hồi tức thì cho người dùng\n\n  // Việc chậm, không gấp: đưa vào hàng đợi. Nó chỉ chạy khi call stack trống,\n  // tức sau khi người gọi (và mọi code đồng bộ khác) đã chạy xong.\n  setTimeout(() => {\n    console.log(`Đã gửi email cho ${ten}`);\n  }, 0);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>setTimeout(fn, 0)</code> là cách đơn giản nhất nói \"làm việc này, nhưng không phải bây giờ\": <code>fn</code> vào hàng đợi, call stack chạy tiếp phần còn lại của người gọi. Hai lần gọi <code>dangKy</code> đặt hai hẹn giờ cùng thời điểm, chạy theo thứ tự đăng ký.</p>\n<p>Máy chấm gọi hàm theo hai kịch bản và so toàn bộ dãy dòng in.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Bọc cả hai dòng trong setTimeout — \"Đang xử lý\" cũng bị trễ.</li>\n  <li>Viết <code>setTimeout(console.log(…), 0)</code> — gọi log NGAY rồi đưa kết quả (undefined) cho setTimeout.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.1 Đồng bộ, bất đồng bộ và event loop.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout",
+      "testsJson": {
+        "loai": "console",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Một lần đăng ký",
+            "goi": "(dangKy(\"Lan\"), console.log(\"Trang đã hiện\"))",
+            "mongDoi": [
+              "Đang xử lý Lan",
+              "Trang đã hiện",
+              "Đã gửi email cho Lan"
+            ]
+          },
+          {
+            "moTa": "Hai lần đăng ký liền nhau",
+            "goi": "(dangKy(\"A\"), dangKy(\"B\"), console.log(\"X\"))",
+            "mongDoi": [
+              "Đang xử lý A",
+              "Đang xử lý B",
+              "X",
+              "Đã gửi email cho A",
+              "Đã gửi email cho B"
+            ]
+          },
+          {
+            "moTa": "Dùng setTimeout",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "setTimeout\\s*\\("
+          }
+        ]
+      }
+    },
+    {
+      "title": "Thông báo ưu tiên: microtask cho việc gấp, task cho việc thường",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "queueMicrotask",
+        "setTimeout",
+        "chốt chặn đầu vào",
+        "TypeError"
+      ],
+      "prerequisites": [
+        "microtask",
+        "setTimeout"
+      ],
+      "tags": [
+        "javascript",
+        "event-loop",
+        "microtask"
+      ],
+      "problemHtml": "<p>Hệ thống thông báo nhận việc từ nhiều nơi trong một lượt chạy. Viết <code>guiThongBao(loai, noiDung)</code>: không in ngay, mà xếp lịch sao cho sau khi code đồng bộ chạy xong, <strong>mọi thông báo gấp in trước mọi thông báo thường</strong> — bất kể thứ tự gọi. Đó đúng là quan hệ microtask / task của Bài 5.1.</p>\n<p><em>Máy chấm dùng đồng hồ GIẢ: setTimeout không bắt bạn chờ thật, nhưng thứ tự và thời điểm chạy y như trình duyệt.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>loai === \"gap\"</code> → in <code>\"[GẤP] &lt;noiDung&gt;\"</code> bằng <code>queueMicrotask</code> (hoặc <code>Promise.resolve().then</code>).</li>\n  <li><code>loai === \"thuong\"</code> → in <code>\"[thường] &lt;noiDung&gt;\"</code> bằng <code>setTimeout(…, 0)</code>.</li>\n  <li>Trong cùng một loại, giữ thứ tự gọi.</li>\n  <li>Loại khác → ném <code>TypeError</code> ngay lúc gọi (đồng bộ), thông điệp chứa tên loại sai.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "loai: \"gap\" | \"thuong\"; noiDung: string.",
+      "outputSpec": "Các dòng console.",
+      "constraints": "Không tự sắp xếp bằng mảng — để event loop làm việc đó.",
+      "examplesJson": [
+        {
+          "input": "guiThongBao(\"thuong\", \"Có bài mới\");\nguiThongBao(\"gap\", \"Mất kết nối\");\nconsole.log(\"render xong\");",
+          "output": "render xong\n[GẤP] Mất kết nối\n[thường] Có bài mới",
+          "explanation": "Gọi \"thường\" trước nhưng in sau."
+        }
+      ],
+      "hintsJson": [
+        "Hai hàng đợi có sẵn của event loop làm hộ việc ưu tiên: microtask luôn xả hết trước task kế tiếp.",
+        "if (loai === \"gap\") queueMicrotask(() => console.log(`[GẤP] ${noiDung}`)); else if (loai === \"thuong\") setTimeout(…, 0); else throw new TypeError(`Loại không hợp lệ: ${loai}`);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Thông báo ưu tiên\nfunction guiThongBao(loai, noiDung) {\n  if (loai === \"gap\") {\n    console.log(`[GẤP] ${noiDung}`);\n  } else {\n    console.log(`[thường] ${noiDung}`);\n  }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Thông báo ưu tiên\nfunction guiThongBao(loai, noiDung) {\n  if (loai === \"gap\") {\n    // microtask: chạy ngay khi call stack trống, TRƯỚC mọi task hẹn giờ\n    queueMicrotask(() => console.log(`[GẤP] ${noiDung}`));\n  } else if (loai === \"thuong\") {\n    // task: chờ tới lượt của event loop, sau khi hàng microtask đã xả hết\n    setTimeout(() => console.log(`[thường] ${noiDung}`), 0);\n  } else {\n    // lỗi đầu vào: báo ngay, đồng bộ — đừng để nó lặng lẽ biến mất trong hàng đợi\n    throw new TypeError(`Loại không hợp lệ: ${loai}`);\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Không cần tự viết hàng đợi ưu tiên: event loop đã có hai tầng. Đặt việc gấp vào microtask, việc thường vào task, rồi để luật \"xả hết microtask trước task kế tiếp\" làm phần còn lại. Mỗi tầng là FIFO nên thứ tự gọi trong cùng loại được giữ.</p>\n<p>Ném lỗi đầu vào <em>đồng bộ</em> quan trọng: nếu ném bên trong callback hẹn giờ, người gọi không bắt được bằng <code>try/catch</code>. Máy chấm gọi xen kẽ năm thông báo và một loại sai.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng setTimeout cho cả hai với độ trễ khác nhau (0 và 1 ms) — chạy được ở đây, nhưng phụ thuộc thời gian thay vì cơ chế.</li>\n  <li>Ném lỗi bên trong callback — người gọi không bắt được.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.1 Đồng bộ, bất đồng bộ và event loop.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Window/queueMicrotask",
+      "testsJson": {
+        "loai": "console",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Gấp in trước thường, sau code đồng bộ",
+            "goi": "(guiThongBao(\"thuong\", \"Có bài mới\"), guiThongBao(\"gap\", \"Mất kết nối\"), console.log(\"render xong\"))",
+            "mongDoi": [
+              "render xong",
+              "[GẤP] Mất kết nối",
+              "[thường] Có bài mới"
+            ]
+          },
+          {
+            "moTa": "Xen kẽ năm thông báo — giữ thứ tự trong từng loại",
+            "goi": "(guiThongBao(\"thuong\", \"t1\"), guiThongBao(\"gap\", \"g1\"), guiThongBao(\"thuong\", \"t2\"), guiThongBao(\"gap\", \"g2\"), guiThongBao(\"gap\", \"g3\"))",
+            "mongDoi": [
+              "[GẤP] g1",
+              "[GẤP] g2",
+              "[GẤP] g3",
+              "[thường] t1",
+              "[thường] t2"
+            ]
+          },
+          {
+            "moTa": "Loại sai → TypeError ngay khi gọi",
+            "so": "giaTri",
+            "goi": "guiThongBao(\"khac\", \"x\")",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "khac"
+            }
+          },
+          {
+            "moTa": "Không in đồng bộ",
+            "goi": "(guiThongBao(\"gap\", \"a\"), console.log(\"sau\"))",
+            "mongDoi": [
+              "sau",
+              "[GẤP] a"
+            ],
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Đồng hồ đếm ngược in toàn số 0: var trong vòng lặp hẹn giờ",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "setTimeout trong vòng lặp",
+        "var vs let",
+        "closure",
+        "thời điểm hẹn"
+      ],
+      "prerequisites": [
+        "setTimeout",
+        "let / var",
+        "closure"
+      ],
+      "tags": [
+        "javascript",
+        "event-loop",
+        "closure",
+        "pitfall"
+      ],
+      "problemHtml": "<p><code>demNguoc(n)</code> phải in <code>n</code>, <code>n-1</code>, …, <code>1</code> cách nhau 1 giây (số đầu tiên in ngay lúc 0 ms), rồi <code>\"Hết giờ!\"</code> ở giây thứ <code>n</code>. Bản cũ in ra <code>0, 0, 0, Hết giờ!</code>. Lý do nằm ở hai bài: callback chạy <em>sau</em> khi vòng lặp đã xong (5.1), và <code>var</code> chỉ có MỘT biến dùng chung cho mọi lượt (4.1).</p>\n<p><em>Máy chấm dùng đồng hồ GIẢ: setTimeout không bắt bạn chờ thật, nhưng thứ tự và thời điểm chạy y như trình duyệt.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>demNguoc(3)</code> in <code>3, 2, 1, Hết giờ!</code> ở các mốc 0, 1000, 2000, 3000 ms.</li>\n  <li><code>demNguoc(0)</code> chỉ in <code>\"Hết giờ!\"</code> (ở mốc 0 ms).</li>\n  <li>Không dùng <code>var</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "n: số nguyên >= 0.",
+      "outputSpec": "n + 1 dòng console theo đúng mốc thời gian.",
+      "constraints": "In số dưới dạng chuỗi (console.log(String(i)) hoặc console.log(i) đều ra \"3\").",
+      "examplesJson": [
+        {
+          "input": "demNguoc(3)",
+          "output": "3   (0 ms)\n2   (1000 ms)\n1   (2000 ms)\nHết giờ!   (3000 ms)",
+          "explanation": "Mỗi lượt lặp đặt một hẹn giờ với độ trễ riêng."
+        },
+        {
+          "input": "(code khởi đầu) demNguoc(3)",
+          "output": "0\n0\n0\nHết giờ!",
+          "explanation": "Lúc các callback chạy, vòng lặp đã xong và biến var i duy nhất đang bằng 0."
+        }
+      ],
+      "hintsJson": [
+        "Lúc callback chạy, nó đọc giá trị HIỆN TẠI của i. Với var, cả ba callback cùng đọc MỘT biến i — đã thành 0.",
+        "Đổi var thành let: mỗi lượt lặp có biến i riêng, mỗi callback giữ đúng i của lượt mình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Đếm ngược\nfunction demNguoc(n) {\n  for (var i = n; i > 0; i--) {\n    setTimeout(() => console.log(i), (n - i) * 1000);\n  }\n  setTimeout(() => console.log(\"Hết giờ!\"), n * 1000);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Đếm ngược\nfunction demNguoc(n) {\n  // let: MỖI lượt lặp có một biến i riêng ⇒ mỗi callback nhớ đúng i của lượt đó.\n  // (var: một biến i chung — khi các callback chạy, vòng lặp đã xong và i = 0)\n  for (let i = n; i > 0; i--) {\n    setTimeout(() => console.log(i), (n - i) * 1000);   // n ở 0 ms, n-1 ở 1000 ms, ...\n  }\n  setTimeout(() => console.log(\"Hết giờ!\"), n * 1000);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Vòng lặp chạy xong <em>đồng bộ</em> trong tích tắc, chỉ đặt hẹn giờ; các callback chạy muộn hơn nhiều. Với <code>var</code>, chỉ có một biến <code>i</code> cho cả hàm, và lúc callback đọc nó thì nó đã là 0. Với <code>let</code>, mỗi lượt lặp tạo một biến mới — ba callback đóng gói ba biến khác nhau (closure, Bài 4.3).</p>\n<p>Máy chấm chạy với đồng hồ giả và kiểm cả thứ tự lẫn <em>thời điểm</em>: ở mốc 2500 ms phải đã in đúng ba dòng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt mọi hẹn giờ cùng độ trễ 1000 — cả ba in cùng lúc.</li>\n  <li>Dùng setInterval rồi quên clearInterval — đếm xuống số âm mãi.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.1 Đồng bộ, bất đồng bộ và event loop.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/closure#closures-in-loops",
+      "testsJson": {
+        "loai": "console",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "demNguoc(3) in 3, 2, 1, Hết giờ!",
+            "goi": "demNguoc(3)",
+            "mongDoi": [
+              "3",
+              "2",
+              "1",
+              "Hết giờ!"
+            ]
+          },
+          {
+            "moTa": "demNguoc(0) chỉ in Hết giờ!",
+            "goi": "demNguoc(0)",
+            "mongDoi": [
+              "Hết giờ!"
+            ]
+          },
+          {
+            "moTa": "Đúng mốc thời gian: tới 2500 ms đã in 3 dòng",
+            "so": "giaTri",
+            "chuanBi": "demNguoc(3); await new Promise((r) => setTimeout(r, 2500));",
+            "goi": "__log.slice()",
+            "mongDoi": [
+              "3",
+              "2",
+              "1"
+            ]
+          },
+          {
+            "moTa": "Không dùng var",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\bvar\\b",
+            "phuDinh": true
+          },
+          {
+            "moTa": "demNguoc(5) đủ 6 dòng",
+            "goi": "demNguoc(5)",
+            "mongDoi": [
+              "5",
+              "4",
+              "3",
+              "2",
+              "1",
+              "Hết giờ!"
+            ],
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Đoán thứ tự in: hẹn giờ trong microtask, microtask trong hẹn giờ",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "xả microtask sau MỖI task",
+        "lồng setTimeout / then",
+        "event loop từng vòng"
+      ],
+      "prerequisites": [
+        "microtask",
+        "setTimeout"
+      ],
+      "tags": [
+        "javascript",
+        "event-loop",
+        "microtask"
+      ],
+      "problemHtml": "<p>Bài khó hơn hai bài đoán trước: callback lồng nhau tạo thêm việc mới <em>trong lúc</em> event loop đang chạy. Đoán thứ tự in:</p>\n<pre><code>function doanMa() {\n  console.log(\"A\");\n  setTimeout(() => {\n    console.log(\"B\");\n    Promise.resolve().then(() => console.log(\"C\"));\n  }, 0);\n  Promise.resolve().then(() => {\n    console.log(\"D\");\n    setTimeout(() => console.log(\"E\"), 0);\n  });\n  setTimeout(() => console.log(\"F\"), 0);\n  console.log(\"G\");\n}</code></pre>\n<p>Ngoài <code>duDoan</code>, điền <code>soVongTask</code> = số task hẹn giờ phải chạy (không tính lần gọi doanMa).</p>\n<p><em>Máy chấm dùng đồng hồ GIẢ: setTimeout không bắt bạn chờ thật, nhưng thứ tự và thời điểm chạy y như trình duyệt.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>duDoan</code>: mảng bảy chữ theo thứ tự in.</li>\n  <li><code>soVongTask</code>: một số nguyên.</li>\n  <li>Không sửa doanMa; điền bằng tay.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Không có — đọc code.",
+      "outputSpec": "const duDoan = [...]; const soVongTask = …;",
+      "constraints": "Điền bằng tay.",
+      "examplesJson": [
+        {
+          "input": "setTimeout(() => { console.log(\"x\"); Promise.resolve().then(() => console.log(\"y\")); }, 0);\nsetTimeout(() => console.log(\"z\"), 0);",
+          "output": "[\"x\", \"y\", \"z\"]",
+          "explanation": "Sau task x, microtask y được xả TRƯỚC task z."
+        }
+      ],
+      "hintsJson": [
+        "Mô phỏng từng vòng: [đồng bộ] → xả microtask → task 1 → xả microtask → task 2 → … Ghi ra hai cột \"hàng task\" và \"hàng microtask\" trên giấy.",
+        "Hẹn giờ E được đặt BÊN TRONG microtask D — tức sau khi B và F đã nằm sẵn trong hàng task."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Lồng nhau. KHÔNG sửa doanMa.\nfunction doanMa() {\n  console.log(\"A\");\n  setTimeout(() => {\n    console.log(\"B\");\n    Promise.resolve().then(() => console.log(\"C\"));\n  }, 0);\n  Promise.resolve().then(() => {\n    console.log(\"D\");\n    setTimeout(() => console.log(\"E\"), 0);\n  });\n  setTimeout(() => console.log(\"F\"), 0);\n  console.log(\"G\");\n}\n\nconst duDoan = [];\nconst soVongTask = 0;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Lồng nhau. KHÔNG sửa doanMa.\nfunction doanMa() {\n  console.log(\"A\");\n  setTimeout(() => {\n    console.log(\"B\");\n    Promise.resolve().then(() => console.log(\"C\"));\n  }, 0);\n  Promise.resolve().then(() => {\n    console.log(\"D\");\n    setTimeout(() => console.log(\"E\"), 0);\n  });\n  setTimeout(() => console.log(\"F\"), 0);\n  console.log(\"G\");\n}\n\n// Đồng bộ:                     A, G       (hàng task: B, F · hàng microtask: D)\n// Xả microtask:                D          (D đặt thêm task E ⇒ hàng task: B, F, E)\n// Task B:                      B          (B đặt microtask C)\n// Xả microtask sau task B:     C\n// Task F:                      F\n// Task E:                      E\nconst duDoan = [\"A\", \"G\", \"D\", \"B\", \"C\", \"F\", \"E\"];\nconst soVongTask = 3;   // B, F, E\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hai luật đủ giải mọi bài loại này: (1) sau <em>mỗi</em> task, event loop xả sạch microtask trước khi lấy task kế; (2) việc mới được thêm vào CUỐI hàng tương ứng tại thời điểm nó được đặt. C là microtask sinh ra trong task B nên chạy ngay sau B, trước F. E là task sinh ra trong microtask D — lúc đó B và F đã xếp hàng, nên E đứng cuối.</p>\n<p>Máy chấm chạy doanMa thật và so cả hai giá trị.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Xếp C ở cuối cùng (sau mọi task) — microtask được xả sau MỖI task, không chỉ sau đồng bộ.</li>\n  <li>Xếp E trước F vì E nằm trong microtask \"chạy sớm\" — chỉ D chạy sớm; E vẫn là task, xếp sau những task có sẵn.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.1 Đồng bộ, bất đồng bộ và event loop.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/event-loop",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "doanMa() vẫn in như bản gốc",
+            "so": "console",
+            "goi": "doanMa()",
+            "mongDoi": [
+              "A",
+              "G",
+              "D",
+              "B",
+              "C",
+              "F",
+              "E"
+            ]
+          },
+          {
+            "moTa": "Dự đoán khớp thứ tự thật",
+            "goi": "duDoan",
+            "mongDoi": [
+              "A",
+              "G",
+              "D",
+              "B",
+              "C",
+              "F",
+              "E"
+            ]
+          },
+          {
+            "moTa": "C chạy ngay sau B",
+            "goi": "duDoan.indexOf(\"C\") - duDoan.indexOf(\"B\")",
+            "mongDoi": 1
+          },
+          {
+            "moTa": "soVongTask = 3",
+            "goi": "soVongTask",
+            "mongDoi": 3
+          }
+        ]
+      }
+    },
+    {
+      "title": "Xử lý theo lô: đừng để vòng lặp dài đóng băng trang",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "vòng lặp đồng bộ chặn event loop",
+        "chia nhỏ công việc",
+        "setTimeout(…, 0) để nhường",
+        "callback hoàn tất",
+        "luôn bất đồng bộ"
+      ],
+      "prerequisites": [
+        "setTimeout",
+        "callback",
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "event-loop",
+        "performance"
+      ],
+      "problemHtml": "<p>Bài 5.1, mục bẫy: <em>\"một vòng lặp đồng bộ dài chặn MỌI thứ — hẹn giờ, cú bấm, cả vòng quay 'đang tải'.\"</em> Hàm xử lý 50.000 dòng dữ liệu một mạch làm trang đứng hình vài giây. Cách chữa kinh điển: chia thành <strong>lô</strong>, xử lý một lô, rồi nhường event loop (<code>setTimeout(…, 0)</code>) để trình duyệt kịp xử lý cú bấm và vẽ lại, rồi mới làm lô kế.</p>\n<p>Viết <code>xuLyTheoLo(mang, kichThuocLo, xuLy, xong)</code>:</p>\n<ul><li>Lô đầu xử lý <strong>ngay</strong> (đồng bộ) khi gọi; mỗi lô sau chạy trong một <code>setTimeout(…, 0)</code> mới.</li>\n<li><code>xuLy(phanTu)</code> trả về giá trị mới; kết quả cuối là mảng các giá trị đó theo thứ tự gốc.</li>\n<li>Xong hết thì gọi <code>xong(ketQua)</code> — <strong>luôn bất đồng bộ</strong>, kể cả khi mảng rỗng.</li></ul>\n<p><em>Máy chấm dùng đồng hồ GIẢ: setTimeout không bắt bạn chờ thật, nhưng thứ tự và thời điểm chạy y như trình duyệt.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>xong</code> nhận <code>[2, 4, 6, 8, 10]</code> với <code>mang = [1..5]</code>, <code>xuLy = x =&gt; x * 2</code>.</li>\n  <li>Giữa hai lô, một cú bấm (task đã xếp hàng trước) phải chạy được.</li>\n  <li>Mảng rỗng: <code>xong([])</code> được gọi nhưng KHÔNG đồng bộ (sau khi xuLyTheoLo đã trả về).</li>\n  <li><code>kichThuocLo</code> không phải số nguyên dương → ném <code>RangeError</code> ngay.</li>\n  <li><code>xong</code> chỉ được gọi đúng một lần.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "mang: mảng; kichThuocLo: số nguyên >= 1; xuLy: hàm; xong: hàm.",
+      "outputSpec": "Không trả về gì; kết quả đi qua xong(ketQua).",
+      "constraints": "Không dùng Promise/async (bài 5.2–5.3) — luyện callback + setTimeout.\nKhông sửa mảng đầu vào.",
+      "examplesJson": [
+        {
+          "input": "Đã có hẹn giờ \"click\" xếp hàng; gọi xuLyTheoLo([1,2,3,4,5], 2, ghi, xong)",
+          "output": "Thứ tự: 1, 2, click, 3, 4, 5, rồi xong",
+          "explanation": "Lô [1,2] chạy ngay; lô [3,4] xếp hàng SAU cú bấm."
+        },
+        {
+          "input": "(code khởi đầu) cùng kịch bản",
+          "output": "1, 2, 3, 4, 5, xong, click",
+          "explanation": "Một mạch đồng bộ — cú bấm phải chờ tới khi xong hết."
+        }
+      ],
+      "hintsJson": [
+        "Viết một hàm con chayLo(batDau) xử lý mang[batDau … batDau + kichThuocLo - 1]; còn phần tử thì setTimeout(() => chayLo(batDau + kichThuocLo), 0); hết thì setTimeout(() => xong(ketQua), 0).",
+        "Gọi chayLo(0) trực tiếp (lô đầu đồng bộ). Với mảng rỗng, chayLo(0) không xử lý gì và đi thẳng nhánh \"hết\" — vẫn qua setTimeout nên vẫn bất đồng bộ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Xử lý theo lô\nfunction xuLyTheoLo(mang, kichThuocLo, xuLy, xong) {\n  const ketQua = [];\n  for (const x of mang) {\n    ketQua.push(xuLy(x));      // một mạch: trang đứng hình tới khi xong\n  }\n  xong(ketQua);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.1 — Xử lý theo lô\nfunction xuLyTheoLo(mang, kichThuocLo, xuLy, xong) {\n  // Chốt chặn đồng bộ: báo lỗi cho người gọi NGAY, đừng để lỗi chìm trong hàng đợi\n  if (!Number.isInteger(kichThuocLo) || kichThuocLo < 1) {\n    throw new RangeError(\"kichThuocLo phải là số nguyên >= 1\");\n  }\n\n  const ketQua = [];\n\n  function chayLo(batDau) {\n    const ketThuc = Math.min(batDau + kichThuocLo, mang.length);\n    for (let i = batDau; i < ketThuc; i++) {\n      ketQua.push(xuLy(mang[i]));          // một lô nhỏ: chiếm call stack rất ngắn\n    }\n    if (ketThuc < mang.length) {\n      // Nhường event loop: cú bấm, hẹn giờ, việc vẽ lại đã xếp hàng được chạy trước lô kế\n      setTimeout(() => chayLo(ketThuc), 0);\n    } else {\n      // \"Luôn bất đồng bộ\": người gọi không phải đoán xong() chạy trước hay sau dòng kế tiếp\n      setTimeout(() => xong(ketQua), 0);\n    }\n  }\n\n  chayLo(0);   // lô đầu chạy ngay\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một luồng nghĩa là trong lúc vòng lặp của bạn chạy, trình duyệt không làm được gì khác — không xử lý cú bấm, không vẽ lại. Chia lô + <code>setTimeout(…, 0)</code> trả quyền điều khiển cho event loop sau mỗi lô: những task đã xếp hàng (như cú bấm) chen vào giữa. Tổng thời gian dài hơn chút, nhưng trang không bao giờ đứng hình lâu hơn một lô.</p>\n<p>\"Luôn bất đồng bộ\" là một luật thiết kế API: nếu <code>xong</code> lúc thì gọi đồng bộ (mảng rỗng) lúc thì bất đồng bộ, code người gọi sẽ chạy theo hai thứ tự khác nhau tuỳ dữ liệu — một loại lỗi rất khó tìm. Máy chấm kiểm kết quả, thứ tự xen kẽ với cú bấm, mảng rỗng, <code>xong</code> gọi một lần, và RangeError.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt mọi lô vào hẹn giờ cùng lúc trong một vòng for — chúng vẫn chạy liền nhau, cú bấm chỉ chen được trước lô đầu.</li>\n  <li>Gọi xong(ketQua) đồng bộ khi mảng rỗng.</li>\n  <li>Ném RangeError bên trong setTimeout — người gọi không bắt được.</li>\n  <li>Dùng ketQua[i] = … với chỉ số lệch giữa các lô.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.1 Đồng bộ, bất đồng bộ và event loop.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/articles/optimize-long-tasks",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Kết quả đúng thứ tự",
+            "so": "giaTri",
+            "chuanBi": "const kq = await new Promise((r) => xuLyTheoLo([1, 2, 3, 4, 5], 2, (x) => x * 2, r));",
+            "goi": "kq",
+            "mongDoi": [
+              2,
+              4,
+              6,
+              8,
+              10
+            ]
+          },
+          {
+            "moTa": "Cú bấm chen được giữa hai lô",
+            "so": "giaTri",
+            "chuanBi": "const log = []; setTimeout(() => log.push(\"click\"), 0); await new Promise((r) => xuLyTheoLo([1, 2, 3, 4, 5], 2, (x) => { log.push(x); return x; }, () => { log.push(\"xong\"); r(); }));",
+            "goi": "log",
+            "mongDoi": [
+              1,
+              2,
+              "click",
+              3,
+              4,
+              5,
+              "xong"
+            ]
+          },
+          {
+            "moTa": "Mảng rỗng: xong được gọi, nhưng bất đồng bộ",
+            "so": "giaTri",
+            "chuanBi": "let daGoi = false; let nhan = null; xuLyTheoLo([], 3, (x) => x, (kq) => { daGoi = true; nhan = kq; }); const ngay = daGoi; await new Promise((r) => setTimeout(r, 0));",
+            "goi": "[ngay, daGoi, nhan]",
+            "mongDoi": [
+              false,
+              true,
+              []
+            ]
+          },
+          {
+            "moTa": "Lô đầu chạy đồng bộ",
+            "so": "giaTri",
+            "chuanBi": "const log = []; xuLyTheoLo([1, 2, 3], 2, (x) => { log.push(x); return x; }, () => {}); const ngay = log.slice();",
+            "goi": "ngay",
+            "mongDoi": [
+              1,
+              2
+            ]
+          },
+          {
+            "moTa": "xong chỉ được gọi một lần",
+            "so": "giaTri",
+            "chuanBi": "let soLan = 0; xuLyTheoLo([1, 2, 3, 4], 1, (x) => x, () => { soLan++; }); await new Promise((r) => setTimeout(r, 50));",
+            "goi": "soLan",
+            "mongDoi": 1
+          },
+          {
+            "moTa": "kichThuocLo = 0 → RangeError",
+            "so": "giaTri",
+            "goi": "xuLyTheoLo([1], 0, (x) => x, () => {})",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          },
+          {
+            "moTa": "Lô lớn hơn mảng: một lô",
+            "so": "giaTri",
+            "chuanBi": "const log = []; setTimeout(() => log.push(\"click\"), 0); await new Promise((r) => xuLyTheoLo([7, 8], 10, (x) => { log.push(x); return x; }, () => r()));",
+            "goi": "log",
+            "mongDoi": [
+              7,
+              8,
+              "click"
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Không dùng Promise / async",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\bPromise\\b|\\basync\\b|\\bawait\\b",
+            "phuDinh": true,
+            "an": true
+          }
+        ]
+      }
+    }
+  ]
+}

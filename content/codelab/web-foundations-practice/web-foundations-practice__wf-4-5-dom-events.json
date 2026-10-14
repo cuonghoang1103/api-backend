@@ -1,0 +1,1473 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-4-5-dom-events",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-4-5-dom-events"
+  },
+  "exercises": [
+    {
+      "title": "Bộ đếm sống: ba nút và một con số",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "querySelector",
+        "addEventListener(\"click\")",
+        "textContent",
+        "let"
+      ],
+      "prerequisites": [
+        "biến",
+        "hàm"
+      ],
+      "tags": [
+        "javascript",
+        "dom",
+        "events"
+      ],
+      "problemHtml": "<p>Bài 4.5 ghép mọi thứ của Chương 4 vào \"một bộ đếm sống trong mười hai dòng\". Trang có ba nút <code>#giam</code>, <code>#tang</code>, <code>#dat-lai</code> và con số <code>#dem</code>. Code khởi đầu có hai lỗi: chọn sai id (<code>#count</code> không tồn tại ⇒ <code>null</code> ⇒ <code>TypeError</code>), và tăng biến nhưng quên đưa giá trị lên trang. Sửa <code>app.js</code> để cả ba nút chạy đúng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>#tang</code> tăng 1, <code>#giam</code> giảm 1 (được xuống số âm), <code>#dat-lai</code> về 0.</li>\n  <li>Sau mỗi cú bấm, <code>#dem</code> hiển thị đúng giá trị (đặt bằng <code>textContent</code>).</li>\n  <li>Trang chạy không có lỗi JavaScript nào trong console.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Ba cú bấm bất kỳ của người dùng.",
+      "outputSpec": "#dem luôn hiện đúng con số.",
+      "constraints": "Không sửa index.html.\nKhông dùng onclick=\"…\" trong HTML — gắn bằng addEventListener.",
+      "examplesJson": [
+        {
+          "input": "Bấm +1 ba lần",
+          "output": "Giá trị: 3",
+          "explanation": "Mỗi lần bấm: dem = dem + 1, rồi out.textContent = dem."
+        },
+        {
+          "input": "Bấm +1 hai lần, −1 một lần",
+          "output": "Giá trị: 1",
+          "explanation": "Cả hai nút sửa cùng một biến."
+        },
+        {
+          "input": "(code khởi đầu) mở trang",
+          "output": "TypeError: Cannot read properties of null (reading 'textContent')",
+          "explanation": "querySelector(\"#count\") không tìm thấy gì."
+        }
+      ],
+      "hintsJson": [
+        "querySelector trả về null khi không có phần tử khớp — so id trong app.js với id trong index.html.",
+        "Mỗi handler hai bước: đổi biến dem, rồi out.textContent = dem; — viết một hàm hienThi() dùng chung cho ba nút cho gọn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Bộ đếm</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <main class=\"bo-dem\">\n      <h1>Bộ đếm</h1>\n      <p>Giá trị: <span id=\"dem\">0</span></p>\n      <button type=\"button\" id=\"giam\">−1</button>\n      <button type=\"button\" id=\"tang\">+1</button>\n      <button type=\"button\" id=\"dat-lai\">Đặt lại</button>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".bo-dem { font-family: system-ui, sans-serif; padding: 16px; }\n.bo-dem button { padding: 8px 14px; }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Bộ đếm sống\nlet dem = 0;\nconst out = document.querySelector(\"#count\");\nout.textContent = dem;\n\ndocument.querySelector(\"#tang\").addEventListener(\"click\", () => {\n  dem = dem + 1;\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Bộ đếm</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <main class=\"bo-dem\">\n      <h1>Bộ đếm</h1>\n      <p>Giá trị: <span id=\"dem\">0</span></p>\n      <button type=\"button\" id=\"giam\">−1</button>\n      <button type=\"button\" id=\"tang\">+1</button>\n      <button type=\"button\" id=\"dat-lai\">Đặt lại</button>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".bo-dem { font-family: system-ui, sans-serif; padding: 16px; }\n.bo-dem button { padding: 8px 14px; }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Bộ đếm sống\nlet dem = 0;                                    // trạng thái: con số hiện tại\nconst out = document.querySelector(\"#dem\");     // đúng id trong index.html\n\n// Một chỗ duy nhất đưa trạng thái lên trang\nfunction hienThi() {\n  out.textContent = dem;\n}\n\ndocument.querySelector(\"#tang\").addEventListener(\"click\", () => {\n  dem = dem + 1;\n  hienThi();                                    // đổi biến thôi chưa đủ — phải cập nhật DOM\n});\n\ndocument.querySelector(\"#giam\").addEventListener(\"click\", () => {\n  dem = dem - 1;\n  hienThi();\n});\n\ndocument.querySelector(\"#dat-lai\").addEventListener(\"click\", () => {\n  dem = 0;\n  hienThi();\n});\n\nhienThi();\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Biến <code>dem</code> trong JavaScript và chữ trên trang là hai thứ riêng biệt: đổi biến KHÔNG tự đổi trang. Mỗi lần trạng thái đổi phải tự đẩy nó lên DOM — gom việc đó vào một hàm <code>hienThi()</code> để không quên ở nút nào. (React ra đời để làm hộ đúng bước này.)</p>\n<p><code>querySelector</code> trả về <code>null</code> khi selector không khớp, và lỗi chỉ nổ ở dòng <em>dùng</em> nó. Máy chấm mở trang thật, bấm các nút theo nhiều kịch bản và đọc <code>#dem</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sửa id nhưng vẫn quên cập nhật textContent trong handler — con số đứng yên ở 0.</li>\n  <li>Dùng <code>innerHTML</code> cho một con số — chạy được, nhưng <code>textContent</code> đúng việc và an toàn hơn.</li>\n  <li>Gắn <code>onclick=\"…\"</code> trong HTML — trộn logic vào trang, đề cấm.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.5 DOM: làm cho HTML tương tác.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "Trang mở không lỗi JavaScript",
+            "kiem": "khong-loi-js"
+          },
+          {
+            "moTa": "Ban đầu hiện 0",
+            "kiem": "text",
+            "selector": "#dem",
+            "giaTri": "0"
+          },
+          {
+            "moTa": "Bấm +1 ba lần → 3",
+            "kiem": "text",
+            "selector": "#dem",
+            "giaTri": "3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tang",
+                "lan": 3
+              }
+            ]
+          },
+          {
+            "moTa": "+1 hai lần, −1 một lần → 1",
+            "kiem": "text",
+            "selector": "#dem",
+            "giaTri": "1",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tang",
+                "lan": 2
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#giam"
+              }
+            ]
+          },
+          {
+            "moTa": "Giảm xuống số âm",
+            "kiem": "text",
+            "selector": "#dem",
+            "giaTri": "-2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#giam",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "Đặt lại về 0",
+            "kiem": "text",
+            "selector": "#dem",
+            "giaTri": "0",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#tang",
+                "lan": 4
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#dat-lai"
+              }
+            ]
+          },
+          {
+            "moTa": "Không dùng onclick trong HTML",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "onclick\\s*=",
+            "phuDinh": true,
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Script trong <head> chạy quá sớm: sửa bằng defer",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "thứ tự phân tích HTML",
+        "defer",
+        "null từ querySelector"
+      ],
+      "prerequisites": [
+        "querySelector"
+      ],
+      "tags": [
+        "javascript",
+        "dom",
+        "defer"
+      ],
+      "problemHtml": "<p>Bài 4.5, mục <em>\"Bẫy — một thẻ script nằm trong head chạy trước khi các phần tử tồn tại\"</em>. Code JavaScript của trang này <strong>đúng</strong> — nhưng trang báo <code>Cannot read properties of null (reading 'addEventListener')</code>, vì trình duyệt chạy <code>app.js</code> ngay khi gặp thẻ script, lúc <code>&lt;body&gt;</code> còn chưa được đọc. Sửa <strong>HTML</strong> (không sửa app.js) để script chạy sau khi trang đã phân tích xong.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thêm thuộc tính <code>defer</code> vào thẻ <code>&lt;script src=\"app.js\"&gt;</code> (hoặc dời thẻ xuống ngay trước <code>&lt;/body&gt;</code> — <code>defer</code> được khuyên hơn).</li>\n  <li>Trang mở không còn lỗi JavaScript.</li>\n  <li>Bấm <code>#doi-loi-chao</code> đổi chữ của <code>#loi-chao</code> thành <code>\"Chào mừng quay lại!\"</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html có thẻ script trong head; app.js đúng.",
+      "outputSpec": "Trang chạy không lỗi, nút hoạt động.",
+      "constraints": "Không sửa app.js.\nKhông bọc code trong DOMContentLoaded — sửa đúng chỗ gây ra vấn đề.",
+      "examplesJson": [
+        {
+          "input": "<script src=\"app.js\"></script>  (trong head)",
+          "output": "TypeError: Cannot read properties of null (reading 'addEventListener')",
+          "explanation": "Lúc script chạy, #doi-loi-chao chưa tồn tại."
+        },
+        {
+          "input": "<script src=\"app.js\" defer></script>",
+          "output": "Không lỗi; bấm nút ⇒ \"Chào mừng quay lại!\"",
+          "explanation": "defer: tải song song, CHẠY sau khi HTML phân tích xong."
+        }
+      ],
+      "hintsJson": [
+        "Lỗi \"reading addEventListener of null\" có nghĩa phần tử chưa có — không phải code sai.",
+        "<script src=\"app.js\" defer></script> — một chữ, giữ thẻ ở chỗ người đọc vẫn tìm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Lời chào</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\"></script>\n  </head>\n  <body>\n    <main>\n      <h1 id=\"loi-chao\">Xin chào!</h1>\n      <button type=\"button\" id=\"doi-loi-chao\">Tôi đã từng ghé</button>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "main { font-family: system-ui, sans-serif; padding: 16px; }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — app.js này ĐÚNG, đừng sửa\nconst nut = document.querySelector(\"#doi-loi-chao\");\nconst tieuDe = document.querySelector(\"#loi-chao\");\n\nnut.addEventListener(\"click\", () => {\n  tieuDe.textContent = \"Chào mừng quay lại!\";\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Lời chào</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <!-- defer: tải ngay nhưng CHẠY sau khi toàn bộ HTML đã được phân tích -->\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <main>\n      <h1 id=\"loi-chao\">Xin chào!</h1>\n      <button type=\"button\" id=\"doi-loi-chao\">Tôi đã từng ghé</button>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "main { font-family: system-ui, sans-serif; padding: 16px; }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — app.js này ĐÚNG, đừng sửa\nconst nut = document.querySelector(\"#doi-loi-chao\");\nconst tieuDe = document.querySelector(\"#loi-chao\");\n\nnut.addEventListener(\"click\", () => {\n  tieuDe.textContent = \"Chào mừng quay lại!\";\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trình duyệt đọc HTML từ trên xuống. Thẻ script thường <em>dừng</em> việc đọc, tải và chạy script ngay — nên script ở <code>&lt;head&gt;</code> chạy khi chưa có phần tử nào của <code>&lt;body&gt;</code>; <code>querySelector</code> trả về <code>null</code>. <code>defer</code> đổi thời điểm: tải song song, chạy sau khi đọc xong HTML. Code đúng, chỉ thời điểm sai.</p>\n<p>Máy chấm mô phỏng đúng thứ tự đó: script không <code>defer</code> chạy tại chỗ gặp nó. Nó mở trang, kiểm không còn lỗi JS, bấm nút và đọc tiêu đề, và kiểm app.js không bị sửa.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thêm <code>async</code> thay vì <code>defer</code> — async chạy ngay khi tải xong, có thể vẫn trước khi HTML đọc xong.</li>\n  <li>Sửa app.js thêm if (nut) — che lỗi, nút vẫn không bao giờ chạy.</li>\n  <li>Viết <code>defer=\"false\"</code> — thuộc tính boolean có mặt là bật, bất kể giá trị.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.5 DOM: làm cho HTML tương tác.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#defer",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "Trang mở không lỗi JavaScript",
+            "kiem": "khong-loi-js"
+          },
+          {
+            "moTa": "Bấm nút đổi lời chào",
+            "kiem": "text",
+            "selector": "#loi-chao",
+            "giaTri": "Chào mừng quay lại!",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#doi-loi-chao"
+              }
+            ]
+          },
+          {
+            "moTa": "Script có defer hoặc nằm cuối body",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "<script[^>]*\\bdefer\\b|<script[^>]*src=[^>]*>\\s*</script>\\s*</body>"
+          },
+          {
+            "moTa": "app.js không bị sửa (không thêm DOMContentLoaded / if)",
+            "kiem": "ma-nguon",
+            "tep": "app.js",
+            "khop": "DOMContentLoaded|\\bif\\s*\\(",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Đọc ô nhập và chào bằng textContent",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "input.value",
+        "trim()",
+        "textContent",
+        "classList.add / remove",
+        "XSS"
+      ],
+      "prerequisites": [
+        "querySelector",
+        "addEventListener"
+      ],
+      "tags": [
+        "javascript",
+        "dom",
+        "forms",
+        "security"
+      ],
+      "problemHtml": "<p>Bài 4.5: <em>\"value cho ô nhập, textContent cho chữ.\"</em> Gõ tên vào <code>#ten</code>, bấm <code>#chao</code>, đoạn <code>#loi-chao</code> hiện <code>\"Xin chào, &lt;tên&gt;!\"</code>. Code khởi đầu đọc <code>input.textContent</code> — với ô nhập thì luôn là chuỗi rỗng — và đưa kết quả lên trang bằng <code>innerHTML</code>, nên ai đó gõ <code>&lt;b&gt;Lan&lt;/b&gt;</code> là chèn được HTML vào trang của bạn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đọc <code>value</code> của ô nhập, bỏ khoảng trắng hai đầu bằng <code>.trim()</code>.</li>\n  <li>Có tên → <code>#loi-chao</code> hiện <code>\"Xin chào, &lt;tên&gt;!\"</code> và KHÔNG có class <code>loi</code>.</li>\n  <li>Ô trống (hoặc chỉ toàn dấu cách) → hiện <code>\"Hãy nhập tên của bạn.\"</code> và thêm class <code>loi</code>.</li>\n  <li>Gán chữ bằng <code>textContent</code>: gõ <code>&lt;b&gt;Lan&lt;/b&gt;</code> phải hiện nguyên văn các ký tự đó, không thành chữ đậm.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Chữ người dùng gõ vào #ten.",
+      "outputSpec": "Nội dung và class của #loi-chao.",
+      "constraints": "Không dùng innerHTML.",
+      "examplesJson": [
+        {
+          "input": "Gõ \"  Lan  \", bấm Chào",
+          "output": "Xin chào, Lan!",
+          "explanation": "trim() bỏ dấu cách thừa."
+        },
+        {
+          "input": "Để trống, bấm Chào",
+          "output": "Hãy nhập tên của bạn.  (đoạn có class \"loi\")",
+          "explanation": "classList.add(\"loi\") để CSS tô đỏ."
+        },
+        {
+          "input": "Gõ \"<b>Lan</b>\", bấm Chào",
+          "output": "Xin chào, <b>Lan</b>!",
+          "explanation": "textContent coi mọi thứ là chữ — không có thẻ <b> nào được tạo."
+        }
+      ],
+      "hintsJson": [
+        "const ten = oTen.value.trim(); — rồi if (ten === \"\") { … } else { … }.",
+        "Nhánh lỗi: loiChao.textContent = \"Hãy nhập tên của bạn.\"; loiChao.classList.add(\"loi\"); — nhánh đúng nhớ classList.remove(\"loi\") để xoá lỗi cũ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Lời chào</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <main>\n      <label for=\"ten\">Tên của bạn</label>\n      <input id=\"ten\" autocomplete=\"off\">\n      <button type=\"button\" id=\"chao\">Chào</button>\n      <p id=\"loi-chao\"></p>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "main { font-family: system-ui, sans-serif; padding: 16px; }\n.loi { color: rgb(185, 28, 28); }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Đọc ô nhập\nconst oTen = document.querySelector(\"#ten\");\nconst loiChao = document.querySelector(\"#loi-chao\");\n\ndocument.querySelector(\"#chao\").addEventListener(\"click\", () => {\n  const ten = oTen.textContent;\n  loiChao.innerHTML = \"Xin chào, \" + ten + \"!\";\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Lời chào</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <main>\n      <label for=\"ten\">Tên của bạn</label>\n      <input id=\"ten\" autocomplete=\"off\">\n      <button type=\"button\" id=\"chao\">Chào</button>\n      <p id=\"loi-chao\"></p>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "main { font-family: system-ui, sans-serif; padding: 16px; }\n.loi { color: rgb(185, 28, 28); }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Đọc ô nhập\nconst oTen = document.querySelector(\"#ten\");\nconst loiChao = document.querySelector(\"#loi-chao\");\n\ndocument.querySelector(\"#chao\").addEventListener(\"click\", () => {\n  // Ô nhập: thứ người dùng gõ nằm ở .value (textContent của <input> luôn rỗng)\n  const ten = oTen.value.trim();\n\n  if (ten === \"\") {\n    loiChao.textContent = \"Hãy nhập tên của bạn.\";\n    loiChao.classList.add(\"loi\");          // đổi giao diện bằng class, CSS lo màu\n    return;\n  }\n\n  // textContent: mọi ký tự là CHỮ — \"<b>\" hiện ra đúng là \"<b>\", không thành thẻ\n  loiChao.textContent = `Xin chào, ${ten}!`;\n  loiChao.classList.remove(\"loi\");         // xoá trạng thái lỗi của lần bấm trước\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ô nhập giữ chữ người dùng gõ ở thuộc tính <code>value</code>; <code>textContent</code> của một <code>&lt;input&gt;</code> luôn rỗng vì input không có nội dung con. Ngược lại, để <em>hiển thị</em> chữ thì dùng <code>textContent</code>, không phải <code>innerHTML</code>: <code>innerHTML</code> phân tích chuỗi thành HTML, nên dữ liệu người dùng gõ có thể chèn thẻ (và cả script) vào trang — lỗ hổng XSS.</p>\n<p>Máy chấm gõ bốn kiểu tên (có dấu cách thừa, trống, toàn dấu cách, có thẻ HTML), đọc chữ, đếm class <code>loi</code> và đếm thẻ <code>&lt;b&gt;</code> trong đoạn.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên classList.remove(\"loi\") — sau một lần để trống, lời chào đúng vẫn hiện màu đỏ.</li>\n  <li>Kiểm <code>if (!ten)</code> TRƯỚC khi trim — \"   \" là truthy, lọt qua.</li>\n  <li>Dùng innerHTML vì \"ngắn hơn\" — mở cửa cho XSS.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.5 DOM: làm cho HTML tương tác.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent#differences_from_innerhtml",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "Gõ \"  Lan  \" → \"Xin chào, Lan!\"",
+            "kiem": "text",
+            "selector": "#loi-chao",
+            "giaTri": "Xin chào, Lan!",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#ten",
+                "giaTri": "  Lan  "
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#chao"
+              }
+            ]
+          },
+          {
+            "moTa": "Ô trống → thông báo lỗi",
+            "kiem": "text",
+            "selector": "#loi-chao",
+            "giaTri": "Hãy nhập tên của bạn.",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#chao"
+              }
+            ]
+          },
+          {
+            "moTa": "Ô toàn dấu cách → có class loi",
+            "kiem": "so-luong",
+            "selector": "#loi-chao.loi",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#ten",
+                "giaTri": "   "
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#chao"
+              }
+            ]
+          },
+          {
+            "moTa": "Lỗi rồi nhập đúng → class loi được gỡ",
+            "kiem": "so-luong",
+            "selector": "#loi-chao.loi",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#chao"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#ten",
+                "giaTri": "Minh"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#chao"
+              }
+            ]
+          },
+          {
+            "moTa": "Gõ thẻ HTML → hiện nguyên văn",
+            "kiem": "text",
+            "selector": "#loi-chao",
+            "giaTri": "Xin chào, <b>Lan</b>!",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#ten",
+                "giaTri": "<b>Lan</b>"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#chao"
+              }
+            ]
+          },
+          {
+            "moTa": "Không có thẻ <b> nào bị chèn",
+            "kiem": "so-luong",
+            "selector": "#loi-chao b",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#ten",
+                "giaTri": "<b>Lan</b>"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#chao"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Không dùng innerHTML",
+            "kiem": "ma-nguon",
+            "tep": "app.js",
+            "khop": "innerHTML",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Nút mở menu: classList.toggle và aria-expanded",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "classList.toggle",
+        "setAttribute",
+        "aria-expanded",
+        "tách JS khỏi CSS"
+      ],
+      "prerequisites": [
+        "addEventListener",
+        "class CSS"
+      ],
+      "tags": [
+        "javascript",
+        "dom",
+        "classList",
+        "a11y"
+      ],
+      "problemHtml": "<p>Bài 4.5: <em>\"Hãy ưu tiên bật/tắt một class hơn là đặt từng thuộc tính style một.\"</em> Trên điện thoại, menu <code>#menu</code> ẩn sau nút <code>#nut-menu</code>. Code cũ gán <code>menu.style.display = \"block\"</code> — mở được nhưng không đóng lại được, và trình đọc màn hình không biết menu đang mở hay đóng. Làm lại bằng một class và thuộc tính <code>aria-expanded</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi lần bấm <code>#nut-menu</code>: bật/tắt class <code>mo</code> trên <code>#menu</code> bằng <code>classList.toggle</code>.</li>\n  <li>CSS: <code>#menu</code> mặc định <code>display: none</code>; <code>#menu.mo</code> là <code>display: block</code>.</li>\n  <li>Nút có <code>aria-expanded</code> = <code>\"true\"</code> khi menu mở, <code>\"false\"</code> khi đóng (ban đầu <code>\"false\"</code> trong HTML).</li>\n  <li>Chữ trên nút: <code>\"Mở menu\"</code> khi đóng, <code>\"Đóng menu\"</code> khi mở.</li>\n  <li>Không đặt <code>.style.</code> trực tiếp trong app.js.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Các cú bấm vào #nut-menu.",
+      "outputSpec": "Trạng thái class, aria-expanded và chữ của nút luôn khớp nhau.",
+      "constraints": "Không dùng element.style trong JS.",
+      "examplesJson": [
+        {
+          "input": "Bấm nút một lần",
+          "output": "#menu có class \"mo\" (hiện ra), nút: aria-expanded=\"true\", chữ \"Đóng menu\"",
+          "explanation": "toggle thêm class khi chưa có."
+        },
+        {
+          "input": "Bấm nút hai lần",
+          "output": "Trở về như ban đầu",
+          "explanation": "toggle gỡ class khi đã có."
+        }
+      ],
+      "hintsJson": [
+        "classList.toggle(\"mo\") TRẢ VỀ true nếu sau lệnh class đang có — dùng luôn giá trị đó cho aria-expanded và chữ trên nút.",
+        "const dangMo = menu.classList.toggle(\"mo\"); nut.setAttribute(\"aria-expanded\", String(dangMo)); nut.textContent = dangMo ? \"Đóng menu\" : \"Mở menu\";"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Menu</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <header>\n      <button type=\"button\" id=\"nut-menu\" aria-controls=\"menu\" aria-expanded=\"false\">Mở menu</button>\n      <nav id=\"menu\">\n        <a href=\"#gioi-thieu\">Giới thiệu</a>\n        <a href=\"#khoa-hoc\">Khoá học</a>\n        <a href=\"#lien-he\">Liên hệ</a>\n      </nav>\n    </header>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "header { font-family: system-ui, sans-serif; padding: 16px; }\n#menu { display: none; }\n#menu a { display: block; padding: 8px 0; }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Nút menu\nconst nut = document.querySelector(\"#nut-menu\");\nconst menu = document.querySelector(\"#menu\");\n\nnut.addEventListener(\"click\", () => {\n  menu.style.display = \"block\";\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Menu</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <header>\n      <button type=\"button\" id=\"nut-menu\" aria-controls=\"menu\" aria-expanded=\"false\">Mở menu</button>\n      <nav id=\"menu\">\n        <a href=\"#gioi-thieu\">Giới thiệu</a>\n        <a href=\"#khoa-hoc\">Khoá học</a>\n        <a href=\"#lien-he\">Liên hệ</a>\n      </nav>\n    </header>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "header { font-family: system-ui, sans-serif; padding: 16px; }\n#menu { display: none; }\n/* JS chỉ bật/tắt class; CSS quyết định \"mở\" trông như thế nào */\n#menu.mo { display: block; }\n#menu a { display: block; padding: 8px 0; }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Nút menu\nconst nut = document.querySelector(\"#nut-menu\");\nconst menu = document.querySelector(\"#menu\");\n\nnut.addEventListener(\"click\", () => {\n  // toggle: chưa có thì thêm, có rồi thì gỡ — và trả về trạng thái SAU lệnh\n  const dangMo = menu.classList.toggle(\"mo\");\n\n  // Báo cho trình đọc màn hình biết menu đang mở hay đóng\n  nut.setAttribute(\"aria-expanded\", String(dangMo));\n  nut.textContent = dangMo ? \"Đóng menu\" : \"Mở menu\";\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đặt <code>style.display</code> bằng JS rải thông tin giao diện vào code: muốn đổi hiệu ứng mở (trượt, mờ dần) phải sửa JS. Bật/tắt <em>class</em> tách việc: JS nói \"đang mở\", CSS nói \"mở trông thế nào\". <code>classList.toggle</code> trả về trạng thái mới, nên một biến <code>dangMo</code> điều khiển cả ba thứ phải khớp nhau (class, aria, chữ) — không thể lệch.</p>\n<p><code>aria-expanded</code> là cách nút nói với trình đọc màn hình (Bài 2.5) — người không nhìn thấy menu vẫn biết nó đang mở. Máy chấm bấm 1, 2 và 3 lần, kiểm class, <code>display</code> computed, <code>aria-expanded</code> và chữ của nút.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li><code>setAttribute(\"aria-expanded\", dangMo)</code> với boolean — được ép thành chuỗi \"true\"/\"false\", nhưng viết <code>String(...)</code> rõ ý hơn.</li>\n  <li>Dùng hai biến riêng cho class và aria — sớm muộn sẽ lệch nhau.</li>\n  <li>Quên quy tắc <code>#menu.mo</code> trong CSS — class bật rồi mà menu vẫn ẩn.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.5 DOM: làm cho HTML tương tác.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/toggle",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "Ban đầu menu ẩn",
+            "kiem": "css",
+            "selector": "#menu",
+            "thuocTinh": "display",
+            "giaTri": "none"
+          },
+          {
+            "moTa": "Bấm một lần: #menu có class mo",
+            "kiem": "so-luong",
+            "selector": "#menu.mo",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nut-menu"
+              }
+            ]
+          },
+          {
+            "moTa": "Bấm một lần: menu hiện (display block)",
+            "kiem": "css",
+            "selector": "#menu",
+            "thuocTinh": "display",
+            "giaTri": "block",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nut-menu"
+              }
+            ]
+          },
+          {
+            "moTa": "Bấm một lần: aria-expanded=\"true\", chữ \"Đóng menu\"",
+            "kiem": "thuoc-tinh",
+            "selector": "#nut-menu",
+            "thuocTinh": "aria-expanded",
+            "giaTri": "true",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nut-menu"
+              }
+            ]
+          },
+          {
+            "moTa": "Bấm một lần: chữ nút là \"Đóng menu\"",
+            "kiem": "text",
+            "selector": "#nut-menu",
+            "giaTri": "Đóng menu",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nut-menu"
+              }
+            ]
+          },
+          {
+            "moTa": "Bấm hai lần: menu đóng lại, aria-expanded=\"false\"",
+            "kiem": "thuoc-tinh",
+            "selector": "#nut-menu",
+            "thuocTinh": "aria-expanded",
+            "giaTri": "false",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nut-menu",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "Bấm hai lần: không còn class mo",
+            "kiem": "so-luong",
+            "selector": "#menu.mo",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nut-menu",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "Bấm ba lần: mở lại",
+            "kiem": "text",
+            "selector": "#nut-menu",
+            "giaTri": "Đóng menu",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#nut-menu",
+                "lan": 3
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Không đặt .style trong app.js",
+            "kiem": "ma-nguon",
+            "tep": "app.js",
+            "khop": "\\.style\\b",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Form đăng ký: preventDefault, kiểm email và báo lỗi",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "sự kiện submit",
+        "event.preventDefault()",
+        "form.reset()",
+        "kiểm tra phía client"
+      ],
+      "prerequisites": [
+        "input.value",
+        "textContent"
+      ],
+      "tags": [
+        "javascript",
+        "dom",
+        "forms",
+        "events"
+      ],
+      "problemHtml": "<p>Bài 4.5: <em>\"Handler nhận một object sự kiện có target, currentTarget và preventDefault().\"</em> Form nhận bản tin <code>#dang-ky</code> cần xử lý bằng JavaScript. Bản cũ gắn handler vào sự kiện <em>click</em> của nút — nhưng nhấn Enter trong ô nhập cũng gửi form mà không có click nào, và không có <code>preventDefault()</code> nên trình duyệt <strong>tải lại trang</strong>: thông báo vừa hiện biến mất ngay.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Lắng nghe sự kiện <code>submit</code> của <code>#dang-ky</code> (không phải click của nút), gọi <code>event.preventDefault()</code>.</li>\n  <li>Email (đã <code>trim</code>) rỗng hoặc không chứa <code>\"@\"</code> → <code>#loi</code> hiện <code>\"Email không hợp lệ.\"</code>, <code>#ket-qua</code> rỗng.</li>\n  <li>Hợp lệ → <code>#ket-qua</code> hiện <code>\"Đã đăng ký: &lt;email&gt;\"</code>, <code>#loi</code> rỗng, và ô nhập được xoá trắng (<code>form.reset()</code>).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Chữ người dùng gõ vào #email, rồi gửi form (bấm nút hoặc Enter).",
+      "outputSpec": "Nội dung #loi / #ket-qua; trang không tải lại.",
+      "constraints": "Form có novalidate — kiểm tra bằng JS của bạn.\nKhông dùng innerHTML.",
+      "examplesJson": [
+        {
+          "input": "Gõ \"lan@example.com\", bấm Đăng ký",
+          "output": "#ket-qua: \"Đã đăng ký: lan@example.com\", ô nhập trống",
+          "explanation": "preventDefault giữ trang lại; form.reset() xoá ô."
+        },
+        {
+          "input": "Gõ \"lan.example.com\", bấm Đăng ký",
+          "output": "#loi: \"Email không hợp lệ.\"",
+          "explanation": "Thiếu @."
+        },
+        {
+          "input": "(code khởi đầu) bấm Đăng ký",
+          "output": "Trang tải lại, mọi thông báo mất",
+          "explanation": "Không có preventDefault ⇒ trình duyệt gửi form thật."
+        }
+      ],
+      "hintsJson": [
+        "form.addEventListener(\"submit\", (e) => { e.preventDefault(); … }); — submit bắt được cả Enter lẫn click.",
+        "const email = oEmail.value.trim(); if (email === \"\" || !email.includes(\"@\")) { loi.textContent = \"Email không hợp lệ.\"; ketQua.textContent = \"\"; return; } — nhánh đúng rồi form.reset();"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Nhận bản tin</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <main>\n      <h1>Nhận bản tin</h1>\n      <form id=\"dang-ky\" action=\"/dang-ky\" method=\"post\" novalidate>\n        <label for=\"email\">Email</label>\n        <input id=\"email\" name=\"email\" type=\"email\" autocomplete=\"email\">\n        <button type=\"submit\">Đăng ký</button>\n      </form>\n      <p id=\"loi\" role=\"alert\"></p>\n      <p id=\"ket-qua\"></p>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "main { font-family: system-ui, sans-serif; padding: 16px; }\n#loi { color: rgb(185, 28, 28); }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Form đăng ký\nconst oEmail = document.querySelector(\"#email\");\nconst ketQua = document.querySelector(\"#ket-qua\");\n\ndocument.querySelector(\"#dang-ky button\").addEventListener(\"click\", () => {\n  ketQua.textContent = \"Đã đăng ký: \" + oEmail.value;\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Nhận bản tin</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <main>\n      <h1>Nhận bản tin</h1>\n      <form id=\"dang-ky\" action=\"/dang-ky\" method=\"post\" novalidate>\n        <label for=\"email\">Email</label>\n        <input id=\"email\" name=\"email\" type=\"email\" autocomplete=\"email\">\n        <button type=\"submit\">Đăng ký</button>\n      </form>\n      <p id=\"loi\" role=\"alert\"></p>\n      <p id=\"ket-qua\"></p>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "main { font-family: system-ui, sans-serif; padding: 16px; }\n#loi { color: rgb(185, 28, 28); }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Form đăng ký\nconst form = document.querySelector(\"#dang-ky\");\nconst oEmail = document.querySelector(\"#email\");\nconst loi = document.querySelector(\"#loi\");\nconst ketQua = document.querySelector(\"#ket-qua\");\n\n// \"submit\" bắt MỌI cách gửi form: bấm nút, nhấn Enter trong ô nhập\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();               // chặn trình duyệt gửi form thật + tải lại trang\n\n  const email = oEmail.value.trim();\n  if (email === \"\" || !email.includes(\"@\")) {\n    loi.textContent = \"Email không hợp lệ.\";\n    ketQua.textContent = \"\";        // xoá kết quả cũ (nếu có)\n    return;\n  }\n\n  loi.textContent = \"\";             // xoá lỗi cũ (nếu có)\n  ketQua.textContent = `Đã đăng ký: ${email}`;\n  form.reset();                     // đưa mọi ô của form về giá trị ban đầu\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hành vi mặc định của form là gửi dữ liệu tới <code>action</code> rồi tải trang mới. Khi JavaScript tự xử lý, <code>preventDefault()</code> là dòng đầu tiên của handler. Lắng nghe <code>submit</code> trên chính form (không phải click của nút) bắt được mọi đường gửi — bàn phím, nút, trình đọc màn hình.</p>\n<p>Máy chấm mô phỏng trình duyệt: submit không bị chặn ⇒ trang được dựng lại từ đầu và mọi thông báo mất — đúng điều người dùng thấy. Nó gửi form bằng nút và bằng <code>requestSubmit</code>, thử email trống / thiếu @ / hợp lệ, và kiểm lỗi cũ được xoá khi lần sau nhập đúng. (Kiểm \"có @\" chỉ là lớp đầu cho người dùng — máy chủ ở Chương 6 vẫn phải kiểm lại.)</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Gắn handler vào click của nút — Enter trong ô nhập không qua đó.</li>\n  <li>Gọi <code>e.preventDefault</code> thiếu <code>()</code> — không làm gì.</li>\n  <li>Không xoá thông báo lỗi khi lần sau nhập đúng — trang hiện cùng lúc \"không hợp lệ\" và \"đã đăng ký\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.5 DOM: làm cho HTML tương tác.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "Bấm Đăng ký: trang không tải lại",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@example.com"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#dang-ky button"
+              }
+            ]
+          },
+          {
+            "moTa": "Email hợp lệ → \"Đã đăng ký: lan@example.com\"",
+            "kiem": "text",
+            "selector": "#ket-qua",
+            "giaTri": "Đã đăng ký: lan@example.com",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@example.com"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#dang-ky button"
+              }
+            ]
+          },
+          {
+            "moTa": "Ô nhập được xoá sau khi đăng ký",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#email",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@example.com"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#dang-ky"
+              }
+            ]
+          },
+          {
+            "moTa": "Thiếu @ → \"Email không hợp lệ.\"",
+            "kiem": "text",
+            "selector": "#loi",
+            "giaTri": "Email không hợp lệ.",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan.example.com"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#dang-ky"
+              }
+            ]
+          },
+          {
+            "moTa": "Trống → lỗi, không có kết quả",
+            "kiem": "text",
+            "selector": "#ket-qua",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "gui",
+                "selector": "#dang-ky"
+              }
+            ]
+          },
+          {
+            "moTa": "Gửi bằng Enter (requestSubmit) cũng được xử lý",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "a@b.vn"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#dang-ky"
+              }
+            ]
+          },
+          {
+            "moTa": "Sai rồi đúng → lỗi cũ được xoá",
+            "kiem": "text",
+            "selector": "#loi",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "gui",
+                "selector": "#dang-ky"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "minh@fpt.edu.vn"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#dang-ky"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Dùng preventDefault()",
+            "kiem": "ma-nguon",
+            "tep": "app.js",
+            "khop": "\\.preventDefault\\(\\s*\\)"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Ủy quyền sự kiện: một listener cho cả danh sách",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "event bubbling",
+        "event delegation",
+        "event.target",
+        "closest()",
+        "createElement"
+      ],
+      "prerequisites": [
+        "addEventListener",
+        "submit + preventDefault"
+      ],
+      "tags": [
+        "javascript",
+        "dom",
+        "event-delegation"
+      ],
+      "problemHtml": "<p>Bài 4.5: <em>\"Sự kiện nổi bọt lên trên. Chính điều đó cho phép một listener trên danh sách xử lý cú bấm của cả trăm dòng.\"</em> Danh sách việc có nút <code>.xoa</code> ở mỗi dòng và form thêm việc mới. Code khởi đầu gắn listener cho <em>từng</em> nút lúc tải trang — nên những việc thêm SAU đó có nút Xoá bấm không ăn. Viết lại bằng một listener duy nhất trên <code>#ds-viec</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một <code>addEventListener(\"click\", …)</code> trên <code>#ds-viec</code>; dùng <code>e.target.closest(\".xoa\")</code> để biết cú bấm có trúng nút Xoá không, rồi xoá <code>&lt;li&gt;</code> chứa nó.</li>\n  <li>Form <code>#them-viec</code>: chặn gửi, việc mới (đã trim, khác rỗng) thêm vào CUỐI danh sách với cùng cấu trúc <code>&lt;li&gt;&lt;span class=\"ten\"&gt;…&lt;/span&gt; &lt;button type=\"button\" class=\"xoa\"&gt;Xoá&lt;/button&gt;&lt;/li&gt;</code>; ô nhập xoá trắng.</li>\n  <li>Việc vừa thêm cũng xoá được (đó là lý do phải ủy quyền).</li>\n  <li>Tên việc gán bằng <code>textContent</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Các cú bấm Xoá và các lần thêm việc.",
+      "outputSpec": "Danh sách <li> cập nhật đúng.",
+      "constraints": "Không gắn listener cho từng nút .xoa.\nKhông dùng innerHTML để dựng dòng mới (dữ liệu người dùng gõ).",
+      "examplesJson": [
+        {
+          "input": "Bấm Xoá ở dòng 2",
+          "output": "Còn 2 việc: \"Học Bài 4.5\", \"Đẩy code lên GitHub\"",
+          "explanation": "Cú bấm nổi bọt từ nút lên <ul>; listener của <ul> tìm <li> gần nhất và xoá."
+        },
+        {
+          "input": "Thêm \"Ôn Chương 4\", rồi bấm Xoá của chính nó",
+          "output": "Còn 3 việc ban đầu",
+          "explanation": "Nút mới không cần listener riêng."
+        }
+      ],
+      "hintsJson": [
+        "ds.addEventListener(\"click\", (e) => { const nut = e.target.closest(\".xoa\"); if (!nut) return; nut.closest(\"li\").remove(); });",
+        "Dựng dòng mới: const li = document.createElement(\"li\"); const ten = document.createElement(\"span\"); ten.className = \"ten\"; ten.textContent = viec; … li.append(ten, \" \", nut); ds.append(li);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Việc cần làm</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <main>\n      <h1>Việc cần làm</h1>\n      <form id=\"them-viec\" novalidate>\n        <label for=\"viec-moi\">Việc mới</label>\n        <input id=\"viec-moi\" name=\"viec\" autocomplete=\"off\">\n        <button type=\"submit\">Thêm</button>\n      </form>\n      <ul id=\"ds-viec\">\n        <li><span class=\"ten\">Học Bài 4.5</span> <button type=\"button\" class=\"xoa\">Xoá</button></li>\n        <li><span class=\"ten\">Làm bài tập DOM</span> <button type=\"button\" class=\"xoa\">Xoá</button></li>\n        <li><span class=\"ten\">Đẩy code lên GitHub</span> <button type=\"button\" class=\"xoa\">Xoá</button></li>\n      </ul>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "main { font-family: system-ui, sans-serif; padding: 16px; }\n#ds-viec li { padding: 4px 0; }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Ủy quyền sự kiện\nconst ds = document.querySelector(\"#ds-viec\");\nconst form = document.querySelector(\"#them-viec\");\nconst oViec = document.querySelector(\"#viec-moi\");\n\n// Gắn cho TỪNG nút lúc tải trang\ndocument.querySelectorAll(\".xoa\").forEach((nut) => {\n  nut.addEventListener(\"click\", () => {\n    nut.closest(\"li\").remove();\n  });\n});\n\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const li = document.createElement(\"li\");\n  li.textContent = oViec.value;\n  ds.append(li);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Việc cần làm</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <main>\n      <h1>Việc cần làm</h1>\n      <form id=\"them-viec\" novalidate>\n        <label for=\"viec-moi\">Việc mới</label>\n        <input id=\"viec-moi\" name=\"viec\" autocomplete=\"off\">\n        <button type=\"submit\">Thêm</button>\n      </form>\n      <ul id=\"ds-viec\">\n        <li><span class=\"ten\">Học Bài 4.5</span> <button type=\"button\" class=\"xoa\">Xoá</button></li>\n        <li><span class=\"ten\">Làm bài tập DOM</span> <button type=\"button\" class=\"xoa\">Xoá</button></li>\n        <li><span class=\"ten\">Đẩy code lên GitHub</span> <button type=\"button\" class=\"xoa\">Xoá</button></li>\n      </ul>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "main { font-family: system-ui, sans-serif; padding: 16px; }\n#ds-viec li { padding: 4px 0; }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Ủy quyền sự kiện\nconst ds = document.querySelector(\"#ds-viec\");\nconst form = document.querySelector(\"#them-viec\");\nconst oViec = document.querySelector(\"#viec-moi\");\n\n// MỘT listener trên danh sách: cú bấm vào bất kỳ nút con nào cũng nổi bọt lên đây,\n// kể cả nút của những dòng được thêm SAU khi listener này đã gắn.\nds.addEventListener(\"click\", (e) => {\n  const nut = e.target.closest(\".xoa\");   // trúng nút Xoá (hoặc phần tử bên trong nó)?\n  if (!nut) return;                        // bấm vào chỗ khác của danh sách: bỏ qua\n  nut.closest(\"li\").remove();\n});\n\n// Dựng một dòng mới bằng DOM — textContent cho phần chữ người dùng gõ\nfunction taoDong(viec) {\n  const li = document.createElement(\"li\");\n  const ten = document.createElement(\"span\");\n  ten.className = \"ten\";\n  ten.textContent = viec;\n  const nut = document.createElement(\"button\");\n  nut.type = \"button\";\n  nut.className = \"xoa\";\n  nut.textContent = \"Xoá\";\n  li.append(ten, \" \", nut);\n  return li;\n}\n\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const viec = oViec.value.trim();\n  if (viec === \"\") return;                 // không thêm dòng trống\n  ds.append(taoDong(viec));                // thêm vào CUỐI danh sách\n  form.reset();\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một cú bấm vào nút đi ngược lên cây DOM: nút → <code>&lt;li&gt;</code> → <code>&lt;ul&gt;</code> → … → <code>document</code>; mọi listener trên đường đi đều được gọi. Ủy quyền tận dụng điều đó: đặt listener ở tổ tiên chung, rồi hỏi <code>e.target</code> (phần tử thật bị bấm) xem có phải thứ mình quan tâm không. <code>closest(\".xoa\")</code> đi ngược lên từ <code>target</code> — vẫn đúng khi nút có icon bên trong.</p>\n<p>Lợi ích: một listener thay cho trăm cái, và phần tử thêm sau tự được phục vụ. Máy chấm xoá dòng giữa, thêm hai việc (một việc toàn dấu cách bị bỏ), xoá việc vừa thêm, và kiểm mã không còn <code>querySelectorAll(\".xoa\")</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>So <code>e.target.className === \"xoa\"</code> — vỡ ngay khi nút có thêm class hoặc có phần tử con.</li>\n  <li>Xoá <code>e.target</code> thay vì <code>&lt;li&gt;</code> — chỉ mất cái nút, dòng còn nguyên.</li>\n  <li>Dựng dòng bằng <code>innerHTML = `&lt;span&gt;${viec}&lt;/span&gt;…`</code> — chữ người dùng gõ thành HTML.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.5 DOM: làm cho HTML tương tác.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/event-delegation",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "Ban đầu có 3 việc",
+            "kiem": "so-luong",
+            "selector": "#ds-viec li",
+            "giaTri": 3
+          },
+          {
+            "moTa": "Xoá dòng 2 → còn 2",
+            "kiem": "so-luong",
+            "selector": "#ds-viec li",
+            "giaTri": 2,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#ds-viec li:nth-child(2) .xoa"
+              }
+            ]
+          },
+          {
+            "moTa": "Xoá đúng dòng 2",
+            "kiem": "text",
+            "selector": "#ds-viec li:nth-child(2) .ten",
+            "giaTri": "Đẩy code lên GitHub",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#ds-viec li:nth-child(2) .xoa"
+              }
+            ]
+          },
+          {
+            "moTa": "Thêm việc → cuối danh sách, đúng cấu trúc",
+            "kiem": "text",
+            "selector": "#ds-viec li:last-child .ten",
+            "giaTri": "Ôn Chương 4",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "  Ôn Chương 4 "
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#them-viec"
+              }
+            ]
+          },
+          {
+            "moTa": "Việc vừa thêm xoá được",
+            "kiem": "so-luong",
+            "selector": "#ds-viec li",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "Ôn Chương 4"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#them-viec"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#ds-viec li:last-child .xoa"
+              }
+            ]
+          },
+          {
+            "moTa": "Việc toàn dấu cách không được thêm",
+            "kiem": "so-luong",
+            "selector": "#ds-viec li",
+            "giaTri": 3,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "   "
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#them-viec"
+              }
+            ]
+          },
+          {
+            "moTa": "Ô nhập được xoá sau khi thêm",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#viec-moi",
+            "thuocTinh": "value",
+            "giaTri": "",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "X"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#them-viec"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Không gắn listener cho từng nút .xoa",
+            "kiem": "ma-nguon",
+            "tep": "app.js",
+            "khop": "querySelectorAll\\(\\s*[\"']\\.xoa",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Không dùng innerHTML",
+            "kiem": "ma-nguon",
+            "tep": "app.js",
+            "khop": "innerHTML",
+            "phuDinh": true,
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Danh sách việc cần làm hoàn chỉnh: thêm, đánh dấu xong, xoá, đếm",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "trạng thái → giao diện",
+        "event delegation",
+        "sự kiện change",
+        "classList.toggle(…, force)",
+        "createElement"
+      ],
+      "prerequisites": [
+        "event delegation",
+        "submit + preventDefault",
+        "classList"
+      ],
+      "tags": [
+        "javascript",
+        "dom",
+        "project",
+        "event-delegation"
+      ],
+      "problemHtml": "<p>Bài tổng hợp Chương 4: dựng một ứng dụng việc cần làm thật sự chạy từ trang HTML trống. Mỗi dòng có ô đánh dấu, tên việc và nút xoá; đầu danh sách có dòng đếm <code>#dem</code>. Viết toàn bộ <code>app.js</code> (HTML và CSS có sẵn).</p>\n<p>Cấu trúc một dòng (máy chấm đọc đúng cấu trúc này):</p>\n<pre><code>&lt;li&gt;\n  &lt;input type=\"checkbox\" class=\"xong-chua\" aria-label=\"Đánh dấu xong: Học DOM\"&gt;\n  &lt;span class=\"ten\"&gt;Học DOM&lt;/span&gt;\n  &lt;button type=\"button\" class=\"xoa\"&gt;Xoá&lt;/button&gt;\n&lt;/li&gt;</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thêm việc qua form <code>#form-viec</code> / ô <code>#viec-moi</code>: chặn gửi, trim, bỏ qua việc rỗng, thêm vào cuối, xoá ô nhập.</li>\n  <li>Tích ô <code>.xong-chua</code> → <code>&lt;li&gt;</code> có class <code>xong</code>; bỏ tích → gỡ class (dùng sự kiện <code>change</code>).</li>\n  <li>Nút <code>.xoa</code> xoá dòng — một listener ủy quyền trên <code>#ds-viec</code> cho cả click lẫn change.</li>\n  <li><code>#dem</code> luôn hiện <code>\"&lt;n&gt; việc chưa xong\"</code> — n là số dòng chưa có class <code>xong</code>; danh sách rỗng hiện <code>\"Không còn việc nào 🎉\"</code>. Cập nhật sau MỌI thay đổi, kể cả lúc tải trang.</li>\n  <li>Tên việc gán bằng <code>textContent</code>; ô đánh dấu có <code>aria-label</code> như mẫu.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Thao tác của người dùng: thêm, tích/bỏ tích, xoá.",
+      "outputSpec": "Danh sách <li> và dòng đếm luôn đúng.",
+      "constraints": "Không dùng innerHTML.\nKhông gắn listener riêng cho từng dòng.\nKhông có lỗi JS khi tải trang.",
+      "examplesJson": [
+        {
+          "input": "Tải trang",
+          "output": "#dem: \"Không còn việc nào 🎉\"",
+          "explanation": "Danh sách ban đầu trống."
+        },
+        {
+          "input": "Thêm \"Học DOM\", thêm \"Làm bài 4.5\"",
+          "output": "#dem: \"2 việc chưa xong\"",
+          "explanation": "Hai dòng chưa xong."
+        },
+        {
+          "input": "Tích dòng 1",
+          "output": "<li class=\"xong\">…, #dem: \"1 việc chưa xong\"",
+          "explanation": "change nổi bọt lên #ds-viec."
+        }
+      ],
+      "hintsJson": [
+        "Viết một hàm capNhatDem() đếm ds.querySelectorAll(\"li:not(.xong)\").length và tổng số li — gọi nó sau MỌI thay đổi và một lần lúc tải.",
+        "Hai listener trên #ds-viec: \"click\" (tìm .xoa → xoá li) và \"change\" (tìm .xong-chua → li.classList.toggle(\"xong\", e.target.checked)). Mỗi cái kết thúc bằng capNhatDem()."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Việc cần làm</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <main>\n      <h1>Việc cần làm</h1>\n      <form id=\"form-viec\" novalidate>\n        <label for=\"viec-moi\">Việc mới</label>\n        <input id=\"viec-moi\" autocomplete=\"off\">\n        <button type=\"submit\">Thêm</button>\n      </form>\n      <p id=\"dem\" aria-live=\"polite\"></p>\n      <ul id=\"ds-viec\"></ul>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "main { font-family: system-ui, sans-serif; padding: 16px; max-width: 480px; }\n#ds-viec { list-style: none; padding: 0; }\n#ds-viec li { display: flex; gap: 8px; align-items: center; padding: 6px 0; }\n#ds-viec li.xong .ten { text-decoration: line-through; color: rgb(100, 116, 139); }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Việc cần làm (viết toàn bộ ở đây)\nconst ds = document.querySelector(\"#ds-viec\");\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Việc cần làm</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <script src=\"app.js\" defer></script>\n  </head>\n  <body>\n    <main>\n      <h1>Việc cần làm</h1>\n      <form id=\"form-viec\" novalidate>\n        <label for=\"viec-moi\">Việc mới</label>\n        <input id=\"viec-moi\" autocomplete=\"off\">\n        <button type=\"submit\">Thêm</button>\n      </form>\n      <p id=\"dem\" aria-live=\"polite\"></p>\n      <ul id=\"ds-viec\"></ul>\n    </main>\n  </body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "main { font-family: system-ui, sans-serif; padding: 16px; max-width: 480px; }\n#ds-viec { list-style: none; padding: 0; }\n#ds-viec li { display: flex; gap: 8px; align-items: center; padding: 6px 0; }\n#ds-viec li.xong .ten { text-decoration: line-through; color: rgb(100, 116, 139); }\n"
+        },
+        {
+          "name": "app.js",
+          "language": "javascript",
+          "code": "// Bài 4.5 — Việc cần làm\nconst ds = document.querySelector(\"#ds-viec\");\nconst form = document.querySelector(\"#form-viec\");\nconst oViec = document.querySelector(\"#viec-moi\");\nconst dem = document.querySelector(\"#dem\");\n\n// Đưa \"trạng thái\" (các <li> và class xong) lên dòng đếm. Gọi sau MỌI thay đổi.\nfunction capNhatDem() {\n  const tong = ds.querySelectorAll(\"li\").length;\n  const chuaXong = ds.querySelectorAll(\"li:not(.xong)\").length;\n  dem.textContent = tong === 0 ? \"Không còn việc nào 🎉\" : `${chuaXong} việc chưa xong`;\n}\n\n// Dựng một dòng bằng DOM — chữ người dùng gõ chỉ đi qua textContent / setAttribute\nfunction taoDong(viec) {\n  const li = document.createElement(\"li\");\n\n  const o = document.createElement(\"input\");\n  o.type = \"checkbox\";\n  o.className = \"xong-chua\";\n  o.setAttribute(\"aria-label\", `Đánh dấu xong: ${viec}`);\n\n  const ten = document.createElement(\"span\");\n  ten.className = \"ten\";\n  ten.textContent = viec;\n\n  const nut = document.createElement(\"button\");\n  nut.type = \"button\";\n  nut.className = \"xoa\";\n  nut.textContent = \"Xoá\";\n\n  li.append(o, ten, nut);\n  return li;\n}\n\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();                       // xử lý bằng JS, không tải lại trang\n  const viec = oViec.value.trim();\n  if (viec === \"\") return;\n  ds.append(taoDong(viec));\n  form.reset();\n  capNhatDem();\n});\n\n// Ủy quyền 1: nút Xoá của MỌI dòng, kể cả dòng thêm sau\nds.addEventListener(\"click\", (e) => {\n  const nut = e.target.closest(\".xoa\");\n  if (!nut) return;\n  nut.closest(\"li\").remove();\n  capNhatDem();\n});\n\n// Ủy quyền 2: sự kiện change của ô đánh dấu cũng nổi bọt lên danh sách\nds.addEventListener(\"change\", (e) => {\n  if (!e.target.matches(\".xong-chua\")) return;\n  // toggle(class, force): force = true ⇒ thêm, false ⇒ gỡ — khớp đúng trạng thái ô\n  e.target.closest(\"li\").classList.toggle(\"xong\", e.target.checked);\n  capNhatDem();\n});\n\ncapNhatDem();                               // trạng thái lúc vừa tải trang\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bài này gom mọi ý của Chương 4 và thêm một nguyên tắc cho mọi giao diện: <strong>giao diện là hàm của trạng thái</strong>. Thay vì cộng/trừ biến đếm ở từng chỗ (dễ lệch), <code>capNhatDem()</code> <em>tính lại</em> từ DOM mỗi lần — một nguồn sự thật. React tổng quát hoá đúng ý này.</p>\n<p><code>change</code> cũng nổi bọt, nên một listener trên danh sách xử lý mọi ô đánh dấu. <code>classList.toggle(\"xong\", checked)</code> có tham số thứ hai ép trạng thái — class luôn khớp với ô, không phụ thuộc số lần bấm. Máy chấm chạy 9 kịch bản: thêm (có việc rỗng, có thẻ HTML), tích, bỏ tích, xoá dòng đã xong, xoá hết, và kiểm cấu trúc dòng + <code>aria-label</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên gọi capNhatDem() lúc tải trang — #dem trống cho tới thao tác đầu.</li>\n  <li>Giữ biến đếm riêng (<code>let soViec</code>) rồi quên trừ khi xoá một dòng đã xong.</li>\n  <li>Dùng <code>classList.toggle(\"xong\")</code> không có force — lệch với ô khi trạng thái bị đổi bằng cách khác.</li>\n  <li>Gắn listener cho checkbox lúc tạo dòng — chạy được, nhưng trái yêu cầu ủy quyền và tốn bộ nhớ khi danh sách dài.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.5 DOM: làm cho HTML tương tác.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_delegation",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "Tải trang không lỗi, đếm ban đầu \"Không còn việc nào 🎉\"",
+            "kiem": "text",
+            "selector": "#dem",
+            "giaTri": "Không còn việc nào 🎉"
+          },
+          {
+            "moTa": "Không có lỗi JavaScript qua cả kịch bản",
+            "kiem": "khong-loi-js",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#ds-viec .xong-chua"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#ds-viec .xoa"
+              }
+            ]
+          },
+          {
+            "moTa": "Thêm hai việc → \"2 việc chưa xong\"",
+            "kiem": "text",
+            "selector": "#dem",
+            "giaTri": "2 việc chưa xong",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "Học DOM"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "Làm bài 4.5"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              }
+            ]
+          },
+          {
+            "moTa": "Cấu trúc dòng: checkbox có aria-label",
+            "kiem": "thuoc-tinh",
+            "selector": "#ds-viec li .xong-chua",
+            "thuocTinh": "aria-label",
+            "giaTri": "Đánh dấu xong: Học DOM",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": " Học DOM "
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              }
+            ]
+          },
+          {
+            "moTa": "Tích dòng 1 → li.xong, đếm giảm",
+            "kiem": "text",
+            "selector": "#dem",
+            "giaTri": "1 việc chưa xong",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "B"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#ds-viec li:first-child .xong-chua"
+              }
+            ]
+          },
+          {
+            "moTa": "Tích dòng 1 → đúng dòng 1 có class xong",
+            "kiem": "so-luong",
+            "selector": "#ds-viec li:first-child.xong",
+            "giaTri": 1,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "B"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#ds-viec li:first-child .xong-chua"
+              }
+            ]
+          },
+          {
+            "moTa": "Tích rồi bỏ tích → gỡ class",
+            "kiem": "so-luong",
+            "selector": "#ds-viec li.xong",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#ds-viec .xong-chua",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "Xoá dòng đã xong → đếm vẫn đúng",
+            "kiem": "text",
+            "selector": "#dem",
+            "giaTri": "1 việc chưa xong",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "B"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#ds-viec li:first-child .xong-chua"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#ds-viec li:first-child .xoa"
+              }
+            ]
+          },
+          {
+            "moTa": "Xoá hết → \"Không còn việc nào 🎉\"",
+            "kiem": "text",
+            "selector": "#dem",
+            "giaTri": "Không còn việc nào 🎉",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "A"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#ds-viec .xoa"
+              }
+            ]
+          },
+          {
+            "moTa": "Việc rỗng không được thêm",
+            "kiem": "so-luong",
+            "selector": "#ds-viec li",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "   "
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              }
+            ]
+          },
+          {
+            "moTa": "Tên có thẻ HTML hiện nguyên văn",
+            "kiem": "text",
+            "selector": "#ds-viec .ten",
+            "giaTri": "<img src=x>",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#viec-moi",
+                "giaTri": "<img src=x>"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#form-viec"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Không dùng innerHTML",
+            "kiem": "ma-nguon",
+            "tep": "app.js",
+            "khop": "innerHTML",
+            "phuDinh": true
+          }
+        ]
+      }
+    }
+  ]
+}

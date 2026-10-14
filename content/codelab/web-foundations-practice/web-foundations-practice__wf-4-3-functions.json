@@ -1,0 +1,830 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-4-3-functions",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-4-3-functions"
+  },
+  "exercises": [
+    {
+      "title": "Đổi hàm thường sang arrow function",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "arrow function",
+        "trả về ngầm",
+        "một tham số bỏ ngoặc"
+      ],
+      "prerequisites": [
+        "function"
+      ],
+      "tags": [
+        "javascript",
+        "arrow-function"
+      ],
+      "problemHtml": "<p>Bài 4.3: <em>\"Hàm mũi tên — dạng ngắn hiện đại. Hãy đọc được cả hai dạng, chúng cùng một ý nghĩa.\"</em> Ba hàm dưới đây đang viết bằng <code>function</code>. Viết lại cả ba thành <code>const ten = (...) =&gt; ...</code>; hai hàm chỉ có một biểu thức thì dùng dạng <strong>trả về ngầm</strong> (không ngoặc nhọn, không <code>return</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>binhPhuong(n)</code> → <code>n * n</code>, viết <code>const binhPhuong = n =&gt; n * n;</code> (một tham số không cần ngoặc).</li>\n  <li><code>tong(a, b)</code> → <code>a + b</code>, arrow trả về ngầm.</li>\n  <li><code>chaoHoi(ten)</code> → <code>\"Chào \" + ten + \"!\"</code> hoặc template literal — dạng khối <code>{ }</code> có <code>return</code> cũng được.</li>\n  <li>Không còn từ khoá <code>function</code> trong tệp.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "n, a, b: number; ten: string.",
+      "outputSpec": "Như ba hàm cũ — kết quả không đổi, chỉ đổi cách viết.",
+      "constraints": "Giữ nguyên tên ba hàm.",
+      "examplesJson": [
+        {
+          "input": "binhPhuong(7)",
+          "output": "49",
+          "explanation": "n => n * n — biểu thức sau => là giá trị trả về."
+        },
+        {
+          "input": "tong(2, 3)",
+          "output": "5",
+          "explanation": "Hai tham số thì phải có ngoặc: (a, b) => a + b."
+        },
+        {
+          "input": "chaoHoi(\"Lan\")",
+          "output": "\"Chào Lan!\"",
+          "explanation": "Cùng kết quả với bản function cũ."
+        }
+      ],
+      "hintsJson": [
+        "function tong(a, b) { return a + b; }  ⇔  const tong = (a, b) => a + b;",
+        "Nếu dùng ngoặc nhọn { } sau => thì PHẢI có return — không có là hàm trả về undefined."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — function → arrow\nfunction binhPhuong(n) {\n  return n * n;\n}\n\nfunction tong(a, b) {\n  return a + b;\n}\n\nfunction chaoHoi(ten) {\n  return \"Chào \" + ten + \"!\";\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — function → arrow\n// Một tham số: bỏ được ngoặc. Một biểu thức: bỏ { } và return (trả về ngầm).\nconst binhPhuong = n => n * n;\n\n// Hai tham số: bắt buộc có ngoặc (a, b)\nconst tong = (a, b) => a + b;\n\n// Dạng khối { } — được, nhưng khi đó PHẢI viết return\nconst chaoHoi = (ten) => {\n  return `Chào ${ten}!`;\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Arrow function có hai dạng thân: <strong>biểu thức</strong> (<code>n =&gt; n * n</code>) — giá trị biểu thức tự được trả về; và <strong>khối</strong> (<code>n =&gt; { … }</code>) — như hàm thường, phải <code>return</code>. Dạng biểu thức là lý do arrow gọn khi viết callback cho <code>map</code>/<code>filter</code> ở Bài 4.4.</p>\n<p>Một khác biệt nhỏ: <code>const f = () =&gt; …</code> không được \"kéo lên\" (hoisting) như <code>function f()</code> — gọi trước dòng khai báo sẽ lỗi. Máy chấm gọi ba hàm và soi mã không còn <code>function</code>, có đủ ba <code>=&gt;</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>const tong = a, b =&gt; a + b</code> — thiếu ngoặc, JavaScript hiểu thành hai khai báo.</li>\n  <li>Giữ ngoặc nhọn mà bỏ <code>return</code>: <code>n =&gt; { n * n }</code> trả về <code>undefined</code>.</li>\n  <li>Gọi hàm trước dòng <code>const</code> khai báo nó — ReferenceError.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.3 Hàm: khối logic tái dùng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "binhPhuong(7) = 49",
+            "goi": "binhPhuong(7)",
+            "mongDoi": 49
+          },
+          {
+            "moTa": "tong(2, 3) = 5",
+            "goi": "tong(2, 3)",
+            "mongDoi": 5
+          },
+          {
+            "moTa": "chaoHoi(\"Lan\") = \"Chào Lan!\"",
+            "goi": "chaoHoi(\"Lan\")",
+            "mongDoi": "Chào Lan!"
+          },
+          {
+            "moTa": "Không còn từ khoá function",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\bfunction\\b",
+            "phuDinh": true
+          },
+          {
+            "moTa": "binhPhuong viết dạng trả về ngầm",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "binhPhuong\\s*=\\s*\\(?\\s*n\\s*\\)?\\s*=>\\s*n\\s*\\*\\s*n"
+          },
+          {
+            "moTa": "tong viết dạng trả về ngầm",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "tong\\s*=\\s*\\(\\s*a\\s*,\\s*b\\s*\\)\\s*=>\\s*a\\s*\\+\\s*b"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bẫy arrow có ngoặc nhọn: hàm trả về undefined",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "arrow function",
+        "return",
+        "trả về object literal",
+        "({ … })"
+      ],
+      "prerequisites": [
+        "arrow function"
+      ],
+      "tags": [
+        "javascript",
+        "arrow-function",
+        "pitfall"
+      ],
+      "problemHtml": "<p>Bài 4.3, mục <em>\"Bẫy — một arrow function có dấu ngoặc nhọn thì trả về undefined\"</em>. Cả ba hàm dưới đây \"trông đúng\" nhưng đều trả về <code>undefined</code> — không có lỗi đỏ nào, chỉ có <code>NaN</code> hiện ra ba hàm sau đó. Sửa cả ba.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>nhanDoi(5)</code> → <code>10</code>.</li>\n  <li><code>taoNguoiDung(\"Lan\")</code> → object <code>{ ten: \"Lan\", vaiTro: \"thanh-vien\" }</code> — lưu ý cách trả về object literal từ arrow.</li>\n  <li><code>tinhVAT(100000)</code> → <code>10000</code> (10%), giữ thân hàm nhiều dòng và thêm <code>return</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "number / string như ví dụ.",
+      "outputSpec": "number / object.",
+      "constraints": "Giữ dạng arrow function cho cả ba.",
+      "examplesJson": [
+        {
+          "input": "nhanDoi(5)",
+          "output": "10",
+          "explanation": "n => n * 2 (không ngoặc nhọn) hoặc n => { return n * 2; }."
+        },
+        {
+          "input": "taoNguoiDung(\"Lan\")",
+          "output": "{ ten: \"Lan\", vaiTro: \"thanh-vien\" }",
+          "explanation": "Bọc object trong ngoặc tròn: (ten) => ({ ... })."
+        },
+        {
+          "input": "(code khởi đầu) nhanDoi(5) + 1",
+          "output": "NaN",
+          "explanation": "undefined + 1 là NaN — lỗi hiện ra ở chỗ khác chỗ sai."
+        }
+      ],
+      "hintsJson": [
+        "Sau => mà gặp { thì JavaScript hiểu là THÂN HÀM, không phải object. { ten: ten } bên trong thân hàm là một \"nhãn\" lạ, không phải object.",
+        "const taoNguoiDung = (ten) => ({ ten: ten, vaiTro: \"thanh-vien\" });  — ngoặc tròn bao ngoài biến nó thành biểu thức."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Bẫy arrow có ngoặc nhọn\nconst nhanDoi = n => { n * 2 };\n\nconst taoNguoiDung = (ten) => { ten: ten };\n\nconst tinhVAT = (gia) => {\n  const THUE = 0.1;\n  gia * THUE;\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Bẫy arrow có ngoặc nhọn\n// Một biểu thức ⇒ bỏ ngoặc nhọn, giá trị tự được trả về\nconst nhanDoi = n => n * 2;\n\n// Trả về object literal: bọc trong ( ) để { } không bị hiểu là thân hàm\nconst taoNguoiDung = (ten) => ({ ten: ten, vaiTro: \"thanh-vien\" });\n\n// Thân nhiều dòng thì giữ { } — và PHẢI có return\nconst tinhVAT = (gia) => {\n  const THUE = 0.1;\n  return gia * THUE;\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Dấu <code>{</code> ngay sau <code>=&gt;</code> luôn mở <em>thân hàm</em>. Thân hàm không có <code>return</code> thì hàm trả về <code>undefined</code> — hợp lệ hoàn toàn, nên chẳng có lỗi nào báo. <code>{ ten: ten }</code> trong thân hàm còn tệ hơn: <code>ten:</code> là một <em>nhãn</em> (label), và <code>ten</code> là một câu lệnh không làm gì.</p>\n<p>Muốn trả về object bằng dạng ngắn, bọc nó trong ngoặc tròn: <code>() =&gt; ({ … })</code>. Máy chấm gọi cả ba hàm, và có một kiểm ẩn gọi <code>taoNguoiDung</code> với tên khác để chắc bạn không viết cứng \"Lan\".</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sửa <code>taoNguoiDung</code> thành <code>(ten) =&gt; { ten: ten, vaiTro: \"…\" }</code> — giờ thì thành LỖI CÚ PHÁP (nhãn không có dấu phẩy).</li>\n  <li>Trả về <code>{ name: …, role: … }</code> — sai tên khoá đề yêu cầu.</li>\n  <li>Làm tròn VAT — <code>100000 * 0.1</code> đã đúng <code>10000</code>.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.3 Hàm: khối logic tái dùng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions#function_body",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "nhanDoi(5) = 10",
+            "goi": "nhanDoi(5)",
+            "mongDoi": 10
+          },
+          {
+            "moTa": "taoNguoiDung(\"Lan\")",
+            "goi": "taoNguoiDung(\"Lan\")",
+            "mongDoi": {
+              "ten": "Lan",
+              "vaiTro": "thanh-vien"
+            }
+          },
+          {
+            "moTa": "taoNguoiDung với tên khác",
+            "goi": "taoNguoiDung(\"Minh\")",
+            "mongDoi": {
+              "ten": "Minh",
+              "vaiTro": "thanh-vien"
+            },
+            "an": true
+          },
+          {
+            "moTa": "tinhVAT(100000) = 10000",
+            "goi": "tinhVAT(100000)",
+            "mongDoi": 10000
+          },
+          {
+            "moTa": "Không còn NaN ở phía sau",
+            "goi": "nhanDoi(5) + 1",
+            "mongDoi": 11
+          },
+          {
+            "moTa": "Cả ba vẫn là arrow function",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\bfunction\\b",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Tham số mặc định: khi nào thì giá trị mặc định được dùng?",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tham số mặc định",
+        "undefined",
+        "null",
+        "đối số thiếu"
+      ],
+      "prerequisites": [
+        "function",
+        "template literal"
+      ],
+      "tags": [
+        "javascript",
+        "default-parameters"
+      ],
+      "problemHtml": "<p>Bài 4.3: <em>\"Một tham số không có đối số là undefined, một cách lặng lẽ — giá trị mặc định (= 1) chữa được.\"</em> Viết <code>taoLoiChao(ten, loiChao)</code> có <strong>tham số mặc định</strong>: <code>ten = \"bạn\"</code>, <code>loiChao = \"Xin chào\"</code>. Code khởi đầu tự kiểm bằng <code>if (!ten)</code> — nên <code>taoLoiChao(\"\")</code> lại thành \"bạn\", và cả <code>0</code> cũng bị nuốt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>taoLoiChao()</code> → <code>\"Xin chào, bạn!\"</code>; <code>taoLoiChao(\"Lan\")</code> → <code>\"Xin chào, Lan!\"</code>; <code>taoLoiChao(\"Lan\", \"Hi\")</code> → <code>\"Hi, Lan!\"</code>.</li>\n  <li>Truyền <code>undefined</code> rõ ràng cũng dùng mặc định: <code>taoLoiChao(undefined, \"Hi\")</code> → <code>\"Hi, bạn!\"</code>.</li>\n  <li>Mặc định CHỈ áp cho <code>undefined</code>: <code>taoLoiChao(null)</code> → <code>\"Xin chào, null!\"</code>, <code>taoLoiChao(\"\")</code> → <code>\"Xin chào, !\"</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ten, loiChao: string hoặc vắng.",
+      "outputSpec": "string \"<loiChao>, <ten>!\".",
+      "constraints": "Dùng cú pháp tham số mặc định trong khai báo hàm, không if.",
+      "examplesJson": [
+        {
+          "input": "taoLoiChao()",
+          "output": "\"Xin chào, bạn!\"",
+          "explanation": "Thiếu cả hai đối số ⇒ cả hai mặc định."
+        },
+        {
+          "input": "taoLoiChao(undefined, \"Hi\")",
+          "output": "\"Hi, bạn!\"",
+          "explanation": "Muốn bỏ qua tham số đầu thì truyền undefined."
+        },
+        {
+          "input": "taoLoiChao(null)",
+          "output": "\"Xin chào, null!\"",
+          "explanation": "null là một giá trị được truyền — mặc định không áp."
+        }
+      ],
+      "hintsJson": [
+        "function taoLoiChao(ten = \"bạn\", loiChao = \"Xin chào\") { … } — giá trị sau dấu = chỉ dùng khi đối số là undefined.",
+        "Thân hàm chỉ còn một dòng: return `${loiChao}, ${ten}!`;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Tham số mặc định\nfunction taoLoiChao(ten, loiChao) {\n  if (!ten) {\n    ten = \"bạn\";\n  }\n  return `${loiChao}, ${ten}!`;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Tham số mặc định\n// Giá trị sau dấu = chỉ được dùng khi đối số là undefined (thiếu, hoặc truyền undefined).\n// null, \"\" hay 0 là giá trị THẬT được truyền vào ⇒ giữ nguyên.\nfunction taoLoiChao(ten = \"bạn\", loiChao = \"Xin chào\") {\n  return `${loiChao}, ${ten}!`;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tham số mặc định đặt \"ý định\" ngay ở chữ ký hàm: đọc dòng đầu là biết hàm chịu được thiếu đối số nào. Luật của nó trùng với <code>??</code> một nửa: chỉ <code>undefined</code> kích hoạt mặc định (<code>null</code> thì không — khác <code>??</code>).</p>\n<p><code>if (!ten)</code> là kiểu kiểm \"falsy\" — nó gộp chung chuỗi rỗng, 0, null với \"không truyền\". Máy chấm thử 6 cách gọi, gồm truyền <code>undefined</code>, <code>null</code>, <code>\"\"</code> và số 0.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt tham số mặc định ở GIỮA danh sách rồi gọi thiếu đối số — muốn bỏ qua tham số đầu thì phải truyền <code>undefined</code>.</li>\n  <li>Giữ thêm <code>if (!ten)</code> — \"\" lại thành \"bạn\".</li>\n  <li>Tưởng <code>null</code> cũng kích hoạt mặc định.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.3 Hàm: khối logic tái dùng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "taoLoiChao() dùng cả hai mặc định",
+            "goi": "taoLoiChao()",
+            "mongDoi": "Xin chào, bạn!"
+          },
+          {
+            "moTa": "taoLoiChao(\"Lan\")",
+            "goi": "taoLoiChao(\"Lan\")",
+            "mongDoi": "Xin chào, Lan!"
+          },
+          {
+            "moTa": "taoLoiChao(\"Lan\", \"Hi\")",
+            "goi": "taoLoiChao(\"Lan\", \"Hi\")",
+            "mongDoi": "Hi, Lan!"
+          },
+          {
+            "moTa": "undefined rõ ràng dùng mặc định",
+            "goi": "taoLoiChao(undefined, \"Hi\")",
+            "mongDoi": "Hi, bạn!"
+          },
+          {
+            "moTa": "null và \"\" giữ nguyên",
+            "goi": "[taoLoiChao(null), taoLoiChao(\"\")]",
+            "mongDoi": [
+              "Xin chào, null!",
+              "Xin chào, !"
+            ]
+          },
+          {
+            "moTa": "Số 0 giữ nguyên",
+            "goi": "taoLoiChao(0)",
+            "mongDoi": "Xin chào, 0!",
+            "an": true
+          },
+          {
+            "moTa": "Khai báo tham số mặc định",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "ten\\s*=\\s*[\"']bạn[\"'][\\s\\S]*loiChao\\s*=\\s*[\"']Xin chào[\"']"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Phạm vi: hai bộ đếm dùng chung một biến toàn cục",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "scope",
+        "biến cục bộ",
+        "hàm trả về hàm",
+        "closure"
+      ],
+      "prerequisites": [
+        "arrow function",
+        "let"
+      ],
+      "tags": [
+        "javascript",
+        "scope",
+        "closure"
+      ],
+      "problemHtml": "<p>Bài 4.3, mục <em>\"Phạm vi — nơi một biến nhìn thấy được\"</em>. <code>taoBoDem()</code> phải trả về một <strong>hàm đếm</strong>: mỗi lần gọi hàm đó, nó tăng và trả về số đếm của riêng nó. Code khởi đầu để biến <code>dem</code> ở phạm vi toàn cục, nên hai bộ đếm (vd đếm lượt thích và đếm lượt xem) giẫm lên nhau.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>const a = taoBoDem(); a(); a();</code> ⇒ <code>a()</code> lần thứ ba trả về <code>3</code>.</li>\n  <li>Hai bộ đếm độc lập: sau ba lần <code>a()</code>, lần đầu <code>b()</code> vẫn trả về <code>1</code>.</li>\n  <li><code>taoBoDem(10)</code> bắt đầu từ 10 (lần gọi đầu trả về 11) — tham số <code>batDau</code> mặc định 0.</li>\n  <li>Không còn biến đếm nào ở phạm vi toàn cục.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "batDau: number (tuỳ chọn, mặc định 0).",
+      "outputSpec": "Một hàm; mỗi lần gọi trả về số đếm tăng 1.",
+      "constraints": "Không dùng class (chưa học).",
+      "examplesJson": [
+        {
+          "input": "const a = taoBoDem();\na(); a();\na()",
+          "output": "3",
+          "explanation": "Mỗi lần gọi a() tăng biến đếm của a."
+        },
+        {
+          "input": "const a = taoBoDem(); const b = taoBoDem();\na(); a(); a();\nb()",
+          "output": "1",
+          "explanation": "b có biến đếm riêng — đây là thứ code khởi đầu làm sai (nó ra 4)."
+        }
+      ],
+      "hintsJson": [
+        "Đưa let dem vào TRONG taoBoDem. Mỗi lần gọi taoBoDem tạo ra một biến dem mới, riêng.",
+        "function taoBoDem(batDau = 0) { let dem = batDau; return () => { dem = dem + 1; return dem; }; } — hàm bên trong vẫn \"nhìn thấy\" dem của lần gọi đã tạo ra nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Phạm vi\nlet dem = 0;   // ⚠ toàn cục: mọi bộ đếm dùng chung\n\nfunction taoBoDem(batDau) {\n  return () => {\n    dem = dem + 1;\n    return dem;\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Phạm vi\nfunction taoBoDem(batDau = 0) {\n  // dem là biến CỤC BỘ: mỗi lần gọi taoBoDem() sinh ra một biến dem mới\n  let dem = batDau;\n\n  // Hàm trả về vẫn nhìn thấy đúng biến dem của lần gọi đã tạo ra nó\n  // (gọi là closure) — người ngoài không đọc/sửa được dem trực tiếp.\n  return () => {\n    dem = dem + 1;\n    return dem;\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Biến khai báo trong một hàm chỉ sống trong phạm vi hàm đó — và mỗi <em>lần gọi</em> hàm có bộ biến riêng. Hàm con được tạo bên trong vẫn giữ tham chiếu tới biến của lần gọi ấy, kể cả sau khi <code>taoBoDem</code> đã chạy xong. Đó là <strong>closure</strong>: cách JavaScript cho mỗi bộ đếm một \"ngăn kéo\" riêng mà không cần class.</p>\n<p>Biến toàn cục thì ngược lại: một ngăn kéo cho cả chương trình, ai cũng mở được. Máy chấm tạo nhiều bộ đếm trong cùng một lần chạy để bắt đúng lỗi \"giẫm chân\", và soi mã không còn <code>let dem</code> ở cấp ngoài cùng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt <code>let dem = 0</code> BÊN TRONG hàm trả về — mỗi lần gọi <code>a()</code> lại về 0, luôn trả 1.</li>\n  <li>Quên <code>return</code> hàm con — <code>taoBoDem()</code> trả về undefined, gọi <code>a()</code> ném TypeError \"a is not a function\".</li>\n  <li>Bỏ qua <code>batDau</code> — <code>taoBoDem(10)</code> vẫn bắt đầu từ 0.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.3 Hàm: khối logic tái dùng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Gọi ba lần ra 3",
+            "chuanBi": "const a = taoBoDem(); a(); a();",
+            "goi": "a()",
+            "mongDoi": 3
+          },
+          {
+            "moTa": "Hai bộ đếm độc lập",
+            "chuanBi": "const a = taoBoDem(); const b = taoBoDem(); a(); a(); a();",
+            "goi": "b()",
+            "mongDoi": 1
+          },
+          {
+            "moTa": "taoBoDem(10) bắt đầu từ 10",
+            "chuanBi": "const c = taoBoDem(10);",
+            "goi": "[c(), c()]",
+            "mongDoi": [
+              11,
+              12
+            ]
+          },
+          {
+            "moTa": "Xen kẽ hai bộ đếm",
+            "chuanBi": "const a = taoBoDem(); const b = taoBoDem(5);",
+            "goi": "[a(), b(), a(), b(), a()]",
+            "mongDoi": [
+              1,
+              6,
+              2,
+              7,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Không còn biến dem toàn cục",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "^(let|var|const)\\s+dem\\b",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mệnh đề chốt chặn thay cho if lồng bốn tầng",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "guard clause",
+        "return sớm",
+        "typeof",
+        ".length",
+        ".includes()"
+      ],
+      "prerequisites": [
+        "if / else",
+        "return"
+      ],
+      "tags": [
+        "javascript",
+        "guard-clause",
+        "refactoring"
+      ],
+      "problemHtml": "<p>Bài 4.3: <em>\"Trả về sớm — xử các ca xấu ngay đầu rồi trả về; nhánh thuận lợi ở lại phẳng.\"</em> <code>kiemTraMatKhau(matKhau, tenDangNhap)</code> trả về thông báo lỗi ĐẦU TIÊN gặp phải, hoặc <code>\"OK\"</code>. Bản cũ lồng <code>if</code> bốn tầng, và trong lúc lồng đã đặt nhầm thứ tự hai luật. Viết lại bằng các chốt chặn phẳng, theo đúng thứ tự:</p>\n<ol><li>Không phải chuỗi hoặc chuỗi rỗng → <code>\"Thiếu mật khẩu\"</code></li>\n<li>Ngắn hơn 8 ký tự → <code>\"Mật khẩu quá ngắn\"</code></li>\n<li>Trùng tên đăng nhập → <code>\"Không được trùng tên đăng nhập\"</code></li>\n<li>Không chứa chữ số nào → <code>\"Cần ít nhất một chữ số\"</code></li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về đúng thông báo của luật ĐẦU TIÊN bị vi phạm, theo thứ tự 1 → 4; không vi phạm gì → \"OK\".</li>\n  <li>Viết bằng các <code>if (…) return …;</code> liên tiếp, không có <code>else</code>, không lồng <code>if</code> trong <code>if</code>.</li>\n  <li>Kiểm \"có chữ số\" bằng vòng lặp qua từng ký tự và <code>\"0123456789\".includes(kyTu)</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "matKhau: giá trị bất kỳ; tenDangNhap: string.",
+      "outputSpec": "string — một trong 5 thông báo.",
+      "constraints": "Không dùng regex (chưa học).\nKhông dùng else.",
+      "examplesJson": [
+        {
+          "input": "kiemTraMatKhau(\"\", \"lan\")",
+          "output": "\"Thiếu mật khẩu\"",
+          "explanation": "Luật 1."
+        },
+        {
+          "input": "kiemTraMatKhau(\"lan12345\", \"lan12345\")",
+          "output": "\"Không được trùng tên đăng nhập\"",
+          "explanation": "Đủ 8 ký tự nên qua luật 2, vấp luật 3."
+        },
+        {
+          "input": "kiemTraMatKhau(\"matkhaudai\", \"lan\")",
+          "output": "\"Cần ít nhất một chữ số\"",
+          "explanation": "Luật 4."
+        },
+        {
+          "input": "kiemTraMatKhau(\"hoa-sen-2026\", \"lan\")",
+          "output": "\"OK\"",
+          "explanation": "Qua cả bốn luật."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi luật một dòng: if (điều kiện xấu) return \"thông báo\"; — tới được dòng cuối nghĩa là mọi luật đều qua: return \"OK\";",
+        "Luật 4: let coSo = false; for (const kyTu of matKhau) { if (\"0123456789\".includes(kyTu)) coSo = true; } if (!coSo) return \"Cần ít nhất một chữ số\";"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Chốt chặn\nfunction kiemTraMatKhau(matKhau, tenDangNhap) {\n  if (typeof matKhau === \"string\" && matKhau !== \"\") {\n    if (matKhau !== tenDangNhap) {\n      if (matKhau.length >= 8) {\n        return \"OK\";\n      } else {\n        return \"Mật khẩu quá ngắn\";\n      }\n    } else {\n      return \"Không được trùng tên đăng nhập\";\n    }\n  } else {\n    return \"Thiếu mật khẩu\";\n  }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Chốt chặn\nfunction kiemTraMatKhau(matKhau, tenDangNhap) {\n  // Mỗi ca xấu: kiểm rồi trả về ngay. Thứ tự dòng = thứ tự ưu tiên của luật.\n  if (typeof matKhau !== \"string\" || matKhau === \"\") return \"Thiếu mật khẩu\";\n  if (matKhau.length < 8) return \"Mật khẩu quá ngắn\";\n  if (matKhau === tenDangNhap) return \"Không được trùng tên đăng nhập\";\n\n  // Luật 4: đi qua từng ký tự, tìm một chữ số\n  let coChuSo = false;\n  for (const kyTu of matKhau) {\n    if (\"0123456789\".includes(kyTu)) {\n      coChuSo = true;\n    }\n  }\n  if (!coChuSo) return \"Cần ít nhất một chữ số\";\n\n  // Tới được đây nghĩa là mọi luật đều đã qua — nhánh thuận lợi nằm phẳng ở cuối\n  return \"OK\";\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Code lồng nhau giấu thứ tự luật trong độ thụt lề: muốn biết luật nào xét trước phải dò ngoặc. Bản cũ vì thế kiểm \"trùng tên\" trước \"quá ngắn\" mà không ai để ý — <code>kiemTraMatKhau(\"lan\", \"lan\")</code> báo trùng tên thay vì quá ngắn. Với chốt chặn, thứ tự dòng chính là thứ tự luật, và thêm luật 4 chỉ là thêm vài dòng chứ không phải thêm một tầng.</p>\n<p>Máy chấm thử 9 cách gọi phủ đủ năm kết quả, gồm ca <code>(\"lan\", \"lan\")</code> bắt đúng lỗi thứ tự, <code>null</code>, số, và soi mã không còn <code>else</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Kiểm <code>if (!matKhau)</code> rồi gọi <code>matKhau.length</code> khi matKhau là số — số không có length (undefined < 8 là false!).</li>\n  <li>Đặt luật \"trùng tên\" trước \"quá ngắn\" như bản cũ.</li>\n  <li>Đặt <code>return \"Cần ít nhất một chữ số\"</code> TRONG vòng lặp — trả về ngay ở ký tự đầu không phải số.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.3 Hàm: khối logic tái dùng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://refactoring.guru/replace-nested-conditional-with-guard-clauses",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Chuỗi rỗng → Thiếu mật khẩu",
+            "goi": "kiemTraMatKhau(\"\", \"lan\")",
+            "mongDoi": "Thiếu mật khẩu"
+          },
+          {
+            "moTa": "Không phải chuỗi → Thiếu mật khẩu",
+            "goi": "[kiemTraMatKhau(null, \"lan\"), kiemTraMatKhau(12345678, \"lan\")]",
+            "mongDoi": [
+              "Thiếu mật khẩu",
+              "Thiếu mật khẩu"
+            ]
+          },
+          {
+            "moTa": "\"abc\" → Mật khẩu quá ngắn",
+            "goi": "kiemTraMatKhau(\"abc\", \"lan\")",
+            "mongDoi": "Mật khẩu quá ngắn"
+          },
+          {
+            "moTa": "Ngắn VÀ trùng tên → báo quá ngắn (luật 2 trước luật 3)",
+            "goi": "kiemTraMatKhau(\"lan\", \"lan\")",
+            "mongDoi": "Mật khẩu quá ngắn"
+          },
+          {
+            "moTa": "Trùng tên đăng nhập",
+            "goi": "kiemTraMatKhau(\"lan12345\", \"lan12345\")",
+            "mongDoi": "Không được trùng tên đăng nhập"
+          },
+          {
+            "moTa": "Thiếu chữ số",
+            "goi": "kiemTraMatKhau(\"matkhaudai\", \"lan\")",
+            "mongDoi": "Cần ít nhất một chữ số"
+          },
+          {
+            "moTa": "Hợp lệ → OK",
+            "goi": "[kiemTraMatKhau(\"hoa-sen-2026\", \"lan\"), kiemTraMatKhau(\"9abcdefg\", \"lan\")]",
+            "mongDoi": [
+              "OK",
+              "OK"
+            ]
+          },
+          {
+            "moTa": "Không dùng else",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\belse\\b",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Hàm làm đối số: áp một phép biến đổi n lần",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "hàm là giá trị",
+        "callback",
+        "arrow function",
+        "vòng lặp"
+      ],
+      "prerequisites": [
+        "arrow function",
+        "vòng lặp for"
+      ],
+      "tags": [
+        "javascript",
+        "callback",
+        "higher-order-function"
+      ],
+      "problemHtml": "<p>Bài 4.3 nói arrow function là \"mặc định cho callback\". Callback là một hàm bạn <strong>truyền vào</strong> hàm khác như một đối số — <code>map</code>, <code>setTimeout</code> và <code>addEventListener</code> đều nhận callback. Tự viết hai hàm nhận callback để hiểu cơ chế:</p>\n<ul><li><code>apDungNLan(f, n, x)</code>: áp <code>f</code> lên <code>x</code> <code>n</code> lần: <code>f(f(f(x)))</code> khi n = 3.</li>\n<li><code>demThoa(tu, den, dieuKien)</code>: đếm các số nguyên trong <code>[tu, den]</code> mà <code>dieuKien(so)</code> trả về truthy.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>apDungNLan(x =&gt; x * 2, 3, 1)</code> → <code>8</code>; <code>n = 0</code> trả về <code>x</code> nguyên vẹn.</li>\n  <li><code>demThoa(1, 10, n =&gt; n % 3 === 0)</code> → <code>3</code>; <code>tu &gt; den</code> → <code>0</code>.</li>\n  <li>Gọi <code>f</code> / <code>dieuKien</code> như một hàm bình thường — không viết cứng phép nhân 2 hay phép chia 3.</li>\n  <li>Nếu <code>f</code> không phải hàm, <code>apDungNLan</code> ném <code>TypeError</code> với thông điệp <code>\"f phải là hàm\"</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "f, dieuKien: function; n: số nguyên >= 0; x: bất kỳ; tu, den: số nguyên.",
+      "outputSpec": "apDungNLan → giá trị sau n lần biến đổi; demThoa → number.",
+      "constraints": "Không dùng đệ quy bắt buộc — vòng lặp là đủ.\nKhông dùng mảng.",
+      "examplesJson": [
+        {
+          "input": "apDungNLan(x => x * 2, 3, 1)",
+          "output": "8",
+          "explanation": "1 → 2 → 4 → 8."
+        },
+        {
+          "input": "apDungNLan(s => s + \"!\", 2, \"Chào\")",
+          "output": "\"Chào!!\"",
+          "explanation": "Callback làm gì cũng được — apDungNLan chỉ lo việc \"gọi n lần\"."
+        },
+        {
+          "input": "demThoa(1, 10, n => n % 3 === 0)",
+          "output": "3",
+          "explanation": "3, 6, 9."
+        }
+      ],
+      "hintsJson": [
+        "let ketQua = x; for (let i = 0; i < n; i++) { ketQua = f(ketQua); } return ketQua;",
+        "Ném lỗi: if (typeof f !== \"function\") throw new TypeError(\"f phải là hàm\"); — đặt ở đầu hàm (chốt chặn)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Hàm làm đối số\nfunction apDungNLan(f, n, x) {\n  // áp f lên x đúng n lần\n  return x * 2 * n;\n}\n\nfunction demThoa(tu, den, dieuKien) {\n  let dem = 0;\n  // đếm các số trong [tu, den] mà dieuKien(so) đúng\n  return dem;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Hàm làm đối số\nfunction apDungNLan(f, n, x) {\n  // Chốt chặn: f phải gọi được\n  if (typeof f !== \"function\") throw new TypeError(\"f phải là hàm\");\n\n  let ketQua = x;\n  for (let i = 0; i < n; i++) {\n    ketQua = f(ketQua);          // f là một giá trị kiểu hàm — gọi nó như mọi hàm khác\n  }\n  return ketQua;                 // n = 0 ⇒ vòng lặp không chạy ⇒ trả về x\n}\n\nfunction demThoa(tu, den, dieuKien) {\n  let dem = 0;\n  for (let so = tu; so <= den; so++) {\n    if (dieuKien(so)) {          // người gọi quyết định \"thoả\" nghĩa là gì\n      dem++;\n    }\n  }\n  return dem;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trong JavaScript hàm là một giá trị như số hay chuỗi: gán được vào biến, truyền được làm đối số, trả về được từ hàm khác (bài bộ đếm). <code>apDungNLan</code> không biết và không cần biết <code>f</code> làm gì — nó chỉ lo \"gọi n lần\". Tách \"khung việc\" khỏi \"chi tiết việc\" như vậy chính là cách <code>map</code>/<code>filter</code> ở Bài 4.4 hoạt động.</p>\n<p>Máy chấm truyền callback số, callback chuỗi, <code>n = 0</code>, khoảng rỗng, và gọi với <code>f = 5</code> để chắc bạn ném đúng <code>TypeError</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>f(x)</code> trong vòng lặp mà không gán lại — lần nào cũng áp lên x gốc, ra f(x) thay vì f(f(f(x))).</li>\n  <li>Truyền <code>dieuKien</code> rồi so <code>dieuKien(so) === true</code> — callback trả về số khác 0 (truthy) sẽ bị bỏ qua.</li>\n  <li>Gọi <code>f()</code> không đối số.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.3 Hàm: khối logic tái dùng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Glossary/Callback_function",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "apDungNLan(x => x * 2, 3, 1) = 8",
+            "goi": "apDungNLan(x => x * 2, 3, 1)",
+            "mongDoi": 8
+          },
+          {
+            "moTa": "Callback chuỗi",
+            "goi": "apDungNLan(s => s + \"!\", 2, \"Chào\")",
+            "mongDoi": "Chào!!"
+          },
+          {
+            "moTa": "n = 0 trả về x",
+            "goi": "apDungNLan(x => x + 1, 0, 42)",
+            "mongDoi": 42
+          },
+          {
+            "moTa": "f không phải hàm → TypeError",
+            "goi": "apDungNLan(5, 1, 1)",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "f phải là hàm"
+            }
+          },
+          {
+            "moTa": "demThoa(1, 10, chia hết cho 3) = 3",
+            "goi": "demThoa(1, 10, n => n % 3 === 0)",
+            "mongDoi": 3
+          },
+          {
+            "moTa": "Khoảng rỗng → 0",
+            "goi": "demThoa(5, 1, n => true)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": "Callback trả về truthy (không phải true)",
+            "goi": "demThoa(1, 6, n => n % 2)",
+            "mongDoi": 3,
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Nhà máy định dạng tiền: hàm trả về hàm",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "hàm trả về hàm",
+        "closure",
+        "tham số mặc định",
+        "chốt chặn",
+        "duyệt chuỗi từ cuối"
+      ],
+      "prerequisites": [
+        "closure",
+        "tham số mặc định",
+        "vòng lặp"
+      ],
+      "tags": [
+        "javascript",
+        "closure",
+        "string",
+        "real-world"
+      ],
+      "problemHtml": "<p>Bài tổng hợp 4.3. Trang bán hàng cần định dạng tiền theo nhiều kiểu: <code>1.250.000đ</code> cho tiếng Việt, <code>$1,250,000</code> cho bản tiếng Anh. Thay vì một hàm với năm tham số gọi đi gọi lại, viết một <strong>nhà máy</strong>: <code>taoDinhDang(tuyChon)</code> nhận cấu hình MỘT lần và trả về một hàm <code>dinhDang(so)</code> dùng mãi.</p>\n<p>Cấu hình (mọi trường đều tuỳ chọn): <code>kyHieu = \"đ\"</code>, <code>viTri = \"sau\"</code> (hoặc <code>\"truoc\"</code>), <code>phanCach = \".\"</code>. Tự cài phần chia nhóm ba chữ số bằng vòng lặp — không dùng <code>toLocaleString</code> / <code>Intl</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>taoDinhDang()(1250000)</code> → <code>\"1.250.000đ\"</code>; <code>taoDinhDang({ kyHieu: \"$\", viTri: \"truoc\", phanCach: \",\" })(1250000)</code> → <code>\"$1,250,000\"</code>.</li>\n  <li>Số âm giữ dấu trừ ở đầu: <code>-1500</code> → <code>\"-1.500đ\"</code> (và <code>\"-$1,500\"</code> khi ký hiệu đứng trước).</li>\n  <li>Số có phần lẻ được làm tròn tới đơn vị (<code>Math.round</code>) trước khi định dạng; <code>0</code> → <code>\"0đ\"</code>.</li>\n  <li>Đầu vào không phải số hữu hạn (chuỗi, NaN, Infinity, undefined) → <code>\"—\"</code> (gạch dài).</li>\n  <li><code>taoDinhDang</code> được gọi không có đối số vẫn chạy (tham số mặc định cho cả object).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "tuyChon: { kyHieu?, viTri?, phanCach? } hoặc vắng; so: giá trị bất kỳ.",
+      "outputSpec": "taoDinhDang → function; dinhDang → string.",
+      "constraints": "Không dùng toLocaleString, Intl, regex.\nMỗi lần gọi taoDinhDang tạo một bộ định dạng độc lập.",
+      "examplesJson": [
+        {
+          "input": "const vnd = taoDinhDang();\nvnd(1250000)",
+          "output": "\"1.250.000đ\"",
+          "explanation": "Mặc định: ký hiệu đ đứng sau, phân cách dấu chấm."
+        },
+        {
+          "input": "const usd = taoDinhDang({ kyHieu: \"$\", viTri: \"truoc\", phanCach: \",\" });\nusd(-1500.6)",
+          "output": "\"-$1,501\"",
+          "explanation": "Làm tròn −1500.6 thành −1501, dấu trừ đứng trước ký hiệu."
+        },
+        {
+          "input": "vnd(\"abc\")",
+          "output": "\"—\"",
+          "explanation": "Không phải số ⇒ gạch dài, không ném lỗi."
+        }
+      ],
+      "hintsJson": [
+        "Chia nhóm: chuyển phần trị tuyệt đối thành chuỗi, đi từ ký tự CUỐI về đầu, cứ đủ 3 chữ số (và còn chữ số phía trước) thì chèn phanCach.",
+        "function taoDinhDang({ kyHieu = \"đ\", viTri = \"sau\", phanCach = \".\" } = {}) { return (so) => { … }; } — \"= {}\" ở cuối cho phép gọi taoDinhDang() không đối số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Nhà máy định dạng tiền\nfunction taoDinhDang(tuyChon) {\n  return (so) => {\n    return so + tuyChon.kyHieu;\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.3 — Nhà máy định dạng tiền\n\n// Chèn dấu phân cách mỗi 3 chữ số, đi từ phải sang trái: \"1250000\" → \"1.250.000\"\nfunction chiaNhom(chuSo, phanCach) {\n  let ketQua = \"\";\n  let dem = 0;\n  for (let i = chuSo.length - 1; i >= 0; i--) {\n    ketQua = chuSo[i] + ketQua;\n    dem++;\n    if (dem % 3 === 0 && i > 0) {   // đủ 3 chữ số VÀ còn chữ số phía trước\n      ketQua = phanCach + ketQua;\n    }\n  }\n  return ketQua;\n}\n\n// Destructuring + mặc định từng trường; \"= {}\" cho phép gọi taoDinhDang() trống\nfunction taoDinhDang({ kyHieu = \"đ\", viTri = \"sau\", phanCach = \".\" } = {}) {\n  // Hàm trả về \"nhớ\" kyHieu/viTri/phanCach của lần cấu hình này (closure)\n  return (so) => {\n    if (typeof so !== \"number\" || !Number.isFinite(so)) return \"—\";   // chốt chặn\n\n    const tron = Math.round(so);\n    const dau = tron < 0 ? \"-\" : \"\";\n    const nhom = chiaNhom(String(Math.abs(tron)), phanCach);\n\n    return viTri === \"truoc\"\n      ? `${dau}${kyHieu}${nhom}`\n      : `${dau}${nhom}${kyHieu}`;\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Nhà máy hàm tách hai thời điểm: <em>cấu hình</em> (một lần, lúc khởi động trang) và <em>dùng</em> (hàng trăm lần, mỗi giá sản phẩm). Hàm trả về giữ cấu hình qua closure — đúng cơ chế bộ đếm, chỉ là thứ được nhớ là ba tuỳ chọn thay vì một con số.</p>\n<p>Phần chia nhóm đi từ phải sang vì nhóm ba chữ số tính từ hàng đơn vị; điều kiện <code>i &gt; 0</code> tránh dấu phân cách thừa ở đầu (<code>\".250.000\"</code>). Dấu trừ xử lý riêng — chia nhóm trên trị tuyệt đối, ghép dấu lại sau — để không ra <code>\"-.150\"</code>. Máy chấm thử 12 trường hợp, gồm 3 chữ số tròn (<code>100</code>, <code>999</code>), <code>1000</code>, số âm, số lẻ, hai bộ định dạng độc lập trong cùng một lần chạy.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt mặc định <code>function taoDinhDang({ kyHieu = \"đ\" })</code> mà thiếu <code>= {}</code> — gọi <code>taoDinhDang()</code> ném TypeError (không destructure được undefined).</li>\n  <li>Chèn phân cách ở đầu với số có số chữ số chia hết cho 3 — <code>\".100đ\"</code>.</li>\n  <li>Chia nhóm trên <code>String(-1500)</code> — dấu trừ bị đếm như một chữ số.</li>\n  <li>Dùng <code>if (!so)</code> để chặn đầu vào — chặn luôn số 0 hợp lệ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.3 Hàm: khối logic tái dùng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#default_value",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Mặc định: 1250000 → \"1.250.000đ\"",
+            "goi": "taoDinhDang()(1250000)",
+            "mongDoi": "1.250.000đ"
+          },
+          {
+            "moTa": "Kiểu USD: \"$1,250,000\"",
+            "goi": "taoDinhDang({ kyHieu: \"$\", viTri: \"truoc\", phanCach: \",\" })(1250000)",
+            "mongDoi": "$1,250,000"
+          },
+          {
+            "moTa": "Biên nhóm: 0, 100, 999, 1000",
+            "chuanBi": "const f = taoDinhDang();",
+            "goi": "[f(0), f(100), f(999), f(1000)]",
+            "mongDoi": [
+              "0đ",
+              "100đ",
+              "999đ",
+              "1.000đ"
+            ]
+          },
+          {
+            "moTa": "Số âm: \"-1.500đ\" và \"-$1,501\"",
+            "goi": "[taoDinhDang()(-1500), taoDinhDang({ kyHieu: \"$\", viTri: \"truoc\", phanCach: \",\" })(-1500.6)]",
+            "mongDoi": [
+              "-1.500đ",
+              "-$1,501"
+            ]
+          },
+          {
+            "moTa": "Làm tròn: 999.5 → \"1.000đ\"",
+            "goi": "taoDinhDang()(999.5)",
+            "mongDoi": "1.000đ"
+          },
+          {
+            "moTa": "Đầu vào sai → \"—\"",
+            "chuanBi": "const f = taoDinhDang();",
+            "goi": "[f(\"abc\"), f(NaN), f(Infinity), f(undefined), f(\"1000\")]",
+            "mongDoi": [
+              "—",
+              "—",
+              "—",
+              "—",
+              "—"
+            ]
+          },
+          {
+            "moTa": "Chỉ đổi một trường, hai trường kia giữ mặc định",
+            "goi": "taoDinhDang({ kyHieu: \" VND\" })(25000)",
+            "mongDoi": "25.000 VND"
+          },
+          {
+            "moTa": "Hai bộ định dạng độc lập",
+            "chuanBi": "const a = taoDinhDang(); const b = taoDinhDang({ phanCach: \" \" });",
+            "goi": "[a(1234567), b(1234567), a(1234567)]",
+            "mongDoi": [
+              "1.234.567đ",
+              "1 234 567đ",
+              "1.234.567đ"
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Không dùng toLocaleString / Intl",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "toLocaleString|\\bIntl\\b",
+            "phuDinh": true
+          }
+        ]
+      }
+    }
+  ]
+}

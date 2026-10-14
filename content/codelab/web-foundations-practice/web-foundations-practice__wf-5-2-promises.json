@@ -1,0 +1,816 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-5-2-promises",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-5-2-promises"
+  },
+  "exercises": [
+    {
+      "title": "Tự tạo Promise: hàm cho(ms) chờ một lúc rồi trả giá trị",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "new Promise",
+        "resolve",
+        "setTimeout",
+        "Promise trả về giá trị"
+      ],
+      "prerequisites": [
+        "setTimeout",
+        "arrow function"
+      ],
+      "tags": [
+        "javascript",
+        "promise"
+      ],
+      "problemHtml": "<p>Bài 5.2 có đúng một dòng tạo Promise bằng tay: <code>const wait = ms =&gt; new Promise(resolve =&gt; setTimeout(resolve, ms));</code>. Viết <code>cho(ms, giaTri)</code> mạnh hơn một chút: trả về Promise được <code>fulfilled</code> sau <code>ms</code> mili-giây với giá trị <code>giaTri</code>. Code khởi đầu gọi <code>setTimeout</code> nhưng không trả về gì — người gọi không có thứ gì để <code>.then</code>.</p>\n<p><em>Máy chấm dùng đồng hồ GIẢ: các khoảng trễ là thật về thứ tự và thời điểm, nhưng bạn không phải chờ.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>cho(ms)</code> trả về một <code>Promise</code> (kiểm bằng <code>instanceof Promise</code>).</li>\n  <li>Promise fulfilled đúng sau <code>ms</code> ms với giá trị <code>giaTri</code> (vắng ⇒ <code>undefined</code>).</li>\n  <li><code>cho(0, \"x\")</code> vẫn bất đồng bộ (đi qua hàng đợi).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ms: number >= 0; giaTri: bất kỳ (tuỳ chọn).",
+      "outputSpec": "Promise<giaTri>.",
+      "constraints": "Không dùng async/await (Bài 5.3).",
+      "examplesJson": [
+        {
+          "input": "cho(250, \"xong\").then(v => console.log(v))",
+          "output": "xong   (sau 250 ms)",
+          "explanation": "resolve(giaTri) được gọi trong callback của setTimeout."
+        },
+        {
+          "input": "cho(10) instanceof Promise",
+          "output": "true",
+          "explanation": "Trả về Promise ngay, giá trị đến sau."
+        }
+      ],
+      "hintsJson": [
+        "return new Promise((resolve) => { … }); — hàm truyền vào new Promise chạy NGAY, và resolve là \"nút bấm\" để báo xong.",
+        "return new Promise((resolve) => setTimeout(() => resolve(giaTri), ms));"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Tự tạo Promise\nfunction cho(ms, giaTri) {\n  setTimeout(() => {\n    return giaTri;\n  }, ms);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Tự tạo Promise\nfunction cho(ms, giaTri) {\n  // Trả về Promise NGAY (trạng thái pending); setTimeout bấm \"resolve\" sau ms mili-giây.\n  // return bên trong callback của setTimeout không đi tới đâu — phải dùng resolve.\n  return new Promise((resolve) => {\n    setTimeout(() => resolve(giaTri), ms);\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>return giaTri</code> bên trong callback của setTimeout trả giá trị về cho... setTimeout, kẻ bỏ qua nó. Hàm <code>cho</code> đã kết thúc từ lâu và trả về <code>undefined</code>. Promise giải quyết đúng chuyện này: hàm trả về <em>ngay</em> một object đại diện cho giá trị tương lai, và <code>resolve</code> là cách \"giao hàng\" khi giá trị có.</p>\n<p>Máy chấm đo bằng đồng hồ giả: <code>await cho(250)</code> phải tốn đúng 250 ms ảo, và giá trị phải đi qua.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li><code>setTimeout(resolve(giaTri), ms)</code> — gọi resolve NGAY, không chờ.</li>\n  <li>Quên return trước new Promise — hàm vẫn trả về undefined.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.2 Promise: một giá trị đến sau.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/Promise",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Trả về một Promise",
+            "goi": "cho(10) instanceof Promise",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Giá trị đi qua",
+            "goi": "await cho(50, \"xong\")",
+            "mongDoi": "xong"
+          },
+          {
+            "moTa": "Chờ đúng 250 ms",
+            "chuanBi": "const t = Date.now(); await cho(250);",
+            "goi": "Date.now() - t",
+            "mongDoi": 250
+          },
+          {
+            "moTa": "Không truyền giá trị → undefined",
+            "goi": "await cho(5)",
+            "mongDoi": {
+              "$js": "undefined"
+            }
+          },
+          {
+            "moTa": "cho(0) vẫn bất đồng bộ",
+            "chuanBi": "const log = []; cho(0, \"p\").then((v) => log.push(v)); log.push(\"dong-bo\"); await cho(1);",
+            "goi": "log",
+            "mongDoi": [
+              "dong-bo",
+              "p"
+            ],
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": ".then, .catch và .finally: mô tả một người dùng",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        ".then",
+        ".catch",
+        ".finally",
+        "rejected"
+      ],
+      "prerequisites": [
+        "Promise"
+      ],
+      "tags": [
+        "javascript",
+        "promise",
+        "error-handling"
+      ],
+      "problemHtml": "<p>Bài 5.2: <em>\"then chạy khi fulfilled, catch khi rejected, finally chạy dù thế nào.\"</em> Viết <code>moTaNguoiDung(id)</code> dùng <code>layNguoiDung(id)</code> của máy chủ giả, trả về một Promise của chuỗi:</p>\n<ul><li>thành công: <code>\"Lan (25 tuổi)\"</code></li>\n<li>thất bại: <code>\"Lỗi: &lt;thông điệp lỗi&gt;\"</code> — Promise vẫn FULFILLED với chuỗi này, không reject</li>\n<li>dù thế nào cũng in <code>\"Đã tải xong &lt;id&gt;\"</code> bằng <code>.finally</code>.</li></ul>\n<p><code>api.js</code> là \"máy chủ giả\" có sẵn — <strong>đừng sửa</strong>; nó được nạp trước <code>main.js</code> nên các hàm của nó gọi được trực tiếp.</p><p><em>Máy chấm dùng đồng hồ GIẢ: các khoảng trễ là thật về thứ tự và thời điểm, nhưng bạn không phải chờ.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thành công → <code>\"&lt;ten&gt; (&lt;tuoi&gt; tuổi)\"</code>.</li>\n  <li>Thất bại → <code>\"Lỗi: Không tìm thấy người dùng 9\"</code> (dùng <code>err.message</code>).</li>\n  <li><code>.finally</code> in <code>\"Đã tải xong &lt;id&gt;\"</code> trong cả hai trường hợp.</li>\n  <li>Dùng <code>.then / .catch / .finally</code>, không async/await.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "id: number.",
+      "outputSpec": "Promise<string>.",
+      "constraints": "Không sửa api.js.\nKhông dùng async/await.",
+      "examplesJson": [
+        {
+          "input": "moTaNguoiDung(1).then(console.log)",
+          "output": "Đã tải xong 1\nLan (25 tuổi)",
+          "explanation": "finally chạy trước then gắn SAU nó (nó nằm trước trong chuỗi)."
+        },
+        {
+          "input": "moTaNguoiDung(9).then(console.log)",
+          "output": "Đã tải xong 9\nLỗi: Không tìm thấy người dùng 9",
+          "explanation": "catch \"chữa\" lỗi thành một chuỗi bình thường."
+        }
+      ],
+      "hintsJson": [
+        "return layNguoiDung(id).then(u => …).catch(err => …).finally(() => …); — giá trị return trong catch thành giá trị FULFILLED của chuỗi.",
+        ".then((u) => `${u.ten} (${u.tuoi} tuổi)`).catch((err) => `Lỗi: ${err.message}`).finally(() => console.log(`Đã tải xong ${id}`))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mỗi hàm trả về Promise sau một khoảng trễ.\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\", tuoi: 25 },\n  2: { id: 2, ten: \"Minh\", tuoi: 30 },\n};\n\nfunction layNguoiDung(id) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const u = NGUOI_DUNG[id];\n      if (u) resolve({ ...u });\n      else reject(new Error(`Không tìm thấy người dùng ${id}`));\n    }, 100);\n  });\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — then / catch / finally\nfunction moTaNguoiDung(id) {\n  return layNguoiDung(id).then((u) => {\n    console.log(u.ten + \" (\" + u.tuoi + \" tuổi)\");\n  });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mỗi hàm trả về Promise sau một khoảng trễ.\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\", tuoi: 25 },\n  2: { id: 2, ten: \"Minh\", tuoi: 30 },\n};\n\nfunction layNguoiDung(id) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      const u = NGUOI_DUNG[id];\n      if (u) resolve({ ...u });\n      else reject(new Error(`Không tìm thấy người dùng ${id}`));\n    }, 100);\n  });\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — then / catch / finally\nfunction moTaNguoiDung(id) {\n  return layNguoiDung(id)\n    // fulfilled: biến object người dùng thành chuỗi mô tả (RETURN, đừng chỉ log)\n    .then((u) => `${u.ten} (${u.tuoi} tuổi)`)\n    // rejected: chữa lỗi thành một chuỗi — chuỗi Promise từ đây lại fulfilled\n    .catch((err) => `Lỗi: ${err.message}`)\n    // luôn chạy; KHÔNG đổi giá trị đang đi qua chuỗi\n    .finally(() => console.log(`Đã tải xong ${id}`));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi <code>.then</code>/<code>.catch</code>/<code>.finally</code> trả về một Promise mới. Giá trị <code>return</code> trong <code>.then</code> hoặc <code>.catch</code> thành giá trị của Promise mới; <code>.finally</code> thì để giá trị cũ đi qua nguyên vẹn. Vì <code>.catch</code> trả về chuỗi, cả chuỗi kết thúc fulfilled — người gọi không phải bắt lỗi nữa.</p>\n<p>Bản cũ <code>console.log</code> thay vì <code>return</code>: người gọi nhận <code>undefined</code>. Máy chấm kiểm giá trị trả về và các dòng in của cả hai trường hợp.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>log trong then thay vì return — Promise trả về undefined.</li>\n  <li>Đặt catch TRƯỚC then — lỗi bị chữa xong thì then nhận chuỗi lỗi và cố đọc u.ten.</li>\n  <li>Trả về <code>err</code> thay vì <code>err.message</code> — chuỗi thành \"Lỗi: Error: …\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.2 Promise: một giá trị đến sau.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/finally",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "tepNap": [
+          "api.js",
+          "main.js"
+        ],
+        "kiem": [
+          {
+            "moTa": "Thành công → \"Lan (25 tuổi)\"",
+            "goi": "await moTaNguoiDung(1)",
+            "mongDoi": "Lan (25 tuổi)"
+          },
+          {
+            "moTa": "Thất bại → chuỗi lỗi, không reject",
+            "goi": "await moTaNguoiDung(9)",
+            "mongDoi": "Lỗi: Không tìm thấy người dùng 9"
+          },
+          {
+            "moTa": "finally in khi thành công",
+            "so": "console",
+            "goi": "await moTaNguoiDung(2)",
+            "mongDoi": [
+              "Đã tải xong 2"
+            ]
+          },
+          {
+            "moTa": "finally in khi thất bại",
+            "so": "console",
+            "goi": "await moTaNguoiDung(9)",
+            "mongDoi": [
+              "Đã tải xong 9"
+            ]
+          },
+          {
+            "moTa": "Dùng .catch và .finally",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\.catch\\s*\\([\\s\\S]*\\.finally\\s*\\("
+          },
+          {
+            "moTa": "Không dùng async/await",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\b(async|await)\\b",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Quên return trong .then: chuỗi gãy mà không báo lỗi",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "chuỗi Promise",
+        "return Promise trong then",
+        "lỗi lan theo chuỗi"
+      ],
+      "prerequisites": [
+        ".then"
+      ],
+      "tags": [
+        "javascript",
+        "promise",
+        "pitfall"
+      ],
+      "problemHtml": "<p>Bài 5.2, mục <em>\"Bẫy — quên return promise bên trong .then, chuỗi gãy lặng lẽ\"</em>. <code>luuRoiDoc(noiDung)</code> lưu một bài (<code>luuBai</code>) rồi đọc lại nó (<code>docBai</code>) và trả về nội dung đọc được. Bản hiện tại trả về <code>undefined</code>, và khi lưu thất bại thì lỗi không tới được người gọi.</p>\n<p><code>api.js</code> là \"máy chủ giả\" có sẵn — <strong>đừng sửa</strong>; nó được nạp trước <code>main.js</code> nên các hàm của nó gọi được trực tiếp.</p><p><em>Máy chấm dùng đồng hồ GIẢ: các khoảng trễ là thật về thứ tự và thời điểm, nhưng bạn không phải chờ.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>await luuRoiDoc(\"Xin chào\")</code> → <code>\"Xin chào\"</code>.</li>\n  <li>Nội dung rỗng → Promise của <code>luuRoiDoc</code> REJECT với lỗi <code>\"Nội dung trống\"</code>.</li>\n  <li>Chuỗi phẳng: <code>luuBai(…).then(…).then(…)</code> — không lồng then trong then.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "noiDung: string.",
+      "outputSpec": "Promise<string>.",
+      "constraints": "Không dùng async/await.\nKhông sửa api.js.",
+      "examplesJson": [
+        {
+          "input": "luuRoiDoc(\"Xin chào\").then(console.log)",
+          "output": "Xin chào   (sau 150 ms: 100 lưu + 50 đọc)",
+          "explanation": "then thứ nhất RETURN Promise của docBai ⇒ then thứ hai chờ nó."
+        },
+        {
+          "input": "luuRoiDoc(\"\").catch(e => console.log(e.message))",
+          "output": "Nội dung trống",
+          "explanation": "Lỗi của luuBai đi thẳng tới catch của người gọi."
+        }
+      ],
+      "hintsJson": [
+        "Ngoặc nhọn sau => mở thân hàm — không có return là trả về undefined (bẫy của Bài 4.3, gặp lại ở đây).",
+        "return luuBai(noiDung).then((id) => docBai(id)); — hoặc .then(docBai)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa.\nconst KHO_BAI = {};\nlet soBai = 0;\n\n// Lưu một bài, trả về Promise<id> sau 100 ms. Nội dung rỗng ⇒ reject.\nfunction luuBai(noiDung) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (!noiDung) return reject(new Error(\"Nội dung trống\"));\n      soBai = soBai + 1;\n      KHO_BAI[soBai] = noiDung;\n      resolve(soBai);\n    }, 100);\n  });\n}\n\n// Đọc một bài theo id, trả về Promise<string> sau 50 ms.\nfunction docBai(id) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (KHO_BAI[id] === undefined) return reject(new Error(`Không có bài ${id}`));\n      resolve(KHO_BAI[id]);\n    }, 50);\n  });\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Quên return\nfunction luuRoiDoc(noiDung) {\n  luuBai(noiDung)\n    .then((id) => {\n      docBai(id);\n    })\n    .then((bai) => bai);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa.\nconst KHO_BAI = {};\nlet soBai = 0;\n\n// Lưu một bài, trả về Promise<id> sau 100 ms. Nội dung rỗng ⇒ reject.\nfunction luuBai(noiDung) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (!noiDung) return reject(new Error(\"Nội dung trống\"));\n      soBai = soBai + 1;\n      KHO_BAI[soBai] = noiDung;\n      resolve(soBai);\n    }, 100);\n  });\n}\n\n// Đọc một bài theo id, trả về Promise<string> sau 50 ms.\nfunction docBai(id) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (KHO_BAI[id] === undefined) return reject(new Error(`Không có bài ${id}`));\n      resolve(KHO_BAI[id]);\n    }, 50);\n  });\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Quên return\nfunction luuRoiDoc(noiDung) {\n  // return chuỗi cho người gọi — không có nó, người gọi nhận undefined\n  return luuBai(noiDung)\n    // then trả về Promise của docBai ⇒ bước sau CHỜ nó và nhận nội dung bài\n    .then((id) => docBai(id));\n  // Lỗi của luuBai hay docBai đều đi theo chuỗi tới .catch của người gọi\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hai chỗ thiếu <code>return</code>: (1) hàm <code>luuRoiDoc</code> không trả chuỗi Promise cho người gọi; (2) callback của then có ngoặc nhọn mà không return <code>docBai(id)</code>, nên then trả về Promise của <code>undefined</code> ngay lập tức — bước sau không chờ lần đọc. Không chỗ nào văng lỗi; thứ tự chỉ lặng lẽ sai, và lỗi của Promise bị bỏ rơi thành \"unhandled rejection\".</p>\n<p>Khi callback của then <em>trả về một Promise</em>, chuỗi chờ Promise đó — đó là thứ làm chuỗi phẳng được. Máy chấm kiểm giá trị, thời gian (150 ms ảo) và lỗi lan tới người gọi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chỉ thêm return ở một trong hai chỗ.</li>\n  <li>Lồng .then bên trong .then — chạy được nhưng quay lại \"kim tự tháp\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.2 Promise: một giá trị đến sau.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises#chaining",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "tepNap": [
+          "api.js",
+          "main.js"
+        ],
+        "kiem": [
+          {
+            "moTa": "Trả về nội dung đã lưu",
+            "goi": "await luuRoiDoc(\"Xin chào\")",
+            "mongDoi": "Xin chào"
+          },
+          {
+            "moTa": "Mất đúng 150 ms (lưu rồi mới đọc)",
+            "chuanBi": "const t = Date.now(); await luuRoiDoc(\"a\");",
+            "goi": "Date.now() - t",
+            "mongDoi": 150
+          },
+          {
+            "moTa": "Nội dung rỗng → reject \"Nội dung trống\"",
+            "goi": "await luuRoiDoc(\"\")",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^Nội dung trống$"
+            }
+          },
+          {
+            "moTa": "Hai lần lưu không lẫn nhau",
+            "goi": "await Promise.all([luuRoiDoc(\"một\"), luuRoiDoc(\"hai\")])",
+            "mongDoi": [
+              "một",
+              "hai"
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Không dùng async/await",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\b(async|await)\\b",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bọc API callback cũ thành Promise",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "new Promise(resolve, reject)",
+        "callback kiểu Node (err, data)",
+        "promisify"
+      ],
+      "prerequisites": [
+        "new Promise"
+      ],
+      "tags": [
+        "javascript",
+        "promise",
+        "callback"
+      ],
+      "problemHtml": "<p>Bài 5.2: <em>\"Bạn hiếm khi tự tạo Promise — trừ khi phải bọc một API kiểu cũ.\"</em> <code>docTepCallback(ten, cb)</code> là API kiểu Node.js đời đầu: gọi <code>cb(loi)</code> khi lỗi, <code>cb(null, duLieu)</code> khi thành công. Viết <code>docTep(ten)</code> trả về Promise, rồi <code>docHaiTep(a, b)</code> đọc hai tệp liên tiếp và trả về mảng <code>[noiDungA, noiDungB]</code>.</p>\n<p><code>api.js</code> là \"máy chủ giả\" có sẵn — <strong>đừng sửa</strong>; nó được nạp trước <code>main.js</code> nên các hàm của nó gọi được trực tiếp.</p><p><em>Máy chấm dùng đồng hồ GIẢ: các khoảng trễ là thật về thứ tự và thời điểm, nhưng bạn không phải chờ.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>docTep(\"ghi-chu.txt\")</code> fulfilled với <code>\"Học Promise\"</code>; tệp không có → reject với đúng Error mà API đưa.</li>\n  <li>Tệp rỗng (<code>\"rong.txt\"</code>) là thành công với <code>\"\"</code> — đừng nhầm \"không có dữ liệu\" với \"có lỗi\".</li>\n  <li><code>docHaiTep</code> dùng <code>docTep</code> và chuỗi <code>.then</code>; một tệp lỗi ⇒ cả Promise reject.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ten, a, b: string.",
+      "outputSpec": "docTep → Promise<string>; docHaiTep → Promise<[string, string]>.",
+      "constraints": "Không sửa api.js.\nKhông async/await.",
+      "examplesJson": [
+        {
+          "input": "docTep(\"khong-co.txt\").catch(e => e.message)",
+          "output": "\"ENOENT: không có tệp khong-co.txt\"",
+          "explanation": "Lỗi của callback đi qua reject."
+        },
+        {
+          "input": "docHaiTep(\"ghi-chu.txt\", \"rong.txt\")",
+          "output": "[\"Học Promise\", \"\"]",
+          "explanation": "Chuỗi rỗng vẫn là dữ liệu hợp lệ."
+        }
+      ],
+      "hintsJson": [
+        "return new Promise((resolve, reject) => { docTepCallback(ten, (loi, duLieu) => { … }); });",
+        "Trong callback: if (loi) reject(loi); else resolve(duLieu); — đừng viết if (duLieu): chuỗi rỗng là falsy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — API kiểu CALLBACK cũ (kiểu Node.js), đừng sửa.\n// cb(loi, duLieu): thành công ⇒ loi = null; thất bại ⇒ loi là một Error.\nconst O_DIA = { \"ghi-chu.txt\": \"Học Promise\", \"rong.txt\": \"\" };\n\nfunction docTepCallback(ten, cb) {\n  setTimeout(() => {\n    if (!(ten in O_DIA)) cb(new Error(`ENOENT: không có tệp ${ten}`));\n    else cb(null, O_DIA[ten]);\n  }, 30);\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Bọc callback thành Promise\nfunction docTep(ten) {\n  return new Promise((resolve) => {\n    docTepCallback(ten, (loi, duLieu) => {\n      if (duLieu) resolve(duLieu);\n    });\n  });\n}\n\nfunction docHaiTep(a, b) {\n  return docTep(a);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — API kiểu CALLBACK cũ (kiểu Node.js), đừng sửa.\n// cb(loi, duLieu): thành công ⇒ loi = null; thất bại ⇒ loi là một Error.\nconst O_DIA = { \"ghi-chu.txt\": \"Học Promise\", \"rong.txt\": \"\" };\n\nfunction docTepCallback(ten, cb) {\n  setTimeout(() => {\n    if (!(ten in O_DIA)) cb(new Error(`ENOENT: không có tệp ${ten}`));\n    else cb(null, O_DIA[ten]);\n  }, 30);\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Bọc callback thành Promise\nfunction docTep(ten) {\n  return new Promise((resolve, reject) => {\n    docTepCallback(ten, (loi, duLieu) => {\n      if (loi) {\n        reject(loi);          // giữ nguyên Error gốc — đừng tạo lỗi mới mất thông tin\n      } else {\n        resolve(duLieu);      // kể cả \"\" — không có lỗi nghĩa là thành công\n      }\n    });\n  });\n}\n\nfunction docHaiTep(a, b) {\n  let noiDungA;\n  return docTep(a)\n    .then((nd) => {\n      noiDungA = nd;\n      return docTep(b);       // return Promise ⇒ bước sau chờ nó\n    })\n    .then((noiDungB) => [noiDungA, noiDungB]);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bọc callback vào Promise là ba dòng cố định: <code>new Promise((resolve, reject) =&gt; api(…, (loi, kq) =&gt; loi ? reject(loi) : resolve(kq)))</code>. Phán đoán thành công phải dựa vào <em>lỗi</em>, không dựa vào dữ liệu — tệp rỗng trả về <code>\"\"</code> (falsy) nhưng vẫn là thành công; bản cũ để Promise đó pending mãi mãi.</p>\n<p>Bản cũ còn quên <code>reject</code>: tệp lỗi cũng treo vĩnh viễn. Máy chấm phát hiện treo (Promise không bao giờ settle) và báo trượt. Node.js có sẵn <code>util.promisify</code> làm đúng việc này.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li><code>if (duLieu) resolve(duLieu)</code> — tệp rỗng treo mãi.</li>\n  <li><code>reject(new Error(\"Lỗi đọc tệp\"))</code> — vứt mất thông điệp gốc.</li>\n  <li>Đọc hai tệp song song rồi ghép sai thứ tự (đây là đọc liên tiếp).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.2 Promise: một giá trị đến sau.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/promisify",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "tepNap": [
+          "api.js",
+          "main.js"
+        ],
+        "kiem": [
+          {
+            "moTa": "Đọc tệp có nội dung",
+            "goi": "await docTep(\"ghi-chu.txt\")",
+            "mongDoi": "Học Promise"
+          },
+          {
+            "moTa": "Tệp rỗng vẫn fulfilled với \"\"",
+            "goi": "await docTep(\"rong.txt\")",
+            "mongDoi": ""
+          },
+          {
+            "moTa": "Tệp không có → reject với lỗi gốc",
+            "goi": "await docTep(\"khong-co.txt\")",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "ENOENT: không có tệp khong-co.txt"
+            }
+          },
+          {
+            "moTa": "docHaiTep",
+            "goi": "await docHaiTep(\"ghi-chu.txt\", \"rong.txt\")",
+            "mongDoi": [
+              "Học Promise",
+              ""
+            ]
+          },
+          {
+            "moTa": "docHaiTep đọc liên tiếp (60 ms)",
+            "chuanBi": "const t = Date.now(); await docHaiTep(\"ghi-chu.txt\", \"ghi-chu.txt\");",
+            "goi": "Date.now() - t",
+            "mongDoi": 60
+          },
+          {
+            "moTa": "Một tệp lỗi → docHaiTep reject",
+            "goi": "await docHaiTep(\"ghi-chu.txt\", \"x.txt\")",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "x\\.txt"
+            },
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Chuỗi ba bước đặt hàng với MỘT .catch ở cuối",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "chuỗi then phẳng",
+        "truyền giá trị qua các bước",
+        "một catch cho cả chuỗi"
+      ],
+      "prerequisites": [
+        ".then",
+        ".catch"
+      ],
+      "tags": [
+        "javascript",
+        "promise",
+        "chaining"
+      ],
+      "problemHtml": "<p>Bài 5.2: <em>\"Nếu bước nào reject, điều khiển nhảy thẳng tới .catch gần nhất.\"</em> Đặt hàng gồm ba bước bất đồng bộ của máy chủ giả: <code>kiemTraKho(ma, soLuong)</code> → <code>tinhTien(sp, soLuong)</code> → <code>taoDon(tien)</code>. Viết <code>datHang(ma, soLuong)</code> trả về Promise của chuỗi:</p>\n<ul><li>thành công: <code>\"Đơn DH-1: 15000đ\"</code></li>\n<li>bất kỳ bước nào lỗi: <code>\"Lỗi: &lt;thông điệp&gt;\"</code></li></ul>\n<p>Bản hiện tại lồng ba tầng then (kim tự tháp) và chỉ bắt lỗi của bước đầu.</p>\n<p><code>api.js</code> là \"máy chủ giả\" có sẵn — <strong>đừng sửa</strong>; nó được nạp trước <code>main.js</code> nên các hàm của nó gọi được trực tiếp.</p><p><em>Máy chấm dùng đồng hồ GIẢ: các khoảng trễ là thật về thứ tự và thời điểm, nhưng bạn không phải chờ.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba bước nối thành MỘT chuỗi phẳng .then(...).then(...).then(...).</li>\n  <li>MỘT .catch ở cuối bắt lỗi của cả ba bước.</li>\n  <li>Các bước chạy tuần tự: tổng thời gian 40 + 20 + 30 = 90 ms khi thành công.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ma: string; soLuong: number.",
+      "outputSpec": "Promise<string>.",
+      "constraints": "Không async/await.\nKhông lồng .then trong callback của .then.",
+      "examplesJson": [
+        {
+          "input": "datHang(\"BUT\", 3)",
+          "output": "\"Đơn DH-1: 15000đ\"",
+          "explanation": "5000 × 3."
+        },
+        {
+          "input": "datHang(\"VO\", 1)",
+          "output": "\"Lỗi: Hết hàng\"",
+          "explanation": "Bước 1 reject."
+        },
+        {
+          "input": "datHang(\"BUT\", 0)",
+          "output": "\"Lỗi: Số lượng không hợp lệ\"",
+          "explanation": "Bước 2 reject — bản cũ không bắt được lỗi này."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi callback RETURN Promise của bước kế: .then((sp) => tinhTien(sp, soLuong)).then((tien) => taoDon(tien)).then((don) => `Đơn ${don.maDon}: ${don.tien}đ`)",
+        "Cuối chuỗi: .catch((err) => `Lỗi: ${err.message}`) — chỉ một cái là đủ cho mọi bước phía trên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ của cửa hàng, đừng sửa.\nconst KHO = { BUT: { ma: \"BUT\", ten: \"Bút bi\", gia: 5000, ton: 100 }, VO: { ma: \"VO\", ten: \"Vở\", gia: 12000, ton: 0 } };\nlet soDon = 0;\n\n// Promise<sanPham> — hết hàng / không có mã ⇒ reject\nfunction kiemTraKho(ma, soLuong) {\n  return new Promise((resolve, reject) => setTimeout(() => {\n    const sp = KHO[ma];\n    if (!sp) return reject(new Error(`Không có sản phẩm ${ma}`));\n    if (sp.ton < soLuong) return reject(new Error(\"Hết hàng\"));\n    resolve(sp);\n  }, 40));\n}\n\n// Promise<number> — số lượng <= 0 ⇒ reject\nfunction tinhTien(sp, soLuong) {\n  return new Promise((resolve, reject) => setTimeout(() => {\n    if (!(soLuong > 0)) return reject(new Error(\"Số lượng không hợp lệ\"));\n    resolve(sp.gia * soLuong);\n  }, 20));\n}\n\n// Promise<{ maDon, tien }>\nfunction taoDon(tien) {\n  return new Promise((resolve) => setTimeout(() => {\n    soDon = soDon + 1;\n    resolve({ maDon: `DH-${soDon}`, tien });\n  }, 30));\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Chuỗi đặt hàng\nfunction datHang(ma, soLuong) {\n  return kiemTraKho(ma, soLuong)\n    .then((sp) => {\n      return tinhTien(sp, soLuong).then((tien) => {\n        return taoDon(tien).then((don) => {\n          return \"Đơn \" + don.maDon + \": \" + don.tien + \"đ\";\n        });\n      });\n    }, (err) => \"Lỗi: \" + err.message);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ của cửa hàng, đừng sửa.\nconst KHO = { BUT: { ma: \"BUT\", ten: \"Bút bi\", gia: 5000, ton: 100 }, VO: { ma: \"VO\", ten: \"Vở\", gia: 12000, ton: 0 } };\nlet soDon = 0;\n\n// Promise<sanPham> — hết hàng / không có mã ⇒ reject\nfunction kiemTraKho(ma, soLuong) {\n  return new Promise((resolve, reject) => setTimeout(() => {\n    const sp = KHO[ma];\n    if (!sp) return reject(new Error(`Không có sản phẩm ${ma}`));\n    if (sp.ton < soLuong) return reject(new Error(\"Hết hàng\"));\n    resolve(sp);\n  }, 40));\n}\n\n// Promise<number> — số lượng <= 0 ⇒ reject\nfunction tinhTien(sp, soLuong) {\n  return new Promise((resolve, reject) => setTimeout(() => {\n    if (!(soLuong > 0)) return reject(new Error(\"Số lượng không hợp lệ\"));\n    resolve(sp.gia * soLuong);\n  }, 20));\n}\n\n// Promise<{ maDon, tien }>\nfunction taoDon(tien) {\n  return new Promise((resolve) => setTimeout(() => {\n    soDon = soDon + 1;\n    resolve({ maDon: `DH-${soDon}`, tien });\n  }, 30));\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Chuỗi đặt hàng\nfunction datHang(ma, soLuong) {\n  return kiemTraKho(ma, soLuong)                 // bước 1: Promise<sanPham>\n    .then((sp) => tinhTien(sp, soLuong))         // bước 2: return Promise ⇒ chuỗi chờ nó\n    .then((tien) => taoDon(tien))                // bước 3\n    .then((don) => `Đơn ${don.maDon}: ${don.tien}đ`)\n    // MỘT catch cho cả chuỗi: lỗi ở bước nào cũng nhảy thẳng xuống đây\n    .catch((err) => `Lỗi: ${err.message}`);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bản cũ truyền hàm lỗi làm đối số thứ hai của then đầu tiên: nó chỉ bắt lỗi của <em>bước 1</em>; lỗi ở bước 2 nằm trong Promise lồng bên trong và không ai bắt. Chuỗi phẳng + một <code>.catch</code> cuối cùng nghĩa là: lỗi xảy ra ở đâu, mọi then còn lại bị bỏ qua và điều khiển tới catch.</p>\n<p>Lưu ý: lỗi ở bước 2 ⇒ bước 3 không chạy, không đơn nào được tạo — máy chấm kiểm số đơn tiếp theo vẫn là DH-1. Nó cũng đo tổng 90 ms ảo để chắc ba bước nối tiếp.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thêm catch sau mỗi then — lỗi ở bước 1 bị \"chữa\" thành chuỗi, bước 2 lại nhận chuỗi đó thay vì sản phẩm.</li>\n  <li>Quên return trong then — bước sau nhận undefined.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.2 Promise: một giá trị đến sau.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/promise-error-handling",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "tepNap": [
+          "api.js",
+          "main.js"
+        ],
+        "kiem": [
+          {
+            "moTa": "Đặt hàng thành công",
+            "goi": "await datHang(\"BUT\", 3)",
+            "mongDoi": "Đơn DH-1: 15000đ"
+          },
+          {
+            "moTa": "Hết hàng (lỗi bước 1)",
+            "goi": "await datHang(\"VO\", 1)",
+            "mongDoi": "Lỗi: Hết hàng"
+          },
+          {
+            "moTa": "Số lượng 0 (lỗi bước 2) cũng được bắt",
+            "goi": "await datHang(\"BUT\", 0)",
+            "mongDoi": "Lỗi: Số lượng không hợp lệ"
+          },
+          {
+            "moTa": "Lỗi bước 2 ⇒ không tạo đơn",
+            "chuanBi": "await datHang(\"BUT\", 0);",
+            "goi": "await datHang(\"BUT\", 1)",
+            "mongDoi": "Đơn DH-1: 5000đ"
+          },
+          {
+            "moTa": "Ba bước tuần tự: 90 ms",
+            "chuanBi": "const t = Date.now(); await datHang(\"BUT\", 2);",
+            "goi": "Date.now() - t",
+            "mongDoi": 90
+          },
+          {
+            "moTa": "Mã không tồn tại",
+            "goi": "await datHang(\"XYZ\", 1)",
+            "mongDoi": "Lỗi: Không có sản phẩm XYZ",
+            "an": true
+          },
+          {
+            "moTa": "Không async/await",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\b(async|await)\\b",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Hạn chờ cho một Promise: settle đúng một lần",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "Promise settle một lần",
+        "chạy đua hai việc",
+        "clearTimeout",
+        "reject với Error"
+      ],
+      "prerequisites": [
+        "new Promise",
+        ".then"
+      ],
+      "tags": [
+        "javascript",
+        "promise",
+        "timeout"
+      ],
+      "problemHtml": "<p>Bài 5.2: <em>\"Một Promise rời trạng thái pending đúng một lần. Gọi resolve lần hai chẳng làm gì — hữu ích khi bọc API.\"</em> Tận dụng điều đó để viết <code>voiHanGio(promise, ms)</code>: trả về Promise mới mang kết quả của <code>promise</code> nếu nó xong trong <code>ms</code>; quá hạn thì reject với <code>Error(\"Quá thời gian &lt;ms&gt;ms\")</code>.</p>\n<p><em>Máy chấm dùng đồng hồ GIẢ: các khoảng trễ là thật về thứ tự và thời điểm, nhưng bạn không phải chờ.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>promise</code> fulfilled kịp → Promise mới fulfilled cùng giá trị.</li>\n  <li><code>promise</code> rejected kịp → Promise mới rejected cùng lỗi.</li>\n  <li>Quá <code>ms</code> → reject <code>Error</code> với thông điệp <code>\"Quá thời gian &lt;ms&gt;ms\"</code>, ngay tại mốc <code>ms</code> (không chờ promise gốc).</li>\n  <li>Khi promise gốc xong trước, huỷ hẹn giờ bằng <code>clearTimeout</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "promise: Promise; ms: number.",
+      "outputSpec": "Promise.",
+      "constraints": "Không dùng Promise.race (tự viết để hiểu cơ chế).\nKhông async/await.",
+      "examplesJson": [
+        {
+          "input": "voiHanGio(cho(50, \"ok\"), 100)",
+          "output": "\"ok\"   (ở mốc 50 ms)",
+          "explanation": "Xong kịp."
+        },
+        {
+          "input": "voiHanGio(cho(500, \"muộn\"), 100)",
+          "output": "Error: Quá thời gian 100ms   (ở mốc 100 ms)",
+          "explanation": "resolve của promise gốc ở mốc 500 không còn tác dụng — Promise mới đã rejected."
+        }
+      ],
+      "hintsJson": [
+        "return new Promise((resolve, reject) => { const hen = setTimeout(() => reject(new Error(…)), ms); promise.then(…, …); });",
+        "Ai gọi trước thắng: promise.then((v) => { clearTimeout(hen); resolve(v); }, (e) => { clearTimeout(hen); reject(e); }); — lần gọi sau (của kẻ thua) bị bỏ qua."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Hạn chờ\n// cho(ms, giaTri) — tiện ích có sẵn để thử\nconst cho = (ms, giaTri) => new Promise((resolve) => setTimeout(() => resolve(giaTri), ms));\n\nfunction voiHanGio(promise, ms) {\n  return promise;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Hạn chờ\n// cho(ms, giaTri) — tiện ích có sẵn để thử\nconst cho = (ms, giaTri) => new Promise((resolve) => setTimeout(() => resolve(giaTri), ms));\n\nfunction voiHanGio(promise, ms) {\n  return new Promise((resolve, reject) => {\n    // Đối thủ 1: đồng hồ — hết giờ thì reject\n    const hen = setTimeout(() => {\n      reject(new Error(`Quá thời gian ${ms}ms`));\n    }, ms);\n\n    // Đối thủ 2: promise gốc. Ai settle Promise mới TRƯỚC thì thắng;\n    // lời gọi resolve/reject của kẻ thua bị bỏ qua (Promise chỉ settle một lần).\n    promise.then(\n      (giaTri) => { clearTimeout(hen); resolve(giaTri); },\n      (loi) => { clearTimeout(hen); reject(loi); },\n    );\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Promise mới có hai \"đối thủ\" cùng cầm resolve/reject: hẹn giờ và promise gốc. Luật settle-một-lần biến chuyện chạy đua thành an toàn: kẻ thua gọi resolve/reject cũng không đổi được gì. <code>clearTimeout</code> không bắt buộc cho đúng kết quả, nhưng dọn hẹn giờ thừa là thói quen tốt (nhiều hẹn giờ treo giữ chương trình Node không thoát).</p>\n<p><code>Promise.race([promise, hetGio])</code> làm đúng việc này trong một dòng — giờ bạn biết bên trong nó là gì. Máy chấm kiểm cả ba kết cục và <em>thời điểm</em> reject (100 ms, không phải 500).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>reject bằng chuỗi thay vì Error — người gọi đọc err.message ra undefined.</li>\n  <li>Chờ promise gốc xong rồi mới kiểm \"đã quá giờ chưa\" — reject muộn ở mốc 500.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.2 Promise: một giá trị đến sau.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/race",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Xong kịp → giá trị gốc",
+            "goi": "await voiHanGio(cho(50, \"ok\"), 100)",
+            "mongDoi": "ok"
+          },
+          {
+            "moTa": "Quá hạn → Error \"Quá thời gian 100ms\"",
+            "goi": "await voiHanGio(cho(500, \"muộn\"), 100)",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^Quá thời gian 100ms$"
+            }
+          },
+          {
+            "moTa": "Reject đúng ở mốc 100 ms",
+            "chuanBi": "const t = Date.now(); let tg = -1; await voiHanGio(cho(500), 100).catch(() => { tg = Date.now() - t; });",
+            "goi": "tg",
+            "mongDoi": 100
+          },
+          {
+            "moTa": "Promise gốc reject kịp → cùng lỗi",
+            "goi": "await voiHanGio(Promise.reject(new RangeError(\"hỏng\")), 100)",
+            "mongDoi": {
+              "loi": "RangeError",
+              "thongDiep": "hỏng"
+            }
+          },
+          {
+            "moTa": "Không dùng Promise.race",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "Promise\\.race",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Dọn hẹn giờ bằng clearTimeout",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "clearTimeout\\s*\\(",
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Chạy tuần tự một danh sách việc bất đồng bộ bằng chuỗi then",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "reduce dựng chuỗi Promise",
+        "Promise.resolve()",
+        "dừng chuỗi khi lỗi",
+        "gom kết quả"
+      ],
+      "prerequisites": [
+        "chuỗi then",
+        "reduce"
+      ],
+      "tags": [
+        "javascript",
+        "promise",
+        "reduce"
+      ],
+      "problemHtml": "<p>Bài tổng hợp 5.2. <code>chayTuanTu(cacViec)</code> nhận một mảng <strong>hàm</strong>, mỗi hàm khi gọi trả về một Promise (vd ba lần ghi vào cơ sở dữ liệu phải theo đúng thứ tự). Chạy từng việc <em>sau khi</em> việc trước xong, trả về Promise của mảng kết quả theo thứ tự. Một việc reject ⇒ dừng ngay (các việc sau KHÔNG được bắt đầu) và reject với lỗi đó.</p>\n<p>Code khởi đầu gọi mọi hàm cùng lúc — chúng chạy song song, và kết quả theo thứ tự <em>xong</em>, không theo thứ tự <em>danh sách</em>.</p>\n<p><em>Máy chấm dùng đồng hồ GIẢ: các khoảng trễ là thật về thứ tự và thời điểm, nhưng bạn không phải chờ.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Việc i chỉ được GỌI sau khi Promise của việc i − 1 fulfilled.</li>\n  <li>Kết quả là mảng giá trị theo thứ tự danh sách; tổng thời gian = tổng thời gian từng việc.</li>\n  <li>Một việc reject ⇒ Promise trả về reject với đúng lỗi đó; các việc sau không được gọi.</li>\n  <li>Danh sách rỗng ⇒ fulfilled với <code>[]</code>.</li>\n  <li>Không async/await (luyện chuỗi then) — gợi ý: reduce bắt đầu từ Promise.resolve([]).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "cacViec: mảng hàm () => Promise.",
+      "outputSpec": "Promise<mảng kết quả>.",
+      "constraints": "Không async/await.\nKhông Promise.all (nó chạy song song).",
+      "examplesJson": [
+        {
+          "input": "chayTuanTu([() => cho(100, \"A\"), () => cho(50, \"B\"), () => cho(10, \"C\")])",
+          "output": "[\"A\", \"B\", \"C\"]   (sau 160 ms)",
+          "explanation": "Song song sẽ chỉ mất 100 ms, nhưng thứ tự BẮT ĐẦU sẽ không còn là A → B → C."
+        }
+      ],
+      "hintsJson": [
+        "Bắt đầu từ một Promise đã fulfilled với mảng rỗng, rồi với mỗi việc nối thêm một then: chuoi = chuoi.then((kq) => viec().then((v) => [...kq, v]));",
+        "return cacViec.reduce((chuoi, viec) => chuoi.then((kq) => viec().then((v) => [...kq, v])), Promise.resolve([])); — lỗi của một việc làm mọi then sau bị bỏ qua, nên các việc sau không được gọi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Chạy tuần tự\n// cho(ms, giaTri) — tiện ích có sẵn để thử\nconst cho = (ms, giaTri) => new Promise((resolve) => setTimeout(() => resolve(giaTri), ms));\n\nfunction chayTuanTu(cacViec) {\n  const ketQua = [];\n  cacViec.forEach((viec) => {\n    viec().then((v) => ketQua.push(v));\n  });\n  return Promise.resolve(ketQua);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.2 — Chạy tuần tự\n// cho(ms, giaTri) — tiện ích có sẵn để thử\nconst cho = (ms, giaTri) => new Promise((resolve) => setTimeout(() => resolve(giaTri), ms));\n\nfunction chayTuanTu(cacViec) {\n  // Mắt xích đầu: một Promise đã fulfilled với mảng kết quả rỗng\n  return cacViec.reduce(\n    (chuoi, viec) =>\n      // Nối thêm một mắt xích: CHỈ khi chuỗi trước xong mới gọi viec()\n      chuoi.then((ketQua) =>\n        viec().then((giaTri) => [...ketQua, giaTri])   // mảng mới, không push vào mảng cũ\n      ),\n    Promise.resolve([]),\n  );\n  // Một việc reject ⇒ mọi then phía sau bị bỏ qua ⇒ các việc sau KHÔNG được gọi,\n  // và lỗi đi thẳng tới người gọi.\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mấu chốt: gọi <code>viec()</code> là bắt đầu công việc. Code khởi đầu gọi tất cả trong <code>forEach</code> nên mọi việc bắt đầu cùng lúc; nó còn trả về mảng rỗng ngay vì các then chưa kịp chạy. Muốn tuần tự, lời gọi <code>viec()</code> phải nằm <em>bên trong</em> then của mắt xích trước.</p>\n<p><code>reduce</code> dựng cả chuỗi <code>Promise.resolve([]).then(v1).then(v2).then(v3)</code> từ một mảng độ dài bất kỳ. Ở Bài 5.3, <code>for…of</code> + <code>await</code> làm đúng việc này dễ đọc hơn — nhưng bên dưới nó chính là chuỗi then này. Máy chấm ghi lại thời điểm <em>bắt đầu</em> từng việc để chắc không có hai việc chạy chồng nhau.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Gọi viec() khi dựng chuỗi (ngoài then) — mọi việc vẫn bắt đầu cùng lúc.</li>\n  <li>Dùng Promise.all — song song, đề cấm.</li>\n  <li>push vào một mảng dùng chung rồi trả về mảng đó trước khi các việc xong.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.2 Promise: một giá trị đến sau.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises#composition",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Kết quả theo thứ tự danh sách",
+            "goi": "await chayTuanTu([() => cho(100, \"A\"), () => cho(50, \"B\"), () => cho(10, \"C\")])",
+            "mongDoi": [
+              "A",
+              "B",
+              "C"
+            ]
+          },
+          {
+            "moTa": "Tuần tự: 160 ms",
+            "chuanBi": "const t = Date.now(); await chayTuanTu([() => cho(100), () => cho(50), () => cho(10)]);",
+            "goi": "Date.now() - t",
+            "mongDoi": 160
+          },
+          {
+            "moTa": "Mốc bắt đầu từng việc: 0, 100, 150",
+            "chuanBi": "const t = Date.now(); const bd = []; const v = (ms) => () => { bd.push(Date.now() - t); return cho(ms); }; await chayTuanTu([v(100), v(50), v(10)]);",
+            "goi": "bd",
+            "mongDoi": [
+              0,
+              100,
+              150
+            ]
+          },
+          {
+            "moTa": "Danh sách rỗng → []",
+            "goi": "await chayTuanTu([])",
+            "mongDoi": []
+          },
+          {
+            "moTa": "Một việc reject → reject đúng lỗi đó",
+            "goi": "await chayTuanTu([() => cho(10, 1), () => Promise.reject(new Error(\"việc 2 hỏng\")), () => cho(10, 3)])",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "việc 2 hỏng"
+            }
+          },
+          {
+            "moTa": "Sau lỗi, các việc sau không được gọi",
+            "chuanBi": "let daGoi3 = false; await chayTuanTu([() => Promise.reject(new Error(\"x\")), () => { daGoi3 = true; return cho(1); }]).catch(() => {});",
+            "goi": "daGoi3",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": "Không async/await, không Promise.all",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\b(async|await)\\b|Promise\\.all",
+            "phuDinh": true
+          }
+        ]
+      }
+    }
+  ]
+}

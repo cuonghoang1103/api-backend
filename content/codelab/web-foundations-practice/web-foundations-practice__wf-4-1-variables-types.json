@@ -1,0 +1,770 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-4-1-variables-types",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-4-1-variables-types"
+  },
+  "exercises": [
+    {
+      "title": "Lời chào bằng template literal",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "template literal",
+        "nhúng biến bằng ${ }",
+        "string"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "javascript",
+        "string",
+        "template-literal"
+      ],
+      "problemHtml": "<p>Bài 4.1: <em>\"Template literal: dấu huyền cho phép nhúng giá trị bằng <code>${ }</code>.\"</em> Trang hồ sơ cần một câu chào ghép từ tên và tuổi. Người viết trước nối chuỗi bằng <code>+</code> và quên dấu cách, nên ra <code>\"Xin chào, tôi làLan,25 tuổi.\"</code>. Viết lại hàm <code>loiChao(ten, tuoi)</code> bằng template literal.</p>\n<p><em>Khung hàm đã viết sẵn — hàm sẽ học kỹ ở Bài 4.3. Ở đây bạn chỉ sửa/viết phần THÂN hàm và dòng <code>return</code>.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>loiChao(ten, tuoi)</code> trả về đúng chuỗi <code>Xin chào, tôi là &lt;ten&gt;, &lt;tuoi&gt; tuổi.</code> — có dấu cách sau dấu phẩy, có dấu chấm cuối.</li>\n  <li>Dùng template literal (dấu huyền <code>`</code> và <code>${ }</code>), không nối bằng <code>+</code>.</li>\n  <li>Chạy đúng với mọi tên/tuổi, không viết cứng \"Lan\".</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ten: string (vd \"Lan\"), tuoi: number (vd 25).",
+      "outputSpec": "Một string: \"Xin chào, tôi là Lan, 25 tuổi.\"",
+      "constraints": "Không dùng toán tử + để ghép chuỗi.\nGiữ nguyên tên hàm loiChao.",
+      "examplesJson": [
+        {
+          "input": "loiChao(\"Lan\", 25)",
+          "output": "\"Xin chào, tôi là Lan, 25 tuổi.\"",
+          "explanation": "Hai giá trị được nhúng vào đúng chỗ bằng ${ten} và ${tuoi}."
+        },
+        {
+          "input": "loiChao(\"Minh Anh\", 19)",
+          "output": "\"Xin chào, tôi là Minh Anh, 19 tuổi.\"",
+          "explanation": "Tên có dấu cách vẫn nằm nguyên trong chuỗi — template literal không cần nối thêm khoảng trắng."
+        }
+      ],
+      "hintsJson": [
+        "Template literal bắt đầu và kết thúc bằng dấu huyền ` (phím cạnh số 1), không phải dấu nháy đơn.",
+        "return `Xin chào, tôi là ${ten}, ${tuoi} tuổi.`; — chép đúng dấu phẩy, dấu cách và dấu chấm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — Lời chào bằng template literal\nfunction loiChao(ten, tuoi) {\n  // Bản cũ: nối bằng + và quên dấu cách — sửa lại bằng template literal\n  return \"Xin chào, tôi là\" + ten + \",\" + tuoi + \" tuổi.\";\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — Lời chào bằng template literal\nfunction loiChao(ten, tuoi) {\n  // Dấu huyền mở template literal; ${...} nhúng giá trị của biến vào đúng chỗ.\n  // Khoảng trắng và dấu câu viết thẳng như câu bình thường — không phải nhớ \" \" + ...\n  return `Xin chào, tôi là ${ten}, ${tuoi} tuổi.`;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Với <code>+</code>, mỗi khoảng trắng phải là một mảnh <code>\" \"</code> riêng — quên một mảnh là chữ dính vào nhau. Template literal viết cả câu một lần, chỗ nào cần giá trị thì đặt <code>${…}</code>: câu trong code trông y hệt câu hiện ra.</p>\n<p>Số <code>25</code> được nhúng tự đổi thành chữ <code>\"25\"</code>. Máy chấm gọi hàm với ba bộ tên/tuổi khác nhau và đọc mã nguồn (đã bỏ chú thích) để chắc bạn không còn dùng <code>+</code> ghép chuỗi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng dấu nháy đơn <code>'Xin chào, ${ten}'</code> — nháy đơn không phải template literal, ra nguyên văn chữ <code>${ten}</code>.</li>\n  <li>Thiếu dấu chấm cuối hoặc dấu cách sau dấu phẩy — máy chấm so từng ký tự.</li>\n  <li>Viết <code>$ {ten}</code> có dấu cách giữa <code>$</code> và <code>{</code> — không còn là chỗ nhúng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.1 Biến và kiểu dữ liệu.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "loiChao(\"Lan\", 25)",
+            "goi": "loiChao(\"Lan\", 25)",
+            "mongDoi": "Xin chào, tôi là Lan, 25 tuổi."
+          },
+          {
+            "moTa": "Tên có dấu cách: loiChao(\"Minh Anh\", 19)",
+            "goi": "loiChao(\"Minh Anh\", 19)",
+            "mongDoi": "Xin chào, tôi là Minh Anh, 19 tuổi."
+          },
+          {
+            "moTa": "Tuổi 0 vẫn in ra \"0\"",
+            "goi": "loiChao(\"Bé Na\", 0)",
+            "mongDoi": "Xin chào, tôi là Bé Na, 0 tuổi.",
+            "an": true
+          },
+          {
+            "moTa": "Dùng template literal có ${…}",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "`[^`]*\\$\\{[^`]*`"
+          },
+          {
+            "moTa": "Không ghép chuỗi bằng dấu +",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "[\"'`]\\s*\\+|\\+\\s*[\"'`]",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Sửa lỗi \"Assignment to constant variable\"",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "const",
+        "let",
+        "gán lại",
+        "TypeError"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "javascript",
+        "const",
+        "let"
+      ],
+      "problemHtml": "<p>Bài 4.1: <em>\"Luôn bắt đầu bằng const; chỉ đổi sang let khi bạn gán lại.\"</em> Hàm <code>tinhDiemThuong()</code> dưới đây cộng điểm thưởng qua ba lượt chơi, nhưng gọi nó là văng <code>TypeError: Assignment to constant variable.</code> Ngoài ra nó còn dùng <code>var</code> — cách cũ mà bài học dặn đừng dùng nữa.</p>\n<p><em>Khung hàm đã viết sẵn — hàm sẽ học kỹ ở Bài 4.3. Ở đây bạn chỉ sửa/viết phần THÂN hàm và dòng <code>return</code>.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>tinhDiemThuong()</code> chạy không lỗi và trả về <code>35</code>.</li>\n  <li>Biến bị gán lại khai báo bằng <code>let</code>; biến không bao giờ gán lại giữ <code>const</code>.</li>\n  <li>Không còn chữ <code>var</code> nào trong tệp.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Không có tham số.",
+      "outputSpec": "number 35 (10 + 5 + 20).",
+      "constraints": "Không đổi các con số thưởng.\nKhông xoá dòng cộng điểm nào.",
+      "examplesJson": [
+        {
+          "input": "tinhDiemThuong()",
+          "output": "35",
+          "explanation": "diem bắt đầu 0, cộng 10, rồi 5, rồi 20."
+        },
+        {
+          "input": "(code khởi đầu) tinhDiemThuong()",
+          "output": "TypeError: Assignment to constant variable.",
+          "explanation": "diem khai báo bằng const nhưng dòng diem = diem + 10 lại gán lại nó."
+        }
+      ],
+      "hintsJson": [
+        "Tìm biến nào bị gán lại (có dấu = đứng sau tên nó lần thứ hai). Biến đó không được là const.",
+        "Đổi const diem thành let diem; đổi var THUONG_CUOI thành const (nó không bao giờ đổi)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — const hay let?\nfunction tinhDiemThuong() {\n  const diem = 0;\n  var THUONG_CUOI = 20;\n  const thuongLuot1 = 10;\n  const thuongLuot2 = 5;\n\n  diem = diem + thuongLuot1;\n  diem = diem + thuongLuot2;\n  diem = diem + THUONG_CUOI;\n  return diem;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — const hay let?\nfunction tinhDiemThuong() {\n  let diem = 0;               // bị gán lại 3 lần bên dưới ⇒ phải là let\n  const THUONG_CUOI = 20;     // không bao giờ đổi ⇒ const (bỏ var: var rò ra khỏi khối)\n  const thuongLuot1 = 10;     // const: tên này không trỏ sang giá trị khác\n  const thuongLuot2 = 5;\n\n  diem = diem + thuongLuot1;  // 10\n  diem = diem + thuongLuot2;  // 15\n  diem = diem + THUONG_CUOI;  // 35\n  return diem;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>const</code> khoá <em>cái tên</em>: tên đó không được trỏ sang giá trị khác. <code>diem = diem + 10</code> chính là trỏ sang giá trị mới, nên với <code>const</code> JavaScript ném <code>TypeError</code> ngay lúc chạy. Biến cộng dồn là ví dụ kinh điển của <code>let</code>.</p>\n<p><code>THUONG_CUOI</code> chẳng bao giờ đổi nên <code>const</code> là đúng — và đổi <code>var</code> thành <code>const</code> cũng bỏ luôn luật phạm vi khó đoán của <code>var</code>. Máy chấm gọi hàm (phải ra 35, không ném lỗi) và soi mã nguồn không còn <code>var</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đổi TẤT CẢ thành <code>let</code> cho chắc — chạy được, nhưng mất lời hứa \"không đổi\" mà <code>const</code> cho người đọc.</li>\n  <li>Đổi <code>var</code> thành <code>let</code> — chạy được, nhưng hằng số thưởng không bị gán lại nên <code>const</code> mới đúng ý.</li>\n  <li>Gộp thành <code>const diem = 10 + 5 + 20</code> — ra 35 nhưng xoá mất các dòng cộng (đề cấm).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.1 Biến và kiểu dữ liệu.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/variables",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "tinhDiemThuong() trả về 35, không ném lỗi",
+            "goi": "tinhDiemThuong()",
+            "mongDoi": 35
+          },
+          {
+            "moTa": "Gọi hai lần vẫn ra 35 (không cộng dồn ngoài hàm)",
+            "goi": "tinhDiemThuong() + tinhDiemThuong()",
+            "mongDoi": 70,
+            "an": true
+          },
+          {
+            "moTa": "diem khai báo bằng let",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\blet\\s+diem\\b"
+          },
+          {
+            "moTa": "Không còn var",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\bvar\\b",
+            "phuDinh": true
+          },
+          {
+            "moTa": "THUONG_CUOI là const",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\bconst\\s+THUONG_CUOI\\b"
+          },
+          {
+            "moTa": "Vẫn giữ ba dòng cộng điểm",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "(diem\\s*=\\s*diem\\s*\\+[^\\n]*\\n[\\s\\S]*){3}"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bẫy dấu +: cộng tiền đọc từ ô nhập",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "dấu + mang hai vai",
+        "string và number",
+        "Number()",
+        "typeof"
+      ],
+      "prerequisites": [
+        "template literal"
+      ],
+      "tags": [
+        "javascript",
+        "number",
+        "type-coercion"
+      ],
+      "problemHtml": "<p>Bài 4.1: <em>\"Với số thì cộng; với một chuỗi ở bất kỳ bên nào thì nối thành chữ.\"</em> Trang thanh toán đọc giá từ một ô nhập — mà ô nhập luôn cho <strong>chuỗi</strong>. Hàm <code>tongTien(giaNhap, phiShip)</code> đang trả về <code>\"12000030000\"</code> thay vì <code>150000</code>. Sửa để nó trả về một <strong>số</strong>.</p>\n<p><em>Khung hàm đã viết sẵn — hàm sẽ học kỹ ở Bài 4.3. Ở đây bạn chỉ sửa/viết phần THÂN hàm và dòng <code>return</code>.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>tongTien(\"120000\", 30000)</code> trả về số <code>150000</code> (kiểu <code>number</code>, không phải chuỗi).</li>\n  <li>Đổi <code>giaNhap</code> sang số bằng <code>Number(...)</code> TRƯỚC khi cộng.</li>\n  <li>Hàm thứ hai <code>kieuKetQua(giaNhap, phiShip)</code> trả về <code>typeof</code> của kết quả <code>tongTien</code> — phải là <code>\"number\"</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "giaNhap: string chỉ gồm chữ số (vd \"120000\"); phiShip: number.",
+      "outputSpec": "tongTien → number; kieuKetQua → \"number\".",
+      "constraints": "Không dùng parseInt/parseFloat (chưa học) — dùng Number().\nGiữ tên hai hàm.",
+      "examplesJson": [
+        {
+          "input": "tongTien(\"120000\", 30000)",
+          "output": "150000",
+          "explanation": "Number(\"120000\") là số 120000, cộng 30000 ra 150000."
+        },
+        {
+          "input": "(code khởi đầu) tongTien(\"120000\", 30000)",
+          "output": "\"12000030000\"",
+          "explanation": "Một bên là chuỗi nên + nối chữ: \"120000\" + 30000 → \"12000030000\"."
+        },
+        {
+          "input": "kieuKetQua(\"5\", 1)",
+          "output": "\"number\"",
+          "explanation": "typeof trả về tên kiểu dưới dạng chuỗi."
+        }
+      ],
+      "hintsJson": [
+        "Chỉ cần MỘT bên của + là chuỗi là cả phép thành nối chữ. Hãy đổi giaNhap thành số trước.",
+        "const gia = Number(giaNhap); return gia + phiShip; — và kieuKetQua chỉ cần return typeof tongTien(giaNhap, phiShip);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — Bẫy dấu +\n// giaNhap đến từ ô <input> nên LUÔN là chuỗi, ví dụ \"120000\"\nfunction tongTien(giaNhap, phiShip) {\n  return giaNhap + phiShip;\n}\n\nfunction kieuKetQua(giaNhap, phiShip) {\n  // trả về typeof của tongTien(giaNhap, phiShip)\n  return \"?\";\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — Bẫy dấu +\n// giaNhap đến từ ô <input> nên LUÔN là chuỗi, ví dụ \"120000\"\nfunction tongTien(giaNhap, phiShip) {\n  const gia = Number(giaNhap);   // \"120000\" → 120000 (number)\n  return gia + phiShip;          // cả hai bên là số ⇒ + là phép CỘNG\n}\n\nfunction kieuKetQua(giaNhap, phiShip) {\n  // typeof trả về tên kiểu dạng chuỗi: \"number\", \"string\", ...\n  return typeof tongTien(giaNhap, phiShip);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Dấu <code>+</code> xét kiểu hai bên: hai số ⇒ cộng; có một chuỗi ⇒ nối. <code>\"120000\" + 30000</code> nên ra chuỗi <code>\"12000030000\"</code> — và lỗi này lặng lẽ: không có thông báo nào, chỉ có một con số khổng lồ trên hoá đơn. Đổi kiểu <em>ở chỗ dữ liệu đi vào</em> (<code>Number(giaNhap)</code>) là cách sửa gọn nhất.</p>\n<p><code>typeof</code> là công cụ để <em>kiểm</em> giả thuyết về kiểu: <code>typeof \"12000030000\"</code> là <code>\"string\"</code>, còn sau khi sửa là <code>\"number\"</code>. Máy chấm gọi cả hai hàm với nhiều bộ số, kể cả <code>\"0\"</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đổi kiểu SAU khi cộng: <code>Number(giaNhap + phiShip)</code> — chuỗi đã nối thành <code>\"12000030000\"</code> rồi mới đổi, ra số sai.</li>\n  <li>Viết <code>kieuKetQua</code> trả về chuỗi cứng <code>\"number\"</code> — máy chấm có kiểm ẩn gọi hàm thật.</li>\n  <li>Tưởng <code>-</code> cũng nối chuỗi: <code>\"5\" - 2</code> ra <code>3</code> (trừ luôn đổi sang số) — chỉ <code>+</code> có hai vai.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.1 Biến và kiểu dữ liệu.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Addition",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "tongTien(\"120000\", 30000) = 150000",
+            "goi": "tongTien(\"120000\", 30000)",
+            "mongDoi": 150000
+          },
+          {
+            "moTa": "tongTien(\"0\", 0) = 0",
+            "goi": "tongTien(\"0\", 0)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": "Kết quả là number",
+            "goi": "typeof tongTien(\"99000\", 15000)",
+            "mongDoi": "number"
+          },
+          {
+            "moTa": "kieuKetQua(\"5\", 1) = \"number\"",
+            "goi": "kieuKetQua(\"5\", 1)",
+            "mongDoi": "number"
+          },
+          {
+            "moTa": "Dùng Number(...) để đổi kiểu",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "Number\\s*\\("
+          },
+          {
+            "moTa": "kieuKetQua dùng typeof thật",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "typeof\\s+tongTien|typeof\\s*\\(\\s*tongTien",
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bảng so sánh == với ===",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "== (bằng lỏng lẻo)",
+        "=== (bằng nghiêm ngặt)",
+        "typeof",
+        "object literal"
+      ],
+      "prerequisites": [
+        "typeof"
+      ],
+      "tags": [
+        "javascript",
+        "equality",
+        "typeof"
+      ],
+      "problemHtml": "<p>Bài 4.1, mục <em>\"Bẫy — == chuyển đổi kiểu trước khi so, và luật của nó thì không nhớ nổi\"</em>. Để thấy tận mắt, viết hàm <code>soSanh(a, b)</code> trả về một object bốn trường: kiểu của mỗi bên và kết quả của cả hai phép so. Sau đó tự gọi thử với <code>(\"5\", 5)</code>, <code>(\"\", 0)</code>, <code>(null, undefined)</code> — bảng đó chính là lý do bài học dặn luôn dùng <code>===</code>.</p>\n<p><em>Khung hàm đã viết sẵn — hàm sẽ học kỹ ở Bài 4.3. Ở đây bạn chỉ sửa/viết phần THÂN hàm và dòng <code>return</code>.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>soSanh(a, b)</code> trả về object <code>{ kieuA, kieuB, bangLong, bangChat }</code>.</li>\n  <li><code>kieuA</code>/<code>kieuB</code> là <code>typeof</code> của a/b; <code>bangLong</code> là <code>a == b</code>; <code>bangChat</code> là <code>a === b</code>.</li>\n  <li>Hàm <code>anToan(a, b)</code> trả về <code>true</code> chỉ khi a và b cùng giá trị VÀ cùng kiểu — dùng <code>===</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "a, b: hai giá trị bất kỳ.",
+      "outputSpec": "soSanh → object 4 trường; anToan → boolean.",
+      "constraints": "Trong anToan không được dùng ==.\nKhông viết cứng kết quả cho từng cặp — phải tính bằng toán tử.",
+      "examplesJson": [
+        {
+          "input": "soSanh(\"5\", 5)",
+          "output": "{ kieuA: \"string\", kieuB: \"number\", bangLong: true, bangChat: false }",
+          "explanation": "== đổi \"5\" sang số 5 rồi mới so; === thấy hai kiểu khác nhau nên false."
+        },
+        {
+          "input": "soSanh(null, undefined)",
+          "output": "{ kieuA: \"object\", kieuB: \"undefined\", bangLong: true, bangChat: false }",
+          "explanation": "typeof null là \"object\" — một lỗi lịch sử của JavaScript, cứ thế mà nhớ."
+        },
+        {
+          "input": "anToan(\"\", 0)",
+          "output": "false",
+          "explanation": "Chuỗi rỗng và số 0 khác kiểu."
+        }
+      ],
+      "hintsJson": [
+        "Một object literal: { tenTruong: giaTri, ... }. Mỗi giá trị ở đây là một biểu thức: typeof a, a == b, a === b.",
+        "return { kieuA: typeof a, kieuB: typeof b, bangLong: a == b, bangChat: a === b }; — anToan chỉ cần return a === b;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — == hay ===?\nfunction soSanh(a, b) {\n  // trả về { kieuA, kieuB, bangLong, bangChat }\n  return {};\n}\n\nfunction anToan(a, b) {\n  return a == b;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — == hay ===?\nfunction soSanh(a, b) {\n  return {\n    kieuA: typeof a,      // vd \"string\"\n    kieuB: typeof b,      // vd \"number\"\n    bangLong: a == b,     // == ĐỔI KIỂU trước khi so ⇒ hay cho kết quả bất ngờ\n    bangChat: a === b,    // === so cả giá trị LẪN kiểu ⇒ dễ đoán\n  };\n}\n\nfunction anToan(a, b) {\n  // Luật của bài học: luôn dùng === (và !==)\n  return a === b;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bảng mà hàm của bạn in ra cho thấy vì sao <code>==</code> nguy hiểm: <code>\"\" == 0</code> là <code>true</code>, <code>\"0\" == 0</code> là <code>true</code>, nhưng <code>\"\" == \"0\"</code> lại <code>false</code> — phép \"bằng\" không còn bắc cầu. <code>===</code> không đổi kiểu nên kết quả khớp đúng thứ bạn đọc trên màn hình.</p>\n<p>Lưu ý <code>typeof null</code> là <code>\"object\"</code> — lỗi từ phiên bản JavaScript đầu tiên, không sửa được vì sẽ làm vỡ web cũ. Máy chấm gọi <code>soSanh</code> với 5 cặp (có cặp ẩn) và kiểm <code>anToan</code> không dùng <code>==</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết cứng <code>bangLong: true</code> vì \"thấy ví dụ ra true\" — cặp ẩn <code>(\"\", \"0\")</code> ra false.</li>\n  <li>Đặt sai tên trường (<code>kieu_a</code>, <code>KieuA</code>) — object so khớp từng tên khoá.</li>\n  <li>Tưởng <code>typeof null</code> là <code>\"null\"</code>.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.1 Biến và kiểu dữ liệu.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "soSanh(\"5\", 5)",
+            "goi": "soSanh(\"5\", 5)",
+            "mongDoi": {
+              "kieuA": "string",
+              "kieuB": "number",
+              "bangLong": true,
+              "bangChat": false
+            }
+          },
+          {
+            "moTa": "soSanh(\"\", 0)",
+            "goi": "soSanh(\"\", 0)",
+            "mongDoi": {
+              "kieuA": "string",
+              "kieuB": "number",
+              "bangLong": true,
+              "bangChat": false
+            }
+          },
+          {
+            "moTa": "soSanh(null, undefined)",
+            "goi": "soSanh(null, undefined)",
+            "mongDoi": {
+              "kieuA": "object",
+              "kieuB": "undefined",
+              "bangLong": true,
+              "bangChat": false
+            }
+          },
+          {
+            "moTa": "soSanh(\"\", \"0\") — == không bắc cầu",
+            "goi": "soSanh(\"\", \"0\")",
+            "mongDoi": {
+              "kieuA": "string",
+              "kieuB": "string",
+              "bangLong": false,
+              "bangChat": false
+            },
+            "an": true
+          },
+          {
+            "moTa": "soSanh(7, 7)",
+            "goi": "soSanh(7, 7)",
+            "mongDoi": {
+              "kieuA": "number",
+              "kieuB": "number",
+              "bangLong": true,
+              "bangChat": true
+            },
+            "an": true
+          },
+          {
+            "moTa": "anToan(\"\", 0) = false",
+            "goi": "anToan(\"\", 0)",
+            "mongDoi": false
+          },
+          {
+            "moTa": "anToan(3, 3) = true",
+            "goi": "anToan(3, 3)",
+            "mongDoi": true
+          },
+          {
+            "moTa": "anToan không dùng ==",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "function\\s+anToan[^}]*[^=!]==[^=]",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Thẻ hồ sơ nhiều dòng: template literal + biểu thức",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "template literal nhiều dòng",
+        "biểu thức trong ${ }",
+        ".length",
+        "toUpperCase()"
+      ],
+      "prerequisites": [
+        "template literal"
+      ],
+      "tags": [
+        "javascript",
+        "string",
+        "template-literal"
+      ],
+      "problemHtml": "<p>Template literal không chỉ nhúng <em>biến</em> — bên trong <code>${ }</code> đặt được bất kỳ <strong>biểu thức</strong> nào: phép tính, <code>.length</code>, lời gọi phương thức. Và nó giữ nguyên xuống dòng. Viết <code>theHoSo(ho, ten, namSinh, namNay)</code> trả về một chuỗi ba dòng đúng định dạng dưới đây.</p>\n<pre><code>Họ tên: NGUYỄN Lan\nTuổi: 25\nĐộ dài tên đầy đủ: 10 ký tự</code></pre>\n<p><em>Khung hàm đã viết sẵn — hàm sẽ học kỹ ở Bài 4.3. Ở đây bạn chỉ sửa/viết phần THÂN hàm và dòng <code>return</code>.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dòng 1: <code>Họ tên: </code> + họ VIẾT HOA (<code>ho.toUpperCase()</code>) + dấu cách + tên giữ nguyên.</li>\n  <li>Dòng 2: <code>Tuổi: </code> + <code>namNay - namSinh</code>.</li>\n  <li>Dòng 3: <code>Độ dài tên đầy đủ: N ký tự</code> với N = độ dài của <code>\"&lt;ho&gt; &lt;ten&gt;\"</code> (tính cả dấu cách).</li>\n  <li>Các dòng cách nhau bằng đúng một ký tự xuống dòng, không có khoảng trắng thừa đầu/cuối dòng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ho, ten: string; namSinh, namNay: number.",
+      "outputSpec": "string ba dòng.",
+      "constraints": "Một template literal duy nhất cho cả ba dòng (được phép tạo biến phụ trước đó).\nKhông ghép bằng +.",
+      "examplesJson": [
+        {
+          "input": "theHoSo(\"Nguyễn\", \"Lan\", 2001, 2026)",
+          "output": "\"Họ tên: NGUYỄN Lan\\nTuổi: 25\\nĐộ dài tên đầy đủ: 10 ký tự\"",
+          "explanation": "\"Nguyễn Lan\" có 10 ký tự (6 + 1 dấu cách + 3)."
+        },
+        {
+          "input": "theHoSo(\"Lê\", \"Minh Anh\", 2008, 2026)",
+          "output": "\"Họ tên: LÊ Minh Anh\\nTuổi: 18\\nĐộ dài tên đầy đủ: 11 ký tự\"",
+          "explanation": "Dấu cách giữa \"Minh\" và \"Anh\" cũng là một ký tự."
+        }
+      ],
+      "hintsJson": [
+        "Tạo biến phụ const hoTen = `${ho} ${ten}`; rồi dùng hoTen.length ở dòng 3.",
+        "Xuống dòng thật bên trong dấu huyền, và đừng thụt lề hai dòng sau — khoảng trắng thụt lề cũng nằm trong chuỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — Thẻ hồ sơ nhiều dòng\nfunction theHoSo(ho, ten, namSinh, namNay) {\n  return \"Họ tên: \" + ho + \" \" + ten;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — Thẻ hồ sơ nhiều dòng\nfunction theHoSo(ho, ten, namSinh, namNay) {\n  const hoTen = `${ho} ${ten}`;      // \"Nguyễn Lan\" — dấu cách cũng tính vào length\n  const tuoi = namNay - namSinh;    // phép trừ giữa hai số\n\n  // Template literal giữ nguyên xuống dòng. Hai dòng sau KHÔNG thụt lề,\n  // vì mọi khoảng trắng nằm giữa hai dấu huyền đều thuộc về chuỗi.\n  return `Họ tên: ${ho.toUpperCase()} ${ten}\nTuổi: ${tuoi}\nĐộ dài tên đầy đủ: ${hoTen.length} ký tự`;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trong <code>${ }</code> là một biểu thức JavaScript đầy đủ: <code>ho.toUpperCase()</code> gọi phương thức của chuỗi, <code>namNay - namSinh</code> tính toán, <code>hoTen.length</code> đọc độ dài. Kết quả của biểu thức được đổi thành chữ và chèn vào.</p>\n<p>Cái bẫy của chuỗi nhiều dòng là <strong>thụt lề</strong>: nếu bạn thụt hai dòng sau cho \"đẹp code\", các dấu cách đó nằm luôn trong chuỗi và máy chấm (so từng ký tự) báo sai. Máy chấm gọi hàm với ba bộ dữ liệu, có tên chứa dấu cách.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thụt lề dòng 2 và 3 trong template literal — chuỗi có thêm khoảng trắng đầu dòng.</li>\n  <li>Tính độ dài <code>ho.length + ten.length</code> — thiếu dấu cách ở giữa (ra 9 thay vì 10).</li>\n  <li>Viết <code>ho.toUpperCase</code> thiếu <code>()</code> — chèn nguyên mã của hàm vào chuỗi.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.1 Biến và kiểu dữ liệu.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#multi-line_strings",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "theHoSo(\"Nguyễn\", \"Lan\", 2001, 2026)",
+            "goi": "theHoSo(\"Nguyễn\", \"Lan\", 2001, 2026)",
+            "mongDoi": "Họ tên: NGUYỄN Lan\nTuổi: 25\nĐộ dài tên đầy đủ: 10 ký tự"
+          },
+          {
+            "moTa": "theHoSo(\"Lê\", \"Minh Anh\", 2008, 2026)",
+            "goi": "theHoSo(\"Lê\", \"Minh Anh\", 2008, 2026)",
+            "mongDoi": "Họ tên: LÊ Minh Anh\nTuổi: 18\nĐộ dài tên đầy đủ: 11 ký tự"
+          },
+          {
+            "moTa": "Đúng 3 dòng",
+            "goi": "theHoSo(\"Trần\", \"B\", 2000, 2026).split(\"\\n\").length",
+            "mongDoi": 3
+          },
+          {
+            "moTa": "Không có khoảng trắng thụt đầu dòng",
+            "goi": "/\\n\\s/.test(theHoSo(\"Trần\", \"B\", 2000, 2026))",
+            "mongDoi": false
+          },
+          {
+            "moTa": "Bộ dữ liệu ẩn",
+            "goi": "theHoSo(\"Phạm\", \"Thu Hà\", 1990, 2026)",
+            "mongDoi": "Họ tên: PHẠM Thu Hà\nTuổi: 36\nĐộ dài tên đầy đủ: 11 ký tự",
+            "an": true
+          },
+          {
+            "moTa": "Dùng template literal",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "`[^`]*\\$\\{[^`]*`"
+          }
+        ]
+      }
+    },
+    {
+      "title": "const khoá cái tên, không khoá giá trị",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "const với object",
+        "sửa thuộc tính",
+        "gán lại",
+        "tham chiếu"
+      ],
+      "prerequisites": [
+        "const",
+        "let"
+      ],
+      "tags": [
+        "javascript",
+        "const",
+        "object"
+      ],
+      "problemHtml": "<p>Bài 4.1: <em>\"const không có nghĩa là đóng băng — nó khoá cái tên, không khoá giá trị.\"</em> <code>const user = { name: \"An\" }</code> rồi <code>user.name = \"Bình\"</code> là hợp lệ; còn <code>user = { name: \"Chi\" }</code> thì ném <code>TypeError</code>. Hàm <code>doiTen(nguoiDung, tenMoi)</code> phải <strong>sửa chính object được đưa vào</strong> rồi trả lại đúng object đó — người viết trước lại cố gán một object mới vào một const.</p>\n<p><em>Khung hàm đã viết sẵn — hàm sẽ học kỹ ở Bài 4.3. Ở đây bạn chỉ sửa/viết phần THÂN hàm và dòng <code>return</code>.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>doiTen(nguoiDung, tenMoi)</code> đặt <code>nguoiDung.name = tenMoi</code> và trả về <strong>chính</strong> <code>nguoiDung</code> (cùng một object, không phải bản sao).</li>\n  <li>Các thuộc tính khác của object (vd tuoi) giữ nguyên.</li>\n  <li>Hàm <code>thuGanLai()</code> trả về chuỗi tên lỗi khi cố gán lại một const: viết <code>const x = 1;</code> rồi <code>x = 2;</code> bên trong <code>try</code>, trong <code>catch (e)</code> trả về <code>e.name</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "nguoiDung: object có name (và có thể có thêm trường); tenMoi: string.",
+      "outputSpec": "doiTen → chính object đó; thuGanLai → \"TypeError\".",
+      "constraints": "Không tạo object mới trong doiTen.\ntry/catch được viết sẵn khung trong code khởi đầu — chỉ cần điền.",
+      "examplesJson": [
+        {
+          "input": "const u = { name: \"An\", tuoi: 20 };\nconst r = doiTen(u, \"Bình\");\n[u.name, r === u]",
+          "output": "[\"Bình\", true]",
+          "explanation": "Object gốc đã đổi tên, và giá trị trả về là cùng một object."
+        },
+        {
+          "input": "thuGanLai()",
+          "output": "\"TypeError\"",
+          "explanation": "x = 2 với const x ném TypeError: Assignment to constant variable."
+        }
+      ],
+      "hintsJson": [
+        "Đổi một THUỘC TÍNH (nguoiDung.name = …) không phải là gán lại tên nguoiDung — const cho phép.",
+        "doiTen: nguoiDung.name = tenMoi; return nguoiDung;  — thuGanLai: try { const x = 1; x = 2; } catch (e) { return e.name; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — const khoá tên, không khoá giá trị\nfunction doiTen(nguoiDung, tenMoi) {\n  const ketQua = nguoiDung;\n  ketQua = { name: tenMoi };   // cố gán object mới vào một const\n  return ketQua;\n}\n\nfunction thuGanLai() {\n  try {\n    // viết: một const x, rồi gán lại x\n  } catch (e) {\n    // trả về tên lỗi\n  }\n  return \"không có lỗi\";\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — const khoá tên, không khoá giá trị\nfunction doiTen(nguoiDung, tenMoi) {\n  // Sửa THUỘC TÍNH của object — const/tham số không cấm việc này.\n  // Mọi biến đang trỏ vào object này (kể cả biến của người gọi) đều thấy tên mới.\n  nguoiDung.name = tenMoi;\n  return nguoiDung;            // trả lại chính object đó, không phải bản sao\n}\n\nfunction thuGanLai() {\n  try {\n    const x = 1;\n    x = 2;                     // gán lại một const ⇒ ném lỗi ngay tại đây\n  } catch (e) {\n    return e.name;             // \"TypeError\"\n  }\n  return \"không có lỗi\";\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một biến giữ object thật ra giữ <em>tham chiếu</em> tới object. <code>const</code> khoá tham chiếu đó (không trỏ sang object khác được), còn bản thân object vẫn sửa thoải mái. Vì vậy <code>nguoiDung.name = tenMoi</code> hợp lệ, và người gọi — đang giữ cùng tham chiếu — thấy ngay tên mới.</p>\n<p>Code khởi đầu tạo object mới nên dù không có const thì người gọi vẫn giữ object cũ, tên cũ. Máy chấm kiểm <code>r === u</code> (cùng object), tên mới, trường khác còn nguyên, và tên lỗi khi gán lại const.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đổi <code>const ketQua</code> thành <code>let</code> rồi vẫn gán object mới — hết lỗi, nhưng object của người gọi không đổi tên.</li>\n  <li>Trả về <code>{ ...nguoiDung, name: tenMoi }</code> — một bản sao: <code>r === u</code> là false (cách này đúng ở chỗ khác, như React, nhưng không phải yêu cầu ở đây).</li>\n  <li>Trong <code>catch</code> trả về <code>e.message</code> — đề hỏi tên lỗi (<code>e.name</code>).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.1 Biến và kiểu dữ liệu.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Object gốc đổi tên, giá trị trả về là chính nó",
+            "chuanBi": "const u = { name: \"An\", tuoi: 20 }; const r = doiTen(u, \"Bình\");",
+            "goi": "[u.name, r === u]",
+            "mongDoi": [
+              "Bình",
+              true
+            ]
+          },
+          {
+            "moTa": "Trường khác giữ nguyên",
+            "chuanBi": "const u = { name: \"An\", tuoi: 20 }; doiTen(u, \"Chi\");",
+            "goi": "u",
+            "mongDoi": {
+              "name": "Chi",
+              "tuoi": 20
+            }
+          },
+          {
+            "moTa": "Đổi hai lần liên tiếp",
+            "chuanBi": "const u = { name: \"A\" }; doiTen(doiTen(u, \"B\"), \"C\");",
+            "goi": "u.name",
+            "mongDoi": "C",
+            "an": true
+          },
+          {
+            "moTa": "thuGanLai() = \"TypeError\"",
+            "goi": "thuGanLai()",
+            "mongDoi": "TypeError"
+          },
+          {
+            "moTa": "thuGanLai thật sự gán lại một const",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "const\\s+x\\s*=[^;\\n]*;?\\s*\\n?\\s*x\\s*="
+          }
+        ]
+      }
+    },
+    {
+      "title": "Gỡ năm lỗi kiểu dữ liệu trong hàm tính điểm",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "ép kiểu ngầm",
+        "+ nối chuỗi",
+        "Number()",
+        "template literal",
+        "const/let",
+        "==="
+      ],
+      "prerequisites": [
+        "template literal",
+        "dấu + mang hai vai",
+        "== với ==="
+      ],
+      "tags": [
+        "javascript",
+        "debugging",
+        "types"
+      ],
+      "problemHtml": "<p>Bài tổng hợp Bài 4.1. Hàm <code>bangDiem(ten, diemGK, diemCK)</code> lấy điểm giữa kỳ và cuối kỳ từ hai ô nhập (nên là <strong>chuỗi</strong>) và trả về một dòng báo cáo. Code khởi đầu có <strong>năm</strong> lỗi đúng loại bài học đã cảnh báo: dùng <code>var</code>, gán lại một <code>const</code>, cộng chuỗi thay vì cộng số (nên <code>(\"7\" + \"8\") / 2</code> ra <code>39</code>!), so sánh bằng <code>==</code>, và một chuỗi viết bằng nháy đơn nên <code>${…}</code> không được thay. Tìm và sửa cả năm.</p>\n<p>Định dạng chuẩn: <code>Lan: trung bình 7.5 — đạt điểm tối đa: false</code>. \"Đạt điểm tối đa\" là <code>true</code> khi trung bình bằng đúng <code>10</code>.</p>\n<p><em>Khung hàm đã viết sẵn — hàm sẽ học kỹ ở Bài 4.3. Ở đây bạn chỉ sửa/viết phần THÂN hàm và dòng <code>return</code>.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trung bình = (giữa kỳ + cuối kỳ) / 2, tính trên SỐ: <code>bangDiem(\"Lan\", \"7\", \"8\")</code> → <code>\"Lan: trung bình 7.5 — đạt điểm tối đa: false\"</code>.</li>\n  <li>\"Đạt điểm tối đa\" so bằng <code>===</code> với số <code>10</code>.</li>\n  <li>Chuỗi kết quả dùng template literal; không còn <code>var</code>; không còn phép <code>==</code> lỏng lẻo.</li>\n  <li>Hàm trả về chuỗi, không ném lỗi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ten: string; diemGK, diemCK: string chứa số thập phân dạng \"7\" hoặc \"8.5\".",
+      "outputSpec": "string \"<ten>: trung bình <tb> — đạt điểm tối đa: <true|false>\".",
+      "constraints": "Không làm tròn trung bình.\nKhông dùng parseFloat — Number() là đủ.",
+      "examplesJson": [
+        {
+          "input": "bangDiem(\"Lan\", \"7\", \"8\")",
+          "output": "\"Lan: trung bình 7.5 — đạt điểm tối đa: false\"",
+          "explanation": "Number(\"7\") + Number(\"8\") = 15; 15 / 2 = 7.5."
+        },
+        {
+          "input": "bangDiem(\"Huy\", \"10\", \"10\")",
+          "output": "\"Huy: trung bình 10 — đạt điểm tối đa: true\"",
+          "explanation": "10 === 10. Với code cũ: \"10\" + \"10\" = \"1010\", chia 2 = 505."
+        },
+        {
+          "input": "(code khởi đầu) bangDiem(\"Lan\", \"7\", \"8\")",
+          "output": "TypeError: Assignment to constant variable.",
+          "explanation": "Lỗi đầu tiên chặn mọi thứ phía sau — sửa xong lỗi này mới thấy các lỗi kia."
+        }
+      ],
+      "hintsJson": [
+        "Sửa lần lượt và chạy lại sau mỗi lần sửa: lỗi TypeError trước, rồi đến con số sai (39 hay 505 là dấu hiệu + đang nối chữ), rồi đến chuỗi in ra nguyên văn \"${ten}\".",
+        "const gk = Number(diemGK); const ck = Number(diemCK); const tb = (gk + ck) / 2; const toiDa = tb === 10; return `${ten}: trung bình ${tb} — đạt điểm tối đa: ${toiDa}`;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — Gỡ 5 lỗi kiểu dữ liệu\nfunction bangDiem(ten, diemGK, diemCK) {\n  var tong = diemGK + diemCK;\n  const tb = 0;\n  tb = tong / 2;\n  const toiDa = tb == \"10\";\n  return '${ten}: trung bình ${tb} — đạt điểm tối đa: ${toiDa}';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.1 — Gỡ 5 lỗi kiểu dữ liệu\nfunction bangDiem(ten, diemGK, diemCK) {\n  // (1) Ô nhập cho CHUỖI ⇒ đổi sang số trước khi cộng, không thì + sẽ NỐI: \"7\" + \"8\" = \"78\"\n  const gk = Number(diemGK);\n  const ck = Number(diemCK);\n\n  // (2) bỏ var — const đủ, vì không gán lại\n  const tong = gk + ck;\n\n  // (3) không gán lại const: tính một lần, đặt tên một lần\n  const tb = tong / 2;\n\n  // (4) === với SỐ 10 — không để == tự đổi kiểu hộ\n  const toiDa = tb === 10;\n\n  // (5) template literal dùng DẤU HUYỀN; nháy đơn sẽ in nguyên văn \"${ten}\"\n  return `${ten}: trung bình ${tb} — đạt điểm tối đa: ${toiDa}`;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Năm lỗi, năm bài học của 4.1: (1) <code>+</code> có một bên là chuỗi thì nối — <code>\"7\" + \"8\"</code> là <code>\"78\"</code>, và <code>\"78\" / 2</code> ra <code>39</code> vì phép chia lặng lẽ đổi chuỗi sang số. Lỗi kiểu này không văng thông báo nào, chỉ cho ra con số sai. (2) <code>var</code> là cách cũ. (3) <code>const</code> không gán lại được. (4) <code>==</code> tự đổi kiểu — <code>10 == \"10\"</code> là true, che mất việc bạn đang so số với chuỗi. (5) Chỉ dấu huyền mới là template literal.</p>\n<p>Thứ tự sửa cũng là bài học: lỗi ném ra (TypeError) chặn mọi thứ sau nó, nên phải sửa trước; lỗi \"im lặng\" (số sai, chuỗi in nguyên văn) chỉ lộ khi bạn nhìn kết quả. Máy chấm gọi hàm với 4 bộ điểm, có điểm lẻ <code>\"8.5\"</code>, và soi mã không còn <code>var</code> / <code>==</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đổi kiểu sau khi cộng: <code>Number(diemGK + diemCK)</code> — ra 78, không phải 15.</li>\n  <li>So <code>tb === \"10\"</code> — số không bao giờ === chuỗi, luôn false.</li>\n  <li>Sửa nháy đơn thành nháy kép — vẫn không phải template literal.</li>\n  <li>Làm tròn <code>Math.round(tb)</code> — 7.5 thành 8, sai đề.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.1 Biến và kiểu dữ liệu.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Glossary/Type_coercion",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "bangDiem(\"Lan\", \"7\", \"8\")",
+            "goi": "bangDiem(\"Lan\", \"7\", \"8\")",
+            "mongDoi": "Lan: trung bình 7.5 — đạt điểm tối đa: false"
+          },
+          {
+            "moTa": "bangDiem(\"Huy\", \"10\", \"10\") — đạt tối đa",
+            "goi": "bangDiem(\"Huy\", \"10\", \"10\")",
+            "mongDoi": "Huy: trung bình 10 — đạt điểm tối đa: true"
+          },
+          {
+            "moTa": "Điểm lẻ: bangDiem(\"Na\", \"8.5\", \"9\")",
+            "goi": "bangDiem(\"Na\", \"8.5\", \"9\")",
+            "mongDoi": "Na: trung bình 8.75 — đạt điểm tối đa: false"
+          },
+          {
+            "moTa": "Bộ ẩn: bangDiem(\"Tú\", \"0\", \"3\")",
+            "goi": "bangDiem(\"Tú\", \"0\", \"3\")",
+            "mongDoi": "Tú: trung bình 1.5 — đạt điểm tối đa: false",
+            "an": true
+          },
+          {
+            "moTa": "Không còn var",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\bvar\\b",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Không còn == lỏng lẻo",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "[^=!<>]==[^=]",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Kết quả dựng bằng template literal",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "`[^`]*\\$\\{ten\\}[^`]*`"
+          }
+        ]
+      }
+    }
+  ]
+}

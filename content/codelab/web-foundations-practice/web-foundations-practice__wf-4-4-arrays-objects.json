@@ -1,0 +1,892 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-4-4-arrays-objects",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-4-4-arrays-objects"
+  },
+  "exercises": [
+    {
+      "title": "map và filter trên danh sách người dùng",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "map",
+        "filter",
+        "mảng các object",
+        "arrow callback"
+      ],
+      "prerequisites": [
+        "arrow function",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "array",
+        "map",
+        "filter"
+      ],
+      "problemHtml": "<p>Bài 4.4: <em>\"Hình dạng bạn thấy khắp nơi: một mảng các đối tượng.\"</em> API trả về danh sách người dùng. Viết hai hàm:</p>\n<ul><li><code>layTen(ds)</code>: mảng tên, cùng thứ tự — dùng <code>map</code>.</li>\n<li><code>tenNguoiTu(ds, tuoi)</code>: tên của những người có <code>age &gt;= tuoi</code> — <code>filter</code> rồi <code>map</code>.</li></ul>\n<p>Code khởi đầu dùng <code>forEach</code> và tưởng nó trả về mảng mới — nhưng <code>forEach</code> luôn trả về <code>undefined</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>layTen([{ name: \"Lan\", age: 25 }, { name: \"Minh\", age: 30 }])</code> → <code>[\"Lan\", \"Minh\"]</code>.</li>\n  <li><code>tenNguoiTu(ds, 30)</code> → tên những người từ 30 tuổi, giữ thứ tự gốc.</li>\n  <li>Không sửa mảng đầu vào; danh sách rỗng → mảng rỗng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ds: mảng object { name: string, age: number }; tuoi: number.",
+      "outputSpec": "Mảng string.",
+      "constraints": "Dùng map / filter, không dùng vòng lặp for và push.",
+      "examplesJson": [
+        {
+          "input": "layTen([{ name: \"Lan\", age: 25 }, { name: \"Minh\", age: 30 }])",
+          "output": "[\"Lan\", \"Minh\"]",
+          "explanation": "map: mười người vào, mười cái tên ra — cùng độ dài."
+        },
+        {
+          "input": "tenNguoiTu([{ name: \"Lan\", age: 25 }, { name: \"Minh\", age: 30 }], 30)",
+          "output": "[\"Minh\"]",
+          "explanation": "filter giữ người ≥ 30, map lấy tên."
+        }
+      ],
+      "hintsJson": [
+        "map nhận một hàm biến MỘT phần tử thành MỘT giá trị mới: u => u.name.",
+        "return ds.filter(u => u.age >= tuoi).map(u => u.name); — hai phương thức nối nhau vì filter trả về một mảng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — map và filter\nfunction layTen(ds) {\n  return ds.forEach(u => u.name);\n}\n\nfunction tenNguoiTu(ds, tuoi) {\n  return ds.forEach(u => u.age >= tuoi);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — map và filter\nfunction layTen(ds) {\n  // map: biến MỖI phần tử thành một giá trị mới ⇒ mảng MỚI cùng độ dài\n  return ds.map(u => u.name);\n}\n\nfunction tenNguoiTu(ds, tuoi) {\n  return ds\n    .filter(u => u.age >= tuoi)   // giữ những người đủ tuổi (mảng mới, ngắn hơn)\n    .map(u => u.name);            // rồi lấy tên của họ\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>forEach</code> để <em>làm</em> gì đó với từng phần tử (tác dụng phụ) và trả về <code>undefined</code>; <code>map</code> để <em>tạo ra</em> một mảng mới. Câu hỏi để chọn: \"mình cần kết quả không?\" — cần thì <code>map</code>/<code>filter</code>.</p>\n<p>Cả hai trả về mảng mới, mảng gốc nguyên vẹn — nên nối được <code>.filter(…).map(…)</code>. Máy chấm gọi với danh sách 2 và 4 người, danh sách rỗng, và kiểm mảng gốc không đổi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>ds.map(u =&gt; { u.name })</code> — ngoặc nhọn không return, ra mảng toàn <code>undefined</code>.</li>\n  <li><code>filter(u =&gt; u.name)</code> khi cần tên — filter trả về object, không phải tên.</li>\n  <li>Dùng <code>&gt;</code> thay <code>&gt;=</code>.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.4 Mảng và đối tượng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "layTen hai người",
+            "goi": "layTen([{ name: \"Lan\", age: 25 }, { name: \"Minh\", age: 30 }])",
+            "mongDoi": [
+              "Lan",
+              "Minh"
+            ]
+          },
+          {
+            "moTa": "layTen([]) = []",
+            "goi": "layTen([])",
+            "mongDoi": []
+          },
+          {
+            "moTa": "tenNguoiTu(…, 30)",
+            "goi": "tenNguoiTu([{ name: \"Lan\", age: 25 }, { name: \"Minh\", age: 30 }, { name: \"Hà\", age: 41 }, { name: \"Tú\", age: 18 }], 30)",
+            "mongDoi": [
+              "Minh",
+              "Hà"
+            ]
+          },
+          {
+            "moTa": "Không ai đủ tuổi → []",
+            "goi": "tenNguoiTu([{ name: \"Tú\", age: 18 }], 60)",
+            "mongDoi": []
+          },
+          {
+            "moTa": "Mảng gốc không đổi",
+            "chuanBi": "const ds = [{ name: \"A\", age: 40 }]; tenNguoiTu(ds, 30); layTen(ds);",
+            "goi": "ds",
+            "mongDoi": [
+              {
+                "name": "A",
+                "age": 40
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Dùng map",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\.map\\s*\\("
+          },
+          {
+            "moTa": "Dùng filter",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\.filter\\s*\\("
+          }
+        ]
+      }
+    },
+    {
+      "title": "Tổng giỏ hàng bằng reduce — và giá trị khởi đầu bị quên",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "reduce",
+        "giá trị khởi đầu",
+        "mảng rỗng"
+      ],
+      "prerequisites": [
+        "arrow function",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "array",
+        "reduce"
+      ],
+      "problemHtml": "<p>Bài 4.4: <em>\"reduce — gộp mọi phần tử thành một giá trị.\"</em> Giỏ hàng là mảng <code>{ ten, gia, soLuong }</code>. <code>tongGioHang(gio)</code> phải trả về tổng <code>gia × soLuong</code>. Bản cũ gọi <code>reduce</code> <strong>không có giá trị khởi đầu</strong>: với giỏ có hàng, lượt đầu nó lấy cả object làm \"tổng\" (ra <code>\"[object Object]…\"</code>); với giỏ rỗng nó ném <code>TypeError</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>tongGioHang([{ ten: \"Bút\", gia: 5000, soLuong: 3 }, { ten: \"Vở\", gia: 12000, soLuong: 2 }])</code> → <code>39000</code>.</li>\n  <li>Giỏ rỗng → <code>0</code>, không ném lỗi.</li>\n  <li>Dùng <code>reduce</code> với giá trị khởi đầu <code>0</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "gio: mảng { ten: string, gia: number, soLuong: number }.",
+      "outputSpec": "number.",
+      "constraints": "Không dùng vòng lặp for.",
+      "examplesJson": [
+        {
+          "input": "tongGioHang([{ ten: \"Bút\", gia: 5000, soLuong: 3 }, { ten: \"Vở\", gia: 12000, soLuong: 2 }])",
+          "output": "39000",
+          "explanation": "15000 + 24000."
+        },
+        {
+          "input": "tongGioHang([])",
+          "output": "0",
+          "explanation": "Có giá trị khởi đầu thì reduce trên mảng rỗng trả về chính giá trị đó."
+        }
+      ],
+      "hintsJson": [
+        "reduce((tong, mon) => …, 0) — số 0 ở cuối là giá trị đầu của \"tong\". Thiếu nó, reduce lấy PHẦN TỬ ĐẦU (một object) làm tong.",
+        "return gio.reduce((tong, mon) => tong + mon.gia * mon.soLuong, 0);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — reduce\nfunction tongGioHang(gio) {\n  return gio.reduce((tong, mon) => tong + mon.gia * mon.soLuong);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — reduce\nfunction tongGioHang(gio) {\n  // reduce(hàmGộp, giáTrịKhởiĐầu):\n  //   tong bắt đầu bằng 0, mỗi lượt cộng thêm thành tiền của một món.\n  // Thiếu số 0: lượt đầu tong = cả object món đầu tiên, và mảng rỗng ném TypeError.\n  return gio.reduce((tong, mon) => tong + mon.gia * mon.soLuong, 0);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>reduce</code> có hai chế độ. Có giá trị khởi đầu: <code>tong</code> bắt đầu bằng nó và hàm gộp chạy cho MỌI phần tử. Không có: <code>tong</code> bắt đầu bằng <em>phần tử đầu tiên</em> và hàm gộp chạy từ phần tử thứ hai. Khi cộng số trong mảng số thì hai chế độ trùng kết quả — nên lỗi chỉ lộ khi phần tử là object (cộng object với số ra chuỗi) hoặc mảng rỗng (không có phần tử đầu ⇒ TypeError).</p>\n<p>Quy tắc an toàn: luôn đưa giá trị khởi đầu. Máy chấm thử giỏ 1 món, 2 món, rỗng, và một giỏ ẩn 4 món.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên giá trị khởi đầu (như bản cũ).</li>\n  <li>Đặt giá trị khởi đầu là <code>\"\"</code> — ra chuỗi nối, không phải tổng.</li>\n  <li>Quên <code>return</code> khi viết hàm gộp có ngoặc nhọn — lượt sau <code>tong</code> là undefined, ra NaN.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.4 Mảng và đối tượng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Giỏ hai món = 39000",
+            "goi": "tongGioHang([{ ten: \"Bút\", gia: 5000, soLuong: 3 }, { ten: \"Vở\", gia: 12000, soLuong: 2 }])",
+            "mongDoi": 39000
+          },
+          {
+            "moTa": "Giỏ một món",
+            "goi": "tongGioHang([{ ten: \"Sách\", gia: 85000, soLuong: 1 }])",
+            "mongDoi": 85000
+          },
+          {
+            "moTa": "Giỏ rỗng = 0, không lỗi",
+            "goi": "tongGioHang([])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": "Giỏ ẩn 4 món",
+            "goi": "tongGioHang([{ gia: 1000, soLuong: 1 }, { gia: 2000, soLuong: 2 }, { gia: 0, soLuong: 9 }, { gia: 500, soLuong: 4 }])",
+            "mongDoi": 7000,
+            "an": true
+          },
+          {
+            "moTa": "Dùng reduce",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\.reduce\\s*\\("
+          }
+        ]
+      }
+    },
+    {
+      "title": "find trả về undefined khi không thấy — đừng quên ca đó",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "find",
+        "undefined",
+        "optional chaining ?.",
+        "??"
+      ],
+      "prerequisites": [
+        "arrow function",
+        "??"
+      ],
+      "tags": [
+        "javascript",
+        "array",
+        "find"
+      ],
+      "problemHtml": "<p>Bài 4.4: <em>\"find — dừng ở cái khớp đầu tiên. Cái undefined khi chẳng có gì khớp mới là phần người ta hay quên xử lý.\"</em> <code>tenSanPham(ds, ma)</code> trả về tên sản phẩm có mã <code>ma</code>. Bản cũ viết <code>ds.find(…).ten</code> — chạy tốt với mã có thật, nhưng một mã sai làm sập cả trang với <code>TypeError: Cannot read properties of undefined</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tìm bằng <code>find</code> và so <code>===</code>; thấy → trả về <code>ten</code>.</li>\n  <li>Không thấy → trả về <code>\"Không tìm thấy\"</code>, không ném lỗi.</li>\n  <li>Có nhiều sản phẩm trùng mã → lấy cái ĐẦU TIÊN.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ds: mảng { ma: string, ten: string }; ma: string.",
+      "outputSpec": "string.",
+      "constraints": "Dùng find, không dùng filter(...)[0].",
+      "examplesJson": [
+        {
+          "input": "tenSanPham([{ ma: \"SP1\", ten: \"Bút\" }, { ma: \"SP2\", ten: \"Vở\" }], \"SP2\")",
+          "output": "\"Vở\"",
+          "explanation": "find trả về object khớp đầu tiên."
+        },
+        {
+          "input": "tenSanPham([{ ma: \"SP1\", ten: \"Bút\" }], \"SP9\")",
+          "output": "\"Không tìm thấy\"",
+          "explanation": "find trả về undefined ⇒ phải xử lý trước khi đọc .ten."
+        }
+      ],
+      "hintsJson": [
+        "Lưu kết quả find vào biến rồi kiểm nó trước khi đọc .ten: if (!sp) return \"Không tìm thấy\";",
+        "Dạng ngắn: return ds.find(sp => sp.ma === ma)?.ten ?? \"Không tìm thấy\"; — ?. dừng lại (ra undefined) thay vì ném lỗi khi vế trái là undefined."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — find\nfunction tenSanPham(ds, ma) {\n  return ds.find(sp => sp.ma === ma).ten;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — find\nfunction tenSanPham(ds, ma) {\n  const sp = ds.find(sp => sp.ma === ma);   // object khớp ĐẦU TIÊN, hoặc undefined\n  if (sp === undefined) {\n    return \"Không tìm thấy\";                // xử lý ca \"không thấy\" TRƯỚC khi đọc .ten\n  }\n  return sp.ten;\n  // Dạng ngắn tương đương: return ds.find(sp => sp.ma === ma)?.ten ?? \"Không tìm thấy\";\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>find</code> trả về hai kiểu giá trị: một object hoặc <code>undefined</code>. Đọc <code>.ten</code> trên <code>undefined</code> là ném lỗi, nên mọi lần dùng <code>find</code> phải đi kèm câu hỏi \"nếu không thấy thì sao?\". Optional chaining <code>?.</code> là cách gọn: <code>x?.ten</code> trả về <code>undefined</code> khi x là null/undefined thay vì ném.</p>\n<p>Máy chấm thử mã có thật, mã không có, danh sách rỗng và danh sách có mã trùng (lấy cái đầu).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng <code>filter(...)[0]</code> — chạy được nhưng duyệt hết mảng, và vẫn phải xử lý undefined.</li>\n  <li>Bọc <code>try/catch</code> quanh <code>.ten</code> — che lỗi thay vì xử lý đúng ca.</li>\n  <li>So <code>sp.ma == ma</code>.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.4 Mảng và đối tượng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Tìm thấy \"SP2\" → \"Vở\"",
+            "goi": "tenSanPham([{ ma: \"SP1\", ten: \"Bút\" }, { ma: \"SP2\", ten: \"Vở\" }], \"SP2\")",
+            "mongDoi": "Vở"
+          },
+          {
+            "moTa": "Không thấy → \"Không tìm thấy\"",
+            "goi": "tenSanPham([{ ma: \"SP1\", ten: \"Bút\" }], \"SP9\")",
+            "mongDoi": "Không tìm thấy"
+          },
+          {
+            "moTa": "Danh sách rỗng",
+            "goi": "tenSanPham([], \"SP1\")",
+            "mongDoi": "Không tìm thấy"
+          },
+          {
+            "moTa": "Mã trùng → lấy cái đầu",
+            "goi": "tenSanPham([{ ma: \"A\", ten: \"Một\" }, { ma: \"A\", ten: \"Hai\" }], \"A\")",
+            "mongDoi": "Một",
+            "an": true
+          },
+          {
+            "moTa": "Dùng find",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\.find\\s*\\("
+          }
+        ]
+      }
+    },
+    {
+      "title": "Khoá động bằng ngoặc vuông: đếm đơn theo trạng thái",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "bracket notation",
+        "khoá động",
+        "object làm bộ đếm",
+        "thuộc tính thiếu là undefined"
+      ],
+      "prerequisites": [
+        "object",
+        "for...of"
+      ],
+      "tags": [
+        "javascript",
+        "object",
+        "bracket-notation"
+      ],
+      "problemHtml": "<p>Bài 4.4: <em>\"Truy cập bằng ngoặc vuông — cần cho khoá động.\"</em> Bảng điều khiển cửa hàng cần đếm đơn theo trạng thái. Trạng thái nằm trong <em>biến</em> (<code>don.trangThai</code>), nên <code>dem.trangThai</code> (dấu chấm) sẽ đếm vào một khoá tên là chữ \"trangThai\" — sai. Viết <code>demTheoTrangThai(dsDon)</code> trả về object dạng <code>{ moi: 2, dangGiao: 1, daGiao: 3 }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi trạng thái xuất hiện là một khoá; giá trị là số đơn có trạng thái đó.</li>\n  <li>Trạng thái chưa xuất hiện thì KHÔNG có khoá (không phải khoá với giá trị 0).</li>\n  <li>Dùng <code>dem[don.trangThai]</code>; xử lý lần gặp đầu (giá trị đang là <code>undefined</code>).</li>\n  <li>Hàm thứ hai <code>layTruong(obj, tenTruong)</code> trả về <code>obj[tenTruong]</code>, hoặc <code>null</code> nếu object không có trường đó.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "dsDon: mảng { ma, trangThai: string }; obj: object; tenTruong: string.",
+      "outputSpec": "demTheoTrangThai → object; layTruong → giá trị hoặc null.",
+      "constraints": "Không viết cứng tên trạng thái (moi, dangGiao…) trong code — trạng thái mới phải tự đếm được.",
+      "examplesJson": [
+        {
+          "input": "demTheoTrangThai([{ ma: 1, trangThai: \"moi\" }, { ma: 2, trangThai: \"daGiao\" }, { ma: 3, trangThai: \"moi\" }])",
+          "output": "{ moi: 2, daGiao: 1 }",
+          "explanation": "Không có đơn \"dangGiao\" nên không có khoá đó."
+        },
+        {
+          "input": "layTruong({ ten: \"Lan\", tuoi: 0 }, \"tuoi\")",
+          "output": "0",
+          "explanation": "Giá trị 0 vẫn trả về 0 — đừng nhầm với \"không có\"."
+        },
+        {
+          "input": "layTruong({ ten: \"Lan\" }, \"email\")",
+          "output": "null",
+          "explanation": "Trường thiếu ⇒ obj[\"email\"] là undefined ⇒ trả về null."
+        }
+      ],
+      "hintsJson": [
+        "const dem = {}; for (const don of dsDon) { const k = don.trangThai; dem[k] = (dem[k] ?? 0) + 1; } return dem;",
+        "layTruong: return obj[tenTruong] ?? null; — ?? giữ được 0 và \"\" (|| thì không)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — Khoá động\nfunction demTheoTrangThai(dsDon) {\n  const dem = {};\n  for (const don of dsDon) {\n    dem.trangThai = dem.trangThai + 1;\n  }\n  return dem;\n}\n\nfunction layTruong(obj, tenTruong) {\n  return obj.tenTruong || null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — Khoá động\nfunction demTheoTrangThai(dsDon) {\n  const dem = {};\n  for (const don of dsDon) {\n    const khoa = don.trangThai;          // tên khoá nằm trong BIẾN\n    // dem[khoa] lần đầu là undefined ⇒ ?? 0 cho nó điểm xuất phát\n    dem[khoa] = (dem[khoa] ?? 0) + 1;    // ngoặc vuông: dùng GIÁ TRỊ của biến làm tên khoá\n  }\n  return dem;\n}\n\nfunction layTruong(obj, tenTruong) {\n  // obj.tenTruong tìm khoá tên đúng là chữ \"tenTruong\"; obj[tenTruong] dùng giá trị biến.\n  // ?? (không phải ||) để giữ 0, \"\" và false là giá trị thật.\n  return obj[tenTruong] ?? null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>obj.ten</code> luôn tìm khoá có tên đúng là chữ <code>\"ten\"</code>; <code>obj[bieu_thuc]</code> tính biểu thức trước rồi dùng kết quả làm tên khoá. Khi tên khoá chỉ biết lúc chạy (đọc từ dữ liệu, từ ô nhập, từ URL), ngoặc vuông là cách duy nhất.</p>\n<p>Lần đầu gặp một trạng thái, <code>dem[khoa]</code> là <code>undefined</code> — và <code>undefined + 1</code> là <code>NaN</code>. <code>(dem[khoa] ?? 0) + 1</code> cho nó điểm xuất phát. Máy chấm đếm cả trạng thái lạ chưa có trong ví dụ và kiểm <code>layTruong</code> với giá trị 0 / chuỗi rỗng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng <code>dem.trangThai</code> — mọi đơn được đếm vào một khoá tên \"trangThai\".</li>\n  <li>Khởi tạo sẵn <code>{ moi: 0, dangGiao: 0, daGiao: 0 }</code> — trạng thái mới (vd \"huy\") không được đếm, và thừa khoá giá trị 0.</li>\n  <li><code>obj[tenTruong] || null</code> — trường có giá trị 0 hoặc \"\" bị biến thành null.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.4 Mảng và đối tượng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors#bracket_notation",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Đếm ba đơn",
+            "goi": "demTheoTrangThai([{ ma: 1, trangThai: \"moi\" }, { ma: 2, trangThai: \"daGiao\" }, { ma: 3, trangThai: \"moi\" }])",
+            "mongDoi": {
+              "moi": 2,
+              "daGiao": 1
+            }
+          },
+          {
+            "moTa": "Trạng thái lạ cũng được đếm",
+            "goi": "demTheoTrangThai([{ trangThai: \"huy\" }, { trangThai: \"huy\" }, { trangThai: \"dangGiao\" }])",
+            "mongDoi": {
+              "huy": 2,
+              "dangGiao": 1
+            }
+          },
+          {
+            "moTa": "Không đơn nào → {}",
+            "goi": "demTheoTrangThai([])",
+            "mongDoi": {}
+          },
+          {
+            "moTa": "layTruong có trường",
+            "goi": "layTruong({ ten: \"Lan\" }, \"ten\")",
+            "mongDoi": "Lan"
+          },
+          {
+            "moTa": "layTruong giữ 0 và \"\"",
+            "goi": "[layTruong({ a: 0 }, \"a\"), layTruong({ b: \"\" }, \"b\")]",
+            "mongDoi": [
+              0,
+              ""
+            ]
+          },
+          {
+            "moTa": "layTruong thiếu trường → null",
+            "goi": "layTruong({ ten: \"Lan\" }, \"email\")",
+            "mongDoi": null
+          },
+          {
+            "moTa": "Dùng ngoặc vuông với biến",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\w\\[\\s*[a-zA-Z_][\\w.]*\\s*\\]"
+          },
+          {
+            "moTa": "Không viết cứng tên trạng thái",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "[\"'](moi|dangGiao|daGiao)[\"']|\\b(moi|dangGiao|daGiao)\\s*:",
+            "phuDinh": true,
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bản chép nông: sửa một bài thì bài gốc cũng đổi",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "spread {...obj}",
+        "bản chép nông",
+        "tham chiếu dùng chung",
+        "structuredClone",
+        "không đột biến"
+      ],
+      "prerequisites": [
+        "object",
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "object",
+        "immutability",
+        "spread"
+      ],
+      "problemHtml": "<p>Bài 4.4, mục <em>\"Bẫy — chép một object bằng {...obj} rồi sửa thứ nằm sâu hơn một tầng\"</em>. Trình soạn blog có nút \"nhân bản bài viết rồi gắn thêm thẻ\". Người dùng phàn nàn: gắn thẻ cho bản nhân bản thì <strong>bài gốc cũng có thẻ đó</strong>. Sửa <code>themThe(baiViet, the)</code> để trả về một bài MỚI có thêm thẻ, bài gốc nguyên vẹn; và viết <code>nhanBanSau(baiViet)</code> chép sâu mọi tầng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>themThe(bai, \"js\")</code> trả về object mới: mọi trường như bài gốc, <code>the</code> có thêm <code>\"js\"</code> ở cuối.</li>\n  <li>Bài gốc (kể cả mảng <code>the</code> của nó) không đổi; kết quả không phải cùng object với bài gốc.</li>\n  <li><code>nhanBanSau(bai)</code> trả về bản chép SÂU: sửa <code>banSao.tacGia.ten</code> không làm đổi bài gốc — dùng <code>structuredClone</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "baiViet: { tieuDe: string, the: string[], tacGia: { ten: string } }; the: string.",
+      "outputSpec": "object mới.",
+      "constraints": "Không dùng push trên mảng của bài gốc.\nKhông dùng JSON.parse(JSON.stringify(...)) (chưa học, và làm mất kiểu Date).",
+      "examplesJson": [
+        {
+          "input": "const goc = { tieuDe: \"A\", the: [\"web\"], tacGia: { ten: \"Lan\" } };\nconst moi = themThe(goc, \"js\");\n[goc.the, moi.the]",
+          "output": "[[\"web\"], [\"web\", \"js\"]]",
+          "explanation": "Mảng the của bài mới là một mảng MỚI."
+        },
+        {
+          "input": "const ban = nhanBanSau(goc);\nban.tacGia.ten = \"Minh\";\ngoc.tacGia.ten",
+          "output": "\"Lan\"",
+          "explanation": "Bản chép sâu không dùng chung object tacGia."
+        }
+      ],
+      "hintsJson": [
+        "{...bai} chỉ chép tầng ngoài: bai.the và ban.the vẫn là CÙNG một mảng. Phải tạo mảng mới cho trường the: [...bai.the, the].",
+        "return { ...baiViet, the: [...baiViet.the, the] }; — nhanBanSau: return structuredClone(baiViet);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — Bản chép nông\nfunction themThe(baiViet, the) {\n  const banSao = { ...baiViet };\n  banSao.the.push(the);\n  return banSao;\n}\n\nfunction nhanBanSau(baiViet) {\n  return { ...baiViet };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — Bản chép nông\nfunction themThe(baiViet, the) {\n  // {...baiViet} chép tầng NGOÀI; trường the vẫn trỏ vào mảng CŨ.\n  // Nên tạo luôn mảng mới cho đúng tầng mình định sửa: [...mảngCũ, phầnTửMới]\n  return { ...baiViet, the: [...baiViet.the, the] };\n}\n\nfunction nhanBanSau(baiViet) {\n  // structuredClone chép MỌI tầng: object/mảng lồng bên trong cũng là bản mới\n  return structuredClone(baiViet);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Spread <code>{...a}</code> tạo object mới và chép <em>giá trị</em> từng trường. Với trường là mảng hay object, giá trị đó là một <em>tham chiếu</em> — nên bản chép và bản gốc cùng trỏ một mảng <code>the</code>. <code>push</code> vào mảng chung thì cả hai cùng thấy. Đây là lỗi \"sửa một mục thì mọi mục cùng đổi\" mà bài học cảnh báo — và là lý do React đòi bạn tạo mảng mới thay vì push.</p>\n<p>Hai cách sửa: chép tường minh đúng tầng cần đổi (<code>the: [...bai.the, the]</code> — nhẹ, phổ biến nhất), hoặc chép sâu toàn bộ (<code>structuredClone</code>). Máy chấm kiểm mảng gốc không đổi, <code>moi !== goc</code>, <code>moi.the !== goc.the</code>, và độc lập của <code>tacGia</code> trong bản chép sâu.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li><code>const ban = baiViet</code> — không chép gì cả, chỉ thêm một tên cho cùng object.</li>\n  <li><code>{ ...baiViet, the: baiViet.the.push(the) }</code> — push trả về ĐỘ DÀI mới (một số), và vẫn sửa mảng gốc.</li>\n  <li>Tưởng <code>{...obj}</code> chép sâu.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.4 Mảng và đối tượng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Bài mới có thêm thẻ ở cuối",
+            "chuanBi": "const goc = { tieuDe: \"A\", the: [\"web\"], tacGia: { ten: \"Lan\" } }; const moi = themThe(goc, \"js\");",
+            "goi": "moi",
+            "mongDoi": {
+              "tieuDe": "A",
+              "the": [
+                "web",
+                "js"
+              ],
+              "tacGia": {
+                "ten": "Lan"
+              }
+            }
+          },
+          {
+            "moTa": "Mảng thẻ của bài gốc không đổi",
+            "chuanBi": "const goc = { tieuDe: \"A\", the: [\"web\"], tacGia: { ten: \"Lan\" } }; themThe(goc, \"js\");",
+            "goi": "goc.the",
+            "mongDoi": [
+              "web"
+            ]
+          },
+          {
+            "moTa": "Kết quả là object mới, mảng mới",
+            "chuanBi": "const goc = { tieuDe: \"A\", the: [\"web\"], tacGia: { ten: \"Lan\" } }; const moi = themThe(goc, \"js\");",
+            "goi": "[moi !== goc, moi.the !== goc.the]",
+            "mongDoi": [
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Bản chép sâu độc lập ở tầng tacGia",
+            "chuanBi": "const goc = { tieuDe: \"A\", the: [\"web\"], tacGia: { ten: \"Lan\" } }; const ban = nhanBanSau(goc); ban.tacGia.ten = \"Minh\"; ban.the.push(\"x\");",
+            "goi": "[goc.tacGia.ten, goc.the.length, ban.tacGia.ten]",
+            "mongDoi": [
+              "Lan",
+              1,
+              "Minh"
+            ]
+          },
+          {
+            "moTa": "Thêm hai thẻ liên tiếp",
+            "chuanBi": "const goc = { tieuDe: \"B\", the: [], tacGia: { ten: \"Hà\" } }; const m = themThe(themThe(goc, \"a\"), \"b\");",
+            "goi": "[goc.the, m.the]",
+            "mongDoi": [
+              [],
+              [
+                "a",
+                "b"
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Không dùng JSON.parse(JSON.stringify())",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "JSON\\.parse",
+            "phuDinh": true,
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Thống kê lớp học: chuỗi filter, map, reduce",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "filter",
+        "map",
+        "reduce",
+        "Math.round",
+        "object kết quả"
+      ],
+      "prerequisites": [
+        "map",
+        "filter",
+        "reduce"
+      ],
+      "tags": [
+        "javascript",
+        "array",
+        "data-processing"
+      ],
+      "problemHtml": "<p>Ba phương thức của Bài 4.4 ghép lại là đủ cho hầu hết báo cáo dữ liệu. Viết <code>thongKeLop(dsSV, lop)</code> trả về thống kê của MỘT lớp:</p>\n<pre><code>{ siSo, soDat, diemTB, danhSachDat }</code></pre>\n<p>Đạt là <code>diem &gt;= 5</code>. <code>diemTB</code> là trung bình điểm của cả lớp, làm tròn 2 chữ số thập phân (<code>Math.round(x * 100) / 100</code>); lớp không có ai → <code>diemTB: null</code>. <code>danhSachDat</code> là mảng tên người đạt, theo thứ tự gốc.</p>\n<pre><code>const ds = [\n  { ten: \"Lan\",  diem: 8.5, lop: \"SE1\" },\n  { ten: \"Minh\", diem: 4,   lop: \"SE2\" },\n  { ten: \"Hà\",   diem: 6,   lop: \"SE1\" },\n];</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ tính sinh viên thuộc <code>lop</code> (lọc trước).</li>\n  <li><code>siSo</code>, <code>soDat</code>: số nguyên; <code>diemTB</code>: làm tròn 2 chữ số hoặc <code>null</code>; <code>danhSachDat</code>: mảng tên.</li>\n  <li>Dùng <code>filter</code>, <code>map</code>, <code>reduce</code> — không vòng lặp <code>for</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "dsSV: mảng { ten, diem: number, lop }; lop: string.",
+      "outputSpec": "object { siSo: number, soDat: number, diemTB: number|null, danhSachDat: string[] }.",
+      "constraints": "Không sửa mảng đầu vào.\nKhông dùng for / while.",
+      "examplesJson": [
+        {
+          "input": "thongKeLop(ds, \"SE1\")",
+          "output": "{ siSo: 2, soDat: 2, diemTB: 7.25, danhSachDat: [\"Lan\", \"Hà\"] }",
+          "explanation": "(8.5 + 6) / 2 = 7.25."
+        },
+        {
+          "input": "thongKeLop(ds, \"SE9\")",
+          "output": "{ siSo: 0, soDat: 0, diemTB: null, danhSachDat: [] }",
+          "explanation": "Không chia cho 0 — lớp rỗng thì diemTB là null."
+        }
+      ],
+      "hintsJson": [
+        "const trongLop = dsSV.filter(sv => sv.lop === lop); rồi mọi thứ khác tính trên trongLop.",
+        "const tong = trongLop.reduce((s, sv) => s + sv.diem, 0); const diemTB = trongLop.length === 0 ? null : Math.round(tong / trongLop.length * 100) / 100;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — Thống kê lớp\nfunction thongKeLop(dsSV, lop) {\n  const tong = dsSV.reduce((s, sv) => s + sv.diem, 0);\n  return {\n    siSo: dsSV.length,\n    soDat: 0,\n    diemTB: tong / dsSV.length,\n    danhSachDat: [],\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — Thống kê lớp\nfunction thongKeLop(dsSV, lop) {\n  // 1) Lọc đúng lớp TRƯỚC — mọi con số sau đều tính trên nhóm này\n  const trongLop = dsSV.filter(sv => sv.lop === lop);\n\n  // 2) Những người đạt (diem >= 5), rồi lấy tên — giữ thứ tự gốc\n  const dat = trongLop.filter(sv => sv.diem >= 5);\n  const danhSachDat = dat.map(sv => sv.ten);\n\n  // 3) Trung bình: reduce ra tổng; lớp rỗng thì không chia (tránh NaN)\n  const tong = trongLop.reduce((s, sv) => s + sv.diem, 0);\n  const diemTB = trongLop.length === 0\n    ? null\n    : Math.round((tong / trongLop.length) * 100) / 100;   // làm tròn 2 chữ số\n\n  return { siSo: trongLop.length, soDat: dat.length, diemTB, danhSachDat };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thứ tự là chìa khoá: lọc theo lớp TRƯỚC, rồi mọi phép đếm/trung bình làm trên nhóm đã lọc — bản cũ tính trên cả trường. Mỗi bước một phương thức, một mảng mới, không biến cộng dồn nào trôi nổi: dễ đọc và dễ kiểm từng bước bằng <code>console.log</code>.</p>\n<p>Lớp rỗng là ca biên kinh điển: <code>0 / 0</code> là <code>NaN</code>, và <code>NaN</code> sẽ lan khắp báo cáo. Trả <code>null</code> nói rõ \"không có dữ liệu\". <code>{ siSo: …, diemTB, danhSachDat }</code> dùng cú pháp viết tắt — tên biến trùng tên khoá. Máy chấm thử hai lớp, lớp rỗng, lớp ẩn có trung bình cần làm tròn (<code>6.666…</code> → <code>6.67</code>).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Tính trung bình trên cả danh sách thay vì lớp đã lọc.</li>\n  <li>Làm tròn bằng <code>toFixed(2)</code> — trả về CHUỖI <code>\"7.25\"</code>, không phải số.</li>\n  <li>Lớp rỗng ra <code>NaN</code> hoặc ném lỗi.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.4 Mảng và đối tượng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/array-methods",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Thống kê lớp SE1",
+            "goi": "thongKeLop([ { ten: \"Lan\", diem: 8.5, lop: \"SE1\" }, { ten: \"Minh\", diem: 4, lop: \"SE2\" }, { ten: \"Hà\", diem: 6, lop: \"SE1\" }, ], \"SE1\")",
+            "mongDoi": {
+              "siSo": 2,
+              "soDat": 2,
+              "diemTB": 7.25,
+              "danhSachDat": [
+                "Lan",
+                "Hà"
+              ]
+            }
+          },
+          {
+            "moTa": "Lớp SE2 (có người trượt)",
+            "goi": "thongKeLop([ { ten: \"Lan\", diem: 8.5, lop: \"SE1\" }, { ten: \"Minh\", diem: 4, lop: \"SE2\" }, { ten: \"Hà\", diem: 6, lop: \"SE1\" }, ], \"SE2\")",
+            "mongDoi": {
+              "siSo": 1,
+              "soDat": 0,
+              "diemTB": 4,
+              "danhSachDat": []
+            }
+          },
+          {
+            "moTa": "Lớp không tồn tại",
+            "goi": "thongKeLop([ { ten: \"Lan\", diem: 8.5, lop: \"SE1\" }, { ten: \"Minh\", diem: 4, lop: \"SE2\" }, { ten: \"Hà\", diem: 6, lop: \"SE1\" }, ], \"SE9\")",
+            "mongDoi": {
+              "siSo": 0,
+              "soDat": 0,
+              "diemTB": null,
+              "danhSachDat": []
+            }
+          },
+          {
+            "moTa": "Làm tròn 2 chữ số: 6.67",
+            "goi": "thongKeLop([{ ten: \"A\", diem: 5, lop: \"X\" }, { ten: \"B\", diem: 7, lop: \"X\" }, { ten: \"C\", diem: 8, lop: \"X\" }, { ten: \"D\", diem: 1, lop: \"Y\" }], \"X\")",
+            "mongDoi": {
+              "siSo": 3,
+              "soDat": 3,
+              "diemTB": 6.67,
+              "danhSachDat": [
+                "A",
+                "B",
+                "C"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": "Biên đạt: 5 là đạt, 4.99 là trượt",
+            "goi": "thongKeLop([{ ten: \"A\", diem: 5, lop: \"X\" }, { ten: \"B\", diem: 4.99, lop: \"X\" }], \"X\").danhSachDat",
+            "mongDoi": [
+              "A"
+            ]
+          },
+          {
+            "moTa": "Không dùng for / while",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\b(for|while)\\s*\\(",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Dùng reduce",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\.reduce\\s*\\("
+          }
+        ]
+      }
+    },
+    {
+      "title": "Tự viết groupBy: gom mảng theo khoá hoặc theo hàm",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "reduce ra object",
+        "khoá động",
+        "hàm làm đối số",
+        "typeof",
+        "không đột biến"
+      ],
+      "prerequisites": [
+        "reduce",
+        "bracket notation",
+        "callback"
+      ],
+      "tags": [
+        "javascript",
+        "array",
+        "object",
+        "reduce",
+        "utility"
+      ],
+      "problemHtml": "<p>Bài tổng hợp 4.4. Gom dữ liệu theo nhóm là việc làm mỗi ngày: đơn theo trạng thái, bài theo tháng, sinh viên theo lớp. Viết <code>nhomTheo(ds, khoa)</code> — phiên bản tự cài của <code>Object.groupBy</code>:</p>\n<ul><li><code>khoa</code> là <strong>chuỗi</strong> ⇒ nhóm theo giá trị trường đó: <code>nhomTheo(sv, \"lop\")</code>.</li>\n<li><code>khoa</code> là <strong>hàm</strong> ⇒ nhóm theo giá trị hàm trả về: <code>nhomTheo(sv, s =&gt; s.diem &gt;= 5 ? \"dat\" : \"truot\")</code>.</li></ul>\n<p>Kết quả: object mà mỗi khoá là một nhóm, giá trị là mảng các phần tử thuộc nhóm, giữ thứ tự gốc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hỗ trợ cả khoá chuỗi lẫn khoá hàm (kiểm bằng typeof).</li>\n  <li>Mỗi nhóm giữ thứ tự xuất hiện ban đầu; phần tử trong nhóm là CHÍNH object gốc (không chép).</li>\n  <li>Không sửa mảng <code>ds</code>; <code>ds</code> rỗng → <code>{}</code>.</li>\n  <li>Khoá không phải chuỗi/hàm → ném <code>TypeError</code> với thông điệp chứa <code>\"khoa\"</code>.</li>\n  <li>Không dùng <code>Object.groupBy</code> có sẵn.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ds: mảng; khoa: string | function.",
+      "outputSpec": "object { [tenNhom]: mảng phần tử }.",
+      "constraints": "Không dùng thư viện, không dùng Object.groupBy / Map.groupBy.",
+      "examplesJson": [
+        {
+          "input": "nhomTheo([ { ten: \"Lan\", diem: 8.5, lop: \"SE1\" }, { ten: \"Minh\", diem: 4, lop: \"SE2\" }, { ten: \"Hà\", diem: 6, lop: \"SE1\" }, ], \"lop\")",
+          "output": "{ SE1: [Lan, Hà], SE2: [Minh] }",
+          "explanation": "(viết tắt — mỗi phần tử là cả object sinh viên)."
+        },
+        {
+          "input": "nhomTheo([1, 2, 3, 4, 5], n => n % 2 === 0 ? \"chan\" : \"le\")",
+          "output": "{ le: [1, 3, 5], chan: [2, 4] }",
+          "explanation": "Khoá hàm: tên nhóm là giá trị hàm trả về."
+        },
+        {
+          "input": "nhomTheo([1], 42)",
+          "output": "TypeError: khoa phải là chuỗi hoặc hàm",
+          "explanation": "Chốt chặn đầu vào."
+        }
+      ],
+      "hintsJson": [
+        "Bước 1: biến khoa thành MỘT hàm layKhoa: typeof khoa === \"function\" ? khoa : (x => x[khoa]). Từ đó trở đi chỉ còn một trường hợp.",
+        "return ds.reduce((nhom, x) => { const k = layKhoa(x); (nhom[k] ??= []).push(x); return nhom; }, {}); — hoặc viết if (!nhom[k]) nhom[k] = []; cho dễ đọc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — groupBy tự viết\nfunction nhomTheo(ds, khoa) {\n  const ketQua = {};\n  for (const x of ds) {\n    ketQua[khoa] = x;\n  }\n  return ketQua;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 4.4 — groupBy tự viết\nfunction nhomTheo(ds, khoa) {\n  // Chuẩn hoá hai kiểu \"khoa\" về MỘT hàm — phần còn lại chỉ phải lo một trường hợp\n  let layKhoa;\n  if (typeof khoa === \"function\") {\n    layKhoa = khoa;\n  } else if (typeof khoa === \"string\") {\n    layKhoa = (x) => x[khoa];          // khoá động: dùng giá trị của biến khoa\n  } else {\n    throw new TypeError(\"khoa phải là chuỗi hoặc hàm\");\n  }\n\n  // reduce gộp cả mảng thành MỘT object; giá trị khởi đầu {} là object rỗng MỚI\n  return ds.reduce((nhom, x) => {\n    const k = layKhoa(x);\n    if (nhom[k] === undefined) {\n      nhom[k] = [];                     // lần đầu gặp nhóm này\n    }\n    nhom[k].push(x);                    // push vào mảng của KẾT QUẢ, không đụng ds\n    return nhom;                        // quên dòng này ⇒ lượt sau nhom là undefined\n  }, {});\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mẹo thiết kế: thay vì rải <code>if (typeof khoa === \"string\")</code> khắp thân hàm, chuẩn hoá đầu vào về một dạng ngay từ đầu (khoá chuỗi thành hàm <code>x =&gt; x[khoa]</code>). Phần lõi khi đó chỉ có một đường đi — ít chỗ sai hơn.</p>\n<p><code>reduce</code> với giá trị khởi đầu <code>{}</code> là khuôn chuẩn để \"gộp mảng thành object\". Hàm gộp phải <code>return nhom</code> mỗi lượt. <code>push</code> ở đây hợp lệ vì nó sửa mảng của <em>kết quả</em> do chính ta tạo, không phải dữ liệu người gọi đưa vào. Máy chấm kiểm thứ tự trong nhóm, <code>=== </code> object gốc, mảng đầu vào không đổi, và TypeError cho khoá sai.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên <code>return nhom</code> trong hàm gộp — lượt thứ hai ném TypeError (đọc thuộc tính của undefined).</li>\n  <li><code>nhom[k] = [x]</code> mỗi lượt — mỗi nhóm chỉ còn phần tử cuối.</li>\n  <li>Dùng <code>nhom.k</code> thay vì <code>nhom[k]</code> — mọi thứ dồn vào một nhóm tên \"k\".</li>\n  <li>Chép phần tử (<code>{...x}</code>) vào nhóm — đề yêu cầu giữ chính object gốc.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 4.4 Mảng và đối tượng.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Nhóm theo khoá chuỗi \"lop\"",
+            "goi": "nhomTheo([ { ten: \"Lan\", diem: 8.5, lop: \"SE1\" }, { ten: \"Minh\", diem: 4, lop: \"SE2\" }, { ten: \"Hà\", diem: 6, lop: \"SE1\" }, ], \"lop\")",
+            "mongDoi": {
+              "SE1": [
+                {
+                  "ten": "Lan",
+                  "diem": 8.5,
+                  "lop": "SE1"
+                },
+                {
+                  "ten": "Hà",
+                  "diem": 6,
+                  "lop": "SE1"
+                }
+              ],
+              "SE2": [
+                {
+                  "ten": "Minh",
+                  "diem": 4,
+                  "lop": "SE2"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": "Nhóm theo khoá hàm",
+            "goi": "nhomTheo([1, 2, 3, 4, 5], n => n % 2 === 0 ? \"chan\" : \"le\")",
+            "mongDoi": {
+              "le": [
+                1,
+                3,
+                5
+              ],
+              "chan": [
+                2,
+                4
+              ]
+            }
+          },
+          {
+            "moTa": "Mảng rỗng → {}",
+            "goi": "nhomTheo([], \"lop\")",
+            "mongDoi": {}
+          },
+          {
+            "moTa": "Phần tử trong nhóm là CHÍNH object gốc",
+            "chuanBi": "const a = { t: \"x\" }; const r = nhomTheo([a], \"t\");",
+            "goi": "r.x[0] === a",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Mảng đầu vào không đổi",
+            "chuanBi": "const ds = [{ t: \"x\" }, { t: \"y\" }]; nhomTheo(ds, \"t\");",
+            "goi": "ds",
+            "mongDoi": [
+              {
+                "t": "x"
+              },
+              {
+                "t": "y"
+              }
+            ]
+          },
+          {
+            "moTa": "Khoá sai → TypeError",
+            "goi": "nhomTheo([1], 42)",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "khoa"
+            }
+          },
+          {
+            "moTa": "Nhóm theo độ dài chuỗi (thứ tự trong nhóm)",
+            "goi": "nhomTheo([\"an\", \"binh\", \"chi\", \"dung\", \"em\", \"hoang\"], s => s.length)",
+            "mongDoi": {
+              "2": [
+                "an",
+                "em"
+              ],
+              "3": [
+                "chi"
+              ],
+              "4": [
+                "binh",
+                "dung"
+              ],
+              "5": [
+                "hoang"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": "Không dùng Object.groupBy",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\b(Object|Map)\\.groupBy",
+            "phuDinh": true
+          }
+        ]
+      }
+    }
+  ]
+}

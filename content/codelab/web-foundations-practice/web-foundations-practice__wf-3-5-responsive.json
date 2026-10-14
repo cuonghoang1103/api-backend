@@ -1,0 +1,1008 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-3-5-responsive",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-3-5-responsive"
+  },
+  "exercises": [
+    {
+      "title": "Bước 0 của responsive: thẻ viewport và ảnh không bao giờ tràn",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "meta viewport",
+        "img max-width: 100%",
+        "tràn ngang trên điện thoại"
+      ],
+      "prerequisites": [
+        "bộ khung HTML5",
+        "quy tắc CSS"
+      ],
+      "tags": [
+        "css",
+        "responsive",
+        "viewport",
+        "images"
+      ],
+      "problemHtml": "<p>Bài 3.5, bước 0: <em>\"Thiếu thẻ viewport, điện thoại giả vờ là một desktop rộng và thu nhỏ cả trang tới mức không đọc nổi.\"</em> Và trong bảng đơn vị: <em>\"<code>img { max-width: 100%; }</code> ngăn ảnh tràn ra trên màn hình nhỏ — bắt buộc.\"</em> Trang du lịch dưới đây thiếu cả hai: trên điện thoại chữ tí hon, và ảnh rộng 1200px kéo cả trang tràn ngang. Sửa đúng hai dòng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thêm <code>&lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;</code> vào <code>&lt;head&gt;</code>.</li>\n  <li>Mọi <code>&lt;img&gt;</code> có <code>max-width: 100%</code> (và <code>height: auto</code> để giữ tỉ lệ khi ảnh co).</li>\n  <li>Giữ nguyên thuộc tính <code>width=\"1200\" height=\"800\"</code> trên ảnh (chúng giữ chỗ, bài 2.2).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html không có viewport; ảnh 1200×800; styles.css trống.",
+      "outputSpec": "Trên điện thoại 375px: chữ đọc được ngay, ảnh co còn ~359px, không còn thanh cuộn ngang.",
+      "constraints": "Không xoá width/height của ảnh.\nKhông dùng overflow: hidden để giấu phần tràn.",
+      "examplesJson": [
+        {
+          "input": "img { max-width: 100%; height: auto; }  ·  màn 375px, body margin 8px",
+          "output": "Ảnh 1200×800 hiển thị 359 × 239px — vừa khít, đúng tỉ lệ.",
+          "explanation": "max-width: 100% = \"không bao giờ rộng hơn vật chứa\". height: auto tính lại chiều cao theo tỉ lệ gốc thay vì giữ 800px."
+        }
+      ],
+      "hintsJson": [
+        "Một dòng HTML trong head, một quy tắc CSS cho img.",
+        "img { max-width: 100%; height: auto; } — height: auto quan trọng vì thuộc tính height=\"800\" sẽ giữ chiều cao 800px nếu không đè."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* Ảnh tràn ngang trên điện thoại — thêm một quy tắc */\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <title>Đà Lạt</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <h1>Ba ngày ở Đà Lạt</h1>\n    <img src=\"ho-xuan-huong.jpg\" alt=\"Hồ Xuân Hương phủ sương sớm\" width=\"1200\" height=\"800\">\n    <p>Ngày đầu tiên dạo quanh hồ lúc sáu giờ sáng.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* bắt buộc trong mọi trang responsive: ảnh không bao giờ rộng hơn vật chứa */\nimg {\n  max-width: 100%;  /* co lại khi màn hẹp hơn ảnh */\n  height: auto;     /* tính lại chiều cao theo tỉ lệ (đè height=\"800\" của thuộc tính) */\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Đà Lạt</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <h1>Ba ngày ở Đà Lạt</h1>\n    <!-- width/height giữ nguyên: trình duyệt dùng chúng để giữ chỗ đúng TỈ LỆ trước khi ảnh tải -->\n    <img src=\"ho-xuan-huong.jpg\" alt=\"Hồ Xuân Hương phủ sương sớm\" width=\"1200\" height=\"800\">\n    <p>Ngày đầu tiên dạo quanh hồ lúc sáu giờ sáng.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thẻ viewport bảo điện thoại \"bề rộng trang = bề rộng màn hình thật\" — thiếu nó, điện thoại giả vờ rộng 980px rồi thu nhỏ, và mọi media query bạn sẽ viết ở các bài sau đo nhầm thứ. <code>max-width: 100%</code> khiến ảnh co theo vật chứa nhưng không phóng to quá kích thước gốc.</p>\n<p><code>height: auto</code> là mảnh hay quên: thuộc tính <code>height=\"800\"</code> trên thẻ img trở thành chiều cao CSS, nên ảnh co ngang mà vẫn cao 800px — méo hình. Trình duyệt hiện đại vẫn dùng cặp width/height để tính <em>tỉ lệ</em> giữ chỗ, nên giữ chúng là đúng. Máy chấm kiểm meta viewport và <code>max-width</code>/<code>height</code> computed của ảnh; trong trình duyệt nó đo thêm bề rộng ảnh ở màn 375px.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>img { width: 100%; }</code> — ảnh nhỏ (icon 32px) cũng bị kéo căng hết hàng.</li>\n  <li>Xoá width/height của thẻ img để \"hết méo\" — mất chỗ giữ, trang nhảy khi ảnh tải.</li>\n  <li>Thêm <code>overflow-x: hidden</code> cho body — giấu triệu chứng, ảnh vẫn bị cắt.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.5 Thiết kế responsive: một trang, mọi màn hình.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/learn/design/media",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Có meta viewport width=device-width, initial-scale=1",
+            "kiem": "thuoc-tinh",
+            "selector": "head meta[name=\"viewport\"]",
+            "thuocTinh": "content",
+            "khop": "^width=device-width,\\s*initial-scale=1(\\.0)?$"
+          },
+          {
+            "moTa": "Ảnh có max-width: 100%",
+            "kiem": "css",
+            "selector": "img",
+            "thuocTinh": "max-width",
+            "giaTri": "100%"
+          },
+          {
+            "moTa": "Ảnh có height: auto",
+            "kiem": "css",
+            "selector": "img",
+            "thuocTinh": "height",
+            "khop": "^(auto|\\d+(\\.\\d+)?px)$"
+          },
+          {
+            "moTa": "Quy tắc height: auto có trong CSS",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "img[^{]*\\{[^}]*height\\s*:\\s*auto"
+          },
+          {
+            "moTa": "Vẫn giữ width=\"1200\" height=\"800\" trên ảnh",
+            "kiem": "ton-tai",
+            "selector": "img[width=\"1200\"][height=\"800\"]"
+          },
+          {
+            "moTa": "Không giấu phần tràn bằng overflow",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "overflow",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Đổi px sang rem để chữ và khoảng cách co giãn cùng nhau",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "rem",
+        "1rem = 16px mặc định",
+        "đơn vị tương đối",
+        "tôn trọng cỡ chữ người dùng chọn"
+      ],
+      "prerequisites": [
+        "quy tắc CSS"
+      ],
+      "tags": [
+        "css",
+        "responsive",
+        "rem",
+        "units"
+      ],
+      "problemHtml": "<p>Bài 3.5: <em>\"rem — tương đối theo cỡ chữ gốc. 1rem = 16px mặc định. Dùng cho cỡ chữ và khoảng cách để mọi thứ co giãn cùng nhau.\"</em> Bảng kiểu dưới đây khoá mọi cỡ chữ bằng px — người dùng đặt cỡ chữ trình duyệt lớn hơn (vì mắt kém) thì trang vẫn y nguyên. Đổi sang rem: ở cỡ mặc định trang trông <strong>y hệt</strong>, nhưng giờ nó tôn trọng lựa chọn của người dùng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>h1</code>: 32px ⇒ <code>2rem</code>; <code>p</code>: 16px ⇒ <code>1rem</code>; <code>.ghi-chu</code>: 14px ⇒ <code>0.875rem</code>.</li>\n  <li><code>.the</code>: padding 24px ⇒ <code>1.5rem</code>; margin-bottom 16px ⇒ <code>1rem</code>.</li>\n  <li>Không còn đơn vị <code>px</code> nào trong font-size, padding, margin của tệp.</li>\n  <li>Giá trị tính ra ở cỡ mặc định giữ nguyên (32px, 16px, 14px, 24px, 16px).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "styles.css dùng px cho cỡ chữ và khoảng cách.",
+      "outputSpec": "Trông y hệt ở cỡ chữ mặc định; phóng to cỡ chữ trình duyệt thì chữ và khoảng cách cùng lớn theo.",
+      "constraints": "Viền 1px giữ nguyên px (đường kẻ mảnh không cần co giãn).",
+      "examplesJson": [
+        {
+          "input": "h1 { font-size: 2rem; }",
+          "output": "Cỡ mặc định (16px): h1 = 32px\nNgười dùng đặt cỡ chữ 20px: h1 = 40px",
+          "explanation": "rem = bội số của cỡ chữ gốc (html). px thì cố định, bỏ qua cài đặt của người dùng."
+        }
+      ],
+      "hintsJson": [
+        "Chia cho 16: 32/16 = 2, 24/16 = 1,5, 14/16 = 0,875.",
+        "Viết số thập phân bằng dấu chấm: 1.5rem, 0.875rem."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\nh1 { font-size: 32px; }\np  { font-size: 16px; }\n.ghi-chu { font-size: 14px; }\n.the {\n  padding: 24px;\n  margin-bottom: 16px;\n  border: 1px solid #e2e8f0;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cỡ chữ</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <h1>Thực đơn tuần này</h1>\n    <div class=\"the\">\n      <p>Thứ Hai: bún chả.</p>\n      <p class=\"ghi-chu\">Giá đã gồm nước chấm.</p>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* 1rem = cỡ chữ gốc (mặc định 16px) — chia giá trị px cho 16 */\nh1 { font-size: 2rem; }          /* 32 / 16 */\np  { font-size: 1rem; }          /* 16 / 16 */\n.ghi-chu { font-size: 0.875rem; } /* 14 / 16 */\n.the {\n  padding: 1.5rem;               /* 24 / 16 — khoảng cách co giãn cùng chữ */\n  margin-bottom: 1rem;           /* 16 / 16 */\n  border: 1px solid #e2e8f0;     /* đường kẻ mảnh: px là đúng */\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cỡ chữ</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <h1>Thực đơn tuần này</h1>\n    <div class=\"the\">\n      <p>Thứ Hai: bún chả.</p>\n      <p class=\"ghi-chu\">Giá đã gồm nước chấm.</p>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ở cỡ mặc định, rem và px cho cùng con số — nên thiết kế không đổi. Khác biệt lộ ra khi người dùng đổi cỡ chữ trong cài đặt trình duyệt: px làm ngơ, rem lớn theo. Khoảng cách cũng dùng rem để chữ to ra không bị \"chật\" trong hộp cũ.</p>\n<p>Máy chấm kiểm giá trị computed (trình duyệt luôn trả về px: 2rem ⇒ 32px) và kiểm mã nguồn không còn px trong font-size/padding/margin. Viền giữ px vì một đường kẻ 1px không cần dày lên theo chữ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng <code>em</code> thay rem cho cỡ chữ lồng nhau — em tính theo cha, lồng hai tầng 0.875em là 0.766 lần.</li>\n  <li>Viết <code>0,875rem</code> với dấu phẩy — CSS chỉ nhận dấu chấm.</li>\n  <li>Đặt <code>html { font-size: 62.5% }</code> cho \"dễ tính\" — ghi đè cỡ người dùng chọn, đúng thứ ta muốn tránh.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.5 Thiết kế responsive: một trang, mọi màn hình.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units#relative_length_units",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "h1 tính ra 32px",
+            "kiem": "css",
+            "selector": "h1",
+            "thuocTinh": "font-size",
+            "giaTri": "32px"
+          },
+          {
+            "moTa": "p tính ra 16px",
+            "kiem": "css",
+            "selector": "p:not(.ghi-chu)",
+            "thuocTinh": "font-size",
+            "giaTri": "16px"
+          },
+          {
+            "moTa": ".ghi-chu tính ra 14px",
+            "kiem": "css",
+            "selector": ".ghi-chu",
+            "thuocTinh": "font-size",
+            "giaTri": "14px"
+          },
+          {
+            "moTa": ".the padding tính ra 24px",
+            "kiem": "css",
+            "selector": ".the",
+            "thuocTinh": "padding-top",
+            "giaTri": "24px"
+          },
+          {
+            "moTa": ".the margin-bottom tính ra 16px",
+            "kiem": "css",
+            "selector": ".the",
+            "thuocTinh": "margin-bottom",
+            "giaTri": "16px"
+          },
+          {
+            "moTa": "Không còn px trong font-size/padding/margin",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "(font-size|padding|margin)[\\w-]*\\s*:[^;]*\\dpx",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Dùng rem",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "\\d(\\.\\d+)?rem"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Media query đầu tiên: rộng tay hơn từ 768px trở lên",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "@media (min-width)",
+        "điểm ngắt",
+        "kiểu nền cho điện thoại"
+      ],
+      "prerequisites": [
+        "rem / px"
+      ],
+      "tags": [
+        "css",
+        "responsive",
+        "media-query"
+      ],
+      "problemHtml": "<p>Bài 3.5: <em>\"Một media query áp một khối CSS chỉ khi một điều kiện đúng — thường là chiều rộng màn hình tối thiểu, gọi là một điểm ngắt (breakpoint).\"</em> Trang bài viết dùng <code>padding: 48px</code> cho mọi màn — đẹp trên laptop, nhưng trên điện thoại 375px chữ bị ép còn một dải hẹp. Viết kiểu nền cho điện thoại, rồi \"nới\" ra từ 768px.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểu nền: <code>.container</code> có <code>padding: 16px</code>, tiêu đề <code>font-size: 1.5rem</code>.</li>\n  <li>Từ <code>768px</code> trở lên (<code>@media (min-width: 768px)</code>): <code>padding: 48px</code>, tiêu đề <code>2.25rem</code>.</li>\n  <li>Không dùng max-width trong media query.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": ".container padding 48px, h1 2.25rem cho mọi màn.",
+      "outputSpec": "375px: padding 16px, tiêu đề 24px · 1024px: padding 48px, tiêu đề 36px.",
+      "constraints": "Kiểu nền (ngoài media query) là kiểu điện thoại.",
+      "examplesJson": [
+        {
+          "input": ".container { padding: 16px; }\n@media (min-width: 768px) {\n  .container { padding: 48px; }\n}",
+          "output": "Màn 767px: padding 16px\nMàn 768px: padding 48px",
+          "explanation": "min-width: 768px nghĩa là \"bề rộng ≥ 768px\". Quy tắc trong media query đứng sau nên thắng kiểu nền khi điều kiện đúng."
+        }
+      ],
+      "hintsJson": [
+        "Viết kiểu điện thoại trước, ngoài mọi media query. Rồi mở @media (min-width: 768px) { … } và chỉ ghi những gì THAY ĐỔI.",
+        ".container { padding: 16px; } .container h1 { font-size: 1.5rem; } @media (min-width: 768px) { .container { padding: 48px; } .container h1 { font-size: 2.25rem; } }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.container {\n  padding: 48px;\n}\n.container h1 {\n  font-size: 2.25rem;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Bài viết</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"container\">\n      <h1>Thiết kế cho điện thoại trước</h1>\n      <p>Hơn một nửa lượt truy cập web là trên điện thoại.</p>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* KIỂU NỀN = điện thoại (mobile-first) */\n.container {\n  padding: 16px;\n}\n.container h1 {\n  font-size: 1.5rem;     /* 24px */\n}\n\n/* từ tablet trở lên: chỉ ghi thứ THAY ĐỔI */\n@media (min-width: 768px) {\n  .container {\n    padding: 48px;\n  }\n  .container h1 {\n    font-size: 2.25rem;  /* 36px */\n  }\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Bài viết</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"container\">\n      <h1>Thiết kế cho điện thoại trước</h1>\n      <p>Hơn một nửa lượt truy cập web là trên điện thoại.</p>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Media query không phải \"một tệp CSS khác cho điện thoại\" — nó là một khối quy tắc chỉ bật khi điều kiện đúng, và vì đứng sau nên nó đè kiểu nền có cùng độ đặc hiệu (bài 3.1: hoà thì đứng sau thắng). Kiểu nền viết cho màn nhỏ nhất, media query chỉ <em>thêm</em> cho màn lớn hơn.</p>\n<p>Máy chấm dựng trang ở hai bề rộng iframe (375 và 1024px) và đọc padding/cỡ chữ computed ở mỗi bề rộng — đúng như thao tác kéo cửa sổ trong DevTools mà bài 3.5 dặn.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt media query LÊN TRÊN kiểu nền — kiểu nền đứng sau sẽ đè, media query vô hiệu.</li>\n  <li>Viết <code>@media (min-width = 768px)</code> — cú pháp đúng là dấu hai chấm.</li>\n  <li>Chép lại mọi thuộc tính vào media query — chỉ cần thứ thay đổi.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.5 Thiết kế responsive: một trang, mọi màn hình.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Màn 375px: padding 16px",
+            "kiem": "css",
+            "selector": ".container",
+            "thuocTinh": "padding-left",
+            "giaTri": "16px",
+            "beRong": 375
+          },
+          {
+            "moTa": "Màn 375px: tiêu đề 24px",
+            "kiem": "css",
+            "selector": ".container h1",
+            "thuocTinh": "font-size",
+            "giaTri": "24px",
+            "beRong": 375
+          },
+          {
+            "moTa": "Màn 1024px: padding 48px",
+            "kiem": "css",
+            "selector": ".container",
+            "thuocTinh": "padding-left",
+            "giaTri": "48px",
+            "beRong": 1024
+          },
+          {
+            "moTa": "Màn 1024px: tiêu đề 36px",
+            "kiem": "css",
+            "selector": ".container h1",
+            "thuocTinh": "font-size",
+            "giaTri": "36px",
+            "beRong": 1024
+          },
+          {
+            "moTa": "Ranh giới 767px vẫn là kiểu điện thoại",
+            "kiem": "css",
+            "selector": ".container",
+            "thuocTinh": "padding-left",
+            "giaTri": "16px",
+            "beRong": 767,
+            "an": true
+          },
+          {
+            "moTa": "Ranh giới 768px đã là kiểu tablet",
+            "kiem": "css",
+            "selector": ".container",
+            "thuocTinh": "padding-left",
+            "giaTri": "48px",
+            "beRong": 768,
+            "an": true
+          },
+          {
+            "moTa": "Không dùng max-width trong media query",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@media[^{]*max-width",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mobile-first đúng như bài học: 1 cột → 2 cột từ 768px → 3 cột từ 1024px",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "mobile-first",
+        "nhiều điểm ngắt",
+        "grid trong media query",
+        "chỉ thêm, không gỡ"
+      ],
+      "prerequisites": [
+        "media query",
+        "grid repeat()"
+      ],
+      "tags": [
+        "css",
+        "responsive",
+        "mobile-first",
+        "grid"
+      ],
+      "problemHtml": "<p>Ví dụ chính của bài 3.5 có ba tầng: kiểu nền 1 cột, <code>@media (min-width: 768px)</code> 2 cột, <code>@media (min-width: 1024px)</code> 3 cột. Trang sản phẩm dưới đây mới có 3 cột cứng — trên điện thoại mỗi thẻ hẹp còn 100px. Dựng lại theo đúng ba tầng, mỗi tầng chỉ <strong>thêm</strong> vào tầng trước.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểu nền: <code>.cards</code> là grid <code>1fr</code>, <code>gap: 16px</code>.</li>\n  <li><code>@media (min-width: 768px)</code>: <code>repeat(2, 1fr)</code>.</li>\n  <li><code>@media (min-width: 1024px)</code>: <code>repeat(3, 1fr)</code>.</li>\n  <li>Hai khối media query xếp theo thứ tự tăng dần.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": ".cards grid repeat(3, 1fr) cho mọi màn.",
+      "outputSpec": "375px: 1 cột · 800px: 2 cột · 1200px: 3 cột.",
+      "constraints": "Không max-width trong media query.\nKhông auto-fit (bài này luyện media query).",
+      "examplesJson": [
+        {
+          "input": "Màn 1200px: cả hai điều kiện min-width: 768px VÀ min-width: 1024px đều đúng.",
+          "output": "Cả hai khối cùng áp; khối 1024px đứng sau nên thắng ⇒ 3 cột.",
+          "explanation": "Vì thế thứ tự tăng dần là bắt buộc với min-width. Đảo ngược: màn 1200px ra 2 cột."
+        }
+      ],
+      "hintsJson": [
+        "Ba tầng = ba quy tắc .cards: một ngoài media query, hai trong media query, nhỏ trước lớn sau.",
+        ".cards { display: grid; grid-template-columns: 1fr; gap: 16px; } @media (min-width: 768px) { .cards { grid-template-columns: repeat(2, 1fr); } } @media (min-width: 1024px) { .cards { grid-template-columns: repeat(3, 1fr); } }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.cards {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}\n.o { padding: 16px; border: 1px solid #e2e8f0; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Sản phẩm</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"cards\">\n      <div class=\"o\">Sản phẩm 1</div>\n      <div class=\"o\">Sản phẩm 2</div>\n      <div class=\"o\">Sản phẩm 3</div>\n      <div class=\"o\">Sản phẩm 4</div>\n      <div class=\"o\">Sản phẩm 5</div>\n      <div class=\"o\">Sản phẩm 6</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* tầng 1 — kiểu nền: điện thoại, MỘT cột */\n.cards {\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: 16px;\n}\n\n/* tầng 2 — từ tablet: thêm cột */\n@media (min-width: 768px) {\n  .cards { grid-template-columns: repeat(2, 1fr); }\n}\n\n/* tầng 3 — từ desktop: thêm cột nữa. Đứng SAU tầng 2 vì ở ≥ 1024px cả hai cùng đúng */\n@media (min-width: 1024px) {\n  .cards { grid-template-columns: repeat(3, 1fr); }\n}\n\n.o { padding: 16px; border: 1px solid #e2e8f0; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Sản phẩm</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"cards\">\n      <div class=\"o\">Sản phẩm 1</div>\n      <div class=\"o\">Sản phẩm 2</div>\n      <div class=\"o\">Sản phẩm 3</div>\n      <div class=\"o\">Sản phẩm 4</div>\n      <div class=\"o\">Sản phẩm 5</div>\n      <div class=\"o\">Sản phẩm 6</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mobile-first đọc như một câu chuyện tăng dần: điện thoại (đơn giản nhất) → tablet thêm một cột → desktop thêm một cột nữa. Không tầng nào phải \"gỡ\" thứ gì của tầng trước — đó là lý do bài 3.5 nói cách này \"dễ suy luận hơn và ít code hơn\".</p>\n<p>Điểm hay vấp: ở màn 1200px <em>cả hai</em> media query đều đúng, nên thứ tự quyết định (lại là luật \"hoà thì đứng sau thắng\"). Máy chấm đếm cột ở 375/800/1200px và ở hai ranh giới 767/1024px.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết khối 1024px trước khối 768px — ở màn lớn, khối 768px đứng sau đè lại thành 2 cột.</li>\n  <li>Lặp lại <code>display: grid</code> và <code>gap</code> trong mỗi media query — thừa, chỉ cần thứ thay đổi.</li>\n  <li>Dùng <code>max-width: 767px</code> cho điện thoại — đó là desktop-first, bài sau sẽ chuyển ngược.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.5 Thiết kế responsive: một trang, mọi màn hình.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/learn/design/media-queries",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Màn 375px ⇒ 1 cột",
+            "kiem": "so-cot",
+            "selector": ".cards",
+            "giaTri": 1,
+            "beRong": 375
+          },
+          {
+            "moTa": "Màn 800px ⇒ 2 cột",
+            "kiem": "so-cot",
+            "selector": ".cards",
+            "giaTri": 2,
+            "beRong": 800
+          },
+          {
+            "moTa": "Màn 1200px ⇒ 3 cột",
+            "kiem": "so-cot",
+            "selector": ".cards",
+            "giaTri": 3,
+            "beRong": 1200
+          },
+          {
+            "moTa": "Ranh giới 767px ⇒ 1 cột",
+            "kiem": "so-cot",
+            "selector": ".cards",
+            "giaTri": 1,
+            "beRong": 767,
+            "an": true
+          },
+          {
+            "moTa": "Ranh giới 1024px ⇒ 3 cột",
+            "kiem": "so-cot",
+            "selector": ".cards",
+            "giaTri": 3,
+            "beRong": 1024,
+            "an": true
+          },
+          {
+            "moTa": "Có media query min-width: 768px và 1024px",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@media\\s*\\(\\s*min-width\\s*:\\s*768px\\s*\\)[\\s\\S]*@media\\s*\\(\\s*min-width\\s*:\\s*1024px\\s*\\)"
+          },
+          {
+            "moTa": "Không max-width trong media query, không auto-fit",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@media[^{]*max-width|auto-fit",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Lật ngược bảng kiểu desktop-first thành mobile-first mà kết quả y nguyên",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "desktop-first vs mobile-first",
+        "max-width → min-width",
+        "ranh giới điểm ngắt",
+        "tái cấu trúc"
+      ],
+      "prerequisites": [
+        "mobile-first ba tầng"
+      ],
+      "tags": [
+        "css",
+        "responsive",
+        "mobile-first",
+        "refactor"
+      ],
+      "problemHtml": "<p>Bài 3.5: viết bố cục điện thoại làm CSS nền rồi dùng min-width để thêm — <em>\"dễ suy luận hơn và ít code hơn so với bắt đầu từ màn hình rộng rồi lược bớt\"</em>. Bảng kiểu dưới đây làm ngược lại: kiểu nền là desktop, rồi <code>max-width</code> lược dần. Viết lại theo mobile-first, và kết quả ở <strong>mọi</strong> bề rộng phải y như cũ — kể cả đúng ranh giới.</p>\n<pre><code>Hành vi hiện tại (phải giữ):\n  bề rộng      .luoi     .menu (flex-direction)   h1\n  ≤ 767px      1 cột     column                   1.5rem\n  768–1023px   2 cột     row                      2rem\n  ≥ 1024px     4 cột     row                      2rem</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểu nền (ngoài media query) là cột \"≤ 767px\" của bảng.</li>\n  <li>Chỉ dùng <code>@media (min-width: …)</code> — không còn <code>max-width</code> trong media query.</li>\n  <li>Ranh giới đúng: 767px vẫn là kiểu điện thoại, 768px đã là kiểu tablet; 1023px còn 2 cột, 1024px là 4 cột.</li>\n  <li>Số khối media query ≤ 2.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Kiểu nền desktop + @media (max-width: 1023px) + @media (max-width: 767px).",
+      "outputSpec": "Cùng hành vi, viết theo mobile-first.",
+      "constraints": "Không đổi HTML.\nKhông dùng auto-fit.",
+      "examplesJson": [
+        {
+          "input": "@media (max-width: 767px)  ⟷  @media (min-width: 768px)",
+          "output": "max-width: 767px đúng với 0…767; min-width: 768px đúng với 768…∞ — hai nửa không chồng nhau.",
+          "explanation": "Lật max-width X thành min-width X+1. Lật nhầm thành min-width: 767px là chồng một pixel — ở đúng 767px cả hai cách viết cho kết quả khác nhau."
+        }
+      ],
+      "hintsJson": [
+        "Ba hàng của bảng = kiểu nền + hai khối min-width. Ranh giới: max-width 767 ⇒ min-width 768; max-width 1023 ⇒ min-width 1024.",
+        "Trong khối 768px: .luoi 2 cột, .menu row, h1 2rem. Trong khối 1024px: chỉ .luoi 4 cột (menu và h1 không đổi nữa)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* desktop-first: nền là desktop, lược dần xuống */\n.menu {\n  display: flex;\n  flex-direction: row;\n  gap: 16px;\n}\nh1 { font-size: 2rem; }\n.luoi {\n  display: grid;\n  grid-template-columns: repeat(4, 1fr);\n  gap: 16px;\n}\n\n@media (max-width: 1023px) {\n  .luoi { grid-template-columns: repeat(2, 1fr); }\n}\n\n@media (max-width: 767px) {\n  .menu { flex-direction: column; }\n  h1 { font-size: 1.5rem; }\n  .luoi { grid-template-columns: 1fr; }\n}\n.o { padding: 16px; border: 1px solid #e2e8f0; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cửa hàng</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav class=\"menu\">\n      <a href=\"/\">Trang chủ</a>\n      <a href=\"/san-pham\">Sản phẩm</a>\n      <a href=\"/lien-he\">Liên hệ</a>\n    </nav>\n    <h1>Sản phẩm mới</h1>\n    <div class=\"luoi\">\n      <div class=\"o\">Sản phẩm 1</div>\n      <div class=\"o\">Sản phẩm 2</div>\n      <div class=\"o\">Sản phẩm 3</div>\n      <div class=\"o\">Sản phẩm 4</div>\n      <div class=\"o\">Sản phẩm 5</div>\n      <div class=\"o\">Sản phẩm 6</div>\n      <div class=\"o\">Sản phẩm 7</div>\n      <div class=\"o\">Sản phẩm 8</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* MOBILE-FIRST — kiểu nền là điện thoại (≤ 767px) */\n.menu {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\nh1 { font-size: 1.5rem; }\n.luoi {\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: 16px;\n}\n\n/* max-width: 767px cũ ⇒ min-width: 768px (không chồng pixel nào) */\n@media (min-width: 768px) {\n  .menu { flex-direction: row; }\n  h1 { font-size: 2rem; }\n  .luoi { grid-template-columns: repeat(2, 1fr); }\n}\n\n/* max-width: 1023px cũ ⇒ min-width: 1024px; chỉ lưới đổi tiếp */\n@media (min-width: 1024px) {\n  .luoi { grid-template-columns: repeat(4, 1fr); }\n}\n.o { padding: 16px; border: 1px solid #e2e8f0; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cửa hàng</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav class=\"menu\">\n      <a href=\"/\">Trang chủ</a>\n      <a href=\"/san-pham\">Sản phẩm</a>\n      <a href=\"/lien-he\">Liên hệ</a>\n    </nav>\n    <h1>Sản phẩm mới</h1>\n    <div class=\"luoi\">\n      <div class=\"o\">Sản phẩm 1</div>\n      <div class=\"o\">Sản phẩm 2</div>\n      <div class=\"o\">Sản phẩm 3</div>\n      <div class=\"o\">Sản phẩm 4</div>\n      <div class=\"o\">Sản phẩm 5</div>\n      <div class=\"o\">Sản phẩm 6</div>\n      <div class=\"o\">Sản phẩm 7</div>\n      <div class=\"o\">Sản phẩm 8</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tái cấu trúc an toàn = kết quả không đổi ở mọi đầu vào. Với CSS responsive, \"đầu vào\" là bề rộng màn hình, và chỗ dễ vỡ nhất là đúng ranh giới. <code>max-width: 767px</code> phủ 0…767, nên phần bù của nó là <code>min-width: 768px</code> — không phải 767. Máy chấm vì vậy đo ở 7 bề rộng gồm cả bốn pixel ranh giới 767/768/1023/1024.</p>\n<p>Bản mobile-first ngắn hơn ở chỗ khối thứ hai chỉ còn một dòng: từ 1024px, menu và tiêu đề không đổi gì nữa — chúng đã được \"thêm\" ở tầng 768px. Bản desktop-first phải lặp lại <code>.luoi</code> ở cả hai khối vì mỗi khối \"gỡ\" một phần.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Lật <code>max-width: 767px</code> thành <code>min-width: 767px</code> — ở đúng 767px ra kiểu tablet.</li>\n  <li>Giữ kiểu nền desktop và chỉ đổi chữ max thành min — hành vi đảo lộn hoàn toàn.</li>\n  <li>Đặt khối 1024px trước khối 768px — màn lớn ra 2 cột.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.5 Thiết kế responsive: một trang, mọi màn hình.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design#media_queries",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Màn 375px: 1 cột",
+            "kiem": "so-cot",
+            "selector": ".luoi",
+            "giaTri": 1,
+            "beRong": 375
+          },
+          {
+            "moTa": "Màn 375px: menu dọc",
+            "kiem": "css",
+            "selector": ".menu",
+            "thuocTinh": "flex-direction",
+            "giaTri": "column",
+            "beRong": 375
+          },
+          {
+            "moTa": "Màn 375px: h1 24px",
+            "kiem": "css",
+            "selector": "h1",
+            "thuocTinh": "font-size",
+            "giaTri": "24px",
+            "beRong": 375
+          },
+          {
+            "moTa": "Ranh giới 767px: vẫn kiểu điện thoại",
+            "kiem": "css",
+            "selector": ".menu",
+            "thuocTinh": "flex-direction",
+            "giaTri": "column",
+            "beRong": 767
+          },
+          {
+            "moTa": "Ranh giới 768px: menu ngang",
+            "kiem": "css",
+            "selector": ".menu",
+            "thuocTinh": "flex-direction",
+            "giaTri": "row",
+            "beRong": 768
+          },
+          {
+            "moTa": "Ranh giới 768px: h1 32px",
+            "kiem": "css",
+            "selector": "h1",
+            "thuocTinh": "font-size",
+            "giaTri": "32px",
+            "beRong": 768
+          },
+          {
+            "moTa": "Ranh giới 1023px: 2 cột",
+            "kiem": "so-cot",
+            "selector": ".luoi",
+            "giaTri": 2,
+            "beRong": 1023
+          },
+          {
+            "moTa": "Ranh giới 1024px: 4 cột",
+            "kiem": "so-cot",
+            "selector": ".luoi",
+            "giaTri": 4,
+            "beRong": 1024
+          },
+          {
+            "moTa": "Màn 1440px: menu vẫn ngang",
+            "kiem": "css",
+            "selector": ".menu",
+            "thuocTinh": "flex-direction",
+            "giaTri": "row",
+            "beRong": 1440,
+            "an": true
+          },
+          {
+            "moTa": "Không còn max-width trong media query",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@media[^{]*max-width",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Tối đa 2 khối media query",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "(@media[\\s\\S]*){3}",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Thanh điều hướng xếp dọc trên điện thoại, nằm ngang từ 768px",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "flex-direction đổi theo điểm ngắt",
+        "vùng chạm 44px",
+        "rem cho khoảng cách",
+        "mobile-first"
+      ],
+      "prerequisites": [
+        "Flexbox (bài 3.3)",
+        "media query"
+      ],
+      "tags": [
+        "css",
+        "responsive",
+        "navbar",
+        "flexbox"
+      ],
+      "problemHtml": "<p>Bẫy cuối bài 3.5: <em>\"một đầu ngón tay rộng chừng 44px, nên các liên kết cách nhau 8px là một trò may rủi.\"</em> Thanh điều hướng của site đang nằm ngang ở mọi màn, liên kết sát nhau, trên điện thoại bấm trượt liên tục. Thiết kế lại theo mobile-first: điện thoại xếp dọc với mỗi liên kết là một vùng chạm cao ít nhất 44px; từ 768px chuyển thành hàng ngang logo trái — menu phải.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểu nền: <code>.navbar</code> flex <code>column</code>, <code>gap: 0.5rem</code>; <code>.menu</code> flex <code>column</code>.</li>\n  <li>Kiểu nền: mỗi <code>.menu a</code> là vùng chạm: <code>display: block</code>, <code>min-height: 44px</code>, <code>padding: 0.75rem 1rem</code>.</li>\n  <li>Từ 768px: <code>.navbar</code> thành <code>row</code>, <code>justify-content: space-between</code>, <code>align-items: center</code>; <code>.menu</code> thành <code>row</code>, <code>gap: 1.5rem</code>.</li>\n  <li>Từ 768px: liên kết bỏ min-height (<code>min-height: 0</code>) và padding gọn <code>0.5rem</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": ".navbar và .menu flex row ở mọi màn, liên kết không padding.",
+      "outputSpec": "375px: logo trên, menu dọc từng dòng cao 44px · 1024px: logo trái, menu ngang bên phải.",
+      "constraints": "Không max-width trong media query.\nKhông ẩn menu (chưa học JavaScript để mở/đóng).",
+      "examplesJson": [
+        {
+          "input": ".menu a { display: block; min-height: 44px; padding: 0.75rem 1rem; }",
+          "output": "Mỗi liên kết là một dải cao ≥ 44px, rộng hết hàng — bấm chỗ nào trong dải cũng trúng.",
+          "explanation": "display: block để padding dọc có tác dụng và vùng bấm phủ cả hàng."
+        }
+      ],
+      "hintsJson": [
+        "Viết trọn bản điện thoại trước (column, vùng chạm 44px). Rồi mở @media (min-width: 768px) và chỉ ghi những gì đổi.",
+        "Trong media query: .navbar { flex-direction: row; justify-content: space-between; align-items: center; } .menu { flex-direction: row; gap: 1.5rem; } .menu a { min-height: 0; padding: 0.5rem; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.navbar {\n  display: flex;\n  padding: 1rem;\n  background: #0f172a;\n}\n.menu {\n  display: flex;\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n.navbar a {\n  color: #f8fafc;\n  text-decoration: none;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>CuongThai</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <header class=\"navbar\">\n      <a href=\"/\" class=\"logo\">CuongThai</a>\n      <ul class=\"menu\">\n        <li><a href=\"/courses\">Khoá học</a></li>\n        <li><a href=\"/blog\">Blog</a></li>\n        <li><a href=\"/code-lab\">Code Lab</a></li>\n      </ul>\n    </header>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* KIỂU NỀN — điện thoại: mọi thứ xếp dọc, vùng chạm lớn */\n.navbar {\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n  padding: 1rem;\n  background: #0f172a;\n}\n.menu {\n  display: flex;\n  flex-direction: column;\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n.navbar a {\n  color: #f8fafc;\n  text-decoration: none;\n}\n.menu a {\n  display: block;          /* padding dọc có tác dụng, vùng bấm phủ cả dòng */\n  min-height: 44px;        /* bề rộng một đầu ngón tay */\n  padding: 0.75rem 1rem;\n}\n\n/* TỪ 768px — chỉ ghi thứ thay đổi */\n@media (min-width: 768px) {\n  .navbar {\n    flex-direction: row;\n    justify-content: space-between;  /* logo trái, menu phải */\n    align-items: center;\n  }\n  .menu {\n    flex-direction: row;\n    gap: 1.5rem;\n  }\n  .menu a {\n    min-height: 0;         /* có chuột: không cần vùng chạm 44px */\n    padding: 0.5rem;\n  }\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>CuongThai</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <header class=\"navbar\">\n      <a href=\"/\" class=\"logo\">CuongThai</a>\n      <ul class=\"menu\">\n        <li><a href=\"/courses\">Khoá học</a></li>\n        <li><a href=\"/blog\">Blog</a></li>\n        <li><a href=\"/code-lab\">Code Lab</a></li>\n      </ul>\n    </header>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Responsive không chỉ là \"co cho vừa\" — trên điện thoại thứ hữu hạn là đầu ngón tay, không phải điểm ảnh. Vùng chạm 44px (con số trong hướng dẫn của Apple và WCAG) biến danh sách liên kết thành những dải dễ bấm. Từ 768px trở lên, chuột chính xác hơn nên ta thu gọn lại.</p>\n<p>Đây là bài 3.3 (flex) gặp bài 3.5 (media query): cùng một vật chứa đổi <code>flex-direction</code> theo điểm ngắt, và nhớ bẫy đổi trục — ở bản column, <code>justify-content</code> không còn là trái/phải. Máy chấm đọc giá trị computed ở 375px và 1024px (min-height ở 375px là 44px).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt min-height lên <code>&lt;li&gt;</code> thay vì <code>&lt;a&gt;</code> — dải cao 44px nhưng chỉ chữ là bấm được.</li>\n  <li>Quên <code>display: block</code> trên liên kết — padding dọc của phần tử dòng không đẩy dòng, vùng bấm vẫn bé.</li>\n  <li>Viết <code>justify-content: space-between</code> ở kiểu nền column — với column nó trải theo chiều dọc.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.5 Thiết kế responsive: một trang, mọi màn hình.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.w3.org/WAI/WCAG21/Understanding/target-size.html",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "375px: .navbar xếp dọc",
+            "kiem": "css",
+            "selector": ".navbar",
+            "thuocTinh": "flex-direction",
+            "giaTri": "column",
+            "beRong": 375
+          },
+          {
+            "moTa": "375px: .menu xếp dọc",
+            "kiem": "css",
+            "selector": ".menu",
+            "thuocTinh": "flex-direction",
+            "giaTri": "column",
+            "beRong": 375
+          },
+          {
+            "moTa": "375px: liên kết menu cao tối thiểu 44px",
+            "kiem": "css",
+            "selector": ".menu a",
+            "thuocTinh": "min-height",
+            "giaTri": "44px",
+            "beRong": 375
+          },
+          {
+            "moTa": "375px: liên kết menu là khối",
+            "kiem": "css",
+            "selector": ".menu a",
+            "thuocTinh": "display",
+            "giaTri": "block",
+            "beRong": 375
+          },
+          {
+            "moTa": "375px: padding liên kết 12px 16px",
+            "kiem": "css",
+            "selector": ".menu a",
+            "thuocTinh": "padding-top",
+            "giaTri": "12px",
+            "beRong": 375
+          },
+          {
+            "moTa": "1024px: .navbar hàng ngang, space-between",
+            "kiem": "css",
+            "selector": ".navbar",
+            "thuocTinh": "justify-content",
+            "giaTri": "space-between",
+            "beRong": 1024
+          },
+          {
+            "moTa": "1024px: .navbar căn giữa dọc",
+            "kiem": "css",
+            "selector": ".navbar",
+            "thuocTinh": "align-items",
+            "giaTri": "center",
+            "beRong": 1024
+          },
+          {
+            "moTa": "1024px: .menu hàng ngang, gap 24px",
+            "kiem": "css",
+            "selector": ".menu",
+            "thuocTinh": "gap",
+            "khop": "^24px( 24px)?$",
+            "beRong": 1024
+          },
+          {
+            "moTa": "1024px: liên kết bỏ min-height",
+            "kiem": "css",
+            "selector": ".menu a",
+            "thuocTinh": "min-height",
+            "khop": "^(0(px)?|auto)$",
+            "beRong": 1024
+          },
+          {
+            "moTa": "Không max-width trong media query",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@media[^{]*max-width",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Trang sản phẩm responsive trọn vẹn: 1 cột < 600px, 2 cột 600–899px, 3 cột + thanh lọc ≥ 900px",
+      "language": "css",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "thẻ viewport",
+        "mobile-first nhiều điểm ngắt",
+        "grid khung trang theo điểm ngắt",
+        "ẩn/hiện vùng",
+        "rem",
+        "kiểm ranh giới"
+      ],
+      "prerequisites": [
+        "toàn bộ Chương 3"
+      ],
+      "tags": [
+        "css",
+        "responsive",
+        "tong-hop",
+        "grid",
+        "media-query"
+      ],
+      "problemHtml": "<p>Bài tổng hợp của Chương 3: trang danh sách sản phẩm theo đặc tả của nhà thiết kế, đúng thứ tự quan trọng mà bài 3.5 liệt kê — viewport trước, bố cục điện thoại làm mặc định, thêm min-width khi màn rộng ra, và ngắt ở chỗ thiết kế vỡ (ở đây nhà thiết kế đã thử và chốt 600px, 900px). Máy chấm đo ở <strong>tám</strong> bề rộng, gồm cả bốn pixel ranh giới.</p>\n<pre><code>                 &lt; 600px            600–899px           ≥ 900px\n.khung           1 cột              1 cột               grid 240px 1fr, gap 1.5rem\n.loc (thanh lọc) ẨN (display:none)  ẨN                  HIỆN (display:block)\n.luoi            1 cột              repeat(2, 1fr)      repeat(3, 1fr)\nh1               1.5rem             1.75rem             2rem\n.o (thẻ)         padding 1rem       padding 1rem        padding 1.25rem\nimg              max-width 100%, height auto — mọi bề rộng</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thêm thẻ viewport vào <code>&lt;head&gt;</code>.</li>\n  <li>Viết đúng bảng đặc tả theo mobile-first: kiểu nền = cột \"< 600px\", hai khối <code>@media (min-width: 600px)</code> và <code>@media (min-width: 900px)</code>.</li>\n  <li>Ranh giới chuẩn xác: 599px là điện thoại, 600px là 2 cột; 899px vẫn ẩn thanh lọc, 900px hiện.</li>\n  <li>Ảnh không tràn ở mọi bề rộng; cỡ chữ và padding dùng rem.</li>\n  <li>Không <code>max-width</code> trong media query, không <code>!important</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html chưa có viewport; styles.css chỉ có màu sắc.",
+      "outputSpec": "Điện thoại: danh sách 1 cột, không thanh lọc · Tablet: 2 cột · Desktop: thanh lọc bên trái + lưới 3 cột.",
+      "constraints": "Mobile-first, chỉ min-width.\nKhông !important, không px cho font-size/padding.\nĐúng 2 khối media query.",
+      "examplesJson": [
+        {
+          "input": "Màn 900px",
+          "output": ".khung = grid 240px 1fr → thanh lọc 240px bên trái, vùng sản phẩm bên phải\n.luoi = 3 cột trong vùng sản phẩm\nh1 = 32px",
+          "explanation": "Cả hai khối media query cùng đúng; khối 900px đứng sau nên đè .luoi và h1 của khối 600px."
+        }
+      ],
+      "hintsJson": [
+        "Dịch bảng theo cột: cột \"< 600px\" thành kiểu nền; cột giữa thành khối min-width: 600px (chỉ ghi ô KHÁC cột trước: .luoi, h1); cột phải thành khối min-width: 900px (.khung, .loc, .luoi, h1, .o).",
+        "Ẩn/hiện: .loc { display: none; } ở nền, .loc { display: block; } trong khối 900px. Khung: .khung { display: grid; grid-template-columns: 240px 1fr; gap: 1.5rem; } trong khối 900px."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* Viết trang theo bảng đặc tả — mobile-first */\n.loc { background: #f1f5f9; padding: 1rem; }\n.o { border: 1px solid #e2e8f0; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <title>Sản phẩm</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <h1>Bàn phím cơ</h1>\n    <div class=\"khung\">\n      <aside class=\"loc\">\n        <h2>Bộ lọc</h2>\n        <p>Giá · Thương hiệu · Kết nối</p>\n      </aside>\n      <div class=\"luoi\">\n        <div class=\"o\"><img src=\"ban-phim-1.jpg\" alt=\"Bàn phím cơ 87 phím, keycap trắng\" width=\"800\" height=\"600\"><p>K87 — 890.000đ</p></div>\n        <div class=\"o\"><img src=\"ban-phim-2.jpg\" alt=\"Bàn phím cơ không dây, đèn nền RGB\" width=\"800\" height=\"600\"><p>K68 — 1.150.000đ</p></div>\n        <div class=\"o\"><img src=\"ban-phim-3.jpg\" alt=\"Bàn phím cơ 104 phím, vỏ nhôm xám\" width=\"800\" height=\"600\"><p>K104 — 1.490.000đ</p></div>\n      </div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* ── KIỂU NỀN: điện thoại (< 600px) ─────────────────────────── */\nimg {\n  max-width: 100%;   /* ảnh không bao giờ tràn */\n  height: auto;\n}\nh1 { font-size: 1.5rem; }\n.loc {\n  display: none;     /* thanh lọc ẩn trên màn nhỏ */\n  background: #f1f5f9;\n  padding: 1rem;\n}\n.luoi {\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: 1rem;\n}\n.o {\n  padding: 1rem;\n  border: 1px solid #e2e8f0;\n}\n\n/* ── TỪ 600px: chỉ ghi ô KHÁC cột trước ───────────────────── */\n@media (min-width: 600px) {\n  h1 { font-size: 1.75rem; }\n  .luoi { grid-template-columns: repeat(2, 1fr); }\n}\n\n/* ── TỪ 900px: khung hai cột, hiện thanh lọc, lưới 3 cột ───── */\n@media (min-width: 900px) {\n  h1 { font-size: 2rem; }\n  .khung {\n    display: grid;\n    grid-template-columns: 240px 1fr;\n    gap: 1.5rem;\n  }\n  .loc { display: block; }\n  .luoi { grid-template-columns: repeat(3, 1fr); }\n  .o { padding: 1.25rem; }\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Sản phẩm</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <h1>Bàn phím cơ</h1>\n    <div class=\"khung\">\n      <aside class=\"loc\">\n        <h2>Bộ lọc</h2>\n        <p>Giá · Thương hiệu · Kết nối</p>\n      </aside>\n      <div class=\"luoi\">\n        <div class=\"o\"><img src=\"ban-phim-1.jpg\" alt=\"Bàn phím cơ 87 phím, keycap trắng\" width=\"800\" height=\"600\"><p>K87 — 890.000đ</p></div>\n        <div class=\"o\"><img src=\"ban-phim-2.jpg\" alt=\"Bàn phím cơ không dây, đèn nền RGB\" width=\"800\" height=\"600\"><p>K68 — 1.150.000đ</p></div>\n        <div class=\"o\"><img src=\"ban-phim-3.jpg\" alt=\"Bàn phím cơ 104 phím, vỏ nhôm xám\" width=\"800\" height=\"600\"><p>K104 — 1.490.000đ</p></div>\n      </div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bảng đặc tả là một hàm của bề rộng màn hình, và mobile-first là cách viết hàm đó gọn nhất: cột trái làm mặc định, mỗi cột sau chỉ ghi những ô <em>khác</em> cột trước nó. Khối 600px chỉ có hai dòng; khối 900px gánh phần thay đổi lớn (khung hai cột, hiện thanh lọc). Thứ tự hai khối là bắt buộc vì ở ≥ 900px cả hai cùng đúng.</p>\n<p>Ẩn bằng <code>display: none</code> ở nền rồi hiện ở 900px là cách \"chỉ thêm\" đúng nghĩa — không cần gỡ gì ở màn lớn. Máy chấm đo tám bề rộng (360, 599, 600, 750, 899, 900, 1280 và cả ảnh ở 360) cho <code>.luoi</code>, <code>.loc</code>, <code>.khung</code>, h1 và padding thẻ; viewport và ảnh kiểm riêng. Đây cũng là nền của <code>sm:</code>/<code>md:</code>/<code>lg:</code> trong Tailwind mà bài 3.5 nhắc tới.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt <code>.loc { display: none }</code> trong media query max-width cho màn nhỏ — desktop-first lén quay lại.</li>\n  <li>Ở khối 600px lặp lại toàn bộ kiểu nền — dài gấp đôi, đổi một chỗ phải sửa ba chỗ.</li>\n  <li>Dùng <code>min-width: 899px</code> — ở đúng 899px thanh lọc hiện ra sớm một pixel.</li>\n  <li>Quên thẻ viewport — trên điện thoại thật mọi media query đo nhầm 980px, hiện bản desktop thu nhỏ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.5 Thiết kế responsive: một trang, mọi màn hình.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/learn/design/",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Có meta viewport",
+            "kiem": "thuoc-tinh",
+            "selector": "head meta[name=\"viewport\"]",
+            "thuocTinh": "content",
+            "khop": "width=device-width"
+          },
+          {
+            "moTa": "Ảnh max-width 100%",
+            "kiem": "css",
+            "selector": "img",
+            "thuocTinh": "max-width",
+            "giaTri": "100%",
+            "beRong": 360
+          },
+          {
+            "moTa": "360px: lưới 1 cột",
+            "kiem": "so-cot",
+            "selector": ".luoi",
+            "giaTri": 1,
+            "beRong": 360
+          },
+          {
+            "moTa": "360px: thanh lọc ẩn",
+            "kiem": "css",
+            "selector": ".loc",
+            "thuocTinh": "display",
+            "giaTri": "none",
+            "beRong": 360
+          },
+          {
+            "moTa": "360px: h1 24px",
+            "kiem": "css",
+            "selector": "h1",
+            "thuocTinh": "font-size",
+            "giaTri": "24px",
+            "beRong": 360
+          },
+          {
+            "moTa": "599px: vẫn 1 cột",
+            "kiem": "so-cot",
+            "selector": ".luoi",
+            "giaTri": 1,
+            "beRong": 599
+          },
+          {
+            "moTa": "600px: 2 cột",
+            "kiem": "so-cot",
+            "selector": ".luoi",
+            "giaTri": 2,
+            "beRong": 600
+          },
+          {
+            "moTa": "750px: h1 28px",
+            "kiem": "css",
+            "selector": "h1",
+            "thuocTinh": "font-size",
+            "giaTri": "28px",
+            "beRong": 750
+          },
+          {
+            "moTa": "899px: thanh lọc vẫn ẩn",
+            "kiem": "css",
+            "selector": ".loc",
+            "thuocTinh": "display",
+            "giaTri": "none",
+            "beRong": 899
+          },
+          {
+            "moTa": "900px: thanh lọc hiện",
+            "kiem": "css",
+            "selector": ".loc",
+            "thuocTinh": "display",
+            "giaTri": "block",
+            "beRong": 900
+          },
+          {
+            "moTa": "900px: khung grid 240px 1fr",
+            "kiem": "css",
+            "selector": ".khung",
+            "thuocTinh": "grid-template-columns",
+            "khop": "^240px ",
+            "beRong": 900
+          },
+          {
+            "moTa": "900px: lưới 3 cột",
+            "kiem": "so-cot",
+            "selector": ".luoi",
+            "giaTri": 3,
+            "beRong": 900
+          },
+          {
+            "moTa": "1280px: thẻ padding 20px (1.25rem)",
+            "kiem": "css",
+            "selector": ".o",
+            "thuocTinh": "padding-top",
+            "giaTri": "20px",
+            "beRong": 1280
+          },
+          {
+            "moTa": "899px: lưới 2 cột",
+            "kiem": "so-cot",
+            "selector": ".luoi",
+            "giaTri": 2,
+            "beRong": 899,
+            "an": true
+          },
+          {
+            "moTa": "Mobile-first: không max-width trong media query, không !important",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@media[^{]*max-width|!important",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Không px cho font-size/padding",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "(font-size|padding)[\\w-]*\\s*:[^;]*\\dpx",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Đúng 2 khối media query, 600px rồi 900px",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "^(?![\\s\\S]*(@media[\\s\\S]*){3})[\\s\\S]*@media\\s*\\(\\s*min-width\\s*:\\s*600px\\s*\\)[\\s\\S]*@media\\s*\\(\\s*min-width\\s*:\\s*900px\\s*\\)"
+          }
+        ]
+      }
+    }
+  ]
+}

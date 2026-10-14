@@ -1,0 +1,862 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-3-4-css-grid",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-3-4-css-grid"
+  },
+  "exercises": [
+    {
+      "title": "Thư viện ảnh ba cột bằng nhau với đơn vị fr",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "display: grid",
+        "grid-template-columns",
+        "đơn vị fr",
+        "gap"
+      ],
+      "prerequisites": [
+        "box model"
+      ],
+      "tags": [
+        "css",
+        "grid",
+        "fr"
+      ],
+      "problemHtml": "<p>Ví dụ đầu tiên của bài 3.4:</p>\n<pre><code>.gallery {\n  display: grid;\n  grid-template-columns: 1fr 1fr 1fr;  /* ba cột bằng nhau */\n  gap: 16px;\n}</code></pre>\n<p>Thư viện ảnh của câu lạc bộ đang dùng phần trăm (<code>width: 32%</code> + margin) và hàng cuối lệch. Chuyển sang Grid: ba cột bằng nhau, khoảng cách 16px, không phần trăm nào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.gallery</code> là grid container ba cột bằng nhau: <code>1fr 1fr 1fr</code>.</li>\n  <li><code>gap: 16px</code> giữa các ô (cả hàng lẫn cột).</li>\n  <li>Bỏ <code>width</code> và <code>margin</code> phần trăm trên <code>.o</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Sáu .o với width 32% + margin-right 2% (hàng lệch).",
+      "outputSpec": "Lưới 3 cột × 2 hàng, mọi ô bằng nhau, khoảng cách đều 16px.",
+      "constraints": "Không dùng phần trăm hay calc().\nKhông sửa HTML.",
+      "examplesJson": [
+        {
+          "input": "grid-template-columns: 1fr 1fr 1fr;  ·  vùng rộng 960px, gap 16px",
+          "output": "Mỗi cột = (960 − 2×16) / 3 = 309,33px",
+          "explanation": "fr chia phần không gian CÒN LẠI sau khi trừ gap — khác % (tính trên cả bề rộng, rồi gap làm tràn)."
+        }
+      ],
+      "hintsJson": [
+        "Thuộc tính đặt trên vật chứa .gallery; các .o tự rơi vào ô lần lượt.",
+        ".gallery { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; } — và xoá width/margin của .o."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.o {\n  display: inline-block;\n  width: 32%;\n  margin-right: 2%;\n  padding: 24px;\n  background: #e0f2fe;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Thư viện ảnh</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"gallery\">\n      <div class=\"o\">Ảnh 1</div>\n      <div class=\"o\">Ảnh 2</div>\n      <div class=\"o\">Ảnh 3</div>\n      <div class=\"o\">Ảnh 4</div>\n      <div class=\"o\">Ảnh 5</div>\n      <div class=\"o\">Ảnh 6</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.gallery {\n  display: grid;\n  grid-template-columns: 1fr 1fr 1fr;  /* ba cột, mỗi cột một phần bằng nhau của chỗ trống */\n  gap: 16px;                           /* khoảng cách giữa hàng VÀ cột */\n}\n\n/* ô không cần tự tính kích thước nữa */\n.o {\n  padding: 24px;\n  background: #e0f2fe;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Thư viện ảnh</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"gallery\">\n      <div class=\"o\">Ảnh 1</div>\n      <div class=\"o\">Ảnh 2</div>\n      <div class=\"o\">Ảnh 3</div>\n      <div class=\"o\">Ảnh 4</div>\n      <div class=\"o\">Ảnh 5</div>\n      <div class=\"o\">Ảnh 6</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>fr</code> là \"một phần của không gian trống\" — trình duyệt trừ gap trước rồi mới chia, nên ba cột luôn vừa khít. Với phần trăm, <code>32% × 3 + 2% × 2</code> phải cộng đúng 100% và vẫn vỡ khi thêm viền hay padding (bẫy của bài 3.2).</p>\n<p>Grid định nghĩa cột trên vật chứa; các ô chỉ việc rơi vào chỗ — đó là \"bố cục quyết định kích thước\" trong bảng so sánh của bài 3.4. Máy chấm kiểm <code>display: grid</code>, đếm 3 cột, tỉ lệ cột 1:1, gap, và không còn phần trăm.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>grid-template-columns: 3fr</code> — một cột chiếm ba phần, không phải ba cột.</li>\n  <li>Giữ <code>width: 32%</code> trên ô — % giờ tính theo ô lưới, ảnh co lại còn 1/3 ô.</li>\n  <li>Quên <code>display: grid</code> — grid-template-columns không có tác dụng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.4 CSS Grid: dàn trang hai chiều.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".gallery là grid",
+            "kiem": "css",
+            "selector": ".gallery",
+            "thuocTinh": "display",
+            "giaTri": "grid"
+          },
+          {
+            "moTa": "Lưới có ba cột",
+            "kiem": "so-cot",
+            "selector": ".gallery",
+            "giaTri": 3
+          },
+          {
+            "moTa": "Cột 1 rộng bằng cột 2 (1fr : 1fr)",
+            "kiem": "ti-le-cot",
+            "selector": ".gallery",
+            "giaTri": 1
+          },
+          {
+            "moTa": "gap 16px",
+            "kiem": "css",
+            "selector": ".gallery",
+            "thuocTinh": "gap",
+            "khop": "^16px( 16px)?$"
+          },
+          {
+            "moTa": "Không còn width/margin phần trăm",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "\\d+%",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Dùng đơn vị fr",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "\\dfr"
+          }
+        ]
+      }
+    },
+    {
+      "title": "repeat(): bốn cột sản phẩm mà không gõ lặp 1fr",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "repeat()",
+        "đổi số cột một chỗ"
+      ],
+      "prerequisites": [
+        "grid-template-columns, fr"
+      ],
+      "tags": [
+        "css",
+        "grid",
+        "repeat"
+      ],
+      "problemHtml": "<p>Bài 3.4: <em>\"repeat() — đừng gõ mười hai lần\"</em>: <code>repeat(3, 1fr)</code> giống <code>1fr 1fr 1fr</code>. Trang cửa hàng cần lưới <strong>bốn</strong> cột sản phẩm. Viết bằng <code>repeat()</code> để sau này đổi số cột chỉ phải sửa một con số.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.san-pham</code>: grid bốn cột bằng nhau viết bằng <code>repeat(4, 1fr)</code>.</li>\n  <li><code>gap: 20px</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": ".san-pham chưa có bố cục; 8 sản phẩm.",
+      "outputSpec": "Lưới 4 cột × 2 hàng.",
+      "constraints": "Bắt buộc dùng repeat().",
+      "examplesJson": [
+        {
+          "input": "grid-template-columns: repeat(4, 1fr);",
+          "output": "Giống hệt 1fr 1fr 1fr 1fr — DevTools hiện 4 rãnh cột.",
+          "explanation": "repeat(số lần, mẫu rãnh). Mẫu có thể nhiều rãnh: repeat(2, 1fr 2fr) = 1fr 2fr 1fr 2fr."
+        }
+      ],
+      "hintsJson": [
+        "Cú pháp: repeat(số-lần, kích-thước).",
+        ".san-pham { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.o {\n  padding: 16px;\n  border: 1px solid #e2e8f0;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cửa hàng</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"san-pham\">\n      <div class=\"o\">Sản phẩm 1</div>\n      <div class=\"o\">Sản phẩm 2</div>\n      <div class=\"o\">Sản phẩm 3</div>\n      <div class=\"o\">Sản phẩm 4</div>\n      <div class=\"o\">Sản phẩm 5</div>\n      <div class=\"o\">Sản phẩm 6</div>\n      <div class=\"o\">Sản phẩm 7</div>\n      <div class=\"o\">Sản phẩm 8</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.san-pham {\n  display: grid;\n  grid-template-columns: repeat(4, 1fr);  /* 4 cột bằng nhau — đổi số cột: sửa đúng chữ số 4 */\n  gap: 20px;\n}\n\n.o {\n  padding: 16px;\n  border: 1px solid #e2e8f0;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cửa hàng</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"san-pham\">\n      <div class=\"o\">Sản phẩm 1</div>\n      <div class=\"o\">Sản phẩm 2</div>\n      <div class=\"o\">Sản phẩm 3</div>\n      <div class=\"o\">Sản phẩm 4</div>\n      <div class=\"o\">Sản phẩm 5</div>\n      <div class=\"o\">Sản phẩm 6</div>\n      <div class=\"o\">Sản phẩm 7</div>\n      <div class=\"o\">Sản phẩm 8</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>repeat()</code> không thêm khả năng gì mới — nó chỉ là cách viết gọn và ít lỗi hơn (gõ năm lần \"1fr\" rất dễ thành bốn). Quan trọng hơn: nó là cửa ngõ cho chiêu <code>repeat(auto-fit, …)</code> ở bài 5 của bộ này, nơi số lần lặp do trình duyệt tự tính.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>repeat(4 1fr)</code> thiếu dấu phẩy — không hợp lệ, cả dòng bị bỏ.</li>\n  <li>Viết <code>repeat(1fr, 4)</code> — đảo thứ tự tham số.</li>\n  <li>Quên <code>display: grid</code>.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.4 CSS Grid: dàn trang hai chiều.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/repeat",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".san-pham là grid",
+            "kiem": "css",
+            "selector": ".san-pham",
+            "thuocTinh": "display",
+            "giaTri": "grid"
+          },
+          {
+            "moTa": "Lưới có bốn cột",
+            "kiem": "so-cot",
+            "selector": ".san-pham",
+            "giaTri": 4
+          },
+          {
+            "moTa": "Các cột bằng nhau",
+            "kiem": "ti-le-cot",
+            "selector": ".san-pham",
+            "giaTri": 1
+          },
+          {
+            "moTa": "Viết bằng repeat(4, …)",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "repeat\\(\\s*4\\s*,\\s*1fr\\s*\\)"
+          },
+          {
+            "moTa": "gap 20px",
+            "kiem": "css",
+            "selector": ".san-pham",
+            "thuocTinh": "gap",
+            "khop": "^20px( 20px)?$"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Thanh bên cố định 240px và nội dung linh hoạt bằng Grid",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "trộn px và fr",
+        "240px 1fr",
+        "bộ khung trang"
+      ],
+      "prerequisites": [
+        "grid-template-columns"
+      ],
+      "tags": [
+        "css",
+        "grid",
+        "layout"
+      ],
+      "problemHtml": "<p>Bài 3.4 có dòng <code>grid-template-columns: 240px 1fr; /* thanh bên cố định + nội dung linh hoạt */</code>. Bài 3.3 bạn đã làm bố cục này bằng flex (<code>flex: 1</code>); giờ làm bằng Grid — chỉ <strong>một</strong> quy tắc trên vật chứa, các con không cần gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.trang</code>: grid hai cột <code>240px 1fr</code>, <code>gap: 24px</code>.</li>\n  <li>Không đặt width hay flex trên <code>aside</code> và <code>main</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "aside + main xếp chồng dọc.",
+      "outputSpec": "[ aside 240px ] 24px [ main lấp phần còn lại ]",
+      "constraints": "Không dùng flex ở bài này.",
+      "examplesJson": [
+        {
+          "input": "grid-template-columns: 240px 1fr; gap: 24px;  ·  .trang rộng 1000px",
+          "output": "cột 1 = 240px, cột 2 = 1000 − 240 − 24 = 736px",
+          "explanation": "Rãnh px cố định được trừ trước, 1fr nhận toàn bộ phần còn lại."
+        }
+      ],
+      "hintsJson": [
+        "Khác flex: kích thước nằm ở vật chứa (bố cục quyết định), không ở từng con.",
+        ".trang { display: grid; grid-template-columns: 240px 1fr; gap: 24px; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\naside { padding: 16px; background: #f1f5f9; }\nmain  { padding: 16px; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Tài liệu</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"trang\">\n      <aside>\n        <p>Mục lục</p>\n      </aside>\n      <main>\n        <h1>Bắt đầu với Grid</h1>\n        <p>Grid dàn cả hàng lẫn cột cùng lúc.</p>\n      </main>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* bộ khung trang: MỘT quy tắc trên vật chứa */\n.trang {\n  display: grid;\n  grid-template-columns: 240px 1fr;  /* thanh bên cố định + nội dung linh hoạt */\n  gap: 24px;\n}\n\naside { padding: 16px; background: #f1f5f9; }\nmain  { padding: 16px; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Tài liệu</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"trang\">\n      <aside>\n        <p>Mục lục</p>\n      </aside>\n      <main>\n        <h1>Bắt đầu với Grid</h1>\n        <p>Grid dàn cả hàng lẫn cột cùng lúc.</p>\n      </main>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>So với flex ở bài 3.3 (thanh bên <code>width</code> + <code>flex-shrink: 0</code>, nội dung <code>flex: 1</code>), Grid gom quyết định về một chỗ: vật chứa khai rãnh, con rơi vào. Đây là lý do bài 3.4 nói \"Grid cho bộ khung tổng thể của trang\". Máy chấm đếm 2 cột, kiểm rãnh đầu 240px, và không có kích thước trên con.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>grid-template-columns: 240px auto</code> — thường cũng chạy, nhưng auto co theo nội dung; 1fr mới là \"lấy phần còn lại\".</li>\n  <li>Đặt thêm <code>width: 240px</code> lên aside — thừa, và lệch khi đổi rãnh.</li>\n  <li>Viết <code>240 1fr</code> thiếu đơn vị — không hợp lệ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.4 CSS Grid: dàn trang hai chiều.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Grids",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".trang là grid",
+            "kiem": "css",
+            "selector": ".trang",
+            "thuocTinh": "display",
+            "giaTri": "grid"
+          },
+          {
+            "moTa": "Lưới có hai cột",
+            "kiem": "so-cot",
+            "selector": ".trang",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Rãnh đầu 240px",
+            "kiem": "css",
+            "selector": ".trang",
+            "thuocTinh": "grid-template-columns",
+            "khop": "^240px "
+          },
+          {
+            "moTa": "gap 24px",
+            "kiem": "css",
+            "selector": ".trang",
+            "thuocTinh": "gap",
+            "khop": "^24px( 24px)?$"
+          },
+          {
+            "moTa": "Không width/flex trên aside và main",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "(aside|main)\\s*\\{[^}]*([{;\\s]width|flex)\\s*:",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bài viết và thanh bên tỉ lệ 2:1, phần đầu và chân trang trải hết bề ngang",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "2fr 1fr",
+        "tỉ lệ cột",
+        "grid lồng trong khối thường",
+        "grid chỉ cho vùng cần"
+      ],
+      "prerequisites": [
+        "fr, gap"
+      ],
+      "tags": [
+        "css",
+        "grid",
+        "fr",
+        "layout"
+      ],
+      "problemHtml": "<p>Bài 3.4: <em>\"<code>2fr 1fr</code> làm cột đầu rộng gấp đôi cột sau.\"</em> Trang blog có ba tầng: <code>&lt;header&gt;</code> trải hết bề ngang, vùng <code>.than</code> gồm bài viết + thanh bên theo tỉ lệ <strong>2:1</strong>, và <code>&lt;footer&gt;</code> trải hết bề ngang. Bạn chưa học cách cho một ô trải nhiều cột — và không cần: chỉ biến <em>đúng vùng cần chia cột</em> thành grid.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.than</code>: grid <code>2fr 1fr</code>, <code>gap: 32px</code> — bài viết rộng gấp đôi thanh bên ở mọi bề rộng.</li>\n  <li><code>header</code> và <code>footer</code> không nằm trong grid (vẫn là khối thường, rộng hết hàng).</li>\n  <li><code>.than</code> rộng tối đa <code>1080px</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "header, div.than (article + aside), footer — chưa có bố cục.",
+      "outputSpec": "header ▬▬▬▬▬\n[ article ──── 2 phần ─── ] [ aside 1 phần ]\nfooter ▬▬▬▬▬",
+      "constraints": "Không dùng phần trăm.\nKhông biến body thành grid.",
+      "examplesJson": [
+        {
+          "input": ".than { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; max-width: 1080px; }",
+          "output": "article = (1080 − 32) × 2/3 ≈ 698,67px · aside ≈ 349,33px",
+          "explanation": "2fr 1fr = 3 phần; article lấy 2, aside lấy 1 — tỉ lệ giữ nguyên khi bề rộng đổi."
+        }
+      ],
+      "hintsJson": [
+        "Câu hỏi của bài 3.4: \"Một chiều hay hai chiều?\" — ở đây chỉ vùng thân bài cần chia cột; header/footer cứ để là khối.",
+        ".than { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; max-width: 1080px; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\nheader, footer { padding: 16px; background: #0f172a; color: #f8fafc; }\narticle { padding: 16px; }\naside   { padding: 16px; background: #f8fafc; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Blog</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <header><h1>Blog Lập trình</h1></header>\n    <div class=\"than\">\n      <article>\n        <h2>Grid tròn 10 tuổi</h2>\n        <p>Bài viết chính chiếm hai phần ba bề ngang.</p>\n      </article>\n      <aside>\n        <h2>Đọc thêm</h2>\n        <p>Thanh bên chiếm một phần ba.</p>\n      </aside>\n    </div>\n    <footer><p>© 2026 Blog Lập trình</p></footer>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\nheader, footer { padding: 16px; background: #0f172a; color: #f8fafc; }\n\n/* chỉ VÙNG cần chia cột mới là grid; header/footer vẫn là khối rộng hết hàng */\n.than {\n  display: grid;\n  grid-template-columns: 2fr 1fr;  /* bài viết : thanh bên = 2 : 1 ở mọi bề rộng */\n  gap: 32px;\n  max-width: 1080px;\n}\n\narticle { padding: 16px; }\naside   { padding: 16px; background: #f8fafc; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Blog</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <header><h1>Blog Lập trình</h1></header>\n    <div class=\"than\">\n      <article>\n        <h2>Grid tròn 10 tuổi</h2>\n        <p>Bài viết chính chiếm hai phần ba bề ngang.</p>\n      </article>\n      <aside>\n        <h2>Đọc thêm</h2>\n        <p>Thanh bên chiếm một phần ba.</p>\n      </aside>\n    </div>\n    <footer><p>© 2026 Blog Lập trình</p></footer>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>fr</code> là tỉ lệ, nên <code>2fr 1fr</code> giữ đúng \"gấp đôi\" ở mọi bề rộng — điều mà <code>66% 33%</code> không làm được khi có gap. Bài cũng tập một thói quen của bài 3.4: hỏi câu hỏi về chiều cho <em>từng vật chứa</em>, không cho cả trang. Header/footer là chuyện một chiều (xếp chồng) — khối thường làm sẵn; chỉ <code>.than</code> cần hai cột.</p>\n<p>Máy chấm đo tỉ lệ cột 1 / cột 2 = 2 (trình duyệt: chia hai bề rộng px), gap, max-width, và kiểm header/footer không bị biến thành ô lưới.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Biến <code>body</code> thành grid <code>2fr 1fr</code> — header và footer bị nhét vào một ô mỗi cái.</li>\n  <li>Viết <code>1fr 2fr</code> — thanh bên rộng gấp đôi bài viết.</li>\n  <li>Dùng <code>66% 34%</code> + gap — tổng vượt 100%, tràn ngang.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.4 CSS Grid: dàn trang hai chiều.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex_value",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".than là grid",
+            "kiem": "css",
+            "selector": ".than",
+            "thuocTinh": "display",
+            "giaTri": "grid"
+          },
+          {
+            "moTa": "Lưới có hai cột",
+            "kiem": "so-cot",
+            "selector": ".than",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Bài viết rộng gấp đôi thanh bên (2:1)",
+            "kiem": "ti-le-cot",
+            "selector": ".than",
+            "giaTri": 2
+          },
+          {
+            "moTa": "gap 32px",
+            "kiem": "css",
+            "selector": ".than",
+            "thuocTinh": "gap",
+            "khop": "^32px( 32px)?$"
+          },
+          {
+            "moTa": "max-width 1080px",
+            "kiem": "css",
+            "selector": ".than",
+            "thuocTinh": "max-width",
+            "giaTri": "1080px"
+          },
+          {
+            "moTa": "body không là grid",
+            "kiem": "css",
+            "selector": "body",
+            "thuocTinh": "display",
+            "giaTri": "block"
+          },
+          {
+            "moTa": "header vẫn là khối thường",
+            "kiem": "css",
+            "selector": "header",
+            "thuocTinh": "display",
+            "giaTri": "block"
+          },
+          {
+            "moTa": "Không dùng phần trăm",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "\\d%",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Lưới thẻ tự đổi số cột: repeat(auto-fit, minmax(220px, 1fr))",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "auto-fit",
+        "minmax()",
+        "responsive không media query",
+        "số cột theo bề rộng"
+      ],
+      "prerequisites": [
+        "repeat()"
+      ],
+      "tags": [
+        "css",
+        "grid",
+        "auto-fit",
+        "minmax",
+        "responsive"
+      ],
+      "problemHtml": "<p><em>\"Chiêu lưới responsive đáng học thuộc\"</em> của bài 3.4 — một dòng tạo lưới thẻ vừa đủ nhiều cột nhất có thể, tự sắp lại trên màn nhỏ, không cần media query. Trang khoá học đang có ba media query để đổi 1/2/3/4 cột. Thay cả ba bằng một dòng, rồi tự tính trước: ở mỗi bề rộng màn hình, lưới sẽ có mấy cột?</p>\n<pre><code>body  : margin 8px mặc định\n.cards: max-width 1000px, gap 16px, 6 thẻ\ncột   : minmax(220px, 1fr)\n\nMàn 1280px → vùng .cards = min(1280 − 16, 1000) = 1000 → ? cột\nMàn  768px → vùng .cards = 768 − 16 = 752                → ? cột\nMàn  360px → vùng .cards = 360 − 16 = 344                → ? cột</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.cards</code>: grid <code>repeat(auto-fit, minmax(220px, 1fr))</code>, <code>gap: 16px</code>, <code>max-width: 1000px</code>.</li>\n  <li>Xoá mọi <code>@media</code> trong styles.css.</li>\n  <li>Ghi vào chú thích số cột bạn tính được ở 1280 / 768 / 360px (máy chấm sẽ đo đúng ba bề rộng đó).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "styles.css: grid 1 cột + 3 media query 600/900/1200px.",
+      "outputSpec": "1280px: 4 cột · 768px: 3 cột · 360px: 1 cột — tự động.",
+      "constraints": "Không media query.\nKhông đổi số thẻ.",
+      "examplesJson": [
+        {
+          "input": "vùng rộng 1000px, gap 16px, mỗi cột tối thiểu 220px",
+          "output": "Số cột = số lớn nhất n sao cho n×220 + (n−1)×16 ≤ 1000\nn = 4: 880 + 48 = 928 ≤ 1000 ✓ · n = 5: 1100 + 64 = 1164 > 1000 ✗ ⇒ 4 cột, mỗi cột nở thành (1000 − 48)/4 = 238px",
+          "explanation": "minmax(220px, 1fr): không bé hơn 220px, nhưng nở ra để chia phần dư."
+        }
+      ],
+      "hintsJson": [
+        "Công thức gọn: n = floor((vùng + gap) / (220 + gap)). Với 752: (752 + 16) / 236 ≈ 3,25 ⇒ 3.",
+        ".cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; max-width: 1000px; } — xoá ba khối @media."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.cards {\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: 16px;\n  max-width: 1000px;\n}\n@media (min-width: 600px)  { .cards { grid-template-columns: repeat(2, 1fr); } }\n@media (min-width: 900px)  { .cards { grid-template-columns: repeat(3, 1fr); } }\n@media (min-width: 1200px) { .cards { grid-template-columns: repeat(4, 1fr); } }\n\n.o { padding: 16px; border: 1px solid #e2e8f0; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Khoá học</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"cards\">\n      <div class=\"o\">Khoá 1</div>\n      <div class=\"o\">Khoá 2</div>\n      <div class=\"o\">Khoá 3</div>\n      <div class=\"o\">Khoá 4</div>\n      <div class=\"o\">Khoá 5</div>\n      <div class=\"o\">Khoá 6</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* Một dòng thay ba media query:\n   auto-fit       — nhồi nhiều cột nhất mà bề rộng cho phép\n   minmax(220,1fr)— mỗi cột ≥ 220px, nở ra chia phần dư\n   Tính trước (vùng = min(màn − 16, 1000), n = floor((vùng + 16) / 236)):\n     1280px → 1000 → 4 cột\n      768px →  752 → 3 cột\n      360px →  344 → 1 cột */\n.cards {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: 16px;\n  max-width: 1000px;\n}\n\n.o { padding: 16px; border: 1px solid #e2e8f0; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Khoá học</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"cards\">\n      <div class=\"o\">Khoá 1</div>\n      <div class=\"o\">Khoá 2</div>\n      <div class=\"o\">Khoá 3</div>\n      <div class=\"o\">Khoá 4</div>\n      <div class=\"o\">Khoá 5</div>\n      <div class=\"o\">Khoá 6</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ba media query cũ chọn số cột theo <em>bề rộng màn hình</em>; <code>auto-fit</code> chọn theo <em>bề rộng thật của vật chứa</em> — tốt hơn, vì cùng thành phần đặt trong cột hẹp hay rộng đều tự đúng. Số cột là n lớn nhất thoả n×220 + (n−1)×16 ≤ vùng; ở 1280px vùng bị <code>max-width</code> chặn còn 1000px ⇒ 4 cột chứ không phải 5.</p>\n<p>Máy chấm đo số cột ở ba bề rộng iframe (1280, 768, 360). Trình duyệt đếm rãnh có bề rộng > 0 (auto-fit gập rãnh rỗng về 0px); trong Node, script ước lượng bằng đúng công thức ở gợi ý.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>repeat(auto-fit, 220px)</code> — cột cứng 220px, không nở, lưới lệch về bên trái với khoảng trống bên phải.</li>\n  <li>Quên <code>max-width</code> rồi tính 5 cột ở 1280px.</li>\n  <li>Giữ lại một media query \"cho chắc\" — nó sẽ đè auto-fit ở bề rộng đó.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.4 CSS Grid: dàn trang hai chiều.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/minmax",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".cards dùng auto-fit + minmax(220px, 1fr)",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "repeat\\(\\s*auto-fit\\s*,\\s*minmax\\(\\s*220px\\s*,\\s*1fr\\s*\\)\\s*\\)"
+          },
+          {
+            "moTa": "Không còn media query",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@media",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Màn 1280px ⇒ 4 cột",
+            "kiem": "so-cot",
+            "selector": ".cards",
+            "giaTri": 4,
+            "beRong": 1280
+          },
+          {
+            "moTa": "Màn 768px ⇒ 3 cột",
+            "kiem": "so-cot",
+            "selector": ".cards",
+            "giaTri": 3,
+            "beRong": 768
+          },
+          {
+            "moTa": "Màn 360px ⇒ 1 cột",
+            "kiem": "so-cot",
+            "selector": ".cards",
+            "giaTri": 1,
+            "beRong": 360
+          },
+          {
+            "moTa": "gap 16px",
+            "kiem": "css",
+            "selector": ".cards",
+            "thuocTinh": "gap",
+            "khop": "^16px( 16px)?$"
+          },
+          {
+            "moTa": "Có chú thích ghi số cột tính trước (4, 3, 1)",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "/\\*[\\s\\S]*4 cột[\\s\\S]*3 cột[\\s\\S]*1 cột[\\s\\S]*\\*/",
+            "giuChuThich": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Grid cho bộ khung, Flexbox bên trong: trang quản trị hai tầng bố cục",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "Grid hay Flexbox",
+        "grid cho khung trang",
+        "flex trong từng vùng",
+        "câu hỏi về chiều"
+      ],
+      "prerequisites": [
+        "Flexbox (bài 3.3)",
+        "grid-template-columns"
+      ],
+      "tags": [
+        "css",
+        "grid",
+        "flexbox",
+        "layout"
+      ],
+      "problemHtml": "<p>Bẫy cuối bài 3.4: <em>\"coi grid và flexbox là đối thủ rồi chọn một cái cho cả dự án\"</em>. Đáp án tự nhiên là grid cho bộ khung trang, flexbox bên trong từng vùng. Trang quản trị dưới đây đang dùng flex cho mọi thứ — kể cả khung trang, nơi người viết phải đặt width cứng để các cột thẳng hàng. Hãy hỏi câu hỏi về chiều cho <strong>từng</strong> vật chứa và chọn lại.</p>\n<pre><code>Vật chứa            Bố cục mong muốn                      Một chiều hay hai?\n.khung              thanh bên 220px | nội dung 1fr         → ?\n.thanh-cong-cu      tiêu đề trái ... nút phải, giữa dọc    → ?\n.chi-so             4 ô số liệu bằng nhau, thẳng cột       → ?\n.hang-nut           các nút cạnh nhau, cách 8px            → ?</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.khung</code>: grid <code>220px 1fr</code>, gap 24px (bỏ width cứng của hai con).</li>\n  <li><code>.thanh-cong-cu</code>: flex, <code>space-between</code>, <code>align-items: center</code>.</li>\n  <li><code>.chi-so</code>: grid <code>repeat(4, 1fr)</code>, gap 16px.</li>\n  <li><code>.hang-nut</code>: flex, gap 8px.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Mọi vật chứa đều display: flex; .khung dùng width cứng 220px/860px.",
+      "outputSpec": "Khung trang bằng grid; thanh công cụ và hàng nút bằng flex; bốn ô chỉ số thẳng cột bằng grid.",
+      "constraints": "Không width cứng trên .thanh-ben và .noi-dung.\nKhông phần trăm.",
+      "examplesJson": [
+        {
+          "input": ".chi-so { display: flex; } .o { flex: 1; }",
+          "output": "Bốn ô bằng nhau… cho tới khi một ô có số dài (\"1.250.000đ\") — flex chia theo nội dung, ô đó phình ra, các cột lệch.",
+          "explanation": "Bốn ô cần THẲNG CỘT với nhau ⇒ bố cục quyết định kích thước ⇒ Grid."
+        }
+      ],
+      "hintsJson": [
+        "Dùng bảng quyết định của bài 3.4: hai chiều/khung cố định ⇒ grid; một hàng mà nội dung quyết định ⇒ flex.",
+        ".khung → grid 220px 1fr · .thanh-cong-cu → flex space-between center · .chi-so → grid repeat(4, 1fr) · .hang-nut → flex gap 8px."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.khung { display: flex; }\n.thanh-ben { width: 220px; padding: 16px; background: #f1f5f9; }\n.noi-dung  { width: 860px; padding: 16px; }\n\n.thanh-cong-cu { display: flex; }\n.chi-so { display: flex; }\n.chi-so .o { padding: 16px; border: 1px solid #e2e8f0; }\n.hang-nut { display: flex; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Quản trị</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"khung\">\n      <aside class=\"thanh-ben\">Menu</aside>\n      <main class=\"noi-dung\">\n        <div class=\"thanh-cong-cu\">\n          <h1>Tổng quan</h1>\n          <div class=\"hang-nut\">\n            <button type=\"button\">Xuất CSV</button>\n            <button type=\"button\">Làm mới</button>\n          </div>\n        </div>\n        <div class=\"chi-so\">\n          <div class=\"o\">Người dùng: 1.204</div>\n          <div class=\"o\">Doanh thu: 1.250.000đ</div>\n          <div class=\"o\">Bài nộp: 87</div>\n          <div class=\"o\">Lỗi: 0</div>\n        </div>\n      </main>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* KHUNG TRANG — hai chiều, bố cục quyết định kích thước ⇒ GRID */\n.khung {\n  display: grid;\n  grid-template-columns: 220px 1fr;\n  gap: 24px;\n}\n.thanh-ben { padding: 16px; background: #f1f5f9; }   /* không width cứng */\n.noi-dung  { padding: 16px; }\n\n/* thanh công cụ — MỘT hàng, trái/phải ⇒ FLEX */\n.thanh-cong-cu {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* bốn ô chỉ số phải thẳng cột dù nội dung dài ngắn ⇒ GRID */\n.chi-so {\n  display: grid;\n  grid-template-columns: repeat(4, 1fr);\n  gap: 16px;\n}\n.chi-so .o { padding: 16px; border: 1px solid #e2e8f0; }\n\n/* hàng nút — một chiều, nội dung quyết định ⇒ FLEX */\n.hang-nut {\n  display: flex;\n  gap: 8px;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Quản trị</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"khung\">\n      <aside class=\"thanh-ben\">Menu</aside>\n      <main class=\"noi-dung\">\n        <div class=\"thanh-cong-cu\">\n          <h1>Tổng quan</h1>\n          <div class=\"hang-nut\">\n            <button type=\"button\">Xuất CSV</button>\n            <button type=\"button\">Làm mới</button>\n          </div>\n        </div>\n        <div class=\"chi-so\">\n          <div class=\"o\">Người dùng: 1.204</div>\n          <div class=\"o\">Doanh thu: 1.250.000đ</div>\n          <div class=\"o\">Bài nộp: 87</div>\n          <div class=\"o\">Lỗi: 0</div>\n        </div>\n      </main>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bốn vật chứa, bốn câu trả lời. <code>.khung</code> và <code>.chi-so</code> có \"bộ khung cố định\" mà phần tử phải rơi vào ⇒ Grid; <code>.thanh-cong-cu</code> và <code>.hang-nut</code> là một đường, nội dung quyết định ⇒ Flexbox. Triệu chứng của chọn sai mà bài 3.4 kể ra có mặt ngay trong mã khởi đầu: \"một bố cục flexbox đầy chiều rộng cố định cố làm các hàng thẳng nhau\" (220px/860px).</p>\n<p>Máy chấm kiểm display và các thuộc tính của từng vật chứa, đếm cột ở hai lưới, và cấm width cứng trên hai vùng của khung.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng grid cho cả <code>.hang-nut</code> — chạy được, nhưng phải khai số cột; thêm nút là phải sửa CSS.</li>\n  <li>Giữ <code>width: 860px</code> trên nội dung — tràn ngang trên laptop 1024px.</li>\n  <li>Bốn ô chỉ số bằng <code>flex: 1</code> — lệch cột khi một số dài.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.4 CSS Grid: dàn trang hai chiều.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Grids#grid_and_flexbox",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".khung là grid",
+            "kiem": "css",
+            "selector": ".khung",
+            "thuocTinh": "display",
+            "giaTri": "grid"
+          },
+          {
+            "moTa": ".khung hai cột, rãnh đầu 220px",
+            "kiem": "css",
+            "selector": ".khung",
+            "thuocTinh": "grid-template-columns",
+            "khop": "^220px "
+          },
+          {
+            "moTa": ".khung gap 24px",
+            "kiem": "css",
+            "selector": ".khung",
+            "thuocTinh": "gap",
+            "khop": "^24px( 24px)?$"
+          },
+          {
+            "moTa": ".thanh-cong-cu là flex space-between",
+            "kiem": "css",
+            "selector": ".thanh-cong-cu",
+            "thuocTinh": "justify-content",
+            "giaTri": "space-between"
+          },
+          {
+            "moTa": ".thanh-cong-cu căn giữa dọc",
+            "kiem": "css",
+            "selector": ".thanh-cong-cu",
+            "thuocTinh": "align-items",
+            "giaTri": "center"
+          },
+          {
+            "moTa": ".chi-so là grid 4 cột",
+            "kiem": "so-cot",
+            "selector": ".chi-so",
+            "giaTri": 4
+          },
+          {
+            "moTa": ".chi-so cột bằng nhau",
+            "kiem": "ti-le-cot",
+            "selector": ".chi-so",
+            "giaTri": 1
+          },
+          {
+            "moTa": ".hang-nut là flex",
+            "kiem": "css",
+            "selector": ".hang-nut",
+            "thuocTinh": "display",
+            "giaTri": "flex"
+          },
+          {
+            "moTa": ".hang-nut gap 8px",
+            "kiem": "css",
+            "selector": ".hang-nut",
+            "thuocTinh": "gap",
+            "khop": "^8px( 8px)?$"
+          },
+          {
+            "moTa": "Không width cứng trên .thanh-ben/.noi-dung",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "\\.(thanh-ben|noi-dung)\\s*\\{[^}]*[{;\\s]width\\s*:",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Lưới lồng lưới: thư viện auto-fill trong cột 1fr, tính đúng số cột ở ba màn hình",
+      "language": "css",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "grid lồng grid",
+        "auto-fill",
+        "bề rộng rãnh 1fr",
+        "max-width",
+        "tính toán trước khi gõ"
+      ],
+      "prerequisites": [
+        "toàn bộ bài 3.4"
+      ],
+      "tags": [
+        "css",
+        "grid",
+        "auto-fill",
+        "calculation"
+      ],
+      "problemHtml": "<p>Bài 3.4 có hai biến thể: <code>auto-fit</code> (bài 5) và <code>auto-fill</code> (khối code cuối bài, \"số cột tự thêm vào và bớt đi khi vật chứa rộng ra hay hẹp lại\"). Ở đây thư viện ảnh <code>auto-fill</code> không nằm trong cả trang mà trong <strong>cột 1fr</strong> của một grid khác — nên bề rộng nó nhận được phụ thuộc vào grid ngoài. Viết CSS theo đặc tả rồi <strong>tính trước</strong> số cột thư viện ở ba màn hình; máy chấm đo đúng ba màn đó.</p>\n<pre><code>body          margin 8px (mặc định)\n.trang        grid: 260px 1fr · gap 24px · max-width 1200px\n  aside       (cột 260px)\n  main        (cột 1fr)\n    .thu-vien grid: repeat(auto-fill, minmax(180px, 1fr)) · gap 12px · 8 ảnh\n\nMàn 1400px · 1024px · 800px  →  .thu-vien có ? · ? · ? cột</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.trang</code> và <code>.thu-vien</code> đúng đặc tả (cột, gap, max-width).</li>\n  <li>Ghi phép tính ba trường hợp trong chú thích, theo chuỗi: màn → vùng .trang → cột main → số cột.</li>\n  <li>Số cột thực tế khớp phép tính của bạn ở cả ba màn hình.</li>\n  <li>Không media query, không phần trăm.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "HTML có sẵn .trang > aside + main > .thu-vien (8 ảnh); styles.css trống.",
+      "outputSpec": "1400px: 4 cột · 1024px: 3 cột · 800px: 2 cột.",
+      "constraints": "Không media query, không %, không calc().\nDùng auto-fill (không phải auto-fit) cho thư viện.",
+      "examplesJson": [
+        {
+          "input": "Màn 1400px",
+          "output": ".trang = min(1400 − 16, 1200) = 1200\nmain = 1200 − 260 − 24 = 916\ncột = floor((916 + 12) / (180 + 12)) = floor(4,83) = 4",
+          "explanation": "Rãnh 1fr của grid ngoài nhận phần còn lại sau rãnh px và gap — đó là \"vùng\" của grid trong."
+        }
+      ],
+      "hintsJson": [
+        "Làm ba bước cho mỗi màn: (1) vùng .trang = min(màn − 16, 1200); (2) main = vùng − 260 − 24; (3) n = floor((main + 12) / 192).",
+        "CSS: .trang { display: grid; grid-template-columns: 260px 1fr; gap: 24px; max-width: 1200px; } .thu-vien { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* Viết .trang và .thu-vien theo đặc tả, kèm phép tính số cột */\naside { padding: 16px; background: #f1f5f9; }\n.o { padding: 24px; background: #fef3c7; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Thư viện</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"trang\">\n      <aside>Album</aside>\n      <main>\n        <h1>Chuyến đi Đà Lạt</h1>\n        <div class=\"thu-vien\">\n      <div class=\"o\">Ảnh 1</div>\n      <div class=\"o\">Ảnh 2</div>\n      <div class=\"o\">Ảnh 3</div>\n      <div class=\"o\">Ảnh 4</div>\n      <div class=\"o\">Ảnh 5</div>\n      <div class=\"o\">Ảnh 6</div>\n      <div class=\"o\">Ảnh 7</div>\n      <div class=\"o\">Ảnh 8</div>\n        </div>\n      </main>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* Grid NGOÀI: bộ khung trang */\n.trang {\n  display: grid;\n  grid-template-columns: 260px 1fr;\n  gap: 24px;\n  max-width: 1200px;\n}\n\n/* Grid TRONG: nằm trong rãnh 1fr của grid ngoài\n   n = floor((cột main + 12) / (180 + 12))\n   Màn 1400: .trang = min(1384, 1200) = 1200 → main = 1200 − 260 − 24 = 916 → (928 / 192) = 4,83 → 4 cột\n   Màn 1024: .trang = 1008                    → main = 1008 − 284 = 724       → (736 / 192) = 3,83 → 3 cột\n   Màn  800: .trang = 784                     → main =  784 − 284 = 500       → (512 / 192) = 2,67 → 2 cột */\n.thu-vien {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));\n  gap: 12px;\n}\n\naside { padding: 16px; background: #f1f5f9; }\n.o { padding: 24px; background: #fef3c7; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Thư viện</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"trang\">\n      <aside>Album</aside>\n      <main>\n        <h1>Chuyến đi Đà Lạt</h1>\n        <div class=\"thu-vien\">\n      <div class=\"o\">Ảnh 1</div>\n      <div class=\"o\">Ảnh 2</div>\n      <div class=\"o\">Ảnh 3</div>\n      <div class=\"o\">Ảnh 4</div>\n      <div class=\"o\">Ảnh 5</div>\n      <div class=\"o\">Ảnh 6</div>\n      <div class=\"o\">Ảnh 7</div>\n      <div class=\"o\">Ảnh 8</div>\n        </div>\n      </main>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Grid trong không biết màn hình rộng bao nhiêu — nó chỉ biết rãnh mà grid ngoài trao cho nó. Vì vậy chuỗi tính có ba mắt: màn hình → vùng <code>.trang</code> (bị max-width chặn ở màn lớn) → rãnh 1fr của main (trừ rãnh 260px và gap 24px) → số cột thư viện. Ở màn 1400px, nếu quên max-width bạn sẽ tính 5 cột; nếu quên trừ thanh bên, 6 cột.</p>\n<p><code>auto-fill</code> khác <code>auto-fit</code> chỉ khi ảnh <em>ít hơn</em> số cột vừa: auto-fill giữ rãnh rỗng (ảnh không nở hết hàng), auto-fit gập rãnh rỗng. Với 8 ảnh ở đây, hai cái cho cùng số cột — nhưng thư viện ảnh thường muốn ảnh giữ cỡ khi album chỉ có 2 tấm, nên auto-fill là lựa chọn hợp. Máy chấm đo số cột ở ba bề rộng iframe; trong Node script ước lượng bằng chính chuỗi tính này.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Tính theo bề rộng màn hình thay vì bề rộng main — ra 6–7 cột ở 1400px.</li>\n  <li>Quên gap của grid ngoài (24px) — lệch một cột ở ranh giới.</li>\n  <li>Dùng <code>repeat(auto-fill, 180px)</code> — cột cứng, thừa khoảng trống bên phải.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.4 CSS Grid: dàn trang hai chiều.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://css-tricks.com/auto-sizing-columns-css-grid-auto-fill-vs-auto-fit/",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".trang grid 260px 1fr",
+            "kiem": "css",
+            "selector": ".trang",
+            "thuocTinh": "grid-template-columns",
+            "khop": "^260px "
+          },
+          {
+            "moTa": ".trang max-width 1200px",
+            "kiem": "css",
+            "selector": ".trang",
+            "thuocTinh": "max-width",
+            "giaTri": "1200px"
+          },
+          {
+            "moTa": ".trang gap 24px",
+            "kiem": "css",
+            "selector": ".trang",
+            "thuocTinh": "gap",
+            "khop": "^24px( 24px)?$"
+          },
+          {
+            "moTa": ".thu-vien dùng auto-fill + minmax(180px, 1fr)",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "repeat\\(\\s*auto-fill\\s*,\\s*minmax\\(\\s*180px\\s*,\\s*1fr\\s*\\)\\s*\\)"
+          },
+          {
+            "moTa": ".thu-vien gap 12px",
+            "kiem": "css",
+            "selector": ".thu-vien",
+            "thuocTinh": "gap",
+            "khop": "^12px( 12px)?$"
+          },
+          {
+            "moTa": "Màn 1400px ⇒ 4 cột",
+            "kiem": "so-cot",
+            "selector": ".thu-vien",
+            "giaTri": 4,
+            "beRong": 1400
+          },
+          {
+            "moTa": "Màn 1024px ⇒ 3 cột",
+            "kiem": "so-cot",
+            "selector": ".thu-vien",
+            "giaTri": 3,
+            "beRong": 1024
+          },
+          {
+            "moTa": "Màn 800px ⇒ 2 cột",
+            "kiem": "so-cot",
+            "selector": ".thu-vien",
+            "giaTri": 2,
+            "beRong": 800
+          },
+          {
+            "moTa": "Không media query, %, calc()",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@media|\\d%|calc\\(",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Có chú thích phép tính cho cả ba màn",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "1400[\\s\\S]*1024[\\s\\S]*800",
+            "giuChuThich": true
+          }
+        ]
+      }
+    }
+  ]
+}

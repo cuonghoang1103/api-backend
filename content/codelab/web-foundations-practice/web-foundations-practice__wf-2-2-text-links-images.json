@@ -1,0 +1,836 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-2-2-text-links-images",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-2-2-text-links-images"
+  },
+  "exercises": [
+    {
+      "title": "Dàn ý công thức Bánh mì: tiêu đề đúng cấp, không nhảy cấp",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "h1–h6",
+        "dàn ý tài liệu",
+        "một h1 mỗi trang",
+        "p"
+      ],
+      "prerequisites": [
+        "bộ khung HTML5"
+      ],
+      "tags": [
+        "html",
+        "headings",
+        "outline"
+      ],
+      "problemHtml": "<p>Bài 2.2 dặn: <em>\"Đừng nhảy cấp chỉ vì cỡ chữ.\"</em> Trang công thức dưới đây do một bạn viết theo cảm giác: tiêu đề trang dùng <code>&lt;h3&gt;</code> vì \"h1 to quá\", mục con dùng <code>&lt;h5&gt;</code> vì \"nhỏ xinh\", và một tiêu đề giả làm bằng <code>&lt;b&gt;</code>. Trình đọc màn hình và Google đọc ra một dàn ý méo. Hãy sắp lại cấp tiêu đề thành dàn ý thật.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tiêu đề trang \"Công thức Bánh mì\" là <code>&lt;h1&gt;</code> — đúng một h1.</li>\n  <li>Ba mục \"Nguyên liệu\", \"Các bước\", \"Mẹo nhỏ\" là <code>&lt;h2&gt;</code>.</li>\n  <li>Mục con \"Đồ chua\" (thuộc \"Nguyên liệu\") là <code>&lt;h3&gt;</code>.</li>\n  <li>Bỏ tiêu đề giả <code>&lt;p&gt;&lt;b&gt;Mẹo nhỏ&lt;/b&gt;&lt;/p&gt;</code> — thay bằng tiêu đề thật.</li>\n  <li>Chữ thân bài nằm trong <code>&lt;p&gt;</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html với tiêu đề sai cấp (h3, h5, b).",
+      "outputSpec": "Dàn ý: h1 Công thức Bánh mì → h2 Nguyên liệu → h3 Đồ chua → h2 Các bước → h2 Mẹo nhỏ.",
+      "constraints": "Không dùng CSS để chỉnh cỡ chữ — cỡ chữ không phải lý do chọn cấp.\nGiữ nguyên thứ tự và chữ của các mục.",
+      "examplesJson": [
+        {
+          "input": "<h1>Công thức Bánh mì</h1>\n<h2>Nguyên liệu</h2>\n<h3>Đồ chua</h3>\n<h2>Các bước</h2>",
+          "output": "Dàn ý (như trình đọc màn hình liệt kê):\n1 Công thức Bánh mì\n  2 Nguyên liệu\n    3 Đồ chua\n  2 Các bước",
+          "explanation": "Mỗi cấp chỉ được sâu hơn cấp trước tối đa 1. Từ h3 quay về h2 thì được (đóng một mục con)."
+        }
+      ],
+      "hintsJson": [
+        "Viết dàn ý ra giấy trước: tên trang (cấp 1) → các phần lớn (cấp 2) → phần nhỏ bên trong phần lớn (cấp 3). Rồi mới gán thẻ.",
+        "Đổi <h3>Công thức Bánh mì</h3> → <h1>, các <h5> mục lớn → <h2>, \"Đồ chua\" → <h3>, và <p><b>Mẹo nhỏ</b></p> → <h2>Mẹo nhỏ</h2>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Công thức Bánh mì</title>\n  </head>\n  <body>\n    <h3>Công thức Bánh mì</h3>\n    <h5>Nguyên liệu</h5>\n    <p>Một ổ bánh mì, pa-tê, chả lụa, rau mùi.</p>\n    <h6>Đồ chua</h6>\n    <p>Cà rốt và củ cải ngâm giấm đường một đêm.</p>\n    <h5>Các bước</h5>\n    <p>Phết pa-tê, xếp chả, thêm đồ chua và rau.</p>\n    <p><b>Mẹo nhỏ</b></p>\n    <p>Nướng bánh hai phút cho vỏ giòn.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Công thức Bánh mì</title>\n  </head>\n  <body>\n    <!-- cấp 1: tên của cả trang — đúng MỘT h1 -->\n    <h1>Công thức Bánh mì</h1>\n    <!-- cấp 2: các phần lớn -->\n    <h2>Nguyên liệu</h2>\n    <p>Một ổ bánh mì, pa-tê, chả lụa, rau mùi.</p>\n    <!-- cấp 3: phần nhỏ NẰM TRONG \"Nguyên liệu\" -->\n    <h3>Đồ chua</h3>\n    <p>Cà rốt và củ cải ngâm giấm đường một đêm.</p>\n    <!-- quay về cấp 2: được phép (đóng mục con) -->\n    <h2>Các bước</h2>\n    <p>Phết pa-tê, xếp chả, thêm đồ chua và rau.</p>\n    <!-- tiêu đề giả bằng b ⇒ tiêu đề thật -->\n    <h2>Mẹo nhỏ</h2>\n    <p>Nướng bánh hai phút cho vỏ giòn.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thẻ tiêu đề mô tả <strong>thứ bậc</strong>, không mô tả cỡ chữ. Người dùng trình đọc màn hình thường nghe danh sách tiêu đề trước để \"lướt\" trang — dàn ý đúng giúp họ nhảy thẳng tới \"Các bước\". Tiêu đề giả <code>&lt;p&gt;&lt;b&gt;…&lt;/b&gt;&lt;/p&gt;</code> nhìn đậm nhưng không có mặt trong dàn ý nào.</p>\n<p>Máy chấm dùng kiểm <code>tieu-de</code>: đúng một h1, và không chỗ nào sâu hơn cấp trước quá 1 (h2 → h4 là trượt; h3 → h2 thì hợp lệ).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Giữ <code>&lt;h3&gt;</code> cho tiêu đề trang vì \"h1 to quá\" — muốn nhỏ thì CSS <code>font-size</code>, không hạ cấp.</li>\n  <li>Đánh \"Đồ chua\" là <code>&lt;h2&gt;</code> — nó thành một phần ngang hàng \"Nguyên liệu\", mất quan hệ cha–con.</li>\n  <li>Dùng <code>&lt;strong&gt;</code> thay tiêu đề — strong là \"quan trọng\" trong câu, không phải tên một mục.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.2 Chữ, liên kết và ảnh.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Đúng một h1 và không nhảy cấp tiêu đề",
+            "kiem": "tieu-de"
+          },
+          {
+            "moTa": "h1 là \"Công thức Bánh mì\"",
+            "kiem": "text",
+            "selector": "h1",
+            "giaTri": "Công thức Bánh mì"
+          },
+          {
+            "moTa": "Có đúng ba h2: Nguyên liệu, Các bước, Mẹo nhỏ",
+            "kiem": "so-luong",
+            "selector": "h2",
+            "giaTri": 3
+          },
+          {
+            "moTa": "h2 cuối là \"Mẹo nhỏ\"",
+            "kiem": "text",
+            "selector": "h2:last-of-type",
+            "giaTri": "Mẹo nhỏ"
+          },
+          {
+            "moTa": "\"Đồ chua\" là h3",
+            "kiem": "text",
+            "selector": "h3",
+            "giaTri": "Đồ chua"
+          },
+          {
+            "moTa": "Không còn h4/h5/h6",
+            "kiem": "khong-ton-tai",
+            "selector": "h4, h5, h6"
+          },
+          {
+            "moTa": "Không còn tiêu đề giả <p><b>",
+            "kiem": "khong-ton-tai",
+            "selector": "p > b:only-child"
+          },
+          {
+            "moTa": "Bốn đoạn thân bài giữ nguyên",
+            "kiem": "so-luong",
+            "selector": "body > p",
+            "giaTri": 4
+          }
+        ]
+      }
+    },
+    {
+      "title": "ul hay ol? Danh sách nguyên liệu và các bước pha cà phê",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "ul",
+        "ol",
+        "li",
+        "thứ tự có ý nghĩa"
+      ],
+      "prerequisites": [
+        "tiêu đề và đoạn văn"
+      ],
+      "tags": [
+        "html",
+        "lists"
+      ],
+      "problemHtml": "<p>Bài 2.2: <code>&lt;ul&gt;</code> khi <em>thứ tự không quan trọng</em> (dấu chấm), <code>&lt;ol&gt;</code> khi <em>thứ tự quan trọng</em> (đánh số). Trang pha cà phê sữa đá đang viết danh sách bằng các dòng <code>&lt;p&gt;</code> có gạch đầu dòng gõ tay \"- \" và số gõ tay \"1.\" — trông như danh sách nhưng với trình duyệt chỉ là chữ. Hãy đổi sang danh sách thật, chọn đúng loại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nguyên liệu (cà phê, sữa đặc, đá) thành <code>&lt;ul&gt;</code> — 3 mục <code>&lt;li&gt;</code>.</li>\n  <li>Các bước pha (4 bước) thành <code>&lt;ol&gt;</code> — 4 mục <code>&lt;li&gt;</code> theo đúng thứ tự.</li>\n  <li>Bỏ dấu \"- \" và số \"1.\" gõ tay — trình duyệt tự vẽ.</li>\n  <li>Mọi <code>&lt;li&gt;</code> là con trực tiếp của <code>&lt;ul&gt;</code>/<code>&lt;ol&gt;</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html: 7 dòng <p> giả làm danh sách.",
+      "outputSpec": "Một danh sách chấm 3 mục và một danh sách đánh số 1–4.",
+      "constraints": "Không dùng <br> hay <p> bên trong danh sách để tạo dòng.\nChữ của mỗi mục giữ nguyên (chỉ bỏ \"- \" và số đầu dòng).",
+      "examplesJson": [
+        {
+          "input": "<ol>\n  <li>Pha cà phê phin</li>\n  <li>Cho sữa đặc vào ly</li>\n</ol>",
+          "output": "1. Pha cà phê phin\n2. Cho sữa đặc vào ly",
+          "explanation": "Số do trình duyệt đánh: thêm/bớt một bước không phải sửa số tay."
+        }
+      ],
+      "hintsJson": [
+        "Hỏi từng nhóm: \"đổi thứ tự có làm sai ý không?\" Nguyên liệu: không ⇒ ul. Các bước: có ⇒ ol.",
+        "Khung: <ul><li>…</li> ×3</ul> và <ol><li>…</li> ×4</ol>. Xoá các <p> cũ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cà phê sữa đá</title>\n  </head>\n  <body>\n    <h1>Cà phê sữa đá</h1>\n    <h2>Nguyên liệu</h2>\n    <p>- 25g cà phê phin</p>\n    <p>- 2 thìa sữa đặc</p>\n    <p>- Một ly đá viên</p>\n    <h2>Cách pha</h2>\n    <p>1. Pha cà phê phin trong 5 phút</p>\n    <p>2. Cho sữa đặc vào ly</p>\n    <p>3. Đổ cà phê vào, khuấy đều</p>\n    <p>4. Thêm đá và thưởng thức</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cà phê sữa đá</title>\n  </head>\n  <body>\n    <h1>Cà phê sữa đá</h1>\n    <h2>Nguyên liệu</h2>\n    <!-- ul: đổi thứ tự không sai ý -->\n    <ul>\n      <li>25g cà phê phin</li>\n      <li>2 thìa sữa đặc</li>\n      <li>Một ly đá viên</li>\n    </ul>\n    <h2>Cách pha</h2>\n    <!-- ol: thứ tự là nội dung; số do trình duyệt đánh -->\n    <ol>\n      <li>Pha cà phê phin trong 5 phút</li>\n      <li>Cho sữa đặc vào ly</li>\n      <li>Đổ cà phê vào, khuấy đều</li>\n      <li>Thêm đá và thưởng thức</li>\n    </ol>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Danh sách thật cho trình đọc màn hình nói \"danh sách, 4 mục\" trước khi đọc — người nghe biết còn bao nhiêu. Danh sách giả bằng <code>&lt;p&gt;</code> chỉ là bảy đoạn văn rời. <code>&lt;ol&gt;</code> còn tự đánh lại số khi bạn chèn bước mới, khỏi sửa tay.</p>\n<p>Máy chấm kiểm cấu trúc (<code>ul &gt; li</code> ×3, <code>ol &gt; li</code> ×4), kiểm chữ của mục đầu, và kiểm không còn dấu \"- \" hay \"1.\" gõ tay trong chữ của mục.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Để nguyên \"1.\" trong <code>&lt;li&gt;</code> — hiện thành \"1. 1. Pha cà phê\".</li>\n  <li>Dùng <code>&lt;ol&gt;</code> cho nguyên liệu \"cho có số\" — số ngụ ý thứ tự mà nội dung không có.</li>\n  <li>Đặt chữ trực tiếp trong <code>&lt;ul&gt;</code> không có <code>&lt;li&gt;</code> — không hợp lệ, trình duyệt hiện lệch.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.2 Chữ, liên kết và ảnh.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ol",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Có một ul với đúng 3 li",
+            "kiem": "so-luong",
+            "selector": "ul > li",
+            "giaTri": 3
+          },
+          {
+            "moTa": "Có một ol với đúng 4 li",
+            "kiem": "so-luong",
+            "selector": "ol > li",
+            "giaTri": 4
+          },
+          {
+            "moTa": "Mục đầu của ol là \"Pha cà phê phin trong 5 phút\"",
+            "kiem": "text",
+            "selector": "ol > li:first-child",
+            "giaTri": "Pha cà phê phin trong 5 phút"
+          },
+          {
+            "moTa": "Mục cuối của ol là bước thêm đá",
+            "kiem": "text",
+            "selector": "ol > li:last-child",
+            "giaTri": "Thêm đá và thưởng thức"
+          },
+          {
+            "moTa": "Không còn số gõ tay đầu mục",
+            "kiem": "text",
+            "selector": "li",
+            "khop": "^(?!\\d+\\.)"
+          },
+          {
+            "moTa": "Không còn \"- \" gõ tay đầu mục",
+            "kiem": "text",
+            "selector": "li",
+            "khop": "^(?!-)"
+          },
+          {
+            "moTa": "Không còn đoạn <p> giả làm danh sách",
+            "kiem": "khong-ton-tai",
+            "selector": "body > p"
+          },
+          {
+            "moTa": "ul đứng trước ol (nguyên liệu trước cách pha)",
+            "kiem": "thu-tu",
+            "cacSelector": [
+              "ul",
+              "ol"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "title": "Ba kiểu liên kết: tương đối, tuyệt đối và mở tab mới an toàn",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "href tương đối",
+        "href tuyệt đối",
+        "target=\"_blank\"",
+        "rel=\"noopener\""
+      ],
+      "prerequisites": [
+        "thuộc tính href"
+      ],
+      "tags": [
+        "html",
+        "links",
+        "a"
+      ],
+      "problemHtml": "<p>Bài 2.2 có bốn dòng liên kết mẫu: tương đối (<code>about.html</code>), tuyệt đối (<code>https://…</code>), neo (<code>#contact</code>), và mở tab mới. Trang của câu lạc bộ cần một thanh liên kết gồm ba loại đầu và một liên kết ngoài mở tab mới. Người viết trước đã trộn lẫn: trang nội bộ viết bằng URL tuyệt đối tới localhost, trang ngoài lại thiếu <code>https://</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>\"Giới thiệu\" trỏ tới trang cùng site <code>about.html</code> bằng đường dẫn <strong>tương đối</strong>.</li>\n  <li>\"Lịch sinh hoạt\" trỏ tới <code>lich.html</code> (tương đối).</li>\n  <li>\"Tài liệu MDN\" trỏ tới <code>https://developer.mozilla.org</code> (tuyệt đối, có giao thức).</li>\n  <li>\"Nhóm Facebook\" trỏ tới <code>https://facebook.com/groups/fcode</code>, mở <strong>tab mới</strong> với <code>target=\"_blank\"</code> và <code>rel=\"noopener\"</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Thanh liên kết 4 mục với href sai kiểu.",
+      "outputSpec": "Hai liên kết nội bộ tương đối, hai liên kết ngoài tuyệt đối; liên kết Facebook mở tab mới an toàn.",
+      "constraints": "Liên kết nội bộ không được chứa \"localhost\" hay \"http\".\nChỉ liên kết Facebook mở tab mới (đừng ép mọi liên kết mở tab mới).",
+      "examplesJson": [
+        {
+          "input": "<a href=\"developer.mozilla.org\">Tài liệu MDN</a>",
+          "output": "Bấm vào ⇒ trình duyệt mở https://cuongthai.com/clb/developer.mozilla.org ⇒ 404.",
+          "explanation": "Thiếu \"https://\", trình duyệt coi đó là đường dẫn TƯƠNG ĐỐI tới một tệp tên \"developer.mozilla.org\" cạnh trang hiện tại."
+        }
+      ],
+      "hintsJson": [
+        "Tương đối = chỉ tên tệp (tính từ thư mục của trang hiện tại). Tuyệt đối = bắt đầu bằng https://.",
+        "Liên kết tab mới: <a href=\"https://facebook.com/groups/fcode\" target=\"_blank\" rel=\"noopener\">Nhóm Facebook</a>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>CLB F-Code</title>\n  </head>\n  <body>\n    <h1>CLB F-Code</h1>\n    <!-- Sửa href của bốn liên kết -->\n    <p>\n      <a href=\"http://localhost:5500/about.html\">Giới thiệu</a> ·\n      <a href=\"http://localhost:5500/lich.html\">Lịch sinh hoạt</a> ·\n      <a href=\"developer.mozilla.org\">Tài liệu MDN</a> ·\n      <a href=\"facebook.com/groups/fcode\">Nhóm Facebook</a>\n    </p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>CLB F-Code</title>\n  </head>\n  <body>\n    <h1>CLB F-Code</h1>\n    <p>\n      <!-- tương đối: tính từ thư mục của trang này, chạy được ở localhost lẫn trên mạng -->\n      <a href=\"about.html\">Giới thiệu</a> ·\n      <a href=\"lich.html\">Lịch sinh hoạt</a> ·\n      <!-- tuyệt đối: site khác ⇒ phải có https:// -->\n      <a href=\"https://developer.mozilla.org\">Tài liệu MDN</a> ·\n      <!-- tab mới: target=\"_blank\"; rel=\"noopener\" để trang mới không điều khiển được tab này -->\n      <a href=\"https://facebook.com/groups/fcode\" target=\"_blank\" rel=\"noopener\">Nhóm Facebook</a>\n    </p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đường dẫn tương đối \"đi theo\" trang: chạy ở <code>localhost:5500</code> hay ở <code>cuongthai.com</code> đều đúng, vì nó tính từ thư mục hiện tại — đúng ý tưởng <code>cd</code> tương đối ở bài 1.1. Viết cứng <code>http://localhost…</code> thì lên mạng là hỏng hết.</p>\n<p>Ngược lại, site khác bắt buộc có giao thức: thiếu <code>https://</code> thì chuỗi bị hiểu là tên tệp tương đối. <code>rel=\"noopener\"</code> ngăn trang được mở dùng <code>window.opener</code> để đổi địa chỉ tab gốc (một kiểu lừa đảo gọi là reverse tabnabbing) — trình duyệt mới đã mặc định vậy, nhưng viết rõ là thói quen tốt và nhiều bộ kiểm vẫn đòi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>target=\"blank\"</code> (thiếu gạch dưới) — mở vào một tab tên \"blank\", lần bấm sau tái dùng tab đó.</li>\n  <li>Đặt <code>target=\"_blank\"</code> cho mọi liên kết — người dùng mất nút Back quen thuộc.</li>\n  <li>Dùng <code>/about.html</code> (tương đối theo gốc) khi trang nằm trong thư mục con — trỏ nhầm về gốc site.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.2 Chữ, liên kết và ảnh.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "\"Giới thiệu\" → about.html (tương đối)",
+            "kiem": "ton-tai",
+            "selector": "a[href=\"about.html\"]"
+          },
+          {
+            "moTa": "\"Lịch sinh hoạt\" → lich.html (tương đối)",
+            "kiem": "ton-tai",
+            "selector": "a[href=\"lich.html\"]"
+          },
+          {
+            "moTa": "Không liên kết nào trỏ localhost",
+            "kiem": "khong-ton-tai",
+            "selector": "a[href*=\"localhost\"]"
+          },
+          {
+            "moTa": "MDN là URL tuyệt đối https://developer.mozilla.org",
+            "kiem": "ton-tai",
+            "selector": "a[href^=\"https://developer.mozilla.org\"]"
+          },
+          {
+            "moTa": "Facebook là URL tuyệt đối https://facebook.com/groups/fcode",
+            "kiem": "ton-tai",
+            "selector": "a[href=\"https://facebook.com/groups/fcode\"]"
+          },
+          {
+            "moTa": "Facebook mở tab mới (target=\"_blank\")",
+            "kiem": "thuoc-tinh",
+            "selector": "a[href*=\"facebook.com\"]",
+            "thuocTinh": "target",
+            "giaTri": "_blank"
+          },
+          {
+            "moTa": "Facebook có rel chứa noopener",
+            "kiem": "thuoc-tinh",
+            "selector": "a[href*=\"facebook.com\"]",
+            "thuocTinh": "rel",
+            "khop": "\\bnoopener\\b"
+          },
+          {
+            "moTa": "Chỉ đúng một liên kết mở tab mới",
+            "kiem": "so-luong",
+            "selector": "a[target]",
+            "giaTri": 1
+          }
+        ]
+      }
+    },
+    {
+      "title": "alt có nghĩa hay alt rỗng? Sửa bộ ảnh của trang du lịch Đà Lạt",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "alt mang nội dung",
+        "alt=\"\" cho ảnh trang trí",
+        "thiếu alt",
+        "width/height"
+      ],
+      "prerequisites": [
+        "thuộc tính src/alt"
+      ],
+      "tags": [
+        "html",
+        "img",
+        "alt",
+        "a11y"
+      ],
+      "problemHtml": "<p>Bẫy cuối bài 2.2: <em><code>alt=\"\"</code> và thiếu hẳn <code>alt</code> mang ý nghĩa trái ngược nhau.</em> Alt rỗng là tuyên bố \"ảnh trang trí, bỏ qua\"; thiếu alt thì trình đọc màn hình đọc luôn tên tệp. Trang Đà Lạt có 5 ảnh: 3 ảnh mang nội dung, 1 đường viền hoa văn và 1 biểu tượng ngôi sao chỉ để đệm (chữ cạnh nó đã nói \"Đánh giá 5 sao\"). Hãy cho mỗi ảnh đúng loại alt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba ảnh nội dung (<code>ho-xuan-huong.jpg</code>, <code>cho-dem.jpg</code>, <code>doi-che.jpg</code>) có alt <strong>mô tả điều ảnh cho thấy</strong> (≥ 15 ký tự, không chứa \"ảnh\"/\"hình\" ở đầu, không là tên tệp).</li>\n  <li>Hai ảnh trang trí (<code>class=\"trang-tri\"</code>) có <code>alt=\"\"</code> — rỗng nhưng <strong>có mặt</strong>.</li>\n  <li>Mọi <code>&lt;img&gt;</code> có <code>width</code> và <code>height</code>.</li>\n  <li>Không <code>&lt;img&gt;</code> nào thiếu thuộc tính <code>alt</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "5 ảnh: vài cái thiếu alt, vài cái alt là tên tệp, ảnh trang trí có alt dài dòng.",
+      "outputSpec": "Trình đọc màn hình đọc 3 mô tả có ích và im lặng ở 2 ảnh trang trí.",
+      "constraints": "Không đổi src và class của ảnh.\nKhông dùng title thay cho alt.",
+      "examplesJson": [
+        {
+          "input": "<img src=\"doi-che.jpg\">",
+          "output": "Trình đọc màn hình: \"doi gạch ngang che chấm j-p-g, hình ảnh\".",
+          "explanation": "Thiếu alt ⇒ nhiều trình đọc rơi về tên tệp."
+        },
+        {
+          "input": "<img src=\"vien-hoa-van.png\" class=\"trang-tri\" alt=\"\">",
+          "output": "Trình đọc màn hình: (im lặng, bỏ qua)",
+          "explanation": "alt rỗng là chủ ý: ảnh không mang thông tin."
+        }
+      ],
+      "hintsJson": [
+        "Với mỗi ảnh hỏi: \"Nếu ảnh không tải, trang có mất thông tin không?\" Có ⇒ viết alt mô tả. Không ⇒ alt=\"\".",
+        "alt tốt nói điều ảnh cho thấy trong ngữ cảnh: \"Hồ Xuân Hương phủ sương sớm, hàng thông in bóng xuống mặt nước\". Đừng mở đầu bằng \"Ảnh của…\" — trình đọc đã nói \"hình ảnh\" rồi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Ba ngày ở Đà Lạt</title>\n  </head>\n  <body>\n    <h1>Ba ngày ở Đà Lạt</h1>\n    <img src=\"vien-hoa-van.png\" class=\"trang-tri\" alt=\"Đây là đường viền hoa văn trang trí màu xanh\" width=\"600\" height=\"24\">\n    <h2>Ngày 1: Hồ Xuân Hương</h2>\n    <img src=\"ho-xuan-huong.jpg\" width=\"600\" height=\"400\">\n    <h2>Ngày 2: Chợ đêm</h2>\n    <img src=\"cho-dem.jpg\" alt=\"cho-dem.jpg\" width=\"600\" height=\"400\">\n    <h2>Ngày 3: Đồi chè Cầu Đất</h2>\n    <img src=\"doi-che.jpg\" alt=\"Ảnh\">\n    <p><img src=\"ngoi-sao.svg\" class=\"trang-tri\" width=\"16\" height=\"16\"> Đánh giá 5 sao</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Ba ngày ở Đà Lạt</title>\n  </head>\n  <body>\n    <h1>Ba ngày ở Đà Lạt</h1>\n    <!-- trang trí: alt rỗng CÓ MẶT ⇒ trình đọc bỏ qua -->\n    <img src=\"vien-hoa-van.png\" class=\"trang-tri\" alt=\"\" width=\"600\" height=\"24\">\n    <h2>Ngày 1: Hồ Xuân Hương</h2>\n    <!-- nội dung: mô tả điều ảnh cho thấy, không mở đầu bằng \"ảnh\" -->\n    <img src=\"ho-xuan-huong.jpg\" alt=\"Hồ Xuân Hương phủ sương sớm, hàng thông in bóng xuống mặt nước\" width=\"600\" height=\"400\">\n    <h2>Ngày 2: Chợ đêm</h2>\n    <img src=\"cho-dem.jpg\" alt=\"Dãy hàng nướng ở chợ đêm Đà Lạt đông người, khói bay dưới đèn vàng\" width=\"600\" height=\"400\">\n    <h2>Ngày 3: Đồi chè Cầu Đất</h2>\n    <!-- thêm width/height để giữ chỗ khi ảnh tải -->\n    <img src=\"doi-che.jpg\" alt=\"Những luống chè xanh chạy vòng quanh sườn đồi Cầu Đất dưới trời nắng\" width=\"600\" height=\"400\">\n    <!-- ngôi sao chỉ đệm cho chữ đã nói \"5 sao\" ⇒ alt rỗng -->\n    <p><img src=\"ngoi-sao.svg\" class=\"trang-tri\" alt=\"\" width=\"16\" height=\"16\"> Đánh giá 5 sao</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Quy tắc quyết định: ảnh có mang thông tin mà chữ xung quanh chưa nói không? Ba ảnh phong cảnh có ⇒ cần mô tả. Viền hoa văn và ngôi sao thì không (chữ \"Đánh giá 5 sao\" đã nói hết) ⇒ <code>alt=\"\"</code>. Viết alt dài cho ảnh trang trí làm người nghe phải ngồi nghe \"đường viền hoa văn trang trí màu xanh\" mỗi lần — tệ không kém thiếu alt.</p>\n<p>Máy chấm phân biệt ba trạng thái: thiếu alt (<code>img:not([alt])</code> phải rỗng), alt rỗng đúng chỗ (<code>img.trang-tri</code> có alt bằng \"\"), và alt có nghĩa (dài ≥ 15 ký tự, không phải tên tệp, không mở đầu \"Ảnh\"/\"Hình\").</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Xoá hẳn alt của ảnh trang trí — trạng thái \"thiếu alt\", trình đọc đọc tên tệp \"vien hoa van chấm png\".</li>\n  <li>Viết <code>alt=\"Ảnh hồ\"</code> — có alt nhưng gần như không có thông tin.</li>\n  <li>Lặp lại chú thích ngay dưới ảnh vào alt — người nghe nghe hai lần; alt nên bổ sung, không lặp.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.2 Chữ, liên kết và ảnh.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.w3.org/WAI/tutorials/images/decision-tree/",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Không ảnh nào thiếu thuộc tính alt",
+            "kiem": "khong-ton-tai",
+            "selector": "img:not([alt])"
+          },
+          {
+            "moTa": "Hai ảnh trang trí có alt=\"\" (rỗng)",
+            "kiem": "thuoc-tinh",
+            "selector": "img.trang-tri",
+            "thuocTinh": "alt",
+            "giaTri": ""
+          },
+          {
+            "moTa": "Đủ hai ảnh trang trí",
+            "kiem": "so-luong",
+            "selector": "img.trang-tri",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Ba ảnh nội dung có alt ≥ 15 ký tự",
+            "kiem": "thuoc-tinh",
+            "selector": "img:not(.trang-tri)",
+            "thuocTinh": "alt",
+            "khop": "^.{15,}$"
+          },
+          {
+            "moTa": "alt ảnh nội dung không là tên tệp",
+            "kiem": "thuoc-tinh",
+            "selector": "img:not(.trang-tri)",
+            "thuocTinh": "alt",
+            "khop": "^(?!.*\\.(jpe?g|png|svg|webp)\\b)"
+          },
+          {
+            "moTa": "alt không mở đầu bằng \"Ảnh\"/\"Hình\"",
+            "kiem": "thuoc-tinh",
+            "selector": "img:not(.trang-tri)",
+            "thuocTinh": "alt",
+            "khop": "^(?!\\s*(ảnh|hình)\\b)"
+          },
+          {
+            "moTa": "Mọi ảnh có width",
+            "kiem": "khong-ton-tai",
+            "selector": "img:not([width])"
+          },
+          {
+            "moTa": "Mọi ảnh có height",
+            "kiem": "khong-ton-tai",
+            "selector": "img:not([height])"
+          },
+          {
+            "moTa": "Vẫn đủ 5 ảnh",
+            "kiem": "so-luong",
+            "selector": "img",
+            "giaTri": 5
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mục lục nhảy trong trang bằng href=\"#id\"",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "liên kết neo",
+        "thuộc tính id",
+        "href=\"#…\"",
+        "id duy nhất"
+      ],
+      "prerequisites": [
+        "liên kết tương đối/tuyệt đối",
+        "tiêu đề"
+      ],
+      "tags": [
+        "html",
+        "anchor",
+        "id",
+        "navigation"
+      ],
+      "problemHtml": "<p>Dòng thứ ba trong ví dụ liên kết của bài 2.2: <code>&lt;a href=\"#contact\"&gt;Nhảy tới phần liên hệ&lt;/a&gt;</code> — liên kết tới một <code>id</code> trên cùng trang. Trang \"Câu hỏi thường gặp\" dài 4 mục, người đọc phải cuộn mãi. Hãy thêm mục lục ở đầu trang (mỗi dòng nhảy tới một mục) và nút \"Về đầu trang\" ở cuối mỗi mục.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi <code>&lt;h2&gt;</code> của 4 mục có một <code>id</code> ngắn, chữ thường, không dấu, nối bằng gạch ngang (vd <code>id=\"hoc-phi\"</code>).</li>\n  <li>Đầu trang có <code>&lt;ul class=\"muc-luc\"&gt;</code> gồm 4 liên kết <code>href=\"#…\"</code> trỏ đúng 4 id đó, đúng thứ tự.</li>\n  <li><code>&lt;h1&gt;</code> có <code>id=\"dau-trang\"</code>; cuối mỗi mục có liên kết \"Về đầu trang\" trỏ <code>#dau-trang</code>.</li>\n  <li>Không có hai phần tử trùng id.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Trang FAQ 4 mục, chưa có id và mục lục.",
+      "outputSpec": "Bấm \"Học phí\" trong mục lục ⇒ trang cuộn tới mục Học phí; bấm \"Về đầu trang\" ⇒ cuộn lên tiêu đề.",
+      "constraints": "id không dấu, không khoảng trắng (khoảng trắng làm href khó viết và dễ hỏng).\nMỗi id xuất hiện đúng một lần.\nLiên kết mục lục chỉ dùng #id, không viết tên tệp phía trước.",
+      "examplesJson": [
+        {
+          "input": "<a href=\"#hoc-phi\">Học phí</a>\n…\n<h2 id=\"hoc-phi\">Học phí bao nhiêu?</h2>",
+          "output": "Bấm \"Học phí\" ⇒ trang cuộn sao cho \"Học phí bao nhiêu?\" nằm ở mép trên; URL đổi thành …/faq.html#hoc-phi.",
+          "explanation": "# trong href nghĩa là \"phần tử có id này trên trang hiện tại\"."
+        }
+      ],
+      "hintsJson": [
+        "Làm hai bước: (1) gắn id cho 4 h2 và h1; (2) viết mục lục với href = \"#\" + đúng id đó. Chép id, đừng gõ lại — một chữ sai là neo chết.",
+        "Mục lục: <ul class=\"muc-luc\"><li><a href=\"#dang-ky\">Đăng ký</a></li> … </ul>; cuối mục: <p><a href=\"#dau-trang\">Về đầu trang</a></p>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Câu hỏi thường gặp</title>\n  </head>\n  <body>\n    <h1>Câu hỏi thường gặp</h1>\n    <!-- TODO: mục lục -->\n\n    <h2>Đăng ký thế nào?</h2>\n    <p>Điền biểu mẫu ở trang chủ, xác nhận email trong 24 giờ.</p>\n\n    <h2>Học phí bao nhiêu?</h2>\n    <p>Khoá nền tảng miễn phí; khoá nâng cao 199.000đ một tháng.</p>\n\n    <h2>Có chứng chỉ không?</h2>\n    <p>Có, sau khi hoàn thành bài kiểm tra cuối khoá.</p>\n\n    <h2>Liên hệ ở đâu?</h2>\n    <p>Gửi email tới hotro@vidu.com.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Câu hỏi thường gặp</title>\n  </head>\n  <body>\n    <!-- đích của \"Về đầu trang\" -->\n    <h1 id=\"dau-trang\">Câu hỏi thường gặp</h1>\n\n    <!-- mục lục: href=\"#id\" — đúng thứ tự các mục bên dưới -->\n    <ul class=\"muc-luc\">\n      <li><a href=\"#dang-ky\">Đăng ký</a></li>\n      <li><a href=\"#hoc-phi\">Học phí</a></li>\n      <li><a href=\"#chung-chi\">Chứng chỉ</a></li>\n      <li><a href=\"#lien-he\">Liên hệ</a></li>\n    </ul>\n\n    <!-- id: chữ thường, không dấu, nối bằng gạch ngang, duy nhất -->\n    <h2 id=\"dang-ky\">Đăng ký thế nào?</h2>\n    <p>Điền biểu mẫu ở trang chủ, xác nhận email trong 24 giờ.</p>\n    <p><a href=\"#dau-trang\">Về đầu trang</a></p>\n\n    <h2 id=\"hoc-phi\">Học phí bao nhiêu?</h2>\n    <p>Khoá nền tảng miễn phí; khoá nâng cao 199.000đ một tháng.</p>\n    <p><a href=\"#dau-trang\">Về đầu trang</a></p>\n\n    <h2 id=\"chung-chi\">Có chứng chỉ không?</h2>\n    <p>Có, sau khi hoàn thành bài kiểm tra cuối khoá.</p>\n    <p><a href=\"#dau-trang\">Về đầu trang</a></p>\n\n    <h2 id=\"lien-he\">Liên hệ ở đâu?</h2>\n    <p>Gửi email tới hotro@vidu.com.</p>\n    <p><a href=\"#dau-trang\">Về đầu trang</a></p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Neo gồm hai nửa phải khớp từng ký tự: <code>id=\"hoc-phi\"</code> trên đích và <code>href=\"#hoc-phi\"</code> trên liên kết. Sai một chữ (vd <code>#hocphi</code>) thì bấm vào không có gì xảy ra — và không có thông báo lỗi nào. Vì vậy máy chấm dùng kiểm <code>neo-hop-le</code>: mọi <code>href=\"#…\"</code> phải trỏ tới một id có thật.</p>\n<p>id phải duy nhất trên trang: hai phần tử cùng id thì liên kết nhảy tới cái đầu tiên, và CSS/JS chọn theo id sẽ hành xử khó đoán. id không dấu, không khoảng trắng vì nó xuất hiện trong URL (<code>faq.html#hoc-phi</code>) — người khác có thể chia sẻ đường dẫn nhảy thẳng vào mục.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt id lên <code>&lt;a&gt;</code> trong mục lục thay vì lên tiêu đề đích — liên kết nhảy tới chính nó.</li>\n  <li>Viết <code>href=\"hoc-phi\"</code> thiếu dấu # — thành liên kết tương đối tới tệp \"hoc-phi\" ⇒ 404.</li>\n  <li>Dùng id có dấu cách <code>id=\"hoc phi\"</code> — không hợp lệ, href phải mã hoá thành %20.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.2 Chữ, liên kết và ảnh.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#linking_to_an_element_on_the_same_page",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Mục lục ul.muc-luc có 4 liên kết neo",
+            "kiem": "so-luong",
+            "selector": "ul.muc-luc a[href^=\"#\"]",
+            "giaTri": 4
+          },
+          {
+            "moTa": "Mọi liên kết neo trỏ tới id có thật",
+            "kiem": "neo-hop-le",
+            "selector": "a[href^=\"#\"]"
+          },
+          {
+            "moTa": "Bốn h2 đều có id",
+            "kiem": "so-luong",
+            "selector": "h2[id]",
+            "giaTri": 4
+          },
+          {
+            "moTa": "id viết thường, không dấu, nối gạch ngang",
+            "kiem": "thuoc-tinh",
+            "selector": "[id]",
+            "thuocTinh": "id",
+            "khop": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          {
+            "moTa": "Mục lục đúng thứ tự: liên kết thứ 2 trỏ id của h2 thứ 2",
+            "kiem": "ton-tai",
+            "selector": "ul.muc-luc li:nth-child(2) a[href=\"#hoc-phi\"]"
+          },
+          {
+            "moTa": "h1 có id=\"dau-trang\"",
+            "kiem": "ton-tai",
+            "selector": "h1#dau-trang"
+          },
+          {
+            "moTa": "Có 4 liên kết \"Về đầu trang\"",
+            "kiem": "so-luong",
+            "selector": "a[href=\"#dau-trang\"]",
+            "giaTri": 4
+          },
+          {
+            "moTa": "Mục lục nằm trước mục đầu tiên",
+            "kiem": "thu-tu",
+            "cacSelector": [
+              "h1",
+              "ul.muc-luc",
+              "h2"
+            ]
+          },
+          {
+            "moTa": "Không có id trùng nhau (mỗi id một lần)",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "\\bid=\"([^\"]+)\"[\\s\\S]*\\bid=\"\\1\"",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Trang hồ sơ cá nhân: tiêu đề, danh sách, liên kết ngoài và ảnh đại diện",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "h1–h3",
+        "ul/ol",
+        "a target rel",
+        "img alt width height",
+        "chọn thẻ theo nghĩa"
+      ],
+      "prerequisites": [
+        "các bài 1–5 của bộ này"
+      ],
+      "tags": [
+        "html",
+        "profile",
+        "tong-hop"
+      ],
+      "problemHtml": "<p>Bài tổng hợp của 2.2: dựng trang hồ sơ của bạn An từ bản nháp thuần chữ. Không có mã khởi đầu nào cho từng thẻ — bạn tự chọn thẻ theo <em>nghĩa</em> của từng mẩu nội dung, đúng tinh thần \"đừng chọn thẻ theo vẻ ngoài\". Bản nháp nằm trong chú thích của tệp.</p>\n<pre><code>An Nguyễn — Sinh viên Kỹ thuật phần mềm               ← tiêu đề trang\n[ảnh an.jpg 160×160: An cười, đeo kính, áo đồng phục]\nGiới thiệu                                             ← mục\n  Mình học năm 2, thích làm web và chơi cầu lông.\nKỹ năng                                                ← mục\n  HTML · CSS · Git                                     ← không cần thứ tự\nMục tiêu năm nay                                       ← mục\n  Học xong Nền tảng Web → Làm 3 dự án → Đi thực tập    ← có thứ tự\n  Chi tiết dự án                                       ← mục con của \"Mục tiêu\"\n    (một đoạn ngắn tuỳ bạn)\nLiên hệ                                                ← mục\n  GitHub: https://github.com/an-nguyen  (mở tab mới)\n  Email: mailto:an@vidu.com</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng một <code>&lt;h1&gt;</code>; bốn mục là <code>&lt;h2&gt;</code>; \"Chi tiết dự án\" là <code>&lt;h3&gt;</code> nằm sau \"Mục tiêu năm nay\".</li>\n  <li>Ảnh <code>an.jpg</code> có alt mô tả, <code>width=\"160\"</code>, <code>height=\"160\"</code>.</li>\n  <li>Kỹ năng là <code>&lt;ul&gt;</code> 3 mục; mục tiêu là <code>&lt;ol&gt;</code> 3 mục.</li>\n  <li>Liên kết GitHub tuyệt đối, mở tab mới với <code>rel=\"noopener\"</code>; liên kết email dùng <code>href=\"mailto:an@vidu.com\"</code>.</li>\n  <li>Phần giới thiệu và chi tiết dự án là <code>&lt;p&gt;</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html chỉ có bộ khung và bản nháp trong chú thích.",
+      "outputSpec": "Trang hồ sơ có dàn ý h1 → h2 ×4 (+ h3), ảnh đại diện, hai danh sách đúng loại, hai liên kết liên hệ.",
+      "constraints": "Không dùng <br> để xuống dòng giữa các mục danh sách.\nKhông dùng <b> hay <font> làm tiêu đề.\nLiên kết email không mở tab mới.",
+      "examplesJson": [
+        {
+          "input": "<a href=\"mailto:an@vidu.com\">an@vidu.com</a>",
+          "output": "Bấm vào ⇒ mở ứng dụng thư với người nhận an@vidu.com.",
+          "explanation": "mailto: là một \"giao thức\" trong href giống https: — trình duyệt giao việc cho ứng dụng thư."
+        }
+      ],
+      "hintsJson": [
+        "Gán thẻ cho từng dòng bản nháp trước khi gõ: tiêu đề trang → h1, mục → h2, mục con → h3, \"không cần thứ tự\" → ul, \"có thứ tự\" → ol, câu văn → p.",
+        "Phần liên hệ có thể là <ul> hai mục, mỗi mục chứa một <a>. GitHub: <a href=\"https://github.com/an-nguyen\" target=\"_blank\" rel=\"noopener\">GitHub</a>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>An Nguyễn — Hồ sơ</title>\n  </head>\n  <body>\n    <!-- Dựng trang theo bản nháp trong đề bài. Bắt đầu từ h1. -->\n\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>An Nguyễn — Hồ sơ</title>\n  </head>\n  <body>\n    <!-- tiêu đề trang: đúng một h1 -->\n    <h1>An Nguyễn — Sinh viên Kỹ thuật phần mềm</h1>\n    <!-- ảnh mang nội dung: alt mô tả, width/height giữ chỗ -->\n    <img src=\"an.jpg\" alt=\"An cười tươi, đeo kính, mặc áo đồng phục trường\" width=\"160\" height=\"160\">\n\n    <h2>Giới thiệu</h2>\n    <p>Mình học năm 2, thích làm web và chơi cầu lông.</p>\n\n    <h2>Kỹ năng</h2>\n    <!-- không cần thứ tự ⇒ ul -->\n    <ul>\n      <li>HTML</li>\n      <li>CSS</li>\n      <li>Git</li>\n    </ul>\n\n    <h2>Mục tiêu năm nay</h2>\n    <!-- có thứ tự ⇒ ol -->\n    <ol>\n      <li>Học xong Nền tảng Web</li>\n      <li>Làm 3 dự án</li>\n      <li>Đi thực tập</li>\n    </ol>\n    <!-- mục con của \"Mục tiêu\" ⇒ h3 -->\n    <h3>Chi tiết dự án</h3>\n    <p>Một trang hồ sơ, một trang công thức nấu ăn và một trang quản lý chi tiêu nhỏ.</p>\n\n    <h2>Liên hệ</h2>\n    <ul>\n      <!-- site ngoài: tuyệt đối + tab mới an toàn -->\n      <li><a href=\"https://github.com/an-nguyen\" target=\"_blank\" rel=\"noopener\">GitHub của An</a></li>\n      <!-- mailto: mở ứng dụng thư, không cần tab mới -->\n      <li><a href=\"mailto:an@vidu.com\">an@vidu.com</a></li>\n    </ul>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Không có thẻ nào được chọn vì vẻ ngoài: \"HTML · CSS · Git\" trong bản nháp viết trên một dòng nhưng nó là một <em>danh sách không thứ tự</em>; ba mục tiêu có mũi tên → nghĩa là có trình tự ⇒ <code>&lt;ol&gt;</code>. Ảnh đặt ngay sau h1 vì nó thuộc về cả trang.</p>\n<p>Máy chấm kiểm dàn ý (một h1, không nhảy cấp, h3 nằm sau mục \"Mục tiêu\"), loại danh sách, thuộc tính của ảnh và liên kết. Liên kết email bị cấm <code>target</code> vì mở tab trống chỉ để gọi ứng dụng thư là trải nghiệm tệ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết kỹ năng là <code>&lt;p&gt;HTML · CSS · Git&lt;/p&gt;</code> như bản nháp — mất cấu trúc danh sách.</li>\n  <li>Cho \"Chi tiết dự án\" là h2 — nó thành mục ngang hàng, không còn thuộc \"Mục tiêu\".</li>\n  <li>Viết <code>href=\"an@vidu.com\"</code> thiếu <code>mailto:</code> — trình duyệt tìm tệp tên \"an@vidu.com\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.2 Chữ, liên kết và ảnh.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/HTML_text_fundamentals",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Đúng một h1 và không nhảy cấp tiêu đề",
+            "kiem": "tieu-de"
+          },
+          {
+            "moTa": "Bốn mục h2",
+            "kiem": "so-luong",
+            "selector": "h2",
+            "giaTri": 4
+          },
+          {
+            "moTa": "h3 \"Chi tiết dự án\" nằm sau h2 \"Mục tiêu năm nay\"",
+            "kiem": "thu-tu",
+            "cacSelector": [
+              "h2:nth-of-type(3)",
+              "h3"
+            ]
+          },
+          {
+            "moTa": "Ảnh an.jpg có alt ≥ 10 ký tự",
+            "kiem": "thuoc-tinh",
+            "selector": "img[src=\"an.jpg\"]",
+            "thuocTinh": "alt",
+            "khop": "^.{10,}$"
+          },
+          {
+            "moTa": "Ảnh có width=\"160\" height=\"160\"",
+            "kiem": "ton-tai",
+            "selector": "img[src=\"an.jpg\"][width=\"160\"][height=\"160\"]"
+          },
+          {
+            "moTa": "Kỹ năng là ul 3 mục",
+            "kiem": "ton-tai",
+            "selector": "ul:has(> li:nth-child(3):last-child)"
+          },
+          {
+            "moTa": "Mục tiêu là ol 3 mục",
+            "kiem": "so-luong",
+            "selector": "ol > li",
+            "giaTri": 3
+          },
+          {
+            "moTa": "GitHub: tuyệt đối, tab mới, rel noopener",
+            "kiem": "thuoc-tinh",
+            "selector": "a[href=\"https://github.com/an-nguyen\"][target=\"_blank\"]",
+            "thuocTinh": "rel",
+            "khop": "\\bnoopener\\b"
+          },
+          {
+            "moTa": "Email dùng mailto:an@vidu.com",
+            "kiem": "ton-tai",
+            "selector": "a[href=\"mailto:an@vidu.com\"]"
+          },
+          {
+            "moTa": "Liên kết email không mở tab mới",
+            "kiem": "khong-ton-tai",
+            "selector": "a[href^=\"mailto:\"][target]"
+          },
+          {
+            "moTa": "Có ít nhất 2 đoạn p (giới thiệu, chi tiết dự án)",
+            "kiem": "so-luong",
+            "selector": "p",
+            "min": 2
+          },
+          {
+            "moTa": "Không dùng <br> hay <b> trong trang",
+            "kiem": "khong-ton-tai",
+            "selector": "br, b, font"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Mục lục khoá học lồng ba cấp với đường dẫn tương đối từ thư mục con",
+      "language": "html",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "danh sách lồng nhau",
+        "li chứa ul/ol",
+        "đường dẫn tương đối ../",
+        "đường dẫn theo gốc /"
+      ],
+      "prerequisites": [
+        "ul/ol",
+        "đường dẫn tương đối (bài 1.1)"
+      ],
+      "tags": [
+        "html",
+        "nested-lists",
+        "relative-paths"
+      ],
+      "problemHtml": "<p>Trang này nằm ở <code>/khoa-hoc/web/muc-luc.html</code> trên site. Nó cần một mục lục ba cấp: chương (đánh số) → bài (đánh số) → tài liệu kèm theo (không thứ tự). Hai cái khó: (1) danh sách con phải nằm <strong>bên trong</strong> <code>&lt;li&gt;</code> của mục cha, không đứng cạnh nó; (2) mỗi liên kết phải viết đúng kiểu đường dẫn, tính từ thư mục <code>/khoa-hoc/web/</code>.</p>\n<pre><code>/                         (trang chủ)\n/khoa-hoc/tai-lieu.html\n/khoa-hoc/web/muc-luc.html          ← TRANG NÀY\n/khoa-hoc/web/bai-1.html\n/khoa-hoc/web/html/bai-2.html\n/khoa-hoc/web/html/bai-3.html\n/khoa-hoc/web/css/bai-4.html</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Danh sách ngoài cùng <code>&lt;ol class=\"muc-luc\"&gt;</code> có 2 chương: \"Chương 1: HTML\", \"Chương 2: CSS\".</li>\n  <li>Mỗi chương chứa một <code>&lt;ol&gt;</code> các bài <em>bên trong li của chương</em>: Chương 1 có bài 1, 2, 3; Chương 2 có bài 4.</li>\n  <li>Bài 2 chứa một <code>&lt;ul&gt;</code> (bên trong li của bài 2) gồm 2 tài liệu: \"Tài liệu chung\" → <code>/khoa-hoc/tai-lieu.html</code> viết <strong>tương đối</strong> bằng <code>../</code>, và \"MDN\" → <code>https://developer.mozilla.org</code>.</li>\n  <li>Liên kết bài viết tương đối từ thư mục hiện tại: <code>bai-1.html</code>, <code>html/bai-2.html</code>, <code>html/bai-3.html</code>, <code>css/bai-4.html</code>.</li>\n  <li>Cuối trang có liên kết \"Trang chủ\" viết theo gốc: <code>href=\"/\"</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Mục lục phẳng: ul/ol con đứng cạnh li (sai), đường dẫn viết tuyệt đối tới localhost.",
+      "outputSpec": "Mục lục thụt ba cấp đúng; mọi liên kết tới đúng tệp khi trang chạy ở bất kỳ tên miền nào.",
+      "constraints": "Không có <ul>/<ol> nào là con trực tiếp của <ul>/<ol> khác (phải nằm trong <li>).\nKhông liên kết nội bộ nào chứa \"http\" hay \"localhost\".\nKhông dùng ./ trước tên tệp (đúng nhưng thừa — giữ gọn).",
+      "examplesJson": [
+        {
+          "input": "<ol>\n  <li>Chương 1</li>\n  <ol><li>Bài 1</li></ol>   ← sai: ol con đứng cạnh li\n</ol>",
+          "output": "Nhìn gần giống, nhưng HTML không hợp lệ: ol chỉ được chứa li. Trình đọc màn hình đếm sai \"danh sách 2 mục\".",
+          "explanation": "Đúng: <li>Chương 1 <ol><li>Bài 1</li></ol></li> — danh sách con là một phần nội dung của mục cha."
+        },
+        {
+          "input": "Từ /khoa-hoc/web/muc-luc.html:\nhref=\"../tai-lieu.html\"",
+          "output": "⇒ /khoa-hoc/tai-lieu.html",
+          "explanation": "../ lên một thư mục (web → khoa-hoc), y như cd .. ở bài 1.1."
+        }
+      ],
+      "hintsJson": [
+        "Viết cấp 1 trước: <ol class=\"muc-luc\"><li>Chương 1: HTML …</li><li>Chương 2: CSS …</li></ol>. Rồi chèn <ol> bài vào TRƯỚC </li> của mỗi chương, và chèn <ul> tài liệu vào trước </li> của bài 2.",
+        "Đường dẫn: cùng thư mục ⇒ chỉ tên tệp; thư mục con ⇒ \"html/bai-2.html\"; thư mục cha ⇒ \"../tai-lieu.html\"; gốc site ⇒ \"/\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Mục lục khoá Web</title>\n  </head>\n  <body>\n    <h1>Mục lục khoá Web</h1>\n    <ol class=\"muc-luc\">\n      <li>Chương 1: HTML</li>\n      <ol>\n        <li><a href=\"http://localhost:5500/khoa-hoc/web/bai-1.html\">Bài 1: Phần tử và thẻ</a></li>\n        <li><a href=\"http://localhost:5500/khoa-hoc/web/html/bai-2.html\">Bài 2: Liên kết</a></li>\n        <ul>\n          <li><a href=\"http://localhost:5500/khoa-hoc/tai-lieu.html\">Tài liệu chung</a></li>\n          <li><a href=\"https://developer.mozilla.org\">MDN</a></li>\n        </ul>\n        <li><a href=\"http://localhost:5500/khoa-hoc/web/html/bai-3.html\">Bài 3: Ảnh</a></li>\n      </ol>\n      <li>Chương 2: CSS</li>\n      <ol>\n        <li><a href=\"http://localhost:5500/khoa-hoc/web/css/bai-4.html\">Bài 4: Bộ chọn</a></li>\n      </ol>\n    </ol>\n    <p><a href=\"http://localhost:5500/\">Trang chủ</a></p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Mục lục khoá Web</title>\n  </head>\n  <body>\n    <h1>Mục lục khoá Web</h1>\n    <!-- cấp 1: chương (có thứ tự) -->\n    <ol class=\"muc-luc\">\n      <li>Chương 1: HTML\n        <!-- cấp 2: ol NẰM TRONG li của chương, trước </li> -->\n        <ol>\n          <!-- cùng thư mục /khoa-hoc/web/ ⇒ chỉ tên tệp -->\n          <li><a href=\"bai-1.html\">Bài 1: Phần tử và thẻ</a></li>\n          <!-- thư mục con html/ -->\n          <li><a href=\"html/bai-2.html\">Bài 2: Liên kết</a>\n            <!-- cấp 3: tài liệu (không thứ tự) NẰM TRONG li của bài 2 -->\n            <ul>\n              <!-- thư mục cha: ../ (web → khoa-hoc) -->\n              <li><a href=\"../tai-lieu.html\">Tài liệu chung</a></li>\n              <!-- site khác: tuyệt đối -->\n              <li><a href=\"https://developer.mozilla.org\">MDN</a></li>\n            </ul>\n          </li>\n          <li><a href=\"html/bai-3.html\">Bài 3: Ảnh</a></li>\n        </ol>\n      </li>\n      <li>Chương 2: CSS\n        <ol>\n          <li><a href=\"css/bai-4.html\">Bài 4: Bộ chọn</a></li>\n        </ol>\n      </li>\n    </ol>\n    <!-- theo gốc site: luôn về trang chủ dù trang này nằm sâu đến đâu -->\n    <p><a href=\"/\">Trang chủ</a></p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Luật nội dung của HTML: <code>&lt;ul&gt;</code>/<code>&lt;ol&gt;</code> chỉ được có con là <code>&lt;li&gt;</code>. Danh sách con là <em>một phần của mục cha</em> (\"Bài 2, và đây là tài liệu của nó\"), nên nó nằm trong <code>&lt;li&gt;</code> của mục cha, trước thẻ <code>&lt;/li&gt;</code>. Đặt cạnh thì trình duyệt vẫn vẽ thụt lề (vì ul/ol có padding), nên lỗi này sống rất lâu trong mã — đến khi trình đọc màn hình đọc sai số mục hoặc CSS <code>.muc-luc &gt; li</code> đếm hụt.</p>\n<p>Ba kiểu đường dẫn có ba vai trò: tương đối theo tệp (<code>html/bai-2.html</code>, <code>../tai-lieu.html</code>) đi theo vị trí trang; theo gốc (<code>/</code>) luôn tính từ gốc tên miền; tuyệt đối (<code>https://…</code>) cho site khác. Máy chấm kiểm cả cấu trúc lồng (<code>li &gt; ol</code>, cấm <code>ol &gt; ol</code>/<code>ol &gt; ul</code>) và từng href.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đóng <code>&lt;/li&gt;</code> của chương ngay sau chữ \"Chương 1: HTML\" rồi mới mở <code>&lt;ol&gt;</code> — ol con lại đứng cạnh li.</li>\n  <li>Viết <code>href=\"/tai-lieu.html\"</code> — theo gốc thì trỏ tới <code>/tai-lieu.html</code>, không phải <code>/khoa-hoc/tai-lieu.html</code>.</li>\n  <li>Viết <code>href=\"../html/bai-2.html\"</code> — lên một cấp rồi mới vào html/ ⇒ <code>/khoa-hoc/html/bai-2.html</code>, sai thư mục.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.2 Chữ, liên kết và ảnh.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/What_is_a_URL",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "ol.muc-luc có đúng 2 chương (li con trực tiếp)",
+            "kiem": "so-luong",
+            "selector": "ol.muc-luc > li",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Không có ul/ol là con trực tiếp của ul/ol",
+            "kiem": "khong-ton-tai",
+            "selector": "ul > ul, ul > ol, ol > ul, ol > ol"
+          },
+          {
+            "moTa": "Chương 1 chứa ol 3 bài bên trong li",
+            "kiem": "so-luong",
+            "selector": "ol.muc-luc > li:nth-child(1) > ol > li",
+            "giaTri": 3
+          },
+          {
+            "moTa": "Chương 2 chứa ol 1 bài bên trong li",
+            "kiem": "so-luong",
+            "selector": "ol.muc-luc > li:nth-child(2) > ol > li",
+            "giaTri": 1
+          },
+          {
+            "moTa": "Bài 2 chứa ul 2 tài liệu bên trong li của nó",
+            "kiem": "so-luong",
+            "selector": "ol.muc-luc > li:nth-child(1) > ol > li:nth-child(2) > ul > li",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Bài 1 → bai-1.html",
+            "kiem": "ton-tai",
+            "selector": "a[href=\"bai-1.html\"]"
+          },
+          {
+            "moTa": "Bài 2, 3 → html/bai-2.html, html/bai-3.html",
+            "kiem": "so-luong",
+            "selector": "a[href=\"html/bai-2.html\"], a[href=\"html/bai-3.html\"]",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Bài 4 → css/bai-4.html",
+            "kiem": "ton-tai",
+            "selector": "a[href=\"css/bai-4.html\"]"
+          },
+          {
+            "moTa": "Tài liệu chung → ../tai-lieu.html",
+            "kiem": "ton-tai",
+            "selector": "a[href=\"../tai-lieu.html\"]"
+          },
+          {
+            "moTa": "Trang chủ → \"/\"",
+            "kiem": "ton-tai",
+            "selector": "a[href=\"/\"]"
+          },
+          {
+            "moTa": "Không còn liên kết localhost",
+            "kiem": "khong-ton-tai",
+            "selector": "a[href*=\"localhost\"]"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -16,6 +16,8 @@
  *     "language":"sql", "color":"#336791", "docsUrl":"https://…",
  *     "status":"DRAFT", "level":"BEGINNER",
  *     "modules":[ {"name":"Getting Started with PostgreSQL","level":"BEGINNER"}, … ] }
+ *   Module có thể khai "slug" — bộ luyện gắn khoá học (web-foundations-practice) dùng
+ *   module slug = slug bài học, nên không để slug tự sinh từ tên.
  */
 import fs from 'node:fs';
 import { PrismaClient } from '@prisma/client';
@@ -66,7 +68,7 @@ if (track) {
   let nextOrder = (maxMod._max.sortOrder ?? -1) + 1;
   for (let i = 0; i < mods.length; i++) {
     const m = mods[i];
-    const mSlug = slugify(m.name);
+    const mSlug = m.slug || slugify(m.name); // slug khai sẵn (vd = slug bài học của bộ luyện) thắng slug sinh từ tên
     const existing = await prisma.codeModule.findFirst({ where: { trackId: track.id, slug: mSlug } });
     if (existing) { console.log(`    = module ${i}: ${m.name}`); continue; }
     mCreated++;

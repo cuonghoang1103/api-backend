@@ -131,6 +131,8 @@ export default function LandingExperience() {
             <Link href="/about">{copy.footer.about}</Link>
             <Link href="/tech-trends">{copy.footer.writing}</Link>
             <Link href="/register">{copy.footer.account}</Link>
+            <Link href="/chinh-sach-bao-mat">{copy.footer.privacy}</Link>
+            <Link href="/dieu-khoan-su-dung">{copy.footer.terms}</Link>
           </nav>
         </div>
       </footer>

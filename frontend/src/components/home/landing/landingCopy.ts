@@ -207,6 +207,8 @@ export const LANDING_COPY = {
       about: 'About',
       writing: 'Writing',
       account: 'Create an account',
+      privacy: 'Privacy',
+      terms: 'Terms',
     },
     playgroundGate: {
       eyebrow: 'Before you enter',
@@ -276,6 +278,8 @@ export const LANDING_COPY = {
       about: 'Giới thiệu',
       writing: 'Bài viết',
       account: 'Tạo tài khoản',
+      privacy: 'Bảo mật',
+      terms: 'Điều khoản',
     },
     playgroundGate: {
       eyebrow: 'Trước khi bước vào',

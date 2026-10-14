@@ -8,11 +8,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
-import { ArrowLeft, BookOpenText, CheckCircle2, Circle, Loader2, Clock, ExternalLink, Target, FlaskConical, CheckSquare, Square } from 'lucide-react';
+import { ArrowLeft, BookOpenText, CheckCircle2, Circle, Loader2, Clock, ExternalLink, Target, FlaskConical, CheckSquare, Square, Dumbbell, Filter, X } from 'lucide-react';
 import { codeLabApi, locFromTitle } from '@/lib/code-lab-api';
-import type { CodeTrack, MyProgressItem } from '@/types/code-lab';
+import type { CodeDifficulty, CodeExerciseListItem, CodeModule, CodeTrack, MyProgressItem } from '@/types/code-lab';
+import { pickLang } from '@/lib/utils';
+import { DIFF_ORDER, DIFF_UI, carryQS, layBoLuyenTapUi, sortEasyToHard, type BoLuyenTapUi, type DiffFilter, type StatusFilter } from '@/lib/codelabUi';
+import { DifficultyChip } from '@/components/code-lab/ProblemCard';
 import { useAuthStore } from '@/store/authStore';
-import { DifficultyBadge, LevelPill, ProgressRing, TechIcon, VerifiedBadge, parseVerified } from '@/components/code-lab/shared';
+import { LevelPill, ProgressRing, TechIcon, VerifiedBadge, parseVerified } from '@/components/code-lab/shared';
 import { ModuleLesson } from '@/components/code-lab/ModuleLesson';
 import { CourseBackLink } from '@/components/code-lab/CourseBackLink';
 import { SkillCoverage } from '@/components/code-lab/SkillCoverage';
@@ -23,17 +26,20 @@ export default function TrackRoadmapPage() {
   const params = useParams<{ trackSlug: string }>();
   const slug = params.trackSlug;
   const searchParams = useSearchParams();
-  // Carry ?ref=&reflabel= (set by an Academy/Courses lesson link) onto the
-  // exercise links too, so the "back to course" button survives one more hop.
-  // `chon` là param của RIÊNG trang này (đường đi từ trong một phòng ra để
-  // nhặt thêm bài), nên nó bị gạt khỏi chuỗi mang sang trang bài — mang theo
-  // thì link bài nào cũng đeo một tham số không ai đọc.
-  const refQS = (() => {
-    if (!searchParams.get('ref')) return '';
-    const qs = new URLSearchParams(searchParams.toString());
-    qs.delete('chon');
-    return `?${qs.toString()}`;
-  })();
+  // Carry ?ref=&reflabel= (set by an Academy/Courses lesson link) and ?bai=
+  // (bộ luyện của một bài học) onto the exercise links, so the "back to course"
+  // button and the practice set survive one more hop. `chon` là param của RIÊNG
+  // trang này (đường đi từ trong một phòng ra để nhặt thêm bài) ⇒ không mang theo.
+  const refQS = carryQS(searchParams);
+  // `?bai=<slug module>` — nút "Luyện tập" dưới video bài học trỏ tới đây:
+  // chỉ hiện module có slug đó (module slug = slug bài học), sắp Dễ → Khó.
+  const bai = searchParams.get('bai') || '';
+  // `khoa` (slug khoá học) đi kèm `bai` khi đến từ nút dưới video ⇒ hỏi đúng
+  // endpoint bộ luyện (thứ tự + phạm vi do backend quyết; bài slide N.0 gộp cả
+  // chương nên `bai` khi đó KHÔNG trùng module nào). Thiếu `khoa` ⇒ lùi về khớp slug module.
+  const khoa = searchParams.get('khoa') || '';
+  const reflabel = searchParams.get('reflabel') || '';
+  const allQS = carryQS({ get: (k: string) => (k === 'bai' || k === 'khoa' ? null : searchParams.get(k)) });
   const phongGhim = Number(searchParams.get('chon')) || null;
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
 
@@ -54,6 +60,22 @@ export default function TrackRoadmapPage() {
   // năm bài, bấm Thêm, và nhận về "đã có sẵn trong phòng rồi" mà không hiểu
   // bài nào trùng.
   const [daCoTrongPhong, setDaCoTrongPhong] = useState<Set<number>>(new Set());
+  // Bộ lọc trong track (lọc phía client — dữ liệu track đã có đủ độ khó + tiến độ).
+  const [locDoKho, setLocDoKho] = useState<DiffFilter>('all');
+  const [locTrangThai, setLocTrangThai] = useState<StatusFilter>('all');
+  // Bộ luyện từ `GET /code-lab/practice/:khoa/:bai`.
+  const [boApi, setBoApi] = useState<BoLuyenTapUi | null>(null);
+  const [boApiTT, setBoApiTT] = useState<'idle' | 'loading' | 'ok' | 'loi'>('idle');
+
+  useEffect(() => {
+    if (!bai || !khoa) { setBoApi(null); setBoApiTT('idle'); return; }
+    let alive = true;
+    setBoApiTT('loading');
+    layBoLuyenTapUi(khoa, bai)
+      .then((d) => { if (alive) { setBoApi(d); setBoApiTT('ok'); } })
+      .catch(() => { if (alive) { setBoApi(null); setBoApiTT('loi'); } });
+    return () => { alive = false; };
+  }, [bai, khoa, isAuthed]);
 
   useEffect(() => {
     (async () => {
@@ -105,6 +127,56 @@ export default function TrackRoadmapPage() {
     () => (track?.modules || []).filter((m) => !((m.exercises || []).length === 0 && m.hasLesson)),
     [track],
   );
+  // Bộ luyện của một bài học (`?bai=`):
+  //   - có `khoa` + endpoint trả bài ⇒ đúng danh sách/thứ tự của endpoint, gói vào MỘT
+  //     module (module thật nếu bộ là đúng một module của track này, không thì module ảo
+  //     "cả chương");
+  //   - có `khoa` + endpoint trả rỗng (`dangSoan`) ⇒ không bài nào, dải báo "đang soạn" + gợi ý;
+  //   - không `khoa` / endpoint lỗi ⇒ lùi về module có slug trùng `bai`.
+  const cheDoApi = !!bai && !!khoa && boApiTT === 'ok' && !!boApi;
+  const boLuyen = useMemo((): CodeModule | null => {
+    if (!bai || !track) return null;
+    if (cheDoApi && boApi) {
+      if (!boApi.items.length) return null;
+      const that = boApi.scope === 'lesson' && boApi.moduleSlugs.length === 1
+        ? (track.modules || []).find((m) => m.slug === boApi.moduleSlugs[0])
+        : undefined;
+      const exercises: CodeExerciseListItem[] = boApi.items.map((it, i) => ({
+        id: it.id, moduleId: that?.id ?? -1, trackId: track.id, title: it.title, slug: it.slug,
+        difficulty: it.difficulty, sortOrder: i, status: 'PUBLISHED', language: track.language,
+        points: it.points, estimatedMinutes: it.estimatedMinutes, viewCount: 0, solveCount: 0,
+      }));
+      return that
+        ? { ...that, exercises }
+        : {
+          id: -1, trackId: track.id, slug: bai, level: 'BEGINNER', sortOrder: 0, hasLesson: false, exercises,
+          name: reflabel || (boApi.scope === 'chapter' ? 'Bộ luyện cả chương' : 'Bộ luyện'),
+          description: boApi.scope === 'chapter' ? `Gộp ${boApi.moduleSlugs.length} nhóm bài của chương này.` : null,
+        } as CodeModule;
+    }
+    if (bai && khoa && boApiTT === 'loading') return null;
+    return (track.modules || []).find((m) => m.slug === bai) ?? null;
+  }, [track, bai, khoa, cheDoApi, boApi, boApiTT, reflabel]);
+  const moduleHienThi = bai ? (boLuyen ? [boLuyen] : []) : moduleBaiTap;
+  // Bài đã giải: tiến độ của track + cờ `solved` của endpoint bộ luyện (bộ có thể nằm ở track khác).
+  const daGiaiApi = useMemo(() => new Set((boApi?.items || []).filter((i) => i.solved).map((i) => i.id)), [boApi]);
+  const daGiai = (id: number) => progress[id]?.status === 'SOLVED' || daGiaiApi.has(id);
+  // Track chứa bài của bộ (endpoint trả `trackSlug`) — link bài phải trỏ đúng track đó.
+  const trackCuaBai = cheDoApi && boApi ? boApi.trackSlug : slug;
+  // Độ khó có mặt trong phần đang hiện ⇒ chỉ bày pill có bài (track không có EXPERT thì không có pill đó).
+  const demDoKho = useMemo(() => {
+    const c: Record<CodeDifficulty, number> = { EASY: 0, MEDIUM: 0, HARD: 0, EXPERT: 0 };
+    for (const m of moduleHienThi) for (const e of m.exercises || []) c[e.difficulty] = (c[e.difficulty] ?? 0) + 1;
+    return c;
+  }, [moduleHienThi]);
+  const dangLoc = locDoKho !== 'all' || locTrangThai !== 'all';
+  const hopLoc = (e: { id: number; difficulty: CodeDifficulty }) => {
+    if (locDoKho !== 'all' && e.difficulty !== locDoKho) return false;
+    const solvedE = daGiai(e.id);
+    if (locTrangThai === 'done' && !solvedE) return false;
+    if (locTrangThai === 'todo' && solvedE) return false;
+    return true;
+  };
 
   const { total, solved } = useMemo(() => {
     const all = (track?.modules || []).flatMap((m) => m.exercises || []);
@@ -219,14 +291,93 @@ export default function TrackRoadmapPage() {
           No modules yet.
         </div>
       )}
-      <SkillCoverage trackSlug={slug} />
+      {/* ── Bộ luyện của một bài học (?bai=) ── */}
+      {bai && (
+        <div className="cl-set-band cl-in mb-5">
+          <span className="cl-set-band-icon"><Dumbbell size={18} /></span>
+          <div className="min-w-0 flex-1">
+            {boApiTT === 'loading' ? (
+              <div className="inline-flex items-center gap-2 text-sm" style={{ color: 'var(--text-muted)' }}>
+                <Loader2 size={14} className="animate-spin" /> Đang tải bộ luyện…
+              </div>
+            ) : boLuyen ? (
+              <>
+                <div className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                  Luyện tập cho bài: {reflabel || pickLang(boLuyen.name, 'vi')}
+                </div>
+                <div className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+                  {(boLuyen.exercises || []).length} bài · sắp từ dễ đến khó
+                  {cheDoApi && boApi?.scope === 'chapter' && ' · gộp cả chương'}
+                  {cheDoApi && boApi?.estimatedMinutes ? ` · ≈ ${boApi.estimatedMinutes} phút` : ''}
+                  {isAuthed && (boLuyen.exercises || []).length > 0 && (
+                    <> · đã giải {(boLuyen.exercises || []).filter((e) => daGiai(e.id)).length}/{(boLuyen.exercises || []).length}</>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                  Bộ luyện cho bài{reflabel ? ` “${reflabel}”` : ' này'} đang được soạn
+                </div>
+                <div className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+                  {cheDoApi && boApi?.goiY?.items.length
+                    ? 'Trong lúc chờ, luyện tạm vài bài gần nhất:'
+                    : `Chưa có nhóm bài “${bai}” trong lộ trình ${track.name}. Xem tất cả bài của lộ trình để luyện tạm.`}
+                </div>
+                {cheDoApi && boApi?.goiY && boApi.goiY.items.length > 0 && (
+                  <ul className="mt-2 flex flex-wrap gap-1.5">
+                    {boApi.goiY.items.map((g) => (
+                      <li key={g.slug}>
+                        <Link href={`/code-lab/${boApi.goiY!.trackSlug}/${g.slug}${allQS}`} className="cl-fpill">
+                          {g.title} <DifficultyChip difficulty={g.difficulty} small />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            )}
+          </div>
+          <Link href={`/code-lab/${slug}${allQS}`} className="cl-set-band-btn">Xem tất cả</Link>
+        </div>
+      )}
+
+      {!bai && <SkillCoverage trackSlug={slug} />}
+
+      {/* ── Bộ lọc: độ khó + trạng thái (lọc phía client) ── */}
+      {moduleHienThi.some((m) => (m.exercises || []).length > 0) && (
+        <div className="cl-filterbar mb-4" role="group" aria-label="Lọc bài tập">
+          <span className="inline-flex items-center gap-1 text-xs font-semibold" style={{ color: 'var(--text-muted)' }}><Filter size={13} /> Độ khó</span>
+          <button type="button" className="cl-fpill" data-on={locDoKho === 'all' ? 'true' : undefined} onClick={() => setLocDoKho('all')}>Tất cả</button>
+          {DIFF_ORDER.filter((d) => demDoKho[d] > 0).map((d) => (
+            <button key={d} type="button" className="cl-fpill" data-on={locDoKho === d ? 'true' : undefined} onClick={() => setLocDoKho(d)}
+              style={locDoKho === d ? { background: DIFF_UI[d].bg, color: DIFF_UI[d].color, borderColor: DIFF_UI[d].border } : undefined}>
+              {DIFF_UI[d].label} <span className="tabular-nums opacity-70">{demDoKho[d]}</span>
+            </button>
+          ))}
+          {isAuthed && (
+            <>
+              <span className="mx-1 hidden h-4 w-px sm:inline-block" style={{ background: 'var(--border-color)' }} />
+              <span className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>Trạng thái</span>
+              {([['all', 'Tất cả'], ['done', 'Đã làm'], ['todo', 'Chưa làm']] as const).map(([v, label]) => (
+                <button key={v} type="button" className="cl-fpill" data-on={locTrangThai === v ? 'true' : undefined} onClick={() => setLocTrangThai(v)}>{label}</button>
+              ))}
+            </>
+          )}
+          {dangLoc && (
+            <button type="button" onClick={() => { setLocDoKho('all'); setLocTrangThai('all'); }} className="ml-auto inline-flex items-center gap-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+              <X size={13} /> Bỏ lọc
+            </button>
+          )}
+        </div>
+      )}
 
       {/* GIÁO TRÌNH — mọi module chỉ-có-bài-giảng gom vào MỘT mục, đặt trên các
           bài tập. Trước đây chúng nằm rải: 4 bài giảng ở trên, 54 bài lab ở
           giữa, 3 bài tra cứu ở dưới — mỗi bài một thẻ to kèm dòng "No exercises
           in this module yet.", nên trang đọc như một danh sách hỏng. Thứ tự bên
           trong giữ nguyên thứ tự của track: phần hướng dẫn vẫn đứng đầu. */}
-      {baiGiang.length >= 2 && (
+      {!bai && !dangLoc && baiGiang.length >= 2 && (
         <section
           className="mb-5 overflow-hidden rounded-2xl border"
           style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}
@@ -265,9 +416,19 @@ export default function TrackRoadmapPage() {
       )}
 
       <div className="space-y-5">
-        {moduleBaiTap.map((m, mi) => {
+        {dangLoc && !moduleHienThi.some((m) => (m.exercises || []).some(hopLoc)) && (
+          <div className="rounded-xl border py-10 text-center text-sm" style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}>
+            Không có bài nào khớp bộ lọc.
+          </div>
+        )}
+        {moduleHienThi.map((m, mi) => {
           const modAll = (m.exercises || []).length;
-          const modSolved = (m.exercises || []).filter((e) => progress[e.id]?.status === 'SOLVED').length;
+          // Trong module: Dễ → Vừa → Khó (cùng mức giữ thứ tự soạn). Số thứ tự theo
+          // danh sách ĐẦY ĐỦ đã sắp, nên lọc không làm số nhảy.
+          const daSap = sortEasyToHard(m.exercises || []);
+          const hienRa = daSap.filter(hopLoc);
+          if (dangLoc && hienRa.length === 0) return null;
+          const modSolved = (m.exercises || []).filter((e) => daGiai(e.id)).length;
           const modDone = modAll > 0 && modSolved === modAll;
           const focused = focusModuleId === m.id;
           return (
@@ -307,8 +468,9 @@ export default function TrackRoadmapPage() {
               {modAll === 0 && (
                 <li className="px-4 py-3 text-xs" style={{ color: 'var(--text-muted)' }}>No exercises in this module yet.</li>
               )}
-              {(m.exercises || []).map((ex, i) => {
-                const isSolved = progress[ex.id]?.status === 'SOLVED';
+              {hienRa.map((ex) => {
+                const i = daSap.indexOf(ex);
+                const isSolved = daGiai(ex.id);
                 const inProgress = progress[ex.id]?.status === 'IN_PROGRESS';
                 const loc = locFromTitle(ex.title);
                 const daCo = daCoTrongPhong.has(ex.id);
@@ -340,7 +502,7 @@ export default function TrackRoadmapPage() {
                         <Clock size={12} />{ex.estimatedMinutes}m
                       </span>
                     ) : null}
-                    <DifficultyBadge difficulty={ex.difficulty} small />
+                    <DifficultyChip difficulty={ex.difficulty} small />
                   </>
                 );
                 return (
@@ -353,7 +515,7 @@ export default function TrackRoadmapPage() {
                         {noiDung}
                       </button>
                     ) : (
-                      <Link href={`/code-lab/${track.slug}/${ex.slug}${refQS}`} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-[var(--bg-surface-hover)]">
+                      <Link href={`/code-lab/${trackCuaBai}/${ex.slug}${refQS}`} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-[var(--bg-surface-hover)]">
                         {noiDung}
                       </Link>
                     )}

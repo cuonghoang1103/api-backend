@@ -1,17 +1,31 @@
 'use client';
 
-/** Code Lab — full-text search results. */
+/**
+ * Code Lab — full-text search results.
+ * Lọc độ khó (14/10/2026): API `/code-lab/search` đã nhận `difficulty` sẵn ⇒ lọc
+ * PHÍA MÁY CHỦ (đếm `total` đúng theo bộ lọc), tham số nằm trên URL `?difficulty=`.
+ */
 import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Search, Loader2 } from 'lucide-react';
 import { codeLabApi } from '@/lib/code-lab-api';
-import type { CodeExercise } from '@/types/code-lab';
-import { DifficultyBadge } from '@/components/code-lab/shared';
+import type { CodeDifficulty, CodeExercise } from '@/types/code-lab';
+import { DIFF_ORDER, DIFF_UI } from '@/lib/codelabUi';
+import { DifficultyChip } from '@/components/code-lab/ProblemCard';
 
 function Results() {
   const sp = useSearchParams();
   const q = sp.get('q') || '';
+  const router = useRouter();
+  const pathname = usePathname();
+  const rawDiff = (sp.get('difficulty') || '').toUpperCase();
+  const difficulty = (DIFF_ORDER as string[]).includes(rawDiff) ? (rawDiff as CodeDifficulty) : undefined;
+  const pickDiff = (d?: CodeDifficulty) => {
+    const next = new URLSearchParams(sp.toString());
+    if (d) next.set('difficulty', d); else next.delete('difficulty');
+    router.replace(`${pathname}?${next.toString()}`, { scroll: false });
+  };
   const [items, setItems] = useState<CodeExercise[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -19,11 +33,11 @@ function Results() {
   useEffect(() => {
     if (!q.trim()) { setItems([]); setLoading(false); return; }
     setLoading(true);
-    codeLabApi.search({ q, limit: 40 })
+    codeLabApi.search({ q, limit: 40, difficulty })
       .then((res) => { setItems(res.data.data.exercises || []); setTotal(res.data.data.total || 0); })
       .catch(() => setItems([]))
       .finally(() => setLoading(false));
-  }, [q]);
+  }, [q, difficulty]);
 
   return (
     <div className="cl-root mx-auto max-w-3xl px-4 pb-10 pt-20" style={{ color: 'var(--text-primary)' }}>
@@ -40,6 +54,17 @@ function Results() {
         </p>
       </div>
 
+      <div className="cl-filterbar mb-4" role="group" aria-label="Lọc theo độ khó">
+        <span className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>Độ khó</span>
+        <button type="button" className="cl-fpill" data-on={!difficulty ? 'true' : undefined} onClick={() => pickDiff(undefined)}>Tất cả</button>
+        {DIFF_ORDER.filter((d) => d !== 'EXPERT').map((d) => (
+          <button key={d} type="button" className="cl-fpill" data-on={difficulty === d ? 'true' : undefined} onClick={() => pickDiff(d)}
+            style={difficulty === d ? { background: DIFF_UI[d].bg, color: DIFF_UI[d].color, borderColor: DIFF_UI[d].border } : undefined}>
+            {DIFF_UI[d].label}
+          </button>
+        ))}
+      </div>
+
       {loading ? (
         <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => <div key={i} className="cl-skel" style={{ height: 62 }} />)}</div>
       ) : items.length === 0 ? (
@@ -53,7 +78,7 @@ function Results() {
                   <div className="truncate font-semibold transition-colors group-hover:text-[var(--cl-accent)]" style={{ color: 'var(--text-primary)' }}>{ex.title}</div>
                   <div className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>{ex.track?.name} · {ex.language}</div>
                 </div>
-                <DifficultyBadge difficulty={ex.difficulty} small />
+                <DifficultyChip difficulty={ex.difficulty} small />
               </Link>
             </li>
           ))}

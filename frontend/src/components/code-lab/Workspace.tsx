@@ -91,9 +91,13 @@ interface Props {
   trackSlug: string;
   language: string;
   projectName: string;
+  /** Cao của ô soạn (px). Bố cục 2 cột của trang làm bài đo theo màn hình. */
+  editorHeight?: number;
+  /** Gọn cho cột phải hẹp: cây tệp hẹp hơn, và ẩn hẳn khi chỉ có MỘT tệp (tên tệp vẫn hiện trên ô soạn). */
+  compact?: boolean;
 }
 
-export function Workspace({ files, onChange, exerciseId, trackSlug, language, projectName }: Props) {
+export function Workspace({ files, onChange, exerciseId, trackSlug, language, projectName, editorHeight = 320, compact = false }: Props) {
   const flavor = useMemo(() => flavorFor(trackSlug, language), [trackSlug, language]);
   const [active, setActive] = useState(0);
   const [busy, setBusy] = useState<'zip' | 'import' | null>(null);
@@ -237,8 +241,10 @@ export function Workspace({ files, onChange, exerciseId, trackSlug, language, pr
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-[190px_1fr]">
-        <div className="max-h-[380px] overflow-y-auto border-b p-2 sm:border-b-0 sm:border-r" style={{ borderColor: 'var(--border-color)' }}>
+      <div className={compact
+        ? (files.length > 1 ? 'grid grid-cols-1 sm:grid-cols-[150px_1fr]' : 'grid grid-cols-1')
+        : 'grid grid-cols-1 sm:grid-cols-[190px_1fr]'}>
+        <div className={`max-h-[380px] overflow-y-auto border-b p-2 sm:border-b-0 sm:border-r${compact && files.length <= 1 ? ' hidden' : ''}`} style={{ borderColor: 'var(--border-color)' }}>
           {tree.map(([dir, entries]) => (
             <div key={dir || '(root)'} className="mb-1.5">
               <div className="mb-0.5 truncate px-1 text-[11px] font-semibold uppercase tracking-wide" style={{ color: 'var(--text-secondary)' }}>
@@ -263,7 +269,7 @@ export function Workspace({ files, onChange, exerciseId, trackSlug, language, pr
           {current ? (
             <>
               <div className="mb-1 truncate font-mono text-[11px]" style={{ color: 'var(--text-secondary)' }}>{current.name}</div>
-              <CodeEditor value={current.code} language={current.language || language} onChange={setCode} height={320}
+              <CodeEditor value={current.code} language={current.language || language} onChange={setCode} height={editorHeight}
                 placeholder={flavor.javaStyle ? 'Write your Java code…' : 'Write your solution…'} />
             </>
           ) : (

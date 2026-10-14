@@ -686,7 +686,7 @@ btn.addEventListener("click", () =&gt; {
 <div class="lz-node"><span class="lz-k">Copies are shallow</span><span class="lz-t">{...obj} shares nested data</span><span class="lz-d">Mutating <code>copy.tags</code> also mutates <code>original.tags</code>. This is the source of "editing one changed all of them".</span></div>
 </div>
 <p class="note-ct"><strong>The questions that ask what a snippet prints are the important ones.</strong> If your prediction is wrong, do not just read the answer — paste the snippet into a Node REPL or the browser console and change one thing at a time until the behaviour makes sense.</p>
-<div class="link-card"><a href="/code-lab/javascript">Practice on Code Lab → JavaScript track</a></div></div>
+<div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-4-0-slides&khoa=web-foundations">Practice on Code Lab → Chapter 4 practice set</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 4: biến và kiểu, bằng nghiêm ngặt, vòng lặp, hàm, phương thức mảng, đối tượng, và DOM. Vài câu hỏi một đoạn code in ra gì — đáp án đã được xác minh bằng cách chạy code.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> JavaScript chỉ thấm khi bạn tự viết. Hãy sang Code Lab giải bài thật — biến, vòng lặp, hàm và phương thức mảng — chạy thử để xem kết quả, rồi tự đánh dấu đã giải (máy chấm tự động đang được làm).</p>
 <h3>Cả chương trong bốn ý</h3>
@@ -697,7 +697,7 @@ btn.addEventListener("click", () =&gt; {
 <div class="lz-node"><span class="lz-k">Bản chép là chép nông</span><span class="lz-t">{...obj} dùng chung dữ liệu lồng</span><span class="lz-d">Sửa <code>copy.tags</code> là sửa luôn <code>original.tags</code>. Đây là nguồn gốc của cảnh "sửa một cái thì cả đám cùng đổi".</span></div>
 </div>
 <p class="note-ct"><strong>Những câu hỏi "đoạn này in ra gì" mới là câu quan trọng.</strong> Nếu bạn đoán sai, đừng chỉ đọc đáp án — hãy dán đoạn đó vào Node REPL hoặc console của trình duyệt rồi đổi từng thứ một cho tới khi hành vi của nó trở nên có lý.</p>
-<div class="link-card"><a href="/code-lab/javascript">Luyện tập ở Code Lab → track JavaScript</a></div></div>
+<div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-4-0-slides&khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 4</a></div></div>
 `,
       quiz: {
         timeLimitSeconds: 720,

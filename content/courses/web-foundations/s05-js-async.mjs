@@ -635,7 +635,7 @@ import { useState } from "react";  // một named export từ React</code></pre>
 <div class="lz-node"><span class="lz-k">fetch and modules</span><span class="lz-t">Two silent traps</span><span class="lz-d"><code>fetch</code> does not reject on 404 or 500 — check <code>res.ok</code>. And modules need a real server, not <code>file://</code>.</span></div>
 </div>
 <p class="note-ct"><strong>Async bugs are ordering bugs.</strong> When something is <code>undefined</code> that should have a value, add a <code>console.log</code> with a label at each step and read the order they print in — it is almost never the order you assumed.</p>
-<div class="link-card"><a href="/code-lab/javascript">Practice on Code Lab → JavaScript track</a></div></div>
+<div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-5-0-slides&khoa=web-foundations">Practice on Code Lab → Chapter 5 practice set</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 5: đồng bộ vs bất đồng bộ, event loop và thứ tự in ra, các trạng thái Promise, async/await và try/catch, fetch và response.ok, và import/export ES module. Đáp án thứ tự đã được xác minh bằng cách chạy code.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Bất đồng bộ học tốt nhất qua thực hành. Trên Code Lab, hãy viết Promise, async/await và bài kiểu fetch — chạy thử để xem kết quả, rồi tự đánh dấu đã giải (máy chấm tự động đang được làm).</p>
 <h3>Cả chương trong bốn ý</h3>
@@ -646,7 +646,7 @@ import { useState } from "react";  // một named export từ React</code></pre>
 <div class="lz-node"><span class="lz-k">fetch và module</span><span class="lz-t">Hai cái bẫy lặng lẽ</span><span class="lz-d"><code>fetch</code> không từ chối khi gặp 404 hay 500 — hãy kiểm <code>res.ok</code>. Và module cần một máy chủ thật, không phải <code>file://</code>.</span></div>
 </div>
 <p class="note-ct"><strong>Lỗi bất đồng bộ là lỗi thứ tự.</strong> Khi một thứ đang là <code>undefined</code> mà lẽ ra phải có giá trị, hãy thêm một <code>console.log</code> có nhãn ở từng bước rồi đọc thứ tự chúng in ra — nó gần như chẳng bao giờ là thứ tự bạn đã giả định.</p>
-<div class="link-card"><a href="/code-lab/javascript">Luyện tập ở Code Lab → track JavaScript</a></div></div>
+<div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-5-0-slides&khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 5</a></div></div>
 `,
       quiz: {
         timeLimitSeconds: 720,

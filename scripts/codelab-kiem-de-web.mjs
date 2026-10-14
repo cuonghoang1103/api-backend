@@ -15,6 +15,12 @@
  *   node scripts/codelab-kiem-de-web.mjs --chi wf-3-3-flexbox   # một module
  *   node scripts/codelab-kiem-de-web.mjs --chi-tiet # in từng kiểm
  *
+ * Từ Ch4–Ch5 (đợt đề 2) có thêm máy chấm JS — xem _luoc-do.mjs mục "MỞ RỘNG CH4–CH5":
+ *   loại 'js' / 'console' / 'module' chạy bằng node:vm (scripts/codelab-cham-js.mjs: realm mới mỗi
+ *   kiểm, hẹn giờ + fetch GIẢ, trần CPU 1000ms); loại 'dom' có `chayScript` chạy <script> trong jsdom
+ *   rồi làm các bước `truoc` (click/nhập/gửi form/phím). Loại 'module' cần vm.SourceTextModule ⇒
+ *   script tự chạy lại chính nó với `--experimental-vm-modules` (không cần gõ cờ).
+ *
  * jsdom: repo gốc không cài; script tự tìm ở node_modules của gốc, frontend/, desktop/
  * (frontend kéo jsdom gián tiếp, desktop có trong devDependencies). Worktree chưa
  * `npm ci` frontend thì chỉ đường: JSDOM_TU=/đường/tới/thư-mục-có-node_modules.
@@ -37,8 +43,19 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import vm from 'node:vm';
+import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+
+// loại 'module' cần vm.SourceTextModule ⇒ chạy lại chính mình với cờ (một lần, truyền nguyên tham số)
+if (!vm.SourceTextModule && !process.env.CODELAB_KIEM_DA_BAT_CO) {
+  const r = spawnSync(process.execPath, ['--experimental-vm-modules', '--no-warnings', ...process.argv.slice(1)], {
+    stdio: 'inherit', env: { ...process.env, CODELAB_KIEM_DA_BAT_CO: '1' },
+  });
+  process.exit(r.status ?? 1);
+}
+const { chamKiemJs, chamKiemModule, laMongDoiLoi } = await import('./codelab-cham-js.mjs');
 
 const GOC = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const THU_MUC = path.join(GOC, 'content/codelab/web-foundations-practice');
@@ -74,7 +91,8 @@ function timJsdom() {
   for (const c of coSo) {
     try {
       const req = createRequire(path.join(c, 'package.json'));
-      return { JSDOM: req('jsdom').JSDOM, tu: c };
+      const j = req('jsdom');
+      return { JSDOM: j.JSDOM, VirtualConsole: j.VirtualConsole, requestInterceptor: j.requestInterceptor, tu: c };
     } catch { /* thử chỗ kế */ }
   }
   return null;
@@ -167,6 +185,91 @@ function dungTrang(files, tepHtml, w, moi = false) {
   const kq = { win: dom.window, doc: dom.window.document, w };
   if (!moi) boNho.set(khoa, kq);
   return kq;
+}
+
+// ─── trang có chạy script (dom + chayScript, Bài 4.5) ─────────────────────
+const fmtLog = (v) => {
+  if (typeof v === 'string') return v;
+  if (v === undefined) return 'undefined';
+  if (v === null || ['number', 'boolean', 'bigint'].includes(typeof v)) return String(v);
+  if (typeof v === 'function') return '[Function]';
+  if (v && typeof v === 'object' && typeof v.name === 'string' && typeof v.message === 'string' && 'stack' in v) return `${v.name}: ${v.message}`;
+  try { return JSON.stringify(v); } catch { return String(v); }
+};
+
+/** script cổ điển không defer/async có src là tệp trong bài ⇒ chèn nội tuyến đúng chỗ (chặn parser như trình duyệt) */
+function ghepTepScript(files, tepHtml) {
+  return ghepTep(files, tepHtml).replace(/<script\b([^>]*)>\s*<\/script>/gi, (tag, attrs) => {
+    const m = attrs.match(/\bsrc\s*=\s*["']([^"']+)["']/i);
+    if (!m || files[m[1]] == null) return tag;
+    if (/\b(defer|async)\b/i.test(attrs) || /type\s*=\s*["']?module/i.test(attrs)) return tag;
+    const conLai = attrs.replace(/\bsrc\s*=\s*["'][^"']+["']/i, ` data-tu="${m[1]}"`);
+    return `<script${conLai}>\n${files[m[1]].replace(/<\/script/gi, '<\\/script')}\n</script>`;
+  });
+}
+
+const choTick = (ms = 0) => new Promise((r) => setTimeout(r, ms));
+
+async function dungTrangScript(files, tepHtml, w, truoc) {
+  const log = [], loi = [];
+  const ghi = (...a) => log.push(a.map(fmtLog).join(' '));
+  // dựng (hoặc dựng LẠI — trình duyệt tải lại trang khi form gửi đi mà không preventDefault)
+  async function tao() {
+    const vc = new JS.VirtualConsole();
+    for (const lv of ['log', 'info', 'warn', 'error', 'debug']) vc.on(lv, ghi);
+    vc.on('jsdomError', (e) => { if (e.type === 'unhandled-exception' || (!e.type && /^Uncaught/.test(e.message))) loi.push(fmtLog(e.cause || e)); });
+    const dom = new JS.JSDOM(ghepTepScript(files, tepHtml), {
+      runScripts: 'dangerously',
+      url: `https://bai.local/${tepHtml}`,
+      virtualConsole: vc,
+      pretendToBeVisual: true,
+      resources: {
+        interceptors: [JS.requestInterceptor((req) => {
+          const p = decodeURIComponent(new URL(req.url).pathname.slice(1));
+          return /\.m?js$/.test(p) && files[p] != null
+            ? new Response(files[p], { headers: { 'content-type': 'text/javascript' } })
+            : new Response('Not Found', { status: 404 });
+        })],
+      },
+    });
+    const win = dom.window, doc = win.document;
+    if (doc.readyState !== 'complete') await new Promise((r) => { win.addEventListener('load', r); setTimeout(r, 3000); });
+    await choTick();
+    const ua = doc.createElement('style');
+    ua.setAttribute('data-ua', '');
+    ua.textContent = UA_CSS;
+    doc.documentElement.insertBefore(ua, doc.documentElement.firstChild);
+    lamPhangMedia(doc, w);
+    // theo dõi submit: listener gắn SAU script của trang ⇒ chạy sau handler của người học
+    const t = { win, doc, w, log, loi, guiChuaChan: false, taiLai: 0 };
+    doc.addEventListener('submit', (e) => { setTimeout(() => { if (!e.defaultPrevented) t.guiChuaChan = true; }, 0); });
+    return t;
+  }
+  let t = await tao();
+  let taiLai = 0;
+  for (const b of truoc || []) {
+    const el = b.selector ? t.doc.querySelector(b.selector) : null;
+    if (b.selector && !el) return { ...t, hong: `không có ${b.selector} để ${b.hanhDong}` };
+    const { win } = t;
+    try {
+      switch (b.hanhDong) {
+        case 'click': for (let i = 0; i < (b.lan || 1); i++) el.click(); break;
+        case 'nhap': el.value = b.giaTri; el.dispatchEvent(new win.Event('input', { bubbles: true })); break;
+        case 'doi': if (b.giaTri !== undefined) el.value = b.giaTri; el.dispatchEvent(new win.Event('change', { bubbles: true })); break;
+        case 'gui': (el.tagName === 'FORM' ? el : el.form).requestSubmit(); break;
+        case 'phim': el.dispatchEvent(new win.KeyboardEvent('keydown', { key: b.phim, bubbles: true, cancelable: true })); break;
+        default: return { ...t, hong: `hành động lạ ${b.hanhDong}` };
+      }
+    } catch (e) { loi.push(fmtLog(e)); }
+    await choTick();
+    await choTick();
+    if (t.guiChuaChan) {        // form gửi đi thật ⇒ trình duyệt tải lại trang: mọi thay đổi DOM mất
+      taiLai++;
+      t = await tao();
+    }
+  }
+  t.taiLai = taiLai;
+  return t;
 }
 
 // ─── chuẩn hoá giá trị CSS ────────────────────────────────────────────────
@@ -334,12 +437,41 @@ function demCot(win, el, w) {
 }
 
 // ─── chạy MỘT kiểm ────────────────────────────────────────────────────────
-function boChuThich(s) { return s.replace(/<!--[\s\S]*?-->/g, '').replace(/\/\*[\s\S]*?\*\//g, ''); }
+function boChuThich(s, ten = '') {
+  let r = s.replace(/<!--[\s\S]*?-->/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
+  // JS: bỏ chú thích // (đầu dòng hoặc sau khoảng trắng — không đụng 'https://' trong chuỗi)
+  if (/\.m?js$/.test(ten)) r = r.replace(/(^|[ \t;{}(),])\/\/[^\n]*/gm, '$1');
+  return r;
+}
 
-function chayKiem(k, files, tepHtml) {
+const LOAI_JS = new Set(['js', 'console', 'module']);
+
+async function chayKiem(k, files, tj) {
+  if (k.kiem === 'ma-nguon') return chayKiemDom(k, files, tj.tepHtml, null);
+  if (tj.loai === 'module') return chamKiemModule(tj, k, files);
+  if (LOAI_JS.has(tj.loai)) return chamKiemJs(tj, k, files);
+  if (tj.chayScript) {
+    const w = k.beRong || 1024;
+    const khoa = `S${w}\u0000${tj.tepHtml}\u0000${JSON.stringify(files)}`;
+    let trang;
+    if (!k.truoc?.length && k.kiem !== 'hop-le' && boNho.has(khoa)) trang = boNho.get(khoa);
+    else {
+      trang = await dungTrangScript(files, tj.tepHtml, w, k.truoc);
+      if (!k.truoc?.length && k.kiem !== 'hop-le') boNho.set(khoa, trang);
+    }
+    if (trang.hong) return { dat: false, thay: trang.hong };
+    if (k.kiem === 'console') return { dat: JSON.stringify(trang.log) === JSON.stringify(k.mongDoi), thay: JSON.stringify(trang.log) };
+    if (k.kiem === 'khong-tai-lai') return { dat: trang.taiLai === 0, thay: trang.taiLai ? `trang tải lại ${trang.taiLai} lần (form gửi đi thật — thiếu preventDefault?)` : 'không tải lại' };
+    if (k.kiem === 'khong-loi-js') return { dat: trang.loi.length === 0, thay: trang.loi.length ? trang.loi.join(' | ') : 'không lỗi' };
+    return chayKiemDom(k, files, tj.tepHtml, trang);
+  }
+  return chayKiemDom(k, files, tj.tepHtml, null);
+}
+
+function chayKiemDom(k, files, tepHtml, trang) {
   const w = k.beRong || 1024;
   const can = ['hop-le'].includes(k.kiem);
-  const { win, doc } = dungTrang(files, tepHtml, w, can);
+  const { win, doc } = trang || (k.kiem === 'ma-nguon' ? {} : dungTrang(files, tepHtml, w, can));
   const tatCa = k.tatCa !== false;
   const chon = () => (k.selector ? [...doc.querySelectorAll(k.selector)] : []);
   const moiCai = (els, f) => (els.length > 0 && (tatCa ? els.every(f) : els.some(f)));
@@ -431,9 +563,14 @@ function chayKiem(k, files, tepHtml) {
       const v = el.checkValidity();
       return { dat: v === k.giaTri, thay: `checkValidity() = ${v}` };
     }
+    case 'thuoc-tinh-js': {
+      const els = chon();
+      const vals = els.map((e) => e[k.thuocTinh]);
+      return { dat: moiCai(els, (e) => JSON.stringify(e[k.thuocTinh]) === JSON.stringify(k.giaTri)), thay: vals.slice(0, 4).map((v) => JSON.stringify(v)).join(' | ') };
+    }
     case 'ma-nguon': {
-      const nguon = k.tep ? [files[k.tep] ?? ''] : Object.values(files);
-      const khop = nguon.some((s) => regex(k.khop).test(k.giuChuThich ? s : boChuThich(s)));
+      const ten = k.tep ? [k.tep] : Object.keys(files);
+      const khop = ten.some((t) => regex(k.khop).test(k.giuChuThich ? (files[t] ?? '') : boChuThich(files[t] ?? '', t)));
       return { dat: k.phuDinh ? !khop : khop };
     }
     default: return { dat: false, thay: `loại kiểm lạ: ${k.kiem}` };
@@ -442,12 +579,45 @@ function chayKiem(k, files, tepHtml) {
 
 const LOAI = new Set(['doctype', 'ton-tai', 'khong-ton-tai', 'so-luong', 'thuoc-tinh', 'text', 'css', 'kich-thuoc',
   'so-cot', 'ti-le-cot', 'co-nhan', 'neo-hop-le', 'tieu-de', 'thu-tu', 'hop-le', 'ma-nguon']);
-const CAN_SELECTOR = new Set(['ton-tai', 'khong-ton-tai', 'so-luong', 'thuoc-tinh', 'text', 'css', 'kich-thuoc', 'so-cot', 'ti-le-cot', 'co-nhan', 'neo-hop-le', 'hop-le']);
+const LOAI_SCRIPT = new Set(['console', 'khong-loi-js', 'thuoc-tinh-js', 'khong-tai-lai']); // chỉ khi chayScript
+const CAN_SELECTOR = new Set(['ton-tai', 'khong-ton-tai', 'so-luong', 'thuoc-tinh', 'text', 'css', 'kich-thuoc', 'so-cot', 'ti-le-cot', 'co-nhan', 'neo-hop-le', 'hop-le', 'thuoc-tinh-js']);
+const HANH_DONG = new Set(['click', 'nhap', 'doi', 'gui', 'phim']);
 
-function kiemLuocDo(k) {
+/** kiểm hình dạng một kiểm của loại js / console / module */
+function kiemLuocDoJs(k, tj) {
   const loi = [];
   if (!k.moTa || k.moTa.length < 8) loi.push('thiếu moTa');
-  if (!LOAI.has(k.kiem)) loi.push(`loại lạ "${k.kiem}"`);
+  if (k.kiem === 'ma-nguon') { if (!k.khop) loi.push('thiếu khop'); return loi; }
+  if (k.kiem === 'nap-duoc') { if (tj.loai !== 'module') loi.push("'nap-duoc' chỉ cho loại module"); return loi; }
+  if (k.kiem !== undefined) loi.push(`loại lạ "${k.kiem}"`);
+  if (k.so && !['giaTri', 'console'].includes(k.so)) loi.push(`so lạ "${k.so}"`);
+  const so = k.so || (tj.loai === 'console' ? 'console' : 'giaTri');
+  if (k.mongDoi === undefined) loi.push('thiếu mongDoi');
+  if (so === 'console' && !Array.isArray(k.mongDoi) && !laMongDoiLoi(k.mongDoi)) loi.push('so console cần mongDoi là mảng dòng');
+  if (so === 'console' && Array.isArray(k.mongDoi) && k.mongDoi.some((x) => typeof x !== 'string')) loi.push('mongDoi console phải là mảng CHUỖI');
+  if (so === 'giaTri' && !k.goi) loi.push('thiếu goi');
+  for (const t of [k.goi, k.chuanBi].filter(Boolean)) {
+    try { new Function(`return (async () => { ${k.chuanBi || ''}\n return (${k.goi || 'undefined'}); })`); } catch (e) { loi.push(`goi/chuanBi sai cú pháp: ${e.message}`); break; }
+    void t;
+  }
+  return loi;
+}
+
+function kiemLuocDo(k, tj = { loai: 'dom' }) {
+  if (LOAI_JS.has(tj.loai)) return kiemLuocDoJs(k, tj);
+  const loi = [];
+  if (!k.moTa || k.moTa.length < 8) loi.push('thiếu moTa');
+  if (LOAI_SCRIPT.has(k.kiem) && !tj.chayScript) loi.push(`"${k.kiem}" cần chayScript`);
+  if (k.kiem === 'console' && !Array.isArray(k.mongDoi)) loi.push('console cần mongDoi là mảng');
+  if (k.kiem === 'thuoc-tinh-js' && (!k.thuocTinh || k.giaTri === undefined)) loi.push('thiếu thuocTinh/giaTri');
+  if (k.truoc) {
+    if (!tj.chayScript) loi.push('truoc cần chayScript');
+    for (const b of k.truoc) {
+      if (!HANH_DONG.has(b.hanhDong)) loi.push(`hành động lạ "${b.hanhDong}"`);
+      if (!b.selector) loi.push('bước thiếu selector');
+    }
+  }
+  if (!LOAI.has(k.kiem) && !LOAI_SCRIPT.has(k.kiem)) loi.push(`loại lạ "${k.kiem}"`);
   if (CAN_SELECTOR.has(k.kiem) && !k.selector) loi.push('thiếu selector');
   if (['thuoc-tinh', 'css', 'kich-thuoc'].includes(k.kiem) && !k.thuocTinh) loi.push('thiếu thuocTinh');
   if (['text', 'css'].includes(k.kiem) && k.giaTri === undefined && !k.khop) loi.push('thiếu giaTri/khop');
@@ -475,14 +645,19 @@ function kiemTruong(ex) {
   const sol = (ex.solutionCodeJson || []).map((b) => b.code).join('');
   if (sol.length < 200) loi.push('lời giải < 200 ký tự (seed từ chối)');
   if (/(\/\/|#|\/\*|\*)\s*(TODO|FIXME)\b/.test(sol) || /…|rest omitted|omitted for brevity/i.test(sol)) loi.push('lời giải còn dấu "chưa xong" (seed từ chối)');
-  if (!/<!--|\/\*/.test(sol)) loi.push('lời giải không có chú thích');
+  if (!/<!--|\/\*|\/\/ /.test(sol)) loi.push('lời giải không có chú thích');
   if (!/<h4>Lỗi hay gặp<\/h4>/.test(ex.solutionExplanationHtmlVi || ex.solutionExplanationHtml)) loi.push('giải thích thiếu mục Lỗi hay gặp');
   if (!ex.estimatedMinutes) loi.push('thiếu estimatedMinutes');
   const tj = ex.testsJson;
-  if (!tj || tj.loai !== 'dom' || !Array.isArray(tj.kiem) || tj.kiem.length < 3) loi.push('bộ kiểm cần ≥ 3 kiểm');
-  else tj.kiem.forEach((k, i) => { const l = kiemLuocDo(k); if (l.length) loi.push(`kiểm #${i + 1}: ${l.join(', ')}`); });
-  const ten = new Set([...(ex.starterCodeJson || []), ...(ex.solutionCodeJson || [])].map((b) => b.name));
-  if (tj && !ten.has(tj.tepHtml)) loi.push(`không có tệp ${tj?.tepHtml}`);
+  if (!tj || !['dom', ...LOAI_JS].includes(tj.loai) || !Array.isArray(tj.kiem) || tj.kiem.length < 3) loi.push('bộ kiểm cần ≥ 3 kiểm');
+  else tj.kiem.forEach((k, i) => { const l = kiemLuocDo(k, tj); if (l.length) loi.push(`kiểm #${i + 1}: ${l.join(', ')}`); });
+  if (tj && LOAI_JS.has(tj.loai) && !tj.kiem?.some((k) => k.kiem !== 'ma-nguon')) loi.push('bộ kiểm JS cần ít nhất một kiểm CHẠY code (không chỉ ma-nguon)');
+  // tệp gốc phải có ở CẢ khởi đầu lẫn lời giải (khởi đầu thiếu ⇒ người học không biết viết vào đâu)
+  for (const [nhan, khoi] of [['khởi đầu', ex.starterCodeJson], ['lời giải', ex.solutionCodeJson]]) {
+    const ten = new Set((khoi || []).map((b) => b.name));
+    const can = tj?.loai === 'dom' ? [tj.tepHtml] : (tj?.loai === 'module' ? [tj.tepChinh] : (tj?.tepNap || [tj?.tepChinh]));
+    for (const t of can) if (tj && !ten.has(t)) loi.push(`không có tệp ${t} trong ${nhan}`);
+  }
   return loi;
 }
 
@@ -510,7 +685,7 @@ for (const m of modules) {
     trackSlug: TRACK,
     moduleSlug: m.slug,
     lesson: { course: 'web-foundations', slug: m.slug },
-    exercises: m.de.map((d) => xuatDe(d, { baiHoc: m.baiHoc, ngonNgu: m.ngonNgu })),
+    exercises: m.de.map((d) => xuatDe(d, { baiHoc: m.baiHoc, ngonNgu: m.ngonNgu, loaiKiem: m.loaiKiem })),
   };
   const dem = { EASY: 0, MEDIUM: 0, HARD: 0 };
   const loiModule = [];
@@ -526,20 +701,20 @@ for (const m of modules) {
     tieuDeDaThay.add(t);
     const l = kiemTruong(ex);
     const dong = [];
-    if (JS && !l.some((x) => x.startsWith('không có tệp'))) {
+    if ((JS || LOAI_JS.has(ex.testsJson?.loai)) && !l.some((x) => x.startsWith('không có tệp') || x.startsWith('bộ kiểm cần'))) {
       const giai = tepMap(ex.solutionCodeJson), dau = tepMap(ex.starterCodeJson);
       let truotDau = 0;
       for (const [i, k] of ex.testsJson.kiem.entries()) {
         tongKiem++;
         let r;
-        try { r = chayKiem(k, giai, ex.testsJson.tepHtml); } catch (e) { r = { dat: false, thay: `lỗi: ${e.message}` }; }
+        try { r = await chayKiem(k, giai, ex.testsJson); } catch (e) { r = { dat: false, thay: `lỗi: ${e.message}` }; }
         if (r.boQua) { boQuaKiem++; dong.push(`      ~ #${i + 1} BỎ QUA (${r.boQua}): ${k.moTa}`); continue; }
         if (r.uocLuong) uocLuong++;
         if (r.dat) datKiem++;
         else l.push(`lời giải TRƯỢT kiểm #${i + 1} "${k.moTa}" (thấy: ${r.thay ?? '—'})`);
         if (CHI_TIET) dong.push(`      ${r.dat ? '✓' : '✗'} #${i + 1} ${k.moTa}${r.thay ? `  [${r.thay}]` : ''}`);
         let rd;
-        try { rd = chayKiem(k, dau, ex.testsJson.tepHtml); } catch { rd = { dat: false }; }
+        try { rd = await chayKiem(k, dau, ex.testsJson); } catch { rd = { dat: false }; }
         if (!rd.boQua && !rd.dat) truotDau++;
       }
       if (truotDau === 0) l.push('code khởi đầu đã ĐẠT mọi kiểm — bộ kiểm không phân biệt được');
@@ -574,7 +749,7 @@ if (!CHI) {
     docsUrl: 'https://developer.mozilla.org/vi/docs/Learn',
     status: 'DRAFT',
     level: 'BEGINNER',
-    description: 'Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS.',
+    description: `Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. ${[['wf-2-', 'Chương 2 HTML'], ['wf-3-', 'Chương 3 CSS'], ['wf-4-', 'Chương 4 JavaScript'], ['wf-5-', 'Chương 5 JS bất đồng bộ & modules']].filter(([p]) => modules.some((m) => m.slug.startsWith(p))).map(([, t]) => t).join(' + ')}.`,
     modules: modules.map((m) => ({ slug: m.slug, name: m.ten, level: m.level || 'BEGINNER', description: m.moTa })),
   };
   const tepTrack = path.join(THU_MUC, '_track.json');

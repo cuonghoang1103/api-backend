@@ -1,0 +1,850 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-5-3-async-await",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-5-3-async-await"
+  },
+  "exercises": [
+    {
+      "title": "Viết lại chuỗi .then bằng async/await",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "async function",
+        "await",
+        "chuỗi then"
+      ],
+      "prerequisites": [
+        "Promise",
+        ".then"
+      ],
+      "tags": [
+        "javascript",
+        "async-await"
+      ],
+      "problemHtml": "<p>Bài 5.3: <em>\"Cùng một việc, hai cách viết — async/await đọc như code bình thường.\"</em> <code>tieuDeBaiDau(userId)</code> dưới đây chạy đúng, nhưng viết bằng chuỗi <code>.then</code>. Viết lại bằng <code>async</code>/<code>await</code>, kết quả không đổi: tiêu đề bài viết đầu tiên của người dùng, hoặc <code>null</code> nếu họ chưa có bài.</p>\n<p><code>api.js</code> là \"máy chủ giả\" có sẵn (đừng sửa), nạp trước <code>main.js</code>.</p><p><em>Máy chấm dùng đồng hồ GIẢ và đo thời gian bằng Date.now() — tuần tự hay song song lộ ra ngay trong con số.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>tieuDeBaiDau</code> là <code>async function</code> và dùng <code>await</code>; không còn <code>.then(</code>.</li>\n  <li>Kết quả như cũ: <code>\"Học async\"</code> cho người dùng 1, <code>null</code> cho người dùng 2.</li>\n  <li>Vẫn tuần tự: lấy người dùng (100 ms) rồi mới lấy bài viết (200 ms).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "userId: number.",
+      "outputSpec": "Promise<string | null>.",
+      "constraints": "Không sửa api.js.",
+      "examplesJson": [
+        {
+          "input": "await tieuDeBaiDau(1)",
+          "output": "\"Học async\"",
+          "explanation": "Người dùng 1 có hai bài, lấy bài đầu."
+        },
+        {
+          "input": "await tieuDeBaiDau(2)",
+          "output": "null",
+          "explanation": "Mảng bài rỗng."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi .then((x) => …) trở thành một dòng const x = await …;",
+        "const u = await layNguoiDung(userId); const bai = await layBaiViet(u.id); return bai.length > 0 ? bai[0].tieuDe : null;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mọi hàm trả về Promise sau một khoảng trễ.\nconst cho = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\" },\n  2: { id: 2, ten: \"Minh\" },\n  3: { id: 3, ten: \"Hà\" },\n};\nconst BAI_VIET = {\n  1: [{ tieuDe: \"Học async\" }, { tieuDe: \"Học fetch\" }],\n  2: [],\n  3: [{ tieuDe: \"Ghi chú CSS\" }],\n};\n\n// 100 ms\nasync function layNguoiDung(id) {\n  await cho(100);\n  if (!NGUOI_DUNG[id]) throw new Error(`Không tìm thấy người dùng ${id}`);\n  return { ...NGUOI_DUNG[id] };\n}\n\n// 200 ms\nasync function layBaiViet(userId) {\n  await cho(200);\n  return (BAI_VIET[userId] || []).map((b) => ({ ...b }));\n}\n\n// 150 ms — người dùng 3 làm hỏng dịch vụ bạn bè\nasync function layBanBe(userId) {\n  await cho(150);\n  if (userId === 3) throw new Error(\"Dịch vụ bạn bè lỗi\");\n  return userId === 1 ? [2, 3] : [1];\n}\n\n// 100 ms\nasync function layThongBao(userId) {\n  await cho(100);\n  return [`Chào ${userId}`];\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — then → await\nfunction tieuDeBaiDau(userId) {\n  return layNguoiDung(userId)\n    .then((u) => layBaiViet(u.id))\n    .then((bai) => (bai.length > 0 ? bai[0].tieuDe : null));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mọi hàm trả về Promise sau một khoảng trễ.\nconst cho = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\" },\n  2: { id: 2, ten: \"Minh\" },\n  3: { id: 3, ten: \"Hà\" },\n};\nconst BAI_VIET = {\n  1: [{ tieuDe: \"Học async\" }, { tieuDe: \"Học fetch\" }],\n  2: [],\n  3: [{ tieuDe: \"Ghi chú CSS\" }],\n};\n\n// 100 ms\nasync function layNguoiDung(id) {\n  await cho(100);\n  if (!NGUOI_DUNG[id]) throw new Error(`Không tìm thấy người dùng ${id}`);\n  return { ...NGUOI_DUNG[id] };\n}\n\n// 200 ms\nasync function layBaiViet(userId) {\n  await cho(200);\n  return (BAI_VIET[userId] || []).map((b) => ({ ...b }));\n}\n\n// 150 ms — người dùng 3 làm hỏng dịch vụ bạn bè\nasync function layBanBe(userId) {\n  await cho(150);\n  if (userId === 3) throw new Error(\"Dịch vụ bạn bè lỗi\");\n  return userId === 1 ? [2, 3] : [1];\n}\n\n// 100 ms\nasync function layThongBao(userId) {\n  await cho(100);\n  return [`Chào ${userId}`];\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — then → await\nasync function tieuDeBaiDau(userId) {\n  const u = await layNguoiDung(userId);     // dừng ở đây tới khi có người dùng\n  const bai = await layBaiViet(u.id);       // rồi mới hỏi bài viết (cần u.id)\n  return bai.length > 0 ? bai[0].tieuDe : null;\n  // async ⇒ giá trị return được bọc trong một Promise cho người gọi\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>await p</code> tạm dừng <em>hàm này</em> tới khi <code>p</code> settle rồi trao giá trị — mỗi bước then thành một dòng gán. Code đọc từ trên xuống y như code đồng bộ, nhưng bên dưới vẫn là đúng chuỗi Promise cũ. Hàm <code>async</code> luôn trả về Promise, nên người gọi vẫn <code>await</code> hoặc <code>.then</code> nó như trước.</p>\n<p>Máy chấm kiểm kết quả, kiểm 300 ms (vẫn tuần tự — bước 2 cần <code>u.id</code>) và soi mã không còn <code>.then(</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên async trước function — await trong hàm thường là lỗi cú pháp.</li>\n  <li>Quên await trước layNguoiDung — u là một Promise, u.id là undefined.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.3 async / await.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/async-await",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "tepNap": [
+          "api.js",
+          "main.js"
+        ],
+        "kiem": [
+          {
+            "moTa": "Người dùng 1 → \"Học async\"",
+            "goi": "await tieuDeBaiDau(1)",
+            "mongDoi": "Học async"
+          },
+          {
+            "moTa": "Người dùng 2 chưa có bài → null",
+            "goi": "await tieuDeBaiDau(2)",
+            "mongDoi": null
+          },
+          {
+            "moTa": "Vẫn tuần tự: 300 ms",
+            "chuanBi": "const t = Date.now(); await tieuDeBaiDau(3);",
+            "goi": "Date.now() - t",
+            "mongDoi": 300
+          },
+          {
+            "moTa": "Là async function (trả Promise)",
+            "goi": "tieuDeBaiDau(1) instanceof Promise",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Dùng await, không còn .then(",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\.then\\s*\\(",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Có từ khoá await",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\bawait\\b"
+          }
+        ]
+      }
+    },
+    {
+      "title": "try/catch quanh await: tải an toàn",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "try / catch",
+        "rejected → ném lỗi",
+        "object kết quả"
+      ],
+      "prerequisites": [
+        "async/await"
+      ],
+      "tags": [
+        "javascript",
+        "async-await",
+        "error-handling"
+      ],
+      "problemHtml": "<p>Bài 5.3: <em>\"Promise bị reject trở thành một lỗi được ném ra, nên try/catch bình thường xử lý được.\"</em> <code>taiAnToan(id)</code> không bao giờ được reject — giao diện gọi nó không có catch. Trả về:</p>\n<ul><li>thành công: <code>{ ok: true, nguoiDung: { id, ten } }</code></li>\n<li>thất bại: <code>{ ok: false, thongBao: \"&lt;err.message&gt;\" }</code></li></ul>\n<p><code>api.js</code> là \"máy chủ giả\" có sẵn (đừng sửa), nạp trước <code>main.js</code>.</p><p><em>Máy chấm dùng đồng hồ GIẢ và đo thời gian bằng Date.now() — tuần tự hay song song lộ ra ngay trong con số.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bọc lời gọi <code>await layNguoiDung(id)</code> trong <code>try</code>.</li>\n  <li>Thành công / thất bại trả về đúng hai hình dạng object trên.</li>\n  <li>Promise của taiAnToan luôn fulfilled.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "id: number.",
+      "outputSpec": "Promise<{ ok, nguoiDung } | { ok, thongBao }>.",
+      "constraints": "Không dùng .catch (luyện try/catch).",
+      "examplesJson": [
+        {
+          "input": "await taiAnToan(1)",
+          "output": "{ ok: true, nguoiDung: { id: 1, ten: \"Lan\" } }",
+          "explanation": "Người dùng có thật ⇒ nhánh try đi hết."
+        },
+        {
+          "input": "await taiAnToan(99)",
+          "output": "{ ok: false, thongBao: \"Không tìm thấy người dùng 99\" }",
+          "explanation": "Reject của layNguoiDung thành lỗi ném ra ở dòng await, rơi vào catch."
+        }
+      ],
+      "hintsJson": [
+        "try { const u = await layNguoiDung(id); return { … }; } catch (err) { return { … }; }",
+        "Thiếu await trong try thì Promise bị reject SAU khi try đã xong — catch không bắt được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mọi hàm trả về Promise sau một khoảng trễ.\nconst cho = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\" },\n  2: { id: 2, ten: \"Minh\" },\n  3: { id: 3, ten: \"Hà\" },\n};\nconst BAI_VIET = {\n  1: [{ tieuDe: \"Học async\" }, { tieuDe: \"Học fetch\" }],\n  2: [],\n  3: [{ tieuDe: \"Ghi chú CSS\" }],\n};\n\n// 100 ms\nasync function layNguoiDung(id) {\n  await cho(100);\n  if (!NGUOI_DUNG[id]) throw new Error(`Không tìm thấy người dùng ${id}`);\n  return { ...NGUOI_DUNG[id] };\n}\n\n// 200 ms\nasync function layBaiViet(userId) {\n  await cho(200);\n  return (BAI_VIET[userId] || []).map((b) => ({ ...b }));\n}\n\n// 150 ms — người dùng 3 làm hỏng dịch vụ bạn bè\nasync function layBanBe(userId) {\n  await cho(150);\n  if (userId === 3) throw new Error(\"Dịch vụ bạn bè lỗi\");\n  return userId === 1 ? [2, 3] : [1];\n}\n\n// 100 ms\nasync function layThongBao(userId) {\n  await cho(100);\n  return [`Chào ${userId}`];\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — try/catch\nasync function taiAnToan(id) {\n  const u = await layNguoiDung(id);\n  return { ok: true, nguoiDung: u };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mọi hàm trả về Promise sau một khoảng trễ.\nconst cho = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\" },\n  2: { id: 2, ten: \"Minh\" },\n  3: { id: 3, ten: \"Hà\" },\n};\nconst BAI_VIET = {\n  1: [{ tieuDe: \"Học async\" }, { tieuDe: \"Học fetch\" }],\n  2: [],\n  3: [{ tieuDe: \"Ghi chú CSS\" }],\n};\n\n// 100 ms\nasync function layNguoiDung(id) {\n  await cho(100);\n  if (!NGUOI_DUNG[id]) throw new Error(`Không tìm thấy người dùng ${id}`);\n  return { ...NGUOI_DUNG[id] };\n}\n\n// 200 ms\nasync function layBaiViet(userId) {\n  await cho(200);\n  return (BAI_VIET[userId] || []).map((b) => ({ ...b }));\n}\n\n// 150 ms — người dùng 3 làm hỏng dịch vụ bạn bè\nasync function layBanBe(userId) {\n  await cho(150);\n  if (userId === 3) throw new Error(\"Dịch vụ bạn bè lỗi\");\n  return userId === 1 ? [2, 3] : [1];\n}\n\n// 100 ms\nasync function layThongBao(userId) {\n  await cho(100);\n  return [`Chào ${userId}`];\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — try/catch\nasync function taiAnToan(id) {\n  try {\n    // await biến Promise bị reject thành một lỗi ném ra NGAY TẠI dòng này\n    const u = await layNguoiDung(id);\n    return { ok: true, nguoiDung: u };\n  } catch (err) {\n    // mọi lỗi trong khối try (kể cả từ await) rơi vào đây\n    return { ok: false, thongBao: err.message };\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ưu điểm lớn nhất của await so với then: xử lý lỗi bất đồng bộ bằng đúng công cụ của code đồng bộ. Phải có <code>await</code> <em>bên trong</em> <code>try</code>: <code>return layNguoiDung(id)</code> không await thì hàm rời khối try trước khi Promise kịp reject.</p>\n<p>Trả về object <code>{ ok, … }</code> là một mẫu hay gặp ở ranh giới giao diện: người gọi kiểm <code>kq.ok</code> thay vì phải nhớ bắt lỗi. Máy chấm kiểm cả hai hình dạng và một lời gọi không await-được-bắt.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li><code>return layNguoiDung(id)</code> trong try mà không await — lỗi lọt ra ngoài.</li>\n  <li>Trả về <code>thongBao: err</code> (cả object Error) thay vì <code>err.message</code>.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.3 async / await.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "tepNap": [
+          "api.js",
+          "main.js"
+        ],
+        "kiem": [
+          {
+            "moTa": "Thành công",
+            "goi": "await taiAnToan(1)",
+            "mongDoi": {
+              "ok": true,
+              "nguoiDung": {
+                "id": 1,
+                "ten": "Lan"
+              }
+            }
+          },
+          {
+            "moTa": "Thất bại → ok: false + thông báo",
+            "goi": "await taiAnToan(99)",
+            "mongDoi": {
+              "ok": false,
+              "thongBao": "Không tìm thấy người dùng 99"
+            }
+          },
+          {
+            "moTa": "Không bao giờ reject",
+            "goi": "await taiAnToan(-1).then(() => \"fulfilled\", () => \"rejected\")",
+            "mongDoi": "fulfilled"
+          },
+          {
+            "moTa": "Dùng try/catch",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\btry\\s*\\{[\\s\\S]*\\bawait\\b[\\s\\S]*\\}\\s*catch"
+          },
+          {
+            "moTa": "Không dùng .catch",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\.catch\\s*\\(",
+            "phuDinh": true,
+            "an": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "\"[object Promise][object Promise]\": quên await",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "async luôn trả Promise",
+        "quên await",
+        "Promise không phải giá trị"
+      ],
+      "prerequisites": [
+        "async/await"
+      ],
+      "tags": [
+        "javascript",
+        "async-await",
+        "pitfall"
+      ],
+      "problemHtml": "<p>Bài 5.3: <em>\"async làm hàm luôn trả về Promise — kể cả khi bạn return một con số.\"</em> <code>tongDiem()</code> cộng điểm Toán và Văn từ <code>layDiem(mon)</code> (trả Promise). Bản hiện tại trả về chuỗi <code>\"[object Promise][object Promise]\"</code> — nó đang cộng hai <em>Promise</em>, không phải hai con số. Sửa nó, và viết thêm <code>diemTrungBinh(dsMon)</code>.</p>\n<p><code>api.js</code> là \"máy chủ giả\" có sẵn (đừng sửa), nạp trước <code>main.js</code>.</p><p><em>Máy chấm dùng đồng hồ GIẢ và đo thời gian bằng Date.now() — tuần tự hay song song lộ ra ngay trong con số.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>await tongDiem()</code> → <code>15</code>.</li>\n  <li><code>await diemTrungBinh([\"toan\", \"van\", \"anh\"])</code> → <code>8</code>; danh sách rỗng → <code>null</code>.</li>\n  <li>Môn không có → <code>diemTrungBinh</code> reject với lỗi của <code>layDiem</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "dsMon: mảng tên môn.",
+      "outputSpec": "Promise<number | null>.",
+      "constraints": "Không sửa api.js.",
+      "examplesJson": [
+        {
+          "input": "await tongDiem()",
+          "output": "15",
+          "explanation": "8 + 7."
+        },
+        {
+          "input": "(code khởi đầu) tongDiem()",
+          "output": "\"[object Promise][object Promise]\"",
+          "explanation": "Promise + Promise ⇒ cả hai bị đổi sang chuỗi."
+        }
+      ],
+      "hintsJson": [
+        "Hàm phải là async để dùng await; mỗi layDiem(...) cần một await trước nó.",
+        "diemTrungBinh: if (dsMon.length === 0) return null; let tong = 0; for (const mon of dsMon) tong += await layDiem(mon); return tong / dsMon.length;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa.\nconst DIEM = { toan: 8, van: 7, anh: 9 };\n\n// Promise<number> sau 50 ms\nfunction layDiem(mon) {\n  return new Promise((resolve, reject) => setTimeout(() => {\n    if (!(mon in DIEM)) return reject(new Error(`Không có môn ${mon}`));\n    resolve(DIEM[mon]);\n  }, 50));\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — Quên await\nfunction tongDiem() {\n  const toan = layDiem(\"toan\");\n  const van = layDiem(\"van\");\n  return toan + van;\n}\n\nasync function diemTrungBinh(dsMon) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa.\nconst DIEM = { toan: 8, van: 7, anh: 9 };\n\n// Promise<number> sau 50 ms\nfunction layDiem(mon) {\n  return new Promise((resolve, reject) => setTimeout(() => {\n    if (!(mon in DIEM)) return reject(new Error(`Không có môn ${mon}`));\n    resolve(DIEM[mon]);\n  }, 50));\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — Quên await\nasync function tongDiem() {\n  const toan = await layDiem(\"toan\");    // await: lấy CON SỐ ra khỏi Promise\n  const van = await layDiem(\"van\");\n  return toan + van;                     // 8 + 7 — hàm async bọc 15 trong một Promise\n}\n\nasync function diemTrungBinh(dsMon) {\n  if (dsMon.length === 0) return null;   // tránh 0 / 0 = NaN\n  let tong = 0;\n  for (const mon of dsMon) {\n    tong = tong + (await layDiem(mon));  // lỗi của layDiem ném ra ⇒ hàm reject\n  }\n  return tong / dsMon.length;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một Promise là \"giấy hẹn\", không phải giá trị. Cộng hai giấy hẹn bằng <code>+</code> thì JavaScript đổi cả hai sang chuỗi <code>\"[object Promise]\"</code> (Bài 4.1: <code>+</code> gặp thứ không phải số thì nối). <code>await</code> đổi giấy hẹn ra giá trị thật. Không có lỗi đỏ nào ở đây — chỉ một kết quả kỳ quặc — nên nhận ra mẫu chữ <code>[object Promise]</code> là kỹ năng gỡ lỗi đáng nhớ.</p>\n<p>Máy chấm kiểm giá trị, danh sách rỗng, môn không có, và <code>tongDiem()</code> trả về Promise.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thêm await nhưng quên async — lỗi cú pháp \"await is only valid in async functions\".</li>\n  <li>Gọi tongDiem() mà không await ở phía người gọi — lại nhận một Promise.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.3 async / await.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "tepNap": [
+          "api.js",
+          "main.js"
+        ],
+        "kiem": [
+          {
+            "moTa": "tongDiem() = 15",
+            "goi": "await tongDiem()",
+            "mongDoi": 15
+          },
+          {
+            "moTa": "tongDiem() trả về Promise",
+            "goi": "tongDiem() instanceof Promise",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Trung bình ba môn = 8",
+            "goi": "await diemTrungBinh([\"toan\", \"van\", \"anh\"])",
+            "mongDoi": 8
+          },
+          {
+            "moTa": "Danh sách rỗng → null",
+            "goi": "await diemTrungBinh([])",
+            "mongDoi": null
+          },
+          {
+            "moTa": "Môn không có → reject",
+            "goi": "await diemTrungBinh([\"toan\", \"su\"])",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "Không có môn su"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bảng điều khiển chậm gấp ba: chạy song song bằng Promise.all",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Promise.all",
+        "tuần tự vs song song",
+        "destructuring mảng"
+      ],
+      "prerequisites": [
+        "async/await"
+      ],
+      "tags": [
+        "javascript",
+        "async-await",
+        "performance"
+      ],
+      "problemHtml": "<p>Bài 5.3: <em>\"Đừng await trong vòng lặp khi các lời gọi độc lập — ba lời gọi 1 giây thành 3 giây.\"</em> Trang chủ cần ba thứ <strong>không phụ thuộc nhau</strong> về người dùng <code>id</code>: hồ sơ (<code>layNguoiDung</code>, 100 ms), thông báo (<code>layThongBao</code>, 100 ms) và bạn bè (<code>layBanBe</code>, 150 ms). Bản hiện tại await lần lượt: 350 ms. Song song chỉ cần 150 ms.</p>\n<p><code>api.js</code> là \"máy chủ giả\" có sẵn (đừng sửa), nạp trước <code>main.js</code>.</p><p><em>Máy chấm dùng đồng hồ GIẢ và đo thời gian bằng Date.now() — tuần tự hay song song lộ ra ngay trong con số.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>taiBangDieuKhien(id)</code> trả về <code>{ nguoiDung, thongBao, banBe }</code>.</li>\n  <li>Ba lời gọi bắt đầu cùng lúc; tổng thời gian bằng lời gọi lâu nhất (<code>150 ms</code>).</li>\n  <li>Dùng <code>Promise.all</code> và một <code>await</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "id: number (1 hoặc 2).",
+      "outputSpec": "Promise<{ nguoiDung, thongBao, banBe }>.",
+      "constraints": "Không sửa api.js.",
+      "examplesJson": [
+        {
+          "input": "await taiBangDieuKhien(1)",
+          "output": "{ nguoiDung: { id: 1, ten: \"Lan\" }, thongBao: [\"Chào 1\"], banBe: [2, 3] }",
+          "explanation": "Sau 150 ms."
+        }
+      ],
+      "hintsJson": [
+        "Gọi cả ba hàm TRƯỚC (bắt đầu công việc), rồi mới await một lần cho cả ba.",
+        "const [nguoiDung, thongBao, banBe] = await Promise.all([layNguoiDung(id), layThongBao(id), layBanBe(id)]);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mọi hàm trả về Promise sau một khoảng trễ.\nconst cho = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\" },\n  2: { id: 2, ten: \"Minh\" },\n  3: { id: 3, ten: \"Hà\" },\n};\nconst BAI_VIET = {\n  1: [{ tieuDe: \"Học async\" }, { tieuDe: \"Học fetch\" }],\n  2: [],\n  3: [{ tieuDe: \"Ghi chú CSS\" }],\n};\n\n// 100 ms\nasync function layNguoiDung(id) {\n  await cho(100);\n  if (!NGUOI_DUNG[id]) throw new Error(`Không tìm thấy người dùng ${id}`);\n  return { ...NGUOI_DUNG[id] };\n}\n\n// 200 ms\nasync function layBaiViet(userId) {\n  await cho(200);\n  return (BAI_VIET[userId] || []).map((b) => ({ ...b }));\n}\n\n// 150 ms — người dùng 3 làm hỏng dịch vụ bạn bè\nasync function layBanBe(userId) {\n  await cho(150);\n  if (userId === 3) throw new Error(\"Dịch vụ bạn bè lỗi\");\n  return userId === 1 ? [2, 3] : [1];\n}\n\n// 100 ms\nasync function layThongBao(userId) {\n  await cho(100);\n  return [`Chào ${userId}`];\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — Song song\nasync function taiBangDieuKhien(id) {\n  const nguoiDung = await layNguoiDung(id);\n  const thongBao = await layThongBao(id);\n  const banBe = await layBanBe(id);\n  return { nguoiDung, thongBao, banBe };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mọi hàm trả về Promise sau một khoảng trễ.\nconst cho = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\" },\n  2: { id: 2, ten: \"Minh\" },\n  3: { id: 3, ten: \"Hà\" },\n};\nconst BAI_VIET = {\n  1: [{ tieuDe: \"Học async\" }, { tieuDe: \"Học fetch\" }],\n  2: [],\n  3: [{ tieuDe: \"Ghi chú CSS\" }],\n};\n\n// 100 ms\nasync function layNguoiDung(id) {\n  await cho(100);\n  if (!NGUOI_DUNG[id]) throw new Error(`Không tìm thấy người dùng ${id}`);\n  return { ...NGUOI_DUNG[id] };\n}\n\n// 200 ms\nasync function layBaiViet(userId) {\n  await cho(200);\n  return (BAI_VIET[userId] || []).map((b) => ({ ...b }));\n}\n\n// 150 ms — người dùng 3 làm hỏng dịch vụ bạn bè\nasync function layBanBe(userId) {\n  await cho(150);\n  if (userId === 3) throw new Error(\"Dịch vụ bạn bè lỗi\");\n  return userId === 1 ? [2, 3] : [1];\n}\n\n// 100 ms\nasync function layThongBao(userId) {\n  await cho(100);\n  return [`Chào ${userId}`];\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — Song song\nasync function taiBangDieuKhien(id) {\n  // Ba việc độc lập: BẮT ĐẦU cả ba ngay (gọi hàm), rồi chờ MỘT lần cho cả ba.\n  // Promise.all giữ đúng thứ tự kết quả theo thứ tự mảng đưa vào.\n  const [nguoiDung, thongBao, banBe] = await Promise.all([\n    layNguoiDung(id),\n    layThongBao(id),\n    layBanBe(id),\n  ]);\n  return { nguoiDung, thongBao, banBe };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hai <code>await</code> liên tiếp nghĩa là \"xong cái này mới <em>bắt đầu</em> cái kia\". Khi các việc không cần kết quả của nhau, đó là thời gian chết. <code>Promise.all</code> nhận các Promise <em>đã bắt đầu</em>, chờ tất cả, trả mảng kết quả theo đúng thứ tự đưa vào (không theo thứ tự xong). Đây là một trong những lỗi hiệu năng phổ biến nhất ngoài đời.</p>\n<p>Máy chấm đo bằng đồng hồ giả: 150 ms là đạt, 350 ms là trượt.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Truyền hàm thay vì lời gọi: Promise.all([layNguoiDung, …]) — nhận về chính các hàm.</li>\n  <li>await từng phần tử trong mảng trước khi đưa vào Promise.all — lại tuần tự.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.3 async / await.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "tepNap": [
+          "api.js",
+          "main.js"
+        ],
+        "kiem": [
+          {
+            "moTa": "Kết quả đúng cho người dùng 1",
+            "goi": "await taiBangDieuKhien(1)",
+            "mongDoi": {
+              "nguoiDung": {
+                "id": 1,
+                "ten": "Lan"
+              },
+              "thongBao": [
+                "Chào 1"
+              ],
+              "banBe": [
+                2,
+                3
+              ]
+            }
+          },
+          {
+            "moTa": "Song song: 150 ms",
+            "chuanBi": "const t = Date.now(); await taiBangDieuKhien(2);",
+            "goi": "Date.now() - t",
+            "mongDoi": 150
+          },
+          {
+            "moTa": "Người dùng 2",
+            "goi": "await taiBangDieuKhien(2)",
+            "mongDoi": {
+              "nguoiDung": {
+                "id": 2,
+                "ten": "Minh"
+              },
+              "thongBao": [
+                "Chào 2"
+              ],
+              "banBe": [
+                1
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": "Dùng Promise.all",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "Promise\\.all\\s*\\("
+          }
+        ]
+      }
+    },
+    {
+      "title": "await trong forEach không chờ gì cả",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "forEach bỏ qua Promise",
+        "for…of + await",
+        "tuần tự có thứ tự"
+      ],
+      "prerequisites": [
+        "async/await",
+        "for…of"
+      ],
+      "tags": [
+        "javascript",
+        "async-await",
+        "pitfall"
+      ],
+      "problemHtml": "<p>Bài 5.3, mục <em>\"Bẫy — await bên trong forEach chẳng làm gì cả\"</em>. <code>luuTatCa(ds)</code> phải lưu từng mục <strong>theo đúng thứ tự</strong> (mục sau chỉ bắt đầu khi mục trước xong) và chỉ trả về số mục đã lưu SAU KHI tất cả đã xong. Mỗi lần <code>luu</code> mất thời gian khác nhau (chuỗi dài lâu hơn), và <code>daLuu</code> ghi thứ tự các lần lưu xong. Bản dùng <code>forEach</code> trả về 0 ngay lập tức và lưu lộn thứ tự.</p>\n<p><code>api.js</code> là \"máy chủ giả\" có sẵn (đừng sửa), nạp trước <code>main.js</code>.</p><p><em>Máy chấm dùng đồng hồ GIẢ và đo thời gian bằng Date.now() — tuần tự hay song song lộ ra ngay trong con số.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>await luuTatCa([\"ccc\", \"a\", \"bb\"])</code> → <code>3</code>, và lúc đó <code>daLuu</code> là <code>[\"ccc\", \"a\", \"bb\"]</code>.</li>\n  <li>Mục sau chỉ bắt đầu khi mục trước xong (tổng thời gian = tổng từng lần).</li>\n  <li>Dùng <code>for…of</code> + <code>await</code>, không <code>forEach</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ds: mảng chuỗi.",
+      "outputSpec": "Promise<number>.",
+      "constraints": "Không sửa api.js.",
+      "examplesJson": [
+        {
+          "input": "await luuTatCa([\"ccc\", \"a\", \"bb\"]); daLuu",
+          "output": "[\"ccc\", \"a\", \"bb\"]",
+          "explanation": "Tuần tự ⇒ thứ tự xong = thứ tự danh sách."
+        },
+        {
+          "input": "(code khởi đầu) await luuTatCa([\"ccc\", \"a\", \"bb\"])",
+          "output": "0   (và daLuu sau đó: [\"a\", \"bb\", \"ccc\"])",
+          "explanation": "forEach phóng cả ba cùng lúc, không chờ; cái ngắn xong trước."
+        }
+      ],
+      "hintsJson": [
+        "forEach không biết callback của nó trả về Promise — nó gọi xong là đi tiếp. for…of thì tôn trọng await.",
+        "let dem = 0; for (const muc of ds) { await luu(muc); dem++; } return dem;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa.\n// Mỗi lần lưu mất một khoảng KHÁC nhau; daLuu ghi lại thứ tự các lần lưu XONG.\nconst daLuu = [];\nfunction luu(muc) {\n  const tre = muc.length * 30;          // chuỗi dài lưu lâu hơn\n  return new Promise((resolve) => setTimeout(() => {\n    daLuu.push(muc);\n    resolve(true);\n  }, tre));\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — await trong forEach\nasync function luuTatCa(ds) {\n  let dem = 0;\n  ds.forEach(async (muc) => {\n    await luu(muc);\n    dem++;\n  });\n  return dem;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa.\n// Mỗi lần lưu mất một khoảng KHÁC nhau; daLuu ghi lại thứ tự các lần lưu XONG.\nconst daLuu = [];\nfunction luu(muc) {\n  const tre = muc.length * 30;          // chuỗi dài lưu lâu hơn\n  return new Promise((resolve) => setTimeout(() => {\n    daLuu.push(muc);\n    resolve(true);\n  }, tre));\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — await trong forEach\nasync function luuTatCa(ds) {\n  let dem = 0;\n  // for...of chạy TRONG hàm async này ⇒ mỗi await tạm dừng chính vòng lặp\n  for (const muc of ds) {\n    await luu(muc);   // mục sau chỉ bắt đầu khi mục này xong\n    dem++;\n  }\n  return dem;         // tới đây mọi lần lưu đã xong\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>forEach(async (muc) =&gt; …)</code> tạo ra một hàm async cho mỗi phần tử; mỗi hàm trả về Promise, và <code>forEach</code> vứt các Promise đó đi. Vòng lặp xong ngay, <code>return dem</code> chạy khi chưa lần lưu nào kết thúc. Với <code>for…of</code>, <code>await</code> nằm trong chính hàm <code>luuTatCa</code> nên dừng được vòng lặp.</p>\n<p>Khi thứ tự KHÔNG quan trọng và muốn nhanh: <code>await Promise.all(ds.map(luu))</code>. Máy chấm kiểm giá trị trả về, thứ tự <code>daLuu</code> và tổng thời gian.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thêm await trước ds.forEach(…) — forEach trả về undefined, await undefined chẳng chờ gì.</li>\n  <li>Dùng map(async …) mà không Promise.all — mảng Promise không được chờ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.3 async / await.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#description",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "tepNap": [
+          "api.js",
+          "main.js"
+        ],
+        "kiem": [
+          {
+            "moTa": "Trả về 3 sau khi lưu xong",
+            "goi": "await luuTatCa([\"ccc\", \"a\", \"bb\"])",
+            "mongDoi": 3
+          },
+          {
+            "moTa": "Lưu đúng thứ tự",
+            "chuanBi": "await luuTatCa([\"ccc\", \"a\", \"bb\"]);",
+            "goi": "daLuu",
+            "mongDoi": [
+              "ccc",
+              "a",
+              "bb"
+            ]
+          },
+          {
+            "moTa": "Tuần tự: 90 + 30 + 60 = 180 ms",
+            "chuanBi": "const t = Date.now(); await luuTatCa([\"ccc\", \"a\", \"bb\"]);",
+            "goi": "Date.now() - t",
+            "mongDoi": 180
+          },
+          {
+            "moTa": "Danh sách rỗng → 0",
+            "goi": "await luuTatCa([])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": "Không dùng forEach",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\.forEach\\s*\\(",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Tải nhiều người dùng song song mà vẫn giữ thứ tự",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Promise.all với map",
+        "thứ tự kết quả",
+        "thất bại nhanh (fail-fast)"
+      ],
+      "prerequisites": [
+        "Promise.all",
+        "map"
+      ],
+      "tags": [
+        "javascript",
+        "async-await",
+        "promise-all"
+      ],
+      "problemHtml": "<p>Danh sách thành viên cần tên của nhiều người dùng. Viết <code>layTen(ids)</code> trả về mảng tên <strong>đúng thứ tự ids</strong>, tải song song (tổng 100 ms dù bao nhiêu người). Nếu một id không tồn tại, cả lời gọi reject với lỗi đó (Promise.all \"thất bại nhanh\"). Viết thêm <code>layTenAnToan(ids)</code>: id lỗi thì đặt <code>null</code> vào đúng vị trí đó, không reject.</p>\n<p><code>api.js</code> là \"máy chủ giả\" có sẵn (đừng sửa), nạp trước <code>main.js</code>.</p><p><em>Máy chấm dùng đồng hồ GIẢ và đo thời gian bằng Date.now() — tuần tự hay song song lộ ra ngay trong con số.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>await layTen([3, 1, 2])</code> → <code>[\"Hà\", \"Lan\", \"Minh\"]</code> sau 100 ms.</li>\n  <li><code>layTen([1, 99])</code> reject với lỗi <code>\"Không tìm thấy người dùng 99\"</code>.</li>\n  <li><code>await layTenAnToan([1, 99, 2])</code> → <code>[\"Lan\", null, \"Minh\"]</code>, vẫn 100 ms.</li>\n  <li>Dùng <code>Promise.all</code> + <code>map</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ids: mảng số.",
+      "outputSpec": "Promise<mảng tên>.",
+      "constraints": "Không dùng Promise.allSettled (luyện cách tự bắt lỗi từng phần tử).",
+      "examplesJson": [
+        {
+          "input": "await layTen([3, 1, 2])",
+          "output": "[\"Hà\", \"Lan\", \"Minh\"]",
+          "explanation": "Thứ tự theo ids, không theo thứ tự xong."
+        },
+        {
+          "input": "await layTenAnToan([1, 99, 2])",
+          "output": "[\"Lan\", null, \"Minh\"]",
+          "explanation": "Mỗi phần tử tự bắt lỗi của nó."
+        }
+      ],
+      "hintsJson": [
+        "const ds = await Promise.all(ids.map((id) => layNguoiDung(id))); return ds.map((u) => u.ten);",
+        "Bản an toàn: map mỗi id thành một hàm async có try/catch riêng: ids.map(async (id) => { try { return (await layNguoiDung(id)).ten; } catch { return null; } })"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mọi hàm trả về Promise sau một khoảng trễ.\nconst cho = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\" },\n  2: { id: 2, ten: \"Minh\" },\n  3: { id: 3, ten: \"Hà\" },\n};\nconst BAI_VIET = {\n  1: [{ tieuDe: \"Học async\" }, { tieuDe: \"Học fetch\" }],\n  2: [],\n  3: [{ tieuDe: \"Ghi chú CSS\" }],\n};\n\n// 100 ms\nasync function layNguoiDung(id) {\n  await cho(100);\n  if (!NGUOI_DUNG[id]) throw new Error(`Không tìm thấy người dùng ${id}`);\n  return { ...NGUOI_DUNG[id] };\n}\n\n// 200 ms\nasync function layBaiViet(userId) {\n  await cho(200);\n  return (BAI_VIET[userId] || []).map((b) => ({ ...b }));\n}\n\n// 150 ms — người dùng 3 làm hỏng dịch vụ bạn bè\nasync function layBanBe(userId) {\n  await cho(150);\n  if (userId === 3) throw new Error(\"Dịch vụ bạn bè lỗi\");\n  return userId === 1 ? [2, 3] : [1];\n}\n\n// 100 ms\nasync function layThongBao(userId) {\n  await cho(100);\n  return [`Chào ${userId}`];\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — Promise.all + map\nasync function layTen(ids) {\n  const ten = [];\n  for (const id of ids) {\n    const u = await layNguoiDung(id);\n    ten.push(u.ten);\n  }\n  return ten;\n}\n\nasync function layTenAnToan(ids) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mọi hàm trả về Promise sau một khoảng trễ.\nconst cho = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\" },\n  2: { id: 2, ten: \"Minh\" },\n  3: { id: 3, ten: \"Hà\" },\n};\nconst BAI_VIET = {\n  1: [{ tieuDe: \"Học async\" }, { tieuDe: \"Học fetch\" }],\n  2: [],\n  3: [{ tieuDe: \"Ghi chú CSS\" }],\n};\n\n// 100 ms\nasync function layNguoiDung(id) {\n  await cho(100);\n  if (!NGUOI_DUNG[id]) throw new Error(`Không tìm thấy người dùng ${id}`);\n  return { ...NGUOI_DUNG[id] };\n}\n\n// 200 ms\nasync function layBaiViet(userId) {\n  await cho(200);\n  return (BAI_VIET[userId] || []).map((b) => ({ ...b }));\n}\n\n// 150 ms — người dùng 3 làm hỏng dịch vụ bạn bè\nasync function layBanBe(userId) {\n  await cho(150);\n  if (userId === 3) throw new Error(\"Dịch vụ bạn bè lỗi\");\n  return userId === 1 ? [2, 3] : [1];\n}\n\n// 100 ms\nasync function layThongBao(userId) {\n  await cho(100);\n  return [`Chào ${userId}`];\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — Promise.all + map\nasync function layTen(ids) {\n  // map: mỗi id ⇒ một Promise ĐÃ BẮT ĐẦU; Promise.all chờ tất cả, giữ thứ tự ids.\n  // Một Promise reject ⇒ Promise.all reject ngay với lỗi đó.\n  const ds = await Promise.all(ids.map((id) => layNguoiDung(id)));\n  return ds.map((u) => u.ten);\n}\n\nasync function layTenAnToan(ids) {\n  // Mỗi phần tử tự bắt lỗi của mình ⇒ không Promise nào reject ⇒ Promise.all không thất bại\n  return Promise.all(\n    ids.map(async (id) => {\n      try {\n        const u = await layNguoiDung(id);\n        return u.ten;\n      } catch {\n        return null;            // giữ đúng vị trí, đánh dấu \"không lấy được\"\n      }\n    }),\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>ids.map((id) =&gt; layNguoiDung(id))</code> gọi hàm cho mọi id ngay lập tức ⇒ mọi request chạy cùng lúc; <code>Promise.all</code> chờ tất cả và xếp kết quả theo vị trí trong mảng. Một phần tử reject ⇒ toàn bộ reject (thất bại nhanh) — phù hợp khi thiếu một mảnh là vô nghĩa.</p>\n<p>Khi muốn \"lấy được bao nhiêu thì lấy\", chuyển việc bắt lỗi xuống từng phần tử: mỗi hàm async con có try/catch, không bao giờ reject. (<code>Promise.allSettled</code> làm sẵn việc này.) Máy chấm kiểm thứ tự, thời gian 100 ms và cả hai cách xử lý lỗi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>await trong vòng for — đúng thứ tự nhưng 100 ms × số người.</li>\n  <li>Gom kết quả bằng push trong .then — thứ tự theo ai xong trước.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.3 async / await.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/promise-api#promise-all",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "tepNap": [
+          "api.js",
+          "main.js"
+        ],
+        "kiem": [
+          {
+            "moTa": "Đúng thứ tự ids",
+            "goi": "await layTen([3, 1, 2])",
+            "mongDoi": [
+              "Hà",
+              "Lan",
+              "Minh"
+            ]
+          },
+          {
+            "moTa": "Song song: 100 ms cho 3 người",
+            "chuanBi": "const t = Date.now(); await layTen([3, 1, 2]);",
+            "goi": "Date.now() - t",
+            "mongDoi": 100
+          },
+          {
+            "moTa": "Một id lỗi → reject",
+            "goi": "await layTen([1, 99])",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "Không tìm thấy người dùng 99"
+            }
+          },
+          {
+            "moTa": "Bản an toàn: null đúng vị trí",
+            "goi": "await layTenAnToan([1, 99, 2])",
+            "mongDoi": [
+              "Lan",
+              null,
+              "Minh"
+            ]
+          },
+          {
+            "moTa": "Bản an toàn vẫn song song",
+            "chuanBi": "const t = Date.now(); await layTenAnToan([1, 99, 2, 3]);",
+            "goi": "Date.now() - t",
+            "mongDoi": 100,
+            "an": true
+          },
+          {
+            "moTa": "Không dùng allSettled",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "allSettled",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Trang cá nhân: tuần tự khi phụ thuộc, song song khi độc lập",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "phụ thuộc dữ liệu",
+        "Promise.all",
+        "try/catch cục bộ",
+        "xuống cấp nhẹ nhàng"
+      ],
+      "prerequisites": [
+        "Promise.all",
+        "try/catch quanh await"
+      ],
+      "tags": [
+        "javascript",
+        "async-await",
+        "architecture"
+      ],
+      "problemHtml": "<p>Bài 5.3: <em>\"Dùng await khi bước B cần kết quả bước A; dùng Promise.all khi các bước độc lập.\"</em> Trang cá nhân cần: người dùng (100 ms) → rồi, <strong>với id của họ</strong>, bài viết (200 ms) và bạn bè (150 ms). Viết <code>taiTrangCaNhan(id)</code> trả về <code>{ ten, soBai, soBan }</code>:</p>\n<ul><li>Bước 1 phải chờ; bước 2 và 3 chạy song song ⇒ tổng <code>300 ms</code> (không phải 450).</li>\n<li>Dịch vụ bạn bè lỗi thì trang vẫn hiện: <code>soBan: null</code> (xuống cấp nhẹ nhàng).</li>\n<li>Không lấy được người dùng thì cả hàm reject — không có gì để hiện.</li></ul>\n<p><code>api.js</code> là \"máy chủ giả\" có sẵn (đừng sửa), nạp trước <code>main.js</code>.</p><p><em>Máy chấm dùng đồng hồ GIẢ và đo thời gian bằng Date.now() — tuần tự hay song song lộ ra ngay trong con số.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>await taiTrangCaNhan(1)</code> → <code>{ ten: \"Lan\", soBai: 2, soBan: 2 }</code> sau đúng 300 ms.</li>\n  <li>Người dùng 3 (dịch vụ bạn bè lỗi) → <code>{ ten: \"Hà\", soBai: 1, soBan: null }</code>, vẫn 300 ms.</li>\n  <li>Lỗi bài viết hay người dùng KHÔNG bị nuốt: <code>taiTrangCaNhan(99)</code> reject.</li>\n  <li>Chỉ lỗi của bạn bè được thay bằng null — không bọc cả hàm trong một try/catch lớn.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "id: number.",
+      "outputSpec": "Promise<{ ten, soBai, soBan }>.",
+      "constraints": "Không sửa api.js.\nKhông dùng Promise.allSettled.",
+      "examplesJson": [
+        {
+          "input": "await taiTrangCaNhan(1)",
+          "output": "{ ten: \"Lan\", soBai: 2, soBan: 2 }   (300 ms)",
+          "explanation": "100 + max(200, 150)."
+        },
+        {
+          "input": "await taiTrangCaNhan(3)",
+          "output": "{ ten: \"Hà\", soBai: 1, soBan: null }",
+          "explanation": "layBanBe(3) reject — chỉ phần bạn bè xuống cấp."
+        }
+      ],
+      "hintsJson": [
+        "const u = await layNguoiDung(id); rồi const [bai, ban] = await Promise.all([layBaiViet(u.id), layBanBeAnToan(u.id)]);",
+        "layBanBeAnToan có thể là: layBanBe(uid).catch(() => null) — một Promise không bao giờ reject. Hoặc một hàm async con có try/catch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mọi hàm trả về Promise sau một khoảng trễ.\nconst cho = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\" },\n  2: { id: 2, ten: \"Minh\" },\n  3: { id: 3, ten: \"Hà\" },\n};\nconst BAI_VIET = {\n  1: [{ tieuDe: \"Học async\" }, { tieuDe: \"Học fetch\" }],\n  2: [],\n  3: [{ tieuDe: \"Ghi chú CSS\" }],\n};\n\n// 100 ms\nasync function layNguoiDung(id) {\n  await cho(100);\n  if (!NGUOI_DUNG[id]) throw new Error(`Không tìm thấy người dùng ${id}`);\n  return { ...NGUOI_DUNG[id] };\n}\n\n// 200 ms\nasync function layBaiViet(userId) {\n  await cho(200);\n  return (BAI_VIET[userId] || []).map((b) => ({ ...b }));\n}\n\n// 150 ms — người dùng 3 làm hỏng dịch vụ bạn bè\nasync function layBanBe(userId) {\n  await cho(150);\n  if (userId === 3) throw new Error(\"Dịch vụ bạn bè lỗi\");\n  return userId === 1 ? [2, 3] : [1];\n}\n\n// 100 ms\nasync function layThongBao(userId) {\n  await cho(100);\n  return [`Chào ${userId}`];\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — Phụ thuộc vs độc lập\nasync function taiTrangCaNhan(id) {\n  try {\n    const u = await layNguoiDung(id);\n    const bai = await layBaiViet(u.id);\n    const ban = await layBanBe(u.id);\n    return { ten: u.ten, soBai: bai.length, soBan: ban.length };\n  } catch (err) {\n    return null;\n  }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — MÁY CHỦ GIẢ, đừng sửa. Mọi hàm trả về Promise sau một khoảng trễ.\nconst cho = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nconst NGUOI_DUNG = {\n  1: { id: 1, ten: \"Lan\" },\n  2: { id: 2, ten: \"Minh\" },\n  3: { id: 3, ten: \"Hà\" },\n};\nconst BAI_VIET = {\n  1: [{ tieuDe: \"Học async\" }, { tieuDe: \"Học fetch\" }],\n  2: [],\n  3: [{ tieuDe: \"Ghi chú CSS\" }],\n};\n\n// 100 ms\nasync function layNguoiDung(id) {\n  await cho(100);\n  if (!NGUOI_DUNG[id]) throw new Error(`Không tìm thấy người dùng ${id}`);\n  return { ...NGUOI_DUNG[id] };\n}\n\n// 200 ms\nasync function layBaiViet(userId) {\n  await cho(200);\n  return (BAI_VIET[userId] || []).map((b) => ({ ...b }));\n}\n\n// 150 ms — người dùng 3 làm hỏng dịch vụ bạn bè\nasync function layBanBe(userId) {\n  await cho(150);\n  if (userId === 3) throw new Error(\"Dịch vụ bạn bè lỗi\");\n  return userId === 1 ? [2, 3] : [1];\n}\n\n// 100 ms\nasync function layThongBao(userId) {\n  await cho(100);\n  return [`Chào ${userId}`];\n}\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 5.3 — Phụ thuộc vs độc lập\n\n// Bạn bè là phần \"có thì tốt\": lỗi ⇒ null thay vì làm hỏng cả trang.\n// Bắt lỗi NGAY TẠI phần đó, không bọc cả hàm — lỗi khác vẫn phải lộ ra.\nasync function layBanBeAnToan(userId) {\n  try {\n    return await layBanBe(userId);   // return await: lỗi ném ra TRONG try nên bắt được\n  } catch {\n    return null;\n  }\n}\n\nasync function taiTrangCaNhan(id) {\n  // Bước 1 — mọi thứ sau cần u.id ⇒ phải chờ (lỗi ở đây ⇒ cả hàm reject)\n  const u = await layNguoiDung(id);\n\n  // Bước 2 + 3 — độc lập với nhau ⇒ bắt đầu cùng lúc, chờ một lần\n  const [bai, ban] = await Promise.all([\n    layBaiViet(u.id),\n    layBanBeAnToan(u.id),\n  ]);\n\n  return {\n    ten: u.ten,\n    soBai: bai.length,\n    soBan: ban === null ? null : ban.length,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Vẽ đồ thị phụ thuộc trước khi viết: người dùng → {bài viết, bạn bè}. Mũi tên nào có thật thì phải <code>await</code> tuần tự; hai việc cùng tầng thì <code>Promise.all</code>. Kết quả 300 ms thay vì 450.</p>\n<p>Bắt lỗi đúng <em>phạm vi</em>: bản cũ bọc tất cả trong một try/catch lớn và trả <code>null</code> — mất cả trang vì một dịch vụ phụ, và che luôn lỗi thật của người dùng. <code>return await</code> trong try là chỗ hiếm hoi mà <code>await</code> trước return là bắt buộc: thiếu nó, Promise reject sau khi đã rời khối try. Máy chấm kiểm ba người dùng, thời gian, và lỗi 99 phải lộ ra.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đưa layNguoiDung vào cùng Promise.all — nhưng bước 2, 3 cần u.id.</li>\n  <li><code>return layBanBe(uid)</code> trong try mà thiếu await — lỗi lọt ra, Promise.all reject.</li>\n  <li>Một try/catch bọc tất cả rồi trả null — nuốt lỗi người dùng không tồn tại.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.3 async / await.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises#composition",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "tepNap": [
+          "api.js",
+          "main.js"
+        ],
+        "kiem": [
+          {
+            "moTa": "Người dùng 1",
+            "goi": "await taiTrangCaNhan(1)",
+            "mongDoi": {
+              "ten": "Lan",
+              "soBai": 2,
+              "soBan": 2
+            }
+          },
+          {
+            "moTa": "Đúng 300 ms (bước 2, 3 song song)",
+            "chuanBi": "const t = Date.now(); await taiTrangCaNhan(1);",
+            "goi": "Date.now() - t",
+            "mongDoi": 300
+          },
+          {
+            "moTa": "Bạn bè lỗi → soBan null, trang vẫn hiện",
+            "goi": "await taiTrangCaNhan(3)",
+            "mongDoi": {
+              "ten": "Hà",
+              "soBai": 1,
+              "soBan": null
+            }
+          },
+          {
+            "moTa": "Bạn bè lỗi vẫn 300 ms",
+            "chuanBi": "const t = Date.now(); await taiTrangCaNhan(3);",
+            "goi": "Date.now() - t",
+            "mongDoi": 300
+          },
+          {
+            "moTa": "Người dùng không tồn tại → reject",
+            "goi": "await taiTrangCaNhan(99)",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "Không tìm thấy người dùng 99"
+            }
+          },
+          {
+            "moTa": "Người dùng 2 (không có bài)",
+            "goi": "await taiTrangCaNhan(2)",
+            "mongDoi": {
+              "ten": "Minh",
+              "soBai": 0,
+              "soBan": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": "Không dùng allSettled",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "allSettled",
+            "phuDinh": true,
+            "an": true
+          }
+        ]
+      }
+    }
+  ]
+}

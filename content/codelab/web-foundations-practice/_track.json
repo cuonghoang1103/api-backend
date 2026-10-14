@@ -7,7 +7,7 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "DRAFT",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules.",
   "modules": [
     {
       "slug": "wf-2-1-html-basics",
@@ -68,6 +68,66 @@
       "name": "3.5 Thiết kế responsive: một trang, mọi màn hình",
       "level": "BEGINNER",
       "description": "Thẻ viewport, đơn vị tương đối (%, rem, vw/vh), img max-width: 100%, media query min-width, mobile-first, điểm ngắt theo nội dung — 7 bài từ dễ đến khó."
+    },
+    {
+      "slug": "wf-4-1-variables-types",
+      "name": "4.1 Biến và kiểu dữ liệu",
+      "level": "BEGINNER",
+      "description": "const/let (và vì sao bỏ var), string/number/boolean/null/undefined, typeof, template literal, bẫy dấu + nối chuỗi, == với === — 7 bài từ dễ đến khó, chấm bằng cách gọi hàm."
+    },
+    {
+      "slug": "wf-4-2-conditions-loops",
+      "name": "4.2 Toán tử, điều kiện và vòng lặp",
+      "level": "BEGINNER",
+      "description": "=== và !==, && || !, if / else if / else, toán tử ba ngôi, for / while / for...of, sáu giá trị falsy, ?? thay cho || khi đặt mặc định — 7 bài từ dễ đến khó."
+    },
+    {
+      "slug": "wf-4-3-functions",
+      "name": "4.3 Hàm: khối logic tái dùng",
+      "level": "BEGINNER",
+      "description": "Khai báo hàm và arrow function, tham số/đối số, return, tham số mặc định, phạm vi (scope), mệnh đề chốt chặn, bẫy arrow có ngoặc nhọn, hàm làm đối số — 7 bài từ dễ đến khó."
+    },
+    {
+      "slug": "wf-4-4-arrays-objects",
+      "name": "4.4 Mảng và đối tượng",
+      "level": "BEGINNER",
+      "description": "Mảng (chỉ số, length, push), map / filter / reduce / find / forEach, object (dấu chấm, ngoặc vuông, khoá động), mảng các object, bản chép nông với structuredClone, tự viết groupBy — 7 bài từ dễ đến khó."
+    },
+    {
+      "slug": "wf-4-5-dom-events",
+      "name": "4.5 DOM: làm cho HTML tương tác",
+      "level": "BEGINNER",
+      "description": "querySelector, textContent, classList, value, addEventListener, defer, preventDefault cho form, sự kiện nổi bọt và ủy quyền sự kiện (event delegation) — 7 bài từ dễ đến khó, máy chấm bấm nút/gõ phím thật trên trang."
+    },
+    {
+      "slug": "wf-5-1-event-loop",
+      "name": "5.1 Đồng bộ, bất đồng bộ và event loop",
+      "level": "BEGINNER",
+      "description": "Một luồng, call stack, hàng đợi task và microtask, vì sao setTimeout(…, 0) vẫn chạy sau cùng, vòng lặp đồng bộ chặn mọi thứ — 7 bài: đoán thứ tự in, rồi tự sắp xếp công việc cho đúng thứ tự. Máy chấm bắt từng dòng console.log."
+    },
+    {
+      "slug": "wf-5-2-promises",
+      "name": "5.2 Promise: một giá trị đến sau",
+      "level": "BEGINNER",
+      "description": "Ba trạng thái pending / fulfilled / rejected, new Promise, .then / .catch / .finally, chuỗi then phẳng và cái bẫy quên return, bọc API callback thành Promise, settle một lần — 7 bài, máy chấm chạy với đồng hồ giả."
+    },
+    {
+      "slug": "wf-5-3-async-await",
+      "name": "5.3 async / await: code bất đồng bộ đọc như đồng bộ",
+      "level": "BEGINNER",
+      "description": "async luôn trả Promise, await tạm dừng hàm, try/catch quanh await, tuần tự vs song song với Promise.all, bẫy await trong forEach — 7 bài, có đo thời gian bằng đồng hồ giả."
+    },
+    {
+      "slug": "wf-5-4-fetch-apis",
+      "name": "5.4 fetch: nói chuyện với API",
+      "level": "BEGINNER",
+      "description": "fetch trả về Promise, await res.json(), kiểm res.ok (fetch KHÔNG reject khi 404/500), gửi POST với headers + JSON.stringify, query string, phân biệt lỗi mạng với lỗi HTTP, thử lại có chờ lùi dần — 7 bài, máy chấm dùng fetch giả."
+    },
+    {
+      "slug": "wf-5-5-es-modules",
+      "name": "5.5 ES modules: chia code thành nhiều file",
+      "level": "BEGINNER",
+      "description": "export có tên và export default, import đúng dạng, đường dẫn tương đối có đuôi .js, tách một tệp lớn thành module, module chạy một lần và trạng thái dùng chung, gom export qua index.js, ghép một ứng dụng nhỏ nhiều module — 7 bài, máy chấm nạp module thật."
     }
   ]
 }

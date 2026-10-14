@@ -1,0 +1,875 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-5-5-es-modules",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-5-5-es-modules"
+  },
+  "exercises": [
+    {
+      "title": "Export có tên: chia sẻ nhiều thứ từ một tệp",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "export có tên",
+        "import { … }",
+        "module scope"
+      ],
+      "prerequisites": [
+        "hàm",
+        "const"
+      ],
+      "tags": [
+        "javascript",
+        "es-modules",
+        "export"
+      ],
+      "problemHtml": "<p>Bài 5.5: <em>\"Mỗi tệp export những phần nó muốn chia sẻ và import thứ nó cần từ tệp khác.\"</em> <code>main.js</code> đang <code>import { add, PI } from \"./math.js\"</code> nhưng <code>math.js</code> chưa export gì — trình duyệt báo <code>SyntaxError: The requested module './math.js' does not provide an export named 'add'</code>. Thêm <code>export</code> cho cả ba thứ trong math.js.</p>\n<p><em>Mọi tệp .js ở đây là ES module, nạp giống trình duyệt: đường dẫn import phải là đường tương đối CÓ đuôi <code>.js</code>; import một tên mà tệp kia không export là lỗi ngay lúc liên kết. Máy chấm chạy <code>main.js</code> và đọc từng dòng console.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>math.js</code> export có tên <code>add</code>, <code>multiply</code> và <code>PI</code>.</li>\n  <li><code>main.js</code> chạy được và in <code>5</code> rồi <code>3.14159</code>.</li>\n  <li>Không đổi main.js.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Hai tệp: math.js, main.js.",
+      "outputSpec": "Console: 5, 3.14159.",
+      "constraints": "Dùng export có tên (không default).",
+      "examplesJson": [
+        {
+          "input": "export function add(a, b) { return a + b; }",
+          "output": "import { add } from \"./math.js\" dùng được",
+          "explanation": "Tên trong ngoặc nhọn phải KHỚP tên đã export."
+        }
+      ],
+      "hintsJson": [
+        "Viết chữ export ngay trước function / const muốn chia sẻ.",
+        "export function add(…) {…}  export function multiply(…) {…}  export const PI = 3.14159;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "math.js",
+          "language": "javascript",
+          "code": "// math.js — chưa export gì cả\nfunction add(a, b) {\n  return a + b;\n}\n\nfunction multiply(a, b) {\n  return a * b;\n}\n\nconst PI = 3.14159;\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — đừng sửa\nimport { add, PI } from \"./math.js\";\n\nconsole.log(add(2, 3));\nconsole.log(PI);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "math.js",
+          "language": "javascript",
+          "code": "// math.js — export có tên: một tệp chia sẻ được NHIỀU thứ\nexport function add(a, b) {\n  return a + b;\n}\n\nexport function multiply(a, b) {\n  return a * b;\n}\n\nexport const PI = 3.14159;\n// Thứ gì không export thì chỉ sống trong tệp này (phạm vi module)\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — đừng sửa\nimport { add, PI } from \"./math.js\";\n\nconsole.log(add(2, 3));\nconsole.log(PI);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi tệp module có phạm vi riêng: <code>function add</code> khai báo trong math.js không tự lọt sang tệp khác (khác hẳn script cổ điển, nơi mọi thứ cấp cao nhất thành toàn cục). <code>export</code> là cách duy nhất để chia sẻ, <code>import { tên }</code> là cách duy nhất để dùng — và tên phải khớp, nên trình soạn thảo đổi tên xuyên tệp được.</p>\n<p>Lỗi import sai tên xảy ra lúc <em>liên kết</em>, trước khi dòng nào của main.js chạy. Máy chấm nạp main.js, đọc console, và kiểm danh sách export của math.js.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li><code>export { add, multiply, PI }</code> ở cuối tệp cũng đúng — miễn là có export.</li>\n  <li>Chỉ export add và PI — multiply vẫn cần cho các tệp khác (máy chấm kiểm).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.5 ES modules: chia code thành nhiều file.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules",
+      "testsJson": {
+        "loai": "module",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "main.js nạp được (import khớp export)",
+            "kiem": "nap-duoc"
+          },
+          {
+            "moTa": "main.js in 5 và 3.14159",
+            "so": "console",
+            "mongDoi": [
+              "5",
+              "3.14159"
+            ]
+          },
+          {
+            "moTa": "math.js export đủ ba tên",
+            "goi": "Object.keys(__module(\"./math.js\")).sort()",
+            "mongDoi": [
+              "PI",
+              "add",
+              "multiply"
+            ]
+          },
+          {
+            "moTa": "multiply(4, 5) = 20",
+            "goi": "__module(\"./math.js\").multiply(4, 5)",
+            "mongDoi": 20
+          }
+        ]
+      }
+    },
+    {
+      "title": "Export default: import không có ngoặc nhọn",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "export default",
+        "import X from",
+        "một default mỗi tệp"
+      ],
+      "prerequisites": [
+        "export có tên"
+      ],
+      "tags": [
+        "javascript",
+        "es-modules",
+        "default-export"
+      ],
+      "problemHtml": "<p>Bài 5.5: <em>\"Default export — một thứ chính mỗi tệp. Import không ngoặc nhọn, đặt tên gì tuỳ bạn.\"</em> <code>User.js</code> export default một hàm tạo người dùng. <code>main.js</code> lại import nó bằng ngoặc nhọn — tìm một export <em>có tên</em> <code>taoNguoiDung</code> không hề tồn tại. Sửa main.js.</p>\n<p><em>Mọi tệp .js ở đây là ES module, nạp giống trình duyệt: đường dẫn import phải là đường tương đối CÓ đuôi <code>.js</code>; import một tên mà tệp kia không export là lỗi ngay lúc liên kết. Máy chấm chạy <code>main.js</code> và đọc từng dòng console.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa dòng import trong <code>main.js</code> cho khớp với <code>export default</code> của User.js.</li>\n  <li>main.js in <code>{\"ten\":\"Lan\",\"vaiTro\":\"thanh-vien\"}</code>.</li>\n  <li>Không sửa User.js.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "User.js (export default), main.js.",
+      "outputSpec": "Console: một dòng JSON.",
+      "constraints": "Không đổi User.js sang export có tên.",
+      "examplesJson": [
+        {
+          "input": "export default function User(name) { … }",
+          "output": "import User from \"./User.js\";",
+          "explanation": "Không ngoặc nhọn; tên phía import tuỳ chọn."
+        }
+      ],
+      "hintsJson": [
+        "Ngoặc nhọn = export CÓ TÊN. Không ngoặc nhọn = export DEFAULT.",
+        "import taoNguoiDung from \"./User.js\";"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js\nimport { taoNguoiDung } from \"./User.js\";\n\nconsole.log(JSON.stringify(taoNguoiDung(\"Lan\")));\n"
+        },
+        {
+          "name": "User.js",
+          "language": "javascript",
+          "code": "// User.js — đừng sửa\nexport default function taoNguoiDung(ten) {\n  return { ten, vaiTro: \"thanh-vien\" };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js\n// Export DEFAULT ⇒ import KHÔNG ngoặc nhọn; tên bên trái do tệp import tự đặt\nimport taoNguoiDung from \"./User.js\";\n\nconsole.log(JSON.stringify(taoNguoiDung(\"Lan\")));\n"
+        },
+        {
+          "name": "User.js",
+          "language": "javascript",
+          "code": "// User.js — đừng sửa\nexport default function taoNguoiDung(ten) {\n  return { ten, vaiTro: \"thanh-vien\" };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một module có thể có nhiều export có tên và tối đa một <code>default</code>. Bên trong, <code>default</code> thật ra là một export có tên đặc biệt tên là <code>\"default\"</code> — <code>import X from</code> là cách viết tắt của <code>import { default as X } from</code>. Vì phía import tự đặt tên, hai tệp có thể gọi cùng một thứ bằng hai tên khác nhau — tiện, nhưng công cụ khó theo dõi hơn.</p>\n<p>Máy chấm nạp main.js, đọc console, và kiểm User.js vẫn chỉ có export <code>default</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sửa User.js thành export có tên — đề cấm; React và nhiều thư viện dùng default, bạn phải đọc được cả hai.</li>\n  <li><code>import * from \"./User.js\"</code> — thiếu <code>as tên</code>, lỗi cú pháp.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.5 ES modules: chia code thành nhiều file.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#importing_defaults",
+      "testsJson": {
+        "loai": "module",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "main.js nạp được",
+            "kiem": "nap-duoc"
+          },
+          {
+            "moTa": "In ra người dùng Lan",
+            "so": "console",
+            "mongDoi": [
+              "{\"ten\":\"Lan\",\"vaiTro\":\"thanh-vien\"}"
+            ]
+          },
+          {
+            "moTa": "User.js vẫn chỉ có export default",
+            "goi": "Object.keys(__module(\"./User.js\"))",
+            "mongDoi": [
+              "default"
+            ]
+          },
+          {
+            "moTa": "main.js import không ngoặc nhọn",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "import\\s+\\w+\\s+from\\s+[\"']\\./User\\.js[\"']"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Đường dẫn import: có đuôi .js, đúng ./ và ../",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "đường dẫn tương đối",
+        "../",
+        "đuôi .js bắt buộc trong trình duyệt",
+        "thư mục con"
+      ],
+      "prerequisites": [
+        "import / export"
+      ],
+      "tags": [
+        "javascript",
+        "es-modules",
+        "paths"
+      ],
+      "problemHtml": "<p>Bài 5.5: <em>\"Trong trình duyệt là ./utils.js — không phải ./utils. Bundler cho bỏ đuôi, nên chuyển code sang trình duyệt đôi khi vỡ import.\"</em> Dự án có thư mục con:</p>\n<pre><code>main.js\nconfig.js\nutils/tien.js</code></pre>\n<p>Hai dòng import đang sai: <code>main.js</code> viết <code>\"./utils/tien\"</code> (thiếu đuôi), và <code>utils/tien.js</code> viết <code>\"./config.js\"</code> — nhưng config.js nằm ở thư mục <em>cha</em> của utils/.</p>\n<p><em>Mọi tệp .js ở đây là ES module, nạp giống trình duyệt: đường dẫn import phải là đường tương đối CÓ đuôi <code>.js</code>; import một tên mà tệp kia không export là lỗi ngay lúc liên kết. Máy chấm chạy <code>main.js</code> và đọc từng dòng console.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>main.js import từ <code>\"./utils/tien.js\"</code>.</li>\n  <li>utils/tien.js import <code>KY_HIEU</code> từ <code>\"../config.js\"</code> (đường dẫn tính từ CHÍNH tệp tien.js).</li>\n  <li>main.js in <code>\"125000đ\"</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Ba tệp.",
+      "outputSpec": "Console: 125000đ.",
+      "constraints": "Không di chuyển tệp.",
+      "examplesJson": [
+        {
+          "input": "import { x } from \"./utils/tien\"",
+          "output": "Failed to resolve module specifier \"./utils/tien\"",
+          "explanation": "Trình duyệt tải đúng URL bạn viết — không tự đoán đuôi."
+        },
+        {
+          "input": "trong utils/tien.js: import … from \"./config.js\"",
+          "output": "tìm utils/config.js — không có",
+          "explanation": "./ là thư mục của tệp đang viết, không phải thư mục gốc dự án."
+        }
+      ],
+      "hintsJson": [
+        "Đường dẫn tương đối tính từ vị trí của TỆP CHỨA dòng import (giống href tương đối ở Bài 1.1/2.2).",
+        "main.js: from \"./utils/tien.js\"; utils/tien.js: from \"../config.js\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js\nimport { dinhDangTien } from \"./utils/tien\";\n\nconsole.log(dinhDangTien(125000));\n"
+        },
+        {
+          "name": "utils/tien.js",
+          "language": "javascript",
+          "code": "// utils/tien.js\nimport { KY_HIEU } from \"./config.js\";\n\nexport function dinhDangTien(so) {\n  return `${so}${KY_HIEU}`;\n}\n"
+        },
+        {
+          "name": "config.js",
+          "language": "javascript",
+          "code": "// config.js\nexport const KY_HIEU = \"đ\";\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — đường dẫn tính từ thư mục của main.js; trình duyệt cần ĐỦ đuôi .js\nimport { dinhDangTien } from \"./utils/tien.js\";\n\nconsole.log(dinhDangTien(125000));\n"
+        },
+        {
+          "name": "utils/tien.js",
+          "language": "javascript",
+          "code": "// utils/tien.js — \"./\" là utils/, nên lên một cấp bằng \"../\" để tới config.js\nimport { KY_HIEU } from \"../config.js\";\n\nexport function dinhDangTien(so) {\n  return `${so}${KY_HIEU}`;\n}\n"
+        },
+        {
+          "name": "config.js",
+          "language": "javascript",
+          "code": "// config.js\nexport const KY_HIEU = \"đ\";\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Specifier của import là một URL tương đối, phân giải theo URL của <em>tệp đang import</em> — đúng luật của <code>href</code> và <code>src</code>. Trong trình duyệt không ai \"đoán\" đuôi hay tìm <code>index.js</code> giúp bạn; bundler (Vite, webpack) và Node có luật phân giải riêng nên code chạy ở đó có thể vỡ khi đưa thẳng lên trình duyệt.</p>\n<p>Máy chấm phân giải đường dẫn như trình duyệt. Nó nạp main.js, đọc console và kiểm từng tệp nạp được.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sửa thành \"/config.js\" (đường dẫn tuyệt đối) — trỏ về gốc tên miền, không phải gốc dự án; dễ vỡ khi trang nằm trong thư mục con.</li>\n  <li>Chép config.js vào utils/ — giờ có hai bản cấu hình lệch nhau.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.5 ES modules: chia code thành nhiều file.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules#importing_features_into_your_script",
+      "testsJson": {
+        "loai": "module",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "main.js nạp được",
+            "kiem": "nap-duoc"
+          },
+          {
+            "moTa": "utils/tien.js nạp được",
+            "kiem": "nap-duoc",
+            "tep": "utils/tien.js"
+          },
+          {
+            "moTa": "In 125000đ",
+            "so": "console",
+            "mongDoi": [
+              "125000đ"
+            ]
+          },
+          {
+            "moTa": "dinhDangTien dùng ký hiệu từ config.js",
+            "goi": "__module(\"./utils/tien.js\").dinhDangTien(5)",
+            "mongDoi": "5đ"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Tách một tệp 60 dòng thành ba module",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "tách module theo trách nhiệm",
+        "named + default trong cùng dự án",
+        "hàm thuần"
+      ],
+      "prerequisites": [
+        "export có tên",
+        "export default"
+      ],
+      "tags": [
+        "javascript",
+        "es-modules",
+        "refactoring"
+      ],
+      "problemHtml": "<p>Bài 5.5: <em>\"Không thể nhét cả ứng dụng vào một tệp.\"</em> <code>main.js</code> đang chứa mọi thứ của giỏ hàng. Tách ra:</p>\n<ul><li><code>gio-hang.js</code>: export có tên <code>themVao(gio, mon)</code> (trả về giỏ MỚI) và <code>tongTien(gio)</code>.</li>\n<li><code>dinh-dang.js</code>: export default <code>dinhDangTien(so)</code> → <code>\"39000đ\"</code>.</li>\n<li><code>main.js</code>: chỉ còn import và phần chạy — output giữ nguyên y như trước.</li></ul>\n<p><em>Mọi tệp .js ở đây là ES module, nạp giống trình duyệt: đường dẫn import phải là đường tương đối CÓ đuôi <code>.js</code>; import một tên mà tệp kia không export là lỗi ngay lúc liên kết. Máy chấm chạy <code>main.js</code> và đọc từng dòng console.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>gio-hang.js và dinh-dang.js export đúng như trên.</li>\n  <li>main.js không còn định nghĩa themVao / tongTien / dinhDangTien — chỉ import.</li>\n  <li>Output của main.js không đổi: <code>\"2 món\"</code>, <code>\"Tổng: 39000đ\"</code>.</li>\n  <li>themVao không sửa mảng giỏ cũ.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "main.js nguyên khối; gio-hang.js và dinh-dang.js đang trống.",
+      "outputSpec": "Ba tệp, cùng output.",
+      "constraints": "Không đổi tên hàm.",
+      "examplesJson": [
+        {
+          "input": "tongTien([{ gia: 5000, soLuong: 3 }, { gia: 12000, soLuong: 2 }])",
+          "output": "39000",
+          "explanation": "Logic như Bài 4.4, giờ nằm ở gio-hang.js."
+        }
+      ],
+      "hintsJson": [
+        "Cắt từng hàm sang tệp mới, thêm export; ở main.js thêm import tương ứng. Chạy sau mỗi bước.",
+        "main.js: import { themVao, tongTien } from \"./gio-hang.js\"; import dinhDangTien from \"./dinh-dang.js\";"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — mọi thứ trong một tệp\nfunction themVao(gio, mon) {\n  return [...gio, mon];\n}\n\nfunction tongTien(gio) {\n  return gio.reduce((tong, mon) => tong + mon.gia * mon.soLuong, 0);\n}\n\nfunction dinhDangTien(so) {\n  return `${so}đ`;\n}\n\nlet gio = [];\ngio = themVao(gio, { ten: \"Bút\", gia: 5000, soLuong: 3 });\ngio = themVao(gio, { ten: \"Vở\", gia: 12000, soLuong: 2 });\nconsole.log(`${gio.length} món`);\nconsole.log(`Tổng: ${dinhDangTien(tongTien(gio))}`);\n"
+        },
+        {
+          "name": "gio-hang.js",
+          "language": "javascript",
+          "code": "// gio-hang.js — chuyển themVao và tongTien vào đây\n"
+        },
+        {
+          "name": "dinh-dang.js",
+          "language": "javascript",
+          "code": "// dinh-dang.js — chuyển dinhDangTien vào đây (export default)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — chỉ còn \"dây nối\": import rồi chạy\nimport { themVao, tongTien } from \"./gio-hang.js\";   // export có tên ⇒ ngoặc nhọn\nimport dinhDangTien from \"./dinh-dang.js\";           // export default ⇒ không ngoặc\n\nlet gio = [];\ngio = themVao(gio, { ten: \"Bút\", gia: 5000, soLuong: 3 });\ngio = themVao(gio, { ten: \"Vở\", gia: 12000, soLuong: 2 });\nconsole.log(`${gio.length} món`);\nconsole.log(`Tổng: ${dinhDangTien(tongTien(gio))}`);\n"
+        },
+        {
+          "name": "gio-hang.js",
+          "language": "javascript",
+          "code": "// gio-hang.js — logic giỏ hàng (không biết gì về hiển thị)\nexport function themVao(gio, mon) {\n  return [...gio, mon];        // giỏ MỚI — giỏ cũ không bị sửa\n}\n\nexport function tongTien(gio) {\n  return gio.reduce((tong, mon) => tong + mon.gia * mon.soLuong, 0);\n}\n"
+        },
+        {
+          "name": "dinh-dang.js",
+          "language": "javascript",
+          "code": "// dinh-dang.js — một việc chính ⇒ export default\nexport default function dinhDangTien(so) {\n  return `${so}đ`;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tách theo <em>trách nhiệm</em>: logic dữ liệu (giỏ hàng) không phụ thuộc cách hiển thị (định dạng tiền) — muốn đổi sang \"39.000 ₫\" chỉ sửa một tệp, muốn kiểm thử tongTien thì import mỗi gio-hang.js. main.js trở thành \"dây nối\" ngắn đọc một lượt là hiểu ứng dụng làm gì.</p>\n<p>Máy chấm kiểm output không đổi, từng hàm gọi được qua đúng tệp của nó, giỏ cũ không bị sửa, và main.js không còn định nghĩa lại các hàm.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Để lại bản sao hàm trong main.js \"cho chắc\" — hai bản sẽ lệch nhau.</li>\n  <li>Export default trong gio-hang.js một object { themVao, tongTien } — chạy được nhưng mất lợi ích của export có tên.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.5 ES modules: chia code thành nhiều file.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/import-export",
+      "testsJson": {
+        "loai": "module",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Output không đổi",
+            "so": "console",
+            "mongDoi": [
+              "2 món",
+              "Tổng: 39000đ"
+            ]
+          },
+          {
+            "moTa": "gio-hang.js export themVao và tongTien",
+            "goi": "Object.keys(__module(\"./gio-hang.js\")).sort()",
+            "mongDoi": [
+              "themVao",
+              "tongTien"
+            ]
+          },
+          {
+            "moTa": "tongTien gọi được từ gio-hang.js",
+            "goi": "__module(\"./gio-hang.js\").tongTien([{ gia: 5000, soLuong: 3 }, { gia: 12000, soLuong: 2 }])",
+            "mongDoi": 39000
+          },
+          {
+            "moTa": "themVao không sửa giỏ cũ",
+            "chuanBi": "const cu = [{ ten: \"A\" }]; const moi = __module(\"./gio-hang.js\").themVao(cu, { ten: \"B\" });",
+            "goi": "[cu.length, moi.length]",
+            "mongDoi": [
+              1,
+              2
+            ]
+          },
+          {
+            "moTa": "dinh-dang.js export default",
+            "goi": "__module(\"./dinh-dang.js\").default(39000)",
+            "mongDoi": "39000đ"
+          },
+          {
+            "moTa": "main.js không còn định nghĩa các hàm",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "function\\s+(themVao|tongTien|dinhDangTien)\\b",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Module chạy một lần: trạng thái dùng chung giữa các tệp",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "module được cache",
+        "chạy một lần",
+        "live binding",
+        "trạng thái dùng chung"
+      ],
+      "prerequisites": [
+        "export có tên"
+      ],
+      "tags": [
+        "javascript",
+        "es-modules",
+        "singleton"
+      ],
+      "problemHtml": "<p>Bài 5.5: <em>\"Import cùng một tệp từ năm chỗ thì nó chạy đúng một lần.\"</em> <code>kho.js</code> giữ bộ đếm lượt thích của cả trang. <code>a.js</code> và <code>b.js</code> (hai component) mỗi cái thích một lần lúc nạp. Nhưng <code>b.js</code> đang tự chép một bộ đếm riêng, nên tổng chỉ ra 1. Sửa b.js để dùng chung kho, và cho main.js đọc cả <code>layDem()</code> lẫn biến <code>dem</code> export trực tiếp.</p>\n<p><em>Mọi tệp .js ở đây là ES module, nạp giống trình duyệt: đường dẫn import phải là đường tương đối CÓ đuôi <code>.js</code>; import một tên mà tệp kia không export là lỗi ngay lúc liên kết. Máy chấm chạy <code>main.js</code> và đọc từng dòng console.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>kho.js</code> (đã có) in <code>\"Nạp kho\"</code> khi được nạp; export <code>tang</code>, <code>layDem</code> và <code>let dem</code>.</li>\n  <li><code>b.js</code> import <code>tang</code> từ <code>\"./kho.js\"</code> — không còn bộ đếm riêng.</li>\n  <li><code>main.js</code> in: <code>\"Nạp kho\"</code> (MỘT lần), <code>\"Tổng: 2\"</code>, <code>\"dem trực tiếp: 2\"</code> — dòng cuối import thẳng biến <code>dem</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "kho.js, a.js, b.js, main.js.",
+      "outputSpec": "Console ba dòng.",
+      "constraints": "Không sửa kho.js và a.js.",
+      "examplesJson": [
+        {
+          "input": "a.js và b.js cùng import \"./kho.js\"",
+          "output": "Nạp kho   (chỉ một lần)",
+          "explanation": "Module được lưu đệm theo URL đã phân giải — lần import thứ hai nhận lại đúng instance cũ."
+        }
+      ],
+      "hintsJson": [
+        "b.js chỉ cần: import { tang } from \"./kho.js\"; tang();",
+        "main.js: import \"./a.js\"; import \"./b.js\"; import { layDem, dem } from \"./kho.js\"; — dem là \"live binding\": đọc lúc nào thấy giá trị lúc đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js\nimport \"./a.js\";\nimport \"./b.js\";\nimport { layDem } from \"./kho.js\";\n\nconsole.log(`Tổng: ${layDem()}`);\n"
+        },
+        {
+          "name": "b.js",
+          "language": "javascript",
+          "code": "// b.js — tự chép một bộ đếm riêng (sai)\nlet dem = 0;\nfunction tang() {\n  dem = dem + 1;\n}\ntang();\n"
+        },
+        {
+          "name": "a.js",
+          "language": "javascript",
+          "code": "// a.js — đừng sửa\nimport { tang } from \"./kho.js\";\ntang();\n"
+        },
+        {
+          "name": "kho.js",
+          "language": "javascript",
+          "code": "// kho.js — đừng sửa\nconsole.log(\"Nạp kho\");\n\nexport let dem = 0;\n\nexport function tang() {\n  dem = dem + 1;\n}\n\nexport function layDem() {\n  return dem;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js\nimport \"./a.js\";                        // import chỉ để CHẠY tệp (tác dụng phụ)\nimport \"./b.js\";\nimport { layDem, dem } from \"./kho.js\"; // cùng instance mà a.js và b.js đã dùng\n\nconsole.log(`Tổng: ${layDem()}`);\n// dem là live binding: không phải bản sao lúc import, mà là \"cửa sổ\" nhìn vào biến của kho.js\nconsole.log(`dem trực tiếp: ${dem}`);\n"
+        },
+        {
+          "name": "b.js",
+          "language": "javascript",
+          "code": "// b.js — dùng CHUNG kho với a.js: cùng URL \"./kho.js\" ⇒ cùng một module, nạp một lần\nimport { tang } from \"./kho.js\";\ntang();\n"
+        },
+        {
+          "name": "a.js",
+          "language": "javascript",
+          "code": "// a.js — đừng sửa\nimport { tang } from \"./kho.js\";\ntang();\n"
+        },
+        {
+          "name": "kho.js",
+          "language": "javascript",
+          "code": "// kho.js — đừng sửa\nconsole.log(\"Nạp kho\");\n\nexport let dem = 0;\n\nexport function tang() {\n  dem = dem + 1;\n}\n\nexport function layDem() {\n  return dem;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi module được nạp, liên kết và chạy <strong>một lần</strong> cho mỗi URL; mọi import sau đó nhận lại cùng instance. Nên một module giữ trạng thái (bộ đếm, kết nối cơ sở dữ liệu, cấu hình) tự nhiên thành \"một bản duy nhất\" dùng chung — đó là lý do kết nối Prisma ở backend Chương 8 nằm trong một tệp riêng được import khắp nơi.</p>\n<p><code>import { dem }</code> không chép giá trị: nó là một <em>live binding</em>, luôn thấy giá trị hiện tại của biến trong kho.js (nhưng phía import không gán lại được nó). Máy chấm kiểm \"Nạp kho\" chỉ in một lần và cả hai cách đọc đều ra 2.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Import \"./Kho.js\" hay \"./kho.js?x\" ở một chỗ — URL khác ⇒ module khác ⇒ hai kho.</li>\n  <li>Gán dem = 5 trong main.js — binding import là chỉ đọc (TypeError).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.5 ES modules: chia code thành nhiều file.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#imported_values_can_only_be_modified_by_the_exporter",
+      "testsJson": {
+        "loai": "module",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Output: Nạp kho một lần, Tổng 2, dem trực tiếp 2",
+            "so": "console",
+            "mongDoi": [
+              "Nạp kho",
+              "Tổng: 2",
+              "dem trực tiếp: 2"
+            ]
+          },
+          {
+            "moTa": "b.js import tang từ ./kho.js",
+            "kiem": "ma-nguon",
+            "tep": "b.js",
+            "khop": "import\\s*\\{\\s*tang\\s*\\}\\s*from\\s*[\"']\\./kho\\.js[\"']"
+          },
+          {
+            "moTa": "b.js không còn bộ đếm riêng",
+            "kiem": "ma-nguon",
+            "tep": "b.js",
+            "khop": "\\blet\\s+dem\\b|function\\s+tang",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Đọc kho từ ngoài: layDem() = 2",
+            "goi": "__module(\"./kho.js\").layDem()",
+            "mongDoi": 2
+          }
+        ]
+      }
+    },
+    {
+      "title": "Gom export qua utils/index.js (barrel file)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "export { … } from",
+        "export { default as … } from",
+        "barrel file",
+        "import * as"
+      ],
+      "prerequisites": [
+        "export có tên",
+        "export default"
+      ],
+      "tags": [
+        "javascript",
+        "es-modules",
+        "re-export"
+      ],
+      "problemHtml": "<p>Thư mục <code>utils/</code> có ba tệp nhỏ. Thay vì để mọi nơi import ba dòng, dự án dùng một tệp <code>utils/index.js</code> <strong>gom và xuất lại</strong> (re-export) — người dùng chỉ cần <code>import { … } from \"./utils/index.js\"</code>. Bản hiện tại của index.js chỉ <em>import</em> chứ không xuất lại, nên main.js báo thiếu export.</p>\n<ul><li><code>tien.js</code>: export có tên <code>dinhDangTien</code></li>\n<li><code>chu.js</code>: export có tên <code>vietHoaDau</code></li>\n<li><code>slug.js</code>: export <strong>default</strong> một hàm — xuất lại dưới tên <code>taoSlug</code></li></ul>\n<p><em>Mọi tệp .js ở đây là ES module, nạp giống trình duyệt: đường dẫn import phải là đường tương đối CÓ đuôi <code>.js</code>; import một tên mà tệp kia không export là lỗi ngay lúc liên kết. Máy chấm chạy <code>main.js</code> và đọc từng dòng console.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>utils/index.js</code> xuất lại đúng ba tên: <code>dinhDangTien</code>, <code>vietHoaDau</code>, <code>taoSlug</code>.</li>\n  <li>Dùng cú pháp <code>export { … } from \"…\"</code> (default thì <code>export { default as taoSlug } from …</code>).</li>\n  <li>main.js (không sửa) chạy được và in đúng ba dòng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "utils/tien.js, utils/chu.js, utils/slug.js, utils/index.js, main.js.",
+      "outputSpec": "Console: 50000đ · Hà nội · ha-noi-mua-thu.",
+      "constraints": "Không sửa main.js và ba tệp tiện ích.",
+      "examplesJson": [
+        {
+          "input": "export { dinhDangTien } from \"./tien.js\";",
+          "output": "index.js có export dinhDangTien",
+          "explanation": "Một dòng: import rồi export lại, không tạo biến cục bộ."
+        }
+      ],
+      "hintsJson": [
+        "Ba dòng export … from, mỗi tệp tiện ích một dòng.",
+        "export { default as taoSlug } from \"./slug.js\"; — default của slug.js trở thành export CÓ TÊN taoSlug của index.js."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "utils/index.js",
+          "language": "javascript",
+          "code": "// utils/index.js — đang chỉ import, chưa xuất lại\nimport { dinhDangTien } from \"./tien.js\";\nimport { vietHoaDau } from \"./chu.js\";\nimport taoSlug from \"./slug.js\";\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — đừng sửa\nimport { dinhDangTien, vietHoaDau, taoSlug } from \"./utils/index.js\";\n\nconsole.log(dinhDangTien(50000));\nconsole.log(vietHoaDau(\"hà nội\"));\nconsole.log(taoSlug(\"Hà Nội mùa thu\"));\n"
+        },
+        {
+          "name": "utils/tien.js",
+          "language": "javascript",
+          "code": "// utils/tien.js — đừng sửa\nexport function dinhDangTien(so) {\n  return `${so}đ`;\n}\n"
+        },
+        {
+          "name": "utils/chu.js",
+          "language": "javascript",
+          "code": "// utils/chu.js — đừng sửa\nexport function vietHoaDau(chuoi) {\n  return chuoi.charAt(0).toUpperCase() + chuoi.slice(1);\n}\n"
+        },
+        {
+          "name": "utils/slug.js",
+          "language": "javascript",
+          "code": "// utils/slug.js — đừng sửa (export default)\nexport default function taoSlug(chuoi) {\n  return chuoi\n    .normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\")\n    .replace(/đ/g, \"d\").replace(/Đ/g, \"D\")\n    .toLowerCase().trim().replace(/\\s+/g, \"-\");\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "utils/index.js",
+          "language": "javascript",
+          "code": "// utils/index.js — \"barrel\": gom các tiện ích về một cửa\n// export { x } from \"...\": import và export lại trong một dòng (không tạo biến trong tệp này)\nexport { dinhDangTien } from \"./tien.js\";\nexport { vietHoaDau } from \"./chu.js\";\n// default của slug.js ⇒ một export CÓ TÊN của index.js\nexport { default as taoSlug } from \"./slug.js\";\n"
+        },
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — đừng sửa\nimport { dinhDangTien, vietHoaDau, taoSlug } from \"./utils/index.js\";\n\nconsole.log(dinhDangTien(50000));\nconsole.log(vietHoaDau(\"hà nội\"));\nconsole.log(taoSlug(\"Hà Nội mùa thu\"));\n"
+        },
+        {
+          "name": "utils/tien.js",
+          "language": "javascript",
+          "code": "// utils/tien.js — đừng sửa\nexport function dinhDangTien(so) {\n  return `${so}đ`;\n}\n"
+        },
+        {
+          "name": "utils/chu.js",
+          "language": "javascript",
+          "code": "// utils/chu.js — đừng sửa\nexport function vietHoaDau(chuoi) {\n  return chuoi.charAt(0).toUpperCase() + chuoi.slice(1);\n}\n"
+        },
+        {
+          "name": "utils/slug.js",
+          "language": "javascript",
+          "code": "// utils/slug.js — đừng sửa (export default)\nexport default function taoSlug(chuoi) {\n  return chuoi\n    .normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\")\n    .replace(/đ/g, \"d\").replace(/Đ/g, \"D\")\n    .toLowerCase().trim().replace(/\\s+/g, \"-\");\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Import chỉ đưa tên <em>vào</em> phạm vi của tệp; muốn tệp khác thấy thì phải export. <code>export { x } from \"./a.js\"</code> làm cả hai việc trong một dòng mà không tạo biến cục bộ. Default không có tên cố định nên khi xuất lại phải đặt tên: <code>export { default as taoSlug }</code>.</p>\n<p>Barrel file làm import gọn, nhưng có giá: nạp index.js là nạp <em>mọi</em> tệp nó gom, kể cả thứ bạn không dùng — với thư viện lớn đó là lý do bundle phình. Máy chấm kiểm danh sách export của index.js và output của main.js.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li><code>export default from \"./slug.js\"</code> — không phải cú pháp hợp lệ.</li>\n  <li><code>export * from \"./slug.js\"</code> — export * KHÔNG mang theo default.</li>\n  <li>Giữ nguyên ba dòng import rồi thêm export { … } ở cuối — đúng, nhưng dài gấp đôi.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.5 ES modules: chia code thành nhiều file.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export#re-exporting_aggregating",
+      "testsJson": {
+        "loai": "module",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "main.js nạp được",
+            "kiem": "nap-duoc"
+          },
+          {
+            "moTa": "Output ba dòng",
+            "so": "console",
+            "mongDoi": [
+              "50000đ",
+              "Hà nội",
+              "ha-noi-mua-thu"
+            ]
+          },
+          {
+            "moTa": "index.js export đúng ba tên",
+            "goi": "Object.keys(__module(\"./utils/index.js\")).sort()",
+            "mongDoi": [
+              "dinhDangTien",
+              "taoSlug",
+              "vietHoaDau"
+            ]
+          },
+          {
+            "moTa": "Dùng export … from",
+            "kiem": "ma-nguon",
+            "tep": "utils/index.js",
+            "khop": "export\\s*\\{[^}]*default\\s+as\\s+taoSlug[^}]*\\}\\s*from"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Ghép ứng dụng thời tiết từ bốn module + fetch",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "đồ thị phụ thuộc module",
+        "export async function",
+        "top-level await",
+        "Promise.all",
+        "lỗi từng phần"
+      ],
+      "prerequisites": [
+        "ES modules",
+        "fetch + res.ok",
+        "Promise.all",
+        "URLSearchParams"
+      ],
+      "tags": [
+        "javascript",
+        "es-modules",
+        "fetch",
+        "project"
+      ],
+      "problemHtml": "<p>Bài tổng hợp Chương 5. Ứng dụng thời tiết gồm bốn module:</p>\n<pre><code>config.js      export const API_GOC\napi.js         export async function layThoiTiet(thanhPho)      ← cần config.js\ndinh-dang.js   export default function dinhDangThoiTiet(duLieu)\nmain.js        export async function taiTatCa(dsThanhPho)        ← cần api.js + dinh-dang.js</code></pre>\n<p>Hoàn thiện <code>api.js</code> và <code>main.js</code>:</p>\n<ul><li><code>layThoiTiet(tp)</code>: GET <code>&lt;API_GOC&gt;?city=&lt;tp đã mã hoá&gt;</code>, kiểm <code>res.ok</code> (lỗi ⇒ ném <code>Error(\"HTTP &lt;status&gt;\")</code>), trả JSON.</li>\n<li><code>taiTatCa(ds)</code>: tải mọi thành phố <strong>song song</strong>, trả mảng dòng hiển thị theo đúng thứ tự ds; thành phố lỗi thành dòng <code>\"Không tải được &lt;tp&gt;: HTTP 404\"</code> — không làm hỏng các dòng khác.</li>\n<li>Cuối main.js: dùng top-level <code>await</code> gọi <code>taiTatCa([\"Hà Nội\", \"Đà Lạt\", \"Huế\"])</code> và in từng dòng.</li></ul>\n<p><em>Mọi tệp .js ở đây là ES module, nạp giống trình duyệt: đường dẫn import phải là đường tương đối CÓ đuôi <code>.js</code>; import một tên mà tệp kia không export là lỗi ngay lúc liên kết. Máy chấm chạy <code>main.js</code> và đọc từng dòng console.</em></p><p><em>fetch là máy chủ giả: mỗi phản hồi mất 50 ms ảo; Đà Lạt trả 404.</em></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>api.js</code> export có tên <code>layThoiTiet</code>; dùng <code>API_GOC</code> import từ config.js; mã hoá tên thành phố (URLSearchParams hoặc encodeURIComponent).</li>\n  <li><code>main.js</code> export <code>taiTatCa</code>; import default của dinh-dang.js đúng dạng.</li>\n  <li>Tải song song: 3 thành phố vẫn chỉ mất 50 ms.</li>\n  <li>Output: <code>\"Hà Nội: 31°C, nắng\"</code>, <code>\"Không tải được Đà Lạt: HTTP 404\"</code>, <code>\"Huế: 29°C, mưa\"</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Bốn tệp module; máy chủ giả.",
+      "outputSpec": "Console ba dòng; taiTatCa trả mảng ba dòng.",
+      "constraints": "Không sửa config.js, dinh-dang.js.\nKhông dùng Promise.allSettled.",
+      "examplesJson": [
+        {
+          "input": "await taiTatCa([\"Huế\", \"Hà Nội\"])",
+          "output": "[\"Huế: 29°C, mưa\", \"Hà Nội: 31°C, nắng\"]",
+          "explanation": "Thứ tự theo đầu vào, sau 50 ms."
+        },
+        {
+          "input": "await layThoiTiet(\"Đà Lạt\")",
+          "output": "Error: HTTP 404",
+          "explanation": "api.js ném; main.js bắt riêng cho từng thành phố."
+        }
+      ],
+      "hintsJson": [
+        "api.js: import { API_GOC } from \"./config.js\"; export async function layThoiTiet(tp) { const res = await fetch(`${API_GOC}?${new URLSearchParams({ city: tp })}`); if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); }",
+        "main.js: return Promise.all(ds.map(async (tp) => { try { return dinhDangThoiTiet(await layThoiTiet(tp)); } catch (err) { return `Không tải được ${tp}: ${err.message}`; } })); — rồi const dong = await taiTatCa([...]); for (const d of dong) console.log(d);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js\nimport { layThoiTiet } from \"./api.js\";\nimport { dinhDangThoiTiet } from \"./dinh-dang.js\";\n\nexport async function taiTatCa(dsThanhPho) {\n  const dong = [];\n  for (const tp of dsThanhPho) {\n    dong.push(dinhDangThoiTiet(await layThoiTiet(tp)));\n  }\n  return dong;\n}\n"
+        },
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js\nimport { API_GOC } from \"./config.js\";\n\nasync function layThoiTiet(thanhPho) {\n  const res = await fetch(API_GOC + \"?city=\" + thanhPho);\n  return res.json();\n}\n"
+        },
+        {
+          "name": "config.js",
+          "language": "javascript",
+          "code": "// config.js — cấu hình chung\nexport const API_GOC = \"/api/thoi-tiet\";\n"
+        },
+        {
+          "name": "dinh-dang.js",
+          "language": "javascript",
+          "code": "// dinh-dang.js — MỘT việc chính ⇒ default export\nexport default function dinhDangThoiTiet({ thanhPho, nhietDo, troi }) {\n  return `${thanhPho}: ${nhietDo}°C, ${troi}`;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// main.js — \"dây nối\" của ứng dụng\nimport { layThoiTiet } from \"./api.js\";               // export có tên\nimport dinhDangThoiTiet from \"./dinh-dang.js\";         // export default ⇒ không ngoặc\n\nexport async function taiTatCa(dsThanhPho) {\n  // Mỗi thành phố một Promise, bắt đầu cùng lúc; mỗi cái tự bắt lỗi của nó\n  // ⇒ không cái nào reject ⇒ Promise.all không thất bại vì một thành phố.\n  return Promise.all(\n    dsThanhPho.map(async (tp) => {\n      try {\n        return dinhDangThoiTiet(await layThoiTiet(tp));\n      } catch (err) {\n        return `Không tải được ${tp}: ${err.message}`;\n      }\n    }),\n  );\n}\n\n// Top-level await: được phép ở cấp cao nhất của một ES module\nconst dong = await taiTatCa([\"Hà Nội\", \"Đà Lạt\", \"Huế\"]);\nfor (const d of dong) {\n  console.log(d);\n}\n"
+        },
+        {
+          "name": "api.js",
+          "language": "javascript",
+          "code": "// api.js — mọi thứ về nói chuyện với máy chủ nằm ở đây\nimport { API_GOC } from \"./config.js\";\n\nexport async function layThoiTiet(thanhPho) {\n  // Mã hoá tên có dấu và dấu cách — đừng ghép chuỗi trần vào URL\n  const qs = new URLSearchParams({ city: thanhPho });\n  const res = await fetch(`${API_GOC}?${qs}`);\n  if (!res.ok) throw new Error(`HTTP ${res.status}`);   // fetch không tự ném khi 404\n  return res.json();\n}\n"
+        },
+        {
+          "name": "config.js",
+          "language": "javascript",
+          "code": "// config.js — cấu hình chung\nexport const API_GOC = \"/api/thoi-tiet\";\n"
+        },
+        {
+          "name": "dinh-dang.js",
+          "language": "javascript",
+          "code": "// dinh-dang.js — MỘT việc chính ⇒ default export\nexport default function dinhDangThoiTiet({ thanhPho, nhietDo, troi }) {\n  return `${thanhPho}: ${nhietDo}°C, ${troi}`;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bài này gom cả chương: module chia trách nhiệm (cấu hình / mạng / hiển thị / dây nối), fetch có kiểm <code>res.ok</code>, Promise.all để song song, và bắt lỗi đúng phạm vi để một thành phố hỏng không kéo sập cả trang. Bốn lỗi của bản khởi đầu: api.js quên export; main.js import default bằng ngoặc nhọn; URL không mã hoá; tải tuần tự và một lỗi làm hỏng tất cả.</p>\n<p>Top-level <code>await</code> chỉ có trong ES module: trình duyệt (và máy chấm) chờ module chạy xong — kể cả những <code>await</code> ở cấp cao nhất — trước khi coi nó đã nạp. Máy chấm kiểm output, export của từng tệp, lỗi 404 từ api.js và thời gian song song 50 ms.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Bắt lỗi bằng một try/catch quanh cả Promise.all — một thành phố lỗi làm mất cả ba dòng.</li>\n  <li>Gọi taiTatCa nhưng quên await ở cấp cao nhất — console in \"[object Promise]\" hoặc không in gì.</li>\n  <li>Import \"./api\" thiếu đuôi .js.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 5.5 ES modules: chia code thành nhiều file.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await",
+      "testsJson": {
+        "loai": "module",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "fetchGia": {
+          "/api/thoi-tiet?city=H%C3%A0%20N%E1%BB%99i": {
+            "json": {
+              "thanhPho": "Hà Nội",
+              "nhietDo": 31,
+              "troi": "nắng"
+            }
+          },
+          "/api/thoi-tiet?city=H%C3%A0+N%E1%BB%99i": {
+            "json": {
+              "thanhPho": "Hà Nội",
+              "nhietDo": 31,
+              "troi": "nắng"
+            }
+          },
+          "/api/thoi-tiet?city=Hu%E1%BA%BF": {
+            "json": {
+              "thanhPho": "Huế",
+              "nhietDo": 29,
+              "troi": "mưa"
+            }
+          },
+          "/api/thoi-tiet?city=%C4%90%C3%A0%20L%E1%BA%A1t": {
+            "status": 404,
+            "json": {
+              "loi": "Không có dữ liệu"
+            }
+          },
+          "/api/thoi-tiet?city=%C4%90%C3%A0+L%E1%BA%A1t": {
+            "status": 404,
+            "json": {
+              "loi": "Không có dữ liệu"
+            }
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "main.js nạp được",
+            "kiem": "nap-duoc"
+          },
+          {
+            "moTa": "Output ba dòng đúng thứ tự",
+            "so": "console",
+            "mongDoi": [
+              "Hà Nội: 31°C, nắng",
+              "Không tải được Đà Lạt: HTTP 404",
+              "Huế: 29°C, mưa"
+            ]
+          },
+          {
+            "moTa": "api.js export layThoiTiet",
+            "goi": "await __module(\"./api.js\").layThoiTiet(\"Huế\")",
+            "mongDoi": {
+              "thanhPho": "Huế",
+              "nhietDo": 29,
+              "troi": "mưa"
+            }
+          },
+          {
+            "moTa": "layThoiTiet ném HTTP 404",
+            "goi": "await __module(\"./api.js\").layThoiTiet(\"Đà Lạt\")",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^HTTP 404$"
+            }
+          },
+          {
+            "moTa": "taiTatCa song song: 50 ms",
+            "chuanBi": "const tai = __module(\"./main.js\").taiTatCa; const t = Date.now(); await tai([\"Huế\", \"Hà Nội\", \"Đà Lạt\"]);",
+            "goi": "Date.now() - t",
+            "mongDoi": 50
+          },
+          {
+            "moTa": "taiTatCa giữ thứ tự đầu vào",
+            "goi": "await __module(\"./main.js\").taiTatCa([\"Huế\", \"Hà Nội\"])",
+            "mongDoi": [
+              "Huế: 29°C, mưa",
+              "Hà Nội: 31°C, nắng"
+            ],
+            "an": true
+          },
+          {
+            "moTa": "Không dùng allSettled",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "allSettled",
+            "phuDinh": true,
+            "an": true
+          }
+        ]
+      }
+    }
+  ]
+}

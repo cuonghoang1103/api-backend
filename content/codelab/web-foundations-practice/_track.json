@@ -38,6 +38,36 @@
       "name": "2.5 Bảng, đa phương tiện và khả năng tiếp cận",
       "level": "BEGINNER",
       "description": "table / thead / tbody / tr / th / td, video & audio có controls và phụ đề, danh sách kiểm khả năng tiếp cận — 7 bài từ dễ đến khó."
+    },
+    {
+      "slug": "wf-3-1-css-basics",
+      "name": "3.1 CSS căn bản: bộ chọn, thuộc tính, xếp tầng",
+      "level": "BEGINNER",
+      "description": "Ba cách gắn CSS, hình dạng một quy tắc, bộ chọn thẻ/class/id/con cháu, độ đặc hiệu và thứ tự nguồn, vì sao tránh !important — 7 bài từ dễ đến khó."
+    },
+    {
+      "slug": "wf-3-2-box-model",
+      "name": "3.2 Box model: mọi phần tử là một cái hộp",
+      "level": "BEGINNER",
+      "description": "content / padding / border / margin, box-sizing: border-box, cú pháp rút gọn, margin dọc gộp, bẫy hai cột 50% — 7 bài từ dễ đến khó."
+    },
+    {
+      "slug": "wf-3-3-flexbox",
+      "name": "3.3 Flexbox: xếp mọi thứ theo hàng hoặc cột",
+      "level": "BEGINNER",
+      "description": "display: flex, gap, trục chính/trục phụ, justify-content, align-items, flex-direction, flex-wrap, flex: 1, căn giữa hoàn hảo, bẫy đổi trục — 7 bài từ dễ đến khó."
+    },
+    {
+      "slug": "wf-3-4-css-grid",
+      "name": "3.4 CSS Grid: dàn trang hai chiều",
+      "level": "BEGINNER",
+      "description": "display: grid, grid-template-columns, đơn vị fr, repeat(), cột cố định + linh hoạt, repeat(auto-fit/auto-fill, minmax()), Grid cho khung trang + Flexbox bên trong — 7 bài từ dễ đến khó."
+    },
+    {
+      "slug": "wf-3-5-responsive",
+      "name": "3.5 Thiết kế responsive: một trang, mọi màn hình",
+      "level": "BEGINNER",
+      "description": "Thẻ viewport, đơn vị tương đối (%, rem, vw/vh), img max-width: 100%, media query min-width, mobile-first, điểm ngắt theo nội dung — 7 bài từ dễ đến khó."
     }
   ]
 }

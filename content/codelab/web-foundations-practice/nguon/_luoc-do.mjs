@@ -57,10 +57,12 @@
  *
  * Cách dựng trang trước khi kiểm (máy chấm trình duyệt PHẢI làm y hệt):
  *   1. Lấy tệp `tepHtml` từ code người học.
- *   2. Mỗi <link rel="stylesheet" href="X"> mà X là một tệp trong bài ⇒ thay
- *      bằng <style>nội dung X</style> (đúng vị trí cũ, giữ thứ tự cascade).
+ *   2. Mỗi <link rel="stylesheet" href="X"> mà X là một tệp trong bài ⇒ GIỮ thẻ link
+ *      (kiểm cấu trúc head cần nó) và chèn NGAY SAU nó <style>nội dung X</style>
+ *      (đúng vị trí cũ, giữ thứ tự cascade).
  *   3. KHÔNG chạy <script> (Ch2–Ch3 chỉ HTML/CSS).
- *   4. Iframe rộng `beRong` px (mặc định 1024) — kiểm responsive đặt beRong khác.
+ *   4. Iframe rộng `beRong` px (mặc định 1024) và CAO 768px (100vh = 768px) — kiểm
+ *      responsive đặt beRong khác. Body giữ margin 8px mặc định của trình duyệt.
  *
  * Kiem = {
  *   moTa:   string,      // câu tiếng Việt hiện cho người học (✓/✗ từng dòng)
@@ -88,7 +90,11 @@
  *  'kich-thuoc'    selector, thuocTinh:'width'|    getBoundingClientRect()[thuocTinh] ≈ giaTri (±0,5px)
  *                  'height', giaTri, beRong?
  *  'so-cot'        selector, giaTri, beRong?       số rãnh cột của grid = giaTri (trình duyệt: đếm
- *                                                  token px của computed grid-template-columns)
+ *                                                  token px > 0 của computed grid-template-columns —
+ *                                                  auto-fit gập rãnh rỗng thành 0px, không tính)
+ *  'ti-le-cot'     selector, giaTri, beRong?       bề rộng cột 1 / cột 2 ≈ giaTri (±0,05) — vd 2fr 1fr ⇒ 2
+ *                                                  (trình duyệt: chia hai token px đầu; nếu có gap
+ *                                                  thì vẫn đúng vì gap không nằm trong rãnh)
  *  'co-nhan'       selector                        MỌI phần tử khớp có nhãn: el.labels.length ≥ 1
  *                                                  hoặc aria-label / aria-labelledby không rỗng
  *  'neo-hop-le'    selector (vd 'nav a[href^="#"]') có ≥1 phần tử và MỌI href="#id" trỏ tới id có thật
@@ -102,7 +108,8 @@
  *                                                  khi gán value bằng mã (đặc tả: chỉ khi người dùng gõ)
  *                                                  ⇒ kiểm minlength bằng 'thuoc-tinh'.
  *  'ma-nguon'      tep? (mặc định mọi tệp), khop,  regex khớp mã nguồn ĐÃ BỎ chú thích (<!-- -->, /* * /);
- *                  phuDinh?: true                  phuDinh ⇒ ĐẠT khi KHÔNG khớp (cấm !important, cấm style=…)
+ *                  phuDinh?: true,                 phuDinh ⇒ ĐẠT khi KHÔNG khớp (cấm !important, cấm style=…);
+ *                  giuChuThich?: true              giuChuThich ⇒ khớp trên mã GỐC (kiểm "có chú thích giải thích")
  *
  * Nguyên tắc soạn kiểm:
  *   - Mỗi yêu cầu trong `yeuCau` có ít nhất một kiểm. Lời giải PHẢI qua hết;

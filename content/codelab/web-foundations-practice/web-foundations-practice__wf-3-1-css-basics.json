@@ -1,0 +1,905 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-3-1-css-basics",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-3-1-css-basics"
+  },
+  "exercises": [
+    {
+      "title": "Dọn style nội dòng ra một tệp styles.css riêng",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "inline / internal / external",
+        "link rel=\"stylesheet\"",
+        "quy tắc CSS",
+        "khai báo"
+      ],
+      "prerequisites": [
+        "bộ khung HTML5"
+      ],
+      "tags": [
+        "css",
+        "link",
+        "external-stylesheet"
+      ],
+      "problemHtml": "<p>Bài 3.1 có ba cách gắn CSS: inline (<code>style=\"…\"</code> trên phần tử — \"nhanh nhưng khó quản, tránh\"), internal (khối <code>&lt;style&gt;</code>), và external (tệp <code>.css</code> riêng, nối bằng <code>&lt;link&gt;</code> — \"chuẩn mực\"). Trang dưới đây trộn cả hai cách đầu. Hãy dọn hết sang <code>styles.css</code> để một tệp tạo kiểu cho cả site.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trong <code>&lt;head&gt;</code> có <code>&lt;link rel=\"stylesheet\" href=\"styles.css\"&gt;</code>.</li>\n  <li>Không còn thuộc tính <code>style=\"…\"</code> nào và không còn khối <code>&lt;style&gt;</code> nào trong index.html.</li>\n  <li><code>styles.css</code> có quy tắc cho <code>p</code>: <code>color: #333</code>, <code>font-size: 16px</code>, <code>line-height: 1.6</code> (đúng ví dụ của bài).</li>\n  <li>Và quy tắc cho <code>h1</code>: <code>color: navy</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html có <style> trong head và style=\"…\" trên h1; styles.css trống.",
+      "outputSpec": "Giao diện y như cũ, nhưng mọi kiểu nằm trong styles.css.",
+      "constraints": "Không đổi nội dung HTML ngoài việc xoá style/thêm link.\nMỗi khai báo kết thúc bằng dấu chấm phẩy.",
+      "examplesJson": [
+        {
+          "input": "styles.css:\np {\n  color: #333;\n  font-size: 16px;\n  line-height: 1.6;\n}",
+          "output": "Mọi đoạn văn: chữ xám đậm, cỡ 16px, giãn dòng 1,6 lần cỡ chữ.",
+          "explanation": "bộ_chọn { thuộc_tính: giá_trị; } — một quy tắc áp cho MỌI phần tử khớp bộ chọn."
+        }
+      ],
+      "hintsJson": [
+        "Chép phần bên trong <style>…</style> sang styles.css, rồi chuyển nội dung style=\"color: navy\" của h1 thành một quy tắc h1 { … }.",
+        "Thêm <link rel=\"stylesheet\" href=\"styles.css\"> vào <head>, xoá khối <style> và thuộc tính style."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Dọn kiểu từ index.html sang đây */\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Câu lạc bộ</title>\n    <style>\n      p { color: #333; font-size: 16px; line-height: 1.6; }\n    </style>\n  </head>\n  <body>\n    <h1 style=\"color: navy;\">Câu lạc bộ F-Code</h1>\n    <p>Sinh hoạt tối thứ Năm hằng tuần.</p>\n    <p>Năm nay học HTML, CSS và JavaScript.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Một tệp tạo kiểu cho cả site — nối từ <head> bằng <link> */\n\n/* bộ chọn thẻ: mọi <h1> */\nh1 {\n  color: navy;\n}\n\n/* bộ chọn thẻ: mọi <p> — đúng ví dụ của bài 3.1 */\np {\n  color: #333;        /* xám đậm, dễ đọc hơn đen tuyền */\n  font-size: 16px;\n  line-height: 1.6;   /* không đơn vị: 1,6 lần cỡ chữ */\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Câu lạc bộ</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <h1>Câu lạc bộ F-Code</h1>\n    <p>Sinh hoạt tối thứ Năm hằng tuần.</p>\n    <p>Năm nay học HTML, CSS và JavaScript.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tệp ngoài tách nội dung (HTML) khỏi hình thức (CSS) — đúng \"điều cốt lõi\" mở đầu bài 3.1. Lợi ích thực tế: mười trang cùng nối một <code>styles.css</code> thì đổi màu tiêu đề một lần là cả site đổi; trình duyệt tải tệp CSS một lần rồi lưu đệm cho mọi trang.</p>\n<p>Máy chấm kiểm cả mã nguồn (có link, không còn <code>style=</code> hay <code>&lt;style&gt;</code>) và kết quả: màu/cỡ chữ <em>computed</em> của <code>p</code> và <code>h1</code> — tức là CSS của bạn thật sự được áp, không chỉ \"có mặt\".</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>&lt;link href=\"styles.css\"&gt;</code> thiếu <code>rel=\"stylesheet\"</code> — trình duyệt không biết đó là bảng kiểu, bỏ qua.</li>\n  <li>Chép cả thẻ <code>&lt;style&gt;</code> vào tệp .css — tệp CSS chỉ chứa quy tắc, không có thẻ HTML.</li>\n  <li>Quên dấu <code>;</code> giữa hai khai báo — khai báo thứ hai bị nuốt vào giá trị của khai báo đầu, cả hai cùng hỏng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.1 CSS căn bản: bộ chọn, thuộc tính, và sự \"xếp tầng\".</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps/Getting_started",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "head có <link rel=\"stylesheet\" href=\"styles.css\">",
+            "kiem": "ton-tai",
+            "selector": "head link[rel=\"stylesheet\"][href=\"styles.css\"]"
+          },
+          {
+            "moTa": "Không còn thuộc tính style=\"…\"",
+            "kiem": "khong-ton-tai",
+            "selector": "[style]"
+          },
+          {
+            "moTa": "Không còn khối <style> trong index.html",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "<style",
+            "phuDinh": true
+          },
+          {
+            "moTa": "p có màu #333 (rgb(51, 51, 51))",
+            "kiem": "css",
+            "selector": "p",
+            "thuocTinh": "color",
+            "giaTri": "rgb(51, 51, 51)"
+          },
+          {
+            "moTa": "p cỡ chữ 16px",
+            "kiem": "css",
+            "selector": "p",
+            "thuocTinh": "font-size",
+            "giaTri": "16px"
+          },
+          {
+            "moTa": "p giãn dòng 1.6",
+            "kiem": "css",
+            "selector": "p",
+            "thuocTinh": "line-height",
+            "khop": "^(1\\.6|25\\.6px)$"
+          },
+          {
+            "moTa": "h1 màu navy (rgb(0, 0, 128))",
+            "kiem": "css",
+            "selector": "h1",
+            "thuocTinh": "color",
+            "giaTri": "rgb(0, 0, 128)"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Ba bộ chọn dùng hằng ngày: theo thẻ, theo class, theo id",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "bộ chọn thẻ",
+        "bộ chọn .class",
+        "bộ chọn #id",
+        "tái dùng class"
+      ],
+      "prerequisites": [
+        "quy tắc CSS"
+      ],
+      "tags": [
+        "css",
+        "selectors"
+      ],
+      "problemHtml": "<p>Ba dòng ví dụ của bài 3.1:</p>\n<pre><code>h1        { color: navy; }      /* theo tên thẻ: mọi &lt;h1&gt; */\n.card     { padding: 16px; }    /* theo class: mọi phần tử có class=\"card\" */\n#site-nav { background: #eee; } /* theo id: phần tử duy nhất id=\"site-nav\" */</code></pre>\n<p>HTML đã có sẵn các class và id. Viết <code>styles.css</code> để tạo kiểu đúng phần tử, mỗi yêu cầu dùng đúng loại bộ chọn được chỉ định.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><strong>Theo thẻ</strong>: mọi <code>h2</code> màu <code>teal</code>.</li>\n  <li><strong>Theo class</strong>: mọi phần tử <code>class=\"card\"</code> có <code>padding: 16px</code> và <code>border: 1px solid #ccc</code> — có ba thẻ, một quy tắc.</li>\n  <li><strong>Theo id</strong>: thanh <code>id=\"site-nav\"</code> có nền <code>#eee</code>.</li>\n  <li>Thẻ có thêm class <code>noi-bat</code> (một thẻ có hai class) có chữ đậm: <code>font-weight: bold</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html có h2, ba div.card (một cái thêm .noi-bat), nav#site-nav; styles.css trống.",
+      "outputSpec": "Ba thẻ cùng khung viền, thẻ nổi bật chữ đậm, thanh điều hướng nền xám nhạt, tiêu đề mục màu xanh mòng két.",
+      "constraints": "Không sửa index.html.\nKhông dùng style nội dòng.\nKhông viết ba quy tắc riêng cho ba thẻ — một class, một quy tắc.",
+      "examplesJson": [
+        {
+          "input": "<div class=\"card noi-bat\">…</div>",
+          "output": "Thẻ này nhận CẢ quy tắc .card (khung, padding) LẪN .noi-bat (chữ đậm).",
+          "explanation": "class=\"card noi-bat\" là hai class, cách nhau dấu cách. Mỗi bộ chọn class khớp độc lập."
+        }
+      ],
+      "hintsJson": [
+        "Bốn quy tắc: h2 { … }, .card { … }, #site-nav { … }, .noi-bat { … }. Dấu chấm = class, dấu thăng = id.",
+        "background: #eee; hoặc background-color: #eee; đều được. border viết gọn: 1px solid #ccc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Viết 4 quy tắc: theo thẻ, theo class, theo id, và class thứ hai */\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Khoá học</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav id=\"site-nav\"><a href=\"/\">Trang chủ</a> · <a href=\"/khoa-hoc\">Khoá học</a></nav>\n    <h1>Khoá học nổi bật</h1>\n    <h2>Lập trình web</h2>\n    <div class=\"card\">Nền tảng Web</div>\n    <div class=\"card noi-bat\">React — đang giảm giá</div>\n    <div class=\"card\">Node.js</div>\n    <h2>Dữ liệu</h2>\n    <p>Sắp ra mắt.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* theo THẺ: mọi <h2> trên trang */\nh2 {\n  color: teal;\n}\n\n/* theo CLASS: mọi phần tử có class=\"card\" — một quy tắc cho cả ba thẻ */\n.card {\n  padding: 16px;\n  border: 1px solid #ccc;\n}\n\n/* class thứ hai trên cùng phần tử: cộng thêm, không thay thế .card */\n.noi-bat {\n  font-weight: bold;\n}\n\n/* theo ID: phần tử duy nhất id=\"site-nav\" — dùng dè sẻn */\n#site-nav {\n  background: #eee;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Khoá học</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav id=\"site-nav\"><a href=\"/\">Trang chủ</a> · <a href=\"/khoa-hoc\">Khoá học</a></nav>\n    <h1>Khoá học nổi bật</h1>\n    <h2>Lập trình web</h2>\n    <div class=\"card\">Nền tảng Web</div>\n    <div class=\"card noi-bat\">React — đang giảm giá</div>\n    <div class=\"card\">Node.js</div>\n    <h2>Dữ liệu</h2>\n    <p>Sắp ra mắt.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi loại bộ chọn có tầm khác nhau: thẻ thì rộng (mọi h2), class thì tái dùng được (mọi thẻ mang <code>card</code>), id thì chỉ một phần tử. Bài 3.1 khuyên \"ưu tiên class\" — công cụ hằng ngày — và dùng id dè sẻn, vì id có độ đặc hiệu rất cao (bài 5 của bộ này sẽ cho thấy cái giá).</p>\n<p>Một phần tử nhiều class nhận kiểu từ mọi class của nó: thẻ React vừa có khung của <code>.card</code> vừa có chữ đậm của <code>.noi-bat</code>. Máy chấm kiểm giá trị computed trên từng phần tử, kể cả kiểm âm: hai thẻ thường <em>không</em> được đậm.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>card { … }</code> thiếu dấu chấm — đó là bộ chọn thẻ tìm phần tử tên \"card\", không khớp gì.</li>\n  <li>Viết <code>.site-nav</code> cho id — dấu chấm là class; id dùng <code>#</code>.</li>\n  <li>Viết <code>.card.noi-bat</code> hay <code>.card .noi-bat</code> lẫn lộn — có dấu cách nghĩa là \"con cháu\", không dấu cách nghĩa là \"cùng phần tử\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.1 CSS căn bản: bộ chọn, thuộc tính, và sự \"xếp tầng\".</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Mọi h2 màu teal (rgb(0, 128, 128))",
+            "kiem": "css",
+            "selector": "h2",
+            "thuocTinh": "color",
+            "giaTri": "rgb(0, 128, 128)"
+          },
+          {
+            "moTa": "Mọi .card có padding 16px",
+            "kiem": "css",
+            "selector": ".card",
+            "thuocTinh": "padding-top",
+            "giaTri": "16px"
+          },
+          {
+            "moTa": "Mọi .card có viền 1px",
+            "kiem": "css",
+            "selector": ".card",
+            "thuocTinh": "border-left-width",
+            "giaTri": "1px"
+          },
+          {
+            "moTa": "Viền .card màu #ccc",
+            "kiem": "css",
+            "selector": ".card",
+            "thuocTinh": "border-top-color",
+            "giaTri": "rgb(204, 204, 204)"
+          },
+          {
+            "moTa": "#site-nav nền #eee",
+            "kiem": "css",
+            "selector": "#site-nav",
+            "thuocTinh": "background-color",
+            "giaTri": "rgb(238, 238, 238)"
+          },
+          {
+            "moTa": ".noi-bat chữ đậm",
+            "kiem": "css",
+            "selector": ".noi-bat",
+            "thuocTinh": "font-weight",
+            "khop": "^(bold|700)$"
+          },
+          {
+            "moTa": "Thẻ thường KHÔNG đậm",
+            "kiem": "css",
+            "selector": ".card:not(.noi-bat)",
+            "thuocTinh": "font-weight",
+            "khop": "^(normal|400)$"
+          },
+          {
+            "moTa": "Một quy tắc .card cho cả ba thẻ (không quy tắc riêng từng thẻ)",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": ":nth-child|:first-child|:last-child",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bộ chọn con cháu: chỉ tô liên kết nằm trong thanh điều hướng",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "bộ chọn con cháu (descendant)",
+        "kết hợp bộ chọn",
+        "nav a"
+      ],
+      "prerequisites": [
+        "bộ chọn thẻ/class"
+      ],
+      "tags": [
+        "css",
+        "selectors",
+        "descendant"
+      ],
+      "problemHtml": "<p>Bài 3.1: <em>\"Bạn có thể kết hợp: <code>nav a</code> nghĩa là mọi <code>&lt;a&gt;</code> bên trong một <code>&lt;nav&gt;</code>.\"</em> Trang có liên kết ở ba chỗ: thanh điều hướng, thân bài và chân trang. Người viết trước dùng <code>a { … }</code> nên cả ba chỗ đổi màu trắng — liên kết trong thân bài (nền trắng) biến mất. Chỉ tô liên kết trong nav, không sửa HTML.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Liên kết trong <code>nav</code>: chữ trắng, không gạch chân (<code>text-decoration: none</code>).</li>\n  <li><code>nav</code> có nền <code>#1e293b</code> để chữ trắng đọc được.</li>\n  <li>Liên kết trong thân bài và chân trang giữ màu mặc định của trình duyệt (không bị quy tắc nào của bạn chạm tới).</li>\n  <li>Không thêm class vào HTML.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "styles.css có quy tắc a { color: white; text-decoration: none; } áp lên mọi liên kết.",
+      "outputSpec": "Thanh điều hướng nền tối, liên kết trắng; liên kết trong bài vẫn xanh gạch chân như mặc định.",
+      "constraints": "Không sửa index.html.\nKhông dùng id hay !important.",
+      "examplesJson": [
+        {
+          "input": "nav a { color: white; }",
+          "output": "<nav><a>Trang chủ</a></nav> ⇒ trắng\n<main><a>MDN</a></main> ⇒ không đổi",
+          "explanation": "Dấu cách giữa nav và a nghĩa là \"a nằm đâu đó bên trong nav\" (con, cháu, chắt… đều khớp)."
+        }
+      ],
+      "hintsJson": [
+        "Bộ chọn hiện tại (a) quá rộng. Thu hẹp bằng cách thêm \"ngữ cảnh\" phía trước, cách một dấu cách.",
+        "Đổi a { … } thành nav a { … } và thêm nav { background: #1e293b; }."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Quy tắc này đang tô MỌI liên kết — sửa cho chỉ tô liên kết trong nav */\na {\n  color: white;\n  text-decoration: none;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Blog</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav>\n      <a href=\"/\">Trang chủ</a>\n      <a href=\"/bai-viet\">Bài viết</a>\n    </nav>\n    <main>\n      <p>Tài liệu hay nhất là <a href=\"https://developer.mozilla.org\">MDN</a>.</p>\n    </main>\n    <footer>\n      <p><a href=\"/lien-he\">Liên hệ</a></p>\n    </footer>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* nền tối cho thanh điều hướng để chữ trắng đọc được */\nnav {\n  background: #1e293b;\n}\n\n/* con cháu: chỉ những <a> nằm BÊN TRONG <nav> */\nnav a {\n  color: white;\n  text-decoration: none;\n}\n\n/* liên kết ở main/footer không bị quy tắc nào chạm tới ⇒ giữ mặc định */\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Blog</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav>\n      <a href=\"/\">Trang chủ</a>\n      <a href=\"/bai-viet\">Bài viết</a>\n    </nav>\n    <main>\n      <p>Tài liệu hay nhất là <a href=\"https://developer.mozilla.org\">MDN</a>.</p>\n    </main>\n    <footer>\n      <p><a href=\"/lien-he\">Liên hệ</a></p>\n    </footer>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bộ chọn con cháu thu hẹp phạm vi bằng <em>vị trí trong cây DOM</em> thay vì bằng class — HTML không cần đổi gì. Đây là lý do bài 2.3 quan trọng: có <code>&lt;nav&gt;</code> ngữ nghĩa thì CSS chọn \"liên kết trong thanh điều hướng\" được ngay; với div không tên thì phải thêm class.</p>\n<p>Máy chấm kiểm cả hai chiều: liên kết trong nav trắng và không gạch chân, liên kết trong main/footer <em>không</em> trắng (vẫn là màu mặc định, khác rgb(255, 255, 255)).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>nav, a</code> (có dấu phẩy) — dấu phẩy nghĩa là \"nav VÀ mọi a\", vẫn tô mọi liên kết.</li>\n  <li>Viết <code>nav &gt; a</code> — trong bài này cũng chạy (a là con trực tiếp), nhưng hỏng ngay khi menu được bọc trong ul/li.</li>\n  <li>Thêm <code>main a { color: blue; }</code> để \"đè lại\" — chữa triệu chứng, quy tắc gốc vẫn quá rộng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.1 CSS căn bản: bộ chọn, thuộc tính, và sự \"xếp tầng\".</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/Descendant_combinator",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "nav có nền #1e293b",
+            "kiem": "css",
+            "selector": "nav",
+            "thuocTinh": "background-color",
+            "giaTri": "rgb(30, 41, 59)"
+          },
+          {
+            "moTa": "Liên kết trong nav chữ trắng",
+            "kiem": "css",
+            "selector": "nav a",
+            "thuocTinh": "color",
+            "giaTri": "rgb(255, 255, 255)"
+          },
+          {
+            "moTa": "Liên kết trong nav không gạch chân",
+            "kiem": "css",
+            "selector": "nav a",
+            "thuocTinh": "text-decoration-line",
+            "khop": "^none$"
+          },
+          {
+            "moTa": "Liên kết trong main KHÔNG trắng",
+            "kiem": "css",
+            "selector": "main a",
+            "thuocTinh": "color",
+            "khop": "^(?!rgb\\(255, 255, 255\\)$)"
+          },
+          {
+            "moTa": "Liên kết trong footer KHÔNG trắng",
+            "kiem": "css",
+            "selector": "footer a",
+            "thuocTinh": "color",
+            "khop": "^(?!rgb\\(255, 255, 255\\)$)"
+          },
+          {
+            "moTa": "Không thêm class vào HTML",
+            "kiem": "khong-ton-tai",
+            "selector": "[class]"
+          },
+          {
+            "moTa": "Không dùng !important",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "!important",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Style \"không ăn\": tìm luật đặc hiệu hơn đang đè lên và cân bằng lại",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "độ đặc hiệu (specificity)",
+        "id thắng class thắng thẻ",
+        "DevTools Styles",
+        "không dùng !important"
+      ],
+      "prerequisites": [
+        "ba loại bộ chọn"
+      ],
+      "tags": [
+        "css",
+        "cascade",
+        "specificity",
+        "debug"
+      ],
+      "problemHtml": "<p>Bài 3.1: <em>\"Một id thắng bao nhiêu class cũng thắng.\"</em> Menu dưới đây cần liên kết của trang hiện tại (class <code>active</code>) màu đỏ, các liên kết khác màu xám. Bạn đã viết <code>.active { color: crimson; }</code> ở cuối tệp nhưng nó \"không ăn\". Mở DevTools ra sẽ thấy nó bị gạch ngang bởi <code>#menu a</code>. Sửa tận gốc: <strong>hạ</strong> độ đặc hiệu của luật gây chuyện — không dùng <code>!important</code>, không thêm id.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Liên kết <code>.active</code> màu <code>crimson</code>; các liên kết khác trong menu màu <code>gray</code>.</li>\n  <li>Thay bộ chọn <code>#menu a</code> bằng bộ chọn dùng class (nav đã có <code>class=\"menu\"</code>).</li>\n  <li>Không có <code>!important</code>, không có bộ chọn id nào trong styles.css.</li>\n  <li>Không sửa index.html.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "styles.css: #menu a { color: gray; } … .active { color: crimson; } (thua).",
+      "outputSpec": "\"Khoá học\" (trang hiện tại) màu đỏ thẫm, ba liên kết còn lại màu xám.",
+      "constraints": "Không !important, không #id trong bộ chọn.\nKhông viết lại thành bộ chọn dài hơn cần thiết (vd không cần .menu a.active nếu thứ tự đã giải quyết được).",
+      "examplesJson": [
+        {
+          "input": "#menu a   { color: gray; }      /* (1,0,1) */\n.active   { color: crimson; }   /* (0,1,0) */",
+          "output": "Liên kết .active: XÁM. Quy tắc .active bị gạch ngang trong DevTools.",
+          "explanation": "Một id (1,0,1) thắng mọi số class. Thứ tự (viết sau) chỉ phân định khi độ đặc hiệu HOÀ."
+        },
+        {
+          "input": ".menu a   { color: gray; }      /* (0,1,1) */\n.menu .active { color: crimson; } /* (0,2,0) */",
+          "output": "Liên kết .active: ĐỎ.",
+          "explanation": "(0,2,0) > (0,1,1): hai class thắng một class + một thẻ."
+        }
+      ],
+      "hintsJson": [
+        "Tính điểm (id, class, thẻ): #menu a = (1,0,1); .active = (0,1,0). Muốn .active thắng mà không leo thang, hãy hạ luật kia xuống mức class.",
+        "Đổi #menu a thành .menu a = (0,1,1). Lúc này .active (0,1,0) vẫn THUA (0,1,1)! Hãy viết .menu .active (0,2,0), hoặc .menu a.active (0,2,1)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "#menu a {\n  color: gray;\n  text-decoration: none;\n}\n\n/* liên kết của trang hiện tại — \"không ăn\"?! */\n.active {\n  color: crimson;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Khoá học</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav id=\"menu\" class=\"menu\">\n      <a href=\"/\">Trang chủ</a>\n      <a href=\"/khoa-hoc\" class=\"active\">Khoá học</a>\n      <a href=\"/blog\">Blog</a>\n      <a href=\"/lien-he\">Liên hệ</a>\n    </nav>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* hạ từ #menu a (1,0,1) xuống .menu a (0,1,1) — class thay id */\n.menu a {\n  color: gray;\n  text-decoration: none;\n}\n\n/* .menu .active = (0,2,0) > (0,1,1) ⇒ thắng mà không cần !important */\n.menu .active {\n  color: crimson;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Khoá học</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav id=\"menu\" class=\"menu\">\n      <a href=\"/\">Trang chủ</a>\n      <a href=\"/khoa-hoc\" class=\"active\">Khoá học</a>\n      <a href=\"/blog\">Blog</a>\n      <a href=\"/lien-he\">Liên hệ</a>\n    </nav>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Độ đặc hiệu so theo cột, từ trái sang: (id, class, thẻ). Cột id thắng là thắng, không cần nhìn tiếp — nên <code>#menu a</code> (1,0,1) đè <code>.active</code> (0,1,0) dù <code>.active</code> viết sau. Thứ tự nguồn chỉ là trọng tài khi <em>hoà</em>.</p>\n<p>Cách sửa đúng tinh thần bài 3.1 là đưa mọi thứ về cùng \"hạng cân\" class rồi để cấu trúc bộ chọn quyết định. Bẫy tinh tế: chỉ đổi sang <code>.menu a</code> (0,1,1) thì <code>.active</code> (0,1,0) <em>vẫn thua</em> vì thua ở cột thẻ — phải viết <code>.menu .active</code>. Máy chấm kiểm màu computed của từng liên kết, và cấm <code>!important</code> lẫn bộ chọn id.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thêm <code>!important</code> vào .active — chạy ngay, và từ đó mỗi lần đổi màu active phải có thêm một !important nữa.</li>\n  <li>Viết <code>#menu .active</code> — thắng, nhưng leo thang id: luật sau muốn đè lại phải có id.</li>\n  <li>Chỉ đổi <code>#menu a</code> → <code>.menu a</code> rồi tưởng xong — .active vẫn xám vì (0,1,0) < (0,1,1).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.1 CSS căn bản: bộ chọn, thuộc tính, và sự \"xếp tầng\".</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Liên kết .active màu crimson (rgb(220, 20, 60))",
+            "kiem": "css",
+            "selector": "a.active",
+            "thuocTinh": "color",
+            "giaTri": "rgb(220, 20, 60)"
+          },
+          {
+            "moTa": "Các liên kết khác màu gray (rgb(128, 128, 128))",
+            "kiem": "css",
+            "selector": ".menu a:not(.active)",
+            "thuocTinh": "color",
+            "giaTri": "rgb(128, 128, 128)"
+          },
+          {
+            "moTa": "Không dùng !important",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "!important",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Không có bộ chọn id trong styles.css",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "#[A-Za-z_][\\w-]*[^;{}]*\\{",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Liên kết không gạch chân (giữ kiểu cũ)",
+            "kiem": "css",
+            "selector": ".menu a",
+            "thuocTinh": "text-decoration-line",
+            "khop": "^none$"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Hai tệp CSS, một trận hoà: thứ tự thẻ <link> quyết định ai thắng",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "thứ tự nguồn",
+        "hoà độ đặc hiệu",
+        "nhiều bảng kiểu",
+        "theme đè base"
+      ],
+      "prerequisites": [
+        "độ đặc hiệu"
+      ],
+      "tags": [
+        "css",
+        "cascade",
+        "source-order"
+      ],
+      "problemHtml": "<p>Bài 3.1, bước 3: <em>\"Cùng độ đặc hiệu thì thứ tự trong mã quyết định — đó là lý do thứ tự các thẻ <code>&lt;link&gt;</code> có ý nghĩa.\"</em> Site có <code>base.css</code> (kiểu chung) và <code>theme.css</code> (giao diện \"Hoàng hôn\" đè lên một số màu). Hai tệp dùng <em>đúng cùng bộ chọn</em>, nên luôn hoà. Nhưng giao diện mới không hiện ra. Tìm nguyên nhân và sửa chỉ bằng HTML.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>theme.css</code> phải thắng <code>base.css</code> ở mọi thuộc tính hai tệp cùng khai báo.</li>\n  <li>Kết quả: <code>body</code> nền <code>#fff7ed</code>, <code>h1</code> màu <code>#c2410c</code>, <code>.nut</code> nền <code>#ea580c</code>.</li>\n  <li>Thuộc tính chỉ base.css có (vd <code>.nut</code> padding 8px 16px) vẫn còn.</li>\n  <li>Không sửa base.css hay theme.css — chỉ sửa index.html.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html nối theme.css TRƯỚC base.css.",
+      "outputSpec": "Trang mang màu cam \"Hoàng hôn\"; nút vẫn giữ padding từ base.",
+      "constraints": "Không thêm !important, không đổi bộ chọn.\nKhông gộp hai tệp.",
+      "examplesJson": [
+        {
+          "input": "<link rel=\"stylesheet\" href=\"theme.css\">\n<link rel=\"stylesheet\" href=\"base.css\">",
+          "output": "h1 màu của base.css — theme bị đè.",
+          "explanation": "Hai tệp ghép lại thành một dòng chảy: tệp nối sau đứng sau. Cùng bộ chọn h1 ⇒ hoà ⇒ luật đứng sau (base) thắng."
+        }
+      ],
+      "hintsJson": [
+        "Hai luật có cùng bộ chọn thì độ đặc hiệu bằng nhau. Câu hỏi duy nhất còn lại: luật nào đứng sau trong \"dòng chảy\" CSS?",
+        "Đổi chỗ hai thẻ <link>: base.css trước (nền móng), theme.css sau (lớp phủ)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "base.css",
+          "language": "css",
+          "code": "/* base.css — KHÔNG sửa tệp này */\nbody { background: #ffffff; font-family: sans-serif; }\nh1   { color: #111827; }\n.nut { background: #2563eb; color: #ffffff; padding: 8px 16px; border: 0; }\n"
+        },
+        {
+          "name": "theme.css",
+          "language": "css",
+          "code": "/* theme.css — giao diện \"Hoàng hôn\" — KHÔNG sửa tệp này */\nbody { background: #fff7ed; }\nh1   { color: #c2410c; }\n.nut { background: #ea580c; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Hoàng hôn</title>\n    <link rel=\"stylesheet\" href=\"theme.css\">\n    <link rel=\"stylesheet\" href=\"base.css\">\n  </head>\n  <body>\n    <h1>Giao diện Hoàng hôn</h1>\n    <button type=\"button\" class=\"nut\">Thử ngay</button>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "base.css",
+          "language": "css",
+          "code": "/* base.css — KHÔNG sửa tệp này */\nbody { background: #ffffff; font-family: sans-serif; }\nh1   { color: #111827; }\n.nut { background: #2563eb; color: #ffffff; padding: 8px 16px; border: 0; }\n"
+        },
+        {
+          "name": "theme.css",
+          "language": "css",
+          "code": "/* theme.css — giao diện \"Hoàng hôn\" — KHÔNG sửa tệp này */\nbody { background: #fff7ed; }\nh1   { color: #c2410c; }\n.nut { background: #ea580c; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Hoàng hôn</title>\n    <!-- nền móng trước ... -->\n    <link rel=\"stylesheet\" href=\"base.css\">\n    <!-- ... lớp phủ sau: cùng bộ chọn ⇒ hoà độ đặc hiệu ⇒ luật đứng sau thắng -->\n    <link rel=\"stylesheet\" href=\"theme.css\">\n  </head>\n  <body>\n    <h1>Giao diện Hoàng hôn</h1>\n    <button type=\"button\" class=\"nut\">Thử ngay</button>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trình duyệt coi mọi bảng kiểu của trang như một dòng chảy nối đuôi theo thứ tự xuất hiện. <code>h1</code> trong base.css và <code>h1</code> trong theme.css có cùng độ đặc hiệu (0,0,1) ⇒ hoà ⇒ cái đứng sau thắng. Chỉ những thuộc tính <em>cùng được khai báo</em> mới tranh nhau: padding của <code>.nut</code> chỉ base.css có nên vẫn áp.</p>\n<p>Đây là mô hình của mọi hệ thống giao diện: base/reset trước, component sau, theme/override cuối cùng. Máy chấm kiểm màu computed của ba phần tử, padding còn nguyên, và thứ tự hai thẻ link trong head.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thêm <code>!important</code> vào theme.css — chạy, nhưng đề cấm sửa tệp, và đó là chữa sai chỗ.</li>\n  <li>Xoá link base.css — theme thắng, nhưng nút mất padding, chữ trắng, phông chữ.</li>\n  <li>Đổi thành <code>body h1</code> trong theme \"cho mạnh hơn\" — leo thang đặc hiệu thay vì dùng đúng thứ tự.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.1 CSS căn bản: bộ chọn, thuộc tính, và sự \"xếp tầng\".</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance#source_order",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "base.css được nối trước theme.css",
+            "kiem": "thu-tu",
+            "cacSelector": [
+              "link[href=\"base.css\"]",
+              "link[href=\"theme.css\"]"
+            ]
+          },
+          {
+            "moTa": "body nền #fff7ed",
+            "kiem": "css",
+            "selector": "body",
+            "thuocTinh": "background-color",
+            "giaTri": "rgb(255, 247, 237)"
+          },
+          {
+            "moTa": "h1 màu #c2410c",
+            "kiem": "css",
+            "selector": "h1",
+            "thuocTinh": "color",
+            "giaTri": "rgb(194, 65, 12)"
+          },
+          {
+            "moTa": ".nut nền #ea580c",
+            "kiem": "css",
+            "selector": ".nut",
+            "thuocTinh": "background-color",
+            "giaTri": "rgb(234, 88, 12)"
+          },
+          {
+            "moTa": ".nut vẫn có padding 8px 16px từ base.css",
+            "kiem": "css",
+            "selector": ".nut",
+            "thuocTinh": "padding-left",
+            "giaTri": "16px"
+          },
+          {
+            "moTa": "Không thêm !important",
+            "kiem": "ma-nguon",
+            "khop": "!important",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Gỡ năm cái !important mà trang vẫn y nguyên",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "!important",
+        "cân bằng độ đặc hiệu",
+        "thứ tự nguồn",
+        "tái cấu trúc CSS"
+      ],
+      "prerequisites": [
+        "độ đặc hiệu",
+        "thứ tự nguồn"
+      ],
+      "tags": [
+        "css",
+        "cascade",
+        "refactor",
+        "important"
+      ],
+      "problemHtml": "<p>Bẫy cuối bài 3.1: <em>\"Hai tháng sau, một bảng kiểu có mười lăm cái như thế, và đổi một màu bất kỳ đòi phải thêm cái thứ mười sáu.\"</em> Bảng kiểu thẻ sản phẩm dưới đây đang ở tháng thứ hai: năm cái <code>!important</code> chồng nhau. Nhiệm vụ: gỡ cả năm mà <strong>giá trị computed của mọi phần tử giữ nguyên</strong> — tức là một cuộc tái cấu trúc (refactor), không phải đổi giao diện.</p>\n<pre><code>Giao diện phải giữ nguyên:\n.the            nền #ffffff, viền 1px solid #e5e7eb\n.the h3         màu #111827\n.gia            màu #16a34a, đậm\n.the.het-hang   nền #f3f4f6\n.het-hang .gia  màu #9ca3af (giá xám khi hết hàng), gạch ngang</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không còn <code>!important</code> nào.</li>\n  <li>Năm dòng giao diện ở trên giữ đúng giá trị (máy chấm đo từng cái).</li>\n  <li>Không dùng bộ chọn id.</li>\n  <li>Không sửa index.html.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "styles.css với 5 !important và vài bộ chọn id/thẻ lộn xộn.",
+      "outputSpec": "Cùng giao diện, bảng kiểu chỉ dùng class + thứ tự nguồn.",
+      "constraints": "Tối đa 2 class trong một bộ chọn.\nKhông !important, không #id.",
+      "examplesJson": [
+        {
+          "input": ".gia { color: #16a34a !important; }\n.het-hang .gia { color: #9ca3af !important; }",
+          "output": "Hai !important đánh nhau ⇒ lại quay về so độ đặc hiệu (0,2,0) > (0,1,0) ⇒ xám thắng.",
+          "explanation": "Khi cả hai cùng !important, !important vô tác dụng — chỉ thêm rác. Bỏ cả hai, kết quả y hệt."
+        }
+      ],
+      "hintsJson": [
+        "Viết lại bảng kiểu theo thứ tự \"chung trước, riêng sau\": .the → .the h3 → .gia → .het-hang → .het-hang .gia. Rồi kiểm: luật riêng có độ đặc hiệu ≥ luật chung và đứng sau không?",
+        "Thay #kho … bằng class sẵn có trong HTML (.kho), và để .the.het-hang (0,2,0) đè .the (0,1,0) cho màu nền."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "#kho .the {\n  background: #ffffff;\n  border: 1px solid #e5e7eb;\n}\n.het-hang {\n  background: #f3f4f6 !important;\n}\n.the h3 {\n  color: #111827 !important;\n}\nh3 {\n  color: #374151;\n}\n.gia {\n  color: #16a34a !important;\n  font-weight: bold !important;\n}\n.het-hang .gia {\n  color: #9ca3af !important;\n  text-decoration: line-through;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cửa hàng</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <section id=\"kho\" class=\"kho\">\n      <div class=\"the\">\n        <h3>Bàn phím cơ</h3>\n        <p class=\"gia\">890.000đ</p>\n      </div>\n      <div class=\"the het-hang\">\n        <h3>Chuột không dây</h3>\n        <p class=\"gia\">350.000đ</p>\n      </div>\n    </section>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Chung trước, riêng sau — mọi luật đều là class, không !important */\n\n/* (0,1,0) thẻ sản phẩm thường */\n.the {\n  background: #ffffff;\n  border: 1px solid #e5e7eb;\n}\n\n/* (0,1,1) tiêu đề trong thẻ — không còn luật h3 trần nào tranh */\n.the h3 {\n  color: #111827;\n}\n\n/* (0,1,0) giá */\n.gia {\n  color: #16a34a;\n  font-weight: bold;\n}\n\n/* (0,2,0) thẻ hết hàng: hai class thắng .the (0,1,0) */\n.the.het-hang {\n  background: #f3f4f6;\n}\n\n/* (0,2,0) giá trong thẻ hết hàng: thắng .gia (0,1,0) */\n.het-hang .gia {\n  color: #9ca3af;\n  text-decoration: line-through;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cửa hàng</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <section id=\"kho\" class=\"kho\">\n      <div class=\"the\">\n        <h3>Bàn phím cơ</h3>\n        <p class=\"gia\">890.000đ</p>\n      </div>\n      <div class=\"the het-hang\">\n        <h3>Chuột không dây</h3>\n        <p class=\"gia\">350.000đ</p>\n      </div>\n    </section>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi <code>!important</code> trong tệp gốc đang \"chữa\" một trận thua đặc hiệu: <code>.het-hang</code> (0,1,0) thua <code>#kho .the</code> (1,1,0) nên phải !important; <code>.the h3</code> thì chẳng cần (nó đã thắng <code>h3</code>); hai cái ở <code>.gia</code> và <code>.het-hang .gia</code> triệt tiêu nhau. Gỡ id đi là gỡ được nguyên nhân gốc, và bốn cái còn lại hoá ra thừa.</p>\n<p>Bảng kiểu mới đọc từ trên xuống như một câu chuyện: thẻ thường, tiêu đề, giá, rồi các trạng thái đặc biệt — mỗi trạng thái có độ đặc hiệu cao hơn đúng một bậc và đứng sau. Máy chấm đo năm giá trị trên cả thẻ thường lẫn thẻ hết hàng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Xoá hết !important mà giữ <code>#kho .the</code> — thẻ hết hàng mất nền xám (bị id đè).</li>\n  <li>Giữ quy tắc <code>h3 { color: #374151 }</code> và đặt nó cuối tệp — vẫn thua <code>.the h3</code> nên vô hại, nhưng là mã chết; xoá đi.</li>\n  <li>Viết <code>.kho .the.het-hang .gia</code> \"cho chắc\" — bộ chọn dài vô cớ là leo thang kiểu mới.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.1 CSS căn bản: bộ chọn, thuộc tính, và sự \"xếp tầng\".</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/important",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Không còn !important",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "!important",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Không có bộ chọn id",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "#[A-Za-z_][\\w-]*[^;{}]*\\{",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Thẻ thường nền trắng",
+            "kiem": "css",
+            "selector": ".the:not(.het-hang)",
+            "thuocTinh": "background-color",
+            "giaTri": "rgb(255, 255, 255)"
+          },
+          {
+            "moTa": "Mọi thẻ viền 1px #e5e7eb",
+            "kiem": "css",
+            "selector": ".the",
+            "thuocTinh": "border-top-color",
+            "giaTri": "rgb(229, 231, 235)"
+          },
+          {
+            "moTa": "Tiêu đề thẻ màu #111827",
+            "kiem": "css",
+            "selector": ".the h3",
+            "thuocTinh": "color",
+            "giaTri": "rgb(17, 24, 39)"
+          },
+          {
+            "moTa": "Giá thường màu #16a34a, đậm",
+            "kiem": "css",
+            "selector": ".the:not(.het-hang) .gia",
+            "thuocTinh": "color",
+            "giaTri": "rgb(22, 163, 74)"
+          },
+          {
+            "moTa": "Giá đậm ở mọi thẻ",
+            "kiem": "css",
+            "selector": ".gia",
+            "thuocTinh": "font-weight",
+            "khop": "^(bold|700)$"
+          },
+          {
+            "moTa": "Thẻ hết hàng nền #f3f4f6",
+            "kiem": "css",
+            "selector": ".the.het-hang",
+            "thuocTinh": "background-color",
+            "giaTri": "rgb(243, 244, 246)"
+          },
+          {
+            "moTa": "Giá hết hàng màu #9ca3af",
+            "kiem": "css",
+            "selector": ".het-hang .gia",
+            "thuocTinh": "color",
+            "giaTri": "rgb(156, 163, 175)"
+          },
+          {
+            "moTa": "Giá hết hàng gạch ngang",
+            "kiem": "css",
+            "selector": ".het-hang .gia",
+            "thuocTinh": "text-decoration-line",
+            "giaTri": "line-through"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Cuộc chiến xếp tầng: dự đoán người thắng rồi đưa sáu phần tử về đúng màu",
+      "language": "css",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "tính độ đặc hiệu (id, class, thẻ)",
+        "thứ tự nguồn",
+        "bộ chọn kết hợp",
+        "kế thừa màu chữ",
+        "chỉ thêm, không xoá"
+      ],
+      "prerequisites": [
+        "các bài 1–6 của bộ này"
+      ],
+      "tags": [
+        "css",
+        "cascade",
+        "specificity",
+        "puzzle"
+      ],
+      "problemHtml": "<p>Bảng kiểu <code>khoa.css</code> là CSS của bên thứ ba — bạn <strong>không được sửa</strong> nó (đúng trường hợp bài 3.1 nói là duy nhất có lý do để đụng tới !important — nhưng ở đây bạn sẽ làm được mà không cần). Bạn chỉ được viết thêm vào <code>styles.css</code>, nối sau <code>khoa.css</code>. Sáu phần tử phải ra đúng màu trong bảng. Muốn ít mã nhất, bạn phải tính được trước luật nào đang thắng ở từng phần tử và luật mới cần \"nặng\" tới đâu.</p>\n<pre><code>khoa.css (KHÔNG sửa):\n  #trang .noi-dung p      { color: #6b7280; }   /* (1,1,1) */\n  .noi-dung .ghi-chu      { color: #2563eb; }   /* (0,2,0) */\n  p.canh-bao              { color: #d97706; }   /* (0,1,1) */\n  nav a                   { color: #111827; }   /* (0,0,2) */\n  .the h2                 { color: #7c3aed; }   /* (0,1,1) */\n\nPhải ra (computed color):\n  (1) .noi-dung p.thuong     → #374151\n  (2) .noi-dung p.ghi-chu    → #059669\n  (3) .noi-dung p.canh-bao   → #dc2626\n  (4) nav a                  → #0f766e\n  (5) nav a.dang-xem         → #be123c\n  (6) .the h2                → #1d4ed8</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sáu phần tử ra đúng sáu màu trong bảng.</li>\n  <li>Chỉ sửa <code>styles.css</code>; <code>khoa.css</code> và <code>index.html</code> giữ nguyên.</li>\n  <li>Không <code>!important</code>, không style nội dòng. Được dùng bộ chọn id — nhưng chỉ ở đúng chỗ thật sự cần (hãy tính xem đó là những phần tử nào).</li>\n  <li>Mỗi quy tắc bạn viết có chú thích độ đặc hiệu (vd <code>/* (1,2,1) */</code>).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "khoa.css (5 luật, cố định), styles.css trống, index.html có sẵn id=\"trang\".",
+      "outputSpec": "Sáu phần tử đúng màu; styles.css ngắn, mỗi luật vừa đủ nặng để thắng.",
+      "constraints": "Không sửa khoa.css, index.html.\nKhông !important.\nTối đa 6 quy tắc trong styles.css.",
+      "examplesJson": [
+        {
+          "input": "/* muốn (2) ghi-chu → #059669 */\n.noi-dung .ghi-chu { color: #059669; }   /* (0,2,0) */",
+          "output": "Vẫn XÁM #6b7280.",
+          "explanation": "p.ghi-chu cũng khớp #trang .noi-dung p (1,1,1) — có id nên thắng (0,2,0) dù đứng sau. Muốn thắng phải có id: #trang .noi-dung .ghi-chu (1,2,0)."
+        }
+      ],
+      "hintsJson": [
+        "Với mỗi phần tử, liệt kê MỌI luật của khoa.css khớp nó (một phần tử có thể khớp nhiều luật) và tìm luật mạnh nhất. Ba đoạn trong .noi-dung đều bị #trang .noi-dung p (1,1,1) phủ ⇒ luật mới cho chúng phải có id. nav a và .the h2 thì không dính id.",
+        "Đáp số độ nặng: (1) #trang .noi-dung p (1,1,1) — hoà, đứng sau thắng; (2) #trang .noi-dung .ghi-chu (1,2,0); (3) #trang .noi-dung .canh-bao (1,2,0); (4) nav a (0,0,2) — hoà, đứng sau thắng; (5) nav .dang-xem (0,1,1); (6) .the h2 (0,1,1) — hoà."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "khoa.css",
+          "language": "css",
+          "code": "/* khoa.css — CSS của bên thứ ba. KHÔNG SỬA. */\n#trang .noi-dung p { color: #6b7280; }\n.noi-dung .ghi-chu { color: #2563eb; }\np.canh-bao         { color: #d97706; }\nnav a              { color: #111827; }\n.the h2            { color: #7c3aed; }\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Viết thêm ở đây (nối SAU khoa.css). Mỗi luật ghi độ đặc hiệu. */\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cuộc chiến xếp tầng</title>\n    <link rel=\"stylesheet\" href=\"khoa.css\">\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div id=\"trang\">\n      <nav>\n        <a href=\"/\">Trang chủ</a>\n        <a href=\"/khoa\" class=\"dang-xem\">Khoá học</a>\n      </nav>\n      <div class=\"noi-dung\">\n        <p class=\"thuong\">Đoạn văn thường.</p>\n        <p class=\"ghi-chu\">Ghi chú của giảng viên.</p>\n        <p class=\"canh-bao\">Cảnh báo: hạn nộp bài tối nay.</p>\n      </div>\n      <div class=\"the\">\n        <h2>Thẻ khoá học</h2>\n      </div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "khoa.css",
+          "language": "css",
+          "code": "/* khoa.css — CSS của bên thứ ba. KHÔNG SỬA. */\n#trang .noi-dung p { color: #6b7280; }\n.noi-dung .ghi-chu { color: #2563eb; }\np.canh-bao         { color: #d97706; }\nnav a              { color: #111827; }\n.the h2            { color: #7c3aed; }\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* styles.css nối SAU khoa.css ⇒ khi HOÀ độ đặc hiệu, luật ở đây thắng */\n\n/* (1) mọi p trong .noi-dung bị #trang .noi-dung p (1,1,1) phủ.\n       Viết đúng bộ chọn đó (1,1,1): hoà ⇒ đứng sau thắng */\n#trang .noi-dung p { color: #374151; }\n\n/* (2) ghi-chu: luật mạnh nhất đang khớp là (1,1,1) ⇒ cần ≥ (1,1,1) mà vẫn riêng cho ghi-chu:\n       (1,2,0) > (1,1,1) và > luật (1) ở trên */\n#trang .noi-dung .ghi-chu { color: #059669; }\n\n/* (3) canh-bao: tương tự (1,2,0) */\n#trang .noi-dung .canh-bao { color: #dc2626; }\n\n/* (4) nav a (0,0,2) — hoà với khoa.css, đứng sau ⇒ thắng */\nnav a { color: #0f766e; }\n\n/* (5) liên kết đang xem: (0,1,1) > (0,0,2) — không cần id */\nnav .dang-xem { color: #be123c; }\n\n/* (6) .the h2 (0,1,1) — hoà, đứng sau ⇒ thắng */\n.the h2 { color: #1d4ed8; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Cuộc chiến xếp tầng</title>\n    <link rel=\"stylesheet\" href=\"khoa.css\">\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div id=\"trang\">\n      <nav>\n        <a href=\"/\">Trang chủ</a>\n        <a href=\"/khoa\" class=\"dang-xem\">Khoá học</a>\n      </nav>\n      <div class=\"noi-dung\">\n        <p class=\"thuong\">Đoạn văn thường.</p>\n        <p class=\"ghi-chu\">Ghi chú của giảng viên.</p>\n        <p class=\"canh-bao\">Cảnh báo: hạn nộp bài tối nay.</p>\n      </div>\n      <div class=\"the\">\n        <h2>Thẻ khoá học</h2>\n      </div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Chìa khoá là thấy rằng <em>một phần tử khớp nhiều luật</em>: đoạn ghi-chú khớp cả <code>#trang .noi-dung p</code> (1,1,1) lẫn <code>.noi-dung .ghi-chu</code> (0,2,0) — và luật có id thắng, nên trong khoa.css nó vốn đã xám chứ không xanh. Mọi luật mới cho ba đoạn văn vì thế phải \"mang\" một id; còn nav và thẻ không nằm dưới luật id nào nên chỉ cần hoà và đứng sau.</p>\n<p>Đây chính là bài học \"đọc DevTools thay vì đoán\" của bài 3.1, làm bằng tay: liệt kê luật khớp → tính điểm → chọn luật nhẹ nhất đủ thắng. Máy chấm đo sáu màu computed và cấm !important; bộ chọn id được phép vì CSS bên thứ ba đã dùng id — bạn chỉ \"đấu cùng hạng cân\", không leo thang thêm.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>.ghi-chu { color: #059669; }</code> rồi thắc mắc vì sao vẫn xám — quên rằng đoạn đó cũng khớp luật có id.</li>\n  <li>Gắn id cho cả nav và thẻ \"cho đồng bộ\" — leo thang không cần thiết, sau này đè lại sẽ khổ.</li>\n  <li>Đặt luật (1) <code>#trang .noi-dung p</code> SAU luật (2) — (1,2,0) vẫn thắng (1,1,1) nên không sao; nhưng nếu bạn viết (2) bằng (1,1,1) như <code>#trang .noi-dung p.ghi-chu</code>… thật ra đó là (1,2,1). Hãy luôn tính điểm, đừng đoán.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.1 CSS căn bản: bộ chọn, thuộc tính, và sự \"xếp tầng\".</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://specificity.keegan.st/",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "(1) p.thuong → #374151",
+            "kiem": "css",
+            "selector": ".noi-dung p.thuong",
+            "thuocTinh": "color",
+            "giaTri": "rgb(55, 65, 81)"
+          },
+          {
+            "moTa": "(2) p.ghi-chu → #059669",
+            "kiem": "css",
+            "selector": ".noi-dung p.ghi-chu",
+            "thuocTinh": "color",
+            "giaTri": "rgb(5, 150, 105)"
+          },
+          {
+            "moTa": "(3) p.canh-bao → #dc2626",
+            "kiem": "css",
+            "selector": ".noi-dung p.canh-bao",
+            "thuocTinh": "color",
+            "giaTri": "rgb(220, 38, 38)"
+          },
+          {
+            "moTa": "(4) nav a thường → #0f766e",
+            "kiem": "css",
+            "selector": "nav a:not(.dang-xem)",
+            "thuocTinh": "color",
+            "giaTri": "rgb(15, 118, 110)"
+          },
+          {
+            "moTa": "(5) nav a.dang-xem → #be123c",
+            "kiem": "css",
+            "selector": "nav a.dang-xem",
+            "thuocTinh": "color",
+            "giaTri": "rgb(190, 18, 60)"
+          },
+          {
+            "moTa": "(6) .the h2 → #1d4ed8",
+            "kiem": "css",
+            "selector": ".the h2",
+            "thuocTinh": "color",
+            "giaTri": "rgb(29, 78, 216)"
+          },
+          {
+            "moTa": "Không dùng !important",
+            "kiem": "ma-nguon",
+            "khop": "!important",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Không style nội dòng",
+            "kiem": "khong-ton-tai",
+            "selector": "[style]"
+          },
+          {
+            "moTa": "khoa.css nối trước styles.css",
+            "kiem": "thu-tu",
+            "cacSelector": [
+              "link[href=\"khoa.css\"]",
+              "link[href=\"styles.css\"]"
+            ]
+          },
+          {
+            "moTa": "nav và thẻ không cần id (không có #trang nav/#trang .the)",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "#trang\\s+(nav|\\.the)",
+            "phuDinh": true
+          }
+        ]
+      }
+    }
+  ]
+}

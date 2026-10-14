@@ -1,0 +1,869 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-3-3-flexbox",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-3-3-flexbox"
+  },
+  "exercises": [
+    {
+      "title": "Căn giữa hoàn hảo một khối theo cả hai chiều",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "display: flex",
+        "justify-content: center",
+        "align-items: center",
+        "min-height: 100vh"
+      ],
+      "prerequisites": [
+        "box model"
+      ],
+      "tags": [
+        "css",
+        "flexbox",
+        "centering"
+      ],
+      "problemHtml": "<p>Bài 3.3: <em>\"Hai dòng căn giữa một phần tử con theo cả hai chiều — thứ trước kia phải dùng những chiêu xấu xí.\"</em> Màn chào của trang đăng nhập cần thẻ <code>.hop-dang-nhap</code> nằm <strong>chính giữa màn hình</strong>. Người viết trước dùng <code>margin-top: 300px</code> và <code>margin-left: 40%</code> — chỉ đúng trên đúng một màn hình. Thay bằng cú căn giữa của flexbox, đặt trên phần tử <em>cha</em> <code>.hero</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.hero</code> là flex container: <code>display: flex</code>.</li>\n  <li>Căn giữa ngang (trục chính): <code>justify-content: center</code>.</li>\n  <li>Căn giữa dọc (trục phụ): <code>align-items: center</code>.</li>\n  <li><code>.hero</code> cao tối thiểu bằng màn hình: <code>min-height: 100vh</code>.</li>\n  <li>Xoá hai margin \"đoán mò\" trên <code>.hop-dang-nhap</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": ".hop-dang-nhap { margin-top: 300px; margin-left: 40%; … }",
+      "outputSpec": "Thẻ đăng nhập nằm chính giữa màn hình ở mọi kích thước cửa sổ.",
+      "constraints": "Thuộc tính căn chỉnh đặt trên CHA (.hero), không trên con.\nKhông dùng position/transform (chưa học).",
+      "examplesJson": [
+        {
+          "input": ".hero {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n}",
+          "output": "┌─────────────────────────┐\n│                         │\n│       ┌─────────┐       │\n│       │ Đăng nhập│       │\n│       └─────────┘       │\n│                         │\n└─────────────────────────┘",
+          "explanation": "justify-content lo chiều ngang (trục chính của hàng), align-items lo chiều dọc (trục phụ). min-height cho cha đủ cao để \"giữa\" có nghĩa."
+        }
+      ],
+      "hintsJson": [
+        "Flexbox căn các CON của một vật chứa. Ai là vật chứa ở đây? .hero.",
+        ".hero { display: flex; justify-content: center; align-items: center; min-height: 100vh; } — và xoá margin-top/margin-left của thẻ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\nbody { margin: 0; }\n\n.hero {\n  background: #f1f5f9;\n}\n\n.hop-dang-nhap {\n  margin-top: 300px;   /* đoán mò */\n  margin-left: 40%;    /* đoán mò */\n  width: 320px;\n  padding: 24px;\n  background: #ffffff;\n  border: 1px solid #cbd5e1;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Đăng nhập</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"hero\">\n      <div class=\"hop-dang-nhap\">\n        <h1>Đăng nhập</h1>\n        <p>Chào mừng bạn quay lại.</p>\n      </div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\nbody { margin: 0; }\n\n/* Vật chứa: các thuộc tính căn chỉnh đặt trên CHA */\n.hero {\n  display: flex;            /* các con trực tiếp thành flex item */\n  justify-content: center;  /* giữa theo trục chính (ngang, vì mặc định là row) */\n  align-items: center;      /* giữa theo trục phụ (dọc) */\n  min-height: 100vh;        /* cao ít nhất bằng màn hình — \"giữa\" mới có chỗ */\n  background: #f1f5f9;\n}\n\n/* Con: không còn margin đoán mò */\n.hop-dang-nhap {\n  width: 320px;\n  padding: 24px;\n  background: #ffffff;\n  border: 1px solid #cbd5e1;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Đăng nhập</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"hero\">\n      <div class=\"hop-dang-nhap\">\n        <h1>Đăng nhập</h1>\n        <p>Chào mừng bạn quay lại.</p>\n      </div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Margin \"đoán mò\" phụ thuộc kích thước màn hình: 300px từ trên là giữa với màn cao 700px, lệch hẳn với màn 1080px. Flexbox căn theo <em>không gian thật</em> của vật chứa nên luôn đúng. Hai thuộc tính ứng với hai trục: <code>justify-content</code> cho trục chính, <code>align-items</code> cho trục phụ.</p>\n<p><code>min-height: 100vh</code> là mảnh hay quên: không có nó, <code>.hero</code> chỉ cao bằng nội dung, nên \"giữa theo chiều dọc\" chẳng có chỗ để giữa. Máy chấm đọc các giá trị computed của <code>.hero</code> và kiểm thẻ không còn margin đoán mò (iframe chấm cao 768px nên 100vh tính ra 768px).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt <code>justify-content: center</code> lên chính <code>.hop-dang-nhap</code> — thuộc tính căn chỉnh tác động lên CON của vật chứa flex.</li>\n  <li>Quên <code>min-height</code> — căn ngang chạy, căn dọc \"không ăn\".</li>\n  <li>Dùng <code>height: 100vh</code> — chạy được, nhưng nội dung dài hơn màn hình sẽ tràn; min-height cho phép nở ra.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.3 Flexbox: xếp mọi thứ theo hàng hoặc cột.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://css-tricks.com/snippets/css/a-guide-to-flexbox/",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".hero là flex container",
+            "kiem": "css",
+            "selector": ".hero",
+            "thuocTinh": "display",
+            "giaTri": "flex"
+          },
+          {
+            "moTa": "Căn giữa trục chính",
+            "kiem": "css",
+            "selector": ".hero",
+            "thuocTinh": "justify-content",
+            "giaTri": "center"
+          },
+          {
+            "moTa": "Căn giữa trục phụ",
+            "kiem": "css",
+            "selector": ".hero",
+            "thuocTinh": "align-items",
+            "giaTri": "center"
+          },
+          {
+            "moTa": ".hero cao tối thiểu 100vh",
+            "kiem": "css",
+            "selector": ".hero",
+            "thuocTinh": "min-height",
+            "khop": "^(100vh|768px)$"
+          },
+          {
+            "moTa": "Thẻ không còn margin-top đoán mò",
+            "kiem": "css",
+            "selector": ".hop-dang-nhap",
+            "thuocTinh": "margin-top",
+            "khop": "^0(px)?$"
+          },
+          {
+            "moTa": "Thẻ không còn margin-left đoán mò",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "margin-left\\s*:\\s*40%",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Hàng nút bấm: display: flex và gap thay cho margin vá víu",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "flex container / flex item",
+        "gap",
+        "con trực tiếp"
+      ],
+      "prerequisites": [
+        "box model"
+      ],
+      "tags": [
+        "css",
+        "flexbox",
+        "gap"
+      ],
+      "problemHtml": "<p>Bài 3.3 mở đầu bằng đúng hai dòng: <code>display: flex</code> (các con nằm thành một hàng) và <code>gap: 16px</code> (khoảng cách đều giữa chúng). Hàng nút \"Lưu / Huỷ / Xoá\" đang xếp chồng dọc, và người viết trước định cho chúng cách nhau bằng <code>margin-right</code> — nút cuối thừa margin, chỗ thì 10px chỗ thì 12px. Làm lại bằng flex + gap.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.hang-nut</code> là flex container.</li>\n  <li>Khoảng cách giữa các nút đúng <code>12px</code> bằng <code>gap</code>.</li>\n  <li>Xoá mọi <code>margin-right</code> trên các nút.</li>\n  <li>Không sửa HTML.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Ba nút display:block chồng dọc, margin-right lộn xộn.",
+      "outputSpec": "[ Lưu ] [ Huỷ ] [ Xoá ] — một hàng, cách nhau đều 12px, không thừa khoảng sau nút cuối.",
+      "constraints": "Không dùng margin để tạo khoảng giữa các nút.",
+      "examplesJson": [
+        {
+          "input": ".hang-nut { display: flex; gap: 12px; }",
+          "output": "[Lưu]␣12px␣[Huỷ]␣12px␣[Xoá]",
+          "explanation": "gap chỉ đặt khoảng GIỮA các item — không có ở đầu hay cuối hàng, khác với margin."
+        }
+      ],
+      "hintsJson": [
+        "display: flex đặt lên CHA của các nút. Các nút (con trực tiếp) tự nằm thành hàng, kể cả khi chúng đang display: block.",
+        ".hang-nut { display: flex; gap: 12px; } rồi xoá các quy tắc margin-right."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.hang-nut button {\n  display: block;\n  padding: 8px 16px;\n}\n.nut-luu { margin-right: 10px; }\n.nut-huy { margin-right: 12px; }\n.nut-xoa { margin-right: 12px; }\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Hàng nút</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"hang-nut\">\n      <button type=\"button\" class=\"nut-luu\">Lưu</button>\n      <button type=\"button\" class=\"nut-huy\">Huỷ</button>\n      <button type=\"button\" class=\"nut-xoa\">Xoá</button>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* Vật chứa: con trực tiếp (3 button) nằm thành một hàng */\n.hang-nut {\n  display: flex;\n  gap: 12px;            /* khoảng đều GIỮA các nút — không thừa ở cuối */\n}\n\n.hang-nut button {\n  display: block;       /* không còn quan trọng: con của flex container đều là flex item */\n  padding: 8px 16px;\n}\n/* không còn margin-right vá víu */\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Hàng nút</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"hang-nut\">\n      <button type=\"button\" class=\"nut-luu\">Lưu</button>\n      <button type=\"button\" class=\"nut-huy\">Huỷ</button>\n      <button type=\"button\" class=\"nut-xoa\">Xoá</button>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>display: flex</code> đổi cách bố trí <em>các con trực tiếp</em>: chúng thành flex item và xếp theo trục chính (mặc định ngang), bất kể trước đó là block hay inline. <code>gap</code> là khoảng cách do vật chứa quản lý — một con số duy nhất, chỉ nằm giữa các item, không cần nhớ \"nút cuối thì bỏ margin\".</p>\n<p>Máy chấm kiểm <code>display</code> và <code>gap</code> computed của vật chứa, và margin-right của mọi nút bằng 0.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt <code>display: flex</code> lên từng button — mỗi nút thành vật chứa của chữ bên trong nó, các nút vẫn chồng dọc.</li>\n  <li>Giữ margin-right và thêm gap — khoảng cách cộng dồn thành 22–24px.</li>\n  <li>Viết <code>gap</code> trên button — gap là thuộc tính của vật chứa.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.3 Flexbox: xếp mọi thứ theo hàng hoặc cột.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/gap",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".hang-nut là flex container",
+            "kiem": "css",
+            "selector": ".hang-nut",
+            "thuocTinh": "display",
+            "giaTri": "flex"
+          },
+          {
+            "moTa": ".hang-nut có gap 12px",
+            "kiem": "css",
+            "selector": ".hang-nut",
+            "thuocTinh": "gap",
+            "khop": "^12px( 12px)?$"
+          },
+          {
+            "moTa": "Không nút nào còn margin-right",
+            "kiem": "css",
+            "selector": ".hang-nut button",
+            "thuocTinh": "margin-right",
+            "khop": "^0(px)?$"
+          },
+          {
+            "moTa": "Không còn quy tắc margin-right trong styles.css",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "margin-right",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Đổi trục: flex-direction: column cho menu dọc",
+      "language": "css",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "flex-direction",
+        "trục chính dọc",
+        "gap theo cột"
+      ],
+      "prerequisites": [
+        "display: flex, gap"
+      ],
+      "tags": [
+        "css",
+        "flexbox",
+        "flex-direction"
+      ],
+      "problemHtml": "<p>Bài 3.3, quyết định số 2: <em>\"Trục chính đi hướng nào? <code>flex-direction: row</code> (mặc định) hoặc <code>column</code>.\"</em> Thanh bên tài khoản cần các liên kết xếp <strong>dọc</strong>, cách nhau 8px. Vì <code>&lt;a&gt;</code> là phần tử dòng nên hiện tại chúng nằm cùng một dòng. Dùng flex với trục chính dọc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.menu-doc</code> là flex container với <code>flex-direction: column</code>.</li>\n  <li>Khoảng cách giữa các liên kết là <code>gap: 8px</code>.</li>\n  <li>Không dùng <code>&lt;br&gt;</code> hay <code>display: block</code> + margin cho từng liên kết.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Bốn <a> nằm cùng một dòng trong nav.menu-doc.",
+      "outputSpec": "Bốn liên kết xếp dọc, cách nhau 8px.",
+      "constraints": "Không sửa HTML.",
+      "examplesJson": [
+        {
+          "input": ".menu-doc { display: flex; flex-direction: column; gap: 8px; }",
+          "output": "Hồ sơ\n(8px)\nĐơn hàng\n(8px)\nCài đặt\n(8px)\nĐăng xuất",
+          "explanation": "Trục chính giờ là trên→dưới; gap áp dọc theo trục đó."
+        }
+      ],
+      "hintsJson": [
+        "Chỉ một thuộc tính khác với hàng nút ở bài trước: hướng của trục chính.",
+        ".menu-doc { display: flex; flex-direction: column; gap: 8px; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.menu-doc {\n  width: 200px;\n  padding: 16px;\n  background: #f8fafc;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Tài khoản</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav class=\"menu-doc\">\n      <a href=\"/ho-so\">Hồ sơ</a>\n      <a href=\"/don-hang\">Đơn hàng</a>\n      <a href=\"/cai-dat\">Cài đặt</a>\n      <a href=\"/dang-xuat\">Đăng xuất</a>\n    </nav>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.menu-doc {\n  display: flex;\n  flex-direction: column;   /* trục chính: trên → dưới */\n  gap: 8px;                 /* khoảng giữa các mục, theo trục chính (dọc) */\n  width: 200px;\n  padding: 16px;\n  background: #f8fafc;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Tài khoản</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav class=\"menu-doc\">\n      <a href=\"/ho-so\">Hồ sơ</a>\n      <a href=\"/don-hang\">Đơn hàng</a>\n      <a href=\"/cai-dat\">Cài đặt</a>\n      <a href=\"/dang-xuat\">Đăng xuất</a>\n    </nav>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một thuộc tính đổi cả hệ trục: với <code>column</code>, trục chính đi từ trên xuống, nên các item chồng dọc và <code>gap</code> tạo khoảng dọc. Các <code>&lt;a&gt;</code> vốn là phần tử dòng nhưng khi là flex item chúng được xếp như khối — không cần <code>display: block</code> cho từng cái.</p>\n<p>Ghi nhớ điều này cho bài 7 (khó): khi trục chính dọc, <code>justify-content</code> và <code>align-items</code> cũng đổi nghĩa.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>flex-direction: vertical</code> — không có giá trị đó; đúng là <code>column</code>.</li>\n  <li>Thêm <code>display: block</code> cho từng a rồi margin — chạy, nhưng là cách cũ, nhiều quy tắc hơn.</li>\n  <li>Quên <code>display: flex</code> — <code>flex-direction</code> một mình không có tác dụng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.3 Flexbox: xếp mọi thứ theo hàng hoặc cột.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex-direction",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".menu-doc là flex container",
+            "kiem": "css",
+            "selector": ".menu-doc",
+            "thuocTinh": "display",
+            "giaTri": "flex"
+          },
+          {
+            "moTa": "Trục chính dọc (column)",
+            "kiem": "css",
+            "selector": ".menu-doc",
+            "thuocTinh": "flex-direction",
+            "giaTri": "column"
+          },
+          {
+            "moTa": "Khoảng cách gap 8px",
+            "kiem": "css",
+            "selector": ".menu-doc",
+            "thuocTinh": "gap",
+            "khop": "^8px( 8px)?$"
+          },
+          {
+            "moTa": "Không dùng <br>",
+            "kiem": "khong-ton-tai",
+            "selector": "br"
+          },
+          {
+            "moTa": "Không đặt margin riêng cho từng liên kết",
+            "kiem": "css",
+            "selector": ".menu-doc a",
+            "thuocTinh": "margin-bottom",
+            "khop": "^0(px)?$"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Thanh điều hướng kinh điển: logo bên trái, menu bên phải, căn giữa dọc",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "justify-content: space-between",
+        "align-items: center",
+        "flex lồng flex",
+        "chỉ con trực tiếp"
+      ],
+      "prerequisites": [
+        "display: flex, gap"
+      ],
+      "tags": [
+        "css",
+        "flexbox",
+        "navbar"
+      ],
+      "problemHtml": "<p>Bài 3.3: <em>\"<code>space-between</code> là thanh điều hướng kinh điển: logo bên trái, các liên kết bên phải.\"</em> Thanh điều hướng có hai con trực tiếp: logo và <code>&lt;ul class=\"menu\"&gt;</code>. Menu lại có các <code>&lt;li&gt;</code> — con của <em>menu</em>, không phải của thanh. Bài học dặn: <code>display: flex</code> <em>\"đổi cách các con TRỰC TIẾP được bố trí và chẳng làm gì với các cháu\"</em> — nên bạn cần flex ở hai tầng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.navbar</code>: flex, logo trái — menu phải (<code>space-between</code>), căn giữa dọc (<code>align-items: center</code>).</li>\n  <li><code>.menu</code>: flex, các mục cách nhau <code>24px</code>.</li>\n  <li><code>.menu</code> bỏ chấm đầu dòng và lề mặc định: <code>list-style: none</code>, <code>margin: 0</code>, <code>padding: 0</code>.</li>\n  <li><code>.navbar</code> có <code>padding: 12px 24px</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "header.navbar > a.logo + ul.menu > li × 4; styles.css chỉ có màu.",
+      "outputSpec": "[CuongThai]                         Khoá học   Blog   Code Lab   Đăng nhập",
+      "constraints": "Không dùng margin-left: auto hay float (dùng đúng thuộc tính của bài).\nKhông sửa HTML.",
+      "examplesJson": [
+        {
+          "input": ".navbar { display: flex; justify-content: space-between; }\n/* nhưng .menu chưa flex */",
+          "output": "[CuongThai]                                    • Khoá học\n                                               • Blog\n                                               • …",
+          "explanation": "Thanh đã chia trái–phải, nhưng các li vẫn chồng dọc: chúng là CHÁU của .navbar, flex của thanh không chạm tới."
+        }
+      ],
+      "hintsJson": [
+        "Hai vật chứa, hai tầng: .navbar sắp xếp (logo, menu); .menu sắp xếp các li.",
+        ".navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; } .menu { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\nbody { margin: 0; }\n\n.navbar {\n  background: #0f172a;\n}\n.navbar a {\n  color: #f8fafc;\n  text-decoration: none;\n}\n.logo {\n  font-weight: bold;\n  font-size: 20px;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>CuongThai</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <header class=\"navbar\">\n      <a href=\"/\" class=\"logo\">CuongThai</a>\n      <ul class=\"menu\">\n        <li><a href=\"/courses\">Khoá học</a></li>\n        <li><a href=\"/blog\">Blog</a></li>\n        <li><a href=\"/code-lab\">Code Lab</a></li>\n        <li><a href=\"/login\">Đăng nhập</a></li>\n      </ul>\n    </header>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\nbody { margin: 0; }\n\n/* Tầng 1: con trực tiếp là logo và ul.menu */\n.navbar {\n  display: flex;\n  justify-content: space-between;  /* logo dạt trái, menu dạt phải (trục chính ngang) */\n  align-items: center;             /* logo cao 20px và menu thẳng hàng giữa (trục phụ dọc) */\n  padding: 12px 24px;\n  background: #0f172a;\n}\n.navbar a {\n  color: #f8fafc;\n  text-decoration: none;\n}\n.logo {\n  font-weight: bold;\n  font-size: 20px;\n}\n\n/* Tầng 2: con trực tiếp là các li — flex của .navbar KHÔNG chạm tới chúng */\n.menu {\n  display: flex;\n  gap: 24px;\n  list-style: none;   /* bỏ chấm đầu dòng */\n  margin: 0;          /* bỏ lề mặc định của ul */\n  padding: 0;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>CuongThai</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <header class=\"navbar\">\n      <a href=\"/\" class=\"logo\">CuongThai</a>\n      <ul class=\"menu\">\n        <li><a href=\"/courses\">Khoá học</a></li>\n        <li><a href=\"/blog\">Blog</a></li>\n        <li><a href=\"/code-lab\">Code Lab</a></li>\n        <li><a href=\"/login\">Đăng nhập</a></li>\n      </ul>\n    </header>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thanh điều hướng là bài toán hai tầng. Tầng ngoài chỉ có hai item (logo, menu) — <code>space-between</code> đẩy chúng ra hai mép, <code>align-items: center</code> canh chúng thẳng hàng theo chiều dọc dù cỡ chữ khác nhau. Tầng trong là các <code>li</code>, cần flex riêng. Đây là \"Flexbox bên trong từng thanh\" mà bài 3.4 nhắc lại.</p>\n<p><code>&lt;ul&gt;</code> có lề và padding mặc định (để chừa chỗ cho chấm đầu dòng) — bỏ chấm thì cũng bỏ luôn khoảng đó, nếu không menu lệch vào trong. Máy chấm kiểm cả hai vật chứa và các giá trị reset của ul.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chỉ flex <code>.navbar</code> rồi thắc mắc vì sao các li vẫn chồng dọc.</li>\n  <li>Dùng <code>space-around</code> — logo và menu cách mép một khoảng, không sát mép như thiết kế.</li>\n  <li>Quên <code>align-items: center</code> — mặc định <code>stretch</code> kéo item cao bằng thanh, chữ menu nằm lệch lên trên so với logo.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.3 Flexbox: xếp mọi thứ theo hàng hoặc cột.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".navbar flex",
+            "kiem": "css",
+            "selector": ".navbar",
+            "thuocTinh": "display",
+            "giaTri": "flex"
+          },
+          {
+            "moTa": ".navbar space-between",
+            "kiem": "css",
+            "selector": ".navbar",
+            "thuocTinh": "justify-content",
+            "giaTri": "space-between"
+          },
+          {
+            "moTa": ".navbar căn giữa dọc",
+            "kiem": "css",
+            "selector": ".navbar",
+            "thuocTinh": "align-items",
+            "giaTri": "center"
+          },
+          {
+            "moTa": ".navbar padding 12px 24px",
+            "kiem": "css",
+            "selector": ".navbar",
+            "thuocTinh": "padding-left",
+            "giaTri": "24px"
+          },
+          {
+            "moTa": ".menu cũng là flex (tầng 2)",
+            "kiem": "css",
+            "selector": ".menu",
+            "thuocTinh": "display",
+            "giaTri": "flex"
+          },
+          {
+            "moTa": ".menu gap 24px",
+            "kiem": "css",
+            "selector": ".menu",
+            "thuocTinh": "gap",
+            "khop": "^24px( 24px)?$"
+          },
+          {
+            "moTa": ".menu bỏ chấm đầu dòng",
+            "kiem": "css",
+            "selector": ".menu",
+            "thuocTinh": "list-style-type",
+            "khop": "^none$"
+          },
+          {
+            "moTa": ".menu bỏ padding mặc định",
+            "kiem": "css",
+            "selector": ".menu",
+            "thuocTinh": "padding-left",
+            "khop": "^0(px)?$"
+          },
+          {
+            "moTa": "Không dùng margin-left: auto hay float",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "margin-left\\s*:\\s*auto|float\\s*:",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Thanh bên rộng cố định, nội dung lấp phần còn lại với flex: 1",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "flex: 1",
+        "nở ra chia không gian dư",
+        "chiều rộng cố định",
+        "flex-shrink"
+      ],
+      "prerequisites": [
+        "display: flex"
+      ],
+      "tags": [
+        "css",
+        "flexbox",
+        "flex-grow",
+        "layout"
+      ],
+      "problemHtml": "<p>Bài 3.3, mục \"Nở ra và co lại\":</p>\n<pre><code>.sidebar { width: 240px; }   /* cố định */\n.content { flex: 1; }        /* lấy hết không gian còn lại */</code></pre>\n<p>Trang quản trị cần bố cục đó. Người viết trước đặt <code>.content { width: 1000px }</code> — vừa trên màn của họ, tràn trên laptop nhỏ. Hãy làm cho nội dung <em>tự</em> lấp phần còn lại ở mọi bề rộng, thanh bên giữ đúng 240px.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.bo-cuc</code> là flex container, khoảng cách giữa thanh bên và nội dung <code>gap: 24px</code>.</li>\n  <li><code>.sidebar</code> rộng đúng 240px và <strong>không bị co</strong> khi màn hẹp (<code>flex-shrink: 0</code>).</li>\n  <li><code>.content</code> có <code>flex: 1</code>, bỏ <code>width: 1000px</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": ".bo-cuc chưa flex; .content width 1000px.",
+      "outputSpec": "[ thanh bên 240px ] 24px [ nội dung lấp hết phần còn lại ] — ở mọi bề rộng cửa sổ.",
+      "constraints": "Không đặt width cho .content.\nKhông dùng calc().",
+      "examplesJson": [
+        {
+          "input": "Cửa sổ 1280px (body margin 8px hai bên):\n.bo-cuc 1264px · .sidebar 240px · gap 24px",
+          "output": ".content = 1264 − 240 − 24 = 1000px",
+          "explanation": "flex: 1 = \"nở ra lấy hết không gian dư\". Cửa sổ 1024px thì content tự còn 744px."
+        }
+      ],
+      "hintsJson": [
+        "flex: 1 đặt trên ITEM cần nở (.content), không trên vật chứa.",
+        ".bo-cuc { display: flex; gap: 24px; } .sidebar { width: 240px; flex-shrink: 0; } .content { flex: 1; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.sidebar {\n  width: 240px;\n  padding: 16px;\n  background: #f1f5f9;\n}\n.content {\n  width: 1000px;\n  padding: 16px;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Quản trị</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"bo-cuc\">\n      <aside class=\"sidebar\">\n        <p>Bảng điều khiển</p>\n        <p>Người dùng</p>\n        <p>Cài đặt</p>\n      </aside>\n      <main class=\"content\">\n        <h1>Bảng điều khiển</h1>\n        <p>Hôm nay có 42 lượt đăng ký mới.</p>\n      </main>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.bo-cuc {\n  display: flex;\n  gap: 24px;           /* khoảng giữa thanh bên và nội dung */\n}\n\n.sidebar {\n  width: 240px;        /* cố định */\n  flex-shrink: 0;      /* màn hẹp cũng không bị co dưới 240px */\n  padding: 16px;\n  background: #f1f5f9;\n}\n\n.content {\n  flex: 1;             /* = 1 1 0%: nở ra lấy HẾT không gian còn lại */\n  padding: 16px;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Quản trị</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"bo-cuc\">\n      <aside class=\"sidebar\">\n        <p>Bảng điều khiển</p>\n        <p>Người dùng</p>\n        <p>Cài đặt</p>\n      </aside>\n      <main class=\"content\">\n        <h1>Bảng điều khiển</h1>\n        <p>Hôm nay có 42 lượt đăng ký mới.</p>\n      </main>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>flex: 1</code> là viết tắt của <code>flex-grow: 1; flex-shrink: 1; flex-basis: 0%</code>: bắt đầu từ 0 rồi nở ra lấy toàn bộ phần dư. Vì thanh bên không có flex-grow, toàn bộ phần dư đổ về <code>.content</code> — ở mọi bề rộng.</p>\n<p>Chi tiết nhỏ mà quan trọng: flex item mặc định <code>flex-shrink: 1</code>, nên khi màn hẹp trình duyệt được phép co cả thanh bên dưới 240px. <code>flex-shrink: 0</code> giữ nó cố định đúng như thiết kế. Máy chấm kiểm flex-grow/basis của nội dung, flex-shrink và bề rộng của thanh bên, và không còn width cứng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt <code>flex: 1</code> lên <code>.bo-cuc</code> — vật chứa không nở theo con của nó.</li>\n  <li>Giữ <code>width: 1000px</code> cùng <code>flex: 1</code> — flex-basis 0% thắng width trong hàng, nhưng mã gây hiểu lầm; xoá đi.</li>\n  <li>Đặt <code>flex: 1</code> cho cả thanh bên — hai cột chia đôi, thanh bên không còn 240px.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.3 Flexbox: xếp mọi thứ theo hàng hoặc cột.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".bo-cuc là flex",
+            "kiem": "css",
+            "selector": ".bo-cuc",
+            "thuocTinh": "display",
+            "giaTri": "flex"
+          },
+          {
+            "moTa": ".bo-cuc gap 24px",
+            "kiem": "css",
+            "selector": ".bo-cuc",
+            "thuocTinh": "gap",
+            "khop": "^24px( 24px)?$"
+          },
+          {
+            "moTa": "Thanh bên rộng 240px",
+            "kiem": "kich-thuoc",
+            "selector": ".sidebar",
+            "thuocTinh": "width",
+            "giaTri": 240
+          },
+          {
+            "moTa": "Thanh bên không bị co",
+            "kiem": "css",
+            "selector": ".sidebar",
+            "thuocTinh": "flex-shrink",
+            "giaTri": "0"
+          },
+          {
+            "moTa": "Nội dung nở ra (flex-grow 1)",
+            "kiem": "css",
+            "selector": ".content",
+            "thuocTinh": "flex-grow",
+            "giaTri": "1"
+          },
+          {
+            "moTa": "Nội dung flex-basis 0% (flex: 1)",
+            "kiem": "css",
+            "selector": ".content",
+            "thuocTinh": "flex-basis",
+            "khop": "^0(%|px)?$"
+          },
+          {
+            "moTa": "Không còn width cứng cho .content",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "\\.content\\s*\\{[^}]*[{;\\s]width\\s*:",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Hàng thẻ co giãn và xuống dòng: flex-wrap với flex: 1 1 200px",
+      "language": "css",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "flex-wrap",
+        "flex-grow / flex-shrink / flex-basis",
+        "flex rút gọn ba giá trị",
+        "gap hai chiều"
+      ],
+      "prerequisites": [
+        "flex: 1"
+      ],
+      "tags": [
+        "css",
+        "flexbox",
+        "flex-wrap",
+        "cards"
+      ],
+      "problemHtml": "<p>Bài 3.3 có dòng <code>flex-wrap: wrap; /* cho các mục rớt xuống dòng mới nếu chật */</code>. Ghép nó với <code>flex: 1</code> của mục \"Nở ra và co lại\", ta được hàng thẻ tự sắp xếp: mỗi thẻ <em>muốn</em> rộng 200px, nở ra chia đều phần dư, và khi chật thì rớt xuống dòng. Viết rút gọn đủ ba giá trị: <code>flex: 1 1 200px</code> = nở (grow) · co (shrink) · kích thước gốc (basis).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.cards</code>: flex, <code>flex-wrap: wrap</code>, <code>gap: 16px</code>.</li>\n  <li>Mỗi <code>.card</code>: <code>flex: 1 1 200px</code>.</li>\n  <li>Bỏ <code>width: 23%</code> và <code>margin-right: 2%</code> (cách cũ vỡ ở màn hẹp).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Năm .card với width 23% + margin-right 2%, không wrap.",
+      "outputSpec": "Màn rộng: 4 thẻ một hàng, thẻ thứ 5 rớt xuống và nở hết hàng. Màn hẹp: 2 thẻ/hàng, rồi 1 thẻ/hàng.",
+      "constraints": "Không dùng width hay margin phần trăm trên .card.\nKhông media query (bài 3.5).",
+      "examplesJson": [
+        {
+          "input": ".card { flex: 1 1 200px; }  ·  .cards rộng 900px, gap 16px",
+          "output": "4 thẻ cần 4×200 + 3×16 = 848 ≤ 900 ⇒ 4 thẻ hàng đầu, mỗi thẻ nở thành (900 − 48) / 4 = 213px\nThẻ 5 xuống hàng 2 và nở thành 900px",
+          "explanation": "basis 200px quyết định bao nhiêu thẻ VỪA một hàng; grow 1 chia đều phần dư cho các thẻ trên hàng đó."
+        }
+      ],
+      "hintsJson": [
+        "Ba việc trên vật chứa (flex, wrap, gap); một việc trên mỗi item (flex: 1 1 200px).",
+        ".cards { display: flex; flex-wrap: wrap; gap: 16px; } .card { flex: 1 1 200px; padding: 16px; border: 1px solid #e2e8f0; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.cards {\n  /* chưa flex */\n}\n.card {\n  display: inline-block;\n  width: 23%;\n  margin-right: 2%;\n  padding: 16px;\n  border: 1px solid #e2e8f0;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Khoá học</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"cards\">\n      <div class=\"card\">HTML</div>\n      <div class=\"card\">CSS</div>\n      <div class=\"card\">JavaScript</div>\n      <div class=\"card\">Git</div>\n      <div class=\"card\">Node.js</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.cards {\n  display: flex;\n  flex-wrap: wrap;   /* chật thì rớt xuống dòng mới */\n  gap: 16px;         /* khoảng đều cả ngang lẫn dọc giữa các hàng */\n}\n\n.card {\n  /* grow 1: nở chia đều phần dư · shrink 1: được co · basis 200px: kích thước mong muốn */\n  flex: 1 1 200px;\n  padding: 16px;\n  border: 1px solid #e2e8f0;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Khoá học</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <div class=\"cards\">\n      <div class=\"card\">HTML</div>\n      <div class=\"card\">CSS</div>\n      <div class=\"card\">JavaScript</div>\n      <div class=\"card\">Git</div>\n      <div class=\"card\">Node.js</div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>flex-basis: 200px</code> là \"kích thước mong muốn\" dùng để quyết định bao nhiêu thẻ vừa một hàng; <code>flex-grow: 1</code> chia phần dư còn lại; <code>flex-wrap: wrap</code> cho phép xuống dòng thay vì ép co. Ba giá trị cùng nhau tạo hàng thẻ responsive không cần media query.</p>\n<p>Một đặc điểm cần biết (và là lý do bài 3.4 có Grid): thẻ cuối nằm một mình trên hàng sẽ nở hết hàng — flex nghĩ theo <em>từng hàng</em>, không giữ các cột thẳng nhau. Khi cần cột thẳng hàng, dùng <code>repeat(auto-fit, minmax(…))</code> của Grid. Máy chấm kiểm wrap/gap của vật chứa và grow/shrink/basis của từng thẻ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên <code>flex-wrap: wrap</code> — năm thẻ bị ép co trên một hàng, chữ dài tràn ra.</li>\n  <li>Viết <code>flex: 200px</code> — một giá trị độ dài nghĩa là <code>1 1 200px</code>; chạy được, nhưng đề yêu cầu viết rõ ba giá trị để nhớ ý nghĩa.</li>\n  <li>Giữ <code>margin-right: 2%</code> cùng gap — khoảng cách cộng dồn, hàng bị lệch.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.3 Flexbox: xếp mọi thứ theo hàng hoặc cột.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex-wrap",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".cards flex",
+            "kiem": "css",
+            "selector": ".cards",
+            "thuocTinh": "display",
+            "giaTri": "flex"
+          },
+          {
+            "moTa": ".cards flex-wrap: wrap",
+            "kiem": "css",
+            "selector": ".cards",
+            "thuocTinh": "flex-wrap",
+            "giaTri": "wrap"
+          },
+          {
+            "moTa": ".cards gap 16px",
+            "kiem": "css",
+            "selector": ".cards",
+            "thuocTinh": "gap",
+            "khop": "^16px( 16px)?$"
+          },
+          {
+            "moTa": ".card flex-grow 1",
+            "kiem": "css",
+            "selector": ".card",
+            "thuocTinh": "flex-grow",
+            "giaTri": "1"
+          },
+          {
+            "moTa": ".card flex-shrink 1",
+            "kiem": "css",
+            "selector": ".card",
+            "thuocTinh": "flex-shrink",
+            "giaTri": "1"
+          },
+          {
+            "moTa": ".card flex-basis 200px",
+            "kiem": "css",
+            "selector": ".card",
+            "thuocTinh": "flex-basis",
+            "giaTri": "200px"
+          },
+          {
+            "moTa": "Không còn width/margin phần trăm",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "(width|margin-right)\\s*:\\s*\\d+%",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Viết đủ ba giá trị flex: 1 1 200px",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "flex\\s*:\\s*1\\s+1\\s+200px"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Bẫy đổi trục: sửa thanh bên column mà justify và align đang làm ngược việc",
+      "language": "css",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "trục chính vs trục phụ khi column",
+        "justify-content dọc",
+        "align-items ngang",
+        "flex lồng nhau hai hướng"
+      ],
+      "prerequisites": [
+        "toàn bộ bài 3.3"
+      ],
+      "tags": [
+        "css",
+        "flexbox",
+        "axes",
+        "debug"
+      ],
+      "problemHtml": "<p>Bẫy cuối bài 3.3: <em>\"Hai thuộc tính căn chỉnh đổi nghĩa cho nhau ngay khi bạn đặt <code>flex-direction: column</code>: justify-content giờ làm việc theo chiều dọc còn align-items theo chiều ngang.\"</em></p>\n<p>Thanh công cụ dọc <code>.khung</code> cao 480px (trục chính dọc) có ba nhóm: logo, các nút công cụ, và thẻ người dùng ở dưới cùng. Người viết trước nghĩ theo hàng ngang nên viết ngược hết. Bên trong thẻ người dùng lại là một flex <em>hàng ngang</em> (ảnh + tên) — nơi justify/align mang nghĩa bình thường. Sửa để ra đúng thiết kế:</p>\n<pre><code>.khung (column, cao 480px)          .the-nguoi-dung (row)\n┌──────────────┐                    ┌──────────────────────┐\n│     LOGO     │ ← sát trên          │ (ảnh)  Minh Anh      │\n│              │                    └──────────────────────┘\n│    [ Bút ]   │                      ảnh và tên căn giữa DỌC,\n│    [ Xoá ]   │ ← nhóm giữa           cách nhau 8px\n│              │\n│ [ảnh] Minh   │ ← sát dưới\n└──────────────┘\nmọi nhóm căn giữa NGANG trong khung</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.khung</code>: ba nhóm dàn đều từ sát trên xuống sát dưới (theo trục chính dọc) ⇒ <code>justify-content: space-between</code>.</li>\n  <li><code>.khung</code>: mọi nhóm căn giữa <strong>ngang</strong> ⇒ thuộc tính trục phụ nào?</li>\n  <li><code>.cong-cu</code>: các nút xếp dọc (column) cách nhau 8px.</li>\n  <li><code>.the-nguoi-dung</code>: hàng ngang, ảnh và tên căn giữa <strong>dọc</strong>, cách nhau 8px.</li>\n  <li>Ghi chú thích ở <code>.khung</code>: \"column ⇒ justify là chiều …, align là chiều …\".</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "styles.css viết theo \"tư duy hàng ngang\": .khung có justify-content: center, align-items: flex-end; .the-nguoi-dung có justify-content: center.",
+      "outputSpec": "Logo sát trên, nhóm nút ở giữa, thẻ người dùng sát dưới; tất cả giữa theo chiều ngang; trong thẻ, ảnh và tên thẳng hàng giữa.",
+      "constraints": "Không dùng margin auto, position hay height cố định cho từng nhóm.\nKhông đổi flex-direction của .khung (thiết kế bắt buộc là cột).",
+      "examplesJson": [
+        {
+          "input": ".khung { display: flex; flex-direction: column; justify-content: center; }",
+          "output": "Ba nhóm DỒN vào giữa theo chiều DỌC (không phải giữa ngang như người viết nghĩ).",
+          "explanation": "Với column, justify-content làm việc trên trục chính = dọc."
+        }
+      ],
+      "hintsJson": [
+        "Nói thành lời trước khi gõ: \".khung là column ⇒ justify = DỌC, align = NGANG. .the-nguoi-dung là row ⇒ justify = NGANG, align = DỌC.\"",
+        ".khung { justify-content: space-between; align-items: center; } .cong-cu { display: flex; flex-direction: column; gap: 8px; } .the-nguoi-dung { display: flex; align-items: center; gap: 8px; } — bỏ justify-content: center ở thẻ người dùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n.khung {\n  display: flex;\n  flex-direction: column;\n  height: 480px;\n  width: 200px;\n  padding: 16px;\n  background: #1e293b;\n  color: #f8fafc;\n  justify-content: center;    /* \"căn giữa ngang\"?? */\n  align-items: flex-end;      /* \"đẩy xuống dưới\"?? */\n}\n\n.cong-cu {\n  /* các nút nên xếp dọc, cách 8px */\n}\n\n.the-nguoi-dung {\n  display: flex;\n  justify-content: center;    /* \"ảnh và tên giữa dọc\"?? */\n}\n\n.anh {\n  width: 32px;\n  height: 32px;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Thanh công cụ</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav class=\"khung\">\n      <div class=\"logo\">LOGO</div>\n      <div class=\"cong-cu\">\n        <button type=\"button\">Bút</button>\n        <button type=\"button\">Xoá</button>\n      </div>\n      <div class=\"the-nguoi-dung\">\n        <img class=\"anh\" src=\"minh-anh.png\" alt=\"\" width=\"32\" height=\"32\">\n        <span>Minh Anh</span>\n      </div>\n    </nav>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "*, *::before, *::after { box-sizing: border-box; }\n\n/* column ⇒ justify là chiều DỌC (trục chính), align là chiều NGANG (trục phụ) */\n.khung {\n  display: flex;\n  flex-direction: column;\n  height: 480px;\n  width: 200px;\n  padding: 16px;\n  background: #1e293b;\n  color: #f8fafc;\n  justify-content: space-between;  /* DỌC: logo sát trên, thẻ người dùng sát dưới, nhóm nút ở giữa */\n  align-items: center;             /* NGANG: mọi nhóm căn giữa trong khung */\n}\n\n/* nhóm nút: cột riêng, cách 8px */\n.cong-cu {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n\n/* row (mặc định) ⇒ justify NGANG, align DỌC */\n.the-nguoi-dung {\n  display: flex;\n  align-items: center;   /* DỌC: ảnh 32px và dòng chữ thẳng hàng giữa */\n  gap: 8px;              /* ảnh cách tên 8px */\n}\n\n.anh {\n  width: 32px;\n  height: 32px;\n}\n"
+        },
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Thanh công cụ</title>\n    <link rel=\"stylesheet\" href=\"styles.css\">\n  </head>\n  <body>\n    <nav class=\"khung\">\n      <div class=\"logo\">LOGO</div>\n      <div class=\"cong-cu\">\n        <button type=\"button\">Bút</button>\n        <button type=\"button\">Xoá</button>\n      </div>\n      <div class=\"the-nguoi-dung\">\n        <img class=\"anh\" src=\"minh-anh.png\" alt=\"\" width=\"32\" height=\"32\">\n        <span>Minh Anh</span>\n      </div>\n    </nav>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Người viết trước không sai cú pháp — họ sai <em>trục</em>. Với <code>.khung</code> là column, <code>justify-content: center</code> dồn mọi thứ vào giữa theo chiều dọc, còn <code>align-items: flex-end</code> đẩy mọi thứ sang <em>phải</em>. Đổi đúng nghĩa: trải dọc ⇒ justify (<code>space-between</code> cho \"sát trên — giữa — sát dưới\" với ba item), căn giữa ngang ⇒ align.</p>\n<p>Trang thật luôn lồng hai hướng: khung cột, bên trong có hàng. Mỗi vật chứa có hệ trục của riêng nó — ở <code>.the-nguoi-dung</code> (row), \"giữa dọc\" lại là <code>align-items</code>. Thói quen bài học dặn: nói hướng ra thành lời, hoặc bật lớp phủ flexbox của DevTools. Máy chấm kiểm 9 giá trị trên ba vật chứa và cấm các mẹo né (margin auto).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đổi <code>.khung</code> sang row cho \"dễ\" — sai thiết kế, đề cấm.</li>\n  <li>Dùng <code>justify-content: space-around</code> — logo và thẻ người dùng cách mép một khoảng, không sát.</li>\n  <li>Ở <code>.the-nguoi-dung</code> viết <code>justify-content: center</code> để \"giữa dọc\" — với row nó căn giữa NGANG.</li>\n  <li>Thêm <code>margin-top: auto</code> cho thẻ người dùng — đẩy được xuống đáy, nhưng nhóm nút không còn ở giữa.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 3.3 Flexbox: xếp mọi thứ theo hàng hoặc cột.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Flexbox#flexbox_axes",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".khung vẫn là column",
+            "kiem": "css",
+            "selector": ".khung",
+            "thuocTinh": "flex-direction",
+            "giaTri": "column"
+          },
+          {
+            "moTa": ".khung trải dọc: space-between",
+            "kiem": "css",
+            "selector": ".khung",
+            "thuocTinh": "justify-content",
+            "giaTri": "space-between"
+          },
+          {
+            "moTa": ".khung căn giữa ngang: align-items center",
+            "kiem": "css",
+            "selector": ".khung",
+            "thuocTinh": "align-items",
+            "giaTri": "center"
+          },
+          {
+            "moTa": ".cong-cu là flex column",
+            "kiem": "css",
+            "selector": ".cong-cu",
+            "thuocTinh": "flex-direction",
+            "giaTri": "column"
+          },
+          {
+            "moTa": ".cong-cu gap 8px",
+            "kiem": "css",
+            "selector": ".cong-cu",
+            "thuocTinh": "gap",
+            "khop": "^8px( 8px)?$"
+          },
+          {
+            "moTa": ".cong-cu là flex container",
+            "kiem": "css",
+            "selector": ".cong-cu",
+            "thuocTinh": "display",
+            "giaTri": "flex"
+          },
+          {
+            "moTa": ".the-nguoi-dung là hàng (row)",
+            "kiem": "css",
+            "selector": ".the-nguoi-dung",
+            "thuocTinh": "flex-direction",
+            "giaTri": "row"
+          },
+          {
+            "moTa": ".the-nguoi-dung giữa dọc: align-items center",
+            "kiem": "css",
+            "selector": ".the-nguoi-dung",
+            "thuocTinh": "align-items",
+            "giaTri": "center"
+          },
+          {
+            "moTa": ".the-nguoi-dung không còn justify-content: center",
+            "kiem": "css",
+            "selector": ".the-nguoi-dung",
+            "thuocTinh": "justify-content",
+            "khop": "^(normal|flex-start|start)$"
+          },
+          {
+            "moTa": ".the-nguoi-dung gap 8px",
+            "kiem": "css",
+            "selector": ".the-nguoi-dung",
+            "thuocTinh": "gap",
+            "khop": "^8px( 8px)?$"
+          },
+          {
+            "moTa": "Không dùng margin auto / position",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "margin(-top|-bottom)?\\s*:[^;]*auto|position\\s*:",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Có chú thích nói rõ trục của column",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "column[^\\n]*justify[^\\n]*(dọc|DỌC)",
+            "giuChuThich": true
+          }
+        ]
+      }
+    }
+  ]
+}

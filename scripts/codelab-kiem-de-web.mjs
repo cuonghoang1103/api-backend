@@ -26,8 +26,12 @@
  *     tổ tiên, repeat(auto-fit, minmax(Apx, …))). Giá trị không phải px ⇒ BỎ QUA (báo rõ).
  *   - Không hiểu @media: script tự "làm phẳng" — khối @media khớp với beRong được
  *     mở ra tại chỗ, khối không khớp bị bỏ (hỗ trợ min-/max-width theo px/em/rem, and, dấu phẩy).
- *   - Không mở shorthand `flex-flow`, không giải var(); `gap` đọc được nhưng không
- *     tách ra column-gap/row-gap. Lời giải trong bộ này viết longhand vì vậy.
+ *   - Không mở shorthand `flex-flow`, `text-decoration`, `list-style` (script tự đọc phần cần), không giải
+ *     var(); `gap` đọc được nhưng không tách ra column-gap/row-gap. Lời giải viết longhand.
+ *   - Độ dài 0 chưa ai đặt trả về "0" (trình duyệt: "0px") ⇒ kiểm số 0 viết khop '^0(px)?$'.
+ *   - Bảng kiểu mặc định của jsdom bị tính như CSS tác giả (`:link` (0,1,0) thắng `nav a`);
+ *     script vá bằng cách bọc nó trong :where() lúc nạp. Hai !important đánh nhau thì jsdom lấy
+ *     cái sau cùng (trình duyệt so độ đặc hiệu) — chỉ ảnh hưởng code khởi đầu cố ý có !important.
  *   - Trình duyệt có margin mặc định 8px cho body; jsdom không ⇒ script chèn
  *     `body{margin:8px}` làm bảng kiểu đầu tiên (tác giả đè được như thật).
  */
@@ -51,6 +55,20 @@ const CHI = lay('--chi');
 const { xuatDe } = await import(pathToFileURL(path.join(NGUON, '_luoc-do.mjs')).href);
 
 // ─── tìm jsdom ────────────────────────────────────────────────────────────
+// jsdom coi bảng kiểu mặc định của nó (default-stylesheet.css) như CSS của TÁC GIẢ: `:link { color }`
+// (0,1,0) thắng `nav a` (0,0,2) của người học — trình duyệt thật thì luật tác giả LUÔN thắng luật
+// user-agent bất kể độ đặc hiệu. Vá: trước khi nạp jsdom, bọc mọi bộ chọn của tệp đó trong :where(…)
+// (độ đặc hiệu 0) — nó được xử lý đầu tiên nên mọi luật tác giả cùng thuộc tính đều đè được.
+const _docTep = fs.readFileSync;
+fs.readFileSync = function (tep, ...rest) {
+  const kq = _docTep.call(this, tep, ...rest);
+  if (typeof tep === 'string' && tep.endsWith('default-stylesheet.css') && typeof kq === 'string') {
+    return kq.replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/(^|[{}])(\s*)([^{}@;]+?)(\s*)\{/g, (m, a, s1, sel, s2) => (sel.includes('::') ? m : `${a}${s1}:where(${sel})${s2}{`));
+  }
+  return kq;
+};
+
 function timJsdom() {
   const coSo = [process.env.JSDOM_TU, GOC, path.join(GOC, 'frontend'), path.join(GOC, 'desktop')].filter(Boolean);
   for (const c of coSo) {
@@ -73,7 +91,8 @@ function ghepTep(files, tepHtml) {
     if (!/rel\s*=\s*["']?stylesheet/i.test(tag)) return tag;
     const m = tag.match(/href\s*=\s*["']([^"']+)["']/i);
     if (!m || files[m[1]] == null) return tag;
-    return `<style data-tu="${m[1]}">\n${files[m[1]]}\n</style>`;
+    // giữ thẻ <link> (để kiểm cấu trúc head) và chèn nội dung tệp ngay sau nó — đúng vị trí cascade
+    return `${tag}<style data-tu="${m[1]}">\n${files[m[1]]}\n</style>`;
   });
   return html;
 }
@@ -120,7 +139,12 @@ function lamPhangMedia(doc, w) {
     const di = (rules) => {
       for (const r of rules) {
         if (r.constructor.name === 'CSSMediaRule') { if (khopMedia(r.media.mediaText, w)) di(r.cssRules); }
-        else ra.push(r.cssText);
+        else if (r.constructor.name === 'CSSStyleRule' && r.selectorText.includes('::')) {
+          // jsdom bỏ CẢ quy tắc khi danh sách bộ chọn có giả phần tử (*, *::before …) — trình duyệt
+          // thì không. Giả phần tử không ảnh hưởng phần tử thật ⇒ lược chúng khỏi danh sách.
+          const con = r.selectorText.split(',').map((x) => x.trim()).filter((x) => !x.includes('::'));
+          if (con.length) ra.push(`${con.join(', ')} { ${r.style.cssText} }`);
+        } else ra.push(r.cssText);
       }
     };
     di(sheet.cssRules);
@@ -156,6 +180,21 @@ function chuanCss(v) {
 const gonChu = (s) => String(s ?? '').replace(/\s+/g, ' ').trim();
 const regex = (k) => new RegExp(k, 'i');
 
+/** đọc một thuộc tính computed; bù chỗ jsdom không tách shorthand thành longhand */
+function docCss(cs, prop) {
+  if (prop === 'text-decoration-line') {
+    const t = String(cs.getPropertyValue('text-decoration') || '');
+    const m = t.match(/\b(none|underline|overline|line-through)\b/g);
+    if (m) return m.join(' ');
+  }
+  if (prop === 'list-style-type') {
+    const t = String(cs.getPropertyValue('list-style') || '');
+    const m = t.match(/\b(none|disc|circle|square|decimal|lower-alpha|upper-alpha|lower-roman|upper-roman)\b/);
+    if (m) return m[1];
+  }
+  return cs.getPropertyValue(prop);
+}
+
 // ─── ước lượng bố cục (jsdom không có layout) ─────────────────────────────
 const px = (v) => { const m = String(v).trim().match(/^(-?[\d.]+)px$/); return m ? parseFloat(m[1]) : null; };
 const pxHoac0 = (v) => px(chuanCss(v)) ?? 0;
@@ -175,7 +214,21 @@ function beRongNoiDung(win, el, w) {
     const wKhai = chuanCss(cs.getPropertyValue('width'));
     const maxW = px(chuanCss(cs.getPropertyValue('max-width')));
     let hop; // bề rộng hộp viền
-    if (px(wKhai) != null) hop = bb ? px(wKhai) : px(wKhai) + pad + bor;
+    // phần tử con của grid/flex: "không gian cha cho" không phải cả bề rộng cha
+    const cha = e.parentElement;
+    const csCha = cha ? win.getComputedStyle(cha) : null;
+    const hienCha = csCha ? chuanCss(csCha.getPropertyValue('display')) : '';
+    if (hienCha === 'grid' && (!wKhai || wKhai === 'auto')) {
+      const ranh = cacRanhCot(win, cha, W);
+      if (!ranh) return null;
+      const vt = [...cha.children].indexOf(e) % ranh.length; // tự xếp, không span
+      hop = ranh[vt] - mar;
+    } else if (hienCha === 'flex' && px(wKhai) == null) {
+      const huong = chuanCss(csCha.getPropertyValue('flex-direction'));
+      const canh = chuanCss(csCha.getPropertyValue('align-items'));
+      if (!/^column/.test(huong) || !/^(normal|stretch|)$/.test(canh)) return null; // flex hàng: cần bố cục thật
+      hop = W - mar;
+    } else if (px(wKhai) != null) hop = bb ? px(wKhai) : px(wKhai) + pad + bor;
     else if (/%$/.test(wKhai)) { const p = parseFloat(wKhai) / 100 * W; hop = bb ? p : p + pad + bor; }
     else if (!wKhai || wKhai === 'auto') hop = W - mar;
     else return null;
@@ -191,8 +244,15 @@ function hopVien(win, el, w, truc) {
   const pad = pxHoac0(cs.getPropertyValue(`padding-${a}`)) + pxHoac0(cs.getPropertyValue(`padding-${b}`));
   const bor = pxHoac0(cs.getPropertyValue(`border-${a}-width`)) + pxHoac0(cs.getPropertyValue(`border-${b}-width`));
   const bb = cs.getPropertyValue('box-sizing') === 'border-box';
-  const v = px(chuanCss(cs.getPropertyValue(truc)));
+  const raw = chuanCss(cs.getPropertyValue(truc));
+  const v = px(raw);
   if (v != null) return bb ? v : v + pad + bor;
+  if (truc === 'width' && /%$/.test(raw)) {
+    const cha = el.parentElement ? beRongNoiDung(win, el.parentElement, w) : w;
+    if (cha == null) return null;
+    const p = parseFloat(raw) / 100 * cha;
+    return bb ? p : p + pad + bor;
+  }
   if (truc === 'width') {
     const cha = el.parentElement ? beRongNoiDung(win, el.parentElement, w) : w;
     if (cha == null) return null;
@@ -209,33 +269,68 @@ function hopVien(win, el, w, truc) {
   return null;
 }
 
-function demCot(win, el, w) {
+/** tách theo khoảng trắng ở độ sâu ngoặc 0, bỏ tên đường kẻ [..] */
+function tachRanh(s) {
+  const ra = []; let sau = 0, cur = '';
+  for (const ch of s) {
+    if (ch === '(') sau++;
+    if (ch === ')') sau--;
+    if (ch === ' ' && sau === 0) { if (cur) ra.push(cur); cur = ''; } else cur += ch;
+  }
+  if (cur) ra.push(cur);
+  return ra.filter((t) => !t.startsWith('['));
+}
+
+/** bề rộng từng rãnh cột của grid `el` khi vùng nội dung của nó rộng W — ước lượng (px, %, fr,
+ *  minmax(Apx, Nfr), repeat(n|auto-fit|auto-fill, …)); null nếu gặp thứ khác */
+function cacRanhCot(win, el, W) {
   const cs = win.getComputedStyle(el);
   const gtc = chuanCss(cs.getPropertyValue('grid-template-columns'));
-  if (!gtc || gtc === 'none') return 0;
-  const gapCot = px(chuanCss(cs.getPropertyValue('column-gap'))) ?? px(chuanCss(cs.getPropertyValue('gap')).split(' ').pop()) ?? 0;
-  const tach = (s) => { // tách theo khoảng trắng ở độ sâu ngoặc 0
-    const ra = []; let sau = 0, cur = '';
-    for (const ch of s) {
-      if (ch === '(') sau++;
-      if (ch === ')') sau--;
-      if (ch === ' ' && sau === 0) { if (cur) ra.push(cur); cur = ''; } else cur += ch;
-    }
-    if (cur) ra.push(cur);
-    return ra.filter((t) => !t.startsWith('['));
-  };
-  let n = 0;
-  for (const t of tach(gtc)) {
+  if (!gtc || gtc === 'none') return null;
+  const gap = px(chuanCss(cs.getPropertyValue('column-gap'))) ?? px(chuanCss(cs.getPropertyValue('gap')).split(' ').pop()) ?? 0;
+  const ranh = [];
+  for (const t of tachRanh(gtc)) {
     const m = t.match(/^repeat\((auto-fit|auto-fill|\d+), (.+)\)$/);
-    if (!m) { n++; continue; }
-    if (/^\d+$/.test(m[1])) { n += +m[1] * tach(m[2]).length; continue; }
-    const W = beRongNoiDung(win, el, w);
+    if (!m) { ranh.push(t); continue; }
+    if (/^\d+$/.test(m[1])) { for (let i = 0; i < +m[1]; i++) ranh.push(...tachRanh(m[2])); continue; }
     const mm = m[2].match(/^minmax\(([\d.]+)px, /) || m[2].match(/^([\d.]+)px$/);
-    if (W == null || !mm) return null;
+    if (!mm) return null;
     const A = parseFloat(mm[1]);
-    n += Math.max(1, Math.floor((W + gapCot) / (A + gapCot)));
+    const n = Math.max(1, Math.floor((W + gap) / (A + gap)));
+    for (let i = 0; i < n; i++) ranh.push(m[2]);
   }
-  return n;
+  const conLai = W - gap * (ranh.length - 1);
+  let coDinh = 0, tongFr = 0;
+  const loai = ranh.map((t) => {
+    let m = t.match(/^([\d.]+)px$/); if (m) { coDinh += +m[1]; return { px: +m[1] }; }
+    m = t.match(/^([\d.]+)%$/); if (m) { const v = +m[1] / 100 * W; coDinh += v; return { px: v }; }
+    m = t.match(/^([\d.]+)fr$/); if (m) { tongFr += +m[1]; return { fr: +m[1] }; }
+    m = t.match(/^minmax\(([\d.]+)px, ([\d.]+)fr\)$/); if (m) { tongFr += +m[2]; return { fr: +m[2], min: +m[1] }; }
+    return null;
+  });
+  if (loai.some((x) => !x)) return null;
+  const moiFr = tongFr ? Math.max(0, conLai - coDinh) / tongFr : 0;
+  return loai.map((x) => (x.px != null ? x.px : Math.max(x.min || 0, x.fr * moiFr)));
+}
+
+/** tỉ lệ bề rộng cột 1 / cột 2 của grid (từ fr hoặc px khai báo) — null nếu không tính được */
+function tiLeCot(win, el) {
+  const gtc = chuanCss(win.getComputedStyle(el).getPropertyValue('grid-template-columns'))
+    .replace(/repeat\((\d+), ([^()]+)\)/g, (_, n, t) => Array(+n).fill(t).join(' '));
+  const t = gtc.split(' ').filter((x) => !x.startsWith('['));
+  if (t.length < 2) return null;
+  const so = t.slice(0, 2).map((x) => { const m = x.match(/^([\d.]+)(fr|px)$/); return m ? { v: +m[1], dv: m[2] } : null; });
+  if (so.some((x) => !x) || so[0].dv !== so[1].dv) return null;
+  return so[0].v / so[1].v;
+}
+
+function demCot(win, el, w) {
+  const gtc = chuanCss(win.getComputedStyle(el).getPropertyValue('grid-template-columns'));
+  if (!gtc || gtc === 'none') return 0;
+  const W = beRongNoiDung(win, el, w);
+  if (W == null) return null;
+  const r = cacRanhCot(win, el, W);
+  return r ? r.length : null;
 }
 
 // ─── chạy MỘT kiểm ────────────────────────────────────────────────────────
@@ -272,7 +367,7 @@ function chayKiem(k, files, tepHtml) {
     }
     case 'css': {
       const els = chon();
-      const vals = els.map((e) => chuanCss(win.getComputedStyle(e).getPropertyValue(k.thuocTinh)));
+      const vals = els.map((e) => chuanCss(docCss(win.getComputedStyle(e), k.thuocTinh)));
       const mong = k.giaTri !== undefined ? chuanCss(k.giaTri) : null;
       const f = (v) => (mong !== null ? v === mong : regex(k.khop).test(v));
       return { dat: vals.length > 0 && (tatCa ? vals.every(f) : vals.some(f)), thay: vals.slice(0, 3).join(' | ') };
@@ -290,6 +385,13 @@ function chayKiem(k, files, tepHtml) {
       const n = demCot(win, els[0], w);
       if (n == null) return { boQua: 'không ước lượng được số cột — cần bố cục thật' };
       return { dat: n === k.giaTri, thay: `${n} cột (ước lượng)`, uocLuong: true };
+    }
+    case 'ti-le-cot': {
+      const els = chon();
+      if (!els.length) return { dat: false, thay: 'không có phần tử' };
+      const r = tiLeCot(win, els[0]);
+      if (r == null) return { boQua: 'không tính được tỉ lệ cột từ giá trị khai báo — cần bố cục thật' };
+      return { dat: Math.abs(r - k.giaTri) <= 0.05, thay: `cột1/cột2 = ${+r.toFixed(3)}` };
     }
     case 'co-nhan': {
       const els = chon();
@@ -331,7 +433,7 @@ function chayKiem(k, files, tepHtml) {
     }
     case 'ma-nguon': {
       const nguon = k.tep ? [files[k.tep] ?? ''] : Object.values(files);
-      const khop = nguon.some((s) => regex(k.khop).test(boChuThich(s)));
+      const khop = nguon.some((s) => regex(k.khop).test(k.giuChuThich ? s : boChuThich(s)));
       return { dat: k.phuDinh ? !khop : khop };
     }
     default: return { dat: false, thay: `loại kiểm lạ: ${k.kiem}` };
@@ -339,8 +441,8 @@ function chayKiem(k, files, tepHtml) {
 }
 
 const LOAI = new Set(['doctype', 'ton-tai', 'khong-ton-tai', 'so-luong', 'thuoc-tinh', 'text', 'css', 'kich-thuoc',
-  'so-cot', 'co-nhan', 'neo-hop-le', 'tieu-de', 'thu-tu', 'hop-le', 'ma-nguon']);
-const CAN_SELECTOR = new Set(['ton-tai', 'khong-ton-tai', 'so-luong', 'thuoc-tinh', 'text', 'css', 'kich-thuoc', 'so-cot', 'co-nhan', 'neo-hop-le', 'hop-le']);
+  'so-cot', 'ti-le-cot', 'co-nhan', 'neo-hop-le', 'tieu-de', 'thu-tu', 'hop-le', 'ma-nguon']);
+const CAN_SELECTOR = new Set(['ton-tai', 'khong-ton-tai', 'so-luong', 'thuoc-tinh', 'text', 'css', 'kich-thuoc', 'so-cot', 'ti-le-cot', 'co-nhan', 'neo-hop-le', 'hop-le']);
 
 function kiemLuocDo(k) {
   const loi = [];
@@ -349,7 +451,7 @@ function kiemLuocDo(k) {
   if (CAN_SELECTOR.has(k.kiem) && !k.selector) loi.push('thiếu selector');
   if (['thuoc-tinh', 'css', 'kich-thuoc'].includes(k.kiem) && !k.thuocTinh) loi.push('thiếu thuocTinh');
   if (['text', 'css'].includes(k.kiem) && k.giaTri === undefined && !k.khop) loi.push('thiếu giaTri/khop');
-  if (['kich-thuoc', 'so-cot', 'hop-le'].includes(k.kiem) && k.giaTri === undefined) loi.push('thiếu giaTri');
+  if (['kich-thuoc', 'so-cot', 'ti-le-cot', 'hop-le'].includes(k.kiem) && k.giaTri === undefined) loi.push('thiếu giaTri');
   if (k.kiem === 'so-luong' && k.giaTri === undefined && k.min === undefined && k.max === undefined) loi.push('thiếu giaTri/min/max');
   if (k.kiem === 'ma-nguon' && !k.khop) loi.push('thiếu khop');
   if (k.kiem === 'thu-tu' && !(Array.isArray(k.cacSelector) && k.cacSelector.length >= 2)) loi.push('thiếu cacSelector');

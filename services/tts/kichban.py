@@ -65,6 +65,10 @@ class Muc(_MucGoc, total=False):
     # Mục giảng bài có thuật ngữ tiếng Anh: mỗi câu được gắn danh sách
     # thuật ngữ (`tuAnh`) để màn hình thu hiện nút nghe mẫu + chấm từng từ.
     tuAnh: bool
+    # Mục câu THUẦN tiếng Anh (khoá `anh`): màn hình có nút nghe mẫu cả câu,
+    # backend chấm bằng Whisper ngôn ngữ `en` không mớm, và `xuong.py` xuất
+    # nó ra bộ dữ liệu RIÊNG — không trộn vào F5 tiếng Việt.
+    tiengAnh: bool
 
 
 KICH_BAN: List[Muc] = [
@@ -1094,6 +1098,167 @@ KICH_BAN_GIANG: List[Muc] = [
 KICH_BAN.extend(KICH_BAN_GIANG)
 
 
+# ══════════════════════════════════════════════════════════
+#  MỤC "ĐỌC TIẾNG ANH" — giọng mẫu sạch cho máy nhân bản giọng tiếng Anh
+# ══════════════════════════════════════════════════════════
+#
+# Thêm 14/10/2026. Câu THUẦN tiếng Anh, giảng bài lập trình web / React /
+# JavaScript — đúng kiểu câu sẽ cần ở video bài giảng bản tiếng Anh.
+#
+# ── VÌ SAO CÓ MỤC NÀY ──
+#
+# Các mục `giang-*` là câu tiếng Việt xen thuật ngữ — dạy F5 tiếng Việt đọc
+# "useState". Mục này phục vụ MỘT MÔ HÌNH KHÁC: máy nhân bản giọng tiếng Anh
+# (Chatterbox — `chatterbox_en.py` — hoặc F5 bản tiếng Anh). Máy đó chép
+# CHẤT GIỌNG từ đoạn mẫu, còn PHÁT ÂM là của chính mô hình. Nên đoạn mẫu
+# không cần giọng bản xứ — nó cần SẠCH: đủ chữ, không vấp, không ồn, nhịp
+# đều. Đọc chậm theo mẫu 🔊 là đủ.
+#
+# ⚠️ KHÔNG ĐI VÀO BỘ DỮ LIỆU F5 TIẾNG VIỆT. `xuong.py` xuất mục `tiengAnh`
+# ra thư mục RIÊNG (`xuat-anh/`) — trộn câu thuần Anh vào finetune tiếng
+# Việt là dạy model nói tiếng Việt bằng âm tiếng Anh.
+#
+# ── LUẬT VIẾT CÂU ──
+#
+# · Chỉ ASCII cơ bản + dấu câu thường (. , ? ! : ') — KHÔNG nháy cong, KHÔNG
+#   gạch dài, KHÔNG chữ số (Whisper viết "3" hay "three" tuỳ hứng, chấm khớp
+#   chữ sẽ lệch). Kiểm bằng `kiem_ascii()` bên dưới.
+# · Tránh "thanks for watching": đúng câu bịa kinh điển của Whisper, bộ lọc
+#   `hallucination.ts` sẽ chặn luôn bản đọc thật.
+# · Tránh "okay/OK", "oops": Whisper viết mỗi lần một kiểu.
+# · Câu 6–26 từ ≈ 3–12 giây ở tốc độ đọc chậm (~2,3 từ/giây). Có câu kể,
+#   câu hỏi, câu nhấn mạnh, liệt kê, mở đầu và kết bài — model chép ngữ điệu
+#   từ mẫu, thiếu câu hỏi thì giọng Anh hỏi cũng như kể.
+#
+# ⚠️ ID ỔN ĐỊNH: `anh-NNN` theo vị trí — thêm câu thì thêm vào CUỐI.
+
+_DAN_ANH = (
+    "Câu THUẦN tiếng Anh. Trước khi thu: bấm 🔊 Nghe mẫu cả câu (bấm lại trong "
+    "4 giây nghe chậm hơn), chưa chắc thì 🐢 nghe từng cụm. Đọc CHẬM, RÕ, đủ "
+    "từng chữ, ngắt ở dấu phẩy. KHÔNG cần giọng bản xứ — máy chỉ chép CHẤT "
+    "GIỌNG của anh, phát âm do mô hình lo. Vấp hay đọc sót chữ thì bấm R thu lại."
+)
+
+KICH_BAN_ANH: List[Muc] = [
+    {
+        "khoa": "anh",
+        "ten": "Đọc tiếng Anh — giọng mẫu",
+        "dan": _DAN_ANH,
+        "lamMau": True,
+        "tiengAnh": True,
+        "cau": [
+            # ── Mở đầu ──
+            "Hello everyone, and welcome back to the channel.",
+            "In this lesson, we will build a small counter with React.",
+            "Today we are going to learn how the browser turns code into a web page.",
+            "Before we start, make sure you have Node and a code editor installed on your computer.",
+            "Alright, let's get started with the first example.",
+            "Here is the plan for this video.",
+            # ── Giải thích (câu kể) ──
+            "React is a library for building user interfaces.",
+            "A component is just a function that returns some markup.",
+            "Props are the values that a parent passes down to its children.",
+            "State is data that can change over time inside a component.",
+            "When the state changes, React renders the component again.",
+            "We use the useState hook to keep track of the current count.",
+            "The browser reads the HTML first, and then it applies the CSS.",
+            "JavaScript is the language that makes a web page interactive.",
+            "An array is simply an ordered list of values.",
+            "Each item in the list needs a unique key.",
+            "A function takes some input and gives back a result.",
+            "The fetch function sends a request to the server and waits for the response.",
+            "If the request fails, we show a friendly error message to the user.",
+            "This line creates a new variable called total.",
+            "We store the name in a constant, because it never changes.",
+            # ── Thao tác ──
+            "Now let's open the terminal and run the project.",
+            "Type npm install in the terminal and press Enter.",
+            "Wait a few seconds while the packages are downloaded.",
+            "Open your browser and go to localhost.",
+            "You should see a button in the middle of the page.",
+            "Click the button, and the number goes up by one.",
+            # ── Câu hỏi ──
+            "So what exactly is a component in React?",
+            "Why do we need state at all?",
+            "What happens if we forget the key?",
+            "Can you guess what this code will print?",
+            "Have you ever wondered how a website remembers who you are?",
+            "Does that make sense to you so far?",
+            "Which one do you think is faster?",
+            "Where should we put this logic, in the parent or in the child?",
+            "Did you notice the small warning in the console?",
+            "Is there a simpler way to write this?",
+            # ── Nhấn mạnh ──
+            "This is the most important rule in the whole lesson.",
+            "Never change the state directly. Always use the setter function.",
+            "Please don't skip this part, it will save you hours of debugging later.",
+            "Remember, the code runs from top to bottom.",
+            "That is a really common mistake, so watch out for it.",
+            "It works! And it only took a few lines of code.",
+            "Be careful here, the order of these two lines really matters.",
+            "Now, this is where it gets interesting.",
+            # ── Liệt kê ──
+            "We need three things: a button, a counter, and a function to update it.",
+            "HTML gives the structure, CSS gives the style, and JavaScript gives the behavior.",
+            "First we write the code, then we test it, and finally we fix the bugs.",
+            "There are four steps: install, import, configure, and run.",
+            "You can store strings, numbers, booleans, arrays, and objects.",
+            "Let's review: components, props, state, and effects.",
+            # ── Câu dài (mẫu tham chiếu 8–12 giây) ──
+            "If you look closely at this function, you will see that it returns a new array instead of changing the old one.",
+            "A good habit is to give every variable a clear name, so that anyone who reads your code later can understand it quickly.",
+            "When you build a real project, you will spend more time reading code than writing it, so readability really matters.",
+            "The effect runs after the component appears on the screen, which makes it a good place to load data from an API.",
+            "Instead of copying the same code into three different places, we move it into one function and call it whenever we need it.",
+            "Don't worry if this feels confusing right now, because we will come back to it with a simpler example.",
+            "Notice that we never touch the page directly, we only describe what it should look like, and React takes care of the rest.",
+            "If the list is empty, we show a short message instead, so the user always knows what is going on.",
+            # ── Chuyển ý ──
+            "Now that we understand the idea, let's write some code.",
+            "Let me show you what I mean.",
+            "Let's take a quick look at the result.",
+            "Let's pause here for a moment and think about it.",
+            "Next, we will add some style to make it look nicer.",
+            "Let's move on to the next part.",
+            "Let's run it one more time and see what happens.",
+            # ── Gỡ lỗi ──
+            "Wait, something went wrong. Let's read the error message together.",
+            "The error says that the variable is not defined.",
+            "We forgot to export the component, so the import fails.",
+            "After fixing that line, the page loads without any errors.",
+            # ── Kết bài ──
+            "That's all for today's lesson, great job.",
+            "In the next video, we will learn how to fetch data from a real API.",
+            "Try to build this counter on your own before you watch the solution.",
+            "If you have any questions, leave a comment below.",
+            "Thank you so much, and see you in the next lesson.",
+            "Good luck with your project, and happy coding!",
+        ],
+    },
+]
+
+KICH_BAN.extend(KICH_BAN_ANH)
+
+# Ký tự được phép trong mục `tiengAnh`. Hẹp CÓ CHỦ Ý: nháy cong / gạch dài
+# lọt vào từ trình soạn thảo là chấm khớp chữ lệch và bộ tách cụm 🐢 vỡ.
+_ASCII_ANH = set(
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,?!:'"
+)
+
+
+def kiem_ascii() -> Dict[str, List[str]]:
+    """Ký tự NGOÀI bộ cho phép trong các mục `tiengAnh`. Rỗng = sạch."""
+    sai: Dict[str, List[str]] = {}
+    for m in KICH_BAN:
+        if not m.get("tiengAnh"):
+            continue
+        for i, c in enumerate(m["cau"]):
+            x = sorted({ch for ch in c if ch not in _ASCII_ANH})
+            if x:
+                sai[f"{m['khoa']}-{i:03d}"] = x
+    return sai
+
+
 # Thuật ngữ tiếng Anh của các mục `giang-*`. KHOÁ PHẢI KHỚP `TU_ANH` trong
 # frontend/src/components/admin/xuongTuDien.ts (bên đó giữ IPA + cách đọc).
 TU_ANH: List[str] = [
@@ -1167,7 +1332,7 @@ def tu_anh_trong(cau: str) -> List[str]:
 
 
 def kiem_vocab(duong_vocab: str) -> Dict[str, List[str]]:
-    """Ký tự nào của các mục `giang-*` KHÔNG có trong vocab của checkpoint.
+    """Ký tự nào của các mục `giang-*` / `anh` KHÔNG có trong vocab của checkpoint.
 
     Rỗng = an toàn. Chạy trên máy nhà:
         python -c "import kichban; print(kichban.kiem_vocab('/home/Cuong03dx/f5-train/nen/hynt_vocab.txt'))"
@@ -1176,7 +1341,7 @@ def kiem_vocab(duong_vocab: str) -> Dict[str, List[str]]:
         vocab = set(f.read().split("\n"))
     thieu: Dict[str, List[str]] = {}
     for m in KICH_BAN:
-        if not m.get("tuAnh"):
+        if not (m.get("tuAnh") or m.get("tiengAnh")):
             continue
         for i, c in enumerate(m["cau"]):
             x = sorted({ch for ch in c if ch not in vocab})
@@ -1208,12 +1373,14 @@ def tat_ca_cau() -> List[Dict[str, object]]:
                     # Chỉ mục giảng bài mới có — màn hình thu hiện nút nghe
                     # mẫu cho từng từ, và backend chấm Whisper từng từ.
                     **({"tuAnh": tu_anh_trong(cau)} if muc.get("tuAnh") else {}),
+                    # Câu thuần tiếng Anh — nút nghe mẫu cả câu + chấm Whisper `en`.
+                    **({"tiengAnh": True} if muc.get("tiengAnh") else {}),
                 }
             )
     return ra
 
 
-def uoc_giay(cau: str) -> float:
+def uoc_giay(cau: str, anh: bool = False) -> float:
     """Ước thời lượng đọc một câu, tính bằng giây.
 
     ⚠️ 3,2 âm tiết/giây, KHÔNG PHẢI 4,5.
@@ -1227,13 +1394,19 @@ def uoc_giay(cau: str) -> float:
     còn 0,3 giây đệm hai đầu sau khi cắt lặng.
 
     Trong tiếng Việt mỗi âm tiết viết rời một từ, nên đếm từ = đếm âm tiết.
+
+    Câu tiếng Anh (`anh=True`) thì KHÔNG: một từ Anh ~1,4 âm tiết, và người
+    không quen đọc chậm hơn nữa — lấy ~2,3 từ/giây (~140 từ/phút, nhịp đọc
+    bài giảng chậm).
     """
+    if anh:
+        return len(cau.split()) / 2.3 + 0.3
     return len(cau.split()) / 3.2 + 0.3
 
 
 def tom_tat() -> Dict[str, object]:
     tong = sum(len(m["cau"]) for m in KICH_BAN)
-    giay = sum(uoc_giay(c) for m in KICH_BAN for c in m["cau"])
+    giay = sum(uoc_giay(c, bool(m.get("tiengAnh"))) for m in KICH_BAN for c in m["cau"])
     return {
         "soCau": tong,
         "soMuc": len(KICH_BAN),
@@ -1247,11 +1420,15 @@ def tom_tat() -> Dict[str, object]:
                 "soCau": len(m["cau"]),
                 "lamMau": m["lamMau"],
                 "tuAnh": bool(m.get("tuAnh")),
-                "uocPhut": round(sum(uoc_giay(c) for c in m["cau"]) / 60, 1),
+                "tiengAnh": bool(m.get("tiengAnh")),
+                "uocPhut": round(sum(uoc_giay(c, bool(m.get("tiengAnh"))) for c in m["cau"]) / 60, 1),
                 # Đoạn ≥ 30 âm tiết (~9 giây) mới dùng được làm mẫu tham
                 # chiếu: F5-TTS chép ngữ điệu tốt nhất ở mẫu 5-15 giây, và
                 # một câu 3 giây không đủ chỗ cho một đường ngữ điệu.
-                "soDai": sum(1 for c in m["cau"] if len(c.split()) >= 30),
+                # Câu Anh: ≥ 20 từ ≈ 9 giây ở nhịp đọc chậm.
+                "soDai": sum(
+                    1 for c in m["cau"] if len(c.split()) >= (20 if m.get("tiengAnh") else 30)
+                ),
             }
             for m in KICH_BAN
         ],

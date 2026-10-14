@@ -389,3 +389,134 @@ export function goiChamTu(tuAnh: string[]): Array<{ tu: string; nhan?: string[] 
     return d?.nhan?.length ? { tu: t, nhan: d.nhan } : { tu: t };
   });
 }
+
+// ══════════════════════════════════════════════════════════
+//  Từ khó trong mục "Đọc tiếng Anh" (khoá `anh`, câu thuần tiếng Anh)
+// ══════════════════════════════════════════════════════════
+//
+// KHÔNG gộp vào `TU_ANH`: bảng đó phải khớp từng khoá với `TU_ANH` bên
+// kichban.py (thuật ngữ được chấm trong câu tiếng Việt). Đây chỉ là từ điển
+// hiển thị — IPA (Mỹ) + cách đọc gần đúng cho từ thường mà người Việt hay
+// vấp (âm th, cụm phụ âm cuối, trọng âm). Tra theo chữ thường, đúng dạng
+// xuất hiện trong câu.
+
+export const TU_KHO_ANH: Record<string, { ipa: string; viet: string }> = {
+  everyone: { ipa: '/ˈevriwʌn/', viet: 'e-vri-goăn' },
+  welcome: { ipa: '/ˈwelkəm/', viet: 'oeo-cầm' },
+  channel: { ipa: '/ˈtʃænəl/', viet: 'che-nồ' },
+  lesson: { ipa: '/ˈlesən/', viet: 'le-xần' },
+  counter: { ipa: '/ˈkaʊntər/', viet: 'cao-n-tơ' },
+  editor: { ipa: '/ˈedɪtər/', viet: 'e-đi-tơ' },
+  installed: { ipa: '/ɪnˈstɔːld/', viet: 'in-xtôn-đ' },
+  computer: { ipa: '/kəmˈpjuːtər/', viet: 'cầm-piu-tơ' },
+  alright: { ipa: '/ɔːlˈraɪt/', viet: 'ôn-rai-t' },
+  example: { ipa: '/ɪɡˈzæmpəl/', viet: 'ig-zem-pồ' },
+  library: { ipa: '/ˈlaɪbreri/', viet: 'lai-bre-ri' },
+  interfaces: { ipa: '/ˈɪntərfeɪsɪz/', viet: 'in-tơ-phây-xịt' },
+  markup: { ipa: '/ˈmɑːrkʌp/', viet: 'mác-cắp' },
+  parent: { ipa: '/ˈperənt/', viet: 'pe-rần-t' },
+  interactive: { ipa: '/ˌɪntərˈæktɪv/', viet: 'in-tơ-rác-tiv' },
+  ordered: { ipa: '/ˈɔːrdərd/', viet: 'o-đơ-đ' },
+  unique: { ipa: '/juˈniːk/', viet: 'diu-ních' },
+  friendly: { ipa: '/ˈfrendli/', viet: 'phren-li' },
+  variable: { ipa: '/ˈveriəbəl/', viet: 've-ri-ơ-bồ' },
+  constant: { ipa: '/ˈkɑːnstənt/', viet: 'con-xtần-t' },
+  packages: { ipa: '/ˈpækɪdʒɪz/', viet: 'pác-ki-dịt' },
+  downloaded: { ipa: '/ˈdaʊnloʊdɪd/', viet: 'đao-lâu-địt' },
+  exactly: { ipa: '/ɪɡˈzæktli/', viet: 'ig-zác-li' },
+  wondered: { ipa: '/ˈwʌndərd/', viet: 'goăn-đơ-đ' },
+  remembers: { ipa: '/rɪˈmembərz/', viet: 'ri-mem-bơ-z' },
+  logic: { ipa: '/ˈlɑːdʒɪk/', viet: 'la-dích' },
+  simpler: { ipa: '/ˈsɪmplər/', viet: 'xim-plơ' },
+  directly: { ipa: '/dəˈrektli/', viet: 'đơ-réc-li' },
+  setter: { ipa: '/ˈsetər/', viet: 'xe-tơ' },
+  debugging: { ipa: '/diːˈbʌɡɪŋ/', viet: 'đi-bắc-ghing' },
+  mistake: { ipa: '/mɪˈsteɪk/', viet: 'mít-xtếch' },
+  careful: { ipa: '/ˈkerfəl/', viet: 'ke-phồ' },
+  interesting: { ipa: '/ˈɪntrəstɪŋ/', viet: 'in-trết-xting' },
+  structure: { ipa: '/ˈstrʌktʃər/', viet: 'xtrắc-chơ' },
+  behavior: { ipa: '/bɪˈheɪvjər/', viet: 'bi-hây-vi-ơ' },
+  configure: { ipa: '/kənˈfɪɡjər/', viet: 'cần-phi-giơ' },
+  booleans: { ipa: '/ˈbuːliənz/', viet: 'bu-li-ần-z' },
+  effects: { ipa: '/ɪˈfekts/', viet: 'i-phéc-x' },
+  closely: { ipa: '/ˈkloʊsli/', viet: 'clâu-xli' },
+  habit: { ipa: '/ˈhæbɪt/', viet: 'he-bít' },
+  readability: { ipa: '/ˌriːdəˈbɪləti/', viet: 'ri-đơ-bi-lơ-ti' },
+  appears: { ipa: '/əˈpɪrz/', viet: 'ơ-pia-z' },
+  whenever: { ipa: '/wenˈevər/', viet: 'oen-e-vơ' },
+  confusing: { ipa: '/kənˈfjuːzɪŋ/', viet: 'cần-phiu-zing' },
+  notice: { ipa: '/ˈnoʊtɪs/', viet: 'nâu-tít' },
+  describe: { ipa: '/dɪˈskraɪb/', viet: 'đi-xcrai-b' },
+  solution: { ipa: '/səˈluːʃən/', viet: 'xơ-lu-sần' },
+  questions: { ipa: '/ˈkwestʃənz/', viet: 'quét-chần-z' },
+  result: { ipa: '/rɪˈzʌlt/', viet: 'ri-zân-t' },
+  three: { ipa: '/θriː/', viet: 'thri (lưỡi chạm răng)' },
+  things: { ipa: '/θɪŋz/', viet: 'thing-z (lưỡi chạm răng)' },
+  think: { ipa: '/θɪŋk/', viet: 'thinh-k (lưỡi chạm răng)' },
+  thank: { ipa: '/θæŋk/', viet: 'thenh-k (lưỡi chạm răng)' },
+  enter: { ipa: '/ˈentər/', viet: 'en-tơ' },
+  coding: { ipa: '/ˈkoʊdɪŋ/', viet: 'câu-đing' },
+  project: { ipa: '/ˈprɑːdʒekt/', viet: 'pra-jéc-t' },
+  comment: { ipa: '/ˈkɑːment/', viet: 'ca-men-t' },
+  below: { ipa: '/bɪˈloʊ/', viet: 'bi-lâu' },
+  defined: { ipa: '/dɪˈfaɪnd/', viet: 'đi-phai-n-đ' },
+  errors: { ipa: '/ˈerərz/', viet: 'e-rơ-z' },
+  together: { ipa: '/təˈɡeðər/', viet: 'tơ-ghe-đơ' },
+};
+
+/** Từ thường bỏ qua khi liệt kê "từ khó" cho câu Anh — ai cũng đọc được. */
+const TU_DE_ANH = new Set([
+  'for', 'then', 'true', 'false', 'else', 'value', 'values', 'number', 'click', 'test', 'build', 'code',
+  'file', 'push', 'pull', 'form', 'body', 'head', 'table', 'font', 'color', 'image', 'label', 'input',
+  'button', 'store', 'status', 'method', 'server', 'client', 'event', 'string', 'object', 'index',
+  'length', 'scope', 'action', 'state', 'loop', 'link', 'card', 'hook', 'website', 'install',
+]);
+
+/**
+ * Từ khó trong một câu tiếng Anh, theo thứ tự, không trùng: lấy từ
+ * `TU_KHO_ANH` và thuật ngữ một-từ của `TU_ANH` (có sẵn IPA), bỏ từ dễ.
+ */
+export function tuKhoTrongCau(chu: string): Array<{ tu: string; ipa: string; viet: string; noi?: string; tach?: string[] }> {
+  const ra: Array<{ tu: string; ipa: string; viet: string; noi?: string; tach?: string[] }> = [];
+  const da = new Set<string>();
+  for (const tho of chu.split(/\s+/)) {
+    const w = tho.replace(/^[^A-Za-z]+|[^A-Za-z]+$/g, '');
+    const k = w.toLowerCase();
+    if (!w || da.has(k) || TU_DE_ANH.has(k)) continue;
+    const kho = TU_KHO_ANH[k];
+    const tn = kho ? null : traTu(w);
+    if (kho) ra.push({ tu: w, ...kho });
+    else if (tn && (k.length >= 4 || /^[A-Z]{2,}$/.test(w) || k === 'npm'))
+      ra.push({ tu: w, ipa: tn.ipa, viet: tn.viet, noi: tn.noi, tach: tn.tach });
+    else continue;
+    da.add(k);
+  }
+  return ra;
+}
+
+/**
+ * Tách câu tiếng Anh thành cụm ngắn cho nút 🐢: trước hết theo dấu câu
+ * (, : . ? !), rồi cụm nào dài hơn 5 từ thì chia đều thành các cụm 3–5 từ.
+ */
+export function tachCum(chu: string): string[] {
+  const ra: string[] = [];
+  for (const ve of chu.split(/(?<=[,:.?!])\s+/)) {
+    const tu = ve.trim().split(/\s+/).filter(Boolean);
+    if (!tu.length) continue;
+    if (tu.length <= 5) {
+      ra.push(tu.join(' '));
+      continue;
+    }
+    const k = Math.ceil(tu.length / 5);
+    const co = Math.floor(tu.length / k);
+    let du = tu.length % k;
+    let i = 0;
+    for (let c = 0; c < k; c++) {
+      const n = co + (du > 0 ? 1 : 0);
+      if (du > 0) du--;
+      ra.push(tu.slice(i, i + n).join(' '));
+      i += n;
+    }
+  }
+  return ra;
+}

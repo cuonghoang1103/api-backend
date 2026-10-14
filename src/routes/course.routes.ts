@@ -813,6 +813,14 @@ async function serializeCourse(
   };
 }
 
+// Bảng bỏ dấu tiếng Việt cho translate() trong SQL (cùng thứ tự từng ký tự). Chữ HOA đã được lower() trước khi translate.
+const DAU_VIET = 'àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ';
+const KHONG_DAU = 'aaaaaaaaaaaaaaaaaeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyyd';
+function boDau(s: string): string {
+  const m = new Map([...DAU_VIET].map((c, i) => [c, KHONG_DAU[i]!] as const));
+  return [...s.toLowerCase()].map((c) => m.get(c) ?? c).join('').replace(/[%_\\]/g, '').trim();
+}
+
 router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
     const { page = 1, size = 12, keyword, category, level, academy } = req.query;
@@ -821,13 +829,20 @@ router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
     const where: Record<string, unknown> = { isPublished: true };
     if (keyword) {
       const kw = String(keyword).trim();
-      // Gõ không dấu ("lap trinh") vẫn khớp khoá "Lập trình" qua slug (slug luôn là chữ Latin không dấu, nối bằng "-").
-      const kwSlug = kw.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      // Bỏ dấu cả hai phía (14/10/2026): "lap trinh" khớp "Lập trình". So khớp bằng translate() của Postgres — không cần
+      // extension unaccent. Slug KHÔNG dùng được cho việc này: nhiều khoá có slug tiếng Anh (web-foundations).
+      const kwKhongDau = boDau(kw);
+      const idKhongDau = kwKhongDau
+        ? (await prisma.$queryRaw<{ id: number }[]>`
+            SELECT id FROM courses WHERE is_published = true AND
+              translate(lower(concat_ws(' ', title, short_description, course_code)), ${DAU_VIET}, ${KHONG_DAU}) LIKE ${'%' + kwKhongDau + '%'}
+            LIMIT 500`).map((r) => r.id)
+        : [];
       where.OR = [
         { title: { contains: kw, mode: 'insensitive' } },
         { shortDescription: { contains: kw, mode: 'insensitive' } },
         { courseCode: { contains: kw, mode: 'insensitive' } },
-        ...(kwSlug ? [{ slug: { contains: kwSlug, mode: 'insensitive' } }] : []),
+        ...(idKhongDau.length ? [{ id: { in: idKhongDau } }] : []),
       ];
     }
     if (category) where.category = { slug: String(category) };

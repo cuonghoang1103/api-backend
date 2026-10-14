@@ -42,6 +42,8 @@ import {
   Ear, Loader2, Mic, MicOff, Pencil, Plus, RefreshCw, Square, Trash2, Volume2,
 } from 'lucide-react';
 import { api } from '@/lib/api';
+import { ChipTu, CauToMau, LuyenTruoc, docCacTu, type KetQuaTu } from './XuongTuAnh';
+import { goiChamTu, tachCau } from './xuongTuDien';
 
 interface Cau {
   id: string;
@@ -57,6 +59,11 @@ interface Cau {
   tuThem?: boolean;
   /** Nghĩa phổ thông — chỉ để đọc hiểu, KHÔNG đi vào dữ liệu train. */
   nghia?: string;
+  /** Thuật ngữ tiếng Anh trong câu (chỉ mục `giang-*`) — gắn ở kichban.py. */
+  tuAnh?: string[];
+  /** Kết quả chấm từng thuật ngữ đã cất ở máy nhà (Whisper không mớm). */
+  kiemTu?: KetQuaTu[] | null;
+  ngheDa?: string;
 }
 
 interface Do {
@@ -115,7 +122,13 @@ export function XuongGiong() {
     /** Whisper có nhả ra một câu bịa không, và vì sao biết. Rỗng = không. */
     biaRa?: string;
     loiNghe?: string;
+    /** Chấm từng thuật ngữ tiếng Anh; null = câu không có thuật ngữ / chấm hỏng. */
+    kiemTu?: KetQuaTu[] | null;
+    /** Whisper nghe cả câu thành gì khi KHÔNG được mớm. */
+    ngheDa?: string;
   } | null>(null);
+  /** Hai chế độ: thu câu thật, hoặc luyện từng thuật ngữ trước. */
+  const [cheDo, setCheDo] = useState<'thu' | 'luyen'>('thu');
   const [thietBi, setThietBi] = useState<MediaTrackSettings | null>(null);
   const [nenPhong, setNenPhong] = useState<{ rms: number; danh: string } | null>(null);
   const [dangDoPhong, setDangDoPhong] = useState(false);
@@ -147,7 +160,10 @@ export function XuongGiong() {
   const [soatXong, setSoatXong] = useState(0);
   const [soatTong, setSoatTong] = useState(0);
   const [dangNgo, setDangNgo] = useState<
-    Array<{ id: string; tenMuc: string; chu: string; nghe: string; khop: number | null; biaRa: string }>
+    Array<{
+      id: string; tenMuc: string; chu: string; nghe: string; khop: number | null; biaRa: string;
+      kiemTu?: KetQuaTu[] | null; ngheDa?: string;
+    }>
   >([]);
   const dungSoat = useRef(false);
 
@@ -174,6 +190,18 @@ export function XuongGiong() {
     [suaCucBo],
   );
   const chuDoc = hienTai ? chuCuaCau(hienTai) : '';
+
+  /**
+   * Thuật ngữ THẬT SỰ có trong câu đang đọc — lọc lại trên chữ hiện hành vì
+   * người dùng có thể đã sửa câu. Chỉ mục giảng bài mới có `tuAnh`.
+   */
+  const tuCau = useMemo(() => {
+    const goc = hienTai?.tuAnh ?? [];
+    if (!goc.length) return [] as string[];
+    const ra: string[] = [];
+    for (const d of tachCau(chuDoc, goc)) if (d.tu && !ra.includes(d.tu)) ra.push(d.tu);
+    return ra;
+  }, [hienTai, chuDoc]);
 
   // ── Nạp kịch bản ──────────────────────────────────────────
   const napLai = useCallback(async () => {
@@ -327,13 +355,21 @@ export function XuongGiong() {
           const form = new FormData();
           form.append('tieng', blob, 'thu.webm');
           form.append('chu', chuCuaCau(hienTai));
+          if (tuCau.length) form.append('tuAnh', JSON.stringify(goiChamTu(tuCau)));
           const r = await api.post(`${BASE}/cau/${encodeURIComponent(hienTai.id)}`, form, {
             timeout: 90_000,
           });
           const d = r.data?.data ?? {};
-          setKetQua({ do: d.do, nghe: d.nghe ?? '', biaRa: d.biaRa, loiNghe: d.loiNghe });
+          setKetQua({
+            do: d.do, nghe: d.nghe ?? '', biaRa: d.biaRa, loiNghe: d.loiNghe,
+            kiemTu: d.kiemTu ?? null, ngheDa: d.ngheDa ?? '',
+          });
           setCau((cs) =>
-            cs.map((c) => (c.id === hienTai.id ? { ...c, daThu: true, do: d.do } : c)),
+            cs.map((c) =>
+              c.id === hienTai.id
+                ? { ...c, daThu: true, do: d.do, kiemTu: d.kiemTu ?? null, ngheDa: d.ngheDa ?? '' }
+                : c,
+            ),
           );
           setLoi('');
         } catch (e) {
@@ -350,7 +386,7 @@ export function XuongGiong() {
     } catch (e) {
       setLoi(e instanceof Error ? e.message : 'Không mở được mic.');
     }
-  }, [dangThu, dangGui, hienTai, moMic, batDauDo, dungDo]);
+  }, [dangThu, dangGui, hienTai, tuCau, moMic, batDauDo, dungDo]);
 
   // Đồng hồ giây trong lúc thu
   useEffect(() => {
@@ -421,6 +457,9 @@ export function XuongGiong() {
       // Đang gõ trong ô sửa chữ thì phím là phím, không phải lệnh.
       const t = e.target as HTMLElement;
       if (mienBanPhim.current || t?.tagName === 'INPUT' || t?.tagName === 'TEXTAREA') return;
+      // Chế độ luyện có nút thu riêng cho từng từ — phím tắt của vòng thu
+      // câu mà vẫn chạy ở đây là thu nhầm một câu không ai đang đọc.
+      if (cheDo === 'luyen') return;
       if (e.code === 'Space') {
         e.preventDefault();
         dangThu ? dungThu() : void batDauThu();
@@ -437,7 +476,7 @@ export function XuongGiong() {
     };
     window.addEventListener('keydown', f);
     return () => window.removeEventListener('keydown', f);
-  }, [dangThu, dangGui, batDauThu, dungThu, sang, napLai]);
+  }, [dangThu, dangGui, batDauThu, dungThu, sang, napLai, cheDo]);
 
   // Dọn mic khi rời trang — không dọn thì đèn mic trên máy sáng mãi.
   useEffect(
@@ -532,7 +571,11 @@ export function XuongGiong() {
       try {
         const r = await api.post(
           `${BASE}/soat-lai/${encodeURIComponent(c.id)}`,
-          { chu: chuCuaCau(c), muc: c.muc },
+          {
+            chu: chuCuaCau(c),
+            muc: c.muc,
+            ...(c.tuAnh?.length ? { tuAnh: goiChamTu(c.tuAnh) } : {}),
+          },
           { timeout: 60_000 },
         );
         const d = r.data?.data;
@@ -544,6 +587,8 @@ export function XuongGiong() {
             nghe: d.nghe ?? '',
             khop: d.khop ?? null,
             biaRa: d.biaRa ?? '',
+            kiemTu: d.kiemTu ?? null,
+            ngheDa: d.ngheDa ?? '',
           });
           setDangNgo([...ngo]);
         }
@@ -614,6 +659,28 @@ export function XuongGiong() {
         </div>
       )}
 
+      {/* ── Chọn chế độ ── */}
+      <div className="mb-5 inline-flex rounded-lg border border-white/10 p-0.5 text-sm">
+        {([
+          ['thu', 'Thu câu'],
+          ['luyen', 'Luyện trước — phát âm thuật ngữ'],
+        ] as const).map(([k, ten]) => (
+          <button
+            key={k}
+            onClick={() => setCheDo(k)}
+            className={`rounded-md px-3 py-1.5 ${
+              cheDo === k ? 'bg-cyan-500 font-medium text-slate-900' : 'text-[var(--text-secondary)] hover:bg-white/5'
+            }`}
+          >
+            {ten}
+          </button>
+        ))}
+      </div>
+
+      {cheDo === 'luyen' ? (
+        <LuyenTruoc />
+      ) : (
+      <>
       {/* ── Tiến độ ── */}
       {tienDo && (
         <section className="mb-6 rounded-xl border border-white/10 bg-white/[0.03] p-4">
@@ -822,15 +889,18 @@ export function XuongGiong() {
             translate="no"
             className="notranslate mb-5 text-2xl leading-relaxed text-[var(--text-primary)]"
           >
-            {chuDoc.split(/(\s+)/).map((t, i) => {
-              const sach = chuanTu(t)[0];
-              const lech = khop != null && sach && !tuNghe.has(sach);
-              return (
-                <span key={`${i}-${t}`} className={lech ? 'rounded bg-red-500/25 px-0.5' : undefined}>
-                  {t}
-                </span>
-              );
-            })}
+            {/* Câu giảng bài: thuật ngữ tô màu, bấm để nghe mẫu. Câu thường
+                đi qua cùng component với danh sách thuật ngữ rỗng — một
+                đường render duy nhất, không lật cấu trúc. */}
+            <CauToMau
+              chu={chuDoc}
+              tuAnh={tuCau}
+              kiemTu={ketQua ? ketQua.kiemTu : hienTai.kiemTu}
+              lech={(t) => {
+                const sach = chuanTu(t)[0];
+                return khop != null && !!sach && !tuNghe.has(sach);
+              }}
+            />
           </p>
 
           {/* Nghĩa phổ thông — CHỈ để đọc cho hiểu, KHÔNG phải thứ để đọc
@@ -839,6 +909,31 @@ export function XuongGiong() {
             <p className="-mt-3 mb-5 text-sm italic" style={{ color: 'var(--text-secondary)' }}>
               nghĩa: {hienTai.nghia}
             </p>
+          )}
+
+          {/* Thuật ngữ trong câu: nghe mẫu TRƯỚC khi thu. */}
+          {tuCau.length > 0 && (
+            <div className="-mt-2 mb-5 space-y-2">
+              <div className="flex flex-wrap gap-2">
+                {tuCau.map((t) => {
+                  const kq = (ketQua ? ketQua.kiemTu : hienTai.kiemTu)?.find(
+                    (k) => k.tu.toLowerCase() === t.toLowerCase(),
+                  );
+                  return <ChipTu key={t} tu={t} ketQua={kq?.dung} />;
+                })}
+              </div>
+              <button
+                onClick={() => void docCacTu(tuCau)}
+                className="rounded-lg border border-sky-400/40 bg-sky-400/10 px-3 py-1.5 text-sm text-sky-200 hover:bg-sky-400/20"
+              >
+                <Volume2 className="mr-1 inline h-3.5 w-3.5" /> Nghe mẫu các thuật ngữ trong câu
+              </button>
+              {!ketQua && hienTai.daThu && hienTai.kiemTu && hienTai.kiemTu.some((k) => !k.dung) && (
+                <p className="text-xs text-red-300">
+                  Lần thu trước có thuật ngữ Whisper chưa nhận ra (tô đỏ) — nghe mẫu rồi thu lại nếu muốn.
+                </p>
+              )}
+            </div>
           )}
 
           {/* Thanh mức tiếng */}
@@ -1050,6 +1145,49 @@ export function XuongGiong() {
                   </>
                 )}
               </div>
+
+              {/* Chấm từng thuật ngữ tiếng Anh — Whisper KHÔNG được mớm. */}
+              {tuCau.length > 0 && (
+                <div className="mt-3 border-t border-white/10 pt-2">
+                  {ketQua.kiemTu ? (
+                    <>
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        <span className="text-[var(--text-secondary)]">Phát âm thuật ngữ:</span>
+                        {ketQua.kiemTu.map((k) => (
+                          <span
+                            key={k.tu}
+                            className={`rounded px-1.5 py-0.5 font-medium ${
+                              k.dung ? 'bg-emerald-500/15 text-emerald-300' : 'bg-red-500/20 text-red-300'
+                            }`}
+                          >
+                            {k.dung ? '✓' : '✗'} {k.tu}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="mt-1 text-xs text-[var(--text-secondary)]">
+                        Whisper (không mớm) nghe cả câu thành:{' '}
+                        <span className="text-[var(--text-primary)]">“{ketQua.ngheDa || '(không nghe ra gì)'}”</span>
+                      </p>
+                      {ketQua.kiemTu.some((k) => !k.dung) ? (
+                        <div className="mt-2 rounded border border-red-400/30 bg-red-500/10 px-2 py-1.5 text-xs text-red-200">
+                          Có thuật ngữ Whisper chưa nhận ra là tiếng Anh. Bấm 🔊 cạnh từ đỏ nghe lại mẫu, rồi{' '}
+                          <button onClick={() => void batDauThu()} className="underline">
+                            thu lại câu này
+                          </button>{' '}
+                          (phím R). Không bắt buộc — đoạn thu đã lưu; từ ngắn như id, key, let đôi khi bị nghe hụt dù
+                          đọc đúng, tai anh là chốt cuối.
+                        </div>
+                      ) : (
+                        <p className="mt-1 text-xs text-emerald-400">Mọi thuật ngữ đều được nhận ra — tốt.</p>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-xs text-[var(--text-secondary)]">
+                      Chưa chấm được phát âm thuật ngữ cho lần thu này (máy chấm bận hoặc lỗi) — đoạn thu vẫn đã lưu.
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -1141,6 +1279,12 @@ export function XuongGiong() {
                   {d.nghe && (
                     <p className="mt-0.5 text-xs text-[var(--text-secondary)]">
                       máy nghe: {d.nghe}
+                    </p>
+                  )}
+                  {d.kiemTu?.some((k) => !k.dung) && (
+                    <p className="mt-0.5 text-xs text-red-300">
+                      thuật ngữ chưa nhận ra: {d.kiemTu.filter((k) => !k.dung).map((k) => k.tu).join(', ')}
+                      {d.ngheDa ? ` — Whisper (không mớm) nghe: ${d.ngheDa}` : ''}
                     </p>
                   )}
                 </li>
@@ -1298,6 +1442,8 @@ export function XuongGiong() {
         <p className="mt-2 flex items-center justify-center gap-1 text-center text-xs text-[var(--text-secondary)]">
           <MicOff className="h-3 w-3" /> Trình duyệt sẽ hỏi quyền dùng mic ở lần thu đầu tiên.
         </p>
+      )}
+      </>
       )}
     </div>
   );

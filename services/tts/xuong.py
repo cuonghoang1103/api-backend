@@ -354,6 +354,9 @@ async def kich_ban(x_token: Optional[str] = Header(None, alias="X-Token")):
             c["nghe"] = g.get("nghe")
             c["khop"] = g.get("khop")
             c["biaRa"] = g.get("biaRa")
+            # Chấm từng thuật ngữ tiếng Anh (mục giang-*) — xem `luu_soat`.
+            c["kiemTu"] = g.get("kiemTu")
+            c["ngheDa"] = g.get("ngheDa")
     tt = dict(tom_tat())
     tt["soCau"] = len(cau)
     tt["soTuThem"] = sum(1 for c in cau if c.get("tuThem"))
@@ -458,6 +461,24 @@ async def luu_soat(cid: str, req: Request, x_token: Optional[str] = Header(None,
     meta[cid]["nghe"] = str(b.get("nghe") or "")[:600]
     meta[cid]["khop"] = b.get("khop")
     meta[cid]["biaRa"] = str(b.get("biaRa") or "")[:200]
+    # ── Chấm từng thuật ngữ tiếng Anh (mục `giang-*`, thêm 14/10/2026) ──
+    #
+    # Backend nghe lại câu lần HAI bằng Whisper KHÔNG mớm từ vựng, không ép
+    # ngôn ngữ (`ngheDa`), rồi xét từng thuật ngữ có hiện ra đúng chính tả
+    # tiếng Anh không (`kiemTu` = [{tu, dung}]). Không mớm vì mớm thì Whisper
+    # "nghe đúng" cả bản đọc sai — chính lỗi đã thấy ở dây chuyền video
+    # (Node.js đọc vấp mà vẫn đạt).
+    #
+    # Chỉ ghi khi request CÓ gửi trường đó: lượt soát cũ (không chấm từ)
+    # không được xoá mất kết quả chấm từ đã có.
+    if isinstance(b.get("kiemTu"), list):
+        meta[cid]["kiemTu"] = [
+            {"tu": str(x.get("tu") or "")[:60], "dung": bool(x.get("dung"))}
+            for x in b["kiemTu"][:12]
+            if isinstance(x, dict)
+        ]
+    if "ngheDa" in b:
+        meta[cid]["ngheDa"] = str(b.get("ngheDa") or "")[:600]
     meta[cid]["soatLuc"] = int(time.time())
     _ghi_meta(meta)
     return {"id": cid}

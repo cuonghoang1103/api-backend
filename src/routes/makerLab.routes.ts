@@ -41,6 +41,7 @@ import multer from 'multer';
 import { createHash } from 'crypto';
 import { uploadGeneric } from '../storage/uploadService.js';
 import { logger } from '../utils/logger.js';
+import { docDanhSachTu, kiemTuAnh, type TuCanCham } from '../services/makerlab/kiemTuAnh.js';
 
 /**
  * Bản build firmware tải lên.
@@ -948,6 +949,37 @@ adminRouter.get('/ha-tang/xuong/nen', async (_req, res: Response<ApiResponse>, n
  */
 const thuUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
 
+/**
+ * Chấm từng thuật ngữ tiếng Anh (mục `giang-*`) — lượt nghe THỨ HAI.
+ *
+ * ⚠️ KHÔNG MỚM TỪ VỰNG, KHÔNG ÉP NGÔN NGỮ. Lượt nghe thứ nhất (để tính %
+ * khớp) có mớm câu kịch bản, nên Whisper bám vào đó và "nghe đúng" cả bản
+ * đọc sai — dây chuyền video đã dính đúng chuyện này (Node.js đọc vấp mà
+ * vẫn đạt). Lượt này để Whisper tự dò ngôn ngữ và tự viết ra cái nó nghe:
+ * đọc giống tiếng Anh thì nó viết "useState", đọc kiểu phiên âm thì nó viết
+ * âm tiết Việt.
+ *
+ * Hỏng thì trả null — không bao giờ chặn việc lưu tiếng.
+ */
+async function chamTuAnh(
+  tieng: Buffer,
+  tenFile: string,
+  kieu: string,
+  ds: TuCanCham[],
+): Promise<{ kiemTu: ReturnType<typeof kiemTuAnh>; ngheDa: string } | null> {
+  if (!ds.length) return null;
+  try {
+    const { transcribeWithGroq } = await import('../services/interview/voice/stt.js');
+    // language '' = bỏ hẳn trường → Groq tự dò (xem ghi chú trong stt.ts).
+    const kq = await transcribeWithGroq(tieng, tenFile, kieu, { language: '' });
+    const ngheDa = (kq?.text ?? '').trim();
+    return { kiemTu: kiemTuAnh(ngheDa, ds), ngheDa };
+  } catch (e) {
+    logger.warn(`xuong cham tu anh hong: ${e instanceof Error ? e.message : String(e)}`);
+    return null;
+  }
+}
+
 adminRouter.post(
   '/ha-tang/xuong/cau/:cid',
   thuUpload.single('tieng'),
@@ -1024,12 +1056,41 @@ adminRouter.post(
         loiNghe = e instanceof Error ? e.message : String(e);
       }
 
+      // Mục giảng bài: chấm thêm từng thuật ngữ tiếng Anh, rồi cất cả kết
+      // quả soát lên máy nhà để lần sau mở trang vẫn thấy ✓/✗.
+      const dsTu = docDanhSachTu(req.body?.tuAnh);
+      const cham = await chamTuAnh(f.buffer, 'thu.webm', f.mimetype || 'audio/webm', dsTu);
+      if (cham) {
+        try {
+          await goiMayNha(`/xuong/cau/${encodeURIComponent(cid)}/soat`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              nghe,
+              khop: nghe ? doKhopTu(chuGoc, nghe) : null,
+              biaRa,
+              kiemTu: cham.kiemTu,
+              ngheDa: cham.ngheDa,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+          });
+        } catch {
+          /* cất hỏng thì màn hình vẫn có kết quả của lượt này */
+        }
+      }
+
       res.status(200).json({
         success: true,
         // `biaRa` đi riêng chứ không nhét vào `nghe`: màn hình phải phân
         // biệt được "máy nghe ra câu khác" với "máy không nghe ra gì".
         // Gộp lại là dạy người dùng tin một câu bịa.
-        data: { ...(du as object), nghe, biaRa, loiNghe },
+        data: {
+          ...(du as object),
+          nghe,
+          biaRa,
+          loiNghe,
+          kiemTu: cham?.kiemTu ?? null,
+          ngheDa: cham?.ngheDa ?? '',
+        },
       });
     } catch (e) {
       next(e);
@@ -1176,12 +1237,16 @@ adminRouter.post('/ha-tang/xuong/soat-lai/:cid', async (req, res: Response<ApiRe
     const biaRa = check.ok ? '' : (check.reason ?? 'máy nghe không ra');
     const khop = nghe ? doKhopTu(chu, nghe) : null;
     const nguong = nguongCuaMuc(muc);
+    const cham = await chamTuAnh(wav, 'soat.wav', 'audio/wav', docDanhSachTu(req.body?.tuAnh));
 
     await goiMayNha(`/xuong/cau/${encodeURIComponent(cid)}/soat`, {
       method: 'PUT',
-      body: JSON.stringify({ nghe, khop, biaRa }),
+      body: JSON.stringify(
+        cham ? { nghe, khop, biaRa, kiemTu: cham.kiemTu, ngheDa: cham.ngheDa } : { nghe, khop, biaRa },
+      ),
       headers: { 'Content-Type': 'application/json' },
     });
+    const saiTu = cham ? cham.kiemTu.filter((x) => !x.dung).length : 0;
 
     res.json({
       success: true,
@@ -1194,9 +1259,35 @@ adminRouter.post('/ha-tang/xuong/soat-lai/:cid', async (req, res: Response<ApiRe
         nguong,
         // `dangNgo` chứ không phải `dat`/`hong`: con số này không đủ tư
         // cách phán một đoạn thu là hỏng, nó chỉ đủ để nói "nên nghe lại".
-        dangNgo: nguong != null && khop != null && khop < nguong,
+        dangNgo: (nguong != null && khop != null && khop < nguong) || saiTu > 0,
+        kiemTu: cham?.kiemTu ?? null,
+        ngheDa: cham?.ngheDa ?? '',
       },
     });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/**
+ * "Luyện trước" — thu thử MỘT thuật ngữ và chấm ngay, không lưu gì.
+ *
+ * Không đi qua máy nhà: chỉ cần Groq ở backend, nên luyện được cả khi máy
+ * nhà đang bận dựng giọng video. Ép `language: 'en'` vì đầu vào là đúng một
+ * từ tiếng Anh; KHÔNG mớm từ đó làm gợi ý (mớm là nó nghe đúng cả bản sai).
+ */
+adminRouter.post('/ha-tang/xuong/luyen', thuUpload.single('tieng'), async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const f = req.file;
+    const ds = docDanhSachTu(req.body?.tuAnh);
+    if (!f?.buffer?.length || !ds.length) {
+      res.status(400).json({ success: false, message: 'Thiếu tiếng hoặc thiếu từ cần chấm.' });
+      return;
+    }
+    const { transcribeWithGroq } = await import('../services/interview/voice/stt.js');
+    const kq = await transcribeWithGroq(f.buffer, 'luyen.webm', f.mimetype || 'audio/webm', { language: 'en' });
+    const nghe = (kq?.text ?? '').trim();
+    res.json({ success: true, data: { nghe, kiemTu: kiemTuAnh(nghe, ds) } });
   } catch (e) {
     next(e);
   }

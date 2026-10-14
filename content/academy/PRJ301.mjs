@@ -6,10 +6,25 @@
  * Deep-link CodeLab java-core + sql + spring-boot; setup → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/PRJ301.mjs --apply
  */
+// 📑 Bài học theo từng slide, 🧪 bài thực hành chương và quiz viết lại/mới nằm trong ./prj301/*.mjs
+// (SINH bởi flm-nguon/PRJ301/gen/gen.mjs — sửa nguồn ở đó rồi chạy lại, đừng sửa tay các module).
+import sec0 from './prj301/sec0.mjs';
+import ch1 from './prj301/ch1.mjs';
+import ch2 from './prj301/ch2.mjs';
+import ch3 from './prj301/ch3.mjs';
+import ch4 from './prj301/ch4.mjs';
+import ch5 from './prj301/ch5.mjs';
+import ch6 from './prj301/ch6.mjs';
+import ch7 from './prj301/ch7.mjs';
+import ch8 from './prj301/ch8.mjs';
+import ch10 from './prj301/ch10.mjs';
+
 export default {
   semester: { code: 'FPTU_Hola4', name: 'Kỳ 4', ordinal: 6 },
   course: {
     courseCode: 'PRJ301',
+    // Seed xếp lại thứ tự bài/section theo FILE (không xoá gì) — bài ⭐ nền + bài 📑 slide đứng đầu chương (gen PRJ301).
+    syncOrder: true,
     slug: 'java-web-application-development',
     title: 'Java Web Application Development',
     level: 'INTERMEDIATE',
@@ -27,6 +42,8 @@ export default {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
       description: 'Đọc trước tiên: môn học là gì, điều kiện qua môn, và cài đặt Tomcat/NetBeans/SQL Server.',
       lessons: [
+        /* 🧭 Bài nền tảng bổ sung — ./prj301/sec0.mjs */
+        ...sec0.extrasStart,
         {
           title: '0.1 — About PRJ301 & the course map|||0.1 — Giới thiệu PRJ301 & bản đồ môn học',
           slug: 'prj301-gioi-thieu',
@@ -239,6 +256,8 @@ export default {
       title: 'Chapter 1 — How the web works|||Chương 1 — Web hoạt động ra sao',
       description: 'Mô hình client-server, giao thức HTTP (request/response, method, status), và Servlet đầu tiên.',
       lessons: [
+        /* 📑 Học theo từng slide (prj1 1–16) — ./prj301/ch1.mjs */
+        ...ch1.slides,
         {
           title: '1.1 — HTTP: request, response & your first Servlet|||1.1 — HTTP: request, response & Servlet đầu tiên',
           slug: 'prj301-http-servlet',
@@ -449,6 +468,10 @@ export default {
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./prj301/ch1.mjs */
+        ch1.practice,
+        /* ❓ Quiz mới — ./prj301/ch1.mjs */
+        ch1.quizLesson,
       ],
     },
     /* ══════════════════ CHƯƠNG 2 — SERVLET CHUYÊN SÂU ══════════════════ */
@@ -456,6 +479,8 @@ export default {
       title: 'Chapter 2 — Servlets in depth|||Chương 2 — Servlet chuyên sâu',
       description: 'Vòng đời Servlet, đọc tham số request, chuyển tiếp (forward) vs chuyển hướng (redirect).',
       lessons: [
+        /* 📑 Học theo từng slide (prj1 17–43) — ./prj301/ch2.mjs */
+        ...ch2.slides,
         {
           title: '2.1 — Lifecycle, parameters, forward vs redirect|||2.1 — Vòng đời, tham số, forward vs redirect',
           slug: 'prj301-servlet-sau',
@@ -808,6 +833,10 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./prj301/ch2.mjs */
+        ch2.practice,
+        /* ❓ Quiz mới — ./prj301/ch2.mjs */
+        ch2.quizLesson,
       ],
     },
 
@@ -816,6 +845,8 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
       title: 'Chapter 3 — JSP, EL & JSTL|||Chương 3 — JSP, EL & JSTL',
       description: 'Sinh HTML sạch bằng JSP; Expression Language (EL) và thư viện thẻ JSTL thay cho scriptlet.',
       lessons: [
+        /* 📑 Học theo từng slide (prj3 1–37, prj6 1–24, prj7 1–34, prj9 1–14) — ./prj301/ch3.mjs */
+        ...ch3.slides,
         {
           title: '3.1 — JSP as the View: EL & JSTL|||3.1 — JSP làm View: EL & JSTL',
           slug: 'prj301-jsp',
@@ -1080,7 +1111,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 \${fn:contains(title, 'java')}
 \${fn:substring(desc, 0, 100)}...</code></pre>
 
-<p><strong>Static fields (syllabus session 37).</strong> Plain EL 2.x cannot see a class's static members at all — <span class="badge">\${Integer.MAX_VALUE}</span> resolves to nothing and prints an empty string, which is exactly the silent failure described in the trap below. Two ways to reach them:</p>
+<p><strong>Static fields (syllabus session 37).</strong> Plain EL 2.x cannot see a class's static members at all — <span class="badge">\${Integer.MAX_VALUE}</span> resolves to nothing and prints an empty string, which is exactly the silent failure described in the trap below. <strong>Since EL 3.0 (Java EE 7) this changed:</strong> <code>java.lang</code> is imported automatically and public static fields are readable, so on Tomcat 10.1 (EL 5.0) <span class="badge">\${Integer.MAX_VALUE}</span> really prints <code>2147483647</code> — measured in lesson 3.C. Two ways to reach them (still needed for your own classes and on old servers):</p>
 <pre><code class="language-xml"><span class="tok-comment">// 1. EL 3.0+ (Tomcat 8+): import the class, then use the :: static reference</span>
 &lt;%@ page import=<span class="tok-string">"com.app.Status"</span> %&gt;
 \${Status.ACTIVE}                      <span class="tok-comment">// EL 3.0 static field reference</span>
@@ -1152,7 +1183,7 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 \${fn:contains(title, 'java')}
 \${fn:substring(desc, 0, 100)}...</code></pre>
 
-<p><strong>Trường tĩnh (buổi 37 của syllabus).</strong> EL 2.x thuần không nhìn thấy thành viên static của một lớp — <span class="badge">\${Integer.MAX_VALUE}</span> không phân giải được và in ra chuỗi rỗng, đúng kiểu lỗi im lặng mô tả ở phần bẫy bên dưới. Hai cách chạm tới chúng:</p>
+<p><strong>Trường tĩnh (buổi 37 của syllabus).</strong> EL 2.x thuần không nhìn thấy thành viên static của một lớp — <span class="badge">\${Integer.MAX_VALUE}</span> không phân giải được và in ra chuỗi rỗng, đúng kiểu lỗi im lặng mô tả ở phần bẫy bên dưới. <strong>Từ EL 3.0 (Java EE 7) đã khác:</strong> <code>java.lang</code> được import sẵn và trường static public đọc được, nên trên Tomcat 10.1 (EL 5.0) <span class="badge">\${Integer.MAX_VALUE}</span> in ra thật <code>2147483647</code> — đã đo ở bài 3.C. Hai cách chạm tới chúng (vẫn cần cho lớp của chính bạn và trên server cũ):</p>
 <pre><code class="language-xml"><span class="tok-comment">// 1. EL 3.0+ (Tomcat 8+): import lớp rồi dùng tham chiếu static</span>
 &lt;%@ page import=<span class="tok-string">"com.app.Status"</span> %&gt;
 \${Status.ACTIVE}                      <span class="tok-comment">// tham chiếu trường tĩnh của EL 3.0</span>
@@ -1410,6 +1441,10 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./prj301/ch3.mjs */
+        ch3.practice,
+        /* ❓ Quiz mới — ./prj301/ch3.mjs */
+        ch3.quizLesson,
       ],
     },
 
@@ -1418,6 +1453,8 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
       title: 'Chapter 4 — The four scopes|||Chương 4 — Bốn phạm vi (scope)',
       description: 'Chia sẻ trạng thái: page, request, session, application — sống lâu bao nhiêu và ai thấy được.',
       lessons: [
+        /* 📑 Học theo từng slide (prj5 1–20) — ./prj301/ch4.mjs */
+        ...ch4.slides,
         {
           title: '4.1 — page, request, session & application|||4.1 — page, request, session & application',
           slug: 'prj301-scope',
@@ -1736,22 +1773,14 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./prj301/ch4.mjs */
+        ch4.practice,
         {
           title: 'Quiz 1 — Servlets, JSP & scopes|||Quiz 1 — Servlet, JSP & scope',
           slug: 'prj301-quiz-1',
           type: 'QUIZ',
-          description: 'Kiểm tra HTTP, Servlet, JSP và bốn phạm vi — gồm câu suy luận.',
-          quiz: {
-            timeLimitSeconds: 420,
-            questions: [
-              { question: 'HTTP is described as "stateless" because…|||HTTP được gọi là "stateless" vì…', options: ['it is slow|||nó chậm', 'each request is independent; the server does not remember the previous one|||mỗi request độc lập; server không nhớ request trước', 'it has no status codes|||không có mã trạng thái', 'it only uses GET|||chỉ dùng GET'], correctIndex: 1, points: 1 },
-              { question: 'Sensitive form data (a password) should be sent with…|||Dữ liệu form nhạy cảm (mật khẩu) nên gửi bằng…', options: ['GET (in the URL)|||GET (trong URL)', 'POST (in the request body)|||POST (trong thân request)', 'a redirect|||một redirect', 'the session|||session'], correctIndex: 1, points: 1 },
-              { question: 'A forward differs from a redirect in that a forward…|||Forward khác redirect ở chỗ forward…', options: ['changes the URL bar|||đổi thanh URL', 'keeps the same request and its data (server-side)|||giữ cùng request và dữ liệu (phía server)', 'creates a new request|||tạo request mới', 'is done by the browser|||do trình duyệt làm'], correctIndex: 1, points: 1 },
-              { question: 'To keep a logged-in user across many requests, store them in…|||Để giữ người dùng đã đăng nhập qua nhiều request, lưu vào…', options: ['page scope|||phạm vi page', 'session scope|||phạm vi session', 'request scope|||phạm vi request', 'a Servlet field|||một trường của Servlet'], correctIndex: 1, points: 1 },
-              { question: 'In a clean MVC app, database calls and business logic belong in…|||Trong app MVC sạch, gọi CSDL và logic nghiệp vụ thuộc về…', options: ['the JSP (View)|||JSP (View)', 'the Servlet/Model, not the JSP|||Servlet/Model, không phải JSP', 'the browser|||trình duyệt', 'the URL|||URL'], correctIndex: 1, points: 1 },
-              { question: 'The Post-Redirect-Get pattern prevents…|||Mẫu Post-Redirect-Get ngăn…', options: ['SQL injection|||SQL injection', 'duplicate form submissions on refresh|||gửi form trùng khi refresh', 'session loss|||mất session', 'slow pages|||trang chậm'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch4.quizDescription,
+          quiz: ch4.quiz,
         },
       ],
     },
@@ -1760,6 +1789,8 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
       title: 'Chapter 5 — JDBC & the DAO pattern|||Chương 5 — JDBC & mẫu DAO',
       description: 'Kết nối SQL Server từ Java, PreparedStatement (chống SQL injection), và tổ chức truy cập dữ liệu bằng DAO.',
       lessons: [
+        /* 📑 Học theo từng slide (prj2 1–40) — ./prj301/ch5.mjs */
+        ...ch5.slides,
         {
           title: '5.1 — Connecting to the database safely|||5.1 — Kết nối cơ sở dữ liệu an toàn',
           slug: 'prj301-jdbc-dao',
@@ -2286,6 +2317,10 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./prj301/ch5.mjs */
+        ch5.practice,
+        /* ❓ Quiz mới — ./prj301/ch5.mjs */
+        ch5.quizLesson,
       ],
     },
 
@@ -2294,6 +2329,8 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
       title: 'Chapter 6 — The MVC architecture|||Chương 6 — Kiến trúc MVC',
       description: 'Trái tim của môn: Controller (Servlet) + Model (DAO/entity) + View (JSP) — luồng đi của một request.',
       lessons: [
+        /* 📑 Học theo từng slide (prj4 1–15) — ./prj301/ch6.mjs */
+        ...ch6.slides,
         {
           title: '6.1 — Model, View, Controller working together|||6.1 — Model, View, Controller phối hợp',
           slug: 'prj301-mvc',
@@ -2712,6 +2749,10 @@ req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"key
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./prj301/ch6.mjs */
+        ch6.practice,
+        /* ❓ Quiz mới — ./prj301/ch6.mjs */
+        ch6.quizLesson,
       ],
     },
 
@@ -2720,6 +2761,8 @@ req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"key
       title: 'Chapter 7 — JPA: object-relational mapping|||Chương 7 — JPA: ánh xạ đối tượng-quan hệ',
       description: 'Thao tác cơ sở dữ liệu bằng đối tượng Java thay vì SQL thô — entity, @Entity, EntityManager.',
       lessons: [
+        /* 📑 Học theo từng slide (prj8 1–19) — ./prj301/ch7.mjs */
+        ...ch7.slides,
         {
           title: '7.1 — Entities & the EntityManager|||7.1 — Entity & EntityManager',
           slug: 'prj301-jpa',
@@ -2966,6 +3009,10 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./prj301/ch7.mjs */
+        ch7.practice,
+        /* ❓ Quiz mới — ./prj301/ch7.mjs */
+        ch7.quizLesson,
       ],
     },
 
@@ -2974,6 +3021,8 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
       title: 'Chapter 8 — Filters & Listeners|||Chương 8 — Filter & Listener',
       description: 'Buổi 49–54: code chạy TRƯỚC mọi request (Filter) và code phản ứng với sự kiện của container (Listener).',
       lessons: [
+        /* 📑 Học theo từng slide (prj10 1–21, prj11 1–18) — ./prj301/ch8.mjs */
+        ...ch8.slides,
         {
           title: '8.1 — Filters: code that runs before every request|||8.1 — Filter: code chạy trước mọi request',
           slug: 'prj301-filter',
@@ -3306,26 +3355,14 @@ Dang online: \${applicationScope.onlineUsers}</code></pre>
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./prj301/ch8.mjs */
+        ch8.practice,
         {
           title: 'Quiz 3 — JDBC, MVC, Filter & Listener|||Quiz 3 — JDBC, MVC, Filter & Listener',
           slug: 'prj301-quiz-3',
           type: 'QUIZ',
-          description: 'Kiểm tra chương 2–8: request/response, EL/JSTL, cookie, JDBC, phân trang, filter và listener.',
-          quiz: {
-            timeLimitSeconds: 480,
-            questions: [
-              { question: 'Files placed in WEB-INF are…|||File đặt trong WEB-INF thì…', options: ['public to any browser|||công khai với mọi trình duyệt', 'not directly reachable by a browser|||không truy cập trực tiếp được từ trình duyệt', 'compiled to JavaScript|||được biên dịch sang JavaScript', 'ignored by Tomcat|||bị Tomcat bỏ qua'], correctIndex: 1, points: 1 },
-              { question: 'A form with method="post" whose Servlet only overrides doGet returns…|||Một form method="post" mà Servlet chỉ ghi đè doGet sẽ trả về…', options: ['200 OK', '405 Method Not Allowed', '404 Not Found', '302 Redirect'], correctIndex: 1, points: 1 },
-              { question: 'In EL, \\${user.name} calls…|||Trong EL, \\${user.name} gọi…', options: ['the public field name|||trường public tên name', 'the getter getName()|||hàm getter getName()', 'the constructor|||hàm khởi tạo', 'toString()'], correctIndex: 1, points: 1 },
-              { question: 'To output user-supplied text safely in a JSP, use…|||Để in văn bản do người dùng nhập một cách an toàn trong JSP, dùng…', options: ['\\${value}', '<c:out value="\\${value}"/>', '<%= value %>', 'out.print(value)'], correctIndex: 1, points: 1 },
-              { question: 'A cookie with setMaxAge(0)…|||Một cookie với setMaxAge(0)…', options: ['lasts forever|||tồn tại mãi mãi', 'is deleted immediately|||bị xoá ngay lập tức', 'lasts one session|||tồn tại một phiên', 'is invalid|||không hợp lệ'], correctIndex: 1, points: 1 },
-              { question: 'Which JDBC driver type is a pure-Java "thin" driver?|||Loại driver JDBC nào là driver "thin" thuần Java?', options: ['Type 1', 'Type 4', 'Type 2', 'Type 3'], correctIndex: 1, points: 1 },
-              { question: 'Sorting by a user-chosen column must be done by…|||Sắp xếp theo cột do người dùng chọn phải được làm bằng cách…', options: ['ORDER BY ? with a PreparedStatement|||ORDER BY ? với PreparedStatement', 'mapping the choice to a fixed whitelisted string|||ánh xạ lựa chọn sang một chuỗi cố định trong danh sách trắng', 'string concatenation|||nối chuỗi', 'a cookie|||một cookie'], correctIndex: 1, points: 1 },
-              { question: 'Omitting chain.doFilter() in a Filter causes…|||Bỏ quên chain.doFilter() trong một Filter sẽ gây ra…', options: ['a compile error|||lỗi biên dịch', 'the request to stop — a blank response|||request bị chặn lại — response trắng', 'a redirect loop|||vòng lặp chuyển hướng', 'nothing|||không gì cả'], correctIndex: 1, points: 1 },
-              { question: 'To count online users you implement…|||Để đếm người đang online bạn cài đặt…', options: ['ServletContextListener', 'HttpSessionListener', 'a Filter|||một Filter', 'ServletRequestListener'], correctIndex: 1, points: 1 },
-              { question: 'In a transaction, the three DAO methods must share… (beyond-syllabus)|||Trong một giao dịch, ba phương thức DAO phải dùng chung… (ngoài giáo trình)', options: ['the same Servlet|||cùng một Servlet', 'the same Connection object|||cùng một đối tượng Connection', 'the same session|||cùng một session', 'the same JSP|||cùng một JSP'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch8.quizDescription,
+          quiz: ch8.quiz,
         },
       ],
     },
@@ -3633,6 +3670,8 @@ input.addEventListener('input', () =&gt; {
       title: 'Chapter 10 — AI in a Java web application|||Chương 10 — AI trong ứng dụng Java web',
       description: 'CLO9 (buổi 3, 8, 15, 51): dùng AI để viết code Java web, và nhúng AI vào chính ứng dụng của bạn.',
       lessons: [
+        /* 🧭 Bài nền tảng bổ sung — ./prj301/ch10.mjs */
+        ...ch10.extrasStart,
         {
           title: '10.1 — Prompt engineering for Java web work|||10.1 — Prompt engineering cho công việc Java web',
           slug: 'prj301-ai-prompt',
@@ -3883,6 +3922,10 @@ input.addEventListener('input', () =&gt; {
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./prj301/ch10.mjs */
+        ch10.practice,
+        /* ❓ Quiz mới — ./prj301/ch10.mjs */
+        ch10.quizLesson,
       ],
     },
 

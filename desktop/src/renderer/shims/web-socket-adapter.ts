@@ -17,10 +17,11 @@
  *
  * Đây là bộ nối 20 dòng, cùng lối với `web-api-adapter.ts`.
  */
-import { datNguonSocket } from '@/lib/socket';
-import { laySocket } from '../realtime/socket';
+import { baoSocketMoi, datNguonSocket } from '@/lib/socket';
+import { khiCoSocketMoi, laySocket } from '../realtime/socket';
 
 let daCam = false;
+let goNghe: (() => void) | null = null;
 
 /**
  * Trỏ `lib/socket.ts` của web vào socket của app.
@@ -33,10 +34,16 @@ export function camSocketDesktop(): void {
   if (daCam) return;
   daCam = true;
   datNguonSocket(() => laySocket());
+  /* App tạo socket MỚI (đăng nhập lại, nối lại) ⇒ báo cho cửa hàng tin nhắn
+     của web gắn lại listener. Thiếu dòng này thì listener nằm lại trên socket
+     cũ đã bị `removeAllListeners()` và messenger điếc tới khi rời trang. */
+  goNghe = khiCoSocketMoi((s) => baoSocketMoi(s));
 }
 
 /** Gỡ ra, trả web về hành vi mặc định. Chỉ dùng trong phép kiểm. */
 export function thaSocketDesktop(): void {
   daCam = false;
+  goNghe?.();
+  goNghe = null;
   datNguonSocket(null);
 }

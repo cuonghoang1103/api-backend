@@ -88,7 +88,7 @@ export default function NewMessageModal({ open, onClose }: { open: boolean; onCl
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search name or @username…"
-              className="w-full bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted/70"
+              className="w-full bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted"
             />
           </div>
         </div>

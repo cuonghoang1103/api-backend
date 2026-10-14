@@ -51,6 +51,8 @@ declare module '@/lib/socket' {
   export function datNguonSocket(
     f: (() => unknown | Promise<unknown> | null) | null,
   ): void;
+  /** Báo cho cửa hàng tin nhắn: app vừa tạo socket MỚI ⇒ gắn lại listener (14/10/2026). */
+  export function baoSocketMoi(s: unknown): void;
   /** Thông báo trong app (04/10/2026) — `features/thongBao/ThongBaoHost`. */
   export function connectSocket(): Promise<{
     on(ev: string, f: (...a: any[]) => void): unknown;

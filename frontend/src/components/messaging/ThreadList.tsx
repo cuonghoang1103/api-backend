@@ -278,7 +278,7 @@ export default function ThreadList() {
         </div>
       </div>
 
-      <div className="chat-messages-scroll min-h-0 flex-1 overflow-y-auto px-2 py-1">
+      <div className="chat-messages-scroll min-h-0 flex-1 overflow-y-auto px-2 py-1" data-testid="thread-list">
         {filter !== 'deleted' && <TimNguoiDeNhan query={query} onDaMo={() => setQuery('')} />}
         {filter === 'deleted' ? (
           <DeletedList
@@ -324,7 +324,7 @@ export default function ThreadList() {
               const isMarkedUnread = !!t.preferences?.markedUnreadAt;
               const isUnreadLooking = (t.unreadCount && t.unreadCount > 0) || isMarkedUnread;
               return (
-                <li key={t.id} className="relative">
+                <li key={t.id} className="relative" data-testid="thread-row" data-thread-id={t.id}>
                   <button
                     onClick={() => store.openThread(t.id)}
                     onContextMenu={(e) => {
@@ -378,6 +378,9 @@ export default function ThreadList() {
                               'Cuộc trò chuyện'
                             )}
                           </span>
+                          {t.type === 'ADMIN' && (
+                            <span className="shrink-0 rounded bg-cyan-500/15 px-1 py-px text-[9px] font-bold uppercase tracking-wide text-cyan-300">Hỗ trợ</span>
+                          )}
                           {isPinned && <Pin className="h-3 w-3 shrink-0 text-amber-400" aria-label="Đã ghim" />}
                           {isMuted && <BellOff className="h-3 w-3 shrink-0 text-text-muted" aria-label="Đã tắt thông báo" />}
                         </p>
@@ -392,7 +395,7 @@ export default function ThreadList() {
                               'shrink-0 text-[10px] tabular-nums',
                               isUnreadLooking
                                 ? 'font-bold text-cyan-300'
-                                : 'font-normal text-text-muted/80',
+                                : 'font-normal text-text-muted',
                             )}
                           >
                             {formatDistanceToNow(new Date(t.lastMessageAt), { addSuffix: false, locale: vi })}
@@ -406,7 +409,7 @@ export default function ThreadList() {
                             'truncate text-[13px] md:text-xs',
                             isUnreadLooking
                               ? 'font-semibold text-text-primary'
-                              : 'font-normal text-text-muted/70',
+                              : 'font-normal text-text-muted',
                           )}
                         >
                           {/* Messenger-style "Bạn: " prefix when the
@@ -414,10 +417,16 @@ export default function ThreadList() {
                           {t.lastMessage && t.lastMessage.senderId === auth.user?.id && (
                             <span>Bạn: </span>
                           )}
-                          {t.lastMessage?.hasAttachment ? (
-                            <>
-                              <span className="text-cyan-400">📎</span> {t.lastMessage.attachmentName ?? 'Đính kèm'}
-                            </>
+                          {t.lastMessage?.hasAttachment && !t.lastMessage.content ? (
+                            t.lastMessage.attachmentMime?.startsWith('image/') ? (
+                              <>📷 Ảnh</>
+                            ) : t.lastMessage.attachmentMime?.startsWith('audio/') ? (
+                              <>🎤 Tin nhắn thoại</>
+                            ) : (
+                              <>
+                                <span className="text-cyan-400">📎</span> {t.lastMessage.attachmentName ?? 'Đính kèm'}
+                              </>
+                            )
                           ) : (
                             t.lastMessage?.content || <span className="italic opacity-60">Chưa có tin nhắn</span>
                           )}
@@ -570,7 +579,7 @@ function DeletedRow({
       />
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-text-primary">{name}</p>
-        <p className="truncate text-[11.5px] text-text-muted/70">
+        <p className="truncate text-[11.5px] text-text-muted">
           {thread.lastMessage?.hasAttachment ? (
             <>
               <span className="text-cyan-400">📎</span>{' '}
@@ -691,9 +700,15 @@ function EmptyState({
   );
 }
 
-function Avatar({ src, name, badge, online }: { src?: string | null; name: string; badge: 'admin' | null; online: boolean }) {
+function Avatar({ src, name, online }: { src?: string | null; name: string; badge?: 'admin' | null; online: boolean }) {
   // Messenger-style responsive sizing: large 56px avatars on mobile,
   // the original compact 40px on desktop (md+).
+  //
+  // Trạng thái: CHỈ một chấm xanh khi đang hoạt động; ngoại tuyến thì KHÔNG
+  // vẽ gì (14/10/2026). Bản cũ vẽ chấm xám cho người ngoại tuyến, và với hội
+  // thoại hỗ trợ còn chồng thêm một huy hiệu ★ vàng ngay cạnh — chấm xám đè
+  // lên nửa vòng tròn vàng nên người dùng thấy như một "mặt trăng khuyết"
+  // (tưởng là trạng thái "vắng mặt"). Nhãn hỗ trợ nay nằm cạnh TÊN.
   return (
     <div className="relative h-14 w-14 shrink-0 md:h-10 md:w-10">
       {src ? (
@@ -707,48 +722,13 @@ function Avatar({ src, name, badge, online }: { src?: string | null; name: strin
           {name.charAt(0).toUpperCase()}
         </div>
       )}
-      {badge === 'admin' && <AdminBadge />}
-      {/* Online dot — properly overlapping the avatar's bottom-right
-          corner using a 2px ring that matches the row background. The
-          dot is `h-3 w-3` (slightly larger than the previous 2.5) so
-          the status is actually readable at a glance. */}
-      {badge !== 'admin' && (
+      {online && (
         <span
-          className={cn(
-            'absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full ring-2',
-            // Slightly larger ring uses a translucent color so the dot
-            // "punches out" of any background the row happens to be on
-            // (hover, active, default).
-            online
-              ? 'bg-emerald-400 ring-[#0a0a14] shadow-[0_0_8px_rgba(16,185,129,0.4)]'
-              : 'bg-zinc-500 ring-[#0a0a14]',
-          )}
-          title={online ? 'Đang hoạt động' : 'Ngoại tuyến'}
-        />
-      )}
-      {badge === 'admin' && (
-        <span
-          className={cn(
-            'absolute -bottom-0.5 right-1.5 h-3 w-3 rounded-full ring-2 ring-[#0a0a14]',
-            online
-              ? 'bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.4)]'
-              : 'bg-zinc-500',
-          )}
-          title={online ? 'Đang hoạt động' : 'Ngoại tuyến'}
+          className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full bg-emerald-400 ring-[3px] ring-[#191a26] md:h-3 md:w-3 md:ring-2"
+          title="Đang hoạt động"
+          data-testid="presence-online"
         />
       )}
     </div>
-  );
-}
-
-function AdminBadge() {
-  return (
-    <span
-      className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-400 text-[8px] font-bold text-black"
-      style={{ boxShadow: '0 0 0 2px #0a0a14' }}
-      aria-label="Admin"
-    >
-      ★
-    </span>
   );
 }

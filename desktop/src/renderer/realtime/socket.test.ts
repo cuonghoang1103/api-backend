@@ -39,10 +39,30 @@ beforeEach(() => {
 });
 
 describe('noiSocket', () => {
+  /** `auth` có thể là object hoặc HÀM (socket.io gọi lại mỗi lượt bắt tay). */
+  const docAuth = (auth: unknown): Record<string, unknown> | undefined => {
+    if (typeof auth !== 'function') return auth as Record<string, unknown> | undefined;
+    let ra: Record<string, unknown> | undefined;
+    (auth as (cb: (d: Record<string, unknown>) => void) => void)((d) => { ra = d; });
+    return ra;
+  };
+
   it('gửi token trong `auth` — đường DUY NHẤT qua được mọi transport', () => {
     noiSocket(apiGia, 'https://cuongthai.com');
-    const tuy = luotGoi[0]?.tuy as { auth?: { token?: string } };
-    expect(tuy?.auth?.token, 'thiếu auth.token ⇒ máy chủ từ chối bắt tay').toBe('tok-abc');
+    const tuy = luotGoi[0]?.tuy as { auth?: unknown };
+    expect(docAuth(tuy?.auth)?.token, 'thiếu auth.token ⇒ máy chủ từ chối bắt tay').toBe('tok-abc');
+  });
+
+  it('NỐI LẠI dùng token MỚI NHẤT, không phải token chụp lúc đăng nhập', () => {
+    // 14/10/2026: `auth: { token }` chụp một lần ⇒ JWT hết hạn (24h) thì mọi
+    // lượt nối lại tự động đều bị từ chối, messenger điếc tới khi thoát app.
+    let tokenHienTai = 'tok-cu';
+    const api = { layToken: () => tokenHienTai } as never;
+    noiSocket(api, 'https://cuongthai.com');
+    const auth = (luotGoi[0]?.tuy as { auth?: unknown })?.auth;
+    expect(typeof auth, '`auth` phải là HÀM để socket.io gọi lại ở mỗi lượt bắt tay').toBe('function');
+    tokenHienTai = 'tok-moi';
+    expect(docAuth(auth)?.token).toBe('tok-moi');
   });
 
   it('KHÔNG ép transports websocket-only — nó làm rụng mọi header', () => {

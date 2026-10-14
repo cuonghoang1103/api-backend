@@ -100,7 +100,7 @@ export default function StickerPicker({
         ) : packs.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center px-4 text-center text-xs text-text-muted">
             <p>Chưa có bộ nhãn dán nào.</p>
-            <p className="mt-1 text-[11px] text-text-muted/70">Admin có thể thêm tại <span className="text-cyan-400">/admin/stickers</span>.</p>
+            <p className="mt-1 text-[11px] text-text-muted">Admin có thể thêm tại <span className="text-cyan-400">/admin/stickers</span>.</p>
           </div>
         ) : loadingStickers ? (
           <div className="flex h-full items-center justify-center"><Loader2 className="h-5 w-5 animate-spin text-text-muted" /></div>

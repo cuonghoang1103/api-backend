@@ -35,13 +35,17 @@ import ChatInfoPanel from '@/components/messaging/ChatInfoPanel';
 // (GalaxyBackground removed — messages now uses a soft, eye-friendly dark
 //  backdrop instead of the busy dotted starfield.)
 import { cn } from '@/lib/utils';
+import { MAU_TOI } from '@/lib/tinNhan/mauToi';
 import { useKeyboardInset } from '@/hooks/useKeyboardInset';
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import toast from 'react-hot-toast';
 
-// iOS-like spring curve — used everywhere for hover/transitions
-const IOS_SPRING = 'cubic-bezier(0.16, 1, 0.3, 1)';
+// iOS-like curve. ⚠️ framer-motion CHỈ nhận mảng 4 số — chuỗi CSS `cubic-bezier(...)`
+// làm nó NÉM "Invalid easing type" ở bản dev (vỡ cả khung chat bên phải: AnimatePresence
+// mode="wait" kẹt, không bao giờ dựng hội thoại mới) và lặng lẽ ra easing `undefined`
+// ở bản production. Đo thật 14/10/2026 bằng scripts/messenger-realtime-e2e.mjs.
+const IOS_SPRING: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 export default function MessagesPage() {
   return (
@@ -247,7 +251,7 @@ function MessagesPageInner() {
       // safe area — NOT the 58px nav. Overriding the var locally keeps the
       // existing `100dvh - 4rem - var(--app-chrome-bottom)` math correct and
       // makes the composer always sit flush above the safe area.
-      style={{ ['--app-chrome-bottom' as string]: 'env(safe-area-inset-bottom, 0px)' }}
+      style={{ ...MAU_TOI, ['--app-chrome-bottom' as string]: 'env(safe-area-inset-bottom, 0px)' }}
     >
       {/* Soft, eye-friendly dark backdrop (replaces the busy starfield). */}
       <div
@@ -367,7 +371,7 @@ function MessagesPageInner() {
                 initial={{ opacity: 0, x: 8 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -8 }}
-                transition={{ duration: 0.22, ease: IOS_SPRING as any }}
+                transition={{ duration: 0.22, ease: IOS_SPRING }}
                 // min-h-0 is load-bearing: without it a long thread (or one
                 // with tall image/file attachments) makes this flex child grow
                 // past the container instead of letting MessageList scroll, so
@@ -403,7 +407,7 @@ function MessagesPageInner() {
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.25, ease: IOS_SPRING as any }}
+                transition={{ duration: 0.25, ease: IOS_SPRING }}
                 className="flex h-full min-h-0 min-w-0 flex-1 flex-col"
                 style={{
                   background: 'linear-gradient(180deg, #15161f 0%, #0f1019 100%)',
@@ -578,15 +582,13 @@ function ThreadHeader({
             {(peer?.displayName ?? peer?.username ?? '?').charAt(0).toUpperCase()}
           </div>
         )}
-        {presence && (
+        {/* CHỈ chấm xanh khi đang hoạt động — ngoại tuyến thì không vẽ gì
+            (Messenger). Trạng thái chữ bên cạnh đã nói "Hoạt động N phút trước". */}
+        {presence?.online && (
           <span
-            className={cn(
-              'absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full ring-2 ring-[#0c0d18]',
-              presence.online
-                ? 'bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.4)]'
-                : 'bg-zinc-500',
-            )}
+            className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-[#15161f]"
             title={statusText}
+            data-testid="presence-online"
           />
         )}
       </div>
@@ -598,7 +600,7 @@ function ThreadHeader({
           >
             {peer?.displayName ?? peer?.username ?? 'Cuộc trò chuyện'}
             {thread?.type === 'ADMIN' && (
-              <span className="ml-2 inline-flex items-center rounded-full bg-amber-500/15 px-1.5 py-0.5 text-[9px] font-bold text-amber-400">ADMIN</span>
+              <span className="ml-2 inline-flex items-center rounded-full bg-cyan-500/15 px-1.5 py-0.5 text-[9px] font-bold text-cyan-300">HỖ TRỢ</span>
             )}
           </p>
           <NicknamePopover thread={thread!} />
@@ -606,7 +608,7 @@ function ThreadHeader({
         <p
           className={cn(
             'truncate text-[11.5px]',
-            presence?.online ? 'text-emerald-400' : 'text-text-muted/80',
+            presence?.online ? 'text-emerald-400' : 'text-text-muted',
           )}
           style={{ letterSpacing: '-0.003em' }}
         >
@@ -663,17 +665,6 @@ function ThreadHeader({
             <Info className="h-[18px] w-[18px]" />
           </button>
         )}
-        {peer && onGoi && (
-          <button
-            type="button"
-            onClick={onGoi}
-            title="Gọi thoại"
-            aria-label="Gọi thoại"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-emerald-400 transition-colors hover:bg-white/[0.06]"
-          >
-            <Phone className="h-[18px] w-[18px]" />
-          </button>
-        )}
         {peer && <ThreadHeaderMenu threadId={thread!.id} peerId={peer.id} />}
       </div>
     </div>
@@ -702,7 +693,7 @@ function EmptyChatState({
         // mailbox screen.
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: IOS_SPRING as any }}
+        transition={{ duration: 0.5, ease: IOS_SPRING }}
         className="mb-6 flex h-24 w-24 items-center justify-center rounded-3xl border border-white/[0.06] bg-gradient-to-br from-white/[0.04] to-white/[0.01] shadow-inner"
       >
         <MessageCircle

@@ -39,6 +39,33 @@ let connecting: Promise<Socket> | null = null;
 let nhaCungCapNgoai: (() => Socket | Promise<Socket> | null) | null = null;
 
 /**
+ * ─── Báo "socket đã bị THAY" ─────────────────────────────────
+ *
+ * Mọi listener của cửa hàng tin nhắn gắn lên MỘT đối tượng socket cụ thể. Khi
+ * đối tượng đó bị thay (web: `disconnectSocket()` rồi nối lại; app desktop:
+ * đăng nhập lại / nối lại bằng token mới) thì listener nằm lại trên xác chết,
+ * còn socket mới không ai nghe ⇒ tin mới, "đang nhập", trạng thái hoạt động
+ * chết câm cho tới khi người dùng rời trang rồi vào lại. Đó là một nửa của lỗi
+ * "danh sách mãi sau mới cập nhật" (14/10/2026).
+ *
+ * Ai giữ listener thì đăng ký ở đây và tự gắn lại lên socket mới.
+ */
+type NgheDoiSocket = (s: Socket) => void;
+const ngheDoiSocket = new Set<NgheDoiSocket>();
+
+export function onSocketReplaced(cb: NgheDoiSocket): () => void {
+  ngheDoiSocket.add(cb);
+  return () => { ngheDoiSocket.delete(cb); };
+}
+
+/** Gọi khi có một đối tượng socket MỚI. App desktop gọi qua bộ nối của nó. */
+export function baoSocketMoi(s: Socket): void {
+  for (const cb of Array.from(ngheDoiSocket)) {
+    try { cb(s); } catch { /* một người nghe hỏng không được chặn người khác */ }
+  }
+}
+
+/**
  * Cắm socket từ bên ngoài. Gọi TRƯỚC khi dựng cây messenger.
  *
  * Truyền `null` để trả lại hành vi mặc định của web.
@@ -106,10 +133,32 @@ export async function connectSocket(): Promise<Socket> {
       } else {
         socket = s;
         resolve(s);
+        baoSocketMoi(s);
       }
     };
 
     s.once('connect', () => finish(null));
+    /*
+     * Phiên hết hạn lúc socket đang NỐI LẠI ⇒ tự làm mới cookie rồi để
+     * socket.io thử tiếp.
+     *
+     * Web xác thực socket bằng cookie httpOnly `backend_token` (JWT 24 giờ).
+     * Socket đang nối thì không cần xác thực lại — nhưng hễ nó rớt (máy chủ
+     * deploy, mạng chập, máy ngủ dậy) thì lượt bắt tay mới mang cookie ĐÃ HẾT
+     * HẠN, bị từ chối, và `reconnection` quay vô tận mà không lượt REST nào
+     * xảy ra để làm mới cookie hộ. Người dùng đứng yên ở /messages thì không
+     * bao giờ nhận tin mới nữa — "danh sách mãi sau mới cập nhật", tới lúc họ
+     * bấm gì đó gọi API. `/api/auth/refresh` là đúng đường axios dùng khi gặp 401.
+     */
+    let lanLamMoi = 0;
+    s.on('connect_error', (err) => {
+      const msg = String(err?.message ?? '');
+      if (!/unauthor|token|jwt|expired|session/i.test(msg)) return;
+      const bayGio = Date.now();
+      if (bayGio - lanLamMoi < 30_000) return; // chặn vòng lặp khi phiên chết thật
+      lanLamMoi = bayGio;
+      void fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' }).catch(() => undefined);
+    });
     s.once('connect_error', (err) => {
       // First-attempt error — surface so the store can show a
       // user-visible message. After the first connection we

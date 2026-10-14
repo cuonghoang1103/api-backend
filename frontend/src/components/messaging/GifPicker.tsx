@@ -152,7 +152,7 @@ export default function GifPicker({
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Tim GIF tren GIPHY..."
             autoFocus
-            className="w-full bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted/70"
+            className="w-full bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted"
           />
         </div>
         <button onClick={onClose} className="rounded-lg p-1.5 text-text-muted hover:bg-[var(--bg-surface-hover)] hover:text-text-primary">

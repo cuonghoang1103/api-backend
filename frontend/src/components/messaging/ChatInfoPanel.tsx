@@ -223,15 +223,9 @@ export default function ChatInfoPanel({
               {displayName.charAt(0).toUpperCase()}
             </div>
           )}
-          {thread.type !== 'ADMIN' && peer && (
-            <span
-              className={cn(
-                'absolute bottom-1 right-1 h-4 w-4 rounded-full ring-2 ring-[#141522]',
-                isOnline
-                  ? 'bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.4)]'
-                  : 'bg-zinc-500',
-              )}
-            />
+          {/* Chỉ chấm xanh khi đang hoạt động; ngoại tuyến không vẽ gì. */}
+          {peer && isOnline && (
+            <span className="absolute bottom-1 right-1 h-4 w-4 rounded-full bg-emerald-400 ring-[3px] ring-[#141522]" />
           )}
         </div>
         <p className="text-center text-lg font-semibold text-text-primary">{displayName}</p>

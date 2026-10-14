@@ -226,6 +226,16 @@ export class ApiClient {
    * mà backend trả về lúc đăng nhập: nó ký bằng một secret không ai verify, nên
    * gửi lên chỉ nhận 401.
    */
+  /**
+   * Làm mới token từ BÊN NGOÀI luồng REST — socket bị từ chối bắt tay vì token
+   * hết hạn thì gọi cái này (xem `realtime/socket.ts`). Dùng chung lời hứa
+   * đang chạy với luồng REST, nên không bao giờ sinh hai token song song.
+   * Trả `null` khi không làm mới được; KHÔNG tự đăng xuất (mất mạng ≠ phiên chết).
+   */
+  lamMoiToken(): Promise<string | null> {
+    return this.refreshOnce();
+  }
+
   private refreshOnce(): Promise<string | null> {
     // Đã có lần làm mới đang chạy thì bám vào nó.
     this.refreshing ??= this.doRefresh().finally(() => {

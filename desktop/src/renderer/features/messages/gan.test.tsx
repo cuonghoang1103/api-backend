@@ -72,6 +72,8 @@ vi.mock('@/lib/socket', () => ({
   connectSocket: () => Promise.resolve(null),
   getSocket: () => null,
   disconnectSocket: () => {},
+  onSocketReplaced: () => () => {},
+  baoSocketMoi: () => {},
 }));
 
 /*

@@ -30,8 +30,11 @@ import {
   joinThread,
   leaveThread,
   emitTyping,
+  onSocketReplaced,
 } from '@/lib/socket';
+import type { Socket } from 'socket.io-client';
 import { useAuthStore } from './authStore';
+import { xemTruocTin } from '@/lib/tinNhan/nhom';
 
 interface TypingState {
   // userId -> until-timestamp. We evict stale entries on read.
@@ -185,6 +188,10 @@ interface MessagingState {
   // Presence
   getPresence: (userId: number) => { online: boolean; lastSeen: number };
 
+  /** Tải lại danh sách + khung chat đang mở để bắt kịp những gì lỡ khi
+   *  socket đứt / tab ngủ. Im lặng, không bật khung xương. */
+  batKip: () => Promise<void>;
+
   // Internal socket handlers (called from socket lib)
   applyIncomingMessage: (threadId: number, message: MessagingMessage) => void;
   applyReadReceipt: (threadId: number, readerId: number, readAt?: string) => void;
@@ -295,6 +302,93 @@ function sortThreads(threads: MessagingThread[]): MessagingThread[] {
   });
 }
 
+/** Socket đã từng nối trong phiên này chưa — để phân biệt NỐI LẠI với nối lần đầu. */
+let daTungNoiSocket = false;
+/** Mốc lần bắt kịp gần nhất — chống bắt kịp dồn dập (nối lại + tab hiện lại cùng lúc). */
+let lanBatKipCuoi = 0;
+
+/**
+ * Cập nhật hàng của một hội thoại theo MỘT tin mới: chữ xem trước, mốc thời
+ * gian, (tuỳ chọn) +1 chưa đọc — rồi XẾP LẠI để hàng nhảy lên đầu (vẫn dưới
+ * các hàng ghim). Dùng cho cả tin đến lẫn tin của chính mình (gửi ở tab này
+ * hoặc ở máy khác). Hàng không có trong danh sách thì trả nguyên.
+ */
+function capNhatHangTheoTin(
+  threads: MessagingThread[],
+  threadId: number,
+  message: MessagingMessage,
+  { tangChuaDoc }: { tangChuaDoc: boolean },
+): MessagingThread[] {
+  let doi = false;
+  const next = threads.map((t) => {
+    if (t.id !== threadId) return t;
+    // Tin cũ hơn tin xem trước đang có (vd bắt kịp về muộn) thì đừng lùi hàng.
+    const moc = t.lastMessage?.createdAt ? new Date(t.lastMessage.createdAt).getTime() : 0;
+    if (moc > new Date(message.createdAt).getTime()) return t;
+    doi = true;
+    return {
+      ...t,
+      lastMessage: xemTruocTin(message),
+      lastMessageAt: message.createdAt,
+      unreadCount: tangChuaDoc ? (t.unreadCount ?? 0) + 1 : (t.unreadCount ?? 0),
+    };
+  });
+  return doi ? sortThreads(next) : threads;
+}
+
+/**
+ * Gắn mọi listener của cửa hàng tin nhắn lên MỘT đối tượng socket.
+ *
+ * Idempotent theo ĐỐI TƯỢNG (WeakSet), không theo một cờ toàn cục: socket bị
+ * thay (web nối lại sau `disconnectSocket`, app desktop đăng nhập lại) là đối
+ * tượng mới ⇒ được gắn lại. Cờ `_messagingWired` cũ dán lên đối tượng thì
+ * đúng, nhưng chỉ `init()` gọi tới — mà `init()` chỉ chạy lúc dựng trang, nên
+ * socket mới sinh SAU đó không ai nghe.
+ */
+const socketDaGan = new WeakSet<Socket>();
+function ganNgheSocket(socket: Socket): void {
+  if (socketDaGan.has(socket)) return;
+  socketDaGan.add(socket);
+  const st = () => useMessagingStore.getState();
+  socket.on('thread:new-message', (payload: { threadId: number; message: MessagingMessage }) => {
+    if (!payload || typeof payload.threadId !== 'number' || !payload.message) return;
+    st().applyIncomingMessage(payload.threadId, payload.message);
+  });
+  socket.on('thread:read', (payload: { threadId: number; readerId: number; readAt?: string | Date }) => {
+    st().applyReadReceipt(payload.threadId, payload.readerId, payload.readAt as string | undefined);
+  });
+  socket.on('thread:updated', (payload: { threadId: number; changes?: { preferenceChanged?: { userId: number; slot: string; value: string | null } } }) => {
+    st().applyThreadUpdated(payload.threadId, payload?.changes);
+  });
+  // Peer started a new conversation — re-emitted to BOTH participants so the
+  // freshly-created thread shows up in both sidebars without a refresh.
+  socket.on('thread:created', (payload: { thread: MessagingThread }) => {
+    if (payload?.thread) st().applyThreadCreated(payload.thread);
+  });
+  socket.on('thread:typing', (payload: { threadId: number; userId: number; isTyping: boolean }) => {
+    useMessagingStore.setState((s) => {
+      const cur = s.typing.byThread[payload.threadId] ?? {};
+      const next = { ...cur };
+      if (payload.isTyping) next[payload.userId] = Date.now() + TYPING_TIMEOUT_MS;
+      else delete next[payload.userId];
+      return { typing: { byThread: { ...s.typing.byThread, [payload.threadId]: next } } };
+    });
+  });
+  socket.on('presence:update', (payload: { userId: number; online: boolean; lastSeen: number }) => {
+    st().applyPeerPresence(payload.userId, payload.online, payload.lastSeen);
+  });
+  socket.on('connect', () => st().onConnectionChange(true));
+  socket.on('disconnect', () => st().onConnectionChange(false));
+  // In-place message updates (recall, delete, reactions).
+  socket.on('message:updated', (payload: {
+    threadId: number;
+    messageId: number;
+    changes: { deleted?: boolean; recalled?: boolean; recalledAt?: string; reactions?: unknown };
+  }) => {
+    st().applyMessageUpdated(payload.threadId, payload.messageId, payload.changes);
+  });
+}
+
 export const useMessagingStore = create<MessagingState>((set, get) => ({
   threads: [],
   threadsLoaded: false,
@@ -362,62 +456,19 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
       }
     }
 
+    // Gắn listener lên socket HIỆN HÀNH (idempotent theo từng đối tượng
+    // socket — xem `ganNgheSocket`). Socket bị thay sau này thì
+    // `onSocketReplaced` ở cuối tệp tự gắn lại.
     const socket = getSocket();
     if (socket) {
-      if (!(socket as any)._messagingWired) {
-        (socket as any)._messagingWired = true;
-        socket.on('thread:new-message', (payload: { threadId: number; message: MessagingMessage }) => {
-          get().applyIncomingMessage(payload.threadId, payload.message);
-        });
-        socket.on('thread:read', (payload: { threadId: number; readerId: number; readAt?: string | Date }) => {
-          get().applyReadReceipt(payload.threadId, payload.readerId, payload.readAt as any);
-        });
-        socket.on('thread:updated', (payload: { threadId: number; changes?: any }) => {
-          get().applyThreadUpdated(payload.threadId, payload?.changes);
-        });
-        // NEW: peer started a new conversation. Re-emitted to
-        // BOTH participants so the freshly-created thread shows
-        // up in both sidebars without a refresh. We treat the
-        // payload idempotently — if the row already exists we
-        // just refresh its summary.
-        socket.on('thread:created', (payload: { thread: MessagingThread }) => {
-          get().applyThreadCreated(payload.thread);
-        });
-        socket.on('thread:typing', (payload: { threadId: number; userId: number; isTyping: boolean }) => {
-          const cur = get().typing.byThread[payload.threadId] ?? {};
-          const next = { ...cur };
-          if (payload.isTyping) {
-            next[payload.userId] = Date.now() + TYPING_TIMEOUT_MS;
-          } else {
-            delete next[payload.userId];
-          }
-          set((s) => ({ typing: { byThread: { ...s.typing.byThread, [payload.threadId]: next } } }));
-        });
-        socket.on('presence:update', (payload: { userId: number; online: boolean; lastSeen: number }) => {
-          get().applyPeerPresence(payload.userId, payload.online, payload.lastSeen);
-        });
-        socket.on('connect', () => get().onConnectionChange(true));
-        socket.on('disconnect', () => get().onConnectionChange(false));
-        // Listen for in-place message updates (recall, delete,
-        // reactions) and per-thread metadata changes.
-        socket.on(
-          'message:updated',
-          (payload: {
-            threadId: number;
-            messageId: number;
-            changes: { deleted?: boolean; recalled?: boolean; recalledAt?: string; reactions?: unknown };
-          }) => {
-            get().applyMessageUpdated(payload.threadId, payload.messageId, payload.changes);
-          },
-        );
-        // CRITICAL: by the time we get here, the socket has ALREADY
-        // connected (connectSocket awaited on the 'connect' event).
-        // The listeners above will only fire on the NEXT (re)connect.
-        // We must mirror the live state into the store right now,
-        // otherwise the UI stays stuck on "Ngoại tuyến" forever.
-        if (socket.connected) {
-          get().onConnectionChange(true);
-        }
+      ganNgheSocket(socket);
+      // CRITICAL: by the time we get here, the socket has ALREADY
+      // connected (connectSocket awaited on the 'connect' event).
+      // The 'connect' listener only fires on the NEXT (re)connect, so
+      // mirror the live state into the store right now — otherwise the
+      // UI stays stuck on "Ngoại tuyến" forever.
+      if (socket.connected) {
+        get().onConnectionChange(true);
       }
     }
 
@@ -453,6 +504,7 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
 
   shutdown() {
     disconnectSocket();
+    daTungNoiSocket = false;
     set({
       threads: [],
       threadsLoaded: false,
@@ -545,8 +597,16 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     try {
       const res = await messagingApi.getThread(threadId);
       const updated = res.data.data;
+      // Hàm này chỉ có thông tin ĐẦU hội thoại (người kia, mốc thời gian,
+      // tuỳ chọn) — KHÔNG có `lastMessage`/`unreadCount`, nên giữ hai thứ đó
+      // của hàng cũ. Và PHẢI xếp lại: `lastMessageAt` vừa đổi mà không xếp
+      // thì hàng nằm im chỗ cũ.
       set((s) => ({
-        threads: s.threads.map((t) => (t.id === threadId ? { ...t, ...updated } : t)),
+        threads: sortThreads(
+          s.threads.map((t) => (t.id === threadId
+            ? { ...t, ...updated, lastMessage: t.lastMessage, unreadCount: t.unreadCount }
+            : t)),
+        ),
       }));
     } catch {
       // Best-effort: ignore
@@ -963,17 +1023,25 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
         media,
       });
       const real = res.data.data;
-      // Replace optimistic with real
-      set((s) => ({
-        messagesByThread: {
-          ...s.messagesByThread,
-          [threadId]: (s.messagesByThread[threadId] ?? []).map((m) =>
-            m.id === optimistic.id ? real : m,
-          ),
-        },
-      }));
-      // Update the thread summary (last message preview)
-      get().refreshThreadSummary(threadId);
+      // Replace optimistic with real. Socket có thể đã về TRƯỚC phản hồi
+      // này và thay sẵn tin lạc quan bằng tin thật — khi đó đừng thêm lần hai.
+      set((s) => {
+        const cur = s.messagesByThread[threadId] ?? [];
+        const daCo = cur.some((m) => m.id === real.id);
+        return {
+          messagesByThread: {
+            ...s.messagesByThread,
+            [threadId]: daCo
+              ? cur.filter((m) => m.id !== optimistic.id)
+              : cur.map((m) => (m.id === optimistic.id ? real : m)),
+          },
+          // Hàng của hội thoại đổi chữ xem trước + nhảy lên đầu NGAY. Trước
+          // 14/10/2026 chỗ này chỉ gọi `refreshThreadSummary` — mà đường đó
+          // không trả `lastMessage` và không xếp lại ⇒ người GỬI thấy hàng
+          // của mình đứng im với tin cũ cho tới lần tải lại danh sách sau.
+          threads: capNhatHangTheoTin(s.threads, threadId, real, { tangChuaDoc: false }),
+        };
+      });
       // Mirror the new state to IndexedDB so a hard refresh
       // immediately after sending doesn't lose the message.
       get().persistThreadMessages(threadId);
@@ -1154,109 +1222,123 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     return get().presence.byUserId[userId] ?? { online: false, lastSeen: 0 };
   },
 
+  async batKip() {
+    if (!useAuthStore.getState().isAuthenticated) return;
+    const bayGio = Date.now();
+    if (bayGio - lanBatKipCuoi < 3000) return;
+    lanBatKipCuoi = bayGio;
+    const threadId = get().currentThreadId;
+    await Promise.allSettled([
+      get().loadThreads(),
+      get().refreshUnread(),
+      get().loadOnlineUsers(),
+      (async () => {
+        if (!threadId) return;
+        const res = await messagingApi.listMessages(threadId, { limit: 50 });
+        const serverMsgs = (res.data.data ?? []) as MessagingMessage[];
+        set((s) => ({
+          messagesByThread: {
+            ...s.messagesByThread,
+            [threadId]: mergeMessages(serverMsgs, s.messagesByThread[threadId] ?? []),
+          },
+        }));
+        if (get().currentThreadId === threadId) void get().markRead(threadId);
+      })(),
+    ]);
+  },
+
   applyIncomingMessage(threadId, message) {
     const auth = useAuthStore.getState();
     const isOwn = message.senderId === auth.user?.id;
-    // Play a "new message" sound when an incoming message arrives
-    // for a thread the user ISN'T currently viewing. If they have
-    // the thread open they're already aware of the message; the
-    // sound would be annoying. This matches the unread-bump rule
-    // (line below: `unreadCount` only increments when
-    // currentThreadId !== threadId).
-    if (!isOwn) {
-      // Lazy-import to avoid loading the sound service when the
-      // user has never received a message in this session.
+    const truoc = get();
+    // Khử trùng TRƯỚC mọi tác dụng phụ (tiếng, đếm chưa đọc). Máy chủ cũ phát
+    // mỗi tin HAI lần (phòng hội thoại + phòng riêng); máy chủ đã gộp lại một
+    // lượt nhưng client vẫn phải chịu được bản cũ đang chạy.
+    const daCoTrongKhung = truoc.messagesByThread[threadId]?.some((m) => m.id === message.id) ?? false;
+    const hang = truoc.threads.find((t) => t.id === threadId);
+    const daCoTrongHang = hang?.lastMessage?.id === message.id;
+    if (daCoTrongKhung || daCoTrongHang) return;
+
+    const dangXem = truoc.currentThreadId === threadId
+      && (typeof document === 'undefined' || document.visibilityState === 'visible');
+    // Tiếng "tin mới" chỉ khi người dùng KHÔNG đang nhìn đúng hội thoại đó —
+    // đang nhìn thì họ đã thấy tin, kêu thêm chỉ phiền.
+    if (!isOwn && !dangXem) {
       import('@/lib/sound').then(({ playSound }) => {
         playSound('message');
       }).catch(() => { /* ignore */ });
     }
+
     set((s) => {
-      const cur = s.messagesByThread[threadId] ?? [];
-      // De-dupe (sender may receive their own message back via socket)
-      if (cur.some((m) => m.id === message.id)) return s;
-      // If the optimistic message exists (same sender, near-identical content),
-      // replace it instead of appending.
-      if (isOwn) {
-        const idx = cur.findIndex(
-          (m) => m.id < 0 && m.senderId === message.senderId && m.content === message.content,
-        );
-        if (idx >= 0) {
-          const next = cur.slice();
-          next[idx] = message;
-          return { ...s, messagesByThread: { ...s.messagesByThread, [threadId]: next } };
+      const cur = s.messagesByThread[threadId];
+      let nextMsgs = cur;
+      if (cur) {
+        if (cur.some((m) => m.id === message.id)) {
+          nextMsgs = cur;
+        } else {
+          // Tin của chính mình (gửi từ tab này hoặc máy khác): thay tin lạc
+          // quan cùng nội dung nếu có, không thì nối vào cuối.
+          const idx = isOwn
+            ? cur.findIndex((m) => m.id < 0 && m.senderId === message.senderId && m.content === message.content)
+            : -1;
+          if (idx >= 0) {
+            nextMsgs = cur.slice();
+            nextMsgs[idx] = message;
+          } else {
+            nextMsgs = [...cur, message];
+          }
         }
       }
-      // BUGFIX: if the socket event arrived for a thread that ISN'T
-      // in the sidebar yet (e.g. peer just started a brand new
-      // conversation), fetch the canonical thread row from the
-      // REST API and prepend it. Without this, the sidebar would
-      // silently ignore the event and the user wouldn't see the
-      // new thread until they refreshed the page.
-      const threadExists = s.threads.some((t) => t.id === threadId);
-      if (!threadExists && !isOwn) {
-        // Fire-and-forget the fetch. We don't await — the user
-        // gets an immediate empty thread row in the sidebar (so
-        // the unread badge is visible right away) and the full
-        // row is filled in once the fetch resolves.
-        get().refreshThreadSummary(threadId);
-      }
-      const newThreadPreview = {
-        id: message.id,
-        content: message.content,
-        senderId: message.senderId,
-        createdAt: message.createdAt,
-        hasAttachment: (message.attachments?.length ?? 0) > 0,
-        attachmentMime: message.attachments?.[0]?.mimeType,
-        attachmentName: message.attachments?.[0]?.fileName,
-      };
-      // Bump lastMessage + unreadCount on the matching row.
-      // We re-sort the list because lastMessageAt changes and
-      // pinned rows need to stay at the top.
-      const updatedThreads = s.threads.map((t) => {
-        if (t.id !== threadId) return t;
-        if (isOwn) return t;
-        return {
-          ...t,
-          unreadCount: s.currentThreadId === threadId ? 0 : (t.unreadCount ?? 0) + 1,
-          lastMessage: newThreadPreview,
-          lastMessageAt: message.createdAt,
-        };
+      // ⚠️ Hội thoại CHƯA từng tải (`cur` undefined) thì KHÔNG tạo bộ nhớ
+      // đệm một-tin `[message]`. Trước 14/10/2026 nó làm vậy, và `openThread`
+      // thấy bộ đệm "có sẵn" nên coi đó là cả lịch sử: khung chat dựng với
+      // MỘT tin, cuộn xuống đáy, rồi 50 tin thật đổ vào PHÍA TRÊN ⇒ người dùng
+      // thấy mình đứng ở đầu/giữa đoạn chat. Đúng lỗi "mở chat nằm giữa".
+
+      const coHang = s.threads.some((t) => t.id === threadId);
+      let threads = capNhatHangTheoTin(s.threads, threadId, message, {
+        tangChuaDoc: !isOwn && s.currentThreadId !== threadId,
       });
-      // If the thread still isn't in the list, add a stub so the
-      // user can see something is happening. The full peer info
-      // arrives a moment later via refreshThreadSummary.
-      if (!threadExists) {
-        updatedThreads.push({
+      if (!coHang) {
+        // Hội thoại mới tinh (người lạ nhắn lần đầu / mình nhắn từ máy khác):
+        // dựng hàng tạm để thấy NGAY, thông tin người kia điền sau qua
+        // `refreshThreadSummary`.
+        threads = sortThreads([...threads, {
           id: threadId,
           type: 'USER',
           lastMessageAt: message.createdAt,
           createdAt: message.createdAt,
           updatedAt: message.createdAt,
           peer: null,
-          lastMessage: newThreadPreview,
+          lastMessage: xemTruocTin(message),
           unreadCount: isOwn ? 0 : 1,
           preferences: null,
-        });
+        }]);
       }
       return {
-        ...s,
-        messagesByThread: { ...s.messagesByThread, [threadId]: [...cur, message] },
-        // Increment unread for non-active threads
+        messagesByThread: nextMsgs && nextMsgs !== cur
+          ? { ...s.messagesByThread, [threadId]: nextMsgs }
+          : s.messagesByThread,
         unreadTotal:
           isOwn || s.currentThreadId === threadId
             ? s.unreadTotal
             : s.unreadTotal + 1,
-        threads: sortThreads(updatedThreads),
+        threads,
       };
     });
+    // Hàng chưa có, hoặc có mà chưa biết người kia (hàng tạm / hàng dựng từ
+    // `thread:created` — payload đó là dòng Prisma thô, không có `peer`) ⇒
+    // hỏi máy chủ thông tin đầu hội thoại.
+    if (!hang?.peer) {
+      void get().refreshThreadSummary(threadId);
+    }
     // If the message came in for the open thread, also mark read
     if (get().currentThreadId === threadId && !isOwn) {
       get().markRead(threadId);
     }
     // Mirror the new state to IndexedDB so the conversation
-    // survives a hard refresh even if the user closes the tab
-    // immediately. Best-effort, silent on failure.
-    get().persistThreadMessages(threadId);
+    // survives a hard refresh. Best-effort, silent on failure.
+    if (get().messagesByThread[threadId]) get().persistThreadMessages(threadId);
   },
 
   /**
@@ -1331,6 +1413,10 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
         threads: sortThreads([...s.threads, { ...thread, unreadCount: 0 }]),
       };
     });
+    // Payload `thread:created` là dòng Prisma THÔ (user/adminUser/userA/userB),
+    // không có `peer` đã chuẩn hoá ⇒ hàng sẽ hiện "Cuộc trò chuyện" không tên.
+    // Hỏi lại bản chuẩn hoá của chính người xem.
+    if (!thread.peer) void get().refreshThreadSummary(thread.id);
   },
 
   applyThreadUpdated(threadId, changes) {
@@ -1679,8 +1765,16 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
   },
 
   onConnectionChange(connected) {
+    const daTungNoi = daTungNoiSocket;
     set({ isConnected: connected, isConnecting: false });
     if (connected) {
+      daTungNoiSocket = true;
+      // ── Lưới đỡ: BẮT KỊP những gì lỡ trong lúc đứt ──
+      // Sự kiện phát ra lúc socket đang đứt (máy chủ deploy, mạng chập, máy
+      // ngủ) MẤT HẲN — không ai gửi lại. Nối lại xong mà không tải lại thì
+      // hàng/khung chat đứng ở trạng thái cũ cho tới lần F5. Bài học y hệt app
+      // iOS (21/08/2026, commit f3af84d bên ios-app).
+      if (daTungNoi) void get().batKip();
       // Re-join active thread room after reconnect. The server
       // now auto-joins every thread on connect, but we also
       // re-join explicitly here in case the active thread was
@@ -1706,3 +1800,30 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     }
   },
 }));
+
+/*
+ * Socket bị THAY (xem `onSocketReplaced` ở lib/socket.ts) ⇒ gắn lại listener
+ * lên đối tượng mới, và nếu nó đã nối sẵn thì phản chiếu trạng thái ngay.
+ * Chỉ khi cửa hàng đã khởi động (người dùng đã đăng nhập) — socket của người
+ * chưa đăng nhập không mang tin của ai.
+ */
+if (typeof window !== 'undefined') {
+  onSocketReplaced((s) => {
+    if (!useAuthStore.getState().isAuthenticated) return;
+    ganNgheSocket(s);
+    if (s.connected) useMessagingStore.getState().onConnectionChange(true);
+  });
+  /*
+   * Tab/app quay lại sau khi bị ẩn lâu ⇒ bắt kịp. Trình duyệt được phép bóp
+   * nghẹt timer và cả websocket của tab nền; máy ngủ thì socket chết hẳn mà
+   * phía client có khi chưa kịp nhận ra.
+   */
+  let anLuc = 0;
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') { anLuc = Date.now(); return; }
+    if (anLuc && Date.now() - anLuc > 30_000 && useMessagingStore.getState().threadsLoaded) {
+      void useMessagingStore.getState().batKip();
+    }
+    anLuc = 0;
+  });
+}

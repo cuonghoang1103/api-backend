@@ -18,6 +18,14 @@ import type { ApiClient } from '../api/client';
 let socket: Socket | null = null;
 let apiRef: ApiClient | null = null;
 
+/** Người nghe "socket vừa được THAY bằng đối tượng mới" — bộ nối messenger
+ *  của web đăng ký ở đây để gắn lại listener (xem `shims/web-socket-adapter.ts`). */
+const ngheSocketMoi = new Set<(s: Socket) => void>();
+export function khiCoSocketMoi(cb: (s: Socket) => void): () => void {
+  ngheSocketMoi.add(cb);
+  return () => { ngheSocketMoi.delete(cb); };
+}
+
 export function noiSocket(api: ApiClient, apiOrigin: string): Socket | null {
   if (socket?.connected) return socket;
   const token = api.layToken();
@@ -56,7 +64,18 @@ export function noiSocket(api: ApiClient, apiOrigin: string): Socket | null {
      * Phép kiểm chặn tái diễn: `realtime/socket.test.ts`.
      */
     path: '/socket.io',
-    auth: { token },
+    /*
+     * `auth` là HÀM, không phải object chụp sẵn (14/10/2026). socket.io-client
+     * gọi lại hàm này ở MỖI lượt bắt tay — kể cả lượt NỐI LẠI tự động.
+     *
+     * Bản trước chụp `{ token }` một lần lúc đăng nhập. JWT sống 24 giờ, app
+     * thì mở cả tuần: hễ socket rớt (máy chủ deploy, mạng chập, máy ngủ dậy)
+     * sau mốc đó là mọi lượt nối lại gửi token ĐÃ HẾT HẠN, máy chủ từ chối,
+     * `reconnection` quay vô tận — không tin nhắn mới, không "đang nhập",
+     * không cuộc gọi, cho tới khi người dùng thoát app. REST thì vẫn chạy
+     * (ApiClient tự làm mới token), nên nhìn như "tin nhắn mãi sau mới hiện".
+     */
+    auth: (cb: (data: object) => void) => cb({ token: api.layToken() ?? token }),
     // Để mặc định polling→nâng cấp websocket. Chặng hỏi-đáp tốn thêm một
     // vòng bắt tay, nhưng nó là đường lùi cho người ngồi sau proxy nuốt
     // header Upgrade — và máy chủ cũng mở cả hai (`messaging.socket.ts`).
@@ -65,10 +84,23 @@ export function noiSocket(api: ApiClient, apiOrigin: string): Socket | null {
     reconnectionDelayMax: 30000,
   });
 
+  let lanLamMoi = 0;
   socket.on('connect_error', (e) => {
     console.warn('[socket] không nối được:', e.message);
+    // Bị từ chối vì token ⇒ làm mới token; lượt nối lại kế tiếp tự lấy token
+    // mới qua hàm `auth` ở trên. Chặn 30 giây/lần để phiên chết thật không
+    // biến thành vòng gọi `/auth/refresh` liên tục.
+    if (!/unauthor|token|jwt|expired|session/i.test(String(e?.message ?? ''))) return;
+    const bayGio = Date.now();
+    if (bayGio - lanLamMoi < 30_000) return;
+    lanLamMoi = bayGio;
+    void apiRef?.lamMoiToken();
   });
 
+  const moi = socket;
+  for (const cb of Array.from(ngheSocketMoi)) {
+    try { cb(moi); } catch { /* một người nghe hỏng không được chặn người khác */ }
+  }
   return socket;
 }
 

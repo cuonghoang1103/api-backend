@@ -44,7 +44,10 @@ export interface BoLuyenTap {
   goiY: {
     trackSlug: string;
     trackName: string;
-    items: Array<{ slug: string; title: string; difficulty: DoKho }>;
+    /** Module của bài gợi ý đầu — nút "luyện tạm" mở đúng bài học đó (backend 14/10/2026; bản cũ không có). */
+    moduleSlug?: string | null;
+    moduleName?: string | null;
+    items: Array<{ slug: string; title: string; difficulty: DoKho; moduleSlug?: string }>;
   } | null;
 }
 

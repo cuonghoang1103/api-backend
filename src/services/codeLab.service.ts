@@ -1091,7 +1091,13 @@ export interface PracticeSet {
   goiY: {
     trackSlug: string;
     trackName: string;
-    items: Array<{ slug: string; title: string; difficulty: CodeDifficulty }>;
+    /**
+     * Module chứa bài gợi ý đầu tiên — nút "luyện tạm" của thẻ dưới video trỏ thẳng
+     * `/code-lab/<track>?bai=<moduleSlug>` (MỘT bài học), không về trang track chung.
+     */
+    moduleSlug: string | null;
+    moduleName: string | null;
+    items: Array<{ slug: string; title: string; difficulty: CodeDifficulty; moduleSlug: string }>;
   } | null;
 }
 
@@ -1180,11 +1186,17 @@ export async function getPracticeSet(
       if (fb && fb.status === 'PUBLISHED') {
         const easy = await prisma.codeExercise.findMany({
           where: { trackId: fb.id, status: 'PUBLISHED', difficulty: 'EASY' },
-          select: { slug: true, title: true, difficulty: true },
+          select: { slug: true, title: true, difficulty: true, module: { select: { slug: true, name: true } } },
           orderBy: [{ module: { sortOrder: 'asc' } }, { sortOrder: 'asc' }, { id: 'asc' }],
           take: 3,
         });
-        goiY = { trackSlug: fb.slug, trackName: fb.name, items: easy };
+        goiY = {
+          trackSlug: fb.slug,
+          trackName: fb.name,
+          moduleSlug: easy[0]?.module.slug ?? null,
+          moduleName: easy[0]?.module.name ?? null,
+          items: easy.map((e) => ({ slug: e.slug, title: e.title, difficulty: e.difficulty, moduleSlug: e.module.slug })),
+        };
       }
     }
   }

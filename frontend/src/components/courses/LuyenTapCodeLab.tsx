@@ -22,6 +22,7 @@ import {
   thamSoVe,
   type BoLuyenTap,
 } from '@/lib/codelabPractice';
+import { duongBaiHoc } from '@/lib/codelabToc';
 
 const NHAN_DO_KHO: Record<string, { vi: string; en: string; cls: string }> = {
   EASY: { vi: 'dễ', en: 'easy', cls: 'text-emerald-500' },
@@ -137,9 +138,18 @@ export default function LuyenTapCodeLab({
     );
   }
 
-  // Chưa có bộ (hoặc lỗi mạng): vẫn hiện, trỏ track gần nhất.
+  // Chưa có bộ (hoặc lỗi mạng): vẫn hiện. Nút chính mở MỘT bài học cụ thể — module
+  // chứa bài gợi ý đầu (`goiY.moduleSlug`) — chứ không về trang track chung; backend
+  // cũ chưa trả `moduleSlug` thì lùi về mục lục track gần nhất.
   const goiY = bo?.goiY ?? null;
   const ve = thamSoVe(duongVe, nhan);
+  const modGoiY = goiY ? (goiY.moduleSlug || goiY.items[0]?.moduleSlug || null) : null;
+  const duongGoiY = goiY
+    ? (modGoiY
+      ? duongBaiHoc(goiY.trackSlug, modGoiY, { ref: duongVe, reflabel: nhan.slice(0, 120) })
+      : `/code-lab/${encodeURIComponent(goiY.trackSlug)}?${ve}`)
+    : `/code-lab?${ve}`;
+  const nhanGoiY = goiY ? (modGoiY && goiY.moduleName ? goiY.moduleName : goiY.trackName) : 'Code Lab';
   return (
     <div className={khung}>
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -167,10 +177,11 @@ export default function LuyenTapCodeLab({
           )}
         </div>
         <Link
-          href={goiY ? `/code-lab/${encodeURIComponent(goiY.trackSlug)}?${ve}` : `/code-lab?${ve}`}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/50 px-3.5 py-2 text-sm font-semibold text-emerald-600 transition-colors hover:bg-emerald-500/10"
+          href={duongGoiY}
+          title={goiY ? `${goiY.trackName}${modGoiY && goiY.moduleName ? ` › ${goiY.moduleName}` : ''}` : undefined}
+          className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-xl border border-emerald-500/50 px-3.5 py-2 text-sm font-semibold text-emerald-600 transition-colors hover:bg-emerald-500/10"
         >
-          {goiY ? goiY.trackName : 'Code Lab'} <ArrowRight className="h-4 w-4" />
+          <span className="truncate">{nhanGoiY}</span> <ArrowRight className="h-4 w-4 shrink-0" />
         </Link>
       </div>
     </div>

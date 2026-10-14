@@ -643,7 +643,7 @@ grid-template-columns: 240px 1fr;             /* thanh bên cố định + nội
 <div class="lz-node"><span class="lz-k">Grid &amp; responsive</span><span class="lz-t">Two directions; mobile as the default</span><span class="lz-d">Grid for the page skeleton, flexbox inside it. Write the one-column layout first, then add <code>min-width</code> queries where the design breaks.</span></div>
 </div>
 <p class="note-ct"><strong>Do not memorise CSS properties.</strong> Nobody does. Learn the four models above — cascade, box, flex axis, grid tracks — and look the properties up. The models are what let you read someone else's stylesheet.</p>
-<div class="link-card"><a href="/code-lab/html-css">Practice on Code Lab → HTML &amp; CSS track</a></div></div>
+<div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-3-0-slides&amp;khoa=web-foundations">Practice on Code Lab → the Chapter 3 set, easy to hard</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 3: bộ chọn và cascade, box model và box-sizing, các trục Flexbox, CSS Grid, đơn vị tương đối và media query.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Bố cục CSS chỉ thật sự thông khi bạn tự tay đẩy từng pixel. Trên Code Lab, hãy tạo kiểu và dàn các phần tử thật — box model, Flexbox, Grid và responsive — với phản hồi tức thì.</p>
 <h3>Cả chương trong bốn ý</h3>
@@ -654,7 +654,7 @@ grid-template-columns: 240px 1fr;             /* thanh bên cố định + nội
 <div class="lz-node"><span class="lz-k">Grid &amp; responsive</span><span class="lz-t">Hai chiều; điện thoại làm mặc định</span><span class="lz-d">Grid cho bộ khung trang, flexbox bên trong nó. Hãy viết bố cục một cột trước, rồi thêm query <code>min-width</code> ở chỗ thiết kế vỡ.</span></div>
 </div>
 <p class="note-ct"><strong>Đừng học thuộc các thuộc tính CSS.</strong> Chẳng ai làm thế. Hãy học bốn mô hình ở trên — cascade, hộp, trục flex, rãnh grid — rồi tra thuộc tính khi cần. Chính các mô hình mới là thứ giúp bạn đọc được bảng kiểu của người khác.</p>
-<div class="link-card"><a href="/code-lab/html-css">Luyện tập ở Code Lab → track HTML &amp; CSS</a></div></div>
+<div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-3-0-slides&amp;khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 3, từ dễ đến khó</a></div></div>
 `,
       quiz: {
         timeLimitSeconds: 720,

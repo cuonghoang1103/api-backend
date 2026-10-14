@@ -94,7 +94,10 @@ export interface BoLuyenTapUi {
   goiY: {
     trackSlug: string;
     trackName: string;
-    items: Array<{ slug: string; title: string; difficulty: CodeDifficulty }>;
+    /** Module của bài gợi ý đầu (backend 14/10/2026 trở đi; bản cũ không có). */
+    moduleSlug?: string | null;
+    moduleName?: string | null;
+    items: Array<{ slug: string; title: string; difficulty: CodeDifficulty; moduleSlug?: string }>;
   } | null;
 }
 

@@ -667,7 +667,7 @@ ${gallery('wf-html', [
 <div class="lz-node"><span class="lz-k">Forms</span><span class="lz-t">name to submit, label to be usable</span><span class="lz-d">A field without <code>name</code> is not sent. A placeholder is not a label, and browser validation is not a security check.</span></div>
 </div>
 <p class="note-ct"><strong>A five-minute check that beats any quiz:</strong> open a page you wrote, put the mouse away, and Tab through it. If you cannot reach every control and see where you are, the HTML has something to fix.</p>
-<div class="link-card"><a href="/code-lab/html-css">Practice on Code Lab → HTML &amp; CSS track</a></div></div>
+<div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-2-0-slides&amp;khoa=web-foundations">Practice on Code Lab → the Chapter 2 set, easy to hard</a></div></div>
 <div class="ml-vi"><p class="lead">Mười câu cho Chương 2: giải phẫu phần tử và thuộc tính, tiêu đề và liên kết, cấu trúc ngữ nghĩa, biểu mẫu và input, bảng, và khả năng tiếp cận.</p>
 <p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Đọc HTML không giống viết HTML. Hãy sang Code Lab để tự tay dựng mã thật — chạy thử để xem kết quả, rồi tự đánh dấu đã giải (máy chấm tự động đang được làm).</p>
 <h3>Cả chương trong bốn ý</h3>
@@ -678,7 +678,7 @@ ${gallery('wf-html', [
 <div class="lz-node"><span class="lz-k">Form</span><span class="lz-t">name để gửi được, label để dùng được</span><span class="lz-d">Một trường thiếu <code>name</code> thì không được gửi. Placeholder không phải nhãn, và phần kiểm của trình duyệt không phải phép kiểm an toàn.</span></div>
 </div>
 <p class="note-ct"><strong>Một phép kiểm năm phút hơn mọi bài kiểm tra:</strong> mở một trang bạn tự viết, cất con chuột đi, rồi đi khắp trang bằng phím Tab. Nếu bạn không tới được mọi điều khiển và không thấy mình đang ở đâu thì HTML còn thứ cần sửa.</p>
-<div class="link-card"><a href="/code-lab/html-css">Luyện tập ở Code Lab → track HTML &amp; CSS</a></div></div>
+<div class="link-card"><a href="/code-lab/web-foundations-practice?bai=wf-2-0-slides&amp;khoa=web-foundations">Luyện tập ở Code Lab → bộ đề Chương 2, từ dễ đến khó</a></div></div>
 `,
       quiz: {
         timeLimitSeconds: 720,

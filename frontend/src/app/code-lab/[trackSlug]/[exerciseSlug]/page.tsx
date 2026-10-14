@@ -20,6 +20,9 @@
  * học): Trước/Sau chỉ chạy trong bộ luyện do `GET /code-lab/practice/:khoa/:bai`
  * trả về (đã sắp Dễ → Khó; bài slide N.0 gộp cả chương). Có `bai` mà không có
  * `khoa` ⇒ lùi về module có slug trùng `bai`. `?ref=&reflabel=` giữ nút quay về bài học.
+ * KHÔNG có `bai` (vào từ tìm kiếm, link cũ…) ⇒ Trước/Sau vẫn chỉ đi trong bộ đề của
+ * BÀI HỌC chứa đề này (module của nó), không chạy qua 160 đề của cả track (14/10/2026).
+ * Thanh trên là breadcrumb Code Lab › Track › Chương N › Bài học (tên module, không slug).
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -34,6 +37,7 @@ import type { CodeExercise, CodeBlock, CodeDifficulty } from '@/types/code-lab';
 import { useAuthStore } from '@/store/authStore';
 import { pickLang } from '@/lib/utils';
 import { carryQS, duongDangNhap, layBoLuyenTapUi, sortEasyToHard, type SolutionFlags } from '@/lib/codelabUi';
+import { duongBaiHoc, duongMucLuc, soChuongCuaModule, soChuongTuSlug, tenBoSo } from '@/lib/codelabToc';
 import { CourseBackLink } from '@/components/code-lab/CourseBackLink';
 import { Workspace, flavorFor } from '@/components/code-lab/Workspace';
 import { AiExplain } from '@/components/code-lab/AiExplain';
@@ -68,10 +72,10 @@ export default function ExerciseDetailPage() {
 
   const [ex, setEx] = useState<CodeExercise | null>(null);
   const [loading, setLoading] = useState(true);
-  // Thứ tự bài cho Trước/Sau: cả track (module theo thứ tự, trong module Dễ → Khó),
-  // hoặc chỉ bộ luyện `?bai=`.
+  // Thứ tự bài cho Trước/Sau: bộ đề của bài học (module chứa đề, Dễ → Khó), hoặc bộ
+  // luyện `?bai=` (endpoint bộ luyện; bài slide N.0 = cả chương ⇒ `boCaChuong`).
   const [siblings, setSiblings] = useState<Sibling[]>([]);
-  const [setName, setSetName] = useState<string | null>(null);
+  const [boCaChuong, setBoCaChuong] = useState(false);
 
   // Workspace state: EVERY file the learner has, not one. `name` is the path.
   const [files, setFiles] = useState<CodeBlock[]>([]);
@@ -151,16 +155,19 @@ export default function ExerciseDetailPage() {
     setPane('de');
   }, [params.exerciseSlug, isAuthed]);
 
-  // Danh sách bài cho Trước/Sau. Cùng thứ tự với trang track (trong module: Dễ → Khó).
+  // Bộ đề cho Trước/Sau = bài học chứa đề (`bai`, không có thì module của chính đề).
+  // Chờ đề tải xong mới biết module ⇒ `nhomSlug` rỗng thì chưa dựng.
+  const nhomSlug = bai || ex?.module?.slug || '';
   useEffect(() => {
+    if (!nhomSlug) return;
     let alive = true;
+    setBoCaChuong(false);
     const theoTrack = () => codeLabApi.getTrack(params.trackSlug)
       .then((res) => {
         if (!alive) return;
         let mods = [...(res.data.data.modules || [])].sort((a, b) => a.sortOrder - b.sortOrder);
-        const set = bai ? mods.find((m) => m.slug === bai) : undefined;
+        const set = mods.find((m) => m.slug === nhomSlug);
         if (set) mods = [set];
-        setSetName(set ? set.name : null);
         const flat: Sibling[] = [];
         for (const mod of mods) {
           for (const e of sortEasyToHard(mod.exercises || [])) {
@@ -169,14 +176,14 @@ export default function ExerciseDetailPage() {
         }
         setSiblings(flat);
       })
-      .catch(() => { if (alive) { setSiblings([]); setSetName(null); } });
+      .catch(() => { if (alive) setSiblings([]); });
     if (bai && khoa) {
       // Bộ luyện của bài học: đúng danh sách + thứ tự của backend.
       layBoLuyenTapUi(khoa, bai)
         .then((bo) => {
           if (!alive) return;
           if (!bo.items.length) { void theoTrack(); return; }
-          setSetName(reflabel || (bo.scope === 'chapter' ? 'cả chương' : bai));
+          setBoCaChuong(bo.scope === 'chapter');
           setSiblings(bo.items.map((it, i) => ({ slug: it.slug, title: it.title, difficulty: it.difficulty, sortOrder: i })));
         })
         .catch(() => { if (alive) void theoTrack(); });
@@ -184,7 +191,7 @@ export default function ExerciseDetailPage() {
       void theoTrack();
     }
     return () => { alive = false; };
-  }, [params.trackSlug, bai, khoa, reflabel]);
+  }, [params.trackSlug, nhomSlug, bai, khoa]);
 
   // Locate the current exercise in the ordered list → neighbours.
   const nav = useMemo(() => {
@@ -290,9 +297,18 @@ export default function ExerciseDetailPage() {
   const loginHref = duongDangNhap(`${pathname}${qsNow ? `?${qsNow}` : ''}`);
   const trackAccent = ex.track?.color || 'var(--accent-color)';
   const orderLabel = nav.idx >= 0 && nav.total > 0
-    ? `Bài ${nav.idx + 1}/${nav.total}${setName ? ' trong bộ luyện' : ''}`
+    ? `Đề ${nav.idx + 1}/${nav.total} của bài học`
     : null;
-  const backLabel = setName ? `Bộ luyện: ${pickLang(setName, lang)}` : (ex.track?.name || 'Lộ trình');
+  // Breadcrumb: Code Lab › Track › Chương N › Bài học. Tên bài học = tên MODULE (không
+  // phải slug "wf-3-3-flexbox"); bộ "cả chương" (bài slide N.0) không trùng module nào.
+  const trackSlugNow = params.trackSlug as string;
+  const soChuong = boCaChuong ? soChuongTuSlug(bai) : (ex.module ? soChuongCuaModule(ex.module, trackSlugNow) : null);
+  const tenBaiHoc = boCaChuong
+    ? (reflabel || (soChuong != null ? `Cả chương ${soChuong}` : 'Cả chương'))
+    : (ex.module?.name ? tenBoSo(pickLang(ex.module.name, lang)) : (reflabel || ex.track?.name || 'Bài học'));
+  const duongBaiHocNay = bai || !ex.module
+    ? `/code-lab/${trackSlugNow}${qs}`
+    : duongBaiHoc(trackSlugNow, ex.module.slug, { ref: searchParams.get('ref'), reflabel });
 
   const TABS: Array<{ id: LeftTab; label: string; icon: React.ReactNode }> = [
     { id: 'de', label: 'Đề', icon: <FileText size={14} /> },
@@ -316,9 +332,21 @@ export default function ExerciseDetailPage() {
       {/* ── Thanh mảnh ── */}
       <div className="cl-ws-top">
         <div className="cl-ws-backlink"><CourseBackLink /></div>
-        <Link href={`/code-lab/${params.trackSlug}${qs}`} className="inline-flex min-w-0 items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
-          <ArrowLeft size={15} className="shrink-0" /> <span className="truncate">{backLabel}</span>
-        </Link>
+        <nav className="cl-crumbs min-w-0 flex-1" aria-label="Vị trí">
+          <Link href="/code-lab" className="hidden sm:inline">Code Lab</Link>
+          <ChevronRight size={13} aria-hidden className="hidden shrink-0 sm:inline" />
+          <Link href={duongMucLuc(trackSlugNow)} className="hidden sm:inline">{ex.track?.name || 'Lộ trình'}</Link>
+          {soChuong != null && (
+            <>
+              <ChevronRight size={13} aria-hidden className="hidden shrink-0 sm:inline" />
+              <Link href={duongMucLuc(trackSlugNow, soChuong)} className="hidden sm:inline">Chương {soChuong}</Link>
+            </>
+          )}
+          <ChevronRight size={13} aria-hidden className="hidden shrink-0 sm:inline" />
+          <Link href={duongBaiHocNay} className="inline-flex min-w-0 items-center gap-1" title={`Bài học: ${tenBaiHoc}`} style={{ color: 'var(--text-primary)', fontWeight: 600 }}>
+            <ArrowLeft size={14} className="shrink-0 sm:hidden" /> <span className="truncate">{tenBaiHoc}</span>
+          </Link>
+        </nav>
         <div className="ml-auto flex shrink-0 items-center gap-1.5">
           {nav.prev ? (
             <Link href={`/code-lab/${params.trackSlug}/${nav.prev.slug}${qs}`} className="cl-navbtn" title={`Bài trước: ${nav.prev.title}`}>

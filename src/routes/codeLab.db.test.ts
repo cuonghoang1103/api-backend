@@ -303,6 +303,11 @@ describe('Code Lab đợt 1 (HTTP + DB thật)', { skip: !RUN ? 'không có CSDL
       assert.equal(r.data.goiY?.trackSlug, 'html-css');
       assert.ok(r.data.goiY.items.length <= 3);
       for (const it of r.data.goiY.items) assert.equal(it.difficulty, 'EASY');
+      // Nút "luyện tạm" trỏ MỘT bài học (module của bài gợi ý đầu), không về cả track.
+      if (r.data.goiY.items.length) {
+        assert.equal(r.data.goiY.moduleSlug, r.data.goiY.items[0].moduleSlug);
+        assert.ok(r.data.goiY.moduleSlug);
+      }
     }
   });
 

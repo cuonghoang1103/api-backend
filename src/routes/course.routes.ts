@@ -819,11 +819,17 @@ router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
     const skip = (Number(page) - 1) * Number(size);
 
     const where: Record<string, unknown> = { isPublished: true };
-    if (keyword) where.OR = [
-      { title: { contains: String(keyword), mode: 'insensitive' } },
-      { shortDescription: { contains: String(keyword), mode: 'insensitive' } },
-      { courseCode: { contains: String(keyword), mode: 'insensitive' } },
-    ];
+    if (keyword) {
+      const kw = String(keyword).trim();
+      // Gõ không dấu ("lap trinh") vẫn khớp khoá "Lập trình" qua slug (slug luôn là chữ Latin không dấu, nối bằng "-").
+      const kwSlug = kw.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      where.OR = [
+        { title: { contains: kw, mode: 'insensitive' } },
+        { shortDescription: { contains: kw, mode: 'insensitive' } },
+        { courseCode: { contains: kw, mode: 'insensitive' } },
+        ...(kwSlug ? [{ slug: { contains: kwSlug, mode: 'insensitive' } }] : []),
+      ];
+    }
     if (category) where.category = { slug: String(category) };
     if (level) where.level = String(level);
     // Academy (FPTU) courses live in the same table but are surfaced ONLY

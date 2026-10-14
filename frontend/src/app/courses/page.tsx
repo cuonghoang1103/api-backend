@@ -113,6 +113,19 @@ function CoursesContent() {
     fetchCourses();
   }, [fetchCourses, roadmapMode, lanTai]);
 
+  // Tìm NGAY khi gõ (14/10/2026 — chủ trang: "tìm kiếm không hoạt động"): trước đây chỉ áp từ khoá khi bấm Enter,
+  // gõ xong mà danh sách đứng im nên trông như hỏng. Chờ 350 ms sau phím cuối để không bắn một request mỗi ký tự.
+  useEffect(() => {
+    const k = keyword.trim();
+    if (k === tuKhoa) return;
+    const t = setTimeout(() => {
+      setPage(0);
+      if (k) setRoadmapMode(false);
+      setTuKhoa(k);
+    }, 350);
+    return () => clearTimeout(t);
+  }, [keyword, tuKhoa]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setPage(0);

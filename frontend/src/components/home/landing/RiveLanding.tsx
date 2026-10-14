@@ -357,6 +357,13 @@ export function LegacyRiveLanding() {
               <Link href="/register" className="transition-colors hover:text-[var(--text-primary)]">
                 Create an account
               </Link>
+              {/* Hồ sơ YouTube API (14/10/2026): trang chủ phải có liên kết chính sách. */}
+              <Link href="/chinh-sach-bao-mat" className="transition-colors hover:text-[var(--text-primary)]">
+                Privacy
+              </Link>
+              <Link href="/dieu-khoan-su-dung" className="transition-colors hover:text-[var(--text-primary)]">
+                Terms
+              </Link>
             </nav>
           </div>
         </footer>

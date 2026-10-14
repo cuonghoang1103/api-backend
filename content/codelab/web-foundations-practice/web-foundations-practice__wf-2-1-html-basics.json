@@ -1,0 +1,840 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-2-1-html-basics",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-2-1-html-basics"
+  },
+  "exercises": [
+    {
+      "title": "Bộ khung trang HTML5 đầu tiên",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "DOCTYPE",
+        "html lang",
+        "head và body",
+        "meta charset",
+        "meta viewport",
+        "title"
+      ],
+      "prerequisites": [
+        "mở được tệp .html bằng Live Server"
+      ],
+      "tags": [
+        "html",
+        "boilerplate",
+        "bo-khung"
+      ],
+      "problemHtml": "<p>Mọi trang web bắt đầu từ cùng một bộ khung. Trong bài 2.1 bạn đã thấy nó: dòng <code>&lt;!DOCTYPE html&gt;</code>, phần tử <code>&lt;html&gt;</code> bọc ngoài cùng, <code>&lt;head&gt;</code> chứa thông tin người xem không thấy, <code>&lt;body&gt;</code> chứa mọi thứ hiển thị. Hãy tự gõ lại bộ khung đó cho trang hồ sơ của bạn Minh — không chép, gõ từng dòng để tay nhớ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dòng đầu tiên là <code>&lt;!DOCTYPE html&gt;</code>.</li>\n  <li>Phần tử <code>&lt;html&gt;</code> có thuộc tính <code>lang=\"vi\"</code> (trang viết tiếng Việt).</li>\n  <li>Trong <code>&lt;head&gt;</code>: <code>&lt;meta charset=\"UTF-8\"&gt;</code>, thẻ viewport <code>&lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;</code> và <code>&lt;title&gt;</code> có chữ <strong>Hồ sơ của Minh</strong>.</li>\n  <li>Trong <code>&lt;body&gt;</code>: đúng một <code>&lt;h1&gt;</code> ghi <strong>Xin chào, mình là Minh</strong> và ít nhất một đoạn <code>&lt;p&gt;</code> giới thiệu.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Tệp index.html gần như trống (chỉ có chú thích hướng dẫn).",
+      "outputSpec": "Một tài liệu HTML hợp lệ: tab trình duyệt ghi \"Hồ sơ của Minh\", trang hiện một tiêu đề lớn và một đoạn văn, chữ có dấu hiển thị đúng.",
+      "constraints": "Không dùng CSS hay JavaScript — bài này chỉ có HTML.\nChỉ đúng một <h1> trên trang.\nThẻ <title> phải nằm trong <head>, không nằm trong <body>.",
+      "examplesJson": [
+        {
+          "input": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head> …meta, title… </head>\n  <body>\n    <h1>Xin chào, mình là Minh</h1>\n    <p>Mình đang học làm web.</p>\n  </body>\n</html>",
+          "output": "Tab trình duyệt: \"Hồ sơ của Minh\".\nTrang: dòng chữ to đậm \"Xin chào, mình là Minh\", bên dưới là đoạn \"Mình đang học làm web.\"",
+          "explanation": "Phần trong <head> không hiện trên trang — title hiện ở tab. Mọi thứ nhìn thấy nằm trong <body>."
+        }
+      ],
+      "hintsJson": [
+        "Bộ khung có hai tầng: <html> bọc <head> và <body>. Viết bốn thẻ khung đó trước (mở và đóng ngay), rồi mới điền vào bên trong.",
+        "Trong <head> cần ba dòng: <meta charset=\"UTF-8\">, <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">, rồi <title>Hồ sơ của Minh</title>. Trong <body> là <h1> rồi <p>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!-- Gõ bộ khung HTML5 ở đây.\n     1) DOCTYPE\n     2) <html lang=\"vi\"> bọc <head> và <body>\n     3) <head>: meta charset, meta viewport, title \"Hồ sơ của Minh\"\n     4) <body>: một <h1> và ít nhất một <p> -->\n<h1>Xin chào, mình là Minh</h1>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>                       <!-- 1. luôn là dòng đầu: \"đây là HTML hiện đại\" -->\n<html lang=\"vi\">                      <!-- 2. lang giúp trình đọc màn hình phát âm tiếng Việt -->\n  <head>                              <!-- 3. phần không hiện trên trang -->\n    <meta charset=\"UTF-8\">            <!-- gõ được ă, ơ, ư, đ mà không vỡ chữ -->\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">  <!-- vừa màn hình điện thoại -->\n    <title>Hồ sơ của Minh</title>     <!-- chữ hiện trên tab trình duyệt -->\n  </head>\n  <body>                              <!-- 4. mọi thứ người xem thấy -->\n    <h1>Xin chào, mình là Minh</h1>   <!-- đúng MỘT h1: tiêu đề của cả trang -->\n    <p>Mình là sinh viên năm nhất, đang học làm web từ con số 0.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lời giải đi đúng thứ tự trình duyệt đọc: <code>&lt;!DOCTYPE html&gt;</code> báo \"chế độ chuẩn\" (thiếu nó trình duyệt rơi vào <em>quirks mode</em> — tính kích thước hộp kiểu cũ những năm 1990, CSS ở Chương 3 sẽ chạy sai khó hiểu). <code>&lt;html lang=\"vi\"&gt;</code> là gốc của cây DOM; <code>lang</code> cho trình đọc màn hình chọn giọng tiếng Việt.</p>\n<p><code>&lt;head&gt;</code> gom thông tin \"về\" trang: <code>charset</code> phải nằm sớm (trong 1024 byte đầu) để trình duyệt giải mã đúng ngay từ đầu; viewport khiến điện thoại không giả vờ rộng 980px; <code>&lt;title&gt;</code> là chữ ở tab, ở dấu trang và ở kết quả Google. <code>&lt;body&gt;</code> chứa phần nhìn thấy, với đúng một <code>&lt;h1&gt;</code> làm tiêu đề trang.</p>\n<p>Máy chấm kiểm từng điều đó trên cây DOM đã dựng: có doctype, <code>html[lang=\"vi\"]</code>, meta charset là UTF-8, meta viewport có <code>width=device-width</code>, title đúng chữ, đúng một h1.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên <code>&lt;!DOCTYPE html&gt;</code> — trang vẫn hiện, nhưng trình duyệt chạy quirks mode, và lỗi chỉ lộ ra khi học box model.</li>\n  <li>Đặt <code>&lt;title&gt;</code> trong <code>&lt;body&gt;</code>: trình duyệt tự dời nó lên head nên trông như chạy được — nhưng đó là trình duyệt vá giùm, không phải bạn viết đúng.</li>\n  <li>Gõ <code>charset=\"UTF8\"</code> (thiếu gạch) hoặc để meta charset sau một đoạn dài — chữ tiếng Việt thành \"Xin chÃ o\".</li>\n  <li>Hai <code>&lt;h1&gt;</code> vì \"muốn chữ to\" — chữ to là việc của CSS, h1 là \"tiêu đề của trang\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.1 HTML là gì: phần tử, thẻ, thuộc tính.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Getting_started",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Có <!DOCTYPE html>",
+            "kiem": "doctype"
+          },
+          {
+            "moTa": "<html> có lang=\"vi\"",
+            "kiem": "thuoc-tinh",
+            "selector": "html",
+            "thuocTinh": "lang",
+            "giaTri": "vi"
+          },
+          {
+            "moTa": "Có <meta charset> là UTF-8 trong <head>",
+            "kiem": "thuoc-tinh",
+            "selector": "head meta[charset]",
+            "thuocTinh": "charset",
+            "khop": "^utf-8$"
+          },
+          {
+            "moTa": "Có meta viewport với width=device-width",
+            "kiem": "thuoc-tinh",
+            "selector": "head meta[name=\"viewport\"]",
+            "thuocTinh": "content",
+            "khop": "width\\s*=\\s*device-width"
+          },
+          {
+            "moTa": "<title> trong <head> ghi \"Hồ sơ của Minh\"",
+            "kiem": "text",
+            "selector": "head > title",
+            "giaTri": "Hồ sơ của Minh"
+          },
+          {
+            "moTa": "Viết <title> trong <head> ngay từ mã nguồn (không để trình duyệt dời giùm)",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "<head[^>]*>(?:(?!</head>)[\\s\\S])*<title>"
+          },
+          {
+            "moTa": "Đúng một <h1> với chữ \"Xin chào, mình là Minh\"",
+            "kiem": "text",
+            "selector": "body h1",
+            "giaTri": "Xin chào, mình là Minh"
+          },
+          {
+            "moTa": "Chỉ một <h1> trên trang",
+            "kiem": "so-luong",
+            "selector": "h1",
+            "giaTri": 1
+          },
+          {
+            "moTa": "Có ít nhất một đoạn <p> trong <body>",
+            "kiem": "so-luong",
+            "selector": "body p",
+            "min": 1
+          }
+        ]
+      }
+    },
+    {
+      "title": "Thuộc tính đầu tiên: cho liên kết một đích, cho ảnh một nguồn và lời mô tả",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "thuộc tính",
+        "href",
+        "src",
+        "alt",
+        "tên=\"giá trị\""
+      ],
+      "prerequisites": [
+        "bộ khung HTML5"
+      ],
+      "tags": [
+        "html",
+        "attribute",
+        "a",
+        "img"
+      ],
+      "problemHtml": "<p>Một thẻ <code>&lt;a&gt;</code> không có <code>href</code> chỉ là chữ thường — bấm không đi đâu cả. Một <code>&lt;img&gt;</code> không có <code>src</code> là cái khung trống. <strong>Thuộc tính</strong> (dạng <code>tên=\"giá trị\"</code> nằm trong thẻ mở) là thứ cấu hình phần tử. Trang dưới đây đã có đủ phần tử nhưng thiếu hết thuộc tính — hãy điền vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Liên kết \"Ghé thăm CuongThai\" trỏ tới <code>https://cuongthai.com</code> (thuộc tính <code>href</code>).</li>\n  <li>Liên kết \"Tài liệu MDN\" trỏ tới <code>https://developer.mozilla.org</code>.</li>\n  <li>Ảnh dùng tệp <code>meo.jpg</code> (thuộc tính <code>src</code>) và có <code>alt</code> mô tả ảnh bằng chữ (không để trống — đây là ảnh mang nội dung).</li>\n  <li>Ảnh có thêm <code>width=\"320\"</code> và <code>height=\"240\"</code> để trình duyệt giữ chỗ trước khi ảnh tải xong.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html có sẵn hai thẻ <a> và một thẻ <img> chưa có thuộc tính nào.",
+      "outputSpec": "Hai liên kết bấm được đúng địa chỉ; ảnh con mèo hiện ra (hoặc hiện chữ alt nếu tệp ảnh hỏng).",
+      "constraints": "Giá trị thuộc tính đặt trong dấu nháy kép: href=\"…\".\nKhông thêm phần tử mới, chỉ thêm thuộc tính.\n<img> là phần tử rỗng: không có thẻ đóng </img>.",
+      "examplesJson": [
+        {
+          "input": "<a>Ghé thăm CuongThai</a>",
+          "output": "Chữ \"Ghé thăm CuongThai\" màu đen, bấm không có gì xảy ra.",
+          "explanation": "Thiếu href nên trình duyệt không coi đây là liên kết thật (không gạch chân, không đổi con trỏ)."
+        },
+        {
+          "input": "<a href=\"https://cuongthai.com\">Ghé thăm CuongThai</a>",
+          "output": "Chữ xanh gạch chân, bấm vào mở cuongthai.com.",
+          "explanation": "Cùng phần tử, chỉ thêm một thuộc tính — hành vi thay đổi hoàn toàn."
+        }
+      ],
+      "hintsJson": [
+        "Thuộc tính luôn nằm TRONG thẻ mở, sau tên thẻ và một dấu cách: <a href=\"…\">, không bao giờ ở thẻ đóng.",
+        "Ảnh cần bốn thuộc tính: <img src=\"meo.jpg\" alt=\"Một con mèo mướp đang ngủ trên bàn phím\" width=\"320\" height=\"240\">."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Góc nhỏ của Minh</title>\n  </head>\n  <body>\n    <h1>Góc nhỏ của Minh</h1>\n    <!-- Thêm thuộc tính cho hai liên kết và tấm ảnh dưới đây -->\n    <p><a>Ghé thăm CuongThai</a></p>\n    <p><a>Tài liệu MDN</a></p>\n    <img>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Góc nhỏ của Minh</title>\n  </head>\n  <body>\n    <h1>Góc nhỏ của Minh</h1>\n    <!-- href = liên kết đi đâu (URL tuyệt đối vì là site khác) -->\n    <p><a href=\"https://cuongthai.com\">Ghé thăm CuongThai</a></p>\n    <p><a href=\"https://developer.mozilla.org\">Tài liệu MDN</a></p>\n    <!-- src = nạp tệp nào; alt = ảnh NÓI GÌ (trình đọc màn hình đọc to, hiện khi ảnh hỏng);\n         width/height = giữ chỗ để chữ phía dưới không nhảy khi ảnh đang tải -->\n    <img src=\"meo.jpg\" alt=\"Một con mèo mướp đang ngủ trên bàn phím\" width=\"320\" height=\"240\">\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi thuộc tính trả lời một câu hỏi: <code>href</code> — \"bấm vào thì đi đâu?\", <code>src</code> — \"nạp tệp nào?\" (mỗi src là một request mạng nữa), <code>alt</code> — \"ảnh nói gì?\". Thiếu <code>href</code> thì <code>&lt;a&gt;</code> không tới được bằng phím Tab và không bấm được; thiếu <code>src</code> thì không có gì để vẽ.</p>\n<p><code>alt</code> không phải điểm cộng: người khiếm thị \"thấy\" ảnh chỉ qua alt, và nếu thiếu hẳn thuộc tính, nhiều trình đọc sẽ đọc luôn tên tệp. <code>width</code>/<code>height</code> cho trình duyệt biết khung ảnh trước khi ảnh về, nên đoạn chữ bên dưới không bị đẩy xuống giữa chừng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết thuộc tính vào thẻ đóng: <code>&lt;/a href=\"…\"&gt;</code> — trình duyệt bỏ qua, liên kết vẫn chết.</li>\n  <li>Quên dấu nháy đóng: <code>&lt;a href=\"https://cuongthai.com&gt;</code> — phần còn lại của dòng bị nuốt vào giá trị href.</li>\n  <li>Viết <code>alt=\"image\"</code> hoặc <code>alt=\"meo.jpg\"</code> — có alt nhưng chẳng mô tả gì; hãy viết điều tấm ảnh thật sự cho thấy.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.1 HTML là gì: phần tử, thẻ, thuộc tính.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Liên kết thứ nhất trỏ tới https://cuongthai.com",
+            "kiem": "thuoc-tinh",
+            "selector": "a",
+            "thuocTinh": "href",
+            "giaTri": "https://cuongthai.com",
+            "tatCa": false
+          },
+          {
+            "moTa": "Liên kết thứ hai trỏ tới https://developer.mozilla.org",
+            "kiem": "thuoc-tinh",
+            "selector": "a",
+            "thuocTinh": "href",
+            "khop": "^https://developer\\.mozilla\\.org/?$",
+            "tatCa": false
+          },
+          {
+            "moTa": "Mọi <a> đều có href",
+            "kiem": "khong-ton-tai",
+            "selector": "a:not([href])"
+          },
+          {
+            "moTa": "Ảnh có src=\"meo.jpg\"",
+            "kiem": "thuoc-tinh",
+            "selector": "img",
+            "thuocTinh": "src",
+            "giaTri": "meo.jpg"
+          },
+          {
+            "moTa": "Ảnh có alt mô tả (ít nhất 10 ký tự, không phải tên tệp)",
+            "kiem": "thuoc-tinh",
+            "selector": "img",
+            "thuocTinh": "alt",
+            "khop": "^(?!.*\\.(jpe?g|png|gif|webp)$).{10,}$"
+          },
+          {
+            "moTa": "Ảnh có width=\"320\" và height=\"240\"",
+            "kiem": "so-luong",
+            "selector": "img[width=\"320\"][height=\"240\"]",
+            "giaTri": 1
+          },
+          {
+            "moTa": "Không viết thẻ đóng </img>",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "</img>",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Phần tử rỗng: ngắt dòng địa chỉ bằng <br> mà không đóng thẻ",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "phần tử rỗng (void)",
+        "br",
+        "img",
+        "hr",
+        "phần tử vs thẻ"
+      ],
+      "prerequisites": [
+        "thẻ mở / thẻ đóng"
+      ],
+      "tags": [
+        "html",
+        "void-elements",
+        "br"
+      ],
+      "problemHtml": "<p>Bài 2.1 nói: hầu hết phần tử có thẻ mở + nội dung + thẻ đóng, nhưng <strong>phần tử rỗng</strong> như <code>&lt;img&gt;</code> và <code>&lt;br&gt;</code> thì không có nội dung và không có thẻ đóng. Một tiệm phở cần chân trang ghi địa chỉ ba dòng. Người viết trước đã tách thành ba đoạn <code>&lt;p&gt;</code> (giữa các dòng hở to) và còn viết <code>&lt;/br&gt;</code>. Hãy viết lại cho đúng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Địa chỉ nằm trong <strong>một</strong> đoạn <code>&lt;p class=\"dia-chi\"&gt;</code>, ba dòng ngắt bằng hai thẻ <code>&lt;br&gt;</code>.</li>\n  <li>Không có <code>&lt;/br&gt;</code> hay <code>&lt;/img&gt;</code> nào trong mã.</li>\n  <li>Phía trên địa chỉ có một đường kẻ ngang <code>&lt;hr&gt;</code> (cũng là phần tử rỗng) ngăn với phần thực đơn.</li>\n  <li>Giữ nguyên ảnh logo, thêm <code>alt=\"Logo Phở Hà Nội\"</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html: một trang thực đơn ngắn, cuối trang có địa chỉ viết thành ba <p>.",
+      "outputSpec": "Cuối trang: một đường kẻ ngang, dưới là khối địa chỉ ba dòng sát nhau (không hở như ba đoạn văn).",
+      "constraints": "Không dùng CSS để ép khoảng cách — chỉ sửa HTML.\nChỉ dùng <br> cho chỗ ngắt dòng có nghĩa (địa chỉ, thơ), không dùng để tạo khoảng trống.",
+      "examplesJson": [
+        {
+          "input": "<p class=\"dia-chi\">\n  Phở Hà Nội<br>\n  12 Hàng Bạc, Hoàn Kiếm<br>\n  Mở cửa 6:00 – 22:00\n</p>",
+          "output": "Phở Hà Nội\n12 Hàng Bạc, Hoàn Kiếm\nMở cửa 6:00 – 22:00\n(ba dòng sát nhau trong cùng một đoạn)",
+          "explanation": "<br> chỉ ngắt dòng bên trong đoạn; ba <p> là ba đoạn văn riêng nên có khoảng hở giữa chúng."
+        }
+      ],
+      "hintsJson": [
+        "Gộp ba <p> thành một <p class=\"dia-chi\">, đặt <br> ở cuối dòng thứ nhất và dòng thứ hai.",
+        "Phần tử rỗng chỉ có thẻ mở: viết <br>, <hr>, <img …> — tuyệt đối không có </br>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Phở Hà Nội</title>\n  </head>\n  <body>\n    <img src=\"logo-pho.png\"></img>\n    <h1>Thực đơn hôm nay</h1>\n    <p>Phở bò tái — 55.000đ</p>\n    <p>Phở gà — 50.000đ</p>\n    <!-- Sửa phần địa chỉ dưới đây -->\n    <p>Phở Hà Nội</br></p>\n    <p>12 Hàng Bạc, Hoàn Kiếm</br></p>\n    <p>Mở cửa 6:00 – 22:00</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Phở Hà Nội</title>\n  </head>\n  <body>\n    <!-- img là phần tử rỗng: không có </img>; alt mô tả logo -->\n    <img src=\"logo-pho.png\" alt=\"Logo Phở Hà Nội\">\n    <h1>Thực đơn hôm nay</h1>\n    <p>Phở bò tái — 55.000đ</p>\n    <p>Phở gà — 50.000đ</p>\n    <hr>  <!-- đường kẻ ngang: rỗng, không đóng -->\n    <!-- MỘT đoạn, ba dòng: br chỉ ngắt dòng bên trong đoạn -->\n    <p class=\"dia-chi\">\n      Phở Hà Nội<br>\n      12 Hàng Bạc, Hoàn Kiếm<br>\n      Mở cửa 6:00 – 22:00\n    </p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Phần tử rỗng không có chỗ để chứa nội dung, nên đặc tả HTML không cho nó thẻ đóng. Trình duyệt gặp <code>&lt;/br&gt;</code> sẽ <em>đoán</em> bạn muốn một <code>&lt;br&gt;</code> nữa (một trong những chỗ \"âm thầm vá lỗi\" ở bài 2.1) — nên trang của người viết trước có ngắt dòng thừa mà nhìn mã không hiểu vì sao. <code>&lt;/img&gt;</code> thì bị bỏ qua lặng lẽ.</p>\n<p>Ba dòng địa chỉ là <em>một</em> khối thông tin, nên một <code>&lt;p&gt;</code> với hai <code>&lt;br&gt;</code> đúng ý nghĩa hơn ba đoạn văn. <code>&lt;hr&gt;</code> mang nghĩa \"chuyển chủ đề\" — vừa đúng chỗ giữa thực đơn và địa chỉ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết <code>&lt;br/&gt;</code> rồi lo là sai — dấu <code>/</code> trước <code>&gt;</code> được phép (di sản XHTML) và bị bỏ qua; cái sai là <code>&lt;/br&gt;</code>.</li>\n  <li>Dùng năm <code>&lt;br&gt;</code> liên tiếp để tạo khoảng trống — đó là việc của <code>margin</code> trong CSS (bài 3.2).</li>\n  <li>Gắn class vào <code>&lt;br&gt;</code> hay cố đặt chữ giữa <code>&lt;br&gt;</code> và <code>&lt;/br&gt;</code> — br không chứa gì cả.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.1 HTML là gì: phần tử, thẻ, thuộc tính.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Glossary/Void_element",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Có đúng một đoạn p.dia-chi",
+            "kiem": "so-luong",
+            "selector": "p.dia-chi",
+            "giaTri": 1
+          },
+          {
+            "moTa": "p.dia-chi chứa đúng hai <br>",
+            "kiem": "so-luong",
+            "selector": "p.dia-chi br",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Địa chỉ đủ ba dòng chữ",
+            "kiem": "text",
+            "selector": "p.dia-chi",
+            "khop": "Phở Hà Nội.*12 Hàng Bạc, Hoàn Kiếm.*Mở cửa 6:00"
+          },
+          {
+            "moTa": "Không có </br> trong mã",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "</br\\s*>",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Không có </img> trong mã",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "</img\\s*>",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Có đường kẻ <hr> đứng trước khối địa chỉ",
+            "kiem": "thu-tu",
+            "cacSelector": [
+              "hr",
+              "p.dia-chi"
+            ]
+          },
+          {
+            "moTa": "Logo có alt=\"Logo Phở Hà Nội\"",
+            "kiem": "thuoc-tinh",
+            "selector": "img[src=\"logo-pho.png\"]",
+            "thuocTinh": "alt",
+            "giaTri": "Logo Phở Hà Nội"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Cứu trang tiếng Việt bị vỡ chữ và tí hon trên điện thoại",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "meta charset",
+        "meta viewport",
+        "html lang",
+        "head vs body",
+        "quirks mode"
+      ],
+      "prerequisites": [
+        "bộ khung HTML5"
+      ],
+      "tags": [
+        "html",
+        "debug",
+        "charset",
+        "viewport"
+      ],
+      "problemHtml": "<p>Một bạn gửi trang \"Câu lạc bộ Lập trình\" kèm ba lời phàn nàn: <em>(1) mở trên điện thoại chữ bé như con kiến, phải phóng to mới đọc được; (2) trình đọc màn hình đọc tiếng Việt bằng giọng Anh nghe rất buồn cười; (3) tab trình duyệt không có tên.</em> Ngoài ra trang không có dòng DOCTYPE. Mỗi lời phàn nàn ứng với đúng một dòng trong bộ khung ở bài 2.1. Hãy chẩn đoán và sửa — không viết lại từ đầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thêm <code>&lt;!DOCTYPE html&gt;</code> ở dòng đầu (thoát quirks mode).</li>\n  <li>Sửa <code>lang</code> của <code>&lt;html&gt;</code> cho khớp ngôn ngữ của trang (lời phàn nàn 2).</li>\n  <li>Thêm thẻ viewport để trang vừa màn hình điện thoại (lời phàn nàn 1).</li>\n  <li>Dời <code>&lt;title&gt;</code> đang nằm lạc trong <code>&lt;body&gt;</code> về <code>&lt;head&gt;</code> (lời phàn nàn 3), giữ nguyên chữ \"Câu lạc bộ Lập trình\".</li>\n  <li>Đổi meta charset đang khai sai <code>ISO-8859-1</code> thành <code>UTF-8</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html có bộ khung sai năm chỗ (thiếu DOCTYPE, lang=\"en\", thiếu viewport, title lạc trong body, charset ISO-8859-1).",
+      "outputSpec": "Trang y hệt về nội dung, nhưng: tab có tên, đọc được ngay trên điện thoại, trình đọc màn hình dùng giọng Việt, chữ có dấu không vỡ.",
+      "constraints": "Không đổi nội dung nhìn thấy (h1, các đoạn văn giữ nguyên).\nChỉ một <title>, nằm trong <head>.\nmeta charset là phần tử đầu tiên trong <head>.",
+      "examplesJson": [
+        {
+          "input": "<html lang=\"en\">\n  <head><meta charset=\"ISO-8859-1\"></head>\n  <body><title>Câu lạc bộ Lập trình</title> …",
+          "output": "Tab trình duyệt: \"index.html\" (hoặc trống)\nChữ \"Câu lạc bộ\" có thể hiện thành \"CÃ¢u láº¡c bá»™\"\nTrình đọc màn hình: đọc \"Cau lac bo\" theo giọng Anh",
+          "explanation": "Mỗi triệu chứng là một dòng khai sai trong head — không cần CSS hay JS để sửa."
+        }
+      ],
+      "hintsJson": [
+        "Ghép từng lời phàn nàn với một dòng: chữ bé trên điện thoại → viewport; giọng đọc sai → lang; tab không tên → title; chữ vỡ dấu → charset.",
+        "Sau khi sửa, <head> nên có đúng thứ tự: <meta charset=\"UTF-8\">, <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">, <title>Câu lạc bộ Lập trình</title>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<html lang=\"en\">\n  <head>\n    <meta charset=\"ISO-8859-1\">\n  </head>\n  <body>\n    <title>Câu lạc bộ Lập trình</title>\n    <h1>Câu lạc bộ Lập trình F-Code</h1>\n    <p>Sinh hoạt tối thứ Năm hằng tuần tại phòng 204.</p>\n    <p>Năm nay câu lạc bộ học HTML, CSS và JavaScript từ con số 0.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>                       <!-- (0) thoát quirks mode -->\n<html lang=\"vi\">                      <!-- (2) giọng đọc tiếng Việt, đúng ngôn ngữ của nội dung -->\n  <head>\n    <meta charset=\"UTF-8\">            <!-- (4) đứng ĐẦU head: giải mã đúng chữ có dấu ngay từ byte đầu -->\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">  <!-- (1) vừa màn hình điện thoại -->\n    <title>Câu lạc bộ Lập trình</title>  <!-- (3) title thuộc về head -->\n  </head>\n  <body>\n    <h1>Câu lạc bộ Lập trình F-Code</h1>\n    <p>Sinh hoạt tối thứ Năm hằng tuần tại phòng 204.</p>\n    <p>Năm nay câu lạc bộ học HTML, CSS và JavaScript từ con số 0.</p>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bài này dạy thói quen chẩn đoán: <strong>triệu chứng → dòng khai báo</strong>. Điện thoại không có viewport sẽ giả vờ rộng 980px rồi thu nhỏ cả trang — chữ bé là hậu quả. <code>lang=\"en\"</code> nói với trình đọc màn hình \"đây là tiếng Anh\", nên nó đọc chữ Việt bằng luật phát âm tiếng Anh. <code>&lt;title&gt;</code> trong body: trình duyệt hiện đại thường dời nó lên head khi dựng DOM, nhưng đó là cơ chế vá lỗi — bạn đừng dựa vào nó.</p>\n<p>Charset phải khớp với cách tệp được lưu: VS Code lưu UTF-8, nên khai <code>ISO-8859-1</code> là bảo trình duyệt đọc mỗi byte thành một ký tự Latin — chữ \"â\" (2 byte UTF-8) thành hai ký tự rác. Meta charset đứng đầu head vì trình duyệt chỉ dò nó trong 1024 byte đầu tiên.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thêm title mới trong head nhưng quên xoá title cũ trong body — trang có hai title.</li>\n  <li>Viết <code>lang=\"vn\"</code> — mã ngôn ngữ tiếng Việt là <code>vi</code> (vn là mã quốc gia).</li>\n  <li>Viết viewport thành <code>content=\"width=device-width; initial-scale=1\"</code> với dấu chấm phẩy — dấu phân cách đúng là dấu phẩy.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.1 HTML là gì: phần tử, thẻ, thuộc tính.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Có <!DOCTYPE html>",
+            "kiem": "doctype"
+          },
+          {
+            "moTa": "<html lang=\"vi\">",
+            "kiem": "thuoc-tinh",
+            "selector": "html",
+            "thuocTinh": "lang",
+            "giaTri": "vi"
+          },
+          {
+            "moTa": "meta charset là UTF-8",
+            "kiem": "thuoc-tinh",
+            "selector": "meta[charset]",
+            "thuocTinh": "charset",
+            "khop": "^utf-8$"
+          },
+          {
+            "moTa": "meta charset là phần tử đầu tiên trong <head>",
+            "kiem": "ton-tai",
+            "selector": "head > meta[charset]:first-of-type:first-child"
+          },
+          {
+            "moTa": "Có meta viewport width=device-width, initial-scale=1",
+            "kiem": "thuoc-tinh",
+            "selector": "meta[name=\"viewport\"]",
+            "thuocTinh": "content",
+            "khop": "^width=device-width,\\s*initial-scale=1(\\.0)?$"
+          },
+          {
+            "moTa": "Đúng một <title> trong mã nguồn",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "<title>[\\s\\S]*<title>",
+            "phuDinh": true
+          },
+          {
+            "moTa": "<title> viết trong <head> (không lạc trong body)",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "<body[^>]*>[\\s\\S]*<title>",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Title ghi \"Câu lạc bộ Lập trình\"",
+            "kiem": "text",
+            "selector": "title",
+            "giaTri": "Câu lạc bộ Lập trình"
+          },
+          {
+            "moTa": "Nội dung giữ nguyên: h1 và hai đoạn văn",
+            "kiem": "so-luong",
+            "selector": "body > p",
+            "giaTri": 2
+          }
+        ]
+      }
+    },
+    {
+      "title": "Dựng đúng cây DOM theo sơ đồ cho trước",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "cây DOM",
+        "lồng nhau",
+        "cha / con trực tiếp",
+        "đóng thẻ theo thứ tự ngược"
+      ],
+      "prerequisites": [
+        "phần tử và thuộc tính"
+      ],
+      "tags": [
+        "html",
+        "dom",
+        "nesting"
+      ],
+      "problemHtml": "<p>Bài 2.1 nói: trình duyệt không giữ tệp của bạn, nó dựng một <strong>cây DOM</strong>, và CSS/JS làm việc trên cây đó. Bài này đi ngược lại: cho sẵn cây, bạn viết HTML sinh ra đúng cây ấy. Đọc kỹ ai là con trực tiếp của ai — <code>&lt;strong&gt;</code> nằm trong đoạn thứ hai, không nằm cạnh nó.</p>\n<pre><code>body\n├── h1                 \"Nhật ký học web\"\n├── p                  \"Hôm nay mình học về cây DOM.\"\n├── p\n│   ├── (chữ)          \"Tài liệu hay nhất là \"\n│   ├── a  href=\"https://developer.mozilla.org\"   \"MDN\"\n│   ├── (chữ)          \", nhớ đọc mục \"\n│   └── strong         \"Introduction to HTML\"\n└── div  class=\"ghi-chu\"\n    ├── p              \"Mẹo: mở DevTools → Elements để soi cây.\"\n    └── img  src=\"devtools.png\"  alt=\"Tab Elements của DevTools\"</code></pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>&lt;body&gt;</code> có đúng bốn con trực tiếp theo thứ tự: <code>h1</code>, <code>p</code>, <code>p</code>, <code>div.ghi-chu</code>.</li>\n  <li>Đoạn thứ hai chứa liên kết <code>&lt;a&gt;</code> tới MDN <em>và</em> <code>&lt;strong&gt;</code> — cả hai là con trực tiếp của đoạn đó.</li>\n  <li><code>div.ghi-chu</code> chứa một <code>&lt;p&gt;</code> và một <code>&lt;img&gt;</code> có đủ <code>src</code> và <code>alt</code> như sơ đồ.</li>\n  <li>Chữ trong từng phần tử đúng như sơ đồ.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html có bộ khung trống và sơ đồ cây dán trong chú thích.",
+      "outputSpec": "Tab Elements của DevTools hiện đúng cây trong sơ đồ.",
+      "constraints": "Không thêm phần tử bọc nào khác vào <body> (không div bọc ngoài cùng).\nĐóng thẻ theo thứ tự ngược: mở sau, đóng trước.",
+      "examplesJson": [
+        {
+          "input": "<p>Tài liệu hay nhất là <a href=\"https://developer.mozilla.org\">MDN</a>, nhớ đọc mục <strong>Introduction to HTML</strong></p>",
+          "output": "Một đoạn văn: \"Tài liệu hay nhất là MDN, nhớ đọc mục Introduction to HTML\" — chữ MDN là liên kết, cụm cuối in đậm.",
+          "explanation": "a và strong là CON của p (nằm giữa <p> và </p>), xen giữa các mẩu chữ — đúng nhánh thứ ba của sơ đồ."
+        }
+      ],
+      "hintsJson": [
+        "Viết theo từng tầng: bốn con của body trước (mở + đóng ngay), rồi mới điền con của đoạn thứ hai và của div.ghi-chu.",
+        "Mẩu \"(chữ)\" trong sơ đồ là nút văn bản, không phải thẻ — bạn chỉ việc gõ chữ đó vào giữa các thẻ a và strong."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Nhật ký học web</title>\n  </head>\n  <body>\n    <!-- Viết HTML sinh ra đúng cây trong đề bài.\n         Gợi ý: body có 4 con trực tiếp: h1, p, p, div.ghi-chu -->\n    <h1>Nhật ký học web</h1>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Nhật ký học web</title>\n  </head>\n  <body>\n    <!-- con 1 của body -->\n    <h1>Nhật ký học web</h1>\n    <!-- con 2 -->\n    <p>Hôm nay mình học về cây DOM.</p>\n    <!-- con 3: một p có 4 con — chữ, a, chữ, strong -->\n    <p>Tài liệu hay nhất là <a href=\"https://developer.mozilla.org\">MDN</a>, nhớ đọc mục <strong>Introduction to HTML</strong></p>\n    <!-- con 4: div bọc một p và một img (img rỗng, không đóng) -->\n    <div class=\"ghi-chu\">\n      <p>Mẹo: mở DevTools → Elements để soi cây.</p>\n      <img src=\"devtools.png\" alt=\"Tab Elements của DevTools\">\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thụt lề trong lời giải phản chiếu đúng độ sâu trong cây: mỗi lần thụt vào là xuống một tầng. Đó là lý do lập trình viên giữ thụt lề cẩn thận — nhìn mã là thấy cây.</p>\n<p>Trong đoạn thứ ba, chữ và thẻ xen kẽ nhau: DOM gọi đó là các <em>nút văn bản</em> nằm cạnh các <em>nút phần tử</em>. Máy chấm dùng bộ chọn con trực tiếp <code>body &gt; p:nth-of-type(2) &gt; a</code> — nếu bạn lỡ đóng <code>&lt;/p&gt;</code> trước <code>&lt;strong&gt;</code>, strong thành con của body và kiểm đó đỏ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Bọc mọi thứ trong một <code>&lt;div&gt;</code> cho \"gọn\" — body khi đó chỉ còn một con, sai sơ đồ.</li>\n  <li>Đặt <code>&lt;strong&gt;</code> sau <code>&lt;/p&gt;</code> — nhìn trên trang gần như giống, nhưng cây khác: strong không còn thuộc đoạn văn.</li>\n  <li>Gõ class thành <code>class=\"ghi chu\"</code> (dấu cách) — đó là HAI class \"ghi\" và \"chu\", bộ chọn <code>.ghi-chu</code> không khớp.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.1 HTML là gì: phần tử, thẻ, thuộc tính.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "body có đúng 4 con trực tiếp",
+            "kiem": "so-luong",
+            "selector": "body > *",
+            "giaTri": 4
+          },
+          {
+            "moTa": "Thứ tự con của body: h1 → p → p → div.ghi-chu",
+            "kiem": "thu-tu",
+            "cacSelector": [
+              "body > h1",
+              "body > p:nth-of-type(1)",
+              "body > p:nth-of-type(2)",
+              "body > div.ghi-chu"
+            ]
+          },
+          {
+            "moTa": "h1 ghi \"Nhật ký học web\"",
+            "kiem": "text",
+            "selector": "body > h1",
+            "giaTri": "Nhật ký học web"
+          },
+          {
+            "moTa": "Đoạn 1 ghi \"Hôm nay mình học về cây DOM.\"",
+            "kiem": "text",
+            "selector": "body > p:nth-of-type(1)",
+            "giaTri": "Hôm nay mình học về cây DOM."
+          },
+          {
+            "moTa": "Liên kết MDN là con trực tiếp của đoạn 2",
+            "kiem": "thuoc-tinh",
+            "selector": "body > p:nth-of-type(2) > a",
+            "thuocTinh": "href",
+            "khop": "^https://developer\\.mozilla\\.org/?$"
+          },
+          {
+            "moTa": "<strong> \"Introduction to HTML\" là con trực tiếp của đoạn 2",
+            "kiem": "text",
+            "selector": "body > p:nth-of-type(2) > strong",
+            "giaTri": "Introduction to HTML"
+          },
+          {
+            "moTa": "Đoạn 2 đọc liền mạch đúng câu",
+            "kiem": "text",
+            "selector": "body > p:nth-of-type(2)",
+            "giaTri": "Tài liệu hay nhất là MDN, nhớ đọc mục Introduction to HTML"
+          },
+          {
+            "moTa": "div.ghi-chu chứa một p và một img",
+            "kiem": "so-luong",
+            "selector": "div.ghi-chu > p, div.ghi-chu > img",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Ảnh có src=\"devtools.png\" và alt đúng sơ đồ",
+            "kiem": "thuoc-tinh",
+            "selector": "div.ghi-chu > img[src=\"devtools.png\"]",
+            "thuocTinh": "alt",
+            "giaTri": "Tab Elements của DevTools"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Sửa 5 lỗi lồng thẻ mà trình duyệt đã lặng lẽ vá giùm",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "lồng nhau",
+        "thẻ chưa đóng",
+        "phần tử rỗng",
+        "trình duyệt tự vá lỗi",
+        "block trong inline"
+      ],
+      "prerequisites": [
+        "dựng cây DOM"
+      ],
+      "tags": [
+        "html",
+        "debug",
+        "nesting",
+        "validator"
+      ],
+      "problemHtml": "<p>HTML không bao giờ báo lỗi — trình duyệt tự vá rồi hiện ra <em>một</em> trang, chỉ là không phải trang bạn viết. Trang giới thiệu dưới đây có đúng <strong>năm</strong> lỗi lồng thẻ kinh điển. Trên màn hình nó trông \"gần đúng\", nên rất dễ bỏ qua; nhưng chỉ cần thêm CSS ở chương sau là vỡ. Tìm và sửa cả năm.</p>\n<p>Năm lỗi thuộc năm loại: (1) đóng chéo thẻ, (2) quên đóng liên kết, (3) đóng nhầm cấp tiêu đề, (4) <code>&lt;div&gt;</code> nằm trong <code>&lt;p&gt;</code>, (5) đóng một phần tử rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa chỗ đóng chéo <code>&lt;strong&gt;&lt;em&gt;…&lt;/strong&gt;&lt;/em&gt;</code> thành lồng đúng: mở sau, đóng trước.</li>\n  <li>Đóng liên kết MDN để chỉ chữ \"Tài liệu MDN\" là liên kết.</li>\n  <li>Thẻ <code>&lt;h2&gt;</code> phải đóng bằng <code>&lt;/h2&gt;</code>.</li>\n  <li>Đưa <code>&lt;div class=\"the\"&gt;</code> ra khỏi đoạn <code>&lt;p&gt;</code> (p chỉ được chứa nội dung dòng; giữ div ngay sau đoạn văn).</li>\n  <li>Bỏ <code>&lt;/img&gt;</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html có 5 lỗi lồng thẻ (mỗi loại một lỗi).",
+      "outputSpec": "Mã nguồn lồng đúng, và cây DOM đúng như mã: chỉ một liên kết ngắn, thẻ .the là anh em của đoạn văn.",
+      "constraints": "Không xoá nội dung chữ nào; chỉ sửa thẻ.\nKiểm lại bằng W3C validator (validator.w3.org/nu) nếu muốn — sau khi sửa không còn lỗi nào.",
+      "examplesJson": [
+        {
+          "input": "<p>Tôi học <strong><em>HTML</strong></em> mỗi ngày.</p>",
+          "output": "Nhìn trên trang: chữ \"HTML\" đậm nghiêng — giống hệt bản đúng.\nTrong DevTools: trình duyệt phải tạo thêm một <em> rỗng để \"vá\" chỗ đóng chéo.",
+          "explanation": "Đây chính là lý do lỗi lồng thẻ khó thấy: trang trông đúng, cây thì không."
+        },
+        {
+          "input": "<p>Giới thiệu <div class=\"the\">Thẻ</div></p>",
+          "output": "Trong DevTools: <p>Giới thiệu </p><div class=\"the\">Thẻ</div><p></p>",
+          "explanation": "Gặp <div>, trình duyệt tự đóng <p> trước nó; </p> còn lại thành một đoạn rỗng thứ hai."
+        }
+      ],
+      "hintsJson": [
+        "Đọc mã theo cặp: mỗi thẻ mở phải gặp đúng thẻ đóng của NÓ trước khi thẻ cha đóng. Lỗi 2 là chỗ thẻ mở <a> không bao giờ gặp </a>.",
+        "Lỗi 4: <p> chỉ chứa chữ và phần tử dòng (a, strong, em, img…). Đóng </p> trước <div class=\"the\">, và xoá </p> thừa sau </div>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Giới thiệu bản thân</title>\n  </head>\n  <body>\n    <h1>Mình là Lan</h1>\n    <p>Mình đang học <strong><em>HTML</strong></em> mỗi ngày.</p>\n    <p>Mình hay tra <a href=\"https://developer.mozilla.org\">Tài liệu MDN mỗi khi quên một thẻ.</p>\n    <h2>Kỹ năng</h3>\n    <p>Giới thiệu nhanh:\n      <div class=\"the\">HTML · CSS · Git</div>\n    </p>\n    <img src=\"lan.jpg\" alt=\"Ảnh chân dung của Lan\"></img>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Giới thiệu bản thân</title>\n  </head>\n  <body>\n    <h1>Mình là Lan</h1>\n    <!-- (1) mở strong rồi em ⇒ đóng em rồi strong (mở sau, đóng trước) -->\n    <p>Mình đang học <strong><em>HTML</em></strong> mỗi ngày.</p>\n    <!-- (2) đóng </a> ngay sau chữ của liên kết -->\n    <p>Mình hay tra <a href=\"https://developer.mozilla.org\">Tài liệu MDN</a> mỗi khi quên một thẻ.</p>\n    <!-- (3) h2 đóng bằng /h2 -->\n    <h2>Kỹ năng</h2>\n    <!-- (4) p chỉ chứa nội dung dòng: đóng p TRƯỚC div -->\n    <p>Giới thiệu nhanh:</p>\n    <div class=\"the\">HTML · CSS · Git</div>\n    <!-- (5) img là phần tử rỗng: không có thẻ đóng -->\n    <img src=\"lan.jpg\" alt=\"Ảnh chân dung của Lan\">\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Năm lỗi, năm cơ chế vá khác nhau của trình duyệt: (1) đóng chéo ⇒ trình duyệt đóng <code>&lt;em&gt;</code> giùm rồi mở lại một <code>&lt;em&gt;</code> rỗng; (2) thiếu <code>&lt;/a&gt;</code> ⇒ liên kết nuốt hết phần chữ phía sau (và trong trang thật có thể nuốt luôn cả các đoạn kế tiếp); (3) <code>&lt;/h3&gt;</code> không khớp ⇒ trình duyệt đóng tiêu đề đang mở giùm; (4) <code>&lt;div&gt;</code> trong <code>&lt;p&gt;</code> ⇒ đoạn văn bị đóng sớm, <code>&lt;/p&gt;</code> thừa sinh ra một đoạn rỗng; (5) <code>&lt;/img&gt;</code> ⇒ bị bỏ qua.</p>\n<p>Máy chấm kiểm cả hai phía: <strong>mã nguồn</strong> không còn mẫu sai (vì trình duyệt đã vá thì DOM có khi trông đúng), và <strong>cây DOM</strong> đúng ý (liên kết chỉ chứa \"Tài liệu MDN\", <code>.the</code> là anh em của đoạn văn, không có đoạn rỗng).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sửa lỗi (4) bằng cách đổi <code>&lt;div&gt;</code> thành <code>&lt;span&gt;</code> nhưng vẫn để trong p — hợp lệ, nhưng làm mất khối \"thẻ\" riêng mà CSS sẽ tạo kiểu ở chương sau; đề yêu cầu đưa div ra ngoài.</li>\n  <li>Thêm <code>&lt;/a&gt;</code> ở cuối đoạn thay vì ngay sau chữ \"Tài liệu MDN\" — liên kết vẫn dài cả câu.</li>\n  <li>Tin rằng \"trang hiện đúng là xong\" — luôn mở DevTools → Elements so cây với mã.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.1 HTML là gì: phần tử, thẻ, thuộc tính.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://validator.w3.org/nu/",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Không còn đóng chéo </strong></em>",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "<strong><em>[^<]*</strong>",
+            "phuDinh": true
+          },
+          {
+            "moTa": "strong bọc em, em bọc chữ \"HTML\"",
+            "kiem": "text",
+            "selector": "strong > em",
+            "giaTri": "HTML"
+          },
+          {
+            "moTa": "Không có <em> rỗng do trình duyệt vá",
+            "kiem": "khong-ton-tai",
+            "selector": "em:empty"
+          },
+          {
+            "moTa": "Liên kết chỉ chứa đúng \"Tài liệu MDN\"",
+            "kiem": "text",
+            "selector": "a[href^=\"https://developer.mozilla.org\"]",
+            "giaTri": "Tài liệu MDN"
+          },
+          {
+            "moTa": "Không còn </h3> lạc",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "</h3>",
+            "phuDinh": true
+          },
+          {
+            "moTa": "h2 \"Kỹ năng\" đóng đúng",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "<h2>\\s*Kỹ năng\\s*</h2>"
+          },
+          {
+            "moTa": "Không có <div> viết bên trong <p> trong mã",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "<p[^>]*>(?:(?!</p>)[\\s\\S])*<div",
+            "phuDinh": true
+          },
+          {
+            "moTa": ".the là con trực tiếp của body (anh em của đoạn văn)",
+            "kiem": "ton-tai",
+            "selector": "body > div.the"
+          },
+          {
+            "moTa": "Không có đoạn <p> rỗng nào",
+            "kiem": "khong-ton-tai",
+            "selector": "p:empty"
+          },
+          {
+            "moTa": "Không có </img>",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "</img\\s*>",
+            "phuDinh": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Chân trang chui vào thanh bên: truy ra thẻ </div> bị thiếu",
+      "language": "html",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "thẻ chưa đóng",
+        "cây DOM vs mã nguồn",
+        "DevTools Elements",
+        "đếm cặp thẻ"
+      ],
+      "prerequisites": [
+        "sửa lỗi lồng thẻ",
+        "cây DOM"
+      ],
+      "tags": [
+        "html",
+        "debug",
+        "dom",
+        "div"
+      ],
+      "problemHtml": "<p>Đây đúng là cái bẫy cuối bài 2.1: <em>\"Quên một <code>&lt;/div&gt;</code> là trình duyệt tự đóng giùm — ở đâu đó. Cái footer của bạn kết thúc bên trong thanh bên, bộ chọn CSS thôi khớp, và bạn mất một tiếng với một bảng kiểu vốn đã đúng.\"</em></p>\n<p>Trang blog dưới đây có bố cục 3 khối nằm trong <code>div.trang</code>: <code>div.thanh-ben</code>, <code>div.noi-dung</code>, <code>div.chan-trang</code>. Nhưng mở DevTools thì thấy nội dung và chân trang đều nằm <strong>bên trong</strong> thanh bên. Mã dài, lồng nhiều tầng, và chỉ thiếu đúng một thẻ đóng. Tìm nó bằng cách đếm, đừng đoán.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>div.trang</code> có đúng ba con trực tiếp theo thứ tự: <code>.thanh-ben</code>, <code>.noi-dung</code>, <code>.chan-trang</code>.</li>\n  <li>Không phần tử nào của <code>.noi-dung</code> hay <code>.chan-trang</code> nằm trong <code>.thanh-ben</code>.</li>\n  <li>Thanh bên vẫn giữ đủ <code>&lt;h2&gt;</code> \"Chuyên mục\" và danh sách 3 liên kết của nó.</li>\n  <li>Sửa bằng cách thêm <strong>đúng một</strong> thẻ đóng vào đúng chỗ — không xoá, không viết lại khối nào.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html: trang blog ~40 dòng, thiếu đúng một </div> trong thanh bên.",
+      "outputSpec": "Cây DOM: div.trang > [div.thanh-ben, div.noi-dung, div.chan-trang] — ba anh em, không ai nằm trong ai.",
+      "constraints": "Tổng số thẻ <div mở bằng tổng số </div> sau khi sửa.\nKhông dùng CSS hay JS để \"che\" lỗi.\nChỉ thêm một dòng </div>.",
+      "examplesJson": [
+        {
+          "input": "<div class=\"trang\">\n  <div class=\"thanh-ben\">\n    <div class=\"hop\">…\n    </div>\n  <!-- thiếu </div> của thanh-ben ở đây -->\n  <div class=\"noi-dung\">…</div>\n  <div class=\"chan-trang\">…</div>\n</div>",
+          "output": "DevTools: div.trang > div.thanh-ben > [div.hop, div.noi-dung, div.chan-trang]\nTrên màn hình (khi đã có CSS): nội dung và chân trang bị bóp vào cột thanh bên hẹp.",
+          "explanation": "</div> cuối cùng (vốn của .trang) bị trình duyệt dùng để đóng .thanh-ben; .trang tự đóng ở cuối body."
+        }
+      ],
+      "hintsJson": [
+        "Đếm: số \"<div\" và số \"</div>\" trong tệp lệch nhau đúng 1. Rồi đi từ trên xuống, giữ một con số độ sâu: gặp <div +1, gặp </div> −1. Ngay trước <div class=\"noi-dung\">, độ sâu phải trở về 1 (chỉ còn .trang đang mở).",
+        "Trong .thanh-ben có hai hộp con (.hop). Hộp thứ hai đã đóng; chính thanh-ben chưa đóng — thêm </div> ngay sau </div> của hộp thứ hai, trước dòng <div class=\"noi-dung\">."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Blog của Tú</title>\n  </head>\n  <body>\n    <div class=\"trang\">\n      <div class=\"thanh-ben\">\n        <div class=\"hop\">\n          <h2>Chuyên mục</h2>\n          <div class=\"danh-sach\">\n            <p><a href=\"/html\">HTML</a></p>\n            <p><a href=\"/css\">CSS</a></p>\n            <p><a href=\"/js\">JavaScript</a></p>\n          </div>\n        </div>\n        <div class=\"hop\">\n          <h2>Theo dõi</h2>\n          <p><a href=\"https://github.com\">GitHub của Tú</a></p>\n        </div>\n\n      <div class=\"noi-dung\">\n        <h1>Tuần đầu học HTML</h1>\n        <div class=\"bai-viet\">\n          <p>Tuần này mình học phần tử, thẻ và thuộc tính.</p>\n          <p>Bài học lớn nhất: luôn soi cây DOM trong DevTools.</p>\n        </div>\n      </div>\n\n      <div class=\"chan-trang\">\n        <p>© 2026 Blog của Tú</p>\n      </div>\n    </div>\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>Blog của Tú</title>\n  </head>\n  <body>\n    <div class=\"trang\">                         <!-- độ sâu 1 -->\n      <div class=\"thanh-ben\">                   <!-- độ sâu 2 -->\n        <div class=\"hop\">                       <!-- 3 -->\n          <h2>Chuyên mục</h2>\n          <div class=\"danh-sach\">               <!-- 4 -->\n            <p><a href=\"/html\">HTML</a></p>\n            <p><a href=\"/css\">CSS</a></p>\n            <p><a href=\"/js\">JavaScript</a></p>\n          </div>                                <!-- về 3 -->\n        </div>                                  <!-- về 2 -->\n        <div class=\"hop\">                       <!-- 3 -->\n          <h2>Theo dõi</h2>\n          <p><a href=\"https://github.com\">GitHub của Tú</a></p>\n        </div>                                  <!-- về 2 -->\n      </div>                                    <!-- THẺ BỊ THIẾU: đóng .thanh-ben, về 1 -->\n\n      <div class=\"noi-dung\">                    <!-- 2: anh em của thanh-ben -->\n        <h1>Tuần đầu học HTML</h1>\n        <div class=\"bai-viet\">\n          <p>Tuần này mình học phần tử, thẻ và thuộc tính.</p>\n          <p>Bài học lớn nhất: luôn soi cây DOM trong DevTools.</p>\n        </div>\n      </div>                                    <!-- về 1 -->\n\n      <div class=\"chan-trang\">                  <!-- 2 -->\n        <p>© 2026 Blog của Tú</p>\n      </div>                                    <!-- về 1 -->\n    </div>                                      <!-- về 0: đóng .trang -->\n  </body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Kỹ thuật \"đếm độ sâu\" biến việc dò lỗi thành việc máy móc: mỗi <code>&lt;div</code> cộng 1, mỗi <code>&lt;/div&gt;</code> trừ 1. Ở mã khởi đầu, đến dòng <code>&lt;div class=\"noi-dung\"&gt;</code> độ sâu đang là 2 (vẫn trong thanh bên) trong khi bố cục muốn nó là 1. Thẻ thiếu vì thế phải nằm <em>trước</em> dòng đó và <em>sau</em> thẻ đóng của hộp thứ hai.</p>\n<p>Vì sao trình duyệt không báo lỗi? Thiếu <code>&lt;/div&gt;</code> không phải lỗi cú pháp trong HTML: khi gặp <code>&lt;/div&gt;</code> cuối cùng, trình duyệt đóng phần tử div đang mở gần nhất (là <code>.thanh-ben</code>), rồi tự đóng <code>.trang</code> khi hết body. Trang vẫn hiện — chỉ là cây sai. Máy chấm vì vậy kiểm <strong>cây</strong>: <code>.trang &gt; .noi-dung</code> phải tồn tại và <code>.thanh-ben .chan-trang</code> không được tồn tại.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thêm <code>&lt;/div&gt;</code> ở cuối tệp — số thẻ cân bằng, nhưng nội dung và chân trang vẫn nằm trong thanh bên.</li>\n  <li>Xoá một <code>&lt;div class=\"hop\"&gt;</code> cho \"cân\" — mất cấu trúc hộp, sai yêu cầu \"chỉ thêm một thẻ đóng\".</li>\n  <li>Đếm bằng mắt trên mã thụt lề sai — thụt lề không phải là cây; hãy tin DevTools Elements (hoặc phép đếm), không tin khoảng trắng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 2.1 HTML là gì: phần tử, thẻ, thuộc tính.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.chrome.com/docs/devtools/dom",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "div.trang có đúng 3 con trực tiếp",
+            "kiem": "so-luong",
+            "selector": "div.trang > *",
+            "giaTri": 3
+          },
+          {
+            "moTa": "Thứ tự: .thanh-ben → .noi-dung → .chan-trang (đều là con của .trang)",
+            "kiem": "thu-tu",
+            "cacSelector": [
+              ".trang > .thanh-ben",
+              ".trang > .noi-dung",
+              ".trang > .chan-trang"
+            ]
+          },
+          {
+            "moTa": ".noi-dung KHÔNG nằm trong .thanh-ben",
+            "kiem": "khong-ton-tai",
+            "selector": ".thanh-ben .noi-dung"
+          },
+          {
+            "moTa": ".chan-trang KHÔNG nằm trong .thanh-ben",
+            "kiem": "khong-ton-tai",
+            "selector": ".thanh-ben .chan-trang"
+          },
+          {
+            "moTa": "Thanh bên vẫn có h2 \"Chuyên mục\" và 3 liên kết chuyên mục",
+            "kiem": "so-luong",
+            "selector": ".thanh-ben .danh-sach a",
+            "giaTri": 3
+          },
+          {
+            "moTa": "Thanh bên có đúng 2 hộp .hop",
+            "kiem": "so-luong",
+            "selector": ".thanh-ben > .hop",
+            "giaTri": 2
+          },
+          {
+            "moTa": "Đủ 8 thẻ đóng </div> cho 8 thẻ <div> mở",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "(?:[\\s\\S]*?</div>){8}"
+          },
+          {
+            "moTa": "h1 thuộc .noi-dung",
+            "kiem": "ton-tai",
+            "selector": ".trang > .noi-dung > h1"
+          }
+        ]
+      }
+    }
+  ]
+}

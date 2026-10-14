@@ -22,8 +22,11 @@
  *                      prerequisites[], tags[], problemHtml, inputSpec,
  *                      outputSpec, constraints, examplesJson[], hintsJson[],
  *                      starterCodeJson[], solutionCodeJson[],
- *                      solutionExplanationHtml, diagramMermaid? }, ... ]
+ *                      solutionExplanationHtml, diagramMermaid?,
+ *                      problemHtmlVi?, solutionExplanationHtmlVi?, testsJson? }, ... ]
  *   }
+ *   testsJson (bộ kiểm máy chấm DOM, xem content/codelab/web-foundations-practice/nguon/_luoc-do.mjs)
+ *   CHƯA có cột trong CSDL ⇒ script này BỎ QUA nó; đợt 2 (cột tests_json) mới nạp.
  *
  * FLAGS
  *   --dir D      ingest every *.json in D (default /tmp/authored)
@@ -141,6 +144,7 @@ for (const f of files) {
         status: 'PUBLISHED',
         sortOrder: order++,
         problemHtml: ex.problemHtml,
+        problemHtmlVi: ex.problemHtmlVi ?? null,
         concepts: ex.concepts || [],
         prerequisites: ex.prerequisites || [],
         inputSpec: ex.inputSpec ?? null,
@@ -151,6 +155,7 @@ for (const f of files) {
         starterCodeJson: ex.starterCodeJson || [],
         solutionCodeJson: ex.solutionCodeJson || [],
         solutionExplanationHtml: ex.solutionExplanationHtml,
+        solutionExplanationHtmlVi: ex.solutionExplanationHtmlVi ?? null,
         diagramMermaid: ex.diagramMermaid ?? null,
         referenceUrl: ex.referenceUrl ?? null,
         tags: ex.tags || [],

@@ -97,7 +97,16 @@ export class MessagesService {
       where: { type: 'ADMIN', userId, adminUserId: { not: null } },
       include: this.threadIncludeForViewer(userId),
     });
-    if (existing) return existing;
+    if (existing) {
+      // Đã có hội thoại hỗ trợ — nhưng nếu người dùng CŨNG đã nhắn thẳng
+      // admin đó (hội thoại USER) thì trả về hội thoại sôi động hơn, để
+      // "Hỗ trợ từ Admin" không mở ra một hội thoại thứ hai với cùng người.
+      if (existing.adminUserId && existing.adminUserId !== userId) {
+        const cap = await this.timHoiThoaiCuaCap(userId, existing.adminUserId, userId);
+        if (cap) return cap;
+      }
+      return existing;
+    }
 
     const adminId = await findFirstAdminUserId();
     if (!adminId) {
@@ -106,6 +115,16 @@ export class MessagesService {
         503,
         'NO_ADMIN_AVAILABLE',
       );
+    }
+
+    // MỘT người ↔ MỘT hội thoại (14/10/2026). Trước đây "Hỗ trợ từ Admin"
+    // luôn tạo hội thoại ADMIN riêng, còn nhắn từ trang cá nhân của admin
+    // lại tạo hội thoại USER ⇒ người dùng thấy HAI "Cuong Hoang" trong hộp
+    // thư, lịch sử chia đôi. Nay nếu đã có hội thoại USER với admin thì
+    // dùng luôn nó. (Hội thoại trùng CŨ: scripts/messages-gop-thread-trung.mjs.)
+    if (adminId !== userId) {
+      const cap = await this.timHoiThoaiCuaCap(userId, adminId, userId);
+      if (cap) return cap;
     }
 
     const created = await prisma.messageThread.create({
@@ -153,11 +172,11 @@ export class MessagesService {
     // row, which surfaces as "chat shows no messages". Prefer the thread with
     // the most recent activity (nulls — never-used threads — sort last) so the
     // populated thread always wins.
-    const existing = await prisma.messageThread.findFirst({
-      where: { type: 'USER', userAId: a, userBId: b },
-      orderBy: { lastMessageAt: { sort: 'desc', nulls: 'last' } },
-      include: this.threadIncludeForViewer(userId),
-    });
+    //
+    // `timHoiThoaiCuaCap` tìm cả hội thoại hỗ trợ (ADMIN) giữa đúng hai người
+    // này: nhắn admin từ trang cá nhân của họ phải vào lại hội thoại "Hỗ trợ
+    // từ Admin" đã có, không mở hội thoại thứ hai (14/10/2026).
+    const existing = await this.timHoiThoaiCuaCap(userId, peerId, userId);
     if (existing) return existing;
 
     if (!peer.allowMessagesFromStrangers) {
@@ -187,6 +206,30 @@ export class MessagesService {
 
     this.emitThreadCreated(created);
     return created;
+  }
+
+  /**
+   * Hội thoại 1-1 ĐANG CÓ giữa hai người, bất kể loại: USER (nhắn thẳng)
+   * hoặc ADMIN (hỗ trợ — một trong hai là admin được giao).
+   *
+   * Hai loại dùng chung MỘT hệ (`MessageThread`), nên với người dùng chúng là
+   * cùng một cuộc trò chuyện. Lỡ có cả hai (dữ liệu trước 14/10/2026) thì lấy
+   * hội thoại có hoạt động GẦN NHẤT — rỗng (`lastMessageAt` null) xếp cuối —
+   * để lịch sử thật luôn thắng; hoà thì hội thoại CŨ hơn (id nhỏ).
+   */
+  private async timHoiThoaiCuaCap(u: number, v: number, viewerId: number) {
+    const [a, b] = u < v ? [u, v] : [v, u];
+    return prisma.messageThread.findFirst({
+      where: {
+        OR: [
+          { type: 'USER', userAId: a, userBId: b },
+          { type: 'ADMIN', userId: u, adminUserId: v },
+          { type: 'ADMIN', userId: v, adminUserId: u },
+        ],
+      },
+      orderBy: [{ lastMessageAt: { sort: 'desc', nulls: 'last' } }, { id: 'asc' }],
+      include: this.threadIncludeForViewer(viewerId),
+    });
   }
 
   async getThread(threadId: number, viewerId: number) {

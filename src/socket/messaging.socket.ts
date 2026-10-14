@@ -150,23 +150,23 @@ let emitter: MessagingEmitter | null = null;
 
           if (!p || !p.threadId) return;
 
-        // Broadcast the event into the per-thread room so anyone
-        // who has joined the conversation (both the sender's
-        // other devices and the recipient) sees the new
-        // message in real time.
-        io?.to(`thread:${p.threadId}`).emit(event, payload);
-
-        // ALSO broadcast to each participant's personal user room.
-        // This is the bugfix for "user side không nhận được tin
-        // nhắn": previously we only emitted to the thread room,
-        // so a user who had the thread listed in the sidebar
-        // but hadn't clicked into it yet (and therefore hadn't
-        // joined the thread room) never got the update.
+        // Phát vào phòng hội thoại (`thread:<id>`) VÀ phòng riêng của
+        // từng người trong cuộc (`user:<id>`) — phòng riêng là để người
+        // CHƯA vào phòng hội thoại (hội thoại tạo sau lúc bắt tay) vẫn
+        // nhận được.
+        //
+        // ⚠️ PHẢI là MỘT lượt `emit` với MẢNG phòng. Trước 14/10/2026 đây
+        // là hai lượt riêng (`to(thread)` rồi `to(user)` từng người), mà
+        // máy nào cũng ở CẢ HAI phòng (máy chủ tự `join` mọi hội thoại lúc
+        // bắt tay) ⇒ MỖI sự kiện tới HAI LẦN. Đo trên app iOS: mọi tin về
+        // đúng 2 lượt cách nhau 12–25 ms — chuông "ting" kêu đôi, số chưa
+        // đọc có chỗ cộng đôi. `io.to([...])` gộp phòng và socket.io tự
+        // khử trùng: mỗi socket nhận đúng một lần, kể cả qua Redis adapter.
+        const rooms = [`thread:${p.threadId}`];
         if (Array.isArray(p.participantIds)) {
-          for (const uid of p.participantIds) {
-            io?.to(`user:${uid}`).emit(event, payload);
-          }
+          for (const uid of p.participantIds) rooms.push(`user:${uid}`);
         }
+        io?.to(rooms).emit(event, payload);
       },
     };
   }

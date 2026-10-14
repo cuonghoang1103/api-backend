@@ -77,3 +77,9 @@ test('TU_DIEN không có khoá nào bị ghi đè', () => {
   const dong = [...than.matchAll(/(?:^|[,{]\s*)\n?\s*'?([a-z0-9.+#-]+)'?:\s*'/gm)].length;
   assert.equal(dong, tuKhoaCongNghe().length, 'có khoá trùng trong TU_DIEN');
 });
+
+test('từ trùng tên thuộc tính của Object.prototype không bị đọc thành mã JS', () => {
+  // TU_DIEN là object thường: TU_DIEN['constructor'] trả hàm Object ⇒ câu ra "function Object() { [native code] }" (15/10/2026).
+  const ra = phienAmSangViet('Hàm constructor, toString và hasOwnProperty.');
+  assert.doesNotMatch(ra, /native code|function/);
+});

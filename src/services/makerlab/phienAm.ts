@@ -210,7 +210,7 @@ const VIET_TAT_DAC_BIET: Record<string, string> = {
 /** Đọc một viết tắt VIẾT HOA thành chuỗi tên chữ cái. */
 function docVietTat(tu: string): string | null {
   const thuong = tu.toLowerCase();
-  const dacBiet = VIET_TAT_DAC_BIET[thuong];
+  const dacBiet = Object.hasOwn(VIET_TAT_DAC_BIET, thuong) ? VIET_TAT_DAC_BIET[thuong] : undefined;
   if (dacBiet) return dacBiet;
 
   // Chỉ nhận chữ cái thuần, 2-5 ký tự, VIẾT HOA TOÀN BỘ. Dài hơn 5 thì
@@ -398,7 +398,7 @@ export function phienAmSangViet(text: string): string {
     if (/[À-ỹ]/.test(tu)) return tu;
 
     const thuong = tu.toLowerCase();
-    const trongTuDien = TU_DIEN[thuong];
+    const trongTuDien = Object.hasOwn(TU_DIEN, thuong) ? TU_DIEN[thuong] : undefined;
     if (trongTuDien) return giuHoa(tu, trongTuDien);
 
     // VIẾT TẮT trước phép thử độ dài: "AI", "OS", "PC" chỉ hai chữ cái

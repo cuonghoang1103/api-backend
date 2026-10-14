@@ -18,6 +18,10 @@ import ch6 from './prj301/ch6.mjs';
 import ch7 from './prj301/ch7.mjs';
 import ch8 from './prj301/ch8.mjs';
 import ch10 from './prj301/ch10.mjs';
+import adv2 from './prj301/adv-quiz2.mjs';
+import adv4 from './prj301/adv-quiz4.mjs';
+import asm from './prj301/assignment.mjs';
+import fe from './prj301/fe.mjs';
 
 export default {
   semester: { code: 'FPTU_Hola4', name: 'Kỳ 4', ordinal: 6 },
@@ -3930,6 +3934,12 @@ input.addEventListener('input', () =&gt; {
     },
 
     /* ══════════════════ NÂNG CAO ══════════════════ */
+    /* Section MỚI — 🧭 Assignment PRJ301 từ A–Z (mẫu Quản lý phòng khám) — ./prj301/assignment.mjs */
+    {
+      title: "🧭 Course Assignment A–Z — a complete MVC web app: clinic management sample (10 requirements, sandbox payment, report)|||🧭 Assignment PRJ301 từ A–Z — làm trọn một web MVC: mẫu Quản lý phòng khám (10 yêu cầu, thanh toán sandbox, báo cáo)",
+      description: "Phần TỰ THÊM: đi trọn Assignment PRJ301 (30% điểm) theo đúng 10 yêu cầu của đề lớp — phân tích tác nhân/chức năng, thiết kế CSDL SQL Server, cấu trúc MVC, Servlet/JSP + JSTL + CustomTag, Bootstrap 5 responsive, Filter phân quyền theo nghiệp vụ, thanh toán sandbox, báo cáo và phân công nhóm — làm mẫu với đề tài Quản lý phòng khám, mọi chức năng chạy thật.",
+      lessons: asm.lessons,
+    },
     {
       title: 'Advanced — Security, operations & Spring Boot|||Nâng cao — Bảo mật, vận hành & Spring Boot',
       description: 'Học thêm SAU môn: bảo mật web, ghi log/trang lỗi, và bước tới Spring Boot. (AI trong Java web KHÔNG phải học thêm — đó là CLO9, buổi 3, 8, 15, 51, dạy ở chương 10.)',
@@ -4004,37 +4014,15 @@ input.addEventListener('input', () =&gt; {
           title: 'Quiz 4 — JPA, upload, AJAX & AI|||Quiz 4 — JPA, upload, AJAX & AI',
           slug: 'prj301-quiz-4',
           type: 'QUIZ',
-          description: 'Kiểm tra chương 7, 9 và 10: JPA sâu, tải file, AJAX/JSON và tích hợp AI (CLO9).',
-          quiz: {
-            timeLimitSeconds: 420,
-            questions: [
-              { question: 'In RESOURCE_LOCAL JPA, a persist() without begin()/commit()…|||Trong JPA kiểu RESOURCE_LOCAL, gọi persist() mà không có begin()/commit()…', options: ['throws an exception|||ném ngoại lệ', 'silently never reaches the database|||âm thầm không bao giờ tới cơ sở dữ liệu', 'commits anyway|||vẫn commit', 'creates a new table|||tạo bảng mới'], correctIndex: 1, points: 1 },
-              { question: 'LazyInitializationException usually means…|||LazyInitializationException thường có nghĩa là…', options: ['the entity has no @Id|||entity thiếu @Id', 'related data was accessed after the EntityManager was closed|||dữ liệu liên quan bị truy cập sau khi EntityManager đã đóng', 'the database is down|||cơ sở dữ liệu đã sập', 'JPQL syntax error|||lỗi cú pháp JPQL'], correctIndex: 1, points: 1 },
-              { question: 'A file upload form must set…|||Form tải file lên bắt buộc phải đặt…', options: ['method="get"', 'enctype="multipart/form-data"', 'accept-charset="UTF-8"', 'target="_blank"'], correctIndex: 1, points: 1 },
-              { question: 'Saving uploads inside the deployed app folder is wrong because…|||Lưu file tải lên bên trong thư mục app đã triển khai là sai vì…', options: ['it is too slow|||nó quá chậm', 'the files are lost on the next redeploy|||các file mất sạch ở lần deploy lại kế tiếp', 'Tomcat forbids it|||Tomcat cấm', 'it needs a database|||nó cần cơ sở dữ liệu'], correctIndex: 1, points: 1 },
-              { question: 'When the browser POSTs a JSON body, req.getParameter()…|||Khi trình duyệt POST một thân JSON, req.getParameter()…', options: ['parses the JSON|||phân tích JSON giúp bạn', 'returns null — you must read the request body|||trả về null — bạn phải đọc thân request', 'throws|||ném ngoại lệ', 'returns the whole body|||trả về cả thân request'], correctIndex: 1, points: 1 },
-              { question: 'The AI API key must be stored…|||Khoá API của AI phải được lưu…', options: ['in the JavaScript on the page|||trong JavaScript trên trang', 'server-side only (e.g. a context-param)|||chỉ phía server (vd một context-param)', 'in a cookie|||trong một cookie', 'in the JSP|||trong JSP'], correctIndex: 1, points: 1 },
-              { question: 'Executing AI-generated SQL directly is unsafe; the safer design is…|||Thực thi thẳng SQL do AI sinh ra là không an toàn; thiết kế an toàn hơn là…', options: ['checking the string starts with SELECT|||kiểm chuỗi có bắt đầu bằng SELECT không', 'letting the AI choose among pre-written parameterised queries|||để AI chọn trong số các truy vấn tham số hoá viết sẵn', 'running it as sa|||chạy nó bằng tài khoản sa', 'logging it first|||ghi log nó trước đã'], correctIndex: 1, points: 1 },
-              { question: 'Prompt injection differs from SQL injection because…|||Prompt injection khác SQL injection ở chỗ…', options: ['it is harmless|||nó vô hại', 'there is no parameterised query for natural language — instruction and data share one channel|||không có truy vấn tham số hoá cho ngôn ngữ tự nhiên — chỉ dẫn và dữ liệu dùng chung một kênh', 'it only affects JSP|||nó chỉ ảnh hưởng JSP', 'PreparedStatement stops it|||PreparedStatement chặn được nó'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: adv4.quizDescription,
+          quiz: adv4.quiz,
         },
         {
           title: 'Quiz 2 — JDBC, MVC, JPA & security|||Quiz 2 — JDBC, MVC, JPA & bảo mật',
           slug: 'prj301-quiz-2',
           type: 'QUIZ',
-          description: 'Kiểm tra JDBC/DAO, MVC, JPA và bảo mật — gồm câu suy luận.',
-          quiz: {
-            timeLimitSeconds: 420,
-            questions: [
-              { question: 'To prevent SQL injection you must…|||Để chống SQL injection bạn phải…', options: ['concatenate carefully|||nối chuỗi cẩn thận', 'use a PreparedStatement with ? placeholders|||dùng PreparedStatement với chỗ giữ ?', 'validate on the JSP|||validate trên JSP', 'use GET not POST|||dùng GET không POST'], correctIndex: 1, points: 1 },
-              { question: 'In MVC, the Servlet plays the role of…|||Trong MVC, Servlet đóng vai…', options: ['the View|||View', 'the Controller|||Controller', 'the Model|||Model', 'the database|||cơ sở dữ liệu'], correctIndex: 1, points: 1 },
-              { question: 'The DAO pattern exists to…|||Mẫu DAO tồn tại để…', options: ['generate HTML|||sinh HTML', 'keep all database code for an entity in one reusable place|||giữ toàn bộ code CSDL của một thực thể ở một nơi tái dùng', 'manage sessions|||quản lý session', 'replace Tomcat|||thay Tomcat'], correctIndex: 1, points: 1 },
-              { question: '@Entity on a Java class tells JPA that…|||@Entity trên một lớp Java báo JPA rằng…', options: ['it is a Servlet|||nó là một Servlet', 'the class maps to a database table|||lớp ánh xạ tới một bảng CSDL', 'it is the View|||nó là View', 'it needs no primary key|||nó không cần khóa chính'], correctIndex: 1, points: 1 },
-              { question: 'The N+1 query problem is a… (beyond-syllabus)|||Vấn đề truy vấn N+1 là một… (ngoài giáo trình)', options: ['security hole|||lỗ hổng bảo mật', 'common ORM performance bug from lazy loading in a loop|||bug hiệu năng ORM phổ biến do lazy-load trong vòng lặp', 'JSP syntax error|||lỗi cú pháp JSP', 'Tomcat setting|||thiết lập Tomcat'], correctIndex: 1, points: 1 },
-              { question: 'Spring Boot relates to this course by…|||Spring Boot liên quan môn này ở chỗ…', options: ['replacing Java entirely|||thay hẳn Java', 'automating the same Servlet/MVC/JPA patterns you learned|||tự động hóa chính các mẫu Servlet/MVC/JPA bạn đã học', 'being unrelated|||không liên quan', 'removing the need for a database|||bỏ nhu cầu CSDL'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: adv2.quizDescription,
+          quiz: adv2.quiz,
         },
       ],
     },
@@ -4133,7 +4121,9 @@ input.addEventListener('input', () =&gt; {
               }
             ]
           }
-        }
+        },
+        /* 🧩 Bài bổ sung — ./prj301/fe.mjs */
+        ...fe.extrasEnd,
       ]
     },
   ],

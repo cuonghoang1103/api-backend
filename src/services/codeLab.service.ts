@@ -15,6 +15,18 @@ import { Prisma, type CodeLevel, type CodeDifficulty, type CodeStatus } from '@p
 import { prisma } from '../config/database.js';
 import { sanitizeMermaid } from '../utils/mermaid.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
+import {
+  SOLUTION_FIELDS,
+  chapterPrefixOf,
+  countByDifficulty,
+  estimateMinutes,
+  fallbackTrackFor,
+  isPracticeCourse,
+  practiceTrackSlugFor,
+  sortPracticeItems,
+  withSolutionFlags,
+  withoutSolution,
+} from './codeLab.practice.js';
 
 // ─── Slug helpers ───────────────────────────────────────────────
 
@@ -166,19 +178,25 @@ export interface GroupInput {
 
 export async function getGroupsTree(opts: { admin?: boolean } = {}) {
   const trackWhere = opts.admin ? {} : { status: 'PUBLISHED' as CodeStatus };
+  // Khách chỉ đếm bài PUBLISHED — số trên thẻ track phải khớp số bài trang track
+  // thật sự hiện (getTrackBySlug lọc y như vậy). Admin thấy cả bài nháp.
+  const countSelect = {
+    exercises: opts.admin ? true : { where: { status: 'PUBLISHED' as CodeStatus } },
+    modules: true,
+  } satisfies Prisma.CodeTrackCountOutputTypeSelect;
   const groups = await prisma.codeGroup.findMany({
     orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
     include: {
       tracks: {
         where: trackWhere,
         orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
-        include: { _count: { select: { exercises: true, modules: true } } },
+        include: { _count: { select: countSelect } },
       },
       // Tracks featured in this group besides their primary group (many-to-many).
       extraTracks: {
         orderBy: [{ sortOrder: 'asc' }],
         include: {
-          track: { include: { _count: { select: { exercises: true, modules: true } } } },
+          track: { include: { _count: { select: countSelect } } },
         },
       },
     },
@@ -335,6 +353,8 @@ export async function getTrackBySlug(slug: string, opts: { admin?: boolean } = {
     include: { group: true },
   });
   if (!track) throw new NotFoundError('Track not found.');
+  // Track nháp (DRAFT) không lộ qua URL cho khách — cùng luật với sitemap/meta.
+  if (!opts.admin && track.status !== 'PUBLISHED') throw new NotFoundError('Track not found.');
 
   const exWhere = opts.admin ? {} : { status: 'PUBLISHED' as CodeStatus };
   // Explicit select so the (potentially large) lessonBlocks JSON is NOT shipped
@@ -562,9 +582,16 @@ export async function deleteExercise(id: number) {
 
 const EXERCISE_DETAIL_INCLUDE = {
   module: { select: { id: true, name: true, slug: true } },
-  track: { select: { id: true, name: true, slug: true, language: true, color: true, groupId: true } },
+  track: { select: { id: true, name: true, slug: true, language: true, color: true, groupId: true, status: true } },
   author: { select: { id: true, username: true, fullName: true, avatarUrl: true } },
 } satisfies Prisma.CodeExerciseInclude;
+
+/** Danh sách/tìm kiếm không bao giờ mang lời giải (nặng, và lộ đáp án cho khách). */
+function stripSolutionFields<T extends Record<string, unknown>>(ex: T): Omit<T, (typeof SOLUTION_FIELDS)[number]> {
+  const out: Record<string, unknown> = { ...ex };
+  for (const f of SOLUTION_FIELDS) delete out[f];
+  return out as Omit<T, (typeof SOLUTION_FIELDS)[number]>;
+}
 
 // ─── Sitemap feed ───────────────────────────────────────────────
 
@@ -628,16 +655,55 @@ export async function listSitemapEntries(): Promise<SitemapEntries> {
   return data;
 }
 
-export async function getExerciseBySlug(slug: string, opts: { admin?: boolean } = {}) {
+/**
+ * Một bài (đầy đủ đề) cho trang làm bài.
+ *
+ * - Khách/người dùng thường: bài phải PUBLISHED **và** track PUBLISHED (trước
+ *   14/10/2026 chỉ xét bài ⇒ ~5.078 bài của track nháp như `vnpay` mở được qua URL).
+ * - Lời giải: KHÔNG trả cho khách chưa đăng nhập (`withoutSolution` — còn cờ
+ *   `hasSolution`/`solutionLocked`). Người đã đăng nhập vẫn nhận các trường cũ để
+ *   bản app desktop đã phát hành không mất lời giải; lấy riêng qua
+ *   `GET /exercises/:id/solution`.
+ */
+export async function getExerciseBySlug(slug: string, opts: { admin?: boolean; signedIn?: boolean } = {}) {
   const exercise = await prisma.codeExercise.findUnique({
     where: { slug },
     include: EXERCISE_DETAIL_INCLUDE,
   });
   if (!exercise) throw new NotFoundError('Exercise not found.');
-  if (!opts.admin && exercise.status !== 'PUBLISHED') throw new NotFoundError('Exercise not found.');
+  if (!opts.admin && (exercise.status !== 'PUBLISHED' || exercise.track?.status !== 'PUBLISHED')) {
+    throw new NotFoundError('Exercise not found.');
+  }
   // Best-effort view counter (don't block on it).
   prisma.codeExercise.update({ where: { id: exercise.id }, data: { viewCount: { increment: 1 } } }).catch(() => {});
-  return exercise;
+  return opts.admin || opts.signedIn ? withSolutionFlags(exercise) : withoutSolution(exercise);
+}
+
+/** Lời giải chính thức của một bài — chỉ gọi sau `authenticate`. Bài/track nháp ⇒ 404 (trừ admin). */
+export async function getExerciseSolution(id: number, opts: { admin?: boolean } = {}) {
+  const ex = await prisma.codeExercise.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      slug: true,
+      status: true,
+      solutionCodeJson: true,
+      solutionExplanationHtml: true,
+      solutionExplanationHtmlVi: true,
+      track: { select: { status: true } },
+    },
+  });
+  if (!ex) throw new NotFoundError('Exercise not found.');
+  if (!opts.admin && (ex.status !== 'PUBLISHED' || ex.track?.status !== 'PUBLISHED')) {
+    throw new NotFoundError('Exercise not found.');
+  }
+  return {
+    id: ex.id,
+    slug: ex.slug,
+    solutionCodeJson: ex.solutionCodeJson,
+    solutionExplanationHtml: ex.solutionExplanationHtml,
+    solutionExplanationHtmlVi: ex.solutionExplanationHtmlVi,
+  };
 }
 
 /**
@@ -697,10 +763,12 @@ export interface ExerciseFilters {
   sort?: 'newest' | 'popular' | 'difficulty';
   page?: number;
   limit?: number;
+  /** Admin/editor: thấy cả bài thuộc track nháp. Mặc định (khách) chỉ track PUBLISHED. */
+  admin?: boolean;
 }
 
 export async function listExercises(filters: ExerciseFilters = {}) {
-  const { trackId, moduleId, groupId, language, difficulty, status = 'PUBLISHED', search, sort = 'newest' } = filters;
+  const { trackId, moduleId, groupId, language, difficulty, status = 'PUBLISHED', search, sort = 'newest', admin = false } = filters;
   const page = Math.max(1, filters.page ?? 1);
   const limit = Math.min(100, Math.max(1, filters.limit ?? 20));
   const skip = (page - 1) * limit;
@@ -709,6 +777,7 @@ export async function listExercises(filters: ExerciseFilters = {}) {
   if (q) {
     const conds: Prisma.Sql[] = [Prisma.sql`e.search_vector @@ websearch_to_tsquery('simple', ${q})`];
     if (status) conds.push(Prisma.sql`e.status::text = ${status}`);
+    if (!admin) conds.push(Prisma.sql`e.track_id IN (SELECT id FROM code_tracks WHERE status::text = 'PUBLISHED')`);
     if (trackId) conds.push(Prisma.sql`e.track_id = ${trackId}`);
     if (moduleId) conds.push(Prisma.sql`e.module_id = ${moduleId}`);
     if (groupId) conds.push(Prisma.sql`e.track_id IN (SELECT id FROM code_tracks WHERE group_id = ${groupId})`);
@@ -732,14 +801,17 @@ export async function listExercises(filters: ExerciseFilters = {}) {
     const found = await prisma.codeExercise.findMany({ where: { id: { in: ids } }, include: EXERCISE_DETAIL_INCLUDE });
     const byId = new Map(found.map((e) => [e.id, e]));
     const ordered = ids.map((id) => byId.get(id)).filter((e): e is (typeof found)[number] => !!e);
-    return { exercises: ordered, total, page, limit, totalPages: Math.ceil(total / limit) };
+    return { exercises: ordered.map(stripSolutionFields), total, page, limit, totalPages: Math.ceil(total / limit) };
   }
 
   const where: Prisma.CodeExerciseWhereInput = {};
   if (status) where.status = status;
   if (trackId) where.trackId = trackId;
   if (moduleId) where.moduleId = moduleId;
-  if (groupId) where.track = { groupId };
+  const trackWhere: Prisma.CodeTrackWhereInput = {};
+  if (groupId) trackWhere.groupId = groupId;
+  if (!admin) trackWhere.status = 'PUBLISHED';
+  if (Object.keys(trackWhere).length) where.track = trackWhere;
   if (language) where.language = language;
   if (difficulty) where.difficulty = difficulty;
 
@@ -750,7 +822,7 @@ export async function listExercises(filters: ExerciseFilters = {}) {
     prisma.codeExercise.findMany({ where, skip, take: limit, orderBy, include: EXERCISE_DETAIL_INCLUDE }),
     prisma.codeExercise.count({ where }),
   ]);
-  return { exercises, total, page, limit, totalPages: Math.ceil(total / limit) };
+  return { exercises: exercises.map(stripSolutionFields), total, page, limit, totalPages: Math.ceil(total / limit) };
 }
 
 /** Lightweight autocomplete: matching tracks + exercises for the search box.
@@ -772,7 +844,9 @@ export async function autocomplete(query: string, limit = 8) {
     tsq
       ? prisma.$queryRaw<Array<{ id: number }>>(Prisma.sql`
           SELECT e.id FROM code_exercises e
-          WHERE e.status = 'PUBLISHED' AND e.search_vector @@ to_tsquery('simple', ${tsq})
+          WHERE e.status = 'PUBLISHED'
+            AND e.track_id IN (SELECT id FROM code_tracks WHERE status::text = 'PUBLISHED')
+            AND e.search_vector @@ to_tsquery('simple', ${tsq})
           ORDER BY ts_rank(e.search_vector, to_tsquery('simple', ${tsq})) DESC
           LIMIT ${limit}
         `)
@@ -840,15 +914,23 @@ export async function getMyProgressForExercise(userId: number, exerciseId: numbe
 
 // ─── Stats + bulk import ────────────────────────────────────────
 
+/**
+ * Số trên hero `/code-lab`. CHỈ đếm thứ khách thấy được: track PUBLISHED, module
+ * của track đó, bài PUBLISHED trong track PUBLISHED — khớp sitemap/getTrackBySlug.
+ * (Trước 14/10/2026 đếm cả track nháp: hero khoe 146 track / 12.549 bài trong khi
+ * người dùng chỉ mở được 50 / 7.471.)
+ */
 export async function getStats() {
-  const [groups, tracks, modules, exercises, solved] = await Promise.all([
+  const publishedTrack = { status: 'PUBLISHED' as CodeStatus };
+  const exWhere: Prisma.CodeExerciseWhereInput = { status: 'PUBLISHED', track: publishedTrack };
+  const [groups, tracks, modules, exercises, solved, byDifficulty] = await Promise.all([
     prisma.codeGroup.count(),
-    prisma.codeTrack.count(),
-    prisma.codeModule.count(),
-    prisma.codeExercise.count(),
+    prisma.codeTrack.count({ where: publishedTrack }),
+    prisma.codeModule.count({ where: { track: publishedTrack } }),
+    prisma.codeExercise.count({ where: exWhere }),
     prisma.codeProgress.count({ where: { status: 'SOLVED' } }),
+    prisma.codeExercise.groupBy({ by: ['difficulty'], where: exWhere, _count: true }),
   ]);
-  const byDifficulty = await prisma.codeExercise.groupBy({ by: ['difficulty'], _count: true });
   return { groups, tracks, modules, exercises, solved, byDifficulty };
 }
 
@@ -908,7 +990,7 @@ export interface SkillCoverage {
   inProgress: number;
 }
 
-export async function getSkillCoverage(trackSlug: string, userId?: number | null): Promise<{
+export async function getSkillCoverage(trackSlug: string, userId?: number | null, opts: { admin?: boolean } = {}): Promise<{
   track: { id: number; name: string; slug: string };
   skills: SkillCoverage[];
   totalExercises: number;
@@ -916,9 +998,9 @@ export async function getSkillCoverage(trackSlug: string, userId?: number | null
 }> {
   const track = await prisma.codeTrack.findUnique({
     where: { slug: trackSlug },
-    select: { id: true, name: true, slug: true },
+    select: { id: true, name: true, slug: true, status: true },
   });
-  if (!track) throw new NotFoundError('Track not found.');
+  if (!track || (!opts.admin && track.status !== 'PUBLISHED')) throw new NotFoundError('Track not found.');
 
   const exercises = await prisma.codeExercise.findMany({
     where: { trackId: track.id, status: 'PUBLISHED' },
@@ -959,9 +1041,169 @@ export async function getSkillCoverage(trackSlug: string, userId?: number | null
     .sort((a, b) => (a.solved / a.total) - (b.solved / b.total) || b.total - a.total);
 
   return {
-    track,
+    track: { id: track.id, name: track.name, slug: track.slug },
     skills,
     totalExercises: exercises.length,
     solvedExercises: exercises.filter((e) => byExercise.get(e.id) === 'SOLVED').length,
+  };
+}
+
+// ─── Bộ luyện tập gắn bài học (nút dưới video) ──────────────────
+/**
+ * `GET /code-lab/practice/:courseSlug/:lessonSlug` — bộ bài của module trùng
+ * slug bài học trong track luyện tập của khoá (xem `codeLab.practice.ts`).
+ *
+ * LUÔN trả 200: chưa có bộ ⇒ `items: []`, `dangSoan: true` + `goiY` (track gần
+ * nhất, 3 bài EASY) — giọng đọc cuối video đã nói "link ngay dưới bài giảng", nên
+ * thẻ không bao giờ được biến mất với khoá trong chương trình (`coBoLuyen`).
+ *
+ * Khách: chỉ track/bài PUBLISHED. Admin/editor: thấy cả track nháp (`banNhap`)
+ * để duyệt bộ trước khi mở. Có `userId` ⇒ kèm `solved` từng bài.
+ */
+export interface PracticeItem {
+  id: number;
+  slug: string;
+  title: string;
+  difficulty: CodeDifficulty;
+  estimatedMinutes: number | null;
+  points: number;
+  moduleSlug: string;
+  solved?: boolean;
+}
+
+export interface PracticeSet {
+  courseSlug: string;
+  lessonSlug: string;
+  /** Khoá thuộc chương trình luyện tập (có bảng nối hoặc track `<khoá>-practice` tồn tại). */
+  coBoLuyen: boolean;
+  trackSlug: string;
+  trackName: string | null;
+  /** Module dùng cho bộ: một (trùng slug bài) hoặc nhiều (bài slide N.0 gộp cả chương). */
+  moduleSlugs: string[];
+  scope: 'lesson' | 'chapter' | 'none';
+  items: PracticeItem[];
+  total: number;
+  byDifficulty: Record<'EASY' | 'MEDIUM' | 'HARD' | 'EXPERT', number>;
+  estimatedMinutes: number;
+  solvedCount: number | null;
+  dangSoan: boolean;
+  banNhap: boolean;
+  goiY: {
+    trackSlug: string;
+    trackName: string;
+    items: Array<{ slug: string; title: string; difficulty: CodeDifficulty }>;
+  } | null;
+}
+
+export async function getPracticeSet(
+  courseSlug: string,
+  lessonSlug: string,
+  opts: { admin?: boolean; userId?: number | null } = {},
+): Promise<PracticeSet> {
+  const trackSlug = practiceTrackSlugFor(courseSlug);
+  const track = await prisma.codeTrack.findUnique({
+    where: { slug: trackSlug },
+    select: { id: true, name: true, status: true },
+  });
+  const trackVisible = !!track && (opts.admin || track.status === 'PUBLISHED');
+
+  let moduleRows: Array<{ id: number; slug: string; sortOrder: number }> = [];
+  let scope: PracticeSet['scope'] = 'none';
+  if (track && trackVisible) {
+    const exact = await prisma.codeModule.findUnique({
+      where: { uk_code_module_track_slug: { trackId: track.id, slug: lessonSlug } },
+      select: { id: true, slug: true, sortOrder: true },
+    });
+    if (exact) {
+      moduleRows = [exact];
+      scope = 'lesson';
+    } else {
+      const prefix = chapterPrefixOf(lessonSlug);
+      if (prefix) {
+        moduleRows = await prisma.codeModule.findMany({
+          where: { trackId: track.id, slug: { startsWith: prefix } },
+          select: { id: true, slug: true, sortOrder: true },
+          orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+        });
+        if (moduleRows.length) scope = 'chapter';
+      }
+    }
+  }
+
+  let items: PracticeItem[] = [];
+  if (moduleRows.length) {
+    const modById = new Map(moduleRows.map((m) => [m.id, m]));
+    const rows = await prisma.codeExercise.findMany({
+      where: {
+        moduleId: { in: moduleRows.map((m) => m.id) },
+        ...(opts.admin ? {} : { status: 'PUBLISHED' as CodeStatus }),
+      },
+      select: {
+        id: true, slug: true, title: true, difficulty: true, sortOrder: true,
+        estimatedMinutes: true, points: true, moduleId: true,
+      },
+    });
+    const sorted = sortPracticeItems(
+      rows.map((r) => ({ ...r, moduleSortOrder: modById.get(r.moduleId)?.sortOrder ?? 0 })),
+    );
+    items = sorted.map((r) => ({
+      id: r.id,
+      slug: r.slug,
+      title: r.title,
+      difficulty: r.difficulty,
+      estimatedMinutes: r.estimatedMinutes,
+      points: r.points,
+      moduleSlug: modById.get(r.moduleId)?.slug ?? '',
+    }));
+  }
+
+  let solvedCount: number | null = null;
+  if (opts.userId && items.length) {
+    const done = await prisma.codeProgress.findMany({
+      where: { userId: opts.userId, status: 'SOLVED', exerciseId: { in: items.map((i) => i.id) } },
+      select: { exerciseId: true },
+    });
+    const doneSet = new Set(done.map((d) => d.exerciseId));
+    items = items.map((i) => ({ ...i, solved: doneSet.has(i.id) }));
+    solvedCount = doneSet.size;
+  }
+
+  // Chưa có bộ ⇒ gợi ý luyện tạm ở track gần nhất (chỉ track PUBLISHED, 3 bài EASY đầu tiên theo lộ trình).
+  let goiY: PracticeSet['goiY'] = null;
+  if (!items.length) {
+    const fbSlug = fallbackTrackFor(courseSlug, lessonSlug);
+    if (fbSlug) {
+      const fb = await prisma.codeTrack.findUnique({
+        where: { slug: fbSlug },
+        select: { id: true, name: true, slug: true, status: true },
+      });
+      if (fb && fb.status === 'PUBLISHED') {
+        const easy = await prisma.codeExercise.findMany({
+          where: { trackId: fb.id, status: 'PUBLISHED', difficulty: 'EASY' },
+          select: { slug: true, title: true, difficulty: true },
+          orderBy: [{ module: { sortOrder: 'asc' } }, { sortOrder: 'asc' }, { id: 'asc' }],
+          take: 3,
+        });
+        goiY = { trackSlug: fb.slug, trackName: fb.name, items: easy };
+      }
+    }
+  }
+
+  return {
+    courseSlug,
+    lessonSlug,
+    coBoLuyen: isPracticeCourse(courseSlug) || trackVisible,
+    trackSlug,
+    trackName: trackVisible && track ? track.name : null,
+    moduleSlugs: moduleRows.map((m) => m.slug),
+    scope,
+    items,
+    total: items.length,
+    byDifficulty: countByDifficulty(items),
+    estimatedMinutes: estimateMinutes(items),
+    solvedCount,
+    dangSoan: items.length === 0,
+    banNhap: !!track && track.status !== 'PUBLISHED' && trackVisible,
+    goiY,
   };
 }

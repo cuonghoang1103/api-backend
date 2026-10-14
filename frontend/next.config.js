@@ -399,6 +399,22 @@ const nextConfig = {
         destination: '/tech-trends',
         permanent: true,
       },
+      // 2026-10-14 — Code Lab chưa từng có tuyến `/code-lab/tracks/<slug>`
+      // (track sống ở `/code-lab/<slug>`), nhưng ~350 thẻ trong khoá Prisma ORM,
+      // Authentication, Nginx, Socket.IO, Tailwind trỏ dạng đó ⇒ trước đây nó bị
+      // đọc thành "track `tracks`, bài `<slug>`" và ra trang lỗi. Redirect ở
+      // tầng Next (query `?ref=&reflabel=` đi theo tự động) ⇒ sống lại không cần
+      // seed lại khoá. Đặt dạng 2 đoạn trước để `/tracks/<t>/<bài>` cũng đúng.
+      {
+        source: '/code-lab/tracks/:trackSlug/:exerciseSlug',
+        destination: '/code-lab/:trackSlug/:exerciseSlug',
+        permanent: true,
+      },
+      {
+        source: '/code-lab/tracks/:trackSlug',
+        destination: '/code-lab/:trackSlug',
+        permanent: true,
+      },
     ];
   },
 };

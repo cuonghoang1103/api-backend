@@ -13,7 +13,11 @@
  *  - GET  /autocomplete ? q=            — search suggestions
  *  - GET  /stats
  *  - GET  /sitemap                      — slug + updatedAt cho sitemap.xml
+ *  - GET  /practice/:courseSlug/:lessonSlug — bộ luyện của một bài học (nút dưới video)
+ *  Khách chỉ thấy track PUBLISHED (list/search/autocomplete/stats/tracks/exercises);
+ *  admin/editor thấy cả track nháp. Lời giải không có trong payload đề cho khách.
  * Authenticated (any logged-in user):
+ *  - GET  /exercises/:id/solution       — lời giải chính thức (tách khỏi payload đề)
  *  - POST /exercises/:id/progress       — save attempt / mark solved
  *  - GET  /progress/mine ? trackId=
  *  - /lab-rooms/…                       — Phòng Lab: chọn bài theo mục tiêu LOC,
@@ -32,6 +36,7 @@ import { BadRequestError, AppError } from '../middleware/errorHandler.js';
 import { prisma } from '../config/database.js';
 import type { ApiResponse } from '../types/index.js';
 import * as codeLab from '../services/codeLab.service.js';
+import { isSafeSlug } from '../services/codeLab.practice.js';
 import * as explainService from '../services/codeLab.explain.service.js';
 import * as coachService from '../services/codeLab.coach.service.js';
 import * as workspace from '../services/codeLab.workspace.service.js';
@@ -76,9 +81,10 @@ router.get('/autocomplete', async (req, res: Response<ApiResponse>, next) => {
 });
 
 // GET /search?q=
-router.get('/search', async (req, res: Response<ApiResponse>, next) => {
+router.get('/search', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
     const data = await codeLab.listExercises({
+      admin: isEditor(req),
       search: String(req.query.q || ''),
       trackId: req.query.trackId ? Number(req.query.trackId) : undefined,
       groupId: req.query.groupId ? Number(req.query.groupId) : undefined,
@@ -92,9 +98,10 @@ router.get('/search', async (req, res: Response<ApiResponse>, next) => {
 });
 
 // GET /exercises — list/filter
-router.get('/exercises', async (req, res: Response<ApiResponse>, next) => {
+router.get('/exercises', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
     const data = await codeLab.listExercises({
+      admin: isEditor(req),
       trackId: req.query.trackId ? Number(req.query.trackId) : undefined,
       moduleId: req.query.moduleId ? Number(req.query.moduleId) : undefined,
       groupId: req.query.groupId ? Number(req.query.groupId) : undefined,
@@ -122,6 +129,23 @@ router.get('/sitemap', async (_req, res: Response<ApiResponse>, next) => {
   } catch (e) { next(e); }
 });
 
+// GET /practice/:courseSlug/:lessonSlug — bộ luyện tập của MỘT bài học (thẻ
+// "🏋️ Luyện tập trên Code Lab" ngay dưới video). Luôn 200; chưa có bộ ⇒
+// `items: []`, `dangSoan: true` (+ `goiY`). Tiền tố `/practice` không đụng tuyến
+// `:slug` nào nên đứng đâu cũng được — để cạnh các tuyến công khai cho dễ tìm.
+router.get('/practice/:courseSlug/:lessonSlug', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { courseSlug, lessonSlug } = req.params;
+    if (!isSafeSlug(courseSlug) || !isSafeSlug(lessonSlug)) throw new BadRequestError('Invalid course or lesson slug.');
+    const admin = isEditor(req);
+    const userId = req.user?.userId ?? null;
+    const data = await codeLab.getPracticeSet(courseSlug, lessonSlug, { admin, userId });
+    // Có tiến độ riêng / bản nháp của admin ⇒ không cho cache dùng chung.
+    res.set('Cache-Control', userId || admin ? 'private, no-store' : 'public, max-age=60, stale-while-revalidate=300');
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
 // GET /tracks/:slug — roadmap
 router.get('/tracks/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
@@ -145,7 +169,17 @@ router.get('/exercises/:slug/meta', async (req, res: Response<ApiResponse>, next
 // GET /exercises/:slug — full exercise
 router.get('/exercises/:slug', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
-    const data = await codeLab.getExerciseBySlug(req.params.slug, { admin: isEditor(req) });
+    const data = await codeLab.getExerciseBySlug(req.params.slug, { admin: isEditor(req), signedIn: !!req.user?.userId });
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+// GET /exercises/:id/solution — lời giải chính thức, chỉ cho người đã đăng nhập.
+// Payload đề cho khách không còn mang lời giải (cờ `solutionLocked`).
+router.get('/exercises/:id(\\d+)/solution', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await codeLab.getExerciseSolution(parseInt(req.params.id, 10), { admin: isEditor(req) });
+    res.set('Cache-Control', 'private, no-store');
     res.json({ success: true, data });
   } catch (e) { next(e); }
 });
@@ -509,7 +543,7 @@ router.post('/lab-rooms/:id(\\d+)/items/:itemId(\\d+)/guide', authenticate, asyn
 
 router.get('/tracks/:slug/skills', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
-    const out = await codeLab.getSkillCoverage(req.params.slug, req.user?.userId ?? null);
+    const out = await codeLab.getSkillCoverage(req.params.slug, req.user?.userId ?? null, { admin: isEditor(req) });
     res.json({ success: true, data: out });
   } catch (e) { next(e); }
 });

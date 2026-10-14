@@ -1,0 +1,167 @@
+/**
+ * ============================================================
+ * Code Lab — bộ luyện tập gắn bài học (đợt 1, 14/10/2026)
+ * ============================================================
+ *
+ * Phần THUẦN (không đụng CSDL) của nút "🏋️ Luyện tập trên Code Lab" dưới video
+ * bài giảng — tách riêng để test được mà không cần Postgres
+ * (`codeLab.practice.test.ts`). Phần đọc CSDL nằm ở `getPracticeSet` trong
+ * `codeLab.service.ts`.
+ *
+ * Quy ước (KE-HOACH-CODELAB.md §0b-2, không migration):
+ *   - mỗi khoá có MỘT track luyện tập: `PRACTICE_TRACK_BY_COURSE[courseSlug]`,
+ *     không khai thì theo quy ước `<courseSlug>-practice`;
+ *   - module slug = slug bài học (vd `wf-3-3-flexbox`); `@@unique([trackId, slug])`
+ *     nên (track, lessonSlug) là duy nhất sẵn;
+ *   - bài slide "N.0" (`wf-3-0-slides`) chưa có module riêng ⇒ gộp mọi module cùng
+ *     chương (tiền tố `wf-3-`);
+ *   - thứ tự "từ dễ đến khó" là LUẬT của endpoint (EASY→MEDIUM→HARD→EXPERT, rồi
+ *     thứ tự module, rồi sortOrder) — không phụ thuộc người soạn nhớ đặt sortOrder.
+ */
+
+/** Khoá học → track luyện tập. Thêm khoá mới = thêm một dòng. */
+export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object.freeze({
+  'web-foundations': 'web-foundations-practice',
+  // FER202 học ở /courses/front-end-web-development-with-react/learn (Academy dùng chung LearnPageClient).
+  'front-end-web-development-with-react': 'fer202-practice',
+  fer202: 'fer202-practice',
+});
+
+/** Track luyện tập của một khoá (bảng trên, không có thì `<courseSlug>-practice`). */
+export function practiceTrackSlugFor(courseSlug: string): string {
+  return PRACTICE_TRACK_BY_COURSE[courseSlug] ?? `${courseSlug}-practice`;
+}
+
+/** Khoá có nằm trong chương trình luyện tập (nút phải hiện kể cả khi bài chưa có bộ)? */
+export function isPracticeCourse(courseSlug: string): boolean {
+  return Object.prototype.hasOwnProperty.call(PRACTICE_TRACK_BY_COURSE, courseSlug);
+}
+
+/** Slug hợp lệ cho tham số URL (khớp slugify của Code Lab + slug bài học trong content/). */
+export function isSafeSlug(s: string): boolean {
+  return /^[a-z0-9][a-z0-9-]{0,149}$/i.test(s);
+}
+
+/**
+ * Bài slide mở chương ("wf-3-0-slides") ⇒ tiền tố chương "wf-3-" để gộp bộ của cả
+ * chương. Bài khác ⇒ null.
+ */
+export function chapterPrefixOf(lessonSlug: string): string | null {
+  const m = /^(.+?-\d+-)0-slides$/.exec(lessonSlug);
+  return m ? m[1] : null;
+}
+
+/**
+ * Track "gần nhất" để luyện tạm khi bài chưa có bộ riêng — theo bảng §4.1/§4.2 của
+ * kế hoạch (Ch1 → git, Ch2/3 → html-css, Ch4/5 → javascript, Ch6/7 → nodejs-express,
+ * Ch8 → sql, Ch9 → typescript, Ch10 → git; FER202: ES6 → javascript, Bootstrap →
+ * html-css, còn lại → react). Không biết ⇒ null.
+ */
+export function fallbackTrackFor(courseSlug: string, lessonSlug: string): string | null {
+  const wf = /^wf-(\d+)-/.exec(lessonSlug);
+  if (courseSlug === 'web-foundations' || wf) {
+    const ch = wf ? Number(wf[1]) : NaN;
+    if (!Number.isFinite(ch)) return 'html-css';
+    if (ch === 1) return 'git';
+    if (ch === 0 || ch === 2 || ch === 3) return 'html-css';
+    if (ch === 4 || ch === 5) return 'javascript';
+    if (ch === 6 || ch === 7) return 'nodejs-express';
+    if (ch === 8) return 'sql';
+    if (ch === 9) return 'typescript';
+    if (ch === 10) return 'git';
+    return 'javascript';
+  }
+  const fer = /^fer202-(\d+)-/.exec(lessonSlug);
+  if (fer || courseSlug === 'front-end-web-development-with-react' || courseSlug === 'fer202') {
+    const ch = fer ? Number(fer[1]) : NaN;
+    if (ch === 0 || ch === 1 || ch === 2) return 'javascript';
+    if (ch === 4) return 'html-css';
+    return 'react';
+  }
+  return null;
+}
+
+export const DIFFICULTY_RANK: Readonly<Record<string, number>> = Object.freeze({
+  EASY: 0,
+  MEDIUM: 1,
+  HARD: 2,
+  EXPERT: 3,
+});
+
+export interface PracticeSortable {
+  id: number;
+  difficulty: string;
+  sortOrder: number;
+  moduleSortOrder?: number;
+}
+
+/** EASY→MEDIUM→HARD→EXPERT, rồi thứ tự module (khi gộp chương), rồi sortOrder, rồi id. Không đổi mảng gốc. */
+export function sortPracticeItems<T extends PracticeSortable>(items: readonly T[]): T[] {
+  const rank = (d: string) => DIFFICULTY_RANK[d] ?? 99;
+  return [...items].sort(
+    (a, b) =>
+      rank(a.difficulty) - rank(b.difficulty) ||
+      (a.moduleSortOrder ?? 0) - (b.moduleSortOrder ?? 0) ||
+      a.sortOrder - b.sortOrder ||
+      a.id - b.id,
+  );
+}
+
+export function countByDifficulty(items: readonly { difficulty: string }[]) {
+  const out = { EASY: 0, MEDIUM: 0, HARD: 0, EXPERT: 0 } as Record<'EASY' | 'MEDIUM' | 'HARD' | 'EXPERT', number>;
+  for (const it of items) {
+    if (it.difficulty in out) out[it.difficulty as keyof typeof out]++;
+  }
+  return out;
+}
+
+/** Ước lượng phút cả bộ; bài không khai phút tính 10 phút. */
+export function estimateMinutes(items: readonly { estimatedMinutes?: number | null }[]): number {
+  return items.reduce((n, it) => n + (it.estimatedMinutes && it.estimatedMinutes > 0 ? it.estimatedMinutes : 10), 0);
+}
+
+// ─── Lời giải: không lộ cho khách chưa đăng nhập ───────────────
+
+/** Các trường "đáp án" — không trả cho khách, không trả trong danh sách. */
+export const SOLUTION_FIELDS = [
+  'solutionCodeJson',
+  'solutionExplanationHtml',
+  'solutionExplanationHtmlVi',
+  'aiExplanationJson',
+] as const;
+
+function nonEmpty(v: unknown): boolean {
+  if (v == null) return false;
+  if (typeof v === 'string') return v.trim().length > 0;
+  if (Array.isArray(v)) return v.length > 0;
+  return true;
+}
+
+/**
+ * Bỏ lời giải khỏi payload một bài. Giữ cờ `hasSolution` để giao diện vẫn biết
+ * có lời giải (hiện "Đăng nhập để xem lời giải") và `solutionLocked` = true.
+ */
+export function withoutSolution<T extends Record<string, unknown>>(
+  ex: T,
+): Omit<T, (typeof SOLUTION_FIELDS)[number]> & { hasSolution: boolean; solutionLocked: true } {
+  const hasSolution = nonEmpty(ex.solutionCodeJson) || nonEmpty(ex.solutionExplanationHtml);
+  const out: Record<string, unknown> = { ...ex };
+  for (const f of SOLUTION_FIELDS) delete out[f];
+  return { ...(out as Omit<T, (typeof SOLUTION_FIELDS)[number]>), hasSolution, solutionLocked: true };
+}
+
+/**
+ * Người đã đăng nhập: GIỮ NGUYÊN các trường lời giải cũ (bản app desktop đã phát
+ * hành gói sẵn trang bài tập của web và đọc thẳng `solutionCodeJson`/
+ * `solutionExplanationHtml`), thêm cờ. Chỉ bỏ `aiExplanationJson` — không client
+ * nào đọc nó từ payload này (đọc qua `GET /exercises/:id/ai/explain`), mà nó nặng
+ * ~29KB/bài.
+ */
+export function withSolutionFlags<T extends Record<string, unknown>>(
+  ex: T,
+): Omit<T, 'aiExplanationJson'> & { hasSolution: boolean; solutionLocked: false } {
+  const hasSolution = nonEmpty(ex.solutionCodeJson) || nonEmpty(ex.solutionExplanationHtml);
+  const { aiExplanationJson: _drop, ...rest } = ex;
+  void _drop;
+  return { ...rest, hasSolution, solutionLocked: false };
+}

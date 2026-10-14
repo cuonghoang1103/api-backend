@@ -20,6 +20,7 @@ import { sanitizeHtml, stripInlineColors, pickLang } from '@/lib/utils';
 import { useTranslation } from '@/context/LocaleContext';
 import { loadYouTubeAPI, isYouTubeUrl } from '@/lib/youtube-player';
 import MoiVaoPhongVideo from '@/components/academy/MoiVaoPhongVideo';
+import LuyenTapCodeLab from '@/components/courses/LuyenTapCodeLab';
 import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
 import LessonPdfViewer from './LessonPdfViewer';
 import type { Course, LessonDto, LessonProgress, LessonDetail, LessonVideoTrack, VideoTrackKey } from '@/types';
@@ -1066,6 +1067,17 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                       );
                     })()}
                   </div>
+
+                  {/* 🏋️ Luyện tập trên Code Lab — NGAY dưới khung video (giọng
+                      đọc cuối video chỉ vào đây). Khoá trong chương trình luyện
+                      tập thì thẻ luôn hiện, kể cả khi bộ của bài đang soạn. */}
+                  <LuyenTapCodeLab
+                    courseSlug={slug}
+                    lessonSlug={currentLesson.slug}
+                    lessonId={currentLesson.id}
+                    lessonTitle={pickLang(currentLesson.title, locale)}
+                    locale={locale}
+                  />
 
                   {/* A borrowed lecture always gets a way out to its own page —
                       credit the author, and let the learner subscribe there. */}

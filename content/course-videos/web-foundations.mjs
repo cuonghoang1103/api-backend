@@ -33,16 +33,16 @@ export default {
     /* ── Chương 1 — Hộp đồ nghề: terminal, VS Code, Git, npm ── */
     'wf-1-1-terminal': { yt: 'oK8EvVeVltE', credit: 'The Coding Train — 1.5: Intro to the Command Line - Git and GitHub for Poets', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-01-terminal-2596d7e8.mp4' }, defaultVideoTrack: 'VI'}, // 1.5: Intro to the Command Line - Git and GitHub for Poets
     'wf-1-2-vscode': { yt: '4NfFFsQC77M', credit: 'codeSTACKr — Visual Studio Code Web Dev Setup In 6 Minutes', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-02-vs-code-04d15579.mp4' }, defaultVideoTrack: 'VI'},   // Visual Studio Code Web Dev Setup In 6 Minutes
-    'wf-1-3-git': { yt: 'HVsySz-h9r4', credit: 'Corey Schafer — Git Tutorial for Beginners: Command-Line Fundamentals' },      // Git Tutorial for Beginners: Command-Line Fundamentals
+    'wf-1-3-git': { yt: 'HVsySz-h9r4', credit: 'Corey Schafer — Git Tutorial for Beginners: Command-Line Fundamentals', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-03-git-co-may-thoi-gian-2c15c648.mp4' }, defaultVideoTrack: 'VI'},      // Git Tutorial for Beginners: Command-Line Fundamentals
     'wf-1-4-github': { yt: 'c6OXmAlpS9c', credit: 'Mission Bit — Using the Terminal and Command Prompt | GitHub Tutorial', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-04-github-42dec16e.mp4' }, defaultVideoTrack: 'VI'},   // Using the Terminal and Command Prompt | GitHub Tutorial
-    'wf-1-5-node-npm': { yt: 'XQMqmGk_Mqk', credit: 'Victor Dozal — npm Tutorial - 1 - Installation - npm Tutorial For Beginners' }, // npm Tutorial - 1 - Installation - npm Tutorial For Beginners
+    'wf-1-5-node-npm': { yt: 'XQMqmGk_Mqk', credit: 'Victor Dozal — npm Tutorial - 1 - Installation - npm Tutorial For Beginners', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-05-node-va-npm-7e83c3bc.mp4' }, defaultVideoTrack: 'VI'}, // npm Tutorial - 1 - Installation - npm Tutorial For Beginners
 
     /* ── Chương 2 — HTML: bộ khung của mọi trang web ── */
-    'wf-2-1-html-basics': { yt: 'YXCbjS2fxzU', credit: 'PixemWeb — HTML5 Semantic Markup Tags & Layout - HTML Tutorial for Beginners' },       // HTML5 Semantic Markup Tags & Layout - HTML Tutorial for Beginners
-    'wf-2-2-text-links-images': { yt: 'kGW8Al_cga4', credit: 'Net Ninja — HTML & CSS Crash Course Tutorial #6 - HTML 5 Semantics' }, // HTML & CSS Crash Course Tutorial #6 - HTML 5 Semantics
-    'wf-2-3-semantic-html': { yt: 'kX3TfdUqpuU', credit: 'Dave Gray — Semantic HTML Tags | HTML5 Semantic Elements Tutorial' },     // Semantic HTML Tags | HTML5 Semantic Elements Tutorial
-    'wf-2-4-forms': { yt: 'NNozarQM7J0', credit: 'Process Guy — HTML Forms | Input, Label, Select, Textarea Element - Exercise 7' },             // HTML Forms | Input, Label, Select, Textarea Element - Exercise 7
-    'wf-2-5-tables-media-a11y': { yt: 'elKGz9r5qGw', credit: 'CodeLucky — HTML Table Accessibility: A Beginner\'s Guide to Semantic Structure & Screen Readers' }, // HTML Table Accessibility: A Beginner's Guide to Semantic Structure & Screen Readers
+    'wf-2-1-html-basics': { yt: 'YXCbjS2fxzU', credit: 'PixemWeb — HTML5 Semantic Markup Tags & Layout - HTML Tutorial for Beginners', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-01-html-co-ban-6cffebb5.mp4' }, defaultVideoTrack: 'VI'},       // HTML5 Semantic Markup Tags & Layout - HTML Tutorial for Beginners
+    'wf-2-2-text-links-images': { yt: 'kGW8Al_cga4', credit: 'Net Ninja — HTML & CSS Crash Course Tutorial #6 - HTML 5 Semantics', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-02-chu-lien-ket-anh-93d4ed0b.mp4' }, defaultVideoTrack: 'VI'}, // HTML & CSS Crash Course Tutorial #6 - HTML 5 Semantics
+    'wf-2-3-semantic-html': { yt: 'kX3TfdUqpuU', credit: 'Dave Gray — Semantic HTML Tags | HTML5 Semantic Elements Tutorial', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-03-html-ngu-nghia-859f27d9.mp4' }, defaultVideoTrack: 'VI'},     // Semantic HTML Tags | HTML5 Semantic Elements Tutorial
+    'wf-2-4-forms': { yt: 'NNozarQM7J0', credit: 'Process Guy — HTML Forms | Input, Label, Select, Textarea Element - Exercise 7', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-04-bieu-mau-forms-dd8ae1d9.mp4' }, defaultVideoTrack: 'VI'},             // HTML Forms | Input, Label, Select, Textarea Element - Exercise 7
+    'wf-2-5-tables-media-a11y': { yt: 'elKGz9r5qGw', credit: 'CodeLucky — HTML Table Accessibility: A Beginner\'s Guide to Semantic Structure & Screen Readers', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-05-bang-media-tiep-can-3b87b1b3.mp4' }, defaultVideoTrack: 'VI'}, // HTML Table Accessibility: A Beginner's Guide to Semantic Structure & Screen Readers
 
     /* ── Chương 3 — CSS & thiết kế đáp ứng ── */
     'wf-3-1-css-basics': { yt: 'TjMlfWpw7E0', credit: 'VirtualAddiction — CSS: The cascade, specificity and inheritance' }, // CSS: The cascade, specificity and inheritance
@@ -101,5 +101,6 @@ export default {
     'wf-10-5-full-stack-picture': { yt: 'z102ahiA8DA', credit: 'College Wallah — Lecture 1: Intro to JavaScript, Variables, Data Types & Operators| Full Stack Free Course' },       // Lecture 1: Intro to JavaScript, Variables, Data Types & Operators | Full Stack Free Course
     'wf-0-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-00-slide-tong-quan-muc-0-78214476.mp4' }, defaultVideoTrack: 'VI'},
     'wf-1-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-00-slide-tong-quan-chuong-1-5b2b8524.mp4' }, defaultVideoTrack: 'VI'},
+    'wf-2-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-00-slide-tong-quan-chuong-2-113b6ec9.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

@@ -20,6 +20,7 @@ import ch2 from './swd392/ch2.mjs';
 import ch3 from './swd392/ch3.mjs';
 import ch4 from './swd392/ch4.mjs';
 import ch5 from './swd392/ch5.mjs';
+import cs from './swd392/chuyen-sau.mjs';
 import fe from './swd392/fe.mjs';
 
 export default {
@@ -1389,6 +1390,12 @@ AI trả về text PlantUML; bạn dán vào một renderer và <b>kiểm multip
           },
         },
       ],
+    },
+    /* ⭐ Chuyên sâu — ngoài giáo trình, slide TỰ DỰNG — ./swd392/chuyen-sau.mjs */
+    {
+      title: "⭐ Advanced — From diagrams to Spring Boot code: history, class↔JPA, sequence/state→code, COMET→Spring, SEP490 & interviews|||⭐ Chuyên sâu — Từ sơ đồ tới code Spring Boot: lịch sử, class↔JPA, sequence/state→code, COMET→Spring, đồ án SEP490 & phỏng vấn",
+      description: "Phần TỰ THÊM ngoài giáo trình trường (đánh dấu ⭐, slide tự dựng) — bản gọn, cầu nối từ sơ đồ SWD392 sang code Java/Spring Boot của đồ án: lịch sử thiết kế phần mềm + bản đồ đi tiếp, class diagram ↔ Java ↔ JPA ↔ CSDL, sequence/state machine → code → test, COMET → Spring Boot (phân tầng, DI, đo coupling/cohesion), SWD392 trong hồ sơ SEP490 và phỏng vấn. Kiến trúc chuyên sâu (C4, DDD, microservices, saga…) học tiếp ở khoá Software Architecture.",
+      lessons: cs.lessons,
     },
     {
       "title": "Final Exam — Practical (20%, 85') + Theory (40%, 60') = 60%, 145 minutes|||Thi cuối kỳ — Practical (20%, 85') + Theory (40%, 60') = 60%, 145 phút",

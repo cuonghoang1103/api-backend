@@ -323,6 +323,14 @@ describe('CT Work — MCP + chi phí agent (A9–A12, HTTP + DB thật)', { skip
     assert.equal(created.assigneeId, agent.id);
     const badType = await tool(agent, 'create_issue', { project: 'FP', type: 'EPICX', title: 'x' });
     assert.match(badType.text, /^WORK_BAD_TYPE/);
+    // 16/10/2026: NGƯỜI (token cá nhân) gắn nhãn chưa có ⇒ nhãn được tạo như ô chọn nhãn trên web; agent vẫn bị từ chối ở trên.
+    const pt = await call(lead, 'POST', '/me/api-tokens', { name: 'labels', scopes: ['read', 'write'] });
+    const byHuman = await tool({ token: pt.data.token }, 'create_issue', { project: 'FP', type: 'TASK', title: 'Labelled by a person', labels: ['brand-new-label'] });
+    assert.equal(byHuman.isError, false, byHuman.text);
+    const made = await prisma.workLabel.findFirst({ where: { projectId: pid, name: 'brand-new-label' } });
+    assert.ok(made, 'nhãn mới đã được tạo');
+    const linked = await prisma.workIssue.findFirstOrThrow({ where: { projectId: pid, number: byHuman.json.number }, select: { labels: { select: { labelId: true } } } });
+    assert.deepEqual(linked.labels.map((l) => l.labelId), [made!.id]);
   });
 
   it('A10.3 RÀO CHẮN qua MCP: sửa/chuyển thẻ của người khác ⇒ WORK_AGENT_FORBIDDEN (owner=…), tạo thẻ giao cho người khác bị chặn ở service', async () => {

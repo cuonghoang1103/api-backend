@@ -13,6 +13,7 @@ import { prisma } from '../../../config/database.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../../middleware/errorHandler.js';
 import { requireProject } from '../permissions.js';
 import { auditProject } from '../audit.js';
+import { frontendUrl } from '../common.js';
 import { emitWorkEvent } from '../events.js';
 import { liveConnection, logOAuth, toUserError } from '../oauth/connections.js';
 import { getProvider, providerClient } from '../oauth/registry.js';
@@ -160,7 +161,7 @@ export async function filePreview(userId: number, projectId: number, fileRowId: 
 export async function createOnlineMeeting(userId: number, projectId: number, number: number, provider: 'microsoft' | 'google') {
   const { govCtx } = await import('../governanceDb.js');
   await govCtx(userId, projectId, 'meetings', { edit: true });
-  const m = await prisma.workMeeting.findFirst({ where: { projectId, number, deletedAt: null }, select: { id: true, title: true, startsAt: true, endsAt: true, timezone: true, meetingUrl: true, status: true, project: { select: { key: true, name: true } } } });
+  const m = await prisma.workMeeting.findFirst({ where: { projectId, number, deletedAt: null }, select: { id: true, title: true, startsAt: true, endsAt: true, timezone: true, meetingUrl: true, status: true, project: { select: { key: true, name: true, workspace: { select: { slug: true } } } } } });
   if (!m) throw new NotFoundError('Meeting not found');
   if (m.status === 'CANCELLED') throw new BadRequestError('This meeting is cancelled', 'VALIDATION_ERROR');
   if (m.meetingUrl) throw new AppError('This meeting already has a join link — remove it first', 409, 'MEETING_HAS_LINK');
@@ -170,7 +171,7 @@ export async function createOnlineMeeting(userId: number, projectId: number, num
   let r: { joinUrl: string; eventId: string | null; updatedAt: Date | null };
   try {
     r = await adapterFor(provider).createOnlineMeeting(conn, calendarId, {
-      title: `${m.project.key} · ${m.title}`, description: `${m.project.name} (CT Work)`, url: '',
+      title: `${m.project.key} · ${m.title}`, description: `${m.project.name} (CT Work)`, url: frontendUrl(`/work/${m.project.workspace.slug}/${m.project.key}/meetings/${number}`),
       allDay: false, start: m.startsAt, end: m.endsAt, timezone: m.timezone, ctworkId: `meeting:${m.id}`,
     });
   } catch (err) {

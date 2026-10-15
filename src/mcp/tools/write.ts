@@ -14,7 +14,7 @@ import { putObject } from '../../config/r2.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import * as agents from '../../services/work/agents.service.js';
 import { PROJECT_TEMPLATES, PROJECT_TYPES } from '../../services/work/constants.js';
-import { createProject } from '../../services/work/projects.service.js';
+import { createProject, upsertLabel } from '../../services/work/projects.service.js';
 import { agentBus, listInbox } from '../../services/work/agentEvents.js';
 import * as approvals from '../../services/work/approvals.service.js';
 import { displayName } from '../../services/work/common.js';
@@ -181,7 +181,12 @@ async function moveTo(ctx: McpCtx, p: ProjectHit, n: number, to: string) {
 
 const dateArg = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD');
 
-async function labelIdsOf(projectId: number, names: string[]): Promise<number[]> {
+/**
+ * Tên nhãn ⇒ id. Nhãn chưa có: NGƯỜI (token cá nhân) thì tạo luôn — như ô chọn nhãn trên web, upsertLabel tự kiểm
+ * quyền `issue.edit`; AGENT thì vẫn từ chối (agent không được đổi cấu hình dự án). Trước 16/10/2026 người cũng bị từ
+ * chối với thông báo "Agents cannot create labels" — sai đối tượng, khó hiểu.
+ */
+async function labelIdsOf(ctx: McpCtx, projectId: number, names: string[]): Promise<number[]> {
   const all = await prisma.workLabel.findMany({ where: { projectId }, select: { id: true, name: true } });
   const ids: number[] = [];
   const missing: string[] = [];
@@ -189,8 +194,13 @@ async function labelIdsOf(projectId: number, names: string[]): Promise<number[]>
     const hit = all.find((l) => l.name.toLowerCase() === n.trim().toLowerCase());
     if (hit) ids.push(hit.id); else missing.push(n);
   }
-  if (missing.length) {
+  if (missing.length && ctx.agent) {
     throw new AppError(`Unknown label(s): ${missing.join(', ')}. Agents cannot create labels — use existing ones.`, 400, 'WORK_BAD_LABEL', { allowed: all.map((l) => l.name).slice(0, 50) });
+  }
+  for (const n of [...new Set(missing.map((m) => m.trim()))]) {
+    if (!n) continue;
+    const made = await upsertLabel(ctx.userId, projectId, { name: n });
+    ids.push(made.id);
   }
   return ids;
 }
@@ -218,7 +228,7 @@ const updateIssue = defineTool({
     if (a.storyPoints !== undefined) patch.storyPoints = a.storyPoints;
     if (a.remainingMinutes !== undefined) patch.remainingEstimateMin = a.remainingMinutes;
     if (a.dueDate !== undefined) patch.dueDate = a.dueDate === null ? null : new Date(`${a.dueDate}T00:00:00.000Z`);
-    if (a.labels !== undefined) patch.labelIds = await labelIdsOf(p.id, a.labels);
+    if (a.labels !== undefined) patch.labelIds = await labelIdsOf(ctx, p.id, a.labels);
     if (!Object.keys(patch).length) throw new BadRequestError('Nothing to change — pass at least one field', 'VALIDATION_ERROR');
     const cur = await prisma.workIssue.findFirst({ where: { projectId: p.id, number: n, deletedAt: null }, select: { version: true } });
     if (!cur) throw new AppError('Issue not found', 404, 'NOT_FOUND');
@@ -254,7 +264,7 @@ const createIssue = defineTool({
       ...(a.descriptionMarkdown?.trim() ? { descriptionJson: docOf(a.descriptionMarkdown) } : {}),
       ...(parentId ? { parentId } : {}),
       ...(a.assignToMe ? { assigneeId: ctx.userId } : {}),
-      ...(a.labels?.length ? { labelIds: await labelIdsOf(p.id, a.labels) } : {}),
+      ...(a.labels?.length ? { labelIds: await labelIdsOf(ctx, p.id, a.labels) } : {}),
     };
     const issue = await issues.createIssueAs(ctx.userId, p.id, body);
     const key = `${p.key}-${issue.number}`;

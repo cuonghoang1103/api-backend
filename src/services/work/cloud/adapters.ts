@@ -255,7 +255,8 @@ function gBody(ev: DesiredEvent) {
     start: ev.allDay ? { date: day(ev.start) } : { dateTime: iso(ev.start), timeZone: ev.timezone },
     end: ev.allDay ? { date: day(ev.end) } : { dateTime: iso(ev.end), timeZone: ev.timezone },
     transparency: ev.allDay ? 'transparent' : 'opaque',
-    source: { title: 'CT Work', url: ev.url },
+    // Google trả 400 "Invalid source url" khi url rỗng/không phải http(s) ⇒ chỉ gửi source khi có link thật (15/10/2026).
+    ...(/^https?:\/\//.test(ev.url) ? { source: { title: 'CT Work', url: ev.url } } : {}),
     extendedProperties: { private: { ctworkId: ev.ctworkId } },
   };
 }

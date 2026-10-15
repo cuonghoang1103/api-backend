@@ -106,6 +106,8 @@ class FakeCloud {
       const id = g[2] ? decodeURIComponent(g[2]) : null;
       if (method === 'POST') {
         const b = JSON.parse(body);
+        // Như Google thật: source.url phải là http(s) — rỗng ⇒ 400 "Invalid source url" (lỗi prod 15/10/2026).
+        if (b.source && !/^https?:\/\//.test(String(b.source.url ?? ''))) return this.json({ error: { code: 400, message: 'Invalid source url: .' } }, 400);
         const e: FakeEvent = {
           id: `gev${++this.n}`, cal, allDay: !!b.start.date, start: b.start.date ?? b.start.dateTime, end: b.end.date ?? b.end.dateTime,
           updated: new Date().toISOString(), deleted: false, seq: 0, ctworkId: b.extendedProperties?.private?.ctworkId ?? null, summary: b.summary,

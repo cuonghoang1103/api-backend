@@ -1154,6 +1154,22 @@
 :global(html.theme-dark) .wNum { fill: #fca5a5; }
 .wFallback { font-size: 78px; fill: var(--lh-ink); font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif; }
 .wModelFoot { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin-top: 6px; }
+/* hàng TỪ nhiều chữ: mẫu = các khung nhỏ liền nhau */
+.wModel.wModelTu { width: auto; min-width: 112px; max-width: 100%; }
+.wModelTuKhung { display: flex; flex-wrap: wrap; gap: 4px; max-width: 420px; }
+.wModelSvgNho {
+  display: block; width: 66px; height: 66px;
+  border: 1.5px solid var(--lh-line); border-radius: 10px; background: var(--lh-bg);
+}
+.wCheMau {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  width: 112px; min-height: 112px; padding: 8px; border: 1.5px dashed var(--lh-line); border-radius: 12px; background: var(--lh-bg);
+  text-align: center;
+}
+.wModelTu .wCheMau { width: 100%; min-width: 140px; }
+.wCheDau { font-size: 30px; font-weight: 800; line-height: 1; color: var(--lh-ink-3); }
+.wGoi { margin-top: 4px; font-size: 13px; line-height: 1.4; color: var(--lh-ink-2); max-width: 280px; overflow-wrap: anywhere; }
+.wCheMau .wGoi { margin-top: 0; font-weight: 600; color: var(--lh-ink); }
 .wModelCh { font-size: 15px; font-weight: 700; color: var(--lh-ink); }
 .wCount { font-size: 12px; color: var(--lh-ink-3); }
 .wPlay {
@@ -1179,6 +1195,10 @@
 @media (max-width: 420px) {
   .wModel { width: 100%; display: flex; gap: 10px; align-items: center; }
   .wModelSvg { width: 96px; height: 96px; flex: 0 0 auto; }
+  .wModelSvgNho { width: 56px; height: 56px; }
+  .wModelTuKhung { max-width: none; }
+  .wModel.wModelTu { width: 100%; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .wModelTu .wModelFoot { flex-direction: row; align-items: center; }
   .wModelFoot { flex-direction: column; align-items: flex-start; margin-top: 0; }
   .wPractice { min-width: 0; flex-basis: 100%; }
 }
@@ -1401,6 +1421,49 @@
 }
 .vidNote { margin-top: 4px; font-size: 14.5px; line-height: 1.55; color: var(--lh-ink-2); }
 .vidCredit { margin-top: 4px; font-size: 12.5px; color: var(--lh-ink-3); }
+
+/* mp4 tự làm (R2) — thẻ <video>, ở đầu bài hoặc dưới đúng mục (neo) */
+.vidFrame video { position: absolute; inset: 0; width: 100%; height: 100%; background: #000; object-fit: contain; }
+.vidMeta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 4px; font-size: 12.5px; color: var(--lh-ink-3); font-variant-numeric: tabular-nums; }
+.vidMetaTag { font-weight: 650; color: var(--lh-ink-2); }
+.vidXong { display: inline-flex; align-items: center; gap: 3px; color: var(--lh-good); font-weight: 650; }
+.vidNeo { scroll-margin-top: calc(var(--app-nav-h, 64px) + 72px); transition: box-shadow 0.4s ease; }
+.vidNhay { box-shadow: 0 0 0 3px color-mix(in srgb, #ef4444 45%, transparent); }
+.vidMuc {
+  margin: 4px 0 20px; padding: 12px 14px 14px; border-radius: 14px;
+  border: 1px solid color-mix(in srgb, #ef4444 22%, var(--lh-line));
+  background: color-mix(in srgb, #ef4444 5%, var(--lh-surface));
+}
+.vidMucHead { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-bottom: 10px; font-size: 14.5px; font-weight: 750; color: var(--lh-ink); }
+.vidMucHead svg { color: #dc2626; }
+:global(html.theme-dark) .vidMucHead svg { color: #f87171; }
+.vidMucSub { font-size: 12.5px; font-weight: 500; color: var(--lh-ink-3); }
+.vidMucGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 14px; max-width: 860px; }
+/* "🎬 Video của bài" — danh sách đầu bài */
+.vidList {
+  margin: 18px 0 8px; padding: 12px 14px; border-radius: 14px;
+  border: 1px solid var(--lh-line); background: var(--lh-surface);
+}
+.vidListHead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin-bottom: 8px; }
+.vidListHead > span:first-child { font-size: 15.5px; font-weight: 750; color: var(--lh-ink); }
+.vidListSub { font-size: 12.5px; color: var(--lh-ink-3); }
+.vidListOl { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.vidListItem {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 6px 8px;
+  border-radius: 10px; text-align: left; color: var(--lh-ink);
+}
+.vidListItem:hover, .vidListItem:focus-visible { background: color-mix(in srgb, #ef4444 7%, var(--lh-surface-2)); }
+.vidListNum {
+  flex: 0 0 auto; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 999px;
+  background: color-mix(in srgb, #ef4444 14%, transparent); color: #b91c1c; font-size: 12.5px; font-weight: 750;
+}
+:global(html.theme-dark) .vidListNum { color: #fca5a5; }
+.vidListNumXong { background: var(--lh-good-soft); color: var(--lh-good); }
+:global(html.theme-dark) .vidListNumXong { color: var(--lh-good); }
+.vidListTen { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.vidListTitle { font-size: 14px; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; }
+.vidListMuc { font-size: 12px; color: var(--lh-ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vidListDur { flex: 0 0 auto; font-size: 12.5px; color: var(--lh-ink-3); font-variant-numeric: tabular-nums; }
 
 /* ── 🗣️ Luyện phát âm (PhatAm.tsx) ─────────────────────────────────── */
 .paItem { padding: 14px 0; border-top: 1px dashed var(--lh-line); }

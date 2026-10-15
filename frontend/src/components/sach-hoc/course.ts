@@ -7,7 +7,7 @@
  * còn nội dung một buổi tải qua `loadDay` khi mở — mỗi buổi một chunk JS.
  * Buổi viết thẳng trong data.ts (Mở đầu, IELTS Ngày 1) thì không cần tải.
  */
-import type { Day, Kind, Lesson, LessonVideo, Voice } from './types';
+import type { Day, Kind, Lesson, LessonVideo, VideoNeoMap, Voice } from './types';
 import type { KanjiDict } from './kanji';
 import { dayMeta, isReady, type CourseManifest, type DayMeta, type VocabMeta } from './manifest';
 
@@ -45,6 +45,11 @@ export type CourseDef = {
    * thay video không phải đụng vào bài.
    */
   videos?: Record<string, LessonVideo[]>;
+  /**
+   * Video mp4 tự làm gắn theo MỤC trong bài (neo = tiêu đề `h` hoặc 'dau-bai') —
+   * hiện NGAY DƯỚI mục đó, kèm danh sách "🎬 Video của bài" ở đầu bài. Xem `VideoNeoMap`.
+   */
+  videoNeo?: VideoNeoMap;
   /** Trang riêng đi kèm khoá (vd. Phòng thi thử) — hiện ngay dưới "Kế hoạch & tiến độ". */
   links?: { href: string; label: string }[];
   /** Mục lục các buổi. Buổi tải chậm: bài chỉ có metadata + `ready`, không có blocks. */

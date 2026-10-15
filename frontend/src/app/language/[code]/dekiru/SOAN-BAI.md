@@ -188,3 +188,19 @@ mục chữ Hán). Có ảnh slide của cô → sửa `chars` + `nguon: 'slide'
 cho từ cô chép, rồi `npm run course:manifest && npm run dekiru:kanji`.
 Bài 5 (29/09): từ vựng khớp đủ 61/61 "Từ mới bài 5.pdf", ポイント 37–47 đủ; bổ sung
 6 từ cô chép trên bảng (後ろ, 午後, 見学します, 飲食, 毎週, 後で) trong `b5-han-lop`.
+
+## 7. 🎬 Video giảng theo mục + ✍️ viết tay cả TỪ (15/10/2026)
+
+- **Video KHÔNG soạn trong tệp bài.** Video mp4 (R2) gắn theo mục nằm ở `videos.ts`
+  (`{ [lessonId]: { [neo]: VideoMuc[] } }`), SINH bởi `~/Documents/video-bai-giang/xuat/gan-sach.mts`
+  từ trường `neo` trong `thong-tin.json` của từng video. Neo = `'dau-bai'` hoặc `'#<đầu tiêu đề h>'`
+  (vd `'#ポイント 48'`) ⇒ trang tự chèn video ngay dưới tiêu đề đó + mục "🎬 Video của bài" đầu bài.
+  ⚠️ Đổi chữ ĐẦU của một tiêu đề `h` đã có video gắn (vd "ポイント 48 — …") là gỡ video khỏi chỗ đó
+  (video rơi lên đầu bài) — sửa thì chạy lại `gan-sach` để nó kiểm neo.
+- **`write` nhận TỪ**: phần tử `chars` dài hơn một chữ (`'がくせい'`, `'学生'`, `'コーヒー'`) ⇒ hàng
+  từ: mẫu cả từ + lưới (dòng trên tô, dòng dưới tự viết). Trộn được với chữ đơn. Thêm `goi`
+  (`{ '学生': 'がくせい · học sinh' }`) để nút "Che mẫu" luyện nhớ từ: chỉ hiện gợi ý + 🔊.
+  Đặt sau `vocab` của `bN-tu-vung` (vd `write` `bN-viet-tu`, 8–15 từ hay vào đề), từ ≤ 6 chữ.
+- **Để sau** (chưa có khối, đừng giả lập bằng khối khác): viết hội thoại + AI chấm (`vietHoiThoai`),
+  trả lời câu hỏi tự do + AI kiểm (`traLoi`), AI chấm NÓI tiếng Nhật (chamNoi đang cứng `en`/thang IELTS),
+  dữ liệu `phatam` (Azure ja-JP) cho câu mẫu mỗi ポイント.

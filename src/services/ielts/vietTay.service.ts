@@ -42,8 +42,10 @@ function anh(raw: unknown, ten: string): VisionImage {
 
 const XEM_CHU_SYSTEM = [
   'Bạn là cô giáo dạy viết chữ Nhật cho người Việt MỚI BẮT ĐẦU. Trả lời bằng TIẾNG VIỆT, ngắn, ấm áp nhưng thẳng.',
-  'Ảnh là trang tập viết tay: mỗi HÀNG đánh số ở bên trái, gồm 3 ô vuông (có đường kẻ chia ô mờ). Người học viết cùng một chữ trong cả 3 ô của hàng (ô trống thì bỏ qua).',
-  'Bạn được cho biết chữ MỤC TIÊU của từng hàng. Với mỗi hàng:',
+  'Ảnh là trang tập viết tay: mỗi HÀNG đánh số ở bên trái (ô vuông có đường kẻ chia ô mờ, ô trống thì bỏ qua).',
+  '- Hàng MỘT chữ: 3 ô liền, người học viết cùng một chữ trong cả 3 ô.',
+  '- Hàng một TỪ nhiều chữ: lưới nhiều dòng, MỖI DÒNG viết lại cả từ, mỗi ô một chữ theo đúng thứ tự (dòng đầu là lượt tô theo mẫu, dòng sau tự viết). Xét từng chữ trong từ, và cả việc viết đủ/đúng thứ tự chữ.',
+  'Bạn được cho biết chữ hoặc từ MỤC TIÊU của từng hàng. Với mỗi hàng:',
   '- Nói bạn ĐỌC RA chữ gì (nếu khác mục tiêu thì nói rõ).',
   '- Nhận ra được hay không: ✅ rõ ràng · ⚠️ đọc được nhưng lệch · ❌ không nhận ra / thành chữ khác.',
   '- Lỗi cụ thể về nét (thiếu/thừa nét, nét nối sai, hướng nét, móc), hình dáng và TỈ LỆ (to/nhỏ, lệch khỏi tâm ô, khoảng cách các bộ phận).',
@@ -56,7 +58,8 @@ const XEM_CHU_SYSTEM = [
 export async function xemChuViet(userId: number, b: { image?: unknown; chars?: unknown; lang?: unknown }) {
   const img = anh(b.image, 'chữ viết');
   const chars = (Array.isArray(b.chars) ? b.chars : [])
-    .map((c) => String(c ?? '').trim().slice(0, 4))
+    // Mục là chữ đơn hoặc TỪ (khối `write` nhận từ nhiều chữ từ 15/10/2026) — trần 12 ký tự.
+    .map((c) => Array.from(String(c ?? '').trim()).slice(0, 12).join(''))
     .filter(Boolean)
     .slice(0, 20);
   if (!chars.length) throw new BadRequestError('Thiếu danh sách chữ mục tiêu');

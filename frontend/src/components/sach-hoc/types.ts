@@ -80,10 +80,17 @@ export type Block =
   | { t: 'readkanji'; id: string; title: string; note?: string; items: { text: string; ro: string; vi: string }[] }
   | { t: 'build'; id: string; title: string; items: { vi: string; chips: string[]; answer: string[]; alt?: string[][]; ro?: string }[] }
   /**
-   * Tập viết tay (Apple Pencil / chuột): mỗi chữ một hàng — ô mẫu chạy thứ tự
-   * nét (KanjiVG) + ba ô luyện, rồi ✨ AI xem chữ (POST /ielts/ai/xem-chu-viet).
+   * Tập viết tay (Apple Pencil / chuột): mỗi mục một hàng — ô mẫu chạy thứ tự
+   * nét (KanjiVG) + ô luyện, rồi ✨ AI xem chữ (POST /ielts/ai/xem-chu-viet).
+   *
+   * Mục `chars` là MỘT chữ (`'あ'`, `'学'`) ⇒ hàng cũ: ô mẫu + ba ô tập cùng chữ.
+   * Mục là một TỪ nhiều chữ (`'がくせい'`, `'学生'`) ⇒ hàng từ: mẫu cả từ (chạy
+   * nét lần lượt từng chữ) + lưới tập, dòng trên có chữ mờ để tô, dòng dưới tự viết.
+   * Trộn được hai loại trong một khối. `goi` (tuỳ chọn): gợi ý theo mục — nghĩa /
+   * cách đọc, vd `{ '学生': 'がくせい · học sinh' }`; bật "Che mẫu" thì người học
+   * chỉ thấy gợi ý + 🔊 và phải tự nhớ ra từ.
    */
-  | { t: 'write'; id: string; title: string; chars: string[]; note?: string }
+  | { t: 'write'; id: string; title: string; chars: string[]; note?: string; goi?: Record<string, string> }
   /**
    * Thẻ "Chữ Hán của lớp" như slide của cô: chữ to, Hán Việt, On/Kun, cách nhớ,
    * từ đi chung — chữ lấy theo danh sách lớp của bài `bai` (dữ liệu tải chậm qua
@@ -126,10 +133,19 @@ export type Lesson = {
 
 export type Day = { n: number; lessons: Lesson[] };
 
-/** Một video bài giảng YouTube gắn với một bài (CourseDef.videos). */
+/**
+ * Một video bài giảng gắn với một bài (CourseDef.videos). Hai loại:
+ * - YouTube: `id` = videoId 11 ký tự (iframe youtube-nocookie / trình phát của app).
+ * - mp4 tự làm trên R2: có `src` (https://media.cuongthai.com/...) ⇒ thẻ `<video>`;
+ *   `id` lúc đó chỉ là khoá ổn định (vd "jp-b6-p1"), không phải videoId.
+ */
 export type LessonVideo = {
-  /** videoId 11 ký tự. */
+  /** YouTube: videoId 11 ký tự. Video mp4 (`src`): khoá ổn định bất kỳ. */
   id: string;
+  /** mp4 trên R2 — có trường này thì phát bằng `<video>`, KHÔNG đi YouTube. */
+  src?: string;
+  /** Ảnh bìa của video mp4 (tuỳ chọn). */
+  poster?: string;
   /** Đúng `author_name — title` mà oEmbed trả về (scripts/yt-check.mjs). */
   credit: string;
   /** Thời lượng hiển thị, vd "12:30". */
@@ -140,4 +156,33 @@ export type LessonVideo = {
   /** Giây bắt đầu (tuỳ chọn). */
   start?: number;
 };
+
+/**
+ * Một video gắn vào MỘT MỤC của bài (CourseDef.videoNeo) — video mp4 tự làm.
+ * Dữ liệu sinh tự động (vd. dekiru/videos.ts do `xuat/gan-sach.mts` ghi).
+ */
+export type VideoMuc = {
+  /** https://media.cuongthai.com/... (mp4 H.264 faststart). */
+  src: string;
+  tieuDe: string;
+  thoiLuongGiay?: number;
+  poster?: string;
+  /** Mã video ổn định (vd "jp-b6-p1") — khoá React + nhớ vị trí xem. Thiếu thì dùng `src`. */
+  id?: string;
+  /** Một câu: video nói gì / xem xong thì làm khối nào. */
+  ghiChu?: string;
+};
+
+/**
+ * Bản đồ video theo MỤC: `{ [lessonId]: { [neo]: VideoMuc[] } }`.
+ *
+ * `lessonId` = id bài (đúng `?bai=…`, vd `b6-ngu-phap`). `neo`:
+ * - `'dau-bai'` — đầu bài (ngay dưới "Mục tiêu").
+ * - `'#<đầu tiêu đề>'` — ngay dưới khối `h` đầu tiên có chữ BẮT ĐẦU bằng phần sau `#`
+ *   (so sau khi bỏ furigana `{漢字|かな}`→漢字 và dấu `** == ~~`, chuẩn NFKC):
+ *   `'#ポイント 48'` khớp "ポイント 48 — V ませんか…" nhưng KHÔNG khớp "ポイント 480";
+ *   `'#2. Bảng 46 chữ'`, `'#Thể て'`, `'#F.'`.
+ * Neo không khớp tiêu đề nào ⇒ video vẫn hiện ở đầu bài (không bao giờ mất).
+ */
+export type VideoNeoMap = Record<string, Record<string, VideoMuc[]>>;
 

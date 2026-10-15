@@ -15,7 +15,7 @@ import { setDefaultVoice, AI_TIMEOUT, getRate, setRate, onRate, stopAudio } from
 import { useTienDo } from './useTienDo';
 import { TongQuanBuoi, KeHoach, dayDone } from './TongQuan';
 import { KanjiHost } from './KanjiSheet';
-import { VideoBai } from './VideoBai';
+import { DanhSachVideoBai, VideoBai, VideoTheoMuc, chiaNeo, neoId, veLessonVideo } from './VideoBai';
 import { docTruyVan, ghiTruyVan, laAppDesktop } from './moiTruong';
 import dynamic from 'next/dynamic';
 const GoiGiaSu = dynamic(() => import('./GoiGiaSu'), { ssr: false });
@@ -273,6 +273,8 @@ export default function CoursePage({ course, lessonExtra }: {
   };
 
   const markDone = () => lesson && tien.setDone(lesson.id, !tien.done.includes(lesson.id));
+  // Video theo MỤC của bài đang mở (videoNeo) — hàm thuần, tính một lần mỗi lần vẽ.
+  const neoBai = lesson ? chiaNeo(lesson.id, course.videoNeo?.[lesson.id], full?.blocks) : null;
 
   return (
     <CourseCtx.Provider value={course}>
@@ -401,10 +403,26 @@ export default function CoursePage({ course, lessonExtra }: {
                   </span>
                 </div>
                 {lessonExtra?.(lesson, day?.n)}
-                <VideoBai videos={course.videos?.[lesson.id] ?? []} />
+                {/* Video theo MỤC (videoNeo): danh sách "🎬 Video của bài" + video đầu bài; video của
+                    từng mục chèn ngay dưới tiêu đề mục đó (Blocks › sauTieuDe). Chưa tải nội dung bài
+                    thì chưa biết neo nào khớp ⇒ tạm chỉ hiện video đầu bài. */}
+                {full && neoBai?.coMuc && <DanhSachVideoBai nhom={neoBai.tatCa} />}
+                <VideoBai
+                  videos={[...(course.videos?.[lesson.id] ?? []), ...(neoBai?.dauBai ?? []).flatMap((n) => n.videos.map(veLessonVideo))]}
+                  id={neoBai?.dauBai[0]?.id ?? neoId(lesson.id, 'dau-bai')}
+                />
+                {neoBai?.dauBai.slice(1).map((n) => <span key={n.id} id={n.id} />)}
 
                 {full ? (
-                  <Blocks key={lesson.id} blocks={full.blocks ?? []} framed={lesson.kind === 'grammar'} />
+                  <Blocks
+                    key={lesson.id}
+                    blocks={full.blocks ?? []}
+                    framed={lesson.kind === 'grammar'}
+                    sauTieuDe={neoBai?.coMuc ? (i) => {
+                      const nhom = neoBai.theoKhoi.get(i);
+                      return nhom ? <VideoTheoMuc nhom={nhom} /> : null;
+                    } : undefined}
+                  />
                 ) : loadErr === day?.n ? (
                   <div className={s.soonBox} role="alert">
                     Không tải được nội dung bài (mạng chập chờn hoặc web vừa cập nhật).{' '}

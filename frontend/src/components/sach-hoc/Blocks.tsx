@@ -653,8 +653,22 @@ const IS_EXERCISE = new Set(['vocabAll', 'quiz', 'mcq', 'dictation', 'listen', '
  * công thức và ví dụ bên dưới nó — người học nhìn là biết một điểm ngữ pháp
  * bắt đầu và kết thúc ở đâu, như khung trong sách. Bài tập đứng ngoài khung.
  */
-export function Blocks({ blocks, framed = false }: { blocks: Block[]; framed?: boolean }) {
-  if (!framed) return <>{blocks.map(renderBlock)}</>;
+export function Blocks({ blocks, framed = false, sauTieuDe }: {
+  blocks: Block[];
+  framed?: boolean;
+  /**
+   * Chèn thêm ngay SAU khối `h` thứ i (vd. video giảng gắn theo neo — VideoBai.tsx).
+   * Bài đóng khung: chèn vào đầu khung của mục đó.
+   */
+  sauTieuDe?: (i: number) => React.ReactNode;
+}) {
+  if (!framed) {
+    if (!sauTieuDe) return <>{blocks.map(renderBlock)}</>;
+    return <>{blocks.flatMap((b, i) => {
+      const them = b.t === 'h' ? sauTieuDe(i) : null;
+      return them ? [renderBlock(b, i), <Fragment key={`sau-${i}`}>{them}</Fragment>] : [renderBlock(b, i)];
+    })}</>;
+  }
   const out: React.ReactNode[] = [];
   let box: { title: string; items: React.ReactNode[] } | null = null;
   const close = () => {
@@ -671,6 +685,8 @@ export function Blocks({ blocks, framed = false }: { blocks: Block[]; framed?: b
     if (b.t === 'h') {
       close();
       box = { title: b.text, items: [] };
+      const them = sauTieuDe?.(i);
+      if (them) box.items.push(<Fragment key={`sau-${i}`}>{them}</Fragment>);
     } else if (IS_EXERCISE.has(b.t)) {
       close();
       out.push(renderBlock(b, i));

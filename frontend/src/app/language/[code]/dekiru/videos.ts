@@ -52,4 +52,62 @@ export const VIDEO_NEO: VideoNeoMap = {
       { id: "jp-b4-noi", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-09-noi-gioi-thieu-que-toi-cau-thi-dcb60b03.mp4", tieuDe: "Luyện nói: giới thiệu quê tôi và câu hỏi thi Bài 4", thoiLuongGiay: 488 },
     ],
   },
+  "b5-hoi-thoai": {
+    "dau-bai": [
+      { id: "jp-b5-0", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-01-hoi-thoai-cuoi-tuan-da-lam-gi-580d9160.mp4", tieuDe: "Hội thoại Bài 5: cuối tuần đã làm gì, thấy thế nào, kỳ nghỉ tới", thoiLuongGiay: 741 },
+    ],
+  },
+  "b5-tu-vung": {
+    "dau-bai": [
+      { id: "jp-b5-tv1", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-02-tu-vung-thoi-gian-noi-chon-viec-lam-9b9b05a2.mp4", tieuDe: "Từ vựng Bài 5 (1): thời gian, nơi chốn, người đi cùng, việc làm", thoiLuongGiay: 702 },
+    ],
+    "#4. Đồ vật": [
+      { id: "jp-b5-tv2", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-03-tu-vung-do-vat-cam-tuong-thich-muon-3fc0b338.mp4", tieuDe: "Từ vựng Bài 5 (2): đồ vật, tính từ cảm tưởng, thích – muốn – tại sao", thoiLuongGiay: 544 },
+    ],
+  },
+  "b5-ngu-phap": {
+    "#Bảng tổng": [
+      { id: "jp-b5-chia", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-04-bang-chia-qua-khu-4-loai-tu-31e2ffc5.mp4", tieuDe: "Bảng chia quá khứ: động từ, tính từ đuôi i, đuôi na, danh từ", thoiLuongGiay: 568 },
+    ],
+    "#ポイント 37": [
+      { id: "jp-b5-p1", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-05-diem-37-38-da-lam-gi-the-nao-32f1ef6f.mp4", tieuDe: "Điểm 37–38: đã làm gì, thấy thế nào", thoiLuongGiay: 613 },
+    ],
+    "#ポイント 39": [
+      { id: "jp-b5-p2", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-06-diem-39-43-thich-muon-di-de-lam-2e290692.mp4", tieuDe: "Điểm 39–43: thích, muốn có, muốn làm, đi để làm gì", thoiLuongGiay: 708 },
+    ],
+    "#ポイント 44": [
+      { id: "jp-b5-p3", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-07-diem-44-47-tai-sao-sau-do-voi-ai-c2873e27.mp4", tieuDe: "Điểm 44–47: tại sao, sau đó, với ai, vì… nên + tổng hợp trợ từ", thoiLuongGiay: 674 },
+    ],
+  },
+  "b5-han-lop": {
+    "dau-bai": [
+      { id: "jp-b5-kj", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-08-chu-han-lop-bai-5-6e08af31.mp4", tieuDe: "Chữ Hán của lớp Bài 5: Tiên, Chu, Mỗi, Ngọ, Hậu, Kiến, Thực, Ẩm, Mãi, Vật, Hành, Hưu", thoiLuongGiay: 762 },
+    ],
+  },
+  "b5-noi": {
+    "dau-bai": [
+      { id: "jp-b5-noi", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-09-noi-cuoi-tuan-cua-toi-cau-thi-f56a851c.mp4", tieuDe: "Luyện nói: cuối tuần của tôi và câu hỏi thi Bài 5", thoiLuongGiay: 649 },
+    ],
+  },
+  "b6-hoi-thoai": {
+    "dau-bai": [
+      { id: "jp-b6-0", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-01-hoi-thoai-ru-di-choi-chon-cho-hen-gap-ab077f83.mp4", tieuDe: "Hội thoại Bài 6: rủ đi chơi, chọn chỗ, hẹn gặp", thoiLuongGiay: 747 },
+    ],
+  },
+  "b6-tu-vung": {
+    "dau-bai": [
+      { id: "jp-b6-tv1", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-02-tu-vung-thoi-gian-giai-tri-do-an-dd6d242b.mp4", tieuDe: "Từ vựng Bài 6 (1): kế hoạch, giải trí, đồ vật, ăn uống", thoiLuongGiay: 683 },
+    ],
+    "#E. Tính từ & từ so sánh": [
+      { id: "jp-b6-tv2", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-03-tu-vung-so-sanh-pho-tu-cau-giao-tiep-f77c105d.mp4", tieuDe: "Từ vựng Bài 6 (2): so sánh, phó từ, câu giao tiếp, 8 câu mẫu", thoiLuongGiay: 639 },
+    ],
+  },
+  "b6-ngu-phap": {
+    "#ポイント 48": [
+      { id: "jp-b6-p1", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-04-diem-48-49-ru-nhan-loi-tu-choi-d2780bee.mp4", tieuDe: "Điểm 48–49: rủ, nhận lời, từ chối khéo", thoiLuongGiay: 672 },
+    ],
+    "#ポイント 50": [
+      { id: "jp-b6-p2", src: "https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-05-diem-50-52-co-hen-su-kien-may-ve-4b1260be.mp4", tieuDe: "Điểm 50–52: có hẹn, có sự kiện ở đâu, có mấy vé", thoiLuongGiay: 768 },
+    ],
+  },
 };

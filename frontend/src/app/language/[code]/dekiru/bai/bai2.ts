@@ -1557,13 +1557,13 @@ const NGHE: Lesson = {
       note: 'Nghe: kim từ điển ở đâu, hai cái giá bao nhiêu, Park mua cái nào?',
       lines: [
         { who: '{店員|てんいん}', voice: 'ja-nu', text: 'いらっしゃいませ。', ro: 'Irasshaimase.', vi: 'Kính chào quý khách.' },
-        { who: 'パク', voice: 'ja-nam', text: 'すみません、{電子辞書|でんしじしょ}はどこですか。', ro: 'Sumimasen, denshi jisho wa doko desu ka.', vi: 'Xin lỗi, kim từ điển ở đâu ạ?' },
+        { who: 'パク', voice: 'ja-nu', text: 'すみません、{電子辞書|でんしじしょ}はどこですか。', ro: 'Sumimasen, denshi jisho wa doko desu ka.', vi: 'Xin lỗi, kim từ điển ở đâu ạ?' },
         { who: '{店員|てんいん}', voice: 'ja-nu', text: '{電子辞書|でんしじしょ}ですか。あちらです。', ro: 'Denshi jisho desu ka. Achira desu.', vi: 'Kim từ điển ạ? Ở phía kia.' },
-        { who: 'パク', voice: 'ja-nam', text: 'すみません、これはいくらですか。', ro: 'Sumimasen, kore wa ikura desu ka.', vi: 'Xin lỗi, cái này bao nhiêu ạ?' },
+        { who: 'パク', voice: 'ja-nu', text: 'すみません、これはいくらですか。', ro: 'Sumimasen, kore wa ikura desu ka.', vi: 'Xin lỗi, cái này bao nhiêu ạ?' },
         { who: '{店員|てんいん}', voice: 'ja-nu', text: 'それは{18,000円|いちまんはっせんえん}です。', ro: 'Sore wa ichiman hassen en desu.', vi: 'Cái đó 18.000 yên ạ.' },
-        { who: 'パク', voice: 'ja-nam', text: 'そうですか。その{電子辞書|でんしじしょ}はいくらですか。', ro: 'Sou desu ka. Sono denshi jisho wa ikura desu ka.', vi: 'Thế à. Còn cái chị đang cầm bao nhiêu?' },
+        { who: 'パク', voice: 'ja-nu', text: 'そうですか。その{電子辞書|でんしじしょ}はいくらですか。', ro: 'Sou desu ka. Sono denshi jisho wa ikura desu ka.', vi: 'Thế à. Còn cái chị đang cầm bao nhiêu?' },
         { who: '{店員|てんいん}', voice: 'ja-nu', text: 'これは{23,500円|にまんさんぜんごひゃくえん}です。', ro: 'Kore wa niman sanzen gohyaku en desu.', vi: 'Cái này 23.500 yên ạ.' },
-        { who: 'パク', voice: 'ja-nam', text: 'うーん…。じゃ、これをください。', ro: 'Uun… Ja, kore o kudasai.', vi: 'Ừm… Vậy cho tôi cái này.' },
+        { who: 'パク', voice: 'ja-nu', text: 'うーん…。じゃ、これをください。', ro: 'Uun… Ja, kore o kudasai.', vi: 'Ừm… Vậy cho tôi cái này.' },
       ],
     },
     {
@@ -1679,11 +1679,11 @@ const NGHE: Lesson = {
       title: 'Cái túi và cái đồng hồ của ai?',
       lines: [
         { who: '{店員|てんいん}', voice: 'ja-nu', text: 'あのう、すみません。これは{誰|だれ}のかばんですか。', ro: 'Anoo, sumimasen. Kore wa dare no kaban desu ka.', vi: 'Xin lỗi quý khách. Đây là túi của ai ạ?' },
-        { who: 'パク', voice: 'ja-nam', text: 'あ、それはワンさんのかばんです。ワンさん、かばん！', ro: 'A, sore wa Wan-san no kaban desu. Wan-san, kaban!', vi: 'A, đó là túi của Wang. Wang ơi, túi!' },
+        { who: 'パク', voice: 'ja-nu', text: 'あ、それはワンさんのかばんです。ワンさん、かばん！', ro: 'A, sore wa Wan-san no kaban desu. Wan-san, kaban!', vi: 'A, đó là túi của Wang. Wang ơi, túi!' },
         { who: 'ワン', voice: 'ja-nu', text: 'あ、すみません。ありがとうございます。', ro: 'A, sumimasen. Arigatou gozaimasu.', vi: 'A, xin lỗi. Cảm ơn chị.' },
         { who: '{店員|てんいん}', voice: 'ja-nu', text: 'この{時計|とけい}もワンさんのですか。', ro: 'Kono tokei mo Wan-san no desu ka.', vi: 'Đồng hồ này cũng của chị ạ?' },
         { who: 'ワン', voice: 'ja-nu', text: 'いいえ、{私|わたし}のじゃありません。', ro: 'Iie, watashi no ja arimasen.', vi: 'Không, không phải của tôi.' },
-        { who: 'パク', voice: 'ja-nam', text: 'あ、それは{私|わたし}の{時計|とけい}です！どうもすみません。', ro: 'A, sore wa watashi no tokei desu! Doumo sumimasen.', vi: 'A, đó là đồng hồ của tôi! Xin lỗi nhé.' },
+        { who: 'パク', voice: 'ja-nu', text: 'あ、それは{私|わたし}の{時計|とけい}です！どうもすみません。', ro: 'A, sore wa watashi no tokei desu! Doumo sumimasen.', vi: 'A, đó là đồng hồ của tôi! Xin lỗi nhé.' },
       ],
     },
     {

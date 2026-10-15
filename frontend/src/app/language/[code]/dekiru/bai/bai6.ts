@@ -11,7 +11,7 @@
  * Hội thoại, câu ví dụ, bài đọc, kịch bản nghe: VIẾT MỚI theo đúng tình huống của sách
  * (xem ../SOAN-BAI.md). Tên quán, rạp, sự kiện trong bài là tự đặt.
  *
- * Vai: アンナ, ワン — nữ (a / c); パク, ダニエル — nam (b). Giám thị — examiner.
+ * Vai: アンナ, ワン, パク — nữ (a / c); ダニエル — nam (b). (パク là NỮ — theo bai1.ts.) Giám thị — examiner.
  */
 import type { Lesson } from '@/components/sach-hoc/types';
 
@@ -1550,7 +1550,7 @@ const NGHE: Lesson = {
       title: '①',
       lines: [
         { who: 'アンナ', voice: 'ja-nu', text: 'パクさん、{今晩|こんばん}、{一緒|いっしょ}にラーメンを{食|た}べに{行|い}きませんか。', ro: 'Paku-san, konban, issho ni raamen o tabe ni ikimasen ka.', vi: 'Park, tối nay đi ăn ramen cùng mình không?' },
-        { who: 'パク', voice: 'ja-nam', text: 'ラーメンですか。いいですね。{行|い}きましょう。', ro: 'Raamen desu ka. Ii desu ne. Ikimashou.', vi: 'Ramen à. Hay đấy. Đi thôi.' },
+        { who: 'パク', voice: 'ja-nu', text: 'ラーメンですか。いいですね。{行|い}きましょう。', ro: 'Raamen desu ka. Ii desu ne. Ikimashou.', vi: 'Ramen à. Hay đấy. Đi thôi.' },
       ],
     },
     {
@@ -1568,7 +1568,7 @@ const NGHE: Lesson = {
       id: 'b6-ng-1c',
       title: '③',
       lines: [
-        { who: 'パク', voice: 'ja-nam', text: 'アンナさん、{野球|やきゅう}のチケットが{2枚|にまい}あります。{土曜日|どようび}、{一緒|いっしょ}に{見|み}に{行|い}きませんか。', ro: 'Anna-san, yakyuu no chiketto ga nimai arimasu. Doyoubi, issho ni mi ni ikimasen ka.', vi: 'Anna, mình có 2 vé bóng chày. Thứ Bảy cùng đi xem không?' },
+        { who: 'パク', voice: 'ja-nu', text: 'アンナさん、{野球|やきゅう}のチケットが{2枚|にまい}あります。{土曜日|どようび}、{一緒|いっしょ}に{見|み}に{行|い}きませんか。', ro: 'Anna-san, yakyuu no chiketto ga nimai arimasu. Doyoubi, issho ni mi ni ikimasen ka.', vi: 'Anna, mình có 2 vé bóng chày. Thứ Bảy cùng đi xem không?' },
         { who: 'アンナ', voice: 'ja-nu', text: 'わあ、{野球|やきゅう}！ぜひ{行|い}きたいです。', ro: 'Waa, yakyuu! Zehi ikitai desu.', vi: 'Oa, bóng chày! Mình rất muốn đi.' },
       ],
     },
@@ -1588,9 +1588,9 @@ const NGHE: Lesson = {
       title: '⑤',
       lines: [
         { who: 'アンナ', voice: 'ja-nu', text: 'パクさん、{今度|こんど}、うちで{一緒|いっしょ}にすき{焼|や}きを{作|つく}りませんか。', ro: 'Paku-san, kondo, uchi de issho ni sukiyaki o tsukurimasen ka.', vi: 'Park, lần tới cùng nấu sukiyaki ở nhà mình không?' },
-        { who: 'パク', voice: 'ja-nam', text: 'すき{焼|や}きですか。わあ、いいですね。ぜひ！', ro: 'Sukiyaki desu ka. Waa, ii desu ne. Zehi!', vi: 'Sukiyaki à? Oa, hay quá. Nhất định rồi!' },
+        { who: 'パク', voice: 'ja-nu', text: 'すき{焼|や}きですか。わあ、いいですね。ぜひ！', ro: 'Sukiyaki desu ka. Waa, ii desu ne. Zehi!', vi: 'Sukiyaki à? Oa, hay quá. Nhất định rồi!' },
         { who: 'アンナ', voice: 'ja-nu', text: 'よかった。じゃ、{日曜日|にちようび}はどうですか。', ro: 'Yokatta. Ja, nichiyoubi wa dou desu ka.', vi: 'Tốt quá. Vậy Chủ Nhật được không?' },
-        { who: 'パク', voice: 'ja-nam', text: 'いいですよ。', ro: 'Ii desu yo.', vi: 'Được chứ.' },
+        { who: 'パク', voice: 'ja-nu', text: 'いいですよ。', ro: 'Ii desu yo.', vi: 'Được chứ.' },
       ],
     },
     {
@@ -1625,13 +1625,13 @@ const NGHE: Lesson = {
       note: 'Nghe: đi khi nào, chọn quán nào (ⓐ ⓑ ⓒ), vì sao.',
       lines: [
         { who: 'ワン', voice: 'ja-nu', text: 'パクさん、{今週|こんしゅう}の{土曜日|どようび}、{一緒|いっしょ}に{食事|しょくじ}に{行|い}きませんか。', ro: 'Paku-san, konshuu no doyoubi, issho ni shokuji ni ikimasen ka.', vi: 'Park, thứ Bảy tuần này đi ăn cùng mình không?' },
-        { who: 'パク', voice: 'ja-nam', text: 'いいですね。{何|なに}を{食|た}べますか。', ro: 'Ii desu ne. Nani o tabemasu ka.', vi: 'Hay đấy. Ăn gì?' },
+        { who: 'パク', voice: 'ja-nu', text: 'いいですね。{何|なに}を{食|た}べますか。', ro: 'Ii desu ne. Nani o tabemasu ka.', vi: 'Hay đấy. Ăn gì?' },
         { who: 'ワン', voice: 'ja-nu', text: 'すしと{焼|や}き{肉|にく}とどちらがいいですか。', ro: 'Sushi to yakiniku to dochira ga ii desu ka.', vi: 'Sushi và thịt nướng, cậu thích cái nào hơn?' },
-        { who: 'パク', voice: 'ja-nam', text: 'そうですねえ。{焼|や}き{肉|にく}のほうがいいです。', ro: 'Sou desu nee. Yakiniku no hou ga ii desu.', vi: 'Để xem nào. Thịt nướng hơn.' },
+        { who: 'パク', voice: 'ja-nu', text: 'そうですねえ。{焼|や}き{肉|にく}のほうがいいです。', ro: 'Sou desu nee. Yakiniku no hou ga ii desu.', vi: 'Để xem nào. Thịt nướng hơn.' },
         { who: 'ワン', voice: 'ja-nu', text: '{焼|や}き{肉|にく}の{食|た}べ{放題|ほうだい}の{店|みせ}が{二|ふた}つあります。やまととほしぞらです。ほしぞらのほうが{安|やす}いですよ。ケーキもあります。', ro: 'Yakiniku no tabehoudai no mise ga futatsu arimasu. Yamato to Hoshizora desu. Hoshizora no hou ga yasui desu yo. Keeki mo arimasu.', vi: 'Có hai quán thịt nướng buffet: Yamato và Hoshizora. Hoshizora rẻ hơn đấy. Có cả bánh ngọt.' },
-        { who: 'パク', voice: 'ja-nam', text: 'でも、ほしぞらは{駅|えき}から{遠|とお}いですね。やまとは{駅|えき}から{歩|ある}いて{3分|さんぷん}ですよ。', ro: 'Demo, Hoshizora wa eki kara tooi desu ne. Yamato wa eki kara aruite sanpun desu yo.', vi: 'Nhưng Hoshizora xa ga nhỉ. Yamato thì từ ga đi bộ 3 phút thôi đấy.' },
+        { who: 'パク', voice: 'ja-nu', text: 'でも、ほしぞらは{駅|えき}から{遠|とお}いですね。やまとは{駅|えき}から{歩|ある}いて{3分|さんぷん}ですよ。', ro: 'Demo, Hoshizora wa eki kara tooi desu ne. Yamato wa eki kara aruite sanpun desu yo.', vi: 'Nhưng Hoshizora xa ga nhỉ. Yamato thì từ ga đi bộ 3 phút thôi đấy.' },
         { who: 'ワン', voice: 'ja-nu', text: 'そうですね。{土曜日|どようび}はバスが{少|すく}ないです。じゃ、やまとへ{行|い}きましょう。', ro: 'Sou desu ne. Doyoubi wa basu ga sukunai desu. Ja, Yamato e ikimashou.', vi: 'Đúng nhỉ. Thứ Bảy ít xe buýt. Vậy đi Yamato nhé.' },
-        { who: 'パク', voice: 'ja-nam', text: 'はい、そうしましょう。', ro: 'Hai, sou shimashou.', vi: 'Ừ, làm vậy đi.' },
+        { who: 'パク', voice: 'ja-nu', text: 'はい、そうしましょう。', ro: 'Hai, sou shimashou.', vi: 'Ừ, làm vậy đi.' },
       ],
     },
     {
@@ -1657,15 +1657,15 @@ const NGHE: Lesson = {
       id: 'b6-ng-3',
       title: 'Park rủ Anna đi xem phim',
       lines: [
-        { who: 'パク', voice: 'ja-nam', text: 'アンナさん、もう「キングマン」を{見|み}ましたか。', ro: 'Anna-san, mou "Kinguman" o mimashita ka.', vi: 'Anna đã xem phim "Kingman" chưa?' },
+        { who: 'パク', voice: 'ja-nu', text: 'アンナさん、もう「キングマン」を{見|み}ましたか。', ro: 'Anna-san, mou "Kinguman" o mimashita ka.', vi: 'Anna đã xem phim "Kingman" chưa?' },
         { who: 'アンナ', voice: 'ja-nu', text: 'いいえ、まだです。おもしろいですか。', ro: 'Iie, mada desu. Omoshiroi desu ka.', vi: 'Chưa. Có hay không?' },
-        { who: 'パク', voice: 'ja-nam', text: 'とてもおもしろいですよ。{一緒|いっしょ}に{見|み}に{行|い}きませんか。', ro: 'Totemo omoshiroi desu yo. Issho ni mi ni ikimasen ka.', vi: 'Hay lắm đấy. Cùng đi xem không?' },
+        { who: 'パク', voice: 'ja-nu', text: 'とてもおもしろいですよ。{一緒|いっしょ}に{見|み}に{行|い}きませんか。', ro: 'Totemo omoshiroi desu yo. Issho ni mi ni ikimasen ka.', vi: 'Hay lắm đấy. Cùng đi xem không?' },
         { who: 'アンナ', voice: 'ja-nu', text: 'いいですね。いつ{行|い}きますか。', ro: 'Ii desu ne. Itsu ikimasu ka.', vi: 'Hay đấy. Khi nào đi?' },
-        { who: 'パク', voice: 'ja-nam', text: '{今週|こんしゅう}の{金曜日|きんようび}はどうですか。', ro: 'Konshuu no kinyoubi wa dou desu ka.', vi: 'Thứ Sáu tuần này thì sao?' },
+        { who: 'パク', voice: 'ja-nu', text: '{今週|こんしゅう}の{金曜日|きんようび}はどうですか。', ro: 'Konshuu no kinyoubi wa dou desu ka.', vi: 'Thứ Sáu tuần này thì sao?' },
         { who: 'アンナ', voice: 'ja-nu', text: '{14日|じゅうよっか}ですか。すみません、{金曜日|きんようび}はちょっと……。アルバイトがありますから。{土曜日|どようび}はどうですか。', ro: 'Juuyokka desu ka. Sumimasen, kinyoubi wa chotto……. Arubaito ga arimasu kara. Doyoubi wa dou desu ka.', vi: 'Ngày 14 à. Xin lỗi, thứ Sáu thì hơi… Vì mình có ca làm thêm. Thứ Bảy thì sao?' },
-        { who: 'パク', voice: 'ja-nam', text: 'いいですよ。{15日|じゅうごにち}ですね。{何時|なんじ}に{会|あ}いますか。', ro: 'Ii desu yo. Juugonichi desu ne. Nanji ni aimasu ka.', vi: 'Được. Ngày 15 nhé. Mấy giờ gặp?' },
+        { who: 'パク', voice: 'ja-nu', text: 'いいですよ。{15日|じゅうごにち}ですね。{何時|なんじ}に{会|あ}いますか。', ro: 'Ii desu yo. Juugonichi desu ne. Nanji ni aimasu ka.', vi: 'Được. Ngày 15 nhé. Mấy giờ gặp?' },
         { who: 'アンナ', voice: 'ja-nu', text: '{映画|えいが}は{1時|いちじ}からですね。{12時半|じゅうにじはん}はどうですか。', ro: 'Eiga wa ichiji kara desu ne. Juuniji han wa dou desu ka.', vi: 'Phim chiếu từ 1 giờ nhỉ. 12 rưỡi thì sao?' },
-        { who: 'パク', voice: 'ja-nam', text: '{12時半|じゅうにじはん}ですね。どこで{会|あ}いますか。{渋谷駅|しぶやえき}はどうですか。', ro: 'Juuniji han desu ne. Doko de aimasu ka. Shibuya eki wa dou desu ka.', vi: '12 rưỡi nhé. Gặp ở đâu? Ga Shibuya thì sao?' },
+        { who: 'パク', voice: 'ja-nu', text: '{12時半|じゅうにじはん}ですね。どこで{会|あ}いますか。{渋谷駅|しぶやえき}はどうですか。', ro: 'Juuniji han desu ne. Doko de aimasu ka. Shibuya eki wa dou desu ka.', vi: '12 rưỡi nhé. Gặp ở đâu? Ga Shibuya thì sao?' },
         { who: 'アンナ', voice: 'ja-nu', text: 'はい、わかりました。じゃ、{土曜日|どようび}の{12時半|じゅうにじはん}に{渋谷駅|しぶやえき}で。', ro: 'Hai, wakarimashita. Ja, doyoubi no juuniji han ni Shibuya eki de.', vi: 'Ừ, mình hiểu rồi. Vậy 12 rưỡi thứ Bảy ở ga Shibuya nhé.' },
       ],
     },

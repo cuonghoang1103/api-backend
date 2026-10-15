@@ -19,11 +19,11 @@ export default {
     'jpd123-dieu-kien-qua-mon': { }, // dự kiến: jp-0-1
     'jpd123-dong-tu-masu': { }, // dự kiến: jp-b3-chia (+ jp-b5-chia)
     'jpd123-tro-tu': { }, // dự kiến: jp-b3-p1
-    'jpd123-tinh-tu': { }, // dự kiến: jp-b4-chia
-    'jpd123-tinh-tu-chia-4-dang': { }, // dự kiến: jp-b4-chia
+    'jpd123-tinh-tu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-05-diem-24-27-ta-noi-chon-mua-muc-do-53e16156.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b4-chia
+    'jpd123-tinh-tu-chia-4-dang': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-04-bang-chia-tinh-tu-i-na-8d8bd196.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b4-chia
     'jpd123-tinh-tu-bo-nghia-dong-tu': { }, // dự kiến: — (không thuộc ポイント 1–80, không có video)
-    'jpd123-tu-chi-muc-do': { }, // dự kiến: jp-b4-p1
-    'jpd123-lien-tu': { }, // dự kiến: jp-b4-p3
+    'jpd123-tu-chi-muc-do': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-05-diem-24-27-ta-noi-chon-mua-muc-do-53e16156.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b4-p1
+    'jpd123-lien-tu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-07-diem-32-36-the-nao-va-nhung-nhi-e7b06d0c.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b4-p3
     'jpd123-nguphap-chuong3': { },
     'jpd123-moi-ru': { }, // dự kiến: jp-b6-p1
     'jpd123-dem-thoi-gian': { }, // dự kiến: jp-b6-p2

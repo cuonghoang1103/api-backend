@@ -23,6 +23,7 @@ import pt1 from './pro192/pt1.mjs';
 import pt2 from './pro192/pt2.mjs';
 import adv2 from './pro192/adv2.mjs';
 import fe from './pro192/fe.mjs';
+import cs from './pro192/chuyen-sau.mjs';
 
 export default {
   semester: { code: 'KY2', name: 'Kỳ 2', ordinal: 2 },
@@ -1668,6 +1669,12 @@ students.<span class="tok-function">stream</span>()
         /* 🧩 Bài bổ sung — ./pro192/adv2.mjs */
         ...adv2.extrasEnd,
       ],
+    },
+    /* ⭐ Chuyên sâu — ngoài giáo trình, slide TỰ DỰNG — ./pro192/chuyen-sau.mjs */
+    {
+      title: "⭐ Advanced — Modern Java and Spring readiness: generics, lambdas, streams, Java 17–21, object contracts, JVM, OO design|||⭐ Chuyên sâu — Java hiện đại & sẵn sàng Spring: generics, lambda, stream, Java 17–21, hợp đồng đối tượng, JVM, thiết kế OO",
+      description: "Phần TỰ THÊM ngoài giáo trình trường (đánh dấu ⭐, slide tự dựng): đưa người học từ Java 8 của phòng thi tới Java 17/21 mà Spring Boot 4 dùng — generics & lambda, Stream API & Optional, record/sealed/pattern matching, equals/hashCode/bất biến, bên trong JVM & GC, thiết kế OO sẵn cho Spring (DI), Maven + JUnit đầu tiên và 40 câu phỏng vấn Java core. Mọi code chạy thật.",
+      lessons: cs.lessons,
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",

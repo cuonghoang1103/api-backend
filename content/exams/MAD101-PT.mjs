@@ -854,7 +854,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Consider the algorithm: <pre>procedure bubblesort($a_1,a_2,\\dots,a_n$: real numbers with $n\\ge2$)\nfor i := 1 to n-1\n  for j := 1 to n-i\n    if $a_j > a_{j+1}$ then interchange $a_j$ and $a_{j+1}$\n{$a_1,a_2,\\dots,a_n$ is in increasing order}</pre> We use this algorithm to sort the list [1, 5, 3, 4, 7, 2]. What does the list look like when i=2, j=4?|||Xét thuật toán bubblesort (như trên). Áp dụng để sắp [1, 5, 3, 4, 7, 2]. Danh sách trông ra sao khi i=2, j=4?",
+          "prompt": "Consider the algorithm: <pre>procedure bubblesort($a_1,a_2,\\dots,a_n$: real numbers with $n\\ge2$)\nfor i := 1 to n-1\n  for j := 1 to n-i\n    if $a_j &gt; a_{j+1}$ then interchange $a_j$ and $a_{j+1}$\n{$a_1,a_2,\\dots,a_n$ is in increasing order}</pre> We use this algorithm to sort the list [1, 5, 3, 4, 7, 2]. What does the list look like when i=2, j=4?|||Xét thuật toán bubblesort (như trên). Áp dụng để sắp [1, 5, 3, 4, 7, 2]. Danh sách trông ra sao khi i=2, j=4?",
           "options": [
             {
               "text": "[1, 3, 2, 4, 5, 7]|||[1, 3, 2, 4, 5, 7]"
@@ -974,7 +974,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Consider the algorithm: <pre>procedure binary search(x: integer, $a_1,\\dots,a_n$: increasing integers)\ni:=1 {i is left endpoint of search interval}\nj:=n {j is right endpoint of search interval}\nwhile i&lt;j:\n  m := $\\lfloor(i+j)/2\\rfloor$\n  if $x>a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> How many comparisons are used if we search for x=3 in the list [1, 3, 4, 5, 6, 8, 9, 12, 17, 20, 26]?|||Xét thuật toán binary search (như trên). Cần bao nhiêu phép so sánh để tìm x=3 trong [1, 3, 4, 5, 6, 8, 9, 12, 17, 20, 26]?",
+          "prompt": "Consider the algorithm: <pre>procedure binary search(x: integer, $a_1,\\dots,a_n$: increasing integers)\ni:=1 {i is left endpoint of search interval}\nj:=n {j is right endpoint of search interval}\nwhile i&lt;j:\n  m := $\\lfloor(i+j)/2\\rfloor$\n  if $x&gt;a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> How many comparisons are used if we search for x=3 in the list [1, 3, 4, 5, 6, 8, 9, 12, 17, 20, 26]?|||Xét thuật toán binary search (như trên). Cần bao nhiêu phép so sánh để tìm x=3 trong [1, 3, 4, 5, 6, 8, 9, 12, 17, 20, 26]?",
           "options": [
             {
               "text": "8|||8"
@@ -2083,7 +2083,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure tt($a_1,a_2,\\dots,a_n$: integers)\nd := $a_1$\nfor i := 1 to n do\n  if d > $a_i$ then d := $a_i$\nk := n\nwhile (k>=1) and ($a_k$ > d)\n  k := k-1\nPrint(k)</pre> What is the output of the algorithm?|||<pre>procedure tt($a_1,a_2,\\dots,a_n$: integers)\nd := $a_1$\nfor i := 1 to n do\n  if d > $a_i$ then d := $a_i$\nk := n\nwhile (k>=1) and ($a_k$ > d)\n  k := k-1\nPrint(k)</pre> Cho thuật toán tt (như trên). Kết quả xuất ra là gì?",
+          "prompt": "<pre>procedure tt($a_1,a_2,\\dots,a_n$: integers)\nd := $a_1$\nfor i := 1 to n do\n  if d &gt; $a_i$ then d := $a_i$\nk := n\nwhile (k&gt;=1) and ($a_k$ &gt; d)\n  k := k-1\nPrint(k)</pre> What is the output of the algorithm?|||<pre>procedure tt($a_1,a_2,\\dots,a_n$: integers)\nd := $a_1$\nfor i := 1 to n do\n  if d &gt; $a_i$ then d := $a_i$\nk := n\nwhile (k&gt;=1) and ($a_k$ &gt; d)\n  k := k-1\nPrint(k)</pre> Cho thuật toán tt (như trên). Kết quả xuất ra là gì?",
           "options": [
             {
               "text": "None of the other choices is correct|||Không đáp án nào đúng"
@@ -2137,7 +2137,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure Binarysearch($a_1<a_2<\\dots<a_n$, x: integer)\ni:=1\nj:=n\nwhile (i<j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x>a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> If input = 2, 4, 5, 7, 8, 9, 10, 13 and x = 11, after the second time of dividing into sublists, the sublist to be considered is ___|||<pre>procedure Binarysearch($a_1<a_2<\\dots<a_n$, x: integer)\ni:=1\nj:=n\nwhile (i<j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x>a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> Cho thuật toán Binarysearch (như trên). Với input 2,4,5,7,8,9,10,13 và x=11, sau lần chia thứ HAI, dãy con cần xét là gì?",
+          "prompt": "<pre>procedure Binarysearch($a_1&lt;a_2&lt;\\dots&lt;a_n$, x: integer)\ni:=1\nj:=n\nwhile (i&lt;j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x&gt;a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> If input = 2, 4, 5, 7, 8, 9, 10, 13 and x = 11, after the second time of dividing into sublists, the sublist to be considered is ___|||<pre>procedure Binarysearch($a_1&lt;a_2&lt;\\dots&lt;a_n$, x: integer)\ni:=1\nj:=n\nwhile (i&lt;j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x&gt;a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> Cho thuật toán Binarysearch (như trên). Với input 2,4,5,7,8,9,10,13 và x=11, sau lần chia thứ HAI, dãy con cần xét là gì?",
           "options": [
             {
               "text": "10, 13|||10, 13"
@@ -2188,7 +2188,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j<a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> If input = 3, 2, 4, 7, 1, 6, 5, after running the outer loop with i = 5, the order of the elements in the list is ___|||<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j<a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> Cho Insertionsort (như trên). Với input 3,2,4,7,1,6,5, sau khi chạy vòng ngoài i=5, thứ tự danh sách là gì?",
+          "prompt": "<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j&lt;a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> If input = 3, 2, 4, 7, 1, 6, 5, after running the outer loop with i = 5, the order of the elements in the list is ___|||<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j&lt;a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> Cho Insertionsort (như trên). Với input 3,2,4,7,1,6,5, sau khi chạy vòng ngoài i=5, thứ tự danh sách là gì?",
           "options": [
             {
               "text": "1, 2, 3, 4, 7, 6, 5|||1, 2, 3, 4, 7, 6, 5"
@@ -2212,7 +2212,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure Binarysearch($a_1<a_2<\\dots<a_n$, x: integer)\ni:=1\nj:=n\nwhile (i<j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x>a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> If input = 2, 4, 5, 7, 8, 9, 10, 13 and x = 11, after the third time of dividing into sublists, the sublist to be considered is ___|||<pre>procedure Binarysearch($a_1<a_2<\\dots<a_n$, x: integer)\ni:=1\nj:=n\nwhile (i<j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x>a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> Cho Binarysearch (như trên). Với input 2,4,5,7,8,9,10,13 và x=11, sau lần chia thứ BA, dãy con là gì?",
+          "prompt": "<pre>procedure Binarysearch($a_1&lt;a_2&lt;\\dots&lt;a_n$, x: integer)\ni:=1\nj:=n\nwhile (i&lt;j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x&gt;a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> If input = 2, 4, 5, 7, 8, 9, 10, 13 and x = 11, after the third time of dividing into sublists, the sublist to be considered is ___|||<pre>procedure Binarysearch($a_1&lt;a_2&lt;\\dots&lt;a_n$, x: integer)\ni:=1\nj:=n\nwhile (i&lt;j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x&gt;a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> Cho Binarysearch (như trên). Với input 2,4,5,7,8,9,10,13 và x=11, sau lần chia thứ BA, dãy con là gì?",
           "options": [
             {
               "text": "13|||13"
@@ -2236,7 +2236,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j<a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> If input = 7, 2, 4, 3, 1, 6, 5, after running the outer loop with i = 5, the order of the elements in the list is ___|||<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j<a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> Cho Insertionsort (như trên). Với input 7,2,4,3,1,6,5, sau khi chạy vòng ngoài i=5, thứ tự danh sách là gì?",
+          "prompt": "<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j&lt;a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> If input = 7, 2, 4, 3, 1, 6, 5, after running the outer loop with i = 5, the order of the elements in the list is ___|||<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j&lt;a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> Cho Insertionsort (như trên). Với input 7,2,4,3,1,6,5, sau khi chạy vòng ngoài i=5, thứ tự danh sách là gì?",
           "options": [
             {
               "text": "1, 2, 3, 4, 7, 6, 5|||1, 2, 3, 4, 7, 6, 5"
@@ -2487,7 +2487,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure TT(n: integer)\nsum:=0\ni:=0\nj:=0\nwhile ($i<\\sqrt{n}$)\n  sum:=sum+1\n  i:=i+1\nwhile ($j<\\sqrt{n}/2$)\n  j:=j+1\n  sum:=sum+1\nPrint(sum)</pre> If n=9, how many additions are required?|||<pre>procedure TT(n: integer)\nsum:=0\ni:=0\nj:=0\nwhile ($i<\\sqrt{n}$)\n  sum:=sum+1\n  i:=i+1\nwhile ($j<\\sqrt{n}/2$)\n  j:=j+1\n  sum:=sum+1\nPrint(sum)</pre> Cho TT (như trên). Nếu n=9, cần bao nhiêu phép cộng?",
+          "prompt": "<pre>procedure TT(n: integer)\nsum:=0\ni:=0\nj:=0\nwhile ($i&lt;\\sqrt{n}$)\n  sum:=sum+1\n  i:=i+1\nwhile ($j&lt;\\sqrt{n}/2$)\n  j:=j+1\n  sum:=sum+1\nPrint(sum)</pre> If n=9, how many additions are required?|||<pre>procedure TT(n: integer)\nsum:=0\ni:=0\nj:=0\nwhile ($i&lt;\\sqrt{n}$)\n  sum:=sum+1\n  i:=i+1\nwhile ($j&lt;\\sqrt{n}/2$)\n  j:=j+1\n  sum:=sum+1\nPrint(sum)</pre> Cho TT (như trên). Nếu n=9, cần bao nhiêu phép cộng?",
           "options": [
             {
               "text": "10|||10"
@@ -2565,7 +2565,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "In the bubble sort algorithm: <pre>procedure bubblesort($a_1,a_2,\\dots,a_n$: integers)\nfor i=1 to n-1\n  for j=1 to n-i\n    if $a_j>a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> If the input is $\\{4,2,3,1\\}$, how many swaps are used?|||<pre>procedure bubblesort($a_1,a_2,\\dots,a_n$: integers)\nfor i=1 to n-1\n  for j=1 to n-i\n    if $a_j>a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> Trong bubble sort (như trên). Với đầu vào $\\{4,2,3,1\\}$, cần bao nhiêu lần đổi chỗ?",
+          "prompt": "In the bubble sort algorithm: <pre>procedure bubblesort($a_1,a_2,\\dots,a_n$: integers)\nfor i=1 to n-1\n  for j=1 to n-i\n    if $a_j&gt;a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> If the input is $\\{4,2,3,1\\}$, how many swaps are used?|||<pre>procedure bubblesort($a_1,a_2,\\dots,a_n$: integers)\nfor i=1 to n-1\n  for j=1 to n-i\n    if $a_j&gt;a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> Trong bubble sort (như trên). Với đầu vào $\\{4,2,3,1\\}$, cần bao nhiêu lần đổi chỗ?",
           "options": [
             {
               "text": "3|||3"
@@ -2673,7 +2673,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure Ia($a_1,a_2,\\dots,a_n$: integers)\nm := $a_1$\nt := 0\nfor i:=2 to n\n  if ($a_i>m$) then\n    m:=$a_i$\n    t:=t+1</pre> If the input is the list $[1,6,2,3,7,7,4,8,8,6]$, how many additions are used?|||<pre>procedure Ia($a_1,a_2,\\dots,a_n$: integers)\nm := $a_1$\nt := 0\nfor i:=2 to n\n  if ($a_i>m$) then\n    m:=$a_i$\n    t:=t+1</pre> Cho Ia (như trên). Với đầu vào $[1,6,2,3,7,7,4,8,8,6]$, cần bao nhiêu phép cộng?",
+          "prompt": "<pre>procedure Ia($a_1,a_2,\\dots,a_n$: integers)\nm := $a_1$\nt := 0\nfor i:=2 to n\n  if ($a_i&gt;m$) then\n    m:=$a_i$\n    t:=t+1</pre> If the input is the list $[1,6,2,3,7,7,4,8,8,6]$, how many additions are used?|||<pre>procedure Ia($a_1,a_2,\\dots,a_n$: integers)\nm := $a_1$\nt := 0\nfor i:=2 to n\n  if ($a_i&gt;m$) then\n    m:=$a_i$\n    t:=t+1</pre> Cho Ia (như trên). Với đầu vào $[1,6,2,3,7,7,4,8,8,6]$, cần bao nhiêu phép cộng?",
           "options": [
             {
               "text": "2|||2"
@@ -3963,7 +3963,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the recursive algorithm: <pre>procedure T(n: integer)\nif n<3 then\n  return 3\nelse if (n mod 2=0) then\n  return n\nelse\n  return 3*T(n-1)-2</pre> Find output if n=9.|||<pre>procedure T(n: integer)\nif n<3 then\n  return 3\nelse if (n mod 2=0) then\n  return n\nelse\n  return 3*T(n-1)-2</pre> Cho T (như trên). Tìm kết quả nếu n=9.",
+          "prompt": "Given the recursive algorithm: <pre>procedure T(n: integer)\nif n&lt;3 then\n  return 3\nelse if (n mod 2=0) then\n  return n\nelse\n  return 3*T(n-1)-2</pre> Find output if n=9.|||<pre>procedure T(n: integer)\nif n&lt;3 then\n  return 3\nelse if (n mod 2=0) then\n  return n\nelse\n  return 3*T(n-1)-2</pre> Cho T (như trên). Tìm kết quả nếu n=9.",
           "options": [
             {
               "text": "22|||22"
@@ -5043,7 +5043,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the algorithm: <pre>Procedure LN(m, n: integers)\nwhile (m != n)\n  if m > n then m:=m-n\n  else n:=n-m;\nPrint(m)</pre> If m=36, n=44, what is the output of the algorithm?|||<pre>Procedure LN(m, n: integers)\nwhile (m != n)\n  if m > n then m:=m-n\n  else n:=n-m;\nPrint(m)</pre> Cho LN (như trên). Nếu m=36, n=44, kết quả xuất ra là gì?",
+          "prompt": "Given the algorithm: <pre>Procedure LN(m, n: integers)\nwhile (m != n)\n  if m &gt; n then m:=m-n\n  else n:=n-m;\nPrint(m)</pre> If m=36, n=44, what is the output of the algorithm?|||<pre>Procedure LN(m, n: integers)\nwhile (m != n)\n  if m &gt; n then m:=m-n\n  else n:=n-m;\nPrint(m)</pre> Cho LN (như trên). Nếu m=36, n=44, kết quả xuất ra là gì?",
           "options": [
             {
               "text": "4|||4"
@@ -5070,7 +5070,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the Bubble sort algorithm: <pre>Procedure Bubblesort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 1 to (n-1) do\n  for j = 1 to (n-i) do\n    if $a_j > a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> If input = 3, 2, 4, 7, 1, 6, 5, find the order of the elements after completing the first pass (i = 1).|||<pre>Procedure Bubblesort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 1 to (n-1) do\n  for j = 1 to (n-i) do\n    if $a_j > a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> Cho Bubblesort (như trên). Với input 3,2,4,7,1,6,5, thứ tự sau khi hoàn tất vòng đầu (i=1) là gì?",
+          "prompt": "Given the Bubble sort algorithm: <pre>Procedure Bubblesort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 1 to (n-1) do\n  for j = 1 to (n-i) do\n    if $a_j &gt; a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> If input = 3, 2, 4, 7, 1, 6, 5, find the order of the elements after completing the first pass (i = 1).|||<pre>Procedure Bubblesort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 1 to (n-1) do\n  for j = 1 to (n-i) do\n    if $a_j &gt; a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> Cho Bubblesort (như trên). Với input 3,2,4,7,1,6,5, thứ tự sau khi hoàn tất vòng đầu (i=1) là gì?",
           "options": [
             {
               "text": "2, 3, 4, 1, 6, 5, 7|||2, 3, 4, 1, 6, 5, 7"
@@ -6015,7 +6015,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the directed graph below with vertices A, B, C, D, E, F. How many vertices are in the strongly connected component containing A?<pre class=\"mermaid\">graph LR\n  c((C)) --> b((B))\n  e((E)) --> b\n  f((F)) --> b\n  b --> d((D))\n  e --> c\n  d --> f\n  e --> f\n  c --> a((A))\n  f --> a\n  a --> e\n  a --> d</pre>|||Cho đồ thị có hướng dưới đây với các đỉnh A, B, C, D, E, F. Có bao nhiêu đỉnh trong thành phần liên thông mạnh chứa A?<pre class=\"mermaid\">graph LR\n  c((C)) --> b((B))\n  e((E)) --> b\n  f((F)) --> b\n  b --> d((D))\n  e --> c\n  d --> f\n  e --> f\n  c --> a((A))\n  f --> a\n  a --> e\n  a --> d</pre>",
+          "prompt": "Given the directed graph below with vertices A, B, C, D, E, F. How many vertices are in the strongly connected component containing A?<pre class=\"mermaid\">graph LR\n  c((C)) --&gt; b((B))\n  e((E)) --&gt; b\n  f((F)) --&gt; b\n  b --&gt; d((D))\n  e --&gt; c\n  d --&gt; f\n  e --&gt; f\n  c --&gt; a((A))\n  f --&gt; a\n  a --&gt; e\n  a --&gt; d</pre>|||Cho đồ thị có hướng dưới đây với các đỉnh A, B, C, D, E, F. Có bao nhiêu đỉnh trong thành phần liên thông mạnh chứa A?<pre class=\"mermaid\">graph LR\n  c((C)) --&gt; b((B))\n  e((E)) --&gt; b\n  f((F)) --&gt; b\n  b --&gt; d((D))\n  e --&gt; c\n  d --&gt; f\n  e --&gt; f\n  c --&gt; a((A))\n  f --&gt; a\n  a --&gt; e\n  a --&gt; d</pre>",
           "options": [
             {
               "text": "6|||6"
@@ -6042,7 +6042,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the directed graph below with vertices A, B, C, D, E, F. How many vertices are in the strongly connected component containing A?<pre class=\"mermaid\">graph LR\n  a((A)) --> b((B))\n  b --> c((C))\n  d((D)) --> a\n  e((E)) --> b\n  e --> d\n  e --> f((F))\n  f --> b\n  f --> c\n  a --> e</pre>|||Cho đồ thị có hướng dưới đây với các đỉnh A, B, C, D, E, F. Có bao nhiêu đỉnh trong thành phần liên thông mạnh chứa A?<pre class=\"mermaid\">graph LR\n  a((A)) --> b((B))\n  b --> c((C))\n  d((D)) --> a\n  e((E)) --> b\n  e --> d\n  e --> f((F))\n  f --> b\n  f --> c\n  a --> e</pre>",
+          "prompt": "Given the directed graph below with vertices A, B, C, D, E, F. How many vertices are in the strongly connected component containing A?<pre class=\"mermaid\">graph LR\n  a((A)) --&gt; b((B))\n  b --&gt; c((C))\n  d((D)) --&gt; a\n  e((E)) --&gt; b\n  e --&gt; d\n  e --&gt; f((F))\n  f --&gt; b\n  f --&gt; c\n  a --&gt; e</pre>|||Cho đồ thị có hướng dưới đây với các đỉnh A, B, C, D, E, F. Có bao nhiêu đỉnh trong thành phần liên thông mạnh chứa A?<pre class=\"mermaid\">graph LR\n  a((A)) --&gt; b((B))\n  b --&gt; c((C))\n  d((D)) --&gt; a\n  e((E)) --&gt; b\n  e --&gt; d\n  e --&gt; f((F))\n  f --&gt; b\n  f --&gt; c\n  a --&gt; e</pre>",
           "options": [
             {
               "text": "4|||4"
@@ -6207,7 +6207,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "How many strongly connected components are there in this graph? It has 12 vertices: an outer ring $v_1..v_8$ and four inner vertices $w_1..w_4$.<pre class=\"mermaid\">graph LR\n  v1((v1)) --> v2((v2))\n  v2 --> v3((v3))\n  v3 --> v4((v4))\n  v4 --> v5((v5))\n  v5 --> v6((v6))\n  v6 --> v7((v7))\n  v7 --> v8((v8))\n  v8 --> v1\n  v1 --> w1((w1))\n  v8 --> w1\n  v2 --> w2((w2))\n  v3 --> w2\n  v6 --> w3((w3))\n  v7 --> w3\n  v5 --> w4((w4))\n  v4 --> w4\n  w4 --> w1\n  w2 --> w3</pre>|||Đồ thị sau có bao nhiêu thành phần liên thông mạnh? Đồ thị có 12 đỉnh: vành ngoài $v_1..v_8$ và 4 đỉnh trong $w_1..w_4$.<pre class=\"mermaid\">graph LR\n  v1((v1)) --> v2((v2))\n  v2 --> v3((v3))\n  v3 --> v4((v4))\n  v4 --> v5((v5))\n  v5 --> v6((v6))\n  v6 --> v7((v7))\n  v7 --> v8((v8))\n  v8 --> v1\n  v1 --> w1((w1))\n  v8 --> w1\n  v2 --> w2((w2))\n  v3 --> w2\n  v6 --> w3((w3))\n  v7 --> w3\n  v5 --> w4((w4))\n  v4 --> w4\n  w4 --> w1\n  w2 --> w3</pre>",
+          "prompt": "How many strongly connected components are there in this graph? It has 12 vertices: an outer ring $v_1..v_8$ and four inner vertices $w_1..w_4$.<pre class=\"mermaid\">graph LR\n  v1((v1)) --&gt; v2((v2))\n  v2 --&gt; v3((v3))\n  v3 --&gt; v4((v4))\n  v4 --&gt; v5((v5))\n  v5 --&gt; v6((v6))\n  v6 --&gt; v7((v7))\n  v7 --&gt; v8((v8))\n  v8 --&gt; v1\n  v1 --&gt; w1((w1))\n  v8 --&gt; w1\n  v2 --&gt; w2((w2))\n  v3 --&gt; w2\n  v6 --&gt; w3((w3))\n  v7 --&gt; w3\n  v5 --&gt; w4((w4))\n  v4 --&gt; w4\n  w4 --&gt; w1\n  w2 --&gt; w3</pre>|||Đồ thị sau có bao nhiêu thành phần liên thông mạnh? Đồ thị có 12 đỉnh: vành ngoài $v_1..v_8$ và 4 đỉnh trong $w_1..w_4$.<pre class=\"mermaid\">graph LR\n  v1((v1)) --&gt; v2((v2))\n  v2 --&gt; v3((v3))\n  v3 --&gt; v4((v4))\n  v4 --&gt; v5((v5))\n  v5 --&gt; v6((v6))\n  v6 --&gt; v7((v7))\n  v7 --&gt; v8((v8))\n  v8 --&gt; v1\n  v1 --&gt; w1((w1))\n  v8 --&gt; w1\n  v2 --&gt; w2((w2))\n  v3 --&gt; w2\n  v6 --&gt; w3((w3))\n  v7 --&gt; w3\n  v5 --&gt; w4((w4))\n  v4 --&gt; w4\n  w4 --&gt; w1\n  w2 --&gt; w3</pre>",
           "options": [
             {
               "text": "5|||5"
@@ -6859,7 +6859,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>How many ancestors does the vertex e have?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>Đỉnh e có bao nhiêu tổ tiên (ancestor)?",
+          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; b((b))\n  a --&gt; d((d))\n  a --&gt; c((c))\n  b --&gt; e((e))\n  b --&gt; h((h))\n  b --&gt; g((g))\n  e --&gt; i((i))\n  e --&gt; n((n))\n  e --&gt; k((k))\n  c --&gt; f((f))\n  c --&gt; l((l))\n  c --&gt; m((m))</pre>How many ancestors does the vertex e have?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; b((b))\n  a --&gt; d((d))\n  a --&gt; c((c))\n  b --&gt; e((e))\n  b --&gt; h((h))\n  b --&gt; g((g))\n  e --&gt; i((i))\n  e --&gt; n((n))\n  e --&gt; k((k))\n  c --&gt; f((f))\n  c --&gt; l((l))\n  c --&gt; m((m))</pre>Đỉnh e có bao nhiêu tổ tiên (ancestor)?",
           "options": [
             {
               "text": "2|||2"
@@ -6913,7 +6913,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Which of the rooted trees below are full 3-ary trees?<pre class=\"mermaid\">graph TD\n  subgraph T1[\"(i)\"]\n  t1((D)) --> t2((A))\n  t1 --> t3((C))\n  t1 --> t4((E))\n  t2 --> t5((x))\n  t3 --> t6((y))\n  t3 --> t7((z))\n  end\n  subgraph T2[\"(ii)\"]\n  u1((a)) --> u2((b))\n  u1 --> u3((c))\n  u1 --> u4((d))\n  u2 --> u5((e))\n  u2 --> u6((f))\n  u2 --> u7((g))\n  end\n  subgraph T3[\"(iii)\"]\n  w1((p)) --> w2((q))\n  w1 --> w3((r))\n  w1 --> w4((s))\n  w2 --> w5((t))\n  w2 --> w6((u))\n  end</pre>|||Trong các cây có gốc dưới đây, cây nào là cây 3-phân đầy đủ (full 3-ary)?<pre class=\"mermaid\">graph TD\n  subgraph T1[\"(i)\"]\n  t1((D)) --> t2((A))\n  t1 --> t3((C))\n  t1 --> t4((E))\n  t2 --> t5((x))\n  t3 --> t6((y))\n  t3 --> t7((z))\n  end\n  subgraph T2[\"(ii)\"]\n  u1((a)) --> u2((b))\n  u1 --> u3((c))\n  u1 --> u4((d))\n  u2 --> u5((e))\n  u2 --> u6((f))\n  u2 --> u7((g))\n  end\n  subgraph T3[\"(iii)\"]\n  w1((p)) --> w2((q))\n  w1 --> w3((r))\n  w1 --> w4((s))\n  w2 --> w5((t))\n  w2 --> w6((u))\n  end</pre>",
+          "prompt": "Which of the rooted trees below are full 3-ary trees?<pre class=\"mermaid\">graph TD\n  subgraph T1[\"(i)\"]\n  t1((D)) --&gt; t2((A))\n  t1 --&gt; t3((C))\n  t1 --&gt; t4((E))\n  t2 --&gt; t5((x))\n  t3 --&gt; t6((y))\n  t3 --&gt; t7((z))\n  end\n  subgraph T2[\"(ii)\"]\n  u1((a)) --&gt; u2((b))\n  u1 --&gt; u3((c))\n  u1 --&gt; u4((d))\n  u2 --&gt; u5((e))\n  u2 --&gt; u6((f))\n  u2 --&gt; u7((g))\n  end\n  subgraph T3[\"(iii)\"]\n  w1((p)) --&gt; w2((q))\n  w1 --&gt; w3((r))\n  w1 --&gt; w4((s))\n  w2 --&gt; w5((t))\n  w2 --&gt; w6((u))\n  end</pre>|||Trong các cây có gốc dưới đây, cây nào là cây 3-phân đầy đủ (full 3-ary)?<pre class=\"mermaid\">graph TD\n  subgraph T1[\"(i)\"]\n  t1((D)) --&gt; t2((A))\n  t1 --&gt; t3((C))\n  t1 --&gt; t4((E))\n  t2 --&gt; t5((x))\n  t3 --&gt; t6((y))\n  t3 --&gt; t7((z))\n  end\n  subgraph T2[\"(ii)\"]\n  u1((a)) --&gt; u2((b))\n  u1 --&gt; u3((c))\n  u1 --&gt; u4((d))\n  u2 --&gt; u5((e))\n  u2 --&gt; u6((f))\n  u2 --&gt; u7((g))\n  end\n  subgraph T3[\"(iii)\"]\n  w1((p)) --&gt; w2((q))\n  w1 --&gt; w3((r))\n  w1 --&gt; w4((s))\n  w2 --&gt; w5((t))\n  w2 --&gt; w6((u))\n  end</pre>",
           "options": [
             {
               "text": "(ii)|||(ii)"
@@ -6964,7 +6964,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>How many ancestors does the vertex k have?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>Đỉnh k có bao nhiêu tổ tiên?",
+          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; b((b))\n  a --&gt; d((d))\n  a --&gt; c((c))\n  b --&gt; e((e))\n  b --&gt; h((h))\n  b --&gt; g((g))\n  e --&gt; i((i))\n  e --&gt; n((n))\n  e --&gt; k((k))\n  c --&gt; f((f))\n  c --&gt; l((l))\n  c --&gt; m((m))</pre>How many ancestors does the vertex k have?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; b((b))\n  a --&gt; d((d))\n  a --&gt; c((c))\n  b --&gt; e((e))\n  b --&gt; h((h))\n  b --&gt; g((g))\n  e --&gt; i((i))\n  e --&gt; n((n))\n  e --&gt; k((k))\n  c --&gt; f((f))\n  c --&gt; l((l))\n  c --&gt; m((m))</pre>Đỉnh k có bao nhiêu tổ tiên?",
           "options": [
             {
               "text": "3|||3"
@@ -7018,7 +7018,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>How many leaves in this tree?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>Cây này có bao nhiêu lá?",
+          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; b((b))\n  a --&gt; d((d))\n  a --&gt; c((c))\n  b --&gt; e((e))\n  b --&gt; h((h))\n  b --&gt; g((g))\n  e --&gt; i((i))\n  e --&gt; n((n))\n  e --&gt; k((k))\n  c --&gt; f((f))\n  c --&gt; l((l))\n  c --&gt; m((m))</pre>How many leaves in this tree?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; b((b))\n  a --&gt; d((d))\n  a --&gt; c((c))\n  b --&gt; e((e))\n  b --&gt; h((h))\n  b --&gt; g((g))\n  e --&gt; i((i))\n  e --&gt; n((n))\n  e --&gt; k((k))\n  c --&gt; f((f))\n  c --&gt; l((l))\n  c --&gt; m((m))</pre>Cây này có bao nhiêu lá?",
           "options": [
             {
               "text": "9|||9"
@@ -7350,7 +7350,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a rooted tree: a is the root with children b, c, d. b's children are e, f, g. e's children are k, l, m. g's child is n, whose children are r, s. c is a leaf. d's children are h, i, j; h's child is o, i's child is p, j's child is q.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> c((c))\n  a --> d((d))\n  b --> e((e))\n  b --> f((f))\n  b --> g((g))\n  e --> k((k))\n  e --> l((l))\n  e --> m((m))\n  g --> n((n))\n  n --> r((r))\n  n --> s((s))\n  d --> h((h))\n  d --> i((i))\n  d --> j((j))\n  h --> vo((o))\n  i --> p((p))\n  j --> q((q))</pre>If using preorder traversal to visit the vertices of the given rooted tree, what is the position of vertex d?|||Cho cây có gốc: a là gốc, con của a là b, c, d. Con của b là e, f, g. Con của e là k, l, m. Con của g là n, con của n là r, s. c là lá. Con của d là h, i, j; con của h là o, con của i là p, con của j là q.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> c((c))\n  a --> d((d))\n  b --> e((e))\n  b --> f((f))\n  b --> g((g))\n  e --> k((k))\n  e --> l((l))\n  e --> m((m))\n  g --> n((n))\n  n --> r((r))\n  n --> s((s))\n  d --> h((h))\n  d --> i((i))\n  d --> j((j))\n  h --> vo((o))\n  i --> p((p))\n  j --> q((q))</pre>Nếu duyệt tiền thứ tự (preorder) cây trên, đỉnh d ở vị trí thứ mấy?",
+          "prompt": "Given a rooted tree: a is the root with children b, c, d. b's children are e, f, g. e's children are k, l, m. g's child is n, whose children are r, s. c is a leaf. d's children are h, i, j; h's child is o, i's child is p, j's child is q.<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; b((b))\n  a --&gt; c((c))\n  a --&gt; d((d))\n  b --&gt; e((e))\n  b --&gt; f((f))\n  b --&gt; g((g))\n  e --&gt; k((k))\n  e --&gt; l((l))\n  e --&gt; m((m))\n  g --&gt; n((n))\n  n --&gt; r((r))\n  n --&gt; s((s))\n  d --&gt; h((h))\n  d --&gt; i((i))\n  d --&gt; j((j))\n  h --&gt; vo((o))\n  i --&gt; p((p))\n  j --&gt; q((q))</pre>If using preorder traversal to visit the vertices of the given rooted tree, what is the position of vertex d?|||Cho cây có gốc: a là gốc, con của a là b, c, d. Con của b là e, f, g. Con của e là k, l, m. Con của g là n, con của n là r, s. c là lá. Con của d là h, i, j; con của h là o, con của i là p, con của j là q.<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; b((b))\n  a --&gt; c((c))\n  a --&gt; d((d))\n  b --&gt; e((e))\n  b --&gt; f((f))\n  b --&gt; g((g))\n  e --&gt; k((k))\n  e --&gt; l((l))\n  e --&gt; m((m))\n  g --&gt; n((n))\n  n --&gt; r((r))\n  n --&gt; s((s))\n  d --&gt; h((h))\n  d --&gt; i((i))\n  d --&gt; j((j))\n  h --&gt; vo((o))\n  i --&gt; p((p))\n  j --&gt; q((q))</pre>Nếu duyệt tiền thứ tự (preorder) cây trên, đỉnh d ở vị trí thứ mấy?",
           "options": [
             {
               "text": "4th|||Thứ 4"
@@ -8236,7 +8236,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Are these two directed graphs isomorphic?<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Left graph\"]\n  p2((2)) --> p1((1))\n  p1 --> p3((3))\n  p1 --> p4((4))\n  p3 --> p2\n  p3 --> p4\n  p4 --> p2\n  end\n  subgraph GR[\"Right graph\"]\n  q2((2)) --> q1((1))\n  q1 --> q3((3))\n  q4((4)) --> q1\n  q3 --> q2\n  q3 --> q4\n  q4 --> q2\n  end</pre>|||Hai đồ thị có hướng sau có đẳng cấu không?<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Đồ thị bên trái\"]\n  p2((2)) --> p1((1))\n  p1 --> p3((3))\n  p1 --> p4((4))\n  p3 --> p2\n  p3 --> p4\n  p4 --> p2\n  end\n  subgraph GR[\"Đồ thị bên phải\"]\n  q2((2)) --> q1((1))\n  q1 --> q3((3))\n  q4((4)) --> q1\n  q3 --> q2\n  q3 --> q4\n  q4 --> q2\n  end</pre>",
+          "prompt": "Are these two directed graphs isomorphic?<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Left graph\"]\n  p2((2)) --&gt; p1((1))\n  p1 --&gt; p3((3))\n  p1 --&gt; p4((4))\n  p3 --&gt; p2\n  p3 --&gt; p4\n  p4 --&gt; p2\n  end\n  subgraph GR[\"Right graph\"]\n  q2((2)) --&gt; q1((1))\n  q1 --&gt; q3((3))\n  q4((4)) --&gt; q1\n  q3 --&gt; q2\n  q3 --&gt; q4\n  q4 --&gt; q2\n  end</pre>|||Hai đồ thị có hướng sau có đẳng cấu không?<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Đồ thị bên trái\"]\n  p2((2)) --&gt; p1((1))\n  p1 --&gt; p3((3))\n  p1 --&gt; p4((4))\n  p3 --&gt; p2\n  p3 --&gt; p4\n  p4 --&gt; p2\n  end\n  subgraph GR[\"Đồ thị bên phải\"]\n  q2((2)) --&gt; q1((1))\n  q1 --&gt; q3((3))\n  q4((4)) --&gt; q1\n  q3 --&gt; q2\n  q3 --&gt; q4\n  q4 --&gt; q2\n  end</pre>",
           "options": [
             {
               "text": "Yes|||Có"
@@ -8278,7 +8278,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the two directed graphs below. $G_1$ is drawn as a 6-pointed star: joining every second vertex of a hexagon splits it into two vertex-disjoint directed triangles with no edge between them. $G_2$ is drawn as a 5-pointed star: joining every second vertex of a pentagon traces one single directed 5-cycle through all five vertices.<pre class=\"mermaid\">graph LR\n  subgraph H1[\"G1\"]\n  h1((1)) --> h3((3))\n  h3 --> h5((5))\n  h5 --> h1\n  h2((2)) --> h4((4))\n  h4 --> h6((6))\n  h6 --> h2\n  end\n  subgraph H2[\"G2\"]\n  g1((1)) --> g3((3))\n  g3 --> g5((5))\n  g5 --> g2((2))\n  g2 --> g4((4))\n  g4 --> g1\n  end</pre>Which statement is correct?<br>(i) $G_1$ is strongly connected<br>(ii) $G_2$ is strongly connected|||Cho 2 đồ thị có hướng dưới đây. $G_1$ vẽ dạng ngôi sao 6 cánh: nối các đỉnh cách nhau 2 bước trên lục giác thì tách thành 2 tam giác có hướng RỜI NHAU, không có cạnh nối giữa chúng. $G_2$ vẽ dạng ngôi sao 5 cánh: nối các đỉnh cách nhau 2 bước trên ngũ giác thì tạo thành MỘT chu trình có hướng 5 cạnh duy nhất đi qua cả 5 đỉnh.<pre class=\"mermaid\">graph LR\n  subgraph H1[\"G1\"]\n  h1((1)) --> h3((3))\n  h3 --> h5((5))\n  h5 --> h1\n  h2((2)) --> h4((4))\n  h4 --> h6((6))\n  h6 --> h2\n  end\n  subgraph H2[\"G2\"]\n  g1((1)) --> g3((3))\n  g3 --> g5((5))\n  g5 --> g2((2))\n  g2 --> g4((4))\n  g4 --> g1\n  end</pre>Phát biểu nào đúng?<br>(i) $G_1$ liên thông mạnh<br>(ii) $G_2$ liên thông mạnh",
+          "prompt": "Given the two directed graphs below. $G_1$ is drawn as a 6-pointed star: joining every second vertex of a hexagon splits it into two vertex-disjoint directed triangles with no edge between them. $G_2$ is drawn as a 5-pointed star: joining every second vertex of a pentagon traces one single directed 5-cycle through all five vertices.<pre class=\"mermaid\">graph LR\n  subgraph H1[\"G1\"]\n  h1((1)) --&gt; h3((3))\n  h3 --&gt; h5((5))\n  h5 --&gt; h1\n  h2((2)) --&gt; h4((4))\n  h4 --&gt; h6((6))\n  h6 --&gt; h2\n  end\n  subgraph H2[\"G2\"]\n  g1((1)) --&gt; g3((3))\n  g3 --&gt; g5((5))\n  g5 --&gt; g2((2))\n  g2 --&gt; g4((4))\n  g4 --&gt; g1\n  end</pre>Which statement is correct?<br>(i) $G_1$ is strongly connected<br>(ii) $G_2$ is strongly connected|||Cho 2 đồ thị có hướng dưới đây. $G_1$ vẽ dạng ngôi sao 6 cánh: nối các đỉnh cách nhau 2 bước trên lục giác thì tách thành 2 tam giác có hướng RỜI NHAU, không có cạnh nối giữa chúng. $G_2$ vẽ dạng ngôi sao 5 cánh: nối các đỉnh cách nhau 2 bước trên ngũ giác thì tạo thành MỘT chu trình có hướng 5 cạnh duy nhất đi qua cả 5 đỉnh.<pre class=\"mermaid\">graph LR\n  subgraph H1[\"G1\"]\n  h1((1)) --&gt; h3((3))\n  h3 --&gt; h5((5))\n  h5 --&gt; h1\n  h2((2)) --&gt; h4((4))\n  h4 --&gt; h6((6))\n  h6 --&gt; h2\n  end\n  subgraph H2[\"G2\"]\n  g1((1)) --&gt; g3((3))\n  g3 --&gt; g5((5))\n  g5 --&gt; g2((2))\n  g2 --&gt; g4((4))\n  g4 --&gt; g1\n  end</pre>Phát biểu nào đúng?<br>(i) $G_1$ liên thông mạnh<br>(ii) $G_2$ liên thông mạnh",
           "options": [
             {
               "text": "(i) only|||Chỉ (i)"
@@ -8553,7 +8553,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>How many ancestors does the vertex d have?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>Đỉnh d có bao nhiêu tổ tiên?",
+          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; b((b))\n  a --&gt; d((d))\n  a --&gt; c((c))\n  b --&gt; e((e))\n  b --&gt; h((h))\n  b --&gt; g((g))\n  e --&gt; i((i))\n  e --&gt; n((n))\n  e --&gt; k((k))\n  c --&gt; f((f))\n  c --&gt; l((l))\n  c --&gt; m((m))</pre>How many ancestors does the vertex d have?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; b((b))\n  a --&gt; d((d))\n  a --&gt; c((c))\n  b --&gt; e((e))\n  b --&gt; h((h))\n  b --&gt; g((g))\n  e --&gt; i((i))\n  e --&gt; n((n))\n  e --&gt; k((k))\n  c --&gt; f((f))\n  c --&gt; l((l))\n  c --&gt; m((m))</pre>Đỉnh d có bao nhiêu tổ tiên?",
           "options": [
             {
               "text": "1|||1"
@@ -8756,7 +8756,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the binary tree: a is the root with left child c and right child m. c's children are e (left) and h (right). m's children are n (left) and t (right). t's children are s (left) and y (right).<pre class=\"mermaid\">graph TD\n  a((a)) --> c((c))\n  a --> m((m))\n  c --> e((e))\n  c --> h((h))\n  m --> n((n))\n  m --> t((t))\n  t --> s((s))\n  t --> y((y))</pre>Find the inorder traversal of the tree.|||Cho cây nhị phân: a là gốc, con trái c, con phải m. Con của c: e (trái), h (phải). Con của m: n (trái), t (phải). Con của t: s (trái), y (phải).<pre class=\"mermaid\">graph TD\n  a((a)) --> c((c))\n  a --> m((m))\n  c --> e((e))\n  c --> h((h))\n  m --> n((n))\n  m --> t((t))\n  t --> s((s))\n  t --> y((y))</pre>Tìm duyệt trung thứ tự (inorder) của cây.",
+          "prompt": "Given the binary tree: a is the root with left child c and right child m. c's children are e (left) and h (right). m's children are n (left) and t (right). t's children are s (left) and y (right).<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; c((c))\n  a --&gt; m((m))\n  c --&gt; e((e))\n  c --&gt; h((h))\n  m --&gt; n((n))\n  m --&gt; t((t))\n  t --&gt; s((s))\n  t --&gt; y((y))</pre>Find the inorder traversal of the tree.|||Cho cây nhị phân: a là gốc, con trái c, con phải m. Con của c: e (trái), h (phải). Con của m: n (trái), t (phải). Con của t: s (trái), y (phải).<pre class=\"mermaid\">graph TD\n  a((a)) --&gt; c((c))\n  a --&gt; m((m))\n  c --&gt; e((e))\n  c --&gt; h((h))\n  m --&gt; n((n))\n  m --&gt; t((t))\n  t --&gt; s((s))\n  t --&gt; y((y))</pre>Tìm duyệt trung thứ tự (inorder) của cây.",
           "options": [
             {
               "text": "e - h - c - n - s - y - t - m - a|||e - h - c - n - s - y - t - m - a"
@@ -8912,7 +8912,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "How many strongly connected components does the directed graph G below have? Its vertices are a,b,c,d,e: a and e form a mutual 2-cycle, e has a self-loop, e and d form a mutual 2-cycle, and there are one-way edges a&rarr;b, b&rarr;c, d&rarr;c; c has no outgoing edges.<pre class=\"mermaid\">graph LR\n  a((a)) --> e((e))\n  e --> a\n  e --> e\n  e --> d((d))\n  d --> e\n  a --> b((b))\n  b --> c((c))\n  d --> c</pre>|||Đồ thị có hướng G dưới đây có bao nhiêu thành phần liên thông mạnh? Đỉnh gồm a,b,c,d,e: a và e tạo chu trình 2 chiều, e có khuyên, e và d tạo chu trình 2 chiều, và có các cạnh một chiều a&rarr;b, b&rarr;c, d&rarr;c; c không có cạnh ra.<pre class=\"mermaid\">graph LR\n  a((a)) --> e((e))\n  e --> a\n  e --> e\n  e --> d((d))\n  d --> e\n  a --> b((b))\n  b --> c((c))\n  d --> c</pre>",
+          "prompt": "How many strongly connected components does the directed graph G below have? Its vertices are a,b,c,d,e: a and e form a mutual 2-cycle, e has a self-loop, e and d form a mutual 2-cycle, and there are one-way edges a&rarr;b, b&rarr;c, d&rarr;c; c has no outgoing edges.<pre class=\"mermaid\">graph LR\n  a((a)) --&gt; e((e))\n  e --&gt; a\n  e --&gt; e\n  e --&gt; d((d))\n  d --&gt; e\n  a --&gt; b((b))\n  b --&gt; c((c))\n  d --&gt; c</pre>|||Đồ thị có hướng G dưới đây có bao nhiêu thành phần liên thông mạnh? Đỉnh gồm a,b,c,d,e: a và e tạo chu trình 2 chiều, e có khuyên, e và d tạo chu trình 2 chiều, và có các cạnh một chiều a&rarr;b, b&rarr;c, d&rarr;c; c không có cạnh ra.<pre class=\"mermaid\">graph LR\n  a((a)) --&gt; e((e))\n  e --&gt; a\n  e --&gt; e\n  e --&gt; d((d))\n  d --&gt; e\n  a --&gt; b((b))\n  b --&gt; c((c))\n  d --&gt; c</pre>",
           "options": [
             {
               "text": "4|||4"

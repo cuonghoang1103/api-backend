@@ -121,6 +121,43 @@ export const BOOKS = {
     en: '<em>MDN Web Docs — HTML elements &amp; forms</em> (developer.mozilla.org/docs/Web/HTML)',
     vi: '<em>MDN Web Docs — phần tử HTML &amp; form</em> (developer.mozilla.org/docs/Web/HTML)',
   },
+  // ⭐ Chuyên sâu "Từ Servlet tới Spring Boot" (cs1–cs7) — tài liệu chính thức, đúng bản runner gen/boot dùng (Spring Boot 4.1.1, P4-b 15/10/2026)
+  springBoot: {
+    en: '<em>Spring Boot Reference Documentation 4.1</em> (docs.spring.io/spring-boot) — the official manual of the version every app in this section runs on',
+    vi: '<em>Tài liệu tham khảo Spring Boot 4.1</em> (docs.spring.io/spring-boot) — sách hướng dẫn chính thức của đúng phiên bản mọi app trong phần này chạy',
+  },
+  springFramework: {
+    en: '<em>Spring Framework Reference 7.0</em> (docs.spring.io/spring-framework/reference) — Core (IoC container, beans), Web Servlet (Spring MVC), Data Access (transactions, JDBC)',
+    vi: '<em>Tài liệu tham khảo Spring Framework 7.0</em> (docs.spring.io/spring-framework/reference) — Core (IoC container, bean), Web Servlet (Spring MVC), Data Access (giao dịch, JDBC)',
+  },
+  bootMigration: {
+    en: '<em>Spring Boot 4.0 Migration Guide</em> and <em>4.1 Release Notes</em> (github.com/spring-projects/spring-boot/wiki) — every renamed starter, moved package and changed default between 3.5 and 4.1',
+    vi: '<em>Spring Boot 4.0 Migration Guide</em> và <em>4.1 Release Notes</em> (github.com/spring-projects/spring-boot/wiki) — mọi starter đổi tên, gói chuyển chỗ và mặc định thay đổi giữa 3.5 và 4.1',
+  },
+  springData: {
+    en: '<em>Spring Data JPA Reference</em> (docs.spring.io/spring-data/jpa/reference) — repositories, derived queries, @Query, paging, projections, entity graphs',
+    vi: '<em>Tài liệu tham khảo Spring Data JPA</em> (docs.spring.io/spring-data/jpa/reference) — repository, derived query, @Query, phân trang, projection, entity graph',
+  },
+  hibernateGuide: {
+    en: '<em>Hibernate ORM 7 User Guide</em> (docs.jboss.org/hibernate/orm/7.4/userguide) — fetching, lazy loading, the N+1 problem, batch fetching',
+    vi: '<em>Hướng dẫn sử dụng Hibernate ORM 7</em> (docs.jboss.org/hibernate/orm/7.4/userguide) — fetching, nạp lười, vấn đề N+1, batch fetching',
+  },
+  flywayDocs: {
+    en: '<em>Flyway documentation</em> (documentation.red-gate.com/flyway) — versioned migrations V1__…sql, the flyway_schema_history table, checksums',
+    vi: '<em>Tài liệu Flyway</em> (documentation.red-gate.com/flyway) — migration có phiên bản V1__…sql, bảng flyway_schema_history, checksum',
+  },
+  johnson: {
+    en: 'Rod Johnson — <em>Expert One-on-One J2EE Design and Development</em> (Wrox, 2002) — the book whose sample code became the Spring Framework',
+    vi: 'Rod Johnson — <em>Expert One-on-One J2EE Design and Development</em> (Wrox, 2002) — cuốn sách mà code mẫu của nó trở thành Spring Framework',
+  },
+  rfc9457: {
+    en: '<em>RFC 9457 — Problem Details for HTTP APIs</em> (IETF, 2023; replaces RFC 7807) — the <code>application/problem+json</code> error format',
+    vi: '<em>RFC 9457 — Problem Details for HTTP APIs</em> (IETF, 2023; thay RFC 7807) — định dạng lỗi <code>application/problem+json</code>',
+  },
+  thymeleaf: {
+    en: '<em>Tutorial: Thymeleaf + Spring</em> (thymeleaf.org/doc/tutorials/3.1) — th:each, th:field, th:errors, #fields',
+    vi: '<em>Tutorial: Thymeleaf + Spring</em> (thymeleaf.org/doc/tutorials/3.1) — th:each, th:field, th:errors, #fields',
+  },
   fuSlides: { en: '<em>FU course slides (.pptx)</em> — the 11 decks walked through in these lessons', vi: '<em>Slide môn học của FU (.pptx)</em> — 11 bộ slide được giảng từng slide trong các bài này' },
 };
 

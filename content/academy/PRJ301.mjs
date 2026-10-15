@@ -20,6 +20,7 @@ import ch8 from './prj301/ch8.mjs';
 import ch10 from './prj301/ch10.mjs';
 import adv2 from './prj301/adv-quiz2.mjs';
 import adv4 from './prj301/adv-quiz4.mjs';
+import cs from './prj301/chuyen-sau.mjs';
 import asm from './prj301/assignment.mjs';
 import fe from './prj301/fe.mjs';
 
@@ -4027,6 +4028,12 @@ input.addEventListener('input', () =&gt; {
       ],
     },
     /* END-SECTIONS-MARKER */
+    /* ⭐ Chuyên sâu — ngoài giáo trình, slide TỰ DỰNG — ./prj301/chuyen-sau.mjs */
+    {
+      title: "⭐ Advanced — From Servlets to Spring Boot: MVC, Data JPA, Security, tests, deploy, capstone|||⭐ Chuyên sâu — Từ Servlet tới Spring Boot: MVC, Data JPA, Security, test, deploy, capstone",
+      description: "Phần TỰ THÊM ngoài giáo trình trường (đánh dấu ⭐, slide tự dựng): mỗi thứ đã học ở PRJ301 (Servlet, Filter, JDBC/DAO, MVC, session, JPA) ⇒ đúng cái đó trong Spring Boot 4.1, mọi app chạy thật — DispatcherServlet, JdbcTemplate/Spring Data JPA, @Transactional, Spring Security + JWT, kiến trúc dự án, test (MockMvc, Testcontainers), Docker & CI, capstone port Assignment phòng khám sang Spring Boot REST + React — nền cho đồ án LabFlow.",
+      lessons: cs.lessons,
+    },
     {
       "title": "Final Exam|||Thi cuối kỳ",
       "description": "PE 30% (85 phút, cột QUÁ TRÌNH) và FE 20% (60 phút, phải ≥ 4). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",

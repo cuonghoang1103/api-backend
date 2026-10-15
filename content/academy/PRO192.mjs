@@ -7,6 +7,23 @@
  * Luyện code → CodeLab track java-core; cài đặt JDK/NetBeans → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/PRO192.mjs --apply
  */
+// 📑 Bài học theo từng slide, 🧪 bài thực hành chương và quiz viết lại/mới nằm trong ./pro192/*.mjs
+// (SINH bởi flm-nguon/PRO192/gen/gen.mjs — sửa nguồn ở đó rồi chạy lại, đừng sửa tay các module).
+import sec0 from './pro192/sec0.mjs';
+import ch1 from './pro192/ch1.mjs';
+import ch2 from './pro192/ch2.mjs';
+import ch3 from './pro192/ch3.mjs';
+import ch4 from './pro192/ch4.mjs';
+import ch5 from './pro192/ch5.mjs';
+import ch6 from './pro192/ch6.mjs';
+import ch7 from './pro192/ch7.mjs';
+import ch8 from './pro192/ch8.mjs';
+import ch9 from './pro192/ch9.mjs';
+import pt1 from './pro192/pt1.mjs';
+import pt2 from './pro192/pt2.mjs';
+import adv2 from './pro192/adv2.mjs';
+import fe from './pro192/fe.mjs';
+
 export default {
   semester: { code: 'KY2', name: 'Kỳ 2', ordinal: 2 },
   course: {
@@ -113,6 +130,10 @@ export default {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
       description: 'Đọc trước tiên: môn học là gì, học ra sao, điều kiện qua môn, lộ trình và công cụ.',
       lessons: [
+        /* 🧭 Bài nền tảng bổ sung — ./pro192/sec0.mjs */
+        ...sec0.extrasStart,
+        /* 📑 Học theo từng slide (pro2 1–1) — ./pro192/sec0.mjs */
+        ...sec0.slides,
         {
           title: '0.1 — About PRO192 & the course map|||0.1 — Giới thiệu PRO192 & bản đồ môn học',
           slug: 'pro192-gioi-thieu',
@@ -372,6 +393,8 @@ export default {
       title: 'Chapter 1 — OO Thinking & Java Basics|||Chương 1 — Tư duy OO & Java cơ bản',
       description: 'Vì sao lập trình hướng đối tượng, và cú pháp Java khác C ra sao.',
       lessons: [
+        /* 📑 Học theo từng slide (pro1 1–16, pro3 1–26, pro4 1–27, pro5 1–30, pro6 1–18) — ./pro192/ch1.mjs */
+        ...ch1.slides,
         {
           title: '1.1 — Why objects? Procedural vs OO|||1.1 — Vì sao đối tượng? Thủ tục vs OO',
           slug: 'pro192-1-1-tu-duy-oo',
@@ -536,21 +559,14 @@ export default {
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch1.mjs */
+        ch1.practice,
         {
           title: 'Chapter 1 Quiz|||Quiz chương 1',
           slug: 'pro192-quiz-ch1',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: OO vs thủ tục, lớp vs đối tượng, cú pháp Java.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'The main idea of OOP is to…|||Ý tưởng chính của OOP là…', options: ['keep data and functions separate|||giữ dữ liệu và hàm tách rời', 'bundle related data and behavior into objects|||gom dữ liệu và hành vi liên quan vào các đối tượng', 'avoid using functions|||tránh dùng hàm', 'only use global variables|||chỉ dùng biến toàn cục'], correctIndex: 1, points: 1 },
-              { question: 'A class is a…, and an object is a…|||Một lớp là…, và một đối tượng là…', options: ['concrete instance … blueprint|||thể hiện cụ thể … khuôn mẫu', 'blueprint … concrete instance of it|||khuôn mẫu … thể hiện cụ thể của nó', 'function … variable|||hàm … biến', 'they are the same|||chúng như nhau'], correctIndex: 1, points: 1 },
-              { question: 'In Java, code must be written…|||Trong Java, code phải được viết…', options: ['as free-standing functions|||thành các hàm độc lập', 'inside a class|||bên trong một lớp', 'only in the main file|||chỉ trong file main', 'without any structure|||không cấu trúc nào'], correctIndex: 1, points: 1 },
-              { question: 'To print a line in Java you use…|||Để in một dòng trong Java bạn dùng…', options: ['printf(...)', 'System.out.println(...)', 'cout <<', 'print()'], correctIndex: 1, points: 1 },
-              { question: 'To compare the contents of two Strings in Java, use…|||Để so sánh nội dung hai String trong Java, dùng…', options: ['==', '.equals()', '>', '.compare'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch1.quizDescription,
+          quiz: ch1.quiz,
         },
       ],
     },
@@ -559,6 +575,8 @@ export default {
       title: 'Chapter 2 — Classes & Objects|||Chương 2 — Lớp & Đối tượng',
       description: 'Định nghĩa lớp với trường, phương thức, constructor và tạo đối tượng.',
       lessons: [
+        /* 📑 Học theo từng slide (pro7 1–9, pro8 1–25) — ./pro192/ch2.mjs */
+        ...ch2.slides,
         {
           title: '2.1 — Fields, methods & constructors|||2.1 — Trường, phương thức & constructor',
           slug: 'pro192-2-1-lop-doi-tuong',
@@ -670,21 +688,14 @@ export default {
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch2.mjs */
+        ch2.practice,
         {
           title: 'Chapter 2 Quiz|||Quiz chương 2',
           slug: 'pro192-quiz-ch2',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: trường, phương thức, constructor, new, this.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'The three main parts of a class are…|||Ba phần chính của một lớp là…', options: ['fields, methods, constructors|||trường, phương thức, constructor', 'loops, arrays, pointers|||vòng lặp, mảng, con trỏ', 'imports, packages, comments|||import, package, chú thích', 'input, process, output|||nhập, xử lý, xuất'], correctIndex: 0, points: 1 },
-              { question: 'A constructor is a special method that…|||Constructor là một phương thức đặc biệt…', options: ['prints output|||in kết quả', 'creates and initializes an object|||tạo và khởi tạo một đối tượng', 'deletes an object|||xoá một đối tượng', 'compares two objects|||so sánh hai đối tượng'], correctIndex: 1, points: 1 },
-              { question: 'The keyword to create a new object is…|||Từ khoá để tạo một đối tượng mới là…', options: ['make', 'new', 'create', 'object'], correctIndex: 1, points: 1 },
-              { question: 'Inside a class, "this" refers to…|||Bên trong một lớp, "this" chỉ…', options: ['the class file|||file lớp', 'the current object|||đối tượng hiện tại', 'the main method|||phương thức main', 'the parent class|||lớp cha'], correctIndex: 1, points: 1 },
-              { question: 'A "Classroom has an array of Students" is an example of a… relationship.|||"Classroom chứa một mảng Student" là ví dụ của quan hệ…', options: ['is-a', 'has-a', 'no', 'inheritance'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch2.quizDescription,
+          quiz: ch2.quiz,
         },
       ],
     },
@@ -693,6 +704,8 @@ export default {
       title: 'Chapter 3 — Encapsulation & Abstraction|||Chương 3 — Đóng gói & Trừu tượng',
       description: 'Giấu dữ liệu bằng private + getter/setter, và lộ giao diện sạch.',
       lessons: [
+        /* 📑 Học theo từng slide (pro8 26–40) — ./pro192/ch3.mjs */
+        ...ch3.slides,
         {
           title: '3.1 — Encapsulation & abstraction|||3.1 — Đóng gói & trừu tượng',
           slug: 'pro192-3-1-dong-goi',
@@ -790,21 +803,14 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch3.mjs */
+        ch3.practice,
         {
           title: 'Chapter 3 Quiz|||Quiz chương 3',
           slug: 'pro192-quiz-ch3',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: đóng gói, private, getter/setter, trừu tượng.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'Encapsulation means…|||Đóng gói nghĩa là…', options: ['making all fields public|||để mọi trường public', 'hiding internal data and exposing it via controlled methods|||giấu dữ liệu bên trong và lộ qua phương thức có kiểm soát', 'copying an object|||sao chép một đối tượng', 'deleting private data|||xoá dữ liệu private'], correctIndex: 1, points: 1 },
-              { question: 'To hide a field so only its own class can access it, declare it…|||Để giấu một trường sao cho chỉ lớp của nó truy cập, khai báo nó…', options: ['public', 'private', 'protected', 'static'], correctIndex: 1, points: 1 },
-              { question: 'Getters and setters let you…|||Getter và setter cho bạn…', options: ['read/change private fields in a controlled way|||đọc/đổi trường private một cách có kiểm soát', 'delete the class|||xoá lớp', 'skip the constructor|||bỏ constructor', 'make fields public|||để trường public'], correctIndex: 0, points: 1 },
-              { question: 'Abstraction means exposing… and hiding…|||Trừu tượng nghĩa là lộ… và giấu…', options: ['how … what', 'what an object does … how it does it|||cái gì đối tượng làm … làm sao nó làm', 'the fields … the methods', 'nothing … everything'], correctIndex: 1, points: 1 },
-              { question: 'Which access modifier makes a member visible to everyone?|||Modifier nào làm một thành viên thấy được với mọi nơi?', options: ['private', 'protected', 'public', 'default'], correctIndex: 2, points: 1 },
-            ],
-          },
+          description: ch3.quizDescription,
+          quiz: ch3.quiz,
         },
       ],
     },
@@ -813,6 +819,8 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
       title: 'Chapter 4 — Inheritance & Polymorphism|||Chương 4 — Kế thừa & Đa hình',
       description: 'Tái dùng code bằng kế thừa, và một giao diện nhiều hình dạng.',
       lessons: [
+        /* 📑 Học theo từng slide (pro9 1–17, pro10 1–11) — ./pro192/ch4.mjs */
+        ...ch4.slides,
         {
           title: '4.1 — Inheritance|||4.1 — Kế thừa',
           slug: 'pro192-4-1-ke-thua',
@@ -972,21 +980,14 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch4.mjs */
+        ch4.practice,
         {
           title: 'Chapter 4 Quiz|||Quiz chương 4',
           slug: 'pro192-quiz-ch4',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: kế thừa, extends, override, đa hình, dynamic dispatch.',
-          quiz: {
-            timeLimitSeconds: 360,
-            questions: [
-              { question: 'Inheritance models which relationship?|||Kế thừa mô hình quan hệ nào?', options: ['has-a', 'is-a', 'uses-a', 'none|||không cái nào'], correctIndex: 1, points: 1 },
-              { question: 'The Java keyword for inheritance is…|||Từ khoá Java cho kế thừa là…', options: ['inherits', 'extends', 'implements', 'super'], correctIndex: 1, points: 1 },
-              { question: 'Overriding a method means…|||Ghi đè (override) một phương thức nghĩa là…', options: ['deleting the parent method|||xoá phương thức cha', 'redefining a parent method in the subclass|||định nghĩa lại một phương thức cha trong lớp con', 'renaming the class|||đổi tên lớp', 'calling a private method|||gọi một phương thức private'], correctIndex: 1, points: 1 },
-              { question: 'Java supports how many parent classes per class?|||Java hỗ trợ bao nhiêu lớp cha cho mỗi lớp?', options: ['one (single inheritance)|||một (kế thừa đơn)', 'unlimited|||không giới hạn', 'exactly two|||đúng hai', 'zero|||không có'], correctIndex: 0, points: 1 },
-              { question: 'Dynamic dispatch means the method that runs depends on…|||Dynamic dispatch nghĩa là phương thức chạy phụ thuộc vào…', options: ['the reference type|||kiểu tham chiếu', 'the object\'s actual runtime type|||kiểu thật lúc chạy của đối tượng', 'the file name|||tên file', 'the compiler|||trình biên dịch'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch4.quizDescription,
+          quiz: ch4.quiz,
         },
       ],
     },
@@ -995,6 +996,8 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
       title: 'Chapter 5 — Abstract Classes & Interfaces|||Chương 5 — Abstract Class & Interface',
       description: 'Định nghĩa hợp đồng hành vi mà lớp con phải hiện thực.',
       lessons: [
+        /* 📑 Học theo từng slide (pro10 12–27) — ./pro192/ch5.mjs */
+        ...ch5.slides,
         {
           title: '5.1 — Abstract classes & interfaces|||5.1 — Abstract class & interface',
           slug: 'pro192-5-1-abstract-interface',
@@ -1089,21 +1092,14 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch5.mjs */
+        ch5.practice,
         {
           title: 'Chapter 5 Quiz|||Quiz chương 5',
           slug: 'pro192-quiz-ch5',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: abstract class, interface, implements, khi nào dùng gì.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'An abstract class…|||Một abstract class…', options: ['can be instantiated with new|||có thể tạo thể hiện bằng new', 'cannot be instantiated and may have abstract methods|||không thể tạo thể hiện và có thể có phương thức trừu tượng', 'has no methods|||không có phương thức', 'is the same as an object|||giống một đối tượng'], correctIndex: 1, points: 1 },
-              { question: 'An interface is…|||Một interface là…', options: ['a fully implemented class|||một lớp cài đặt đầy đủ', 'a contract of method signatures a class must implement|||một hợp đồng các chữ ký phương thức mà lớp phải hiện thực', 'a private field|||một trường private', 'a constructor|||một constructor'], correctIndex: 1, points: 1 },
-              { question: 'The keyword to use an interface is…|||Từ khoá để dùng một interface là…', options: ['extends', 'implements', 'inherits', 'new'], correctIndex: 1, points: 1 },
-              { question: 'How many interfaces can a Java class implement?|||Một lớp Java implements được bao nhiêu interface?', options: ['only one|||chỉ một', 'many|||nhiều', 'zero|||không', 'exactly two|||đúng hai'], correctIndex: 1, points: 1 },
-              { question: 'Use an interface (rather than abstract class) when you want to…|||Dùng interface (thay vì abstract class) khi bạn muốn…', options: ['share fields and code|||chia sẻ trường và code', 'give unrelated classes a shared capability|||cho các lớp không liên quan một khả năng chung', 'prevent inheritance|||ngăn kế thừa', 'store data|||lưu dữ liệu'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch5.quizDescription,
+          quiz: ch5.quiz,
         },
       ],
     },
@@ -1116,18 +1112,8 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
           title: 'Progress Test 1 — OOP review|||Progress Test 1 — Ôn OOP',
           slug: 'pro192-progress-test-1',
           type: 'QUIZ',
-          description: 'Trộn câu hỏi từ chương 1–5.',
-          quiz: {
-            timeLimitSeconds: 480,
-            questions: [
-              { question: 'OOP bundles together…|||OOP gom lại với nhau…', options: ['only functions|||chỉ hàm', 'data and the behavior that acts on it|||dữ liệu và hành vi tác động lên nó', 'only variables|||chỉ biến', 'files and folders|||tệp và thư mục'], correctIndex: 1, points: 1 },
-              { question: 'Making a field private and adding getters/setters is called…|||Để một trường private và thêm getter/setter gọi là…', options: ['inheritance|||kế thừa', 'encapsulation|||đóng gói', 'polymorphism|||đa hình', 'abstraction|||trừu tượng'], correctIndex: 1, points: 1 },
-              { question: 'Reusing a parent class\'s fields and methods in a child class is…|||Tái dùng trường và phương thức của lớp cha trong lớp con là…', options: ['encapsulation|||đóng gói', 'inheritance|||kế thừa', 'an interface|||một interface', 'a constructor|||một constructor'], correctIndex: 1, points: 1 },
-              { question: 'Treating different subclasses through a common parent type and running the right method is…|||Xử lý các lớp con khác nhau qua một kiểu cha chung và chạy đúng phương thức là…', options: ['polymorphism|||đa hình', 'encapsulation|||đóng gói', 'a getter|||một getter', 'a package|||một package'], correctIndex: 0, points: 1 },
-              { question: 'Which can a class implement MANY of?|||Một lớp có thể implements NHIỀU cái nào?', options: ['parent classes|||lớp cha', 'interfaces|||interface', 'constructors|||constructor', 'main methods|||phương thức main'], correctIndex: 1, points: 1 },
-              { question: 'A class that cannot be instantiated but defines abstract methods is…|||Một lớp không thể tạo thể hiện nhưng định nghĩa phương thức trừu tượng là…', options: ['an interface|||một interface', 'an abstract class|||một abstract class', 'a final class|||một lớp final', 'an object|||một đối tượng'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: pt1.quizDescription,
+          quiz: pt1.quiz,
         },
       ],
     },
@@ -1136,6 +1122,8 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
       title: 'Chapter 6 — Exception Handling|||Chương 6 — Xử lý ngoại lệ',
       description: 'try/catch/finally, ngoại lệ checked vs unchecked và ném ngoại lệ.',
       lessons: [
+        /* 📑 Học theo từng slide (pro11 1–17) — ./pro192/ch6.mjs */
+        ...ch6.slides,
         {
           title: '6.1 — try, catch, finally & throw|||6.1 — try, catch, finally & throw',
           slug: 'pro192-6-1-ngoai-le',
@@ -1226,21 +1214,14 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch6.mjs */
+        ch6.practice,
         {
           title: 'Chapter 6 Quiz|||Quiz chương 6',
           slug: 'pro192-quiz-ch6',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: try/catch/finally, checked vs unchecked, throw.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'The try block contains…|||Khối try chứa…', options: ['the error handler|||trình xử lý lỗi', 'the risky code that might throw an exception|||code rủi ro có thể ném ngoại lệ', 'cleanup code|||code dọn dẹp', 'nothing|||không gì'], correctIndex: 1, points: 1 },
-              { question: 'The finally block…|||Khối finally…', options: ['runs only if there is an error|||chỉ chạy nếu có lỗi', 'always runs (used for cleanup)|||luôn chạy (dùng để dọn dẹp)', 'never runs|||không bao giờ chạy', 'catches the exception|||bắt ngoại lệ'], correctIndex: 1, points: 1 },
-              { question: 'A checked exception is one that…|||Ngoại lệ checked là loại mà…', options: ['the compiler forces you to handle or declare|||trình biên dịch buộc bạn xử lý hoặc khai báo', 'never happens|||không bao giờ xảy ra', 'cannot be caught|||không thể bắt', 'is always fatal|||luôn gây chết chương trình'], correctIndex: 0, points: 1 },
-              { question: 'To raise your own exception you use…|||Để tự phát ngoại lệ bạn dùng…', options: ['catch', 'throw new Exception(...)', 'finally', 'return'], correctIndex: 1, points: 1 },
-              { question: 'Good exception handling lets a program…|||Xử lý ngoại lệ tốt cho một chương trình…', options: ['crash faster|||sập nhanh hơn', 'respond to errors and keep running|||phản hồi lỗi và chạy tiếp', 'ignore all bugs|||bỏ qua mọi lỗi', 'skip the finally block|||bỏ khối finally'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch6.quizDescription,
+          quiz: ch6.quiz,
         },
       ],
     },
@@ -1249,6 +1230,8 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
       title: 'Chapter 7 — Arrays of Objects|||Chương 7 — Mảng đối tượng',
       description: 'Quản lý một tập đối tượng và xây một chương trình hoàn chỉnh.',
       lessons: [
+        /* 📑 Học theo từng slide (pro12 1–16) — ./pro192/ch7.mjs */
+        ...ch7.slides,
         {
           title: '7.1 — Managing many objects|||7.1 — Quản lý nhiều đối tượng',
           slug: 'pro192-7-1-mang-doi-tuong',
@@ -1323,20 +1306,14 @@ students[2] = <span class="tok-keyword">new</span> <span class="tok-function">St
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch7.mjs */
+        ch7.practice,
         {
           title: 'Chapter 7 Quiz|||Quiz chương 7',
           slug: 'pro192-quiz-ch7',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: mảng đối tượng, duyệt, chương trình quản lý.',
-          quiz: {
-            timeLimitSeconds: 240,
-            questions: [
-              { question: 'An array of objects is used to…|||Một mảng đối tượng dùng để…', options: ['store a single value|||lưu một giá trị đơn', 'manage many objects of the same type|||quản lý nhiều đối tượng cùng loại', 'replace classes|||thay thế lớp', 'catch exceptions|||bắt ngoại lệ'], correctIndex: 1, points: 1 },
-              { question: 'To visit every object in an array you typically use…|||Để thăm mọi đối tượng trong một mảng bạn thường dùng…', options: ['a try block|||một khối try', 'a loop (for/for-each)|||một vòng lặp (for/for-each)', 'a constructor|||một constructor', 'an interface|||một interface'], correctIndex: 1, points: 1 },
-              { question: 'A typical console management program is built around a…|||Một chương trình quản lý console điển hình xây quanh một…', options: ['single print statement|||một câu in đơn', 'menu loop with one method per action|||vòng lặp menu với mỗi hành động một phương thức', 'private field|||một trường private', 'checked exception|||một ngoại lệ checked'], correctIndex: 1, points: 1 },
-              { question: 'A limitation of a plain array is that…|||Một hạn chế của mảng thường là…', options: ['it cannot hold objects|||nó không chứa được đối tượng', 'it has a fixed size|||nó có kích thước cố định', 'it cannot be looped|||không thể lặp qua', 'it needs an interface|||nó cần một interface'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch7.quizDescription,
+          quiz: ch7.quiz,
         },
       ],
     },
@@ -1345,6 +1322,8 @@ students[2] = <span class="tok-keyword">new</span> <span class="tok-function">St
       title: 'Chapter 8 — Java Collections|||Chương 8 — Java Collections',
       description: 'List, Set, Map — các cấu trúc dữ liệu linh hoạt của Java.',
       lessons: [
+        /* 📑 Học theo từng slide (pro13 1–27) — ./pro192/ch8.mjs */
+        ...ch8.slides,
         {
           title: '8.1 — List, Set & Map|||8.1 — List, Set & Map',
           slug: 'pro192-8-1-collections',
@@ -1389,7 +1368,7 @@ ages.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>,
 <div class="out"><b>Output:</b><br>An<br>20</div>
 <p>The <code>&lt;String&gt;</code> part is <strong>generics</strong> — it tells the collection what type it holds, so the compiler catches type errors and you avoid casting. A <code>List&lt;Student&gt;</code> can only hold Students.</p>
 <h3>Ví dụ có lời giải · Worked example (all three at once)</h3>
-<pre><code class="language-java"><span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt; list = <span class="tok-keyword">new</span> <span class="tok-function">ArrayList</span>&lt;&gt;(<span class="tok-type">List</span>.<span class="tok-function">of</span>(<span class="tok-string">"An"</span>, <span class="tok-string">"Binh"</span>, <span class="tok-string">"An"</span>));
+<pre><code class="language-java"><span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt; list = <span class="tok-keyword">new</span> <span class="tok-function">ArrayList</span>&lt;&gt;(<span class="tok-type">Arrays</span>.<span class="tok-function">asList</span>(<span class="tok-string">"An"</span>, <span class="tok-string">"Binh"</span>, <span class="tok-string">"An"</span>));
 <span class="tok-type">Set</span>&lt;<span class="tok-type">String</span>&gt; set = <span class="tok-keyword">new</span> <span class="tok-function">HashSet</span>&lt;&gt;(list);   <span class="tok-comment">// duplicates dropped</span>
 <span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>, <span class="tok-type">Integer</span>&gt; diem = <span class="tok-keyword">new</span> <span class="tok-function">HashMap</span>&lt;&gt;();
 diem.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>, 8); diem.<span class="tok-function">put</span>(<span class="tok-string">"Binh"</span>, 7);
@@ -1428,7 +1407,7 @@ ages.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>,
 <div class="out"><b>Kết quả:</b><br>An<br>20</div>
 <p>Phần <code>&lt;String&gt;</code> là <strong>generics</strong> — nó cho collection biết chứa kiểu gì, để trình biên dịch bắt lỗi kiểu và bạn khỏi ép kiểu. Một <code>List&lt;Student&gt;</code> chỉ chứa được Student.</p>
 <h3>Ví dụ có lời giải · Cả ba cùng lúc</h3>
-<pre><code class="language-java"><span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt; list = <span class="tok-keyword">new</span> <span class="tok-function">ArrayList</span>&lt;&gt;(<span class="tok-type">List</span>.<span class="tok-function">of</span>(<span class="tok-string">"An"</span>, <span class="tok-string">"Binh"</span>, <span class="tok-string">"An"</span>));
+<pre><code class="language-java"><span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt; list = <span class="tok-keyword">new</span> <span class="tok-function">ArrayList</span>&lt;&gt;(<span class="tok-type">Arrays</span>.<span class="tok-function">asList</span>(<span class="tok-string">"An"</span>, <span class="tok-string">"Binh"</span>, <span class="tok-string">"An"</span>));
 <span class="tok-type">Set</span>&lt;<span class="tok-type">String</span>&gt; set = <span class="tok-keyword">new</span> <span class="tok-function">HashSet</span>&lt;&gt;(list);   <span class="tok-comment">// loại trùng</span>
 <span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>, <span class="tok-type">Integer</span>&gt; diem = <span class="tok-keyword">new</span> <span class="tok-function">HashMap</span>&lt;&gt;();
 diem.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>, 8); diem.<span class="tok-function">put</span>(<span class="tok-string">"Binh"</span>, 7);
@@ -1447,21 +1426,14 @@ diem.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>,
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch8.mjs */
+        ch8.practice,
         {
           title: 'Chapter 8 Quiz|||Quiz chương 8',
           slug: 'pro192-quiz-ch8',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: List/Set/Map, generics, khi nào dùng gì.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'Which collection stores an ordered sequence and allows duplicates?|||Collection nào lưu một dãy có thứ tự và cho phép trùng?', options: ['Set', 'List', 'Map', 'none|||không cái nào'], correctIndex: 1, points: 1 },
-              { question: 'Which collection automatically removes duplicates?|||Collection nào tự động loại trùng?', options: ['List', 'Set', 'Map', 'Array|||Mảng'], correctIndex: 1, points: 1 },
-              { question: 'A Map stores…|||Một Map lưu…', options: ['single values|||các giá trị đơn', 'key → value pairs|||các cặp khoá → giá trị', 'only numbers|||chỉ số', 'unique elements only|||chỉ phần tử duy nhất'], correctIndex: 1, points: 1 },
-              { question: 'The <String> in List<String> is an example of…|||<String> trong List<String> là ví dụ của…', options: ['inheritance|||kế thừa', 'generics (type safety)|||generics (an toàn kiểu)', 'an exception|||một ngoại lệ', 'a constructor|||một constructor'], correctIndex: 1, points: 1 },
-              { question: 'A key advantage of ArrayList over a plain array is that it…|||Một ưu điểm chính của ArrayList so với mảng thường là nó…', options: ['is fixed-size|||cố định kích thước', 'grows automatically|||tự lớn lên', 'cannot hold objects|||không chứa được đối tượng', 'has no methods|||không có phương thức'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch8.quizDescription,
+          quiz: ch8.quiz,
         },
       ],
     },
@@ -1470,6 +1442,8 @@ diem.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>,
       title: 'Chapter 9 — Streams & File I/O|||Chương 9 — Luồng & Đọc/ghi tệp',
       description: 'Đọc và ghi dữ liệu ra tệp bằng luồng (stream).',
       lessons: [
+        /* 📑 Học theo từng slide (pro14 1–59) — ./pro192/ch9.mjs */
+        ...ch9.slides,
         {
           title: '9.1 — Reading & writing files|||9.1 — Đọc & ghi tệp',
           slug: 'pro192-9-1-file-io',
@@ -1556,20 +1530,14 @@ diem.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>,
 </div>
 `,
         },
+        /* 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt — ./pro192/ch9.mjs */
+        ch9.practice,
         {
           title: 'Chapter 9 Quiz|||Quiz chương 9',
           slug: 'pro192-quiz-ch9',
           type: 'QUIZ',
-          description: 'Kiểm tra nhanh: luồng byte/ký tự, đọc/ghi tệp, try-with-resources.',
-          quiz: {
-            timeLimitSeconds: 300,
-            questions: [
-              { question: 'Java reads and writes files using…|||Java đọc và ghi tệp bằng…', options: ['pointers|||con trỏ', 'streams|||luồng (stream)', 'arrays only|||chỉ mảng', 'interfaces|||interface'], correctIndex: 1, points: 1 },
-              { question: 'Character streams (Reader/Writer) are used for…|||Luồng ký tự (Reader/Writer) dùng cho…', options: ['images and audio|||ảnh và âm thanh', 'text files|||tệp văn bản', 'compiling code|||biên dịch code', 'network sockets only|||chỉ socket mạng'], correctIndex: 1, points: 1 },
-              { question: 'File I/O in Java throws which kind of exception?|||Đọc/ghi tệp trong Java ném loại ngoại lệ nào?', options: ['unchecked|||unchecked', 'checked (IOException)|||checked (IOException)', 'no exceptions|||không ngoại lệ', 'ArithmeticException'], correctIndex: 1, points: 1 },
-              { question: 'try-with-resources is useful because it…|||try-with-resources hữu ích vì nó…', options: ['runs faster|||chạy nhanh hơn', 'automatically closes the file/resource|||tự động đóng tệp/tài nguyên', 'skips exceptions|||bỏ qua ngoại lệ', 'needs no catch ever|||không bao giờ cần catch'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: ch9.quizDescription,
+          quiz: ch9.quiz,
         },
       ],
     },
@@ -1582,18 +1550,8 @@ diem.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>,
           title: 'Progress Test 2 — review|||Progress Test 2 — ôn tổng hợp',
           slug: 'pro192-progress-test-2',
           type: 'QUIZ',
-          description: 'Trộn câu hỏi từ chương 6–9.',
-          quiz: {
-            timeLimitSeconds: 420,
-            questions: [
-              { question: 'Which block always runs, whether or not an exception occurs?|||Khối nào luôn chạy, dù có hay không có ngoại lệ?', options: ['try', 'catch', 'finally', 'throw'], correctIndex: 2, points: 1 },
-              { question: 'A HashMap is best when you need to…|||HashMap tốt nhất khi bạn cần…', options: ['store an ordered list|||lưu một danh sách có thứ tự', 'look up values by a key|||tra giá trị theo khoá', 'remove duplicates|||loại trùng', 'catch exceptions|||bắt ngoại lệ'], correctIndex: 1, points: 1 },
-              { question: 'A HashSet guarantees…|||HashSet đảm bảo…', options: ['order|||thứ tự', 'no duplicate elements|||không phần tử trùng', 'key-value pairs|||cặp khoá-giá trị', 'fixed size|||kích thước cố định'], correctIndex: 1, points: 1 },
-              { question: 'A menu-driven management program is typically built around a… of objects.|||Một chương trình quản lý theo menu thường xây quanh một… đối tượng.', options: ['single object|||đối tượng đơn', 'collection (list/array)|||collection (list/mảng)', 'exception|||ngoại lệ', 'interface|||interface'], correctIndex: 1, points: 1 },
-              { question: 'To save program data permanently you must…|||Để lưu dữ liệu chương trình vĩnh viễn bạn phải…', options: ['keep it in variables|||giữ trong biến', 'write it to a file (stream)|||ghi nó ra tệp (stream)', 'print it|||in nó ra', 'catch it|||bắt nó'], correctIndex: 1, points: 1 },
-              { question: 'Generics like List<Student> give you…|||Generics như List<Student> cho bạn…', options: ['slower code|||code chậm hơn', 'compile-time type safety|||an toàn kiểu lúc biên dịch', 'more exceptions|||nhiều ngoại lệ hơn', 'no benefit|||không lợi ích'], correctIndex: 1, points: 1 },
-            ],
-          },
+          description: pt2.quizDescription,
+          quiz: pt2.quiz,
         },
       ],
     },
@@ -1707,6 +1665,8 @@ students.<span class="tok-function">stream</span>()
 </div>
 `,
         },
+        /* 🧩 Bài bổ sung — ./pro192/adv2.mjs */
+        ...adv2.extrasEnd,
       ],
     },
     {
@@ -1803,7 +1763,9 @@ students.<span class="tok-function">stream</span>()
               }
             ]
           }
-        }
+        },
+        /* 🧩 Bài bổ sung — ./pro192/fe.mjs */
+        ...fe.extrasEnd,
       ]
     },
   ],

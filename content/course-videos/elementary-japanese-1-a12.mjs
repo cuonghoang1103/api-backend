@@ -31,15 +31,15 @@ export default {
     'jpd123-muc-dich-chuyen-di': { }, // dự kiến: jp-b5-p2
     'jpd123-so-thich': { }, // dự kiến: jp-b5-p2
     'jpd123-qua-khu-ly-do': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-05-diem-37-38-da-lam-gi-the-nao-32f1ef6f.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b5-p3
-    'jpd123-sac-thai-hoi-thoai': { }, // dự kiến: jp-b6-p4
+    'jpd123-sac-thai-hoi-thoai': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-07-diem-57-60-da-chua-goi-y-ne-yo-d023f15d.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b6-p4
     'jpd123-so-sanh-hon-kem': { }, // dự kiến: jp-b6-p3
     'jpd123-so-sanh-nhat': { }, // dự kiến: jp-b6-p3
-    'jpd123-cau-hoi-so-sanh': { }, // dự kiến: jp-b6-p3
+    'jpd123-cau-hoi-so-sanh': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-06-diem-53-56-nhat-hon-chon-mot-trong-hai-e7dfe0e6.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b6-p3
     'jpd123-nguphap-chuong6': { },
-    'jpd123-the-te': { }, // dự kiến: jp-b7-chia (+ jp-b7-p2)
-    'jpd123-bang-chia-the-te': { }, // dự kiến: jp-b7-chia
-    'jpd123-teimasu': { }, // dự kiến: jp-b7-p3
-    'jpd123-ton-tai-dung-cu-cach-lam': { }, // dự kiến: jp-b7-p1 (+ jp-b7-p2)
+    'jpd123-the-te': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-06-diem-63-66-71-nho-cach-lam-bang-gi-8a832cf7.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b7-chia (+ jp-b7-p2)
+    'jpd123-bang-chia-the-te': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-04-the-te-ba-nhom-dong-tu-a82c315b.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b7-chia
+    'jpd123-teimasu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-07-diem-64-65-dang-lam-de-toi-giup-1561edac.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b7-p3
+    'jpd123-ton-tai-dung-cu-cach-lam': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-05-diem-61-62-o-dau-o-do-co-gi-0d552d0a.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: jp-b7-p1 (+ jp-b7-p2)
     'jpd123-kanji': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-08-chu-han-lop-bai-5-6e08af31.mp4' }, defaultVideoTrack: 'VI' }, // dự kiến: ghép jp-b4…b7-kj (-tron)
     'jpd123-nang-cao': { },
   },

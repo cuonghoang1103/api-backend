@@ -2,7 +2,7 @@
   "name": "cuongthai-ai-code",
   "displayName": "CuongThai AI Code",
   "description": "AI Code của CuongThai ngay trong VS Code — chat, sửa code, chạy lệnh, skill, MCP, GitHub. Chạy bằng app desktop CuongThai.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "cuongthai",
   "license": "UNLICENSED",
   "private": true,

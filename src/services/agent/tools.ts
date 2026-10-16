@@ -133,7 +133,7 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       'Đọc nội dung một file, kèm số dòng. DÒNG ĐẦU kết quả cho biết đang xem dòng nào / tổng bao nhiêu dòng '
       + 'và offset để đọc tiếp. MẶC ĐỊNH 300 dòng. Đã biết dòng cần (từ grep) thì đọc HẸP bằng offset/limit '
       + '(~60–120 dòng) — rẻ hơn nhiều. Đừng đoán nội dung phần chưa đọc. ' +
-      'ĐỌC ĐƯỢC CẢ ẢNH (.png .jpg .jpeg .gif .webp) — trả về tấm ảnh để bạn NHÌN (trần 1.4MB); chụp màn hình bằng lệnh '
+      'ĐỌC ĐƯỢC CẢ ẢNH (.png .jpg .jpeg .gif .webp, và .heic .heif .avif .tiff .bmp .ico .psd — app tự chuyển đổi, tự xoay ảnh điện thoại, tự thu nhỏ ảnh to) — trả về tấm ảnh để bạn NHÌN; đừng tự chuyển định dạng bằng run_command. Chụp màn hình bằng lệnh '
       + '(`screencapture -x`, `adb exec-out screencap -p`, `xcrun simctl io booted screenshot`) rồi read_file ảnh. ' +
       // Từ app desktop 0.5.45: `read_file` tự rút chữ khỏi PDF (xem
       // `desktop/src/main/agent/docPdf.ts`). Phải nói ra ở ĐÂY, vì đây là thứ

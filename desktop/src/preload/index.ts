@@ -186,6 +186,11 @@ const bridge: DesktopBridge = {
     }
   },
 
+  chuanHoaAnh: (nguon: { duong: string } | { bytes: Uint8Array }) =>
+    ipcRenderer.invoke('anh:chuanHoa', nguon) as Promise<
+      { ok: true; dataUrl: string; byte: number; rong: number; cao: number; goc: string } | { ok: false; loi: string }
+    >,
+
   music: {
     listDownloaded: () =>
       ipcRenderer.invoke('music:listDownloaded') as Promise<DownloadedTrack[]>,

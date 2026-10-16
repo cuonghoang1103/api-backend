@@ -21,7 +21,7 @@ vi.mock('../store', () => ({
   setSetting: (k: string, v: unknown) => { caiDat[k] = v; },
 }));
 
-const { taoCuoc, datGocChoCuoc, quyenCuaCuoc } = await import('./loop');
+const { taoCuoc, datGocChoCuoc, datGocNeuChuaCo, datCheDoQuyen, quyenCuaCuoc, soCuaCuoc, napPhien, xoaHoiThoai } = await import('./loop');
 
 let goc = '';
 beforeEach(async () => {
@@ -68,5 +68,62 @@ describe('chế độ mặc định khi mở dự án', () => {
       caiDat.aiCheDoQuyenMacDinh = rac;
       expect(moDuAn().cheDoQuyen).toBe('keHoach');
     }
+  });
+});
+
+describe('tab CHƯA CÓ thư mục ⇒ toàn quyền (16/10/2026)', () => {
+  it('tab mới ⇒ `boQuaHet`, và cờ trên SỔ cũng bật (thứ thẻ duyệt thật sự đọc)', () => {
+    const id = taoCuoc();
+    expect(quyenCuaCuoc(id).cheDoQuyen).toBe('boQuaHet');
+    expect(soCuaCuoc(id).boQuaHet).toBe(true);
+  });
+
+  it('toàn quyền TỰ ĐẶT không đi theo sang thư mục mặc định', () => {
+    const id = taoCuoc();
+    datGocNeuChuaCo(id, goc);
+    expect(quyenCuaCuoc(id).cheDoQuyen).toBe('keHoach');
+    expect(soCuaCuoc(id).boQuaHet).toBe(false);
+  });
+
+  it('người dùng TỰ bật "Bỏ qua tất cả" rồi mới chọn thư mục ⇒ GIỮ (lỗi bạn chủ app trên Windows)', () => {
+    const id = taoCuoc();
+    datCheDoQuyen(id, 'boQuaHet');
+    datGocChoCuoc(id, goc);
+    expect(quyenCuaCuoc(id).cheDoQuyen).toBe('boQuaHet');
+    expect(soCuaCuoc(id).boQuaHet).toBe(true);
+  });
+
+  it('⛔ đổi từ dự án A sang dự án B ⇒ vẫn HẠ về mặc định', async () => {
+    const id = taoCuoc();
+    datCheDoQuyen(id, 'boQuaHet');
+    datGocChoCuoc(id, goc);
+    const gocB = await fs.mkdtemp(path.join(os.tmpdir(), 'ct-duan-b-'));
+    datGocChoCuoc(id, gocB);
+    expect(quyenCuaCuoc(id).cheDoQuyen).toBe('keHoach');
+    expect(soCuaCuoc(id).boQuaHet).toBe(false);
+  });
+
+  it('bỏ thư mục (✕) ⇒ về toàn quyền của tab trống', () => {
+    const id = taoCuoc();
+    datGocChoCuoc(id, goc);
+    datGocChoCuoc(id, null);
+    expect(quyenCuaCuoc(id).cheDoQuyen).toBe('boQuaHet');
+  });
+
+  it('mở lại phiên KHÔNG đổi thư mục ⇒ sổ mới vẫn mang cờ của chế độ đang hiện', () => {
+    const id = taoCuoc();
+    datCheDoQuyen(id, 'boQuaHet');
+    napPhien(id, id, [], null);
+    expect(quyenCuaCuoc(id).cheDoQuyen).toBe('boQuaHet');
+    expect(soCuaCuoc(id).boQuaHet).toBe(true);
+  });
+
+  it('bấm "Việc mới" khi đang "Bỏ qua tất cả" ⇒ sổ mới VẪN bật, và vẫn nhớ thư mục', () => {
+    const id = taoCuoc();
+    datGocChoCuoc(id, goc);
+    datCheDoQuyen(id, 'boQuaHet');
+    xoaHoiThoai(id);
+    expect(soCuaCuoc(id).boQuaHet).toBe(true);
+    expect(soCuaCuoc(id).goc).toBe(goc);
   });
 });

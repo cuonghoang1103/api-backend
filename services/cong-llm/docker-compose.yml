@@ -105,6 +105,12 @@ services:
       # `WEB_INTERNAL_TOKEN` phải TRÙNG với `INTERNAL_API_TOKEN` của backend.
       WEB_API_URL: ${CONG_LLM_WEB_API_URL:-http://cuonghoangdev_backend:3001}
       WEB_INTERNAL_TOKEN: ${INTERNAL_API_TOKEN:-}
+      # ─── Cổng dự phòng (16/10/2026, xem canh/du-phong.mjs) ─────────
+      # Rambo nhường web / bảo trì / hết hạn mức ⇒ chạy gpt-6-sol trên
+      # modelapi thay vì trả 429 "Tạm dừng … phút". Khoá trống ⇒ tắt.
+      DU_PHONG_BASE_URL: ${LLM_GATEWAY_BASE_URL:-https://modelapi.vn/v1}
+      DU_PHONG_KEY: ${LLM_GATEWAY_API_KEY_GPT:-}
+      DU_PHONG_MODEL: ${CONG_LLM_DU_PHONG_MODEL:-gpt-6-sol}
       TZ: Asia/Ho_Chi_Minh
     volumes:
       # Mount cả THƯ MỤC, không mount từng file: file đơn bị gắn theo inode,

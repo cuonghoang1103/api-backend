@@ -695,6 +695,29 @@ export function registerAgentHandlers(): void {
     }
   });
 
+  handle('anh:chuanHoa', async (nguon) => {
+    try {
+      const { chuanHoaAnh, TRAN_BYTE_VAO } = await import('../agent/anhLa');
+      let byte: Buffer;
+      if ('duong' in nguon) {
+        const st = await fs.stat(nguon.duong);
+        if (!st.isFile()) return { ok: false as const, loi: 'Không phải file.' };
+        if (st.size > TRAN_BYTE_VAO) return { ok: false as const, loi: `Ảnh nặng ${(st.size / 1048576).toFixed(0)}MB — quá trần.` };
+        byte = await fs.readFile(nguon.duong);
+      } else {
+        byte = Buffer.from(nguon.bytes.buffer, nguon.bytes.byteOffset, nguon.bytes.byteLength);
+      }
+      const r = await chuanHoaAnh(byte);
+      return {
+        ok: true as const,
+        dataUrl: `data:${r.media};base64,${r.data.toString('base64')}`,
+        byte: r.data.length, rong: r.rong, cao: r.cao, goc: r.goc,
+      };
+    } catch (e) {
+      return { ok: false as const, loi: (e as Error).message };
+    }
+  });
+
   handle('agent:xoaPhien', async ({ id }) => {
     // Xoá phiên ⇒ đóng luôn cuộc nếu nó đang mở, nếu không agent vẫn nhớ một
     // việc mà người dùng vừa bảo là bỏ đi.

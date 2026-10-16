@@ -19,6 +19,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FileText, ImageIcon, Loader2, Paperclip, X } from 'lucide-react';
 import { useDich } from '../../i18n';
+import { chuanHoaChoAI, laAnh } from './anhChoAI';
 
 /** Trần của cổng cho ảnh gửi thẳng. Trên mức này thì rơi xuống đường đĩa. */
 const TRAN_ANH_BYTE = 4 * 1024 * 1024;
@@ -35,7 +36,6 @@ const TRAN_ANH_BYTE = 4 * 1024 * 1024;
  * điều này; đừng nâng tiếp mà không đo lại.
  */
 const MAX_ANH_THANG = 8;
-const LOAI_ANH = /^image\/(png|jpeg|webp|gif)$/;
 
 export interface TepCode {
   id: string;
@@ -45,6 +45,8 @@ export interface TepCode {
   guiThang: boolean;
   /** Chỉ có khi `guiThang`. */
   dataUrl?: string;
+  /** Ảnh đã được ĐỔI ĐỊNH DẠNG trước khi gửi (ví dụ "HEIC") — thẻ nói rõ. */
+  doiTu?: string;
   /** Chỉ có khi đã đặt lên đĩa xong. */
   tuongDoi?: string;
   /** Kéo cả một THƯ MỤC vào — agent dùng `list_dir`/`grep` chứ không `read_file`. */
@@ -75,65 +77,6 @@ function docFile(f: File, kieu: 'dataUrl' | 'base64'): Promise<string> {
     };
     d.readAsDataURL(f);
   });
-}
-
-/**
- * Thu nhỏ ảnh QUÁ TO để nó vẫn đi được đường gửi thẳng.
- *
- * ⚠️ Vì sao cần: ảnh vượt `TRAN_ANH_BYTE` rơi xuống đường ĐĨA, mà ở đó
- * `read_file` có trần RIÊNG 1,4MB và trả về "ảnh quá lớn, thu nhỏ bằng
- * run_command" — trong khi chế độ mặc định (`keHoach`) KHÔNG có `run_command`.
- * Ngõ cụt. Và nó cắn Windows nặng nhất: PrintScreen chụp NGUYÊN màn hình ở độ
- * phân giải thật, nên ảnh 4K thường 4-8MB, còn Cmd+Shift+4 của macOS chỉ cắt
- * một vùng.
- *
- * 1568px là cạnh dài Anthropic co ảnh về trước khi đọc — gửi to hơn chỉ tốn
- * token chứ không nét thêm.
- */
-const CANH_DAI = 1568;
-
-/** Số byte THẬT của ảnh trong một data URL (base64 phình 4/3). */
-function byteCuaDataUrl(url: string): number {
-  const than = url.slice(url.indexOf(',') + 1);
-  const dem = (than.endsWith('==') ? 2 : than.endsWith('=') ? 1 : 0);
-  return Math.max(0, Math.floor((than.length * 3) / 4) - dem);
-}
-
-/** Cạnh dài có vượt mức model co về không. Đọc kích thước, không giải mã cả ảnh. */
-async function quaTo(f: File): Promise<boolean> {
-  try {
-    const bm = await createImageBitmap(f);
-    const to = Math.max(bm.width, bm.height) > CANH_DAI;
-    bm.close();
-    return to;
-  } catch {
-    return false;   // không đọc được kích thước ⇒ cứ gửi nguyên, đừng chặn
-  }
-}
-
-async function thuNhoAnh(f: File): Promise<string> {
-  const bm = await createImageBitmap(f);
-  try {
-    for (let canh = CANH_DAI, lan = 0; lan < 4; lan += 1, canh = Math.round(canh * 0.7)) {
-      const ti = Math.min(1, canh / Math.max(bm.width, bm.height));
-      const cv = new OffscreenCanvas(Math.max(1, Math.round(bm.width * ti)), Math.max(1, Math.round(bm.height * ti)));
-      const ctx = cv.getContext('2d');
-      if (!ctx) throw new Error('Không dựng được canvas để thu nhỏ ảnh.');
-      // Nền TRẮNG trước: JPEG không có kênh trong suốt, thiếu bước này thì
-      // mọi vùng trong suốt của PNG thành ĐEN và ảnh đọc ra khác hẳn bản gốc.
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0, 0, cv.width, cv.height);
-      ctx.drawImage(bm, 0, 0, cv.width, cv.height);
-      const blob = await cv.convertToBlob({ type: 'image/jpeg', quality: 0.85 });
-      // So trên KÍCH THƯỚC CHUỖI base64 (phình ~4/3), vì trần ở máy chủ đo
-      // chính chuỗi đó chứ không đo byte gốc.
-      const url = await docFile(new File([blob], 'anh.jpg', { type: 'image/jpeg' }), 'dataUrl');
-      if (url.length <= TRAN_ANH_BYTE) return url;
-    }
-    throw new Error('Ảnh quá lớn, thu nhỏ không đủ.');
-  } finally {
-    bm.close();
-  }
 }
 
 export function useDinhKemCode(cuocId: string) {
@@ -179,12 +122,13 @@ export function useDinhKemCode(cuocId: string) {
       /* Ảnh nhỏ vẫn GỬI THẲNG kể cả khi có đường dẫn: bắt agent gọi thêm một
          lượt tool chỉ để nhìn cái ảnh vừa kéo vào là chậm hơn và đắt hơn.
          Thư mục thì `f.type` rỗng và `f.size` là 0 nên không lọt vào đây. */
-      /* KHÔNG còn loại ảnh to ra khỏi đường gửi thẳng — `thuNhoAnh` lo phần
-         đó. Trước đây ảnh >4MB rơi xuống đĩa và tắc hẳn ở trần 1,4MB của
+      /* KHÔNG còn loại ảnh to ra khỏi đường gửi thẳng — `chuanHoaChoAI` lo
+         phần đó. Trước đây ảnh >4MB rơi xuống đĩa và tắc hẳn ở trần 1,4MB của
          `read_file`. Thư mục thì `f.type` rỗng và `f.size` là 0 nên không lọt. */
-      const guiThang = LOAI_ANH.test(f.type)
-        && f.size > 0
-        && soAnhThang.current < MAX_ANH_THANG;
+      /* `laAnh` nhận cả HEIC/AVIF/TIFF/BMP (16/10/2026) — trước đây chỉ bốn
+         loại cổng nhận, nên ảnh iPhone rơi xuống đường đĩa và agent chỉ thấy
+         một "file nhị phân". Giờ chúng được đổi sang JPEG ngay tại đây. */
+      const guiThang = laAnh(f) && soAnhThang.current < MAX_ANH_THANG;
       if (guiThang) soAnhThang.current += 1;
 
       /* `dangTai` bật cho CẢ ảnh gửi thẳng. Trước đây ảnh vào thẳng với
@@ -204,17 +148,15 @@ export function useDinhKemCode(cuocId: string) {
            * ở đầu kia — trả tiền cho phần bị vứt đi. Với trần 8 ảnh thì đó là
            * tám lần trả thừa trong mỗi bước của vòng lặp.
            *
-           * Ảnh vốn đã nhỏ hơn 1568px thì `thuNhoAnh` trả về ngay ở vòng đầu
-           * (tỉ lệ bị kẹp ở 1) nên không phóng to, chỉ mã hoá lại.
+           * `chuanHoaChoAI` (anhChoAI.ts) còn đổi HEIC/AVIF/TIFF sang JPEG và
+           * dựng đứng ảnh dọc của điện thoại theo thẻ EXIF.
            */
-          const thang = await docFile(f, 'dataUrl');
-          const canThu = thang.length > TRAN_ANH_BYTE || await quaTo(f);
-          const url = canThu ? await thuNhoAnh(f) : thang;
+          const r = await chuanHoaChoAI(f, { tranChuoi: TRAN_ANH_BYTE, duong });
           datTep((cu) => cu.map((t) => (t.id === id
-            // Ảnh đã thu nhỏ thì hiện KÍCH THƯỚC MỚI, không phải cỡ gốc: thẻ
-            // ghi "8.4 MB" cạnh một tấm đã co còn 300KB là nói sai với người
-            // dùng về thứ thật sự được gửi đi.
-            ? { ...t, dataUrl: url, byte: url === thang ? f.size : byteCuaDataUrl(url), dangTai: false }
+            // Ảnh đã thu nhỏ/đổi định dạng thì hiện KÍCH THƯỚC MỚI, không phải
+            // cỡ gốc: thẻ ghi "8.4 MB" cạnh một tấm đã co còn 300KB là nói sai
+            // với người dùng về thứ thật sự được gửi đi.
+            ? { ...t, dataUrl: r.dataUrl, byte: r.byte, ...(r.doiTu ? { doiTu: r.doiTu } : {}), dangTai: false }
             : t)));
           return;
         }
@@ -411,7 +353,7 @@ export function DaiTepCode({ tep, bo }: { tep: TepCode[]; bo: (id: string) => vo
           <span className="ct-dkc-phu">
             {t.loi ? t.loi
               : t.dangTai ? 'đang lưu…'
-                : t.guiThang ? `${coChu(t.byte)} · gửi kèm`
+                : t.guiThang ? `${t.doiTu ? `${t.doiTu} → ${t.dataUrl?.startsWith('data:image/png') ? 'PNG' : 'JPG'} · ` : ''}${coChu(t.byte)} · gửi kèm`
                   : t.ngoai ? 'thư mục ngoài · chỉ đọc'
                     : t.laThuMuc ? 'thư mục · agent tự mở'
                       : `${coChu(t.byte)} · agent tự mở`}

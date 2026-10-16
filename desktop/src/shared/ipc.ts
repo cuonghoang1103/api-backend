@@ -1638,6 +1638,14 @@ export const INVOKE_CHANNELS = {
     duong: z.string().min(1).max(4096),
   }),
 
+  /* Ảnh model không đọc được (HEIC của iPhone, AVIF, TIFF, BMP…) → JPEG/PNG
+     đứng thẳng, cạnh dài ≤1568px. Nhận ĐƯỜNG DẪN (kéo/chọn file) hoặc BYTE
+     (ảnh dán). Main chỉ trả về ảnh — byte không phải ảnh thì báo lỗi. */
+  'anh:chuanHoa': z.union([
+    z.object({ duong: z.string().min(1).max(4096) }),
+    z.object({ bytes: z.instanceof(Uint8Array).refine((b) => b.byteLength <= 80 * 1024 * 1024, 'Ảnh quá lớn') }),
+  ]),
+
   /**
    * Dự án đang mở có GHI CHÚ cho agent chưa (`AGENTS.md` / `CLAUDE.md`).
    *
@@ -2447,6 +2455,10 @@ export interface DesktopBridge {
    * đĩa — ví dụ ảnh kéo từ một trang web.
    */
   duongCuaFile(f: File): string | null;
+  /** Xem kênh `anh:chuanHoa`. `dataUrl` là ảnh đã chuẩn hoá, sẵn để gửi cho model. */
+  chuanHoaAnh(nguon: { duong: string } | { bytes: Uint8Array }): Promise<
+    { ok: true; dataUrl: string; byte: number; rong: number; cao: number; goc: string } | { ok: false; loi: string }
+  >;
   music: {
     listDownloaded(): Promise<DownloadedTrack[]>;
     saveAudio(trackId: number, bytes: Uint8Array, ext: string): Promise<void>;

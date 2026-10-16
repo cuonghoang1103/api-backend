@@ -45,11 +45,20 @@ function load(): StoreShape {
       settings: parsed.settings ?? {},
       windowState: { ...DEFAULT_STATE.windowState, ...parsed.windowState },
     };
-  } catch {
+  } catch (e) {
     // Chưa có file (lần chạy đầu) hoặc JSON hỏng. Cả hai đều không phải lý do
     // để app chết — quay về mặc định và chạy tiếp. Ghi đè sẽ xảy ra ở lần
     // `persist()` kế tiếp, nên một file hỏng tự lành.
     cache = structuredClone(DEFAULT_STATE);
+    /* LẦN CÀI ĐẦU (chưa có file — KHÔNG tính JSON hỏng): robot Odin TẮT sẵn
+       (chủ app 16/10/2026). Người mới mở app thấy ngay con robot nổi trên màn
+       hình là dễ tưởng phần mềm lạ; ai muốn thì bật ở Cài đặt → Trợ lý Odin.
+       Chỉ ghi vào máy MỚI: máy đang dùng đã có file nên giữ nguyên lựa chọn —
+       mọi chỗ đọc vẫn là `robotEnabled !== false` (thiếu khoá = bật). */
+    if ((e as NodeJS.ErrnoException)?.code === 'ENOENT') {
+      cache.settings.robotEnabled = false;
+      persist();
+    }
   }
   return cache;
 }

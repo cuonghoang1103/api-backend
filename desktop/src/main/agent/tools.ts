@@ -29,6 +29,7 @@ import { promisify } from 'node:util';
 import { soSanhDong, type KetQuaDiff } from './diff';
 import { capQuyenDocNgoai, fileBiCam, LoiNguc, loiNgoaiChuaCap, moTrongNguc, thuMucBiCam, timThuMucNgoai, TRAN_BYTE_FILE } from './jail';
 import { dinhDangTheoTen, napAnh, suaAnh } from './anh';
+import { chuanHoaAnh, docHuongExif, DUOI_ANH_LA, LOAI_CONG_NHAN, nhanDangAnh, TRAN_BYTE_VAO } from './anhLa';
 import { hienKhoangTrang, timGanDung } from './ganDung';
 import { kiemDuongDanNgoai } from './ghiNgoai';
 import { chuanBiCommit, chuanBiPr, commit, taoPr } from './gitViet';
@@ -644,13 +645,6 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
     }
   }
 
-  if (st.size > TRAN_BYTE_FILE) {
-    return {
-      noiDung: `LỖI: file nặng ${(st.size / 1024 / 1024).toFixed(1)}MB, quá lớn để đọc (trần 2MB). Dùng grep để tìm trong nó.`,
-      tomTat: 'quá lớn',
-    };
-  }
-
   /*
    * ẢNH: TRẢ VỀ DẠNG ẢNH, KHÔNG PHẢI CHỮ.
    *
@@ -670,8 +664,14 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
    * (xem `src/services/agent/anthropic.ts`). Ở đây chỉ nối thêm một nguồn vào
    * đúng đường ống đó.
    *
-   * Bốn định dạng này là toàn bộ những gì Anthropic nhận. Định dạng khác thì
-   * rơi xuống nhánh nhị phân bên dưới và báo đúng lý do.
+   * Cổng chỉ nhận PNG/JPEG/GIF/WebP. Từ 16/10/2026 ảnh "lạ" (HEIC của
+   * iPhone, AVIF, TIFF, BMP, ICO, PSD) được CHUYỂN ĐỔI tại chỗ, ảnh quá to
+   * được TỰ THU NHỎ về 1568px, và ảnh điện thoại có thẻ xoay EXIF được dựng
+   * đứng lại — xem `anhLa.ts`. Trước đó ảnh >1.4MB báo lỗi và bắt model gọi
+   * thêm `sua_anh`; còn HEIC thì rơi xuống "file nhị phân".
+   *
+   * Khối này đứng TRƯỚC trần 2MB của file chữ: một ảnh 3MB từ điện thoại là
+   * chuyện thường, nó phải được thu nhỏ chứ không bị từ chối.
    */
   const KIEU_ANH: Record<string, string> = {
     '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
@@ -679,26 +679,48 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
   };
   const duoi = path.extname(dich).toLowerCase();
   const kieu = KIEU_ANH[duoi];
-  if (kieu) {
+  if (kieu || DUOI_ANH_LA.has(duoi)) {
     // base64 phình ~4/3 so với byte gốc, và mỗi tấm ảnh còn tốn token theo
-    // diện tích. Trần riêng, thấp hơn trần file chữ: một ảnh 2MB là vài nghìn
-    // token cho MỘT lời gọi, và model thường đọc nhiều ảnh liên tiếp.
+    // diện tích. Trần riêng, thấp hơn trần file chữ: model thường đọc nhiều
+    // ảnh liên tiếp.
     const TRAN_ANH = 1_400_000;
-    if (st.size > TRAN_ANH) {
-      return {
-        noiDung: `LỖI: ảnh nặng ${(st.size / 1024 / 1024).toFixed(1)}MB, quá lớn (trần 1.4MB). `
-          + 'Thu nhỏ bằng sua_anh: {"path": "<ảnh này>", "viec": "co", "rong": 1200, '
-          + '"dich": "<tên mới>.jpg"} rồi read_file file mới. '
-          + 'ĐỪNG đi vòng qua run_command với sips/magick — đa số máy người dùng không cài magick, '
-          + 'và sips thì chỉ có trên macOS.',
-        tomTat: 'ảnh quá lớn',
-      };
+    if (st.size > TRAN_BYTE_VAO) {
+      return { noiDung: `LỖI: ảnh nặng ${(st.size / 1048576).toFixed(0)}MB, quá trần ${TRAN_BYTE_VAO / 1048576}MB.`, tomTat: 'ảnh quá lớn' };
     }
     const byte = await fs.readFile(dich);
+    /* Đường nhanh — ảnh chuẩn, nhỏ, không có thẻ xoay: gửi NGUYÊN BYTE như
+       trước (GIF/WebP động không bị đông cứng thành một khung hình). */
+    if (kieu && st.size <= TRAN_ANH && nhanDangAnh(byte) !== null
+        && (nhanDangAnh(byte) !== 'jpeg' || docHuongExif(byte) === 1)) {
+      return {
+        noiDung: `Ảnh ${path.basename(dich)} (${duoi.slice(1).toUpperCase()}, ${(st.size / 1024).toFixed(0)}KB).`,
+        tomTat: `ảnh ${(st.size / 1024).toFixed(0)}KB`,
+        anh: [{ media_type: kieu, data: byte.toString('base64') }],
+      };
+    }
+    try {
+      const r = await chuanHoaAnh(byte);
+      const ghi = r.daDoi
+        ? ` — đã ${LOAI_CONG_NHAN.has(r.goc) ? 'chuẩn hoá' : `chuyển từ ${r.goc.toUpperCase()}`} sang ${r.media === 'image/png' ? 'PNG' : 'JPEG'} ${r.rong}×${r.cao}`
+          + ' để model đọc được; file gốc trên đĩa KHÔNG đổi'
+        : '';
+      return {
+        noiDung: `Ảnh ${path.basename(dich)} (${r.goc.toUpperCase()}, ${(st.size / 1024).toFixed(0)}KB)${ghi}.`,
+        tomTat: `ảnh ${r.goc === 'jpeg' ? '' : `${r.goc} → `}${(r.data.length / 1024).toFixed(0)}KB`,
+        anh: [{ media_type: r.media, data: r.data.toString('base64') }],
+      };
+    } catch (e) {
+      // Đuôi ảnh nhưng byte không phải ảnh ⇒ để các nhánh dưới báo đúng lý do.
+      if (!(kieu && nhanDangAnh(byte) === null)) {
+        return { noiDung: `LỖI: ${(e as Error).message}`, tomTat: 'ảnh không đọc được' };
+      }
+    }
+  }
+
+  if (st.size > TRAN_BYTE_FILE) {
     return {
-      noiDung: `Ảnh ${path.basename(dich)} (${duoi.slice(1).toUpperCase()}, ${(st.size / 1024).toFixed(0)}KB).`,
-      tomTat: `ảnh ${(st.size / 1024).toFixed(0)}KB`,
-      anh: [{ media_type: kieu, data: byte.toString('base64') }],
+      noiDung: `LỖI: file nặng ${(st.size / 1024 / 1024).toFixed(1)}MB, quá lớn để đọc (trần 2MB). Dùng grep để tìm trong nó.`,
+      tomTat: 'quá lớn',
     };
   }
 
@@ -2116,33 +2138,23 @@ async function docFileTheoLink(url: string): Promise<KetQuaTool> {
 
   // Nhận dạng theo BYTE ĐẦU trước, rồi mới tin content-type/đuôi: máy chủ hay
   // trả `application/octet-stream` cho mọi thứ.
-  const laPng = b.subarray(0, 4).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47]));
-  const laJpg = b[0] === 0xff && b[1] === 0xd8;
-  const laGif = b.subarray(0, 3).toString('latin1') === 'GIF';
-  const laWebp = b.subarray(8, 12).toString('latin1') === 'WEBP';
   const laPdf = b.subarray(0, 5).toString('latin1') === '%PDF-';
   const laZip = b[0] === 0x50 && b[1] === 0x4b;
 
-  if (laPng || laJpg || laGif || laWebp) {
-    const { nativeImage } = await import('electron');
-    let media = laPng ? 'image/png' : laJpg ? 'image/jpeg' : laGif ? 'image/gif' : 'image/webp';
-    let data = b;
-    // Ảnh lớn ⇒ co về 1568px JPEG (GIF/WebP động thì giữ nguyên nếu vừa trần).
-    if (b.length > 1_400_000 || laPng) {
-      const anh = nativeImage.createFromBuffer(b);
-      if (!anh.isEmpty()) {
-        const { width } = anh.getSize();
-        const nho = width > 1568 ? anh.resize({ width: 1568, quality: 'good' }) : anh;
-        const jpg = nho.toJPEG(85);
-        if (jpg.length < data.length || data.length > 1_400_000) { data = jpg; media = 'image/jpeg'; }
-      }
+  /* Mọi ảnh — kể cả HEIC/AVIF/TIFF/BMP mà cổng không nhận — đi qua
+     `chuanHoaAnh`: đổi định dạng, dựng đứng theo EXIF, co về 1568px. */
+  const loaiAnh = nhanDangAnh(b);
+  if (loaiAnh) {
+    try {
+      const r = await chuanHoaAnh(b);
+      return {
+        noiDung: `Ảnh ${dich}${LOAI_CONG_NHAN.has(loaiAnh) ? '' : ` (${loaiAnh.toUpperCase()} → ${r.media === 'image/png' ? 'PNG' : 'JPEG'})`} — nhìn ảnh kèm theo.`,
+        tomTat: `ảnh ${Math.round(r.data.length / 1024)} KB`,
+        anh: [{ media_type: r.media, data: r.data.toString('base64') }],
+      };
+    } catch (e) {
+      return { noiDung: `LỖI: ${(e as Error).message}`, tomTat: 'ảnh không đọc được' };
     }
-    if (data.length > 4_000_000) return { noiDung: 'LỖI: ảnh quá lớn kể cả sau khi thu nhỏ.', tomTat: 'ảnh quá lớn' };
-    return {
-      noiDung: `Ảnh ${dich} — nhìn ảnh kèm theo.`,
-      tomTat: `ảnh ${Math.round(data.length / 1024)} KB`,
-      anh: [{ media_type: media, data: data.toString('base64') }],
-    };
   }
   if (laPdf || kieu === 'application/pdf') {
     const { docPdf } = await import('./docPdf');
@@ -2174,7 +2186,7 @@ async function docFileTheoLink(url: string): Promise<KetQuaTool> {
   }
   return {
     noiDung: `${dich} là "${kieu || 'không rõ kiểu'}" (${Math.round(b.length / 1024)} KB) — chưa đọc được loại này. `
-      + 'Đọc được: ảnh png/jpg/gif/webp, PDF, pptx/docx/xlsx, file chữ.',
+      + 'Đọc được: ảnh png/jpg/gif/webp/heic/avif/tiff/bmp, PDF, pptx/docx/xlsx, file chữ.',
     tomTat: 'loại không hỗ trợ',
   };
 }

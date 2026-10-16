@@ -31,6 +31,7 @@ import { readFileSync, writeFileSync, renameSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 import { nanYeuCau } from './sua-yeu-cau.mjs';
+import { anthropicSangOpenAI, nenChuyenDuPhong, openAISangAnthropic, taoBoDichStream } from './du-phong.mjs';
 
 const env = process.env;
 
@@ -43,6 +44,15 @@ const RAMBO_KEY = env.AGENT_GATEWAY_API_KEY?.trim();
 const RAMBO_CHECK = env.RAMBO_CHECK_URL || `${new URL(RAMBO_API).origin}/auth/check-limit/api/check`;
 
 const KHOA_NOI_BO = env.CANH_KHOA_NOI_BO?.trim();
+
+// ─── Cổng DỰ PHÒNG (16/10/2026) — xem du-phong.mjs ──────────────────────
+// Rambo đóng (cổng nhường web) hoặc sập/bảo trì ⇒ chạy gpt-6-sol trên
+// modelapi thay vì trả chữ đỏ "Tạm dừng 194 phút". Thiếu khoá ⇒ tắt, canh
+// chạy y như cũ. Khoá GPT của modelapi dùng chung với backend (cùng .env).
+const DU_PHONG_URL = (env.DU_PHONG_BASE_URL || 'https://modelapi.vn/v1').trim().replace(/\/+$/, '');
+const DU_PHONG_KEY = env.DU_PHONG_KEY?.trim() || '';
+const DU_PHONG_MODEL = env.DU_PHONG_MODEL?.trim() || 'gpt-6-sol';
+const CO_DU_PHONG = DU_PHONG_KEY.length > 0;
 /**
  * ⚠️ NGƯỠNG NHƯỜNG: 0.7 → 0.85 (16/09/2026).
  *
@@ -111,6 +121,7 @@ const s = {
   lyDo: 'chưa đo hạn mức key chính lần nào',
   soLuot: 0,
   soLuotBiChan: 0,
+  soLuotDuPhong: 0,
 };
 
 // `keyThat`: id token → key THẬT (48 ký tự). Ghi xuống đĩa vì New API chặn
@@ -667,13 +678,73 @@ function docBody(req) {
 
 const HEADER_CHUYEN = ['content-type', 'anthropic-version', 'anthropic-beta', 'accept'];
 
+/**
+ * Chạy MỘT lượt trên cổng dự phòng, trả về đúng định dạng Anthropic mà New API
+ * và OpenCode đang chờ (stream lẫn không stream).
+ */
+async function goiDuPhong(j, res, ac, lyDo) {
+  const batDau = Date.now();
+  const yc = anthropicSangOpenAI(j, DU_PHONG_MODEL);
+  let r;
+  try {
+    r = await fetch(`${DU_PHONG_URL}/chat/completions`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${DU_PHONG_KEY}` },
+      body: JSON.stringify(yc),
+      signal: ac.signal,
+    });
+  } catch (e) {
+    if (ac.signal.aborted) return;
+    ghi('cổng dự phòng không trả lời:', e.message);
+    return loiAnthropic(res, 502, 'api_error', `Cổng chính đang ${lyDo}, cổng dự phòng cũng không trả lời (${e.message}). Thử lại sau ít phút.`);
+  }
+  if (!r.ok) {
+    const t = (await r.text().catch(() => '')).replace(/sk-[A-Za-z0-9]+/g, 'sk-***').slice(0, 300);
+    ghi(`cổng dự phòng HTTP ${r.status}: ${t}`);
+    return loiAnthropic(res, r.status === 429 ? 429 : 502, r.status === 429 ? 'rate_limit_error' : 'api_error',
+      `Cổng chính đang ${lyDo}, cổng dự phòng báo lỗi HTTP ${r.status}. Thử lại sau ít phút.`);
+  }
+  s.soLuotDuPhong++;
+  const xong = () => ghi(`DỰ PHÒNG ${j.model}→${DU_PHONG_MODEL} (${lyDo}) ${Date.now() - batDau}ms`);
+  if (!j.stream) {
+    const o = await r.json();
+    res.writeHead(200, { 'content-type': 'application/json', 'x-cong-du-phong': DU_PHONG_MODEL });
+    res.end(JSON.stringify(openAISangAnthropic(o, j.model)));
+    return xong();
+  }
+  res.writeHead(200, { 'content-type': 'text/event-stream', 'cache-control': 'no-cache', 'x-cong-du-phong': DU_PHONG_MODEL });
+  const bd = taoBoDichStream(j.model);
+  const giaiMa = new TextDecoder();
+  let du = '';
+  try {
+    for await (const khuc of r.body) {
+      du += giaiMa.decode(khuc, { stream: true });
+      let i;
+      while ((i = du.indexOf('\n')) >= 0) {
+        const dong = du.slice(0, i).replace(/\r$/, '');
+        du = du.slice(i + 1);
+        const ra = bd.nhan(dong);
+        if (ra) res.write(ra);
+      }
+    }
+    if (du.trim()) { const ra = bd.nhan(du.trim()); if (ra) res.write(ra); }
+    res.end(bd.ketThuc());
+    xong();
+  } catch (e) {
+    if (!ac.signal.aborted) ghi('dự phòng đứt giữa chừng:', e.message);
+    res.destroy();
+  }
+}
+
 async function chuyenTiep(req, res) {
   const bearer = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
   if (req.headers['x-api-key'] !== KHOA_NOI_BO && bearer !== KHOA_NOI_BO) {
     return loiAnthropic(res, 401, 'authentication_error', 'sai khoá nội bộ');
   }
   s.soLuot++;
-  if (s.dangNhuong) {
+  // Chỉ lượt hội thoại mới đi dự phòng được (không phải count_tokens…).
+  const laHoiThoai = /^\/v1\/messages(\?|$)/.test(req.url);
+  if (s.dangNhuong && !(CO_DU_PHONG && laHoiThoai)) {
     s.soLuotBiChan++;
     // CỐ Ý không gửi `retry-after`. OpenCode tôn trọng nó tới từng giây: đo
     // thật với retry-after 3600 thì `opencode run` đứng im cả tiếng, không in
@@ -710,8 +781,11 @@ async function chuyenTiep(req, res) {
   const batDau = Date.now();
   let model = '?';
   let ghiChu = '';
+  /** Yêu cầu GỐC (chưa nắn cho rambo) — cổng dự phòng không có giới hạn ngầm của rambo. */
+  let jGoc = null;
   try {
     const j = JSON.parse(body.toString('utf8'));
+    jGoc = j;
     model = j.model || '?';
     // Rambo cắt ngầm khối >~12k ký tự và bỏ tin nhắn cũ quá ~58 — xem sua-yeu-cau.mjs.
     const nan = nanYeuCau(j);
@@ -723,13 +797,27 @@ async function chuyenTiep(req, res) {
     /* body không phải JSON — chuyển nguyên, để rambo tự trả lỗi */
   }
 
+  const duPhongDuoc = CO_DU_PHONG && laHoiThoai && jGoc !== null;
+  // Cổng chính đang nhường web ⇒ đi thẳng dự phòng, KHÔNG tiêu thêm phần của web.
+  if (s.dangNhuong) {
+    if (duPhongDuoc) return goiDuPhong(jGoc, res, ac, 'tạm nhường giờ cao điểm');
+    return loiAnthropic(res, 429, 'rate_limit_error', cauChoNguoiDung());
+  }
+
   let r;
   try {
     r = await fetch(`${RAMBO_API}${req.url}`, { method: 'POST', headers, body, signal: ac.signal });
   } catch (e) {
     if (ac.signal.aborted) return;
     ghi('rambo không trả lời:', e.message);
+    if (duPhongDuoc) return goiDuPhong(jGoc, res, ac, 'mất kết nối');
     return loiAnthropic(res, 502, 'api_error', `không nối được tới rambo: ${e.message}`);
+  }
+  // Rambo bảo trì / quá tải / hết hạn mức key chính ⇒ dự phòng thay vì báo lỗi.
+  if (duPhongDuoc && nenChuyenDuPhong(r.status)) {
+    ghi(`rambo HTTP ${r.status} — chuyển sang cổng dự phòng`);
+    try { await r.body?.cancel(); } catch { /* bỏ */ }
+    return goiDuPhong(jGoc, res, ac, r.status === 429 ? 'hết hạn mức' : 'bảo trì');
   }
 
   const traVe = { 'content-type': r.headers.get('content-type') || 'application/json', 'cache-control': 'no-cache' };
@@ -872,6 +960,7 @@ http
           loiDoCuoi: s.loiDoCuoi,
           soLuot: s.soLuot,
           soLuotBiChan: s.soLuotBiChan,
+          duPhong: CO_DU_PHONG ? { model: DU_PHONG_MODEL, soLuot: s.soLuotDuPhong } : null,
         }),
       );
     }

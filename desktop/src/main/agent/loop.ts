@@ -245,6 +245,13 @@ interface CuocHoiThoai {
    * từ nó trong `datCheDoQuyen`, chứ không ai đặt độc lập.
    */
   cheDoQuyen: CheDoQuyen;
+  /**
+   * `true` = chế độ hiện tại do APP tự đặt vì tab CHƯA CÓ THƯ MỤC (toàn quyền,
+   * xem `CHE_DO_KHONG_THU_MUC`), không phải người dùng chọn. Có thư mục là nó
+   * nhường chỗ cho chế độ mặc định của dự án; còn chế độ người dùng TỰ chọn
+   * (`false`) thì đi theo khi họ chọn thư mục đầu tiên cho tab.
+   */
+  cheDoTuDong: boolean;
   choSua: boolean;
   /** Quyền CHẠY LỆNH của riêng cuộc này. Cũng chỉ trong RAM, cũng bật riêng. */
   choChayLenh: boolean;
@@ -276,10 +283,12 @@ function layCuoc(id: string): CuocHoiThoai {
   if (!c) {
     c = {
       id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc(), soViecPhu: 0, tomTat: null,
-      goc: null, daChonGoc: false, cheDoQuyen: 'keHoach', choSua: false, choChayLenh: false, choGhiNote: false,
+      goc: null, daChonGoc: false, cheDoQuyen: 'keHoach', cheDoTuDong: false, choSua: false, choChayLenh: false, choGhiNote: false,
       choTrinhDuyet: trinhDuyetMacDinh(),
     };
     cuoc.set(id, c);
+    // Tab mới chưa có thư mục ⇒ toàn quyền (chủ app 16/10/2026).
+    datCheDoQuyen(id, CHE_DO_KHONG_THU_MUC, true);
   }
   return c;
 }
@@ -346,14 +355,23 @@ export function datGocChoCuoc(id: string, goc: string | null): void {
   // chọn gì vẫn là một quyết định ("tab này không đọc dự án nào").
   c.daChonGoc = true;
   if (c.goc === goc) return;
+  const gocCu = c.goc;
   c.goc = goc;
   c.choSua = false;
   c.choChayLenh = false;
   c.choGhiNote = false;
-  /* Đổi dự án ⇒ HẠ luôn bỏ-qua-hết. Người dùng bật nó cho MỘT thư mục họ tin
-     tưởng; để nó theo sang thư mục vừa mở là cho agent toàn quyền trên một
-     nơi chưa ai đồng ý gì cả. */
-  datCheDoQuyen(id, cheDoMacDinh());
+  /* Đổi TỪ DỰ ÁN NÀY SANG DỰ ÁN KHÁC ⇒ HẠ luôn bỏ-qua-hết. Người dùng bật nó
+     cho MỘT thư mục họ tin tưởng; để nó theo sang thư mục vừa mở là cho agent
+     toàn quyền trên một nơi chưa ai đồng ý gì cả.
+
+     Nhưng chọn thư mục ĐẦU TIÊN cho một tab trống thì GIỮ chế độ người dùng
+     vừa tự chọn (16/10/2026). Bạn của chủ app trên Windows: bật "Bỏ qua tất
+     cả" rồi mới chọn thư mục ⇒ app lặng lẽ hạ về "Lập kế hoạch" ⇒ agent vẫn
+     xin quyền sửa, trông như công tắc hỏng. Chế độ app TỰ đặt cho tab trống
+     (`cheDoTuDong`) thì không tính là lựa chọn của ai — nhường mặc định. */
+  if (goc === null) datCheDoQuyen(id, CHE_DO_KHONG_THU_MUC, true);
+  else if (gocCu !== null || c.cheDoTuDong) datCheDoQuyen(id, cheDoMacDinh());
+  else datCheDoQuyen(id, c.cheDoQuyen);
   dongBoQuyenLau(c);
   xoaHoiThoai(id);
 }
@@ -373,6 +391,8 @@ export function datGocNeuChuaCo(id: string, goc: string): void {
   const c = layCuoc(id);
   if (c.daChonGoc || c.goc) return;
   c.goc = goc;
+  // Toàn quyền app tự đặt cho tab trống không đi theo sang thư mục mặc định.
+  if (c.cheDoTuDong) datCheDoQuyen(id, cheDoMacDinh());
   dongBoQuyenLau(c);
 }
 
@@ -411,6 +431,16 @@ function dongBoQuyenLau(c: { goc: string | null; so: SoCuoc }): void {
  * Chốt nằm Ở ĐÂY chứ không ở giao diện: giao diện đã không cho chọn, nhưng
  * file cài đặt là JSON trên đĩa, sửa tay được.
  */
+/**
+ * Chế độ của tab CHƯA CÓ THƯ MỤC nào: toàn quyền (chủ app 16/10/2026 — "khi
+ * chưa thêm project hay folder nào thì mặc định toàn quyền"). Không có dự án
+ * thì không có kho mã nào để phá; việc agent làm lúc này là việc trên máy
+ * người dùng nhờ trực tiếp (cài đặt, sửa cấu hình). Những thư mục chiếm máy
+ * (`~/.ssh`, khởi động cùng hệ thống, thư mục hệ điều hành) và file bí mật
+ * vẫn bị chặn ở tầng tool — xem `ghiNgoai.ts`, `jail.ts`.
+ */
+const CHE_DO_KHONG_THU_MUC: CheDoQuyen = 'boQuaHet';
+
 function cheDoMacDinh(): CheDoQuyen {
   const v = getSettings().aiCheDoQuyenMacDinh;
   return v === 'hoi' || v === 'tuSua' || v === 'tuSuaVaLenh' ? v : 'keHoach';
@@ -464,9 +494,10 @@ export async function xoaQuyenLauCua(id: string, khoa?: string): Promise<number>
  * công tắc rời song song với chế độ thì sẽ có lúc chúng nói ngược nhau, và
  * người dùng không có cách nào biết cái nào đang thắng.
  */
-export function datCheDoQuyen(id: string, cheDo: CheDoQuyen): void {
+export function datCheDoQuyen(id: string, cheDo: CheDoQuyen, tuDong = false): void {
   const c = layCuoc(id);
   c.cheDoQuyen = cheDo;
+  c.cheDoTuDong = tuDong;
   const moQuyen = cheDo !== 'keHoach';
   c.choSua = moQuyen;
   c.choChayLenh = moQuyen;
@@ -539,16 +570,21 @@ export function napPhien(
   // nên tắt nó ở đây chỉ là bắt người dùng bật lại một thứ không hề đổi.
   // Mở việc cũ ⇒ về chế độ AN TOÀN NHẤT. Quyền đã cấp hôm qua không được
   // tự sống lại hôm nay — mở lại là một lần ngồi xuống mới.
-  if (goc !== undefined) {
-    c.goc = goc; c.daChonGoc = true;
-    datCheDoQuyen(cuocId, cheDoMacDinh());
-    dongBoQuyenLau(c);
-  }
   // Quyền đã cấp và nhật ký hoàn tác KHÔNG khôi phục theo. Hoàn tác một thay
   // đổi từ hôm qua là ghi đè lên thứ người dùng có thể đã sửa tiếp bằng tay; và
   // quyền "cho phép cả file này" cấp cho phiên trước thì hết hiệu lực cùng
   // phiên đó — mở lại là một lần ngồi xuống mới.
+  // ⚠️ Thay sổ TRƯỚC khi đặt chế độ/gốc: bản cũ thay SAU, nên cờ `boQuaHet`
+  // và `so.goc` vừa ghi bị xoá — giao diện nói "Bỏ qua tất cả" mà sổ thì tắt,
+  // agent vẫn hỏi từng việc.
   c.so = taoSoCuoc();
+  if (goc !== undefined) {
+    c.goc = goc; c.daChonGoc = true;
+    datCheDoQuyen(cuocId, goc === null ? CHE_DO_KHONG_THU_MUC : cheDoMacDinh(), goc === null);
+  } else {
+    datCheDoQuyen(cuocId, c.cheDoQuyen, c.cheDoTuDong);
+  }
+  dongBoQuyenLau(c);
 }
 
 export function soCuaCuoc(id: string): SoCuoc {
@@ -659,6 +695,13 @@ export function xoaHoiThoai(id: string): void {
   // và giữ nhật ký cũ lại thì nút Hoàn tác sẽ lùi cả những thay đổi thuộc
   // việc trước mà người dùng đã chấp nhận xong xuôi.
   c.so = taoSoCuoc();
+  /* ⚠️ Sổ mới phải MANG LẠI hai thứ không thuộc về "một việc": cờ bỏ-qua-hết
+     của chế độ ĐANG HIỆN trên màn hình, và thư mục + quyền lâu dài của dự án.
+     Bản cũ quên cả hai (lỗi 16/10/2026: bạn chủ app bật "Bỏ qua tất cả", bấm
+     Việc mới / chọn thư mục ⇒ nút vẫn ghi "Bỏ qua tất cả" mà sổ thì TẮT ⇒
+     agent hỏi duyệt từng việc). */
+  c.so.boQuaHet = c.cheDoQuyen === 'boQuaHet';
+  dongBoQuyenLau(c);
   baoDaXoa(id);
 }
 

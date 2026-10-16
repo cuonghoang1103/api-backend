@@ -18,6 +18,7 @@
  */
 import { useCallback, useRef, useState } from 'react';
 import { FileText, ImageIcon, Paperclip, X } from 'lucide-react';
+import { chuanHoaChoAI, docDataUrl, laAnh as laAnhAI } from './anhChoAI';
 
 export interface TepDinhKem {
   /** `image` đi vào trường `images`, `tailieu` đi vào `documents`. */
@@ -34,6 +35,8 @@ export interface TepDinhKem {
 const ANH_MIME = new Set(['image/png', 'image/jpeg', 'image/webp', 'image/gif']);
 const MAX_ANH = 4;
 const MAX_ANH_BYTES = 4 * 1024 * 1024;
+/** Trần ảnh GỐC trước khi chuẩn hoá — ảnh sau khi co về 1568px luôn dưới trần máy chủ. */
+const TRAN_ANH_GOC = 80 * 1024 * 1024;
 
 /** Khớp `ALLOWED_DOC_TYPES` / `MAX_CHAT_DOCS`. */
 const TAILIEU_MIME = new Set([
@@ -103,32 +106,47 @@ export function locTep(
 
   const viec = ds.map(async (f): Promise<TepDinhKem | null> => {
     const mime = doanMime(f);
-    const laAnh = ANH_MIME.has(mime);
-    const laTai = TAILIEU_MIME.has(mime);
+    /* Ảnh: nhận cả HEIC/AVIF/TIFF/BMP (16/10/2026) — `chuanHoaChoAI` đổi
+       sang JPEG/PNG, dựng đứng ảnh dọc theo EXIF và co về 1568px. Nhờ vậy ảnh
+       điện thoại 5–8MB cũng không còn bị từ chối vì vượt trần 4MB. */
+    const laAnh = ANH_MIME.has(mime) || laAnhAI(f);
+    const laTai = !laAnh && TAILIEU_MIME.has(mime);
 
     if (!laAnh && !laTai) {
-      boQua.push(`${f.name}: định dạng không nhận (chỉ ảnh PNG/JPG/WebP/GIF, và PDF/Word/txt/md/csv)`);
+      boQua.push(`${f.name}: định dạng không nhận (chỉ ảnh PNG/JPG/WebP/GIF/HEIC/AVIF/TIFF/BMP, và PDF/Word/txt/md/csv)`);
       return null;
     }
     if (laAnh && soAnh >= MAX_ANH) { boQua.push(`${f.name}: quá ${MAX_ANH} ảnh`); return null; }
     if (laTai && soTai >= MAX_TAILIEU) { boQua.push(`${f.name}: quá ${MAX_TAILIEU} tài liệu`); return null; }
 
-    const tran = laAnh ? MAX_ANH_BYTES : MAX_TAILIEU_BYTES;
+    const tran = laAnh ? TRAN_ANH_GOC : MAX_TAILIEU_BYTES;
     if (f.size > tran) {
       boQua.push(`${f.name}: nặng ${coChu(f.size)}, trần là ${coChu(tran)}`);
       return null;
     }
 
-    if (laAnh) soAnh++; else soTai++;
-    const url = await new Promise<string>((xong, hong) => {
-      const doc = new FileReader();
-      doc.onload = () => xong(String(doc.result ?? ''));
-      doc.onerror = () => hong(new Error('đọc file hỏng'));
-      doc.readAsDataURL(f);
-    }).catch(() => '');
+    if (laAnh) {
+      soAnh++;
+      try {
+        const r = await chuanHoaChoAI(f, {
+          // Máy chủ đo byte ĐÃ GIẢI MÃ ≤ 4MB; đo trên độ dài chuỗi thì chặt hơn, an toàn.
+          tranChuoi: MAX_ANH_BYTES,
+          duong: window.cuongthai?.duongCuaFile(f) ?? null,
+        });
+        const mimeRa = r.dataUrl.slice(5, r.dataUrl.indexOf(';'));
+        return { loai: 'image', ten: f.name, mime: mimeRa, url: r.dataUrl, bytes: r.byte };
+      } catch (e) {
+        soAnh--;
+        boQua.push(`${f.name}: ${(e as Error).message}`);
+        return null;
+      }
+    }
+
+    soTai++;
+    const url = await docDataUrl(f).catch(() => '');
 
     if (!url.startsWith('data:')) { boQua.push(`${f.name}: không đọc được`); return null; }
-    return { loai: laAnh ? 'image' : 'tailieu', ten: f.name, mime, url, bytes: f.size };
+    return { loai: 'tailieu', ten: f.name, mime, url, bytes: f.size };
   });
 
   return Promise.all(viec).then((r) => ({ nhan: r.filter((x): x is TepDinhKem => x !== null), boQua }));
@@ -210,7 +228,7 @@ export function ODinhKem({
       type="file"
       multiple
       hidden
-      accept=".png,.jpg,.jpeg,.webp,.gif,.pdf,.docx,.xlsx,.pptx,.txt,.md,.csv,image/*,application/pdf"
+      accept=".png,.jpg,.jpeg,.webp,.gif,.heic,.heif,.avif,.tif,.tiff,.bmp,.pdf,.docx,.xlsx,.pptx,.txt,.md,.csv,image/*,application/pdf"
       onChange={nhanTuO}
     />
   );

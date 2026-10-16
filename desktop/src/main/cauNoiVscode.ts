@@ -144,6 +144,33 @@ export async function batCauNoiVscode(): Promise<void> {
           return tra(res, 200, { ok: false, loi: (e as Error).message });
         }
       }
+      /* Cổng dự phòng AI Code (rambo bảo trì ⇒ lỗi RAMBO_BAO_TRI): mở khoá bằng
+         mật khẩu admin — y hệt ô mật khẩu trong app (`CongDuPhong.tsx`). App gọi
+         máy chủ bằng phiên đăng nhập của CHÍNH NÓ, extension không bao giờ cầm
+         token; vé lưu vào thiết đặt `agentDuPhongVe` như app. */
+      if (url === '/mo-du-phong') {
+        try {
+          const matKhau = String(b.matKhau ?? '');
+          if (!matKhau || matKhau.length > 200) throw new Error('Thiếu mật khẩu.');
+          const { readStoredSession } = await import('./ipc/auth');
+          const { API_ORIGIN } = await import('./config');
+          const phien = readStoredSession();
+          if (!phien?.sessionToken) throw new Error('App chưa đăng nhập.');
+          const r = await fetch(`${API_ORIGIN}/api/v1/agent/du-phong/mo-khoa`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', authorization: `Bearer ${phien.sessionToken}` },
+            body: JSON.stringify({ matKhau }),
+            signal: AbortSignal.timeout(20_000),
+          });
+          const j = await r.json().catch(() => ({})) as { data?: { ve?: string; ten?: string }; message?: string; error?: { message?: string } };
+          if (!r.ok || !j.data?.ve) throw new Error(j.error?.message ?? j.message ?? `Máy chủ trả HTTP ${r.status}`);
+          const { setSetting } = await import('./store');
+          setSetting('agentDuPhongVe', j.data.ve);
+          return tra(res, 200, { ok: true, ten: j.data.ten ?? 'cổng dự phòng' });
+        } catch (e) {
+          return tra(res, 200, { ok: false, loi: (e as Error).message });
+        }
+      }
       // Ảnh dán/kéo vào VS Code (HEIC/AVIF/TIFF…) ⇒ chuẩn hoá như app.
       if (url === '/chuan-hoa-anh') {
         try {

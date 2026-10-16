@@ -259,9 +259,15 @@ function xuLy(e: SuKien): void {
     }
     case 'loi': {
       ketThucTraLoi();
+      if (e.ma === 'DOI_CONG' || e.ma === 'KHOI_PHUC' || e.ma === 'LAM_TIEP' || e.ma === 'COMPACT' || e.ma === 'DOI_CHE_DO' || e.ma === 'TU_GO_ANH') {
+        // Thông báo giữa chừng (đổi cổng, tự khôi phục…) — không phải lỗi dừng việc.
+        the('ket', `ℹ️ ${esc(e.thongDiep ?? '')}`);
+        break;
+      }
       dangChay = false;
       capNhatNut();
-      the('loi', `⚠️ ${esc(e.thongDiep ?? 'Có lỗi.')}`);
+      const el = the('loi', `⚠️ ${esc(e.thongDiep ?? 'Có lỗi.')}`);
+      if (e.ma === 'RAMBO_BAO_TRI') veODuPhong(el);
       break;
     }
     case 'huy':
@@ -276,6 +282,31 @@ function xuLy(e: SuKien): void {
       break;
   }
 }
+
+/** Ô mật khẩu cổng dự phòng — giống hộp trong app (`CongDuPhong.tsx`). */
+let cauHoiCuoi = '';
+function veODuPhong(el: HTMLElement): void {
+  const o2 = document.createElement('div');
+  o2.className = 'du-phong';
+  o2.innerHTML = `<div class="phu">Dùng cổng dự phòng (gpt-6-sol) trong lúc chờ? Nhập mật khẩu quản trị cấp:</div>
+<div class="hang"><input type="password" placeholder="Mật khẩu cổng dự phòng" autocomplete="off"><button class="nut chinh">Mở khoá</button></div>
+<div class="phu kq"></div>`;
+  el.appendChild(o2);
+  const inp = o2.querySelector('input')!;
+  const nut = o2.querySelector('button')!;
+  const kq = o2.querySelector<HTMLElement>('.kq')!;
+  const mo = () => {
+    if (!inp.value) return;
+    nut.disabled = true;
+    kq.textContent = 'Đang mở khoá…';
+    gui({ loai: 'moDuPhong', matKhau: inp.value });
+    inp.value = '';
+  };
+  nut.addEventListener('click', mo);
+  inp.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') mo(); });
+  odangCho = { kq, nut };
+}
+let odangCho: { kq: HTMLElement; nut: HTMLButtonElement } | null = null;
 
 function loiChao(): void {
   if (bang.children.length) return;
@@ -318,6 +349,7 @@ function guiCauHoi(): void {
   if (!text || dangChay) return;
   document.querySelector('.chao')?.remove();
   the('nguoi', `${esc(text).replace(/\n/g, '<br>')}${anhDinh.length ? `<div class="anh-nho">${anhDinh.map((a) => `<img src="${a}" alt="">`).join('')}</div>` : ''}`);
+  cauHoiCuoi = text;
   gui({ loai: 'gui', text, anh: anhDinh, kem: kemNguCanh });
   o.value = '';
   anhDinh = [];
@@ -401,6 +433,13 @@ window.addEventListener('message', (ev) => {
     case 'nguCanh': nguCanh = m as any; if (m.bat === false) kemNguCanh = false; veChip(); break;
     case 'loiCuc': the('loi', `⚠️ ${esc(String(m.chu))}`); dangChay = false; capNhatNut(); break;
     case 'thongBao': the('ket', esc(String(m.chu))); break;
+    case 'duPhongMo':
+      if (odangCho) {
+        odangCho.nut.disabled = false;
+        odangCho.kq.textContent = m.ok ? `✓ Đã mở ${m.ten}. Đang gửi lại câu hỏi…` : `✕ ${m.loi}`;
+      }
+      if (m.ok && cauHoiCuoi) { o.value = cauHoiCuoi; guiCauHoi(); }
+      break;
     case 'dien':
       o.value = String(m.text ?? '') + (m.guiLuon ? '' : o.value);
       tuCao();

@@ -74,6 +74,13 @@ export class CauNoi {
     return r.kq;
   }
 
+  /** Mở cổng dự phòng bằng mật khẩu admin (app tự gọi máy chủ, giữ vé). */
+  async moDuPhong(matKhau: string): Promise<string> {
+    const r = await yeuCau(this.cau, 'POST', '/mo-du-phong', { matKhau }, 30) as { ok: boolean; ten?: string; loi?: string };
+    if (!r.ok) throw new Error(r.loi ?? 'Không mở khoá được.');
+    return r.ten ?? 'cổng dự phòng';
+  }
+
   async chuanHoaAnh(dataUrl: string): Promise<string> {
     const r = await yeuCau(this.cau, 'POST', '/chuan-hoa-anh', { dataUrl }, 90) as { ok: boolean; dataUrl?: string; loi?: string };
     if (!r.ok || !r.dataUrl) throw new Error(r.loi ?? 'Không đọc được ảnh.');

@@ -144,3 +144,9 @@ body {
   position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; border-radius: 50%; border: none;
   background: #ef4444; color: #fff; font-size: 10px; cursor: pointer; line-height: 18px; padding: 0;
 }
+
+.du-phong { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+.du-phong input {
+  flex: 1; min-width: 0; background: var(--vscode-input-background); color: var(--vscode-input-foreground);
+  border: 1px solid var(--vscode-input-border, var(--vien)); border-radius: 7px; padding: 4px 8px; font: inherit;
+}

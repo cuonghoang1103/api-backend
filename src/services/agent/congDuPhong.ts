@@ -38,6 +38,25 @@
  * ⚠️ Số bước của GPT dao động mạnh: lượt thử đầu của gpt-6-sol đi 63 bước
  * (~327k token) cho cùng câu hỏi. Nếu thấy nó lan man trên việc thật thì đó
  * là chỗ đầu tiên cần nhìn, trước khi đổi model.
+ *
+ * ─── ĐO LẠI 16/10/2026 (chủ app hỏi đổi mặc định sang gpt-6.1-sol) ───
+ * Giá niêm yết của cổng (`/api/pricing`, đã nhân hệ số nhóm default ×0,9),
+ * USD / 1 triệu token vào · ra:
+ *   gpt-6.1-sol 67,5 · 135   gpt-6-sol 4,5 · 9   gpt-6-luna 4,5 · 9
+ *   gpt-6-astra 9 · 45       gpt-5.6-terra 1,8 · 10,8 (đệm ×0,1)
+ *   gpt-5.6-luna 0,18 · 1,08 (đệm ×0,1)
+ * Bài khó có bộ chấm ẩn 20 ca (viết `parseDuration` theo đặc tả, qua OpenCode
+ * → canh dự phòng, đúng vòng lặp gọi tool):
+ *   gpt-5.6-luna 20/20 · 15 lượt · ~0,02 $   (chậm nhất: 286 s)
+ *   gpt-6-sol    20/20 · 18 lượt · ~1 $      (174 s)
+ *   gpt-6-luna   20/20 · 18 lượt · ~1 $
+ *   gpt-5.6-terra 20/20 · 22 lượt · ~0,2 $
+ *   gpt-6.1-sol  lần 1 0/20 (TỰ SỬA SAI đường dẫn file rồi bỏ việc), lần 2
+ *                18/20 · ~10 $ ⇒ KHÔNG đưa vào: đắt ~15× mà không hơn.
+ * Cả luna/sol/terra đều đọc đúng chữ + màu trong ảnh thử.
+ * ⇒ Giữ 6 Sol mặc định, thêm 5.6 Luna làm lựa chọn TIẾT KIỆM.
+ * Gemini (9,9 $ vào), GLM (12 $), Kimi (24 $), DeepSeek thường (6,5–28 $)
+ * đều đắt hơn 6 Sol và cần khoá nhóm riêng; Grok vẫn loại (vượt trần token).
  */
 import crypto from 'node:crypto';
 import bcrypt from 'bcryptjs';
@@ -56,7 +75,8 @@ const HAN_VE_MS = 30 * 24 * 60 * 60 * 1000;
  * modelapi nó đắt ~14 lần (xem số đo ở đầu file).
  */
 export const MODEL_DU_PHONG = Object.freeze([
-  { id: 'gpt-6-sol', ten: 'GPT 6 Sol', mo: 'Mặc định — rẻ, nhanh. Đo 16,4/việc trên vòng lặp' },
+  { id: 'gpt-6-sol', ten: 'GPT 6 Sol', mo: 'Mặc định — nhanh, chắc tay. Đo 16,4/việc trên vòng lặp' },
+  { id: 'gpt-5.6-luna', ten: 'GPT 5.6 Luna', mo: 'Tiết kiệm — rẻ hơn 6 Sol ~50 lần, đúng ngang trên bài thử, chậm hơn ~1,6×' },
   { id: 'gpt-6-astra', ten: 'GPT 6 Astra', mo: 'Việc khó — đắt gấp ~6 lần 6 Sol (98,4/việc)' },
 ] as const);
 

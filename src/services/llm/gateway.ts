@@ -216,7 +216,9 @@ export const MODEL_CATALOG: Record<string, ModelInfo> = {
   'gpt-image-1.5': { vendor: 'openai', in: 0, out: 0, vision: true, note: 'Sinh ảnh — không phải model chat' },
   // ── Dưới đây KHÔNG có trong nhóm của khoá hiện tại (503). Giữ để tính giá
   //    đúng nếu sau này mở kênh, và để `llm:check` so sánh. ──
-  'gpt-5.6-luna': { vendor: 'openai', in: 0.25, out: 2, vision: true, note: '⚠ chưa mua được' },
+  /* 16/10/2026: khoá GPT ĐÃ mua được. Giá niêm yết ×0,9 ≈ 0,18/1,08 $ (đệm ×0,1); bài khó 20/20 qua OpenCode,
+     đọc ảnh đúng — lựa chọn "Tiết kiệm" của cổng dự phòng AI Code (xem congDuPhong.ts). */
+  'gpt-5.6-luna': { vendor: 'openai', in: 0.18, out: 1.08, vision: true, note: 'Rẻ nhất nhóm GPT (~50× rẻ hơn 6-sol trên vòng lặp), đúng ngang bài thử, chậm hơn ~1,6×' },
   // ── Anthropic — ⚠ CHƯA MUA ĐƯỢC (kênh chưa mở trong nhóm của khoá) ──
   'claude-opus-5': { vendor: 'anthropic', in: 5, out: 25, vision: true, note: 'Qua cổng rambo: model MẶC ĐỊNH của mọi việc AI từ 26/09/2026' },
   'claude-sonnet-5': { vendor: 'anthropic', in: 3, out: 15, vision: true, note: '⚠ chưa mua được — giỏi code, giá vừa' },

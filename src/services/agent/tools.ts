@@ -59,6 +59,10 @@ export type AgentCapability =
   | 'ky_nang'
   /** commit / mở PR. Tách riêng vì nó GHI vào lịch sử git và ĐẨY ra ngoài. */
   | 'git_write'
+  /** App TỰ CÀI git/gh + kết nối GitHub (16/10/2026) — app cũ không gửi ⇒ không thấy tool. */
+  | 'cong_cu'
+  /** Đẩy nhánh / đưa dự án lên GitHub lần đầu (16/10/2026). */
+  | 'github'
   /**
    * GHI vào sổ ghi chú cá nhân trên cuongthai.com.
    *
@@ -753,7 +757,8 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     capability: 'git_write',
     description:
       'Commit những thay đổi đang có trong cây làm việc. '
-      + 'TUYỆT ĐỐI không chạy được trên nhánh chung (main/master/develop/production) — hãy tạo nhánh hoặc dùng worktree trước. '
+      + 'KHÔNG chạy được trên nhánh chung (main/master/develop/production) của repo nhóm — hãy tạo nhánh hoặc dùng worktree trước. '
+      + 'NGOẠI LỆ: repo CÁ NHÂN (origin thuộc đúng tài khoản GitHub đang đăng nhập) thì commit thẳng main/master được. '
       + 'File bí mật (.env, khoá riêng…) luôn bị loại, kể cả khi .gitignore sót. '
       + 'Lời nhắn viết theo quy ước của dự án; nói RÕ đã làm gì và VÌ SAO, đừng chỉ liệt kê tên file. '
       + 'Người dùng thấy danh sách file + lời nhắn rồi mới duyệt.',
@@ -782,6 +787,65 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       },
       required: ['tieu_de', 'than'],
     },
+  },
+
+  // ─── Tự cài công cụ + GitHub (16/10/2026) ──────────────────────
+  {
+    name: 'cai_cong_cu',
+    ring: 'client',
+    capability: 'cong_cu',
+    description:
+      'TỰ CÀI công cụ còn thiếu trên máy người dùng: "git" hoặc "gh" (GitHub CLI). App tải bản CHÍNH THỨC vào thư mục '
+      + 'riêng của nó — Windows/gh không cần quyền quản trị; macOS hiện hộp cài của Apple (người dùng bấm "Cài đặt" một lần); '
+      + 'Linux qua trình quản lý gói. Đã có thì trả về ngay. Gặp "git: command not found", "không nhận ra lệnh git"… thì GỌI '
+      + 'TOOL NÀY, ĐỪNG bảo người dùng tự cài hay tự gõ lệnh.',
+    parameters: {
+      type: 'object',
+      properties: { ten: { type: 'string', enum: ['git', 'gh'], description: 'Công cụ cần cài.' } },
+      required: ['ten'],
+    },
+  },
+  {
+    name: 'github_ket_noi',
+    ring: 'client',
+    capability: 'cong_cu',
+    description:
+      'Kết nối tài khoản GitHub của người dùng (tự cài gh nếu thiếu). Lần đầu: app TỰ MỞ trang github.com/login/device và '
+      + 'TỰ CHÉP mã 8 ký tự vào bộ nhớ tạm — bạn nói người dùng dán mã → Continue → Authorize (chưa có tài khoản thì bấm '
+      + 'Create an account trên trang đó). Rồi gọi lại tool này với cho_giay=60 để chờ và xác nhận. Đã kết nối thì trả tên '
+      + 'tài khoản; app cũng tự đặt tên/email commit. Token nằm trong kho khoá của máy, bạn KHÔNG BAO GIỜ thấy và KHÔNG cần.',
+    parameters: {
+      type: 'object',
+      properties: { cho_giay: { type: 'number', description: 'Chờ người dùng xác nhận tối đa bấy nhiêu giây (0–120) trước khi kiểm.' } },
+    },
+  },
+  {
+    name: 'github_dang_du_an',
+    ring: 'client',
+    capability: 'github',
+    description:
+      'ĐƯA DỰ ÁN ĐANG MỞ LÊN GITHUB trong một bước, dành cho người chưa từng dùng git: init (nếu chưa có) → .gitignore an '
+      + 'toàn (nếu chưa có) → commit mọi file trừ file bí mật/quá 95MB → tạo repo RIÊNG TƯ trên tài khoản của họ → đẩy lên, '
+      + 'trả về link. Dự án đã có repo GitHub thì chỉ commit thay đổi mới + đẩy. Cần git (thiếu ⇒ `cai_cong_cu`) và đã kết '
+      + 'nối GitHub (chưa ⇒ `github_ket_noi`). Người dùng duyệt trên thẻ trước khi chạy.',
+    parameters: {
+      type: 'object',
+      properties: {
+        ten_repo: { type: 'string', description: 'Tên repo (chữ không dấu, số, - _ .). Bỏ trống = tên thư mục.' },
+        cong_khai: { type: 'boolean', description: 'true = repo công khai. Mặc định RIÊNG TƯ — chỉ đặt true khi người dùng nói rõ.' },
+        mo_ta: { type: 'string', description: 'Mô tả ngắn của repo.' },
+        loi_nhan: { type: 'string', description: 'Lời nhắn commit. Bỏ trống = "Khởi tạo dự án".' },
+      },
+    },
+  },
+  {
+    name: 'git_day',
+    ring: 'client',
+    capability: 'github',
+    description:
+      'ĐẨY (push) nhánh hiện tại lên GitHub, KHÔNG BAO GIỜ đẩy ép. Được đẩy thẳng `main` khi repo thuộc đúng tài khoản GitHub '
+      + 'đang đăng nhập (dự án cá nhân); repo nhóm/tổ chức thì phải làm trên nhánh riêng + `tao_pr`. Commit trước rồi mới đẩy.',
+    parameters: { type: 'object', properties: {} },
   },
 
   {
@@ -1245,7 +1309,7 @@ export function laToolMcp(name: string): boolean {
  */
 export const ALL_CAPABILITIES: readonly AgentCapability[] = [
   'fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent', 'shell_nen', 'git_write',
-  'notes_write', 'browser', 'ky_nang', 'anh_sua', 'terminal', 'bo_nho',
+  'notes_write', 'browser', 'ky_nang', 'anh_sua', 'terminal', 'bo_nho', 'cong_cu', 'github',
 ];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {

@@ -356,17 +356,24 @@ export function XinPhepGit({
   traLoi,
 }: {
   id: string;
-  viec: 'commit' | 'pr';
+  viec: 'commit' | 'pr' | 'day' | 'cai';
   chiTiet: string;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
 }) {
   const { dich } = useDich();
   const laPr = viec === 'pr';
+  /* `day` = đẩy lên GitHub / đưa dự án lên lần đầu · `cai` = tự cài git/gh (16/10/2026). */
+  const raNgoai = laPr || viec === 'day';
+  const tieuDe = laPr ? 'Agent muốn ĐẨY nhánh và mở Pull Request'
+    : viec === 'day' ? 'Agent muốn ĐẨY dự án lên GitHub'
+      : viec === 'cai' ? 'Agent muốn cài công cụ cho máy'
+        : 'Agent muốn commit';
+  const nutDongY = laPr ? 'Đẩy và mở PR' : viec === 'day' ? 'Đẩy lên GitHub' : viec === 'cai' ? 'Cài' : 'Commit';
   return (
-    <div className="ct-xinphep" data-muc={laPr ? 'nguyhiem' : 'cankiem'}>
+    <div className="ct-xinphep" data-muc={raNgoai ? 'nguyhiem' : 'cankiem'}>
       <div className="ct-xinphep-dau">
         {laPr ? <GitPullRequest size={14} aria-hidden /> : <GitCommitHorizontal size={14} aria-hidden />}
-        <span>{laPr ? 'Agent muốn ĐẨY nhánh và mở Pull Request' : 'Agent muốn commit'}</span>
+        <span>{tieuDe}</span>
       </div>
 
       {/* Text thô trong `<pre>`: đây là tên file và lời nhắn do model soạn —
@@ -385,11 +392,11 @@ export function XinPhepGit({
       <div className="ct-xinphep-nut">
         <button
           type="button"
-          className={laPr ? 'ct-btn ct-xinphep-lieu' : 'ct-btn'}
+          className={raNgoai ? 'ct-btn ct-xinphep-lieu' : 'ct-btn'}
           onClick={() => traLoi(id, 'choPhep')}
         >
           <Check size={14} aria-hidden />
-          {laPr ? 'Đẩy và mở PR' : 'Commit'}
+          {nutDongY}
         </button>
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
           <X size={14} aria-hidden />

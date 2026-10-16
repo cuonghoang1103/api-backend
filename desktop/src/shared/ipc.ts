@@ -1471,7 +1471,7 @@ export type AgentUiEvent = { cuocId: string } & (
    * sách file, lời nhắn (commit) hoặc nhánh + tiêu đề + mô tả (PR). Một thẻ chỉ
    * ghi "agent muốn commit" thì không ai duyệt được gì cả.
    */
-  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr'; chiTiet: string }
+  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai'; chiTiet: string }
   /** Xin phép GHI vào sổ ghi chú. `chiTiet` là nội dung sắp ghi — người dùng phải ĐỌC nó. */
   | { loai: 'xinPhepNote'; id: string; viec: 'tao' | 'ghi'; chiTiet: string }
   /** Đầu ra của lệnh, chảy ra khi nó còn đang chạy. */

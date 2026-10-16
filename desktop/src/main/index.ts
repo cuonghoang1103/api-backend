@@ -153,6 +153,14 @@ async function bootstrap(): Promise<void> {
   } catch (e) {
     console.warn('[path] không nạp được PATH của shell:', (e as Error)?.message);
   }
+  /* git/gh do AI Code tự cài nằm trong thư mục riêng của app (`congCu.ts`) —
+     nối vào PATH để mọi lệnh của agent thấy chúng. */
+  try {
+    const { napPathCongCu } = await import('./agent/congCu');
+    napPathCongCu();
+  } catch (e) {
+    console.warn('[path] không nạp được thư mục công cụ:', (e as Error)?.message);
+  }
 
   /* "Bạn không cần tôi nữa ư?" — đăng ký TRƯỚC mọi `before-quit` khác. */
   const { dangKyHoiThoat } = await import('./hoiThoat');
@@ -161,6 +169,12 @@ async function bootstrap(): Promise<void> {
   applySessionPolicies();
   registerAppProtocol(path.join(__dirname, '../renderer'));
   await registerIpcHandlers();
+
+  /* Cầu nối cho extension VS Code "CuongThai AI Code" (16/10/2026) — chỉ
+     127.0.0.1, có khoá; hỏng thì app vẫn chạy bình thường. */
+  void import('./cauNoiVscode').then((m) => m.batCauNoiVscode()).catch((e) => {
+    console.warn('[vscode] không mở được cầu nối:', (e as Error)?.message);
+  });
 
   mainWindow = createMainWindow();
   watchNetwork();

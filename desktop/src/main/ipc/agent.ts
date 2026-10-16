@@ -19,6 +19,7 @@ import { app, BrowserWindow, dialog, shell, type IpcMainInvokeEvent } from 'elec
 import { execFile } from 'node:child_process';
 import fs from 'node:fs/promises';
 import { constants as fsConstants } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
@@ -401,9 +402,15 @@ export function registerAgentHandlers(): void {
     if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở. Hãy dừng nó trước.');
 
     const goc = gocCua(cuocId);
-    const conSong = goc && (await conDungDuoc(goc)) ? goc : null;
-    if (goc && !conSong) datGocChoCuoc(cuocId, null);
+    const conSongDuAn = goc && (await conDungDuoc(goc)) ? goc : null;
+    if (goc && !conSongDuAn) datGocChoCuoc(cuocId, null);
     const quyenTab = quyenCuaCuoc(cuocId);
+    /* Tab CHƯA CÓ thư mục + "Bỏ qua tất cả" (mặc định của tab trống từ
+       16/10/2026) ⇒ làm việc ở THƯ MỤC NHÀ của người dùng. Không có gốc thì
+       agent không có tool nào (xem `capabilities` trong loop.ts) — "toàn quyền"
+       mà không cài nổi git, không chạy nổi một lệnh là toàn quyền trên giấy.
+       Không lưu thành thư mục của tab: chọn dự án thật lúc nào cũng được. */
+    const conSong = conSongDuAn ?? (quyenTab.cheDoQuyen === 'boQuaHet' ? os.homedir() : null);
     /* `/plan` · `/review`: CHỈ ĐỌC cho riêng lượt này — bỏ mọi quyền ghi khỏi
        bối cảnh, nên `capabilities` không mời tool ghi nào. Chế độ quyền của
        tab không đổi; lượt sau trở lại như cũ. */
@@ -425,7 +432,7 @@ export function registerAgentHandlers(): void {
       if (!guiVe.isDestroyed()) guiVe.send('agent:event', { ...e, cuocId });
     };
 
-    const nhanh = conSong ? await nhanhGit(conSong) : null;
+    const nhanh = conSongDuAn ? await nhanhGit(conSongDuAn) : null;
 
     /*
      * ── MẤT MẠNG ⇒ AI CODE NGOẠI TUYẾN (03/10/2026) ──

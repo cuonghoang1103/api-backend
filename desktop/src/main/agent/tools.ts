@@ -90,7 +90,7 @@ export interface BoiCanhGit {
   so: SoCuoc;
   signal: AbortSignal;
   /** Thẻ duyệt cho commit / PR — mang theo phần người dùng cần ĐỌC trước khi bấm. */
-  xinPhepGit: (y: YeuCauXinPhep & { viec: 'commit' | 'pr'; chiTiet: string }) => void;
+  xinPhepGit: (y: YeuCauXinPhep & { viec: 'commit' | 'pr' | 'day' | 'cai'; chiTiet: string }) => void;
 }
 
 export type { BoiCanhNote } from './ghiNote';
@@ -330,6 +330,23 @@ export async function chayToolAgent(
       case 'tao_pr': {
         if (!gitGhi) return { noiDung: 'LỖI: phiên này không bật quyền ghi git.', tomTat: 'không có quyền' };
         return await toolTaoPr(goc, args, gitGhi);
+      }
+      /* ── TỰ CÀI CÔNG CỤ + GITHUB (16/10/2026) — xem congCu.ts ── */
+      case 'cai_cong_cu': {
+        if (!gitGhi || !nen) return { noiDung: 'LỖI: cần bật quyền sửa + chạy lệnh để cài công cụ.', tomTat: 'không có quyền' };
+        return await toolCaiCongCu(goc, args, gitGhi);
+      }
+      case 'github_ket_noi': {
+        if (!gitGhi || !nen) return { noiDung: 'LỖI: cần bật quyền sửa + chạy lệnh để kết nối GitHub.', tomTat: 'không có quyền' };
+        return await toolGithubKetNoi(args);
+      }
+      case 'git_day': {
+        if (!gitGhi) return { noiDung: 'LỖI: phiên này không bật quyền ghi git.', tomTat: 'không có quyền' };
+        return await toolGitDay(goc, gitGhi);
+      }
+      case 'github_dang_du_an': {
+        if (!gitGhi || !nen) return { noiDung: 'LỖI: cần bật quyền sửa + chạy lệnh.', tomTat: 'không có quyền' };
+        return await toolGithubDangDuAn(goc, args, gitGhi);
       }
       case 'notes_tao': {
         if (!note) return { noiDung: 'LỖI: phiên này không bật quyền ghi ghi chú.', tomTat: 'không có quyền' };
@@ -2064,6 +2081,105 @@ async function toolTaoPr(
   if (kq.ok) return { noiDung: kq.noi, tomTat: 'đã mở PR' };
   // `noi` có thể mang một sự thật quan trọng: nhánh ĐÃ được đẩy lên dù PR hỏng.
   return { noiDung: `${kq.noi ? kq.noi + '\n' : ''}LỖI: ${kq.loi}`, tomTat: 'PR hỏng' };
+}
+
+// ─── Tự cài công cụ + GitHub (16/10/2026) ─────────────────────────
+
+async function toolCaiCongCu(goc: string, args: Record<string, unknown>, g: BoiCanhGit): Promise<KetQuaTool> {
+  const ten = args.ten === 'gh' ? 'gh' : args.ten === 'git' ? 'git' : null;
+  if (!ten) return { noiDung: 'LỖI: "ten" phải là "git" hoặc "gh".', tomTat: 'công cụ lạ' };
+  const { caiCongCu, coLenh, napPathCongCu } = await import('./congCu');
+  napPathCongCu();
+  const co = await coLenh(ten);
+  if (co) return { noiDung: `${ten} đã có sẵn: ${co}`, tomTat: `${ten} có sẵn` };
+
+  const chiTiet = ten === 'gh'
+    ? 'Tải GitHub CLI (gh) bản chính thức từ github.com/cli/cli vào thư mục riêng của app. Không cần quyền quản trị.'
+    : process.platform === 'win32'
+      ? 'Tải Git cho Windows (MinGit, bản chính thức của git-for-windows) vào thư mục riêng của app. Không cần quyền quản trị.'
+      : process.platform === 'darwin'
+        ? 'Mở hộp "Cài công cụ dòng lệnh" của Apple (có git bên trong). Bạn bấm "Cài đặt" một lần là xong.'
+        : 'Cài git bằng trình quản lý gói của máy — hệ điều hành sẽ hỏi mật khẩu quản trị.';
+  const quyet = await hoiNguoiDung(
+    { ten: 'cai_cong_cu', duongDan: `cài ${ten}`, khoa: `cai:${ten}`, choNho: false },
+    (y) => g.xinPhepGit({ ...y, viec: 'cai', chiTiet }),
+    g.signal,
+    g.so,
+  );
+  if (quyet === 'tuChoi') return { noiDung: `NGƯỜI DÙNG TỪ CHỐI cài ${ten}.`, tomTat: 'bị từ chối' };
+
+  const kq = await caiCongCu(ten, async (lenh) => {
+    const r = await chayQuyenCao({ lenh, cwd: goc, signal: g.signal, giay: 600 });
+    return { ok: r.ma === 0, ra: r.ra };
+  });
+  return { noiDung: kq.noi, tomTat: kq.ok ? `đã cài ${ten}` : `chưa cài xong ${ten}` };
+}
+
+async function toolGithubKetNoi(args: Record<string, unknown>): Promise<KetQuaTool> {
+  const { choDangNhap, ketNoiGithub } = await import('./congCu');
+  // `cho` = chờ người dùng bấm Authorize thêm tối đa N giây trước khi kiểm.
+  const cho = Math.min(120, Math.max(0, Number(args.cho_giay) || 0));
+  if (cho) await choDangNhap(cho);
+  const kq = await ketNoiGithub();
+  return { noiDung: kq.noi, tomTat: kq.ok ? 'đã kết nối GitHub' : 'chờ đăng nhập GitHub' };
+}
+
+async function toolGitDay(goc: string, g: BoiCanhGit): Promise<KetQuaTool> {
+  const { chuanBiDay, dayNhanh } = await import('./gitViet');
+  const cb = await chuanBiDay(goc);
+  if (!cb.ok) return { noiDung: `LỖI: ${cb.loi}`, tomTat: 'không đẩy được' };
+  const chiTiet = `Đẩy nhánh "${cb.nhanh}" lên GitHub (origin)${cb.soCommit ? ` — ${cb.soCommit} commit` : ''}`
+    + `${cb.coUpstream ? '' : ', lần đầu cho nhánh này'}. Không đẩy ép (--force).`;
+  const quyet = await hoiNguoiDung(
+    { ten: 'git_day', duongDan: `đẩy ${cb.nhanh}`, khoa: `day:${Date.now()}`, choNho: false },
+    (y) => g.xinPhepGit({ ...y, viec: 'day', chiTiet }),
+    g.signal,
+    g.so,
+  );
+  if (quyet === 'tuChoi') return { noiDung: 'NGƯỜI DÙNG TỪ CHỐI đẩy.', tomTat: 'bị từ chối' };
+  const kq = await dayNhanh(goc);
+  return kq.ok ? { noiDung: kq.noi, tomTat: 'đã đẩy' } : { noiDung: `LỖI: ${kq.loi}`, tomTat: 'đẩy hỏng' };
+}
+
+async function toolGithubDangDuAn(goc: string, args: Record<string, unknown>, g: BoiCanhGit): Promise<KetQuaTool> {
+  const { caiCongCu, coLenh, taiKhoanGithub } = await import('./congCu');
+  const { keHoachDangDuAn, dangDuAn } = await import('./gitViet');
+  if (!(await coLenh('git'))) {
+    return { noiDung: 'Máy chưa có git — gọi `cai_cong_cu` với ten="git" trước (tự cài, người dùng không phải gõ gì).', tomTat: 'thiếu git' };
+  }
+  const gh = await caiCongCu('gh');
+  if (!gh.ok) return { noiDung: gh.noi, tomTat: 'thiếu gh' };
+  const tk = await taiKhoanGithub();
+  if (!tk) return { noiDung: 'Chưa kết nối GitHub — gọi `github_ket_noi` trước, chờ người dùng xác nhận, rồi gọi lại tool này.', tomTat: 'chưa đăng nhập' };
+
+  const tenRepo = String(args.ten_repo ?? '').trim().replace(/[^A-Za-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 100)
+    || path.basename(goc).replace(/[^A-Za-z0-9._-]+/g, '-');
+  const riengTu = args.cong_khai !== true;
+  const loiNhan = String(args.loi_nhan ?? '').trim() || 'Khởi tạo dự án';
+  const moTa = typeof args.mo_ta === 'string' ? args.mo_ta : '';
+
+  const kh = await keHoachDangDuAn(goc);
+  if (!kh.ok) return { noiDung: `LỖI: ${kh.loi}`, tomTat: 'không chuẩn bị được' };
+  const chiTiet = [
+    kh.coOrigin ? 'Dự án đã có repo GitHub — commit thay đổi mới rồi đẩy lên.'
+      : `Tạo repo ${riengTu ? 'RIÊNG TƯ' : 'CÔNG KHAI'} "${tk}/${tenRepo}" trên tài khoản GitHub ${tk}, rồi đẩy dự án lên.`,
+    kh.canInit ? '• Khởi tạo git cho thư mục này (nhánh main).' : '',
+    kh.taoGitignore ? '• Tạo .gitignore an toàn (chặn node_modules, bản build, .env, khoá…).' : '',
+    kh.canInit ? '• Commit TOÀN BỘ file của dự án (trừ những gì .gitignore chặn và file bí mật).'
+      : kh.file.length ? `• Commit ${kh.file.length} file:\n${kh.file.slice(0, 40).map((f) => `    ${f}`).join('\n')}${kh.file.length > 40 ? `\n    … và ${kh.file.length - 40} file nữa` : ''}` : '• Không có thay đổi mới — chỉ đẩy commit có sẵn.',
+    kh.daChan.length ? `• BỊ LOẠI (file bí mật): ${kh.daChan.join(', ')}` : '',
+    kh.quaLon.length ? `• BỎ QUA (quá 95MB): ${kh.quaLon.join(', ')}` : '',
+    `\n─── lời nhắn commit ───\n${loiNhan}`,
+  ].filter(Boolean).join('\n');
+  const quyet = await hoiNguoiDung(
+    { ten: 'github_dang_du_an', duongDan: `đưa dự án lên GitHub (${tenRepo})`, khoa: `dang:${Date.now()}`, choNho: false },
+    (y) => g.xinPhepGit({ ...y, viec: 'day', chiTiet }),
+    g.signal,
+    g.so,
+  );
+  if (quyet === 'tuChoi') return { noiDung: 'NGƯỜI DÙNG TỪ CHỐI đưa dự án lên GitHub.', tomTat: 'bị từ chối' };
+  const kq = await dangDuAn(goc, { tenRepo, riengTu, moTa, loiNhan });
+  return kq.ok ? { noiDung: kq.noi, tomTat: 'đã lên GitHub' } : { noiDung: `LỖI: ${kq.loi}`, tomTat: 'đưa lên hỏng' };
 }
 
 

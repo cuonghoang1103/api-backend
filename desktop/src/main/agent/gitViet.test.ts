@@ -12,7 +12,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { chuanBiCommit, commit } from './gitViet';
+import { chuanBiCommit, chuanBiDay, chuRepoGithub, commit, dangDuAn, keHoachDangDuAn } from './gitViet';
 
 let repo: string;
 
@@ -104,5 +104,66 @@ describe('git ghi — rào chắn', () => {
     const kq = await commit(repo, 'thu', cb.file!);
     expect(kq.ok).toBe(false);
     expect(kq.loi).toMatch(/main/);
+  });
+});
+
+describe('16/10/2026 — người mới đưa dự án lên GitHub', () => {
+  it('thư mục CHƯA theo dõi chứa .env ⇒ liệt kê TỪNG file, .env bị loại (trước đây cả thư mục bị add nguyên cục)', async () => {
+    git('checkout', '-q', '-b', 'agent/thu');
+    fs.mkdirSync(path.join(repo, 'cauhinh'));
+    fs.writeFileSync(path.join(repo, 'cauhinh', 'app.json'), '{}');
+    fs.writeFileSync(path.join(repo, 'cauhinh', '.env'), 'KHOA=bi-mat');
+    const cb = await chuanBiCommit(repo);
+    expect(cb.file).toContain('cauhinh/app.json');
+    expect(cb.file).not.toContain('cauhinh/');
+    expect(cb.daChan).toContain('cauhinh/.env');
+  });
+
+  it('đổi tên file ⇒ không sinh đường dẫn rác từ mục nguồn', async () => {
+    git('checkout', '-q', '-b', 'agent/thu');
+    git('mv', 'a.txt', 'b.txt');
+    const cb = await chuanBiCommit(repo);
+    expect(cb.file).toEqual(['b.txt']);
+  });
+
+  it('đọc chủ repo GitHub từ origin (https lẫn ssh)', async () => {
+    expect(await chuRepoGithub(repo)).toBeNull();
+    git('remote', 'add', 'origin', 'https://github.com/nguoi-moi/bai-tap.git');
+    expect(await chuRepoGithub(repo)).toBe('nguoi-moi');
+    git('remote', 'set-url', 'origin', 'git@github.com:Ai-Do/repo');
+    expect(await chuRepoGithub(repo)).toBe('Ai-Do');
+  });
+
+  it('chưa có origin ⇒ git_day nói rõ phải đưa dự án lên trước', async () => {
+    git('checkout', '-q', '-b', 'agent/thu');
+    const cb = await chuanBiDay(repo);
+    expect(cb.ok).toBe(false);
+    expect(cb.loi).toContain('github_dang_du_an');
+  });
+
+  it('thư mục CHƯA có git ⇒ kế hoạch báo sẽ init + tạo .gitignore', async () => {
+    const moi = fs.mkdtempSync(path.join(os.tmpdir(), 'gitviet-moi-'));
+    try {
+      fs.writeFileSync(path.join(moi, 'index.js'), 'console.log(1)\n');
+      const kh = await keHoachDangDuAn(moi);
+      expect(kh.canInit).toBe(true);
+      expect(kh.taoGitignore).toBe(true);
+    } finally {
+      fs.rmSync(moi, { recursive: true, force: true });
+    }
+  });
+
+  it('⛔ repo NHÓM đã có origin, đang ở main ⇒ github_dang_du_an KHÔNG commit/đẩy thẳng main', async () => {
+    const tu = fs.mkdtempSync(path.join(os.tmpdir(), 'gitviet-goc-'));
+    try {
+      execFileSync('git', ['init', '-q', '--bare', tu]);
+      git('remote', 'add', 'origin', tu);
+      fs.writeFileSync(path.join(repo, 'a.txt'), 'ba\n');
+      const kq = await dangDuAn(repo, { tenRepo: 'x', riengTu: true, loiNhan: 'thu' });
+      expect(kq.ok).toBe(false);
+      expect(git('log', '--oneline').trim().split('\n')).toHaveLength(1);
+    } finally {
+      fs.rmSync(tu, { recursive: true, force: true });
+    }
   });
 });

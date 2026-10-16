@@ -35,6 +35,21 @@ type Handler<TInput> = (input: TInput, event: IpcMainInvokeEvent) => unknown;
 const registered = new Set<InvokeChannel>();
 
 /**
+ * Bản sao "kiểm schema + gọi handler" của từng kênh, KHÔNG qua `ipcMain`.
+ *
+ * Dành cho cầu nối VS Code (`cauNoiVscode.ts`, 16/10/2026): extension gọi
+ * đúng các handler AI Code của app — cùng schema, cùng luật quyền — thay vì
+ * một bản chép lại sẽ lệch dần. Cầu nối tự giữ danh sách kênh được phép.
+ */
+const xuLyNoiBo = new Map<InvokeChannel, (raw: unknown, event: IpcMainInvokeEvent) => unknown>();
+
+export function goiKenhNoiBo(channel: InvokeChannel, raw: unknown, event: IpcMainInvokeEvent): unknown {
+  const f = xuLyNoiBo.get(channel);
+  if (!f) throw new Error(`Kênh ${channel} chưa đăng ký.`);
+  return f(raw, event);
+}
+
+/**
  * `channel` bị ràng buộc vào `InvokeChannel`, nên gõ sai tên kênh là lỗi biên
  * dịch chứ không phải lỗi lúc chạy.
  */
@@ -48,6 +63,16 @@ export function handle<C extends InvokeChannel>(
 ): void {
   const schema = INVOKE_CHANNELS[channel] as z.ZodTypeAny | null;
   registered.add(channel);
+  xuLyNoiBo.set(channel, (raw, event) => {
+    let input: unknown;
+    if (schema === null) input = undefined;
+    else {
+      const r = schema.safeParse(raw);
+      if (!r.success) throw new Error(`Dữ liệu gửi lên không hợp lệ cho ${channel}`);
+      input = r.data;
+    }
+    return handler(input as never, event);
+  });
 
   ipcMain.handle(channel, async (event, rawPayload: unknown) => {
     if (!isTrustedSender(event)) {

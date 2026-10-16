@@ -112,7 +112,7 @@ export type SuKienAgent =
   /** Agent muốn gọi một tool MCP của bên thứ ba. LUÔN phải hỏi, không nhớ được. */
   | { loai: 'xinPhepMcp'; id: string; server: string; tool: string; args: string }
   /** Xin phép COMMIT hoặc MỞ PR. `chiTiet` là thứ người dùng phải ĐỌC trước khi bấm. */
-  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr'; chiTiet: string }
+  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai'; chiTiet: string }
   /** Xin phép GHI vào sổ ghi chú. `chiTiet` là nội dung sắp ghi — người dùng phải ĐỌC. */
   | { loai: 'xinPhepNote'; id: string; viec: 'tao' | 'ghi'; chiTiet: string }
   | { loai: 'lenhRa'; mau: string }
@@ -964,6 +964,10 @@ export async function chayLuot(
        biết app có cài `sua_anh` hay chưa; bản app cũ không đẩy chuỗi này nên
        model không bao giờ được mời một tool chúng không chạy được. */
     if (boiCanh.choSua) capabilities.push('anh_sua');
+    /* Tự cài git/gh + kết nối GitHub + đưa dự án lên (16/10/2026). Cần CẢ hai
+       quyền: cài là chạy mã, đưa lên là ghi repo. Khả năng RIÊNG để bản app cũ
+       (không có các tool này) không bao giờ được mời gọi chúng. */
+    if (boiCanh.choSua && boiCanh.choChayLenh) capabilities.push('cong_cu', 'github');
   }
   // NGOÀI khối trên: ghi chú sống trên máy chủ, không cần thư mục dự án nào.
   if (boiCanh.choGhiNote) capabilities.push('notes_write');
@@ -1602,7 +1606,7 @@ function taoBoiCanhTool(
     ? {
         so: c.so,
         signal: dieuKhien.signal,
-        xinPhepGit: (y: YeuCauXinPhep & { viec: 'commit' | 'pr'; chiTiet: string }) =>
+        xinPhepGit: (y: YeuCauXinPhep & { viec: 'commit' | 'pr' | 'day' | 'cai'; chiTiet: string }) =>
           phat({ loai: 'xinPhepGit', id: y.id, viec: y.viec, chiTiet: y.chiTiet }),
       }
     : undefined;

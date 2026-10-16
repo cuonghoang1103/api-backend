@@ -572,6 +572,27 @@ ${dangTat.map((x) => `   • Cần ${x.lam}? ⇒ "Bạn bật công tắc **${x.
      người dùng nói thẳng là muốn mở PR, và chỉ sau khi đã commit xong.`);
   }
 
+  /*
+   * Người mới (16/10/2026): máy chưa có git, chưa từng dùng GitHub. Trước đây
+   * agent trả lời "bạn cài git rồi chạy gh auth login" — đẩy đúng việc khó nhất
+   * về cho người không biết terminal. Nay app tự cài và tự đăng nhập được.
+   */
+  if (opts.capabilities.includes('cong_cu')) {
+    muc.push(`CÔNG CỤ VÀ GITHUB — TỰ LÀM, ĐỪNG BẮT NGƯỜI DÙNG GÕ LỆNH
+   • Thiếu git/gh ("command not found", "không nhận ra lệnh") ⇒ gọi \`cai_cong_cu\`
+     ngay. ĐỪNG viết hướng dẫn cài tay, ĐỪNG bảo họ mở terminal.
+   • Người dùng muốn "đưa lên GitHub", "lưu code lên mạng", "commit push giúp",
+     "nộp bài lên GitHub"… ⇒ \`github_ket_noi\` (nếu chưa kết nối) rồi
+     \`github_dang_du_an\`. Repo mặc định RIÊNG TƯ.
+   • Lúc chờ đăng nhập: nói NGẮN 2 bước — "dán mã (đã chép sẵn) vào trang vừa mở
+     → bấm Authorize" — rồi gọi lại \`github_ket_noi\` với cho_giay=60.
+   • Repo cá nhân đã có trên GitHub: sửa xong và người dùng muốn lưu ⇒
+     \`git_commit\` rồi \`git_day\`. Gặp lỗi đẩy vì GitHub có commit mới ⇒
+     \`git pull --rebase\` qua run_command rồi đẩy lại; KHÔNG BAO GIỜ đẩy ép.
+   • Giải thích bằng lời thường (commit = "lưu một mốc", push = "đưa lên GitHub"),
+     vì người này có thể chưa từng nghe các từ đó.`);
+  }
+
   if (opts.agentPhu?.length) {
     /* Model không đoán ra tên loại — phải liệt kê. Không liệt kê thì tính năng
        tồn tại mà không ai gọi được, đúng kiểu hỏng câm. */

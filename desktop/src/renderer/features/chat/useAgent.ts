@@ -67,7 +67,7 @@ export type MucHienThi =
   /** Thẻ duyệt LỆNH. Khác thẻ sửa file: hiện chuỗi lệnh + lý do nguy hiểm. */
   | { kieu: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh; xong?: 'dongY' | 'tuChoi' }
   | { kieu: 'xinPhepMcp'; id: string; server: string; tool: string; args: string; xong?: 'dongY' | 'tuChoi' }
-  | { kieu: 'xinPhepGit'; id: string; viec: 'commit' | 'pr'; chiTiet: string; xong?: 'dongY' | 'tuChoi' }
+  | { kieu: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai'; chiTiet: string; xong?: 'dongY' | 'tuChoi' }
   | { kieu: 'xinPhepNote'; id: string; viec: 'tao' | 'ghi'; chiTiet: string; xong?: 'dongY' | 'tuChoi' }
   /**
    * Đầu ra lệnh, gom dần khi lệnh còn đang chạy.

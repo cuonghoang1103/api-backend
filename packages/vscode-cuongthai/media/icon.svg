@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="nen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8B5CF6"/>
+      <stop offset="0.55" stop-color="#6D28D9"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+    <radialGradient id="sang" cx="0.3" cy="0.2" r="0.8">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="chu" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#E0E7FF"/>
+    </linearGradient>
+    <filter id="bong" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#1e1b4b" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect x="8" y="8" width="240" height="240" rx="58" fill="url(#nen)"/>
+  <rect x="8" y="8" width="240" height="240" rx="58" fill="url(#sang)"/>
+  <g filter="url(#bong)">
+    <!-- chữ C mập làm khuôn mặt -->
+    <path d="M178 84 A70 70 0 1 0 178 182" fill="none" stroke="url(#chu)" stroke-width="36" stroke-linecap="round"/>
+    <!-- mắt -->
+    <ellipse cx="111" cy="122" rx="9.5" ry="12" fill="#ffffff"/>
+    <ellipse cx="145" cy="122" rx="9.5" ry="12" fill="#ffffff"/>
+    <circle cx="114" cy="118" r="3.4" fill="#1e1b4b" opacity="0"/>
+  </g>
+  <ellipse cx="111" cy="122" rx="9.5" ry="12" fill="#1e1b4b"/>
+  <ellipse cx="145" cy="122" rx="9.5" ry="12" fill="#1e1b4b"/>
+  <circle cx="114.5" cy="117" r="3.6" fill="#ffffff"/>
+  <circle cx="148.5" cy="117" r="3.6" fill="#ffffff"/>
+  <!-- má hồng -->
+  <ellipse cx="98" cy="146" rx="10" ry="6.5" fill="#F9A8D4" opacity="0.9"/>
+  <ellipse cx="158" cy="146" rx="10" ry="6.5" fill="#F9A8D4" opacity="0.9"/>
+  <!-- miệng cười -->
+  <path d="M117 148 Q128 160 139 148" fill="none" stroke="#1e1b4b" stroke-width="6" stroke-linecap="round"/>
+  <!-- lấp lánh AI -->
+  <path d="M199 42 l7 19 19 7 -19 7 -7 19 -7 -19 -19 -7 19 -7z" fill="#FFD27A"/>
+  <path d="M222 96 l3.5 9 9 3.5 -9 3.5 -3.5 9 -3.5 -9 -9 -3.5 9 -3.5z" fill="#FFE8B0"/>
+</svg>

@@ -1,0 +1,79 @@
+{
+  "name": "cuongthai-ai-code",
+  "displayName": "CuongThai AI Code",
+  "description": "AI Code của CuongThai ngay trong VS Code — chat, sửa code, chạy lệnh, skill, MCP, GitHub. Chạy bằng app desktop CuongThai.",
+  "version": "0.1.0",
+  "publisher": "cuongthai",
+  "license": "UNLICENSED",
+  "private": true,
+  "icon": "media/icon.png",
+  "galleryBanner": { "color": "#4c1d95", "theme": "dark" },
+  "homepage": "https://cuongthai.com",
+  "engines": { "vscode": "^1.90.0" },
+  "categories": ["AI", "Chat", "Programming Languages"],
+  "keywords": ["ai", "agent", "chat", "cuongthai", "code assistant"],
+  "main": "./dist/extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        { "id": "cuongthai", "title": "CuongThai AI", "icon": "media/activity.svg" }
+      ]
+    },
+    "views": {
+      "cuongthai": [
+        { "type": "webview", "id": "cuongthai.chat", "name": "AI Code", "icon": "media/activity.svg" }
+      ]
+    },
+    "commands": [
+      { "command": "cuongthai.moChat", "title": "Mở khung chat", "category": "CuongThai", "icon": "$(comment-discussion)" },
+      { "command": "cuongthai.viecMoi", "title": "Việc mới", "category": "CuongThai", "icon": "$(add)" },
+      { "command": "cuongthai.hoiDoanChon", "title": "Hỏi AI về đoạn đang chọn", "category": "CuongThai" },
+      { "command": "cuongthai.themFile", "title": "Gửi file này cho AI", "category": "CuongThai" },
+      { "command": "cuongthai.suaLoi", "title": "Nhờ AI sửa lỗi này", "category": "CuongThai" },
+      { "command": "cuongthai.moApp", "title": "Mở app CuongThai", "category": "CuongThai" }
+    ],
+    "menus": {
+      "view/title": [
+        { "command": "cuongthai.viecMoi", "when": "view == cuongthai.chat", "group": "navigation" }
+      ],
+      "editor/context": [
+        { "command": "cuongthai.hoiDoanChon", "when": "editorHasSelection", "group": "cuongthai@1" }
+      ],
+      "explorer/context": [
+        { "command": "cuongthai.themFile", "when": "!explorerResourceIsFolder", "group": "cuongthai@1" }
+      ],
+      "commandPalette": [
+        { "command": "cuongthai.suaLoi", "when": "false" }
+      ]
+    },
+    "keybindings": [
+      { "command": "cuongthai.moChat", "key": "ctrl+alt+c", "mac": "cmd+alt+c" },
+      { "command": "cuongthai.hoiDoanChon", "key": "ctrl+alt+l", "mac": "cmd+alt+l", "when": "editorHasSelection" }
+    ],
+    "configuration": {
+      "title": "CuongThai AI Code",
+      "properties": {
+        "cuongthai.kemFileDangMo": {
+          "type": "boolean",
+          "default": true,
+          "description": "Tự gửi kèm tên file đang mở và đoạn đang chọn làm ngữ cảnh cho AI."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "node build.mjs --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "package": "node build.mjs && npx --yes @vscode/vsce@3.2.1 package --no-dependencies --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/vscode": "^1.90.0",
+    "dompurify": "^3.2.3",
+    "esbuild": "^0.24.2",
+    "marked": "^15.0.4",
+    "typescript": "^5.7.2"
+  }
+}

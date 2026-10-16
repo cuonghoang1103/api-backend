@@ -377,7 +377,7 @@ export function PaneDrawer({ open, onClose, side, label, width = 320, children }
         tabIndex={-1}
         data-pane-drawer
         className={cn(
-          'fixed inset-y-0 z-[63] flex max-w-[92vw] flex-col bg-[var(--w-panel)] outline-none',
+          'w-safe-y fixed inset-y-0 z-[63] flex max-w-[92vw] flex-col bg-[var(--w-panel)] outline-none',
           side === 'left' ? 'left-0 border-r' : 'right-0 border-l',
           'border-[var(--w-border)]',
         )}

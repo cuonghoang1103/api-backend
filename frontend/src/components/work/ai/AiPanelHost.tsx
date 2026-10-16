@@ -424,7 +424,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
         role="dialog"
         aria-modal="false"
         aria-label={wt('ai.assistant')}
-        className={cn('fixed inset-y-0 right-0 z-[66] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-bg)] transition-[width] duration-150', wide ? 'sm:w-[min(760px,92vw)]' : 'sm:w-[440px]')}
+        className={cn('w-safe-y w-safe-r fixed inset-y-0 right-0 z-[66] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-bg)] transition-[width] duration-150', wide ? 'sm:w-[min(760px,92vw)]' : 'sm:w-[440px]')}
         data-wide={wide || undefined}
         style={{ boxShadow: 'var(--w-shadow-pop)' }}
       >

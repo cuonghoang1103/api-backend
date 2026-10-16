@@ -358,7 +358,7 @@ export function DocSpecDrawer({ open, onClose, config, pageNumber, beforeRun, on
   if (!open) return null;
   return (
     <aside
-      className="fixed bottom-0 right-0 top-0 z-[60] flex w-full max-w-[460px] flex-col border-l border-[var(--w-border)] bg-[var(--w-panel)] shadow-[var(--w-shadow-pop,0_10px_40px_rgba(0,0,0,.18))]"
+      className="w-safe-y w-safe-r fixed bottom-0 right-0 top-0 z-[60] flex w-full max-w-[460px] flex-col border-l border-[var(--w-border)] bg-[var(--w-panel)] shadow-[var(--w-shadow-pop,0_10px_40px_rgba(0,0,0,.18))]"
       aria-label={wt('pspec.specQuality')} data-testid="spec-drawer"
     >
       <div className="flex h-[52px] shrink-0 items-center gap-2 border-b border-[var(--w-border)] px-4">

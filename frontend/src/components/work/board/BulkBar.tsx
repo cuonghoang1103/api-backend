@@ -50,7 +50,7 @@ export default function BulkBar({ count, config, lk, sprints, epics, onPatch, on
   const assignable = config.members.filter((m) => m.role === 'ADMIN' || m.role === 'MEMBER');
   const openSprints = sprints.filter((s) => s.state !== 'CLOSED');
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-5 z-[55] flex justify-center px-4">
+    <div className="w-safe-bottom-5 pointer-events-none fixed inset-x-0 z-[55] flex justify-center px-4">
       <div
         role="toolbar"
         aria-label={wt('board.bulkActions')}

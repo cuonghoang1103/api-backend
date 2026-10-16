@@ -44,7 +44,7 @@ export default function IssueDrawer({ pid, num, onClose, onOpenIssue }: {
     <WorkPortal>
       <div className="fixed inset-0 z-[60] bg-black/20 md:bg-black/10" onMouseDown={onClose} />
       <div
-        className="fixed inset-y-0 right-0 z-[61] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-panel)] sm:w-[min(920px,92vw)]"
+        className="w-safe-y w-safe-r fixed inset-y-0 right-0 z-[61] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-panel)] sm:w-[min(920px,92vw)]"
         style={{ boxShadow: 'var(--w-shadow-pop)' }}
       >
         {cfg ? (

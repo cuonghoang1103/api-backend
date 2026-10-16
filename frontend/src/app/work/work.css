@@ -193,6 +193,27 @@ html.theme-dark .work-root {
   --w-shadow-pop: 0 14px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
+/* ── Vùng an toàn của màn hình (iPhone có tai thỏ / Dynamic Island, thanh home, thanh công cụ kính của Safari,
+   web app thêm vào màn hình chính) — 16/10/2026.
+   Site đặt `viewport-fit: cover` (app/layout.tsx) ⇒ trang tràn tới sát mép thật của màn hình. Phần site chính có đệm
+   env(safe-area-inset-*) cho thanh trên/dưới, nhưng khung CT Work (`.work-root`, fixed inset-0) thì KHÔNG ⇒ trên điện
+   thoại thanh đầu của CT Work nằm dưới thanh trạng thái, còn ô nhập / nút cuối trang nằm sau thanh home và thanh
+   công cụ mờ của Safari: nhìn mờ và bấm không được (người dùng báo 16/10, che cả nút gửi của ngăn AI).
+   Máy tính + app desktop: env() = 0 ⇒ không đổi một điểm ảnh nào.
+   Phần tử `fixed` BÊN TRONG CT Work (ngăn trượt, màn toàn màn hình) định vị theo màn hình, không theo `.work-root`,
+   nên đệm của khung không tới được chúng ⇒ mỗi cái gắn thêm lớp w-safe-* dưới đây. */
+.work-root {
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}
+.w-safe-y { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.w-safe-l { padding-left: env(safe-area-inset-left, 0px); }
+.w-safe-r { padding-right: env(safe-area-inset-right, 0px); }
+.w-safe-all {
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}
+/* Thanh nổi sát đáy (BulkBar): cách đáy 1.25rem TÍNH TỪ mép an toàn, không phải mép màn hình. */
+.w-safe-bottom-5 { bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)); }
+
 .work-root ::selection { background: color-mix(in srgb, var(--w-accent) 30%, transparent); }
 .work-root * { scrollbar-width: thin; scrollbar-color: var(--w-border-strong) transparent; }
 .work-root .tabular { font-variant-numeric: tabular-nums; }

@@ -247,7 +247,7 @@ export function QuizTake({ cid, qid, attempt, onFinished, onExit }: { cid: numbe
 
   return (
     <WorkPortal>
-      <div className="fixed inset-0 z-[60] flex flex-col bg-[var(--w-bg)]" role="dialog" aria-modal="true" aria-labelledby="quiz-take-title" data-testid="quiz-take">
+      <div className="w-safe-all fixed inset-0 z-[60] flex flex-col bg-[var(--w-bg)]" role="dialog" aria-modal="true" aria-labelledby="quiz-take-title" data-testid="quiz-take">
         <header className="flex flex-wrap items-center gap-3 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-4 py-2.5">
           <div className="min-w-0 flex-1">
             <h2 id="quiz-take-title" className="truncate text-[15px] font-semibold">{attempt.title}</h2>

@@ -628,7 +628,7 @@ function HelpPanel({ requested, nonce, onClose }: { requested: string | null; no
         aria-label={UI.title[lang]}
         lang={lang}
         data-help-panel=""
-        className="fixed inset-y-0 right-0 z-[76] flex w-full flex-col bg-[var(--w-panel)] text-[var(--w-text)] outline-none sm:w-[min(900px,94vw)] sm:border-l sm:border-[var(--w-border)]"
+        className="w-safe-y w-safe-r fixed inset-y-0 right-0 z-[76] flex w-full flex-col bg-[var(--w-panel)] text-[var(--w-text)] outline-none sm:w-[min(900px,94vw)] sm:border-l sm:border-[var(--w-border)]"
         style={{ boxShadow: 'var(--w-shadow-pop)' }}
       >
         {/* Đầu ngăn */}

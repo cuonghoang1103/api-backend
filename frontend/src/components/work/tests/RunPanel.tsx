@@ -264,7 +264,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
         role="complementary"
         aria-label={wt('tests.execution')}
         onPaste={onPaste}
-        className="fixed inset-y-0 right-0 z-[61] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-panel)] sm:w-[min(780px,94vw)]"
+        className="w-safe-y w-safe-r fixed inset-y-0 right-0 z-[61] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-panel)] sm:w-[min(780px,94vw)]"
         style={{ boxShadow: 'var(--w-shadow-pop)' }}
       >
         {/* Thanh trên */}
@@ -838,7 +838,7 @@ function EvidenceLightbox({ pid, ev, onClose }: { pid: number; ev: RunEvidence; 
   }, [onClose]);
   return (
     <WorkPortal>
-      <div role="dialog" aria-modal="true" aria-label={ev.fileName} className="fixed inset-0 z-[70] flex flex-col bg-black/80" onMouseDown={onClose}>
+      <div role="dialog" aria-modal="true" aria-label={ev.fileName} className="w-safe-all fixed inset-0 z-[70] flex flex-col bg-black/80" onMouseDown={onClose}>
         <div className="flex h-12 shrink-0 items-center gap-2 px-4 text-[13px] text-white" onMouseDown={(e) => e.stopPropagation()}>
           <span className="min-w-0 flex-1 truncate">{ev.fileName}</span>
           {url.data && <a href={url.data} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-sm">{wt('tests.openOriginal')}</a>}

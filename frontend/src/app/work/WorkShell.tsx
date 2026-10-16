@@ -130,7 +130,7 @@ export default function WorkShell({ children }: { children: React.ReactNode }) {
             <div className="fixed inset-0 z-[60] md:hidden" onClick={() => setMobileNav(false)}>
               <div className="absolute inset-0 bg-black/45" />
               <aside
-                className="absolute inset-y-0 left-0 w-[284px] max-w-[86vw] border-r border-[var(--w-border)] bg-[var(--w-bg)]"
+                className="w-safe-y w-safe-l absolute inset-y-0 left-0 w-[284px] max-w-[86vw] border-r border-[var(--w-border)] bg-[var(--w-bg)]"
                 style={{ boxShadow: 'var(--w-shadow-pop)' }}
                 onClick={(e) => e.stopPropagation()}
               >

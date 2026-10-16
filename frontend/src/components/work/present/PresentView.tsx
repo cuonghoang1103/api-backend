@@ -244,7 +244,7 @@ export default function PresentView({ config }: { config: ProjectConfig }) {
 
   const s = slides[i];
   return (
-    <div ref={stage} className="fixed inset-0 z-[80] flex flex-col bg-[var(--w-panel)] text-[var(--w-text)]" role="region" aria-roledescription="presentation" aria-label={wt('rep.pvAria', { n: config.name })} data-testid="present-stage">
+    <div ref={stage} className="w-safe-all fixed inset-0 z-[80] flex flex-col bg-[var(--w-panel)] text-[var(--w-text)]" role="region" aria-roledescription="presentation" aria-label={wt('rep.pvAria', { n: config.name })} data-testid="present-stage">
       <div className="flex shrink-0 items-center gap-2 px-[clamp(12px,3vw,40px)] pt-[clamp(10px,2vw,24px)]">
         <span className="min-w-0 truncate text-[clamp(11px,1vw,14px)] font-medium text-[var(--w-text-3)]">{config.name} · {p.mode === 'client' ? wt('rep.pvClientSafe') : wt('docs.internalTag')}</span>
         <span className="ml-auto text-[12px] tabular-nums text-[var(--w-text-3)]" data-testid="slide-counter">{i + 1} / {slides.length}</span>

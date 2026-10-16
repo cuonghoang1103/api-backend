@@ -42,6 +42,20 @@ export function PointsBadge({ points, unit = 'pts' }: { points: number | null; u
   );
 }
 
+/** 16/10/2026: thẻ đang chờ thẻ khác chưa xong (liên kết "blocks") — hiện ngay trên board: "⏳ Chờ TP2-12 · Cường". */
+export function WaitingChip({ items }: { items: NonNullable<IssueCard['waitingOn']> }) {
+  const first = items[0];
+  const tip = items.map((w) => `${w.key} ${w.title}${w.assignee ? ` — ${w.assignee}` : ''}`).join('\n');
+  return (
+    <span
+      className="flex min-w-0 shrink items-center gap-0.5 truncate rounded-[5px] bg-[color-mix(in_srgb,var(--w-orange)_14%,transparent)] px-1 font-medium text-[var(--w-orange)]"
+      title={wt('board.waitingOnTip', { list: tip })}
+    >
+      ⏳ {wt('board.waitingOn', { key: first.key })}{first.assignee ? ` · ${first.assignee}` : ''}{items.length > 1 ? ` +${items.length - 1}` : ''}
+    </span>
+  );
+}
+
 export function DueChip({ issue, lk }: { issue: Pick<IssueCard, 'dueDate' | 'statusId'>; lk: Lookups }) {
   if (!issue.dueDate) return null;
   const overdue = isOverdue(issue, lk);
@@ -146,6 +160,7 @@ export function CardBody({ issue, lk, dragging, subtasks, inDoneColumn, onOpen, 
         {issue.clientVisible && <span className="flex shrink-0 items-center text-[var(--w-yellow)]" title={wt('board.visibleToClient')} aria-label={wt('board.visibleToClient')}><Eye size={11} /></span>}
         {/* CTW-11: cờ "Bị chặn". */}
         {issue.flaggedAt && <FlagBadge reason={issue.flagReason} />}
+        {issue.waitingOn && issue.waitingOn.length > 0 && <WaitingChip items={issue.waitingOn} />}
         {issue.commentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={wt('board.nComments', { count: issue.commentCount })}><MessageSquare size={11} />{issue.commentCount}</span>}
         {issue.attachmentCount > 0 && <span className="flex shrink-0 items-center gap-0.5" title={wt('board.nAttachments', { count: issue.attachmentCount })}><Paperclip size={11} />{issue.attachmentCount}</span>}
         {needsSubmit && <span className="flex shrink-0 items-center gap-0.5 font-medium text-[var(--w-orange)]" title="Chưa đính kèm tệp nộp — cần nộp deliverable trước khi kéo sang Done"><Paperclip size={11} />{wt('board.needsSubmit')}</span>}

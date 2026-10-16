@@ -101,6 +101,28 @@ describe('CT Work — phần bù đợt 3–4', { skip: !RUN }, () => {
     assert.equal(plan.data.rationale, null, 'không xin giải thích thì không gọi AI');
   });
 
+  it('thẻ đang chờ thẻ khác: "G blocks H" ⇒ H mang waitingOn (mã, tên, người làm G); G xong ⇒ H hết chờ', async () => {
+    const mk = await call(lead, 'POST', `/projects/${pid}/issues`, { typeId: type('STORY'), title: 'Glossary', assigneeId: lead.id });
+    assert.equal(mk.status, 201, JSON.stringify(mk.raw));
+    const g = mk.data;
+    const h = await newIssue('Use cases');
+    assert.equal((await call(dev, 'POST', `/projects/${pid}/issues/${g.number}/links`, { targetKey: `EX-${h.number}`, type: 'BLOCKS' })).status, 201);
+    const cards = async () => {
+      const r = (await call(dev, 'GET', `/projects/${pid}/issues?includeDone=true&limit=200`)).data;
+      const items: any[] = r.items ?? r.issues ?? r;
+      return { g: items.find((x) => x.number === g.number), h: items.find((x) => x.number === h.number) };
+    };
+    let c = await cards();
+    assert.deepEqual(c.g.waitingOn, [], 'thẻ chặn không chờ ai');
+    assert.equal(c.h.waitingOn.length, 1);
+    assert.equal(c.h.waitingOn[0].key, `EX-${g.number}`);
+    assert.equal(c.h.waitingOn[0].title, 'Glossary');
+    assert.equal(c.h.waitingOn[0].assignee, lead.username, 'người làm thẻ chặn (chưa có tên hiển thị ⇒ username)');
+    assert.equal((await call(lead, 'PATCH', `/projects/${pid}/issues/${g.number}`, { statusId: st('Done') })).status, 200);
+    c = await cards();
+    assert.deepEqual(c.h.waitingOn, [], 'thẻ chặn đã xong ⇒ đến lượt H');
+  });
+
   it('retro / bản tin: viewer không gọi được; hết lượt thì 402 (hoặc 503 khi máy không có khoá AI)', async () => {
     const sprintId = (await call(lead, 'GET', `/projects/${pid}/sprints?includeClosed=true`)).data.find((s: any) => s.state === 'CLOSED').id;
     assert.equal((await call(viewer, 'POST', `/projects/${pid}/ai/retro`, { sprintId })).status, 403);

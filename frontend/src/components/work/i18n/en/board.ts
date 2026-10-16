@@ -55,6 +55,8 @@ export const board = {
   visibleToClient: 'Visible to client',
   blockedReason: 'Blocked: {reason}',
   blocked: 'Blocked',
+  waitingOn: 'Waiting on {key}',
+  waitingOnTip: 'Can start once these are done:\n{list}',
   markedBlocked: 'Marked as blocked',
   noLongerBlocked: 'No longer blocked',
   removing: 'Removing…',

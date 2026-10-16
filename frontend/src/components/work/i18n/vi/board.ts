@@ -58,6 +58,8 @@ export const board: Strings<typeof En> = {
   visibleToClient: 'Khách hàng xem được',
   blockedReason: 'Bị chặn: {reason}',
   blocked: 'Bị chặn',
+  waitingOn: 'Chờ {key}',
+  waitingOnTip: 'Đang chờ các thẻ này xong mới làm được:\n{list}',
   markedBlocked: 'Đã đánh dấu bị chặn',
   noLongerBlocked: 'Đã bỏ đánh dấu bị chặn',
   removing: 'Đang gỡ…',

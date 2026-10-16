@@ -225,6 +225,8 @@ export interface IssueCard {
   /** CTW-11: cờ "Bị chặn" + lý do (khách không thấy). */
   flaggedAt?: string | null;
   flagReason?: string | null;
+  /** 16/10/2026: các thẻ CHẶN thẻ này mà chưa xong (liên kết BLOCKS) — rỗng = đến lượt làm. */
+  waitingOn?: { key: string; title: string; assignee: string | null }[];
 }
 
 export interface IssueBrief { id: number; key: string; number: number; title: string; statusId: number; typeId: number }

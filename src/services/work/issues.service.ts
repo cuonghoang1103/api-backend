@@ -96,15 +96,32 @@ export const CARD_SELECT = {
   // Đợt 6a: cờ chia sẻ của thẻ cha — khách không được thấy số/id của epic CHƯA chia sẻ (clientCard).
   parent: { select: { number: true, clientVisible: true } },
   _count: { select: { children: { where: { deletedAt: null } }, comments: { where: { deletedAt: null } }, attachments: true } },
+  // 16/10/2026: thẻ đang CHỜ thẻ khác — liên kết "A blocks B" lưu ở A (fromIssue) ⇒ B đọc linksIn. Board hiện "⏳ Chờ A · người
+  // làm A" khi A CHƯA xong (nhóm SV hỏi: "phải mở thẻ mới biết mình chờ ai"). Tối đa 5 cái, thẻ đã xoá bỏ qua.
+  linksIn: {
+    where: { type: 'BLOCKS', fromIssue: { deletedAt: null } },
+    take: 5,
+    orderBy: { id: 'asc' },
+    select: { fromIssue: { select: { number: true, title: true, status: { select: { category: true } }, project: { select: { key: true } }, assignee: { select: { username: true, displayName: true, fullName: true } } } } },
+  },
 } satisfies Prisma.WorkIssueSelect;
 
 type CardRow = Prisma.WorkIssueGetPayload<{ select: typeof CARD_SELECT }>;
 
 export function toCard(r: CardRow) {
-  const { labels, _count, parent, ...rest } = r;
+  const { labels, _count, parent, linksIn, ...rest } = r;
   return {
     ...rest,
     parentNumber: parent?.number ?? null,
+    // Chỉ những thẻ chặn CHƯA xong — xong rồi thì thẻ này "đến lượt" làm, không còn chip chờ.
+    // Vài truy vấn (chi tiết thẻ…) dựng thẻ từ bộ trường riêng không có linksIn ⇒ coi như không chờ ai.
+    waitingOn: (linksIn ?? [])
+      .filter((l) => l.fromIssue.status.category !== 'DONE')
+      .map((l) => ({
+        key: `${l.fromIssue.project.key}-${l.fromIssue.number}`,
+        title: l.fromIssue.title,
+        assignee: l.fromIssue.assignee ? (l.fromIssue.assignee.displayName || l.fromIssue.assignee.fullName || l.fromIssue.assignee.username) : null,
+      })),
     labelIds: labels.map((l) => l.labelId),
     subtaskCount: _count.children,
     commentCount: _count.comments,
@@ -135,7 +152,8 @@ export function clientIssueWhere(access: Pick<ProjectAccess, 'role' | 'modules'>
 export function scrubCardForClient<T extends Record<string, unknown>>(card: T, scoped: boolean): T {
   if (!scoped) return card;
   // CTW-11: cờ chặn + lý do là ghi chú nội bộ của đội.
-  return { ...card, commentCount: null, attachmentCount: null, subtaskCount: null, storyPoints: null, teamId: null, version: 0, flaggedAt: null, flagReason: null };
+  // 16/10/2026: waitingOn mang tên + người làm của thẻ nội bộ (có thể chưa chia sẻ) ⇒ khách không thấy.
+  return { ...card, commentCount: null, attachmentCount: null, subtaskCount: null, storyPoints: null, teamId: null, version: 0, flaggedAt: null, flagReason: null, waitingOn: [] };
 }
 
 /**

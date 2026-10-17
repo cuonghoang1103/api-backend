@@ -4,6 +4,7 @@
  *
  * (--render mặc định: $GIT_RENDER hoặc /tmp/git-render — nơi _render-slides.mjs --out đã ghi git-NN/NNN.webp)
  * (--moi: chương MỚI, chưa có trong git HEAD ⇒ bỏ qua phép so với bản cũ)
+ * (chương "Khởi động nhanh" dùng mã chương chữ `kd` thay số: slug git-kd-M-…, bài đầu git-kd-0-slides)
  *
  * 1. import được; content là chuỗi; title ≤ 180 ký tự và có |||; slug dạng git-N-M-…
  * 2. bài đầu = git-N-0-slides DOCUMENT; có đúng MỘT bài QUIZ ở cuối, 10 câu, câu nào cũng có explanation,
@@ -37,7 +38,7 @@ if (!mod.title?.includes('|||')) err('section title thiếu |||');
 // Mục 0 được có tối đa 2 bài "Bắt đầu tại đây" (slug …-bat-dau-…) đứng TRƯỚC bài slide — trang đầu tiên người mới bấm vào.
 const i0 = ls.findIndex((l) => !/^git-0-\d+-bat-dau/.test(l.slug || ''));
 if (i0 > 2) err('Mục 0: tối đa 2 bài bat-dau trước bài slide');
-const m0 = ls[i0]?.slug?.match(/^git-(\d+)-0-slides$/);
+const m0 = ls[i0]?.slug?.match(/^git-(\d+|kd)-0-slides$/);
 if (!m0 || ls[i0].type !== 'DOCUMENT') err('bài đầu phải là git-N-0-slides, type DOCUMENT');
 const N = m0 ? m0[1] : '?';
 const quizzes = ls.filter((l) => l.type === 'QUIZ');
@@ -47,7 +48,7 @@ else if (quizzes.length !== 1 || ls[ls.length - 1].type !== 'QUIZ') err('phải 
 const slugs = new Set();
 for (const l of ls) {
   const tag = l.slug || '(không slug)';
-  if (!/^git-\d+-\d+-[a-z0-9-]+$/.test(l.slug || '')) err(`${tag}: slug sai dạng`);
+  if (!/^git-(\d+|kd)-\d+-[a-z0-9-]+$/.test(l.slug || '')) err(`${tag}: slug sai dạng`);
   else if (!l.slug.startsWith(`git-${N}-`)) err(`${tag}: slug không thuộc chương ${N}`);
   if (slugs.has(l.slug)) err(`${tag}: slug trùng`); slugs.add(l.slug);
   if (typeof l.content !== 'string') { err(`${tag}: content không phải chuỗi`); continue; }

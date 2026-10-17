@@ -10,6 +10,8 @@
  * Seed: node scripts/course-seed.mjs --file ./content/courses/git.mjs --apply
  */
 import s00 from './git/s00-intro.mjs';
+// 10/2026: chương thực chiến "Khởi động nhanh" (slug git-kd-*), đặt NGAY SAU Mục 0 — nhóm mới lên GitHub lần đầu.
+import s17 from './git/s17-nhom-tu-so-0.mjs';
 import s01 from './git/s01-mo-hinh.mjs';
 import s02 from './git/s02-doc-lich-su.mjs';
 import s03 from './git/s03-nhanh-hop-nhat.mjs';
@@ -44,13 +46,14 @@ export default {
     //     --slug git --icon git --color F05032 --title "Git & GitHub" --subtitle "Zero → Production"
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/git.png?v=4',
     shortDescription: 'Master the tool you touch every day: what a commit really is, branching and merging without fear, undoing anything, pull requests and code review, rewriting history safely, and recovering work you thought was gone.|||Làm chủ công cụ bạn chạm vào mỗi ngày: một commit thật sự là gì, tạo nhánh và hợp nhất mà không sợ, hoàn tác được mọi thứ, pull request và code review, viết lại lịch sử an toàn, và cứu lại việc bạn tưởng đã mất.',
-    description: 'Khoá Git & GitHub từ số 0 tới mức cứu được một kho mã tưởng đã hỏng, do CuongThai tự biên soạn. Mục 0 và 16 chương, mỗi chương có bộ slide màu vẽ đồ thị commit/ba cây/sơ đồ, mỗi bài có bài tập nhỏ, bảng thuật ngữ Anh–Việt và tóm tắt, mỗi chương một bài kiểm tra 10 câu có giải thích. Đi từ mô hình ba cây và bản chất của một commit, qua đọc lịch sử (log, blame, bisect), nhánh và hợp nhất, mọi cách hoàn tác an toàn, remote và GitHub, pull request và code review, chiến lược nhánh cho nhóm, viết lại lịch sử, ruột gan kho đối tượng, kho mã lớn (worktree, submodule, LFS, monorepo), nền tảng GitHub, hook và ký commit, một sách công thức cứu hộ, Git trong VS Code và công cụ đồ hoạ, GitHub cho sinh viên (hồ sơ, Pages, Student Pack, mã nguồn mở), và kết thúc bằng một dự án nhóm mô phỏng trọn một sprint cùng bài thi cuối khoá 20 câu. Mọi ví dụ là output terminal chạy thật.',
+    description: 'Khoá Git & GitHub từ số 0 tới mức cứu được một kho mã tưởng đã hỏng, do CuongThai tự biên soạn. Mục 0, chương Khởi động nhanh (cả nhóm lên GitHub từ số 0 trên Windows + Mac) và 16 chương, mỗi chương có bộ slide màu vẽ đồ thị commit/ba cây/sơ đồ, mỗi bài có bài tập nhỏ, bảng thuật ngữ Anh–Việt và tóm tắt, mỗi chương một bài kiểm tra 10 câu có giải thích. Đi từ mô hình ba cây và bản chất của một commit, qua đọc lịch sử (log, blame, bisect), nhánh và hợp nhất, mọi cách hoàn tác an toàn, remote và GitHub, pull request và code review, chiến lược nhánh cho nhóm, viết lại lịch sử, ruột gan kho đối tượng, kho mã lớn (worktree, submodule, LFS, monorepo), nền tảng GitHub, hook và ký commit, một sách công thức cứu hộ, Git trong VS Code và công cụ đồ hoạ, GitHub cho sinh viên (hồ sơ, Pages, Student Pack, mã nguồn mở), và kết thúc bằng một dự án nhóm mô phỏng trọn một sprint cùng bài thi cuối khoá 20 câu. Mọi ví dụ là output terminal chạy thật.',
     whatYouLearn: 'Hiểu ba cây (thư mục làm việc, index, HEAD) và đoán trước được mọi lệnh sẽ làm gì; giải quyết xung đột hợp nhất một cách bình tĩnh; dùng rebase tương tác để dọn lịch sử trước khi review; lấy lại commit/nhánh đã "mất" bằng reflog; tìm commit gây lỗi bằng bisect; chạy quy trình GitHub chuyên nghiệp với nhánh bảo vệ, CODEOWNERS và kiểm tra bắt buộc; gỡ một khoá API bị lộ khỏi toàn bộ lịch sử; và biết chính xác khi nào một thao tác trở nên nguy hiểm cho người khác.',
     requirements: 'Biết mở terminal và gõ lệnh cơ bản (cd, ls, mkdir). KHÔNG cần biết Git trước — Chương 1 dựng lại từ đầu. KHÔNG cần biết một ngôn ngữ lập trình cụ thể nào; ví dụ dùng file văn bản và JavaScript ở mức đọc hiểu được. Máy tính cài được Git 2.30 trở lên.',
     documentsNote: 'Tài liệu tham chiếu chính: git-scm.com/book (Pro Git, miễn phí, tiếng Anh) • git-scm.com/docs (sách tra cứu lệnh) • docs.github.com cho phần nền tảng • conventionalcommits.org cho quy ước lời nhắn. Phần thực hành đi kèm: track "Git" trên Code Lab.',
   },
   sections: [
     s00,
+    s17,
     s01,
     s02,
     s03,

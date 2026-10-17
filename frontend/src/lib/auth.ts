@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import { goiBackend, maNhaCungCap } from '@/lib/backendServer';
+import { goiBackend, headerNoiBoOAuth, maNhaCungCap } from '@/lib/backendServer';
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import AppleProvider from "next-auth/providers/apple";
@@ -149,7 +149,7 @@ export const authConfig: NextAuthConfig = {
           endpoint = `/api/v1/auth/oauth/register`;
           options = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", ...headerNoiBoOAuth() },
             body: JSON.stringify({
               email,
               fullName: (token.name as string) ?? email.split("@")[0],

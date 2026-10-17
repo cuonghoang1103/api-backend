@@ -7,6 +7,8 @@ import { AppError } from '../middleware/errorHandler.js';
 import { softCaptchaMiddleware } from '../middleware/captcha.js';
 import type { ApiResponse, AuthResponse } from '../types/index.js';
 import mfaRoutes from './mfa.routes.js';
+import { xacMinhOAuth } from '../services/xacMinhOAuth.js';
+import { logger } from '../utils/logger.js';
 
 const router = Router();
 
@@ -185,6 +187,13 @@ router.post(
   validate,
   async (req: Request, res: Response<ApiResponse<AuthResponse>>, next: NextFunction) => {
     try {
+      // ⛔ Trước 18/10/2026 route này cấp phiên cho BẤT KỲ email nào gửi lên (chiếm tài khoản).
+      // Giờ phải có bằng chứng: chữ ký nội bộ của máy chủ Next, hoặc token Apple/Google hợp lệ.
+      const xm = await xacMinhOAuth(req.headers as Record<string, unknown>, req.body);
+      if (!xm.ok) {
+        logger.warn('[oauth] từ chối cấp phiên', { lyDo: xm.lyDo, provider: req.body?.provider, ip: req.ip });
+        throw new AppError('Không xác minh được đăng nhập với nhà cung cấp. Thử đăng nhập lại.', 401, 'OAUTH_UNVERIFIED');
+      }
       const result = await authService.oauthRegister(req.body);
       res.cookie('backend_token', result.token, {
         httpOnly: true,
@@ -229,6 +238,13 @@ router.post(
   validate,
   async (req: Request, res: Response<ApiResponse<AuthResponse>>, next: NextFunction) => {
     try {
+      // ⛔ Trước 18/10/2026 route này cấp phiên cho BẤT KỲ email nào gửi lên (chiếm tài khoản).
+      // Giờ phải có bằng chứng: chữ ký nội bộ của máy chủ Next, hoặc token Apple/Google hợp lệ.
+      const xm = await xacMinhOAuth(req.headers as Record<string, unknown>, req.body);
+      if (!xm.ok) {
+        logger.warn('[oauth] từ chối cấp phiên', { lyDo: xm.lyDo, provider: req.body?.provider, ip: req.ip });
+        throw new AppError('Không xác minh được đăng nhập với nhà cung cấp. Thử đăng nhập lại.', 401, 'OAUTH_UNVERIFIED');
+      }
       const result = await authService.oauthRegister(req.body);
       res.cookie('backend_token', result.token, {
         httpOnly: true,

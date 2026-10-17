@@ -21,9 +21,10 @@ async function resolveToken(request: NextRequest): Promise<string | null> {
     const session = await auth();
     if (session?.user?.email) {
       const user = session.user as any;
+      const { headerNoiBoOAuth } = await import("@/lib/backendServer");
       const res = await fetch(`${BACKEND_URL}/api/v1/auth/oauth/token`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...headerNoiBoOAuth() },
         body: JSON.stringify({
           email: session.user.email,
           fullName: session.user.name ?? session.user.email.split("@")[0],

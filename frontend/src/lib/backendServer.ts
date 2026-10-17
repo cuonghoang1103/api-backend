@@ -25,6 +25,19 @@
  *     chỉ bận vài giây.
  */
 
+import { createHmac } from 'node:crypto';
+
+/**
+ * Chữ ký nội bộ cho `/auth/oauth/token` + `/auth/oauth/register` (18/10/2026): backend chỉ cấp phiên
+ * OAuth khi có chữ ký này (máy chủ Next đã xác minh đăng nhập qua NextAuth) hoặc token Apple/Google
+ * hợp lệ. HMAC từ AUTH_SECRET — bí mật gốc không đi trên đường truyền. Xem `src/services/xacMinhOAuth.ts`.
+ */
+export function headerNoiBoOAuth(): Record<string, string> {
+  const bi = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+  if (!bi) return {};
+  return { 'x-cuongthai-noi-bo': createHmac('sha256', bi).update('oauth-token-v1').digest('hex') };
+}
+
 /** Nội bộ trước — cùng mạng Docker, không qua DNS công cộng. */
 const NOI_BO = process.env.BACKEND_INTERNAL_URL || 'http://backend:3001';
 /** Công khai — dự phòng cho khi chạy ngoài Docker (dev trên máy cá nhân). */

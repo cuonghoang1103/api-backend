@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { goiBackend, maNhaCungCap } from '@/lib/backendServer';
+import { goiBackend, headerNoiBoOAuth, maNhaCungCap } from '@/lib/backendServer';
 import { auth } from "@/lib/auth";
 
 /**
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
   try {
     backendRes = await goiBackend(`/api/v1/auth/oauth/token`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...headerNoiBoOAuth() },
       // `image` là ảnh đại diện nhà cung cấp trả về. Backend TẢI VỀ rồi đẩy
       // lên R2 chứ không lưu thẳng URL này — URL của Google gắn theo phiên và
       // sẽ chết. Chỉ điền khi tài khoản CHƯA có ảnh, không đè ảnh tự chọn.

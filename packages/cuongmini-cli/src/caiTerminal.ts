@@ -13,6 +13,7 @@
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { L } from './i18n';
 
 export const KEYBINDING_VSCODE = {
   key: 'shift+enter',
@@ -33,13 +34,13 @@ export function chenKeybinding(noiDung: string): string | null {
   if (/workbench\.action\.terminal\.sendSequence[\s\S]{0,200}\\u001b\\r|"shift\+enter"[\s\S]{0,120}terminal\.sendSequence/.test(noiDung)) return null;
   const muc = JSON.stringify(KEYBINDING_VSCODE, null, 2).split('\n').map((d) => `  ${d}`).join('\n');
   const t = noiDung.trim();
-  if (!t) return `// Shift+Enter xuống dòng trong terminal — thêm bởi CuongMini /terminal-setup\n[\n${muc}\n]\n`;
+  if (!t) return `// Shift+Enter newline in the terminal — added by CuongMini /terminal-setup\n[\n${muc}\n]\n`;
   const cuoi = noiDung.lastIndexOf(']');
-  if (cuoi < 0) throw new Error('keybindings.json không có mảng [...] — sửa tay theo hướng dẫn.');
+  if (cuoi < 0) throw new Error(L('keybindings.json không có mảng [...] — sửa tay theo hướng dẫn.', 'keybindings.json has no [...] array — edit it by hand.'));
   // Mảng rỗng hay đã có phần tử (bỏ qua chú thích/khoảng trắng trước `]`)?
   const truoc = noiDung.slice(0, cuoi).replace(/\/\/[^\n]*|\/\*[\s\S]*?\*\//g, '').trimEnd();
   const can = truoc.endsWith('[') || truoc.endsWith(',') ? '' : ',';
-  return `${noiDung.slice(0, cuoi).trimEnd()}${can}\n  // Shift+Enter xuống dòng trong terminal — thêm bởi CuongMini /terminal-setup\n${muc}\n${noiDung.slice(cuoi)}`;
+  return `${noiDung.slice(0, cuoi).trimEnd()}${can}\n  // Shift+Enter newline in the terminal — added by CuongMini /terminal-setup\n${muc}\n${noiDung.slice(cuoi)}`;
 }
 
 export function caiVsCode(ungDung: 'Code' | 'Cursor'): { duong: string; daCo: boolean; saoLuu: string | null } {
@@ -64,9 +65,13 @@ export function doTerminal(env: NodeJS.ProcessEnv = process.env): LoaiTerminal {
   return 'khac';
 }
 
-export const HUONG_DAN: Record<Exclude<LoaiTerminal, 'vscode' | 'cursor'>, string> = {
-  iterm: '**iTerm2**: Settings → Profiles → Keys → Key Mappings → **+** → bấm Shift+Enter → Action: **Send Escape Sequence** → ô Esc+ gõ `\\r`… nếu không có ô đó thì chọn **Send Text with "vim" Special Chars** và gõ `\\e\\r`. Hoặc bật **Report modifiers using CSI u** (Keys → General) — CuongMini hiểu luôn.',
-  windowsTerminal: '**Windows Terminal**: Settings → **Open JSON file**, thêm vào mảng `"actions"`:\n\n```json\n{ "command": { "action": "sendInput", "input": "\\u001b\\r" }, "keys": "shift+enter" }\n```\n\nLưu lại là có tác dụng ngay. (Alt+Enter của Windows Terminal là phím toàn màn hình — vì vậy dùng `ctrl+j` hoặc `\\` cuối dòng nếu chưa cài.)',
-  appleTerminal: '**Terminal.app**: Settings → Profiles → Keyboard → bật **Use Option as Meta key** ⇒ Option+Enter xuống dòng. Shift+Enter không gán được trong Terminal.app; dùng `ctrl+j` hoặc `\\` cuối dòng.',
-  khac: 'Terminal này chưa tự cài được. Xuống dòng bằng **Alt+Enter**, **ctrl+j**, hoặc gõ `\\` cuối dòng rồi Enter. Nếu terminal cho gán phím: gán Shift+Enter gửi chuỗi `ESC` + `\\r` (`\\x1b\\r`).',
+export const HUONG_DAN: Record<Exclude<LoaiTerminal, 'vscode' | 'cursor'>, () => string> = {
+  iterm: () => L('**iTerm2**: Settings → Profiles → Keys → Key Mappings → **+** → bấm Shift+Enter → Action: **Send Escape Sequence** → ô Esc+ gõ `\\r`… nếu không có ô đó thì chọn **Send Text with "vim" Special Chars** và gõ `\\e\\r`. Hoặc bật **Report modifiers using CSI u** (Keys → General) — CuongMini hiểu luôn.',
+    '**iTerm2**: Settings → Profiles → Keys → Key Mappings → **+** → press Shift+Enter → Action: **Send Escape Sequence** → type `\\r` in the Esc+ box… or choose **Send Text with "vim" Special Chars** and type `\\e\\r`. Or enable **Report modifiers using CSI u** (Keys → General) — CuongMini understands it.'),
+  windowsTerminal: () => L('**Windows Terminal**: Settings → **Open JSON file**, thêm vào mảng `"actions"`:\n\n```json\n{ "command": { "action": "sendInput", "input": "\\u001b\\r" }, "keys": "shift+enter" }\n```\n\nLưu lại là có tác dụng ngay. (Alt+Enter của Windows Terminal là phím toàn màn hình — vì vậy dùng `ctrl+j` hoặc `\\` cuối dòng nếu chưa cài.)',
+    '**Windows Terminal**: Settings → **Open JSON file**, add to the `"actions"` array:\n\n```json\n{ "command": { "action": "sendInput", "input": "\\u001b\\r" }, "keys": "shift+enter" }\n```\n\nSave and it works right away. (Alt+Enter is fullscreen in Windows Terminal — use `ctrl+j` or a trailing `\\` until then.)'),
+  appleTerminal: () => L('**Terminal.app**: Settings → Profiles → Keyboard → bật **Use Option as Meta key** ⇒ Option+Enter xuống dòng. Shift+Enter không gán được trong Terminal.app; dùng `ctrl+j` hoặc `\\` cuối dòng.',
+    '**Terminal.app**: Settings → Profiles → Keyboard → enable **Use Option as Meta key** ⇒ Option+Enter inserts a newline. Shift+Enter cannot be remapped in Terminal.app; use `ctrl+j` or a trailing `\\`.'),
+  khac: () => L('Terminal này chưa tự cài được. Xuống dòng bằng **Alt+Enter**, **ctrl+j**, hoặc gõ `\\` cuối dòng rồi Enter. Nếu terminal cho gán phím: gán Shift+Enter gửi chuỗi `ESC` + `\\r` (`\\x1b\\r`).',
+    'This terminal can\'t be set up automatically. Insert newlines with **Alt+Enter**, **ctrl+j**, or a trailing `\\` then Enter. If your terminal supports key bindings, map Shift+Enter to send `ESC` + `\\r` (`\\x1b\\r`).'),
 };

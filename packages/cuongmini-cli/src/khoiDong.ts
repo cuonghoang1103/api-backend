@@ -9,9 +9,10 @@ import { timTheoChu, type PhienCu } from 'ct-lenh';
 import type { CoDong } from './coDong';
 import { KetNoiLoi } from './ketNoi';
 import { KhoChat, type InfoLoi, type WsLoi } from './kho';
-import { MODEL_DU_PHONG, doiTenModel, moPhien } from './lenh';
+import { MODEL_DU_PHONG, tenModel, moPhien } from './lenh';
 import { timTrinhDuyet } from '../../cuongmini-core/src/timTrinhDuyet';
 import { docCaiDat, nenBatTrinhDuyet } from './caiDat';
+import { L } from './i18n';
 import { thuMucGoc, type NguoiDung } from './phien';
 
 export interface PhienLamViec { kn: KetNoiLoi; kho: KhoChat; canhBao: string[] }
@@ -29,27 +30,28 @@ export async function khoiDongPhien(nguoi: NguoiDung, co: CoDong, thuMuc: string
   // "Bỏ qua hết" không bao giờ đến từ file cài đặt (xem `chuanHoaCaiDat`).
   const cheDo = co.cheDo ?? cd.cheDoMacDinh;
   if (cheDo) {
-    await kn.goi('agent:datCheDoQuyen', { cheDo }).catch((e: Error) => canhBao.push(`Không đặt được chế độ: ${e.message}`));
+    await kn.goi('agent:datCheDoQuyen', { cheDo }).catch((e: Error) => canhBao.push(L(`Không đặt được chế độ: ${e.message}`, `Could not set mode: ${e.message}`)));
   }
   for (const d of co.themThuMuc ?? []) {
     const td = path.resolve(thuMuc, d);
     await kn.goi('agent:themDuong', { duong: td }).then(
       () => undefined,
-      (e: Error) => canhBao.push(`Không thêm được thư mục ${td}: ${e.message}`),
+      (e: Error) => canhBao.push(L(`Không thêm được thư mục ${td}: ${e.message}`, `Could not add directory ${td}: ${e.message}`)),
     );
   }
   // Trình duyệt cho AI: mặc định BẬT khi máy có Chrome/Edge/… — không bật thì lõi không khai
   // capability `browser` và máy chủ không gửi tool web nào (lỗi thật ở 0.2.0).
-  await kn.apTrinhDuyet(nenBatTrinhDuyet(cd, Boolean(timTrinhDuyet()))).catch((e: Error) => canhBao.push(`Không bật được trình duyệt cho AI: ${e.message}`));
+  await kn.apTrinhDuyet(nenBatTrinhDuyet(cd, Boolean(timTrinhDuyet()))).catch((e: Error) => canhBao.push(L(`Không bật được trình duyệt cho AI: ${e.message}`, `Could not enable the AI browser: ${e.message}`)));
   S.info = await kn.goi<InfoLoi>('agent:getInfo').catch(() => null);
   const model = co.model ?? cd.modelMacDinh ?? undefined;
   if (model) {
-    const ds = (S.info?.models?.length ? S.info.models : MODEL_DU_PHONG).map((m) => ({ ...m, ten: doiTenModel(m.ten) }));
+    const ds = (S.info?.models?.length ? S.info.models : MODEL_DU_PHONG).map((m) => ({ ...m, ten: tenModel(m) }));
     const m = timTheoChu(model, ds);
-    if (!m) canhBao.push(`Không rõ model "${model}" — có: ${ds.map((x) => x.id).join(', ')}. Giữ model đang chọn.`);
-    else if (!m.dungDuoc) canhBao.push(`${m.ten} chưa mở trên máy chủ — giữ model đang chọn.`);
+    if (!m) canhBao.push(L(`Không rõ model "${model}" — có: ${ds.map((x) => x.id).join(', ')}. Giữ model đang chọn.`, `Unknown model "${model}" — available: ${ds.map((x) => x.id).join(', ')}. Keeping the current one.`));
+    else if (!m.dungDuoc) canhBao.push(L(`${m.ten} chưa mở trên máy chủ — giữ model đang chọn.`, `${m.ten} is not enabled on the server — keeping the current model.`));
     else {
-      await kn.goi('agent:datModel', { model: m.id }).catch((e: Error) => canhBao.push(`Không đổi được model: ${e.message}`));
+      if (m.canMoKhoa) canhBao.push(L(`🔒 ${m.ten} cần mật khẩu cổng Claude chính hãng — CuongMini sẽ hỏi ở câu đầu tiên (hoặc chọn trong /model).`, `🔒 ${m.ten} needs the official Claude gateway password — CuongMini will ask on your first message (or pick it in /model).`));
+      await kn.goi('agent:datModel', { model: m.id }).catch((e: Error) => canhBao.push(L(`Không đổi được model: ${e.message}`, `Could not switch model: ${e.message}`)));
       S.info = await kn.goi<InfoLoi>('agent:getInfo').catch(() => S.info);
     }
   }
@@ -58,7 +60,7 @@ export async function khoiDongPhien(nguoi: NguoiDung, co: CoDong, thuMuc: string
     const tenDuAn = path.basename(thuMuc);
     const ds = await kn.goi<PhienCu[]>('agent:dsPhien').catch(() => [] as PhienCu[]);
     const p = ds.filter((x) => !x.luuTru && x.duAn === tenDuAn).sort((a, b) => b.luucLuc - a.luucLuc)[0];
-    if (!p) canhBao.push(`Chưa có việc nào đã lưu của thư mục "${tenDuAn}" — bắt đầu việc mới.`);
+    if (!p) canhBao.push(L(`Chưa có việc nào đã lưu của thư mục "${tenDuAn}" — bắt đầu việc mới.`, `No saved task for folder "${tenDuAn}" — starting a new one.`));
     else await moPhien(p.id, p.tieuDe, { kho, kn, xoaManHinh: () => undefined }).catch((e: Error) => canhBao.push(e.message));
   }
   return { kn, kho, canhBao };

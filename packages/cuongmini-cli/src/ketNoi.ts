@@ -15,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 import type { LoiApi } from '../../cuongmini-core/src/kieuLoi';
 import { lamMoi, LoiDangNhap } from '../../cuongmini-core/src/dangNhap';
 import { chepChu, moNgoai } from './heThong';
+import { L } from './i18n';
 import { luuPhien, thuMucDuLieu, type NguoiDung } from './phien';
 
 /** Token sống 24h phía máy chủ; đổi mới mỗi 6h là dư sức (như extension VS Code). */
@@ -58,7 +59,7 @@ export class KetNoiLoi {
       },
       moNgoai,
       chepChu: (chu) => { void chepChu(chu); },
-      moDuong: async (duong) => ((await moNgoai(duong)) ? '' : 'Không mở được bằng chương trình mặc định.'),
+      moDuong: async (duong) => ((await moNgoai(duong)) ? '' : L('Không mở được bằng chương trình mặc định.', 'Could not open with the default app.')),
       // Terminal không có hộp chọn thư mục — thư mục dự án luôn là thư mục đang đứng.
       chonThuMuc: async () => ({ canceled: true, filePaths: [] }),
     });
@@ -119,6 +120,20 @@ export class KetNoiLoi {
   }
 
   moDuPhong(matKhau: string): Promise<string> { return this.loi.moDuPhong(matKhau, this.nguoi.token); }
+
+  /**
+   * Cổng Claude chính hãng: mật khẩu ⇒ vé (lõi lưu, gửi kèm mọi lượt). Lõi cũ không có hàm
+   * riêng thì đi kênh `agent:moCongAnthropic`; lõi cũ hơn nữa không có kênh ⇒ ném lỗi rõ.
+   */
+  async moCongAnthropic(matKhau: string): Promise<{ ten: string; hetHan: number | null }> {
+    if (this.loi.moCongAnthropic) return this.loi.moCongAnthropic(matKhau);
+    return await this.loi.goi('agent:moCongAnthropic', { matKhau }) as { ten: string; hetHan: number | null };
+  }
+
+  /** Chọn cổng phụ cho cuộc này: `modelapi` (kèm model gpt-*) hoặc `null` (về cổng chính / Free / chính hãng theo model). */
+  datCongPhu(cong: 'modelapi' | null, model?: string): Promise<unknown> {
+    return this.goi('agent:datCongPhu', { cong, ...(model ? { model } : {}) });
+  }
 
   chuanHoaAnh(dataUrl: string): Promise<string> { return this.loi.chuanHoaAnh(dataUrl); }
 

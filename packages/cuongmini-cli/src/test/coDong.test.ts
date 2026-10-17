@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { datNgonNgu } from '../i18n';
 import { cheDoKe, cheDoTuChu, moTaCheDo } from '../cheDo';
 import { phanTichCo } from '../coDong';
+
+// Các phép kiểm dưới so chữ giao diện tiếng Việt.
+datNgonNgu('vi');
 
 test('cờ: tương tác, câu hỏi, -p, -c, --model, --che-do', () => {
   assert.deepEqual(phanTichCo([]), { lenh: 'chat', cauHoi: '', cheDoIn: false, tiepTuc: false });

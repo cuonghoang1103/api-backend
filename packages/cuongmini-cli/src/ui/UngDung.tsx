@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import type { CoDong } from '../coDong';
 import type { KetNoiLoi } from '../ketNoi';
 import type { KhoChat } from '../kho';
+import { L } from '../i18n';
 import { khoiDongPhien } from '../khoiDong';
 import { THUONG_HIEU, mau, mo } from '../mau';
 import { moLaiPhien, tenHienThi, type NguoiDung } from '../phien';
@@ -55,7 +56,7 @@ export function UngDung({ co, thuMuc, phienBan, chiDangNhap, banMoi, onThoat }: 
         for (const c of p.canhBao) p.kho.thongBao(c, 'canh');
         setPha({ loai: 'chat', kn: p.kn, kho: p.kho, ngoaiTuyen, banMoi: moi });
       } catch (e) {
-        setPha({ loai: 'loi', chu: `Không khởi động được lõi AI Code: ${(e as Error).message}` });
+        setPha({ loai: 'loi', chu: L(`Không khởi động được lõi AI Code: ${(e as Error).message}`, `Could not start the AI Code core: ${(e as Error).message}`) });
       }
     })();
   }, [pha, co, thuMuc, phienBan, banMoi]);
@@ -70,18 +71,18 @@ export function UngDung({ co, thuMuc, phienBan, chiDangNhap, banMoi, onThoat }: 
   const rong = stdout.columns || 100;
   const sao = mau(THUONG_HIEU.tim)(SAO[nhip % SAO.length]!);
   switch (pha.loai) {
-    case 'moLai': return <Text>{`${sao} ${mo('Đang mở phiên đăng nhập…')}`}</Text>;
-    case 'khoiDong': return <Text>{`${sao} ${mo(`Xin chào ${tenHienThi(pha.nguoi)} — đang khởi động lõi AI Code…`)}`}</Text>;
+    case 'moLai': return <Text>{`${sao} ${mo(L('Đang mở phiên đăng nhập…', 'Restoring your session…'))}`}</Text>;
+    case 'khoiDong': return <Text>{`${sao} ${mo(L(`Xin chào ${tenHienThi(pha.nguoi)} — đang khởi động lõi AI Code…`, `Hi ${tenHienThi(pha.nguoi)} — starting the AI Code core…`))}`}</Text>;
     case 'dangNhap':
       return (
         <ManDangNhap
           rong={rong}
           nhacNho={pha.nhacNho}
           onXong={(n) => {
-            if (chiDangNhap) { onThoat(`✓ Đã đăng nhập: ${tenHienThi(n)}. Gõ \`cuongmini\` để bắt đầu.`); exit(); return; }
+            if (chiDangNhap) { onThoat(L(`✓ Đã đăng nhập: ${tenHienThi(n)}. Gõ \`cuongmini\` để bắt đầu.`, `✓ Signed in as ${tenHienThi(n)}. Run \`cuongmini\` to start.`)); exit(); return; }
             setPha({ loai: 'khoiDong', nguoi: n, ngoaiTuyen: false });
           }}
-          onHuy={() => { onThoat('Đã huỷ đăng nhập.'); exit(); }}
+          onHuy={() => { onThoat(L('Đã huỷ đăng nhập.', 'Sign-in cancelled.')); exit(); }}
         />
       );
     case 'chat':

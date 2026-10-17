@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { test } from 'node:test';
+import { datNgonNgu } from '../i18n';
 import { cachDocAnh } from '../anhDan';
 import { chuanHoaCaiDat, MAC_DINH, nenBatTrinhDuyet } from '../caiDat';
 import { chenKeybinding, doTerminal } from '../caiTerminal';
@@ -13,6 +14,9 @@ import { boMau, chinhTheoTheme, datCapMau, datTheme, doTheme, mau, nen, rgbSang1
 import { dungNguCanhShell, lenhShell, sachDauRa } from '../shell';
 import { lenhThongBao } from '../thongBao';
 import { dungBanGhi } from '../veBang';
+
+// Các phép kiểm dưới so chữ giao diện tiếng Việt.
+datNgonNgu('vi');
 
 test('shell `!`: đúng shell theo hệ điều hành', () => {
   assert.deepEqual(lenhShell('ls -la', 'darwin', { SHELL: '/bin/zsh' }), { file: '/bin/zsh', args: ['-c', 'ls -la'] });
@@ -59,7 +63,7 @@ test('thông báo hệ điều hành: nội dung qua env, không ghép chuỗi',
 
 test('@ hàm/lớp: quét định nghĩa theo ngôn ngữ', () => {
   const ts = quetNoiDung('export async function layUser() {}\nclass A {}\nexport interface Props {}\nexport const tinh = (a: number) => a\nif (x) {}\ntype T = string;', 'src/a.ts');
-  assert.deepEqual(ts.map((k) => [k.ten, k.kieu, k.dong]), [['layUser', 'hàm', 1], ['A', 'lớp', 2], ['Props', 'interface', 3], ['tinh', 'hàm', 4], ['T', 'kiểu', 6]]);
+  assert.deepEqual(ts.map((k) => [k.ten, k.kieu, k.dong]), [['layUser', 'fn', 1], ['A', 'class', 2], ['Props', 'interface', 3], ['tinh', 'fn', 4], ['T', 'type', 6]]);
   assert.deepEqual(quetNoiDung('def tinh_tong(a):\n  pass\nclass Nguoi:\n', 'x.py').map((k) => k.ten), ['tinh_tong', 'Nguoi']);
   assert.deepEqual(quetNoiDung('func (s *S) Chay() {}\ntype S struct {}', 'm.go').map((k) => k.ten), ['Chay', 'S']);
   assert.deepEqual(quetNoiDung('public class Main {\n  public static void main(String[] a) {}\n}', 'Main.java').map((k) => k.ten), ['Main', 'main']);
@@ -82,7 +86,7 @@ test('# ghi nhớ: tách, chọn file quy ước lõi đang đọc, chèn vào m
 test('cài đặt: trường sai ⇒ mặc định; "Bỏ qua hết" không đến từ file', () => {
   assert.deepEqual(chuanHoaCaiDat(null), MAC_DINH);
   const c = chuanHoaCaiDat({ theme: 'sang', thongBao: 'xyz', cheDoMacDinh: 'boQuaHet', modelMacDinh: 'opus-4-8', ascii: 'bat' });
-  assert.deepEqual(c, { theme: 'sang', thongBao: 'heThong', cheDoMacDinh: null, modelMacDinh: 'opus-4-8', ascii: 'bat', trinhDuyet: 'tuDong' });
+  assert.deepEqual(c, { theme: 'sang', thongBao: 'heThong', cheDoMacDinh: null, modelMacDinh: 'opus-4-8', ascii: 'bat', trinhDuyet: 'tuDong', ngonNgu: 'tuDong', traLoiTheoNgonNgu: 'tat' });
   assert.equal(MAC_DINH.cheDoMacDinh, null, 'chưa tự chọn ⇒ để lõi dùng "Hỏi trước"');
   assert.equal(chuanHoaCaiDat({ cheDoMacDinh: 'keHoach' }).cheDoMacDinh, 'keHoach');
   assert.equal(chuanHoaCaiDat({ modelMacDinh: '$(rm)' }).modelMacDinh, null);

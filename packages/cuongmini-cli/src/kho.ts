@@ -11,6 +11,8 @@
  * Tách khỏi React để kiểm bằng test thuần.
  */
 import type { DuLieuDiff } from './diff';
+import { L } from './i18n';
+import { apSuKienPhu, dongAgentTreo, type AgentPhu, type LenhNen } from './viecPhu';
 import { coVeHong, tachKetQuaLenh, TOOL_GHI, TOOL_LENH, type Pha } from './trangThai';
 
 export interface ViecKeHoach { ten: string; trangThai: string }
@@ -22,8 +24,27 @@ export interface WsLoi {
 export interface InfoLoi {
   pro?: boolean;
   model?: string | null;
-  models?: Array<{ id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean }>;
+  models?: Array<{
+    id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean;
+    /** Cổng của model: `rambo` (cổng chính) · `modelapi` · `anthropic` (Claude chính hãng). Máy chủ cũ không khai ⇒ cổng chính. */
+    cong?: 'rambo' | 'modelapi' | 'anthropic';
+    /** Model cao của cổng chính hãng, chưa có vé ⇒ 🔒, chọn là hỏi mật khẩu. */
+    canMoKhoa?: boolean;
+    mienPhi?: boolean;
+    hang?: 'free' | 'cao';
+  }>;
   mucNoLuc?: Array<{ id: string; ten: string; buoc: number; viecPhu: number }>;
+}
+
+/** Một cổng trong lời mời nâng cấp (`CONG_CHINH_HONG_FREE.cacCong`, hoặc `agent:congAnthropic`). */
+export interface CongNangCap {
+  cong: 'anthropic' | 'modelapi';
+  ten: string;
+  /** Quản trị đã đặt mật khẩu cổng này chưa (chưa ⇒ người thường không mở được). */
+  daBat: boolean;
+  /** Chưa có vé hợp lệ ⇒ phải nhập mật khẩu. */
+  canMatKhau: boolean;
+  models: Array<{ id: string; ten: string; mo: string; dat?: boolean; dungDuoc: boolean }>;
 }
 
 export type MucBang =
@@ -93,12 +114,24 @@ export interface TrangThaiChat {
   /** ctrl+o: in đầy đủ đầu ra tool thay vì vài dòng cuối. */
   chiTiet: boolean;
   /** Lỗi cuối cần giao diện xử lý thêm (RAMBO_BAO_TRI, 401…). Giao diện đọc xong thì xoá. */
-  loiCanXuLy: { ma: string; thongDiep: string } | null;
+  loiCanXuLy: { ma: string; thongDiep: string; daBat?: boolean } | null;
+  /** Đang ở khung `nghi` (model nghĩ, chữ ẩn) — dòng trạng thái nói thẳng "Đang suy nghĩ" tới sự kiện kế tiếp. */
+  nghiThat: boolean;
+  /** Cổng chính hỏng ⇒ máy chủ tự sang CuongMini Free và mời chọn cổng mạnh hơn. Giao diện mời SAU lượt (lượt vẫn đang chạy ở Free). */
+  moiCong: { cacCong: CongNangCap[] } | null;
+  /** Đã mở lời mời chọn cổng trong phiên này (mời tự động một lần; sau đó nhắc /gateway). */
+  daMoiCong: boolean;
+  /** Cổng chính sống lại (`RAMBO_SONG_LAI`) ⇒ hỏi quay về hay ở lại cổng phụ. */
+  hoiQuayVe: string | null;
   ws: WsLoi | null;
   info: InfoLoi | null;
   lenhDuAn: Array<{ ten: string; mo: string; than: string }>;
   /** Đã báo "đã mở cửa sổ trình duyệt riêng" trong phiên này chưa (chỉ báo một lần). */
   daBaoTrinhDuyet: boolean;
+  /** Agent phụ (`giao_viec_phu`) đang chạy / đã xong — bảng kiểu Claude Code. */
+  agentPhu: AgentPhu[];
+  /** Lệnh nền (`chay_lenh_nen`) — đếm vào "N shells". */
+  lenhNen: LenhNen[];
 }
 
 export function trangThaiDau(): TrangThaiChat {
@@ -106,12 +139,14 @@ export function trangThaiDau(): TrangThaiChat {
     bang: [], khoaBang: 0, dangChay: false, batDauLuot: 0, pha: 'cho', toolDang: '', toolCuoi: '', buoc: null,
     chuDangViet: '', toolChay: [], choDuyet: [], keHoach: [], fileDaSua: {}, tienPhien: 0, soFileDaSua: 0,
     nguCanh: null, hanMucPhanTram: null, luotCuoi: null, muc: [], tieuDe: '', cauHoiCuoi: '', choDuyetKeHoach: false, hoiDuyetKeHoach: false,
-    daCompact: false, chiTiet: false, loiCanXuLy: null, ws: null, info: null, lenhDuAn: [], daBaoTrinhDuyet: false,
+    daCompact: false, chiTiet: false, loiCanXuLy: null, nghiThat: false, moiCong: null, daMoiCong: false, hoiQuayVe: null, ws: null, info: null, lenhDuAn: [], daBaoTrinhDuyet: false, agentPhu: [], lenhNen: [],
   };
 }
 
 /** Mã lỗi thật ra là THÔNG BÁO (đổi cổng, tự compact…) — không kết lượt. */
-const LOI_THONG_BAO = new Set(['DOI_CONG', 'KHOI_PHUC', 'LAM_TIEP', 'COMPACT', 'DOI_CHE_DO', 'TU_GO_ANH']);
+export const LOI_THONG_BAO = new Set(['DOI_CONG', 'KHOI_PHUC', 'LAM_TIEP', 'COMPACT', 'DOI_CHE_DO', 'TU_GO_ANH', 'CONG_CHINH_HONG_FREE', 'RAMBO_SONG_LAI']);
+/** Lỗi cổng Claude chính hãng giao diện phải xử lý thêm (hỏi mật khẩu / mời modelapi). */
+export const LOI_CONG_ANTHROPIC = new Set(['CONG_ANTHROPIC_KHOA', 'CONG_ANTHROPIC_HET_HAN_MUC', 'CONG_ANTHROPIC_HET_KEY']);
 export const LOI_HET_PHIEN = new Set(['401', 'UNAUTHORIZED', 'NO_SESSION']);
 const TRAN_RA = 20_000;
 
@@ -121,6 +156,8 @@ export class KhoChat {
   private nguoiNghe = new Set<() => void>();
   private hen: NodeJS.Timeout | null = null;
   phienBan = 0;
+  /** `false` ở chế độ in (-p): không có menu ⇒ không hứa "sẽ mời chọn cổng". */
+  coGiaoDien = true;
   /** `true` trong test: báo ngay, không gộp. */
   constructor(private baoNgay = false) {}
 
@@ -188,6 +225,7 @@ export class KhoChat {
     S.batDauLuot = 0;
     S.toolChay = [];
     S.choDuyet = [];
+    dongAgentTreo(S, bayGio);
     S.luotCuoi = { luc: bayGio, thoiLuong: tong, loi };
     if (!loi) this.them({ loai: 'ketLuot', luc: bayGio, thoiLuong: tong, ghiChu });
   }
@@ -217,7 +255,16 @@ export class KhoChat {
   /** Một sự kiện của lõi. */
   xuLy(e: { loai: string; [k: string]: unknown }, bayGio = Date.now()): void {
     const S = this.S;
+    // Bảng agent phụ / lệnh nền. Lệnh nền chỉ biết CÂU LỆNH qua thẻ xin phép trước đó (đã gắn vào tool đang chạy).
+    const choPhu = e.loai === 'tool' && e.ten === 'chay_lenh_nen' ? { ...e, lenhNen: S.toolChay.find((t) => t.id === e.id)?.lenh ?? '' } : e;
+    if (apSuKienPhu(S, choPhu, bayGio)) { this.bao(); return; }
+    S.nghiThat = e.loai === 'nghi';
     switch (e.loai) {
+      case 'nghi':
+        S.dangChay = true;
+        if (!S.batDauLuot) S.batDauLuot = bayGio;
+        if (S.pha !== 'duyet') S.pha = 'nghi';
+        break;
       case 'batDau':
         S.dangChay = true;
         if (!S.batDauLuot) S.batDauLuot = bayGio;
@@ -233,7 +280,7 @@ export class KhoChat {
         if (!S.daBaoTrinhDuyet && /^web_/.test(String(e.ten ?? ''))) {
           // Một cửa sổ Chrome/Edge sắp hiện lên — nói trước để người dùng không giật mình (và yên tâm về hồ sơ).
           S.daBaoTrinhDuyet = true;
-          this.them({ loai: 'thongBao', text: '🌐 Đã mở cửa sổ trình duyệt riêng của CuongMini (hồ sơ riêng, không đụng Chrome của bạn)', muc: 'info' });
+          this.them({ loai: 'thongBao', text: L('🌐 Đã mở cửa sổ trình duyệt riêng của CuongMini (hồ sơ riêng, không đụng Chrome của bạn)', '🌐 Opened CuongMini\'s own browser window (separate profile — your Chrome is untouched)'), muc: 'info' });
         }
         S.pha = 'tool';
         S.toolDang = String(e.ten ?? '');
@@ -316,7 +363,7 @@ export class KhoChat {
         if (hm && typeof hm.phanTram === 'number') S.hanMucPhanTram = hm.phanTram;
         const soFile = Object.keys(S.fileDaSua).length || S.soFileDaSua;
         const tien = Number(e.tienUsd ?? 0);
-        const ghi = [soFile ? `${soFile} file đã sửa` : '', tien > 0 ? `~$${tien < 0.01 ? tien.toFixed(4) : tien.toFixed(3)}` : ''].filter(Boolean).join(' · ');
+        const ghi = [soFile ? L(`${soFile} file đã sửa`, `${soFile} file${soFile > 1 ? 's' : ''} changed`) : '', tien > 0 ? `~$${tien < 0.01 ? tien.toFixed(4) : tien.toFixed(3)}` : ''].filter(Boolean).join(' · ');
         this.ketLuot(ghi, false, bayGio);
         if (S.choDuyetKeHoach) { S.choDuyetKeHoach = false; S.hoiDuyetKeHoach = true; }
         break;
@@ -324,9 +371,29 @@ export class KhoChat {
       case 'loi': {
         this.chotChu();
         const ma = String(e.ma ?? '');
-        const thongDiep = String(e.thongDiep ?? 'Có lỗi.');
+        const thongDiep = String(e.thongDiep ?? L('Có lỗi.', 'Something went wrong.'));
         if (LOI_THONG_BAO.has(ma)) {
           if (ma === 'COMPACT') S.daCompact = true;
+          if (ma === 'CONG_CHINH_HONG_FREE') {
+            // Lượt VẪN CHẠY (ở Free) — chỉ báo + ghi lời mời; giao diện mở lời mời khi lượt xong.
+            this.them({ loai: 'thongBao', text: L(thongDiep, 'The main gateway is having problems — switching to the CuongMini Free model automatically.'), muc: 'info' });
+            const cacCong = Array.isArray(e.cacCong) ? (e.cacCong as CongNangCap[]) : [];
+            if (e.moiNangCap !== false && cacCong.length && this.coGiaoDien) {
+              S.moiCong = { cacCong };
+              this.them({
+                loai: 'thongBao', muc: 'info',
+                text: S.daMoiCong
+                  ? L('↳ Gõ /gateway để chọn cổng mạnh hơn (Claude chính hãng / modelapi).', '↳ Type /gateway to pick a stronger gateway (official Claude / modelapi).')
+                  : L('↳ Lượt này vẫn chạy tiếp. Xong lượt, CuongMini sẽ mời bạn chọn cổng mạnh hơn (Claude chính hãng / modelapi) — hoặc gõ /gateway bất cứ lúc nào.', '↳ This turn keeps running. When it finishes you can pick a stronger gateway (official Claude / modelapi) — or type /gateway any time.'),
+              });
+            }
+            break;
+          }
+          if (ma === 'RAMBO_SONG_LAI') {
+            S.hoiQuayVe = thongDiep;
+            this.them({ loai: 'thongBao', text: L(thongDiep, 'The CuongMini main gateway is back. Continue on the main gateway or stay on the current one?'), muc: 'info' });
+            break;
+          }
           this.them({ loai: 'thongBao', text: thongDiep, muc: 'info' });
           break;
         }
@@ -334,13 +401,15 @@ export class KhoChat {
         S.choDuyetKeHoach = false;
         S.muc.push({ kieu: 'loi', text: thongDiep });
         this.them({ loai: 'loi', text: thongDiep, ma: ma || undefined });
-        if (ma === 'RAMBO_BAO_TRI' || ma === 'PRO_REQUIRED' || LOI_HET_PHIEN.has(ma)) S.loiCanXuLy = { ma, thongDiep };
+        if (ma === 'RAMBO_BAO_TRI' || ma === 'PRO_REQUIRED' || LOI_HET_PHIEN.has(ma) || LOI_CONG_ANTHROPIC.has(ma)) {
+          S.loiCanXuLy = { ma, thongDiep, ...(typeof e.daBat === 'boolean' ? { daBat: e.daBat } : {}) };
+        }
         break;
       }
       case 'huy':
         this.chotChu();
         S.choDuyetKeHoach = false;
-        this.ketLuot('đã dừng', false, bayGio);
+        this.ketLuot(L('đã dừng', 'interrupted'), false, bayGio);
         break;
       case 'daXoa':
         this.xoaBang();
@@ -366,17 +435,30 @@ export class KhoChat {
     S.nguCanh = null;
     S.chuDangViet = '';
     S.hoiDuyetKeHoach = false;
+    S.agentPhu = [];
+    S.lenhNen = S.lenhNen.filter((x) => x.dangChay);
     this.bao(true);
   }
 }
 
 export function tieuDeDuyet(d: ChoDuyet): string {
   switch (d.loai) {
-    case 'xinPhep': return `${d.taoMoi ? 'Tạo file' : 'Sửa file'} ${d.duongDan ?? ''}`;
-    case 'xinPhepLenh': return `Chạy lệnh ${(d.lenh ?? '').split('\n')[0]}`;
-    case 'xinPhepMcp': return `Công cụ ${d.server ?? ''} · ${d.tool ?? ''}`;
-    case 'xinPhepGit': return ({ commit: 'Commit', pr: 'Đẩy nhánh + mở Pull Request', day: 'Đẩy lên GitHub', cai: 'Cài công cụ' } as Record<string, string>)[d.viec ?? ''] ?? 'Git';
-    case 'xinPhepNote': return d.viec === 'tao' ? 'Tạo ghi chú' : 'Ghi vào ghi chú';
-    default: return 'Yêu cầu';
+    case 'xinPhep': return `${d.taoMoi ? L('Tạo file', 'Create file') : L('Sửa file', 'Edit file')} ${d.duongDan ?? ''}`;
+    case 'xinPhepLenh': return `${L('Chạy lệnh', 'Run command')} ${(d.lenh ?? '').split('\n')[0]}`;
+    case 'xinPhepMcp': return `${L('Công cụ', 'Tool')} ${d.server ?? ''} · ${d.tool ?? ''}`;
+    case 'xinPhepGit': return tenViecGit(d.viec);
+    case 'xinPhepNote': return d.viec === 'tao' ? L('Tạo ghi chú', 'Create note') : L('Ghi vào ghi chú', 'Write to note');
+    default: return L('Yêu cầu', 'Request');
+  }
+}
+
+/** Tên việc git trên thẻ duyệt. */
+export function tenViecGit(viec: string | undefined): string {
+  switch (viec) {
+    case 'commit': return 'Commit';
+    case 'pr': return L('Đẩy nhánh + mở Pull Request', 'Push branch + open pull request');
+    case 'day': return L('Đẩy lên GitHub', 'Push to GitHub');
+    case 'cai': return L('Cài công cụ', 'Install tool');
+    default: return 'Git';
   }
 }

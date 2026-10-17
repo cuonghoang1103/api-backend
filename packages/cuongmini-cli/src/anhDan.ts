@@ -9,6 +9,7 @@
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { L } from './i18n';
 import { thuMucGoc } from './phien';
 
 export interface CachDoc {
@@ -54,10 +55,10 @@ export function cachDocAnh(nenTang: string, dich: string): CachDoc[] {
   ];
 }
 
-export const GOI_Y_KHONG_DAN_DUOC: Record<string, string> = {
-  darwin: 'Clipboard không có ảnh. Chụp màn hình vào clipboard bằng ⌘⇧⌃4, hoặc kéo file ảnh vào terminal.',
-  win32: 'Clipboard không có ảnh. Chụp bằng Win+Shift+S rồi dán lại (alt+v), hoặc kéo file ảnh vào terminal.',
-  linux: 'Không đọc được ảnh từ clipboard — cài wl-clipboard (Wayland) hoặc xclip (X11), hoặc kéo file ảnh vào terminal.',
+export const GOI_Y_KHONG_DAN_DUOC: Record<string, () => string> = {
+  darwin: () => L('Clipboard không có ảnh. Chụp màn hình vào clipboard bằng ⌘⇧⌃4, hoặc kéo file ảnh vào terminal.', 'No image in the clipboard. Capture to clipboard with ⌘⇧⌃4, or drag an image file into the terminal.'),
+  win32: () => L('Clipboard không có ảnh. Chụp bằng Win+Shift+S rồi dán lại (alt+v), hoặc kéo file ảnh vào terminal.', 'No image in the clipboard. Capture with Win+Shift+S and paste again (alt+v), or drag an image file in.'),
+  linux: () => L('Không đọc được ảnh từ clipboard — cài wl-clipboard (Wayland) hoặc xclip (X11), hoặc kéo file ảnh vào terminal.', 'Can\'t read an image from the clipboard — install wl-clipboard (Wayland) or xclip (X11), or drag an image file in.'),
 };
 
 function thu(c: CachDoc, dich: string): Promise<boolean> {
@@ -91,5 +92,5 @@ export async function danAnhTuClipboard(): Promise<{ duong: string } | { loi: st
   mkdirSync(thuMuc, { recursive: true, mode: 0o700 });
   const dich = path.join(thuMuc, `anh-dan-${Date.now()}.png`);
   for (const c of cachDocAnh(process.platform, dich)) if (await thu(c, dich)) return { duong: dich };
-  return { loi: GOI_Y_KHONG_DAN_DUOC[process.platform] ?? GOI_Y_KHONG_DAN_DUOC.linux! };
+  return { loi: (GOI_Y_KHONG_DAN_DUOC[process.platform] ?? GOI_Y_KHONG_DAN_DUOC.linux!)() };
 }

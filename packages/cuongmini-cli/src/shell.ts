@@ -77,8 +77,9 @@ export function dungNguCanhShell(ds: readonly LanChayShell[], tran = 3500): stri
   const moiCai = Math.max(300, Math.floor(tran / ds.length));
   const khoi = ds.map((l) => {
     let ra = sachDauRa(l.ra).trim();
-    if (ra.length > moiCai) ra = `… (đã cắt ${ra.length - moiCai} ký tự đầu)\n${ra.slice(-moiCai)}`;
-    return `$ ${l.lenh}\n${ra || '(không có đầu ra)'}\n[mã thoát ${l.ma ?? '?'}]`;
+    if (ra.length > moiCai) ra = `… (đã cắt ${ra.length - moiCai} ký tự đầu)\n${ra.slice(-moiCai)}`; // i18n-bo-qua: gửi model
+    return `$ ${l.lenh}\n${ra || '(không có đầu ra)'}\n[mã thoát ${l.ma ?? '?'}]`; // i18n-bo-qua: gửi model
   });
+  // i18n-bo-qua: đoạn gửi model
   return `[Tôi đã tự chạy trong terminal, ở thư mục dự án — kết quả để bạn tham khảo:]\n\`\`\`\n${khoi.join('\n\n').replace(/```/g, 'ˋˋˋ')}\n\`\`\`\n\n`;
 }

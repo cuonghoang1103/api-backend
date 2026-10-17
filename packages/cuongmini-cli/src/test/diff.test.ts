@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { datNgonNgu } from '../i18n';
 import { veDiff } from '../diff';
 import { boMau, datCapMau, doRong } from '../mau';
+
+// Các phép kiểm dưới so chữ giao diện tiếng Việt.
+datNgonNgu('vi');
 
 const DIFF = {
   soThem: 2, soBo: 1, quaLon: false,

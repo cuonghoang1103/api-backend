@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { datNgonNgu } from '../i18n';
 import { boMau, datCapMau, doRong } from '../mau';
 import { duoiMarkdown, veMarkdown } from '../markdown';
+
+// Các phép kiểm dưới so chữ giao diện tiếng Việt.
+datNgonNgu('vi');
 
 test('markdown: tiêu đề, đậm, code trong dòng, danh sách, việc', () => {
   datCapMau(3);

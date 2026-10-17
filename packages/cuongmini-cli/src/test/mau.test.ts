@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { datNgonNgu } from '../i18n';
 import { boMau, catVua, datCapMau, doCapMau, mau, rgbSang256 } from '../mau';
 import { coNgonNgu, htmlSangAnsi, ngonNguTuDuong, toMauCode } from '../toMau';
+
+// Các phép kiểm dưới so chữ giao diện tiếng Việt.
+datNgonNgu('vi');
 
 test('NO_COLOR tắt màu, FORCE_COLOR ép mức, pipe không màu', () => {
   assert.equal(doCapMau({ NO_COLOR: '1' }, true), 0);

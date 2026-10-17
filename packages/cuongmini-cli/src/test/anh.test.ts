@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { test } from 'node:test';
+import { datNgonNgu } from '../i18n';
 import { guiThangDuoc, tachAnh } from '../anh';
+
+// Các phép kiểm dưới so chữ giao diện tiếng Việt.
+datNgonNgu('vi');
 
 const co = (ds: string[]) => (p: string) => ds.includes(p);
 

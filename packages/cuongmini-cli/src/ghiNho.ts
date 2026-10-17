@@ -9,9 +9,12 @@
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { L } from './i18n';
 
 export const TEN_FILE_QUY_UOC = ['AGENTS.md', 'CLAUDE.md', '.agentrc.md'] as const;
-export const TIEU_DE_MUC = '## Ghi nhớ nhanh';
+/** Tiêu đề mục — theo ngôn ngữ lúc TẠO; nhận cả hai khi tìm mục đã có. */
+export const TIEU_DE_CAC = ['## Ghi nhớ nhanh', '## Quick notes']; // i18n-bo-qua: so khớp nội dung file
+export const tieuDeMuc = (): string => L('## Ghi nhớ nhanh', '## Quick notes');
 
 /** File quy ước lõi đang đọc (file đầu tiên có trong dự án), hoặc AGENTS.md sẽ được tạo. */
 export function fileQuyUoc(goc: string, coFile: (p: string) => boolean = existsSync): { duong: string; taoMoi: boolean } {
@@ -36,10 +39,10 @@ export function tachGhiNho(text: string): string | null {
 export function chenGhiNho(noiDung: string, ghiNho: string): string {
   const dong = `- ${ghiNho}`;
   const goc = noiDung.replace(/\s+$/, '');
-  if (!goc) return `# Quy ước dự án\n\n${TIEU_DE_MUC}\n\n${dong}\n`;
+  if (!goc) return `${L('# Quy ước dự án', '# Project conventions')}\n\n${tieuDeMuc()}\n\n${dong}\n`;
   const ds = goc.split('\n');
-  const i = ds.findIndex((d) => d.trim() === TIEU_DE_MUC);
-  if (i < 0) return `${goc}\n\n${TIEU_DE_MUC}\n\n${dong}\n`;
+  const i = ds.findIndex((d) => TIEU_DE_CAC.includes(d.trim()));
+  if (i < 0) return `${goc}\n\n${tieuDeMuc()}\n\n${dong}\n`;
   let j = i + 1;
   while (j < ds.length && !/^#{1,2}\s/.test(ds[j]!)) j += 1;
   let cuoi = j;

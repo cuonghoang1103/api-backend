@@ -5,36 +5,47 @@
  */
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
+import { L } from './i18n';
 
 export interface KyHieu { ten: string; kieu: string; file: string; dong: number }
+
+/** Nhãn loại ký hiệu theo ngôn ngữ giao diện (mã lưu là tiếng Anh ngắn). */
+export function nhanKieu(kieu: string): string {
+  switch (kieu) {
+    case 'fn': return L('hàm', 'function');
+    case 'class': return L('lớp', 'class');
+    case 'type': return L('kiểu', 'type');
+    default: return kieu;
+  }
+}
 
 const MAU: Array<{ duoi: RegExp; luat: Array<[RegExp, string]> }> = [
   {
     duoi: /\.(m?[jt]sx?|cjs|cts|mts)$/,
     luat: [
-      [/^\s*(?:export\s+)?(?:default\s+)?(?:async\s+)?function\s*\*?\s*([A-Za-z_$][\w$]*)/, 'hàm'],
-      [/^\s*(?:export\s+)?(?:default\s+)?(?:abstract\s+)?class\s+([A-Za-z_$][\w$]*)/, 'lớp'],
+      [/^\s*(?:export\s+)?(?:default\s+)?(?:async\s+)?function\s*\*?\s*([A-Za-z_$][\w$]*)/, 'fn'],
+      [/^\s*(?:export\s+)?(?:default\s+)?(?:abstract\s+)?class\s+([A-Za-z_$][\w$]*)/, 'class'],
       [/^\s*(?:export\s+)?interface\s+([A-Za-z_$][\w$]*)/, 'interface'],
-      [/^\s*(?:export\s+)?type\s+([A-Za-z_$][\w$]*)\s*(?:<[^=]*>)?\s*=/, 'kiểu'],
+      [/^\s*(?:export\s+)?type\s+([A-Za-z_$][\w$]*)\s*(?:<[^=]*>)?\s*=/, 'type'],
       [/^\s*(?:export\s+)?(?:const\s+)?enum\s+([A-Za-z_$][\w$]*)/, 'enum'],
-      [/^\s*(?:export\s+)?const\s+([A-Za-z_$][\w$]*)\s*(?::[^=]+)?=\s*(?:async\s*)?(?:\([^)]*\)|[A-Za-z_$][\w$]*)\s*(?::[^=]+)?=>/, 'hàm'],
+      [/^\s*(?:export\s+)?const\s+([A-Za-z_$][\w$]*)\s*(?::[^=]+)?=\s*(?:async\s*)?(?:\([^)]*\)|[A-Za-z_$][\w$]*)\s*(?::[^=]+)?=>/, 'fn'],
     ],
   },
-  { duoi: /\.py$/, luat: [[/^\s*(?:async\s+)?def\s+([A-Za-z_]\w*)/, 'hàm'], [/^\s*class\s+([A-Za-z_]\w*)/, 'lớp']] },
-  { duoi: /\.go$/, luat: [[/^func\s+(?:\([^)]*\)\s*)?([A-Za-z_]\w*)/, 'hàm'], [/^type\s+([A-Za-z_]\w*)\s+(?:struct|interface)/, 'kiểu']] },
-  { duoi: /\.rs$/, luat: [[/^\s*(?:pub(?:\([^)]*\))?\s+)?(?:async\s+)?fn\s+([A-Za-z_]\w*)/, 'hàm'], [/^\s*(?:pub\s+)?(?:struct|enum|trait)\s+([A-Za-z_]\w*)/, 'kiểu']] },
+  { duoi: /\.py$/, luat: [[/^\s*(?:async\s+)?def\s+([A-Za-z_]\w*)/, 'fn'], [/^\s*class\s+([A-Za-z_]\w*)/, 'class']] },
+  { duoi: /\.go$/, luat: [[/^func\s+(?:\([^)]*\)\s*)?([A-Za-z_]\w*)/, 'fn'], [/^type\s+([A-Za-z_]\w*)\s+(?:struct|interface)/, 'type']] },
+  { duoi: /\.rs$/, luat: [[/^\s*(?:pub(?:\([^)]*\))?\s+)?(?:async\s+)?fn\s+([A-Za-z_]\w*)/, 'fn'], [/^\s*(?:pub\s+)?(?:struct|enum|trait)\s+([A-Za-z_]\w*)/, 'type']] },
   {
     duoi: /\.(java|kt|kts|cs|swift|scala|dart)$/,
     luat: [
-      [/^\s*(?:(?:public|private|protected|internal|static|final|abstract|sealed|data|open|partial)\s+)*(?:class|interface|enum|record|struct|object|protocol)\s+([A-Za-z_]\w*)/, 'lớp'],
-      [/^\s*(?:(?:public|private|protected|internal|static|final|override|suspend|async|virtual)\s+)+[\w<>[\],.? ]+?\s+([a-z_]\w*)\s*\(/, 'hàm'],
-      [/^\s*(?:(?:public|private|internal|override|suspend)\s+)*fun\s+(?:<[^>]*>\s*)?(?:[\w.]+\.)?([A-Za-z_]\w*)/, 'hàm'],
-      [/^\s*(?:(?:public|private|static)\s+)*func\s+([A-Za-z_]\w*)/, 'hàm'],
+      [/^\s*(?:(?:public|private|protected|internal|static|final|abstract|sealed|data|open|partial)\s+)*(?:class|interface|enum|record|struct|object|protocol)\s+([A-Za-z_]\w*)/, 'class'],
+      [/^\s*(?:(?:public|private|protected|internal|static|final|override|suspend|async|virtual)\s+)+[\w<>[\],.? ]+?\s+([a-z_]\w*)\s*\(/, 'fn'],
+      [/^\s*(?:(?:public|private|internal|override|suspend)\s+)*fun\s+(?:<[^>]*>\s*)?(?:[\w.]+\.)?([A-Za-z_]\w*)/, 'fn'],
+      [/^\s*(?:(?:public|private|static)\s+)*func\s+([A-Za-z_]\w*)/, 'fn'],
     ],
   },
-  { duoi: /\.(c|h|cc|cpp|hpp)$/, luat: [[/^(?:static\s+|inline\s+)*[\w*&:<> ]+?\s+\*?([A-Za-z_]\w*)\s*\([^;]*$/, 'hàm'], [/^\s*(?:class|struct)\s+([A-Za-z_]\w*)\s*[:{]?/, 'lớp']] },
-  { duoi: /\.(rb)$/, luat: [[/^\s*def\s+(?:self\.)?([A-Za-z_]\w*[?!]?)/, 'hàm'], [/^\s*(?:class|module)\s+([A-Z]\w*)/, 'lớp']] },
-  { duoi: /\.php$/, luat: [[/^\s*(?:(?:public|private|protected|static|final|abstract)\s+)*function\s+([A-Za-z_]\w*)/, 'hàm'], [/^\s*(?:final\s+|abstract\s+)?class\s+([A-Za-z_]\w*)/, 'lớp']] },
+  { duoi: /\.(c|h|cc|cpp|hpp)$/, luat: [[/^(?:static\s+|inline\s+)*[\w*&:<> ]+?\s+\*?([A-Za-z_]\w*)\s*\([^;]*$/, 'fn'], [/^\s*(?:class|struct)\s+([A-Za-z_]\w*)\s*[:{]?/, 'class']] },
+  { duoi: /\.(rb)$/, luat: [[/^\s*def\s+(?:self\.)?([A-Za-z_]\w*[?!]?)/, 'fn'], [/^\s*(?:class|module)\s+([A-Z]\w*)/, 'class']] },
+  { duoi: /\.php$/, luat: [[/^\s*(?:(?:public|private|protected|static|final|abstract)\s+)*function\s+([A-Za-z_]\w*)/, 'fn'], [/^\s*(?:final\s+|abstract\s+)?class\s+([A-Za-z_]\w*)/, 'class']] },
 ];
 
 const TU_KHOA_BO = new Set(['if', 'for', 'while', 'switch', 'return', 'catch', 'new', 'else', 'do', 'try', 'function']);

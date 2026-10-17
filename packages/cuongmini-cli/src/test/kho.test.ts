@@ -1,9 +1,13 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { datNgonNgu } from '../i18n';
 import { KhoChat } from '../kho';
 import { boMau, datCapMau } from '../mau';
 import { cauTrangThai, giay, tachKetQuaLenh } from '../trangThai';
 import { veMuc } from '../veBang';
+
+// Các phép kiểm dưới so chữ giao diện tiếng Việt.
+datNgonNgu('vi');
 
 const DIFF = { soThem: 1, soBo: 1, quaLon: false, dong: [{ loai: 'bo' as const, soCu: 1, soMoi: null, text: 'a' }, { loai: 'them' as const, soCu: null, soMoi: 1, text: 'b' }] };
 

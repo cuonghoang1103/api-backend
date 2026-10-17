@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type { CheDoQuyen } from './cheDo';
+import { L } from './i18n';
 import { damBaoThuMuc, thuMucGoc } from './phien';
 
 export type ChonTheme = 'tuDong' | 'toi' | 'sang';
@@ -32,30 +33,48 @@ export interface CaiDat {
    * máy chủ không gửi tool web — AI chỉ còn nói "chưa có công cụ" (lỗi thật 0.2.0).
    */
   trinhDuyet: ChonTrinhDuyet;
+  /** Ngôn ngữ giao diện. `tuDong` = theo `LANG`/`LC_ALL`. */
+  ngonNgu: 'tuDong' | 'vi' | 'en';
+  /** Kèm dòng nhắc model trả lời bằng ngôn ngữ giao diện. */
+  traLoiTheoNgonNgu: 'tat' | 'bat';
 }
 
-export const MAC_DINH: CaiDat = { theme: 'tuDong', thongBao: 'heThong', cheDoMacDinh: null, modelMacDinh: null, ascii: 'tuDong', trinhDuyet: 'tuDong' };
+export const MAC_DINH: CaiDat = { theme: 'tuDong', thongBao: 'heThong', cheDoMacDinh: null, modelMacDinh: null, ascii: 'tuDong', trinhDuyet: 'tuDong', ngonNgu: 'tuDong', traLoiTheoNgonNgu: 'tat' };
 
-export const LUA_CHON = {
-  theme: [['tuDong', 'Tự động (dò COLORFGBG, mặc định tối)'], ['toi', 'Tối'], ['sang', 'Sáng — terminal nền trắng']],
-  thongBao: [['heThong', 'Chuông + thông báo hệ điều hành khi bạn không nhìn terminal'], ['chuong', 'Chỉ chuông'], ['tat', 'Tắt']],
-  cheDoMacDinh: [['hoi', 'Hỏi trước — đủ công cụ, mỗi lần sửa/chạy lệnh vẫn hỏi (mặc định)'], ['keHoach', 'Lập kế hoạch (chỉ đọc)'], ['tuSua', 'Tự sửa file'], ['tuSuaVaLenh', 'Tự động']],
-  ascii: [['tuDong', 'Tự động (console cũ ⇒ ASCII)'], ['bat', 'Luôn dùng ASCII'], ['tat', 'Luôn dùng Unicode']],
-  trinhDuyet: [['tuDong', 'Bật khi máy có Chrome/Edge/Brave/Chromium'], ['bat', 'Luôn bật'], ['tat', 'Tắt — AI không mở trình duyệt']],
+/** Lựa chọn từng mục: [mã, tiếng Việt, English]. */
+const LUA_CHON_GOC = {
+  theme: [['tuDong', 'Tự động (dò COLORFGBG, mặc định tối)', 'Auto (detect COLORFGBG, default dark)'], ['toi', 'Tối', 'Dark'], ['sang', 'Sáng — terminal nền trắng', 'Light — white terminal background']],
+  thongBao: [['heThong', 'Chuông + thông báo hệ điều hành khi bạn không nhìn terminal', 'Bell + OS notification when the terminal is not focused'], ['chuong', 'Chỉ chuông', 'Bell only'], ['tat', 'Tắt', 'Off']],
+  cheDoMacDinh: [['hoi', 'Hỏi trước — đủ công cụ, mỗi lần sửa/chạy lệnh vẫn hỏi (mặc định)', 'Ask before edits — all tools, asks every time (default)'], ['keHoach', 'Lập kế hoạch (chỉ đọc)', 'Plan mode (read-only)'], ['tuSua', 'Tự sửa file', 'Accept edits'], ['tuSuaVaLenh', 'Tự động', 'Auto mode']],
+  ascii: [['tuDong', 'Tự động (console cũ ⇒ ASCII)', 'Auto (legacy console ⇒ ASCII)'], ['bat', 'Luôn dùng ASCII', 'Always ASCII'], ['tat', 'Luôn dùng Unicode', 'Always Unicode']],
+  trinhDuyet: [['tuDong', 'Bật khi máy có Chrome/Edge/Brave/Chromium', 'On when Chrome/Edge/Brave/Chromium is installed'], ['bat', 'Luôn bật', 'Always on'], ['tat', 'Tắt — AI không mở trình duyệt', 'Off — the AI never opens a browser']],
+  ngonNgu: [['tuDong', 'Tự động (theo LANG của máy)', 'Auto (from system LANG)'], ['vi', 'Tiếng Việt', 'Vietnamese (Tiếng Việt)'], ['en', 'English', 'English']],
+  traLoiTheoNgonNgu: [['tat', 'Tắt — AI tự chọn ngôn ngữ trả lời', 'Off — the AI picks its reply language'], ['bat', 'Bật — luôn trả lời bằng ngôn ngữ giao diện', 'On — always reply in the interface language']],
 } as const;
 
-export const TEN_MUC: Record<keyof CaiDat, string> = {
-  theme: 'Giao diện', thongBao: 'Thông báo', cheDoMacDinh: 'Chế độ quyền mặc định', modelMacDinh: 'Model mặc định', ascii: 'Ký tự khung', trinhDuyet: 'Trình duyệt cho AI',
+export type MucLuaChon = keyof typeof LUA_CHON_GOC;
+
+/** Lựa chọn của một mục, nhãn theo ngôn ngữ hiện tại. */
+export function luaChon(k: MucLuaChon): Array<[string, string]> {
+  return (LUA_CHON_GOC[k] as ReadonlyArray<readonly [string, string, string]>).map(([id, vi, en]) => [id, L(vi, en)]);
+}
+
+const TEN_MUC_GOC: Record<keyof CaiDat, [string, string]> = {
+  theme: ['Giao diện', 'Theme'], thongBao: ['Thông báo', 'Notifications'], cheDoMacDinh: ['Chế độ quyền mặc định', 'Default permission mode'],
+  modelMacDinh: ['Model mặc định', 'Default model'], ascii: ['Ký tự khung', 'Box characters'], trinhDuyet: ['Trình duyệt cho AI', 'AI browser'],
+  ngonNgu: ['Ngôn ngữ giao diện', 'Interface language'], traLoiTheoNgonNgu: ['AI trả lời bằng ngôn ngữ này', 'AI replies in this language'],
 };
+export const tenMuc = (k: keyof CaiDat): string => L(TEN_MUC_GOC[k][0], TEN_MUC_GOC[k][1]);
+export const CAC_MUC = Object.keys(TEN_MUC_GOC) as Array<keyof CaiDat>;
 
 export const duongCaiDat = (): string => path.join(thuMucGoc(), 'cai-dat.json');
 
 /** Lọc một object bất kỳ thành cài đặt hợp lệ (trường sai ⇒ mặc định). */
 export function chuanHoaCaiDat(tho: unknown): CaiDat {
   const j = (tho && typeof tho === 'object' ? tho : {}) as Record<string, unknown>;
-  const trong = <K extends keyof typeof LUA_CHON>(k: K): string | null => {
+  const trong = <K extends MucLuaChon>(k: K): string | null => {
     const v = j[k];
-    return typeof v === 'string' && LUA_CHON[k].some(([id]) => id === v) ? v : MAC_DINH[k] as string | null;
+    return typeof v === 'string' && LUA_CHON_GOC[k].some(([id]) => id === v) ? v : MAC_DINH[k] as string | null;
   };
   // Không cho "Bỏ qua hết" làm mặc định từ file — chỉ bật được bằng cờ hoặc cửa xác nhận trong phiên.
   return {
@@ -65,6 +84,8 @@ export function chuanHoaCaiDat(tho: unknown): CaiDat {
     modelMacDinh: typeof j.modelMacDinh === 'string' && /^[\w.-]{1,40}$/.test(j.modelMacDinh) ? j.modelMacDinh : null,
     ascii: trong('ascii') as ChonAscii,
     trinhDuyet: trong('trinhDuyet') as ChonTrinhDuyet,
+    ngonNgu: trong('ngonNgu') as CaiDat['ngonNgu'],
+    traLoiTheoNgonNgu: trong('traLoiTheoNgonNgu') as CaiDat['traLoiTheoNgonNgu'],
   };
 }
 
@@ -83,10 +104,9 @@ export function ghiCaiDat(c: CaiDat): void {
 
 /** Mô tả giá trị cho menu `/config`. */
 export function moTaGiaTri(k: keyof CaiDat, c: CaiDat): string {
-  if (k === 'modelMacDinh') return c.modelMacDinh ?? 'giữ model đang chọn';
-  if (k === 'cheDoMacDinh' && !c.cheDoMacDinh) return 'Hỏi trước (mặc định — đủ công cụ, mỗi lần vẫn hỏi)';
-  const ds = LUA_CHON[k as keyof typeof LUA_CHON] as ReadonlyArray<readonly [string, string]>;
-  return ds.find(([id]) => id === c[k])?.[1] ?? String(c[k]);
+  if (k === 'modelMacDinh') return c.modelMacDinh ?? L('giữ model đang chọn', 'keep current model');
+  if (k === 'cheDoMacDinh' && !c.cheDoMacDinh) return L('Hỏi trước (mặc định — đủ công cụ, mỗi lần vẫn hỏi)', 'Ask before edits (default — all tools, asks every time)');
+  return luaChon(k as MucLuaChon).find(([id]) => id === c[k])?.[1] ?? String(c[k]);
 }
 
 /** Có cho AI lái trình duyệt lúc mở không. `coTrinhDuyet` = máy có Chrome/Edge… (tiêm vào để test). */

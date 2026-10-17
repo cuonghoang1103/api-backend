@@ -3,8 +3,12 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
+import { datNgonNgu } from '../i18n';
 import { dungLatest, sha256File } from '../../phatHanh.mjs';
 import { canKiemLai, soSanhPhienBan, MOT_NGAY } from '../capNhat';
+
+// Các phép kiểm dưới so chữ giao diện tiếng Việt.
+datNgonNgu('vi');
 
 test('latest.json: đúng trường, tên gói theo phiên bản', () => {
   const j = dungLatest({ phienBan: '0.2.0', sha256: 'a'.repeat(64), kichThuoc: 1234, ngay: new Date('2026-10-17T00:00:00Z') });

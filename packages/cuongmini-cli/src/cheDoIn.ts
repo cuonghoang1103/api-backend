@@ -14,8 +14,9 @@ import { createInterface } from 'node:readline';
 import type { CoDong } from './coDong';
 import { PHIEN_BAN } from './coDong';
 import { docAnhDataUrl, guiThangDuoc, tachAnh } from './anh';
+import { L } from './i18n';
 import { khoiDongPhien } from './khoiDong';
-import type { MucBang } from './kho';
+import { LOI_THONG_BAO, type MucBang } from './kho';
 import { capMau, datCapMau, doCapMau, mau, mo } from './mau';
 import { veMarkdown } from './markdown';
 import { moLaiPhien } from './phien';
@@ -75,11 +76,12 @@ export async function chayCheDoIn(co: CoDong, thuMuc: string): Promise<number> {
     const vao = (await docHetStdin(cauHoi ? 800 : undefined)).trim();
     if (vao) cauHoi = cauHoi ? `${cauHoi}\n\n${vao}` : vao;
   }
-  if (!cauHoi) { process.stderr.write('Thiếu câu hỏi. Ví dụ: cuongmini -p "giải thích dự án này"\n'); return 2; }
+  if (!cauHoi) { process.stderr.write(L('Thiếu câu hỏi. Ví dụ: cuongmini -p "giải thích dự án này"\n', 'Missing prompt. Example: cuongmini -p "explain this project"\n')); return 2; }
 
   const mo2 = await moLaiPhien();
-  if (!mo2) { process.stderr.write('Chưa đăng nhập. Chạy `cuongmini login` trước.\n'); return 1; }
+  if (!mo2) { process.stderr.write(L('Chưa đăng nhập. Chạy `cuongmini login` trước.\n', 'Not signed in. Run `cuongmini login` first.\n')); return 1; }
   const { kn, kho, canhBao } = await khoiDongPhien(mo2.nguoi, { ...co, cheDo: co.cheDo ?? 'keHoach' }, thuMuc, PHIEN_BAN);
+  kho.coGiaoDien = false;
   for (const c of canhBao) viet(`${mau('#fbbf24')('⚠')} ${c}\n`);
   const rong = Math.max(40, (process.stderr.columns || 100) - 1);
 
@@ -98,7 +100,7 @@ export async function chayCheDoIn(co: CoDong, thuMuc: string): Promise<number> {
     const inTool = () => {
       for (const m of kho.S.bang.slice(daIn)) {
         if (m.loai === 'tool') tools.push({ ten: m.ten, tomTat: m.tomTat, ...(m.duongDan ? { duongDan: m.duongDan } : {}), hong: m.hong });
-        if (m.loai === 'tool') viet(`${veTool(m as Extract<MucBang, { loai: 'tool' }>, rong).join('\n').replace(' (ctrl+o để xem hết)', '')}\n`);
+        if (m.loai === 'tool') viet(`${veTool(m as Extract<MucBang, { loai: 'tool' }>, rong).join('\n').replace(L(' (ctrl+o để xem hết)', ' (ctrl+o to expand)'), '')}\n`);
         else if (m.loai === 'may') ketQua.push(m.text);
         else if (m.loai === 'thongBao') viet(`${mo(`ℹ ${m.text}`)}\n`);
         else if (m.loai === 'duyet') viet(`${mo(`  ${m.dongY ? '✓' : '✕'} ${m.tieuDe}`)}\n`);
@@ -125,10 +127,13 @@ export async function chayCheDoIn(co: CoDong, thuMuc: string): Promise<number> {
     kn.nghe((e) => {
       if (dinhDang === 'stream-json') dongJson({ type: 'event', ...e, cuocId: undefined });
       if (e.loai === 'xong') tienUsd = Number(e.tienUsd ?? 0);
-      if (e.loai === 'loi' && !['DOI_CONG', 'KHOI_PHUC', 'LAM_TIEP', 'COMPACT', 'DOI_CHE_DO', 'TU_GO_ANH'].includes(String(e.ma ?? ''))) loiCuoi = { ma: String(e.ma ?? ''), thongDiep: String(e.thongDiep ?? '') };
+      if (e.loai === 'loi' && !LOI_THONG_BAO.has(String(e.ma ?? ''))) loiCuoi = { ma: String(e.ma ?? ''), thongDiep: String(e.thongDiep ?? '') };
       switch (e.loai) {
         case 'xinPhep': case 'xinPhepLenh': case 'xinPhepMcp': case 'xinPhepGit': case 'xinPhepNote':
-          viet(`${mau('#fbbf24')('⚠')} Từ chối "${e.loai === 'xinPhepLenh' ? `chạy ${String(e.lenh ?? '')}` : e.loai === 'xinPhep' ? `sửa ${String(e.duongDan ?? '')}` : e.loai}" — chế độ in không hỏi được. Cho phép bằng --che-do tu-sua / tu-dong / bo-qua-het.\n`);
+          {
+            const viec = e.loai === 'xinPhepLenh' ? `${L('chạy', 'run')} ${String(e.lenh ?? '')}` : e.loai === 'xinPhep' ? `${L('sửa', 'edit')} ${String(e.duongDan ?? '')}` : e.loai;
+            viet(`${mau('#fbbf24')('⚠')} ${L(`Từ chối "${viec}" — chế độ in không hỏi được. Cho phép bằng --che-do tu-sua / tu-dong / bo-qua-het.`, `Denied "${viec}" — print mode can't ask. Allow with --che-do tu-sua / tu-dong / bo-qua-het.`)}\n`);
+          }
           void kn.goi('agent:traLoiXinPhep', { id: e.id, quyetDinh: 'tuChoi' });
           return;
         case 'tool': case 'toolBatDau': case 'keHoach':
@@ -138,16 +143,27 @@ export async function chayCheDoIn(co: CoDong, thuMuc: string): Promise<number> {
         case 'huy': setImmediate(() => ketThuc(130)); return;
         case 'loi': {
           const ma = String(e.ma ?? '');
-          if (['DOI_CONG', 'KHOI_PHUC', 'LAM_TIEP', 'COMPACT', 'DOI_CHE_DO', 'TU_GO_ANH'].includes(ma)) { viet(`${mo(`ℹ ${String(e.thongDiep ?? '')}`)}\n`); return; }
-          viet(`${mau('#f87171')('✗')} ${String(e.thongDiep ?? 'Có lỗi.')}\n`);
-          if (ma === 'PRO_REQUIRED') viet('  Cần gói Pro — https://cuongthai.com/pro\n');
-          if (ma === 'RAMBO_BAO_TRI' && process.stdin.isTTY && loiTTY && !dangDuPhong) {
+          // Thông báo (đổi cổng, Free, compact…) — lượt VẪN chạy, không kết thúc chế độ in. Kho (nghe trước) đã ghi
+          // dòng thông báo vào bảng ⇒ in từ đó, khỏi in hai lần.
+          if (LOI_THONG_BAO.has(ma)) { inTool(); return; }
+          viet(`${mau('#f87171')('✗')} ${String(e.thongDiep ?? L('Có lỗi.', 'Something went wrong.'))}\n`);
+          if (ma === 'PRO_REQUIRED') viet(L('  Cần gói Pro — https://cuongthai.com/pro\n', '  Requires Pro — https://cuongthai.com/pro\n'));
+          // Lỗi mở được bằng mật khẩu: bảo trì / hết trần chính hãng ⇒ modelapi; vé chính hãng chết ⇒ hỏi lại cổng chính hãng.
+          const laCH = ma === 'CONG_ANTHROPIC_KHOA' && e.daBat !== false;
+          const laDp = ma === 'RAMBO_BAO_TRI' || ma === 'CONG_ANTHROPIC_HET_HAN_MUC' || ma === 'CONG_ANTHROPIC_HET_KEY';
+          if (ma === 'CONG_ANTHROPIC_KHOA' && e.daBat === false) viet(L('  Quản trị chưa bật cổng Claude chính hãng — chọn model khác (--model).\n', '  The admin has not enabled the official Claude gateway — pick another model (--model).\n'));
+          if ((laCH || laDp) && process.stdin.isTTY && loiTTY && !dangDuPhong) {
             dangDuPhong = true;
-            void hoiAn('Cổng chính đang bảo trì. Mật khẩu cổng dự phòng (Enter để bỏ qua): ').then(async (mk) => {
+            const cau = laCH
+              ? L('Mật khẩu cổng Claude chính hãng (Enter để bỏ qua): ', 'Official Claude gateway password (Enter to skip): ')
+              : ma === 'RAMBO_BAO_TRI'
+                ? L('Cổng chính đang bảo trì. Mật khẩu cổng dự phòng (Enter để bỏ qua): ', 'Main gateway is under maintenance. Fallback gateway password (Enter to skip): ')
+                : L('Dùng modelapi thay thế? Mật khẩu modelapi (Enter để bỏ qua): ', 'Use modelapi instead? modelapi password (Enter to skip): ');
+            void hoiAn(cau).then(async (mk) => {
               if (!mk) { ketThuc(1); return; }
               try {
-                const ten = await kn.moDuPhong(mk);
-                viet(`${mau('#4ade80')('✓')} Đã mở ${ten} — gửi lại câu hỏi…\n`);
+                const ten = laCH ? (await kn.moCongAnthropic(mk)).ten : await kn.moDuPhong(mk);
+                viet(`${mau('#4ade80')('✓')} ${L(`Đã mở ${ten} — gửi lại câu hỏi…`, `Unlocked ${ten} — resending…`)}\n`);
                 await gui();
               } catch (er) {
                 viet(`${mau('#f87171')('✗')} ${(er as Error).message}\n`);

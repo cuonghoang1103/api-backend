@@ -137,6 +137,9 @@ export class LichSu {
 
   datLai(): void { this.viTri = -1; this.nhap = ''; }
 
+  /** Đang lật lịch sử (đã bấm ↑) — lúc đó ↓ là "câu mới hơn", không phải "vào bảng agent phụ". */
+  dangDuyet(): boolean { return this.viTri !== -1; }
+
   /** ↑: câu cũ hơn. `hienTai` = chữ đang gõ dở (giữ lại để ↓ về được). */
   truoc(hienTai: string): string | null {
     if (!this.ds.length) return null;

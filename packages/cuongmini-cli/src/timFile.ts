@@ -122,5 +122,6 @@ export function phuLucNhac(text: string, boQua: ReadonlySet<string> = new Set())
     .filter((d) => !boQua.has(d))
     .slice(0, 20);
   if (!ds.length) return text;
+  // i18n-bo-qua: phụ lục gửi model
   return `${text}\n\nFile/thư mục tôi nhắc tới (đọc bằng read_file / list_dir trước khi trả lời):\n${ds.map((d) => `- ${d}`).join('\n')}`;
 }

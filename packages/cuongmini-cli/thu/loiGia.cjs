@@ -12,7 +12,7 @@
 
 let vo = null;
 let cuoc = 'cuoc-gia-1';
-let ws = { path: process.cwd(), name: require('node:path').basename(process.cwd()), branch: 'main', cheDoQuyen: 'keHoach', mucNoLuc: 'vua', model: 'sonnet-5', choSua: false, choChayLenh: false };
+let ws = { path: process.cwd(), name: require('node:path').basename(process.cwd()), branch: 'main', cheDoQuyen: 'hoi', mucNoLuc: 'vua', model: 'sonnet-5', choSua: false, choChayLenh: false };
 let choDuyet = null;
 let huy = false;
 let lanGui = 0;
@@ -55,9 +55,122 @@ export function laEmail(s: string): boolean {
 - Không đổi API công khai — chỗ gọi cũ giữ nguyên
 `;
 
+/**
+ * Kịch bản AGENT PHỤ chạy song song + một lệnh nền — ĐÚNG thứ tự sự kiện của lõi thật
+ * (`loop.ts › chayViecPhu`): toolBatDau → tool không id (nhiệm vụ cắt 60) → phuBatDau →
+ * phuSuKien… → phuXong (tomTat = câu trả lời) → tool có id ("xong (n/N)").
+ */
+async function kichBanPhu() {
+  phat({ loai: 'batDau', model: 'sonnet-5', buoc: 1, tranBuoc: 60 });
+  await ngu(800);
+  for (const m of ['Việc này lớn — mình giao ', 'hai agent phụ chạy song song ', 'và bật dev server ở nền.']) { phat({ loai: 'chu', delta: m }); await ngu(100); }
+  phat({ loai: 'keHoach', viec: [{ ten: 'Khảo sát API cũ', trangThai: 'dang' }, { ten: 'Soát bảo mật', trangThai: 'dang' }, { ten: 'Tổng hợp', trangThai: 'cho' }] });
+  const giao = (id, loai, nv) => {
+    phat({ loai: 'toolBatDau', id, ten: 'giao_viec_phu', vong: 'may' });
+    phat({ loai: 'tool', ten: 'giao_viec_phu', tomTat: `${loai ? `[${loai}] ` : ''}${nv.slice(0, 60)}…`, vong: 'may' });
+    phat({ loai: 'phuBatDau', phuId: id, kieuAgent: loai || 'general-purpose', nhiemVu: nv, model: ws.model });
+  };
+  giao('call_g1', '', 'Tìm mọi chỗ gọi `fetch` tới /api/v1/** trong src/, liệt kê file:dòng, đánh dấu chỗ thiếu xử lý lỗi.');
+  giao('call_g2', 'code-reviewer', 'Soát src/auth/** tìm lỗ hổng: token lộ ra log, so sánh chuỗi không hằng thời gian, thiếu kiểm hạn.');
+  phat({ loai: 'toolBatDau', id: 'n1', ten: 'chay_lenh_nen', vong: 'may' });
+  phat({ loai: 'tool', id: 'n1', ten: 'chay_lenh_nen', tomTat: 'nền dev01', vong: 'may', chiTiet: 'Đã khởi động ở nền, mã "dev01".', lenh: 'npm run dev' });
+  for (const id of ['call_g1', 'call_g2']) {
+    phat({ loai: 'phuSuKien', phuId: id, e: { loai: 'batDau', model: 'claude-haiku-4-5', buoc: 1, tranBuoc: 30 } });
+    phat({ loai: 'phuSuKien', phuId: id, e: { loai: 'nghi' } });
+  }
+  await ngu(700);
+  const buoc = [
+    ['call_g1', 'grep', null, '38 kết quả'], ['call_g2', 'glob', null, '14 file'], ['call_g1', 'read_file', 'src/api/client.ts', '210/210 dòng'],
+    ['call_g2', 'read_file', 'src/auth/token.ts', '96/96 dòng'], ['call_g1', 'read_file', 'src/pages/orders.tsx', '340/340 dòng'],
+    ['call_g2', 'grep', null, '3 kết quả'], ['call_g1', 'grep', null, '9 kết quả'], ['call_g2', 'read_file', 'src/auth/session.ts', '120/120 dòng'],
+  ];
+  let k = 0;
+  for (const [id, ten, duong, tt] of buoc) {
+    if (huy) return;
+    k += 1;
+    phat({ loai: 'phuSuKien', phuId: id, e: { loai: 'toolBatDau', id: `p${k}`, ten, vong: 'may' } });
+    await ngu(900);
+    phat({ loai: 'phuSuKien', phuId: id, e: { loai: 'tool', id: `p${k}`, ten, tomTat: tt, vong: 'may', ...(duong ? { duongDan: duong } : {}) } });
+    phat({ loai: 'phuSuKien', phuId: id, e: { loai: 'xong', hanMuc: null, tienUsd: 0.0011, daLuoc: 0, soFileDaSua: 0 } });
+  }
+  phat({ loai: 'toolBatDau', id: 'n2', ten: 'doc_dau_ra_nen', vong: 'may' });
+  phat({ loai: 'tool', id: 'n2', ten: 'doc_dau_ra_nen', tomTat: 'đang chạy (9s)', vong: 'may', chiTiet: 'Lệnh: npm run dev\nTrạng thái: đang chạy (9s)\n\n> demo@1.0.0 dev\n> vite\n\n  VITE v6.0.0  ready in 412 ms\n  ➜  Local:   http://localhost:5173/' });
+  await ngu(1500);
+  const kq1 = '**38 chỗ** gọi API; **6 chỗ** thiếu `try/catch`: orders.tsx:88, client.ts:41…';
+  phat({ loai: 'phuSuKien', phuId: 'call_g1', e: { loai: 'chu', delta: kq1 } });
+  phat({ loai: 'phuXong', phuId: 'call_g1', ok: true, tomTat: kq1, tienUsd: 0.0046, tokenVao: 41_200, tokenRa: 2_300 });
+  phat({ loai: 'tool', id: 'call_g1', ten: 'giao_viec_phu', tomTat: 'xong (1/3)', vong: 'may', chiTiet: `KẾT QUẢ VIỆC PHỤ — "Tìm mọi chỗ gọi fetch"\n\n${kq1}\n- src/pages/orders.tsx:88\n- src/api/client.ts:41` });
+  await ngu(2500);
+  const kq2 = 'Không thấy token lộ ra log. `session.ts:57` so sánh chuỗi bằng `===` — nên dùng `timingSafeEqual`.';
+  phat({ loai: 'phuSuKien', phuId: 'call_g2', e: { loai: 'chu', delta: kq2 } });
+  phat({ loai: 'phuXong', phuId: 'call_g2', ok: true, tomTat: kq2, tienUsd: 0.0039, tokenVao: 30_100, tokenRa: 1_500 });
+  phat({ loai: 'tool', id: 'call_g2', ten: 'giao_viec_phu', tomTat: 'xong (2/3)', vong: 'may', chiTiet: `KẾT QUẢ VIỆC PHỤ — "Soát src/auth"\n\n${kq2}` });
+  phat({ loai: 'keHoach', viec: [{ ten: 'Khảo sát API cũ', trangThai: 'xong' }, { ten: 'Soát bảo mật', trangThai: 'xong' }, { ten: 'Tổng hợp', trangThai: 'xong' }] });
+  for (const m of ['## Tổng hợp\n\n- 6 chỗ gọi API thiếu xử lý lỗi\n', '- `session.ts:57` nên dùng `timingSafeEqual`\n']) { phat({ loai: 'chu', delta: m }); await ngu(120); }
+  phat({ loai: 'xong', hanMuc: { daDung: 1, tran: 2, phanTram: 62, hoiLucNao: null }, tienUsd: 0.0187, daLuoc: 0, soFileDaSua: 0, nguCanh: { kyTu: 1, tran: 2, phanTram: 31, soLuotDaBo: 0 } });
+}
+
+// ─── Cổng Claude chính hãng (docs/cong-anthropic-chinh-hang.md) ───
+let veCH = false;
+let veDp = false;
+let congPhu = null;
+let modelDp = 'gpt-6-sol';
+const CL_CAO = new Set(['cl-sonnet-5-5', 'cl-opus-5-5', 'cl-fable-5-1']);
+const cacCong = () => [
+  { cong: 'anthropic', ten: 'Anthropic chính hãng', daBat: true, canMatKhau: !veCH, models: [
+    { id: 'cl-sonnet-5-5', ten: 'Claude Sonnet 5.5 · chính hãng', mo: 'Cân bằng, thinking', dungDuoc: true },
+    { id: 'cl-opus-5-5', ten: 'Claude Opus 5.5 · chính hãng', mo: 'Mạnh nhất', dungDuoc: true },
+    { id: 'cl-fable-5-1', ten: 'Claude Fable 5.1 · chính hãng', mo: 'Rất đắt', dungDuoc: true, dat: true },
+  ] },
+  { cong: 'modelapi', ten: 'modelapi', daBat: true, canMatKhau: !veDp, models: [
+    { id: 'gpt-6-sol', ten: 'GPT 6 Sol', mo: 'Nhìn được ảnh, rẻ trong vòng lặp', dungDuoc: true },
+    { id: 'gpt-6-astra', ten: 'GPT 6 Astra', mo: 'Nhanh', dungDuoc: true },
+  ] },
+];
+const ngoiTraLoi = async (model, chu) => {
+  phat({ loai: 'batDau', model, buoc: 1, tranBuoc: 30 });
+  await ngu(400);
+  phat({ loai: 'nghi' });
+  await ngu(2600);
+  for (let i = 0; i < chu.length; i += 20) { if (huy) return; phat({ loai: 'chu', delta: chu.slice(i, i + 20) }); await ngu(40); }
+  phat({ loai: 'xong', hanMuc: null, tienUsd: 0.0042, daLuoc: 0, soFileDaSua: 0 });
+};
+
+/** Lượt đi cổng nào — giống máy chủ: cl-* cao không vé ⇒ 403 KHOA; tab chọn modelapi ⇒ GPT. */
+async function kichBanCong(text) {
+  if (CL_CAO.has(ws.model) && !veCH) {
+    await ngu(300);
+    phat({ loai: 'loi', ma: 'CONG_ANTHROPIC_KHOA', thongDiep: 'Claude Opus 5.5 · chính hãng cần mật khẩu cổng Claude chính hãng. Nhập mật khẩu do quản trị cấp để mở khoá.', daBat: true });
+    return true;
+  }
+  if (/hethanmuc|het han muc/i.test(text)) {
+    await ngu(300);
+    phat({ loai: 'loi', ma: 'CONG_ANTHROPIC_HET_HAN_MUC', thongDiep: 'Bạn đã dùng hết hạn mức tháng của cổng Claude chính hãng (20 $). Hạn mức làm mới ngày 1.' });
+    return true;
+  }
+  if (/free|sự cố|su co/i.test(text) && congPhu !== 'modelapi') {
+    phat({ loai: 'batDau', model: 'claude-haiku-5-5', buoc: 1, tranBuoc: 30 });
+    await ngu(300);
+    phat({ loai: 'loi', ma: 'CONG_CHINH_HONG_FREE', thongDiep: 'Cổng chính đang gặp sự cố — đang tự chuyển sang model CuongMini Free.', moiNangCap: true, cacCong: cacCong() });
+    await ngu(300);
+    phat({ loai: 'nghi' });
+    await ngu(2600);
+    const chu = 'Mình đang trả lời bằng **CuongMini Free** (Claude Haiku 5.5). Câu hỏi của bạn: hàm `laEmail` nên dùng `zod` để kiểm.';
+    for (let i = 0; i < chu.length; i += 20) { if (huy) return true; phat({ loai: 'chu', delta: chu.slice(i, i + 20) }); await ngu(40); }
+    phat({ loai: 'xong', hanMuc: null, tienUsd: 0.0006, daLuoc: 0, soFileDaSua: 0 });
+    if (/song lai|sống lại/i.test(text)) { await ngu(600); phat({ loai: 'loi', ma: 'RAMBO_SONG_LAI', thongDiep: 'Cổng chính CuongMini đã hoạt động lại. Bạn muốn làm tiếp ở cổng chính hay ở lại CuongMini Free?' }); }
+    return true;
+  }
+  if (congPhu === 'modelapi') { await ngoiTraLoi(modelDp, `Trả lời qua **modelapi** (${modelDp}).`); return true; }
+  if (CL_CAO.has(ws.model)) { await ngoiTraLoi(ws.model.replace(/^cl-/, 'claude-'), `Trả lời qua **Claude chính hãng** (${ws.model}) — có thinking.`); return true; }
+  return false;
+}
+
 async function kichBan(text) {
   huy = false;
   lanGui += 1;
+  if (/agent|song song|parallel/i.test(text)) { await kichBanPhu(); return; }
+  if (await kichBanCong(text)) return;
   if (/baotri/i.test(text)) {
     await ngu(400);
     phat({ loai: 'loi', ma: 'RAMBO_BAO_TRI', thongDiep: 'Cổng AI chính đang bảo trì (dự kiến 10 phút).' });
@@ -107,8 +220,9 @@ async function kichBan(text) {
 module.exports = {
   khoiDong(v) { vo = v; },
   datPhien() {},
-  async datThuMuc(id, duong) { ws = { ...ws, path: duong, name: require('node:path').basename(duong), cheDoQuyen: 'keHoach' }; return ws; },
-  async moDuPhong(mk) { if (mk !== 'dung') throw new Error('Sai mật khẩu cổng dự phòng.'); return 'cổng dự phòng (modelapi)'; },
+  async datThuMuc(id, duong) { ws = { ...ws, path: duong, name: require('node:path').basename(duong), cheDoQuyen: 'hoi', choTrinhDuyet: true }; return ws; },
+  async moDuPhong(mk) { if (mk !== 'dung') throw new Error('Sai mật khẩu cổng dự phòng.'); veDp = true; return 'cổng dự phòng (modelapi)'; },
+  async moCongAnthropic(mk) { if (mk !== 'dung') throw new Error('Sai mật khẩu.'); veCH = true; return { ten: 'Claude chính hãng', hetHan: Date.now() + 30 * 864e5 }; },
   async chuanHoaAnh(d) { return d; },
   async goi(kenh, d) {
     switch (kenh) {
@@ -121,11 +235,20 @@ module.exports = {
           { id: 'opus-4-8', ten: 'Claude Opus 4.8', mo: 'Mạnh nhất cho việc khó', dungDuoc: true },
           { id: 'gpt-sol', ten: 'GPT 6 Sol', mo: 'Ý kiến thứ hai', dungDuoc: true },
           { id: 'fable-5', ten: 'Claude Fable 5', mo: 'Đắt ×3,5', dungDuoc: true, dat: true },
-        ],
+          { id: 'cl-free', ten: 'CuongMini Free', mo: 'Tự bật khi cổng chính gặp sự cố', dungDuoc: true, cong: 'anthropic', hang: 'free', mienPhi: true, canMoKhoa: false },
+          { id: 'cl-sonnet-5-5', ten: 'Claude Sonnet 5.5 · chính hãng', mo: 'Cân bằng, thinking', dungDuoc: true, cong: 'anthropic', hang: 'cao', canMoKhoa: !veCH },
+          { id: 'cl-opus-5-5', ten: 'Claude Opus 5.5 · chính hãng', mo: 'Mạnh nhất', dungDuoc: true, cong: 'anthropic', hang: 'cao', canMoKhoa: !veCH },
+          { id: 'cl-fable-5-1', ten: 'Claude Fable 5.1 · chính hãng', mo: 'Rất đắt', dungDuoc: true, cong: 'anthropic', hang: 'cao', canMoKhoa: !veCH, dat: true },
+        ].map((m) => (m.cong ? m : { ...m, cong: 'rambo' })),
         mucNoLuc: [{ id: 'thap', ten: 'Thấp', buoc: 8, viecPhu: 1 }, { id: 'vua', ten: 'Vừa', buoc: 30, viecPhu: 3 }, { id: 'cao', ten: 'Cao', buoc: 60, viecPhu: 3 }, { id: 'ratCao', ten: 'Rất cao', buoc: 100, viecPhu: 5 }],
       };
       case 'agent:datCheDoQuyen': ws = { ...ws, cheDoQuyen: d.cheDo }; return ws;
+      case 'agent:datCheDoTrinhDuyet': ws = { ...ws, choTrinhDuyet: d.bat }; return ws;
       case 'agent:datModel': ws = { ...ws, model: d.model }; return null;
+      case 'agent:moCongAnthropic': return module.exports.moCongAnthropic(d.matKhau);
+      case 'agent:congAnthropic': return { coKey: true, daBat: true, laAdmin: false, veHopLe: veCH, modelCaoDuoc: veCH, congChinhDangHong: false, cacCong: cacCong(), coVe: veCH };
+      case 'agent:datCongPhu': congPhu = d.cong; if (d.model) modelDp = d.model; return null;
+      case 'agent:veCongChinh': congPhu = null; return null;
       case 'agent:datMucNoLuc': ws = { ...ws, mucNoLuc: d.muc }; return null;
       case 'agent:lenhDuAn': return [{ ten: '/trien-khai', mo: 'Triển khai lên VPS', than: 'Triển khai: $ARGUMENTS' }];
       case 'agent:send': void kichBan(String(d.text)); return null;

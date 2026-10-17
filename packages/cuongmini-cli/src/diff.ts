@@ -4,6 +4,7 @@
  * (cùng bản app hiện trên thẻ duyệt) — CLI không tự diff lại.
  */
 import { capMau, catVua, doRong, mau, mo, nen } from './mau';
+import { L } from './i18n';
 import { ngonNguTuDuong, toMauCode } from './toMau';
 
 export interface DongDiff { loai: 'giu' | 'them' | 'bo'; soCu: number | null; soMoi: number | null; text: string }
@@ -53,7 +54,7 @@ export function veDiff(diff: DuLieuDiff | undefined | null, o: TuyChonDiff): str
     return nen(them ? MAU_DIFF.nenThem : MAU_DIFF.nenBo)(dong + ' '.repeat(du));
   });
   const con = diff.dong.length - ds.length;
-  if (con > 0) ra.push(mo(`… +${con} dòng nữa`));
-  if (diff.quaLon) ra.push(mo('(diff quá dài — chỉ hiện một phần)'));
+  if (con > 0) ra.push(mo(L(`… +${con} dòng nữa`, `… +${con} more lines`)));
+  if (diff.quaLon) ra.push(mo(L('(diff quá dài — chỉ hiện một phần)', '(diff too long — showing part of it)')));
   return ra;
 }

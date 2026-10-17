@@ -9,6 +9,7 @@
 import { Lexer, type Token, type Tokens } from 'marked';
 import wrapAnsi from 'wrap-ansi';
 import { THUONG_HIEU, capMau, catVua, chuyenSac, dam, doRong, gachChan, gachNgang, mau, mo, nghieng } from './mau';
+import { L } from './i18n';
 import { toMauCode } from './toMau';
 
 export interface TuyChonMd {
@@ -69,7 +70,7 @@ function motTrongDong(t: Token): string {
     }
     case 'image': {
       const im = t as Tokens.Image;
-      return mo(`[ảnh: ${im.text || im.href}]`);
+      return mo(L(`[ảnh: ${im.text || im.href}]`, `[image: ${im.text || im.href}]`));
     }
     case 'html': return mo((t as Tokens.HTML).text);
     default: {

@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { datNgonNgu } from '../i18n';
 import * as ST from '../ui/soanThao';
+
+// Các phép kiểm dưới so chữ giao diện tiếng Việt.
+datNgonNgu('vi');
 
 test('ô nhập: chèn, xoá lùi giữ nguyên ký tự có dấu và emoji', () => {
   let o = ST.chen(ST.rong(), 'Việt 😀');

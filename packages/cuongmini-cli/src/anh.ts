@@ -42,7 +42,7 @@ export function tachAnh(text: string, cwd: string, laFile: (p: string) => boolea
   let ra = text.replace(/(['"])((?:~|\/|[A-Za-z]:[\\/])[^'"\n]*?)\1/g, (m, _q: string, p: string) => {
     if (!DUOI_ANH.test(p)) return m;
     const td = moRong(p, cwd);
-    return them(td) ? `[ảnh: ${path.basename(td)}]` : m;
+    return them(td) ? `[ảnh: ${path.basename(td)}]` : m; // i18n-bo-qua: chữ gửi model
   });
   // 2) `@đường` và đường tuyệt đối trần (cho phép `\ ` bên trong).
   ra = ra.replace(/(^|\s)(@?)((?:~\/|\/|[A-Za-z]:[\\/]|\.{0,2}[\w-])(?:\\ |[^\s])*)/g, (m, dau: string, a: string, p: string) => {
@@ -52,7 +52,7 @@ export function tachAnh(text: string, cwd: string, laFile: (p: string) => boolea
     const td = moRong(p, cwd);
     if (!them(td)) return m;
     if (a) daNhac.add(p);
-    return `${dau}[ảnh: ${path.basename(td)}]`;
+    return `${dau}[ảnh: ${path.basename(td)}]`; // i18n-bo-qua: chữ gửi model
   });
   return { text: ra, anh, daNhac };
 }

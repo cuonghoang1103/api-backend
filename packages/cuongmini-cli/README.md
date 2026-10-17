@@ -52,6 +52,33 @@ Cờ: `-c/--tiep-tuc` · `-r/--resume` · `-m/--model <tên>` (vd `sonnet-5`, `o
 `cuongmini update` chạy lại trình cài (tải bản mới, kiểm SHA-256). `cuongmini doctor` kiểm máy: Node,
 PATH, đăng nhập, mạng, trình duyệt cho tool web, công cụ dán ảnh/thông báo, khả năng màu/Unicode.
 
+## Agent phụ và lệnh nền (như Claude Code)
+
+Khi CuongMini giao việc cho agent phụ (`giao_viec_phu`) hoặc chạy lệnh nền, dưới ô nhập hiện bảng:
+
+```
+▸▸ Tự động · 2 lệnh nền · ⧉ 2 · /tasks xem agent phụ · esc để dừng · ↓ để quản lý
+● main             Đang chạy lệnh…                          2m 05s · ~$0.019
+○ general-purpose  Đọc(src/api/client.ts)                       48s · ~$0.004
+○ code-reviewer    Tìm file                                          31s
+○ $ npm run dev    đang chạy (9s)                                    1m 10s
+```
+
+- **↓** (ô nhập trống) vào bảng · ↑↓ chọn · **Enter** mở màn chi tiết (nhiệm vụ đầy đủ, dòng thời gian từng bước,
+  tool đã gọi + kết quả rút gọn, chữ agent phụ viết, kết quả cuối) · **←/→** chuyển agent · **Esc** quay lại.
+- **←** (ô nhập trống) nhảy thẳng vào agent phụ đang chạy.
+- **`/tasks`** — cả agent phụ đã xong (✓/✗) và lệnh nền (xem đầu ra; `x` dừng lệnh nền).
+- Lõi hiện tại chỉ báo lúc agent phụ bắt đầu và kết quả cuối; dòng thời gian từng bước sẽ đầy đủ khi lõi phát
+  thêm sự kiện `phuBatDau` / `phuSuKien` / `phuXong` (CLI đã sẵn sàng nhận).
+
+## Ngôn ngữ — Tiếng Việt ↔ English
+
+`/language` (bí danh `/ngon-ngu`, `/lang`; hoặc `/language en`, `/language vi`) đổi NGAY toàn bộ giao diện — màn chào,
+chân trang, gợi ý, `/help`, thẻ duyệt, trạng thái "Đang…/Thinking…", `/config`, `doctor`, `--help` — và vẽ lại màn hình.
+Mặc định đoán theo `LANG`/`LC_ALL` (bắt đầu bằng `vi` ⇒ Tiếng Việt, còn lại English); lựa chọn lưu ở `cai-dat.json`.
+Trong `/language` có công tắc **"AI trả lời bằng ngôn ngữ này"**: bật thì mỗi câu gửi kèm một dòng nhắc ngôn ngữ.
+Chữ đến từ lõi/máy chủ (tóm tắt tool, lỗi, chẩn đoán của lõi) giữ nguyên ngôn ngữ gốc.
+
 ## Gõ đặc biệt (như Claude Code)
 
 | Gõ | Tác dụng |
@@ -119,11 +146,11 @@ việc ☐ ◐ ☑, "Đang làm" (pha + lệnh), file đã sửa (+/−), bướ
 Cùng bộ lệnh với app desktop và extension VS Code:
 
 - **Cơ bản**: `/help` · `/clear` · `/login` · `/logout` · `/exit`
-- **Phiên & model**: `/model` (menu) · `/effort` · `/compact` · `/context` · `/usage` · `/cost` · `/status`
+- **Phiên & model**: `/model` (menu nhóm theo cổng: Cổng chính · Claude chính hãng · modelapi; 🔒 = cần mật khẩu quản trị cấp) · `/gateway` (`/cong` — chọn cổng khi cổng chính hỏng / quay về) · `/effort` · `/compact` · `/context` · `/usage` · `/cost` · `/status`
 - **Làm việc**: `/plan <việc>` (chỉ đọc, xong hỏi duyệt) · `/review` · `/diff` · `/init` · `/undo` ·
   `/rewind [n]` · `/resume` (bảng chọn việc cũ) · `/export [tên.md]`
 - **Công cụ**: `/memory` · `/mcp [mo|nap]` · `/hooks` · `/kynang` · `/quyen` (= `/permissions`) · `/doctor` · `/terminal-setup`
-- **CLI**: `/browser [on|off]` (`/trinh-duyet`, `/chrome`) · `/config` (giao diện sáng/tối, thông báo, chế độ & model mặc định, ký tự ASCII) · `/theme` · `/add-dir` ·
+- **CLI**: `/tasks` · `/language [vi|en]` · `/browser [on|off]` (`/trinh-duyet`, `/chrome`) · `/config` (giao diện sáng/tối, thông báo, chế độ & model mặc định, ký tự ASCII) · `/theme` · `/add-dir` ·
   `/copy` (chép câu trả lời gần nhất) · `/transcript`
 - Lệnh tự tạo của dự án (`.claude/commands/*.md`) cũng hiện trong gợi ý.
 

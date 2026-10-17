@@ -12,6 +12,7 @@ import { PHIEN_BAN, chuTroGiup, phanTichCo } from './coDong';
 import { CLI_BASE, kiemCapNhat, lenhCaiChoMay } from './capNhat';
 import { docCaiDat } from './caiDat';
 import { kiemMay } from './doctor';
+import { datNgonNgu, doNgonNgu, L } from './i18n';
 import { canAscii, datAscii, doiKyTu } from './kyTu';
 import { dongKetNoiDangMo } from './ketNoi';
 import { chuyenNhatKy } from './khoiDong';
@@ -36,14 +37,14 @@ const viet = (s: string) => process.stdout.write(`${doiKyTu(s)}\n`);
  */
 async function chayTrinhCai(): Promise<number> {
   const moi = await kiemCapNhat(PHIEN_BAN, true).catch(() => null);
-  viet(`${chuyenSac('✻ CuongMini')} ${PHIEN_BAN}${moi ? mau('#fbbf24')(` ⇒ ${moi}`) : mo(' (kiểm bản mới…)')}`);
+  viet(`${chuyenSac('✻ CuongMini')} ${PHIEN_BAN}${moi ? mau('#fbbf24')(` ⇒ ${moi}`) : mo(L(' (kiểm bản mới…)', ' (checking for updates…)'))}`);
   const base = CLI_BASE();
   const [file, args] = process.platform === 'win32'
     ? ['powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', `irm '${base}/install.ps1' | iex`]] as const
     : ['/bin/sh', ['-c', `if command -v curl >/dev/null 2>&1; then curl -fsSL '${base}/install.sh'; else wget -qO- '${base}/install.sh'; fi | bash`]] as const;
   const r = spawnSync(file, [...args], { stdio: 'inherit', env: process.env });
   if (r.error || r.status !== 0) {
-    vietLoi(`${mau('#f87171')('✗')} Trình cài không chạy xong${r.error ? ` (${r.error.message})` : ''}. Chạy tay:\n  ${lenhCaiChoMay()}`);
+    vietLoi(`${mau('#f87171')('✗')} ${L('Trình cài không chạy xong', 'The installer did not finish')}${r.error ? ` (${r.error.message})` : ''}. ${L('Chạy tay', 'Run it manually')}:\n  ${lenhCaiChoMay()}`);
     return 1;
   }
   return 0;
@@ -55,6 +56,7 @@ async function main(): Promise<number> {
   const cd = docCaiDat();
   datTheme(cd.theme === 'tuDong' ? doTheme(process.env) : cd.theme);
   datAscii(cd.ascii === 'bat' ? true : cd.ascii === 'tat' ? false : canAscii(process.env));
+  datNgonNgu(cd.ngonNgu === 'tuDong' ? doNgonNgu(process.env) : cd.ngonNgu);
   const co = phanTichCo(process.argv.slice(2));
   if (co.loi) { vietLoi(`${mau('#f87171')('✗')} ${co.loi}`); return 2; }
 
@@ -63,7 +65,7 @@ async function main(): Promise<number> {
     case 'help': viet(chuTroGiup()); return 0;
     case 'logout': {
       const n = docPhien();
-      viet(xoaPhien() ? `${mau('#4ade80')('✓')} Đã đăng xuất${n ? ` (${tenHienThi(n)})` : ''} — đã xoá phiên trên máy này.` : 'Chưa đăng nhập.');
+      viet(xoaPhien() ? `${mau('#4ade80')('✓')} ${L(`Đã đăng xuất${n ? ` (${tenHienThi(n)})` : ''} — đã xoá phiên trên máy này.`, `Signed out${n ? ` (${tenHienThi(n)})` : ''} — local session removed.`)}` : L('Chưa đăng nhập.', 'Not signed in.'));
       return 0;
     }
     case 'capNhat': return chayTrinhCai();
@@ -74,20 +76,20 @@ async function main(): Promise<number> {
       const be = Math.max(...ds.map((m) => m.ten.length));
       for (const m of ds) viet(doiKyTu(`${mau(mauDau[m.muc])({ ok: '✓', canh: '⚠', loi: '✗' }[m.muc])} ${m.ten.padEnd(be)}  ${mo(m.chiTiet)}`));
       const loi = ds.filter((m) => m.muc === 'loi').length;
-      viet(`\n${loi ? mau('#f87171')(`${loi} lỗi cần sửa.`) : mau('#4ade80')('Máy sẵn sàng.')}`);
+      viet(`\n${loi ? mau('#f87171')(L(`${loi} lỗi cần sửa.`, `${loi} problem${loi > 1 ? 's' : ''} to fix.`)) : mau('#4ade80')(L('Máy sẵn sàng.', 'All good.'))}`);
       return loi ? 1 : 0;
     }
     default:
   }
 
   const major = Number(process.versions.node.split('.')[0]);
-  if (major < 20) { vietLoi(`CuongMini cần Node 20 trở lên (đang là ${process.versions.node}). Chạy lại lệnh cài để tự tải Node: ${lenhCaiChoMay()}`); return 1; }
+  if (major < 20) { vietLoi(L(`CuongMini cần Node 20 trở lên (đang là ${process.versions.node}). Chạy lại lệnh cài để tự tải Node: ${lenhCaiChoMay()}`, `CuongMini needs Node 20+ (found ${process.versions.node}). Re-run the installer to download Node: ${lenhCaiChoMay()}`)); return 1; }
 
   const thuMuc = path.resolve(co.thuMuc ?? process.cwd());
   try {
     if (!statSync(thuMuc).isDirectory()) throw new Error();
   } catch {
-    vietLoi(`${mau('#f87171')('✗')} Không mở được thư mục: ${thuMuc}`);
+    vietLoi(`${mau('#f87171')('✗')} ${L('Không mở được thư mục', 'Cannot open directory')}: ${thuMuc}`);
     return 2;
   }
 
@@ -95,7 +97,7 @@ async function main(): Promise<number> {
   if (co.cheDoIn) return chayCheDoIn(co, thuMuc);
 
   if (!process.stdin.isTTY || !process.stdout.isTTY) {
-    vietLoi('Phiên tương tác cần một terminal. Chạy không tương tác thì dùng: cuongmini -p "câu hỏi"');
+    vietLoi(L('Phiên tương tác cần một terminal. Chạy không tương tác thì dùng: cuongmini -p "câu hỏi"', 'Interactive mode needs a terminal. For non-interactive use: cuongmini -p "question"'));
     return 2;
   }
 
@@ -125,7 +127,7 @@ async function main(): Promise<number> {
   }
   await dongKetNoiDangMo();
   if (loiNhan) viet(loiNhan);
-  else if (daThoat && co.lenh !== 'login') viet(mo(`Tạm biệt! Việc đã được lưu — mở lại: ${mau(THUONG_HIEU.timNhat)('cuongmini -c')}`));
+  else if (daThoat && co.lenh !== 'login') viet(mo(`${L('Tạm biệt! Việc đã được lưu — mở lại:', 'Bye! Your task is saved — resume with:')} ${mau(THUONG_HIEU.timNhat)('cuongmini -c')}`));
   return 0;
 }
 

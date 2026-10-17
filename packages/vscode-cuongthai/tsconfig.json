@@ -10,5 +10,5 @@
     "types": ["node", "vscode"]
   },
   "include": ["src", "webview"],
-  "exclude": ["src/doclap/loi.ts", "src/**/*.test.ts"]
+  "exclude": ["src/**/*.test.ts"]
 }

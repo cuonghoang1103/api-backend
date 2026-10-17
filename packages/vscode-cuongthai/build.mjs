@@ -1,54 +1,18 @@
 // Dựng 3 gói:
 //  • dist/extension.js — extension (Node, CommonJS, `vscode` là external)
-//  • dist/loi.js       — LÕI ĐỘC LẬP: AI Code của app desktop chạy không cần app (xem src/doclap/loi.ts)
+//  • dist/loi.js       — LÕI ĐỘC LẬP: AI Code của app desktop chạy không cần app (packages/cuongmini-core, dùng chung với CuongMini CLI)
 //  • dist/webview.js   — giao diện khung chat (trình duyệt, IIFE)
 import { build, context } from 'esbuild';
-import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { cauHinhLoi } from '../cuongmini-core/esbuildLoi.mjs';
 
 const goc = path.dirname(fileURLToPath(import.meta.url));
-const desktop = path.resolve(goc, '../../desktop/src/main');
-const doclap = path.join(goc, 'src/doclap');
-
-/**
- * Module "vỏ app" của desktop ⇒ bản thay. Chỉ đúng mấy cái này: phần còn lại
- * (vòng lặp, tool, skill, MCP, quyền…) đi NGUYÊN mã của app.
- */
-const THAY = new Map([
-  [path.join(desktop, 'ipc/index.ts'), path.join(doclap, 'ipcThay.ts')],
-  [path.join(desktop, 'ipc/auth.ts'), path.join(doclap, 'authThay.ts')],
-  [path.join(desktop, 'window.ts'), path.join(doclap, 'cuaSoThay.ts')],
-  [path.join(desktop, 'aiCucBo/quanLy.ts'), path.join(doclap, 'aiCucBoThay.ts')],
-]);
-
-const thayVoApp = {
-  name: 'thay-vo-app',
-  setup(b) {
-    b.onResolve({ filter: /^\.\.?\// }, (a) => {
-      if (!a.importer.startsWith(desktop)) return undefined;
-      const p = path.resolve(a.resolveDir, a.path);
-      for (const thu of [p, `${p}.ts`, path.join(p, 'index.ts')]) {
-        const t = THAY.get(thu);
-        if (t) return { path: t };
-        if (existsSync(thu) && thu.endsWith('.ts')) break;
-      }
-      return undefined;
-    });
-    // Skill dựng sẵn import `*.md?raw` (cú pháp Vite) ⇒ nạp thành chuỗi.
-    b.onResolve({ filter: /\?raw$/ }, (a) => ({ path: path.resolve(a.resolveDir, a.path.replace(/\?raw$/, '')), namespace: 'raw' }));
-    b.onLoad({ filter: /.*/, namespace: 'raw' }, (a) => ({ contents: readFileSync(a.path, 'utf8'), loader: 'text' }));
-  },
-};
-
 const xem = process.argv.includes('--watch');
 const chung = { bundle: true, minify: !xem, sourcemap: xem, logLevel: 'info' };
 const ds = [
   { ...chung, entryPoints: ['src/extension.ts'], outfile: 'dist/extension.js', platform: 'node', format: 'cjs', target: 'node20', external: ['vscode', './loi.js'] },
-  {
-    ...chung, entryPoints: ['src/doclap/loi.ts'], outfile: 'dist/loi.js', platform: 'node', format: 'cjs', target: 'node20',
-    alias: { electron: path.join(doclap, 'electron.ts') }, plugins: [thayVoApp],
-  },
+  cauHinhLoi({ outfile: 'dist/loi.js', minify: !xem, sourcemap: xem }),
   {
     ...chung, entryPoints: ['webview/main.ts'], outfile: 'dist/webview.js', platform: 'browser', format: 'iife', target: 'es2022',
     // Lệnh `/` dùng CHUNG một bản với app desktop (phần thuần, không React).

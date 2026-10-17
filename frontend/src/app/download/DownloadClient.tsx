@@ -383,6 +383,26 @@ export default function DownloadClient({ banPhatHanh }: { banPhatHanh: ReleaseIn
         </ul>
       </section>
 
+      {/* ── AI Code trong trình soạn (17/10/2026) ───────────────
+          Chỉ một thẻ trỏ sang /ai-code: trang đó có deep link cài một cú bấm
+          cho từng trình soạn + CLI. Giữ tiếng Anh như phần còn lại của trang. */}
+      <section className="mt-10">
+        <Link
+          href="/ai-code"
+          className="flex flex-col gap-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-5 transition hover:border-indigo-500 sm:flex-row sm:items-center"
+        >
+          <img src="/images/cuongmini-code/icon.png" alt="" width={48} height={48} className="h-12 w-12 shrink-0 rounded-xl" />
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold">Prefer your own editor? Get AI Code as an extension</span>
+            <span className="mt-1 block text-sm text-[var(--text-secondary)]">
+              CuongMini Code installs in one click into VS Code, Cursor, Antigravity, Windsurf and VSCodium —
+              or run <code>cuongmini</code> in any terminal. Works with or without this app.
+            </span>
+          </span>
+          <span className="shrink-0 text-sm font-medium text-indigo-500">Install in your editor →</span>
+        </Link>
+      </section>
+
       {/* ── Terminal install ─────────────────────────────────── */}
       <section className="mt-12">
         <button

@@ -1,10 +1,16 @@
 'use client';
 
 /**
- * /llm-key — API key dùng AI trên terminal bằng OpenCode.
+ * /llm-key — key terminal: quyền dùng CuongMini trong terminal.
  *
- * Ba việc trên một trang: hướng dẫn cắm, xin key (admin duyệt), và xem hạn
- * mức còn lại.
+ * Ba việc trên một trang: xin key (admin duyệt), xem hạn mức còn lại, và hướng
+ * dẫn dùng.
+ *
+ * 17/10/2026: đường chính chuyển từ OpenCode sang CuongMini CLI (`/cli`). Máy
+ * chủ cho CLI chạy khi tài khoản là Pro HOẶC có key terminal đã duyệt còn hạn
+ * (`duocDungAiCode` ở `src/routes/agent.routes.ts`) — nên với CLI, key là
+ * QUYỀN gắn với tài khoản, không phải chuỗi phải dán đi đâu. Hướng dẫn OpenCode
+ * cũ vẫn giữ trong một mục thu gọn vì key cũ vẫn chạy tới hết hạn.
  *
  * ⚠️ Phần hạn mức gọi `/llm/han-muc` — endpoint đó do phiên khác làm và có
  * thể CHƯA lên production. Gọi hỏng thì ẩn hẳn khối đó đi, KHÔNG để trang vỡ
@@ -15,9 +21,11 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import {
   ShieldAlert, RefreshCw, Terminal, KeyRound, Copy, Check, Loader2, ArrowLeft, Clock, XCircle,
-  AlertCircle, Crown, Eye, EyeOff, Gauge, ExternalLink,
+  AlertCircle, Crown, Eye, EyeOff, Gauge, ExternalLink, ChevronDown, ShoppingBag, ArrowRight, History,
 } from 'lucide-react';
 import { useDaDangNhap } from '@/hooks/useDaDangNhap';
+import { detectPlatform } from '../download/DownloadClient';
+import { LENH_CHAY_CLI, LENH_CLI_UNIX, LENH_CLI_WINDOWS } from '../ai-code/trinhSoan';
 
 interface DonKey {
   id: number;
@@ -137,6 +145,13 @@ export default function LlmKeyPage() {
   const [heDieuHanh, setHeDieuHanh] = useState<MaHDH>('macos');
   const khoaGui = useRef(false);
 
+  // Mở sẵn đúng tab hệ điều hành của máy đang xem — người mới không biết mình nên đọc tab nào.
+  useEffect(() => {
+    const p = detectPlatform();
+    if (p === 'windows') setHeDieuHanh('windows');
+    else if (p === 'linux') setHeDieuHanh('linux');
+  }, []);
+
   const nap = useCallback(async () => {
     if (!isAuthenticated) { setDangTai(false); return; }
     try {
@@ -214,14 +229,14 @@ export default function LlmKeyPage() {
       'Xoay key mới?\n\n'
       + '• Key hiện tại CHẾT NGAY LẬP TỨC — mọi máy đang cắm key đó sẽ ngừng chạy.\n'
       + '• Bạn nhận key mới với đúng hạn mức và đúng hạn còn lại của gói.\n'
-      + '• Nhớ dán key mới vào opencode.json trên máy bạn.',
+      + '• CuongMini CLI không cần làm gì. Còn dùng OpenCode thì nhớ dán key mới vào opencode.json.',
     );
     if (!chac) return;
     setDangXoay(true);
     try {
       await goi<{ data: { key: string } }>('/llm-keys/doi-key-bi-lo', { method: 'POST' });
       await nap();
-      toast.success('Đã xoay key. Key cũ đã bị khoá — nhớ dán key mới vào cấu hình.', { duration: 10000 });
+      toast.success('Đã xoay key. Key cũ đã bị khoá — CuongMini CLI chạy tiếp bình thường; OpenCode thì dán key mới vào cấu hình.', { duration: 10000 });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Không xoay được key.', { duration: 8000 });
     } finally {
@@ -301,16 +316,40 @@ export default function LlmKeyPage() {
     2,
   );
 
+  /** Hàng chọn hệ điều hành — dùng chung cho phần CLI và phần OpenCode cũ (một trạng thái). */
+  const hangChonHDH = (
+    <div className="flex gap-1.5 p-1 rounded-xl bg-darkbg border border-darkborder w-fit">
+      {HE_DIEU_HANH.map((h) => (
+        <button
+          key={h.ma}
+          onClick={() => setHeDieuHanh(h.ma)}
+          aria-pressed={heDieuHanh === h.ma}
+          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+            heDieuHanh === h.ma
+              ? 'bg-gradient-to-r from-neon-indigo to-neon-violet text-white'
+              : 'text-text-muted hover:text-text-secondary'
+          }`}
+        >
+          {h.ten}
+        </button>
+      ))}
+    </div>
+  );
+  const lenhCaiCli = heDieuHanh === 'windows' ? LENH_CLI_WINDOWS : LENH_CLI_UNIX;
+
   if (sanSang && !isAuthenticated) {
     return (
       <div className="min-h-screen bg-darkbg pt-24 px-4">
         <div className="max-w-md mx-auto text-center bg-darkcard border border-darkborder rounded-2xl p-8">
           <Terminal className="w-12 h-12 text-neon-violet mx-auto mb-4" />
           <h1 className="text-xl font-heading font-bold text-text-primary mb-2">CuongMini trên Terminal</h1>
-          <p className="text-text-muted text-sm mb-6">Đăng nhập để xin key dùng CuongMini trong OpenCode.</p>
+          <p className="text-text-muted text-sm mb-6">Đăng nhập để xin key dùng CuongMini trong terminal bằng CuongMini CLI.</p>
           <Link href="/login?redirect=/llm-key" className="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold">
             Đăng nhập
           </Link>
+          <p className="mt-4 text-xs text-text-muted">
+            Chưa biết CuongMini CLI là gì? <Link href="/cli" className="text-neon-violet hover:underline">Xem giới thiệu + cách cài</Link>
+          </p>
         </div>
       </div>
     );
@@ -331,19 +370,20 @@ export default function LlmKeyPage() {
             <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500/70" />
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
-            <span className="ml-2 text-[11px] font-mono text-text-muted">~/du-an — opencode</span>
+            <span className="ml-2 text-[11px] font-mono text-text-muted">~/du-an — cuongmini</span>
           </div>
           <div className="px-5 py-6 sm:px-7 sm:py-8">
             <h1 className="text-2xl md:text-3xl font-heading font-bold text-text-primary tracking-tight">
               CuongMini trên Terminal
             </h1>
             <p className="text-text-secondary text-sm md:text-base mt-2.5 max-w-2xl leading-relaxed">
-              Dùng CuongMini ngay trong OpenCode trên máy bạn — đọc và sửa mã bằng terminal,
-              không cần mở trình duyệt.
+              Key dùng CuongMini trong terminal — cài <Link href="/cli" className="text-neon-violet hover:underline">CuongMini CLI</Link>,
+              đăng nhập đúng tài khoản được cấp key là chạy: đọc và sửa mã, chạy lệnh ngay trong thư mục dự án,
+              không cần mở trình duyệt. Tài khoản Pro thì dùng được luôn, không cần xin key.
             </p>
             <p className="mt-4 font-mono text-sm">
               <span className="text-emerald-400">$</span>{' '}
-              <span className="text-text-muted">opencode</span>{' '}
+              <span className="text-text-muted">cuongmini</span>{' '}
               <span className="inline-block w-2 h-4 align-middle bg-neon-violet/80 animate-pulse" />
             </p>
           </div>
@@ -356,9 +396,9 @@ export default function LlmKeyPage() {
             {/* ─── Trạng thái key ─── */}
             {key ? (
               <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/[0.07] p-5">
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex flex-wrap items-center gap-2 mb-4">
                   <KeyRound className="w-5 h-5 text-emerald-400" />
-                  <span className="font-semibold text-text-primary">Key của bạn</span>
+                  <span className="font-semibold text-text-primary whitespace-nowrap">Key của bạn</span>
                   {donHienHanh?.quotaUsd != null && (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300">
                       hạn mức {donHienHanh.quotaUsd} USD / chu kỳ
@@ -387,7 +427,9 @@ export default function LlmKeyPage() {
                   </button>
                 </div>
                 <p className="text-xs text-text-muted mt-3">
-                  Giữ key như mật khẩu — đừng commit vào git, đừng dán lên nhóm chat.
+                  Dùng CuongMini CLI thì <b className="text-text-secondary">không cần dán key này đi đâu</b> — chỉ cần đăng nhập
+                  đúng tài khoản. Chuỗi key chỉ dùng cho OpenCode (cách cũ) và trang kiểm tra hạn mức; giữ nó như mật khẩu —
+                  đừng commit vào git, đừng dán lên nhóm chat.
                 </p>
 
                 {/* Lỡ lộ thì tính bằng PHÚT. Bắt người dùng nhắn admin rồi
@@ -463,11 +505,17 @@ export default function LlmKeyPage() {
                 {info && !info.isPro ? (
                   <div className="mt-3">
                     <p className="text-sm text-text-muted mb-4">
-                      Cấp key là quyền lợi của tài khoản Pro.
+                      Xin key ở đây là quyền lợi của tài khoản Pro (mà Pro thì đã dùng được CuongMini CLI ngay).
+                      Chưa có Pro: mua key terminal ở shop — key về tài khoản ngay sau khi thanh toán.
                     </p>
-                    <Link href="/pro" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-violet-500 text-white font-semibold text-sm">
-                      <Crown className="w-4 h-4" /> Nâng cấp Pro
-                    </Link>
+                    <div className="flex flex-wrap gap-2">
+                      <Link href="/pro" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-violet-500 text-white font-semibold text-sm">
+                        <Crown className="w-4 h-4" /> Nâng cấp Pro
+                      </Link>
+                      <Link href="/shop" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-darkborder text-text-secondary hover:text-text-primary font-semibold text-sm">
+                        <ShoppingBag className="w-4 h-4" /> Mua key ở shop
+                      </Link>
+                    </div>
                   </div>
                 ) : (
                   <>
@@ -479,7 +527,7 @@ export default function LlmKeyPage() {
                       onChange={(e) => setLyDo(e.target.value)}
                       rows={3}
                       maxLength={2000}
-                      placeholder="e.g. Using OpenCode to refactor a personal Next.js project on a Mac, about 2–3 hours each evening."
+                      placeholder="VD: Dùng CuongMini CLI để refactor dự án Next.js cá nhân trên Mac, khoảng 2–3 giờ mỗi tối."
                       className="w-full bg-darkbg border border-darkborder rounded-xl px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted/60 focus:border-neon-violet outline-none resize-none"
                     />
                     <div className="flex items-center justify-between mt-1.5 mb-4">
@@ -500,145 +548,74 @@ export default function LlmKeyPage() {
               </div>
             )}
 
-            {/* ─── Hướng dẫn ─── */}
+            {/* ─── Dùng bằng CuongMini CLI (đường chính từ 17/10/2026) ───
+                Chỉ bốn bước ngắn + link sang /cli: trang đó mới là nơi viết kỹ cho
+                người chưa từng mở terminal. Ở đây người dùng đang lo chuyện key,
+                chỉ cần biết "cài gì, gõ gì, và KHÔNG phải dán key". */}
             <div className="rounded-2xl border border-darkborder bg-darkcard p-5">
               <h2 className="font-semibold text-text-primary mb-1 flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-neon-violet" /> Cắm vào OpenCode
+                <Terminal className="w-4 h-4 text-neon-violet" /> Dùng bằng CuongMini CLI
               </h2>
               <p className="text-xs text-text-muted mb-4">
-                Chạy được trên cả <strong className="text-text-secondary">Windows, macOS và Linux</strong> — OpenCode là
-                gói npm, chỉ cần Node 18 trở lên. Các bước khác nhau giữa ba hệ nằm ngay dưới, chọn đúng hệ của bạn.
+                Một dòng lệnh cài trên <strong className="text-text-secondary">macOS, Windows và Linux</strong> — trình cài tự lo
+                Node.js và PATH. <strong className="text-text-secondary">Không cần dán key</strong>: CLI đăng nhập bằng tài khoản
+                cuongthai.com, máy chủ tự nhận key đã duyệt của tài khoản này.
               </p>
 
-              {/* Không giấu chuyện này xuống cuối: nhà phát triển OpenCode
-                  khuyên mạnh dùng WSL trên Windows, và người dùng cần biết
-                  TRƯỚC khi bỏ 10 phút đi theo đường native rồi mới gặp trục
-                  trặc. Nhưng cũng không ép — gói npm có sẵn nhị phân Windows
-                  (đã kiểm: os `win32`, opencode-windows-x64/arm64). */}
-              {heDieuHanh === 'windows' && (
-                <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-3 mb-4">
-                  <p className="text-xs text-text-muted leading-relaxed">
-                    <b className="text-amber-300">Windows:</b> làm theo hướng dẫn dưới là chạy được ngay. Nhưng nhà
-                    phát triển OpenCode <b className="text-text-secondary">khuyên dùng WSL</b> (Windows Subsystem for
-                    Linux) để có hiệu năng file và hỗ trợ terminal tốt hơn. Dùng WSL thì mở terminal WSL rồi làm theo
-                    tab <b className="text-text-secondary">Linux</b>, không phải tab Windows.
-                  </p>
-                </div>
-              )}
-
-              {/* Chọn hệ điều hành — chỉ đổi bước 2 và bước 3 */}
-              <div className="flex gap-1.5 mb-4 p-1 rounded-xl bg-darkbg border border-darkborder w-fit">
-                {HE_DIEU_HANH.map((h) => (
-                  <button
-                    key={h.ma}
-                    onClick={() => setHeDieuHanh(h.ma)}
-                    aria-pressed={heDieuHanh === h.ma}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                      heDieuHanh === h.ma
-                        ? 'bg-gradient-to-r from-neon-indigo to-neon-violet text-white'
-                        : 'text-text-muted hover:text-text-secondary'
-                    }`}
-                  >
-                    {h.ten}
-                  </button>
-                ))}
-              </div>
+              <div className="mb-4">{hangChonHDH}</div>
 
               <ol className="space-y-4 text-sm">
-                {/* ⚠️ BƯỚC NÀY TRƯỚC ĐÂY KHÔNG CÓ, và đó là lỗi.
-                    Hướng dẫn cũ bắt đầu thẳng từ `npm i -g opencode-ai`, tức
-                    GIẢ ĐỊNH SẴN máy đã cài Node. Trên Windows sạch thì không,
-                    và người dùng nhận "npm không phải là lệnh" — một câu chẳng
-                    nhắc gì tới Node.js, nên họ tưởng hướng dẫn sai. Đã dính
-                    thật 14/09/2026. */}
                 <li>
-                  <p className="text-text-primary font-medium mb-1.5">1. Cài Node.js (bỏ qua nếu đã có)</p>
-                  <p className="text-xs text-text-muted mb-1.5">
-                    Kiểm trước bằng <code className="text-text-secondary">node -v</code>. Ra số phiên bản là đã có.
-                    Báo <em>&quot;không phải là lệnh&quot;</em> / <em>&quot;command not found&quot;</em> thì cài theo dưới
-                    — và đó cũng chính là lý do <code className="text-text-secondary">npm</code> báo không tìm thấy.
+                  <p className="text-text-primary font-medium mb-1.5">1. Mở terminal</p>
+                  <p className="text-xs text-text-muted">
+                    {heDieuHanh === 'macos' && <>Bấm <b className="text-text-secondary">Cmd + Space</b>, gõ <b className="text-text-secondary">Terminal</b> rồi Enter.</>}
+                    {heDieuHanh === 'windows' && <>Bấm phím Windows, gõ <b className="text-text-secondary">PowerShell</b> rồi Enter — không dùng Command Prompt (cmd), không cần quyền Admin.</>}
+                    {heDieuHanh === 'linux' && <>Bấm <b className="text-text-secondary">Ctrl + Alt + T</b> hoặc mở Terminal từ menu ứng dụng.</>}
                   </p>
+                </li>
+                <li>
+                  <p className="text-text-primary font-medium mb-1.5">2. Dán lệnh cài rồi Enter</p>
                   <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
-                    <code className="flex-1 min-w-0 text-xs font-mono text-text-secondary truncate">{lenhCaiNode(heDieuHanh)}</code>
-                    <button onClick={() => chepChu(lenhCaiNode(heDieuHanh), 'node')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
-                      {chep === 'node' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <code className="flex-1 min-w-0 text-xs font-mono text-text-secondary break-all">{lenhCaiCli}</code>
+                    <button onClick={() => chepChu(lenhCaiCli, 'cli')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh cài">
+                      {chep === 'cli' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                  <p className="text-xs text-text-muted mt-1.5">Chạy lại đúng lệnh này bất cứ lúc nào để cập nhật lên bản mới.</p>
+                </li>
+                <li>
+                  <p className="text-text-primary font-medium mb-1.5">3. Mở cửa sổ terminal MỚI, vào thư mục dự án, gõ</p>
+                  <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
+                    <code className="flex-1 min-w-0 text-xs font-mono text-text-secondary">{LENH_CHAY_CLI}</code>
+                    <button onClick={() => chepChu(LENH_CHAY_CLI, 'chayCli')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
+                      {chep === 'chayCli' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     </button>
                   </div>
                   <p className="text-xs text-amber-300/80 mt-1.5">
-                    Cài xong phải <b>mở lại cửa sổ terminal</b> — đường dẫn mới chỉ có hiệu lực ở cửa sổ mở sau đó.
+                    Phải là cửa sổ mở <b>sau</b> khi cài — cửa sổ cũ chưa biết lệnh <code>cuongmini</code>.
                   </p>
                 </li>
-
                 <li>
-                  <p className="text-text-primary font-medium mb-1.5">2. Cài OpenCode</p>
-                  <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
-                    <code className="flex-1 text-xs font-mono text-text-secondary">npm i -g opencode-ai</code>
-                    <button onClick={() => chepChu('npm i -g opencode-ai', 'cai')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
-                      {chep === 'cai' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    </button>
-                  </div>
-                  <p className="text-xs text-text-muted mt-1.5">Giống nhau trên cả ba hệ điều hành.</p>
-                </li>
-
-                <li>
-                  <p className="text-text-primary font-medium mb-1.5">3. Đặt key vào biến môi trường</p>
-                  <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
-                    <code className="flex-1 min-w-0 text-xs font-mono text-text-secondary truncate">
-                      {lenhDatKey(heDieuHanh, key ? (hienKey ? key : 'sk-…') : 'key-cua-ban').lenh}
-                    </code>
-                    <button onClick={() => chepChu(lenhDatKey(heDieuHanh, key ?? 'key-cua-ban').lenh, 'env')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
-                      {chep === 'env' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    </button>
-                  </div>
-                  <p className="text-xs text-text-muted mt-1.5">{lenhDatKey(heDieuHanh, '').ghiChu}</p>
-                </li>
-
-                <li>
-                  <p className="text-text-primary font-medium mb-1.5">
-                    4. Tạo <code className="text-text-secondary">{duongDanCauHinh(heDieuHanh)}</code>
+                  <p className="text-text-primary font-medium mb-1.5">4. Đăng nhập đúng tài khoản này</p>
+                  <p className="text-xs text-text-muted">
+                    Lần đầu CLI hỏi đăng nhập: Google / GitHub / Apple (mở trình duyệt) hoặc tên + mật khẩu. Xong là giao việc bằng
+                    tiếng Việt được ngay.
                   </p>
-                  <p className="text-xs text-text-muted mb-1.5">
-                    Không muốn đụng thư mục hệ thống thì đặt file tên{' '}
-                    <code className="text-text-secondary">opencode.json</code> ngay trong thư mục dự án — cách này giống
-                    hệt nhau trên cả ba hệ.
-                  </p>
-                  <div className="relative">
-                    <pre className="bg-darkbg border border-darkborder rounded-lg p-3 text-xs font-mono text-text-secondary overflow-x-auto max-h-72">
-{cauHinhMau}
-                    </pre>
-                    <button
-                      onClick={() => chepChu(cauHinhMau, 'json')}
-                      className="absolute top-2 right-2 p-1.5 rounded bg-darkcard/90 text-text-muted hover:text-neon-violet"
-                      aria-label="Chép cấu hình"
-                    >
-                      {chep === 'json' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    </button>
-                  </div>
-                </li>
-
-                <li>
-                  <p className="text-text-primary font-medium mb-1.5">5. Chạy</p>
-                  <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
-                    <code className="flex-1 text-xs font-mono text-text-secondary">opencode</code>
-                    <button onClick={() => chepChu('opencode', 'chay')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
-                      {chep === 'chay' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    </button>
-                  </div>
                 </li>
               </ol>
 
-              {info && info.models.length > 0 && (
-                <div className="mt-5 pt-4 border-t border-darkborder">
-                  <p className="text-xs text-text-muted mb-2">Model dùng được ({info.models.length}):</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {info.models.map((m) => (
-                      <code key={m} className="text-[11px] px-2 py-1 rounded bg-darkbg border border-darkborder text-text-secondary">
-                        {m}
-                      </code>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <Link
+                href="/cli"
+                className="mt-5 flex items-center gap-3 rounded-xl border border-neon-violet/30 bg-neon-violet/[0.06] p-3 hover:border-neon-violet/60 transition-colors group"
+              >
+                <Terminal className="w-4 h-4 text-neon-violet shrink-0" />
+                <span className="text-xs text-text-secondary flex-1 min-w-0">
+                  Hướng dẫn đầy đủ: cài trên máy mới tinh, lệnh <code>/</code>, phím tắt, chế độ quyền, lỗi hay gặp.
+                </span>
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-neon-violet whitespace-nowrap group-hover:underline">
+                  Mở /cli <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </Link>
             </div>
 
             {/* ─── Điều cần biết. Nói TRƯỚC, không để người dùng tự phát hiện ─── */}
@@ -646,15 +623,158 @@ export default function LlmKeyPage() {
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
                 <div className="text-sm space-y-2 min-w-0">
-                  <p className="font-semibold text-amber-300">Ba điều cần biết trước</p>
+                  <p className="font-semibold text-amber-300">Hai điều cần biết trước</p>
+                  <p className="text-text-muted">
+                    <b className="text-text-primary">Hạn mức tính chung một ví.</b> CuongMini CLI, app desktop, extension
+                    (và OpenCode nếu bạn còn dùng) cùng trừ vào hạn mức của key theo từng chu kỳ, nạp lại khi chu kỳ mới bắt
+                    đầu. Trong CLI gõ <code className="text-text-secondary">/usage</code> để xem còn bao nhiêu.
+                  </p>
+                  <p className="text-text-muted">
+                    <b className="text-text-primary">Key có hạn thì quyền dùng CLI cũng có hạn.</b> Gói mua ở shop hết hạn (mà
+                    tài khoản không có Pro) thì CLI báo cần nâng cấp — mua gói mới hoặc xin lại key ở trang này.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* ─── Cách cũ: OpenCode ───
+                Thu gọn chứ KHÔNG xoá: key cấp trước 17/10/2026 vẫn chạy tới hết
+                hạn, người đang dùng OpenCode vẫn cần chỗ tra cấu hình. Mở sẵn thì
+                người mới lại đi nhầm đường cũ, nên mặc định đóng. */}
+            <details className="group rounded-2xl border border-darkborder bg-darkcard">
+              <summary className="flex cursor-pointer list-none items-center gap-2 p-5 font-semibold text-text-primary">
+                <History className="w-4 h-4 text-text-muted shrink-0" />
+                <span className="flex-1 min-w-0">Cách cũ: OpenCode (key vẫn dùng được tới hết hạn)</span>
+                <ChevronDown className="w-4 h-4 text-text-muted shrink-0 transition group-open:rotate-180" />
+              </summary>
+              <div className="px-5 pb-5">
+                <p className="text-xs text-text-muted mb-4">
+                  Chạy được trên cả <strong className="text-text-secondary">Windows, macOS và Linux</strong> — OpenCode là
+                  gói npm, chỉ cần Node 18 trở lên. Từ 17/10/2026 đường chính là CuongMini CLI ở trên; phần này giữ lại cho
+                  người đang dùng OpenCode.
+                </p>
+
+                {/* Không giấu chuyện này xuống cuối: nhà phát triển OpenCode
+                    khuyên mạnh dùng WSL trên Windows, và người dùng cần biết
+                    TRƯỚC khi bỏ 10 phút đi theo đường native rồi mới gặp trục
+                    trặc. Nhưng cũng không ép — gói npm có sẵn nhị phân Windows
+                    (đã kiểm: os `win32`, opencode-windows-x64/arm64). */}
+                {heDieuHanh === 'windows' && (
+                  <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-3 mb-4">
+                    <p className="text-xs text-text-muted leading-relaxed">
+                      <b className="text-amber-300">Windows:</b> làm theo hướng dẫn dưới là chạy được ngay. Nhưng nhà
+                      phát triển OpenCode <b className="text-text-secondary">khuyên dùng WSL</b> (Windows Subsystem for
+                      Linux) để có hiệu năng file và hỗ trợ terminal tốt hơn. Dùng WSL thì mở terminal WSL rồi làm theo
+                      tab <b className="text-text-secondary">Linux</b>, không phải tab Windows.
+                    </p>
+                  </div>
+                )}
+
+                {/* Chọn hệ điều hành — dùng chung trạng thái với phần CLI ở trên */}
+                <div className="mb-4">{hangChonHDH}</div>
+
+                <ol className="space-y-4 text-sm">
+                  {/* ⚠️ BƯỚC NÀY TRƯỚC ĐÂY KHÔNG CÓ, và đó là lỗi.
+                      Hướng dẫn cũ bắt đầu thẳng từ `npm i -g opencode-ai`, tức
+                      GIẢ ĐỊNH SẴN máy đã cài Node. Trên Windows sạch thì không,
+                      và người dùng nhận "npm không phải là lệnh" — một câu chẳng
+                      nhắc gì tới Node.js, nên họ tưởng hướng dẫn sai. Đã dính
+                      thật 14/09/2026. */}
+                  <li>
+                    <p className="text-text-primary font-medium mb-1.5">1. Cài Node.js (bỏ qua nếu đã có)</p>
+                    <p className="text-xs text-text-muted mb-1.5">
+                      Kiểm trước bằng <code className="text-text-secondary">node -v</code>. Ra số phiên bản là đã có.
+                      Báo <em>&quot;không phải là lệnh&quot;</em> / <em>&quot;command not found&quot;</em> thì cài theo dưới
+                      — và đó cũng chính là lý do <code className="text-text-secondary">npm</code> báo không tìm thấy.
+                    </p>
+                    <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
+                      <code className="flex-1 min-w-0 text-xs font-mono text-text-secondary truncate">{lenhCaiNode(heDieuHanh)}</code>
+                      <button onClick={() => chepChu(lenhCaiNode(heDieuHanh), 'node')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
+                        {chep === 'node' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                    <p className="text-xs text-amber-300/80 mt-1.5">
+                      Cài xong phải <b>mở lại cửa sổ terminal</b> — đường dẫn mới chỉ có hiệu lực ở cửa sổ mở sau đó.
+                    </p>
+                  </li>
+
+                  <li>
+                    <p className="text-text-primary font-medium mb-1.5">2. Cài OpenCode</p>
+                    <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
+                      <code className="flex-1 text-xs font-mono text-text-secondary">npm i -g opencode-ai</code>
+                      <button onClick={() => chepChu('npm i -g opencode-ai', 'cai')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
+                        {chep === 'cai' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                    <p className="text-xs text-text-muted mt-1.5">Giống nhau trên cả ba hệ điều hành.</p>
+                  </li>
+
+                  <li>
+                    <p className="text-text-primary font-medium mb-1.5">3. Đặt key vào biến môi trường</p>
+                    <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
+                      <code className="flex-1 min-w-0 text-xs font-mono text-text-secondary truncate">
+                        {lenhDatKey(heDieuHanh, key ? (hienKey ? key : 'sk-…') : 'key-cua-ban').lenh}
+                      </code>
+                      <button onClick={() => chepChu(lenhDatKey(heDieuHanh, key ?? 'key-cua-ban').lenh, 'env')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
+                        {chep === 'env' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                    <p className="text-xs text-text-muted mt-1.5">{lenhDatKey(heDieuHanh, '').ghiChu}</p>
+                  </li>
+
+                  <li>
+                    <p className="text-text-primary font-medium mb-1.5">
+                      4. Tạo <code className="text-text-secondary">{duongDanCauHinh(heDieuHanh)}</code>
+                    </p>
+                    <p className="text-xs text-text-muted mb-1.5">
+                      Không muốn đụng thư mục hệ thống thì đặt file tên{' '}
+                      <code className="text-text-secondary">opencode.json</code> ngay trong thư mục dự án — cách này giống
+                      hệt nhau trên cả ba hệ.
+                    </p>
+                    <div className="relative">
+                      <pre className="bg-darkbg border border-darkborder rounded-lg p-3 text-xs font-mono text-text-secondary overflow-x-auto max-h-72">
+  {cauHinhMau}
+                      </pre>
+                      <button
+                        onClick={() => chepChu(cauHinhMau, 'json')}
+                        className="absolute top-2 right-2 p-1.5 rounded bg-darkcard/90 text-text-muted hover:text-neon-violet"
+                        aria-label="Chép cấu hình"
+                      >
+                        {chep === 'json' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  </li>
+
+                  <li>
+                    <p className="text-text-primary font-medium mb-1.5">5. Chạy</p>
+                    <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
+                      <code className="flex-1 text-xs font-mono text-text-secondary">opencode</code>
+                      <button onClick={() => chepChu('opencode', 'chay')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
+                        {chep === 'chay' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  </li>
+                </ol>
+
+                {info && info.models.length > 0 && (
+                  <div className="mt-5 pt-4 border-t border-darkborder">
+                    <p className="text-xs text-text-muted mb-2">Model dùng được ({info.models.length}):</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {info.models.map((m) => (
+                        <code key={m} className="text-[11px] px-2 py-1 rounded bg-darkbg border border-darkborder text-text-secondary">
+                          {m}
+                        </code>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Hai giới hạn riêng của đường OpenCode (đi qua cổng key, không qua AI Code). */}
+                <div className="mt-5 pt-4 border-t border-darkborder text-xs space-y-2">
                   <p className="text-text-muted">
                     <b className="text-text-primary">Web được ưu tiên.</b> Khi cuongthai.com đang dùng nhiều,
                     key cá nhân tạm nhường lượt và trả lỗi 429 kèm lý do. Hết chu kỳ là mở lại — không phải
                     key hỏng.
-                  </p>
-                  <p className="text-text-muted">
-                    <b className="text-text-primary">Mỗi key có hạn mức riêng</b> theo từng chu kỳ, nạp lại
-                    khi chu kỳ mới bắt đầu.
                   </p>
                   <p className="text-text-muted">
                     <b className="text-text-primary">
@@ -664,19 +784,25 @@ export default function LlmKeyPage() {
                     phục vụ được ổn định — khai cao hơn thứ cổng chịu nổi thì OpenCode ngừng nén và yêu cầu bị
                     từ chối giữa chừng. Cần nhiều hơn thì nhắn admin, chúng tôi đo lại và nâng.
                   </p>
+                  <a
+                    href="https://opencode.ai/docs"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-text-muted hover:text-neon-violet"
+                  >
+                    Tài liệu OpenCode <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                 </div>
               </div>
-            </div>
+            </details>
 
             <div className="flex flex-wrap gap-3">
-              <a
-                href="https://opencode.ai/docs"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-neon-violet"
-              >
-                Tài liệu OpenCode <ExternalLink className="w-3.5 h-3.5" />
-              </a>
+              <Link href="/cli" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-neon-violet">
+                <Terminal className="w-3.5 h-3.5" /> CuongMini CLI
+              </Link>
+              <Link href="/kiem-tra-key" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-neon-violet">
+                <Gauge className="w-3.5 h-3.5" /> Kiểm tra hạn mức key
+              </Link>
               <Link href="/pro" className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-amber-300">
                 <Crown className="w-3.5 h-3.5" /> Quyền lợi Pro
               </Link>

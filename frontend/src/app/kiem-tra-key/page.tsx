@@ -181,8 +181,8 @@ export default function TrangKiemTraKey() {
         )}
 
         <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm">
-          <Link href="/llm-key" className="text-text-muted hover:text-neon-violet inline-flex items-center gap-1.5">
-            <Terminal className="w-4 h-4" /> Hướng dẫn cắm vào OpenCode
+          <Link href="/cli" className="text-text-muted hover:text-neon-violet inline-flex items-center gap-1.5">
+            <Terminal className="w-4 h-4" /> Dùng key với CuongMini CLI
           </Link>
           <Link href="/shop" className="text-text-muted hover:text-neon-violet inline-flex items-center gap-1.5">
             <ShoppingBag className="w-4 h-4" /> Mua key

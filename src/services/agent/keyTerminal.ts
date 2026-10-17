@@ -156,6 +156,27 @@ export async function tranRiengCuaNguoi(userId: number): Promise<number | null> 
   }
 }
 
+/**
+ * Người này có key terminal ĐÃ DUYỆT, CÒN HẠN không (mọi nguồn: xin hoặc mua).
+ *
+ * 17/10/2026: terminal chuyển từ OpenCode sang CuongMini CLI — CLI đi qua chính
+ * AI Code của web (`/agent/turn`), vốn chỉ mở cho Pro. Người đã được cấp key
+ * terminal phải dùng được CLI (chủ app chốt "Pro + người có key"), hạn mức vẫn
+ * là ví gộp như cũ (`viTien.ts` đọc trần riêng của key). Hỏng CSDL ⇒ false: thà
+ * mời nâng cấp nhầm một lần còn hơn mở cửa cho người không có quyền.
+ */
+export async function coKeyTerminalHieuLuc(userId: number): Promise<boolean> {
+  try {
+    const don = await prisma.llmKeyRequest.findFirst({
+      where: { userId, status: 'APPROVED', OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+      select: { id: true },
+    });
+    return don !== null;
+  } catch {
+    return false;
+  }
+}
+
 /** Xoá nhớ tạm — dùng trong kiểm thử. */
 export function xoaNhoKeyTerminal(): void {
   dem.clear();

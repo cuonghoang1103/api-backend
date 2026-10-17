@@ -105,6 +105,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.4,
     })),
     { url: `${SITE_URL}/download`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    // CuongMini Code (extension VS Code/Cursor/…) + CLI — trang giới thiệu có deep link cài một cú bấm.
+    { url: `${SITE_URL}/ai-code`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    // CuongMini CLI (17/10/2026) — AI Code trong terminal: cài một dòng + hướng dẫn dùng cho máy mới tinh.
+    { url: `${SITE_URL}/cli`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${SITE_URL}/tools/image-to-doc`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
 
     // Sân chơi 3D. Trước đây KHÔNG có ở đây, và trên trang chủ nó lại nấp sau

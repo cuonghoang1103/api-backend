@@ -2,7 +2,7 @@
  * `nativeImage` thuần JS (anhThuan.ts).
  *
  * Chạy từ gốc repo:
- *   npx tsx --test packages/vscode-cuongthai/src/doclap/anhThuan.test.ts
+ *   npx tsx --test packages/cuongmini-core/src/anhThuan.test.ts
  *
  * Phép kiểm cuối chạy THẬT `chuanHoaAnh` của app desktop (`desktop/src/main/
  * agent/anhLa.ts`) với `electron` được đổi sang chính file này — tức đúng cách
@@ -209,9 +209,9 @@ describe('chuanHoaAnh THẬT của app desktop, electron = anhThuan', () => {
   (Module as unknown as { _resolveFilename: (...a: unknown[]) => string })._resolveFilename = function (yeuCau: unknown, ...con: unknown[]) {
     return yeuCau === 'electron' ? thay : goc.call(this, yeuCau, ...con);
   };
-  const duongAnhLa = path.resolve(__dirname, '../../../../desktop/src/main/agent/anhLa.ts');
+  const duongAnhLa = path.resolve(__dirname, '../../../desktop/src/main/agent/anhLa.ts');
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const napAnhLa = () => require(duongAnhLa) as typeof import('../../../../desktop/src/main/agent/anhLa');
+  const napAnhLa = () => require(duongAnhLa) as typeof import('../../../desktop/src/main/agent/anhLa');
 
   it('PNG nhỏ đứng thẳng đi NGUYÊN BYTE', async () => {
     const { chuanHoaAnh } = napAnhLa();

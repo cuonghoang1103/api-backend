@@ -12,8 +12,8 @@ import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 import * as vscode from 'vscode';
 import type { KetNoi } from './ketNoi';
-import type { LoiApi } from './doclap/kieuLoi';
-import { lamMoi, LoiDangNhap, type NguoiDung } from './dangNhap';
+import type { LoiApi } from '../../cuongmini-core/src/kieuLoi';
+import { lamMoi, LoiDangNhap, type NguoiDung } from '../../cuongmini-core/src/dangNhap';
 
 const KHOA_PHIEN = 'cuongthai.phien';
 /** Token sống 24h phía máy chủ; đổi mới mỗi 6h là dư sức. */
@@ -120,6 +120,11 @@ export class LoiDocLap implements KetNoi {
     if (this.hen) clearInterval(this.hen);
     this.hen = null;
     this.nguoiNghe.clear();
+  }
+
+  /** Tắt VS Code/extension ⇒ đóng cửa sổ trình duyệt AI đã mở (không để Chrome mồ côi). */
+  static async dongTrinhDuyet(): Promise<void> {
+    await loiDaNap?.dongTrinhDuyet?.().catch(() => undefined);
   }
 
   async trangThai(): Promise<{ ok: boolean; phienBan: string; mucNoLuc?: string }> {

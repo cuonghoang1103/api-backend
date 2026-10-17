@@ -2,7 +2,7 @@
   "name": "cuongthai-ai-code",
   "displayName": "CuongMini Code — AI lập trình của CuongThai",
   "description": "CuongMini Code — AI lập trình của CuongThai ngay trong VS Code — chat, sửa code, chạy lệnh, skill, MCP, GitHub. Cài là dùng: đăng nhập bằng tài khoản cuongthai.com (có app desktop thì tự chạy qua app).",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "cuongthai",
   "license": "UNLICENSED",
   "private": true,

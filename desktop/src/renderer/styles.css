@@ -15530,3 +15530,86 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 .ct-dangnhap[data-bien-the="ctwork"] .ct-dangnhap-icon { background: transparent; box-shadow: none; }
 .ct-dangnhap[data-bien-the="ctwork"] .ct-dangnhap-lien button:hover { color: #4f5bd5; }
+
+/* ══ DÙNG AI CODE TRONG VS CODE / CURSOR… (17/10/2026) ══════════════════
+   Hộp phủ giữa màn hình (không phải tấm thả xuống): danh sách trình soạn có
+   nút Cài/Mở cần chỗ, và người dùng làm việc này một lần rồi thôi.
+   Bọc `display: contents` để khi cột hẹp nút (data-phu) ẩn đi thì bọc không
+   để lại một khe trống trên thanh công cụ. */
+.ct-trinhsoan-boc { display: contents; }
+.ct-trinhsoan-phu {
+  position: fixed; inset: 0; z-index: 60;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px; background: rgba(0, 0, 0, .6);
+}
+.ct-trinhsoan-hop {
+  width: 100%; max-width: 520px; max-height: calc(100vh - 32px); overflow-y: auto;
+  padding: 18px 20px; border-radius: 14px; text-align: left;
+  background: var(--ct-card, #16161f); color: var(--ct-text);
+  border: 1px solid var(--ct-border);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .35);
+}
+.ct-trinhsoan-dau { display: flex; align-items: center; gap: 6px; }
+.ct-trinhsoan-dau h3 { flex: 1; margin: 0; font-size: 15px; }
+.ct-trinhsoan-dau .ct-agent-icon { width: 28px; height: 28px; border-radius: 8px; }
+.ct-trinhsoan-gioi { margin: 8px 0 12px; font-size: 12.5px; line-height: 1.55; color: var(--ct-text-muted); }
+.ct-trinhsoan-cho { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ct-text-muted); }
+.ct-trinhsoan-ds { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ct-trinhsoan-ds li {
+  display: grid; grid-template-columns: 1fr auto; grid-template-areas: 'ten nut' 'tt nut' 'tin tin';
+  align-items: center; column-gap: 10px;
+  padding: 9px 11px; border-radius: 10px;
+  border: 1px solid var(--ct-border); background: var(--ct-surface-2);
+}
+.ct-trinhsoan-ds li[data-cai='false'] { opacity: .65; }
+.ct-trinhsoan-ten { grid-area: ten; font-weight: 600; font-size: 13px; }
+.ct-trinhsoan-tt { grid-area: tt; font-size: 11.5px; color: var(--ct-text-muted); }
+.ct-trinhsoan-tt[data-co='true'] { color: var(--ct-accent-text); }
+.ct-trinhsoan-nut { grid-area: nut; display: flex; gap: 6px; }
+.ct-trinhsoan-nut .ct-agent-cong { height: 28px; border-radius: 8px; font-size: 12px; }
+.ct-trinhsoan-tin { grid-area: tin; margin: 6px 0 0; font-size: 12px; color: var(--ct-text-muted); white-space: pre-line; }
+.ct-trinhsoan-tin[data-loi='true'] { color: #f87171; }
+.ct-trinhsoan-cli {
+  margin-top: 14px; padding: 11px; border-radius: 10px;
+  border: 1px dashed var(--ct-border);
+}
+.ct-trinhsoan-cli p { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; font-size: 12.5px; }
+.ct-trinhsoan-cli p.ct-trinhsoan-nho { margin: 8px 0 0; color: var(--ct-text-muted); display: block; }
+.ct-trinhsoan-lenh {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 8px 7px 10px; border-radius: 8px;
+  background: #0f1117; color: #e6e8ee;
+}
+.ct-trinhsoan-lenh code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; font-size: 12px; }
+.ct-trinhsoan-lenh button {
+  display: inline-flex; align-items: center; gap: 4px; flex: none;
+  padding: 3px 8px; border-radius: 6px; border: 0; cursor: pointer;
+  background: rgba(255, 255, 255, .1); color: inherit; font-size: 11.5px;
+}
+.ct-trinhsoan-lenh button:hover { background: rgba(255, 255, 255, .2); }
+.ct-trinhsoan-web {
+  display: inline-flex; align-items: center; gap: 5px; margin-top: 12px;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  color: var(--ct-accent-text); font-size: 12.5px;
+}
+.ct-trinhsoan-web:hover { text-decoration: underline; }
+
+/* ─── Nút + hộp cài CuongMini CLI (17/10/2026, thay nút OpenCode) ─────── */
+.nut-cli { display: inline-flex; align-items: center; gap: 8px; }
+.nut-cli__hop { max-width: 560px; text-align: left; }
+.nut-cli__hop code { font-family: var(--ct-font-mono, ui-monospace, Menlo, monospace); font-size: .92em; padding: 1px 5px; border-radius: 5px; background: rgba(148, 163, 184, .14); }
+.nut-cli__buoc { list-style: none; padding: 0; margin: 14px 0; display: grid; gap: 6px; font-size: 13px; }
+.nut-cli__buoc li { display: flex; gap: 8px; align-items: baseline; color: var(--ct-text-muted, #94a3b8); }
+.nut-cli__buoc li > span { width: 14px; text-align: center; flex: none; }
+.nut-cli__b--xong { color: #4ade80 !important; }
+.nut-cli__b--dang { color: #c4b5fd !important; font-weight: 600; }
+.nut-cli__chinh { background: linear-gradient(135deg, #6366f1, #a855f7) !important; color: #fff !important; border-color: transparent !important; }
+.nut-cli__xong { margin-top: 12px; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(74, 222, 128, .4); background: rgba(74, 222, 128, .08); }
+.nut-cli__xong p { margin: 6px 0 0; }
+.nut-cli__lenh { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(15, 23, 42, .55); border: 1px solid var(--ct-border, rgba(148, 163, 184, .25)); }
+.nut-cli__lenh code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; background: none !important; padding: 0 !important; color: #e2e8f0; }
+.nut-cli__lenh button { flex: none; font-size: 12px; padding: 4px 10px; border-radius: 8px; border: 1px solid var(--ct-border, rgba(148, 163, 184, .3)); background: transparent; color: inherit; cursor: pointer; }
+.nut-cli__log { margin-top: 10px; font-size: 12px; }
+.nut-cli__log summary { cursor: pointer; color: var(--ct-text-muted, #94a3b8); }
+.nut-cli__log pre { max-height: 220px; overflow: auto; margin: 6px 0 0; padding: 8px 10px; border-radius: 8px; background: rgba(15, 23, 42, .6); font-size: 11px; white-space: pre-wrap; word-break: break-all; }
+.nut-cli__tay { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--ct-border, rgba(148, 163, 184, .2)); }

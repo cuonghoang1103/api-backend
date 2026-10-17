@@ -1,0 +1,233 @@
+# Kiểm CuongMini CLI (packages/cuongmini-cli) trên Windows / Linux / macOS THẬT.
+#
+# CHỈ ĐỌC: không secret, không deploy, không đẩy gì đi đâu. Gói cài và script cài
+# được phục vụ từ một http server CỤC BỘ trên chính runner (CUONGMINI_BASE_URL),
+# nên lệnh cài một dòng được chạy đúng như người dùng chạy — trừ nguồn tải.
+#
+# Chạy: push nhánh `cuongmini-cli-thu`, hoặc bấm tay (workflow_dispatch).
+name: CuongMini CLI — thử đa hệ điều hành
+
+on:
+  push:
+    branches: ['cuongmini-cli-thu']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cuongmini-cli-thu-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  thu:
+    name: ${{ matrix.os }} · Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        node: [20, 22]
+    defaults:
+      run:
+        shell: bash
+    env:
+      CUONGMINI_KHONG_KIEM_CAP_NHAT: '1'
+      CUONGMINI_KHONG_MO_TRINH_DUYET: '1'
+      # Không bao giờ chạm máy chủ thật: cổng 9 đóng ⇒ "mất mạng" ⇒ CLI dùng phiên giả đã lưu.
+      CUONGTHAI_API_ORIGIN: http://127.0.0.1:9
+      CONG: '8765'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Phụ thuộc lõi (packages/cuongmini-core)
+        working-directory: packages/cuongmini-core
+        run: npm ci --no-audit --no-fund
+
+      # Lõi kéo mã desktop/src/main, cần zod + unpdf từ desktop/node_modules. Cài cả desktop là
+      # Electron + gói native — không cần. Cài đúng hai gói (bản khoá trong desktop/package-lock.json)
+      # vào thư mục riêng, build.mjs tìm ở đó qua CUONGMINI_NODE_PATHS.
+      - name: zod + unpdf cho lõi (đúng bản khoá của desktop)
+        run: |
+          V=$(node -p "const l=require('./desktop/package-lock.json');['zod','unpdf'].map(n=>n+'@'+l.packages['node_modules/'+n].version).join(' ')")
+          echo "Cài: $V"
+          PHU="$RUNNER_TEMP/phu"
+          mkdir -p "$PHU" && cd "$PHU" && npm init -y >/dev/null && npm install --no-audit --no-fund --save-exact $V
+          echo "CUONGMINI_NODE_PATHS=$PHU/node_modules" >> "$GITHUB_ENV"
+
+      - name: Phụ thuộc CLI
+        working-directory: packages/cuongmini-cli
+        run: npm ci --no-audit --no-fund
+
+      - name: Kiểm kiểu (tsc)
+        working-directory: packages/cuongmini-cli
+        run: npx tsc --noEmit -p tsconfig.json
+
+      - name: Dựng (dist/cuongmini.mjs + dist/loi.cjs)
+        working-directory: packages/cuongmini-cli
+        run: node build.mjs && ls -la dist
+
+      - name: Test đơn vị
+        working-directory: packages/cuongmini-cli
+        run: npx tsx --test src/test/*.test.ts
+
+      - name: --version / --help
+        working-directory: packages/cuongmini-cli
+        run: |
+          V=$(node -p "require('./package.json').version")
+          OUT=$(node dist/cuongmini.mjs --version)
+          echo "$OUT"
+          [ "$OUT" = "$V" ] || { echo "::error::--version in '$OUT', mong '$V'"; exit 1; }
+          node dist/cuongmini.mjs --help | tee "$RUNNER_TEMP/help.txt"
+          grep -q "Cách dùng" "$RUNNER_TEMP/help.txt"
+          set +e; node dist/cuongmini.mjs --co-la; MA=$?; set -e
+          [ "$MA" = "2" ] || { echo "::error::cờ lạ phải thoát mã 2, nhận $MA"; exit 1; }
+
+      - name: -p với lõi giả (text + json + stdin)
+        working-directory: packages/cuongmini-cli
+        run: |
+          export CUONGMINI_HOME="$RUNNER_TEMP/cm-p"
+          mkdir -p "$CUONGMINI_HOME" "$RUNNER_TEMP/duan/src"
+          echo '{"userId":7,"username":"ci","fullName":"CI","token":"tk-gia"}' > "$CUONGMINI_HOME/phien.json"
+          echo 'export const laEmail = (s) => s.includes("@");' > "$RUNNER_TEMP/duan/src/email.ts"
+          # Đường dạng của NODE (D:\… trên Windows), không phải /d/… của Git Bash.
+          export CUONGMINI_LOI="$(node -p "require('path').resolve('thu/loiGia.cjs')")" LOI_GIA_NHANH=1
+          B="$(node -p "require('path').resolve('dist/cuongmini.mjs')")"
+          cd "$RUNNER_TEMP/duan"
+          node "$B" -p "sửa laEmail" --che-do tu-dong > ra.md 2> ra.err
+          cat ra.md; echo '--- stderr'; cat ra.err
+          grep -q "Đã sửa xong" ra.md
+          grep -q "Sửa(src/email.ts)" ra.err
+          node "$B" -p "x" --che-do tu-dong --output-format json 2>/dev/null > ra.json
+          node -e "const j=JSON.parse(require('fs').readFileSync('ra.json','utf8')); if(j.type!=='result'||!j.thanhCong||!/Đã sửa xong/.test(j.ketQua)) { console.error(j); process.exit(1) } console.log('json ok', j.tools.length, 'tool')"
+          # Mặc định "Lập kế hoạch": xin phép sửa phải bị từ chối, không treo.
+          node "$B" -p "sửa" 2> ra2.err > /dev/null
+          grep -q "Từ chối" ra2.err
+          echo "dữ liệu từ pipe" | node "$B" -p "tóm tắt" --che-do tu-dong > /dev/null 2>&1
+
+      - name: Giao diện tương tác qua PTY (macOS/Linux)
+        if: runner.os != 'Windows'
+        working-directory: packages/cuongmini-cli
+        run: |
+          export CUONGMINI_HOME="$RUNNER_TEMP/cm-p"
+          cat > "$RUNNER_TEMP/pty.json" <<J
+          {"cols":120,"rows":40,"duration":12,"cwd":"$RUNNER_TEMP/duan","cmd":["node","$PWD/dist/cuongmini.mjs"],
+           "env":{"CUONGMINI_HOME":"$CUONGMINI_HOME","TERM":"xterm-256color","COLORTERM":"truecolor","CUONGMINI_LOI":"$PWD/thu/loiGia.cjs","LOI_GIA_NHANH":"1","LANG":"C.UTF-8","SHELL":"/bin/bash"},
+           "keys":[[3.0,"/"],[4.0,"\u001b"],[4.5,"sửa laEmail"],[4.8,"\r"],[5.6,"1"],[6.2,"1"],[8.0,"!echo xin-chao-tu-shell"],[8.3,"\r"],[9.5,"\u0012"],[10.5,"\u001b"]],
+           "out":"$RUNNER_TEMP/pty-ghi.json"}
+          J
+          python3 thu/chup_pty.py "$RUNNER_TEMP/pty.json"
+          python3 thu/kiem_pty.py "$RUNNER_TEMP/pty-ghi.json" "CuongMini CLI" "Hỏi hoặc giao việc" "/clear" "Đã sửa xong" "xin-chao-tu-shell" "Bảng ghi"
+
+      - name: Đóng gói (tgz + latest.json) và phục vụ cục bộ
+        working-directory: packages/cuongmini-cli
+        run: |
+          node dong-goi.mjs --khong-build
+          cat ban-phat-hanh/latest.json
+          cp cai/install.sh cai/install.ps1 ban-phat-hanh/
+          cd ban-phat-hanh
+          PY=python3; [ "$RUNNER_OS" = "Windows" ] && PY=python
+          ($PY -m http.server "$CONG" --bind 127.0.0.1 > "$RUNNER_TEMP/http.log" 2>&1 &)
+          for i in $(seq 1 30); do curl -fsS "http://127.0.0.1:$CONG/latest.json" >/dev/null 2>&1 && break; sleep 1; done
+          curl -fsS "http://127.0.0.1:$CONG/latest.json"
+
+      - name: install.sh (Node có sẵn) ⇒ cuongmini --version
+        if: runner.os != 'Windows'
+        run: |
+          H="$RUNNER_TEMP/home-cai"; mkdir -p "$H"; touch "$H/.bashrc"
+          curl -fsSL "http://127.0.0.1:$CONG/install.sh" | env HOME="$H" SHELL=/bin/bash CUONGMINI_BASE_URL="http://127.0.0.1:$CONG" bash
+          V=$(node -p "require('./packages/cuongmini-cli/package.json').version")
+          OUT=$(env HOME="$H" "$H/.local/bin/cuongmini" --version); echo "$OUT"; [ "$OUT" = "$V" ]
+          grep -q 'CuongMini CLI' "$H/.bashrc"
+          # Chạy lại = cập nhật (không thêm PATH lần hai).
+          curl -fsSL "http://127.0.0.1:$CONG/install.sh" | env HOME="$H" SHELL=/bin/bash CUONGMINI_BASE_URL="http://127.0.0.1:$CONG" bash
+          [ "$(grep -c 'CuongMini CLI' "$H/.bashrc")" = "1" ]
+
+      - name: install.sh ép tải Node (kiểm SHA-256) ⇒ chạy không cần Node của máy
+        if: runner.os != 'Windows' && matrix.node == 22
+        run: |
+          H="$RUNNER_TEMP/home-node"; mkdir -p "$H"
+          curl -fsSL "http://127.0.0.1:$CONG/install.sh" | env HOME="$H" SHELL=/bin/bash CUONGMINI_EP_TAI_NODE=1 CUONGMINI_BASE_URL="http://127.0.0.1:$CONG" bash
+          ls "$H/.cuongmini/node/bin/node"
+          env -i HOME="$H" PATH=/usr/bin:/bin "$H/.local/bin/cuongmini" --version
+
+      - name: install.sh từ chối gói bị sửa (SHA-256 lệch)
+        if: runner.os != 'Windows' && matrix.node == 22
+        run: |
+          D="$RUNNER_TEMP/goi-hong"; mkdir -p "$D"
+          cp packages/cuongmini-cli/ban-phat-hanh/latest.json packages/cuongmini-cli/ban-phat-hanh/cuongmini-latest.tgz "$D/"
+          echo rac >> "$D/cuongmini-latest.tgz"
+          (cd "$D" && nohup python3 -m http.server 8766 --bind 127.0.0.1 >/dev/null 2>&1 &)
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:8766/latest.json >/dev/null 2>&1 && break; sleep 1; done
+          H="$RUNNER_TEMP/home-hong"; mkdir -p "$H"
+          set +e; env HOME="$H" CUONGMINI_BASE_URL=http://127.0.0.1:8766 bash packages/cuongmini-cli/cai/install.sh; MA=$?; set -e
+          [ "$MA" != "0" ] && [ ! -e "$H/.cuongmini/app" ] || { echo "::error::gói hỏng mà vẫn cài"; exit 1; }
+
+      - name: install.ps1 bằng Windows PowerShell 5.1 (mặc định %USERPROFILE%) ⇒ cuongmini.cmd
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $env:CUONGMINI_BASE_URL = "http://127.0.0.1:$env:CONG"
+          # Tải về rồi đọc bằng UTF-8: http.server cục bộ không gắn charset (web thật trả text/plain; charset=utf-8),
+          # và PowerShell 5.1 đọc mặc định theo ANSI — chữ tiếng Việt thành ký tự lạ.
+          Invoke-WebRequest -UseBasicParsing "$env:CUONGMINI_BASE_URL/install.ps1" -OutFile "$env:RUNNER_TEMP\install.ps1"
+          Get-Content -Raw -Encoding UTF8 "$env:RUNNER_TEMP\install.ps1" | Invoke-Expression
+          $V = node -p "require('./packages/cuongmini-cli/package.json').version"
+          $Cmd = Join-Path $env:LOCALAPPDATA 'CuongMini\bin\cuongmini.cmd'
+          Get-Content $Cmd
+          $Out = & $Cmd --version
+          Write-Host "cuongmini.cmd --version => $Out"
+          if ($Out -ne $V) { throw "--version '$Out' khác '$V'" }
+          # PATH người dùng đã được thêm: một tiến trình MỚI (cmd) phải gọi được `cuongmini`, kể cả bí danh `cm`.
+          $env:Path = [Environment]::GetEnvironmentVariable('Path', 'User') + ';' + [Environment]::GetEnvironmentVariable('Path', 'Machine')
+          $Out2 = cmd /c "cuongmini --version"
+          if ($Out2 -ne $V) { throw "cmd /c cuongmini --version => '$Out2'" }
+          $Out3 = cuongmini --version
+          if ($Out3 -ne $V) { throw "PowerShell cuongmini --version => '$Out3'" }
+          if (Test-Path (Join-Path $env:LOCALAPPDATA 'CuongMini\bin\cm.cmd')) { cmd /c "cm --version" }
+          # Chạy lại = cập nhật.
+          Get-Content -Raw -Encoding UTF8 "$env:RUNNER_TEMP\install.ps1" | Invoke-Expression
+          & $Cmd --help | Select-Object -First 3
+
+      - name: install.ps1 bằng pwsh 7 (thư mục riêng + ép tải Node)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $env:CUONGMINI_BASE_URL = "http://127.0.0.1:$env:CONG"
+          $env:CUONGMINI_HOME = Join-Path $env:RUNNER_TEMP 'cm-pwsh'
+          $env:CUONGMINI_BIN_DIR = Join-Path $env:RUNNER_TEMP 'cm-pwsh-bin'
+          if ('${{ matrix.node }}' -eq '22') { $env:CUONGMINI_EP_TAI_NODE = '1' }
+          Invoke-WebRequest -UseBasicParsing "$env:CUONGMINI_BASE_URL/install.ps1" -OutFile "$env:RUNNER_TEMP\install7.ps1"
+          Get-Content -Raw -Encoding utf8 "$env:RUNNER_TEMP\install7.ps1" | Invoke-Expression
+          $V = node -p "require('./packages/cuongmini-cli/package.json').version"
+          $Out = & (Join-Path $env:CUONGMINI_BIN_DIR 'cuongmini.cmd') --version
+          Write-Host "=> $Out"
+          if ($Out -ne $V) { throw "--version '$Out' khác '$V'" }
+          if ($env:CUONGMINI_EP_TAI_NODE) {
+            if (-not (Test-Path (Join-Path $env:CUONGMINI_HOME 'node\node.exe'))) { throw 'Không thấy Node riêng đã tải' }
+          }
+
+      - name: -p chạy qua lệnh đã cài (Windows, cmd)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          set CUONGMINI_HOME=%RUNNER_TEMP%\cm-p
+          set CUONGMINI_LOI=%GITHUB_WORKSPACE%\packages\cuongmini-cli\thu\loiGia.cjs
+          set LOI_GIA_NHANH=1
+          cd /d %RUNNER_TEMP%\duan
+          call "%LOCALAPPDATA%\CuongMini\bin\cuongmini.cmd" -p "sua laEmail" --che-do tu-dong --output-format json > ra-cmd.json
+          node -e "const j=JSON.parse(require('fs').readFileSync('ra-cmd.json','utf8')); if(!j.thanhCong) process.exit(1); console.log('cmd -p ok')"
+
+      - name: Nhật ký khi hỏng
+        if: failure()
+        run: |
+          cat "$RUNNER_TEMP/http.log" 2>/dev/null || true
+          ls -la "$RUNNER_TEMP" || true

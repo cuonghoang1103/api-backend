@@ -32,6 +32,8 @@ import type {
   MucNoLuc,
   AppInfo,
   DesktopBridge,
+  MaTrinhSoan,
+  TrinhSoanTinhTrang,
   EventChannel,
   SettingKey,
   SettingValue,
@@ -92,6 +94,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'nhac:phim',
   'aiCucBo:tienDo',
   'opencode:tienDo',
+  'cli:tienDo',
   'pty:du',
   'pty:trangThai',
   'agent:phienDoi',
@@ -261,6 +264,22 @@ const bridge: DesktopBridge = {
     batDau: (provider: 'google' | 'github' | 'apple') =>
       ipcRenderer.invoke('oauth:batDau', { provider }) as Promise<{ ok: boolean; cong?: number }>,
     huy: () => ipcRenderer.invoke('oauth:huy') as Promise<{ ok: boolean }>,
+  },
+  /* CuongMini CLI — main chạy trình cài chính thức + đăng nhập sẵn; preload chỉ chuyển tiếp. */
+  cli: {
+    doMay: () => ipcRenderer.invoke('cli:doMay') as ReturnType<DesktopBridge['cli']['doMay']>,
+    cai: () => ipcRenderer.invoke('cli:cai') as ReturnType<DesktopBridge['cli']['cai']>,
+    dangNhap: () => ipcRenderer.invoke('cli:dangNhap') as ReturnType<DesktopBridge['cli']['dangNhap']>,
+    moTerminal: (thuMuc?: string) => ipcRenderer.invoke('cli:moTerminal', thuMuc ? { thuMuc } : {}) as ReturnType<DesktopBridge['cli']['moTerminal']>,
+  },
+  /* CuongMini Code trong trình soạn — main giữ danh sách trắng, preload chỉ chuyển tiếp mã. */
+  trinhSoan: {
+    doMay: () => ipcRenderer.invoke('trinhSoan:doMay') as Promise<TrinhSoanTinhTrang[]>,
+    caiExt: (ma: MaTrinhSoan) =>
+      ipcRenderer.invoke('trinhSoan:caiExt', { ma }) as Promise<{
+        ok: boolean; phienBan?: string; quaDeepLink?: boolean; loi?: string; log?: string;
+      }>,
+    mo: (ma: MaTrinhSoan) => ipcRenderer.invoke('trinhSoan:mo', { ma }) as Promise<{ ok: boolean; loi?: string }>,
   },
   opencode: {
     /** Máy này có node/npm/opencode chưa, và cấu hình đã tồn tại chưa. */

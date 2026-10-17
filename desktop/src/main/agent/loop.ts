@@ -964,6 +964,10 @@ export async function chayLuot(
        biết app có cài `sua_anh` hay chưa; bản app cũ không đẩy chuỗi này nên
        model không bao giờ được mời một tool chúng không chạy được. */
     if (boiCanh.choSua) capabilities.push('anh_sua');
+    /* Xuất sơ đồ (17/10/2026) ghi một file vào dự án ⇒ theo `choSua`, như
+       `anh_sua`. Khả năng RIÊNG để bản cũ không bao giờ được mời gọi nó.
+       Lõi ngoài app (VS Code/CLI) dùng chính file này nên khai luôn. */
+    if (boiCanh.choSua) capabilities.push('xuat_so_do');
     /* Tự cài git/gh + kết nối GitHub + đưa dự án lên (16/10/2026). Cần CẢ hai
        quyền: cài là chạy mã, đưa lên là ghi repo. Khả năng RIÊNG để bản app cũ
        (không có các tool này) không bao giờ được mời gọi chúng. */

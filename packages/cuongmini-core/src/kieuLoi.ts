@@ -13,4 +13,8 @@ export interface LoiApi {
   datThuMuc(cuocId: string, duong: string): Promise<unknown>;
   moDuPhong(matKhau: string, token: string): Promise<string>;
   chuanHoaAnh(dataUrl: string): Promise<string>;
+  /** Trình duyệt AI (Chrome/Edge thật) đang nối chưa — để hiện "Đã nối trình duyệt". Bản lõi cũ không có. */
+  trangThaiTrinhDuyet?(): { ketNoi: boolean; url: string; trinhDuyet: string | null };
+  /** Đóng trình duyệt AI + trình duyệt ẩn xuất sơ đồ (gọi lúc tắt extension/CLI). */
+  dongTrinhDuyet?(): Promise<void>;
 }

@@ -91,7 +91,15 @@ export type AgentCapability =
    * Khả năng riêng thì chỉ bản app có cài mới khai, nên bản cũ không bao giờ
    * nhìn thấy nó. Cùng lý do với `shell_nen`.
    */
-  | 'anh_sua';
+  | 'anh_sua'
+  /**
+   * XUẤT SƠ ĐỒ draw.io / SVG / Mermaid / HTML ⇒ PNG / PDF (17/10/2026).
+   *
+   * Khả năng RIÊNG, cùng lý do với `anh_sua`: app đang nằm trên máy người dùng
+   * khai `fs_write` nhưng chưa cài `xuat_so_do`. App chỉ khai nó khi có thư mục
+   * dự án VÀ bật quyền sửa (tool ghi một file vào dự án).
+   */
+  | 'xuat_so_do';
 
 export interface AgentToolDef {
   name: string;
@@ -342,6 +350,34 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
         chat_luong: { type: 'integer', description: 'Chỉ với .jpg: 1-100. Mặc định 88.' },
       },
       required: ['path', 'viec'],
+    },
+  },
+  {
+    name: 'xuat_so_do',
+    ring: 'client',
+    capability: 'xuat_so_do',
+    description:
+      'Xuất SƠ ĐỒ ra ảnh PNG hoặc PDF: draw.io (.drawio .dio .xml), SVG (.svg), Mermaid (.mmd .mermaid), '
+      + 'hoặc một trang HTML (.html). Vẽ bằng trình duyệt thật (draw.io viewer / Mermaid / Chromium), '
+      + 'KHÔNG cần cài draw.io, mmdc, ImageMagick hay Inkscape — đừng dùng run_command cho việc này. '
+      + 'Ghi file kết quả (mặc định cạnh file nguồn, cùng tên, đuôi .png/.pdf); ghi đè file có sẵn thì người dùng phải duyệt. '
+      + 'Kết quả LUÔN kèm ẢNH của chính file vừa xuất (PDF: trang 1 vẽ lại từ file PDF). '
+      + '⚠️ XUẤT XONG PHẢI NHÌN ẢNH ĐÓ để kiểm: chữ bị cắt/tràn khỏi hình, chữ chồng lên hình hay mũi tên, '
+      + 'nhãn đè nhau, ký tự lỗi font (ô vuông, dấu ?), hình lệch/thiếu. Sai thì SỬA FILE NGUỒN (nới khung, xuống dòng, '
+      + 'dời hình) rồi gọi lại tool này — đừng báo xong khi chưa nhìn ảnh, và đừng báo xong khi ảnh còn lỗi. '
+      + 'File draw.io nhiều trang: chọn bằng "trang" (kết quả liệt kê tên các trang). '
+      + 'Cần mạng để nạp thư viện vẽ (draw.io viewer, Mermaid, pdf.js); mất mạng thì draw.io dùng draw.io desktop nếu máy có cài.',
+    parameters: {
+      type: 'object',
+      properties: {
+        duongDan: { type: 'string', description: 'File nguồn, đường dẫn TƯƠNG ĐỐI so với gốc dự án (.drawio .dio .xml .svg .mmd .mermaid .html .htm).' },
+        dinhDang: { type: 'string', enum: ['png', 'pdf'], description: 'Định dạng ra. Mặc định png.' },
+        ra: { type: 'string', description: 'File kết quả, tương đối gốc dự án, đuôi khớp dinhDang. Bỏ trống ⇒ cạnh file nguồn, cùng tên.' },
+        tiLe: { type: 'number', description: 'Độ phân giải so với kích thước sơ đồ: 1–4, mặc định 2 (sắc nét khi in / màn Retina).' },
+        trang: { type: 'string', description: 'Chỉ draw.io nhiều trang: số trang (1 = trang đầu) hoặc TÊN trang. Mặc định trang đầu.' },
+        nen: { type: 'string', description: 'Màu nền: #rrggbb hoặc tên màu (white…), "trong-suot" cho PNG nền trong suốt. Mặc định trắng.' },
+      },
+      required: ['duongDan'],
     },
   },
   {
@@ -1309,7 +1345,7 @@ export function laToolMcp(name: string): boolean {
  */
 export const ALL_CAPABILITIES: readonly AgentCapability[] = [
   'fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent', 'shell_nen', 'git_write',
-  'notes_write', 'browser', 'ky_nang', 'anh_sua', 'terminal', 'bo_nho', 'cong_cu', 'github',
+  'notes_write', 'browser', 'ky_nang', 'anh_sua', 'terminal', 'bo_nho', 'cong_cu', 'github', 'xuat_so_do',
 ];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {

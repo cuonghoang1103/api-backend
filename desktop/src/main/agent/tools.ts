@@ -46,6 +46,9 @@ import * as trinhDuyet from '../browser';
 import { layCuaSoChinh } from '../window';
 import { ghiSoTruoc, type SoCuoc } from './so';
 import { chupTrangThai, ghiThayDoiCuaLenh } from './theoDoiLenh';
+import { LoiXuat, nhanLoaiNguon, xuatSoDo } from './xuatSoDo';
+// Bộ vẽ: BrowserWindow ẩn trong app; ngoài app esbuild tráo sang Chrome headless (boVeSoDoThay.ts).
+import { moKenhVe } from './boVeSoDo';
 
 const chay = promisify(execFile);
 
@@ -405,6 +408,12 @@ export async function chayToolAgent(
       case 'sua_anh': {
         if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
         return await toolSuaAnh(goc, args);
+      }
+      /* Xuất sơ đồ: GHI một file vào dự án ⇒ cùng cửa quyền với create_file
+         (thẻ duyệt + chế độ tự duyệt), xem `toolXuatSoDo`. */
+      case 'xuat_so_do': {
+        if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
+        return await toolXuatSoDo(goc, args, ghi);
       }
       case 'edit_file':
       case 'create_file': {
@@ -1391,6 +1400,97 @@ async function toolSuaAnh(goc: string, args: Record<string, unknown>): Promise<K
       `Đã tạo ${raTen} — ${kq.keLai}. Ảnh ra ${kq.rong}×${kq.cao}, `
       + `${Math.round(kq.than.length / 1024)}KB. Gọi read_file để NHÌN kết quả trước khi báo là xong.`,
     tomTat: `${kq.rong}×${kq.cao}`,
+  };
+}
+
+// ─── xuat_so_do ────────────────────────────────────────────────────
+
+/**
+ * draw.io / SVG / Mermaid / HTML ⇒ PNG / PDF, kèm ẢNH KIỂM cho model nhìn.
+ *
+ * VẼ TRƯỚC, HỎI SAU: vẽ không ghi gì xuống đĩa, nên người dùng chỉ bị hỏi khi
+ * đã có file thật để ghi (vẽ hỏng thì khỏi hỏi). Ghi đè đi qua thẻ duyệt như
+ * `create_file`/`doi_ten_file` — nhưng KHÁC ở một chỗ: sổ hoàn tác chỉ giữ
+ * CHỮ, nên ghi đè một PNG/PDF cũ thì nút Hoàn tác không lấy lại được bản cũ.
+ * Thẻ duyệt nói rõ "GHI ĐÈ" để người bấm biết điều đó. Tạo mới thì Hoàn tác
+ * xoá được (`ghiSoTruoc(…, null)`).
+ */
+async function toolXuatSoDo(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {
+  const nguon = String(args.duongDan ?? args.path ?? '').trim();
+  if (!nguon) return { noiDung: 'LỖI: thiếu "duongDan" (file sơ đồ nguồn).', tomTat: 'thiếu đường dẫn' };
+  const dd = args.dinhDang === undefined || args.dinhDang === '' ? 'png' : String(args.dinhDang).toLowerCase();
+  if (dd !== 'png' && dd !== 'pdf') return { noiDung: 'LỖI: "dinhDang" phải là png hoặc pdf.', tomTat: 'định dạng lạ' };
+  if (!nhanLoaiNguon(nguon)) {
+    return { noiDung: 'LỖI: chỉ xuất được .drawio .dio .xml .svg .mmd .mermaid .html .htm.', tomTat: 'loại lạ' };
+  }
+  const duongNguon = await moTrongNguc(goc, nguon, { phaiCoThat: true });
+
+  const raTho = typeof args.ra === 'string' && args.ra.trim()
+    ? args.ra.trim()
+    : path.join(path.dirname(nguon), `${path.basename(nguon, path.extname(nguon))}.${dd}`);
+  if (path.extname(raTho).toLowerCase() !== `.${dd}`) {
+    return { noiDung: `LỖI: "ra" phải có đuôi .${dd} cho khớp dinhDang.`, tomTat: 'đuôi lệch' };
+  }
+  const duongRa = await moTrongNguc(goc, raTho);
+  const daCo = await fs.stat(duongRa).then(() => true).catch(() => false);
+
+  let kq;
+  try {
+    kq = await xuatSoDo(moKenhVe, duongNguon, {
+      dinhDang: dd,
+      ...(typeof args.tiLe === 'number' || typeof args.tiLe === 'string' ? { tiLe: Number(args.tiLe) } : {}),
+      ...(typeof args.trang === 'number' || typeof args.trang === 'string' ? { trang: args.trang } : {}),
+      ...(typeof args.nen === 'string' ? { nen: args.nen } : {}),
+    });
+  } catch (e) {
+    return { noiDung: `LỖI xuất sơ đồ: ${(e as Error).message}`, tomTat: e instanceof LoiXuat ? 'xuất hỏng' : 'lỗi' };
+  }
+
+  const quyet = await hoiNguoiDung(
+    { ten: 'xuat_so_do', duongDan: `${raTho}${daCo ? ' (GHI ĐÈ — Hoàn tác không lấy lại được bản cũ)' : ''}`, tuDuyet: ghi.tuDuyet === true },
+    (y) => ghi.xinPhep({ ...y, diff: soSanhDong('', ''), taoMoi: !daCo }),
+    ghi.signal,
+    ghi.so,
+  );
+  if (quyet === 'tuChoi') return loiTuChoi(`ghi ${raTho}`);
+
+  if (!daCo) ghiSoTruoc(ghi.so, duongRa, null);
+  await fs.mkdir(path.dirname(duongRa), { recursive: true });
+  await fs.writeFile(duongRa, kq.byte);
+
+  const kb = `${Math.max(1, Math.round(kq.byte.length / 1024))}KB`;
+  const co = kq.rong ? `${Math.round(kq.rong * kq.tiLe)}×${Math.round(kq.cao * kq.tiLe)}px (sơ đồ ${kq.rong}×${kq.cao}, tỉ lệ ${kq.tiLe})` : `tỉ lệ ${kq.tiLe}`;
+  const dong = [
+    `Đã xuất ${raTho} — ${dd.toUpperCase()} ${dd === 'pdf' ? `${kq.soTrangPdf ?? '?'} trang, khung ${kq.rong}×${kq.cao}px` : co}, ${kb}`
+      + `${kq.cach === 'drawio-cli' ? ', bằng draw.io desktop' : ''}.`,
+    kq.tenTrang && kq.tenTrang.length > 1
+      ? `File draw.io có ${kq.tenTrang.length} trang: ${kq.tenTrang.map((t, i) => `${i + 1}. ${t || '(không tên)'}`).join(', ')} — đã xuất trang ${kq.trangDaXuat}.`
+      : '',
+    ...kq.ghiChu,
+  ];
+
+  /* Ảnh kiểm co về cạnh dài 1568px như mọi ảnh gửi model. Sơ đồ rộng thì chữ
+     nhỏ đi — nói thẳng để model biết đường soi kỹ hơn (read_file / sua_anh cắt). */
+  let anh: KetQuaTool['anh'];
+  if (kq.anhKiem) {
+    try {
+      const r = await chuanHoaAnh(kq.anhKiem);
+      anh = [{ media_type: r.media, data: r.data.toString('base64') }];
+      dong.push(
+        `NHÌN ẢNH KÈM THEO (${kq.anhKiemTuPdf ? 'trang 1 vẽ lại TỪ FILE PDF' : 'chính file PNG'}${r.daDoi ? `, đã thu về ${r.rong}×${r.cao}` : ''}) `
+        + 'và kiểm: chữ bị cắt/tràn khỏi hình, chữ chồng hình hay mũi tên, nhãn đè nhau, ô vuông/dấu ? thay cho chữ, '
+        + 'hình lệch/thiếu. Có lỗi ⇒ sửa FILE NGUỒN rồi gọi lại xuat_so_do; đừng báo xong khi chưa thấy ảnh đúng.',
+      );
+    } catch (e) {
+      dong.push(`(Không dựng được ảnh kiểm: ${(e as Error).message} — read_file ${raTho} để nhìn.)`);
+    }
+  } else {
+    dong.push(`(Không có ảnh kiểm — ${dd === 'pdf' ? 'cần mạng để vẽ lại PDF bằng pdf.js' : 'xem ghi chú trên'}.)`);
+  }
+  return {
+    noiDung: dong.filter(Boolean).join('\n'),
+    tomTat: `${dd.toUpperCase()} · ${kb}${daCo ? ' · ghi đè' : ''}`,
+    ...(anh ? { anh } : {}),
   };
 }
 

@@ -121,7 +121,7 @@ export default function AdminCommercePage() {
             { id: 'doanhthu' as const, ten: 'Doanh thu', Icon: TrendingUp, badge: 0 },
             { id: 'chuyenkhoan' as const, ten: 'Chuyển khoản', Icon: Landmark, badge: canXuLy?.chuyenKhoanChoDuyet ?? 0 },
             { id: 'doikey' as const, ten: 'Đổi key', Icon: KeyRound, badge: canXuLy?.yeuCauDoiKey ?? 0 },
-            { id: 'llmkey' as const, ten: 'Key OpenCode', Icon: Terminal, badge: 0 },
+            { id: 'llmkey' as const, ten: 'Key terminal', Icon: Terminal, badge: 0 },
             { id: 'fable' as const, ten: 'Cuong Fable', Icon: Sparkles, badge: 0 },
             { id: 'caidat' as const, ten: 'Cài đặt', Icon: Settings, badge: 0 },
           ]).map((t) => (

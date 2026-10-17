@@ -18,11 +18,13 @@ import * as electronGia from './electron';
 import { caiDatVo, type VoDocLap } from './electron';
 import { datPhien as datPhienLoi, type PhienDangNhap } from './authThay';
 import { goiKenhNoiBo } from './ipcThay';
-import { registerAgentHandlers } from '../../../../desktop/src/main/ipc/agent';
-import { datGocChoCuoc, gocCuaCuoc } from '../../../../desktop/src/main/agent/loop';
-import { chuanHoaAnh as chuanHoaAnhApp } from '../../../../desktop/src/main/agent/anhLa';
-import { API_ORIGIN, WEB_ORIGIN } from '../../../../desktop/src/main/config';
-import { setSetting } from '../../../../desktop/src/main/store';
+import { registerAgentHandlers } from '../../../desktop/src/main/ipc/agent';
+import { datGocChoCuoc, gocCuaCuoc } from '../../../desktop/src/main/agent/loop';
+import { chuanHoaAnh as chuanHoaAnhApp } from '../../../desktop/src/main/agent/anhLa';
+import { API_ORIGIN, WEB_ORIGIN } from '../../../desktop/src/main/config';
+import { setSetting } from '../../../desktop/src/main/store';
+import { huy as huyTrinhDuyet, trangThai as trangThaiTd } from './trinhDuyetThay';
+import { dongBoVe } from './boVeSoDoThay';
 import { statSync } from 'node:fs';
 import path from 'node:path';
 
@@ -93,4 +95,16 @@ export async function chuanHoaAnh(dataUrl: string): Promise<string> {
   const than = Buffer.from(dataUrl.slice(dataUrl.indexOf(',') + 1), 'base64');
   const r = await chuanHoaAnhApp(than);
   return `data:${r.media};base64,${r.data.toString('base64')}`;
+}
+
+/** Trình duyệt AI đang nối chưa (extension/CLI hiện "Đã nối trình duyệt"). */
+export function trangThaiTrinhDuyet(): ReturnType<typeof trangThaiTd> { return trangThaiTd(); }
+
+/**
+ * Đóng trình duyệt AI (nếu chính lõi bật nó) và trình duyệt ẩn dùng để xuất sơ
+ * đồ. puppeteer cũng tự giết Chrome khi tiến trình thoát, nhưng extension host
+ * của VS Code SỐNG TIẾP khi một extension tắt — không gọi thì cửa sổ còn đó.
+ */
+export async function dongTrinhDuyet(): Promise<void> {
+  await Promise.all([huyTrinhDuyet(), dongBoVe()]);
 }

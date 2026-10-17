@@ -28,7 +28,7 @@ import {
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
   ShieldCheck, Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus, PanelRight, LifeBuoy, WifiOff,
-  MoreHorizontal, Brain, Webhook, PlugZap, ChevronsDownUp, ChevronsUpDown,
+  MoreHorizontal, Brain, Webhook, PlugZap, ChevronsDownUp, ChevronsUpDown, Code2,
 } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { moTam, useMoTuNgoai } from './moTam';
@@ -44,7 +44,8 @@ import { viecDangLam, viecCuaTool } from './viecDangLam';
 import { TerminalThat } from './TerminalThat';
 import { KhungWeb } from './KhungWeb';
 import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
-import { NutOpenCode } from './NutOpenCode';
+import { NutCuongMiniCli } from './NutCuongMiniCli';
+import { NutTrinhSoan } from './NutTrinhSoan';
 import { ID_FABLE, XinThemFable, moTaHanMuc, useHanMucFable } from './HanMucFable';
 import { HoiQuayVeCongChinh, MoCongDuPhong, moTaDuPhong, useCongDuPhong } from './CongDuPhong';
 import { NhapKeyGiaHan } from './NhapKeyGiaHan';
@@ -1204,6 +1205,10 @@ export function AgentMode({
             <BangBoNho cuocId={cuocId} khoa={trangThai.dangChay} />
           </span>
 
+          {/* CuongMini Code trong VS Code/Cursor… (17/10/2026) — nút hiện thẳng khi
+              cột rộng, gom vào "⋯" khi hẹp; hộp của nó vẫn mở được từ menu. */}
+          <NutTrinhSoan cuocId={cuocId} />
+
           <MenuThem
             onLichSu={lichSu.bat}
             soViec={phien.length}
@@ -1315,7 +1320,7 @@ export function AgentMode({
       <div className="ct-agent-doi" data-co-web={webUrl !== null}>
       <div className="ct-agent-scroll" ref={cuonRef}>
         {trangThai.muc.length === 0 && (
-          <ManHinhTrong coThuMuc={coThuMuc} dangChay={trangThai.dangChay} />
+          <ManHinhTrong coThuMuc={coThuMuc} dangChay={trangThai.dangChay} duongDan={thuMuc?.path ?? null} />
         )}
 
         {trangThai.muc.map((m, i) => {
@@ -1844,6 +1849,7 @@ function MenuThem({
     { key: 'mcp', icon: <Plug size={14} aria-hidden />, nhan: dich('Máy chủ MCP'), phai: '/mcp', lam: () => moTam(cuocId, 'mcp') },
     { key: 'hook', icon: <Webhook size={14} aria-hidden />, nhan: 'Hook', phai: '/hooks', tat: khoa, lam: () => moTam(cuocId, 'hook') },
     { key: 'bonho', icon: <Brain size={14} aria-hidden />, nhan: dich('Bộ nhớ'), phai: PHIM.boNho, tat: khoa, lam: () => moTam(cuocId, 'boNho') },
+    { key: 'trinhsoan', icon: <Code2 size={14} aria-hidden />, nhan: dich('Dùng trong VS Code / Cursor…'), lam: () => { dong(); moTam(cuocId, 'trinhSoan'); } },
     { key: 'lichsu', icon: <History size={14} aria-hidden />, nhan: `${dich('Việc đã lưu')} (${soViec})`, phai: PHIM.lichSu, lam: () => { dong(); onLichSu(); } },
     { key: 'viecmoi', icon: <RotateCcw size={14} aria-hidden />, nhan: dich('Việc mới'), phai: '/clear', tat: !coViec, lam: () => { dong(); onViecMoi(); } },
   ];
@@ -2875,10 +2881,11 @@ function ThanhHanMuc({
 }
 
 function ManHinhTrong({
-  coThuMuc, dangChay,
+  coThuMuc, dangChay, duongDan,
 }: {
   coThuMuc: boolean;
   dangChay: boolean;
+  duongDan: string | null;
 }) {
   const { dich } = useDich();
   return (
@@ -2900,9 +2907,9 @@ function ManHinhTrong({
 
       {/* Đặt ở MÀN HÌNH TRỐNG chứ không nhét vào thanh công cụ: đây là việc
           làm MỘT LẦN rồi thôi, và chỗ này là nơi người dùng nhìn khi chưa biết
-          bắt đầu từ đâu. Nút tự ẩn/sáng theo việc có key hay chưa — xem
-          NutOpenCode.tsx. */}
-      <NutOpenCode dangChay={dangChay} />
+          bắt đầu từ đâu. 17/10/2026: thay nút OpenCode bằng CuongMini CLI —
+          xem NutCuongMiniCli.tsx (NutOpenCode.tsx giữ lại cho key cũ, không hiện). */}
+      <NutCuongMiniCli dangChay={dangChay} thuMuc={duongDan} />
     </div>
   );
 }

@@ -200,7 +200,7 @@ export default function ShopPage() {
               Key &amp; tài khoản AI
             </h1>
             <p className="mt-3 text-text-secondary text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-              Key CuongMini cho OpenCode và credit API — giao ngay sau khi thanh toán,
+              Key terminal dùng CuongMini CLI và credit API — giao ngay sau khi thanh toán,
               mỗi người một key riêng.
             </p>
 

@@ -21,6 +21,7 @@ import rateLimit from 'express-rate-limit';
 
 import { authenticate } from '../middleware/auth.js';
 import { isProEffective, cauChanPro } from '../services/pro.service.js';
+import { coKeyTerminalHieuLuc } from '../services/agent/keyTerminal.js';
 import { logger } from '../utils/logger.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
@@ -54,9 +55,15 @@ router.use(authenticate);
  * biệt hai mã này quan trọng ở phía app: 401 làm nó chạy luồng làm mới token
  * rồi thử lại (và thất bại mãi), 403 thì nó hiện lời mời nâng cấp.
  */
+/** Pro (kể cả admin) HOẶC có key terminal còn hạn — người có key dùng CuongMini CLI/AI Code bằng ví của key (17/10/2026). */
+async function duocDungAiCode(userId: number): Promise<boolean> {
+  if (await isProEffective(userId)) return true;
+  return coKeyTerminalHieuLuc(userId);
+}
+
 async function chiPro(req: any, res: Response<ApiResponse>, next: NextFunction): Promise<void> {
   try {
-    if (await isProEffective(req.userId)) return next();
+    if (await duocDungAiCode(req.userId)) return next();
     res.status(403).json({
       success: false,
       message: await cauChanPro(req.userId, 'Chế độ Lập trình là tính năng của tài khoản Pro. Nâng cấp để agent đọc được dự án trên máy bạn.'),
@@ -83,7 +90,7 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
     // hiện chế độ Lập trình hay không; chặn thì app chỉ nhận 403 và không phân
     // biệt được "chưa đủ gói" với "máy chủ hỏng". Trả `pro: false` thì app hiện
     // được lời mời nâng cấp — một câu mời rõ ràng thay cho một lỗi.
-    const pro = await isProEffective(req.userId).catch(() => false);
+    const pro = await duocDungAiCode(req.userId).catch(() => false);
     res.json({
       success: true,
       data: {
@@ -280,7 +287,7 @@ router.get('/usage', async (req: any, res: Response<ApiResponse>, next) => {
     res.json({
       success: true,
       data: {
-        pro: await isProEffective(req.userId).catch(() => false),
+        pro: await duocDungAiCode(req.userId).catch(() => false),
         ...(await goiUsage(req.userId)),
       },
     });

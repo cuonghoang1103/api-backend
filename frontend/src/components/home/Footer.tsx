@@ -17,6 +17,10 @@ export default function Footer() {
     { label: String(t('common.home')), href: '/' },
     { label: String(t('common.blog')), href: '/tech-trends' },
     { label: String(t('common.projects')), href: '/projects' },
+    // Lối vào extension VS Code/Cursor… + CLI của AI Code — để người ghé trang chủ cũng thấy.
+    { label: 'AI Code cho VS Code', href: '/ai-code' },
+    { label: 'CuongMini CLI', href: '/cli' },
+    { label: 'Tải app', href: '/download' },
     ...(CONTACT_ENABLED ? [{ label: String(t('contact.title')), href: '/#contact' }] : []),
   ];
 

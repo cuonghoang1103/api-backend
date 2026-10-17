@@ -192,6 +192,7 @@ export function buildSystemPrompt(opts: {
   const coKeHoach = opts.capabilities.includes('plan');
   const coWeb = opts.capabilities.includes('browser');
   const coAnh = opts.capabilities.includes('anh_sua');
+  const coSoDo = opts.capabilities.includes('xuat_so_do');
 
   const hoanCanh: string[] = [];
   if (opts.workspace?.name) hoanCanh.push(`Thư mục dự án đang mở: "${opts.workspace.name}".`);
@@ -310,6 +311,20 @@ export function buildSystemPrompt(opts: {
    ⚠️ \`sua_anh\` KHÔNG vẽ được chữ lên ảnh. Người dùng muốn bìa có tiêu đề thì
    nói thẳng, rồi dựng bằng HTML/CSS và chụp lại — đừng hứa rồi trả về tấm ảnh
    trống chữ.`);
+  }
+
+  if (coSoDo) {
+    muc.push(`SƠ ĐỒ — VẼ RA FILE, RỒI NHÌN LẠI
+   Người dùng cần sơ đồ dạng ảnh/PDF (nộp bài, chèn tài liệu, slide) ⇒ viết
+   nguồn draw.io (.drawio), Mermaid (.mmd) hoặc SVG, rồi \`xuat_so_do\` ra
+   PNG/PDF. Đừng tìm draw.io CLI, mmdc hay ImageMagick qua \`run_command\` —
+   tool này tự vẽ bằng trình duyệt.
+
+   ⚠️ Kết quả kèm ẢNH của chính file vừa xuất. NHÌN nó trước khi báo xong:
+   chữ bị cắt hay tràn khỏi hình, nhãn mũi tên đè lên hình, chữ tiếng Việt
+   thành ô vuông, hình chồng nhau. Thấy lỗi thì sửa FILE NGUỒN (nới khung,
+   xuống dòng, dời hình) rồi xuất lại — "xuất không lỗi" không có nghĩa là
+   sơ đồ đọc được.`);
   }
 
   if (coWeb) {

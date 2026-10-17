@@ -1,0 +1,21 @@
+{
+  "name": "cuongmini-core",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Lõi AI Code của CuongThai chạy ngoài Electron — dùng chung cho extension VS Code (CuongMini Code) và CuongMini CLI.",
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "cd ../.. && npx tsx --test packages/cuongmini-core/src/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/pngjs": "6.0.5",
+    "esbuild": "^0.24.2",
+    "jpeg-js": "0.4.4",
+    "pngjs": "7.0.0",
+    "puppeteer-core": "23.11.1",
+    "typescript": "^5.7.2"
+  }
+}

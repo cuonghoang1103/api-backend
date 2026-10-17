@@ -14,11 +14,11 @@
 import path from 'node:path';
 import * as vscode from 'vscode';
 import { CauNoi, docKhamPha, fileKhamPha } from './cauNoi';
-import { dangNhapMatKhau, dangNhapTrinhDuyet, huyDangNhapTrinhDuyet } from './dangNhap';
+import { dangNhapMatKhau, dangNhapTrinhDuyet, huyDangNhapTrinhDuyet } from '../../cuongmini-core/src/dangNhap';
 import { LoiDocLap } from './docLap';
 import type { KetNoi } from './ketNoi';
-import { API_ORIGIN } from './dangNhap';
-import { batDauGhiAm, nhanDang, type PhienGhiAm } from './ghiAm';
+import { API_ORIGIN } from '../../cuongmini-core/src/dangNhap';
+import { batDauGhiAm, nhanDang, type PhienGhiAm } from '../../cuongmini-core/src/ghiAm';
 import { ViecVsc } from './viecVsc';
 
 const KHOA_CUOC = 'cuongthai.cuocId';
@@ -156,7 +156,7 @@ class KhungChat implements vscode.WebviewViewProvider {
   }
 
   /** Đăng nhập xong (trình duyệt hoặc mật khẩu) ⇒ khởi động lõi độc lập rồi nối. */
-  private async sauDangNhap(laiDangNhap: () => Promise<import('./dangNhap').NguoiDung>): Promise<void> {
+  private async sauDangNhap(laiDangNhap: () => Promise<import('../../cuongmini-core/src/dangNhap').NguoiDung>): Promise<void> {
     try {
       const nguoi = await laiDangNhap();
       this.docLap?.dong();
@@ -418,4 +418,7 @@ export function activate(ctx: vscode.ExtensionContext): void {
   );
 }
 
-export function deactivate(): void { huyDangNhapTrinhDuyet(); }
+export async function deactivate(): Promise<void> {
+  huyDangNhapTrinhDuyet();
+  await LoiDocLap.dongTrinhDuyet();
+}

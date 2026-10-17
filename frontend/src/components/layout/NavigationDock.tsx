@@ -13,7 +13,7 @@ import {
   Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
   FileText, Newspaper, Code2, Binary, Map as MapIcon, ClipboardCheck,
   Waypoints, Blocks, CircuitBoard,
-  AudioLines, Terminal, Target, Search
+  AudioLines, Terminal, Target, Search, Puzzle
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { adminCheckUserKey, useAdminCheck } from '@/lib/useAdminCheck';
@@ -86,6 +86,10 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/exp-hub', label: 'Exp Hub', icon: FileCode2, section: 'code' },
   { href: '/hub', label: 'Hub', icon: Layers, section: 'code' },
   { href: '/ai-templates', label: 'AI Templates', icon: Blocks, section: 'code' },
+  // 17/10/2026 — CuongMini Code: AI Code cài vào VS Code/Cursor/Antigravity/Windsurf + CLI.
+  { href: '/ai-code', label: 'AI Code cho VS Code', icon: Puzzle, section: 'code' },
+  // 17/10/2026 — CuongMini CLI: AI Code trong terminal (thay OpenCode làm đường chính).
+  { href: '/cli', label: 'CuongMini CLI', icon: Terminal, section: 'code' },
   { href: '/roadmap', label: 'RoadMap', icon: MapIcon, section: 'code' },
   { href: '/algorithms', label: 'Algorithms', icon: Binary, section: 'code' },
   { href: '/simulation', label: 'Simulation', icon: Waypoints, section: 'code' },
@@ -433,7 +437,7 @@ export default function NavigationDock() {
   const searchItems = useMemo(() => {
     const base = flatItems.map((it) => ({ href: it.href, label: it.label, icon: it.icon }));
     const accountExtras: { href: string; label: string; icon: React.ElementType }[] = [
-      { href: '/llm-key', label: 'CuongMini trên Terminal', icon: Terminal },
+      { href: '/llm-key', label: 'Key terminal (CuongMini CLI)', icon: Terminal },
       { href: '/kiem-tra-key', label: 'Kiểm tra hạn mức key', icon: Gauge },
       ...(isAdmin ? [{ href: '/admin', label: 'Admin Dashboard', icon: Shield }] : []),
       { href: '/profile', label: 'Profile', icon: User },
@@ -762,13 +766,13 @@ export default function NavigationDock() {
                         onHover={() => setHoveredHref('/pro')}
                         onLeave={() => setHoveredHref(null)}
                       />
-                      {/* AI trên terminal — xin key OpenCode + hướng dẫn cắm.
-                          Hiện cho MỌI người: trang tự mời nâng cấp nếu chưa
+                      {/* Key terminal — xin key dùng CuongMini CLI (và OpenCode
+                          cũ). Hiện cho MỌI người: trang tự mời nâng cấp nếu chưa
                           Pro, nên nó vừa là lối vào vừa là chỗ giới thiệu. */}
                       <DockRowLink
                         href="/llm-key"
                         Icon={Terminal}
-                        label="CuongMini trên Terminal"
+                        label="Key terminal"
                         isActive={pathname === '/llm-key'}
                         isHovered={hoveredHref === '/llm-key'}
                         scale={1}

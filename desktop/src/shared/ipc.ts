@@ -1504,6 +1504,25 @@ export type AgentUiEvent = { cuocId: string } & (
  * `invoke` — renderer hỏi, main trả lời. Mỗi kênh khai báo schema đầu vào
  * (`null` = không nhận tham số) để main tự dựng lớp kiểm tra.
  */
+/**
+ * Trình soạn code cài được CuongMini Code (17/10/2026) — DANH SÁCH TRẮNG.
+ * Renderer chỉ gửi một mã trong đây; main tự tính đường dẫn CLI và tham số
+ * (xem `main/trinhSoan.ts`).
+ */
+export const MA_TRINH_SOAN = ['vscode', 'cursor', 'antigravity', 'windsurf', 'vscodium'] as const;
+export type MaTrinhSoan = (typeof MA_TRINH_SOAN)[number];
+export interface TrinhSoanTinhTrang {
+  ma: MaTrinhSoan;
+  ten: string;
+  /** Tìm thấy app hoặc CLI của trình soạn trên máy. */
+  daCai: boolean;
+  /** Có CLI ⇒ cài thẳng được; không thì cài qua deep link. */
+  coCli: boolean;
+  /** Đã chạy được `--list-extensions` (false ⇒ không biết, đừng nói "chưa cài"). */
+  kiemDuocExt: boolean;
+  phienBanExt: string | null;
+}
+
 export const INVOKE_CHANNELS = {
   'app:getInfo': null,
   'app:openExternal': externalUrlSchema,
@@ -2088,6 +2107,15 @@ export const INVOKE_CHANNELS = {
   /** Bộ nhớ bài học của agent (26/09/2026) — xem `main/agent/boNho.ts`. */
   'agent:boNhoDs': agentCuocSchema,
   'agent:boNhoXoa': z.object({ cuocId: z.string().min(1).max(64), id: z.string().min(1).max(80).regex(/^[a-z0-9-]+$/) }),
+  /** CuongMini Code trong VS Code/Cursor/… (17/10/2026) — xem `main/ipc/trinhSoan.ts`. */
+  'trinhSoan:doMay': null,
+  'trinhSoan:caiExt': z.object({ ma: z.enum(MA_TRINH_SOAN) }),
+  'trinhSoan:mo': z.object({ ma: z.enum(MA_TRINH_SOAN) }),
+  /** CuongMini CLI (17/10/2026, thay nút OpenCode) — xem `main/ipc/cuongminiCli.ts`. */
+  'cli:doMay': null,
+  'cli:cai': null,
+  'cli:dangNhap': null,
+  'cli:moTerminal': z.object({ thuMuc: z.string().max(4096).optional() }),
 } as const;
 
 export type InvokeChannel = keyof typeof INVOKE_CHANNELS;
@@ -2198,6 +2226,8 @@ export const EVENT_CHANNELS = [
   'pty:trangThai',
   /** Tiến độ cài OpenCode Terminal: tải (%), giải nén, kiểm, thêm PATH. */
   'opencode:tienDo',
+  /** Tiến độ cài CuongMini CLI: bước + từng dòng log của trình cài. */
+  'cli:tienDo',
   /** Một thiết bị vừa phát hiện trong LAN (bắn dần trong lúc quét). */
   'mangNha:thietBi',
   /** Tiến độ quét: đã dò bao nhiêu / tổng địa chỉ. */
@@ -2533,6 +2563,22 @@ export interface DesktopBridge {
     batDau(provider: 'google' | 'github' | 'apple'): Promise<{ ok: boolean; cong?: number }>;
     /** Bỏ lượt đang chờ (người dùng đóng màn đăng nhập). */
     huy(): Promise<{ ok: boolean }>;
+  };
+  /** CuongMini CLI — cài, đăng nhập sẵn, mở terminal. Xem `main/ipc/cuongminiCli.ts`. */
+  cli: {
+    doMay(): Promise<{ heDieuHanh: string; duongLenh: string; phienBan: string | null; daDangNhap: boolean; terminal: string }>;
+    cai(): Promise<{
+      ok: boolean; loi?: string; log?: string; phienBan?: string; duongLenh?: string; terminal?: string;
+      daDangNhap?: boolean; loiDangNhap?: string;
+    }>;
+    dangNhap(): Promise<{ ok: true; ten: string } | { ok: false; loi: string }>;
+    moTerminal(thuMuc?: string): Promise<{ ok: boolean; loi?: string }>;
+  };
+  /** CuongMini Code trong trình soạn — main dò máy, renderer chỉ gửi mã trong `MA_TRINH_SOAN`. */
+  trinhSoan: {
+    doMay(): Promise<TrinhSoanTinhTrang[]>;
+    caiExt(ma: MaTrinhSoan): Promise<{ ok: boolean; phienBan?: string; quaDeepLink?: boolean; loi?: string; log?: string }>;
+    mo(ma: MaTrinhSoan): Promise<{ ok: boolean; loi?: string }>;
   };
   opencode: {
     /** Máy này có node/npm/opencode chưa, và cấu hình đã tồn tại chưa. */

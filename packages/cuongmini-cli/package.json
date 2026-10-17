@@ -1,0 +1,35 @@
+{
+  "name": "cuongmini",
+  "version": "0.2.0",
+  "private": true,
+  "description": "CuongMini CLI — trợ lý lập trình chạy trong terminal, dùng lõi AI Code của CuongThai.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "bin": {
+    "cuongmini": "dist/cuongmini.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "tsx --test src/test/*.test.ts",
+    "dong-goi": "node dong-goi.mjs"
+  },
+  "dependencies": {
+    "highlight.js": "11.12.0",
+    "ink": "6.8.0",
+    "marked": "18.0.14",
+    "react": "19.3.0",
+    "string-width": "8.3.0",
+    "wrap-ansi": "9.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.0",
+    "@types/react": "19.3.0",
+    "esbuild": "0.24.2",
+    "tsx": "4.22.4",
+    "typescript": "5.7.2"
+  }
+}

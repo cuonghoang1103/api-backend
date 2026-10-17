@@ -3,7 +3,7 @@
  * Phần dựng lệnh/script test thuần; vòng đời phiên ghi test bằng "máy ghi giả" (node -e);
  * JXA chỉ biên dịch bằng osacompile + chạy chế độ `chiThu` (bỏ qua hẳn AVFoundation).
  *
- * Chạy: npx tsx --test packages/vscode-cuongthai/src/ghiAm.test.ts   (từ gốc repo)
+ * Chạy: npx tsx --test packages/cuongmini-core/src/ghiAm.test.ts   (từ gốc repo)
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';

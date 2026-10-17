@@ -6,7 +6,7 @@
  * chục chỗ gọi Electron không có thật. Ở đây chỉ giữ đúng phần lõi: sổ kênh +
  * kiểm schema zod (CÙNG `INVOKE_CHANNELS` của app) + gọi handler.
  */
-import { INVOKE_CHANNELS, type InvokeChannel } from '../../../../desktop/src/shared/ipc';
+import { INVOKE_CHANNELS, type InvokeChannel } from '../../../desktop/src/shared/ipc';
 
 type XuLy = (raw: unknown, event: unknown) => unknown;
 const so = new Map<string, XuLy>();

@@ -11,7 +11,7 @@
  */
 import { useEffect } from 'react';
 
-export type TenTam = 'model' | 'boNho' | 'hook' | 'mcp' | 'worktree';
+export type TenTam = 'model' | 'boNho' | 'hook' | 'mcp' | 'worktree' | 'trinhSoan';
 
 const SU_KIEN = 'ct-agent-mo-tam';
 

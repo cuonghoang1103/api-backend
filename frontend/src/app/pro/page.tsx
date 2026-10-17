@@ -147,14 +147,16 @@ const NHOM_QUYEN: Array<{ ten: string; mo: string; mau: string; items: Quyen[] }
       },
       {
         icon: KeyRound,
-        title: 'CuongMini trên Terminal — API key riêng',
+        title: 'CuongMini trên Terminal — CuongMini CLI',
         // ⚠️ Mô tả PHẢI nói rõ hai giới hạn thật, nếu không là quảng cáo sai:
         //   1. web được ưu tiên — `canh` đóng key con khi key chính chạm 70%
         //      cửa sổ 5 giờ (services/cong-llm/canh/canh.mjs);
         //   2. mỗi key có hạn mức riêng mỗi cửa sổ (canh/han-muc.json).
         // Người mua thấy "API key" mà tưởng vô hạn rồi bị 429 giữa việc thì
         // đó là lỗi của câu quảng cáo, không phải của hệ thống.
-        desc: 'Xin cấp key riêng để dùng CuongMini trong OpenCode trên máy của bạn — code bằng terminal, không cần mở trình duyệt. Mỗi key có hạn mức riêng theo chu kỳ; khi web đang tải nặng, key cá nhân tạm nhường lượt cho web.',
+        // 17/10/2026: đường chính là CuongMini CLI (đăng nhập tài khoản, không dán key);
+        // OpenCode + key cũ vẫn chạy tới hết hạn nên câu cuối vẫn nói về key.
+        desc: 'Cài CuongMini CLI bằng một dòng lệnh, gõ cuongmini trong thư mục dự án — AI đọc, sửa code và chạy lệnh ngay trong terminal, không cần mở trình duyệt. Pro dùng được luôn, hạn mức chung một ví với app. Key OpenCode cũ vẫn chạy tới hết hạn; key cá nhân có hạn mức riêng theo chu kỳ và tạm nhường lượt cho web khi web tải nặng.',
         badge: 'Chỉ Pro',
       },
       {
@@ -463,19 +465,19 @@ export default function ProPage() {
                   </span>
                 </Link>
               )}
-              {/* Lối vào trang xin key + hướng dẫn cắm OpenCode. Không có link
-                  này thì người mua đọc xong quyền lợi mà không biết đi đâu. */}
+              {/* Lối vào CuongMini CLI (đường chính cho terminal từ 17/10/2026). Không
+                  có link này thì người mua đọc xong quyền lợi mà không biết đi đâu. */}
               {g.ten.startsWith('AI Code') && (
                 <Link
-                  href="/llm-key"
+                  href="/cli"
                   className="mb-3 flex items-center gap-3 rounded-xl border border-emerald-400/25 bg-emerald-500/[0.07] p-3 hover:border-emerald-400/55 transition-colors group"
                 >
                   <KeyRound className="w-4 h-4 text-emerald-300 shrink-0" />
                   <span className="text-xs text-slate-300 flex-1 min-w-0">
-                    Muốn dùng AI trong <b className="text-white">terminal</b>? Xin key + xem hướng dẫn cắm OpenCode.
+                    Muốn dùng AI trong <b className="text-white">terminal</b>? Cài CuongMini CLI bằng một dòng lệnh.
                   </span>
                   <span className="text-xs font-semibold text-emerald-300 whitespace-nowrap group-hover:underline">
-                    Xin key →
+                    Cài CLI →
                   </span>
                 </Link>
               )}

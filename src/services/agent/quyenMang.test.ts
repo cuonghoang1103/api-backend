@@ -91,3 +91,28 @@ test('phần prompt về ảnh chỉ nói với app CÓ sua_anh', () => {
   assert.ok(!buildSystemPrompt({ capabilities: ['fs_read', 'fs_write'] }).includes('sua_anh'));
   assert.ok(buildSystemPrompt({ capabilities: ['fs_read', 'fs_write', 'anh_sua'] }).includes('sua_anh'));
 });
+
+/*
+ * `xuat_so_do` (17/10/2026) — cùng luật tương thích ngược với `sua_anh`: chỉ
+ * bản app/lõi có cài tool mới khai `xuat_so_do`. Gắn nó vào `fs_write` là mọi
+ * bản cũ bị mời gọi một tool chúng trả "không cài tool tên xuat_so_do".
+ */
+test('bản app CŨ (chỉ khai fs_write) KHÔNG được mời gọi xuat_so_do', () => {
+  assert.ok(!tenTool(['fs_read', 'fs_write', 'anh_sua']).includes('xuat_so_do'));
+});
+
+test('khai xuat_so_do ⇒ tool có mặt, và parseCapabilities KHÔNG lọc mất nó', () => {
+  assert.ok(tenTool(['fs_read', 'fs_write', 'xuat_so_do']).includes('xuat_so_do'));
+  assert.ok((ALL_CAPABILITIES as readonly string[]).includes('xuat_so_do'));
+});
+
+test('mô tả xuat_so_do bắt model NHÌN ảnh kết quả rồi sửa nguồn', () => {
+  const mo = toolsForGateway(['xuat_so_do'] as any).find((t) => t.function.name === 'xuat_so_do')!.function.description;
+  assert.match(mo, /PHẢI NHÌN ẢNH/);
+  assert.match(mo, /SỬA FILE NGUỒN/);
+});
+
+test('phần prompt về sơ đồ chỉ nói với app CÓ xuat_so_do', () => {
+  assert.ok(!buildSystemPrompt({ capabilities: ['fs_read', 'fs_write'] }).includes('xuat_so_do'));
+  assert.ok(buildSystemPrompt({ capabilities: ['fs_read', 'fs_write', 'xuat_so_do'] as never }).includes('xuat_so_do'));
+});

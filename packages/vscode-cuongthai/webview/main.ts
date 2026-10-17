@@ -84,7 +84,7 @@ const S = {
   ketNoi: false,
   cheDoKetNoi: 'app' as 'app' | 'docLap',
   phienBan: '',
-  ws: null as null | { name?: string; path?: string; branch?: string | null; cheDoQuyen?: string; mucNoLuc?: string; model?: string },
+  ws: null as null | { name?: string; path?: string; branch?: string | null; cheDoQuyen?: string; mucNoLuc?: string; model?: string; choTrinhDuyet?: boolean },
   info: null as null | { models?: ModelMuc[]; mucNoLuc?: Array<{ id: string; ten: string; buoc: number; viecPhu: number }>; model?: string | null; pro?: boolean },
   dangChay: false,
   batDauLuot: 0,
@@ -711,7 +711,7 @@ function capNhatChon(): void {
   const muc = dsMuc().find((x) => x.id === (S.ws?.mucNoLuc ?? 'vua'));
   $('nutModel').innerHTML = `<span>${esc((m?.ten ?? 'Model').replace(/^Cuong(Mini)? /, ''))}</span>${muc ? `<span class="phu">${esc(muc.ten)}</span>` : ''}<span class="mui">▾</span>`;
   const cd = CHE_DO.find((x) => x.id === (S.ws?.cheDoQuyen ?? 'keHoach')) ?? CHE_DO[0]!;
-  $('nutCheDo').innerHTML = `<span>${cd.icon}</span><span>${esc(cd.ngan)}</span>`;
+  $('nutCheDo').innerHTML = `<span>${cd.icon}</span><span>${esc(cd.ngan)}</span>${S.ws?.choTrinhDuyet ? '<span title="Đang cho điều khiển trình duyệt">🌐</span>' : ''}`;
   $('nutCheDo').dataset.che = cd.id;
 }
 
@@ -726,6 +726,19 @@ async function doiMuc(id: string): Promise<void> {
   if (S.ws) S.ws.mucNoLuc = id;
   capNhatChon();
 }
+/** Cho AI điều khiển trình duyệt thật (Chrome/Edge trên máy) — mở trang, đọc, bấm, gõ, chụp, tải file. */
+async function batTatTrinhDuyet(): Promise<void> {
+  const bat = !S.ws?.choTrinhDuyet;
+  try {
+    const ws = await goi('agent:datCheDoTrinhDuyet', { bat }) as typeof S.ws;
+    if (ws) S.ws = ws;
+    capNhatChon();
+    thongBao(bat ? '🌐 Đã cho CuongMini điều khiển trình duyệt — nó sẽ mở cửa sổ Chrome/Edge riêng khi cần (mỗi thao tác vẫn theo chế độ quyền).' : 'Đã tắt điều khiển trình duyệt.');
+  } catch (e) {
+    thongBao((e as Error).message, true);
+  }
+}
+
 async function doiCheDo(id: string): Promise<void> {
   const ws = await goi('agent:datCheDoQuyen', { cheDo: id }) as typeof S.ws;
   if (ws) S.ws = ws;
@@ -835,7 +848,10 @@ function moMenuModel(): void {
 
 function moMenuCheDo(): void {
   const hien = S.ws?.cheDoQuyen ?? 'keHoach';
-  moMenu(CHE_DO.map((c) => ({ nhom: 'Chế độ quyền', ten: `${c.icon}  ${c.ten}`, mo: c.mo, chon: c.id === hien, lam: () => void doiCheDo(c.id).catch((e: Error) => thongBao(e.message, true)) })));
+  moMenu([
+    ...CHE_DO.map((c) => ({ nhom: 'Chế độ quyền', ten: `${c.icon}  ${c.ten}`, mo: c.mo, chon: c.id === hien, lam: () => void doiCheDo(c.id).catch((e: Error) => thongBao(e.message, true)) })),
+    { nhom: 'Công cụ', ten: '🌐  Điều khiển trình duyệt', mo: 'Mở trang, đọc, bấm, gõ, chụp, tải file', chon: S.ws?.choTrinhDuyet === true, lam: () => void batTatTrinhDuyet() },
+  ]);
 }
 
 /** Bảng lệnh đầy đủ (nút `/` dưới ô chat) — như "Filter actions…" của Claude Code. */
@@ -852,6 +868,7 @@ function moBangLenh(): void {
     { nhom: 'Ngữ cảnh', ten: 'Xuất hội thoại (Markdown)', phai: '/export', lam: chay('/export') },
     { nhom: 'Model', ten: 'Đổi model…', phai: model?.ten.replace(/^Cuong(Mini)? /, '') ?? '', lam: moMenuModel },
     { nhom: 'Model', ten: 'Mức nỗ lực…', phai: muc?.ten ?? '', lam: moMenuModel },
+    { nhom: 'Công cụ', ten: S.ws?.choTrinhDuyet ? 'Tắt điều khiển trình duyệt' : 'Cho AI điều khiển trình duyệt', phai: '🌐', lam: () => void batTatTrinhDuyet() },
     { nhom: 'Model', ten: 'Chế độ quyền…', phai: CHE_DO.find((c) => c.id === S.ws?.cheDoQuyen)?.ngan ?? '', lam: moMenuCheDo },
     ...LENH_AGENT.filter((l) => !['/offline'].includes(l.ten)).map((l: LenhGach) => ({
       nhom: 'Lệnh', ten: l.ten, mo: l.mo, lam: () => { if (l.thamSo && /^</.test(l.thamSo)) chenVaoO(`${l.ten} `); else void chayLenh(l.ten, boiCanh()); },

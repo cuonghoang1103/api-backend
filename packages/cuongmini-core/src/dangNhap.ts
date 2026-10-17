@@ -92,6 +92,8 @@ export function huyDangNhapTrinhDuyet(): void {
 export async function dangNhapTrinhDuyet(
   nha: 'google' | 'github' | 'apple',
   moTrinhDuyet: (url: string) => Promise<boolean>,
+  /** Tên nơi người dùng quay về, hiện trên trang "Đã đăng nhập" (vd "VS Code", "terminal"). */
+  noiQuayVe = 'VS Code',
 ): Promise<NguoiDung> {
   huyDangNhapTrinhDuyet();
   const nonce = randomBytes(24).toString('hex');
@@ -103,7 +105,7 @@ export async function dangNhapTrinhDuyet(
       const tk = u.searchParams.get('token') ?? '';
       const hopLe = Boolean(tk) && dangCho !== null && u.searchParams.get('nonce') === nonce;
       res.writeHead(hopLe ? 200 : 400, { 'content-type': 'text/html; charset=utf-8', connection: 'close' });
-      res.end(trangXong(hopLe));
+      res.end(trangXong(hopLe, noiQuayVe));
       if (!hopLe) return;
       const c = dangCho;
       dangCho = null;
@@ -131,9 +133,10 @@ export async function dangNhapTrinhDuyet(
   return lamMoi(token);
 }
 
-function trangXong(ok: boolean): string {
+function trangXong(ok: boolean, noiQuayVe: string): string {
+  const noi = noiQuayVe.replace(/[<>&"']/g, '');
   const tieuDe = ok ? 'Đã đăng nhập CuongThai' : 'Liên kết đăng nhập không hợp lệ';
-  const chu = ok ? 'Quay lại VS Code để dùng CuongThai AI Code. Bạn có thể đóng thẻ này.' : 'Thử bấm đăng nhập lại trong VS Code.';
+  const chu = ok ? `Quay lại ${noi} để dùng CuongMini Code. Bạn có thể đóng thẻ này.` : `Thử bấm đăng nhập lại trong ${noi}.`;
   return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>${tieuDe}</title>
 <style>body{font-family:system-ui,sans-serif;display:grid;place-items:center;height:100vh;margin:0;background:#0f0a1e;color:#ede9fe}
 .k{text-align:center;padding:32px 40px;border-radius:16px;background:#1e1640;box-shadow:0 10px 40px #0006}h1{font-size:20px;margin:0 0 8px}p{margin:0;color:#c4b5fd}</style>

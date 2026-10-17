@@ -35,6 +35,11 @@ const KENH_DUOC: ReadonlySet<InvokeChannel> = new Set<InvokeChannel>([
   'agent:reset', 'agent:traLoiXinPhep', 'agent:datCheDoQuyen', 'agent:datCheDoTrinhDuyet', 'agent:datCheDoNote',
   'agent:datMucNoLuc', 'agent:datModel', 'agent:lamTiep', 'agent:hoanTac', 'agent:compact', 'agent:nguCanhChiTiet',
   'agent:bangGhi', 'agent:veCongChinh', 'agent:themDuong', 'agent:dsQuyenLau',
+  // CuongMini Code 0.3 (17/10): lịch sử việc, `@` file, lệnh `/`, quay lui, bộ nhớ, MCP, kho kỹ năng.
+  'agent:dsPhien', 'agent:moPhien', 'agent:xoaPhien', 'agent:doiTenPhien', 'agent:ghimPhien', 'agent:timFile',
+  'agent:themDinhKem', 'agent:lenhDuAn', 'agent:kyNangDs', 'agent:chanDoan', 'agent:quayLui', 'agent:luiFile',
+  'agent:boNhoDs', 'agent:khoTim', 'agent:khoCai', 'agent:xoaQuyenLau', 'agent:mcpTrangThai', 'agent:mcpMoCauHinh',
+  'agent:hookMoCauHinh',
 ]);
 
 const CONG_THU = [47821, 47822, 47823, 47824, 47825];

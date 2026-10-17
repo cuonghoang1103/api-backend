@@ -10,6 +10,7 @@ import { readFileSync } from 'node:fs';
 import http from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
+import type { KetNoi } from './ketNoi';
 
 export interface ThongTinCau { cong: number; khoa: string; pid?: number; phienBan?: string }
 
@@ -52,8 +53,11 @@ function yeuCau(cau: ThongTinCau, phuongThuc: 'GET' | 'POST', duong: string, tha
   });
 }
 
-export class CauNoi {
+export class CauNoi implements KetNoi {
+  readonly cheDo = 'app' as const;
   constructor(private cau: ThongTinCau) {}
+
+  get phienBan(): string { return this.cau.phienBan ?? ''; }
 
   get thongTin(): ThongTinCau { return this.cau; }
 

@@ -1,9 +1,11 @@
 /**
- * CuongThai AI Code cho VS Code.
+ * CuongMini Code — AI lập trình của CuongThai cho VS Code.
  *
- * Extension là KHUNG CHAT; bộ máy là AI Code trong app desktop CuongThai (nói
- * chuyện qua cầu nối 127.0.0.1 — xem `cauNoi.ts`). Nhờ vậy chất lượng, skill,
- * MCP, bộ nhớ, chế độ quyền, cổng model… giống hệt trong app.
+ * Extension là KHUNG CHAT; bộ máy là AI Code của app desktop CuongThai, chạy
+ * theo một trong hai đường (cùng mã, cùng chất lượng, skill, MCP, quyền…):
+ *  • có app đang mở ⇒ nói chuyện qua cầu nối 127.0.0.1 (`cauNoi.ts`);
+ *  • không có app ⇒ chạy NGAY TRONG extension (`docLap.ts`), đăng nhập bằng
+ *    tài khoản cuongthai.com. Người dùng chỉ cần cài extension.
  *
  * Phần riêng của VS Code: thư mục đang mở = dự án của AI; file đang mở + đoạn
  * đang chọn đi kèm làm ngữ cảnh; "Nhờ AI sửa lỗi này" trên dấu lỗi; bấm vào
@@ -12,26 +14,41 @@
 import path from 'node:path';
 import * as vscode from 'vscode';
 import { CauNoi, docKhamPha, fileKhamPha } from './cauNoi';
+import { dangNhapMatKhau, dangNhapTrinhDuyet, huyDangNhapTrinhDuyet } from './dangNhap';
+import { LoiDocLap } from './docLap';
+import type { KetNoi } from './ketNoi';
+import { API_ORIGIN } from './dangNhap';
+import { batDauGhiAm, nhanDang, type PhienGhiAm } from './ghiAm';
+import { ViecVsc } from './viecVsc';
 
 const KHOA_CUOC = 'cuongthai.cuocId';
 
+type CheDoChon = 'tuDong' | 'app' | 'docLap';
+const cheDoChon = (): CheDoChon => vscode.workspace.getConfiguration('cuongthai').get<CheDoChon>('cheDo', 'tuDong');
+
 class KhungChat implements vscode.WebviewViewProvider {
   private view: vscode.WebviewView | undefined;
-  private cau: CauNoi | null = null;
+  private cau: KetNoi | null = null;
+  private docLap: LoiDocLap | null = null;
   private cuocId: string | null = null;
   private huyNghe: (() => void) | null = null;
   private dangNoi = false;
   private hangCho: unknown[] = [];
 
+  private viec: ViecVsc;
+  private ghi: PhienGhiAm | null = null;
+
   constructor(private ctx: vscode.ExtensionContext) {
     this.cuocId = ctx.workspaceState.get<string>(KHOA_CUOC) ?? null;
+    this.viec = new ViecVsc(ctx, () => ({ cau: this.cau, cuocId: this.cuocId }));
     // App mở (hoặc mở lại) ⇒ file khám phá đổi ⇒ tự nối lại.
     const w = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(vscode.Uri.file(path.dirname(fileKhamPha())), 'vscode-bridge.json'));
-    w.onDidCreate(() => void this.noi());
-    w.onDidChange(() => void this.noi());
+    // Đang chạy độc lập thì KHÔNG tự đổi sang app giữa chừng (mất việc đang làm).
+    w.onDidCreate(() => { if (this.cau?.cheDo !== 'docLap') void this.noi(); });
+    w.onDidChange(() => { if (this.cau?.cheDo !== 'docLap') void this.noi(); });
     ctx.subscriptions.push(w);
     // Lưới đỡ khi bộ theo dõi file không bắn (thư mục chưa tồn tại lúc mở VS Code…).
-    const h = setInterval(() => { if (!this.cau && this.view?.visible) void this.noi(); }, 5000);
+    const h = setInterval(() => { if (!this.cau && this.choApp && this.view?.visible) void this.noi(); }, 5000);
     ctx.subscriptions.push({ dispose: () => clearInterval(h) });
     ctx.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(() => this.guiNguCanh()));
     ctx.subscriptions.push(vscode.window.onDidChangeTextEditorSelection(() => this.guiNguCanh()));
@@ -47,7 +64,13 @@ class KhungChat implements vscode.WebviewViewProvider {
     view.onDidChangeVisibility(() => { if (view.visible) this.guiNguCanh(); });
   }
 
+  /** Đang chờ app mở (mới cần dò định kỳ); màn đăng nhập thì không dò — vẽ lại sẽ xoá chữ đang gõ. */
+  private get choApp(): boolean { return this.lyDoCuoi === 'chuaMoApp' || this.lyDoCuoi === 'matKetNoi'; }
+  private lyDoCuoi = '';
+
   private gui(m: unknown): void {
+    const k = m as { loai?: string; ok?: boolean; lyDo?: string };
+    if (k.loai === 'ketNoi') this.lyDoCuoi = k.ok ? '' : String(k.lyDo ?? '');
     if (this.view) void this.view.webview.postMessage(m);
     else this.hangCho.push(m);
   }
@@ -74,9 +97,8 @@ class KhungChat implements vscode.WebviewViewProvider {
     try {
       this.huyNghe?.();
       this.huyNghe = null;
-      const tt = docKhamPha();
-      if (!tt) { this.cau = null; this.gui({ loai: 'ketNoi', ok: false, lyDo: 'chuaMoApp' }); return; }
-      const cau = new CauNoi(tt);
+      const cau = await this.chonDuong();
+      if (!cau) return;
       let tt2: { mucNoLuc?: string } = {};
       try { tt2 = await cau.trangThai(); } catch { this.cau = null; this.gui({ loai: 'ketNoi', ok: false, lyDo: 'chuaMoApp' }); return; }
       this.cau = cau;
@@ -86,7 +108,7 @@ class KhungChat implements vscode.WebviewViewProvider {
         if (e.cuocId && e.cuocId === this.cuocId) this.gui({ loai: 'suKien', e: d });
       }, () => { this.cau = null; this.gui({ loai: 'ketNoi', ok: false, lyDo: 'matKetNoi' }); setTimeout(() => void this.noi(), 3000); });
 
-      // Cuộc cũ còn sống trong app không? Không thì tạo mới.
+      // Cuộc cũ còn sống không? Không thì tạo mới.
       let ws: unknown = null;
       if (this.cuocId) { try { ws = await cau.goi('agent:getWorkspace', { cuocId: this.cuocId }); } catch { this.cuocId = null; } }
       if (!this.cuocId) {
@@ -99,11 +121,62 @@ class KhungChat implements vscode.WebviewViewProvider {
       const info = await cau.goi('agent:getInfo').catch(() => null);
       // Bảng ghi (khi webview mở lại giữa chừng một việc).
       const bangGhi = await cau.goi('agent:bangGhi', { cuocId: this.cuocId }).catch(() => null);
-      this.gui({ loai: 'ketNoi', ok: true, phienBan: tt.phienBan, mucNoLuc: tt2.mucNoLuc, ws, info, bangGhi });
+      const nguoi = cau instanceof LoiDocLap ? cau.nguoiDung.fullName || cau.nguoiDung.username : undefined;
+      this.gui({ loai: 'ketNoi', ok: true, cheDo: cau.cheDo, nguoi, phienBan: cau.phienBan, mucNoLuc: tt2.mucNoLuc, ws, info, bangGhi });
       this.guiNguCanh();
     } finally {
       this.dangNoi = false;
     }
+  }
+
+  /**
+   * Chọn đường chạy. Tự động: app đang mở ⇒ qua app (giữ chung việc, quyền, vé
+   * dự phòng với app); không có app ⇒ độc lập. Trả null = đã báo màn phù hợp.
+   */
+  private async chonDuong(): Promise<KetNoi | null> {
+    const chon = cheDoChon();
+    if (chon !== 'docLap') {
+      const tt = docKhamPha();
+      if (tt) {
+        const cau = new CauNoi(tt);
+        try { await cau.trangThai(); this.docLap?.dong(); this.docLap = null; return cau; } catch { /* app tắt mà file còn */ }
+      }
+      if (chon === 'app') { this.cau = null; this.gui({ loai: 'ketNoi', ok: false, lyDo: 'chuaMoApp' }); return null; }
+    }
+    if (this.docLap) return this.docLap;
+    try {
+      this.docLap = await LoiDocLap.moLai(this.ctx);
+    } catch (e) {
+      this.cau = null;
+      this.gui({ loai: 'ketNoi', ok: false, lyDo: 'loiKhoiDong', chu: (e as Error).message });
+      return null;
+    }
+    if (!this.docLap) { this.cau = null; this.gui({ loai: 'ketNoi', ok: false, lyDo: 'chuaDangNhap' }); return null; }
+    return this.docLap;
+  }
+
+  /** Đăng nhập xong (trình duyệt hoặc mật khẩu) ⇒ khởi động lõi độc lập rồi nối. */
+  private async sauDangNhap(laiDangNhap: () => Promise<import('./dangNhap').NguoiDung>): Promise<void> {
+    try {
+      const nguoi = await laiDangNhap();
+      this.docLap?.dong();
+      this.docLap = await LoiDocLap.tuDangNhap(this.ctx, nguoi);
+      this.gui({ loai: 'dangNhapKq', ok: true });
+      await this.noi();
+    } catch (e) {
+      this.gui({ loai: 'dangNhapKq', ok: false, loi: (e as Error).message });
+    }
+  }
+
+  async dangXuat(): Promise<void> {
+    huyDangNhapTrinhDuyet();
+    this.docLap?.dong();
+    this.docLap = null;
+    await LoiDocLap.dangXuat(this.ctx);
+    if (this.cau?.cheDo === 'docLap') { this.huyNghe?.(); this.huyNghe = null; this.cau = null; }
+    await this.ctx.workspaceState.update(KHOA_CUOC, undefined);
+    this.cuocId = null;
+    await this.noi();
   }
 
   private guiNguCanh(): void {
@@ -150,8 +223,32 @@ class KhungChat implements vscode.WebviewViewProvider {
           return;
         }
         case 'moLink': { await vscode.env.openExternal(vscode.Uri.parse(String(m.url))); return; }
+        case 'rpc': { void this.rpc(m); return; }
+        case 'dangXuat': { await this.dangXuat(); return; }
+        case 'moCaiDat': { await vscode.commands.executeCommand('workbench.action.openSettings', '@ext:cuongthai.cuongthai-ai-code'); return; }
+        case 'dangNhapNha': {
+          const nha = String(m.nha);
+          if (nha !== 'google' && nha !== 'github' && nha !== 'apple') return;
+          await this.sauDangNhap(() => dangNhapTrinhDuyet(nha, async (url) => vscode.env.openExternal(vscode.Uri.parse(url))));
+          return;
+        }
+        case 'dangNhapMatKhau': {
+          await this.sauDangNhap(() => dangNhapMatKhau(String(m.ten ?? ''), String(m.matKhau ?? '')));
+          return;
+        }
+        case 'hetPhien': {
+          // Máy chủ báo 401 giữa chừng ⇒ thử đổi token; hỏng hẳn thì về màn đăng nhập.
+          if (this.docLap && !(await this.docLap.lamMoiPhien())) {
+            await LoiDocLap.dangXuat(this.ctx);
+            this.docLap.dong();
+            this.docLap = null;
+            this.cau = null;
+            this.gui({ loai: 'ketNoi', ok: false, lyDo: 'hetPhien' });
+          }
+          return;
+        }
       }
-      if (!this.cau || !this.cuocId) { this.gui({ loai: 'ketNoi', ok: false, lyDo: 'chuaMoApp' }); return; }
+      if (!this.cau || !this.cuocId) { await this.noi(); return; }
       const cau = this.cau;
       const cuocId = this.cuocId;
       switch (m.loai) {
@@ -159,7 +256,7 @@ class KhungChat implements vscode.WebviewViewProvider {
           let anh = Array.isArray(m.anh) ? (m.anh as string[]) : [];
           anh = await Promise.all(anh.map(async (a) => (/^data:image\/(png|jpeg|webp|gif);/.test(a) && a.length < 3_500_000 ? a : cau.chuanHoaAnh(a))));
           const text = this.ghepNguCanh(String(m.text ?? ''), m.kem !== false).slice(0, 8000);
-          await cau.goi('agent:send', { cuocId, text, ...(anh.length ? { anh: anh.slice(0, 8) } : {}) });
+          await cau.goi('agent:send', { cuocId, text, ...(anh.length ? { anh: anh.slice(0, 8) } : {}), ...(m.chiDoc === true ? { chiDoc: true } : {}) });
           return;
         }
         case 'traLoi': await cau.goi('agent:traLoiXinPhep', { cuocId, id: m.id, quyetDinh: m.quyetDinh }); return;
@@ -175,7 +272,11 @@ class KhungChat implements vscode.WebviewViewProvider {
         case 'dung': await cau.goi('agent:cancel', { cuocId }); return;
         case 'lamTiep': await cau.goi('agent:lamTiep', { cuocId }); return;
         case 'viecMoi': await cau.goi('agent:reset', { cuocId }); this.gui({ loai: 'daXoa' }); return;
-        case 'hoanTac': this.gui({ loai: 'thongBao', chu: String(await cau.goi('agent:hoanTac', { cuocId }) ?? 'Đã hoàn tác.') }); return;
+        case 'hoanTac': {
+          const r = await cau.goi<{ soFile: number }>('agent:hoanTac', { cuocId });
+          this.gui({ loai: 'thongBao', chu: `Đã hoàn tác ${r?.soFile ?? 0} file.` });
+          return;
+        }
         case 'datCheDo': {
           const ws = await cau.goi('agent:datCheDoQuyen', { cuocId, cheDo: m.cheDo });
           this.gui({ loai: 'ws', ws });
@@ -188,6 +289,84 @@ class KhungChat implements vscode.WebviewViewProvider {
     } catch (e) {
       this.gui({ loai: 'loiCuc', chu: (e as Error).message });
     }
+  }
+
+  /**
+   * Khung chat hỏi và CHỜ trả lời: `agent:*` ⇒ AI Code (qua app hoặc lõi độc
+   * lập, luôn kèm cuộc của khung này); `vsc:*` ⇒ việc riêng của VS Code.
+   */
+  private async rpc(m: { [k: string]: unknown }): Promise<void> {
+    const id = m.id;
+    const kenh = String(m.kenh ?? '');
+    const d = (m.duLieu && typeof m.duLieu === 'object' ? m.duLieu : {}) as Record<string, unknown>;
+    try {
+      let kq: unknown;
+      if (kenh.startsWith('agent:')) {
+        if (!this.cau || !this.cuocId) throw new Error('Chưa kết nối — đợi một chút rồi thử lại.');
+        try {
+          kq = await this.cau.goi(kenh, { cuocId: this.cuocId, ...d });
+        } catch (e) {
+          // App bản cũ chưa mở kênh này cho VS Code ⇒ nói cách làm, đừng đưa nguyên lỗi HTTP.
+          if (/không mở cho VS Code/.test((e as Error).message)) {
+            throw new Error('Tính năng này cần app CuongThai bản mới hơn — cập nhật app, hoặc đặt cài đặt cuongthai.cheDo = "docLap" để chạy ngay trong VS Code.');
+          }
+          throw e;
+        }
+      } else if (kenh === 'vsc:usage') {
+        kq = await this.hanMuc();
+      } else if (kenh === 'vsc:ghiAm') {
+        kq = await this.ghiAm(d.bat === true);
+      } else {
+        kq = await this.viec.xuLy(kenh, d);
+      }
+      this.gui({ loai: 'rpcKq', id, ok: true, kq: kq ?? null });
+    } catch (e) {
+      this.gui({ loai: 'rpcKq', id, ok: false, loi: (e as Error).message });
+    }
+  }
+
+  /** `/usage`: hỏi máy chủ bằng phiên của chính extension (chế độ độc lập). */
+  private async hanMuc(): Promise<unknown> {
+    if (!(this.cau instanceof LoiDocLap)) throw new Error('Đang chạy qua app — xem hạn mức trong app CuongThai (gõ /usage ở đó).');
+    const r = await fetch(`${API_ORIGIN}/api/v1/agent/usage`, {
+      headers: { authorization: `Bearer ${this.cau.nguoiDung.token}` },
+      signal: AbortSignal.timeout(15_000),
+    });
+    const j = await r.json().catch(() => ({})) as { data?: unknown; message?: string };
+    if (!r.ok) throw new Error(j.message ?? `Máy chủ trả HTTP ${r.status}.`);
+    return j.data ?? j;
+  }
+
+  /** Mic: VS Code không cho webview dùng micro ⇒ extension ghi âm bằng công cụ của hệ điều hành rồi nhờ máy chủ nghe. */
+  private async ghiAm(bat: boolean): Promise<string | boolean> {
+    if (bat) {
+      this.ghi?.huy();
+      this.ghi = await batDauGhiAm({ tranGiay: 120 });
+      return true;
+    }
+    const g = this.ghi;
+    this.ghi = null;
+    if (!g) return '';
+    const file = await g.dung();
+    const token = this.cau instanceof LoiDocLap ? this.cau.nguoiDung.token : null;
+    return nhanDang(file, { apiOrigin: API_ORIGIN, token, ngonNgu: 'vi' });
+  }
+
+  /** Chèn `@đường` vào ô chat (chuột phải › Thêm vào CuongMini Code). */
+  async themVaoChat(uris: vscode.Uri[]): Promise<void> {
+    await vscode.commands.executeCommand('cuongthai.chat.focus');
+    try {
+      const kq = await this.viec.xuLy('vsc:thaUri', { uris: uris.map((u) => u.toString()) }) as { chen: string[]; anh: string[] };
+      if (kq.chen.length) this.gui({ loai: 'chenNhac', chen: kq.chen.join(' ') });
+      if (kq.anh.length) this.gui({ loai: 'thongBao', chu: 'Ảnh: dán (Cmd/Ctrl+V) hoặc kéo thẳng vào ô chat để gửi kèm.' });
+    } catch (e) {
+      void vscode.window.showWarningMessage((e as Error).message);
+    }
+  }
+
+  moLichSu(): void {
+    void vscode.commands.executeCommand('cuongthai.chat.focus');
+    this.gui({ loai: 'lichSu' });
   }
 
   /** Đưa một câu hỏi soạn sẵn vào ô nhập (từ lệnh chuột phải / sửa lỗi). */
@@ -211,7 +390,7 @@ class SuaLoiBangAI implements vscode.CodeActionProvider {
   provideCodeActions(doc: vscode.TextDocument, _r: vscode.Range, ctx: vscode.CodeActionContext): vscode.CodeAction[] {
     const loi = ctx.diagnostics.filter((d) => d.severity <= vscode.DiagnosticSeverity.Warning).slice(0, 3);
     if (!loi.length) return [];
-    const a = new vscode.CodeAction('✨ Nhờ CuongThai AI sửa lỗi này', vscode.CodeActionKind.QuickFix);
+    const a = new vscode.CodeAction('✨ Nhờ CuongMini sửa lỗi này', vscode.CodeActionKind.QuickFix);
     const ten = vscode.workspace.asRelativePath(doc.uri, false);
     const moTa = loi.map((d) => `- dòng ${d.range.start.line + 1}: ${d.message}${d.source ? ` (${d.source})` : ''}`).join('\n');
     a.command = { command: 'cuongthai.suaLoi', title: 'Nhờ AI sửa', arguments: [`Sửa lỗi trong ${ten}:\n${moTa}\nĐọc file, tìm nguyên nhân gốc rồi sửa.`] };
@@ -226,14 +405,17 @@ export function activate(ctx: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('cuongthai.moChat', () => vscode.commands.executeCommand('cuongthai.chat.focus')),
     vscode.commands.registerCommand('cuongthai.viecMoi', () => khung.viecMoi()),
     vscode.commands.registerCommand('cuongthai.moApp', () => moApp()),
+    vscode.commands.registerCommand('cuongthai.dangXuat', () => khung.dangXuat()),
+    vscode.workspace.onDidChangeConfiguration((e) => { if (e.affectsConfiguration('cuongthai.cheDo')) void khung.noi(); }),
     vscode.commands.registerCommand('cuongthai.hoiDoanChon', () => khung.dienCauHoi('Giải thích đoạn code này và chỉ ra chỗ có thể sai: ')),
-    vscode.commands.registerCommand('cuongthai.themFile', (uri?: vscode.Uri) => {
-      const u = uri ?? vscode.window.activeTextEditor?.document.uri;
-      if (u) khung.dienCauHoi(`Đọc file ${vscode.workspace.asRelativePath(u, false)} và `);
+    vscode.commands.registerCommand('cuongthai.themFile', (uri?: vscode.Uri, ds?: vscode.Uri[]) => {
+      const tat = ds?.length ? ds : [uri ?? vscode.window.activeTextEditor?.document.uri].filter((x): x is vscode.Uri => Boolean(x));
+      if (tat.length) void khung.themVaoChat(tat);
     }),
+    vscode.commands.registerCommand('cuongthai.lichSu', () => khung.moLichSu()),
     vscode.commands.registerCommand('cuongthai.suaLoi', (cauHoi: string) => khung.dienCauHoi(cauHoi, true)),
     vscode.languages.registerCodeActionsProvider({ scheme: 'file' }, new SuaLoiBangAI(), { providedCodeActionKinds: SuaLoiBangAI.kieu }),
   );
 }
 
-export function deactivate(): void { /* cầu nối tự đóng theo tiến trình */ }
+export function deactivate(): void { huyDangNhapTrinhDuyet(); }

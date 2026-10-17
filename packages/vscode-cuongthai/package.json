@@ -1,8 +1,8 @@
 {
   "name": "cuongthai-ai-code",
-  "displayName": "CuongThai AI Code",
-  "description": "AI Code của CuongThai ngay trong VS Code — chat, sửa code, chạy lệnh, skill, MCP, GitHub. Chạy bằng app desktop CuongThai.",
-  "version": "0.1.1",
+  "displayName": "CuongMini Code — AI lập trình của CuongThai",
+  "description": "CuongMini Code — AI lập trình của CuongThai ngay trong VS Code — chat, sửa code, chạy lệnh, skill, MCP, GitHub. Cài là dùng: đăng nhập bằng tài khoản cuongthai.com (có app desktop thì tự chạy qua app).",
+  "version": "0.3.0",
   "publisher": "cuongthai",
   "license": "UNLICENSED",
   "private": true,
@@ -11,37 +11,43 @@
   "homepage": "https://cuongthai.com",
   "engines": { "vscode": "^1.90.0" },
   "categories": ["AI", "Chat", "Programming Languages"],
-  "keywords": ["ai", "agent", "chat", "cuongthai", "code assistant"],
+  "keywords": ["ai", "agent", "chat", "cuongthai", "cuongmini", "code assistant", "copilot", "tiếng việt"],
   "main": "./dist/extension.js",
   "activationEvents": ["onStartupFinished"],
   "contributes": {
     "viewsContainers": {
       "activitybar": [
-        { "id": "cuongthai", "title": "CuongThai AI", "icon": "media/activity.svg" }
+        { "id": "cuongthai", "title": "CuongMini Code", "icon": "media/activity.svg" }
       ]
     },
     "views": {
       "cuongthai": [
-        { "type": "webview", "id": "cuongthai.chat", "name": "AI Code", "icon": "media/activity.svg" }
+        { "type": "webview", "id": "cuongthai.chat", "name": "CuongMini Code", "icon": "media/activity.svg" }
       ]
     },
     "commands": [
-      { "command": "cuongthai.moChat", "title": "Mở khung chat", "category": "CuongThai", "icon": "$(comment-discussion)" },
-      { "command": "cuongthai.viecMoi", "title": "Việc mới", "category": "CuongThai", "icon": "$(add)" },
-      { "command": "cuongthai.hoiDoanChon", "title": "Hỏi AI về đoạn đang chọn", "category": "CuongThai" },
-      { "command": "cuongthai.themFile", "title": "Gửi file này cho AI", "category": "CuongThai" },
-      { "command": "cuongthai.suaLoi", "title": "Nhờ AI sửa lỗi này", "category": "CuongThai" },
-      { "command": "cuongthai.moApp", "title": "Mở app CuongThai", "category": "CuongThai" }
+      { "command": "cuongthai.moChat", "title": "Mở khung chat", "category": "CuongMini", "icon": "$(comment-discussion)" },
+      { "command": "cuongthai.viecMoi", "title": "Việc mới", "category": "CuongMini", "icon": "$(add)" },
+      { "command": "cuongthai.lichSu", "title": "Lịch sử việc", "category": "CuongMini", "icon": "$(history)" },
+      { "command": "cuongthai.hoiDoanChon", "title": "Hỏi AI về đoạn đang chọn", "category": "CuongMini" },
+      { "command": "cuongthai.themFile", "title": "Thêm vào CuongMini Code", "category": "CuongMini" },
+      { "command": "cuongthai.suaLoi", "title": "Nhờ AI sửa lỗi này", "category": "CuongMini" },
+      { "command": "cuongthai.moApp", "title": "Mở app CuongThai", "category": "CuongMini" },
+      { "command": "cuongthai.dangXuat", "title": "Đăng xuất (chế độ không cần app)", "category": "CuongMini" }
     ],
     "menus": {
       "view/title": [
-        { "command": "cuongthai.viecMoi", "when": "view == cuongthai.chat", "group": "navigation" }
+        { "command": "cuongthai.lichSu", "when": "view == cuongthai.chat", "group": "navigation@1" },
+        { "command": "cuongthai.viecMoi", "when": "view == cuongthai.chat", "group": "navigation@2" }
+      ],
+      "editor/title/context": [
+        { "command": "cuongthai.themFile", "group": "cuongthai@1" }
       ],
       "editor/context": [
         { "command": "cuongthai.hoiDoanChon", "when": "editorHasSelection", "group": "cuongthai@1" }
       ],
       "explorer/context": [
-        { "command": "cuongthai.themFile", "when": "!explorerResourceIsFolder", "group": "cuongthai@1" }
+        { "command": "cuongthai.themFile", "group": "cuongthai@1" }
       ],
       "commandPalette": [
         { "command": "cuongthai.suaLoi", "when": "false" }
@@ -52,8 +58,19 @@
       { "command": "cuongthai.hoiDoanChon", "key": "ctrl+alt+l", "mac": "cmd+alt+l", "when": "editorHasSelection" }
     ],
     "configuration": {
-      "title": "CuongThai AI Code",
+      "title": "CuongMini Code",
       "properties": {
+        "cuongthai.cheDo": {
+          "type": "string",
+          "enum": ["tuDong", "docLap", "app"],
+          "enumDescriptions": [
+            "Có app desktop CuongThai đang mở thì chạy qua app, không thì chạy ngay trong VS Code.",
+            "Luôn chạy ngay trong VS Code (đăng nhập bằng tài khoản cuongthai.com), kể cả khi có app.",
+            "Chỉ chạy qua app desktop CuongThai."
+          ],
+          "default": "tuDong",
+          "description": "AI Code chạy ở đâu."
+        },
         "cuongthai.kemFileDangMo": {
           "type": "boolean",
           "default": true,
@@ -70,10 +87,13 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "@types/pngjs": "6.0.5",
     "@types/vscode": "^1.90.0",
     "dompurify": "^3.2.3",
     "esbuild": "^0.24.2",
+    "jpeg-js": "0.4.4",
     "marked": "^15.0.4",
+    "pngjs": "7.0.0",
     "typescript": "^5.7.2"
   }
 }

@@ -9,5 +9,6 @@
     "noEmit": true,
     "types": ["node", "vscode"]
   },
-  "include": ["src", "webview"]
+  "include": ["src", "webview"],
+  "exclude": ["src/doclap/loi.ts", "src/**/*.test.ts"]
 }

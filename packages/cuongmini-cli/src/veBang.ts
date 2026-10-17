@@ -160,9 +160,13 @@ export interface ThongTinMoDau {
   ten: string;
   thuMuc: string;
   nhanh: string | null;
-  model: string;
-  muc: string;
-  cheDo: { ten: string; icon: string; mau: string };
+  /**
+   * Model/mức/chế độ HIỆN TẠI. Bỏ trống (in nối tiếp: banner in một lần rồi nằm im trong
+   * scrollback) ⇒ không in các dòng này — chân trang đã hiện bản đang đúng, lặp lại chỉ để sai.
+   */
+  model?: string;
+  muc?: string;
+  cheDo?: { ten: string; icon: string; mau: string };
   banMoi: string | null;
   lenhCai: string;
   ngoaiTuyen: boolean;
@@ -190,10 +194,14 @@ export function veManMoDau(t: ThongTinMoDau, logo: string[], rongMan: number): s
   ra.push(dong());
   const nhan = (k: string) => mo(k.padEnd(9));
   ra.push(dong(` ${nhan(L('Thư mục', 'cwd'))}${t.thuMuc}${t.nhanh ? `  ${mau('#a78bfa')(`⎇ ${t.nhanh}`)}` : ''}`));
-  ra.push(dong(` ${nhan('Model')}${mau(THUONG_HIEU.xanhNhat)(t.model)}${mo(L(` · mức ${t.muc}`, ` · effort ${t.muc}`))}`));
-  ra.push(dong(` ${nhan(L('Chế độ', 'Mode'))}${mau(t.cheDo.mau)(`${t.cheDo.icon} ${t.cheDo.ten}`)}${t.trinhDuyet ? `  ${mau('#60a5fa')(L('🌐 trình duyệt', '🌐 browser'))}` : ''}${mo(L('  (shift+tab để đổi)', '  (shift+tab to cycle)'))}`));
-  ra.push(dong(` ${mo(L('         Đủ công cụ: sửa file, chạy lệnh, git, trình duyệt — mỗi lần sửa/chạy lệnh vẫn hỏi.', '         All tools on: edit files, run commands, git, browser — every edit/command still asks.'))}`));
-  ra.push(dong(` ${mo(L('         shift+tab sang "Tự động" hoặc "Bỏ qua hết" nếu muốn khỏi hỏi.', '         shift+tab to "Auto mode" or "Bypass" to skip the prompts.'))}`));
+  if (t.model) ra.push(dong(` ${nhan('Model')}${mau(THUONG_HIEU.xanhNhat)(t.model)}${t.muc ? mo(L(` · mức ${t.muc}`, ` · effort ${t.muc}`)) : ''}`));
+  if (t.cheDo) {
+    ra.push(dong(` ${nhan(L('Chế độ', 'Mode'))}${mau(t.cheDo.mau)(`${t.cheDo.icon} ${t.cheDo.ten}`)}${t.trinhDuyet ? `  ${mau('#60a5fa')(L('🌐 trình duyệt', '🌐 browser'))}` : ''}${mo(L('  (shift+tab để đổi)', '  (shift+tab to cycle)'))}`));
+    ra.push(dong(` ${mo(L('         Đủ công cụ: sửa file, chạy lệnh, git, trình duyệt — mỗi lần sửa/chạy lệnh vẫn hỏi.', '         All tools on: edit files, run commands, git, browser — every edit/command still asks.'))}`));
+    ra.push(dong(` ${mo(L('         shift+tab sang "Tự động" hoặc "Bỏ qua hết" nếu muốn khỏi hỏi.', '         shift+tab to "Auto mode" or "Bypass" to skip the prompts.'))}`));
+  } else {
+    ra.push(dong(` ${nhan(L('Chế độ', 'Mode'))}${mo(L('model, mức và chế độ đang dùng hiện ở dòng dưới cùng · shift+tab đổi chế độ', 'current model, effort and mode are shown in the bottom line · shift+tab to cycle'))}`));
+  }
   ra.push(dong());
   const k = (s: string) => mau(THUONG_HIEU.timNhat)(s);
   ra.push(dong(` ${mo(L('Mẹo:', 'Tips:'))} ${k('/help')} ${mo(L('xem lệnh ·', 'commands ·'))} ${k('@file')} ${mo(L('nhắc file ·', 'mention files ·'))} ${k('/model')} ${mo(L('đổi model ·', 'switch model ·'))} ${k('/language')}`));

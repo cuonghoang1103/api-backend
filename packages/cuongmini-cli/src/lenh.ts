@@ -74,6 +74,8 @@ export interface BoiCanhLenh {
   moMenu: (loai: 'model' | 'muc' | 'resume' | 'cheDo' | 'config' | 'rewind' | 'banGhi' | 'tasks' | 'ngonNgu' | 'cong') => void;
   /** Chọn một model 🔒 của cổng chính hãng: hỏi mật khẩu ⇒ mở khoá ⇒ đổi model. */
   moKhoaModel: (id: string) => void;
+  /** /fullscreen on|off — không tham số thì đảo. */
+  datToanManHinh: (bat?: boolean) => void;
   /** Đổi ngôn ngữ giao diện ngay (vẽ lại toàn bộ màn hình) và lưu cài đặt. */
   doiNgonNgu: (n: 'vi' | 'en') => void;
   /** Đổi theme ngay (vẽ lại màn hình) và lưu cài đặt. */
@@ -384,6 +386,11 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
     case '/config': b.moMenu('config'); return;
     case '/tasks': b.moMenu('tasks'); return;
     case '/gateway': b.moMenu('cong'); return;
+    case '/fullscreen': {
+      const q = thamSo.trim().toLowerCase();
+      b.datToanManHinh(/^(on|bat|bật|1|yes)$/.test(q) ? true : /^(off|tat|tắt|0|no)$/.test(q) ? false : undefined); // i18n-bo-qua: chữ người gõ
+      return;
+    }
     case '/language': {
       const q = chuanHoaTen(thamSo);
       if (q === 'vi' || q === 'tiengviet' || q === 'vietnamese') { b.doiNgonNgu('vi'); return; }

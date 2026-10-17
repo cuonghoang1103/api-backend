@@ -22,8 +22,10 @@ type Pha =
   | { loai: 'chat'; kn: KetNoiLoi; kho: KhoChat; ngoaiTuyen: boolean; banMoi: string | null }
   | { loai: 'loi'; chu: string };
 
-export function UngDung({ co, thuMuc, phienBan, chiDangNhap, banMoi, onThoat }: {
+export function UngDung({ co, thuMuc, phienBan, chiDangNhap, banMoi, toanManHinh = false, onThoat }: {
   co: CoDong; thuMuc: string; phienBan: string; chiDangNhap: boolean; banMoi: Promise<string | null>;
+  /** Đang ở alternate screen (main.tsx đã vào trước khi vẽ). */
+  toanManHinh?: boolean;
   onThoat: (loiNhan?: string) => void;
 }) {
   const { exit } = useApp();
@@ -90,6 +92,7 @@ export function UngDung({ co, thuMuc, phienBan, chiDangNhap, banMoi, onThoat }: 
         <ManChat
           kn={pha.kn} kho={pha.kho} thuMuc={thuMuc} phienBan={phienBan} cauHoiDau={co.cauHoi}
           banMoi={pha.banMoi} ngoaiTuyen={pha.ngoaiTuyen} chonViecCu={co.chonViecCu} onThoat={onThoat}
+          toanManHinh={toanManHinh}
         />
       );
     case 'loi':

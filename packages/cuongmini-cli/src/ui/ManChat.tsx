@@ -8,7 +8,7 @@
  * cục → gợi ý → ô nhập. Nhiều `useInput` rải rác sẽ cùng nhận một phím và giẫm nhau.
  */
 import { appendFileSync, readFileSync } from 'node:fs';
-import { Box, Static, useApp, useInput, useStdout } from 'ink';
+import { Box, Static, measureElement, useApp, useInput, useStdout, type DOMElement } from 'ink';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type MutableRefObject } from 'react';
 import { chuanHoa, dsCauHoi, locPhien, type MucGhi, type PhienCu } from 'ct-lenh';
 import { docAnhDataUrl, guiThangDuoc, tachAnh } from '../anh';
@@ -27,7 +27,9 @@ import { nhanKieu, quetDuAn, type KyHieu } from '../kyHieu';
 import { canAscii, datAscii } from '../kyTu';
 import { LENH_GOI_Y, MODEL_DU_PHONG, MUC_DU_PHONG, NHOM_CONG, chayLenh, tenMuc as tenMucNoLuc, tenModel, nhomCong, tenNhomCong, moPhien, tachLenhCli, type BoiCanhLenh, type ModelMuc, type MucNoLuc } from '../lenh';
 import { veLogo } from '../logo';
-import { datTheme, doTheme, mau, mo } from '../mau';
+import { XOA_KHUNG, capNhatTong, nenBatChuot, catKhung, chuoiDoiCheDo, cuon as cuonViTri, datTomTatPhien, docChuot, xoaSach, type ViTriCuon } from '../toanManHinh';
+import { giay } from '../trangThai';
+import { THUONG_HIEU, dam, datTheme, doTheme, mau, mo } from '../mau';
 import { damBaoThuMuc, duongLichSu, thuMucGoc, xoaPhien, type NguoiDung } from '../phien';
 import { chayShell, dungNguCanhShell, type LanChayShell } from '../shell';
 import { guiThongBaoHeThong, rungChuong } from '../thongBao';
@@ -107,14 +109,27 @@ export interface PropsManChat {
   chonViecCu?: boolean;
   /** Khi thoát: in lời chào cuối rồi mới tắt tiến trình. */
   onThoat: (loiNhan?: string) => void;
+  /** Mở ở toàn màn hình (main.tsx đã vào alternate screen). */
+  toanManHinh?: boolean;
 }
 
-export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuyen, chonViecCu, onThoat }: PropsManChat) {
+export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuyen, chonViecCu, onThoat, toanManHinh = false }: PropsManChat) {
   useSyncExternalStore(useCallback((f) => kho.nghe(f), [kho]), () => kho.phienBan);
   const S = kho.S;
   const { exit } = useApp();
-  const { stdout } = useStdout();
+  // `write` của Ink: xoá khung động → ghi → vẽ lại khung. Mọi chuỗi điều khiển màn hình đi qua đây,
+  // ghi thẳng `stdout.write` thì Ink không biết và lần vẽ sau xoá lệch dòng (khung trùng).
+  const { stdout, write: ghiInk } = useStdout();
   const [cot, hang] = useKichThuoc();
+  const [fsRef, setFs] = useStateRef(toanManHinh);
+  /** Vị trí cuộn của bảng ghi ở toàn màn hình. */
+  const viTri = useRef<ViTriCuon>({ cuon: 0, tong: 0, moi: 0 });
+  const khungRef = useRef<DOMElement>(null);
+  const caoKhung = useRef(10);
+  const [, datDoKhung] = useState(0);
+  const daNhacBoiDen = useRef(false);
+  const batDauPhien = useRef(Date.now());
+  const boNhoDong = useRef(new Map<number, { k: string; d: string[] }>());
   const [oRef, setO] = useStateRef<ST.ONhap>(ST.rong());
   const [goiYRef, setGoiY] = useStateRef<GoiY | null>(null);
   const [hopRef, setHop] = useStateRef<Hop | null>(null);
@@ -164,6 +179,55 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     return () => { tat(); process.off('exit', tat); };
   }, [stdout]);
 
+  /*
+   * ĐỔI CỠ CỬA SỔ (lỗi "khung nhập trùng 3 lần" của 0.3.0). Terminal REFLOW các dòng đã vẽ:
+   * hẹp lại thì một dòng rộng gãy thành hai, mà Ink chỉ xoá đúng số dòng nó nhớ ⇒ sót bản cũ.
+   * Nghe SAU Ink (Ink đã vẽ một khung theo cỡ cũ): toàn màn hình ⇒ xoá khung rồi Ink vẽ lại
+   * ngay; in nối tiếp ⇒ đợi người dùng kéo xong (150ms) rồi xoá sạch + in lại bảng ghi.
+   */
+  useEffect(() => {
+    if (!stdout.isTTY) return undefined;
+    let hen: NodeJS.Timeout | null = null;
+    const f = () => {
+      if (fsRef.current) { ghiInk(XOA_KHUNG); return; }
+      if (hen) clearTimeout(hen);
+      hen = setTimeout(() => { hen = null; if (!fsRef.current) { ghiInk(xoaSach()); kho.veLai(); } }, 150);
+    };
+    stdout.on('resize', f);
+    return () => { stdout.off('resize', f); if (hen) clearTimeout(hen); };
+  }, [stdout, ghiInk, kho, fsRef]);
+
+  // Chiều cao thật của khung cuộn (sau khi Yoga xếp) — để PgUp/PgDn lật đúng một trang.
+  useEffect(() => {
+    if (!khungRef.current) return;
+    const h = measureElement(khungRef.current).height;
+    // Đổi chiều cao khung ⇒ vẽ lại một lần (cách xếp trên/đáy phụ thuộc nó); bằng nhau thì dừng.
+    if (h > 0 && h !== caoKhung.current) { caoKhung.current = h; datDoKhung((n) => n + 1); }
+  });
+
+  // Tóm tắt phiên in ra màn hình thường khi thoát toàn màn hình (alternate screen mất hết nội dung).
+  useEffect(() => {
+    datTomTatPhien(() => {
+      const soCau = S.muc.filter((m) => m.kieu === 'nguoi').length;
+      if (!soCau) return '';
+      const file = Object.keys(S.fileDaSua);
+      const phan = [
+        L(`${soCau} câu hỏi`, `${soCau} question${soCau > 1 ? 's' : ''}`),
+        file.length ? L(`${file.length} file đã sửa`, `${file.length} file${file.length > 1 ? 's' : ''} changed`) : '',
+        S.tienPhien > 0 ? `~$${S.tienPhien < 0.1 ? S.tienPhien.toFixed(3) : S.tienPhien.toFixed(2)}` : '',
+        giay(Date.now() - batDauPhien.current),
+      ].filter(Boolean);
+      const ra = [`${mau(THUONG_HIEU.tim)('✻')} ${dam(S.tieuDe || L('Việc chưa đặt tên', 'Untitled task'))} ${mo(`· ${phan.join(' · ')}`)}`];
+      for (const f of file.slice(0, 6)) {
+        const d = S.fileDaSua[f]!;
+        ra.push(`  ${mo('·')} ${f} ${mau('#4ade80')(`+${d.them}`)} ${mau('#f87171')(`−${d.bo}`)}`);
+      }
+      if (file.length > 6) ra.push(mo(L(`  … +${file.length - 6} file nữa`, `  … +${file.length - 6} more`)));
+      return ra.join('\n');
+    });
+    // KHÔNG gỡ khi unmount: main đọc tóm tắt SAU khi Ink đã tháo cây (thoát = unmount).
+  }, [S]);
+
   const baoChuY = useCallback((tieuDe: string, noiDung: string) => {
     const c = caiDat.current.thongBao;
     if (c === 'tat') return;
@@ -212,26 +276,58 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     void doiCheDo(ke).catch((e: Error) => kho.thongBao(e.message, 'loi'));
   };
 
-  const xoaManHinh = () => { stdout.write('\x1b[2J\x1b[3J\x1b[H'); };
+  /** /clear: toàn màn hình chỉ cần xoá khung (Ink vẽ lại); in nối tiếp thì xoá cả lịch sử cuộn. */
+  const xoaManHinh = () => { ghiInk(fsRef.current ? XOA_KHUNG : xoaSach()); };
 
-  /** Đổi theme/ký tự: xoá màn hình rồi in lại TOÀN BỘ bảng ghi với màu mới. */
-  const veLaiHet = () => { xoaManHinh(); kho.veLai(); };
+  /**
+   * Vẽ lại TOÀN BỘ bảng ghi (ctrl+l, đổi cỡ cửa sổ). Toàn màn hình: chỉ cần vẽ lại khung. In nối tiếp:
+   * xoá màn hình + lịch sử cuộn QUA Ink rồi in lại — `ESC[2J` một mình ở iTerm2 đẩy bản cũ vào
+   * scrollback (lỗi 0.3.0: /language để lại banner + menu cũ phía trên bản mới).
+   */
+  const veLaiHet = () => {
+    if (!fsRef.current) ghiInk(xoaSach());
+    kho.veLai();
+  };
 
-  /** Đổi ngôn ngữ: lưu, đặt, rồi XOÁ MÀN HÌNH VÀ IN LẠI toàn bộ bảng ghi — khung hình đổi chữ ngay. */
+  /**
+   * Đổi ngôn ngữ/theme. Toàn màn hình: vẽ lại cả khung ngay. In nối tiếp: KHÔNG in lại phần đã in
+   * (in lại là cách duy nhất để chữ cũ đổi theo, và cũng là chỗ sinh bản trùng) — chỉ phần in từ giờ đổi.
+   */
+  const apGiaoDienMoi = (chu: string) => {
+    if (fsRef.current) kho.veLai();
+    kho.thongBao(fsRef.current ? chu : `${chu} ${L('(áp dụng cho phần in từ giờ — /fullscreen để vẽ lại cả màn hình)', '(applies to new output — /fullscreen redraws the whole screen)')}`, 'ok');
+  };
+
   const doiNgonNgu = (n: 'vi' | 'en') => {
     caiDat.current = { ...caiDat.current, ngonNgu: n };
     ghiCaiDat(caiDat.current);
     datNgonNgu(n);
-    veLaiHet();
-    kho.thongBao(L('Đã chuyển giao diện sang Tiếng Việt. Gõ /language để đổi lại.', 'Interface switched to English. Type /language to switch back.'), 'ok');
+    apGiaoDienMoi(L('Đã chuyển giao diện sang Tiếng Việt. Gõ /language để đổi lại.', 'Interface switched to English. Type /language to switch back.'));
   };
 
   const doiTheme = (t: 'tuDong' | 'toi' | 'sang') => {
     caiDat.current = { ...caiDat.current, theme: t };
     ghiCaiDat(caiDat.current);
     datTheme(t === 'tuDong' ? doTheme(process.env) : t);
-    veLaiHet();
-    kho.thongBao(`${tenMuc('theme')}: ${moTaGiaTri('theme', caiDat.current)}`, 'ok');
+    apGiaoDienMoi(`${tenMuc('theme')}: ${moTaGiaTri('theme', caiDat.current)}`);
+  };
+
+  /** /fullscreen on|off (không tham số = đảo). Lưu cài đặt; đổi ngay, không cần mở lại. */
+  const datToanManHinh = (bat?: boolean) => {
+    const moi = bat ?? !fsRef.current;
+    caiDat.current = { ...caiDat.current, toanManHinh: moi ? 'bat' : 'tat' };
+    ghiCaiDat(caiDat.current);
+    if (moi === fsRef.current) { kho.thongBao(L(`Toàn màn hình đang ${moi ? 'bật' : 'tắt'}.`, `Fullscreen is already ${moi ? 'on' : 'off'}.`)); return; }
+    ghiInk(chuoiDoiCheDo(moi));
+    setFs(moi);
+    viTri.current = { cuon: 0, tong: 0, moi: 0 };
+    // Tắt: màn hình thường vừa được xoá sạch ⇒ in lại toàn bộ bảng ghi bằng <Static> mới.
+    kho.veLai();
+    kho.thongBao(moi
+      ? (nenBatChuot()
+        ? L('Toàn màn hình: BẬT — cuộn bằng con lăn/PgUp/PgDn. Bôi đen chép chữ: giữ Option (iTerm2) · Fn (Terminal macOS) · Shift (Linux).', 'Fullscreen: ON — scroll with the wheel/PgUp/PgDn. To select text hold Option (iTerm2) · Fn (macOS Terminal) · Shift (Linux).')
+        : L('Toàn màn hình: BẬT — cuộn bằng PgUp/PgDn (Home/End khi ô nhập trống).', 'Fullscreen: ON — scroll with PgUp/PgDn (Home/End when the input is empty).'))
+      : L('Toàn màn hình: TẮT — in nối tiếp vào lịch sử terminal như cũ.', 'Fullscreen: OFF — printing inline into the terminal scrollback.'), 'ok');
   };
 
   // ─── Gửi ───────────────────────────────────────────────────────
@@ -518,7 +614,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   };
 
   const boiCanh = (): BoiCanhLenh => ({
-    kho, kn, thuMuc, phienBan, guiThat, doiModel, doiMuc, doiCheDo, dsModel, dsMuc, moMenu, moKhoaModel, doiTheme, doiNgonNgu,
+    kho, kn, thuMuc, phienBan, guiThat, doiModel, doiMuc, doiCheDo, dsModel, dsMuc, moMenu, moKhoaModel, doiTheme, doiNgonNgu, datToanManHinh,
     datNhap: (t: string) => setO({ text: t, contro: t.length }),
     xoaManHinh, dangXuat, dangNhapLai: () => setHop({ loai: 'dangNhap' }), thoat: () => thoat(),
   });
@@ -588,6 +684,8 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   const guiCauHoi = (text0: string, tuHangCho = false) => {
     const text = text0.trim();
     if (!text) return;
+    // Gửi câu mới ⇒ về đáy bảng ghi (như Claude Code).
+    viTri.current = { ...viTri.current, cuon: 0, moi: 0 };
     if (!tuHangCho) ghiLichSu(text);
     setO(ST.rong());
     setGoiY(null);
@@ -811,6 +909,12 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   };
   const caoBanGhi = Math.max(5, hang - 3);
 
+  /** Cuộn bảng ghi toàn màn hình `b` dòng (dương = lên). */
+  const cuonBang = (b: number) => {
+    viTri.current = cuonViTri(viTri.current, b, caoKhung.current);
+    kho.bao(true);
+  };
+
   useInput((input, key) => {
     // 0) Báo focus của terminal (ESC[I / ESC[O) — không phải phím người dùng.
     if (input === '[I') { dangNhin.current = true; return; }
@@ -819,6 +923,38 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     const hop = hopRef.current;
     const goiY = goiYRef.current;
     const chonDuyet = chonDuyetRef.current;
+
+    // 0a) Chuột (chỉ có ở toàn màn hình): con lăn cuộn màn đang xem; nhấn chuột ⇒ nhắc cách bôi đen một lần.
+    const chuot = docChuot(input);
+    if (chuot) {
+      if (chuot.kieu === 'khac') {
+        if (!daNhacBoiDen.current) {
+          daNhacBoiDen.current = true;
+          baoNhanh(L('Bôi đen chép chữ: giữ Option (iTerm2) · Fn (Terminal macOS) · Shift (Linux) khi kéo — hoặc ctrl+r xem bản ghi, /fullscreen off', 'To select text hold Option (iTerm2) · Fn (macOS Terminal) · Shift (Linux) while dragging — or ctrl+r, /fullscreen off'), 6000);
+        }
+        return;
+      }
+      const b = chuot.kieu === 'cuonLen' ? -3 : 3;
+      if (hop?.loai === 'chiTiet' || hop?.loai === 'banGhi') {
+        const tong = hop.loai === 'chiTiet' ? dongChiTiet(hop.id).length : dungBanGhi(S.bang, rongBanGhi, hop.moRong).dong.length;
+        const toiDa = Math.max(0, tong - caoBanGhi);
+        const dauNay = hop.ganCuoi ? toiDa : Math.min(hop.dau, toiDa);
+        const d = Math.max(0, Math.min(toiDa, dauNay + b));
+        setHop({ ...hop, dau: d, ganCuoi: d >= toiDa });
+        return;
+      }
+      if (fsRef.current) cuonBang(-b);
+      return;
+    }
+
+    // 0a') Toàn màn hình: PgUp/PgDn cuộn bảng ghi; Home/End khi ô nhập trống (có chữ thì là đầu/cuối dòng).
+    if (fsRef.current && !hop && !bangPhuRef.current) {
+      const trang = Math.max(3, caoKhung.current - 2);
+      if (key.pageUp) { cuonBang(trang); return; }
+      if (key.pageDown) { cuonBang(-trang); return; }
+      if (!o.text && !goiY && key.home) { cuonBang(viTri.current.tong); return; }
+      if (!o.text && !goiY && key.end) { cuonBang(-viTri.current.tong); return; }
+    }
 
     // 0b) Màn chi tiết agent phụ / lệnh nền.
     if (hop?.loai === 'chiTiet') {
@@ -1088,6 +1224,9 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   // Màn mở đầu chỉ in MỘT lần — chụp thông tin lúc đó.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [S.ws?.branch, modelNay?.ten, mucNay?.ten, cd.id, S.ws?.choTrinhDuyet, ngonNgu()]);
+  const fs = fsRef.current;
+  // In nối tiếp: banner in MỘT lần rồi nằm im ⇒ bỏ model/chế độ (chân trang hiện bản đang đúng).
+  const thongTinIn: ThongTinMoDau = fs ? thongTin : { ...thongTin, model: undefined, muc: undefined, cheDo: undefined };
 
   const o = oRef.current;
   const hop = hopRef.current;
@@ -1097,11 +1236,29 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   const shell = shellRef.current;
   const rongMuc = Math.max(30, cot - 1);
 
-  const staticBang = (
+  /*
+   * TOÀN MÀN HÌNH: không có <Static> — bảng ghi là các dòng trong một khung cuộn ghim phía trên
+   * ô nhập. Dòng của từng mục được nhớ theo (id, độ rộng, lần vẽ lại, ngôn ngữ): dựng lại
+   * markdown của cả bảng ghi mỗi nhịp xoay (8 lần/giây) là đốt CPU vô ích.
+   */
+  const dongMuc = (m: MucBang): string[] => {
+    if (m.loai === 'chao') return veManMoDau(thongTin, veLogo(Math.min(rongMuc, 96) - 6), rongMuc);
+    const k = `${rongMuc}|${S.khoaBang}|${ngonNgu()}`;
+    const c = boNhoDong.current.get(m.id);
+    if (c && c.k === k) return c.d;
+    const d = veMuc(m, rongMuc).join('\n').split('\n');
+    boNhoDong.current.set(m.id, { k, d });
+    return d;
+  };
+  const vaoKhung = (con: React.ReactNode) => (
+    <Box flexDirection="column" width={cot - 1} height={Math.max(4, hang - 1)} overflow="hidden">{con}</Box>
+  );
+
+  const staticBang = fs ? null : (
     <Static key={S.khoaBang} items={S.bang}>
       {(m: MucBang) => (
         <Box key={m.id} flexDirection="column">
-          <Text>{m.loai === 'chao' ? veManMoDau(thongTin, veLogo(Math.min(rongMuc, 96) - 6), rongMuc).join('\n') : veMuc(m, rongMuc).join('\n')}</Text>
+          <Text>{m.loai === 'chao' ? veManMoDau(thongTinIn, veLogo(Math.min(rongMuc, 96) - 6), rongMuc).join('\n') : veMuc(m, rongMuc).join('\n')}</Text>
         </Box>
       )}
     </Static>
@@ -1114,16 +1271,14 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     const toiDa = Math.max(0, dong.length - caoBanGhi);
     const dau = hop.ganCuoi ? toiDa : Math.min(hop.dau, toiDa);
     const laShell = hop.id.startsWith('shell:');
-    return (
-      <>
-        {staticBang}
+    const xem = (
         <XemBanGhi
           dong={dong} dau={dau} cao={caoBanGhi} rong={cot - 1} khoiChon={null}
           tieuDe={`◆ ${laShell ? L('Lệnh nền', 'Background shell') : L('Agent phụ', 'Subagent')} ${i >= 0 ? `${i + 1}/${ds.length}` : ''}`}
           goiY={`${L('↑↓ cuộn · ←/→ agent khác · g/G đầu/cuối', '↑↓ scroll · ←/→ other agents · g/G top/bottom')}${laShell ? L(' · x dừng lệnh nền', ' · x stop shells') : ''} · ${L('Esc quay lại', 'Esc back')}`}
         />
-      </>
     );
+    return fs ? vaoKhung(xem) : <>{staticBang}{xem}</>;
   }
 
   // Màn xem lại chiếm gần trọn chiều cao — vẽ riêng, không kèm bảng kế hoạch/ô nhập.
@@ -1132,9 +1287,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     const toiDa = Math.max(0, dong.length - caoBanGhi);
     const dau = hop.ganCuoi ? toiDa : Math.min(hop.dau, toiDa);
     const k = hop.cheDo === 'tool' ? khoi[hop.chonKhoi] ?? null : null;
-    return (
-      <>
-        {staticBang}
+    const xem = (
         <XemBanGhi
           dong={dong} dau={dau} cao={caoBanGhi} rong={cot - 1} khoiChon={k}
           tieuDe={hop.cheDo === 'tool' ? L(`◆ Đầu ra lệnh/tool (${khoi.length}) — ${k ? k.nhan : ''}`, `◆ Command/tool outputs (${khoi.length}) — ${k ? k.nhan : ''}`) : L('◆ Bảng ghi', '◆ Transcript')}
@@ -1142,8 +1295,8 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
             ? L('↑↓ chọn khối · Enter mở/thu · p in trọn ra màn hình · Tab cuộn tự do · Esc đóng', '↑↓ pick block · Enter expand/collapse · p print in full · Tab free scroll · Esc close')
             : L('↑↓/j k cuộn · Space/b trang · g/G đầu/cuối · Tab chọn đầu ra (mở/thu) · Esc đóng', '↑↓/j k scroll · Space/b page · g/G top/bottom · Tab pick outputs (expand/collapse) · Esc close')}
         />
-      </>
     );
+    return fs ? vaoKhung(xem) : <>{staticBang}{xem}</>;
   }
 
   // Rộng: bảng nằm cột phải bất cứ khi nào có gì để xem. Hẹp: bảng chiếm chỗ của ô nhập ⇒ chỉ hiện lúc đang làm.
@@ -1218,16 +1371,34 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     </Box>
   );
 
-  return (
+  const vungDuoi = benCanh ? (
+    // Toàn màn hình: ô nhập + chân trang bám ĐÁY kể cả khi bảng kế hoạch bên cạnh cao hơn.
+    <Box flexDirection="row" alignItems={fs ? 'flex-end' : 'flex-start'}>
+      {vungTrai}
+      <Box marginLeft={1} marginTop={1}><BangKeHoach S={S} rong={RONG_BANG} nhip={nhip} toiDaViec={hang - 22} /></Box>
+    </Box>
+  ) : vungTrai;
+
+  if (!fs) return <>{staticBang}{vungDuoi}</>;
+
+  // Toàn màn hình: khung cuộn bám ĐÁY (justifyContent flex-end; phần thừa phía trên bị cắt) + vùng dưới ghim.
+  const tatCaDong = S.bang.flatMap(dongMuc);
+  if (tatCaDong.length !== viTri.current.tong) viTri.current = capNhatTong(viTri.current, tatCaDong.length);
+  const v = viTri.current;
+  const hien = catKhung(tatCaDong, v, hang);
+  return vaoKhung(
     <>
-      {staticBang}
-      {benCanh ? (
-        <Box flexDirection="row" alignItems="flex-start">
-          {vungTrai}
-          <Box marginLeft={1} marginTop={1}><BangKeHoach S={S} rong={RONG_BANG} nhip={nhip} toiDaViec={hang - 22} /></Box>
+      {/* Ít dòng hơn khung ⇒ xếp từ trên xuống (banner ở đỉnh); nhiều hơn ⇒ bám đáy, phần đầu bị cắt. */}
+      <Box ref={khungRef} flexDirection="column" flexGrow={1} flexShrink={1} overflow="hidden" justifyContent={hien.length >= caoKhung.current ? 'flex-end' : 'flex-start'}>
+        <Box flexDirection="column" flexShrink={0}><Text>{hien.join('\n')}</Text></Box>
+      </Box>
+      {v.cuon > 0 ? (
+        <Box paddingLeft={1} flexShrink={0}>
+          <Text wrap="truncate">{`${mau('#fbbf24')(v.moi ? L(`↓ ${v.moi} dòng mới`, `↓ ${v.moi} new line${v.moi > 1 ? 's' : ''}`) : L(`↑ đang xem lại · còn ${v.cuon} dòng bên dưới`, `↑ scrolled up · ${v.cuon} lines below`))} ${mo(L('· End hoặc cuộn xuống để về cuối', '· End or scroll down to jump to the bottom'))}`}</Text>
         </Box>
-      ) : vungTrai}
-    </>
+      ) : null}
+      <Box flexDirection="column" flexShrink={0}>{vungDuoi}</Box>
+    </>,
   );
 }
 

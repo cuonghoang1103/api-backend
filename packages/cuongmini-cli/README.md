@@ -79,6 +79,17 @@ Mặc định đoán theo `LANG`/`LC_ALL` (bắt đầu bằng `vi` ⇒ Tiếng 
 Trong `/language` có công tắc **"AI trả lời bằng ngôn ngữ này"**: bật thì mỗi câu gửi kèm một dòng nhắc ngôn ngữ.
 Chữ đến từ lõi/máy chủ (tóm tắt tool, lỗi, chẩn đoán của lõi) giữ nguyên ngôn ngữ gốc.
 
+## Toàn màn hình (mặc định từ 0.3.1)
+
+CuongMini mở trong **alternate screen** như Claude Code: ô nhập + chân trang ghim ở **đáy cửa sổ**, hội thoại tự cuộn phía trên; thoát thì terminal trả lại màn hình cũ và in một dòng tóm tắt phiên.
+
+- Cuộn: **con lăn chuột** · `PgUp`/`PgDn` · `Home`/`End` (khi ô nhập trống). Đang cuộn lên mà có chữ mới ⇒ dòng `↓ N dòng mới`; gửi câu mới tự về cuối.
+- **Bôi đen chép chữ** (đang bật báo chuột): giữ `Option` (iTerm2) · `Fn` (Terminal macOS) · `Shift` (Linux). Hoặc `ctrl+r` xem bản ghi, `/fullscreen off`.
+- Windows: không bật báo chuột (Node không nhận được sự kiện chuột ở console Windows) ⇒ cuộn bằng `PgUp`/`PgDn`, bôi đen như thường.
+- Đổi cỡ cửa sổ ⇒ xoá khung và vẽ lại đúng cỡ. Đổi ngôn ngữ/model/mức ⇒ banner cập nhật ngay.
+- Tắt: `/fullscreen off` (lưu cho lần sau) · cờ `--no-fullscreen` · `CUONGMINI_TOAN_MAN_HINH=0`. CI, không TTY, `-p` thì không bao giờ bật.
+- Chế độ in nối tiếp (tắt toàn màn hình): đổi cỡ cửa sổ ⇒ xoá sạch (cả scrollback) rồi in lại bảng ghi — hết lỗi "ô nhập trùng 3 lần" của 0.3.0; `/language`, `/theme` chỉ áp cho phần in từ giờ (không in lại để khỏi sinh bản trùng).
+
 ## Gõ đặc biệt (như Claude Code)
 
 | Gõ | Tác dụng |
@@ -150,7 +161,7 @@ Cùng bộ lệnh với app desktop và extension VS Code:
 - **Làm việc**: `/plan <việc>` (chỉ đọc, xong hỏi duyệt) · `/review` · `/diff` · `/init` · `/undo` ·
   `/rewind [n]` · `/resume` (bảng chọn việc cũ) · `/export [tên.md]`
 - **Công cụ**: `/memory` · `/mcp [mo|nap]` · `/hooks` · `/kynang` · `/quyen` (= `/permissions`) · `/doctor` · `/terminal-setup`
-- **CLI**: `/tasks` · `/language [vi|en]` · `/browser [on|off]` (`/trinh-duyet`, `/chrome`) · `/config` (giao diện sáng/tối, thông báo, chế độ & model mặc định, ký tự ASCII) · `/theme` · `/add-dir` ·
+- **CLI**: `/tasks` · `/fullscreen [on|off]` · `/language [vi|en]` · `/browser [on|off]` (`/trinh-duyet`, `/chrome`) · `/config` (giao diện sáng/tối, thông báo, chế độ & model mặc định, ký tự ASCII) · `/theme` · `/add-dir` ·
   `/copy` (chép câu trả lời gần nhất) · `/transcript`
 - Lệnh tự tạo của dự án (`.claude/commands/*.md`) cũng hiện trong gợi ý.
 

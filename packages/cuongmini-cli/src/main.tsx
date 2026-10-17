@@ -19,6 +19,7 @@ import { chuyenNhatKy } from './khoiDong';
 import { THUONG_HIEU, chuyenSac, datTheme, doTheme, mau, mo } from './mau';
 import { docPhien, tenHienThi, xoaPhien } from './phien';
 import { UngDung } from './ui/UngDung';
+import { batDauToanManHinh, dangToanManHinh, ketThucToanManHinh, layTomTatPhien, nenToanManHinh } from './toanManHinh';
 
 /*
  * Ống ra bị đóng sớm (`cuongmini --help | head -3`, `| Select-Object -First 3`) ⇒ Node ném EPIPE
@@ -108,6 +109,11 @@ async function main(): Promise<number> {
   let loiNhan: string | undefined;
   let daThoat = false;
   const banMoi = kiemCapNhat(PHIEN_BAN).catch(() => null);
+  // Toàn màn hình: vào alternate screen TRƯỚC khi Ink vẽ khung đầu tiên.
+  const toanManHinh = co.lenh !== 'login' && nenToanManHinh({
+    caiDat: cd.toanManHinh, co: co.toanManHinh, cheDoIn: co.cheDoIn, tty: Boolean(process.stdout.isTTY), env: process.env,
+  });
+  if (toanManHinh) batDauToanManHinh(process.stdout);
   const ink = render(
     <UngDung
       co={co}
@@ -115,16 +121,28 @@ async function main(): Promise<number> {
       phienBan={PHIEN_BAN}
       chiDangNhap={co.lenh === 'login'}
       banMoi={banMoi}
+      toanManHinh={toanManHinh}
       onThoat={(m) => { daThoat = true; loiNhan = m; }}
     />,
     { exitOnCtrlC: false, maxFps: 30 },
   );
+  // Thoát toàn màn hình (kể cả khi tắt giữa phiên bằng /fullscreen off thì đã ra rồi) ⇒ in tóm tắt phiên lên màn hình cũ.
+  const raToanManHinh = () => {
+    const dangBat = dangToanManHinh();
+    ketThucToanManHinh(process.stdout);
+    const t = dangBat || toanManHinh ? layTomTatPhien() : '';
+    if (t) viet(t);
+  };
   try {
     await ink.waitUntilExit();
-  } catch {
+  } catch (e) {
+    raToanManHinh();
+    // Lỗi đã hiện trong khung Ink — nhưng khung đó nằm ở alternate screen vừa đóng ⇒ in lại.
+    if (toanManHinh && e instanceof Error && e.message) vietLoi(`${mau('#f87171')('✗')} ${e.message}`);
     await dongKetNoiDangMo();
     return 1;
   }
+  raToanManHinh();
   await dongKetNoiDangMo();
   if (loiNhan) viet(loiNhan);
   else if (daThoat && co.lenh !== 'login') viet(mo(`${L('Tạm biệt! Việc đã được lưu — mở lại:', 'Bye! Your task is saved — resume with:')} ${mau(THUONG_HIEU.timNhat)('cuongmini -c')}`));

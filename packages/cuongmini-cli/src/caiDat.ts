@@ -37,9 +37,14 @@ export interface CaiDat {
   ngonNgu: 'tuDong' | 'vi' | 'en';
   /** Kèm dòng nhắc model trả lời bằng ngôn ngữ giao diện. */
   traLoiTheoNgonNgu: 'tat' | 'bat';
+  /**
+   * Toàn màn hình (alternate screen, 0.3.1): ô nhập + chân trang ghim đáy, hội thoại tự cuộn
+   * phía trên. `tat` = in nối tiếp vào scrollback như 0.3.0 (bôi đen chép chữ tự nhiên nhất).
+   */
+  toanManHinh: 'bat' | 'tat';
 }
 
-export const MAC_DINH: CaiDat = { theme: 'tuDong', thongBao: 'heThong', cheDoMacDinh: null, modelMacDinh: null, ascii: 'tuDong', trinhDuyet: 'tuDong', ngonNgu: 'tuDong', traLoiTheoNgonNgu: 'tat' };
+export const MAC_DINH: CaiDat = { theme: 'tuDong', thongBao: 'heThong', cheDoMacDinh: null, modelMacDinh: null, ascii: 'tuDong', trinhDuyet: 'tuDong', ngonNgu: 'tuDong', traLoiTheoNgonNgu: 'tat', toanManHinh: 'bat' };
 
 /** Lựa chọn từng mục: [mã, tiếng Việt, English]. */
 const LUA_CHON_GOC = {
@@ -50,6 +55,7 @@ const LUA_CHON_GOC = {
   trinhDuyet: [['tuDong', 'Bật khi máy có Chrome/Edge/Brave/Chromium', 'On when Chrome/Edge/Brave/Chromium is installed'], ['bat', 'Luôn bật', 'Always on'], ['tat', 'Tắt — AI không mở trình duyệt', 'Off — the AI never opens a browser']],
   ngonNgu: [['tuDong', 'Tự động (theo LANG của máy)', 'Auto (from system LANG)'], ['vi', 'Tiếng Việt', 'Vietnamese (Tiếng Việt)'], ['en', 'English', 'English']],
   traLoiTheoNgonNgu: [['tat', 'Tắt — AI tự chọn ngôn ngữ trả lời', 'Off — the AI picks its reply language'], ['bat', 'Bật — luôn trả lời bằng ngôn ngữ giao diện', 'On — always reply in the interface language']],
+  toanManHinh: [['bat', 'Bật — ô nhập ghim đáy, cuộn bằng chuột/PgUp/PgDn (mặc định)', 'On — input pinned to the bottom, scroll with mouse/PgUp/PgDn (default)'], ['tat', 'Tắt — in nối tiếp vào lịch sử terminal', 'Off — print inline into the terminal scrollback']],
 } as const;
 
 export type MucLuaChon = keyof typeof LUA_CHON_GOC;
@@ -63,6 +69,7 @@ const TEN_MUC_GOC: Record<keyof CaiDat, [string, string]> = {
   theme: ['Giao diện', 'Theme'], thongBao: ['Thông báo', 'Notifications'], cheDoMacDinh: ['Chế độ quyền mặc định', 'Default permission mode'],
   modelMacDinh: ['Model mặc định', 'Default model'], ascii: ['Ký tự khung', 'Box characters'], trinhDuyet: ['Trình duyệt cho AI', 'AI browser'],
   ngonNgu: ['Ngôn ngữ giao diện', 'Interface language'], traLoiTheoNgonNgu: ['AI trả lời bằng ngôn ngữ này', 'AI replies in this language'],
+  toanManHinh: ['Toàn màn hình', 'Fullscreen'],
 };
 export const tenMuc = (k: keyof CaiDat): string => L(TEN_MUC_GOC[k][0], TEN_MUC_GOC[k][1]);
 export const CAC_MUC = Object.keys(TEN_MUC_GOC) as Array<keyof CaiDat>;
@@ -86,6 +93,7 @@ export function chuanHoaCaiDat(tho: unknown): CaiDat {
     trinhDuyet: trong('trinhDuyet') as ChonTrinhDuyet,
     ngonNgu: trong('ngonNgu') as CaiDat['ngonNgu'],
     traLoiTheoNgonNgu: trong('traLoiTheoNgonNgu') as CaiDat['traLoiTheoNgonNgu'],
+    toanManHinh: trong('toanManHinh') as CaiDat['toanManHinh'],
   };
 }
 

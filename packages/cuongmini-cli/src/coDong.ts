@@ -31,6 +31,8 @@ export interface CoDong {
   dinhDang?: DinhDangRa;
   /** `--verbose`: in đầy đủ đầu ra lệnh (như bấm ctrl+o). */
   chiTiet?: boolean;
+  /** `--no-fullscreen` (false) / `--fullscreen` (true) — thắng cài đặt `toanManHinh`. */
+  toanManHinh?: boolean;
   loi?: string;
 }
 
@@ -75,6 +77,8 @@ export function phanTichCo(argv: readonly string[]): CoDong {
       }
       case '-r': case '--resume': ra.chonViecCu = true; break;
       case '--verbose': case '--chi-tiet': ra.chiTiet = true; break;
+      case '--no-fullscreen': case '--khong-toan-man-hinh': ra.toanManHinh = false; break;
+      case '--fullscreen': case '--toan-man-hinh': ra.toanManHinh = true; break;
       case '--dangerously-skip-permissions': ra.cheDo = 'boQuaHet'; break;
       case '--add-dir': case '--them-thu-muc': {
         const v = giaTriLien ?? canGiaTri(ten, i);
@@ -138,6 +142,7 @@ Cờ:
       --add-dir <đường>          Cho agent đọc/sửa thêm thư mục này (lặp lại được)
       --output-format <dạng>     Với -p: text (mặc định) · json · stream-json
       --verbose                  In đầy đủ đầu ra lệnh (như ctrl+o)
+      --no-fullscreen            Không dùng toàn màn hình (in nối tiếp vào lịch sử terminal)
   -v, --version                  In phiên bản
   -h, --help                     In trợ giúp này
 
@@ -173,6 +178,7 @@ Flags:
       --add-dir <path>           Let the agent also work in this folder (repeatable)
       --output-format <fmt>      With -p: text (default) · json · stream-json
       --verbose                  Print full command output (like ctrl+o)
+      --no-fullscreen            Don't use fullscreen (print inline into the terminal scrollback)
   -v, --version                  Print the version
   -h, --help                     Show this help
 

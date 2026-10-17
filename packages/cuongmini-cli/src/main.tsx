@@ -18,6 +18,14 @@ import { THUONG_HIEU, chuyenSac, datTheme, doTheme, mau, mo } from './mau';
 import { docPhien, tenHienThi, xoaPhien } from './phien';
 import { UngDung } from './ui/UngDung';
 
+/*
+ * Ống ra bị đóng sớm (`cuongmini --help | head -3`, `| Select-Object -First 3`) ⇒ Node ném EPIPE
+ * và thoát mã 1 — người dùng thấy như lỗi. Bên đọc đã đủ thì ta cứ thoát êm như mọi công cụ dòng lệnh.
+ */
+for (const luong of [process.stdout, process.stderr]) {
+  luong.on('error', (e: NodeJS.ErrnoException) => { if (e.code === 'EPIPE') process.exit(0); throw e; });
+}
+
 const viet = (s: string) => process.stdout.write(`${doiKyTu(s)}\n`);
 
 /**

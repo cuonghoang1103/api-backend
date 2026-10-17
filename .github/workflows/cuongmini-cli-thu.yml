@@ -117,9 +117,9 @@ jobs:
         run: |
           export CUONGMINI_HOME="$RUNNER_TEMP/cm-p"
           cat > "$RUNNER_TEMP/pty.json" <<J
-          {"cols":120,"rows":40,"duration":12,"cwd":"$RUNNER_TEMP/duan","cmd":["node","$PWD/dist/cuongmini.mjs"],
+          {"cols":120,"rows":40,"duration":22,"cwd":"$RUNNER_TEMP/duan","cmd":["node","$PWD/dist/cuongmini.mjs"],
            "env":{"CUONGMINI_HOME":"$CUONGMINI_HOME","TERM":"xterm-256color","COLORTERM":"truecolor","CUONGMINI_LOI":"$PWD/thu/loiGia.cjs","LOI_GIA_NHANH":"1","LANG":"C.UTF-8","SHELL":"/bin/bash"},
-           "keys":[[3.0,"/"],[4.0,"\u001b"],[4.5,"sửa laEmail"],[4.8,"\r"],[5.6,"1"],[6.2,"1"],[8.0,"!echo xin-chao-tu-shell"],[8.3,"\r"],[9.5,"\u0012"],[10.5,"\u001b"]],
+           "keys":[[8.0,"/"],[9.5,"\u001b"],[10.0,"sửa laEmail"],[10.4,"\r"],[12.0,"1"],[13.0,"1"],[15.5,"!echo xin-chao-tu-shell"],[15.9,"\r"],[18.0,"\u0012"],[19.5,"\u001b"]],
            "out":"$RUNNER_TEMP/pty-ghi.json"}
           J
           python3 thu/chup_pty.py "$RUNNER_TEMP/pty.json"
@@ -194,7 +194,12 @@ jobs:
           if (Test-Path (Join-Path $env:LOCALAPPDATA 'CuongMini\bin\cm.cmd')) { cmd /c "cm --version" }
           # Chạy lại = cập nhật.
           Get-Content -Raw -Encoding UTF8 "$env:RUNNER_TEMP\install.ps1" | Invoke-Expression
-          & $Cmd --help | Select-Object -First 3
+          $H = & $Cmd --help
+          if ($LASTEXITCODE) { throw "--help thoát mã $LASTEXITCODE" }
+          $H | Select-Object -First 3
+          # Ống bị cắt sớm vẫn phải thoát 0 (EPIPE).
+          & $Cmd --help | Select-Object -First 1
+          if ($LASTEXITCODE) { throw "--help | Select-Object thoát mã $LASTEXITCODE" }
 
       - name: install.ps1 bằng pwsh 7 (thư mục riêng + ép tải Node)
         if: runner.os == 'Windows'

@@ -359,16 +359,31 @@ function TranNguoi() {
     try { setRieng((await goi<{ rieng: typeof rieng }>('/tran')).rieng); } catch { /* bỏ qua */ }
   }, []);
   useEffect(() => { napRieng(); }, [napRieng]);
-  const tim = async () => {
-    try { setKq(await goi<NguoiTim[]>(`/tran/tim?q=${encodeURIComponent(q)}`)); } catch (e) { toast.error((e as Error).message); }
-  };
+  const [daTim, setDaTim] = useState('');
+  const tim = useCallback(async (chu = q) => {
+    try {
+      const ds = await goi<NguoiTim[]>(`/tran/tim?q=${encodeURIComponent(chu)}`);
+      setKq(ds);
+      setDaTim(chu);
+    } catch (e) { toast.error((e as Error).message); }
+  }, [q]);
+  // Gõ tới đâu gợi ý tới đó (máy chủ cần ≥ 2 ký tự) — trước đây phải bấm Tìm/Enter mới chạy.
+  useEffect(() => {
+    const chu = q.trim();
+    if (chu.length < 2) { setKq([]); setDaTim(''); return; }
+    const h = setTimeout(() => { void tim(chu); }, 300);
+    return () => clearTimeout(h);
+  }, [q, tim]);
   return (
     <The tieuDe="👤 Trần riêng theo người (ghi đè gói)">
       <div className="flex gap-2">
-        <input className={`${o} flex-1`} value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') tim(); }} placeholder="Tìm email / username / tên / id" />
-        <button onClick={tim} className={`${nut} border-darkborder text-text-muted`}><Search className="w-3 h-3 inline" /> Tìm</button>
+        <input className={`${o} flex-1`} value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') void tim(); }} placeholder="Tìm email / username / tên / id" />
+        <button onClick={() => void tim()} className={`${nut} border-darkborder text-text-muted`}><Search className="w-3 h-3 inline" /> Tìm</button>
       </div>
-      {kq.map((n) => <NguoiSua key={n.id} n={n} onXong={() => { tim(); napRieng(); }} />)}
+      {daTim && daTim === q.trim() && kq.length === 0 && (
+        <p className="text-text-muted text-xs">Không thấy ai khớp “{daTim}” — thử email, username hoặc id.</p>
+      )}
+      {kq.map((n) => <NguoiSua key={n.id} n={n} onXong={() => { void tim(); napRieng(); }} />)}
       {rieng.length > 0 && (
         <div className="overflow-x-auto">
           <p className="text-text-muted text-xs mb-1">Đang có trần riêng ({rieng.length}):</p>

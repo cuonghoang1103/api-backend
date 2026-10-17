@@ -12,7 +12,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import {
-  ArrowLeft, ArrowRight, BookOpen, ChevronRight, CircleHelp, ExternalLink, Lightbulb, Loader2, Search, Send, Sparkles, TriangleAlert, X,
+  ArrowLeft, ArrowRight, BookOpen, ChevronRight, CircleHelp, CirclePlay, ExternalLink, Lightbulb, Loader2, Search, Send, Sparkles, TriangleAlert, X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workHelpApi, type HelpAskLink } from '@/lib/work-api';
@@ -23,6 +23,7 @@ import {
   type HelpArticle, type HelpBlock, type HelpLang, type HelpPageLink, type LText,
 } from './content';
 import { openContextualHelp, useHelp } from './store';
+import { CTW_COURSE_HREF, helpVideoFor } from './videos';
 import { currentWorkLocale, wt } from '@/components/work/i18n';
 
 // ─── Lưu trữ cục bộ ──────────────────────────────────────────────
@@ -71,6 +72,8 @@ const UI: Record<string, LText> = {
     vi: 'Chọn một chủ đề bên dưới, hoặc tìm kiếm. Nhấn ? ở bất cứ đâu để mở hướng dẫn đúng bài của trang đang xem.',
   },
   startHere: { en: 'Start here', vi: 'Bắt đầu từ đây' },
+  video: { en: 'Video walkthrough (in Vietnamese)', vi: 'Video hướng dẫn' },
+  videoSeries: { en: 'Watch the full video series', vi: 'Xem cả loạt video hướng dẫn' },
   close: { en: 'Close (Esc)', vi: 'Đóng (Esc)' },
   shortcut: { en: 'Press ? to open or close', vi: 'Nhấn ? để mở hoặc đóng' },
   askTab: { en: 'Ask AI', vi: 'Hỏi AI' },
@@ -371,6 +374,9 @@ function ArticleView({ a, lang, onOpen, onNavigate }: { a: HelpArticle; lang: He
   const prev = idx > 0 ? HELP_BY_ID[HELP_ORDER[idx - 1]] : null;
   const next = idx >= 0 && idx < HELP_ORDER.length - 1 ? HELP_BY_ID[HELP_ORDER[idx + 1]] : null;
   const related = a.related.map((id) => HELP_BY_ID[id]).filter(Boolean);
+  // Video của tập tương ứng (videos.ts). URL còn rỗng ⇒ null ⇒ không vẽ khung nào.
+  const video = helpVideoFor(a);
+  const videoSrc = video ? (video.start ? `${video.url}#t=${Math.max(0, Math.floor(video.start))}` : video.url) : null;
 
   return (
     <article>
@@ -389,6 +395,25 @@ function ArticleView({ a, lang, onOpen, onNavigate }: { a: HelpArticle; lang: He
             </Link>
           ))}
         </div>
+      )}
+
+      {video && videoSrc && (
+        <figure className="mt-4">
+          <div className="overflow-hidden rounded-[8px] border border-[var(--w-border)] bg-black">
+            {/* key: đổi bài thì dựng lại thẻ video — không giữ tiến độ phát của tập trước. */}
+            <video key={videoSrc} src={videoSrc} controls preload="none" playsInline className="block aspect-video w-full" title={video.title} />
+          </div>
+          <figcaption className="mt-1.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[12.5px]">
+            <span className="flex min-w-0 items-center gap-1.5 text-[var(--w-text-2)]">
+              <CirclePlay size={13} className="shrink-0 text-[var(--w-accent-text)]" />
+              <span className="text-[var(--w-text-3)]">{UI.video[lang]}:</span>
+              <span className="min-w-0 truncate">{video.title}</span>
+            </span>
+            <Link href={CTW_COURSE_HREF} onClick={onNavigate} className="shrink-0 text-[var(--w-accent-text)] hover:underline">
+              {UI.videoSeries[lang]} →
+            </Link>
+          </figcaption>
+        </figure>
       )}
 
       <div className="mt-5 border-t border-[var(--w-border)] pt-2">

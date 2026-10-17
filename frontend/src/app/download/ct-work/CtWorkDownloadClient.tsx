@@ -16,6 +16,11 @@ import Link from 'next/link';
 import { ArrowRight, Bell, Cloud, Laptop, RefreshCw, ShieldCheck, Zap } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { CopyBlock, detectPlatform, type Platform, type ReleaseAsset, type ReleaseInfo } from '../DownloadClient';
+import { CTW_COURSE_HREF, episodeVideo } from '@/components/work/help/videos';
+
+/* Tập 12 của loạt "Hướng dẫn CT Work" (app máy tính + điện thoại + phím tắt). Link dán ở
+   components/work/help/videos.ts — còn rỗng thì cả khối ẩn. */
+const VIDEO_APP = episodeVideo('ctw-12-app-may-tinh-dien-thoai');
 
 const KHO = 'cuonghoang1103/ctwork-desktop';
 const RELEASES_PAGE = `https://github.com/${KHO}/releases`;
@@ -199,6 +204,23 @@ export default function CtWorkDownloadClient({ banPhatHanh }: { banPhatHanh: Rel
               </li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {VIDEO_APP && (
+        <section className="mx-auto mt-14 max-w-2xl">
+          <h2 className="text-center text-2xl font-bold">{vi ? 'Xem app hoạt động' : 'See the app in action'}</h2>
+          <p className="mt-2 text-center text-sm text-[var(--text-secondary)]">
+            {vi ? VIDEO_APP.title : `${VIDEO_APP.title} (video in Vietnamese)`}
+          </p>
+          <div className="mt-5 overflow-hidden rounded-2xl border border-[var(--border-color)] bg-black">
+            <video src={VIDEO_APP.url} controls preload="none" playsInline className="block aspect-video w-full" title={VIDEO_APP.title} />
+          </div>
+          <p className="mt-3 text-center text-sm">
+            <Link href={CTW_COURSE_HREF} className="text-[#6b7cff] hover:underline">
+              {vi ? 'Xem cả loạt 12 video hướng dẫn CT Work' : 'Watch the full 12-part CT Work tutorial series'}
+            </Link>
+          </p>
         </section>
       )}
 

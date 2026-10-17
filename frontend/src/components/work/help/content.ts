@@ -33,6 +33,13 @@ export interface HelpPageLink { scope: 'project' | 'workspace' | 'global'; path:
 
 export type HelpCategory = 'start' | 'people' | 'plan' | 'track' | 'studio' | 'quality' | 'ai' | 'connect' | 'reference';
 
+/**
+ * Video hướng dẫn nhúng trong bài (khung 16:9 giữa nút "Mở trang này" và nội dung). `url` là tệp mp4 trên R2
+ * (media.cuongthai.com), `start` = giây bắt đầu (tuỳ chọn). Thường KHÔNG khai ở đây: video theo tập nằm ở
+ * ./videos.ts (HELP_ARTICLE_EPISODE) — chỉ khai `video` trên bài khi cần ghi đè, ví dụ trỏ đúng đoạn bằng `start`.
+ */
+export interface HelpVideo { url: string; title: string; start?: number }
+
 export interface HelpArticle {
   id: string;
   category: HelpCategory;
@@ -42,6 +49,7 @@ export interface HelpArticle {
   blocks: HelpBlock[];
   related: string[];
   pages?: HelpPageLink[];
+  video?: HelpVideo;
 }
 
 export const HELP_CATEGORIES: Array<{ id: HelpCategory; label: LText }> = [

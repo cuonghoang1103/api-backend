@@ -94,6 +94,8 @@ const KHOA = [
   ['api-design', 'openapiinitiative', '6BA539', 'API Design', 'REST · Errors · Versioning · Idempotency'],
   ['ai-agents', 'anthropic', 'D97757', 'AI Agents', 'Tools · MCP · Memory · Evaluation'],
   ['smart-contracts-solidity', 'solidity', 'FFFFFF', 'Smart Contracts', 'Solidity · Foundry · Audits · DeFi'],
+  // 17/10/2026 — khoá video "Hướng dẫn CT Work"; logo = bảng Kanban tự vẽ (scripts/icons/ctwork.svg), không dùng logo hãng khác.
+  ['huong-dan-ct-work', 'ctwork', '8B8BF5', 'CT Work Tutorial', 'Team Projects by Role · Board → Reports'],
 ];
 
 const esc = (s) => String(s)

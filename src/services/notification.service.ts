@@ -212,6 +212,11 @@ async function dayRaNgoaiApp(row: {
     if (!apnsSanSang()) return;
 
     const ten = tenNguoiGui(row.sender);
+    // Thông báo CT Work ⇒ ưu tiên app iOS CT Work riêng (17/10/2026); huy hiệu ở app đó chỉ đếm việc CT Work.
+    const laCtw = row.type.startsWith('WORK_');
+    const soCtw = laCtw
+      ? await prisma.socialNotification.count({ where: { receiverId: row.receiverId, isRead: false, type: { startsWith: 'WORK_' } } }).catch(() => undefined)
+      : undefined;
     const [soTin, soTb] = await Promise.all([
       // `messagesService` là bản dựng sẵn được xuất ra ở cuối file đó —
       // không có `default`, nên gọi thẳng tên.
@@ -240,7 +245,7 @@ async function dayRaNgoaiApp(row: {
           ? { duongDan: (row.payload as { url: string }).url, maThe: String((row.payload as { issueKey?: unknown }).issueKey ?? '') }
           : {}),
       },
-    });
+    }, laCtw ? 'ctwork' : 'chinh', soCtw);
   } catch (err) {
     logger.warn('đẩy thông báo xã hội hỏng', { error: (err as Error).message });
   }

@@ -21,6 +21,8 @@ import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 
 const BUNDLE_ID = process.env.APNS_BUNDLE_ID ?? 'com.cuongthai.app';
+/** App iOS CT Work riêng (17/10/2026) — cùng khoá APNs của đội, khác `apns-topic`. */
+export const BUNDLE_CTWORK = 'com.cuongthai.ctwork';
 const MAY_CHU_THAT = 'https://api.push.apple.com';
 const MAY_CHU_THU = 'https://api.sandbox.push.apple.com';
 
@@ -73,7 +75,7 @@ export interface NoiDungDay {
 }
 
 /** Gửi tới MỘT thẻ. Trả `true` nếu Apple nhận; `false` kèm dọn thẻ chết. */
-async function guiMotThe(the: string, sandbox: boolean, noi: NoiDungDay): Promise<boolean> {
+async function guiMotThe(the: string, sandbox: boolean, noi: NoiDungDay, topic: string = BUNDLE_ID): Promise<boolean> {
   const provider = tokenNhaCungCap();
   if (!provider) return false;
 
@@ -94,7 +96,7 @@ async function guiMotThe(the: string, sandbox: boolean, noi: NoiDungDay): Promis
         ':method': 'POST',
         ':path': `/3/device/${the}`,
         'authorization': `bearer ${provider}`,
-        'apns-topic': BUNDLE_ID,
+        'apns-topic': topic,
         'apns-push-type': 'alert',
         // 10 = gửi ngay. 5 = gom lại tiết kiệm pin; tin nhắn thì phải ngay.
         'apns-priority': '10',
@@ -112,7 +114,7 @@ async function guiMotThe(the: string, sandbox: boolean, noi: NoiDungDay): Promis
         // hoặc rác. Cả hai đều nên xoá, không thì mỗi lượt gửi lại tốn một
         // vòng mạng cho một cái thẻ vĩnh viễn không dùng được.
         const lyDo = (() => { try { return JSON.parse(traVe).reason; } catch { return traVe; } })();
-        if (ma === 410 || lyDo === 'BadDeviceToken' || lyDo === 'Unregistered') {
+        if (ma === 410 || lyDo === 'BadDeviceToken' || lyDo === 'Unregistered' || lyDo === 'DeviceTokenNotForTopic') {
           void prisma.deviceToken.deleteMany({ where: { token: the } })
             .catch(() => undefined);
           logger.info(`[apns] xoá thẻ chết (${ma} ${lyDo})`);
@@ -138,18 +140,34 @@ async function guiMotThe(the: string, sandbox: boolean, noi: NoiDungDay): Promis
  * Không bao giờ ném: mọi nơi gọi hàm này đều đang làm việc chính (gửi tin
  * nhắn, tạo thông báo) và không được hỏng vì Apple bận.
  */
-export async function guiThongBao(userId: number, noi: NoiDungDay): Promise<number> {
+export async function guiThongBao(
+  userId: number,
+  noi: NoiDungDay,
+  /**
+   * `ctwork` = thông báo CT Work: tới app CT Work nếu người này đã cài nó; chưa cài
+   * thì về app chính như trước (app chính cũng có CT Work). Hai app cùng máy thì
+   * KHÔNG bắn cả hai. Mặc định `chinh` = chỉ app chính (tin nhắn, học tập, mạng xã hội…).
+   */
+  kenh: 'chinh' | 'ctwork' = 'chinh',
+  /** Huy hiệu riêng cho app CT Work (số việc CT Work chưa đọc). */
+  huyHieuCtwork?: number,
+): Promise<number> {
   if (!apnsSanSang()) {
     logger.warn('[apns] chưa cấu hình khoá — bỏ qua lượt gửi');
     return 0;
   }
   try {
-    const the = await prisma.deviceToken.findMany({
+    const tatCa = await prisma.deviceToken.findMany({
       where: { userId, platform: 'ios' },
-      select: { token: true, sandbox: true },
+      select: { token: true, sandbox: true, app: true },
     });
+    const ctw = tatCa.filter((t) => t.app === BUNDLE_CTWORK);
+    const chinh = tatCa.filter((t) => t.app !== BUNDLE_CTWORK);
+    const the = kenh === 'ctwork' && ctw.length > 0 ? ctw : chinh;
     if (the.length === 0) return 0;
-    const kq = await Promise.all(the.map((t) => guiMotThe(t.token, t.sandbox, noi)));
+    const kq = await Promise.all(the.map((t) => (t.app === BUNDLE_CTWORK
+      ? guiMotThe(t.token, t.sandbox, { ...noi, ...(huyHieuCtwork !== undefined ? { huyHieu: huyHieuCtwork } : {}) }, BUNDLE_CTWORK)
+      : guiMotThe(t.token, t.sandbox, noi, t.app || BUNDLE_ID))));
     return kq.filter(Boolean).length;
   } catch (e) {
     logger.warn(`[apns] guiThongBao hỏng: ${(e as Error).message}`);

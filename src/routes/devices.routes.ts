@@ -10,6 +10,9 @@ import { authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 
+/** Các app iOS nhận thông báo đẩy — trùng `apns.ts › APP_DAY`. */
+const APP_HOP_LE = new Set(['com.cuongthai.app', 'com.cuongthai.ctwork']);
+
 const router = Router();
 router.use(authenticate);
 
@@ -23,14 +26,17 @@ router.post('/', async (req: Request, res: Response<ApiResponse>, next: NextFunc
     }
     const sandbox = req.body?.sandbox === true || req.body?.sandbox === 'true';
     const platform = String(req.body?.platform ?? 'ios');
+    // App nào gửi thẻ (bundle id) — DANH SÁCH TRẮNG: một chuỗi lạ ⇒ app chính,
+    // không để client tự chọn `apns-topic` tuỳ ý.
+    const app = APP_HOP_LE.has(String(req.body?.app ?? '')) ? String(req.body.app) : 'com.cuongthai.app';
 
     // `upsert` theo `token` chứ không theo `(userId, token)`: cùng một máy mà
     // người khác đăng nhập thì thẻ phải CHUYỂN CHỦ. Nếu tạo hàng mới thì thông
     // báo của người cũ vẫn bay tới máy người mới đang cầm.
     const row = await prisma.deviceToken.upsert({
       where: { token },
-      create: { token, userId: req.userId!, platform, sandbox },
-      update: { userId: req.userId!, platform, sandbox, lastSeenAt: new Date() },
+      create: { token, userId: req.userId!, platform, sandbox, app },
+      update: { userId: req.userId!, platform, sandbox, app, lastSeenAt: new Date() },
     });
     res.json({ success: true, data: { id: row.id } });
   } catch (error) { next(error); }

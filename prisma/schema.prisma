@@ -9051,6 +9051,9 @@ model DeviceToken {
   // Xcode. Gửi nhầm máy chủ thì Apple trả `BadDeviceToken` và thông báo im
   // lặng không tới nơi — nên phải nhớ thiết bị này thuộc môi trường nào.
   sandbox    Boolean  @default(false)
+  // App nào trên máy đó (17/10/2026: có app iOS CT Work riêng). Thẻ APNs gắn với
+  // MỘT bundle — gửi sai `apns-topic` thì Apple trả `DeviceTokenNotForTopic`.
+  app        String   @default("com.cuongthai.app") @db.VarChar(60)
   createdAt  DateTime @default(now()) @map("created_at")
   // Mỗi lần app mở lại là cập nhật, để dọn thẻ chết sau này.
   lastSeenAt DateTime @default(now()) @map("last_seen_at")

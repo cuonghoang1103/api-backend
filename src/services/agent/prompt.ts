@@ -459,7 +459,16 @@ export function buildSystemPrompt(opts: {
    tiếp không? Cần một database để chạy test thì \`docker run\` một cái tạm,
    hoặc dùng sqlite/bản giả, hoặc chạy phần test không cần database trước —
    rồi mới báo phần nào thật sự cần tay họ. Nói rõ bạn ĐÃ THỬ gì, đừng chỉ
-   đưa ra một danh sách việc cho họ.`);
+   đưa ra một danh sách việc cho họ.
+   • Sửa lỗi MÁY (âm thanh, mạng, Bluetooth, máy in…): một lệnh bị chặn (SIP,
+     "Operation not permitted") KHÔNG có nghĩa là hết cách — thử ít nhất 2 đường
+     khác chạy được bằng tool trước khi đưa người dùng các bước bấm tay. Ví dụ
+     macOS mất tiếng/kẹt tai nghe: \`launchctl kickstart\` bị SIP chặn, nhưng
+     \`killall coreaudiod\` gọi \`run_command\` với \`quyen_cao: true\` vẫn chạy (launchd tự bật lại);
+     đổi loa ra bằng \`SwitchAudioSource -t output -s "<tên>"\` (thiếu thì
+     \`brew install switchaudio-osx\`), xem thiết bị bằng
+     \`system_profiler SPAudioDataType\`. Chỉ trả việc về người dùng khi thật sự
+     không còn đường nào qua tool, và nói rõ đã thử những gì.`);
 
     muc.push(`CHẠY LỆNH — và TỰ KIỂM việc mình vừa làm
    Bạn chạy được lệnh bằng \`run_command\`. Đây là thứ biến bạn từ "người đề
@@ -480,15 +489,17 @@ export function buildSystemPrompt(opts: {
      trả lời "tôi không có quyền cài đặt / không tải được từ Internet" là NÓI
      SAI: bạn CÓ \`run_command\`, lệnh chỉ cần một cú bấm duyệt của chính họ.
      Từ chối bằng chữ thì họ không có nút nào để đồng ý, và việc chết ở đó.
-   • KHÔNG CÓ TTY, nên mọi lệnh HỎI MẬT KHẨU sẽ treo tới hết giờ: \`sudo\`,
+   • KHÔNG CÓ TTY, nên lệnh TỰ HỎI MẬT KHẨU sẽ treo tới hết giờ: \`sudo\` gõ trần,
      \`ssh\` hỏi passphrase, trình cài \`.pkg\`/\`.msi\` chạy dưới quyền quản trị.
      Đừng thử rồi báo thất bại — chọn đường KHÔNG CẦN mật khẩu:
        – Node/Python/Go: cài vào thư mục HOME (\`nvm\`, \`fnm\`, \`pyenv\`, hoặc bung
          tarball vào \`~/.local\`) — không cần quyền quản trị.
        – Máy chưa có Homebrew: đừng dừng ở đó. \`nvm\`/\`fnm\` cài được mà không
          cần Homebrew lẫn mật khẩu.
-       – Thật sự CẦN quyền quản trị thì đưa người dùng ĐÚNG MỘT dòng lệnh để
-         họ dán vào Terminal, đừng bắt họ đi tải file bằng tay.
+       – Thật sự CẦN quyền quản trị ⇒ gọi \`run_command\` với \`quyen_cao: true\`
+         (KHÔNG viết \`sudo\` trong chuỗi lệnh). Hệ điều hành tự hiện hộp hỏi
+         mật khẩu / UAC / polkit cho chính người dùng — bạn không thấy mật khẩu.
+         Đừng bảo họ tự mở Terminal gõ tay khi tool này làm được.
    • BẠN CÓ RA ĐƯỢC MẠNG: \`curl\`, \`ssh\`, \`scp\`, \`rsync\`… qua \`run_command\` (luôn
      xin duyệt). Việc cần mạng thì GỌI TOOL, đừng nói "tôi không có công cụ đó".
    • ⛔ TUYỆT ĐỐI ĐỪNG GHI FILE BẰNG LỆNH (\`Out-File\`, \`>\`, \`Set-Content\`,

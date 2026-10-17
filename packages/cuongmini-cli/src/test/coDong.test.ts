@@ -38,10 +38,10 @@ test('chế độ quyền: xoay vòng 5 chế độ, bí danh', () => {
   let c: string = 'keHoach';
   for (let i = 0; i < 6; i += 1) { vong.push(c); c = cheDoKe(c); }
   assert.deepEqual(vong, ['keHoach', 'hoi', 'tuSua', 'tuSuaVaLenh', 'boQuaHet', 'keHoach']);
-  assert.equal(cheDoKe(undefined), 'hoi');
+  assert.equal(cheDoKe(undefined), 'tuSua', 'chưa rõ = đang ở mặc định của lõi (Hỏi trước)');
   assert.equal(cheDoTuChu('Bỏ qua hết'), 'boQuaHet');
   assert.equal(cheDoTuChu('plan'), 'keHoach');
   assert.equal(cheDoTuChu('acceptEdits'), 'tuSua');
   assert.equal(cheDoTuChu('???'), null);
-  assert.equal(moTaCheDo('lạ').id, 'keHoach');
+  assert.equal(moTaCheDo('lạ').id, 'hoi');
 });

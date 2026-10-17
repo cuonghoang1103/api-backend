@@ -19,12 +19,13 @@ export const CHE_DO: MoTaCheDo[] = [
 ];
 
 export function moTaCheDo(id: string | undefined | null): MoTaCheDo {
-  return CHE_DO.find((c) => c.id === id) ?? CHE_DO[0]!;
+  // Chưa biết (lõi chưa trả workspace) ⇒ hiện mặc định của lõi: Hỏi trước.
+  return CHE_DO.find((c) => c.id === id) ?? CHE_DO[1]!;
 }
 
 /** Chế độ kế tiếp khi bấm `shift+tab`. */
 export function cheDoKe(id: string | undefined | null): CheDoQuyen {
-  const i = Math.max(0, CHE_DO.findIndex((c) => c.id === id)); // chưa rõ = đang ở mặc định (Lập kế hoạch)
+  const i = CHE_DO.findIndex((c) => c.id === id) < 0 ? 1 : CHE_DO.findIndex((c) => c.id === id); // chưa rõ = mặc định của lõi (Hỏi trước)
   return CHE_DO[(i + 1) % CHE_DO.length]!.id;
 }
 

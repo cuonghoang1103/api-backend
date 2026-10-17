@@ -66,12 +66,22 @@ về terminal — không mở được trình duyệt thì CLI in link để b�
 (ô mật khẩu không hiện ký tự). Phiên lưu ở `~/.cuongmini/phien.json` quyền `0600`, tự làm mới
 lúc mở và mỗi 6 giờ.
 
+## Mặc định: đủ công cụ, mỗi lần vẫn hỏi
+
+Mở lên là CuongMini có ĐỦ công cụ: đọc/sửa file, chạy lệnh, git, xuất sơ đồ, ghi chú và **trình duyệt** (🌐 —
+mở web, đọc trang, bấm, gõ trong một cửa sổ Chrome/Edge RIÊNG, hồ sơ `~/.cuongmini/trinh-duyet`, không đụng
+Chrome của bạn; tự đóng khi thoát CLI). Mỗi lần sửa file hay chạy lệnh vẫn hiện thẻ duyệt. Muốn khỏi hỏi:
+`shift+tab` sang **Tự động** hoặc **Bỏ qua hết**. Trình duyệt: `/browser off` tắt cho phiên này, `/config` ⇒
+"Trình duyệt cho AI" để đổi hẳn; máy không có Chrome/Edge/Brave/Chromium thì tự tắt (`cuongmini doctor` nhắc cài).
+Chế độ mặc định đổi được trong `/config` (CLI chỉ ép chế độ khi bạn tự chọn ở đó hoặc dùng `--che-do`).
+Riêng `-p` (không ai bấm duyệt được) mặc định "Lập kế hoạch".
+
 ## Chế độ quyền (`shift+tab` xoay vòng)
 
 | Chế độ | Làm gì |
 |---|---|
-| ⏸ Lập kế hoạch (mặc định) | Chỉ đọc — không sửa file, không chạy lệnh |
-| ✋ Hỏi trước mọi việc | Mỗi lần sửa / chạy lệnh đều có thẻ duyệt |
+| ✋ Hỏi trước mọi việc (**mặc định**) | Đủ công cụ — sửa file, chạy lệnh, git, trình duyệt, ghi chú — nhưng MỖI lần sửa / chạy lệnh đều có thẻ duyệt |
+| ⏸ Lập kế hoạch | Chỉ đọc — không sửa file, không chạy lệnh |
 | ✎ Tự sửa file | Sửa file không hỏi, lệnh vẫn hỏi |
 | ⚡ Tự động | Sửa + chạy lệnh an toàn không hỏi (lệnh nguy hiểm vẫn hỏi) |
 | ⚠ Bỏ qua hết | Không hỏi gì — CLI hỏi xác nhận trước khi bật |
@@ -113,7 +123,7 @@ Cùng bộ lệnh với app desktop và extension VS Code:
 - **Làm việc**: `/plan <việc>` (chỉ đọc, xong hỏi duyệt) · `/review` · `/diff` · `/init` · `/undo` ·
   `/rewind [n]` · `/resume` (bảng chọn việc cũ) · `/export [tên.md]`
 - **Công cụ**: `/memory` · `/mcp [mo|nap]` · `/hooks` · `/kynang` · `/quyen` (= `/permissions`) · `/doctor` · `/terminal-setup`
-- **CLI**: `/config` (giao diện sáng/tối, thông báo, chế độ & model mặc định, ký tự ASCII) · `/theme` · `/add-dir` ·
+- **CLI**: `/browser [on|off]` (`/trinh-duyet`, `/chrome`) · `/config` (giao diện sáng/tối, thông báo, chế độ & model mặc định, ký tự ASCII) · `/theme` · `/add-dir` ·
   `/copy` (chép câu trả lời gần nhất) · `/transcript`
 - Lệnh tự tạo của dự án (`.claude/commands/*.md`) cũng hiện trong gợi ý.
 

@@ -119,8 +119,8 @@ export async function chayCheDoIn(co: CoDong, thuMuc: string): Promise<number> {
         datCapMau(capRa);
         process.stdout.write(`${raTTY && capMau() ? veMarkdown(tra, { rong: Math.max(40, (process.stdout.columns || 100) - 1) }) : tra}\n`);
       }
-      kn.dong();
-      xong(ma);
+      // Chờ đóng trình duyệt AI rồi mới trả mã thoát — `process.exit` ngay sau đó sẽ bỏ Chrome mồ côi.
+      void kn.dong().then(() => xong(ma));
     };
     kn.nghe((e) => {
       if (dinhDang === 'stream-json') dongJson({ type: 'event', ...e, cuocId: undefined });

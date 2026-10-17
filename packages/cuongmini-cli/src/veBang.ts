@@ -165,6 +165,8 @@ export interface ThongTinMoDau {
   banMoi: string | null;
   lenhCai: string;
   ngoaiTuyen: boolean;
+  /** AI đang được dùng trình duyệt (🌐). */
+  trinhDuyet?: boolean;
 }
 
 /** Khung bo tròn, viền chuyển sắc tím → xanh, logo chữ, thông tin phiên, mẹo. */
@@ -188,7 +190,9 @@ export function veManMoDau(t: ThongTinMoDau, logo: string[], rongMan: number): s
   const nhan = (k: string) => mo(k.padEnd(9));
   ra.push(dong(` ${nhan('Thư mục')}${t.thuMuc}${t.nhanh ? `  ${mau('#a78bfa')(`⎇ ${t.nhanh}`)}` : ''}`));
   ra.push(dong(` ${nhan('Model')}${mau(THUONG_HIEU.xanhNhat)(t.model)}${mo(` · mức ${t.muc}`)}`));
-  ra.push(dong(` ${nhan('Chế độ')}${mau(t.cheDo.mau)(`${t.cheDo.icon} ${t.cheDo.ten}`)}${mo('  (shift+tab để đổi)')}`));
+  ra.push(dong(` ${nhan('Chế độ')}${mau(t.cheDo.mau)(`${t.cheDo.icon} ${t.cheDo.ten}`)}${t.trinhDuyet ? `  ${mau('#60a5fa')('🌐 trình duyệt')}` : ''}${mo('  (shift+tab để đổi)')}`));
+  ra.push(dong(` ${mo('         Đủ công cụ: sửa file, chạy lệnh, git, trình duyệt — mỗi lần sửa/chạy lệnh vẫn hỏi.')}`));
+  ra.push(dong(` ${mo('         shift+tab sang "Tự động" hoặc "Bỏ qua hết" nếu muốn khỏi hỏi.')}`));
   ra.push(dong());
   const k = (s: string) => mau(THUONG_HIEU.timNhat)(s);
   ra.push(dong(` ${mo('Mẹo:')} ${k('/help')} ${mo('xem lệnh ·')} ${k('@file')} ${mo('nhắc file ·')} ${k('/model')} ${mo('đổi model')}`));

@@ -23,6 +23,8 @@ export const CHU_KY_LAM_MOI = 6 * 3600 * 1000;
 export interface SuKienAgent { cuocId?: string; loai: string; [k: string]: unknown }
 
 let daNap: LoiApi | null = null;
+/** Kết nối đang mở — để `main` đóng trình duyệt AI (có chờ) trước khi tắt tiến trình. */
+let dangMo: KetNoiLoi | null = null;
 
 export function napLoi(): LoiApi {
   if (daNap) return daNap;
@@ -36,6 +38,8 @@ export function napLoi(): LoiApi {
 export class KetNoiLoi {
   readonly loi: LoiApi;
   cuocId = '';
+  /** Muốn cho AI dùng trình duyệt ở phiên này không (cài đặt + máy có Chrome/Edge, `/browser` đổi được). */
+  trinhDuyet = false;
   private nguoiNghe = new Set<(e: SuKienAgent) => void>();
   private hen: NodeJS.Timeout | null = null;
 
@@ -68,7 +72,18 @@ export class KetNoiLoi {
     const k = new KetNoiLoi(nguoi, o.phienBan);
     k.cuocId = String(await k.loi.goi('agent:taoCuoc'));
     await k.loi.datThuMuc(k.cuocId, o.thuMuc);
+    dangMo = k;
     return k;
+  }
+
+  /**
+   * Gửi quyền trình duyệt xuống lõi (`agent:datCheDoTrinhDuyet`). Gọi sau khi tạo cuộc,
+   * sau khi mở việc cũ và sau `/clear` — mỗi lần lõi có thể dựng lại trạng thái cuộc.
+   * Trả workspace mới (có `choTrinhDuyet`) để giao diện hiện 🌐.
+   */
+  async apTrinhDuyet(bat: boolean = this.trinhDuyet): Promise<unknown> {
+    this.trinhDuyet = bat;
+    return this.goi('agent:datCheDoTrinhDuyet', { bat });
   }
 
   /** Gọi kênh `agent:*` — luôn kèm `cuocId` (zod bỏ khoá thừa ở kênh không cần). */
@@ -107,11 +122,18 @@ export class KetNoiLoi {
 
   chuanHoaAnh(dataUrl: string): Promise<string> { return this.loi.chuanHoaAnh(dataUrl); }
 
-  dong(): void {
-    // Trình duyệt AI (Chrome/Edge do lõi bật cho tool web) phải đóng theo — không để cửa sổ mồ côi.
-    void this.loi.dongTrinhDuyet?.().catch(() => undefined);
+  /** Đóng: dừng hẹn làm mới + ĐÓNG trình duyệt AI (Chrome/Edge lõi bật cho tool web) — chờ tối đa 4s. */
+  async dong(): Promise<void> {
     if (this.hen) clearInterval(this.hen);
     this.hen = null;
     this.nguoiNghe.clear();
+    if (dangMo === this) dangMo = null;
+    const dongTd = this.loi.dongTrinhDuyet?.().catch(() => undefined);
+    if (dongTd) await Promise.race([dongTd, new Promise((x) => setTimeout(x, 4000).unref())]);
   }
+}
+
+/** Gọi trước `process.exit` — không để cửa sổ Chrome mồ côi sau khi CLI thoát. */
+export async function dongKetNoiDangMo(): Promise<void> {
+  await dangMo?.dong();
 }

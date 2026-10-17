@@ -22,7 +22,8 @@ import { registerAgentHandlers } from '../../../desktop/src/main/ipc/agent';
 import { datGocChoCuoc, gocCuaCuoc } from '../../../desktop/src/main/agent/loop';
 import { chuanHoaAnh as chuanHoaAnhApp } from '../../../desktop/src/main/agent/anhLa';
 import { API_ORIGIN, WEB_ORIGIN } from '../../../desktop/src/main/config';
-import { setSetting } from '../../../desktop/src/main/store';
+import { getSettings, setSetting } from '../../../desktop/src/main/store';
+import { timTrinhDuyet } from './timTrinhDuyet';
 import { huy as huyTrinhDuyet, trangThai as trangThaiTd } from './trinhDuyetThay';
 import { dongBoVe } from './boVeSoDoThay';
 import { statSync } from 'node:fs';
@@ -59,19 +60,44 @@ export function khoiDong(v: VoDocLap): void {
   caiDatVo(v);
   if (daKhoiDong) return;
   registerAgentHandlers();
+  datMacDinhDayDu();
   daKhoiDong = true;
+}
+
+/**
+ * Ngoài app (VS Code / CLI) mặc định BẬT ĐỦ công cụ — chủ app 18/10/2026: "mặc định luôn bật all tool".
+ * Chế độ "Hỏi trước" (`hoi`) khai đủ khả năng đọc/sửa/chạy lệnh/git/xuất sơ đồ, nhưng mỗi lần sửa
+ * file hay chạy lệnh VẪN có thẻ duyệt — như Claude Code. Trình duyệt bật sẵn khi máy có Chrome/Edge.
+ * Chỉ đặt khi người dùng CHƯA tự chọn: lựa chọn của họ (kể cả "Lập kế hoạch") luôn thắng.
+ * "Bỏ qua hết" KHÔNG bao giờ là mặc định (xem `cheDoMacDinh` trong loop.ts).
+ */
+function datMacDinhDayDu(): void {
+  try {
+    const s = getSettings() as Record<string, unknown>;
+    if (s.aiCheDoQuyenMacDinh === undefined) setSetting('aiCheDoQuyenMacDinh', 'hoi');
+    if (s.aiTrinhDuyetMacDinh === undefined && timTrinhDuyet()) setSetting('aiTrinhDuyetMacDinh', true);
+  } catch { /* cài đặt hỏng thì giữ mặc định của app */ }
 }
 
 export function datPhien(p: PhienDangNhap | null): void { datPhienLoi(p); }
 
 export async function goi(kenh: string, duLieu?: unknown): Promise<unknown> {
-  return (await goiKenhNoiBo(kenh, duLieu, suKienGia)) ?? null;
+  const kq = (await goiKenhNoiBo(kenh, duLieu, suKienGia)) ?? null;
+  // Cuộc mới ⇒ bật luôn ghi chú (Notes trên web) như mọi công cụ khác — vẫn hỏi duyệt từng lần ghi.
+  if (kenh === 'agent:taoCuoc' && typeof kq === 'string') {
+    await goiKenhNoiBo('agent:datCheDoNote', { cuocId: kq, bat: true }, suKienGia).catch(() => undefined);
+  }
+  return kq;
 }
 
 /** Thư mục đang mở trong VS Code ⇒ thư mục dự án của cuộc. */
 export async function datThuMuc(cuocId: string, duong: string): Promise<unknown> {
   if (!cuocId || !path.isAbsolute(duong) || !statSync(duong).isDirectory()) throw new Error('Thư mục không hợp lệ.');
-  if (gocCuaCuoc(cuocId) !== duong) datGocChoCuoc(cuocId, duong);
+  if (gocCuaCuoc(cuocId) !== duong) {
+    datGocChoCuoc(cuocId, duong);
+    // Đổi thư mục đặt lại các công tắc của cuộc ⇒ bật lại ghi chú (mặc định "đủ công cụ" ngoài app).
+    await goiKenhNoiBo('agent:datCheDoNote', { cuocId, bat: true }, suKienGia).catch(() => undefined);
+  }
   return goi('agent:getWorkspace', { cuocId });
 }
 

@@ -16,6 +16,8 @@ import { coVeHong, tachKetQuaLenh, TOOL_GHI, TOOL_LENH, type Pha } from './trang
 export interface ViecKeHoach { ten: string; trangThai: string }
 export interface WsLoi {
   path?: string | null; name?: string | null; branch?: string | null; cheDoQuyen?: string; mucNoLuc?: string; model?: string;
+  /** Lõi đang cho AI dùng trình duyệt (capability `browser`). */
+  choTrinhDuyet?: boolean;
 }
 export interface InfoLoi {
   pro?: boolean;
@@ -95,6 +97,8 @@ export interface TrangThaiChat {
   ws: WsLoi | null;
   info: InfoLoi | null;
   lenhDuAn: Array<{ ten: string; mo: string; than: string }>;
+  /** Đã báo "đã mở cửa sổ trình duyệt riêng" trong phiên này chưa (chỉ báo một lần). */
+  daBaoTrinhDuyet: boolean;
 }
 
 export function trangThaiDau(): TrangThaiChat {
@@ -102,7 +106,7 @@ export function trangThaiDau(): TrangThaiChat {
     bang: [], khoaBang: 0, dangChay: false, batDauLuot: 0, pha: 'cho', toolDang: '', toolCuoi: '', buoc: null,
     chuDangViet: '', toolChay: [], choDuyet: [], keHoach: [], fileDaSua: {}, tienPhien: 0, soFileDaSua: 0,
     nguCanh: null, hanMucPhanTram: null, luotCuoi: null, muc: [], tieuDe: '', cauHoiCuoi: '', choDuyetKeHoach: false, hoiDuyetKeHoach: false,
-    daCompact: false, chiTiet: false, loiCanXuLy: null, ws: null, info: null, lenhDuAn: [],
+    daCompact: false, chiTiet: false, loiCanXuLy: null, ws: null, info: null, lenhDuAn: [], daBaoTrinhDuyet: false,
   };
 }
 
@@ -226,6 +230,11 @@ export class KhoChat {
         break;
       case 'toolBatDau': {
         this.chotChu();
+        if (!S.daBaoTrinhDuyet && /^web_/.test(String(e.ten ?? ''))) {
+          // Một cửa sổ Chrome/Edge sắp hiện lên — nói trước để người dùng không giật mình (và yên tâm về hồ sơ).
+          S.daBaoTrinhDuyet = true;
+          this.them({ loai: 'thongBao', text: '🌐 Đã mở cửa sổ trình duyệt riêng của CuongMini (hồ sơ riêng, không đụng Chrome của bạn)', muc: 'info' });
+        }
         S.pha = 'tool';
         S.toolDang = String(e.ten ?? '');
         S.toolChay = [...S.toolChay, { id: String(e.id ?? ''), ten: S.toolDang, lenh: null, ra: '', batDau: bayGio }];

@@ -13,7 +13,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import { chuanHoa, dsCauHoi, locPhien, type MucGhi, type PhienCu } from 'ct-lenh';
 import { docAnhDataUrl, guiThangDuoc, tachAnh } from '../anh';
 import { danAnhTuClipboard } from '../anhDan';
-import { LUA_CHON, TEN_MUC, docCaiDat, ghiCaiDat, moTaGiaTri, type CaiDat } from '../caiDat';
+import { timTrinhDuyet } from '../../../cuongmini-core/src/timTrinhDuyet';
+import { LUA_CHON, TEN_MUC, docCaiDat, ghiCaiDat, moTaGiaTri, nenBatTrinhDuyet, type CaiDat } from '../caiDat';
 import { CHE_DO, cheDoKe, moTaCheDo } from '../cheDo';
 import { lenhCaiChoMay } from '../capNhat';
 import { fileQuyUoc, luuGhiNho, tachGhiNho } from '../ghiNho';
@@ -250,7 +251,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
 
   const thoat = (loiNhan?: string) => {
     shellRef.current?.huy();
-    void kn.loi.dongTrinhDuyet?.().catch(() => undefined);
+    // Trình duyệt AI được đóng (có chờ) ở `main` qua `dongKetNoiDangMo()` trước khi tắt tiến trình.
     onThoat(loiNhan);
     exit();
   };
@@ -357,6 +358,12 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       khiChon: (m) => {
         if (k === 'theme') { doiTheme(m.giaTri as CaiDat['theme']); return; }
         const moi = { ...c, [k]: m.giaTri } as CaiDat;
+        if (k === 'trinhDuyet') {
+          luu(moi, `${TEN_MUC[k]}: ${m.nhan}`);
+          void kn.apTrinhDuyet(nenBatTrinhDuyet(moi, Boolean(timTrinhDuyet()))).then((ws) => { if (ws) S.ws = ws as typeof S.ws; kho.bao(true); })
+            .catch((e: Error) => kho.thongBao(e.message, 'loi'));
+          return;
+        }
         if (k === 'ascii') {
           caiDat.current = moi;
           ghiCaiDat(moi);
@@ -834,9 +841,10 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     banMoi,
     lenhCai: lenhCaiChoMay(),
     ngoaiTuyen,
+    trinhDuyet: Boolean(S.ws?.choTrinhDuyet),
   // Màn mở đầu chỉ in MỘT lần — chụp thông tin lúc đó.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [S.ws?.branch, modelNay?.ten, mucNay?.ten, cd.id]);
+  }), [S.ws?.branch, modelNay?.ten, mucNay?.ten, cd.id, S.ws?.choTrinhDuyet]);
 
   const o = oRef.current;
   const hop = hopRef.current;

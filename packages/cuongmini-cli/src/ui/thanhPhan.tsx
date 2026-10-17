@@ -238,7 +238,7 @@ export function GoiYView({ ds, chon, rong, kieu }: { ds: MucGoiY[]; chon: number
 
 export function ChanTrang({ S, rong, model, muc, nhac }: { S: TrangThaiChat; rong: number; model: string; muc: string; nhac: string }) {
   const cd = moTaCheDo(S.ws?.cheDoQuyen);
-  const trai = `${mau(cd.mau)(`${cd.icon} ${cd.ten}`)} ${mo('(shift+tab)')}`;
+  const trai = `${mau(cd.mau)(`${cd.icon} ${cd.ten}`)} ${mo('(shift+tab)')}${S.ws?.choTrinhDuyet ? ` ${mau('#60a5fa')('🌐')}` : ''}`;
   const giua = `${mau(THUONG_HIEU.xanhNhat)(model)}${mo(` · ${muc}`)}`;
   const phaiPhan: string[] = [];
   if (S.ws?.name) phaiPhan.push(`${S.ws.name}${S.ws.branch ? ` ⎇ ${S.ws.branch}` : ''}`);

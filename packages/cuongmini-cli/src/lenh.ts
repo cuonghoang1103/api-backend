@@ -16,6 +16,7 @@ import {
   tenFileXuat, timMuc, timTheoChu, xuatMarkdown, type LenhGach, type MucGhi, type PhienCu,
 } from 'ct-lenh';
 import { API_ORIGIN } from '../../cuongmini-core/src/dangNhap';
+import { LOI_KHONG_CO_TRINH_DUYET, timTrinhDuyet } from '../../cuongmini-core/src/timTrinhDuyet';
 import { caiVsCode, doTerminal, HUONG_DAN } from './caiTerminal';
 import { kiemMay } from './doctor';
 import { chepChu } from './heThong';
@@ -35,6 +36,7 @@ export const LENH_CLI: LenhGach[] = [
   { ten: '/terminal-setup', mo: 'Cài Shift+Enter xuống dòng cho terminal (VS Code, Cursor) hoặc xem hướng dẫn', khac: ['/caiterminal'], nhom: 'cong-cu' },
   { ten: '/add-dir', mo: 'Cho agent đọc/sửa thêm một thư mục ngoài dự án', khac: ['/themthumuc'], thamSo: '<đường dẫn>', nhom: 'lam-viec' },
   { ten: '/copy', mo: 'Chép câu trả lời gần nhất vào clipboard', khac: ['/chep'], nhom: 'lam-viec' },
+  { ten: '/browser', mo: 'Bật/tắt cho AI dùng trình duyệt (mở web, đọc, bấm, gõ) ở phiên này', khac: ['/trinh-duyet', '/trinhduyet', '/chrome'], thamSo: '[on|off]', nhom: 'phien' },
   { ten: '/transcript', mo: 'Xem lại toàn bộ bảng ghi (ctrl+r)', khac: ['/banghi'], nhom: 'phien' },
 ];
 
@@ -118,6 +120,8 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
     case '/clear':
       if (S.dangChay) { traLoi('Việc này đang chạy — bấm `esc` để dừng trước.'); return; }
       await kn.goi('agent:reset');
+      // Lõi có thể dựng lại trạng thái cuộc khi xoá — gửi lại quyền trình duyệt cho chắc.
+      S.ws = await kn.apTrinhDuyet().catch(() => S.ws) as typeof S.ws;
       b.xoaManHinh();
       kho.xoaBang();
       return;
@@ -244,7 +248,7 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
         duAn: S.ws?.name ?? null, duongDan: S.ws?.path ?? null, nhanh: S.ws?.branch ?? null,
         model: nayModel?.ten ?? S.ws?.model ?? '?', muc: nayMuc?.ten ?? '?',
         cheDo: TEN_CHE_DO[S.ws?.cheDoQuyen ?? 'keHoach'] ?? '?', tomTat: S.daCompact,
-      }).replace('- App:', '- Phiên bản:')}\n- Tài khoản: **${kn.nguoi.fullName || kn.nguoi.username}**`);
+      }).replace('- App:', '- Phiên bản:')}\n- Trình duyệt cho AI: ${S.ws?.choTrinhDuyet ? `**bật** 🌐 (${timTrinhDuyet() ?? 'chưa thấy trình duyệt'})` : 'tắt — bật bằng `/browser on`'}\n- Tài khoản: **${kn.nguoi.fullName || kn.nguoi.username}**`);
       return;
     }
 
@@ -360,6 +364,19 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
 
     case '/transcript': b.moMenu('banGhi'); return;
 
+    case '/browser': {
+      const q = thamSo.trim().toLowerCase();
+      const bat = /^(on|bat|bật|1|yes)$/.test(q) ? true : /^(off|tat|tắt|0|no)$/.test(q) ? false : !kn.trinhDuyet;
+      if (bat && !timTrinhDuyet()) { traLoi(`Không tìm thấy Chrome/Edge/Brave/Chromium trên máy. ${LOI_KHONG_CO_TRINH_DUYET.replace(/^Không tìm thấy trình duyệt nào trên máy\. /, '')}`); return; }
+      if (S.dangChay) { traLoi('Việc này đang chạy — đợi xong (hoặc esc) rồi đổi quyền trình duyệt.'); return; }
+      const ws = await kn.apTrinhDuyet(bat);
+      if (ws) S.ws = ws as typeof S.ws;
+      kho.thongBao(bat
+        ? `🌐 Trình duyệt cho AI: BẬT — AI mở được web, đọc trang, bấm, gõ trong cửa sổ Chrome/Edge riêng (hồ sơ riêng ~/.cuongmini/trinh-duyet). Tắt: /browser off`
+        : 'Trình duyệt cho AI: TẮT — AI không mở web ở phiên này. Bật lại: /browser on', 'ok');
+      return;
+    }
+
     case '/copy': {
       const cuoi = [...S.muc].reverse().find((m) => m.kieu === 'may' && m.text);
       if (!cuoi?.text) { traLoi('Chưa có câu trả lời nào để chép.'); return; }
@@ -418,6 +435,8 @@ export async function moPhien(id: string, tieuDe: string, b: Pick<BoiCanhLenh, '
   }
   if (tieuDe) S.tieuDe = tieuDe;
   kho.thongBao(`↺ Đã mở lại việc cũ${tieuDe ? ` "${tieuDe}"` : ''} — hỏi tiếp là CuongMini nhớ toàn bộ ngữ cảnh.`, 'ok');
+  // Mở việc cũ = lõi nạp lại cuộc ⇒ gửi lại quyền trình duyệt, rồi đọc workspace mới.
+  await kn.apTrinhDuyet().catch(() => undefined);
   try { S.ws = await kn.goi('agent:getWorkspace'); } catch { /* giữ ws cũ */ }
   kho.bao(true);
   return true;

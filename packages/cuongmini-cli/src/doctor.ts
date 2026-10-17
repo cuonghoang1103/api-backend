@@ -67,7 +67,7 @@ export async function kiemMay(phienBan: string): Promise<MucKiem[]> {
   const td = timTrinhDuyet();
   ds.push(td
     ? { ten: 'Trình duyệt cho tool web', muc: 'ok', chiTiet: td }
-    : { ten: 'Trình duyệt cho tool web', muc: 'canh', chiTiet: 'không thấy Chrome/Edge/Brave/Chromium — AI không lái được trình duyệt (đặt CUONGMINI_TRINH_DUYET nếu cài ở chỗ lạ)' });
+    : { ten: 'Trình duyệt cho tool web', muc: 'canh', chiTiet: 'không thấy Chrome/Edge/Brave/Chromium — AI sẽ KHÔNG mở được web. Cài Google Chrome (google.com/chrome) hoặc Microsoft Edge, hoặc đặt CUONGMINI_TRINH_DUYET trỏ tới file chạy' });
 
   const clip = process.platform === 'darwin' ? (coLenh('pngpaste') ?? coLenh('osascript'))
     : process.platform === 'win32' ? coLenh('powershell.exe') ?? coLenh('pwsh')

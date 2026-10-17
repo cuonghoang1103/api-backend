@@ -10,7 +10,8 @@ import type { CoDong } from './coDong';
 import { KetNoiLoi } from './ketNoi';
 import { KhoChat, type InfoLoi, type WsLoi } from './kho';
 import { MODEL_DU_PHONG, doiTenModel, moPhien } from './lenh';
-import { docCaiDat } from './caiDat';
+import { timTrinhDuyet } from '../../cuongmini-core/src/timTrinhDuyet';
+import { docCaiDat, nenBatTrinhDuyet } from './caiDat';
 import { thuMucGoc, type NguoiDung } from './phien';
 
 export interface PhienLamViec { kn: KetNoiLoi; kho: KhoChat; canhBao: string[] }
@@ -23,10 +24,11 @@ export async function khoiDongPhien(nguoi: NguoiDung, co: CoDong, thuMuc: string
   const S = kho.S;
   const cd = docCaiDat();
   if (co.chiTiet) S.chiTiet = true;
-  // `datThuMuc` của lõi đặt lại "Lập kế hoạch" (mở thư mục mới không bao giờ tự mở quyền) — cờ/cài đặt áp SAU nó.
-  // Cờ thắng cài đặt; "Bỏ qua hết" không bao giờ đến từ file cài đặt (xem `chuanHoaCaiDat`).
+  // Chế độ quyền: CHỈ đặt khi người dùng TỰ chọn (cờ `--che-do` hoặc `/config`). Không chọn ⇒ để
+  // lõi dùng mặc định của nó ("Hỏi trước": đủ sửa/lệnh/git/trình duyệt, mỗi lần vẫn duyệt).
+  // "Bỏ qua hết" không bao giờ đến từ file cài đặt (xem `chuanHoaCaiDat`).
   const cheDo = co.cheDo ?? cd.cheDoMacDinh;
-  if (cheDo !== 'keHoach') {
+  if (cheDo) {
     await kn.goi('agent:datCheDoQuyen', { cheDo }).catch((e: Error) => canhBao.push(`Không đặt được chế độ: ${e.message}`));
   }
   for (const d of co.themThuMuc ?? []) {
@@ -36,6 +38,9 @@ export async function khoiDongPhien(nguoi: NguoiDung, co: CoDong, thuMuc: string
       (e: Error) => canhBao.push(`Không thêm được thư mục ${td}: ${e.message}`),
     );
   }
+  // Trình duyệt cho AI: mặc định BẬT khi máy có Chrome/Edge/… — không bật thì lõi không khai
+  // capability `browser` và máy chủ không gửi tool web nào (lỗi thật ở 0.2.0).
+  await kn.apTrinhDuyet(nenBatTrinhDuyet(cd, Boolean(timTrinhDuyet()))).catch((e: Error) => canhBao.push(`Không bật được trình duyệt cho AI: ${e.message}`));
   S.info = await kn.goi<InfoLoi>('agent:getInfo').catch(() => null);
   const model = co.model ?? cd.modelMacDinh ?? undefined;
   if (model) {

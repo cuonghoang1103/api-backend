@@ -129,8 +129,9 @@ Cờ:
   -c, --tiep-tuc                 Mở lại việc gần nhất của thư mục này
   -r, --resume                   Chọn một việc cũ để mở lại
   -m, --model <tên>              Chọn model (vd: sonnet-5, opus-4-8, gpt-sol)
-      --che-do <chế độ>          ke-hoach · hoi · tu-sua · tu-dong · bo-qua-het
-                                 (mặc định: ke-hoach — chỉ đọc; ở -p cũng vậy)
+      --che-do <chế độ>          hoi · ke-hoach · tu-sua · tu-dong · bo-qua-het
+                                 (mặc định: hoi — đủ công cụ, mỗi lần sửa/chạy lệnh vẫn hỏi;
+                                  riêng -p mặc định ke-hoach vì không ai bấm duyệt được)
       --dangerously-skip-permissions   = --che-do bo-qua-het (không hỏi gì — cẩn thận)
   -C, --thu-muc <đường>          Làm việc ở thư mục khác thư mục đang đứng
       --add-dir <đường>          Cho agent đọc/sửa thêm thư mục này (lặp lại được)

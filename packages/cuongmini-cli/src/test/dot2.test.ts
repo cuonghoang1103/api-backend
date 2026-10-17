@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { test } from 'node:test';
 import { cachDocAnh } from '../anhDan';
-import { chuanHoaCaiDat, MAC_DINH } from '../caiDat';
+import { chuanHoaCaiDat, MAC_DINH, nenBatTrinhDuyet } from '../caiDat';
 import { chenKeybinding, doTerminal } from '../caiTerminal';
 import { phanTichCo } from '../coDong';
 import { chenGhiNho, fileQuyUoc, tachGhiNho } from '../ghiNho';
@@ -82,7 +82,9 @@ test('# ghi nhớ: tách, chọn file quy ước lõi đang đọc, chèn vào m
 test('cài đặt: trường sai ⇒ mặc định; "Bỏ qua hết" không đến từ file', () => {
   assert.deepEqual(chuanHoaCaiDat(null), MAC_DINH);
   const c = chuanHoaCaiDat({ theme: 'sang', thongBao: 'xyz', cheDoMacDinh: 'boQuaHet', modelMacDinh: 'opus-4-8', ascii: 'bat' });
-  assert.deepEqual(c, { theme: 'sang', thongBao: 'heThong', cheDoMacDinh: 'keHoach', modelMacDinh: 'opus-4-8', ascii: 'bat' });
+  assert.deepEqual(c, { theme: 'sang', thongBao: 'heThong', cheDoMacDinh: null, modelMacDinh: 'opus-4-8', ascii: 'bat', trinhDuyet: 'tuDong' });
+  assert.equal(MAC_DINH.cheDoMacDinh, null, 'chưa tự chọn ⇒ để lõi dùng "Hỏi trước"');
+  assert.equal(chuanHoaCaiDat({ cheDoMacDinh: 'keHoach' }).cheDoMacDinh, 'keHoach');
   assert.equal(chuanHoaCaiDat({ modelMacDinh: '$(rm)' }).modelMacDinh, null);
 });
 
@@ -176,4 +178,18 @@ test('cờ mới: --resume, --add-dir lặp, --output-format chỉ với -p, doc
   assert.equal(phanTichCo(['doctor']).lenh, 'doctor');
   assert.equal(phanTichCo(['--dangerously-skip-permissions']).cheDo, 'boQuaHet');
   assert.equal(phanTichCo(['--verbose']).chiTiet, true);
+});
+
+test('trình duyệt cho AI: mặc định bật khi có Chrome/Edge; báo một lần khi tool web đầu tiên chạy', () => {
+  assert.equal(nenBatTrinhDuyet({ trinhDuyet: 'tuDong' }, true), true);
+  assert.equal(nenBatTrinhDuyet({ trinhDuyet: 'tuDong' }, false), false);
+  assert.equal(nenBatTrinhDuyet({ trinhDuyet: 'tat' }, true), false);
+  assert.equal(nenBatTrinhDuyet({ trinhDuyet: 'bat' }, false), true);
+  const k = new KhoChat(true);
+  k.batDauLuot('mở web', 0, 'mở web', 0);
+  k.xuLy({ loai: 'toolBatDau', id: 'a', ten: 'web_mo', vong: 'may' });
+  k.xuLy({ loai: 'tool', id: 'a', ten: 'web_mo', tomTat: 'example.com', vong: 'may' });
+  k.xuLy({ loai: 'toolBatDau', id: 'b', ten: 'web_doc', vong: 'may' });
+  const bao = k.S.bang.filter((m) => m.loai === 'thongBao' && /trình duyệt riêng/.test(m.text));
+  assert.equal(bao.length, 1);
 });

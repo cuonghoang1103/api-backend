@@ -13,6 +13,7 @@ import { CLI_BASE, kiemCapNhat, lenhCaiChoMay } from './capNhat';
 import { docCaiDat } from './caiDat';
 import { kiemMay } from './doctor';
 import { canAscii, datAscii, doiKyTu } from './kyTu';
+import { dongKetNoiDangMo } from './ketNoi';
 import { chuyenNhatKy } from './khoiDong';
 import { THUONG_HIEU, chuyenSac, datTheme, doTheme, mau, mo } from './mau';
 import { docPhien, tenHienThi, xoaPhien } from './phien';
@@ -98,6 +99,10 @@ async function main(): Promise<number> {
     return 2;
   }
 
+  // Đóng cửa sổ terminal (SIGHUP) / `kill` (SIGTERM): vẫn đóng trình duyệt AI trước khi thoát.
+  for (const tin of ['SIGHUP', 'SIGTERM'] as const) {
+    process.once(tin, () => { void dongKetNoiDangMo().finally(() => process.exit(129)); });
+  }
   let loiNhan: string | undefined;
   let daThoat = false;
   const banMoi = kiemCapNhat(PHIEN_BAN).catch(() => null);
@@ -115,8 +120,10 @@ async function main(): Promise<number> {
   try {
     await ink.waitUntilExit();
   } catch {
+    await dongKetNoiDangMo();
     return 1;
   }
+  await dongKetNoiDangMo();
   if (loiNhan) viet(loiNhan);
   else if (daThoat && co.lenh !== 'login') viet(mo(`Tạm biệt! Việc đã được lưu — mở lại: ${mau(THUONG_HIEU.timNhat)('cuongmini -c')}`));
   return 0;

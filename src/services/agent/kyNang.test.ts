@@ -10,7 +10,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildSystemPrompt } from './prompt.js';
+import { buildSystemPrompt, LOI_LAM_VIEC } from './prompt.js';
 import { toolsForGateway, ALL_CAPABILITIES } from './tools.js';
 
 test('prompt liệt kê tên + mô tả kỹ năng', () => {
@@ -52,4 +52,33 @@ test('turn.ts THẬT SỰ truyền kyNang vào buildSystemPrompt', () => {
   assert.ok(i > 0 && j > i);
   assert.match(nguon.slice(i, j), /kyNang/,
     'khai kiểu mà quên truyền ⇒ tsc sạch, không lỗi, danh sách không tới model');
+});
+
+test('kho kỹ năng cài sẵn: mọi file .md hợp lệ, tên = tên file, và đều ĐÓNG GÓI trong app', async () => {
+  const { dsKyNangSan } = await import('./kyNangSan.js');
+  const { readdirSync } = await import('node:fs');
+  const thuMuc = join(import.meta.dirname, 'kyNangSan');
+  const file = readdirSync(thuMuc).filter((f) => f.endsWith('.md')).sort();
+  const { ds } = await dsKyNangSan();
+  /* Một file bị loại ÂM THẦM (thiếu name/description, tên sai luật) thì
+     model không bao giờ thấy kỹ năng đó — không có lỗi nào báo. */
+  assert.deepEqual(ds.map((k) => `${k.ten}.md`).sort(), file);
+  for (const k of ds) {
+    assert.ok(k.moTa.length > 40 && k.moTa.length <= 300, `${k.ten}: mô tả 41–300 ký tự (model chọn kỹ năng CHỈ bằng mô tả)`);
+    assert.ok(k.than.length > 1500, `${k.ten}: thân quá mỏng`);
+  }
+  for (const ten of ['docker', 'may-ao', 'vps-ssh-deploy', 'video', 'blender-3d', 'ios-xcode', 'android', 'sua-loi-may']) {
+    assert.ok(ds.some((k) => k.ten === ten), `thiếu kỹ năng đợt 2: ${ten}`);
+  }
+  // Bản đóng gói của app (dùng khi không tải được từ máy chủ) phải có ĐỦ — thiếu thì máy mất mạng mất kỹ năng.
+  const goi = readFileSync(join(import.meta.dirname, '../../../desktop/src/main/agent/kyNangSan/index.ts'), 'utf8');
+  for (const f of file) assert.ok(goi.includes(`kyNangSan/${f}?raw`), `desktop kyNangSan/index.ts chưa import ${f}`);
+});
+
+test('prompt nói rõ kỹ năng gồm cả bộ CÀI SẴN, và luật làm việc nêu tên kỹ năng đợt 2', () => {
+  const p = buildSystemPrompt({ capabilities: ['fs_read', 'ky_nang'], kyNang: [{ ten: 'docker', moTa: 'Docker trên mọi HĐH' }] });
+  assert.match(p, /KỸ NĂNG CỦA DỰ ÁN VÀ CÀI SẴN/);
+  assert.match(LOI_LAM_VIEC, /sua-loi-may/, 'LOI_LAM_VIEC (turn.ts nối cho mọi model) phải nêu tên kỹ năng đợt 2');
+  assert.match(p, /TÌM WEB/);
+  assert.match(p, /tim_web/);
 });

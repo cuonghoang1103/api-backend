@@ -100,13 +100,14 @@ describe('tách phần đầu', () => {
 });
 
 describe('kỹ năng CÀI SẴN trong app (26/09/2026)', () => {
-  it('có đủ 17 kỹ năng đóng gói, mỗi cái có mô tả và thân', () => {
+  it('có đủ 25 kỹ năng đóng gói, mỗi cái có mô tả và thân', () => {
     _datBanMayChu(null);
     const ds = kyNangSan();
     expect(ds.map((k) => k.ten).sort()).toEqual([
-      '3d-webgl', 'bao-mat', 'database', 'deploy', 'devops-windows', 'do-an-bao-cao', 'giao-dien-web', 'git-github',
-      'kiem-thu', 'lam-game', 'lam-viec-chuan', 'may-chu-ssh', 'phat-hanh-app', 'phong-thu-may-chu', 'server-may-nha',
-      'thiet-ke-api', 'tinh-nang-ai',
+      '3d-webgl', 'android', 'bao-mat', 'blender-3d', 'database', 'deploy', 'devops-windows', 'do-an-bao-cao', 'docker',
+      'giao-dien-web', 'git-github', 'ios-xcode', 'kiem-thu', 'lam-game', 'lam-viec-chuan', 'may-ao', 'may-chu-ssh',
+      'phat-hanh-app', 'phong-thu-may-chu', 'server-may-nha', 'sua-loi-may', 'thiet-ke-api', 'tinh-nang-ai', 'video',
+      'vps-ssh-deploy',
     ]);
     for (const k of ds) {
       expect(k.moTa.length).toBeGreaterThan(40);
@@ -148,8 +149,8 @@ describe('kỹ năng tải từ MÁY CHỦ (sửa không cần phát hành app)'
     } finally {
       _datBanMayChu(null);
     }
-    // Hết bản máy chủ ⇒ quay về bản đóng gói đủ 17.
-    expect(kyNangSan()).toHaveLength(17);
+    // Hết bản máy chủ ⇒ quay về bản đóng gói đủ 25.
+    expect(kyNangSan()).toHaveLength(25);
   });
 });
 

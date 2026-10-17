@@ -49,7 +49,7 @@ export function phanLoaiLoi(status: number, than: string): LoaiLoiHttp {
 
 export interface NguCanhGoi {
   userId: number | null;
-  viec: 'agent_code' | 'exam_tutor' | 'thu_ket_noi';
+  viec: 'agent_code' | 'exam_tutor' | 'thu_ket_noi' | 'tim_web';
   hang: HangChinhHang;
   model: string;
 }

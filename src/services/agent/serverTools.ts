@@ -58,7 +58,7 @@ export async function runServerTool(
       case 'doc_web':
         return await docWeb(args);
       case 'tim_web':
-        return await timWeb(args);
+        return await timWeb(args, userId);
       default:
         return { content: `LỖI: không có tool tên "${name}".`, summary: 'tool lạ' };
     }

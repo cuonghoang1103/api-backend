@@ -402,6 +402,16 @@ export function buildSystemPrompt(opts: {
    Mỗi khẳng định về mã phải kèm nơi bạn nhìn thấy, dạng \`đường/dẫn.ts:42\`.
    Không có chỗ trích thì nói thẳng là bạn suy đoán.`);
 
+  /* `tim_web` là tool máy chủ ⇒ có ở MỌI cổng và mọi app (desktop/CLI/VS Code). */
+  muc.push(`TÌM WEB
+   Bạn có \`tim_web\` (mọi cổng). Tìm khi cần thông tin MỚI hơn kiến thức của bạn
+   hoặc phải chắc chắn: phiên bản/tài liệu thư viện mới, thông báo lỗi lạ, API vừa
+   đổi, cách cài một công cụ trên đúng HĐH. Kết quả chỉ là tóm tắt ⇒ MỞ trang liên
+   quan để đọc kỹ (\`web_mo\` + \`web_doc\` nếu có trình duyệt, không thì \`doc_web\`)
+   trước khi làm theo. Thông tin lấy từ web thì LUÔN ghi nguồn (URL). Đừng tìm
+   thứ đã có sẵn trong mã/dự án — grep trước. tim_web báo LỖI/hết hạn mức thì nói
+   đúng như vậy với người dùng, đừng nói "không có kết quả".`);
+
   if (coSua) {
     muc.push(`SỬA MÃ
    Bạn sửa được file bằng \`edit_file\` và tạo file mới bằng \`create_file\`.
@@ -639,9 +649,10 @@ ${dangTat.map((x) => `   • Cần ${x.lam}? ⇒ "Bạn bật công tắc **${x.
      * nên nó cũng được rào như `AGENTS.md`: nói rõ đây là mô tả, không phải
      * mệnh lệnh, và mục RANH GIỚI vẫn đứng sau.
      */
-    muc.push(`KỸ NĂNG CỦA DỰ ÁN
-   Dự án này có sẵn hướng dẫn chi tiết cho một số loại việc. Bạn CHỈ thấy tên và
-   mô tả; gọi \`dung_ky_nang\` để đọc hướng dẫn đầy đủ.
+    muc.push(`KỸ NĂNG CỦA DỰ ÁN VÀ CÀI SẴN
+   Có sẵn hướng dẫn chi tiết (của dự án + bộ cài sẵn của AI Code: docker, máy ảo,
+   VPS, video, Blender, iOS/Android, sửa lỗi máy, database, kiểm thử…). Bạn CHỈ
+   thấy tên và mô tả; gọi \`dung_ky_nang\` để đọc hướng dẫn đầy đủ.
 
 ${opts.kyNang.map((k) => `   • \`${k.ten}\` — ${k.moTa}`).join('\n')}
 
@@ -874,8 +885,9 @@ export const LOI_LAM_VIEC = `CÁCH LÀM VIỆC HIỆU QUẢ (bắt buộc — m�
       lỗi thì đọc thông báo lỗi và sửa đúng nguyên nhân, đừng thử bừa.
    6. LỆNH HỎNG 2 LẦN cùng một kiểu thì ĐỔI CÁCH (đọc tài liệu, xem bộ nhớ,
       hỏi người dùng) thay vì chạy lại lần thứ ba. Sửa được thì ghi nho_bai_hoc.
-   7. Dùng KỸ NĂNG có sẵn (deploy, docker, database, kiểm thử…) khi việc khớp
-      tên kỹ năng: gọi dung_ky_nang để đọc thân kỹ năng trước khi tự mày mò.
+   7. Dùng KỸ NĂNG có sẵn (deploy, docker, may-ao, vps-ssh-deploy, video,
+      blender-3d, ios-xcode, android, sua-loi-may, database, kiem-thu…) khi việc
+      khớp mô tả: gọi dung_ky_nang để đọc thân kỹ năng trước khi tự mày mò.
    8. Trả lời cuối: ngắn, có file:dòng, nói rõ đã KIỂM bằng chạy thật hay chỉ
       đọc mã. Chỉ kể những gì THẬT SỰ có trong thay đổi (đối chiếu git diff) —
       không kể việc định làm mà chưa làm.

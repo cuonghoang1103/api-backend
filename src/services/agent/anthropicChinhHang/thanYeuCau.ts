@@ -75,7 +75,7 @@ export async function dungThanChinhHang(than: ThanAnthropic, o: {
       beta.add(BETA_COMPACT);
     }
     than.context_management = { edits };
-    const st = khaiServerTool(await docServerTool());
+    const st = khaiServerTool(await docServerTool(), than.model);
     than.tools = [...st, ...sapTool(than.tools ?? [])];
   }
   if (dungFallbacks(than.model)) {

@@ -211,6 +211,16 @@ Quy tắc viết: mỗi TC kiểm MỘT điều; bước đủ rõ để ngườ
 DB), không viết "hệ thống chạy đúng". Báo lỗi (bug report): ID, tiêu đề, bước tái hiện, dữ liệu, mong đợi vs thực tế, mức độ
 (Severity) và độ ưu tiên (Priority), môi trường, ảnh chụp. Khi sinh viên nhờ làm bài, giải thích VÌ SAO chọn từng giá trị.
 
+## 7b. Kiểm GIAO DIỆN bằng trình duyệt có sẵn trong AI Code
+
+Không có/không cần bộ Playwright đầy đủ mà phải xác nhận một thay đổi giao diện:
+1. Chạy dev server bằng `chay_lenh_nen` (không phải `run_command` — nó chạy mãi), đọc `doc_dau_ra_nen` tới khi thấy cổng.
+2. `web_mo http://localhost:<cổng>/<trang>` → `web_console` (lỗi JS/404 tài nguyên) → `web_anh` để NHÌN.
+3. Thao tác bằng `web_bam`/`web_go` (mỗi lần người dùng duyệt) rồi `web_doc` đọc kết quả sau khi JS chạy.
+4. Kiểm cả bề rộng hẹp (điện thoại) lẫn rộng. Báo cáo kèm ảnh/điều đã thấy, không chỉ "đã chạy không lỗi".
+Muốn giữ lại thành test tự động ⇒ viết Playwright (mục 3) cho đúng luồng vừa kiểm tay:
+`npx playwright test --project=chromium tests/e2e/x.spec.ts` · lần đầu: `npx playwright install chromium`.
+
 ## 8. Bẫy đã gặp thật
 
 - **Watch mode** (`vitest`, `jest --watch`, `ng test` mặc định, `npm test` của CRA không có `CI`) ⇒ treo tới hết giờ.

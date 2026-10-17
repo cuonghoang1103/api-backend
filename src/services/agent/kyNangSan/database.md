@@ -164,6 +164,20 @@ mongodump --uri "$MONGO_URL" --archive=app.archive --gzip
 mongorestore --uri "$MONGO_TEST_URL" --archive=app.archive --gzip --nsFrom='app.*' --nsTo='app_test.*'
 ```
 DB trong Docker: `docker compose exec -T db pg_dump -U postgres app > app.sql` (`-T` để không cấp TTY — thiếu là hỏng file).
+
+**SQLite** (một file — app desktop/mobile, đồ án nhỏ):
+```bash
+sqlite3 app.db ".backup 'app_$(date +%Y%m%d_%H%M).db'"   # an toàn kể cả khi app đang ghi (khác cp)
+sqlite3 app.db "PRAGMA integrity_check;"                   # phải ra đúng một dòng: ok
+sqlite3 app.db ".tables"   ;   sqlite3 app.db ".schema bang"   ;   sqlite3 -header -column app.db "select * from bang limit 5;"
+```
+- `cp app.db` khi app đang chạy có thể chép nửa giao dịch, và **quên file `app.db-wal`** (chế độ WAL) là mất dữ liệu mới nhất.
+- `ALTER TABLE` của SQLite rất hạn chế (đổi kiểu cột/thêm ràng buộc ⇒ tạo bảng mới, chép, đổi tên — trong một transaction, sau khi backup).
+
+**Kết nối nhanh để KIỂM (chỉ đọc trước):** `psql "$DATABASE_URL" -c '\dt'` · `psql ... -c 'select count(*) from bang'`
+· `mysql -h 127.0.0.1 -u root -p -e 'show tables' app` (`-p` sẽ hỏi mật khẩu ⇒ đưa lệnh cho người dùng tự gõ, hoặc
+dùng `MYSQL_PWD`/`~/.my.cnf` họ đã có) · `sqlcmd -S localhost -U sa -C -Q "select name from sys.tables"`.
+Không biết DB đang ở đâu ⇒ đọc `.env`/`docker-compose.yml`/`appsettings*.json` (KHÔNG in mật khẩu ra kết quả).
 Khôi phục THỬ vào một DB khác rồi đếm dòng vài bảng chính. Không bao giờ restore đè lên DB đang chạy khi chưa được đồng ý.
 
 ## 8. Seed dữ liệu

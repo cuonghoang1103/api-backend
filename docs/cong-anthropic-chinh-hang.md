@@ -280,6 +280,18 @@ Tin `assistant` trong `done.append` do cổng chính hãng sinh ra có thêm tr�
 
   Admin sửa trần gói ở `app_settings.anthropic_chinh_hang_tran_goi`. Trần riêng từng người ở `anthropic_user_caps`, ghi đè trần gói theo từng ô; ô để `null` thì theo gói. Nếu không đọc được sổ thì **chặn** (đây là tiền thật).
 
+### 4b. `tim_web` cho MỌI cổng (đợt 2, 18/10/2026)
+
+Tool máy chủ `tim_web` (`src/services/agent/timWeb.ts`) chạy cho cả rambo, modelapi lẫn chính hãng. Thử lần lượt
+`searxng` (SearXNG tự dựng, miễn phí) → `tavily` (khi có khoá) → `anthropic`: `claude-haiku-5-5` + server tool
+`web_search_20250305` (Haiku KHÔNG nhận bản lọc động `_20260209`; `caiDat.kieuWebSearch` chọn bản theo model — áp
+cả cho server tool admin bật ở lượt agent). Nhánh `anthropic`:
+- ghi sổ `viec: 'tim_web'`, `hang: 'free'` ⇒ tính vào trần **CuongMini Free** của người dùng (USD = token Haiku + $0,01/lần tìm);
+- chặn khi hết trần Free, khi tài khoản không Pro/không key terminal, hoặc khi đã tìm `AGENT_TIM_WEB_LUOT_NGAY` (mặc định 40) lần trong ngày (giờ VN);
+- admin không giới hạn (vẫn ghi sổ).
+Lỗi/hết hạn mức trả "LỖI: …" (không bao giờ thành "0 kết quả"). Kết quả: danh sách {tiêu đề, URL, đoạn trích từ
+`citations[].cited_text`, ngày `page_age`} + ghi chú ngắn của bộ tìm; model được dặn mở trang (`web_mo`/`doc_web`) và ghi nguồn.
+
 ## 5. API admin: `/api/v1/admin/cong-anthropic` (ROLE_ADMIN)
 
 | Method | Đường | Thân / Trả |
@@ -328,6 +340,9 @@ Không có biến này thì trang admin ẩn mục đối chiếu. Hình dạng 
 | `ANTHROPIC_CHINH_HANG_MAP` | Không | JSON từ model rambo sang model chính hãng (CuongMini trong thi) |
 | `ANTHROPIC_CHINH_HANG_BASE_URL` | Không | Chỉ dùng cho test hoặc proxy |
 | `ANTHROPIC_ADMIN_KEY` | Không | Đối chiếu số thật |
+| `AGENT_TIM_WEB_NGUON` | Không | Thứ tự nguồn của `tim_web`, mặc định `searxng,tavily,anthropic` (bỏ `anthropic` = không bao giờ tiêu tiền cổng chính hãng cho tìm web) |
+| `AGENT_TIM_WEB_LUOT_NGAY` | Không | Trần số lần `tim_web` qua cổng chính hãng / người / ngày (mặc định 40; admin không giới hạn) |
+| `AGENT_TIM_WEB_MODEL` | Không | Model bộ tìm (mặc định `claude-haiku-5-5`) |
 
 Sau khi đặt biến thì **tạo lại container** backend (xem CLAUDE.md mục env). Migration: `prisma/migrations/20261018000000_anthropic_chinh_hang` chỉ tạo bảng mới.
 

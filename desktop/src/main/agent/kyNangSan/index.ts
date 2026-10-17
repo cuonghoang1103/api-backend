@@ -34,6 +34,15 @@ import serverMayNha from '../../../../../src/services/agent/kyNangSan/server-may
 import webgl3d from '../../../../../src/services/agent/kyNangSan/3d-webgl.md?raw';
 import lamGame from '../../../../../src/services/agent/kyNangSan/lam-game.md?raw';
 import phongThuMayChu from '../../../../../src/services/agent/kyNangSan/phong-thu-may-chu.md?raw';
+/* Đợt 2 (18/10/2026) — kỹ năng vận hành máy & đa phương tiện. */
+import docker from '../../../../../src/services/agent/kyNangSan/docker.md?raw';
+import mayAo from '../../../../../src/services/agent/kyNangSan/may-ao.md?raw';
+import vpsSshDeploy from '../../../../../src/services/agent/kyNangSan/vps-ssh-deploy.md?raw';
+import video from '../../../../../src/services/agent/kyNangSan/video.md?raw';
+import blender3d from '../../../../../src/services/agent/kyNangSan/blender-3d.md?raw';
+import iosXcode from '../../../../../src/services/agent/kyNangSan/ios-xcode.md?raw';
+import android from '../../../../../src/services/agent/kyNangSan/android.md?raw';
+import suaLoiMay from '../../../../../src/services/agent/kyNangSan/sua-loi-may.md?raw';
 
 /** Nội dung thô (có phần đầu YAML) của từng kỹ năng — bản đóng gói. */
 export const KY_NANG_SAN_THO: readonly string[] = [
@@ -42,4 +51,6 @@ export const KY_NANG_SAN_THO: readonly string[] = [
   gitGithub, thietKeApi, tinhNangAi, doAnBaoCao,
   devopsWindows, serverMayNha, webgl3d, lamGame,
   phongThuMayChu,
+  docker, mayAo, vpsSshDeploy, video,
+  blender3d, iosXcode, android, suaLoiMay,
 ];

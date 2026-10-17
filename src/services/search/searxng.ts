@@ -38,6 +38,8 @@ export interface KetQuaTim {
   mien: string;
   /** Máy tìm kiếm nào trả về — hữu ích khi soi chất lượng nguồn. */
   nguon: string;
+  /** Ngày đăng nếu máy tìm kiếm biết (`publishedDate`), dạng YYYY-MM-DD. */
+  ngay?: string;
 }
 
 export function timWebBat(): boolean {
@@ -90,6 +92,8 @@ export async function timWeb(cauHoi: string, soKetQua = 6): Promise<KetQuaTim[]>
         tomTat: (typeof r.content === 'string' ? r.content : '').trim().slice(0, 500),
         mien: mienCua(url),
         nguon: typeof r.engine === 'string' ? r.engine : '',
+        ...(typeof r.publishedDate === 'string' && /^\d{4}-\d{2}-\d{2}/.test(r.publishedDate)
+          ? { ngay: r.publishedDate.slice(0, 10) } : {}),
       });
       if (ra.length >= soKetQua) break;
     }

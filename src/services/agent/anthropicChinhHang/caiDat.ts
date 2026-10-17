@@ -50,10 +50,22 @@ export async function datServerTool(d: Partial<ServerToolBat>): Promise<ServerTo
  * động chạy bằng code execution bên trong — tài liệu Anthropic dặn KHÔNG khai
  * thêm `code_execution` khi đã có nó, nên bật cả hai thì chỉ khai web_search.
  */
-export function khaiServerTool(v: ServerToolBat): Array<Record<string, unknown>> {
-  if (v.webSearch) return [{ type: 'web_search_20260209', name: 'web_search', max_uses: 8 }];
+export function khaiServerTool(v: ServerToolBat, model = ''): Array<Record<string, unknown>> {
+  if (v.webSearch) return [{ type: kieuWebSearch(model), name: 'web_search', max_uses: 8 }];
   if (v.codeExecution) return [{ type: 'code_execution_20260521', name: 'code_execution' }];
   return [];
+}
+
+/**
+ * Bản `web_search` hợp với model. `_20260209` (lọc động) CHỈ chạy trên Opus
+ * 4.6–5.5 / Sonnet 4.6, 5, 5.5 (tài liệu Anthropic, bảng 06/10/2026) — Haiku
+ * 5.5 (CuongMini Free, `tim_web`) và Fable phải dùng bản cơ bản `_20250305`,
+ * gửi nhầm bản mới là 400 cả lượt. Model không nhận ra ⇒ bản cơ bản (an toàn).
+ */
+export function kieuWebSearch(model: string): string {
+  return /^claude-(opus-(4-[678]|5|5-5)|sonnet-(4-6|5|5-5))$/.test(model)
+    ? 'web_search_20260209'
+    : 'web_search_20250305';
 }
 
 // ─── Giới hạn model ──────────────────────────────────────────────────

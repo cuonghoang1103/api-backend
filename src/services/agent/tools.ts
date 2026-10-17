@@ -1093,10 +1093,10 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
        gì tới máy người dùng nên không có quyền nào để bật/tắt ở app. */
     ring: 'server',
     description:
-      'TÌM trên web và trả về danh sách kết quả kèm tóm tắt. Dùng khi bạn KHÔNG BIẾT địa chỉ — '
-      + 'ví dụ "phiên bản mới nhất của thư viện X", "lỗi Y nghĩa là gì", tin tức sau ngày bạn được huấn luyện. '
-      + 'Đã biết địa chỉ rồi thì dùng `doc_web`, đừng tìm lại. '
-      + 'Kết quả chỉ là TÓM TẮT — cần nội dung đầy đủ thì gọi `doc_web` với địa chỉ lấy được ở đây.',
+      'TÌM trên web: trả danh sách {tiêu đề, URL, đoạn trích, ngày}. Dùng khi bạn KHÔNG BIẾT địa chỉ và cần '
+      + 'thông tin MỚI hoặc chắc chắn: phiên bản/tài liệu của thư viện mới, thông báo lỗi lạ chưa gặp, thay đổi API, '
+      + 'tin sau ngày bạn được huấn luyện. Đã biết địa chỉ thì mở thẳng (`web_mo`/`doc_web`), đừng tìm lại. '
+      + 'Kết quả chỉ là TÓM TẮT — mở trang liên quan để đọc kỹ trước khi khẳng định, và ghi nguồn (URL) khi trả lời.',
     parameters: {
       type: 'object',
       properties: {

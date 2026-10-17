@@ -406,11 +406,60 @@ function theDuyet(id: string, tieuDe: string, than: string, cacNut: Array<[strin
 
 const DUYET_CHUAN: Array<[string, string, string?]> = [['choPhep', 'Cho phép', 'chinh'], ['choPhepCaFile', 'Cho phép cả việc này'], ['tuChoi', 'Từ chối', 'phu2']];
 
+/**
+ * AGENT PHỤ (`giao_viec_phu`) — trước 18/10/2026 khung VS Code bỏ qua hẳn ba sự
+ * kiện này nên người dùng chỉ thấy "Agent phụ đang làm" rồi im, trong khi app
+ * desktop và CLI vẽ được. Nay: một khối gập/mở cho mỗi agent phụ — nhiệm vụ,
+ * từng tool nó gọi, kết quả + chi phí. Chữ của agent phụ chỉ nằm TRONG khối,
+ * không bao giờ lẫn vào câu trả lời chính (`themChu` không được gọi ở đây).
+ */
+const phuDangChay = new Map<string, HTMLElement>();
+const MAX_DONG_PHU = 60;
+
+function xuLyPhu(e: SuKien): void {
+  const id = String(e.phuId ?? '');
+  if (e.loai === 'phuBatDau') {
+    ketThucTraLoi();
+    const el = the('tool phu-agent', `<details><summary><span class="cham dang"></span><b>Agent phụ</b> <span class="phu">${esc(String(e.kieuAgent ?? ''))} · ${esc(String(e.nhiemVu ?? '').slice(0, 140))}</span><span class="mo-rong">›</span></summary><div class="ben-trong"><div class="phu-buoc"></div></div></details>`);
+    phuDangChay.set(id, el);
+    return;
+  }
+  const el = phuDangChay.get(id);
+  if (!el) return;
+  if (e.loai === 'phuSuKien') {
+    const con = (e.e ?? {}) as SuKien;
+    if (con.loai !== 'tool') return;
+    const buoc = el.querySelector<HTMLElement>('.phu-buoc');
+    if (!buoc || buoc.childElementCount >= MAX_DONG_PHU) return;
+    const d = document.createElement('div');
+    d.className = 'phu';
+    d.textContent = `• ${nhanTool(String(con.ten ?? ''))}${con.tomTat ? ` — ${String(con.tomTat).slice(0, 160)}` : ''}`;
+    buoc.appendChild(d);
+    return;
+  }
+  if (e.loai === 'phuXong') {
+    phuDangChay.delete(id);
+    el.querySelector('.cham')?.classList.replace('dang', e.ok ? 'xong' : 'hong');
+    const tien = Number(e.tienUsd ?? 0);
+    const tok = Number(e.tokenVao ?? 0) + Number(e.tokenRa ?? 0);
+    const ben = el.querySelector<HTMLElement>('.ben-trong');
+    if (ben) {
+      const kq = document.createElement('pre');
+      kq.className = 'chitiet';
+      kq.textContent = String(e.tomTat ?? '').slice(0, 12000) || (e.ok ? '(không có tóm tắt)' : 'Agent phụ dừng giữa chừng.');
+      ben.appendChild(kq);
+      const phi = document.createElement('div');
+      phi.className = 'phu';
+      phi.textContent = `${tok ? `${tok.toLocaleString('vi-VN')} token` : ''}${tien > 0 ? ` · ~${tien.toFixed(3)} $` : ''}`;
+      if (phi.textContent) ben.appendChild(phi);
+    }
+  }
+}
+
 function xuLy(e: SuKien): void {
-  /* Sự kiện BÊN TRONG agent phụ (`phuBatDau`/`phuSuKien`/`phuXong`): khung này
-     chưa có bảng agent phụ ⇒ bỏ qua hẳn — chữ của agent phụ KHÔNG được lẫn vào
-     câu trả lời chính. */
-  if (e.loai === 'phuBatDau' || e.loai === 'phuSuKien' || e.loai === 'phuXong') return;
+  /* Sự kiện BÊN TRONG agent phụ đi BỌC trong `phuSuKien` — vẽ riêng trong khối
+     của nó (xem `xuLyPhu`), KHÔNG chạy xuống luồng chính bên dưới. */
+  if (e.loai === 'phuBatDau' || e.loai === 'phuSuKien' || e.loai === 'phuXong') { xuLyPhu(e); return; }
   if (e.loai !== 'nghi') S.suyNghi = false;
   switch (e.loai) {
     case 'nghi':

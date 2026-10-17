@@ -122,7 +122,7 @@ ok('`desktop/` sạch');
    Sửa dở ở đó cũng KHÔNG vào bản cài — cùng lý do với `desktop/` ở trên. */
 if (LA_CTWORK) {
   const banWork = chay('git', ['status', '--porcelain', '--',
-    '../frontend/src/app/work', '../frontend/src/components/work'])
+    'frontend/src/app/work', 'frontend/src/components/work'])
     .split('\n').filter((d) => d.trim() && !d.startsWith('??'));
   if (banWork.length > 0) {
     chet('Cây CT Work của web còn thay đổi CHƯA COMMIT — chúng sẽ KHÔNG có trong app CT Work:',

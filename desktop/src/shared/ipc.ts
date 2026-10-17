@@ -98,6 +98,13 @@ export const settingKeySchema = z.enum([
   /** Model ở cổng dự phòng: 'gpt-6-sol' (mặc định) | 'gpt-6-astra' (việc khó). */
   'agentDuPhongModel',
   /**
+   * Vé CỔNG CLAUDE CHÍNH HÃNG (17/10/2026) — mật khẩu RIÊNG, khác vé dự phòng.
+   * Mở các model cao `cl-*`. Gửi kèm MỌI lượt (`congAnthropicVe`) và khi hỏi
+   * `/agent/tools`. Máy chủ báo `CONG_ANTHROPIC_KHOA` ⇒ main tự xoá vé này.
+   * Xem `docs/cong-anthropic-chinh-hang.md`.
+   */
+  'agentAnthropicVe',
+  /**
    * Chế độ đang mở ở /chat: 'chat' (trò chuyện) hay 'code' (lập trình).
    *
    * Lưu vì cùng lý do với `agentMucNoLuc`: đây là SỞ THÍCH, không phải quyền.
@@ -943,6 +950,10 @@ export const modelAgentSchema = z.enum([
   'haiku-4-5', 'sonnet-4-6', 'opus-4-6', 'opus-4-7',
   // 26/09/2026: cổng rambo mở thêm opus-5 (mặc định mới) + fable-5 (đắt ×3,5, có hạn mức)
   'opus-5', 'fable-5',
+  // 17/10/2026: cổng Claude CHÍNH HÃNG (api.anthropic.com). Model cao cần vé
+  // `agentAnthropicVe`; `cl-free` = CuongMini Free, không cần vé. Bảng gốc ở
+  // `src/services/agent/anthropicChinhHang/cauHinh.ts` (`agentModels.test.ts` đọc thẳng).
+  'cl-free', 'cl-sonnet-5-5', 'cl-opus-5-5', 'cl-fable-5-1',
 ]);
 export type ModelAgent = z.infer<typeof modelAgentSchema>;
 
@@ -1406,7 +1417,19 @@ export interface AgentInfo {
    * nhận về lỗi, rồi không hiểu vì sao — còn tệ hơn thấy nó xám và biết lý do.
    */
   /** `dat` = model đắt bất thường (Cuong Fable ×3,5) ⇒ app xác nhận trước khi chọn. */
-  models?: Array<{ id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean }>;
+  models?: Array<{
+    id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean;
+    /**
+     * Cổng của model (17/10/2026): `rambo` (cổng chính) · `modelapi` · `anthropic`
+     * (Claude chính hãng). Máy chủ cũ không khai ⇒ coi như cổng chính.
+     */
+    cong?: 'rambo' | 'modelapi' | 'anthropic';
+    /** `true` = model cao của cổng chính hãng, chưa có vé ⇒ hiện ổ khoá, bấm là hỏi mật khẩu. */
+    canMoKhoa?: boolean;
+    /** Chỉ `cl-free` (CuongMini Free). */
+    mienPhi?: boolean;
+    hang?: 'free' | 'cao';
+  }>;
   /**
    * Bảng mức nỗ lực + SỐ BƯỚC, cũng do máy chủ khai.
    *
@@ -1424,6 +1447,39 @@ export interface AgentInfo {
  * bản sao của một hợp đồng thì sẽ có ngày lệch nhau, và lệch ở đây nghĩa là
  * giao diện im lặng bỏ qua một loại sự kiện mà không ai biết.
  */
+/**
+ * Một cổng người dùng CHỌN được khi cổng chính hỏng (khung `cong` của máy chủ,
+ * `ma: 'CONG_CHINH_HONG_FREE'`). Khớp `CongNangCap` ở
+ * `src/services/agent/anthropicChinhHang/dinhTuyen.ts`.
+ */
+export interface AgentCongNangCap {
+  cong: 'anthropic' | 'modelapi';
+  ten: string;
+  /** Admin đã đặt mật khẩu cổng này chưa (chưa ⇒ người thường không mở được). */
+  daBat: boolean;
+  /** `true` = chưa có vé hợp lệ ⇒ phải nhập mật khẩu. */
+  canMatKhau: boolean;
+  models: Array<{ id: string; ten: string; mo: string; dat?: boolean; dungDuoc: boolean }>;
+}
+
+/** `GET /api/v1/agent/cong-anthropic` — trạng thái cổng Claude chính hãng của người này. */
+export interface AgentCongAnthropic {
+  coKey: boolean;
+  daBat: boolean;
+  laAdmin: boolean;
+  veHopLe: boolean;
+  modelCaoDuoc: boolean;
+  congChinhDangHong: boolean;
+  hanMuc?: Record<'free' | 'cao', {
+    khongGioiHan: boolean; daDungThang: number; daDungNgay: number;
+    tranThang: number | null; tranNgay: number | null; het: boolean;
+  }>;
+  models?: NonNullable<AgentInfo['models']>;
+  cacCong?: AgentCongNangCap[];
+  /** App đang giữ vé trên máy này không (do main thêm, máy chủ không trả). */
+  coVe: boolean;
+}
+
 export type AgentUiEvent = { cuocId: string } & (
   /**
    * `cucBo` có mặt = lượt này chạy bằng AI NGOẠI TUYẾN trên máy (03/10/2026).
@@ -1452,7 +1508,18 @@ export type AgentUiEvent = { cuocId: string } & (
       diff?: AgentDiff;
       /** Đường dẫn file — giao diện dùng để đoán ngôn ngữ mà tô màu. */
       duongDan?: string;
+      /** `chay_lenh_nen`: nguyên văn lệnh nền vừa bật. */
+      lenh?: string;
     }
+  /**
+   * AGENT PHỤ (18/10/2026): `phuId` = `tool_call_id` của `giao_viec_phu`. Sự
+   * kiện BÊN TRONG việc phụ đi BỌC trong `phuSuKien` — giao diện chưa vẽ bảng
+   * agent phụ thì BỎ QUA cả ba loại này (chữ của agent phụ không được lẫn vào
+   * câu trả lời chính).
+   */
+  | { loai: 'phuBatDau'; phuId: string; kieuAgent: string; nhiemVu: string; model?: string }
+  | { loai: 'phuSuKien'; phuId: string; e: { loai: string; [k: string]: unknown } }
+  | { loai: 'phuXong'; phuId: string; ok: boolean; tomTat: string; tienUsd: number; tokenVao: number; tokenRa: number }
   /** Agent ĐANG DỪNG chờ duyệt. Giao diện hiện thẻ diff và bắt buộc phải trả lời. */
   | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: AgentDiff }
   /** Thẻ đã được trả lời (hoặc hết giờ 5 phút) — gỡ thẻ đi. */
@@ -1486,7 +1553,19 @@ export type AgentUiEvent = { cuocId: string } & (
    * `coKeyGiaHan` chỉ đi kèm `AGENT_QUOTA_EXCEEDED` (02/10/2026): admin đã đặt
    * key gia hạn ⇒ hiện ô "Nhập key để làm tiếp" ngay dưới lỗi.
    */
-  | { loai: 'loi'; thongDiep: string; ma?: string; coKeyGiaHan?: boolean }
+  | {
+      loai: 'loi'; thongDiep: string; ma?: string; coKeyGiaHan?: boolean;
+      /**
+       * Cổng chính hỏng ⇒ máy chủ tự chuyển sang CuongMini Free (`ma:
+       * 'CONG_CHINH_HONG_FREE'`): kèm lời mời nâng cấp và các cổng chọn được.
+       */
+      moiNangCap?: boolean;
+      cacCong?: AgentCongNangCap[];
+      /** `CONG_ANTHROPIC_KHOA`: admin đã đặt mật khẩu cổng chính hãng chưa (`false` ⇒ "Quản trị chưa bật"). */
+      daBat?: boolean;
+    }
+  /** Model đang suy nghĩ (khối thinking, chữ ẩn) — chỉ cổng Claude chính hãng phát. */
+  | { loai: 'nghi' }
   | { loai: 'huy' }
   /**
    * Hội thoại ở main vừa bị xoá sạch (đổi thư mục dự án, chuyển worktree, bỏ
@@ -1986,6 +2065,23 @@ export const INVOKE_CHANNELS = {
   'agent:hoanTac': agentCuocSchema,
   /** Tab bám cổng dự phòng ⇒ người dùng bấm "Quay về cổng chính". */
   'agent:veCongChinh': agentCuocSchema,
+  /**
+   * Cổng Claude chính hãng (17/10/2026): mở khoá model cao bằng mật khẩu RIÊNG
+   * của cổng này. Main gọi máy chủ bằng phiên của app, giữ vé (`agentAnthropicVe`).
+   */
+  'agent:moCongAnthropic': z.object({ matKhau: z.string().min(1).max(200) }),
+  /** Trạng thái cổng chính hãng + các cổng nâng cấp (`GET /agent/cong-anthropic`). */
+  'agent:congAnthropic': z.object({}).passthrough().optional(),
+  /**
+   * Tab chọn cổng phụ khi cổng chính hỏng: `modelapi` ⇒ gửi `congPhu:'modelapi'`
+   * + vé dự phòng + giữ cổng phụ; `null` ⇒ bỏ (về Free/cổng chính). `model` =
+   * model dự phòng (`gpt-*`), lưu như `agentDuPhongModel`.
+   */
+  'agent:datCongPhu': z.object({
+    cuocId: cuocIdSchema,
+    cong: z.enum(['modelapi']).nullable(),
+    model: z.string().regex(/^gpt-[a-z0-9.-]{1,40}$/).optional(),
+  }),
   'agent:dsPhien': null,
   'agent:moPhien': agentMoPhienSchema,
   'agent:xoaPhien': agentPhienSchema,
@@ -2795,6 +2891,12 @@ export interface DesktopBridge {
     /** Trả mọi file agent đã sửa trong việc này về nguyên trạng. */
     hoanTac(cuocId: string): Promise<{ soFile: number; loi: string[] }>;
     veCongChinh(cuocId: string): Promise<void>;
+    /** Mở khoá cổng Claude chính hãng. Ném lỗi (câu của máy chủ) khi sai mật khẩu / chưa bật. */
+    moCongAnthropic(matKhau: string): Promise<{ ten: string; hetHan: number | null }>;
+    /** Trạng thái cổng Claude chính hãng. `null` = máy chủ cũ / mất mạng. */
+    congAnthropic(): Promise<AgentCongAnthropic | null>;
+    /** Chọn cổng phụ cho tab (`modelapi` hoặc bỏ). */
+    datCongPhu(cuocId: string, cong: 'modelapi' | null, model?: string): Promise<void>;
     /** Các việc đã lưu, mới nhất trước. */
     dsPhien(): Promise<AgentPhien[]>;
     /**

@@ -41,7 +41,11 @@ export async function goiCompact(o: {
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${o.token}` },
       signal: AbortSignal.timeout(90_000),
       body: JSON.stringify({
-        messages: goAnhCu(o.hoiThoai, 0).messages,
+        /* `khoiAnthropic` (thinking có chữ ký, compaction của cổng chính hãng)
+           KHÔNG lên đây: việc tóm tắt chạy model rẻ của modelapi, vốn bỏ qua
+           trường đó — gửi chỉ phình thân yêu cầu. Bản trong `c.hoiThoai` giữ
+           nguyên; `ghepTomTat` gửi lại các tin sau mốc gộp NGUYÊN VĂN. */
+        messages: goAnhCu(o.hoiThoai, 0).messages.map(({ khoiAnthropic: _bo, ...m }) => m),
         ...(o.ghiChu?.trim() ? { ghiChu: o.ghiChu.trim().slice(0, 500) } : {}),
         ...(o.giuLuot ? { giuLuot: o.giuLuot } : {}),
       }),

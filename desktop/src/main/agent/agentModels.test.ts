@@ -21,6 +21,15 @@ function maBenMayChu(): string[] {
   return [...new Set(ma)];
 }
 
+/** Mã cổng Claude chính hãng (`cl-*`) — bảng riêng, `cauHinh.ts` (17/10/2026). */
+function maChinhHang(): string[] {
+  const src = readFileSync(join(goc, '../src/services/agent/anthropicChinhHang/cauHinh.ts'), 'utf8');
+  const ma = [...src.matchAll(/^\s*id: '(cl-[a-z0-9-]+)',$/gm)].map((m) => m[1]!);
+  if (/MA_FREE = '(cl-[a-z0-9-]+)'/.test(src)) ma.push(/MA_FREE = '(cl-[a-z0-9-]+)'/.exec(src)![1]!);
+  expect(ma.length, 'không đọc được mã cl-* nào — bảng chính hãng đã đổi hình dạng?').toBeGreaterThanOrEqual(4);
+  return [...new Set(ma)];
+}
+
 function maAppNhan(): string[] {
   const src = readFileSync(join(goc, 'src/shared/ipc.ts'), 'utf8');
   const i = src.indexOf('export const modelAgentSchema');
@@ -33,6 +42,12 @@ describe('mã model AI Code', () => {
     const app = new Set(maAppNhan());
     const thieu = maBenMayChu().filter((m) => !app.has(m));
     expect(thieu, `app không nhận: ${thieu.join(', ')} ⇒ nút chọn model sẽ im lặng`).toEqual([]);
+  });
+
+  it('app nhận MỌI mã của cổng Claude chính hãng', () => {
+    const app = new Set(maAppNhan());
+    const thieu = maChinhHang().filter((m) => !app.has(m));
+    expect(thieu, `app không nhận: ${thieu.join(', ')} ⇒ chọn model chính hãng sẽ im lặng`).toEqual([]);
   });
 
   it('danh sách trong main khớp với schema', () => {

@@ -95,13 +95,51 @@ export async function dsAgentPhu(goc: string | null): Promise<TomTatAgentPhu[]> 
 
 /** Thân file (phần sau YAML) của một loại — dùng làm prompt cho lượt phụ. */
 export async function docThanAgentPhu(goc: string | null, ten: string): Promise<string | null> {
+  return (await docAgentPhu(goc, ten))?.than ?? null;
+}
+
+/**
+ * MỨC MODEL của lượt phụ (17/10/2026) — hợp đồng `mucModelPhu` của máy chủ
+ * (`docs/cong-anthropic-chinh-hang.md`, mục "Agent phụ chọn model theo việc").
+ *
+ * Nhận cả tên của tool (`nhanh`/`can_bang`/`manh`/`ke_thua`) lẫn tên kiểu Claude
+ * Code trong `.claude/agents/*.md` (`haiku`/`sonnet`/`opus`/`inherit`). Giá
+ * trị lạ ⇒ `null` (không gửi gì — máy chủ hiểu là kế thừa model chính).
+ * Máy chủ KHÔNG BAO GIỜ chọn model đắt hơn model chính, nên ở đây không chặn gì.
+ */
+export type MucModelPhu = 'nhanh' | 'can_bang' | 'manh' | 'ke_thua';
+
+const BANG_MUC_MODEL: Record<string, MucModelPhu> = {
+  nhanh: 'nhanh', can_bang: 'can_bang', manh: 'manh', ke_thua: 'ke_thua',
+  haiku: 'nhanh', sonnet: 'can_bang', opus: 'manh', inherit: 'ke_thua',
+};
+
+export function chuanHoaMucModelPhu(tho: unknown): MucModelPhu | null {
+  if (typeof tho !== 'string') return null;
+  const k = tho.trim().toLowerCase().replace(/-/g, '_');
+  return BANG_MUC_MODEL[k] ?? null;
+}
+
+/** Khoá `model:` trong phần đầu YAML (định dạng Claude Code). `null` = không khai / khai lạ. */
+export function docModelDauFile(noiDung: string): MucModelPhu | null {
+  if (!noiDung.startsWith('---')) return null;
+  const het = noiDung.indexOf('\n---', 3);
+  if (het < 0) return null;
+  const m = /^\s*model\s*:\s*(.+)$/m.exec(noiDung.slice(3, het));
+  return m ? chuanHoaMucModelPhu(m[1]!.trim().replace(/^["']|["']$/g, '')) : null;
+}
+
+/** Thân + mức model khai trong file của một loại agent phụ. `null` = không có loại đó / thân rỗng. */
+export async function docAgentPhu(
+  goc: string | null, ten: string,
+): Promise<{ than: string; model: MucModelPhu | null } | null> {
   if (!goc) return null;
   const m = (await duyet(goc)).find((x) => x.ten === ten.trim().toLowerCase());
   if (!m) return null;
   try {
-    const { than } = docDauKyNang(await fs.readFile(m.duong, 'utf8'));
-    const t = than.trim();
-    return t.length > 0 ? t : null;
+    const noi = await fs.readFile(m.duong, 'utf8');
+    const t = docDauKyNang(noi).than.trim();
+    return t.length > 0 ? { than: t, model: docModelDauFile(noi) } : null;
   } catch {
     return null;
   }

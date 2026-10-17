@@ -10,6 +10,8 @@ export interface KetNoi {
   goi<T = unknown>(kenh: string, duLieu?: unknown): Promise<T>;
   datThuMuc(cuocId: string, duong: string): Promise<unknown>;
   moDuPhong(matKhau: string): Promise<string>;
+  /** Cổng Claude chính hãng (mật khẩu riêng) — trả tên cổng. */
+  moCongAnthropic(matKhau: string): Promise<string>;
   chuanHoaAnh(dataUrl: string): Promise<string>;
   /** Nghe sự kiện. Trả hàm huỷ. `dong` được gọi khi luồng đứt (app tắt…). */
   nghe(nhan: (kenh: string, duLieu: unknown) => void, dong: () => void): () => void;

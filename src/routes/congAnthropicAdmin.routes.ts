@@ -1,0 +1,242 @@
+/**
+ * /api/v1/admin/cong-anthropic — quản trị cổng Claude CHÍNH HÃNG (17/10/2026).
+ * Giao diện: /admin/commerce?tab=anthropic. Hợp đồng: docs/cong-anthropic-chinh-hang.md.
+ *
+ * ⛔ KHÔNG BAO GIỜ trả khoá thô. Mọi chỗ chỉ có `duoiKhoa` (4 ký tự cuối).
+ */
+import { Router, type Request, type Response } from 'express';
+
+import { authenticate, requireAdmin } from '../middleware/auth.js';
+import { AppError, BadRequestError } from '../middleware/errorHandler.js';
+import { logger } from '../utils/logger.js';
+import type { ApiResponse } from '../types/index.js';
+import { PHIEN_BAN_API, dsModelChinhHangGoc, gocChinhHang, modelFree } from '../services/agent/anthropicChinhHang/cauHinh.js';
+import { BANG_GIA, giaCua } from '../services/agent/anthropicChinhHang/gia.js';
+import {
+  KhoKeyLoi, danhDauKey, doiThuTu, khoaThoCua, suaKey, themKey, xoaKey, xoaNho,
+} from '../services/agent/anthropicChinhHang/khoKey.js';
+import { datTranGoi, datTranRieng, docTranGoi, xoaTranRieng } from '../services/agent/anthropicChinhHang/hanMuc.js';
+import { daBatMatKhauAnthropic, datMatKhauAnthropic } from '../services/agent/anthropicChinhHang/ve.js';
+import { dsKeyAdmin, dsTranRieng, hanMucNguoiAdmin, timNguoi, tongQuanDung } from '../services/agent/anthropicChinhHang/thongKe.js';
+import { doiChieu, dsAdminKey } from '../services/agent/anthropicChinhHang/doiChieu.js';
+import { dauThangVn } from '../services/agent/anthropicChinhHang/hanMuc.js';
+import { prisma } from '../config/database.js';
+import { datServerTool, docServerTool, gioiHanModel } from '../services/agent/anthropicChinhHang/caiDat.js';
+import { DON_TOOL, TRAN_KY_TU_CHINH_HANG, effortTheoMuc, maxTokensAgent, nguongCompact } from '../services/agent/anthropicChinhHang/cauHinh.js';
+
+const router = Router();
+router.use(authenticate, requireAdmin('ROLE_ADMIN'));
+
+const adminId = (req: Request) => (req as any).userId as number | undefined;
+
+function boc(fn: (req: Request, res: Response<ApiResponse>) => Promise<void>) {
+  return async (req: Request, res: Response<ApiResponse>, next: (e?: unknown) => void) => {
+    try {
+      await fn(req, res);
+    } catch (err) {
+      if (err instanceof KhoKeyLoi) { next(new AppError(err.message, err.status, 'CONG_ANTHROPIC_KEY')); return; }
+      next(err);
+    }
+  };
+}
+
+function idTu(req: Request): number {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) throw new BadRequestError('id không hợp lệ');
+  return id;
+}
+
+/** Tổng quan một lần cho cả tab. */
+router.get('/', boc(async (_req, res) => {
+  res.json({
+    success: true,
+    data: {
+      keys: await dsKeyAdmin(),
+      daBatMatKhau: await daBatMatKhauAnthropic(),
+      tranGoi: await docTranGoi(),
+      modelFree: modelFree(),
+      models: dsModelChinhHangGoc().map((m) => ({ ...m, gia: giaCua(m.model) })),
+      bangGia: Object.keys(BANG_GIA).map((model) => ({ model, ...giaCua(model) })),
+      coAdminKey: dsAdminKey().length > 0,
+      goc: gocChinhHang(),
+      serverTool: await docServerTool(),
+      thamSo: {
+        effortMacDinh: effortTheoMuc(undefined),
+        maxTokensAgent: maxTokensAgent(),
+        compactTokens: nguongCompact(),
+        donTool: DON_TOOL,
+        tranKyTuHoiThoai: TRAN_KY_TU_CHINH_HANG,
+      },
+      ghiChu: 'Mọi số USD ở đây là SỐ TỰ ĐO (usage Anthropic trả về × bảng giá trong mã), không phải số dư thật.',
+    },
+  });
+}));
+
+// ─── Key ─────────────────────────────────────────────────────────────
+
+router.post('/keys', boc(async (req, res) => {
+  const id = await themKey(req.body ?? {});
+  logger.info('[cong-anthropic] admin thêm key', { adminId: adminId(req), keyId: id });
+  res.status(201).json({ success: true, data: { id, keys: await dsKeyAdmin() } });
+}));
+
+router.patch('/keys/:id', boc(async (req, res) => {
+  const id = idTu(req);
+  await suaKey(id, req.body ?? {});
+  logger.info('[cong-anthropic] admin sửa key', { adminId: adminId(req), keyId: id, truong: Object.keys(req.body ?? {}).filter((k) => k !== 'khoa') });
+  res.json({ success: true, data: { keys: await dsKeyAdmin() } });
+}));
+
+router.delete('/keys/:id', boc(async (req, res) => {
+  const id = idTu(req);
+  await xoaKey(id);
+  logger.info('[cong-anthropic] admin xoá key', { adminId: adminId(req), keyId: id });
+  res.json({ success: true, data: { keys: await dsKeyAdmin() } });
+}));
+
+router.put('/keys/thu-tu', boc(async (req, res) => {
+  await doiThuTu((req.body as { ids?: unknown })?.ids);
+  res.json({ success: true, data: { keys: await dsKeyAdmin() } });
+}));
+
+/**
+ * "Thử kết nối" — `GET /v1/models` bằng đúng key đó: KHÔNG tốn tiền. Thành
+ * công mà key đang `loi` ⇒ mở lại `hoatDong`.
+ */
+router.post('/keys/:id/thu', boc(async (req, res) => {
+  const id = idTu(req);
+  const khoa = await khoaThoCua(id);
+  const batDau = Date.now();
+  let status = 0;
+  let models: string[] = [];
+  let loi: string | null = null;
+  try {
+    const r = await fetch(`${gocChinhHang()}/v1/models?limit=100`, {
+      headers: { 'x-api-key': khoa, 'anthropic-version': PHIEN_BAN_API },
+      signal: AbortSignal.timeout(15_000),
+    });
+    status = r.status;
+    const than = await r.text();
+    if (r.ok) {
+      const j = JSON.parse(than) as { data?: Array<{ id?: string }> };
+      models = (j.data ?? []).map((m) => String(m.id ?? '')).filter(Boolean);
+    } else {
+      loi = `HTTP ${r.status} ${than.slice(0, 200)}`;
+    }
+  } catch (err) {
+    loi = (err as Error).message;
+  }
+  const ms = Date.now() - batDau;
+  if (!loi) {
+    const k = await prisma.anthropicKey.findUnique({ where: { id }, select: { trangThai: true } });
+    if (k?.trangThai === 'loi') await prisma.anthropicKey.update({ where: { id }, data: { trangThai: 'hoatDong', loiCuoi: null } });
+    xoaNho();
+  } else if (status === 401 || status === 403) {
+    await danhDauKey(id, 'loi', loi);
+  }
+  const canCo = dsModelChinhHangGoc().map((m) => m.model);
+  res.json({
+    success: true,
+    data: { ok: !loi, status, ms, loi, soModel: models.length, thieuModel: models.length ? canCo.filter((m) => !models.includes(m)) : [], keys: await dsKeyAdmin() },
+  });
+}));
+
+// ─── Đo dùng ─────────────────────────────────────────────────────────
+
+router.get('/dung', boc(async (req, res) => {
+  const soNgay = Number(req.query.soNgay) || 30;
+  res.json({ success: true, data: await tongQuanDung(soNgay) });
+}));
+
+/** Đối chiếu với Admin API của Anthropic (chỉ khi có ANTHROPIC_ADMIN_KEY). */
+router.get('/doi-chieu', boc(async (_req, res) => {
+  if (!dsAdminKey().length) { res.json({ success: true, data: { coAdminKey: false, toChuc: [] } }); return; }
+  const keys = await prisma.anthropicKey.findMany({ select: { id: true, nhan: true, duoiKhoa: true } });
+  const tu = dauThangVn();
+  const den = new Date();
+  const toChuc = await doiChieu(tu, den, keys.map((k) => k.duoiKhoa));
+  const tuDo = await prisma.anthropicUsage.groupBy({ by: ['keyId'], where: { createdAt: { gte: tu } }, _sum: { costUsd: true } });
+  res.json({
+    success: true,
+    data: {
+      coAdminKey: true, tu: tu.toISOString(), den: den.toISOString(), toChuc,
+      tuDo: keys.map((k) => ({ ...k, usd: tuDo.find((r) => r.keyId === k.id)?._sum.costUsd ?? 0 })),
+    },
+  });
+}));
+
+// ─── Trần theo gói / người ───────────────────────────────────────────
+
+router.get('/tran', boc(async (_req, res) => {
+  res.json({ success: true, data: { tranGoi: await docTranGoi(), rieng: await dsTranRieng() } });
+}));
+
+/** Body: { pro?: {free?:{thang,ngay}, cao?:{thang,ngay}}, key_terminal?: {...} } — null = không giới hạn ô đó. */
+router.put('/tran/goi', boc(async (req, res) => {
+  const tranGoi = await datTranGoi(req.body);
+  logger.info('[cong-anthropic] admin đổi trần gói', { adminId: adminId(req) });
+  res.json({ success: true, data: { tranGoi } });
+}));
+
+router.get('/tran/tim', boc(async (req, res) => {
+  res.json({ success: true, data: await timNguoi(String(req.query.q ?? '')) });
+}));
+
+router.get('/tran/nguoi/:id', boc(async (req, res) => {
+  res.json({ success: true, data: await hanMucNguoiAdmin(idTu(req)) });
+}));
+
+/** Body: { tranThangUsd?, tranNgayUsd?, freeThangUsd?, freeNgayUsd?, ghiChu? } — null/'' = theo gói. */
+router.put('/tran/nguoi/:id', boc(async (req, res) => {
+  const userId = idTu(req);
+  try {
+    await datTranRieng(userId, req.body ?? {});
+  } catch (err) {
+    throw new BadRequestError((err as Error).message);
+  }
+  logger.info('[cong-anthropic] admin đặt trần riêng', { adminId: adminId(req), userId });
+  res.json({ success: true, data: await hanMucNguoiAdmin(userId) });
+}));
+
+router.delete('/tran/nguoi/:id', boc(async (req, res) => {
+  const userId = idTu(req);
+  await xoaTranRieng(userId);
+  res.json({ success: true, data: await hanMucNguoiAdmin(userId) });
+}));
+
+// ─── Server tool của Anthropic (web_search / code_execution) — mặc định TẮT ───
+
+router.put('/server-tools', boc(async (req, res) => {
+  const b = (req.body ?? {}) as { webSearch?: unknown; codeExecution?: unknown };
+  const v = await datServerTool({
+    ...(typeof b.webSearch === 'boolean' ? { webSearch: b.webSearch } : {}),
+    ...(typeof b.codeExecution === 'boolean' ? { codeExecution: b.codeExecution } : {}),
+  });
+  logger.info('[cong-anthropic] admin đổi server tool', { adminId: adminId(req), ...v });
+  res.json({ success: true, data: v });
+}));
+
+/** Giới hạn THẬT của model (GET /v1/models/{id}, nhớ 1 ngày). */
+router.get('/gioi-han', boc(async (_req, res) => {
+  const ds = await Promise.all(dsModelChinhHangGoc().map(async (m) => ({ model: m.model, ...(await gioiHanModel(m.model)) })));
+  res.json({ success: true, data: ds });
+}));
+
+// ─── Mật khẩu cổng ───────────────────────────────────────────────────
+
+/** Body `{ matKhau: string }` để đặt/đổi (vé cũ chết), `{ matKhau: null }` để TẮT model cao cho người thường. */
+router.put('/mat-khau', boc(async (req, res) => {
+  const raw = (req.body as { matKhau?: unknown })?.matKhau;
+  if (raw === null) {
+    await datMatKhauAnthropic(null);
+  } else {
+    const mk = String(raw ?? '');
+    if (mk.length < 6) throw new BadRequestError('Mật khẩu tối thiểu 6 ký tự.');
+    if (mk.length > 200) throw new BadRequestError('Mật khẩu quá dài.');
+    await datMatKhauAnthropic(mk);
+  }
+  logger.info('[cong-anthropic] admin đổi mật khẩu cổng', { adminId: adminId(req), tat: raw === null });
+  res.json({ success: true, data: { daBatMatKhau: await daBatMatKhauAnthropic() } });
+}));
+
+export default router;

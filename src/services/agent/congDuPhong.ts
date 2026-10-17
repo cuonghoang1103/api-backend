@@ -146,11 +146,12 @@ function biMat(): string {
 }
 
 /** Phiên bản mật khẩu = mẩu băm của chính chuỗi bcrypt. Đổi mật khẩu ⇒ đổi phiên bản. */
-function phienBan(bam: string): string {
+export function phienBan(bam: string): string {
   return crypto.createHash('sha256').update(bam).digest('base64url').slice(0, 12);
 }
 
-function ky(noiDung: string): string {
+/** Chữ ký HMAC(JWT_SECRET) — dùng chung cho vé dự phòng và vé cổng chính hãng (khác tiền tố nội dung). */
+export function ky(noiDung: string): string {
   return crypto.createHmac('sha256', biMat()).update(noiDung).digest('base64url');
 }
 
@@ -160,6 +161,26 @@ function ky(noiDung: string): string {
  */
 const lanSai = new Map<number, { dem: number; tu: number }>();
 const CUA_SO_SAI_MS = 15 * 60 * 1000;
+
+/*
+ * Bộ đếm thử sai DÙNG CHUNG cho mọi cổng có mật khẩu (dự phòng modelapi + cổng
+ * Claude chính hãng, 17/10/2026): sai ở cổng này cũng tính vào cổng kia — dò
+ * mật khẩu bằng cách xoay giữa hai cổng không được nhân đôi số lần thử.
+ */
+/** Đang bị khoá vì sai quá nhiều? */
+export function dangKhoaThuSai(userId: number, now = Date.now()): boolean {
+  const sai = lanSai.get(userId);
+  return Boolean(sai && now - sai.tu < CUA_SO_SAI_MS && sai.dem >= 5);
+}
+
+export function ghiThuSai(userId: number, now = Date.now()): void {
+  const sai = lanSai.get(userId);
+  lanSai.set(userId, sai && now - sai.tu < CUA_SO_SAI_MS ? { dem: sai.dem + 1, tu: sai.tu } : { dem: 1, tu: now });
+}
+
+export function xoaThuSai(userId: number): void {
+  lanSai.delete(userId);
+}
 
 export class MoKhoaLoi extends Error {
   constructor(message: string, public readonly code: 'CHUA_BAT' | 'SAI_MAT_KHAU' | 'THU_QUA_NHIEU') {
@@ -172,17 +193,15 @@ export async function moKhoaDuPhong(userId: number, matKhau: string): Promise<{ 
   if (!bam) throw new MoKhoaLoi('Quản trị chưa bật cổng dự phòng.', 'CHUA_BAT');
 
   const now = Date.now();
-  const sai = lanSai.get(userId);
-  if (sai && now - sai.tu < CUA_SO_SAI_MS && sai.dem >= 5) {
+  if (dangKhoaThuSai(userId, now)) {
     throw new MoKhoaLoi('Nhập sai quá nhiều lần. Thử lại sau 15 phút.', 'THU_QUA_NHIEU');
   }
 
   if (!matKhau || !(await bcrypt.compare(matKhau, bam))) {
-    const moi = sai && now - sai.tu < CUA_SO_SAI_MS ? { dem: sai.dem + 1, tu: sai.tu } : { dem: 1, tu: now };
-    lanSai.set(userId, moi);
+    ghiThuSai(userId, now);
     throw new MoKhoaLoi('Sai mật khẩu cổng dự phòng.', 'SAI_MAT_KHAU');
   }
-  lanSai.delete(userId);
+  xoaThuSai(userId);
 
   const het = now + HAN_VE_MS;
   const noiDung = `${userId}.${phienBan(bam)}.${het}`;

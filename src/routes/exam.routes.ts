@@ -289,7 +289,7 @@ router.post('/attempts/:attemptId/ai/ask', authenticate, async (req, res: Respon
       mode: docTutorMode(req.body?.mode),
       question: typeof req.body?.question === 'string' ? req.body.question : undefined,
       history: Array.isArray(req.body?.history) ? req.body.history : [],
-      provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined,
+      provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined, congAnthropicVe: req.body?.congAnthropicVe,
     });
     res.json({ success: true, data: out });
   } catch (e) { next(e); }
@@ -318,7 +318,7 @@ router.post('/attempts/:attemptId/ai/ask-stream', authenticate, async (req, res)
         mode: docTutorMode(req.body?.mode),
         question: typeof req.body?.question === 'string' ? req.body.question : undefined,
         history: Array.isArray(req.body?.history) ? req.body.history : [],
-        provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined,
+        provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined, congAnthropicVe: req.body?.congAnthropicVe,
       },
       (delta) => send({ type: 'delta', text: delta }),
     );
@@ -346,7 +346,7 @@ router.post('/practice/questions/:questionId(\\d+)/ai/ask', authenticate, async 
       mode: docTutorMode(req.body?.mode),
       question: typeof req.body?.question === 'string' ? req.body.question : undefined,
       history: Array.isArray(req.body?.history) ? req.body.history : [],
-      provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined,
+      provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined, congAnthropicVe: req.body?.congAnthropicVe,
     });
     res.json({ success: true, data: out });
   } catch (e) { next(e); }
@@ -372,7 +372,7 @@ router.post('/practice/questions/:questionId(\\d+)/ai/ask-stream', authenticate,
         mode: docTutorMode(req.body?.mode),
         question: typeof req.body?.question === 'string' ? req.body.question : undefined,
         history: Array.isArray(req.body?.history) ? req.body.history : [],
-        provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined,
+        provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined, congAnthropicVe: req.body?.congAnthropicVe,
       },
       (delta) => send({ type: 'delta', text: delta }),
     );

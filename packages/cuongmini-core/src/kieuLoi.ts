@@ -12,6 +12,14 @@ export interface LoiApi {
   goi(kenh: string, duLieu?: unknown): Promise<unknown>;
   datThuMuc(cuocId: string, duong: string): Promise<unknown>;
   moDuPhong(matKhau: string, token: string): Promise<string>;
+  /**
+   * Cổng Claude chính hãng: mật khẩu riêng ⇒ vé (lưu trong thiết đặt của lõi).
+   * Cũng gọi được bằng `goi('agent:moCongAnthropic', { matKhau })`; trạng thái +
+   * các cổng: `goi('agent:congAnthropic')`; chọn cổng phụ cho tab:
+   * `goi('agent:datCongPhu', { cuocId, cong: 'modelapi' | null, model? })`.
+   * Bản lõi cũ không có.
+   */
+  moCongAnthropic?(matKhau: string): Promise<{ ten: string; hetHan: number | null }>;
   chuanHoaAnh(dataUrl: string): Promise<string>;
   /** Trình duyệt AI (Chrome/Edge thật) đang nối chưa — để hiện "Đã nối trình duyệt". Bản lõi cũ không có. */
   trangThaiTrinhDuyet?(): { ketNoi: boolean; url: string; trinhDuyet: string | null };

@@ -612,6 +612,15 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
             + 'Danh sách các loại đang có nằm trong phần bối cảnh của prompt; '
             + 'gọi một tên không có trong đó sẽ trả về lỗi kèm danh sách đúng.',
         },
+        model: {
+          type: 'string',
+          enum: ['ke_thua', 'manh', 'can_bang', 'nhanh'],
+          description:
+            'Model cho agent phụ. MẶC ĐỊNH `ke_thua` (cùng model với bạn) — dùng cho mọi việc cần hiểu đúng, soát lỗi, phân tích. '
+            + '`manh` cho việc cần suy luận sâu (soát lỗi tinh vi, thiết kế). `can_bang` cho phân tích mức vừa. '
+            + '`nhanh` CHỈ cho việc dò tìm đơn giản: liệt kê file, tìm nơi một tên xuất hiện, đọc lướt rồi tóm tắt. '
+            + 'Bỏ trống nếu loại agent phụ của dự án đã khai model riêng.',
+        },
       },
       required: ['nhiem_vu'],
     },

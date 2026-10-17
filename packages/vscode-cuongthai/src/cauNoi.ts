@@ -85,6 +85,19 @@ export class CauNoi implements KetNoi {
     return r.ten ?? 'cổng dự phòng';
   }
 
+  /** Mở cổng Claude chính hãng (app tự gọi máy chủ bằng phiên của nó, giữ vé). */
+  async moCongAnthropic(matKhau: string): Promise<string> {
+    let r: { ok: boolean; ten?: string; loi?: string };
+    try {
+      r = await yeuCau(this.cau, 'POST', '/mo-cong-anthropic', { matKhau }, 30) as typeof r;
+    } catch (e) {
+      if (/HTTP 404/.test((e as Error).message)) throw new Error('App CuongThai bản này chưa có cổng Claude chính hãng — cập nhật app, hoặc đặt cuongthai.cheDo = "docLap".');
+      throw e;
+    }
+    if (!r.ok) throw new Error(r.loi ?? 'Không mở khoá được.');
+    return r.ten ?? 'Claude chính hãng';
+  }
+
   async chuanHoaAnh(dataUrl: string): Promise<string> {
     const r = await yeuCau(this.cau, 'POST', '/chuan-hoa-anh', { dataUrl }, 90) as { ok: boolean; dataUrl?: string; loi?: string };
     if (!r.ok || !r.dataUrl) throw new Error(r.loi ?? 'Không đọc được ảnh.');

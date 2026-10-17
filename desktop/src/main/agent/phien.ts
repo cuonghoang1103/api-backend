@@ -38,6 +38,16 @@ export interface TinNhanLuu {
   content?: string | Array<Record<string, unknown>> | null;
   tool_calls?: Array<{ id: string; type: 'function'; function: { name: string; arguments: string } }>;
   tool_call_id?: string;
+  /**
+   * Khối Anthropic GỐC (cổng Claude chính hãng) — thinking có CHỮ KÝ, compaction.
+   * Lưu và gửi lại NGUYÊN VĂN: API từ chối thinking bị sửa khi lịch sử có
+   * `tool_use`, và khối compaction phải đi lại thì máy chủ mới không tóm tắt
+   * (và tính tiền) lại. File phiên ghi cả tin bằng `JSON.stringify`, mở lại đọc
+   * nguyên mảng — KHÔNG được thêm bước "lọc trường lạ" nào ở hai đầu này.
+   */
+  khoiAnthropic?: Array<Record<string, unknown>>;
+  /** Ảnh kèm kết quả tool (`web_anh`). */
+  anh?: Array<{ media_type: string; data: string }>;
 }
 
 export interface TomTatPhien {
@@ -487,6 +497,7 @@ export function dungLaiHienThi(hoiThoai: TinNhanLuu[]): MucKhoiPhuc[] {
       const text = Array.isArray(c)
         ? c.filter((k) => k?.type === 'text').map((k) => String(k.text ?? '')).join(' ')
           + (c.some((k) => k?.type === 'image_url') ? '  🖼 (có ảnh đính kèm)' : '')
+          + (c.some((k) => k?.type === 'file') ? '  📄 (có PDF gốc đính kèm)' : '')
         : String(c ?? '');
       ra.push({ kieu: 'nguoi', text });
     } else if (m.role === 'assistant') {

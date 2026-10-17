@@ -40,6 +40,11 @@ import { prisma } from '../config/database.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
 import { CompactLoi, compactChuDong } from '../services/agent/compactChuDong.js';
 import { hardCapUsd, softCapUsd, todaySpendUsd } from '../services/llm/budget.js';
+import { modelChinhHangTu } from '../services/agent/anthropicChinhHang/cauHinh.js';
+import { coKeyKhaDung } from '../services/agent/anthropicChinhHang/khoKey.js';
+import { xemHanMucChinhHang } from '../services/agent/anthropicChinhHang/hanMuc.js';
+import { daBatMatKhauAnthropic, moKhoaAnthropic } from '../services/agent/anthropicChinhHang/ve.js';
+import { cacCongNangCap, dsModelChinhHang, quyenChinhHang } from '../services/agent/anthropicChinhHang/dinhTuyen.js';
 
 const router = Router();
 router.use(authenticate);
@@ -91,13 +96,18 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
     // biệt được "chưa đủ gói" với "máy chủ hỏng". Trả `pro: false` thì app hiện
     // được lời mời nâng cấp — một câu mời rõ ràng thay cho một lỗi.
     const pro = await duocDungAiCode(req.userId).catch(() => false);
+    /* Cổng Claude chính hãng (17/10/2026): thêm các mục `cong: 'anthropic'`.
+       App gửi `?congAnthropicVe=` để `canMoKhoa` phản ánh đúng vé đang giữ. */
+    const chinhHang = pro
+      ? await dsModelChinhHang(await quyenChinhHang(req.userId, req.query.congAnthropicVe)).catch(() => [])
+      : [];
     res.json({
       success: true,
       data: {
         pro,
         configured: gatewayConfigured(),
         model: modelFor('agent_code'),
-        models: dsModelAgent(),
+        models: [...dsModelAgent().map((m) => ({ ...m, cong: congAgent() ? 'rambo' : 'modelapi' })), ...chinhHang],
         mucNoLuc: DS_MUC_NO_LUC,
         capabilities: ALL_CAPABILITIES,
         limits: { tokenCap: tranToken(), windowHours: soGioCuaSo() },
@@ -224,6 +234,60 @@ router.post('/du-phong/mo-khoa', chiPro, async (req: any, res: Response<ApiRespo
   } catch (err) {
     if (err instanceof MoKhoaLoi) {
       next(new AppError(err.message, err.code === 'THU_QUA_NHIEU' ? 429 : err.code === 'CHUA_BAT' ? 409 : 403, err.code));
+      return;
+    }
+    next(err);
+  }
+});
+
+/**
+ * CỔNG CLAUDE CHÍNH HÃNG (17/10/2026) — api.anthropic.com, key của chủ app.
+ * Hợp đồng đầy đủ: docs/cong-anthropic-chinh-hang.md.
+ *
+ * GET  /cong-anthropic           — trạng thái: có key dùng được không, mật khẩu
+ *                                  đã bật chưa, vé (`?ve=`) còn hợp lệ không,
+ *                                  hạn mức free/cao của người này, model, các cổng nâng cấp.
+ * POST /cong-anthropic/mo-khoa   — { matKhau } ⇒ { ve, hetHan } (vé 30 ngày).
+ *                                  Bộ đếm sai dùng chung với /du-phong/mo-khoa.
+ */
+router.get('/cong-anthropic', chiPro, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const q = await quyenChinhHang(req.userId, req.query.ve);
+    const [free, cao] = await Promise.all([
+      xemHanMucChinhHang(req.userId, 'free'),
+      xemHanMucChinhHang(req.userId, 'cao'),
+    ]);
+    const goi = (h: typeof free) => ({
+      khongGioiHan: h.khongGioiHan, daDungThang: h.daDungThang, daDungNgay: h.daDungNgay,
+      tranThang: h.tranThang, tranNgay: h.tranNgay, het: h.het,
+    });
+    res.json({
+      success: true,
+      data: {
+        coKey: await coKeyKhaDung(),
+        daBat: await daBatMatKhauAnthropic(),
+        laAdmin: q.laAdmin,
+        veHopLe: q.modelCao && !q.laAdmin,
+        modelCaoDuoc: q.modelCao,
+        congChinhDangHong: ramboDangNghi(),
+        hanMuc: { free: goi(free), cao: goi(cao) },
+        models: await dsModelChinhHang(q),
+        cacCong: await cacCongNangCap(req.userId, { veAnthropic: req.query.ve, veDuPhong: req.query.veDuPhong }),
+      },
+    });
+  } catch (err) { next(err); }
+});
+
+router.post('/cong-anthropic/mo-khoa', chiPro, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const matKhau = String((req.body as { matKhau?: unknown })?.matKhau ?? '');
+    const kq = await moKhoaAnthropic(req.userId, matKhau.slice(0, 200));
+    logger.info('[cong-anthropic] mở khoá cổng Claude chính hãng', { userId: req.userId });
+    res.json({ success: true, data: kq });
+  } catch (err) {
+    if (err instanceof MoKhoaLoi) {
+      const status = err.code === 'THU_QUA_NHIEU' ? 429 : err.code === 'CHUA_BAT' ? 409 : 403;
+      next(new AppError(err.message, status, `CONG_ANTHROPIC_${err.code}`));
       return;
     }
     next(err);
@@ -399,10 +463,27 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
     messages?: unknown; capabilities?: unknown; workspace?: unknown;
     ghiChuDuAn?: unknown; kyNang?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
     model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown; duPhongVe?: unknown; duPhongModel?: unknown; duPhongGiu?: unknown;
+    congAnthropicVe?: unknown; congPhu?: unknown; mucModelPhu?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
     return;
+  }
+
+  /* Chọn TAY model cao của cổng Claude chính hãng mà chưa có vé ⇒ 403 TRƯỚC khi
+     mở SSE, để app hiện ô mật khẩu (xem docs/cong-anthropic-chinh-hang.md). */
+  const chonCH = modelChinhHangTu(body.model);
+  if (chonCH?.hang === 'cao') {
+    const q = await quyenChinhHang(req.userId, body.congAnthropicVe).catch(() => ({ laAdmin: false, modelCao: false }));
+    if (!q.modelCao) {
+      res.status(403).json({
+        success: false,
+        code: 'CONG_ANTHROPIC_KHOA',
+        message: `${chonCH.ten} cần mật khẩu cổng Claude chính hãng. Nhập mật khẩu do quản trị cấp để mở khoá.`,
+        data: { model: chonCH.id, daBat: await daBatMatKhauAnthropic().catch(() => false) },
+      } as any);
+      return;
+    }
   }
 
   const workspace = typeof body.workspace === 'object' && body.workspace
@@ -508,6 +589,9 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         duPhongVe: body.duPhongVe,
         duPhongModel: body.duPhongModel,
         duPhongGiu: body.duPhongGiu,
+        congAnthropicVe: body.congAnthropicVe,
+        congPhu: body.congPhu,
+        mucModelPhu: body.mucModelPhu,
         laPhu: body.laPhu,
         toolMcp: body.toolMcp,
         userId: req.userId,

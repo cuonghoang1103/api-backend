@@ -14357,6 +14357,14 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-duphong-model strong { display: block; font-size: 12px; }
 .ct-duphong-model em { display: block; font-style: normal; font-size: 11px; opacity: 0.75; }
 
+/* ─── Cổng Claude chính hãng (17/10/2026) — xem CongAnthropic.tsx ─── */
+.ct-moi-nang-cap { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+.ct-moi-nang-cap .ct-btn[data-chon='true'] { border-color: var(--ct-accent); }
+.ct-moi-nang-cap .ct-btn svg { vertical-align: -2px; margin-right: 3px; }
+.ct-chonmm-khoa { flex-shrink: 0; margin-left: 5px; color: var(--ct-warn); vertical-align: -1px; }
+.ct-chonmm-ds button[data-khoa='true'] em { opacity: 0.85; }
+.ct-chonmm-ds button[data-mien-phi='true'] strong { color: var(--ct-success, #30a46c); }
+
 /* Dải báo "đang ngoại tuyến" trên AI Chat (features/chat/ChatMode.tsx) */
 .ct-offline-bar {
   display: flex;

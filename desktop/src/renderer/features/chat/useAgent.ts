@@ -14,7 +14,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
-  AgentDiff,
+  AgentCongNangCap, AgentDiff,
   AgentInfo, AgentMucKhoiPhuc, AgentNguCanh, AgentPhanLoaiLenh, AgentPhien, AgentQuota, AgentQuyetDinh,
   AgentUiEvent, AgentViec, AgentWorkspace,
 } from '../../../shared/ipc';
@@ -77,8 +77,15 @@ export type MucHienThi =
    * hình giật cứng.
    */
   | { kieu: 'lenhRa'; text: string }
-  /** `coKeyGiaHan`: hết hạn mức token và admin đã bật key gia hạn ⇒ hiện ô nhập key. */
-  | { kieu: 'loi'; text: string; ma?: string; coKeyGiaHan?: boolean };
+  /**
+   * `coKeyGiaHan`: hết hạn mức token và admin đã bật key gia hạn ⇒ hiện ô nhập key.
+   * `cacCong`: `CONG_CHINH_HONG_FREE` ⇒ thẻ mời chọn Claude chính hãng / modelapi.
+   * `daBat`: `CONG_ANTHROPIC_KHOA` ⇒ `false` = quản trị chưa bật cổng chính hãng.
+   */
+  | { kieu: 'loi'; text: string; ma?: string; coKeyGiaHan?: boolean; cacCong?: AgentCongNangCap[]; daBat?: boolean };
+
+/** Thông báo đổi cổng giữa lượt — lượt VẪN đang chạy, đừng tắt chỉ báo "đang nghĩ". */
+const MA_DOI_CONG = new Set(['DOI_CONG', 'CONG_CHINH_HONG_FREE']);
 
 /**
  * Gộp một mẩu chữ vào bảng ghi.
@@ -112,6 +119,11 @@ export interface TrangThaiAgent {
    * nào. Không có cờ này thì màn hình đứng im và người dùng tưởng app treo.
    */
   dangNghi: boolean;
+  /**
+   * Model đang SUY NGHĨ thật (khung `nghi` của cổng Claude chính hãng: khối
+   * thinking bắt đầu, chữ ẩn). Tắt ở mẩu chữ/tool kế tiếp.
+   */
+  suyNghi: boolean;
   /** Bước thứ mấy trên tổng bao nhiêu của việc đang làm. `null` = chưa biết. */
   buoc: { nay: number; tran: number } | null;
   hanMuc: AgentQuota | null;
@@ -140,6 +152,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   const [muc, datMuc] = useState<MucHienThi[]>([]);
   const [dangChay, datDangChay] = useState(false);
   const [dangNghi, datDangNghi] = useState(false);
+  const [suyNghi, datSuyNghi] = useState(false);
   const [buoc, datBuoc] = useState<{ nay: number; tran: number } | null>(null);
   const [hanMuc, datHanMuc] = useState<AgentQuota | null>(null);
   const [tienPhien, datTienPhien] = useState(0);
@@ -198,7 +211,17 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     return cau.on('agent:event', (payload) => {
       const e = payload as AgentUiEvent;
       if (e.cuocId !== cuocId) return; // sự kiện của tab khác
+      /* Sự kiện BÊN TRONG agent phụ (bọc `phuSuKien`) + mốc đầu/cuối của nó:
+         màn hình này chưa có bảng agent phụ ⇒ bỏ qua hẳn. Không bao giờ để chữ
+         của agent phụ chảy vào câu trả lời chính. */
+      if (e.loai === 'phuBatDau' || e.loai === 'phuSuKien' || e.loai === 'phuXong') return;
+      /* "Đang suy nghĩ…" chỉ sống tới sự kiện kế tiếp có nội dung. */
+      if (e.loai !== 'nghi' && e.loai !== 'lenhRa' && e.loai !== 'keHoach') datSuyNghi(false);
       switch (e.loai) {
+        case 'nghi':
+          datDangNghi(true);
+          datSuyNghi(true);
+          break;
         case 'batDau':
           datDangNghi(true);
           cucBoRef.current = e.cucBo?.ten ?? null;
@@ -322,11 +345,13 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
         case 'loi':
           /* `DOI_CONG` chỉ là dòng báo giữa lượt (đổi rambo ↔ dự phòng) — lượt
              vẫn đang chạy, đừng tắt chỉ báo "đang nghĩ". */
-          if (e.ma !== 'DOI_CONG') datDangNghi(false);
+          if (!MA_DOI_CONG.has(e.ma ?? '')) datDangNghi(false);
           datMuc((truoc) => [...truoc, {
             kieu: 'loi', text: e.thongDiep,
             ...(e.ma ? { ma: e.ma } : {}),
             ...(e.coKeyGiaHan ? { coKeyGiaHan: true } : {}),
+            ...(e.cacCong?.length ? { cacCong: e.cacCong } : {}),
+            ...(typeof e.daBat === 'boolean' ? { daBat: e.daBat } : {}),
           }]);
           break;
         case 'daXoa':
@@ -618,7 +643,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   }, []);
 
   return {
-    trangThai: { muc, dangChay, dangNghi, buoc, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh, cucBo } satisfies TrangThaiAgent,
+    trangThai: { muc, dangChay, dangNghi, suyNghi, buoc, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh, cucBo } satisfies TrangThaiAgent,
     gui,
     baoTin,
     datHanMuc,

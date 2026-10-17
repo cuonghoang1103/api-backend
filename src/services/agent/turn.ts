@@ -44,9 +44,20 @@ import {
 import { checkBudget, budgetMessage } from '../llm/budget.js';
 import { nenNguCanh, tinhMoc } from './compact.js';
 import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
-import { sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
+import { chuPdfKhongDoc, sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import { modelAgentTu } from './models.js';
 import { congDuPhong, modelDuPhongAgent, veDuPhongHopLe } from './congDuPhong.js';
+import { TRAN_KY_TU_CHINH_HANG, modelChinhHangTu, type HangChinhHang, type ModelChinhHang } from './anthropicChinhHang/cauHinh.js';
+import { dungThanChinhHang, thanAnToan, type ThanAnthropic } from './anthropicChinhHang/thanYeuCau.js';
+import { chonModelPhu } from './anthropicChinhHang/modelPhu.js';
+import { coKeyKhaDung } from './anthropicChinhHang/khoKey.js';
+import { CongAnthropicLoi, ghiDung, guiChinhHang, type KetQuaGui } from './anthropicChinhHang/goi.js';
+import { loiHetHanMucChinhHang, xemHanMucChinhHang } from './anthropicChinhHang/hanMuc.js';
+import { veAnthropicHopLe } from './anthropicChinhHang/ve.js';
+import {
+  CAU_DOI_CONG_FREE, NHAN_CONG_ANTHROPIC, cacCongNangCap, diemCuoiChinhHang, modelFreeChoApp,
+  type CongNangCap,
+} from './anthropicChinhHang/dinhTuyen.js';
 import { LOI_LAM_VIEC } from './prompt.js';
 import { loiHetHan, xemHanMuc, type HanMuc } from './quota.js';
 import { coKeyGiaHan } from './keyGiaHan.js';
@@ -245,11 +256,27 @@ export interface ToolCall {
  */
 export type KhoiNoiDung =
   | { type: 'text'; text: string }
-  | { type: 'image_url'; image_url: { url: string } };
+  | { type: 'image_url'; image_url: { url: string } }
+  /**
+   * PDF đính kèm (hình dạng OpenAI `file`, data URI). Cổng Claude chính hãng
+   * nhận NGUYÊN BẢN (khối `document`); cổng khác nhận một dòng báo không đọc được.
+   */
+  | { type: 'file'; file: { filename: string; file_data: string } };
 
 export type AgentMessage =
   | { role: 'user'; content: string | KhoiNoiDung[] }
-  | { role: 'assistant'; content: string | null; tool_calls?: ToolCall[] }
+  | {
+      role: 'assistant';
+      content: string | null;
+      tool_calls?: ToolCall[];
+      /**
+       * Khối Anthropic GỐC của lượt này (thinking + chữ ký, compaction, server
+       * tool) — CHỈ cổng Claude chính hãng sinh ra và đọc. App phải giữ NGUYÊN
+       * VĂN và gửi lại ở lượt sau (API đòi thinking không bị sửa; khối
+       * compaction đi lại thì máy chủ bỏ phần cũ). Đường khác bỏ qua trường này.
+       */
+      khoiAnthropic?: Array<Record<string, unknown>>;
+    }
   | {
       role: 'tool';
       tool_call_id: string;
@@ -276,10 +303,26 @@ export type AgentEvent =
    * lần gọi là một khoảng lặng dài không phân biệt được với treo. Biết mình
    * đang ở "bước 7/8" vừa giải thích được sự chờ, vừa báo trước sắp chạm trần.
    */
-  | { type: 'start'; model: string; buoc: number; tranBuoc: number; cong?: 'chinh' | 'du-phong' }
-  /** Giữa lượt: rambo vừa hỏng và máy chủ đã chuyển sang cổng dự phòng (có vé). */
-  | { type: 'cong'; cong: 'du-phong'; model: string }
+  | { type: 'start'; model: string; buoc: number; tranBuoc: number; cong?: 'chinh' | 'du-phong' | 'anthropic' }
+  /**
+   * Đổi cổng: rambo hỏng ⇒ cổng phụ. `du-phong` = modelapi (vé dự phòng),
+   * `anthropic` = Claude chính hãng. Khi tự chuyển sang CuongMini Free thì kèm
+   * `ma: 'CONG_CHINH_HONG_FREE'`, `thongDiep`, `moiNangCap` và `cacCong` để app
+   * hiện lời mời nâng cấp (xem docs/cong-anthropic-chinh-hang.md).
+   */
+  | {
+      type: 'cong';
+      cong: 'du-phong' | 'anthropic';
+      model: string;
+      ten?: string;
+      ma?: 'CONG_CHINH_HONG_FREE' | 'DOI_CONG';
+      thongDiep?: string;
+      moiNangCap?: boolean;
+      cacCong?: CongNangCap[];
+    }
   | { type: 'text'; delta: string }
+  /** Model đang suy nghĩ (khối thinking, chữ ẩn) — app có thể hiện "Đang suy nghĩ…". Chỉ cổng chính hãng. */
+  | { type: 'nghi' }
   /** Máy chủ ĐÃ chạy xong một tool vòng 2 — chỉ để hiện tiến trình. */
   | { type: 'server_tool'; name: string; summary: string }
   /** App phải chạy cái này rồi gọi lại. */
@@ -303,6 +346,10 @@ export type AgentEvent =
        */
       stop: 'end' | 'tool_calls' | 'continue' | 'max_steps';
       usage: { inputTokens: number; outputTokens: number; costUsd: number };
+      /** USD của lượt (cổng chính hãng: bảng giá chính thức gồm đọc/ghi đệm + compact + tìm web). */
+      tienUsd?: number;
+      /** Token đọc/ghi đệm của lượt (cổng Anthropic) — app hiện tỉ lệ trúng đệm nếu muốn. */
+      dem?: { doc: number; ghi: number };
       /** Hạn mức 5 giờ SAU lượt này — app vẽ thẳng lên thanh đo, không phải hỏi lại. */
       quota: { daDung: number; tran: number; phanTram: number; hoiLucNao: string | null };
       /**
@@ -337,6 +384,25 @@ export interface AgentTurnInput {
   duPhongVe?: unknown;
   /** Model người dùng chọn cho cổng dự phòng (`gpt-6-sol` | `gpt-6-astra`). */
   duPhongModel?: unknown;
+  /**
+   * Vé cổng Claude chính hãng (mật khẩu RIÊNG, `POST /agent/cong-anthropic/mo-khoa`).
+   * Mở các model cao `cl-*`. CuongMini Free (`cl-free`) không cần vé. Admin không cần vé.
+   */
+  congAnthropicVe?: unknown;
+  /**
+   * Cổng phụ người dùng MUỐN khi rambo hỏng/đang giữ: `'modelapi'` ⇒ đi vé dự
+   * phòng (GPT) thay vì CuongMini Free. Bỏ trống ⇒ Free (app cũ: `duPhongGiu`
+   * + vé dự phòng thật vẫn đi modelapi như trước).
+   */
+  congPhu?: unknown;
+  /**
+   * Lượt PHỤ (`laPhu: true`): mức model của việc phụ — `nhanh` | `can_bang` |
+   * `manh` | `ke_thua` (mặc định). App lấy từ tham số `model` của tool
+   * `giao_viec_phu`, không có thì từ khoá `model:` của `.claude/agents/<loai>.md`
+   * (haiku→nhanh, sonnet→can_bang, opus→manh, inherit→ke_thua). Máy chủ
+   * KHÔNG BAO GIỜ chọn model đắt hơn model chính; vẫn tính trần như lượt chính.
+   */
+  mucModelPhu?: unknown;
   /**
    * Tab này đang BÁM cổng dự phòng (app giữ tới khi người dùng bấm quay về) ⇒
    * đi thẳng dự phòng, không gõ cửa rambo giữa một việc — tránh đổi model giữa
@@ -429,6 +495,7 @@ export function sanitizeIncoming(raw: unknown): AgentMessage[] {
         // gọi ra ngoài thay mặt người dùng, mà chẳng ai duyệt lời gọi đó.
         const khoi: KhoiNoiDung[] = [];
         let soAnh = 0;
+        let soPdf = 0;
         for (const k of tho) {
           if (!k || typeof k !== 'object') continue;
           const t = (k as { type?: unknown }).type;
@@ -436,6 +503,12 @@ export function sanitizeIncoming(raw: unknown): AgentMessage[] {
             const text = String((k as { text?: unknown }).text ?? '');
             tongChu += text.length;
             khoi.push({ type: 'text', text });
+          } else if (t === 'file' && soPdf < MAX_PDF) {
+            const f = (k as { file?: { filename?: unknown; file_data?: unknown } }).file;
+            const data = String(f?.file_data ?? '');
+            if (!data.startsWith('data:application/pdf;base64,') || data.length > MAX_PDF_BYTES) continue;
+            soPdf++;
+            khoi.push({ type: 'file', file: { filename: String(f?.filename ?? 'tai-lieu.pdf').slice(0, 200), file_data: data } });
           } else if (t === 'image_url' && soAnh < MAX_ANH) {
             const url = String((k as { image_url?: { url?: unknown } }).image_url?.url ?? '');
             if (!/^data:image\/(png|jpeg|webp|gif);base64,/.test(url)) continue;
@@ -454,10 +527,12 @@ export function sanitizeIncoming(raw: unknown): AgentMessage[] {
       const content = (m as { content?: unknown }).content;
       const calls = parseToolCalls((m as { tool_calls?: unknown }).tool_calls);
       tongChu += typeof content === 'string' ? content.length : 0;
+      const khoiAnthropic = docKhoiAnthropic((m as { khoiAnthropic?: unknown }).khoiAnthropic, calls);
       out.push({
         role: 'assistant',
         content: typeof content === 'string' ? content : null,
         ...(calls.length ? { tool_calls: calls } : {}),
+        ...(khoiAnthropic ? { khoiAnthropic } : {}),
       });
     } else if (role === 'tool') {
       const id = String((m as { tool_call_id?: unknown }).tool_call_id ?? '');
@@ -493,6 +568,37 @@ export function sanitizeIncoming(raw: unknown): AgentMessage[] {
   // cả hội thoại. Ảnh có trần riêng (`MAX_ANH`, `MAX_ANH_BYTES`) ở trên.
   if (out.length === 0) throw new AgentInputError('Không có tin nhắn hợp lệ nào', 'BAD_MESSAGES');
   return out;
+}
+
+/** Số PDF mỗi tin, và trần một data URI PDF (~6MB tệp). */
+const MAX_PDF = 4;
+const MAX_PDF_BYTES = 8_000_000;
+
+/** Kiểu khối Anthropic gốc được nhận lại từ app — danh sách TRẮNG. */
+const KHOI_ANTHROPIC_HOP_LE = new Set([
+  'thinking', 'redacted_thinking', 'text', 'tool_use', 'compaction',
+  'server_tool_use', 'web_search_tool_result', 'web_fetch_tool_result',
+  'code_execution_tool_result', 'bash_code_execution_tool_result', 'text_editor_code_execution_tool_result',
+]);
+
+/**
+ * `khoiAnthropic` app gửi lại: chỉ nhận khi đúng danh sách trắng, không quá to,
+ * và các `tool_use` khớp ĐÚNG `tool_calls` của tin đó (không cho app chèn một
+ * lời gọi tool khác vào lịch sử). Sai ⇒ bỏ cả mảng, tin vẫn dựng lại từ
+ * `content`/`tool_calls` như cũ.
+ */
+function docKhoiAnthropic(raw: unknown, calls: ToolCall[]): Array<Record<string, unknown>> | undefined {
+  if (!Array.isArray(raw) || !raw.length || raw.length > 400) return undefined;
+  if (JSON.stringify(raw).length > 4_000_000) return undefined;
+  const ra: Array<Record<string, unknown>> = [];
+  for (const k of raw) {
+    if (!k || typeof k !== 'object' || !KHOI_ANTHROPIC_HOP_LE.has(String((k as { type?: unknown }).type))) return undefined;
+    ra.push(k as Record<string, unknown>);
+  }
+  const idTool = ra.filter((k) => k.type === 'tool_use').map((k) => String(k.id));
+  const idCall = calls.map((c) => c.id);
+  if (idTool.length !== idCall.length || idTool.some((id, i) => id !== idCall[i])) return undefined;
+  return ra;
 }
 
 function parseToolCalls(raw: unknown): ToolCall[] {
@@ -828,7 +934,10 @@ export async function runAgentTurn(
    * những lượt sắp bị vứt là công vô ích.
    */
   // Chừa CHO_GHI_NHO ký tự dưới trần cho đề bài ghim + bản tóm tắt chèn vào đầu.
-  const boLuot = catLuotCu(messagesGoc, MAX_TOTAL_CHARS - CHO_GHI_NHO, MAX_MESSAGES);
+  /* Chọn TAY model cao của cổng chính hãng (cửa sổ 1M) ⇒ trần ký tự rộng hơn —
+     chất lượng trước; compact phía máy chủ lo phần quá dài. Mọi đường khác giữ trần cũ. */
+  const tranKyTu = modelChinhHangTu(input.model)?.hang === 'cao' ? TRAN_KY_TU_CHINH_HANG : MAX_TOTAL_CHARS;
+  const boLuot = catLuotCu(messagesGoc, tranKyTu - CHO_GHI_NHO, MAX_MESSAGES);
   let messages = boLuot.messages;
   if (boLuot.soLuotDaBo > 0) {
     /* Không quên sạch: ghim đề bài + tóm tắt các lượt bị bỏ (đệm theo băm nên chỉ
@@ -875,7 +984,7 @@ export async function runAgentTurn(
       stop: 'max_steps',
       usage: { inputTokens: 0, outputTokens: 0, costUsd: 0 },
       quota: goiHanMuc(await xemHanMuc(input.userId)),
-      nguCanh: goiNguCanh(messages, boLuot.soLuotDaBo),
+      nguCanh: goiNguCanh(messages, boLuot.soLuotDaBo, tranKyTu),
     });
     return;
   }
@@ -946,8 +1055,15 @@ export async function runAgentTurn(
   // ⚠️ `null` nghĩa là mã HỢP LỆ nhưng nhóm của nó chưa cắm khoá. Phải nói ra
   // bằng chữ chứ không được lặng lẽ đổi sang model khác: người dùng cố ý chọn
   // GPT rồi nhận về câu trả lời của Claude thì họ đang đọc thứ họ không chọn.
-  const chon = ep.local ? null : modelAgentTu(input.model);
-  if (!ep.local && !chon) {
+  /* CỔNG CLAUDE CHÍNH HÃNG (17/10/2026) — xem `anthropicChinhHang/`. Mã `cl-*`
+     là chọn TAY một model của cổng này; nó không nằm trong bảng rambo/modelapi. */
+  const chonCH = ep.local ? null : modelChinhHangTu(input.model);
+  const laAdminNguoi = input.userId ? await laAdminCua(input.userId) : false;
+  const modelCaoDuoc = laAdminNguoi
+    || (input.congAnthropicVe && input.userId ? await veAnthropicHopLe(input.userId, input.congAnthropicVe).catch(() => false) : false);
+
+  const chon = ep.local || chonCH ? null : modelAgentTu(input.model);
+  if (!ep.local && !chonCH && !chon) {
     tra();
     throw new AgentInputError(
       'Model bạn chọn chưa được cắm khoá trên máy chủ. Hãy chọn lại Claude Sonnet 5, '
@@ -959,11 +1075,15 @@ export async function runAgentTurn(
 
   /* CỔNG DỰ PHÒNG (27/09/2026). Chỉ đổi đường khi CẢ HAI: đang đi rambo mà
      rambo đang hỏng, VÀ app cầm vé hợp lệ (người dùng đã nhập mật khẩu).
-     Rambo khoẻ ⇒ đi rambo như cũ, vé nằm im — tự quay về, không ai chỉnh tay. */
-  const coVeDuPhong = input.duPhongVe && input.userId
+     Rambo khoẻ ⇒ đi rambo như cũ, vé nằm im — tự quay về, không ai chỉnh tay.
+     17/10/2026: admin không cần vé. */
+  const veDuPhongThat = input.duPhongVe && input.userId
     ? await veDuPhongHopLe(input.userId, input.duPhongVe)
     : false;
+  const coVeDuPhong = laAdminNguoi || veDuPhongThat;
   let dangDuPhong = false;
+  /** Đang đi cổng Claude chính hãng ở hạng nào (`null` = không). */
+  let hangCH: HangChinhHang | null = null;
   const chuyenDuPhong = (): boolean => {
     if (dangDuPhong || !coVeDuPhong) return false;
     const m = modelDuPhongAgent(input.duPhongModel);
@@ -972,28 +1092,100 @@ export async function runAgentTurn(
     ep = e;
     model = m;
     dangDuPhong = true;
+    hangCH = null;
     /* Prompt, kỹ năng, bộ nhớ, tool, mục cách-làm-việc: DÙNG CHUNG y nguyên
        với rambo — không còn phần nào riêng cho một nhà cung cấp. */
     return true;
   };
-  if (ep.label === 'cong-agent' && input.duPhongGiu === true) chuyenDuPhong();
-  if (ep.label === 'cong-agent' && ramboDangNghi() && !chuyenDuPhong() && !coVeDuPhong) {
-    /* Rambo đang được đánh dấu hỏng (mũi dò gõ cửa mỗi 30s, sống lại là đóng
-       cầu dao ngay) và người dùng chưa có vé ⇒ hỏi luôn, đừng bắt họ chờ thêm
-       một lần kết nối hỏng nữa mới thấy hộp thoại. */
-    tra();
-    emit({
-      type: 'error',
-      code: 'RAMBO_BAO_TRI',
-      error: 'AI CuongMini đang bảo trì (cổng chính không phản hồi). Bạn có thể dùng cổng dự phòng — cần mật khẩu do quản trị cấp.',
-    });
-    return;
+  /** Sang cổng chính hãng với model `m`. Trả lý do CHẶN, hoặc `null` khi đã chuyển. */
+  const chuyenChinhHang = async (m: ModelChinhHang): Promise<{ code: string; error: string } | null> => {
+    if (!(await coKeyKhaDung())) {
+      return {
+        code: 'CONG_ANTHROPIC_HET_KEY',
+        error: 'Cổng Claude chính hãng tạm thời không có key dùng được (hết credit hoặc hết ngân sách tháng). Báo quản trị kiểm tra.',
+      };
+    }
+    const h = await xemHanMucChinhHang(input.userId, m.hang);
+    if (h.het) return { code: 'CONG_ANTHROPIC_HET_HAN_MUC', error: loiHetHanMucChinhHang(h) };
+    ep = diemCuoiChinhHang();
+    model = m.model;
+    hangCH = m.hang;
+    dangDuPhong = false;
+    return null;
+  };
+  /* Người dùng MUỐN modelapi khi rambo hỏng: nói rõ bằng `congPhu`, hoặc (app
+     cũ) đang giữ dự phòng VÀ cầm vé dự phòng thật — họ đã từng nhập mật khẩu. */
+  const muonModelapi = input.congPhu === 'modelapi'
+    || (input.congPhu === undefined && input.duPhongGiu === true && veDuPhongThat);
+  /** Rambo hỏng/đang giữ cổng phụ ⇒ modelapi (nếu muốn) ⇒ CuongMini Free ⇒ modelapi. */
+  const chuyenCongPhu = async (): Promise<'anthropic' | 'du-phong' | null> => {
+    if (muonModelapi && chuyenDuPhong()) return 'du-phong';
+    if (!(await chuyenChinhHang(modelFreeChoApp()))) return 'anthropic';
+    if (chuyenDuPhong()) return 'du-phong';
+    return null;
+  };
+  const khungDoiCong = async (c: 'anthropic' | 'du-phong'): Promise<AgentEvent> => (c === 'anthropic'
+    ? {
+        type: 'cong', cong: 'anthropic', model, ten: modelFreeChoApp().ten,
+        ma: 'CONG_CHINH_HONG_FREE', thongDiep: CAU_DOI_CONG_FREE, moiNangCap: true,
+        cacCong: await cacCongNangCap(input.userId, { veAnthropic: input.congAnthropicVe, veDuPhong: input.duPhongVe })
+          .catch(() => []),
+      }
+    : { type: 'cong', cong: 'du-phong', model });
+
+  /** Khung `cong` cần phát ngay sau `start` (đổi cổng xảy ra TRƯỚC lời gọi đầu). */
+  let khungCongDau: AgentEvent | null = null;
+  if (chonCH) {
+    /* CHỌN TAY model chính hãng. Route đã chặn 403 trước khi mở SSE; chặn lại
+       ở đây cho mọi đường gọi khác (test, agent phụ). */
+    if (chonCH.hang === 'cao' && !modelCaoDuoc) {
+      tra();
+      throw new AgentInputError(
+        `${chonCH.ten} cần mật khẩu cổng Claude chính hãng. Nhập mật khẩu do quản trị cấp để mở khoá.`,
+        'CONG_ANTHROPIC_KHOA',
+      );
+    }
+    const chan = await chuyenChinhHang(chonCH);
+    if (chan) {
+      /* Hết trần / hết key ⇒ lùi sang modelapi nếu người này có vé. */
+      if (chuyenDuPhong()) {
+        khungCongDau = { type: 'cong', cong: 'du-phong', model, ma: 'DOI_CONG', thongDiep: `${chan.error} Lượt này chạy tạm qua cổng dự phòng modelapi.` };
+      } else {
+        tra();
+        emit({ type: 'error', code: chan.code, error: chan.error });
+        return;
+      }
+    }
+  } else if (ep.label === 'cong-agent' && (input.duPhongGiu === true || ramboDangNghi())) {
+    const c = await chuyenCongPhu();
+    if (!c && ramboDangNghi()) {
+      /* Rambo đang được đánh dấu hỏng (mũi dò gõ cửa mỗi 30s, sống lại là đóng
+         cầu dao ngay), CuongMini Free cũng không chạy được và người dùng chưa
+         có vé dự phòng ⇒ hỏi luôn, đừng bắt họ chờ thêm một lần hỏng nữa. */
+      tra();
+      emit({
+        type: 'error',
+        code: 'RAMBO_BAO_TRI',
+        error: 'AI CuongMini đang bảo trì (cổng chính không phản hồi). Bạn có thể dùng cổng dự phòng — cần mật khẩu do quản trị cấp.',
+      });
+      return;
+    }
+    /* Báo + mời nâng cấp chỉ khi VỪA chuyển vì rambo hỏng — tab đang "giữ"
+       cổng phụ thì đã được báo ở lượt trước. */
+    if (c === 'anthropic' && input.duPhongGiu !== true) khungCongDau = await khungDoiCong(c);
   }
 
   /* 5. HẠN MỨC RIÊNG của Cuong Fable 5 — model tốn gấp 3,5 lần (26/09/2026).
      Kiểm SAU khi biết model thật, và kiểm ở MỌI lượt kể cả lượt của việc phụ:
      một việc dài chạy hàng chục lượt, chặn ở lượt đầu thôi là thủng. Admin
      không bị chặn (xem `fable.ts`). */
+  /* AGENT PHỤ chọn model theo việc (17/10/2026) — `anthropicChinhHang/modelPhu.ts`.
+     Không bao giờ đắt hơn model chính; hạng trần (free/cao) giữ theo lượt chính. */
+  if (laPhu && !ep.local && input.mucModelPhu !== undefined) {
+    const cong = hangCH ? 'anthropic' : ep.label === 'cong-agent' ? 'rambo' : 'modelapi';
+    model = chonModelPhu({ cong, modelChinh: model, muc: input.mucModelPhu });
+  }
+
   if (model === MODEL_FABLE && !dangDuPhong) {
     const hf = await xemHanMucFable(input.userId);
     if (hf.hetHan) {
@@ -1003,7 +1195,11 @@ export async function runAgentTurn(
     }
   }
 
-  emit({ type: 'start', model, buoc: buocDaDi + 1, tranBuoc: MAX_AGENT_STEPS, cong: dangDuPhong ? 'du-phong' : 'chinh' });
+  emit({
+    type: 'start', model, buoc: buocDaDi + 1, tranBuoc: MAX_AGENT_STEPS,
+    cong: dangDuPhong ? 'du-phong' : hangCH ? 'anthropic' : 'chinh',
+  });
+  if (khungCongDau) emit(khungCongDau);
 
   const append: AgentMessage[] = [];
   let inTong = 0;
@@ -1019,6 +1215,16 @@ export async function runAgentTurn(
    * ở bước 30 đã chở ~60k token lên cổng. Về 0 sau mỗi lời gọi thành công.
    */
   let uocLuongDangBay = 0;
+  /* Phần đi cổng chính hãng: USD tính đúng theo bảng giá chính thức (gồm đệm),
+     token tách riêng để phần còn lại vẫn tính theo `costUsd` như cũ. */
+  let usdCH = 0;
+  let inCH = 0;
+  let outCH = 0;
+  let demDoc = 0;
+  let demGhi = 0;
+  /** Lượt trước kết thúc bằng `pause_turn` (server tool) ⇒ gọi tiếp, giữ tin assistant cuối. */
+  let tiepPause = false;
+  const chiPhi = (): number => costUsd(model, Math.max(0, inTong - inCH), Math.max(0, outTong - outCH)) + usdCH;
 
   /**
    * Dựng khung `done`. Gom về một chỗ vì có BỐN lối ra khỏi vòng lặp, và một
@@ -1029,12 +1235,14 @@ export async function runAgentTurn(
     type: 'done',
     append,
     stop,
-    usage: { inputTokens: inTong, outputTokens: outTong, costUsd: costUsd(model, inTong, outTong) },
+    usage: { inputTokens: inTong, outputTokens: outTong, costUsd: chiPhi() },
+    tienUsd: Math.round(chiPhi() * 1e6) / 1e6,
+    ...(demDoc || demGhi ? { dem: { doc: demDoc, ghi: demGhi } } : {}),
     quota: goiHanMuc({
       ...hanMuc,
       daDung: hanMuc.daDung + Math.round((inTong + outTong) * (model === MODEL_FABLE ? HE_SO_FABLE : 1)),
     }),
-    nguCanh: goiNguCanh([...messages, ...append], boLuot.soLuotDaBo),
+    nguCanh: goiNguCanh([...messages, ...append], boLuot.soLuotDaBo, tranKyTu),
     ...(daLuoc > 0 ? { compact: { soDaLuoc: daLuoc, kyTuDaCat: daCat } } : {}),
   });
 
@@ -1052,7 +1260,12 @@ export async function runAgentTurn(
       // Nén NGAY TRƯỚC mỗi lời gọi, tính lại từ đầu mỗi lần: hop này vừa thêm
       // kết quả mới, nên cái "gần nhất" đã khác so với hop trước.
       const tatCa = [...messages, ...append];
-      const nen = nenNguCanh(tatCa);
+      /* Cổng chính hãng, model cao: KHÔNG lược kết quả tool cũ ở phía mình —
+         chất lượng trước; context_management/compact phía Anthropic lo khi thật
+         sự quá lớn, và tiền tố đứng yên nên đệm trúng. */
+      const nen = ep.label === NHAN_CONG_ANTHROPIC && hangCH === 'cao'
+        ? { messages: tatCa, soDaLuoc: 0, kyTuDaCat: 0 }
+        : nenNguCanh(tatCa);
       if (nen.soDaLuoc > daLuoc) { daLuoc = nen.soDaLuoc; daCat = nen.kyTuDaCat; }
 
       /* Lời nhắc ĐUÔI — chỉ gắn vào bản gửi cổng, không lưu vào hội thoại
@@ -1072,6 +1285,14 @@ export async function runAgentTurn(
         url: chatUrlOf(ep),
         key: ep.key,
         ...(ep.giaoThuc ? { giaoThuc: ep.giaoThuc } : {}),
+        ...(ep.label === NHAN_CONG_ANTHROPIC && hangCH
+          ? {
+              chinhHang: {
+                userId: input.userId, viec: 'agent_code' as const, hang: hangCH,
+                mucNoLuc: input.mucNoLuc, tiepPause, onNghi: () => emit({ type: 'nghi' }),
+              },
+            }
+          : {}),
         model,
         system,
         messages: guiDi,
@@ -1088,23 +1309,55 @@ export async function runAgentTurn(
            lại ĐÚNG bước này; không vé ⇒ báo mã riêng để app hỏi người dùng.
            Lỗi 4xx (tất định) và người dùng bấm dừng thì không đụng tới. */
         const thong = (err as Error).message || '';
-        const laRambo = ep.label === 'cong-agent';
-        if (!laRambo || signal.aborted || maLoiCong(thong) === 'LLM_ERROR_4XX') throw err;
-        baoRamboHong();
-        if (!chuyenDuPhong()) throw new RamboBaoTri(thong);
-        logger.warn('agent: rambo hỏng giữa lượt — chuyển sang cổng dự phòng', { model, loi: thong.slice(0, 120) });
-        emit({ type: 'cong', cong: 'du-phong', model });
+        if (signal.aborted) throw err;
+        if (ep.label === 'cong-agent') {
+          if (maLoiCong(thong) === 'LLM_ERROR_4XX') throw err;
+          baoRamboHong();
+          const c = await chuyenCongPhu();
+          if (!c) throw new RamboBaoTri(thong);
+          logger.warn('agent: rambo hỏng giữa lượt — chuyển cổng phụ', { cong: c, model, loi: thong.slice(0, 120) });
+          emit(await khungDoiCong(c));
+        } else if (ep.label === NHAN_CONG_ANTHROPIC
+          && (err instanceof CongAnthropicLoi || maLoiCong(thong) !== 'LLM_ERROR_4XX')) {
+          /* Cổng chính hãng hết key / mọi key lỗi ⇒ lùi tiếp sang modelapi nếu có vé. */
+          if (!chuyenDuPhong()) throw err;
+          logger.warn('agent: cổng chính hãng hỏng — chuyển sang cổng dự phòng modelapi', { model, loi: thong.slice(0, 120) });
+          emit({ type: 'cong', cong: 'du-phong', model, ma: 'DOI_CONG', thongDiep: 'Cổng Claude chính hãng đang lỗi — chuyển sang cổng dự phòng modelapi.' });
+        } else {
+          throw err;
+        }
         ketQua = await goiMotLan();
       }
 
       uocLuongDangBay = 0;
       inTong += ketQua.inputTokens;
       outTong += ketQua.outputTokens;
+      if (ketQua.usdChinhHang !== undefined) {
+        usdCH += ketQua.usdChinhHang;
+        inCH += ketQua.inputTokens;
+        outCH += ketQua.outputTokens;
+      }
+      demDoc += ketQua.cacheDocTokens;
+      demGhi += ketQua.cacheGhiTokens ?? 0;
+      tiepPause = false;
+      /* Khối Anthropic GỐC (thinking + chữ ký, compaction…) đi kèm tin assistant
+         để app gửi lại nguyên văn. Không kèm khi tin bị gộp viết-tiếp (đã sửa). */
+      const goc = ketQua.khoiAnthropic?.length && soLanVietTiep === 0 && viTriPrefill < 0
+        ? { khoiAnthropic: ketQua.khoiAnthropic }
+        : {};
       cacheDocTong += ketQua.cacheDocTokens;
 
       const noiDung = catRacCong(ketQua.text);
       const calls = ketQua.toolCalls;
       const finishReason = ketQua.finishReason;
+
+      /* SERVER TOOL của Anthropic dừng giữa chừng (`pause_turn`) ⇒ gửi lại
+         NGUYÊN tin assistant đó làm tin cuối để model làm tiếp. */
+      if (finishReason === 'pause_turn' && calls.length === 0 && !signal.aborted) {
+        append.push({ role: 'assistant', content: noiDung || null, ...goc });
+        tiepPause = true;
+        continue;
+      }
 
       /* CỔNG TRẢ RỖNG ⇒ gọi lại ĐÚNG bước này một lần (27/09/2026). Đo thật trên
          modelapi lúc quá tải: `finish_reason: stop`, không chữ, không tool — và
@@ -1148,13 +1401,13 @@ export async function runAgentTurn(
         }
 
         if (viTriPrefill >= 0) append[viTriPrefill] = { role: 'assistant', content: gop };
-        else append.push({ role: 'assistant', content: gop });
+        else append.push({ role: 'assistant', content: gop, ...goc });
         thanhCong = true;
         emit(khungXong('end'));
         return;
       }
 
-      append.push({ role: 'assistant', content: noiDung || null, tool_calls: calls });
+      append.push({ role: 'assistant', content: noiDung || null, tool_calls: calls, ...goc });
 
       /* ── Đọc TRÙNG ⇒ máy chủ tự trả, không phát xuống app (26/09/2026) ──
          Cùng cách với tool vòng 2: nối tin `role:'tool'` ngay tại đây, nên
@@ -1216,6 +1469,10 @@ export async function runAgentTurn(
 
     /* Rambo sập và người dùng chưa có vé dự phòng ⇒ mã RIÊNG để app hiện hộp
        "CuongMini đang bảo trì — dùng cổng dự phòng?" thay vì một dòng lỗi đỏ. */
+    if (err instanceof CongAnthropicLoi) {
+      emit({ type: 'error', code: err.code, error: err.message });
+      return;
+    }
     if (err instanceof RamboBaoTri) {
       emit({
         type: 'error',
@@ -1288,6 +1545,7 @@ export async function runAgentTurn(
       outTong,
       thanhCong,
       cacheDoc: cacheDocTong,
+      ...(usdCH > 0 ? { costUsd: chiPhi() } : {}),
     });
   }
 }
@@ -1345,6 +1603,18 @@ function tinNhanOpenAi(messages: AgentMessage[], coAnh: boolean): unknown[] {
       }
       continue;
     }
+    if (m.role === 'assistant') {
+      /* `khoiAnthropic` chỉ dành cho cổng chính hãng — không gửi trường lạ sang modelapi. */
+      ra.push({ role: 'assistant', content: m.content, ...(m.tool_calls?.length ? { tool_calls: m.tool_calls } : {}) });
+      continue;
+    }
+    if (m.role === 'user' && Array.isArray(m.content) && m.content.some((k) => k.type === 'file')) {
+      ra.push({
+        role: 'user',
+        content: m.content.map((k) => (k.type === 'file' ? { type: 'text', text: chuPdfKhongDoc(k.file.filename) } : k)),
+      });
+      continue;
+    }
     ra.push(m.role === 'tool' ? { role: 'tool', tool_call_id: m.tool_call_id, content: m.content } : m);
   }
   xaAnh();
@@ -1387,16 +1657,27 @@ export function boKetQuaLap(messages: AgentMessage[]): AgentMessage[] {
 /** Rambo hỏng và không có vé dự phòng — xem nhánh bắt lỗi của `runAgentTurn`. */
 class RamboBaoTri extends Error {}
 
+/** Admin? Không tra được (CSDL hỏng) ⇒ coi như người thường. */
+async function laAdminCua(userId: number): Promise<boolean> {
+  try {
+    const { laAdmin } = await import('../pro.service.js');
+    return await laAdmin(userId);
+  } catch {
+    return false;
+  }
+}
+
 /** Gói hạn mức cho app. `Date` phải thành chuỗi vì nó đi qua JSON. */
 function goiNguCanh(
   messages: readonly AgentMessage[],
   soLuotDaBo: number,
+  tran = MAX_TOTAL_CHARS,
 ): { kyTu: number; tran: number; phanTram: number; soLuotDaBo: number } {
   const kyTu = tongKyTu(messages);
   return {
     kyTu,
-    tran: MAX_TOTAL_CHARS,
-    phanTram: Math.min(100, Math.round((kyTu / MAX_TOTAL_CHARS) * 100)),
+    tran,
+    phanTram: Math.min(100, Math.round((kyTu / tran) * 100)),
     soLuotDaBo,
   };
 }
@@ -1434,6 +1715,8 @@ async function ghiSo(d: {
   thanhCong: boolean;
   /** Token đọc từ đệm tiền tố (`cache_read_input_tokens`). */
   cacheDoc: number;
+  /** USD đã tính sẵn (cổng chính hãng: giá chính thức gồm đệm). Bỏ trống ⇒ `costUsd(model, …)`. */
+  costUsd?: number;
 }): Promise<void> {
   if (d.inTong === 0 && d.outTong === 0) return;
   /* Sổ `interview_llm_call_logs` KHÔNG có cột cho phần đọc đệm, và thêm cột là
@@ -1456,7 +1739,7 @@ async function ghiSo(d: {
         model: d.model,
         inputTokens: d.inTong,
         outputTokens: d.outTong,
-        costUsd: costUsd(d.model, d.inTong, d.outTong),
+        costUsd: d.costUsd ?? costUsd(d.model, d.inTong, d.outTong),
         success: d.thanhCong,
       },
     });
@@ -1483,6 +1766,12 @@ interface KetQuaCong {
    * `prompt_tokens_details.cached_tokens`). 0 nếu cổng không báo.
    */
   cacheDocTokens: number;
+  /** Token GHI đệm (`cache_creation_input_tokens`, chỉ tuyến Anthropic). */
+  cacheGhiTokens?: number;
+  /** Có ⇒ lời gọi đi cổng Claude chính hãng; USD tự tính theo bảng giá chính thức (gồm cả đệm). */
+  usdChinhHang?: number;
+  /** Khối assistant GỐC của Anthropic (cổng chính hãng) — xem `AgentMessage.khoiAnthropic`. */
+  khoiAnthropic?: Array<Record<string, unknown>>;
 }
 
 /** Ước lượng thô token vào của một lời gọi, BỎ dữ liệu ảnh base64. */
@@ -1570,6 +1859,16 @@ async function goiCong(o: {
   onText: (delta: string) => void;
   /** Mặc định `'openai'`. Xem `LlmEndpoint.giaoThuc`. */
   giaoThuc?: 'openai' | 'anthropic';
+  /** Có ⇒ đi api.anthropic.com qua kho key (tự chuyển key, prompt caching, ghi sổ). */
+  chinhHang?: {
+    userId: number;
+    viec: 'agent_code';
+    hang: HangChinhHang;
+    mucNoLuc?: unknown;
+    tiepPause?: boolean;
+    /** Gọi một lần khi khối thinking đầu tiên bắt đầu. */
+    onNghi?: () => void;
+  };
 }): Promise<KetQuaCong> {
   // Đồng hồ IM LẶNG, không phải đồng hồ tổng: một lượt agent đọc file to có
   // thể chạy lâu một cách chính đáng.
@@ -1588,6 +1887,68 @@ async function goiCong(o: {
   o.signal.addEventListener('abort', huy, { once: true });
   lui();
 
+  /* Cổng chính hãng: giữ `gui` để GHI SỔ cả khi luồng gãy giữa chừng. */
+  let gui: KetQuaGui | null = null;
+  let daGhiSo = false;
+  let inputTokens = 0;
+  let outputTokens = 0;
+  let cacheDocTokens = 0;
+  let cacheGhiTokens = 0;
+  let nenVao = 0;
+  let nenRa = 0;
+  let timWeb = 0;
+
+  /*
+   * CỔNG CHÍNH HÃNG: dựng lại TỪNG KHỐI assistant theo `index` (thinking + chữ
+   * ký, text, tool_use, compaction, server tool…) để gửi lại NGUYÊN VĂN ở lượt
+   * sau — API đòi khối thinking không bị sửa, và khối compaction phải đi lại
+   * thì máy chủ mới bỏ phần đã tóm tắt.
+   */
+  const khoiGoc = new Map<number, Record<string, unknown>>();
+  const jsonDo = new Map<number, string>();
+  let daNghi = false;
+  const ghiKhoi = (j: any): void => {
+    const idx = typeof j.index === 'number' ? j.index : -1;
+    if (j.type === 'content_block_start' && j.content_block && idx >= 0) {
+      const kb = { ...j.content_block } as Record<string, unknown>;
+      if (kb.type === 'fallback') {
+        /* Lùi khi model từ chối: bỏ thinking/tool_use/server_tool_use TRƯỚC khối fallback; chữ giữ. */
+        for (const [i, k] of [...khoiGoc]) {
+          if (i < idx && ['thinking', 'redacted_thinking', 'tool_use', 'server_tool_use'].includes(String(k.type))) khoiGoc.delete(i);
+        }
+        return;
+      }
+      if (kb.type === 'thinking' || kb.type === 'redacted_thinking') {
+        if (kb.type === 'thinking') { kb.thinking = String(kb.thinking ?? ''); kb.signature = String(kb.signature ?? ''); }
+        if (!daNghi) { daNghi = true; o.chinhHang?.onNghi?.(); }
+      }
+      if (kb.type === 'text') kb.text = String(kb.text ?? '');
+      if (kb.type === 'compaction') kb.content = String(kb.content ?? '');
+      if (kb.type === 'tool_use' || kb.type === 'server_tool_use') jsonDo.set(idx, '');
+      delete kb.citations;
+      khoiGoc.set(idx, kb);
+    } else if (j.type === 'content_block_delta' && idx >= 0) {
+      const kb = khoiGoc.get(idx);
+      if (!kb) return;
+      const d = j.delta ?? {};
+      if (d.type === 'text_delta') kb.text = String(kb.text ?? '') + String(d.text ?? '');
+      else if (d.type === 'thinking_delta') kb.thinking = String(kb.thinking ?? '') + String(d.thinking ?? '');
+      else if (d.type === 'signature_delta') kb.signature = String(kb.signature ?? '') + String(d.signature ?? '');
+      else if (d.type === 'input_json_delta') jsonDo.set(idx, (jsonDo.get(idx) ?? '') + String(d.partial_json ?? ''));
+      else if (d.type === 'compaction_delta') kb.content = String(kb.content ?? '') + String(d.content ?? d.text ?? '');
+    }
+  };
+  const dsKhoiGoc = (): Array<Record<string, unknown>> => [...khoiGoc.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .map(([i, k]) => {
+      if (!jsonDo.has(i)) return k;
+      let input: unknown = {};
+      try { input = JSON.parse(jsonDo.get(i) || '{}'); } catch { input = {}; }
+      return { ...k, input };
+    })
+    /* Khối chữ rỗng thì API từ chối khi gửi lại. */
+    .filter((k) => !(k.type === 'text' && !k.text));
+
   try {
     const laAnthropic = o.giaoThuc === 'anthropic';
 
@@ -1595,10 +1956,32 @@ async function goiCong(o: {
        `anthropic.ts`. Gửi sai một trong hai là 400 với một câu chẳng nói rõ
        vì sao ("please try again later or create a new conversation"). */
     const dich = laAnthropic
-      ? sangAnthropic([{ role: 'system', content: o.system }, ...o.messages] as never)
+      ? sangAnthropic([{ role: 'system', content: o.system }, ...o.messages] as never, { chinhHang: Boolean(o.chinhHang) })
       : null;
 
-    const res = await fetch(o.url, {
+    const thanGui: Record<string, unknown> = laAnthropic
+      ? {
+          model: o.model,
+          system: dich!.system,
+          messages: dich!.messages,
+          tools: toolSangAnthropic(o.tools as never),
+          stream: true,
+          max_tokens: MAX_OUTPUT_TOKENS,
+        }
+      : {};
+    if (o.chinhHang) {
+      if (!laAnthropic) throw new Error('Cổng chính hãng chỉ nói giao thức Anthropic');
+      const than = thanGui as ThanAnthropic;
+      const beta = await dungThanChinhHang(than, { laAgent: true, mucNoLuc: o.chinhHang.mucNoLuc, tiepPause: o.chinhHang.tiepPause });
+      gui = await guiChinhHang({
+        body: than,
+        signal: imLang.signal,
+        nguCanh: { userId: o.chinhHang.userId, viec: o.chinhHang.viec, hang: o.chinhHang.hang, model: o.model },
+        beta,
+        banAnToan: () => thanAnToan(than),
+      });
+    }
+    const res = gui ? gui.res : await fetch(o.url, {
       method: 'POST',
       headers: laAnthropic
         ? {
@@ -1609,14 +1992,7 @@ async function goiCong(o: {
         : { 'Content-Type': 'application/json', Authorization: `Bearer ${o.key ?? ''}` },
       signal: imLang.signal,
       body: JSON.stringify(laAnthropic
-        ? {
-            model: o.model,
-            system: dich!.system,
-            messages: dich!.messages,
-            tools: toolSangAnthropic(o.tools as never),
-            stream: true,
-            max_tokens: MAX_OUTPUT_TOKENS,
-          }
+        ? thanGui
         : {
             model: o.model,
             /* ⚠️ Giao thức OpenAI KHÔNG có chỗ cho ảnh trong `role:'tool'`.
@@ -1648,9 +2024,6 @@ async function goiCong(o: {
     let text = '';
     let finishReason: string | null = null;
     const mangTool = new Map<number, { id: string; name: string; args: string }>();
-    let inputTokens = 0;
-    let outputTokens = 0;
-    let cacheDocTokens = 0;
 
     const reader = res.body.getReader();
     const dec = new TextDecoder();
@@ -1680,9 +2053,15 @@ async function goiCong(o: {
          * lý do dừng nằm ở `message_delta.delta.stop_reason`.
          */
         if (laAnthropic) {
+          if (o.chinhHang) ghiKhoi(j);
           if (j.type === 'message_start') {
             inputTokens = j.message?.usage?.input_tokens ?? inputTokens;
             cacheDocTokens = j.message?.usage?.cache_read_input_tokens ?? cacheDocTokens;
+            cacheGhiTokens = j.message?.usage?.cache_creation_input_tokens ?? cacheGhiTokens;
+          } else if (j.type === 'content_block_start' && j.content_block?.type === 'fallback') {
+            /* Lùi phía máy chủ khi model từ chối (`fallbacks: "default"`): mọi
+               `tool_use` TRƯỚC khối fallback phải bỏ — model sau làm lại từ đầu. */
+            mangTool.clear();
           } else if (j.type === 'content_block_start' && j.content_block?.type === 'tool_use') {
             mangTool.set(j.index ?? mangTool.size, {
               id: String(j.content_block.id ?? ''),
@@ -1702,6 +2081,18 @@ async function goiCong(o: {
             if (j.delta?.stop_reason) finishReason = stopSangFinish(j.delta.stop_reason);
             if (j.usage?.output_tokens) outputTokens = j.usage.output_tokens;
             if (j.usage?.cache_read_input_tokens) cacheDocTokens = j.usage.cache_read_input_tokens;
+            if (j.usage?.cache_creation_input_tokens) cacheGhiTokens = j.usage.cache_creation_input_tokens;
+            if (j.usage?.input_tokens) inputTokens = j.usage.input_tokens;
+            /* Compact phía máy chủ: top-level KHÔNG gồm lượt tóm tắt ⇒ cộng riêng từ `iterations`. */
+            if (Array.isArray(j.usage?.iterations)) {
+              nenVao = 0; nenRa = 0;
+              for (const it of j.usage.iterations) {
+                if (it?.type !== 'compaction') continue;
+                nenVao += Number(it.input_tokens ?? 0) + Number(it.cache_read_input_tokens ?? 0) + Number(it.cache_creation_input_tokens ?? 0);
+                nenRa += Number(it.output_tokens ?? 0);
+              }
+            }
+            if (j.usage?.server_tool_use) timWeb = Number(j.usage.server_tool_use.web_search_requests ?? 0) || 0;
           } else if (j.type === 'error') {
             throw new Error(`Cổng trả lỗi: ${JSON.stringify(j.error ?? j).slice(0, 200)}`);
           }
@@ -1760,13 +2151,42 @@ async function goiCong(o: {
     if (outputTokens === 0) {
       outputTokens = Math.ceil((text.length + toolCalls.reduce((s, t) => s + t.function.arguments.length, 0)) / 4);
     }
+    if (gui && o.chinhHang) {
+      /* Anthropic chính hãng TÁCH `input_tokens` (phần không qua đệm) khỏi hai
+         phần đệm. Tiền tính đúng từng phần; còn số token trả về cho hạn mức 5
+         giờ thì GỘP lại — cùng nghĩa với rambo (input của rambo đã gồm đệm). */
+      daGhiSo = true;
+      const usd = await ghiDung({
+        userId: o.chinhHang.userId, viec: o.chinhHang.viec, hang: o.chinhHang.hang, model: o.model,
+        keyId: gui.key.id,
+        dung: { input: inputTokens, output: outputTokens, cacheDoc: cacheDocTokens, cacheGhi: cacheGhiTokens, nenVao, nenRa, timWeb },
+        thanhCong: true, thoiGianMs: Date.now() - gui.batDau, ttfbMs: gui.ttfbMs,
+      });
+      const khoi = dsKhoiGoc();
+      return {
+        text, toolCalls, finishReason,
+        inputTokens: inputTokens + cacheDocTokens + cacheGhiTokens + nenVao,
+        outputTokens: outputTokens + nenRa, cacheDocTokens, cacheGhiTokens, usdChinhHang: usd,
+        ...(khoi.length ? { khoiAnthropic: khoi } : {}),
+      };
+    }
+
     if (inputTokens === 0) {
       inputTokens = Math.ceil((o.system.length + JSON.stringify(o.messages).length) / 4);
     }
 
-    return { text, toolCalls, finishReason, inputTokens, outputTokens, cacheDocTokens };
+    return { text, toolCalls, finishReason, inputTokens, outputTokens, cacheDocTokens, cacheGhiTokens };
   } finally {
     clearTimeout(timer);
     o.signal.removeEventListener('abort', huy);
+    if (gui && o.chinhHang && !daGhiSo) {
+      /* Luồng gãy giữa chừng — vẫn ghi phần Anthropic đã báo (token vào đã bị tính). */
+      void ghiDung({
+        userId: o.chinhHang.userId, viec: o.chinhHang.viec, hang: o.chinhHang.hang, model: o.model,
+        keyId: gui.key.id,
+        dung: { input: inputTokens, output: outputTokens, cacheDoc: cacheDocTokens, cacheGhi: cacheGhiTokens, nenVao, nenRa, timWeb },
+        thanhCong: false, maLoi: 'LUONG_GAY', thoiGianMs: Date.now() - gui.batDau, ttfbMs: gui.ttfbMs,
+      });
+    }
   }
 }

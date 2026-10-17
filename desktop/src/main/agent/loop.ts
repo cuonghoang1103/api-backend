@@ -33,7 +33,8 @@ import { cauImLang, docCoHanIm, TRAN_MOT_LUOT_MS } from './hanImLang';
 import { dsKyNang, docThanKyNang, napKyNangMayChu } from './kyNang';
 import { docBoNho, docTatCa as docTatCaBoNho, mucLuc as mucLucBoNho, nhoBaiHoc, quenBaiHoc, tangLanKhop } from './boNho';
 import { BoDemLoiLap, dauHieuLoi, khopBoNho } from './dauHieuLoi';
-import { dsAgentPhu, docThanAgentPhu } from './agentPhu';
+import { chuanHoaMucModelPhu, docAgentPhu, dsAgentPhu, type MucModelPhu } from './agentPhu';
+import { docKhoiPdf, laCongChinhHang, timPdfTrongCau } from './pdfGoc';
 import {
   chuanBiThan, ghepTomTat, phanTichNguCanh, type NguCanhChiTiet, type TinGui, type TomTatCompact,
 } from './thanGui';
@@ -45,8 +46,8 @@ import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua, demFileSeLui} from './tools';
 import { taoSoCuoc, type SoCuoc } from './so';
 import { napQuyenLau, xoaQuyenLau } from './quyenLau';
-import { getSettings } from '../store';
-import type { CheDoQuyen } from '../../shared/ipc';
+import { getSettings, setSetting } from '../store';
+import type { AgentCongNangCap, CheDoQuyen } from '../../shared/ipc';
 import { dungLenhNenCua } from './lenhNen';
 import { dongTerminalCua } from '../terminal/phienTerminal';
 import { hanMucMcp, goiToolMcp, laToolMcp, toolMcpHienCo } from './mcp';
@@ -103,6 +104,20 @@ export type SuKienAgent =
       diff?: KetQuaDiff;
       /** Đường dẫn file — giao diện dùng để đoán ngôn ngữ mà tô màu. */
       duongDan?: string;
+      /** `chay_lenh_nen`: nguyên văn lệnh nền vừa bật (bảng lệnh nền của CLI đọc). */
+      lenh?: string;
+    }
+  /**
+   * AGENT PHỤ (CLI 0.3, 18/10/2026) — `phuId` = `tool_call_id` của lời gọi
+   * `giao_viec_phu`. Mọi sự kiện BÊN TRONG việc phụ đi ra bọc trong
+   * `phuSuKien`, KHÔNG BAO GIỜ trần: giao diện chưa biết vẽ thì bỏ qua cả
+   * khối, và chữ của agent phụ không thể lẫn vào câu trả lời chính.
+   */
+  | { loai: 'phuBatDau'; phuId: string; kieuAgent: string; nhiemVu: string; model?: string }
+  | { loai: 'phuSuKien'; phuId: string; e: SuKienAgent }
+  | {
+      loai: 'phuXong'; phuId: string; ok: boolean; tomTat: string;
+      tienUsd: number; tokenVao: number; tokenRa: number;
     }
   /** Vòng lặp ĐANG DỪNG chờ người dùng duyệt. Giao diện phải hiện thẻ diff. */
   | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: KetQuaDiff }
@@ -121,8 +136,18 @@ export type SuKienAgent =
       loai: 'xong'; hanMuc: HanMucUi | null; tienUsd: number; daLuoc: number; soFileDaSua: number;
       nguCanh?: NguCanhUi;
     }
-  /** `coKeyGiaHan`: hết hạn mức token VÀ admin đã bật key gia hạn (02/10/2026). */
-  | { loai: 'loi'; thongDiep: string; ma?: string; coKeyGiaHan?: boolean }
+  /**
+   * `coKeyGiaHan`: hết hạn mức token VÀ admin đã bật key gia hạn (02/10/2026).
+   * `moiNangCap`/`cacCong`: cổng chính hỏng ⇒ máy chủ tự sang CuongMini Free
+   * (`ma: 'CONG_CHINH_HONG_FREE'`) và mời chọn cổng cao hơn. `daBat`: đi cùng
+   * `CONG_ANTHROPIC_KHOA` — `false` = quản trị chưa đặt mật khẩu cổng chính hãng.
+   */
+  | {
+      loai: 'loi'; thongDiep: string; ma?: string; coKeyGiaHan?: boolean;
+      moiNangCap?: boolean; cacCong?: AgentCongNangCap[]; daBat?: boolean;
+    }
+  /** Model đang suy nghĩ (khối thinking, chữ ẩn) — cổng chính hãng phát mỗi lời gọi một lần. */
+  | { loai: 'nghi' }
   | { loai: 'huy' }
   /** Hội thoại ở main vừa bị xoá sạch — giao diện PHẢI dọn bảng ghi theo. */
   | { loai: 'daXoa' };
@@ -138,13 +163,24 @@ export interface HanMucUi {
 
 type KhoiNoiDung =
   | { type: 'text'; text: string }
-  | { type: 'image_url'; image_url: { url: string } };
+  | { type: 'image_url'; image_url: { url: string } }
+  /** PDF gốc — CHỈ khi đi cổng Claude chính hãng (`pdfGoc.ts`). */
+  | { type: 'file'; file: { filename: string; file_data: string } };
 
 interface TinNhan {
   role: 'user' | 'assistant' | 'tool';
   content?: string | KhoiNoiDung[] | null;
   tool_calls?: Array<{ id: string; type: 'function'; function: { name: string; arguments: string } }>;
   tool_call_id?: string;
+  /**
+   * Khối Anthropic GỐC (cổng Claude chính hãng): thinking có chữ ký,
+   * compaction. Đến từ `done.append` và phải đi NGUYÊN VĂN mãi về sau — lưu
+   * phiên, quay lui, tách nhánh, `/compact` đều chỉ CẮT/SAO mảng tin, không
+   * dựng lại tin assistant. Ai thêm một bước "chuẩn hoá tin" ở đâu đó thì phải
+   * mang trường này theo (xem `khoiAnthropic.test.ts`).
+   */
+  khoiAnthropic?: Array<Record<string, unknown>>;
+  anh?: Array<{ media_type: string; data: string }>;
 }
 
 export interface BoiCanh {
@@ -917,6 +953,16 @@ export async function chayLuot(
    * khỏi hội thoại thật sau lần quay lui đầu tiên — và nút lùi file sẽ trỏ vào
    * đúng sai chỗ mà không có gì báo.
    */
+  /* PDF GỐC (17/10/2026): chỉ khi đi cổng Claude chính hãng (`cl-*`). Cổng
+     khác đọc PDF bằng `read_file` (rút chữ) như cũ — gửi gốc sang đó chỉ đổi
+     lấy một dòng "không đọc được PDF gốc". */
+  const pdf = !tuyChon.lamTiep && laCongChinhHang(boiCanh.model) && boiCanh.goc
+    ? await docKhoiPdf(boiCanh.goc, timPdfTrongCau(cauHoi)).catch(() => ({ khoi: [], boQua: [] }))
+    : { khoi: [], boQua: [] };
+  const ghiChuPdf = pdf.khoi.length
+    ? `\n\n[App: đã gửi kèm PDF GỐC (${pdf.khoi.map((k) => k.file.filename).join(', ')}) — đọc trực tiếp, không cần read_file các tệp này.`
+      + `${pdf.boQua.length ? ` Không gửi gốc: ${pdf.boQua.join('; ')}.` : ''}]`
+    : '';
   if (tuyChon.lamTiep) {
     /* CÙNG lượt người dùng đang dở ⇒ không +1 (khớp cách `quayLui` đếm). */
     c.so.luot = Math.max(1, c.hoiThoai.filter((m) => m.role === 'user').length);
@@ -929,12 +975,13 @@ export async function chayLuot(
   } else {
     c.so.luot = c.hoiThoai.filter((m) => m.role === 'user').length + 1;
     c.hoiThoai.push(
-      boiCanh.anh?.length
+      boiCanh.anh?.length || pdf.khoi.length
         ? {
             role: 'user',
             content: [
-              { type: 'text', text: cauHoi },
-              ...boiCanh.anh.map((url) => ({ type: 'image_url' as const, image_url: { url } })),
+              { type: 'text', text: `${cauHoi}${ghiChuPdf}` },
+              ...(boiCanh.anh ?? []).map((url) => ({ type: 'image_url' as const, image_url: { url } })),
+              ...pdf.khoi,
             ],
           }
         : { role: 'user', content: cauHoi },
@@ -1149,6 +1196,7 @@ export async function chayLuot(
         phat({
           loai: 'loi', thongDiep: phanHoi.thongDiep, ma: phanHoi.ma,
           ...(phanHoi.coKeyGiaHan ? { coKeyGiaHan: true } : {}),
+          ...(typeof phanHoi.daBat === 'boolean' ? { daBat: phanHoi.daBat } : {}),
         });
         return;
       }
@@ -1293,7 +1341,7 @@ export async function chayLuot(
         } else if (!boiCanh.goc) {
           kq = { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
         } else if (goi.name === 'giao_viec_phu') {
-          kq = await chayViecPhu(c, goi.args, boiCanh, phien.sessionToken, dieuKhien.signal, phat);
+          kq = await chayViecPhu(c, goi.args, boiCanh, phien.sessionToken, dieuKhien.signal, phat, goi.id);
         } else {
           kq = await chayToolAgent(
             boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh, boiCanhKeHoach, boiCanhNen, boiCanhGit,
@@ -1365,6 +1413,7 @@ export async function chayLuot(
              dùng vừa chỉ ra. Lỗi của chính bản 0.5.95. */
           ...(typeof goi.args?.path === 'string' && goi.args.path
             ? { duongDan: goi.args.path } : {}),
+          ...(goi.name === 'chay_lenh_nen' && typeof goi.args?.lenh === 'string' ? { lenh: goi.args.lenh } : {}),
         });
       }
     }
@@ -1720,6 +1769,8 @@ async function chayViecPhu(
   token: string,
   signal: AbortSignal,
   phat: (e: SuKienAgent) => void,
+  /** `tool_call_id` của lời gọi `giao_viec_phu` — làm `phuId` cho sự kiện con. */
+  phuId: string = `phu_${Date.now().toString(36)}`,
 ): Promise<{ noiDung: string; tomTat: string }> {
   const nhiemVu = String(args.nhiem_vu ?? '').trim();
   if (!nhiemVu) return { noiDung: 'LỖI: thiếu "nhiem_vu".', tomTat: 'thiếu nhiệm vụ' };
@@ -1745,8 +1796,14 @@ async function chayViecPhu(
    */
   const loai = typeof args?.loai === 'string' ? args.loai.trim() : '';
   let promptPhu: string | null = null;
+  /* MỨC MODEL của việc phụ (17/10/2026): tham số `model` của tool THẮNG khoá
+     `model:` trong `.claude/agents/<loai>.md`. Không có cả hai ⇒ không gửi,
+     máy chủ kế thừa model chính. */
+  let mucModelPhu: MucModelPhu | null = chuanHoaMucModelPhu(args?.model);
   if (loai) {
-    promptPhu = await docThanAgentPhu(boiCanh.goc, loai);
+    const ap = await docAgentPhu(boiCanh.goc, loai);
+    promptPhu = ap?.than ?? null;
+    mucModelPhu ??= ap?.model ?? null;
     if (promptPhu === null) {
       const co = (await dsAgentPhu(boiCanh.goc)).map((a) => a.ten).join(', ');
       return {
@@ -1759,12 +1816,25 @@ async function chayViecPhu(
 
   phat({ loai: 'tool', ten: 'giao_viec_phu',
     tomTat: `${loai ? `[${loai}] ` : ''}${nhiemVu.slice(0, 60)}…`, vong: 'may' });
+  /* Bảng agent phụ (CLI 0.3): nhiệm vụ ĐẦY ĐỦ, không cắt. */
+  phat({
+    loai: 'phuBatDau', phuId, kieuAgent: loai || 'general-purpose', nhiemVu,
+    ...(boiCanh.model ? { model: boiCanh.model } : {}),
+  });
+  /** Mọi sự kiện con đi ra BỌC trong `phuSuKien` — không bao giờ trần. */
+  const phatPhu = (e: SuKienAgent): void => phat({ loai: 'phuSuKien', phuId, e });
+  let tienUsd = 0;
+  let tokenVao = 0;
+  let tokenRa = 0;
+  const ketThuc = (ok: boolean, tomTat: string): void => {
+    phat({ loai: 'phuXong', phuId, ok, tomTat, tienUsd, tokenVao, tokenRa });
+  };
 
   const phu: TinNhan[] = [{ role: 'user', content: nhiemVu }];
   let traLoi = '';
 
   for (let vong = 0; vong < 14; vong++) {
-    if (signal.aborted) return { noiDung: 'Việc phụ bị dừng.', tomTat: 'đã dừng' };
+    if (signal.aborted) { ketThuc(false, 'đã dừng'); return { noiDung: 'Việc phụ bị dừng.', tomTat: 'đã dừng' }; }
 
     const ph = await mgoiMotLuot({
       cuocId: c.id,
@@ -1783,14 +1853,25 @@ async function chayViecPhu(
       ...(boiCanh.model ? { model: boiCanh.model } : {}),
       laPhu: true,
       ...(promptPhu ? { promptPhu } : {}),
+      ...(mucModelPhu ? { mucModelPhu } : {}),
       signal,
-      // Sự kiện của agent phụ KHÔNG đẩy lên màn hình: bảng ghi sẽ thành một mớ
-      // hai luồng chữ đan nhau mà người dùng không biết luồng nào của ai. Họ
-      // thấy một dòng "giao_viec_phu" lúc bắt đầu và bản tóm tắt lúc xong.
-      phat: () => {},
+      // Sự kiện của agent phụ KHÔNG đi trần lên bảng ghi chính (hai luồng chữ
+      // đan nhau). Chúng đi BỌC trong `phuSuKien` kèm `phuId` — giao diện nào
+      // có bảng agent phụ (CLI 0.3) thì vẽ, chưa có thì bỏ qua cả khối.
+      phat: phatPhu,
     });
 
-    if (!ph.ok) return { noiDung: `LỖI ở việc phụ: ${ph.thongDiep}`, tomTat: 'lỗi' };
+    if (!ph.ok) {
+      ketThuc(false, ph.thongDiep);
+      return { noiDung: `LỖI ở việc phụ: ${ph.thongDiep}`, tomTat: 'lỗi' };
+    }
+    tienUsd += ph.ketQua.costUsd;
+    tokenVao += ph.ketQua.tokenVao;
+    tokenRa += ph.ketQua.tokenRa;
+    phatPhu({
+      loai: 'xong', hanMuc: ph.ketQua.quota, tienUsd: ph.ketQua.costUsd, daLuoc: ph.ketQua.daLuoc, soFileDaSua: 0,
+      ...(ph.ketQua.nguCanh ? { nguCanh: ph.ketQua.nguCanh } : {}),
+    });
     phu.push(...(ph.ketQua.append as TinNhan[]));
 
     if (ph.ketQua.stop === 'end' || ph.ketQua.stop === 'max_steps') {
@@ -1803,14 +1884,22 @@ async function chayViecPhu(
       // KHÔNG truyền bối cảnh ghi/lệnh ⇒ agent phụ gọi `edit_file` sẽ nhận lỗi
       // "không có quyền" thay vì ghi được. Lớp chặn thứ hai, sau việc máy chủ
       // đã không đưa những tool đó cho nó.
+      phatPhu({ loai: 'toolBatDau', id: goi.id, ten: goi.name, vong: 'may' });
       const kq = await chayToolAgent(boiCanh.goc!, goi.name, goi.args);
       phu.push({ role: 'tool', tool_call_id: goi.id, content: kq.noiDung });
+      phatPhu({
+        loai: 'tool', id: goi.id, ten: goi.name, tomTat: kq.tomTat, vong: 'may',
+        ...(kq.noiDung ? { chiTiet: kq.noiDung.slice(0, TRAN_CHI_TIET) } : {}),
+        ...(typeof goi.args?.path === 'string' && goi.args.path ? { duongDan: goi.args.path } : {}),
+      });
     }
   }
 
   if (!traLoi.trim()) {
+    ketThuc(false, 'không có kết quả');
     return { noiDung: 'Việc phụ chạy xong nhưng không trả về tóm tắt nào.', tomTat: 'không có kết quả' };
   }
+  ketThuc(true, traLoi.slice(0, 2000));
   return {
     noiDung: `KẾT QUẢ VIỆC PHỤ — "${nhiemVu.slice(0, 80)}"\n\n${traLoi}`,
     tomTat: `xong (${c.soViecPhu}/${tran})`,
@@ -1831,6 +1920,9 @@ interface KetQuaLuot {
   costUsd: number;
   daLuoc: number;
   nguCanh?: NguCanhUi;
+  /** Token vào/ra của lượt (`done.usage`) — cộng dồn cho `phuXong`. */
+  tokenVao: number;
+  tokenRa: number;
 }
 
 /**
@@ -1862,6 +1954,9 @@ const MA_DANG_THU_LAI = new Set([
   'LUOT_QUA_LAU',
   /* Im lặng hẳn — cùng cách xử lý, khác nguyên nhân. */
   'GATEWAY_IM_LANG',
+  /* Cổng Claude chính hãng: MỌI key đều lỗi TẠM (429/529/5xx/mất mạng) —
+     hợp đồng nói "cho thử lại sau". Hết key / hết trần thì KHÔNG ở đây. */
+  'CONG_ANTHROPIC_HONG',
   /*
    * ⚠️ CỔNG AI QUÁ TẢI — thứ hay gặp hơn hẳn việc máy chủ thay ca.
    * `429` (quá nhiều yêu cầu) và `529` (Anthropic báo quá tải) đều là "quay
@@ -1907,6 +2002,11 @@ async function mgoiMotLuot(o: {
   mucNoLuc?: string;
   model?: string;
   laPhu?: boolean;
+  /**
+   * Lượt PHỤ: mức model (`nhanh`/`can_bang`/`manh`/`ke_thua`). Máy chủ ánh xạ
+   * theo cổng đang chạy và không bao giờ chọn đắt hơn model chính.
+   */
+  mucModelPhu?: MucModelPhu;
   toolMcp?: Array<{ name: string; description: string; parameters: Record<string, unknown> }>;
   /** Tab nào — để cổng dự phòng BÁM theo tab (xem `giuDuPhong`). */
   cuocId?: string;
@@ -1914,7 +2014,7 @@ async function mgoiMotLuot(o: {
   giuAnhLuot?: number;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
-}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean }> {
+}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean; daBat?: boolean }> {
   /*
    * ĐỨT KẾT NỐI PHẢI THÀNH MÃ, KHÔNG ĐƯỢC NÉM THÔ.
    *
@@ -1978,15 +2078,61 @@ async function mgoiMotLuot(o: {
 const giuDuPhong = new Set<string>();
 /** Đã hỏi "quay về không?" cho tab này trong lần rambo sống lại hiện tại. */
 const daHoiSongLai = new Set<string>();
+/**
+ * CỔNG PHỤ của tab đang giữ (17/10/2026): `modelapi` (GPT, vé dự phòng) hay
+ * `anthropic` (CuongMini Free do máy chủ tự bật). Gửi lên thành `congPhu`.
+ *
+ * ⚠️ PHẢI gửi cả giá trị `anthropic`, không chỉ `modelapi`: máy chủ coi
+ * `congPhu` BỎ TRỐNG + `duPhongGiu` + vé dự phòng thật là "app cũ muốn
+ * modelapi" (xem `muonModelapi` trong `turn.ts`). Tab đang ở Free mà người
+ * dùng tình cờ có vé dự phòng sẽ bị đổi sang GPT tính phí giữa một việc nếu ta
+ * chỉ im lặng.
+ */
+const congPhuCua = new Map<string, 'modelapi' | 'anthropic'>();
 
-function danhDauDuPhong(cuocId: string | undefined, model: string, phat: (e: SuKienAgent) => void): void {
-  if (!cuocId || giuDuPhong.has(cuocId)) return;
+function danhDauDuPhong(
+  cuocId: string | undefined, model: string, phat: (e: SuKienAgent) => void, thongDiep?: string,
+): void {
+  if (!cuocId) return;
+  /* Đi modelapi (máy chủ tự lùi, hoặc người dùng đã chọn) ⇒ tab nhớ là modelapi
+     để lượt sau không bị kéo về Free giữa chừng. */
+  congPhuCua.set(cuocId, 'modelapi');
+  if (giuDuPhong.has(cuocId)) return;
   giuDuPhong.add(cuocId);
   daHoiSongLai.delete(cuocId);
   phat({
     loai: 'loi',
     ma: 'DOI_CONG',
-    thongDiep: `CuongMini đang bảo trì — tab này chuyển sang cổng dự phòng (${model}, tính phí) và sẽ Ở LẠI đó cho tới khi bạn chọn quay về. Hết việc, nếu cổng chính đã sống lại, app sẽ hỏi bạn.`,
+    thongDiep: thongDiep
+      ?? `CuongMini đang bảo trì — tab này chuyển sang cổng dự phòng (${model}, tính phí) và sẽ Ở LẠI đó cho tới khi bạn chọn quay về. Hết việc, nếu cổng chính đã sống lại, app sẽ hỏi bạn.`,
+  });
+}
+
+/**
+ * Cổng chính hỏng ⇒ máy chủ TỰ chuyển sang CuongMini Free (khung `cong`,
+ * `ma: 'CONG_CHINH_HONG_FREE'`). Tab giữ Free tới khi người dùng chọn quay
+ * về (cùng luồng "giữ cổng phụ" với dự phòng), và giao diện hiện lời mời
+ * nâng cấp từ `cacCong`.
+ */
+export function danhDauFree(
+  cuocId: string | undefined,
+  e: { model?: unknown; thongDiep?: unknown; moiNangCap?: unknown; cacCong?: unknown },
+  phat: (e: SuKienAgent) => void,
+): void {
+  if (cuocId) {
+    /* Người dùng đã CHỌN modelapi cho tab ⇒ giữ lựa chọn đó. */
+    if (congPhuCua.get(cuocId) !== 'modelapi') congPhuCua.set(cuocId, 'anthropic');
+    giuDuPhong.add(cuocId);
+    daHoiSongLai.delete(cuocId);
+  }
+  phat({
+    loai: 'loi',
+    ma: 'CONG_CHINH_HONG_FREE',
+    thongDiep: typeof e.thongDiep === 'string' && e.thongDiep
+      ? e.thongDiep
+      : 'Cổng chính đang gặp sự cố — đang tự chuyển sang CuongMini Free.',
+    moiNangCap: e.moiNangCap !== false,
+    cacCong: Array.isArray(e.cacCong) ? (e.cacCong as AgentCongNangCap[]) : [],
   });
 }
 
@@ -1994,6 +2140,27 @@ function danhDauDuPhong(cuocId: string | undefined, model: string, phat: (e: SuK
 export function veCongChinh(cuocId: string): void {
   giuDuPhong.delete(cuocId);
   daHoiSongLai.delete(cuocId);
+  congPhuCua.delete(cuocId);
+}
+
+/**
+ * Tab CHỌN cổng phụ (lời mời khi cổng chính hỏng): `modelapi` ⇒ lượt sau gửi
+ * `congPhu:'modelapi'` + vé dự phòng + `duPhongGiu`. `null` ⇒ bỏ chọn (về Free
+ * nếu cổng chính còn hỏng, về rambo nếu đã sống).
+ */
+export function datCongPhuCua(cuocId: string, cong: 'modelapi' | null): void {
+  if (cong === 'modelapi') {
+    congPhuCua.set(cuocId, 'modelapi');
+    giuDuPhong.add(cuocId);
+    daHoiSongLai.delete(cuocId);
+  } else {
+    veCongChinh(cuocId);
+  }
+}
+
+/** Trạng thái cổng phụ của tab — cho phép kiểm. */
+export function congPhuCuaCuoc(cuocId: string): { giu: boolean; congPhu: 'modelapi' | 'anthropic' | null } {
+  return { giu: giuDuPhong.has(cuocId), congPhu: congPhuCua.get(cuocId) ?? null };
 }
 
 /**
@@ -2015,7 +2182,9 @@ async function hoiQuayVeNeuRamboSong(cuocId: string, token: string, phat: (e: Su
     phat({
       loai: 'loi',
       ma: 'RAMBO_SONG_LAI',
-      thongDiep: 'Cổng chính CuongMini đã hoạt động lại. Bạn muốn làm tiếp ở cổng chính (không tính phí) hay ở lại cổng dự phòng?',
+      thongDiep: congPhuCua.get(cuocId) === 'anthropic'
+        ? 'Cổng chính CuongMini đã hoạt động lại. Bạn muốn làm tiếp ở cổng chính hay ở lại CuongMini Free?'
+        : 'Cổng chính CuongMini đã hoạt động lại. Bạn muốn làm tiếp ở cổng chính (không tính phí) hay ở lại cổng dự phòng?',
     });
   } catch {
     /* mạng chập — không sao, hết việc sau sẽ hỏi lại */
@@ -2032,6 +2201,20 @@ function veDuPhong(): string | undefined {
 function modelDuPhong(): string | undefined {
   const v = getSettings().agentDuPhongModel;
   return typeof v === 'string' && v ? v : undefined;
+}
+
+/**
+ * Vé cổng Claude CHÍNH HÃNG (mật khẩu riêng, khác vé dự phòng). Đọc ở chỗ dựng
+ * thân yêu cầu — y như `veDuPhong()` — nên cả lượt chính lẫn việc phụ mang theo.
+ */
+export function veAnthropic(): string | undefined {
+  const v = (getSettings() as Record<string, unknown>).agentAnthropicVe;
+  return typeof v === 'string' && v ? v : undefined;
+}
+
+/** Máy chủ báo vé chết / chưa có vé ⇒ xoá, để giao diện hỏi lại mật khẩu. */
+function xoaVeAnthropic(): void {
+  if (veAnthropic()) setSetting('agentAnthropicVe', '');
 }
 
 async function mgoiMotLuotThat(o: {
@@ -2057,6 +2240,11 @@ async function mgoiMotLuotThat(o: {
   mucNoLuc?: string;
   model?: string;
   laPhu?: boolean;
+  /**
+   * Lượt PHỤ: mức model (`nhanh`/`can_bang`/`manh`/`ke_thua`). Máy chủ ánh xạ
+   * theo cổng đang chạy và không bao giờ chọn đắt hơn model chính.
+   */
+  mucModelPhu?: MucModelPhu;
   toolMcp?: Array<{ name: string; description: string; parameters: Record<string, unknown> }>;
   /** Tab nào — để cổng dự phòng BÁM theo tab (xem `giuDuPhong`). */
   cuocId?: string;
@@ -2064,7 +2252,7 @@ async function mgoiMotLuotThat(o: {
   giuAnhLuot?: number;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
-}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean }> {
+}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean; daBat?: boolean }> {
   /*
    * ⚠️ HẠN TỔNG CHO LỜI GỌI NÀY, chồng lên tín hiệu huỷ của người dùng.
    *
@@ -2105,6 +2293,11 @@ async function mgoiMotLuotThat(o: {
       /* Tab đang bám dự phòng ⇒ máy chủ đi thẳng dự phòng, KHÔNG gõ cửa rambo
          giữa chừng (tránh đổi model giữa một việc). */
       duPhongGiu: o.cuocId ? giuDuPhong.has(o.cuocId) : false,
+      /* Cổng Claude chính hãng (17/10/2026) — xem `docs/cong-anthropic-chinh-hang.md`.
+         Vé gửi ở MỌI lượt (chính + phụ); `congPhu` chỉ khi tab đang giữ cổng phụ. */
+      congAnthropicVe: veAnthropic(),
+      congPhu: o.cuocId && giuDuPhong.has(o.cuocId) ? congPhuCua.get(o.cuocId) : undefined,
+      mucModelPhu: o.laPhu ? o.mucModelPhu : undefined,
     }), o.messages as TinGui[], o.giuAnhLuot === undefined ? {} : { giuLuot: o.giuAnhLuot });
   const res = await fetch(`${API_ORIGIN}/api/v1/agent/turn`, {
     method: 'POST',
@@ -2116,16 +2309,19 @@ async function mgoiMotLuotThat(o: {
   if (!res.ok) {
     // 403 = chưa Pro. Phải phân biệt với 401 (phiên hết hạn) vì hai cái dẫn tới
     // hai màn hình khác hẳn nhau: một cái mời nâng cấp, một cái bắt đăng nhập.
-    const loiThan = await res.json().catch(() => ({})) as { message?: string; code?: string };
+    const loiThan = await res.json().catch(() => ({})) as { message?: string; code?: string; data?: { daBat?: unknown } };
     /* 413 từ nginx là trang HTML, không có `code` ⇒ ép về một mã để chỗ gọi
        nhận ra và tự gỡ ảnh thử lại. */
     if (res.status === 413) {
       return { ok: false, thongDiep: 'Hội thoại quá lớn so với trần máy chủ.', ma: 'PAYLOAD_TOO_LARGE' };
     }
+    /* Chọn model cao chính hãng mà vé chết/không có ⇒ xoá vé, giao diện hỏi mật khẩu. */
+    if (loiThan.code === 'CONG_ANTHROPIC_KHOA') xoaVeAnthropic();
     return {
       ok: false,
       thongDiep: loiThan.message ?? `Máy chủ trả về ${res.status}.`,
       ma: loiThan.code ?? String(res.status),
+      ...(typeof loiThan.data?.daBat === 'boolean' ? { daBat: loiThan.data.daBat } : {}),
     };
   }
   if (!res.body) {
@@ -2135,7 +2331,7 @@ async function mgoiMotLuotThat(o: {
   const doc = res.body.getReader();
   const giaiMa = new TextDecoder();
   let dem = '';
-  const ra: KetQuaLuot = { append: [], stop: 'end', toolCalls: [], quota: null, costUsd: 0, daLuoc: 0 };
+  const ra: KetQuaLuot = { append: [], stop: 'end', toolCalls: [], quota: null, costUsd: 0, daLuoc: 0, tokenVao: 0, tokenRa: 0 };
   let loi: { thongDiep: string; ma: string; coKeyGiaHan?: boolean } | null = null;
 
   for (;;) {
@@ -2184,7 +2380,15 @@ async function mgoiMotLuotThat(o: {
           if (e.cong === 'du-phong') danhDauDuPhong(o.cuocId, e.model, o.phat);
           break;
         case 'cong':
-          danhDauDuPhong(o.cuocId, e.model, o.phat);
+          /* Cổng chính hỏng ⇒ máy chủ tự sang CuongMini Free, kèm lời mời nâng
+             cấp. Khung `cong` khác (lùi modelapi) giữ đường cũ, nhưng dùng câu
+             của máy chủ nếu có — "CuongMini đang bảo trì" sai khi người dùng
+             chọn tay `cl-*` rồi bị lùi vì hết trần. */
+          if (e.cong === 'anthropic' || e.ma === 'CONG_CHINH_HONG_FREE') danhDauFree(o.cuocId, e, o.phat);
+          else danhDauDuPhong(o.cuocId, e.model, o.phat, typeof e.thongDiep === 'string' && e.thongDiep ? e.thongDiep : undefined);
+          break;
+        case 'nghi':
+          o.phat({ loai: 'nghi' });
           break;
         case 'text':
           o.phat({ loai: 'chu', delta: e.delta });
@@ -2199,8 +2403,12 @@ async function mgoiMotLuotThat(o: {
           ra.append = e.append ?? [];
           ra.stop = e.stop;
           ra.quota = e.quota ?? null;
-          ra.costUsd = e.usage?.costUsd ?? 0;
+          /* `tienUsd` (cổng chính hãng: bảng giá chính thức) — cùng số với
+             `usage.costUsd`; lấy cái nào có. */
+          ra.costUsd = typeof e.tienUsd === 'number' ? e.tienUsd : (e.usage?.costUsd ?? 0);
           ra.daLuoc = e.compact?.soDaLuoc ?? 0;
+          ra.tokenVao = Number(e.usage?.inputTokens) || 0;
+          ra.tokenRa = Number(e.usage?.outputTokens) || 0;
           if (e.nguCanh) ra.nguCanh = e.nguCanh;
           break;
         case 'error':
@@ -2211,6 +2419,7 @@ async function mgoiMotLuotThat(o: {
             thongDiep: e.error, ma: e.code ?? 'LLM_ERROR',
             ...(e.coKeyGiaHan === true ? { coKeyGiaHan: true } : {}),
           };
+          if (e.code === 'CONG_ANTHROPIC_KHOA') xoaVeAnthropic();
           break;
       }
     }

@@ -93,7 +93,7 @@ export function viecCuaTool(ten: string): string {
  * soi cả bảng thì mọi lượt SAU đó đều bị báo "đang chờ bạn duyệt" trong khi
  * chẳng còn gì để duyệt.
  */
-export function viecDangLam(muc: MucHienThi[], dangNghi: boolean): ViecHienTai {
+export function viecDangLam(muc: MucHienThi[], dangNghi: boolean, suyNghi = false): ViecHienTai {
   let toolDangChay: string | null = null;
   let toolCuoi: string | null = null;
 
@@ -111,6 +111,9 @@ export function viecDangLam(muc: MucHienThi[], dangNghi: boolean): ViecHienTai {
   }
 
   if (toolDangChay) return { chu: `Odin ${viecCuaTool(toolDangChay)}`, kieu: 'lam' };
+
+  /* Cổng Claude chính hãng báo THẬT là model đang suy nghĩ (khung `nghi`). */
+  if (suyNghi) return { chu: 'Odin đang suy nghĩ…', kieu: 'lam' };
 
   /* Khoảng lặng giữa hai vòng: model đang nghĩ, không tool nào chạy. Nói theo
      việc VỪA XONG — nó là thứ duy nhất ta biết chắc về giai đoạn hiện tại. */

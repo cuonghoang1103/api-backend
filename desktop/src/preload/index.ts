@@ -20,6 +20,7 @@ import type {
   AgentBaiHoc,
   TerminalDauRa,
   AgentCuocDangMo,
+  AgentCongAnthropic,
   AgentMcpTrangThai,
   AgentHookNhatKy,
   AgentMucKhoiPhuc,
@@ -441,6 +442,12 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:datModel', { model }) as Promise<void>,
     veCongChinh: (cuocId: string) =>
       ipcRenderer.invoke('agent:veCongChinh', { cuocId }) as Promise<void>,
+    moCongAnthropic: (matKhau: string) =>
+      ipcRenderer.invoke('agent:moCongAnthropic', { matKhau }) as Promise<{ ten: string; hetHan: number | null }>,
+    congAnthropic: () =>
+      ipcRenderer.invoke('agent:congAnthropic') as Promise<AgentCongAnthropic | null>,
+    datCongPhu: (cuocId: string, cong: 'modelapi' | null, model?: string) =>
+      ipcRenderer.invoke('agent:datCongPhu', { cuocId, cong, ...(model ? { model } : {}) }) as Promise<void>,
     hoanTac: (cuocId: string) =>
       ipcRenderer.invoke('agent:hoanTac', { cuocId }) as Promise<{ soFile: number; loi: string[] }>,
     dsPhien: () => ipcRenderer.invoke('agent:dsPhien') as Promise<AgentPhien[]>,

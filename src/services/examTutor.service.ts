@@ -70,6 +70,11 @@ export interface ExamTutorAskOpts {
   history?: TutorMessage[];
   /** Bỏ trống = tự động (opus trước, lỗi thì lùi về sol). Chọn tay thì gọi thẳng. */
   provider?: TutorProvider;
+  /**
+   * Vé cổng Claude chính hãng (17/10/2026). Rambo hỏng ⇒ có vé (hoặc admin)
+   * thì chạy model cao chính hãng tương đương, không thì CuongMini Free.
+   */
+  congAnthropicVe?: unknown;
 }
 
 async function assertPro(userId: number) {
@@ -367,7 +372,69 @@ export function withFirstTokenDeadline<T>(
   });
 }
 
-async function callTutor(system: string, messages: TutorMessage[], userId: number, provider: TutorProvider | undefined, onToken?: (delta: string) => void) {
+/**
+ * CỔNG CLAUDE CHÍNH HÃNG cho CuongMini khi rambo hỏng (17/10/2026):
+ * có vé/admin ⇒ model cao tương đương (opus-4-8 ⇒ opus-5-5); không ⇒ CuongMini
+ * Free (model rẻ nhất). Chạm trần hạng cao ⇒ thử Free. Không chạy được ⇒
+ * `null` để nơi gọi lùi tiếp sang chat_max (modelapi) như cũ. Đã có chữ mà
+ * gãy ⇒ NÉM (trộn hai model trong một câu trả lời còn tệ hơn báo lỗi).
+ */
+async function goiTutorChinhHang(
+  system: string,
+  messages: TutorMessage[],
+  userId: number,
+  ve: unknown,
+  onToken?: (delta: string) => void,
+): Promise<{ text: string; biCat?: boolean } | null> {
+  const ch = await import('./agent/anthropicChinhHang/dinhTuyen.js');
+  const { coKeyKhaDung } = await import('./agent/anthropicChinhHang/khoKey.js');
+  const { xemHanMucChinhHang } = await import('./agent/anthropicChinhHang/hanMuc.js');
+  const { modelFree, modelTuongDuong } = await import('./agent/anthropicChinhHang/cauHinh.js');
+  const ungVien: Array<{ model: string; hang: 'free' | 'cao' }> = [];
+  try {
+    if (!(await coKeyKhaDung())) return null;
+    const q = await ch.quyenChinhHang(userId, ve);
+    if (q.modelCao) ungVien.push({ model: modelTuongDuong(process.env.LLM_MODEL_EXAM_TUTOR?.trim() || 'claude-opus-4-8'), hang: 'cao' });
+    ungVien.push({ model: modelFree(), hang: 'free' });
+  } catch (err) {
+    logger.warn('exam_tutor: không chuẩn bị được cổng chính hãng', { error: (err as Error).message });
+    return null;
+  }
+
+  for (const m of ungVien) {
+    if ((await xemHanMucChinhHang(userId, m.hang).catch(() => ({ het: true }))).het) continue;
+    let coChu = false;
+    const ctl = new AbortController();
+    try {
+      const kq = await withFirstTokenDeadline(
+        (tok) => ch.goiVanBanChinhHang({
+          system, messages, model: m.model, hang: m.hang, maxTokens: 6000, userId, viec: 'exam_tutor',
+          ...(tok ? { onToken: tok } : {}), signal: ctl.signal,
+        }),
+        40_000,
+        onToken ? (d) => { coChu = true; onToken(d); } : undefined,
+      );
+      logger.info('exam_tutor: rambo hỏng — đã trả lời bằng cổng Claude chính hãng', { model: m.model, hang: m.hang });
+      return kq;
+    } catch (err) {
+      ctl.abort();
+      if (coChu) throw err;
+      logger.warn('exam_tutor: cổng chính hãng lỗi', { model: m.model, error: (err as Error).message });
+      /* Hết key thì Free cũng hỏng y hệt — dừng; lỗi khác ⇒ thử ứng viên kế. */
+      if ((err as { code?: string }).code === 'CONG_ANTHROPIC_HET_KEY') return null;
+    }
+  }
+  return null;
+}
+
+async function callTutor(
+  system: string,
+  messages: TutorMessage[],
+  userId: number,
+  provider: TutorProvider | undefined,
+  onToken?: (delta: string) => void,
+  congAnthropicVe?: unknown,
+): Promise<{ text: string; biCat?: boolean }> {
   const call = (purpose: 'exam_tutor' | 'chat_max', timeoutMs: number, onTok?: (delta: string) => void) => llmComplete({
     step: 'generation',
     feature: 'exam',
@@ -406,10 +473,13 @@ async function callTutor(system: string, messages: TutorMessage[], userId: numbe
     );
   } catch (e) {
     if (gotDelta) throw e;
-    logger.warn('exam_tutor: rambo/opus lỗi hoặc quá 40s, lùi sang chat_max', {
+    logger.warn('exam_tutor: rambo/opus lỗi hoặc quá 40s, thử cổng Claude chính hãng rồi mới tới chat_max', {
       error: e instanceof Error ? e.message : String(e),
       isDeadline: e instanceof DeadlineError,
     });
+    /* Chỉ ném khi cổng chính hãng ĐÃ nhả chữ rồi mới gãy; còn lại trả null. */
+    const ch = await goiTutorChinhHang(system, messages, userId, congAnthropicVe, onToken);
+    if (ch) return ch;
     return call('chat_max', 180_000, onToken);
   }
 }
@@ -437,7 +507,7 @@ export async function askExamTutorStream(opts: ExamTutorAskOpts, onToken: (delta
 
   await assertAiReady(opts.userId);
   const { system, messages } = await buildTutorCall(opts);
-  const res = await callTutor(system, messages, opts.userId, opts.provider, onToken);
+  const res = await callTutor(system, messages, opts.userId, opts.provider, onToken, opts.congAnthropicVe);
   /* Cắt giữa chừng thì PHẢI NÓI RA — xem `LLMResult.biCat`. */
   const answer = ((res.text || '').trim() + (res.biCat ? '\n\n> ⚠️ *Câu trả lời chạm trần độ dài nên bị cắt ở đây. Hỏi tiếp “nói tiếp phần còn lại” để nghe nốt.*' : '')).trim();
   if (!answer) throw new AppError('CuongMini chưa trả lời được. Thử lại nhé.', 400);
@@ -453,7 +523,7 @@ export async function askExamTutor(opts: ExamTutorAskOpts): Promise<{ answer: st
 
   await assertAiReady(opts.userId);
   const { system, messages } = await buildTutorCall(opts);
-  const res = await callTutor(system, messages, opts.userId, opts.provider);
+  const res = await callTutor(system, messages, opts.userId, opts.provider, undefined, opts.congAnthropicVe);
   /* Cắt giữa chừng thì PHẢI NÓI RA — xem `LLMResult.biCat`. */
   const answer = ((res.text || '').trim() + (res.biCat ? '\n\n> ⚠️ *Câu trả lời chạm trần độ dài nên bị cắt ở đây. Hỏi tiếp “nói tiếp phần còn lại” để nghe nốt.*' : '')).trim();
   if (!answer) throw new AppError('CuongMini chưa trả lời được. Thử lại nhé.', 400);

@@ -116,6 +116,16 @@ export async function moDuPhong(matKhau: string, token: string): Promise<string>
   return j.data.ten ?? 'cổng dự phòng';
 }
 
+/**
+ * Cổng Claude CHÍNH HÃNG (17/10/2026): mật khẩu RIÊNG ⇒ vé `agentAnthropicVe`.
+ * Đi qua đúng handler `agent:moCongAnthropic` của app (một chỗ gọi máy chủ,
+ * dùng phiên đã bơm bằng `datPhien`). Ném câu lỗi của máy chủ khi sai/chưa bật.
+ */
+export async function moCongAnthropic(matKhau: string): Promise<{ ten: string; hetHan: number | null }> {
+  if (!matKhau || matKhau.length > 200) throw new Error('Thiếu mật khẩu.');
+  return await goiKenhNoiBo('agent:moCongAnthropic', { matKhau }, suKienGia) as { ten: string; hetHan: number | null };
+}
+
 /** Ảnh dán/kéo vào (HEIC/AVIF/TIFF…, ảnh xoay EXIF, ảnh quá to) ⇒ chuẩn hoá như app. */
 export async function chuanHoaAnh(dataUrl: string): Promise<string> {
   const than = Buffer.from(dataUrl.slice(dataUrl.indexOf(',') + 1), 'base64');

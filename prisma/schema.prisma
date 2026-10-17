@@ -16673,3 +16673,77 @@ model WorkClassCalendarItem {
   @@index([classId, startsAt], map: "idx_work_class_calendar_class")
   @@map("work_class_calendar_items")
 }
+
+/// Một key API Anthropic. Khoá lưu MÃ HOÁ (AES-256-GCM, `utils/crypto.ts`); API admin chỉ trả `duoiKhoa`.
+model AnthropicKey {
+  id               Int       @id @default(autoincrement())
+  nhan             String    @db.VarChar(80)
+  khoaMaHoa        String    @map("khoa_ma_hoa") @db.Text
+  /// 4 ký tự cuối, chỉ để hiển thị.
+  duoiKhoa         String    @map("duoi_khoa") @db.VarChar(8)
+  /// sha256 của khoá — chặn nhập trùng mà không phải giải mã từng dòng.
+  vanTay           String    @unique(map: "uk_anthropic_key_van_tay") @map("van_tay") @db.VarChar(64)
+  /// Nhỏ hơn = dùng trước.
+  thuTu            Int       @default(0) @map("thu_tu")
+  /// Ngân sách USD mỗi chu kỳ tháng (0 = không đặt). Tự đo chạm ngân sách ⇒ bỏ qua key này.
+  nganSachThangUsd Float     @default(0) @map("ngan_sach_thang_usd")
+  /// Ngày (1–28) chu kỳ tháng làm mới — key `hetCredit` tự mở lại khi qua mốc này.
+  ngayLamMoi       Int       @default(1) @map("ngay_lam_moi")
+  hetHanLuc        DateTime? @map("het_han_luc")
+  /// hoatDong | hetCredit | loi | tat
+  trangThai        String    @default("hoatDong") @map("trang_thai") @db.VarChar(20)
+  loiCuoi          String?   @map("loi_cuoi") @db.VarChar(500)
+  loiCuoiLuc       DateTime? @map("loi_cuoi_luc")
+  hetCreditLuc     DateTime? @map("het_credit_luc")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  usage AnthropicUsage[]
+
+  @@index([thuTu], map: "idx_anthropic_key_thu_tu")
+  @@map("anthropic_keys")
+}
+
+/// Mỗi lời gọi tới api.anthropic.com (kể cả lời gọi hỏng). USD là TỰ TÍNH theo bảng giá trong mã.
+model AnthropicUsage {
+  id             Int      @id @default(autoincrement())
+  keyId          Int?     @map("key_id")
+  userId         Int?     @map("user_id")
+  /// agent_code | exam_tutor | thu_ket_noi
+  viec           String   @db.VarChar(30)
+  /// free (CuongMini Free — tự lùi khi rambo hỏng) | cao (model cao, cần vé) — hai trần riêng.
+  hang           String   @default("cao") @db.VarChar(10)
+  model          String   @db.VarChar(80)
+  inputTokens    Int      @default(0) @map("input_tokens")
+  outputTokens   Int      @default(0) @map("output_tokens")
+  cacheDocTokens Int      @default(0) @map("cache_doc_tokens")
+  cacheGhiTokens Int      @default(0) @map("cache_ghi_tokens")
+  costUsd        Float    @default(0) @map("cost_usd")
+  thanhCong      Boolean  @default(true) @map("thanh_cong")
+  maLoi          String?  @map("ma_loi") @db.VarChar(60)
+  /// Tổng thời gian lời gọi (ms), và thời gian tới byte đầu (ms).
+  thoiGianMs     Int      @default(0) @map("thoi_gian_ms")
+  ttfbMs         Int?     @map("ttfb_ms")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  key AnthropicKey? @relation(fields: [keyId], references: [id], onDelete: SetNull)
+
+  @@index([keyId, createdAt], map: "idx_anthropic_usage_key")
+  @@index([userId, createdAt], map: "idx_anthropic_usage_user")
+  @@index([createdAt], map: "idx_anthropic_usage_created")
+  @@map("anthropic_usage_logs")
+}
+
+/// Trần USD RIÊNG của một người cho cổng chính hãng — ghi đè trần theo gói. null = theo gói.
+/// `tran*` = phần model cao; `free*` = phần CuongMini Free.
+model AnthropicUserCap {
+  userId       Int      @id @map("user_id")
+  tranThangUsd Float?   @map("tran_thang_usd")
+  tranNgayUsd  Float?   @map("tran_ngay_usd")
+  freeThangUsd Float?   @map("free_thang_usd")
+  freeNgayUsd  Float?   @map("free_ngay_usd")
+  ghiChu       String?  @map("ghi_chu") @db.VarChar(200)
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("anthropic_user_caps")
+}

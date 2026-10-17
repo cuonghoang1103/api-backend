@@ -17,7 +17,16 @@ import { chayLenh, type BoiCanhLenh } from './lenh';
 
 type SuKien = { loai: string; [k: string]: any };
 type Muc = { kieu: string; text?: string; ten?: string; tomTat?: string; anh?: string[]; [k: string]: unknown };
-type ModelMuc = { id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean };
+type ModelMuc = {
+  id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean;
+  /** Cổng (17/10/2026): `anthropic` = Claude chính hãng; còn lại = cổng chính. */
+  cong?: 'rambo' | 'modelapi' | 'anthropic';
+  /** Model cao chính hãng chưa có vé ⇒ ổ khoá, chọn là hỏi mật khẩu. */
+  canMoKhoa?: boolean;
+  mienPhi?: boolean;
+};
+/** Một cổng trong lời mời khi cổng chính hỏng (khung `cong` `CONG_CHINH_HONG_FREE`). */
+type CongNangCap = { cong: 'anthropic' | 'modelapi'; ten: string; daBat: boolean; canMatKhau: boolean; models: ModelMuc[] };
 type MucNoLuc = { id: string; ten: string; mo: string };
 
 // ─── Hằng ────────────────────────────────────────────────────────
@@ -104,6 +113,8 @@ const S = {
   chuLuot: '',
   /** Tin người dùng của lượt đang chạy — để báo "Đã gửi" khi máy nhận. */
   tinDangGui: null as HTMLElement | null,
+  /** Cổng chính hãng báo THẬT là model đang suy nghĩ (khung `nghi`). */
+  suyNghi: false,
 };
 /** Tin đã ghim (đánh dấu để quay lại) — kiểu Bookmarks của Claude Code. */
 const ghimDs: Array<{ el: HTMLElement; chu: string }> = [];
@@ -346,6 +357,7 @@ function cauTrangThai(): string {
     case 'viet': return 'Đang viết câu trả lời';
     case 'tool': return VIEC_TOOL[S.toolDang] ?? (S.toolDang.startsWith('mcp__') ? 'Đang gọi công cụ ngoài' : 'Đang làm');
     case 'nghi':
+      if (S.suyNghi) return 'Đang suy nghĩ';
       if (S.toolCuoi && TOOL_GHI.has(S.toolCuoi)) return 'Đang code';
       if (S.toolCuoi === 'run_command') return 'Đang xem kết quả lệnh';
       if (S.toolCuoi) return 'Đang đọc mã dự án';
@@ -395,7 +407,16 @@ function theDuyet(id: string, tieuDe: string, than: string, cacNut: Array<[strin
 const DUYET_CHUAN: Array<[string, string, string?]> = [['choPhep', 'Cho phép', 'chinh'], ['choPhepCaFile', 'Cho phép cả việc này'], ['tuChoi', 'Từ chối', 'phu2']];
 
 function xuLy(e: SuKien): void {
+  /* Sự kiện BÊN TRONG agent phụ (`phuBatDau`/`phuSuKien`/`phuXong`): khung này
+     chưa có bảng agent phụ ⇒ bỏ qua hẳn — chữ của agent phụ KHÔNG được lẫn vào
+     câu trả lời chính. */
+  if (e.loai === 'phuBatDau' || e.loai === 'phuSuKien' || e.loai === 'phuXong') return;
+  if (e.loai !== 'nghi') S.suyNghi = false;
   switch (e.loai) {
+    case 'nghi':
+      S.suyNghi = true;
+      if (S.pha === 'cho' || S.pha === 'viet') S.pha = 'nghi';
+      break;
     case 'batDau':
       if (S.tinDangGui) { datTrangGui(S.tinDangGui, 'ok'); S.tinDangGui = null; }
       S.dangChay = true;
@@ -509,15 +530,23 @@ function xuLy(e: SuKien): void {
     }
     case 'loi': {
       ketThucTraLoi();
-      if (['DOI_CONG', 'KHOI_PHUC', 'LAM_TIEP', 'COMPACT', 'DOI_CHE_DO', 'TU_GO_ANH'].includes(e.ma)) {
+      if (['DOI_CONG', 'KHOI_PHUC', 'LAM_TIEP', 'COMPACT', 'DOI_CHE_DO', 'TU_GO_ANH', 'CONG_CHINH_HONG_FREE'].includes(e.ma)) {
         if (e.ma === 'COMPACT') S.daCompact = true;
-        the('tin ket', `ℹ️ ${esc(e.thongDiep ?? '')}`);
+        const el = the('tin ket', `ℹ️ ${esc(e.thongDiep ?? '')}`);
+        /* Cổng chính hỏng ⇒ máy chủ đã tự sang CuongMini Free; mời chọn cổng cao hơn. */
+        if (e.ma === 'CONG_CHINH_HONG_FREE' && Array.isArray(e.cacCong) && e.cacCong.length) veMoiNangCap(el, e.cacCong as CongNangCap[]);
         break;
       }
       ketLuot('', true);
       S.muc.push({ kieu: 'loi', text: e.thongDiep ?? '' });
       const el = the('tin loi', `⚠️ ${esc(e.thongDiep ?? 'Có lỗi.')}`);
       if (e.ma === 'RAMBO_BAO_TRI') veODuPhong(el);
+      /* Cổng Claude chính hãng (17/10/2026). Vé chết ⇒ lõi đã xoá vé; hỏi lại mật khẩu. */
+      if (e.ma === 'CONG_ANTHROPIC_KHOA') {
+        if (e.daBat === false) el.insertAdjacentHTML('beforeend', '<div class="phu">Quản trị chưa bật cổng Claude chính hãng.</div>');
+        else veOMatKhauAnthropic(el, () => { if (cauHoiCuoi) { o.value = cauHoiCuoi; void guiCauHoi(); } });
+      }
+      if (e.ma === 'CONG_ANTHROPIC_HET_HAN_MUC' || e.ma === 'CONG_ANTHROPIC_HET_KEY') veODuPhong(el);
       if (e.ma === 'PRO_REQUIRED') {
         const n = document.createElement('div');
         n.className = 'nut-hang';
@@ -585,7 +614,102 @@ function veDuyetKeHoach(): void {
 
 /** Ô mật khẩu cổng dự phòng — giống hộp trong app (`CongDuPhong.tsx`). */
 let cauHoiCuoi = '';
-let oDangCho: { kq: HTMLElement; nut: HTMLButtonElement } | null = null;
+let oDangCho: { kq: HTMLElement; nut: HTMLButtonElement; khiXong?: () => void } | null = null;
+/** Ô mật khẩu cổng Claude chính hãng đang chờ trả lời từ host. */
+let oAnthropicCho: { kq: HTMLElement; nut: HTMLButtonElement; khiXong: () => void } | null = null;
+
+/** Ô mật khẩu cổng Claude CHÍNH HÃNG (mật khẩu riêng, khác cổng dự phòng). */
+function veOMatKhauAnthropic(el: HTMLElement, khiXong: () => void): void {
+  const o2 = document.createElement('div');
+  o2.className = 'du-phong';
+  o2.innerHTML = `<div class="phu">Nhập mật khẩu cổng Claude chính hãng (quản trị cấp) để mở model cao:</div>
+<div class="hang"><input type="password" placeholder="Mật khẩu cổng Claude chính hãng" autocomplete="off"><button class="nut chinh">Mở khoá</button></div>
+<div class="phu kq"></div>`;
+  el.appendChild(o2);
+  const inp = o2.querySelector('input')!;
+  const nut = o2.querySelector('button')!;
+  const kq = o2.querySelector<HTMLElement>('.kq')!;
+  const mo = () => {
+    if (!inp.value) return;
+    nut.disabled = true;
+    kq.textContent = 'Đang mở khoá…';
+    oAnthropicCho = { kq, nut, khiXong };
+    gui({ loai: 'moCongAnthropic', matKhau: inp.value });
+    inp.value = '';
+  };
+  nut.addEventListener('click', mo);
+  inp.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') mo(); });
+  setTimeout(() => inp.focus(), 0);
+}
+
+/** Nút chọn model của MỘT cổng (sau khi đã mở khoá). */
+function veChonModelCong(el: HTMLElement, models: ModelMuc[], chon: (m: ModelMuc) => Promise<void>): void {
+  const h = document.createElement('div');
+  h.className = 'nut-hang';
+  for (const m of models) {
+    const b = document.createElement('button');
+    b.className = 'nut';
+    b.disabled = !m.dungDuoc;
+    b.title = m.mo;
+    b.textContent = m.ten;
+    b.addEventListener('click', () => {
+      if (m.dat && !confirm(`${m.ten} đắt hơn hẳn các model khác. Vẫn chọn?`)) return;
+      h.querySelectorAll('button').forEach((x) => { x.disabled = true; });
+      void chon(m).then(() => {
+        h.insertAdjacentHTML('afterend', `<div class="phu">✓ Đã chọn <b>${esc(m.ten)}</b>. Gửi lại câu hỏi (hoặc gõ "tiếp tục") để làm tiếp.</div>`);
+      }).catch((er: Error) => { thongBao(er.message, true); h.querySelectorAll('button').forEach((x) => { x.disabled = false; }); });
+    });
+    h.appendChild(b);
+  }
+  el.appendChild(h);
+}
+
+/**
+ * Lời mời khi cổng chính hỏng (máy chủ đã TỰ sang CuongMini Free): chọn Claude
+ * chính hãng (model `cl-*`, mật khẩu riêng) hoặc modelapi (GPT, mật khẩu dự
+ * phòng). Mỗi nút mở đúng ô mật khẩu của cổng đó, rồi chọn model.
+ */
+function veMoiNangCap(el: HTMLElement, cacCong: CongNangCap[]): void {
+  const vung = document.createElement('div');
+  vung.className = 'moi-nang-cap';
+  const hang = document.createElement('div');
+  hang.className = 'nut-hang';
+  const than = document.createElement('div');
+  vung.append(hang, than);
+  el.appendChild(vung);
+  const an = cacCong.find((c) => c.cong === 'anthropic');
+  const ma = cacCong.find((c) => c.cong === 'modelapi');
+  const moCong = (c: CongNangCap): void => {
+    than.innerHTML = '';
+    if (!c.daBat) { than.innerHTML = '<div class="phu">Quản trị chưa bật cổng này.</div>'; return; }
+    const chonModel = (): void => veChonModelCong(than, c.models, async (m) => {
+      if (c.cong === 'anthropic') {
+        await doiModel(m.id);
+        await goi('agent:datCongPhu', { cong: null });
+      } else {
+        await goi('agent:datCongPhu', { cong: 'modelapi', model: m.id });
+      }
+    });
+    if (!c.canMatKhau) { chonModel(); return; }
+    if (c.cong === 'anthropic') veOMatKhauAnthropic(than, () => { than.innerHTML = ''; chonModel(); });
+    else { veODuPhong(than); if (oDangCho) oDangCho.khiXong = () => { than.innerHTML = ''; chonModel(); }; }
+  };
+  if (an) {
+    const b = document.createElement('button');
+    b.className = 'nut chinh';
+    b.textContent = 'Dùng Claude chính hãng (model cao hơn)';
+    b.addEventListener('click', () => moCong(an));
+    hang.appendChild(b);
+  }
+  if (ma) {
+    const b = document.createElement('button');
+    b.className = 'nut';
+    b.textContent = 'Dùng modelapi (GPT)';
+    b.addEventListener('click', () => moCong(ma));
+    hang.appendChild(b);
+  }
+}
+
 function veODuPhong(el: HTMLElement): void {
   const o2 = document.createElement('div');
   o2.className = 'du-phong';
@@ -701,7 +825,8 @@ Có app desktop CuongThai? <a href="#" id="dnMoApp">Mở app</a> — extension s
 // ─── Model / mức / chế độ ────────────────────────────────────────
 
 const dsModel = (): ModelMuc[] => (S.info?.models?.length ? S.info.models : MODEL_DU_PHONG)
-  .map((m) => ({ ...m, ten: m.ten.replace(/^Claude Sonnet\b/, 'Cuong Sonnet').replace(/^Claude Opus\b/, 'CuongMini Max').replace(/^Claude Haiku\b/, 'Cuong Haiku').replace(/^Claude Fable\b/, 'Cuong Fable') }));
+  /* Model chính hãng là Claude THẬT — không đổi tên thành "Cuong …". */
+  .map((m) => (m.cong === 'anthropic' ? m : { ...m, ten: m.ten.replace(/^Claude Sonnet\b/, 'Cuong Sonnet').replace(/^Claude Opus\b/, 'CuongMini Max').replace(/^Claude Haiku\b/, 'Cuong Haiku').replace(/^Claude Fable\b/, 'Cuong Fable') }));
 const dsMuc = (): MucNoLuc[] => (S.info?.mucNoLuc?.length
   ? S.info.mucNoLuc.map((m) => ({ id: m.id, ten: m.ten, mo: `${m.buoc} bước${m.viecPhu ? ` · ${m.viecPhu} agent phụ` : ''}` }))
   : MUC_DU_PHONG);
@@ -828,10 +953,16 @@ function moMenuModel(): void {
   const hienModel = S.ws?.model ?? S.info?.model;
   const hienMuc = S.ws?.mucNoLuc ?? 'vua';
   const mucHtml = `<div class="hang-muc">${dsMuc().map((m) => `<button class="cham-muc ${m.id === hienMuc ? 'bat' : ''}" data-muc="${m.id}" title="${esc(`${m.ten} — ${m.mo}`)}"></button>`).join('')}</div>`;
+  const coChinhHang = dsModel().some((m) => m.cong === 'anthropic');
   moMenu([
+    /* Nhóm theo CỔNG (17/10/2026): Cổng chính · Claude chính hãng. */
     ...dsModel().map((m) => ({
-      nhom: 'Model', ten: m.ten, mo: m.dungDuoc ? m.mo : 'chưa mở trên máy chủ', chon: m.id === hienModel, tat: !m.dungDuoc,
+      nhom: m.cong === 'anthropic' ? 'Claude chính hãng' : coChinhHang ? 'Cổng chính' : 'Model',
+      ten: `${m.canMoKhoa ? '🔒 ' : ''}${m.ten}`,
+      mo: !m.dungDuoc ? 'chưa mở trên máy chủ' : m.canMoKhoa ? `cần mật khẩu — ${m.mo}` : m.mo,
+      chon: m.id === hienModel, tat: !m.dungDuoc,
       lam: () => {
+        if (m.canMoKhoa) { hoiMatKhauRoiChon(m); return; }
         if (m.dat && !confirm(`${m.ten} tốn nhiều hơn hẳn các model khác. Vẫn chọn?`)) return;
         void doiModel(m.id).catch((e: Error) => thongBao(e.message, true));
       },
@@ -844,6 +975,16 @@ function moMenuModel(): void {
     dongMenu();
     void doiMuc(b.dataset.muc!).catch((e: Error) => thongBao(e.message, true));
   }));
+}
+
+/** Model cao chính hãng bị khoá ⇒ thẻ mật khẩu ngay trong bảng ghi, mở xong thì chọn luôn. */
+function hoiMatKhauRoiChon(m: ModelMuc): void {
+  const el = the('tin ket', `🔒 <b>${esc(m.ten)}</b> cần mật khẩu cổng Claude chính hãng.`);
+  veOMatKhauAnthropic(el, () => {
+    if (m.dat && !confirm(`${m.ten} đắt hơn hẳn các model khác. Vẫn chọn?`)) return;
+    void doiModel(m.id).then(() => thongBao(`Đã chọn ${m.ten}.`)).catch((e: Error) => thongBao(e.message, true));
+  });
+  cuonXuong(true);
 }
 
 function moMenuCheDo(): void {
@@ -1325,13 +1466,28 @@ window.addEventListener('message', (ev) => {
       break;
     }
     case 'thongBao': thongBao(String(m.chu)); break;
-    case 'duPhongMo':
-      if (oDangCho) {
-        oDangCho.nut.disabled = false;
-        oDangCho.kq.textContent = m.ok ? `✓ Đã mở ${m.ten}. Đang gửi lại câu hỏi…` : `✕ ${m.loi}`;
+    case 'duPhongMo': {
+      const cho = oDangCho;
+      if (cho) {
+        cho.nut.disabled = false;
+        cho.kq.textContent = m.ok ? (cho.khiXong ? `✓ Đã mở ${m.ten}.` : `✓ Đã mở ${m.ten}. Đang gửi lại câu hỏi…`) : `✕ ${m.loi}`;
       }
+      /* Ô trong lời mời nâng cấp có bước kế tiếp riêng (chọn model) — không tự gửi lại. */
+      if (m.ok && cho?.khiXong) { oDangCho = null; cho.khiXong(); break; }
       if (m.ok && cauHoiCuoi) { o.value = cauHoiCuoi; void guiCauHoi(); }
       break;
+    }
+    case 'congAnthropicMo': {
+      const cho = oAnthropicCho;
+      oAnthropicCho = null;
+      if (m.info) { S.info = m.info; capNhatChon(); }
+      if (cho) {
+        cho.nut.disabled = false;
+        cho.kq.textContent = m.ok ? '✓ Đã mở khoá cổng Claude chính hãng (vé 30 ngày).' : `✕ ${m.loi}`;
+        if (m.ok) cho.khiXong();
+      }
+      break;
+    }
     case 'dangNhapKq': {
       const kq = document.querySelector<HTMLElement>('.dang-nhap .kq');
       document.querySelectorAll<HTMLButtonElement>('.dang-nhap button').forEach((b) => { b.disabled = false; });

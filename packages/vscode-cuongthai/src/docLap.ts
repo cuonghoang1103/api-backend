@@ -140,6 +140,13 @@ export class LoiDocLap implements KetNoi {
 
   moDuPhong(matKhau: string): Promise<string> { return this.loi.moDuPhong(matKhau, this.nguoi.token); }
 
+  async moCongAnthropic(matKhau: string): Promise<string> {
+    const kq = this.loi.moCongAnthropic
+      ? await this.loi.moCongAnthropic(matKhau)
+      : await this.loi.goi('agent:moCongAnthropic', { matKhau }) as { ten?: string };
+    return kq?.ten ?? 'Claude chính hãng';
+  }
+
   chuanHoaAnh(dataUrl: string): Promise<string> { return this.loi.chuanHoaAnh(dataUrl); }
 
   nghe(nhan: (kenh: string, duLieu: unknown) => void, _dong: () => void): () => void {

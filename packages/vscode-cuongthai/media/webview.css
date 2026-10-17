@@ -180,6 +180,9 @@ button { font: inherit; color: inherit; }
 .banner { margin: 0 12px 8px; padding: 10px 12px; border-radius: var(--bo); background: var(--nen2); border: 1px solid var(--nhan1); font-size: 12.5px; }
 .du-phong { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
 .du-phong .hang { display: flex; gap: 6px; }
+/* Lời mời khi cổng chính hỏng (CuongMini Free) — chọn Claude chính hãng / modelapi. */
+.moi-nang-cap { margin-top: 6px; display: flex; flex-direction: column; gap: 4px; }
+.moi-nang-cap .nut-hang { margin-top: 4px; }
 .du-phong input {
   flex: 1; min-width: 0; background: var(--nen3); color: var(--vscode-input-foreground);
   border: 1px solid var(--vscode-input-border, var(--vien)); border-radius: 7px; padding: 5px 9px; font: inherit;

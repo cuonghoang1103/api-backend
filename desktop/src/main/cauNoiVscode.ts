@@ -40,6 +40,8 @@ const KENH_DUOC: ReadonlySet<InvokeChannel> = new Set<InvokeChannel>([
   'agent:themDinhKem', 'agent:lenhDuAn', 'agent:kyNangDs', 'agent:chanDoan', 'agent:quayLui', 'agent:luiFile',
   'agent:boNhoDs', 'agent:khoTim', 'agent:khoCai', 'agent:xoaQuyenLau', 'agent:mcpTrangThai', 'agent:mcpMoCauHinh',
   'agent:hookMoCauHinh',
+  // Cổng Claude chính hãng (17/10/2026): trạng thái, mở khoá (app gọi máy chủ bằng phiên của nó), chọn cổng phụ.
+  'agent:congAnthropic', 'agent:moCongAnthropic', 'agent:datCongPhu',
 ]);
 
 const CONG_THU = [47821, 47822, 47823, 47824, 47825];
@@ -172,6 +174,18 @@ export async function batCauNoiVscode(): Promise<void> {
           const { setSetting } = await import('./store');
           setSetting('agentDuPhongVe', j.data.ve);
           return tra(res, 200, { ok: true, ten: j.data.ten ?? 'cổng dự phòng' });
+        } catch (e) {
+          return tra(res, 200, { ok: false, loi: (e as Error).message });
+        }
+      }
+      /* Cổng Claude chính hãng: mật khẩu RIÊNG ⇒ vé `agentAnthropicVe`. Đi qua
+         đúng handler `agent:moCongAnthropic` của app (một chỗ gọi máy chủ). */
+      if (url === '/mo-cong-anthropic') {
+        try {
+          const matKhau = String(b.matKhau ?? '');
+          if (!matKhau || matKhau.length > 200) throw new Error('Thiếu mật khẩu.');
+          const kq = await goiKenhNoiBo('agent:moCongAnthropic', { matKhau }, suKienGia) as { ten?: string; hetHan?: number | null };
+          return tra(res, 200, { ok: true, ten: kq?.ten ?? 'Claude chính hãng', hetHan: kq?.hetHan ?? null });
         } catch (e) {
           return tra(res, 200, { ok: false, loi: (e as Error).message });
         }

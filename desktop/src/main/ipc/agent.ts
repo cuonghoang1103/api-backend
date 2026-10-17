@@ -24,7 +24,7 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 
 import type {
-  AgentCuocDangMo, AgentInfo, AgentMcpTrangThai, AgentWorktree, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, ModelAgent, MucNoLuc,
+  AgentCongAnthropic, AgentCuocDangMo, AgentInfo, AgentMcpTrangThai, AgentWorktree, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, ModelAgent, MucNoLuc,
 } from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
@@ -34,7 +34,7 @@ import {
   daChonGocCua, datGocNeuChuaCo, gocCuaCuoc, huyLuotCua, napPhien, quayLui, quyenCuaCuoc, soCuaCuoc,
   datCheDoQuyen, tachNhanhCuoc, taoCuoc,
   xoaHoiThoai, type SuKienAgent,
-  dsQuyenLauCua, xoaQuyenLauCua, veCongChinh, chayLuotCucBo,
+  dsQuyenLauCua, xoaQuyenLauCua, veCongChinh, chayLuotCucBo, datCongPhuCua, veAnthropic,
   datTomTatCua, hoiThoaiCua, nguCanhChiTietCua,
 } from '../agent/loop';
 import { chanDoan, goiCompact } from '../agent/lenhMayChu';
@@ -104,6 +104,8 @@ const MODEL_HOP_LE = new Set<string>([
   'sonnet-5', 'opus-4-8', 'gpt-sol',
   'haiku-4-5', 'sonnet-4-6', 'opus-4-6', 'opus-4-7',
   'opus-5', 'fable-5',
+  // Cổng Claude chính hãng (17/10/2026) — xem `modelAgentSchema`.
+  'cl-free', 'cl-sonnet-5-5', 'cl-opus-5-5', 'cl-fable-5-1',
 ]);
 
 function modelHienTai(): ModelAgent {
@@ -261,7 +263,8 @@ export function registerAgentHandlers(): void {
       /* Trần 8 giây: WiFi chưa đăng nhập cổng có thể treo kết nối rất lâu —
          không trần thì trang AI Code quay "Đang kiểm tra quyền…" mãi. */
       const [rTools, rUsage] = await Promise.all([
-        fetch(`${API_ORIGIN}/api/v1/agent/tools`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(8000) }),
+        /* `congAnthropicVe` để `canMoKhoa` của các model chính hãng phản ánh đúng vé đang giữ. */
+        fetch(`${API_ORIGIN}/api/v1/agent/tools${veAnthropic() ? `?congAnthropicVe=${encodeURIComponent(veAnthropic()!)}` : ''}`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(8000) }),
         fetch(`${API_ORIGIN}/api/v1/agent/usage`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(8000) }),
       ]);
       if (!rTools.ok) return trong;
@@ -742,6 +745,60 @@ export function registerAgentHandlers(): void {
 
   handle('agent:veCongChinh', ({ cuocId }) => {
     veCongChinh(cuocId);
+  });
+
+  /*
+   * ── CỔNG CLAUDE CHÍNH HÃNG (17/10/2026) ──
+   * Hợp đồng: `docs/cong-anthropic-chinh-hang.md`. Main gọi máy chủ bằng phiên
+   * đăng nhập của CHÍNH app (renderer, extension VS Code, CLI không cầm token),
+   * và giữ vé trong thiết đặt `agentAnthropicVe` — `loop.ts` gửi kèm mọi lượt.
+   * Chạy được cả trong lõi ngoài Electron (`packages/cuongmini-core`): chỉ dùng
+   * `fetch`, `readStoredSession` và `store`, không API Electron nào.
+   */
+  handle('agent:moCongAnthropic', async ({ matKhau }) => {
+    const phien = readStoredSession();
+    if (!phien?.sessionToken) throw new Error('Chưa đăng nhập.');
+    const r = await fetch(`${API_ORIGIN}/api/v1/agent/cong-anthropic/mo-khoa`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${phien.sessionToken}` },
+      body: JSON.stringify({ matKhau }),
+      signal: AbortSignal.timeout(20_000),
+    });
+    const j = await r.json().catch(() => ({})) as {
+      data?: { ve?: string; hetHan?: number }; message?: string; code?: string; error?: { message?: string };
+    };
+    if (!r.ok || !j.data?.ve) {
+      if (r.status === 404) throw new Error('Máy chủ chưa có cổng Claude chính hãng (bản máy chủ cũ).');
+      throw new Error(j.error?.message ?? j.message ?? `Máy chủ trả HTTP ${r.status}.`);
+    }
+    setSetting('agentAnthropicVe', j.data.ve);
+    return { ten: 'Claude chính hãng', hetHan: typeof j.data.hetHan === 'number' ? j.data.hetHan : null };
+  });
+
+  handle('agent:congAnthropic', async (): Promise<AgentCongAnthropic | null> => {
+    const phien = readStoredSession();
+    if (!phien?.sessionToken) return null;
+    const ve = veAnthropic();
+    const veDp = getSettings().agentDuPhongVe;
+    const q = new URLSearchParams();
+    if (ve) q.set('ve', ve);
+    if (typeof veDp === 'string' && veDp) q.set('veDuPhong', veDp);
+    try {
+      const r = await fetch(`${API_ORIGIN}/api/v1/agent/cong-anthropic${q.size ? `?${q}` : ''}`, {
+        headers: { Authorization: `Bearer ${phien.sessionToken}` },
+        signal: AbortSignal.timeout(10_000),
+      });
+      if (!r.ok) return null;
+      const j = await r.json() as { data?: Omit<AgentCongAnthropic, 'coVe'> };
+      return j.data ? { ...j.data, coVe: Boolean(ve) } : null;
+    } catch {
+      return null;
+    }
+  });
+
+  handle('agent:datCongPhu', ({ cuocId, cong, model }) => {
+    if (model) setSetting('agentDuPhongModel', model);
+    datCongPhuCua(cuocId, cong);
   });
 
   handle('agent:hoanTac', async ({ cuocId }) => {

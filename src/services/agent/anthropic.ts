@@ -32,7 +32,10 @@ type KhoiAnthropic =
   | { type: 'text'; text: string }
   | { type: 'image'; source: { type: 'base64'; media_type: string; data: string } }
   | { type: 'tool_use'; id: string; name: string; input: unknown }
-  | { type: 'tool_result'; tool_use_id: string; content: string };
+  | { type: 'tool_result'; tool_use_id: string; content: string }
+  | { type: 'document'; source: { type: 'base64'; media_type: 'application/pdf'; data: string }; title?: string }
+  /** Khối Anthropic GỐC (thinking có chữ ký, compaction, server tool…) — chỉ cổng chính hãng. */
+  | { type: string; [k: string]: unknown };
 
 export interface TinAnthropic {
   role: 'user' | 'assistant';
@@ -72,7 +75,13 @@ function docArgs(s: string): unknown {
 type TinVao =
   | { role: 'system'; content: string }
   | { role: 'user'; content: unknown }
-  | { role: 'assistant'; content: string | null; tool_calls?: Array<{ id: string; function: { name: string; arguments: string } }> }
+  | {
+      role: 'assistant';
+      content: string | null;
+      tool_calls?: Array<{ id: string; function: { name: string; arguments: string } }>;
+      /** Khối Anthropic gốc của chính lượt này (cổng chính hãng trả về) — xem `turn.ts`. */
+      khoiAnthropic?: Array<Record<string, unknown>>;
+    }
   | { role: 'tool'; tool_call_id: string; content: string; anh?: Array<{ media_type: string; data: string }> };
 
 /**
@@ -114,7 +123,15 @@ function anhTuImageUrl(c: Record<string, any>): KhoiAnthropic | null {
   return { type: 'image', source: { type: 'base64', media_type: dau[1]!, data: than } };
 }
 
-export function sangAnthropic(messages: TinVao[]): { system: string; messages: TinAnthropic[] } {
+/**
+ * `chinhHang` (cổng Claude chính hãng, 17/10/2026):
+ *  • tin assistant có `khoiAnthropic` ⇒ gửi NGUYÊN VĂN các khối đó (thinking có
+ *    chữ ký, compaction, server tool) thay vì dựng lại — API đòi khối thinking
+ *    không bị sửa, và khối compaction phải đi lại thì máy chủ mới bỏ phần cũ.
+ *  • khối `file` PDF của người dùng ⇒ khối `document` gốc (base64).
+ * Đường khác (rambo/modelapi): bỏ `khoiAnthropic`, PDF thành một dòng chữ báo.
+ */
+export function sangAnthropic(messages: TinVao[], tuyChon: { chinhHang?: boolean } = {}): { system: string; messages: TinAnthropic[] } {
   const heThong: string[] = [];
   const ra: TinAnthropic[] = [];
 
@@ -169,6 +186,10 @@ export function sangAnthropic(messages: TinVao[]): { system: string; messages: T
     }
 
     if (m.role === 'assistant') {
+      if (tuyChon.chinhHang && Array.isArray(m.khoiAnthropic) && m.khoiAnthropic.length) {
+        them('assistant', m.khoiAnthropic.map((k) => ({ ...k })) as KhoiAnthropic[]);
+        continue;
+      }
       const khoi: KhoiAnthropic[] = [];
       if (typeof m.content === 'string' && m.content.trim()) {
         khoi.push({ type: 'text', text: m.content });
@@ -192,12 +213,27 @@ export function sangAnthropic(messages: TinVao[]): { system: string; messages: T
       else if (c?.type === 'image_url') {
         const a = anhTuImageUrl(c);
         if (a) khoi.push(a);
+      } else if (c?.type === 'file') {
+        const ten = String(c.file?.filename ?? 'tai-lieu.pdf');
+        const url = String(c.file?.file_data ?? '');
+        const data = url.startsWith('data:application/pdf;base64,') ? url.slice('data:application/pdf;base64,'.length) : '';
+        if (tuyChon.chinhHang && data) {
+          khoi.push({ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data }, title: ten.slice(0, 200) });
+        } else {
+          khoi.push({ type: 'text', text: chuPdfKhongDoc(ten) });
+        }
       }
     }
     them('user', khoi);
   }
 
   return { system: heThong.join('\n\n'), messages: ra };
+}
+
+/** Câu thay cho PDF ở cổng KHÔNG đọc được PDF gốc. */
+export function chuPdfKhongDoc(ten: string): string {
+  return `[Tệp PDF "${ten.slice(0, 200)}" — cổng hiện tại không đọc được PDF gốc (chỉ cổng Claude chính hãng đọc được). `
+    + 'Nếu cần nội dung, hãy dùng tool đọc file trên máy người dùng.]';
 }
 
 /**

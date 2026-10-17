@@ -37,7 +37,12 @@ export const TRAN_THAN_BYTE = 30 * 1024 * 1024;
 
 type Khoi =
   | { type: 'text'; text: string }
-  | { type: 'image_url'; image_url: { url: string } };
+  | { type: 'image_url'; image_url: { url: string } }
+  /** PDF gốc — chỉ gửi ở cổng Claude chính hãng (xem `pdfGoc.ts`). */
+  | { type: 'file'; file: { filename: string; file_data: string } };
+
+/** Dòng thay cho PDF gốc đã gỡ khỏi lượt cũ (tệp vẫn nằm trên đĩa, `read_file` đọc lại được). */
+export const PDF_DA_GO = (ten: string): string => `[PDF gốc "${ten}" đã gỡ khỏi lượt cũ — cần thì read_file đường dẫn của nó]`;
 
 export interface TinGui {
   role: 'user' | 'assistant' | 'tool';
@@ -46,6 +51,13 @@ export interface TinGui {
   tool_call_id?: string;
   /** Ảnh kèm kết quả tool (`web_anh`) — trường riêng của giao thức AI Code. */
   anh?: Array<{ media_type: string; data: string }>;
+  /**
+   * Khối Anthropic GỐC của tin assistant (cổng Claude chính hãng): thinking có
+   * chữ ký, compaction, server tool. Đi NGUYÊN VĂN — không gỡ, không sắp lại.
+   * Hàm nào ở đây cũng chỉ sao chép tin (`...m`), không bao giờ dựng lại tin
+   * assistant từ từng trường, nên trường này đi qua mà không cần nhắc tới.
+   */
+  khoiAnthropic?: Array<Record<string, unknown>>;
 }
 
 export interface KetQuaGoAnh {
@@ -72,12 +84,19 @@ export function goAnhCu(ds: readonly TinGui[], giuLuot: number = GIU_ANH_LUOT): 
     if (i >= tu) return m;
     if (m.role === 'user' && Array.isArray(m.content)) {
       const anh = m.content.filter((k) => k.type === 'image_url').length;
-      if (anh === 0) return m;
-      soAnhDaGo += anh;
+      /* PDF gốc (cổng chính hãng) cũng là tệp nặng gửi lại MỖI vòng — cùng luật
+         với ảnh: chỉ lượt gần đây còn mang bản gốc. */
+      const pdf = m.content.flatMap((k) => (k.type === 'file' ? [k.file.filename] : []));
+      if (anh === 0 && pdf.length === 0) return m;
+      soAnhDaGo += anh + pdf.length;
       doi = true;
       return {
         ...m,
-        content: [...m.content.filter((k) => k.type === 'text'), { type: 'text', text: ANH_DA_GO }],
+        content: [
+          ...m.content.filter((k) => k.type === 'text'),
+          ...(anh ? [{ type: 'text' as const, text: ANH_DA_GO }] : []),
+          ...pdf.map((ten) => ({ type: 'text' as const, text: PDF_DA_GO(ten) })),
+        ],
       };
     }
     if (m.role === 'tool' && Array.isArray(m.anh) && m.anh.length > 0) {
@@ -201,7 +220,10 @@ export function phanTichNguCanh(ds: readonly TinGui[], tt: TomTatCompact | null)
       if (m.role === 'user') {
         if (!daCoDe) { deBai += chu; daCoDe = true; } else lichSu += chu;
         if (Array.isArray(m.content)) {
-          for (const k of m.content) if (k.type === 'image_url') { soAnh++; byteAnh += k.image_url.url.length; }
+          for (const k of m.content) {
+            if (k.type === 'image_url') { soAnh++; byteAnh += k.image_url.url.length; }
+            else if (k.type === 'file') byteAnh += k.file.file_data.length;
+          }
         }
       } else if (m.role === 'assistant') {
         lichSu += chu;

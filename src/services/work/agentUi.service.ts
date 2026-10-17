@@ -23,6 +23,10 @@ export interface LeaseChip {
   status: 'ACTIVE' | 'EXPIRED';
   progress: string | null;
   progressPct: number | null;
+  /** 18/10/2026 (app iOS): số / mã / tiêu đề thẻ — client không phải tra `issueId` nội bộ. */
+  issueNumber: number | null;
+  issueKey: string | null;
+  issueTitle: string | null;
   heartbeatAt: Date;
   expiresAt: Date;
   agentUserId: number;
@@ -38,6 +42,8 @@ export async function projectLeases(userId: number, projectId: number): Promise<
     take: 500,
     select: { id: true, issueId: true, status: true, progress: true, progressPct: true, heartbeatAt: true, expiresAt: true, agent: { select: { userId: true } } },
   });
+  const issues = await prisma.workIssue.findMany({ where: { id: { in: [...new Set(rows.map((r) => r.issueId))] }, deletedAt: null }, select: { id: true, number: true, title: true } });
+  const issueOf = new Map(issues.map((i) => [i.id, i]));
   // Mỗi thẻ một chip: lease mới nhất thắng (ACTIVE mới hơn EXPIRED cũ ⇒ chip xanh).
   const seen = new Set<number>();
   const out: LeaseChip[] = [];
@@ -46,7 +52,9 @@ export async function projectLeases(userId: number, projectId: number): Promise<
     seen.add(r.issueId);
     out.push({
       issueId: r.issueId, leaseId: r.id, status: r.status === 'ACTIVE' ? 'ACTIVE' : 'EXPIRED',
-      progress: r.progress, progressPct: r.progressPct, heartbeatAt: r.heartbeatAt, expiresAt: r.expiresAt, agentUserId: r.agent.userId,
+      progress: r.progress, progressPct: r.progressPct,
+      issueNumber: issueOf.get(r.issueId)?.number ?? null, issueKey: issueOf.has(r.issueId) ? `${access.key}-${issueOf.get(r.issueId)!.number}` : null, issueTitle: issueOf.get(r.issueId)?.title ?? null,
+      heartbeatAt: r.heartbeatAt, expiresAt: r.expiresAt, agentUserId: r.agent.userId,
     });
   }
   return out;

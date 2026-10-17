@@ -15,14 +15,15 @@
 
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
-import { BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
+import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { getIO, getOnlineUserIds } from '../../socket/messaging.socket.js';
 import { logger } from '../../utils/logger.js';
 import { auditProject } from './audit.js';
 import { displayName, PUBLIC_USER, type PublicUser } from './common.js';
 import type { ProjectRole, ProjectVisibility, WorkspaceRole } from './constants.js';
 import { newJitsiUrl } from './governance.js';
-import { notifyWork } from './notify.js';
+import { blockersOf, hourIn, inQuietHours, notifyWork } from './notify.js';
+import { pushPrefsFrom } from '../push/goiDayCtw.js';
 import {
   canViewPage, effectiveProjectRole, effectiveWorkspaceRole, governanceAccess, isClientScoped, loadProjectAccess,
   portalOnlyUserIds, requireProject, type ProjectAccess,
@@ -340,6 +341,47 @@ export async function createChannel(userId: number, projectId: number, input: { 
   return { id: ch.id, name: ch.name, kind: ch.kind };
 }
 
+/**
+ * Nhắn riêng 1-1 (18/10/2026, app iOS): KHÔNG thêm loại kênh — một kênh PRIVATE tên `dm-<id nhỏ>-<id lớn>` với đúng hai
+ * thành viên tường minh (mọi luật xem/đăng/đọc/thông báo của kênh riêng áp nguyên). Đã có ⇒ trả kênh cũ (mở lại nếu lưu trữ).
+ * Cả hai phải là người của đội (khách/agent không); một bên đã chặn bên kia (/messages/blocks) ⇒ 403 USER_BLOCKED.
+ */
+export async function openDm(userId: number, projectId: number, otherId: number) {
+  const ctx = await ctxOf(userId, projectId);
+  if (otherId === userId) throw new BadRequestError('Pick someone else to message', 'VALIDATION_ERROR');
+  const people = await projectPeople(projectId);
+  const other = people.find((p) => p.id === otherId);
+  if (!other || other.kind === 'AGENT' || chatAudience({ role: other.role, workspaceRole: other.workspaceRole }) !== 'TEAM') {
+    throw new NotFoundError('That person is not on this project team');
+  }
+  const blocked = await prisma.userBlock.findFirst({ where: { OR: [{ blockerId: userId, blockedId: otherId }, { blockerId: otherId, blockedId: userId }] }, select: { id: true } });
+  if (blocked) throw new AppError('You cannot message this person', 403, 'USER_BLOCKED');
+  const name = `dm-${Math.min(userId, otherId)}-${Math.max(userId, otherId)}`;
+  const present = (ch: { id: number; archivedAt: Date | null }) => ({
+    id: ch.id, kind: 'DM' as const, channelKind: 'PRIVATE' as const, name,
+    with: { id: other.id, username: other.username }, archived: !!ch.archivedAt,
+  });
+  const existing = await prisma.workChannel.findFirst({ where: { projectId, name }, select: { id: true, kind: true, archivedAt: true } });
+  if (existing) {
+    const members = await prisma.workChannelMember.findMany({ where: { channelId: existing.id, explicit: true }, select: { userId: true } });
+    const ids = new Set(members.map((m) => m.userId));
+    if (existing.kind !== 'PRIVATE' || !ids.has(userId) || !ids.has(otherId) || ids.size !== 2) {
+      throw new BadRequestError(`#${name} already exists and is not a direct message`, 'WORK_CHANNEL_EXISTS');
+    }
+    if (existing.archivedAt) await prisma.workChannel.update({ where: { id: existing.id }, data: { archivedAt: null } });
+    return { ...present({ ...existing, archivedAt: null }), created: false };
+  }
+  if (!canCreateChannel(ctx.actor, 'PRIVATE')) throw new ForbiddenError('You cannot start conversations in this project');
+  if (await prisma.workChannel.count({ where: { projectId } }) >= MAX_CHANNELS_PER_PROJECT) throw new BadRequestError('This project has too many channels', 'WORK_LIMIT');
+  const ch = await prisma.workChannel.create({
+    data: { projectId, name, topic: 'Direct message', kind: 'PRIVATE', createdById: userId },
+    select: { id: true, archivedAt: true },
+  });
+  await prisma.workChannelMember.createMany({ data: [userId, otherId].map((u) => ({ channelId: ch.id, userId: u, explicit: true })), skipDuplicates: true });
+  await auditProject(projectId, { actorId: userId, action: 'chat.channel.create', targetType: 'channel', targetId: ch.id, summary: `Started a direct message (#${name})` });
+  return { ...present(ch), created: true };
+}
+
 export async function updateChannel(userId: number, projectId: number, channelId: number, input: { name?: string; topic?: string | null; archived?: boolean }) {
   const ctx = await ctxOf(userId, projectId);
   const { ch, member } = await channelFor(ctx, channelId);
@@ -532,11 +574,24 @@ function present(m: MessageRow, me: number, previews: Map<string, RefPreview>, w
 }
 export type ChatMessage = ReturnType<typeof present>;
 
-async function presentMany(ctx: ChatCtx, rows: MessageRow[]): Promise<ChatMessage[]> {
+async function presentMany(ctx: ChatCtx, rows: MessageRow[]): Promise<Array<ChatMessage & { authorBlocked: boolean; reportedByMe: boolean; hiddenForMe: boolean }>> {
   const ws = await prisma.workSpace.findUnique({ where: { id: ctx.access.workspaceId }, select: { slug: true } });
   const wsSlug = ws?.slug ?? '';
   const previews = await resolvePreviews(ctx.userId, { ...ctx.access, wsSlug }, rows.filter((r) => !r.deletedAt).map((r) => (Array.isArray(r.refs) ? r.refs : []) as ChatRef[]));
-  return rows.map((r) => present(r, ctx.userId, previews, wsSlug));
+  // 18/10/2026 (App Store 1.2): tin của người mình đã chặn (/messages/blocks) hoặc mình đã báo cáo (POST /work/report) ⇒ cờ
+  // `hiddenForMe` — client thu gọn tin (không xoá khỏi danh sách: luồng trả lời và phân trang vẫn đúng).
+  const authorIds = [...new Set(rows.map((r) => r.authorId).filter((x): x is number => !!x && x !== ctx.userId))];
+  const [blocks, reports] = await Promise.all([
+    authorIds.length ? prisma.userBlock.findMany({ where: { blockerId: ctx.userId, blockedId: { in: authorIds } }, select: { blockedId: true } }) : [],
+    rows.length ? prisma.adminNotification.findMany({ where: { khoaChongTrung: { in: rows.map((r) => `ctw-report:chat_message:${r.id}:${ctx.userId}`) } }, select: { khoaChongTrung: true } }) : [],
+  ]);
+  const blocked = new Set(blocks.map((b) => b.blockedId));
+  const reported = new Set(reports.map((r) => r.khoaChongTrung));
+  return rows.map((r) => {
+    const authorBlocked = !!r.authorId && blocked.has(r.authorId);
+    const reportedByMe = reported.has(`ctw-report:chat_message:${r.id}:${ctx.userId}`);
+    return { ...present(r, ctx.userId, previews, wsSlug), authorBlocked, reportedByMe, hiddenForMe: authorBlocked || reportedByMe };
+  });
 }
 
 export async function listMessages(userId: number, projectId: number, channelId: number, q: { before?: number; after?: number; around?: number; limit?: number } = {}) {
@@ -727,23 +782,31 @@ async function fanOut(a: {
   const [prefs, states, quiet] = await Promise.all([
     prisma.workChatPref.findMany({ where: { userId: { in: ids } }, select: { userId: true, mutedUntil: true, notify: true, sound: true, desktop: true } }),
     prisma.workChannelMember.findMany({ where: { channelId: a.ch.id, userId: { in: ids } }, select: { userId: true, mutedUntil: true, notify: true } }),
-    prisma.workNotifySetting.findMany({ where: { userId: { in: ids } }, select: { userId: true, quietStart: true, quietEnd: true } }),
+    prisma.workNotifySetting.findMany({ where: { userId: { in: ids } }, select: { userId: true, quietStart: true, quietEnd: true, timezone: true, pushPrefs: true } }),
   ]);
+  // Danh sách chặn (/messages/blocks, 18/10/2026): người đã chặn tác giả không bị báo (âm/thông báo/đẩy) vì tin này.
+  const blockers = await blockersOf(a.authorId, ids).catch(() => new Set<number>());
   const P = new Map(prefs.map((x) => [x.userId, x]));
   const S = new Map(states.map((x) => [x.userId, x]));
   const Q = new Map(quiet.map((x) => [x.userId, x]));
   const now = new Date();
   const io = getIO();
   const mentionSet = new Set(a.mentions);
+  const dayTinThuong: number[] = [];
   for (const h of humans) {
     const g = P.get(h.id);
     const c = S.get(h.id);
     const q = Q.get(h.id);
-    const mention = mentionSet.has(h.id) || replyTo.has(h.id);
-    const alert = shouldAlert({
+    const blocked = blockers.has(h.id);
+    const mention = !blocked && (mentionSet.has(h.id) || replyTo.has(h.id));
+    // Giờ im lặng theo múi giờ của người nhận (notify-settings.timezone; trống = giờ VN như cũ).
+    const quietNow = q?.timezone ? inQuietHours(q.quietStart ?? null, q.quietEnd ?? null, hourIn(q.timezone, now)) : inQuiet(q?.quietStart, q?.quietEnd, now);
+    const alert = !blocked && shouldAlert({
       own: false, mention, globalMutedUntil: g?.mutedUntil, channelMutedUntil: c?.mutedUntil,
-      mode: effectiveMode(c?.notify, g?.notify), quiet: inQuiet(q?.quietStart, q?.quietEnd, now), now,
+      mode: effectiveMode(c?.notify, g?.notify), quiet: quietNow, now,
     });
+    // Đẩy iOS cho tin THƯỜNG (kênh/chung đặt ALL, không @, không trả lời mình): chỉ tin gốc, theo công tắc `push.chatAll`.
+    if (alert && !mention && !a.parentId && pushPrefsFrom(q?.pushPrefs).chatAll) dayTinThuong.push(h.id);
     io?.to(`user:${h.id}`).emit('work:chat:notify', {
       projectId: a.ch.projectId, projectKey: a.p.key, projectName: a.p.name, channelId: a.ch.id, channelName: a.ch.name,
       messageId: a.messageId, parentId: a.parentId, author: author ?? null, authorName, excerpt, url,
@@ -752,6 +815,7 @@ async function fanOut(a: {
       counts: !a.parentId && !(isMuted(c?.mutedUntil, now) && !mention),
     });
   }
+  if (dayTinThuong.length) void dayTinChatThuong(dayTinThuong, a, authorName, excerpt, url);
   // Chuông (+ đẩy iOS): @nhắc ⇒ WORK_MENTION; trả lời luồng của mình ⇒ WORK_COMMENT (reply). Không email tức thì (notify.ts).
   const payload = { chat: true, issueKey: `#${a.ch.name}`, title: `${a.p.key} · ${a.p.name}`, url, excerpt };
   for (const uid of a.mentions) {
@@ -774,6 +838,31 @@ async function fanOut(a: {
         actor: { userId: a.authorId, kind: 'USER' }, extra: { channel: a.ch.name, channelId: a.ch.id, messageId: a.messageId, threadId: a.parentId, url },
       }).catch(() => undefined);
     }
+  }
+}
+
+/**
+ * Đẩy iOS (CHỈ app CT Work) cho tin chat thường — không tạo dòng hộp thư (chat là nhịp nhanh). Category CTW_REPLY ⇒ nút
+ * Reply trên thông báo trả lời đúng chuỗi (`duongDan` = chatUrl). Không bao giờ ném.
+ */
+async function dayTinChatThuong(
+  userIds: number[], a: { ch: ChannelRow; p: { key: string; name: string } }, authorName: string, excerpt: string, url: string,
+): Promise<void> {
+  try {
+    const { guiThongBao, apnsSanSang } = await import('../push/apns.js');
+    if (!apnsSanSang()) return;
+    const { CTW_CATEGORY } = await import('../push/goiDayCtw.js');
+    for (const uid of userIds) {
+      await guiThongBao(uid, {
+        tieuDe: `#${a.ch.name} · ${a.p.key}`,
+        than: `${authorName}: ${excerpt}`.slice(0, 240),
+        nhom: `ctw-${a.p.key}-chat-${a.ch.id}`,
+        phanLoai: CTW_CATEGORY.reply,
+        duLieu: { loai: 'xa-hoi', kieu: 'WORK_CHAT', duongDan: url, maThe: '' },
+      }, 'chiCtwork');
+    }
+  } catch (err) {
+    logger.warn('[work] đẩy tin chat thường lỗi', { err: (err as Error).message });
   }
 }
 

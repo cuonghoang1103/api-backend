@@ -268,6 +268,17 @@ export async function listDashboards(userId: number, projectId: number) {
   });
 }
 
+/** Một dashboard (18/10/2026, app iOS): của mình hoặc đã chia sẻ — cùng luật thấy như danh sách. `canEdit` = chủ hoặc ADMIN. */
+export async function getDashboard(userId: number, projectId: number, dashboardId: number) {
+  const access = await requireProject(userId, projectId, 'project.view');
+  const d = await prisma.workDashboard.findFirst({
+    where: { id: dashboardId, projectId, OR: [{ ownerId: userId }, { shared: true }] },
+    select: { id: true, name: true, shared: true, ownerId: true, widgets: true, createdAt: true, updatedAt: true },
+  });
+  if (!d) throw new NotFoundError('Dashboard not found');
+  return { ...d, canEdit: d.ownerId === userId || access.role === 'ADMIN' };
+}
+
 export async function saveDashboard(userId: number, projectId: number, input: { id?: number; name: string; shared?: boolean; widgets: Widget[] }) {
   const access = await requireProject(userId, projectId, 'project.view');
   const name = input.name.trim().slice(0, 100);

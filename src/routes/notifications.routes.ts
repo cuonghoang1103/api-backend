@@ -7,6 +7,7 @@
  *   PATCH /api/v1/social/notifications       — mark all (or a subset) as read
  *   GET   /api/v1/social/notifications/unread-count
  *                                              — quick badge number
+ *   `?surface=work|social` on all three narrows to CT Work (WORK_*) or everything else.
  *
  * Auth: every route requires `authenticate`. The userId comes
  * from the JWT and is the only thing that scopes the query —
@@ -24,6 +25,16 @@ import { AppError } from '../middleware/errorHandler.js';
 import { prisma } from '../config/database.js';
 
 const router = Router();
+
+/**
+ * `?surface=work` (18/10/2026, app iOS CT Work) ⇒ chỉ thông báo CT Work (`WORK_*`);
+ * `?surface=social` ⇒ mọi thứ TRỪ `WORK_*`. Không có/khác ⇒ tất cả như trước.
+ */
+function surfaceWhere(raw: unknown): { type?: { startsWith: string } } | { NOT: { type: { startsWith: string } } } | Record<string, never> {
+  if (raw === 'work') return { type: { startsWith: 'WORK_' } };
+  if (raw === 'social') return { NOT: { type: { startsWith: 'WORK_' } } };
+  return {};
+}
 
 function getUserId(req: any): number {
   if (!req.user || !req.user.userId) {
@@ -45,10 +56,12 @@ router.get(
       const { cursor, limit = '20' } = req.query;
       const parsedLimit = Math.min(parseInt(limit as string, 10) || 20, 50);
       const parsedCursor = cursor ? parseInt(cursor as string, 10) : undefined;
+      const surface = surfaceWhere(req.query.surface);
 
       const rows = await prisma.socialNotification.findMany({
         where: {
           receiverId: userId,
+          ...surface,
           ...(parsedCursor ? { id: { lt: parsedCursor } } : {}),
         },
         orderBy: { id: 'desc' },
@@ -61,6 +74,8 @@ router.get(
               fullName: true,
               displayName: true,
               avatarUrl: true,
+              // HUMAN | AGENT — hộp thư CT Work gắn nhãn AI agent cho thông báo do agent gây ra.
+              kind: true,
             },
           },
         },
@@ -73,7 +88,7 @@ router.get(
       // Side-channel: also return the total unread count so the
       // bell can re-render its badge without a second request.
       const unreadCount = await prisma.socialNotification.count({
-        where: { receiverId: userId, isRead: false },
+        where: { receiverId: userId, isRead: false, ...surface },
       });
 
       res.json({
@@ -105,6 +120,8 @@ router.patch(
     try {
       const userId = getUserId(req);
       const { all, ids } = req.body ?? {};
+      // `{ all: true, surface: 'work' }` ⇒ chỉ đánh dấu thông báo CT Work (app CT Work không được xoá chấm đỏ của web chính).
+      const surface = surfaceWhere(req.body?.surface ?? req.query.surface);
       // Phase 5 home upgrade: stamp readAt on the same write so the
       // bell can render "read 2h ago" without a follow-up query
       // and analytics get a real "time-to-read" signal.
@@ -123,7 +140,7 @@ router.patch(
         updated = result.count;
       } else if (all === true || ids == null) {
         const result = await prisma.socialNotification.updateMany({
-          where: { receiverId: userId, isRead: false },
+          where: { receiverId: userId, isRead: false, ...surface },
           data: { isRead: true, readAt: now },
         });
         updated = result.count;
@@ -148,7 +165,7 @@ router.get(
     try {
       const userId = getUserId(req);
       const unreadCount = await prisma.socialNotification.count({
-        where: { receiverId: userId, isRead: false },
+        where: { receiverId: userId, isRead: false, ...surfaceWhere(req.query.surface) },
       });
       res.json({ success: true, data: { unreadCount } });
     } catch (error) {

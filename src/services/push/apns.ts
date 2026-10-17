@@ -72,6 +72,8 @@ export interface NoiDungDay {
   duLieu?: Record<string, unknown>;
   /** Gộp các thông báo cùng một hội thoại lại. */
   nhom?: string;
+  /** `aps.category` — chọn bộ nút trên thông báo (app CT Work: CTW_REPLY / CTW_APPROVAL / CTW_MEETING / CTW_DEFAULT). */
+  phanLoai?: string;
 }
 
 /** Gửi tới MỘT thẻ. Trả `true` nếu Apple nhận; `false` kèm dọn thẻ chết. */
@@ -88,6 +90,7 @@ async function guiMotThe(the: string, sandbox: boolean, noi: NoiDungDay, topic: 
           sound: 'default',
           ...(noi.huyHieu !== undefined ? { badge: noi.huyHieu } : {}),
           ...(noi.nhom ? { 'thread-id': noi.nhom } : {}),
+          ...(noi.phanLoai ? { category: noi.phanLoai } : {}),
         },
         ...(noi.duLieu ?? {}),
       });
@@ -147,8 +150,9 @@ export async function guiThongBao(
    * `ctwork` = thông báo CT Work: tới app CT Work nếu người này đã cài nó; chưa cài
    * thì về app chính như trước (app chính cũng có CT Work). Hai app cùng máy thì
    * KHÔNG bắn cả hai. Mặc định `chinh` = chỉ app chính (tin nhắn, học tập, mạng xã hội…).
+   * `chiCtwork` = CHỈ app CT Work (đẩy tin chat thường — không có dòng hộp thư, app chính không biết vẽ).
    */
-  kenh: 'chinh' | 'ctwork' = 'chinh',
+  kenh: 'chinh' | 'ctwork' | 'chiCtwork' = 'chinh',
   /** Huy hiệu riêng cho app CT Work (số việc CT Work chưa đọc). */
   huyHieuCtwork?: number,
 ): Promise<number> {
@@ -163,7 +167,7 @@ export async function guiThongBao(
     });
     const ctw = tatCa.filter((t) => t.app === BUNDLE_CTWORK);
     const chinh = tatCa.filter((t) => t.app !== BUNDLE_CTWORK);
-    const the = kenh === 'ctwork' && ctw.length > 0 ? ctw : chinh;
+    const the = kenh === 'chiCtwork' ? ctw : kenh === 'ctwork' && ctw.length > 0 ? ctw : chinh;
     if (the.length === 0) return 0;
     const kq = await Promise.all(the.map((t) => (t.app === BUNDLE_CTWORK
       ? guiMotThe(t.token, t.sandbox, { ...noi, ...(huyHieuCtwork !== undefined ? { huyHieu: huyHieuCtwork } : {}) }, BUNDLE_CTWORK)

@@ -34,6 +34,8 @@ const ALLOWED_WHILE_LOCKED: RegExp[] = [
   /^\/chat\/(?!.*\/issue$).+$/,
   // CTW K-3b: ghi ngay bản đồng soạn đang sống (không đổi nội dung — chỉ đẩy trạng thái Yjs xuống DB trước khi xuất).
   /^\/pages\/\d+\/collab\/flush$/,
+  // 18/10/2026: báo cáo ghi chú họp (App Store 1.2) — không sửa gì của dự án. (Tin chat đã nằm dưới /chat ở trên.)
+  /^\/meetings\/\d+\/report$/,
 ];
 
 export function isAllowedWhileLocked(subPath: string): boolean {

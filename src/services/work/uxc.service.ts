@@ -202,10 +202,13 @@ export async function timelineMarkers(userId: number, projectId: number) {
       ? prisma.workStage.findMany({ where: { projectId }, orderBy: { n: 'asc' }, select: { id: true, n: true, name: true, status: true, startedAt: true, completedAt: true } })
       : Promise.resolve([]),
   ]);
+  // Cắt ngày theo giờ VN (18/10/2026): sprint bắt đầu 00:00 VN lưu 17:00Z hôm trước — cắt UTC thì lệch một ngày.
+  // Cột @db.Date (00:00Z) đổi sang VN vẫn đúng ngày đó.
+  const vday = (d: Date | null | undefined) => (d ? vnDay(d) : null);
   return {
-    sprints: sprints.map((s) => ({ id: s.id, name: s.name, status: s.state, start: day(s.startAt), end: day(s.completedAt ?? s.endAt) })),
-    versions: versions.map((v) => ({ id: v.id, name: v.name, status: v.status, start: day(v.startDate), release: day(v.releasedAt ?? v.releaseDate) })),
-    stages: stages.map((s) => ({ id: s.id, n: s.n, name: s.name, status: s.status, start: day(s.startedAt), end: day(s.completedAt) })),
+    sprints: sprints.map((s) => ({ id: s.id, name: s.name, status: s.state, start: vday(s.startAt), end: vday(s.completedAt ?? s.endAt) })),
+    versions: versions.map((v) => ({ id: v.id, name: v.name, status: v.status, start: vday(v.startDate), release: vday(v.releasedAt ?? v.releaseDate) })),
+    stages: stages.map((s) => ({ id: s.id, n: s.n, name: s.name, status: s.status, start: vday(s.startedAt), end: vday(s.completedAt) })),
   };
 }
 

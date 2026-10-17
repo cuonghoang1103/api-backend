@@ -48,7 +48,9 @@ function daysBetween(a: Date, b: Date): string[] {
 export async function burndown(userId: number, projectId: number, sprintId: number) {
   await requireProject(userId, projectId, 'project.view');
   const s = await sprintOf(projectId, sprintId);
-  if (!s.startAt) return { sprint: s, unit: await estimationOf(projectId), points: [] };
+  // 18/10/2026 (app iOS): số thẻ cạnh số điểm — "8/12 issues done". Sprint đã đóng: theo bản chụp lúc đóng.
+  const issueCounts = await sprintIssueCounts(projectId, sprintId, s);
+  if (!s.startAt) return { sprint: s, unit: await estimationOf(projectId), points: [], ...issueCounts };
   // Sprint đang chạy: cập nhật điểm hôm nay để biểu đồ khớp board ngay lúc xem.
   if (s.state === 'ACTIVE') await snapshotSprint(sprintId);
   const snaps = await prisma.workSprintSnapshot.findMany({ where: { sprintId }, orderBy: { day: 'asc' } });
@@ -72,7 +74,20 @@ export async function burndown(userId: number, projectId: number, sprintId: numb
       ideal: round1(Math.max(0, committed * (1 - i / Math.max(1, daysBetween(s.startAt!, planEnd).length - 1)))),
     };
   });
-  return { sprint: s, unit: await estimationOf(projectId), points };
+  return { sprint: s, unit: await estimationOf(projectId), points, ...issueCounts };
+}
+
+async function sprintIssueCounts(projectId: number, sprintId: number, s: { state: string; report?: unknown }): Promise<{ totalIssues: number; doneIssues: number }> {
+  const rep = s.state === 'CLOSED' ? (s.report as { completed?: unknown[]; incomplete?: unknown[] } | null | undefined) : null;
+  if (rep && Array.isArray(rep.completed) && Array.isArray(rep.incomplete)) {
+    return { totalIssues: rep.completed.length + rep.incomplete.length, doneIssues: rep.completed.length };
+  }
+  const where = { projectId, sprintId, deletedAt: null, type: { level: { gte: 0 } } };
+  const [totalIssues, doneIssues] = await Promise.all([
+    prisma.workIssue.count({ where }),
+    prisma.workIssue.count({ where: { ...where, resolvedAt: { not: null } } }),
+  ]);
+  return { totalIssues, doneIssues };
 }
 
 /** Velocity: cam kết vs hoàn thành của 7 sprint đã đóng gần nhất. */

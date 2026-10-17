@@ -160,12 +160,21 @@ export async function versionDetail(userId: number, projectId: number, versionId
   await requireProject(userId, projectId, 'project.view');
   const v = await prisma.workVersion.findFirst({ where: { id: versionId, projectId }, select: VERSION_SELECT });
   if (!v) throw new NotFoundError('Version not found');
-  const rows = await prisma.workIssue.findMany({
-    where: { projectId, fixVersionId: versionId, deletedAt: null },
-    orderBy: [{ rank: 'asc' }, { id: 'asc' }],
-    select: CARD_SELECT,
-  });
-  return { version: v, issues: rows.map(toCard) };
+  const lvl = { type: { level: { gte: 0 } } };
+  const [rows, total, done, inProgress] = await Promise.all([
+    prisma.workIssue.findMany({
+      where: { projectId, fixVersionId: versionId, deletedAt: null },
+      orderBy: [{ rank: 'asc' }, { id: 'asc' }],
+      select: CARD_SELECT,
+    }),
+    // Đếm cùng luật với listVersions (thẻ tầng ≥ 0, không tính sub-task) — app hiện % mà không phải tự đếm.
+    prisma.workIssue.count({ where: { projectId, fixVersionId: versionId, deletedAt: null, ...lvl } }),
+    prisma.workIssue.count({ where: { projectId, fixVersionId: versionId, deletedAt: null, resolvedAt: { not: null }, ...lvl } }),
+    prisma.workIssue.count({ where: { projectId, fixVersionId: versionId, deletedAt: null, resolvedAt: null, status: { category: 'IN_PROGRESS' }, ...lvl } }),
+  ]);
+  const due = v.releaseDate ? v.releaseDate.toISOString().slice(0, 10) : null;
+  const counts = { total, done, inProgress, todo: Math.max(0, total - done - inProgress), percent: total ? Math.round((done / total) * 100) : 0 };
+  return { version: v, issues: rows.map(toCard), counts, overdue: v.status === 'UNRELEASED' && !!due && due < vnDay() };
 }
 
 // ═══ Timeline + đường găng ════════════════════════════════════════

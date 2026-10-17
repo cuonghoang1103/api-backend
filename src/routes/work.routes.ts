@@ -100,6 +100,7 @@ import ctw8cRoutes from './work.ctw8c.routes.js'; // CTW đợt 8c: họp địn
 import ctw9aRoutes from './work.ctw9a.routes.js'; // CTW đợt 9a: lớp học — bảng tin, tài liệu lớp, lịch lớp + điểm danh
 import ctw9bRoutes from './work.ctw9b.routes.js'; // CTW đợt 9b: lớp học — bài tập, nộp/trả bài, sổ điểm
 import ctw9cRoutes from './work.ctw9c.routes.js'; // CTW đợt 9c: lớp học — quiz trắc nghiệm tự chấm
+import iosRoutes from './work.ios.routes.js'; // 18/10/2026: app iOS CT Work — báo cáo nội dung, DM, agenda/timesheet của tôi, đọc gọn
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
@@ -947,8 +948,8 @@ router.patch('/projects/:pid/test-cycles/:cycleId', asyncHandler(async (req, res
     name: z.string().min(1).max(120).optional(), environment: z.string().max(120).nullable().optional(), build: z.string().max(80).nullable().optional(),
     state: z.enum(tests.CYCLE_STATES).optional(), addNumbers: z.array(id).max(1000).optional(), removeRunIds: z.array(id).max(1000).optional(),
   }), req.body);
-  await tests.updateCycle(callerId(req), idParam(req, 'pid'), idParam(req, 'cycleId'), body);
-  ok(res, { updated: true });
+  const r = await tests.updateCycle(callerId(req), idParam(req, 'pid'), idParam(req, 'cycleId'), body);
+  ok(res, { updated: true, runs: r.runs });
 }));
 router.delete('/projects/:pid/test-cycles/:cycleId', asyncHandler(async (req, res) => {
   await tests.deleteCycle(callerId(req), idParam(req, 'pid'), idParam(req, 'cycleId'));
@@ -1370,7 +1371,12 @@ router.get('/me/notify-settings', asyncHandler(async (req, res) => {
 }));
 router.put('/me/notify-settings', asyncHandler(async (req, res) => {
   const hour = z.number().int().min(0).max(23).nullable();
-  const body = parse(z.object({ emailMode: z.enum(EMAIL_MODES).optional(), quietStart: hour.optional(), quietEnd: hour.optional() }), req.body);
+  // 18/10/2026 (app iOS CT Work): `push` = công tắc đẩy theo loại, `timezone` = múi giờ IANA cho giờ im lặng.
+  const push = z.object({ assign: z.boolean(), comment: z.boolean(), mention: z.boolean(), alert: z.boolean(), approval: z.boolean(), chatAll: z.boolean() }).partial().strict();
+  const body = parse(z.object({
+    emailMode: z.enum(EMAIL_MODES).optional(), quietStart: hour.optional(), quietEnd: hour.optional(),
+    push: push.optional(), timezone: z.string().min(1).max(64).nullable().optional(),
+  }), req.body);
   ok(res, await setNotifySettings(callerId(req), body));
 }));
 
@@ -1907,6 +1913,8 @@ router.patch('/projects/:pid/pages/:num', asyncHandler(async (req, res) => {
     ownerId: id.optional(),
     stageId: id.nullable().optional(),
     version: z.number().int().min(0).optional(),
+    // 18/10/2026: gốc của bản sửa — tôn trọng cả khi trang đang đồng soạn (409 nếu lệch), xem pages.updatePage.
+    baseVersion: z.number().int().min(0).optional(),
     versionNote: z.string().max(500).nullable().optional(),
     aiAssisted: z.boolean().optional(),
   }).strict(), req.body);
@@ -2133,5 +2141,7 @@ router.use(ctw9aRoutes);
 router.use(ctw9bRoutes);
 // CTW đợt 9c: quiz trắc nghiệm tự chấm — ngân hàng câu hỏi, nhập xlsx/Aiken/GIFT, AI nháp, lượt làm, thống kê (work.ctw9c.routes.ts).
 router.use(ctw9cRoutes);
+// 18/10/2026: tuyến cho app iOS CT Work (work.ios.routes.ts) — báo cáo nội dung, nhắn riêng 1-1, lịch/giờ xuyên dự án.
+router.use(iosRoutes);
 
 export default router;

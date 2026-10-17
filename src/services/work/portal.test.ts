@@ -38,6 +38,8 @@ describe('clientPortalRouteAllowed — danh sách trắng tuyến của khách',
     ['PUT', '/issues/12/comments/3/reactions/%F0%9F%91%8D'], ['POST', '/issues/12/attachments/presign'], ['POST', '/issues/12/attachments/complete'],
     ['GET', '/attachments/9/url'], ['GET', '/issues/12/pages'], ['GET', '/approvals'], ['GET', '/approvals/4'], ['POST', '/approvals/4/decide'],
     ['GET', '/pages'], ['GET', '/pages/search'], ['GET', '/pages/2'], ['GET', '/pages/2/markdown'], ['HEAD', '/issues'],
+    // App Store 1.2: báo cáo bình luận thẻ (service kiểm khách THẤY bình luận đó).
+    ['POST', '/issues/12/comments/3/report'], ['GET', '/chat/channels'], ['POST', '/chat/channels/3/messages/9/report'],
   ];
   const blocked: Array<[string, string]> = [
     // Báo cáo, dashboard, worklog, lịch sử, xuất, AI, timeline, backlog, sprint, kiểm thử…
@@ -52,7 +54,7 @@ describe('clientPortalRouteAllowed — danh sách trắng tuyến của khách',
     // Ghi: khách không sửa/kéo/xoá/chia sẻ/tạo thẻ ngoài cổng.
     ['POST', '/issues'], ['PATCH', '/issues/12'], ['POST', '/issues/12/move'], ['DELETE', '/issues/12'], ['POST', '/issues/12/clone'],
     ['PUT', '/issues/12/client-visible'], ['PATCH', '/attachments/9/client'], ['DELETE', '/attachments/9'], ['POST', '/issues/12/links'],
-    ['PUT', '/issues/12/watch'], ['POST', '/issues/12/comments/3/report'], ['GET', '/pages/2/versions'], ['GET', '/pages/2/comments'],
+    ['PUT', '/issues/12/watch'], ['POST', '/chat/dm'], ['GET', '/pages/2/versions'], ['GET', '/pages/2/comments'],
     ['POST', '/pages/2/comments'], ['PATCH', '/pages/2'], ['POST', '/approvals'], ['POST', '/approvals/4/cancel'],
     // Đường trông giống nhưng không khớp đúng.
     ['GET', '/issues/12/comments/3'], ['GET', '/issuesx'], ['GET', '/portalx'], ['POST', '/board'],

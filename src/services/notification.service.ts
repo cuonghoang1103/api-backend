@@ -107,7 +107,7 @@ async function pushNotification(args: {
       },
       include: {
         sender: {
-          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true },
+          select: { id: true, username: true, fullName: true, displayName: true, avatarUrl: true, kind: true },
         },
       },
     });
@@ -196,6 +196,32 @@ function chuThongBao(type: string, ten: string, payload: unknown): string {
 }
 
 /**
+ * CT Work: category + thread-id + khoá thêm cho gói đẩy, sau khi lọc theo công tắc đẩy của người nhận
+ * (`work_notify_settings.push_prefs`). Trả `null` ⇒ KHÔNG đẩy (hàng trong hộp thư vẫn có).
+ */
+async function chuanBiDayCtw(row: { type: string; receiverId: number; payload: unknown }) {
+  const { goiDayCtw, pushKeyFor, pushPrefsFrom } = await import('./push/goiDayCtw.js');
+  const p = (row.payload ?? {}) as Record<string, unknown>;
+  const khoa = pushKeyFor(row.type, p);
+  if (khoa) {
+    const s = await prisma.workNotifySetting.findUnique({ where: { userId: row.receiverId }, select: { pushPrefs: true } }).catch(() => null);
+    if (!pushPrefsFrom(s?.pushPrefs)[khoa]) return null;
+  }
+  let dangChoDuyet = false;
+  if (row.type === 'WORK_ALERT' && typeof p.approvalId === 'number') {
+    const a = await prisma.workApproval.findUnique({
+      where: { id: p.approvalId },
+      select: { status: true, mode: true, steps: { select: { id: true, approverId: true, position: true, decision: true } } },
+    }).catch(() => null);
+    if (a?.status === 'PENDING') {
+      const { actionableSteps } = await import('./work/permissions.js');
+      dangChoDuyet = actionableSteps(a.mode, a.steps).some((st) => st.approverId === row.receiverId);
+    }
+  }
+  return goiDayCtw(row.type, p, { dangChoDuyet });
+}
+
+/**
  * Gửi thông báo đẩy cho một hàng vừa tạo.
  *
  * Huy hiệu = tin chưa đọc + thông báo chưa đọc, khớp cách app tự tính
@@ -214,6 +240,9 @@ async function dayRaNgoaiApp(row: {
     const ten = tenNguoiGui(row.sender);
     // Thông báo CT Work ⇒ ưu tiên app iOS CT Work riêng (17/10/2026); huy hiệu ở app đó chỉ đếm việc CT Work.
     const laCtw = row.type.startsWith('WORK_');
+    // 18/10/2026: CT Work có category (nút trên thông báo) + thread-id theo thẻ/kênh + công tắc đẩy theo loại.
+    const ctw = laCtw ? await chuanBiDayCtw(row) : null;
+    if (laCtw && !ctw) return; // người nhận tắt đẩy loại này
     const soCtw = laCtw
       ? await prisma.socialNotification.count({ where: { receiverId: row.receiverId, isRead: false, type: { startsWith: 'WORK_' } } }).catch(() => undefined)
       : undefined;
@@ -232,7 +261,8 @@ async function dayRaNgoaiApp(row: {
       huyHieu: (typeof soTin === 'number' ? soTin : 0) + soTb,
       // Gom theo LOẠI để iOS xếp chồng thông báo cùng nhóm, thay vì rải ra
       // 20 dòng riêng khi ai đó thả cảm xúc hàng loạt.
-      nhom: `xh-${row.type}`,
+      nhom: ctw?.threadId ?? `xh-${row.type}`,
+      ...(ctw ? { phanLoai: ctw.category } : {}),
       // `loai` khác `tin-nhan` để app biết đây là thông báo mạng xã hội và
       // định tuyến khác — xem `ThongBaoDay.didReceive`.
       duLieu: {
@@ -244,6 +274,8 @@ async function dayRaNgoaiApp(row: {
         ...(row.type.startsWith('WORK_') && typeof (row.payload as { url?: unknown } | null)?.url === 'string'
           ? { duongDan: (row.payload as { url: string }).url, maThe: String((row.payload as { issueKey?: unknown }).issueKey ?? '') }
           : {}),
+        // `approvalId` / `meetingUrl` ở cấp ngoài cùng — app đọc thẳng, khỏi lục lại hộp thư.
+        ...(ctw?.them ?? {}),
       },
     }, laCtw ? 'ctwork' : 'chinh', soCtw);
   } catch (err) {

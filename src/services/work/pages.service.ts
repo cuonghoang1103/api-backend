@@ -347,6 +347,11 @@ export interface UpdatePageInput {
   stageId?: number | null;
   /** Số `version` client đang cầm — lệch ⇒ 409 WORK_PAGE_CONFLICT (có người vừa lưu trước). */
   version?: number;
+  /**
+   * 18/10/2026 (app iOS): `version` mà bản sửa của client DỰA TRÊN. Khác `version`: được tôn trọng CẢ KHI trang đang đồng
+   * soạn — máy chủ ghi phòng Yjs xuống CSDL trước rồi so; lệch ⇒ 409 WORK_PAGE_CONFLICT; khớp ⇒ gộp ba chiều đúng gốc.
+   */
+  baseVersion?: number;
   /** Ghi chú ⇒ ép một phiên bản RIÊNG ("Save version"). */
   versionNote?: string | null;
   /** Đợt S6: sửa nội dung qua đề xuất AI ⇒ AI-assisted. */
@@ -413,6 +418,17 @@ export async function updatePage(userId: number, projectId: number, num: number,
     await assertStage(projectId, input.stageId);
     data.stageId = input.stageId;
   }
+  // baseVersion: ghi trạng thái phòng đồng soạn (nếu đang mở) xuống CSDL rồi mới so — không còn khe "flush → PATCH" của client.
+  let baseContent = p.contentJson;
+  if (input.baseVersion !== undefined) {
+    const gw = await import('../../socket/work-docs-collaboration.gateway.js');
+    await gw.flushPageCollab(p.id).catch(() => false);
+    const now = await prisma.workPage.findUnique({ where: { id: p.id }, select: { version: true, contentJson: true, lastEditedBy: { select: PUBLIC_USER } } });
+    if (now && now.version !== input.baseVersion) {
+      throw new AppError('Someone else changed this document since you opened it. Reload to see their changes.', 409, 'WORK_PAGE_CONFLICT', { version: now.version, baseVersion: input.baseVersion, by: now.lastEditedBy ?? null });
+    }
+    if (now) baseContent = now.contentJson;
+  }
   let json: Prisma.InputJsonValue | undefined;
   let text: string | undefined;
   if (input.contentJson !== undefined) ({ json, text } = normDoc(input.contentJson));
@@ -420,11 +436,11 @@ export async function updatePage(userId: number, projectId: number, num: number,
   // đi QUA Yjs bằng gộp ba chiều theo khối — không đè chữ người đang gõ, không vấp 409 vì phiên bản do người khác đẩy.
   // Gateway đã ghi nội dung + phiên bản (kèm ghi chú) ⇒ phần dưới chỉ còn trường khác (trạng thái, chủ trang, AI…).
   let viaCollab = false;
-  if (json !== undefined && stableStringify(json) !== stableStringify(p.contentJson)) {
+  if (json !== undefined && stableStringify(json) !== stableStringify(baseContent)) {
     if (p.status === 'ARCHIVED' && input.status === undefined) throw new BadRequestError('This document is archived — move it back to Draft to edit it', 'WORK_PAGE_ARCHIVED');
     const { applyPageContentViaCollab } = await import('../../socket/work-docs-collaboration.gateway.js');
     const r = await applyPageContentViaCollab({
-      pageId: p.id, base: p.contentJson, next: json, actorId: userId, mode: 'merge',
+      pageId: p.id, base: baseContent, next: json, actorId: userId, mode: 'merge',
       title: input.title !== undefined ? (input.title.trim() || 'Untitled') : undefined,
       note: input.versionNote ?? (input.aiProvenance ? 'AI suggestion applied' : null),
     });
@@ -437,7 +453,7 @@ export async function updatePage(userId: number, projectId: number, num: number,
   }
   // Gửi lại y nguyên nội dung đang có (tự lưu không có gì mới) ⇒ KHÔNG tính là sửa:
   // không tăng version, không đổi "Edited by", không đẻ phiên bản.
-  const bodyChanged = json !== undefined && stableStringify(json) !== stableStringify(p.contentJson);
+  const bodyChanged = json !== undefined && stableStringify(json) !== stableStringify(baseContent);
   const contentChange = bodyChanged || (!viaCollab && input.title !== undefined && (input.title.trim() || 'Untitled') !== p.title);
   const title = input.title !== undefined ? (input.title.trim() || 'Untitled').slice(0, 255) : p.title;
   if (contentChange) {
@@ -462,7 +478,8 @@ export async function updatePage(userId: number, projectId: number, num: number,
 
   const r = await prisma.$transaction(async (tx) => {
     // Ghi có điều kiện theo version ⇒ hai người lưu cùng lúc không đè nhau. Đồng soạn (K-3b): Yjs đã gộp ⇒ bỏ khoá này.
-    const where = { id: p.id, ...(input.version !== undefined && !viaCollab ? { version: input.version } : {}) };
+    const guard = input.version ?? input.baseVersion;
+    const where = { id: p.id, ...(guard !== undefined && !viaCollab ? { version: guard } : {}) };
     const upd = await tx.workPage.updateMany({ where, data: data as Prisma.WorkPageUncheckedUpdateManyInput });
     if (!upd.count) {
       const now = await tx.workPage.findUnique({ where: { id: p.id }, select: { version: true, lastEditedBy: { select: PUBLIC_USER } } });
@@ -474,6 +491,12 @@ export async function updatePage(userId: number, projectId: number, num: number,
     }
     return cur;
   });
+  // Đổi tên qua REST khi phòng đồng soạn đang mở: cập nhật `metadata.title` của phòng — không thì lần lưu kế của phòng
+  // (materializePage đọc tiêu đề từ Y.Doc) ghi NGƯỢC tiêu đề cũ về CSDL.
+  if (!viaCollab && data.title !== undefined) {
+    const { setPageCollabTitle } = await import('../../socket/work-docs-collaboration.gateway.js');
+    setPageCollabTitle(p.id, r.title);
+  }
   emitPage(projectId, p.id, p.number, data.status ? 'status' : 'updated', userId);
   if (audits.length) await auditProject(projectId, { actorId: userId, action: 'page.update', targetType: 'page', targetId: p.id, summary: `Document ${p.number} (${title}): ${audits.join(', ')}`.slice(0, 500) });
   return { ...(await getPage(userId, projectId, num)), version: r.version };

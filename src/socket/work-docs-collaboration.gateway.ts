@@ -286,6 +286,19 @@ export async function flushPageCollab(pageId: number): Promise<boolean> {
   return true;
 }
 
+/**
+ * Đổi tiêu đề trong phòng đang mở (đổi tên qua REST, 18/10/2026). Không có phòng trong tiến trình ⇒ không làm gì (lần mở
+ * sau `loadDoc` tự lấy tiêu đề từ CSDL). Gọi SAU khi CSDL đã có tiêu đề mới ⇒ lần lưu kế không thấy "đổi" ⇒ không tăng version.
+ */
+export function setPageCollabTitle(pageId: number, title: string): boolean {
+  const d = server?.documents.get(docNameOf(pageId));
+  if (!d) return false;
+  const meta = d.getMap<unknown>('metadata');
+  const t = title.slice(0, 255);
+  if (meta.get('title') !== t) d.transact(() => meta.set('title', t), 'ctw-server');
+  return true;
+}
+
 /** Đóng mọi kết nối của trang (đổi quyền, tắt collab) ⇒ client kết nối lại và tự hỏi quyền mới. */
 export function closePageCollab(pageId: number) {
   server?.closeConnections(docNameOf(pageId));

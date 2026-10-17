@@ -183,6 +183,8 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     // CTW đợt 8c: chuỗi họp (mời người), RSVP cổng khách, phỏng vấn stakeholder AI, gói nộp SWR302, cấu hình ước lượng
     ['POST', '/meeting-series'], ['PATCH', '/meeting-series/4'], ['DELETE', '/meeting-series/4'], ['POST', '/portal/meetings/3/rsvp'],
     ['POST', '/swr/elicitation/ELC-2/ai-stakeholder'], ['DELETE', '/swr/elicitation/2/ai-stakeholder'], ['GET', '/swr/package.zip'], ['PUT', '/swr/estimation'],
+    // 18/10/2026 (app iOS): báo cáo nội dung (việc của người) + nhắn riêng 1-1 + báo cáo tin chat
+    ['POST', '/meetings/3/report'], ['POST', '/issues/12/comments/4/report'], ['POST', '/chat/dm'], ['POST', '/chat/channels/2/messages/9/report'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [
@@ -197,6 +199,8 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     // CTW đợt 8c: đọc chuỗi họp, ảnh sơ đồ, phân tích tĩnh, báo cáo trạng thái yêu cầu, ước lượng
     ['GET', '/meeting-series'], ['GET', '/meeting-series/4'], ['GET', '/diagrams/3/image.svg'], ['POST', '/diagram-renders'],
     ['GET', '/static-analysis'], ['GET', '/swr/status-report'], ['GET', '/swr/estimation'], ['POST', '/meetings/3/apply-template'],
+    // 18/10/2026: đọc gọn một dashboard / một yêu cầu SWR
+    ['GET', '/dashboards/4'], ['GET', '/swr/requirements/12'],
   ];
   it(`${denied.length} tuyến đối ngoại ⇒ cấm`, () => {
     assert.ok(denied.length >= 25);
@@ -228,7 +232,9 @@ describe('AI agent — tuyến ngoài dự án là DANH SÁCH TRẮNG (agentTopR
       ['PUT', '/me/notify-settings'], ['GET', '/workspaces/3/workload'], ['POST', '/workspaces/3/transfer'], ['GET', '/ai/quota'],
       ['GET', '/workspaces/3/builtin-budget'], ['PUT', '/workspaces/3/builtin-budget'], ['GET', '/workspaces/3/agents/1/runs'],
       // CTW đợt 8a: kết nối OAuth của người
-      ['GET', '/integrations'], ['GET', '/integrations/google/start'], ['GET', '/integrations/google/picker'], ['GET', '/integrations/microsoft/files'], ['POST', '/integrations/microsoft/sync']] as const) {
+      ['GET', '/integrations'], ['GET', '/integrations/google/start'], ['GET', '/integrations/google/picker'], ['GET', '/integrations/microsoft/files'], ['POST', '/integrations/microsoft/sync'],
+      // 18/10/2026 (app iOS): báo cáo nội dung + lịch/giờ xuyên dự án của NGƯỜI
+      ['POST', '/report'], ['GET', '/me/agenda'], ['GET', '/me/timesheet']] as const) {
       assert.equal(agentTopRouteAllowed(m, p), false, `${m} ${p}`);
     }
   });

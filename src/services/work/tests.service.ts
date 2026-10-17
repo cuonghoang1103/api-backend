@@ -458,13 +458,17 @@ export async function updateCycle(
     data.endAt = input.state === 'DONE' ? new Date() : null;
     data.closedReason = input.state === 'DONE' ? 'MANUAL' : null; // CTW đợt 8c
   }
-  const add = await testCaseIdsFor(projectId, input.addNumbers ?? []);
+  const numbers = [...new Set(input.addNumbers ?? [])];
+  const add = await testCaseIdsFor(projectId, numbers); // cùng thứ tự với `numbers`
+  // 18/10/2026 (app iOS): trả lượt chạy của từng số thẻ vừa thêm (kể cả đã có sẵn) ⇒ app mở thẳng lượt chạy, khỏi tải lại chu kỳ.
+  const runs: Array<{ number: number; runId: number }> = [];
   await prisma.$transaction(async (tx) => {
     await tx.workTestCycle.update({ where: { id: cycleId }, data });
-    for (const id of add) await createRun(tx, cycleId, id);
+    for (const [i, id] of add.entries()) runs.push({ number: numbers[i], runId: await createRun(tx, cycleId, id) });
     if (input.removeRunIds?.length) await tx.workTestRun.deleteMany({ where: { cycleId, id: { in: input.removeRunIds } } });
   });
   touch(projectId, userId);
+  return { runs };
 }
 
 export async function deleteCycle(userId: number, projectId: number, cycleId: number) {

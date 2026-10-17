@@ -640,11 +640,24 @@ export async function listComments(userId: number, projectId: number, number: nu
   const f = await peopleFilterFor(access, userId);
   // K-1: khách không thấy gốc nội bộ ⇒ trả lời PUBLIC của nó đứng như gốc (không lộ là có ghi chú ẩn).
   const shown = new Set(comments.map((c) => c.id));
-  return comments.map((c) => ({
-    ...c, author: maskUser(c.author, f), reactions: maskReactions(byComment.get(c.id) ?? [], f),
-    parentId: c.parentId !== null && (shown.has(c.parentId) || !isClientScoped(access)) ? c.parentId : null,
-    attachments: (files.get(c.id) ?? []).map((a) => ({ ...a, uploader: maskUser(a.uploader, f) })),
-  }));
+  // 18/10/2026 (App Store 1.2): bình luận của người mình đã chặn / mình đã báo cáo ⇒ `hiddenForMe` (client thu gọn).
+  const authorIds = [...new Set(comments.map((c) => c.author?.id).filter((x): x is number => !!x && x !== userId))];
+  const [blocks, reports] = await Promise.all([
+    authorIds.length ? prisma.userBlock.findMany({ where: { blockerId: userId, blockedId: { in: authorIds } }, select: { blockedId: true } }) : [],
+    comments.length ? prisma.workAuditLog.findMany({ where: { workspaceId: access.workspaceId, actorId: userId, action: 'comment.report', targetId: { in: comments.map((c) => c.id) } }, select: { targetId: true } }) : [],
+  ]);
+  const blocked = new Set(blocks.map((b) => b.blockedId));
+  const reported = new Set(reports.map((r) => r.targetId));
+  return comments.map((c) => {
+    const authorBlocked = !!c.author && blocked.has(c.author.id);
+    const reportedByMe = reported.has(c.id);
+    return {
+      ...c, author: maskUser(c.author, f), reactions: maskReactions(byComment.get(c.id) ?? [], f),
+      parentId: c.parentId !== null && (shown.has(c.parentId) || !isClientScoped(access)) ? c.parentId : null,
+      attachments: (files.get(c.id) ?? []).map((a) => ({ ...a, uploader: maskUser(a.uploader, f) })),
+      authorBlocked, reportedByMe, hiddenForMe: authorBlocked || reportedByMe,
+    };
+  });
 }
 
 export async function addComment(
@@ -990,9 +1003,11 @@ export async function reportComment(
   input: { reason: (typeof COMMENT_REPORT_REASONS)[number]; details?: string | null },
 ) {
   const access = await requireProject(userId, projectId, 'project.view');
-  const { id } = await findIssue(projectId, number);
-  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null }, select: { authorId: true, bodyText: true } });
+  const { id, clientVisible } = await findIssue(projectId, number);
+  const c = await prisma.workComment.findFirst({ where: { id: commentId, issueId: id, deletedAt: null }, select: { authorId: true, bodyText: true, visibility: true } });
   if (!c) throw new NotFoundError('Comment not found');
+  // Khách cổng (18/10/2026 — được gọi tuyến này): chỉ báo cáo bình luận PUBLIC trên thẻ đã chia sẻ, đúng thứ họ thấy.
+  if (isClientScoped(access) && (!clientVisible || c.visibility !== 'PUBLIC')) throw new NotFoundError('Comment not found');
   if (c.authorId === userId) throw new BadRequestError('You cannot report your own comment', 'WORK_REPORT_SELF');
   const dup = await prisma.workAuditLog.findFirst({ where: { workspaceId: access.workspaceId, actorId: userId, action: 'comment.report', targetId: commentId } });
   if (dup) return { reported: true, duplicate: true };

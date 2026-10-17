@@ -18,6 +18,7 @@ import { prisma } from '../../config/database.js';
 import { BadRequestError } from '../../middleware/errorHandler.js';
 import { notifyWork as pushWork } from '../notification.service.js';
 import { logger } from '../../utils/logger.js';
+import { pushPrefsFrom, type PushPrefs } from '../push/goiDayCtw.js';
 import { frontendUrl, sendWorkEmail } from './common.js';
 import { onWorkEvent } from './events.js';
 import { clientEmailContent, clientMemberIds, registerPortalNotifications, routeForClient } from './portalNotify.js';
@@ -37,9 +38,18 @@ const SUBJECT: Record<WorkNotifyArgs['type'], (p: Record<string, unknown>) => st
   WORK_ALERT: (p) => `${p.issueKey}: ${p.message ?? 'needs your attention'}`,
 };
 
-/** Giờ hiện tại theo giờ VN (0–23). */
-function vnHour(d = new Date()): number {
-  return Number(new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', hour12: false }).format(d)) % 24;
+/** Giờ hiện tại (0–23) theo múi giờ của người nhận — NULL/sai ⇒ giờ VN như trước 18/10/2026. */
+export function hourIn(tz: string | null | undefined, d = new Date()): number {
+  try {
+    return Number(new Intl.DateTimeFormat('en-GB', { timeZone: tz || 'Asia/Ho_Chi_Minh', hour: '2-digit', hour12: false }).format(d)) % 24;
+  } catch {
+    return Number(new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', hour12: false }).format(d)) % 24;
+  }
+}
+
+/** Múi giờ IANA hợp lệ không (Intl nhận được). */
+export function validTimezone(tz: string): boolean {
+  try { new Intl.DateTimeFormat('en-GB', { timeZone: tz }); return true; } catch { return false; }
 }
 
 /** Trong giờ im lặng không? Khoảng có thể vắt qua nửa đêm (22 → 7). */
@@ -50,14 +60,22 @@ export function inQuietHours(start: number | null, end: number | null, hour: num
 
 export async function getNotifySettings(userId: number) {
   const s = await prisma.workNotifySetting.findUnique({ where: { userId } });
-  return { emailMode: (s?.emailMode ?? 'INSTANT') as EmailMode, quietStart: s?.quietStart ?? null, quietEnd: s?.quietEnd ?? null };
+  return {
+    emailMode: (s?.emailMode ?? 'INSTANT') as EmailMode, quietStart: s?.quietStart ?? null, quietEnd: s?.quietEnd ?? null,
+    // 18/10/2026 (app iOS CT Work): công tắc đẩy theo loại + múi giờ của giờ im lặng.
+    push: pushPrefsFrom(s?.pushPrefs), timezone: s?.timezone ?? null,
+  };
 }
 
-export async function setNotifySettings(userId: number, input: { emailMode?: EmailMode; quietStart?: number | null; quietEnd?: number | null }) {
+export async function setNotifySettings(userId: number, input: {
+  emailMode?: EmailMode; quietStart?: number | null; quietEnd?: number | null; push?: Partial<PushPrefs>; timezone?: string | null;
+}) {
   const cur = await getNotifySettings(userId);
-  const next = { ...cur, ...input };
+  const next = { ...cur, ...input, push: { ...cur.push, ...(input.push ?? {}) } };
   if ((next.quietStart === null) !== (next.quietEnd === null)) throw new BadRequestError('Set both the start and end of quiet hours', 'WORK_BAD_QUIET');
-  await prisma.workNotifySetting.upsert({ where: { userId }, create: { userId, ...next }, update: next });
+  if (next.timezone !== null && !validTimezone(next.timezone)) throw new BadRequestError('Unknown time zone — use an IANA name like Asia/Ho_Chi_Minh', 'WORK_BAD_TIMEZONE');
+  const data = { emailMode: next.emailMode, quietStart: next.quietStart, quietEnd: next.quietEnd, pushPrefs: next.push, timezone: next.timezone };
+  await prisma.workNotifySetting.upsert({ where: { userId }, create: { userId, ...data }, update: data });
   return next;
 }
 
@@ -76,7 +94,7 @@ async function emailFor(args: WorkNotifyArgs): Promise<void> {
   if (settings.emailMode === 'OFF') return;
   const subject = (args.payload.portal === true ? clientEmailContent(args.payload).subject : SUBJECT[args.type](args.payload)).slice(0, 240);
   const url = typeof args.payload.url === 'string' ? args.payload.url : null;
-  if (settings.emailMode === 'DIGEST' || inQuietHours(settings.quietStart, settings.quietEnd, vnHour())) {
+  if (settings.emailMode === 'DIGEST' || inQuietHours(settings.quietStart, settings.quietEnd, hourIn(settings.timezone))) {
     await prisma.workEmailQueue.create({ data: { userId: args.receiverId, kind: args.type, subject, url } });
     return;
   }
@@ -114,10 +132,27 @@ async function emailFor(args: WorkNotifyArgs): Promise<void> {
  * viết lại link vào cổng khách; còn lại bỏ hẳn.
  */
 export async function notifyWork(args: WorkNotifyArgs): Promise<void> {
+  // Danh sách chặn (/messages/blocks) áp phía máy chủ (18/10/2026): người nhận đã chặn người gửi ⇒ không chuông/đẩy/email
+  // cho NỘI DUNG của người đó (bình luận, @nhắc, tin chat). Giao việc / phê duyệt / nhắc hạn vẫn tới — đó là việc.
+  if ((args.type === 'WORK_COMMENT' || args.type === 'WORK_MENTION') && (await isBlockedBy(args.receiverId, args.senderId))) return;
   const routed = await routeForClient(args);
   if (!routed) return;
   await pushWork(routed);
   await emailFor(routed).catch((err) => logger.warn('[work] email thông báo lỗi', { err: (err as Error).message }));
+}
+
+/** `receiverId` đã chặn `senderId` chưa (bảng user_blocks của tin nhắn). */
+export async function isBlockedBy(receiverId: number, senderId: number): Promise<boolean> {
+  if (receiverId === senderId) return false;
+  const b = await prisma.userBlock.findUnique({ where: { uk_block_pair: { blockerId: receiverId, blockedId: senderId } }, select: { id: true } }).catch(() => null);
+  return !!b;
+}
+
+/** Tập người (trong `userIds`) đã chặn `senderId`. */
+export async function blockersOf(senderId: number, userIds: number[]): Promise<Set<number>> {
+  if (!userIds.length) return new Set();
+  const rows = await prisma.userBlock.findMany({ where: { blockedId: senderId, blockerId: { in: userIds } }, select: { blockerId: true } });
+  return new Set(rows.map((r) => r.blockerId));
 }
 
 /** Cron 08:00 giờ VN: mỗi người một thư gộp mọi mục đang chờ. */

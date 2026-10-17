@@ -475,6 +475,8 @@ const CLIENT_ROUTES: Array<[method: string, re: RegExp]> = [
   ['POST', /^\/issues\/\d+\/comments$/],
   ['PATCH', /^\/issues\/\d+\/comments\/\d+$/],
   ['DELETE', /^\/issues\/\d+\/comments\/\d+$/],
+  // App Store 1.2 (18/10/2026): khách báo cáo được bình luận họ THẤY (service kiểm visibility trước khi ghi).
+  ['POST', /^\/issues\/\d+\/comments\/\d+\/report$/],
   ['PUT', /^\/issues\/\d+\/comments\/\d+\/reactions\/[^/]+$/],
   ['POST', /^\/issues\/\d+\/attachments\/(presign|complete)$/],
   ['GET', /^\/attachments\/\d+\/url$/],
@@ -489,7 +491,8 @@ const CLIENT_ROUTES: Array<[method: string, re: RegExp]> = [
   // Đợt 6a: ảnh trong tài liệu/mô tả/bình luận — docs3a.readImage chỉ trả ảnh nằm trong nội dung ĐÃ chia sẻ.
   ['GET', /^\/images\/\d+$/],
   // CTW K-3: kênh chat — service chỉ cho khách thấy kênh CLIENT (mặc định không có). Khách không "tạo thẻ" từ tin.
-  ['*', /^\/chat(?!.*\/issue$)(\/.*)?$/],
+  // Nhắn riêng 1-1 (`/chat/dm`) KHÔNG mở cho khách — họ chỉ dùng kênh CLIENT nhóm đã mở.
+  ['*', /^\/chat(?!.*\/issue$)(?!\/dm$)(\/.*)?$/],
 ];
 
 /** `sub` = phần đường dẫn SAU /projects/:pid ('' cho chính dự án). Hàm thuần — test bằng bảng. */
@@ -757,6 +760,9 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   // là quyết định của nhóm (đọc vẫn mở). Đọc chuỗi họp, ảnh sơ đồ, phân tích tĩnh, báo cáo trạng thái vẫn mở.
   ['POST', /^\/meeting-series$/], ['PATCH', /^\/meeting-series\/\d+$/], ['DELETE', /^\/meeting-series\/\d+$/],
   ['*', /^\/swr\/elicitation\/[^/]+\/ai-stakeholder$/], ['GET', /^\/swr\/package\.zip$/], ['PUT', /^\/swr\/estimation$/],
+  // 18/10/2026 (App Store 1.2): báo cáo nội dung là việc của NGƯỜI (đi hàng chờ kiểm duyệt + báo ADMIN) — agent không báo cáo.
+  // Tin chat đã nằm dưới /chat (cấm ở trên); POST /work/report nằm ngoài dự án ⇒ agentTopRouteAllowed chặn.
+  ['POST', /^\/(meetings\/\d+|issues\/\d+\/comments\/\d+)\/report$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

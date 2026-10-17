@@ -874,7 +874,8 @@ export async function runMeetingReminders(now = new Date()): Promise<number> {
         receiverId: a.userId, senderId: m.organizerId ?? a.userId, type: 'WORK_ALERT' as const, entityId: m.id,
         payload: isClient
           ? { portal: true, portalKind: 'meeting', projectName: m.project.name, issueKey: m.project.key, title: m.title, message, url: `${portalPath(m.project.workspace.slug, m.project.key, 'meetings')}&meeting=${m.number}` }
-          : { issueKey: `${m.project.key} · M-${m.number}`, title: m.title, message: `${message}: ${m.title}`.slice(0, 200), url, reminder: true },
+          // meetingUrl ⇒ đẩy iOS category CTW_MEETING (nút Join) — xem push/goiDayCtw.ts.
+          : { issueKey: `${m.project.key} · M-${m.number}`, title: m.title, message: `${message}: ${m.title}`.slice(0, 200), url, reminder: true, ...(m.meetingUrl ? { meetingUrl: m.meetingUrl } : {}) },
       };
       const routed = await routeForClient(args).catch(() => null);
       if (routed) { await pushWork(routed).catch(() => {}); sent += 1; }

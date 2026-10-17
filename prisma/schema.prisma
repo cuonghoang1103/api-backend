@@ -11509,6 +11509,10 @@ model WorkNotifySetting {
   quietStart   Int?      @map("quiet_start")
   quietEnd     Int?      @map("quiet_end")
   lastDigestAt DateTime? @map("last_digest_at")
+  /// Công tắc đẩy iOS theo loại (18/10/2026): {assign, comment, mention, alert, approval, chatAll} — thiếu khoá = bật.
+  pushPrefs    Json?     @map("push_prefs")
+  /// Múi giờ IANA cho giờ im lặng (NULL = Asia/Ho_Chi_Minh như trước).
+  timezone     String?   @db.VarChar(64)
   updatedAt    DateTime  @updatedAt @map("updated_at")
 
   user User @relation("WorkNotifySettingUser", fields: [userId], references: [id], onDelete: Cascade)
@@ -16673,6 +16677,10 @@ model WorkClassCalendarItem {
   @@index([classId, startsAt], map: "idx_work_class_calendar_class")
   @@map("work_class_calendar_items")
 }
+
+// ─── Cổng Claude CHÍNH HÃNG (api.anthropic.com) — 17/10/2026 ─────────────────
+// Dự phòng cho AI Code / CuongMini khi rambo hỏng. Xem `src/services/agent/anthropicChinhHang/`.
+// CỐ Ý không nối FK sang `users`: bảng chỉ để đo + chặn, không cần back-relation trong model User.
 
 /// Một key API Anthropic. Khoá lưu MÃ HOÁ (AES-256-GCM, `utils/crypto.ts`); API admin chỉ trả `duoiKhoa`.
 model AnthropicKey {

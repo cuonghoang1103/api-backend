@@ -116,9 +116,12 @@ jobs:
         working-directory: packages/cuongmini-cli
         run: |
           export CUONGMINI_HOME="$RUNNER_TEMP/cm-p"
+          # GitHub đặt CI=true ⇒ Ink (is-in-ci) TẮT vẽ động, chỉ in khung cuối — ô nhập/menu không bao giờ hiện.
+          # Người dùng thật không có biến này; tắt nó để bộ kiểm nhìn đúng cái người dùng thấy.
+          export CI=false
           cat > "$RUNNER_TEMP/pty.json" <<J
           {"cols":120,"rows":40,"duration":22,"cwd":"$RUNNER_TEMP/duan","cmd":["node","$PWD/dist/cuongmini.mjs"],
-           "env":{"CUONGMINI_HOME":"$CUONGMINI_HOME","TERM":"xterm-256color","COLORTERM":"truecolor","CUONGMINI_LOI":"$PWD/thu/loiGia.cjs","LOI_GIA_NHANH":"1","LANG":"C.UTF-8","SHELL":"/bin/bash"},
+           "env":{"CUONGMINI_HOME":"$CUONGMINI_HOME","TERM":"xterm-256color","COLORTERM":"truecolor","CUONGMINI_LOI":"$PWD/thu/loiGia.cjs","LOI_GIA_NHANH":"1","LANG":"C.UTF-8","SHELL":"/bin/bash","CI":"false"},
            "keys":[[8.0,"/"],[9.5,"\u001b"],[10.0,"sửa laEmail"],[10.4,"\r"],[12.0,"1"],[13.0,"1"],[15.5,"!echo xin-chao-tu-shell"],[15.9,"\r"],[18.0,"\u0012"],[19.5,"\u001b"]],
            "out":"$RUNNER_TEMP/pty-ghi.json"}
           J
@@ -197,9 +200,10 @@ jobs:
           $H = & $Cmd --help
           if ($LASTEXITCODE) { throw "--help thoát mã $LASTEXITCODE" }
           $H | Select-Object -First 3
-          # Ống bị cắt sớm vẫn phải thoát 0 (EPIPE).
-          & $Cmd --help | Select-Object -First 1
-          if ($LASTEXITCODE) { throw "--help | Select-Object thoát mã $LASTEXITCODE" }
+          # Ống bị cắt sớm (EPIPE) phải thoát 0 — kiểm qua cmd vì `Select-Object -First` của PowerShell
+          # tự DỪNG tiến trình con (mã -1), không phải lỗi của CLI.
+          cmd /c "cuongmini --help | findstr /n CuongMini >NUL"
+          if ($LASTEXITCODE) { throw "cuongmini --help | findstr thoát mã $LASTEXITCODE" }
 
       - name: install.ps1 bằng pwsh 7 (thư mục riêng + ép tải Node)
         if: runner.os == 'Windows'

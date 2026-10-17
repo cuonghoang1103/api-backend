@@ -62,6 +62,9 @@ export function khoiDong(v: VoDocLap): void {
   registerAgentHandlers();
   datMacDinhDayDu();
   daKhoiDong = true;
+  // App desktop nạp MCP ở `main/index.ts` — file đó bị THAY trong lõi, nên CLI/VS Code chưa từng nạp
+  // `mcp.json` lúc khởi động (18/10/2026: người dùng cấu hình ctwork xong vẫn "none configured").
+  void goiKenhNoiBo('agent:mcpNapLai', {}, suKienGia).catch(() => undefined);
 }
 
 /**

@@ -1721,6 +1721,426 @@ css/app.css</div>`),
   ].join('\n'),
 };
 
+/* ───────── ASM.2b — 🧭 Assignment A–Z (between 2/6 and 3/6): wireframes — draw every page before writing JSP ───────── */
+const L_x_asm_wireframe = {
+  title: 'ASM.2b — 🧭 Assignment A–Z (between 2/6 and 3/6): wireframes — draw every page before writing JSP|||ASM.2b — 🧭 Assignment A–Z (giữa 2/6 và 3/6): wireframe — vẽ từng trang trước khi viết JSP',
+  slug: 'prj301-asm-wireframe',
+  type: 'VIDEO',
+  description: 'Bài tự thêm, chen giữa ASM.2 và ASM.3: wireframe là bản vẽ mặt bằng của một trang (hộp, nút, bấm đi đâu, ai được mở); phân biệt low-fi, hi-fi, mockup, prototype; quy ước vẽ; ví dụ trang chủ Nhà trọ sinh viên; đổi từng hộp thành Bootstrap 5 + JSP (_top.jspf, .row/.col-md-4 .card, form GET, ?page=), bảng màn hình nối sang Filter và báo cáo; công cụ giấy, draw.io, Figma; dùng AI có trách nhiệm; bài tập cho đề tài của nhóm kèm checklist và đáp án mẫu phòng khám.',
+  content: [
+    bi(`<span class="eyebrow">🧭 Course Assignment A–Z · between 2/6 and 3/6 · added by this site</span>
+<h2>Between the database and the JSP: one drawing per page</h2>
+<p class="lead">ASM.2 gave you the tables and <code>setup.sql</code>. ASM.3 writes the JSP pages. This short lesson sits in between, because that is where most teams skip a step and pay for it later: before anyone writes a view, the team draws every page as a <strong>wireframe</strong> and agrees on it.</p>
+<div class="callout">🎯 <strong>The team flow:</strong> actors and functions (ASM.1) → ERD → <code>setup.sql</code> (ASM.2) → <strong>wireframe of every page (this lesson)</strong> → JSP + servlets (ASM.3) → Filters by role (ASM.4) → report (ASM.6). Each step uses the previous one: the wireframe shows columns from <code>setup.sql</code>, and its URLs and roles become your servlets and your Filter.</div>
+<p>The example in this lesson is deliberately <em>not</em> the clinic: it is the home page of <strong>Nhà trọ sinh viên</strong> (student lodging), drawn by a real PRJ301 team. Seeing the method on a second topic is the best proof that it transfers to yours.</p>`,
+    `<span class="eyebrow">🧭 Assignment A–Z · giữa 2/6 và 3/6 · phần web tự thêm</span>
+<h2>Giữa cơ sở dữ liệu và JSP: mỗi trang một hình vẽ</h2>
+<p class="lead">ASM.2 cho bạn các bảng và <code>setup.sql</code>. ASM.3 viết các trang JSP. Bài ngắn này nằm ở giữa, vì đó chính là chỗ đa số nhóm bỏ qua một bước rồi trả giá về sau: trước khi ai viết view nào, cả nhóm vẽ từng trang thành <strong>wireframe</strong> (bản phác khung giao diện) và thống nhất với nhau.</p>
+<div class="callout">🎯 <strong>Luồng làm việc của nhóm:</strong> tác nhân và chức năng (ASM.1) → ERD → <code>setup.sql</code> (ASM.2) → <strong>wireframe từng trang (bài này)</strong> → JSP + servlet (ASM.3) → Filter theo vai trò (ASM.4) → báo cáo (ASM.6). Bước sau dùng kết quả bước trước: wireframe hiện các cột trong <code>setup.sql</code>, còn URL và vai trò ghi trên wireframe thành servlet và Filter của bạn.</div>
+<p>Ví dụ trong bài cố ý <em>không</em> phải phòng khám: đó là trang chủ của <strong>Nhà trọ sinh viên</strong>, do một nhóm PRJ301 thật vẽ. Thấy cùng một cách làm trên đề tài thứ hai là bằng chứng tốt nhất rằng nó áp được cho đề tài của bạn.</p>`),
+    bi(`<h2>1. What a wireframe is</h2>
+<p>Think of a house. Nobody pours concrete first and decides where the kitchen goes later: an architect draws a <strong>floor plan</strong> — rooms as rectangles, doors as gaps, a label on everything, no paint colours. The plan exists so the owner, the builder and the electrician agree while changing it still costs an eraser.</p>
+<p>A wireframe is the floor plan of one page. It shows four things and deliberately leaves out colours, fonts, real photos and exact pixels:</p>
+<ul>
+<li><strong>Boxes</strong> — which blocks exist and where: navbar, filter, list of cards, pagination, footer.</li>
+<li><strong>Controls</strong> — every button, link, input and dropdown, with the real words on it.</li>
+<li><strong>Where each click goes</strong> — a number on each clickable spot, and a note: which URL, GET or POST, what happens after.</li>
+<li><strong>Who may open the page</strong> — its URL and the roles allowed (guest, logged-in, staff, admin).</li>
+</ul>
+<p>Five words that get mixed up in reports and in class:</p>
+<table>
+<thead><tr><th>Stage</th><th>What it looks like</th><th>Question it answers</th><th>Tool · time</th></tr></thead>
+<tbody>
+<tr><td>Sketch</td><td>pen on paper, rough boxes</td><td>roughly what is on the page?</td><td>paper · 2–5 min</td></tr>
+<tr><td>Low-fidelity wireframe</td><td>grey boxes, real labels, numbered clicks</td><td>what goes where, where does each click go?</td><td>draw.io, Figma, paper · 10–30 min</td></tr>
+<tr><td>High-fidelity wireframe</td><td>real spacing and text sizes, still mostly grey</td><td>does the real content fit?</td><td>Figma · 1–2 h</td></tr>
+<tr><td>Mockup</td><td>final colours, fonts, icons — a static picture</td><td>what will it look like?</td><td>Figma · hours</td></tr>
+<tr><td>Prototype</td><td>mockups or wireframes linked so you can click through</td><td>does the flow feel right?</td><td>Figma prototype mode · hours</td></tr>
+<tr><td>Final UI</td><td>your JSP pages with real data</td><td>does it work?</td><td>NetBeans + Tomcat · weeks</td></tr>
+</tbody>
+</table>
+<p>For PRJ301 the <strong>low-fidelity wireframe</strong> is what you need: fast enough for every page of every member, precise enough to code from.</p>`,
+    `<h2>1. Wireframe là gì</h2>
+<p>Hãy nghĩ tới một ngôi nhà. Không ai đổ bê tông trước rồi mới tính bếp đặt đâu: kiến trúc sư vẽ <strong>bản vẽ mặt bằng</strong> — phòng là hình chữ nhật, cửa là khoảng hở, chỗ nào cũng có nhãn, không có màu sơn. Bản vẽ có để chủ nhà, thợ xây, thợ điện thống nhất với nhau khi việc sửa vẫn chỉ tốn một cục tẩy.</p>
+<p>Wireframe là bản vẽ mặt bằng của một trang. Nó cho thấy bốn thứ, và cố ý bỏ qua màu, phông chữ, ảnh thật, kích thước pixel:</p>
+<ul>
+<li><strong>Hộp</strong> — có những khối nào và nằm ở đâu: thanh điều hướng, bộ lọc, danh sách thẻ, phân trang, chân trang.</li>
+<li><strong>Điều khiển</strong> — mọi nút, liên kết, ô nhập, ô chọn, ghi đúng chữ thật trên đó.</li>
+<li><strong>Bấm đi đâu</strong> — mỗi chỗ bấm được có một số, kèm ghi chú: URL nào, GET hay POST, xong thì chuyện gì xảy ra.</li>
+<li><strong>Ai được mở trang</strong> — URL của trang và các vai trò được vào (khách, đã đăng nhập, nhân viên, admin).</li>
+</ul>
+<p>Năm từ hay bị lẫn trong báo cáo và trên lớp:</p>
+<table>
+<thead><tr><th>Giai đoạn</th><th>Trông như thế nào</th><th>Trả lời câu hỏi gì</th><th>Công cụ · thời gian</th></tr></thead>
+<tbody>
+<tr><td>Phác thảo (sketch)</td><td>bút trên giấy, hộp nguệch ngoạc</td><td>đại khái trang có gì?</td><td>giấy · 2–5 phút</td></tr>
+<tr><td>Wireframe low-fidelity (độ trung thực thấp)</td><td>hộp xám, chữ thật, chỗ bấm đánh số</td><td>cái gì ở đâu, bấm thì đi đâu?</td><td>draw.io, Figma, giấy · 10–30 phút</td></tr>
+<tr><td>Wireframe high-fidelity (độ trung thực cao)</td><td>khoảng cách và cỡ chữ thật, vẫn chủ yếu là xám</td><td>nội dung thật có vừa không?</td><td>Figma · 1–2 giờ</td></tr>
+<tr><td>Mockup</td><td>màu, phông, icon bản cuối — một ảnh tĩnh</td><td>trông sẽ ra sao?</td><td>Figma · vài giờ</td></tr>
+<tr><td>Prototype (bản mẫu bấm được)</td><td>các mockup hoặc wireframe nối nhau để bấm thử</td><td>luồng đi có thuận không?</td><td>chế độ prototype của Figma · vài giờ</td></tr>
+<tr><td>Giao diện thật (final UI)</td><td>các trang JSP của bạn với dữ liệu thật</td><td>có chạy không?</td><td>NetBeans + Tomcat · nhiều tuần</td></tr>
+</tbody>
+</table>
+<p>Với PRJ301, thứ bạn cần là <strong>wireframe low-fidelity</strong>: đủ nhanh để mọi thành viên vẽ mọi trang của mình, đủ chính xác để code theo.</p>`),
+    bi(`<h2>2. Why it is worth an evening</h2>
+<ul>
+<li><strong>Four or five people, one website.</strong> ASM.1 split the work by function, so each member builds different pages. Without a shared drawing you get four navbars, three button styles and two ways to paginate. With it, the team argues once — at the table — and codes once.</li>
+<li><strong>Fewer rewrites.</strong> Drawing forces the questions you would otherwise meet halfway through a JSP: what does the list show when the filter finds nothing? Where does "Cancel" go? Does a guest see the "Book" button at all?</li>
+<li><strong>It checks your database.</strong> Every box shows data. If the card says "Area: 20 m²" and <code>setup.sql</code> has no such column, you found the gap before writing a DAO. Go back to ASM.2 now, not in week four.</li>
+<li><strong>It writes your servlet list and your Filter.</strong> The URL and role at the top of each wireframe are exactly the rows of the table in section 5 — the input of ASM.4.</li>
+<li><strong>It is part of the report.</strong> Part 2 of the brief asks for design documents and screenshots of the interface (ASM.6). Later courses ask for the same, in more detail: SWP391 and SEP490 reports contain screen layouts and screen flows, and SWR302 asks for mockups of the requirements.</li>
+<li><strong>Real jobs often have no designer.</strong> In small companies, freelance work and internal tools, the developer draws the screens. A client who sees a wireframe on day one tells you what is wrong while it is still free to fix.</li>
+</ul>`,
+    `<h2>2. Vì sao đáng bỏ ra một buổi tối</h2>
+<ul>
+<li><strong>Bốn, năm người, một website.</strong> ASM.1 chia việc theo chức năng, nên mỗi thành viên làm những trang khác nhau. Không có hình vẽ chung thì ra bốn thanh điều hướng, ba kiểu nút và hai cách phân trang. Có nó thì cả nhóm cãi nhau một lần — trên bàn — và code một lần.</li>
+<li><strong>Ít phải làm lại.</strong> Vẽ buộc bạn trả lời những câu mà nếu không thì đang viết JSP giữa chừng mới gặp: lọc không ra kết quả thì danh sách hiện gì? Nút "Huỷ" về đâu? Khách chưa đăng nhập có thấy nút "Đặt" không?</li>
+<li><strong>Nó soát lại CSDL của bạn.</strong> Hộp nào cũng hiện dữ liệu. Thẻ ghi "Diện tích: 20 m²" mà <code>setup.sql</code> không có cột đó thì bạn đã tìm ra lỗ hổng trước khi viết DAO. Quay lại ASM.2 ngay bây giờ, đừng để tới tuần thứ tư.</li>
+<li><strong>Nó viết sẵn danh sách servlet và Filter.</strong> URL và vai trò ghi ở đầu mỗi wireframe chính là các dòng của bảng ở mục 5 — đầu vào của ASM.4.</li>
+<li><strong>Nó là một phần báo cáo.</strong> Phần 2 của đề đòi tài liệu thiết kế và hình ảnh giao diện (ASM.6). Các môn sau đòi đúng thứ đó, chi tiết hơn: báo cáo SWP391 và SEP490 có bố cục màn hình và luồng màn hình, còn SWR302 yêu cầu mockup cho các yêu cầu.</li>
+<li><strong>Đi làm thật thường không có designer.</strong> Ở công ty nhỏ, việc freelance và công cụ nội bộ, lập trình viên tự vẽ màn hình. Khách hàng thấy wireframe ngay ngày đầu sẽ chỉ ra chỗ sai khi sửa vẫn còn miễn phí.</li>
+</ul>`),
+    bi(`<h2>3. Conventions that make a wireframe readable</h2>
+<p>These are habits most teams share — guidelines, not laws. Adapt them, but agree on them inside the team so every member's drawings look alike.</p>
+<ol>
+<li><strong>Grey by default.</strong> Black, white and greys. Colour only where it carries meaning: the one primary action of the page, or a status (available, rented, cancelled). If everything is coloured, nothing stands out.</li>
+<li><strong>A crossed box is an image.</strong> A rectangle with an X through it means "a picture goes here".</li>
+<li><strong>Real words on buttons.</strong> "View details", "Filter", "Book" — never "Button 1". Real labels are the text you will type into the JSP.</li>
+<li><strong>Number every clickable spot and write its target.</strong> "② Filter ⇒ GET /rooms?typeId=…". An unnumbered click is a click nobody implements.</li>
+<li><strong>Write the page URL and who may open it</strong> at the top. That line becomes a <code>@WebServlet</code> mapping and a rule in your Filter.</li>
+</ol>
+<p>Two more that matter for the marks: draw the <strong>empty and error states</strong> (no results, form errors in red under each field), and sketch the <strong>phone version</strong> — requirement 1.7 asks for a responsive front end, and the phone sketch tells you which Bootstrap breakpoint classes you need.</p>`,
+    `<h2>3. Quy ước giúp wireframe dễ đọc</h2>
+<p>Đây là thói quen đa số nhóm dùng chung — là hướng dẫn, không phải luật. Cứ điều chỉnh, nhưng trong nhóm phải thống nhất để hình của mọi thành viên trông giống nhau.</p>
+<ol>
+<li><strong>Mặc định là xám.</strong> Đen, trắng và các sắc xám. Chỉ tô màu khi màu mang nghĩa: hành động chính duy nhất của trang, hoặc trạng thái (còn trống, đã thuê, đã huỷ). Cái gì cũng có màu thì chẳng cái gì nổi bật.</li>
+<li><strong>Hộp gạch chéo là ảnh.</strong> Hình chữ nhật có dấu X nghĩa là "chỗ này đặt ảnh".</li>
+<li><strong>Chữ thật trên nút.</strong> "Xem chi tiết", "Lọc", "Đặt lịch" — không bao giờ ghi "Nút 1". Chữ thật chính là chữ bạn sẽ gõ vào JSP.</li>
+<li><strong>Đánh số mọi chỗ bấm được và ghi đích đến.</strong> "② Lọc ⇒ GET /rooms?typeId=…". Chỗ bấm không đánh số là chỗ không ai làm.</li>
+<li><strong>Ghi URL của trang và ai được mở</strong> ở trên cùng. Dòng đó sẽ thành một mapping <code>@WebServlet</code> và một luật trong Filter.</li>
+</ol>
+<p>Thêm hai thói quen ảnh hưởng tới điểm: vẽ <strong>trạng thái rỗng và trạng thái lỗi</strong> (không có kết quả, lỗi form màu đỏ dưới từng ô), và phác <strong>bản điện thoại</strong> — yêu cầu 1.7 đòi giao diện responsive, và hình phác trên điện thoại cho bạn biết cần class breakpoint nào của Bootstrap.</p>`),
+    bi(`<h2>4. Worked example: the home page of "Nhà trọ sinh viên"</h2>
+<p>Topic: a lodging house for students. Guests browse available rooms; tenants and the landlord log in for their own pages. This is the team's wireframe of the home page — page 1 of their list, drawn in draw.io before any JSP existed.</p>
+<div class="anh-slide"><img src="https://media.cuongthai.com/images/academy/WIREFRAME/v1/nha-tro-sv/001.webp" alt="Low-fidelity wireframe of the student-lodging home page: navbar, filter panel on the left, a 3 by 2 grid of room cards with crossed image boxes, pagination, footer, and seven numbered notes on the right" loading="lazy" width="1600" height="1150" /><p class="chu-thich">🖼️ Wireframe of the home page (UC01): grey boxes, crossed images, real labels, seven numbered clicks with their targets; URL, access and owner written at the top.</p></div>
+<p>Read it like a developer:</p>
+<ul>
+<li><strong>Top line</strong> — URL <code>/rooms?typeId=&amp;minPrice=&amp;maxPrice=&amp;floor=&amp;page=</code>, open to everyone, use case UC01, and which member builds it. Route, parameters, access rule and owner, in one line.</li>
+<li><strong>① Navbar</strong> — shared by every page (<code>_top.jspf</code>); after login the two buttons become the user's name and "Log out".</li>
+<li><strong>② Filter</strong> — a GET form back to the same URL that keeps what the user typed. GET because filtering only reads, so the URL can be bookmarked and reloaded.</li>
+<li><strong>③ Cards</strong> — "one card = one ACTIVE room with no ACTIVE contract". That is a business rule (requirement 1.2) written on the drawing; it becomes the WHERE clause of the DAO.</li>
+<li><strong>④ View details</strong> — <code>/rooms/detail?id=3</code>: the next page to draw.</li>
+<li><strong>⑤ Pagination</strong> — six rooms per page, <code>?page=2</code>, through a custom tag (requirement 1.8), keeping the filter parameters.</li>
+<li><strong>⑥ Empty state</strong> — "No matching rooms" plus "Clear filters".</li>
+<li><strong>⑦ Log in / Sign up</strong> — <code>/login</code>, <code>/register</code>.</li>
+</ul>
+<p>Only the "Filter" button and the current page are shaded darker — the two places where emphasis means something.</p>`,
+    `<h2>4. Ví dụ: trang chủ "Nhà trọ sinh viên"</h2>
+<p>Đề tài: một khu nhà trọ cho sinh viên. Khách xem các phòng còn trống; người thuê và chủ trọ đăng nhập để vào trang của mình. Đây là wireframe trang chủ của nhóm — trang 1 trong danh sách trang của họ, vẽ bằng draw.io khi chưa có JSP nào.</p>
+<div class="anh-slide"><img src="https://media.cuongthai.com/images/academy/WIREFRAME/v1/nha-tro-sv/001.webp" alt="Wireframe độ trung thực thấp trang chủ Nhà trọ sinh viên: thanh điều hướng, bộ lọc bên trái, lưới 3 x 2 thẻ phòng với ô ảnh gạch chéo, phân trang, chân trang và bảy ghi chú đánh số bên phải" loading="lazy" width="1600" height="1150" /><p class="chu-thich">🖼️ Wireframe trang chủ (UC01): hộp xám, ảnh gạch chéo, chữ thật, bảy chỗ bấm đánh số kèm đích đến; URL, quyền truy cập và người làm ghi ở trên cùng.</p></div>
+<p>Đọc nó bằng con mắt người code:</p>
+<ul>
+<li><strong>Dòng đầu</strong> — URL <code>/rooms?typeId=&amp;minPrice=&amp;maxPrice=&amp;floor=&amp;page=</code>, ai cũng vào được, use case UC01, và thành viên nào làm. Route, tham số, luật truy cập và người phụ trách — trong một dòng.</li>
+<li><strong>① Thanh điều hướng</strong> — dùng chung mọi trang (<code>_top.jspf</code>); đăng nhập rồi thì hai nút thành tên người dùng và "Đăng xuất".</li>
+<li><strong>② Bộ lọc</strong> — form GET về chính URL đó, giữ lại những gì người dùng đã nhập. GET vì lọc chỉ đọc, nên URL lưu dấu trang và tải lại được.</li>
+<li><strong>③ Thẻ phòng</strong> — "mỗi thẻ = 1 phòng ACTIVE và chưa có hợp đồng ACTIVE". Đó là một luật nghiệp vụ (yêu cầu 1.2) ghi ngay trên hình vẽ; nó sẽ thành mệnh đề WHERE của DAO.</li>
+<li><strong>④ Xem chi tiết</strong> — <code>/rooms/detail?id=3</code>: trang tiếp theo cần vẽ.</li>
+<li><strong>⑤ Phân trang</strong> — sáu phòng mỗi trang, <code>?page=2</code>, qua một custom tag (yêu cầu 1.8), giữ nguyên tham số lọc.</li>
+<li><strong>⑥ Trạng thái rỗng</strong> — "Không tìm thấy phòng phù hợp" kèm "Xoá bộ lọc".</li>
+<li><strong>⑦ Đăng nhập / Đăng ký</strong> — <code>/login</code>, <code>/register</code>.</li>
+</ul>
+<p>Chỉ nút "Lọc" và trang hiện tại được tô đậm hơn — hai chỗ mà sự nhấn mạnh có ý nghĩa.</p>`),
+    bi(`<h2>5. From wireframe to Bootstrap 5 + JSP</h2>
+<p>A good wireframe translates box by box. One rule from the numbers: <strong>a note that says "⇒ a URL" is a link (<code>&lt;a&gt;</code>, GET); a note that saves, deletes or pays is a <code>&lt;button&gt;</code> inside a <code>&lt;form method="post"&gt;</code>.</strong></p>
+<table>
+<thead><tr><th>Wireframe box</th><th>Bootstrap 5 / JSP</th><th>Server side</th></tr></thead>
+<tbody>
+<tr><td>① Navbar</td><td><code>_top.jspf</code> included by every page: <code>.navbar .navbar-expand-lg</code>, <code>c:choose</code> on the logged-in user</td><td>session attribute set at login (ASM.4)</td></tr>
+<tr><td>② Filter</td><td><code>.col-lg-3</code> holding <code>&lt;form method="get"&gt;</code>, <code>.form-select</code>, values kept with <code>param</code></td><td><code>doGet</code> reads <code>typeId</code>, <code>minPrice</code>, <code>maxPrice</code>, <code>floor</code></td></tr>
+<tr><td>③ Card grid</td><td><code>.col-lg-9</code> holding <code>.row</code>, then <code>.col-md-4</code> holding <code>.card</code>, inside <code>c:forEach</code></td><td>DAO: the business rule as WHERE, OFFSET … FETCH</td></tr>
+<tr><td>Crossed box</td><td><code>.card-img-top</code> with an <code>alt</code></td><td>image path column, or a placeholder</td></tr>
+<tr><td>④ View details</td><td><code>&lt;a class="btn" href="…/rooms/detail?id=…"&gt;</code></td><td>a second servlet, <code>/rooms/detail</code></td></tr>
+<tr><td>⑤ Pagination</td><td>your pager custom tag (like <code>pk:pager</code> in ASM.3)</td><td><code>page</code> parameter, total count query</td></tr>
+<tr><td>⑥ Empty state</td><td><code>c:if test="&#36;{empty rooms}"</code></td><td>nothing — the list is simply empty</td></tr>
+<tr><td>⑦ Log in / Sign up</td><td>links in <code>_top.jspf</code></td><td><code>/login</code>, <code>/register</code></td></tr>
+</tbody>
+</table>
+<p>The skeleton below is the wireframe turned into a JSP view. It is an illustration for this topic (it has not been run); the clinic version that does run, with real responses, is in ASM.3.</p>
+<pre><code class="language-html">&lt;%@ include file="/WEB-INF/views/_taglibs.jspf" %&gt;
+&lt;c:set var="pageTitle" value="Phòng còn trống"/&gt;
+&lt;%@ include file="/WEB-INF/views/_top.jspf" %&gt;           &lt;%-- (1) navbar --%&gt;
+&lt;h1 class="h3"&gt;Phòng còn trống&lt;/h1&gt;
+&lt;p class="text-muted"&gt;Tìm thấy &#36;{total} phòng&lt;/p&gt;
+&lt;div class="row g-4"&gt;
+  &lt;div class="col-lg-3"&gt;                                  &lt;%-- (2) filter --%&gt;
+    &lt;form method="get" action="&#36;{pageContext.request.contextPath}/rooms" class="card card-body"&gt;
+      &lt;label class="form-label" for="typeId"&gt;Loại phòng&lt;/label&gt;
+      &lt;select class="form-select" id="typeId" name="typeId"&gt;
+        &lt;option value=""&gt;— Tất cả —&lt;/option&gt;
+        &lt;c:forEach items="&#36;{types}" var="t"&gt;
+          &lt;option value="&#36;{t.id}" &#36;{param.typeId == t.id ? 'selected' : ''}&gt;&lt;c:out value="&#36;{t.name}"/&gt;&lt;/option&gt;
+        &lt;/c:forEach&gt;
+      &lt;/select&gt;
+      &lt;%-- minPrice, maxPrice, floor: same pattern, value="&#36;{fn:escapeXml(param.minPrice)}" --%&gt;
+      &lt;button class="btn btn-primary mt-3"&gt;Lọc&lt;/button&gt;
+      &lt;a class="small mt-2" href="&#36;{pageContext.request.contextPath}/rooms"&gt;Xoá bộ lọc&lt;/a&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+  &lt;div class="col-lg-9"&gt;
+    &lt;c:if test="&#36;{empty rooms}"&gt;                          &lt;%-- (6) empty state --%&gt;
+      &lt;p&gt;Không tìm thấy phòng phù hợp.&lt;/p&gt;
+    &lt;/c:if&gt;
+    &lt;div class="row g-3"&gt;                                 &lt;%-- (3) cards --%&gt;
+      &lt;c:forEach items="&#36;{rooms}" var="r"&gt;
+        &lt;div class="col-md-4"&gt;
+          &lt;div class="card h-100"&gt;
+            &lt;img class="card-img-top" src="&#36;{r.imageUrl}" alt="Phòng &#36;{r.code}"&gt;
+            &lt;div class="card-body"&gt;
+              &lt;h2 class="h5"&gt;&lt;c:out value="&#36;{r.code}"/&gt;&lt;/h2&gt;
+              &lt;p class="mb-1"&gt;Diện tích: &#36;{r.area} m²&lt;/p&gt;
+              &lt;p class="fw-bold"&gt;&lt;fmt:formatNumber value="&#36;{r.price}" pattern="#,##0"/&gt; đ / tháng&lt;/p&gt;
+              &lt;a class="btn btn-outline-secondary w-100"
+                 href="&#36;{pageContext.request.contextPath}/rooms/detail?id=&#36;{r.id}"&gt;Xem chi tiết&lt;/a&gt;  &lt;%-- (4) --%&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/c:forEach&gt;
+    &lt;/div&gt;
+    &lt;nt:pager page="&#36;{page}"/&gt;                            &lt;%-- (5) your custom tag, keeps the filter --%&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;%@ include file="/WEB-INF/views/_bottom.jspf" %&gt;</code></pre>
+<p>On a phone (<code>col-lg-3</code> and <code>col-lg-9</code> become full width), the filter sits above the cards and <code>col-md-4</code> gives one card per row below 768 px, three above — exactly the phone sketch next to the desktop one.</p>
+<p>Note ③ goes into the DAO almost word for word (illustrative table names — use yours from <code>setup.sql</code>):</p>
+<pre><code class="language-sql">WHERE r.status = 'ACTIVE'
+  AND NOT EXISTS (SELECT 1 FROM Contract c
+                  WHERE c.roomId = r.roomId AND c.status = 'ACTIVE')</code></pre>
+<p>Then list the pages — one row per wireframe. This table is your servlet list, the input of the Filter in ASM.4, and a ready-made section of the report:</p>
+<table>
+<thead><tr><th>#</th><th>URL</th><th>View (JSP)</th><th>Servlet</th><th>Who may open it</th></tr></thead>
+<tbody>
+<tr><td>UC01</td><td><code>GET /rooms</code></td><td><code>rooms.jsp</code></td><td><code>RoomListServlet</code></td><td>everyone</td></tr>
+<tr><td>UC02</td><td><code>GET /rooms/detail?id=</code></td><td><code>room-detail.jsp</code></td><td><code>RoomDetailServlet</code></td><td>everyone</td></tr>
+<tr><td>—</td><td><code>GET, POST /login</code></td><td><code>login.jsp</code></td><td><code>LoginServlet</code></td><td>guests</td></tr>
+<tr><td>—</td><td><code>GET, POST /register</code></td><td><code>register.jsp</code></td><td><code>RegisterServlet</code></td><td>guests</td></tr>
+<tr><td>…</td><td>one row per page you drew</td><td>…</td><td>…</td><td>the role written on the wireframe</td></tr>
+</tbody>
+</table>
+<div class="pitfall">Pagination that forgets the filter: page 2 of "double rooms under 3 million" must be <code>/rooms?typeId=2&amp;maxPrice=3000000&amp;page=2</code>. A pager that writes only <code>?page=2</code> silently drops the filter — note ⑤ exists precisely to stop that. Build the link from all current parameters (in the tag, or with <code>c:url</code> + <code>c:param</code>).</div>`,
+    `<h2>5. Từ wireframe sang Bootstrap 5 + JSP</h2>
+<p>Một wireframe tốt dịch ra từng hộp một. Một quy tắc rút từ các con số: <strong>ghi chú nói "⇒ một URL" là liên kết (<code>&lt;a&gt;</code>, GET); ghi chú lưu, xoá hay thanh toán là <code>&lt;button&gt;</code> nằm trong <code>&lt;form method="post"&gt;</code>.</strong></p>
+<table>
+<thead><tr><th>Hộp trên wireframe</th><th>Bootstrap 5 / JSP</th><th>Phía server</th></tr></thead>
+<tbody>
+<tr><td>① Thanh điều hướng</td><td><code>_top.jspf</code> mọi trang include: <code>.navbar .navbar-expand-lg</code>, <code>c:choose</code> theo người đã đăng nhập</td><td>attribute trong session đặt lúc đăng nhập (ASM.4)</td></tr>
+<tr><td>② Bộ lọc</td><td><code>.col-lg-3</code> chứa <code>&lt;form method="get"&gt;</code>, <code>.form-select</code>, giữ giá trị bằng <code>param</code></td><td><code>doGet</code> đọc <code>typeId</code>, <code>minPrice</code>, <code>maxPrice</code>, <code>floor</code></td></tr>
+<tr><td>③ Lưới thẻ</td><td><code>.col-lg-9</code> chứa <code>.row</code>, rồi <code>.col-md-4</code> chứa <code>.card</code>, trong <code>c:forEach</code></td><td>DAO: luật nghiệp vụ thành WHERE, OFFSET … FETCH</td></tr>
+<tr><td>Hộp gạch chéo</td><td><code>.card-img-top</code> có <code>alt</code></td><td>cột đường dẫn ảnh, hoặc ảnh giữ chỗ</td></tr>
+<tr><td>④ Xem chi tiết</td><td><code>&lt;a class="btn" href="…/rooms/detail?id=…"&gt;</code></td><td>servlet thứ hai, <code>/rooms/detail</code></td></tr>
+<tr><td>⑤ Phân trang</td><td>custom tag phân trang của nhóm (như <code>pk:pager</code> ở ASM.3)</td><td>tham số <code>page</code>, câu đếm tổng số dòng</td></tr>
+<tr><td>⑥ Trạng thái rỗng</td><td><code>c:if test="&#36;{empty rooms}"</code></td><td>không có gì — danh sách chỉ đơn giản là rỗng</td></tr>
+<tr><td>⑦ Đăng nhập / Đăng ký</td><td>liên kết trong <code>_top.jspf</code></td><td><code>/login</code>, <code>/register</code></td></tr>
+</tbody>
+</table>
+<p>Bộ khung dưới đây là wireframe đổi thành một view JSP. Đây là khung minh hoạ cho đề tài này (chưa chạy); bản phòng khám chạy thật, có response thật, nằm ở ASM.3.</p>
+<pre><code class="language-html">&lt;%@ include file="/WEB-INF/views/_taglibs.jspf" %&gt;
+&lt;c:set var="pageTitle" value="Phòng còn trống"/&gt;
+&lt;%@ include file="/WEB-INF/views/_top.jspf" %&gt;           &lt;%-- (1) thanh điều hướng --%&gt;
+&lt;h1 class="h3"&gt;Phòng còn trống&lt;/h1&gt;
+&lt;p class="text-muted"&gt;Tìm thấy &#36;{total} phòng&lt;/p&gt;
+&lt;div class="row g-4"&gt;
+  &lt;div class="col-lg-3"&gt;                                  &lt;%-- (2) bộ lọc --%&gt;
+    &lt;form method="get" action="&#36;{pageContext.request.contextPath}/rooms" class="card card-body"&gt;
+      &lt;label class="form-label" for="typeId"&gt;Loại phòng&lt;/label&gt;
+      &lt;select class="form-select" id="typeId" name="typeId"&gt;
+        &lt;option value=""&gt;— Tất cả —&lt;/option&gt;
+        &lt;c:forEach items="&#36;{types}" var="t"&gt;
+          &lt;option value="&#36;{t.id}" &#36;{param.typeId == t.id ? 'selected' : ''}&gt;&lt;c:out value="&#36;{t.name}"/&gt;&lt;/option&gt;
+        &lt;/c:forEach&gt;
+      &lt;/select&gt;
+      &lt;%-- minPrice, maxPrice, floor: cùng kiểu, value="&#36;{fn:escapeXml(param.minPrice)}" --%&gt;
+      &lt;button class="btn btn-primary mt-3"&gt;Lọc&lt;/button&gt;
+      &lt;a class="small mt-2" href="&#36;{pageContext.request.contextPath}/rooms"&gt;Xoá bộ lọc&lt;/a&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+  &lt;div class="col-lg-9"&gt;
+    &lt;c:if test="&#36;{empty rooms}"&gt;                          &lt;%-- (6) trạng thái rỗng --%&gt;
+      &lt;p&gt;Không tìm thấy phòng phù hợp.&lt;/p&gt;
+    &lt;/c:if&gt;
+    &lt;div class="row g-3"&gt;                                 &lt;%-- (3) lưới thẻ --%&gt;
+      &lt;c:forEach items="&#36;{rooms}" var="r"&gt;
+        &lt;div class="col-md-4"&gt;
+          &lt;div class="card h-100"&gt;
+            &lt;img class="card-img-top" src="&#36;{r.imageUrl}" alt="Phòng &#36;{r.code}"&gt;
+            &lt;div class="card-body"&gt;
+              &lt;h2 class="h5"&gt;&lt;c:out value="&#36;{r.code}"/&gt;&lt;/h2&gt;
+              &lt;p class="mb-1"&gt;Diện tích: &#36;{r.area} m²&lt;/p&gt;
+              &lt;p class="fw-bold"&gt;&lt;fmt:formatNumber value="&#36;{r.price}" pattern="#,##0"/&gt; đ / tháng&lt;/p&gt;
+              &lt;a class="btn btn-outline-secondary w-100"
+                 href="&#36;{pageContext.request.contextPath}/rooms/detail?id=&#36;{r.id}"&gt;Xem chi tiết&lt;/a&gt;  &lt;%-- (4) --%&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/c:forEach&gt;
+    &lt;/div&gt;
+    &lt;nt:pager page="&#36;{page}"/&gt;                            &lt;%-- (5) custom tag của nhóm, giữ bộ lọc --%&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;%@ include file="/WEB-INF/views/_bottom.jspf" %&gt;</code></pre>
+<p>Trên điện thoại (<code>col-lg-3</code> và <code>col-lg-9</code> thành tràn ngang), bộ lọc nằm trên các thẻ, còn <code>col-md-4</code> cho một thẻ mỗi hàng khi hẹp hơn 768 px, ba thẻ khi rộng hơn — đúng như hình phác điện thoại đặt cạnh bản máy tính.</p>
+<p>Ghi chú ③ đi vào DAO gần như nguyên văn (tên bảng minh hoạ — dùng tên của bạn trong <code>setup.sql</code>):</p>
+<pre><code class="language-sql">WHERE r.status = 'ACTIVE'
+  AND NOT EXISTS (SELECT 1 FROM Contract c
+                  WHERE c.roomId = r.roomId AND c.status = 'ACTIVE')</code></pre>
+<p>Rồi liệt kê các trang — mỗi wireframe một dòng. Bảng này là danh sách servlet của bạn, đầu vào của Filter ở ASM.4, và một mục báo cáo làm sẵn:</p>
+<table>
+<thead><tr><th>#</th><th>URL</th><th>View (JSP)</th><th>Servlet</th><th>Ai được mở</th></tr></thead>
+<tbody>
+<tr><td>UC01</td><td><code>GET /rooms</code></td><td><code>rooms.jsp</code></td><td><code>RoomListServlet</code></td><td>mọi người</td></tr>
+<tr><td>UC02</td><td><code>GET /rooms/detail?id=</code></td><td><code>room-detail.jsp</code></td><td><code>RoomDetailServlet</code></td><td>mọi người</td></tr>
+<tr><td>—</td><td><code>GET, POST /login</code></td><td><code>login.jsp</code></td><td><code>LoginServlet</code></td><td>khách chưa đăng nhập</td></tr>
+<tr><td>—</td><td><code>GET, POST /register</code></td><td><code>register.jsp</code></td><td><code>RegisterServlet</code></td><td>khách chưa đăng nhập</td></tr>
+<tr><td>…</td><td>mỗi trang bạn vẽ một dòng</td><td>…</td><td>…</td><td>vai trò ghi trên wireframe</td></tr>
+</tbody>
+</table>
+<div class="pitfall">Phân trang quên bộ lọc: trang 2 của "phòng đôi dưới 3 triệu" phải là <code>/rooms?typeId=2&amp;maxPrice=3000000&amp;page=2</code>. Thẻ phân trang chỉ ghi <code>?page=2</code> sẽ lặng lẽ làm mất bộ lọc — ghi chú ⑤ có ra là để chặn đúng chuyện đó. Dựng liên kết từ mọi tham số hiện tại (trong tag, hoặc bằng <code>c:url</code> + <code>c:param</code>).</div>`),
+    bi(`<h2>6. Tools — and where to keep the drawings</h2>
+<ul>
+<li><strong>Paper</strong> — the fastest for the first idea. Three versions in ten minutes, photograph the winner, post it in the team chat.</li>
+<li><strong>draw.io (diagrams.net)</strong> — free, in the browser or as a desktop app, with a "Mockups" shape library (buttons, inputs, browser window). The example above was made with it. It saves a <code>.drawio</code> file you can commit.</li>
+<li><strong>Figma</strong> — free starter plan, plus an education plan for verified students; several members can edit the same file at once, and it grows into mockups and clickable prototypes when a later course asks for them.</li>
+<li>Others: Excalidraw (hand-drawn look), Penpot (open source). One tool per team.</li>
+</ul>
+<p>Keep them <strong>in the repository</strong>, next to <code>setup.sql</code>: for example <code>docs/wireframe/01-trang-chu.drawio</code> plus an exported <code>01-trang-chu.png</code> for the report. When a page changes, the drawing changes in the same commit — the same rule ASM.2 gave for the database script.</p>`,
+    `<h2>6. Công cụ — và cất hình vẽ ở đâu</h2>
+<ul>
+<li><strong>Giấy</strong> — nhanh nhất cho ý tưởng đầu. Ba phương án trong mười phút, chụp bản thắng, gửi vào nhóm chat.</li>
+<li><strong>draw.io (diagrams.net)</strong> — miễn phí, chạy trên trình duyệt hoặc bản cài máy tính, có thư viện hình "Mockups" (nút, ô nhập, khung trình duyệt). Ví dụ ở trên vẽ bằng nó. Nó lưu thành file <code>.drawio</code> commit được.</li>
+<li><strong>Figma</strong> — có gói miễn phí, và gói Education cho sinh viên đã xác minh; nhiều thành viên sửa cùng một file một lúc, và file đó lớn dần thành mockup, prototype bấm được khi môn sau đòi.</li>
+<li>Khác: Excalidraw (nét vẽ tay), Penpot (mã nguồn mở). Mỗi nhóm một công cụ.</li>
+</ul>
+<p>Cất chúng <strong>trong repository</strong>, cạnh <code>setup.sql</code>: ví dụ <code>docs/wireframe/01-trang-chu.drawio</code> kèm bản xuất <code>01-trang-chu.png</code> để đưa vào báo cáo. Trang đổi thì hình đổi trong cùng một commit — đúng quy tắc ASM.2 đặt ra cho script CSDL.</p>`),
+    bi(`<h2>7. Wireframe to code with AI — responsibly</h2>
+<p>An AI assistant can read a wireframe image and write a JSP in seconds. Useful — and dangerous for an Assignment that ends with a <strong>defence</strong>, where the marker points at a line and asks why it is there. The rule: <strong>you design, the AI types, you verify and can explain every line.</strong></p>
+<ol>
+<li>The wireframe, the table of pages and <code>setup.sql</code> are yours. Those decisions are the work being graded.</li>
+<li>Give the AI all three plus the rules of this course: JSP under <code>WEB-INF/views</code>, JSTL and EL with no scriptlets, Bootstrap 5 classes, <code>jakarta.*</code> imports, the exact column and attribute names you have.</li>
+<li>Ask for one page at a time, as a skeleton.</li>
+<li>Check it against the numbers: every ① to ⑦ must be there with the right URL and method; anything extra gets questioned or deleted.</li>
+<li>Run it on Tomcat, at phone width and desktop width. If you cannot explain a line, you do not own it yet — and in the defence that shows within a minute.</li>
+</ol>
+<pre><code class="language-plaintext">Attached: wireframe of page UC01 (image) and our setup.sql.
+Write ONLY /WEB-INF/views/rooms.jsp for a Jakarta EE 10 app on Tomcat 10.1:
+- include _taglibs.jspf, _top.jspf, _bottom.jspf (they exist)
+- Bootstrap 5: filter in .col-lg-3, cards in .col-lg-9 &gt; .row &gt; .col-md-4 &gt; .card
+- JSTL + EL only, no scriptlets; c:out for every text that comes from the database
+- request attributes: rooms (List&lt;Room&gt;), types, total, page
+- use ONLY columns that exist in setup.sql; do not add fields
+- mark each numbered element of the wireframe with a JSP comment (1)…(7)</code></pre>
+<div class="pitfall">What AI typically adds: scriptlets (<code>&lt;% … %&gt;</code>) instead of JSTL, <code>javax.servlet</code> imports that do not compile on Tomcat 10, a SQL query inside the JSP (breaks MVC, requirement 1.3), a "rating" or "owner phone" field that is not in your database, raw <code>&#36;{…}</code> output of user text where <code>c:out</code> was needed. Each one costs marks or opens a security hole — and "the AI wrote it" is not an answer the panel accepts.</div>`,
+    `<h2>7. Từ wireframe sang code bằng AI — có trách nhiệm</h2>
+<p>Trợ lý AI đọc được ảnh wireframe và viết JSP trong vài giây. Có ích — và nguy hiểm với một Assignment kết thúc bằng buổi <strong>bảo vệ</strong>, nơi người chấm chỉ vào một dòng và hỏi vì sao nó ở đó. Luật là: <strong>bạn thiết kế, AI gõ phím, bạn kiểm và giải thích được từng dòng.</strong></p>
+<ol>
+<li>Wireframe, bảng các trang và <code>setup.sql</code> là của bạn. Các quyết định đó mới là phần được chấm.</li>
+<li>Đưa AI cả ba thứ kèm luật của môn: JSP nằm dưới <code>WEB-INF/views</code>, JSTL và EL không scriptlet, class Bootstrap 5, import <code>jakarta.*</code>, đúng tên cột và thuộc tính bạn đang có.</li>
+<li>Xin từng trang một, dạng bộ khung.</li>
+<li>So với các con số: đủ ① tới ⑦ với đúng URL và method; thứ gì thừa thì hỏi lại hoặc xoá.</li>
+<li>Chạy trên Tomcat, ở bề ngang điện thoại và máy tính. Dòng nào chưa giải thích được thì nó chưa phải của bạn — và lúc bảo vệ, điều đó lộ ra trong một phút.</li>
+</ol>
+<pre><code class="language-plaintext">Đính kèm: wireframe trang UC01 (ảnh) và setup.sql của nhóm.
+CHỈ viết /WEB-INF/views/rooms.jsp cho app Jakarta EE 10 chạy Tomcat 10.1:
+- include _taglibs.jspf, _top.jspf, _bottom.jspf (đã có sẵn)
+- Bootstrap 5: bộ lọc trong .col-lg-3, thẻ trong .col-lg-9 &gt; .row &gt; .col-md-4 &gt; .card
+- chỉ JSTL + EL, không scriptlet; c:out cho mọi chữ lấy từ CSDL
+- attribute của request: rooms (List&lt;Room&gt;), types, total, page
+- CHỈ dùng các cột có trong setup.sql; không thêm trường
+- đánh dấu mỗi phần tử có số trên wireframe bằng chú thích JSP (1)…(7)</code></pre>
+<div class="pitfall">Những thứ AI hay tự thêm: scriptlet (<code>&lt;% … %&gt;</code>) thay cho JSTL, import <code>javax.servlet</code> không biên dịch được trên Tomcat 10, câu SQL nằm trong JSP (phá MVC, yêu cầu 1.3), trường "đánh giá" hay "số điện thoại chủ trọ" không có trong CSDL, in thẳng <code>&#36;{…}</code> chữ người dùng nhập ở chỗ cần <code>c:out</code>. Mỗi cái làm mất điểm hoặc mở một lỗ hổng bảo mật — và "AI viết đấy ạ" không phải câu trả lời hội đồng chấp nhận.</div>`),
+    bi(`<h2>🧪 Do it now for YOUR topic (45–60 minutes)</h2>
+<ol>
+<li>From your function table (ASM.1), list every page. Most topics have 8–15.</li>
+<li>Each member wireframes the pages of the functions they own. Start with two: the <strong>list page of your main entity</strong> and the page of your <strong>central transaction</strong> (booking, borrowing, ordering…).</li>
+<li>Meet for 20 minutes, put all drawings side by side, and agree on the shared parts: navbar, buttons, pagination, how errors look.</li>
+<li>Fill the table of pages of section 5 and commit drawings + table next to <code>setup.sql</code>.</li>
+</ol>
+<p><strong>Check yourself:</strong></p>
+<ul>
+<li>☐ Every page has its URL and allowed roles at the top.</li>
+<li>☐ Every clickable spot is numbered with its target: URL, GET or POST, where it goes after success and after an error.</li>
+<li>☐ Buttons carry real words; grey everywhere except the primary action and statuses.</li>
+<li>☐ Every box shows data that exists in <code>setup.sql</code> (or you fixed <code>setup.sql</code>).</li>
+<li>☐ Business rules are written as notes on the drawing.</li>
+<li>☐ Empty state and form errors are drawn; a phone sketch exists (1.7).</li>
+<li>☐ Each page has an owner, and the table of pages has one row per drawing.</li>
+<li>☐ A teammate can explain your page from the drawing without you talking.</li>
+</ul>
+<div class="dap-an">✅ <strong>Sample answer — the clinic's central transaction</strong>, drawn on paper level for the page that ASM.3 really builds:
+<pre><code class="language-plaintext">URL: GET /patient/appointments/new?doctorId=…      Who: PATIENT only (Filter, ASM.4)
++------------------------------------------------------------+
+| [Navbar from _top.jspf]                  Nguyễn Thị Hoa  ▾ |
++------------------------------------------------------------+
+| Đặt lịch với BS. Nguyễn Văn An                             |
+| Nội tổng quát · phòng P.101                                |
+|                                                            |
+| (1) Dịch vụ  [ Khám nội tổng quát — 200.000 đ      v ]     |
+| (2) Ngày     [ dd/mm/yyyy ]   (3) Giờ [ 08:00  v ]         |
+| (4) Lý do khám (tuỳ chọn)  [                           ]   |
+|                                                            |
+| (5) [ Đặt lịch ]                                           |
++------------------------------------------------------------+
+(5) POST /patient/appointments/create
+    OK    -&gt; redirect /patient/appointments + green flash
+    error -&gt; 409, same form, red message under the wrong field,
+             values kept; slot taken -&gt; message under (3)
+Rules: date from tomorrow to 30 days ahead; one doctor,
+       one slot (filtered unique index, ASM.2)</code></pre>
+<p>Compare with <code>booking-form.jsp</code> in ASM.3: every number became one form field or the button, and both outcomes of (5) are handled there.</p></div>
+<h2>Going further</h2>
+<p>The HTML/CSS-only version of this lesson, for the Web Foundations course, is <a href="/courses/web-foundations/learn?lessonSlug=wf-3-5b-wireframes">3.5b — Wireframes for developers</a>. For depth — sketching techniques, high-fidelity wireframes, Figma, prototypes and user testing — see Chapter 4 of <a href="/courses/ux-ui-for-developers/learn?lessonSlug=uxui-4-1-phac-thao">UX/UI for Developers (4.1 Sketching and low-fidelity wireframes)</a>; note that this course is still an outline being written.</p>`,
+    `<h2>🧪 Làm ngay cho đề tài CỦA BẠN (45–60 phút)</h2>
+<ol>
+<li>Từ bảng chức năng (ASM.1), liệt kê mọi trang. Đa số đề tài có 8–15 trang.</li>
+<li>Mỗi thành viên vẽ wireframe các trang của chức năng mình phụ trách. Bắt đầu bằng hai trang: <strong>trang danh sách của thực thể chính</strong> và trang của <strong>giao dịch trung tâm</strong> (đặt lịch, mượn sách, đặt hàng…).</li>
+<li>Họp 20 phút, đặt mọi hình cạnh nhau, thống nhất phần dùng chung: thanh điều hướng, nút, phân trang, lỗi trông thế nào.</li>
+<li>Điền bảng các trang ở mục 5, commit hình vẽ + bảng cạnh <code>setup.sql</code>.</li>
+</ol>
+<p><strong>Tự kiểm:</strong></p>
+<ul>
+<li>☐ Trang nào cũng có URL và các vai trò được vào ở trên cùng.</li>
+<li>☐ Mọi chỗ bấm được đều đánh số kèm đích đến: URL, GET hay POST, thành công thì đi đâu, lỗi thì đi đâu.</li>
+<li>☐ Nút mang chữ thật; toàn xám trừ hành động chính và trạng thái.</li>
+<li>☐ Hộp nào cũng hiện dữ liệu có trong <code>setup.sql</code> (hoặc bạn đã sửa <code>setup.sql</code>).</li>
+<li>☐ Luật nghiệp vụ được ghi thành ghi chú trên hình.</li>
+<li>☐ Có vẽ trạng thái rỗng và lỗi form; có hình phác điện thoại (1.7).</li>
+<li>☐ Trang nào cũng có người phụ trách, và bảng các trang có đúng một dòng cho mỗi hình.</li>
+<li>☐ Một bạn trong nhóm nhìn hình là giải thích được trang của bạn, không cần bạn nói.</li>
+</ul>
+<div class="dap-an">✅ <strong>Đáp án mẫu — giao dịch trung tâm của phòng khám</strong>, vẽ ở mức giấy bút cho đúng trang mà ASM.3 dựng thật:
+<pre><code class="language-plaintext">URL: GET /patient/appointments/new?doctorId=…      Ai vào: chỉ PATIENT (Filter, ASM.4)
++------------------------------------------------------------+
+| [Navbar từ _top.jspf]                    Nguyễn Thị Hoa  ▾ |
++------------------------------------------------------------+
+| Đặt lịch với BS. Nguyễn Văn An                             |
+| Nội tổng quát · phòng P.101                                |
+|                                                            |
+| (1) Dịch vụ  [ Khám nội tổng quát — 200.000 đ      v ]     |
+| (2) Ngày     [ dd/mm/yyyy ]   (3) Giờ [ 08:00  v ]         |
+| (4) Lý do khám (tuỳ chọn)  [                           ]   |
+|                                                            |
+| (5) [ Đặt lịch ]                                           |
++------------------------------------------------------------+
+(5) POST /patient/appointments/create
+    OK  -&gt; redirect /patient/appointments + thông báo xanh
+    lỗi -&gt; 409, lại form đó, chữ đỏ dưới ô sai, giữ giá trị đã nhập;
+           giờ đã có người đặt -&gt; thông báo dưới (3)
+Luật: ngày từ mai tới tối đa 30 ngày sau; một bác sĩ,
+      một khung giờ (chỉ mục duy nhất có lọc, ASM.2)</code></pre>
+<p>So với <code>booking-form.jsp</code> ở ASM.3: mỗi con số thành một ô của form hoặc cái nút, và cả hai kết cục của (5) đều được xử lý ở đó.</p></div>
+<h2>Đi xa hơn</h2>
+<p>Bản HTML/CSS thuần của bài này, cho khoá Nền tảng Web, là <a href="/courses/web-foundations/learn?lessonSlug=wf-3-5b-wireframes">3.5b — Wireframe cho lập trình viên</a>. Muốn sâu hơn — kỹ thuật phác thảo, wireframe độ trung thực cao, Figma, prototype và thử với người dùng — xem Chương 4 của <a href="/courses/ux-ui-for-developers/learn?lessonSlug=uxui-4-1-phac-thao">UX/UI cho lập trình viên (4.1 Phác thảo và wireframe độ trung thực thấp)</a>; lưu ý khoá đó hiện mới có đề cương, các bài đang được soạn.</p>`),
+  ].join('\n'),
+};
+
 /* ───────── ASM.3 — 🧭 Assignment A–Z (3/6): core features — Bootstrap 5, CRUD, paging, custom tags, booking ───────── */
 const L_x_asm_3 = {
   title: 'ASM.3 — 🧭 Assignment A–Z (3/6): core features — Bootstrap 5, CRUD, paging, custom tags, booking|||ASM.3 — 🧭 Assignment A–Z (3/6): chức năng lõi — Bootstrap 5, CRUD, phân trang, custom tag, đặt lịch không trùng',
@@ -10474,6 +10894,6 @@ css/app.css</div>
 };
 
 export default {
-  extrasEnd: [L_x_asm_1, L_x_asm_2, L_x_asm_3, L_x_asm_4, L_x_asm_5, L_x_asm_6],
-  lessons: [L_x_asm_1, L_x_asm_2, L_x_asm_3, L_x_asm_4, L_x_asm_5, L_x_asm_6],
+  extrasEnd: [L_x_asm_1, L_x_asm_2, L_x_asm_wireframe, L_x_asm_3, L_x_asm_4, L_x_asm_5, L_x_asm_6],
+  lessons: [L_x_asm_1, L_x_asm_2, L_x_asm_wireframe, L_x_asm_3, L_x_asm_4, L_x_asm_5, L_x_asm_6],
 };

@@ -10,7 +10,8 @@
  *     được, bản xuất Word/PDF (vẽ PNG ở trình duyệt) vẫn chạy y như khối Mermaid thường.
  */
 
-export const DIAGRAM_FORMATS = ['MERMAID', 'EXCALIDRAW'] as const;
+/** SQL (17/10/2026): sơ đồ CSDL viết bằng SQL thật (CREATE TABLE…) — ERD vẽ từ đó; xem sqlDesign/. */
+export const DIAGRAM_FORMATS = ['MERMAID', 'EXCALIDRAW', 'SQL'] as const;
 export type DiagramFormat = (typeof DIAGRAM_FORMATS)[number];
 
 export const DIAGRAM_TYPES = [

@@ -16,6 +16,7 @@
 
 import zlib from 'node:zlib';
 import { mmId, mmLabel, mermaidKind, typeFromMermaid, type DiagramType } from './diagram.js';
+import { analyzeSql, DIALECT_LABEL, joinMeta, toMermaid } from './sqlDesign/index.js';
 
 export const MAX_IMPORT_BYTES = 8 * 1024 * 1024;
 const MAX_XML_BYTES = 16 * 1024 * 1024;
@@ -359,7 +360,7 @@ export function extractMermaid(text: string, index = 0): { mermaid: string; bloc
 }
 
 export interface ImportResult {
-  format: 'MERMAID' | 'EXCALIDRAW';
+  format: 'MERMAID' | 'EXCALIDRAW' | 'SQL';
   type: DiagramType;
   source: string;
   title: string;
@@ -372,7 +373,19 @@ export function importFile(input: { fileName: string; content: string; base64?: 
   const name = input.fileName.toLowerCase();
   const buf = input.base64 ? Buffer.from(input.content, 'base64') : Buffer.from(input.content, 'utf8');
   if (buf.length > MAX_IMPORT_BYTES) throw new ImportError(`The file is too large (max ${MAX_IMPORT_BYTES / 1024 / 1024} MB)`);
-  const title = input.fileName.replace(/\.(drawio|xml|excalidraw|json|mmd|mermaid|md|png|svg)(\.(xml|png|svg))?$/i, '').replace(/[_-]+/g, ' ').trim().slice(0, 180) || 'Imported diagram';
+  const title = input.fileName.replace(/\.(drawio|xml|excalidraw|json|mmd|mermaid|md|png|svg|sql|ddl)(\.(xml|png|svg))?$/i, '').replace(/[_-]+/g, ' ').trim().slice(0, 180) || 'Imported diagram';
+  // Tệp .sql (CREATE TABLE…) ⇒ sơ đồ CSDL dạng SQL (Database designer), hoặc Mermaid ERD nếu người chọn.
+  if (/\.(sql|ddl)$/.test(name)) {
+    const sql = buf.toString('utf8').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+    const a = analyzeSql(sql);
+    const n = a.parse.model.tables.length;
+    if (!n) throw new ImportError('No CREATE TABLE found in this .sql file — the Database designer reads table definitions (CREATE TABLE / ALTER TABLE / CREATE INDEX)');
+    const skipped = Object.entries(a.parse.skipped).map(([k, v]) => `${v} ${k}`).join(', ');
+    const notes = [`Read ${n} table(s) as ${DIALECT_LABEL[a.parse.dialect]}${skipped ? ` — skipped ${skipped} (data, queries and settings are not part of the design)` : ''}.`];
+    if (a.parse.errors.length) notes.push(`${a.parse.errors.length} problem(s) to fix — see the markers in the editor (first: line ${a.parse.errors[0].span?.line ?? '?'}: ${a.parse.errors[0].message.en}).`);
+    if (input.to === 'mermaid') return { format: 'MERMAID', type: 'ERD', source: toMermaid(a.parse.model), title, fidelity: { kept: n, merged: [], dropped: [], notes } };
+    return { format: 'SQL', type: 'ERD', source: joinMeta(sql, { dialect: a.parse.dialect }), title, fidelity: { kept: n, merged: [], dropped: [], notes } };
+  }
   if (/\.excalidraw(\.json)?$/.test(name) || (/\.json$/.test(name) && buf.toString('utf8').includes('"excalidraw"'))) {
     const json = buf.toString('utf8');
     let parsed: unknown;

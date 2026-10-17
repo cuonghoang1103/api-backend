@@ -8,3 +8,8 @@
 .ctw-dg-preview .ctw-dg-svg { width: max-content; max-width: none; margin: 0 auto; }
 .ctw-dg-preview .ctw-dg-svg svg { max-width: none; height: auto; display: block; }
 .ctw-excalidraw .excalidraw { --ui-font: 'Be Vietnam Pro', Inter, system-ui, sans-serif; }
+/* Database designer: câu CREATE TABLE đang chọn trên ERD (Monaco decoration). */
+.ctw-sql-hl-line { background: rgba(79, 91, 213, 0.08); }
+.ctw-sql-hl-gutter { border-left: 3px solid #4f5bd5; margin-left: 2px; }
+html.theme-dark .ctw-sql-hl-line { background: rgba(139, 147, 238, 0.12); }
+.ctw-pz .ctw-dg-preview { padding: 24px; }

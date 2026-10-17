@@ -18,7 +18,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  BadgeCheck, Check, Code2, Download, FileDown, FileUp, History, Info, MessageSquare, PanelRight, Plus, Save, Search, Shapes, Sparkles, Trash2, Undo2, X,
+  BadgeCheck, Check, Code2, Database, Download, Eye, FileDown, FileUp, History, Info, Maximize2, MessageSquare, Minimize2, PanelLeft, PanelRight, Plus, Save, Search, Shapes, Sparkles, Trash2, Undo2, X,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -33,11 +33,18 @@ import { Dialog, EmptyState, PageLoading, Spinner, UserAvatar } from '@/componen
 import { useWT } from '@/components/work/i18n';
 import MermaidEditor from './MermaidEditor';
 import type { ExcalidrawHandle } from './ExcalidrawEditor';
+import { LIMITS, Splitter, useMinWidth, useStudioLayout, type StudioLayout } from './viewer/panels';
+import type { SqlDesignerHandle } from './sql/SqlDesigner';
+import type { Analysis } from '@/lib/sqlDesign';
+import { DIALECT_LABEL, splitMeta, sqlToMermaid } from '@/lib/sqlDesign';
 import { GenerateDialog, ImportDialog, InsertDialog, NewDialog, typeKey } from './dialogs';
 import { download, fileSlug, isDarkTheme, renderDiagramSvg, standaloneSvg, svgToPngBlob, type ParseResult, type Variant } from './render';
 import { useStoreMermaidRender } from '../c8c/mermaidRender';
 
 const ExcalidrawEditor = dynamic(() => import('./ExcalidrawEditor'), { ssr: false, loading: () => <div className="grid h-full place-items-center"><Spinner /></div> });
+// Database designer (Monaco + ERD) nạp lười: chỉ khi mở một sơ đồ SQL.
+const SqlDesigner = dynamic(() => import('./sql/SqlDesigner'), { ssr: false, loading: () => <div className="grid h-full place-items-center"><Spinner /></div> });
+const SqlExportDialog = dynamic(() => import('./sql/ExportDialog'), { ssr: false });
 
 const STATUS_TONE: Record<DiagramStatus, string> = {
   PROPOSED: 'bg-[var(--w-yellow-soft,rgba(154,116,16,0.12))] text-[var(--w-yellow-text)]',
@@ -88,6 +95,9 @@ export default function DiagramStudio({ config, pid }: { config: ProjectConfig; 
     toast.success(t('diagram.generated', { key: r.diagram.key }), { description: r.check.assumptions.length ? t('diagram.generatedAssumptions', { count: r.check.assumptions.length }) : t('diagram.generatedClean'), duration: 8000 });
   };
   const canEdit = list.data?.canEdit ?? false;
+  const [lay, setLay] = useStudioLayout();
+  const md = useMinWidth(768);
+  const listShown = !md || (lay.listOpen && !lay.focus);
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -97,8 +107,8 @@ export default function DiagramStudio({ config, pid }: { config: ProjectConfig; 
         {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setDialog('ai')} aria-label={t('diagram.generateTitle')}><Sparkles size={13} /> <span className="max-sm:hidden">{t('diagram.aiDraw')}</span></button>}
         {canEdit && <button type="button" className="w-btn w-btn-sm w-btn-primary" onClick={() => setDialog('new')}><Plus size={13} /> {t('diagram.new')}</button>}
       </ProjectHeader>
-      <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[280px_minmax(0,1fr)]">
-        <aside className={cn('flex min-h-0 flex-col border-b border-[var(--w-border)] md:border-b-0 md:border-r', selected && 'max-md:hidden')} aria-label={t('diagram.listLabel')}>
+      <div className="flex min-h-0 flex-1 max-md:flex-col">
+        <aside className={cn('flex min-h-0 shrink-0 flex-col border-b border-[var(--w-border)] md:border-b-0 md:border-r', selected && 'max-md:hidden', !listShown && 'hidden')} style={md ? { width: lay.listW } : undefined} aria-label={t('diagram.listLabel')}>
           <div className="flex flex-col gap-2 border-b border-[var(--w-border)] p-3">
             <label className="relative block">
               <span className="sr-only">{t('diagram.search')}</span>
@@ -126,8 +136,9 @@ export default function DiagramStudio({ config, pid }: { config: ProjectConfig; 
             )}
           </div>
         </aside>
-        <main className={cn('flex min-h-0 min-w-0 flex-col', !selected && 'max-md:hidden')}>
-          {selected ? <DiagramDetailView key={selected} pid={pid} number={selected} config={config} onBack={() => setSelected(null)} onChanged={refresh} /> : (
+        {md && listShown && <Splitter value={lay.listW} min={LIMITS.listW[0]} max={LIMITS.listW[1]} onChange={(w) => setLay({ listW: w })} side="left" onToggle={() => setLay({ listOpen: false })} label={t('dbd.resizeList')} />}
+        <main className={cn('flex min-h-0 min-w-0 flex-1 flex-col', !selected && 'max-md:hidden')}>
+          {selected ? <DiagramDetailView key={selected} pid={pid} number={selected} config={config} onBack={() => setSelected(null)} onChanged={refresh} lay={lay} setLay={setLay} onOpen={(n) => setSelected(n)} /> : (
             <EmptyState icon={<Shapes size={22} />} title={t('diagram.emptyTitle')} body={t('diagram.emptyBody')}
               action={canEdit ? <div className="flex flex-wrap justify-center gap-2"><button type="button" className="w-btn w-btn-primary" onClick={() => setDialog('ai')}><Sparkles size={14} /> {t('diagram.aiDraw')}</button><button type="button" className="w-btn" onClick={() => setDialog('new')}><Plus size={14} /> {t('diagram.fromTemplate')}</button></div> : undefined} />
           )}
@@ -167,8 +178,8 @@ function ListRow({ d, active, onOpen, rel }: { d: DiagramListItem; active: boole
 
 // ─── Chi tiết một sơ đồ ──────────────────────────────────────────
 
-function DiagramDetailView({ pid, number, config, onBack, onChanged }: { pid: number; number: number; config: ProjectConfig; onBack: () => void; onChanged: () => void }) {
-  const { t, fmtRelative } = useWT();
+function DiagramDetailView({ pid, number, config, onBack, onChanged, lay, setLay, onOpen }: { pid: number; number: number; config: ProjectConfig; onBack: () => void; onChanged: () => void; lay: StudioLayout; setLay: (p: Partial<StudioLayout>) => void; onOpen: (n: number) => void }) {
+  const { t, fmtRelative, locale } = useWT();
   const qc = useQueryClient();
   const dark = useDark();
   const q = useQuery({ queryKey: workDiagramKeys.one(pid, number), queryFn: () => workDiagramsApi.get(pid, number) });
@@ -180,20 +191,30 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged }: { pid: nu
   const [parsed, setParsed] = useState<ParseResult | null>(null);
   const [viewing, setViewing] = useState<{ number: number; source: string } | null>(null);
   const [insert, setInsert] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(true);
-  const [showCode, setShowCode] = useState(true);
-  // Khung hẹp (< 1536px, gồm vùng nội dung 1180px của app desktop): ngăn chi tiết gập sẵn để sơ đồ có chỗ.
-  useEffect(() => { setPanelOpen(window.matchMedia('(min-width: 1536px)').matches); if (!window.matchMedia('(min-width: 1360px)').matches) setShowCode(false); }, []); // ≤ 1360 (gồm app desktop 1180): mở sẵn sơ đồ, bấm Code để sửa
+  // 17/10/2026: ngăn phải / ngăn mã / chế độ "chỉ sơ đồ" nhớ theo người dùng (useStudioLayout) — thay cho mặc định cố định cũ.
+  const panelOpen = lay.sideOpen && !lay.focus;
+  const setPanelOpen = (f: (v: boolean) => boolean) => setLay({ sideOpen: f(lay.sideOpen), focus: false });
+  const showCode = lay.codeOpen && !lay.focus;
+  const setShowCode = (f: (v: boolean) => boolean) => setLay({ codeOpen: f(showCode), focus: false });
+  const [maximised, setMaximised] = useState(false);
+  const lg = useMinWidth(1024);
+  const [sqlA, setSqlA] = useState<Analysis | null>(null);
+  const [exportOpen, setExportOpen] = useState(false);
+  const sqlRef = useRef<SqlDesignerHandle | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const exRef = useRef<ExcalidrawHandle | null>(null);
   useEffect(() => { setVariant(dark ? 'dark' : 'light'); }, [dark]);
   const d = q.data;
-  useEffect(() => { if (d && !d.canEdit) setShowCode(false); }, [d?.canEdit]); // eslint-disable-line react-hooks/exhaustive-deps
+  const [codeForced, setCodeForced] = useState(false);
+  // Người chỉ xem: mở sẵn sơ đồ (gập ngăn mã một lần, không ghi đè lựa chọn đã lưu của họ cho sơ đồ khác).
+  useEffect(() => { if (d && !d.canEdit && !codeForced) { setCodeForced(true); if (lay.codeOpen && !window.matchMedia('(min-width: 1360px)').matches) setLay({ codeOpen: false }); } }, [d?.canEdit]); // eslint-disable-line react-hooks/exhaustive-deps
   const source = viewing ? viewing.source : draft ?? d?.source ?? '';
   const readOnly = !d?.canEdit || !!viewing;
   const set = (x: DiagramDetail) => { qc.setQueryData(workDiagramKeys.one(pid, number), x); onChanged(); };
   // CTW đợt 8c: gửi ảnh vẽ sẵn của bản ĐÃ LƯU (hoặc phiên bản đang xem) ⇒ GET …/diagrams/:n/image.(svg|png) + MCP diagram_get.
-  useStoreMermaidRender(pid, d?.format === 'MERMAID' && !d?.isAgent ? (viewing ? viewing.source : draft === null ? d.source : null) : null);
+  const savedSrc = viewing ? viewing.source : draft === null ? d?.source ?? null : null;
+  useStoreMermaidRender(pid, !d || d.isAgent || savedSrc === null ? null : d.format === 'MERMAID' ? savedSrc : d.format === 'SQL' ? sqlToMermaid(savedSrc) : null);
+  const sqlBad = d?.format === 'SQL' && !!sqlA && (sqlA.parse.errors.length > 0 || !sqlA.parse.model.tables.length || sqlA.lint.some((p) => p.severity === 'error'));
 
   const save = useMutation({
     mutationFn: async () => {
@@ -225,16 +246,46 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged }: { pid: nu
     onSuccess: (x) => { set(x); setViewing(null); setDraft(null); toast.success(t('diagram.restored', { v: x.currentVersion })); },
     onError: (e) => toast.error(workError(e)),
   });
+  // Mermaid ERD ⇒ thiết kế SQL (sơ đồ MỚI — sơ đồ Mermaid giữ nguyên).
+  const toSql = useMutation({
+    mutationFn: async () => {
+      if (!d) throw new Error('not loaded');
+      const lib = await import('@/lib/sqlDesign');
+      const r = lib.mermaidErdToModel(source, 'sqlserver');
+      if (!r.model.tables.length) throw new Error(t('dbd.toSqlEmpty'));
+      const sql = lib.generateSql(r.model, { target: 'sqlserver', drop: false, lang: locale === 'vi' ? 'vi' : 'en', title: d.title }).text;
+      const created = await workDiagramsApi.create(pid, { format: 'SQL', type: 'ERD', title: `${d.title} (SQL)`.slice(0, 200), source: lib.joinMeta(sql, { dialect: 'sqlserver' }), note: `Converted from ${d.key}` });
+      return { created, notes: r.notes };
+    },
+    onSuccess: ({ created, notes }) => {
+      onChanged();
+      toast.success(t('dbd.toSqlDone', { key: created.key }), { description: notes.slice(0, 4).map((n) => (locale === 'vi' ? n.vi : n.en)).join(' · ') || undefined, duration: 9000 });
+      onOpen(created.number);
+    },
+    onError: (e) => toast.error(workError(e, t('dbd.toSqlFailed'))),
+  });
   const del = useMutation({
     mutationFn: () => workDiagramsApi.remove(pid, number),
     onSuccess: () => { onChanged(); onBack(); toast.success(t('diagram.deleted')); },
     onError: (e) => toast.error(workError(e)),
   });
 
-  const exportAs = async (kind: 'svg' | 'png' | 'print' | 'mmd' | 'json') => {
+  const exportAs = async (kind: ExportKind) => {
     if (!d) return;
     const name = fileSlug(d.key, d.title);
     try {
+      if (d.format === 'SQL') {
+        if (kind === 'scripts') { setExportOpen(true); return; }
+        if (kind === 'sql') { download(new Blob([`\uFEFF${splitMeta(source).sql}`], { type: 'application/sql;charset=utf-8' }), `${name}.sql`); return; }
+        if (kind === 'mmd') { download(new Blob([sqlToMermaid(source) ?? 'erDiagram'], { type: 'text/plain;charset=utf-8' }), `${name}.mmd`); return; }
+        const v: Variant = kind === 'print' ? 'print' : variant;
+        const raw = await erdSvgString(sqlRef.current, v);
+        if (!raw) return;
+        const svg = await standaloneSvg(raw, `${d.key} ${d.title}`, v);
+        if (kind === 'png') download(await svgToPngBlob(svg, 2), `${name}.png`);
+        else download(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }), `${name}${kind === 'print' ? '_print' : ''}.svg`);
+        return;
+      }
       if (kind === 'mmd') { download(new Blob([source], { type: 'text/plain;charset=utf-8' }), `${name}.mmd`); return; }
       if (kind === 'json') { download(new Blob([exRef.current?.getJson() ?? source], { type: 'application/json' }), `${name}.excalidraw`); return; }
       const v: Variant = kind === 'print' ? 'print' : variant;
@@ -253,16 +304,30 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged }: { pid: nu
     return () => window.removeEventListener('keydown', on);
   }, [dirty, draft, title, save]);
 
+  // F = phóng to khung sơ đồ (khi không đang gõ), Esc = thu lại.
+  useEffect(() => {
+    const on = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (el?.closest('input,textarea,select,[contenteditable="true"],.monaco-editor,.excalidraw')) return;
+      if (e.key === 'Escape' && maximised) { setMaximised(false); return; }
+      if ((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey && !e.altKey && !el?.closest('.ctw-pz')) { e.preventDefault(); setMaximised((m) => !m); }
+    };
+    window.addEventListener('keydown', on);
+    return () => window.removeEventListener('keydown', on);
+  }, [maximised]);
+
   if (q.isLoading) return <PageLoading />;
   if (!d) return <EmptyState title={t('diagram.loadFailed')} body={q.error ? workError(q.error) : undefined} />;
   const changed = draft !== null && draft !== d.source || dirty || (title !== null && title !== d.title);
   const pending = d.proposals;
   const base = `/work/${config.workspace.slug}/${config.key}`;
 
+  const toggleMax = () => setMaximised((m) => !m);
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div className={cn('flex min-h-0 flex-1 flex-col', maximised && 'fixed inset-0 z-[60] bg-[var(--w-bg,var(--w-panel))]')}>
       <div className="flex flex-wrap items-center gap-2 border-b border-[var(--w-border)] px-3 py-2">
         <button type="button" className="w-btn w-btn-ghost w-btn-sm md:hidden" onClick={onBack} aria-label={t('diagram.backToList')}><X size={14} /></button>
+        {!maximised && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm max-md:hidden" aria-pressed={lay.listOpen && !lay.focus} onClick={() => setLay({ listOpen: !(lay.listOpen && !lay.focus), focus: false })} aria-label={t('dbd.toggleList')} title={t('dbd.toggleList')}><PanelLeft size={14} /></button>}
         <span className="font-mono text-[12px] text-[var(--w-text-3)]">{d.key}</span>
         <input className="w-input min-w-[220px] flex-1 border-transparent bg-transparent text-[14px] font-semibold hover:border-[var(--w-border)]" aria-label={t('diagram.titleField')} value={title ?? d.title} readOnly={!d.canEdit} onChange={(e) => setTitle(e.target.value)} />
         <span className="text-[12px] text-[var(--w-text-2)]">{t(typeKey(d.type))}</span>
@@ -276,14 +341,24 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged }: { pid: nu
             ))}
           </div>
         )}
-        {d.format === 'MERMAID' && <button type="button" className="w-btn w-btn-sm" aria-pressed={showCode} onClick={() => setShowCode((v) => !v)}><Code2 size={13} /> <span className="max-sm:hidden">{t('diagram.code')}</span></button>}
-        <button type="button" className="w-btn w-btn-sm" aria-pressed={panelOpen} onClick={() => setPanelOpen((v) => !v)} aria-label={t('diagram.sidePanel')}><PanelRight size={13} /></button>
+        {d.format === 'SQL' && (
+          <div className="inline-flex rounded-[6px] border border-[var(--w-border)] p-0.5" role="group" aria-label={t('diagram.previewTheme')}>
+            {(['light', 'dark', 'print'] as const).map((v) => (
+              <button key={v} type="button" aria-pressed={variant === v} onClick={() => setVariant(v)} className={cn('rounded-[4px] px-2 py-0.5 text-[11.5px]', variant === v ? 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'text-[var(--w-text-2)]')}>{t(`diagram.v_${v}`)}</button>
+            ))}
+          </div>
+        )}
+        {d.format === 'MERMAID' && d.type === 'ERD' && d.canEdit && !viewing && <button type="button" className="w-btn w-btn-sm" disabled={toSql.isPending} onClick={() => toSql.mutate()} title={t('dbd.toSqlHint')}>{toSql.isPending ? <Spinner size={12} /> : <Database size={13} />} <span className="max-lg:hidden">{t('dbd.toSql')}</span></button>}
+        {d.format !== 'EXCALIDRAW' && <button type="button" className="w-btn w-btn-sm" aria-pressed={showCode} onClick={() => setShowCode((v) => !v)} title={d.format === 'SQL' ? t('dbd.codeToggleSql') : undefined}><Code2 size={13} /> <span className="max-sm:hidden">{d.format === 'SQL' ? 'SQL' : t('diagram.code')}</span></button>}
+        <button type="button" className="w-btn w-btn-sm" aria-pressed={lay.focus} onClick={() => setLay({ focus: !lay.focus })} title={t('dbd.focusHint')}><Eye size={13} /> <span className="max-lg:hidden">{t('dbd.focus')}</span></button>
+        <button type="button" className="w-btn w-btn-sm" aria-pressed={panelOpen} onClick={() => setPanelOpen((v) => !v)} aria-label={t('diagram.sidePanel')} title={t('diagram.sidePanel')}><PanelRight size={13} /></button>
+        <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-pressed={maximised} onClick={toggleMax} aria-label={maximised ? t('dbd.restoreSize') : t('dbd.maximise')} title={`${maximised ? t('dbd.restoreSize') : t('dbd.maximise')} (F)`}>{maximised ? <Minimize2 size={14} /> : <Maximize2 size={14} />}</button>
         <ExportMenu format={d.format} onPick={exportAs} />
         {d.status !== 'PROPOSED' && <button type="button" className="w-btn w-btn-sm" onClick={() => setInsert(true)}>{t('diagram.insertShort')}</button>}
         {d.canApprove && d.status !== 'PROPOSED' && (
           d.status === 'APPROVED' && d.approvedVersion === d.currentVersion
             ? <button type="button" className="w-btn w-btn-sm" disabled={approve.isPending} onClick={() => approve.mutate(false)}><Undo2 size={13} /> {t('diagram.unapprove')}</button>
-            : <button type="button" className="w-btn w-btn-sm" disabled={approve.isPending || changed || (d.format === 'MERMAID' && parsed?.ok === false)} onClick={() => approve.mutate(true)} title={changed ? t('diagram.saveFirst') : undefined}><BadgeCheck size={13} /> {d.status === 'APPROVED' ? t('diagram.approveNew', { v: d.currentVersion }) : t('diagram.approve')}</button>
+            : <button type="button" className="w-btn w-btn-sm" disabled={approve.isPending || changed || (d.format === 'MERMAID' && parsed?.ok === false) || sqlBad} onClick={() => approve.mutate(true)} title={changed ? t('diagram.saveFirst') : sqlBad ? t('dbd.fixSqlFirst') : undefined}><BadgeCheck size={13} /> {d.status === 'APPROVED' ? t('diagram.approveNew', { v: d.currentVersion }) : t('diagram.approve')}</button>
         )}
         {d.canEdit && <button type="button" className="w-btn w-btn-sm w-btn-primary" disabled={!changed || save.isPending || !!viewing} onClick={() => save.mutate()}>{save.isPending ? <Spinner size={12} /> : <Save size={13} />} {t('diagram.save')}</button>}
         {d.canEdit && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={t('diagram.delete')} onClick={() => setConfirmDelete(true)}><Trash2 size={14} /></button>}
@@ -304,15 +379,24 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged }: { pid: nu
           <button type="button" className="w-btn w-btn-sm w-btn-ghost" onClick={() => setViewing(null)}>{t('diagram.backToCurrent')}</button>
         </div>
       )}
-      <div className={cn('grid min-h-0 flex-1 grid-cols-1', panelOpen && 'lg:grid-cols-[minmax(0,1fr)_300px]')}>
-        <div className="min-h-[480px] min-w-0">
+      <div className="relative flex min-h-0 flex-1">
+        <div className="min-h-[420px] min-w-0 flex-1">
           {d.format === 'MERMAID' ? (
-            <MermaidEditor showCode={showCode} source={source} readOnly={readOnly} variant={variant} onChange={(v) => setDraft(v)} onParsed={setParsed} label={`${d.key} ${d.title}`} />
+            <MermaidEditor showCode={showCode} source={source} readOnly={readOnly} variant={variant} onChange={(v) => setDraft(v)} onParsed={setParsed} label={`${d.key} ${d.title}`}
+              codeW={lay.codeW} onCodeW={(w) => setLay({ codeW: w })} onToggleCode={() => setShowCode((v) => !v)} fitKey={`${number}-${viewing?.number ?? 'cur'}`} maximised={maximised} onToggleMaximise={toggleMax} />
+          ) : d.format === 'SQL' ? (
+            <SqlDesigner handleRef={sqlRef} source={source} readOnly={readOnly} dark={dark} variant={variant} label={`${d.key} ${d.title}`} onChange={(v) => setDraft(v)}
+              codeOpen={showCode} codeW={lay.codeW} onCodeW={(w) => setLay({ codeW: w })} onToggleCode={() => setShowCode((v) => !v)}
+              lintOpen={lay.lintOpen && !lay.focus} lintH={lay.lintH} onLint={(p) => setLay({ ...p, focus: false })} maximised={maximised} onToggleMaximise={toggleMax}
+              onAnalysis={setSqlA} onExport={() => setExportOpen(true)} fitKey={`${number}-${viewing?.number ?? 'cur'}`} />
           ) : (
             <ExcalidrawEditor key={viewing ? `v${viewing.number}` : `cur${d.currentVersion}`} handleRef={exRef} source={source} dark={dark} readOnly={readOnly} onDirty={() => setDirty(true)} label={`${d.key} ${d.title}`} />
           )}
         </div>
-        <aside className={cn('flex min-h-0 flex-col border-t border-[var(--w-border)] lg:border-l lg:border-t-0', !panelOpen && 'hidden')} aria-label={t('diagram.sidePanel')}>
+        {panelOpen && lg && <Splitter value={lay.sideW} min={LIMITS.sideW[0]} max={LIMITS.sideW[1]} onChange={(w) => setLay({ sideW: w })} side="right" onToggle={() => setLay({ sideOpen: false })} label={t('dbd.resizeSide')} />}
+        <aside className={cn('flex min-h-0 flex-col bg-[var(--w-panel)]', lg ? 'shrink-0 border-l border-[var(--w-border)]' : 'absolute inset-y-0 right-0 z-30 w-[min(360px,92vw)] border-l border-[var(--w-border)]', !panelOpen && 'hidden')}
+          style={lg ? { width: lay.sideW } : { boxShadow: 'var(--w-shadow-pop)' }} aria-label={t('diagram.sidePanel')}>
+          {!lg && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm absolute right-1 top-1 z-10" onClick={() => setLay({ sideOpen: false })} aria-label={t('common.close')}><X size={14} /></button>}
           <div className="flex border-b border-[var(--w-border)] px-2" role="tablist">
             {([['info', Info, t('diagram.tabInfo')], ['history', History, t('diagram.tabHistory', { count: d.versions.length })], ['comments', MessageSquare, t('diagram.tabComments', { count: d.comments.filter((c) => !c.resolved).length })]] as const).map(([id, Icon, label]) => (
               <button key={id} type="button" role="tab" aria-selected={panel === id} onClick={() => setPanel(id)}
@@ -322,7 +406,7 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged }: { pid: nu
             ))}
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto p-3 text-[13px]">
-            {panel === 'info' && <InfoPanel d={d} base={base} parsed={parsed} />}
+            {panel === 'info' && <InfoPanel d={d} base={base} parsed={parsed} sql={sqlA} />}
             {panel === 'history' && <HistoryPanel pid={pid} d={d} viewing={viewing?.number ?? null} onView={async (v) => {
               if (v === d.currentVersion) { setViewing(null); return; }
               try { const x = await workDiagramsApi.version(pid, number, v); setViewing({ number: v, source: x.source }); } catch (e) { toast.error(workError(e)); }
@@ -332,6 +416,7 @@ function DiagramDetailView({ pid, number, config, onBack, onChanged }: { pid: nu
         </aside>
       </div>
       {insert && <InsertDialog pid={pid} diagram={d} open={insert} onClose={() => setInsert(false)} />}
+      {d.format === 'SQL' && exportOpen && <SqlExportDialog open={exportOpen} onClose={() => setExportOpen(false)} model={sqlRef.current?.model() ?? sqlA?.parse.model ?? { dialect: 'sqlserver', tables: [], enums: [] }} title={d.title} pid={pid} issueNumber={d.issue?.number ?? null} />}
       <Dialog open={confirmDelete} onClose={() => setConfirmDelete(false)} title={t('diagram.deleteTitle', { key: d.key })} width={420}
         footer={<><button type="button" className="w-btn" onClick={() => setConfirmDelete(false)}>{t('common.cancel')}</button><button type="button" className="w-btn w-btn-danger" disabled={del.isPending} onClick={() => del.mutate()}>{t('diagram.delete')}</button></>}>
         <p className="text-[13px] text-[var(--w-text-2)]">{t('diagram.deleteBody')}</p>
@@ -356,7 +441,17 @@ function ProposalBar({ text, canDecide, busy, onAccept, onDiscard, onView, viewi
   );
 }
 
-function ExportMenu({ format, onPick }: { format: 'MERMAID' | 'EXCALIDRAW'; onPick: (k: 'svg' | 'png' | 'print' | 'mmd' | 'json') => void }) {
+type ExportKind = 'svg' | 'png' | 'print' | 'mmd' | 'json' | 'scripts' | 'sql';
+
+/** ERD của Database designer ⇒ chuỗi SVG ở đúng biến thể (vẽ lại tĩnh, không dính trạng thái chọn/rê chuột). */
+async function erdSvgString(h: SqlDesignerHandle | null, v: Variant): Promise<string | null> {
+  const a = h?.analysis();
+  if (!h || !a) return null;
+  const [{ renderToStaticMarkup }, { default: ErdCanvas }] = await Promise.all([import('react-dom/server'), import('./sql/ErdCanvas')]);
+  return renderToStaticMarkup(<ErdCanvas model={h.model()} variant={v} direction={h.direction()} layout={h.layout()} selected={null} editable={false} getScale={() => 1} onSelect={() => undefined} />);
+}
+
+function ExportMenu({ format, onPick }: { format: 'MERMAID' | 'EXCALIDRAW' | 'SQL'; onPick: (k: ExportKind) => void }) {
   const { t } = useWT();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -368,9 +463,11 @@ function ExportMenu({ format, onPick }: { format: 'MERMAID' | 'EXCALIDRAW'; onPi
     document.addEventListener('keydown', key);
     return () => { document.removeEventListener('mousedown', on); document.removeEventListener('keydown', key); };
   }, [open]);
-  const opts: Array<['svg' | 'png' | 'print' | 'mmd' | 'json', string]> = format === 'MERMAID'
+  const opts: Array<[ExportKind, string]> = format === 'MERMAID'
     ? [['svg', t('diagram.exSvg')], ['png', t('diagram.exPng')], ['print', t('diagram.exPrint')], ['mmd', t('diagram.exMermaid')]]
-    : [['svg', t('diagram.exSvg')], ['png', t('diagram.exPng')], ['json', t('diagram.exExcalidraw')]];
+    : format === 'SQL'
+      ? [['scripts', t('dbd.exScripts')], ['sql', t('dbd.exSql')], ['svg', t('diagram.exSvg')], ['png', t('diagram.exPng')], ['print', t('diagram.exPrint')], ['mmd', t('diagram.exMermaid')]]
+      : [['svg', t('diagram.exSvg')], ['png', t('diagram.exPng')], ['json', t('diagram.exExcalidraw')]];
   return (
     <div ref={ref} className="relative">
       <button type="button" className="w-btn w-btn-sm" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((v) => !v)}><Download size={13} /> <span className="max-sm:hidden">{t('diagram.export')}</span></button>
@@ -383,19 +480,21 @@ function ExportMenu({ format, onPick }: { format: 'MERMAID' | 'EXCALIDRAW'; onPi
   );
 }
 
-function InfoPanel({ d, base, parsed }: { d: DiagramDetail; base: string; parsed: ParseResult | null }) {
+function InfoPanel({ d, base, parsed, sql }: { d: DiagramDetail; base: string; parsed: ParseResult | null; sql: Analysis | null }) {
   const { t } = useWT();
   const o = d.origin;
   return (
     <div className="flex flex-col gap-3">
       <dl className="grid grid-cols-[96px_1fr] gap-x-2 gap-y-1.5 text-[12.5px]">
-        <dt className="text-[var(--w-text-3)]">{t('diagram.format')}</dt><dd>{d.format === 'MERMAID' ? 'Mermaid' : 'Excalidraw'}</dd>
+        <dt className="text-[var(--w-text-3)]">{t('diagram.format')}</dt><dd>{d.format === 'MERMAID' ? 'Mermaid' : d.format === 'SQL' ? `SQL${sql ? ` · ${DIALECT_LABEL[sql.parse.dialect]}` : ''}` : 'Excalidraw'}</dd>
+        {d.format === 'SQL' && sql && <><dt className="text-[var(--w-text-3)]">{t('dbd.design')}</dt><dd>{t('dbd.tablesN', { count: sql.parse.model.tables.length })} · {t('dbd.checksN', { count: sql.lint.length })}</dd></>}
         {d.useCase && <><dt className="text-[var(--w-text-3)]">{t('diagram.useCase')}</dt><dd><Link className="text-[var(--w-accent-text)] hover:underline" href={`${base}/requirements?uc=${d.useCase.number}`}>{d.useCase.key} {d.useCase.name}</Link></dd></>}
         {d.issue && <><dt className="text-[var(--w-text-3)]">{t('diagram.issue')}</dt><dd><Link className="text-[var(--w-accent-text)] hover:underline" href={`${base}/issue/${d.issue.number}`}>{d.issue.key} {d.issue.title}</Link></dd></>}
         {d.page && <><dt className="text-[var(--w-text-3)]">{t('diagram.page')}</dt><dd><Link className="text-[var(--w-accent-text)] hover:underline" href={`${base}/docs/${d.page.number}`}>DOC-{d.page.number} {d.page.title}</Link></dd></>}
         {d.feature && <><dt className="text-[var(--w-text-3)]">{t('diagram.feature')}</dt><dd>{d.feature}</dd></>}
         <dt className="text-[var(--w-text-3)]">{t('diagram.createdBy')}</dt><dd className="flex items-center gap-1">{d.createdBy && <UserAvatar user={{ username: d.createdBy.username, displayName: d.createdBy.name, fullName: null, avatarUrl: null }} size={16} />}{d.createdBy?.name ?? '—'}</dd>
       </dl>
+      {d.format === 'SQL' && sql && (sql.parse.errors.length > 0 || sql.lint.some((p) => p.severity === 'error')) && <p className="rounded-[6px] border border-[var(--w-border)] px-2.5 py-2 text-[12.5px] text-[var(--w-red-text)]">{t('dbd.fixSqlFirst')}</p>}
       {d.format === 'MERMAID' && parsed && !parsed.ok && <p className="rounded-[6px] border border-[var(--w-border)] px-2.5 py-2 text-[12.5px] text-[var(--w-red-text)]">{t('diagram.fixBeforeApprove')}</p>}
       {o?.sources?.length ? (
         <section>

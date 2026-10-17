@@ -22,7 +22,7 @@ import { checkTokenQuota, extractJson, isAiAvailable, llmComplete, type LLMMessa
 import { auditProject } from './audit.js';
 import { displayName } from './common.js';
 import {
-  checkDiagram, DIAGRAM_TYPE_LABEL, diagramKey, isAssumedLabel, lintMermaid, markAssumed, MAX_MERMAID, normalizeExcalidraw,
+  checkDiagram, DIAGRAM_TYPE_LABEL, diagramKey, isAssumedLabel, lintMermaid, markAssumed, MAX_MERMAID, MAX_SOURCE, normalizeExcalidraw,
   typeFromMermaid, type CheckResult, type DiagramFormat, type DiagramType, type GeneratableType,
 } from './diagram.js';
 import {
@@ -38,6 +38,7 @@ import {
 import { importFile, ImportError } from './diagramImport.js';
 import { findClassCandidates, findCompose, findEntityCandidates, findPrisma, findSqlMigrations, readMany, repoFor } from './diagramRepo.js';
 import { plainText } from './docExport.js';
+import { analyzeSql, lintModel, splitMeta, sqlToMermaid } from './sqlDesign/index.js';
 import type { PmNode } from './docMarkdown.js';
 import { emitWorkEvent } from './events.js';
 import { getPage, updatePage } from './pages.service.js';
@@ -171,7 +172,7 @@ export async function getDiagram(userId: number, projectId: number, number: numb
     issue: links.issue(d.issueId), useCase: links.useCase(d.useCaseId), page: links.page(d.pageNumber),
     createdBy: names.get(d.createdById ?? 0) ?? null, updatedBy: names.get(d.updatedById ?? d.createdById ?? 0) ?? null,
     source: cur?.source ?? '', origin: originOf(cur?.origin), previewImageId: cur?.previewImageId ?? null,
-    lint: d.format === 'MERMAID' ? lintMermaid(cur?.source ?? '') : null,
+    lint: d.format === 'MERMAID' ? lintMermaid(cur?.source ?? '') : d.format === 'SQL' ? sqlLint(cur?.source ?? '') : null,
     versions: versions.map((v) => ({ number: v.number, note: v.note, state: v.state, author: names.get(v.authorId ?? 0) ?? null, aiModel: v.aiModel, createdAt: v.createdAt, generator: originOf(v.origin)?.generator ?? null, assumptions: originOf(v.origin)?.assumptions?.length ?? 0 })),
     proposals: pending.map((v) => ({ number: v.number, note: v.note, author: names.get(v.authorId ?? 0) ?? null, createdAt: v.createdAt, source: v.source, origin: originOf(v.origin) })),
     comments: comments.map((c) => ({ id: c.id, parentId: c.parentId, versionNumber: c.versionNumber, anchor: c.anchor, body: c.body, resolved: !!c.resolvedAt, createdAt: c.createdAt, author: names.get(c.authorId ?? 0) ?? null, mine: c.authorId === userId })),
@@ -203,7 +204,27 @@ export interface DiagramInput {
   origin?: Origin | null;
 }
 
+/**
+ * Sơ đồ SQL: kiểm của máy chủ = bộ đọc SQL (sqlDesign) — CHÍNH bộ trình duyệt dùng (bản chép), nên kết quả hai bên khớp.
+ * `errors` = lỗi cú pháp / CSDL sẽ từ chối (chặn Duyệt); cảnh báo thiết kế không chặn.
+ */
+export function sqlLint(source: string): { ok: boolean; kind: 'sql'; errors: Array<{ line: number; message: string }>; dialect: string; tables: number; warnings: number } {
+  const a = analyzeSql(source);
+  const errs = [...a.parse.errors, ...a.lint.filter((p) => p.severity === 'error')];
+  return {
+    ok: errs.length === 0 && a.parse.model.tables.length > 0, kind: 'sql', dialect: a.parse.dialect, tables: a.parse.model.tables.length,
+    warnings: a.lint.filter((p) => p.severity === 'warning').length,
+    errors: (a.parse.model.tables.length ? errs : [{ span: { line: 1 }, message: { en: 'No CREATE TABLE yet — write at least one table' } }]).slice(0, 50).map((e) => ({ line: e.span?.line ?? 1, message: e.message.en })),
+  };
+}
+
 function checkSource(format: DiagramFormat, source: string): string {
+  if (format === 'SQL') {
+    const s = String(source ?? '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').replace(/\s+$/, '\n');
+    if (!s.trim()) throw new BadRequestError('The database design is empty', 'WORK_DIAGRAM_BAD_SOURCE');
+    if (s.length > MAX_SOURCE) throw new BadRequestError(`The SQL is too long (max ${MAX_SOURCE} characters)`, 'WORK_DIAGRAM_BAD_SOURCE');
+    return s;
+  }
   if (format === 'EXCALIDRAW') {
     const n = normalizeExcalidraw(source);
     if (!n.ok) throw new BadRequestError(n.error, 'WORK_DIAGRAM_BAD_SOURCE');
@@ -253,7 +274,7 @@ export async function createDiagram(userId: number, projectId: number, input: Di
   const ctx = await diagramCtx(userId, projectId, 'edit');
   const format: DiagramFormat = input.format ?? 'MERMAID';
   const source = checkSource(format, input.source ?? '');
-  const type: DiagramType = input.type ?? (format === 'EXCALIDRAW' ? 'WHITEBOARD' : typeFromMermaid(source));
+  const type: DiagramType = input.type ?? (format === 'EXCALIDRAW' ? 'WHITEBOARD' : format === 'SQL' ? 'ERD' : typeFromMermaid(source));
   const title = (input.title ?? '').trim().slice(0, 200) || `${DIAGRAM_TYPE_LABEL[type]} diagram`;
   const [issueId, useCaseId, pageNumber, previewImageId] = await Promise.all([
     issueIdFor(projectId, input.issueNumber), ucIdFor(projectId, input.useCase), pageFor(projectId, input.pageNumber), previewFor(projectId, input.previewImageId),
@@ -297,7 +318,7 @@ export async function updateDiagram(userId: number, projectId: number, number: n
   }
   const ownProposal = d.status === 'PROPOSED' && d.createdById === userId;
   const proposeOnly = ctx.isAgent && !ownProposal;
-  if (input.format && input.format !== d.format) throw new BadRequestError('A diagram cannot change between Mermaid and Excalidraw — create a new one', 'WORK_DIAGRAM_BAD_SOURCE');
+  if (input.format && input.format !== d.format) throw new BadRequestError('A diagram cannot change format (Mermaid / Excalidraw / SQL) — create a new one', 'WORK_DIAGRAM_BAD_SOURCE');
   const [issueId, useCaseId, pageNumber, previewImageId] = await Promise.all([
     issueIdFor(projectId, input.issueNumber), ucIdFor(projectId, input.useCase), pageFor(projectId, input.pageNumber), previewFor(projectId, input.previewImageId),
   ]);
@@ -343,6 +364,11 @@ export async function updateDiagram(userId: number, projectId: number, number: n
 export async function setApproval(userId: number, projectId: number, number: number, input: { approve: boolean; parsedOk?: boolean }) {
   await diagramCtx(userId, projectId, 'approve');
   const d = await findDiagram(projectId, number);
+  if (input.approve && d.format === 'SQL') {
+    const cur = await prisma.workDiagramVersion.findFirst({ where: { diagramId: d.id, number: d.currentVersion }, select: { source: true } });
+    const lint = sqlLint(cur?.source ?? '');
+    if (!lint.ok) throw new AppError(`Fix the SQL before approving it: ${lint.errors.slice(0, 3).map((e) => `line ${e.line}: ${e.message}`).join('; ')}`, 422, 'WORK_DIAGRAM_INVALID', { errors: lint.errors });
+  }
   if (input.approve && d.format === 'MERMAID') {
     const cur = await prisma.workDiagramVersion.findFirst({ where: { diagramId: d.id, number: d.currentVersion }, select: { source: true } });
     const lint = lintMermaid(cur?.source ?? '');
@@ -469,8 +495,11 @@ async function placedOf(d: Row, version: number | null): Promise<PlacedDiagram |
   const v = await prisma.workDiagramVersion.findFirst({ where: { diagramId: d.id, number: version ?? d.currentVersion }, select: { number: true, source: true, previewImageId: true } });
   if (!v) return null;
   const uc = d.useCaseId ? await prisma.workUseCase.findUnique({ where: { id: d.useCaseId }, select: { number: true, name: true, feature: true } }) : null;
+  // Sơ đồ SQL đi vào Docs / Report 3-4 dưới dạng Mermaid ERD sinh từ chính SQL đó (máy chủ và trình duyệt cùng một bộ sinh).
+  const isSql = d.format === 'SQL';
   return {
-    id: d.id, number: d.number, title: d.title, type: d.diagramType as DiagramType, format: d.format as DiagramFormat, version: v.number, source: v.source,
+    id: d.id, number: d.number, title: d.title, type: d.diagramType as DiagramType, format: isSql ? 'MERMAID' : d.format as 'MERMAID' | 'EXCALIDRAW', version: v.number,
+    source: isSql ? sqlToMermaid(v.source) ?? 'erDiagram' : v.source,
     feature: d.feature ?? uc?.feature ?? null, useCase: uc ? { number: uc.number, name: uc.name } : null, previewImageId: v.previewImageId,
   };
 }
@@ -954,7 +983,8 @@ export async function diagramForAi(userId: number, projectId: number, number: nu
   return {
     key: d.key, title: d.title, type: d.type, format: d.format, status: d.status, version: d.currentVersion, approvedVersion: d.approvedVersion,
     feature: d.feature, useCase: d.useCase?.key ?? null, issue: d.issue?.key ?? null, page: d.page ? `Doc ${d.page.number}` : null,
-    source: d.format === 'MERMAID' ? d.source : `(Excalidraw drawing, ${d.source.length} characters of JSON — not shown)`,
+    source: d.format === 'EXCALIDRAW' ? `(Excalidraw drawing, ${d.source.length} characters of JSON — not shown)` : d.format === 'SQL' ? splitSqlMeta(d.source) : d.source,
+    ...(d.format === 'SQL' ? { sql: sqlSummary(d.source) } : {}),
     lint: d.lint ? { ok: d.lint.ok, errors: d.lint.errors.slice(0, 5) } : null,
     origin: d.origin ? { generator: d.origin.generator, sources: d.origin.sources, assumptions: d.origin.assumptions } : null,
     pendingProposals: d.proposals.map((p) => p.number), openComments: d.comments.filter((c) => !c.resolved).map((c) => ({ by: c.author?.name ?? null, anchor: c.anchor, body: c.body.slice(0, 300) })),
@@ -962,3 +992,20 @@ export async function diagramForAi(userId: number, projectId: number, number: nu
 }
 
 export { aiReady as _aiReadyForTests };
+
+const splitSqlMeta = (source: string) => splitMeta(source).sql;
+
+/** Tóm tắt thiết kế cho AI/agent: bảng, khoá, quan hệ, lỗi, các phát hiện thiết kế (không có vị trí trong nguồn). */
+function sqlSummary(source: string) {
+  const a = analyzeSql(source);
+  const m = a.parse.model;
+  return {
+    dialect: a.parse.dialect,
+    tables: m.tables.map((t) => ({
+      name: t.name, columns: t.columns.length, primaryKey: t.primaryKey?.columns ?? [],
+      references: t.foreignKeys.map((f) => `${f.columns.join(',')} → ${f.refTable}(${f.refColumns.join(',')})`),
+    })),
+    errors: a.parse.errors.slice(0, 10).map((e) => ({ line: e.span?.line ?? null, message: e.message.en })),
+    designChecks: lintModel(m).slice(0, 25).map((p) => ({ severity: p.severity, code: p.code, message: p.message.en, line: p.span?.line ?? null })),
+  };
+}

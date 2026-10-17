@@ -17,6 +17,7 @@ import { logger } from '../../utils/logger.js';
 import { registerMermaidResolver, type ExportImage } from './docExport.js';
 import { decodePng, krokiUrl, MAX_PNG_BYTES, normalizeMermaid, renderHash, sanitizeSvg } from './diagramRender.js';
 import { isClientScoped, requireProject } from './permissions.js';
+import { sqlToMermaid } from './sqlDesign/index.js';
 
 const MAX_SOURCE = 60_000;
 
@@ -83,9 +84,11 @@ export async function diagramImage(userId: number, projectId: number, number: nu
   if (isClientScoped(access)) throw new NotFoundError('Diagram not found');
   const d = await prisma.workDiagram.findFirst({ where: { projectId, number, deletedAt: null }, select: { id: true, format: true, currentVersion: true, approvedVersion: true, title: true } });
   if (!d) throw new NotFoundError('Diagram not found');
-  if (d.format !== 'MERMAID') throw new BadRequestError('Only Mermaid diagrams have server images — export whiteboards from Diagram Studio', 'WORK_DIAGRAM_NOT_MERMAID');
-  const v = await prisma.workDiagramVersion.findFirst({ where: { diagramId: d.id, number: version ?? d.approvedVersion ?? d.currentVersion }, select: { number: true, source: true } });
-  if (!v) throw new NotFoundError('Diagram version not found');
+  if (d.format === 'EXCALIDRAW') throw new BadRequestError('Only Mermaid and SQL diagrams have server images — export whiteboards from Diagram Studio', 'WORK_DIAGRAM_NOT_MERMAID');
+  const row = await prisma.workDiagramVersion.findFirst({ where: { diagramId: d.id, number: version ?? d.approvedVersion ?? d.currentVersion }, select: { number: true, source: true } });
+  if (!row) throw new NotFoundError('Diagram version not found');
+  // Sơ đồ SQL: ảnh là Mermaid ERD sinh từ SQL (trình duyệt vẽ đúng chuỗi đó rồi gửi lên — cùng bộ sinh nên cùng mã băm).
+  const v = d.format === 'SQL' ? { number: row.number, source: sqlToMermaid(row.source) ?? 'erDiagram' } : row;
   const r = await findRender(v.source);
   let body: Buffer | null = format === 'svg' ? (r?.svg ? Buffer.from(r.svg, 'utf8') : null) : (r?.png ? Buffer.from(r.png) : null);
   if (!body) {

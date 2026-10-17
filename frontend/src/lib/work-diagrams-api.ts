@@ -14,7 +14,7 @@ export const DIAGRAM_TYPES = [
   'GANTT', 'JOURNEY', 'TIMELINE', 'MINDMAP', 'SCREEN_FLOW', 'FLOWCHART', 'WHITEBOARD', 'OTHER',
 ] as const;
 export type DiagramType = (typeof DIAGRAM_TYPES)[number];
-export type DiagramFormat = 'MERMAID' | 'EXCALIDRAW';
+export type DiagramFormat = 'MERMAID' | 'EXCALIDRAW' | 'SQL';
 export type DiagramStatus = 'PROPOSED' | 'DRAFT' | 'APPROVED';
 export const GENERATABLE = ['SEQUENCE', 'USE_CASE', 'ERD', 'CLASS', 'ACTIVITY', 'STATE', 'SCREEN_FLOW', 'DEPLOYMENT', 'ARCHITECTURE', 'DATA_FLOW'] as const;
 export type GeneratableType = (typeof GENERATABLE)[number];
@@ -35,7 +35,7 @@ export interface DiagramListItem extends DiagramRow { updatedBy: DPerson | null;
 export interface DiagramDetail extends DiagramRow {
   canEdit: boolean; canApprove: boolean; canComment: boolean; isAgent: boolean;
   createdBy: DPerson | null; updatedBy: DPerson | null; source: string; origin: DOrigin | null; previewImageId: number | null;
-  lint: { ok: boolean; kind: string | null; errors: Array<{ line: number; message: string }> } | null;
+  lint: { ok: boolean; kind: string | null; errors: Array<{ line: number; message: string }>; dialect?: string; tables?: number; warnings?: number } | null;
   versions: Array<{ number: number; note: string | null; state: 'ACCEPTED' | 'PROPOSED' | 'DISCARDED'; author: DPerson | null; aiModel: string | null; createdAt: string; generator: string | null; assumptions: number }>;
   proposals: Array<{ number: number; note: string | null; author: DPerson | null; createdAt: string; source: string; origin: DOrigin | null }>;
   comments: Array<{ id: number; parentId: number | null; versionNumber: number | null; anchor: string | null; body: string; resolved: boolean; createdAt: string; author: DPerson | null; mine: boolean }>;

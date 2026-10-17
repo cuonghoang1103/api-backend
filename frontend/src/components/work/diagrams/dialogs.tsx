@@ -4,6 +4,7 @@
  * CTW Diagram — các hộp thoại: tạo mới (mẫu / trống / bảng vẽ), AI vẽ từ dữ liệu dự án, nhập tệp, chèn vào trang Docs.
  */
 
+import dynamic from 'next/dynamic';
 import { useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { FileUp, PenTool, Sparkles } from 'lucide-react';
@@ -17,6 +18,10 @@ import { useWT, type WKey } from '@/components/work/i18n';
 import { MermaidPreview } from './MermaidEditor';
 import { TEMPLATES } from './templates';
 import { isDarkTheme } from './render';
+import { BLANK_SQL, SQL_TEMPLATES } from './sql/sqlTemplates';
+import { DIALECT_LABEL, joinMeta, SOURCE_DIALECTS, type Dialect } from '@/lib/sqlDesign';
+
+const SqlPreview = dynamic(() => import('./sql/SqlPreview'), { ssr: false, loading: () => <div className="grid h-[340px] place-items-center"><Spinner /></div> });
 
 export const typeKey = (t: string) => `diagram.type_${t}` as WKey;
 
@@ -26,21 +31,27 @@ export function NewDialog({ pid, open, onClose, onCreated }: { pid: number; open
   const { t } = useWT();
   const [pick, setPick] = useState<string>('sequence');
   const [title, setTitle] = useState('');
+  const [blankDialect, setBlankDialect] = useState<Dialect>('sqlserver');
   const tpl = TEMPLATES.find((x) => x.id === pick);
+  const sqlTpl = SQL_TEMPLATES.find((x) => x.id === pick);
+  const sqlDialect = sqlTpl?.id === 'sql-blank' ? blankDialect : sqlTpl?.dialect ?? 'sqlserver';
+  const sqlText = sqlTpl ? (sqlTpl.id === 'sql-blank' ? BLANK_SQL[blankDialect] : sqlTpl.sql) : '';
   const run = useMutation({
     mutationFn: () => pick === 'whiteboard'
       ? workDiagramsApi.create(pid, { format: 'EXCALIDRAW', type: 'WHITEBOARD', title: title.trim() || t('diagram.untitledWhiteboard'), source: JSON.stringify({ type: 'excalidraw', elements: [], appState: {}, files: {} }) })
-      : workDiagramsApi.create(pid, { format: 'MERMAID', type: tpl!.type, title: title.trim() || t(tpl!.name), source: tpl!.source }),
+      : sqlTpl
+        ? workDiagramsApi.create(pid, { format: 'SQL', type: 'ERD', title: title.trim() || t(sqlTpl.name), source: joinMeta(sqlText, { dialect: sqlDialect }) })
+        : workDiagramsApi.create(pid, { format: 'MERMAID', type: tpl!.type, title: title.trim() || t(tpl!.name), source: tpl!.source }),
     onSuccess: (d) => { onCreated(d); onClose(); setTitle(''); },
     onError: (e) => toast.error(workError(e, t('diagram.createFailed'))),
   });
   return (
     <Dialog open={open} onClose={onClose} title={t('diagram.newTitle')} width={860}
       footer={<><button type="button" className="w-btn" onClick={onClose}>{t('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" disabled={run.isPending} onClick={() => run.mutate()}>{run.isPending ? <Spinner size={12} /> : null} {t('diagram.create')}</button></>}>
-      <Field label={t('diagram.titleField')}><input className="w-input" value={title} placeholder={pick === 'whiteboard' ? t('diagram.untitledWhiteboard') : tpl ? t(tpl.name) : ''} onChange={(e) => setTitle(e.target.value)} /></Field>
+      <Field label={t('diagram.titleField')}><input className="w-input" value={title} placeholder={pick === 'whiteboard' ? t('diagram.untitledWhiteboard') : sqlTpl ? t(sqlTpl.name) : tpl ? t(tpl.name) : ''} onChange={(e) => setTitle(e.target.value)} /></Field>
       <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-[1fr_1.2fr]">
         <div role="radiogroup" aria-label={t('diagram.startFrom')} className="grid max-h-[420px] grid-cols-2 gap-1.5 overflow-y-auto pr-1">
-          {[...TEMPLATES.map((x) => ({ id: x.id, name: t(x.name), hint: t(x.hint) })), { id: 'whiteboard', name: t('diagram.tplWhiteboard'), hint: t('diagram.tplWhiteboardHint') }].map((x) => (
+          {[...SQL_TEMPLATES.map((x) => ({ id: x.id, name: `🗄 ${t(x.name)}`, hint: t(x.hint) })), ...TEMPLATES.map((x) => ({ id: x.id, name: t(x.name), hint: t(x.hint) })), { id: 'whiteboard', name: t('diagram.tplWhiteboard'), hint: t('diagram.tplWhiteboardHint') }].map((x) => (
             <button key={x.id} type="button" role="radio" aria-checked={pick === x.id} onClick={() => setPick(x.id)}
               className={cn('rounded-[8px] border px-2.5 py-2 text-left transition-colors', pick === x.id ? 'border-[var(--w-accent)] bg-[var(--w-accent-soft)]' : 'border-[var(--w-border)] hover:bg-[var(--w-hover)]')}>
               <span className="block text-[13px] font-semibold">{x.name}</span>
@@ -49,7 +60,16 @@ export function NewDialog({ pid, open, onClose, onCreated }: { pid: number; open
           ))}
         </div>
         <div className="min-h-[260px] overflow-auto rounded-[8px] border border-[var(--w-border)]" tabIndex={0} role="region" aria-label={t('diagram.previewRegion')}>
-          {pick === 'whiteboard' ? (
+          {sqlTpl ? (
+            <div>
+              {sqlTpl.id === 'sql-blank' && (
+                <label className="flex items-center gap-2 border-b border-[var(--w-border)] px-3 py-2 text-[12.5px]">{t('dbd.dialect')}
+                  <select className="w-input h-7 py-0" value={blankDialect} onChange={(e) => setBlankDialect(e.target.value as Dialect)}>{SOURCE_DIALECTS.map((d) => <option key={d} value={d}>{DIALECT_LABEL[d]}</option>)}</select>
+                </label>
+              )}
+              <SqlPreview sql={sqlText} dialect={sqlDialect} variant={isDarkTheme() ? 'dark' : 'light'} label={t(sqlTpl.name)} />
+            </div>
+          ) : pick === 'whiteboard' ? (
             <div className="grid h-full place-items-center p-6 text-center text-[13px] text-[var(--w-text-2)]"><span><PenTool className="mx-auto mb-2" size={22} aria-hidden="true" />{t('diagram.tplWhiteboardHint')}</span></div>
           ) : tpl ? <MermaidPreview source={tpl.source} variant={isDarkTheme() ? 'dark' : 'light'} label={t(tpl.name)} /> : null}
         </div>
@@ -144,15 +164,18 @@ export function ImportDialog({ pid, open, onClose, onDone }: { pid: number; open
     onError: (e) => toast.error(workError(e, t('diagram.importFailed')), { duration: 9000 }),
   });
   const isEx = !!file && /\.excalidraw(\.json)?$/i.test(file.name);
+  const isSql = !!file && /\.(sql|ddl)$/i.test(file.name);
   const isDrawio = !!file && /\.(drawio|xml)|\.drawio\.(png|svg)$/i.test(file.name);
   return (
     <Dialog open={open} onClose={onClose} title={<span className="flex items-center gap-1.5"><FileUp size={15} aria-hidden="true" /> {t('diagram.importTitle')}</span>} width={540}
       footer={<><button type="button" className="w-btn" onClick={onClose}>{t('common.cancel')}</button><button type="button" className="w-btn w-btn-primary" disabled={!file || run.isPending} onClick={() => run.mutate()}>{run.isPending ? <Spinner size={12} /> : null} {t('diagram.import')}</button></>}>
       <p className="mb-3 text-[13px] text-[var(--w-text-2)]">{t('diagram.importIntro')}</p>
       <Field label={t('diagram.fileField')}>
-        <input type="file" className="w-input" accept=".drawio,.xml,.png,.svg,.excalidraw,.json,.mmd,.mermaid,.md,.txt" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+        <input type="file" className="w-input" accept=".drawio,.xml,.png,.svg,.excalidraw,.json,.mmd,.mermaid,.md,.txt,.sql,.ddl" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
       </Field>
       {isEx && <label className="mt-2 flex items-center gap-2 text-[13px]"><input type="checkbox" checked={toMermaid} onChange={(e) => setToMermaid(e.target.checked)} /> {t('diagram.convertToMermaid')}</label>}
+      {isSql && <p className="mt-2 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2 text-[12.5px] text-[var(--w-text-2)]">{t('dbd.importSqlHint')}</p>}
+      {isSql && <label className="mt-2 flex items-center gap-2 text-[13px]"><input type="checkbox" checked={toMermaid} onChange={(e) => setToMermaid(e.target.checked)} /> {t('dbd.importSqlAsMermaid')}</label>}
       {isDrawio && <Field label={t('diagram.drawioPage')}><input type="number" min={1} max={100} className="w-input w-24" value={page + 1} onChange={(e) => setPage(Math.max(0, Number(e.target.value) - 1))} /></Field>}
       <p className="mt-3 text-[12px] text-[var(--w-text-3)]">{t('diagram.importPrivacy')}</p>
     </Dialog>

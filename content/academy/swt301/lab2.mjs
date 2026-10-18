@@ -11,12 +11,14 @@
  *   L2.1 Overview & grading (no slides)          L2.2 guide slides 1–35     L2.3 guide slides 36–67
  *   L2.4 guide slides 68–88                        L2.5 PCL deck 1–32         L2.6 structural deck 1–13 + white-box checklist
  *   L2.7 functional deck 1–14 + black-box checklists + the Detail Design     L2.8 Unit Test Case template + two worked sheets
- *   L2.9 UnitTestPoints_EN                         Quiz
+ *   L2.9 UnitTestPoints_EN
+ *   L2.10–L2.15 worked project LabFlow Demo + Report 5.1 on CT Work (lab2-labflow.mjs, one video each)   Quiz
  * NOTE: the guide's images are served from R2 prefix v2 (re-rendered with Japanese fonts; the v1 render had lost
  * every Japanese character). Every Japanese slide also quotes and translates its Japanese text.
  * Every Java listing that claims an output was compiled and run (JDK 21, JUnit 5.12.2, JaCoCo 0.8.13).
  */
 import { walk, walkHead, books, bi } from './_slides.mjs';
+import LABFLOW from './lab2-labflow.mjs';
 
 const G = 'lab2-utguide';
 const P = 'lab2-pcl';
@@ -4917,9 +4919,9 @@ const QUIZ = {
   title: 'Lab 2 quiz — unit-test design, PCL, coverage and the template|||Quiz Lab 2 — thiết kế unit test, PCL, coverage và template',
   slug: 'swt301-lab2-quiz',
   type: 'QUIZ',
-  description: '22 câu về bộ hướng dẫn unit test của Hitachi, cách viết PCL, C0/C1/RC0, quy tắc rút test case, template Unit Test Case và yêu cầu chấm điểm Lab 2.',
+  description: '28 câu về bộ hướng dẫn unit test của Hitachi, cách viết PCL, C0/C1/RC0, quy tắc rút test case, template Unit Test Case, yêu cầu chấm điểm Lab 2 và dự án làm thật LabFlow Demo (biên, Confirmation, test đỏ, Clock.fixed, workbook chung).',
   quiz: {
-    timeLimitSeconds: 1320,
+    timeLimitSeconds: 1680,
     questions: [
       q('According to the Hitachi unit-testing guide, when must the PCL of a software unit be created, and from what?|||Theo hướng dẫn unit test của Hitachi, PCL của một software unit phải được tạo khi nào và từ đâu?',
         ['After coding, from the source code|||Sau khi code, từ source code', 'Before coding, from the Detailed Design|||Trước khi code, từ Detailed Design', 'During system testing, from the requirements|||Trong system test, từ yêu cầu', 'After acceptance, from the bug list|||Sau nghiệm thu, từ bug list'], 1, 'Guide slide 23: a PCL is created for each software unit, based on its Detailed Design, and PCLs must be created before coding. Creating it after coding from the source code is exactly what the same slide forbids.|||Slide 23 của hướng dẫn: mỗi software unit có một PCL, lập từ Detailed Design, và PCL phải được tạo trước khi code. Lập sau khi code từ source code chính là điều slide đó cấm.'),
@@ -4965,12 +4967,30 @@ const QUIZ = {
         ['1-4|||1-4', '5|||5', '6|||6', '8|||8'], 1, 'Lab 2 white-box slide 10 grading: <100 LOC 1-4, 101-200 LOC 5, 201-250 LOC 6, 251-300 LOC 7, >300 LOC 8, plus 0-2 for difficulty. 180 LOC falls in the 101-200 band, so the base is 5.|||Thang điểm ở slide 10 của Lab 2 white-box: <100 LOC 1-4, 101-200 LOC 5, 201-250 LOC 6, 251-300 LOC 7, >300 LOC 8, cộng 0-2 điểm độ khó. 180 LOC nằm trong khoảng 101-200, nên điểm cơ bản là 5.'),
       q('Which statement about coverage is true?|||Phát biểu nào về coverage là đúng?',
         ['100% statement coverage guarantees 100% decision coverage|||100% statement coverage bảo đảm 100% decision coverage', '100% decision coverage guarantees 100% statement coverage|||100% decision coverage bảo đảm 100% statement coverage', '100% coverage proves the unit has no defects|||100% coverage chứng minh unit không có defect', 'Tests without assertions cannot reach 100% coverage|||Test không có assertion không thể đạt 100% coverage'], 1, 'Every executable statement lies on some decision outcome, so 100% decision coverage implies 100% statement coverage. The reverse fails: an if without else can reach 100% statements with only the true outcome. Coverage never proves the absence of defects, and assertion-free tests still produce coverage.|||Mọi câu lệnh chạy được đều nằm trên một kết cục quyết định nào đó, nên 100% decision coverage kéo theo 100% statement coverage. Chiều ngược lại sai: if không có else đạt 100% statement chỉ với kết cục đúng. Coverage không chứng minh hết lỗi, và test không có assertion vẫn tạo ra coverage.'),
+      q('LabFlow Demo, AuthService.login: lock when failed >= 5. Which pair of UTCIDs are the boundary (B) cases around this comparison?|||LabFlow Demo, AuthService.login: khoá khi failed >= 5. Cặp UTCID nào là case biên (B) quanh phép so sánh này?',
+        ['0 and 1 failures so far|||Đã sai 0 và 1 lần', '3 and 4 failures so far, then one more wrong password|||Đã sai 3 và 4 lần, rồi sai thêm một lần', '5 and 6 failures so far|||Đã sai 5 và 6 lần', 'A null password and a blank email|||Mật khẩu null và email rỗng'], 1,
+        'With 4 failures so far one more makes exactly 5, so the account is locked (UTCID04); with 3 failures one more makes 4, just below the threshold, so it is not locked (UTCID05). The two values sit on each side of the >= comparison, which is what makes them B.|||Đã sai 4 lần, sai thêm một là đúng 5 nên bị khoá (UTCID04); đã sai 3 lần, sai thêm một là 4, ngay dưới ngưỡng nên chưa khoá (UTCID05). Hai giá trị nằm hai phía của phép so sánh >=, đó là lý do chúng là B.'),
+      q('In the LabFlow Report 5.1, which Confirmation is complete for "unknown email"?|||Trong Report 5.1 của LabFlow, Confirmation nào là đầy đủ cho case "email không tồn tại"?',
+        ['Return: no token|||Return: không có token', 'Exception: BusinessException(AUTH_INVALID_CREDENTIALS)|||Exception: BusinessException(AUTH_INVALID_CREDENTIALS)', 'Return "no token issued" + Exception AUTH_INVALID_CREDENTIALS + Log message "Invalid email or password"|||Return "không cấp token" + Exception AUTH_INVALID_CREDENTIALS + Log message "Invalid email or password"', 'Passed|||Passed'], 2,
+        'The lecturer requires all three parts of the Confirmation: Return (or state after the call), Exception with its code, and the Log message. "Passed" is a result, not an expectation.|||Cô yêu cầu đủ cả ba phần của Confirmation: Return (hoặc trạng thái sau khi gọi), Exception kèm mã lỗi, và Log message. "Passed" là kết quả chạy, không phải kết quả mong đợi.'),
+      q('UTCID10 expects AUTH_EMAIL_NOT_VERIFIED but the run says "but was: AUTH_INVALID_CREDENTIALS". The requirement says the password is checked first. What do you do?|||UTCID10 kỳ vọng AUTH_EMAIL_NOT_VERIFIED nhưng kết quả chạy báo "but was: AUTH_INVALID_CREDENTIALS". Yêu cầu nói mật khẩu được kiểm trước. Bạn làm gì?',
+        ['Keep F and log a Bug|||Giữ F và tạo Bug', 'Fix the expectation to follow the requirement, run again|||Sửa kỳ vọng theo yêu cầu, chạy lại', 'Edit AuthService so the test passes|||Sửa AuthService cho test qua', 'Delete the test case|||Xoá test case'], 1,
+        'The test was wrong, not the code: the expected result must come from the requirement. F + Bug is only for a real mismatch between requirement and code, and nobody edits src/main in Lab 2.|||Test viết sai chứ không phải code sai: kết quả mong đợi phải lấy từ yêu cầu. F + Bug chỉ dành cho chỗ yêu cầu và code thật sự lệch nhau, và trong Lab 2 không ai sửa src/main.'),
+      q('Why does AuthServiceLoginTest build AuthService by hand with Clock.fixed instead of using the real clock?|||Vì sao AuthServiceLoginTest dựng AuthService bằng tay với Clock.fixed thay vì dùng đồng hồ thật?',
+        ['It makes the test faster|||Để test chạy nhanh hơn', 'So that "now" is the same every run and boundaries such as lockedUntil = now are reproducible|||Để "bây giờ" giống nhau mỗi lần chạy, các biên như lockedUntil = bây giờ tái hiện được', 'Mockito cannot mock repositories|||Vì Mockito không mock được repository', 'Because H2 needs a fixed clock|||Vì H2 cần đồng hồ cố định'], 1,
+        'Time-dependent rules (temporary lock, token expiry, 14 days ahead) need a frozen "now"; with the real clock a test is green today and red tomorrow.|||Luật phụ thuộc thời gian (khoá tạm, token hết hạn, đặt trước 14 ngày) cần "bây giờ" đóng băng; dùng giờ thật thì test hôm nay xanh, mai đỏ.'),
+      q('The group decided how to organise Report 5.1. Which statement matches that decision?|||Nhóm đã chốt cách tổ chức Report 5.1. Phát biểu nào đúng với quyết định đó?',
+        ['Each member hands in a separate workbook|||Mỗi thành viên nộp một workbook riêng', 'One shared workbook; each member owns their function sheets and presents and runs their own tests|||Một workbook chung; mỗi người sở hữu sheet hàm của mình, tự trình bày và tự chạy test phần mình', 'The team lead fills every sheet and presents alone|||Nhóm trưởng điền mọi sheet và trình bày một mình', 'Only the Statistics sheet is handed in|||Chỉ nộp sheet Statistics'], 1,
+        'One shared file (Cover, Functions, Statistics kept by the team lead); Created By / Executed By name the owner of each function sheet; at the presentation each member shows their part, opens their own test class and runs it — the lecturer asked for a code demo, slides and where it was tested.|||Một file chung (nhóm trưởng lo Cover, Functions, Statistics); Created By / Executed By ghi người phụ trách từng sheet hàm; lúc thuyết trình mỗi người trình bày phần mình, mở lớp test của mình và chạy — cô yêu cầu có chạy code demo, có slide và chỉ ra chỗ đã test.'),
+      q('LabFlow Demo: 24 functions, 540 LOC, norm 100 TC/KLOC computed per function. createEquipment has 14 LOC. What is its minimum number of test cases?|||LabFlow Demo: 24 hàm, 540 LOC, chuẩn 100 TC/KLOC tính theo từng hàm. createEquipment dài 14 LOC. Số test case tối thiểu của nó là bao nhiêu?',
+        ['1|||1', '2|||2', '14|||14', '65|||65'], 1,
+        'Minimum = ceil(LOC / 10) = ceil(1.4) = 2. Summed per function this gives the group floor of 65; the group target is 6–10 cases per function.|||Tối thiểu = làm tròn lên của LOC / 10 = ⌈1,4⌉ = 2. Cộng theo từng hàm ra sàn 65 của cả nhóm; mục tiêu của nhóm là 6–10 case mỗi hàm.'),
     ],
   },
 };
 
 export default {
   title: 'Lab 2 — Component (unit) testing: white-box & black-box|||Lab 2 — Component (unit) test: white-box & black-box',
-  description: 'Lab 2 học từng slide: bộ hướng dẫn unit test của Hitachi (88 slide, dịch cả trang tiếng Nhật), cách viết PCL (32), đề bài white-box (13) và black-box (14), các checklist, Detail Design JNAP, template Unit Test Case với sheet mẫu đã chạy JUnit + JaCoCo, bộ UnitTestPoints và quiz.',
-  lessons: [L21, L22, L23, L24, L25, L26, L27, L28, L29, QUIZ],
+  description: 'Lab 2 học từng slide: bộ hướng dẫn unit test của Hitachi (88 slide, dịch cả trang tiếng Nhật), cách viết PCL (32), đề bài white-box (13) và black-box (14), các checklist, Detail Design JNAP, template Unit Test Case với sheet mẫu đã chạy JUnit + JaCoCo, bộ UnitTestPoints; rồi 6 bài dự án làm thật (mỗi bài một video): LabFlow Demo (Spring Boot, 24 hàm service, 5 thành viên), Report 5.1 từ A–Z, ví dụ trọn vòng AuthService.login với JUnit 5 + Mockito chạy thật, chia việc + Pull Request, điền 5.1 trên CT Work và xuất Excel (tải được tệp thật), cách thuyết trình; và quiz.',
+  lessons: [L21, L22, L23, L24, L25, L26, L27, L28, L29, ...LABFLOW, QUIZ],
 };

@@ -31,7 +31,7 @@ Bất biến cần phát biểu không phải *"một phiếu mượn mỗi bả
 >
 > Chạy bộ test: `cd backend && export JAVA_HOME=$(/usr/libexec/java_home -v 21) && mvn test`. **Bắt buộc JDK 21** — Maven chạy JDK mới hơn sẽ làm Mockito và JaCoCo hỏng hàng loạt.
 
-> 🧪 **Dùng project này để làm bài Lab.** Nó là project mẫu của [**Lab 2.5 — Project + Tool: tìm defect và viết báo cáo**](/courses/software-testing) trong môn SWT301: chọn một công cụ, tìm 3 defect, sửa và viết report.
+> 🧪 **Dùng project này để làm bài Lab.** Nó là project mẫu của [**Lab 1 — Project + Tool: tìm defect và viết báo cáo**](/courses/software-testing) trong môn SWT301: chọn một công cụ, tìm 3 defect, sửa và viết report.
 
 ---
 

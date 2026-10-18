@@ -1,5 +1,6 @@
 /**
- * SWT301 · Lab 1 — Code review & static analysis.
+ * SWT301 · Lab 1 (FLM material) — Code review & static analysis. Lessons numbered Lab 1.7–1.10 (18/10/2026):
+ * the lecturer's Lab 1 assignment (Project + Tool, lab-project.mjs) is Lab 1.1–1.6; slugs unchanged.
  * Sources (02.Lab/01.Lab01):
  *   01.Reviews/Lab1_Review.pptx ............ deck lab1-review (2 slides)
  *   01.Reviews/sourcecode.pdf .............. deck lab1-source (2 pages, ReviewCode.java, 119 lines)
@@ -287,19 +288,19 @@ INFO: Finished</code></pre>`;
 
 /* ═══════════════════════════ Lesson 1 — the task & the checklist ═══════════════════════════ */
 const L1 = {
-  title: 'Lab 1.1 — The code-review task and the Java checklist, item by item|||Lab 1.1 — Đề bài review code và checklist Java, từng mục một',
+  title: 'Lab 1.7 — The code-review task and the Java checklist, item by item|||Lab 1.7 — Đề bài review code và checklist Java, từng mục một',
   slug: 'swt301-lab1-review-checklist',
   type: 'VIDEO',
   description: 'Lab1_Review slide 1–2: yêu cầu bài Lab 1 review code (≥10 defect, file Word, 6 nội dung mỗi defect) và toàn bộ file Java_Simple_Checklist — 20 mục sheet Basic + 33 mục sheet Advance, dịch và giải thích, cách điền cột Result/DefectID/Line.',
   content: [
-    bi(`<span class="eyebrow">Lab 1 · Lesson 1.1 · Lab1_Review slides 1–2 · Java_Simple_Checklist_{ClassName}.xlsx</span>
+    bi(`<span class="eyebrow">Lab 1 · Lesson 1.7 · Lab1_Review slides 1–2 · Java_Simple_Checklist_{ClassName}.xlsx</span>
 <h2>Lab 1 (part 1): review code with a checklist</h2>
 <p class="lead">Lab 1 is where Chapter 3 (static testing) becomes a skill. You get a Java class, a checklist and a defect-report format; you must find, log and fix at least ten defects <em>without running the code</em>.</p>
 <p>This lesson explains exactly what is asked and walks through every item of the checklist. The rest of Lab 1:</p>
 <ul>
-<li><strong>Lesson 1.2</strong> — the complete review of the given code.</li>
-<li><strong>Lesson 1.3</strong> — the static-analysis tools.</li>
-<li><strong>Lesson 1.4</strong> — how all of this is marked in PE Question 1.</li>
+<li><strong>Lesson 1.8</strong> — the complete review of the given code.</li>
+<li><strong>Lesson 1.9</strong> — the static-analysis tools.</li>
+<li><strong>Lesson 1.10</strong> — how all of this is marked in PE Question 1.</li>
 </ul>
 <div class="callout"><strong>Learning objectives.</strong>
 <ul>
@@ -317,14 +318,14 @@ const L1 = {
 <tr><td>Demo</td><td>In class you show the three activities: <strong>find</strong> the defect, <strong>log</strong> it, <strong>fix</strong> it.</td></tr>
 </tbody>
 </table>`,
-    `<span class="eyebrow">Lab 1 · Bài 1.1 · Lab1_Review slide 1–2 · Java_Simple_Checklist_{ClassName}.xlsx</span>
+    `<span class="eyebrow">Lab 1 · Bài 1.7 · Lab1_Review slide 1–2 · Java_Simple_Checklist_{ClassName}.xlsx</span>
 <h2>Lab 1 (phần 1): review code bằng checklist</h2>
 <p class="lead">Lab 1 là nơi Chương 3 (kiểm thử tĩnh) trở thành kỹ năng. Bạn nhận một class Java, một checklist và một mẫu báo cáo defect; phải tìm, ghi nhận và sửa ít nhất mười defect <em>mà không chạy code</em>.</p>
 <p>Bài này giải thích chính xác đề yêu cầu gì và đi qua từng mục của checklist. Phần còn lại của Lab 1:</p>
 <ul>
-<li><strong>Bài 1.2</strong> — review trọn vẹn đoạn code được giao.</li>
-<li><strong>Bài 1.3</strong> — các công cụ phân tích tĩnh.</li>
-<li><strong>Bài 1.4</strong> — tất cả những điều này được chấm thế nào ở Câu 1 đề PE.</li>
+<li><strong>Bài 1.8</strong> — review trọn vẹn đoạn code được giao.</li>
+<li><strong>Bài 1.9</strong> — các công cụ phân tích tĩnh.</li>
+<li><strong>Bài 1.10</strong> — tất cả những điều này được chấm thế nào ở Câu 1 đề PE.</li>
 </ul>
 <div class="callout"><strong>Chuẩn đầu ra.</strong>
 <ul>
@@ -362,7 +363,7 @@ const L1 = {
 <ol>
 <li><strong>Source file</strong> — the slide says the code is in <em>review_code.png</em>, but the file in the folder is <em>sourcecode.pdf</em> (same class, <code>ReviewCode.java</code>).</li>
 <li><strong>Numbering</strong> — the title says "Lab 1_2" while the Word file must be named "…_Lab1_1".</li>
-<li><strong>Field count</strong> — "6 contents as in slide 2", but slide 2 shows only <strong>5</strong> fields. Safest: add the checklist item (or the severity) as the sixth — that is what Lesson 1.2 does.</li>
+<li><strong>Field count</strong> — "6 contents as in slide 2", but slide 2 shows only <strong>5</strong> fields. Safest: add the checklist item (or the severity) as the sixth — that is what Lesson 1.8 does.</li>
 </ol>
 <p class="nhan">Why "exit criteria"?</p>
 <p>It is the same term as in the test process (Chapter 1, lesson 1.4): measurable conditions that decide when an activity is finished. Here: ≥ 10 logged defects + the demo.</p>`,
@@ -383,7 +384,7 @@ const L1 = {
 <ol>
 <li><strong>File nguồn</strong> — slide nói code nằm ở <em>review_code.png</em>, nhưng file trong thư mục là <em>sourcecode.pdf</em> (cùng class <code>ReviewCode.java</code>).</li>
 <li><strong>Đánh số</strong> — tiêu đề ghi "Lab 1_2" còn file Word lại đặt tên "…_Lab1_1".</li>
-<li><strong>Số trường</strong> — "6 nội dung như slide 2", nhưng slide 2 chỉ có <strong>5</strong> trường. An toàn nhất: thêm mục checklist (hoặc mức độ nghiêm trọng) làm nội dung thứ sáu — Bài 1.2 làm đúng như vậy.</li>
+<li><strong>Số trường</strong> — "6 nội dung như slide 2", nhưng slide 2 chỉ có <strong>5</strong> trường. An toàn nhất: thêm mục checklist (hoặc mức độ nghiêm trọng) làm nội dung thứ sáu — Bài 1.8 làm đúng như vậy.</li>
 </ol>
 <p class="nhan">Vì sao gọi là "exit criteria"?</p>
 <p>Đó chính là thuật ngữ trong quy trình test (Chương 1, bài 1.4): điều kiện đo được để quyết định một hoạt động đã xong. Ở đây: ≥ 10 defect đã log + buổi demo.</p>`],
@@ -391,7 +392,7 @@ const L1 = {
         `<p class="y-chinh">🎯 This is the defect-report template of PE Question 1: five fields you fill for every defect you find.</p>
 <p class="nhan">What the screenshot shows</p>
 <ul>
-<li><strong>The file</strong> — the Windows Photos app showing <em>1.jpg</em> (5101 × 39606 px — the whole FALL24 final PE paper, shown in full in Lesson 1.4).</li>
+<li><strong>The file</strong> — the Windows Photos app showing <em>1.jpg</em> (5101 × 39606 px — the whole FALL24 final PE paper, shown in full in Lesson 1.10).</li>
 <li><strong>The visible part</strong> — <strong>PE Question 1 (3 points)</strong>: "The following Java class contains six defects related to code standards, logic, and best practices. Identify and explain each defect using the following defect report template".</li>
 </ul>
 <p class="nhan">The five fields, and how to fill them well</p>
@@ -413,7 +414,7 @@ const L1 = {
         `<p class="y-chinh">🎯 Đây là mẫu báo cáo defect của Câu 1 đề PE: năm trường bạn điền cho mỗi defect tìm được.</p>
 <p class="nhan">Ảnh chụp cho thấy gì</p>
 <ul>
-<li><strong>File</strong> — ứng dụng Photos của Windows đang mở <em>1.jpg</em> (5101 × 39606 px — toàn bộ đề PE cuối kỳ FALL24, xem trọn ở Bài 1.4).</li>
+<li><strong>File</strong> — ứng dụng Photos của Windows đang mở <em>1.jpg</em> (5101 × 39606 px — toàn bộ đề PE cuối kỳ FALL24, xem trọn ở Bài 1.10).</li>
 <li><strong>Phần nhìn thấy</strong> — <strong>Câu 1 đề PE (3 điểm)</strong>: "Class Java sau có sáu defect liên quan tới chuẩn code, logic và best practice. Hãy xác định và giải thích từng defect theo mẫu báo cáo defect sau".</li>
 </ul>
 <p class="nhan">Năm trường, và cách điền cho tốt</p>
@@ -582,12 +583,12 @@ const L1 = {
 
 /* ═══════════════════════════ Lesson 2 — the worked review ═══════════════════════════ */
 const L2 = {
-  title: 'Lab 1.2 — Complete worked review of ReviewCode.java (29 defects, fixed code)|||Lab 1.2 — Review trọn vẹn ReviewCode.java (29 defect, code đã sửa)',
+  title: 'Lab 1.8 — Complete worked review of ReviewCode.java (29 defects, fixed code)|||Lab 1.8 — Review trọn vẹn ReviewCode.java (29 defect, code đã sửa)',
   slug: 'swt301-lab1-worked-review',
   type: 'VIDEO',
   description: 'sourcecode.pdf trang 1–2: đọc từng khối của ReviewCode.java, nhật ký 29 defect (dòng, mục checklist, mức độ, mô tả, cách sửa), 2 defect viết đúng mẫu nộp bài, code đã sửa — tất cả đã được biên dịch và chạy thật.',
   content: [
-    bi(`<span class="eyebrow">Lab 1 · Lesson 1.2 · sourcecode.pdf pages 1–2</span>
+    bi(`<span class="eyebrow">Lab 1 · Lesson 1.8 · sourcecode.pdf pages 1–2</span>
 <h2>The complete review of ReviewCode.java</h2>
 <p class="lead">This is the answer key you can check your own Lab against. It goes in three steps:</p>
 <ol>
@@ -611,7 +612,7 @@ const L2 = {
 <tr><td>Trivial</td><td>style and convention</td><td>10</td></tr>
 </tbody>
 </table>`,
-    `<span class="eyebrow">Lab 1 · Bài 1.2 · sourcecode.pdf trang 1–2</span>
+    `<span class="eyebrow">Lab 1 · Bài 1.8 · sourcecode.pdf trang 1–2</span>
 <h2>Review trọn vẹn ReviewCode.java</h2>
 <p class="lead">Đây là đáp án để bạn đối chiếu bài Lab của mình. Bài đi theo ba bước:</p>
 <ol>
@@ -750,7 +751,7 @@ ${RUN_FIXED}
 <li><strong>Eclipse ECJ</strong> (every optional warning enabled) — only its "non-externalized string" (i18n) warnings remain; the null, resource-leak and unused-value warnings are gone.</li>
 <li><strong>Checkstyle (Sun rules)</strong> — drops from 33 to 26 findings, all of the remaining ones pure style (line length &gt; 80, <code>final</code> parameters, Javadoc on constants, 4 magic numbers).</li>
 </ul>
-<p>Lesson 1.3 explains those tools.</p>`,
+<p>Lesson 1.9 explains those tools.</p>`,
     `<h2>🐞 Nhật ký defect (nội dung file Word)</h2>
 <p>Các cột = năm trường của đề PE + mục checklist và mức độ (B = mục sheet Basic, A = mục sheet Advance). Mười defect bất kỳ trong bảng là đạt exit criteria; bài tốt ưu tiên các defect Critical và Major và phủ nhiều nhóm lỗi khác nhau.</p>
 ${defTable(true)}
@@ -785,7 +786,7 @@ ${RUN_FIXED}
 <li><strong>Eclipse ECJ</strong> (bật mọi cảnh báo tuỳ chọn) — chỉ còn cảnh báo "non-externalized string" (i18n); các cảnh báo null, rò tài nguyên, giá trị không dùng đều hết.</li>
 <li><strong>Checkstyle (bộ Sun)</strong> — giảm từ 33 xuống 26, phần còn lại thuần phong cách (dòng &gt; 80 ký tự, tham số <code>final</code>, Javadoc cho hằng, 4 số ma thuật).</li>
 </ul>
-<p>Bài 1.3 giải thích các công cụ này.</p>`),
+<p>Bài 1.9 giải thích các công cụ này.</p>`),
     bi(`<div class="pitfall co-tieu-de"><strong>Traps that lose Lab / PE marks.</strong>
 <ol>
 <li><strong>Symptom line instead of defect line</strong> — the NPE "happens" in <code>equals</code>, but the defect is the null at 18–19.</li>
@@ -877,12 +878,12 @@ const mapRows = MAP.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</t
 const mapTable = (vi) => `<div class="table-wrap"><table><thead><tr>${(vi ? ['Defect', 'javac', 'ECJ', 'Checkstyle', 'PMD (dự kiến)', 'SpotBugs (dự kiến)', 'Sonar (dự kiến)'] : ['Defect', 'javac', 'ECJ', 'Checkstyle', 'PMD (expected)', 'SpotBugs (expected)', 'Sonar (expected)']).map((h) => `<th>${h}</th>`).join('')}</tr></thead><tbody>${mapRows}</tbody></table></div>`;
 
 const L3 = {
-  title: 'Lab 1.3 — Static analysis tools: PVS-Studio, SonarQube, ESLint, PMD, FindBugs/SpotBugs|||Lab 1.3 — Công cụ phân tích tĩnh: PVS-Studio, SonarQube, ESLint, PMD, FindBugs/SpotBugs',
+  title: 'Lab 1.9 — Static analysis tools: PVS-Studio, SonarQube, ESLint, PMD, FindBugs/SpotBugs|||Lab 1.9 — Công cụ phân tích tĩnh: PVS-Studio, SonarQube, ESLint, PMD, FindBugs/SpotBugs',
   slug: 'swt301-lab1-static-analysis',
   type: 'VIDEO',
   description: 'Lab1_static_analysis slide 1–6: đề bài (5 loại defect log trên JIRA), 5 công cụ trên slide, cách cài/chạy trong NetBeans, IntelliJ, VS Code, Maven; kết quả chạy thật javac + ECJ + Checkstyle trên ReviewCode.java, bảng ánh xạ luật PMD/SpotBugs/Sonar, mẫu 5 issue JIRA.',
   content: [
-    bi(`<span class="eyebrow">Lab 1 · Lesson 1.3 · Lab1_static_analysis slides 1–6</span>
+    bi(`<span class="eyebrow">Lab 1 · Lesson 1.9 · Lab1_static_analysis slides 1–6</span>
 <h2>Lab 1 (part 2): static analysis with tools</h2>
 <p class="lead">Reviews are static testing done by people; <strong>static analysis</strong> is static testing done by tools. The second Lab 1 deck asks you to pick one analyser, run it on a real project, and log five <em>different kinds</em> of defect in JIRA. This lesson covers the five tools on the slides, how to install and run the relevant ones from your IDE, what their rules mean, and a real run on the Lab's <code>ReviewCode.java</code>.</p>
 <div class="callout"><strong>Learning objectives.</strong>
@@ -898,7 +899,7 @@ const L3 = {
 <tr><td>Null dereferences on obvious paths, resource leaks, unused variables/imports, dead stores, unreachable code, coding-standard violations, known insecure patterns, complexity metrics</td><td>Wrong business logic ("VIP discount should be 20%"), missing requirements, bad names that are syntactically fine, a design that does not fit the problem — that is what people in reviews are for</td></tr>
 </tbody>
 </table>`,
-    `<span class="eyebrow">Lab 1 · Bài 1.3 · Lab1_static_analysis slide 1–6</span>
+    `<span class="eyebrow">Lab 1 · Bài 1.9 · Lab1_static_analysis slide 1–6</span>
 <h2>Lab 1 (phần 2): phân tích tĩnh bằng công cụ</h2>
 <p class="lead">Review là kiểm thử tĩnh do con người làm; <strong>phân tích tĩnh (static analysis)</strong> là kiểm thử tĩnh do công cụ làm. Bộ slide thứ hai của Lab 1 yêu cầu chọn một công cụ, chạy trên một dự án thật, và log năm <em>loại</em> defect khác nhau lên JIRA. Bài này nói về năm công cụ trên slide, cách cài và chạy các công cụ phù hợp trong IDE, ý nghĩa các luật, và một lần chạy thật trên <code>ReviewCode.java</code> của bài Lab.</p>
 <div class="callout"><strong>Chuẩn đầu ra.</strong>
@@ -1160,7 +1161,7 @@ ${TOOLRUN}
 <li><strong>Checkstyle</strong> — found the conventions.</li>
 <li><strong>"Non-externalized string" warnings</strong> — ECJ's i18n rule (every literal should come from a resource bundle). Noise for a console exercise, which is exactly the "false positives if not tuned" risk of LO-6.1.2: switch that rule off rather than drowning in it.</li>
 </ul>
-<h3>Which defect of Lesson 1.2 each tool reports</h3>
+<h3>Which defect of Lesson 1.8 each tool reports</h3>
 <p>✔ = seen in the real runs above. PMD/SpotBugs/Sonar columns are the rules those tools would be expected to raise (from their rule documentation), <em>not</em> observed output.</p>
 ${mapTable(false)}
 <p><strong>What no tool reported:</strong> the division by (x+y) (DF010 — the values are constants, so the analyser sees no zero), the missing zero case (DF011), the meaningless name <code>doStuff</code> and its useless Javadoc (DF021 — Checkstyle only complains about missing @param), the debug comment (DF018). Human review still matters.</p>`,
@@ -1185,7 +1186,7 @@ ${TOOLRUN}
 <li><strong>Checkstyle</strong> — tìm ra các vi phạm quy ước.</li>
 <li><strong>Cảnh báo "non-externalized string"</strong> — luật i18n của ECJ (mọi literal nên lấy từ resource bundle). Nhiễu với bài console, đúng rủi ro "false positive nếu không tinh chỉnh" của LO-6.1.2: hãy tắt luật đó thay vì chìm trong nó.</li>
 </ul>
-<h3>Defect nào của Bài 1.2 được công cụ nào báo</h3>
+<h3>Defect nào của Bài 1.8 được công cụ nào báo</h3>
 <p>✔ = thấy trong các lần chạy thật ở trên. Cột PMD/SpotBugs/Sonar là luật mà các công cụ đó <em>được dự kiến</em> sẽ báo (theo tài liệu luật của chúng), <em>không phải</em> kết quả quan sát được.</p>
 ${mapTable(true)}
 <p><strong>Không công cụ nào báo:</strong> phép chia cho (x+y) (DF010 — giá trị là hằng nên công cụ không thấy số 0), trường hợp bằng 0 bị bỏ (DF011), tên vô nghĩa <code>doStuff</code> và Javadoc vô dụng (DF021 — Checkstyle chỉ phàn nàn thiếu @param), comment debug (DF018). Review của con người vẫn cần thiết.</p>`),
@@ -1310,12 +1311,12 @@ public class FileProcessor {                       // DF001
 }</code></pre>`;
 
 const L4 = {
-  title: 'Lab 1.4 — From Lab 1 to PE Question 1: the FALL24 fileProcessor, fully answered|||Lab 1.4 — Từ Lab 1 tới Câu 1 đề PE: fileProcessor của FALL24, giải trọn vẹn',
+  title: 'Lab 1.10 — From Lab 1 to PE Question 1: the FALL24 fileProcessor, fully answered|||Lab 1.10 — Từ Lab 1 tới Câu 1 đề PE: fileProcessor của FALL24, giải trọn vẹn',
   slug: 'swt301-lab1-pe-question1',
   type: 'VIDEO',
   description: 'Ảnh 1.jpg (đề PE cuối kỳ FALL24): Câu 1 "tìm 6 defect có số dòng" — lời giải đầy đủ theo mẫu Defect ID/Name/Line/Description/Fix, đã biên dịch và chạy kiểm chứng; chiến lược 20 phút; liên hệ Câu 2, Câu 3.',
   content: [
-    bi(`<span class="eyebrow">Lab 1 · Lesson 1.4 · 1.jpg (SWT301 FALL24 final PE)</span>
+    bi(`<span class="eyebrow">Lab 1 · Lesson 1.10 · 1.jpg (SWT301 FALL24 final PE)</span>
 <h2>How Lab 1 prepares PE Question 1</h2>
 <p class="lead">Every recent SWT301 practical exam opens with a code-review question: "this class contains N defects (usually six) related to code standards, logic and best practices — identify each with a line number and a fix". It is worth 3 of the 10 points. Lab 1 is the rehearsal: same activity, same report format. The folder of Lab 1 even contains the full FALL24 paper as <em>1.jpg</em>; here it is, followed by a complete, verified answer to its Question 1.</p>
 <div class="callout"><strong>Learning objectives.</strong>
@@ -1333,7 +1334,7 @@ The whole PE (all papers, time plan, Q2 and Q3 solutions) is covered in the PE s
 <tr><td>Static analysis tool</td><td>FALL24 allows an IDE: paste the class in NetBeans/IntelliJ and let the red underlines and warnings confirm your findings</td></tr>
 </tbody>
 </table>`,
-    `<span class="eyebrow">Lab 1 · Bài 1.4 · 1.jpg (đề PE cuối kỳ SWT301 FALL24)</span>
+    `<span class="eyebrow">Lab 1 · Bài 1.10 · 1.jpg (đề PE cuối kỳ SWT301 FALL24)</span>
 <h2>Lab 1 chuẩn bị cho Câu 1 đề PE thế nào</h2>
 <p class="lead">Mọi đề thi thực hành SWT301 gần đây đều mở đầu bằng câu review code: "class này có N defect (thường là sáu) về chuẩn code, logic và best practice — hãy chỉ ra từng defect kèm số dòng và cách sửa". Câu này chiếm 3/10 điểm. Lab 1 chính là buổi tập dượt: cùng hoạt động, cùng mẫu báo cáo. Thư mục Lab 1 thậm chí chứa trọn đề FALL24 dưới tên <em>1.jpg</em>; dưới đây là đề, tiếp theo là lời giải đầy đủ, đã kiểm chứng, cho Câu 1.</p>
 <div class="callout"><strong>Chuẩn đầu ra.</strong>
@@ -1362,7 +1363,7 @@ Toàn bộ đề PE (các đề, cách chia thời gian, lời giải Câu 2 và
 </ul>
 <p class="nhan">The three questions</p>
 <ul>
-<li><strong>Question 1 (3 points)</strong> — the defect-report template (Lesson 1.1, slide 2) and the 35-line class <code>fileProcessor</code>: answered completely below.</li>
+<li><strong>Question 1 (3 points)</strong> — the defect-report template (Lesson 1.7, slide 2) and the 35-line class <code>fileProcessor</code>: answered completely below.</li>
 <li><strong>Question 2 (5 points)</strong> — <code>OrderCalculator.calculateTotalPrice(double[] itemPrices, String customerType, boolean isVIP, String discountCode)</code>: design JUnit tests with EP and BVA on the inputs and 100% branch coverage; a partially completed <code>OrderCalculatorTest</code> is given (one expected-exception test, one VIP test asserting 240.0), and each test needs a one-line summary "ID; Test for …; Input parameter …; Expected result …".</li>
 <li><strong>Question 3 (2 points)</strong> — use case "Place an Order" of an online shopping system (main scenario of 8 steps, alternates A1 empty cart, A2 invalid discount code, A3 payment failure; products A $50, B $30, C $20; codes SAVE10 10%, WELCOME5 5% for new customers): write functional black-box test cases covering normal, alternative and exception flows, each with ID, description, preconditions, steps with test data, expected result and a note NF / AL / EX. An example TC001 is given.</li>
 </ul>
@@ -1377,7 +1378,7 @@ Toàn bộ đề PE (các đề, cách chia thời gian, lời giải Câu 2 và
 </ul>
 <p class="nhan">Ba câu hỏi</p>
 <ul>
-<li><strong>Câu 1 (3 điểm)</strong> — mẫu báo cáo defect (Bài 1.1, slide 2) và class 35 dòng <code>fileProcessor</code>: giải đầy đủ bên dưới.</li>
+<li><strong>Câu 1 (3 điểm)</strong> — mẫu báo cáo defect (Bài 1.7, slide 2) và class 35 dòng <code>fileProcessor</code>: giải đầy đủ bên dưới.</li>
 <li><strong>Câu 2 (5 điểm)</strong> — <code>OrderCalculator.calculateTotalPrice(double[] itemPrices, String customerType, boolean isVIP, String discountCode)</code>: thiết kế test JUnit dùng EP và BVA cho các tham số và đạt 100% branch coverage; cho sẵn một <code>OrderCalculatorTest</code> dở dang (một test mong đợi exception, một test VIP kiểm 240.0), mỗi test cần một dòng tóm tắt "ID; Test for …; Input parameter …; Expected result …".</li>
 <li><strong>Câu 3 (2 điểm)</strong> — use case "Place an Order" của hệ thống mua hàng online (kịch bản chính 8 bước, nhánh phụ A1 giỏ trống, A2 mã giảm giá sai, A3 thanh toán lỗi; sản phẩm A $50, B $30, C $20; mã SAVE10 giảm 10%, WELCOME5 giảm 5% cho khách mới): viết test case chức năng black-box phủ luồng chính, luồng thay thế và ngoại lệ, mỗi case có ID, mô tả, điều kiện tiên quyết, các bước kèm dữ liệu, kết quả mong đợi và ghi chú NF / AL / EX. Có sẵn ví dụ TC001.</li>
 </ul>
@@ -1483,7 +1484,7 @@ ${PE_FIX}
 /* ──────────────────────────────── Quiz ──────────────────────────────── */
 const q = (question, options, correctIndex, explanation) => ({ question, options, correctIndex, points: 1, ...(explanation ? { explanation } : {}) });
 const QUIZL1 = {
-  title: 'Quiz Lab 1 — Code review & static analysis|||Quiz Lab 1 — Review code & phân tích tĩnh',
+  title: 'Quiz Lab 1 (FLM) — Code review & static analysis|||Quiz Lab 1 (FLM) — Review code & phân tích tĩnh',
   slug: 'swt301-lab1-quiz',
   type: 'QUIZ',
   description: '12 câu kiểm tra phần Lab 1: yêu cầu bài lab, checklist Java, defect trong ReviewCode.java và fileProcessor, công cụ phân tích tĩnh.',
@@ -1507,7 +1508,7 @@ const QUIZL1 = {
 };
 
 export default {
-  title: 'Lab 1 — Code review & static analysis|||Lab 1 — Review code & phân tích tĩnh',
+  title: 'Lab 1 (FLM material) — Code review & static analysis|||Lab 1 (tài liệu FLM) — Review code & phân tích tĩnh',
   description: 'Lab 1 học từng slide: review ReviewCode.java bằng Java_Simple_Checklist (29 defect có dòng, mức độ, cách sửa, code đã sửa đã chạy thật), công cụ phân tích tĩnh (chạy thật javac/ECJ/Checkstyle, cách dùng Sonar/PMD/SpotBugs, log JIRA) và lời giải Câu 1 đề PE FALL24.',
   lessons: [L1, L2, L3, L4, QUIZL1],
 };

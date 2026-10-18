@@ -64,6 +64,16 @@ export default {
     "swt301-lab2-whitebox": { yt: "QDFI19lj4OM", credit: "IntelliJ IDEA, a JetBrains IDE — Unit Testing and Coverage in IntelliJ IDEA" },
     "swt301-lab2-blackbox": { yt: "flpmSXVTqBI", credit: "freeCodeCamp.org — Java Testing - JUnit 5 Crash Course" },
     "swt301-lab2-unit-test-points": { yt: "xaQC9EWDb8w", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 4.4.3 Checklist Based Testing" },
+    /* ── Lab 2 · LabFlow (L2.10–L2.15, video giọng chủ kênh ~/Videos/CuongThai-KhoaHoc/swt301-lab2/01-lab2-unit-test-labflow/*).
+       CHƯA tải lên R2: sau `tsx xuat/len-r2.mts …` lấy r2Url trong từng thong-tin.json, bỏ // ở 6 dòng dưới và dán URL.
+       (gan-web.mts không dùng được cho loạt này: nó đọc content/course-videos/<khoá>.mjs = swt301-lab2.mjs — không có — và
+       bỏ qua thư mục 01-01b vì regex /^\d\d-\d\d-/.) ── */
+    "swt301-lab2-labflow-nghiep-vu": { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-01-labflow-demo-nghiep-vu-du-lieu-61a536fd.mp4' }, defaultVideoTrack: 'VI' },
+    "swt301-lab2-labflow-chay-app-test": { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-01b-labflow-demo-ben-trong-code-94a054b8.mp4' }, defaultVideoTrack: 'VI' },
+    "swt301-lab2-report51-a-z": { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-02-lab2-va-report-51-04ab87ac.mp4' }, defaultVideoTrack: 'VI' },
+    "swt301-lab2-vi-du-login": { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-03-vi-du-tron-vong-login-d39b134d.mp4' }, defaultVideoTrack: 'VI' },
+    "swt301-lab2-chia-viec-5-thanh-vien": { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-04-phan-cua-tung-thanh-vien-1266d16d.mp4' }, defaultVideoTrack: 'VI' },
+    "swt301-lab2-report51-ct-work-excel": { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-05-dien-51-ct-work-xuat-excel-1441b27d.mp4' }, defaultVideoTrack: 'VI' },
     "swt301-test-organisation": { yt: "UGkYHGxH2lg", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 1.4.5  Roles in Testing" },
     "swt301-test-monitoring-control": { yt: "51SzGHxL1Zk", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 5.3.2 Purpose, Content and Audience for Test Reports" },
     "swt301-configuration-management": { yt: "o8dKL02HtgQ", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 5.4 Configuration Management" },

@@ -49,12 +49,13 @@ export default {
     ch1,
     /* ══════════════════ CHƯƠNG 2 — module riêng: swt301/ch2.mjs (SWT2, 143 slide) ══════════════════ */
     ch2,
-    /* ══════════ LAB 2.5 — swt301/lab-project.mjs (Project + Tool: tìm defect & viết report) ══════════ */
+    /* ══════════ LAB 1 (đề của giảng viên; trước 18/10 tên "Lab 2.5") — swt301/lab-project.mjs (Project + Tool: tìm defect & viết report) ══════════ */
     labProject,
     /* ══════════ PROGRESS TEST 1 — swt301/pt.mjs ══════════ */
     pt1,
     /* ══════════ CHƯƠNG 3 — swt301/ch3.mjs (SWT3, 106 slide) ══════════ */
     ch3,
+    /* ══════════ LAB 1 (tài liệu FLM, bài 1.7–1.10) — swt301/lab1.mjs (review code & phân tích tĩnh) ══════════ */
     lab1,
     /* ══════════ ch4 — swt301/ch4.mjs ══════════ */
     ch4,

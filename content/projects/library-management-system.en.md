@@ -31,7 +31,7 @@ The invariant you actually need is not *"one loan per copy"* but *"at most one *
 >
 > Run the suite: `cd backend && export JAVA_HOME=$(/usr/libexec/java_home -v 21) && mvn test`. **JDK 21 is required** — a newer JDK breaks Mockito and JaCoCo wholesale.
 
-> 🧪 **Use this project for the lab.** It is the sample project of [**Lab 2.5 — Project + Tool: find defects and write the report**](/courses/software-testing) in SWT301: pick a tool, find 3 defects, fix them and write the report.
+> 🧪 **Use this project for the lab.** It is the sample project of [**Lab 1 — Project + Tool: find defects and write the report**](/courses/software-testing) in SWT301: pick a tool, find 3 defects, fix them and write the report.
 
 ---
 

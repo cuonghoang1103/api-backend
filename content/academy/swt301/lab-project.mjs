@@ -1,7 +1,9 @@
 /**
- * SWT301 · Lab 2.5 — Project + Tool: find defects and write the report.
+ * SWT301 · Lab 1 — Project + Tool: find defects and write the report.
+ * (Trước 18/10/2026 mục này tên "Lab 2.5"; slug giữ nguyên swt301-lab25-* để không mất tiến độ người học.)
  *
- * Bài Lab cuối Chương 2, bắc cầu sang Chương 3 (static testing) và Lab 1.
+ * Bài Lab 1 của giảng viên (cuối Chương 2), bắc cầu sang Chương 3 (static testing) và phần tài liệu FLM của Lab 1
+ * (review code & phân tích tĩnh, lab1.mjs — bài Lab 1.7–1.10).
  * Sinh viên chọn MỘT project thật + MỘT công cụ, tìm 3 defect mỗi người,
  * sửa và viết báo cáo theo form giảng viên giao trên lớp.
  *
@@ -31,12 +33,12 @@ const q = (question, options, correctIndex, explanation) => ({
    Lesson 1 — Đề bài & yêu cầu nộp
    ═══════════════════════════════════════════════════════════════════════════ */
 const L1 = {
-  title: 'Lab 2.5.1 — The assignment: one project, one tool, three defects|||Lab 2.5.1 — Đề bài: một project, một công cụ, ba defect',
+  title: 'Lab 1.1 — The assignment: one project, one tool, three defects|||Lab 1.1 — Đề bài: một project, một công cụ, ba defect',
   slug: 'swt301-lab25-de-bai',
   type: 'DOCUMENT',
   description: 'Đề bài Lab cuối Chương 2: chọn project thật + công cụ kiểm thử, mỗi sinh viên tìm 3 defect, sửa và viết báo cáo theo form giảng viên. Giải thích từng mục của form, tiêu chí chấm và những lỗi làm mất điểm.',
   content: [
-    bi(`<span class="eyebrow">Lab 2.5 · Lesson 1 · End of Chapter 2 · Bridge to Chapter 3</span>
+    bi(`<span class="eyebrow">Lab 1 · Lesson 1 · End of Chapter 2 · Bridge to Chapter 3</span>
 <h2>The assignment in one sentence</h2>
 <p class="lead">Take a <strong>real software project</strong>, point a <strong>testing tool</strong> at it, find <strong>three genuine defects</strong> per student, fix them, and write a <strong>professional report</strong>.</p>
 <p class="y-chinh">🎯 The tool finds candidates. <strong>You</strong> decide which ones are real defects, how severe they are, and why. That judgement is what is being marked.</p>
@@ -72,9 +74,9 @@ const L1 = {
 <li><strong>LO-2.2.1</strong> — state which <strong>test level</strong> each defect belongs to: component, integration, system or acceptance (K2).</li>
 <li><strong>LO-3.1.2</strong> — <em>preview of Chapter 3</em>: explain why finding a defect <strong>without executing the code</strong> is cheaper (K2).</li>
 </ul>
-<p class="ghi-chu">This lab is deliberately placed at the end of Chapter 2: it is the practical bridge into Chapter 3 (static testing) and Lab 1 (code review &amp; static analysis).</p>`,
+<p class="ghi-chu">This lab is deliberately placed at the end of Chapter 2: it is the practical bridge into Chapter 3 (static testing) and into the FLM material of Lab 1 (code review &amp; static analysis, lessons Lab 1.7–1.10 right after Chapter 3).</p>`,
 
-`<span class="eyebrow">Lab 2.5 · Bài 1 · Cuối Chương 2 · Bắc cầu sang Chương 3</span>
+`<span class="eyebrow">Lab 1 · Bài 1 · Cuối Chương 2 · Bắc cầu sang Chương 3</span>
 <h2>Đề bài gói trong một câu</h2>
 <p class="lead">Lấy một <strong>project phần mềm có thật</strong>, chĩa một <strong>công cụ kiểm thử</strong> vào nó, mỗi sinh viên tìm <strong>ba defect thật</strong>, sửa chúng, rồi viết một <strong>bản báo cáo chuyên nghiệp</strong>.</p>
 <p class="y-chinh">🎯 Công cụ chỉ đưa ra ứng viên. <strong>Bạn</strong> mới là người quyết định cái nào thật sự là defect, nó nghiêm trọng đến đâu, và vì sao. Chính phần phán đoán đó được chấm điểm.</p>
@@ -110,7 +112,7 @@ const L1 = {
 <li><strong>LO-2.2.1</strong> — nói rõ mỗi defect thuộc <strong>cấp kiểm thử</strong> nào: component, integration, system hay acceptance (K2).</li>
 <li><strong>LO-3.1.2</strong> — <em>xem trước Chương 3</em>: giải thích vì sao tìm ra defect <strong>mà không cần chạy chương trình</strong> thì rẻ hơn (K2).</li>
 </ul>
-<p class="ghi-chu">Bài Lab này được đặt ở cuối Chương 2 có chủ đích: nó là cây cầu thực hành dẫn sang Chương 3 (kiểm thử tĩnh) và Lab 1 (review code &amp; phân tích tĩnh).</p>`),
+<p class="ghi-chu">Bài Lab này được đặt ở cuối Chương 2 có chủ đích: nó là cây cầu thực hành dẫn sang Chương 3 (kiểm thử tĩnh) và phần tài liệu FLM của Lab 1 (review code &amp; phân tích tĩnh, bài Lab 1.7–1.10 ngay sau Chương 3).</p>`),
   ].join('\n'),
 };
 
@@ -118,12 +120,12 @@ const L1 = {
    Lesson 2 — Project mẫu + link tải
    ═══════════════════════════════════════════════════════════════════════════ */
 const L2 = {
-  title: 'Lab 2.5.2 — The sample project: Library Management System|||Lab 2.5.2 — Project mẫu: Library Management System',
+  title: 'Lab 1.2 — The sample project: Library Management System|||Lab 1.2 — Project mẫu: Library Management System',
   slug: 'swt301-lab25-project-mau',
   type: 'DOCUMENT',
   description: 'Project mẫu để làm Lab: hệ thống quản lý thư viện Spring Boot 3.4 + React 18 + PostgreSQL, 10 service, 112 test JUnit sẵn có. Link tải source trên GitHub, cách chạy, cảnh báo JDK 21, và bảng chia module cho nhóm để defect không trùng nhau.',
   content: [
-    bi(`<span class="eyebrow">Lab 2.5 · Lesson 2 · The project under test</span>
+    bi(`<span class="eyebrow">Lab 1 · Lesson 2 · The project under test</span>
 <h2>A real system, not a toy</h2>
 <p class="lead">You may use your own project. If you do not have one ready, use this: a full-stack <strong>Library Management System</strong> with a genuine business domain, a real database and a test suite already in place.</p>
 <div class="callout"><span class="badge">Full source</span>
@@ -175,7 +177,7 @@ mvn test</code></pre>
 </table></div>
 <p class="meo">🧠 The leader should complete their own module first, to the full standard, and circulate it as the worked example the rest of the team copies the <em>shape</em> of — not the content.</p>`,
 
-`<span class="eyebrow">Lab 2.5 · Bài 2 · Project đem ra kiểm thử</span>
+`<span class="eyebrow">Lab 1 · Bài 2 · Project đem ra kiểm thử</span>
 <h2>Một hệ thống thật, không phải bài tập đồ chơi</h2>
 <p class="lead">Bạn có thể dùng project của riêng mình. Nếu chưa có, dùng cái này: <strong>Hệ thống quản lý thư viện</strong> full-stack, nghiệp vụ thật, cơ sở dữ liệu thật, và đã có sẵn bộ test.</p>
 <div class="callout"><span class="badge">Source đầy đủ</span>
@@ -233,12 +235,12 @@ mvn test</code></pre>
    Lesson 3 — Công cụ
    ═══════════════════════════════════════════════════════════════════════════ */
 const L3 = {
-  title: 'Lab 2.5.3 — The tools: SonarQube, the command line and JaCoCo|||Lab 2.5.3 — Bộ công cụ: SonarQube, dòng lệnh và JaCoCo',
+  title: 'Lab 1.3 — The tools: SonarQube, the command line and JaCoCo|||Lab 1.3 — Bộ công cụ: SonarQube, dòng lệnh và JaCoCo',
   slug: 'swt301-lab25-cong-cu',
   type: 'DOCUMENT',
   description: 'Static testing và dynamic testing khác nhau ra sao, tool nào thuộc loại nào. Dựng SonarQube bằng Docker, quét project, đọc thang Blocker→Info, phân biệt Bug / Vulnerability / Code Smell. Chạy JUnit qua CMD và đo coverage bằng JaCoCo.',
   content: [
-    bi(`<span class="eyebrow">Lab 2.5 · Lesson 3 · Tool support for testing</span>
+    bi(`<span class="eyebrow">Lab 1 · Lesson 3 · Tool support for testing</span>
 <h2>Two families of testing, two families of tool</h2>
 <div class="table-wrap"><table>
 <thead><tr><th></th><th>STATIC testing</th><th>DYNAMIC testing</th></tr></thead>
@@ -289,7 +291,7 @@ mvn test -Dtest=LoanServiceTest   # one class, when you are hunting
 <p class="meo">🧠 Coverage is evidence, not a goal. 100% coverage with assertions that check nothing proves nothing. Use it to show <em>which parts were never exercised</em>, because untested code is where defects survive.</p>
 <div class="callout co-tieu-de"><strong>The sentence your lecturer wants to hear.</strong> A tool searches for patterns; it does not know your requirements. If the specification says the VIP discount is 20% and the code gives 15%, that is perfectly legal code and <em>no</em> static analyser will flag it. Catching that needs a human holding the specification. This is precisely why the report is written by people and not by the tool.</div>`,
 
-`<span class="eyebrow">Lab 2.5 · Bài 3 · Công cụ hỗ trợ kiểm thử</span>
+`<span class="eyebrow">Lab 1 · Bài 3 · Công cụ hỗ trợ kiểm thử</span>
 <h2>Hai họ kiểm thử, hai họ công cụ</h2>
 <div class="table-wrap"><table>
 <thead><tr><th></th><th>Kiểm thử TĨNH</th><th>Kiểm thử ĐỘNG</th></tr></thead>
@@ -346,12 +348,12 @@ mvn test -Dtest=LoanServiceTest   # một class, khi đang truy lỗi
    Lesson 4 — Tìm và phân tích defect
    ═══════════════════════════════════════════════════════════════════════════ */
 const L4 = {
-  title: 'Lab 2.5.4 — Finding and analysing a defect, end to end|||Lab 2.5.4 — Tìm và phân tích một defect, trọn vòng',
+  title: 'Lab 1.4 — Finding and analysing a defect, end to end|||Lab 1.4 — Tìm và phân tích một defect, trọn vòng',
   slug: 'swt301-lab25-phan-tich-defect',
   type: 'DOCUMENT',
   description: 'Error/defect/failure áp vào ví dụ thật, chọn severity có lập luận, gán cấp kiểm thử, và một defect có thật trong project mẫu đi trọn vòng từ triệu chứng tới bản sửa đã kiểm chứng.',
   content: [
-    bi(`<span class="eyebrow">Lab 2.5 · Lesson 4 · From symptom to root cause</span>
+    bi(`<span class="eyebrow">Lab 1 · Lesson 4 · From symptom to root cause</span>
 <h2>Three words you must not mix up</h2>
 <pre><code>A developer forgets to guard against a negative number  →  ERROR    (a human mistake)
 The line lacks  if (quantity &lt; 0)                       →  DEFECT   (in the CODE)
@@ -399,7 +401,7 @@ Entering -5 produces a negative fine                     →  FAILURE  (at RUN T
 <p class="y-chinh">🎯 Look at how little the tool contributed: one line — "<code>mvn test</code> reported an error". Everything else — reading the stack trace, knowing Hibernate's flush order, judging the severity, choosing the fix — is human work. That is the part being graded.</p>
 <div class="meo">🧠 <strong>Where to hunt in this project.</strong> Three leads that are already visible: three tests carry <code>@Disabled("Security config issue")</code> in <code>LoanControllerIntegrationTest</code> — somebody switched them off instead of fixing what they found; <code>backend/TEST_PLAN.md</code> still claims Spring Boot 3.2.0 and Java 17 while <code>pom.xml</code> says 3.4.0 and Java 21 (the README was corrected on 21/09/2026); and coverage sits at 57% against a stated target of 70%.</div>`,
 
-`<span class="eyebrow">Lab 2.5 · Bài 4 · Từ triệu chứng tới nguyên nhân gốc</span>
+`<span class="eyebrow">Lab 1 · Bài 4 · Từ triệu chứng tới nguyên nhân gốc</span>
 <h2>Ba chữ không được nhầm</h2>
 <pre><code>Lập trình viên quên chặn số âm                →  ERROR    (sai sót của CON NGƯỜI)
 Dòng code thiếu  if (soLuong &lt; 0)             →  DEFECT   (nằm trong CODE)
@@ -453,12 +455,12 @@ Nhập -5 thì ra tiền phạt âm                   →  FAILURE  (lúc CHẠY
    Lesson 5 — Viết báo cáo
    ═══════════════════════════════════════════════════════════════════════════ */
 const L5 = {
-  title: 'Lab 2.5.5 — Writing the report professionally|||Lab 2.5.5 — Viết báo cáo cho chuyên nghiệp',
+  title: 'Lab 1.5 — Writing the report professionally|||Lab 1.5 — Viết báo cáo cho chuyên nghiệp',
   slug: 'swt301-lab25-viet-bao-cao',
   type: 'DOCUMENT',
   description: 'Bố cục đầy đủ của bản báo cáo, mẫu điền sẵn cho từng defect, quy tắc chụp ảnh minh chứng, bảng phân công nhóm, những lỗi làm mất điểm và checklist trước khi nộp.',
   content: [
-    bi(`<span class="eyebrow">Lab 2.5 · Lesson 5 · The deliverable</span>
+    bi(`<span class="eyebrow">Lab 1 · Lesson 5 · The deliverable</span>
 <h2>The full structure</h2>
 <pre><code>COVER          Project · SWT301 · class · lecturer · team · members (ID, role)
 TABLE OF CONTENTS
@@ -524,11 +526,11 @@ REFERENCES</code></pre>
 <p class="meo">🧠 Write the conclusion last, and make it say something. "We found 12 defects, 9 of which were invisible to the tool and required reading the specification" is a real finding. "We learned a lot about testing" is not.</p>
 <a class="link-card exphub" href="/courses/software-testing/learn?lessonSlug=swt301-lab25-slide-bai-mau">
   <span class="lc-ico">📊</span>
-  <span class="lc-body"><span class="lc-title">See it done — Lab 2.5.6: the finished sample deck</span><span class="lc-sub">Everything on this page applied to the Library Management System: 5 members × 3 defects, every defect with its four items and the proof after the fix. Download the .pptx.</span></span>
+  <span class="lc-body"><span class="lc-title">See it done — Lab 1.6: the finished sample deck</span><span class="lc-sub">Everything on this page applied to the Library Management System: 5 members × 3 defects, every defect with its four items and the proof after the fix. Download the .pptx.</span></span>
   <span class="lc-cta">OPEN →</span>
 </a>`,
 
-`<span class="eyebrow">Lab 2.5 · Bài 5 · Sản phẩm nộp</span>
+`<span class="eyebrow">Lab 1 · Bài 5 · Sản phẩm nộp</span>
 <h2>Bố cục đầy đủ</h2>
 <pre><code>TRANG BÌA      Project · SWT301 · lớp · giảng viên · nhóm · thành viên (MSSV, vai trò)
 MỤC LỤC
@@ -594,7 +596,7 @@ TÀI LIỆU THAM KHẢO</code></pre>
 <p class="meo">🧠 Viết phần kết luận sau cùng, và phải nói được điều gì đó. "Chúng tôi tìm được 12 defect, trong đó 9 cái công cụ không thấy mà phải đọc đặc tả mới ra" là một phát hiện thật. "Chúng em học được nhiều điều về kiểm thử" thì không.</p>
 <a class="link-card exphub" href="/courses/software-testing/learn?lessonSlug=swt301-lab25-slide-bai-mau">
   <span class="lc-ico">📊</span>
-  <span class="lc-body"><span class="lc-title">Xem bài làm hoàn chỉnh — Lab 2.5.6: bộ slide mẫu</span><span class="lc-sub">Mọi điều trong trang này áp vào Library Management System: 5 thành viên × 3 defect, mỗi defect đủ bốn mục và bằng chứng sau khi sửa. Tải được file .pptx.</span></span>
+  <span class="lc-body"><span class="lc-title">Xem bài làm hoàn chỉnh — Lab 1.6: bộ slide mẫu</span><span class="lc-sub">Mọi điều trong trang này áp vào Library Management System: 5 thành viên × 3 defect, mỗi defect đủ bốn mục và bằng chứng sau khi sửa. Tải được file .pptx.</span></span>
   <span class="lc-cta">MỞ →</span>
 </a>`),
   ].join('\n'),
@@ -604,10 +606,10 @@ TÀI LIỆU THAM KHẢO</code></pre>
    Quiz
    ═══════════════════════════════════════════════════════════════════════════ */
 const QUIZ = {
-  title: 'Quiz Lab 2.5 — Project, tool and defect report|||Quiz Lab 2.5 — Project, công cụ và báo cáo defect',
+  title: 'Quiz Lab 1 — Project, tool and defect report|||Quiz Lab 1 — Project, công cụ và báo cáo defect',
   slug: 'swt301-lab25-quiz',
   type: 'QUIZ',
-  description: '10 câu kiểm tra Lab 2.5: error/defect/failure, tĩnh và động, phân loại issue của SonarQube, severity và priority, cấp kiểm thử, và yêu cầu của bản báo cáo.',
+  description: '10 câu kiểm tra Lab 1: error/defect/failure, tĩnh và động, phân loại issue của SonarQube, severity và priority, cấp kiểm thử, và yêu cầu của bản báo cáo.',
   quiz: {
     timeLimitSeconds: 600,
     questions: [
@@ -646,7 +648,7 @@ const QUIZ = {
 };
 
 export default {
-  title: 'Lab 2.5 — Project + Tool: find defects and write the report|||Lab 2.5 — Project + Tool: tìm defect và viết báo cáo',
+  title: 'Lab 1 — Project + Tool: find defects and write the report|||Lab 1 — Project + Tool: tìm defect và viết báo cáo',
   description: 'Bài Lab cuối Chương 2, bắc cầu sang kiểm thử tĩnh: chọn một project thật và một công cụ, mỗi sinh viên tìm 3 defect, sửa và viết báo cáo theo form của giảng viên. Kèm project mẫu Library Management System (Spring Boot 3.4 + React 18, 112 test JUnit) có link tải trên GitHub, hướng dẫn dựng SonarQube bằng Docker, một defect có thật đi trọn vòng từ triệu chứng tới bản sửa đã kiểm chứng, mẫu báo cáo đầy đủ kèm checklist nộp bài, và bộ slide mẫu hoàn chỉnh (tiếng Anh, tải được .pptx) cho 5 thành viên × 3 defect.',
   lessons: [L1, L2, L3, L4, L5, L6, QUIZ],
 };

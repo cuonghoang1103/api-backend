@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Codex X — bot bản tin Codex">
+  <title>Codex X</title>
+  <defs>
+    <linearGradient id="cxBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2dd4a7"/>
+      <stop offset="100%" stop-color="#0d9488"/>
+    </linearGradient>
+    <linearGradient id="cxFace" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f1fffb"/>
+      <stop offset="100%" stop-color="#d4f7ee"/>
+    </linearGradient>
+    <style>
+      #cx-float{animation:cx-bob 3.1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+      #cx-eyes{animation:cx-blink 5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+      #cx-x{animation:cx-spin 6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+      @keyframes cx-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+      @keyframes cx-blink{0%,90%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+      @keyframes cx-spin{0%,70%,100%{transform:rotate(0)}85%{transform:rotate(90deg)}}
+      @media (prefers-reduced-motion:reduce){#cx-float,#cx-eyes,#cx-x{animation:none}}
+    </style>
+  </defs>
+  <circle cx="80" cy="80" r="80" fill="url(#cxBg)"/>
+  <g id="cx-float">
+    <line x1="80" y1="30" x2="80" y2="46" stroke="#a7f3d0" stroke-width="5" stroke-linecap="round"/>
+    <g id="cx-x"><path d="M75 22 l10 10 M85 22 l-10 10" stroke="#ecfdf5" stroke-width="4.5" stroke-linecap="round"/></g>
+    <rect x="34" y="46" width="92" height="78" rx="24" fill="url(#cxFace)" stroke="#0d7a6f" stroke-width="4"/>
+    <rect x="23" y="70" width="12" height="30" rx="6" fill="#5eead4"/>
+    <rect x="125" y="70" width="12" height="30" rx="6" fill="#5eead4"/>
+    <ellipse cx="57" cy="101" rx="8" ry="5" fill="#99f6e4" opacity=".7"/>
+    <ellipse cx="103" cy="101" rx="8" ry="5" fill="#99f6e4" opacity=".7"/>
+    <g id="cx-eyes" fill="none" stroke="#0d7a6f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <!-- angle-bracket eyes:  < > -->
+      <path d="M68 74 l-10 8 l10 8"/>
+      <path d="M92 74 l10 8 l-10 8"/>
+    </g>
+    <path d="M66 108 Q80 117 94 108" fill="none" stroke="#0d7a6f" stroke-width="4.5" stroke-linecap="round"/>
+  </g>
+</svg>

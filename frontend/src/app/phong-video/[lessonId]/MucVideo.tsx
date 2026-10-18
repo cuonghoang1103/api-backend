@@ -24,6 +24,7 @@ import { Loader2, ListVideo, Sparkles } from 'lucide-react';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { GiaSu } from './HoiAiVideo';
 import { bocPhan, moc, themLienKet, giayTuURL, type Phan } from './mocThoiGian';
+import type { PhanVideoRieng } from '@/lib/api';
 
 const CAU_TOM_TAT = 'Tóm tắt video này theo các phần có mốc thời gian.';
 const KHOA_CACHE = 'video_tomtat';
@@ -155,6 +156,47 @@ export default function MucVideo({ giaSu, giay, onTua }: {
           <ChatMarkdown content={themLienKet(luot.content)} renderMath={!luot.streaming} />
         </div>
       ) : null}
+    </div>
+  );
+}
+
+/**
+ * MỤC VIDEO của VIDEO RIÊNG — các cảnh THẬT lấy từ kịch bản dựng video (máy
+ * chủ gửi kèm phòng, `parts`). Không hỏi gia sư: mốc ở đây chính xác tới câu,
+ * còn model chia phần chỉ là đoán — và gia sư cũng được dặn dùng y nguyên danh
+ * sách này khi tóm tắt, nên hai tab luôn cùng một bản đồ.
+ */
+export function MucVideoRieng({ parts, giay, onTua }: {
+  parts: PhanVideoRieng[];
+  giay: number;
+  onTua: (giay: number) => void;
+}) {
+  const dangO = parts.findIndex((p, i) => {
+    const het = p.den ?? parts[i + 1]?.t ?? Number.POSITIVE_INFINITY;
+    return giay >= p.t && giay < het;
+  });
+  return (
+    <div className="h-full overflow-y-auto px-2 py-2">
+      <div className="mb-1.5 flex items-center gap-1.5 px-1.5 text-xs font-semibold uppercase text-text-muted">
+        <ListVideo size={13} /> {parts.length} phần
+      </div>
+      {parts.map((p, i) => (
+        <button
+          key={`${p.t}-${i}`}
+          onClick={() => onTua(p.t)}
+          className={`mb-1 flex w-full gap-2.5 rounded-lg px-2.5 py-2 text-left transition-colors ${
+            i === dangO ? 'bg-neon-violet/15' : 'hover:bg-white/[0.04]'
+          }`}
+        >
+          <span className={`shrink-0 pt-0.5 font-mono text-[11px] tabular-nums ${
+            i === dangO ? 'text-neon-violet' : 'text-text-muted'
+          }`}>
+            {moc(p.t)}
+          </span>
+          <span className="min-w-0 flex-1 text-sm font-medium text-text-primary">{p.ten}</span>
+        </button>
+      ))}
+      <div className="h-8" />
     </div>
   );
 }

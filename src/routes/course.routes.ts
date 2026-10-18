@@ -7,6 +7,7 @@ import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js'
 import { AppError } from '../middleware/errorHandler.js';
 import { isProEffective } from '../services/pro.service.js';
 import { askCourseTutor, streamCourseTutor } from '../services/courseTutor.service.js';
+import { chuanTrack } from '../services/video/phuDeRieng.js';
 import { uploadDocument, deleteByUrl, UploadError } from '../storage/uploadService.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
 import { buildKey } from '../storage/keys.js';
@@ -3164,6 +3165,8 @@ router.post('/lessons/:id(\\d+)/ai/ask', authenticate, async (req, res: Response
       phongVideo: req.body?.phongVideo === true,
       phuDeGiay: Number.isFinite(Number(req.body?.phuDeGiay))
         ? Math.max(0, Math.floor(Number(req.body.phuDeGiay))) : undefined,
+      // Track đang xem (VI = video riêng R2 ⇒ phụ đề riêng). Thiếu ⇒ YouTube như cũ.
+      videoTrack: chuanTrack(req.body?.videoTrack),
     });
     res.json({ success: true, data: out });
     // Cả đường LÙI (không stream) cũng phải lưu. Chỉ gắn ở đường stream thì
@@ -3212,6 +3215,8 @@ router.post('/lessons/:id(\\d+)/ai/ask-stream', authenticate, async (req, res) =
         phongVideo: req.body?.phongVideo === true,
         phuDeGiay: Number.isFinite(Number(req.body?.phuDeGiay))
           ? Math.max(0, Math.floor(Number(req.body.phuDeGiay))) : undefined,
+        // Track đang xem (VI = video riêng R2 ⇒ phụ đề riêng). Thiếu ⇒ YouTube như cũ.
+        videoTrack: chuanTrack(req.body?.videoTrack),
       },
       (delta) => send({ type: 'delta', text: delta }),
     );

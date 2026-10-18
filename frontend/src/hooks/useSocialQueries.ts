@@ -17,6 +17,9 @@ export interface SocialFeedParams {
   type?: 'POST' | 'VIDEO' | 'FILE';
   // Video-category filter (home feed video pills). Omitted = all.
   videoCategoryId?: number;
+  // AI news-network category (claude · codex · gemini · antigravity · tech ·
+  // ai-compare). Omitted = "Tất cả" (bot + human posts).
+  newsCategory?: string;
 }
 
 export interface FeedCounts {

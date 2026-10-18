@@ -12,7 +12,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { CauPhuDe } from '@/lib/api';
+import { chuCauPhuDe, type CauPhuDe } from '@/lib/api';
 import { moc } from './mocThoiGian';
 
 export default function BangPhuDe({ cues, dichVi, giay, hienDich, onTua }: {
@@ -115,7 +115,7 @@ export default function BangPhuDe({ cues, dichVi, giay, hienDich, onTua }: {
                 <span className={`block text-sm leading-relaxed ${
                   dang ? 'font-medium text-text-primary' : 'text-text-secondary'
                 }`}>
-                  {c.en}
+                  {chuCauPhuDe(c)}
                 </span>
                 {hienDich && coDich && dichVi![i] && (
                   <span className="mt-0.5 block text-[13px] leading-relaxed text-text-muted">

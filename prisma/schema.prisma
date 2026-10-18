@@ -1177,7 +1177,7 @@ model Lesson {
   createdAt            DateTime @default(now()) @map("created_at")
   updatedAt            DateTime @updatedAt @map("updated_at")
 
-  section        CourseSection     @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  section        CourseSection         @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   details        LessonDetail?
   documents      CourseDocument[]
   assignments    Assignment[]
@@ -1185,7 +1185,8 @@ model Lesson {
   aiAnswers      LessonAiAnswer[]
   tutorAsks      LessonTutorAsk[]
   phuDe          LessonTranscript?
-  videoYeuThich  VideoYeuThich[]   @relation("VideoYeuThichBaiGiang")
+  phuDeRieng     LessonOwnTranscript[]
+  videoYeuThich  VideoYeuThich[]       @relation("VideoYeuThichBaiGiang")
 
   @@index([sectionId], name: "idx_lessons_section")
   @@index([isPublished], name: "idx_lessons_published")
@@ -1220,6 +1221,45 @@ model LessonTranscript {
 
   @@index([videoId], name: "idx_lesson_transcripts_video")
   @@map("lesson_transcripts")
+}
+
+/// Phụ đề của VIDEO RIÊNG — bài giảng tự dựng (tiếng Việt), phát thẳng từ R2
+/// qua track VI/EN của trang học. Nguồn: `content/lesson-transcripts/<khoá>.json`
+/// (sinh bằng `scripts/phu-de-tu-video-rieng.mjs` từ dữ liệu dựng video), nạp
+/// mỗi deploy bằng `scripts/phu-de-video-rieng-seed.mjs`.
+///
+/// ⚠️ CỐ Ý TÁCH khỏi `LessonTranscript` (phụ đề YouTube), không gộp chung:
+///   - `LessonTranscript.lessonId` là UNIQUE, mà nhiều bài (vd Git Mục 0) có CẢ
+///     video YouTube lẫn video riêng — gộp thì hai seed ghi đè nhau mỗi deploy,
+///     và mốc thời gian của video này bị đem tua video kia.
+///   - App iOS liệt kê MỌI hàng `LessonTranscript` rồi phát bằng `videoId`
+///     YouTube — một hàng video R2 lọt vào đó là một ô video chết trên app.
+/// `cues` = [{ t: giây, vi: "câu" }] (theo câu, mốc lấy từ lúc dựng video);
+/// `parts` = [{ t, den, ten }] — các cảnh THẬT của video, dùng làm "Các phần".
+model LessonOwnTranscript {
+  id          Int      @id @default(autoincrement())
+  lessonId    Int      @map("lesson_id")
+  /// Track của trang học mà phụ đề này khớp: 'VI' (mặc định) hoặc 'EN'.
+  track       String   @default("VI") @db.VarChar(4)
+  lang        String   @default("vi") @db.VarChar(12)
+  source      String   @default("r2") @db.VarChar(16)
+  /// URL video lúc sinh phụ đề. Lệch `lesson_details.video_url_vi` ⇒ video đã
+  /// bị thay, phụ đề KHÔNG được dùng (mốc sẽ trỏ sai chỗ).
+  videoUrl    String   @map("video_url") @db.Text
+  cues        Json     @db.JsonB
+  parts       Json     @db.JsonB
+  soCau       Int      @map("so_cau")
+  soTu        Int      @map("so_tu")
+  durationSec Float?   @map("duration_sec")
+  /// sha1 nội dung — seed chạy lại mà không đổi gì thì không ghi.
+  vanTay      String   @map("van_tay") @db.VarChar(40)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, track], name: "uk_lesson_own_transcript_track", map: "uk_lesson_own_transcript_track")
+  @@map("lesson_own_transcripts")
 }
 
 /// Video do NGƯỜI DÙNG tự thêm (dán link hoặc chia sẻ từ app YouTube/TikTok).
@@ -2552,6 +2592,14 @@ model SocialPost {
   // own category pill. Defaults to true so all existing rows and all
   // non-video posts keep today's behaviour unchanged.
   showInAll       Boolean    @default(true) @map("show_in_all")
+  // Multi-bot AI news network (2026-10-11): tags a feed post with ONE news
+  // channel so the home feed can filter per bot. NULL = a normal human/user
+  // post (the default — every existing row stays NULL and every feed query
+  // with NO newsCategory filter = "Tất cả" = everything, exactly as today).
+  // Known values: claude · codex · gemini · antigravity · tech · ai-compare.
+  // Plain VARCHAR (not a Prisma enum) so a new channel needs no migration,
+  // same rationale as SocialLike.type / SocialPost.type above.
+  newsCategory    String?    @map("news_category") @db.VarChar(20)
   // Instagram-style music attach (Phase 3 add). When set, the
   // PostCard renders a small "🎵 <track title> — <artist>" sticker
   // overlay on the first media tile. Tapping the sticker opens
@@ -2600,6 +2648,8 @@ model SocialPost {
   @@index([visibility, status, createdAt(sort: Desc)], name: "idx_social_posts_vis_status_created")
   // Powers per-category video filtering on the home feed.
   @@index([videoCategoryId, createdAt(sort: Desc)], name: "idx_social_posts_vidcat_created")
+  // Powers the per-bot news-channel filter (GET /posts?newsCategory=claude).
+  @@index([newsCategory, createdAt(sort: Desc)], name: "idx_social_posts_newscat_created")
   // GIN trigram index powering fast ILIKE/substring search on
   // post content (see social.service.ts). Requires the pg_trgm
   // extension. `map:` pins the DB index name to match the

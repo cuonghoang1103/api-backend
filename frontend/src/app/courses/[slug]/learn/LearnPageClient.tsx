@@ -1105,6 +1105,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   <MoiVaoPhongVideo
                     lessonId={currentLesson.id}
                     duongDanVe={`/courses/${slug}/learn?lessonId=${currentLesson.id}`}
+                    track={activeTrack}
                   />
                 </div>
               )}

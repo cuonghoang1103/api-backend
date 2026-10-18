@@ -14,6 +14,7 @@
  */
 import { contextBridge, ipcRenderer, webUtils } from 'electron';
 import type {
+  AgentCtworkHeRa, AgentCtworkHeVao,
   AgentInfo, AgentKetQuaCompact, AgentNguCanhChiTiet, AgentMucChanDoan,
   TerminalKetQua,
   PhienPty,
@@ -25,7 +26,7 @@ import type {
   AgentHookNhatKy,
   AgentMucKhoiPhuc,
   AgentPhien,
-  AgentQuyetDinh, AgentChoView, AgentHenView, AgentPhienMang,
+  AgentQuyetDinh, AgentChoView, AgentHenView, AgentPhienMang, AgentMayTinh, AgentHenLo,
   AgentWorkspace,
   CheDoQuyen,
   AgentWorktree,
@@ -429,11 +430,24 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:dsPhienMang', { cuocId }) as Promise<{ toi: AgentPhienMang | null; ds: AgentPhienMang[] }>,
     doiTenPhienMang: (cuocId: string, ten: string) =>
       ipcRenderer.invoke('agent:doiTenPhienMang', { cuocId, ten }) as Promise<AgentPhienMang | null>,
-    ctwork: (cuocId: string | null, viec: 'noi' | 'ngat' | 'trangThai', quyen?: 'doc' | 'ghi') =>
+    ctwork: (cuocId: string | null, viec: 'noi' | 'ngat' | 'trangThai' | 'capLai', quyen?: 'doc' | 'ghi') =>
       ipcRenderer.invoke('agent:ctwork', { ...(cuocId ? { cuocId } : {}), viec, ...(quyen ? { quyen } : {}) }) as Promise<{
         ok: boolean; loi?: string; soTool?: number; quyen?: 'doc' | 'ghi' | null; coToken?: boolean; bienTay?: boolean;
-        server?: { ok: boolean; soTool: number; loi?: string } | null;
+        server?: { ok: boolean; soTool: number; loi?: string; tat?: boolean; dungSan?: boolean } | null; canCapLai?: boolean;
       }>,
+    /* Đợt 5: CT Work hệ sinh thái. */
+    ctworkHe: (vao: AgentCtworkHeVao) => ipcRenderer.invoke('agent:ctworkHe', vao) as Promise<AgentCtworkHeRa>,
+    /* Đợt 4 */
+    chenTin: (cuocId: string, text: string) =>
+      ipcRenderer.invoke('agent:chenTin', { cuocId, text }) as Promise<{ chen: boolean }>,
+    mayTinh: (bat?: boolean) =>
+      ipcRenderer.invoke('agent:mayTinh', bat === undefined ? {} : { bat }) as Promise<AgentMayTinh>,
+    henLo: () => ipcRenderer.invoke('agent:henLo') as Promise<{ ds: AgentHenLo[] }>,
+    mcpBatTat: (cuocId: string, ten: string, bat: boolean) =>
+      ipcRenderer.invoke('agent:mcpBatTat', { cuocId, ten, bat }) as Promise<{ ok: boolean; loi?: string; trangThai?: AgentMcpTrangThai }>,
+    mcpTool: (cuocId: string, ten?: string) =>
+      ipcRenderer.invoke('agent:mcpTool', { cuocId, ...(ten ? { ten } : {}) }) as Promise<Array<{ server: string; ten: string; moTa: string }>>,
+    xuLyHenLo: (cach: 'chay' | 'bo') => ipcRenderer.invoke('agent:xuLyHenLo', { cach }) as Promise<{ n: number }>,
     themTienTo: (cuocId: string, tienTo: string) =>
       ipcRenderer.invoke('agent:themTienTo', { cuocId, tienTo }) as Promise<{ ok: boolean; khoa?: string; loi?: string }>,
     datCheDoSua: (cuocId: string, bat: boolean) =>

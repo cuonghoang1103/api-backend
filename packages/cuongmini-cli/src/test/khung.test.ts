@@ -91,7 +91,11 @@ test('khung nhập chỉ một bản sau /language, /model, /effort và đổi c
     const b = await phatLai(noi, t);
     assert.equal(b.manPhu, false);
     assert.equal(demDong(b.tatCa, O_NHAP) <= 1, true, `in nối tiếp: ô nhập trùng ở t=${t}:\n${b.tatCa.join('\n')}`);
-    assert.equal(demDong(b.tatCa, ['CuongMini CLI 0.']) <= 1, true, `in nối tiếp: banner trùng ở t=${t}`);
+    /* Đợt 4: đổi cỡ ở chế độ in nối tiếp KHÔNG còn `ESC[3J` (iTerm2 hỏi "clear scrollback?") ⇒ bảng ghi in lại
+       để lại MỘT bản cũ trong scrollback — có chủ ý. Màn hình đang thấy vẫn phải chỉ một banner; ô nhập vẫn một bản
+       kể cả scrollback (kiểm ở trên). Trước lần đổi cỡ đầu (t < 7) scrollback cũng chỉ một banner. */
+    if (t < 7) assert.equal(demDong(b.tatCa, ['CuongMini CLI 0.']) <= 1, true, `in nối tiếp: banner trùng ở t=${t}`);
+    else assert.equal(demDong(b.manHinh, ['CuongMini CLI 0.']) <= 1, true, `in nối tiếp: banner trùng trên màn hình ở t=${t}`);
   }
   // Lúc cuối (không menu, không thẻ duyệt): đúng MỘT ô nhập, và banner toàn màn hình đã sang tiếng Anh.
   const cuoiFs = await phatLai(fs);

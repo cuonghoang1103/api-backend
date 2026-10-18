@@ -22,7 +22,7 @@
  * đầu tiên đã dính (xem ghi chú trong `src/services/agent/turn.ts`).
  */
 import { BrowserWindow } from 'electron';
-import { stat } from 'node:fs/promises';
+import { readFile, stat, writeFile } from 'node:fs/promises';
 import { isAbsolute, join } from 'node:path';
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from '../ipc/auth';
@@ -52,17 +52,25 @@ import { getSettings, setSetting } from '../store';
 import type { AgentCongNangCap, CheDoQuyen } from '../../shared/ipc';
 import { dungLenhNenCua } from './lenhNen';
 import { dongTerminalCua } from '../terminal/phienTerminal';
-import { hanMucMcp, goiToolMcp, laToolMcp, toolMcpHienCo } from './mcp';
+import { hanMucMcp, goiToolMcp, laCtworkTinCay, laToolMcp, toolMcpHienCo } from './mcp';
+import { dinhKemThe, nguCanhChoModel } from './ctworkHe';
+import { baoLoiCtwork } from './ctworkKetNoi';
+import { moTaGhi, tomTatKetQua, type XemTruocGhi } from './ctworkVe';
 import { hoiNguoiDung, huyTatCa, type YeuCauXinPhep } from './xinPhep';
 import { docCauHoi, hoi as hoiLuaChon, huyMoiHoi, moTaKetQua as moTaKetQuaHoi, type CauHoi } from './hoiLuaChon';
 import {
-  choDieuKien, datBoBao as datBoBaoChoHen, datHen, docDieuKien, donCuaCuoc as donChoHenCua, dsCho, dsHen, giayChoTu,
+  choDieuKien, datBoBao as datBoBaoChoHen, datBoTimPhien, datHen, docDieuKien, donCuaCuoc as donChoHenCua, dsCho, dsHen, ganHenChoCuoc, giayChoTu,
   huyHen, moTaKetQuaCho, type TrangThaiCho,
 } from './choHen';
+import * as mayTinh from './mayTinh';
+import { chanDoanMoiSauSua, chupTruocSua, coLsp, dongLspCua, hoiLsp } from './lsp';
+import { chayNotebook, coJupyter, lenhHienThi as lenhNotebook, TRAN_GIAY_NB } from './notebookChay';
+import { ghiSoTruoc } from './so';
+import { relative as relPath, resolve as resolvePath, sep as sepPath } from 'node:path';
 import {
   bocTin, dangKy as dangKyPhien, datNguoiNhan, dsPhienSong, guiTin, huyDangKy, timPhien, toiLa, type TinPhien,
 } from './phienMang';
-import { donKhu, gopVaoGoc, layKhu, taoKhuPhu, thayDoiCuaKhu, tomTatThayDoi } from './viecPhuGhi';
+import { donKhu, gopBangMerge, gopVaoGoc, layKhu, taoKhuPhu, thayDoiCuaKhu, tomTatThayDoi } from './viecPhuGhi';
 import { chayVongCucBo, type TinNhanCucBo } from '../aiCucBo/agentCucBo';
 import { promptCode, TEN_TOOL_CUC_BO, toolCucBo } from '../aiCucBo/promptCode';
 import { batChoCode } from '../aiCucBo/quanLy';
@@ -119,6 +127,8 @@ export type SuKienAgent =
       lenh?: string;
       /** Đợt 3: THAM SỐ CHÍNH để vẽ `● Navigate(cuongthai.com/work)` kiểu Claude Code. */
       thamSo?: string;
+      /** Đợt 5: tool CT Work — bảng GỌN cho người đọc (ctrl+o / mở rộng) thay cho JSON thô của `chiTiet`. */
+      xemGon?: string;
     }
   /**
    * AGENT PHỤ (CLI 0.3, 18/10/2026) — `phuId` = `tool_call_id` của lời gọi
@@ -148,7 +158,15 @@ export type SuKienAgent =
   /** `tienTo` (đợt 3): gợi ý cho nút "Luôn cho phép `npm test …`" — vắng = lệnh không nhớ theo tiền tố được. */
   | { loai: 'xinPhepLenh'; id: string; lenh: string; phanLoai: PhanLoaiLenh; tienTo?: string; phuId?: string }
   /** Agent muốn gọi một tool MCP của bên thứ ba. LUÔN phải hỏi, không nhớ được. */
-  | { loai: 'xinPhepMcp'; id: string; server: string; tool: string; args: string }
+  | {
+      loai: 'xinPhepMcp'; id: string; server: string; tool: string; args: string;
+      /** Đợt 5: GHI lên CT Work — thẻ nào, việc gì, nội dung gì (giao diện vẽ thay cho JSON tham số). */
+      xemTruoc?: XemTruocGhi;
+      /** Đợt 5: tool CT Work tin cậy (giao diện ghi "CT Work" thay cho tên server). */
+      ctwork?: boolean;
+    }
+  /** Đợt 5: tin người dùng nhắc `LF-123` ⇒ app đã đính kèm tóm tắt thẻ (giao diện hiện chip 📎). */
+  | { loai: 'dinhKemCtwork'; khoa: string[] }
   /** Xin phép COMMIT hoặc MỞ PR. `chiTiet` là thứ người dùng phải ĐỌC trước khi bấm. */
   /** `gop` (đợt 3): gộp thay đổi của agent phụ ghi vào dự án. */
   | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop'; chiTiet: string; phuId?: string }
@@ -160,11 +178,13 @@ export type SuKienAgent =
   | { loai: 'hoiLuaChon'; id: string; cauHoi: CauHoi[] }
   | { loai: 'xongHoi'; id: string; tomTat: string }
   /** Đợt 3 — trạng thái CHỜ (`cho_doi`) + HẸN (`hen_goi_lai`) của cuộc. Luôn là TOÀN BỘ danh sách. */
-  | { loai: 'henCho'; cho: TrangThaiCho[]; hen: Array<{ id: string; lyDo: string; luc: number; phut: number; lap: boolean; conLai: number }> }
+  | { loai: 'henCho'; cho: TrangThaiCho[]; hen: Array<{ id: string; lyDo: string; luc: number; phut: number; lap: boolean; conLai: number; cron?: string }> }
   /** Đợt 3 — tin từ một phiên CuongMini khác (đọc ở lượt kế). */
   | { loai: 'tinPhien'; tu: TinPhien['tu']; noiDung: string; luc: number }
   /** Đợt 3 — app tự mở một lượt theo lời hẹn: giao diện vẽ bong bóng + bật trạng thái chạy. */
   | { loai: 'tuDanhThuc'; cauHoi: string; henId: string }
+  /** Đợt 4 — tin người dùng gõ GIỮA lượt đã được chèn vào lượt đang chạy (ở mốc tool kế tiếp / cuối lượt). */
+  | { loai: 'daChen'; text: string; cach: 'tool' | 'cuoiLuot' }
   /**
    * Đợt 3: TIẾN TRÌNH sau MỖI vòng (không chỉ cuối lượt) — ngữ cảnh % (từ usage
    * thật), token ra + tiền của vòng. Lượt 58 bước trước đây hiện "context 0%"
@@ -355,6 +375,8 @@ interface CuocHoiThoai {
   phuGhi: Map<string, { nhiemVu: string }>;
   /** Tiền của LƯỢT hiện tại (mọi vòng + agent phụ) — `xong.tienUsd` mang tổng này (đợt 3). */
   tienLuot: number;
+  /** Đợt 4: tin người dùng gõ khi agent ĐANG chạy — chèn ở mốc tool kế tiếp (hoặc cuối lượt). */
+  tinChen: string[];
 }
 
 const cuoc = new Map<string, CuocHoiThoai>();
@@ -383,10 +405,76 @@ export function phatNen(cuocId: string, e: SuKienAgent): void {
 function baoHenCho(cuocId: string): void {
   phatNen(cuocId, {
     loai: 'henCho', cho: dsCho(cuocId),
-    hen: dsHen(cuocId).map(({ id, lyDo, luc, phut, lap, conLai }) => ({ id, lyDo, luc, phut, lap, conLai })),
+    hen: dsHen(cuocId).map(({ id, lyDo, luc, phut, lap, conLai, cron }) => ({ id, lyDo, luc, phut, lap, conLai, ...(cron ? { cron } : {}) })),
   });
 }
 datBoBaoChoHen(baoHenCho);
+/* Đợt 4: hẹn ghi kèm phiên trên đĩa của cuộc — sống qua lúc tắt. */
+datBoTimPhien((cuocId) => {
+  const c = cuoc.get(cuocId);
+  return c && c.hoiThoai.length ? { phienId: c.phienId, goc: c.goc } : null;
+});
+
+/** Cuộc đang mở phiên `phienId` (hẹn đến giờ cần tìm đúng việc). */
+export function cuocCuaPhien(phienId: string): string | null {
+  for (const c of cuoc.values()) if (c.phienId === phienId) return c.id;
+  return null;
+}
+
+/**
+ * ĐỢT 4 — GÕ THÊM KHI AGENT ĐANG CHẠY (như Claude Code).
+ * Đang chạy ⇒ xếp vào `tinChen`, vòng lặp nối vào kết quả tool KẾ TIẾP (model
+ * đọc ngay ở vòng sau, không chờ hết lượt); lượt sắp kết thúc mà còn tin ⇒ đi
+ * tiếp thêm một vòng với tin đó. Không chạy ⇒ `false` (giao diện gửi như lượt mới).
+ */
+export function chenTinCua(id: string, text: string): boolean {
+  const c = cuoc.get(id);
+  const t = String(text ?? '').trim().slice(0, 8000);
+  if (!c?.dangChay || !t) return false;
+  c.tinChen = [...c.tinChen, t].slice(-10);
+  return true;
+}
+
+function bocChen(ds: string[]): string {
+  return `[NGƯỜI DÙNG VỪA GÕ THÊM GIỮA LƯỢT — đọc ngay, điều chỉnh hướng làm theo đây (ưu tiên hơn kế hoạch cũ):]\n${ds.map((t) => `> ${t.replace(/\n/g, '\n> ')}`).join('\n\n')}`;
+}
+
+/**
+ * Đợt 4 — ngày + múi giờ địa phương gửi lên máy chủ (người dùng: agent nói "mình không biết hôm nay là ngày nào").
+ * CHỈ ngày (không giờ phút) để chuỗi trong prompt đứng yên cả ngày.
+ */
+export function ngayGioMay(bayGio = new Date()): { ngay: string; thu: number; tz: string; lechPhut: number } {
+  const tz = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch { return 'UTC'; } })();
+  const y = bayGio.getFullYear(); const m = bayGio.getMonth() + 1; const d = bayGio.getDate();
+  return { ngay: `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`, thu: bayGio.getDay(), tz, lechPhut: -bayGio.getTimezoneOffset() };
+}
+
+/** Công tắc ĐIỀU KHIỂN MÁY TÍNH (mặc định TẮT, nhớ trong thiết đặt). */
+export function mayTinhDangBat(): boolean {
+  try { return (getSettings() as Record<string, unknown>).aiMayTinh === true; } catch { return false; }
+}
+export function datMayTinh(bat: boolean): boolean {
+  setSetting('aiMayTinh', bat === true);
+  return mayTinhDangBat();
+}
+
+const TOOL_MAY = new Set(['may_chup', 'may_bam', 'may_go', 'may_phim', 'may_cuon']);
+const TOOL_SUA_FILE = new Set(['edit_file', 'create_file', 'sua_nhieu_cho']);
+
+/** Gom lời hook `thongBao` (Notification) — không chờ, không làm hỏng lượt. */
+function baoHookThongBao(goc: string | null, e: SuKienAgent): void {
+  if (!goc) return;
+  const chu = e.loai === 'xinPhep' ? `Cần duyệt sửa ${e.duongDan}`
+    : e.loai === 'xinPhepLenh' ? `Cần duyệt: ${e.lenh.slice(0, 200)}`
+      : e.loai === 'xinPhepMcp' ? `Cần duyệt MCP ${e.server}:${e.tool}`
+        : e.loai === 'xinPhepGit' ? `Cần duyệt git (${e.viec})`
+          : e.loai === 'xinPhepNote' ? 'Cần duyệt ghi chú'
+            : e.loai === 'hoiLuaChon' ? `Agent hỏi: ${e.cauHoi.map((q) => q.cauHoi).join(' / ').slice(0, 200)}` : '';
+  if (!chu) return;
+  const dk = new AbortController();
+  setTimeout(() => dk.abort(), 30_000).unref?.();
+  void chayHook({ moc: 'thongBao', goc, signal: dk.signal, env: { CUONGMINI_THONG_BAO: chu, CUONGMINI_LOAI: e.loai } }).catch(() => {});
+}
 
 /** Tin đến từ phiên khác ⇒ hộp thư của cuộc (trần 20 tin) + báo giao diện. */
 datNguoiNhan((cuocId, tin) => {
@@ -410,7 +498,9 @@ function dangKyCuoc(c: CuocHoiThoai, trangThai: 'ranh' | 'dangChay'): void {
 /** Dọn mọi thứ đợt 3 gắn với cuộc (đóng tab / việc mới). */
 function donDot3(c: CuocHoiThoai, dongHan: boolean): void {
   huyMoiHoi();
-  donChoHenCua(c.id);
+  /* Đóng tab: hẹn đã gắn phiên trên đĩa vẫn GIỮ (chạy tiếp, mở lại việc khi tới giờ). Việc mới: huỷ. */
+  donChoHenCua(c.id, dongHan);
+  if (dongHan) dongLspCua(c.id);
   for (const id of c.phuGhi.keys()) void donKhu(id);
   c.phuGhi.clear();
   c.tinDen = [];
@@ -422,7 +512,7 @@ function layCuoc(id: string): CuocHoiThoai {
   if (!c) {
     c = {
       id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc(), soViecPhu: 0, tomTat: null,
-      tinDen: [], phuGhi: new Map(), tienLuot: 0,
+      tinDen: [], phuGhi: new Map(), tienLuot: 0, tinChen: [],
       goc: null, daChonGoc: false, cheDoQuyen: 'keHoach', cheDoTuDong: false, choSua: false, choChayLenh: false, choGhiNote: false,
       choTrinhDuyet: trinhDuyetMacDinh(),
     };
@@ -739,6 +829,7 @@ export function napPhien(
   // và `so.goc` vừa ghi bị xoá — giao diện nói "Bỏ qua tất cả" mà sổ thì tắt,
   // agent vẫn hỏi từng việc.
   c.so = taoSoCuoc();
+  ganHenChoCuoc(cuocId, phienId);
   if (goc !== undefined) {
     c.goc = goc; c.daChonGoc = true;
     datCheDoQuyen(cuocId, goc === null ? CHE_DO_KHONG_THU_MUC : cheDoMacDinh(), goc === null);
@@ -1064,8 +1155,17 @@ export async function chayLuot(
   // máy chủ đặt tên việc.
   datTokenChoDatTen(phien.sessionToken);
 
+  /* Đợt 4: hook `thongBao` (Notification) khi agent dừng chờ người dùng. */
+  {
+    const phatGoc = phat;
+    phat = (e: SuKienAgent): void => {
+      if (e.loai === 'hoiLuaChon' || e.loai.startsWith('xinPhep')) baoHookThongBao(boiCanh.goc, e);
+      phatGoc(e);
+    };
+  }
   const dieuKhien = new AbortController();
   c.dangChay = dieuKhien;
+  c.tinChen = [];
   // Trần việc phụ tính theo TỪNG CÂU HỎI, không theo cả cuộc: người dùng hỏi
   // mười câu trong một tab thì mỗi câu được ba việc phụ, chứ không phải cả tab
   // chỉ có ba.
@@ -1094,6 +1194,20 @@ export async function chayLuot(
     : '';
   /* Tin từ phiên khác (đợt 3) — nối SAU câu của người dùng, bọc rào DỮ LIỆU. */
   if (!tuyChon.lamTiep && c.tinDen.length) { cauHoi = `${cauHoi}\n\n${bocTin(c.tinDen)}`; c.tinDen = []; }
+  /* ĐỢT 5: người dùng nhắc `LF-123` (đúng key dự án CT Work đã gắn) ⇒ đính kèm tóm tắt thẻ như `@file`
+     (≤ 1.500 ký tự/thẻ, ≤ 3 thẻ). Đọc hỏng thì bỏ qua thẻ đó — không chặn lượt. */
+  if (!tuyChon.lamTiep && boiCanh.goc) {
+    /* Trần 8 giây: CT Work chậm không được giữ lượt của người dùng — quá hạn thì gửi câu như thường. */
+    const rong = { khoa: [] as string[], chu: '' };
+    const dk = await Promise.race([
+      dinhKemThe(boiCanh.goc, cauHoi).catch(() => rong),
+      new Promise<typeof rong>((ok) => { const t = setTimeout(() => ok(rong), 8000); t.unref?.(); }),
+    ]);
+    if (dk.khoa.length) { cauHoi = `${cauHoi}${dk.chu}`; phat({ loai: 'dinhKemCtwork', khoa: dk.khoa }); }
+  }
+  /* ĐỢT 5: "Dự án CT Work: LF (id 2)…" — máy chủ ghi CẠNH dòng HÔM NAY ở cuối prompt (đổi theo dự án,
+     không theo lượt ⇒ không phá đệm). Thư mục chưa gắn ⇒ không gửi. */
+  ctworkTheoCuoc.set(c.id, boiCanh.goc ? await nguCanhChoModel(boiCanh.goc).catch(() => null) : null);
   if (tuyChon.lamTiep) {
     /* CÙNG lượt người dùng đang dở ⇒ không +1 (khớp cách `quayLui` đếm). */
     c.so.luot = Math.max(1, c.hoiThoai.filter((m) => m.role === 'user').length);
@@ -1164,6 +1278,12 @@ export async function chayLuot(
      để nó TRONG khối `if (goc)`, nên bật nút "Trình duyệt" mà chưa mở thư
      mục thì model không có tool web nào — trong khi giao diện nói là có. */
   if (boiCanh.choTrinhDuyet) capabilities.push('browser');
+  /* ĐỢT 4 — điều khiển máy tính: công tắc riêng (mặc định TẮT), không cần thư mục. */
+  if (mayTinhDangBat() && mayTinh.hoTro()) capabilities.push('may_tinh');
+  /* ĐỢT 4 — LSP: chỉ khi thật sự có server (VS Code: API của trình soạn). */
+  if (boiCanh.goc && await coLsp(boiCanh.goc)) capabilities.push('lsp');
+  /* ĐỢT 4 — chạy notebook: cần quyền chạy lệnh + jupyter trên máy. */
+  if (boiCanh.goc && boiCanh.choChayLenh && await coJupyter().catch(() => false)) capabilities.push('notebook_chay');
 
   // Đọc LẠI ở mỗi lượt người dùng gõ — xem ghi chú đầu `ghiChu.ts`. Đọc một
   // lần cho cả lượt là đủ: trong cùng một lượt agent không sửa file này, và đọc
@@ -1350,6 +1470,13 @@ export async function chayLuot(
         ...(ketQua.nguCanh ? { nguCanh: ketQua.nguCanh } : {}),
       });
 
+      if (ketQua.stop === 'end' && c.tinChen.length && !dieuKhien.signal.aborted) {
+        /* Đợt 4: người dùng gõ thêm mà model đã viết xong ⇒ đi tiếp NGAY với tin đó (cùng lượt). */
+        const ds = c.tinChen; c.tinChen = [];
+        c.hoiThoai.push({ role: 'user', content: bocChen(ds) });
+        for (const t of ds) phat({ loai: 'daChen', text: t, cach: 'cuoiLuot' });
+        continue;
+      }
       if (ketQua.stop === 'end' || ketQua.stop === 'max_steps') {
         /*
          * HOOK XONG LƯỢT — chạy TRƯỚC khi báo 'xong'.
@@ -1365,6 +1492,14 @@ export async function chayLuot(
             moc: 'xongLuot', goc: boiCanh.goc, signal: dieuKhien.signal,
           });
           if (hookXong.ra !== '') phat({ loai: 'lenhRa', mau: hookXong.ra });
+        }
+        /* QA 5c: người dùng gõ thêm TRONG LÚC hook xong-lượt chạy (npm test có khi vài phút — lượt vẫn "đang chạy" nên
+           `chenTinCua` nhận) ⇒ trước đây tin bị MẤT câm: báo 'xong' rồi lượt sau xoá `tinChen`. Nay đi tiếp với nó. */
+        if (c.tinChen.length && !dieuKhien.signal.aborted && ketQua.stop === 'end') {
+          const ds = c.tinChen; c.tinChen = [];
+          c.hoiThoai.push({ role: 'user', content: bocChen(ds) });
+          for (const t of ds) phat({ loai: 'daChen', text: t, cach: 'cuoiLuot' });
+          continue;
         }
         phat({
           /* TỔNG cả lượt (mọi vòng + agent phụ). Trước đợt 3 chỉ là tiền của VÒNG CUỐI —
@@ -1411,6 +1546,8 @@ export async function chayLuot(
           noiDung: string; tomTat: string;
           anh?: Array<{ media_type: string; data: string }>;
           diff?: KetQuaDiff;
+          /** Đợt 5: bảng gọn cho tool CT Work. */
+          xemGon?: string;
         };
 
         /*
@@ -1480,6 +1617,9 @@ export async function chayLuot(
         } else if (TOOL_DOT3_KHONG_GOC.has(goi.name)) {
           /* ĐỢT 3 — hỏi lựa chọn / chờ / hẹn / nhắn phiên: không cần thư mục dự án. */
           kq = await chayToolDot3(c, goi.name, goi.args, boiCanh, dieuKhien.signal, phat, boiCanhNen);
+        } else if (TOOL_MAY.has(goi.name)) {
+          /* ĐỢT 4 — điều khiển máy tính: không cần thư mục; mọi thao tác (trừ chụp) LUÔN hỏi. */
+          kq = await chayToolMay(c, goi.name, goi.args ?? {}, dieuKhien.signal, phat);
         } else if (!boiCanh.goc && goi.name.startsWith('web_')) {
           /* Tool trình duyệt chạy được khi CHƯA mở dự án — trừ việc tải về
              (`web_tai*`) vẫn chạy được vì thư mục tải do người dùng chọn qua
@@ -1494,6 +1634,21 @@ export async function chayLuot(
           kq = await chayViecPhu(c, goi.args, boiCanh, phien.sessionToken, dieuKhien.signal, phat, goi.id, true);
         } else if (goi.name === 'gop_viec_phu') {
           kq = await gopViecPhu(c, goi.args, boiCanh, dieuKhien.signal, phat);
+        } else if (goi.name === 'lsp_hoi') {
+          kq = await hoiLsp(c.id, boiCanh.goc, goi.args ?? {});
+        } else if (goi.name === 'chay_notebook') {
+          kq = await chayNotebookCoDuyet(c, boiCanh, goi.args ?? {}, dieuKhien.signal, phat);
+        } else if (TOOL_SUA_FILE.has(goi.name) && capabilities.includes('lsp')) {
+          /* ĐỢT 4 — LSP: chụp chẩn đoán ĐÃ BIẾT trước, sửa, rồi nối lỗi/cảnh báo MỚI vào kết quả. */
+          const duong = typeof goi.args?.path === 'string' ? resolvePath(boiCanh.goc, goi.args.path) : null;
+          const truoc = duong ? await chupTruocSua(c.id, boiCanh.goc, duong) : null;
+          kq = await chayToolAgent(
+            boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh, boiCanhKeHoach, boiCanhNen, boiCanhGit,
+          );
+          if (duong && !/^(LỖI|NGƯỜI DÙNG TỪ CHỐI|Lỗi)/.test(kq.noiDung.trimStart())) {
+            const them = await chanDoanMoiSauSua(c.id, boiCanh.goc, duong, truoc);
+            if (them) kq = { ...kq, noiDung: `${kq.noiDung}${them}`, tomTat: `${kq.tomTat} · LSP ${/(\d+) lỗi/.exec(them)?.[1] ?? '?'} lỗi` };
+          }
         } else {
           kq = await chayToolAgent(
             boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh, boiCanhKeHoach, boiCanhNen, boiCanhGit,
@@ -1550,8 +1705,15 @@ export async function chayLuot(
            (không thêm vai `user` giữa chuỗi tool — cổng nào cũng nhận). */
         const tinGiua = c.tinDen.length ? `\n\n${bocTin(c.tinDen)}` : '';
         c.tinDen = [];
+        /* Đợt 4: tin người dùng gõ GIỮA lượt ⇒ nối vào kết quả tool này (model đọc ngay ở vòng sau). */
+        let chenGiua = '';
+        if (c.tinChen.length) {
+          const ds = c.tinChen; c.tinChen = [];
+          chenGiua = `\n\n${bocChen(ds)}`;
+          for (const t of ds) phat({ loai: 'daChen', text: t, cach: 'tool' });
+        }
         c.hoiThoai.push({
-          role: 'tool', tool_call_id: goi.id, content: `${noiDungCuoi}${tinGiua}`,
+          role: 'tool', tool_call_id: goi.id, content: `${noiDungCuoi}${tinGiua}${chenGiua}`,
           ...(kq.anh?.length ? { anh: kq.anh } : {}),
         });
         phat({
@@ -1571,6 +1733,7 @@ export async function chayLuot(
             ? { duongDan: goi.args.path } : {}),
           ...(goi.name === 'chay_lenh_nen' && typeof goi.args?.lenh === 'string' ? { lenh: goi.args.lenh } : {}),
           ...(thamSo ? { thamSo } : {}),
+          ...(kq.xemGon ? { xemGon: kq.xemGon.slice(0, TRAN_CHI_TIET) } : {}),
         });
       }
     }
@@ -1865,11 +2028,31 @@ async function chayToolMcpCoDuyet(
   c: CuocHoiThoai,
   signal: AbortSignal,
   phat: (e: SuKienAgent) => void,
-): Promise<{ noiDung: string; tomTat: string; anh?: Array<{ media_type: string; data: string }> }> {
+): Promise<{ noiDung: string; tomTat: string; anh?: Array<{ media_type: string; data: string }>; xemGon?: string }> {
   const t = toolMcpHienCo().find((x) => x.ten === ten);
   if (!t) {
     return { noiDung: `LỖI: không có tool MCP tên "${ten}".`, tomTat: 'không có tool' };
   }
+  /*
+   * ĐỢT 5 — CT WORK CỦA CHÍNH CUONGTHAI (server tin cậy, `mcp.ts › laCtworkTinCay`):
+   *   • ĐỌC (`readOnlyHint`) ⇒ không hỏi: đã duyệt sẵn — đọc thẻ/sprint là việc hằng ngày, hỏi từng lần
+   *     là người dùng bấm bừa.
+   *   • GHI ⇒ LUÔN hỏi, kèm xem trước "ghi vào thẻ nào, nội dung gì" — kể cả chế độ "Bỏ qua hết" — trừ khi
+   *     người dùng bật RIÊNG `/ctwork tu-ghi on`.
+   */
+  const ctw = laCtworkTinCay(t.server);
+  if (ctw && t.chiDoc) {
+    const kq0 = await goiToolMcp(ten, args, signal);
+    if (kq0.loi) baoLoiCtwork(kq0.noiDung);
+    const dep = tomTatKetQua(t.tenGoc, kq0.noiDung, kq0.loi);
+    return {
+      noiDung: kq0.noiDung,
+      tomTat: dep?.tomTat ?? (kq0.loi ? 'lỗi' : 'CT Work'),
+      ...(dep?.xemGon ? { xemGon: dep.xemGon } : {}),
+      ...(kq0.anh.length ? { anh: kq0.anh } : {}),
+    };
+  }
+  const tuGhi = ctw && getSettings().ctworkTuGhi === true;
 
   let thamSo = '';
   try {
@@ -1879,9 +2062,13 @@ async function chayToolMcpCoDuyet(
   }
 
   const id = `mcp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const xemTruoc = ctw ? moTaGhi(t.tenGoc, args) : undefined;
   const quyet = await hoiNguoiDung(
-    { ten: 'mcp', duongDan: `${t.server}: ${t.tenGoc}`, khoa: id, choNho: false },
-    (y) => phat({ loai: 'xinPhepMcp', id: y.id, server: t.server, tool: t.tenGoc, args: thamSo }),
+    {
+      ten: 'mcp', duongDan: `${t.server}: ${t.tenGoc}`, khoa: id, choNho: false,
+      ...(ctw ? (tuGhi ? { tuDuyet: true } : { luonHoi: true }) : {}),
+    },
+    (y) => phat({ loai: 'xinPhepMcp', id: y.id, server: t.server, tool: t.tenGoc, args: thamSo, ...(xemTruoc ? { xemTruoc, ctwork: true } : {}) }),
     signal,
     // ⚠️ `quyenDaCap`, KHÔNG phải `soNho`. Lỗi này chạy được suốt vì MCP luôn
     // truyền `choNho: false`, nên `hoiNguoiDung` không bao giờ chạm vào sổ —
@@ -1900,6 +2087,11 @@ async function chayToolMcpCoDuyet(
   // server được báo `notifications/cancelled`), không đứng chờ hết 60 giây.
   const kq = await goiToolMcp(ten, args, signal);
   const h = hanMucMcp();
+  if (ctw) {
+    if (kq.loi) baoLoiCtwork(kq.noiDung);
+    const dep = tomTatKetQua(t.tenGoc, kq.noiDung, kq.loi);
+    return { noiDung: kq.noiDung, tomTat: dep?.tomTat ?? (kq.loi ? 'lỗi' : 'CT Work'), ...(dep?.xemGon ? { xemGon: dep.xemGon } : {}) };
+  }
   return {
     noiDung: kq.noiDung,
     tomTat: kq.loi
@@ -1951,10 +2143,10 @@ async function chayToolDot3(
       const gio = new Date(h.luc);
       const hh = `${String(gio.getHours()).padStart(2, '0')}:${String(gio.getMinutes()).padStart(2, '0')}`;
       return {
-        noiDung: `Đã hẹn #${h.id} lúc ${hh}${h.lap ? ` (lặp mỗi ${h.phut} phút, ${h.conLai} lần)` : ''}. `
-          + 'App sẽ TỰ gửi một lượt "[Đánh thức …]" vào đúng cuộc này khi tới giờ — chỉ khi app/CLI/VS Code còn mở. '
+        noiDung: `Đã hẹn #${h.id} lúc ${hh}${h.cron ? ` (cron "${h.cron}", ${h.conLai} lần)` : h.lap ? ` (lặp mỗi ${h.phut} phút, ${h.conLai} lần)` : ''}. `
+          + 'App sẽ TỰ gửi một lượt "[Đánh thức …]" vào đúng cuộc này khi tới giờ. Hẹn được lưu xuống đĩa: app/CLI/VS Code tắt lúc tới giờ thì lần mở sau người dùng được hỏi chạy bù hay bỏ. '
           + 'Lượt NÀY nên KẾT THÚC NGAY: báo ngắn cho người dùng bạn đã hẹn gì, đừng đứng chờ.',
-        tomTat: `⏰ hẹn ${hh}${h.lap ? ` · lặp ${h.conLai}×` : ''}`,
+        tomTat: `⏰ hẹn ${hh}${h.cron ? ` · cron ${h.cron}` : h.lap ? ` · lặp ${h.conLai}×` : ''}`,
       };
     }
     case 'huy_hen': {
@@ -2006,6 +2198,81 @@ async function chayToolDot3(
   }
 }
 
+/**
+ * ĐỢT 4 — điều khiển máy tính (`mayTinh.ts`). `may_chup` duyệt theo chế độ ĐỌC
+ * (không hỏi — chỉ xem); `may_bam/go/phim/cuon` LUÔN hỏi, kể cả "Bỏ qua hết"
+ * (`luonHoi`), không nhớ được. `chup_sau` (mặc định true) ⇒ trả luôn ảnh sau
+ * thao tác — đỡ một vòng gửi lại cả ngữ cảnh chỉ để nhìn kết quả.
+ */
+async function chayToolMay(
+  c: CuocHoiThoai, ten: string, a: Record<string, unknown>, signal: AbortSignal, phat: (e: SuKienAgent) => void,
+): Promise<{ noiDung: string; tomTat: string; anh?: Array<{ media_type: string; data: string }> }> {
+  if (!mayTinhDangBat()) return { noiDung: 'LỖI: người dùng chưa bật "Điều khiển máy tính" (desktop: nút Máy tính · CLI: /may on · VS Code: cài đặt cuongthai.dieuKhienMayTinh).', tomTat: 'chưa bật' };
+  if (ten === 'may_chup') {
+    const r = await mayTinh.chupManHinh();
+    return r.ok ? { noiDung: r.moTa, tomTat: `📸 ${r.rong}×${r.cao}`, ...(r.anh ? { anh: [r.anh] } : {}) } : { noiDung: `LỖI: ${r.loi}`, tomTat: 'không chụp được' };
+  }
+  if (ten !== 'may_go' && ten !== 'may_phim' && !mayTinh.hinhHocCuoi()) {
+    return { noiDung: 'LỖI: chưa có ảnh màn hình nào — gọi may_chup trước để biết toạ độ.', tomTat: 'chưa chụp' };
+  }
+  const moTa = mayTinh.moTaDuyet(ten, a);
+  const quyet = await hoiNguoiDung(
+    { ten, duongDan: moTa, khoa: `may:${Date.now()}`, choNho: false, luonHoi: true },
+    (y) => phat({
+      loai: 'xinPhepLenh', id: y.id, lenh: moTa,
+      phanLoai: { muc: 'cankiem', lyDo: ['điều khiển chuột/bàn phím THẬT trên máy của bạn — luôn hỏi, kể cả chế độ Bỏ qua hết'], choNho: false },
+    }),
+    signal, c.so,
+  );
+  if (quyet === 'tuChoi') return { noiDung: `NGƯỜI DÙNG TỪ CHỐI thao tác này (${moTa}). Đừng lặp lại; hỏi họ muốn làm gì.`, tomTat: 'bị từ chối' };
+  const r = ten === 'may_bam' ? await mayTinh.bam(Number(a.x), Number(a.y), (a.nut === 'phai' || a.nut === 'giua' ? a.nut : 'trai') as mayTinh.NutChuot, a.hai_lan === true)
+    : ten === 'may_go' ? await mayTinh.go(String(a.chu ?? ''))
+      : ten === 'may_phim' ? await mayTinh.phim(String(a.to_hop ?? ''))
+        : await mayTinh.cuon(String(a.huong ?? 'xuong'), Number(a.so ?? 5), a.x === undefined ? undefined : Number(a.x), a.y === undefined ? undefined : Number(a.y));
+  if (!r.ok) return { noiDung: `LỖI: ${r.loi}`, tomTat: 'không làm được' };
+  if (a.chup_sau === false) return { noiDung: r.moTa, tomTat: '✓' };
+  await new Promise((ok) => setTimeout(ok, 450));
+  const anh = await mayTinh.chupManHinh();
+  return anh.ok
+    ? { noiDung: `${r.moTa}\nẢnh SAU thao tác: ${anh.moTa}`, tomTat: `✓ · 📸 ${anh.rong}×${anh.cao}`, ...(anh.anh ? { anh: [anh.anh] } : {}) }
+    : { noiDung: `${r.moTa}\n(Không chụp lại được: ${anh.loi})`, tomTat: '✓' };
+}
+
+/** ĐỢT 4 — `chay_notebook`: duyệt như chạy lệnh (nhớ được theo file), ghi đầu ra qua sổ hoàn tác khi được sửa. */
+async function chayNotebookCoDuyet(
+  c: CuocHoiThoai, boiCanh: BoiCanh, a: Record<string, unknown>, signal: AbortSignal, phat: (e: SuKienAgent) => void,
+): Promise<{ noiDung: string; tomTat: string }> {
+  const goc = boiCanh.goc!;
+  if (!boiCanh.choChayLenh) return { noiDung: 'LỖI: phiên này chưa bật quyền chạy lệnh.', tomTat: 'không có quyền' };
+  const p = typeof a.path === 'string' ? a.path.trim() : '';
+  if (!p.toLowerCase().endsWith('.ipynb')) return { noiDung: 'LỖI: "path" phải là file .ipynb trong dự án.', tomTat: 'sai file' };
+  const file = resolvePath(goc, p);
+  const rel = relPath(goc, file);
+  if (rel.startsWith('..') || rel.startsWith(sepPath)) return { noiDung: 'LỖI: notebook phải nằm trong dự án.', tomTat: 'ngoài dự án' };
+  const denO = a.den_o === undefined || a.den_o === null ? null : Math.round(Number(a.den_o));
+  if (denO !== null && !Number.isFinite(denO)) return { noiDung: 'LỖI: "den_o" phải là số ô (0-based).', tomTat: 'sai ô' };
+  const giay = Math.min(TRAN_GIAY_NB, Math.max(10, Math.round(Number(a.giay) || 180)));
+  const lenh = lenhNotebook(rel, denO, giay);
+  const quyet = await hoiNguoiDung(
+    { ten: 'chay_notebook', duongDan: lenh, khoa: `notebook:${rel}`, choNho: true, tuDuyet: tuDuyetLenh(c.cheDoQuyen, 'thuong') },
+    (y) => phat({ loai: 'xinPhepLenh', id: y.id, lenh, phanLoai: { muc: 'thuong', lyDo: ['chạy MÃ trong notebook bằng kernel Jupyter trên máy bạn'], choNho: true } }),
+    signal, c.so,
+  );
+  if (quyet === 'tuChoi') return { noiDung: 'NGƯỜI DÙNG TỪ CHỐI chạy notebook. Đừng chạy lại.', tomTat: 'bị từ chối' };
+  const r = await chayNotebook(file, { denO, giay, signal });
+  if (!r.ok) return { noiDung: `LỖI: ${r.loi}`, tomTat: 'chạy hỏng' };
+  let ghi = '';
+  if (boiCanh.choSua && a.ghi_ket_qua !== false) {
+    try {
+      const cu = await readFile(file, 'utf8');
+      ghiSoTruoc(c.so, file, cu);
+      await writeFile(file, r.ketQua, 'utf8');
+      ghi = '\n(Đã ghi đầu ra vào notebook — /undo lùi được.)';
+    } catch (e) { ghi = `\n(Không ghi được đầu ra vào file: ${(e as Error).message})`; }
+  }
+  return { noiDung: `${r.noiDung}${ghi}`, tomTat: r.tomTat };
+}
+
 /** `gop_viec_phu` — gộp (hoặc bỏ) thay đổi của một agent phụ ghi. */
 async function gopViecPhu(
   c: CuocHoiThoai, args: Record<string, unknown>, boiCanh: BoiCanh, signal: AbortSignal, phat: (e: SuKienAgent) => void,
@@ -2023,6 +2290,21 @@ async function gopViecPhu(
   }
   if (!boiCanh.choSua) return { noiDung: 'LỖI: phiên này chưa bật quyền sửa file.', tomTat: 'không có quyền' };
   const ds = await thayDoiCuaKhu(khu);
+  /* ĐỢT 4 — `cach: "merge"`: gộp bằng git merge --no-ff (giữ lịch sử), cả kho một lần. */
+  if (args.cach === 'merge') {
+    if (!ds.length) return { noiDung: 'Không có thay đổi nào để gộp.', tomTat: 'không có gì' };
+    const nv = c.phuGhi.get(id)?.nhiemVu ?? id;
+    const quyetM = await hoiNguoiDung(
+      { ten: 'gop_viec_phu', duongDan: `git merge agent phụ ${id}`, khoa: `gop:${Date.now()}`, choNho: false, tuDuyet: tuDuyetSua(c.cheDoQuyen) },
+      (y) => phat({ loai: 'xinPhepGit', id: y.id, viec: 'gop', chiTiet: `git merge --no-ff — một commit "agent phụ: ${nv.slice(0, 60)}" rồi gộp vào nhánh hiện tại:\n${tomTatThayDoi(ds, 12000)}`, phuId: id }),
+      signal, c.so,
+    );
+    if (quyetM === 'tuChoi') return { noiDung: 'NGƯỜI DÙNG TỪ CHỐI merge. Khu riêng vẫn còn — có thể gộp bằng chép file (bỏ "cach") hoặc bỏ.', tomTat: 'bị từ chối' };
+    const m = await gopBangMerge(khu, nv);
+    if (!m.ok) return { noiDung: `KHÔNG merge được: ${m.loi}${m.xungDot?.length ? `\nFile xung đột: ${m.xungDot.join(', ')}` : ''}\nKhu riêng vẫn còn — gọi lại gop_viec_phu không có "cach" để chép file (báo xung đột theo từng file).`, tomTat: 'merge hỏng' };
+    await donKhu(id); c.phuGhi.delete(id);
+    return { noiDung: `Đã git merge thay đổi của agent phụ (${ds.length} file) — commit merge ${m.sha.slice(0, 10)}. Lùi: \`git revert -m 1 ${m.sha.slice(0, 10)}\` (/undo KHÔNG lùi merge).`, tomTat: `merge ${m.sha.slice(0, 7)}` };
+  }
   const chi = Array.isArray(args.file) ? args.file.filter((x): x is string => typeof x === 'string') : [];
   const chon = chi.length ? ds.filter((t) => chi.includes(t.rel)) : ds;
   if (!chon.length) return { noiDung: 'Không có thay đổi nào để gộp (hoặc tên file không khớp).', tomTat: 'không có gì' };
@@ -2038,7 +2320,8 @@ async function gopViecPhu(
   return {
     noiDung: `Đã gộp ${kq.ghi.length} file: ${kq.ghi.join(', ') || '(không)'}.`
       + (kq.xungDot.length ? `\n⚠️ XUNG ĐỘT (file ở dự án đã đổi từ lúc giao việc — KHÔNG ghi đè): ${kq.xungDot.join(', ')}. Đọc cả hai bản rồi sửa tay bằng edit_file.` : '')
-      + (kq.boQua.length ? `\nBỏ qua (nhị phân/ngoài dự án): ${kq.boQua.join(', ')} — nằm ở ${khu.thuMuc}.` : '')
+      + (kq.boQua.length ? `\nBỏ qua (ngoài dự án / không đọc được): ${kq.boQua.join(', ')} — nằm ở ${khu.thuMuc}.` : '')
+      + (kq.khongLui.length ? `\nFile nhị phân đã ghi đè/xoá (/undo KHÔNG lùi được): ${kq.khongLui.join(', ')}.` : '')
       + (xongHet ? '\nKhu riêng đã dọn.' : `\nKhu riêng còn giữ ở ${khu.thuMuc} (gop_viec_phu {"id":"${id}","bo":true} để dọn).`)
       + '\nNút Hoàn tác (/undo) lùi được các file vừa gộp.',
     tomTat: `gộp ${kq.ghi.length} file${kq.xungDot.length ? ` · ${kq.xungDot.length} xung đột` : ''}`,
@@ -2217,12 +2500,22 @@ async function chayViecPhu(
       // đã không đưa những tool đó cho nó.
       const thamSoPhu = thamSoChinh(goi.name, goi.args);
       phatPhu({ loai: 'toolBatDau', id: goi.id, ten: goi.name, vong: 'may', ...(thamSoPhu ? { thamSo: thamSoPhu } : {}) });
-      const kq = khu && bcPhu
-        ? (TOOL_PHU_GHI.has(goi.name)
-          /* Chạy trong KHU — mọi đường dẫn/lệnh neo ở thư mục khu; thẻ duyệt như agent chính. */
-          ? await chayToolAgent(khu.thuMuc, goi.name, goi.args, bcPhu.boiCanhGhi, bcPhu.boiCanhLenh)
-          : { noiDung: `LỖI: agent phụ ghi không có tool "${goi.name}".`, tomTat: 'không có tool' })
-        : await chayToolAgent(boiCanh.goc!, goi.name, goi.args);
+      /* ĐỢT 4: hook trước/sau tool chạy cả cho AGENT PHỤ — khớp theo dự án gốc, chạy trong khu của nó. */
+      const cwdHook = khu?.thuMuc ?? boiCanh.goc!;
+      const envHook = { CUONGMINI_AGENT_PHU: '1', CUONGMINI_AGENT_PHU_ID: phuId };
+      const hookTruocPhu = await chayHook({ moc: 'truocTool', goc: boiCanh.goc!, tenTool: goi.name, signal, cwd: cwdHook, env: envHook });
+      let kq = hookTruocPhu.chan
+        ? { noiDung: `BỊ CHẶN bởi hook của người dùng — tool này KHÔNG chạy.\n\n${hookTruocPhu.ra}`, tomTat: 'hook chặn' }
+        : khu && bcPhu
+          ? (TOOL_PHU_GHI.has(goi.name)
+            /* Chạy trong KHU — mọi đường dẫn/lệnh neo ở thư mục khu; thẻ duyệt như agent chính. */
+            ? await chayToolAgent(khu.thuMuc, goi.name, goi.args, bcPhu.boiCanhGhi, bcPhu.boiCanhLenh)
+            : { noiDung: `LỖI: agent phụ ghi không có tool "${goi.name}".`, tomTat: 'không có tool' })
+          : await chayToolAgent(boiCanh.goc!, goi.name, goi.args);
+      if (!hookTruocPhu.chan) {
+        const hookSauPhu = await chayHook({ moc: 'sauTool', goc: boiCanh.goc!, tenTool: goi.name, signal, cwd: cwdHook, env: envHook });
+        if (hookSauPhu.ra) kq = { ...kq, noiDung: `${kq.noiDung}\n\n${hookSauPhu.ra}`, tomTat: `${kq.tomTat} · hook có nói` };
+      }
       phu.push({ role: 'tool', tool_call_id: goi.id, content: kq.noiDung });
       phatPhu({
         loai: 'tool', id: goi.id, ten: goi.name, tomTat: kq.tomTat, vong: 'may',
@@ -2574,6 +2867,9 @@ function xoaVeAnthropic(): void {
   if (veAnthropic()) setSetting('agentAnthropicVe', '');
 }
 
+/** Đợt 5: ngữ cảnh CT Work của lượt đang chạy, theo cuộc (lượt phụ không mang). */
+const ctworkTheoCuoc = new Map<string, Awaited<ReturnType<typeof nguCanhChoModel>>>();
+
 async function mgoiMotLuotThat(o: {
   token: string;
   messages: TinNhan[];
@@ -2645,6 +2941,11 @@ async function mgoiMotLuotThat(o: {
       laPhu: o.laPhu,
       ...(o.laPhu && o.quyenPhu === 'ghi' ? { quyenPhu: 'ghi' } : {}),
       toolMcp: o.toolMcp,
+      /* Đợt 4: NGÀY + múi giờ của máy người dùng — máy chủ ghi một dòng "Hôm nay: …" ở CUỐI prompt hệ thống
+         (đổi theo ngày, không theo phút ⇒ không phá đệm tiền tố). */
+      ngayGio: ngayGioMay(),
+      /* Đợt 5: dự án CT Work đã gắn với thư mục (`.cuongmini/ctwork.json`) — dòng cạnh HÔM NAY. */
+      ...(o.cuocId && !o.laPhu && ctworkTheoCuoc.get(o.cuocId) ? { ctwork: ctworkTheoCuoc.get(o.cuocId) } : {}),
       /* Vé cổng dự phòng — đọc thẳng thiết đặt ở ĐÂY (chỗ duy nhất dựng thân
          yêu cầu) để cả lượt chính lẫn việc phụ đều mang theo. Máy chủ chỉ dùng
          khi rambo hỏng. Xem `services/agent/congDuPhong.ts` bên backend. */
@@ -2874,10 +3175,13 @@ export function thamSoChinh(ten: string, args: Record<string, unknown> | undefin
               : l === 'tien_trinh' ? `pid ${String(a.pid ?? '')}` : '';
       break;
     }
-    case 'hen_goi_lai': r = `${String(a.phut ?? '')}′${a.lap === true ? ' ↻' : ''} ${s('ly_do')}`; break;
+    // QA 5c: hẹn theo `cron` (đợt 4) không có `phut` ⇒ trước đây vẽ "Hẹn(′ …)".
+    case 'hen_goi_lai': r = `${s('cron') ? `cron ${s('cron')}` : `${String(a.phut ?? '')}′`}${a.lap === true ? ' ↻' : ''} ${s('ly_do')}`; break;
     case 'nhan_phien': r = s('den'); break;
     case 'notes_tao': case 'notes_ghi': r = s('tieu_de') || s('id'); break;
     default: {
+      /* Đợt 5: CT Work — mã thẻ / JQL làm tham số chính (`● CT Work · get_issue(LF-18)`). */
+      if (ten.startsWith('mcp__ctwork__')) { r = s('issue') || (typeof a.issue === 'number' ? `#${a.issue}` : '') || s('jql') || s('text') || s('to'); break; }
       if (ten.startsWith('mcp__')) break;
       const dau = Object.values(a).find((v) => typeof v === 'string' && v.length <= 200);
       r = typeof dau === 'string' ? dau : '';

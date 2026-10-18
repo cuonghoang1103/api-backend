@@ -26,6 +26,17 @@ export function moTaCheDo(id: string | undefined | null): MoTaCheDo {
 }
 
 /** Chế độ kế tiếp khi bấm `shift+tab`. */
+/**
+ * Đợt 4 — đổi chế độ GIỮA lượt (lỗi thật 18/10: duyệt xong thẻ MCP thì hiện "⚠ Việc này đang chạy dở — hãy dừng
+ * trước khi đổi chế độ" dù người dùng không định đổi — phím shift+tab, thói quen "Yes, don't ask again" của Claude
+ * Code, rơi xuống phím toàn cục khi thẻ vừa đóng). Lõi từ chối đổi chế độ khi đang chạy ⇒ KHÔNG gọi lõi: HOÃN tới
+ * khi lượt xong. Phím đổi chế độ trong ~800ms sau khi trả lời thẻ duyệt bị bỏ qua (phím thừa của thẻ).
+ */
+export function quyetDoiCheDo(o: { dangChay: boolean; vuaDuyetMs: number | null; bayGio: number }): 'ngay' | 'hoan' | 'boQua' {
+  if (o.vuaDuyetMs !== null && o.bayGio - o.vuaDuyetMs < 800) return 'boQua';
+  return o.dangChay ? 'hoan' : 'ngay';
+}
+
 export function cheDoKe(id: string | undefined | null): CheDoQuyen {
   const i = CHE_DO.findIndex((c) => c.id === id) < 0 ? 1 : CHE_DO.findIndex((c) => c.id === id); // chưa rõ = mặc định của lõi (Hỏi trước)
   return CHE_DO[(i + 1) % CHE_DO.length]!.id;

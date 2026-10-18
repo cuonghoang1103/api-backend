@@ -54,8 +54,12 @@ export const LENH_EN: Record<string, { mo: string; thamSo?: string }> = {
   '/sessions': { mo: 'Other CuongMini sessions open on this machine (agents can message each other)' },
   '/rename': { mo: 'Name this session (other sessions see this name)', thamSo: '<name>' },
   '/worktree': { mo: 'Work in a separate git worktree (branch agent/…) — leaves your tree alone', thamSo: '[name | list | remove <path>]' },
-  '/ctwork': { mo: 'One-tap CT Work connection (token created with your signed-in account, kept in this machine\'s secret store)', thamSo: '[read | write | off]' },
-  '/hen': { mo: 'What the agent is WAITING for and its scheduled wake-ups — view / cancel', thamSo: '[cancel [id]]' },
+  '/ctwork': { mo: 'CT Work: menu sprint · my work · open/start an issue · log work · evidence comment · weekly report · meetings · pick project (one-tap connect with your signed-in account)', thamSo: '[project | sprint | work | issue <KEY> | start <KEY> | log <KEY> <time> | comment | report | meetings | auto-write on|off | connect | off]' },
+  '/issue': { mo: 'Open a CT Work issue: title, status, assignee, short description, self-check, latest comment', thamSo: '<LF-18>' },
+  '/sprint': { mo: 'The running (or focus) CT Work sprint — issues grouped by status column' },
+  '/viec': { mo: 'My CT Work issues — nearest due date first' },
+  '/hen': { mo: 'What the agent is WAITING for and its scheduled wake-ups — view / cancel / run schedules missed while closed', thamSo: '[cancel [id] | run-missed | drop-missed]' },
+  '/may': { mo: 'Let the agent CONTROL THE COMPUTER (screenshot, mouse, keyboard) on/off — every action still asks you', thamSo: '[on|off]' },
   '/offline': { mo: 'Toggle on-device (offline) AI for this tab' },
   '/doctor': { mo: 'Diagnose: network, server, gateway, offline AI, folder permissions' },
   '/help': { mo: 'Show slash commands' },
@@ -89,4 +93,44 @@ export function troGiup(ds: readonly LenhGachCli[], lenhDuAn: ReadonlyArray<{ te
     ? `\n\n**${L('Lệnh của dự án', 'Project commands')}** (\`.claude/commands\`)\n${lenhDuAn.map((l) => `- \`${l.ten}\` — ${l.mo}`).join('\n')}`
     : '';
   return `${nhom.join('\n\n')}${duAn}`;
+}
+
+/**
+ * Mô tả NGẮN cho `/help` gọn: bỏ phần trong ngoặc, cắt ở ` — ` / `; `. QA 5c: trước đây cắt ngay ở ` (`
+ * ⇒ "/sprint  The running", "/quyen  View, add a prefix" — câu cụt mất nghĩa.
+ */
+export function moNgan(l: { ten: string; mo: string }): string {
+  const bo = moLenh(l).replace(/\s*\([^()]*\)/g, '').replace(/\s{2,}/g, ' ');
+  return (bo.split(/ — |; /)[0] ?? bo).replace(/[\s,·:]+$/, '').trim();
+}
+
+/**
+ * Đợt 5 — `/help` GỌN kiểu Claude Code: mỗi lệnh một dòng `/tên  mô tả` (không bí danh, không tham số),
+ * theo nhóm; phím tắt gói trong 2 dòng. Bản đầy đủ: `/help all`.
+ */
+export function troGiupGon(ds: readonly LenhGachCli[], lenhDuAn: ReadonlyArray<{ ten: string; mo: string }>): string {
+  // Cột tên đủ rộng cho lệnh DÀI NHẤT (QA 5c: `/terminal-setup` 15 ký tự lệch cột khi trần là 14).
+  const be = Math.max(...ds.map((l) => l.ten.length), ...lenhDuAn.map((l) => Math.min(l.ten.length, 20)));
+  const nhom = Object.keys(TEN_NHOM).map((n) => {
+    const dong = ds.filter((l) => (l.nhom ?? 'co-ban') === n).map((l) => `  ${l.ten.padEnd(be)}  ${moNgan(l)}`);
+    return dong.length ? `${L(TEN_NHOM[n]![0], TEN_NHOM[n]![1])}\n${dong.join('\n')}` : '';
+  }).filter(Boolean);
+  const duAn = lenhDuAn.length ? `\n\n${L('Lệnh của dự án', 'Project commands')}\n${lenhDuAn.map((l) => `  ${l.ten.padEnd(be)}  ${l.mo}`).join('\n')}` : '';
+  return `\`\`\`text\n${nhom.join('\n\n')}${duAn}\n\`\`\`\n${L(
+    '`!` shell · `#` ghi nhớ · `@` file · `?` phím tắt · shift+tab chế độ · esc dừng · ctrl+o đầu ra · ctrl+t kế hoạch — đầy đủ: `/help all`',
+    '`!` shell · `#` memory · `@` files · `?` shortcuts · shift+tab mode · esc interrupt · ctrl+o outputs · ctrl+t plan — full list: `/help all`',
+  )}`;
+}
+
+/** Đợt 5 — bảng phím tắt (`?` ở ô nhập trống), kiểu Claude Code. */
+export function bangPhimTat(): string {
+  const d: Array<[string, string, string]> = [
+    ['! ', 'chạy shell ngay (không qua AI)', 'bash mode'], ['# ', 'ghi nhớ quy ước dự án', 'memorize a project rule'], ['@', 'nhắc file / hàm', 'mention files / symbols'],
+    ['/', 'lệnh', 'commands'], ['LF-123', 'nhắc thẻ CT Work ⇒ tự đính kèm', 'mention a CT Work issue ⇒ auto-attach'],
+    ['shift+tab', 'đổi chế độ quyền', 'cycle permission mode'], ['esc', 'dừng · esc esc quay lui', 'interrupt · esc esc rewind'],
+    ['shift+enter', 'xuống dòng (ctrl+j, \\ cuối dòng)', 'newline (ctrl+j, trailing \\)'], ['ctrl+o', 'mở/thu đầu ra tool', 'expand/collapse tool output'],
+    ['ctrl+r', 'xem lại bảng ghi', 'transcript'], ['ctrl+t', 'kế hoạch', 'plan'], ['ctrl+v', 'dán ảnh', 'paste image'], ['ctrl+c ×2', 'thoát', 'quit'],
+  ];
+  const be = Math.max(...d.map(([k]) => k.length));
+  return d.map(([k, vi, en]) => `  ${k.padEnd(be)}  ${L(vi, en)}`).join('\n');
 }

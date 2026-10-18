@@ -27,6 +27,7 @@ import { getSettings, setSetting } from '../../../desktop/src/main/store';
 import { timTrinhDuyet } from './timTrinhDuyet';
 import { huy as huyTrinhDuyet, trangThai as trangThaiTd } from './trinhDuyetThay';
 import { dongBoVe } from './boVeSoDoThay';
+import { datNguonLsp as datNguonLspLoi, type NguonLsp } from '../../../desktop/src/main/agent/lsp';
 import { statSync } from 'node:fs';
 import path from 'node:path';
 
@@ -86,6 +87,13 @@ function datMacDinhDayDu(): void {
 }
 
 export function datPhien(p: PhienDangNhap | null): void { datPhienLoi(p); }
+
+/**
+ * Đợt 4 — LSP của TRÌNH SOẠN (VS Code): extension bơm nguồn dùng API của nó
+ * (`vscode.executeDefinitionProvider`…). CLI không gọi ⇒ lõi tự chạy server
+ * ngôn ngữ qua stdio (`desktop/src/main/agent/lsp.ts`).
+ */
+export function datNguonLsp(n: NguonLsp | null): void { datNguonLspLoi(n); }
 
 export async function goi(kenh: string, duLieu?: unknown): Promise<unknown> {
   const kq = (await goiKenhNoiBo(kenh, duLieu, suKienGia)) ?? null;

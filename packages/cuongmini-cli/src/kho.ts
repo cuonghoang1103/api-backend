@@ -58,7 +58,11 @@ export type MucBang =
     thamSo?: string;
     /** Các lời gọi LIÊN TIẾP cùng tool chỉ-đọc được gom lại (`● Read 3 pages`). */
     nhom?: Array<{ thamSo?: string; tomTat: string; hong: boolean; chiTiet?: string }>;
+    /** Đợt 5: tool CT Work — bảng GỌN (markdown) hiện khi mở rộng, thay cho JSON thô. */
+    xemGon?: string;
   }
+  /** Đợt 5: `LF-123` trong tin ⇒ lõi đã đính kèm tóm tắt thẻ (chip 📎). */
+  | { id: number; loai: 'dinhKem'; khoa: string[] }
   | { id: number; loai: 'duyet'; tieuDe: string; dongY: boolean; /** Dòng TRẢ LỜI thẻ hỏi — không phải "Allowed". */ traLoi?: boolean }
   | { id: number; loai: 'keHoach'; viec: ViecKeHoach[] }
   | { id: number; loai: 'heThong'; text: string }
@@ -83,6 +87,9 @@ export interface ChoDuyet {
   viec?: string; chiTiet?: string;
   /** Đợt 3: tiền tố gợi ý ("Luôn cho phép `npm test …`"); thẻ của agent phụ ghi. */
   tienTo?: string; phuId?: string;
+  /** Đợt 5: GHI lên CT Work — thẻ nào, việc gì, nội dung gì. */
+  xemTruoc?: { the: string | null; viec: string; noiDung: string };
+  ctwork?: boolean;
 }
 
 /** Đợt 3: agent hỏi bằng lựa chọn (`hoi_nguoi_dung`). */
@@ -225,6 +232,17 @@ export class KhoChat {
   /** Câu trả lời của lệnh `/` chạy CỤC BỘ — không vào hội thoại gửi model. */
   traLoi(text: string): void { this.them({ loai: 'heThong', text }); this.bao(true); }
   thongBao(text: string, muc: 'info' | 'loi' | 'canh' | 'ok' = 'info'): void { this.them({ loai: 'thongBao', text, muc }); this.bao(true); }
+
+  /**
+   * Đợt 4 — tin gõ GIỮA lượt đã được lõi nhận (`agent:chenTin`): in như tin người dùng (đánh dấu ↳)
+   * nhưng KHÔNG mở lượt mới; model đọc nó ở mốc tool kế tiếp (sự kiện `daChen`).
+   */
+  themChen(text: string, bayGio = Date.now()): void {
+    this.chotChu();
+    this.them({ loai: 'nguoi', text: `↳ ${text}`, luc: bayGio, soAnh: 0 });
+    this.S.muc.push({ kieu: 'nguoi', text, luc: bayGio });
+    this.bao(true);
+  }
 
   /** Bắt đầu một lượt: in tin người dùng, bật trạng thái chạy. */
   batDauLuot(hienThi: string, soAnh: number, cauGui: string, bayGio = Date.now()): void {
@@ -399,7 +417,13 @@ export class KhoChat {
           lenh: tach.lenh ?? dang?.lenh ?? null,
           ra: TOOL_LENH.has(ten) ? (tach.ra || dang?.ra || '') : undefined,
           chiTiet: TOOL_LENH.has(ten) ? undefined : chiTiet,
+          ...(typeof e.xemGon === 'string' && e.xemGon ? { xemGon: e.xemGon } : {}),
         });
+        break;
+      }
+      case 'dinhKemCtwork': {
+        const khoa = Array.isArray(e.khoa) ? (e.khoa as unknown[]).filter((x): x is string => typeof x === 'string') : [];
+        if (khoa.length) this.them({ loai: 'dinhKem', khoa });
         break;
       }
       case 'lenhRa': {
@@ -462,6 +486,14 @@ export class KhoChat {
         const tu = (e.tu ?? {}) as { id?: string; ten?: string; noi?: string };
         const noiDung = String(e.noiDung ?? '');
         this.them({ loai: 'heThong', text: `📨 **${L('Tin từ phiên', 'Message from session')} ${tu.ten ?? '?'}** (${tu.noi ?? ''} · \`${tu.id ?? ''}\`) — ${L('agent đọc ở lượt kế', 'the agent reads it next turn')}\n\n${noiDung.split('\n').slice(0, 12).map((d) => `> ${d}`).join('\n')}` });
+        this.bao(true);
+        return;
+      }
+      case 'daChen': {
+        // Đợt 4: lõi đã nối tin gõ giữa lượt vào lượt đang chạy (model đọc ngay ở vòng sau).
+        this.them({ loai: 'thongBao', muc: 'ok', text: e.cach === 'cuoiLuot'
+          ? L('↳ Đã chèn tin của bạn — agent làm tiếp với nó', '↳ Your message was inserted — the agent continues with it')
+          : L('↳ Đã chèn tin của bạn vào lượt đang chạy (sau tool vừa xong)', '↳ Your message was inserted into the running turn (after the last tool)') });
         this.bao(true);
         return;
       }
@@ -600,7 +632,7 @@ function tieuDeDuyetGoc(d: ChoDuyet): string {
       if (tin) return `${L('Nhắn phiên', 'Message to')} ${tin[1]}`;
       return `${L('Chạy lệnh', 'Run command')} ${(d.lenh ?? '').split('\n')[0]}`;
     }
-    case 'xinPhepMcp': return `${L('Công cụ', 'Tool')} ${d.server ?? ''} · ${d.tool ?? ''}`;
+    case 'xinPhepMcp': return d.xemTruoc ? `CT Work · ${d.xemTruoc.viec}${d.xemTruoc.the ? ` → ${d.xemTruoc.the}` : ''}` : `${L('Công cụ', 'Tool')} ${d.server ?? ''} · ${d.tool ?? ''}`;
     case 'xinPhepGit': return tenViecGit(d.viec);
     case 'xinPhepNote': return d.viec === 'tao' ? L('Tạo ghi chú', 'Create note') : L('Ghi vào ghi chú', 'Write to note');
     default: return L('Yêu cầu', 'Request');

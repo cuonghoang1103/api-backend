@@ -2,7 +2,7 @@
   "name": "cuongthai-ai-code",
   "displayName": "CuongMini Code — AI lập trình của CuongThai",
   "description": "CuongMini Code — AI lập trình của CuongThai ngay trong VS Code — chat, sửa code, chạy lệnh, skill, MCP, GitHub. Cài là dùng: đăng nhập bằng tài khoản cuongthai.com (có app desktop thì tự chạy qua app).",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "publisher": "cuongthai",
   "license": "UNLICENSED",
   "private": true,
@@ -33,7 +33,8 @@
       { "command": "cuongthai.themFile", "title": "Thêm vào CuongMini Code", "category": "CuongMini" },
       { "command": "cuongthai.suaLoi", "title": "Nhờ AI sửa lỗi này", "category": "CuongMini" },
       { "command": "cuongthai.moApp", "title": "Mở app CuongThai", "category": "CuongMini" },
-      { "command": "cuongthai.dangXuat", "title": "Đăng xuất (chế độ không cần app)", "category": "CuongMini" }
+      { "command": "cuongthai.dangXuat", "title": "Đăng xuất (chế độ không cần app)", "category": "CuongMini" },
+      { "command": "cuongthai.batTatMayTinh", "title": "Bật/tắt điều khiển máy tính (chụp màn hình, chuột, phím)", "category": "CuongMini" }
     ],
     "menus": {
       "view/title": [
@@ -75,6 +76,11 @@
           "type": "boolean",
           "default": true,
           "description": "Tự gửi kèm tên file đang mở và đoạn đang chọn làm ngữ cảnh cho AI."
+        },
+        "cuongthai.dieuKhienMayTinh": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Cho agent **điều khiển máy tính**: chụp màn hình, bấm chuột, gõ phím (tool `may_*`). Mọi thao tác vẫn hỏi bạn từng lần, kể cả chế độ \"Bỏ qua hết\". macOS cần cấp quyền Ghi màn hình + Trợ năng cho VS Code. / Let the agent control the computer (screenshot, mouse, keyboard) — every action still asks."
         }
       }
     }

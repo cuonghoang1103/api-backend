@@ -228,6 +228,15 @@ class KhungChat implements vscode.WebviewViewProvider {
         case 'rpc': { void this.rpc(m); return; }
         case 'dangXuat': { await this.dangXuat(); return; }
         case 'moCaiDat': { await vscode.commands.executeCommand('workbench.action.openSettings', '@ext:cuongthai.cuongthai-ai-code'); return; }
+        case 'datMayTinh': {
+          /* Đợt 4 — `/may on|off` từ khung chat: đổi CÀI ĐẶT (nguồn sự thật), bật thì hỏi xác nhận. */
+          const cfg = vscode.workspace.getConfiguration('cuongthai');
+          const bat = m.bat === true;
+          if (bat === cfg.get<boolean>('dieuKhienMayTinh', false)) { await this.datMayTinh(bat); return; }
+          if (bat) await vscode.commands.executeCommand('cuongthai.batTatMayTinh');
+          else await cfg.update('dieuKhienMayTinh', false, vscode.ConfigurationTarget.Global);
+          return;
+        }
         case 'dangNhapNha': {
           const nha = String(m.nha);
           if (nha !== 'google' && nha !== 'github' && nha !== 'apple') return;
@@ -387,6 +396,17 @@ class KhungChat implements vscode.WebviewViewProvider {
   }
 
   viecMoi(): void { void this.nhan({ loai: 'viecMoi' }); }
+
+  /** Đợt 4 — điều khiển máy tính: đẩy cài đặt `cuongthai.dieuKhienMayTinh` xuống lõi/app. */
+  async datMayTinh(bat: boolean): Promise<void> {
+    if (!this.cau) return;
+    const r = await this.cau.goi<{ bat: boolean; hoTro: boolean; quyen: { chup: boolean; dieuKhien: boolean } | null }>('agent:mayTinh', { bat }).catch(() => null);
+    if (!r) { this.gui({ loai: 'thongBao', chu: 'App CuongThai bản này chưa có điều khiển máy tính — cập nhật app hoặc chạy ở chế độ độc lập.' }); return; }
+    const thieu = r.quyen && (!r.quyen.chup || !r.quyen.dieuKhien)
+      ? ` macOS còn thiếu quyền ${[!r.quyen.chup ? 'Ghi màn hình' : '', !r.quyen.dieuKhien ? 'Trợ năng' : ''].filter(Boolean).join(' + ')} cho VS Code (System Settings → Privacy & Security).`
+      : '';
+    this.gui({ loai: 'thongBao', chu: r.bat ? `🖥 Điều khiển máy tính: BẬT — mọi cú bấm/gõ đều hỏi bạn.${thieu}` : '🖥 Điều khiển máy tính: TẮT.' });
+  }
 }
 
 async function moApp(): Promise<void> {
@@ -417,7 +437,23 @@ export function activate(ctx: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('cuongthai.viecMoi', () => khung.viecMoi()),
     vscode.commands.registerCommand('cuongthai.moApp', () => moApp()),
     vscode.commands.registerCommand('cuongthai.dangXuat', () => khung.dangXuat()),
-    vscode.workspace.onDidChangeConfiguration((e) => { if (e.affectsConfiguration('cuongthai.cheDo')) void khung.noi(); }),
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration('cuongthai.cheDo')) void khung.noi();
+      if (e.affectsConfiguration('cuongthai.dieuKhienMayTinh')) void khung.datMayTinh(vscode.workspace.getConfiguration('cuongthai').get<boolean>('dieuKhienMayTinh', false));
+    }),
+    /* Đợt 4: bật/tắt điều khiển máy tính (có hỏi xác nhận khi BẬT). */
+    vscode.commands.registerCommand('cuongthai.batTatMayTinh', async () => {
+      const cfg = vscode.workspace.getConfiguration('cuongthai');
+      const dangBat = cfg.get<boolean>('dieuKhienMayTinh', false);
+      if (!dangBat) {
+        const ok = await vscode.window.showWarningMessage(
+          'Cho CuongMini chụp màn hình và điều khiển chuột/bàn phím máy này? Mọi cú bấm/gõ/phím vẫn hỏi bạn từng lần (kể cả chế độ "Bỏ qua hết").',
+          { modal: true }, 'Bật',
+        );
+        if (ok !== 'Bật') return;
+      }
+      await cfg.update('dieuKhienMayTinh', !dangBat, vscode.ConfigurationTarget.Global);
+    }),
     vscode.commands.registerCommand('cuongthai.hoiDoanChon', () => khung.dienCauHoi('Giải thích đoạn code này và chỉ ra chỗ có thể sai: ')),
     vscode.commands.registerCommand('cuongthai.themFile', (uri?: vscode.Uri, ds?: vscode.Uri[]) => {
       const tat = ds?.length ? ds : [uri ?? vscode.window.activeTextEditor?.document.uri].filter((x): x is vscode.Uri => Boolean(x));

@@ -32,7 +32,16 @@ import { app } from 'electron';
 import { chayLenh } from './lenh';
 import { daDuyet, ghiDuyet } from './duyetDuAn';
 
-export type MocHook = 'truocTool' | 'sauTool' | 'xongLuot';
+/**
+ * `truocNen` (đợt 4) = PreCompact — chạy trước `/compact`; đầu ra được nối vào
+ * lời dặn cho bản tóm tắt, `chan: true` + thoát ≠ 0 thì HUỶ lần nén.
+ * `thongBao` (đợt 4) = Notification — chạy (không chờ) khi agent DỪNG chờ bạn:
+ * thẻ duyệt, câu hỏi lựa chọn. Nội dung ở biến `CUONGMINI_THONG_BAO`.
+ * Hook `truocTool`/`sauTool` chạy cả cho AGENT PHỤ (đợt 4) — `CUONGMINI_AGENT_PHU=1`,
+ * cwd = khu riêng của agent phụ.
+ */
+export type MocHook = 'truocTool' | 'sauTool' | 'xongLuot' | 'truocNen' | 'thongBao';
+const MOC_HOP_LE: readonly MocHook[] = ['truocTool', 'sauTool', 'xongLuot', 'truocNen', 'thongBao'];
 
 export interface Hook {
   khi: MocHook;
@@ -59,7 +68,7 @@ export function duongDanCauHinh(): string {
 
 const MAU = `{
   "_doc": "Hook chạy quanh mỗi lời gọi tool của agent. Sửa file này rồi bấm 'Nạp lại hook' trong app.",
-  "_mocs": "truocTool | sauTool | xongLuot",
+  "_mocs": "truocTool | sauTool | xongLuot | truocNen (trước /compact) | thongBao (khi chờ bạn duyệt/trả lời)",
   "_vidu": [
     {
       "khi": "sauTool",
@@ -82,7 +91,7 @@ const MAU = `{
 function hopLe(x: unknown): x is Hook {
   if (typeof x !== 'object' || x === null) return false;
   const h = x as Record<string, unknown>;
-  if (h.khi !== 'truocTool' && h.khi !== 'sauTool' && h.khi !== 'xongLuot') return false;
+  if (!MOC_HOP_LE.includes(h.khi as MocHook)) return false;
   if (typeof h.lenh !== 'string' || h.lenh.trim() === '' || h.lenh.length > 2000) return false;
   if (h.khop !== undefined && typeof h.khop !== 'string') return false;
   if (h.duAn !== undefined && typeof h.duAn !== 'string') return false;
@@ -263,6 +272,10 @@ export async function chayHook(opts: {
   tenTool?: string;
   args?: unknown;
   signal: AbortSignal;
+  /** Thư mục chạy lệnh (mặc định `goc`) — agent phụ chạy ở khu riêng nhưng KHỚP theo `goc` dự án. */
+  cwd?: string;
+  /** Biến môi trường thêm cho lệnh hook (`CUONGMINI_*`). */
+  env?: Record<string, string>;
 }): Promise<KetQuaHook> {
   const ds = (await docHook(opts.goc)).filter((h) => h.khi === opts.moc
     && khopHook(h, opts.goc, opts.tenTool ?? null));
@@ -274,12 +287,13 @@ export async function chayHook(opts: {
     if (opts.signal.aborted) break;
     const kq = await chayLenh({
       lenh: h.lenh,
-      cwd: opts.goc,
+      cwd: opts.cwd ?? opts.goc,
+      ...(opts.env ? { env: opts.env } : {}),
       giay: h.giay ?? GIAY_MAC_DINH,
       signal: opts.signal,
     });
     const dat = kq.ma === 0;
-    const seChan = !dat && h.chan === true && opts.moc === 'truocTool';
+    const seChan = !dat && h.chan === true && (opts.moc === 'truocTool' || opts.moc === 'truocNen');
     ghiNhatKy({
       luc: Date.now(),
       moc: opts.moc,

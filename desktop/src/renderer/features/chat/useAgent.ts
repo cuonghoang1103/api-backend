@@ -12,6 +12,7 @@
  * Notes tra cứu rồi quay lại vẫn thấy kết quả), nhưng nghĩa là nút Dừng phải
  * thật sự gọi `cancel()` chứ không chỉ ẩn giao diện đi.
  */
+import { dich } from '../../i18n';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   AgentCongNangCap, AgentDiff,
@@ -32,7 +33,7 @@ export type MucHienThi =
    * thêm trường lạ vào đó là gửi một trường lạ lên API. Thà không hiện gì còn
    * hơn hiện một con số bịa ra từ mốc lưu của cả phiên.
    */
-  | { kieu: 'nguoi'; text: string; anh?: string[]; luc?: number }
+  | { kieu: 'nguoi'; text: string; anh?: string[]; luc?: number; /** Đợt 5: thẻ CT Work lõi đã đính kèm (chip 📎). */ ctwork?: string[] }
   /**
    * `cucBo` = tên model TRÊN MÁY đã viết câu này (03/10/2026). Ranh giới 2:
    * mọi câu từ máy phải mang nhãn — giữ trên CHÍNH mục, nên có mạng lại rồi
@@ -55,6 +56,9 @@ export type MucHienThi =
       diff?: AgentDiff;
       /** Đường dẫn file — để đoán ngôn ngữ mà tô màu. */
       duongDan?: string;
+      /** Đợt 5: tool CT Work — bảng gọn (markdown) + tham số chính. */
+      xemGon?: string;
+      thamSo?: string;
     }
   /**
    * Thẻ duyệt nằm NGAY TRONG dòng thời gian hội thoại, không phải hộp thoại
@@ -67,7 +71,7 @@ export type MucHienThi =
   | { kieu: 'xinPhep'; the: TheXinPhep; xong?: 'dongY' | 'tuChoi' }
   /** Thẻ duyệt LỆNH. Khác thẻ sửa file: hiện chuỗi lệnh + lý do nguy hiểm. */
   | { kieu: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh; xong?: 'dongY' | 'tuChoi'; tienTo?: string; phuId?: string }
-  | { kieu: 'xinPhepMcp'; id: string; server: string; tool: string; args: string; xong?: 'dongY' | 'tuChoi' }
+  | { kieu: 'xinPhepMcp'; id: string; server: string; tool: string; args: string; xong?: 'dongY' | 'tuChoi'; xemTruoc?: { the: string | null; viec: string; noiDung: string } }
   | { kieu: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop'; chiTiet: string; xong?: 'dongY' | 'tuChoi'; phuId?: string }
   /** Đợt 3: agent hỏi bằng lựa chọn. `xong` = tóm tắt câu trả lời (đã trả lời). */
   | { kieu: 'hoi'; id: string; cauHoi: AgentCauHoi[]; xong?: string }
@@ -260,6 +264,10 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
         datDangNghi(true);
         return;
       }
+      if (e.loai === 'daChen') {
+        datMuc((truoc) => [...truoc, { kieu: 'loi', ma: 'DA_CHEN', text: e.cach === 'cuoiLuot' ? dich('↳ Đã chèn tin của bạn — agent làm tiếp với nó.') : dich('↳ Đã chèn tin của bạn vào lượt đang chạy (sau tool vừa xong).') }]);
+        return;
+      }
       if (e.loai === 'hoiLuaChon') {
         datDangNghi(false);
         datMuc((truoc) => [...truoc, { kieu: 'hoi', id: e.id, cauHoi: e.cauHoi }]);
@@ -328,6 +336,8 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
               ...(e.chiTiet ? { chiTiet: e.chiTiet } : {}),
               ...(e.diff ? { diff: e.diff } : {}),
               ...(e.duongDan ? { duongDan: e.duongDan } : {}),
+              ...(e.xemGon ? { xemGon: e.xemGon } : {}),
+              ...(e.thamSo ? { thamSo: e.thamSo } : {}),
             }];
             }
             const sau = [...truoc];
@@ -336,6 +346,8 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
               ...(e.chiTiet ? { chiTiet: e.chiTiet } : {}),
               ...(e.diff ? { diff: e.diff } : {}),
               ...(e.duongDan ? { duongDan: e.duongDan } : {}),
+              ...(e.xemGon ? { xemGon: e.xemGon } : {}),
+              ...(e.thamSo ? { thamSo: e.thamSo } : {}),
             };
             return sau;
           });
@@ -360,8 +372,18 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
         case 'xinPhepMcp':
           datDangNghi(false);
           datMuc((truoc) => [...truoc, {
-            kieu: 'xinPhepMcp', id: e.id, server: e.server, tool: e.tool, args: e.args,
+            kieu: 'xinPhepMcp', id: e.id, server: e.server, tool: e.tool, args: e.args, ...(e.xemTruoc ? { xemTruoc: e.xemTruoc } : {}),
           }]);
+          break;
+        case 'dinhKemCtwork':
+          /* Đợt 5: gắn chip 📎 vào câu hỏi CUỐI của người dùng. */
+          datMuc((truoc) => {
+            const i = truoc.findLastIndex((m) => m.kieu === 'nguoi');
+            if (i < 0) return truoc;
+            const sau = [...truoc];
+            sau[i] = { ...(sau[i] as Extract<MucHienThi, { kieu: 'nguoi' }>), ctwork: e.khoa };
+            return sau;
+          });
           break;
         case 'xinPhepGit':
           datDangNghi(false);
@@ -717,6 +739,17 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     return kq;
   }, [cuocId]);
 
+  /**
+   * Đợt 4 — GÕ THÊM khi agent đang chạy: main nối tin vào kết quả tool kế tiếp
+   * của lượt (như Claude Code). `false` = không chạy (gọi nơi khác xếp hàng).
+   */
+  const chenTin = useCallback(async (text: string): Promise<boolean> => {
+    const r = await window.cuongthai?.agent.chenTin(cuocId, text).catch(() => null);
+    if (!r?.chen) return false;
+    datMuc((truoc) => [...truoc, { kieu: 'nguoi', text: `↳ ${text}`, luc: Date.now() }]);
+    return true;
+  }, [cuocId]);
+
   /** Một dòng thông báo trên bảng ghi (CHỈ hiển thị — không vào hội thoại gửi lên). */
   const baoTin = useCallback((text: string, ma: string) => {
     datMuc((truoc) => [...truoc, { kieu: 'loi', text, ma }]);
@@ -728,6 +761,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     huyCho,
     huyHen,
     gui,
+    chenTin,
     baoTin,
     datHanMuc,
     lamTiep,

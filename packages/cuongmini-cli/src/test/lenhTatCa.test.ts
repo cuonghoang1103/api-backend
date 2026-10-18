@@ -38,7 +38,8 @@ const KhoChat = M.KhoChat;
 process.env.CUONGMINI_HOME = mkdtempSync(path.join(os.tmpdir(), 'cm-lenh-'));
 process.env.CUONGMINI_KHONG_MO_TRINH_DUYET = '1';
 
-interface Ghi { kenh: Array<[string, unknown]>; cb: string[]; gui: string[] }
+type The = Parameters<BoiCanhLenh['chon']>[0];
+interface Ghi { kenh: Array<[string, unknown]>; cb: string[]; gui: string[]; the: The[] }
 
 const TRA: Record<string, unknown> = {
   'agent:dsQuyenLau': { goc: '/tmp/duan', khoa: ['npm test', 'tien-to:npm run lint'] },
@@ -66,7 +67,7 @@ const TRA: Record<string, unknown> = {
 };
 
 function taoBoiCanh(rong = false): { b: BoiCanhLenh; g: Ghi } {
-  const g: Ghi = { kenh: [], cb: [], gui: [] };
+  const g: Ghi = { kenh: [], cb: [], gui: [], the: [] };
   const kho = new KhoChat(true);
   kho.S.ws = { path: '/tmp/duan', name: 'duan', branch: 'main', cheDoQuyen: 'hoi', mucNoLuc: 'vua', model: 'sonnet-5' } as typeof kho.S.ws;
   kho.S.muc.push({ kieu: 'nguoi', text: 'câu hỏi một' }, { kieu: 'may', text: 'trả lời một' });
@@ -81,6 +82,7 @@ function taoBoiCanh(rong = false): { b: BoiCanhLenh; g: Ghi } {
   const b: BoiCanhLenh = {
     kho, kn: kn as unknown as BoiCanhLenh['kn'], thuMuc: '/tmp/duan', phienBan: '0.4.0',
     guiThat: (text) => { g.gui.push(text); },
+    chon: (o) => { g.the.push(o); g.cb.push(`chon(${JSON.stringify(o.tieuDe)}:${o.ds.map((x) => x.giaTri).join('|')})`); },
     doiModel: ghiCb('doiModel') as BoiCanhLenh['doiModel'], doiMuc: ghiCb('doiMuc') as BoiCanhLenh['doiMuc'], doiCheDo: ghiCb('doiCheDo') as BoiCanhLenh['doiCheDo'],
     dsModel: () => MODEL_DU_PHONG, dsMuc: () => MUC_DU_PHONG,
     moMenu: ghiCb('moMenu') as BoiCanhLenh['moMenu'], moKhoaModel: ghiCb('moKhoaModel') as BoiCanhLenh['moKhoaModel'],
@@ -101,7 +103,8 @@ const THAM_SO: Record<string, string[]> = {
   '/rewind': ['1'], '/resume': ['1', 'việc'], '/kynang': ['docker'], '/quyen': ['them npm test', 'xoa 1', 'add npm run lint'],
   '/sessions': [], '/rename': ['backend api'], '/worktree': ['list', 'tinh-nang-a', 'xoa /tmp/wt'], '/hen': ['huy h1', 'cancel'],
   '/mcp': ['mo', 'mở', 'nap'], '/copy': ['1', 'q', 'all'], '/browser': ['on', 'off'], '/fullscreen': ['on', 'off'], '/mouse': ['on', 'off'],
-  '/language': ['en', 'vi'], '/theme': ['sang', 'dark'], '/add-dir': ['..'], '/ctwork': ['doc', 'ghi', 'off'],
+  '/language': ['en', 'vi'], '/theme': ['sang', 'dark'], '/add-dir': ['..'], '/ctwork': ['doc', 'ghi', 'off', 'du-an', 'sprint', 'the LF-18', 'gio LF-18 1.5h đọc JWT', 'tu-ghi on', 'ket-noi'],
+  '/issue': ['LF-18'],
 };
 
 test('mọi lệnh `/` trong /help: không ném, có phản hồi, giữ tham số — VI + EN', async () => {
@@ -168,4 +171,69 @@ test('lõi trả null/lỗi cho MỌI kênh (lõi cũ, lõi giả): không lện
   }
   datNgonNgu('vi');
   assert.deepEqual(hong, []);
+});
+
+/* ── Đợt 4: `/mcp` là THẺ LỰA CHỌN kiểu Claude Code (không còn dòng "open with /mcp open · reload…") ── */
+test('/mcp: thẻ lựa chọn đủ 5 hành động, chọn được từng cái (mở · nạp lại · CT Work · server → bật/tắt · thoát)', async () => {
+  for (const nn of ['vi', 'en'] as const) {
+    datNgonNgu(nn);
+    const { b, g } = taoBoiCanh();
+    await chayLenh('/mcp', b);
+    const the = g.the.at(-1)!;
+    assert.ok(the, `${nn}: /mcp phải mở thẻ lựa chọn`);
+    assert.deepEqual(the.ds.map((x) => x.giaTri), ['mo', 'nap', 'ctwork', 'server', 'thoat']);
+    assert.match(String(the.than), /ctwork/);
+    assert.match(String(the.than), /⎿ \/tmp\/mcp\.json/, 'dòng đường dẫn file kiểu cây ⎿');
+    assert.doesNotMatch(String(the.than) + the.tieuDe, /open with|mở bằng/, 'không còn dòng gợi ý gõ lệnh');
+    // Chọn "Mở file cấu hình"
+    await the.khiChon('mo');
+    assert.ok(g.kenh.some(([k]) => k === 'agent:mcpMoCauHinh'));
+    // Nạp lại ⇒ gọi lõi + mở lại thẻ có báo
+    await the.khiChon('nap');
+    assert.ok(g.kenh.some(([k]) => k === 'agent:mcpNapLai'));
+    assert.match(String(g.the.at(-1)!.moTa), /✓/);
+    // Server ⇒ chọn ctwork ⇒ tắt
+    await the.khiChon('server');
+    const chonSv = g.the.at(-1)!;
+    assert.ok(chonSv.ds.some((x) => x.giaTri === 'ctwork'));
+    await chonSv.khiChon('ctwork');
+    const sv = g.the.at(-1)!;
+    assert.ok(sv.ds.some((x) => x.giaTri === 'tat'), 'server đang chạy ⇒ có "Tắt server này"');
+    await sv.khiChon('tat');
+    assert.match(JSON.stringify(g.kenh.filter(([k]) => k === 'agent:mcpBatTat')), /"ten":"ctwork","bat":false/);
+  }
+  datNgonNgu('vi');
+});
+
+test('/quyen · /hen · /sessions · /worktree · /ctwork (đã nối): thẻ lựa chọn, chọn ra đúng hành động', async () => {
+  const { b, g } = taoBoiCanh();
+  await chayLenh('/quyen', b);
+  const q = g.the.at(-1)!;
+  assert.deepEqual(q.ds.map((x) => x.giaTri), ['them', 'mot', 'het', 'thoat']);
+  await q.khiChon('mot');
+  await g.the.at(-1)!.khiChon('2');
+  assert.match(JSON.stringify(g.kenh.filter(([k]) => k === 'agent:xoaQuyenLau')), /tien-to:npm run lint/, 'thu hồi đúng mục số 2');
+  await chayLenh('/hen', b);
+  const h = g.the.at(-1)!;
+  await h.khiChon('mot');
+  await g.the.at(-1)!.khiChon('h1');
+  assert.match(JSON.stringify(g.kenh.filter(([k]) => k === 'agent:huyHen')), /h1/);
+  await chayLenh('/sessions', b);
+  assert.deepEqual(g.the.at(-1)!.ds.map((x) => x.giaTri), ['ten', 'nhan', 'thoat']);
+  await chayLenh('/worktree', b);
+  assert.deepEqual(g.the.at(-1)!.ds.map((x) => x.giaTri), ['tao', 'xoa', 'thoat']);
+  TRA['agent:ctwork'] = { ok: true, soTool: 40, quyen: 'doc', server: { ok: true, soTool: 40 } };
+  try {
+    // Đợt 5: đã nối ⇒ MENU đánh số 1–9 + 0 Thoát (chưa gắn dự án ⇒ mục 1–8 mờ, 9 = chọn dự án).
+    await chayLenh('/ctwork', b);
+    const c = g.the.at(-1)!;
+    assert.deepEqual(c.ds.map((x) => x.giaTri), ['sprint', 'viec', 'the', 'batDau', 'gio', 'binhLuan', 'baoCao', 'hop', 'duAn', 'thoat']);
+    assert.equal(c.ds.at(-1)!.so, '0');
+    // Đổi quyền ở thẻ kết nối riêng (`/ctwork ket-noi`).
+    await chayLenh('/ctwork ket-noi', b);
+    const kn2 = g.the.at(-1)!;
+    assert.ok(kn2.ds.some((x) => x.giaTri === 'ghi') && kn2.ds.some((x) => x.giaTri === 'off'));
+    await kn2.khiChon('ghi');
+    assert.match(JSON.stringify(g.kenh.filter(([k]) => k === 'agent:ctwork')), /"quyen":"ghi"/);
+  } finally { TRA['agent:ctwork'] = { ok: true, soTool: 40, coToken: false, server: null }; }
 });

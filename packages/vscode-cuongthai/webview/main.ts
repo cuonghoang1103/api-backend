@@ -13,7 +13,8 @@ import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { LENH_AGENT, chuanHoa, tachLenh, type LenhGach } from 'ct-lenh';
 import { gui, goi, nhanKetQua } from './rpc';
-import { chayLenh, type BoiCanhLenh } from './lenh';
+import { chayLenh, giaoDienCtwVsc, type BoiCanhLenh } from './lenh';
+import { hoiCtworkMotLan, laLoiXacThucCtw, veDongCtw, type DongCtw } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
 
 type SuKien = { loai: string; [k: string]: any };
 type Muc = { kieu: string; text?: string; ten?: string; tomTat?: string; anh?: string[]; [k: string]: unknown };
@@ -164,11 +165,13 @@ goc.innerHTML = `
       <button id="nutA" class="icon nho" title="Nhắc file / thư mục / hàm  (gõ @)">${ICON.a}</button>
       <button id="nutModel" class="chip-chon" title="Model và mức nỗ lực"></button>
       <span class="gian"></span>
+      <span id="oNguCanh" class="o-ngu-canh" hidden title="Ngữ cảnh đã dùng"></span>
       <button id="nutCheDo" class="chip-chon che-do" title="Chế độ quyền"></button>
       <button id="nutMic" class="icon nho" title="Nói thay vì gõ">${ICON.mic}</button>
       <button id="nutGui" class="nut-gui" title="Gửi (Enter)">${ICON.gui}</button>
     </div>
   </div>
+  <div id="dongCtw" class="dong-ctw" hidden title="CT Work"></div>
   <div class="meo">Enter gửi · Shift+Enter xuống dòng · <b>/</b> lệnh · <b>@</b> nhắc file · Esc dừng</div>
 </footer>
 <div id="keoTha" class="keo-tha" hidden><div>📎 Thả vào để AI đọc<br><span class="phu">Kéo từ Explorer: giữ <b>Shift</b> khi thả</span></div></div>`;
@@ -250,6 +253,36 @@ function traLoiHeThong(chu: string | null): void {
   if (chu === null) return;
   const el = the('tin he-thong md', md(chu));
   lamGiau(el);
+}
+
+/** Đợt 4 — hàng nút hành động dưới câu trả lời hệ thống vừa in (`/mcp`…). */
+function nutHeThong(ds: Array<{ nhan: string; chinh?: boolean; so?: string; lam: () => void | Promise<void> }>): void {
+  if (!ds.length) return;
+  const cuoi = bang.querySelector<HTMLElement>('.tin.he-thong:last-of-type') ?? bang.lastElementChild as HTMLElement | null;
+  if (!cuoi) return;
+  const h = document.createElement('div');
+  h.className = 'nut-hang';
+  // Đợt 5: hàng nút có số (thẻ lựa chọn) ⇒ gõ số ở ô nhập TRỐNG là bấm; bấm xong cả hàng khoá lại (như CLI đóng thẻ).
+  const coSo = ds.some((n) => n.so);
+  if (coSo) h.dataset.theChon = '1';
+  for (const n of ds) {
+    const btn = document.createElement('button');
+    btn.className = `nut${n.chinh ? ' chinh' : ''}`;
+    btn.textContent = n.nhan;
+    if (n.so) btn.dataset.so = n.so;
+    btn.addEventListener('click', () => {
+      if (coSo) { h.querySelectorAll('button').forEach((x) => { x.disabled = true; }); btn.classList.add('da-chon'); delete h.dataset.theChon; }
+      void Promise.resolve(n.lam()).catch((e: Error) => thongBao(e.message, true));
+    });
+    h.appendChild(btn);
+  }
+  cuoi.appendChild(h);
+}
+
+/** Đợt 5: thẻ lựa chọn CÒN MỞ gần nhất (hàng nút có số, chưa bấm) — để phím số ở ô nhập trống chọn được. */
+function theChonMo(): HTMLElement | null {
+  const ds = bang.querySelectorAll<HTMLElement>('.nut-hang[data-the-chon="1"]');
+  return ds.length ? ds[ds.length - 1]! : null;
 }
 
 // ─── Tin người dùng / AI ─────────────────────────────────────────
@@ -397,6 +430,7 @@ const toolDangChay = new Map<string, HTMLElement>();
 let khoiLenh: HTMLElement | null = null;
 
 function nhanTool(ten: string): string {
+  if (ten.startsWith('mcp__ctwork__')) return `CT Work · ${ten.slice('mcp__ctwork__'.length)}`;
   if (ten.startsWith('mcp__')) return ten.split('__').slice(1).join(' · ');
   const t = NHAN_TOOL[ten];
   if (t) return t;
@@ -561,10 +595,14 @@ function xuLy(e: SuKien): void {
       const daChay = el.querySelector<HTMLElement>('.lenh-ra')?.textContent ?? '';
       const ra = String(e.chiTiet ?? '') || daChay;
       const hong = /^(lỗi|error|thất bại|failed)|exit code [1-9]|mã thoát [1-9]/i.test(String(e.tomTat ?? ''));
+      // Đợt 5: tool CT Work ⇒ một dòng `CT Work · sprint_current — Sprint 2 · 14 thẻ`, mở ra là BẢNG GỌN (không JSON thô).
+      const laCtw = String(e.ten).startsWith('mcp__ctwork__');
       const chiTiet = e.diff ? veDiff(e.diff)
-        : ra ? `${e.ten === 'run_command' && e.tomTat ? `<div class="nhan-lenh">$ ${esc(String(e.tomTat))}</div>` : ''}<pre class="chitiet">${esc(ra.slice(-12000))}</pre>`
-        : '<div class="phu">Không có đầu ra.</div>';
-      el.innerHTML = `<details><summary><span class="cham ${hong ? 'hong' : 'xong'}"></span><b>${esc(nhanTool(e.ten))}</b>${file} <span class="phu">${esc(e.tomTat ?? '')}</span><span class="mo-rong">›</span></summary><div class="ben-trong">${chiTiet}</div></details>`;
+        : laCtw && typeof e.xemGon === 'string' && e.xemGon ? `<div class="md ctw-gon">${md(e.xemGon)}</div>`
+          : ra ? `${e.ten === 'run_command' && e.tomTat ? `<div class="nhan-lenh">$ ${esc(String(e.tomTat))}</div>` : ''}<pre class="chitiet">${esc(ra.slice(-12000))}</pre>`
+            : '<div class="phu">Không có đầu ra.</div>';
+      const thamCtw = laCtw && e.thamSo ? `<span class="phu">(${esc(String(e.thamSo))})</span>` : '';
+      el.innerHTML = `<details><summary><span class="cham ${hong ? 'hong' : 'xong'}"></span><b>${esc(nhanTool(e.ten))}</b>${thamCtw}${file} <span class="phu">${laCtw ? '— ' : ''}${esc(e.tomTat ?? '')}</span><span class="mo-rong">›</span></summary><div class="ben-trong">${chiTiet}</div></details>`;
       khoiLenh = null;
       el.querySelector<HTMLElement>('.file-link')?.addEventListener('click', (ev) => { ev.preventDefault(); gui({ loai: 'moFile', duong: e.duongDan }); });
       break;
@@ -598,9 +636,25 @@ function xuLy(e: SuKien): void {
     }
     case 'xinPhepMcp':
       ketThucTraLoi();
+      if (e.xemTruoc) {
+        // Đợt 5: GHI lên CT Work — thẻ nào, việc gì, nội dung gì (không phải JSON tham số).
+        const x = e.xemTruoc as { the: string | null; viec: string; noiDung: string };
+        theDuyet(e.id, `✍ CT Work · ${esc(x.viec)}${x.the ? ` → <b>${esc(x.the)}</b>` : ''}`,
+          `${x.noiDung.trim() ? `<div class="md ctw-xem">${md(x.noiDung)}</div>` : ''}<div class="phu">${esc(L(`tool ${e.tool} · ghi CT Work luôn hỏi (kể cả "Bỏ qua hết") — tắt hỏi: /ctwork tu-ghi on`, `tool ${e.tool} · CT Work writes always ask (even in Bypass) — stop asking: /ctwork auto-write on`))}</div>`,
+          [['choPhep', L('Có, ghi lên CT Work', 'Yes, write to CT Work'), 'chinh'], ['tuChoi', L('Không', 'No'), 'phu2']]);
+        break;
+      }
       theDuyet(e.id, `🔌 Gọi công cụ ${esc(e.server)} · ${esc(e.tool)}`, `<pre class="chitiet">${esc(String(e.args).slice(0, 3000))}</pre>`,
         [['choPhep', 'Cho phép', 'chinh'], ['tuChoi', 'Từ chối', 'phu2']]);
       break;
+    case 'dinhKemCtwork': {
+      // Đợt 5: `LF-123` trong tin ⇒ lõi đã đính kèm tóm tắt thẻ — chip 📎 dưới tin người dùng.
+      const nguoi = bang.querySelectorAll<HTMLElement>('.tin.nguoi');
+      const cuoiNguoi = nguoi.length ? nguoi[nguoi.length - 1]! : null;
+      const khoa = (Array.isArray(e.khoa) ? e.khoa : []) as string[];
+      if (cuoiNguoi && khoa.length) cuoiNguoi.querySelector('.than')?.insertAdjacentHTML('beforeend', `<div class="chip-ctw">${khoa.map((k) => `<span class="chip">📎 ${esc(k)}</span>`).join(' ')}</div>`);
+      break;
+    }
     case 'xinPhepGit': {
       ketThucTraLoi();
       const tieu = NHAN_PHU(e.phuId) + ({ commit: '🌿 Commit', pr: '🔀 Đẩy nhánh + mở Pull Request', day: '⬆️ Đẩy lên GitHub', cai: '🧰 Cài công cụ', gop: '🔀 Gộp thay đổi của agent phụ vào dự án' }[e.viec as string] ?? 'Git');
@@ -651,9 +705,14 @@ function xuLy(e: SuKien): void {
       break;
     }
     case 'tienTrinh':
-      // Đợt 3: tiến trình theo vòng — khung VS Code chưa có ô ngữ cảnh %. Tiền của vòng giữ lại: lượt kết thúc
-      // bằng Dừng/lỗi thì không có `xong` mang tổng (QA 18/10: tiền mất trắng sau khi dừng).
+      // Tiền của vòng giữ lại: lượt kết thúc bằng Dừng/lỗi thì không có `xong` mang tổng (QA 18/10: tiền mất trắng sau khi dừng).
       tienLuot += Number(e.tienUsd ?? 0);
+      // Đợt 4: ô ngữ cảnh % + nhắc 80/95% (như CLI).
+      if (e.nguCanh && typeof e.nguCanh.phanTram === 'number') capNhatNguCanh(e.nguCanh.phanTram);
+      break;
+    case 'daChen':
+      // Đợt 4: tin gõ giữa lượt đã vào lượt đang chạy.
+      the('tin ket', `↳ ${esc(e.cach === 'cuoiLuot' ? L('Đã chèn tin của bạn — agent làm tiếp với nó.', 'Your message was inserted — the agent continues with it.') : L('Đã chèn tin của bạn vào lượt đang chạy (sau tool vừa xong).', 'Your message was inserted into the running turn (after the last tool).'))}`);
       break;
     case 'keHoach': {
       ketThucTraLoi();
@@ -665,9 +724,11 @@ function xuLy(e: SuKien): void {
     }
     case 'xong': {
       ketThucTraLoi();
+      void napDongCtw();
       S.tienPhien += Math.max(Number(e.tienUsd ?? 0), tienLuot);
       tienLuot = 0;
       S.soFileDaSua = Number(e.soFileDaSua ?? S.soFileDaSua);
+      if (e.nguCanh && typeof e.nguCanh.phanTram === 'number') capNhatNguCanh(e.nguCanh.phanTram);
       ketLuot(`${S.soFileDaSua ? `${S.soFileDaSua} file đã sửa` : ''}`);
       if (S.choDuyetKeHoach) veDuyetKeHoach();
       break;
@@ -715,13 +776,52 @@ function xuLy(e: SuKien): void {
   }
 }
 
+/** Đợt 4 — hẹn ĐÃ LỠ lúc VS Code/lõi tắt ⇒ thẻ hỏi chạy bù hay bỏ (một lần mỗi lần nối). */
+let daHoiHenLo = false;
+async function hoiHenLo(): Promise<void> {
+  if (daHoiHenLo) return;
+  daHoiHenLo = true;
+  const r = await goi<{ ds: Array<{ id: string; lyDo: string; luc: number }> }>('agent:henLo').catch(() => null);
+  const ds = r?.ds ?? [];
+  if (!ds.length) return;
+  const el = the('tin ket', `⏰ <b>${esc(L(`Đã lỡ ${ds.length} hẹn lúc CuongMini tắt`, `Missed ${ds.length} schedule(s) while CuongMini was closed`))}</b>`
+    + `<div class="phu">${ds.slice(0, 5).map((h) => `• ${esc(new Date(h.luc).toLocaleString())} — ${esc(h.lyDo.slice(0, 100))}`).join('<br>')}</div>`
+    + `<div class="nut-hang"><button class="nut chinh" data-v="chay">${esc(L('Chạy bù', 'Run now'))}</button><button class="nut" data-v="bo">${esc(L('Bỏ', 'Drop'))}</button></div>`);
+  el.querySelectorAll<HTMLButtonElement>('button[data-v]').forEach((b) => b.addEventListener('click', () => {
+    const cach = b.dataset.v === 'chay' ? 'chay' : 'bo';
+    void goi<{ n: number }>('agent:xuLyHenLo', { cach }).then((x) => {
+      el.querySelector('.nut-hang')!.innerHTML = `<span class="phu">${esc(cach === 'chay' ? L(`Đang chạy bù ${x?.n ?? 0} hẹn — chạy nền trong đúng việc cũ của nó; xem kết quả ở Lịch sử.`, `Running ${x?.n ?? 0} schedule(s) in the background, each in its own task — see the result in History.`) : L(`Đã bỏ ${x?.n ?? 0} hẹn.`, `Dropped ${x?.n ?? 0}.`))}</span>`;
+    }).catch(() => undefined);
+  }));
+}
+
 /** Tiền các vòng của lượt đang chạy (`tienTrinh`). */
 let tienLuot = 0;
+
+/** Đợt 4 — chữ hai thứ tiếng theo ngôn ngữ giao diện VS Code (webview nhận `navigator.language` của VS Code). */
+function L(vi: string, en: string): string { return /^vi/i.test(navigator.language || 'vi') ? vi : en; }
+
+/** Đợt 4 — ô ngữ cảnh % ở thanh dưới + nhắc một lần mỗi mốc 80/95% mỗi việc (như CLI). */
+let daNhacNguCanh = 0;
+function capNhatNguCanh(p: number): void {
+  const el = document.getElementById('oNguCanh');
+  if (el) {
+    el.hidden = p <= 0;
+    el.textContent = `${Math.round(p)}%`;
+    el.dataset.muc = p >= 95 ? 'do' : p >= 80 ? 'vang' : '';
+    el.title = L(`Ngữ cảnh đã dùng ${Math.round(p)}% — /compact để tóm tắt phần cũ, /context xem chi tiết`, `Context used ${Math.round(p)}% — /compact to summarize older turns, /context for details`);
+  }
+  const moc = p >= 95 ? 95 : p >= 80 ? 80 : 0;
+  if (!moc || moc <= daNhacNguCanh) return;
+  daNhacNguCanh = moc;
+  the('tin ket', `⚠️ ${esc(L(`Ngữ cảnh đã dùng ${Math.round(p)}% — gõ /compact (kèm điều cần giữ) để tóm tắt phần cũ, hoặc /clear bắt đầu việc mới. Máy chủ sẽ tự cắt lượt cũ khi đầy.`, `Context is ${Math.round(p)}% full — run /compact (with what to keep) to summarize older turns, or /clear to start fresh. The server trims old turns automatically when full.`))}`);
+}
 
 /** Kết một lượt: tắt trạng thái, ghi giờ xong + thời lượng dưới câu trả lời (như Claude Code). */
 function ketLuot(ghiChu: string, loi = false): void {
   const tong = S.batDauLuot ? Date.now() - S.batDauLuot : 0;
   S.dangChay = false;
+  if (cheDoCho) { const id = cheDoCho; cheDoCho = null; void doiCheDo(id).catch((e: Error) => thongBao(e.message, true)); }
   S.pha = 'cho';
   S.toolDang = '';
   S.toolCuoi = '';
@@ -887,6 +987,9 @@ function veODuPhong(el: HTMLElement): void {
 
 function xoaBang(): void {
   bang.innerHTML = '';
+  daNhacNguCanh = 0;
+  const oNc = document.getElementById('oNguCanh');
+  if (oNc) oNc.hidden = true;
   S.muc = [];
   S.tieuDe = '';
   S.tienPhien = 0;
@@ -1015,7 +1118,17 @@ async function batTatTrinhDuyet(): Promise<void> {
   }
 }
 
+/**
+ * QA 5c: lõi TỪ CHỐI đổi chế độ giữa lượt ("Việc này đang chạy dở — hãy dừng trước khi đổi chế độ") ⇒ như CLI (đợt 4):
+ * đang chạy thì HOÃN tới cuối lượt, không ném lỗi vào mặt người dùng.
+ */
+let cheDoCho: string | null = null;
 async function doiCheDo(id: string): Promise<void> {
+  if (S.dangChay) {
+    cheDoCho = id;
+    thongBao(L(`Sẽ đổi sang "${CHE_DO.find((c) => c.id === id)?.ten ?? id}" khi lượt này xong.`, `Will switch to "${CHE_DO.find((c) => c.id === id)?.ten ?? id}" when this turn ends.`));
+    return;
+  }
   const ws = await goi('agent:datCheDoQuyen', { cheDo: id }) as typeof S.ws;
   if (ws) S.ws = ws;
   capNhatChon();
@@ -1260,7 +1373,15 @@ function phuLucNhac(text: string): string {
 
 async function guiCauHoi(): Promise<void> {
   const text = o.value.trim();
-  if (!text || S.dangChay) return;
+  if (!text) return;
+  /* Đợt 4 — GÕ THÊM khi agent đang chạy: chèn vào lượt (lõi nối vào kết quả tool kế tiếp). Lệnh `/` đợi lượt xong. */
+  if (S.dangChay) {
+    if (text.startsWith('/')) { thongBao(L('Đang chạy — lệnh / chạy được sau khi lượt xong (Esc để dừng).', 'Running — slash commands work after the turn ends (Esc to stop).')); return; }
+    const r = await goi<{ chen?: boolean }>('agent:chenTin', { text: text.slice(0, 8000) }).catch(() => null);
+    if (r?.chen) { veNguoi(`↳ ${text}`, [], Date.now()); o.value = ''; tuCao(); cuonXuong(true); }
+    else thongBao(L('Không chèn được (lượt vừa xong?) — gửi lại sau.', 'Could not insert (did the turn just end?) — send again.'), true);
+    return;
+  }
   dongMenu();
   if (text.startsWith('/')) {
     const l = tachLenh(text);
@@ -1297,17 +1418,32 @@ function guiThat(text: string, o2: { chiDoc?: boolean; hienThi?: string }): void
 
 function boiCanh(): BoiCanhLenh {
   return {
-    S, goi, gui, guiThat, traLoi: traLoiHeThong, thongBao, xoaBang, moLichSu, doiModel, doiMuc, doiCheDo, dsModel, dsMuc,
+    S, goi, gui, guiThat, traLoi: traLoiHeThong, nut: nutHeThong, thongBao, xoaBang, moLichSu, doiModel, doiMuc, doiCheDo, dsModel, dsMuc,
     datNhap: (t: string) => { o.value = t; tuCao(); o.focus(); },
     moMenuModel, moMenuCheDo,
+    lamMoiCtwork: () => { void napDongCtw(); },
   };
 }
+
+/** Đợt 5: dòng CT Work dưới ô nhập (dự án · sprint · còn N ngày · ▶ thẻ). Lõi đệm 5 phút. */
+async function napDongCtw(): Promise<void> {
+  const el = document.getElementById('dongCtw');
+  if (!el) return;
+  const r = await goi<{ ok: boolean; dong?: DongCtw | null }>('agent:ctworkHe', { viec: 'dong', ngonNgu: /^vi/i.test(navigator.language || 'vi') ? 'vi' : 'en' }).catch(() => null);
+  const chu = veDongCtw(r?.ok ? r.dong ?? null : null, /^vi/i.test(navigator.language || 'vi') ? 'vi' : 'en', 140);
+  el.hidden = !chu;
+  el.textContent = chu;
+  // Token hết hạn / bị thu hồi giữa phiên ⇒ đề nghị cấp lại một chạm.
+  if (laLoiXacThucCtw(r?.dong?.loi) && !S.dangChay) void hoiCtworkMotLan(giaoDienCtwVsc(boiCanh())).catch(() => undefined);
+}
+let daHoiCtw = false;
+setInterval(() => { void napDongCtw(); }, 60_000);
 
 function capNhatNut(): void {
   nutGui.classList.toggle('dung', S.dangChay);
   nutGui.innerHTML = S.dangChay ? ICON.dung : ICON.gui;
   nutGui.title = S.dangChay ? 'Dừng (Esc)' : 'Gửi (Enter)';
-  o.placeholder = S.dangChay ? 'CuongMini đang làm… (Esc để dừng)' : 'Hỏi hoặc giao việc cho CuongMini…';
+  o.placeholder = S.dangChay ? L('CuongMini đang làm… gõ thêm để chèn vào lượt · Esc để dừng', 'CuongMini is working… type to add to this turn · Esc to stop') : 'Hỏi hoặc giao việc cho CuongMini…';
   if (S.dangChay) batTrangThai(); else tatTrangThai();
 }
 
@@ -1529,6 +1665,15 @@ o.addEventListener('input', () => { tuCao(); goiYKhiGo(); });
 o.addEventListener('click', () => goiYKhiGo());
 o.addEventListener('keydown', (e) => {
   if (menuMo && !menu.querySelector('.loc') && phimMenu(e)) return;
+  // Đợt 5: thẻ lựa chọn đang mở + ô nhập trống ⇒ phím số chọn, Esc đóng (như CLI).
+  if (!o.value && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    const tc = theChonMo();
+    if (tc && /^[0-9]$/.test(e.key)) {
+      const b = tc.querySelector<HTMLButtonElement>(`button[data-so="${e.key}"]`);
+      if (b && !b.disabled) { e.preventDefault(); b.click(); return; }
+    }
+    if (tc && e.key === 'Escape' && !S.dangChay) { e.preventDefault(); tc.querySelectorAll('button').forEach((x) => { x.disabled = true; }); delete tc.dataset.theChon; return; }
+  }
   if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); void guiCauHoi(); return; }
   if (e.key === 'Escape' && S.dangChay) { e.preventDefault(); gui({ loai: 'dung' }); }
 });
@@ -1605,6 +1750,10 @@ window.addEventListener('message', (ev) => {
       }
       loiChao();
       void goi<Array<{ ten: string; mo: string; than: string }>>('agent:lenhDuAn').then((ds) => { S.lenhDuAn = ds ?? []; }).catch(() => undefined);
+      void hoiHenLo();
+      // Đợt 5: dòng CT Work + hỏi MỘT lần (kết nối / cấp lại token / gắn dự án đoán từ AGENTS.md).
+      void napDongCtw();
+      if (!daHoiCtw) { daHoiCtw = true; setTimeout(() => { void hoiCtworkMotLan(giaoDienCtwVsc(boiCanh())).catch(() => undefined); }, 1200); }
       break;
     case 'ws': veWs(m.ws); break;
     case 'info': S.info = m.info; capNhatChon(); break;

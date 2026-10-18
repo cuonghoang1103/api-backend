@@ -44,10 +44,10 @@ describe('2. gõ được trong lúc agent chạy', () => {
       .not.toMatch(/disabled=\{trangThai\.dangChay\}/);
   });
 
-  it('có hàng chờ, và nó XẾP HÀNG chứ không chen ngang', () => {
+  it('đang chạy: câu thường CHÈN vào lượt (đợt 4, như Claude Code); lệnh / và lúc main không nhận ⇒ XẾP HÀNG', () => {
     expect(agentMode).toContain('hangCho');
-    expect(agentMode, 'đang chạy thì phải xếp hàng, không bỏ qua câu vừa gõ')
-      .toMatch(/if \(trangThai\.dangChay\) \{\s*\n\s*datHangCho/);
+    expect(agentMode, 'đang chạy thì phải chèn hoặc xếp hàng, không bỏ qua câu vừa gõ')
+      .toMatch(/if \(trangThai\.dangChay\) \{[\s\S]{0,500}chenTin\(text\)\.then\(\(ok\) => \{ if \(!ok\) datHangCho[\s\S]{0,200}datHangCho\(/);
   });
 
   it('hàng chờ được RÚT khi lượt xong', () => {

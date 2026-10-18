@@ -38,6 +38,9 @@ export const NHAN_TOOL: Record<string, [string, string]> = {
   notes_tao: ['Tạo ghi chú', 'Create note'], notes_ghi: ['Ghi ghi chú', 'Write note'],
   hoi_nguoi_dung: ['Hỏi bạn', 'Ask'], cho_doi: ['Chờ', 'Wait'], hen_goi_lai: ['Hẹn', 'Schedule'], huy_hen: ['Huỷ hẹn', 'Cancel schedule'],
   liet_ke_phien: ['Phiên khác', 'Sessions'], nhan_phien: ['Nhắn phiên', 'Send message'],
+  /* Đợt 4 */
+  may_chup: ['Chụp màn hình', 'Screenshot'], may_bam: ['Bấm chuột', 'Click'], may_go: ['Gõ phím', 'Type'], may_phim: ['Phím tắt', 'Key'],
+  may_cuon: ['Cuộn', 'Scroll'], lsp_hoi: ['LSP', 'LSP'], chay_notebook: ['Chạy notebook', 'Run notebook'],
 };
 
 /** Câu "Đang …" (thanh trạng thái). Không có ⇒ suy từ nhãn. */
@@ -59,6 +62,8 @@ const VIEC_TOOL: Record<string, [string, string]> = {
   dung_lenh_nen: ['Đang dừng lệnh nền', 'Stopping background command'], hoi_nguoi_dung: ['Đang chờ bạn trả lời', 'Waiting for your answer'],
   cho_doi: ['Đang chờ', 'Waiting'], hen_goi_lai: ['Đang hẹn giờ', 'Scheduling'], nhan_phien: ['Đang nhắn phiên khác', 'Messaging a session'],
   liet_ke_phien: ['Đang xem phiên khác', 'Listing sessions'], gop_viec_phu: ['Đang gộp thay đổi', 'Merging changes'],
+  may_chup: ['Đang chụp màn hình', 'Taking a screenshot'], may_bam: ['Đang bấm chuột', 'Clicking'], may_go: ['Đang gõ phím', 'Typing'],
+  may_phim: ['Đang bấm phím', 'Pressing keys'], may_cuon: ['Đang cuộn', 'Scrolling'], lsp_hoi: ['Đang hỏi LSP', 'Querying LSP'], chay_notebook: ['Đang chạy notebook', 'Running notebook'],
 };
 
 /** Tool gom được khi gọi LIÊN TIẾP (chỉ đọc) — `● Read 3 pages` thay vì 3 khối. */
@@ -84,6 +89,8 @@ export function nhanNhom(ten: string, n: number): string {
 const theoNN = (p: [string, string]): string => L(p[0], p[1]);
 
 export function nhanTool(ten: string): string {
+  // Đợt 5: `● CT Work · sprint_current` (server CT Work dựng sẵn) — kiểu Claude Code.
+  if (ten.startsWith('mcp__ctwork__')) return `CT Work · ${ten.slice('mcp__ctwork__'.length)}`;
   if (ten.startsWith('mcp__')) return ten.split('__').slice(1).join(' · ');
   const p = NHAN_TOOL[ten];
   if (p) return theoNN(p);
@@ -112,6 +119,8 @@ const CUM_TOM_TAT: Array<[RegExp, string]> = ([
   ['không đổi', 'unchanged'], ['không khớp', 'no match'], ['không trả lời', 'no answer'],
   ['chưa bật quyền sửa', 'editing not enabled'], ['chưa chọn thư mục', 'no folder chosen'], ['chưa mở dự án', 'no project open'],
   ['chưa đăng nhập', 'not signed in'], ['chưa mở', 'not open'], ['chưa đạt', 'not met'],
+  ['không chụp được', 'screenshot failed'], ['chưa chụp', 'no screenshot yet'], ['không làm được', 'could not do it'], ['ngoài dự án', 'outside the project'],
+  ['chạy hỏng', 'run failed'], ['chưa bật', 'not enabled'], ['không có LSP', 'no LSP'], ['LSP lỗi', 'LSP error'], ['ký hiệu', 'symbols'], ['có kiểu', 'type info'],
   ['nội dung chưa vào', 'content not applied'], ['nội dung rỗng', 'empty content'], ['câu hỏi sai dạng', 'malformed question'],
   ['việc không hợp lệ', 'invalid task'], ['loại không hỗ trợ', 'unsupported type'], ['hết lượt việc phụ', 'subagent limit reached'],
   ['cổng AI đang quá tải', 'AI gateway overloaded'], ['đứt giữa chừng', 'connection dropped'], ['lệch khoảng trắng', 'whitespace mismatch'],

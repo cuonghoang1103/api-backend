@@ -392,6 +392,8 @@ export function chayLenh(opts: {
   signal: AbortSignal;
   /** Đẩy từng mẩu ra màn hình khi lệnh còn đang chạy. */
   onRa?: (mau: string) => void;
+  /** Biến môi trường THÊM (hook đợt 4: `CUONGMINI_*`). */
+  env?: Record<string, string>;
 }): Promise<KetQuaLenh> {
   const tran = Math.min(TRAN_GIAY_TOI_DA, Math.max(1, Math.floor(opts.giay || TRAN_GIAY_MAC_DINH)));
   const batDau = Date.now();
@@ -416,6 +418,7 @@ export function chayLenh(opts: {
         NO_COLOR: '1',
         FORCE_COLOR: '0',
         TERM: 'dumb',
+        ...(opts.env ?? {}),
       },
     });
 

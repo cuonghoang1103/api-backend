@@ -160,7 +160,7 @@ test('banner: câu chào BỌC (không "…"), đường dẫn rút GIỮA giữ
     model: 'Sonnet 5', muc: 'Medium', cheDo: { ten: 'Ask before edits', icon: '✋', mau: '#4ade80' } }, ['LOGO'], 140).join('\n'));
   assert.match(ra, /runs code\s*│\n│\s+right here\./);
   assert.match(ra, /every edit\/command still\s*│\n│\s+asks\./);
-  assert.match(ra, /…[a-z]*\/du-an-cua-toi/);
+  assert.match(ra, /(…|\.\.\.)[a-z]*\/du-an-cua-toi/);
   assert.equal(rutGiua('/abc/def', 50), '/abc/def');
   datNgonNgu('vi');
 });

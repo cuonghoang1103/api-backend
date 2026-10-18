@@ -64,7 +64,7 @@ import { coKeyGiaHan } from './keyGiaHan.js';
 import { HE_SO_FABLE, MODEL_FABLE, loiHetFable, xemHanMucFable } from './fable.js';
 import { loiCanViTien, xemViTien } from './viTien.js';
 import { runServerTool } from './serverTools.js';
-import { buildSystemPrompt, catGhiChu, type WorkspaceHint } from './prompt.js';
+import { buildSystemPrompt, catGhiChu, dongDuAnCtwork, dongHomNay, LUAT_CTWORK, type WorkspaceHint } from './prompt.js';
 import { catLuotCu, loiNhacDaCat, tongKyTu } from './catCu.js';
 import { ghiNhoLuotDaBo } from './tomTatLuotCu.js';
 import { parseCapabilities, parseToolMcp, toolByName, toolsForGateway, type AgentCapability } from './tools.js';
@@ -425,6 +425,10 @@ export interface AgentTurnInput {
    * người dùng cập nhật app.
    */
   ghiChuDuAn?: { ten: string; noiDung: string };
+  /** Đợt 4: ngày + múi giờ máy người dùng (`dongHomNay` lọc từng trường). */
+  ngayGio?: unknown;
+  /** Đợt 5: dự án CT Work gắn với thư mục (`dongDuAnCtwork` lọc từng trường). */
+  ctwork?: unknown;
   /** Mục lục bộ nhớ app gửi lên (chuỗi đã cắt trần phía app). */
   boNho?: string;
   kyNang?: Array<{ ten: string; moTa: string }>;
@@ -1035,6 +1039,9 @@ export async function runAgentTurn(
   const ghiChu = input.ghiChuDuAn?.noiDung
     ? catGhiChu(input.ghiChuDuAn.ten, input.ghiChuDuAn.noiDung)
     : undefined;
+  /* Đợt 5: luật CT Work chỉ khi cuộc CÓ tool CT Work (phần ổn định); dòng dự án cạnh HÔM NAY (cuối). */
+  const coCtwork = toolMcp.some((t) => t.name.startsWith('mcp__ctwork__'));
+  const dongCtw = coCtwork || input.ctwork ? dongDuAnCtwork(input.ctwork) : '';
   /* `LOI_LAM_VIEC` nối cho MỌI model (27/09/2026) — Opus và GPT nhận cùng một
      bộ luật làm việc. Đặt ở cuối để phần đầu prompt giữ nguyên, đệm tiền tố
      của cổng vẫn trúng. */
@@ -1056,7 +1063,7 @@ export async function runAgentTurn(
     ...(input.kyNang?.length ? { kyNang: input.kyNang } : {}),
     ...(input.agentPhu?.length ? { agentPhu: input.agentPhu } : {}),
     ...(input.promptPhu ? { promptPhu: input.promptPhu } : {}),
-  }) + `\n\n${LOI_LAM_VIEC}`;
+  }) + `\n\n${LOI_LAM_VIEC}${coCtwork ? `\n\n${LUAT_CTWORK}` : ''}\n\n${dongHomNay(input.ngayGio)}${dongCtw ? `\n${dongCtw}` : ''}`;
   const tools = toolsForGateway(capabilities, toolMcp);
 
   const xin = await xinDiemCuoi('agent_code');

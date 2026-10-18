@@ -36,13 +36,16 @@ import {
   xoaHoiThoai, type SuKienAgent,
   dsQuyenLauCua, xoaQuyenLauCua, veCongChinh, chayLuotCucBo, datCongPhuCua, veAnthropic,
   datTomTatCua, hoiThoaiCua, nguCanhChiTietCua, henChoCua, phatNen, phatNenTho, themTienToCua,
+  chenTinCua, cuocCuaPhien, datMayTinh, mayTinhDangBat,
 } from '../agent/loop';
+import { hoTro as mayHoTro, kiemQuyen as kiemQuyenMay } from '../agent/mayTinh';
+import { datNoiLuuHen, dsHenLo, ganHenChoCuoc, napHenDaLuu, xuLyHenLo } from '../agent/choHen';
 import { chanDoan, goiCompact } from '../agent/lenhMayChu';
 import { dangMatMang } from '../aiCucBo/mang';
 import { modelChoCode } from '../aiCucBo/quanLy';
 import { duongCuaLuot } from '../agent/epCucBo';
 import { dungLenhNenCua } from '../agent/lenhNen';
-import { duongDanCauHinh, duyetDuAn, hanMucMcp, loiCauHinh, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
+import { batTatServer, choNapMcp, duongDanCauHinh, duyetDuAn, hanMucMcp, loiCauHinh, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
 import { cai, napChiMuc, tim } from '../agent/khoKyNang';
 import { WEB_ORIGIN } from '../config';
 import { dsWorktree, taoWorktree, xoaWorktree } from '../agent/worktree';
@@ -59,7 +62,9 @@ import { dsKyNang } from '../agent/kyNang';
 import { dsDeGiaoDien, quenBaiHoc } from '../agent/boNho';
 import { traLoi } from '../agent/xinPhep';
 import { traLoiHoi } from '../agent/hoiLuaChon';
-import { ketNoiCtwork, napDemBiMat, ngatCtwork, trangThaiCtwork } from '../agent/ctworkKetNoi';
+import { canCapLai, capLaiCtwork, docBiMat, ketNoiCtwork, napDemBiMat, ngatCtwork, trangThaiCtwork, TEN_SERVER as TEN_CTWORK } from '../agent/ctworkKetNoi';
+import * as ctw from '../agent/ctworkHe';
+import { datNgonNgu as datNgonNguCtw } from '../agent/ctworkVe';
 import { cauDanhThuc, datBoChayHen, huyCho, huyHen } from '../agent/choHen';
 import { doiTen as doiTenPhienMang, dsPhienSong, toiLa } from '../agent/phienMang';
 import { readStoredSession } from './auth';
@@ -516,6 +521,21 @@ export function registerAgentHandlers(): void {
     sender: { send: (kenh: string, duLieu: unknown) => phatNenTho(kenh, duLieu), isDestroyed: () => false },
   } as unknown as IpcMainInvokeEvent;
   datBoChayHen(async (hen) => {
+    /* Đợt 4: hẹn nạp lại sau lúc tắt (chưa gắn cuộc) ⇒ tìm cuộc đang mở phiên đó, không có thì
+       mở phiên vào một cuộc NỀN (kết quả lưu vào việc đó; mở lịch sử là thấy). */
+    if (!hen.cuocId) {
+      if (!hen.phienId) return 'hoan';
+      let id = cuocCuaPhien(hen.phienId);
+      if (!id) {
+        const p = await docPhien(hen.phienId);
+        if (!p) { hen.conLai = 0; return 'chay'; }
+        id = taoCuoc();
+        napPhien(id, p.id, p.hoiThoai, p.duAn, p.goc ?? null);
+      } else {
+        ganHenChoCuoc(id, hen.phienId);
+      }
+      if (!hen.cuocId) hen.cuocId = id;
+    }
     if (cuocDangChay(hen.cuocId)) return 'hoan';
     const cau = cauDanhThuc(hen);
     phatNen(hen.cuocId, { loai: 'tuDanhThuc', cauHoi: cau, henId: hen.id });
@@ -525,12 +545,28 @@ export function registerAgentHandlers(): void {
     return 'chay';
   });
 
+  /* Đợt 4: hẹn sống qua lúc tắt — lưu ở thư mục dữ liệu, nạp phần của tiến trình đã tắt. */
+  datNoiLuuHen(path.join(app.getPath('userData'), 'agent-hen.json'));
+  try { napHenDaLuu(); } catch { /* file hỏng không được chặn app khởi động */ }
+  handle('agent:henLo', () => ({ ds: dsHenLo().map(({ id, lyDo, luc, cron, goc }) => ({ id, lyDo, luc, ...(cron ? { cron } : {}), goc: goc ?? null })) }));
+  handle('agent:xuLyHenLo', ({ cach }) => ({ n: xuLyHenLo(cach) }));
+
+  /* Đợt 4: gõ thêm khi agent đang chạy ⇒ chèn vào lượt (mốc tool kế tiếp). `chen:false` = không chạy, gửi như lượt mới. */
+  handle('agent:chenTin', ({ cuocId, text }) => ({ chen: chenTinCua(cuocId, text) }));
+
+  /* Đợt 4: điều khiển máy tính — bật/tắt + trạng thái quyền (macOS). */
+  handle('agent:mayTinh', async ({ bat }) => {
+    const b = typeof bat === 'boolean' ? datMayTinh(bat) : mayTinhDangBat();
+    const ht = mayHoTro();
+    return { bat: b, hoTro: ht, nenTang: process.platform, quyen: ht && process.platform === 'darwin' ? await kiemQuyenMay().catch(() => null) : null };
+  });
+
   handle('agent:traLoiHoi', ({ cuocId: _c, id, traLoi: tl }) => traLoiHoi(id, tl ?? null));
   handle('agent:huyCho', ({ cuocId, id, cach }) => huyCho(cuocId, id, cach ?? 'boCho'));
   handle('agent:huyHen', ({ cuocId, id }) => huyHen(cuocId, id));
   handle('agent:henCho', ({ cuocId }) => {
     const h = henChoCua(cuocId);
-    return { cho: h.cho, hen: h.hen.map(({ id, lyDo, luc, phut, lap, conLai }) => ({ id, lyDo, luc, phut, lap, conLai })) };
+    return { cho: h.cho, hen: h.hen.map(({ id, lyDo, luc, phut, lap, conLai, cron }) => ({ id, lyDo, luc, phut, lap, conLai, ...(cron ? { cron } : {}) })) };
   });
   handle('agent:dsPhienMang', ({ cuocId }) => {
     const bo = (m: ReturnType<typeof dsPhienSong>[number]) => ({
@@ -567,9 +603,20 @@ export function registerAgentHandlers(): void {
     const phien = readStoredSession();
     if (!phien) return { ok: false as const, loi: 'Chưa đăng nhập.' };
     const truoc = nguCanhChiTietCua(cuocId);
+    /* Đợt 4 — hook `truocNen` (PreCompact): đầu ra nối vào lời dặn cho bản tóm tắt; `chan` ⇒ huỷ nén. */
+    let dan = ghiChu ?? '';
+    const gocNen = gocCua(cuocId);
+    if (gocNen) {
+      const dk = new AbortController();
+      const hen = setTimeout(() => dk.abort(), 120_000);
+      const h = await chayHook({ moc: 'truocNen', goc: gocNen, signal: dk.signal, env: { CUONGMINI_GHI_CHU: dan.slice(0, 2000) } }).catch(() => null);
+      clearTimeout(hen);
+      if (h?.chan) return { ok: false as const, loi: `Hook truocNen chặn /compact:\n${h.ra.slice(0, 1500)}` };
+      if (h?.ra) dan = `${dan}${dan ? '\n\n' : ''}${h.ra.slice(0, 3000)}`;
+    }
     const kq = await goiCompact({
       origin: API_ORIGIN, token: phien.sessionToken, hoiThoai: hoiThoaiCua(cuocId),
-      ...(ghiChu ? { ghiChu } : {}),
+      ...(dan ? { ghiChu: dan.slice(0, 2000) } : {}),
     });
     if (!kq.ok) return kq;
     if (!('tomTat' in kq)) return { ok: true as const, soTinDaGop: 0 };
@@ -1011,6 +1058,13 @@ export function registerAgentHandlers(): void {
     }
   });
 
+  /* Đợt 4: `/mcp` menu — tool của server (tên + mô tả ngắn) và bật/tắt server. */
+  handle('agent:mcpTool', ({ ten }) => toolMcpHienCo().filter((t) => !ten || t.server === ten).map((t) => ({ server: t.server, ten: t.tenGoc, moTa: t.moTa.split('\n')[0]!.slice(0, 160) })));
+  handle('agent:mcpBatTat', async ({ cuocId, ten, bat }) => {
+    const r = await batTatServer(ten, bat, cuocId ? gocCuaCuoc(cuocId) : null);
+    return { ...r, trangThai: trangThaiMcp() };
+  });
+
   handle('agent:boNhoDs', async ({ cuocId }) => dsDeGiaoDien(gocCuaCuoc(cuocId)));
   handle('agent:boNhoXoa', async ({ cuocId, id }) => quenBaiHoc(gocCuaCuoc(cuocId), id, 'người dùng xoá ở tab Bộ nhớ'));
 
@@ -1028,7 +1082,76 @@ export function registerAgentHandlers(): void {
     const phien = readStoredSession();
     if (viec === 'ngat') return ngatCtwork(phien?.sessionToken ?? null, goc);
     if (!phien) return { ok: false, loi: 'Chưa đăng nhập CuongThai.' };
+    if (viec === 'capLai') return capLaiCtwork(phien.sessionToken, goc);
     return ketNoiCtwork(phien.sessionToken, quyen === 'ghi' ? 'ghi' : 'doc', goc);
+  });
+
+  /* ── Đợt 5: CT Work hệ sinh thái (`agent/ctworkHe.ts`) ── */
+  handle('agent:ctworkHe', async (v) => {
+    datNgonNguCtw(v.ngonNgu);
+    const goc = v.cuocId ? gocCua(v.cuocId) : null;
+    switch (v.viec) {
+      case 'goiY': {
+        /* Hỏi MỘT lần: (1) đã đăng nhập mà chưa có CT Work ⇒ "Kết nối CT Work?"; (2) token hết hạn/bị thu hồi
+           ⇒ cấp lại một chạm; (3) đã nối, thư mục chưa gắn mà AGENTS.md nói rõ dự án ⇒ hỏi xác nhận. */
+        await napDemBiMat().catch(() => {});
+        // Lần nạp MCP lúc mở còn chạy ⇒ đợi (tối đa 8 giây) để biết server CT Work đã nối chưa.
+        await Promise.race([choNapMcp().catch(() => undefined), new Promise((ok) => { const t = setTimeout(ok, 8000); t.unref?.(); })]);
+        const coPhien = Boolean(readStoredSession());
+        const sv = trangThaiServer().find((s) => s.ten === TEN_CTWORK);
+        if (coPhien && await canCapLai()) return { ok: true, hoi: 'capLai' as const };
+        if (coPhien && !sv && !(await docBiMat()) && !process.env.CTWORK_TOKEN && getSettings().ctworkDaHoi !== true) return { ok: true, hoi: 'ketNoi' as const };
+        if (sv?.ok && goc && !(await ctw.docGan(goc)) && !(await ctw.daHoiGan(goc))) {
+          const doan = await ctw.doanGan(goc);
+          if (doan) return { ok: true, hoi: 'ganDuAn' as const, doan };
+        }
+        return { ok: true, hoi: null };
+      }
+      case 'daHoi':
+        if (v.loai === 'ketNoi') setSetting('ctworkDaHoi', true);
+        else if (v.loai === 'ganDuAn' && goc) await ctw.ghiDaHoiGan(goc);
+        return { ok: true };
+      case 'docGan': return { ok: true, gan: await ctw.docGan(goc) };
+      case 'doan': return { ok: true, doan: await ctw.doanGan(goc) };
+      case 'dsDuAn': {
+        if (!ctw.ctworkSan()) return { ok: false, loi: 'Chưa kết nối CT Work.' };
+        const r = await ctw.dsDuAn();
+        return { ok: r.ok, ds: r.ds, ...(r.loi ? { loi: r.loi } : {}) };
+      }
+      case 'gan': {
+        if (!goc) return { ok: false, loi: 'Chưa mở thư mục dự án.' };
+        if (!v.duAn) return { ok: false, loi: 'Thiếu dự án.' };
+        const g = ctw.ganTuDuAn({
+          key: v.duAn.key, ten: v.duAn.ten ?? '', id: v.duAn.id ?? null, workspaceId: v.duAn.workspaceId ?? null,
+          workspace: v.duAn.workspace ?? null, vaiTro: null, soMo: null, luuTru: false,
+        });
+        const r = await ctw.ghiGan(goc, g);
+        await ctw.ghiDaHoiGan(goc);
+        return { ok: true, gan: g, duong: r.duong, goiYGitignore: r.goiYGitignore };
+      }
+      case 'boGan': {
+        if (!goc) return { ok: false, loi: 'Chưa mở thư mục dự án.' };
+        await fs.rm(path.join(goc, '.cuongmini', 'ctwork.json'), { force: true });
+        await ctw.ghiDaHoiGan(goc);
+        return { ok: true };
+      }
+      case 'dong': return { ok: true, dong: await ctw.dongTrangThai(goc) };
+      case 'sprint': return ctw.xemSprint(goc);
+      case 'viec': return ctw.xemViecToi(goc);
+      case 'the': return ctw.xemThe(goc, v.key);
+      case 'hop': return ctw.xemHop(goc);
+      case 'chuanBiBatDau': return ctw.chuanBiBatDau(goc, v.key);
+      case 'batDau': return ctw.batDauThe(goc, v.key, { nhanh: v.nhanh !== false, chuyen: v.chuyen !== false });
+      case 'gio': return ctw.ghiGio(goc, v.key, v.phut ?? 0, v.noiDung);
+      case 'soanBinhLuan': return ctw.soanBinhLuan(goc, v.key);
+      case 'binhLuan': return ctw.guiBinhLuan(goc, v.key, v.noiDung ?? '');
+      case 'baoCao': return ctw.baoCaoTuan(goc);
+      case 'tuGhi':
+        /* ⛔ Chỉ main ghi (`KHOA_CHI_MAIN`): bật là agent GHI lên CT Work không hỏi. */
+        if (typeof v.bat === 'boolean') setSetting('ctworkTuGhi', v.bat);
+        return { ok: true, bat: getSettings().ctworkTuGhi === true };
+      default: return { ok: false, loi: 'Việc không hợp lệ.' };
+    }
   });
 
   handle('agent:mcpMoCauHinh', async () => {

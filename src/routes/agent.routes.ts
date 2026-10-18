@@ -462,7 +462,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   const body = req.body as {
     messages?: unknown; capabilities?: unknown; workspace?: unknown;
     ghiChuDuAn?: unknown; kyNang?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
-    model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown; duPhongVe?: unknown; duPhongModel?: unknown; duPhongGiu?: unknown;
+    model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown; ngayGio?: unknown; ctwork?: unknown; duPhongVe?: unknown; duPhongModel?: unknown; duPhongGiu?: unknown;
     congAnthropicVe?: unknown; congPhu?: unknown; mucModelPhu?: unknown; quyenPhu?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
@@ -595,6 +595,8 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         laPhu: body.laPhu,
         quyenPhu: body.quyenPhu,
         toolMcp: body.toolMcp,
+        ngayGio: body.ngayGio,
+        ctwork: body.ctwork,
         userId: req.userId,
       },
       guiKhung,

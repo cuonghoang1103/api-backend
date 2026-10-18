@@ -105,6 +105,12 @@ export function hoiNguoiDung(
     khoa?: string; choNho?: boolean; tuDuyet?: boolean;
     /** Lệnh shell nguyên văn ⇒ bật khớp/nhớ THEO TIỀN TỐ (`tienTo.ts`). */
     lenhTienTo?: string;
+    /**
+     * ĐỢT 4 — LUÔN HỎI: bỏ qua cả `tuDuyet`, "Bỏ qua hết", sổ nhớ lẫn quyền lâu
+     * dài. Dành cho điều khiển máy tính (`may_bam/go/phim/cuon`): một cú bấm
+     * chuột ở toạ độ model tự đoán thì không có chế độ nào được phép tự duyệt.
+     */
+    luonHoi?: boolean;
   },
   phat: (y: YeuCauXinPhep) => void,
   signal: AbortSignal,
@@ -118,7 +124,8 @@ export function hoiNguoiDung(
   const quyenLau = so instanceof Set ? null : so.quyenLau;
   const gocCuoc = so instanceof Set ? null : so.goc;
   const khoa = yeuCau.khoa ?? yeuCau.duongDan;
-  const choNho = yeuCau.choNho !== false;
+  const luonHoi = yeuCau.luonHoi === true;
+  const choNho = yeuCau.choNho !== false && !luonHoi;
 
   /*
    * ─── CỬA TỰ DUYỆT — CHỈ MỘT, VÀ NẰM Ở ĐÂY ───
@@ -136,7 +143,7 @@ export function hoiNguoiDung(
    * dùng hạ chế độ xuống thì lần sau phải hỏi lại. Ghi vào sổ nhớ sẽ biến một
    * lựa chọn tạm thời thành quyền vĩnh viễn của cả phiên.
    */
-  if (yeuCau.tuDuyet === true) return Promise.resolve('choPhep');
+  if (yeuCau.tuDuyet === true && !luonHoi) return Promise.resolve('choPhep');
 
   /*
    * ─── BỎ QUA TẤT CẢ ───
@@ -148,7 +155,7 @@ export function hoiNguoiDung(
    * Vẫn KHÔNG ghi vào `soNho`: hạ chế độ xuống là phải hỏi lại ngay, không để
    * lại quyền vĩnh viễn nào.
    */
-  if (boQuaHet) return Promise.resolve('choPhep');
+  if (boQuaHet && !luonHoi) return Promise.resolve('choPhep');
 
   // Đã cấp quyền cho khoá này rồi ⇒ đi thẳng, không hỏi lại. Đây là thứ giữ cho
   // việc sửa mười chỗ trong cùng một file (hay chạy `npm test` mười lần trong

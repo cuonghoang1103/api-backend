@@ -277,10 +277,24 @@ async function bootstrap(): Promise<void> {
    * macOS thì KHÔNG thoát: ở đó đóng cửa sổ không đồng nghĩa thoát app, và
    * robot đứng lại chính là điều người dùng muốn.
    */
-  mainWindow.on('closed', () => {
+  const khiDongCuaSoChinh = (): void => {
     if (process.platform === 'darwin') return;
-    if (!cuaSoChinh()) { dungTheoDoiTin(); dongRobot(); app.quit(); }
-  });
+    if (!cuaSoChinh()) {
+      /* Đợt 4: còn HẸN của agent ⇒ chạy nền với biểu tượng khay thay vì thoát (xem `khayHen.ts`). */
+      void Promise.all([import('./agent/choHen'), import('./khayHen')]).then(([{ soHenDangCho }, { batKhayHen }]) => {
+        if (soHenDangCho() > 0) {
+          void batKhayHen(() => {
+            mainWindow = createMainWindow();
+            theoDoiTieuDiem(mainWindow);
+            mainWindow.on('closed', khiDongCuaSoChinh);
+          }, soHenDangCho);
+          return;
+        }
+        dungTheoDoiTin(); dongRobot(); app.quit();
+      }).catch(() => { dungTheoDoiTin(); dongRobot(); app.quit(); });
+    }
+  };
+  mainWindow.on('closed', khiDongCuaSoChinh);
 
   // Tự kiểm bản mới. Không ai vào Cài đặt mỗi ngày để hỏi — bắt họ làm vậy
   // nghĩa là phần lớn người dùng mắc kẹt ở bản cũ mà không hề biết.
@@ -382,7 +396,11 @@ app.on('open-url', (event, url) => {
 
 app.on('window-all-closed', () => {
   // macOS giữ app sống khi đóng hết cửa sổ — đó là quy ước của nền tảng.
-  if (process.platform !== 'darwin') app.quit();
+  // Đợt 4: còn hẹn của agent ⇒ `mainWindow.on('closed')` đã bật khay và giữ app chạy nền.
+  if (process.platform === 'darwin') return;
+  void Promise.all([import('./agent/choHen'), import('./khayHen')]).then(([{ soHenDangCho }, { khayDangBat }]) => {
+    if (!khayDangBat() && soHenDangCho() === 0) app.quit();
+  }).catch(() => app.quit());
 });
 
 

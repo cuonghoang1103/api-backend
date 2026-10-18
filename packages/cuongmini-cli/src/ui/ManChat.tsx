@@ -11,6 +11,7 @@ import { appendFileSync, readFileSync } from 'node:fs';
 import { Box, Static, measureElement, useApp, useInput, useStdout, type DOMElement } from 'ink';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type MutableRefObject } from 'react';
 import { chuanHoa, dsCauHoi, locPhien, type MucGhi, type PhienCu } from 'ct-lenh';
+import { hoiCtworkMotLan, laLoiXacThucCtw, veDongCtw, type DongCtw, type GiaoDienCtw } from '../../../../desktop/src/renderer/features/chat/ctworkLenh';
 import { docAnhDataUrl, guiThangDuoc, tachAnh } from '../anh';
 import { danAnhTuClipboard } from '../anhDan';
 import { timTrinhDuyet } from '../../../cuongmini-core/src/timTrinhDuyet';
@@ -18,15 +19,15 @@ import { CAC_MUC, docCaiDat, ghiCaiDat, luaChon, moTaGiaTri, nenBatTrinhDuyet, t
 import { datNgonNgu, doNgonNgu, L, ngonNgu, nhacNgonNguTraLoi } from '../i18n';
 import { chiTietAgent, chiTietShell, dongBangPhu, dongTomTat, veDongBang } from '../bangPhu';
 import { cauTrangThai } from '../trangThai';
-import { moLenh, thamSoLenh } from '../lenhMoTa';
-import { CHE_DO, cheDoKe, moTaCheDo } from '../cheDo';
+import { bangPhimTat, moLenh, thamSoLenh } from '../lenhMoTa';
+import { CHE_DO, cheDoKe, moTaCheDo, quyetDoiCheDo } from '../cheDo';
 import { lenhCaiChoMay } from '../capNhat';
 import { fileQuyUoc, luuGhiNho, tachGhiNho } from '../ghiNho';
 import type { KetNoiLoi } from '../ketNoi';
 import type { CongNangCap, KhoChat, MucBang } from '../kho';
 import { nhanKieu, quetDuAn, type KyHieu } from '../kyHieu';
 import { canAscii, datAscii } from '../kyTu';
-import { LENH_GOI_Y, MODEL_DU_PHONG, MUC_DU_PHONG, NHOM_CONG, chayLenh, moModel, tenMuc as tenMucNoLuc, tenModel, nhomCong, tenNhomCong, moPhien, tachLenhCli, type BoiCanhLenh, type ModelMuc, type MucNoLuc } from '../lenh';
+import { LENH_GOI_Y, MODEL_DU_PHONG, MUC_DU_PHONG, NHOM_CONG, chayLenh, giaoDienCtw, moModel, tenMuc as tenMucNoLuc, tenModel, nhomCong, tenNhomCong, moPhien, tachLenhCli, type BoiCanhLenh, type ModelMuc, type MucNoLuc } from '../lenh';
 import { veLogo } from '../logo';
 import { XOA_KHUNG, capNhatTong, nenBatChuot, catKhung, chuoiDoiCheDo, chuoiDoiChuot, cuon as cuonViTri, datTomTatPhien, docChuot, xoaSach, type ViTriCuon } from '../toanManHinh';
 import { giay } from '../trangThai';
@@ -36,18 +37,19 @@ import { chayShell, dungNguCanhShell, type LanChayShell } from '../shell';
 import { guiThongBaoHeThong, rungChuong } from '../thongBao';
 import { chiMucDuAn, diemMo, phuLucNhac, timMo, tokenNhac } from '../timFile';
 import { dungBanGhi, veManMoDau, veMuc, type ThongTinMoDau } from '../veBang';
+import { veMarkdown } from '../markdown';
 import { Text } from './chu';
-import { doTerminalPhim, goiYXuongDong, laXuongDong } from '../banPhim';
+import { doTerminalPhim, goiYXuongDong, laXuongDong, tachPhimDon } from '../banPhim';
 import { ManDangNhap } from './ManDangNhap';
 import * as ST from './soanThao';
 import {
-  ChanTrang, DongHenCho, DongTrangThai, GoiYView, TheHoi, HangCho, MenuView, ONhapNho, ONhapView, ShellDangChay, TheDuyet, VungSong, XemBanGhi,
+  ChanTrang, DongHenCho, DongTrangThai, GoiYView, TheHoi, HangCho, MenuView, ONhapNho, ONhapView, ShellDangChay, TheDuyet, VungSong, XemBanGhi, soCuaMuc,
   dongKeHoachGon, luaChonDuyet, type MucGoiY, type MucMenu,
 } from './thanhPhan';
 import { kieuVien } from '../kyTu';
 
 type Hop =
-  | { loai: 'menu'; tieuDe: string; moTa?: string; ds: MucMenu[]; chon: number; loc: string; coLoc: boolean; mauVien?: string; khiChon: (m: MucMenu) => void; khiHuy?: () => void; boLoc?: (q: string) => MucMenu[] }
+  | { loai: 'menu'; tieuDe: string; moTa?: string; than?: string; ds: MucMenu[]; chon: number; loc: string; coLoc: boolean; mauVien?: string; khiChon: (m: MucMenu) => void; khiHuy?: () => void; boLoc?: (q: string) => MucMenu[] }
   | { loai: 'matKhau'; tieuDe: string; moTa: string; giaTri: string; khiXong: (mk: string) => void }
   | { loai: 'dangNhap'; nhacNho?: string }
   | { loai: 'banGhi'; cheDo: 'cuon' | 'tool'; dau: number; chonKhoi: number; moRong: Set<number>; ganCuoi: boolean }
@@ -147,12 +149,15 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   const [hienKeHoach, setHienKeHoach] = useState(true);
   const [nhac, setNhac] = useState('');
   const [nhip, setNhip] = useState(0);
+  /** Đợt 5: dòng CT Work dưới ô nhập (lõi đệm 5 phút — hỏi bao nhiêu lần cũng chỉ đọc đệm). */
+  const [dongCtw, setDongCtw] = useState<DongCtw | null>(null);
   const caiDat = useRef<CaiDat>(docCaiDat());
   const lichSu = useRef(new ST.LichSu(docLichSu()));
   const chiMuc = useRef<string[] | null>(null);
   const kyHieu = useRef<KyHieu[] | null>(null);
   const dangNapChiMuc = useRef(false);
   const lanCtrlC = useRef(0);
+  const theDuyetHien = useRef<{ id: string; luc: number }>({ id: '', luc: 0 });
   const lanEsc = useRef(0);
   const henNhac = useRef<NodeJS.Timeout | null>(null);
   /** Kết quả lệnh `!` chưa gửi model — đính vào câu hỏi kế tiếp. */
@@ -198,7 +203,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     const f = () => {
       if (fsRef.current) { ghiInk(XOA_KHUNG); return; }
       if (hen) clearTimeout(hen);
-      hen = setTimeout(() => { hen = null; if (!fsRef.current) { ghiInk(xoaSach()); kho.veLai(); } }, 150);
+      hen = setTimeout(() => { hen = null; if (!fsRef.current) { ghiInk(XOA_KHUNG); kho.veLai(); } }, 150); // đợt 4: không ESC[3J khi đổi cỡ (iTerm2 hỏi)
     };
     stdout.on('resize', f);
     return () => { stdout.off('resize', f); if (hen) clearTimeout(hen); };
@@ -268,14 +273,31 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     S.ws = { ...(S.ws ?? {}), mucNoLuc: id };
     kho.bao(true);
   };
+  /* Đợt 4: đổi chế độ khi đang chạy ⇒ HOÃN tới cuối lượt (lõi từ chối đổi giữa lượt) — xem `quyetDoiCheDo`. */
+  const cheDoCho = useRef<string | null>(null);
+  const lucDuyet = useRef<number | null>(null);
   const doiCheDo = async (id: string) => {
+    if (S.dangChay) {
+      cheDoCho.current = id;
+      kho.thongBao(L(`Sẽ đổi sang "${CHE_DO.find((c) => c.id === id)?.ten ?? id}" khi lượt này xong.`, `Will switch to "${CHE_DO.find((c) => c.id === id)?.ten ?? id}" when this turn ends.`));
+      return;
+    }
     const ws = await kn.goi<typeof S.ws>('agent:datCheDoQuyen', { cheDo: id });
     if (ws) S.ws = ws;
     kho.bao(true);
   };
+  useEffect(() => {
+    if (S.dangChay || !cheDoCho.current) return;
+    const id = cheDoCho.current;
+    cheDoCho.current = null;
+    void doiCheDo(id).catch((e: Error) => kho.thongBao(e.message, 'loi'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [S.dangChay]);
 
   const xoayCheDo = () => {
-    const ke = cheDoKe(S.ws?.cheDoQuyen);
+    const q = quyetDoiCheDo({ dangChay: S.dangChay, vuaDuyetMs: lucDuyet.current, bayGio: Date.now() });
+    if (q === 'boQua') return;
+    const ke = cheDoKe(cheDoCho.current ?? S.ws?.cheDoQuyen);
     if (ke === 'boQuaHet') {
       setHop({
         loai: 'menu', tieuDe: L('⚠ Bật chế độ "Bỏ qua hết"?', '⚠ Turn on "Bypass permissions"?'), mauVien: '#f87171',
@@ -564,7 +586,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       ];
       menu({
         tieuDe: L('Kết nối CT Work', 'Connect CT Work'),
-        moTa: L('Dùng tài khoản CuongThai bạn đang đăng nhập. Token lưu trong kho bí mật của máy — AI không bao giờ thấy.', 'Uses the CuongThai account you are signed in with. The token is kept in this machine\'s secret store — the AI never sees it.'),
+        moTa: L('Dùng tài khoản CuongThai bạn đang đăng nhập. Token lưu trên máy này, trong file chỉ bạn đọc được — AI không bao giờ thấy.', 'Uses the CuongThai account you are signed in with. The token is kept on this machine in a file only you can read — the AI never sees it.'),
         ds, chon: 0,
         khiChon: (m) => {
           kho.thongBao(L('Đang kết nối CT Work…', 'Connecting CT Work…'));
@@ -659,6 +681,15 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   };
 
   const boiCanh = (): BoiCanhLenh => ({
+    chon: (o) => menu({
+      tieuDe: o.tieuDe, ...(o.moTa ? { moTa: o.moTa } : {}),
+      // Đợt 5: khối markdown (thẻ CT Work, bảng sprint, xem trước) vẽ theo bề ngang thẻ.
+      ...(o.thanMd ? { than: catThanThe(veMarkdown(o.thanMd, { rong: Math.min(cot - 1, 120) - 6 }), Math.max(6, hang - 16 - o.ds.length)) } : o.than ? { than: o.than } : {}),
+      ds: o.ds.map((m) => ({ nhan: m.nhan, giaTri: m.giaTri, ...(m.mo ? { mo: m.mo } : {}), ...(m.tat ? { tat: true } : {}), ...(m.so !== undefined ? { so: m.so } : {}) })),
+      khiChon: (m) => { void Promise.resolve(o.khiChon(m.giaTri)).catch((e: Error) => kho.thongBao(e.message, 'loi')); },
+      ...(o.khiHuy ? { khiHuy: o.khiHuy } : {}),
+    }),
+    lamMoiCtwork: () => { void napDongCtw(); },
     kho, kn, thuMuc, phienBan, guiThat, doiModel, doiMuc, doiCheDo, dsModel, dsMuc, moMenu, moKhoaModel, doiTheme, doiNgonNgu, datToanManHinh, datChuot,
     datNhap: (t: string) => setO({ text: t, contro: t.length }),
     xoaManHinh, dangXuat, dangNhapLai: () => setHop({ loai: 'dangNhap' }), thoat: () => thoat(),
@@ -745,8 +776,14 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
         return;
       }
     }
-    // Đang chạy ⇒ XẾP HÀNG (như Claude Code): tự gửi khi lượt xong, esc để huỷ.
-    if (S.dangChay) { setHangCho((h) => [...h, text]); return; }
+    // Đợt 4 — đang chạy ⇒ CHÈN vào lượt (như Claude Code): lõi nối tin vào kết quả tool kế tiếp.
+    // Lõi cũ / lượt vừa xong ⇒ XẾP HÀNG như trước (tự gửi khi lượt xong, esc để huỷ).
+    if (S.dangChay) {
+      void kn.goi<{ chen?: boolean }>('agent:chenTin', { text: text.slice(0, 8000) })
+        .then((r) => { if (r?.chen) kho.themChen(text); else setHangCho((h) => [...h, text]); })
+        .catch(() => setHangCho((h) => [...h, text]));
+      return;
+    }
     guiThat(text, {});
   };
 
@@ -780,8 +817,89 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     void kn.goi<Array<{ ten: string; mo: string; than: string }>>('agent:lenhDuAn').then((ds) => { S.lenhDuAn = ds ?? []; }).catch(() => undefined);
     if (cauHoiDau.trim()) guiCauHoi(cauHoiDau);
     else if (chonViecCu) moMenu('resume');
+    // Đợt 4: hẹn ĐÃ LỠ lúc CuongMini tắt ⇒ hỏi chạy bù hay bỏ.
+    void kn.goi<{ ds: Array<{ id: string; lyDo: string; luc: number }> }>('agent:henLo').then((r) => {
+      const ds = r?.ds ?? [];
+      if (!ds.length || hopRef.current) return;
+      setHop({
+        loai: 'menu', tieuDe: L(`⏰ Đã lỡ ${ds.length} hẹn lúc CuongMini tắt`, `⏰ Missed ${ds.length} schedule(s) while CuongMini was closed`),
+        moTa: ds.slice(0, 5).map((h) => `• ${new Date(h.luc).toLocaleString(L('vi-VN', 'en-US'), { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })} — ${h.lyDo.slice(0, 80)}`).join('\n'),
+        ds: [{ nhan: L('Chạy bù ngay (mỗi hẹn mở lại đúng việc của nó)', 'Run them now (each reopens its own task)'), giaTri: 'chay' }, { nhan: L('Bỏ các hẹn đã lỡ', 'Drop the missed schedules'), giaTri: 'bo' }, { nhan: L('Để sau (/hen)', 'Later (/hen)'), giaTri: 'sau' }],
+        chon: 0, loc: '', coLoc: false,
+        khiChon: (m) => {
+          if (m.giaTri === 'sau') return;
+          void kn.goi<{ n: number }>('agent:xuLyHenLo', { cach: m.giaTri === 'chay' ? 'chay' : 'bo' })
+            /* QA 5c: hẹn chạy bù mở lại ĐÚNG việc cũ của nó ở nền — CLI không vẽ cuộc nền ⇒ nói chỗ xem kết quả (trước đây
+               "Đang chạy bù 1 hẹn." rồi không thấy gì nữa). */
+            .then((x) => kho.thongBao(m.giaTri === 'chay' ? L(`Đang chạy bù ${x?.n ?? 0} hẹn — chạy nền trong việc cũ của nó; xem kết quả bằng /resume.`, `Running ${x?.n ?? 0} missed schedule(s) in the background, each in its own task — see the result with /resume.`) : L(`Đã bỏ ${x?.n ?? 0} hẹn.`, `Dropped ${x?.n ?? 0} schedule(s).`), 'ok'))
+            .catch(() => undefined);
+        },
+      });
+    }).catch(() => undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // ─── Đợt 5: CT Work — dòng trạng thái + hỏi MỘT lần (kết nối / cấp lại / gắn dự án) ───
+
+  /*
+   * QA 5c: thẻ CT Work TỰ BẬT (kết nối / cấp lại token / gắn dự án) không được bật lên giữa lúc người dùng đang gõ —
+   * lỗi thấy: gõ câu hỏi, thẻ "Token hết hạn — 1. Cấp lại" bật lên đúng lúc, phím Enter của câu hỏi chọn luôn "Cấp lại"
+   * (câu hỏi nằm lại ô nhập, token bị thu hồi + tạo mới mà người dùng không hề thấy thẻ). Đang gõ (ô nhập có chữ, hoặc
+   * vừa bấm phím < 2,5 s) ⇒ hoãn; thẻ chỉ hiện khi ô nhập trống và tay đã rời phím.
+   */
+  const lanGo = useRef(0);
+  const dangGo = () => oRef.current.text.length > 0 || Date.now() - lanGo.current < 2500;
+  const hoiLaiCtw = useRef<(() => void) | null>(null);
+  const giaoDienCtwTuBat = (): GiaoDienCtw => {
+    const g = giaoDienCtw(boiCanh());
+    // Thẻ NỐI TIẾP sau khi người dùng vừa chọn (kết nối ⇒ "gắn dự án?") vẫn hiện — chỉ thẻ tự bật đầu tiên mới phải chờ.
+    let daChon = false;
+    return {
+      ...g,
+      chon: (o) => {
+        if (!daChon && (dangGo() || hopRef.current || S.dangChay)) {
+          daHoiCtw.current = false;
+          setTimeout(() => hoiLaiCtw.current?.(), 3000);
+          return;
+        }
+        g.chon({ ...o, khiChon: (v) => { daChon = true; return o.khiChon(v); } });
+      },
+    };
+  };
+  const napDongCtw = useCallback(async () => {
+    const r = await kn.goi<{ ok: boolean; dong?: DongCtw | null }>('agent:ctworkHe', { viec: 'dong', ngonNgu: ngonNgu() }).catch(() => null);
+    setDongCtw(r?.ok ? r.dong ?? null : null);
+    // Token hết hạn / bị thu hồi giữa phiên ⇒ đề nghị cấp lại một chạm (không chen ngang thẻ đang mở, không giữa lúc gõ).
+    if (laLoiXacThucCtw(r?.dong?.loi) && !hopRef.current && !S.dangChay && !dangGo()) void hoiCtworkMotLan(giaoDienCtwTuBat()).catch(() => undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kn]);
+  const daHoiCtw = useRef(false);
+  useEffect(() => {
+    // Sau màn chào + kiểm hẹn lỡ: đợi lõi nạp MCP xong (lõi tự chờ) rồi hỏi nếu cần — không chen ngang thẻ khác / lúc gõ.
+    let lan = 0;
+    let t2: ReturnType<typeof setTimeout> | null = null;
+    const hoi = () => {
+      if (daHoiCtw.current) return;
+      if (hopRef.current || S.dangChay || dangGo()) { if (++lan < 60) t2 = setTimeout(hoi, 3000); return; }
+      daHoiCtw.current = true;
+      void hoiCtworkMotLan(giaoDienCtwTuBat()).catch(() => undefined);
+    };
+    hoiLaiCtw.current = () => { if (++lan < 60) hoi(); };
+    const t = setTimeout(() => {
+      void napDongCtw();
+      hoi();
+    }, Number(process.env.CUONGMINI_CTW_TRE_MS ?? 1200));
+    const lap = setInterval(() => { void napDongCtw(); }, 60_000);
+    return () => { clearTimeout(t); if (t2) clearTimeout(t2); clearInterval(lap); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // Lượt xong ⇒ đọc lại (nhánh có thể vừa đổi; sprint đọc đệm 5 phút ở lõi).
+  useEffect(() => { if (!S.dangChay) void napDongCtw(); }, [S.dangChay, napDongCtw]);
+  // Tiêu đề cửa sổ terminal = tiêu đề phiên (kiểu Claude Code). Chỉ TTY thật.
+  useEffect(() => {
+    if (!process.stdout.isTTY || process.env.CUONGMINI_KHONG_DAT_TIEU_DE === '1') return;
+    process.stdout.write(`\x1b]0;${`CuongMini${S.tieuDe ? ` · ${S.tieuDe.replace(/[\x00-\x1f\x07]/g, ' ').slice(0, 60)}` : ''}`}\x07`);
+  }, [S.tieuDe]);
 
   // Lỗi cần xử lý thêm: cổng dự phòng, hết phiên.
   useEffect(() => {
@@ -987,6 +1105,13 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     // 0) Báo focus của terminal (ESC[I / ESC[O) — không phải phím người dùng.
     if (input === '[I') { dangNhin.current = true; return; }
     if (input === '[O') { dangNhin.current = false; return; }
+    lanGo.current = Date.now();
+    /* QA 5c: PHÍM DỒN — CLI đang bận vẽ thì terminal giao "\r\r" hay "1\r" trong MỘT lần đọc; Ink trả nguyên chuỗi nên
+       mọi thẻ bỏ qua (bấm mà "không ăn"). Khi đang có THẺ (duyệt / menu / hỏi) ⇒ lấy PHÍM ĐẦU, bỏ phần thừa — không để
+       Enter thứ hai rơi sang thẻ kế tiếp mà duyệt luôn nó. */
+    const coThe = hopRef.current?.loai === 'menu' || S.choDuyet.length > 0 || Boolean(S.hoi);
+    const don = tachPhimDon(input, coThe);
+    if (don) { input = don.input; key = { ...key, return: don.enter }; }
     const o = oRef.current;
     const hop = hopRef.current;
     const goiY = goiYRef.current;
@@ -1161,7 +1286,8 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       if (key.escape || (key.ctrl && input === 'c')) { setHop(null); hop.khiHuy?.(); return; }
       if (key.upArrow) { nhay(-1); return; }
       if (key.downArrow || (key.tab && !key.shift)) { nhay(1); return; }
-      const chonSo = !hop.coLoc && /^[1-9]$/.test(input) ? Number(input) - 1 : -1;
+      // Đợt 5: số theo nhãn của mục (mục tự khai `so`, vd "0. Thoát") — không chỉ 1–9 theo thứ tự.
+      const chonSo = !hop.coLoc && /^[0-9]$/.test(input) ? hop.ds.findIndex((m, k) => soCuaMuc(m, k) === input) : -1;
       if (key.return || (chonSo >= 0 && chonSo < n)) {
         const m = hop.ds[chonSo >= 0 ? chonSo : hop.chon];
         if (!m || m.tat) return;
@@ -1231,9 +1357,16 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     // 3) Thẻ duyệt.
     const d = S.choDuyet[0];
     if (d) {
+      /* QA 5c: bấm ĐÚP ("1" "1" cách 150 ms) — phím thứ hai duyệt luôn thẻ KẾ TIẾP vừa hiện mà người dùng chưa kịp đọc
+         (thấy thật: lệnh thứ hai chạy không ai xem). Thẻ vừa hiện < 350 ms ⇒ chỉ nhận Esc / ↑↓, không nhận chọn. */
+      if (theDuyetHien.current.id !== d.id) theDuyetHien.current = { id: d.id, luc: Date.now() }; // phím tới trước lần vẽ
+      const moi = Date.now() - theDuyetHien.current.luc < 350;
+      if (moi && !key.escape && !key.upArrow && !key.downArrow) return;
       const lc = luaChonDuyet(d);
-      const traLoi = (q: string) => { void kn.goi('agent:traLoiXinPhep', { id: d.id, quyetDinh: q }).catch((e: Error) => kho.thongBao(e.message, 'loi')); };
+      const traLoi = (q: string) => { lucDuyet.current = Date.now(); void kn.goi('agent:traLoiXinPhep', { id: d.id, quyetDinh: q }).catch((e: Error) => kho.thongBao(e.message, 'loi')); };
       if (key.upArrow) { setChonDuyet((c) => (c - 1 + lc.length) % lc.length); return; }
+      // Đợt 4: shift+tab trên thẻ = "Có, và không hỏi lại" (như Claude Code) nếu thẻ có lựa chọn đó; không thì lùi lên.
+      if (key.tab && key.shift) { const luon = lc.find((x) => x.q === 'choPhepCaFile' || x.q === 'choPhepTienTo'); if (luon) traLoi(luon.q); else setChonDuyet((c) => (c - 1 + lc.length) % lc.length); return; }
       if (key.downArrow || key.tab) { setChonDuyet((c) => (c + 1) % lc.length); return; }
       if (key.return) { traLoi(lc[chonDuyet]!.q); return; }
       if (/^[1-9]$/.test(input) && Number(input) <= lc.length) { traLoi(lc[Number(input) - 1]!.q); return; }
@@ -1338,6 +1471,11 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     if (key.meta && input === 'f') { setO(ST.tuPhai(o)); return; }
     if (key.backspace || key.delete) { doiO(ST.xoaLui(o)); return; }
     if (key.tab) return;
+    // Đợt 5: `?` ở ô nhập TRỐNG ⇒ bảng phím tắt (như Claude Code). Có chữ rồi thì `?` là chữ thường.
+    if (input === '?' && !o.text && !S.dangChay) {
+      menu({ tieuDe: L('Phím tắt', 'Shortcuts'), than: bangPhimTat(), ds: [{ nhan: L('Danh sách lệnh /help', 'Command list /help'), giaTri: 'help' }, { nhan: L('Đóng', 'Close'), giaTri: 'dong', so: '0' }], khiChon: (m) => { if (m.giaTri === 'help') void chayLenh('/help', boiCanh()); } });
+      return;
+    }
     if (input && !key.ctrl && !key.meta) {
       lichSu.current.datLai();
       doiO(ST.chen(o, input));
@@ -1371,6 +1509,8 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   const goiY = goiYRef.current;
   const chonDuyet = chonDuyetRef.current;
   const hangCho = hangChoRef.current;
+  // Mốc thẻ duyệt ĐẦU hàng vừa hiện (chặn bấm đúp duyệt mù thẻ kế tiếp — xem nhánh thẻ duyệt trong useInput).
+  if (S.choDuyet[0] && theDuyetHien.current.id !== S.choDuyet[0].id) theDuyetHien.current = { id: S.choDuyet[0].id, luc: Date.now() };
   const shell = shellRef.current;
   const rongMuc = Math.max(30, cot - 1);
 
@@ -1475,7 +1615,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       {dongKH.length ? <Box paddingLeft={2} marginTop={S.dangChay ? 0 : 1}><Text>{dongKH.join('\n')}</Text></Box> : null}
       <HangCho ds={hangCho} rong={rongTrai} />
       {hop?.loai === 'menu' ? (
-        <MenuView tieuDe={hop.tieuDe} moTa={hop.moTa} ds={hop.ds} chon={hop.chon} loc={hop.loc} coLoc={hop.coLoc} rong={Math.min(rongTrai, 120)} mauVien={hop.mauVien} />
+        <MenuView tieuDe={hop.tieuDe} moTa={hop.moTa} than={hop.than} ds={hop.ds} chon={hop.chon} loc={hop.loc} coLoc={hop.coLoc} rong={Math.min(rongTrai, 120)} mauVien={hop.mauVien} />
       ) : hop?.loai === 'matKhau' ? (
         <Box borderStyle={kieuVien()} flexDirection="column" paddingX={1} marginTop={1} width={Math.min(rongTrai, 90)}>
           <Text>{hop.tieuDe}</Text>
@@ -1519,7 +1659,8 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
           {dsBangPhu.length > 9 ? <Text>{mo(L(`  … +${dsBangPhu.length - 9} nữa (/tasks)`, `  … +${dsBangPhu.length - 9} more (/tasks)`))}</Text> : null}
         </Box>
       ) : (
-        <ChanTrang S={S} rong={rongTrai} model={(modelNay?.ten ?? '—').replace(/^Cuong(Mini)? /, '')} muc={mucNay?.ten ?? L('Vừa', 'Medium')} nhac={nhac} />
+        <ChanTrang S={S} rong={rongTrai} model={(modelNay?.ten ?? '—').replace(/^Cuong(Mini)? /, '')} muc={mucNay?.ten ?? L('Vừa', 'Medium')} nhac={nhac}
+          ctw={veDongCtw(dongCtw, ngonNgu(), rongTrai)} goiYPhim={!o.text && !S.dangChay && !hop && !d} />
       )}
     </Box>
   );
@@ -1556,4 +1697,14 @@ function tuongDoi(t: number): string {
   if (d < 86_400_000) return L(`${Math.floor(d / 3_600_000)} giờ trước`, `${Math.floor(d / 3_600_000)}h ago`);
   if (d < 7 * 86_400_000) return L(`${Math.floor(d / 86_400_000)} ngày trước`, `${Math.floor(d / 86_400_000)}d ago`);
   return new Date(t).toLocaleDateString(L('vi-VN', 'en-US'));
+}
+
+/**
+ * Đợt 5: thẻ lựa chọn KHÔNG được cao hơn terminal (Ink xoá khung cũ bằng cách lùi con trỏ — khung quá cao đè lên
+ * phần đã in). Thân dài (thẻ CT Work, bảng sprint) cắt còn `toiDa` dòng + một dòng nói còn bao nhiêu.
+ */
+function catThanThe(than: string, toiDa: number): string {
+  const d = than.split('\n');
+  if (d.length <= toiDa) return than;
+  return [...d.slice(0, toiDa - 1), mo(L(`… +${d.length - toiDa + 1} dòng (cửa sổ thấp — phóng to terminal để xem đủ)`, `… +${d.length - toiDa + 1} lines (short window — enlarge the terminal to see all)`))].join('\n');
 }

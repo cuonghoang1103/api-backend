@@ -11,6 +11,7 @@
 import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 import * as vscode from 'vscode';
+import { taoNguonLspVsc } from './lspVsc';
 import type { KetNoi } from './ketNoi';
 import type { LoiApi } from '../../cuongmini-core/src/kieuLoi';
 import { lamMoi, LoiDangNhap, type NguoiDung } from '../../cuongmini-core/src/dangNhap';
@@ -72,6 +73,10 @@ export class LoiDocLap implements KetNoi {
       },
     });
     this.loi.datPhien({ userId: nguoi.userId, sessionToken: nguoi.token });
+    /* Đợt 4: LSP của chính VS Code cho tool `lsp_hoi` + chẩn đoán sau mỗi lần sửa. */
+    this.loi.datNguonLsp?.(taoNguonLspVsc());
+    /* Đợt 4: điều khiển máy tính theo cài đặt `cuongthai.dieuKhienMayTinh` (mặc định tắt). */
+    void this.loi.goi('agent:mayTinh', { bat: vscode.workspace.getConfiguration('cuongthai').get<boolean>('dieuKhienMayTinh', false) }).catch(() => undefined);
     this.hen = setInterval(() => void this.lamMoiPhien().catch(() => undefined), CHU_KY_LAM_MOI);
   }
 

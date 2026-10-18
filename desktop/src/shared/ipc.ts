@@ -273,6 +273,19 @@ export const settingKeySchema = z.enum([
    * — họ báo đúng như thế: "macOS mở được, Windows/Linux thì không".
    */
   'aiTrinhDuyetMacDinh',
+  /**
+   * ĐỢT 4 — ĐIỀU KHIỂN MÁY TÍNH (chụp màn hình, chuột, bàn phím). Mặc định TẮT.
+   * ⛔ Chỉ main ghi (`KHOA_CHI_MAIN`) — renderer đi qua `agent:datMayTinh`, nơi
+   * giao diện đã hiện cảnh báo. Mọi thao tác vẫn hỏi duyệt, kể cả "Bỏ qua hết".
+   */
+  'aiMayTinh',
+  /**
+   * ĐỢT 5 — CT Work: cho agent GHI lên CT Work (comment, log_work, transition…) KHÔNG hỏi. Mặc định TẮT:
+   * ghi CT Work luôn qua thẻ duyệt có xem trước, kể cả chế độ "Bỏ qua hết". ⛔ Chỉ main ghi (`/ctwork tu-ghi`).
+   */
+  'ctworkTuGhi',
+  /** Đợt 5: đã hỏi "Kết nối CT Work?" một lần (người dùng chọn Không ⇒ không hỏi lại; vẫn `/ctwork`). */
+  'ctworkDaHoi',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 
@@ -1094,7 +1107,14 @@ export const agentThemTienToSchema = z.object({ cuocId: cuocIdSchema, tienTo: z.
 export interface AgentLuaChon { nhan: string; moTa?: string }
 export interface AgentCauHoi { cauHoi: string; tieuDe?: string; luaChon: AgentLuaChon[]; nhieu?: boolean }
 export interface AgentChoView { id: string; moTa: string; batDau: number; hetLuc: number }
-export interface AgentHenView { id: string; lyDo: string; luc: number; phut: number; lap: boolean; conLai: number }
+export interface AgentHenView { id: string; lyDo: string; luc: number; phut: number; lap: boolean; conLai: number; cron?: string }
+/* Đợt 4 */
+export const agentChenTinSchema = z.object({ cuocId: cuocIdSchema, text: z.string().trim().min(1).max(8000) });
+export const agentMayTinhSchema = z.object({ bat: z.boolean().optional() });
+export const agentXuLyHenLoSchema = z.object({ cach: z.enum(['chay', 'bo']) });
+/** Trạng thái điều khiển máy tính: công tắc + hỗ trợ + quyền hệ điều hành (macOS). */
+export interface AgentMayTinh { bat: boolean; hoTro: boolean; nenTang: string; quyen: { chup: boolean; dieuKhien: boolean } | null }
+export interface AgentHenLo { id: string; lyDo: string; luc: number; cron?: string; goc?: string | null }
 export interface AgentPhienMang {
   id: string; cuocId: string; pid: number; ten: string; noi: 'desktop' | 'cli' | 'vscode';
   thuMuc: string | null; trangThai: 'ranh' | 'dangChay'; capNhat: number;
@@ -1418,6 +1438,10 @@ export interface AgentMcpTrangThai {
     kieu?: 'stdio' | 'http' | 'sse';
     /** Số tool bị bỏ vì chạm trần tổng 40. */
     boBot?: number;
+    /** Đợt 4: server bị tắt (`"disabled": true`). */
+    tat?: boolean;
+    /** Đợt 5: server DỰNG SẴN của app (CT Work) — không có dòng trong mcp.json. */
+    dungSan?: boolean;
   }>;
   soTool: number;
   hanMuc: { daDung: number; tran: number };
@@ -1534,6 +1558,10 @@ export type AgentUiEvent = { cuocId: string } & (
       duongDan?: string;
       /** `chay_lenh_nen`: nguyên văn lệnh nền vừa bật. */
       lenh?: string;
+      /** Đợt 5: tham số chính (`● CT Work · get_issue(LF-18)`). */
+      thamSo?: string;
+      /** Đợt 5: tool CT Work — bảng GỌN (markdown) thay cho JSON thô khi mở ra. */
+      xemGon?: string;
     }
   /**
    * AGENT PHỤ (18/10/2026): `phuId` = `tool_call_id` của `giao_viec_phu`. Sự
@@ -1555,7 +1583,13 @@ export type AgentUiEvent = { cuocId: string } & (
    * Xin phép gọi một tool MCP. Mang cả THAM SỐ — tên tool một mình không đủ để
    * quyết định: `mcp__db__query` nghe vô hại tới khi nhìn thấy câu lệnh nó chạy.
    */
-  | { loai: 'xinPhepMcp'; id: string; server: string; tool: string; args: string }
+  | {
+      loai: 'xinPhepMcp'; id: string; server: string; tool: string; args: string;
+      /** Đợt 5: GHI lên CT Work — thẻ nào, việc gì, nội dung gì. */
+      xemTruoc?: { the: string | null; viec: string; noiDung: string }; ctwork?: boolean;
+    }
+  /** Đợt 5: `LF-123` trong tin ⇒ lõi đã đính kèm tóm tắt thẻ CT Work (chip 📎). */
+  | { loai: 'dinhKemCtwork'; khoa: string[] }
   /**
    * Xin phép COMMIT hoặc MỞ PR.
    *
@@ -1579,6 +1613,8 @@ export type AgentUiEvent = { cuocId: string } & (
   | { loai: 'tinPhien'; tu: { id: string; ten: string; noi: string; thuMuc: string | null }; noiDung: string; luc: number }
   /** Đợt 3: app tự mở lượt theo lời hẹn — vẽ bong bóng + bật trạng thái chạy. */
   | { loai: 'tuDanhThuc'; cauHoi: string; henId: string }
+  /** Đợt 4: tin gõ GIỮA lượt đã được chèn vào lượt đang chạy. */
+  | { loai: 'daChen'; text: string; cach: 'tool' | 'cuoiLuot' }
   /** Đợt 3: tiến trình sau MỖI vòng — ngữ cảnh % (usage thật), token ra/vào + tiền của vòng. */
   | { loai: 'tienTrinh'; nguCanh?: AgentNguCanh; tokenRa: number; tokenVao: number; tienUsd: number }
   | {
@@ -1636,6 +1672,50 @@ export interface TrinhSoanTinhTrang {
   /** Đã chạy được `--list-extensions` (false ⇒ không biết, đừng nói "chưa cài"). */
   kiemDuocExt: boolean;
   phienBanExt: string | null;
+}
+
+/** Đợt 5 (18/10/2026) — `agent:ctworkHe`. Thao tác GHI chỉ được giao diện gọi SAU thẻ xem trước + đồng ý. */
+export const agentCtworkHeSchema = z.object({
+  cuocId: cuocIdSchema.optional(),
+  viec: z.enum([
+    'goiY', 'daHoi', 'gan', 'boGan', 'docGan', 'dsDuAn', 'doan', 'dong', 'sprint', 'viec', 'the', 'hop',
+    'chuanBiBatDau', 'batDau', 'gio', 'soanBinhLuan', 'binhLuan', 'baoCao', 'tuGhi',
+  ]),
+  ngonNgu: z.enum(['vi', 'en']).optional(),
+  key: z.string().max(40).optional(),
+  loai: z.enum(['ketNoi', 'ganDuAn']).optional(),
+  duAn: z.object({
+    key: z.string().min(1).max(80), id: z.number().int().nullable().optional(), workspaceId: z.number().int().nullable().optional(),
+    ten: z.string().max(200).optional(), workspace: z.string().max(120).nullable().optional(),
+  }).optional(),
+  phut: z.number().int().min(1).max(1440).optional(),
+  noiDung: z.string().max(8000).optional(),
+  bat: z.boolean().optional(),
+  nhanh: z.boolean().optional(),
+  chuyen: z.boolean().optional(),
+});
+export type AgentCtworkHeVao = z.infer<typeof agentCtworkHeSchema>;
+/** Kết quả chung của `agent:ctworkHe` — mỗi `viec` điền vài trường. */
+export interface AgentCtworkHeRa {
+  ok: boolean; loi?: string; md?: string;
+  /** goiY: nên hỏi gì (một lần): kết nối · cấp lại token · gắn dự án đoán được. */
+  hoi?: 'ketNoi' | 'capLai' | 'ganDuAn' | null;
+  doan?: { key: string; projectId: number | null; workspaceId: number | null; workspace: string | null } | null;
+  gan?: { key: string; projectId: number | null; workspaceId: number | null; ref?: string; ten?: string | null; workspace?: string | null } | null;
+  ds?: Array<{ key: string; ten: string; id: number | null; workspaceId: number | null; workspace: string | null; vaiTro: string | null; soMo: number | null }>;
+  dsThe?: Array<{ key: string; title: string; status: string | null; dueDate: string | null }>;
+  dong?: {
+    key: string; projectId: number | null; ten: string | null; nhanh: string | null; daNoi: boolean; loi: string | null;
+    sprint: { ten: string; conNgay: number | null; laFocus: boolean; tong: number } | null;
+    the: string | null; theTen: string | null; theTrangThai: string | null;
+  } | null;
+  duong?: string; goiYGitignore?: string | null;
+  key?: string; tieuDe?: string; trangThai?: string | null; chuyenDuoc?: string[];
+  nhanh?: string; nhanhCo?: boolean; nhanhNay?: string | null; den?: string | null;
+  /** QA 5c: thẻ đã ở trạng thái đang làm (không chuyển) · token chỉ đọc (không ghi được). */
+  daDangLam?: boolean; chiDoc?: boolean;
+  noiDung?: string; bat?: boolean;
+  xemTruoc?: { the: string | null; viec: string; noiDung: string };
 }
 
 export const INVOKE_CHANNELS = {
@@ -1815,8 +1895,15 @@ export const INVOKE_CHANNELS = {
   'agent:dsPhienMang': agentCuocSchema,
   'agent:doiTenPhienMang': agentDoiTenPhienMangSchema,
   'agent:themTienTo': agentThemTienToSchema,
+  /* Đợt 4: gõ thêm khi agent đang chạy · điều khiển máy tính · hẹn đã lỡ lúc tắt. */
+  'agent:chenTin': agentChenTinSchema,
+  'agent:mayTinh': agentMayTinhSchema,
+  'agent:henLo': null,
+  'agent:xuLyHenLo': agentXuLyHenLoSchema,
   /* CT Work một chạm: tạo token bằng phiên đăng nhập ⇒ kho bí mật ⇒ server `ctwork` trong mcp.json. */
-  'agent:ctwork': z.object({ cuocId: cuocIdSchema.optional(), viec: z.enum(['noi', 'ngat', 'trangThai']), quyen: z.enum(['doc', 'ghi']).optional() }),
+  'agent:ctwork': z.object({ cuocId: cuocIdSchema.optional(), viec: z.enum(['noi', 'ngat', 'trangThai', 'capLai']), quyen: z.enum(['doc', 'ghi']).optional() }),
+  /* Đợt 5: CT Work hệ sinh thái — gắn dự án, dòng trạng thái, menu `/ctwork`, `/issue`. Xem `agent/ctworkHe.ts`. */
+  'agent:ctworkHe': agentCtworkHeSchema,
   'agent:datCheDoSua': agentCheDoSuaSchema,
   'agent:datCheDoLenh': agentCheDoLenhSchema,
   /* Kho kỹ năng `/ai-templates`. `tuKhoa` là chuỗi người dùng gõ nên có trần
@@ -2226,6 +2313,9 @@ export const INVOKE_CHANNELS = {
      một dự án. `.optional()` vì bảng MCP còn mở được từ chỗ chưa có tab. */
   'agent:mcpTrangThai': z.object({ cuocId: z.string().min(1).optional() }),
   'agent:mcpNapLai': z.object({ cuocId: z.string().min(1).optional() }),
+  /* Đợt 4: `/mcp` dạng menu — xem tool của một server, bật/tắt một server. */
+  'agent:mcpTool': z.object({ cuocId: z.string().min(1).optional(), ten: z.string().min(1).max(64).optional() }),
+  'agent:mcpBatTat': z.object({ cuocId: z.string().min(1).optional(), ten: z.string().min(1).max(64), bat: z.boolean() }),
   'agent:mcpDuyetDuAn': agentCuocSchema,
   'agent:mcpMoCauHinh': null,
   'agent:hookMoCauHinh': null,
@@ -2933,11 +3023,20 @@ export interface DesktopBridge {
     doiTenPhienMang(cuocId: string, ten: string): Promise<AgentPhienMang | null>;
     /** Đợt 3 — thêm "luôn cho phép mọi lệnh bắt đầu bằng …". */
     themTienTo(cuocId: string, tienTo: string): Promise<{ ok: boolean; khoa?: string; loi?: string }>;
-    /** CT Work một chạm (đợt 3). */
-    ctwork(cuocId: string | null, viec: 'noi' | 'ngat' | 'trangThai', quyen?: 'doc' | 'ghi'): Promise<{
+    /* Đợt 4 */
+    chenTin(cuocId: string, text: string): Promise<{ chen: boolean }>;
+    mayTinh(bat?: boolean): Promise<AgentMayTinh>;
+    henLo(): Promise<{ ds: AgentHenLo[] }>;
+    mcpBatTat(cuocId: string, ten: string, bat: boolean): Promise<{ ok: boolean; loi?: string; trangThai?: AgentMcpTrangThai }>;
+    mcpTool(cuocId: string, ten?: string): Promise<Array<{ server: string; ten: string; moTa: string }>>;
+    xuLyHenLo(cach: 'chay' | 'bo'): Promise<{ n: number }>;
+    /** CT Work một chạm (đợt 3; đợt 5 thêm `capLai` — token hết hạn/bị thu hồi). */
+    ctwork(cuocId: string | null, viec: 'noi' | 'ngat' | 'trangThai' | 'capLai', quyen?: 'doc' | 'ghi'): Promise<{
       ok: boolean; loi?: string; soTool?: number; quyen?: 'doc' | 'ghi' | null; coToken?: boolean; bienTay?: boolean;
-      server?: { ok: boolean; soTool: number; loi?: string } | null;
+      server?: { ok: boolean; soTool: number; loi?: string; tat?: boolean; dungSan?: boolean } | null; canCapLai?: boolean;
     }>;
+    /** Đợt 5: CT Work hệ sinh thái (gắn dự án, dòng trạng thái, menu `/ctwork`, `/issue`). */
+    ctworkHe(vao: AgentCtworkHeVao): Promise<AgentCtworkHeRa>;
     /** Bật/tắt quyền sửa file. Không lưu xuống đĩa — mở app lại là tắt. */
     datCheDoSua(cuocId: string, bat: boolean): Promise<AgentWorkspace>;
     /** Bật/tắt quyền chạy lệnh. Cũng không lưu xuống đĩa. */

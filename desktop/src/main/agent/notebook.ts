@@ -48,7 +48,7 @@ export function chuCuaO(o: ONotebook): string {
   return typeof s === 'string' ? s : '';
 }
 
-function chuCuaDauRa(ra: unknown): string {
+export function chuCuaDauRa(ra: unknown): string {
   if (!ra || typeof ra !== 'object') return '';
   const o = ra as Record<string, unknown>;
   // `stream` → text; `execute_result`/`display_data` → data['text/plain'];

@@ -46,7 +46,7 @@ export async function goiCompact(o: {
            trường đó — gửi chỉ phình thân yêu cầu. Bản trong `c.hoiThoai` giữ
            nguyên; `ghepTomTat` gửi lại các tin sau mốc gộp NGUYÊN VĂN. */
         messages: goAnhCu(o.hoiThoai, 0).messages.map(({ khoiAnthropic: _bo, ...m }) => m),
-        ...(o.ghiChu?.trim() ? { ghiChu: o.ghiChu.trim().slice(0, 500) } : {}),
+        ...(o.ghiChu?.trim() ? { ghiChu: o.ghiChu.trim().slice(0, 2000) } : {}),
         ...(o.giuLuot ? { giuLuot: o.giuLuot } : {}),
       }),
     });

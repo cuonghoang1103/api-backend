@@ -87,3 +87,13 @@ export function goiYXuongDong(t: TerminalPhim, L: (vi: string, en: string) => st
     default: return L('ctrl+j / \\⏎ xuống dòng', 'ctrl+j / \\⏎ newline');
   }
 }
+
+/**
+ * QA 5c — PHÍM DỒN trên thẻ: terminal giao "\r\r" / "1\r" / "2\n" trong MỘT lần đọc (CLI bận vẽ) ⇒ Ink trả nguyên chuỗi
+ * và thẻ bỏ qua. Đang có thẻ ⇒ trả PHÍM ĐẦU (số, hoặc một Enter). `null` = không phải phím dồn / không có thẻ (giữ nguyên:
+ * ô nhập vẫn nhận dán nhiều dòng như cũ).
+ */
+export function tachPhimDon(input: string, coThe: boolean): { input: string; enter: boolean } | null {
+  if (!coThe || input.length < 2 || !/^[0-9]?[\r\n]+$/.test(input)) return null;
+  return /^[0-9]/.test(input) ? { input: input[0]!, enter: false } : { input: '\r', enter: true };
+}

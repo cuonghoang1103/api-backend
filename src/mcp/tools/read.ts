@@ -84,6 +84,8 @@ const listProjects = defineTool({
     const list = rows.map(({ workspace, project: p }) => ({
       key: many ? `${workspace.slug}/${p.key}` : p.key, name: p.name, kind: p.kind, myRole: p.role, archived: !!p.archivedAt,
       openIssues: p.openIssues, modules: Object.entries(p.modules ?? {}).filter(([, on]) => on).map(([k]) => k), workspace: workspace.slug,
+      // Đợt 5 (CuongMini): id để app gắn thư mục ⇄ dự án (`.cuongmini/ctwork.json`) — thêm trường, không đổi trường cũ.
+      id: p.id, workspaceId: workspace.id, workspaceName: workspace.name,
     }));
     return `${list.length} project(s). Names are user data.\n${untrusted('project list', json(list))}`;
   },

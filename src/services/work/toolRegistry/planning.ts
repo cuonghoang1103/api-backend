@@ -125,6 +125,22 @@ const exportFile = defineTool({
 
 // ─── Sprint ──────────────────────────────────────────────────────
 
+/**
+ * Không có sprint ACTIVE ⇒ sprint "trong tâm" để agent vẫn biết làm gì (18/10/2026 — người dùng: agent chỉ thấy
+ * `active: null` + tên sprint, không biết sprint có thẻ gì): sprint PLANNED có ngày PHỦ hôm nay (giờ VN), không có
+ * thì sprint sắp tới gần nhất, không có nữa thì sprint planned đầu tiên. `denNgayChuaBatDau` = ngày bắt đầu đã tới
+ * mà chưa ai bấm Start. Thuần — test không cần CSDL.
+ */
+export function sprintTrongTam<T extends { startAt: Date | null; endAt: Date | null }>(planned: readonly T[], homNay: string): { sprint: T; denNgayChuaBatDau: boolean } | null {
+  if (!planned.length) return null;
+  const ngay = (d: Date | null): string | null => (d ? vnDay(d) : null);
+  const phu = planned.find((s) => { const a = ngay(s.startAt); const b = ngay(s.endAt); return a !== null && a <= homNay && (b === null || homNay <= b); });
+  const sapToi = [...planned].filter((s) => (ngay(s.startAt) ?? '') > homNay).sort((x, y) => (ngay(x.startAt)! < ngay(y.startAt)! ? -1 : 1))[0];
+  const chon = phu ?? sapToi ?? planned[0]!;
+  const bd = ngay(chon.startAt);
+  return { sprint: chon, denNgayChuaBatDau: bd !== null && bd <= homNay };
+}
+
 const sprintCurrent = defineTool({
   name: 'sprint_current', title: 'Current sprint', group: 'planning',
   description: 'The active sprint: goal, dates, pace (remaining vs days left, computed by CT Work) and its issues with status, assignee and points. Also lists planned sprints.',
@@ -135,7 +151,23 @@ const sprintCurrent = defineTool({
     const sprints = await listSprints(ctx.userId, p.id);
     const active = sprints.find((s) => s.state === 'ACTIVE') ?? null;
     const planned = sprints.filter((s) => s.state === 'PLANNED').map((s) => ({ name: s.name, startAt: s.startAt, endAt: s.endAt }));
-    if (!active) return { active: null, planned, note: 'No sprint is running.' };
+    if (!active) {
+      const tam = sprintTrongTam(sprints.filter((s) => s.state === 'PLANNED'), vnDay());
+      if (!tam) return { active: null, planned, note: 'No sprint is running and none is planned.' };
+      const ds = await prisma.workIssue.findMany({
+        where: { projectId: p.id, sprintId: tam.sprint.id, deletedAt: null },
+        orderBy: [{ rank: 'asc' }, { id: 'asc' }], take: 30,
+        select: { number: true, title: true, status: { select: { name: true } }, assignee: { select: { username: true, kind: true } } },
+      });
+      const tong = ds.length < 30 ? ds.length : await prisma.workIssue.count({ where: { projectId: p.id, sprintId: tam.sprint.id, deletedAt: null } });
+      const focus = {
+        name: tam.sprint.name, goal: tam.sprint.goal, startAt: tam.sprint.startAt, endAt: tam.sprint.endAt,
+        ...(tam.denNgayChuaBatDau ? { denNgayChuaBatDau: true } : {}), issueCount: tong,
+        issues: ds.map((i) => ({ key: `${p.key}-${i.number}`, title: clip(i.title, 80), status: i.status.name, assignee: i.assignee ? `${i.assignee.kind === 'AGENT' ? '🤖 ' : ''}${i.assignee.username}` : null })),
+      };
+      const note = `No sprint is running. Focus = planned sprint "${tam.sprint.name}"${tam.denNgayChuaBatDau ? ' — its start date has passed but nobody started it (a person must press Start)' : ''}; ${tong} issue(s)${tong > 30 ? ', first 30 shown' : ''}.`;
+      return `${note}\n${untrusted('planned sprint', json({ active: null, focus, planned }))}`;
+    }
     const [issues, pace] = await Promise.all([
       prisma.workIssue.findMany({
         where: { projectId: p.id, sprintId: active.id, deletedAt: null },

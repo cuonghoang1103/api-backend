@@ -16,10 +16,13 @@ import {
   moTaDsCauHoi, moTaDsPhien, moTaNguCanh, moTaTrangThai, moTaUsage, promptPlan, promptReview, tachLenh,
   tenFileXuat, timMuc, timTheoChu, xuatMarkdown, type LenhGach, type MucGhi, type PhienCu,
 } from 'ct-lenh';
+// Đợt 5: bộ lệnh CT Work chung ba nơi (file thuần của app, không React) — import thẳng đường dẫn để tsc kiểm kiểu.
+import { lenhCtwork, type GiaoDienCtw } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
 import { moTaCheDo } from './cheDo';
+import { mau, mo } from './mau';
 import { L, ngonNgu, nhieu } from './i18n';
-import { LENH_CLI, troGiup } from './lenhMoTa';
-import { chanDoanEn, dsCauHoiEn, dsPhienEn, nguCanhEn, trangThaiEn, usageEn, type NguCanhEn } from './moTaHaiNgu';
+import { LENH_CLI, troGiup, troGiupGon } from './lenhMoTa';
+import { chanDoanEn, dichLoiMcp, dsCauHoiEn, dsPhienEn, nguCanhEn, trangThaiEn, usageEn, type NguCanhEn } from './moTaHaiNgu';
 import { dichMoTaCho } from './trangThai';
 import { moModel } from './congModel';
 import { API_ORIGIN } from '../../cuongmini-core/src/dangNhap';
@@ -75,6 +78,18 @@ export interface BoiCanhLenh {
   dsModel: () => ModelMuc[];
   dsMuc: () => MucNoLuc[];
   moMenu: (loai: 'model' | 'muc' | 'resume' | 'cheDo' | 'config' | 'rewind' | 'banGhi' | 'tasks' | 'ngonNgu' | 'cong' | 'ctwork') => void;
+  /**
+   * Đợt 4 — THẺ LỰA CHỌN cho lệnh `/` có hành động (kiểu `/mcp` của Claude Code): khối nội dung + lựa chọn đánh số
+   * (↑↓ + Enter hoặc gõ số, Esc thoát). Thay cho dòng "gõ `/x y` để…".
+   */
+  chon: (o: {
+    tieuDe: string; moTa?: string; than?: string; ds: Array<{ nhan: string; giaTri: string; mo?: string; tat?: boolean; so?: string }>; khiChon: (giaTri: string) => void | Promise<void>;
+    /** Đợt 5: khối MARKDOWN (thẻ CT Work, bảng sprint, xem trước) — giao diện tự vẽ theo bề ngang. */
+    thanMd?: string;
+    khiHuy?: () => void;
+  }) => void;
+  /** Đợt 5: đọc lại dòng trạng thái CT Work (sau khi gắn dự án / tạo nhánh / chuyển thẻ). */
+  lamMoiCtwork?: () => void;
   /** Chọn một model 🔒 của cổng chính hãng: hỏi mật khẩu ⇒ mở khoá ⇒ đổi model. */
   moKhoaModel: (id: string) => void;
   /** /fullscreen on|off — không tham số thì đảo. */
@@ -100,6 +115,23 @@ function baoMoFile(b: BoiCanhLenh, ten: string): void {
   b.kho.thongBao(L(`Đã yêu cầu mở file ${ten}.`, `Asked to open the ${ten}.`));
 }
 
+/** Đợt 5: giao diện cho bộ lệnh CT Work CHUNG (`ctworkLenh.ts` của app) — thẻ lựa chọn, câu trả lời, ô nhập. */
+export function giaoDienCtw(b: BoiCanhLenh): GiaoDienCtw {
+  return {
+    goi: <T,>(k: string, d?: Record<string, unknown>) => b.kn.goi<T>(k, d ?? {}),
+    traLoi: (md) => b.kho.traLoi(md),
+    chon: (o) => b.chon({
+      tieuDe: o.tieuDe, ...(o.moTa ? { moTa: o.moTa } : {}), ...(o.than ? { thanMd: o.than } : {}),
+      ds: o.ds, khiChon: o.khiChon, ...(o.khiHuy ? { khiHuy: o.khiHuy } : {}),
+    }),
+    // Thông báo 'ok' đã có dấu ✓ của bảng ghi — bỏ ✓ đầu câu để khỏi "✓ ✓".
+    thongBao: (t, loai) => b.kho.thongBao(loai === 'ok' ? t.replace(/^✓\s*/, '') : t, loai === 'loi' ? 'loi' : loai === 'ok' ? 'ok' : 'info'),
+    datNhap: b.datNhap,
+    ngonNgu: ngonNgu(),
+    ...(b.lamMoiCtwork ? { lamMoiDong: b.lamMoiCtwork } : {}),
+  };
+}
+
 export function tachLenhCli(text: string): { ten: string; thamSo: string } | null {
   return tachLenh(text, [...LENH_AGENT, ...(LENH_CLI as LenhGach[])]);
 }
@@ -120,6 +152,85 @@ const LOI_WORKTREE_EN = new Map<string, string>([
 export function dichLoiWorktree(loi: string): string {
   const daCo = /^Đã có worktree hoặc nhánh tên "(.*)"\. Chọn tên khác\.$/.exec(loi);
   return L(loi, daCo ? `A worktree or branch named "${daCo[1]}" already exists. Pick another name.` : LOI_WORKTREE_EN.get(loi) ?? loi);
+}
+
+// ─── Đợt 4: trình bày kiểu Claude Code cho thẻ lựa chọn ────────────────
+const XANH = '#4ade80';
+const DO = '#f87171';
+const VANG_NHAT = '#fbbf24';
+/** Một dòng "tên ⟶ trạng thái" thụt 2, tên căn cột. */
+function dongCot(ten: string, beTen: number, phai: string): string { return `  ${ten.padEnd(beTen)}  ${phai}`; }
+/** Dòng phụ mờ dạng cây `⎿`. */
+const cay = (s: string): string => mo(`  ⎿ ${s}`);
+
+type McpTT = { duongDan: string; server: Array<{ ten: string; ok: boolean; soTool: number; loi?: string; canDuyet?: boolean; tat?: boolean; kieu?: string; tuDuAn?: boolean }>; loiCauHinh?: string | null } | null;
+
+/** Khối danh sách server MCP (đã tô màu). */
+export function veMcp(tt: McpTT): string {
+  const sv = tt?.server ?? [];
+  const be = Math.min(24, Math.max(6, ...sv.map((x) => x.ten.length)));
+  const dong = sv.length
+    ? sv.map((x) => dongCot(x.ten, be, x.ok
+      ? `${mau(XANH)('✔')} ${L('đã nối', 'connected')} ${mo(`· ${x.soTool} ${L('tool', x.soTool === 1 ? 'tool' : 'tools')}${x.kieu ? ` · ${x.kieu}` : ''}${x.tuDuAn ? L(' · của dự án', ' · project') : ''}${(x as { dungSan?: boolean }).dungSan ? L(' · dựng sẵn', ' · built-in') : ''}`)}`
+      : x.tat ? mo(`○ ${L('đã tắt', 'disabled')}`)
+        : x.canDuyet ? `${mau(VANG_NHAT)('⏸')} ${L('chờ bạn duyệt (.mcp.json của dự án)', 'awaiting approval (project .mcp.json)')}`
+          : `${mau(DO)('✘')} ${mo(dichLoiMcp(x.loi ?? L('lỗi', 'failed')).split('\n')[0]!.slice(0, 70))}`))
+    : [mo(L('  (chưa cấu hình máy chủ nào)', '  (no servers configured)'))];
+  return [...dong, ...(tt?.loiCauHinh ? ['', `  ${mau(DO)('⚠')} ${L('File cấu hình hỏng', 'Config file is broken')}: ${tt.loiCauHinh}`] : []), '', cay(tt?.duongDan ?? '?')].join('\n');
+}
+
+async function menuMcp(b: BoiCanhLenh, baoDau = ''): Promise<void> {
+  const { kn, kho } = b;
+  const tt = await kn.goi<McpTT>('agent:mcpTrangThai').catch(() => null);
+  const ct = await kn.goi<{ server?: { ok: boolean } | null }>('agent:ctwork', { viec: 'trangThai' }).catch(() => null);
+  b.chon({
+    tieuDe: L('Máy chủ MCP', 'MCP servers'),
+    ...(baoDau ? { moTa: baoDau } : {}),
+    than: veMcp(tt),
+    ds: [
+      { nhan: L('Mở file cấu hình', 'Open config file'), giaTri: 'mo', mo: L('sửa rồi chọn Nạp lại', 'edit, then Reload') },
+      { nhan: L('Nạp lại', 'Reload'), giaTri: 'nap', mo: L('khởi động lại mọi server', 'restart every server') },
+      { nhan: ct?.server?.ok ? L('CT Work: đổi quyền / ngắt', 'CT Work: change access / disconnect') : L('Kết nối CT Work', 'Connect CT Work'), giaTri: 'ctwork', mo: L('một chạm, token cất trên máy', 'one tap, token kept on this machine') },
+      { nhan: L('Xem tool / bật-tắt một server', 'View tools / enable-disable a server'), giaTri: 'server', ...((tt?.server ?? []).length ? {} : { tat: true }) },
+      { nhan: L('Thoát', 'Exit'), giaTri: 'thoat', mo: 'Esc' },
+    ],
+    khiChon: async (g) => {
+      if (g === 'mo') { kn.moCuoi = null; await kn.goi('agent:mcpMoCauHinh'); baoMoFile(b, L('cấu hình MCP', 'MCP config')); return; }
+      // QA 5c: nạp lại / bật-tắt server ⇒ dòng trạng thái CT Work đọc lại ngay (trước đây đứng "chưa nối" tới 60 s).
+      if (g === 'nap') { kho.thongBao(L('Đang nạp lại MCP…', 'Reloading MCP…')); await kn.goi('agent:mcpNapLai').catch(() => undefined); b.lamMoiCtwork?.(); await menuMcp(b, L('✓ Đã nạp lại cấu hình MCP.', '✓ MCP config reloaded.')); return; }
+      if (g === 'ctwork') { await chayLenh('/ctwork', b); return; }
+      if (g === 'server') { menuChonServer(b, tt); }
+    },
+  });
+}
+
+function menuChonServer(b: BoiCanhLenh, tt: McpTT): void {
+  const sv = tt?.server ?? [];
+  b.chon({
+    tieuDe: L('Chọn máy chủ MCP', 'Pick an MCP server'),
+    ds: [...sv.map((x) => ({ nhan: x.ten, giaTri: x.ten, mo: x.ok ? `${x.soTool} ${L('tool', 'tools')}` : x.tat ? L('đã tắt', 'disabled') : L('lỗi', 'failed') })), { nhan: L('← Quay lại', '← Back'), giaTri: '__lai' }],
+    khiChon: async (ten) => {
+      if (ten === '__lai') { await menuMcp(b); return; }
+      const x = sv.find((y) => y.ten === ten);
+      const tool = x?.ok ? await b.kn.goi<Array<{ ten: string; moTa: string }>>('agent:mcpTool', { ten }).catch(() => null) ?? [] : [];
+      b.chon({
+        tieuDe: `MCP · ${ten}`,
+        than: tool.length
+          ? [...tool.slice(0, 40).map((t) => `  ${t.ten}${t.moTa ? `  ${mo(t.moTa.slice(0, 90))}` : ''}`), ...(tool.length > 40 ? [mo(`  … +${tool.length - 40}`)] : [])].join('\n')
+          : mo(x?.ok ? L('  (server không khai tool nào)', '  (the server exposes no tools)') : `  ${dichLoiMcp(x?.loi ?? '').split('\n')[0]!.slice(0, 120)}`),
+        ds: [
+          x?.tat ? { nhan: L('Bật server này', 'Enable this server'), giaTri: 'bat' } : { nhan: L('Tắt server này', 'Disable this server'), giaTri: 'tat', ...(x?.tuDuAn ? { tat: true, mo: L('server của dự án', 'project server') } : {}) },
+          { nhan: L('← Quay lại', '← Back'), giaTri: 'lai' },
+        ],
+        khiChon: async (g) => {
+          if (g === 'lai') { menuChonServer(b, tt); return; }
+          const r = await b.kn.goi<{ ok: boolean; loi?: string }>('agent:mcpBatTat', { ten, bat: g === 'bat' }).catch((e: Error) => ({ ok: false, loi: e.message }));
+          b.lamMoiCtwork?.();
+          await menuMcp(b, r?.ok ? (g === 'bat' ? L(`✓ Đã bật ${ten}.`, `✓ Enabled ${ten}.`) : L(`✓ Đã tắt ${ten}.`, `✓ Disabled ${ten}.`)) : `⚠ ${r?.loi ?? L('lõi cũ chưa hỗ trợ', 'not supported by this core')}`);
+        },
+      });
+    },
+  });
 }
 
 export async function chayLenh(text: string, b: BoiCanhLenh): Promise<void> {
@@ -155,10 +266,12 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
   const traLoi = (t: string) => kho.traLoi(t);
   switch (ten) {
     case '/help': {
+      /* Đợt 5: gọn kiểu Claude Code mặc định; `/help all` = bản đầy đủ (bí danh, tham số, mẹo). */
+      if (!/^(all|tat-ca|tatca|day-du|full|-a)$/i.test(thamSo.trim())) { traLoi(troGiupGon(LENH_GOI_Y, S.lenhDuAn)); return; }
       const coBan = troGiup(LENH_GOI_Y, S.lenhDuAn);
       traLoi(`${coBan}\n\n${L(
-        '**Gõ đặc biệt**\n- `!lệnh` chạy shell ngay ở thư mục dự án (không qua AI) — kết quả đi kèm câu hỏi kế tiếp\n- `# ghi chú` lưu thành quy ước dự án (AGENTS.md) — CuongMini đọc ở mọi lượt\n- `@đường` / `@tênHàm` nhắc file, thư mục, hàm/lớp · kéo file ảnh vào hoặc `ctrl+v` (Windows: `alt+v`) dán ảnh\n\n**Phím tắt**\n- `shift+tab` đổi chế độ quyền · `esc` dừng (hoặc huỷ hàng chờ) · `esc esc` quay lui về câu cũ · `ctrl+c` ×2 thoát\n- Đang chạy vẫn gõ + Enter được — tin vào **hàng chờ**, tự gửi khi xong\n- `↓` (ô nhập trống) vào bảng agent phụ · `/tasks` xem cả việc đã xong và lệnh nền\n- `ctrl+r` xem lại bảng ghi · `ctrl+o` mở/thu đầu ra lệnh cũ · `ctrl+p`/`ctrl+t` bảng kế hoạch · `ctrl+l` vẽ lại\n- `Shift+Enter` (terminal hỗ trợ CSI u: iTerm2 ≥ 3.5, kitty, WezTerm, ghostty), `Alt+Enter`, `ctrl+j` hoặc `\\` cuối dòng để xuống dòng (`/terminal-setup`) \n- Toàn màn hình: con lăn / `↑` `↓` (ô nhập trống) / PgUp PgDn cuộn bản ghi — ô nhập luôn ở đáy · `ctrl+↑`/`ctrl+↓` lịch sử câu hỏi · kéo chuột bôi đen chép như thường (`/mouse on` để bắt chuột) · `/copy` chép câu trả lời\n\n_Lệnh chạy ngay tại đây không tốn lượt nào trừ /plan, /review, /init, /diff._',
-        '**Special input**\n- `!command` runs a shell command in the project folder (no AI) — the output is attached to your next message\n- `# note` saves a project convention (AGENTS.md) — read on every turn\n- `@path` / `@functionName` mention files, folders, functions/classes · drag an image in or `ctrl+v` (Windows: `alt+v`) to paste one\n\n**Shortcuts**\n- `shift+tab` cycle permission mode · `esc` interrupt (or clear the queue) · `esc esc` rewind · `ctrl+c` ×2 quit\n- You can type while it works — messages are **queued** and sent when the turn ends\n- `↓` (empty input) opens the subagent panel · `/tasks` also shows finished tasks and shells\n- `ctrl+r` transcript · `ctrl+o` expand/collapse old outputs · `ctrl+p`/`ctrl+t` plan panel · `ctrl+l` redraw\n- `Shift+Enter` (CSI u terminals: iTerm2 ≥ 3.5, kitty, WezTerm, ghostty), `Alt+Enter`, `ctrl+j` or a trailing `\\` for a newline (`/terminal-setup`) \n- Fullscreen: wheel / `↑` `↓` (empty input) / PgUp PgDn scroll the transcript — the input stays pinned · `ctrl+↑`/`ctrl+↓` prompt history · drag to select & copy as usual (`/mouse on` to capture the mouse) · `/copy` copies an answer\n\n_Local commands cost nothing except /plan, /review, /init, /diff._',
+        '**Gõ đặc biệt**\n- `!lệnh` chạy shell ngay ở thư mục dự án (không qua AI) — kết quả đi kèm câu hỏi kế tiếp\n- `# ghi chú` lưu thành quy ước dự án (AGENTS.md) — CuongMini đọc ở mọi lượt\n- `@đường` / `@tênHàm` nhắc file, thư mục, hàm/lớp · kéo file ảnh vào hoặc `ctrl+v` (Windows: `alt+v`) dán ảnh\n\n**Phím tắt**\n- `shift+tab` đổi chế độ quyền · `esc` dừng (hoặc huỷ hàng chờ) · `esc esc` quay lui về câu cũ · `ctrl+c` ×2 thoát\n- Đang chạy vẫn gõ + Enter được — tin được **chèn** vào lượt đang chạy (↳), agent đọc ngay ở bước kế; lệnh `/` vào hàng chờ\n- `↓` (ô nhập trống) vào bảng agent phụ · `/tasks` xem cả việc đã xong và lệnh nền\n- `ctrl+r` xem lại bảng ghi · `ctrl+o` mở/thu đầu ra lệnh cũ · `ctrl+p`/`ctrl+t` bảng kế hoạch · `ctrl+l` vẽ lại\n- `Shift+Enter` (terminal hỗ trợ CSI u: iTerm2 ≥ 3.5, kitty, WezTerm, ghostty), `Alt+Enter`, `ctrl+j` hoặc `\\` cuối dòng để xuống dòng (`/terminal-setup`) \n- Toàn màn hình: con lăn / `↑` `↓` (ô nhập trống) / PgUp PgDn cuộn bản ghi — ô nhập luôn ở đáy · `ctrl+↑`/`ctrl+↓` lịch sử câu hỏi · kéo chuột bôi đen chép như thường (`/mouse on` để bắt chuột) · `/copy` chép câu trả lời\n\n_Lệnh chạy ngay tại đây không tốn lượt nào trừ /plan, /review, /init, /diff._',
+        '**Special input**\n- `!command` runs a shell command in the project folder (no AI) — the output is attached to your next message\n- `# note` saves a project convention (AGENTS.md) — read on every turn\n- `@path` / `@functionName` mention files, folders, functions/classes · drag an image in or `ctrl+v` (Windows: `alt+v`) to paste one\n\n**Shortcuts**\n- `shift+tab` cycle permission mode · `esc` interrupt (or clear the queue) · `esc esc` rewind · `ctrl+c` ×2 quit\n- You can type while it works — the message is **added to the running turn** (↳) and the agent reads it at its next step; `/` commands are queued\n- `↓` (empty input) opens the subagent panel · `/tasks` also shows finished tasks and shells\n- `ctrl+r` transcript · `ctrl+o` expand/collapse old outputs · `ctrl+p`/`ctrl+t` plan panel · `ctrl+l` redraw\n- `Shift+Enter` (CSI u terminals: iTerm2 ≥ 3.5, kitty, WezTerm, ghostty), `Alt+Enter`, `ctrl+j` or a trailing `\\` for a newline (`/terminal-setup`) \n- Fullscreen: wheel / `↑` `↓` (empty input) / PgUp PgDn scroll the transcript — the input stays pinned · `ctrl+↑`/`ctrl+↓` prompt history · drag to select & copy as usual (`/mouse on` to capture the mouse) · `/copy` copies an answer\n\n_Local commands cost nothing except /plan, /review, /init, /diff._',
       )}`);
       return;
     }
@@ -227,43 +340,64 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
         return;
       }
       if (!r?.goc) { traLoi(L('Chưa mở dự án nào.', 'No project is open.')); return; }
-      const hien = (k: string): string => (k.startsWith('tien-to:') ? `\`${k.slice(8)} …\` ${L('(mọi lệnh bắt đầu bằng)', '(any command starting with)')}` : `\`${k}\``);
-      traLoi(r.khoa.length === 0
-        ? L(`Dự án \`${r.goc}\` chưa có quyền nào được "Luôn cho phép". Thêm: \`/quyen them npm test\`.`, `Project \`${r.goc}\` has no "always allow" permissions. Add one: \`/quyen add npm test\`.`)
-        : `${L(`**${r.khoa.length}** thứ đang được tự duyệt ở \`${r.goc}\`:`, `**${r.khoa.length}** item${r.khoa.length === 1 ? '' : 's'} auto-approved in \`${r.goc}\`:`)}\n\n${r.khoa.map((x, i) => `${i + 1}. ${hien(x)}`).join('\n')}\n\n${L('Thêm tiền tố: `/quyen them npm test` · thu hồi một mục: `/quyen xoa <số>` · tất cả: `/quyen xoa`', 'Add a prefix: `/quyen add npm test` · revoke one: `/quyen remove <n>` · all: `/quyen remove`')}`);
+      // Đợt 4: thẻ lựa chọn (kiểu Claude Code) thay cho dòng gợi ý gõ lệnh.
+      const hienTho = (k: string): string => (k.startsWith('tien-to:') ? `${k.slice(8)} …  ${mo(L('mọi lệnh bắt đầu bằng', 'any command starting with'))}` : k);
+      b.chon({
+        tieuDe: L('Quyền "Luôn cho phép"', '"Always allow" permissions'),
+        than: [...(r.khoa.length ? r.khoa.map((x, i) => `  ${mo(`${i + 1}.`)} ${hienTho(x)}`) : [mo(L('  (chưa có quyền nào)', '  (none yet)'))]), '', cay(r.goc)].join('\n'),
+        ds: [
+          { nhan: L('Thêm tiền tố lệnh…', 'Add a command prefix…'), giaTri: 'them', mo: L('vd "npm test"', 'e.g. "npm test"') },
+          { nhan: L('Thu hồi một mục…', 'Revoke one…'), giaTri: 'mot', ...(r.khoa.length ? {} : { tat: true }) },
+          { nhan: L('Thu hồi tất cả', 'Revoke all'), giaTri: 'het', ...(r.khoa.length ? {} : { tat: true }) },
+          { nhan: L('Thoát', 'Exit'), giaTri: 'thoat', mo: 'Esc' },
+        ],
+        khiChon: async (g) => {
+          if (g === 'them') { b.datNhap(L('/quyen them ', '/quyen add ')); return; }
+          if (g === 'het') { await chayLenh('/quyen xoa', b); return; }
+          if (g === 'mot') {
+            b.chon({
+              tieuDe: L('Thu hồi quyền nào?', 'Revoke which permission?'),
+              ds: [...r.khoa.map((x, i) => ({ nhan: hienTho(x), giaTri: String(i + 1) })), { nhan: L('← Quay lại', '← Back'), giaTri: 'lai' }],
+              khiChon: async (so) => { if (so === 'lai') await chayLenh('/quyen', b); else await chayLenh(`/quyen xoa ${so}`, b); },
+            });
+          }
+        },
+      });
       return;
     }
 
-    case '/ctwork': {
-      const q = chuanHoaTen(thamSo);
-      if (/^(off|tat|ngat|go|remove)$/.test(q)) {
-        const r = await kn.goi<{ ok: boolean; loi?: string }>('agent:ctwork', { viec: 'ngat' });
-        traLoi(r?.ok ? L('Đã ngắt CT Work: thu hồi token, xoá khỏi kho bí mật, gỡ server `ctwork`.', 'Disconnected CT Work: token revoked, removed from the secret store, `ctwork` server removed.') : `⚠ ${r?.loi ?? '?'}`);
-        return;
-      }
-      if (/^(doc|read|ghi|write)$/.test(q)) {
-        const quyen = /^(ghi|write)$/.test(q) ? 'ghi' : 'doc';
-        kho.thongBao(L('Đang kết nối CT Work…', 'Connecting CT Work…'));
-        const r = await kn.goi<{ ok: boolean; loi?: string; soTool?: number }>('agent:ctwork', { viec: 'noi', quyen });
-        traLoi(r?.ok ? L(`✓ ctwork · ${r.soTool ?? 0} tool (${quyen === 'ghi' ? 'đọc + ghi' : 'chỉ đọc'}).`, `✓ ctwork · ${r.soTool ?? 0} tools (${quyen === 'ghi' ? 'read + write' : 'read only'}).`) : `⚠ ${r?.loi ?? '?'}`);
-        return;
-      }
-      const t = await kn.goi<{ coToken?: boolean; quyen?: string | null; bienTay?: boolean; server?: { ok: boolean; soTool: number; loi?: string } | null }>('agent:ctwork', { viec: 'trangThai' }).catch(() => null);
-      if (t?.server?.ok) {
-        traLoi(L(`✓ ctwork · ${t.server.soTool} tool · ${t.bienTay ? 'token từ biến môi trường CTWORK_TOKEN' : t.quyen === 'ghi' ? 'đọc + ghi' : 'chỉ đọc'}. Đổi quyền: \`/ctwork doc\` · \`/ctwork ghi\` · ngắt: \`/ctwork off\`.`, `✓ ctwork · ${t.server.soTool} tools · ${t.bienTay ? 'token from the CTWORK_TOKEN env var' : t.quyen === 'ghi' ? 'read + write' : 'read only'}. Change: \`/ctwork read\` · \`/ctwork write\` · disconnect: \`/ctwork off\`.`));
-        return;
-      }
-      b.moMenu('ctwork');
+    case '/ctwork': case '/issue': case '/sprint': case '/viec':
+      /* Đợt 5: bộ lệnh CT Work CHUNG ba nơi (`desktop/.../ctworkLenh.ts`) — menu đánh số, thẻ xem trước khi ghi. */
+      await lenhCtwork(ten, thamSo, giaoDienCtw(b));
       return;
-    }
 
     case '/sessions': {
       const r = await kn.goi<{ toi: { id: string; ten: string } | null; ds: Array<{ id: string; ten: string; noi: string; thuMuc: string | null; trangThai: string }> } | null>('agent:dsPhienMang').catch(() => null);
       if (!r) { traLoi(L('Lõi này chưa hỗ trợ nhắn giữa phiên.', 'This core does not support cross-session messaging yet.')); return; }
-      const toi = r.toi ? `${L('Phiên này', 'This session')}: **${r.toi.ten}** (\`${r.toi.id}\`)` : L('Phiên này chưa đăng ký (đăng ký sau lượt đầu tiên).', 'This session is not registered yet (registers after the first turn).');
-      traLoi(`${toi}\n\n${r.ds.length
-        ? `${L('Phiên khác đang mở', 'Other open sessions')}:\n\n${r.ds.map((x) => `- \`${x.id}\` **${x.ten}** · ${x.noi} · ${x.trangThai === 'dangChay' ? L('đang chạy', 'running') : L('rảnh', 'idle')} · ${x.thuMuc ?? '—'}`).join('\n')}\n\n${L('Agent tự nhắn được cho các phiên này — bạn duyệt từng tin trước khi gửi. Đổi tên phiên này: `/rename <tên>`.', 'The agent can message them — you approve each message before it is sent. Rename this session: `/rename <name>`.')}`
-        : L('Không có phiên CuongMini nào khác đang mở trên máy này.', 'No other CuongMini session is open on this machine.')}`);
+      // Đợt 4: thẻ lựa chọn.
+      {
+        const be = Math.min(24, Math.max(6, ...r.ds.map((x) => x.ten.length)));
+        b.chon({
+          tieuDe: L('Phiên CuongMini trên máy này', 'CuongMini sessions on this machine'),
+          than: [
+            `  ${L('Phiên này', 'This session')}: ${r.toi ? `${r.toi.ten} ${mo(`(${r.toi.id})`)}` : mo(L('chưa đăng ký (sau lượt đầu tiên)', 'not registered yet (after the first turn)'))}`,
+            '',
+            ...(r.ds.length
+              ? r.ds.map((x) => `${dongCot(x.ten, be, `${x.trangThai === 'dangChay' ? mau(VANG_NHAT)(L('● đang chạy', '● running')) : mo(L('○ rảnh', '○ idle'))} ${mo(`· ${x.noi} · ${x.id}`)}`)}\n${cay(x.thuMuc ?? '—')}`)
+              : [mo(L('  Không có phiên nào khác đang mở.', '  No other session is open.'))]),
+          ].join('\n'),
+          ds: [
+            { nhan: L('Đổi tên phiên này…', 'Rename this session…'), giaTri: 'ten' },
+            { nhan: L('Nhờ agent nhắn một phiên…', 'Ask the agent to message a session…'), giaTri: 'nhan', ...(r.ds.length ? {} : { tat: true }), mo: L('bạn duyệt tin trước khi gửi', 'you approve the text first') },
+            { nhan: L('Thoát', 'Exit'), giaTri: 'thoat', mo: 'Esc' },
+          ],
+          khiChon: (g) => {
+            if (g === 'ten') b.datNhap('/rename ');
+            else if (g === 'nhan') b.datNhap(L(`Nhắn phiên ${r.ds[0]!.id}: `, `Message session ${r.ds[0]!.id}: `));
+          },
+        });
+        return;
+      }
       return;
     }
 
@@ -279,6 +413,31 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       const d = thamSo.split(/\s+/).filter(Boolean);
       const dau = (d[0] ?? '').toLowerCase();
       const ds = await kn.goi<Array<{ duongDan: string; nhanh: string | null; laChinh: boolean; cuaApp: boolean; dangDung?: boolean }>>('agent:dsWorktree').catch(() => []) ?? [];
+      if ((!dau || dau === 'list' || dau === 'ds') && ds.length) {
+        // Đợt 4: thẻ lựa chọn.
+        const xoaDuoc = ds.filter((w) => !w.laChinh && w.cuaApp);
+        b.chon({
+          tieuDe: L('Git worktree', 'Git worktrees'),
+          than: ds.map((w) => `  ${w.dangDung ? mau(XANH)('▶') : ' '} ${w.nhanh ?? L('(tách rời)', '(detached)')}${w.laChinh ? mo(L(' · cây chính', ' · main tree')) : ''}${w.cuaApp ? mo(' · CuongMini') : ''}\n${cay(w.duongDan)}`).join('\n'),
+          ds: [
+            { nhan: L('Tạo worktree mới…', 'Create a new worktree…'), giaTri: 'tao', mo: L('nhánh agent/<tên>', 'branch agent/<name>') },
+            { nhan: L('Xoá một worktree…', 'Remove a worktree…'), giaTri: 'xoa', ...(xoaDuoc.length ? {} : { tat: true }) },
+            { nhan: L('Thoát', 'Exit'), giaTri: 'thoat', mo: 'Esc' },
+          ],
+          khiChon: (g) => {
+            if (g === 'tao') b.datNhap('/worktree ');
+            else if (g === 'xoa') {
+              b.chon({
+                tieuDe: L('Xoá worktree nào?', 'Remove which worktree?'),
+                moTa: L('Nhánh được giữ lại; worktree còn thay đổi chưa commit thì không xoá.', 'The branch is kept; a worktree with uncommitted changes is not removed.'),
+                ds: [...xoaDuoc.map((w) => ({ nhan: w.duongDan, giaTri: w.duongDan, mo: w.nhanh ?? '' })), { nhan: L('← Quay lại', '← Back'), giaTri: '__lai' }],
+                khiChon: async (d2) => { if (d2 === '__lai') await chayLenh('/worktree', b); else await chayLenh(`/worktree xoa ${d2}`, b); },
+              });
+            }
+          },
+        });
+        return;
+      }
       if (!dau || dau === 'list' || dau === 'ds') {
         traLoi(ds.length
           ? `${L('Worktree của repo', 'Repo worktrees')}:\n\n${ds.map((w) => `- ${w.dangDung ? '▶ ' : ''}\`${w.duongDan}\` · ${w.nhanh ?? L('(tách rời)', '(detached)')}${w.laChinh ? L(' · cây chính', ' · main tree') : ''}${w.cuaApp ? ' · CuongMini' : ''}`).join('\n')}\n\n${L('Tạo: `/worktree <tên>` (nhánh `agent/<tên>`, mở ở thư mục anh em) · xoá: `/worktree xoa <đường>`', 'Create: `/worktree <name>` (branch `agent/<name>`, sibling folder) · remove: `/worktree remove <path>`')}`
@@ -301,21 +460,77 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       return;
     }
 
+    case '/may': {
+      const q = thamSo.trim().toLowerCase();
+      const bat = /^(on|bat|bật|1|yes)$/.test(q) ? true : /^(off|tat|tắt|0|no)$/.test(q) ? false : undefined;
+      const r = await kn.goi<{ bat: boolean; hoTro: boolean; nenTang: string; quyen: { chup: boolean; dieuKhien: boolean } | null }>('agent:mayTinh', bat === undefined ? {} : { bat }).catch(() => null);
+      if (!r) { traLoi(L('Lõi này chưa có điều khiển máy tính — cập nhật CuongMini.', 'This core has no computer control yet — update CuongMini.')); return; }
+      if (!r.hoTro) { traLoi(L(`Nền tảng ${r.nenTang} chưa hỗ trợ điều khiển máy tính.`, `Computer control is not supported on ${r.nenTang}.`)); return; }
+      const quyen = r.quyen && (!r.quyen.chup || !r.quyen.dieuKhien)
+        ? `\n\n${L('⚠ macOS còn thiếu quyền cho **app terminal đang chạy CuongMini**', '⚠ macOS is missing permissions for **the terminal app running CuongMini**')}:${!r.quyen.chup ? `\n- ${L('Ghi màn hình', 'Screen Recording')}: \`open "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"\`` : ''}${!r.quyen.dieuKhien ? `\n- ${L('Trợ năng', 'Accessibility')}: \`open "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"\`` : ''}\n${L('Bật xong thì thoát hẳn terminal rồi mở lại.', 'Then quit and reopen the terminal.')}`
+        : '';
+      traLoi(r.bat
+        ? `${L('🖥 Điều khiển máy tính: **BẬT** — agent chụp màn hình được; MỌI cú bấm/gõ/phím/cuộn đều hỏi bạn, kể cả chế độ Bỏ qua hết. Tắt: `/may off`.', '🖥 Computer control: **ON** — the agent can take screenshots; EVERY click/type/key/scroll asks you first, even in Bypass mode. Turn off: `/may off`.')}${quyen}`
+        : L('🖥 Điều khiển máy tính: **TẮT** (mặc định). Bật: `/may on` — từ lượt sau agent có tool chụp màn hình + chuột/phím (mỗi thao tác đều hỏi).', '🖥 Computer control: **OFF** (default). Turn on: `/may on` — from the next turn the agent gets screenshot + mouse/keyboard tools (each action asks).'));
+      return;
+    }
+
     case '/hen': {
       const d = thamSo.split(/\s+/).filter(Boolean);
+      const lenhHen = (d[0] ?? '').toLowerCase();
+      if (['chay-bu', 'chaybu', 'run-missed', 'bo-lo', 'bolo', 'drop-missed'].includes(lenhHen)) {
+        const chay = ['chay-bu', 'chaybu', 'run-missed'].includes(lenhHen);
+        const r = await kn.goi<{ n: number }>('agent:xuLyHenLo', { cach: chay ? 'chay' : 'bo' }).catch(() => null);
+        traLoi(chay ? L(`Đang chạy bù ${r?.n ?? 0} hẹn đã lỡ (mỗi hẹn chạy nền trong đúng việc của nó — xem kết quả bằng /resume).`, `Running ${r?.n ?? 0} missed schedule(s) in the background, each in its own task — see the result with /resume.`)
+          : L(`Đã bỏ ${r?.n ?? 0} hẹn đã lỡ.`, `Dropped ${r?.n ?? 0} missed schedule(s).`));
+        return;
+      }
       if ((d[0] ?? '').toLowerCase() === 'huy' || (d[0] ?? '').toLowerCase() === 'cancel') {
         const n = await kn.goi<number>('agent:huyHen', d[1] ? { id: d[1].replace(/^#/, '') } : {}).catch(() => 0) ?? 0;
         traLoi(L(`Đã huỷ ${n} hẹn.`, `Cancelled ${n} schedule${n === 1 ? '' : 's'}.`));
         return;
       }
-      const r = await kn.goi<{ cho: Array<{ id: string; moTa: string; hetLuc: number }>; hen: Array<{ id: string; lyDo: string; luc: number; lap: boolean; phut: number; conLai: number }> } | null>('agent:henCho').catch(() => null);
-      if (!r || (!r.cho.length && !r.hen.length)) { traLoi(L('Không có việc chờ hay hẹn nào.', 'Nothing is waiting or scheduled.')); return; }
-      const gioP = (t: number) => new Date(t).toLocaleTimeString(L('vi-VN', 'en-US'), { hour: '2-digit', minute: '2-digit' });
-      traLoi([
-        ...r.cho.map((c) => `- ⏳ ${L('Đang chờ', 'Waiting')}: ${dichMoTaCho(c.moTa)} · ${L('còn', 'left')} ${Math.max(0, Math.round((c.hetLuc - Date.now()) / 1000))}s`),
-        ...r.hen.map((h) => `- ⏰ \`${h.id}\` ${gioP(h.luc)}${h.lap ? L(` · lặp mỗi ${h.phut}′ · còn ${h.conLai}×`, ` · every ${h.phut}′ · ${h.conLai}× left`) : ''} — ${h.lyDo}`),
-        '', L('Huỷ: `/hen huy <id>` hoặc `/hen huy` (tất cả) · bỏ chờ: esc khi đang chờ. Hẹn chỉ chạy khi CuongMini còn mở.', 'Cancel: `/hen cancel <id>` or `/hen cancel` (all) · stop waiting: esc while waiting. Schedules only fire while CuongMini is open.'),
-      ].join('\n'));
+      const r = await kn.goi<{ cho: Array<{ id: string; moTa: string; hetLuc: number }>; hen: Array<{ id: string; lyDo: string; luc: number; lap: boolean; phut: number; conLai: number; cron?: string }> } | null>('agent:henCho').catch(() => null);
+      const lo = (await kn.goi<{ ds: Array<{ id: string; lyDo: string; luc: number; cron?: string }> }>('agent:henLo').catch(() => null))?.ds ?? [];
+      const dongLo = lo.length
+        ? ['', L(`**Đã lỡ ${lo.length} hẹn** lúc CuongMini tắt:`, `**Missed ${lo.length} schedule(s)** while CuongMini was closed:`),
+          ...lo.map((h) => `- ⏰ ${new Date(h.luc).toLocaleString(L('vi-VN', 'en-US'), { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })} — ${h.lyDo}`),
+          L('Chạy bù: `/hen chay-bu` · bỏ: `/hen bo-lo`', 'Run now: `/hen run-missed` · drop: `/hen drop-missed`')]
+        : [];
+      if (!r || (!r.cho.length && !r.hen.length)) { if (!lo.length) { traLoi(L('Không có việc chờ hay hẹn nào.', 'Nothing is waiting or scheduled.')); return; } }
+      // Đợt 4: thẻ lựa chọn kiểu Claude Code.
+      {
+        const gio = (t: number) => new Date(t).toLocaleTimeString(L('vi-VN', 'en-US'), { hour: '2-digit', minute: '2-digit' });
+        const henDs = r?.hen ?? [];
+        b.chon({
+          tieuDe: L('Chờ & hẹn của agent', 'Agent waits & schedules'),
+          than: [
+            ...(r?.cho ?? []).map((c) => `  ⏳ ${dichMoTaCho(c.moTa)} ${mo(`· ${L('còn', 'left')} ${Math.max(0, Math.round((c.hetLuc - Date.now()) / 1000))}s`)}`),
+            ...henDs.map((h) => `  ⏰ ${gio(h.luc)} ${mo(`· ${h.id}${h.cron ? ` · cron ${h.cron} · ${L(`còn ${h.conLai}×`, `${h.conLai}× left`)}` : h.lap ? L(` · mỗi ${h.phut}′ · còn ${h.conLai}×`, ` · every ${h.phut}′ · ${h.conLai}× left`) : ''}`)}\n${cay(h.lyDo.slice(0, 100))}`),
+            ...(lo.length ? ['', `  ${mau(VANG_NHAT)(L(`Đã lỡ ${lo.length} hẹn lúc CuongMini tắt`, `Missed ${lo.length} schedule(s) while CuongMini was closed`))}`, ...lo.map((h) => cay(`${new Date(h.luc).toLocaleString(L('vi-VN', 'en-US'), { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })} — ${h.lyDo.slice(0, 80)}`))] : []),
+            '', mo(L('  Hẹn được lưu xuống đĩa — tắt CuongMini lúc tới giờ thì lần mở sau được hỏi chạy bù.', '  Schedules are saved — if CuongMini is closed when one is due, you are asked to run it next time.')),
+          ].join('\n'),
+          ds: [
+            ...(lo.length ? [{ nhan: L('Chạy bù hẹn đã lỡ', 'Run missed schedules'), giaTri: 'chay' }, { nhan: L('Bỏ hẹn đã lỡ', 'Drop missed schedules'), giaTri: 'bo' }] : []),
+            { nhan: L('Huỷ một hẹn…', 'Cancel one…'), giaTri: 'mot', ...(henDs.length ? {} : { tat: true }) },
+            { nhan: L('Huỷ tất cả hẹn', 'Cancel all'), giaTri: 'het', ...(henDs.length ? {} : { tat: true }) },
+            { nhan: L('Thoát', 'Exit'), giaTri: 'thoat', mo: 'Esc' },
+          ],
+          khiChon: async (g) => {
+            if (g === 'chay') await chayLenh('/hen chay-bu', b);
+            else if (g === 'bo') await chayLenh('/hen bo-lo', b);
+            else if (g === 'het') await chayLenh('/hen huy', b);
+            else if (g === 'mot') {
+              b.chon({
+                tieuDe: L('Huỷ hẹn nào?', 'Cancel which schedule?'),
+                ds: [...henDs.map((h) => ({ nhan: `${gio(h.luc)} — ${h.lyDo.slice(0, 60)}`, giaTri: h.id })), { nhan: L('← Quay lại', '← Back'), giaTri: '__lai' }],
+                khiChon: async (id) => { if (id === '__lai') await chayLenh('/hen', b); else await chayLenh(`/hen huy ${id}`, b); },
+              });
+            }
+          },
+        });
+        return;
+      }
       return;
     }
 
@@ -485,10 +700,9 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       const tsMcp = chuanHoaTen(thamSo);
       if (/^(mo|open|edit|sua)$/.test(tsMcp)) { kn.moCuoi = null; await kn.goi('agent:mcpMoCauHinh'); baoMoFile(b, L('cấu hình MCP', 'MCP config')); return; }
       const napLai = /^(nap|napLai|reload)$/i.test(tsMcp);
-      if (napLai) await kn.goi('agent:mcpNapLai').catch(() => undefined);
-      const tt = await kn.goi<{ duongDan: string; server: Array<{ ten: string; ok: boolean; soTool: number; loi?: string; canDuyet?: boolean }>; loiCauHinh?: string | null } | null>('agent:mcpTrangThai').catch(() => null);
-      const sv = tt?.server ?? [];
-      traLoi(`${napLai ? L('✓ Đã nạp lại cấu hình MCP.\n\n', '✓ MCP config reloaded.\n\n') : ''}${L('**Máy chủ MCP**', '**MCP servers**')}${sv.length ? `\n\n${sv.map((x) => `- ${x.ok ? '✓' : x.canDuyet ? '⏸' : '✗'} \`${x.ten}\`${x.soTool ? ` · ${x.soTool} ${L('tool', x.soTool === 1 ? 'tool' : 'tools')}` : ''}${x.loi ? ` · ${x.loi}` : ''}${x.canDuyet ? L(' · chờ duyệt', ' · awaiting approval') : ''}`).join('\n')}` : L(' — chưa cấu hình máy chủ nào.', ' — none configured.')}${tt?.loiCauHinh ? `\n\n⚠ ${L('File cấu hình hỏng', 'Config file is broken')}: ${tt.loiCauHinh}` : ''}\n\n${L(`File cấu hình: \`${tt?.duongDan ?? '?'}\` · mở bằng \`/mcp mo\` · sửa xong gõ \`/mcp nap\` để nạp lại.`, `Config file: \`${tt?.duongDan ?? '?'}\` · open with \`/mcp open\` · reload with \`/mcp reload\` after editing.`)}`);
+      if (napLai) { await kn.goi('agent:mcpNapLai').catch(() => undefined); b.lamMoiCtwork?.(); }
+      // Đợt 4: THẺ LỰA CHỌN kiểu Claude Code (trước đây chỉ in một dòng "open with /mcp open · reload with /mcp reload").
+      await menuMcp(b, napLai ? L('✓ Đã nạp lại cấu hình MCP.', '✓ MCP config reloaded.') : '');
       return;
     }
 

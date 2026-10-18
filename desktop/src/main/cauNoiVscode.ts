@@ -46,6 +46,10 @@ const KENH_DUOC: ReadonlySet<InvokeChannel> = new Set<InvokeChannel>([
   // Đợt 3 (18/10/2026): hỏi lựa chọn, chờ/hẹn, nhắn giữa phiên, tiền tố lệnh, worktree.
   'agent:traLoiHoi', 'agent:huyCho', 'agent:huyHen', 'agent:henCho', 'agent:dsPhienMang', 'agent:doiTenPhienMang',
   'agent:themTienTo', 'agent:dsWorktree', 'agent:taoWorktree', 'agent:xoaWorktree', 'agent:ctwork', 'agent:mcpNapLai',
+  // Đợt 4 (18/10/2026): gõ thêm giữa lượt, điều khiển máy tính, hẹn đã lỡ.
+  'agent:chenTin', 'agent:mayTinh', 'agent:henLo', 'agent:xuLyHenLo', 'agent:mcpTool', 'agent:mcpBatTat',
+  // Đợt 5 (18/10/2026): CT Work hệ sinh thái — gắn dự án, dòng trạng thái, menu `/ctwork`, `/issue`.
+  'agent:ctworkHe',
 ]);
 
 const CONG_THU = [47821, 47822, 47823, 47824, 47825];

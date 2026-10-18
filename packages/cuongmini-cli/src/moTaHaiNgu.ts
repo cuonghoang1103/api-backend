@@ -4,6 +4,7 @@
  * Hình dạng dữ liệu y như bản app — dữ liệu chung, chỉ khác lời.
  * Không import `ct-lenh` (để test nạp được không cần alias).
  */
+import { ngonNgu } from './i18n';
 export interface UsageEn { daDung: number; tran: number; conLai: number; phanTram: number; hoiLucNao: string | null; giaHan?: number; tranGoc?: number; soGio?: number; hoiHetLuc?: string | null; coKeyGiaHan?: boolean; tienNgay?: { phanTram: number; catViecNen: boolean; dungHet: boolean } | null }
 
 const so = (n: number): string => n.toLocaleString('en-US');
@@ -108,4 +109,27 @@ export function dsPhienEn(ds: ReadonlyArray<{ tieuDe: string; duAn: string | nul
   if (!ds.length) return 'No matching tasks.';
   return '**Saved tasks** — type `/resume <n>` to open one here:\n\n'
     + ds.map((p, i) => `${i + 1}. ${p.ghim ? '📌 ' : ''}${p.tieuDe || 'Untitled task'}${p.duAn ? ` · \`${p.duAn}\`` : ''} · ${new Date(p.luucLuc).toLocaleDateString('en-US')}`).join('\n');
+}
+
+/**
+ * QA 5c: lỗi server MCP do LÕI viết (tiếng Việt) ⇒ tiếng Anh khi giao diện English — trước đây /mcp ở English hiện
+ * "✘ không chạy được "/x": spawn …", "không khởi động xong trong 30s".
+ */
+export function dichLoiMcp(loi: string): string {
+  if (ngonNgu() !== 'en') return loi;
+  return loi
+    .replace(/^không chạy được "([^"]*)": /, 'cannot start "$1": ')
+    .replace(/không khởi động xong trong (\d+)s/, 'did not start within $1s')
+    .replace(/ \(lần đầu npx\/uvx phải tải gói — bấm Nạp lại thêm lần nữa, hoặc tăng "startupTimeoutMs"\)/, ' (the first npx/uvx run downloads the package — Reload again, or raise "startupTimeoutMs")')
+    .replace(/server đã thoát \(mã (-?\d+)\)/, 'server exited (code $1)')
+    .replace(/server đã thoát \(tín hiệu ([A-Z0-9]+)\)/, 'server exited (signal $1)')
+    .replace(/luồng SSE đã đóng/, 'SSE stream closed')
+    .replace(/luồng SSE đứt: /, 'SSE stream broke: ')
+    .replace(/: kết nối đã đóng$/, ': connection closed')
+    .replace(/^đã tắt$/, 'disabled')
+    .replace(/^từ \.mcp\.json của dự án — cần bạn duyệt trước khi chạy$/, 'from the project .mcp.json — approve it before it runs')
+    .replace(/^quá trần (\d+) server — không bật$/, 'over the $1-server cap — not started')
+    .replace(/^thiếu "command" \(server chạy trên máy\) hoặc "url" \(server qua mạng\)$/, 'missing "command" (local server) or "url" (remote server)')
+    .replace(/^kiểu "([^"]*)" không hỗ trợ — dùng "stdio", "http" hoặc "sse"$/, 'type "$1" is not supported — use "stdio", "http" or "sse"')
+    .replace(/^tên server chỉ được gồm .*$/, 'server names may only use plain letters, digits, "_" and "-" (max 32 characters)');
 }

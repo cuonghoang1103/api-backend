@@ -43,6 +43,9 @@ export interface KhuPhu {
   gocKhu?: string;
   /** git: mốc so sánh (tree sha). */
   baseTree?: string;
+  /** git (đợt 4): commit mốc (HEAD lúc giao việc) + mốc có ĐÚNG là HEAD sạch không (merge chỉ khi đúng). */
+  mocCommit?: string;
+  mocLaHead?: boolean;
   /** tạm: rel ⇒ sha1 nội dung lúc chép. */
   bam?: Map<string, string>;
 }
@@ -54,6 +57,8 @@ export interface ThayDoi {
   base: string | null;
   moi: string | null;
   nhiPhan?: boolean;
+  /** Nhị phân (đợt 4): mã nội dung MỐC để kiểm xung đột — blob sha (git) hoặc sha1 (thư mục tạm). */
+  maBase?: string | null;
 }
 
 const BO_QUA = new Set(['node_modules', '.git', 'dist', 'build', '.next', 'out', 'target', '.venv', 'venv', '__pycache__', '.cache', 'coverage', '.turbo', '.gradle', 'Pods', 'DerivedData']);
@@ -93,7 +98,9 @@ export async function taoKhuPhu(goc: string, id: string): Promise<{ ok: true; kh
     try {
       let moc = '';
       try { moc = (await git(khoChinh, ['stash', 'create'])).trim(); } catch { /* */ }
-      if (!moc) moc = (await git(khoChinh, ['rev-parse', '--verify', 'HEAD'])).trim();
+      const mocLaHead = !moc;
+      const mocCommit = (await git(khoChinh, ['rev-parse', '--verify', 'HEAD']).catch(() => '')).trim();
+      if (!moc) moc = mocCommit;
       await git(khoChinh, ['worktree', 'prune']).catch(() => '');
       await git(khoChinh, ['worktree', 'add', '--detach', dich, moc]);
       // File chưa theo dõi (không bị ignore) — agent phụ phải thấy đúng cây người dùng đang có.
@@ -112,7 +119,7 @@ export async function taoKhuPhu(goc: string, id: string): Promise<{ ok: true; kh
       // Thư mục con của kho (goc ≠ khoChinh) ⇒ agent phụ làm ở đúng thư mục con tương ứng.
       const con = path.relative(khoChinh, goc);
       const thuMuc = con && !con.startsWith('..') ? path.join(dich, con) : dich;
-      const khu: KhuPhu = { id, loai: 'worktree', thuMuc, goc, khoChinh, baseTree, gocKhu: dich };
+      const khu: KhuPhu = { id, loai: 'worktree', thuMuc, goc, khoChinh, baseTree, gocKhu: dich, ...(mocCommit ? { mocCommit, mocLaHead } : {}) };
       khuDangCo.set(id, khu);
       return { ok: true, khu };
     } catch (e) {
@@ -180,10 +187,11 @@ export async function thayDoiCuaKhu(khu: KhuPhu): Promise<ThayDoi[]> {
       const base = tt === 'A' ? null : await git(gocKhu, ['show', `${khu.baseTree}:${relKho}`]).catch(() => null);
       const buf = tt === 'D' ? null : await docBuf(path.join(gocKhu, relKho));
       const nhiPhan = (buf && laNhiPhan(buf)) || (base !== null && base.includes('\0'));
+      const maBase = nhiPhan && tt !== 'A' ? (await git(gocKhu, ['rev-parse', `${khu.baseTree}:${relKho}`]).catch(() => '')).trim() || null : null;
       ra.push({
         rel, kieu: tt === 'A' ? 'them' : tt === 'D' ? 'xoa' : 'sua',
         base: nhiPhan ? null : base, moi: buf && !nhiPhan ? buf.toString('utf8') : null,
-        ...(nhiPhan ? { nhiPhan: true } : {}),
+        ...(nhiPhan ? { nhiPhan: true, maBase } : {}),
       });
     }
     return ra;
@@ -206,7 +214,7 @@ export async function thayDoiCuaKhu(khu: KhuPhu): Promise<ThayDoi[]> {
     if (cu === bamChu(b)) continue;
     const nhiPhan = laNhiPhan(b);
     const base = cu === undefined ? null : await fs.readFile(path.join(khu.goc, r), 'utf8').catch(() => null);
-    ra.push({ rel: r, kieu: cu === undefined ? 'them' : 'sua', base: nhiPhan ? null : base, moi: nhiPhan ? null : b.toString('utf8'), ...(nhiPhan ? { nhiPhan: true } : {}) });
+    ra.push({ rel: r, kieu: cu === undefined ? 'them' : 'sua', base: nhiPhan ? null : base, moi: nhiPhan ? null : b.toString('utf8'), ...(nhiPhan ? { nhiPhan: true, maBase: cu ?? null } : {}) });
   }
   for (const r of khu.bam!.keys()) if (!thay.has(r)) ra.push({ rel: r, kieu: 'xoa', base: await fs.readFile(path.join(khu.goc, r), 'utf8').catch(() => null), moi: null });
   return ra.sort((a, b) => a.rel.localeCompare(b.rel));
@@ -219,7 +227,7 @@ export function tomTatThayDoi(ds: ThayDoi[], tranKyTu = 6000): string {
   let tongThem = 0; let tongBo = 0;
   const than: string[] = [];
   for (const t of ds) {
-    if (t.nhiPhan) { dong.push(`  ${t.kieu === 'them' ? 'A' : t.kieu === 'xoa' ? 'D' : 'M'} ${t.rel} (nhị phân — không gộp tự động)`); continue; }
+    if (t.nhiPhan) { dong.push(`  ${t.kieu === 'them' ? 'A' : t.kieu === 'xoa' ? 'D' : 'M'} ${t.rel} (nhị phân — gộp bằng chép nguyên tệp)`); continue; }
     const d = soSanhDong(t.base ?? '', t.moi ?? '');
     tongThem += d.soThem; tongBo += d.soBo;
     dong.push(`  ${t.kieu === 'them' ? 'A' : t.kieu === 'xoa' ? 'D' : 'M'} ${t.rel}  +${d.soThem} −${d.soBo}`);
@@ -236,14 +244,31 @@ export function tomTatThayDoi(ds: ThayDoi[], tranKyTu = 6000): string {
  * GỘP về cây gốc. Chỉ file văn bản; file nào ở cây gốc đã KHÁC mốc ⇒ xung đột, bỏ qua.
  * `chiFile` (rel) để gộp một phần. Ghi qua `ghiSoTruoc` ⇒ /undo phủ được.
  */
-export async function gopVaoGoc(khu: KhuPhu, ds: ThayDoi[], so: SoCuoc, chiFile?: string[]): Promise<{ ghi: string[]; xungDot: string[]; boQua: string[] }> {
-  const ghi: string[] = []; const xungDot: string[] = []; const boQua: string[] = [];
+export async function gopVaoGoc(khu: KhuPhu, ds: ThayDoi[], so: SoCuoc, chiFile?: string[]): Promise<{ ghi: string[]; xungDot: string[]; boQua: string[]; khongLui: string[] }> {
+  const ghi: string[] = []; const xungDot: string[] = []; const boQua: string[] = []; const khongLui: string[] = [];
   const chon = chiFile?.length ? new Set(chiFile) : null;
   for (const t of ds) {
     if (chon && !chon.has(t.rel)) continue;
-    if (t.nhiPhan) { boQua.push(t.rel); continue; }
     const dich = path.resolve(khu.goc, t.rel);
     if (!dich.startsWith(path.resolve(khu.goc) + path.sep)) { boQua.push(t.rel); continue; }
+    if (t.nhiPhan) {
+      /* ĐỢT 4 — NHỊ PHÂN: so mã nội dung hiện tại ở dự án với mốc (blob sha / sha1); khớp ⇒ chép nguyên tệp. */
+      const hienTai = await docBuf(dich);
+      const maNay = hienTai === null ? null
+        : khu.loai === 'worktree' ? (await git(khu.khoChinh!, ['hash-object', dich]).catch(() => '')).trim() || '?'
+          : bamChu(hienTai);
+      if ((maNay ?? null) !== (t.maBase ?? null)) { xungDot.push(t.rel); continue; }
+      if (t.kieu === 'xoa') { await fs.rm(dich, { force: true }); khongLui.push(t.rel); }
+      else {
+        const moi = await docBuf(path.join(khu.thuMuc, t.rel));
+        if (!moi) { boQua.push(t.rel); continue; }
+        if (hienTai === null) ghiSoTruoc(so, dich, null); else khongLui.push(t.rel);
+        await fs.mkdir(path.dirname(dich), { recursive: true });
+        await fs.writeFile(dich, moi);
+      }
+      ghi.push(t.rel);
+      continue;
+    }
     const hienTai = await fs.readFile(dich, 'utf8').catch(() => null);
     if ((hienTai ?? null) !== (t.base ?? null)) { xungDot.push(t.rel); continue; }
     ghiSoTruoc(so, dich, hienTai);
@@ -251,7 +276,45 @@ export async function gopVaoGoc(khu: KhuPhu, ds: ThayDoi[], so: SoCuoc, chiFile?
     else { await fs.mkdir(path.dirname(dich), { recursive: true }); await fs.writeFile(dich, t.moi, 'utf8'); }
     ghi.push(t.rel);
   }
-  return { ghi, xungDot, boQua };
+  return { ghi, xungDot, boQua, khongLui };
+}
+
+/**
+ * ĐỢT 4 — GỘP BẰNG `git merge` (tuỳ chọn): giữ lịch sử — một commit của agent
+ * phụ (cây khu, cha = HEAD lúc giao việc) trên nhánh `cuongmini/phu-<id>`, rồi
+ * `git merge --no-ff` vào nhánh hiện tại. Chỉ chạy khi:
+ *   • khu là worktree và lúc giao việc cây làm việc SẠCH (mốc = HEAD — nếu mốc
+ *     là `stash create` thì commit sẽ chở luôn thay đổi chưa commit của bạn);
+ *   • bây giờ cây làm việc (file đã theo dõi) cũng sạch — merge không được đè.
+ * Xung đột ⇒ `git merge --abort`, trả danh sách file, không để repo dở dang.
+ */
+export async function gopBangMerge(khu: KhuPhu, nhiemVu: string): Promise<{ ok: true; sha: string; nhanh: string } | { ok: false; loi: string; xungDot?: string[] }> {
+  if (khu.loai !== 'worktree' || !khu.khoChinh || !khu.gocKhu || !khu.mocCommit) return { ok: false, loi: 'dự án không phải kho git (agent phụ chạy trên bản sao) — dùng cách chép file (mặc định).' };
+  if (!khu.mocLaHead) return { ok: false, loi: 'lúc giao việc cây làm việc có thay đổi CHƯA commit — commit của agent phụ sẽ chở luôn chúng. Commit trước rồi giao lại, hoặc gộp bằng chép file.' };
+  const ban = (await git(khu.khoChinh, ['status', '--porcelain', '--untracked-files=no']).catch(() => 'x')).trim();
+  if (ban) return { ok: false, loi: `cây làm việc đang có thay đổi chưa commit (${ban.split('\n').length} file) — merge không được đè. Commit/stash trước, hoặc gộp bằng chép file.` };
+  const env = { GIT_INDEX_FILE: `${khu.gocKhu}.index` };
+  try {
+    await git(khu.gocKhu, ['add', '-A'], env);
+    const tree = (await git(khu.gocKhu, ['write-tree'], env)).trim();
+    const tieuDe = `agent phụ: ${nhiemVu.replace(/\s+/g, ' ').slice(0, 60)}`;
+    const commitSha = (await git(khu.gocKhu, ['commit-tree', tree, '-p', khu.mocCommit, '-m', tieuDe, '-m', `Do agent phụ CuongMini (${khu.id}) làm trong worktree riêng.`])).trim();
+    const nhanh = `cuongmini/phu-${khu.id.replace(/[^a-zA-Z0-9_-]/g, '').slice(-20)}`;
+    await git(khu.khoChinh, ['branch', '-f', nhanh, commitSha]);
+    try {
+      await git(khu.khoChinh, ['merge', '--no-ff', '--no-edit', '-m', `Gộp ${tieuDe}`, nhanh]);
+    } catch (e) {
+      const xd = (await git(khu.khoChinh, ['diff', '--name-only', '--diff-filter=U']).catch(() => '')).split('\n').filter(Boolean);
+      await git(khu.khoChinh, ['merge', '--abort']).catch(() => '');
+      return { ok: false, loi: `git merge xung đột — đã huỷ merge, repo về như cũ. ${String((e as { stderr?: string }).stderr || (e as Error).message).split('\n')[0]?.slice(0, 160) ?? ''}`, xungDot: xd };
+    }
+    const sha = (await git(khu.khoChinh, ['rev-parse', 'HEAD'])).trim();
+    await git(khu.khoChinh, ['branch', '-D', nhanh]).catch(() => '');
+    return { ok: true, sha, nhanh };
+  } catch (e) {
+    const m = String((e as { stderr?: string }).stderr || (e as Error).message).split('\n')[0]?.slice(0, 200);
+    return { ok: false, loi: `không tạo được commit/merge: ${m}${/identity|user\.email|user\.name/i.test(m ?? '') ? ' — đặt `git config user.name` / `user.email` trước.' : ''}` };
+  }
 }
 
 /** Dọn khu (worktree remove --force: khu là của APP, thay đổi đã gộp hoặc bị bỏ). */

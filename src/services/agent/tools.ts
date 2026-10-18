@@ -110,7 +110,14 @@ export type AgentCapability =
   /** Hẹn tự quay lại sau N phút (`hen_goi_lai`, `huy_hen`). */
   | 'hen'
   /** Nhắn giữa các phiên CuongMini trên cùng máy (`liet_ke_phien`, `nhan_phien`). */
-  | 'phien';
+  | 'phien'
+  /* ── ĐỢT 4 (18/10/2026) — mỗi cái RIÊNG, cùng lý do tương thích ngược ── */
+  /** Điều khiển máy tính: chụp màn hình, chuột, bàn phím (`may_*`). Công tắc riêng, mặc định TẮT ở app. */
+  | 'may_tinh'
+  /** LSP: định nghĩa/tham chiếu/chẩn đoán/ký hiệu/hover (`lsp_hoi`) — chỉ khi app có server ngôn ngữ. */
+  | 'lsp'
+  /** Chạy notebook bằng Jupyter trên máy (`chay_notebook`) — chỉ khi máy có `jupyter`. */
+  | 'notebook_chay';
 
 export interface AgentToolDef {
   name: string;
@@ -674,6 +681,11 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
         id: { type: 'string', description: 'Mã agent phụ (in trong kết quả giao_viec_ghi).' },
         file: { type: 'array', items: { type: 'string' }, description: 'Chỉ gộp các file này (đường dẫn tương đối). Bỏ trống = tất cả.' },
         bo: { type: 'boolean', description: 'true = bỏ hết thay đổi và dọn khu riêng.' },
+        cach: {
+          type: 'string', enum: ['chep', 'merge'],
+          description: '`chep` (mặc định): chép từng file, /undo lùi được, xung đột báo theo file. `merge`: một commit của agent phụ rồi `git merge --no-ff` '
+            + '(giữ lịch sử; cần kho git, cây làm việc sạch cả lúc giao việc lẫn lúc gộp; /undo KHÔNG lùi — dùng git revert). Chỉ dùng merge khi người dùng muốn commit/lịch sử.',
+        },
       },
       required: ['id'],
     },
@@ -743,19 +755,21 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     ring: 'client',
     capability: 'hen',
     description:
-      'HẸN tự quay lại sau `phut` phút (1–1440): lượt này KẾT THÚC, tới giờ app tự gửi một lượt "[Đánh thức …] <ly_do>" vào đúng cuộc này '
-      + '(chỉ khi app/CLI/VS Code còn mở). `lap: true` + `so_lan` (≤50) = lặp định kỳ. Mỗi lần thức là một lượt TÍNH TIỀN — '
+      'HẸN tự quay lại sau `phut` phút (1–1440) HOẶC theo `cron` 5 trường giờ máy ("0 9 * * 1-5" = 9:00 thứ 2–6, "*/30 * * * *" = mỗi 30 phút): '
+      + 'lượt này KẾT THÚC, tới giờ app tự gửi một lượt "[Đánh thức …] <ly_do>" vào đúng cuộc này. Hẹn được LƯU xuống đĩa — app tắt lúc tới giờ thì lần mở sau '
+      + 'người dùng được hỏi chạy bù hay bỏ. `lap: true` + `so_lan` (≤50) = lặp; cron luôn lặp tới hết `so_lan` (mặc định 10). Mỗi lần thức là một lượt TÍNH TIỀN — '
       + 'chỉ hẹn khi người dùng nhờ theo dõi/quay lại (CI chạy xong chưa, deploy lên chưa, nhắc việc), tối đa 3 hẹn/cuộc. '
       + 'Gọi xong thì trả lời ngắn rồi DỪNG, đừng đứng chờ.',
     parameters: {
       type: 'object',
       properties: {
-        phut: { type: 'number', description: 'Sau bao nhiêu phút (1–1440).' },
+        phut: { type: 'number', description: 'Sau bao nhiêu phút (1–1440). Bỏ khi dùng `cron`.' },
+        cron: { type: 'string', description: 'Biểu thức cron 5 trường "phút giờ ngày tháng thứ" theo giờ máy người dùng (thay cho `phut`).' },
         ly_do: { type: 'string', description: 'Lời nhắc gửi lại cho CHÍNH BẠN khi thức: việc cần làm lúc đó.' },
         lap: { type: 'boolean', description: 'Lặp lại mỗi `phut` phút.' },
-        so_lan: { type: 'integer', description: 'Số lần lặp (2–50, mặc định 10).' },
+        so_lan: { type: 'integer', description: 'Số lần lặp (2–50, mặc định 10; cron: 1–50).' },
       },
-      required: ['phut', 'ly_do'],
+      required: ['ly_do'],
     },
   },
   {
@@ -789,6 +803,101 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
         noi_dung: { type: 'string', description: 'Nội dung, ngắn gọn, tự đứng được (≤ 8000 ký tự).' },
       },
       required: ['den', 'noi_dung'],
+    },
+  },
+
+  // ─── ĐỢT 4: điều khiển máy tính ─────────────────────────────────
+  {
+    name: 'may_chup',
+    ring: 'client',
+    capability: 'may_tinh',
+    description:
+      'Chụp màn hình CHÍNH của máy người dùng (thu ≤1280px ngang, gửi như ảnh). Toạ độ cho may_bam/may_cuon tính theo ẢNH NÀY. '
+      + 'Dùng khi việc cần một app desktop KHÔNG có API/CLI (cài đặt hệ thống, app đồ hoạ…). Có lệnh/CLI/MCP/trình duyệt làm được thì ĐỪNG dùng — mỗi ảnh ~1.500 token. '
+      + 'Thiếu quyền ⇒ kết quả nói rõ mục System Settings cần bật; chuyển nguyên lời đó cho người dùng rồi dừng.',
+    parameters: { type: 'object', properties: {} },
+  },
+  {
+    name: 'may_bam',
+    ring: 'client',
+    capability: 'may_tinh',
+    description:
+      'Bấm chuột THẬT tại (x, y) theo ảnh may_chup gần nhất. Người dùng DUYỆT từng lần (kể cả chế độ Bỏ qua hết). '
+      + 'Mặc định trả luôn ảnh SAU khi bấm (`chup_sau:false` để bỏ). Nhắm vào GIỮA nút/ô; không chắc toạ độ thì chụp lại, đừng đoán.',
+    parameters: {
+      type: 'object',
+      properties: {
+        x: { type: 'number' }, y: { type: 'number' },
+        nut: { type: 'string', enum: ['trai', 'phai', 'giua'], description: 'Mặc định trai.' },
+        hai_lan: { type: 'boolean', description: 'Nhấp đúp.' },
+        chup_sau: { type: 'boolean', description: 'Mặc định true.' },
+      },
+      required: ['x', 'y'],
+    },
+  },
+  {
+    name: 'may_go',
+    ring: 'client',
+    capability: 'may_tinh',
+    description: 'Gõ chữ vào ô ĐANG có tiêu điểm (bấm vào ô trước bằng may_bam). Người dùng duyệt nguyên văn. ĐỪNG gõ mật khẩu/bí mật — nhờ người dùng tự gõ.',
+    parameters: { type: 'object', properties: { chu: { type: 'string' }, chup_sau: { type: 'boolean' } }, required: ['chu'] },
+  },
+  {
+    name: 'may_phim',
+    ring: 'client',
+    capability: 'may_tinh',
+    description: 'Bấm phím/tổ hợp phím, vd "enter", "esc", "tab", "cmd+c", "ctrl+shift+t", "alt+f4", "up". Người dùng duyệt từng lần. Trên Windows/Linux `cmd` = ctrl.',
+    parameters: { type: 'object', properties: { to_hop: { type: 'string' }, chup_sau: { type: 'boolean' } }, required: ['to_hop'] },
+  },
+  {
+    name: 'may_cuon',
+    ring: 'client',
+    capability: 'may_tinh',
+    description: 'Cuộn chuột tại (x, y) (bỏ trống = giữa màn hình) theo `huong` len|xuong|trai|phai, `so` nấc (1–50, mặc định 5). Người dùng duyệt.',
+    parameters: {
+      type: 'object',
+      properties: {
+        huong: { type: 'string', enum: ['len', 'xuong', 'trai', 'phai'] }, so: { type: 'integer' },
+        x: { type: 'number' }, y: { type: 'number' }, chup_sau: { type: 'boolean' },
+      },
+      required: ['huong'],
+    },
+  },
+
+  // ─── ĐỢT 4: LSP + chạy notebook ─────────────────────────────────
+  {
+    name: 'lsp_hoi',
+    ring: 'client',
+    capability: 'lsp',
+    description:
+      'Hỏi SERVER NGÔN NGỮ (như IDE): `dinh_nghia` (đi tới định nghĩa), `tham_chieu` (mọi chỗ dùng), `hover` (kiểu/chữ ký/tài liệu) — '
+      + 'ba loại này cần `dong` + `cot` (1-based) trỏ VÀO tên ký hiệu; `chan_doan` (lỗi/cảnh báo kiểu của file — thay cho chạy tsc cả dự án), '
+      + '`ky_hieu` (dàn ý class/hàm của file — rẻ hơn read_file cả file). Chính xác hơn grep với tên trùng/đổi tên/re-export. '
+      + 'Sau mỗi edit_file/create_file/sua_nhieu_cho app TỰ nối lỗi MỚI của file đó vào kết quả — không cần gọi chan_doan lại ngay.',
+    parameters: {
+      type: 'object',
+      properties: {
+        loai: { type: 'string', enum: ['dinh_nghia', 'tham_chieu', 'chan_doan', 'ky_hieu', 'hover'] },
+        file: { type: 'string', description: 'Đường dẫn tương đối gốc dự án.' },
+        dong: { type: 'integer' }, cot: { type: 'integer' },
+      },
+      required: ['loai', 'file'],
+    },
+  },
+  {
+    name: 'chay_notebook',
+    ring: 'client',
+    capability: 'notebook_chay',
+    description:
+      'CHẠY notebook `.ipynb` bằng Jupyter trên máy (kernel của notebook), cwd = thư mục chứa nó; `den_o` = chỉ chạy ô 0…N. '
+      + 'Trả đầu ra từng ô (lỗi ghi rõ). Được sửa file ⇒ ghi đầu ra vào notebook (/undo lùi được; `ghi_ket_qua:false` để không ghi). '
+      + 'Người dùng duyệt như chạy lệnh. `giay` = trần (10–600, mặc định 180).',
+    parameters: {
+      type: 'object',
+      properties: {
+        path: { type: 'string' }, den_o: { type: 'integer' }, giay: { type: 'integer' }, ghi_ket_qua: { type: 'boolean' },
+      },
+      required: ['path'],
     },
   },
 
@@ -1410,7 +1519,9 @@ export function toolsForGateway(
     type: 'function' as const,
     function: { name: t.name, description: t.description, parameters: t.parameters },
   }));
-  const ngoai = toolMcp.map((t) => ({
+  /* Đợt 4: tool MCP SẮP theo tên — app nối lại server MCP có thể đổi thứ tự, mà đổi thứ tự
+     là trượt đệm tiền tố của cổng (GPT đệm tự động theo tiền tố, đo 18/10: 96% trúng khi đứng yên). */
+  const ngoai = [...toolMcp].sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0)).map((t) => ({
     type: 'function' as const,
     function: { name: t.name, description: raoMoTa(t), parameters: t.parameters },
   }));
@@ -1522,6 +1633,7 @@ export const ALL_CAPABILITIES: readonly AgentCapability[] = [
   'fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent', 'shell_nen', 'git_write',
   'notes_write', 'browser', 'ky_nang', 'anh_sua', 'terminal', 'bo_nho', 'cong_cu', 'github', 'xuat_so_do',
   'phu_ghi', 'hoi', 'cho', 'hen', 'phien',
+  'may_tinh', 'lsp', 'notebook_chay',
 ];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {

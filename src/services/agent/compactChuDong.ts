@@ -24,7 +24,7 @@ const GIU_LUOT_TOI_DA = 20;
 /** Trần số tin nhắn nhận — khớp trần 200 lượt × vài tin của `turn.ts`, nới rộng. */
 const TRAN_TIN = 4_000;
 const TRAN_CHU_MOT_TIN = 400_000;
-const TRAN_GHI_CHU = 500;
+const TRAN_GHI_CHU = 2000; // đợt 4: hook truocNen (PreCompact) nối thêm lời dặn
 
 export class CompactLoi extends Error {
   constructor(message: string, readonly code: string, readonly status: number) {

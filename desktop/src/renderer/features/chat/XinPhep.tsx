@@ -319,14 +319,38 @@ export function XinPhepMcp({
   tool,
   args,
   traLoi,
+  xemTruoc,
 }: {
   id: string;
   server: string;
   tool: string;
   args: string;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
+  /** Đợt 5: GHI lên CT Work — vẽ "ghi vào thẻ nào, việc gì, nội dung gì" thay cho JSON tham số. */
+  xemTruoc?: { the: string | null; viec: string; noiDung: string } | undefined;
 }) {
-  const { dich } = useDich();
+  const { dich, nn } = useDich();
+  if (xemTruoc) {
+    const L = (vi: string, en: string) => (nn === 'en' ? en : vi);
+    return (
+      <div className="ct-xinphep" data-muc="cankiem" data-ctwork="1">
+        <div className="ct-xinphep-dau">
+          <Plug size={14} aria-hidden />
+          <span>{L('Ghi lên CT Work', 'Write to CT Work')} · {xemTruoc.viec}</span>
+          {xemTruoc.the ? <span className="ct-xinphep-dem"><span className="ct-mcp-ten">{xemTruoc.the}</span></span> : null}
+        </div>
+        {/* Nội dung do model soạn — chữ thô trong <pre>, không dựng HTML. */}
+        {xemTruoc.noiDung.trim() ? <pre className="ct-mcp-args">{xemTruoc.noiDung}</pre> : null}
+        <div className="ct-notice" data-tone="info" style={{ margin: '8px 0 0' }}>
+          <span>{L(`tool ${tool} · ghi CT Work luôn hỏi (kể cả "Bỏ qua hết") — muốn agent tự ghi: /ctwork tu-ghi on`, `tool ${tool} · CT Work writes always ask (even in Bypass) — let the agent write freely: /ctwork auto-write on`)}</span>
+        </div>
+        <div className="ct-xinphep-nut">
+          <button type="button" className="ct-btn" onClick={() => traLoi(id, 'choPhep')}>{L('Có, ghi lên CT Work', 'Yes, write to CT Work')}</button>
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => traLoi(id, 'tuChoi')}>{L('Không', 'No')}</button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="ct-xinphep" data-muc="cankiem">
       <div className="ct-xinphep-dau">

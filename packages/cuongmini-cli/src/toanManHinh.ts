@@ -31,18 +31,25 @@ export const XOA_KHUNG = '\x1b[2J\x1b[H';
 export function xoaSach(_env: NodeJS.ProcessEnv = process.env): string {
   /* KHÔNG còn mã riêng `OSC 1337;ClearScrollback` của iTerm2 (18/10/2026): iTerm2 hiện thanh hỏi
      "A control sequence attempted to clear scrollback history. Allow?" — người dùng thấy như lỗi.
-     Chỉ dùng ở chế độ in nối tiếp (đổi cỡ / ctrl+l / /clear); toàn màn hình không bao giờ gọi. */
+     Chỉ dùng cho việc NGƯỜI DÙNG chủ động xoá (ctrl+l, /clear) ở chế độ in nối tiếp — mở khoá bộ lọc
+     một lần. Đổi cỡ cửa sổ KHÔNG dùng hàm này (đợt 4 — dùng `XOA_KHUNG`). */
+  choPhep3J += 1;
   return '\x1b[2J\x1b[3J\x1b[H';
 }
 
+/** Số lần `ESC[3J` được PHÉP đi qua (do người dùng chủ động xoá). */
+let choPhep3J = 0;
+
 /**
- * Chặn MỌI lệnh xoá scrollback (`ESC[3J`, `OSC 1337;ClearScrollback`) khi đang ở toàn màn hình.
- * Thủ phạm thật: Ink tự ghi `ansiEscapes.clearTerminal` (= `ESC[2J ESC[3J ESC[H`) mỗi khi khung
- * động cao ≥ số dòng terminal — ở alternate screen việc xoá scrollback là vô nghĩa mà iTerm2 lại hỏi.
+ * Chặn MỌI lệnh xoá scrollback (`ESC[3J`, `OSC 1337;ClearScrollback`) — ở toàn màn hình LUÔN chặn; ở chế độ
+ * in nối tiếp chỉ cho qua đúng những lần người dùng chủ động xoá (`xoaSach`). Thủ phạm thật: Ink tự ghi
+ * `ansiEscapes.clearTerminal` (= `ESC[2J ESC[3J ESC[H`) mỗi khi khung động cao ≥ số dòng terminal hoặc
+ * lúc đổi cỡ — iTerm2 hỏi "clear scrollback?" (đợt 4: cả chế độ in nối tiếp).
  */
 export function locXoaScrollback(chunk: unknown): unknown {
-  if (!dangBat || typeof chunk !== 'string') return chunk;
+  if (typeof chunk !== 'string') return chunk;
   if (!chunk.includes('\x1b[3J') && !chunk.includes('ClearScrollback')) return chunk;
+  if (!dangBat && choPhep3J > 0) { choPhep3J -= 1; return chunk; }
   return chunk.replace(/\x1b\[3J/g, '').replace(/\x1b\]1337;ClearScrollback\x07/g, '');
 }
 

@@ -28,7 +28,7 @@ import {
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
   ShieldCheck, Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus, PanelRight, LifeBuoy, WifiOff,
-  MoreHorizontal, Brain, Webhook, PlugZap, ChevronsDownUp, ChevronsUpDown, Code2,
+  MoreHorizontal, Brain, Webhook, PlugZap, ChevronsDownUp, ChevronsUpDown, Code2, Monitor,
 } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { moTam, useMoTuNgoai } from './moTam';
@@ -37,6 +37,7 @@ import {
   moTaDsCauHoi, moTaDsPhien, moTaNguCanh, moTaTrangThai, moTaTroGiup, moTaUsage, promptPlan, promptReview,
   tachLenh, tenFileXuat, timMuc, timTheoChu, xuatMarkdown,
 } from './lenhGach';
+import { hoiCtworkMotLan, laLoiXacThucCtw, lenhCtwork, veDongCtw, type DongCtw, type GiaoDienCtw, type TheChonCtw } from './ctworkLenh';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
 import { ThanhDangLam } from './ThanhDangLam';
@@ -75,7 +76,10 @@ import { Chu } from '../../i18n/Chu';
 import { DaiNgoaiTuyen, NhanMay, useCheDoCode, useGiaoDienNgoaiTuyen, useMoCaiNgoaiTuyen } from './NgoaiTuyen';
 
 /** Nút kèm câu trả lời của lệnh `/`. */
-type NutLenh = 'nhapKey' | 'caiNgoaiTuyen' | null;
+type NutLenh = 'nhapKey' | 'caiNgoaiTuyen' | 'henLo' | { chon: TheChonCtw } | null;
+
+/** Đợt 5: hỏi "Kết nối CT Work? / gắn dự án?" MỘT lần mỗi lần mở app (lõi còn nhớ qua các lần mở). */
+let daHoiCtworkLanNay = false;
 
 export function AgentMode({
   cuocId,
@@ -110,12 +114,19 @@ export function AgentMode({
    */
   onTachRaTabMoi?: (phienId: string) => void;
 }) {
-  const { dich, dichP } = useDich();
+  const { dich, dichP, nn } = useDich();
+  /** Đợt 5: chữ hai thứ tiếng tại chỗ (không qua từ điển) cho phần CT Work/thẻ lựa chọn mới. */
+  const Ld = (vi: string, en: string): string => (nn === 'en' ? en : vi);
   const {
     trangThai, gui, lamTiep, dung, dangDung, batDauLai, traLoiXinPhep, hoanTac, quayLui, luiFile, tachNhanh,
-    traLoiHoi, huyCho, huyHen,
+    traLoiHoi, huyCho, huyHen, chenTin,
     phien, phienDangMo, moPhien, xoaPhien, baoTin, datHanMuc,
   } = useAgent(cuocId, info);
+  /* Đợt 4 — điều khiển máy tính: công tắc TOÀN APP (main giữ), mặc định tắt. */
+  const [mayTinh, datMayTinhUi] = useState<{ bat: boolean; hoTro: boolean; quyen: { chup: boolean; dieuKhien: boolean } | null } | null>(null);
+  useEffect(() => {
+    void window.cuongthai?.agent.mayTinh?.().then((r) => datMayTinhUi(r)).catch(() => undefined);
+  }, []);
   const { settings, setSetting, online } = useAppState();
   const { api } = useSession();
   /* ── AI CODE NGOẠI TUYẾN (03/10/2026) ── main tự rẽ lượt xuống máy khi mất
@@ -466,6 +477,15 @@ export function AgentMode({
     if (w) datThuMuc(w);
   };
 
+  /** Đợt 4 — bật (có xác nhận) / tắt điều khiển máy tính. Trả trạng thái mới. */
+  const doiMayTinh = async (bat?: boolean): Promise<{ bat: boolean; hoTro: boolean; quyen: { chup: boolean; dieuKhien: boolean } | null } | null> => {
+    const muon = bat ?? !mayTinh?.bat;
+    if (muon && !mayTinh?.bat && !window.confirm(dich('Cho agent CHỤP MÀN HÌNH và ĐIỀU KHIỂN chuột/bàn phím máy này?\n\nMọi cú bấm/gõ/phím/cuộn vẫn hỏi bạn từng lần — kể cả chế độ "Bỏ qua tất cả". Tắt lúc nào cũng được.'))) return mayTinh;
+    const r = await window.cuongthai?.agent.mayTinh?.(muon).catch(() => null);
+    if (r) datMayTinhUi(r);
+    return r ?? null;
+  };
+
   const doiCheDoNote = async (): Promise<void> => {
     const w = await window.cuongthai?.agent.datCheDoNote(cuocId, !thuMuc?.choGhiNote);
     if (w) datThuMuc(w);
@@ -553,6 +573,54 @@ export function AgentMode({
    * câu trả lời mà chính app đã biết. Chỉ `/plan`, `/review`, `/init`, `/diff`
    * là câu hỏi cho agent (chúng CẦN agent đọc mã).
    */
+  /* ── Đợt 5: CT Work — thẻ lựa chọn (nút + phím số), dòng trạng thái trên ô nhập ── */
+  const [dongCtw, datDongCtw] = useState<DongCtw | null>(null);
+  const napDongCtw = useCallback(async (): Promise<void> => {
+    const r = await window.cuongthai?.agent.ctworkHe?.({ cuocId, viec: 'dong', ngonNgu: nn }).catch(() => null);
+    datDongCtw(r?.ok ? (r.dong ?? null) : null);
+    // Token hết hạn / bị thu hồi giữa phiên ⇒ đề nghị cấp lại một chạm.
+    if (laLoiXacThucCtw(r?.dong?.loi)) void hoiCtworkMotLan(gdCtwRef.current()).catch(() => undefined);
+  }, [cuocId, nn]);
+  /** Thẻ lựa chọn kiểu CLI: nội dung + hàng nút đánh số (gõ số ở ô nhập trống cũng chọn được). */
+  const moTheChon = useCallback((o: TheChonCtw): void => {
+    const moTa = o.moTa ? `\n\n${o.moTa.split('\n').map((d) => `_${d}_`).join('  \n')}` : '';
+    traLoi(`**${o.tieuDe}**${moTa}${o.than ? `\n\n${o.than}` : ''}`, { chon: o });
+  }, [traLoi]);
+  /* `napDongCtw` (khai trước) cần gọi `gdCtw` (khai sau) — đi qua ref, khỏi lệ thuộc thứ tự khai. */
+  const gdCtwRef = useRef<() => GiaoDienCtw>(() => { throw new Error('chưa sẵn'); });
+  const gdCtw = (): GiaoDienCtw => ({
+    goi: async <T,>(kenh: string, duLieu?: Record<string, unknown>): Promise<T> => {
+      const a = window.cuongthai?.agent;
+      if (!a) throw new Error('no bridge');
+      if (kenh === 'agent:ctworkHe') return await a.ctworkHe({ cuocId, ...(duLieu ?? {}) } as Parameters<typeof a.ctworkHe>[0]) as T;
+      if (kenh === 'agent:ctwork') { const d = (duLieu ?? {}) as { viec: 'noi' | 'ngat' | 'trangThai' | 'capLai'; quyen?: 'doc' | 'ghi' }; return await a.ctwork(cuocId, d.viec, d.quyen) as T; }
+      throw new Error(`kênh lạ ${kenh}`);
+    },
+    traLoi: (md) => traLoi(md),
+    chon: moTheChon,
+    thongBao: (chu) => traLoi(chu),
+    datNhap: (t) => { datNhap(t); requestAnimationFrame(() => oNhapRef.current?.focus()); },
+    ngonNgu: nn,
+    lamMoiDong: () => { void napDongCtw(); },
+  });
+  gdCtwRef.current = gdCtw;
+  useEffect(() => {
+    void napDongCtw();
+    const t = setInterval(() => { void napDongCtw(); }, 60_000);
+    return () => clearInterval(t);
+  }, [napDongCtw]);
+  useEffect(() => { if (!trangThai.dangChay) void napDongCtw(); }, [trangThai.dangChay, napDongCtw]);
+  useEffect(() => {
+    if (daHoiCtworkLanNay) return undefined;
+    const t = setTimeout(() => {
+      if (daHoiCtworkLanNay) return;
+      daHoiCtworkLanNay = true;
+      void hoiCtworkMotLan(gdCtw()).catch(() => undefined);
+    }, 1500);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cuocId]);
+
   const chayLenhDungSan = async (ten: string, thamSo: string, goc: string): Promise<void> => {
     const b = window.cuongthai?.agent;
     if (!b) return;
@@ -651,6 +719,22 @@ export function AgentMode({
         }
         const r = await b.dsQuyenLau(cuocId);
         if (!r?.goc) { traLoi(dich('Tab này chưa mở dự án nào.')); return; }
+        /* Đợt 5: thẻ lựa chọn (nút + phím số) như CLI. */
+        if (!thamSo.trim()) {
+          const hien = (k: string): string => (k.startsWith('tien-to:') ? `\`${k.slice(8)} …\` ${Ld('(mọi lệnh bắt đầu bằng)', '(any command starting with)')}` : `\`${k}\``);
+          moTheChon({
+            tieuDe: Ld('Quyền "Luôn cho phép"', '"Always allow" permissions'),
+            than: `${r.khoa.length ? r.khoa.map((x, k) => `${k + 1}. ${hien(x)}`).join('\n') : Ld('_(chưa có quyền nào — nút nằm trên thẻ duyệt)_', '_(none yet — the button is on approval cards)_')}\n\n⎿ \`${r.goc}\``,
+            ds: [
+              { nhan: Ld('Thêm tiền tố lệnh…', 'Add a command prefix…'), giaTri: 'them' },
+              ...r.khoa.slice(0, 7).map((x, k) => ({ nhan: `${Ld('Thu hồi', 'Revoke')} ${x.startsWith('tien-to:') ? `${x.slice(8)} …` : x}`, giaTri: `xoa ${k + 1}` })),
+              ...(r.khoa.length ? [{ nhan: Ld('Thu hồi tất cả', 'Revoke all'), giaTri: 'xoa' }] : []),
+              { nhan: Ld('Đóng', 'Close'), giaTri: 'dong', so: '0' },
+            ],
+            khiChon: async (g) => { if (g === 'them') datNhap('/quyen them '); else if (g !== 'dong') await chayLenhDungSan('/quyen', g, `/quyen ${g}`); },
+          });
+          return;
+        }
         traLoi(r.khoa.length === 0
           ? dichP('Dự án `{goc}` chưa có quyền nào được "Luôn cho phép".\n\n_Nút đó nằm trên thẻ duyệt, cạnh "Cho phép"._', { goc: r.goc ?? '' })
           : dichP('**{n}** thứ đang được tự duyệt ở `{goc}`:', { n: r.khoa.length, goc: r.goc ?? '' })
@@ -661,58 +745,117 @@ export function AgentMode({
         return;
       }
 
-      /* ── Đợt 3 (18/10/2026) ── */
+      /* ── Đợt 3 (18/10/2026) · i18n đợt 4 ── */
       case '/sessions': {
         const r = await b.dsPhienMang(cuocId);
-        traLoi(`${r.toi ? `Phiên này: **${r.toi.ten}** (\`${r.toi.id}\`)` : 'Phiên này chưa đăng ký (đăng ký sau lượt đầu tiên).'}\n\n${r.ds.length
-          ? `Phiên khác đang mở:\n\n${r.ds.map((x) => `- \`${x.id}\` **${x.ten}** · ${x.noi} · ${x.trangThai === 'dangChay' ? 'đang chạy' : 'rảnh'} · ${x.thuMuc ?? '—'}`).join('\n')}\n\nAgent tự nhắn được bằng tool \`nhan_phien\` (bạn duyệt nội dung trước khi gửi). Đổi tên phiên này: \`/rename <tên>\`.`
-          : 'Không có phiên CuongMini nào khác đang mở trên máy này.'}`);
+        const dau = r.toi
+          ? dichP('Phiên này: **{ten}** (`{id}`)', { ten: r.toi.ten, id: r.toi.id })
+          : dich('Phiên này chưa đăng ký (đăng ký sau lượt đầu tiên).');
+        /* Đợt 5: nút đổi tên / nhờ agent nhắn (như thẻ của CLI). */
+        moTheChon({
+          tieuDe: Ld('Phiên CuongMini trên máy này', 'CuongMini sessions on this machine'),
+          than: `${dau}\n\n${r.ds.length ? r.ds.map((x) => `- \`${x.id}\` **${x.ten}** · ${x.noi} · ${x.trangThai === 'dangChay' ? dich('đang chạy') : dich('rảnh')} · ${x.thuMuc ?? '—'}`).join('\n') : dich('Không có phiên CuongMini nào khác đang mở trên máy này.')}`,
+          ds: [
+            { nhan: Ld('Đổi tên phiên này…', 'Rename this session…'), giaTri: 'ten' },
+            ...(r.ds.length ? [{ nhan: Ld('Nhờ agent nhắn một phiên…', 'Ask the agent to message a session…'), giaTri: 'nhan' }] : []),
+            { nhan: Ld('Đóng', 'Close'), giaTri: 'dong', so: '0' },
+          ],
+          khiChon: (g) => { if (g === 'ten') datNhap('/rename '); else if (g === 'nhan') datNhap(Ld(`Nhắn phiên ${r.ds[0]!.id}: `, `Message session ${r.ds[0]!.id}: `)); },
+        });
         return;
       }
       case '/rename': {
-        if (!thamSo.trim()) { traLoi('Gõ tên: `/rename backend-api`'); return; }
+        if (!thamSo.trim()) { traLoi(dich('Gõ tên: `/rename backend-api`')); return; }
         const m = await b.doiTenPhienMang(cuocId, thamSo.trim().slice(0, 60));
-        traLoi(m ? `Đã đặt tên phiên: **${m.ten}** (\`${m.id}\`).` : 'Không đổi được tên.');
+        traLoi(m ? dichP('Đã đặt tên phiên: **{ten}** (`{id}`).', { ten: m.ten, id: m.id }) : dich('Không đổi được tên.'));
         return;
       }
       case '/worktree': {
         const d = thamSo.split(/\s+/).filter(Boolean);
         const ds = await b.dsWorktree(cuocId);
+        if ((!d.length || d[0] === 'list' || d[0] === 'ds') && ds.length) {
+          /* Đợt 5: thẻ lựa chọn (tạo / xoá worktree) như CLI. */
+          moTheChon({
+            tieuDe: 'Git worktree',
+            than: ds.map((w) => `- ${w.dangDung ? '▶ ' : ''}\`${w.duongDan}\` · ${w.nhanh ?? dich('(tách rời)')}${w.laChinh ? ` · ${dich('cây chính')}` : ''}`).join('\n'),
+            ds: [
+              { nhan: Ld('Tạo worktree mới…', 'Create a new worktree…'), giaTri: 'tao', mo: Ld('nhánh agent/<tên>', 'branch agent/<name>') },
+              ...ds.filter((w) => !w.laChinh).slice(0, 6).map((w) => ({ nhan: `${Ld('Xoá', 'Remove')} ${w.nhanh ?? w.duongDan}`, giaTri: `xoa ${w.duongDan}` })),
+              { nhan: Ld('Đóng', 'Close'), giaTri: 'dong', so: '0' },
+            ],
+            khiChon: async (g) => { if (g === 'tao') datNhap('/worktree '); else if (g !== 'dong') await chayLenhDungSan('/worktree', g, `/worktree ${g}`); },
+          });
+          return;
+        }
         if (!d.length || d[0] === 'list' || d[0] === 'ds') {
-          traLoi(ds.length ? `Worktree của repo:\n\n${ds.map((w) => `- ${w.dangDung ? '▶ ' : ''}\`${w.duongDan}\` · ${w.nhanh ?? '(tách rời)'}${w.laChinh ? ' · cây chính' : ''}`).join('\n')}\n\nTạo: \`/worktree <tên>\` · xoá: \`/worktree xoa <đường>\` · hoặc nút ⎇ ở thanh trên.` : 'Thư mục này không phải kho git.');
+          traLoi(ds.length
+            ? `${dich('Worktree của repo:')}\n\n${ds.map((w) => `- ${w.dangDung ? '▶ ' : ''}\`${w.duongDan}\` · ${w.nhanh ?? dich('(tách rời)')}${w.laChinh ? ` · ${dich('cây chính')}` : ''}`).join('\n')}\n\n${dich('Tạo: `/worktree <tên>` · xoá: `/worktree xoa <đường>` · hoặc nút ⎇ ở thanh trên.')}`
+            : dich('Thư mục này không phải kho git.'));
           return;
         }
         if (d[0] === 'xoa' || d[0] === 'remove') {
           const r = await b.xoaWorktree(cuocId, d.slice(1).join(' '));
-          traLoi(r.ok ? 'Đã xoá worktree (nhánh giữ lại).' : `⚠ ${r.loi ?? '?'}`);
+          traLoi(r.ok ? dich('Đã xoá worktree (nhánh giữ lại).') : `⚠ ${r.loi ?? '?'}`);
           return;
         }
         const r = await b.taoWorktree(cuocId, d.join('-'));
-        if (!r.ok) { traLoi(`⚠ ${r.loi ?? 'Không tạo được worktree.'}`); return; }
+        if (!r.ok) { traLoi(`⚠ ${r.loi ?? dich('Không tạo được worktree.')}`); return; }
         void napThuMuc(); void batDauLai();
         return;
       }
-      case '/ctwork': {
-        const q = thamSo.trim().toLowerCase();
-        if (/^(off|tat|tắt|ngat|ngắt)$/.test(q)) { const r = await b.ctwork(cuocId, 'ngat'); traLoi(r.ok ? 'Đã ngắt CT Work: thu hồi token, gỡ server `ctwork`.' : `⚠ ${r.loi ?? '?'}`); return; }
-        if (/^(doc|đọc|read|ghi|write)$/.test(q)) {
-          const r = await b.ctwork(cuocId, 'noi', /^(ghi|write)$/.test(q) ? 'ghi' : 'doc');
-          traLoi(r.ok ? `✓ ctwork · ${r.soTool ?? 0} tool. Hỏi thử: "việc của tôi trong CT Work hôm nay".` : `⚠ ${r.loi ?? '?'}`);
-          return;
-        }
-        const t = await b.ctwork(cuocId, 'trangThai');
-        traLoi(t.server?.ok
-          ? `✓ ctwork · ${t.server.soTool} tool · ${t.bienTay ? 'token từ biến CTWORK_TOKEN' : t.quyen === 'ghi' ? 'đọc + ghi' : 'chỉ đọc'}. Đổi: \`/ctwork doc\` · \`/ctwork ghi\` · ngắt: \`/ctwork off\`.`
-          : 'Chưa kết nối CT Work. Gõ `/ctwork doc` (chỉ đọc, khuyên dùng) hoặc `/ctwork ghi` (đọc + ghi) — app tạo token bằng tài khoản đang đăng nhập, cất trong Keychain; AI không bao giờ thấy token. Hoặc bấm nút trong bảng MCP.');
+      case '/ctwork': case '/issue': case '/sprint': case '/viec':
+        /* Đợt 5: bộ lệnh CT Work CHUNG ba nơi — menu đánh số, thẻ xem trước khi ghi. */
+        await lenhCtwork(ten, thamSo, gdCtw());
         return;
-      }
       case '/hen': {
         const d = thamSo.split(/\s+/).filter(Boolean);
-        if (d[0] === 'huy' || d[0] === 'cancel') { const n = await b.huyHen(cuocId, d[1]?.replace(/^#/, '')); traLoi(`Đã huỷ ${n} hẹn.`); return; }
+        if (d[0] === 'huy' || d[0] === 'cancel') { const n = await b.huyHen(cuocId, d[1]?.replace(/^#/, '')); traLoi(dichP('Đã huỷ {n} hẹn.', { n })); return; }
+        /* Đợt 4: hẹn ĐÃ LỠ lúc app tắt — chạy bù / bỏ. */
+        if (['chay-bu', 'run-missed', 'bo-lo', 'drop-missed'].includes(d[0] ?? '')) {
+          const chay = d[0] === 'chay-bu' || d[0] === 'run-missed';
+          const x = await b.xuLyHenLo(chay ? 'chay' : 'bo');
+          traLoi(chay ? dichP('Đang chạy bù {n} hẹn — mỗi hẹn mở lại đúng việc của nó (xem ở Lịch sử).', { n: x.n }) : dichP('Đã bỏ {n} hẹn đã lỡ.', { n: x.n }));
+          return;
+        }
         const r = await b.henCho(cuocId);
-        traLoi(r.cho.length || r.hen.length
-          ? [...r.cho.map((c) => `- ⏳ Đang chờ: ${c.moTa}`), ...r.hen.map((h) => `- ⏰ \`${h.id}\` ${new Date(h.luc).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}${h.lap ? ` · lặp mỗi ${h.phut}′ · còn ${h.conLai}×` : ''} — ${h.lyDo}`), '', 'Huỷ: `/hen huy <id>` · `/hen huy` (tất cả). Hẹn chỉ chạy khi app còn mở.'].join('\n')
-          : 'Không có việc chờ hay hẹn nào.');
+        const lo = (await b.henLo().catch(() => ({ ds: [] as Array<{ luc: number; lyDo: string }> }))).ds;
+        const gio = (t: number) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const dong = [
+          ...r.cho.map((c) => `- ⏳ ${dich('Đang chờ')}: ${c.moTa}`),
+          ...r.hen.map((h) => `- ⏰ \`${h.id}\` ${gio(h.luc)}${h.cron ? ` · cron \`${h.cron}\` · ${dichP('còn {n}×', { n: h.conLai })}` : h.lap ? ` · ${dichP('lặp mỗi {p}′ · còn {n}×', { p: h.phut, n: h.conLai })}` : ''} — ${h.lyDo}`),
+          ...(lo.length ? ['', dichP('**Đã lỡ {n} hẹn** lúc app tắt — `/hen chay-bu` để chạy bù, `/hen bo-lo` để bỏ:', { n: lo.length }), ...lo.map((h) => `- ${new Date(h.luc).toLocaleString()} — ${h.lyDo}`)] : []),
+        ];
+        if (dong.length) {
+          /* Đợt 5: nút (như thẻ lựa chọn của CLI) — huỷ từng hẹn, chạy bù / bỏ hẹn đã lỡ. */
+          moTheChon({
+            tieuDe: Ld('Chờ & hẹn của agent', 'Agent waits & schedules'),
+            than: [...dong, '', dich('Huỷ: `/hen huy <id>` · `/hen huy` (tất cả). Hẹn được lưu xuống đĩa: app tắt lúc tới giờ thì lần mở sau được hỏi chạy bù. Đóng cửa sổ mà còn hẹn ⇒ app chạy nền (biểu tượng khay).')].join('\n'),
+            ds: [
+              ...r.hen.slice(0, 5).map((h) => ({ nhan: `${Ld('Huỷ hẹn', 'Cancel')} ${h.id}`, giaTri: `huy ${h.id}` })),
+              ...(r.hen.length > 1 ? [{ nhan: Ld('Huỷ tất cả', 'Cancel all'), giaTri: 'huy' }] : []),
+              ...(lo.length ? [{ nhan: Ld('Chạy bù hẹn đã lỡ', 'Run missed'), giaTri: 'chay-bu' }, { nhan: Ld('Bỏ hẹn đã lỡ', 'Drop missed'), giaTri: 'bo-lo' }] : []),
+              { nhan: Ld('Đóng', 'Close'), giaTri: 'dong', so: '0' },
+            ],
+            khiChon: async (g) => { if (g !== 'dong') await chayLenhDungSan('/hen', g, `/hen ${g}`); },
+          });
+          return;
+        }
+        traLoi(dich('Không có việc chờ hay hẹn nào.'));
+        return;
+      }
+      /* ── Đợt 4: điều khiển máy tính ── */
+      case '/may': {
+        const q = thamSo.trim().toLowerCase();
+        const bat = /^(on|bat|bật|1)$/.test(q) ? true : /^(off|tat|tắt|0)$/.test(q) ? false : undefined;
+        const r = bat === undefined ? mayTinh : await doiMayTinh(bat);
+        if (!r) { traLoi(dich('Bản app này chưa đọc được trạng thái điều khiển máy tính.')); return; }
+        if (!r.hoTro) { traLoi(dich('Nền tảng này chưa hỗ trợ điều khiển máy tính.')); return; }
+        const thieu = r.quyen && (!r.quyen.chup || !r.quyen.dieuKhien)
+          ? `\n\n${dich('⚠ macOS còn thiếu quyền cho app CuongThai')}: ${[!r.quyen.chup ? dich('Ghi màn hình') : '', !r.quyen.dieuKhien ? dich('Trợ năng') : ''].filter(Boolean).join(' + ')} — System Settings → Privacy & Security.`
+          : '';
+        traLoi(`${r.bat
+          ? dich('🖥 Điều khiển máy tính: **BẬT** — agent chụp màn hình được; MỌI cú bấm/gõ/phím/cuộn đều hỏi bạn, kể cả "Bỏ qua tất cả". Tắt: `/may off` hoặc nút Máy tính.')
+          : dich('🖥 Điều khiển máy tính: **TẮT** (mặc định). Bật: `/may on` hoặc nút Máy tính ở thanh trên.')}${thieu}`);
         return;
       }
 
@@ -959,13 +1102,42 @@ export function AgentMode({
        xếp hàng chứ không chạy ngay: `/clear` giữa lượt là xoá hội thoại mà
        máy chủ đang đọc dở. Khi rút ra, nó đi qua `xuLyCau` — chạy như lệnh. */
     if (trangThai.dangChay) {
-      datHangCho((truoc) => [...truoc, text]);
       datNhap('');
+      /* Đợt 4 — câu THƯỜNG ⇒ CHÈN vào lượt đang chạy (main nối vào kết quả tool kế tiếp, như Claude Code).
+         Lệnh `/` (và lúc main không nhận — lượt vừa xong) ⇒ xếp hàng như cũ. */
+      if (!text.startsWith('/')) {
+        void chenTin(text).then((ok) => { if (!ok) datHangCho((truoc) => [...truoc, text]); });
+        return;
+      }
+      datHangCho((truoc) => [...truoc, text]);
       return;
     }
     datNhap('');
     xuLyCau(text, true);
   };
+
+  /* Đợt 4 — nhắc NGỮ CẢNH SẮP ĐẦY (mốc 80/95%, mỗi mốc một lần mỗi việc — như CLI). */
+  const daNhacNguCanh = useRef(0);
+  useEffect(() => {
+    if (trangThai.muc.length === 0) { daNhacNguCanh.current = 0; return; }
+    const p = trangThai.nguCanh?.phanTram ?? 0;
+    const moc = p >= 95 ? 95 : p >= 80 ? 80 : 0;
+    if (!moc || moc <= daNhacNguCanh.current) return;
+    daNhacNguCanh.current = moc;
+    baoTin(dichP('Ngữ cảnh đã dùng {p}% — gõ /compact (kèm điều cần giữ) để tóm tắt phần cũ, hoặc /clear bắt đầu việc mới. Máy chủ sẽ tự cắt lượt cũ khi đầy.', { p: Math.round(p) }), 'NGU_CANH_DAY');
+  }, [trangThai.nguCanh, trangThai.muc.length, baoTin, dichP]);
+
+  /* Đợt 4 — hẹn ĐÃ LỠ lúc app tắt ⇒ hỏi chạy bù hay bỏ (một lần, lúc mở). */
+  const daHoiHenLo = useRef(false);
+  useEffect(() => {
+    if (daHoiHenLo.current) return;
+    daHoiHenLo.current = true;
+    void window.cuongthai?.agent.henLo?.().then((r) => {
+      const ds = r?.ds ?? [];
+      if (!ds.length) return;
+      traLoi(`${dichP('⏰ **Đã lỡ {n} hẹn** lúc app tắt:', { n: ds.length })}\n\n${ds.slice(0, 6).map((h) => `- ${new Date(h.luc).toLocaleString()} — ${h.lyDo}`).join('\n')}`, 'henLo');
+    }).catch(() => undefined);
+  }, [traLoi, dichP]);
 
   /*
    * Rút hàng chờ khi lượt vừa xong.
@@ -989,6 +1161,15 @@ export function AgentMode({
     // Bộ gõ tiếng Việt/CJK dùng Enter để CHỐT chữ đang gõ. Gửi lúc đó là cắt
     // ngang giữa một từ chưa xong — xem [[feedback_ime_composing_guard]].
     if (e.nativeEvent.isComposing) return;
+    /* Đợt 5: thẻ lựa chọn đang mở + ô nhập TRỐNG ⇒ phím số chọn, Esc đóng (như CLI). */
+    if (!nhap && typeof lenhNut === 'object' && lenhNut?.chon && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      const ds = lenhNut.chon.ds.filter((m) => !m.tat);
+      if (/^[0-9]$/.test(e.key)) {
+        const m = ds.find((x, k) => (x.so ?? (k < 9 ? String(k + 1) : '')) === e.key);
+        if (m) { e.preventDefault(); const c = lenhNut.chon; traLoi(null); void Promise.resolve(c.khiChon(m.giaTri)).catch((er: Error) => traLoi(`⚠ ${er.message}`)); return; }
+      }
+      if (e.key === 'Escape') { e.preventDefault(); lenhNut.chon.khiHuy?.(); traLoi(null); return; }
+    }
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       guiDi();
@@ -1268,6 +1449,26 @@ export function AgentMode({
             <span className="ct-agent-den" aria-label={thuMuc?.choGhiNote ? dich('đang bật') : dich('đang tắt')} />
           </button>
 
+          {/* Đợt 4 — ĐIỀU KHIỂN MÁY TÍNH: công tắc toàn app (nhớ trong thiết đặt), mặc định tắt. */}
+          {mayTinh?.hoTro && (
+            <button
+              type="button"
+              className="ct-agent-cong"
+              data-phu
+              data-bat={mayTinh.bat}
+              data-nut="maytinh"
+              onClick={() => void doiMayTinh()}
+              disabled={trangThai.dangChay}
+              title={mayTinh.bat
+                ? dich('Agent ĐANG được chụp màn hình và điều khiển chuột/bàn phím — mọi thao tác vẫn hỏi bạn từng lần, kể cả "Bỏ qua tất cả". Bấm để tắt.')
+                : dich('Bật cho agent chụp màn hình và điều khiển chuột/bàn phím (cho app không có lệnh/API). Mọi thao tác vẫn hỏi bạn từng lần.')}
+            >
+              <Monitor size={14} aria-hidden />
+              <span className="ct-agent-nhan">{dich('Máy tính')}</span>
+              <span className="ct-agent-den" aria-label={mayTinh.bat ? dich('đang bật') : dich('đang tắt')} />
+            </button>
+          )}
+
           {/* Bốn tấm có bảng riêng. Khi hẹp chỉ ẨN NÚT (CSS), giữ cái bọc để
               bảng của chúng vẫn mở được từ menu "⋯" và từ lệnh `/`. */}
           <span className="ct-agent-tam" data-phu-tam>
@@ -1420,6 +1621,11 @@ export function AgentMode({
                   </div>
                 ) : null}
                 {m.text}
+                {m.ctwork?.length ? (
+                  <div className="ct-chip-ctw" title={Ld('Đã đính kèm tóm tắt thẻ CT Work', 'CT Work issue summary attached')}>
+                    {m.ctwork.map((k) => <span key={k} className="ct-chip">📎 {k}</span>)}
+                  </div>
+                ) : null}
                 <NutTinNhan
                   text={m.text}
                   {...(m.luc === undefined ? {} : { luc: m.luc })}
@@ -1469,7 +1675,8 @@ export function AgentMode({
               <div key={i} className="ct-notice" data-tone={
                 m.ma === 'HOAN_TAC' || m.ma === 'RAMBO_BAO_TRI' || m.ma === 'CUC_BO_CHUA_CAI' || m.ma === 'CUC_BO_DA_TAT' || m.ma === 'MAX_STEPS' || m.ma === 'TOOL_HONG'
                 || m.ma === 'CONG_ANTHROPIC_KHOA' || m.ma === 'CONG_ANTHROPIC_HET_HAN_MUC' || m.ma === 'CONG_ANTHROPIC_HET_KEY' || m.ma === 'CONG_ANTHROPIC_HONG' ? 'warn'
-                  : m.ma === 'KHOI_PHUC' || m.ma === 'DOI_CONG' || m.ma === 'CONG_CHINH_HONG_FREE' || m.ma === 'RAMBO_SONG_LAI' || m.ma === 'LAM_TIEP' || m.ma === 'TU_GO_ANH' || m.ma === 'COMPACT' || m.ma === 'DOI_CHE_DO' ? 'info' : 'err'
+                  : m.ma === 'KHOI_PHUC' || m.ma === 'DOI_CONG' || m.ma === 'CONG_CHINH_HONG_FREE' || m.ma === 'RAMBO_SONG_LAI' || m.ma === 'LAM_TIEP' || m.ma === 'TU_GO_ANH' || m.ma === 'COMPACT' || m.ma === 'DOI_CHE_DO' || m.ma === 'DA_CHEN' ? 'info'
+                  : m.ma === 'NGU_CANH_DAY' ? 'warn' : 'err'
               }>
                 <span>{m.text}</span>
                 {/* Hết hạn mức Cuong Fable ⇒ xin thêm ngay tại chỗ (26/09/2026). */}
@@ -1580,7 +1787,7 @@ export function AgentMode({
             }
             return (
               <XinPhepMcp
-                key={i} id={m.id} server={m.server} tool={m.tool} args={m.args} traLoi={traLoiXinPhep}
+                key={i} id={m.id} server={m.server} tool={m.tool} args={m.args} traLoi={traLoiXinPhep} xemTruoc={m.xemTruoc}
               />
             );
           }
@@ -1732,6 +1939,30 @@ export function AgentMode({
                 onXong={(q) => datHanMuc(q)}
               />
             )}
+            {lenhNut === 'henLo' && (
+              <div className="ct-nut-hang">
+                <button type="button" className="ct-btn" onClick={() => { void window.cuongthai?.agent.xuLyHenLo('chay').then((x) => traLoi(dichP('Đang chạy bù {n} hẹn — mỗi hẹn mở lại đúng việc của nó (xem ở Lịch sử).', { n: x.n }))); }}>
+                  {dich('Chạy bù ngay')}
+                </button>
+                <button type="button" className="ct-btn ct-btn-ghost" onClick={() => { void window.cuongthai?.agent.xuLyHenLo('bo').then((x) => traLoi(dichP('Đã bỏ {n} hẹn đã lỡ.', { n: x.n }))); }}>
+                  {dich('Bỏ các hẹn đã lỡ')}
+                </button>
+              </div>
+            )}
+            {typeof lenhNut === 'object' && lenhNut?.chon && (
+              /* Đợt 5: thẻ lựa chọn kiểu CLI — nút đánh số; ô nhập trống + phím số cũng chọn (`phimTrongO`). */
+              <div className="ct-nut-hang ct-the-chon" data-the-chon="1">
+                {lenhNut.chon.ds.filter((m) => !m.tat).map((m, k) => {
+                  const so = m.so ?? (k < 9 ? String(k + 1) : '');
+                  return (
+                    <button key={m.giaTri} type="button" className={k === 0 ? 'ct-btn' : 'ct-btn ct-btn-ghost'} title={m.mo ?? m.nhan}
+                      onClick={() => { const c = lenhNut.chon; traLoi(null); void Promise.resolve(c.khiChon(m.giaTri)).catch((e: Error) => traLoi(`⚠ ${e.message}`)); }}>
+                      {so ? <kbd>{so}</kbd> : null} {m.nhan}{m.mo ? <span className="ct-the-chon-mo"> · {m.mo}</span> : null}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
             {lenhNut === 'caiNgoaiTuyen' && (
               <button type="button" className="ct-ngoai-tuyen-nut" onClick={moCaiNgoaiTuyen}>
                 {dich('Mở cài đặt AI ngoại tuyến')}
@@ -1811,6 +2042,13 @@ export function AgentMode({
           chữ bị bóp còn vài chục px và placeholder mất cả hai đầu. */}
       {/* Đợt 3: đang CHỜ điều kiện / HẸN quay lại — có nút huỷ. */}
       <DaiHenCho cho={trangThai.henCho.cho} hen={trangThai.henCho.hen} huyCho={huyCho} huyHen={huyHen} />
+      {/* Đợt 5: dòng CT Work kiểu Claude Code — dự án · sprint · còn N ngày · ▶ thẻ của nhánh. Bấm = menu /ctwork. */}
+      {dongCtw && (
+        <button type="button" className="ct-dong-ctw" title={Ld('CT Work — bấm để mở menu', 'CT Work — click for the menu')}
+          onClick={() => { void lenhCtwork('/ctwork', '', gdCtw()); }}>
+          {veDongCtw(dongCtw, nn, 160)}
+        </button>
+      )}
       <div className="ct-agent-soan">
        <div className="ct-agent-soan-khung" data-chay={trangThai.dangChay}>
         <textarea
@@ -1850,9 +2088,11 @@ export function AgentMode({
           <>
             {nhap.trim() && (
               <button type="button" className="ct-btn ct-btn-ghost" onClick={guiDi}
-                title={dich('Xếp câu này vào hàng chờ — gửi ngay khi lượt hiện tại xong')}>
+                title={nhap.trim().startsWith('/')
+                  ? dich('Xếp câu này vào hàng chờ — gửi ngay khi lượt hiện tại xong')
+                  : dich('Chèn câu này vào lượt ĐANG chạy — agent đọc ngay sau tool kế tiếp (Enter cũng được)')}>
                 <ListPlus size={14} aria-hidden />
-                {dich('Xếp hàng')}
+                {nhap.trim().startsWith('/') ? dich('Xếp hàng') : dich('Chèn vào lượt')}
               </button>
             )}
             {/* Khoá nút và đổi chữ NGAY khi bấm. Không có phản hồi tức thì thì
@@ -2804,7 +3044,16 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
                   {/* Lỗi xuống dòng riêng, ĐỌC ĐƯỢC HẾT và chọn-chép được: dòng cuối
                       stderr ("thiếu FIGMA_API_KEY") là thứ duy nhất nói vì sao hỏng,
                       và bản trước cắt nó bằng dấu "…" sau chừng 30 ký tự. */}
-                  {!s.ok && <span className="ct-mcp-loi">{s.loi ?? 'hỏng'}</span>}
+                  {!s.ok && !s.tat && <span className="ct-mcp-loi">{s.loi ?? 'hỏng'}</span>}
+                  {/* Đợt 4 — bật/tắt từng server (`"disabled": true` trong mcp.json), như menu `/mcp` của CLI. */}
+                  {!s.tuDuAn && !s.canDuyet && (
+                    <button
+                      type="button" className="ct-btn ct-btn-ghost ct-mcp-battat" disabled={khoa || dangNap}
+                      onClick={() => { void window.cuongthai?.agent.mcpBatTat(cuocId, s.ten, s.tat === true).then((r) => { if (r.trangThai) datTt(r.trangThai); }); }}
+                    >
+                      {s.tat ? dich('Bật') : dich('Tắt')}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -2956,7 +3205,9 @@ function KhoiMa({ chu, duongDan }: { chu: string; duongDan?: string }) {
 
 function DongTool({ m }: { m: Extract<MucHienThi, { kieu: 'tool' }> }) {
   const [mo, datMo] = useState(false);
-  const coGiDeXem = Boolean(m.diff ?? m.chiTiet);
+  const coGiDeXem = Boolean(m.diff ?? m.chiTiet ?? m.xemGon);
+  /* Đợt 5: tool CT Work ⇒ `CT Work · sprint_current(…)` + tóm tắt một dòng; mở ra là BẢNG GỌN (không JSON thô). */
+  const laCtw = m.ten.startsWith('mcp__ctwork__');
 
   return (
     <div className="ct-agent-tool" data-vong={m.vong} data-ten={m.ten} data-mo={mo}>
@@ -2977,7 +3228,7 @@ function DongTool({ m }: { m: Extract<MucHienThi, { kieu: 'tool' }> }) {
           : {})}
       >
         <IconTool ten={m.ten} vong={m.vong} />
-        <code>{m.ten}</code>
+        <code>{laCtw ? `CT Work · ${m.ten.slice('mcp__ctwork__'.length)}${m.thamSo ? `(${m.thamSo})` : ''}` : m.ten}</code>
         <span className="ct-agent-tool-tomtat" title={m.tomTat}>{m.tomTat}</span>
         {coGiDeXem && (
           <ChevronDown size={12} aria-hidden className="ct-agent-tool-mui" />
@@ -2990,7 +3241,10 @@ function DongTool({ m }: { m: Extract<MucHienThi, { kieu: 'tool' }> }) {
            trả `null` và diff hiện ra chữ trắng trơn. */
         <KhoiDiff diff={m.diff} duongDan={m.duongDan ?? ''} />
       )}
-      {mo && !m.diff && m.chiTiet && (
+      {mo && !m.diff && laCtw && m.xemGon && (
+        <div className="ct-ctw-gon"><ChuAgent text={m.xemGon} /></div>
+      )}
+      {mo && !m.diff && !(laCtw && m.xemGon) && m.chiTiet && (
         <KhoiMa chu={m.chiTiet} {...(m.duongDan ? { duongDan: m.duongDan } : {})} />
       )}
     </div>

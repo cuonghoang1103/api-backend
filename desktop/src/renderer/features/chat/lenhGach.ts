@@ -18,6 +18,9 @@ import type {
 } from '../../../shared/ipc';
 import type { MucHienThi } from './useAgent';
 
+/* Đợt 5 (18/10/2026): lệnh CT Work dùng chung ba nơi — `/ctwork` menu đánh số, `/issue`, `/sprint`, `/viec`. */
+export * from './ctworkLenh';
+
 export type NhomLenh = 'co-ban' | 'phien' | 'lam-viec' | 'cong-cu';
 
 export interface LenhGach {
@@ -60,8 +63,14 @@ export const LENH_AGENT: LenhGach[] = [
   { ten: '/sessions', mo: 'Các phiên CuongMini khác đang mở trên máy (agent nhắn qua lại được)', khac: ['/phien'], nhom: 'phien' },
   { ten: '/rename', mo: 'Đặt tên phiên này (phiên khác thấy tên khi nhắn)', khac: ['/doiten'], thamSo: '<tên>', nhom: 'phien' },
   { ten: '/worktree', mo: 'Làm ở một git worktree riêng (nhánh agent/…) — không đè cây đang làm', khac: ['/wt'], thamSo: '[tên | list | xoa <đường>]', nhom: 'lam-viec' },
-  { ten: '/ctwork', mo: 'Kết nối CT Work một chạm (token tự tạo bằng tài khoản đang đăng nhập, cất trong kho bí mật của máy)', thamSo: '[doc | ghi | off]', nhom: 'cong-cu' },
-  { ten: '/hen', mo: 'Việc đang CHỜ và các HẸN quay lại của agent — xem / huỷ', khac: ['/schedule', '/cho'], thamSo: '[huy [id]]', nhom: 'lam-viec' },
+  { ten: '/ctwork', mo: 'CT Work: menu sprint · việc của tôi · mở/bắt đầu thẻ · ghi giờ · bình luận bằng chứng · báo cáo tuần · họp · chọn dự án (kết nối một chạm bằng tài khoản đang đăng nhập)', thamSo: '[du-an | sprint | viec | the <KEY> | bat-dau <KEY> | gio <KEY> <giờ> | binh-luan | bao-cao | hop | tu-ghi on|off | ket-noi | off]', nhom: 'cong-cu' },
+  /* Đợt 5 (18/10/2026) — lối tắt CT Work */
+  { ten: '/issue', mo: 'Mở một thẻ CT Work: tiêu đề, trạng thái, người làm, mô tả gọn, "Tự kiểm", bình luận gần nhất', khac: ['/the'], thamSo: '<LF-18>', nhom: 'cong-cu' },
+  { ten: '/sprint', mo: 'Sprint CT Work đang chạy (hoặc sprint trọng tâm) — bảng thẻ theo cột trạng thái', nhom: 'cong-cu' },
+  { ten: '/viec', mo: 'Việc CT Work của tôi — hạn gần lên đầu', khac: ['/mywork'], nhom: 'cong-cu' },
+  { ten: '/hen', mo: 'Việc đang CHỜ và các HẸN quay lại của agent — xem / huỷ / chạy bù hẹn đã lỡ lúc tắt', khac: ['/schedule', '/cho'], thamSo: '[huy [id] | chay-bu | bo-lo]', nhom: 'lam-viec' },
+  /* Đợt 4 (18/10/2026) */
+  { ten: '/may', mo: 'Bật/tắt cho agent ĐIỀU KHIỂN MÁY TÍNH (chụp màn hình, chuột, phím) — mọi thao tác vẫn hỏi duyệt', khac: ['/computer', '/maytinh'], thamSo: '[on|off]', nhom: 'cong-cu' },
   { ten: '/offline', mo: 'Bật/tắt chạy bằng AI trên máy (ngoại tuyến) cho tab này', khac: ['/ngoaituyen'], nhom: 'cong-cu' },
   { ten: '/doctor', mo: 'Chẩn đoán: mạng, máy chủ, cổng, AI ngoại tuyến, quyền thư mục', khac: ['/chandoan'], nhom: 'cong-cu' },
   { ten: '/help', mo: 'Danh sách lệnh gạch chéo', khac: ['/?', '/tro-giup'], nhom: 'co-ban' },

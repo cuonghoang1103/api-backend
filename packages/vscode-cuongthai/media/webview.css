@@ -321,3 +321,15 @@ button { font: inherit; color: inherit; }
 .hen-cho .nut-nho { margin-left: 6px; }
 .hoi .hoi-cau + .hoi-cau { margin-top: 10px; }
 .hoi .hoi-khac { width: 100%; margin-top: 6px; box-sizing: border-box; }
+
+/* Đợt 4 — ô ngữ cảnh % ở thanh dưới */
+.o-ngu-canh { font-size: 11px; padding: 1px 6px; border-radius: 9px; border: 1px solid var(--vien-nhat); color: var(--vscode-descriptionForeground); margin-right: 4px; }
+.o-ngu-canh[data-muc="vang"] { color: var(--vscode-editorWarning-foreground, #d97706); border-color: currentColor; }
+.o-ngu-canh[data-muc="do"] { color: var(--vscode-errorForeground, #dc2626); border-color: currentColor; }
+
+/* Đợt 5 — CT Work: dòng trạng thái dưới ô nhập, chip 📎 thẻ, bảng gọn, thẻ lựa chọn có số. */
+.dong-ctw { font-size: 11px; color: var(--vscode-descriptionForeground); padding: 2px 8px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chip-ctw { margin-top: 4px; display: flex; gap: 4px; flex-wrap: wrap; }
+.chip-ctw .chip { font-size: 11px; padding: 1px 6px; border-radius: 10px; background: var(--vscode-badge-background); color: var(--vscode-badge-foreground); }
+.ctw-gon, .ctw-xem { font-size: 12px; max-height: 360px; overflow: auto; }
+.nut-hang .nut.da-chon { outline: 1px solid var(--vscode-focusBorder); }

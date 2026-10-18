@@ -75,6 +75,14 @@ export function veTool(m: Extract<MucBang, { loai: 'tool' }>, rong: number): str
   }
   // Tham số chính của lõi TRƯỚC (`Search("TODO" in src)`) — `duongDan` chỉ là đường dẫn, mất mẫu tìm (QA 18/10: `Search(src)`).
   const thamSo = (TOOL_LENH.has(m.ten) ? m.lenh : null) ?? m.thamSo ?? m.duongDan ?? null;
+  /* Đợt 5: tool CT Work = MỘT dòng kiểu Claude Code — `● CT Work · sprint_current — Sprint 2 · 14 thẻ`;
+     ctrl+o mở bảng gọn (`xemGon`), không bao giờ đổ JSON thô. */
+  if (m.ten.startsWith('mcp__ctwork__')) {
+    const dauCt = `${dongTieuDeTool(m.ten, thamSo, cham, Math.max(20, rong - 30))} ${mo('—')} ${m.hong ? mau(DO)(dichTomTat(m.tomTat)) : mo(catVua(dichTomTat(m.tomTat), Math.max(10, rong - 30)))}`;
+    if (!m.moRong) return [`${dauCt}${m.xemGon ? mo(L('  (ctrl+o)', '  (ctrl+o)')) : ''}`];
+    const bang = m.xemGon ? veMarkdown(m.xemGon, { rong: rong - 5 }).split('\n') : m.chiTiet && !laLoiDanModel(m.chiTiet) ? veDauRa(m.chiTiet, rong, true) : [];
+    return [dauCt, ...nhanhCon(bang)];
+  }
   const dau = dongTieuDeTool(m.ten, thamSo, cham, rong);
   const than: string[] = [];
   if (m.diff?.dong?.length && TOOL_GHI.has(m.ten)) {
@@ -88,7 +96,9 @@ export function veTool(m: Extract<MucBang, { loai: 'tool' }>, rong: number): str
   } else {
     const tt = tomTatHien(m.ten, m.tomTat, thamSo);
     than.push(m.hong ? mau(DO)(tt || L('lỗi', 'error')) : mo(tt || L('xong', 'done')));
-    if (m.moRong && m.chiTiet && !laLoiDanModel(m.chiTiet)) than.push(...veDauRa(m.chiTiet, rong, true));
+    // Đợt 5: tool CT Work có BẢNG GỌN — mở rộng (ctrl+o) hiện bảng đó, không đổ JSON thô.
+    if (m.moRong && m.xemGon) than.push(...veMarkdown(m.xemGon, { rong: rong - 5 }).split('\n'));
+    else if (m.moRong && m.chiTiet && !laLoiDanModel(m.chiTiet)) than.push(...veDauRa(m.chiTiet, rong, true));
   }
   return [dau, ...nhanhCon(than.filter((d) => d !== ''))];
 }
@@ -142,9 +152,14 @@ export function veMuc(m: MucBang, rong: number, truoc?: MucBang): string[] {
     }
     case 'thongBao': {
       const dau = m.muc === 'loi' ? mau(DO)('⚠') : m.muc === 'canh' ? mau(VANG)('⚠') : m.muc === 'ok' ? mau(XANH_LA)('✓') : mau(THUONG_HIEU.xanhNhat)('ℹ');
-      // Dòng nối thụt 2 cột cho thẳng chữ (không chạy về cột 0 dưới dấu ✓).
-      return bocDong(m.muc === 'loi' ? mau(DO)(m.text) : mo(m.text), rong - 2).map((d, i) => (i === 0 ? `${dau} ${d}` : `  ${d}`));
+      // Dòng nối thụt 2 cột cho thẳng chữ (không chạy về cột 0 dưới dấu ✓). Đợt 5: một dòng trống trước khối
+      // (như Claude Code), trừ khi nối tiếp thông báo khác.
+      const cach = truoc && truoc.loai !== 'thongBao' && truoc.loai !== 'chao' ? [''] : [];
+      return [...cach, ...bocDong(m.muc === 'loi' ? mau(DO)(m.text) : mo(m.text), rong - 2).map((d, i) => (i === 0 ? `${dau} ${d}` : `  ${d}`))];
     }
+    case 'dinhKem':
+      // Đợt 5: chip kiểu `@file` ngay dưới tin người dùng.
+      return [`  ${m.khoa.map((k) => mau('#7dd3fc')(`📎 ${k}`)).join(mo('  '))} ${mo(L('· đã đính kèm tóm tắt thẻ CT Work', '· CT Work issue summary attached'))}`];
     case 'ketLuot': {
       const phan = [`CuongMini · ${gio(new Date(m.luc))}`];
       if (m.thoiLuong) phan.push(giay(m.thoiLuong));
@@ -177,7 +192,7 @@ export function dungBanGhi(bang: readonly MucBang[], rong: number, moRong: Reado
   let truoc: MucBang | undefined;
   for (const m of bang) {
     if (m.loai === 'chao') continue;
-    const coRa = (m.loai === 'tool' && Boolean(m.ra || m.chiTiet || m.diff || (m.nhom && m.nhom.length > 1))) || m.loai === 'shell';
+    const coRa = (m.loai === 'tool' && Boolean(m.ra || m.chiTiet || m.xemGon || m.diff || (m.nhom && m.nhom.length > 1))) || m.loai === 'shell';
     const ban = coRa ? { ...m, moRong: moRong.has(m.id) } as MucBang : m;
     const v = veMuc(ban, rong, truoc);
     truoc = m;
@@ -213,9 +228,11 @@ export interface ThongTinMoDau {
 export function rutGiua(s: string, n: number): string {
   if (n <= 0 || doRong(s) <= n) return s;
   if (n < 8) return catVua(s, n);
-  const duoi = Math.ceil((n - 1) * 0.6);
-  const dau = n - 1 - duoi;
-  return `${[...s].slice(0, dau).join('')}…${[...s].slice(-duoi).join('')}`;
+  /* Đợt 4: '...' (3 cột ASCII) thay cho '…' — U+2026 có độ rộng MẬP MỜ (East Asian Ambiguous): terminal bật
+     "ambiguous = double width" vẽ nó 2 cột ⇒ viền phải banner lệch 1 cột. */
+  const duoi = Math.ceil((n - 3) * 0.6);
+  const dau = n - 3 - duoi;
+  return `${[...s].slice(0, dau).join('')}...${[...s].slice(-duoi).join('')}`;
 }
 
 /** Khung bo tròn, viền chuyển sắc tím → xanh, logo chữ, thông tin phiên, mẹo. */
@@ -224,7 +241,10 @@ export function veManMoDau(t: ThongTinMoDau, logo: string[], rongMan: number): s
   const trong = W - 4;
   const vienTrai = mau(THUONG_HIEU.tim)('│');
   const vienPhai = mau(THUONG_HIEU.xanh)('│');
-  const dong = (s = ''): string => `${vienTrai} ${dem(doRong(s) > trong ? catVua(s.replace(/\x1b\[[0-9;]*m/g, ''), trong) : s, trong)} ${vienPhai}`;
+  /* Đợt 4 — viền phải lệch 1 cột: '·' (U+00B7) là ký tự độ rộng MẬP MỜ (terminal tuỳ chỉnh vẽ 1 hoặc 2 cột) và
+     '⎇' vẽ tràn ô ở nhiều font. Trong khung có viền phải thì chỉ dùng ký tự chắc chắn 1 cột. */
+  const anToan = (s: string): string => s.replace(/·/g, '|').replace(/⎇ /g, 'git:');
+  const dong = (s0 = ''): string => { const s = anToan(s0); return `${vienTrai} ${dem(doRong(s) > trong ? catVua(s.replace(/\x1b\[[0-9;]*m/g, ''), trong) : s, trong)} ${vienPhai}`; };
   const tieuDe = ` ✻ CuongMini CLI ${t.phienBan} `;
   const ngang = (trai: string, phai: string, giua: string): string => {
     const du = Math.max(0, W - 2 - doRong(giua) - 3);
@@ -241,8 +261,8 @@ export function veManMoDau(t: ThongTinMoDau, logo: string[], rongMan: number): s
   ra.push(dong());
   const nhan = (k: string) => mo(k.padEnd(9));
   // Đường dẫn dài: rút GIỮA (giữ tên dự án ở cuối) — cắt đuôi là mất đúng phần người dùng cần nhìn.
-  const nhanhChu = t.nhanh ? `  ${mau('#a78bfa')(`⎇ ${t.nhanh}`)}` : '';
-  ra.push(dong(` ${nhan(L('Thư mục', 'cwd'))}${rutGiua(t.thuMuc, trong - 10 - (t.nhanh ? doRong(t.nhanh) + 4 : 0))}${nhanhChu}`));
+  const nhanhChu = t.nhanh ? `  ${mau('#a78bfa')(`git:${t.nhanh}`)}` : '';
+  ra.push(dong(` ${nhan(L('Thư mục', 'cwd'))}${rutGiua(t.thuMuc, trong - 10 - (t.nhanh ? doRong(t.nhanh) + 6 : 0))}${nhanhChu}`));
   if (t.model) ra.push(dong(` ${nhan('Model')}${mau(THUONG_HIEU.xanhNhat)(t.model)}${t.muc ? mo(L(` · mức ${t.muc}`, ` · effort ${t.muc}`)) : ''}`));
   if (t.cheDo) {
     ra.push(dong(` ${nhan(L('Chế độ', 'Mode'))}${mau(t.cheDo.mau)(`${t.cheDo.icon} ${t.cheDo.ten}`)}${t.trinhDuyet ? `  ${mau('#60a5fa')(L('🌐 trình duyệt', '🌐 browser'))}` : ''}${mo(L('  (shift+tab để đổi)', '  (shift+tab to cycle)'))}`));

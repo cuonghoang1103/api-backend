@@ -40,6 +40,7 @@
 import { app } from 'electron';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { API_ORIGIN } from '../config';
 import { daDuyet, ghiDuyet } from './duyetDuAn';
 import {
   KetNoiMcp, LoiHttp, kieuCua, laLenhTaiGoi, taoHttp, taoSse, taoStdio,
@@ -76,6 +77,11 @@ export interface ToolMcp {
   tenGoc: string;
   moTa: string;
   thamSo: Record<string, unknown>;
+  /**
+   * Đợt 5: server tự khai `annotations.readOnlyHint: true`. CHỈ được tin với server CT Work của chính
+   * CuongThai (`laCtworkTinCay`) — với server lạ, bên viết mô tả không được là bên quyết định bỏ cửa duyệt.
+   */
+  chiDoc?: boolean;
 }
 
 interface ServerDangChay {
@@ -250,6 +256,10 @@ export interface KetQuaNap {
     kieu?: KieuKetNoi;
     /** Số tool bị bỏ vì chạm trần tổng — không nói thì "server có 12 tool, AI thấy 8" là bí ẩn. */
     boBot?: number;
+    /** Đợt 4: người dùng TẮT server này (`"disabled": true` trong mcp.json) — không chạy. */
+    tat?: boolean;
+    /** Đợt 5: server DỰNG SẴN của app (CT Work), không có dòng trong mcp.json. */
+    dungSan?: boolean;
   }>;
 }
 
@@ -266,6 +276,9 @@ let hangNap: Promise<unknown> = Promise.resolve();
  * Luôn tắt trước: nạp lại mà không tắt thì mỗi lần bấm "Nạp lại" là thêm một
  * bộ tiến trình con nữa sống mãi tới khi đóng app.
  */
+/** Đợt 5: chờ lần nạp đang chạy (lúc mở app) xong — để hỏi "gắn dự án?" khi server CT Work đã nối. */
+export function choNapMcp(): Promise<unknown> { return hangNap; }
+
 export function napLaiMcp(goc: string | null = null): Promise<KetQuaNap> {
   const lan = hangNap.then(() => napThat(goc), () => napThat(goc));
   hangNap = lan.catch(() => {});
@@ -284,9 +297,27 @@ async function napThat(goc: string | null): Promise<KetQuaNap> {
      dùng tự cắm — đó là cách êm nhất để tráo một server. */
   const tenDuAn = Object.keys(cuaDuAn).filter((t) => !(t in toanCuc));
   const cauHinh: Record<string, CauHinhServer> = {};
+  /* Đợt 5: server DỰNG SẴN (CT Work) đứng ĐẦU — mục cùng tên người dùng tự viết (có url/command) thắng;
+     mục chỉ mang `"disabled": true` (do `/mcp` ghi) thì giữ cờ tắt. */
+  tinCay.clear();
+  dungSanTen.clear();
+  for (const [t, c] of Object.entries(nguonServerDungSan())) {
+    const tay = toanCuc[t];
+    if (tay && kieuCua(tay) !== null) continue;
+    cauHinh[t] = { ...c, ...((tay as { disabled?: unknown } | undefined)?.disabled === true ? { disabled: true } : {}) } as CauHinhServer;
+    dungSanTen.add(t);
+    tinCay.add(t);
+  }
   // Khoá bắt đầu bằng `_` là chú thích (`_ghi_chu`, `_vidu`…), không phải server.
-  for (const [t, c] of Object.entries(toanCuc)) if (!t.startsWith('_')) cauHinh[t] = c;
-  if (daDuyet) for (const t of tenDuAn) cauHinh[t] = cuaDuAn[t]!;
+  for (const [t, c] of Object.entries(toanCuc)) {
+    if (t.startsWith('_') || dungSanTen.has(t)) continue;
+    cauHinh[t] = c;
+    if (laUrlCtwork((c as { url?: unknown }).url)) tinCay.add(t);
+  }
+  if (daDuyet) for (const t of tenDuAn) if (!dungSanTen.has(t)) cauHinh[t] = cuaDuAn[t]!;
+  /* Đợt 4: `"disabled": true` ⇒ không bật, vẫn HIỆN trong danh sách (bật/tắt từ `/mcp`). */
+  const daTat = Object.keys(cauHinh).filter((t) => (cauHinh[t] as { disabled?: unknown }).disabled === true);
+  for (const t of daTat) delete cauHinh[t];
 
   const ten = Object.keys(cauHinh).slice(0, MAX_SERVER);
 
@@ -301,10 +332,10 @@ async function napThat(goc: string | null): Promise<KetQuaNap> {
     const kieu = kieuCua(cauHinh[t]) ?? undefined;
     if (r.status === 'fulfilled') {
       thuTu.push(t);
-      server.push({ ten: t, ok: true, soTool: r.value.tool.length, ...(kieu ? { kieu } : {}) });
+      server.push({ ten: t, ok: true, soTool: r.value.tool.length, ...(kieu ? { kieu } : {}), ...(dungSanTen.has(t) ? { dungSan: true } : {}) });
     } else {
       // Một server hỏng KHÔNG được làm chết những server còn lại.
-      server.push({ ten: t, ok: false, soTool: 0, ...(kieu ? { kieu } : {}), loi: String((r.reason as Error)?.message ?? r.reason).slice(0, 400) });
+      server.push({ ten: t, ok: false, soTool: 0, ...(kieu ? { kieu } : {}), ...(dungSanTen.has(t) ? { dungSan: true } : {}), loi: String((r.reason as Error)?.message ?? r.reason).slice(0, 400) });
     }
   });
 
@@ -315,6 +346,7 @@ async function napThat(goc: string | null): Promise<KetQuaNap> {
    * gì — không tool, không lỗi, không một dòng nào nói vì sao. Đó đúng là kiểu
    * hỏng câm mà cả bảng này sinh ra để chống.
    */
+  for (const t of daTat) server.push({ ten: t, ok: false, soTool: 0, tat: true, loi: 'đã tắt', ...(dungSanTen.has(t) ? { dungSan: true } : {}) });
   if (!daDuyet) {
     for (const t of tenDuAn.slice(0, MAX_SERVER)) {
       server.push({ ten: t, ok: false, soTool: 0, tuDuAn: true, canDuyet: true,
@@ -341,11 +373,15 @@ async function napThat(goc: string | null): Promise<KetQuaNap> {
  */
 function dungLaiDanhSachTool(): void {
   const tool: ToolMcp[] = [];
+  /* Đợt 5: CT Work tin cậy được xếp tool theo ưu tiên, và chừa ≤ 16 chỗ cho các server khác. */
+  const khac = thuTu.filter((t) => !tinCay.has(t)).reduce((n, t) => n + (dangChay.get(t)?.tool.length ?? 0), 0);
   for (const t of thuTu) {
     const s = dangChay.get(t);
     const tt = trangThaiCuoi.find((x) => x.ten === t);
     if (!s) continue;
-    const nhan = s.tool.slice(0, Math.max(0, MAX_TOOL - tool.length));
+    const ds = tinCay.has(t) ? sapToolCtwork(s.tool) : s.tool;
+    const tran = tinCay.has(t) ? Math.max(0, MAX_TOOL - Math.min(16, khac) - tool.length) : Math.max(0, MAX_TOOL - tool.length);
+    const nhan = ds.slice(0, tran);
     tool.push(...nhan);
     if (tt) {
       tt.soTool = nhan.length;
@@ -359,6 +395,50 @@ function dungLaiDanhSachTool(): void {
 let nguonBienBiMat: () => Record<string, string> = () => ({});
 /** `ctworkKetNoi.ts` cắm vào (tránh vòng import). */
 export function datNguonBienBiMat(f: () => Record<string, string>): void { nguonBienBiMat = f; }
+
+/*
+ * ─── ĐỢT 5 (18/10/2026): SERVER DỰNG SẴN — CT Work ───
+ *
+ * Đã kết nối `/ctwork` (token trong kho bí mật) ⇒ server `ctwork` có mặt mà KHÔNG cần dòng nào trong
+ * mcp.json. Người dùng vẫn tắt được nó (`"ctwork": { "disabled": true }` — `/mcp` ghi đúng dòng đó), và
+ * một mục `ctwork` họ tự viết (có `url`/`command`) luôn THẮNG bản dựng sẵn.
+ *
+ * "TIN CẬY" = server CT Work của chính CuongThai (dựng sẵn, hoặc url trỏ đúng `/api/v1/work/mcp` của
+ * máy chủ này): chỉ với nó app mới tin `readOnlyHint` để không hỏi khi ĐỌC, và mới xếp tool theo thứ
+ * tự quan trọng. Server khác giữ nguyên luật "mọi lời gọi đều duyệt".
+ */
+let nguonServerDungSan: () => Record<string, CauHinhServer> = () => ({});
+export function datNguonServerDungSan(f: () => Record<string, CauHinhServer>): void { nguonServerDungSan = f; }
+const tinCay = new Set<string>();
+const dungSanTen = new Set<string>();
+
+/** URL MCP của CT Work mà app tin (máy chủ đang nối + hai tên miền chính thức). */
+export function laUrlCtwork(url: unknown): boolean {
+  if (typeof url !== 'string') return false;
+  const u = url.replace(/\/+$/, '');
+  return [`${API_ORIGIN}/api/v1/work/mcp`, 'https://api.cuongthai.com/api/v1/work/mcp', 'https://cuongthai.com/api/v1/work/mcp'].includes(u);
+}
+/** Server này là CT Work của CuongThai (dựng sẵn hoặc url chính thức). */
+export function laCtworkTinCay(server: string): boolean { return tinCay.has(server); }
+/** Server này đến từ bản DỰNG SẴN (không có dòng trong mcp.json). */
+export function laServerDungSan(server: string): boolean { return dungSanTen.has(server); }
+
+/**
+ * Thứ tự ưu tiên tool CT Work trong trần 40 tool: việc hằng ngày của sinh viên/mentor lên trước
+ * (đọc rẻ → ghi bằng chứng), nhóm chuyên đề (SRS, Report 5.1…) sau. Tool không có trong danh sách
+ * giữ thứ tự của máy chủ, đứng sau.
+ */
+const UU_TIEN_CTWORK = [
+  'my_work', 'get_issue', 'search_issues', 'sprint_current', 'list_projects', 'whoami', 'list_pages', 'get_page',
+  'comment', 'log_work', 'transition', 'update_issue', 'create_issue', 'request_review', 'ask_lead',
+  'meeting_list', 'meeting_get', 'weekly_report_generate', 'raid_list', 'export_file', 'docs_draft_page', 'docs_update_section',
+  'test_list', 'test_get', 'fpt_unit_list', 'fpt_unit_get', 'contrib_summary', 'time_by_activity', 'worklog_set_activity',
+  'chat_read', 'qna_list', 'rtm_get', 'srs_get', 'swr_overview', 'diagram_list', 'attach_file',
+];
+function sapToolCtwork(ds: ToolMcp[]): ToolMcp[] {
+  const hang = (t: ToolMcp) => { const i = UU_TIEN_CTWORK.indexOf(t.tenGoc); return i < 0 ? UU_TIEN_CTWORK.length : i; };
+  return ds.map((t, i) => ({ t, i })).sort((a, b) => hang(a.t) - hang(b.t) || a.i - b.i).map((x) => x.t);
+}
 
 export function trangThaiServer(): KetQuaNap['server'] {
   return trangThaiCuoi;
@@ -474,10 +554,13 @@ async function batVoiKieu(
     // Bắt tay hỏng ⇒ ĐÓNG hẳn. Không đóng thì một server khởi động được nhưng
     // không nói đúng giao thức cứ sống mãi tới lúc đóng app: agent không dùng
     // được nó, người dùng không thấy nó, và nó vẫn ăn RAM.
+    /* QA 5c: lấy lý do đóng TRƯỚC khi tự đóng — `dong()` ghi đè lý do thành "<tên>: đã tắt", nên server hết giờ
+       bắt tay / nói sai giao thức hiện "khac: đã tắt" trong /mcp (nghe như người dùng tự tắt) thay vì lỗi thật. */
+    const lyDoChet = kn.lyDoDong;
     await kn.dong().catch(() => {});
     const m = (err as Error).message;
     // Server chết giữa chừng: lõi đã ghép sẵn đuôi stderr vào lý do.
-    throw err instanceof LoiHttp ? err : new Error(kn.lyDoDong && !m.includes(kn.lyDoDong) ? kn.lyDoDong : m);
+    throw err instanceof LoiHttp ? err : new Error(lyDoChet && !m.includes(lyDoChet) ? lyDoChet : m);
   } finally {
     if (dongHo) clearTimeout(dongHo);
   }
@@ -546,6 +629,7 @@ async function lietKeTool(kn: KetNoiMcp, ten: string, hanMs: number): Promise<To
       tenGoc: t.name,
       moTa: moTa.slice(0, MAX_MO_TA),
       thamSo: chuanSchema(t.inputSchema),
+      ...((t.annotations as { readOnlyHint?: unknown } | undefined)?.readOnlyHint === true ? { chiDoc: true } : {}),
     });
   }
   return ra;
@@ -558,6 +642,32 @@ export async function tatHet(): Promise<void> {
   toolDaBiet = [];
   trangThaiCuoi = [];
   await Promise.allSettled(ds.map((s) => s.ketNoi.dong()));
+}
+
+/**
+ * Đợt 4 — bật/tắt MỘT server trong mcp.json TOÀN CỤC (`"disabled": true`) rồi nạp lại. Chỉ đổi đúng khoá đó; file
+ * hỏng/không có server ⇒ trả lỗi, KHÔNG ghi đè. Server của `.mcp.json` dự án không tắt từ đây (file của repo).
+ */
+export async function batTatServer(ten: string, bat: boolean, goc: string | null = null): Promise<{ ok: boolean; loi?: string }> {
+  const p = duongDanCauHinh();
+  let j: Record<string, unknown>;
+  try { j = JSON.parse(await fs.readFile(p, 'utf8')) as Record<string, unknown>; } catch (e) { return { ok: false, loi: `không đọc được mcp.json: ${(e as Error).message}` }; }
+  const khoa = j.servers && typeof j.servers === 'object' ? 'servers' : j.mcpServers && typeof j.mcpServers === 'object' ? 'mcpServers' : null;
+  let bang = khoa ? (j[khoa] as Record<string, Record<string, unknown>>) : null;
+  /* Đợt 5: server DỰNG SẴN (CT Work) không có dòng nào ⇒ tắt = ghi `{ "disabled": true }`; bật lại = gỡ dòng đó. */
+  if (dungSanTen.has(ten) && (!bang || !bang[ten])) {
+    if (bat) { await napLaiMcp(goc); return { ok: true }; }
+    if (!bang) { bang = {}; j[khoa ?? 'servers'] = bang; }
+    bang[ten] = { disabled: true, _ghi_chu: 'CT Work dựng sẵn của CuongMini đang TẮT. Bật lại: /mcp (hoặc xoá dòng này).' };
+  } else if (!bang || !bang[ten] || typeof bang[ten] !== 'object') {
+    return { ok: false, loi: `không có server "${ten}" trong mcp.json (server của .mcp.json dự án không tắt được từ đây)` };
+  } else if (bat) {
+    delete bang[ten]!.disabled;
+    if (dungSanTen.has(ten) && kieuCua(bang[ten] as CauHinhServer) === null) delete bang[ten];
+  } else bang[ten]!.disabled = true;
+  await fs.writeFile(p, `${JSON.stringify(j, null, 2)}\n`, 'utf8');
+  await napLaiMcp(goc);
+  return { ok: true };
 }
 
 export function toolMcpHienCo(): ToolMcp[] {
@@ -617,6 +727,38 @@ export async function goiToolMcp(
   }
   return goiThat(ten, args, signal);
 }
+
+/**
+ * Đợt 5 — APP tự gọi một tool (menu `/ctwork`, dòng trạng thái, `LF-123` trong câu): không qua model, không
+ * tính vào trần 200 lượt/ngày của MODEL (trần đó chặn vòng lặp model gọi mãi; ở đây mỗi lời gọi là một cú
+ * bấm của người dùng hoặc đã có đệm 5 phút). Gọi được cả tool không lọt vào trần 40 tool gửi model.
+ */
+export async function goiToolMcpTrucTiep(
+  server: string, tenGoc: string, args: Record<string, unknown>, signal?: AbortSignal,
+): Promise<KetQuaChuyen> {
+  const s = dangChay.get(server);
+  if (!s || s.ketNoi.daDong) {
+    const tt = trangThaiCuoi.find((x) => x.ten === server);
+    return loiChu(`LỖI: server MCP "${server}" chưa chạy${tt?.loi ? ` (${tt.loi})` : ''}.`);
+  }
+  if (!s.tool.some((t) => t.tenGoc === tenGoc)) return loiChu(`LỖI: server "${server}" không có tool "${tenGoc}".`);
+  try {
+    const kq = await s.ketNoi.goi('tools/call', { name: tenGoc, arguments: args ?? {} }, s.hanGoiMs, signal);
+    return chuyenKetQua(kq, server);
+  } catch (err) {
+    if (s.kieu === 'http' && err instanceof LoiHttp && err.status === 404 && !signal?.aborted) {
+      try {
+        s.ketNoi.vc.quenPhien?.();
+        await batTay(s.ketNoi, s.hanGoiMs);
+        return chuyenKetQua(await s.ketNoi.goi('tools/call', { name: tenGoc, arguments: args ?? {} }, s.hanGoiMs, signal), server);
+      } catch (e2) { return loiChu(`LỖI khi gọi ${tenGoc}: ${(e2 as Error).message}`); }
+    }
+    return loiChu(`LỖI khi gọi ${tenGoc}: ${(err as Error).message}`);
+  }
+}
+
+/** Tool của một server (đủ, không cắt trần 40) — để biết `chiDoc`. */
+export function toolCuaServer(server: string): ToolMcp[] { return dangChay.get(server)?.tool ?? []; }
 
 function loiChu(noiDung: string): KetQuaChuyen {
   return { noiDung, anh: [], loi: true };

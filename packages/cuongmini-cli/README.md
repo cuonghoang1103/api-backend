@@ -90,6 +90,27 @@ CuongMini mở trong **alternate screen** như Claude Code: ô nhập + chân tr
 - Toàn màn hình KHÔNG bao giờ gửi lệnh xoá scrollback (iTerm2 hết hiện thanh "clear scrollback history?").
 - Tắt: `/fullscreen off` (lưu cho lần sau) · cờ `--no-fullscreen` · `CUONGMINI_TOAN_MAN_HINH=0`. CI, không TTY, `-p` thì không bao giờ bật.
 
+## Mới ở 0.5.0 (đợt 4)
+
+- **Gõ thêm khi agent đang chạy**: Enter khi đang chạy ⇒ tin được CHÈN vào lượt (agent đọc ngay sau tool kế tiếp, hiện `↳`); lệnh `/` vẫn đợi lượt xong · `esc` vẫn dừng.
+- **Điều khiển máy tính** (`/may on|off`, mặc định TẮT): chụp màn hình + chuột/phím/cuộn — MỌI thao tác vẫn hỏi, kể cả "Bỏ qua hết". macOS cấp quyền Ghi màn hình + Trợ năng cho app terminal.
+- **LSP**: có `typescript-language-server` / `pyright-langserver` (trong `node_modules/.bin` hoặc PATH) ⇒ agent hỏi định nghĩa/tham chiếu/chẩn đoán, và lỗi MỚI tự nối vào sau mỗi lần sửa file.
+- **Hẹn sống qua lúc tắt + cron** (`"0 9 * * 1-5"`): mở lại CuongMini mà có hẹn đã lỡ ⇒ hỏi chạy bù hay bỏ (`/hen chay-bu|bo-lo`).
+- **`/mcp` là thẻ lựa chọn** kiểu Claude Code (mở file · nạp lại · CT Work · xem tool / bật-tắt server); `/quyen`, `/hen`, `/sessions`, `/worktree`, `/ctwork` cũng vậy.
+- Agent biết **hôm nay là ngày nào** (ngày + múi giờ máy bạn). Hook mới: `truocNen` (trước /compact), `thongBao` (khi chờ bạn duyệt); hook trước/sau tool chạy cả cho agent phụ.
+- Sửa: đổi chế độ (shift+tab) giữa lượt không còn báo "đang chạy dở" — đổi khi lượt xong; đổi cỡ cửa sổ không còn làm iTerm2 hỏi "clear scrollback"; viền phải banner thẳng cột.
+
+**Đợt 5 — CT Work là hệ sinh thái riêng của CuongMini** (cùng bản 0.5.0):
+
+- **Tự nối CT Work bằng phiên đăng nhập** cuongthai.com: lần đầu hỏi một lần "Kết nối CT Work?" (chỉ đọc / đọc + ghi / không hỏi lại). Token tự tạo, cất trong kho của máy (file 0600), không in, không log. Server `ctwork` **dựng sẵn** — không cần dòng nào trong `mcp.json` (vẫn tắt được ở `/mcp`). Token hết hạn / bị thu hồi ⇒ hỏi "Cấp lại (một chạm)".
+- **Gắn thư mục ⇄ dự án**: `.cuongmini/ctwork.json` = `{ workspaceId, projectId, key }` (không bí mật — commit được, hoặc thêm `.cuongmini/` vào `.gitignore`). Chưa gắn mà `AGENTS.md` ghi "dự án **LF** (id 2)" ⇒ hỏi xác nhận; đổi: `/ctwork du-an`. Agent biết "Dự án CT Work: LF (id 2)" ở mọi lượt.
+- **Dòng trạng thái** dưới ô nhập: `⬡ LF · Sprint 2 · còn 5 ngày · ▶ LF-18 …` (thẻ suy từ nhánh `LF-18-…`). Đọc rẻ: `sprint_current` tối đa 1 lần / 5 phút.
+- **`/ctwork` = menu đánh số** (↑↓ Enter hoặc gõ số): 1 Sprint (bảng theo cột) · 2 Việc của tôi · 3 Mở thẻ · 4 Bắt đầu làm thẻ (nhánh `LF-xx-slug` + In Progress) · 5 Ghi giờ · 6 Bình luận bằng chứng (soạn từ git) · 7 Báo cáo tuần · 8 Họp · 9 Chọn dự án · 0 Thoát. Lối tắt: `/issue LF-18` (`/the`), `/sprint`, `/viec`, `/ctwork gio LF-18 1.5h ghi chú`.
+- **Gõ `LF-123` trong câu** ⇒ tóm tắt thẻ tự đính kèm (≤ 1.500 ký tự/thẻ, ≤ 3 thẻ), chip `📎 LF-123` — như `@file`.
+- Tool CT Work hiện **một dòng** `● CT Work · sprint_current — Sprint 2 · 14 thẻ`; `ctrl+o` mở bảng gọn, không đổ JSON.
+- **Ghi lên CT Work luôn qua thẻ duyệt có xem trước** (thẻ nào, việc gì, nội dung gì) — kể cả "Bỏ qua hết"; đọc thì không hỏi. Muốn agent tự ghi: `/ctwork tu-ghi on`.
+- Bố cục kiểu Claude Code: thẻ duyệt `1. Yes · 2. Yes, and don't ask again for … · 3. No, and tell CuongMini what to do differently (esc)`, `? phím tắt` ở ô nhập trống, `/help` gọn (`/help all` = đầy đủ), tiêu đề cửa sổ terminal = tiêu đề phiên, một dòng trống trước thông báo.
+
 ## Mới ở 0.4.0 (đợt 3)
 
 - **Agent phụ ghi được** (`giao_viec_ghi`): làm trong git worktree / thư mục tạm riêng, mọi lần sửa/chạy lệnh vẫn hiện thẻ duyệt "🤖 Agent phụ", xong trả diff để gộp (`gop_viec_phu`).

@@ -19,8 +19,10 @@
  *    3 hẹn/cuộc, lặp tối đa 50 lần, hiện trên màn hình kèm nút huỷ.
  */
 import { stat } from 'node:fs/promises';
+import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { xemDauRaNen } from './lenhNen';
+import { docCron, lanKe, type Cron } from './cron';
 
 export type DieuKien =
   | { loai: 'lenh_nen'; id: string; khop: RegExp | null }
@@ -37,6 +39,11 @@ export interface Hen {
   phut: number; lap: boolean;
   /** Còn bao nhiêu lần thức (kể cả lần kế tiếp). */
   conLai: number;
+  /** Đợt 4: biểu thức cron 5 trường (thay cho "mỗi `phut` phút"). */
+  cron?: string;
+  /** Đợt 4: phiên trên đĩa của cuộc — để hẹn SỐNG QUA LÚC TẮT (mở lại thì gắn về đúng việc). */
+  phienId?: string;
+  goc?: string | null;
 }
 
 export const TRAN_CHO_GIAY = 900;
@@ -223,30 +230,143 @@ let demHen = 0;
 let boChay: (hen: Hen) => Promise<'chay' | 'hoan'> = async () => 'hoan';
 export function datBoChayHen(f: (hen: Hen) => Promise<'chay' | 'hoan'>): void { boChay = f; }
 
+/*
+ * ── ĐỢT 4: HẸN SỐNG QUA LÚC TẮT ──
+ * Mỗi lần đổi ⇒ ghi `agent-hen.json` (thư mục dữ liệu: userData của app,
+ * `~/.cuongmini/data` của CLI, kho riêng của extension). Mỗi mục mang PID chủ:
+ * hai CLI dùng chung thư mục thì mỗi bên chỉ giữ hẹn của mình; mở lại sau khi
+ * tắt ⇒ mục của PID đã chết được NHẬN LẠI — đến hạn rồi thì vào danh sách
+ * "đã lỡ" (hỏi người dùng chạy bù hay bỏ), chưa đến hạn thì lên lịch lại.
+ * Hẹn chưa gắn cuộc (`cuocId === ''`) ⇒ `boChay` tự mở cuộc từ `phienId`.
+ */
+let noiLuu: string | null = null;
+let timPhien: (cuocId: string) => { phienId: string; goc: string | null } | null = () => null;
+const daLo: Hen[] = [];
+interface MucLuu extends Hen { pid: number }
+
+/** Bật lưu đĩa (gọi một lần lúc đăng ký IPC). `null` = tắt (test). */
+export function datNoiLuuHen(file: string | null): void { noiLuu = file; }
+/** `loop.ts` cho biết phiên trên đĩa của một cuộc — để ghi kèm hẹn. */
+export function datBoTimPhien(f: (cuocId: string) => { phienId: string; goc: string | null } | null): void { timPhien = f; }
+
+function conSong(pid: number): boolean {
+  if (pid === process.pid) return true;
+  try { process.kill(pid, 0); return true; } catch (e) { return (e as NodeJS.ErrnoException).code === 'EPERM'; }
+}
+
+function docFile(): MucLuu[] {
+  if (!noiLuu) return [];
+  try {
+    const j = JSON.parse(readFileSync(noiLuu, 'utf8')) as { hen?: unknown };
+    return Array.isArray(j.hen) ? (j.hen as MucLuu[]).filter((h) => h && typeof h.id === 'string' && typeof h.luc === 'number') : [];
+  } catch { return []; }
+}
+
+function luuDia(): void {
+  if (!noiLuu) return;
+  try {
+    const cuaKhac = docFile().filter((h) => h.pid !== process.pid && conSong(h.pid));
+    const cuaToi: MucLuu[] = [...[...henCua.values()].flat(), ...daLo].map((h) => {
+      const p = h.cuocId ? timPhien(h.cuocId) : null;
+      return { ...h, ...(p ? { phienId: p.phienId, goc: p.goc } : {}), pid: process.pid };
+    }).filter((h) => h.phienId);
+    mkdirSync(path.dirname(noiLuu), { recursive: true, mode: 0o700 });
+    const tam = `${noiLuu}.${process.pid}.tmp`;
+    writeFileSync(tam, JSON.stringify({ hen: [...cuaKhac, ...cuaToi] }, null, 1), { mode: 0o600 });
+    renameSync(tam, noiLuu);
+  } catch { /* ghi đĩa hỏng không được làm hỏng hẹn đang chạy */ }
+}
+
+function baoVaLuu(cuocId: string): void { if (cuocId) bao(cuocId); luuDia(); }
+
+/**
+ * Nạp hẹn đã lưu của các tiến trình đã tắt. Trả số hẹn LỠ (đến hạn trong lúc
+ * tắt) và số hẹn được lên lịch lại. Gọi một lần lúc khởi động.
+ */
+export function napHenDaLuu(bayGio = Date.now()): { lo: number; lenLich: number } {
+  let lo = 0; let lich = 0;
+  for (const m of docFile()) {
+    if (conSong(m.pid)) continue;
+    const { pid: _pid, ...h0 } = m;
+    const id = `h${++demHen}`;
+    const h: Hen = { ...h0, id, cuocId: '' };
+    if (h.luc <= bayGio) { daLo.push(h); lo++; continue; }
+    themVaoCuoc(h);
+    lenLich(h, h.luc - bayGio);
+    lich++;
+  }
+  luuDia();
+  return { lo, lenLich: lich };
+}
+
+/** Hẹn ĐÃ LỠ trong lúc app/CLI tắt — chờ người dùng quyết. */
+export function dsHenLo(): Hen[] { return [...daLo]; }
+
+/** Chạy bù (`chay`) hoặc bỏ (`bo`) mọi hẹn đã lỡ. Trả số đã xử lý. */
+export function xuLyHenLo(cach: 'chay' | 'bo'): number {
+  const ds = daLo.splice(0, daLo.length);
+  if (cach === 'chay') {
+    for (const h of ds) { themVaoCuoc(h); lenLich(h, 0); }
+  }
+  luuDia();
+  return ds.length;
+}
+
+/** Cuộc vừa mở phiên `phienId` ⇒ gắn các hẹn chưa có chủ của phiên đó vào cuộc. */
+export function ganHenChoCuoc(cuocId: string, phienId: string): number {
+  const tho = henCua.get('') ?? [];
+  const cua = tho.filter((h) => h.phienId === phienId);
+  if (!cua.length) return 0;
+  henCua.set('', tho.filter((h) => h.phienId !== phienId));
+  if (!henCua.get('')!.length) henCua.delete('');
+  for (const h of cua) h.cuocId = cuocId;
+  henCua.set(cuocId, [...(henCua.get(cuocId) ?? []), ...cua]);
+  baoVaLuu(cuocId);
+  return cua.length;
+}
+
+/** Có hẹn nào đang chờ không (desktop: còn hẹn ⇒ chạy nền khi đóng cửa sổ). */
+export function soHenDangCho(): number { return [...henCua.values()].reduce((a, d) => a + d.length, 0); }
+
+function themVaoCuoc(h: Hen): void { henCua.set(h.cuocId, [...(henCua.get(h.cuocId) ?? []), h]); }
+
 export function dsHen(cuocId: string): Hen[] { return [...(henCua.get(cuocId) ?? [])]; }
 
 function lenLich(h: Hen, sauMs: number): void {
   const cu = dongHoHen.get(h.id);
   if (cu) clearTimeout(cu);
-  const t = setTimeout(() => { void thuc(h.cuocId, h.id); }, Math.max(0, sauMs));
+  // setTimeout tràn ở ~24,8 ngày ⇒ chia nhịp (hẹn cron hằng tháng).
+  const cho = Math.max(0, Math.min(sauMs, 2 ** 31 - 1));
+  const t = setTimeout(() => { if (cho < sauMs) lenLich(h, sauMs - cho); else void thuc(h.id); }, cho);
   (t as unknown as { unref?: () => void }).unref?.();
   dongHoHen.set(h.id, t);
 }
 
-async function thuc(cuocId: string, id: string): Promise<void> {
-  const h = (henCua.get(cuocId) ?? []).find((x) => x.id === id);
+function timHen(id: string): Hen | undefined {
+  for (const ds of henCua.values()) { const h = ds.find((x) => x.id === id); if (h) return h; }
+  return undefined;
+}
+
+async function thuc(id: string): Promise<void> {
+  const h = timHen(id);
   if (!h) return;
   let kq: 'chay' | 'hoan' = 'hoan';
   try { kq = await boChay(h); } catch { kq = 'hoan'; }
-  if (kq === 'hoan') { h.luc = Date.now() + 15_000; lenLich(h, 15_000); bao(cuocId); return; }
+  if (kq === 'hoan') { h.luc = Date.now() + 15_000; lenLich(h, 15_000); baoVaLuu(h.cuocId); return; }
   h.conLai -= 1;
-  if (h.lap && h.conLai > 0) {
-    h.luc = Date.now() + h.phut * 60_000;
-    lenLich(h, h.phut * 60_000);
+  const ke = h.lap && h.conLai > 0 ? luotKe(h, Date.now()) : null;
+  if (ke !== null) {
+    h.luc = ke;
+    lenLich(h, ke - Date.now());
   } else {
-    xoaMotHen(cuocId, id);
+    xoaMotHen(h.cuocId, id);
   }
-  bao(cuocId);
+  baoVaLuu(h.cuocId);
+}
+
+function luotKe(h: Hen, tu: number): number | null {
+  if (h.cron) { const c = docCron(h.cron); return typeof c === 'string' ? null : lanKe(c, tu); }
+  return tu + h.phut * 60_000;
 }
 
 function xoaMotHen(cuocId: string, id: string): boolean {
@@ -261,46 +381,75 @@ function xoaMotHen(cuocId: string, id: string): boolean {
 }
 
 export function datHen(cuocId: string, args: Record<string, unknown>): Hen | string {
-  const phut = Number(args.phut);
-  if (!Number.isFinite(phut) || phut < 1 || phut > 1440) return '"phut" phải từ 1 tới 1440.';
   const lyDo = typeof args.ly_do === 'string' ? args.ly_do.trim().slice(0, 500) : '';
   if (!lyDo) return 'thiếu "ly_do" — câu này sẽ là lời nhắc gửi lại cho chính bạn khi thức dậy.';
   const ds = henCua.get(cuocId) ?? [];
   if (ds.length >= TRAN_HEN_MOI_CUOC) return `đã có ${ds.length} hẹn ở cuộc này (trần ${TRAN_HEN_MOI_CUOC}). Huỷ bớt bằng huy_hen trước.`;
-  const lap = args.lap === true;
-  const soLan = lap ? Math.min(TRAN_LAP, Math.max(2, Math.round(Number(args.so_lan) || 10))) : 1;
-  const h: Hen = { id: `h${++demHen}`, cuocId, lyDo, luc: Date.now() + phut * 60_000, phut, lap, conLai: soLan };
+  const cronTho = typeof args.cron === 'string' ? args.cron.trim() : '';
+  let cron: Cron | null = null;
+  let phut = Number(args.phut);
+  let luc: number;
+  if (cronTho) {
+    const c = docCron(cronTho);
+    if (typeof c === 'string') return c;
+    const ke = lanKe(c, Date.now());
+    if (ke === null) return 'biểu thức cron không có lần chạy nào trong 5 năm tới.';
+    cron = c; luc = ke; phut = Math.max(1, Math.round((ke - Date.now()) / 60_000));
+  } else {
+    if (!Number.isFinite(phut) || phut < 1 || phut > 1440) return '"phut" phải từ 1 tới 1440 (hoặc dùng "cron").';
+    luc = Date.now() + phut * 60_000;
+  }
+  const lap = cron !== null || args.lap === true;
+  const soLan = lap ? Math.min(TRAN_LAP, Math.max(cron ? 1 : 2, Math.round(Number(args.so_lan) || 10))) : 1;
+  const p = timPhien(cuocId);
+  const h: Hen = {
+    id: `h${++demHen}`, cuocId, lyDo, luc, phut, lap, conLai: soLan,
+    ...(cron ? { cron: cron.nguon } : {}),
+    ...(p ? { phienId: p.phienId, goc: p.goc } : {}),
+  };
   henCua.set(cuocId, [...ds, h]);
-  lenLich(h, phut * 60_000);
-  bao(cuocId);
+  lenLich(h, luc - Date.now());
+  baoVaLuu(cuocId);
   return h;
 }
 
 /** Huỷ một hẹn (`id`) hoặc mọi hẹn của cuộc. Trả số đã huỷ. */
 export function huyHen(cuocId: string, id?: string): number {
-  if (id) { const ok = xoaMotHen(cuocId, id); if (ok) bao(cuocId); return ok ? 1 : 0; }
+  if (id) { const ok = xoaMotHen(cuocId, id); if (ok) baoVaLuu(cuocId); return ok ? 1 : 0; }
   const ds = henCua.get(cuocId) ?? [];
   for (const h of ds) xoaMotHen(cuocId, h.id);
-  if (ds.length) bao(cuocId);
+  if (ds.length) baoVaLuu(cuocId);
   return ds.length;
 }
 
-/** Đóng/xoá cuộc ⇒ bỏ hết chờ + hẹn của nó. */
-export function donCuaCuoc(cuocId: string): void {
+/**
+ * Đóng/xoá cuộc ⇒ bỏ chờ của nó. Hẹn: `giuHen` (đóng app/tab — hẹn đã có
+ * phiên trên đĩa) ⇒ THÁO khỏi cuộc nhưng giữ (chạy được ở lần mở sau);
+ * không ⇒ huỷ hẳn (người dùng xoá việc).
+ */
+export function donCuaCuoc(cuocId: string, giuHen = false): void {
   for (const c of [...dangCho.values()]) if (c.cuocId === cuocId) c.xong('boCho');
+  if (giuHen) {
+    const ds = (henCua.get(cuocId) ?? []).filter((h) => h.phienId);
+    for (const h of henCua.get(cuocId) ?? []) if (!h.phienId) xoaMotHen(cuocId, h.id);
+    henCua.delete(cuocId);
+    for (const h of ds) { h.cuocId = ''; themVaoCuoc(h); }
+    luuDia();
+    return;
+  }
   huyHen(cuocId);
 }
 
 /** Câu gửi vào cuộc khi hẹn tới giờ. */
 export function cauDanhThuc(h: Hen, bayGio = new Date()): string {
   const gio = `${String(bayGio.getHours()).padStart(2, '0')}:${String(bayGio.getMinutes()).padStart(2, '0')}`;
-  const lap = h.lap && h.conLai > 1 ? ` Hẹn lặp mỗi ${h.phut} phút, còn ${h.conLai - 1} lần — xong việc thì gọi huy_hen {id:"${h.id}"} nếu không cần nữa.` : '';
+  const lap = h.lap && h.conLai > 1 ? ` Hẹn lặp ${h.cron ? `theo cron "${h.cron}"` : `mỗi ${h.phut} phút`}, còn ${h.conLai - 1} lần — xong việc thì gọi huy_hen {id:"${h.id}"} nếu không cần nữa.` : '';
   return `[Đánh thức — hẹn #${h.id} lúc ${gio}] ${h.lyDo}\n(Lượt này do APP tự gửi theo lời hẹn của chính bạn, không phải người dùng vừa gõ. Làm đúng việc đã hẹn, báo ngắn rồi dừng.${lap})`;
 }
 
 /** Chỉ cho test. */
 export function _datLai(): void {
   for (const t of dongHoHen.values()) clearTimeout(t);
-  dongHoHen.clear(); henCua.clear(); dangCho.clear(); demHen = 0; demCho = 0;
-  bao = () => {}; boChay = async () => 'hoan';
+  dongHoHen.clear(); henCua.clear(); dangCho.clear(); demHen = 0; demCho = 0; daLo.length = 0;
+  bao = () => {}; boChay = async () => 'hoan'; noiLuu = null; timPhien = () => null;
 }

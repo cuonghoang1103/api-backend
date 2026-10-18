@@ -11,6 +11,7 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import CuongMiniNgonNguAdmin from './CuongMiniNgonNguAdmin';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import {
   ArrowDown, ArrowUp, Info, Loader2, Plug, Plus, RefreshCw, Search, Trash2,
@@ -121,6 +122,7 @@ export default function CongAnthropicAdmin() {
       {tq.rambo && <CongTacRambo rambo={tq.rambo} onDoi={(rambo) => setTq({ ...tq, rambo })} />}
       <ThamSo tq={tq} onDoi={(serverTool) => setTq({ ...tq, serverTool })} />
       <TranGoiForm tranGoi={tq.tranGoi} onXong={(t) => setTq({ ...tq, tranGoi: t })} />
+      <CuongMiniNgonNguAdmin />
       <TranNguoi />
       <DoDung />
       {tq.coAdminKey && <DoiChieu />}

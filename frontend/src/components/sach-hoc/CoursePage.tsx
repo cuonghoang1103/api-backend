@@ -210,6 +210,8 @@ export default function CoursePage({ course, lessonExtra }: {
   // 📞 Luyện phát âm cùng gia sư: câu mẫu = khối luyện phát âm của bài đang mở (không có thì máy chủ dùng ngân hàng chung).
   const [goiMo, setGoiMo] = useState(false);
   const [cheDoGoi, setCheDoGoi] = useState<'phat-am' | 'tro-chuyen'>('phat-am');
+  /* Hàm ỔN ĐỊNH (không tạo mới mỗi lần trang vẽ lại): phòng CuongMini gắn phím tắt theo nó. */
+  const dongGoi = useCallback(() => { stopAudio(); setGoiMo(false); }, []);
   /* ☀️ Màn chào mỗi ngày: lần đầu mở khoá này trong ngày (từ 5h sáng), đã đăng nhập, tiến độ đã đồng bộ. */
   const [chaoMo, setChaoMo] = useState(false);
   useEffect(() => {
@@ -496,7 +498,7 @@ export default function CoursePage({ course, lessonExtra }: {
           />
         )}
         {goiMo && (
-          <GoiGiaSu ngonNgu={course.lang} stage={course.stage} cheDoDau={cheDoGoi} danhSach={danhSachGoi} chuDe={lesson ? lesson.title : 'những âm người Việt hay đọc sai'} onClose={() => { stopAudio(); setGoiMo(false); }} />
+          <GoiGiaSu ngonNgu={course.lang} stage={course.stage} cheDoDau={cheDoGoi} danhSach={danhSachGoi} maBai={lesson?.id} chuDe={lesson ? lesson.title : 'những âm người Việt hay đọc sai'} onClose={dongGoi} />
         )}
 
         {sheetOpen && (

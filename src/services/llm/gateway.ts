@@ -1291,6 +1291,9 @@ const SUY_LUAN_THEO_VIEC: Partial<Record<LlmPurpose, MucSuyLuan>> = {
   exphub_doc: 'medium', news_bulletin: 'medium', plan_review: 'medium',
   // Máy đọc / tra cứu nhỏ / độ trễ quan trọng.
   cv_parse: 'low', han_tra: 'low',
+  /* 19/10/2026: gia sư/trò chuyện ngoại ngữ là lượt NÓI ngắn — đo gpt-6-sol không gửi effort (cổng mặc định
+     medium): 2,4–3,7 s/lượt, 30–86 token suy luận cho câu trả lời 25–190 ký tự. `low` cho chữ đầu sớm hơn. */
+  language_tutor: 'low',
 };
 const SAN_RA: Record<MucSuyLuan, number> = { low: 0, medium: 8_000, high: 16_000, xhigh: 24_000 };
 

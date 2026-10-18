@@ -26,6 +26,12 @@ import { docTo } from '../services/ielts/docTo.service.js';
 import { xemChuViet, chamVietTay, MAX_TRANG } from '../services/ielts/vietTay.service.js';
 import multer from 'multer';
 import hocRoutes from './ielts.hoc.routes.js';
+import { dsChoWeb, docNN } from '../services/ielts/troChuyen/chuDe.js';
+import {
+  chayLuot, chamBuoi, caiDatTroChuyen, datCaiDatTroChuyen, daChiHomNay, thongKeChi, type SuKienTC,
+} from '../services/ielts/troChuyen/troChuyenLuong.service.js';
+import { dsPhien, layPhien, luuPhien, xoaPhien } from '../services/ielts/troChuyen/phien.service.js';
+import { laAdmin } from '../services/pro.service.js';
 
 const router = Router();
 router.use(authenticate);
@@ -143,6 +149,67 @@ router.post('/ai/tro-chuyen', audioNoi.single('audio'), async (req, res: Respons
     let tt: { lichSu?: unknown; ngonNgu?: unknown; chuDe?: unknown; giong?: unknown } = {};
     try { tt = JSON.parse(String(req.body?.trangThai ?? '{}')); } catch { /* lượt mở đầu */ }
     ok(res, await troChuyen(uid(req), { audio: req.file?.buffer, ...tt }));
+  } catch (e) { next(e); }
+});
+// 💬⚡ Trò chuyện CHẢY DẦN (19/10/2026) — troChuyen/troChuyenLuong.service.ts.
+// Danh sách chủ đề theo trình độ (IELTS Part 1/2/3 · JLPT · HSK · nhập vai).
+router.get('/ai/tro-chuyen/chu-de', (req, res: Response<ApiResponse>) => {
+  ok(res, { items: dsChoWeb(docNN(req.query.ngonNgu)) });
+});
+// Một lượt: multipart `audio` (tệp nén của trình duyệt; vắng = câu mở đầu của chủ đề) + `trangThai` JSON
+// {ngonNgu, chuDeId, tenBai, giong, lichSu}. Trả SSE: nghe → cau (mỗi câu một tệp âm thanh, đúng thứ tự) → xong | loi.
+router.post('/ai/tro-chuyen/luong', audioNoi.single('audio'), async (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  // `no-transform`: middleware nén bỏ qua phản hồi này — gzip gom chữ lại thì câu đầu đến muộn.
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+  res.flushHeaders?.();
+  const gui = (e: SuKienTC): void => { if (!res.writableEnded) res.write(`data: ${JSON.stringify(e)}\n\n`); };
+  const keepalive = setInterval(() => { if (!res.writableEnded) res.write(': ka\n\n'); }, 15_000);
+  const ctl = new AbortController();
+  // Web ngắt (tạm dừng / đóng phòng) ⇒ ngừng gọi model & TTS cho lượt này.
+  res.on('close', () => { clearInterval(keepalive); if (!res.writableFinished) ctl.abort(); });
+  try {
+    let tt: Record<string, unknown> = {};
+    try { tt = JSON.parse(String(req.body?.trangThai ?? '{}')) as Record<string, unknown>; } catch { /* lượt mở đầu */ }
+    await chayLuot(uid(req), { audio: req.file?.buffer, mime: req.file?.mimetype, ...tt }, gui, ctl.signal);
+  } catch (e) {
+    gui({ type: 'loi', lyDo: 'loi', message: (e as Error)?.message?.slice(0, 200) || 'Có lỗi, bạn thử lại nhé.' });
+  } finally {
+    clearInterval(keepalive);
+    if (!res.writableEnded) res.end();
+  }
+});
+// Ước lượng band IELTS (4 tiêu chí) / điểm JLPT-HSK cho cả buổi trò chuyện.
+router.post('/ai/tro-chuyen/cham', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await chamBuoi(uid(req), req.body ?? {})); } catch (e) { next(e); }
+});
+// 💾 Buổi đã lưu — "Tiếp tục buổi trước" / "Bắt đầu lại" (bảng ielts_progress, kind 'cuongmini').
+router.get('/cuongmini/phien', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    if (req.query.muc) ok(res, await layPhien(uid(req), req.query.stage, req.query.muc));
+    else ok(res, await dsPhien(uid(req), req.query.stage, req.query.cheDo));
+  } catch (e) { next(e); }
+});
+router.put('/cuongmini/phien', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await luuPhien(uid(req), req.body?.stage, req.body?.muc, req.body?.duLieu)); } catch (e) { next(e); }
+});
+router.delete('/cuongmini/phien', async (req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await xoaPhien(uid(req), req.query.stage, req.query.muc)); } catch (e) { next(e); }
+});
+// Admin: bật/tắt cổng chính hãng cho việc này + trần $/người/ngày (mặc định 0,5 $) + chi 7 ngày.
+router.get('/cuongmini/cai-dat', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const admin = await laAdmin(uid(req));
+    const [cd, daChi] = await Promise.all([caiDatTroChuyen(), daChiHomNay(uid(req))]);
+    ok(res, { ...cd, daChiHomNay: Number.isFinite(daChi) ? Number(daChi.toFixed(4)) : null, ...(admin ? { thongKe7Ngay: await thongKeChi(7) } : {}) });
+  } catch (e) { next(e); }
+});
+router.put('/cuongmini/cai-dat', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    if (!(await laAdmin(uid(req)))) { res.status(403).json({ success: false, message: 'Chỉ quản trị viên.' }); return; }
+    ok(res, await datCaiDatTroChuyen(req.body ?? {}));
   } catch (e) { next(e); }
 });
 router.post('/ai/cham-noi', audioNoi.single('audio'), async (req, res: Response<ApiResponse>, next) => {

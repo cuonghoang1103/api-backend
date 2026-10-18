@@ -13,7 +13,7 @@ import {
   type HangChinhHang, type ModelChinhHang,
 } from './cauHinh.js';
 import { coKeyKhaDung } from './khoKey.js';
-import { ghiDung, guiChinhHang, type NguCanhGoi } from './goi.js';
+import { ganCache, ghiDung, guiChinhHang, type NguCanhGoi } from './goi.js';
 import { dungThanChinhHang, thanAnToan, type ThanAnthropic } from './thanYeuCau.js';
 import { daBatMatKhau, docBoVe } from './ve.js';
 import { TEN_CONG, bangModel, hangSo, modelapiGoiDuoc, type LoaiKhoa, type MucModel } from '../bangModel.js';
@@ -166,7 +166,14 @@ export async function goiVanBanChinhHang(o: {
   viec: NguCanhGoi['viec'];
   onToken?: (delta: string) => void;
   signal?: AbortSignal;
-}): Promise<{ text: string; biCat: boolean; usd: number }> {
+  /**
+   * Lượt NÓI NGẮN cần chữ đầu sớm (19/10/2026 — Trò chuyện cùng CuongMini): KHÔNG nghĩ
+   * (`thinking: disabled`, Haiku 5.5 chỉ nhận ở effort ≤ high), `effort` thấp, đúng
+   * `maxTokens` nơi gọi đặt (không nâng lên 16K), không tham số beta. Model từ chối
+   * `disabled` ⇒ `banAnToan` gửi lại MỘT lần bằng adaptive + cùng effort.
+   */
+  nhanh?: { effort: 'low' | 'medium' };
+}): Promise<{ text: string; biCat: boolean; usd: number; ttfbMs: number }> {
   const body: ThanAnthropic = {
     model: o.model,
     max_tokens: o.maxTokens,
@@ -174,12 +181,22 @@ export async function goiVanBanChinhHang(o: {
     system: o.system,
     messages: o.messages.filter((m) => m.content).map((m) => ({ ...m })),
   };
-  /* Không cắt câu trả lời: thinking cũng ăn vào max_tokens ⇒ tối thiểu 16K. */
-  const beta = await dungThanChinhHang(body, { laAgent: false, maxTokens: Math.max(o.maxTokens, 16_000) });
+  let beta: string[] = [];
+  if (o.nhanh) {
+    body.thinking = { type: 'disabled' };
+    body.output_config = { effort: o.nhanh.effort };
+    ganCache(body);
+  } else {
+    /* Không cắt câu trả lời: thinking cũng ăn vào max_tokens ⇒ tối thiểu 16K. */
+    beta = await dungThanChinhHang(body, { laAgent: false, maxTokens: Math.max(o.maxTokens, 16_000) });
+  }
   const nguCanh: NguCanhGoi = { userId: o.userId, viec: o.viec, hang: o.hang, model: o.model };
   const ctl = new AbortController();
   if (o.signal) o.signal.addEventListener('abort', () => ctl.abort(), { once: true });
-  const g = await guiChinhHang({ body, signal: ctl.signal, nguCanh, beta, banAnToan: () => thanAnToan(body) });
+  const g = await guiChinhHang({
+    body, signal: ctl.signal, nguCanh, beta,
+    banAnToan: () => (o.nhanh ? { ...body, thinking: { type: 'adaptive' } } : thanAnToan(body)),
+  });
 
   let text = '';
   let stop: string | null = null;
@@ -221,5 +238,5 @@ export async function goiVanBanChinhHang(o: {
     usd = await ghiDung({ ...nguCanh, keyId: g.key.id, dung, thanhCong, thoiGianMs: Date.now() - g.batDau, ttfbMs: g.ttfbMs });
     if (!thanhCong) logger.warn('[anthropic] luồng văn bản gãy giữa chừng', { model: o.model, usd });
   }
-  return { text, biCat: stop === 'max_tokens', usd };
+  return { text, biCat: stop === 'max_tokens', usd, ttfbMs: g.ttfbMs };
 }

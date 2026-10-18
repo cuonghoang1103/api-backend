@@ -514,6 +514,8 @@ export async function goiGiaSu(
     che?: unknown; mauGoc?: unknown; mauTu?: unknown; lanTu?: unknown;
     /** Đếm âm người học sai trong buổi (web giữ) + những âm đã giảng riêng rồi. */
     thongKe?: unknown; daNhac?: unknown;
+    /** 19/10/2026 — lời mở: 'moi' (lần đầu, chào đủ) · 'quen' (đã từng luyện, chào ngắn) · 'tiep' (tiếp tục buổi trước) · 'lai' (bắt đầu lại). */
+    moDau?: unknown;
   },
 ) {
   if (!demLuot(userId)) return { lyDo: 'het_luot_ngay' as const };
@@ -544,6 +546,15 @@ export async function goiGiaSu(
     // Ngắn và CỐ ĐỊNH: đọc tên bài ("Nói: Trả lời câu hỏi Wh- (Part 1 · …)") nghe rất kỳ
     // và kéo lời chào tới 19 giây (đo 03/10). Câu cố định thì lưu R2 một lần, mở là phát ngay.
     void chuDe;
+    // Không còn "vào lần nào cũng nghe đúng một câu chào": người quen nghe câu ngắn (vài biến thể,
+    // mỗi câu lưu R2 một lần), tiếp tục buổi trước thì nói đúng câu số mấy.
+    const kieu = input.moDau === 'tiep' || input.moDau === 'lai' || input.moDau === 'quen' ? input.moDau : 'moi';
+    const ngan = kieu === 'tiep'
+      ? `Chào mừng bạn quay lại! Mình tiếp tục từ câu số ${viTri + 1} nhé.`
+      : kieu === 'lai' ? 'Mình bắt đầu lại từ đầu nhé. Câu đầu tiên đây.'
+        : kieu === 'quen' ? chon(['Chào bạn, mình luyện tiếp nhé! Câu đầu tiên đây.', 'Sẵn sàng chưa? Mình bắt đầu nhé, nghe câu mẫu rồi đọc theo.', 'Hôm nay mình luyện phát âm tiếp nhé. Câu đầu tiên đây.'])
+          : null;
+    if (ngan) return { loai: 'mo' as const, noi: ngan, ...(await docGiaSuTheoGiong(ngan, giong, nn)), mau, viTri, lanThu: 0 };
     const noi = nn === 'en'
       ? 'Chào bạn! Mình là CuongMini, bạn luyện phát âm của bạn đây. Bạn nghe câu mẫu rồi đọc theo, mình chấm và sửa ngay nhé. Muốn hỏi gì cứ nói tiếng Việt. Câu đầu tiên đây.'
       : `Chào bạn! Mình là CuongMini, hôm nay mình cùng luyện nói ${TEN_TIENG[nn]} nhé. Bạn nghe câu mẫu rồi đọc theo, mình chấm và sửa ngay. Muốn hỏi gì cứ nói tiếng Việt. Câu đầu tiên đây.`;

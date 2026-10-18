@@ -169,6 +169,7 @@ export function skipClip() {
 }
 
 export function stopAudio() {
+  dangTamDung = false;
   run += 1;
   audio?.pause();
   cancelCur?.();
@@ -181,6 +182,26 @@ export function stopAudio() {
   const f = curOnEnd;
   curOnEnd = null;
   f?.();
+}
+
+/**
+ * ⏸ TẠM DỪNG tại chỗ (19/10/2026 — phòng CuongMini): dừng tiếng đang phát mà KHÔNG kết thúc
+ * lượt (không gọi onEnd) — `tiepAudio()` phát tiếp đúng chỗ đang dở. Khác `stopAudio()` (hủy hẳn).
+ */
+let dangTamDung = false;
+export function tamDungAudio(): boolean {
+  if (dangTamDung) return true;
+  let co = false;
+  if (audio && !audio.paused && !audio.ended) { audio.pause(); co = true; }
+  try { if (window.speechSynthesis?.speaking) { window.speechSynthesis.pause(); co = true; } } catch { /* bỏ qua */ }
+  dangTamDung = co;
+  return co;
+}
+export function tiepAudio(): void {
+  if (!dangTamDung) return;
+  dangTamDung = false;
+  if (audio && audio.paused && !audio.ended) audio.play().catch(() => cancelCur?.());
+  try { window.speechSynthesis?.resume(); } catch { /* bỏ qua */ }
 }
 
 /** Có tiếng đang phát ngay lúc này không — nhân vật gia sư mấp máy môi theo cái này (đọc mỗi khung hình). */

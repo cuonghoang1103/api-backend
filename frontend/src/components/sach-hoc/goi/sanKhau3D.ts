@@ -282,6 +282,12 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
   docDangNoi: () => boolean;
 }): SanKhau {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  /* Trần điểm ảnh: màn Retina phóng toàn khung (1500×1100 CSS ⇒ 6,6 triệu điểm × MSAA) là thừa cho
+     một con robot — giữ ≤ ~2,4 triệu điểm ảnh, DPR không quá 2. */
+  const tinhDpr = (w: number, h: number) => {
+    const goc = Math.min(2, window.devicePixelRatio || 1);
+    return Math.max(1, Math.min(goc, Math.sqrt(2_400_000 / Math.max(1, w * h))));
+  };
   renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -420,8 +426,14 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
   const denDich = new THREE.Color(mauDen.cho);
   let angTenV = 0, angTenGoc = 0; // lò xo ăng-ten
 
+  /* Khung của canvas đo SẴN (ResizeObserver + cuộn), không đo lại mỗi lần chuột nhích:
+     `getBoundingClientRect()` trong `pointermove` ép trình duyệt tính lại bố cục giữa
+     chừng khung hình, đúng lúc chuột đang làm hover đổi kiểu ở nút khác. */
+  let khungTro = canvas.getBoundingClientRect();
+  const doKhungTro = () => { khungTro = canvas.getBoundingClientRect(); };
+  window.addEventListener('scroll', doKhungTro, { passive: true, capture: true });
   const onTro = (e: PointerEvent) => {
-    const r = canvas.getBoundingClientRect();
+    const r = khungTro;
     if (!r.width) return;
     troX = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width - 0.5) * 2));
     troY = Math.max(-1, Math.min(1, -((e.clientY - r.top) / r.height - 0.45) * 2));
@@ -429,26 +441,59 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
   };
   window.addEventListener('pointermove', onTro, { passive: true });
 
+  /* ⚡ CHỐNG NHÁY (19/10/2026) — nguyên nhân THẬT đo bằng Playwright (Chromium, GPU Metal thật):
+     `renderer.setSize()` gán lại `canvas.width/height` ⇒ bộ đệm vẽ bị XOÁ TRẮNG. ResizeObserver
+     chạy SAU requestAnimationFrame trong cùng khung hình, nên khung đó được vẽ ra màn hình với
+     canvas TRỐNG ⇒ CuongMini biến mất một khung. Bố cục của phòng luyện đổi chiều cao mỗi khi có
+     dòng lỗi / dòng "máy nhà bận" / nhãn nút xuống dòng ⇒ canvas co giãn ⇒ nháy. Đo: 12 lần đổi
+     cỡ ⇒ 9 khung hình mất hẳn nhân vật (vùng giữa robot độ sáng 149 → 83 = màu nền).
+     Sửa: (1) chỉ setSize khi số ĐIỂM ẢNH thật đổi, (2) vẽ lại NGAY sau setSize (cùng khung). */
+  let wCu = 0, hCu = 0, dprCu = 0;
   const doKhung = () => {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
+    const dpr = tinhDpr(w, h);
+    doKhungTro();
+    if (w === wCu && h === hCu && dpr === dprCu) return;
+    wCu = w; hCu = h; dprCu = dpr;
+    renderer.setPixelRatio(dpr);
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     // Khung hẹp mà cao (điện thoại): lùi máy quay để nhân vật không tràn hai bên.
     camera.position.z = camera.aspect < 0.8 ? 9.6 / Math.max(0.55, camera.aspect / 0.8) : 9.6;
     camera.updateProjectionMatrix();
+    renderer.render(scene, camera); // lấp bộ đệm vừa bị xoá — khung này KHÔNG trống
   };
   const ro = new ResizeObserver(doKhung);
   ro.observe(canvas);
+  /* Đổi DPR (kéo cửa sổ sang màn khác, phóng to/thu nhỏ trang) không làm ResizeObserver bắn. */
+  let mqDpr: MediaQueryList | null = null;
+  const onDpr = () => { doKhung(); theoDoiDpr(); };
+  const theoDoiDpr = () => {
+    mqDpr?.removeEventListener('change', onDpr);
+    mqDpr = window.matchMedia?.(`(resolution: ${window.devicePixelRatio || 1}dppx)`) ?? null;
+    mqDpr?.addEventListener('change', onDpr);
+  };
+  theoDoiDpr();
   doKhung();
+  /* Ngoài màn hình (màn chào cuộn qua, thẻ bị che) ⇒ khỏi vẽ. */
+  let trongKhung = true;
+  const io = typeof IntersectionObserver !== 'undefined'
+    ? new IntersectionObserver((es) => { trongKhung = es.some((e) => e.isIntersecting); }) : null;
+  io?.observe(canvas);
 
   const dongHo = new THREE.Clock();
   let t = 0, raf = 0, dangChay = true;
   const cham = o.giamChuyenDong ? 0.4 : 1;
 
-  const khung = () => {
+  /* Màn 120 Hz (ProMotion) gọi rAF 120 lần/giây — vẽ 60 là đủ mượt, GPU nhẹ một nửa. */
+  let lanVe = 0;
+  let matCu = '';
+  const khung = (bay: number) => {
     raf = requestAnimationFrame(khung);
-    if (!dangChay) return;
+    if (!dangChay || !trongKhung) return;
+    if (bay - lanVe < 15) return;
+    lanVe = bay;
     const dt = Math.min(0.05, dongHo.getDelta());
     t += dt;
     const k = 1 - Math.pow(0.0025, dt); // mượt, không phụ thuộc tốc độ khung
@@ -484,8 +529,15 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
     phatSang.emissiveIntensity = sangTai;
     for (const v of tai) v.scale.setScalar(1 + p.tai * 0.35);
 
-    veMat(matG, p, t);
-    matTex.needsUpdate = true;
+    /* Màn hình mặt (canvas 2D có shadowBlur + tải lên GPU) chỉ vẽ lại khi nét mặt ĐỔI thấy được —
+       đứng yên thì mắt/miệng không nhúc nhích mà trước đây vẫn vẽ + tải 768×384 mỗi khung. */
+    const keyMat = [p.mo, p.to, p.vui, p.buon, p.boi, p.nhinX, p.nhinY, p.mieng, p.cuoi, p.ma, p.nghi, p.tim, p.ngac, p.ngu]
+      .map((x) => Math.round(x * 200)).join(',') + (p.nghi > 0.02 || p.ngu > 0.02 || p.tim > 0.02 ? `|${Math.round(t * 30)}` : '');
+    if (keyMat !== matCu) {
+      matCu = keyMat;
+      veMat(matG, p, t);
+      matTex.needsUpdate = true;
+    }
 
     // Thân: lơ lửng, thở; nhảy cẫng khi vui.
     const nhip = Math.sin(t * 1.8 * cham);
@@ -563,6 +615,9 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
     huy() {
       cancelAnimationFrame(raf);
       ro.disconnect();
+      io?.disconnect();
+      mqDpr?.removeEventListener('change', onDpr);
+      window.removeEventListener('scroll', doKhungTro, { capture: true });
       window.removeEventListener('pointermove', onTro);
       document.removeEventListener('visibilitychange', onAn);
       scene.traverse((x) => {

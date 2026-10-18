@@ -136,6 +136,12 @@ export function useMicro(o: {
     }
   }, [donDep, dungNgay]);
 
+  /** Bỏ lượt đang ghi — tắt micro, KHÔNG gửi bản ghi (⏸ Tạm dừng ở phòng CuongMini, 19/10/2026). */
+  const huy = useCallback(() => {
+    const mr = r.current.mr;
+    if (mr && mr.state === 'recording') { r.current.huy = true; keoDuoi.current = false; mr.stop(); }
+  }, []);
+
   // Rời bài / đổi câu khi đang ghi: tắt micro, bỏ bản ghi dở.
   useEffect(() => () => {
     r.current.huy = true;
@@ -144,5 +150,5 @@ export function useMicro(o: {
     else donDep();
   }, [donDep]);
 
-  return { trangThai, muc, loi, batDau, dung };
+  return { trangThai, muc, loi, batDau, dung, huy };
 }

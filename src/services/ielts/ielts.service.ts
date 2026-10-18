@@ -134,7 +134,8 @@ export async function phanDungChung(kind: string) {
 // ─── Tiến độ ──────────────────────────────────────────────────────────────
 
 export async function layTienDo(userId: number, stage?: string) {
-  const where = stage ? { userId, stage: laMaSach(stage) ? stage : chuanChang(stage) } : { userId };
+  // Buổi luyện cùng CuongMini (kind 'cuongmini', ghiChu to) có đường riêng — `troChuyen/phien.service.ts`.
+  const where = { ...(stage ? { userId, stage: laMaSach(stage) ? stage : chuanChang(stage) } : { userId }), kind: { not: 'cuongmini' } };
   const ds = await prisma.ieltsProgress.findMany({
     where,
     // ghiChu chỉ cần cho kế hoạch học của khoá sách — các chặng cũ không dùng.

@@ -154,11 +154,11 @@ export const HELP_TOPICS: HelpTopic[] = [
     id: 'ai-assistant',
     title: l('AI assistant in a project', 'Trợ lý AI trong dự án'),
     summary: l(
-      'Ask AI about your project, draft stories and test cases; it proposes changes you apply with your own permissions.',
-      'Hỏi AI về dự án, soạn story và test case; AI đề xuất thay đổi để bạn bấm Apply với quyền của chính mình.',
+      'Open a project and click Ask AI. It reads your issues, their descriptions, links, checklists, comments, attached files, Docs and Resources, then answers like a mentor: try "What is my work this week?", "What should I read before doing KEY-12?", "Explain what KEY-12 requires". It links to the exact issue/page and says when something is not in CT Work. Changes are only proposals you apply with your own permissions.',
+      'Mở một dự án rồi bấm Ask AI. Trợ lý tự đọc thẻ của bạn — mô tả, link, checklist, bình luận, tệp đính kèm, Docs, Resources — rồi trả lời như một mentor: thử "Việc của tôi tuần này là gì?", "Thẻ KEY-12 cần đọc gì?", "Giải thích yêu cầu của thẻ KEY-12". Câu trả lời có link tới đúng thẻ/trang và nói rõ khi CT Work không có thông tin. Thay đổi chỉ là đề xuất để bạn bấm Apply với quyền của chính mình.',
     ),
-    pages: [link('project', 'board', 'Open a project', 'Mở một dự án')],
-    keywords: ['ai', 'assistant', 'ask ai', 'chat', 'proposal', 'apply', 'tro ly', 'de xuat'],
+    pages: [link('project', 'board', 'Open a project', 'Mở một dự án'), link('project', 'docs', 'Docs', 'Tài liệu'), link('project', 'resources', 'Resources', 'Tài nguyên')],
+    keywords: ['ai', 'assistant', 'ask ai', 'chat', 'proposal', 'apply', 'tro ly', 'de xuat', 'my work', 'viec cua toi', 'doc gi', 'what to read', 'explain', 'giai thich', 'mentor', 'huong dan lam'],
   },
   {
     id: 'automation',

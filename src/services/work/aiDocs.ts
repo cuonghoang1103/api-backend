@@ -32,8 +32,12 @@ export function docsAiOn(access: ProjectAccess): { read: boolean; write: boolean
   return { read: da.view !== null, write: da.edit };
 }
 
-/** Mục lục ngắn các trang NGƯỜI HỎI xem được — để model biết số trang mà xin đọc. */
-export async function docsIndex(access: ProjectAccess, limit = 60): Promise<string> {
+/**
+ * Mục lục ngắn các trang NGƯỜI HỎI xem được — để model biết số trang mà xin đọc. Có `docLink` (18/10/2026, trợ lý
+ * mentor) ⇒ kèm đường dẫn trong app + các tiêu đề mục của `withHeadings` trang mới nhất: model chọn đúng trang để đọc
+ * ("quy ước Git" nằm ở mục 4 của trang #1) thay vì đoán theo tên trang.
+ */
+export async function docsIndex(access: ProjectAccess, limit = 60, opts: { docLink?: (n: number) => string; withHeadings?: number } = {}): Promise<string> {
   const on = docsAiOn(access);
   if (!on.read) return '';
   const da = docAccess(access.role, access.workspaceRole);
@@ -43,10 +47,23 @@ export async function docsIndex(access: ProjectAccess, limit = 60): Promise<stri
     select: { number: true, title: true, status: true, visibility: true },
   });
   if (!rows.length) return 'Project documents: none yet.';
-  return `Project documents you can read (page number · title · status): ${rows.map((r) => `#${r.number} "${clip(r.title, 80)}" ${r.status}`).join('; ')}.`;
+  if (!opts.docLink) return `Project documents you can read (page number · title · status): ${rows.map((r) => `#${r.number} "${clip(r.title, 80)}" ${r.status}`).join('; ')}.`;
+  const nHead = opts.withHeadings ?? 0;
+  const heads = new Map<number, string[]>();
+  if (nHead > 0) {
+    const full = await prisma.workPage.findMany({
+      where: { projectId: access.projectId, number: { in: rows.slice(0, nHead).map((r) => r.number) } },
+      select: { number: true, contentJson: true },
+    });
+    for (const f of full) heads.set(f.number, headingsOf((f.contentJson ?? { type: 'doc' }) as unknown as PmNode, 14).map((h) => clip(h.replace(/^#+\s*/, ''), 70)));
+  }
+  return `Project documents (Docs) you can read — read one with read_page:\n${rows.map((r) => {
+    const h = heads.get(r.number);
+    return `- #${r.number} "${clip(r.title, 100)}" ${r.status} · ${opts.docLink!(r.number)}${h?.length ? ` · sections: ${h.join(' / ')}` : ''}`;
+  }).join('\n')}`;
 }
 
-export const DOCS_READ_DOC = `Reading project documents: if you need a document's content, ask for it FIRST instead of answering — return {"reply":"","reads":[{"tool":"search_pages","query":"…"},{"tool":"read_page","number":3}]} (at most 4 reads). You will get the results and then answer. Never guess what a document says.`;
+export const DOCS_READ_DOC = `Reading project documents: if you need a document's content, ask for it FIRST instead of answering — return {"reply":"","reads":[{"tool":"search_pages","query":"…"},{"tool":"read_page","number":3}]} (at most 6 reads per round). You will get the results and then answer. Never guess what a document says.`;
 
 export const DOCS_WRITE_DOC = `Document actions you may PROPOSE (they become a new version only when the user applies them):
 - {"type":"draft_page","title":"…","markdown":"full page in Markdown (## headings, lists, | tables |)","parent":<page number to put it under, optional>}
@@ -62,19 +79,22 @@ export async function readPageText(userId: number, projectId: number, num: numbe
   return { title: p.title, markdown: clip(md, max), headings: headingsOf((p.contentJson ?? { type: 'doc' }) as unknown as PmNode), status: p.status, visibility: p.visibility };
 }
 
-/** Chạy các lượt đọc model xin (tối đa 4) — lỗi quyền/không thấy ⇒ một dòng "not found", không ném. */
-export async function runReads(userId: number, access: ProjectAccess, reads: ReadRequest[]): Promise<string> {
+/**
+ * Chạy các lượt đọc model xin (mặc định tối đa 4; trợ lý chat truyền 6) — lỗi quyền/không thấy ⇒ một dòng "not found",
+ * không ném. `pageChars` = trần một trang (mặc định 8.000; trợ lý mentor 16.000 — trang hướng dẫn của nhóm thường dài).
+ */
+export async function runReads(userId: number, access: ProjectAccess, reads: ReadRequest[], opts: { max?: number; pageChars?: number; docLink?: (n: number) => string } = {}): Promise<string> {
   if (!docsAiOn(access).read) return 'Tool results: project documents are turned off for this project (or not available to this user). Answer without them.';
   const out: string[] = [];
-  for (const r of reads.slice(0, 4)) {
+  for (const r of reads.slice(0, opts.max ?? 4)) {
     try {
       if (r.tool === 'search_pages') {
         const q = (r.query ?? '').trim();
         const hits = q.length >= 2 ? await pages.searchPages(userId, access.projectId, q, 8) : [];
         out.push(`search_pages "${clip(q, 100)}": ${hits.length ? hits.map((h) => `#${h.number} "${h.title}" — ${clip(h.snippet, 200)}`).join(' | ') : 'no matching documents you can read'}`);
       } else if (r.tool === 'read_page' && r.number) {
-        const p = await readPageText(userId, access.projectId, r.number, 8_000);
-        out.push(`read_page #${r.number} "${p.title}" (${p.status}):\nHeadings: ${p.headings.join(' / ') || '(none)'}\n<<<\n${p.markdown}\n>>>`);
+        const p = await readPageText(userId, access.projectId, r.number, opts.pageChars ?? 8_000);
+        out.push(`read_page #${r.number} "${p.title}" (${p.status})${opts.docLink ? ` · link ${opts.docLink(r.number)}` : ''}:\nHeadings: ${p.headings.join(' / ') || '(none)'}\n<<<\n${p.markdown}\n>>>`);
       }
     } catch (err) {
       // 404 (không có / không được xem) và 403 nói cùng một câu — không lộ trang nội bộ tồn tại.

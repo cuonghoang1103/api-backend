@@ -15,6 +15,7 @@
 
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
@@ -32,6 +33,7 @@ import { relativeTime, Spinner, UserAvatar, WorkPortal } from '../ui';
 import { ActionGroup, type ActionItem } from './ActionCard';
 import UpgradeDialog from './UpgradeDialog';
 import { openAiPanel, useAiPanel, type AiQuickRequest } from './store';
+import { inAppPath, isModifiedClick } from './links';
 import { useLayoutPrefs } from '../shell/panes';
 import { wt, wfmt } from '@/components/work/i18n';
 
@@ -88,15 +90,33 @@ function storedItems(m: AiMessage): ActionItem[] {
 
 // ─── Markdown ────────────────────────────────────────────────────
 
-/** Chữ của AI luôn đi qua bộ dựng markdown (không bao giờ in thô); HTML thô bị lọc. */
+/**
+ * Chữ của AI luôn đi qua bộ dựng markdown (không bao giờ in thô); HTML thô bị lọc. Link tới CT Work (`/work/…`) mở
+ * ngay trong app (router), khung AI vẫn mở bên cạnh; link ngoài mở tab mới.
+ */
 const AiMarkdown = memo(function AiMarkdown({ text }: { text: string }) {
+  const router = useRouter();
   return (
     <div className="w-prose !text-[13.5px]">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkBreaks]}
         rehypePlugins={[rehypeSanitize]}
         components={{
-          a: ({ node: _n, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" />,
+          a: ({ node: _n, href, ...props }) => {
+            const inApp = inAppPath(href);
+            if (!inApp) return <a {...props} href={href} target="_blank" rel="noopener noreferrer" />;
+            return (
+              <a
+                {...props}
+                href={inApp}
+                onClick={(e) => {
+                  if (isModifiedClick(e)) return;
+                  e.preventDefault();
+                  router.push(inApp);
+                }}
+              />
+            );
+          },
           table: ({ node: _n, ...props }) => (
             <div className="mb-2 overflow-x-auto">
               <table {...props} className="w-full border-collapse text-[12.5px] [&_td]:border [&_td]:border-[var(--w-border)] [&_td]:px-2 [&_td]:py-1 [&_th]:border [&_th]:border-[var(--w-border)] [&_th]:bg-[var(--w-sunken)] [&_th]:px-2 [&_th]:py-1 [&_th]:text-left" />
@@ -404,12 +424,15 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
     });
   };
 
+  // Câu mẫu cho thành viên mới (18/10/2026): việc của tôi / đọc gì / giải thích thẻ — trợ lý tự đọc thẻ + Docs + tệp.
+  // Chưa chọn thẻ ⇒ điền sẵn "…thẻ KEY-" để người hỏi gõ nốt số thẻ.
   const suggestions = [
+    wt('ai.sugMyWeek'),
+    issueKey ? wt('ai.sugReadKey', { key: issueKey }) : `${wt('ai.sugRead')}${key ? `${key}-` : ''}`,
+    issueKey ? wt('ai.sugExplainKey', { key: issueKey }) : `${wt('ai.sugExplain')}${key ? `${key}-` : ''}`,
     wt('ai.sugNext'),
     wt('ai.sugSprint'),
-    wt('ai.sugLogin'),
     `${wt('ai.sugMeeting')}\n\n`,
-    wt('ai.sugOverload'),
     issueKey ? wt('ai.sugTestsKey', { key: issueKey }) : wt('ai.sugTests'),
   ];
 
@@ -822,7 +845,7 @@ function EmptyState({ suggestions, onPick, disabled, onBrowse, onTool, onDefense
             onClick={() => onPick(s)}
             className="rounded-[8px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2 text-left text-[13px] text-[var(--w-text)] transition-colors hover:border-[var(--w-border-strong)] hover:bg-[var(--w-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--w-accent-border)] disabled:opacity-50"
           >
-            {s.trim().replace(/:$/, '')}
+            {s.trim().replace(/:$/, '').replace(/ [A-Z][A-Z0-9_]*-$/, ' …')}
           </button>
         ))}
       </div>

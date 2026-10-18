@@ -46,6 +46,14 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
       assert.ok(!ask.includes(n), n);
     }
     for (const n of ['get_issue', 'search_issues', 'get_page', 'transition', 'log_work']) assert.ok(ask.includes(n), n);
+    // 18/10/2026 — lệnh đọc của trợ lý mentor: CHỈ đường Ask (không MCP, không BUILTIN), đều là lệnh ĐỌC.
+    const mcp = r.mcpCommands().map((t) => t.name);
+    const builtin = r.builtinCommands().map((t) => t.name);
+    for (const n of ['read_issue', 'read_attachment', 'list_resources', 'member_work']) {
+      assert.ok(ask.includes(n), `${n} có trên Ask AI`);
+      assert.ok(!mcp.includes(n) && !builtin.includes(n), `${n} không lên MCP/BUILTIN`);
+      assert.equal(r.commandByName(n)!.write, false, `${n} chỉ đọc`);
+    }
   });
 
   it('BUILTIN: runner tự lo lease/chi phí/kết thúc ⇒ model không thấy claim/heartbeat/release/report_usage/request_review/ask_lead/transition/log_work', () => {

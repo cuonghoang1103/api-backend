@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <LegalShell title="Chính sách bảo mật" activeHref="/chinh-sach-bao-mat" updated="2026-10-14">
+    <LegalShell title="Chính sách bảo mật" activeHref="/chinh-sach-bao-mat" updated="2026-10-18">
       <p>
         CuongThai tôn trọng và bảo vệ thông tin cá nhân của người dùng, tuân thủ
         <b> Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15</b> và <b>Nghị định 356/2025/NĐ-CP</b> (hiệu lực từ 01/01/2026, thay thế Nghị định 13/2023/NĐ-CP). Chính sách này
@@ -35,8 +35,10 @@ export default function Page() {
       <p>Chúng tôi chỉ chia sẻ dữ liệu tối thiểu cần thiết với các đơn vị:</p>
       <ul>
         <li><b>Cổng thanh toán</b> (PayOS, VNPay) — để xử lý giao dịch.</li>
-        <li><b>Đăng nhập bên thứ ba</b> (Google, GitHub) — khi Quý khách chọn đăng nhập bằng các dịch vụ này.</li>
+        <li><b>Đăng nhập bên thứ ba</b> (Google, GitHub, Apple) — khi Quý khách chọn đăng nhập bằng các dịch vụ này.</li>
         <li><b>Hạ tầng lưu trữ &amp; giám sát lỗi</b> (lưu trữ tệp, theo dõi lỗi kỹ thuật) — để vận hành website.</li>
+        <li><b>Nhà cung cấp AI</b> — chỉ nội dung Quý khách chủ động gửi cho một tính năng AI (trò chuyện, tóm tắt, gợi ý…) được chuyển tới mô hình ngôn ngữ (Anthropic, OpenAI, trực tiếp hoặc qua cổng trung gian) để tạo câu trả lời. <b>Groq</b> chuyển giọng nói thành chữ (tin nhắn thoại, biên bản họp trong CT Work) — chỉ khi Quý khách đồng ý trong ứng dụng.</li>
+        <li><b>Apple</b> — đăng nhập bằng Apple và gửi thông báo đẩy (APNs) tới ứng dụng iOS.</li>
       </ul>
       <p>Chúng tôi <b>không bán</b> dữ liệu cá nhân cho bên thứ ba vì mục đích quảng cáo.</p>
 

@@ -11,7 +11,7 @@ import { appendFileSync, readFileSync } from 'node:fs';
 import { Box, Static, measureElement, useApp, useInput, useStdout, type DOMElement } from 'ink';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type MutableRefObject } from 'react';
 import { chuanHoa, dsCauHoi, locPhien, type MucGhi, type PhienCu } from 'ct-lenh';
-import { hoiCtworkMotLan, laLoiXacThucCtw, veDongCtw, type DongCtw, type GiaoDienCtw } from '../../../../desktop/src/renderer/features/chat/ctworkLenh';
+import { homNay as homNayCtw, hoiCtworkMotLan, kiemTinCtw, laLoiXacThucCtw, moCtworkTuMcp, veDongCtw, xongViec as xongViecCtw, type DongCtw, type GiaoDienCtw } from '../../../../desktop/src/renderer/features/chat/ctworkLenh';
 import { docAnhDataUrl, guiThangDuoc, tachAnh } from '../anh';
 import { danAnhTuClipboard } from '../anhDan';
 import { timTrinhDuyet } from '../../../cuongmini-core/src/timTrinhDuyet';
@@ -698,10 +698,21 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     chon: (o) => menu({
       tieuDe: o.tieuDe, ...(o.moTa ? { moTa: o.moTa } : {}),
       // Đợt 5: khối markdown (thẻ CT Work, bảng sprint, xem trước) vẽ theo bề ngang thẻ.
-      ...(o.thanMd ? { than: catThanThe(veMarkdown(o.thanMd, { rong: Math.min(cot - 1, 120) - 6 }), Math.max(6, hang - 16 - o.ds.length)) } : o.than ? { than: o.than } : {}),
+      /* Đợt 6: chỗ cho thân tính theo đúng khung thẻ (`MenuView.caoToiDa` = hang − 4): viền + tiêu đề + lề + chân ≈ 8 dòng,
+         cửa sổ lựa chọn ≤ 10 dòng, mô tả ≈ 2 dòng. Trước đây trừ cứng 16 + số mục ⇒ thẻ nhiều nút mất "Bình luận gần nhất". */
+      ...(o.thanMd ? { than: catThanThe(veMarkdown(o.thanMd, { rong: Math.min(cot - 1, 120) - 6 }), Math.max(6, hang - 12 - Math.min(10, o.ds.length) - (o.moTa ? 2 : 0))) } : o.than ? { than: o.than } : {}),
       ds: o.ds.map((m) => ({ nhan: m.nhan, giaTri: m.giaTri, ...(m.mo ? { mo: m.mo } : {}), ...(m.tat ? { tat: true } : {}), ...(m.so !== undefined ? { so: m.so } : {}) })),
       khiChon: (m) => { void Promise.resolve(o.khiChon(m.giaTri)).catch((e: Error) => kho.thongBao(e.message, 'loi')); },
       ...(o.khiHuy ? { khiHuy: o.khiHuy } : {}),
+      /* Đợt 6: danh sách dài (mọi dự án CT Work) ⇒ gõ để lọc theo tên/không gian/vai. */
+      ...(o.loc ? {
+        coLoc: true,
+        boLoc: (q: string) => {
+          const t = chuanHoa(q);
+          return o.ds.filter((m) => !t || chuanHoa(`${m.nhan} ${m.mo ?? ''}`).includes(t))
+            .map((m) => ({ nhan: m.nhan, giaTri: m.giaTri, ...(m.mo ? { mo: m.mo } : {}), ...(m.tat ? { tat: true } : {}), ...(m.so !== undefined ? { so: m.so } : {}) }));
+        },
+      } : {}),
     }),
     lamMoiCtwork: () => { void napDongCtw(); },
     kho, kn, thuMuc, phienBan, guiThat, doiModel, doiMuc, doiCheDo, dsModel, dsMuc, moMenu, moKhoaModel, doiTheme, doiNgonNgu, datToanManHinh, datChuot,
@@ -864,21 +875,35 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   const lanGo = useRef(0);
   const dangGo = () => oRef.current.text.length > 0 || Date.now() - lanGo.current < 2500;
   const hoiLaiCtw = useRef<(() => void) | null>(null);
+  /* Đợt 6: thẻ tự bật đang CHỜ (người dùng đang gõ / thẻ khác đang mở / lượt đang chạy) — hiện lại đúng thẻ đó khi rảnh
+     (trước đây chỉ hỏi lại "kết nối/gắn" ⇒ thẻ gợi ý sau việc bị mất). Mỗi lúc chỉ giữ MỘT thẻ chờ (thẻ mới thay thẻ cũ). */
+  const theCho = useRef<{ g: GiaoDienCtw; o: Parameters<GiaoDienCtw['chon']>[0] } | null>(null);
+  useEffect(() => {
+    const h = setInterval(() => {
+      const c = theCho.current;
+      if (!c || dangGo() || hopRef.current || S.dangChay || S.choDuyet.length) return;
+      theCho.current = null;
+      c.g.chon(c.o);
+    }, 700);
+    return () => clearInterval(h);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const giaoDienCtwTuBat = (): GiaoDienCtw => {
     const g = giaoDienCtw(boiCanh());
     // Thẻ NỐI TIẾP sau khi người dùng vừa chọn (kết nối ⇒ "gắn dự án?") vẫn hiện — chỉ thẻ tự bật đầu tiên mới phải chờ.
     let daChon = false;
-    return {
+    const gBoc: GiaoDienCtw = {
       ...g,
       chon: (o) => {
-        if (!daChon && (dangGo() || hopRef.current || S.dangChay)) {
-          daHoiCtw.current = false;
-          setTimeout(() => hoiLaiCtw.current?.(), 3000);
+        const boc = { ...o, khiChon: (v: string) => { daChon = true; return o.khiChon(v); } };
+        if (!daChon && (dangGo() || hopRef.current || S.dangChay || S.choDuyet.length)) {
+          theCho.current = { g, o: boc };
           return;
         }
-        g.chon({ ...o, khiChon: (v) => { daChon = true; return o.khiChon(v); } });
+        g.chon(boc);
       },
     };
+    return gBoc;
   };
   const napDongCtw = useCallback(async () => {
     const r = await kn.goi<{ ok: boolean; dong?: DongCtw | null }>('agent:ctworkHe', { viec: 'dong', ngonNgu: ngonNgu() }).catch(() => null);
@@ -896,19 +921,48 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       if (daHoiCtw.current) return;
       if (hopRef.current || S.dangChay || dangGo()) { if (++lan < 60) t2 = setTimeout(hoi, 3000); return; }
       daHoiCtw.current = true;
-      void hoiCtworkMotLan(giaoDienCtwTuBat()).catch(() => undefined);
+      /* Đợt 6: không có gì để hỏi (đã nối + đã gắn) ⇒ "Hôm nay" — việc của tôi + nên làm gì trước (lõi: một lần/ngày/thư mục). */
+      void hoiCtworkMotLan(giaoDienCtwTuBat()).then((coHoi) => { if (!coHoi) void homNayCtw(giaoDienCtwTuBat(), { tuDong: true }).catch(() => undefined); }).catch(() => undefined);
     };
     hoiLaiCtw.current = () => { if (++lan < 60) hoi(); };
     const t = setTimeout(() => {
       void napDongCtw();
       hoi();
     }, Number(process.env.CUONGMINI_CTW_TRE_MS ?? 1200));
-    const lap = setInterval(() => { void napDongCtw(); }, 60_000);
+    const lap = setInterval(() => { void napDongCtw(); void baoTinCtw(); }, 60_000);
     return () => { clearTimeout(t); if (t2) clearTimeout(t2); clearInterval(lap); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // Lượt xong ⇒ đọc lại (nhánh có thể vừa đổi; sprint đọc đệm 5 phút ở lõi).
   useEffect(() => { if (!S.dangChay) void napDongCtw(); }, [S.dangChay, napDongCtw]);
+  /* ─── Đợt 6: CT Work dẫn đường sau mỗi lượt + theo dõi nhẹ ───
+     • Lượt XONG bình thường (không lỗi/dừng) trên nhánh của một thẻ có thay đổi git mới ⇒ thẻ gợi ý "bước tiếp theo đúng
+       luật dự án" (lõi tự lọc: không có commit/file đổi ⇒ im; cùng HEAD ⇒ không nhắc lại). Thẻ không cướp phím Enter.
+     • Tin theo dõi (≥ 60 s ở lõi, chỉ khi có dự án gắn, tắt bằng /ctwork theo-doi off) ⇒ dòng mờ. */
+  const baoTinCtw = async () => {
+    const tin = await kiemTinCtw(giaoDienCtw(boiCanh())).catch(() => [] as string[]);
+    for (const t of tin) kho.thongBao(t, 'info');
+  };
+  const vuaChay = useRef(false);
+  useEffect(() => {
+    if (S.dangChay) { vuaChay.current = true; return; }
+    if (!vuaChay.current) return;
+    vuaChay.current = false;
+    if (!S.luotCuoi?.xong || S.luotCuoi.loi || S.choChiDan) return;
+    void xongViecCtw(giaoDienCtwTuBat(), undefined, { tuDong: true }).catch(() => undefined);
+    void baoTinCtw();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [S.dangChay]);
+  /* Đợt 6 (lỗi đợt trước): tin gõ giữa lượt mà lượt dừng trước khi agent đọc ⇒ trả về ô nhập (đứng TRƯỚC chữ đang gõ). */
+  useEffect(() => {
+    const ds = S.chenTraVe;
+    if (!ds?.length) return;
+    S.chenTraVe = null;
+    const cu = oRef.current.text;
+    const t = [...ds, cu].filter(Boolean).join('\n');
+    setO({ text: t, contro: t.length });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [S.chenTraVe]);
   // Tiêu đề cửa sổ terminal = tiêu đề phiên (kiểu Claude Code). Chỉ TTY thật.
   useEffect(() => {
     if (!process.stdout.isTTY || process.env.CUONGMINI_KHONG_DAT_TIEU_DE === '1') return;
@@ -1375,7 +1429,9 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       const moi = Date.now() - theDuyetHien.current.luc < 350;
       if (moi && !key.escape && !key.upArrow && !key.downArrow) return;
       const lc = luaChonDuyet(d);
-      const traLoi = (q: string) => { lucDuyet.current = Date.now(); void kn.goi('agent:traLoiXinPhep', { id: d.id, quyetDinh: q }).catch((e: Error) => kho.thongBao(e.message, 'loi')); };
+      /* Đợt 6: "3. Không, và bảo CuongMini làm khác đi (esc)" ⇒ từ chối VÀ dừng lượt, chờ người dùng gõ chỉ dẫn (như
+         Claude Code) — trước đây lõi đi tiếp sau lời từ chối, nhãn hứa hơn hành vi. */
+      const traLoi = (q: string) => { lucDuyet.current = Date.now(); void kn.goi('agent:traLoiXinPhep', { id: d.id, quyetDinh: q, ...(q === 'tuChoi' ? { dung: true } : {}) }).catch((e: Error) => kho.thongBao(e.message, 'loi')); };
       if (key.upArrow) { setChonDuyet((c) => (c - 1 + lc.length) % lc.length); return; }
       // Đợt 4: shift+tab trên thẻ = "Có, và không hỏi lại" (như Claude Code) nếu thẻ có lựa chọn đó; không thì lùi lên.
       if (key.tab && key.shift) { const luon = lc.find((x) => x.q === 'choPhepCaFile' || x.q === 'choPhepTienTo'); if (luon) traLoi(luon.q); else setChonDuyet((c) => (c - 1 + lc.length) % lc.length); return; }
@@ -1627,7 +1683,8 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       {dongKH.length ? <Box paddingLeft={2} marginTop={S.dangChay ? 0 : 1}><Text>{dongKH.join('\n')}</Text></Box> : null}
       <HangCho ds={hangCho} rong={rongTrai} />
       {hop?.loai === 'menu' ? (
-        <MenuView tieuDe={hop.tieuDe} moTa={hop.moTa} than={hop.than} ds={hop.ds} chon={hop.chon} loc={hop.loc} coLoc={hop.coLoc} rong={Math.min(rongTrai, 120)} mauVien={hop.mauVien} />
+        /* Đợt 6: thẻ không cao hơn chỗ còn lại (chân trang 2 dòng + dòng trạng thái + kế hoạch đang hiện). */
+        <MenuView tieuDe={hop.tieuDe} moTa={hop.moTa} than={hop.than} ds={hop.ds} chon={hop.chon} loc={hop.loc} coLoc={hop.coLoc} rong={Math.min(rongTrai, 120)} mauVien={hop.mauVien} caoToiDa={Math.max(9, hang - 4 - caoBang)} />
       ) : hop?.loai === 'matKhau' ? (
         <Box borderStyle={kieuVien()} flexDirection="column" paddingX={1} marginTop={1} width={Math.min(rongTrai, 90)}>
           <Text>{hop.tieuDe}</Text>
@@ -1657,7 +1714,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
           {S.hoi && hoiRef.current?.khac && hoiRef.current.id === S.hoi.id ? (
             <Text>{`${mau('#fbbf24')('?')} ${dam(S.hoi.cauHoi[hoiRef.current.buoc]?.cauHoi ?? '')} ${mo(L('· gõ câu trả lời · Enter gửi · Esc quay lại lựa chọn', '· type your answer · Enter to send · Esc back to the choices'))}`}</Text>
           ) : null}
-          <ONhapView o={o} rong={rongTrai} cheDo={S.ws?.cheDoQuyen ?? 'keHoach'} dangChay={S.dangChay} goiYMo={Boolean(goiY)} soHangCho={hangCho.length} xuongDong={xuongDong} />
+          <ONhapView o={o} rong={rongTrai} cheDo={S.ws?.cheDoQuyen ?? 'keHoach'} dangChay={S.dangChay} goiYMo={Boolean(goiY)} soHangCho={hangCho.length} xuongDong={xuongDong} choChiDan={S.choChiDan} />
           {goiY ? <GoiYView ds={goiY.ds} chon={goiY.chon} rong={rongTrai} kieu={goiY.kieu} /> : null}
         </Box>
       )}

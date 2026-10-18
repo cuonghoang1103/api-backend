@@ -223,6 +223,75 @@ hiện tối hơn + 🔒, bấm/chọn ⇒ ô nhập khoá (CLI: thẻ + ô ẩn
 tương đương ở cổng kia, app chỉ in một dòng mờ "Đã chuyển sang … vì cổng bận". Bỏ dòng "Cổng AI đang chậm…" và dòng "cổng AI đang
 quá tải — chờ Xs…" (thử lại im lặng).
 
+## 2f. Đợt 6 — "mở là dùng", CT Work dẫn đường (18/10/2026)
+
+Mục tiêu: mở `cuongmini` ở thư mục bất kỳ là dùng được như Claude Code; CuongMini hiểu TOÀN BỘ CT Work và chủ động dẫn đường
+(hôm nay làm gì, thẻ này làm thế nào, chờ ai, xong rồi làm gì tiếp) ở cả ba nơi. Phần thuần ở lõi:
+`desktop/src/main/agent/ctworkDanDuongVe.ts` (đọc/vẽ, không I/O), phần I/O: `ctworkDanDuong.ts`; điều phối chung ba nơi vẫn là
+`renderer/features/chat/ctworkLenh.ts`.
+
+| Việc | Lõi / máy chủ | Desktop | CLI | VS Code |
+|---|---|---|---|---|
+| 1. Tin thư mục | — | (app mở theo dự án, không hỏi) | `src/tinThuMuc.ts` + pha `tinCay` (`HopTinThuMuc`): "Accessing workspace … Quick safety check", 1 Có / 2 Không-thoát; HOME/gốc ổ ⇒ cảnh báo đỏ, con trỏ ở "Không"; nhớ ở `~/.cuongmini/thu-muc-tin.json` (0600), tin cha ⇒ tin con (trừ HOME); `-p`/lệnh phụ/`CUONGMINI_TIN_THU_MUC=1` không hỏi | `capabilities.untrustedWorkspaces: false` (VS Code tự hỏi Workspace Trust) |
+| 2. Đăng nhập trong CLI rồi chạy tiếp | đã có từ đợt 4 (không đổi) | | | |
+| 3. Hạn mức cả nhóm | `src/services/agent/hanMucNhom.ts`: người KHÔNG Pro/không key, là thành viên (không phải agent) dự án mà chủ (chọn tay `chuId` → lead → ADMIN có Pro) có Pro ⇒ dùng hạn mức chủ. Cấu hình `work_projects.settings.cuongMiniNhom` (KHÔNG đổi schema): mặc định BẬT, 1 $/người/ngày, 15 $/nhóm/tháng. Sổ: `interview_llm_call_logs.step = 'nhom:p<pid>:u<chủ>'`. Chỉ model free (`NHOM_CHI_MODEL_FREE`). `agent.routes.ts › chiProHoacNhom` cho `/turn`, `/compact`, `/dat-ten`: agent ⇒ 403 `NHOM_AGENT`, chủ tắt ⇒ 403 `NHOM_TAT`, hết trần ⇒ 429 `NHOM_HET_TRAN`. `/tools` trả `nhom` + chỉ model free. Tuyến `GET/PUT /work/projects/:pid/cuongmini-team` (quyền `project.settings`, cấm agent trong `AGENT_DENIED_ROUTES`) | Project settings → tab **CuongMini** (`ProjectCuongMini.tsx`): công tắc "CuongMini cho cả nhóm", hai trần, chọn người tài trợ, bảng ai đã dùng bao nhiêu | thanh chặn Pro tự mở khi có `info.nhom` | như CLI |
+| 4. `/mcp` ⇒ chọn dự án + quyền | `agent:ctworkHe {viec:'goiY'}` trả `chonDuAn` khi đã nối mà chưa gắn; danh sách MỌI dự án (`không gian · tên · vai`), ô lọc khi > 8; chọn quyền "Đọc + ghi (có duyệt)" / "Chỉ đọc"; thư mục không phải git ⇒ gắn theo PHIÊN (`ganTam`, không ghi file). Chỉ đọc ⇒ lõi từ chối mọi tool ghi CT Work trước cả thẻ duyệt, menu không hiện mục ghi | nút "Chọn dự án CT Work" trong bảng MCP | mục `ctworkDuAn` trong `/mcp` | nút trong `/mcp` |
+| 5. AGENTS.md của nhóm | `huongDanNhom`: trang Docs có tiêu đề bắt đầu `AGENTS.md` (không phân biệt hoa thường) ⇒ khối ```markdown đầu tiên, không có thì cả trang; gộp với AGENTS.md cục bộ (`gopGhiChu`: cùng tiêu đề ⇒ CỤC BỘ thắng); đệm theo `updatedAt` của trang (`list_pages` thêm `updatedAt`, ≤ 1 lần/10 phút); không có trang ⇒ tóm tắt dự án + sprint; Docs tắt ⇒ bỏ qua im lặng. Báo một lần "Đã nạp hướng dẫn nhóm …" (sự kiện `ctwHuongDanNhom`) | dòng mờ | dòng mờ | dòng mờ |
+| 6. Dẫn đường | máy chủ: `prompt.ts › LUAT_DAN_DUONG` (sau LUAT_CTWORK) + vai trong dòng dự án (ADMIN ⇒ trưởng nhóm, TEACHER ⇒ giảng viên, MEMBER, VIEWER ⇒ chỉ đọc); MCP mới `issue_guide` (thẻ + phụ thuộc + DoD + bước), `project_resources`, `my_updates` (`src/services/work/toolRegistry/cuongMini.ts`); `get_issue` thêm dòng máy đọc "Blocked by (not done)…/Blocks…/Subtasks not done…" (`src/mcp/issueView.ts › dependencyLines`). Lõi: "Hôm nay" (`/ctwork hom-nay`, tự hiện một lần/ngày/thư mục khi mở), hướng dẫn từng thẻ (đọc gì · các bước · xong khi nào · hỏi ai), phụ thuộc ("cần @user2 làm xong LF-17 trước — nhánh `LF-17-…` đã có trên remote, pull về"), gợi ý sau việc (`goiYSau`: commit chưa đẩy ⇒ đẩy; đã đẩy chưa PR ⇒ mở PR; có PR ⇒ comment bằng chứng + chuyển Review…) — luôn xem trước, chọn số mới làm, chỉ đọc thì không làm. Trưởng nhóm/giảng viên: `/ctwork nhom` (ai quá hạn, ai bị chặn, soạn tin nhắc — xem trước rồi mới gửi `chat_post`) | tự gợi ý sau lượt agent kết thúc bình thường | như trên | như trên |
+| 7. Ba nơi | lõi chung + `ctworkLenh.ts` | ✓ | ✓ | ✓ |
+| 8. Kỹ năng CT Work | tool máy chủ `ctwork_huong_dan` (`src/services/agent/ctworkKyNang.ts`): gộp `helpGuide.ts` + 14 chủ đề CuongMini (tài nguyên, CR, Q&A, chat nhóm, SRS/SWR, RTM, báo cáo test FPT, báo cáo tuần, phụ thuộc, luật Done, git↔CT Work, giai đoạn FPT, hướng dẫn lead/giảng viên); link đúng `/work/<slug>/<KEY>/<trang>`; chỉ có khi cuộc có CT Work, nạp khi CẦN (không vào prompt) | | | |
+| 9. Đủ ~150 tool MCP, nạp khi cần | lõi `mcp.ts`: > 28 tool ⇒ gửi 20 tool lõi (`UU_TIEN_CTWORK` mới: my_work, issue_guide, get_issue…) + MỤC LỤC (tên + một dòng) cho phần còn lại; model gọi tool client `nap_tool_mcp` (capability `mcp_nap`, ≤ 24 tool/cuộc) rồi dùng ngay bước sau; `CUONGMINI_MCP_NAP=0` ⇒ về trần 40 cũ. Máy chủ: `MAX_TOOL_MCP` 40 → 64, `parseMucLucMcp` + `khoiMucLucMcp` (trước HÔM NAY ⇒ không phá đệm). Đo A/B bên dưới | đếm "N tool · M trong mục lục" ở bảng MCP | `/mcp` hiện mục lục | như CLI |
+| 10. Theo dõi | `kiemTin`: chỉ khi đã gắn + bật (`/ctwork theo-doi on|off`, `ctwork-dan-duong.json`), ≥ 60 s/lần, lần đầu chỉ lấy mốc; `my_updates` (máy chủ cũ ⇒ so `my_work`); in một dòng "CT Work: LF-17 vừa xong — LF-18 hết bị chặn" | interval 60 s | interval 60 s | interval 60 s |
+| 11. Git ↔ CT Work | `tinhTrangGit` (nhánh, ahead/behind, chưa commit — bỏ qua `.cuongmini/`, PR qua `gh pr view` nếu có), nhánh `LF-xx-slug` ⇒ thẻ; gợi ý theo luật Done của dự án | | | |
+| 12. Mẫu FPT theo giai đoạn | `goiYMauFpt` + `/ctwork mau`: loại dự án + giai đoạn ⇒ mẫu (SRS/SDD/Test plan/Report 5.x…), link trang trong dự án | | | |
+| 13. Lead / giảng viên | vai TEACHER ⇒ `teaching_group`; ADMIN ⇒ hai JQL (quá hạn, bị chặn); Q&A (`/ctwork hoi`) soạn câu hỏi, xem trước rồi `qna_ask` | | | |
+| 14. An toàn | không đổi: ghi CT Work luôn qua thẻ duyệt (trừ `tu-ghi`), agent không vào được tuyến cấu hình nhóm, nội dung người viết vẫn bọc `<ctwork-content untrusted>`, tool `my_updates` từ chối token agent (dùng `wait_events`) | | | |
+
+**Lỗi tồn từ đợt 5 đã sửa:**
+1. Tự chuyển 1M → GPT 400K tràn ngữ cảnh: `turn.ts` khi đổi cửa sổ giữa lượt cắt lại từ `messagesGoc` theo cửa sổ MỚI (`vuaCuaSoMoi`, cập nhật cả `boLuot.messages` — chỗ dựng khối GHI NHỚ dùng lại bản chưa cắt), dựng lại thân gửi (`dungGuiDi`) sau khi đổi model, nén khi > trần − chỗ ghi nhớ.
+2. Chèn tin giữa lượt rồi Esc: tin chưa được model đọc KHÔNG bị tiêu; sự kiện `traChen` trả chữ về ô nhập (ba nơi).
+3. "3. Không, và bảo CuongMini làm khác đi": dừng lượt ngay (`traLoiXinPhep(..., dung)`), các tool còn lại trong cùng bước nhận "BỎ QUA", ô nhập hiện "Bảo CuongMini nên làm gì…" (`choChiDan`).
+4. Thẻ `/ctwork` ở 60×20 cao thừa một dòng: `MenuView caoToiDa` (thu mô tả, cửa sổ cuộn, tiêu đề/chân một dòng), thân thẻ tính theo khung.
+5. "Connecting CT Work…" treo 30–45 s vì server MCP khác: `mcp.ts` nạp TỪNG server (bộ đếm thế hệ `theHe`, áp dần `batVaAp`), `napLaiMotServer` cho kết nối/ngắt/bật/tắt — server chậm không giữ server khác.
+6. Bốn test PTY đỏ (banPhim, dot5Pty, khung, qa5cPty): nguyên nhân thật là phím gửi theo GIỜ CỐ ĐỊNH lúc máy quá tải (load 40–49) — phím tới trước khi giao diện sẵn sàng, và thẻ duyệt bỏ qua phím < 350 ms sau khi hiện. `thu/pty_chay.py` thêm phím chờ-chữ `[t, phím, regex]` (chờ tối đa 25 s, thêm 0,6 s như người), dòng thời gian neo theo phím thật (`phatLai.mjs › moc`). Không tắt test nào.
+
+**Đo A/B việc 9 (model thật CuongMini Solid, 5 việc × 2 biến × 2 vòng, tổng 0,85 $):** dùng đúng 123 schema tool thật
+(`mcpCommands()`), kết quả tool là mẫu `ctworkMauThu.ts` (KHÔNG chạm CT Work prod). A = trần 40 cũ; B = 20 lõi + mục lục.
+
+| Việc | A đúng | B đúng | A $ (2 vòng) | B $ (2 vòng) |
+|---|---|---|---|---|
+| đọc thẻ LF-18 | 2/2 | 2/2 | 0,081 | 0,112 (thêm `whoami`) |
+| liệt kê việc / quá hạn | 2/2 | 2/2 | 0,081 | 0,094 |
+| bình luận LF-18 | 2/2 | 1/2 (vòng 1 trả lời không gọi tool; chạy lại riêng: đúng) | 0,059 | 0,037 |
+| chuyển LF-18 sang Review | 2/2 | 2/2 | 0,100 | 0,037 |
+| tìm trang Docs + đọc | 2/2 | 2/2 | 0,119 | 0,111 |
+| **Tổng** | **10/10** | **9/10** | **0,438** | **0,391 (−11%)** |
+
+Token vào mỗi bước: A ≈ 15.600, B ≈ 14.400 (−8%), và B CÓ ĐỦ 123 tool thay vì 40. Kết luận: giữ, mặc định BẬT; độ chính xác
+lệch một mẫu (trong nhiễu, chạy lại đúng) — nếu thấy model bỏ lỡ tool thì tắt bằng `CUONGMINI_MCP_NAP=0`, không cần build lại.
+Không lần nào model phải gọi `nap_tool_mcp` trong 5 việc này (đều nằm trong 20 lõi) — lợi ích của mục lục là các việc ngoài lõi
+(SRS, test FPT, RAID…), chưa đo bằng model thật.
+
+**Test**: máy chủ `src/services/agent/dot6.test.ts` (7: hạn mức nhóm, `ctwork_huong_dan` link đúng, mục lục/`nap_tool_mcp`,
+luật dẫn đường + vai, nhóm chỉ model free, **lỗi 1** — 1M ⇒ GPT 400K cắt trước khi gọi), DB `src/routes/agent.nhom.db.test.ts`
+(5: thành viên được, người ngoài 403; trưởng nhóm tắt 403; vượt trần người/ngày và nhóm/tháng 429 + bảng ai dùng bao nhiêu; agent
+403; `/agent/tools` chỉ model free), `src/routes/work.cuongmini.db.test.ts` (2: `my_updates`, `list_pages` có `updatedAt`),
+`permissions.test.ts` (bảng cấm agent có `cuongmini-team`); lõi `dot6.test.ts` (14: phụ thuộc, hướng dẫn thẻ, hôm nay, gợi ý sau
+việc theo workflow, AGENTS.md nhóm + đệm theo phiên bản, theo dõi, trưởng nhóm, gắn theo phiên), `dot6Mcp.test.ts` (3: máy chủ
+giả ~153 tool ⇒ 20 + mục lục + nạp; `CUONGMINI_MCP_NAP=0` ⇒ cách cũ; **lỗi 5** — server khác treo, ctwork vẫn nạp < 5 s),
+`dot6Loop.test.ts` (5: nạp theo nhu cầu, **lỗi 2** chèn+Esc, **lỗi 3** "Không, và bảo…", chỉ đọc chặn ghi, AGENTS.md nhóm gộp vào
+thân); CLI `src/test/dot6.test.ts` (6) và `src/test/dot6Pty.test.ts` — **PTY + LÕI THẬT** (2: tin thư mục ⇒ `/mcp` chọn dự án +
+quyền ⇒ AGENTS.md nhóm ⇒ gợi ý sau việc ⇒ phụ thuộc ⇒ thẻ vừa 60×20 (**lỗi 4**); mở ở HOME ⇒ cảnh báo đỏ, mặc định "Không").
+Bốn PTY cũ (banPhim, dot5Pty, khung, qa5cPty) xanh lại (**lỗi 6**).
+
+**Chưa làm / làm khác (và vì sao):**
+- Hạn mức nhóm chỉ dùng model FREE và chỉ trên cổng của web (modelapi) — đưa model trả tiền vào là tiêu tiền thật của chủ nhóm
+  mà họ không chọn từng lượt.
+- Theo dõi dùng thăm dò ≥ 60 s, không giữ `wait_events` mở: `wait_events` là tool của token AGENT; token người không có.
+- Gợi ý sau việc không tự LÀM gì — chỉ đề xuất + xem trước; chọn số mới chạy (đúng mục 14).
+- Desktop + VS Code: phần điều phối chung đã test qua CLI/lõi; chưa có test DOM riêng cho thẻ chọn dự án / hộp gợi ý.
+- Máy chủ prod chưa deploy ⇒ `issue_guide`/`my_updates`/`project_resources` chưa có: lõi tự lùi về `get_issue`/`my_work`.
+
 ## 3. Thiết kế đợt 3/4 (đợt 3 ĐÃ LÀM — ghi chỗ đổi thiết kế)
 
 ### 3.1 Agent phụ GHI được (đợt 3)

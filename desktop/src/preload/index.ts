@@ -417,8 +417,8 @@ const bridge: DesktopBridge = {
     taoGhiChu: (cuocId: string) =>
       ipcRenderer.invoke('agent:taoGhiChu', { cuocId }) as Promise<{ ok: boolean; daCo: boolean }>,
     reset: (cuocId: string) => ipcRenderer.invoke('agent:reset', { cuocId }) as Promise<void>,
-    traLoiXinPhep: (cuocId: string, id: string, quyetDinh: AgentQuyetDinh) =>
-      ipcRenderer.invoke('agent:traLoiXinPhep', { cuocId, id, quyetDinh }) as Promise<void>,
+    traLoiXinPhep: (cuocId: string, id: string, quyetDinh: AgentQuyetDinh, dung?: boolean) =>
+      ipcRenderer.invoke('agent:traLoiXinPhep', { cuocId, id, quyetDinh, ...(dung ? { dung: true } : {}) }) as Promise<void>,
     traLoiHoi: (cuocId: string, id: string, traLoi: Array<{ chon: string[]; khac?: string }> | null) =>
       ipcRenderer.invoke('agent:traLoiHoi', { cuocId, id, traLoi }) as Promise<boolean>,
     huyCho: (cuocId: string, id: string, cach?: 'boCho' | 'xongNgay') =>

@@ -33,6 +33,10 @@ const traMcp = (tenGoc: string, args: Record<string, unknown>) => ({
 vi.mock('./mcp', async (goc) => ({
   ...(await goc<typeof import('./mcp')>()),
   toolMcpHienCo: () => TOOL,
+  /* Đợt 6: vòng lặp gửi bộ tool theo cuộc + mục lục, tìm tool bằng `timToolMcp` (kể cả tool ở mục lục). */
+  toolGuiChoCuoc: () => TOOL,
+  mucLucChoCuoc: () => [],
+  timToolMcp: (t: string) => TOOL.find((x) => x.ten === t),
   laToolMcp: (t: string) => t.startsWith('mcp__'),
   laCtworkTinCay: (sv: string) => sv === 'ctwork',
   trangThaiServer: () => [{ ten: 'ctwork', ok: true, soTool: 3 }],

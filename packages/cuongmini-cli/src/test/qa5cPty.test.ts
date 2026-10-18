@@ -90,7 +90,7 @@ before(async () => {
 });
 after(() => { may?.close(); if (tam) rmSync(tam, { recursive: true, force: true }); });
 
-async function chay(phim: Array<[number, string]>, giayChay: number): Promise<{ su_kien: unknown[]; cols: number; rows: number }> {
+async function chay(phim: Array<[number, string] | [number, string, string]>, giayChay: number): Promise<{ su_kien: unknown[]; cols: number; rows: number }> {
   const home = path.join(tam, 'home');
   const duAn = path.join(tam, 'LabFlow-AI');
   mkdirSync(path.join(home, '.cuongmini'), { recursive: true });
@@ -103,7 +103,7 @@ async function chay(phim: Array<[number, string]>, giayChay: number): Promise<{ 
     cmd: [process.execPath, dist], cwd: duAn, cols: 120, rows: 40, duration: giayChay, out: ra,
     env: {
       HOME: home, CUONGMINI_HOME: path.join(home, '.cuongmini'), CUONGTHAI_API_ORIGIN: `http://127.0.0.1:${cong}`,
-      CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1', CUONGMINI_CTW_TRE_MS: '2500', CUONGMINI_KHONG_DAT_TIEU_DE: '1',
+      CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_TIN_THU_MUC: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1', CUONGMINI_CTW_TRE_MS: '2500', CUONGMINI_KHONG_DAT_TIEU_DE: '1',
       TERM: 'xterm-256color', LANG: 'en_US.UTF-8', TERM_PROGRAM: 'iTerm.app', TERM_PROGRAM_VERSION: '3.5.10',
     },
     bo_env: ['CI', 'GITHUB_ACTIONS', 'CONTINUOUS_INTEGRATION', 'BUILD_NUMBER', 'BUILD_ID', 'RUN_ID', 'TF_BUILD', 'GITLAB_CI', 'CTWORK_TOKEN', 'CUONGMINI_LOI', 'LC_ALL', 'LC_MESSAGES'],
@@ -119,15 +119,15 @@ async function chay(phim: Array<[number, string]>, giayChay: number): Promise<{ 
 test('PTY lõi thật: thẻ tự bật không cướp Enter khi đang gõ · token chỉ đọc ⇒ thẻ nâng quyền, không gọi tool ghi · chân trang giữ context %', { skip: boQua, timeout: 150_000 }, async () => {
   const { phatLai } = await import(path.join(goc, 'thu/phatLai.mjs')) as { phatLai: (g: unknown, t?: number) => Promise<{ manHinh: string[] }> };
   const g = await chay([
-    [2.0, 'hello'], // gõ ngay lúc mở — thẻ kết nối (hẹn 2,5 s) KHÔNG được bật giữa chừng
+    [2.0, 'hello', 'Hỏi hoặc giao việc|Ask or give a task'], // gõ ngay lúc mở — thẻ kết nối (hẹn 2,5 s) KHÔNG được bật giữa chừng
     [3.0, '\r'], // Enter của câu hỏi ⇒ GỬI câu hỏi, không chọn gì trên thẻ nào
-    [10.5, '1'], // "Connect CT Work?" (hiện khi tay rời phím) ⇒ Yes — read only
-    [13.5, '1'], // "Bind this folder to LF?" ⇒ Yes
-    [16.0, '/ctwork'], [16.4, '\r'],
-    [18.0, '5'], // Log work… ⇒ token chỉ đọc
-    [21.5, '\x1b'],
+    [10.5, '1', 'Connect CT Work\\?'], // "Connect CT Work?" (hiện khi tay rời phím) ⇒ Yes — read only
+    [13.5, '1', 'Bind this folder'], // "Bind this folder to LF?" ⇒ Yes
+    [16.0, '/ctwork', '⬡ LF'], [16.4, '\r'],
+    [18.0, '5', 'Log work'], // Log work… ⇒ token chỉ đọc
+    [21.5, '\x1b', 'read only'],
     [22.5, 'hai lenh'], [22.9, '\r'],
-    [25.0, '1'], [25.15, '1'], // bấm ĐÚP: phím thứ hai KHÔNG được duyệt thẻ "echo hai" vừa hiện
+    [25.0, '1', '\\$ echo'], [25.15, '1'], // bấm ĐÚP: phím thứ hai KHÔNG được duyệt thẻ "echo hai" vừa hiện
   ], 28);
   const man = async (t: number) => (await phatLai(g, t)).manHinh;
   const co = (m: string[], s: string | RegExp) => m.some((d) => (typeof s === 'string' ? d.includes(s) : s.test(d)));

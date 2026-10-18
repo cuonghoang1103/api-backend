@@ -14,6 +14,8 @@
 export interface MucChon { nhan: string; giaTri: string; mo?: string; tat?: boolean; /** Số hiện bên trái (mặc định thứ tự 1–9). "0" = Thoát. */ so?: string }
 export interface TheChonCtw {
   tieuDe: string; moTa?: string;
+  /** Đợt 6: danh sách dài (mọi dự án) ⇒ cho gõ để lọc (CLI: ô lọc; desktop/VS Code: lọc khi gõ). */
+  loc?: boolean;
   /** Khối nội dung markdown (thẻ, bảng sprint, xem trước) hiện TRÊN các lựa chọn. */
   than?: string;
   ds: MucChon[];
@@ -36,16 +38,24 @@ export interface GiaoDienCtw {
 
 /** Kết quả `agent:ctworkHe` (cùng hình `AgentCtworkHeRa` của shared/ipc — chép lỏng để CLI/VS Code khỏi kéo zod). */
 export interface RaCtw {
-  ok: boolean; loi?: string; md?: string; hoi?: 'ketNoi' | 'capLai' | 'ganDuAn' | null;
+  ok: boolean; loi?: string; md?: string; hoi?: 'ketNoi' | 'capLai' | 'ganDuAn' | 'chonDuAn' | null;
   doan?: { key: string; projectId: number | null; workspaceId: number | null; workspace: string | null } | null;
   gan?: { key: string; projectId: number | null; workspaceId: number | null; ref?: string; ten?: string | null; workspace?: string | null } | null;
   ds?: Array<{ key: string; ten: string; id: number | null; workspaceId: number | null; workspace: string | null; vaiTro: string | null; soMo: number | null }>;
-  dsThe?: Array<{ key: string; title: string; status: string | null; dueDate: string | null }>;
+  dsThe?: Array<{ key: string; title: string; status: string | null; dueDate: string | null; blocked?: boolean }>;
   dong?: DongCtw | null;
   duong?: string; goiYGitignore?: string | null;
   key?: string; tieuDe?: string; trangThai?: string | null; chuyenDuoc?: string[];
   nhanh?: string; nhanhCo?: boolean; nhanhNay?: string | null; den?: string | null; daDangLam?: boolean; chiDoc?: boolean; noiDung?: string; bat?: boolean;
+  /* ── Đợt 6 — dẫn đường ── */
+  boQua?: boolean; truoc?: string | null;
+  goiY?: GoiYCtw[];
+  viec?: string; nhapGoiY?: string; phuThuoc?: string[]; chan?: string[];
+  tin?: string[]; vai?: string | null; tinNhac?: string | null;
+  mau?: Array<{ ten: string; tool: string; cauHoi: string }>;
+  laKho?: boolean; theoPhien?: boolean; nguon?: string; laAgents?: boolean;
 }
+export interface GoiYCtw { id: string; loai: string; nhan: string; mo: string; den?: string; ghi: boolean; tool?: string }
 export interface DongCtw {
   key: string; projectId: number | null; ten: string | null; nhanh: string | null; daNoi: boolean; loi: string | null;
   sprint: { ten: string; conNgay: number | null; laFocus: boolean; tong: number } | null;
@@ -114,8 +124,12 @@ export async function hoiCtworkMotLan(g: GiaoDienCtw): Promise<boolean> {
       khiChon: async (v) => {
         await he(g, 'daHoi', { loai: 'ketNoi' });
         if (v === 'khong') return;
-        await ketNoi(g, v === 'ghi' ? 'ghi' : 'doc');
-        await hoiCtworkMotLan(g);
+        if (!(await ketNoi(g, v === 'ghi' ? 'ghi' : 'doc'))) return;
+        /* Đợt 6: nối xong mà thư mục chưa gắn ⇒ hỏi gắn (đoán từ AGENTS.md) hoặc liệt kê MỌI dự án để chọn. */
+        if (!(await hoiCtworkMotLan(g))) {
+          const d = await he(g, 'docGan');
+          if (!d.gan) await chonDuAn(g);
+        }
       },
       khiHuy: () => { void he(g, 'daHoi', { loai: 'ketNoi' }); },
     });
@@ -135,6 +149,12 @@ export async function hoiCtworkMotLan(g: GiaoDienCtw): Promise<boolean> {
     });
     return true;
   }
+  if (r.hoi === 'chonDuAn') {
+    /* Đợt 6: đã nối, thư mục chưa gắn, AGENTS.md không nói dự án nào ⇒ liệt kê MỌI dự án (không gian · tên · vai). */
+    await he(g, 'daHoi', { loai: 'ganDuAn' });
+    await chonDuAn(g, { lanDau: true });
+    return true;
+  }
   if (r.hoi === 'ganDuAn' && r.doan) {
     const d = r.doan;
     g.chon({
@@ -152,6 +172,7 @@ export async function hoiCtworkMotLan(g: GiaoDienCtw): Promise<boolean> {
         if (v !== 'gan') return;
         const ds = await he(g, 'dsDuAn');
         const p = ds.ds?.find((x) => (d.projectId && x.id === d.projectId) || x.key.split('/').pop() === d.key);
+        /* Đoán từ AGENTS.md + người dùng xác nhận ⇒ gắn ngay (quyền theo token; đổi ở `/ctwork du-an`). */
         await gan(g, p ?? { key: d.key, ten: '', id: d.projectId, workspaceId: d.workspaceId, workspace: d.workspace, vaiTro: null, soMo: null });
       },
       khiHuy: () => { void he(g, 'daHoi', { loai: 'ganDuAn' }); },
@@ -174,38 +195,94 @@ async function ketNoi(g: GiaoDienCtw, quyen: 'doc' | 'ghi'): Promise<boolean> {
   return false;
 }
 
-async function gan(g: GiaoDienCtw, p: NonNullable<RaCtw['ds']>[number]): Promise<void> {
-  const L = Lg(g);
-  const r = await he(g, 'gan', { duAn: { key: p.key, id: p.id, workspaceId: p.workspaceId, ...(p.ten ? { ten: p.ten } : {}), workspace: p.workspace } });
-  if (!r.ok) { g.thongBao(`⚠ ${r.loi ?? '?'}`, 'loi'); return; }
-  const key = r.gan?.key ?? p.key;
-  g.traLoi(`${L(`✓ Đã gắn thư mục với dự án **${key}**${p.id ? ` (id ${p.id})` : ''}${p.ten ? ` — ${p.ten}` : ''}.`, `✓ Bound this folder to project **${key}**${p.id ? ` (id ${p.id})` : ''}${p.ten ? ` — ${p.ten}` : ''}.`)}\n\n${L('Lưu ở', 'Saved in')} \`${r.duong ?? '.cuongmini/ctwork.json'}\`.${r.goiYGitignore ? `\n\n_${r.goiYGitignore}_` : ''}`);
-  g.lamMoiDong?.();
+type DuAnDs = NonNullable<RaCtw['ds']>[number];
+
+/** Vai trong dự án ⇒ chữ người đọc. */
+export function tenVai(vai: string | null | undefined, ngonNgu: 'vi' | 'en'): string {
+  const v: Record<string, [string, string]> = { ADMIN: ['trưởng nhóm', 'lead'], MEMBER: ['thành viên', 'member'], TEACHER: ['giảng viên', 'lecturer'], VIEWER: ['chỉ xem', 'viewer'], CLIENT: ['khách', 'client'] };
+  const x = vai ? v[vai] : undefined;
+  return x ? (ngonNgu === 'en' ? x[1] : x[0]) : vai ?? '';
 }
 
-/** Chọn dự án (`list_projects`) ⇒ gắn thư mục. */
-export async function chonDuAn(g: GiaoDienCtw): Promise<void> {
+async function gan(g: GiaoDienCtw, p: DuAnDs, quyen: 'doc' | 'ghi' = 'ghi', theoPhien = false): Promise<void> {
   const L = Lg(g);
+  const r = await he(g, 'gan', { duAn: { key: p.key, id: p.id, workspaceId: p.workspaceId, ...(p.ten ? { ten: p.ten } : {}), workspace: p.workspace, vaiTro: p.vaiTro }, quyen, ...(theoPhien ? { theoPhien: true } : {}) });
+  if (!r.ok) { g.thongBao(`⚠ ${r.loi ?? '?'}`, 'loi'); return; }
+  const key = r.gan?.key ?? p.key;
+  const noi = r.theoPhien
+    ? L('Gắn **theo phiên** (thư mục này không phải repo git — không ghi file; mở lại CuongMini thì chọn lại).', 'Bound **for this session** (this folder is not a git repo — nothing is written; pick again next time).')
+    : `${L('Lưu ở', 'Saved in')} \`${r.duong ?? '.cuongmini/ctwork.json'}\`.${r.goiYGitignore ? `\n\n_${r.goiYGitignore}_` : ''}`;
+  g.traLoi(`${L(`✓ Đã gắn thư mục với dự án **${key}**${p.id ? ` (id ${p.id})` : ''}${p.ten ? ` — ${p.ten}` : ''} · ${quyen === 'doc' ? 'chỉ đọc' : 'đọc + ghi'}${p.vaiTro ? ` · vai: ${tenVai(p.vaiTro, g.ngonNgu)}` : ''}.`, `✓ Bound this folder to project **${key}**${p.id ? ` (id ${p.id})` : ''}${p.ten ? ` — ${p.ten}` : ''} · ${quyen === 'doc' ? 'read only' : 'read + write'}${p.vaiTro ? ` · role: ${tenVai(p.vaiTro, g.ngonNgu)}` : ''}.`)}\n\n${noi}`);
+  g.lamMoiDong?.();
+  /* Đợt 6 (việc 5): tự đọc hướng dẫn của NHÓM (trang Docs "AGENTS.md — …") ngay — báo nguồn để người dùng biết. */
+  const n = await he(g, 'huongDanNhom');
+  if (n.ok && n.nguon) {
+    g.thongBao(n.laAgents
+      ? L(`📎 Đã đọc hướng dẫn của nhóm: ${n.nguon} — CuongMini làm theo nó (AGENTS.md cục bộ thắng khi trùng).`, `📎 Read the team instructions: ${n.nguon} — CuongMini follows them (a local AGENTS.md wins on overlaps).`)
+      : L(`📎 Nhóm chưa có trang "AGENTS.md" trong Docs — CuongMini tự đọc bối cảnh (${n.nguon}).`, `📎 The team has no "AGENTS.md" Docs page — CuongMini read the project context instead (${n.nguon}).`), 'info');
+  }
+  await homNay(g, { tuDong: true });
+}
+
+/** Đợt 6 (việc 4): chọn QUYỀN cho lần gắn (đọc + ghi / chỉ đọc); ghi mà token đang chỉ đọc ⇒ nối lại đọc + ghi trước. */
+async function chonQuyen(g: GiaoDienCtw, p: DuAnDs): Promise<void> {
+  const L = Lg(g);
+  const t = await g.goi<{ coGhi?: boolean | null; bienTay?: boolean }>('agent:ctwork', { viec: 'trangThai' }).catch(() => null);
+  const docVai = p.vaiTro === 'VIEWER' || p.vaiTro === 'CLIENT';
+  g.chon({
+    tieuDe: L(`Quyền của CuongMini với ${p.key}${p.ten ? ` — ${p.ten}` : ''}`, `CuongMini's access to ${p.key}${p.ten ? ` — ${p.ten}` : ''}`),
+    moTa: [p.workspace ? `${L('Không gian', 'Workspace')}: ${p.workspace}` : '', p.vaiTro ? `${L('Vai của bạn', 'Your role')}: ${tenVai(p.vaiTro, g.ngonNgu)}` : ''].filter(Boolean).join(' · ') || L('Mỗi lần ghi vẫn hỏi duyệt.', 'Every write still asks.'),
+    ds: [
+      { nhan: L('Đọc + ghi', 'Read + write'), giaTri: 'ghi', mo: docVai ? L('vai của bạn chỉ xem', 'your role is view-only') : t?.coGhi === false && !t.bienTay ? L('sẽ nối lại token đọc + ghi · mỗi lần ghi vẫn hỏi', 'reconnects with a read + write token · every write still asks') : L('mỗi lần ghi vẫn hỏi duyệt', 'every write still asks'), ...(docVai ? { tat: true } : {}) },
+      { nhan: L('Chỉ đọc', 'Read only'), giaTri: 'doc', mo: L('CuongMini không ghi gì vào dự án này', 'CuongMini never writes to this project') },
+      { nhan: L('Chỉ phiên này (không ghi file)', 'This session only (no file)'), giaTri: 'phien', mo: L('đọc + ghi, quên khi đóng', 'read + write, forgotten on exit') },
+      { nhan: L('Huỷ', 'Cancel'), giaTri: 'huy', so: '0' },
+    ],
+    khiChon: async (v) => {
+      if (v === 'huy') return;
+      const quyen: 'doc' | 'ghi' = v === 'doc' ? 'doc' : 'ghi';
+      if (quyen === 'ghi' && t?.coGhi === false && !t.bienTay && !(await ketNoi(g, 'ghi'))) return;
+      await gan(g, p, quyen, v === 'phien');
+    },
+  });
+}
+
+/**
+ * Chọn dự án (`list_projects`) ⇒ chọn quyền ⇒ gắn thư mục. Đợt 6 (việc 4): MỌI dự án của người dùng (không gian · tên ·
+ * vai · số thẻ mở), gõ để lọc khi nhiều; chưa nối CT Work ⇒ nối trước (phiên đăng nhập).
+ */
+export async function chonDuAn(g: GiaoDienCtw, o: { lanDau?: boolean } = {}): Promise<void> {
+  const L = Lg(g);
+  const t0 = await g.goi<{ server?: { ok: boolean } | null }>('agent:ctwork', { viec: 'trangThai' }).catch(() => null);
+  if (!t0?.server?.ok && !(await ketNoi(g, 'doc'))) return;
   const r = await he(g, 'dsDuAn');
   if (!r.ok) { g.traLoi(`⚠ ${r.loi ?? '?'}`); return; }
   const ds = r.ds ?? [];
-  if (!ds.length) { g.traLoi(L('Token này không thấy dự án CT Work nào.', 'This token sees no CT Work project.')); return; }
+  if (!ds.length) { g.traLoi(L('Token này không thấy dự án CT Work nào — tạo hoặc nhận lời mời ở cuongthai.com/work.', 'This token sees no CT Work project — create one or accept an invite at cuongthai.com/work.')); return; }
   const cu = await he(g, 'docGan');
   g.chon({
-    tieuDe: L('Chọn dự án CT Work cho thư mục này', 'Pick the CT Work project for this folder'),
-    ...(cu.gan ? { moTa: L(`Đang gắn: ${cu.gan.key}${cu.gan.projectId ? ` (id ${cu.gan.projectId})` : ''}`, `Currently bound: ${cu.gan.key}${cu.gan.projectId ? ` (id ${cu.gan.projectId})` : ''}`) } : {}),
+    tieuDe: o.lanDau ? L('CT Work đã nối — thư mục này làm cho dự án nào?', 'CT Work is connected — which project is this folder for?') : L('Chọn dự án CT Work cho thư mục này', 'Pick the CT Work project for this folder'),
+    moTa: cu.gan
+      ? L(`Đang gắn: ${cu.gan.key}${cu.gan.projectId ? ` (id ${cu.gan.projectId})` : ''} · ${ds.length} dự án`, `Currently bound: ${cu.gan.key}${cu.gan.projectId ? ` (id ${cu.gan.projectId})` : ''} · ${ds.length} projects`)
+      : L(`${ds.length} dự án của bạn (không gian · vai · thẻ mở). Chọn rồi chọn quyền.`, `${ds.length} of your projects (workspace · role · open issues). Pick one, then the access level.`),
+    ...(ds.length > 9 ? { loc: true } : {}),
     ds: [
-      ...ds.slice(0, 30).map((p) => ({ nhan: `${p.key} — ${p.ten}`, giaTri: p.key, mo: [p.workspace, p.soMo != null ? L(`${p.soMo} thẻ mở`, `${p.soMo} open`) : ''].filter(Boolean).join(' · ') })),
+      ...ds.map((p) => ({ nhan: `${p.key} — ${p.ten}`, giaTri: p.key, mo: [p.workspace, p.vaiTro ? tenVai(p.vaiTro, g.ngonNgu) : '', p.soMo != null ? L(`${p.soMo} thẻ mở`, `${p.soMo} open`) : ''].filter(Boolean).join(' · ') })),
       ...(cu.gan ? [{ nhan: L('Bỏ gắn thư mục này', 'Unbind this folder'), giaTri: '__bo' }] : []),
-      { nhan: L('Thoát', 'Exit'), giaTri: '__thoat', so: '0', mo: 'Esc' },
+      { nhan: o.lanDau ? L('Để sau', 'Later') : L('Thoát', 'Exit'), giaTri: '__thoat', so: '0', mo: 'Esc' },
     ],
     khiChon: async (v) => {
       if (v === '__bo') { await he(g, 'boGan'); g.thongBao(L('Đã bỏ gắn dự án CT Work.', 'Unbound the CT Work project.'), 'ok'); g.lamMoiDong?.(); return; }
       if (v === '__thoat') return;
       const p = ds.find((x) => x.key === v);
-      if (p) await gan(g, p);
+      if (p) await chonQuyen(g, p);
     },
   });
+}
+
+/** Đợt 6: `/mcp` ⇒ "CT Work — kết nối & chọn dự án": chưa nối ⇒ nối bằng phiên đăng nhập ⇒ liệt kê mọi dự án. */
+export async function moCtworkTuMcp(g: GiaoDienCtw): Promise<void> {
+  await chonDuAn(g);
 }
 
 // ─── Chọn thẻ (việc của tôi) ─────────────────────────────────────
@@ -237,17 +314,21 @@ async function moThe(g: GiaoDienCtw, key: string): Promise<void> {
     tieuDe: L('Thẻ CT Work', 'CT Work issue'),
     than: r.md ?? '',
     ds: [
+      { nhan: L('Hướng dẫn làm thẻ này', 'Guide me through it'), giaTri: 'hd', mo: L('đọc gì · các bước · xong khi · phụ thuộc', 'read · steps · done when · dependencies') },
       { nhan: L('Bắt đầu làm thẻ này', 'Start working on it'), giaTri: 'bd', mo: L('nhánh + In Progress', 'branch + In Progress') },
       { nhan: L('Ghi giờ…', 'Log time…'), giaTri: 'gio' },
       { nhan: L('Bình luận bằng chứng', 'Post evidence comment'), giaTri: 'bl', mo: L('soạn từ git', 'drafted from git') },
+      { nhan: L('Xong việc — bước tiếp', 'Done — next steps'), giaTri: 'xong', mo: L('chuyển trạng thái đúng luật · review', 'status move by the rules · review') },
       { nhan: L('Hỏi CuongMini về thẻ này', 'Ask CuongMini about it'), giaTri: 'hoi' },
       { nhan: L('Đóng', 'Close'), giaTri: 'thoat', so: '0' },
     ],
     khiChon: async (v) => {
       const k = r.key ?? key;
-      if (v === 'bd') await batDau(g, k);
+      if (v === 'hd') await huongDanThe(g, k);
+      else if (v === 'bd') await batDau(g, k);
       else if (v === 'gio') g.datNhap(`/ctwork gio ${k} `);
       else if (v === 'bl') await binhLuan(g, k);
+      else if (v === 'xong') await xongViec(g, k);
       else if (v === 'hoi') g.datNhap(`${k} `);
     },
   });
@@ -381,40 +462,254 @@ async function xem(g: GiaoDienCtw, viec: 'sprint' | 'viec' | 'hop'): Promise<voi
   g.traLoi(r.ok ? (r.md ?? '') : `⚠ ${r.loi ?? '?'}`);
 }
 
-/** Menu `/ctwork` đánh số (1–9, 0 Thoát) — đã kết nối. */
+// ─── Đợt 6: DẪN ĐƯỜNG — hôm nay · hướng dẫn thẻ · xong việc · nhóm · mẫu FPT ─
+
+/** "Hôm nay làm gì": việc của tôi + nên làm cái nào trước. `tuDong` ⇒ lõi chỉ hiện MỘT lần mỗi ngày mỗi thư mục. */
+export async function homNay(g: GiaoDienCtw, o: { tuDong?: boolean } = {}): Promise<boolean> {
+  const L = Lg(g);
+  const r = await he(g, 'homNay', o.tuDong ? { tuDong: true } : {});
+  if (r.boQua || (r.ok && !r.md)) return false;
+  if (!r.ok) { if (!o.tuDong) g.traLoi(`⚠ ${r.loi ?? '?'}`); return false; }
+  const dau = r.truoc;
+  /* Tự hiện lúc mở (đầu buổi): KHỐI CHỮ, không phải thẻ chặn phím — người dùng vừa mở CuongMini để gõ. Nút ở `/ctwork`. */
+  if (o.tuDong) {
+    g.traLoi(`${r.md ?? ''}${dau ? `\n\n${L(`→ \`/ctwork huong-dan ${dau}\` (đọc gì · các bước · phụ thuộc) · \`/ctwork bat-dau ${dau}\` · \`/ctwork\` mục 2`, `→ \`/ctwork guide ${dau}\` (read · steps · dependencies) · \`/ctwork start ${dau}\` · \`/ctwork\` item 2`)}` : ''}`);
+    return true;
+  }
+  g.chon({
+    tieuDe: L('CT Work · hôm nay', 'CT Work · today'),
+    than: r.md ?? '',
+    ds: [
+      ...(dau ? [
+        { nhan: L(`Hướng dẫn làm ${dau}`, `Guide me through ${dau}`), giaTri: `hd:${dau}`, mo: L('đọc gì · các bước · xong khi · hỏi ai', 'what to read · steps · done when · who to ask') },
+        { nhan: L(`Bắt đầu ${dau}`, `Start ${dau}`), giaTri: `bd:${dau}`, mo: L('nhánh + In Progress, có duyệt', 'branch + In Progress, approved first') },
+      ] : []),
+      { nhan: L('Mở thẻ khác…', 'Open another issue…'), giaTri: 'the' },
+      { nhan: L('Để sau', 'Later'), giaTri: 'sau', so: '0', mo: L('/ctwork để mở lại', '/ctwork to reopen') },
+    ],
+    khiChon: async (v) => {
+      if (v.startsWith('hd:')) await huongDanThe(g, v.slice(3));
+      else if (v.startsWith('bd:')) await batDau(g, v.slice(3));
+      else if (v === 'the') await chonThe(g, L('Mở thẻ nào?', 'Open which issue?'), (k) => moThe(g, k), '/issue ');
+    },
+  });
+  return true;
+}
+
+/** Hướng dẫn MỘT thẻ: đọc gì (link), các bước, xong khi, hỏi ai + phụ thuộc (ai phải xong gì trước, nhánh nào). */
+export async function huongDanThe(g: GiaoDienCtw, key?: string): Promise<void> {
+  const L = Lg(g);
+  g.thongBao(L(`Đang đọc ${key ?? 'thẻ của nhánh'}…`, `Reading ${key ?? 'the branch issue'}…`));
+  const r = await he(g, 'huongDan', key ? { key } : {});
+  if (!r.ok || !r.key) { g.traLoi(`⚠ ${r.loi ?? '?'}`); return; }
+  const k = r.key;
+  const biChan = (r.chan ?? []).length > 0;
+  g.chon({
+    tieuDe: L(`Hướng dẫn · ${k}`, `Guide · ${k}`),
+    than: r.md ?? '',
+    ds: [
+      { nhan: biChan ? L('Vẫn bắt đầu (đang bị chặn)', 'Start anyway (blocked)') : L('Bắt đầu làm thẻ này', 'Start working on it'), giaTri: 'bd', mo: L('nhánh + In Progress', 'branch + In Progress') },
+      { nhan: L('Làm cùng CuongMini', 'Work on it with CuongMini'), giaTri: 'cung', mo: L('đưa thẻ vào ô nhập', 'puts the issue in the input') },
+      ...(biChan ? [{ nhan: L('Nhắn người làm thẻ chặn…', 'Message the blocker\'s owner…'), giaTri: 'nhan', mo: L('soạn tin, xem trước rồi gửi', 'draft, preview, then send') }] : []),
+      { nhan: L('Hỏi giảng viên/trưởng nhóm (Q&A)…', 'Ask the lecturer/lead (Q&A)…'), giaTri: 'qna' },
+      { nhan: L('Đóng', 'Close'), giaTri: 'thoat', so: '0' },
+    ],
+    khiChon: async (v) => {
+      if (v === 'bd') await batDau(g, k);
+      else if (v === 'cung') g.datNhap(L(`${k} — hướng dẫn mình làm thẻ này từng bước (đọc đủ trước, không viết hộ nếu AGENTS.md bảo mentor).`, `${k} — walk me through this issue step by step (read everything first; don't write it for me if AGENTS.md says mentor).`));
+      else if (v === 'nhan') g.datNhap(L(`Soạn tin nhắn ngắn hỏi người làm ${(r.chan ?? []).join(', ')} khi nào xong (để mình xem trước rồi gửi vào chat nhóm).`, `Draft a short message asking the owner of ${(r.chan ?? []).join(', ')} when it will be done (I'll preview before sending to team chat).`));
+      else if (v === 'qna') g.datNhap(`/ctwork hoi ${k}: `);
+    },
+  });
+}
+
+/**
+ * Làm xong ⇒ gợi ý thao tác ĐÚNG LUẬT dự án (chuyển trạng thái được phép + Done rules, bình luận bằng chứng, ghi giờ, xin
+ * review, báo nhóm…). `tuDong` (sau mỗi lượt): lõi chỉ trả khi có thay đổi git mới trên nhánh của thẻ, không nhắc lại.
+ * Mọi thao tác GHI đi qua thẻ XEM TRƯỚC rồi mới gọi lõi.
+ */
+export async function xongViec(g: GiaoDienCtw, key?: string, o: { tuDong?: boolean } = {}): Promise<boolean> {
+  const L = Lg(g);
+  const r = await he(g, 'goiYSau', { ...(key ? { key } : {}), ...(o.tuDong ? { tuDong: true } : {}) });
+  if (r.boQua) return false;
+  if (!r.ok || !r.key) { if (!o.tuDong) g.traLoi(`⚠ ${r.loi ?? '?'}`); return false; }
+  const k = r.key;
+  const ds = r.goiY ?? [];
+  if (!ds.length) { if (!o.tuDong) g.traLoi(r.md ?? ''); return false; }
+  g.chon({
+    tieuDe: o.tuDong ? L(`Xong việc ở ${k}? Bước tiếp theo đúng luật dự án:`, `Done with ${k}? Next steps by the project rules:`) : L(`Xong việc · ${k}`, `Done · ${k}`),
+    than: r.md ?? '',
+    ds: [
+      ...ds.slice(0, 8).map((x) => ({ nhan: x.nhan, giaTri: x.id, mo: `${x.mo}${x.ghi ? L(' · xem trước', ' · preview') : ''}` })),
+      { nhan: L('Để sau', 'Later'), giaTri: '__sau', so: '0', mo: L('/ctwork xong để mở lại', '/ctwork done to reopen') },
+    ],
+    khiChon: async (v) => { if (v !== '__sau') await lamMotGoiY(g, k, v); },
+  });
+  return true;
+}
+
+async function lamMotGoiY(g: GiaoDienCtw, key: string, id: string): Promise<void> {
+  const L = Lg(g);
+  const x = await he(g, 'xemTruocGoiY', { key, id });
+  if (!x.ok) { g.traLoi(`⚠ ${x.loi ?? '?'}`); return; }
+  if (x.nhapGoiY) { g.datNhap(x.nhapGoiY); g.thongBao(L('Đã đưa vào ô nhập — sửa rồi Enter.', 'Put in the input — edit, then press Enter.')); return; }
+  if (id === 'binhLuan') { xacNhanGui(g, key, x.noiDung ?? '', L('Bình luận này được soạn từ git của nhánh.', 'This comment was drafted from the branch\'s git history.')); return; }
+  if (await chanChiDoc(g)) return;
+  const noiDung = x.noiDung ?? '';
+  g.chon({
+    tieuDe: L(`Ghi lên CT Work · ${key}?`, `Write to CT Work · ${key}?`),
+    ...(x.viec ? { moTa: x.viec } : {}),
+    ...(noiDung ? { than: noiDung } : {}),
+    ds: [
+      { nhan: L('Đồng ý', 'Do it'), giaTri: 'ok' },
+      ...(noiDung ? [{ nhan: L('Sửa trước khi gửi', 'Edit first'), giaTri: 'sua', mo: L('đưa vào ô nhập', 'puts it in the input') }] : []),
+      { nhan: L('Huỷ', 'Cancel'), giaTri: 'huy', so: '0' },
+    ],
+    khiChon: async (v) => {
+      if (v === 'sua') { g.datNhap(id === 'chat' ? `/ctwork nhan ${noiDung}` : `/ctwork gui ${key} ${noiDung}`); return; }
+      if (v !== 'ok') return;
+      const kq = await he(g, 'lamGoiY', { key, id, noiDung });
+      g.traLoi(kq.ok ? (kq.md ?? '✓') : `⚠ ${kq.loi ?? '?'}`);
+      g.lamMoiDong?.();
+    },
+  });
+}
+
+/** Thẻ "Nhóm": tổng quan tiến độ (trưởng nhóm) / nhóm của giảng viên · nhắc người trễ · Q&A · chat · họp. */
+async function nhom(g: GiaoDienCtw): Promise<void> {
+  const L = Lg(g);
+  g.thongBao(L('Đang đọc tiến độ nhóm…', 'Reading team progress…'));
+  const r = await he(g, 'tongQuan');
+  if (!r.ok) { g.traLoi(`⚠ ${r.loi ?? '?'}`); return; }
+  g.chon({
+    tieuDe: r.vai === 'TEACHER' ? L('Nhóm · góc giảng viên', 'Group · lecturer view') : r.vai === 'ADMIN' ? L('Nhóm · góc trưởng nhóm', 'Team · lead view') : L('Nhóm', 'Team'),
+    than: r.md ?? '',
+    ds: [
+      ...(r.tinNhac && r.vai === 'ADMIN' ? [{ nhan: L('Nhắc người trễ hạn…', 'Nudge overdue members…'), giaTri: 'nhac', mo: L('soạn tin, xem trước rồi gửi #general', 'draft, preview, then post to #general') }] : []),
+      ...(r.vai === 'ADMIN' ? [{ nhan: L('Gợi ý chia việc / lập sprint', 'Suggest assignments / sprint plan'), giaTri: 'chia', mo: L('CuongMini đề xuất, bạn quyết', 'CuongMini proposes, you decide') }] : []),
+      { nhan: L('Hỏi Q&A…', 'Ask in Q&A…'), giaTri: 'qna' },
+      { nhan: L('Nhắn kênh nhóm…', 'Message the team…'), giaTri: 'chat' },
+      { nhan: L('Họp', 'Meetings'), giaTri: 'hop', mo: 'meeting_list' },
+      { nhan: L('Đóng', 'Close'), giaTri: 'thoat', so: '0' },
+    ],
+    khiChon: async (v) => {
+      if (v === 'nhac' && r.tinNhac) xacNhanNhom(g, r.tinNhac);
+      else if (v === 'chia') g.datNhap(L('Xem sprint + việc từng người, gợi ý chia lại việc và thẻ nên đưa vào sprint tới (chỉ đề xuất — mình quyết, đừng ghi gì).', 'Look at the sprint and everyone\'s work, suggest how to rebalance and what to pull into the next sprint (proposal only — I decide, write nothing).'));
+      else if (v === 'qna') g.datNhap('/ctwork hoi ');
+      else if (v === 'chat') g.datNhap('/ctwork nhan ');
+      else if (v === 'hop') await xem(g, 'hop');
+    },
+  });
+}
+
+function xacNhanNhom(g: GiaoDienCtw, noiDung: string): void {
+  const L = Lg(g);
+  g.chon({
+    tieuDe: L('Gửi vào kênh #general?', 'Post to #general?'),
+    than: noiDung,
+    ds: [{ nhan: L('Gửi', 'Post it'), giaTri: 'gui' }, { nhan: L('Sửa trước khi gửi', 'Edit first'), giaTri: 'sua' }, { nhan: L('Huỷ', 'Cancel'), giaTri: 'huy', so: '0' }],
+    khiChon: async (v) => {
+      if (v === 'sua') { g.datNhap(`/ctwork nhan ${noiDung}`); return; }
+      if (v !== 'gui') return;
+      if (await chanChiDoc(g)) return;
+      const x = await he(g, 'guiTinNhom', { noiDung });
+      g.traLoi(x.ok ? (x.md ?? '✓') : `⚠ ${x.loi ?? '?'}`);
+    },
+  });
+}
+
+function xacNhanQna(g: GiaoDienCtw, cauHoi: string): void {
+  const L = Lg(g);
+  g.chon({
+    tieuDe: L('Gửi câu hỏi vào sổ Q&A của dự án?', 'Post this question to the project Q&A log?'),
+    than: cauHoi,
+    ds: [{ nhan: L('Gửi', 'Post it'), giaTri: 'gui' }, { nhan: L('Huỷ', 'Cancel'), giaTri: 'huy', so: '0' }],
+    khiChon: async (v) => {
+      if (v !== 'gui') return;
+      if (await chanChiDoc(g)) return;
+      const x = await he(g, 'hoiQna', { noiDung: cauHoi });
+      g.traLoi(x.ok ? (x.md ?? '✓') : `⚠ ${x.loi ?? '?'}`);
+    },
+  });
+}
+
+/** Thẻ "Báo cáo & mẫu FPT": báo cáo tuần + mẫu nên làm lúc này (CuongMini điền, bạn duyệt) + họp. */
+async function baoCaoMau(g: GiaoDienCtw): Promise<void> {
+  const L = Lg(g);
+  const r = await he(g, 'mauFpt');
+  const mau = r.ok ? (r.mau ?? []) : [];
+  g.chon({
+    tieuDe: L('Báo cáo & mẫu FPT', 'Reports & FPT templates'),
+    ...(r.md ? { than: r.md } : {}),
+    ds: [
+      { nhan: L('Báo cáo tuần', 'Weekly report'), giaTri: '__bc', mo: 'weekly_report_generate' },
+      ...mau.filter((m) => m.tool !== 'weekly_report_generate').slice(0, 6).map((m) => ({ nhan: L(`Nhờ CuongMini: ${m.ten}`, `Ask CuongMini: ${m.ten}`), giaTri: m.tool, mo: m.tool })),
+      { nhan: L('Họp', 'Meetings'), giaTri: '__hop', mo: 'meeting_list' },
+      { nhan: L('Đóng', 'Close'), giaTri: '__thoat', so: '0' },
+    ],
+    khiChon: async (v) => {
+      if (v === '__bc') { await baoCao(g); return; }
+      if (v === '__hop') { await xem(g, 'hop'); return; }
+      const m = mau.find((x) => x.tool === v);
+      if (m) g.datNhap(m.cauHoi);
+    },
+  });
+}
+
+/** Một lần gọi lõi sau mỗi lượt: tin theo dõi (≥ 60 s/lần ở lõi) — trả các dòng để giao diện in mờ. */
+export async function kiemTinCtw(g: GiaoDienCtw): Promise<string[]> {
+  const r = await he(g, 'kiemTin');
+  return r.ok ? (r.tin ?? []) : [];
+}
+
+/**
+ * Menu `/ctwork` đánh số (1–9, 0 Thoát) — đã kết nối. Đợt 6: 2 = HÔM NAY (việc của tôi + nên làm gì trước), 6 = XONG VIỆC
+ * (bình luận bằng chứng + chuyển trạng thái đúng luật + ghi giờ + xin review…), 7 = báo cáo & mẫu FPT, 8 = nhóm (tổng quan
+ * trưởng nhóm / giảng viên, Q&A, chat, họp); không số: theo dõi bật/tắt, hỏi cách dùng CT Work, tài nguyên.
+ */
 export async function menuCtwork(g: GiaoDienCtw): Promise<void> {
   const L = Lg(g);
-  const [d, t] = await Promise.all([he(g, 'dong'), g.goi<{ server?: { ok: boolean; soTool: number } | null; quyen?: string | null; bienTay?: boolean; coGhi?: boolean | null }>('agent:ctwork', { viec: 'trangThai' }).catch(() => null)]);
+  const [d, t, td] = await Promise.all([
+    he(g, 'dong'),
+    g.goi<{ server?: { ok: boolean; soTool: number } | null; quyen?: string | null; bienTay?: boolean; coGhi?: boolean | null }>('agent:ctwork', { viec: 'trangThai' }).catch(() => null),
+    he(g, 'theoDoi'),
+  ]);
   const canGhi = t?.coGhi === false ? L('cần quyền ghi — /ctwork ghi', 'needs write access — /ctwork write') : null;
   const dong = veDongCtw(d.dong, g.ngonNgu, 200);
   const quyen = t?.bienTay ? L('token từ biến CTWORK_TOKEN', 'token from CTWORK_TOKEN') : t?.quyen === 'ghi' ? L('đọc + ghi', 'read + write') : L('chỉ đọc', 'read only');
   const coGan = Boolean(d.dong);
+  const tat = coGan ? {} : { tat: true };
   g.chon({
     tieuDe: 'CT Work',
     moTa: `${dong || L('Thư mục này chưa gắn dự án — chọn mục 9.', 'This folder is not bound to a project — pick 9.')}\n${L('Kết nối', 'Connection')}: ${t?.server?.ok ? `✔ ${t.server.soTool} ${L('tool', t.server.soTool === 1 ? 'tool' : 'tools')} · ${quyen}` : L('chưa nối', 'not connected')} · ${L('đổi', 'change')}: /ctwork ${L('ket-noi', 'connect')}`,
     ds: [
-      { nhan: L('Sprint hiện tại', 'Current sprint'), giaTri: 'sprint', mo: L('bảng thẻ theo cột trạng thái', 'board by status column'), ...(coGan ? {} : { tat: true }) },
-      { nhan: L('Việc của tôi', 'My work'), giaTri: 'viec', mo: L('hạn gần lên đầu', 'nearest due first'), ...(coGan ? {} : { tat: true }) },
-      { nhan: L('Mở thẻ…', 'Open an issue…'), giaTri: 'the', mo: `${d.dong?.key ?? 'LF'}-xx`, ...(coGan ? {} : { tat: true }) },
-      { nhan: L('Bắt đầu làm thẻ…', 'Start an issue…'), giaTri: 'batDau', mo: L('nhánh + In Progress, có duyệt', 'branch + In Progress, approved first'), ...(coGan ? {} : { tat: true }) },
-      { nhan: L('Ghi giờ…', 'Log work…'), giaTri: 'gio', mo: canGhi ?? 'log_work', ...(coGan ? {} : { tat: true }) },
-      { nhan: L('Bình luận bằng chứng', 'Evidence comment'), giaTri: 'binhLuan', mo: canGhi ?? L('soạn từ git, xem trước rồi gửi', 'drafted from git, preview first'), ...(coGan ? {} : { tat: true }) },
-      { nhan: L('Báo cáo tuần', 'Weekly report'), giaTri: 'baoCao', ...(canGhi ? { mo: canGhi } : {}), ...(coGan ? {} : { tat: true }) },
-      { nhan: L('Họp', 'Meetings'), giaTri: 'hop', mo: 'meeting_list', ...(coGan ? {} : { tat: true }) },
+      { nhan: L('Sprint hiện tại', 'Current sprint'), giaTri: 'sprint', mo: L('bảng thẻ theo cột trạng thái', 'board by status column'), ...tat },
+      { nhan: L('Hôm nay — việc của tôi', 'Today — my work'), giaTri: 'homNay', mo: L('hạn gần lên đầu · nên làm gì trước', 'nearest due first · what to do first'), ...tat },
+      { nhan: L('Mở thẻ / hướng dẫn…', 'Open / guide an issue…'), giaTri: 'the', mo: `${d.dong?.key ?? 'LF'}-xx · ${L('đọc gì, các bước, phụ thuộc', 'what to read, steps, dependencies')}`, ...tat },
+      { nhan: L('Bắt đầu làm thẻ…', 'Start an issue…'), giaTri: 'batDau', mo: L('nhánh + In Progress, có duyệt', 'branch + In Progress, approved first'), ...tat },
+      { nhan: L('Ghi giờ…', 'Log work…'), giaTri: 'gio', mo: canGhi ?? 'log_work', ...tat },
+      { nhan: L('Xong việc — bước tiếp', 'Done — next steps'), giaTri: 'xong', mo: canGhi ?? L('bằng chứng · chuyển trạng thái · review', 'evidence · status move · review'), ...tat },
+      { nhan: L('Báo cáo & mẫu FPT', 'Reports & FPT templates'), giaTri: 'baoCao', mo: L('báo cáo tuần · 5.1/5.2 · SRS · họp', 'weekly · 5.1/5.2 · SRS · meetings'), ...tat },
+      { nhan: L('Nhóm', 'Team'), giaTri: 'nhom', mo: L('tổng quan · Q&A · chat · họp', 'overview · Q&A · chat · meetings'), ...tat },
       { nhan: L('Chọn dự án', 'Pick project'), giaTri: 'duAn', mo: d.dong ? L(`đang: ${d.dong.key}`, `now: ${d.dong.key}`) : L('gắn thư mục ⇄ dự án', 'bind folder ⇄ project') },
+      /* "0. Thoát" đứng ngay sau 9 (cửa sổ 10 dòng luôn thấy 1–9 + 0); hai mục không số ở dưới, ↑↓ tới. */
       { nhan: L('Thoát', 'Exit'), giaTri: 'thoat', so: '0', mo: 'Esc' },
+      { nhan: L(`Theo dõi: ${td.bat ? 'BẬT' : 'TẮT'}`, `Watch: ${td.bat ? 'ON' : 'OFF'}`), giaTri: 'theoDoi', mo: L('báo nhẹ khi được giao/nhắc/thẻ chặn xong', 'gentle notices: assigned / mentioned / blocker done') },
+      { nhan: L('Hỏi cách dùng CT Work…', 'How do I … in CT Work?'), giaTri: 'cachDung', mo: L('kèm link đúng trang', 'with links to the right page') },
     ],
     khiChon: async (v) => {
       switch (v) {
         case 'sprint': await xem(g, 'sprint'); return;
-        case 'viec': await xem(g, 'viec'); return;
+        case 'homNay': await homNay(g); return;
         case 'the': await chonThe(g, L('Mở thẻ nào?', 'Open which issue?'), (k) => moThe(g, k), '/issue '); return;
         case 'batDau': await chonThe(g, L('Bắt đầu làm thẻ nào?', 'Start which issue?'), (k) => batDau(g, k), '/ctwork bat-dau '); return;
         case 'gio': if (await chanChiDoc(g)) return; await chonThe(g, L('Ghi giờ vào thẻ nào?', 'Log work on which issue?'), (k) => { g.datNhap(`/ctwork gio ${k} `); g.thongBao(L(`Gõ thời gian rồi Enter, vd: 1.5h đọc tài liệu JWT`, `Type the time then Enter, e.g. 1.5h read JWT docs`)); }, '/ctwork gio '); return;
-        case 'binhLuan': await binhLuan(g); return;
-        case 'baoCao': await baoCao(g); return;
-        case 'hop': await xem(g, 'hop'); return;
+        case 'xong': await xongViec(g); return;
+        case 'baoCao': await baoCaoMau(g); return;
+        case 'nhom': await nhom(g); return;
         case 'duAn': await chonDuAn(g); return;
+        case 'theoDoi': { const x = await he(g, 'theoDoi', { bat: !td.bat }); g.thongBao(x.bat ? L('Theo dõi CT Work: BẬT — báo nhẹ mỗi ≥ 60 giây khi có gì mới.', 'CT Work watch: ON — gentle notices at most once a minute.') : L('Theo dõi CT Work: TẮT.', 'CT Work watch: OFF.'), 'ok'); return; }
+        case 'cachDung': g.datNhap(L('Trong CT Work làm thế nào để ', 'In CT Work, how do I ')); return;
         default:
       }
     },
@@ -530,6 +825,36 @@ export async function lenhCtwork(ten: string, thamSo: string, g: GiaoDienCtw): P
       return true;
     }
     case 'bao-cao': case 'baocao': case 'report': case 'weekly': await baoCao(g); return true;
+    /* ── Đợt 6: dẫn đường ── */
+    case 'hom-nay': case 'homnay': case 'today': await homNay(g); return true;
+    case 'huong-dan': case 'huongdan': case 'guide': await huongDanThe(g, sau[0]); return true;
+    case 'xong': case 'done': case 'next': await xongViec(g, sau[0]); return true;
+    case 'nhom': case 'team': await nhom(g); return true;
+    case 'mau': case 'mau-fpt': case 'templates': case 'fpt': await baoCaoMau(g); return true;
+    case 'tai-nguyen': case 'tainguyen': case 'resources': g.datNhap(L('Liệt kê Resources của dự án (project_resources) và chỉ cái nào liên quan việc mình đang làm.', 'List the project Resources (project_resources) and point out the ones relevant to what I am doing.')); return true;
+    case 'theo-doi': case 'theodoi': case 'watch': {
+      const q = ch(sau[0] ?? '');
+      const bat = /^(on|bat|1|yes)$/.test(q) ? true : /^(off|tat|0|no)$/.test(q) ? false : undefined;
+      const r = await he(g, 'theoDoi', bat === undefined ? {} : { bat });
+      g.traLoi(r.bat
+        ? L('👀 **Theo dõi CT Work: BẬT** — báo nhẹ (tối đa mỗi phút một lần, chỉ khi thư mục gắn dự án): được giao thẻ, được nhắc, bình luận mới, thẻ chặn việc của bạn đã xong. Tắt: `/ctwork theo-doi off`.', '👀 **CT Work watch: ON** — gentle notices (at most once a minute, only when a project is bound): assigned, mentioned, new comments, your blocker is done. Turn off: `/ctwork watch off`.')
+        : L('👀 Theo dõi CT Work: **TẮT**. Bật: `/ctwork theo-doi on`.', '👀 CT Work watch: **OFF**. Turn on: `/ctwork watch on`.'));
+      return true;
+    }
+    case 'hoi': case 'ask': case 'qna': {
+      const cau = thamSo.trim().replace(/^\S+\s*/, '');
+      if (!cau) { g.datNhap('/ctwork hoi '); g.thongBao(L('Gõ câu hỏi cho giảng viên/trưởng nhóm rồi Enter (xem trước rồi mới gửi).', 'Type your question for the lecturer/lead, then Enter (preview before posting).')); return true; }
+      if (await chanChiDoc(g)) return true;
+      xacNhanQna(g, cau);
+      return true;
+    }
+    case 'nhan': case 'chat': case 'say': {
+      const cau = thamSo.trim().replace(/^\S+\s*/, '');
+      if (!cau) { g.datNhap('/ctwork nhan '); g.thongBao(L('Gõ tin cho kênh #general rồi Enter (xem trước rồi mới gửi).', 'Type a message for #general, then Enter (preview before posting).')); return true; }
+      if (await chanChiDoc(g)) return true;
+      xacNhanNhom(g, cau);
+      return true;
+    }
     case 'tu-ghi': case 'tughi': case 'auto-write': case 'autowrite': {
       const q = ch(sau[0] ?? '');
       const bat = /^(on|bat|1|yes)$/.test(q) ? true : /^(off|tat|0|no)$/.test(q) ? false : undefined;

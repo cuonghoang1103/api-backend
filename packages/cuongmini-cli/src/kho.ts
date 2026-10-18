@@ -119,7 +119,7 @@ export interface TrangThaiChat {
   /** Hạn mức 5 giờ đã dùng (%), lõi báo kèm sự kiện `xong`. */
   hanMucPhanTram: number | null;
   /** Thời điểm kết thúc lượt gần nhất + thời lượng — để báo thông báo lượt dài. */
-  luotCuoi: { luc: number; thoiLuong: number; loi: boolean } | null;
+  luotCuoi: { luc: number; thoiLuong: number; loi: boolean; /** Đợt 6: lượt kết thúc bằng `xong` (không phải dừng/lỗi). */ xong?: boolean } | null;
   muc: MucGhi[];
   tieuDe: string;
   cauHoiCuoi: string;
@@ -131,6 +131,10 @@ export interface TrangThaiChat {
   chiTiet: boolean;
   /** Lỗi cuối cần giao diện xử lý thêm (RAMBO_BAO_TRI, 401…). Giao diện đọc xong thì xoá. */
   loiCanXuLy: { ma: string; thongDiep: string; daBat?: boolean } | null;
+  /** Đợt 6: tin gõ giữa lượt mà lượt dừng trước khi agent đọc ⇒ giao diện trả về ô nhập rồi xoá trường này. */
+  chenTraVe: string[] | null;
+  /** Đợt 6: lượt vừa dừng vì "Không, và bảo CuongMini làm khác đi" ⇒ ô nhập gợi ý gõ chỉ dẫn. */
+  choChiDan: boolean;
   /** Đang ở khung `nghi` (model nghĩ, chữ ẩn) — dòng trạng thái nói thẳng "Đang suy nghĩ" tới sự kiện kế tiếp. */
   nghiThat: boolean;
   /** Cổng chính hỏng ⇒ máy chủ tự sang CuongMini Free và mời chọn cổng mạnh hơn. Giao diện mời SAU lượt (lượt vẫn đang chạy ở Free). */
@@ -169,7 +173,7 @@ export function trangThaiDau(): TrangThaiChat {
     bang: [], khoaBang: 0, dangChay: false, batDauLuot: 0, pha: 'cho', toolDang: '', toolCuoi: '', buoc: null,
     chuDangViet: '', toolChay: [], choDuyet: [], keHoach: [], fileDaSua: {}, tienPhien: 0, soFileDaSua: 0,
     nguCanh: null, hanMucPhanTram: null, luotCuoi: null, muc: [], tieuDe: '', cauHoiCuoi: '', choDuyetKeHoach: false, hoiDuyetKeHoach: false,
-    daCompact: false, chiTiet: false, loiCanXuLy: null, nghiThat: false, moiCong: null, daMoiCong: false, hoiQuayVe: null, ws: null, info: null, lenhDuAn: [], daBaoTrinhDuyet: false, agentPhu: [], lenhNen: [],
+    daCompact: false, chiTiet: false, loiCanXuLy: null, chenTraVe: null, choChiDan: false, nghiThat: false, moiCong: null, daMoiCong: false, hoiQuayVe: null, ws: null, info: null, lenhDuAn: [], daBaoTrinhDuyet: false, agentPhu: [], lenhNen: [],
     toolCho: null, tokenRa: 0, kyTuRa: 0, coTienTrinh: false, tienLuot: 0, hoi: null, henCho: { cho: [], hen: [] }, daNhacNguCanh: 0,
   };
 }
@@ -182,6 +186,8 @@ export const LOI_HET_PHIEN = new Set(['401', 'UNAUTHORIZED', 'NO_SESSION']);
 const TRAN_RA = 20_000;
 
 export class KhoChat {
+  /** Đợt 6: sự kiện `xong` vừa tới (lượt kết thúc bình thường) — `ketLuot` ghi vào `luotCuoi.xong`. */
+  private xongTot = false;
   S: TrangThaiChat = trangThaiDau();
   private dem = 0;
   private nguoiNghe = new Set<() => void>();
@@ -251,6 +257,7 @@ export class KhoChat {
     S.muc.push({ kieu: 'nguoi', text: hienThi, luc: bayGio });
     if (!S.tieuDe) S.tieuDe = hienThi.replace(/\s+/g, ' ').trim().slice(0, 80);
     S.cauHoiCuoi = cauGui;
+    S.choChiDan = false;
     S.dangChay = true;
     S.batDauLuot = bayGio;
     S.tokenRa = 0;
@@ -298,7 +305,8 @@ export class KhoChat {
     S.choDuyet = [];
     S.hoi = null;
     dongAgentTreo(S, bayGio);
-    S.luotCuoi = { luc: bayGio, thoiLuong: tong, loi };
+    S.luotCuoi = { luc: bayGio, thoiLuong: tong, loi, ...(this.xongTot ? { xong: true } : {}) };
+    this.xongTot = false;
     if (!loi) this.them({ loai: 'ketLuot', luc: bayGio, thoiLuong: tong, ghiChu });
   }
 
@@ -426,6 +434,25 @@ export class KhoChat {
         if (khoa.length) this.them({ loai: 'dinhKem', khoa });
         break;
       }
+      case 'ctwHuongDanNhom': {
+        // Đợt 6: lõi đã đọc hướng dẫn của NHÓM từ CT Work (trang "AGENTS.md — …" hoặc bối cảnh tự đọc) — một lần mỗi việc.
+        const nguon = String(e.nguon ?? '');
+        this.them({ loai: 'thongBao', muc: 'info', text: e.laAgents
+          ? L(`📎 Đọc hướng dẫn của nhóm: ${nguon}`, `📎 Read the team instructions: ${nguon}`)
+          : L(`📎 Đọc bối cảnh dự án từ CT Work: ${nguon}`, `📎 Read the project context from CT Work: ${nguon}`) });
+        this.bao(true);
+        return;
+      }
+      case 'traChen': {
+        // Đợt 6: tin gõ giữa lượt chưa tới model (Esc / lỗi) ⇒ ManChat đặt lại vào ô nhập.
+        const ds = Array.isArray(e.ds) ? (e.ds as unknown[]).filter((x): x is string => typeof x === 'string') : [];
+        if (ds.length) {
+          S.chenTraVe = [...(S.chenTraVe ?? []), ...ds];
+          this.them({ loai: 'thongBao', muc: 'canh', text: L(`↩ ${ds.length} tin bạn gõ thêm chưa kịp tới agent — đã trả về ô nhập.`, `↩ ${ds.length} message(s) you added did not reach the agent — they are back in the input.`) });
+        }
+        this.bao(true);
+        return;
+      }
       case 'lenhRa': {
         const mau = String(e.mau ?? '');
         let i = S.toolChay.length - 1;
@@ -509,6 +536,7 @@ export class KhoChat {
         break;
       case 'xong': {
         this.chotChu();
+        this.xongTot = true;
         // Lõi đợt 3: `xong.tienUsd` = TỔNG cả lượt (mọi vòng + agent phụ). Lõi cũ chỉ gửi vòng cuối
         // (lỗi đếm thiếu 18/10: hiện ~$0.25 trong khi sổ máy chủ 3,42 $) ⇒ lấy số lớn hơn.
         const tongLuot = Math.max(Number(e.tienUsd ?? 0), S.tienLuot);
@@ -579,7 +607,10 @@ export class KhoChat {
         // Dừng giữa lượt (esc): lõi không gửi `xong` ⇒ tiền các vòng đã chạy (đến qua `tienTrinh`) phải cộng ở đây —
         // trước đây mất trắng: /cost báo ~$0.000 trong khi sổ máy chủ ghi 0,84 $ (QA 18/10).
         const tien = this.chotTienLuot();
-        this.ketLuot([L('đã dừng', 'interrupted'), tien > 0 ? tienGon(tien) : ''].filter(Boolean).join(' · '), false, bayGio);
+        /* Đợt 6: "3. Không, và bảo CuongMini làm khác đi" ⇒ lượt DỪNG chờ người dùng gõ chỉ dẫn (như Claude Code). */
+        const chiDan = e.lyDo === 'tuChoi';
+        S.choChiDan = chiDan;
+        this.ketLuot([chiDan ? L('đã dừng — gõ CuongMini nên làm gì khác', 'stopped — tell CuongMini what to do instead') : L('đã dừng', 'interrupted'), tien > 0 ? tienGon(tien) : ''].filter(Boolean).join(' · '), false, bayGio);
         break;
       }
       case 'daXoa':

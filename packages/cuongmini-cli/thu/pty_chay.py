@@ -18,13 +18,36 @@ if pid == 0:
     os.execvpe(cfg['cmd'][0], cfg['cmd'], env)
 
 keys = sorted(cfg['keys'], key=lambda k: k[0])
-su_kien = []  # ["o", giây, base64] | ["r", giây, cols, rows]
+su_kien = []  # ["o", giây, base64] | ["r", giây, cols, rows] | ["k", giây theo lịch, giây thật]
 start = time.time()
 alive = True
-while time.time() - start < cfg['duration']:
+# Đợt 6 (lỗi PTY đỏ khi máy quá tải): phím có thể kèm CHỮ PHẢI THẤY TRƯỚC — [giây, "phím", "mẫu regex"]. Phím chỉ gửi
+# khi màn hình (chữ đã bỏ mã ANSI, kể từ phím trước) đã có mẫu đó, tối đa `cho_toi_da` giây trễ. Trễ cộng dồn (`lech`)
+# đẩy MỌI phím sau và hạn chạy theo ⇒ khoảng cách giữa các bước giữ nguyên, máy chậm không làm lệch kịch bản.
+# Ghi ["k", lịch, thật] để phatLai.mjs đổi mốc chụp màn hình theo đúng độ trễ đó.
+import re
+ANSI = re.compile(r'\x1b\[[0-9;?<>=]*[ -/]*[@-~]|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)|\x1b[()][0-9A-Za-z]|\x1b[=>78DEHM]')
+cho_toi_da = float(cfg.get('cho_toi_da', 25))
+# Thấy chữ rồi vẫn chờ thêm chút như người thật đọc thẻ (thẻ duyệt bỏ phím tới < 350 ms sau khi hiện — chống bấm đúp).
+cho_sau = float(cfg.get('cho_sau', 0.6))
+lech = 0.0
+chu_tu_phim_truoc = ''
+thay_luc = None
+while time.time() - start < cfg['duration'] + lech:
     now = time.time() - start
-    while keys and keys[0][0] <= now:
-        k = keys.pop(0)
+    while keys and keys[0][0] + lech <= now:
+        k = keys[0]
+        if len(k) >= 3 and k[1] != '__resize__' and isinstance(k[2], str) and k[2]:
+            if now < k[0] + lech + cho_toi_da:
+                if thay_luc is None and re.search(k[2], chu_tu_phim_truoc):
+                    thay_luc = now
+                if thay_luc is None or now < thay_luc + cho_sau:
+                    break
+        thay_luc = None
+        keys.pop(0)
+        lech = max(lech, now - k[0])
+        su_kien.append(['k', k[0], round(now, 3)])
+        chu_tu_phim_truoc = ''
         if k[1] == '__resize__':
             # Đặt cỡ trên đầu master ⇒ nhân gửi SIGWINCH cho nhóm tiến trình đang chạy ở terminal.
             fcntl.ioctl(fd, termios.TIOCSWINSZ, struct.pack('HHHH', k[3], k[2], 0, 0))
@@ -42,6 +65,7 @@ while time.time() - start < cfg['duration']:
             alive = False
             break
         su_kien.append(['o', round(time.time() - start, 3), base64.b64encode(data).decode()])
+        chu_tu_phim_truoc = (chu_tu_phim_truoc + ANSI.sub('', data.decode('utf-8', 'replace')))[-200000:]
 try:
     os.kill(pid, signal.SIGKILL)
 except ProcessLookupError:

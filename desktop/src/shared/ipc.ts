@@ -1091,6 +1091,8 @@ export const agentTraLoiSchema = z.object({
   cuocId: cuocIdSchema,
   id: z.string().min(1).max(64),
   quyetDinh: agentQuyetDinhSchema,
+  /** Đợt 6: "3. Không, và bảo CuongMini làm khác đi" ⇒ từ chối VÀ dừng lượt, chờ người dùng gõ chỉ dẫn. */
+  dung: z.boolean().optional(),
 });
 
 /* ── ĐỢT 3 (18/10/2026): hỏi lựa chọn · chờ/hẹn · nhắn giữa phiên · tiền tố ── */
@@ -1441,6 +1443,8 @@ export interface AgentMcpTrangThai {
     kieu?: 'stdio' | 'http' | 'sse';
     /** Số tool bị bỏ vì chạm trần tổng 40. */
     boBot?: number;
+    /** Đợt 6: số tool CT Work ở MỤC LỤC (model nạp schema khi cần). */
+    soMucLuc?: number;
     /** Đợt 4: server bị tắt (`"disabled": true`). */
     tat?: boolean;
     /** Đợt 5: server DỰNG SẴN của app (CT Work) — không có dòng trong mcp.json. */
@@ -1455,6 +1459,11 @@ export interface AgentMcpTrangThai {
 /** Thông tin agent lúc mở màn hình: có Pro không, trần bao nhiêu, còn bao nhiêu. */
 export interface AgentInfo {
   pro: boolean;
+  /**
+   * Đợt 6: không Pro nhưng dùng được HẠN MỨC NHÓM (trưởng nhóm có Pro) ở các dự án này — app không hiện lời mời nâng cấp;
+   * máy chủ vẫn quyết từng lượt theo dự án gắn với thư mục.
+   */
+  nhom?: Array<{ projectId: number; key: string }>;
   configured: boolean;
   model: string | null;
   quota: AgentQuota | null;
@@ -1598,6 +1607,10 @@ export type AgentUiEvent = { cuocId: string } & (
     }
   /** Đợt 5: `LF-123` trong tin ⇒ lõi đã đính kèm tóm tắt thẻ CT Work (chip 📎). */
   | { loai: 'dinhKemCtwork'; khoa: string[] }
+  /** Đợt 6: đã đọc hướng dẫn của NHÓM từ CT Work (trang "AGENTS.md — …" / bối cảnh tự đọc) — một lần mỗi cuộc. */
+  | { loai: 'ctwHuongDanNhom'; nguon: string; laAgents: boolean }
+  /** Đợt 6: tin gõ giữa lượt CHƯA tới model (Esc / lỗi) ⇒ đặt lại vào ô nhập. */
+  | { loai: 'traChen'; ds: string[] }
   /**
    * Xin phép COMMIT hoặc MỞ PR.
    *
@@ -1648,7 +1661,8 @@ export type AgentUiEvent = { cuocId: string } & (
     }
   /** Model đang suy nghĩ (khối thinking, chữ ẩn) — chỉ cổng Claude chính hãng phát. */
   | { loai: 'nghi' }
-  | { loai: 'huy' }
+  /** `lyDo: 'tuChoi'` (đợt 6): người dùng chọn "Không, và bảo CuongMini làm khác đi" ⇒ lượt dừng chờ chỉ dẫn. */
+  | { loai: 'huy'; lyDo?: 'tuChoi' }
   /**
    * Hội thoại ở main vừa bị xoá sạch (đổi thư mục dự án, chuyển worktree, bỏ
    * thư mục). Giao diện PHẢI dọn bảng ghi — giữ lại là vẽ một cuộc trò chuyện
@@ -1690,6 +1704,8 @@ export const agentCtworkHeSchema = z.object({
   viec: z.enum([
     'goiY', 'daHoi', 'gan', 'boGan', 'docGan', 'dsDuAn', 'doan', 'dong', 'sprint', 'viec', 'the', 'hop',
     'chuanBiBatDau', 'batDau', 'gio', 'soanBinhLuan', 'binhLuan', 'baoCao', 'tuGhi',
+    /* Đợt 6 — dẫn đường: hôm nay · hướng dẫn thẻ · gợi ý sau việc (xem trước / làm) · theo dõi · trưởng nhóm · Q&A · mẫu FPT. */
+    'homNay', 'huongDan', 'goiYSau', 'xemTruocGoiY', 'lamGoiY', 'kiemTin', 'theoDoi', 'tongQuan', 'guiTinNhom', 'hoiQna', 'mauFpt', 'huongDanNhom',
   ]),
   ngonNgu: z.enum(['vi', 'en']).optional(),
   key: z.string().max(40).optional(),
@@ -1697,23 +1713,33 @@ export const agentCtworkHeSchema = z.object({
   duAn: z.object({
     key: z.string().min(1).max(80), id: z.number().int().nullable().optional(), workspaceId: z.number().int().nullable().optional(),
     ten: z.string().max(200).optional(), workspace: z.string().max(120).nullable().optional(),
+    /** Đợt 6: vai của người dùng trong dự án (`list_projects.myRole`). */
+    vaiTro: z.string().max(16).nullable().optional(),
   }).optional(),
   phut: z.number().int().min(1).max(1440).optional(),
   noiDung: z.string().max(8000).optional(),
   bat: z.boolean().optional(),
   nhanh: z.boolean().optional(),
   chuyen: z.boolean().optional(),
+  /** Đợt 6: id gợi ý (`binhLuan` · `chuyen:<trạng thái>` · `gio` · `review` · `chat` · `raid` · `qna` · `push` · `commit`). */
+  id: z.string().max(80).optional(),
+  /** Đợt 6: lời gọi TỰ ĐỘNG (đầu buổi / sau lượt) — lõi tự lọc trùng, im lặng khi không có gì. */
+  tuDong: z.boolean().optional(),
+  /** Đợt 6: quyền của lần gắn (`gan`) — `doc` = CuongMini chỉ đọc dự án này. */
+  quyen: z.enum(['doc', 'ghi']).optional(),
+  /** Đợt 6: gắn THEO PHIÊN (thư mục không phải repo — không ghi file). */
+  theoPhien: z.boolean().optional(),
 });
 export type AgentCtworkHeVao = z.infer<typeof agentCtworkHeSchema>;
 /** Kết quả chung của `agent:ctworkHe` — mỗi `viec` điền vài trường. */
 export interface AgentCtworkHeRa {
   ok: boolean; loi?: string; md?: string;
   /** goiY: nên hỏi gì (một lần): kết nối · cấp lại token · gắn dự án đoán được. */
-  hoi?: 'ketNoi' | 'capLai' | 'ganDuAn' | null;
+  hoi?: 'ketNoi' | 'capLai' | 'ganDuAn' | 'chonDuAn' | null;
   doan?: { key: string; projectId: number | null; workspaceId: number | null; workspace: string | null } | null;
   gan?: { key: string; projectId: number | null; workspaceId: number | null; ref?: string; ten?: string | null; workspace?: string | null } | null;
   ds?: Array<{ key: string; ten: string; id: number | null; workspaceId: number | null; workspace: string | null; vaiTro: string | null; soMo: number | null }>;
-  dsThe?: Array<{ key: string; title: string; status: string | null; dueDate: string | null }>;
+  dsThe?: Array<{ key: string; title: string; status: string | null; dueDate: string | null; blocked?: boolean }>;
   dong?: {
     key: string; projectId: number | null; ten: string | null; nhanh: string | null; daNoi: boolean; loi: string | null;
     sprint: { ten: string; conNgay: number | null; laFocus: boolean; tong: number } | null;
@@ -1726,6 +1752,13 @@ export interface AgentCtworkHeRa {
   daDangLam?: boolean; chiDoc?: boolean;
   noiDung?: string; bat?: boolean;
   xemTruoc?: { the: string | null; viec: string; noiDung: string };
+  /* ── Đợt 6 — dẫn đường ── */
+  boQua?: boolean; truoc?: string | null;
+  goiY?: Array<{ id: string; loai: string; nhan: string; mo: string; den?: string; ghi: boolean; tool?: string }>;
+  viec?: string; nhapGoiY?: string; phuThuoc?: string[]; chan?: string[];
+  tin?: string[]; vai?: string | null; tinNhac?: string | null;
+  mau?: Array<{ ten: string; tool: string; cauHoi: string }>;
+  laKho?: boolean; theoPhien?: boolean; nguon?: string; laAgents?: boolean;
 }
 
 export const INVOKE_CHANNELS = {
@@ -3020,7 +3053,7 @@ export interface DesktopBridge {
      * Trả lời thẻ duyệt. PHẢI gọi — vòng lặp đang đứng chờ đúng lời hứa này,
      * và nó chỉ tự thoát sau 5 phút hết giờ (coi như từ chối).
      */
-    traLoiXinPhep(cuocId: string, id: string, quyetDinh: AgentQuyetDinh): Promise<void>;
+    traLoiXinPhep(cuocId: string, id: string, quyetDinh: AgentQuyetDinh, dung?: boolean): Promise<void>;
     /** Đợt 3 — trả lời thẻ hỏi lựa chọn (`null` = bỏ qua). */
     traLoiHoi(cuocId: string, id: string, traLoi: Array<{ chon: string[]; khac?: string }> | null): Promise<boolean>;
     /** Đợt 3 — bỏ chờ / tiếp ngay một `cho_doi` đang chạy. */

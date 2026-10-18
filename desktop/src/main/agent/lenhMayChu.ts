@@ -32,6 +32,8 @@ export async function goiCompact(o: {
   /** 18/10/2026: tóm tắt bằng CHÍNH model của cuộc ⇒ gửi mã model + bó vé như lượt agent. */
   model?: string;
   congAnthropicVe?: string;
+  /** Đợt 6: dự án CT Work của cuộc — máy chủ dùng cho HẠN MỨC NHÓM khi người dùng không có Pro. */
+  ctworkDuAn?: number | null;
   fetchFn?: Fetch;
   bayGio?: () => number;
 }): Promise<KetQuaCompactApp> {
@@ -53,6 +55,7 @@ export async function goiCompact(o: {
         ...(o.giuLuot ? { giuLuot: o.giuLuot } : {}),
         ...(o.model ? { model: o.model } : {}),
         ...(o.congAnthropicVe ? { congAnthropicVe: o.congAnthropicVe } : {}),
+        ...(o.ctworkDuAn ? { ctworkDuAn: o.ctworkDuAn } : {}),
       }),
     });
   } catch (e) {

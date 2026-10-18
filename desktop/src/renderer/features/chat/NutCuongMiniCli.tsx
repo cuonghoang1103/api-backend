@@ -15,8 +15,9 @@
  * (`agent.routes.ts › duocDungAiCode`). Cài thì ai cũng cài được; chưa đủ quyền
  * thì hộp nói rõ cách lấy, thay vì để người ta cài xong rồi mới bị chặn.
  */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSession } from '../../auth/session';
+import { useDich } from '../../i18n';
 
 const WEB = 'https://cuongthai.com';
 
@@ -39,10 +40,29 @@ const BUOC: Array<[Buoc, string]> = [
 const LENH_CAI = {
   posix: 'curl -fsSL https://cuongthai.com/cli/install.sh | bash',
   win: 'irm https://cuongthai.com/cli/install.ps1 | iex',
+  /** cmd.exe không hiểu `irm` ⇒ gọi PowerShell một lần (đúng lệnh trên /cli). */
+  cmd: 'powershell -NoProfile -ExecutionPolicy Bypass -c "irm https://cuongthai.com/cli/install.ps1 | iex"',
+  /** Git Bash: install.sh tự nhận MSYS và chuyển sang install.ps1 (5ccda538). */
+  gitBash: 'curl -fsSL https://cuongthai.com/cli/install.sh | bash',
 };
+
+/** Dòng lệnh cài tay — hệ đang chạy lên đầu (máy khác vẫn thấy đủ). */
+function dongCaiTay(laWin: boolean): Array<{ id: string; nhan: string; lenh: string }> {
+  const win = [
+    { id: 'ps', nhan: 'Windows · PowerShell', lenh: LENH_CAI.win },
+    { id: 'cmd', nhan: 'Windows · cmd', lenh: LENH_CAI.cmd },
+    { id: 'gitbash', nhan: 'Windows · Git Bash', lenh: LENH_CAI.gitBash },
+  ];
+  const posix = [{ id: 'posix', nhan: 'macOS / Linux · Terminal', lenh: LENH_CAI.posix }];
+  return laWin ? [...win, ...posix] : [...posix, ...win];
+}
 
 export function NutCuongMiniCli({ dangChay, thuMuc }: { dangChay: boolean; thuMuc?: string | null }) {
   const { api } = useSession();
+  const { dich } = useDich();
+  const logRef = useRef<HTMLDetailsElement | null>(null);
+  /** Vừa cài xong ⇒ nút "Mở terminal" nổi bật (và đã tự mở một lần). */
+  const [vuaCaiXong, setVuaCaiXong] = useState(false);
   const [mo, setMo] = useState(false);
   const [may, setMay] = useState<DoMay | null>(null);
   const [duocDung, setDuocDung] = useState<boolean | null>(null);
@@ -76,35 +96,49 @@ export function NutCuongMiniCli({ dangChay, thuMuc }: { dangChay: boolean; thuMu
     if (t.dong) setLog((l) => [...l.slice(-400), t.dong!]);
   }), []);
 
+  const moTerminal = useCallback(async () => {
+    const r = await window.cuongthai?.cli.moTerminal(thuMuc ?? undefined);
+    if (r && !r.ok) setLoi(r.loi ?? dich('Không mở được terminal.'));
+    return Boolean(r?.ok);
+  }, [thuMuc, dich]);
+
+  const xemLog = useCallback(() => {
+    setMoLog(true);
+    requestAnimationFrame(() => logRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
+  }, []);
+
   const caiDat = useCallback(async () => {
     if (dangCai) return;
     setDangCai(true);
     setLoi(null);
     setXong(null);
+    setVuaCaiXong(false);
     setLog([]);
     setBuocNay('tai');
     try {
       const kq = await window.cuongthai?.cli.cai();
       if (!kq?.ok) {
-        setLoi(`${kq?.loi ?? 'Không cài được.'}\nKiểm tra mạng rồi bấm lại. Vẫn lỗi thì mở "Chi tiết" bên dưới và gửi cho admin.`);
-        setMoLog(true);
+        // Câu lỗi THẬT từ main (`loiThat`: dòng ✗ của trình cài / lỗi PowerShell) — không thay bằng câu chung.
+        setLoi(kq?.loi?.trim() || dich('Không cài được.'));
+        // Main trả cả `log` khi hỏng: trình cài chết trước khi kịp in dòng nào qua tiến độ thì vẫn có log để xem.
+        const logMain = kq?.log;
+        if (logMain) setLog((l) => (l.length ? l : logMain.split(/\r?\n/).filter((d) => d.trim()).slice(-400)));
+        xemLog();
         return;
       }
       setXong(`CuongMini CLI ${kq.phienBan} đã sẵn sàng${kq.daDangNhap ? ' và đã đăng nhập sẵn' : ''}.`);
       if (!kq.daDangNhap && kq.loiDangNhap) setLoi(`Chưa đăng nhập sẵn được (${kq.loiDangNhap}) — lần đầu gõ cuongmini nó sẽ hỏi đăng nhập.`);
       await napMay();
+      // Cài xong ⇒ tự mở terminal chạy cuongmini luôn (một lần); nút vẫn nổi bật để mở lại.
+      setVuaCaiXong(true);
+      await moTerminal();
     } catch (e) {
-      setLoi(e instanceof Error ? e.message : 'Không cài được.');
+      setLoi(e instanceof Error ? e.message : dich('Không cài được.'));
     } finally {
       setDangCai(false);
       setBuocNay(null);
     }
-  }, [dangCai, napMay]);
-
-  const moTerminal = useCallback(async () => {
-    const r = await window.cuongthai?.cli.moTerminal(thuMuc ?? undefined);
-    if (r && !r.ok) setLoi(r.loi ?? 'Không mở được terminal.');
-  }, [thuMuc]);
+  }, [dangCai, napMay, moTerminal, xemLog, dich]);
 
   const chep = (chu: string) => {
     void navigator.clipboard.writeText(chu);
@@ -163,17 +197,34 @@ export function NutCuongMiniCli({ dangChay, thuMuc }: { dangChay: boolean; thuMu
             </ul>
 
             <div className="nut-opencode__cach">
-              <button type="button" className="nut-cli__chinh" onClick={() => void caiDat()} disabled={dangCai}>
+              {daCai && vuaCaiXong && (
+                <button type="button" className="nut-cli__chinh" onClick={() => void moTerminal()} disabled={dangCai} autoFocus>
+                  ▶ Mở {tenTerm} và chạy cuongmini{thuMuc ? ' ở dự án này' : ''}
+                </button>
+              )}
+              <button type="button" className={vuaCaiXong ? undefined : 'nut-cli__chinh'} onClick={() => void caiDat()} disabled={dangCai}>
                 {dangCai ? 'Đang cài… (đừng tắt app)' : daCai ? 'Cài lại / cập nhật' : 'Cài đặt tự động'}
               </button>
-              {daCai && (
+              {daCai && !vuaCaiXong && (
                 <button type="button" onClick={() => void moTerminal()} disabled={dangCai}>
                   Mở {tenTerm} và chạy cuongmini{thuMuc ? ' ở dự án này' : ''}
                 </button>
               )}
             </div>
 
-            {loi && <p className="nut-opencode__loi" style={{ whiteSpace: 'pre-line' }}>{loi}</p>}
+            {loi && (
+              <div className="nut-opencode__loi" role="alert">
+                <p style={{ whiteSpace: 'pre-line', margin: 0 }}>{loi}</p>
+                {log.length > 0 && (
+                  <p style={{ margin: '6px 0 0' }}>
+                    <button type="button" onClick={xemLog}>{dich('Xem log')}</button>{' '}
+                    <button type="button" onClick={() => chep(`${loi}\n\n${log.slice(-200).join('\n')}`)}>
+                      {daChep.startsWith(loi) ? dich('Đã chép') : dich('Chép lỗi + log')}
+                    </button>
+                  </p>
+                )}
+              </div>
+            )}
             {xong && (
               <div className="nut-opencode__xong nut-cli__xong">
                 <b>✓ {xong}</b>
@@ -184,18 +235,23 @@ export function NutCuongMiniCli({ dangChay, thuMuc }: { dangChay: boolean; thuMu
             )}
 
             {log.length > 0 && (
-              <details open={moLog} onToggle={(e) => setMoLog((e.target as HTMLDetailsElement).open)} className="nut-cli__log">
+              <details ref={logRef} open={moLog} onToggle={(e) => setMoLog((e.target as HTMLDetailsElement).open)} className="nut-cli__log">
                 <summary>Chi tiết cài đặt ({log.length} dòng)</summary>
                 <pre>{log.slice(-120).join('\n')}</pre>
               </details>
             )}
 
             <div className="nut-cli__tay">
-              <p className="nut-opencode__nho">Cài tay trên máy khác ({laWin ? 'PowerShell' : 'Terminal'}):</p>
-              <div className="nut-cli__lenh">
-                <code>{laWin ? LENH_CAI.win : LENH_CAI.posix}</code>
-                <button type="button" onClick={() => chep(laWin ? LENH_CAI.win : LENH_CAI.posix)}>{daChep ? 'Đã chép' : 'Chép'}</button>
-              </div>
+              <p className="nut-opencode__nho">{dich('Cài tay (máy này hoặc máy khác) — chọn đúng cửa sổ lệnh bạn đang dùng:')}</p>
+              {dongCaiTay(laWin).map((d) => (
+                <div key={d.id}>
+                  <p className="nut-opencode__nho" style={{ margin: '6px 0 2px' }}>{d.nhan}</p>
+                  <div className="nut-cli__lenh">
+                    <code>{d.lenh}</code>
+                    <button type="button" onClick={() => chep(d.lenh)}>{daChep === d.lenh ? dich('Đã chép') : dich('Chép')}</button>
+                  </div>
+                </div>
+              ))}
               <p className="nut-opencode__nho">
                 Hướng dẫn đầy đủ (phím tắt, lệnh /, bảng kế hoạch…):{' '}
                 <a href="#" onClick={(e) => { e.preventDefault(); void window.cuongthai?.app.openExternal(`${WEB}/cli`); }}>cuongthai.com/cli</a>

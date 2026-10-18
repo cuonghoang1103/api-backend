@@ -56,6 +56,9 @@ let gitThat: Git = async (args, cwd) => {
 };
 /** CHỈ cho test. */
 export function _datPhuThuoc(o: { goi?: Goi; git?: Git }): void { if (o.goi) goiThat = o.goi; if (o.git) gitThat = o.git; }
+/** Đợt 6: dùng chung với `ctworkDanDuong.ts` (cùng đường MCP chính thức + git, cùng bản giả khi test). */
+export const goiCtw: Goi = (tool, args) => goiThat(tool, args);
+export const gitCtw: Git = (args, cwd) => gitThat(args, cwd);
 
 /** Server `ctwork` đang nối được không (không gọi mạng). */
 export function ctworkSan(): boolean {
@@ -73,12 +76,26 @@ export interface GanDuAn {
   ref?: string;
   ten?: string | null;
   workspace?: string | null;
+  /** Đợt 6: quyền của LẦN GẮN — `doc` ⇒ CuongMini chỉ đọc dự án này (không mời model gọi tool ghi). Mặc định `ghi`. */
+  quyen?: 'doc' | 'ghi';
+  /** Đợt 6: vai của người dùng trong dự án (`list_projects.myRole`): ADMIN | MEMBER | TEACHER | VIEWER… */
+  vai?: string | null;
+  /** Đợt 6: gắn THEO PHIÊN (thư mục không phải repo) — không ghi file. */
+  theoPhien?: boolean;
 }
 
 const FILE_GAN = path.join('.cuongmini', 'ctwork.json');
+/** Đợt 6: gắn theo PHIÊN (thư mục không phải repo git — vd home): sống trong bộ nhớ tiến trình, không ghi file. */
+const ganTam = new Map<string, GanDuAn>();
+export function ganTheoPhien(goc: string, g: GanDuAn | null): void {
+  if (g) ganTam.set(goc, { ...g, theoPhien: true }); else ganTam.delete(goc);
+  datDem.delete(goc);
+}
 
 export async function docGan(goc: string | null): Promise<GanDuAn | null> {
   if (!goc) return null;
+  const tam = ganTam.get(goc);
+  if (tam) return tam;
   try {
     const j = JSON.parse(await readFile(path.join(goc, FILE_GAN), 'utf8')) as Record<string, unknown>;
     const key = typeof j.key === 'string' && /^[A-Z][A-Z0-9_]{0,9}$/.test(j.key) ? j.key : null;
@@ -89,6 +106,8 @@ export async function docGan(goc: string | null): Promise<GanDuAn | null> {
       ...(typeof j.ref === 'string' && j.ref ? { ref: j.ref.slice(0, 80) } : {}),
       ...(typeof j.ten === 'string' ? { ten: j.ten.slice(0, 200) } : {}),
       ...(typeof j.workspace === 'string' ? { workspace: j.workspace.slice(0, 120) } : {}),
+      ...(j.quyen === 'doc' ? { quyen: 'doc' as const } : {}),
+      ...(typeof j.vai === 'string' && /^[A-Z_]{2,16}$/.test(j.vai) ? { vai: j.vai } : {}),
     };
   } catch { return null; }
 }
@@ -101,7 +120,9 @@ export async function ghiGan(goc: string, g: GanDuAn): Promise<{ duong: string; 
     _ghi_chu: 'CuongMini: thư mục này gắn với một dự án CT Work. KHÔNG có bí mật (token nằm trong kho của máy). Đổi: /ctwork du-an.',
     workspaceId: g.workspaceId, projectId: g.projectId, key: g.key,
     ...(g.ref && g.ref !== g.key ? { ref: g.ref } : {}), ...(g.ten ? { ten: g.ten } : {}), ...(g.workspace ? { workspace: g.workspace } : {}),
+    ...(g.quyen === 'doc' ? { quyen: 'doc' } : {}), ...(g.vai ? { vai: g.vai } : {}),
   };
+  ganTam.delete(goc);
   await writeFile(duong, `${JSON.stringify(than, null, 2)}\n`, 'utf8');
   datDem.delete(goc);
   return { duong, goiYGitignore: await goiYGitignore(goc) };
@@ -152,17 +173,22 @@ export async function dsDuAn(): Promise<{ ok: boolean; ds: DuAnCtw[]; loi?: stri
 }
 
 /** Đổi một dự án của `list_projects` thành bản gắn. */
-export function ganTuDuAn(p: DuAnCtw): GanDuAn {
+export function ganTuDuAn(p: DuAnCtw, quyen?: 'doc' | 'ghi'): GanDuAn {
   const key = p.key.split('/').pop()!;
-  return { key, projectId: p.id, workspaceId: p.workspaceId, ref: p.key, ten: p.ten, workspace: p.workspace };
+  return { key, projectId: p.id, workspaceId: p.workspaceId, ref: p.key, ten: p.ten, workspace: p.workspace, ...(quyen === 'doc' ? { quyen } : {}), ...(p.vaiTro ? { vai: p.vaiTro } : {}) };
 }
 
-const refCua = (g: GanDuAn): string => g.ref || g.key;
+/** Đợt 6: thư mục có phải kho git không (gắn file vs gắn theo phiên). */
+export async function laKhoGit(goc: string): Promise<boolean> {
+  return (await gitThat(['rev-parse', '--show-toplevel'], goc)).ok;
+}
+
+export const refCua = (g: GanDuAn): string => g.ref || g.key;
 /**
  * QA 5c: thẻ của dự án KHÁC (`/issue ABC-1` khi thư mục gắn LF) ⇒ hỏi đúng dự án của thẻ — trước đây gửi
  * `project: "LF", issue: "ABC-1"` ⇒ máy chủ trả lỗi "ABC-1 is not in project LF". Không có quyền ⇒ máy chủ tự báo.
  */
-const duAnCuaThe = (g: GanDuAn, key: string): string => { const p = key.split('-')[0]!; return p === g.key ? refCua(g) : p; };
+export const duAnCuaThe = (g: GanDuAn, key: string): string => { const p = key.split('-')[0]!; return p === g.key ? refCua(g) : p; };
 
 // ─── Dòng trạng thái (đệm 5 phút) ────────────────────────────────
 
@@ -178,9 +204,9 @@ const dangGoi = new Map<string, Promise<void>>();
 let soLanGoiSprint = 0;
 export function _demLanGoiSprint(): number { return soLanGoiSprint; }
 /** CHỈ cho test: xoá mọi đệm. */
-export function _xoaDem(): void { demSprint.clear(); demNhanh.clear(); datDem.clear(); demThe.clear(); }
+export function _xoaDem(): void { demSprint.clear(); demNhanh.clear(); datDem.clear(); demThe.clear(); ganTam.clear(); }
 
-async function ganCo(goc: string): Promise<GanDuAn | null> {
+export async function ganCo(goc: string): Promise<GanDuAn | null> {
   const d = datDem.get(goc);
   if (d && Date.now() - d.luc < HAN_NHANH_MS) return d.g;
   const g = await docGan(goc);
@@ -245,7 +271,7 @@ export async function dongTrangThai(goc: string | null): Promise<DongTrangThai |
  * Dòng ngữ cảnh cho model (gửi lên máy chủ, đặt CẠNH dòng HÔM NAY ở cuối prompt — đổi theo dự án,
  * không theo phút ⇒ không phá đệm tiền tố). Chỉ chữ máy sinh: key, id, tên không gian đã lọc.
  */
-export async function nguCanhChoModel(goc: string | null): Promise<{ key: string; projectId: number | null; workspaceId: number | null; ref?: string; ten?: string; workspace?: string; the?: string } | null> {
+export async function nguCanhChoModel(goc: string | null): Promise<{ key: string; projectId: number | null; workspaceId: number | null; ref?: string; ten?: string; workspace?: string; the?: string; vai?: string; chiDoc?: boolean } | null> {
   if (!goc) return null;
   const g = await ganCo(goc).catch(() => null);
   if (!g) return null;
@@ -255,6 +281,7 @@ export async function nguCanhChoModel(goc: string | null): Promise<{ key: string
     key: g.key, projectId: g.projectId, workspaceId: g.workspaceId,
     ...(g.ref && g.ref !== g.key ? { ref: g.ref } : {}), ...(g.ten ? { ten: g.ten } : {}), ...(g.workspace ? { workspace: g.workspace } : {}),
     ...(the ? { the } : {}),
+    ...(g.vai ? { vai: g.vai } : {}), ...(g.quyen === 'doc' ? { chiDoc: true } : {}),
   };
 }
 
@@ -279,12 +306,12 @@ export function chuLoiCtw(noiDung: string): string {
 }
 const loiGoi = (r: KetQuaGoi): KetQuaXem => ({ ok: false, loi: chuLoiCtw(r.noiDung) });
 
-async function canGan(goc: string | null): Promise<GanDuAn | KetQuaXem> {
+export async function canGan(goc: string | null): Promise<GanDuAn | KetQuaXem> {
   if (!ctworkSan()) return chuaNoi();
   const g = goc ? await ganCo(goc) : null;
   return g ?? chuaGan();
 }
-const laLoi = (x: GanDuAn | KetQuaXem): x is KetQuaXem => 'ok' in x;
+export const laLoi = (x: GanDuAn | KetQuaXem): x is KetQuaXem => 'ok' in x;
 
 /**
  * QA 5c: token CHỈ ĐỌC (mặc định "khuyên dùng") ⇒ máy chủ thật KHÔNG liệt kê tool ghi trong `tools/list`
@@ -296,7 +323,7 @@ export function thieuQuyenGhi(tool: string): boolean {
   const ds = toolCuaServer(TEN_SERVER);
   return ctworkSan() && ds.length > 0 && !ds.some((t) => t.tenGoc === tool);
 }
-const loiChiDoc = (): KetQuaXem => ({
+export const loiChiDoc = (): KetQuaXem => ({
   ok: false,
   loi: T('Token CT Work đang **chỉ đọc** nên không ghi được. Nối lại quyền "Đọc + ghi": gõ `/ctwork ghi` (mỗi lần ghi vẫn hỏi duyệt).',
     'Your CT Work token is **read only**, so this cannot be written. Reconnect with read + write: type `/ctwork write` (every write still asks).'),
@@ -332,7 +359,7 @@ export async function xemViecToi(goc: string | null): Promise<KetQuaXem & { dsTh
 const demThe = new Map<string, { luc: number; t: TheChiTiet }>();
 const HAN_THE_MS = 2 * 60_000;
 
-async function docTheCo(g: GanDuAn, key: string, moi = false): Promise<TheChiTiet | KetQuaXem> {
+export async function docTheCo(g: GanDuAn, key: string, moi = false): Promise<TheChiTiet | KetQuaXem> {
   const d = demThe.get(key);
   if (!moi && d && Date.now() - d.luc < HAN_THE_MS) return d.t;
   const r = await goiThat('get_issue', { project: duAnCuaThe(g, key), issue: key });
@@ -342,7 +369,7 @@ async function docTheCo(g: GanDuAn, key: string, moi = false): Promise<TheChiTie
   demThe.set(key, { luc: Date.now(), t });
   return t;
 }
-const laTheLoi = (x: TheChiTiet | KetQuaXem): x is KetQuaXem => 'ok' in x;
+export const laTheLoi = (x: TheChiTiet | KetQuaXem): x is KetQuaXem => 'ok' in x;
 
 export async function xemThe(goc: string | null, the: string | undefined): Promise<KetQuaXem & { key?: string; tieuDe?: string; trangThai?: string | null; chuyenDuoc?: string[] }> {
   const g = await canGan(goc);
@@ -425,7 +452,7 @@ export async function ghiGio(goc: string | null, the: string | undefined, phut: 
 }
 
 /** Nhánh gốc để so (main/master/origin/HEAD). */
-async function nhanhGoc(goc: string): Promise<string | null> {
+export async function nhanhGoc(goc: string): Promise<string | null> {
   const r = await gitThat(['symbolic-ref', '--quiet', '--short', 'refs/remotes/origin/HEAD'], goc);
   if (r.ok && r.ra.trim()) return r.ra.trim();
   for (const n of ['main', 'master', 'develop']) if ((await gitThat(['rev-parse', '--verify', '--quiet', n], goc)).ok) return n;

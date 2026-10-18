@@ -14,7 +14,7 @@ import { marked } from 'marked';
 import { LENH_AGENT, chuanHoa, tachLenh, type LenhGach } from 'ct-lenh';
 import { gui, goi, nhanKetQua } from './rpc';
 import { chayLenh, giaoDienCtwVsc, type BoiCanhLenh } from './lenh';
-import { hoiCtworkMotLan, laLoiXacThucCtw, veDongCtw, type DongCtw } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
+import { homNay as homNayCtw, hoiCtworkMotLan, kiemTinCtw, laLoiXacThucCtw, veDongCtw, xongViec as xongViecCtw, type DongCtw } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
 
 type SuKien = { loai: string; [k: string]: any };
 type Muc = { kieu: string; text?: string; ten?: string; tomTat?: string; anh?: string[]; [k: string]: unknown };
@@ -733,6 +733,10 @@ function xuLy(e: SuKien): void {
       if (e.nguCanh && typeof e.nguCanh.phanTram === 'number') capNhatNguCanh(e.nguCanh.phanTram);
       ketLuot(`${S.soFileDaSua ? `${S.soFileDaSua} file đã sửa` : ''}`);
       if (S.choDuyetKeHoach) veDuyetKeHoach();
+      /* Đợt 6: lượt xong bình thường ⇒ gợi ý bước tiếp CT Work đúng luật dự án (lõi chỉ trả khi nhánh của thẻ có thay đổi
+         git mới) + một lần kiểm tin theo dõi. */
+      else void xongViecCtw(giaoDienCtwVsc(boiCanh()), undefined, { tuDong: true }).catch(() => undefined);
+      void baoTinCtw();
       break;
     }
     case 'loi': {
@@ -776,7 +780,25 @@ function xuLy(e: SuKien): void {
       ketThucTraLoi();
       S.tienPhien += tienLuot;
       tienLuot = 0;
-      ketLuot('đã dừng');
+      /* Đợt 6: từ chối kèm "bảo CuongMini làm khác đi" ⇒ dừng CHỜ chỉ dẫn. */
+      if (e.lyDo === 'tuChoi') {
+        ketLuot(L('đã dừng — gõ CuongMini nên làm gì khác', 'stopped — tell CuongMini what to do instead'));
+        o.placeholder = L('CuongMini nên làm gì khác? Gõ chỉ dẫn rồi Enter…', 'What should CuongMini do instead? Type and press Enter…');
+        o.focus();
+      } else ketLuot('đã dừng');
+      break;
+    case 'traChen': {
+      /* Đợt 6: tin gõ giữa lượt chưa tới agent (Esc / lỗi) ⇒ trả về ô nhập (trước chữ đang gõ). */
+      const ds = Array.isArray(e.ds) ? (e.ds as unknown[]).filter((x): x is string => typeof x === 'string') : [];
+      if (ds.length) {
+        o.value = [...ds, o.value].filter(Boolean).join('\n');
+        o.dispatchEvent(new Event('input'));
+        the('tin ket', `↩ ${esc(L(`${ds.length} tin bạn gõ thêm chưa kịp tới agent — đã trả về ô nhập.`, `${ds.length} message(s) you added did not reach the agent — they are back in the input.`))}`);
+      }
+      break;
+    }
+    case 'ctwHuongDanNhom':
+      the('tin ket mo', `📎 ${esc(e.laAgents ? L(`Đọc hướng dẫn của nhóm: ${e.nguon}`, `Read the team instructions: ${e.nguon}`) : L(`Đọc bối cảnh dự án từ CT Work: ${e.nguon}`, `Read the project context from CT Work: ${e.nguon}`))}`);
       break;
     case 'daXoa':
       xoaBang();
@@ -1446,7 +1468,12 @@ async function napDongCtw(): Promise<void> {
   if (laLoiXacThucCtw(r?.dong?.loi) && !S.dangChay) void hoiCtworkMotLan(giaoDienCtwVsc(boiCanh())).catch(() => undefined);
 }
 let daHoiCtw = false;
-setInterval(() => { void napDongCtw(); }, 60_000);
+/** Đợt 6: theo dõi nhẹ (lõi tự giới hạn ≥ 60 s; chỉ khi thư mục gắn dự án; tắt bằng /ctwork theo-doi off). */
+async function baoTinCtw(): Promise<void> {
+  const tin = await kiemTinCtw(giaoDienCtwVsc(boiCanh())).catch(() => [] as string[]);
+  for (const t of tin) the('tin ket mo', esc(t));
+}
+setInterval(() => { void napDongCtw(); void baoTinCtw(); }, 60_000);
 
 function capNhatNut(): void {
   nutGui.classList.toggle('dung', S.dangChay);
@@ -1762,7 +1789,8 @@ window.addEventListener('message', (ev) => {
       void hoiHenLo();
       // Đợt 5: dòng CT Work + hỏi MỘT lần (kết nối / cấp lại token / gắn dự án đoán từ AGENTS.md).
       void napDongCtw();
-      if (!daHoiCtw) { daHoiCtw = true; setTimeout(() => { void hoiCtworkMotLan(giaoDienCtwVsc(boiCanh())).catch(() => undefined); }, 1200); }
+      /* Đợt 6: không có gì để hỏi (đã nối + đã gắn) ⇒ "Hôm nay" (lõi: một lần mỗi ngày mỗi thư mục). */
+      if (!daHoiCtw) { daHoiCtw = true; setTimeout(() => { void hoiCtworkMotLan(giaoDienCtwVsc(boiCanh())).then((coHoi) => { if (!coHoi) void homNayCtw(giaoDienCtwVsc(boiCanh()), { tuDong: true }).catch(() => undefined); }).catch(() => undefined); }, 1200); }
       break;
     case 'ws': veWs(m.ws); break;
     case 'info': S.info = m.info; capNhatChon(); break;

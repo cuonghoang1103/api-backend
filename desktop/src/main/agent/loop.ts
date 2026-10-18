@@ -39,7 +39,7 @@ import {
   chuanBiThan, ghepTomTat, phanTichNguCanh, type NguCanhChiTiet, type TinGui, type TomTatCompact,
 } from './thanGui';
 import {
-  datTokenChoDatTen, docPhien, dungLaiHienThi, luuPhien, taoPhienNhanh,
+  datDuAnChoDatTen, datTokenChoDatTen, docPhien, dungLaiHienThi, luuPhien, taoPhienNhanh,
   type MucKhoiPhuc, type TinNhanLuu,
 } from './phien';
 import type { PhanLoaiLenh } from './lenh';
@@ -52,7 +52,8 @@ import { getSettings, setSetting } from '../store';
 import type { AgentCongNangCap, CheDoQuyen } from '../../shared/ipc';
 import { dungLenhNenCua } from './lenhNen';
 import { dongTerminalCua } from '../terminal/phienTerminal';
-import { hanMucMcp, goiToolMcp, laCtworkTinCay, laToolMcp, toolMcpHienCo } from './mcp';
+import { hanMucMcp, goiToolMcp, laCtworkTinCay, laToolMcp, mucLucChoCuoc, napToolChoCuoc, timToolMcp, toolGuiChoCuoc } from './mcp';
+import { ghiChuGop } from './ctworkDanDuong';
 import { dinhKemThe, nguCanhChoModel } from './ctworkHe';
 import { baoLoiCtwork } from './ctworkKetNoi';
 import { moTaGhi, tomTatKetQua, type XemTruocGhi } from './ctworkVe';
@@ -167,6 +168,13 @@ export type SuKienAgent =
     }
   /** Đợt 5: tin người dùng nhắc `LF-123` ⇒ app đã đính kèm tóm tắt thẻ (giao diện hiện chip 📎). */
   | { loai: 'dinhKemCtwork'; khoa: string[] }
+  /** Đợt 6: lượt này đã đọc hướng dẫn của NHÓM từ CT Work (trang "AGENTS.md — …" hoặc bối cảnh tự đọc) — một lần mỗi cuộc. */
+  | { loai: 'ctwHuongDanNhom'; nguon: string; laAgents: boolean }
+  /**
+   * Đợt 6 (lỗi đợt trước): tin người dùng gõ GIỮA lượt mà lượt đã dừng (Esc / lỗi) TRƯỚC khi agent kịp đọc ⇒ trả về để
+   * giao diện đặt lại vào ô nhập (như Claude Code), không mất câm.
+   */
+  | { loai: 'traChen'; ds: string[] }
   /** Xin phép COMMIT hoặc MỞ PR. `chiTiet` là thứ người dùng phải ĐỌC trước khi bấm. */
   /** `gop` (đợt 3): gộp thay đổi của agent phụ ghi vào dự án. */
   | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop'; chiTiet: string; phuId?: string }
@@ -207,7 +215,8 @@ export type SuKienAgent =
     }
   /** Model đang suy nghĩ (khối thinking, chữ ẩn) — cổng chính hãng phát mỗi lời gọi một lần. */
   | { loai: 'nghi' }
-  | { loai: 'huy' }
+  /** `lyDo: 'tuChoi'` (đợt 6): người dùng chọn "3. Không, và bảo CuongMini làm khác đi" ⇒ lượt DỪNG chờ người dùng gõ. */
+  | { loai: 'huy'; lyDo?: 'tuChoi' }
   /** Hội thoại ở main vừa bị xoá sạch — giao diện PHẢI dọn bảng ghi theo. */
   | { loai: 'daXoa' };
 
@@ -377,6 +386,8 @@ interface CuocHoiThoai {
   tienLuot: number;
   /** Đợt 4: tin người dùng gõ khi agent ĐANG chạy — chèn ở mốc tool kế tiếp (hoặc cuối lượt). */
   tinChen: string[];
+  /** Đợt 6: người dùng vừa từ chối kèm "bảo CuongMini làm khác đi" ⇒ dừng lượt sau kết quả tool hiện tại. */
+  dungChiDan?: boolean;
 }
 
 const cuoc = new Map<string, CuocHoiThoai>();
@@ -427,6 +438,14 @@ export function cuocCuaPhien(phienId: string): string | null {
  * đọc ngay ở vòng sau, không chờ hết lượt); lượt sắp kết thúc mà còn tin ⇒ đi
  * tiếp thêm một vòng với tin đó. Không chạy ⇒ `false` (giao diện gửi như lượt mới).
  */
+/** Đợt 6: thẻ duyệt "3. Không, và bảo CuongMini làm khác đi" ⇒ dừng lượt sau kết quả tool đang chờ (không Esc cả lượt). */
+export function datDungChiDan(id: string): boolean {
+  const c = cuoc.get(id);
+  if (!c?.dangChay) return false;
+  c.dungChiDan = true;
+  return true;
+}
+
 export function chenTinCua(id: string, text: string): boolean {
   const c = cuoc.get(id);
   const t = String(text ?? '').trim().slice(0, 8000);
@@ -1208,6 +1227,7 @@ export async function chayLuot(
   /* ĐỢT 5: "Dự án CT Work: LF (id 2)…" — máy chủ ghi CẠNH dòng HÔM NAY ở cuối prompt (đổi theo dự án,
      không theo lượt ⇒ không phá đệm). Thư mục chưa gắn ⇒ không gửi. */
   ctworkTheoCuoc.set(c.id, boiCanh.goc ? await nguCanhChoModel(boiCanh.goc).catch(() => null) : null);
+  datDuAnChoDatTen(ctworkTheoCuoc.get(c.id)?.projectId ?? null);
   if (tuyChon.lamTiep) {
     /* CÙNG lượt người dùng đang dở ⇒ không +1 (khớp cách `quayLui` đếm). */
     c.so.luot = Math.max(1, c.hoiThoai.filter((m) => m.role === 'user').length);
@@ -1284,11 +1304,23 @@ export async function chayLuot(
   if (boiCanh.goc && await coLsp(boiCanh.goc)) capabilities.push('lsp');
   /* ĐỢT 4 — chạy notebook: cần quyền chạy lệnh + jupyter trên máy. */
   if (boiCanh.goc && boiCanh.choChayLenh && await coJupyter().catch(() => false)) capabilities.push('notebook_chay');
+  /* ĐỢT 6 — nạp tool MCP theo nhu cầu: CT Work ~120 tool ⇒ 20 tool hằng ngày + MỤC LỤC (tên + một dòng). Thư mục gắn dự
+     án CHỈ ĐỌC ⇒ bỏ tool GHI của CT Work khỏi cả hai (model không được mời gọi thứ sẽ bị từ chối). */
+  const boGhiCtwork = ctworkTheoCuoc.get(c.id)?.chiDoc === true;
+  if (mucLucChoCuoc({ boGhiCtwork }).length) capabilities.push('mcp_nap');
 
   // Đọc LẠI ở mỗi lượt người dùng gõ — xem ghi chú đầu `ghiChu.ts`. Đọc một
   // lần cho cả lượt là đủ: trong cùng một lượt agent không sửa file này, và đọc
   // lại ở từng vòng chỉ thêm I/O không đổi gì.
-  const ghiChuDuAn = boiCanh.goc ? await docGhiChuDuAn(boiCanh.goc) : null;
+  const ghiChuCucBo = boiCanh.goc ? await docGhiChuDuAn(boiCanh.goc) : null;
+  /* ĐỢT 6: AGENTS.md của NHÓM (trang Docs "AGENTS.md — …" của dự án CT Work đã gắn) gộp với AGENTS.md cục bộ — cục bộ
+     thắng khi trùng mục; đệm theo phiên bản trang; Docs tắt / chưa nối ⇒ bỏ qua êm (trần 8 s). */
+  const gop = boiCanh.goc ? await ghiChuGop(boiCanh.goc, ghiChuCucBo).catch(() => null) : null;
+  const ghiChuDuAn = gop ? { ten: gop.ten, noiDung: gop.noiDung } : ghiChuCucBo;
+  if (gop?.nhom && !daBaoNhom.has(c.id)) {
+    daBaoNhom.add(c.id);
+    phat({ loai: 'ctwHuongDanNhom', nguon: gop.nhom.nguon, laAgents: gop.nhom.laAgents });
+  }
   /* Đọc cùng nhịp với ghi chú dự án, và vì cùng một lý do: người dùng có thể
      vừa thêm một kỹ năng, và đọc một lần lúc mở app thì họ phải khởi động lại
      mới thấy. Chỉ là tên + mô tả nên rẻ. */
@@ -1395,9 +1427,11 @@ export async function chayLuot(
         ...(boiCanh.model ? { model: boiCanh.model } : {}),
         // Gửi ở MỌI vòng, không phải chỉ vòng đầu: người dùng có thể nạp lại
         // MCP giữa chừng, và máy chủ chỉ chấp nhận tool có mặt trong lượt NÀY.
-        toolMcp: toolMcpHienCo().map((t) => ({
+        toolMcp: toolGuiChoCuoc(c.id, { boGhiCtwork }).map((t) => ({
           name: t.ten, description: t.moTa, parameters: t.thamSo,
         })),
+        /* Đợt 6: mục lục tool chưa nạp (ổn định theo server ⇒ không phá đệm tiền tố). */
+        mcpMucLuc: mucLucChoCuoc({ boGhiCtwork }),
         signal: dieuKhien.signal,
         phat: phatVaGom,
       });
@@ -1565,7 +1599,20 @@ export async function chayLuot(
           continue;
         }
 
-        if (laToolMcp(goi.name)) {
+        if (goi.name === 'nap_tool_mcp') {
+          /* ĐỢT 6 — nạp schema tool MCP ở mục lục: đánh dấu cho cuộc, vòng sau tool có mặt kèm tham số. Không gọi mạng,
+             không cần duyệt (chưa chạy gì). */
+          const n = napToolChoCuoc(c.id, goi.args?.ten);
+          const dong = n.daNap.map((t) => `- ${t.ten}: ${t.moTa.split('\n')[0]!.slice(0, 160)}`);
+          kq = {
+            noiDung: [
+              n.daNap.length ? `ĐÃ NẠP ${n.daNap.length} tool — gọi được NGAY ở bước kế (tham số có trong danh sách tool):\n${dong.join('\n')}` : 'Không nạp được tool nào.',
+              n.daCo.length ? `Đã có sẵn (gọi thẳng): ${n.daCo.join(', ')}` : '',
+              n.khongCo.length ? `KHÔNG có trong mục lục: ${n.khongCo.join(', ')} — xem lại tên trong MỤC LỤC TOOL MCP CHƯA NẠP.` : '',
+            ].filter(Boolean).join('\n'),
+            tomTat: n.daNap.length ? `nạp ${n.daNap.map((t) => t.tenGoc).join(', ')}` : 'không nạp được',
+          };
+        } else if (laToolMcp(goi.name)) {
           // Tool MCP xử lý TRƯỚC cả phép kiểm "đã mở dự án chưa": một server
           // Linear hay Sentry không cần thư mục nào trên máy cả.
           kq = await chayToolMcpCoDuyet(goi.name, goi.args, c, dieuKhien.signal, phat);
@@ -1704,7 +1751,8 @@ export async function chayLuot(
         c.tinDen = [];
         /* Đợt 4: tin người dùng gõ GIỮA lượt ⇒ nối vào kết quả tool này (model đọc ngay ở vòng sau). */
         let chenGiua = '';
-        if (c.tinChen.length) {
+        /* Đợt 6: đã bấm Esc/dừng ⇒ KHÔNG nhét tin chèn vào kết quả tool (model sẽ không đọc nữa) — để `finally` trả nó về ô nhập. */
+        if (c.tinChen.length && !dieuKhien.signal.aborted && !c.dungChiDan) {
           const ds = c.tinChen; c.tinChen = [];
           chenGiua = `\n\n${bocChen(ds)}`;
           for (const t of ds) phat({ loai: 'daChen', text: t, cach: 'tool' });
@@ -1732,6 +1780,17 @@ export async function chayLuot(
           ...(thamSo ? { thamSo } : {}),
           ...(kq.xemGon ? { xemGon: kq.xemGon.slice(0, TRAN_CHI_TIET) } : {}),
         });
+        /* Đợt 6 (lỗi đợt trước): "3. Không, và bảo CuongMini làm khác đi" ⇒ DỪNG lượt ở đây, chờ người dùng gõ (như
+           Claude Code). Các tool_call còn lại của vòng này nhận kết quả "bỏ qua" để hội thoại vẫn đúng giao thức. */
+        if (c.dungChiDan) {
+          c.dungChiDan = false;
+          for (const con of ketQua.toolCalls.slice(ketQua.toolCalls.indexOf(goi) + 1)) {
+            c.hoiThoai.push({ role: 'tool', tool_call_id: con.id, content: 'BỎ QUA — người dùng đã dừng lượt để chỉ dẫn lại. Chờ tin kế tiếp của họ.' });
+          }
+          giuChuDo();
+          phat({ loai: 'huy', lyDo: 'tuChoi' });
+          return;
+        }
       }
     }
 
@@ -1748,6 +1807,9 @@ export async function chayLuot(
     else phat({ loai: 'loi', thongDiep: (err as Error).message || 'Lỗi không rõ.' });
   } finally {
     if (c.dangChay === dieuKhien) c.dangChay = null;
+    /* Đợt 6: tin gõ giữa lượt CHƯA tới được model (Esc / lỗi / dừng chờ chỉ dẫn) ⇒ trả về ô nhập, không mất câm. */
+    if (c.tinChen.length) { const ds = c.tinChen; c.tinChen = []; phat({ loai: 'traChen', ds }); }
+    c.dungChiDan = false;
     dangKyCuoc(c, 'ranh');
     if (!dieuKhien.signal.aborted) void hoiQuayVeNeuRamboSong(c.id, phien.sessionToken, phat);
     // Lưu ở `finally`, KHÔNG ở nhánh thành công. Lượt hỏng giữa chừng hay bị
@@ -2026,9 +2088,14 @@ async function chayToolMcpCoDuyet(
   signal: AbortSignal,
   phat: (e: SuKienAgent) => void,
 ): Promise<{ noiDung: string; tomTat: string; anh?: Array<{ media_type: string; data: string }>; xemGon?: string }> {
-  const t = toolMcpHienCo().find((x) => x.ten === ten);
+  /* Đợt 6: tool ở MỤC LỤC (đã nạp bằng nap_tool_mcp) cũng là tool hợp lệ. */
+  const t = timToolMcp(ten);
   if (!t) {
     return { noiDung: `LỖI: không có tool MCP tên "${ten}".`, tomTat: 'không có tool' };
+  }
+  /* Đợt 6: thư mục gắn dự án CT Work ở chế độ CHỈ ĐỌC ⇒ từ chối tool GHI của CT Work (không hỏi). */
+  if (laCtworkTinCay(t.server) && !t.chiDoc && ctworkTheoCuoc.get(c.id)?.chiDoc === true) {
+    return { noiDung: `TỪ CHỐI: thư mục này gắn dự án CT Work ở chế độ CHỈ ĐỌC — không ghi lên CT Work. Nói người dùng đổi quyền bằng /ctwork du-an nếu muốn.`, tomTat: 'chỉ đọc' };
   }
   /*
    * ĐỢT 5 — CT WORK CỦA CHÍNH CUONGTHAI (server tin cậy, `mcp.ts › laCtworkTinCay`):
@@ -2655,6 +2722,8 @@ async function mgoiMotLuot(o: {
    */
   mucModelPhu?: MucModelPhu;
   toolMcp?: Array<{ name: string; description: string; parameters: Record<string, unknown> }>;
+  /** Đợt 6: mục lục tool MCP chưa nạp schema (`nap_tool_mcp`). */
+  mcpMucLuc?: Array<{ name: string; mo: string }>;
   /** Tab nào — để cổng dự phòng BÁM theo tab (xem `giuDuPhong`). */
   cuocId?: string;
   /** Giữ ảnh của ngần này lượt cuối (mặc định 2; 0 = gỡ sạch — sau 413). */
@@ -2866,6 +2935,12 @@ function xoaVeAnthropic(): void {
 
 /** Đợt 5: ngữ cảnh CT Work của lượt đang chạy, theo cuộc (lượt phụ không mang). */
 const ctworkTheoCuoc = new Map<string, Awaited<ReturnType<typeof nguCanhChoModel>>>();
+/** Đợt 6: id dự án CT Work của cuộc (cho `/compact` + đặt tên dùng hạn mức nhóm). */
+export function duAnCtworkCuaCuoc(cuocId: string | null | undefined): number | null {
+  return (cuocId ? ctworkTheoCuoc.get(cuocId)?.projectId : null) ?? null;
+}
+/** Đợt 6: đã báo "đọc AGENTS.md của nhóm" cho cuộc này chưa (một lần mỗi cuộc). */
+const daBaoNhom = new Set<string>();
 
 async function mgoiMotLuotThat(o: {
   token: string;
@@ -2898,6 +2973,8 @@ async function mgoiMotLuotThat(o: {
    */
   mucModelPhu?: MucModelPhu;
   toolMcp?: Array<{ name: string; description: string; parameters: Record<string, unknown> }>;
+  /** Đợt 6: mục lục tool MCP chưa nạp schema (`nap_tool_mcp`). */
+  mcpMucLuc?: Array<{ name: string; mo: string }>;
   /** Tab nào — để cổng dự phòng BÁM theo tab (xem `giuDuPhong`). */
   cuocId?: string;
   /** Giữ ảnh của ngần này lượt cuối (mặc định 2; 0 = gỡ sạch — sau 413). */
@@ -2938,6 +3015,10 @@ async function mgoiMotLuotThat(o: {
       laPhu: o.laPhu,
       ...(o.laPhu && o.quyenPhu === 'ghi' ? { quyenPhu: 'ghi' } : {}),
       toolMcp: o.toolMcp,
+      ...(o.mcpMucLuc?.length ? { mcpMucLuc: o.mcpMucLuc } : {}),
+      /* Đợt 6: dự án CT Work của cuộc (kể cả lượt PHỤ) — máy chủ dùng cho HẠN MỨC NHÓM khi người dùng không có Pro
+         (`hanMucNhom.ts`). Chỉ là id; máy chủ tự kiểm thành viên + trưởng nhóm Pro. */
+      ...(o.cuocId && ctworkTheoCuoc.get(o.cuocId)?.projectId ? { ctworkDuAn: ctworkTheoCuoc.get(o.cuocId)!.projectId } : {}),
       /* Đợt 4: NGÀY + múi giờ của máy người dùng — máy chủ ghi một dòng "Hôm nay: …" ở CUỐI prompt hệ thống
          (đổi theo ngày, không theo phút ⇒ không phá đệm tiền tố). */
       ngayGio: ngayGioMay(),

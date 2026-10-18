@@ -25,9 +25,9 @@ const boQua = !existsSync(dist) ? 'chưa dựng dist/ (npm run build)' : !coPyth
 const O_NHAP = ['Ask or give a task', 'Hỏi hoặc giao việc', 'CuongMini is working', 'CuongMini đang làm'];
 const R = '__resize__';
 /** Lịch phím + đổi cỡ: menu ngôn ngữ ⇒ English, /model, /effort, thu hẹp, nới rộng, một lượt có sửa file. */
-const LICH: Array<[number, string, number?, number?]> = [
-  [2.2, '/language'], [2.5, '\r'], [3.2, '2'], [4.0, '/model'], [4.3, '\r'], [5.0, '\x1b'], [5.4, '/effort'], [5.7, '\r'], [6.3, '\x1b'],
-  [6.8, R, 90, 30], [7.8, R, 140, 40], [8.6, 'sửa laEmail'], [8.9, '\r'], [10.4, '1'], [11.2, '1'], [12.6, R, 100, 28], [13.6, R, 120, 36],
+const LICH: Array<[number, string, (number | string)?, number?]> = [
+  [2.2, '/language', 'Hỏi hoặc giao việc|Ask or give a task'], [2.5, '\r'], [3.2, '2'], [4.0, '/model'], [4.3, '\r'], [5.0, '\x1b'], [5.4, '/effort'], [5.7, '\r'], [6.3, '\x1b'],
+  [6.8, R, 90, 30], [7.8, R, 140, 40], [8.6, 'sửa laEmail'], [8.9, '\r'], [10.4, '1', '1\\. (Có|Yes)'], [11.2, '1', '1\\. (Có|Yes)'], [12.6, R, 100, 28], [13.6, R, 120, 36],
 ];
 
 let tam = '';
@@ -63,7 +63,7 @@ async function chay(ten: string, coThem: string[]): Promise<{ su_kien: unknown[]
     cmd: [process.execPath, dist, ...coThem], cwd: path.join(tam, 'duan'), cols: 120, rows: 36, duration: 15.5, out: ra,
     env: {
       HOME: home, CUONGMINI_HOME: path.join(home, '.cuongmini'), CUONGTHAI_API_ORIGIN: `http://127.0.0.1:${cong}`,
-      CUONGMINI_LOI: path.join(goc, 'thu/loiGia.cjs'), LOI_GIA_NHANH: '1', CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1',
+      CUONGMINI_LOI: path.join(goc, 'thu/loiGia.cjs'), LOI_GIA_NHANH: '1', CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_TIN_THU_MUC: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1',
       TERM: 'xterm-256color', COLORTERM: 'truecolor', LANG: 'vi_VN.UTF-8', TERM_PROGRAM: '',
     },
     // Chạy trong CI: Ink thấy CI ⇒ tắt khung động, và CuongMini không bật toàn màn hình — bỏ đi để thử như terminal thật.

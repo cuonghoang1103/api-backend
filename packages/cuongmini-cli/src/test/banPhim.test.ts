@@ -87,7 +87,7 @@ before(async () => {
 });
 after(() => { may?.close(); if (tam) rmSync(tam, { recursive: true, force: true }); });
 
-async function chay(ten: string, coThem: string[], phim?: Array<[number, string]>, giayChay = 8.5): Promise<{ su_kien: Array<[string, number, string]> }> {
+async function chay(ten: string, coThem: string[], phim?: Array<[number, string] | [number, string, string]>, giayChay = 8.5): Promise<{ su_kien: Array<[string, number, string]> }> {
   const home = path.join(tam, ten);
   mkdirSync(path.join(home, '.cuongmini'), { recursive: true });
   mkdirSync(path.join(tam, 'duan'), { recursive: true });
@@ -98,11 +98,11 @@ async function chay(ten: string, coThem: string[], phim?: Array<[number, string]
     cmd: [process.execPath, dist, ...coThem], cwd: path.join(tam, 'duan'), cols: 110, rows: 32, duration: giayChay, out: ra,
     env: {
       HOME: home, CUONGMINI_HOME: path.join(home, '.cuongmini'), CUONGTHAI_API_ORIGIN: `http://127.0.0.1:${cong}`,
-      CUONGMINI_LOI: path.join(goc, 'thu/loiGia.cjs'), LOI_GIA_NHANH: '1', CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1',
+      CUONGMINI_LOI: path.join(goc, 'thu/loiGia.cjs'), LOI_GIA_NHANH: '1', CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_TIN_THU_MUC: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1',
       TERM: 'xterm-256color', LANG: 'vi_VN.UTF-8', TERM_PROGRAM: 'iTerm.app', TERM_PROGRAM_VERSION: '3.5.10', CUONGMINI_NGON_NGU: 'vi',
     },
     bo_env: ['CI', 'GITHUB_ACTIONS', 'CONTINUOUS_INTEGRATION', 'BUILD_NUMBER', 'BUILD_ID', 'RUN_ID', 'TF_BUILD', 'GITLAB_CI'],
-    keys: phim ?? [[2.4, 'dong mot'], [2.8, '\x1b[13;2u'], [3.1, 'dong hai'], [3.4, '\x1b[106;5u'], [3.7, 'dong ba'], [6.0, '\x1b[99;5u'], [6.4, '\x1b[99;5u'], [6.7, '\x1b[99;5u']],
+    keys: phim ?? [[2.4, 'dong mot', 'Hỏi hoặc giao việc|Ask or give a task'], [2.8, '\x1b[13;2u'], [3.1, 'dong hai'], [3.4, '\x1b[106;5u'], [3.7, 'dong ba'], [6.0, '\x1b[99;5u'], [6.4, '\x1b[99;5u'], [6.7, '\x1b[99;5u']],
   }));
   await new Promise<void>((ok, hong) => {
     const p = spawn('python3', [path.join(goc, 'thu/pty_chay.py'), cauHinh], { stdio: 'ignore' });
@@ -128,8 +128,8 @@ test('PTY: CSI 13;2u xuống dòng trong ô nhập (toàn màn hình + in nối 
 test('PTY toàn màn hình mặc định: KHÔNG bắt chuột, KHÔNG xoá scrollback; ↑ ở ô trống ⇒ cuộn bản ghi, ô nhập vẫn ở đáy', { skip: boQua, timeout: 60_000 }, async () => {
   const { phatLai } = await import(path.join(goc, 'thu/phatLai.mjs')) as { phatLai: (g: unknown, t?: number) => Promise<{ manHinh: string[]; manPhu: boolean }> };
   const g = await chay('cuon', [], [
-    [2.4, 'sửa laEmail'], [2.7, '\r'], [4.2, '1'], [5.0, '1'],
-    [7.0, '\x1b[A'], [7.2, '\x1b[A'], [7.4, '\x1b[A'], [7.6, '\x1b[A'],
+    [2.4, 'sửa laEmail', 'Hỏi hoặc giao việc|Ask or give a task'], [2.7, '\r'], [4.2, '1', '1\\. (Có|Yes)'], [5.0, '1', '1\\. (Có|Yes)'],
+    [7.0, '\x1b[A', 'Hỏi hoặc giao việc|Ask or give a task'], [7.2, '\x1b[A'], [7.4, '\x1b[A'], [7.6, '\x1b[A'],
   ], 9);
   const tho = g.su_kien.filter((e) => e[0] === 'o').map((e) => Buffer.from(e[2], 'base64').toString('utf8')).join('');
   for (const ma of ['\x1b[?1000h', '\x1b[?1002h', '\x1b[?1003h', '\x1b[?1006h']) assert.ok(!tho.includes(ma), `không được bật mouse tracking (${JSON.stringify(ma)})`);

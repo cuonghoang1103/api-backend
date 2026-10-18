@@ -9,6 +9,7 @@
  *     GET/POST  /workspaces/:wsId/agents/:agentId/webhooks      · PATCH/DELETE …/webhooks/:hid · POST …/webhooks/:hid/test
  *     GET       /workspaces/:wsId/agents/:agentId/inbox         (50 dòng gần nhất)
  *     GET/PUT   /projects/:pid/agent-settings                   (Done⇒Review, reviewStatusId, … — ADMIN dự án)
+ *     GET/PUT   /projects/:pid/cuongmini-team                   (đợt 6: CuongMini cho cả nhóm — hạn mức trưởng nhóm, ADMIN sửa)
  *     GET       /workspaces/:wsId/agents/dashboard?days=30       (A12 People vs Agents — admin: tất; owner: agent của mình)
  *     GET       /projects/:pid/reports/agents?from&to&sprintId   (A12) · GET /projects/:pid/issues/:num/agent-activity
  *
@@ -31,6 +32,7 @@ import * as agents from '../services/work/agents.service.js';
 import * as webhooks from '../services/work/webhooks.service.js';
 import * as agentReports from '../services/work/agentReports.service.js';
 import { ackInbox, agentBus, listInbox } from '../services/work/agentEvents.js';
+import { datCauHinhNhom, xemBangNhom } from '../services/agent/hanMucNhom.js';
 
 const router = Router();
 
@@ -186,6 +188,23 @@ router.put('/projects/:pid/agent-settings', asyncHandler(async (req, res) => {
     reviewerIds: z.array(id).max(10).optional(),
   }).strict(), req.body);
   ok(res, await agents.updateAgentSettings(callerId(req), P(req, 'pid'), body));
+}));
+
+// ─── CuongMini cho cả nhóm (đợt 6, 18/10/2026) ──────────────────
+// Hạn mức CuongMini của trưởng nhóm (ADMIN có Pro) cho thành viên không Pro — xem services/agent/hanMucNhom.ts.
+// Agent CT Work bị chặn ở AGENT_DENIED_ROUTES (`cuongmini-team`), service cũng chỉ cho NGƯỜI ADMIN sửa.
+
+router.get('/projects/:pid/cuongmini-team', asyncHandler(async (req, res) => {
+  ok(res, await xemBangNhom(callerId(req), P(req, 'pid')));
+}));
+router.put('/projects/:pid/cuongmini-team', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    bat: z.boolean().optional(),
+    tranNgayNguoiUsd: z.number().min(0).max(50).optional(),
+    tranThangNhomUsd: z.number().min(0).max(1000).optional(),
+    chuId: id.nullable().optional(),
+  }).strict(), req.body);
+  ok(res, await datCauHinhNhom(callerId(req), P(req, 'pid'), body));
 }));
 
 // ─── Chi phí / năng suất (A12) ───────────────────────────────────

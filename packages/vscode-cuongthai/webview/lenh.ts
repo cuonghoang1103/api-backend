@@ -12,7 +12,7 @@ import {
   timMuc, timTheoChu, xuatMarkdown, type MucGhi, type PhienCu,
 } from 'ct-lenh';
 // Đợt 5: bộ lệnh CT Work chung ba nơi (`/ctwork` menu đánh số, `/issue`, `/sprint`, `/viec`).
-import { lenhCtwork, type GiaoDienCtw, type TheChonCtw } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
+import { lenhCtwork, moCtworkTuMcp, type GiaoDienCtw, type TheChonCtw } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
 
 /** Đợt 4 — chữ hai thứ tiếng theo ngôn ngữ giao diện VS Code. */
 const Lv = (vi: string, en: string): string => (/^vi/i.test(navigator.language || 'vi') ? vi : en);
@@ -405,16 +405,18 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       const q = thamSo.trim().toLowerCase();
       if (/^(mo|mở|open|edit)$/.test(q)) { await b.goi('agent:mcpMoCauHinh').catch(() => undefined); b.thongBao(Lv('Đã mở file cấu hình MCP.', 'Opened the MCP config file.')); return; }
       if (/^(nap|nạp|reload)$/.test(q)) await b.goi('agent:mcpNapLai').catch(() => undefined);
-      type TT = { duongDan: string; server: Array<{ ten: string; ok: boolean; soTool: number; loi?: string; canDuyet?: boolean; tat?: boolean; tuDuAn?: boolean; kieu?: string }>; loiCauHinh?: string | null } | null;
+      type TT = { duongDan: string; server: Array<{ ten: string; ok: boolean; soTool: number; loi?: string; canDuyet?: boolean; tat?: boolean; tuDuAn?: boolean; kieu?: string; soMucLuc?: number }>; loiCauHinh?: string | null } | null;
       const tt = await b.goi<TT>('agent:mcpTrangThai').catch(() => null);
       const sv = tt?.server ?? [];
       const dong = sv.length
-        ? sv.map((x) => `- \`${x.ten}\` — ${x.ok ? `✔ ${Lv('đã nối', 'connected')} · ${x.soTool} tool${x.kieu ? ` · ${x.kieu}` : ''}` : x.tat ? `○ ${Lv('đã tắt', 'disabled')}` : x.canDuyet ? `⏸ ${Lv('chờ duyệt (.mcp.json dự án)', 'awaiting approval (project .mcp.json)')}` : `✘ ${(x.loi ?? Lv('lỗi', 'failed')).split('\n')[0]!.slice(0, 120)}`}`).join('\n')
+        ? sv.map((x) => `- \`${x.ten}\` — ${x.ok ? `✔ ${Lv('đã nối', 'connected')} · ${x.soTool} tool${x.soMucLuc ? Lv(` + ${x.soMucLuc} nạp khi cần`, ` + ${x.soMucLuc} on demand`) : ''}${x.kieu ? ` · ${x.kieu}` : ''}` : x.tat ? `○ ${Lv('đã tắt', 'disabled')}` : x.canDuyet ? `⏸ ${Lv('chờ duyệt (.mcp.json dự án)', 'awaiting approval (project .mcp.json)')}` : `✘ ${(x.loi ?? Lv('lỗi', 'failed')).split('\n')[0]!.slice(0, 120)}`}`).join('\n')
         : Lv('_(chưa cấu hình máy chủ nào)_', '_(no servers configured)_');
       b.traLoi(`${/^(nap|nạp|reload)$/.test(q) ? `${Lv('✓ Đã nạp lại cấu hình MCP.', '✓ MCP config reloaded.')}\n\n` : ''}**${Lv('Máy chủ MCP', 'MCP servers')}**\n\n${dong}${tt?.loiCauHinh ? `\n\n⚠ ${tt.loiCauHinh}` : ''}\n\n⎿ \`${tt?.duongDan ?? '?'}\``);
       b.nut?.([
         { nhan: Lv('Mở file cấu hình', 'Open config file'), chinh: true, lam: async () => { await b.goi('agent:mcpMoCauHinh').catch(() => undefined); } },
         { nhan: Lv('Nạp lại', 'Reload'), lam: () => chayLenh('/mcp nap', b) },
+        /* Đợt 6 (việc 4): nối bằng phiên đăng nhập ⇒ MỌI dự án (không gian · vai) ⇒ quyền ⇒ gắn. */
+        { nhan: Lv('CT Work — chọn dự án & quyền', 'CT Work — pick project & access'), lam: () => moCtworkTuMcp(giaoDienCtwVsc(b)) },
         { nhan: Lv('Kết nối CT Work', 'Connect CT Work'), lam: () => chayLenh('/ctwork', b) },
         ...sv.filter((x) => !x.tuDuAn && !x.canDuyet).map((x) => ({
           nhan: `${x.tat ? Lv('Bật', 'Enable') : Lv('Tắt', 'Disable')} ${x.ten}`,

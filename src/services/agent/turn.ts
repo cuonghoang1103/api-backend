@@ -70,10 +70,11 @@ import { coKeyGiaHan } from './keyGiaHan.js';
 import { HE_SO_FABLE, MODEL_FABLE, loiHetFable, xemHanMucFable } from './fable.js';
 import { loiCanViTien, xemViTien } from './viTien.js';
 import { runServerTool } from './serverTools.js';
-import { buildSystemPrompt, catGhiChu, dongDuAnCtwork, dongHomNay, LUAT_CTWORK, type WorkspaceHint } from './prompt.js';
+import { buildSystemPrompt, catGhiChu, dongDuAnCtwork, dongHomNay, LUAT_CTWORK, LUAT_DAN_DUONG, type WorkspaceHint } from './prompt.js';
 import { catLuotCu, loiNhacDaCat, tongKyTu } from './catCu.js';
+import { stepNhom, type NguonNhom } from './hanMucNhom.js';
 import { ghiNhoLuotDaBo, goiTomTatBangModel } from './tomTatLuotCu.js';
-import { parseCapabilities, parseToolMcp, toolByName, toolsForGateway, type AgentCapability } from './tools.js';
+import { khoiMucLucMcp, parseCapabilities, parseMucLucMcp, parseToolMcp, toolByName, toolsForGateway, type AgentCapability } from './tools.js';
 import { logger } from '../../utils/logger.js';
 import { prisma } from '../../config/database.js';
 
@@ -441,6 +442,17 @@ export interface AgentTurnInput {
   ngayGio?: unknown;
   /** Đợt 5: dự án CT Work gắn với thư mục (`dongDuAnCtwork` lọc từng trường). */
   ctwork?: unknown;
+  /**
+   * Đợt 6: người dùng KHÔNG Pro đang dùng HẠN MỨC NHÓM (trưởng nhóm có Pro tài trợ) — CHỈ route `chiProHoacNhom`
+   * điền (sau khi máy chủ đã kiểm thành viên + trưởng nhóm Pro + đang bật + còn trần), KHÔNG BAO GIỜ từ thân yêu cầu.
+   * Có trường này ⇒ chỉ model free, sổ ghi dấu nhóm (`hanMucNhom.ts › stepNhom`).
+   */
+  nhom?: NguonNhom;
+  /**
+   * Đợt 6 (việc 9): MỤC LỤC tool MCP chưa nạp schema — `[{ name, mo }]` (tên đầy đủ `mcp__server__tool` + một dòng
+   * mô tả). Có ⇒ máy chủ thêm tool `nap_tool_mcp` + khối mục lục ở phần ổn định của prompt.
+   */
+  mcpMucLuc?: unknown;
   /** Mục lục bộ nhớ app gửi lên (chuỗi đã cắt trần phía app). */
   boNho?: string;
   kyNang?: Array<{ ten: string; moTa: string }>;
@@ -948,6 +960,8 @@ export async function runAgentTurn(
   }
 
   const messagesGoc = sanitizeIncoming(input.messages);
+  /** Đợt 6: lượt dùng hạn mức NHÓM ⇒ sổ mang dấu nhóm (đếm trần nhóm + bảng "ai dùng bao nhiêu"). */
+  const stepSo = input.nhom ? stepNhom(input.nhom.projectId, input.nhom.chu.id) : undefined;
   /**
    * Tự bỏ lượt cũ khi chạm trần, thay vì từ chối cả lượt.
    *
@@ -964,9 +978,9 @@ export async function runAgentTurn(
   const diRamboDuKien = ramboBat()
     && (input.model === undefined || (laMaRambo(input.model) && !laMaCuongMini(input.model)));
   const mucDuKien = diRamboDuKien ? null : timModel(input.model);
-  const tranKyTu = mucDuKien ? tranKyTuCua(mucDuKien.cuaSoToken) : MAX_TOTAL_CHARS;
+  let tranKyTu = mucDuKien ? tranKyTuCua(mucDuKien.cuaSoToken) : MAX_TOTAL_CHARS;
   /** Cửa sổ ngữ cảnh (token) để tính "context %" từ usage thật. */
-  const cuaSoToken = mucDuKien?.cuaSoToken ?? 200_000;
+  let cuaSoToken = mucDuKien?.cuaSoToken ?? 200_000;
   const boLuot = catLuotCu(messagesGoc, tranKyTu - CHO_GHI_NHO, MAX_MESSAGES);
   /* Lời nhắc "đã bỏ N lượt" đặt NGAY (đếm bước cần nó); phần ghi nhớ (đề bài +
      tóm tắt) điền SAU khi biết model của cuộc — tóm tắt chạy bằng CHÍNH model đó. */
@@ -1053,7 +1067,9 @@ export async function runAgentTurn(
     ? catGhiChu(input.ghiChuDuAn.ten, input.ghiChuDuAn.noiDung)
     : undefined;
   /* Đợt 5: luật CT Work chỉ khi cuộc CÓ tool CT Work (phần ổn định); dòng dự án cạnh HÔM NAY (cuối). */
-  const coCtwork = toolMcp.some((t) => t.name.startsWith('mcp__ctwork__'));
+  /* Đợt 6: mục lục tool MCP chưa nạp — tool ở mục lục cũng tính là "có CT Work". */
+  const mucLucMcp = laPhu ? [] : parseMucLucMcp(input.mcpMucLuc);
+  const coCtwork = toolMcp.some((t) => t.name.startsWith('mcp__ctwork__')) || mucLucMcp.some((t) => t.name.startsWith('mcp__ctwork__'));
   const dongCtw = coCtwork || input.ctwork ? dongDuAnCtwork(input.ctwork) : '';
   /* `LOI_LAM_VIEC` nối cho MỌI model (27/09/2026) — Opus và GPT nhận cùng một
      bộ luật làm việc. Đặt ở cuối để phần đầu prompt giữ nguyên, đệm tiền tố
@@ -1076,8 +1092,10 @@ export async function runAgentTurn(
     ...(input.kyNang?.length ? { kyNang: input.kyNang } : {}),
     ...(input.agentPhu?.length ? { agentPhu: input.agentPhu } : {}),
     ...(input.promptPhu ? { promptPhu: input.promptPhu } : {}),
-  }) + `\n\n${LOI_LAM_VIEC}${coCtwork ? `\n\n${LUAT_CTWORK}` : ''}\n\n${dongHomNay(input.ngayGio)}${dongCtw ? `\n${dongCtw}` : ''}`;
-  const tools = toolsForGateway(capabilities, toolMcp);
+  }) + `\n\n${LOI_LAM_VIEC}${coCtwork ? `\n\n${LUAT_CTWORK}\n\n${LUAT_DAN_DUONG}` : ''}${mucLucMcp.length ? `\n\n${khoiMucLucMcp(mucLucMcp)}` : ''}\n\n${dongHomNay(input.ngayGio)}${dongCtw ? `\n${dongCtw}` : ''}`;
+  /* Đợt 6: `ctwork_huong_dan` chỉ khi cuộc có CT Work (tool hoặc dự án gắn); `nap_tool_mcp` chỉ khi có mục lục. */
+  const tools = toolsForGateway(capabilities, toolMcp)
+    .filter((t) => (t.function.name !== 'ctwork_huong_dan' || coCtwork || Boolean(input.ctwork)) && (t.function.name !== 'nap_tool_mcp' || mucLucMcp.length > 0));
 
   const xin = await xinDiemCuoi('agent_code');
   const tra = xin.tra;
@@ -1113,6 +1131,23 @@ export async function runAgentTurn(
    * model theo người). Trả lý do CHẶN (`loai: 'cong'` = cổng hỏng ⇒ được tự
    * chuyển; `'tran'` = hết trần ⇒ báo, không tự nâng), hoặc `null` khi đã chuyển.
    */
+  /** Phần lượt NÀY đã thêm (gán lại khi `append` được tạo bên dưới — tránh TDZ khi đổi model trước lời gọi đầu). */
+  let appendCuaLuot: AgentMessage[] = [];
+  /** Đợt 6: model vừa đổi cửa sổ ⇒ trần ký tự theo cửa sổ mới; hội thoại vượt ⇒ cắt lượt cũ từ bản gốc. */
+  const vuaCuaSoMoi = (): void => {
+    tranKyTu = tranKyTuCua(muc.cuaSoToken);
+    cuaSoToken = muc.cuaSoToken;
+    const daThem = tongKyTu(appendCuaLuot);
+    if (tongKyTu(messages) + daThem <= tranKyTu - CHO_GHI_NHO) return;
+    const cat = catLuotCu(messagesGoc, Math.max(20_000, tranKyTu - CHO_GHI_NHO - daThem), MAX_MESSAGES);
+    if (cat.soLuotDaBo > boLuot.soLuotDaBo) {
+      logger.warn('agent: đổi sang model cửa sổ nhỏ hơn — cắt lượt cũ trước khi gọi', { model: muc.model, boLuot: cat.soLuotDaBo, tranKyTu });
+      messages = [loiNhacDaCat(cat.soLuotDaBo), ...cat.messages];
+      /* Cập nhật CẢ hai trường: bước "ghi nhớ lượt đã bỏ" phía sau dựng lại `messages` từ `boLuot.messages`. */
+      boLuot.soLuotDaBo = cat.soLuotDaBo;
+      boLuot.messages = cat.messages;
+    }
+  };
   const chuyenSang = async (m: MucModel): Promise<{ loai: 'cong' | 'tran'; code: string; error: string } | null> => {
     if (m.cong === 'anthropic') {
       if (congDangHong('anthropic') || !(await coKeyKhaDung())) {
@@ -1123,14 +1158,30 @@ export async function runAgentTurn(
     } else if (congDangHong('modelapi') || !modelapiGoiDuoc(m)) {
       return { loai: 'cong', code: 'MODEL_CHUA_CO_KHOA', error: `${m.ten} tạm thời không chạy được (cổng bận). / ${m.ten} is temporarily unavailable (gateway busy).` };
     }
-    const ht = await xemTranModel(input.userId, m);
-    if (ht.het) return { loai: 'tran', code: 'CUONGMINI_HET_TRAN', error: loiHetTranModel(ht, m.ten) };
+    if (input.nhom) {
+      /* Đợt 6 — HẠN MỨC NHÓM: chỉ model FREE (model cần khoá vẫn cần khoá — và tiền là của trưởng nhóm). Trần
+         nhóm (người/ngày + nhóm/tháng) đã kiểm ở route trước khi mở SSE; trần model theo người KHÔNG áp (người
+         gọi không có gói ⇒ trần 0). */
+      if (m.khoa !== 'free') {
+        return {
+          loai: 'tran', code: 'NHOM_CHI_MODEL_FREE',
+          error: `Hạn mức nhóm ${input.nhom.key} chỉ dùng model miễn phí (Solid, Nova, Shin, Sonic, Heshin, Eco) — chọn lại bằng /model. / The ${input.nhom.key} team allowance only covers free models — pick one with /model.`,
+        };
+      }
+    } else {
+      const ht = await xemTranModel(input.userId, m);
+      if (ht.het) return { loai: 'tran', code: 'CUONGMINI_HET_TRAN', error: loiHetTranModel(ht, m.ten) };
+    }
     ep = m.cong === 'anthropic'
       ? diemCuoiChinhHang()
       : { root: gatewayRoot(), key: gatewayKeyFor(m.model), local: false, label: 'cong', giaoThuc: 'openai' };
     model = m.model;
+    const cuaSoCu = muc.cuaSoToken;
     muc = m;
     hangCH = m.cong === 'anthropic' ? hangSo(m) : null;
+    /* Đợt 6 (lỗi đợt trước): tự chuyển từ model 1M sang GPT 400K mà hội thoại đã vượt cửa sổ mới ⇒ cổng trả 400
+       "context length". Nay đổi trần theo cửa sổ MỚI và CẮT lượt cũ (kèm lời nhắc) TRƯỚC khi gọi. */
+    if (m.cuaSoToken !== cuaSoCu) vuaCuaSoMoi();
     return null;
   };
   /**
@@ -1177,7 +1228,7 @@ export async function runAgentTurn(
      tiết. Vẫn đệm theo băm (khoá có model) ⇒ chỉ tốn một lời gọi khi phần bỏ đổi. */
   if (boLuot.soLuotDaBo > 0) {
     const ghiNho = await ghiNhoLuotDaBo(messagesGoc, boLuot.messages.length, undefined,
-      diRambo ? undefined : goiTomTatBangModel(muc, input.userId));
+      diRambo ? undefined : goiTomTatBangModel(muc, input.userId, stepSo));
     if (ghiNho.daGoiModel) {
       emit({ type: 'server_tool', name: 'tóm tắt ngữ cảnh', summary: `ghi nhớ ${boLuot.soLuotDaBo} lượt cũ` });
     }
@@ -1211,6 +1262,7 @@ export async function runAgentTurn(
   if (khungCongDau) emit(khungCongDau);
 
   const append: AgentMessage[] = [];
+  appendCuaLuot = append;
   let inTong = 0;
   /* Token VÀO của lời gọi GẦN NHẤT (đã gồm phần đọc/ghi đệm) = cỡ ngữ cảnh THẬT
      đang gửi. Đợt 3: "context %" tính từ đây thay vì chỉ đếm ký tự — với cổng
@@ -1288,13 +1340,16 @@ export async function runAgentTurn(
     for (let hop = 0; hop <= MAX_SERVER_HOPS + MAX_VIET_TIEP; hop++) {
       // Nén NGAY TRƯỚC mỗi lời gọi, tính lại từ đầu mỗi lần: hop này vừa thêm
       // kết quả mới, nên cái "gần nhất" đã khác so với hop trước.
+      /* Đợt 6: dựng bản gửi thành HÀM — tự chuyển cổng GIỮA lượt sang model cửa sổ nhỏ hơn thì dựng lại theo cửa sổ
+         mới (trước đây gửi lại đúng bản cũ ⇒ GPT 400K nhận hội thoại 1M ⇒ 400 "context length"). */
+      const dungGuiDi = (): AgentMessage[] => {
       const tatCa = [...messages, ...append];
       /* KHÔNG lược kết quả tool cũ khi còn chỗ (18/10/2026 — "không giới hạn năng
          lực"): cổng chính hãng (mọi model) có compact phía Anthropic lo phần quá dài;
          cổng modelapi chỉ lược khi hội thoại đã quá ~nửa cửa sổ thật của model.
          Trước đây: luôn lược (trừ model cao chính hãng), giữ 8–15 kết quả gần nhất. */
       const canNen = ep.label !== NHAN_CONG_ANTHROPIC
-        && (ep.label === 'cong-agent' || tongKyTu(tatCa) > nguongNen(muc.cuaSoToken));
+        && (ep.label === 'cong-agent' || tongKyTu(tatCa) > nguongNen(muc.cuaSoToken) || tongKyTu(tatCa) > tranKyTu - CHO_GHI_NHO);
       const nen = canNen ? nenNguCanh(tatCa) : { messages: tatCa, soDaLuoc: 0, kyTuDaCat: 0 };
       if (nen.soDaLuoc > daLuoc) { daLuoc = nen.soDaLuoc; daCat = nen.kyTuDaCat; }
 
@@ -1308,7 +1363,9 @@ export async function runAgentTurn(
          trần và phát hiện của nó chỉ còn là những mẩu chữ rời rạc. */
       if (laPhu && demBuocViecNay(tatCa) >= MAX_AGENT_STEPS - 1) nhac.push(NHAC_BUOC_CUOI);
       const khongLap = boKetQuaLap(nen.messages);
-      const guiDi = nhac.length ? ganNhacDuoi(khongLap, nhac.join('\n')) : khongLap;
+      return nhac.length ? ganNhacDuoi(khongLap, nhac.join('\n')) : khongLap;
+      };
+      let guiDi = dungGuiDi();
       uocLuongDangBay = uocLuongVao(system, guiDi);
 
       const goiMotLan = () => (ep.label === 'cong-agent' ? goiCongCoLuoiDo : goiCong)({
@@ -1355,6 +1412,9 @@ export async function runAgentTurn(
         }
         logger.warn('agent: cổng hỏng giữa lượt — tự chuyển model tương đương', { tu: tuModel, sang: model, loi: thong.slice(0, 120) });
         emit(khungTuDoi());
+        /* Đợt 6: cửa sổ model mới có thể nhỏ hơn ⇒ dựng lại bản gửi (đã cắt/lược theo cửa sổ mới) TRƯỚC khi gọi lại. */
+        guiDi = dungGuiDi();
+        uocLuongDangBay = uocLuongVao(system, guiDi);
         ketQua = await goiMotLan();
       }
 
@@ -1457,7 +1517,7 @@ export async function runAgentTurn(
 
       for (const c of vongServer) {
         const args = docArgs(c.function.arguments);
-        const kq = await runServerTool(c.function.name, args, input.userId);
+        const kq = await runServerTool(c.function.name, args, input.userId, { ctwork: input.ctwork });
         append.push({ role: 'tool', tool_call_id: c.id, content: kq.content, ...(kq.anh?.length ? { anh: kq.anh } : {}) });
         emit({ type: 'server_tool', name: c.function.name, summary: kq.summary });
       }
@@ -1571,9 +1631,10 @@ export async function runAgentTurn(
     // token vào rồi, và đó chính là loại chi phí mà biểu đồ cần nhìn thấy.
     /* Mỗi ĐOẠN một dòng sổ (tự chuyển cổng giữa lượt ⇒ hai model, hai giá). */
     for (const d of doanDaChot) {
-      void ghiSo({ userId: input.userId, model: d.model, inTong: d.inTong, outTong: d.outTong, thanhCong: true, cacheDoc: d.cacheDoc, costUsd: d.costUsd });
+      void ghiSo({ userId: input.userId, model: d.model, inTong: d.inTong, outTong: d.outTong, thanhCong: true, cacheDoc: d.cacheDoc, costUsd: d.costUsd, ...(stepSo ? { step: stepSo } : {}) });
     }
     void ghiSo({
+      ...(stepSo ? { step: stepSo } : {}),
       userId: input.userId,
       model,
       // Lời gọi hỏng giữa chừng: cộng ước lượng token vào của nó (26/09/2026).
@@ -1785,6 +1846,8 @@ async function ghiSo(d: {
   cacheDoc: number;
   /** USD đã tính sẵn (cổng chính hãng: giá chính thức gồm đệm). Bỏ trống ⇒ `costUsd(model, …)`. */
   costUsd?: number;
+  /** Đợt 6: dấu hạn mức NHÓM (`nhom:p<pid>:u<chủ>`) — sổ theo cả hai id. Bỏ trống ⇒ 'interview' như cũ. */
+  step?: string;
 }): Promise<void> {
   if (d.inTong === 0 && d.outTong === 0) return;
   /* Sổ `interview_llm_call_logs` KHÔNG có cột cho phần đọc đệm, và thêm cột là
@@ -1802,7 +1865,7 @@ async function ghiSo(d: {
       data: {
         userId: d.userId,
         feature: 'agent',
-        step: 'interview', // cột này chỉ để suy ra bậc model khi caller cũ không khai `purpose`
+        step: d.step ?? 'interview', // cột này chỉ để suy ra bậc model khi caller cũ không khai `purpose`; đợt 6: dấu nhóm
         provider: 'gateway',
         model: d.model,
         inputTokens: d.inTong,

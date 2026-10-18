@@ -718,7 +718,7 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['POST', /^\/assets(\/.*)?$/], ['PATCH', /^\/assets(\/.*)?$/], ['PUT', /^\/assets(\/.*)?$/], ['DELETE', /^\/assets(\/.*)?$/], ['GET', /^\/assets-export$/],
   // Cấu hình dự án / quyền / thành viên / xoá
   ['*', /^\/members(\/.*)?$/], ['PATCH', /^$/], ['DELETE', /^$/], ['*', /^\/archive$/],
-  ['*', /^\/(labels|components|workflows|statuses|issue-types|issue-templates|custom-fields|board-columns|studio|desk\/settings|spec-settings|agent-settings|avatar|sample-data|onboarding)(\/.*)?$/],
+  ['*', /^\/(labels|components|workflows|statuses|issue-types|issue-templates|custom-fields|board-columns|studio|desk\/settings|spec-settings|agent-settings|cuongmini-team|avatar|sample-data|onboarding)(\/.*)?$/],
   ['PUT', /^\/capacity\/\d+$/], ['POST', /^\/tests\/enable$/],
   ['POST', /^\/versions\/\d+\/release$/], ['DELETE', /^\/versions\/\d+$/],
   ['DELETE', /^\/issues\/\d+$/], ['POST', /^\/issues\/\d+\/move-project$/], ['POST', /^\/issues\/bulk$/], ['*', /^\/trash(\/.*)?$/],

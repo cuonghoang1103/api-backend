@@ -2090,4 +2090,19 @@ export const TU_DIEN: Record<string, string> = {
   "↳ Đã chèn tin của bạn vào lượt đang chạy (sau tool vừa xong).": "↳ Your message was inserted into the running turn (after the last tool).",
   'Chèn câu này vào lượt ĐANG chạy — agent đọc ngay sau tool kế tiếp (Enter cũng được)': 'Insert this into the RUNNING turn — the agent reads it right after the next tool (Enter works too)',
   'Chèn vào lượt': 'Insert into turn',
+
+  // ── Đợt 6 CuongMini (18/10/2026) — CT Work dẫn đường, nạp tool theo nhu cầu, trả tin chèn ──
+  'nạp khi cần': 'loaded on demand',
+  'Đã dừng — gõ CuongMini nên làm gì khác.': 'Stopped — tell CuongMini what to do instead.',
+  '↩ {n} tin bạn gõ thêm chưa kịp tới agent — đã trả về ô nhập.': '↩ {n} message(s) you added did not reach the agent — they are back in the input.',
+  '📎 Đọc hướng dẫn của nhóm: {nguon}': '📎 Read the team instructions: {nguon}',
+  '📎 Đọc bối cảnh dự án từ CT Work: {nguon}': '📎 Read the project context from CT Work: {nguon}',
+  'CuongMini nên làm gì khác? Gõ chỉ dẫn rồi Enter…': 'What should CuongMini do instead? Type and press Enter…',
+  'Nối CT Work bằng tài khoản đang đăng nhập, chọn dự án (không gian · vai) và quyền đọc/ghi': 'Connect CT Work with your signed-in account, pick a project (workspace · role) and read/write access',
+  'CT Work — chọn dự án & quyền': 'CT Work — pick project & access',
+  // Nút "Cài CuongMini CLI" (đợt 6): lỗi thật + xem log, lệnh cài tay cho cmd / Git Bash
+  'Không mở được terminal.': 'Could not open a terminal.',
+  'Xem log': 'View log',
+  'Chép lỗi + log': 'Copy error + log',
+  'Cài tay (máy này hoặc máy khác) — chọn đúng cửa sổ lệnh bạn đang dùng:': 'Install manually (this or another machine) — pick the shell you are using:',
 };

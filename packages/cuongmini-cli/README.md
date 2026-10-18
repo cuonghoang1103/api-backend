@@ -90,6 +90,33 @@ CuongMini mở trong **alternate screen** như Claude Code: ô nhập + chân tr
 - Toàn màn hình KHÔNG bao giờ gửi lệnh xoá scrollback (iTerm2 hết hiện thanh "clear scrollback history?").
 - Tắt: `/fullscreen off` (lưu cho lần sau) · cờ `--no-fullscreen` · `CUONGMINI_TOAN_MAN_HINH=0`. CI, không TTY, `-p` thì không bao giờ bật.
 
+## Mới ở 0.6.0 (đợt 6 + cổng & model)
+
+**Mở là dùng**
+- Mở `cuongmini` ở **bất kỳ thư mục nào**: lần đầu ở thư mục mới hiện hộp "Mở thư mục làm việc … Kiểm nhanh an toàn" (`1. Có, tôi tin thư mục này` · `2. Không, thoát`), nhớ thư mục đã tin (cả thư mục con) ở `~/.cuongmini/thu-muc-tin.json`. Thư mục HOME / gốc ổ đĩa ⇒ cảnh báo đỏ, mặc định "Không". `-p` và `CUONGMINI_TIN_THU_MUC=1` (CI) không hỏi.
+- Chưa đăng nhập ⇒ đăng nhập ngay trong CLI rồi đi tiếp (không thoát).
+- **Hạn mức nhóm**: không có Pro nhưng là thành viên một dự án CT Work mà trưởng nhóm (ADMIN) có Pro ⇒ dùng CuongMini cho dự án đó bằng hạn mức trưởng nhóm (chỉ model free; trần mỗi người/ngày + cả nhóm/tháng, trưởng nhóm bật/tắt ở Project settings → "CuongMini cho cả nhóm"). Máy chủ quyết định — CLI chỉ gửi id dự án đã gắn.
+
+**CT Work dẫn đường**
+- `/mcp` → **CT Work — chọn dự án & quyền**: nối bằng phiên đăng nhập ⇒ MỌI dự án của bạn (không gian · vai · thẻ mở, gõ để lọc) ⇒ quyền **Đọc + ghi / Chỉ đọc / Chỉ phiên này** ⇒ gắn thư mục (thư mục không phải repo ⇒ gắn theo phiên).
+- Gắn xong CuongMini **tự đọc trang Docs "AGENTS.md — …"** của dự án (khối ```markdown đầu tiên, đệm theo phiên bản trang), gộp với `AGENTS.md` cục bộ (cục bộ thắng khi trùng mục). Không có trang ⇒ tự đọc trang tổng quan + sprint.
+- **Hôm nay** (đầu buổi, một lần/ngày/thư mục): việc của bạn + hạn + nên làm thẻ nào trước.
+- **`/ctwork`** mới: 1 Sprint · 2 **Hôm nay** · 3 Mở thẻ / **hướng dẫn** (đọc gì, các bước, xong khi, hỏi ai, **phụ thuộc** "cần @user làm xong LF-5 trước — nhánh `origin/LF-5-…`, pull về rồi làm") · 4 Bắt đầu · 5 Ghi giờ · 6 **Xong việc — bước tiếp** · 7 Báo cáo & mẫu FPT · 8 Nhóm (tổng quan trưởng nhóm / giảng viên, Q&A, chat, họp) · 9 Chọn dự án · 0 Thoát; ↑↓ thêm: Theo dõi bật/tắt, Hỏi cách dùng CT Work. Lối tắt: `/ctwork hom-nay | huong-dan LF-18 | xong | nhom | mau | hoi <câu> | nhan <tin> | theo-doi on|off`.
+- **Làm xong là gợi ý**: lượt xong trên nhánh `LF-18-…` có commit mới ⇒ thẻ "Xong việc ở LF-18? Bước tiếp theo đúng luật dự án" (chuyển trạng thái theo workflow + Done rules, bình luận bằng chứng kèm link PR, ghi giờ, xin review, báo nhóm…) — mọi thao tác ghi đều qua thẻ xem trước.
+- **Theo dõi nhẹ** (≥ 60 s, chỉ khi có dự án gắn): "@longbui vừa bình luận NT-12", "bạn vừa được giao NT-20", "NT-12 (chặn thẻ của bạn) đã Done — pull về làm được rồi". Tắt: `/ctwork theo-doi off`.
+- AI **dùng được mọi tool CT Work (~120)**: 20 tool hằng ngày kèm tham số, phần còn lại ở mục lục và được nạp khi cần (`nap_tool_mcp`); hỏi "làm X trong CT Work thế nào" ⇒ trả kèm link đúng trang (`ctwork_huong_dan`).
+
+**Cổng & model (từ 18/10)**
+- Một danh sách model CuongMini (cao → thấp, chỉ tên CuongMini); model cần khoá hiện 🔒, chọn ⇒ hỏi khoá (vé 48 giờ). Cổng của model hỏng ⇒ máy chủ tự chuyển sang model free tương đương ở cổng kia (một dòng mờ "Đã chuyển sang … vì cổng bận"). Bỏ các trần làm model kém đi (ngữ cảnh theo cửa sổ thật 1M/400K, `max_tokens` theo model, đọc file/lệnh/MCP rộng hơn); tiền chặn bằng trần chi tiêu theo model × người.
+
+**Sửa**
+- Tự chuyển từ model 1M sang GPT 400K mà hội thoại dài ⇒ máy chủ cắt lượt cũ (kèm ghi nhớ) TRƯỚC khi gọi, không còn lỗi 400.
+- Gõ thêm giữa lượt rồi `esc` ⇒ tin trả về ô nhập (như Claude Code).
+- "3. Không, và bảo CuongMini làm khác đi (esc)" ⇒ lượt DỪNG, chờ bạn gõ chỉ dẫn.
+- Thẻ `/ctwork` ở cửa sổ 60×20 không còn cao hơn màn hình.
+- "Connecting CT Work…" không còn treo 30–45 s vì một server MCP khác treo (nạp lại từng server).
+- Windows: cài được trên PowerShell 5.1/7, **cmd** (`powershell -NoProfile -ExecutionPolicy Bypass -c "irm https://cuongthai.com/cli/install.ps1 | iex"`) và **Git Bash** (`curl -fsSL https://cuongthai.com/cli/install.sh | bash`); `cuongmini doctor` báo PATH/shell/TTY trên Windows. Nút "Cài CuongMini CLI" trong app hiện lỗi thật + log, cài xong tự mở terminal chạy `cuongmini`.
+
 ## Mới ở 0.5.0 (đợt 4)
 
 - **Gõ thêm khi agent đang chạy**: Enter khi đang chạy ⇒ tin được CHÈN vào lượt (agent đọc ngay sau tool kế tiếp, hiện `↳`); lệnh `/` vẫn đợi lượt xong · `esc` vẫn dừng.

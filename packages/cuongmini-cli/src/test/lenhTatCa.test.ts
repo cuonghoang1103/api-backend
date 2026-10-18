@@ -181,7 +181,8 @@ test('/mcp: thẻ lựa chọn đủ 5 hành động, chọn được từng cá
     await chayLenh('/mcp', b);
     const the = g.the.at(-1)!;
     assert.ok(the, `${nn}: /mcp phải mở thẻ lựa chọn`);
-    assert.deepEqual(the.ds.map((x) => x.giaTri), ['mo', 'nap', 'ctwork', 'server', 'thoat']);
+    /* Đợt 6: + "CT Work — chọn dự án & quyền" (nối bằng phiên ⇒ mọi dự án ⇒ quyền ⇒ gắn). */
+    assert.deepEqual(the.ds.map((x) => x.giaTri), ['mo', 'nap', 'ctworkDuAn', 'ctwork', 'server', 'thoat']);
     assert.match(String(the.than), /ctwork/);
     assert.match(String(the.than), /⎿ \/tmp\/mcp\.json/, 'dòng đường dẫn file kiểu cây ⎿');
     assert.doesNotMatch(String(the.than) + the.tieuDe, /open with|mở bằng/, 'không còn dòng gợi ý gõ lệnh');
@@ -227,8 +228,8 @@ test('/quyen · /hen · /sessions · /worktree · /ctwork (đã nối): thẻ l�
     // Đợt 5: đã nối ⇒ MENU đánh số 1–9 + 0 Thoát (chưa gắn dự án ⇒ mục 1–8 mờ, 9 = chọn dự án).
     await chayLenh('/ctwork', b);
     const c = g.the.at(-1)!;
-    assert.deepEqual(c.ds.map((x) => x.giaTri), ['sprint', 'viec', 'the', 'batDau', 'gio', 'binhLuan', 'baoCao', 'hop', 'duAn', 'thoat']);
-    assert.equal(c.ds.at(-1)!.so, '0');
+    assert.deepEqual(c.ds.map((x) => x.giaTri), ['sprint', 'homNay', 'the', 'batDau', 'gio', 'xong', 'baoCao', 'nhom', 'duAn', 'thoat', 'theoDoi', 'cachDung']);
+    assert.equal(c.ds[9]!.so, '0');
     // Đổi quyền ở thẻ kết nối riêng (`/ctwork ket-noi`).
     await chayLenh('/ctwork ket-noi', b);
     const kn2 = g.the.at(-1)!;

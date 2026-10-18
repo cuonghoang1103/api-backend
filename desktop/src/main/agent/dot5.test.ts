@@ -172,7 +172,8 @@ describe('ctworkHe — app tự làm với CT Work GIẢ', () => {
     const r = await H.ghiGan(goc, H.ganTuDuAn(ds.ds[0]!));
     const j = JSON.parse(await fs.readFile(path.join(goc, '.cuongmini', 'ctwork.json'), 'utf8'));
     expect(j).toMatchObject({ workspaceId: 3, projectId: 2, key: 'LF' });
-    expect(Object.keys(j).sort()).toEqual(["_ghi_chu", "key", "projectId", "ten", "workspace", "workspaceId"]);
+    /* Đợt 6: thêm `vai` (myRole của list_projects) — vẫn KHÔNG có bí mật. */
+    expect(Object.keys(j).sort()).toEqual(["_ghi_chu", "key", "projectId", "ten", "vai", "workspace", "workspaceId"]);
     expect(JSON.stringify(j)).not.toMatch(/ctw_[A-Za-z0-9]|Bearer|"token"/);
     expect(r.goiYGitignore).toMatch(/\.cuongmini\//);
     await fs.writeFile(path.join(goc, '.gitignore'), 'node_modules\n.cuongmini/\n');

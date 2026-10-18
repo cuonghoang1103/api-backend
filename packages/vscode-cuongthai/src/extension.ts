@@ -270,7 +270,8 @@ class KhungChat implements vscode.WebviewViewProvider {
           await cau.goi('agent:send', { cuocId, text, ...(anh.length ? { anh: anh.slice(0, 8) } : {}), ...(m.chiDoc === true ? { chiDoc: true } : {}) });
           return;
         }
-        case 'traLoi': await cau.goi('agent:traLoiXinPhep', { cuocId, id: m.id, quyetDinh: m.quyetDinh }); return;
+        /* Đợt 6: Từ chối ⇒ lượt DỪNG chờ người dùng gõ chỉ dẫn (như "No, and tell Claude what to do differently"). */
+        case 'traLoi': await cau.goi('agent:traLoiXinPhep', { cuocId, id: m.id, quyetDinh: m.quyetDinh, ...(m.quyetDinh === 'tuChoi' ? { dung: true } : {}) }); return;
         case 'moDuPhong': {
           try {
             const ten = await cau.moDuPhong(String(m.matKhau ?? ''));

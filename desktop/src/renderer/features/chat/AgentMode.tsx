@@ -37,7 +37,7 @@ import {
   moTaDsCauHoi, moTaDsPhien, moTaNguCanh, moTaTrangThai, moTaTroGiup, moTaUsage, promptPlan, promptReview,
   tachLenh, tenFileXuat, timMuc, timTheoChu, xuatMarkdown,
 } from './lenhGach';
-import { hoiCtworkMotLan, laLoiXacThucCtw, lenhCtwork, veDongCtw, type DongCtw, type GiaoDienCtw, type TheChonCtw } from './ctworkLenh';
+import { homNay as homNayCtw, hoiCtworkMotLan, kiemTinCtw, laLoiXacThucCtw, lenhCtwork, moCtworkTuMcp, veDongCtw, xongViec as xongViecCtw, type DongCtw, type GiaoDienCtw, type TheChonCtw } from './ctworkLenh';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
 import { ThanhDangLam } from './ThanhDangLam';
@@ -121,6 +121,7 @@ export function AgentMode({
     trangThai, gui, lamTiep, dung, dangDung, batDauLai, traLoiXinPhep, hoanTac, quayLui, luiFile, tachNhanh,
     traLoiHoi, huyCho, huyHen, chenTin,
     phien, phienDangMo, moPhien, xoaPhien, baoTin, datHanMuc,
+    tinTraVe, xoaTinTraVe, soLanXong, choChiDan, boChoChiDan,
   } = useAgent(cuocId, info);
   /* Đợt 4 — điều khiển máy tính: công tắc TOÀN APP (main giữ), mặc định tắt. */
   const [mayTinh, datMayTinhUi] = useState<{ bat: boolean; hoTro: boolean; quyen: { chup: boolean; dieuKhien: boolean } | null } | null>(null);
@@ -604,18 +605,44 @@ export function AgentMode({
     lamMoiDong: () => { void napDongCtw(); },
   });
   gdCtwRef.current = gdCtw;
+  /* Đợt 6: theo dõi nhẹ — lõi tự giới hạn ≥ 60 s, chỉ khi thư mục gắn dự án, tắt bằng /ctwork theo-doi off. */
+  const baoTinCtw = useCallback(async (): Promise<void> => {
+    const tin = await kiemTinCtw(gdCtwRef.current()).catch(() => [] as string[]);
+    for (const t of tin) traLoi(t);
+  }, [traLoi]);
   useEffect(() => {
     void napDongCtw();
-    const t = setInterval(() => { void napDongCtw(); }, 60_000);
+    const t = setInterval(() => { void napDongCtw(); void baoTinCtw(); }, 60_000);
     return () => clearInterval(t);
-  }, [napDongCtw]);
+  }, [napDongCtw, baoTinCtw]);
+  /* Đợt 6: lượt XONG bình thường ⇒ gợi ý bước tiếp theo đúng luật dự án (lõi chỉ trả khi nhánh của thẻ có thay đổi git
+     mới, không nhắc lại cùng HEAD) + một lần kiểm tin theo dõi. */
+  useEffect(() => {
+    if (!soLanXong) return;
+    void xongViecCtw(gdCtwRef.current(), undefined, { tuDong: true }).catch(() => undefined);
+    void baoTinCtw();
+  }, [soLanXong, baoTinCtw]);
+  /* Đợt 6: tin gõ giữa lượt chưa tới agent (Esc / lỗi) ⇒ trả về ô nhập (đứng trước chữ đang gõ). */
+  useEffect(() => {
+    if (!tinTraVe.length) return;
+    datNhap((cu) => [...tinTraVe, cu].filter(Boolean).join('\n'));
+    xoaTinTraVe();
+    requestAnimationFrame(() => oNhapRef.current?.focus());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tinTraVe]);
   useEffect(() => { if (!trangThai.dangChay) void napDongCtw(); }, [trangThai.dangChay, napDongCtw]);
+  useEffect(() => {
+    const f = (e: Event): void => { if ((e as CustomEvent<{ cuocId?: string }>).detail?.cuocId === cuocId) void moCtworkTuMcp(gdCtwRef.current()); };
+    window.addEventListener(SU_KIEN_CTW_DU_AN, f);
+    return () => window.removeEventListener(SU_KIEN_CTW_DU_AN, f);
+  }, [cuocId]);
   useEffect(() => {
     if (daHoiCtworkLanNay) return undefined;
     const t = setTimeout(() => {
       if (daHoiCtworkLanNay) return;
       daHoiCtworkLanNay = true;
-      void hoiCtworkMotLan(gdCtw()).catch(() => undefined);
+      /* Đợt 6: không có gì để hỏi (đã nối + đã gắn) ⇒ "Hôm nay" (lõi: một lần mỗi ngày mỗi thư mục). */
+      void hoiCtworkMotLan(gdCtw()).then((coHoi) => { if (!coHoi) void homNayCtw(gdCtwRef.current(), { tuDong: true }).catch(() => undefined); }).catch(() => undefined);
     }, 1500);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1212,7 +1239,8 @@ export function AgentMode({
 
   // ─── Chưa đủ điều kiện ─────────────────────────────────────
   // Thoát Ở ĐÂY, sau khi MỌI hook đã chạy — xem chú thích dài ở trên.
-  if (!info.pro) return <MoiNangCap />;
+  /* Đợt 6: không Pro nhưng có dự án dùng được hạn mức NHÓM ⇒ vẫn mở; máy chủ quyết từng lượt theo dự án gắn. */
+  if (!info.pro && !info.nhom?.length) return <MoiNangCap />;
   if (!info.configured) {
     return (
       <div className="ct-empty">
@@ -2058,10 +2086,12 @@ export function AgentMode({
           rows={2}
           onPaste={dk.danVao}
           value={nhap}
-          placeholder={coThuMuc
-            ? `Hỏi về ${thuMuc?.name}… (kéo thả hoặc dán file, gõ / để xem lệnh)`
-            : 'Chọn thư mục dự án trước, rồi hỏi…'}
-          onChange={(e) => capNhatNhap(e.target.value, e.target.selectionStart ?? e.target.value.length)}
+          placeholder={choChiDan
+            ? dich('CuongMini nên làm gì khác? Gõ chỉ dẫn rồi Enter…')
+            : coThuMuc
+              ? `Hỏi về ${thuMuc?.name}… (kéo thả hoặc dán file, gõ / để xem lệnh)`
+              : 'Chọn thư mục dự án trước, rồi hỏi…'}
+          onChange={(e) => { if (choChiDan) boChoChiDan(); capNhatNhap(e.target.value, e.target.selectionStart ?? e.target.value.length); }}
           /* Di chuyển con trỏ bằng phím mũi tên hay chuột KHÔNG bắn `onChange`.
              Thiếu dòng này thì bảng gợi ý còn treo lại sau khi người dùng đã
              bấm ra chỗ khác trong câu — một bảng nổi nuốt phím Enter ở nơi
@@ -2923,6 +2953,8 @@ function MauMcp() {
  * agent chỉ đơn giản không có tool đó, không có gì đỏ ở đâu cả, và người dùng
  * ngồi hỏi tại sao nó không chịu dùng công cụ mình vừa cắm.
  */
+/** Đợt 6: nút "CT Work — chọn dự án & quyền" trong bảng MCP gọi về AgentMode (nơi có giao diện thẻ lựa chọn CT Work). */
+const SU_KIEN_CTW_DU_AN = 'cuongmini:ctwork-du-an';
 function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
   const { dich } = useDich();
   const { mo, bat, boc } = useMoRieng('agent:mcp');
@@ -2998,6 +3030,14 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
               {dangNap ? <Loader2 size={12} aria-hidden className="ct-spin" /> : <RotateCcw size={12} aria-hidden />}
               {dich('Nạp lại')}
             </button>
+            <button
+              type="button"
+              className="ct-btn ct-btn-ghost ct-mcp-nho"
+              onClick={() => window.dispatchEvent(new CustomEvent(SU_KIEN_CTW_DU_AN, { detail: { cuocId } }))}
+              title={dich('Nối CT Work bằng tài khoản đang đăng nhập, chọn dự án (không gian · vai) và quyền đọc/ghi')}
+            >
+              {dich('CT Work — chọn dự án & quyền')}
+            </button>
           </div>
 
           {tt?.loiCauHinh && (
@@ -3022,7 +3062,7 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
                   {s.tuDuAn && <span className="ct-mcp-nhan" title={dich('.mcp.json trong dự án')}>{dich('dự án')}</span>}
                   {s.ok && (
                     <span className="ct-mcp-phu" title={s.boBot ? `Bỏ ${s.boBot} tool vì chạm trần tổng 40 tool` : undefined}>
-                      {s.soTool} tool{s.boBot ? ` · bỏ ${s.boBot}` : ''}
+                      {s.soTool} tool{s.soMucLuc ? ` + ${s.soMucLuc} ${dich('nạp khi cần')}` : ''}{s.boBot ? ` · bỏ ${s.boBot}` : ''}
                     </span>
                   )}
                   {/* Lỗi xuống dòng riêng, ĐỌC ĐƯỢC HẾT và chọn-chép được: dòng cuối

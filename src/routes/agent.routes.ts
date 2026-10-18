@@ -38,6 +38,7 @@ import { datTenViec } from '../services/agent/datTen.js';
 import { DS_MUC_NO_LUC } from '../services/agent/turn.js';
 import { xemHanMucFable } from '../services/agent/fable.js';
 import { dsKyNangSan } from '../services/agent/kyNangSan.js';
+import { docDuAnId, duAnNhomCuaNguoi, quyetDinhNhom, stepNhom, type NguonNhom } from '../services/agent/hanMucNhom.js';
 import { prisma } from '../config/database.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
 import { CompactLoi, compactChuDong } from '../services/agent/compactChuDong.js';
@@ -80,6 +81,36 @@ async function chiPro(req: any, res: Response<ApiResponse>, next: NextFunction):
   }
 }
 
+/**
+ * ĐỢT 6 — Pro, HOẶC hạn mức NHÓM (`hanMucNhom.ts`): người không Pro nhưng cuộc gắn một dự án CT Work (`ctworkDuAn`
+ * trong thân / URL, app lấy từ `.cuongmini/ctwork.json`) mà họ là thành viên, trưởng nhóm có Pro còn hạn và đang bật
+ * chia sẻ ⇒ cho qua, gắn `req.nguonNhom`. Chỉ cho các tuyến TIÊU model (turn, compact, đặt tên) — tuyến cổng/khoá/
+ * gia hạn vẫn chỉ Pro. Người CÓ Pro không bao giờ đi đường nhóm (không tiêu tiền của trưởng nhóm).
+ */
+async function chiProHoacNhom(req: any, res: Response<ApiResponse>, next: NextFunction): Promise<void> {
+  try {
+    if (await duocDungAiCode(req.userId)) return next();
+    const b = (req.body ?? {}) as { ctworkDuAn?: unknown; ctwork?: { projectId?: unknown } };
+    const pid = docDuAnId(b.ctworkDuAn ?? req.query?.ctworkDuAn ?? b.ctwork?.projectId);
+    const q = await quyetDinhNhom(req.userId, pid);
+    if (q.loai === 'nhom') { req.nguonNhom = q; return next(); }
+    if (q.ma === 'NHOM_HET_TRAN') {
+      res.status(429).json({ success: false, message: q.cau, code: 'NHOM_HET_TRAN' });
+      return;
+    }
+    /* Mã vẫn là PRO_REQUIRED (app cũ hiện lời mời nâng cấp đúng như trước); `data.nhom` nói rõ vì sao đường nhóm không
+       dùng được, và câu báo là câu của đường nhóm khi cuộc CÓ gắn dự án. */
+    res.status(403).json({
+      success: false,
+      message: pid ? q.cau : await cauChanPro(req.userId, 'Chế độ Lập trình là tính năng của tài khoản Pro. Nâng cấp để agent đọc được dự án trên máy bạn.'),
+      code: 'PRO_REQUIRED',
+      data: { nhom: q.ma },
+    } as any);
+  } catch (err) {
+    next(err);
+  }
+}
+
 /** Nginx cắt kết nối im lặng ở 60s — nhịp tim phải thưa hơn thế một cách rõ ràng. */
 const KEEPALIVE_MS = 25_000;
 
@@ -97,16 +128,22 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
     // biệt được "chưa đủ gói" với "máy chủ hỏng". Trả `pro: false` thì app hiện
     // được lời mời nâng cấp — một câu mời rõ ràng thay cho một lỗi.
     const pro = await duocDungAiCode(req.userId).catch(() => false);
+    /* Đợt 6: không Pro ⇒ các dự án dùng được hạn mức NHÓM (app không hiện lời mời nâng cấp khi có) — chỉ model free. */
+    const nhom = pro ? [] : await duAnNhomCuaNguoi(req.userId).catch(() => []);
     /* Bảng CuongMini (18/10/2026, `bangModel.ts`): xếp năng lực cao → thấp, CHỈ tên
        CuongMini (không tên model thật, không tên cổng thật). App gửi `?congAnthropicVe=`
        (bó vé) để `canMoKhoa` phản ánh đúng vé đang giữ. */
     const models = pro
       ? await dsModelChoApp(await quyenChinhHang(req.userId, req.query.congAnthropicVe)).catch(() => [])
-      : [];
+      : nhom.length
+        ? (await dsModelChoApp(await quyenChinhHang(req.userId, undefined)).catch(() => [])).filter((m: { khoa?: string }) => m.khoa === 'free')
+        : [];
     res.json({
       success: true,
       data: {
         pro,
+        /* Đợt 6: dự án dùng được hạn mức nhóm (rỗng khi có Pro hoặc không có nhóm nào). */
+        nhom,
         configured: gatewayConfigured(),
         /* Mã model mặc định (không phải tên thật). */
         model: MA_MAC_DINH,
@@ -141,7 +178,7 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
  * App gọi MỘT LẦN sau lượt đầu tiên. Để app tự cắt câu hỏi thì ba việc cùng
  * bắt đầu bằng "bạn kiểm tra dự án này…" là ba dòng giống hệt nhau.
  */
-router.post('/dat-ten', chiPro, async (req: any, res: Response<ApiResponse>, next) => {
+router.post('/dat-ten', chiProHoacNhom, async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const { cauHoi } = req.body ?? {};
     if (typeof cauHoi !== 'string') throw new AppError('Thiếu cauHoi', 400, 'BAD_INPUT');
@@ -437,19 +474,23 @@ const compactLimiter = rateLimit({
   message: { success: false, message: 'Tóm tắt quá nhiều lần. Thử lại sau 15 phút.', code: 'COMPACT_QUA_NHIEU' },
 });
 
-router.post('/compact', chiPro, compactLimiter, async (req: any, res: Response<ApiResponse>, next) => {
+router.post('/compact', chiProHoacNhom, compactLimiter, async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const b = (req.body ?? {}) as { messages?: unknown; giuLuot?: unknown; ghiChu?: unknown; model?: unknown; congAnthropicVe?: unknown };
     /* 18/10/2026: tóm tắt bằng CHÍNH model của cuộc (app gửi `model` + vé như lượt
        agent). Model cần khoá mà vé không mở ⇒ CuongMini Solid. Hết trần ⇒ báo. */
     let muc = timModel(b.model);
+    const nhom = req.nguonNhom as NguonNhom | undefined;
     if (muc.khoa !== 'free') {
       const q = await quyenChinhHang(req.userId, b.congAnthropicVe).catch(() => ({ laAdmin: false, modelCao: false, invisible: false }));
-      if (!daMoKhoa(muc, q)) muc = timModel(MA_MAC_DINH);
+      /* Đợt 6: hạn mức nhóm chỉ model free. */
+      if (nhom || !daMoKhoa(muc, q)) muc = timModel(MA_MAC_DINH);
     }
-    const ht = await xemTranModel(req.userId, muc);
-    if (ht.het) throw new AppError(`Đã hết hạn mức ${muc.ten} — chọn model khác rồi /compact lại. / ${muc.ten} allowance used up.`, 429, 'CUONGMINI_HET_TRAN');
-    const kq = await compactChuDong(b.messages, { giuLuot: b.giuLuot, ghiChu: b.ghiChu, goi: goiTomTatBangModel(muc, req.userId) });
+    if (!nhom) {
+      const ht = await xemTranModel(req.userId, muc);
+      if (ht.het) throw new AppError(`Đã hết hạn mức ${muc.ten} — chọn model khác rồi /compact lại. / ${muc.ten} allowance used up.`, 429, 'CUONGMINI_HET_TRAN');
+    }
+    const kq = await compactChuDong(b.messages, { giuLuot: b.giuLuot, ghiChu: b.ghiChu, goi: goiTomTatBangModel(muc, req.userId, nhom ? stepNhom(nhom.projectId, nhom.chu.id) : undefined) });
     logger.info('[agent/compact] tóm tắt chủ động', {
       userId: req.userId, soTinDaGop: kq.soTinDaGop, daGoiModel: kq.daGoiModel,
     });
@@ -475,7 +516,7 @@ router.post('/compact', chiPro, compactLimiter, async (req: any, res: Response<A
  * khung `text` đã bị cắt rác của cổng và không mang `tool_calls`, nối bằng nó
  * thì lượt sau cổng từ chối vì thiếu tin nhắn trả lời cho tool_call.
  */
-router.post('/turn', chiPro, async (req: any, res: Response) => {
+router.post('/turn', chiProHoacNhom, async (req: any, res: Response) => {
   // ─── 1. Kiểm đầu vào TRƯỚC khi mở SSE ────────────────────────
   // Mở SSE rồi mới thấy đầu vào sai thì lỗi phải đi trong một khung sự kiện,
   // và app nhận HTTP 200 cho một yêu cầu hỏng. Sai sớm thì sai bằng mã HTTP.
@@ -493,6 +534,8 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
     ghiChuDuAn?: unknown; kyNang?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
     model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown; ngayGio?: unknown; ctwork?: unknown; duPhongVe?: unknown; duPhongModel?: unknown; duPhongGiu?: unknown;
     congAnthropicVe?: unknown; congPhu?: unknown; mucModelPhu?: unknown; quyenPhu?: unknown;
+    /* Đợt 6: `ctworkDuAn` (hạn mức nhóm — đọc ở `chiProHoacNhom`) · `mcpMucLuc` (mục lục tool MCP chưa nạp). */
+    ctworkDuAn?: unknown; mcpMucLuc?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
@@ -626,6 +669,9 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         toolMcp: body.toolMcp,
         ngayGio: body.ngayGio,
         ctwork: body.ctwork,
+        mcpMucLuc: body.mcpMucLuc,
+        /* ⛔ Chỉ từ middleware (máy chủ đã kiểm) — không bao giờ từ thân yêu cầu. */
+        ...(req.nguonNhom ? { nhom: req.nguonNhom as NguonNhom } : {}),
         userId: req.userId,
       },
       guiKhung,

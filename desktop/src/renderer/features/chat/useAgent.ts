@@ -12,7 +12,7 @@
  * Notes tra cứu rồi quay lại vẫn thấy kết quả), nhưng nghĩa là nút Dừng phải
  * thật sự gọi `cancel()` chứ không chỉ ẩn giao diện đi.
  */
-import { dich, ngonNguHienTai } from '../../i18n';
+import { dich, dichP, ngonNguHienTai } from '../../i18n';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   AgentCongNangCap, AgentDiff,
@@ -176,6 +176,12 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   const [nguCanh, datNguCanh] = useState<AgentNguCanh | null>(null);
   const [cucBo, datCucBo] = useState<{ ten: string; nhan: string } | null>(null);
   const [henCho, datHenCho] = useState<{ cho: AgentChoView[]; hen: AgentHenView[] }>({ cho: [], hen: [] });
+  /** Đợt 6: tin gõ giữa lượt mà lượt dừng trước khi agent đọc ⇒ AgentMode đặt lại vào ô nhập rồi gọi `xoaTinTraVe`. */
+  const [tinTraVe, datTinTraVe] = useState<string[]>([]);
+  /** Đợt 6: đếm lượt kết thúc bằng `xong` (bình thường) — AgentMode gợi ý bước tiếp CT Work sau mỗi lần tăng. */
+  const [soLanXong, datSoLanXong] = useState(0);
+  /** Đợt 6: lượt vừa dừng vì người dùng từ chối kèm "bảo CuongMini làm khác đi" ⇒ ô nhập gợi ý gõ chỉ dẫn. */
+  const [choChiDan, datChoChiDan] = useState(false);
   /** Lượt hiện tại do APP tự mở (hẹn quay lại) — không có `gui()` nào chờ để tắt trạng thái chạy. */
   const tuDongRef = useRef(false);
   /* Đọc trong listener (đóng một lần) — state sẽ là bản cũ, ref thì không. */
@@ -428,6 +434,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           datKeHoach(e.viec);
           break;
         case 'xong':
+          datSoLanXong((n) => n + 1);
           if (e.nguCanh) datNguCanh(e.nguCanh);
           if (e.hanMuc) datHanMuc(e.hanMuc);
           { const tLuot = tienLuotRef.current; tienLuotRef.current = 0; datTienPhien((t) => t + Math.max(e.tienUsd, tLuot)); }
@@ -464,7 +471,21 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           break;
         case 'huy':
           datDangNghi(false);
-          datMuc((truoc) => [...truoc, { kieu: 'loi', text: 'Đã dừng theo yêu cầu.', ma: 'CANCELLED' }]);
+          /* Đợt 6: từ chối kèm "bảo CuongMini làm khác đi" ⇒ lượt dừng CHỜ chỉ dẫn (như Claude Code). */
+          if (e.lyDo === 'tuChoi') {
+            datChoChiDan(true);
+            datMuc((truoc) => [...truoc, { kieu: 'loi', text: dich('Đã dừng — gõ CuongMini nên làm gì khác.'), ma: 'DOI_CHE_DO' }]);
+          } else datMuc((truoc) => [...truoc, { kieu: 'loi', text: 'Đã dừng theo yêu cầu.', ma: 'CANCELLED' }]);
+          break;
+        case 'traChen':
+          /* Đợt 6: tin gõ giữa lượt chưa tới agent (Esc / lỗi) ⇒ trả về ô nhập. */
+          if (e.ds.length) {
+            datTinTraVe((cu) => [...cu, ...e.ds]);
+            datMuc((truoc) => [...truoc, { kieu: 'loi', ma: 'DA_CHEN', text: dichP('↩ {n} tin bạn gõ thêm chưa kịp tới agent — đã trả về ô nhập.', { n: String(e.ds.length) }) }]);
+          }
+          break;
+        case 'ctwHuongDanNhom':
+          datMuc((truoc) => [...truoc, { kieu: 'loi', ma: 'DA_CHEN', text: e.laAgents ? dichP('📎 Đọc hướng dẫn của nhóm: {nguon}', { nguon: e.nguon }) : dichP('📎 Đọc bối cảnh dự án từ CT Work: {nguon}', { nguon: e.nguon }) }]);
           break;
       }
     });
@@ -718,7 +739,8 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
    * thay đổi chưa bao giờ được ghi.
    */
   const traLoiXinPhep = useCallback((id: string, quyetDinh: AgentQuyetDinh) => {
-    void window.cuongthai?.agent.traLoiXinPhep(cuocId, id, quyetDinh);
+    /* Đợt 6: Từ chối ⇒ lượt DỪNG chờ người dùng gõ chỉ dẫn (như "No, and tell Claude what to do differently"). */
+    void window.cuongthai?.agent.traLoiXinPhep(cuocId, id, quyetDinh, quyetDinh === 'tuChoi');
   }, [cuocId]);
 
   /* ── Đợt 3 ── */
@@ -766,6 +788,8 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
 
   return {
     trangThai: { muc, dangChay, dangNghi, suyNghi, buoc, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh, cucBo, henCho } satisfies TrangThaiAgent,
+    /* Đợt 6 */
+    tinTraVe, xoaTinTraVe: () => datTinTraVe([]), soLanXong, choChiDan, boChoChiDan: () => datChoChiDan(false),
     traLoiHoi,
     huyCho,
     huyHen,

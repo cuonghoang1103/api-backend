@@ -163,7 +163,7 @@ export type CheDoNhap = 'thuong' | 'shell' | 'ghiNho';
 /** Dòng đầu bắt đầu bằng `!` ⇒ chạy shell; `# ` ⇒ ghi nhớ quy ước (đổi màu ô nhập như Claude Code). */
 export const cheDoNhapCua = (text: string): CheDoNhap => (text.startsWith('!') ? 'shell' : /^#\s/.test(text) ? 'ghiNho' : 'thuong');
 
-export function ONhapView({ o, rong, cheDo, dangChay, goiYMo, soHangCho, xuongDong }: { o: ONhap; rong: number; cheDo: string; dangChay: boolean; goiYMo: boolean; soHangCho: number; xuongDong?: string }) {
+export function ONhapView({ o, rong, cheDo, dangChay, goiYMo, soHangCho, xuongDong, choChiDan }: { o: ONhap; rong: number; cheDo: string; dangChay: boolean; goiYMo: boolean; soHangCho: number; xuongDong?: string; /** Đợt 6: lượt vừa dừng chờ chỉ dẫn ("Không, và bảo CuongMini làm khác đi"). */ choChiDan?: boolean }) {
   const cd = moTaCheDo(cheDo);
   const trong = rong - 6;
   const kieu = cheDoNhapCua(o.text);
@@ -186,7 +186,9 @@ export function ONhapView({ o, rong, cheDo, dangChay, goiYMo, soHangCho, xuongDo
   const goi = dangChay
     /* QA 5c: từ đợt 4 Enter khi đang chạy CHÈN tin vào lượt (↳) — chữ cũ "để xếp hàng" nói sai việc sẽ xảy ra. */
     ? L(`CuongMini đang làm… gõ thêm + Enter để chèn vào lượt${soHangCho ? ` (${soHangCho} tin đang chờ)` : ''}`, `CuongMini is working… type + Enter to add to this turn${soHangCho ? ` (${soHangCho} queued)` : ''}`)
-    : L('Hỏi hoặc giao việc…  / lệnh · @ file · ! shell · # ghi nhớ', 'Ask or give a task…  / commands · @ files · ! shell · # memory');
+    : choChiDan
+      ? L('CuongMini nên làm gì khác? Gõ chỉ dẫn rồi Enter…', 'What should CuongMini do instead? Type and press Enter…')
+      : L('Hỏi hoặc giao việc…  / lệnh · @ file · ! shell · # ghi nhớ', 'Ask or give a task…  / commands · @ files · ! shell · # memory');
   const hien = o.text ? ra.join('\n') : `${mau(THUONG_HIEU.timNhat)('❯')} ${dao(' ')}${mo(catVua(goi, trong - 2))}`;
   const nhanKieu = kieu === 'shell' ? mau('#fbbf24')(L(' chế độ shell — Enter chạy ngay ở thư mục dự án, không qua AI', ' shell mode — Enter runs it in the project folder, no AI'))
     : kieu === 'ghiNho' ? mau('#22d3ee')(L(' ghi nhớ — Enter lưu thành quy ước dự án (AGENTS.md)', ' memory — Enter saves a project rule (AGENTS.md)')) : '';
@@ -441,12 +443,26 @@ export interface MucMenu { nhan: string; mo?: string; nhom?: string; tat?: boole
 /** Số hiện của mục thứ `k` (đợt 5: mục tự khai `so` thắng; mặc định 1–9). */
 export const soCuaMuc = (m: MucMenu, k: number): string => m.so ?? (k < 9 ? String(k + 1) : '');
 
-export function MenuView({ tieuDe, moTa, than, ds, chon, loc, coLoc, rong, mauVien }: {
+export function MenuView({ tieuDe, moTa, than, ds, chon, loc, coLoc, rong, mauVien, caoToiDa }: {
   tieuDe: string; moTa?: string; ds: MucMenu[]; chon: number; loc: string; coLoc: boolean; rong: number; mauVien?: string;
   /** Đợt 4: khối nội dung ĐÃ TÔ MÀU (danh sách server, quyền…) hiện trên các lựa chọn — kiểu `/mcp` của Claude Code. */
   than?: string;
+  /**
+   * Đợt 6 (lỗi đợt 5): số dòng TỐI ĐA thẻ được chiếm (cả viền). Thẻ `/ctwork` ở 60×20 cao hơn màn hình 1 dòng ⇒ mất viền
+   * dưới + chân trang. Nay: mô tả co về ít dòng hơn, rồi cửa sổ danh sách co lại (vẫn ↑↓ cuộn được hết).
+   */
+  caoToiDa?: number;
 }) {
-  const cua = 10;
+  const moTaDong = moTa ? bocVan(moTa, rong - 4) : [];
+  const thanDong = than ? than.split('\n').length : 0;
+  /* viền 2 + lề trên 1 + tiêu đề 1 + lề danh sách 1 + chân 1 (+ ô lọc 1) (+ lề thân 1 + thân). */
+  const coDinh = 6 + (coLoc ? 1 : 0) + (than ? 1 + thanDong : 0);
+  let moTaHien = moTaDong;
+  let cua = 10;
+  if (caoToiDa) {
+    if (coDinh + moTaHien.length + Math.min(cua, ds.length) > caoToiDa && moTaHien.length > 1) moTaHien = [catVua(moTaHien.join(' '), rong - 4)];
+    cua = Math.max(3, Math.min(10, caoToiDa - coDinh - moTaHien.length));
+  }
   const dau = Math.max(0, Math.min(chon - Math.floor(cua / 2), ds.length - cua));
   const hien = ds.slice(dau, dau + cua);
   const dong: string[] = [];
@@ -466,12 +482,13 @@ export function MenuView({ tieuDe, moTa, than, ds, chon, loc, coLoc, rong, mauVi
   if (!ds.length) dong.push(mo(L('  Không có gì khớp.', '  Nothing matches.')));
   return (
     <Box borderStyle={kieuVien()} borderColor={mauInk(mauVien ?? THUONG_HIEU.tim)} flexDirection="column" paddingX={1} width={rong} marginTop={1}>
-      <Text>{dam(tieuDe)}</Text>
-      {moTa ? <Text>{mo(bocVan(moTa, rong - 4).join('\n'))}</Text> : null}
+      <Text>{dam(caoToiDa ? catVua(tieuDe, rong - 4) : tieuDe)}</Text>
+      {moTaHien.length ? <Text>{mo(moTaHien.join('\n'))}</Text> : null}
       {than ? <Box marginTop={1}><Text>{than}</Text></Box> : null}
       {coLoc ? <Text>{`${mau(THUONG_HIEU.timNhat)('⌕')} ${loc}${dao(' ')}${loc ? '' : mo(L(' gõ để lọc…', ' type to filter…'))}`}</Text> : null}
       <Box marginTop={1}><Text>{dong.join('\n')}</Text></Box>
-      <Text>{mo(`${ds.length > cua ? `${chon + 1}/${ds.length} · ` : ''}${L('↑↓ chọn · Enter xác nhận · gõ số chọn nhanh · Esc huỷ', '↑↓ select · Enter confirm · number to pick · Esc cancel')}`)}</Text>
+      {/* Đợt 6: chân thẻ một dòng (bản cũ gãy thành 2 dòng ở 60 cột ⇒ thẻ cao hơn màn hình). */}
+      <Text>{mo(catVua(`${ds.length > cua ? `${chon + 1}/${ds.length} · ` : ''}${L('↑↓ chọn · Enter xác nhận · gõ số chọn nhanh · Esc huỷ', '↑↓ select · Enter confirm · number to pick · Esc cancel')}`, rong - 4))}</Text>
     </Box>
   );
 }

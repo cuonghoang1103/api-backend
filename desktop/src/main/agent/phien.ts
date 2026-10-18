@@ -203,6 +203,9 @@ const tenAi = new Map<string, string>();
 /** Token phiên, do `loop.ts` bơm vào. `phien.ts` không tự đọc được phiên đăng nhập. */
 let tokenPhien: string | null = null;
 export function datTokenChoDatTen(t: string | null): void { tokenPhien = t; }
+/** Đợt 6: dự án CT Work của lượt vừa chạy — người dùng hạn mức NHÓM (không Pro) vẫn được máy chủ đặt tên việc. */
+let duAnPhien: number | null = null;
+export function datDuAnChoDatTen(pid: number | null): void { duAnPhien = pid; }
 
 async function nhoAiDatTen(id: string, tenTho: string, token: string): Promise<string | null> {
   if (daDatTen.has(id)) return null;
@@ -211,7 +214,7 @@ async function nhoAiDatTen(id: string, tenTho: string, token: string): Promise<s
     const r = await fetch(`${API_ORIGIN}/api/v1/agent/dat-ten`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ cauHoi: tenTho }),
+      body: JSON.stringify({ cauHoi: tenTho, ...(duAnPhien ? { ctworkDuAn: duAnPhien } : {}) }),
       signal: AbortSignal.timeout(20_000),
     });
     if (!r.ok) return null;

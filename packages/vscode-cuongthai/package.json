@@ -2,7 +2,7 @@
   "name": "cuongthai-ai-code",
   "displayName": "CuongMini Code — AI lập trình của CuongThai",
   "description": "CuongMini Code — AI lập trình của CuongThai ngay trong VS Code — chat, sửa code, chạy lệnh, skill, MCP, GitHub. Cài là dùng: đăng nhập bằng tài khoản cuongthai.com (có app desktop thì tự chạy qua app).",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "publisher": "cuongthai",
   "license": "UNLICENSED",
   "private": true,
@@ -14,6 +14,10 @@
   "keywords": ["ai", "agent", "chat", "cuongthai", "cuongmini", "code assistant", "copilot", "tiếng việt"],
   "main": "./dist/extension.js",
   "activationEvents": ["onStartupFinished"],
+  "capabilities": {
+    "untrustedWorkspaces": { "supported": false, "description": "CuongMini Code đọc, sửa file và chạy lệnh trong thư mục — chỉ chạy khi bạn TIN thư mục (Workspace Trust). / CuongMini Code reads, edits and runs commands in the folder — it only runs in trusted workspaces." },
+    "virtualWorkspaces": false
+  },
   "contributes": {
     "viewsContainers": {
       "activitybar": [

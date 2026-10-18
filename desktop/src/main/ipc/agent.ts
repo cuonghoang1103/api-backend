@@ -36,7 +36,7 @@ import {
   xoaHoiThoai, type SuKienAgent,
   dsQuyenLauCua, xoaQuyenLauCua, veCongChinh, chayLuotCucBo, datCongPhuCua, veAnthropic,
   datTomTatCua, hoiThoaiCua, nguCanhChiTietCua, henChoCua, phatNen, phatNenTho, themTienToCua,
-  chenTinCua, cuocCuaPhien, datMayTinh, mayTinhDangBat,
+  chenTinCua, cuocCuaPhien, datMayTinh, mayTinhDangBat, duAnCtworkCuaCuoc, datDungChiDan,
 } from '../agent/loop';
 import { hoTro as mayHoTro, kiemQuyen as kiemQuyenMay } from '../agent/mayTinh';
 import { datNoiLuuHen, dsHenLo, ganHenChoCuoc, napHenDaLuu, xuLyHenLo } from '../agent/choHen';
@@ -64,6 +64,7 @@ import { traLoi } from '../agent/xinPhep';
 import { traLoiHoi } from '../agent/hoiLuaChon';
 import { canCapLai, capLaiCtwork, docBiMat, ketNoiCtwork, napDemBiMat, ngatCtwork, trangThaiCtwork, TEN_SERVER as TEN_CTWORK } from '../agent/ctworkKetNoi';
 import * as ctw from '../agent/ctworkHe';
+import * as ctwDd from '../agent/ctworkDanDuong';
 import { datNgonNgu as datNgonNguCtw } from '../agent/ctworkVe';
 import { cauDanhThuc, datBoChayHen, huyCho, huyHen } from '../agent/choHen';
 import { doiTen as doiTenPhienMang, dsPhienSong, toiLa } from '../agent/phienMang';
@@ -283,7 +284,7 @@ export function registerAgentHandlers(): void {
 
       const tools = await rTools.json() as {
         data?: {
-          pro?: boolean; configured?: boolean; model?: string;
+          pro?: boolean; configured?: boolean; model?: string; nhom?: Array<{ projectId: number; key: string }>;
           models?: AgentInfo['models']; mucNoLuc?: AgentInfo['mucNoLuc'];
         };
       };
@@ -297,6 +298,7 @@ export function registerAgentHandlers(): void {
 
       const ra: AgentInfo = {
         pro: tools.data?.pro ?? false,
+        ...(tools.data?.nhom?.length ? { nhom: tools.data.nhom.slice(0, 20) } : {}),
         configured: tools.data?.configured ?? false,
         model: tools.data?.model ?? null,
         quota,
@@ -622,6 +624,7 @@ export function registerAgentHandlers(): void {
       ...(dan ? { ghiChu: dan.slice(0, 2000) } : {}),
       model: modelHienTai(),
       ...(veAnthropic() ? { congAnthropicVe: veAnthropic()! } : {}),
+      ctworkDuAn: duAnCtworkCuaCuoc(cuocId),
     });
     if (!kq.ok) return kq;
     if (!('tomTat' in kq)) return { ok: true as const, soTinDaGop: 0 };
@@ -689,7 +692,10 @@ export function registerAgentHandlers(): void {
     dongCuoc(cuocId);
   });
 
-  handle('agent:traLoiXinPhep', ({ cuocId, id, quyetDinh }, event) => {
+  handle('agent:traLoiXinPhep', ({ cuocId, id, quyetDinh, dung }, event) => {
+    /* Đợt 6: "3. Không, và bảo CuongMini làm khác đi" ⇒ đánh dấu dừng TRƯỚC khi trả lời (vòng lặp đọc cờ ngay sau kết
+       quả tool này) — lượt dừng, chờ người dùng gõ chỉ dẫn. */
+    if (dung && quyetDinh === 'tuChoi') datDungChiDan(cuocId);
     // `traLoi` cần đường dẫn để nhớ "cho phép cả file này". Nó tự tra trong sổ
     // yêu cầu đang treo, nên ở đây chỉ chuyển tiếp quyết định.
     const nhan = traLoi(id, quyetDinh);
@@ -1112,6 +1118,8 @@ export function registerAgentHandlers(): void {
         if (sv?.ok && goc && !(await ctw.docGan(goc)) && !(await ctw.daHoiGan(goc))) {
           const doan = await ctw.doanGan(goc);
           if (doan) return { ok: true, hoi: 'ganDuAn' as const, doan };
+          /* Đợt 6 (việc 4): không đoán được ⇒ liệt kê MỌI dự án để chọn (một lần mỗi thư mục). */
+          return { ok: true, hoi: 'chonDuAn' as const };
         }
         return { ok: true, hoi: null };
       }
@@ -1131,14 +1139,21 @@ export function registerAgentHandlers(): void {
         if (!v.duAn) return { ok: false, loi: 'Thiếu dự án.' };
         const g = ctw.ganTuDuAn({
           key: v.duAn.key, ten: v.duAn.ten ?? '', id: v.duAn.id ?? null, workspaceId: v.duAn.workspaceId ?? null,
-          workspace: v.duAn.workspace ?? null, vaiTro: null, soMo: null, luuTru: false,
-        });
+          workspace: v.duAn.workspace ?? null, vaiTro: v.duAn.vaiTro ?? null, soMo: null, luuTru: false,
+        }, v.quyen);
+        /* Đợt 6: thư mục KHÔNG phải repo git (vd home) hoặc người dùng chọn "chỉ phiên này" ⇒ gắn THEO PHIÊN (không ghi file). */
+        const laKho = await ctw.laKhoGit(goc);
+        if (v.theoPhien || !laKho) {
+          ctw.ganTheoPhien(goc, g);
+          return { ok: true, gan: g, laKho, theoPhien: true };
+        }
         const r = await ctw.ghiGan(goc, g);
         await ctw.ghiDaHoiGan(goc);
-        return { ok: true, gan: g, duong: r.duong, goiYGitignore: r.goiYGitignore };
+        return { ok: true, gan: g, duong: r.duong, goiYGitignore: r.goiYGitignore, laKho };
       }
       case 'boGan': {
         if (!goc) return { ok: false, loi: 'Chưa mở thư mục dự án.' };
+        ctw.ganTheoPhien(goc, null);
         await fs.rm(path.join(goc, '.cuongmini', 'ctwork.json'), { force: true });
         await ctw.ghiDaHoiGan(goc);
         return { ok: true };
@@ -1154,6 +1169,20 @@ export function registerAgentHandlers(): void {
       case 'soanBinhLuan': return ctw.soanBinhLuan(goc, v.key);
       case 'binhLuan': return ctw.guiBinhLuan(goc, v.key, v.noiDung ?? '');
       case 'baoCao': return ctw.baoCaoTuan(goc);
+      /* ── Đợt 6: CuongMini dẫn đường (`agent/ctworkDanDuong.ts`). Thao tác GHI (`lamGoiY`, `guiTinNhom`, `hoiQna`) chỉ
+         được giao diện gọi SAU thẻ xem trước + đồng ý. ── */
+      case 'homNay': return ctwDd.homNay(goc, { tuDong: v.tuDong === true });
+      case 'huongDan': return ctwDd.huongDan(goc, v.key);
+      case 'goiYSau': return ctwDd.goiYSau(goc, v.key, { tuDong: v.tuDong === true });
+      case 'xemTruocGoiY': return ctwDd.xemTruocGoiY(goc, v.key, v.id ?? '');
+      case 'lamGoiY': return ctwDd.lamGoiY(goc, v.key, v.id ?? '', v.noiDung ?? '');
+      case 'kiemTin': return ctwDd.kiemTin(goc, { epNgay: v.tuDong === false });
+      case 'theoDoi': return { ok: true, bat: await ctwDd.theoDoiBat(typeof v.bat === 'boolean' ? v.bat : undefined) };
+      case 'tongQuan': return ctwDd.tongQuan(goc);
+      case 'guiTinNhom': return ctwDd.guiTinNhom(goc, v.noiDung ?? '');
+      case 'hoiQna': return ctwDd.hoiQna(goc, v.noiDung ?? '');
+      case 'mauFpt': { const r = await ctwDd.mauFpt(goc); return { ok: r.ok, ...(r.md ? { md: r.md } : {}), ...(r.loi ? { loi: r.loi } : {}), ...(r.ds ? { mau: r.ds } : {}) }; }
+      case 'huongDanNhom': { const n = await ctwDd.huongDanNhom(goc); return n ? { ok: true, md: n.noiDung, nguon: n.nguon, laAgents: n.laAgents } : { ok: true }; }
       case 'tuGhi':
         /* ⛔ Chỉ main ghi (`KHOA_CHI_MAIN`): bật là agent GHI lên CT Work không hỏi. */
         if (typeof v.bat === 'boolean') setSetting('ctworkTuGhi', v.bat);

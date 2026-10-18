@@ -27,7 +27,7 @@ import { chmod, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { API_ORIGIN } from '../config';
-import { datNguonBienBiMat, datNguonServerDungSan, duongDanCauHinh, napLaiMcp, toolCuaServer, trangThaiServer, type CauHinhServer } from './mcp';
+import { datNguonBienBiMat, datNguonServerDungSan, duongDanCauHinh, napLaiMotServer, toolCuaServer, trangThaiServer, type CauHinhServer } from './mcp';
 
 export const TEN_SERVER = 'ctwork';
 export const BIEN_TOKEN = 'CTWORK_TOKEN';
@@ -137,7 +137,8 @@ export async function ketNoiCtwork(sessionToken: string, quyen: 'doc' | 'ghi', g
      dùng TỰ viết (không có ghi chú `/ctwork`) để nguyên, nó vẫn thắng. */
   await goDongCu(true);
   loiXacThucCuoi = 0;
-  await napLaiMcp(goc).catch(() => {});
+  /* Đợt 6: nạp lại RIÊNG server ctwork — server MCP khác treo không giữ "Connecting CT Work…" nữa. */
+  await napLaiMotServer(TEN_SERVER, goc).catch(() => {});
   const sv = trangThaiServer().find((s) => s.ten === TEN_SERVER);
   return sv?.ok
     ? { ok: true, soTool: sv.soTool, quyen }
@@ -177,7 +178,8 @@ export async function ngatCtwork(sessionToken: string | null, goc: string | null
   await ghiBiMat(null);
   dem = null;
   await goDongCu(false);
-  await napLaiMcp(goc).catch(() => {});
+  /* Đợt 6: nạp lại RIÊNG server ctwork — server MCP khác treo không giữ "Connecting CT Work…" nữa. */
+  await napLaiMotServer(TEN_SERVER, goc).catch(() => {});
   return { ok: true };
 }
 

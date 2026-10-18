@@ -269,7 +269,8 @@ export function veThe(t: TheChiTiet): string {
   ].filter(Boolean);
   dong.push(meta.join(' · '));
   const mt = moTaGon(t.moTa);
-  if (mt) dong.push('', ...mt.split('\n').map((d) => `> ${d}`));
+  /* Đợt 6: bỏ dòng trích dẫn TRỐNG — thẻ gọn hơn (cửa sổ thấp vẫn thấy Tự kiểm + bình luận gần nhất). */
+  if (mt) dong.push('', ...mt.split('\n').filter((d) => d.trim()).map((d) => `> ${d}`));
   if (t.tuKiem.length) {
     dong.push('', `**${T('Tự kiểm', 'Self-check')}** (${t.tuKiem.filter((x) => x.xong).length}/${t.tuKiem.length})`);
     for (const x of t.tuKiem.slice(0, 10)) dong.push(`- [${x.xong ? 'x' : ' '}] ${cat(motDong(x.chu), 140)}`);

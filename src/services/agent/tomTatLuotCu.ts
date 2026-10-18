@@ -207,7 +207,8 @@ export async function ghiNhoLuotDaBo(
  * thử model free tương đương ở cổng kia (như lượt agent). Ghi sổ `interview_llm_call_logs`
  * (feature `agent`, đúng model) ⇒ tính vào trần theo model của người dùng.
  */
-export function goiTomTatBangModel(muc: MucModel, userId: number): GoiTomTat & { maModel: string } {
+/** `step` (đợt 6): dấu hạn mức NHÓM — tóm tắt của lượt dùng hạn mức nhóm cũng tính vào trần nhóm. */
+export function goiTomTatBangModel(muc: MucModel, userId: number, step?: string): GoiTomTat & { maModel: string } {
   const goi = async (system: string, user: string): Promise<string | null> => {
     const thu = async (m: MucModel): Promise<string> => {
       if (m.cong === 'anthropic') {
@@ -216,7 +217,7 @@ export function goiTomTatBangModel(muc: MucModel, userId: number): GoiTomTat & {
           system, messages: [{ role: 'user', content: user }], model: m.model, hang: hangSo(m),
           maxTokens: 16_000, userId, viec: 'agent_code', signal: AbortSignal.timeout(240_000),
         });
-        void ghiSoTomTat(userId, m.model, 0, 0, kq.usd);
+        void ghiSoTomTat(userId, m.model, 0, 0, kq.usd, step);
         return kq.text;
       }
       const res = await fetch(`${gatewayRoot()}/v1/chat/completions`, {
@@ -230,7 +231,7 @@ export function goiTomTatBangModel(muc: MucModel, userId: number): GoiTomTat & {
       });
       if (!res.ok) throw new Error(`HTTP ${res.status} ${(await res.text().catch(() => '')).slice(0, 200)}`);
       const j = await res.json() as { choices?: Array<{ message?: { content?: string } }>; usage?: { prompt_tokens?: number; completion_tokens?: number } };
-      void ghiSoTomTat(userId, m.model, j.usage?.prompt_tokens ?? 0, j.usage?.completion_tokens ?? 0);
+      void ghiSoTomTat(userId, m.model, j.usage?.prompt_tokens ?? 0, j.usage?.completion_tokens ?? 0, undefined, step);
       return j.choices?.[0]?.message?.content ?? '';
     };
     try {
@@ -246,12 +247,12 @@ export function goiTomTatBangModel(muc: MucModel, userId: number): GoiTomTat & {
   return Object.assign(goi, { maModel: muc.id });
 }
 
-async function ghiSoTomTat(userId: number, model: string, vao: number, ra: number, usd?: number): Promise<void> {
+async function ghiSoTomTat(userId: number, model: string, vao: number, ra: number, usd?: number, step?: string): Promise<void> {
   try {
     const { prisma } = await import('../../config/database.js');
     await prisma.interviewLLMCallLog.create({
       data: {
-        userId, feature: 'agent', step: 'interview', provider: 'gateway', model,
+        userId, feature: 'agent', step: step ?? 'interview', provider: 'gateway', model,
         inputTokens: vao, outputTokens: ra, costUsd: usd ?? costUsd(model, vao, ra), success: true,
       },
     });

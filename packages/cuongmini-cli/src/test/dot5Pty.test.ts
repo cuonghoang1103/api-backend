@@ -85,12 +85,14 @@ before(async () => {
 });
 after(() => { may?.close(); if (tam) rmSync(tam, { recursive: true, force: true }); });
 
-async function chay(phim: Array<[number, string]>, giayChay: number): Promise<{ su_kien: unknown[]; cols: number; rows: number; duAn: string }> {
+async function chay(phim: Array<[number, string] | [number, string, string]>, giayChay: number): Promise<{ su_kien: unknown[]; cols: number; rows: number; duAn: string }> {
   const home = path.join(tam, 'home');
   const duAn = path.join(tam, 'LabFlow-AI');
   mkdirSync(path.join(home, '.cuongmini'), { recursive: true });
   mkdirSync(duAn, { recursive: true });
   writeFileSync(path.join(duAn, 'AGENTS.md'), '# AGENTS\n- Dự án **LF** (id 2) trong không gian **"LabFlow Studio"** (id 3) trên cuongthai.com.\n');
+  /* Đợt 6: thư mục KHÔNG phải repo git ⇒ gắn THEO PHIÊN (không ghi ctwork.json). Dự án thật là repo ⇒ git init. */
+  if (!existsSync(path.join(duAn, '.git'))) spawnSync('git', ['init', '-q'], { cwd: duAn });
   writeFileSync(path.join(home, '.cuongmini/phien.json'), JSON.stringify({ userId: 7, username: 'cuong', fullName: 'Cường', token: 'tk-thu', luu: new Date().toISOString() }));
   const cauHinh = path.join(tam, 'pty.json');
   const ra = path.join(tam, 'ghi.json');
@@ -98,7 +100,7 @@ async function chay(phim: Array<[number, string]>, giayChay: number): Promise<{ 
     cmd: [process.execPath, dist], cwd: duAn, cols: 120, rows: 42, duration: giayChay, out: ra,
     env: {
       HOME: home, CUONGMINI_HOME: path.join(home, '.cuongmini'), CUONGTHAI_API_ORIGIN: `http://127.0.0.1:${cong}`,
-      CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1', CUONGMINI_CTW_TRE_MS: '900', CUONGMINI_KHONG_DAT_TIEU_DE: '1',
+      CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_TIN_THU_MUC: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1', CUONGMINI_CTW_TRE_MS: '900', CUONGMINI_KHONG_DAT_TIEU_DE: '1',
       TERM: 'xterm-256color', LANG: 'vi_VN.UTF-8', TERM_PROGRAM: 'iTerm.app', TERM_PROGRAM_VERSION: '3.5.10', CUONGMINI_NGON_NGU: 'vi',
     },
     bo_env: ['CI', 'GITHUB_ACTIONS', 'CONTINUOUS_INTEGRATION', 'BUILD_NUMBER', 'BUILD_ID', 'RUN_ID', 'TF_BUILD', 'GITLAB_CI', 'CTWORK_TOKEN', 'CUONGMINI_LOI'],
@@ -114,14 +116,14 @@ async function chay(phim: Array<[number, string]>, giayChay: number): Promise<{ 
 test('PTY lõi thật: kết nối một chạm ⇒ gắn LF ⇒ dòng trạng thái ⇒ /ctwork menu ⇒ /issue ⇒ chip LF-18 ⇒ thẻ duyệt ghi CT Work', { skip: boQua, timeout: 90_000 }, async () => {
   const { phatLai } = await import(path.join(goc, 'thu/phatLai.mjs')) as { phatLai: (g: unknown, t?: number) => Promise<{ manHinh: string[] }> };
   const g = await chay([
-    [3.4, '1'], // Kết nối CT Work? ⇒ Có — chỉ đọc
-    [6.4, '1'], // Gắn thư mục với LF? ⇒ Đúng
-    [9.0, '/ctwork'], [9.4, '\r'],
-    [11.2, '1'], // Sprint hiện tại
-    [13.0, '/issue LF-18'], [13.4, '\r'],
-    [15.4, '\x1b'],
+    [3.4, '1', 'Kết nối CT Work\\?'], // Kết nối CT Work? ⇒ Có — chỉ đọc (đợt 6: chờ thẻ hiện rồi mới bấm — máy chậm không lệch kịch bản)
+    [6.4, '1', 'Gắn thư mục'], // Gắn thư mục với LF? ⇒ Đúng
+    [9.0, '/ctwork', '⬡ LF'], [9.4, '\r'],
+    [11.2, '1', 'Sprint hiện tại'], // Sprint hiện tại
+    [13.0, '/issue LF-18', 'To Do'], [13.4, '\r'],
+    [15.4, '\x1b', 'Tự kiểm'],
     [16.0, 'giải thích LF-18 giúp mình'], [16.5, '\r'],
-    [20.4, '2'], // thẻ duyệt ghi CT Work ⇒ Không
+    [20.4, '2', 'Bình luận → LF-18'], // thẻ duyệt ghi CT Work ⇒ Không
     [23.0, '?'],
   ], 25);
   const man = async (t: number) => (await phatLai(g, t)).manHinh;

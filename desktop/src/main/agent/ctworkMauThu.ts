@@ -81,3 +81,75 @@ export const MAU_TOOLS: Array<{ name: string; ghi: boolean }> = [
   { name: 'log_work', ghi: true }, { name: 'test_list', ghi: false }, { name: 'test_get', ghi: false },
   { name: 'sprint_current', ghi: false }, { name: 'meeting_list', ghi: false }, { name: 'weekly_report_generate', ghi: true },
 ];
+
+// ─── Đợt 6 — dẫn đường ────────────────────────────────────────────
+
+/**
+ * ĐỦ bộ tool CT Work một NGƯỜI (token đọc + ghi) thấy trên máy chủ thật (123 tool, sinh từ `mcpCommands()` 18/10/2026;
+ * `*` = tool ghi) + 30 tool đệm ⇒ ~153 tool — máy chủ giả "đủ ~150 tool" cho test nạp theo nhu cầu (việc 9).
+ */
+const TEN_DAY_DU = ['whoami', 'list_projects', 'my_work', 'get_issue', 'search_issues', 'list_pages', 'get_page', 'comment*', 'transition*', 'update_issue*', 'create_issue*', 'log_work*', 'attach_file*', 'attach_complete*', 'ask_lead*', 'request_review*', 'create_project*', 'fpt_unit_list', 'fpt_unit_get', 'fpt_unit_create_function*', 'fpt_unit_add_cases*', 'fpt_unit_mark*', 'fpt_unit_record_results*', 'fpt_unit_suggest', 'fpt_it_list', 'fpt_it_get', 'fpt_it_create_module*', 'fpt_it_add_cases*', 'fpt_it_record_round*', 'test_list', 'test_get', 'test_create*', 'test_cycles', 'test_run', 'test_cycle_create*', 'test_run_record*', 'docs_draft_page*', 'docs_update_section*', 'export_file', 'sprint_current', 'meeting_list', 'meeting_get', 'meeting_add_actions*', 'meeting_create_issues*', 'raid_list', 'raid_create*', 'raid_update*', 'weekly_report_generate*', 'srs_get', 'srs_use_case_get', 'rtm_get', 'defect_log', 'qna_list', 'time_by_activity', 'srs_propose_use_case*', 'srs_propose_business_rule*', 'srs_suggest_use_cases*', 'srs_add_actor*', 'srs_add_screen*', 'srs_set_screen_access*', 'srs_add_non_ui_function*', 'trace_link_add*', 'defect_set*', 'spec_finding_to_bug*', 'qna_ask*', 'qna_answer*', 'worklog_set_activity*', 'report3_fill_page*', 'final_report_assemble*', 'chat_channels', 'chat_read', 'chat_post*', 'contrib_summary', 'diagram_list', 'diagram_get', 'diagram_generate*', 'diagram_update*', 'diagram_fill_report*', 'diagram_sql_export', 'diagram_sql_create*', 'teaching_overview', 'teaching_group', 'swr_overview', 'swr_features', 'swr_requirements', 'swr_priority', 'swr_glossary', 'swr_dictionary', 'swr_six_links', 'swr_feature_add*', 'swr_feature_update*', 'swr_feature_link*', 'swr_requirement_classify*', 'swr_requirement_set_status*', 'swr_priority_set*', 'swr_glossary_add*', 'swr_dictionary_add*', 'swr_doc_fill*', 'meeting_transcript_get', 'meeting_minutes_propose*', 'swr_stakeholders', 'swr_raci', 'swr_elicitation_sessions', 'swr_elicitation_get', 'swr_surveys', 'swr_survey_results', 'swr_requirement_sources', 'swr_models', 'swr_quality', 'swr_nfr', 'swr_stakeholder_add*', 'swr_stakeholder_update*', 'swr_elicitation_add*', 'swr_elicitation_update*', 'swr_elicitation_propose*', 'swr_requirement_source_add*', 'swr_survey_add*', 'swr_model_generate*', 'swr_nfr_set*', 'swr_mockup_add_link*', 'issue_guide', 'project_resources', 'my_updates'];
+export const MAU_TOOLS_DAY_DU: Array<{ name: string; ghi: boolean; mo: string }> = [
+  ...TEN_DAY_DU.map((t) => ({ name: t.replace(/\*$/, ''), ghi: t.endsWith('*'), mo: `CT Work ${t.replace(/\*$/, '').replace(/_/g, ' ')}` })),
+  ...Array.from({ length: 30 }, (_, i) => ({ name: `ext_report_${i + 1}`, ghi: i % 3 === 0, mo: `Báo cáo mở rộng số ${i + 1}` })),
+];
+
+/** `get_issue` kèm dòng PHỤ THUỘC (máy sinh, đợt 6): LF-18 bị LF-5 (@longbui, chưa xong) chặn; LF-18 chặn LF-19. */
+export function mauGetIssuePhuThuoc(key = 'LF-18', o: { chanXong?: boolean } = {}): string {
+  const goc = mauGetIssue(key);
+  const i = goc.indexOf('\n\n<ctwork-content');
+  const dong = o.chanXong
+    ? ['Blocked by: all done (LF-5 [Done ✓] @longbui)', 'Blocks: LF-19 [To Do] @an']
+    : ['Blocked by (not done): LF-5 [In Progress] @longbui', 'Blocks: LF-19 [To Do] @an', 'Parent status: LF-2 [In Progress] @cuong', 'Subtasks not done (1/2): LF-31 [To Do] nobody'];
+  return `${goc.slice(0, i)}\n${dong.join('\n')}${goc.slice(i)}`;
+}
+
+/** `issue_guide` = tiêu đề + link trong app + get_issue (có phụ thuộc) + trang Docs gắn thẻ + web links. */
+export function mauIssueGuide(key = 'LF-18', o: { chanXong?: boolean } = {}): string {
+  const n = Number(key.split('-')[1]);
+  return [
+    `### ${key} — in-app link /work/labflow-studio/LF/issue/${n}`,
+    mauGetIssuePhuThuoc(key, o),
+    '',
+    'Docs pages linked to this issue: #3 "Hướng dẫn ERD" (PUBLISHED) /work/labflow-studio/LF/docs/3; #7 "Quy ước đặt tên bảng" (DRAFT) /work/labflow-studio/LF/docs/7',
+    '',
+    `Web links on this issue:\n${boc(`web links of ${key}`, '- dbdiagram <https://dbdiagram.io/d/labflow>\n- Slide ERD (Resources) <https://docs.google.com/x>')}`,
+  ].join('\n');
+}
+
+/** `list_pages` có trang "AGENTS.md — hướng dẫn cho CuongMini" (5 dự án thật đều có trang tiêu đề kiểu này). */
+export function mauListPages(o: { coAgents?: boolean; updatedAt?: string } = {}): string {
+  const ds = [
+    { page: 1, title: 'Tổng quan dự án LabFlow', status: 'PUBLISHED', visibility: 'TEAM', parentId: null, updatedAt: '2026-10-10T08:00:00.000Z' },
+    ...(o.coAgents === false ? [] : [{ page: 5, title: 'agents.md — Hướng dẫn cho CuongMini', status: 'PUBLISHED', visibility: 'TEAM', parentId: null, updatedAt: o.updatedAt ?? '2026-10-17T09:00:00.000Z' }]),
+    { page: 6, title: 'Biên bản họp tuần 2', status: 'DRAFT', visibility: 'TEAM', parentId: null, updatedAt: '2026-10-16T09:00:00.000Z' },
+  ];
+  return `${ds.length} page(s). Titles are user data.\n${boc('pages of LF', json(ds))}`;
+}
+
+export function mauGetPage(so: number, than: string): string {
+  return `Page LF-DOC-${so}:\n${boc(`page LF-DOC-${so}`, than)}`;
+}
+
+/** Trang AGENTS.md của nhóm: lời dẫn + khối \`\`\`markdown (CuongMini chỉ lấy khối đầu tiên). */
+export const MAU_TRANG_AGENTS = [
+  '# AGENTS.md — hướng dẫn cho CuongMini',
+  'Chép khối dưới vào AGENTS.md của repo nếu muốn.',
+  '',
+  '```markdown',
+  '## Vai trò',
+  'CuongMini là MENTOR: giải thích, không viết hộ code.',
+  '',
+  '## Quy ước git',
+  'Nhánh LF-số-tên, commit "LF-số: …", PR vào develop.',
+  '```',
+  '',
+  '```markdown',
+  '## Khối thứ hai không được lấy',
+  '```',
+].join('\n');
+
+/** `my_updates` (đợt 6). */
+export function mauMyUpdates(o: { events?: unknown[]; unblocked?: unknown[]; lastId: number }): string {
+  return `${(o.events ?? []).length} event(s), ${(o.unblocked ?? []).length} unblocked, lastId=${o.lastId}. Titles/excerpts are user data.\n${boc('my updates', json({ events: o.events ?? [], unblocked: o.unblocked ?? [], lastId: o.lastId }))}`;
+}

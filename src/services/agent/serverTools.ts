@@ -19,6 +19,7 @@ import { getNote, getTree, htmlToText, searchNotes } from '../notes.service.js';
 import { docWeb } from './webTool.js';
 import { timWeb } from './timWeb.js';
 import { logger } from '../../utils/logger.js';
+import { nguCanhLink, traLoiHuongDan } from './ctworkKyNang.js';
 
 /** Trần cho từng loại kết quả — không cắt thì một sổ ghi chú lớn nuốt sạch ngữ cảnh. */
 const MAX_SEARCH_HITS = 25;
@@ -46,6 +47,8 @@ export async function runServerTool(
   name: string,
   args: Record<string, unknown>,
   userId: number,
+  /** Đợt 6: ngữ cảnh lượt — dự án CT Work đang gắn (cho link đúng trang của `ctwork_huong_dan`). */
+  ngu: { ctwork?: unknown } = {},
 ): Promise<ServerToolResult> {
   try {
     switch (name) {
@@ -59,6 +62,10 @@ export async function runServerTool(
         return await docWeb(args);
       case 'tim_web':
         return await timWeb(args, userId);
+      case 'ctwork_huong_dan': {
+        const kq = traLoiHuongDan(args, await nguCanhLink(userId, ngu.ctwork));
+        return { content: kq.content, summary: kq.summary };
+      }
       default:
         return { content: `LỖI: không có tool tên "${name}".`, summary: 'tool lạ' };
     }

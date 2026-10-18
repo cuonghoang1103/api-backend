@@ -165,7 +165,7 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['PATCH', ''], ['DELETE', ''], ['POST', '/archive'], ['PUT', '/members/8'], ['DELETE', '/members/8'],
     ['POST', '/labels'], ['PATCH', '/components/1'], ['POST', '/workflows'], ['PUT', '/workflows/1/transitions'], ['PATCH', '/statuses/3'],
     ['POST', '/issue-types'], ['PUT', '/issue-templates/BUG'], ['POST', '/custom-fields'], ['PUT', '/board-columns'], ['PUT', '/studio'],
-    ['POST', '/studio/apply-defaults'], ['PUT', '/desk/settings'], ['PUT', '/spec-settings'], ['PUT', '/agent-settings'], ['GET', '/agent-settings'],
+    ['POST', '/studio/apply-defaults'], ['PUT', '/desk/settings'], ['PUT', '/spec-settings'], ['PUT', '/agent-settings'], ['GET', '/agent-settings'], ['PUT', '/cuongmini-team'], ['GET', '/cuongmini-team'],
     ['POST', '/avatar/presign'], ['POST', '/sample-data'], ['PUT', '/capacity/4'], ['POST', '/tests/enable'],
     ['POST', '/versions/2/release'], ['DELETE', '/versions/2'],
     ['DELETE', '/issues/12'], ['POST', '/issues/12/move-project'], ['POST', '/issues/bulk'], ['GET', '/trash'], ['POST', '/trash/3/restore'],

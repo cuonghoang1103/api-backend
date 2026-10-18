@@ -38,9 +38,11 @@ import ProjectDanger from '@/components/work/settings/ProjectDanger';
 import ProjectSpecQuality from '@/components/work/settings/ProjectSpecQuality';
 // CTW-28 A14: luật cho AI agent (Done ⇒ Review, lease, người duyệt).
 import ProjectAgents from '@/components/work/settings/ProjectAgents';
+import ProjectCuongMini from '@/components/work/settings/ProjectCuongMini'; // đợt 6 CuongMini: hạn mức nhóm
+import { currentWorkLocale } from '@/components/work/i18n/store';
 import { wt } from '@/components/work/i18n';
 
-type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'agents' | 'automation' | 'recurring' | 'github' | 'gitlab' | 'cloud' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
+type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'agents' | 'cuongmini' | 'automation' | 'recurring' | 'github' | 'gitlab' | 'cloud' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
 
 function ProjectSettings() {
   const params = useParams<{ ws: string; key: string }>();
@@ -68,6 +70,8 @@ function ProjectSettings() {
       { key: 'fields', get label() { return wt('settings.tFields'); }, icon: TextCursorInput },
       ...(config && config.role !== 'CLIENT' ? [{ key: 'quality' as const, get label() { return wt('settings.tSpecQualityAi'); }, icon: Gauge }] : []),
       ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'agents' as const, label: wt('pages.aiAgents'), icon: Bot }] : []),
+      /* Đợt 6: CuongMini cho cả nhóm — hạn mức của trưởng nhóm cho thành viên không Pro. */
+      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'cuongmini' as const, get label() { return currentWorkLocale() === 'vi' ? 'CuongMini cho cả nhóm' : 'CuongMini for the team'; }, icon: Bot }] : []),
     ] },
     { get label() { return wt('settings.tAutomationIntegrations'); }, tabs: [
       { key: 'automation', get label() { return wt('settings.tAutomation'); }, icon: Zap },
@@ -136,6 +140,7 @@ function ProjectSettings() {
         {tab === 'fields' && <ProjectFields config={config} slug={slug} />}
         {tab === 'quality' && <ProjectSpecQuality config={config} slug={slug} />}
         {tab === 'agents' && <ProjectAgents config={config} slug={slug} />}
+        {tab === 'cuongmini' && <ProjectCuongMini config={config} slug={slug} />}
         {tab === 'automation' && <ProjectAutomation config={config} slug={slug} />}
         {tab === 'recurring' && <ProjectRecurring config={config} />}
         {tab === 'github' && <ProjectGithub config={config} slug={slug} />}

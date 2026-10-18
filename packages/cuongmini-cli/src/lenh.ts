@@ -17,7 +17,7 @@ import {
   tenFileXuat, timMuc, timTheoChu, xuatMarkdown, type LenhGach, type MucGhi, type PhienCu,
 } from 'ct-lenh';
 // Đợt 5: bộ lệnh CT Work chung ba nơi (file thuần của app, không React) — import thẳng đường dẫn để tsc kiểm kiểu.
-import { lenhCtwork, type GiaoDienCtw } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
+import { lenhCtwork, moCtworkTuMcp, type GiaoDienCtw } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
 import { moTaCheDo } from './cheDo';
 import { mau, mo } from './mau';
 import { L, ngonNgu, nhieu } from './i18n';
@@ -88,6 +88,8 @@ export interface BoiCanhLenh {
     /** Đợt 5: khối MARKDOWN (thẻ CT Work, bảng sprint, xem trước) — giao diện tự vẽ theo bề ngang. */
     thanMd?: string;
     khiHuy?: () => void;
+    /** Đợt 6: danh sách dài ⇒ gõ để lọc. */
+    loc?: boolean;
   }) => void;
   /** Đợt 5: đọc lại dòng trạng thái CT Work (sau khi gắn dự án / tạo nhánh / chuyển thẻ). */
   lamMoiCtwork?: () => void;
@@ -123,7 +125,7 @@ export function giaoDienCtw(b: BoiCanhLenh): GiaoDienCtw {
     traLoi: (md) => b.kho.traLoi(md),
     chon: (o) => b.chon({
       tieuDe: o.tieuDe, ...(o.moTa ? { moTa: o.moTa } : {}), ...(o.than ? { thanMd: o.than } : {}),
-      ds: o.ds, khiChon: o.khiChon, ...(o.khiHuy ? { khiHuy: o.khiHuy } : {}),
+      ds: o.ds, khiChon: o.khiChon, ...(o.khiHuy ? { khiHuy: o.khiHuy } : {}), ...(o.loc ? { loc: true } : {}),
     }),
     // Thông báo 'ok' đã có dấu ✓ của bảng ghi — bỏ ✓ đầu câu để khỏi "✓ ✓".
     thongBao: (t, loai) => b.kho.thongBao(loai === 'ok' ? t.replace(/^✓\s*/, '') : t, loai === 'loi' ? 'loi' : loai === 'ok' ? 'ok' : 'info'),
@@ -164,7 +166,7 @@ function dongCot(ten: string, beTen: number, phai: string): string { return `  $
 /** Dòng phụ mờ dạng cây `⎿`. */
 const cay = (s: string): string => mo(`  ⎿ ${s}`);
 
-type McpTT = { duongDan: string; server: Array<{ ten: string; ok: boolean; soTool: number; loi?: string; canDuyet?: boolean; tat?: boolean; kieu?: string; tuDuAn?: boolean }>; loiCauHinh?: string | null } | null;
+type McpTT = { duongDan: string; server: Array<{ ten: string; ok: boolean; soTool: number; loi?: string; canDuyet?: boolean; tat?: boolean; kieu?: string; tuDuAn?: boolean; soMucLuc?: number }>; loiCauHinh?: string | null } | null;
 
 /** Khối danh sách server MCP (đã tô màu). */
 export function veMcp(tt: McpTT): string {
@@ -172,7 +174,7 @@ export function veMcp(tt: McpTT): string {
   const be = Math.min(24, Math.max(6, ...sv.map((x) => x.ten.length)));
   const dong = sv.length
     ? sv.map((x) => dongCot(x.ten, be, x.ok
-      ? `${mau(XANH)('✔')} ${L('đã nối', 'connected')} ${mo(`· ${x.soTool} ${L('tool', x.soTool === 1 ? 'tool' : 'tools')}${x.kieu ? ` · ${x.kieu}` : ''}${x.tuDuAn ? L(' · của dự án', ' · project') : ''}${(x as { dungSan?: boolean }).dungSan ? L(' · dựng sẵn', ' · built-in') : ''}`)}`
+      ? `${mau(XANH)('✔')} ${L('đã nối', 'connected')} ${mo(`· ${x.soTool} ${L('tool', x.soTool === 1 ? 'tool' : 'tools')}${x.soMucLuc ? L(` + ${x.soMucLuc} nạp khi cần`, ` + ${x.soMucLuc} on demand`) : ''}${x.kieu ? ` · ${x.kieu}` : ''}${x.tuDuAn ? L(' · của dự án', ' · project') : ''}${(x as { dungSan?: boolean }).dungSan ? L(' · dựng sẵn', ' · built-in') : ''}`)}`
       : x.tat ? mo(`○ ${L('đã tắt', 'disabled')}`)
         : x.canDuyet ? `${mau(VANG_NHAT)('⏸')} ${L('chờ bạn duyệt (.mcp.json của dự án)', 'awaiting approval (project .mcp.json)')}`
           : `${mau(DO)('✘')} ${mo(dichLoiMcp(x.loi ?? L('lỗi', 'failed')).split('\n')[0]!.slice(0, 70))}`))
@@ -191,6 +193,8 @@ async function menuMcp(b: BoiCanhLenh, baoDau = ''): Promise<void> {
     ds: [
       { nhan: L('Mở file cấu hình', 'Open config file'), giaTri: 'mo', mo: L('sửa rồi chọn Nạp lại', 'edit, then Reload') },
       { nhan: L('Nạp lại', 'Reload'), giaTri: 'nap', mo: L('khởi động lại mọi server', 'restart every server') },
+      /* Đợt 6 (việc 4): một chạm — nối bằng phiên đăng nhập ⇒ MỌI dự án (không gian · tên · vai) ⇒ quyền ⇒ gắn. */
+      { nhan: L('CT Work — chọn dự án & quyền', 'CT Work — pick project & access'), giaTri: 'ctworkDuAn', mo: ct?.server?.ok ? L('mọi dự án của bạn · đọc+ghi / chỉ đọc', 'all your projects · read+write / read only') : L('nối bằng tài khoản đang đăng nhập', 'connects with your signed-in account') },
       { nhan: ct?.server?.ok ? L('CT Work: đổi quyền / ngắt', 'CT Work: change access / disconnect') : L('Kết nối CT Work', 'Connect CT Work'), giaTri: 'ctwork', mo: L('một chạm, token cất trên máy', 'one tap, token kept on this machine') },
       { nhan: L('Xem tool / bật-tắt một server', 'View tools / enable-disable a server'), giaTri: 'server', ...((tt?.server ?? []).length ? {} : { tat: true }) },
       { nhan: L('Thoát', 'Exit'), giaTri: 'thoat', mo: 'Esc' },
@@ -200,6 +204,7 @@ async function menuMcp(b: BoiCanhLenh, baoDau = ''): Promise<void> {
       // QA 5c: nạp lại / bật-tắt server ⇒ dòng trạng thái CT Work đọc lại ngay (trước đây đứng "chưa nối" tới 60 s).
       if (g === 'nap') { kho.thongBao(L('Đang nạp lại MCP…', 'Reloading MCP…')); await kn.goi('agent:mcpNapLai').catch(() => undefined); b.lamMoiCtwork?.(); await menuMcp(b, L('✓ Đã nạp lại cấu hình MCP.', '✓ MCP config reloaded.')); return; }
       if (g === 'ctwork') { await chayLenh('/ctwork', b); return; }
+      if (g === 'ctworkDuAn') { await moCtworkTuMcp(giaoDienCtw(b)); return; }
       if (g === 'server') { menuChonServer(b, tt); }
     },
   });

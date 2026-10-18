@@ -41,6 +41,8 @@ export const NHAN_TOOL: Record<string, [string, string]> = {
   /* Đợt 4 */
   may_chup: ['Chụp màn hình', 'Screenshot'], may_bam: ['Bấm chuột', 'Click'], may_go: ['Gõ phím', 'Type'], may_phim: ['Phím tắt', 'Key'],
   may_cuon: ['Cuộn', 'Scroll'], lsp_hoi: ['LSP', 'LSP'], chay_notebook: ['Chạy notebook', 'Run notebook'],
+  /* Đợt 6 */
+  ctwork_huong_dan: ['Hướng dẫn CT Work', 'CT Work guide'], nap_tool_mcp: ['Nạp tool', 'Load tools'],
 };
 
 /** Câu "Đang …" (thanh trạng thái). Không có ⇒ suy từ nhãn. */
@@ -64,6 +66,7 @@ const VIEC_TOOL: Record<string, [string, string]> = {
   liet_ke_phien: ['Đang xem phiên khác', 'Listing sessions'], gop_viec_phu: ['Đang gộp thay đổi', 'Merging changes'],
   may_chup: ['Đang chụp màn hình', 'Taking a screenshot'], may_bam: ['Đang bấm chuột', 'Clicking'], may_go: ['Đang gõ phím', 'Typing'],
   may_phim: ['Đang bấm phím', 'Pressing keys'], may_cuon: ['Đang cuộn', 'Scrolling'], lsp_hoi: ['Đang hỏi LSP', 'Querying LSP'], chay_notebook: ['Đang chạy notebook', 'Running notebook'],
+  ctwork_huong_dan: ['Đang tra hướng dẫn CT Work', 'Looking up the CT Work guide'], nap_tool_mcp: ['Đang nạp tool', 'Loading tools'],
 };
 
 /** Tool gom được khi gọi LIÊN TIẾP (chỉ đọc) — `● Read 3 pages` thay vì 3 khối. */
@@ -112,6 +115,8 @@ const CUM_TOM_TAT: Array<[RegExp, string]> = ([
   ['không có mã đó', 'no such id'], ['không có phiên đó', 'no such session'], ['không có tool này', 'unknown tool'], ['không có cửa sổ', 'no window'],
   ['không có liên kết', 'no links'], ['không có kết quả', 'no result'], ['không có terminal', 'no terminal'], ['không có quyền', 'no permission'],
   ['không có tool', 'unknown tool'], ['không có git', 'git not found'], ['không có gì', 'nothing'],
+  /* Đợt 6 */
+  ['không nạp được', 'nothing loaded'], ['chỉ đọc', 'read only'], ['nạp', 'loaded'],
   ['không mở được khung', 'could not open the frame'], ['không chuẩn bị được', 'could not prepare'], ['không thấy phần tử', 'element not found'],
   ['không commit được', 'could not commit'], ['không đăng ký được', 'could not register'], ['không mở PR được', 'could not open the PR'],
   ['không đẩy được', 'could not push'], ['không dừng được', 'could not stop'], ['không hẹn được', 'could not schedule'],

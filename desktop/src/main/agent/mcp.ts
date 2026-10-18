@@ -56,6 +56,8 @@ export type { CauHinhServer } from './mcpKetNoi';
 // ─── Trần ──────────────────────────────────────────────────────────
 const MAX_SERVER = 5;
 const MAX_TOOL = 40;
+/** Đợt 6: đọc ĐỦ danh sách tool của server (CT Work ~120) — trần gửi model nằm ở `dungLaiDanhSachTool`, không ở đây. */
+const MAX_TOOL_LIET_KE = 300;
 const MAX_MO_TA = 500;
 /**
  * Hạn khởi động + bắt tay. 10 giây cũ quá ngắn cho lần đầu `npx -y …` (phải
@@ -256,6 +258,8 @@ export interface KetQuaNap {
     kieu?: KieuKetNoi;
     /** Số tool bị bỏ vì chạm trần tổng — không nói thì "server có 12 tool, AI thấy 8" là bí ẩn. */
     boBot?: number;
+    /** Đợt 6: số tool ở MỤC LỤC (model nạp schema khi cần — không bị bỏ). */
+    soMucLuc?: number;
     /** Đợt 4: người dùng TẮT server này (`"disabled": true` trong mcp.json) — không chạy. */
     tat?: boolean;
     /** Đợt 5: server DỰNG SẴN của app (CT Work), không có dòng trong mcp.json. */
@@ -285,13 +289,57 @@ export function napLaiMcp(goc: string | null = null): Promise<KetQuaNap> {
   return lan;
 }
 
-async function napThat(goc: string | null): Promise<KetQuaNap> {
-  await tatHet();
+/**
+ * ĐỢT 6 (lỗi đợt 5): THẾ HỆ của từng server — mỗi lần bật một server (nạp cả bộ HAY nạp riêng nó) tăng số này. Kết quả
+ * về muộn của một lần bật cũ (vd nạp cả bộ còn treo vì server KHÁC) bị đóng và bỏ, không đè lên lần nạp riêng mới hơn.
+ */
+const theHe = new Map<string, number>();
+const tangTheHe = (ten: string): number => { const g = (theHe.get(ten) ?? 0) + 1; theHe.set(ten, g); return g; };
+/** Thứ tự server theo cấu hình của lần nạp cả bộ gần nhất (để giữ thứ tự khi nạp riêng một cái). */
+let thuTuCauHinh: string[] = [];
+
+/** Thay (hoặc thêm) dòng trạng thái của một server. */
+function datTrangThai(dong: KetQuaNap['server'][number]): void {
+  const i = trangThaiCuoi.findIndex((x) => x.ten === dong.ten);
+  if (i >= 0) trangThaiCuoi[i] = dong; else trangThaiCuoi.push(dong);
+}
+
+/** Server `ten` đang chạy được ⇒ chen vào `thuTu` đúng chỗ theo cấu hình (dựng sẵn đứng đầu). */
+function themThuTu(ten: string): void {
+  if (thuTu.includes(ten)) return;
+  const viTri = (t: string) => { const i = thuTuCauHinh.indexOf(t); return dungSanTen.has(t) ? -1 : i < 0 ? 1e6 : i; };
+  thuTu = [...thuTu, ten].sort((a, b) => viTri(a) - viTri(b));
+}
+
+/**
+ * Bật MỘT server, áp kết quả NGAY khi nó về (không chờ server khác) — trừ khi đã có lần bật mới hơn của cùng server.
+ * Đợt 6: trước đây nạp cả bộ chờ `allSettled` ⇒ một server treo bắt mọi server (kể cả CT Work) đứng chờ 30–45 s.
+ */
+async function batVaAp(ten: string, c: CauHinhServer, them: Partial<KetQuaNap['server'][number]>): Promise<void> {
+  const g = tangTheHe(ten);
+  const kieu = kieuCua(c) ?? undefined;
+  try {
+    const s = await batServer(ten, c);
+    if (theHe.get(ten) !== g) { await s.ketNoi.dong().catch(() => {}); return; }
+    dangChay.set(ten, s);
+    themThuTu(ten);
+    datTrangThai({ ten, ok: true, soTool: s.tool.length, ...(kieu ? { kieu } : {}), ...them });
+  } catch (err) {
+    if (theHe.get(ten) !== g) return;
+    // Một server hỏng KHÔNG được làm chết những server còn lại.
+    datTrangThai({ ten, ok: false, soTool: 0, ...(kieu ? { kieu } : {}), ...them, loi: String((err as Error)?.message ?? err).slice(0, 400) });
+  }
+  dungLaiDanhSachTool();
+}
+
+/** Cấu hình hiệu lực (dựng sẵn ⇢ toàn cục ⇢ dự án đã duyệt) + cờ tin cậy — chung cho nạp cả bộ và nạp một server. */
+async function cauHinhHieuLuc(goc: string | null): Promise<{
+  cauHinh: Record<string, CauHinhServer>; daTat: string[]; tenDuAn: string[]; daDuyet: boolean;
+}> {
   const { bang: toanCuc, loi } = await docCauHinh();
   loiCauHinhCuoi = loi;
   const cuaDuAn = await docCauHinhDuAn(goc);
   const daDuyet = await daDuyetDuAn(goc, cuaDuAn);
-
   /* TOÀN CỤC THẮNG khi trùng tên. Cùng lý do lệnh gạch chéo dựng sẵn thắng
      `.claude/commands`: một file trong repo không được phép thay thế thứ người
      dùng tự cắm — đó là cách êm nhất để tráo một server. */
@@ -318,26 +366,14 @@ async function napThat(goc: string | null): Promise<KetQuaNap> {
   /* Đợt 4: `"disabled": true` ⇒ không bật, vẫn HIỆN trong danh sách (bật/tắt từ `/mcp`). */
   const daTat = Object.keys(cauHinh).filter((t) => (cauHinh[t] as { disabled?: unknown }).disabled === true);
   for (const t of daTat) delete cauHinh[t];
+  return { cauHinh, daTat, tenDuAn, daDuyet };
+}
 
+async function napThat(goc: string | null): Promise<KetQuaNap> {
+  await tatHet();
+  const { cauHinh, daTat, tenDuAn, daDuyet } = await cauHinhHieuLuc(goc);
   const ten = Object.keys(cauHinh).slice(0, MAX_SERVER);
-
-  /* Bật SONG SONG. Tuần tự thì một server `npx` đang tải gói (cả phút) bắt
-     mọi server sau nó đứng chờ — kể cả server chạy tức thì. */
-  const ketQua = await Promise.allSettled(ten.map((t) => batServer(t, cauHinh[t]!)));
-
-  const server: KetQuaNap['server'] = [];
-  thuTu = [];
-  ten.forEach((t, i) => {
-    const r = ketQua[i]!;
-    const kieu = kieuCua(cauHinh[t]) ?? undefined;
-    if (r.status === 'fulfilled') {
-      thuTu.push(t);
-      server.push({ ten: t, ok: true, soTool: r.value.tool.length, ...(kieu ? { kieu } : {}), ...(dungSanTen.has(t) ? { dungSan: true } : {}) });
-    } else {
-      // Một server hỏng KHÔNG được làm chết những server còn lại.
-      server.push({ ten: t, ok: false, soTool: 0, ...(kieu ? { kieu } : {}), ...(dungSanTen.has(t) ? { dungSan: true } : {}), loi: String((r.reason as Error)?.message ?? r.reason).slice(0, 400) });
-    }
-  });
+  thuTuCauHinh = ten;
 
   /*
    * Server dự án CHƯA duyệt vẫn phải HIỆN RA, kèm lý do.
@@ -346,33 +382,68 @@ async function napThat(goc: string | null): Promise<KetQuaNap> {
    * gì — không tool, không lỗi, không một dòng nào nói vì sao. Đó đúng là kiểu
    * hỏng câm mà cả bảng này sinh ra để chống.
    */
-  for (const t of daTat) server.push({ ten: t, ok: false, soTool: 0, tat: true, loi: 'đã tắt', ...(dungSanTen.has(t) ? { dungSan: true } : {}) });
+  for (const t of daTat) datTrangThai({ ten: t, ok: false, soTool: 0, tat: true, loi: 'đã tắt', ...(dungSanTen.has(t) ? { dungSan: true } : {}) });
   if (!daDuyet) {
     for (const t of tenDuAn.slice(0, MAX_SERVER)) {
-      server.push({ ten: t, ok: false, soTool: 0, tuDuAn: true, canDuyet: true,
-        loi: 'từ .mcp.json của dự án — cần bạn duyệt trước khi chạy' });
+      datTrangThai({ ten: t, ok: false, soTool: 0, tuDuAn: true, canDuyet: true, loi: 'từ .mcp.json của dự án — cần bạn duyệt trước khi chạy' });
     }
-  } else {
-    for (const s2 of server) if (tenDuAn.includes(s2.ten)) s2.tuDuAn = true;
   }
   if (Object.keys(cauHinh).length > MAX_SERVER) {
-    for (const t of Object.keys(cauHinh).slice(MAX_SERVER)) {
-      server.push({ ten: t, ok: false, soTool: 0, loi: `quá trần ${MAX_SERVER} server — không bật` });
-    }
+    for (const t of Object.keys(cauHinh).slice(MAX_SERVER)) datTrangThai({ ten: t, ok: false, soTool: 0, loi: `quá trần ${MAX_SERVER} server — không bật` });
   }
 
-  trangThaiCuoi = server;
+  /* Bật SONG SONG, và áp TỪNG cái ngay khi nó về (đợt 6) — tuần tự thì một server `npx` đang tải gói (cả phút) bắt
+     mọi server sau nó đứng chờ; `allSettled` rồi mới áp thì một server TREO giữ cả bộ (kể cả CT Work) chưa dùng được. */
+  await Promise.allSettled(ten.map((t) => batVaAp(t, cauHinh[t]!, {
+    ...(dungSanTen.has(t) ? { dungSan: true } : {}),
+    ...(daDuyet && tenDuAn.includes(t) ? { tuDuAn: true } : {}),
+  })));
+  /* Giữ đúng thứ tự cấu hình trong bảng trạng thái (trạng thái ghi theo lúc về). */
+  const thu = (t: string) => { const i = ten.indexOf(t); return i < 0 ? 1e6 : i; };
+  trangThaiCuoi = [...trangThaiCuoi].sort((a, b) => thu(a.ten) - thu(b.ten));
   dungLaiDanhSachTool();
-  return { tool: toolDaBiet, server };
+  return { tool: toolDaBiet, server: trangThaiCuoi };
+}
+
+/**
+ * ĐỢT 6 (lỗi đợt 5) — NẠP LẠI ĐÚNG MỘT SERVER (kết nối CT Work, bật/tắt trong `/mcp`): không tắt/bật lại các server khác,
+ * KHÔNG xếp hàng sau lần nạp cả bộ đang chạy (server khác treo không giữ "Connecting CT Work…" 30–45 s nữa). Lần nạp cả
+ * bộ còn dở của CHÍNH server này bị bỏ nhờ thế hệ (`theHe`).
+ */
+export async function napLaiMotServer(ten: string, goc: string | null = null): Promise<KetQuaNap> {
+  tangTheHe(ten);
+  const cu = dangChay.get(ten);
+  if (cu) { dangChay.delete(ten); thuTu = thuTu.filter((x) => x !== ten); await cu.ketNoi.dong().catch(() => {}); }
+  const { cauHinh, daTat, tenDuAn, daDuyet } = await cauHinhHieuLuc(goc);
+  const c = cauHinh[ten];
+  if (!c && !daTat.includes(ten)) {
+    trangThaiCuoi = trangThaiCuoi.filter((x) => x.ten !== ten);
+  } else if (!c) {
+    datTrangThai({ ten, ok: false, soTool: 0, tat: true, loi: 'đã tắt', ...(dungSanTen.has(ten) ? { dungSan: true } : {}) });
+  } else if (dangChay.size >= MAX_SERVER) {
+    datTrangThai({ ten, ok: false, soTool: 0, loi: `quá trần ${MAX_SERVER} server — không bật` });
+  } else {
+    await batVaAp(ten, c, {
+      ...(dungSanTen.has(ten) ? { dungSan: true } : {}),
+      ...(daDuyet && tenDuAn.includes(ten) ? { tuDuAn: true } : {}),
+    });
+  }
+  dungLaiDanhSachTool();
+  return { tool: toolDaBiet, server: trangThaiCuoi };
 }
 
 /**
  * Gộp tool của mọi server đang sống, theo thứ tự file cấu hình, cắt ở trần
  * TỔNG 40: 40 tool đã là ~6k token gửi lại ở mọi lượt, và đó là tiền thật.
  * Gọi lại mỗi khi một server đổi danh sách (`list_changed`) hoặc chết.
+ *
+ * ĐỢT 6 (việc 9) — CT Work có ~120 tool: server CT Work tin cậy có nhiều hơn `NGUONG_NAP` tool ⇒ chỉ `LOI_CTWORK` tool
+ * hằng ngày gửi kèm schema; phần còn lại vào MỤC LỤC (tên + một dòng, `mucLucChoCuoc`) và model nạp schema khi cần
+ * (`nap_tool_mcp` ⇒ `napToolChoCuoc`). Tắt chế độ này (đo A/B): `CUONGMINI_MCP_NAP=0` ⇒ trần 40 như cũ.
  */
 function dungLaiDanhSachTool(): void {
   const tool: ToolMcp[] = [];
+  const mucLuc: ToolMcp[] = [];
   /* Đợt 5: CT Work tin cậy được xếp tool theo ưu tiên, và chừa ≤ 16 chỗ cho các server khác. */
   const khac = thuTu.filter((t) => !tinCay.has(t)).reduce((n, t) => n + (dangChay.get(t)?.tool.length ?? 0), 0);
   for (const t of thuTu) {
@@ -380,17 +451,88 @@ function dungLaiDanhSachTool(): void {
     const tt = trangThaiCuoi.find((x) => x.ten === t);
     if (!s) continue;
     const ds = tinCay.has(t) ? sapToolCtwork(s.tool) : s.tool;
+    if (tinCay.has(t) && cheDoNap() && ds.length > NGUONG_NAP) {
+      const loi = ds.slice(0, LOI_CTWORK);
+      tool.push(...loi);
+      mucLuc.push(...ds.slice(LOI_CTWORK));
+      if (tt) { tt.soTool = loi.length; tt.soMucLuc = ds.length - loi.length; delete tt.boBot; }
+      continue;
+    }
     const tran = tinCay.has(t) ? Math.max(0, MAX_TOOL - Math.min(16, khac) - tool.length) : Math.max(0, MAX_TOOL - tool.length);
     const nhan = ds.slice(0, tran);
     tool.push(...nhan);
     if (tt) {
       tt.soTool = nhan.length;
+      delete tt.soMucLuc;
       const bo = s.tool.length - nhan.length;
       if (bo > 0) tt.boBot = bo; else delete tt.boBot;
     }
   }
   toolDaBiet = tool;
+  mucLucDaBiet = mucLuc;
+  for (const [cuoc, ds] of daNapCuoc) daNapCuoc.set(cuoc, ds.filter((ten) => mucLuc.some((x) => x.ten === ten)));
 }
+
+// ─── Đợt 6: nạp tool MCP theo nhu cầu ─────────────────────────────
+
+/** Server CT Work có nhiều hơn ngần này tool ⇒ chế độ mục lục. */
+const NGUONG_NAP = 28;
+/** Số tool CT Work hằng ngày luôn gửi kèm schema (đầu `UU_TIEN_CTWORK`). */
+const LOI_CTWORK = 20;
+/** Tool nạp thêm tối đa mỗi cuộc (cũ nhất rơi ra trước). */
+const MAX_NAP_CUOC = 24;
+let mucLucDaBiet: ToolMcp[] = [];
+const daNapCuoc = new Map<string, string[]>();
+function cheDoNap(): boolean { return process.env.CUONGMINI_MCP_NAP !== '0'; }
+
+/** Tên tool CT Work GHI (để bỏ khi thư mục gắn dự án ở chế độ CHỈ ĐỌC). */
+const laGhiCtw = (t: ToolMcp): boolean => tinCay.has(t.server) && !t.chiDoc;
+
+/**
+ * Tool MCP gửi model ở lượt của cuộc `cuocId`: bộ hằng ngày + những tool cuộc này đã nạp. `boGhiCtwork` ⇒ bỏ tool GHI của
+ * CT Work (thư mục gắn dự án chỉ đọc — model không được mời gọi thứ sẽ bị từ chối).
+ */
+export function toolGuiChoCuoc(cuocId: string | null | undefined, o: { boGhiCtwork?: boolean } = {}): ToolMcp[] {
+  const nap = cuocId ? (daNapCuoc.get(cuocId) ?? []) : [];
+  const them = nap.map((ten) => mucLucDaBiet.find((x) => x.ten === ten)).filter((x): x is ToolMcp => !!x);
+  return [...toolDaBiet, ...them].filter((t) => !o.boGhiCtwork || !laGhiCtw(t));
+}
+
+/** Mục lục tool CHƯA gửi schema (tên đầy đủ + một dòng) — ỔN ĐỊNH theo server, không theo cuộc (giữ đệm tiền tố). */
+export function mucLucChoCuoc(o: { boGhiCtwork?: boolean } = {}): Array<{ name: string; mo: string }> {
+  return mucLucDaBiet.filter((t) => !o.boGhiCtwork || !laGhiCtw(t))
+    .map((t) => ({ name: t.ten, mo: t.moTa.split('\n')[0]!.replace(/\s+/g, ' ').trim().slice(0, 110) }));
+}
+
+/** `nap_tool_mcp`: đánh dấu đã nạp cho cuộc (tên phải có trong mục lục). Trả tên đã nạp + tên không có. */
+export function napToolChoCuoc(cuocId: string, ten: unknown): { daNap: ToolMcp[]; khongCo: string[]; daCo: string[] } {
+  const ds = Array.isArray(ten) ? ten.filter((x): x is string => typeof x === 'string').slice(0, 8) : [];
+  const cu = daNapCuoc.get(cuocId) ?? [];
+  const daNap: ToolMcp[] = [];
+  const khongCo: string[] = [];
+  const daCo: string[] = [];
+  for (const t0 of ds) {
+    const t = t0.trim();
+    if (toolDaBiet.some((x) => x.ten === t)) { daCo.push(t); continue; }
+    const m = mucLucDaBiet.find((x) => x.ten === t || x.tenGoc === t);
+    if (!m) { khongCo.push(t); continue; }
+    if (!cu.includes(m.ten)) cu.push(m.ten);
+    daNap.push(m);
+  }
+  daNapCuoc.set(cuocId, cu.slice(-MAX_NAP_CUOC));
+  return { daNap, khongCo, daCo };
+}
+
+/** Quên phần đã nạp của một cuộc (xoá hội thoại / đóng tab). */
+export function quenNapCuoc(cuocId: string): void { daNapCuoc.delete(cuocId); }
+
+/** Một tool MCP theo tên đầy đủ — trong bộ gửi model HOẶC mục lục (đã nạp hay chưa). */
+export function timToolMcp(ten: string): ToolMcp | undefined {
+  return toolDaBiet.find((x) => x.ten === ten) ?? mucLucDaBiet.find((x) => x.ten === ten);
+}
+
+/** Mọi tool đang có (bộ hằng ngày + mục lục) — cho `/mcp` liệt kê. */
+export function tatCaToolMcp(): ToolMcp[] { return [...toolDaBiet, ...mucLucDaBiet]; }
 
 let nguonBienBiMat: () => Record<string, string> = () => ({});
 /** `ctworkKetNoi.ts` cắm vào (tránh vòng import). */
@@ -429,8 +571,9 @@ export function laServerDungSan(server: string): boolean { return dungSanTen.has
  * giữ thứ tự của máy chủ, đứng sau.
  */
 const UU_TIEN_CTWORK = [
-  'my_work', 'get_issue', 'search_issues', 'sprint_current', 'list_projects', 'whoami', 'list_pages', 'get_page',
-  'comment', 'log_work', 'transition', 'update_issue', 'create_issue', 'request_review', 'ask_lead',
+  /* Đợt 6: 20 tool đầu luôn gửi kèm schema khi CT Work ở chế độ mục lục — việc hằng ngày + dẫn đường. */
+  'my_work', 'issue_guide', 'get_issue', 'search_issues', 'sprint_current', 'list_projects', 'list_pages', 'get_page',
+  'comment', 'log_work', 'transition', 'update_issue', 'create_issue', 'request_review', 'project_resources', 'chat_post', 'qna_ask', 'raid_create', 'whoami', 'ask_lead',
   'meeting_list', 'meeting_get', 'weekly_report_generate', 'raid_list', 'export_file', 'docs_draft_page', 'docs_update_section',
   'test_list', 'test_get', 'fpt_unit_list', 'fpt_unit_get', 'contrib_summary', 'time_by_activity', 'worklog_set_activity',
   'chat_read', 'qna_list', 'rtm_get', 'srs_get', 'swr_overview', 'diagram_list', 'attach_file',
@@ -565,7 +708,7 @@ async function batVoiKieu(
     if (dongHo) clearTimeout(dongHo);
   }
 
-  dangChay.set(ten, s);
+  /* Đợt 6: KHÔNG tự `dangChay.set` ở đây — `batVaAp` chỉ ghi khi đây vẫn là lần bật mới nhất của server này. */
 
   // Server báo danh sách tool đổi ⇒ hỏi lại, rồi gộp lại danh sách chung.
   kn.onThongBao = (method) => {
@@ -608,7 +751,7 @@ async function lietKeTool(kn: KetNoiMcp, ten: string, hanMs: number): Promise<To
       { tools?: unknown[]; nextCursor?: unknown } | null;
     for (const t of ds?.tools ?? []) if (t && typeof t === 'object') tho.push(t as Record<string, unknown>);
     con = typeof ds?.nextCursor === 'string' && ds.nextCursor ? ds.nextCursor : undefined;
-    if (!con || tho.length >= MAX_TOOL) break;
+    if (!con || tho.length >= MAX_TOOL_LIET_KE) break;
   }
   const daCo = new Set<string>();
   const ra: ToolMcp[] = [];
@@ -636,10 +779,12 @@ async function lietKeTool(kn: KetNoiMcp, ten: string, hanMs: number): Promise<To
 }
 
 export async function tatHet(): Promise<void> {
+  for (const t of theHe.keys()) tangTheHe(t);
   const ds = [...dangChay.values()];
   dangChay.clear();
   thuTu = [];
   toolDaBiet = [];
+  mucLucDaBiet = [];
   trangThaiCuoi = [];
   await Promise.allSettled(ds.map((s) => s.ketNoi.dong()));
 }
@@ -656,7 +801,7 @@ export async function batTatServer(ten: string, bat: boolean, goc: string | null
   let bang = khoa ? (j[khoa] as Record<string, Record<string, unknown>>) : null;
   /* Đợt 5: server DỰNG SẴN (CT Work) không có dòng nào ⇒ tắt = ghi `{ "disabled": true }`; bật lại = gỡ dòng đó. */
   if (dungSanTen.has(ten) && (!bang || !bang[ten])) {
-    if (bat) { await napLaiMcp(goc); return { ok: true }; }
+    if (bat) { await napLaiMotServer(ten, goc); return { ok: true }; }
     if (!bang) { bang = {}; j[khoa ?? 'servers'] = bang; }
     bang[ten] = { disabled: true, _ghi_chu: 'CT Work dựng sẵn của CuongMini đang TẮT. Bật lại: /mcp (hoặc xoá dòng này).' };
   } else if (!bang || !bang[ten] || typeof bang[ten] !== 'object') {
@@ -666,7 +811,8 @@ export async function batTatServer(ten: string, bat: boolean, goc: string | null
     if (dungSanTen.has(ten) && kieuCua(bang[ten] as CauHinhServer) === null) delete bang[ten];
   } else bang[ten]!.disabled = true;
   await fs.writeFile(p, `${JSON.stringify(j, null, 2)}\n`, 'utf8');
-  await napLaiMcp(goc);
+  /* Đợt 6: chỉ nạp lại server vừa bật/tắt — không đụng (và không chờ) server khác. */
+  await napLaiMotServer(ten, goc);
   return { ok: true };
 }
 
@@ -765,7 +911,8 @@ function loiChu(noiDung: string): KetQuaChuyen {
 }
 
 async function goiThat(ten: string, args: Record<string, unknown>, signal?: AbortSignal): Promise<KetQuaChuyen> {
-  const t = toolDaBiet.find((x) => x.ten === ten);
+  /* Đợt 6: tool ở MỤC LỤC (đã nạp theo nhu cầu) cũng gọi được. */
+  const t = timToolMcp(ten);
   if (!t) return loiChu(`LỖI: không có tool MCP tên "${ten}".`);
   const s = dangChay.get(t.server);
   if (!s || s.ketNoi.daDong) {

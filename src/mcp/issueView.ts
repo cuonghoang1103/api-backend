@@ -109,6 +109,13 @@ export async function issueMarkdown(ctx: McpCtx, p: ProjectHit, number: number, 
     meta.push(`Lease: #${lease.id} held by @${lease.agent.user.username}${mine ? ' (you)' : ''} until ${lease.expiresAt.toISOString()}${lease.progressPct !== null ? ` · ${lease.progressPct}%` : ''}`);
   }
   if (d.parent) meta.push(`Parent: ${p.key}-${d.parent.number}`);
+  /* Đợt 6 (CuongMini dẫn đường, 18/10/2026) — PHỤ THUỘC, máy sinh (chỉ THÊM dòng, không đổi dòng cũ): thẻ đang chặn thẻ
+     này mà CHƯA xong (+ người làm), thẻ này đang chặn ai, trạng thái thẻ cha, thẻ con chưa xong. Tiêu đề vẫn nằm trong
+     khối untrusted (## Links / ## Subtasks); ở đây chỉ key, trạng thái, @người làm. */
+  if (inc.has('links') || inc.has('subtasks')) {
+    const dep = await dependencyLines(p.id, p.key, d, inc);
+    meta.push(...dep);
+  }
 
   // ── Phần người viết (không tin cậy) ──
   const body: string[] = [`## Title\n${d.title}`];
@@ -166,6 +173,43 @@ export async function issueMarkdown(ctx: McpCtx, p: ProjectHit, number: number, 
   const dod = Array.isArray(settings.definitionOfDone) ? (settings.definitionOfDone as unknown[]).filter((x): x is string => typeof x === 'string' && !!x.trim()) : [];
   if (dod.length) out.push(`Definition of Done of project ${p.key}:\n${untrusted(`project ${p.key} definition of done`, dod.map((x) => `- ${x}`).join('\n'))}`);
   return out.join('\n\n');
+}
+
+/**
+ * Đợt 6 — dòng phụ thuộc cho model/app: "Blocked by (not done): LF-5 [In Progress] @longbui", "Blocks: …",
+ * "Parent status: …", "Subtasks not done: …". Thẻ ở dự án khác / đã xoá ⇒ bỏ. Chỉ quan hệ BLOCKS + cha/con.
+ */
+export async function dependencyLines(projectId: number, key: string, d: Record<string, any>, inc: Set<IssueInclude>): Promise<string[]> {
+  const links = (Array.isArray(d.links) ? d.links : []) as Array<{ type: string; direction: 'outward' | 'inward'; issue: { id: number; key: string } }>;
+  const blocks = links.filter((l) => l.type === 'BLOCKS');
+  const kids = (inc.has('subtasks') && Array.isArray(d.children) ? d.children : []) as Array<{ id: number; number: number }>;
+  const ids = [...new Set([...blocks.map((l) => l.issue.id), ...(d.parent?.id ? [d.parent.id as number] : []), ...kids.map((c) => c.id)])];
+  if (!ids.length) return [];
+  const rows = await prisma.workIssue.findMany({
+    where: { id: { in: ids }, deletedAt: null },
+    select: { id: true, number: true, project: { select: { key: true } }, status: { select: { name: true, category: true } }, assignee: { select: { username: true, kind: true } } },
+  });
+  const one = (id: number): string | null => {
+    const r = rows.find((x) => x.id === id);
+    if (!r) return null;
+    return `${r.project.key}-${r.number} [${r.status.name}${r.status.category === 'DONE' ? ' ✓' : ''}] ${r.assignee ? `@${r.assignee.username}${r.assignee.kind === 'AGENT' ? ' (AI agent)' : ''}` : 'nobody'}`;
+  };
+  const notDone = (id: number) => rows.find((x) => x.id === id)?.status.category !== 'DONE';
+  const out: string[] = [];
+  const by = blocks.filter((l) => l.direction === 'inward').map((l) => l.issue.id);
+  if (by.length) {
+    const open = by.filter(notDone).map(one).filter(Boolean);
+    out.push(open.length ? `Blocked by (not done): ${open.join('; ')}` : `Blocked by: all done (${by.map(one).filter(Boolean).join('; ')})`);
+  }
+  const blocking = blocks.filter((l) => l.direction === 'outward').map((l) => one(l.issue.id)).filter(Boolean);
+  if (blocking.length) out.push(`Blocks: ${blocking.join('; ')}`);
+  if (d.parent?.id) { const pr = one(d.parent.id); if (pr) out.push(`Parent status: ${pr}`); }
+  if (kids.length) {
+    const open = kids.filter((c) => notDone(c.id)).map((c) => one(c.id)).filter(Boolean);
+    out.push(open.length ? `Subtasks not done (${open.length}/${kids.length}): ${open.slice(0, 12).join('; ')}` : `Subtasks: all ${kids.length} done`);
+  }
+  void key;
+  return out;
 }
 
 /** DoD + chỉ dẫn AI của dự án (resource ctwork://{project}/dod). */

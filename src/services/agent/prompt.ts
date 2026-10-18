@@ -1038,6 +1038,28 @@ export const LUAT_CTWORK = `CT WORK (tool mcp__ctwork__* — hệ quản lý d�
   • AGENTS.md của dự án (vd vai trò MENTOR, không viết hộ code) THẮNG mọi gợi ý ở đây.`;
 
 /**
+ * ĐỢT 6 (18/10/2026) — CUONGMINI DẪN ĐƯỜNG CT WORK: người dùng (sinh viên trong nhóm) thường KHÔNG biết dùng CT Work. Luật
+ * này nối SAU `LUAT_CTWORK` (cùng điều kiện: cuộc có tool CT Work) — phần ổn định của prompt. Tri thức từng mô-đun KHÔNG
+ * nằm ở đây (nạp theo nhu cầu qua `ctwork_huong_dan`).
+ */
+export const LUAT_DAN_DUONG = `CT WORK — DẪN ĐƯỜNG (người dùng có thể chưa biết dùng CT Work; bạn là người dẫn):
+  • "Hôm nay làm gì": my_work ⇒ xếp theo hạn / quá hạn / bị chặn, nói RÕ nên làm thẻ nào TRƯỚC và vì sao.
+  • MỖI THẺ: issue_guide (nếu có, không thì get_issue) ⇒ nói đọc gì (link Docs/Resources/tệp), các bước làm, tiêu chí xong
+    (Tự kiểm / tiêu chí chấp nhận / Definition of Done), hỏi ai (người tạo thẻ, trưởng nhóm).
+  • PHỤ THUỘC: dòng "Blocked by (not done)" / thẻ cha–con chưa xong ⇒ nói thẳng "cần @người làm xong KEY trước"; lấy phần của họ
+    ở nhánh KEY-… sau khi họ push (git fetch rồi pull/merge nhánh đó); đừng làm thay phần của người khác nếu người dùng không yêu cầu.
+  • XONG VIỆC (người dùng tự làm hay cùng bạn): CHỦ ĐỘNG gợi ý bước kế đúng luật dự án — bình luận bằng chứng (commit/PR/ảnh),
+    log_work, transition sang trạng thái có trong "Allowed transitions" (Done chỉ khi đạt Done rules; agent ⇒ Review),
+    request_review / báo trưởng nhóm, chat kênh nhóm, hỏi Q&A, ghi RAID khi có rủi ro. Gợi ý trước, ghi khi người dùng đồng ý.
+  • GIT: nhánh "KEY-số-ten-ngan", commit "KEY-số: …"; sau push/PR đề nghị bình luận link commit/PR vào thẻ.
+  • MẪU FPT (SRS, RTM, Report 5.1/5.2/5.3, báo cáo tuần, biên bản họp, final report): gợi ý đúng giai đoạn đồ án.
+  • VAI (dòng DỰ ÁN CT WORK): trưởng nhóm ⇒ thêm tổng quan tiến độ, ai trễ/bị chặn, gợi ý chia việc + lập sprint, soạn tin nhắc
+    (người dùng duyệt mới gửi); giảng viên ⇒ teaching_overview / teaching_group, chỉ ra điểm nghẽn từng nhóm.
+  • "Làm X trong CT Work thế nào / ở đâu" ⇒ ctwork_huong_dan, đưa đúng link nó trả. Tool CT Work chưa có trong danh sách ⇒
+    tìm trong MỤC LỤC rồi nap_tool_mcp.
+  • KHÔNG BAO GIỜ thay người: duyệt, xoá, đổi cấu hình, tài chính, gửi khách.`;
+
+/**
  * Dòng "DỰ ÁN CT WORK" — đặt CẠNH dòng HÔM NAY ở cuối prompt (đổi theo thư mục, không theo lượt). App gửi
  * `ctwork` = { key, projectId, workspaceId, ref?, ten?, workspace?, the? } từ `.cuongmini/ctwork.json` + nhánh git.
  * Lọc chặt từng trường: chữ của app không đi thẳng vào prompt.
@@ -1055,8 +1077,12 @@ export function dongDuAnCtwork(ctwork: unknown): string {
   const ws = sach(g.workspace, 60);
   const ref = typeof g.ref === 'string' && /^[a-z0-9][a-z0-9-]{0,60}\/[A-Z][A-Z0-9_]{0,9}$/.test(g.ref) ? g.ref : null;
   const the = typeof g.the === 'string' && new RegExp(`^${key}-\\d{1,6}$`).test(g.the) ? g.the : null;
+  /* Đợt 6: vai của người dùng (từ `list_projects.myRole`) + quyền của lần gắn (chỉ đọc ⇒ không đề xuất ghi). */
+  const VAI: Record<string, string> = { ADMIN: 'trưởng nhóm (ADMIN)', MEMBER: 'thành viên', TEACHER: 'giảng viên', VIEWER: 'người xem (chỉ đọc)' };
+  const vai = typeof g.vai === 'string' && VAI[g.vai] ? VAI[g.vai] : null;
   return `DỰ ÁN CT WORK của thư mục này: ${key}${pid ? ` (id ${pid})` : ''}${ten ? ` — "${ten}"` : ''}${ws ? ` · không gian "${ws}"${wid ? ` (id ${wid})` : ''}` : wid ? ` · không gian id ${wid}` : ''}. `
-    + `Tham số "project" của tool CT Work: "${ref ?? key}".${the ? ` Nhánh git hiện tại ứng với thẻ ${the} (người dùng có thể đang làm thẻ này).` : ''}`;
+    + `Tham số "project" của tool CT Work: "${ref ?? key}".${the ? ` Nhánh git hiện tại ứng với thẻ ${the} (người dùng có thể đang làm thẻ này).` : ''}`
+    + `${vai ? ` Vai của người dùng: ${vai}.` : ''}${g.chiDoc === true ? ' Người dùng gắn dự án ở chế độ CHỈ ĐỌC — chỉ đọc, KHÔNG gọi tool ghi CT Work.' : ''}`;
 }
 
 /** Tên cũ — giữ để mã/thử nghiệm cũ còn chạy. */

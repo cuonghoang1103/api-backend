@@ -56,8 +56,10 @@ test('/ctwork (đã nối) ⇒ menu đánh số 1–9 + 0 Thoát; chọn 1 ⇒ b
   const x = giaoDien(traMacDinh);
   await lenhCtwork('/ctwork', '', x.g);
   const m = x.the.at(-1)!;
-  assert.deepEqual(m.ds.map((d) => d.nhan), ['Sprint hiện tại', 'Việc của tôi', 'Mở thẻ…', 'Bắt đầu làm thẻ…', 'Ghi giờ…', 'Bình luận bằng chứng', 'Báo cáo tuần', 'Họp', 'Chọn dự án', 'Thoát']);
-  assert.equal(m.ds.at(-1)!.so, '0');
+  /* Đợt 6: 2 = Hôm nay (việc của tôi + nên làm gì trước), 6 = Xong việc (bằng chứng + chuyển trạng thái đúng luật…), 7 = báo
+     cáo & mẫu FPT, 8 = nhóm; không số: theo dõi bật/tắt, hỏi cách dùng CT Work. 1 · 9 · 0 giữ nguyên chỗ. */
+  assert.deepEqual(m.ds.map((d) => d.nhan), ['Sprint hiện tại', 'Hôm nay — việc của tôi', 'Mở thẻ / hướng dẫn…', 'Bắt đầu làm thẻ…', 'Ghi giờ…', 'Xong việc — bước tiếp', 'Báo cáo & mẫu FPT', 'Nhóm', 'Chọn dự án', 'Thoát', 'Theo dõi: TẮT', 'Hỏi cách dùng CT Work…']);
+  assert.equal(m.ds[9]!.so, '0');
   assert.match(m.moTa ?? '', /⬡ LF · Sprint 2 · còn 5 ngày · ▶ LF-18 Thiết kế ERD \[In Progress\]/);
   await m.khiChon('sprint');
   assert.match(x.chu.at(-1)!, /\*\*Sprint 2\*\*/);
@@ -124,7 +126,8 @@ test('hỏi MỘT lần lúc mở: "Kết nối CT Work?" ⇒ nối chỉ đọc
   const b = x.the.at(-1)!;
   assert.match(b.tieuDe, /Gắn thư mục này với dự án CT Work LF \(id 2\)\?/);
   await b.khiChon('gan');
-  assert.deepEqual(x.goi.find(([, d]) => d.viec === 'gan')![1].duAn, { key: 'LF', id: 2, workspaceId: 3, ten: 'LabFlow AI', workspace: 'LabFlow Studio' });
+  /* Đợt 6: kèm vai (myRole) — lõi ghi `vai` vào ctwork.json, máy chủ nói vai cho model. */
+  assert.deepEqual(x.goi.find(([, d]) => d.viec === 'gan')![1].duAn, { key: 'LF', id: 2, workspaceId: 3, ten: 'LabFlow AI', workspace: 'LabFlow Studio', vaiTro: 'ADMIN' });
   assert.match(x.chu.at(-1)!, /Đã gắn thư mục với dự án \*\*LF\*\* \(id 2\)[\s\S]*\.gitignore/);
 });
 

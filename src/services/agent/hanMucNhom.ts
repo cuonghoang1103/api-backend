@@ -335,6 +335,15 @@ export async function datCauHinhNhom(callerId: number, projectId: number, input:
       throw new BadRequestError('The sponsoring lead must agree first: they open Project settings → CuongMini with their own account and pick themselves', 'WORK_SPONSOR_NO_CONSENT');
     }
   }
+  /* Nới trần = tiêu thêm tiền của nhà tài trợ ⇒ chỉ CHÍNH nhà tài trợ đang hiệu lực được nới (ADMIN khác chỉ hạ được). */
+  const nangNgay = input.tranNgayNguoiUsd !== undefined && input.tranNgayNguoiUsd > cu.tranNgayNguoiUsd;
+  const nangThang = input.tranThangNhomUsd !== undefined && input.tranThangNhomUsd > cu.tranThangNhomUsd;
+  if (nangNgay || nangThang) {
+    const chuNay = await timChuNhom(projectId, cu);
+    if (chuNay && chuNay.id !== callerId && input.chuId !== callerId) {
+      throw new BadRequestError(`Only the sponsoring lead (@${chuNay.username}) can raise the CuongMini limits`, 'WORK_SPONSOR_ONLY_RAISE');
+    }
+  }
   const { dongY: _boQua, ...vao } = input;
   void _boQua; // `dongY` không bao giờ nhận từ thân yêu cầu — chỉ sinh ra khi CHÍNH người đó chọn mình.
   /* Chọn CHÍNH mình ⇒ đồng ý; chọn người khác / "tự chọn" ⇒ rút đồng ý của mình (người tạo dự án vẫn được tính). */

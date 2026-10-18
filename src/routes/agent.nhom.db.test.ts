@@ -225,6 +225,14 @@ describe('CuongMini — hạn mức NHÓM (HTTP + DB thật)', { skip: !RUN }, (
       assert.equal(dongY.status, 200, JSON.stringify(dongY.raw));
       assert.equal(dongY.data.chu?.id, pro2.id);
       assert.equal((await thuCua(ke, kePid)).status, 400, 'đã đồng ý ⇒ qua cửa');
+      // Nới trần là tiêu tiền của nhà tài trợ ⇒ ADMIN khác chỉ HẠ được.
+      const nang = await call(ke, 'PUT', `/work/projects/${kePid}/cuongmini-team`, { tranThangNhomUsd: 1000 });
+      assert.ok(nang.status === 200 || nang.status === 400);
+      await call(pro2, 'PUT', `/work/projects/${kePid}/cuongmini-team`, { tranNgayNguoiUsd: 1, tranThangNhomUsd: 15 });
+      const nang2 = await call(ke, 'PUT', `/work/projects/${kePid}/cuongmini-team`, { tranNgayNguoiUsd: 50 });
+      assert.equal(nang2.status, 400, JSON.stringify(nang2.raw));
+      assert.equal(nang2.code, 'WORK_SPONSOR_ONLY_RAISE');
+      assert.equal((await call(ke, 'PUT', `/work/projects/${kePid}/cuongmini-team`, { tranNgayNguoiUsd: 0.5 })).status, 200, 'hạ thì được');
       assert.equal((await call(pro2, 'PUT', `/work/projects/${kePid}/cuongmini-team`, { chuId: null })).status, 200);
       assert.equal((await thuCua(ke, kePid)).status, 403, 'rút đồng ý ⇒ chặn lại');
     } finally {

@@ -35,6 +35,8 @@ let tam = '';
 let may: Server | null = null;
 let cong = 0;
 const ghi = { scopes: [] as string[][], turn: [] as Array<Record<string, any>>, goi: [] as Array<[string, Record<string, unknown>]> };
+/** QA đợt 6: lượt agent đầu tiên "làm việc" ⇒ tạo một commit trong repo (gợi ý "Xong việc?" chỉ bật khi LƯỢT đổi git). */
+let repoCuaLuot = '';
 
 const DS_DU_AN = [
   { key: 'LF', name: 'LabFlow AI', kind: 'SCHOOL', myRole: 'MEMBER', archived: false, openIssues: 42, modules: ['sprints', 'docs'], workspace: 'labflow-studio', id: 2, workspaceId: 3, workspaceName: 'LabFlow Studio' },
@@ -96,6 +98,7 @@ before(async () => {
       if (url === '/api/v1/agent/turn') {
         const b = JSON.parse(than) as Record<string, any>;
         ghi.turn.push(b);
+        if (ghi.turn.length === 1 && repoCuaLuot) git(repoCuaLuot, 'commit', '-q', '--allow-empty', '-m', 'LF-18: ERD v2');
         return sse(res, [{ type: 'start', model: 'gia' }, { type: 'text', delta: 'Đã đọc thẻ — bạn làm tiếp nhé.' },
           { type: 'done', append: [{ role: 'assistant', content: 'Đã đọc thẻ — bạn làm tiếp nhé.' }], stop: 'end', usage: { inputTokens: 10, outputTokens: 5, costUsd: 0.001 }, quota: null }]);
       }
@@ -146,6 +149,7 @@ test('PTY lõi thật: tin thư mục ⇒ /mcp chọn dự án + quyền ⇒ AGE
   git(duAn, 'checkout', '-q', '-b', 'LF-18-erd');
   writeFileSync(path.join(duAn, 'erd.md'), '# ERD\n');
   git(duAn, 'add', '.'); git(duAn, 'commit', '-q', '-m', 'LF-18: ERD bản nháp');
+  repoCuaLuot = duAn;
 
   const g = await chay(duAn, home, [
     [2.0, '1', 'Mở thư mục làm việc'], // 1. hộp tin thư mục ⇒ Có

@@ -33,7 +33,8 @@ const VN_MS = 7 * 3600_000;
 
 /** Mặc định khi admin chưa đặt — đủ chặt để một vòng lặp hỏng không đốt hết credit. */
 export const TRAN_MAC_DINH: Record<GoiCoTran, TranGoi> = {
-  pro: { free: { thang: 3, ngay: 0.5 }, cao: { thang: 20, ngay: null } },
+  // 18/10/2026: nhóm free (Sonic 5.5 + Heshin 5.5) nâng theo trần ×10 của từng model (100 + 80 $/tháng, 20 $/ngày).
+  pro: { free: { thang: 180, ngay: 40 }, cao: { thang: 20, ngay: null } },
   key_terminal: { free: { thang: 2, ngay: 0.3 }, cao: { thang: 10, ngay: null } },
 };
 

@@ -37,12 +37,12 @@ const KHOA = 'cuongmini_tran_model';
 export const TRAN_MODEL_MAC_DINH: Record<string, Record<GoiCoTranModel, TranUsd>> = {
   'cm-invisible': { pro: { thang: 10, ngay: 3 }, key_terminal: { thang: 5, ngay: 1.5 } },
   'cm-optimum': { pro: { thang: 20, ngay: 5 }, key_terminal: { thang: 10, ngay: 2.5 } },
-  'cm-sonic': { pro: { thang: 10, ngay: 2 }, key_terminal: { thang: 5, ngay: 1 } },
+  'cm-sonic': { pro: { thang: 100, ngay: 20 }, /* ×10 theo chủ app 18/10/2026 */ key_terminal: { thang: 5, ngay: 1 } },
   'cm-solid': { pro: { thang: 15, ngay: 3 }, key_terminal: { thang: 8, ngay: 1.5 } },
   'cm-nova': { pro: { thang: 15, ngay: 3 }, key_terminal: { thang: 8, ngay: 1.5 } },
   'cm-shin': { pro: { thang: 5, ngay: 1 }, key_terminal: { thang: 2.5, ngay: 0.5 } },
   'cm-eco': { pro: { thang: 10, ngay: 2 }, key_terminal: { thang: 5, ngay: 1 } },
-  'cm-heshin': { pro: { thang: 8, ngay: 2 }, key_terminal: { thang: 4, ngay: 1 } },
+  'cm-heshin': { pro: { thang: 80, ngay: 20 }, /* ×10 theo chủ app 18/10/2026 */ key_terminal: { thang: 4, ngay: 1 } },
 };
 const DU_PHONG: Record<GoiCoTranModel, TranUsd> = { pro: { thang: 5, ngay: 1 }, key_terminal: { thang: 2.5, ngay: 0.5 } };
 

@@ -612,43 +612,6 @@ export function startCronJobs(): void {
     }
   }, { timezone: 'UTC' });
 
-  // ─── Mạng bản tin AI NHIỀU BOT — tự đăng lên BẢNG TIN (feed) ───
-  //
-  // Năm khung giờ VN (UTC+7) viết dưới dạng UTC:
-  //   07:00 VN = 00:00 UTC · 10:00 = 03:00 · 15:00 = 08:00 · 18:00 = 11:00 · 22:00 = 15:00
-  // Năm bot (claude-mini / codex-x / gemini-mini / cuongmini / antigravity-mini —
-  // xem newsBots.ts) chia nhau MỘT trần chung 6–8 bài/ngày (`planNewsBotsDay`
-  // trong cuongMiniSchedule.ts; trần đặt bằng NEWS_BOTS_DAILY_CAP, mặc định 7).
-  // Ưu tiên claude-mini trước nhất. `runNewsBotsSlot` chạy mọi bot đã lên kế
-  // hoạch cho khung giờ đó, kiểm trần ngày rồi mới đăng; tự nuốt lỗi.
-  //
-  // MẶC ĐỊNH TẮT — giống TECH_NEWS_AUTOPOST, và vì lý do y hệt: việc chạy nền tự
-  // tiêu tiền phải là thứ người ta CHỌN bật. Bật bằng CUONGMINI_FEED_AUTOPOST=true
-  // (giữ TÊN CŨ để không vỡ cấu hình; chấp cả alias NEWS_BOTS_AUTOPOST=true) trong
-  // /opt/cuonghoangdev/.env — CẦN thêm LLM_BACKGROUND_ENABLED=true vì bài đi qua
-  // feature:'news' = việc chạy nền.
-  const newsBotsEnabled =
-    String(process.env.CUONGMINI_FEED_AUTOPOST ?? process.env.NEWS_BOTS_AUTOPOST ?? 'false').toLowerCase() === 'true';
-  const cuongMiniEnabled = newsBotsEnabled; // tên cũ dùng trong log tổng kết bên dưới
-  const newsBotsSlots: Array<[string, string]> = [
-    ['0 0 * * *', '07:00'],
-    ['0 3 * * *', '10:00'],
-    ['0 8 * * *', '15:00'],
-    ['0 11 * * *', '18:00'],
-    ['0 15 * * *', '22:00'],
-  ];
-  for (const [bieu, slot] of newsBotsSlots) {
-    cron.schedule(bieu, async () => {
-      if (!newsBotsEnabled) return;
-      try {
-        const { runNewsBotsSlot } = await import('./techTrends/newsBotsFeed.js');
-        await runNewsBotsSlot(slot);
-      } catch (err) {
-        logger.error('cron news-bots feed slot failed', { slot, error: (err as Error).message });
-      }
-    }, { timezone: 'UTC' });
-  }
-
   // ─── Maker Lab housekeeping (hourly) ───
   // Telemetry is the only table on the site that grows purely with
   // wall-clock time (one row per device per 10s), and the VPS disk is
@@ -819,9 +782,6 @@ export function startCronJobs(): void {
   newsEnabled
     ? 'Tech news ingest every 2h; bulletin 07:30 VN; scheduled-publish sweep every 5 min'
     : 'Tech news: TẮT (TECH_NEWS_AUTOPOST chưa bật) — chỉ còn scheduled-publish sweep, không gọi AI',
-  cuongMiniEnabled
-    ? 'News bots (5 bot) feed: 5 khung giờ VN (07/10/15/18/22), trần chung 6–8 bài/ngày, claude-mini ưu tiên (cần LLM_BACKGROUND_ENABLED=true)'
-    : 'News bots feed: TẮT (CUONGMINI_FEED_AUTOPOST / NEWS_BOTS_AUTOPOST chưa bật)',
   'Maker Lab housekeeping hourly (telemetry prune, stale devices, expired commands)',
   'IndexNow sitemap submit every 6h (+ once ~2 min after startup)',
   'Tiền nong: nhắc nợ 8h/12h/19h VN (01:00/05:00/12:00 UTC) + chốt chi tiêu 20h VN (13:00 UTC)',

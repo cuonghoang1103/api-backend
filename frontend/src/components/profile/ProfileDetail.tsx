@@ -33,8 +33,6 @@ import { useSocialStore } from '@/store/socialStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-import { getBot } from '@/lib/botRegistry';
-import { BotProfileBanner } from '@/components/profile/BotProfileBanner';
 import { getCroppedImg, type PixelCrop } from './cropImage';
 
 // Dynamic imports — heavy client components
@@ -590,21 +588,10 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   const videos = media.filter((m) => m.type === 'VIDEO' && (m.url || m.thumbnail));
   const photos = media.filter((m) => m.type !== 'VIDEO' && (m.url || m.thumbnail));
 
-  // Automated news-bot account? → polished bot hero instead of the normal
-  // cover/avatar header. The tab bar + posts list below are unchanged.
-  const bot = getBot(p.username);
-
   // ─── Render ───────────────────────────────────────────────────
   return (
     <div className="mx-auto w-full max-w-[1050px] px-4 pb-10">
-      {bot ? (
-        <BotProfileBanner
-          bot={bot}
-          displayName={p.displayName || p.fullName || p.username}
-          followerCount={p.followerCount ?? 0}
-        />
-      ) : (
-      /* Cover + avatar header (avatar overlaps cover via negative margin, not clipped) */
+      {/* Cover + avatar header (avatar overlaps cover via negative margin, not clipped) */}
       <div className="relative rounded-2xl bg-darkcard border border-darkborder">
         {/* Cover photo — its own overflow-hidden box; the avatar is a SIBLING so it is never clipped */}
         <div
@@ -712,7 +699,6 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
           </div>
         </div>
       </div>
-      )}
 
       {/* Sticky tab bar — sibling of the header card so it stays pinned while the feed scrolls.
           --app-nav-h is the navbar's real height: 64px, or 64 + the notch on an installed PWA.

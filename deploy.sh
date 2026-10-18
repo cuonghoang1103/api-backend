@@ -620,22 +620,6 @@ PHUDE_SEED_RC="$(printf '%s\n' "$PHUDE_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' |
 PHUDE_SEED_OUT="$(printf '%s\n' "$PHUDE_SEED_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Lesson transcript seed" "seed-phu-de" "$PHUDE_SEED_OUT" "${PHUDE_SEED_RC:-0}" || true
 
-# ── Step 3.12b': phụ đề VIDEO RIÊNG (bài giảng tiếng Việt trên R2) ──
-# Nguồn: content/lesson-transcripts/<courseSlug>.json (sinh bằng
-# `npx tsx scripts/phu-de-tu-video-rieng.mjs` ở máy có dữ liệu dựng video).
-# Bảng RIÊNG `lesson_own_transcripts` — không đụng phụ đề YouTube ở trên.
-# Idempotent (upsert theo lessonId+track, vân tay không đổi thì không ghi),
-# không xoá gì. PHẢI chạy SAU "Course video-track seed" (so URL track VI) và
-# TRƯỚC `report_seed "IELTS seed"` (mốc cắt của deploy-nha.sh).
-info "Running own-video transcript seed..."
-PDRIENG_SEED_OUT=$($DC exec -T backend sh -c '
-  node scripts/phu-de-video-rieng-seed.mjs --apply 2>&1
-  echo "__SEED_RC__=$?"
-') || true
-PDRIENG_SEED_RC="$(printf '%s\n' "$PDRIENG_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
-PDRIENG_SEED_OUT="$(printf '%s\n' "$PDRIENG_SEED_OUT" | grep -v '^__SEED_RC__=')"
-report_seed "Own-video transcript seed" "seed-phu-de-rieng" "$PDRIENG_SEED_OUT" "${PDRIENG_SEED_RC:-0}" || true
-
 # ── Step 3.12c: video giải trí đã biên tập (hoạt hình, nhạc, kỹ năng…) ──
 # Nguồn: content/phu-de/video-hay.jsonl.gz. Mỗi video đã qua 4 chốt lúc
 # chọn (thời lượng, lượt xem, TẢI ĐƯỢC phụ đề tiếng Anh thật ≥3KB) rồi mới

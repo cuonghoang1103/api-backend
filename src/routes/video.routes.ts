@@ -11,7 +11,6 @@ import { authenticate } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import type { ApiResponse } from '../types/index.js';
 import * as svc from '../services/video/phuDe.service.js';
-import { chuanTrack } from '../services/video/phuDeRieng.js';
 import * as them from '../services/video/themVideo.service.js';
 import { body } from 'express-validator';
 
@@ -100,17 +99,14 @@ router.get('/khoa/:id(\\d+)', param('id').isInt(), validate,
 // quyết có mời vào phòng học cùng AI hay không — xem `coPhuDe()`.
 router.get('/co-phu-de/:lessonId(\\d+)', param('lessonId').isInt(), validate,
   async (req, res: Response<ApiResponse>, next) => {
-    // `?track=VI|EN` (trang học đang mở video riêng) ⇒ hỏi phụ đề RIÊNG; thiếu ⇒ như cũ.
-    try { ok(res, await svc.coPhuDe(Number(req.params.lessonId), chuanTrack(req.query.track))); } catch (e) { next(e); }
+    try { ok(res, await svc.coPhuDe(Number(req.params.lessonId))); } catch (e) { next(e); }
   });
 
 // Mở phòng học video: có phụ đề thì trả đủ, chưa có thì trả video + `coPhuDe:false`.
 // Tách khỏi `/phu-de` (app iOS coi 404 ở đó là "chưa có phụ đề") — xem `phongHoc()`.
 router.get('/phong/:lessonId(\\d+)', param('lessonId').isInt(), validate,
   async (req, res: Response<ApiResponse>, next) => {
-    // `?track=VI|EN|YT|auto` — trình duyệt luôn gửi; thiếu (app iOS) ⇒ đường YouTube cũ y nguyên.
-    const t = String(req.query.track ?? '').toLowerCase() === 'auto' ? 'auto' as const : chuanTrack(req.query.track);
-    try { ok(res, await svc.phongHoc(Number(req.params.lessonId), t)); } catch (e) { next(e); }
+    try { ok(res, await svc.phongHoc(Number(req.params.lessonId))); } catch (e) { next(e); }
   });
 
 router.get('/phu-de/:lessonId(\\d+)', param('lessonId').isInt(), validate,

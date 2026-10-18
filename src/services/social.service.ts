@@ -135,32 +135,10 @@ export function _clearAdminCache() {
 
 // ─── Types ─────────────────────────────────────────────────────────
 
-/**
- * Multi-bot AI news network (2026-10-11). One of these tags a feed post with
- * the bot channel that produced it; `null`/absent = a normal human post. The
- * home feed filters on it (GET /posts?newsCategory=claude); no filter = "All"
- * = everything (bot + human), exactly as before. Plain string union (not a
- * Prisma enum) so adding a channel needs no migration — the column is
- * VARCHAR(20) and `cleanNewsCategory` is the single gate that rejects anything
- * off this list before it reaches the DB.
- */
-export const NEWS_CATEGORIES = ['claude', 'codex', 'gemini', 'antigravity', 'tech', 'ai-compare'] as const;
-export type NewsCategory = (typeof NEWS_CATEGORIES)[number];
-/** Coerce arbitrary input to a known channel or null (never store junk). */
-export function cleanNewsCategory(v: unknown): NewsCategory | null {
-  return typeof v === 'string' && (NEWS_CATEGORIES as readonly string[]).includes(v)
-    ? (v as NewsCategory)
-    : null;
-}
-
 export interface CreatePostInput {
   authorId: number;
   content: string;
   visibility?: 'PUBLIC' | 'FRIENDS' | 'PRIVATE';
-  // News-channel tag for feed bots (see NEWS_CATEGORIES). Only the news bots
-  // set this; the human composer route never passes it, so user posts stay
-  // NULL. Invalid values are coerced to NULL in createPost.
-  newsCategory?: NewsCategory | string | null;
   latitude?: number;
   longitude?: number;
   locationName?: string;
@@ -241,11 +219,6 @@ export interface FeedOptions {
   // Video-category filter (home feed video pills). When set, restrict to
   // posts with this videoCategoryId. Only used alongside type=VIDEO.
   videoCategoryId?: number;
-  // Multi-bot AI news channel filter. When set, restrict the feed to posts
-  // of exactly this channel (claude · codex · gemini · antigravity · tech ·
-  // ai-compare). Omitted/undefined = "Tất cả" = every post (bot + human),
-  // which is the unchanged default.
-  newsCategory?: string;
   // Bỏ hẳn bài của các loạt nhiều kỳ (100 Ngày Java/Database/Tiếng Anh) khỏi
   // kết quả. Dùng cho bảng tin chung, nơi chúng chiếm 82% số bài và dìm hết
   // bài thường; các loạt có màn riêng của mình để xem theo ngày.
@@ -366,10 +339,6 @@ export async function createPost(input: CreatePostInput) {
       // doesn't care about extra fields at the type level — it
       // only validates at query time.)
       type: resolvedType,
-      // News-channel tag (multi-bot AI news). Coerced to a known channel or
-      // NULL so an arbitrary string can never reach the column. Set AFTER the
-      // `...postData` spread so it always wins.
-      newsCategory: cleanNewsCategory((input as { newsCategory?: unknown }).newsCategory),
       // "Hiện ở mục Tất cả" — only a VIDEO post WITH a category may opt
       // out of the no-category feeds; anything else is forced visible so
       // a post can't end up hidden everywhere (e.g. unchecked box but no
@@ -732,10 +701,7 @@ export async function updatePost(postId: number, userId: number, data: {
 // ─── Feed ────────────────────────────────────────────────────────
 
 export async function getFeed(options: FeedOptions & { currentUserId?: number }) {
-  const { cursor, limit = 20, authorId, currentUserId, hashtag, sort = 'recent', following, type, videoCategoryId, excludeSeries, newsCategory } = options;
-  // Only a known channel narrows the feed; anything else behaves as "no
-  // filter" (= everything), so a bad query string can never hide the feed.
-  const newsCategoryFilter = cleanNewsCategory(newsCategory);
+  const { cursor, limit = 20, authorId, currentUserId, hashtag, sort = 'recent', following, type, videoCategoryId, excludeSeries } = options;
 
   // SECURITY: enforce post visibility server-side. We intentionally
   // ignore any client-supplied `visibility` filter — it was the
@@ -769,8 +735,6 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
       ...(hashtag ? { content: { contains: `#${hashtag}`, mode: 'insensitive' as const } } : {}),
       // Content-type tab filter (Bài viết / Video / File). Omitted = all.
       ...(type ? { type } : {}),
-      // Multi-bot news channel filter. Omitted = "Tất cả" = every post.
-      ...(newsCategoryFilter ? { newsCategory: newsCategoryFilter } : {}),
       // Loại bài thuộc các LOẠT NHIỀU KỲ khỏi bảng tin chung.
       //
       // Vì sao cần: đo 20/08/2026, bảng tin có 165 bài thì 135 là bài của ba
@@ -1135,9 +1099,6 @@ export function serializePost(
     // Content-type bucket for the feed tabs / per-type badge. Falls back
     // to POST for any row/query that didn't select it.
     type: post.type ?? 'POST',
-    // Multi-bot AI news channel (null for normal human posts). The frontend
-    // uses this to render the per-bot badge and to power the channel filter.
-    newsCategory: post.newsCategory ?? null,
     viewCount: post.viewCount ?? 0,
     createdAt: post.createdAt,
     updatedAt: post.updatedAt,

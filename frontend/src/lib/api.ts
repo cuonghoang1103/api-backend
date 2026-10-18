@@ -2456,9 +2456,6 @@ export const socialApi = {
     type?: 'POST' | 'VIDEO' | 'FILE';
     // Video-category filter (home feed video pills). Omitted = all.
     videoCategoryId?: number;
-    // AI news-network category filter (claude · codex · gemini · antigravity
-    // · tech · ai-compare). Omitted = "Tất cả" (bot + human posts).
-    newsCategory?: string;
   }) => api.get('/social/posts', { params }),
 
   /** Per-content-type counts for the feed tab badges. */
@@ -5917,43 +5914,20 @@ export const adminVoiceApi = {
  */
 export interface CauPhuDe {
   t: number;
-  /** Phụ đề YouTube (tiếng Anh). */
-  en?: string;
-  /** Phụ đề video RIÊNG của khoá (tiếng Việt, R2) — xem `chuCauPhuDe`. */
-  vi?: string;
+  en: string;
 }
-
-/** Chữ của một câu phụ đề, bất kể khuôn YouTube `{t,en}` hay video riêng `{t,vi}`. */
-export const chuCauPhuDe = (c: CauPhuDe): string => c.vi ?? c.en ?? '';
-
-/** Một phần (cảnh) của video riêng — mốc lấy từ kịch bản dựng video, không phải AI đoán. */
-export interface PhanVideoRieng {
-  t: number;
-  den?: number;
-  ten: string;
-}
-
-export type TrackPhongVideo = 'VI' | 'EN' | 'YT';
 
 export interface PhuDeBai {
   lessonId: number;
-  /** Mã YouTube; `null` khi phòng đang phát video riêng (R2). */
-  videoId: string | null;
+  videoId: string;
   tieuDe: string;
-  tieuDeVi: string | null;
+  tieuDeVi: string;
   lang: string;
   soCau: number;
   soTu: number;
   cues: CauPhuDe[];
   /** Bản dịch tiếng Việt — cùng SỐ PHẦN TỬ với `cues`, ghép theo chỉ số. */
   dichVi: string[] | null;
-  /** 'r2' = video riêng của khoá; 'youtube'. Máy chủ chỉ gửi khi được hỏi kèm `track`. */
-  nguon?: 'r2' | 'youtube';
-  videoTrack?: TrackPhongVideo;
-  /** Video riêng: khoá chứa bài — để lấy URL video ĐÃ KÝ qua `coursesApi.getLesson`. */
-  courseId?: number | null;
-  /** Video riêng: các phần thật của video. */
-  parts?: PhanVideoRieng[];
 }
 
 export const videoHocApi = {
@@ -5961,16 +5935,14 @@ export const videoHocApi = {
    * Bài này có phụ đề không — CHỈ đếm, không kéo về cả mảng `cues`.
    * Trang học gọi mỗi lần đổi bài để quyết có mời vào phòng học cùng AI.
    */
-  coPhuDe(lessonId: number, track?: TrackPhongVideo | null) {
+  coPhuDe(lessonId: number) {
     return api.get<{ data: {
       co: boolean; videoId: string | null; soCau: number; coDich: boolean;
       /** Mở được phòng học không — có phụ đề HOẶC có video YouTube. Trường mới:
        *  máy chủ cũ chưa có thì coi như bằng `co`. */
       moDuoc?: boolean;
-      /** Có khi hỏi kèm track VI/EN (video riêng). */
-      videoTrack?: TrackPhongVideo;
     } }>(
-      `/video-hoc/co-phu-de/${lessonId}`, track ? { params: { track } } : undefined,
+      `/video-hoc/co-phu-de/${lessonId}`,
     );
   },
   phuDe(lessonId: number) {
@@ -5978,8 +5950,8 @@ export const videoHocApi = {
   },
   /** Mở phòng học: có phụ đề thì đủ như `phuDe`, chưa có thì `cues` rỗng và
    *  `coPhuDe: false` — phòng vẫn chạy với video + gia sư đọc nội dung bài. */
-  phongHoc(lessonId: number, track: TrackPhongVideo | 'auto' = 'auto') {
-    return api.get<{ data: PhuDeBai & { coPhuDe: boolean } }>(`/video-hoc/phong/${lessonId}`, { params: { track } });
+  phongHoc(lessonId: number) {
+    return api.get<{ data: PhuDeBai & { coPhuDe: boolean } }>(`/video-hoc/phong/${lessonId}`);
   },
 };
 

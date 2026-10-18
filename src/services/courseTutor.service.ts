@@ -22,10 +22,6 @@ import { logger } from '../utils/logger.js';
 import {
   plain, vanBanBai, quizTuDuLieuBai, vanTayBai, khoaCacheCoVanTay, TRAN_SO_CAU_QUIZ,
 } from './courseTutor.context.js';
-import {
-  chonNguonPhuDe, docPhan, dungKhoiPhuDe, khoaCacheTheoTrack, laTrackRieng,
-  type CauBatKy, type TrackVideo,
-} from './video/phuDeRieng.js';
 
 const MAX_QUESTION = 1500;
 const MAX_HISTORY = 12;
@@ -303,13 +299,6 @@ export interface TutorAskOpts {
    * ngôn ngữ.
    */
   phongVideo?: boolean;
-  /**
-   * Track video người học ĐANG XEM trong phòng video. 'VI'/'EN' = video RIÊNG
-   * của khoá (R2) ⇒ đọc phụ đề riêng + các phần thật; 'YT'/không truyền ⇒
-   * phụ đề YouTube như trước (app iOS không gửi trường này). Cũng tách khoá
-   * cache chip theo track — xem `khoaCacheTheoTrack`.
-   */
-  videoTrack?: TrackVideo;
 }
 
 /** Có ảnh thì cache phải đứng ngoài — xem chú thích ở `images`. */
@@ -368,41 +357,32 @@ function hoiKemAnh(chu: string, anh?: AnhHoi[]): string | ClaudeContentBlock[] {
  * Hai phần: một cửa sổ quanh chỗ đang xem (đầy đủ, để "giải thích đoạn
  * này" trúng đích) và phần còn lại của bài (rút gọn, để biết mạch chung).
  */
-export async function khoiPhuDe(
-  lessonId: number,
-  giay?: number,
-  track?: TrackVideo,
-): Promise<{ text: string; rieng: boolean; coPhan: boolean }> {
-  /* Track VI/EN = video RIÊNG phát từ R2 ⇒ đọc `LessonOwnTranscript` và chỉ
-     nó. Không truyền / YT ⇒ phụ đề YouTube y như trước (app iOS đi đường này).
-     Xem `chonNguonPhuDe`: không bao giờ lùi chéo giữa hai nguồn. */
-  if (laTrackRieng(track)) {
-    const [r, d] = await Promise.all([
-      prisma.lessonOwnTranscript.findUnique({
-        where: { uk_lesson_own_transcript_track: { lessonId, track } },
-        select: { videoUrl: true, cues: true, parts: true, soCau: true },
-      }),
-      prisma.lessonDetail.findUnique({ where: { lessonId }, select: { videoUrlVi: true, videoUrlEn: true } }),
-    ]);
-    const chon = chonNguonPhuDe(track, r, track === 'VI' ? d?.videoUrlVi : d?.videoUrlEn, null);
-    if (!chon || chon.loai !== 'rieng') return { text: '', rieng: true, coPhan: false };
-    const parts = docPhan(chon.du.parts);
-    const text = dungKhoiPhuDe({
-      cues: (chon.du.cues as CauBatKy[] | null) ?? [], soCau: chon.du.soCau, giay, parts,
-      banKinhGiay: BAN_KINH_GIAY, tran: TRAN_PHU_DE, tiengViet: track === 'VI',
-    });
-    return { text, rieng: true, coPhan: !!text && parts.length > 0 };
-  }
-
+async function khoiPhuDe(lessonId: number, giay?: number): Promise<string> {
   const t = await prisma.lessonTranscript.findUnique({
     where: { lessonId },
     select: { cues: true, soCau: true },
   });
-  const text = dungKhoiPhuDe({
-    cues: (t?.cues as CauBatKy[] | undefined) ?? [], soCau: t?.soCau, giay,
-    banKinhGiay: BAN_KINH_GIAY, tran: TRAN_PHU_DE,
-  });
-  return { text, rieng: false, coPhan: false };
+  const cues = (t?.cues as Array<{ t: number; en: string }> | undefined) ?? [];
+  if (!cues.length) return '';
+
+  const moc = (g: number) => `${Math.floor(g / 60)}:${String(Math.floor(g % 60)).padStart(2, '0')}`;
+  const dong = (c: { t: number; en: string }) => `[${moc(c.t)}] ${c.en}`;
+
+  let ra = '';
+  if (typeof giay === 'number' && giay >= 0) {
+    const gan = cues.filter((c) => Math.abs(c.t - giay) <= BAN_KINH_GIAY);
+    if (gan.length) {
+      ra += `\n\nĐOẠN NGƯỜI HỌC ĐANG XEM (quanh mốc ${moc(giay)}):\n`
+          + gan.map(dong).join('\n');
+    }
+  }
+
+  const toanBai = cues.map(dong).join('\n');
+  const conLai = Math.max(2000, TRAN_PHU_DE - ra.length);
+  ra += `\n\nPHỤ ĐỀ TOÀN VIDEO (${t?.soCau ?? cues.length} câu`
+      + (toanBai.length > conLai ? ', đã cắt bớt' : '') + `):\n`
+      + (toanBai.length > conLai ? toanBai.slice(0, conLai) + '\n…' : toanBai);
+  return ra;
 }
 
 /** Luật vẽ sơ đồ — dùng chung cho phòng video có và chưa có phụ đề. */
@@ -467,63 +447,6 @@ When the student asks for a SUMMARY / "tóm tắt", answer in exactly this shape
 
   **Điều quan trọng nhất**
   Một đoạn ngắn: thứ người học phải nhớ sau khi xem xong.`;
-
-/**
- * Phần prompt THÊM khi ở phòng học video và đang xem VIDEO RIÊNG của khoá
- * (bài giảng tiếng Việt tự dựng, phát từ R2) — CÓ phụ đề riêng.
- *
- * Khác `THEM_PHONG_VIDEO` ở hai chỗ: (1) lời giảng là tiếng Việt, nên không
- * nói "học tiếng Anh từ video này"; (2) khi có `parts` (các cảnh thật lúc
- * dựng video) thì "Các phần trong video" PHẢI dùng y nguyên danh sách đó —
- * mốc của nó chính xác tới từng câu, còn model tự chia thì chỉ là đoán.
- */
-export function themPhongVideoRieng(coPhan: boolean): string {
-  return `
-
-YOU ARE NOW IN THE VIDEO LEARNING ROOM, WATCHING THIS COURSE'S OWN LECTURE VIDEO. The lecture is
-spoken in VIETNAMESE by the course instructor; its full transcript is given above with [mm:ss]
-timestamps (Vietnamese sentences, English technical terms kept as spoken).${coPhan ? `
-The video's REAL parts (its scenes, taken from the production script) are listed above under
-"CÁC PHẦN CỦA VIDEO" with exact start - end timestamps.` : ''}
-
-- Ground every answer in what the instructor ACTUALLY SAYS. Quote the transcript (in Vietnamese,
-  word for word) and cite the timestamp, e.g. "ở [3:20] thầy nói …". Never invent content that is
-  not in the transcript.
-- When a technical term appears, give the English term, the Vietnamese meaning, and one plain
-  sentence of what it means — in that order.
-- If the student asks about "this part" / "đoạn này", answer about the section marked
-  "ĐOẠN NGƯỜI HỌC ĐANG XEM" above. If they name a moment ("chỗ 3:20 em chưa hiểu"), find the cues
-  around that timestamp in the full transcript and explain exactly those sentences.
-- Prefer a DIAGRAM when the content is a process, an architecture, a comparison or a
-  hierarchy. Use a fenced code block whose language tag is: mermaid.
-
-${LUAT_SO_DO}
-  * Put the timestamp at the END of the label when a node maps to a moment in the video:
-    "B[Component<br/>hàm JS đơn giản<br/>0:20]".
-- When the answer has steps or parts, use a numbered list and a short bold heading per part.
-
-TIMESTAMPS — always write them as [mm:ss] in square brackets, taken from the transcript${coPhan ? ' or the parts list' : ''}.
-The app turns every [mm:ss] into a button that jumps the video there, so a timestamp that
-is only approximate sends the student to the wrong place. Use the timestamp of the cue the
-statement actually comes from.
-
-When the student asks for a SUMMARY / "tóm tắt" or for the parts of the video, answer in exactly this shape:
-
-  One short paragraph saying what the whole video is about.
-
-  **Các phần trong video**
-${coPhan ? `  Use EXACTLY the parts listed under "CÁC PHẦN CỦA VIDEO" — same order, same [mm:ss - mm:ss],
-  same titles. Do NOT merge, split, rename or re-time them. For each one:
-  - **[mm:ss - mm:ss] Tên phần** — 1-2 câu nói phần đó dạy gì, nêu thuật ngữ chính.`
-    : `  - **[mm:ss - mm:ss] Tên phần** — 1-2 câu nói phần đó dạy gì, nêu thuật ngữ chính.
-  - (tiếp tục cho từng phần; chia theo Ý, thường 4-8 phần, không chia đều máy móc)`}
-
-  **Thuật ngữ cần nhớ**
-  - **term** (nghĩa tiếng Việt) — một câu giải thích.
-
-  **Điều quan trọng nhất**
-  Một đoạn ngắn: thứ người học phải nhớ sau khi xem xong.`;
-}
 
 /**
  * Phần prompt THÊM khi ở phòng học video mà video CHƯA CÓ phụ đề.
@@ -599,8 +522,7 @@ export async function buildTutorCall(
   const quizBlock = buildQuizBlock(cauQuiz);
   // Phụ đề chỉ nạp khi ĐANG Ở phòng video: bài chữ không cần, mà nạp thừa
   // thì mỗi câu hỏi đắt thêm hàng nghìn token cho không.
-  const khoi = opts.phongVideo ? await khoiPhuDe(lessonId, opts.phuDeGiay, opts.videoTrack) : null;
-  const phuDe = khoi?.text ?? '';
+  const phuDe = opts.phongVideo ? await khoiPhuDe(lessonId, opts.phuDeGiay) : '';
   const messages: TutorMessage[] = [
     {
       role: 'user',
@@ -618,9 +540,7 @@ export async function buildTutorCall(
   /* Phòng video mà bài chưa có phụ đề (`phuDe` rỗng) dùng lời dặn RIÊNG — xem
      `THEM_PHONG_VIDEO_KHONG_PHU_DE`: lời dặn thường sẽ khiến model bịa phụ đề. */
   const system = tutorSystem(opts.english)
-    + (opts.phongVideo
-      ? (phuDe ? (khoi?.rieng ? themPhongVideoRieng(khoi.coPhan) : THEM_PHONG_VIDEO) : THEM_PHONG_VIDEO_KHONG_PHU_DE)
-      : '');
+    + (opts.phongVideo ? (phuDe ? THEM_PHONG_VIDEO : THEM_PHONG_VIDEO_KHONG_PHU_DE) : '');
   return { system, messages };
 }
 
@@ -631,8 +551,7 @@ export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Prom
 
   // Câu hỏi gợi ý (có cacheKey) → thử cache trước; HIT thì trả ngay, khỏi tốn AI.
   // `refresh` bỏ qua bước ĐỌC này nhưng vẫn đi tới bước GHI bên dưới.
-  const ck = (opts.cacheKey && !khongDungCache(opts))
-    ? await khoaCache(lessonId, khoaCacheTheoTrack(opts.cacheKey, opts.videoTrack, opts.phongVideo)) : undefined;
+  const ck = (opts.cacheKey && !khongDungCache(opts)) ? await khoaCache(lessonId, opts.cacheKey) : undefined;
   if (ck && !opts.refresh) {
     const hit = await getCachedAnswer(lessonId, ck, lang);
     if (hit) return { answer: hit, cached: true };
@@ -678,8 +597,7 @@ export async function streamCourseTutor(
   // Cache HIT: KHÔNG stream (không có delta) — route sẽ gửi thẳng khung 'done'
   // với answer + cached:true, frontend hiện ngay tức thì.
   // `refresh` bỏ qua bước ĐỌC này nhưng vẫn đi tới bước GHI bên dưới.
-  const ck = (opts.cacheKey && !khongDungCache(opts))
-    ? await khoaCache(lessonId, khoaCacheTheoTrack(opts.cacheKey, opts.videoTrack, opts.phongVideo)) : undefined;
+  const ck = (opts.cacheKey && !khongDungCache(opts)) ? await khoaCache(lessonId, opts.cacheKey) : undefined;
   if (ck && !opts.refresh) {
     const hit = await getCachedAnswer(lessonId, ck, lang);
     if (hit) return { answer: hit, cached: true };

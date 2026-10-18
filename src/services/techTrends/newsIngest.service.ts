@@ -199,20 +199,15 @@ export interface CandidateItem {
  * without a date sit below dated ones of the same source, because "we don't
  * know when this happened" is a real quality difference for a news bulletin.
  */
-export async function selectCandidates(opts: { limit?: number; windowHours?: number; publishers?: string[] } = {}): Promise<CandidateItem[]> {
+export async function selectCandidates(opts: { limit?: number; windowHours?: number } = {}): Promise<CandidateItem[]> {
   const limit = opts.limit ?? 12;
   const windowHours = opts.windowHours ?? 96;    // 4 days of candidates to choose from
   const since = new Date(Date.now() - windowHours * 3600_000);
-  // Optional per-bot grounding: restrict the pool to a bot's own official
-  // publishers (e.g. ['OpenAI'] for the Codex bot). Omitted/empty = every
-  // feed, which is the unchanged default the general bulletin relies on.
-  const publishers = opts.publishers?.filter(Boolean);
 
   const rows = await prisma.newsItem.findMany({
     where: {
       usedInArticleId: null,
       OR: [{ publishedAt: { gte: since } }, { publishedAt: null, fetchedAt: { gte: since } }],
-      ...(publishers && publishers.length ? { feed: { publisher: { in: publishers } } } : {}),
     },
     include: { feed: { select: { publisher: true, topic: true, weight: true } } },
     orderBy: { publishedAt: 'desc' },

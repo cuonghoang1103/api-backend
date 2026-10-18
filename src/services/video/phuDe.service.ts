@@ -9,7 +9,6 @@ import { prisma } from '../../config/database.js';
 import { NotFoundError, BadRequestError } from '../../middleware/errorHandler.js';
 import { transcribeWithGroq } from '../interview/voice/stt.js';
 import { NHOM_CHU_DE, NHOM_LON, NHOM_LON_CO_CON, nhomCuaKhoa, nhomLonCuaKhoa, tachTieuDe } from './nhomChuDe.js';
-import { chonNguonPhuDe, docPhan, laTrackRieng, type PhanVideo, type TrackVideo } from './phuDeRieng.js';
 
 export type CauPhuDe = { t: number; en: string };
 
@@ -244,16 +243,7 @@ export async function videoCuaKhoa(courseId: number) {
  * ⚠️ ĐỪNG dùng `phuDe()` cho việc này: bài dài có hàng nghìn `cues`, mỗi lần
  * đổi bài là kéo về vài trăm KB chỉ để hỏi một câu đúng/sai.
  */
-export async function coPhuDe(lessonId: number, track?: TrackVideo) {
-  /* Trang học đang mở track VIDEO RIÊNG (R2) ⇒ hỏi về phụ đề RIÊNG của đúng
-     track đó. Không truyền track ⇒ hợp đồng cũ y nguyên (app iOS đọc nó). */
-  if (laTrackRieng(track)) {
-    const b = await baiRieng(lessonId, track);
-    return {
-      co: !!b.phuDe, videoId: null, soCau: b.phuDe?.soCau ?? 0, coDich: false,
-      moDuoc: !!b.urlTrack, videoTrack: track,
-    };
-  }
+export async function coPhuDe(lessonId: number) {
   const [d, bai] = await Promise.all([
     prisma.lessonTranscript.findUnique({
       where: { lessonId },
@@ -299,100 +289,7 @@ function idYouTube(url: string | null | undefined): string | null {
  * Chỉ nhận video YouTube: phòng phát bằng trình phát YouTube, và link video
  * tự lưu trên R2 không được lộ ra qua đường này.
  */
-/** Các URL video của một bài, đủ để chọn track như trang học (`resolveVideoTracks`). */
-async function urlCacTrack(lessonId: number) {
-  const bai = await prisma.lesson.findUnique({
-    where: { id: lessonId },
-    select: {
-      title: true, videoUrl: true,
-      section: { select: { courseId: true } },
-      details: { select: { videoUrlVi: true, videoUrlEn: true, videoUrlYt: true, defaultVideoTrack: true } },
-    },
-  });
-  if (!bai) return null;
-  const legacyYt = idYouTube(bai.videoUrl) ? bai.videoUrl : null;
-  return {
-    bai,
-    vi: bai.details?.videoUrlVi ?? (bai.videoUrl && !legacyYt ? bai.videoUrl : null),
-    en: bai.details?.videoUrlEn ?? null,
-    yt: bai.details?.videoUrlYt ?? legacyYt,
-    macDinh: String(bai.details?.defaultVideoTrack ?? 'YT').toUpperCase(),
-  };
-}
-
-/** Video riêng của một track + phụ đề riêng HỢP LỆ của nó (URL khớp) — `phuDe: null` nếu chưa có/lệch. */
-async function baiRieng(lessonId: number, track: 'VI' | 'EN') {
-  const [u, r] = await Promise.all([
-    urlCacTrack(lessonId),
-    prisma.lessonOwnTranscript.findUnique({
-      where: { uk_lesson_own_transcript_track: { lessonId, track } },
-      select: { videoUrl: true, lang: true, cues: true, parts: true, soCau: true, soTu: true },
-    }),
-  ]);
-  const urlTrack = u ? (track === 'VI' ? u.vi : u.en) : null;
-  const chon = chonNguonPhuDe(track, r, urlTrack, null);
-  return { u, urlTrack, phuDe: chon?.loai === 'rieng' ? chon.du : null };
-}
-
-/**
- * `?track=auto` ⇒ chọn như trang học: track mặc định của bài nếu nó có video,
- * không thì YouTube (đường cũ), không thì video riêng còn lại.
- */
-export async function chonTrackPhong(lessonId: number): Promise<TrackVideo> {
-  const u = await urlCacTrack(lessonId);
-  if (!u) return 'YT';
-  if (u.macDinh === 'VI' && u.vi) return 'VI';
-  if (u.macDinh === 'EN' && u.en) return 'EN';
-  if (u.yt) return 'YT';
-  if (u.vi) return 'VI';
-  if (u.en) return 'EN';
-  return 'YT';
-}
-
-/**
- * Phòng học cho VIDEO RIÊNG (track VI/EN, phát từ R2).
- *
- * ⚠️ KHÔNG trả URL video ở đây. Video riêng có thể là object R2 riêng tư cần
- * ký, và quyền xem bài (đã mua/miễn phí/preview) nằm ở route bài học. Trả
- * `courseId` để trình duyệt gọi đúng route đó (`GET /courses/:cid/lessons/:id`)
- * lấy URL đã ký — cùng một cửa kiểm quyền với trang học, không mở cửa thứ hai.
- */
-async function phongHocRieng(lessonId: number, track: 'VI' | 'EN') {
-  const { u, urlTrack, phuDe: r } = await baiRieng(lessonId, track);
-  if (!u || !urlTrack) throw new NotFoundError('Bài này không có video riêng ở track này');
-  const tach = tachTieuDe(u.bai.title);
-  const parts: PhanVideo[] = r ? docPhan(r.parts) : [];
-  return {
-    lessonId,
-    courseId: u.bai.section?.courseId ?? null,
-    videoId: null,
-    nguon: 'r2' as const,
-    videoTrack: track,
-    tieuDe: track === 'VI' ? (tach.vi ?? tach.en) : tach.en,
-    tieuDeVi: track === 'VI' ? null : tach.vi,
-    lang: r?.lang ?? (track === 'VI' ? 'vi' : 'en'),
-    soCau: r?.soCau ?? 0,
-    soTu: r?.soTu ?? 0,
-    cues: ((r?.cues as Array<{ t: number; vi?: string; en?: string }> | null) ?? []),
-    dichVi: null,
-    parts,
-    coPhuDe: !!r,
-  };
-}
-
-export async function phongHoc(lessonId: number, trackYeuCau?: TrackVideo | 'auto') {
-  /* Không truyền track ⇒ đường CŨ y nguyên (YouTube). Trình duyệt luôn gửi
-     `track`; app iOS không gửi nên không thấy gì đổi. */
-  const track = trackYeuCau === 'auto' ? await chonTrackPhong(lessonId) : trackYeuCau;
-  if (laTrackRieng(track)) return phongHocRieng(lessonId, track);
-  if (track === 'YT') {
-    const ra = await phongHocYouTube(lessonId);
-    return { ...ra, nguon: 'youtube' as const, videoTrack: 'YT' as const };
-  }
-  return phongHocYouTube(lessonId);
-}
-
-async function phongHocYouTube(lessonId: number) {
+export async function phongHoc(lessonId: number) {
   const d = await prisma.lessonTranscript.findUnique({ where: { lessonId }, select: { lessonId: true } });
   if (d) return { ...(await phuDe(lessonId)), coPhuDe: true };
 

@@ -39,7 +39,6 @@ import { getFeedSound, setFeedSound, subscribeFeedSound } from '@/lib/feedVideoS
 import type { SocialPost, SocialComment, SocialMedia, ReactionType, ReactionBreakdown, FeedCollection, FeedPostSaveContext, FeedSaveResult } from '@/types/social';
 import { REACTION_META, REACTION_PICKER_ORDER, WOW_META, EMPTY_REACTION_BREAKDOWN } from '@/types/social';
 import { socialKeys, type SocialFeedResponse } from '@/hooks/useSocialQueries';
-import { categoryLabel, categoryAccent } from '@/lib/botRegistry';
 import { formatRelative } from '@/lib/formatDate';
 import { toast } from 'sonner';
 import ProAvatarRing, { ProTag } from '@/components/common/ProAvatarRing';
@@ -88,15 +87,6 @@ function previewOf(text: string): string {
 // the save state. Centralised here so the new bookmark button and
 // the popover use exactly the same amber.
 const NEON_AMBER = '#f59e0b';
-
-// "#rrggbb" + alpha → "rgba(r,g,b,a)" — used to tint the news-category chip
-// from a bot's accent colour. Falls back to brand purple on bad input.
-function hexToRgba(hex: string, alpha: number): string {
-  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
-  if (!m) return `rgba(79,91,213,${alpha})`;
-  const int = parseInt(m[1], 16);
-  return `rgba(${(int >> 16) & 255},${(int >> 8) & 255},${int & 255},${alpha})`;
-}
 
 interface PostCardProps {
   post: SocialPost;
@@ -1001,35 +991,6 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
                   >
                     Admin
                   </span>
-                )}
-                {/* Huy hiệu "AI" cho MỌI bài của bot bản tin (mạng lưới
-                    nhiều bot AI). Nhận diện bằng post.newsCategory != null —
-                    mỗi bài bot luôn được gắn một chủ đề (claude / codex /
-                    gemini / antigravity / tech / ai-compare). Minh bạch rằng
-                    bài do AI tạo; kèm một chip chủ đề nhỏ. */}
-                {post.newsCategory != null && (
-                  <>
-                    <span
-                      className="text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md"
-                      style={{ background: 'rgba(79,91,213,0.18)', color: '#a5b4fc', border: '1px solid rgba(79,91,213,0.4)' }}
-                      title="Bài viết do AI tạo tự động"
-                    >
-                      🤖 AI
-                    </span>
-                    {categoryLabel(post.newsCategory) && (
-                      <span
-                        className="text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md"
-                        style={{
-                          background: hexToRgba(categoryAccent(post.newsCategory), 0.14),
-                          color: categoryAccent(post.newsCategory),
-                          border: `1px solid ${hexToRgba(categoryAccent(post.newsCategory), 0.4)}`,
-                        }}
-                        title={`Bản tin: ${categoryLabel(post.newsCategory)}`}
-                      >
-                        {categoryLabel(post.newsCategory)}
-                      </span>
-                    )}
-                  </>
                 )}
                 {/* Content-type badge — only for Video/File so normal
                     posts (and non-social callers that don't set `type`)

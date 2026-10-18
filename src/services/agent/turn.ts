@@ -1698,13 +1698,23 @@ class RamboBaoTri extends Error {}
  * (đo trên hội thoại AI Code tiếng Việt + mã) ⇒ 1M token ↔ 2,4M ký tự (= trần cũ
  * của model cao chính hãng), 400K ↔ 960K. Trước: 600K cho mọi đường trừ model cao.
  */
-export function tranKyTuCua(cuaSoToken: number): number {
-  return Math.round(cuaSoToken * 2.4);
+/*
+ * NÉN SỚM (chủ app 18/10/2026: "nén sớm đi"): mỗi bước gửi lại CẢ hội thoại, nên hội thoại càng dài mỗi bước càng
+ * đắt. Trần ký tự = 55% cửa sổ thật (env `AGENT_NEN_SOM_TI_LE`, 0.2–1) ⇒ chạm trần thì máy chủ tóm tắt lượt cũ
+ * (bằng CHÍNH model của cuộc, ghim đề bài) rồi làm tiếp — như auto-compact của Claude Code nhưng sớm hơn.
+ */
+function tiLeNenSom(): number {
+  const n = Number(process.env.AGENT_NEN_SOM_TI_LE);
+  return Number.isFinite(n) && n >= 0.2 && n <= 1 ? n : 0.55;
 }
 
-/** Bắt đầu lược kết quả tool cũ (chỉ cổng modelapi) khi hội thoại quá ~nửa cửa sổ. */
+export function tranKyTuCua(cuaSoToken: number): number {
+  return Math.round(cuaSoToken * 2.4 * tiLeNenSom());
+}
+
+/** Bắt đầu lược kết quả tool cũ (chỉ cổng modelapi) khi hội thoại quá ~nửa cửa sổ THẬT (không theo tỉ lệ nén sớm). */
 export function nguongNen(cuaSoToken: number): number {
-  return Math.round(tranKyTuCua(cuaSoToken) / 2);
+  return Math.round((cuaSoToken * 2.4) / 2);
 }
 
 /**

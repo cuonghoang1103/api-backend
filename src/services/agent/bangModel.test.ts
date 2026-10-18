@@ -203,8 +203,9 @@ test('trần theo model: mặc định đủ mọi model, admin ghi đè từng 
 });
 
 test('không giới hạn năng lực: trần ký tự theo cửa sổ thật, effort theo mức người dùng', () => {
-  assert.equal(tranKyTuCua(1_000_000), 2_400_000);
-  assert.equal(tranKyTuCua(400_000), 960_000);
+  // Nén sớm 55% cửa sổ (18/10/2026).
+  assert.equal(tranKyTuCua(1_000_000), 1_320_000);
+  assert.equal(tranKyTuCua(400_000), 528_000);
   assert.equal(nguongNen(400_000), 480_000);
   assert.equal(effortGpt('thap'), 'low');
   assert.equal(effortGpt('ultracode'), 'xhigh');

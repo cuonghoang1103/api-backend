@@ -172,11 +172,13 @@ describe('CuongMini — hạn mức NHÓM (HTTP + DB thật)', { skip: !RUN }, (
   });
 
   it('/agent/tools: thành viên không Pro ⇒ nhom:[NT] + chỉ model free; trưởng nhóm hết Pro ⇒ 403 NHOM_KHONG_CHU', async () => {
-    const t = await call(mem, 'GET', '/agent/tools');
+    const t = await call(mem, 'GET', '/agent/tools?bang=cm');
     assert.equal(t.status, 200);
     assert.equal(t.data.pro, false);
     assert.deepEqual(t.data.nhom, [{ projectId: pid, key: 'NT' }]);
-    assert.ok((t.data.models as any[]).every((m) => m.khoa === 'free'), JSON.stringify(t.data.models));
+    /* QA đợt 6: chỉ model FREE của cổng web — Sonic/Heshin (cổng chính hãng) không chạy được bằng hạn mức nhóm. */
+    assert.ok((t.data.models as any[]).length > 0 && (t.data.models as any[]).every((m) => m.khoa === 'free' && m.cong === 'modelapi'), JSON.stringify(t.data.models));
+    assert.ok(!(t.data.models as any[]).some((m) => /Sonic|Heshin/.test(m.ten)));
     assert.deepEqual((await call(out, 'GET', '/agent/tools')).data.nhom, []);
     await prisma.user.update({ where: { id: lead.id }, data: { isPro: false } });
     try {
@@ -186,6 +188,47 @@ describe('CuongMini — hạn mức NHÓM (HTTP + DB thật)', { skip: !RUN }, (
       assert.deepEqual((await call(mem, 'GET', '/agent/tools')).data.nhom, []);
     } finally {
       await prisma.user.update({ where: { id: lead.id }, data: { isPro: true } });
+    }
+  });
+
+  it('QA đợt 6 — LẠM DỤNG: mời thẳng một người Pro làm ADMIN dự án của mình ⇒ KHÔNG thành nhà tài trợ khi họ chưa tự đồng ý', async () => {
+    const ke = await mkUser('ke');
+    let ws2 = 0;
+    try {
+      ws2 = (await call(ke, 'POST', '/work/workspaces', { name: `Ke ${tag}` })).data.id;
+      const kp = await call(ke, 'POST', `/work/workspaces/${ws2}/projects`, { key: 'KE', name: 'Dự án mượn Pro', template: 'BLANK', kind: 'SCHOOL' });
+      assert.equal(kp.status, 201, JSON.stringify(kp.raw));
+      const kePid = kp.data.id as number;
+      // Tài khoản có sẵn ⇒ thêm THẲNG (không cần chấp nhận), làm ADMIN dự án.
+      const moi = await call(ke, 'POST', `/work/workspaces/${ws2}/invites`, { emails: [pro2.email], role: 'ADMIN', projectId: kePid, projectRole: 'ADMIN' });
+      assert.ok(moi.status < 300, JSON.stringify(moi.raw));
+      assert.equal((await prisma.workProjectMember.findFirst({ where: { projectId: kePid, userId: pro2.id } }))?.role, 'ADMIN');
+      const r = await thuCua(ke, kePid);
+      assert.equal(r.status, 403, `kẻ mượn Pro không được qua cửa: ${JSON.stringify(r.raw)}`);
+      assert.equal(r.data?.nhom, 'NHOM_KHONG_CHU');
+      // Tự chọn người Pro làm nhà tài trợ / đổi lead sang họ / nới trần ⇒ vẫn không.
+      const chon = await call(ke, 'PUT', `/work/projects/${kePid}/cuongmini-team`, { chuId: pro2.id });
+      assert.equal(chon.status, 400, JSON.stringify(chon.raw));
+      assert.equal(chon.code, 'WORK_SPONSOR_NO_CONSENT');
+      await prisma.workProject.update({ where: { id: kePid }, data: { leadId: pro2.id } });
+      assert.equal((await call(ke, 'PUT', `/work/projects/${kePid}/cuongmini-team`, { tranNgayNguoiUsd: 50, tranThangNhomUsd: 1000 })).status, 200);
+      assert.equal((await thuCua(ke, kePid)).status, 403);
+      assert.equal((await call(ke, 'GET', '/agent/tools?bang=cm')).data.nhom.length, 0, '/agent/tools không mời dùng dự án này');
+      const bang = await call(ke, 'GET', `/work/projects/${kePid}/cuongmini-team`);
+      assert.equal(bang.data.chu, null);
+      assert.equal(bang.data.ungVien.find((u: any) => u.id === pro2.id)?.dongY, false);
+      assert.ok(!('dongY' in (bang.data.cauHinh ?? {})) || Array.isArray(bang.data.cauHinh.dongY));
+      // Thân yêu cầu không tự khai được `dongY`.
+      assert.equal((await call(ke, 'PUT', `/work/projects/${kePid}/cuongmini-team`, { dongY: [pro2.id] })).status, 400);
+      // Chính người Pro TỰ đồng ý (chọn mình) ⇒ được — đường hợp lệ. Rút lại ⇒ hết.
+      const dongY = await call(pro2, 'PUT', `/work/projects/${kePid}/cuongmini-team`, { chuId: pro2.id });
+      assert.equal(dongY.status, 200, JSON.stringify(dongY.raw));
+      assert.equal(dongY.data.chu?.id, pro2.id);
+      assert.equal((await thuCua(ke, kePid)).status, 400, 'đã đồng ý ⇒ qua cửa');
+      assert.equal((await call(pro2, 'PUT', `/work/projects/${kePid}/cuongmini-team`, { chuId: null })).status, 200);
+      assert.equal((await thuCua(ke, kePid)).status, 403, 'rút đồng ý ⇒ chặn lại');
+    } finally {
+      if (ws2) await prisma.workSpace.deleteMany({ where: { id: ws2 } });
     }
   });
 });

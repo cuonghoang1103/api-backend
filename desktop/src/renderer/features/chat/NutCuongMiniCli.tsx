@@ -84,7 +84,7 @@ export function NutCuongMiniCli({ dangChay, thuMuc }: { dangChay: boolean; thuMu
   useEffect(() => {
     if (!api || !mo) return;
     let huy = false;
-    api.request<{ pro?: boolean }>('/api/v1/agent/tools')
+    api.request<{ pro?: boolean }>('/api/v1/agent/tools?bang=cm')
       .then((d) => { if (!huy) setDuocDung(d?.pro === true); })
       .catch(() => { if (!huy) setDuocDung(null); });
     return () => { huy = true; };

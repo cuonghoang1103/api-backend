@@ -159,6 +159,18 @@ test('runAgentTurn: hạn mức NHÓM chỉ model free — model cần khoá b�
     runAgentTurn({ userId: 1, messages: [{ role: 'user', content: 'x' }], capabilities: ['fs_read'], ngayGio, model: 'cm-optimum', nhom } as any, (e) => sk2.push(e), new AbortController().signal),
     /cần khoá/,
   );
+  // QA đợt 6: Sonic 5.5 / Heshin 5.5 (free nhưng cổng CHÍNH HÃNG) — người không gói có hạn mức chính hãng = 0 ⇒ trước đây
+  // ra câu "hết hạn mức CuongMini Free" sai chỗ (hoặc gọi cổng chính hãng bằng tiền nhóm). Nay: NHOM_CHI_MODEL_FREE rõ ràng,
+  // KHÔNG chạm cổng nào.
+  for (const ma of ['cm-sonic', 'cm-heshin']) {
+    const sk3: AgentEvent[] = [];
+    process.env.ANTHROPIC_CHINH_HANG_KEY = 'sk-ant-gia';
+    await runAgentTurn({ userId: 1, messages: [{ role: 'user', content: 'x' }], capabilities: ['fs_read'], ngayGio, model: ma, nhom } as any, (e) => sk3.push(e), new AbortController().signal).catch(() => undefined);
+    const loi = sk3.find((e) => e.type === 'error') as { code?: string; error?: string } | undefined;
+    assert.equal(loi?.code, 'NHOM_CHI_MODEL_FREE', `${ma}: ${JSON.stringify(sk3)}`);
+    assert.match(loi?.error ?? '', /Solid, Nova, Shin, Eco/);
+    assert.doesNotMatch(loi?.error ?? '', /Sonic|Heshin/);
+  }
 });
 
 test('LỖI ĐỢT TRƯỚC: tự chuyển từ model 1M sang GPT 400K mà hội thoại vượt cửa sổ ⇒ CẮT lượt cũ trước khi gọi (không 400)', async (t) => {

@@ -39,9 +39,17 @@ export interface CauHinhNhom {
   tranThangNhomUsd: number;
   /** Trưởng nhóm tài trợ (ADMIN dự án có Pro). `null` ⇒ tự chọn: lead ⇒ ADMIN cũ nhất có Pro. */
   chuId: number | null;
+  /**
+   * QA đợt 6 (🔴 lạm dụng): ADMIN đã TỰ đồng ý tài trợ (tự chọn chính mình ở tab CuongMini). Người TẠO dự án coi như đã
+   * đồng ý. Không có ⇒ không bao giờ là nhà tài trợ — kể cả có Pro: ai cũng mời thẳng được một người Pro (biết email) làm
+   * ADMIN dự án của mình (`inviteByEmail` thêm thẳng tài khoản có sẵn, không cần chấp nhận) rồi tiêu hạn mức của họ.
+   */
+  dongY: number[];
 }
 
-export const MAC_DINH_NHOM: CauHinhNhom = { bat: true, tranNgayNguoiUsd: 1, tranThangNhomUsd: 15, chuId: null };
+export const MAC_DINH_NHOM: CauHinhNhom = { bat: true, tranNgayNguoiUsd: 1, tranThangNhomUsd: 15, chuId: null, dongY: [] };
+/** Dòng thành viên tạo cùng lúc với dự án (≤ ngần này) = người tạo dự án. */
+const CUA_SO_NGUOI_TAO_MS = 5 * 60_000;
 const TRAN_TOI_DA_NGAY = 50;
 const TRAN_TOI_DA_THANG = 1000;
 
@@ -57,6 +65,7 @@ export function docCauHinhNhom(settings: unknown): CauHinhNhom {
     tranNgayNguoiUsd: so(c.tranNgayNguoiUsd, MAC_DINH_NHOM.tranNgayNguoiUsd, TRAN_TOI_DA_NGAY),
     tranThangNhomUsd: so(c.tranThangNhomUsd, MAC_DINH_NHOM.tranThangNhomUsd, TRAN_TOI_DA_THANG),
     chuId: typeof c.chuId === 'number' && Number.isInteger(c.chuId) && c.chuId > 0 ? c.chuId : null,
+    dongY: Array.isArray(c.dongY) ? [...new Set(c.dongY.filter((x): x is number => typeof x === 'number' && Number.isInteger(x) && x > 0))].slice(0, 50) : [],
   };
 }
 
@@ -89,13 +98,15 @@ export async function timChuNhom(projectId: number, cauHinh?: CauHinhNhom): Prom
   const p = await prisma.workProject.findFirst({
     where: { id: projectId, deletedAt: null },
     select: {
-      leadId: true, settings: true,
-      members: { where: { role: 'ADMIN' }, orderBy: { createdAt: 'asc' }, select: { userId: true, user: { select: { id: true, username: true, fullName: true, displayName: true, kind: true } } } },
+      leadId: true, settings: true, createdAt: true,
+      members: { where: { role: 'ADMIN' }, orderBy: { createdAt: 'asc' }, select: { userId: true, createdAt: true, user: { select: { id: true, username: true, fullName: true, displayName: true, kind: true } } } },
     },
   });
   if (!p) return null;
   const ch = cauHinh ?? docCauHinhNhom(p.settings);
-  const admins = p.members.filter((m) => m.user.kind !== 'AGENT');
+  const tao = await nguoiTaoDuAn(projectId, p.createdAt);
+  /* Chỉ ADMIN đã ĐỒNG Ý (tự chọn mình ở tab CuongMini) hoặc người tạo dự án — xem `CauHinhNhom.dongY`. */
+  const admins = p.members.filter((m) => m.user.kind !== 'AGENT' && (m.userId === tao || ch.dongY.includes(m.userId)));
   const thuTu = [
     ...(ch.chuId ? [ch.chuId] : []),
     ...(p.leadId ? [p.leadId] : []),
@@ -110,6 +121,19 @@ export async function timChuNhom(projectId: number, cauHinh?: CauHinhNhom): Prom
     if (ch.chuId === id) return null; // trưởng nhóm đã chọn hết Pro ⇒ không tự chuyển sang người khác
   }
   return null;
+}
+
+/** Người tạo dự án: dòng thành viên SỚM NHẤT, tạo cùng lúc với dự án (cùng transaction `createProject`). */
+async function nguoiTaoDuAn(projectId: number, taoLuc: Date): Promise<number | null> {
+  const r = await prisma.workProjectMember.findFirst({ where: { projectId }, orderBy: [{ createdAt: 'asc' }, { id: 'asc' }], select: { userId: true, createdAt: true } });
+  return r && r.createdAt.getTime() - taoLuc.getTime() <= CUA_SO_NGUOI_TAO_MS ? r.userId : null;
+}
+
+/** ADMIN này đã đồng ý tài trợ chưa (người tạo dự án ⇒ rồi). */
+async function daDongY(projectId: number, ch: CauHinhNhom, userId: number): Promise<boolean> {
+  if (ch.dongY.includes(userId)) return true;
+  const p = await prisma.workProject.findUnique({ where: { id: projectId }, select: { createdAt: true } });
+  return !!p && (await nguoiTaoDuAn(projectId, p.createdAt)) === userId;
 }
 
 // ─── Sổ: đã dùng bao nhiêu ────────────────────────────────────────
@@ -176,8 +200,8 @@ export async function quyetDinhNhom(userId: number, projectId: number | null, o:
     const chu = await timChuNhom(projectId, ch);
     if (!chu) {
       return tuChoi('NHOM_KHONG_CHU',
-        `Dự án ${access.key} chưa có trưởng nhóm (ADMIN) nào có gói Pro còn hạn, nên chưa có hạn mức nhóm để dùng.`,
-        `No admin of ${access.key} has an active Pro plan, so there is no team allowance to use.`);
+        `Dự án ${access.key} chưa có trưởng nhóm (ADMIN) nào có gói Pro còn hạn VÀ đã đồng ý tài trợ, nên chưa có hạn mức nhóm để dùng. Nhờ trưởng nhóm có Pro mở Project settings → CuongMini và chọn chính mình làm người tài trợ.`,
+        `No admin of ${access.key} with an active Pro plan has agreed to sponsor, so there is no team allowance yet. Ask a lead with Pro to open Project settings → CuongMini and pick themselves as sponsor.`);
     }
     const luc = o.luc ?? new Date();
     const [daDungNgay, daDungThang] = await Promise.all([daDungNguoiNgay(projectId, userId, luc), daDungNhomThang(projectId, luc)]);
@@ -247,7 +271,9 @@ export interface BangNhom {
   /** Người xem có quyền sửa không (ADMIN dự án). */
   sua: boolean;
   /** ADMIN có Pro chọn được làm trưởng nhóm tài trợ. */
-  ungVien: Array<{ id: number; username: string; ten: string; pro: boolean }>;
+  ungVien: Array<{ id: number; username: string; ten: string; pro: boolean; dongY: boolean }>;
+  /** Người đang xem (giao diện biết "chọn chính mình" = đồng ý). */
+  toiId: number;
 }
 
 export async function xemBangNhom(callerId: number, projectId: number, luc = new Date()): Promise<BangNhom> {
@@ -286,9 +312,10 @@ export async function xemBangNhom(callerId: number, projectId: number, luc = new
     ? await Promise.all(p.members.filter((m) => m.user.kind !== 'AGENT').map(async (m) => ({
       id: m.user.id, username: m.user.username, ten: m.user.displayName || m.user.fullName || m.user.username,
       pro: await kiemPro(m.user.id).catch(() => false),
+      dongY: await daDongY(projectId, cauHinh, m.user.id),
     })))
     : [];
-  return { cauHinh, chu, daDungThang, nguoi, sua, ungVien };
+  return { cauHinh, chu, daDungThang, nguoi, sua, ungVien, toiId: callerId };
 }
 
 export async function datCauHinhNhom(callerId: number, projectId: number, input: Partial<CauHinhNhom>): Promise<BangNhom> {
@@ -303,11 +330,21 @@ export async function datCauHinhNhom(callerId: number, projectId: number, input:
     const m = p.members.find((x) => x.userId === input.chuId);
     if (!m || m.user.kind === 'AGENT') throw new BadRequestError('The sponsoring lead must be a human ADMIN of this project', 'WORK_BAD_SPONSOR');
     if (!(await kiemPro(input.chuId).catch(() => false))) throw new BadRequestError('The sponsoring lead needs an active Pro plan', 'WORK_SPONSOR_NOT_PRO');
+    /* Chọn NGƯỜI KHÁC làm nhà tài trợ ⇒ người đó phải tự đồng ý trước (chọn chính mình ở tab này). */
+    if (input.chuId !== callerId && !(await daDongY(projectId, cu, input.chuId))) {
+      throw new BadRequestError('The sponsoring lead must agree first: they open Project settings → CuongMini with their own account and pick themselves', 'WORK_SPONSOR_NO_CONSENT');
+    }
   }
+  const { dongY: _boQua, ...vao } = input;
+  void _boQua; // `dongY` không bao giờ nhận từ thân yêu cầu — chỉ sinh ra khi CHÍNH người đó chọn mình.
+  /* Chọn CHÍNH mình ⇒ đồng ý; chọn người khác / "tự chọn" ⇒ rút đồng ý của mình (người tạo dự án vẫn được tính). */
+  const dongY = input.chuId === callerId ? [...new Set([...cu.dongY, callerId])]
+    : input.chuId !== undefined ? cu.dongY.filter((x) => x !== callerId) : cu.dongY;
   const moi = docCauHinhNhom({
     cuongMiniNhom: {
       ...cu,
-      ...Object.fromEntries(Object.entries(input).filter(([, v]) => v !== undefined)),
+      ...Object.fromEntries(Object.entries(vao).filter(([, v]) => v !== undefined)),
+      dongY,
     },
   });
   await prisma.workProject.update({ where: { id: projectId }, data: { settings: { ...settings, cuongMiniNhom: moi } as unknown as Prisma.InputJsonValue } });

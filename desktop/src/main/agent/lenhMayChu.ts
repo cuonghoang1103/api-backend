@@ -128,7 +128,8 @@ export async function chanDoan(p: PhuThuocChanDoan): Promise<MucChanDoan[]> {
   } else {
     const t0 = now();
     try {
-      const r = await f(`${p.origin}/api/v1/agent/tools`, {
+      // `?bang=cm`: app mới hiểu mã `cm-*` — thiếu cờ thì máy chủ trả mã cũ cho app cũ (e14d0a60), doctor in "gpt-sol".
+      const r = await f(`${p.origin}/api/v1/agent/tools?bang=cm`, {
         headers: { Authorization: `Bearer ${p.token}` }, signal: AbortSignal.timeout(8000),
       });
       const ms = now() - t0;

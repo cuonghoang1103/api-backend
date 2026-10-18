@@ -51,7 +51,7 @@ import { chuPdfKhongDoc, sangAnthropic, stopSangFinish, toolSangAnthropic } from
 import { laMaRambo, modelAgentTu } from './models.js';
 import {
   MA_MAC_DINH, anTenThat, baoCongHong, cauDoiCong, congDangHong, hangSo, laLoiCongHong, laMaCuongMini, modelapiGoiDuoc,
-  timModel, tuongDuongFree, type MucModel,
+  timModel, tuongDuongFree, type MucModel, dungChoNhom, tenModelNhom,
 } from './bangModel.js';
 import { loiHetTranModel, xemTranModel } from './tranModel.js';
 import { type HangChinhHang } from './anthropicChinhHang/cauHinh.js';
@@ -1149,6 +1149,15 @@ export async function runAgentTurn(
     }
   };
   const chuyenSang = async (m: MucModel): Promise<{ loai: 'cong' | 'tran'; code: string; error: string } | null> => {
+    /* Đợt 6 — HẠN MỨC NHÓM: chỉ model FREE của cổng web (modelapi) — kiểm TRƯỚC cổng chính hãng (người không gói có hạn
+       mức chính hãng = 0 ⇒ câu "hết hạn mức CuongMini Free" sai chỗ). Tiền là của trưởng nhóm; model cần khoá vẫn cần
+       khoá. Trần nhóm (người/ngày + nhóm/tháng) đã kiểm ở route trước khi mở SSE; trần model theo người KHÔNG áp. */
+    if (input.nhom && !dungChoNhom(m)) {
+      return {
+        loai: 'tran', code: 'NHOM_CHI_MODEL_FREE',
+        error: `Hạn mức nhóm ${input.nhom.key} chỉ dùng model miễn phí (${tenModelNhom()}) — chọn lại bằng /model. / The ${input.nhom.key} team allowance only covers free models (${tenModelNhom()}) — pick one with /model.`,
+      };
+    }
     if (m.cong === 'anthropic') {
       if (congDangHong('anthropic') || !(await coKeyKhaDung())) {
         return { loai: 'cong', code: 'CONG_ANTHROPIC_HET_KEY', error: `${m.ten} tạm thời không chạy được (cổng bận). / ${m.ten} is temporarily unavailable (gateway busy).` };
@@ -1158,17 +1167,7 @@ export async function runAgentTurn(
     } else if (congDangHong('modelapi') || !modelapiGoiDuoc(m)) {
       return { loai: 'cong', code: 'MODEL_CHUA_CO_KHOA', error: `${m.ten} tạm thời không chạy được (cổng bận). / ${m.ten} is temporarily unavailable (gateway busy).` };
     }
-    if (input.nhom) {
-      /* Đợt 6 — HẠN MỨC NHÓM: chỉ model FREE (model cần khoá vẫn cần khoá — và tiền là của trưởng nhóm). Trần
-         nhóm (người/ngày + nhóm/tháng) đã kiểm ở route trước khi mở SSE; trần model theo người KHÔNG áp (người
-         gọi không có gói ⇒ trần 0). */
-      if (m.khoa !== 'free') {
-        return {
-          loai: 'tran', code: 'NHOM_CHI_MODEL_FREE',
-          error: `Hạn mức nhóm ${input.nhom.key} chỉ dùng model miễn phí (Solid, Nova, Shin, Sonic, Heshin, Eco) — chọn lại bằng /model. / The ${input.nhom.key} team allowance only covers free models — pick one with /model.`,
-        };
-      }
-    } else {
+    if (!input.nhom) {
       const ht = await xemTranModel(input.userId, m);
       if (ht.het) return { loai: 'tran', code: 'CUONGMINI_HET_TRAN', error: loiHetTranModel(ht, m.ten) };
     }

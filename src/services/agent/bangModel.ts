@@ -161,6 +161,34 @@ const BI_DANH: Record<string, string> = {
   'gpt-5.6-luna': 'cm-eco',
 };
 
+/*
+ * APP CŨ (desktop ≤ 0.5.200, CLI ≤ 0.5.0, extension ≤ 0.7.0) kiểm mã model bằng một z.enum CỐ ĐỊNH ⇒ nhận mã
+ * `cm-*` là báo "Dữ liệu gửi lên không hợp lệ cho agent:datModel" (người dùng gặp 18/10/2026 ngay sau deploy).
+ * App mới gửi `?bang=cm`. Không có ⇒ đổi mã về mã cũ app đó hiểu (máy chủ đổi ngược qua BI_DANH), model chưa có
+ * mã cũ thì bỏ khỏi danh sách của app cũ.
+ */
+export const MA_CU: Record<string, string> = {
+  'cm-solid': 'gpt-sol', 'cm-sonic': 'cl-sonnet-5-5', 'cm-optimum': 'cl-opus-5-5', 'cm-invisible': 'cl-fable-5-1', 'cm-heshin': 'cl-free',
+};
+export function maChoAppCu<T extends { id: string }>(ds: T[], appCu: boolean): T[] {
+  if (!appCu) return ds;
+  return ds.flatMap((m) => (m.id.startsWith('cm-') ? (MA_CU[m.id] ? [{ ...m, id: MA_CU[m.id] }] : []) : [m]));
+}
+
+/**
+ * HẠN MỨC NHÓM (đợt 6, `hanMucNhom.ts`) chỉ chạy model FREE trên cổng của web (modelapi) — như thiết kế ghi ở
+ * `docs/cuongmini-doi-chieu-nang-luc.md` mục 2f. QA đợt 6: trước đây lọc mỗi `khoa === 'free'` ⇒ Sonic 5.5 / Heshin 5.5
+ * (cổng chính hãng) hiện trong /model của thành viên nhóm, chọn vào thì hạn mức chính hãng của người KHÔNG gói = 0 ⇒ lỗi
+ * "hết hạn mức CuongMini Free" khó hiểu.
+ */
+export function dungChoNhom(m: { khoa?: string; cong?: string }): boolean {
+  return m.khoa === 'free' && m.cong === 'modelapi';
+}
+/** Tên các model dùng được bằng hạn mức nhóm (câu báo lỗi / giao diện). */
+export function tenModelNhom(): string {
+  return BANG.filter(dungChoNhom).map((m) => m.ten.replace(/^CuongMini /, '')).join(', ');
+}
+
 /** Mã có phải của bảng này (kể cả bí danh) không. */
 export function laMaCuongMini(id: unknown): id is string {
   return typeof id === 'string' && (BANG.some((m) => m.id === id) || id in BI_DANH);

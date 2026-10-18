@@ -30,7 +30,7 @@ import { soGioCuaSo, tranToken, xemHanMuc } from '../services/agent/quota.js';
 import { AgentInputError, runAgentTurn, type AgentEvent } from '../services/agent/turn.js';
 import { congAgent, gatewayConfigured, kiemRamboSong, ramboDangNghi } from '../services/llm/gateway.js';
 import { MODEL_DU_PHONG, MoKhoaLoi, congDuPhong, daCoMatKhau, modelDuPhongAgent, moKhoaDuPhong, tenDuPhong, veDuPhongHopLe } from '../services/agent/congDuPhong.js';
-import { MA_MAC_DINH, TEN_CONG, bangModel, laMaCuongMini, timModel } from '../services/agent/bangModel.js';
+import { MA_CU, MA_MAC_DINH, TEN_CONG, bangModel, dungChoNhom, laMaCuongMini, maChoAppCu, timModel } from '../services/agent/bangModel.js';
 import { xemTranModel } from '../services/agent/tranModel.js';
 import { goiTomTatBangModel } from '../services/agent/tomTatLuotCu.js';
 import { KeyGiaHanLoi, coKeyGiaHan, nhapKeyGiaHan } from '../services/agent/keyGiaHan.js';
@@ -136,7 +136,7 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
     const models = pro
       ? await dsModelChoApp(await quyenChinhHang(req.userId, req.query.congAnthropicVe)).catch(() => [])
       : nhom.length
-        ? (await dsModelChoApp(await quyenChinhHang(req.userId, undefined)).catch(() => [])).filter((m: { khoa?: string }) => m.khoa === 'free')
+        ? (await dsModelChoApp(await quyenChinhHang(req.userId, undefined)).catch(() => [])).filter((m: { khoa?: string; cong?: string }) => dungChoNhom(m))
         : [];
     res.json({
       success: true,
@@ -292,20 +292,6 @@ router.post('/du-phong/mo-khoa', chiPro, async (req: any, res: Response<ApiRespo
  * POST /cong-anthropic/mo-khoa   — { matKhau } ⇒ { ve, hetHan } (vé 30 ngày).
  *                                  Bộ đếm sai dùng chung với /du-phong/mo-khoa.
  */
-/*
- * APP CŨ (desktop ≤ 0.5.200, CLI ≤ 0.5.0, extension ≤ 0.7.0) kiểm mã model bằng một z.enum CỐ ĐỊNH ⇒ nhận mã
- * `cm-*` là báo "Dữ liệu gửi lên không hợp lệ cho agent:datModel" (người dùng gặp 18/10/2026 ngay sau deploy).
- * App mới gửi `?bang=cm`. Không có ⇒ đổi mã về mã cũ app đó hiểu (máy chủ đổi ngược qua BI_DANH), model chưa có
- * mã cũ thì bỏ khỏi danh sách của app cũ.
- */
-const MA_CU: Record<string, string> = {
-  'cm-solid': 'gpt-sol', 'cm-sonic': 'cl-sonnet-5-5', 'cm-optimum': 'cl-opus-5-5', 'cm-invisible': 'cl-fable-5-1', 'cm-heshin': 'cl-free',
-};
-function maChoAppCu<T extends { id: string }>(ds: T[], appCu: boolean): T[] {
-  if (!appCu) return ds;
-  return ds.flatMap((m) => (m.id.startsWith('cm-') ? (MA_CU[m.id] ? [{ ...m, id: MA_CU[m.id] }] : []) : [m]));
-}
-
 router.get('/cong-anthropic', chiPro, async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const q = await quyenChinhHang(req.userId, req.query.ve);
@@ -495,10 +481,12 @@ router.post('/compact', chiProHoacNhom, compactLimiter, async (req: any, res: Re
        agent). Model cần khoá mà vé không mở ⇒ CuongMini Solid. Hết trần ⇒ báo. */
     let muc = timModel(b.model);
     const nhom = req.nguonNhom as NguonNhom | undefined;
-    if (muc.khoa !== 'free') {
+    if (nhom) {
+      /* Đợt 6: hạn mức nhóm chỉ model free của cổng web (modelapi). */
+      if (!dungChoNhom(muc)) muc = timModel(MA_MAC_DINH);
+    } else if (muc.khoa !== 'free') {
       const q = await quyenChinhHang(req.userId, b.congAnthropicVe).catch(() => ({ laAdmin: false, modelCao: false, invisible: false }));
-      /* Đợt 6: hạn mức nhóm chỉ model free. */
-      if (nhom || !daMoKhoa(muc, q)) muc = timModel(MA_MAC_DINH);
+      if (!daMoKhoa(muc, q)) muc = timModel(MA_MAC_DINH);
     }
     if (!nhom) {
       const ht = await xemTranModel(req.userId, muc);

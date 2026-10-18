@@ -936,7 +936,14 @@ function lamTiepSauGiaHan(): void {
   batTrangThai(); capNhatNut();
 }
 
+/** QA đợt 7: câu hỏi cuối của hội thoại (đối tượng) — thẻ ghi lại lúc bị chặn; duyệt MUỘN chỉ tự làm tiếp khi chưa đổi. */
+function cauNguoiCuoi(): unknown {
+  for (let i = S.muc.length - 1; i >= 0; i--) if (S.muc[i]!.kieu === 'nguoi') return S.muc[i];
+  return null;
+}
+
 function veTheGiaHan(el: HTMLElement, g: GiaHanTien): void {
+  const dauLuc = cauNguoiCuoi();
   const o2 = document.createElement('div');
   o2.className = 'du-phong';
   o2.dataset.giaHanTien = g.tran;
@@ -964,10 +971,14 @@ function veTheGiaHan(el: HTMLElement, g: GiaHanTien): void {
     dung();
     if (r.ketQua === 'daCap') {
       hang.style.display = 'none';
-      kq.textContent = tuNhap
-        ? L(`✓ Đã cộng +${usdGH(r.soUsd)} — CuongMini làm tiếp chỗ dở.`, `✓ +${usdGH(r.soUsd)} added — CuongMini continues.`)
-        : L(`✓ Admin đã duyệt: +${usdGH(r.soUsd)} — đang làm tiếp.`, `✓ Approved: +${usdGH(r.soUsd)} — continuing.`);
-      lamTiepSauGiaHan();
+      /* QA đợt 7: duyệt tới khi người dùng đã hỏi câu khác / mở việc khác / đang chạy ⇒ KHÔNG tự gửi lại hội thoại. */
+      const diTiep = S.dangChay || cauNguoiCuoi() !== dauLuc;
+      kq.textContent = diTiep
+        ? L(`✓ Admin đã duyệt: +${usdGH(r.soUsd)}. Gửi lại câu hỏi khi cần dùng tiếp.`, `✓ Approved: +${usdGH(r.soUsd)}. Resend your question when you want to continue.`)
+        : tuNhap
+          ? L(`✓ Đã cộng +${usdGH(r.soUsd)} — CuongMini làm tiếp chỗ dở.`, `✓ +${usdGH(r.soUsd)} added — CuongMini continues.`)
+          : L(`✓ Admin đã duyệt: +${usdGH(r.soUsd)} — đang làm tiếp.`, `✓ Approved: +${usdGH(r.soUsd)} — continuing.`);
+      if (!diTiep) lamTiepSauGiaHan();
     } else if (r.ketQua === 'tuChoi') {
       hang.style.display = '';
       nut.disabled = false;

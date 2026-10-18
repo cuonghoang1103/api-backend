@@ -31,7 +31,7 @@
 import type { Browser, CDPSession, Page } from 'puppeteer-core';
 
 import { spawn } from 'node:child_process';
-import { createWriteStream, existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
+import { createWriteStream, existsSync, mkdirSync, readFileSync, realpathSync, rmSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -47,13 +47,28 @@ export function thuMucHoSo(): string {
   return ep && hoSoAnToan(ep) ? ep : path.join(os.homedir(), '.cuongmini', 'trinh-duyet');
 }
 
+/** Đường hồ sơ CHÍNH của các trình duyệt nhân Chromium (đã đổi \\ ⇒ / và chữ thường). */
+const MAU_HO_SO_CHINH = new RegExp([
+  '(^|/)(google/chrome( beta| canary| dev| for testing)?|google-chrome(-beta|-unstable|-canary)?|chromium',
+  '|microsoft edge( beta| dev| canary)?|microsoft/edge( beta| dev| sxs)?|microsoft-edge(-beta|-dev)?',
+  '|bravesoftware|brave-browser(-beta|-nightly)?|vivaldi|opera software|com\\.operasoftware\\.opera[a-z]*',
+  '|yandex/yandexbrowser|the browser company)(/|$)',
+  '|/user data(/|$)',
+].join(''));
+
 /**
  * ⛔ KHÔNG BAO GIỜ dùng hồ sơ CHÍNH của người dùng (cookie ngân hàng, mật khẩu đã lưu). Env trỏ vào thư mục
  * hồ sơ mặc định của Chrome/Edge/Brave/Chromium ⇒ bỏ qua, dùng hồ sơ riêng.
  */
 export function hoSoAnToan(duong: string): boolean {
-  const d = duong.replace(/\\/g, '/').toLowerCase();
-  return !/(google\/chrome|chrome\/user data|microsoft edge|microsoft\/edge|bravesoftware|brave-browser|\/chromium|google-chrome|\.config\/chromium)(\/|$)/.test(d);
+  /* QA đợt 7: thêm kênh Beta/Dev/Canary, Vivaldi/Opera/Yandex, mọi ".../User Data" (Windows + Arc), và soi cả ĐƯỜNG
+     THẬT (symlink ~/ai-profile → hồ sơ Chrome trước đây lọt). */
+  const laChinh = (p: string) => MAU_HO_SO_CHINH.test(p.replace(/\\/g, '/').toLowerCase());
+  if (laChinh(duong)) return false;
+  try {
+    if (existsSync(duong) && laChinh(realpathSync.native(duong))) return false;
+  } catch { /* không đọc được đường thật — đã xét đường gõ vào */ }
+  return true;
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -490,13 +505,25 @@ export async function goChu(boChon: string, chu: string): Promise<{ ok: boolean;
   if (!cdp) return { ok: false, loi: 'chưa mở trình duyệt' };
   const kq = await chayJs(`(() => { const e = document.querySelector(${JSON.stringify(boChon)});
     if (!e) return 'khong-thay';
-    if (e instanceof HTMLInputElement && e.type === 'password') return 'mat-khau';
+    /* QA đợt 7: "ô mật khẩu" không chỉ là type=password lúc tìm thấy — trang đổi type khi focus (ô hiện chữ rồi
+       che), che chữ bằng CSS -webkit-text-security, hoặc khai autocomplete current-/new-password. Kiểm trước VÀ sau
+       focus/gõ; lọt sau khi gõ thì xoá chữ vừa đặt. */
+    const laMk = (x) => !!x && x instanceof HTMLInputElement && (x.type === 'password'
+      || /(^|\\s)(current-password|new-password|one-time-code)(\\s|$)/i.test(x.getAttribute('autocomplete') || '')
+      || /password|passcode|m[aậ]t[ _-]?kh[aẩ]u|(^|[^a-z])(pass|passwd|pwd|otp)([^a-z]|$)/i.test([x.name, x.id, x.getAttribute('aria-label') || '', x.placeholder].join(' '))
+      || /^(disc|circle|square)$/.test(getComputedStyle(x).getPropertyValue('-webkit-text-security').trim()));
+    if (laMk(e)) return 'mat-khau';
     e.focus();
+    /* Chạy ngầm (headless) trang không có focus thật ⇒ focus() không bắn sự kiện — bắn tay để trang nào "đổi sang ô
+       mật khẩu khi focus" lộ ra trước khi gõ. */
+    if (document.activeElement !== e || !document.hasFocus()) e.dispatchEvent(new FocusEvent('focus'));
+    if (laMk(e) || laMk(document.activeElement)) return 'mat-khau';
     const dat = Object.getOwnPropertyDescriptor(
       e instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype, 'value')?.set;
     if (dat) dat.call(e, ${JSON.stringify(chu)}); else e.value = ${JSON.stringify(chu)};
     e.dispatchEvent(new Event('input', { bubbles: true }));
     e.dispatchEvent(new Event('change', { bubbles: true }));
+    if (laMk(e)) { if (dat) dat.call(e, ''); else e.value = ''; e.dispatchEvent(new Event('input', { bubbles: true })); return 'mat-khau'; }
     return 'ok'; })()`);
   /* 19/10/2026: KHÔNG BAO GIỜ gõ vào ô mật khẩu — người dùng tự đăng nhập (`/browser show` · `trinh_duyet_hien`). */
   if (kq === 'mat-khau') return { ok: false, loi: 'đây là ô MẬT KHẨU — CuongMini không gõ mật khẩu. Nhờ người dùng tự đăng nhập (trinh_duyet_hien / /browser show).' };

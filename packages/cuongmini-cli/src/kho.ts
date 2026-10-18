@@ -261,7 +261,19 @@ export class KhoChat {
     this.bao(true);
   }
 
-  /** Bắt đầu một lượt: in tin người dùng, bật trạng thái chạy. */
+  /**
+   * QA đợt 7: "dấu" của hội thoại = id câu hỏi cuối trong bảng (0 = trống). Thẻ mã gia hạn ghi dấu lúc bị chặn; yêu cầu
+   * được duyệt MUỘN (kiểm lại 30 s) chỉ tự làm tiếp khi dấu chưa đổi — người dùng đã hỏi câu khác / đổi model rồi hỏi /
+   * /clear / /rewind thì "làm tiếp" sẽ gửi lại một hội thoại khác hẳn (tốn tiền, trả lời câu không ai hỏi) ⇒ chỉ báo.
+   */
+  dauHoiThoai(): number {
+    for (let i = this.S.bang.length - 1; i >= 0; i--) {
+      const m = this.S.bang[i]!;
+      if (m.loai === 'nguoi') return m.id;
+    }
+    return 0;
+  }
+
   /**
    * Mã gia hạn theo $ (19/10/2026): LÀM TIẾP lượt vừa bị chặn (`agent:lamTiep` — lõi gửi lại nguyên hội thoại) — không
    * thêm bong bóng câu hỏi, không đếm là một câu cho `/rewind`.
@@ -282,6 +294,7 @@ export class KhoChat {
     this.bao(true);
   }
 
+  /** Bắt đầu một lượt: in tin người dùng, bật trạng thái chạy. */
   batDauLuot(hienThi: string, soAnh: number, cauGui: string, bayGio = Date.now()): void {
     const S = this.S;
     this.them({ loai: 'nguoi', text: hienThi, luc: bayGio, soAnh });

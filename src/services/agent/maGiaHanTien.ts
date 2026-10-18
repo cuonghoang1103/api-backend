@@ -337,6 +337,13 @@ export async function nhapMaGiaHan(
   if (sai && now - sai.tu < CUA_SO_SAI_MS && sai.dem >= SAI_TOI_DA) {
     throw new GiaHanLoi('Nhập sai quá nhiều lần — thử lại sau 15 phút. / Too many wrong attempts — try again in 15 minutes.', 'GIA_HAN_THU_QUA_NHIEU', 429);
   }
+  /*
+   * QA đợt 7: kiểm "trần có ĐANG chạm thật" TRƯỚC khi so mã. Trước đây so mã trước ⇒ MỌI tài khoản (kể cả tài khoản
+   * thường không có trần nào để gia hạn) đều dò được mã — 5 lần/15 phút mỗi tài khoản, nhân với bao nhiêu tài khoản
+   * tự tạo cũng được. Nay chỉ người đang thật sự bị chặn bởi một trần gia hạn được mới được thử mã. Câu trả lời của
+   * bước này ("chưa chạm", "không áp dụng") không nói gì về mã — `GET /gia-han-tien` vốn đã cho biết chừng đó.
+   */
+  const tc0 = await xacDinhTran(userId, o.tran, { congAnthropicVe: o.congAnthropicVe });
   const ma = typeof o.ma === 'string' ? o.ma : '';
   if (!ma || ma.length > 200 || !(await bcrypt.compare(ma, ch.bam))) {
     const moi = sai && now - sai.tu < CUA_SO_SAI_MS ? { dem: sai.dem + 1, tu: sai.tu } : { dem: 1, tu: now };
@@ -346,11 +353,14 @@ export async function nhapMaGiaHan(
   }
   lanSai.delete(userId);
 
-  const tc = await xacDinhTran(userId, o.tran, { congAnthropicVe: o.congAnthropicVe });
-  const tu = dauKy(tc.ky, luc, await soGioCuaSo());
-
+  const soGio = await soGioCuaSo();
+  let tc!: TranCham;
   const kq = await prisma.$transaction(async (tx) => {
-    await tx.$executeRaw`SELECT pg_advisory_xact_lock(${khoaTuVan(userId, tc.tran)}::int)`;
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(${khoaTuVan(userId, tc0.tran)}::int)`;
+    /* QA đợt 7: xác định trần LẠI sau khi giữ khoá. Hai lần nhập cùng lúc (bấm Enter hai lần, hai app) — lượt đầu cấp
+       xong là trần KHÔNG còn chạm; trước đây lượt sau vẫn dùng kết quả cũ ⇒ tạo yêu cầu "chờ duyệt" thừa + báo admin. */
+    tc = await xacDinhTran(userId, o.tran, { congAnthropicVe: o.congAnthropicVe });
+    const tu = dauKy(tc.ky, luc, soGio);
     const cho = await tx.agentGiaHanTien.findFirst({
       where: { userId, tran: tc.tran, ky: tc.ky, trangThai: 'CHO_DUYET', createdAt: { gte: tu } },
       orderBy: { id: 'desc' },

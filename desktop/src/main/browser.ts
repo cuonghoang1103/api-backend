@@ -583,13 +583,25 @@ export async function goChu(boChon: string, chu: string): Promise<{ ok: boolean;
   if (!wc) return { ok: false, loi: 'chưa mở trình duyệt' };
   const ma = `(() => { const e = document.querySelector(${JSON.stringify(boChon)});
     if (!e) return 'khong-thay';
-    if (e instanceof HTMLInputElement && e.type === 'password') return 'mat-khau';
+    /* QA đợt 7: "ô mật khẩu" không chỉ là type=password lúc tìm thấy — trang đổi type khi focus (ô hiện chữ rồi
+       che), che chữ bằng CSS -webkit-text-security, hoặc khai autocomplete current-/new-password. Kiểm trước VÀ sau
+       focus/gõ; lọt sau khi gõ thì xoá chữ vừa đặt. */
+    const laMk = (x) => !!x && x instanceof HTMLInputElement && (x.type === 'password'
+      || /(^|\\s)(current-password|new-password|one-time-code)(\\s|$)/i.test(x.getAttribute('autocomplete') || '')
+      || /password|passcode|m[aậ]t[ _-]?kh[aẩ]u|(^|[^a-z])(pass|passwd|pwd|otp)([^a-z]|$)/i.test([x.name, x.id, x.getAttribute('aria-label') || '', x.placeholder].join(' '))
+      || /^(disc|circle|square)$/.test(getComputedStyle(x).getPropertyValue('-webkit-text-security').trim()));
+    if (laMk(e)) return 'mat-khau';
     e.focus();
+    /* Chạy ngầm (headless) trang không có focus thật ⇒ focus() không bắn sự kiện — bắn tay để trang nào "đổi sang ô
+       mật khẩu khi focus" lộ ra trước khi gõ. */
+    if (document.activeElement !== e || !document.hasFocus()) e.dispatchEvent(new FocusEvent('focus'));
+    if (laMk(e) || laMk(document.activeElement)) return 'mat-khau';
     const dat = Object.getOwnPropertyDescriptor(
       e instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype, 'value')?.set;
     if (dat) dat.call(e, ${JSON.stringify(chu)}); else e.value = ${JSON.stringify(chu)};
     e.dispatchEvent(new Event('input', { bubbles: true }));
     e.dispatchEvent(new Event('change', { bubbles: true }));
+    if (laMk(e)) { if (dat) dat.call(e, ''); else e.value = ''; e.dispatchEvent(new Event('input', { bubbles: true })); return 'mat-khau'; }
     return 'ok'; })()`;
   const kq = await wc.executeJavaScript(ma, true) as string;
   /* 19/10/2026: KHÔNG BAO GIỜ gõ vào ô mật khẩu — người dùng tự đăng nhập (`/browser show` · `trinh_duyet_hien`). */

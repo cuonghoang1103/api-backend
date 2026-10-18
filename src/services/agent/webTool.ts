@@ -63,17 +63,54 @@ export function ipBiCam(ip: string): boolean {
     return false;
   }
   if (v === 6) {
-    const s = ip.toLowerCase().replace(/^\[|\]$/g, '');
-    if (s === '::' || s === '::1') return true;     // chưa xác định + loopback
-    if (s.startsWith('fe80')) return true;          // link-local
-    if (/^f[cd]/.test(s)) return true;              // fc00::/7 unique-local
-    // IPv4 ánh xạ vào IPv6 (`::ffff:127.0.0.1`) — phải soi phần IPv4 bên trong,
-    // nếu không nó là đường vòng đi thẳng qua mọi luật ở trên.
-    const m = s.match(/::ffff:(\d+\.\d+\.\d+\.\d+)$/);
-    if (m?.[1]) return ipBiCam(m[1]);
+    /*
+     * QA đợt 7 (19/10/2026): soi theo 8 NHÓM SỐ, không theo chuỗi. Trước đây chỉ bắt `::ffff:127.0.0.1` dạng chấm —
+     * mà WHATWG URL viết lại `http://[::ffff:127.0.0.1]/` thành `[::ffff:7f00:1]` (dạng HEX) ⇒ `doc_web` đọc được
+     * localhost / mạng docker / 169.254.169.254 (đo thật: trả "200 NOI-BO" từ một server nghe 127.0.0.1).
+     */
+    const s = ip.toLowerCase().replace(/^\[|\]$/g, '').split('%')[0]!;
+    const g = nhomIpv6(s);
+    if (!g) return true;
+    const v4 = (hi: number, lo: number) => `${hi >> 8}.${hi & 255}.${lo >> 8}.${lo & 255}`;
+    const dau0 = (n: number) => g.slice(0, n).every((x) => x === 0);
+    if (dau0(8)) return true;                                   // ::  chưa xác định
+    if (dau0(7) && g[7] === 1) return true;                     // ::1 loopback
+    if ((g[0]! & 0xffc0) === 0xfe80) return true;               // fe80::/10 link-local
+    if ((g[0]! & 0xffc0) === 0xfec0) return true;               // fec0::/10 site-local (cũ)
+    if ((g[0]! & 0xfe00) === 0xfc00) return true;               // fc00::/7 unique-local
+    if ((g[0]! & 0xff00) === 0xff00) return true;               // ff00::/8 multicast
+    // IPv4 nằm trong IPv6 ⇒ soi phần IPv4: ánh xạ ::ffff:a.b.c.d · tương thích ::a.b.c.d · ::ffff:0:a.b.c.d (SIIT)
+    // · NAT64 64:ff9b::/96 + 64:ff9b:1::/48 · 6to4 2002:AABB:CCDD::/16.
+    if (dau0(5) && g[5] === 0xffff) return ipBiCam(v4(g[6]!, g[7]!));
+    if (dau0(6)) return ipBiCam(v4(g[6]!, g[7]!));
+    if (dau0(4) && g[4] === 0xffff && g[5] === 0) return ipBiCam(v4(g[6]!, g[7]!));
+    if (g[0] === 0x64 && g[1] === 0xff9b) return ipBiCam(v4(g[6]!, g[7]!));
+    if (g[0] === 0x2002) return ipBiCam(v4(g[1]!, g[2]!));
+    if (g[0] === 0x2001 && g[1] === 0) return true;             // Teredo 2001::/32 (IPv4 bị che, không soi được)
     return false;
   }
   return true; // không phải IP hợp lệ ⇒ từ chối
+}
+
+/** "::ffff:7f00:1" ⇒ 8 nhóm số 16-bit (nhận cả đuôi IPv4 chấm). Sai dạng ⇒ null. */
+function nhomIpv6(s: string): number[] | null {
+  let str = s;
+  const cham = /(\d+)\.(\d+)\.(\d+)\.(\d+)$/.exec(str);
+  if (cham) {
+    const p = cham.slice(1, 5).map(Number);
+    if (p.some((n) => n > 255)) return null;
+    str = `${str.slice(0, cham.index)}${((p[0]! << 8) | p[1]!).toString(16)}:${((p[2]! << 8) | p[3]!).toString(16)}`;
+  }
+  const nua = str.split('::');
+  if (nua.length > 2) return null;
+  const tach = (x: string | undefined) => (x ? x.split(':') : []);
+  const dau = tach(nua[0]);
+  const duoi = nua.length === 2 ? tach(nua[1]) : [];
+  const lap = 8 - dau.length - duoi.length;
+  if ((nua.length === 1 && lap !== 0) || lap < 0) return null;
+  const tat = [...dau, ...Array<string>(nua.length === 2 ? lap : 0).fill('0'), ...duoi];
+  if (tat.length !== 8 || tat.some((x) => !/^[0-9a-f]{1,4}$/.test(x))) return null;
+  return tat.map((x) => parseInt(x, 16));
 }
 
 async function kiemMotChang(u: URL): Promise<string | null> {

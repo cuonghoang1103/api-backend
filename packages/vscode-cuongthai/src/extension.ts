@@ -398,7 +398,6 @@ class KhungChat implements vscode.WebviewViewProvider {
 
   viecMoi(): void { void this.nhan({ loai: 'viecMoi' }); }
 
-  /** Đợt 4 — điều khiển máy tính: đẩy cài đặt `cuongthai.dieuKhienMayTinh` xuống lõi/app. */
   /** 19/10/2026: gọi một kênh lõi khi đang nối (lệnh trình duyệt ngầm/hiện, kết nối Figma). `null` = chưa nối. */
   async goiLoi<T = unknown>(kenh: string, duLieu?: unknown): Promise<T | null> {
     if (!this.cau) await this.noi();
@@ -406,6 +405,7 @@ class KhungChat implements vscode.WebviewViewProvider {
     return cau ? await cau.goi<T>(kenh, duLieu) : null;
   }
 
+  /** Đợt 4 — điều khiển máy tính: đẩy cài đặt `cuongthai.dieuKhienMayTinh` xuống lõi/app. */
   async datMayTinh(bat: boolean): Promise<void> {
     if (!this.cau) return;
     const r = await this.cau.goi<{ bat: boolean; hoTro: boolean; quyen: { chup: boolean; dieuKhien: boolean } | null }>('agent:mayTinh', { bat }).catch(() => null);

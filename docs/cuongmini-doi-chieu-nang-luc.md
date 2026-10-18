@@ -673,3 +673,86 @@ git, AGENTS.md có khối lồng), `qa61BangCm.test.ts`; CLI `dot6.test.ts` (+ t
 - Gợi ý "Push nhánh lên remote" hiện cả khi repo KHÔNG có remote nào (repo mới `git init`) — bấm thì lệnh push hỏng.
 - Thẻ duyệt lệnh git chỉ có Có / Không (không có "Có, và đừng hỏi lại lệnh này" như Claude Code) — dùng `/quyen them`.
 - Không chạy `next build` frontend trong worktree (ổ còn ~31 GB, `.next` ~7 GB) — đã `tsc` + `eslint` tệp đổi.
+
+### 5e. QA đợt 7 (19/10/2026 — máy chủ THẬT trên CSDL tạm + cổng LLM giả + PTY thật + Chrome headless thật, nhánh `qa70-fix`)
+
+Cách làm: worktree sạch ở `99fb2746`; **máy chủ thật** (routes `agent` + `admin/cong-anthropic` + `work` của worktree) trên cụm
+Postgres 18 tạm có pgvector (dựng bằng `scripts/db-test-tu-migration.mjs`), cổng LLM giả (OpenAI SSE, giá cố định 10 $/1M token)
+⇒ CLI bản dựng thật trong PTY gọi đúng đường người dùng: hỏi ⇒ máy chủ ghi sổ ⇒ chạm trần Solid (0,02 $/ngày) ⇒ thẻ "Nhập mã gia
+hạn" ⇒ sai (Còn 4 lần) ⇒ đúng ⇒ cộng ngay + làm tiếp ⇒ chạm lần 2 ⇒ chờ duyệt ⇒ admin duyệt qua API ⇒ CLI kiểm lại. `/cost` +
+chân trang (~$0.045) khớp sổ máy chủ (0,04483 $); gia hạn chỉ nới trần, không ghi tiền. `/model` của máy chủ thật: Sonic · Solid ·
+Nova · Shin · Heshin · Eco rồi 🔒 Invisible · 🔒 Optimum, mặc định Solid. Webview VS Code (`dist/webview.js` thật) chạy trong
+Chrome headless với `acquireVsCodeApi` giả. Trang `/cuongmini/gia-han` (bản `next build` của worktree) qua proxy cùng gốc tới máy
+chủ thật. Trình duyệt AI: puppeteer THẬT, headless, hồ sơ tạm. Một lượt đọc thật Google Docs công khai (xuất `.md` qua chuyển
+hướng googleusercontent, 4,6 s) + Figma oEmbed file không tồn tại (⇒ "chưa mở chia sẻ"); một lượt `/ket-noi figma` với token giả
+(Figma trả 403 ⇒ "Figma từ chối token", không lưu gì).
+
+**Lỗi tìm ra và đã sửa** (🔴 cao · 🟠 vừa · 🟡 nhỏ):
+- 🔴 **`doc_web` (máy chủ) đọc được localhost / mạng nội bộ qua IPv6 ánh xạ.** `ipBiCam` chỉ bắt `::ffff:127.0.0.1` dạng chấm, mà
+  WHATWG URL viết lại `http://[::ffff:127.0.0.1]:<cổng>/` thành `[::ffff:7f00:1]` ⇒ lọt; đo thật: server nghe 127.0.0.1 trả
+  nguyên nội dung cho `doc_web` (cũng mở đường tới 169.254.169.254 / mạng docker bằng `::ffff:a9fe:a9fe`). `resourceRules.ts`
+  đã tự vá riêng cho CT Work Resources nhưng `webTool.ts` (và bộ tải link ngoài dùng chung `ipBiCam`) thì chưa. Nay `ipBiCam`
+  soi theo 8 nhóm số: ánh xạ / tương thích / SIIT / NAT64 (64:ff9b::/96, /48) / 6to4 / Teredo / site-local / multicast.
+- 🟠 **Ai cũng dò được mã gia hạn.** Máy chủ so mã TRƯỚC khi xét người đó có đang chạm trần nào không ⇒ mọi tài khoản (kể cả
+  tài khoản thường tạo hàng loạt) có 5 lần/15 phút để dò. Nay xét trần trước — người không có gì để gia hạn chỉ nhận
+  `GIA_HAN_KHONG_AP_DUNG`/`GIA_HAN_CHUA_CHAM`, máy chủ không so mã, không đếm "Còn n lần".
+- 🟠 **CLI + VS Code tự "làm tiếp" khi yêu cầu được duyệt MUỘN** (kiểm lại 30 s) dù người dùng đã đổi model và hỏi câu khác — đo
+  thật trên máy chủ thật: lượt "Tiếp tục đúng từ chỗ đang dừng" tự chạy bằng Nova (model vừa đổi), không ai hỏi, có tốn tiền.
+  Nay ghi "dấu" hội thoại lúc bị chặn (CLI `kho.dauHoiThoai` = id câu hỏi cuối; VS Code = đối tượng câu hỏi cuối); duyệt tới khi
+  hội thoại đã đi tiếp / đang chạy ⇒ chỉ báo "Admin đã duyệt … Gửi lại câu hỏi khi cần dùng tiếp." (desktop vốn đã bắt bấm "Làm
+  tiếp").
+- 🟡 Nhập mã hai lần cùng lúc: lượt sau dùng kết quả "đang chạm" cũ ⇒ tạo yêu cầu CHỜ DUYỆT thừa + báo admin oan. Nay xác định trần
+  LẠI sau khi giữ khoá tư vấn (khoá theo trần đã chuẩn hoá — `nhom:007` = `nhom:7`) ⇒ lượt sau 409 "chưa chạm".
+- 🟡 `goChu` chỉ từ chối ô `type=password` lúc tìm thấy. Lọt: ô ĐỔI sang password khi focus (headless không bắn sự kiện focus nên
+  trang không kịp đổi), ô che chữ bằng CSS `-webkit-text-security`, ô `autocomplete=current-/new-password|one-time-code`, ô tên/nhãn
+  "password/mật khẩu/otp". Nay kiểm trước + sau focus (bắn focus tay khi trang không có focus) + sau khi gõ (lọt thì xoá chữ) —
+  cả lõi CLI/VS Code lẫn app (`browser.ts`). "passport" vẫn gõ được.
+- 🟡 `hoSoAnToan` bỏ sót hồ sơ chính của Chrome Beta/Canary/Dev, Edge Dev/SxS, Vivaldi, Opera, Arc, `google-chrome-beta|unstable`,
+  mọi ".../User Data", và SYMLINK trỏ vào hồ sơ Chrome. Nay khớp rộng hơn + soi đường thật (`realpathSync`).
+- 🟡 Tiêu đề tài liệu ngoài (tên file Figma, tiêu đề issue GitHub — chữ người lạ) nằm NGOÀI khối `untrusted` ⇒ một tiêu đề có
+  xuống dòng / `</noi-dung-ngoai>` giả được chỉ dẫn. Nay `dongDauKetQua` ép một dòng, bỏ `< >` và ký tự điều khiển, ≤ 120 ký tự.
+- 🟡 Ô nhập token `/ket-noi figma` mang nhãn "Mật khẩu" ⇒ "Token". Chú thích JSDoc của `datMayTinh` (extension) bị đẩy lệch.
+- 🟡 Tab Figma của Project settings: thêm cảnh báo token cá nhân đọc được MỌI file tài khoản đó xem được, và thành viên nào dán
+  link Figma vào thẻ cũng nhờ trợ lý đọc được ⇒ nên dùng tài khoản Figma chỉ có file của dự án.
+
+**Đã kiểm, đúng:** lần 1 cộng ngay + làm tiếp (không thêm câu hỏi, `/rewind` không lệch) · lần 2 chờ duyệt, kiểm lại định kỳ ·
+admin duyệt / từ chối (lý do tới app) · nhà tài trợ duyệt, ADMIN không tài trợ 403, thành viên tự duyệt 403, nhà tài trợ dự án A
+sửa pid sang yêu cầu dự án B ⇒ 404 · duyệt khi đã quá kỳ ⇒ 409 `HET_KY`, không cấp · 5 lần sai khoá 15 phút (kể cả mã đúng) ·
+đổi mã ⇒ mã cũ chết · model trả phí không vé ⇒ 403 · trần lạ/pid bậy ⇒ 400 · VÍ AI Code (cửa sổ 5 giờ) và nhóm FREE chính
+hãng: lần 1 cộng đúng một mức, trần nới đúng; hạng CAO không có đường mã · trần THÁNG của nhóm không có thẻ, không nới · mã
+không có trong mọi phản hồi + mọi dòng `logger.*` của cả bộ test, không trên màn hình / `~/.cuongmini` / URL / DOM trang web ·
+app cũ nhận câu "Vào cuongthai.com/cuongmini/gia-han…" · hạn mức nhóm mặc định 5/20, số đã lưu (1/15) giữ nguyên · thẻ đi cả
+đường SSE lẫn HTTP 429 (`NHOM_HET_TRAN`, `data.giaHanTien`) · SSRF link ngoài: `docs.google.com.evil.com`, `@`, IP literal,
+DNS trả IP nội bộ (kể cả MỘT bản ghi trong nhiều), chuyển hướng sang host khác / hạ http / trang đăng nhập Google, header token
+chỉ cho host đầu, thân chảy vô tận không content-length dừng ở trần · trình duyệt THẬT: headless, đúng hồ sơ tạm, ảnh 1280×800,
+tắt sạch không còn tiến trình · token Figma CLI: ô ẩn, Esc không lưu, sai ⇒ không lưu, không lên máy chủ CuongThai.
+
+**Test thêm:** máy chủ `src/services/linkNgoai/qa70Ssrf.test.ts` (6 — máy chủ nội bộ thật + ipBiCam + bộ tải + tiêu đề),
+`src/services/agent/qa70.test.ts` (3), DB `src/routes/agent.qa70.db.test.ts` (8 — dò mã, nhập trùng, quá kỳ, sửa pid, ví,
+chính hãng free, mã không vào log); `agent.giaHanTien.db.test.ts` đổi kỳ vọng nhập trùng (409, không yêu cầu chờ thừa); lõi
+`packages/cuongmini-core/src/qa70.test.ts` (2 — hồ sơ chính + symlink), `qa70TrinhDuyetThat.test.ts` (Chrome THẬT, chạy khi
+`CUONGMINI_TEST_TRINH_DUYET_THAT=1`: headless, hồ sơ, 1280×800, 7 kiểu ô mật khẩu, tắt sạch); CLI `src/test/qa70Pty.test.ts`
+(PTY: duyệt muộn chỉ báo / duyệt sớm tự làm tiếp, thẻ từ HTTP 429 nhóm, `/ket-noi figma` ẩn + Esc, `/browser mode`). Nhịp kiểm
+lại của CLI rút được bằng `CUONGMINI_NHIP_GIA_HAN_MS` (CHỈ cho test, ≥ 1 s).
+
+**Chạy lại toàn bộ trên worktree (sau sửa):** `tsc` gốc + `typecheck:seed` + lõi + CLI + extension + desktop (2 tsconfig) +
+frontend: 0 lỗi · dựng CLI + extension xanh · `next build` xanh ở heap 10 GB (heap 6 GB = mức `NODE_HEAP_MB` của
+`frontend/Dockerfile` ⇒ OOM trong worktree — chưa rõ do `node_modules` symlink hay bản dựng đã nặng hơn; để ý khi deploy; `.next` đã xoá) · CLI 137/137 (`--test-concurrency=1`, gồm mọi PTY) · lõi 56 + 1 bỏ qua (bản Chrome thật chạy riêng: xanh) ·
+desktop vitest 2244 + 8 bỏ qua · máy chủ `agent`+`llm`+`linkNgoai` 286 + 16 bỏ qua (DB) · `work/*` 1016/1016 · DB:
+`agent.giaHanTien` 9/9, `agent.qa70` 8/8, `agent.nhom` 6/6, `work.agents` 23/23, `work.agentsUi` 5/5, `work.aiMentor` 6/6,
+`work.code` 24/24, `chinhHang.db` 6 + 10 đỏ CŨ (như 2g) · `test:work-db` 63/64 tệp — `work.ctw7a` đỏ y hệt khi stash bản sửa
+(`dashboard.weeks.at(-1).actual > 0`, lệch tuần sáng thứ Hai, không liên quan); `work.ctw7c` cần Redis + `REDIS_HOST/PORT`.
+
+**Còn lại (chưa sửa, ghi để biết):**
+- 🟠 `doc_web` đường chung (trang bất kỳ) vẫn có kẽ **DNS rebinding**: kiểm IP bằng `lookup` rồi `fetch` tự phân giải lại. Link
+  ngoài không bị (chỉ host Google/Figma/GitHub — kẻ tấn công không điều khiển DNS của họ). Vá đúng cần `undici` Agent với
+  `connect.lookup` kiểm IP lúc nối — thêm phụ thuộc ⇒ cần chủ app duyệt.
+- Câu lỗi chạm trần ở app mới vẫn kèm câu "Vào cuongthai.com/cuongmini/gia-han …" (dành cho app cũ) ngay trên thẻ — thừa chữ.
+- Yêu cầu chờ duyệt mà kỳ đã qua vẫn để `CHO_DUYET` (chỉ thành `HET_KY` khi có người bấm duyệt) ⇒ app cứ kiểm lại 30 s tới khi tắt.
+- "Khoá 15 phút" tính từ lần sai ĐẦU trong cửa sổ, không từ lần thứ 5; đếm sai nằm trong RAM (khởi động lại backend là xoá).
+- Trần model gốc 0 $ (admin chặn model với gói) ⇒ `/gia-han-tien` trả "chưa chạm" thay vì "không áp dụng".
+- `/browser mode hien` vừa lưu mặc định vừa mở cửa sổ ngay (lệnh `mode` lẽ ra chỉ lưu).
+- Trang `/cuongmini/gia-han`: cấp xong thì mục trần biến mất (đã hết chạm) nên câu "✓ Đã cộng … quay lại app và gửi lại câu
+  hỏi" không hiện — chỉ thấy "Bạn chưa chạm giới hạn nào" + dòng "Đã cộng" ở Lượt gần đây.
+- `chuyenCheDo` khi lõi đang NỐI VÀO trình duyệt của tiến trình khác (CLI + VS Code cùng hồ sơ): đổi ngầm ⇄ hiện chỉ ngắt/nối lại
+  cùng bản đó, chế độ thật không đổi.

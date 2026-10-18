@@ -321,5 +321,9 @@ async function docGithub(l: LinkNhanDien, tran: number): Promise<KetQuaLink> {
 
 /** Kết quả ⇒ khối chữ cho model (dòng nguồn + nội dung). Người gọi tự bọc untrusted theo kiểu của nơi đó. */
 export function dongDauKetQua(kq: KetQuaLink): string {
-  return `${TEN_LOAI[kq.loai]}${kq.tieuDe ? ` "${kq.tieuDe}"` : ''} <${kq.url}>${kq.cach ? ` — ${kq.cach}` : ''}`;
+  /* QA đợt 7: tiêu đề là chữ của NGƯỜI KHÁC (tên file Figma, tiêu đề issue GitHub…) mà dòng này nằm NGOÀI khối
+     untrusted ⇒ một dòng, không ký tự điều khiển / dấu ngoặc thẻ, ≤ 120 ký tự — không tự đóng/mở khối, không tách dòng
+     giả làm chỉ dẫn. */
+  const td = kq.tieuDe ? kq.tieuDe.replace(/[\u0000-\u001f\u007f<>]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 120) : '';
+  return `${TEN_LOAI[kq.loai]}${td ? ` "${td}"` : ''} <${kq.url}>${kq.cach ? ` — ${kq.cach}` : ''}`;
 }

@@ -459,11 +459,19 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
 
   // ─── Mã gia hạn theo $ (19/10/2026) — `src/services/agent/maGiaHanTien.ts` ───
   const pollGiaHan = useRef<NodeJS.Timeout | null>(null);
+  /** QA đợt 7: dấu hội thoại lúc bị chặn (`kho.dauHoiThoai`) — duyệt muộn chỉ tự làm tiếp khi hội thoại chưa đi tiếp. */
+  const dauGiaHan = useRef<number | null>(null);
   const dungPollGiaHan = () => { if (pollGiaHan.current) clearInterval(pollGiaHan.current); pollGiaHan.current = null; };
   useEffect(() => () => dungPollGiaHan(), []);
-  /** Làm tiếp đúng lượt vừa bị chặn (lõi gửi lại nguyên hội thoại) — đang chạy việc khác thì chỉ báo. */
+  /** Làm tiếp đúng lượt vừa bị chặn (lõi gửi lại nguyên hội thoại) — đang chạy việc khác / hội thoại đã đi tiếp thì chỉ báo. */
   const lamTiepSauGiaHan = (chu: string) => {
-    if (S.dangChay) { kho.thongBao(chu, 'ok'); return; }
+    const daDiTiep = dauGiaHan.current !== null && dauGiaHan.current !== kho.dauHoiThoai();
+    if (S.dangChay || daDiTiep) {
+      /* QA đợt 7: duyệt tới sau khi người dùng đã hỏi câu khác / đổi model / /clear ⇒ KHÔNG tự gửi lại hội thoại
+         (đo thật: lượt "Tiếp tục đúng từ chỗ đang dừng" tự chạy bằng model vừa đổi sang, không ai hỏi). */
+      kho.thongBao(`${chu} ${L('Gửi lại câu hỏi khi cần dùng tiếp.', 'Resend your question when you want to continue.')}`, 'ok');
+      return;
+    }
     kho.batDauLamTiep(chu);
     kn.goi('agent:lamTiep').catch((e: Error) => { kho.ketLuot('', true); kho.thongBao(e.message, 'loi'); });
   };
@@ -485,6 +493,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   }
   /** Chạm trần tiền ⇒ thẻ "Nhập mã gia hạn để dùng tiếp" (ô ẩn ký tự); đang chờ duyệt sẵn ⇒ kiểm lại ngay + theo dõi. */
   const moTheGiaHan = (g: GiaHanTien, loiTruoc?: string) => {
+    if (!loiTruoc) dauGiaHan.current = kho.dauHoiThoai();
     if (g.dangCho) {
       kho.thongBao(cauDangCho(g.dangCho), 'canh');
       kiemGiaHan(g.dangCho);
@@ -768,7 +777,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     }),
     lamMoiCtwork: () => { void napDongCtw(); },
     /* 19/10/2026: ô nhập ẨN ký tự (token Figma — /ket-noi figma). */
-    hoiAn: (o) => setHop({ loai: 'matKhau', giaTri: '', tieuDe: o.tieuDe, moTa: o.moTa, khiXong: o.khiXong }),
+    hoiAn: (o) => setHop({ loai: 'matKhau', giaTri: '', nhan: 'Token', tieuDe: o.tieuDe, moTa: o.moTa, khiXong: o.khiXong }),
     kho, kn, thuMuc, phienBan, guiThat, doiModel, doiMuc, doiCheDo, dsModel, dsMuc, moMenu, moKhoaModel, doiTheme, doiNgonNgu, datToanManHinh, datChuot,
     datNhap: (t: string) => setO({ text: t, contro: t.length }),
     xoaManHinh, dangXuat, dangNhapLai: () => setHop({ loai: 'dangNhap' }), thoat: () => thoat(),

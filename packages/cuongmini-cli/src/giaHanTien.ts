@@ -7,8 +7,8 @@
 import { L } from './i18n';
 import type { GiaHanTien } from './kho';
 
-/** Nhịp tự kiểm lại yêu cầu chờ duyệt (≥ 30 s — nhẹ cho máy chủ). */
-export const NHIP_KIEM_MS = 30_000;
+/** Nhịp tự kiểm lại yêu cầu chờ duyệt (≥ 30 s — nhẹ cho máy chủ). `CUONGMINI_NHIP_GIA_HAN_MS` CHỈ cho test PTY (≥ 1 s). */
+export const NHIP_KIEM_MS = Math.max(1000, Number(process.env.CUONGMINI_NHIP_GIA_HAN_MS) || 30_000);
 
 export type KetQuaGiaHan =
   | { ketQua: 'daCap'; id: number; soUsd: number; lanThu: number }

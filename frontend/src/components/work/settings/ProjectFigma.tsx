@@ -101,6 +101,9 @@ export default function ProjectFigma({ config }: { config: ProjectConfig; slug: 
             <li>{L('Figma → Settings → Security → Personal access tokens → Generate new token.', 'Figma → Settings → Security → Personal access tokens → Generate new token.')}</li>
             <li>{L('Chỉ cấp quyền "File content: Read-only" (file_content:read) — không cấp quyền ghi.', 'Grant only "File content: Read-only" (file_content:read) — no write scopes.')}</li>
             <li>{L('Token được mã hoá trên máy chủ, không bao giờ hiện lại, không gửi cho trình duyệt hay AI agent.', 'The token is encrypted on the server, never shown again, never sent to browsers or AI agents.')}</li>
+            {/* QA đợt 7: personal access token đọc được MỌI file tài khoản đó xem được — thành viên nào dán link Figma vào thẻ
+                cũng nhờ trợ lý đọc được file ấy bằng token này. */}
+            <li>{L('Token đọc được MỌI file mà tài khoản Figma đó xem được, và mọi thành viên dự án dán link Figma vào thẻ đều nhờ trợ lý đọc được bằng nó — nên dùng tài khoản Figma chỉ có file của dự án này.', 'The token can read EVERY file that Figma account can view, and any project member who pastes a Figma link into an issue can have the assistant read it — use a Figma account that only has this project\'s files.')}</li>
           </ul>
           <a href="https://www.figma.com/developers/api#access-tokens" target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-[12.5px] text-[var(--w-accent-text)] hover:underline">
             {L('Hướng dẫn của Figma', 'Figma docs')} <ExternalLink size={12} />

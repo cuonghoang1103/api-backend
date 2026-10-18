@@ -9,7 +9,8 @@
  *   • model trả phí chưa có vé ⇒ 403 GIA_HAN_CAN_KHOA;
  *   • HẠN MỨC NHÓM (mặc định 5/20): 429 kèm thẻ ⇒ lần 1 cộng ngay ⇒ lần 2 chờ; ADMIN không tài trợ KHÔNG duyệt được,
  *     NHÀ TÀI TRỢ duyệt được; bảng "ai dùng bao nhiêu" ghi tiền gia hạn; người ngoài nhóm ⇒ 403;
- *   • 5 lần sai ⇒ lần 6 (kể cả đúng) 429; admin ĐỔI MÃ ⇒ mã cũ chết; hai lần nhập CÙNG LÚC ⇒ đúng một lượt "lần 1".
+ *   • 5 lần sai ⇒ lần 6 (kể cả đúng) 429; admin ĐỔI MÃ ⇒ mã cũ chết; hai lần nhập CÙNG LÚC ⇒ đúng một lượt "lần 1"
+ *     (QA đợt 7: lượt kia 409 "chưa chạm", không thành yêu cầu chờ thừa).
  */
 import assert from 'node:assert/strict';
 import type { AddressInfo } from 'node:net';
@@ -336,11 +337,13 @@ describe('CuongMini — MÃ GIA HẠN THEO $ (HTTP + DB thật)', { skip: !RUN }
     assert.equal(moi.data.ketQua, 'daCap');
   });
 
-  it('hai lần nhập CÙNG LÚC ⇒ đúng một lượt "lần 1" (khoá tư vấn), lượt kia chờ duyệt', async () => {
+  it('hai lần nhập CÙNG LÚC ⇒ đúng một lượt "lần 1" (khoá tư vấn); lượt kia thấy trần đã nới ⇒ 409, không tạo yêu cầu chờ thừa', async () => {
     await ghiSo(dong.id, 0.6);
     const [a, b] = await Promise.all([nhap(dong, 'model:cm-solid', MA_MOI), nhap(dong, 'model:cm-solid', MA_MOI)]);
-    const kq = [a.data?.ketQua, b.data?.ketQua].sort();
-    assert.deepEqual(kq, ['choDuyet', 'daCap'], JSON.stringify([a.raw, b.raw]));
+    /* QA đợt 7: trước đây lượt sau dùng kết quả "đang chạm" cũ ⇒ yêu cầu CHỜ DUYỆT thừa + báo admin oan. */
+    const kq = [a.data?.ketQua ?? a.code, b.data?.ketQua ?? b.code].sort();
+    assert.deepEqual(kq, ['GIA_HAN_CHUA_CHAM', 'daCap'], JSON.stringify([a.raw, b.raw]));
+    assert.equal(await prisma.agentGiaHanTien.count({ where: { userId: dong.id, trangThai: 'CHO_DUYET' } }), 0);
     assert.equal(await prisma.agentGiaHanTien.count({ where: { userId: dong.id, trangThai: 'DA_CAP' } }), 1);
   });
 });

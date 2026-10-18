@@ -386,7 +386,9 @@ interface RejectedCommand { command: string; error: string }
  * cho model sửa MỘT lần (chat) và ghi chú cuối câu trả lời nếu vẫn hỏng — không bao giờ im lặng.
  */
 async function checkCommandActions(raw: unknown, access: ProjectAccess): Promise<{ kept: AiAction[]; rejected: RejectedCommand[] }> {
-  const actions = Array.isArray(raw) ? saneActions(raw) : (raw as AiAction[]);
+  // Model trả JSON THIẾU `actions` (chỉ có "reply") ⇒ `raw` là undefined. Trước 18/10/2026 dòng này ép kiểu
+  // `raw as AiAction[]` ⇒ `.some` trên undefined ⇒ 500 cho MỌI câu hỏi không đề xuất thay đổi (thành viên PRJ301 gặp).
+  const actions = Array.isArray(raw) ? saneActions(raw) : [];
   const rejected: RejectedCommand[] = [];
   // Đề xuất trông như lệnh nhưng sai khung (thiếu `command`, args không phải object…) ⇒ saneActions đã bỏ — ghi lý do.
   for (const a of Array.isArray(raw) ? raw.slice(0, 30) : []) {

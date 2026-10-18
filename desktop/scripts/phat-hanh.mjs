@@ -124,13 +124,18 @@ if (LA_CTWORK) {
   const banWork = chay('git', ['status', '--porcelain', '--',
     'frontend/src/app/work', 'frontend/src/components/work'])
     .split('\n').filter((d) => d.trim() && !d.startsWith('??'));
-  if (banWork.length > 0) {
+  /* `--bo-qua-work-dang-sua` (19/10/2026): thay đổi chưa commit là của PHIÊN KHÁC đang làm dở (không phải thứ cần
+     phát hành) ⇒ chỉ liệt kê rồi đi tiếp. Bản cài vẫn dựng từ mã trên GitHub nên không lẫn phần dở đó. */
+  if (banWork.length > 0 && co.has('--bo-qua-work-dang-sua')) {
+    console.log('⚠ Bỏ qua thay đổi chưa commit của phiên khác trong cây CT Work (KHÔNG vào bản cài):');
+    for (const d of banWork) console.log(`    ${d}`);
+  } else if (banWork.length > 0) {
     chet('Cây CT Work của web còn thay đổi CHƯA COMMIT — chúng sẽ KHÔNG có trong app CT Work:',
       ...banWork.map((d) => mo(`    ${d}`)),
       '',
-      'Commit (và deploy web) rồi chạy lại.');
-  }
-  ok('Cây CT Work của web sạch');
+      'Commit (và deploy web) rồi chạy lại.',
+      'Nếu đó là đồ dở của PHIÊN KHÁC: thêm --bo-qua-work-dang-sua.');
+  } else ok('Cây CT Work của web sạch');
 }
 
 // ─── 3. Đồng bộ với GitHub ────────────────────────────────────────

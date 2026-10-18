@@ -20,7 +20,10 @@
  *
  * Cấu hình nằm trong `work_projects.settings.cuongMiniNhom` (JSON sẵn có — KHÔNG đổi schema):
  *   { bat: boolean, tranNgayNguoiUsd: number, tranThangNhomUsd: number, chuId?: number }
- * Không có cấu hình ⇒ MẶC ĐỊNH BẬT (chủ app muốn) với trần vừa phải. Trưởng nhóm chỉnh ở Project settings →
+ * Không có cấu hình ⇒ MẶC ĐỊNH BẬT (chủ app muốn) với trần vừa phải: 5 $/người/ngày, 20 $/nhóm/tháng (19/10/2026 — trước
+ * là 1 và 15; dự án đã LƯU số riêng giữ số đó, vì `docCauHinhNhom` chỉ lấy mặc định cho ô thiếu).
+ * Chạm trần người/ngày ⇒ thành viên nhập MÃ GIA HẠN (`maGiaHanTien.ts`, trần `nhom:<pid>`): lần 1 trong ngày cộng ngay
+ * một mức (= trần người/ngày), lần 2+ chờ nhà tài trợ hoặc admin web duyệt. Trưởng nhóm chỉnh ở Project settings →
  * "CuongMini cho cả nhóm" (`GET/PUT /work/projects/:pid/cuongmini-team`, ADMIN dự án; agent CT Work bị chặn ở
  * `AGENT_DENIED_ROUTES`).
  */
@@ -30,6 +33,7 @@ import { logger } from '../../utils/logger.js';
 import { BadRequestError } from '../../middleware/errorHandler.js';
 import { loadProjectAccess, requireProject } from '../work/permissions.js';
 import { dauNgayVn, dauThangVn } from './anthropicChinhHang/hanMuc.js';
+import { tienGiaHanTheoKy } from './giaHanTienSo.js';
 
 export interface CauHinhNhom {
   bat: boolean;
@@ -47,7 +51,8 @@ export interface CauHinhNhom {
   dongY: number[];
 }
 
-export const MAC_DINH_NHOM: CauHinhNhom = { bat: true, tranNgayNguoiUsd: 1, tranThangNhomUsd: 15, chuId: null, dongY: [] };
+/** 19/10/2026 (chủ app chốt): 5 $/người/ngày · 20 $/nhóm/tháng — trước là 1 và 15. */
+export const MAC_DINH_NHOM: CauHinhNhom = { bat: true, tranNgayNguoiUsd: 5, tranThangNhomUsd: 20, chuId: null, dongY: [] };
 /** Dòng thành viên tạo cùng lúc với dự án (≤ ngần này) = người tạo dự án. */
 const CUA_SO_NGUOI_TAO_MS = 5 * 60_000;
 const TRAN_TOI_DA_NGAY = 50;
@@ -162,10 +167,17 @@ export interface NguonNhom {
   tranThangNhomUsd: number;
   daDungNgay: number;
   daDungThang: number;
+  /** Mã gia hạn theo $ (19/10/2026): USD đã cấp thêm cho NGƯỜI này hôm nay ở dự án này — trần người/ngày = gốc + phần này. */
+  giaHanNgay?: number;
 }
 export type QuyetDinhNhom =
   | NguonNhom
-  | { loai: 'tuChoi'; ma: 'NHOM_KHONG_GAN' | 'NHOM_KHONG_THANH_VIEN' | 'NHOM_AGENT' | 'NHOM_TAT' | 'NHOM_KHONG_CHU' | 'NHOM_HET_TRAN'; cau: string };
+  | {
+    loai: 'tuChoi'; ma: 'NHOM_KHONG_GAN' | 'NHOM_KHONG_THANH_VIEN' | 'NHOM_AGENT' | 'NHOM_TAT' | 'NHOM_KHONG_CHU' | 'NHOM_HET_TRAN'; cau: string;
+    /** NHOM_HET_TRAN: trần nào chạm — CHỈ `nguoiNgay` gia hạn được bằng mã (trần tháng của nhóm thì trưởng nhóm nới). */
+    tranCham?: 'nguoiNgay' | 'nhomThang';
+    nguon?: NguonNhom;
+  };
 
 const tuChoi = (ma: Extract<QuyetDinhNhom, { loai: 'tuChoi' }>['ma'], vi: string, en: string): QuyetDinhNhom => ({ loai: 'tuChoi', ma, cau: `${vi} / ${en}` });
 
@@ -204,14 +216,16 @@ export async function quyetDinhNhom(userId: number, projectId: number | null, o:
         `No admin of ${access.key} with an active Pro plan has agreed to sponsor, so there is no team allowance yet. Ask a lead with Pro to open Project settings → CuongMini and pick themselves as sponsor.`);
     }
     const luc = o.luc ?? new Date();
-    const [daDungNgay, daDungThang] = await Promise.all([daDungNguoiNgay(projectId, userId, luc), daDungNhomThang(projectId, luc)]);
+    const [daDungNgay, daDungThang, g] = await Promise.all([
+      daDungNguoiNgay(projectId, userId, luc), daDungNhomThang(projectId, luc), tienGiaHanTheoKy(userId, `nhom:${projectId}`, luc),
+    ]);
     const nguon: NguonNhom = {
       loai: 'nhom', projectId, key: access.key, chu,
-      tranNgayNguoiUsd: ch.tranNgayNguoiUsd, tranThangNhomUsd: ch.tranThangNhomUsd, daDungNgay, daDungThang,
+      tranNgayNguoiUsd: ch.tranNgayNguoiUsd, tranThangNhomUsd: ch.tranThangNhomUsd, daDungNgay, daDungThang, giaHanNgay: g.ngay,
     };
     if (o.kiemTran !== false) {
       const het = chamTranNhom(nguon);
-      if (het) return het;
+      if (het) return het.loai === 'tuChoi' ? { ...het, nguon } : het;
     }
     return nguon;
   } catch (err) {
@@ -222,17 +236,19 @@ export async function quyetDinhNhom(userId: number, projectId: number | null, o:
 }
 
 /** Thuần: đã chạm trần nhóm chưa ⇒ câu từ chối, `null` = còn. */
-export function chamTranNhom(n: Pick<NguonNhom, 'key' | 'tranNgayNguoiUsd' | 'tranThangNhomUsd' | 'daDungNgay' | 'daDungThang'>): QuyetDinhNhom | null {
+export function chamTranNhom(n: Pick<NguonNhom, 'key' | 'tranNgayNguoiUsd' | 'tranThangNhomUsd' | 'daDungNgay' | 'daDungThang' | 'giaHanNgay'>): QuyetDinhNhom | null {
   const usd = (x: number) => `${x.toLocaleString('en-US', { maximumFractionDigits: 2 })} $`;
-  if (n.daDungNgay >= n.tranNgayNguoiUsd) {
-    return tuChoi('NHOM_HET_TRAN',
-      `Bạn đã dùng hết hạn mức nhóm ${n.key} hôm nay (${usd(n.daDungNgay)}/${usd(n.tranNgayNguoiUsd)}); làm mới lúc 0 giờ (giờ Việt Nam). Trưởng nhóm nới trần ở Project settings → CuongMini cho cả nhóm.`,
-      `You have used today's ${n.key} team allowance (${usd(n.daDungNgay)}/${usd(n.tranNgayNguoiUsd)}); it resets at midnight (Vietnam time). The team lead can raise it in Project settings.`);
-  }
+  /* Trần tháng của NHÓM trước: nới trần người/ngày bằng mã không gỡ được trần tháng (tiền của nhà tài trợ). */
   if (n.daDungThang >= n.tranThangNhomUsd) {
-    return tuChoi('NHOM_HET_TRAN',
+    return { ...(tuChoi('NHOM_HET_TRAN',
       `Nhóm ${n.key} đã dùng hết hạn mức tháng này (${usd(n.daDungThang)}/${usd(n.tranThangNhomUsd)}); làm mới đầu tháng sau. Trưởng nhóm nới trần ở Project settings → CuongMini cho cả nhóm.`,
-      `Team ${n.key} has used this month's allowance (${usd(n.daDungThang)}/${usd(n.tranThangNhomUsd)}); it resets next month. The team lead can raise it in Project settings.`);
+      `Team ${n.key} has used this month's allowance (${usd(n.daDungThang)}/${usd(n.tranThangNhomUsd)}); it resets next month. The team lead can raise it in Project settings.`) as Extract<QuyetDinhNhom, { loai: 'tuChoi' }>), tranCham: 'nhomThang' };
+  }
+  const tranNgay = Math.round((n.tranNgayNguoiUsd + (n.giaHanNgay ?? 0)) * 10_000) / 10_000;
+  if (n.daDungNgay >= tranNgay) {
+    return { ...(tuChoi('NHOM_HET_TRAN',
+      `Bạn đã dùng hết hạn mức nhóm ${n.key} hôm nay (${usd(n.daDungNgay)}/${usd(tranNgay)}); làm mới lúc 0 giờ (giờ Việt Nam). Trưởng nhóm nới trần ở Project settings → CuongMini cho cả nhóm.`,
+      `You have used today's ${n.key} team allowance (${usd(n.daDungNgay)}/${usd(tranNgay)}); it resets at midnight (Vietnam time). The team lead can raise it in Project settings.`) as Extract<QuyetDinhNhom, { loai: 'tuChoi' }>), tranCham: 'nguoiNgay' };
   }
   return null;
 }
@@ -266,8 +282,12 @@ export interface BangNhom {
   cauHinh: CauHinhNhom;
   chu: ChuNhom | null;
   daDungThang: number;
-  /** Ai dùng bao nhiêu (tháng này + hôm nay), nhiều nhất trước. */
-  nguoi: Array<{ userId: number; username: string; ten: string; thang: number; homNay: number; soLuot: number }>;
+  /** Ai dùng bao nhiêu (tháng này + hôm nay), nhiều nhất trước. `giaHan`/`soLanGiaHan` = mã gia hạn ĐÃ CẤP tháng này. */
+  nguoi: Array<{ userId: number; username: string; ten: string; thang: number; homNay: number; soLuot: number; giaHan: number; soLanGiaHan: number }>;
+  /** Mã gia hạn (19/10/2026): yêu cầu của thành viên đang chờ duyệt — ADMIN dự án thấy, NHÀ TÀI TRỢ duyệt được. */
+  choDuyet: Array<import('./maGiaHanTien.js').YeuCauView>;
+  /** Người xem duyệt được không (= nhà tài trợ đang hiệu lực). */
+  duyetDuoc: boolean;
   /** Người xem có quyền sửa không (ADMIN dự án). */
   sua: boolean;
   /** ADMIN có Pro chọn được làm trưởng nhóm tài trợ. */
@@ -291,7 +311,10 @@ export async function xemBangNhom(callerId: number, projectId: number, luc = new
       _sum: { costUsd: true }, _count: { _all: true },
     }),
   ]);
-  const ids = nhom.map((x) => x.userId).filter((x): x is number => typeof x === 'number');
+  /* Mã gia hạn: tiền gia hạn ghi rõ theo người (kể cả người có lượt cấp mà chưa có dòng sổ nào — hiếm). */
+  const { giaHanCuaNhom } = await import('./maGiaHanTien.js');
+  const gh = await giaHanCuaNhom(projectId, luc).catch(() => ({ choDuyet: [], theoNguoi: [] as Array<{ userId: number; usd: number; soLan: number }> }));
+  const ids = [...new Set([...nhom.map((x) => x.userId).filter((x): x is number => typeof x === 'number'), ...gh.theoNguoi.map((x) => x.userId)])];
   const [users, homNay] = await Promise.all([
     prisma.user.findMany({ where: { id: { in: ids } }, select: { id: true, username: true, fullName: true, displayName: true } }),
     prisma.interviewLLMCallLog.groupBy({
@@ -300,11 +323,14 @@ export async function xemBangNhom(callerId: number, projectId: number, luc = new
     }),
   ]);
   const r4 = (x: unknown) => Math.round(Number(x ?? 0) * 10_000) / 10_000;
-  const nguoi = nhom.filter((x) => x.userId !== null).map((x) => {
-    const u = users.find((y) => y.id === x.userId);
+  const nguoi = ids.map((uid) => {
+    const x = nhom.find((y) => y.userId === uid);
+    const u = users.find((y) => y.id === uid);
+    const g = gh.theoNguoi.find((y) => y.userId === uid);
     return {
-      userId: x.userId!, username: u?.username ?? `#${x.userId}`, ten: u ? (u.displayName || u.fullName || u.username) : `#${x.userId}`,
-      thang: r4(x._sum.costUsd), homNay: r4(homNay.find((h) => h.userId === x.userId)?._sum.costUsd), soLuot: x._count._all,
+      userId: uid, username: u?.username ?? `#${uid}`, ten: u ? (u.displayName || u.fullName || u.username) : `#${uid}`,
+      thang: r4(x?._sum.costUsd), homNay: r4(homNay.find((h) => h.userId === uid)?._sum.costUsd), soLuot: x?._count._all ?? 0,
+      giaHan: g?.usd ?? 0, soLanGiaHan: g?.soLan ?? 0,
     };
   }).sort((a, b) => b.thang - a.thang);
   const sua = access.principal === 'HUMAN' && access.role === 'ADMIN';
@@ -315,7 +341,8 @@ export async function xemBangNhom(callerId: number, projectId: number, luc = new
       dongY: await daDongY(projectId, cauHinh, m.user.id),
     })))
     : [];
-  return { cauHinh, chu, daDungThang, nguoi, sua, ungVien, toiId: callerId };
+  /* Thành viên thường không thấy yêu cầu của người khác — chỉ ADMIN dự án (trưởng nhóm) thấy. */
+  return { cauHinh, chu, daDungThang, nguoi, sua, ungVien, toiId: callerId, choDuyet: sua ? gh.choDuyet : [], duyetDuoc: sua && chu?.id === callerId };
 }
 
 export async function datCauHinhNhom(callerId: number, projectId: number, input: Partial<CauHinhNhom>): Promise<BangNhom> {

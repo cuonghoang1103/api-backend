@@ -129,12 +129,14 @@ test('xemHanMuc cộng key gia hạn vào trần TOKEN', () => {
   assert.match(quota, /const tran = tranGoc \+ giaHan/);
 });
 
-test('⛔ key gia hạn KHÔNG nới trần TIỀN', () => {
+test('⛔ key gia hạn TOKEN KHÔNG nới trần TIỀN (trần tiền chỉ nới bằng MÃ GIA HẠN THEO $ — sổ riêng, 19/10/2026)', () => {
   const i = quota.indexOf('export async function xemViAgent');
   assert.ok(i > -1);
   assert.ok(!quota.slice(i).includes('giaHan'), 'ví tiền agent đang bị key gia hạn nới');
   const viTien = readFileSync(new URL('./viTien.ts', import.meta.url), 'utf8');
-  assert.ok(!viTien.includes('keyGiaHan') && !viTien.includes('giaHan'), 'viTien.ts bị key gia hạn nới');
+  assert.ok(!viTien.includes('keyGiaHan') && !viTien.includes('tokenGiaHan'), 'viTien.ts bị key gia hạn TOKEN nới');
+  /* Chủ app 19/10/2026: ví AI Code nới được bằng mã gia hạn theo $ — đọc ĐÚNG sổ `agent_gia_han_tien`, không phải sổ token. */
+  assert.match(viTien, /from '\.\/giaHanTienSo\.js'/);
 });
 
 test('lỗi hết hạn mức báo cho app biết có key gia hạn không', () => {

@@ -188,6 +188,8 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     // CTW Code (18/10/2026): agent không xem mã nguồn qua proxy; cài token chỉ đọc / kênh / gửi thử nằm dưới /github|/gitlab.
     ['GET', '/code/source/tree'], ['GET', '/code/source/blob'], ['GET', '/code/source/commit/abc1234'], ['GET', '/code/source'],
     ['PUT', '/github/read-token'], ['PUT', '/gitlab/activity'], ['POST', '/github/test'],
+    // 19/10/2026: token Figma chỉ đọc của dự án
+    ['GET', '/figma'], ['PUT', '/figma/token'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [

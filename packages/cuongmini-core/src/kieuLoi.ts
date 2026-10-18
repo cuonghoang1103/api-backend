@@ -22,7 +22,7 @@ export interface LoiApi {
   moCongAnthropic?(matKhau: string): Promise<{ ten: string; hetHan: number | null }>;
   chuanHoaAnh(dataUrl: string): Promise<string>;
   /** Trình duyệt AI (Chrome/Edge thật) đang nối chưa — để hiện "Đã nối trình duyệt". Bản lõi cũ không có. */
-  trangThaiTrinhDuyet?(): { ketNoi: boolean; url: string; trinhDuyet: string | null };
+  trangThaiTrinhDuyet?(): { ketNoi: boolean; url: string; trinhDuyet: string | null; /** 19/10/2026 */ cheDo?: 'ngam' | 'hien' };
   /** Đóng trình duyệt AI + trình duyệt ẩn xuất sơ đồ (gọi lúc tắt extension/CLI). */
   dongTrinhDuyet?(): Promise<void>;
   /**

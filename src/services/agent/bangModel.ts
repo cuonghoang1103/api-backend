@@ -15,8 +15,9 @@
  *     RIÊNG (`invisible`) vì quá đắt. Vé sống 48 giờ (`anthropicChinhHang/ve.ts`).
  *
  * App (desktop, CLI `/model`, extension VS Code) CHỈ hiện `ten` — không bao
- * giờ hiện `model` (tên thật) hay tên cổng thật. Thứ tự hiển thị = `nangLuc`
- * giảm dần; đổi thứ tự thì đổi con số, không đổi chỗ dòng.
+ * giờ hiện `model` (tên thật) hay tên cổng thật. Thứ tự hiển thị (19/10/2026,
+ * chủ app chốt): nhóm FREE lên trên, rồi nhóm cần khoá; TRONG mỗi nhóm xếp
+ * `nangLuc` giảm dần (`thuTuHienThi`). Đổi thứ tự thì đổi con số, không đổi chỗ dòng.
  *
  * ⚠️ `mo`/`moEn` không được nhắc tên model thật hay tên cổng thật.
  */
@@ -137,9 +138,19 @@ const BANG: readonly MucModel[] = Object.freeze(([
     cong: 'modelapi', khoa: 'free', nangLuc: 45, cuaSoToken: GPT_CUA_SO, maxRa: RA_128K,
     tuongDuong: 'cm-heshin', nhinAnh: true,
   },
-] as MucModel[]).sort((a, b) => b.nangLuc - a.nangLuc));
+] as MucModel[]).sort(thuTuHienThi));
 
-/** Toàn bảng, đã xếp năng lực cao → thấp. */
+/**
+ * THỨ TỰ HIỂN THỊ (19/10/2026, chủ app chốt): model FREE trước (Sonic 5.5 · Solid · Nova · Shin · Heshin 5.5 · Eco),
+ * rồi model cần khoá (Invisible 5.1 · Optimum 5.5); trong mỗi nhóm năng lực cao → thấp. Trước đây chỉ theo năng lực ⇒
+ * hai model cần khoá đứng đầu danh sách mà đa số người dùng không mở được.
+ */
+export function thuTuHienThi(a: { khoa: string; nangLuc: number }, b: { khoa: string; nangLuc: number }): number {
+  const nhom = (m: { khoa: string }) => (m.khoa === 'free' ? 0 : 1);
+  return nhom(a) - nhom(b) || b.nangLuc - a.nangLuc;
+}
+
+/** Toàn bảng, đã xếp: free trước, trong nhóm năng lực cao → thấp. */
 export function bangModel(): readonly MucModel[] {
   return BANG;
 }

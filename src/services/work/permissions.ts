@@ -713,6 +713,8 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   // Xuất/nhập dữ liệu, tích hợp ra ngoài
   ['*', /^\/exports?(\/.*)?$/], ['POST', /^\/import$/], ['GET', /^\/submissions\/(download|report\.csv)$/],
   ['*', /^\/chat-hooks(\/.*)?$/], ['*', /^\/webhooks(\/.*)?$/], ['*', /^\/github(\/.*)?$/], ['*', /^\/gitlab(\/.*)?$/],
+  // 19/10/2026: token Figma chỉ đọc của dự án (trợ lý AI đọc link Figma) — cấu hình, agent không xem/đổi.
+  ['*', /^\/figma(\/.*)?$/],
   ['*', /^\/automation(\/.*)?$/],
   // CTW đợt 7c: sổ tài sản/giấy phép (chi phí, hợp đồng) — agent chỉ ĐỌC; xuất tệp giấy phép là xuất dữ liệu.
   ['POST', /^\/assets(\/.*)?$/], ['PATCH', /^\/assets(\/.*)?$/], ['PUT', /^\/assets(\/.*)?$/], ['DELETE', /^\/assets(\/.*)?$/], ['GET', /^\/assets-export$/],

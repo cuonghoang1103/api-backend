@@ -32,6 +32,9 @@ import { congAgent, gatewayConfigured, kiemRamboSong, ramboDangNghi } from '../s
 import { MODEL_DU_PHONG, MoKhoaLoi, congDuPhong, daCoMatKhau, modelDuPhongAgent, moKhoaDuPhong, tenDuPhong, veDuPhongHopLe } from '../services/agent/congDuPhong.js';
 import { MA_CU, MA_MAC_DINH, TEN_CONG, bangModel, dungChoNhom, laMaCuongMini, maChoAppCu, timModel } from '../services/agent/bangModel.js';
 import { xemTranModel } from '../services/agent/tranModel.js';
+import {
+  GiaHanLoi, giaHanChoLoi, nhapMaGiaHan, tongQuanCuaNguoi, tranChamModel, tranChamNhom, xemYeuCauCuaNguoi,
+} from '../services/agent/maGiaHanTien.js';
 import { goiTomTatBangModel } from '../services/agent/tomTatLuotCu.js';
 import { KeyGiaHanLoi, coKeyGiaHan, nhapKeyGiaHan } from '../services/agent/keyGiaHan.js';
 import { datTenViec } from '../services/agent/datTen.js';
@@ -95,7 +98,9 @@ async function chiProHoacNhom(req: any, res: Response<ApiResponse>, next: NextFu
     const q = await quyetDinhNhom(req.userId, pid);
     if (q.loai === 'nhom') { req.nguonNhom = q; return next(); }
     if (q.ma === 'NHOM_HET_TRAN') {
-      res.status(429).json({ success: false, message: q.cau, code: 'NHOM_HET_TRAN' });
+      /* Mã gia hạn theo $ (19/10/2026): trần NGƯỜI/NGÀY ⇒ kèm thẻ nhập mã (`data.giaHanTien`) + câu cho app cũ. */
+      const gh = q.tranCham === 'nguoiNgay' && q.nguon ? await giaHanChoLoi(req.userId, tranChamNhom(q.nguon)) : { them: '' };
+      res.status(429).json({ success: false, message: q.cau + gh.them, code: 'NHOM_HET_TRAN', ...(gh.ui ? { data: { giaHanTien: gh.ui } } : {}) } as any);
       return;
     }
     /* Mã vẫn là PRO_REQUIRED (app cũ hiện lời mời nâng cấp đúng như trước); `data.nhom` nói rõ vì sao đường nhóm không
@@ -130,7 +135,7 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
     const pro = await duocDungAiCode(req.userId).catch(() => false);
     /* Đợt 6: không Pro ⇒ các dự án dùng được hạn mức NHÓM (app không hiện lời mời nâng cấp khi có) — chỉ model free. */
     const nhom = pro ? [] : await duAnNhomCuaNguoi(req.userId).catch(() => []);
-    /* Bảng CuongMini (18/10/2026, `bangModel.ts`): xếp năng lực cao → thấp, CHỈ tên
+    /* Bảng CuongMini (18/10/2026, `bangModel.ts`): FREE trước rồi cần khoá, trong nhóm năng lực cao → thấp (19/10), CHỈ tên
        CuongMini (không tên model thật, không tên cổng thật). App gửi `?congAnthropicVe=`
        (bó vé) để `canMoKhoa` phản ánh đúng vé đang giữ. */
     const models = pro
@@ -456,6 +461,61 @@ router.post('/gia-han', chiPro, giaHanLimiter, async (req: any, res: Response<Ap
 });
 
 /**
+ * ============================================================
+ * MÃ GIA HẠN THEO $ (19/10/2026) — `services/agent/maGiaHanTien.ts`
+ * ============================================================
+ *
+ * GET  /gia-han-tien                — trang web nhập mã + app: trần ĐANG chạm, mã đã bật chưa, 20 lượt gần nhất.
+ * POST /gia-han-tien { ma, tran }   — lần 1 trong kỳ ⇒ 200 `{ ketQua:'daCap', soUsd }` (app tự làm tiếp);
+ *                                     lần 2+ ⇒ 202 `{ ketQua:'choDuyet', id }` (app tự kiểm lại ≥ 30 s).
+ * GET  /gia-han-tien/yeu-cau/:id    — app kiểm lại một yêu cầu (chỉ của chính mình).
+ *
+ * CỐ Ý không `chiPro`: thành viên dùng HẠN MỨC NHÓM không có Pro. Máy chủ tự kiểm trần có đang chạm thật cho đúng
+ * người gọi (người không có gì để chạm thì không bao giờ được cấp). Mã đi trong THÂN, không bao giờ vào URL/log.
+ * Mã lỗi: 409 GIA_HAN_CHUA_BAT · 403 GIA_HAN_MA_SAI · 429 GIA_HAN_THU_QUA_NHIEU · 409 GIA_HAN_CHUA_CHAM ·
+ *         403 GIA_HAN_CAN_KHOA (model trả phí chưa có vé) · 400/403 GIA_HAN_KHONG_AP_DUNG · 400 GIA_HAN_TRAN_LA.
+ */
+const giaHanTienLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req: any): string => `gia-han-tien:${req.userId ?? req.ip ?? 'anon'}`,
+  message: { success: false, message: 'Nhập mã quá nhiều lần — thử lại sau 15 phút. / Too many attempts — try again in 15 minutes.', code: 'GIA_HAN_THU_QUA_NHIEU' },
+});
+
+const loiGiaHan = (err: unknown, next: NextFunction): void => {
+  if (err instanceof GiaHanLoi) { next(new AppError(err.message, err.status, err.code)); return; }
+  next(err);
+};
+
+router.get('/gia-han-tien', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await tongQuanCuaNguoi(req.userId, { congAnthropicVe: req.query.congAnthropicVe }) });
+  } catch (err) { loiGiaHan(err, next); }
+});
+
+router.post('/gia-han-tien', giaHanTienLimiter, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const b = (req.body ?? {}) as { ma?: unknown; tran?: unknown; congAnthropicVe?: unknown };
+    const kq = await nhapMaGiaHan(req.userId, {
+      ma: typeof b.ma === 'string' ? b.ma.trim().slice(0, 201) : '',
+      tran: typeof b.tran === 'string' ? b.tran.slice(0, 61) : '',
+      congAnthropicVe: b.congAnthropicVe,
+    });
+    res.status(kq.ketQua === 'daCap' ? 200 : 202).json({ success: true, data: kq });
+  } catch (err) { loiGiaHan(err, next); }
+});
+
+router.get('/gia-han-tien/yeu-cau/:id', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) throw new AppError('id không hợp lệ', 400, 'BAD_INPUT');
+    res.json({ success: true, data: await xemYeuCauCuaNguoi(req.userId, id) });
+  } catch (err) { loiGiaHan(err, next); }
+});
+
+/**
  * `POST /compact` — lệnh `/compact [ghi chú]` của AI Code (03/10/2026).
  *
  * Thân: `{ messages, giuLuot?, ghiChu? }` (messages = hội thoại app đang giữ,
@@ -490,7 +550,11 @@ router.post('/compact', chiProHoacNhom, compactLimiter, async (req: any, res: Re
     }
     if (!nhom) {
       const ht = await xemTranModel(req.userId, muc);
-      if (ht.het) throw new AppError(`Đã hết hạn mức ${muc.ten} — chọn model khác rồi /compact lại. / ${muc.ten} allowance used up.`, 429, 'CUONGMINI_HET_TRAN');
+      if (ht.het) {
+        const gh = await giaHanChoLoi(req.userId, tranChamModel(ht, muc));
+        throw new AppError(`Đã hết hạn mức ${muc.ten} — chọn model khác rồi /compact lại. / ${muc.ten} allowance used up.${gh.them}`, 429, 'CUONGMINI_HET_TRAN',
+          gh.ui ? { giaHanTien: gh.ui as unknown as Record<string, unknown> } : undefined);
+      }
     }
     const kq = await compactChuDong(b.messages, { giuLuot: b.giuLuot, ghiChu: b.ghiChu, goi: goiTomTatBangModel(muc, req.userId, nhom ? stepNhom(nhom.projectId, nhom.chu.id) : undefined) });
     logger.info('[agent/compact] tóm tắt chủ động', {

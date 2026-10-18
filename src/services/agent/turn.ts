@@ -67,6 +67,7 @@ import {
 import { LOI_LAM_VIEC } from './prompt.js';
 import { loiHetHan, xemHanMuc, type HanMuc } from './quota.js';
 import { coKeyGiaHan } from './keyGiaHan.js';
+import { giaHanChoLoi, tranChamChinhHangFree, tranChamModel, tranChamVi, type GiaHanTienUi } from './maGiaHanTien.js';
 import { HE_SO_FABLE, MODEL_FABLE, loiHetFable, xemHanMucFable } from './fable.js';
 import { loiCanViTien, xemViTien } from './viTien.js';
 import { runServerTool } from './serverTools.js';
@@ -380,7 +381,8 @@ export type AgentEvent =
    * `coKeyGiaHan` CHỈ đi kèm `AGENT_QUOTA_EXCEEDED` (02/10/2026): admin đã đặt
    * key gia hạn ⇒ app hiện ô "Nhập key để làm tiếp". Không có ⇒ app im ô đó.
    */
-  | { type: 'error'; error: string; code?: string; coKeyGiaHan?: boolean };
+  /* `giaHanTien` (19/10/2026): chạm một trần TIỀN gia hạn được ⇒ app mới hiện thẻ "Nhập mã gia hạn" (`maGiaHanTien.ts`). */
+  | { type: 'error'; error: string; code?: string; coKeyGiaHan?: boolean; giaHanTien?: GiaHanTienUi };
 
 export interface AgentTurnInput {
   messages: unknown;
@@ -703,6 +705,8 @@ export function demBuocViecNay(messages: AgentMessage[]): number {
 const TOOL_CHI_DOC = new Set([
   'read_file', 'grep', 'glob', 'list_dir', 'git_status', 'git_diff', 'web_doc',
   'notes_read', 'notes_search', 'notes_tree', 'doc_web', 'tim_web',
+  // 19/10/2026: đọc Figma bằng token cất trên máy (app chạy, chỉ đọc).
+  'figma_doc',
 ]);
 
 /** Đọc trạng thái TRÔI — lặp lại là bình thường (theo dõi lệnh nền/terminal). */
@@ -1051,7 +1055,8 @@ export async function runAgentTurn(
    */
   const vi = await xemViTien(input.userId, 'code');
   if (vi.canVi) {
-    emit({ type: 'error', error: loiCanViTien(vi), code: 'AGENT_BUDGET_EXCEEDED' });
+    const gh = await giaHanChoLoi(input.userId, tranChamVi(vi));
+    emit({ type: 'error', error: loiCanViTien(vi) + gh.them, code: 'AGENT_BUDGET_EXCEEDED', ...(gh.ui ? { giaHanTien: gh.ui } : {}) });
     return;
   }
 
@@ -1148,7 +1153,7 @@ export async function runAgentTurn(
       boLuot.messages = cat.messages;
     }
   };
-  const chuyenSang = async (m: MucModel): Promise<{ loai: 'cong' | 'tran'; code: string; error: string } | null> => {
+  const chuyenSang = async (m: MucModel): Promise<{ loai: 'cong' | 'tran'; code: string; error: string; giaHanTien?: GiaHanTienUi } | null> => {
     /* Đợt 6 — HẠN MỨC NHÓM: chỉ model FREE của cổng web (modelapi) — kiểm TRƯỚC cổng chính hãng (người không gói có hạn
        mức chính hãng = 0 ⇒ câu "hết hạn mức CuongMini Free" sai chỗ). Tiền là của trưởng nhóm; model cần khoá vẫn cần
        khoá. Trần nhóm (người/ngày + nhóm/tháng) đã kiểm ở route trước khi mở SSE; trần model theo người KHÔNG áp. */
@@ -1163,13 +1168,21 @@ export async function runAgentTurn(
         return { loai: 'cong', code: 'CONG_ANTHROPIC_HET_KEY', error: `${m.ten} tạm thời không chạy được (cổng bận). / ${m.ten} is temporarily unavailable (gateway busy).` };
       }
       const hg = await xemHanMucChinhHang(input.userId, hangSo(m));
-      if (hg.het) return { loai: 'tran', code: 'CONG_ANTHROPIC_HET_HAN_MUC', error: loiHetHanMucChinhHang(hg) };
+      if (hg.het) {
+        /* Mã gia hạn theo $: CHỈ nhóm free (Sonic/Heshin) — nhóm cao (model trả phí) không nới bằng mã. */
+        const gh = await giaHanChoLoi(input.userId, tranChamChinhHangFree(hg));
+        return { loai: 'tran', code: 'CONG_ANTHROPIC_HET_HAN_MUC', error: loiHetHanMucChinhHang(hg) + gh.them, ...(gh.ui ? { giaHanTien: gh.ui } : {}) };
+      }
     } else if (congDangHong('modelapi') || !modelapiGoiDuoc(m)) {
       return { loai: 'cong', code: 'MODEL_CHUA_CO_KHOA', error: `${m.ten} tạm thời không chạy được (cổng bận). / ${m.ten} is temporarily unavailable (gateway busy).` };
     }
     if (!input.nhom) {
       const ht = await xemTranModel(input.userId, m);
-      if (ht.het) return { loai: 'tran', code: 'CUONGMINI_HET_TRAN', error: loiHetTranModel(ht, m.ten) };
+      if (ht.het) {
+        /* Model trả phí tới được đây ⇒ vé khoá đã mở (kiểm ở trên) — gia hạn tiền được. */
+        const gh = await giaHanChoLoi(input.userId, tranChamModel(ht, m));
+        return { loai: 'tran', code: 'CUONGMINI_HET_TRAN', error: loiHetTranModel(ht, m.ten) + gh.them, ...(gh.ui ? { giaHanTien: gh.ui } : {}) };
+      }
     }
     ep = m.cong === 'anthropic'
       ? diemCuoiChinhHang()
@@ -1213,7 +1226,7 @@ export async function runAgentTurn(
         khungCongDau = khungTuDoi();
       } else {
         tra();
-        emit({ type: 'error', code: chan.code, error: chan.error });
+        emit({ type: 'error', code: chan.code, error: chan.error, ...(chan.giaHanTien ? { giaHanTien: chan.giaHanTien } : {}) });
         return;
       }
     }

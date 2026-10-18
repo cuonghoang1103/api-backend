@@ -33,6 +33,8 @@ import * as webhooks from '../services/work/webhooks.service.js';
 import * as agentReports from '../services/work/agentReports.service.js';
 import { ackInbox, agentBus, listInbox } from '../services/work/agentEvents.js';
 import { datCauHinhNhom, xemBangNhom } from '../services/agent/hanMucNhom.js';
+import { GiaHanLoi, duyetYeuCau } from '../services/agent/maGiaHanTien.js';
+import { requireProject } from '../services/work/permissions.js';
 
 const router = Router();
 
@@ -205,6 +207,20 @@ router.put('/projects/:pid/cuongmini-team', asyncHandler(async (req, res) => {
     chuId: id.nullable().optional(),
   }).strict(), req.body);
   ok(res, await datCauHinhNhom(callerId(req), P(req, 'pid'), body));
+}));
+/* Mã gia hạn theo $ (19/10/2026): nhà tài trợ duyệt / từ chối yêu cầu gia hạn của thành viên (lần 2+ trong ngày).
+   Service tự kiểm người duyệt = nhà tài trợ đang hiệu lực; agent CT Work bị chặn ở AGENT_DENIED_ROUTES. */
+router.post('/projects/:pid/cuongmini-team/gia-han/:id', asyncHandler(async (req, res) => {
+  const body = parse(z.object({ dongY: z.boolean(), lyDo: z.string().max(300).optional() }).strict(), req.body);
+  const pid = P(req, 'pid');
+  await requireProject(callerId(req), pid, 'project.settings');
+  try {
+    await duyetYeuCau(callerId(req), P(req, 'id'), body.dongY, { quyen: { projectId: pid }, ...(body.lyDo ? { lyDo: body.lyDo } : {}) });
+  } catch (err) {
+    if (err instanceof GiaHanLoi) throw new AppError(err.message, err.status, err.code);
+    throw err;
+  }
+  ok(res, await xemBangNhom(callerId(req), pid));
 }));
 
 // ─── Chi phí / năng suất (A12) ───────────────────────────────────

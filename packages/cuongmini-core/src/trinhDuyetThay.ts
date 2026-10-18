@@ -7,6 +7,15 @@
  * Brave / Chromium) qua `puppeteer-core` — y như "Browser connected" của Claude
  * Code: một cửa sổ hiện lên, người dùng nhìn thấy AI đang mở trang nào, bấm gì.
  *
+ * ⭐ 19/10/2026 — MẶC ĐỊNH CHẠY NGẦM. Chủ app: "khi CuongMini dùng trình duyệt nó mở Google đè và thao tác lên việc
+ * tôi đang làm". Nay: `headless` + viewport cố định 1280×800 (ảnh chụp ổn định), không cửa sổ, không cướp focus,
+ * cùng hồ sơ riêng nên đăng nhập vẫn được nhớ. Cần người dùng THẤY / tự đăng nhập ⇒ `/browser show` (hoặc nút ở
+ * VS Code, hoặc tool `trinh_duyet_hien` model gọi khi gặp trang đăng nhập/captcha) mở lại CÙNG hồ sơ ở chế độ có
+ * cửa sổ; `/browser hide` quay về ngầm. Chrome khoá thư mục hồ sơ ⇒ đổi chế độ = đóng bản này, bật bản kia.
+ * Cửa sổ do MODEL xin (không phải người dùng bấm) ⇒ cố KHÔNG đưa lên trước: macOS bật bằng `open -g` (không kích
+ * hoạt app) rồi nối qua cổng gỡ lỗi; Windows/Linux `--start-minimized`; không `bringToFront`. Cài đặt bền:
+ * `trinhDuyetCheDo: 'ngam' | 'hien'` (mặc định `ngam`; `hien` = kiểu cũ, luôn có cửa sổ).
+ *
  * CÙNG export, CÙNG ngữ nghĩa với bản Electron, vì `agent/tools.ts` gọi thẳng
  * vào đây (esbuild tráo module lúc dựng — xem `esbuildLoi.mjs`). Sửa chữ ký ở
  * bản app thì phải sửa ở đây.
@@ -21,7 +30,8 @@
  */
 import type { Browser, CDPSession, Page } from 'puppeteer-core';
 
-import { createWriteStream, existsSync, mkdirSync, readFileSync } from 'node:fs';
+import { spawn } from 'node:child_process';
+import { createWriteStream, existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -33,7 +43,99 @@ import { LOI_KHONG_CO_TRINH_DUYET, timTrinhDuyet } from './timTrinhDuyet';
 
 /** Thư mục hồ sơ riêng của trình duyệt AI. Đổi được bằng env (chạy thử, CI). */
 export function thuMucHoSo(): string {
-  return process.env.CUONGMINI_HO_SO_TRINH_DUYET?.trim() || path.join(os.homedir(), '.cuongmini', 'trinh-duyet');
+  const ep = process.env.CUONGMINI_HO_SO_TRINH_DUYET?.trim();
+  return ep && hoSoAnToan(ep) ? ep : path.join(os.homedir(), '.cuongmini', 'trinh-duyet');
+}
+
+/**
+ * ⛔ KHÔNG BAO GIỜ dùng hồ sơ CHÍNH của người dùng (cookie ngân hàng, mật khẩu đã lưu). Env trỏ vào thư mục
+ * hồ sơ mặc định của Chrome/Edge/Brave/Chromium ⇒ bỏ qua, dùng hồ sơ riêng.
+ */
+export function hoSoAnToan(duong: string): boolean {
+  const d = duong.replace(/\\/g, '/').toLowerCase();
+  return !/(google\/chrome|chrome\/user data|microsoft edge|microsoft\/edge|bravesoftware|brave-browser|\/chromium|google-chrome|\.config\/chromium)(\/|$)/.test(d);
+}
+
+// ═══════════════════════════════════════════════════════════
+// CHẾ ĐỘ: NGẦM (mặc định) / HIỆN
+// ═══════════════════════════════════════════════════════════
+
+export type CheDoTrinhDuyet = 'ngam' | 'hien';
+/** Lõi này phân biệt ngầm/hiện (bản app nhúng trong cửa sổ app thì không) — loop khai capability `trinh_duyet_hien`. */
+export const HO_TRO_CHE_DO_NGAM = true;
+export const VIEWPORT_NGAM = { width: 1280, height: 800 } as const;
+
+let docCaiDat: () => unknown = () => undefined;
+/** `loi.ts` bơm cách đọc cài đặt `trinhDuyetCheDo` (file này không import kho cài đặt của app). */
+export function datNguonCheDo(f: () => unknown): void { docCaiDat = f; }
+
+/** Chế độ BỀN: env `CUONGMINI_TRINH_DUYET_CHE_DO` > cài đặt `trinhDuyetCheDo` > `ngam`. */
+export function cheDoMacDinh(): CheDoTrinhDuyet {
+  const e = process.env.CUONGMINI_TRINH_DUYET_CHE_DO?.trim().toLowerCase();
+  if (e === 'hien' || e === 'ngam') return e;
+  let c: unknown;
+  try { c = docCaiDat(); } catch { c = undefined; }
+  return c === 'hien' ? 'hien' : 'ngam';
+}
+
+/** Ghi đè TẠM trong phiên (`/browser show` · `trinh_duyet_hien`). `null` = theo cài đặt. */
+let cheDoTam: CheDoTrinhDuyet | null = null;
+/** Cửa sổ hiện ra do NGƯỜI DÙNG bấm/gõ (được đưa lên trước) hay do model xin (không cướp focus). */
+let doNguoiDung = false;
+/** Chế độ của trình duyệt ĐANG chạy (để biết có phải bật lại không). */
+let cheDoDangChay: CheDoTrinhDuyet | null = null;
+
+export function cheDoHienTai(): CheDoTrinhDuyet { return cheDoTam ?? cheDoMacDinh(); }
+
+/** Tham số `puppeteer.launch` cho một chế độ — hàm thuần, test kiểm. */
+export function thamSoKhoiDong(cheDo: CheDoTrinhDuyet, chay: string, hoSo: string, o: { nguoiDungYeuCau?: boolean; nenTang?: NodeJS.Platform } = {}) {
+  const chung = ['--no-first-run', '--no-default-browser-check', '--mute-audio'];
+  if (cheDo === 'ngam') {
+    return {
+      executablePath: chay, headless: true as const, userDataDir: hoSo,
+      // Viewport CỐ ĐỊNH: ảnh chụp cho model luôn cùng cỡ, không phụ thuộc màn hình người dùng.
+      defaultViewport: { ...VIEWPORT_NGAM }, protocolTimeout: 60_000,
+      args: [...chung, `--window-size=${VIEWPORT_NGAM.width},${VIEWPORT_NGAM.height}`],
+    };
+  }
+  const nenTang = o.nenTang ?? process.platform;
+  return {
+    executablePath: chay, headless: false as const, userDataDir: hoSo,
+    // Có cửa sổ: trang theo cỡ cửa sổ thật — người dùng kéo to/nhỏ để đăng nhập cho thoải mái.
+    defaultViewport: null, protocolTimeout: 60_000,
+    args: [...chung, '--window-size=1280,900', ...(!o.nguoiDungYeuCau && nenTang !== 'darwin' ? ['--start-minimized'] : [])],
+  };
+}
+
+/**
+ * macOS + cửa sổ do MODEL xin ⇒ bật bằng `open -g` (Launch Services KHÔNG kích hoạt app) thay vì puppeteer.launch
+ * (cái đó đưa Chrome lên trước, cướp bàn phím giữa lúc người dùng đang gõ). Trả `null` = dùng puppeteer.launch.
+ */
+export function lenhMoKhongCuopFocus(chay: string, hoSo: string, o: { nguoiDungYeuCau?: boolean; nenTang?: NodeJS.Platform } = {}): { lenh: string; args: string[] } | null {
+  const nenTang = o.nenTang ?? process.platform;
+  if (nenTang !== 'darwin' || o.nguoiDungYeuCau) return null;
+  const app = /^(.*?\.app)\//.exec(chay)?.[1];
+  if (!app) return null;
+  return {
+    lenh: 'open',
+    args: ['-g', '-n', '-a', app, '--args', `--user-data-dir=${hoSo}`, '--remote-debugging-port=0', '--no-first-run', '--no-default-browser-check', '--window-size=1280,900', 'about:blank'],
+  };
+}
+
+type Pp = typeof import('puppeteer-core');
+let ppTest: Pp | null = null;
+let chayLenhTest: ((lenh: string, args: string[]) => void) | null = null;
+/** CHỈ cho test: puppeteer giả + bắt lệnh `open -g`. */
+export function __datChoTest(pp: unknown, chayLenh: ((lenh: string, args: string[]) => void) | null = null): void {
+  ppTest = pp as Pp | null;
+  chayLenhTest = chayLenh;
+}
+async function napPp(): Promise<Pp> { return ppTest ?? await import('puppeteer-core'); }
+function chayLenhNen(lenh: string, args: string[]): void {
+  if (chayLenhTest) { chayLenhTest(lenh, args); return; }
+  const c = spawn(lenh, args, { detached: true, stdio: 'ignore' });
+  c.on('error', () => undefined);
+  c.unref();
 }
 
 let trinhDuyet: Browser | null = null;
@@ -133,31 +235,45 @@ export function batDau(): Promise<void> {
   if (khoiDong) return khoiDong;
   loiKhoiDong = null;
   khoiDong = (async () => {
-    const pp = await import('puppeteer-core');
+    const pp = await napPp();
     if (!trinhDuyet || !trinhDuyet.connected) {
       const hoSo = thuMucHoSo();
       mkdirSync(hoSo, { recursive: true });
+      const cheDo = cheDoHienTai();
+      // Đang ở chế độ HIỆN (người dùng đăng nhập dở) mà một tiến trình khác (VS Code ↔ CLI) giữ trình duyệt ⇒ nối vào.
+      // Chế độ NGẦM thì không nối vào cửa sổ đang hiện của người khác: mỗi tiến trình một bản ngầm là đủ — nhưng Chrome
+      // khoá hồ sơ, nên vẫn phải nối khi có bản đang chạy (bật bản thứ hai trên cùng hồ sơ sẽ hỏng).
       const noi = await thuNoiVao(pp, hoSo);
       if (noi) {
         trinhDuyet = noi;
         taTuBat = false;
+        cheDoDangChay = null; // không biết chắc — để chuyenCheDo tự bật lại khi cần
       } else {
         const chay = timTrinhDuyet();
         if (!chay) throw new Error(LOI_KHONG_CO_TRINH_DUYET);
+        const ngamFocus = cheDo === 'hien' ? lenhMoKhongCuopFocus(chay, hoSo, { nguoiDungYeuCau: doNguoiDung }) : null;
         try {
-          trinhDuyet = await pp.launch({
-            executablePath: chay,
-            headless: false,
-            userDataDir: hoSo,
-            // Trang theo cỡ cửa sổ thật — người dùng kéo to/nhỏ thì AI thấy đúng thế.
-            defaultViewport: null,
-            protocolTimeout: 60_000,
-            args: ['--no-first-run', '--no-default-browser-check', '--window-size=1280,900'],
-          });
+          if (ngamFocus) {
+            // macOS, cửa sổ do model xin: `open -g` rồi nối qua DevToolsActivePort (file cũ xoá trước để chờ đúng file mới).
+            rmSync(path.join(hoSo, 'DevToolsActivePort'), { force: true });
+            chayLenhNen(ngamFocus.lenh, ngamFocus.args);
+            const het = Date.now() + 15_000;
+            let b: Browser | null = null;
+            while (!b && Date.now() < het) {
+              await new Promise((x) => { setTimeout(x, 250); });
+              b = await thuNoiVao(pp, hoSo);
+            }
+            if (!b) throw new Error('trình duyệt không mở cổng gỡ lỗi trong 15 giây');
+            trinhDuyet = b;
+          } else {
+            trinhDuyet = await pp.launch(thamSoKhoiDong(cheDo, chay, hoSo, { nguoiDungYeuCau: doNguoiDung }));
+          }
         } catch (e) {
           throw new Error(`Không bật được trình duyệt (${path.basename(chay)}): ${(e as Error).message.split('\n')[0]}`);
         }
+        // `open -g` cũng do TA bật ⇒ đóng được (Browser.close qua CDP).
         taTuBat = true;
+        cheDoDangChay = cheDo;
       }
       const b = trinhDuyet;
       b.on('disconnected', () => {
@@ -171,7 +287,12 @@ export function batDau(): Promise<void> {
     // Tab trống sẵn của lần bật đầu thì dùng luôn; nối vào trình duyệt có sẵn thì mở tab mới.
     const ds = taTuBat ? await b.pages() : [];
     const trong = ds.find((p) => p.url() === 'about:blank' || p.url() === 'chrome://newtab/');
-    await ganTrang(trong ?? await b.newPage());
+    const p = trong ?? await b.newPage();
+    // Ngầm: viewport cố định cả với tab có sẵn (defaultViewport chỉ áp cho tab puppeteer tạo).
+    if (cheDoDangChay === 'ngam') await p.setViewport({ ...VIEWPORT_NGAM }).catch(() => undefined);
+    await ganTrang(p);
+    // Người dùng tự bấm "hiện" ⇒ đưa cửa sổ lên trước. Model xin ⇒ KHÔNG (xem lenhMoKhongCuopFocus).
+    if (cheDoDangChay === 'hien' && doNguoiDung) await p.bringToFront().catch(() => undefined);
   })()
     .catch((e: unknown) => { loiKhoiDong = e instanceof Error ? e : new Error(String(e)); })
     .finally(() => { khoiDong = null; });
@@ -227,7 +348,7 @@ export function diToi(url: string): { ok: boolean; loi?: string } {
     const p = trang;
     if (!p) throw new Error('Trình duyệt vừa bị đóng.');
     try {
-      await p.bringToFront().catch(() => undefined);
+      // 19/10/2026: KHÔNG `bringToFront` khi điều hướng — đó chính là chỗ cửa sổ Chrome nhảy lên đè việc người dùng.
       // timeout 0: hạn chờ là việc của `choTai` (trang websocket không bao giờ "xong").
       await p.goto(sach, { waitUntil: 'load', timeout: 0 });
     } catch (e) {
@@ -369,6 +490,7 @@ export async function goChu(boChon: string, chu: string): Promise<{ ok: boolean;
   if (!cdp) return { ok: false, loi: 'chưa mở trình duyệt' };
   const kq = await chayJs(`(() => { const e = document.querySelector(${JSON.stringify(boChon)});
     if (!e) return 'khong-thay';
+    if (e instanceof HTMLInputElement && e.type === 'password') return 'mat-khau';
     e.focus();
     const dat = Object.getOwnPropertyDescriptor(
       e instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype, 'value')?.set;
@@ -376,6 +498,8 @@ export async function goChu(boChon: string, chu: string): Promise<{ ok: boolean;
     e.dispatchEvent(new Event('input', { bubbles: true }));
     e.dispatchEvent(new Event('change', { bubbles: true }));
     return 'ok'; })()`);
+  /* 19/10/2026: KHÔNG BAO GIỜ gõ vào ô mật khẩu — người dùng tự đăng nhập (`/browser show` · `trinh_duyet_hien`). */
+  if (kq === 'mat-khau') return { ok: false, loi: 'đây là ô MẬT KHẨU — CuongMini không gõ mật khẩu. Nhờ người dùng tự đăng nhập (trinh_duyet_hien / /browser show).' };
   return kq === 'ok' ? { ok: true } : { ok: false, loi: `không thấy ô nhập "${boChon}"` };
 }
 
@@ -572,12 +696,50 @@ export async function taiFile(url: string, thuMuc: string, tenGoiY?: string): Pr
 export async function huy(): Promise<void> {
   const b = trinhDuyet;
   trinhDuyet = null; trang = null; cdp = null; dangTai = false; dieuHuong = null; xaChoTai();
+  cheDoDangChay = null;
   if (!b) return;
   if (taTuBat) await b.close().catch(() => undefined);
   else await b.disconnect().catch(() => undefined);
 }
 
+export interface KetQuaCheDo { ok: boolean; cheDo: CheDoTrinhDuyet; url: string; loi?: string }
+
+/**
+ * Đổi NGẦM ↔ HIỆN cho phiên này (`/browser show|hide`, nút VS Code, tool `trinh_duyet_hien`).
+ * Trình duyệt đang chạy khác chế độ ⇒ đóng (Chrome ghi cookie xuống hồ sơ) rồi bật lại cùng hồ sơ, mở lại trang
+ * đang xem (hoặc `url`). Chưa chạy ⇒ chỉ ghi nhớ; `hien` thì bật ngay để người dùng thấy.
+ * CuongMini KHÔNG BAO GIỜ tự gõ mật khẩu / giải captcha trong cửa sổ này — người dùng tự làm.
+ */
+export async function chuyenCheDo(cheDo: CheDoTrinhDuyet, o: { nguoiDungYeuCau?: boolean; url?: string } = {}): Promise<KetQuaCheDo> {
+  const dangXem = urlHienTai();
+  const dich = (o.url && hopLe(o.url)) || (dangXem && dangXem !== 'about:blank' ? dangXem : '');
+  cheDoTam = cheDo === cheDoMacDinh() ? null : cheDo;
+  doNguoiDung = cheDo === 'hien' && !!o.nguoiDungYeuCau;
+  const dangChay = !!(trinhDuyet && trinhDuyet.connected);
+  if (dangChay && cheDoDangChay === cheDo) {
+    if (cheDo === 'hien' && doNguoiDung) await trang?.bringToFront().catch(() => undefined);
+    if (o.url && dich) { diToi(dich); await choTai(8000).catch(() => undefined); }
+    return { ok: true, cheDo, url: urlHienTai() };
+  }
+  if (dangChay) {
+    if (khoiDong) await khoiDong.catch(() => undefined);
+    await huy();
+  }
+  if (cheDo === 'ngam' && !dich) return { ok: true, cheDo, url: '' }; // bật ngầm lười — lần web_mo sau
+  await batDau();
+  if (loiKhoiDong) {
+    const l = loiKhoiDong;
+    loiKhoiDong = null;
+    return { ok: false, cheDo, url: '', loi: l.message };
+  }
+  if (dich) {
+    const kq = diToi(dich);
+    if (kq.ok) await choTai(10_000).catch(() => undefined);
+  }
+  return { ok: true, cheDo, url: urlHienTai() };
+}
+
 /** Trạng thái cho giao diện (extension/CLI muốn hiện "Browser connected"). */
-export function trangThai(): { ketNoi: boolean; url: string; trinhDuyet: string | null } {
-  return { ketNoi: !!(trang && !trang.isClosed()), url: urlHienTai(), trinhDuyet: timTrinhDuyet() };
+export function trangThai(): { ketNoi: boolean; url: string; trinhDuyet: string | null; cheDo: CheDoTrinhDuyet } {
+  return { ketNoi: !!(trang && !trang.isClosed()), url: urlHienTai(), trinhDuyet: timTrinhDuyet(), cheDo: cheDoHienTai() };
 }

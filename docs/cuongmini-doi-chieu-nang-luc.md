@@ -218,7 +218,7 @@ Lõi `desktop/src/main/agent/*` chạy chung cho app desktop, CuongMini CLI và 
 macOS / Windows / Linux ⇒ một chỗ sửa là đủ ba nơi, ba hệ điều hành. Mức nỗ lực (8/30/60/100/160/260 bước) giữ nguyên — đó là lựa
 chọn của người dùng, không phải trần ẩn.
 
-Danh sách model ở cả ba nơi: một danh sách, xếp năng lực cao → thấp (thứ tự máy chủ), CHỈ tên CuongMini; model cần khoá chưa có vé
+Danh sách model ở cả ba nơi: một danh sách, xếp năng lực cao → thấp (thứ tự máy chủ; **19/10/2026: nhóm FREE lên trên** — mục 2g), CHỈ tên CuongMini; model cần khoá chưa có vé
 hiện tối hơn + 🔒, bấm/chọn ⇒ ô nhập khoá (CLI: thẻ + ô ẩn ký tự) ⇒ đúng thì chọn luôn. Cổng hỏng ⇒ máy chủ tự sang model free
 tương đương ở cổng kia, app chỉ in một dòng mờ "Đã chuyển sang … vì cổng bận". Bỏ dòng "Cổng AI đang chậm…" và dòng "cổng AI đang
 quá tải — chờ Xs…" (thử lại im lặng).
@@ -234,7 +234,7 @@ Mục tiêu: mở `cuongmini` ở thư mục bất kỳ là dùng được như 
 |---|---|---|---|---|
 | 1. Tin thư mục | — | (app mở theo dự án, không hỏi) | `src/tinThuMuc.ts` + pha `tinCay` (`HopTinThuMuc`): "Accessing workspace … Quick safety check", 1 Có / 2 Không-thoát; HOME/gốc ổ ⇒ cảnh báo đỏ, con trỏ ở "Không"; nhớ ở `~/.cuongmini/thu-muc-tin.json` (0600), tin cha ⇒ tin con (trừ HOME); `-p`/lệnh phụ/`CUONGMINI_TIN_THU_MUC=1` không hỏi | `capabilities.untrustedWorkspaces: false` (VS Code tự hỏi Workspace Trust) |
 | 2. Đăng nhập trong CLI rồi chạy tiếp | đã có từ đợt 4 (không đổi) | | | |
-| 3. Hạn mức cả nhóm | `src/services/agent/hanMucNhom.ts`: người KHÔNG Pro/không key, là thành viên (không phải agent) dự án mà chủ (chọn tay `chuId` → lead → ADMIN có Pro) có Pro ⇒ dùng hạn mức chủ. Cấu hình `work_projects.settings.cuongMiniNhom` (KHÔNG đổi schema): mặc định BẬT, 1 $/người/ngày, 15 $/nhóm/tháng. Sổ: `interview_llm_call_logs.step = 'nhom:p<pid>:u<chủ>'`. Chỉ model free (`NHOM_CHI_MODEL_FREE`). `agent.routes.ts › chiProHoacNhom` cho `/turn`, `/compact`, `/dat-ten`: agent ⇒ 403 `NHOM_AGENT`, chủ tắt ⇒ 403 `NHOM_TAT`, hết trần ⇒ 429 `NHOM_HET_TRAN`. `/tools` trả `nhom` + chỉ model free. Tuyến `GET/PUT /work/projects/:pid/cuongmini-team` (quyền `project.settings`, cấm agent trong `AGENT_DENIED_ROUTES`) | Project settings → tab **CuongMini** (`ProjectCuongMini.tsx`): công tắc "CuongMini cho cả nhóm", hai trần, chọn người tài trợ, bảng ai đã dùng bao nhiêu | thanh chặn Pro tự mở khi có `info.nhom` | như CLI |
+| 3. Hạn mức cả nhóm | `src/services/agent/hanMucNhom.ts`: người KHÔNG Pro/không key, là thành viên (không phải agent) dự án mà chủ (chọn tay `chuId` → lead → ADMIN có Pro) có Pro ⇒ dùng hạn mức chủ. Cấu hình `work_projects.settings.cuongMiniNhom` (KHÔNG đổi schema): mặc định BẬT, 1 $/người/ngày, 15 $/nhóm/tháng (**19/10/2026: 5 $ · 20 $** — mục 2g). Sổ: `interview_llm_call_logs.step = 'nhom:p<pid>:u<chủ>'`. Chỉ model free (`NHOM_CHI_MODEL_FREE`). `agent.routes.ts › chiProHoacNhom` cho `/turn`, `/compact`, `/dat-ten`: agent ⇒ 403 `NHOM_AGENT`, chủ tắt ⇒ 403 `NHOM_TAT`, hết trần ⇒ 429 `NHOM_HET_TRAN`. `/tools` trả `nhom` + chỉ model free. Tuyến `GET/PUT /work/projects/:pid/cuongmini-team` (quyền `project.settings`, cấm agent trong `AGENT_DENIED_ROUTES`) | Project settings → tab **CuongMini** (`ProjectCuongMini.tsx`): công tắc "CuongMini cho cả nhóm", hai trần, chọn người tài trợ, bảng ai đã dùng bao nhiêu | thanh chặn Pro tự mở khi có `info.nhom` | như CLI |
 | 4. `/mcp` ⇒ chọn dự án + quyền | `agent:ctworkHe {viec:'goiY'}` trả `chonDuAn` khi đã nối mà chưa gắn; danh sách MỌI dự án (`không gian · tên · vai`), ô lọc khi > 8; chọn quyền "Đọc + ghi (có duyệt)" / "Chỉ đọc"; thư mục không phải git ⇒ gắn theo PHIÊN (`ganTam`, không ghi file). Chỉ đọc ⇒ lõi từ chối mọi tool ghi CT Work trước cả thẻ duyệt, menu không hiện mục ghi | nút "Chọn dự án CT Work" trong bảng MCP | mục `ctworkDuAn` trong `/mcp` | nút trong `/mcp` |
 | 5. AGENTS.md của nhóm | `huongDanNhom`: trang Docs có tiêu đề bắt đầu `AGENTS.md` (không phân biệt hoa thường) ⇒ khối ```markdown đầu tiên, không có thì cả trang; gộp với AGENTS.md cục bộ (`gopGhiChu`: cùng tiêu đề ⇒ CỤC BỘ thắng); đệm theo `updatedAt` của trang (`list_pages` thêm `updatedAt`, ≤ 1 lần/10 phút); không có trang ⇒ tóm tắt dự án + sprint; Docs tắt ⇒ bỏ qua im lặng. Báo một lần "Đã nạp hướng dẫn nhóm …" (sự kiện `ctwHuongDanNhom`) | dòng mờ | dòng mờ | dòng mờ |
 | 6. Dẫn đường | máy chủ: `prompt.ts › LUAT_DAN_DUONG` (sau LUAT_CTWORK) + vai trong dòng dự án (ADMIN ⇒ trưởng nhóm, TEACHER ⇒ giảng viên, MEMBER, VIEWER ⇒ chỉ đọc); MCP mới `issue_guide` (thẻ + phụ thuộc + DoD + bước), `project_resources`, `my_updates` (`src/services/work/toolRegistry/cuongMini.ts`); `get_issue` thêm dòng máy đọc "Blocked by (not done)…/Blocks…/Subtasks not done…" (`src/mcp/issueView.ts › dependencyLines`). Lõi: "Hôm nay" (`/ctwork hom-nay`, tự hiện một lần/ngày/thư mục khi mở), hướng dẫn từng thẻ (đọc gì · các bước · xong khi nào · hỏi ai), phụ thuộc ("cần @user2 làm xong LF-17 trước — nhánh `LF-17-…` đã có trên remote, pull về"), gợi ý sau việc (`goiYSau`: commit chưa đẩy ⇒ đẩy; đã đẩy chưa PR ⇒ mở PR; có PR ⇒ comment bằng chứng + chuyển Review…) — luôn xem trước, chọn số mới làm, chỉ đọc thì không làm. Trưởng nhóm/giảng viên: `/ctwork nhom` (ai quá hạn, ai bị chặn, soạn tin nhắc — xem trước rồi mới gửi `chat_post`) | tự gợi ý sau lượt agent kết thúc bình thường | như trên | như trên |
@@ -291,6 +291,115 @@ Bốn PTY cũ (banPhim, dot5Pty, khung, qa5cPty) xanh lại (**lỗi 6**).
 - Gợi ý sau việc không tự LÀM gì — chỉ đề xuất + xem trước; chọn số mới chạy (đúng mục 14).
 - Desktop + VS Code: phần điều phối chung đã test qua CLI/lõi; chưa có test DOM riêng cho thẻ chọn dự án / hộp gợi ý.
 - Máy chủ prod chưa deploy ⇒ `issue_guide`/`my_updates`/`project_resources` chưa có: lõi tự lùi về `get_issue`/`my_work`.
+
+## 2h. Link ngoài + trình duyệt ngầm (19/10/2026)
+
+### Link ngoài (Figma, Google Docs/Sheets/Slides/Drive, GitHub)
+
+Trưởng nhóm gắn link Figma/Google Docs vào thẻ, AI chỉ thấy tiêu đề (trang của họ chạy bằng JS, Figma là canvas). Nay đọc
+qua **URL xuất chính thức**.
+
+| Phần | Ở đâu |
+|---|---|
+| Nhận diện + URL xuất + tóm tắt cây Figma (THUẦN, không import gì — dùng chung máy chủ và app) | `src/services/linkNgoai/nhanDien.ts` |
+| Bộ tải có rào (SSRF) | `src/services/linkNgoai/taiAnToan.ts` — chỉ https, chỉ host của đúng loại link (`hostChoPhep`, khớp đuôi có dấu chấm: `docs.google.com.evil.com` bị chặn), phân giải DNS rồi kiểm MỌI IP (`ipBiCam`, kể cả `::ffff:127.0.0.1`), tự theo chuyển hướng ≤ 4 chặng và kiểm lại từng chặng (sang host khác / hạ http ⇒ DỪNG; tới `accounts.google.com` ⇒ "riêng tư", không gọi tới), header bí mật CHỈ gửi cho host đầu, trần byte đọc theo mẩu |
+| Đọc từng loại + đệm 10 phút theo URL | `src/services/linkNgoai/docLink.ts` |
+| CuongMini `doc_web` tự nhận diện | `src/services/agent/webTool.ts › ketQuaLinkChoModel` — nội dung bọc `<noi-dung-ngoai untrusted="true">` |
+| CT Work AI đọc link trong thẻ | `src/services/work/linkNgoaiDuAn.ts › docLinkCuaThe` ← `aiMentor.ts › readIssueFull({ withLinks })` (tool `read_issue` mặc định bật; đọc sẵn khi hỏi đích danh ≤ 2 thẻ). ≤ 3 link/thẻ, ≤ 5k ký tự/link, ≤ 12k/thẻ, bọc `untrusted()` |
+
+- **Google Docs** ⇒ `/export?format=md` (lùi `txt`) · **Sheets** ⇒ `/export?format=xlsx` (MỌI trang tính, rút bằng `docOffice`; lùi `csv&gid=` của trang trong URL) · **Slides** ⇒ `/export/txt` (lùi `/export/pdf` + `extractPdf`) · **Drive file** ⇒ `uc?export=download` ⇒ PDF/DOCX/PPTX/XLSX rút chữ (`extractPdf`/`extractDocx`/`docOffice`); file lớn Google bắt bấm xác nhận ⇒ báo, không bấm hộ · **Drive thư mục** ⇒ không liệt kê được khi chưa có OAuth ⇒ gợi ý gửi link từng file.
+- Link riêng tư ⇒ câu song ngữ "link chưa mở chia sẻ — nhờ chủ tài liệu bật 'Bất kỳ ai có đường liên kết'".
+- **Đo thật 19/10** (một lượt, tài liệu mẫu công khai trên mạng): `docs.google.com/document/d/<id>/export?format=md` ⇒ 307 sang `doc-…-docstext.googleusercontent.com` ⇒ 200 `text/x-markdown`; `drive.google.com/uc?export=download` ⇒ 303 sang `drive.usercontent.google.com`; Figma oEmbed `www.figma.com/api/oembed?url=` ⇒ JSON `{error:true,status:404}` cho file không công khai.
+- **GitHub** (rẻ, không token, 60 lượt/giờ/IP + đệm): repo ⇒ mô tả + README; issue/PR ⇒ thân + 30 bình luận; `blob/<ref>/<path>` ⇒ `raw.githubusercontent.com`.
+- **Notion / Canva**: không có URL xuất công khai rẻ ⇒ `doc_web` đọc như trang thường + gợi ý mở bằng trình duyệt.
+- **Figma không token** ⇒ oEmbed (tiêu đề + ảnh xem trước, gửi ảnh thu nhỏ khi model nhìn được). **Có token CHỈ ĐỌC** (scope `file_content:read`) ⇒ REST `GET /v1/files/:key?depth=2` (trang + frame) → `/v1/files/:key/nodes?ids=` (≤ 6 frame, hoặc đúng `node-id` trong link: chữ trong layer, khung con có tên) → `/comments` → `/v1/images?scale=0.5` (ảnh 3 frame đầu, cạnh dài ≤ 1024).
+  - **Web (CT Work)**: Cài đặt dự án → **Figma** (`ProjectFigma.tsx`, ADMIN) ⇒ `PUT /work/projects/:pid/figma/token` (`work.code.routes.ts`); kiểm bằng `GET /v1/me`; lưu `sealToken` (AAD `figma:project:<id>`) trong `app_settings` khoá `work.figma.p<id>` — KHÔNG đổi schema; `GET …/figma` chỉ trả `hasToken/handle`. Agent bị chặn ở `AGENT_DENIED_ROUTES` (`/figma/**`). Đệm kết quả đọc bằng token tách theo dự án + băm token.
+  - **CuongMini (app/CLI/VS Code)**: token ở KHO BÍ MẬT CỦA MÁY (`desktop/src/main/agent/figmaKetNoi.ts`, cùng cách token `ctw_`: `safeStorage` ở app, file 0600 ở CLI/VS Code; biến `FIGMA_TOKEN` thắng). Kênh `agent:figma {noi|ngat|trangThai}`; CLI `/ket-noi figma [off|status]` (ô nhập ẨN ký tự — không vào lịch sử/hội thoại), VS Code lệnh "CuongMini: Kết nối Figma" (`showInputBox password`). Có token ⇒ capability `figma` ⇒ tool client `figma_doc` gọi Figma NGAY TRÊN MÁY (token không lên máy chủ CuongThai). App desktop: chưa có ô nhập trong giao diện (đi kênh `agent:figma` qua VS Code cầu nối, hoặc `FIGMA_TOKEN`).
+- **Sau này**: nối Google OAuth (đợt 8a đã có OAuth Drive cho CT Work Cloud) để đọc tài liệu riêng tư bằng quyền của người hỏi — CHƯA làm.
+
+### Trình duyệt CuongMini chạy NGẦM (CLI + VS Code)
+
+Chủ app: "khi CuongMini dùng trình duyệt nó mở Google đè và thao tác lên việc tôi đang làm". `packages/cuongmini-core/src/trinhDuyetThay.ts`:
+
+- **Mặc định `ngam`**: `headless: true`, viewport CỐ ĐỊNH 1280×800 (ảnh chụp ổn định), `--mute-audio`, hồ sơ RIÊNG `~/.cuongmini/trinh-duyet` (bền ⇒ giữ đăng nhập). `hoSoAnToan()`: env trỏ vào hồ sơ chính của Chrome/Edge/Brave ⇒ bỏ qua. Điều hướng KHÔNG còn `bringToFront` (đó chính là chỗ cửa sổ nhảy lên).
+- **Hiện khi cần**: `/browser show [url]` (CLI) · lệnh "CuongMini: Hiện trình duyệt AI" (VS Code) ⇒ người dùng yêu cầu ⇒ cửa sổ thấy được CÙNG hồ sơ, đưa lên trước. Tool **`trinh_duyet_hien`** (capability `trinh_duyet_hien`, chỉ lõi CLI/VS Code khai) ⇒ model xin khi gặp trang đăng nhập/captcha ⇒ cửa sổ hiện mà KHÔNG cướp focus: macOS bật bằng `open -g -n -a <Chrome.app> --args --user-data-dir=… --remote-debugging-port=0` rồi nối qua `DevToolsActivePort`; Windows/Linux `--start-minimized`; không `bringToFront`. `/browser hide` / `trinh_duyet_hien {an:true}` ⇒ đóng, về ngầm. Chrome khoá hồ sơ ⇒ đổi chế độ = đóng bản này (cookie ghi xuống đĩa) rồi bật bản kia, mở lại trang đang xem.
+- **Không bao giờ gõ mật khẩu / giải captcha**: `goChu` từ chối ô `type=password` (cả bản app), mô tả tool + prompt nói rõ.
+- **Cài đặt bền** `trinhDuyetCheDo: 'ngam' | 'hien'` (khoá cài đặt của lõi; `/browser mode ngam|hien`; env `CUONGMINI_TRINH_DUYET_CHE_DO`). Kênh `agent:trinhDuyetCheDo { cheDo?, macDinh?, url? }` (cũng mở cho VS Code qua cầu nối app — app trả `hoTro:false`).
+- **App desktop**: trình duyệt là khung `WebContentsView` NẰM TRONG cửa sổ app — không mở cửa sổ hệ điều hành, không cướp focus app khác ⇒ giữ nguyên, không khai `trinh_duyet_hien`.
+- Đo thật 19/10 trên máy này: lõi thật + Chrome thật, hồ sơ tạm: bật ngầm `about:blank` → chụp PNG 1280×800 → đóng, 7,9 s, không còn tiến trình Chrome.
+
+### Đợt sau: "CuongMini for Chrome" (như Claude in Chrome) — CHƯA làm
+
+Extension Chrome điều khiển TAB THẬT của người dùng trong một nhóm tab riêng ("CuongMini"), nói chuyện với lõi qua native messaging hoặc WebSocket localhost có khoá.
+- **Ưu**: dùng luôn phiên đăng nhập thật (không phải đăng nhập lại trong hồ sơ riêng), không bật Chrome thứ hai (nhẹ RAM), người dùng thấy AI làm gì ngay trong nhóm tab, chạy được trên trang cần SSO công ty / 2FA.
+- **Nhược**: rủi ro lớn hơn hẳn — AI chạm phiên ngân hàng/email thật ⇒ cần danh sách trang cho phép theo miền + hỏi duyệt từng miền, chống prompt injection từ trang; phải phát hành lên Chrome Web Store (duyệt), giữ hai kênh cập nhật; Edge/Brave cần bản riêng; Manifest V3 giới hạn service worker (ngủ sau 30 s).
+- **Việc cần làm**: (1) extension MV3: `tabs`, `tabGroups`, `scripting`, `debugger` (chụp + bấm), `nativeMessaging`; (2) host native messaging cài kèm CLI/VS Code (manifest theo hệ điều hành); (3) giao thức trùng chữ ký `trinhDuyetThay.ts` để `tools.ts` không đổi (thêm bản thay thứ ba trong `esbuildLoi.mjs`); (4) danh sách miền cho phép + duyệt từng miền, chặn trang ngân hàng/thanh toán mặc định; (5) chế độ chọn: ngầm (headless, mặc định) · tab thật (extension); (6) test: QA PTY + trang local.
+
+## 2g. Mã gia hạn + free lên trên (19/10/2026)
+
+Chủ app chốt ba việc. CLI **0.6.1**, extension **0.8.1** (desktop không bump — thẻ mới đi cùng bản desktop kế tiếp).
+
+**1. Hạn mức nhóm mặc định 5 $/người/ngày · 20 $/nhóm/tháng** (trước 1 và 15) — `hanMucNhom.ts › MAC_DINH_NHOM`. Dự án đã LƯU số
+riêng giữ nguyên (`docCauHinhNhom` chỉ lấy mặc định cho ô thiếu). `chamTranNhom` nay xét trần THÁNG của nhóm trước (nới ngày không
+gỡ được tháng) và trả `tranCham: 'nguoiNgay' | 'nhomThang'`.
+
+**2. Mã gia hạn theo $** — `src/services/agent/maGiaHanTien.ts` (+ `giaHanTienSo.ts` chỉ đọc tổng, tránh nhập vòng). Bảng mới
+`agent_gia_han_tien` (migration viết tay `20261019090000_agent_gia_han_tien`, model `AgentGiaHanTien`, KHÔNG FK). Mã: `app_settings.
+cuongmini_ma_gia_han_tien` = `{ bam (bcrypt), phienBan }` — tách khỏi key gia hạn TOKEN cũ (`keyGiaHan.ts`, trần token 5 giờ đã tắt).
+
+| Trần (`tran`) | Kỳ | Một mức = | Nới ở đâu |
+|---|---|---|---|
+| `model:<cm-id>` — trần model × người | `ngay` hoặc `thang` (cái đang chặn; tháng ưu tiên) | trần GỐC của kỳ đó | `tranModel.ts › xemTranModel` (`tranNgay/Thang` = gốc + cấp) |
+| `vi` — ví AI Code của người | `cuaSo` (5 giờ trượt — lượt cấp trôi ra là hết, như tiền đã tiêu) | `AI_COST_WINDOW_USD` (hoặc trần gói key) | `viTien.ts` (⚠ ví thật đang chặn lượt; `quota.ts › xemViAgent` không còn ai gọi) |
+| `chinhHang:free` — nhóm free Code Max (Sonic 5.5 + Heshin 5.5) | `ngay`/`thang` | trần gốc (gói / riêng) | `anthropicChinhHang/hanMuc.ts` (CHỈ hạng free; hạng cao không nới) |
+| `nhom:<pid>` — hạn mức nhóm, NGƯỜI/NGÀY | `ngay` | trần người/ngày của dự án | `hanMucNhom.ts › quyetDinhNhom` (`giaHanNgay`); trần THÁNG của nhóm KHÔNG nới bằng mã |
+
+- **Lần 1 trong kỳ** (không có lượt nào của (người, trần, kỳ)): mã đúng ⇒ `DA_CAP` ngay (200). **Lần 2+** ⇒ `CHO_DUYET` (202), đã có
+  yêu cầu chờ ⇒ trả lại nó (không tạo thêm); duyệt ⇒ `DA_CAP` (`capLuc` = lúc duyệt); từ chối ⇒ `TU_CHOI` + lý do; duyệt khi kỳ đã
+  qua ⇒ `HET_KY` (không thành quà cho kỳ sau). Lặp vô hạn. Lượt 1 chạy trong giao dịch có `pg_advisory_xact_lock(người, trần)` —
+  hai lần nhập cùng lúc chỉ được MỘT lượt "lần 1".
+- **Máy chủ tự kiểm** (`xacDinhTran`): trần có ĐANG chạm thật, kỳ nào, mức bao nhiêu — app chỉ nói tên trần. Gói không có trần thật
+  (trần 0 của tài khoản thường) ⇒ `GIA_HAN_KHONG_AP_DUNG`; model trả phí chưa có vé ⇒ 403 `GIA_HAN_CAN_KHOA` (khoá ≠ gia hạn tiền).
+- **Chống dò**: 5 lần sai / 15 phút ⇒ khoá 15 phút (429 `GIA_HAN_THU_QUA_NHIEU`, kể cả mã đúng) + rate-limit 10 lần/15 phút theo
+  người ở route. Mã chỉ đi trong THÂN, không log (`logger` chỉ ghi id/trần/số tiền), không lưu ở app.
+- **Lỗi chạm trần mang `giaHanTien`** (`GiaHanTienUi`: tran, ky, ten/tenEn, mucUsd, daDung/tran, canDuyet, dangCho, lanThu,
+  duongDan) ở: `turn.ts` (ví `AGENT_BUDGET_EXCEEDED`, `CUONGMINI_HET_TRAN`, `CONG_ANTHROPIC_HET_HAN_MUC` hạng free), `/agent/compact`
+  (429 `data.giaHanTien`), `chiProHoacNhom` (429 `NHOM_HET_TRAN` trần người/ngày). Admin đã đặt mã ⇒ câu lỗi nối thêm "Có mã gia
+  hạn? Vào cuongthai.com/cuongmini/gia-han để nhập mã gia hạn" (đang chờ ⇒ "Yêu cầu #id đang chờ admin duyệt") — **app CŨ** in câu đó.
+- **Tuyến**: người dùng `GET/POST /agent/gia-han-tien`, `GET /agent/gia-han-tien/yeu-cau/:id` (KHÔNG `chiPro` — thành viên hạn mức
+  nhóm không có Pro); admin `GET /admin/cong-anthropic/gia-han-tien`, `PUT …/ma-gia-han {ma|null}`, `POST …/gia-han-tien/:id
+  {dongY, lyDo?}`; trưởng nhóm `POST /work/projects/:pid/cuongmini-team/gia-han/:id` (quyền `project.settings` + phải là NHÀ TÀI TRỢ
+  đang hiệu lực — duyệt là tiêu thêm tiền của họ; `cuongmini-team` đã nằm trong `AGENT_DENIED_ROUTES`).
+- **Báo**: yêu cầu mới ⇒ `baoAdmin` (hộp thư admin + Telegram, `khoaChongTrung GIA_HAN_TIEN:<id>`); hạn mức nhóm ⇒ thêm chuông
+  CT Work `WORK_ALERT` cho nhà tài trợ (link `…/settings?tab=cuongmini`).
+
+| Nơi | Thẻ "Đã chạm giới hạn … · Nhập mã gia hạn để dùng tiếp" |
+|---|---|
+| Lõi | `ipc/agent.ts`: kênh `agent:giaHanTien {ma, tran}` (gửi kèm vé khoá) + `agent:giaHanTienKiem {id}`; `loop.ts` chuyển `giaHanTien` từ khung SSE / HTTP 429 sang sự kiện `loi` (`laGiaHanTien`); `cauNoiVscode.ts` mở hai kênh |
+| Desktop | `NhapMaGiaHanTien.tsx` dưới khối lỗi: ô `password`; lần 1 ⇒ tự `agent:lamTiep`; chờ duyệt ⇒ tự kiểm lại 30 s + "Kiểm lại ngay"; duyệt ⇒ nút "Làm tiếp"; từ chối ⇒ lý do + "Gửi lại" |
+| CLI | `src/giaHanTien.ts` (chữ, thuần) + `ManChat.tsx › moTheGiaHan`: hộp `matKhau` (nhãn "Mã gia hạn", ẩn ký tự); sai ⇒ mở lại kèm "Còn n lần thử"; lần 1 ⇒ `kho.batDauLamTiep` + `agent:lamTiep` (không thêm câu hỏi ⇒ `/rewind` không lệch); chờ ⇒ kiểm lại 30 s; `dangCho` ⇒ không hỏi mã, kiểm ngay |
+| VS Code | `webview/main.ts › veTheGiaHan` (RPC `agent:giaHanTien`/`Kiem`, kiểm lại 30 s, làm tiếp bằng `lamTiep`) |
+| Web | `/cuongmini/gia-han` (app cũ): các trần đang chạm + ô nhập + tự kiểm lại; admin `/admin/commerce?tab=anthropic` mục **🎟️ Mã gia hạn** (đặt/đổi/tắt, chờ duyệt: người · trần · đã dùng · đã gia hạn mấy lần trong kỳ · Duyệt/Từ chối, 50 lượt gần nhất); Project settings → CuongMini: cột **Gia hạn (tháng)** + bảng **Yêu cầu gia hạn chờ duyệt** (ADMIN thấy, nhà tài trợ duyệt) |
+
+**3. Danh sách model: FREE lên trên** — `bangModel.ts › thuTuHienThi`: free trước (Sonic 5.5 · Solid · Nova · Shin · Heshin 5.5 · Eco),
+rồi model cần khoá; trong nhóm theo `nangLuc` ⇒ Invisible 5.1 (100) rồi Optimum 5.5 (90). Cả ba nơi + admin đọc thứ tự máy chủ
+(không app nào tự sắp), app cũ (`maChoAppCu`, không `?bang=cm`) giữ cùng thứ tự với mã cũ. `CuongMiniPanel` (thi) chỉ có hai
+lựa chọn đều miễn phí (Gia sư / Max) — không có nhóm cần khoá để xếp, giữ nguyên.
+
+**Test**: máy chủ `maGiaHanTien.test.ts` (8, thuần: tran cham từng loại, kỳ sổ, mặc định 5/20, mã không vào log, `turn.ts` gắn
+thẻ), `bangModel.test.ts`/`appCu.test.ts` (thứ tự mới), `keyGiaHan.test.ts` (key TOKEN vẫn không nới tiền); DB
+`src/routes/agent.giaHanTien.db.test.ts` (9: chưa bật/đặt mã chỉ băm · lần 1 ngay · app cũ nhận câu chữ qua `/compact` + `runAgentTurn`
+thật · lần 2 chờ + báo admin + duyệt · từ chối + lặp · model trả phí cần khoá · nhóm 5/20: lần 1, lần 2, ADMIN không tài trợ bị 403,
+nhà tài trợ duyệt, bảng ghi tiền gia hạn, trần tháng không nới · 5 lần sai ⇒ 429 + đổi mã ⇒ mã cũ chết · hai lần cùng lúc ⇒ một
+lượt "lần 1"); desktop `main/agent/giaHanTien.test.ts` (6); CLI `src/test/giaHanTien.test.ts` (3) + **PTY lõi thật**
+`src/test/giaHanPty.test.ts` (thẻ ẩn ký tự ⇒ sai mở lại ⇒ đúng cộng ngay + làm tiếp ⇒ lần 2 chờ duyệt ⇒ `dangCho` tự kiểm lại ⇒ đã
+duyệt làm tiếp; mã không lên màn hình / đĩa).
+
+**Chưa làm / làm khác:**
+- Trần nhóm CAO cổng chính hãng (model trả phí) và trần THÁNG của hạn mức nhóm không gia hạn bằng mã (không nằm trong danh sách chủ
+  app; tháng của nhóm là tiền nhà tài trợ — trưởng nhóm nới ở tab CuongMini).
+- Trang web không gửi được vé khoá ⇒ trần của model trả phí chỉ gia hạn được trong app.
+- `chinhHang.db.test.ts` có 10 phép đỏ CŨ (giả định 17/10: trần free 0,5 $/ngày, vé 30 ngày, rambo bật) — đỏ y hệt ở worktree sạch `HEAD`, không do đợt này.
 
 ## 3. Thiết kế đợt 3/4 (đợt 3 ĐÃ LÀM — ghi chỗ đổi thiết kế)
 

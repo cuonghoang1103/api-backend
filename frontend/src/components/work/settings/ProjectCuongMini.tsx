@@ -3,7 +3,9 @@
 /**
  * Cài đặt dự án → CuongMini cho cả nhóm (đợt 6, 18/10/2026). Thành viên KHÔNG có Pro dùng CuongMini (CLI · app desktop ·
  * VS Code) cho dự án này bằng hạn mức của trưởng nhóm (ADMIN có Pro). Trưởng nhóm bật/tắt, chỉnh trần mỗi người/ngày và
- * cả nhóm/tháng, chọn người tài trợ; ai cũng xem được ai dùng bao nhiêu.
+ * cả nhóm/tháng (mặc định 5 $/người/ngày · 20 $/nhóm/tháng từ 19/10/2026), chọn người tài trợ; ai cũng xem được ai dùng
+ * bao nhiêu (kèm tiền GIA HẠN bằng mã). Mã gia hạn theo $: thành viên chạm trần người/ngày nhập mã — lần 1 trong ngày cộng
+ * ngay, lần 2+ chờ duyệt; NHÀ TÀI TRỢ duyệt/từ chối ở bảng "Yêu cầu gia hạn" bên dưới (admin web cũng duyệt được).
  * Server: GET/PUT /work/projects/:pid/cuongmini-team (src/services/agent/hanMucNhom.ts). Gọi API ngay trong component
  * (không thêm vào lib/api.ts dùng chung).
  */
@@ -21,14 +23,22 @@ import { Section, Select, Switch } from './shared';
 interface CauHinh { bat: boolean; tranNgayNguoiUsd: number; tranThangNhomUsd: number; chuId: number | null }
 /** Máy chủ trả thêm `dongY` (ai đã tự đồng ý tài trợ) — KHÔNG gửi lại (PUT `.strict()` từ chối khoá lạ). */
 const chiSua = (c: CauHinh & { dongY?: number[] }): CauHinh => ({ bat: c.bat, tranNgayNguoiUsd: c.tranNgayNguoiUsd, tranThangNhomUsd: c.tranThangNhomUsd, chuId: c.chuId });
+interface YeuCauGiaHan {
+  id: number; userId: number; username: string | null; ten: string | null; soUsd: number; lanThu: number;
+  daDungUsd: number; tranUsd: number; soLanDaCapKy: number; createdAt: string;
+}
 interface BangNhom {
   cauHinh: CauHinh;
   chu: { id: number; username: string; ten: string } | null;
   daDungThang: number;
-  nguoi: Array<{ userId: number; username: string; ten: string; thang: number; homNay: number; soLuot: number }>;
+  /** `giaHan`/`soLanGiaHan`: mã gia hạn ĐÃ CẤP tháng này (máy chủ cũ không có ⇒ 0). */
+  nguoi: Array<{ userId: number; username: string; ten: string; thang: number; homNay: number; soLuot: number; giaHan?: number; soLanGiaHan?: number }>;
   sua: boolean;
   ungVien: Array<{ id: number; username: string; ten: string; pro: boolean; dongY?: boolean }>;
   toiId?: number;
+  /** Mã gia hạn theo $ (19/10/2026): yêu cầu chờ duyệt (chỉ ADMIN thấy) + người xem có duyệt được không (nhà tài trợ). */
+  choDuyet?: YeuCauGiaHan[];
+  duyetDuoc?: boolean;
 }
 
 const T = (vi: string, en: string): string => (currentWorkLocale() === 'vi' ? vi : en);
@@ -48,6 +58,12 @@ export default function ProjectCuongMini({ config }: { config: ProjectConfig; sl
     mutationFn: async (body: Partial<CauHinh>) => (await api.put<{ data: BangNhom }>(`/work/projects/${pid}/cuongmini-team`, body)).data.data,
     onSuccess: (r) => { qc.setQueryData(khoa(pid), r); setS(chiSua(r.cauHinh)); toast.success(T('Đã lưu', 'Saved')); },
     onError: (err) => toast.error(workError(err, T('Không lưu được', 'Could not save'))),
+  });
+  const duyet = useMutation({
+    mutationFn: async (v: { id: number; dongY: boolean }) =>
+      (await api.post<{ data: BangNhom }>(`/work/projects/${pid}/cuongmini-team/gia-han/${v.id}`, { dongY: v.dongY })).data.data,
+    onSuccess: (r, v) => { qc.setQueryData(khoa(pid), r); toast.success(v.dongY ? T('Đã duyệt gia hạn', 'Extension approved') : T('Đã từ chối', 'Rejected')); },
+    onError: (err) => toast.error(workError(err, T('Không xử lý được yêu cầu', 'Could not handle the request'))),
   });
 
   if (!q.data || !s) return q.error ? <p className="text-[13px] text-[var(--w-red)]">{workError(q.error)}</p> : <PageLoading rows={4} />;
@@ -144,6 +160,7 @@ export default function ProjectCuongMini({ config }: { config: ProjectConfig; sl
                 <th className="py-1 text-right font-normal">{T('Hôm nay', 'Today')}</th>
                 <th className="py-1 text-right font-normal">{T('Tháng này', 'This month')}</th>
                 <th className="py-1 text-right font-normal">{T('Số lượt', 'Turns')}</th>
+                <th className="py-1 text-right font-normal">{T('Gia hạn (tháng)', 'Extensions (month)')}</th>
               </tr>
             </thead>
             <tbody>
@@ -153,6 +170,7 @@ export default function ProjectCuongMini({ config }: { config: ProjectConfig; sl
                   <td className={`py-1.5 text-right ${n.homNay >= s.tranNgayNguoiUsd && s.tranNgayNguoiUsd > 0 ? 'text-[var(--w-red)]' : ''}`}>{usd(n.homNay)}</td>
                   <td className="py-1.5 text-right">{usd(n.thang)}</td>
                   <td className="py-1.5 text-right">{n.soLuot}</td>
+                  <td className="py-1.5 text-right" data-testid="cm-gia-han">{n.giaHan ? `+${usd(n.giaHan)} (${n.soLanGiaHan ?? 0}×)` : '—'}</td>
                 </tr>
               ))}
             </tbody>
@@ -161,6 +179,50 @@ export default function ProjectCuongMini({ config }: { config: ProjectConfig; sl
           <p className="flex items-center gap-2 text-[13px] text-[var(--w-text-3)]"><Sparkles size={14} /> {T('Chưa ai dùng hạn mức nhóm tháng này.', 'Nobody has used the team allowance this month.')}</p>
         )}
       </Section>
+
+      {can ? (
+        <Section
+          title={T('Yêu cầu gia hạn chờ duyệt', 'Extension requests waiting')}
+          description={T(
+            'Thành viên chạm trần người/ngày nhập mã gia hạn: lần đầu trong ngày được cộng ngay một mức (= trần người/ngày), từ lần 2 phải chờ duyệt. Duyệt = cộng thêm một mức từ hạn mức của nhà tài trợ — chỉ nhà tài trợ (hoặc admin web) duyệt được.',
+            'Members who hit the per-member daily cap can enter an extension code: the first time each day adds one step (= the daily cap) at once; after that it waits for approval. Approving adds one more step from the sponsor\'s allowance — only the sponsor (or a site admin) can approve.',
+          )}
+        >
+          {d.choDuyet?.length ? (
+            <table className="w-full text-[13px]" data-testid="cm-cho-duyet">
+              <thead>
+                <tr className="text-left text-[12px] text-[var(--w-text-3)]">
+                  <th className="py-1 font-normal">{T('Thành viên', 'Member')}</th>
+                  <th className="py-1 text-right font-normal">{T('Đã dùng / trần', 'Used / cap')}</th>
+                  <th className="py-1 text-right font-normal">{T('Đã gia hạn hôm đó', 'Extended that day')}</th>
+                  <th className="py-1 text-right font-normal">{T('Xin thêm', 'Asks for')}</th>
+                  <th className="py-1" />
+                </tr>
+              </thead>
+              <tbody>
+                {d.choDuyet.map((y) => (
+                  <tr key={y.id} className="border-t border-[var(--w-border)]">
+                    <td className="py-1.5">{`@${y.username ?? y.userId}`} <span className="text-[var(--w-text-3)]">{T(`lần ${y.lanThu}`, `attempt ${y.lanThu}`)}</span></td>
+                    <td className="py-1.5 text-right">{`${usd(y.daDungUsd)} / ${usd(y.tranUsd)}`}</td>
+                    <td className="py-1.5 text-right">{`${y.soLanDaCapKy}×`}</td>
+                    <td className="py-1.5 text-right">{`+${usd(y.soUsd)}`}</td>
+                    <td className="py-1.5 text-right">
+                      {d.duyetDuoc ? (
+                        <span className="inline-flex gap-1">
+                          <button type="button" disabled={duyet.isPending} onClick={() => duyet.mutate({ id: y.id, dongY: true })} className="h-7 rounded-[6px] bg-[var(--w-accent)] px-2 text-[12px] font-medium text-white disabled:opacity-50" data-testid="cm-duyet">{T('Duyệt', 'Approve')}</button>
+                          <button type="button" disabled={duyet.isPending} onClick={() => duyet.mutate({ id: y.id, dongY: false })} className="h-7 rounded-[6px] px-2 text-[12px] text-[var(--w-text-2)] hover:bg-[var(--w-surface-2)] disabled:opacity-50">{T('Từ chối', 'Reject')}</button>
+                        </span>
+                      ) : <span className="text-[12px] text-[var(--w-text-3)]">{T('chờ nhà tài trợ', 'waiting for the sponsor')}</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-[13px] text-[var(--w-text-3)]">{T('Không có yêu cầu nào đang chờ.', 'No requests waiting.')}</p>
+          )}
+        </Section>
+      ) : null}
     </div>
   );
 }

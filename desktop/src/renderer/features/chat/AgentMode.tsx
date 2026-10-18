@@ -51,6 +51,7 @@ import { ID_FABLE, XinThemFable } from './HanMucFable';
 import { HoiQuayVeCongChinh, MoCongDuPhong, moTaDuPhong, useCongDuPhong } from './CongDuPhong';
 import { MoCongAnthropic, MoiNangCapCong, OKhoa } from './CongAnthropic';
 import { NhapKeyGiaHan } from './NhapKeyGiaHan';
+import { NhapMaGiaHanTien } from './NhapMaGiaHanTien';
 import { GoiYFile, docTokenFile, type TokenFile } from './GoiYFile';
 import { BangHook } from './BangHook';
 import { BangBoNho } from './BangBoNho';
@@ -1737,6 +1738,11 @@ export function AgentMode({
                     tự gửi lại ĐÚNG lượt vừa bị chặn (02/10/2026). */}
                 {m.ma === 'AGENT_QUOTA_EXCEEDED' && m.coKeyGiaHan && (
                   <NhapKeyGiaHan khoa={trangThai.dangChay} onXong={(q) => { void lamTiep(q); }} />
+                )}
+                {/* Chạm trần TIỀN gia hạn được (19/10/2026) ⇒ "Nhập mã gia hạn để dùng tiếp": lần 1 trong kỳ cộng ngay +
+                    tự làm tiếp; lần 2+ chờ admin duyệt (tự kiểm lại mỗi 30 s). */}
+                {m.giaHanTien && (
+                  <NhapMaGiaHanTien g={m.giaHanTien} khoa={trangThai.dangChay} onLamTiep={() => { void lamTiep(); }} />
                 )}
                 {/* Cổng chính sống lại SAU khi việc xong ⇒ người dùng chọn (27/09/2026). */}
                 {m.ma === 'RAMBO_SONG_LAI' && <HoiQuayVeCongChinh cuocId={cuocId} />}

@@ -23,15 +23,15 @@ const ASK_ONLY = { mcp: false, builtin: false } as const;
 
 const readIssue = defineTool({
   name: 'read_issue', title: 'Read issue (everything)', group: 'issues',
-  description: 'Reads ONE issue with everything a member needs: description (with its links and checklist), acceptance criteria, comments, parent and subtasks, linked issues, web links, Docs pages linked to it, and the text of its attached files (txt/md/PDF/DOCX). Use it before explaining an issue or saying what to read/do.',
+  description: 'Reads ONE issue with everything a member needs: description (with its links and checklist), acceptance criteria, comments, parent and subtasks, linked issues, web links, Docs pages linked to it, the text of its attached files (txt/md/PDF/DOCX), and the CONTENT of external links (public Google Docs/Sheets/Slides/Drive, Figma, GitHub). Use it before explaining an issue or saying what to read/do.',
   write: false,
   surfaces: ASK_ONLY,
-  input: z.object({ project: projectArg, issue: issueArg, withPages: z.boolean().optional().describe('Also include the content of the Docs pages linked to the issue (max 2)') }),
+  input: z.object({ project: projectArg, issue: issueArg, withPages: z.boolean().optional().describe('Also include the content of the Docs pages linked to the issue (max 2)'), withLinks: z.boolean().optional().describe('Read the content of external links on the issue — Google Docs/Sheets/Slides/Drive (public), Figma, GitHub (default true; max 3, cached)') }),
   run: async (ctx, a) => {
     const p0 = await projectFor(ctx, a.project, []);
     const n = issueNumber(p0.key, a.issue);
     const p = await projectFor(ctx, a.project, [['GET', `/issues/${n}`], ['GET', `/issues/${n}/comments`], ['GET', `/issues/${n}/web-links`]]);
-    return readIssueFull(ctx.userId, p.access, workLinks(p.workspaceSlug, p.key), n, { withPages: a.withPages === true });
+    return readIssueFull(ctx.userId, p.access, workLinks(p.workspaceSlug, p.key), n, { withPages: a.withPages === true, withLinks: a.withLinks !== false });
   },
 });
 

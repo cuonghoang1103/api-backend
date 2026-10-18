@@ -43,6 +43,7 @@ import {
 import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
 import { toolNotesTao, toolNotesGhi, type BoiCanhNote } from './ghiNote';
 import * as trinhDuyet from '../browser';
+import { toolFigmaDoc } from './figmaKetNoi';
 import { layCuaSoChinh } from '../window';
 import { ghiSoTruoc, type SoCuoc } from './so';
 import { chupTrangThai, ghiThayDoiCuaLenh } from './theoDoiLenh';
@@ -435,6 +436,11 @@ export async function chayToolAgent(
       case 'web_anh': return await toolWebAnh(args);
       case 'web_console': return await toolWebConsole();
       case 'web_lien_ket': return await toolWebLienKet(args);
+      /* 19/10/2026: trình duyệt ngầm ⇒ hiện cửa sổ cho NGƯỜI DÙNG tự đăng nhập (không gõ mật khẩu hộ). Không hỏi
+         duyệt: nó chỉ mở cửa sổ (không cướp focus khi model xin) — quyết định đăng nhập vẫn ở người dùng. */
+      case 'trinh_duyet_hien': return await toolTrinhDuyetHien(args);
+      /* 19/10/2026: Figma bằng token chỉ đọc cất trên máy — chỉ ĐỌC, không hỏi duyệt. */
+      case 'figma_doc': return await toolFigmaDoc(args);
 
       // Bấm / gõ: ĐỔI trạng thái trang, và trang đang chạy bằng phiên đăng
       // nhập THẬT của người dùng. Một cú bấm nhầm vào nút xoá thì không có
@@ -2289,6 +2295,21 @@ async function toolGithubDangDuAn(goc: string, args: Record<string, unknown>, g:
 // ═══════════════════════════════════════════════════════════
 // TRÌNH DUYỆT
 // ═══════════════════════════════════════════════════════════
+
+async function toolTrinhDuyetHien(args: Record<string, unknown>): Promise<KetQuaTool> {
+  const an = args.an === true;
+  const url = typeof args.url === 'string' && args.url.trim() ? args.url.trim() : undefined;
+  const lyDo = typeof args.ly_do === 'string' ? args.ly_do.trim().slice(0, 300) : '';
+  const kq = await trinhDuyet.chuyenCheDo(an ? 'ngam' : 'hien', { nguoiDungYeuCau: false, ...(url ? { url } : {}) });
+  if (!kq.ok) return { noiDung: `LỖI: không đổi được chế độ trình duyệt (${kq.loi ?? 'không rõ'}).`, tomTat: 'hỏng' };
+  if (an) return { noiDung: 'Trình duyệt đã quay về chạy NGẦM (phiên đăng nhập vẫn giữ trong hồ sơ riêng). Làm tiếp việc.', tomTat: 'về ngầm' };
+  return {
+    noiDung: `Đã mở cửa sổ trình duyệt THẤY ĐƯỢC${kq.url ? ` ở ${kq.url}` : ''} (cửa sổ không tự nhảy lên trước — người dùng bấm vào biểu tượng Chrome/Edge trên Dock/thanh tác vụ). `
+      + `DỪNG Ở ĐÂY: nói người dùng ${lyDo ? `"${lyDo}" ` : ''}rồi tự đăng nhập/giải captcha trong cửa sổ đó và báo lại khi xong. `
+      + 'KHÔNG gõ mật khẩu / OTP hộ. Họ báo xong ⇒ gọi `trinh_duyet_hien` với `an: true` rồi làm tiếp.',
+    tomTat: 'hiện cửa sổ — chờ người dùng',
+  };
+}
 
 async function toolWebMo(args: Record<string, unknown>): Promise<KetQuaTool> {
   const url = typeof args.url === 'string' ? args.url.trim() : '';

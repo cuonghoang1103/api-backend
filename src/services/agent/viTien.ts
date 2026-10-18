@@ -33,6 +33,7 @@
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { xemKeyTerminal, tranRiengCuaNguoi } from './keyTerminal.js';
+import { tienGiaHanTheoKy } from './giaHanTienSo.js';
 
 /** Hai mảng AI được đo riêng. */
 export type MangAI = 'code' | 'chat';
@@ -72,6 +73,9 @@ export interface ViTien {
   /** Trần này là trần RIÊNG theo gói đã mua, hay trần chung của web. */
   tranRieng?: boolean;
   tran: number;
+  /** Mã gia hạn theo $ (19/10/2026, chỉ mảng 'code'): trần gốc + phần đã cấp trong cửa sổ. `tran` = gốc + cấp. */
+  tranGoc?: number;
+  giaHan?: number;
   conLai: number;
   /** 0–100, để vẽ thanh đo. */
   phanTram: number;
@@ -139,6 +143,11 @@ export async function xemViTien(userId: number, mang: MangAI): Promise<ViTien> {
 
   if (tran <= 0) return rong(mang, tran, soGio, miemTran);
 
+  /* Mã gia hạn theo $ (19/10/2026): ví AI Code được nới bằng lượt cấp còn trong cửa sổ trượt (đọc hỏng ⇒ 0). */
+  const tranGoc = tran;
+  const giaHan = mang === 'code' ? (await tienGiaHanTheoKy(userId, 'vi', new Date(), soGio)).cuaSo : 0;
+  tran = Math.round((tranGoc + giaHan) * 10_000) / 10_000;
+
   // ── Phần đã tiêu qua KEY TERMINAL ──────────────────────────────────────
   // Hỏi New API (cùng mạng docker). Hỏng thì trả 0 — xem keyTerminal.ts.
   // Cộng vào CÙNG một ví với phần app desktop, nên dùng hết ở đường nào thì
@@ -190,6 +199,7 @@ export async function xemViTien(userId: number, mang: MangAI): Promise<ViTien> {
     daTieuTerminal: terminalUsd,
     tranRieng,
     tran,
+    ...(mang === 'code' ? { tranGoc, giaHan } : {}),
     conLai: Math.max(0, tran - tong),
     phanTram: Math.min(100, Math.round((tong / tran) * 100)),
     soGio,

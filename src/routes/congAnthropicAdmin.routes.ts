@@ -20,6 +20,7 @@ import { daBatMatKhau, datMatKhau, trungMatKhauKhac, type LoaiVe } from '../serv
 import { TEN_CONG, bangModel } from '../services/agent/bangModel.js';
 import { datTranModel, docTranModel } from '../services/agent/tranModel.js';
 import { datCongTacRambo, trangThaiRambo } from '../services/llm/congTacRambo.js';
+import { GiaHanLoi, datMaGiaHan, dsYeuCauAdmin, duyetYeuCau, trangThaiMa } from '../services/agent/maGiaHanTien.js';
 import { priceOf } from '../services/llm/gateway.js';
 import { dsKeyAdmin, dsTranRieng, hanMucNguoiAdmin, timNguoi, tongQuanDung } from '../services/agent/anthropicChinhHang/thongKe.js';
 import { doiChieu, dsAdminKey } from '../services/agent/anthropicChinhHang/doiChieu.js';
@@ -39,6 +40,7 @@ function boc(fn: (req: Request, res: Response<ApiResponse>) => Promise<void>) {
       await fn(req, res);
     } catch (err) {
       if (err instanceof KhoKeyLoi) { next(new AppError(err.message, err.status, 'CONG_ANTHROPIC_KEY')); return; }
+      if (err instanceof GiaHanLoi) { next(new AppError(err.message, err.status, err.code)); return; }
       next(err);
     }
   };
@@ -60,7 +62,7 @@ router.get('/', boc(async (_req, res) => {
       /* 18/10/2026: khoá RIÊNG của CuongMini Invisible 5.1. */
       daBatMatKhauInvisible: await daBatMatKhau('invisible'),
       tranGoi: await docTranGoi(),
-      /* Bảng model CuongMini (thứ tự = năng lực) — admin thấy cả tên thật để đối chiếu sổ. */
+      /* Bảng model CuongMini (thứ tự = danh sách người dùng thấy: free trước, rồi theo năng lực) — admin thấy cả tên thật. */
       bangModel: bangModel().map((m) => ({
         id: m.id, ten: m.ten, model: m.model, cong: m.cong, tenCong: TEN_CONG[m.cong], khoa: m.khoa,
         nangLuc: m.nangLuc, tuongDuong: m.tuongDuong, cuaSoToken: m.cuaSoToken, maxRa: m.maxRa,
@@ -272,6 +274,29 @@ router.put('/tran-model', boc(async (req, res) => {
   const tranModel = await datTranModel(req.body);
   logger.info('[cong-anthropic] admin đổi trần theo model', { adminId: adminId(req) });
   res.json({ success: true, data: { tranModel } });
+}));
+
+// ─── Mã gia hạn theo $ (19/10/2026) — services/agent/maGiaHanTien.ts ─────
+
+/** Trạng thái mã (KHÔNG có băm) + yêu cầu chờ duyệt + 50 lượt gần nhất. */
+router.get('/gia-han-tien', boc(async (_req, res) => {
+  res.json({ success: true, data: { ma: await trangThaiMa(), ...(await dsYeuCauAdmin()) } });
+}));
+
+/** Body `{ ma: string }` đặt/đổi (mã cũ chết ngay) · `{ ma: null }` tắt. Chỉ lưu băm; KHÔNG log mã. */
+router.put('/ma-gia-han', boc(async (req, res) => {
+  const raw = (req.body as { ma?: unknown })?.ma;
+  const kq = await datMaGiaHan(raw === null ? null : String(raw ?? ''));
+  logger.info('[gia-han-tien] admin đổi mã gia hạn', { adminId: adminId(req), tat: raw === null, phienBan: kq.phienBan });
+  res.json({ success: true, data: kq });
+}));
+
+/** Body `{ dongY: boolean, lyDo?: string }` — duyệt (cộng thêm một mức) hoặc từ chối một yêu cầu chờ. */
+router.post('/gia-han-tien/:id', boc(async (req, res) => {
+  const b = (req.body ?? {}) as { dongY?: unknown; lyDo?: unknown };
+  if (typeof b.dongY !== 'boolean') throw new BadRequestError('Thiếu dongY (true/false).');
+  const yeuCau = await duyetYeuCau(adminId(req)!, idTu(req), b.dongY, { quyen: 'admin', ...(typeof b.lyDo === 'string' ? { lyDo: b.lyDo } : {}) });
+  res.json({ success: true, data: { yeuCau, ...(await dsYeuCauAdmin()) } });
 }));
 
 // ─── Công tắc cổng rambo (mặc định TẮT) ─────────────────────────────

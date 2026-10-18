@@ -13071,6 +13071,35 @@ model AgentQuotaGrant {
   @@map("agent_quota_grants")
 }
 
+/// MÃ GIA HẠN THEO $ của CuongMini (19/10/2026) — `src/services/agent/maGiaHanTien.ts`.
+/// Một hàng = một lượt người dùng nhập ĐÚNG mã khi chạm một trần tiền: lần 1 trong kỳ ⇒ `DA_CAP` ngay,
+/// lần 2+ ⇒ `CHO_DUYET` (admin web / nhà tài trợ nhóm duyệt ⇒ `DA_CAP`, từ chối ⇒ `TU_CHOI`, quá kỳ ⇒ `HET_KY`).
+/// `tran`: `model:<cm-id>` · `vi` · `chinhHang:free` · `nhom:<projectId>`. `ky`: `ngay` · `thang` · `cuaSo`.
+/// Không FK (cố ý — bảng sổ, không đổi model `User`); xoá người ⇒ hàng mồ côi vô hại, không ai đọc.
+model AgentGiaHanTien {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @map("user_id")
+  tran         String    @db.VarChar(60)
+  ky           String    @db.VarChar(10)
+  projectId    Int?      @map("project_id")
+  soUsd        Float     @map("so_usd")
+  trangThai    String    @map("trang_thai") @db.VarChar(12)
+  lanThu       Int       @map("lan_thu")
+  daDungUsd    Float     @default(0) @map("da_dung_usd")
+  tranUsd      Float     @default(0) @map("tran_usd")
+  phienBanMa   Int       @default(0) @map("phien_ban_ma")
+  capLuc       DateTime? @map("cap_luc")
+  nguoiDuyetId Int?      @map("nguoi_duyet_id")
+  lyDoTuChoi   String?   @map("ly_do_tu_choi") @db.VarChar(300)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@index([userId, tran, createdAt], name: "idx_agent_gia_han_tien_user_tran")
+  @@index([trangThai, createdAt], name: "idx_agent_gia_han_tien_trang_thai")
+  @@index([projectId, trangThai], name: "idx_agent_gia_han_tien_project")
+  @@map("agent_gia_han_tien")
+}
+
 // ============================================================
 // CRM NHẸ CHO STUDIO (CT Work đợt S5b, 05/10/2026) — /admin/crm
 // ============================================================

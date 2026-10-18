@@ -90,6 +90,18 @@ CuongMini mở trong **alternate screen** như Claude Code: ô nhập + chân tr
 - Toàn màn hình KHÔNG bao giờ gửi lệnh xoá scrollback (iTerm2 hết hiện thanh "clear scrollback history?").
 - Tắt: `/fullscreen off` (lưu cho lần sau) · cờ `--no-fullscreen` · `CUONGMINI_TOAN_MAN_HINH=0`. CI, không TTY, `-p` thì không bao giờ bật.
 
+## Mới ở 0.6.1 (mã gia hạn + model free lên trên)
+
+**Mã gia hạn theo $ / Extension codes**
+- Chạm một giới hạn chi tiêu (trần của model, ví AI Code 5 giờ, nhóm free Code Max, hạn mức nhóm CT Work) ⇒ thẻ **"Đã chạm giới hạn … · Nhập mã gia hạn để dùng tiếp"** với ô nhập **ẩn ký tự**. *Hit a spending limit ⇒ a card "Limit reached … · Enter an extension code to continue" with a hidden input.*
+- **Lần đầu trong kỳ** (ngày / tháng / 5 giờ, tuỳ giới hạn) mã đúng ⇒ cộng ngay một mức và CuongMini **làm tiếp chỗ dở** (không gõ lại câu hỏi). *First time in a period ⇒ one step added at once and the task continues.*
+- **Từ lần 2** ⇒ gửi yêu cầu, báo "Đã gửi yêu cầu, chờ admin duyệt" và **tự kiểm lại mỗi 30 giây**; duyệt ⇒ làm tiếp, từ chối ⇒ báo rõ lý do. Hạn mức nhóm: nhà tài trợ của dự án cũng duyệt được. *From the 2nd time ⇒ a request waits for an admin (or the team sponsor); CuongMini re-checks every 30 s.*
+- Model cần khoá vẫn phải mở khoá trước (mã gia hạn không thay khoá). Nhập sai 5 lần ⇒ chờ 15 phút. Máy chủ tự kiểm mọi thứ. *Locked models still need their key; 5 wrong tries ⇒ 15-minute wait.*
+- App/CLI cũ: câu lỗi trỏ tới **cuongthai.com/cuongmini/gia-han** để nhập mã trên web. *Older apps: the error points to that page.*
+
+**Danh sách model / Model list**
+- `/model`: model **miễn phí lên trên** (Sonic 5.5 · Solid · Nova · Shin · Heshin 5.5 · Eco), rồi mới tới model cần khoá; trong mỗi nhóm vẫn xếp theo năng lực. *Free models first, then keyed ones; capability order inside each group.*
+
 ## Mới ở 0.6.0 (đợt 6 + cổng & model)
 
 **Mở là dùng**

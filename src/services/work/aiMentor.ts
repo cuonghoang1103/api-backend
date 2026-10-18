@@ -13,6 +13,7 @@
  *   - `readIssueFull`  MỘT thẻ đầy đủ: `issueMarkdown` (getIssueDetail + listComments ⇒ cùng luật với REST/MCP; mô tả
  *                      giữ link + checklist) + thẻ cha + web links + trang Docs gắn thẻ / được link trong thẻ + chữ của
  *                      tệp đính kèm (txt/md/PDF/DOCX — rút bằng `extractPdf`/`extractDocx` của CV Builder);
+ *                      + (19/10/2026) NỘI DUNG link ngoài Figma/Google Docs-Sheets-Slides-Drive/GitHub (`linkNgoaiDuAn.ts`);
  *   - `readAttachmentText` một tệp (cùng điều kiện với `attachmentDownloadUrl`);
  *   - `askIntent` + `prefetchForQuestion`: câu hỏi kiểu "việc của tôi / thẻ X cần đọc gì" ⇒ mã ĐỌC SẴN trước khi gọi
  *     model (ít vòng hỏi hơn ⇒ rẻ + nhanh hơn để model tự xin đọc từng thứ).
@@ -38,6 +39,7 @@ import { docAccess, isClientScoped, requireProject, resourceAccess, type Project
 import { dayInZone } from './projectTime.js';
 import { projectMembers } from './projects.service.js';
 import { listWebLinks } from './resources.service.js';
+import { docLinkCuaThe } from './linkNgoaiDuAn.js';
 
 const clip = (s: string | null | undefined, n: number) => (s ? (s.length > n ? `${s.slice(0, n)}…` : s) : '');
 
@@ -325,6 +327,8 @@ export interface ReadIssueOpts {
   withPages?: boolean;
   /** Thẻ đã có đầy đủ ở chỗ khác trong prompt ⇒ không chép lại mô tả của thẻ cha nếu nó nằm trong đây. */
   known?: number[];
+  /** 19/10/2026: đọc luôn NỘI DUNG link ngoài (Google Docs/Sheets/Slides/Drive, Figma, GitHub) — xem linkNgoaiDuAn.ts. */
+  withLinks?: boolean;
 }
 
 /**
@@ -353,8 +357,10 @@ export async function readIssueFull(userId: number, access: ProjectAccess, links
     const full = o.known?.includes(p.number);
     extra.push(`Parent ${access.key}-${p.number} "${clip(p.title, 160)}" (${links.issue(p.number)})${full ? ' — read in full above/below' : p.descriptionText ? `:\n${untrusted(`parent ${access.key}-${p.number}`, clip(p.descriptionText, 800))}` : ''}`);
   }
+  let webLinkUrls = '';
   try {
     const wl = await listWebLinks(userId, access.projectId, number);
+    webLinkUrls = wl.items.map((w) => w.url).join('\n');
     if (wl.items.length) extra.push(`Web links on this issue:\n${untrusted(`web links of ${access.key}-${number}`, wl.items.map((w) => `- ${w.title} <${w.url}>${w.inResources ? ' (from Resources)' : ''}`).join('\n'))}`);
   } catch { /* mô-đun Resources tắt / không xem được ⇒ không có web links */ }
 
@@ -395,6 +401,12 @@ export async function readIssueFull(userId: number, access: ProjectAccess, links
   if (files.length) extra.push(`Content of attached files:\n${untrusted(`attachments of ${access.key}-${number}`, files.join('\n\n'))}`);
   const unread = row.attachments.filter((a) => !files.some((f) => f.startsWith(`--- attachment #${a.id} `)));
   if (unread.length) extra.push(`Other attachments (read one with read_attachment(attachment:<id>) if needed): ${unread.map((a) => `#${a.id} ${a.fileName}`).join(', ')}`);
+
+  // Link ngoài (Figma / Google / GitHub) trong mô tả + bình luận + web links ⇒ nội dung (trần + đệm 10 phút).
+  if (o.withLinks) {
+    const ext = await docLinkCuaThe(access.projectId, `${md}\n${webLinkUrls}`).catch(() => '');
+    if (ext) extra.push(ext);
+  }
 
   return `### ${access.key}-${number} — in-app link ${links.issue(number)}\n${clip(md, o.chars ?? MENTOR_LIMITS.issueChars)}${extra.length ? `\n\n${extra.join('\n\n')}` : ''}`;
 }
@@ -495,7 +507,8 @@ export async function prefetchForQuestion(userId: number, access: ProjectAccess,
   for (const n of order) {
     if (left < 1500) break;
     try {
-      let t = await readIssueFull(userId, access, links, n, { chars: Math.min(MENTOR_LIMITS.issueChars, left), withPages: pinned.includes(n) && pinned.length <= 2, known: order });
+      const dich = pinned.includes(n) && pinned.length <= 2;
+      let t = await readIssueFull(userId, access, links, n, { chars: Math.min(MENTOR_LIMITS.issueChars, left), withPages: dich, withLinks: dich, known: order });
       // Definition of Done của dự án giống hệt nhau ở mọi thẻ ⇒ chỉ giữ bản đầu.
       const dod = /\n\nDefinition of Done of project [^\n]*\n<ctwork-content[\s\S]*?<\/ctwork-content>/.exec(t);
       if (dod && parts.some((x) => x.includes(dod[0]))) t = t.replace(dod[0], '\n\n(Definition of Done: same as above.)');

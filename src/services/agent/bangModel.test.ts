@@ -22,10 +22,16 @@ const { effortGpt, nguongNen, tranKyTuCua } = await import('./turn.js');
 
 const KHONG_QUYEN = { laAdmin: false, modelCao: false, invisible: false };
 
-test('bảng model: xếp năng lực cao → thấp, mặc định CuongMini Solid = gpt-6-sol', () => {
+test('bảng model: FREE trước rồi cần khoá, trong nhóm năng lực cao → thấp (19/10); mặc định CuongMini Solid = gpt-6-sol', () => {
   const ds = bangModel();
-  for (let i = 1; i < ds.length; i++) assert.ok(ds[i - 1]!.nangLuc >= ds[i]!.nangLuc, `${ds[i - 1]!.id} phải đứng trên ${ds[i]!.id}`);
-  assert.equal(ds[0]!.ten, TEN_INVISIBLE);
+  const nhom = (m: { khoa: string }) => (m.khoa === 'free' ? 0 : 1);
+  for (let i = 1; i < ds.length; i++) {
+    const [a, b] = [ds[i - 1]!, ds[i]!];
+    assert.ok(nhom(a) < nhom(b) || (nhom(a) === nhom(b) && a.nangLuc >= b.nangLuc), `${a.id} phải đứng trên ${b.id}`);
+  }
+  /* Thứ tự chủ app chốt: Sonic 5.5, Solid, Nova, Shin, Heshin 5.5, Eco — rồi mới tới hai model cần khoá. */
+  assert.deepEqual(ds.map((m) => m.id), ['cm-sonic', 'cm-solid', 'cm-nova', 'cm-shin', 'cm-heshin', 'cm-eco', 'cm-invisible', 'cm-optimum']);
+  assert.equal(ds.find((m) => m.khoa === 'invisible')!.ten, TEN_INVISIBLE);
   assert.equal(MA_MAC_DINH, 'cm-solid');
   const solid = timModel(undefined);
   assert.equal(solid.model, 'gpt-6-sol');

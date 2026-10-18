@@ -14,12 +14,16 @@
  *   PUT  /projects/:pid/(github|gitlab)/read-token            { token|null } — ADMIN; token không bao giờ trả về
  *   PUT  /projects/:pid/(github|gitlab)/activity              { chatChannelId?, notify? } — ADMIN
  *   POST /projects/:pid/(github|gitlab)/test                  gửi thử — ADMIN
+ *   GET  /projects/:pid/figma                                 { hasToken, handle, savedAt, canEdit } (19/10/2026)
+ *   PUT  /projects/:pid/figma/token                           { token|null } — ADMIN; token Figma CHỈ ĐỌC cho trợ lý AI,
+ *                                                             mã hoá, không bao giờ trả về (linkNgoaiDuAn.ts)
  */
 
 import { Router, type Request, type Response } from 'express';
 import { z, ZodError } from 'zod';
 import { asyncHandler, BadRequestError, UnauthorizedError } from '../middleware/errorHandler.js';
 import * as code from '../services/work/code.service.js';
+import * as linkNgoai from '../services/work/linkNgoaiDuAn.js';
 
 const router = Router();
 
@@ -109,6 +113,16 @@ router.put('/projects/:pid/:host(github|gitlab)/activity', asyncHandler(async (r
 }));
 router.post('/projects/:pid/:host(github|gitlab)/test', asyncHandler(async (req, res) => {
   ok(res, await code.testSend(callerId(req), P(req, 'pid'), providerOf(req)));
+}));
+
+// ─── Figma (19/10/2026): token CHỈ ĐỌC để trợ lý AI đọc link Figma trong thẻ ──
+router.get('/projects/:pid/figma', asyncHandler(async (req, res) => {
+  ok(res, await linkNgoai.trangThaiFigma(callerId(req), P(req, 'pid')));
+}));
+
+router.put('/projects/:pid/figma/token', asyncHandler(async (req, res) => {
+  const { token } = parse(z.object({ token: z.string().max(400).nullable() }), req.body ?? {});
+  ok(res, await linkNgoai.datTokenFigma(callerId(req), P(req, 'pid'), token));
 }));
 
 export default router;

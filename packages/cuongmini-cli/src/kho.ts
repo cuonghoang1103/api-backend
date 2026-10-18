@@ -130,7 +130,7 @@ export interface TrangThaiChat {
   /** ctrl+o: in đầy đủ đầu ra tool thay vì vài dòng cuối. */
   chiTiet: boolean;
   /** Lỗi cuối cần giao diện xử lý thêm (RAMBO_BAO_TRI, 401…). Giao diện đọc xong thì xoá. */
-  loiCanXuLy: { ma: string; thongDiep: string; daBat?: boolean } | null;
+  loiCanXuLy: { ma: string; thongDiep: string; daBat?: boolean; giaHanTien?: GiaHanTien } | null;
   /** Đợt 6: tin gõ giữa lượt mà lượt dừng trước khi agent đọc ⇒ giao diện trả về ô nhập rồi xoá trường này. */
   chenTraVe: string[] | null;
   /** Đợt 6: lượt vừa dừng vì "Không, và bảo CuongMini làm khác đi" ⇒ ô nhập gợi ý gõ chỉ dẫn. */
@@ -183,6 +183,17 @@ export const LOI_THONG_BAO = new Set(['DOI_CONG', 'KHOI_PHUC', 'LAM_TIEP', 'COMP
 /** Lỗi cổng Claude chính hãng giao diện phải xử lý thêm (hỏi mật khẩu / mời modelapi). */
 export const LOI_CONG_ANTHROPIC = new Set(['CONG_ANTHROPIC_KHOA', 'CONG_ANTHROPIC_HET_HAN_MUC', 'CONG_ANTHROPIC_HET_KEY']);
 export const LOI_HET_PHIEN = new Set(['401', 'UNAUTHORIZED', 'NO_SESSION']);
+
+/** Mã gia hạn theo $ (19/10/2026) — khớp `AgentGiaHanTien` của lõi / `GiaHanTienUi` của máy chủ. */
+export interface GiaHanTien {
+  tran: string; ky: 'ngay' | 'thang' | 'cuaSo'; ten: string; tenEn: string; mucUsd: number; daDungUsd: number; tranUsd: number;
+  canDuyet: boolean; dangCho: number | null; lanThu: number; duongDan: string;
+}
+export function laGiaHanTien(x: unknown): x is GiaHanTien {
+  const o = x as Partial<GiaHanTien> | null;
+  return !!o && typeof o === 'object' && typeof o.tran === 'string' && o.tran.length > 0 && o.tran.length <= 60
+    && (o.ky === 'ngay' || o.ky === 'thang' || o.ky === 'cuaSo') && typeof o.mucUsd === 'number' && typeof o.ten === 'string';
+}
 const TRAN_RA = 20_000;
 
 export class KhoChat {
@@ -251,6 +262,26 @@ export class KhoChat {
   }
 
   /** Bắt đầu một lượt: in tin người dùng, bật trạng thái chạy. */
+  /**
+   * Mã gia hạn theo $ (19/10/2026): LÀM TIẾP lượt vừa bị chặn (`agent:lamTiep` — lõi gửi lại nguyên hội thoại) — không
+   * thêm bong bóng câu hỏi, không đếm là một câu cho `/rewind`.
+   */
+  batDauLamTiep(thongBao: string, bayGio = Date.now()): void {
+    const S = this.S;
+    this.them({ loai: 'thongBao', text: thongBao, muc: 'ok' });
+    S.choChiDan = false;
+    S.dangChay = true;
+    S.batDauLuot = bayGio;
+    S.tokenRa = 0;
+    S.kyTuRa = 0;
+    S.coTienTrinh = false;
+    S.tienLuot = 0;
+    S.pha = 'cho';
+    S.buoc = null;
+    S.chuDangViet = '';
+    this.bao(true);
+  }
+
   batDauLuot(hienThi: string, soAnh: number, cauGui: string, bayGio = Date.now()): void {
     const S = this.S;
     this.them({ loai: 'nguoi', text: hienThi, luc: bayGio, soAnh });
@@ -604,8 +635,10 @@ export class KhoChat {
         S.choDuyetKeHoach = false;
         S.muc.push({ kieu: 'loi', text: thongDiep });
         this.them({ loai: 'loi', text: thongDiep, ma: ma || undefined });
-        if (ma === 'RAMBO_BAO_TRI' || ma === 'PRO_REQUIRED' || LOI_HET_PHIEN.has(ma) || LOI_CONG_ANTHROPIC.has(ma)) {
-          S.loiCanXuLy = { ma, thongDiep, ...(typeof e.daBat === 'boolean' ? { daBat: e.daBat } : {}) };
+        /* Mã gia hạn theo $ (19/10/2026): lỗi chạm trần tiền mang `giaHanTien` ⇒ giao diện mở thẻ nhập mã (ẩn ký tự). */
+        const gh = laGiaHanTien(e.giaHanTien) ? e.giaHanTien : undefined;
+        if (gh || ma === 'RAMBO_BAO_TRI' || ma === 'PRO_REQUIRED' || LOI_HET_PHIEN.has(ma) || LOI_CONG_ANTHROPIC.has(ma)) {
+          S.loiCanXuLy = { ma, thongDiep, ...(typeof e.daBat === 'boolean' ? { daBat: e.daBat } : {}), ...(gh ? { giaHanTien: gh } : {}) };
         }
         break;
       }

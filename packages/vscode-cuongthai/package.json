@@ -2,7 +2,7 @@
   "name": "cuongthai-ai-code",
   "displayName": "CuongMini Code — AI lập trình của CuongThai",
   "description": "CuongMini Code — AI lập trình của CuongThai ngay trong VS Code — chat, sửa code, chạy lệnh, skill, MCP, GitHub. Cài là dùng: đăng nhập bằng tài khoản cuongthai.com (có app desktop thì tự chạy qua app).",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "publisher": "cuongthai",
   "license": "UNLICENSED",
   "private": true,
@@ -38,7 +38,10 @@
       { "command": "cuongthai.suaLoi", "title": "Nhờ AI sửa lỗi này", "category": "CuongMini" },
       { "command": "cuongthai.moApp", "title": "Mở app CuongThai", "category": "CuongMini" },
       { "command": "cuongthai.dangXuat", "title": "Đăng xuất (chế độ không cần app)", "category": "CuongMini" },
-      { "command": "cuongthai.batTatMayTinh", "title": "Bật/tắt điều khiển máy tính (chụp màn hình, chuột, phím)", "category": "CuongMini" }
+      { "command": "cuongthai.batTatMayTinh", "title": "Bật/tắt điều khiển máy tính (chụp màn hình, chuột, phím)", "category": "CuongMini" },
+      { "command": "cuongthai.hienTrinhDuyet", "title": "Hiện trình duyệt AI (để tự đăng nhập) / Show AI browser", "category": "CuongMini", "icon": "$(globe)" },
+      { "command": "cuongthai.anTrinhDuyet", "title": "Ẩn trình duyệt AI — chạy ngầm / Hide AI browser", "category": "CuongMini" },
+      { "command": "cuongthai.ketNoiFigma", "title": "Kết nối Figma (token chỉ đọc) / Connect Figma", "category": "CuongMini" }
     ],
     "menus": {
       "view/title": [

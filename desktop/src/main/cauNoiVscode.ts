@@ -43,6 +43,8 @@ const KENH_DUOC: ReadonlySet<InvokeChannel> = new Set<InvokeChannel>([
   'agent:hookMoCauHinh',
   // Cổng Claude chính hãng (17/10/2026): trạng thái, mở khoá (app gọi máy chủ bằng phiên của nó), chọn cổng phụ.
   'agent:congAnthropic', 'agent:moCongAnthropic', 'agent:datCongPhu',
+  // Mã gia hạn theo $ (19/10/2026): nhập mã khi chạm trần tiền + kiểm lại yêu cầu chờ duyệt.
+  'agent:giaHanTien', 'agent:giaHanTienKiem',
   // Đợt 3 (18/10/2026): hỏi lựa chọn, chờ/hẹn, nhắn giữa phiên, tiền tố lệnh, worktree.
   'agent:traLoiHoi', 'agent:huyCho', 'agent:huyHen', 'agent:henCho', 'agent:dsPhienMang', 'agent:doiTenPhienMang',
   'agent:themTienTo', 'agent:dsWorktree', 'agent:taoWorktree', 'agent:xoaWorktree', 'agent:ctwork', 'agent:mcpNapLai',
@@ -50,6 +52,8 @@ const KENH_DUOC: ReadonlySet<InvokeChannel> = new Set<InvokeChannel>([
   'agent:chenTin', 'agent:mayTinh', 'agent:henLo', 'agent:xuLyHenLo', 'agent:mcpTool', 'agent:mcpBatTat',
   // Đợt 5 (18/10/2026): CT Work hệ sinh thái — gắn dự án, dòng trạng thái, menu `/ctwork`, `/issue`.
   'agent:ctworkHe',
+  // 19/10/2026: token Figma chỉ đọc (kho bí mật của app) + trình duyệt ngầm/hiện (app trả hoTro:false — khung nằm trong app).
+  'agent:figma', 'agent:trinhDuyetCheDo',
 ]);
 
 const CONG_THU = [47821, 47822, 47823, 47824, 47825];

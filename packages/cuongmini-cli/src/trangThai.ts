@@ -43,6 +43,8 @@ export const NHAN_TOOL: Record<string, [string, string]> = {
   may_cuon: ['Cuộn', 'Scroll'], lsp_hoi: ['LSP', 'LSP'], chay_notebook: ['Chạy notebook', 'Run notebook'],
   /* Đợt 6 */
   ctwork_huong_dan: ['Hướng dẫn CT Work', 'CT Work guide'], nap_tool_mcp: ['Nạp tool', 'Load tools'],
+  /* 19/10/2026 */
+  trinh_duyet_hien: ['Hiện trình duyệt', 'Show browser'], figma_doc: ['Đọc Figma', 'Read Figma'],
 };
 
 /** Câu "Đang …" (thanh trạng thái). Không có ⇒ suy từ nhãn. */
@@ -58,6 +60,7 @@ const VIEC_TOOL: Record<string, [string, string]> = {
   web_anh: ['Đang chụp trang', 'Taking a screenshot'], web_lien_ket: ['Đang lấy liên kết', 'Collecting links'], web_bam: ['Đang bấm', 'Clicking'],
   web_go: ['Đang gõ', 'Typing'], web_tai: ['Đang tải về', 'Downloading'], web_console: ['Đang đọc console', 'Reading console'],
   doc_web: ['Đang đọc trang web', 'Reading page'], tim_web: ['Đang tra cứu trên web', 'Searching the web'],
+  trinh_duyet_hien: ['Đang mở cửa sổ trình duyệt', 'Showing the browser window'], figma_doc: ['Đang đọc Figma', 'Reading Figma'],
   giao_viec_phu: ['Agent phụ đang làm', 'Subagent working'], giao_viec_ghi: ['Agent phụ đang sửa', 'Subagent editing'], cap_nhat_ke_hoach: ['Đang lập kế hoạch', 'Planning'],
   dung_ky_nang: ['Đang dùng skill', 'Using skill'], ghi_nho: ['Đang ghi nhớ bài học', 'Saving memory'], nho_bai_hoc: ['Đang ghi nhớ bài học', 'Saving memory'],
   doc_anh: ['Đang xem ảnh', 'Viewing image'], sua_anh: ['Đang sửa ảnh', 'Editing image'], doc_dau_ra_nen: ['Đang đọc đầu ra lệnh nền', 'Reading background output'],
@@ -110,6 +113,8 @@ export function nhanTool(ten: string): string {
  */
 const CUM_TOM_TAT: Array<[RegExp, string]> = ([
   // Câu trọn (cụ thể nhất).
+  ['hiện cửa sổ — chờ người dùng', 'window shown — waiting for you'], ['về ngầm', 'back to background'],
+  ['chưa có token', 'no token yet'], ['link sai', 'wrong link'], ['Figma lỗi', 'Figma error'],
   ['từ chối ở hộp hệ thống', 'denied at the OS prompt'], ['chờ người dùng gõ mật khẩu', 'waiting for you to type the password'],
   ['không tạo được khu riêng', 'could not create the sandbox'], ['không có kỹ năng đó', 'no such skill'], ['không có loại đó', 'no such type'],
   ['không có mã đó', 'no such id'], ['không có phiên đó', 'no such session'], ['không có tool này', 'unknown tool'], ['không có cửa sổ', 'no window'],

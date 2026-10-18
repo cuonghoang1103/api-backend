@@ -22,6 +22,7 @@ import type {
   TerminalDauRa,
   AgentCuocDangMo,
   AgentCongAnthropic,
+  AgentKetQuaGiaHan,
   AgentMcpTrangThai,
   AgentHookNhatKy,
   AgentMucKhoiPhuc,
@@ -478,6 +479,11 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:moCongAnthropic', { matKhau, ...(model ? { model } : {}) }) as Promise<{ ten: string; hetHan: number | null }>,
     congAnthropic: () =>
       ipcRenderer.invoke('agent:congAnthropic') as Promise<AgentCongAnthropic | null>,
+    /* Mã gia hạn theo $ (19/10/2026): nhập mã cho một trần tiền đã chạm + kiểm lại yêu cầu chờ duyệt. */
+    giaHanTien: (ma: string, tran: string) =>
+      ipcRenderer.invoke('agent:giaHanTien', { ma, tran }) as Promise<AgentKetQuaGiaHan>,
+    giaHanTienKiem: (id: number) =>
+      ipcRenderer.invoke('agent:giaHanTienKiem', { id }) as Promise<AgentKetQuaGiaHan>,
     datCongPhu: (cuocId: string, cong: 'modelapi' | null, model?: string) =>
       ipcRenderer.invoke('agent:datCongPhu', { cuocId, cong, ...(model ? { model } : {}) }) as Promise<void>,
     hoanTac: (cuocId: string) =>

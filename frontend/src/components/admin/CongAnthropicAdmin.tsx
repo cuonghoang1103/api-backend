@@ -117,6 +117,7 @@ export default function CongAnthropicAdmin() {
       {tq.bangModel && <BangModelCm models={tq.bangModel} tran={tq.tranModel ?? {}} onXong={(tranModel) => setTq({ ...tq, tranModel })} />}
       <MatKhau loai="chung" daBat={tq.daBatMatKhau} onXong={nap} />
       <MatKhau loai="invisible" daBat={tq.daBatMatKhauInvisible === true} onXong={nap} />
+      <MaGiaHanTien />
       {tq.rambo && <CongTacRambo rambo={tq.rambo} onDoi={(rambo) => setTq({ ...tq, rambo })} />}
       <ThamSo tq={tq} onDoi={(serverTool) => setTq({ ...tq, serverTool })} />
       <TranGoiForm tranGoi={tq.tranGoi} onXong={(t) => setTq({ ...tq, tranGoi: t })} />
@@ -309,6 +310,117 @@ function MatKhau({ loai, daBat, onXong }: { loai: 'chung' | 'invisible'; daBat: 
   );
 }
 
+// ─── Mã gia hạn theo $ (19/10/2026) — src/services/agent/maGiaHanTien.ts ──
+
+interface YeuCauGH {
+  id: number; userId: number; username: string | null; ten: string | null; email?: string | null;
+  tran: string; tenTran: string; ky: string; soUsd: number; lanThu: number; daDungUsd: number; tranUsd: number;
+  trangThai: 'CHO_DUYET' | 'DA_CAP' | 'TU_CHOI' | 'HET_KY'; lyDoTuChoi: string | null; soLanDaCapKy: number; createdAt: string;
+}
+interface DuLieuGH { ma: { daBat: boolean; phienBan: number }; choDuyet: YeuCauGH[]; ganDay: YeuCauGH[] }
+const TEN_TT_GH: Record<YeuCauGH['trangThai'], string> = {
+  CHO_DUYET: 'Chờ duyệt / Pending', DA_CAP: 'Đã cấp / Granted', TU_CHOI: 'Từ chối / Rejected', HET_KY: 'Quá kỳ / Expired',
+};
+
+/**
+ * Mục "Mã gia hạn": đặt/đổi mã (chỉ lưu BĂM — đổi là mã cũ chết ngay), bảng yêu cầu chờ duyệt (người, trần nào, đã dùng
+ * bao nhiêu, đã gia hạn mấy lần trong kỳ) với Duyệt/Từ chối, và 50 lượt gần nhất. Yêu cầu mới ⇒ hộp thư admin + Telegram.
+ */
+function MaGiaHanTien() {
+  const [d, setD] = useState<DuLieuGH | null>(null);
+  const [ma, setMa] = useState('');
+  const [dang, setDang] = useState(false);
+  const nap = useCallback(async () => {
+    try { setD(await goi<DuLieuGH>('/gia-han-tien')); } catch (e) { toast.error((e as Error).message); }
+  }, []);
+  useEffect(() => { void nap(); }, [nap]);
+  const datMa = async (moi: string | null) => {
+    if (moi !== null && moi.length < 6) { toast.error('Mã tối thiểu 6 ký tự. / At least 6 characters.'); return; }
+    if (moi === null && !window.confirm('Tắt mã gia hạn? Người dùng chạm trần sẽ không còn ô nhập mã. / Turn extension codes off?')) return;
+    setDang(true);
+    try {
+      await goi('/ma-gia-han', { method: 'PUT', body: JSON.stringify({ ma: moi }) });
+      toast.success(moi === null ? 'Đã tắt. / Turned off.' : 'Đã đặt — mã cũ hết hiệu lực. / Set — the old code no longer works.');
+      setMa(''); await nap();
+    } catch (e) { toast.error((e as Error).message); } finally { setDang(false); }
+  };
+  const xuLy = async (id: number, dongY: boolean) => {
+    const lyDo = dongY ? undefined : (window.prompt('Lý do từ chối (không bắt buộc) / Reason (optional)') ?? undefined);
+    setDang(true);
+    try {
+      const r = await goi<DuLieuGH & { yeuCau: YeuCauGH }>(`/gia-han-tien/${id}`, { method: 'POST', body: JSON.stringify({ dongY, ...(lyDo ? { lyDo } : {}) }) });
+      setD((cu) => (cu ? { ...cu, choDuyet: r.choDuyet, ganDay: r.ganDay } : cu));
+      toast.success(dongY ? 'Đã duyệt — cộng thêm một mức. / Approved.' : 'Đã từ chối. / Rejected.');
+    } catch (e) { toast.error((e as Error).message); await nap(); } finally { setDang(false); }
+  };
+  const nguoi = (y: YeuCauGH) => `@${y.username ?? y.userId}${y.email ? ` · ${y.email}` : ''}`;
+  return (
+    <The tieuDe="🎟️ Mã gia hạn theo $ (extension code)"
+      phai={<span className={`px-2 py-0.5 rounded-full text-xs border ${d?.ma.daBat ? 'border-green-500/50 text-green-400' : 'border-darkborder text-text-muted'}`}>{d?.ma.daBat ? 'Đang bật / On' : 'Chưa đặt / Not set'}</span>}>
+      <p className="text-text-muted text-xs">
+        Áp cho mọi trần TIỀN người dùng chạm được: trần model × người, ví AI Code (5 giờ), nhóm free Code Max, hạn mức nhóm (từng người).
+        Lần 1 trong kỳ của trần đó: mã đúng ⇒ cộng ngay một mức = mức gốc của trần. Lần 2+: tạo yêu cầu chờ duyệt ở đây (nhà tài trợ nhóm
+        cũng duyệt được yêu cầu hạn mức nhóm). Model trả phí cần vé khoá trước. 5 lần sai / 15 phút ⇒ khoá. Mã chỉ lưu băm, không bao giờ ghi log.
+        <br />Applies to every money cap: per-model, AI Code wallet, Code Max free group, team allowance (per member). First time per period ⇒
+        +1 step at once; later ⇒ approval here. Paid models still need their key. Only the hash is stored.
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <input type="password" autoComplete="new-password" className={`${o} flex-1 min-w-[200px]`} value={ma} onChange={(e) => setMa(e.target.value)}
+          placeholder={d?.ma.daBat ? 'Mã mới (đổi = mã cũ chết) / New code' : 'Đặt mã để bật / Set a code to enable'} />
+        <button disabled={dang || !ma} onClick={() => datMa(ma)} className={`${nut} border-neon-violet text-neon-violet`}>{d?.ma.daBat ? 'Đổi / Change' : 'Bật / Enable'}</button>
+        {d?.ma.daBat && <button disabled={dang} onClick={() => datMa(null)} className={`${nut} border-darkborder text-text-muted`}>Tắt / Off</button>}
+        <button disabled={dang} onClick={() => void nap()} className={`${nut} border-darkborder text-text-muted`}><RefreshCw className="w-3 h-3 inline" /> Tải lại</button>
+      </div>
+      <div>
+        <b className="text-text-primary text-xs">Chờ duyệt / Pending ({d?.choDuyet.length ?? 0})</b>
+        {d?.choDuyet.length ? (
+          <div className="overflow-x-auto">
+            <table className="text-xs w-full">
+              <thead className="text-text-muted text-left">
+                <tr><th className="pr-3">Người / User</th><th className="pr-3">Trần / Limit</th><th className="pr-3">Đã dùng / Used</th>
+                  <th className="pr-3">Đã gia hạn trong kỳ</th><th className="pr-3">Lần / Attempt</th><th className="pr-3">Xin / Asks</th><th className="pr-3">Lúc / At</th><th /></tr>
+              </thead>
+              <tbody>
+                {d.choDuyet.map((y) => (
+                  <tr key={y.id}>
+                    <td className="pr-3 py-1 text-text-primary">{nguoi(y)}</td>
+                    <td className="pr-3">{y.tenTran}</td>
+                    <td className="pr-3">{usd(y.daDungUsd)} / {usd(y.tranUsd)}</td>
+                    <td className="pr-3">{y.soLanDaCapKy}×</td>
+                    <td className="pr-3">{y.lanThu}</td>
+                    <td className="pr-3">+{usd(y.soUsd)}</td>
+                    <td className="pr-3">{ngayVN(y.createdAt)}</td>
+                    <td className="whitespace-nowrap">
+                      <button disabled={dang} onClick={() => void xuLy(y.id, true)} className={`${nut} border-green-500/50 text-green-400 mr-1`}>Duyệt / Approve</button>
+                      <button disabled={dang} onClick={() => void xuLy(y.id, false)} className={`${nut} border-red-500/50 text-red-400`}>Từ chối / Reject</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : <p className="text-text-muted text-xs">Không có yêu cầu nào. / Nothing pending.</p>}
+      </div>
+      {!!d?.ganDay.length && (
+        <details>
+          <summary className="text-text-muted text-xs cursor-pointer">Gần đây / Recent ({d.ganDay.length})</summary>
+          <table className="text-xs w-full mt-2">
+            <tbody>
+              {d.ganDay.map((y) => (
+                <tr key={y.id}>
+                  <td className="pr-3 py-0.5">#{y.id}</td><td className="pr-3">{nguoi(y)}</td><td className="pr-3">{y.tenTran}</td>
+                  <td className="pr-3">+{usd(y.soUsd)}</td><td className="pr-3">{TEN_TT_GH[y.trangThai] ?? y.trangThai}{y.lyDoTuChoi ? ` — ${y.lyDoTuChoi}` : ''}</td>
+                  <td className="pr-3">{ngayVN(y.createdAt)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </details>
+      )}
+    </The>
+  );
+}
+
 // ─── Bảng model CuongMini + trần theo model × người (18/10/2026) ──────
 
 const TEN_KHOA = { free: 'Free (Pro)', chung: 'Khoá chung / shared key', invisible: 'Khoá riêng / own key' } as const;
@@ -335,9 +447,9 @@ function BangModelCm({ models, tran, onXong }: {
   return (
     <The tieuDe="🧠 Bảng model CuongMini + trần theo người (USD) / CuongMini models + per-user caps">
       <p className="text-text-muted text-xs">
-        Thứ tự = năng lực (cao → thấp), giống danh sách người dùng thấy (họ chỉ thấy tên CuongMini). Trần tính theo tháng/ngày lịch giờ Việt Nam
+        Thứ tự = danh sách người dùng thấy: model FREE trước, rồi model cần khoá; trong mỗi nhóm năng lực cao → thấp (họ chỉ thấy tên CuongMini). Trần tính theo tháng/ngày lịch giờ Việt Nam
         trên sổ <code>interview_llm_call_logs</code> (feature agent, đúng model). Ô trống = không giới hạn. Cổng chính hãng còn trần nhóm free/cao bên dưới.
-        <br />Order = capability; users only see CuongMini names. Empty = unlimited.
+        <br />Order = what users see: free models first, then keyed ones; capability within each group. Empty = unlimited.
       </p>
       <div className="overflow-x-auto">
         <table className="text-xs">

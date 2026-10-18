@@ -23,6 +23,7 @@ import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { bangModel, type MucModel } from './bangModel.js';
 import { dauNgayVn, dauThangVn, goiCuaNguoi, type GoiTaiKhoan } from './anthropicChinhHang/hanMuc.js';
+import { tienGiaHanTheoKy } from './giaHanTienSo.js';
 
 export type GoiCoTranModel = 'pro' | 'key_terminal';
 export const GOI_TRAN_MODEL: readonly GoiCoTranModel[] = ['pro', 'key_terminal'];
@@ -110,6 +111,18 @@ export interface HanMucModel {
   tranThang: number | null;
   tranNgay: number | null;
   het: boolean;
+  /** Mã gia hạn theo $ (19/10/2026): trần GỐC (admin đặt) và phần đã cấp thêm trong kỳ — `tranThang/Ngay` = gốc + cấp. */
+  tranThangGoc?: number | null;
+  tranNgayGoc?: number | null;
+  giaHanThang?: number;
+  giaHanNgay?: number;
+}
+
+/** Trần nào đang chặn: tháng (ưu tiên — nới ngày không gỡ được trần tháng) hay ngày. `null` = chưa chạm. */
+export function kyDangCham(h: Pick<HanMucModel, 'daDungThang' | 'daDungNgay' | 'tranThang' | 'tranNgay'>): 'thang' | 'ngay' | null {
+  if (h.tranThang !== null && h.daDungThang >= h.tranThang) return 'thang';
+  if (h.tranNgay !== null && h.daDungNgay >= h.tranNgay) return 'ngay';
+  return null;
 }
 
 /** Thuần: đã dùng + trần ⇒ chạm chưa. */
@@ -139,12 +152,19 @@ export async function xemTranModel(userId: number, m: MucModel, luc = new Date()
   if (goi === 'admin') {
     return { id: m.id, goi, khongGioiHan: true, daDungThang: sach(thang), daDungNgay: sach(ngay), tranThang: null, tranNgay: null, het: false };
   }
-  const t: TranUsd = goi === 'pro' || goi === 'key_terminal' ? (await docTranModel())[m.id]?.[goi] ?? DU_PHONG[goi] : { thang: 0, ngay: 0 };
+  const goc: TranUsd = goi === 'pro' || goi === 'key_terminal' ? (await docTranModel())[m.id]?.[goi] ?? DU_PHONG[goi] : { thang: 0, ngay: 0 };
+  /* Mã gia hạn theo $ (19/10/2026): chỉ gói có trần thật (pro/key_terminal) mới được cấp — trần 0 của gói khác không nới. */
+  const g = goi === 'pro' || goi === 'key_terminal' ? await tienGiaHanTheoKy(userId, `model:${m.id}`, luc) : { ngay: 0, thang: 0, cuaSo: 0 };
+  const t: TranUsd = {
+    thang: goc.thang === null ? null : Math.round((goc.thang + g.thang) * 10_000) / 10_000,
+    ngay: goc.ngay === null ? null : Math.round((goc.ngay + g.ngay) * 10_000) / 10_000,
+  };
   return {
     id: m.id, goi, khongGioiHan: false,
     daDungThang: sach(thang), daDungNgay: sach(ngay),
     tranThang: t.thang, tranNgay: t.ngay,
     het: chamTran(thang, ngay, t),
+    tranThangGoc: goc.thang, tranNgayGoc: goc.ngay, giaHanThang: g.thang, giaHanNgay: g.ngay,
   };
 }
 

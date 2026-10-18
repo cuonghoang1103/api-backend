@@ -95,6 +95,8 @@ export interface BoiCanhLenh {
   lamMoiCtwork?: () => void;
   /** Chọn một model 🔒 của cổng chính hãng: hỏi mật khẩu ⇒ mở khoá ⇒ đổi model. */
   moKhoaModel: (id: string) => void;
+  /** 19/10/2026: hỏi một chuỗi BÍ MẬT bằng ô nhập ẩn ký tự (token Figma). Không có ⇒ lệnh báo cách khác. */
+  hoiAn?: (o: { tieuDe: string; moTa: string; khiXong: (giaTri: string) => void }) => void;
   /** /fullscreen on|off — không tham số thì đảo. */
   datToanManHinh: (bat?: boolean) => void;
   /** /mouse on|off — bắt chuột ở toàn màn hình (mặc định tắt để bôi đen chép tự nhiên). */
@@ -367,6 +369,39 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
               khiChon: async (so) => { if (so === 'lai') await chayLenh('/quyen', b); else await chayLenh(`/quyen xoa ${so}`, b); },
             });
           }
+        },
+      });
+      return;
+    }
+
+    case '/ket-noi': {
+      /* 19/10/2026: kết nối dịch vụ ngoài bằng token CHỈ ĐỌC cất trong kho bí mật của máy (0600 / Keychain) — hiện có Figma.
+         Token gõ vào ô ẨN ký tự (không vào lịch sử, không vào hội thoại, model không thấy). */
+      const [dv, viec] = thamSo.trim().toLowerCase().split(/\s+/);
+      if (dv !== 'figma') { traLoi(L('Dùng: `/ket-noi figma` (dán token) · `/ket-noi figma off` (gỡ) · `/ket-noi figma status`.', 'Usage: `/ket-noi figma` (paste a token) · `/ket-noi figma off` (remove) · `/ket-noi figma status`.')); return; }
+      type KqF = { ok: boolean; loi?: string; coToken?: boolean; handle?: string | null; tuBien?: boolean };
+      if (viec === 'off' || viec === 'ngat' || viec === 'tat') {
+        const r = await kn.goi<KqF>('agent:figma', { viec: 'ngat' });
+        kho.thongBao(r?.coToken ? L('Đã xoá token trong kho — biến môi trường FIGMA_TOKEN vẫn còn.', 'Removed the stored token — the FIGMA_TOKEN env var is still set.') : L('Đã gỡ token Figma khỏi máy.', 'Figma token removed from this machine.'), 'ok');
+        return;
+      }
+      if (viec === 'status' || viec === 'trang-thai') {
+        const r = await kn.goi<KqF>('agent:figma', { viec: 'trangThai' });
+        traLoi(r?.coToken ? L(`Figma: **đã kết nối**${r.handle ? ` (${r.handle})` : ''}${r.tuBien ? ' — từ biến FIGMA_TOKEN' : ''}. AI dùng tool \`figma_doc\` đọc frame + chữ + bình luận.`, `Figma: **connected**${r.handle ? ` (${r.handle})` : ''}${r.tuBien ? ' — from FIGMA_TOKEN' : ''}. The AI reads frames + text + comments with \`figma_doc\`.`)
+          : L('Figma: chưa kết nối. Gõ `/ket-noi figma` để dán token chỉ đọc.', 'Figma: not connected. Type `/ket-noi figma` to paste a read-only token.'));
+        return;
+      }
+      if (!b.hoiAn) { traLoi(L('Bản giao diện này chưa có ô nhập ẩn — đặt biến môi trường FIGMA_TOKEN rồi mở lại CuongMini.', 'This UI has no hidden input — set the FIGMA_TOKEN env var and restart CuongMini.')); return; }
+      b.hoiAn({
+        tieuDe: L('🎨 Kết nối Figma', '🎨 Connect Figma'),
+        moTa: L('Figma → Settings → Security → Personal access tokens: tạo token CHỈ ĐỌC (File content: Read-only). Dán vào đây (Enter lưu · Esc bỏ). Token cất trong kho bí mật của máy, không gửi lên máy chủ CuongThai.',
+          'Figma → Settings → Security → Personal access tokens: create a READ-ONLY token (File content: Read-only). Paste it here (Enter save · Esc cancel). Stored in this machine\'s secret store, never sent to CuongThai servers.'),
+        khiXong: (tk) => {
+          kho.thongBao(L('Đang kiểm token với Figma…', 'Checking the token with Figma…'));
+          void kn.goi<KqF>('agent:figma', { viec: 'noi', token: tk }).then((r) => {
+            if (r?.ok) kho.thongBao(L(`Đã kết nối Figma${r.handle ? ` (${r.handle})` : ''} — AI đọc được frame, chữ, bình luận của file bạn có quyền xem.`, `Figma connected${r.handle ? ` (${r.handle})` : ''} — the AI can read frames, text and comments of files you can view.`), 'ok');
+            else kho.thongBao(L(`Không kết nối được: ${r?.loi ?? 'lỗi không rõ'}`, `Could not connect: ${r?.loi ?? 'unknown error'}`), 'loi');
+          }).catch((e: Error) => kho.thongBao(e.message, 'loi'));
         },
       });
       return;
@@ -774,6 +809,29 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
 
     case '/browser': {
       const q = thamSo.trim().toLowerCase();
+      /* 19/10/2026: trình duyệt AI chạy NGẦM (headless). show = mở cửa sổ THẤY ĐƯỢC cùng hồ sơ để TỰ đăng nhập;
+         hide = về ngầm; mode ngam|hien = đổi mặc định bền. CuongMini không bao giờ gõ mật khẩu hộ. */
+      const mCheDo = /^(show|hien|hiện|hide|an|ẩn|mode|che-do)\b\s*(.*)$/.exec(q); // i18n-bo-qua: chữ người gõ
+      if (mCheDo) {
+        const viec = mCheDo[1]!;
+        if (viec === 'mode' || viec === 'che-do') {
+          const md = /^(ngam|ngầm|headless|background)$/.test(mCheDo[2]!) ? 'ngam' : /^(hien|hiện|visible|window)$/.test(mCheDo[2]!) ? 'hien' : null; // i18n-bo-qua: chữ người gõ
+          if (!md) { traLoi(L('Dùng: `/browser mode ngam` (mặc định — chạy ngầm) hoặc `/browser mode hien` (luôn có cửa sổ).', 'Usage: `/browser mode ngam` (default — background) or `/browser mode hien` (always show a window).')); return; }
+          await kn.goi('agent:trinhDuyetCheDo', { cheDo: md, macDinh: true }).catch(() => null);
+          kho.thongBao(md === 'ngam' ? L('Trình duyệt AI mặc định: chạy NGẦM.', 'AI browser default: BACKGROUND (headless).') : L('Trình duyệt AI mặc định: luôn HIỆN cửa sổ.', 'AI browser default: always SHOW a window.'), 'ok');
+          return;
+        }
+        const hien = /^(show|hien|hiện)$/.test(viec); // i18n-bo-qua: chữ người gõ
+        if (hien && !timTrinhDuyet()) { traLoi(L('Không tìm thấy Chrome/Edge/Brave/Chromium trên máy.', 'No Chrome/Edge/Brave/Chromium found.')); return; }
+        kho.thongBao(hien ? L('Đang mở cửa sổ trình duyệt…', 'Opening the browser window…') : L('Đang đưa trình duyệt về chạy ngầm…', 'Switching the browser back to background…'));
+        const r = await kn.goi<{ ok: boolean; cheDo: string; url: string; loi?: string; hoTro?: boolean } | null>('agent:trinhDuyetCheDo', { cheDo: hien ? 'hien' : 'ngam', ...(mCheDo[2] ? { url: mCheDo[2] } : {}) }).catch((e: Error) => ({ ok: false, cheDo: '', url: '', loi: e.message }));
+        if (!r?.ok) { kho.thongBao(L(`Không đổi được: ${r?.loi ?? 'lõi bản cũ'}`, `Could not switch: ${r?.loi ?? 'outdated core'}`), 'loi'); return; }
+        kho.thongBao(hien
+          ? L(`🌐 Cửa sổ trình duyệt AI đã HIỆN${r.url ? ` (${r.url})` : ''} — hồ sơ riêng ~/.cuongmini/trinh-duyet. Tự đăng nhập/giải captcha ở đó (CuongMini không gõ mật khẩu hộ), xong gõ /browser hide.`,
+            `🌐 AI browser window SHOWN${r.url ? ` (${r.url})` : ''} — own profile ~/.cuongmini/trinh-duyet. Sign in / solve the captcha there yourself (CuongMini never types passwords), then /browser hide.`)
+          : L('Trình duyệt AI chạy NGẦM — không cửa sổ, không chiếm màn hình; đăng nhập vừa làm vẫn được nhớ.', 'AI browser runs in the BACKGROUND — no window; your sign-in is kept.'), 'ok');
+        return;
+      }
       const bat = /^(on|bat|bật|1|yes)$/.test(q) ? true : /^(off|tat|tắt|0|no)$/.test(q) ? false : !kn.trinhDuyet; // i18n-bo-qua: chữ người gõ
       if (bat && !timTrinhDuyet()) {
         traLoi(L(`Không tìm thấy Chrome/Edge/Brave/Chromium trên máy. ${LOI_KHONG_CO_TRINH_DUYET.replace(/^Không tìm thấy trình duyệt nào trên máy\. /, '')}`, // i18n-bo-qua: chữ của lõi

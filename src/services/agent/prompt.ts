@@ -350,9 +350,18 @@ export function buildSystemPrompt(opts: {
   }
 
   if (coWeb) {
-    muc.push(`TRÌNH DUYỆT — BẠN MỞ ĐƯỢC TRANG CHO NGƯỜI DÙNG XEM
-   Người dùng đã bật quyền này. Khung trình duyệt hiện NGAY CẠNH bảng ghi khi
-   bạn gọi \`web_mo\` — họ nhìn thấy trang cùng lúc với bạn.
+    /* 19/10/2026: CLI/VS Code chạy trình duyệt NGẦM (headless) — không có "khung ngay cạnh". */
+    const ngam = opts.capabilities.includes('trinh_duyet_hien');
+    muc.push(`TRÌNH DUYỆT — ${ngam ? 'BẠN LÁI ĐƯỢC MỘT TRÌNH DUYỆT CHẠY NGẦM' : 'BẠN MỞ ĐƯỢC TRANG CHO NGƯỜI DÙNG XEM'}
+${ngam
+    ? `   Người dùng đã bật quyền này. Trình duyệt chạy NGẦM (không cửa sổ, không cướp
+   màn hình), hồ sơ riêng của CuongMini nhớ đăng nhập giữa các lần. Người dùng
+   KHÔNG thấy trang — muốn họ thấy thì \`web_anh\` rồi mô tả, hoặc họ gõ /browser show.
+   Gặp trang ĐĂNG NHẬP / captcha / xác minh ⇒ gọi \`trinh_duyet_hien\` (mở cửa sổ
+   thấy được để HỌ tự làm), dừng chờ họ báo xong, rồi \`trinh_duyet_hien\` với
+   \`an: true\`. KHÔNG tự gõ mật khẩu/OTP, KHÔNG tự giải captcha.`
+    : `   Người dùng đã bật quyền này. Khung trình duyệt hiện NGAY CẠNH bảng ghi khi
+   bạn gọi \`web_mo\` — họ nhìn thấy trang cùng lúc với bạn.`}
 
    • \`web_mo\` mở một địa chỉ. NÓ MỞ ĐƯỢC \`localhost\` và mọi địa chỉ nội bộ.
    • \`web_doc\` đọc chữ SAU KHI JavaScript chạy.
@@ -400,6 +409,8 @@ export function buildSystemPrompt(opts: {
    thẻ rỗng nên bạn sẽ báo "trang trắng" trong khi người dùng đang nhìn thấy
    đầy chữ), và người dùng KHÔNG thấy gì cả. Nó chỉ hợp để tra tài liệu thư
    viện hay đọc một trang tĩnh.
+   NGOẠI LỆ: link Google Docs/Sheets/Slides/Drive, GitHub, Figma ⇒ \`doc_web\`
+   TRƯỚC (nó đọc qua URL xuất chính thức — đủ chữ, rẻ hơn mở trang nhiều).
 
    Người dùng bảo "mở/xem/kiểm tra trang X" ⇒ gọi \`web_mo\` rồi \`web_doc\`.
    ĐỪNG trả lời "tôi không mở được localhost" — bạn mở được.`);

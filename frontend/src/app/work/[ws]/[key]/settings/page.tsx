@@ -39,10 +39,12 @@ import ProjectSpecQuality from '@/components/work/settings/ProjectSpecQuality';
 // CTW-28 A14: luật cho AI agent (Done ⇒ Review, lease, người duyệt).
 import ProjectAgents from '@/components/work/settings/ProjectAgents';
 import ProjectCuongMini from '@/components/work/settings/ProjectCuongMini'; // đợt 6 CuongMini: hạn mức nhóm
+import ProjectFigma from '@/components/work/settings/ProjectFigma'; // 19/10/2026: token Figma chỉ đọc cho trợ lý AI
+import { Figma } from 'lucide-react';
 import { currentWorkLocale } from '@/components/work/i18n/store';
 import { wt } from '@/components/work/i18n';
 
-type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'agents' | 'cuongmini' | 'automation' | 'recurring' | 'github' | 'gitlab' | 'cloud' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
+type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'agents' | 'cuongmini' | 'automation' | 'recurring' | 'github' | 'gitlab' | 'figma' | 'cloud' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
 
 function ProjectSettings() {
   const params = useParams<{ ws: string; key: string }>();
@@ -78,6 +80,8 @@ function ProjectSettings() {
       ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'recurring' as const, get label() { return wt('classroom.tabRecurring'); }, icon: CalendarClock }] : []), // CTW đợt 5
       { key: 'github', get label() { return wt('settings.tGithub'); }, icon: Github },
       { key: 'gitlab', get label() { return wt('settings.tGitlab'); }, icon: GitMerge },
+      // 19/10/2026: link ngoài cho trợ lý AI (Figma token chỉ đọc) — chỉ đội dự án, không khách.
+      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'figma' as const, label: 'Figma', icon: Figma }] : []),
       // CTW đợt 8a: xuất Google Sheets / Excel (một chiều) — chỉ đội dự án, không khách.
       ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'cloud' as const, get label() { return wt('c8a.tabCloud'); }, icon: Cloud }] : []),
       ...(perms?.settings ? [{ key: 'chat' as const, get label() { return wt('settings.tChatNotifications'); }, icon: MessageSquareShare }] : []),
@@ -145,6 +149,7 @@ function ProjectSettings() {
         {tab === 'recurring' && <ProjectRecurring config={config} />}
         {tab === 'github' && <ProjectGithub config={config} slug={slug} />}
         {tab === 'gitlab' && <ProjectGitlab config={config} slug={slug} />}
+        {tab === 'figma' && <ProjectFigma config={config} slug={slug} />}
         {tab === 'cloud' && <ProjectCloud config={config} slug={slug} />}
         {tab === 'chat' && <ProjectChat config={config} slug={slug} />}
         {tab === 'export' && <ProjectExport config={config} slug={slug} />}

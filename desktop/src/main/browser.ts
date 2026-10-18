@@ -583,6 +583,7 @@ export async function goChu(boChon: string, chu: string): Promise<{ ok: boolean;
   if (!wc) return { ok: false, loi: 'chưa mở trình duyệt' };
   const ma = `(() => { const e = document.querySelector(${JSON.stringify(boChon)});
     if (!e) return 'khong-thay';
+    if (e instanceof HTMLInputElement && e.type === 'password') return 'mat-khau';
     e.focus();
     const dat = Object.getOwnPropertyDescriptor(
       e instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype, 'value')?.set;
@@ -591,6 +592,8 @@ export async function goChu(boChon: string, chu: string): Promise<{ ok: boolean;
     e.dispatchEvent(new Event('change', { bubbles: true }));
     return 'ok'; })()`;
   const kq = await wc.executeJavaScript(ma, true) as string;
+  /* 19/10/2026: KHÔNG BAO GIỜ gõ vào ô mật khẩu — người dùng tự đăng nhập (`/browser show` · `trinh_duyet_hien`). */
+  if (kq === 'mat-khau') return { ok: false, loi: 'đây là ô MẬT KHẨU — CuongMini không gõ mật khẩu. Nhờ người dùng tự đăng nhập (trinh_duyet_hien / /browser show).' };
   return kq === 'ok' ? { ok: true } : { ok: false, loi: `không thấy ô nhập "${boChon}"` };
 }
 
@@ -944,4 +947,20 @@ export function huy(): void {
   khung?.webContents.close();
   khung = null;
   cuaSoChu = null;
+}
+
+// ═══════════════════════════════════════════════════════════
+// CHẾ ĐỘ NGẦM / HIỆN (19/10/2026) — cùng chữ ký với lõi CLI/VS Code
+// ═══════════════════════════════════════════════════════════
+/*
+ * Bản lõi (`packages/cuongmini-core/src/trinhDuyetThay.ts`) lái Chrome thật nên có "ngầm" (headless) và "hiện".
+ * Ở app, trình duyệt là khung NẰM TRONG cửa sổ app — không mở cửa sổ hệ điều hành nào, không cướp focus của app
+ * khác — nên luôn là "hiện" trong app và loop KHÔNG khai capability `trinh_duyet_hien`.
+ */
+export type CheDoTrinhDuyet = 'ngam' | 'hien';
+export const HO_TRO_CHE_DO_NGAM = false;
+export interface KetQuaCheDo { ok: boolean; cheDo: CheDoTrinhDuyet; url: string; loi?: string }
+export function cheDoHienTai(): CheDoTrinhDuyet { return 'hien'; }
+export async function chuyenCheDo(_cheDo: CheDoTrinhDuyet, _o: { nguoiDungYeuCau?: boolean; url?: string } = {}): Promise<KetQuaCheDo> {
+  return { ok: true, cheDo: 'hien', url: urlHienTai() };
 }

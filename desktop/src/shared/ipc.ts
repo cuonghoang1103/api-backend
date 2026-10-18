@@ -274,6 +274,11 @@ export const settingKeySchema = z.enum([
    */
   'aiTrinhDuyetMacDinh',
   /**
+   * 19/10/2026 — trình duyệt AI (CLI/VS Code) chạy `ngam` (headless, mặc định) hay `hien` (luôn có cửa sổ, kiểu cũ).
+   * `/browser show|hide` chỉ đổi TẠM trong phiên; `/browser mode ngam|hien` đổi khoá này.
+   */
+  'trinhDuyetCheDo',
+  /**
    * ĐỢT 4 — ĐIỀU KHIỂN MÁY TÍNH (chụp màn hình, chuột, bàn phím). Mặc định TẮT.
    * ⛔ Chỉ main ghi (`KHOA_CHI_MAIN`) — renderer đi qua `agent:datMayTinh`, nơi
    * giao diện đã hiện cảnh báo. Mọi thao tác vẫn hỏi duyệt, kể cả "Bỏ qua hết".
@@ -1517,6 +1522,31 @@ export interface AgentInfo {
  * `ma: 'CONG_CHINH_HONG_FREE'`). Khớp `CongNangCap` ở
  * `src/services/agent/anthropicChinhHang/dinhTuyen.ts`.
  */
+/**
+ * MÃ GIA HẠN THEO $ (19/10/2026) — khớp `GiaHanTienUi` ở `src/services/agent/maGiaHanTien.ts`.
+ * Lần 1 trong kỳ của trần: mã đúng ⇒ cộng ngay `mucUsd`; lần 2+ ⇒ yêu cầu chờ duyệt (`dangCho` = id, app tự kiểm lại).
+ */
+export interface AgentGiaHanTien {
+  tran: string;
+  ky: 'ngay' | 'thang' | 'cuaSo';
+  ten: string;
+  tenEn: string;
+  mucUsd: number;
+  daDungUsd: number;
+  tranUsd: number;
+  canDuyet: boolean;
+  dangCho: number | null;
+  lanThu: number;
+  duongDan: string;
+}
+
+/** Kết quả `agent:giaHanTien` (nhập mã) và `agent:giaHanTienKiem` (kiểm lại yêu cầu). */
+export type AgentKetQuaGiaHan =
+  | { ketQua: 'daCap'; id: number; soUsd: number; lanThu: number }
+  | { ketQua: 'choDuyet'; id: number; soUsd: number; lanThu: number; moi?: boolean }
+  | { ketQua: 'tuChoi'; id: number; soUsd: number; lyDo: string | null }
+  | { ketQua: 'hetKy'; id: number; soUsd: number };
+
 export interface AgentCongNangCap {
   cong: 'anthropic' | 'modelapi';
   ten: string;
@@ -1658,6 +1688,8 @@ export type AgentUiEvent = { cuocId: string } & (
       cacCong?: AgentCongNangCap[];
       /** `CONG_ANTHROPIC_KHOA`: admin đã đặt mật khẩu cổng chính hãng chưa (`false` ⇒ "Quản trị chưa bật"). */
       daBat?: boolean;
+      /** Mã gia hạn theo $ (19/10/2026): chạm một trần TIỀN gia hạn được ⇒ thẻ "Nhập mã gia hạn để dùng tiếp". */
+      giaHanTien?: AgentGiaHanTien;
     }
   /** Model đang suy nghĩ (khối thinking, chữ ẩn) — chỉ cổng Claude chính hãng phát. */
   | { loai: 'nghi' }
@@ -1945,6 +1977,12 @@ export const INVOKE_CHANNELS = {
   'agent:xuLyHenLo': agentXuLyHenLoSchema,
   /* CT Work một chạm: tạo token bằng phiên đăng nhập ⇒ kho bí mật ⇒ server `ctwork` trong mcp.json. */
   'agent:ctwork': z.object({ cuocId: cuocIdSchema.optional(), viec: z.enum(['noi', 'ngat', 'trangThai', 'capLai']), quyen: z.enum(['doc', 'ghi']).optional() }),
+  /* 19/10/2026: Figma token CHỈ ĐỌC cất trong kho bí mật của máy (`agent/figmaKetNoi.ts`) — `/ket-noi figma`. Token chỉ đi
+     MỘT CHIỀU vào main (viec 'noi'), không bao giờ trả ra. */
+  'agent:figma': z.object({ viec: z.enum(['noi', 'ngat', 'trangThai']), token: z.string().min(1).max(400).optional() }),
+  /* 19/10/2026: trình duyệt AI ngầm ⇄ hiện (`/browser show|hide`, nút VS Code). `macDinh` = đổi cài đặt bền
+     `trinhDuyetCheDo`. Chỉ lõi CLI/VS Code có nghĩa (app: khung trình duyệt nằm trong cửa sổ app). */
+  'agent:trinhDuyetCheDo': z.object({ cheDo: z.enum(['ngam', 'hien']).optional(), macDinh: z.boolean().optional(), url: z.string().max(2000).optional() }),
   /* Đợt 5: CT Work hệ sinh thái — gắn dự án, dòng trạng thái, menu `/ctwork`, `/issue`. Xem `agent/ctworkHe.ts`. */
   'agent:ctworkHe': agentCtworkHeSchema,
   'agent:datCheDoSua': agentCheDoSuaSchema,
@@ -2248,6 +2286,12 @@ export const INVOKE_CHANNELS = {
   'agent:moCongAnthropic': z.object({ matKhau: z.string().min(1).max(200), model: z.string().max(40).optional() }),
   /** Trạng thái cổng chính hãng + các cổng nâng cấp (`GET /agent/cong-anthropic`). */
   'agent:congAnthropic': z.object({}).passthrough().optional(),
+  /**
+   * Mã gia hạn theo $ (19/10/2026): nhập mã cho trần `tran` (`POST /agent/gia-han-tien`, main gửi kèm vé khoá) và kiểm
+   * lại một yêu cầu chờ duyệt (`GET /agent/gia-han-tien/yeu-cau/:id`). Mã KHÔNG bao giờ được lưu/ghi log ở app.
+   */
+  'agent:giaHanTien': z.object({ ma: z.string().min(1).max(200), tran: z.string().min(1).max(60) }),
+  'agent:giaHanTienKiem': z.object({ id: z.number().int().positive() }),
   /**
    * Tab chọn cổng phụ khi cổng chính hỏng: `modelapi` ⇒ gửi `congPhu:'modelapi'`
    * + vé dự phòng + giữ cổng phụ; `null` ⇒ bỏ (về Free/cổng chính). `model` =
@@ -3100,6 +3144,9 @@ export interface DesktopBridge {
     moCongAnthropic(matKhau: string, model?: string): Promise<{ ten: string; hetHan: number | null }>;
     /** Trạng thái cổng Claude chính hãng. `null` = máy chủ cũ / mất mạng. */
     congAnthropic(): Promise<AgentCongAnthropic | null>;
+    /** Mã gia hạn theo $ (19/10/2026): nhập mã cho trần `tran` / kiểm lại yêu cầu chờ duyệt. */
+    giaHanTien(ma: string, tran: string): Promise<AgentKetQuaGiaHan>;
+    giaHanTienKiem(id: number): Promise<AgentKetQuaGiaHan>;
     /** Chọn cổng phụ cho tab (`modelapi` hoặc bỏ). */
     datCongPhu(cuocId: string, cong: 'modelapi' | null, model?: string): Promise<void>;
     /** Các việc đã lưu, mới nhất trước. */

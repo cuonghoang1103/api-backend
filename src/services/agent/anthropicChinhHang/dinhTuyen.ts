@@ -77,7 +77,7 @@ export interface ModelChoApp {
 }
 
 /**
- * Danh sách model cho app (`/agent/tools`), xếp năng lực cao → thấp.
+ * Danh sách model cho app (`/agent/tools`): nhóm FREE trước, rồi nhóm cần khoá; trong nhóm năng lực cao → thấp (19/10/2026).
  * KHÔNG có tên model thật. Rambo bật ⇒ thêm bảng rambo cũ ở cuối (nhóm "CuongMini Classic").
  */
 /** Một mục cho app — THUẦN (test được): không có trường `model` (tên thật) nào đi ra. */

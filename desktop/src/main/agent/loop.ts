@@ -49,13 +49,15 @@ import { napQuyenLau, themQuyenLau, xoaQuyenLau } from './quyenLau';
 import { khoaTienTo, laLenhDon } from './tienTo';
 import { phanLoaiLenh } from './lenh';
 import { getSettings, setSetting } from '../store';
-import type { AgentCongNangCap, CheDoQuyen } from '../../shared/ipc';
+import type { AgentCongNangCap, AgentGiaHanTien, CheDoQuyen } from '../../shared/ipc';
 import { dungLenhNenCua } from './lenhNen';
 import { dongTerminalCua } from '../terminal/phienTerminal';
 import { hanMucMcp, goiToolMcp, laCtworkTinCay, laToolMcp, mucLucChoCuoc, napToolChoCuoc, timToolMcp, toolGuiChoCuoc } from './mcp';
 import { ghiChuGop } from './ctworkDanDuong';
 import { dinhKemThe, nguCanhChoModel } from './ctworkHe';
 import { baoLoiCtwork } from './ctworkKetNoi';
+import { coTokenFigma } from './figmaKetNoi';
+import * as trinhDuyetCheDo from '../browser';
 import { moTaGhi, tomTatKetQua, type XemTruocGhi } from './ctworkVe';
 import { hoiNguoiDung, huyTatCa, type YeuCauXinPhep } from './xinPhep';
 import { docCauHoi, hoi as hoiLuaChon, huyMoiHoi, moTaKetQua as moTaKetQuaHoi, type CauHoi } from './hoiLuaChon';
@@ -212,6 +214,8 @@ export type SuKienAgent =
   | {
       loai: 'loi'; thongDiep: string; ma?: string; coKeyGiaHan?: boolean;
       moiNangCap?: boolean; cacCong?: AgentCongNangCap[]; daBat?: boolean;
+      /** Mã gia hạn theo $ (19/10/2026): chạm trần TIỀN gia hạn được ⇒ giao diện hiện thẻ nhập mã. */
+      giaHanTien?: AgentGiaHanTien;
     }
   /** Model đang suy nghĩ (khối thinking, chữ ẩn) — cổng chính hãng phát mỗi lời gọi một lần. */
   | { loai: 'nghi' }
@@ -1298,6 +1302,10 @@ export async function chayLuot(
      để nó TRONG khối `if (goc)`, nên bật nút "Trình duyệt" mà chưa mở thư
      mục thì model không có tool web nào — trong khi giao diện nói là có. */
   if (boiCanh.choTrinhDuyet) capabilities.push('browser');
+  /* 19/10/2026: lõi CLI/VS Code chạy trình duyệt NGẦM ⇒ model có `trinh_duyet_hien` để nhờ người dùng tự đăng nhập. */
+  if (boiCanh.choTrinhDuyet && trinhDuyetCheDo.HO_TRO_CHE_DO_NGAM) capabilities.push('trinh_duyet_hien');
+  /* 19/10/2026: có token Figma chỉ đọc trong kho máy ⇒ `figma_doc`. */
+  if (await coTokenFigma().catch(() => false)) capabilities.push('figma');
   /* ĐỢT 4 — điều khiển máy tính: công tắc riêng (mặc định TẮT), không cần thư mục. */
   if (mayTinhDangBat() && mayTinh.hoTro()) capabilities.push('may_tinh');
   /* ĐỢT 4 — LSP: chỉ khi thật sự có server (VS Code: API của trình soạn). */
@@ -1484,6 +1492,7 @@ export async function chayLuot(
         phat({
           loai: 'loi', thongDiep: phanHoi.thongDiep, ma: phanHoi.ma,
           ...(phanHoi.coKeyGiaHan ? { coKeyGiaHan: true } : {}),
+          ...(phanHoi.giaHanTien ? { giaHanTien: phanHoi.giaHanTien } : {}),
           ...(typeof phanHoi.daBat === 'boolean' ? { daBat: phanHoi.daBat } : {}),
         });
         return;
@@ -2730,7 +2739,7 @@ async function mgoiMotLuot(o: {
   giuAnhLuot?: number;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
-}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean; daBat?: boolean }> {
+}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean; daBat?: boolean; giaHanTien?: AgentGiaHanTien }> {
   /*
    * ĐỨT KẾT NỐI PHẢI THÀNH MÃ, KHÔNG ĐƯỢC NÉM THÔ.
    *
@@ -2981,7 +2990,7 @@ async function mgoiMotLuotThat(o: {
   giuAnhLuot?: number;
   signal: AbortSignal;
   phat: (e: SuKienAgent) => void;
-}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean; daBat?: boolean }> {
+}): Promise<{ ok: true; ketQua: KetQuaLuot } | { ok: false; thongDiep: string; ma: string; coKeyGiaHan?: boolean; daBat?: boolean; giaHanTien?: AgentGiaHanTien }> {
   /*
    * ⚠️ HẠN TỔNG CHO LỜI GỌI NÀY, chồng lên tín hiệu huỷ của người dùng.
    *
@@ -3048,7 +3057,7 @@ async function mgoiMotLuotThat(o: {
   if (!res.ok) {
     // 403 = chưa Pro. Phải phân biệt với 401 (phiên hết hạn) vì hai cái dẫn tới
     // hai màn hình khác hẳn nhau: một cái mời nâng cấp, một cái bắt đăng nhập.
-    const loiThan = await res.json().catch(() => ({})) as { message?: string; code?: string; data?: { daBat?: unknown } };
+    const loiThan = await res.json().catch(() => ({})) as { message?: string; code?: string; data?: { daBat?: unknown; giaHanTien?: unknown } };
     /* 413 từ nginx là trang HTML, không có `code` ⇒ ép về một mã để chỗ gọi
        nhận ra và tự gỡ ảnh thử lại. */
     if (res.status === 413) {
@@ -3061,6 +3070,8 @@ async function mgoiMotLuotThat(o: {
       thongDiep: loiThan.message ?? `Máy chủ trả về ${res.status}.`,
       ma: loiThan.code ?? String(res.status),
       ...(typeof loiThan.data?.daBat === 'boolean' ? { daBat: loiThan.data.daBat } : {}),
+      /* 429 NHOM_HET_TRAN (trần người/ngày của hạn mức nhóm) đi qua đường HTTP — kèm thẻ mã gia hạn. */
+      ...(laGiaHanTien(loiThan.data?.giaHanTien) ? { giaHanTien: loiThan.data.giaHanTien } : {}),
     };
   }
   if (!res.body) {
@@ -3071,7 +3082,7 @@ async function mgoiMotLuotThat(o: {
   const giaiMa = new TextDecoder();
   let dem = '';
   const ra: KetQuaLuot = { append: [], stop: 'end', toolCalls: [], quota: null, costUsd: 0, daLuoc: 0, tokenVao: 0, tokenRa: 0 };
-  let loi: { thongDiep: string; ma: string; coKeyGiaHan?: boolean } | null = null;
+  let loi: { thongDiep: string; ma: string; coKeyGiaHan?: boolean; giaHanTien?: AgentGiaHanTien } | null = null;
 
   for (;;) {
     /* ⚠️ KHÔNG `await doc.read()` trần.
@@ -3167,6 +3178,7 @@ async function mgoiMotLuotThat(o: {
           loi = {
             thongDiep: e.error, ma: e.code ?? 'LLM_ERROR',
             ...(e.coKeyGiaHan === true ? { coKeyGiaHan: true } : {}),
+            ...(laGiaHanTien(e.giaHanTien) ? { giaHanTien: e.giaHanTien } : {}),
           };
           if (e.code === 'CONG_ANTHROPIC_KHOA') xoaVeAnthropic();
           break;
@@ -3277,4 +3289,12 @@ export function thamSoChinh(ten: string, args: Record<string, unknown> | undefin
   }
   r = gon(r);
   return r || undefined;
+}
+
+
+/** Mã gia hạn theo $ (19/10/2026): khung lỗi có mang thông tin thẻ nhập mã HỢP LỆ không (máy chủ cũ/hỏng ⇒ bỏ qua). */
+export function laGiaHanTien(x: unknown): x is AgentGiaHanTien {
+  const o = x as Partial<AgentGiaHanTien> | null;
+  return !!o && typeof o === 'object' && typeof o.tran === 'string' && o.tran.length > 0 && o.tran.length <= 60
+    && (o.ky === 'ngay' || o.ky === 'thang' || o.ky === 'cuaSo') && typeof o.mucUsd === 'number' && typeof o.ten === 'string';
 }

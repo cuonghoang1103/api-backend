@@ -39,9 +39,11 @@ test('app cũ (không ?bang=cm): MỌI id + model/macDinh nằm trong z.enum cũ
   assert.ok(ENUM_APP_CU.has(macDinhCu), `model/macDinh cho app cũ "${macDinhCu}" phải nằm trong enum cũ`);
 });
 
-test('app cũ: model chưa có mã cũ (Nova/Shin/Eco) bị ẩn, phần còn lại giữ đúng thứ tự năng lực', () => {
+test('app cũ: model chưa có mã cũ (Nova/Shin/Eco) bị ẩn, phần còn lại giữ đúng thứ tự (free trước, rồi năng lực)', () => {
   const ds = maChoAppCu(bangModel().map((m) => ({ id: m.id, ten: m.ten })), true);
-  assert.deepEqual(ds.map((m) => m.ten), ['CuongMini Invisible', 'CuongMini Optimum 5.5', 'CuongMini Sonic 5.5', 'CuongMini Solid', 'CuongMini Heshin 5.5'].map((t) => (t === 'CuongMini Invisible' ? bangModel()[0]!.ten : t)));
+  assert.deepEqual(ds.map((m) => m.ten), ['CuongMini Sonic 5.5', 'CuongMini Solid', 'CuongMini Heshin 5.5', 'CuongMini Invisible 5.1', 'CuongMini Optimum 5.5']);
+  /* Mã vẫn là mã cũ app đó hiểu. */
+  assert.deepEqual(ds.map((m) => m.id), ['cl-sonnet-5-5', 'gpt-sol', 'cl-free', 'cl-fable-5-1', 'cl-opus-5-5']);
 });
 
 test('app mới (?bang=cm): giữ nguyên mã cm-* và đủ 8 model', () => {

@@ -399,6 +399,13 @@ class KhungChat implements vscode.WebviewViewProvider {
   viecMoi(): void { void this.nhan({ loai: 'viecMoi' }); }
 
   /** Đợt 4 — điều khiển máy tính: đẩy cài đặt `cuongthai.dieuKhienMayTinh` xuống lõi/app. */
+  /** 19/10/2026: gọi một kênh lõi khi đang nối (lệnh trình duyệt ngầm/hiện, kết nối Figma). `null` = chưa nối. */
+  async goiLoi<T = unknown>(kenh: string, duLieu?: unknown): Promise<T | null> {
+    if (!this.cau) await this.noi();
+    const cau = this.cau as KetNoi | null;
+    return cau ? await cau.goi<T>(kenh, duLieu) : null;
+  }
+
   async datMayTinh(bat: boolean): Promise<void> {
     if (!this.cau) return;
     const r = await this.cau.goi<{ bat: boolean; hoTro: boolean; quyen: { chup: boolean; dieuKhien: boolean } | null }>('agent:mayTinh', { bat }).catch(() => null);
@@ -461,6 +468,34 @@ export function activate(ctx: vscode.ExtensionContext): void {
       if (tat.length) void khung.themVaoChat(tat);
     }),
     vscode.commands.registerCommand('cuongthai.lichSu', () => khung.moLichSu()),
+    /* 19/10/2026: trình duyệt AI chạy NGẦM (mặc định). Hiện cửa sổ để TỰ đăng nhập / giải captcha — CuongMini không gõ
+       mật khẩu hộ — rồi ẩn để về ngầm (đăng nhập được nhớ trong hồ sơ riêng ~/.cuongmini/trinh-duyet). */
+    vscode.commands.registerCommand('cuongthai.hienTrinhDuyet', async () => {
+      const r = await khung.goiLoi<{ ok: boolean; url: string; loi?: string; hoTro?: boolean }>('agent:trinhDuyetCheDo', { cheDo: 'hien' }).catch((e: Error) => ({ ok: false, url: '', loi: e.message, hoTro: true }));
+      if (!r) { void vscode.window.showWarningMessage('CuongMini chưa kết nối. / CuongMini is not connected.'); return; }
+      if (r.hoTro === false) { void vscode.window.showInformationMessage('Đang chạy qua app CuongThai — trình duyệt nằm trong khung của app. / Running through the CuongThai app — the browser lives in the app pane.'); return; }
+      if (!r.ok) { void vscode.window.showErrorMessage(`Không mở được trình duyệt: ${r.loi ?? ''}`); return; }
+      void vscode.window.showInformationMessage(`Cửa sổ trình duyệt AI đã hiện${r.url ? ` (${r.url})` : ''}. Tự đăng nhập ở đó, xong chạy "CuongMini: Ẩn trình duyệt AI". / Sign in there yourself, then run "Hide AI browser".`);
+    }),
+    vscode.commands.registerCommand('cuongthai.anTrinhDuyet', async () => {
+      const r = await khung.goiLoi<{ ok: boolean; loi?: string }>('agent:trinhDuyetCheDo', { cheDo: 'ngam' }).catch((e: Error) => ({ ok: false, loi: e.message }));
+      if (r?.ok) void vscode.window.showInformationMessage('Trình duyệt AI chạy ngầm. / AI browser runs in the background.');
+      else if (r) void vscode.window.showErrorMessage(`Không đổi được: ${r.loi ?? ''}`);
+    }),
+    /* 19/10/2026: token Figma CHỈ ĐỌC ⇒ kho bí mật của lõi (file 0600) — ô nhập ẩn ký tự, không vào lịch sử/hội thoại. */
+    vscode.commands.registerCommand('cuongthai.ketNoiFigma', async () => {
+      const tk = await vscode.window.showInputBox({
+        title: 'CuongMini: Kết nối Figma / Connect Figma',
+        prompt: 'Figma → Settings → Security → Personal access tokens — token CHỈ ĐỌC (File content: Read-only). Để trống + Enter = gỡ token.',
+        password: true, ignoreFocusOut: true, placeHolder: 'figd_…',
+      });
+      if (tk === undefined) return;
+      const r = await khung.goiLoi<{ ok: boolean; loi?: string; handle?: string | null }>('agent:figma', tk.trim() ? { viec: 'noi', token: tk.trim() } : { viec: 'ngat' })
+        .catch((e: Error) => ({ ok: false, loi: e.message, handle: null }));
+      if (!r) { void vscode.window.showWarningMessage('CuongMini chưa kết nối. / CuongMini is not connected.'); return; }
+      if (!r.ok) { void vscode.window.showErrorMessage(`Figma: ${r.loi ?? 'lỗi'}`); return; }
+      void vscode.window.showInformationMessage(tk.trim() ? `Đã kết nối Figma${r.handle ? ` (${r.handle})` : ''}. / Figma connected.` : 'Đã gỡ token Figma. / Figma token removed.');
+    }),
     vscode.commands.registerCommand('cuongthai.suaLoi', (cauHoi: string) => khung.dienCauHoi(cauHoi, true)),
     vscode.languages.registerCodeActionsProvider({ scheme: 'file' }, new SuaLoiBangAI(), { providedCodeActionKinds: SuaLoiBangAI.kieu }),
   );

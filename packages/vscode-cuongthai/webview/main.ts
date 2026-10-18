@@ -760,6 +760,8 @@ function xuLy(e: SuKien): void {
       S.muc.push({ kieu: 'loi', text: e.thongDiep ?? '' });
       const el = the('tin loi', `⚠️ ${esc(e.thongDiep ?? 'Có lỗi.')}`);
       if (e.ma === 'RAMBO_BAO_TRI') veODuPhong(el);
+      /* Mã gia hạn theo $ (19/10/2026): chạm trần tiền gia hạn được ⇒ thẻ "Nhập mã gia hạn để dùng tiếp". */
+      if (laGiaHanTien(e.giaHanTien)) veTheGiaHan(el, e.giaHanTien);
       /* Cổng Claude chính hãng (17/10/2026). Vé chết ⇒ lõi đã xoá vé; hỏi lại mật khẩu. */
       if (e.ma === 'CONG_ANTHROPIC_KHOA') {
         if (e.daBat === false) el.insertAdjacentHTML('beforeend', `<div class="phu">${esc(L('Quản trị chưa đặt khoá cho model này.', 'The admin has not set a key for this model.'))}</div>`);
@@ -905,6 +907,95 @@ let dongDoiCongCuoi = '';
 let oDangCho: { kq: HTMLElement; nut: HTMLButtonElement; khiXong?: () => void } | null = null;
 /** Ô mật khẩu cổng Claude chính hãng đang chờ trả lời từ host. */
 let oAnthropicCho: { kq: HTMLElement; nut: HTMLButtonElement; khiXong: () => void } | null = null;
+
+// ─── Mã gia hạn theo $ (19/10/2026) — `src/services/agent/maGiaHanTien.ts` ───
+
+interface GiaHanTien {
+  tran: string; ky: 'ngay' | 'thang' | 'cuaSo'; ten: string; tenEn: string; mucUsd: number; daDungUsd: number; tranUsd: number;
+  canDuyet: boolean; dangCho: number | null; lanThu: number; duongDan: string;
+}
+type KetQuaGiaHan =
+  | { ketQua: 'daCap'; id: number; soUsd: number; lanThu: number }
+  | { ketQua: 'choDuyet'; id: number; soUsd: number; lanThu: number }
+  | { ketQua: 'tuChoi'; id: number; soUsd: number; lyDo: string | null }
+  | { ketQua: 'hetKy'; id: number; soUsd: number };
+function laGiaHanTien(x: unknown): x is GiaHanTien {
+  const g = x as Partial<GiaHanTien> | null;
+  return !!g && typeof g === 'object' && typeof g.tran === 'string' && g.tran.length > 0 && g.tran.length <= 60
+    && (g.ky === 'ngay' || g.ky === 'thang' || g.ky === 'cuaSo') && typeof g.mucUsd === 'number' && typeof g.ten === 'string';
+}
+const usdGH = (n: number): string => `${n.toLocaleString('en-US', { maximumFractionDigits: 2 })} $`;
+/** Một bộ đếm tự kiểm lại mỗi lúc (≥ 30 s). */
+let henKiemGiaHan: ReturnType<typeof setInterval> | null = null;
+
+/** Làm tiếp đúng lượt vừa bị chặn (lõi gửi lại nguyên hội thoại). */
+function lamTiepSauGiaHan(): void {
+  if (S.dangChay) return;
+  gui({ loai: 'lamTiep' });
+  S.dangChay = true; S.batDauLuot = Date.now(); S.pha = 'cho'; S.buoc = null;
+  batTrangThai(); capNhatNut();
+}
+
+function veTheGiaHan(el: HTMLElement, g: GiaHanTien): void {
+  const o2 = document.createElement('div');
+  o2.className = 'du-phong';
+  o2.dataset.giaHanTien = g.tran;
+  const ten = L(g.ten, g.tenEn);
+  o2.innerHTML = `<div class="phu"><b>${esc(L(`Đã chạm giới hạn ${ten} (${usdGH(g.daDungUsd)}/${usdGH(g.tranUsd)}) · Nhập mã gia hạn để dùng tiếp`, `Limit reached: ${ten} (${usdGH(g.daDungUsd)}/${usdGH(g.tranUsd)}) · Enter an extension code to continue`))}</b></div>
+<div class="phu">${esc(g.canDuyet
+    ? L(`Lần ${g.lanThu} trong kỳ — mã đúng sẽ gửi yêu cầu, admin duyệt rồi mới cộng +${usdGH(g.mucUsd)}.`, `Attempt ${g.lanThu} this period — a correct code sends a request; +${usdGH(g.mucUsd)} after an admin approves.`)
+    : L(`Mã đúng ⇒ cộng ngay +${usdGH(g.mucUsd)} và CuongMini làm tiếp chỗ dở.`, `Correct code ⇒ +${usdGH(g.mucUsd)} right away and CuongMini continues.`))}</div>
+<div class="hang"><input type="password" placeholder="${esc(L('Mã gia hạn', 'Extension code'))}" autocomplete="off"><button class="nut chinh">${esc(L('Gia hạn', 'Extend'))}</button></div>
+<div class="phu kq"></div>`;
+  el.appendChild(o2);
+  const hang = o2.querySelector<HTMLElement>('.hang')!;
+  const inp = o2.querySelector('input')!;
+  const nut = o2.querySelector('button')!;
+  const kq = o2.querySelector<HTMLElement>('.kq')!;
+  const dung = () => { if (henKiemGiaHan) clearInterval(henKiemGiaHan); henKiemGiaHan = null; };
+  const ap = (r: KetQuaGiaHan, tuNhap: boolean): void => {
+    if (r.ketQua === 'choDuyet') {
+      hang.style.display = 'none';
+      kq.textContent = L(`⏳ Đã gửi yêu cầu #${r.id}, chờ admin duyệt — tự kiểm lại mỗi 30 giây.`, `⏳ Request #${r.id} sent, waiting for an admin — re-checking every 30 seconds.`);
+      dung();
+      henKiemGiaHan = setInterval(() => { void goi<KetQuaGiaHan>('agent:giaHanTienKiem', { id: r.id }).then((k) => { if (k.ketQua !== 'choDuyet') ap(k, false); }).catch(() => undefined); }, 30_000);
+      return;
+    }
+    dung();
+    if (r.ketQua === 'daCap') {
+      hang.style.display = 'none';
+      kq.textContent = tuNhap
+        ? L(`✓ Đã cộng +${usdGH(r.soUsd)} — CuongMini làm tiếp chỗ dở.`, `✓ +${usdGH(r.soUsd)} added — CuongMini continues.`)
+        : L(`✓ Admin đã duyệt: +${usdGH(r.soUsd)} — đang làm tiếp.`, `✓ Approved: +${usdGH(r.soUsd)} — continuing.`);
+      lamTiepSauGiaHan();
+    } else if (r.ketQua === 'tuChoi') {
+      hang.style.display = '';
+      nut.disabled = false;
+      kq.textContent = L(`✗ Admin đã từ chối yêu cầu #${r.id}${r.lyDo ? `: ${r.lyDo}` : '.'} Nhập mã lần nữa để gửi yêu cầu mới.`, `✗ An admin rejected request #${r.id}${r.lyDo ? `: ${r.lyDo}` : '.'} Enter the code again to ask again.`);
+    } else {
+      hang.style.display = 'none';
+      kq.textContent = L('Kỳ đã qua — giới hạn đã tự làm mới, cứ gửi lại câu hỏi.', 'The period ended — the limit already reset; just resend.');
+    }
+  };
+  if (g.dangCho) {
+    ap({ ketQua: 'choDuyet', id: g.dangCho, soUsd: g.mucUsd, lanThu: g.lanThu }, false);
+    void goi<KetQuaGiaHan>('agent:giaHanTienKiem', { id: g.dangCho }).then((k) => { if (k.ketQua !== 'choDuyet') ap(k, false); }).catch(() => undefined);
+    return;
+  }
+  const guiMa = () => {
+    const ma = inp.value.trim();
+    if (!ma) return;
+    nut.disabled = true;
+    kq.textContent = L('Đang kiểm mã…', 'Checking the code…');
+    inp.value = '';
+    goi<KetQuaGiaHan>('agent:giaHanTien', { ma, tran: g.tran })
+      .then((r) => ap(r, true))
+      .catch((er: Error) => { nut.disabled = false; kq.textContent = `⚠️ ${er.message}`; });
+  };
+  nut.addEventListener('click', guiMa);
+  inp.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') guiMa(); });
+  setTimeout(() => inp.focus(), 0);
+}
 
 /** Ô nhập KHOÁ model CuongMini (18/10/2026: khoá chung hoặc khoá Invisible — máy chủ tự nhận). */
 function veOMatKhauAnthropic(el: HTMLElement, khiXong: () => void, model?: string): void {

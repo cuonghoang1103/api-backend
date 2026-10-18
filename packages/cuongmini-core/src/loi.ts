@@ -25,7 +25,7 @@ import { chuanHoaAnh as chuanHoaAnhApp } from '../../../desktop/src/main/agent/a
 import { API_ORIGIN, WEB_ORIGIN } from '../../../desktop/src/main/config';
 import { getSettings, setSetting } from '../../../desktop/src/main/store';
 import { timTrinhDuyet } from './timTrinhDuyet';
-import { huy as huyTrinhDuyet, trangThai as trangThaiTd } from './trinhDuyetThay';
+import { datNguonCheDo, huy as huyTrinhDuyet, trangThai as trangThaiTd } from './trinhDuyetThay';
 import { dongBoVe } from './boVeSoDoThay';
 import { datNguonLsp as datNguonLspLoi, type NguonLsp } from '../../../desktop/src/main/agent/lsp';
 import { statSync } from 'node:fs';
@@ -65,6 +65,8 @@ export function khoiDong(v: VoDocLap): void {
   if (daKhoiDong) return;
   registerAgentHandlers();
   datMacDinhDayDu();
+  // 19/10/2026: trình duyệt AI mặc định NGẦM — cài đặt bền `trinhDuyetCheDo` ('ngam' | 'hien').
+  datNguonCheDo(() => (getSettings() as Record<string, unknown>).trinhDuyetCheDo);
   daKhoiDong = true;
   // App desktop nạp MCP ở `main/index.ts` — file đó bị THAY trong lõi, nên CLI/VS Code chưa từng nạp
   // `mcp.json` lúc khởi động (18/10/2026: người dùng cấu hình ctwork xong vẫn "none configured").

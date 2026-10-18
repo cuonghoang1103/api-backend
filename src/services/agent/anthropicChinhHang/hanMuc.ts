@@ -20,6 +20,7 @@
 import { prisma } from '../../../config/database.js';
 import { logger } from '../../../utils/logger.js';
 import type { HangChinhHang } from './cauHinh.js';
+import { tienGiaHanTheoKy } from '../giaHanTienSo.js';
 
 export type GoiTaiKhoan = 'admin' | 'pro' | 'key_terminal' | 'khac';
 export const GOI_CO_TRAN = ['pro', 'key_terminal'] as const;
@@ -110,6 +111,11 @@ export interface HanMucChinhHang {
   tranNgay: number | null;
   /** Chạm trần ⇒ chặn lượt mới ở hạng này. */
   het: boolean;
+  /** Mã gia hạn theo $ (19/10/2026, CHỈ hạng free): phần đã cấp trong kỳ — `tranThang/Ngay` đã cộng sẵn. */
+  giaHanThang?: number;
+  giaHanNgay?: number;
+  tranThangGoc?: number | null;
+  tranNgayGoc?: number | null;
 }
 
 export async function xemHanMucChinhHang(userId: number, hang: HangChinhHang, luc = new Date()): Promise<HanMucChinhHang> {
@@ -137,6 +143,12 @@ export async function xemHanMucChinhHang(userId: number, hang: HangChinhHang, lu
       tran = { thang: t.thang ?? tran.thang, ngay: t.ngay ?? tran.ngay };
     }
   }
+  /* Mã gia hạn theo $ (19/10/2026): CHỈ nhóm free (Sonic/Heshin) của gói có trần thật — nhóm cao (model trả phí) không nới. */
+  const goc = { ...tran };
+  const g = hang === 'free' && (goi === 'pro' || goi === 'key_terminal')
+    ? await tienGiaHanTheoKy(userId, 'chinhHang:free', luc) : { ngay: 0, thang: 0, cuaSo: 0 };
+  if (tran.thang !== null) tran = { ...tran, thang: tran.thang + g.thang };
+  if (tran.ngay !== null) tran = { ...tran, ngay: tran.ngay + g.ngay };
   /* Sổ hỏng ⇒ CHẶN (vô cực ≥ mọi trần): đây là tiền thật của chủ app. */
   const het = (tran.thang !== null && daDungThang >= tran.thang) || (tran.ngay !== null && daDungNgay >= tran.ngay);
   return {
@@ -144,6 +156,7 @@ export async function xemHanMucChinhHang(userId: number, hang: HangChinhHang, lu
     daDungThang: Number.isFinite(daDungThang) ? daDungThang : 0,
     daDungNgay: Number.isFinite(daDungNgay) ? daDungNgay : 0,
     tranThang: tran.thang, tranNgay: tran.ngay, het,
+    ...(hang === 'free' ? { giaHanThang: g.thang, giaHanNgay: g.ngay, tranThangGoc: goc.thang, tranNgayGoc: goc.ngay } : {}),
   };
 }
 

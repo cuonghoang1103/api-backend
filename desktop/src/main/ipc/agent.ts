@@ -24,10 +24,12 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 
 import type {
-  AgentCongAnthropic, AgentCuocDangMo, AgentInfo, AgentMcpTrangThai, AgentWorktree, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, ModelAgent, MucNoLuc,
+  AgentCongAnthropic, AgentCuocDangMo, AgentInfo, AgentKetQuaGiaHan, AgentMcpTrangThai, AgentWorktree, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, ModelAgent, MucNoLuc,
 } from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
+import * as trinhDuyetApp from '../browser';
+import { ketNoiFigma, ngatFigma, trangThaiFigma } from '../agent/figmaKetNoi';
 import { docGhiChuDuAn } from '../agent/ghiChu';
 import {
   bangGhiCua, chayLuot, cuocDangChay, datGocChoCuoc, datQuyenChoCuoc, dongCuoc, dsCuocDangMo,
@@ -907,6 +909,48 @@ export function registerAgentHandlers(): void {
     }
   });
 
+  /*
+   * ── MÃ GIA HẠN THEO $ (19/10/2026) — `src/services/agent/maGiaHanTien.ts` ──
+   * Chạm một trần tiền ⇒ thẻ "Nhập mã gia hạn" (desktop · CLI · VS Code đều đi qua ĐÂY: một chỗ gọi máy chủ, gửi kèm vé
+   * khoá — model trả phí chỉ gia hạn khi vé còn sống). Lần 1 trong kỳ ⇒ cộng ngay; lần 2+ ⇒ chờ duyệt, giao diện tự kiểm
+   * lại bằng `agent:giaHanTienKiem` (≥ 30 s). ⛔ Mã KHÔNG lưu, KHÔNG ghi log — chỉ đi thẳng trong thân yêu cầu.
+   */
+  handle('agent:giaHanTien', async ({ ma, tran }): Promise<AgentKetQuaGiaHan> => {
+    const phien = readStoredSession();
+    if (!phien?.sessionToken) throw new Error('Chưa đăng nhập. / Not signed in.');
+    const r = await fetch(`${API_ORIGIN}/api/v1/agent/gia-han-tien`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${phien.sessionToken}` },
+      body: JSON.stringify({ ma, tran, ...(veAnthropic() ? { congAnthropicVe: veAnthropic() } : {}) }),
+      signal: AbortSignal.timeout(20_000),
+    });
+    const j = await r.json().catch(() => ({})) as { data?: AgentKetQuaGiaHan; message?: string; code?: string; error?: { message?: string } };
+    if (!r.ok || !j.data) {
+      if (r.status === 404) throw new Error('Máy chủ chưa hỗ trợ mã gia hạn (bản máy chủ cũ). / Server too old for extension codes.');
+      /* `ma` (vd GIA_HAN_MA_SAI) đi kèm lỗi — giao diện cùng tiến trình (CLI) mở lại ô nhập khi mã sai. */
+      throw Object.assign(new Error(j.error?.message ?? j.message ?? `Máy chủ trả HTTP ${r.status}.`), { ma: j.code ?? String(r.status) });
+    }
+    return j.data.ketQua === 'daCap'
+      ? { ketQua: 'daCap', id: j.data.id, soUsd: j.data.soUsd, lanThu: j.data.lanThu }
+      : { ketQua: 'choDuyet', id: j.data.id, soUsd: j.data.soUsd, lanThu: (j.data as { lanThu: number }).lanThu, ...((j.data as { moi?: boolean }).moi !== undefined ? { moi: (j.data as { moi?: boolean }).moi } : {}) };
+  });
+
+  handle('agent:giaHanTienKiem', async ({ id }): Promise<AgentKetQuaGiaHan> => {
+    const phien = readStoredSession();
+    if (!phien?.sessionToken) throw new Error('Chưa đăng nhập. / Not signed in.');
+    const r = await fetch(`${API_ORIGIN}/api/v1/agent/gia-han-tien/yeu-cau/${id}`, {
+      headers: { Authorization: `Bearer ${phien.sessionToken}` },
+      signal: AbortSignal.timeout(10_000),
+    });
+    const j = await r.json().catch(() => ({})) as { data?: { id: number; trangThai: string; soUsd: number; lanThu: number; lyDoTuChoi: string | null }; message?: string };
+    if (!r.ok || !j.data) throw new Error(j.message ?? `Máy chủ trả HTTP ${r.status}.`);
+    const d = j.data;
+    if (d.trangThai === 'DA_CAP') return { ketQua: 'daCap', id: d.id, soUsd: d.soUsd, lanThu: d.lanThu };
+    if (d.trangThai === 'TU_CHOI') return { ketQua: 'tuChoi', id: d.id, soUsd: d.soUsd, lyDo: d.lyDoTuChoi };
+    if (d.trangThai === 'HET_KY') return { ketQua: 'hetKy', id: d.id, soUsd: d.soUsd };
+    return { ketQua: 'choDuyet', id: d.id, soUsd: d.soUsd, lanThu: d.lanThu };
+  });
+
   handle('agent:datCongPhu', ({ cuocId, cong, model }) => {
     if (model) setSetting('agentDuPhongModel', model);
     datCongPhuCua(cuocId, cong);
@@ -1102,6 +1146,22 @@ export function registerAgentHandlers(): void {
     if (!phien) return { ok: false, loi: 'Chưa đăng nhập CuongThai.' };
     if (viec === 'capLai') return capLaiCtwork(phien.sessionToken, goc);
     return ketNoiCtwork(phien.sessionToken, quyen === 'ghi' ? 'ghi' : 'doc', goc);
+  });
+
+  /* ── 19/10/2026: Figma token chỉ đọc (kho bí mật của máy) ── */
+  handle('agent:figma', async ({ viec, token }) => {
+    if (viec === 'trangThai') return trangThaiFigma();
+    if (viec === 'ngat') return ngatFigma();
+    if (!token) return { ok: false, loi: 'Thiếu token.' };
+    return ketNoiFigma(token);
+  });
+
+  /* ── 19/10/2026: trình duyệt AI ngầm ⇄ hiện (lõi CLI/VS Code; app: luôn "hiện" trong khung của app) ── */
+  handle('agent:trinhDuyetCheDo', async ({ cheDo, macDinh, url }) => {
+    if (cheDo && macDinh) setSetting('trinhDuyetCheDo', cheDo);
+    if (!cheDo) return { ok: true, cheDo: trinhDuyetApp.cheDoHienTai(), url: trinhDuyetApp.urlHienTai(), hoTro: trinhDuyetApp.HO_TRO_CHE_DO_NGAM };
+    const kq = await trinhDuyetApp.chuyenCheDo(cheDo, { nguoiDungYeuCau: true, ...(url ? { url } : {}) });
+    return { ...kq, hoTro: trinhDuyetApp.HO_TRO_CHE_DO_NGAM };
   });
 
   /* ── Đợt 5: CT Work hệ sinh thái (`agent/ctworkHe.ts`) ── */

@@ -15,7 +15,7 @@
 import { dich, dichP, ngonNguHienTai } from '../../i18n';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
-  AgentCongNangCap, AgentDiff,
+  AgentCongNangCap, AgentDiff, AgentGiaHanTien,
   AgentInfo, AgentMucKhoiPhuc, AgentNguCanh, AgentPhanLoaiLenh, AgentPhien, AgentQuota, AgentQuyetDinh,
   AgentUiEvent, AgentViec, AgentWorkspace, AgentCauHoi, AgentChoView, AgentHenView,
 } from '../../../shared/ipc';
@@ -93,7 +93,7 @@ export type MucHienThi =
    * `cacCong`: `CONG_CHINH_HONG_FREE` ⇒ thẻ mời chọn Claude chính hãng / modelapi.
    * `daBat`: `CONG_ANTHROPIC_KHOA` ⇒ `false` = quản trị chưa bật cổng chính hãng.
    */
-  | { kieu: 'loi'; text: string; ma?: string; coKeyGiaHan?: boolean; cacCong?: AgentCongNangCap[]; daBat?: boolean };
+  | { kieu: 'loi'; text: string; ma?: string; coKeyGiaHan?: boolean; cacCong?: AgentCongNangCap[]; daBat?: boolean; giaHanTien?: AgentGiaHanTien };
 
 /** Thông báo đổi cổng giữa lượt — lượt VẪN đang chạy, đừng tắt chỉ báo "đang nghĩ". */
 const MA_DOI_CONG = new Set(['DOI_CONG', 'CONG_CHINH_HONG_FREE', 'DOI_CONG_TU_DONG']);
@@ -459,6 +459,8 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
             ...(e.coKeyGiaHan ? { coKeyGiaHan: true } : {}),
             ...(e.cacCong?.length ? { cacCong: e.cacCong } : {}),
             ...(typeof e.daBat === 'boolean' ? { daBat: e.daBat } : {}),
+            /* Mã gia hạn theo $ (19/10/2026): thẻ "Nhập mã gia hạn để dùng tiếp" dưới khối lỗi. */
+            ...(e.giaHanTien ? { giaHanTien: e.giaHanTien } : {}),
           }]);
           break;
         case 'daXoa':

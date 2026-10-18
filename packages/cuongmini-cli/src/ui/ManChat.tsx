@@ -24,7 +24,8 @@ import { CHE_DO, cheDoKe, moTaCheDo, quyetDoiCheDo } from '../cheDo';
 import { lenhCaiChoMay } from '../capNhat';
 import { fileQuyUoc, luuGhiNho, tachGhiNho } from '../ghiNho';
 import type { KetNoiLoi } from '../ketNoi';
-import type { CongNangCap, KhoChat, MucBang } from '../kho';
+import type { CongNangCap, GiaHanTien, KhoChat, MucBang } from '../kho';
+import { NHIP_KIEM_MS, cauDangCho, cauKetQua, cauTheGiaHan, type KetQuaGiaHan } from '../giaHanTien';
 import { nhanKieu, quetDuAn, type KyHieu } from '../kyHieu';
 import { canAscii, datAscii } from '../kyTu';
 import { LENH_GOI_Y, MODEL_DU_PHONG, MUC_DU_PHONG, chayLenh, giaoDienCtw, moModel, tenMuc as tenMucNoLuc, tenModel, tenNhomCong, moPhien, tachLenhCli, type BoiCanhLenh, type ModelMuc, type MucNoLuc } from '../lenh';
@@ -50,7 +51,7 @@ import { kieuVien } from '../kyTu';
 
 type Hop =
   | { loai: 'menu'; tieuDe: string; moTa?: string; than?: string; ds: MucMenu[]; chon: number; loc: string; coLoc: boolean; mauVien?: string; khiChon: (m: MucMenu) => void; khiHuy?: () => void; boLoc?: (q: string) => MucMenu[] }
-  | { loai: 'matKhau'; tieuDe: string; moTa: string; giaTri: string; khiXong: (mk: string) => void }
+  | { loai: 'matKhau'; tieuDe: string; moTa: string; giaTri: string; khiXong: (mk: string) => void; nhan?: string }
   | { loai: 'dangNhap'; nhacNho?: string }
   | { loai: 'banGhi'; cheDo: 'cuon' | 'tool'; dau: number; chonKhoi: number; moRong: Set<number>; ganCuoi: boolean }
   /** Màn chi tiết một agent phụ / lệnh nền (Enter trong bảng agent phụ). */
@@ -456,6 +457,57 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     });
   };
 
+  // ─── Mã gia hạn theo $ (19/10/2026) — `src/services/agent/maGiaHanTien.ts` ───
+  const pollGiaHan = useRef<NodeJS.Timeout | null>(null);
+  const dungPollGiaHan = () => { if (pollGiaHan.current) clearInterval(pollGiaHan.current); pollGiaHan.current = null; };
+  useEffect(() => () => dungPollGiaHan(), []);
+  /** Làm tiếp đúng lượt vừa bị chặn (lõi gửi lại nguyên hội thoại) — đang chạy việc khác thì chỉ báo. */
+  const lamTiepSauGiaHan = (chu: string) => {
+    if (S.dangChay) { kho.thongBao(chu, 'ok'); return; }
+    kho.batDauLamTiep(chu);
+    kn.goi('agent:lamTiep').catch((e: Error) => { kho.ketLuot('', true); kho.thongBao(e.message, 'loi'); });
+  };
+  const apKetQuaGiaHan = (kq: KetQuaGiaHan, tuNhap: boolean) => {
+    const c = cauKetQua(kq, tuNhap);
+    if (kq.ketQua !== 'choDuyet') dungPollGiaHan();
+    if (kq.ketQua === 'daCap' && c) { lamTiepSauGiaHan(c.chu); return; }
+    if (c) kho.thongBao(c.chu, c.muc);
+    if (kq.ketQua === 'choDuyet') theoDoiGiaHan(kq.id);
+  };
+  const kiemGiaHan = (id: number) => {
+    void kn.goi<KetQuaGiaHan>('agent:giaHanTienKiem', { id }).then((kq) => { if (kq.ketQua !== 'choDuyet') apKetQuaGiaHan(kq, false); }, () => undefined);
+  };
+  /** Tự kiểm lại yêu cầu chờ duyệt mỗi 30 s (một bộ đếm mỗi lúc). */
+  function theoDoiGiaHan(id: number) {
+    dungPollGiaHan();
+    pollGiaHan.current = setInterval(() => kiemGiaHan(id), NHIP_KIEM_MS);
+    pollGiaHan.current.unref?.();
+  }
+  /** Chạm trần tiền ⇒ thẻ "Nhập mã gia hạn để dùng tiếp" (ô ẩn ký tự); đang chờ duyệt sẵn ⇒ kiểm lại ngay + theo dõi. */
+  const moTheGiaHan = (g: GiaHanTien, loiTruoc?: string) => {
+    if (g.dangCho) {
+      kho.thongBao(cauDangCho(g.dangCho), 'canh');
+      kiemGiaHan(g.dangCho);
+      theoDoiGiaHan(g.dangCho);
+      return;
+    }
+    const c = cauTheGiaHan(g);
+    setHop({
+      loai: 'matKhau', giaTri: '', nhan: L('Mã gia hạn', 'Extension code'), tieuDe: c.tieuDe,
+      moTa: loiTruoc ? `⚠ ${loiTruoc}\n${c.moTa}` : c.moTa,
+      khiXong: (ma) => {
+        kho.thongBao(L('Đang kiểm mã gia hạn…', 'Checking the extension code…'));
+        kn.goi<KetQuaGiaHan>('agent:giaHanTien', { ma, tran: g.tran })
+          .then((kq) => apKetQuaGiaHan(kq, true))
+          .catch((e: Error & { ma?: string }) => {
+            /* Mã sai ⇒ mở lại ô nhập ngay (kèm số lần còn lại); lỗi khác (khoá 15 phút, chưa chạm…) ⇒ chỉ báo. */
+            if (e.ma === 'GIA_HAN_MA_SAI') { moTheGiaHan(g, e.message); return; }
+            kho.thongBao(L(`Không gia hạn được: ${e.message}`, `Could not extend: ${e.message}`), 'loi');
+          });
+      },
+    });
+  };
+
   /** Xác nhận model đắt (`dat`) trước, rồi mới làm `lam`. */
   const xacNhanDat = (m: { ten: string; dat?: boolean }, lam: () => void) => {
     if (!m.dat) { lam(); return; }
@@ -715,6 +767,8 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       } : {}),
     }),
     lamMoiCtwork: () => { void napDongCtw(); },
+    /* 19/10/2026: ô nhập ẨN ký tự (token Figma — /ket-noi figma). */
+    hoiAn: (o) => setHop({ loai: 'matKhau', giaTri: '', tieuDe: o.tieuDe, moTa: o.moTa, khiXong: o.khiXong }),
     kho, kn, thuMuc, phienBan, guiThat, doiModel, doiMuc, doiCheDo, dsModel, dsMuc, moMenu, moKhoaModel, doiTheme, doiNgonNgu, datToanManHinh, datChuot,
     datNhap: (t: string) => setO({ text: t, contro: t.length }),
     xoaManHinh, dangXuat, dangNhapLai: () => setHop({ loai: 'dangNhap' }), thoat: () => thoat(),
@@ -974,6 +1028,8 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     const l = S.loiCanXuLy;
     if (!l) return;
     S.loiCanXuLy = null;
+    /* Mã gia hạn theo $ (19/10/2026): mọi lỗi chạm trần tiền gia hạn được đi chung một thẻ. */
+    if (l.giaHanTien) { moTheGiaHan(l.giaHanTien); return; }
     if (l.ma === 'RAMBO_BAO_TRI') {
       setHop({
         loai: 'matKhau', tieuDe: L('Cổng chính đang bảo trì', 'Main gateway is under maintenance'), giaTri: '',
@@ -1689,7 +1745,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
         <Box borderStyle={kieuVien()} flexDirection="column" paddingX={1} marginTop={1} width={Math.min(rongTrai, 90)}>
           <Text>{hop.tieuDe}</Text>
           <Text>{mo(hop.moTa)}</Text>
-          <Box marginTop={1}><ONhapNho nhan={L('Mật khẩu', 'Password')} giaTri={hop.giaTri} an dangNhap /></Box>
+          <Box marginTop={1}><ONhapNho nhan={hop.nhan ?? L('Mật khẩu', 'Password')} giaTri={hop.giaTri} an dangNhap /></Box>
         </Box>
       ) : hop?.loai === 'dangNhap' ? (
         <ManDangNhap

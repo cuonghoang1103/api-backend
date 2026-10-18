@@ -146,10 +146,10 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
         nhom,
         configured: gatewayConfigured(),
         /* Mã model mặc định (không phải tên thật). */
-        model: MA_MAC_DINH,
-        macDinh: MA_MAC_DINH,
+        model: req.query.bang === 'cm' ? MA_MAC_DINH : (MA_CU[MA_MAC_DINH] ?? MA_MAC_DINH),
+        macDinh: req.query.bang === 'cm' ? MA_MAC_DINH : (MA_CU[MA_MAC_DINH] ?? MA_MAC_DINH),
         tenCong: TEN_CONG,
-        models,
+        models: maChoAppCu(models, req.query.bang !== 'cm'),
         mucNoLuc: DS_MUC_NO_LUC,
         capabilities: ALL_CAPABILITIES,
         limits: { tokenCap: tranToken(), windowHours: soGioCuaSo() },
@@ -292,6 +292,20 @@ router.post('/du-phong/mo-khoa', chiPro, async (req: any, res: Response<ApiRespo
  * POST /cong-anthropic/mo-khoa   — { matKhau } ⇒ { ve, hetHan } (vé 30 ngày).
  *                                  Bộ đếm sai dùng chung với /du-phong/mo-khoa.
  */
+/*
+ * APP CŨ (desktop ≤ 0.5.200, CLI ≤ 0.5.0, extension ≤ 0.7.0) kiểm mã model bằng một z.enum CỐ ĐỊNH ⇒ nhận mã
+ * `cm-*` là báo "Dữ liệu gửi lên không hợp lệ cho agent:datModel" (người dùng gặp 18/10/2026 ngay sau deploy).
+ * App mới gửi `?bang=cm`. Không có ⇒ đổi mã về mã cũ app đó hiểu (máy chủ đổi ngược qua BI_DANH), model chưa có
+ * mã cũ thì bỏ khỏi danh sách của app cũ.
+ */
+const MA_CU: Record<string, string> = {
+  'cm-solid': 'gpt-sol', 'cm-sonic': 'cl-sonnet-5-5', 'cm-optimum': 'cl-opus-5-5', 'cm-invisible': 'cl-fable-5-1', 'cm-heshin': 'cl-free',
+};
+function maChoAppCu<T extends { id: string }>(ds: T[], appCu: boolean): T[] {
+  if (!appCu) return ds;
+  return ds.flatMap((m) => (m.id.startsWith('cm-') ? (MA_CU[m.id] ? [{ ...m, id: MA_CU[m.id] }] : []) : [m]));
+}
+
 router.get('/cong-anthropic', chiPro, async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const q = await quyenChinhHang(req.userId, req.query.ve);
@@ -321,7 +335,7 @@ router.get('/cong-anthropic', chiPro, async (req: any, res: Response<ApiResponse
         tranModel: tranModel.filter(Boolean),
         congChinhDangHong: ramboDangNghi(),
         hanMuc: { free: goi(free), cao: goi(cao) },
-        models: await dsModelChoApp(q),
+        models: maChoAppCu(await dsModelChoApp(q), req.query.bang !== 'cm'),
         cacCong: await cacCongNangCap(req.userId, { veAnthropic: req.query.ve, veDuPhong: req.query.veDuPhong }),
       },
     });

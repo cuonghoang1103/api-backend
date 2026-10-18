@@ -277,7 +277,7 @@ export function registerAgentHandlers(): void {
          không trần thì trang AI Code quay "Đang kiểm tra quyền…" mãi. */
       const [rTools, rUsage] = await Promise.all([
         /* `congAnthropicVe` để `canMoKhoa` của các model chính hãng phản ánh đúng vé đang giữ. */
-        fetch(`${API_ORIGIN}/api/v1/agent/tools${veAnthropic() ? `?congAnthropicVe=${encodeURIComponent(veAnthropic()!)}` : ''}`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(8000) }),
+        fetch(`${API_ORIGIN}/api/v1/agent/tools?bang=cm${veAnthropic() ? `&congAnthropicVe=${encodeURIComponent(veAnthropic()!)}` : ''}`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(8000) }),
         fetch(`${API_ORIGIN}/api/v1/agent/usage`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(8000) }),
       ]);
       if (!rTools.ok) return trong;
@@ -888,6 +888,8 @@ export function registerAgentHandlers(): void {
     const ve = veAnthropic();
     const veDp = getSettings().agentDuPhongVe;
     const q = new URLSearchParams();
+    // App hiểu mã trung tính `cm-*` (bảng CuongMini 18/10/2026) — thiếu cờ này máy chủ trả mã cũ cho app cũ.
+    q.set('bang', 'cm');
     if (ve) q.set('ve', ve);
     if (typeof veDp === 'string' && veDp) q.set('veDuPhong', veDp);
     try {

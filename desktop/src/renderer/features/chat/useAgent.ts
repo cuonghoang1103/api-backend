@@ -481,7 +481,16 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           /* Đợt 6: tin gõ giữa lượt chưa tới agent (Esc / lỗi) ⇒ trả về ô nhập. */
           if (e.ds.length) {
             datTinTraVe((cu) => [...cu, ...e.ds]);
-            datMuc((truoc) => [...truoc, { kieu: 'loi', ma: 'DA_CHEN', text: dichP('↩ {n} tin bạn gõ thêm chưa kịp tới agent — đã trả về ô nhập.', { n: String(e.ds.length) }) }]);
+            datMuc((truoc) => {
+              /* QA đợt 6: tin chưa tới model không còn là "câu hỏi" — `/rewind <n>` đếm câu theo bảng này, lõi đếm theo
+                 hội thoại thật ⇒ để nguyên thì lệch một câu (cắt nhầm, lùi nhầm file). Đổi dòng ↳ thành dòng thông báo. */
+              const sau = [...truoc];
+              for (const t of e.ds) {
+                const i = sau.map((m) => m.kieu === 'nguoi' && m.text === `↳ ${t}`).lastIndexOf(true);
+                if (i >= 0) sau[i] = { kieu: 'loi', ma: 'DA_CHEN', text: `↳ ${t} ${dichP('(chưa gửi)', {})}` };
+              }
+              return [...sau, { kieu: 'loi', ma: 'DA_CHEN', text: dichP('↩ {n} tin bạn gõ thêm chưa kịp tới agent — đã trả về ô nhập.', { n: String(e.ds.length) }) }];
+            });
           }
           break;
         case 'ctwHuongDanNhom':

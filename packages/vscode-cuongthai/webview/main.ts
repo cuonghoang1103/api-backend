@@ -793,6 +793,11 @@ function xuLy(e: SuKien): void {
       if (ds.length) {
         o.value = [...ds, o.value].filter(Boolean).join('\n');
         o.dispatchEvent(new Event('input'));
+        /* QA đợt 6: tin chưa tới model không còn là "câu hỏi" — `/rewind <n>` đếm theo S.muc, lõi đếm hội thoại thật. */
+        for (const t of ds) {
+          const i = S.muc.map((m) => m.kieu === 'nguoi' && m.text === `↳ ${t}`).lastIndexOf(true);
+          if (i >= 0) S.muc.splice(i, 1);
+        }
         the('tin ket', `↩ ${esc(L(`${ds.length} tin bạn gõ thêm chưa kịp tới agent — đã trả về ô nhập.`, `${ds.length} message(s) you added did not reach the agent — they are back in the input.`))}`);
       }
       break;

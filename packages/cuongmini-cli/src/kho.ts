@@ -448,6 +448,14 @@ export class KhoChat {
         const ds = Array.isArray(e.ds) ? (e.ds as unknown[]).filter((x): x is string => typeof x === 'string') : [];
         if (ds.length) {
           S.chenTraVe = [...(S.chenTraVe ?? []), ...ds];
+          /* QA đợt 6: tin chưa tới model KHÔNG còn là "câu hỏi" của việc — lõi (`quayLui`) đếm câu theo hội thoại thật,
+             CLI đếm theo bảng ghi ⇒ để lại thì `/rewind <n>` sau đó lệch một câu (cắt nhầm chỗ, lùi nhầm file). */
+          for (const t of ds) {
+            const i = S.bang.map((m) => m.loai === 'nguoi' && (m as { text?: string }).text === `↳ ${t}`).lastIndexOf(true);
+            if (i >= 0) S.bang[i] = { loai: 'thongBao', muc: 'canh', text: `↳ ${t} ${L('(chưa gửi)', '(not sent)')}` } as (typeof S.bang)[number];
+            const j = S.muc.map((m) => m.kieu === 'nguoi' && m.text === t).lastIndexOf(true);
+            if (j >= 0) S.muc.splice(j, 1);
+          }
           this.them({ loai: 'thongBao', muc: 'canh', text: L(`↩ ${ds.length} tin bạn gõ thêm chưa kịp tới agent — đã trả về ô nhập.`, `↩ ${ds.length} message(s) you added did not reach the agent — they are back in the input.`) });
         }
         this.bao(true);

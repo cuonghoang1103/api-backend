@@ -191,8 +191,12 @@ test('nhãn tool mới + tóm tắt tiếng Anh; kho: traChen ⇒ trả về ô 
     assert.equal(dichTomTat('chỉ đọc'), 'read only');
     const k = new KhoChat();
     k.batDauLuot('việc của tôi', 0, 'việc của tôi');
+    k.themChen('à, làm LF-19 trước');
     k.xuLy({ loai: 'traChen', ds: ['à, làm LF-19 trước'] });
     assert.deepEqual(k.S.chenTraVe, ['à, làm LF-19 trước']);
+    // QA đợt 6: tin trả về không còn là "câu hỏi" ⇒ /rewind đếm khớp với lõi (chỉ 1 câu đã gửi).
+    assert.equal(k.S.muc.filter((m) => m.kieu === 'nguoi').length, 1);
+    assert.equal(k.S.bang.filter((m) => m.loai === 'nguoi').length, 1);
     k.xuLy({ loai: 'huy', lyDo: 'tuChoi' });
     assert.equal(k.S.choChiDan, true);
     assert.equal(k.S.luotCuoi?.xong, undefined, 'dừng ⇒ không phải "xong" (không gợi ý bước tiếp)');

@@ -2095,6 +2095,7 @@ export const TU_DIEN: Record<string, string> = {
   'nạp khi cần': 'loaded on demand',
   'Đã dừng — gõ CuongMini nên làm gì khác.': 'Stopped — tell CuongMini what to do instead.',
   '↩ {n} tin bạn gõ thêm chưa kịp tới agent — đã trả về ô nhập.': '↩ {n} message(s) you added did not reach the agent — they are back in the input.',
+  '(chưa gửi)': '(not sent)',
   '📎 Đọc hướng dẫn của nhóm: {nguon}': '📎 Read the team instructions: {nguon}',
   '📎 Đọc bối cảnh dự án từ CT Work: {nguon}': '📎 Read the project context from CT Work: {nguon}',
   'CuongMini nên làm gì khác? Gõ chỉ dẫn rồi Enter…': 'What should CuongMini do instead? Type and press Enter…',

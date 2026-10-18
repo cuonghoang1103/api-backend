@@ -185,6 +185,13 @@ export default function DocView({ config, num, details, focus = false }: { confi
   const editable = !!page && page.canEdit && !!config.permissions.editDocs && page.status !== 'ARCHIVED';
   /** K-3b: sửa được trong phòng Yjs = máy chủ cho 'edit' (vai, khoá chỉnh sửa, lưu trữ) VÀ trang sửa được như thường. */
   const liveEditable = !!live && live.session.canEdit && editable;
+  /*
+   * BubbleMenu chỉ đọc `shouldShow` lúc gắn ⇒ cờ "được bình luận" đi qua ref. Đổi trạng thái trang sang Archived
+   * (⇒ editable=false) từng GỠ BubbleMenu khỏi cây React ⇒ tippy đã dời phần tử ra ngoài ⇒ "Failed to execute
+   * 'removeChild' on 'Node'", cả trang sập (người dùng gặp 18/10/2026). Nay menu luôn gắn khi có editor, ẩn bằng ref.
+   */
+  const choBinhLuan = useRef(false);
+  choBinhLuan.current = editable && !!page?.canComment;
 
   const accept = useCallback((p: WorkPageDetail) => {
     base.current = p.version;
@@ -618,8 +625,8 @@ export default function DocView({ config, num, details, focus = false }: { confi
           {anchorCss && <style>{`${anchorCss}{background:color-mix(in srgb,var(--w-yellow) 20%,transparent);border-bottom:2px solid var(--w-yellow);border-radius:2px;cursor:pointer}`}</style>}
           {/* Đang viết bình luận ⇒ ẨN bong bóng qua shouldShow (nó nằm trên hộp thoại). KHÔNG gỡ khỏi cây React: tippy đã dời
               phần tử ra ngoài ⇒ React removeChild ném lỗi, cả trang sập (bắt được bằng E2E). */}
-          {ed && editable && page.canComment && (
-            <BubbleMenu editor={ed} tippyOptions={{ duration: 100, placement: 'top' }} shouldShow={({ editor: e, state }) => !inlineOpen.current && e.isEditable && !state.selection.empty && !e.isActive('codeBlock') && state.doc.textBetween(state.selection.from, state.selection.to, ' ').trim().length > 0}>
+          {ed && (
+            <BubbleMenu editor={ed} tippyOptions={{ duration: 100, placement: 'top' }} shouldShow={({ editor: e, state }) => choBinhLuan.current && !inlineOpen.current && e.isEditable && !state.selection.empty && !e.isActive('codeBlock') && state.doc.textBetween(state.selection.from, state.selection.to, ' ').trim().length > 0}>
               <button type="button" className="w-btn w-btn-sm" onMouseDown={(e) => e.preventDefault()} onClick={startInline} title={wt('collab.commentOnSel')} data-testid="docs-inline-comment">
                 <MessageSquarePlus size={13} /> {wt('collab.commentBtn')}
               </button>

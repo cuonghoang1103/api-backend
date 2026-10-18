@@ -1138,7 +1138,19 @@ export function chatUrlOf(ep: LlmEndpoint): string {
  */
 function modelCong(purpose: LlmPurpose): string {
   const env = process.env[`LLM_MODEL_${purpose.toUpperCase()}`];
-  return env?.trim() || PURPOSE_MODEL[purpose];
+  return env?.trim() || modelBanDo(purpose);
+}
+
+/**
+ * Model theo BẢN ĐỒ `PURPOSE_MODEL`, có tính công tắc rambo (chủ app chốt 18/10/2026: "về 6-sol hết").
+ * Các dòng `claude-*` ở bản đồ được viết cho thời đi cổng rambo (gói trả trọn). Rambo TẮT ⇒ gọi Claude qua
+ * modelapi là trả theo token, giá ~3,3× mua thẳng + đọc đệm tính đủ ×2 — nên việc đó chạy `MODELAPI_DU_PHONG`
+ * (gpt-6-sol), đúng như mấy ngày rambo hỏng nó đã tự rơi về. Muốn giữ Claude cho MỘT việc: đặt
+ * `LLM_MODEL_<VIỆC>=claude-…` (env luôn thắng, không cần deploy). Rambo bật lại ⇒ bản đồ gốc tự quay về.
+ */
+function modelBanDo(purpose: LlmPurpose): string {
+  const m = PURPOSE_MODEL[purpose];
+  return !ramboBat() && m.startsWith('claude-') ? MODELAPI_DU_PHONG : m;
 }
 
 /**
@@ -1246,7 +1258,7 @@ export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
   // Lưới đỡ chỉ áp cho đường qua CỔNG (model máy nhà không cần khoá nhóm nào),
   // nhưng áp cho CẢ nhánh env: đặt tay một model của nhóm chưa cắm khoá thì
   // cũng chết y hệt, và đó lại là nhánh người ta dùng lúc đang vội.
-  return modelGoiDuoc(env || PURPOSE_MODEL[purpose]);
+  return modelGoiDuoc(env || modelBanDo(purpose));
 }
 
 /**

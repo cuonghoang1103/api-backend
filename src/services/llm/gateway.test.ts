@@ -139,9 +139,12 @@ test('18/10/2026: rambo TẮT mặc định ⇒ lab_room/exam_tutor/agent_code �
       assert.equal(ep.label, 'cong', `${viec} vẫn đi rambo dù công tắc TẮT`);
       assert.equal(modelFor(viec), 'gpt-6-sol', `${viec} không về gpt-6-sol`);
     }
-    // Việc Claude mạnh KHÔNG bị hạ (W2): course_tutor/codelab_coach giữ claude-opus-4-8.
-    assert.equal(modelFor('course_tutor'), 'claude-opus-4-8');
-    assert.equal(modelFor('codelab_coach'), 'claude-opus-4-8');
+    // Chủ app chốt 18/10/2026 "về 6-sol hết": rambo TẮT ⇒ việc bản đồ ghi claude-* chạy gpt-6-sol (Claude qua
+    // modelapi trả theo token ~3,3×). Env LLM_MODEL_<VIỆC> vẫn thắng để giữ Claude cho riêng một việc.
+    assert.equal(modelFor('course_tutor'), 'gpt-6-sol');
+    assert.equal(modelFor('codelab_coach'), 'gpt-6-sol');
+    process.env.LLM_MODEL_COURSE_TUTOR = 'claude-opus-4-8';
+    try { assert.equal(modelFor('course_tutor'), 'claude-opus-4-8', 'env phải thắng'); } finally { delete process.env.LLM_MODEL_COURSE_TUTOR; }
     // Bật lại bằng env ⇒ rambo quay về; env 0 ⇒ tắt cứng.
     process.env.RAMBO_BAT = '1';
     assert.equal(endpointFor('lab_room').label, 'cong-agent');
@@ -247,12 +250,14 @@ test('lùi về modelapi: KHOÁ đi theo model lùi, không theo bản đồ', (
     assert.equal(ep.label, 'cong', 'chat_pro phải lùi về modelapi khi cầu dao mở');
     assert.equal(ep.key, 'sk-gia-lap-nhom-gpt', 'khoá đi theo BẢN ĐỒ chứ không theo model lùi ⇒ lệch nhóm');
 
-    // KIỂM BỘ KIỂM: lúc cầu dao ĐÓNG, cùng việc đó KHÔNG được lấy khoá nhóm
-    // GPT nữa (bản đồ phân nó cho model claude). Thiếu dòng này thì khẳng định
-    // trên vẫn xanh kể cả khi mọi việc đều lấy chung một khoá.
+    // KIỂM BỘ KIỂM: rambo TẮT (18/10/2026) ⇒ chat_pro chạy gpt-6-sol ⇒ khoá nhóm GPT; còn khi env ép
+    // một model claude thì KHÔNG được lấy khoá nhóm GPT. Thiếu vế sau thì khẳng định trên vẫn xanh kể cả
+    // khi mọi việc đều lấy chung một khoá.
     baoRamboOk();
     delete process.env.AGENT_GATEWAY_API_KEY; // tắt rambo để rơi về cổng chung
-    assert.notEqual(endpointFor('chat_pro').key, 'sk-gia-lap-nhom-gpt', 'khoá không còn phân theo nhóm model');
+    assert.equal(endpointFor('chat_pro').key, 'sk-gia-lap-nhom-gpt', 'rambo tắt ⇒ chat_pro chạy gpt-6-sol ⇒ khoá nhóm GPT');
+    process.env.LLM_MODEL_CHAT_PRO = 'claude-sonnet-5';
+    try { assert.notEqual(endpointFor('chat_pro').key, 'sk-gia-lap-nhom-gpt', 'khoá không còn phân theo nhóm model'); } finally { delete process.env.LLM_MODEL_CHAT_PRO; }
   } finally {
     baoRamboOk();
     for (const [t, gt] of luu) {

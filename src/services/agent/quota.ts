@@ -37,7 +37,13 @@ import { HE_SO_FABLE, MODEL_FABLE } from './fable.js';
 import { tokenGiaHan } from './keyGiaHan.js';
 
 /** Mặc định. Đổi bằng env, không sửa mã. `AGENT_TOKEN_CAP=0` = tắt trần (có chủ ý). */
-const MAC_DINH_TRAN = 4_000_000;
+/*
+ * 18/10/2026 — chủ app: "cấp theo $ cơ mà, đừng giới hạn 5h nữa". Mặc định TẮT trần token 5 giờ (0 = tắt);
+ * chặn chi tiêu bằng trần TIỀN theo model × người (`tranModel.ts`, admin chỉnh) + ví ngày `tranTienNgay`.
+ * Trần token 5 giờ cũ (4 triệu) bị chạm rất nhanh từ khi ngữ cảnh nới theo cửa sổ thật (đợt cổng & model).
+ * Muốn bật lại: env `AGENT_TOKEN_CAP=<số token>`.
+ */
+const MAC_DINH_TRAN = 0;
 const MAC_DINH_GIO = 5;
 
 export function tranToken(): number {

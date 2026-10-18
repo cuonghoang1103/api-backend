@@ -11,6 +11,7 @@ import { Spinner } from '../ui';
 import { wt, wfmt } from '../i18n';
 import { codeApi, codeKeys, type PullItem } from './codeApi';
 import { BranchName, IssueChips, LineDelta, prIcon, WhoChip } from './parts';
+import { safeHref } from './codeText';
 
 type St = 'open' | 'merged' | 'closed' | 'all';
 
@@ -62,8 +63,8 @@ export default function PullsTab({ pid, projectKey, state, onState, focus, onIss
                 <Icon size={17} className="mt-0.5 shrink-0" style={{ color }} aria-hidden="true" />
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                    {p.url ? (
-                      <a href={p.url} target="_blank" rel="noopener noreferrer" className="min-w-0 text-[14px] font-semibold hover:text-[var(--w-accent-text)] hover:underline">{p.title}</a>
+                    {safeHref(p.url) ? (
+                      <a href={safeHref(p.url)} target="_blank" rel="noopener noreferrer" className="min-w-0 text-[14px] font-semibold hover:text-[var(--w-accent-text)] hover:underline">{p.title}</a>
                     ) : <span className="min-w-0 text-[14px] font-semibold">{p.title}</span>}
                     {p.state === 'draft' && <span className="rounded-full border border-[var(--w-border-strong)] px-1.5 text-[11px] text-[var(--w-text-2)]">{wt('code.stDraft')}</span>}
                     <IssueChips nums={p.issueNumbers} refs={q.data!.issues} projectKey={projectKey} onOpen={onIssue} />
@@ -89,7 +90,7 @@ export default function PullsTab({ pid, projectKey, state, onState, focus, onIss
                       <span className="flex -space-x-1">{p.reviewers.slice(0, 4).map((r) => <WhoChip key={r.label} who={r} size={18} className="[&>span:last-child]:hidden" />)}</span>
                     </span>
                   )}
-                  {p.url && <a href={p.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[11.5px] text-[var(--w-text-3)] hover:text-[var(--w-accent-text)]"><ExternalLink size={11} /> {p.provider === 'GITLAB' ? 'GitLab' : 'GitHub'}</a>}
+                  {safeHref(p.url) && <a href={safeHref(p.url)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[11.5px] text-[var(--w-text-3)] hover:text-[var(--w-accent-text)]"><ExternalLink size={11} /> {p.provider === 'GITLAB' ? 'GitLab' : 'GitHub'}</a>}
                 </div>
               </li>
             );

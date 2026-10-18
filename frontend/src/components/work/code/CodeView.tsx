@@ -16,6 +16,7 @@ import { userName, workError, type ProjectConfig } from '@/lib/work-api';
 import KpiTile, { KpiRow } from '../KpiTile';
 import { EmptyState, PageLoading, UserAvatar } from '../ui';
 import { wt, wfmt } from '../i18n';
+import { safeHref } from './codeText';
 import { codeApi, codeKeys, type CodeOverview } from './codeApi';
 import { ProviderIcon } from './parts';
 import ActivityTab from './ActivityTab';
@@ -54,7 +55,7 @@ function Header({ o, settingsHref }: { o: CodeOverview; settingsHref: string }) 
         {o.providers.map((p) => (
           <span key={p.provider} className="inline-flex min-w-0 items-center gap-2 text-[14px] font-semibold">
             <ProviderIcon provider={p.provider} size={17} />
-            {p.webUrl ? <a href={p.webUrl} target="_blank" rel="noopener noreferrer" className="truncate hover:underline">{p.repo}</a> : <span className="text-[var(--w-text-2)]">{wt('code.repoUnknown')}</span>}
+            {p.webUrl ? <a href={safeHref(p.webUrl)} target="_blank" rel="noopener noreferrer" className="truncate hover:underline">{p.repo}</a> : <span className="text-[var(--w-text-2)]">{wt('code.repoUnknown')}</span>}
             {p.webUrl && <ExternalLink size={12} className="text-[var(--w-text-3)]" aria-hidden="true" />}
             <span className="inline-flex items-center gap-1.5 text-[12px] font-normal text-[var(--w-text-3)]">
               <span className={cn('h-2 w-2 rounded-full', p.lastEventAt && Date.now() - Date.parse(p.lastEventAt) < 7 * 86_400_000 ? 'bg-[var(--w-green)]' : 'bg-[var(--w-text-3)]')} aria-hidden="true" />

@@ -14,6 +14,7 @@ import { ArrowUpRight, ChevronDown, ChevronRight, GitBranch, GitCommitHorizontal
 import { cn } from '@/lib/utils';
 import { codeApi, codeKeys, type IssueDevGroup } from './code/codeApi';
 import { PrState, WhoChip } from './code/parts';
+import { safeHref } from './code/codeText';
 import { relativeTime, Spinner } from './ui';
 import { wt } from '@/components/work/i18n';
 
@@ -48,8 +49,8 @@ function GroupBlock({ g, codeHref, defaultOpen }: { g: IssueDevGroup; codeHref: 
           {head}
         </button>
         {g.commits.length > 0 && <span className="shrink-0 text-[11px] tabular-nums text-[var(--w-text-3)]">{g.commits.length}</span>}
-        {g.url && (
-          <a href={g.url} target="_blank" rel="noopener noreferrer" aria-label={wt('code.openOnHost')} className="shrink-0 text-[var(--w-text-3)] hover:text-[var(--w-accent-text)]">
+        {safeHref(g.url) && (
+          <a href={safeHref(g.url)} target="_blank" rel="noopener noreferrer" aria-label={wt('code.openOnHost')} className="shrink-0 text-[var(--w-text-3)] hover:text-[var(--w-accent-text)]">
             <ArrowUpRight size={13} />
           </a>
         )}

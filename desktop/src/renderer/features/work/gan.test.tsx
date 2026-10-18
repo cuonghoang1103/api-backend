@@ -117,6 +117,8 @@ describe('⭐ cây CT Work của web dựng được trong app desktop', () => {
     ['/work/:ws/:key/dashboards', () => import('@/app/work/[ws]/[key]/dashboards/page')],
     ['/work/:ws/:key/tests', () => import('@/app/work/[ws]/[key]/tests/page')],
     ['/work/:ws/:key/settings', () => import('@/app/work/[ws]/[key]/settings/page')],
+    // QA 18/10/2026: trang Code mới (hoạt động Git, nhánh, PR, mã nguồn) — có tuyến trong tuyenCtWork.ts.
+    ['/work/:ws/:key/code', () => import('@/app/work/[ws]/[key]/code/page')],
     ['/work/:ws/:key/tests/:num', () => import('@/app/work/[ws]/[key]/tests/[num]/page')],
     ['/work/:ws/:key/tests/cycles/:cycleId', () => import('@/app/work/[ws]/[key]/tests/cycles/[cycleId]/page')],
   ] as const)('trang %s dựng xong mà KHÔNG ném', { timeout: 30_000 }, async (_ten, nap) => {

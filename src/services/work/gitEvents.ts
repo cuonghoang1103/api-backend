@@ -92,6 +92,11 @@ const EMPTY: GitExtract = { events: [], branches: [], pulls: [] };
 const ZERO_SHA = /^0+$/;
 
 const str = (v: unknown, n: number): string | null => (v === undefined || v === null || v === '' ? null : String(v).slice(0, n));
+/** Liên kết từ payload: CHỈ http(s) — `javascript:` trong payload (ai cầm khoá webhook / GitLab tự host) là XSS khi bấm (QA 18/10/2026). */
+const link = (v: unknown, n: number): string | null => {
+  const s = str(v, n);
+  return s && /^https?:\/\//i.test(s.trim()) ? s.trim() : null;
+};
 const int = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.round(v) : null);
 const when = (v: unknown, fallback: Date): Date => {
   const d = v ? new Date(String(v)) : null;
@@ -123,7 +128,7 @@ function ghCommit(c: any, key: string, branch: string): GitCommitItem {
   return {
     sha: String(c?.id ?? '').slice(0, 64), message,
     authorLogin: str(c?.author?.username, 100), authorName: str(c?.author?.name, 100), authorEmail: str(c?.author?.email, 200),
-    url: str(c?.url, 500), at: c?.timestamp ? when(c.timestamp, new Date()).toISOString() : null,
+    url: link(c?.url, 500), at: c?.timestamp ? when(c.timestamp, new Date()).toISOString() : null,
     issueNumbers: keyNumbers(`${message} ${branch}`, key), files: fileCount(c),
   };
 }
@@ -169,8 +174,8 @@ export function extractGithubGit(event: string, body: any, key: string, now = ne
       events.push({
         kind: 'PUSH', dedupeKey: `push:${branch}:${after.slice(0, 64)}`.slice(0, 300), repo, ref: branch, ...actor,
         title: commits[commits.length - 1]?.message.split('\n')[0].slice(0, 500) ?? branch,
-        url: str(body.compare, 500), prNumber: null, commitCount: commits.length, commits,
-        data: { before, after, forced: !!body.forced, created: !!body.created, compare: str(body.compare, 500) },
+        url: link(body.compare, 500), prNumber: null, commitCount: commits.length, commits,
+        data: { before, after, forced: !!body.forced, created: !!body.created, compare: link(body.compare, 500) },
         issueNumbers: nums, occurredAt: at,
       });
     }
@@ -224,7 +229,7 @@ export function extractGithubGit(event: string, body: any, key: string, now = ne
       ...(body.requested_reviewer?.login ? [String(body.requested_reviewer.login)] : []),
     ])].slice(0, 20).map((s) => s.slice(0, 100));
     const pull: GitPullInput = {
-      number, title: String(pr.title ?? '').slice(0, 300), url: str(pr.html_url, 500), state,
+      number, title: String(pr.title ?? '').slice(0, 300), url: link(pr.html_url, 500), state,
       authorLogin: str(pr.user?.login, 100), headRef, baseRef: str(pr.base?.ref, 255), reviewers, issueNumbers: nums,
       additions: int(pr.additions), deletions: int(pr.deletions), changedFiles: int(pr.changed_files),
       mergedBy: str(pr.merged_by?.login, 100), openedAt: when(pr.created_at, now),
@@ -260,7 +265,7 @@ export function extractGithubGit(event: string, body: any, key: string, now = ne
 export function extractGitlabGit(body: any, key: string, now = new Date()): GitExtract {
   if (!body || typeof body !== 'object') return EMPTY;
   const repo = str(body.project?.path_with_namespace, 200);
-  const web = String(body.project?.web_url ?? '').replace(/\/$/, '');
+  const web = (link(body.project?.web_url, 400) ?? '').replace(/\/$/, '');
   if (body.object_kind === 'push') {
     const branch = branchOf(body.ref);
     if (!branch) return EMPTY;
@@ -281,7 +286,7 @@ export function extractGitlabGit(body: any, key: string, now = new Date()): GitE
       const message = String(c.message ?? c.title ?? '').slice(0, 2000);
       return {
         sha: String(c.id).slice(0, 64), message, authorLogin: null, authorName: str(c.author?.name, 100), authorEmail: str(c.author?.email, 200),
-        url: str(c.url, 500), at: c.timestamp ? when(c.timestamp, now).toISOString() : null, issueNumbers: keyNumbers(`${message} ${branch}`, key), files: fileCount(c),
+        url: link(c.url, 500), at: c.timestamp ? when(c.timestamp, now).toISOString() : null, issueNumbers: keyNumbers(`${message} ${branch}`, key), files: fileCount(c),
       };
     });
     // GitLab gửi commit cũ → mới; commit cuối = đầu nhánh.
@@ -327,7 +332,7 @@ export function extractGitlabGit(body: any, key: string, now = new Date()): GitE
     const reviewers = (Array.isArray(body.reviewers) ? body.reviewers : []).map((r: any) => String(r?.username ?? '')).filter(Boolean).slice(0, 20);
     const actorLogin = str(body.user?.username, 100);
     const pull: GitPullInput = {
-      number, title: String(mr.title ?? '').slice(0, 300), url: str(mr.url, 500), state, authorLogin: null, headRef, baseRef: str(mr.target_branch, 255),
+      number, title: String(mr.title ?? '').slice(0, 300), url: link(mr.url, 500), state, authorLogin: null, headRef, baseRef: str(mr.target_branch, 255),
       reviewers, issueNumbers: nums, additions: null, deletions: null, changedFiles: null, mergedBy: state === 'merged' ? actorLogin : null,
       openedAt: when(mr.created_at, now), mergedAt: state === 'merged' ? when(mr.merged_at ?? mr.updated_at, now) : null,
       closedAt: state === 'closed' ? when(mr.closed_at ?? mr.updated_at, now) : null,
@@ -370,8 +375,9 @@ const isUnique = (err: unknown) => err instanceof Prisma.PrismaClientKnownReques
  */
 export async function recordGit(projectId: number, provider: GitProvider, x: GitExtract): Promise<RecordedGitEvent[]> {
   const out: RecordedGitEvent[] = [];
+  /** Nhánh có sự kiện PUSH là bản GỬI LẠI (trùng dedupeKey) ⇒ không cộng commitCount lần hai (QA 18/10/2026). */
+  const pushGuiLai = new Set<string>();
   try {
-    for (const b of x.branches) await upsertBranch(projectId, provider, b);
     for (const p of x.pulls) await upsertPull(projectId, provider, p);
     for (const e of x.events) {
       try {
@@ -396,7 +402,13 @@ export async function recordGit(projectId: number, provider: GitProvider, x: Git
         out.push({ id: row.id, kind: e.kind, ref: e.ref, prNumber: e.prNumber });
       } catch (err) {
         if (!isUnique(err)) throw err;
+        if (e.kind === 'PUSH' && e.ref) pushGuiLai.add(e.ref);
       }
+    }
+    // Nhánh SAU sự kiện: GitHub "Redeliver" / GitLab gửi lại cùng một push thì `commitCount: { increment }` từng cộng đôi.
+    for (const b of x.branches) {
+      if (b.op === 'PUSH' && pushGuiLai.has(b.name)) continue;
+      await upsertBranch(projectId, provider, b);
     }
   } catch (err) {
     logger.warn('[work] code: không lưu được hoạt động Git', { projectId, provider, err: (err as Error).message });

@@ -4,7 +4,7 @@
  */
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { languageOf, parsePatch, sizeLabel, splitHighlighted } from './codeText';
+import { languageOf, parsePatch, safeHref, sizeLabel, splitHighlighted } from './codeText';
 
 describe('splitHighlighted', () => {
   it('giữ thẻ span mở qua nhiều dòng (chú thích dài)', () => {
@@ -55,5 +55,15 @@ describe('languageOf / sizeLabel', () => {
     assert.equal(sizeLabel(512), '512 B');
     assert.equal(sizeLabel(2048), '2.0 KB');
     assert.equal(sizeLabel(3 * 1024 * 1024), '3.0 MB');
+  });
+});
+
+describe('safeHref (QA 18/10/2026 — liên kết từ webhook/host)', () => {
+  it('chỉ cho http(s); javascript:/data:/vbscript:/tương đối ⇒ undefined', () => {
+    assert.equal(safeHref('https://github.com/o/r/commit/abc'), 'https://github.com/o/r/commit/abc');
+    assert.equal(safeHref('http://gitlab.local/x'), 'http://gitlab.local/x');
+    for (const bad of ['javascript:alert(1)', ' JavaScript:alert(1)', 'data:text/html,x', 'vbscript:x', '//evil.com', '/relative', '', null, undefined, 42]) {
+      assert.equal(safeHref(bad), undefined, String(bad));
+    }
   });
 });

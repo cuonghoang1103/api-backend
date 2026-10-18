@@ -225,3 +225,21 @@ export function laLoiCongHong(thong: string, code?: string): boolean {
 export function cauDoiCong(ten: string): { vi: string; en: string } {
   return { vi: `Đã chuyển sang ${ten} vì cổng bận`, en: `Switched to ${ten} because the gateway is busy` };
 }
+
+/**
+ * Câu lỗi đi tới app KHÔNG được nhắc tên model thật / tên nhà cung cấp (QA 18/10/2026): cổng thường trả
+ * `HTTP 503 No available channel for model gpt-6-sol …`, `unknown provider for model …`, và câu của cổng chính hãng
+ * nói "cổng Claude chính hãng". Đổi tên thật ⇒ tên CuongMini (dài trước để `gpt-6-sol` không bị `gpt-6` nuốt dở).
+ * THUẦN.
+ */
+export function anTenThat(text: string, them: Record<string, string> = {}): string {
+  const cap: Array<[string, string]> = [
+    ...BANG.map((m) => [m.model, m.ten] as [string, string]),
+    ...Object.entries(them),
+  ].filter(([that]) => that).sort((a, b) => b[0].length - a[0].length);
+  let ra = String(text ?? '');
+  for (const [that, ten] of cap) ra = ra.split(that).join(ten);
+  return ra
+    .replace(/cổng Claude chính hãng/gi, TEN_CONG.anthropic)
+    .replace(/api\.anthropic\.com|modelapi(\.vn)?/gi, 'CuongMini');
+}

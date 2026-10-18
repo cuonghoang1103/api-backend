@@ -12,6 +12,7 @@ import { userName } from '@/lib/work-api';
 import { CATEGORY_DOT, UserAvatar } from '../ui';
 import { wt } from '../i18n';
 import type { ActivityKind, GitProvider, IssueRef, Who } from './codeApi';
+import { safeHref } from './codeText';
 
 export function WhoChip({ who, size = 18, className, muted }: { who: Who | null | undefined; size?: number; className?: string; muted?: boolean }) {
   if (!who) return <span className="text-[var(--w-text-3)]">—</span>;
@@ -117,7 +118,8 @@ export function ProviderIcon({ provider, size = 15 }: { provider: GitProvider; s
 export function Sha({ sha, onClick, href }: { sha: string; onClick?: () => void; href?: string | null }) {
   const cls = 'shrink-0 rounded-[4px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-1.5 py-[1px] font-mono text-[11px] text-[var(--w-accent-text)] hover:border-[var(--w-accent-border)]';
   if (onClick) return <button type="button" className={cls} onClick={onClick} title={wt('code.viewDiff')}>{sha.slice(0, 7)}</button>;
-  if (href) return <a className={cls} href={href} target="_blank" rel="noopener noreferrer">{sha.slice(0, 7)}</a>;
+  const h = safeHref(href);
+  if (h) return <a className={cls} href={h} target="_blank" rel="noopener noreferrer">{sha.slice(0, 7)}</a>;
   return <span className={cls}>{sha.slice(0, 7)}</span>;
 }
 

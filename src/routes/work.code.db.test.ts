@@ -20,7 +20,7 @@ import { prisma } from '../config/database.js';
 import { errorHandler } from '../middleware/errorHandler.js';
 import { emailService } from '../services/email.service.js';
 import { extractGithubGit, extractGitlabGit, keyNumbers } from '../services/work/gitEvents.js';
-import { __setGitFetchForTests, capPatches, cleanPath, cleanRef, looksBinary, safeGitlabBase } from '../services/work/gitSource.js';
+import { __setGitFetchForTests, capPatches, cleanPath, cleanRef, looksBinary, repoMeta, safeGitlabBase } from '../services/work/gitSource.js';
 import { gitMessage, prNumberOf } from '../services/work/code.service.js';
 import { agentRouteAllowed, clientPortalRouteAllowed } from '../services/work/permissions.js';
 
@@ -92,6 +92,17 @@ describe('CTW Code — rút sự kiện (hàm thuần)', () => {
     const rv = extractGitlabGit({ object_kind: 'merge_request', user: { username: 'a' }, project: { path_with_namespace: 'g/p' }, changes: { reviewers: { previous: [{ username: 'x' }], current: [{ username: 'x' }, { username: 'y' }] } }, object_attributes: { iid: 4, title: 't', state: 'opened', action: 'update', updated_at: 't2' } }, 'NT', now);
     assert.deepEqual(rv.events.map((e) => [e.kind, (e.data as { reviewer?: string }).reviewer]), [['REVIEW_REQUESTED', 'y']]);
   });
+  it('QA 18/10: liên kết javascript:/data: trong payload bị bỏ (chỉ http(s) được lưu)', () => {
+    const x = extractGithubGit('push', { ref: 'refs/heads/main', before: SHA(1), after: SHA(2), compare: 'javascript:alert(1)', sender: { login: 'a' }, repository: { full_name: 'o/r' },
+      commits: [{ id: SHA(2), message: 'x', url: 'javascript:alert(document.cookie)', author: { name: 'a' } }] }, 'NT', now);
+    assert.equal(x.events[0].url, null);
+    assert.equal(x.events[0].commits[0].url, null);
+    const pr = extractGithubGit('pull_request', { action: 'opened', pull_request: { number: 3, title: 't', html_url: 'data:text/html,x', head: { ref: 'b' }, base: { ref: 'main' } }, sender: { login: 'a' } }, 'NT', now);
+    assert.equal(pr.pulls[0].url, null);
+    const gl = extractGitlabGit({ object_kind: 'push', ref: 'refs/heads/b', before: SHA(3), after: SHA(4), total_commits_count: 1, project: { path_with_namespace: 'g/p', web_url: 'javascript:alert(1)//' }, commits: [{ id: SHA(4), message: 'x', url: 'https://gitlab.com/g/p/-/commit/1' }] }, 'NT', now);
+    assert.equal(gl.events[0].url, null);
+    assert.equal(gl.events[0].commits[0].url, 'https://gitlab.com/g/p/-/commit/1');
+  });
   it('mã thẻ, số PR, câu thông báo', () => {
     assert.deepEqual(keyNumbers('nt-12 and NT-3, XNT-4', 'NT'), [12, 3]);
     assert.equal(prNumberOf('o/r#12'), 12);
@@ -117,6 +128,44 @@ describe('CTW Code — an toàn proxy mã nguồn (hàm thuần)', () => {
     assert.equal(safeGitlabBase('https://localhost/g'), null);
     assert.equal(safeGitlabBase('https://10.0.0.5/g'), null);
     assert.equal(safeGitlabBase('https://[::1]/g'), null);
+    // QA 18/10/2026: dấu chấm cuối, IP viết kiểu khác, userinfo.
+    assert.equal(safeGitlabBase('https://localhost./g'), null);
+    assert.equal(safeGitlabBase('https://git.internal./g'), null);
+    assert.equal(safeGitlabBase('https://2130706433/g'), null);
+    assert.equal(safeGitlabBase('https://0x7f.1/g'), null);
+    assert.equal(safeGitlabBase('https://gitlab.com@127.0.0.1/g'), null);
+    assert.equal(safeGitlabBase('https://user:pw@gitlab.example.com/g'), null);
+    assert.equal(safeGitlabBase('https://[::ffff:127.0.0.1]/g'), null);
+  });
+  it('chuyển hướng KHÁC nguồn không được theo (SSRF + token không đi theo 302); cùng nguồn thì theo', async () => {
+    const calls: Array<{ url: string; redirect?: string; token: string | null }> = [];
+    const target = { provider: 'GITLAB' as const, repo: 'g/p', apiBase: 'https://gitlab.example.com/api/v4', webBase: 'https://gitlab.example.com', token: 'gia-lap-SECRET-khong-phai-token-that', projectId: 1 };
+    __setGitFetchForTests(((url: string, init: { headers: Record<string, string>; redirect?: string }) => {
+      calls.push({ url, redirect: init.redirect, token: init.headers['PRIVATE-TOKEN'] ?? null });
+      if (url.includes('/projects/g%2Fp') && !url.includes('moved')) return Promise.resolve(new Response(null, { status: 302, headers: { location: 'http://169.254.169.254/latest/meta-data/' } }));
+      return Promise.resolve(new Response('{}', { status: 200 }));
+    }) as never);
+    try {
+      await assert.rejects(() => repoMeta(target), (e: any) => e.statusCode === 502 && !String(e.message).includes('SECRET'));
+      assert.equal(calls.length, 1, 'không gọi tới địa chỉ chuyển hướng');
+      assert.equal(calls[0].redirect, 'manual');
+      assert.ok(!calls.some((c) => c.url.includes('169.254')));
+      // GitHub đổi tên repo: 301 trong CÙNG api.github.com ⇒ theo.
+      calls.length = 0;
+      __setGitFetchForTests(((url: string, init: { redirect?: string }) => {
+        calls.push({ url, redirect: init.redirect, token: null });
+        if (url.endsWith('/repos/old/name')) return Promise.resolve(new Response(null, { status: 301, headers: { location: 'https://api.github.com/repositories/42' } }));
+        return Promise.resolve(new Response(JSON.stringify({ default_branch: 'dev', private: false }), { status: 200 }));
+      }) as never);
+      const m = await repoMeta({ provider: 'GITHUB', repo: 'old/name', apiBase: 'https://api.github.com', webBase: 'https://github.com', token: null, projectId: 2 });
+      assert.equal(m.defaultBranch, 'dev');
+      assert.deepEqual(calls.map((c) => c.url), ['https://api.github.com/repos/old/name', 'https://api.github.com/repositories/42']);
+      // Thân không phải JSON ⇒ 502, không phải 500.
+      __setGitFetchForTests((() => Promise.resolve(new Response('<html>maintenance</html>', { status: 200 }))) as never);
+      await assert.rejects(() => repoMeta({ ...target, projectId: 3 }), (e: any) => e.statusCode === 502);
+    } finally {
+      __setGitFetchForTests(null);
+    }
   });
   it('nhị phân + cắt patch', () => {
     assert.equal(looksBinary(Buffer.from([0x50, 0x4b, 0x00, 0x01]), 'a.txt'), true);
@@ -270,8 +319,38 @@ describe('CTW Code — HTTP + DB', { skip: !RUN }, () => {
     assert.equal((await gitNotes(dev2.id)).length, before2 + 1);
     assert.equal((await gitNotes(lead.id)).length, beforeLead + 1);
     assert.equal(await prisma.workGitEvent.count({ where: { projectId: pid, kind: 'PUSH' } }), 2);
+    // QA 18/10/2026: gửi lại KHÔNG cộng commitCount của nhánh lần hai.
+    assert.equal((await prisma.workGitBranch.findFirst({ where: { projectId: pid, name: `feature/gc-${issueNum}-login` } }))?.commitCount, 3);
     const ev = await prisma.workGitEvent.findFirst({ where: { projectId: pid, ref: `feature/gc-${issueNum}-login` } });
     assert.deepEqual(ev?.issueNumbers, [issueNum]);
+  });
+
+  it('QA 18/10: chữ ký webhook GitHub SAI ⇒ 401, không ghi sự kiện nào', async () => {
+    const n0 = await prisma.workGitEvent.count({ where: { projectId: pid } });
+    const raw = Buffer.from(JSON.stringify(push(dev, 'main', ['forged'])));
+    const bad = `sha256=${crypto.createHmac('sha256', 'not-the-secret').update(raw).digest('hex')}`;
+    for (const headers of [{ 'X-Hub-Signature-256': bad }, {}] as Array<Record<string, string>>) {
+      const r = await fetch(`${base}/api/v1/work/github/webhook/${pid}`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-GitHub-Event': 'push', ...headers }, body: new Uint8Array(raw) });
+      assert.equal(r.status, 401);
+    }
+    assert.equal(await prisma.workGitEvent.count({ where: { projectId: pid } }), n0);
+  });
+
+  it('QA 18/10: GitLab — token sai 401; gốc web GHIM ở webhook đầu (webhook sau không kéo được token sang host khác)', async () => {
+    const c = await call(lead, 'POST', `/projects/${pid}/gitlab`, {});
+    assert.ok(c.status === 200 || c.status === 201, c.text);
+    const glToken = c.data.token as string;
+    const gl = async (tok: string, webUrl: string) => (await fetch(`${base}/api/v1/work/gitlab/webhook/${pid}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Gitlab-Token': tok },
+      body: JSON.stringify({ object_kind: 'push', ref: 'refs/heads/gl-main', before: SHA(900), after: SHA(901), total_commits_count: 1, user_username: dev.username,
+        project: { path_with_namespace: 'grp/app', web_url: webUrl }, commits: [{ id: SHA(901), message: 'gl', author: { name: 'd', email: 'd@x' } }] }),
+    })).status;
+    assert.equal(await gl('wrong-token', 'https://gitlab.example.com/grp/app'), 401);
+    assert.equal(await gl(glToken, 'https://gitlab.example.com/grp/app'), 200);
+    assert.equal(((await prisma.workGitlabConnection.findUnique({ where: { projectId: pid } }))?.config as any)?.webBase, 'https://gitlab.example.com');
+    assert.equal(await gl(glToken, 'https://attacker.example.net/grp/app'), 200);
+    assert.equal(((await prisma.workGitlabConnection.findUnique({ where: { projectId: pid } }))?.config as any)?.webBase, 'https://gitlab.example.com', 'webhook sau không được đổi host');
+    assert.equal((await call(lead, 'DELETE', `/projects/${pid}/gitlab`)).status, 200);
   });
 
   it('nhánh bị xoá: push(deleted) + sự kiện delete chỉ ghi MỘT dòng; nhánh đánh dấu đã xoá', async () => {

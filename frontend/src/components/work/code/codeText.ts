@@ -75,3 +75,13 @@ export function localDay(iso: string): string {
   const d = new Date(iso);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
+
+/**
+ * Liên kết ra ngoài lấy từ webhook / API của host (QA 18/10/2026): chỉ http(s). Payload webhook (ai cầm khoá đều gửi
+ * được) hay một GitLab tự host có thể trả `javascript:…` — React 18 vẫn chạy nó khi bấm ⇒ XSS trên cuongthai.com.
+ */
+export function safeHref(u: unknown): string | undefined {
+  if (typeof u !== 'string') return undefined;
+  const s = u.trim();
+  return /^https?:\/\//i.test(s) ? s : undefined;
+}

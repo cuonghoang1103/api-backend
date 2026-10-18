@@ -130,11 +130,14 @@ export async function handleWebhook(projectId: number, token: string | undefined
   if (!body || typeof body !== 'object') throw new BadRequestError('Invalid JSON payload', 'WORK_BAD_PAYLOAD');
   const repo = body?.project?.path_with_namespace ? String(body.project.path_with_namespace).slice(0, 200) : null;
   // CTW Code: gốc web của GitLab (gitlab.com hoặc GitLab tự host) để xem mã — chỉ https, không host nội bộ (safeGitlabBase).
+  // GHIM ở webhook ĐẦU TIÊN như repoPath (QA 18/10/2026): token chỉ đọc đi tới đúng host này kèm `PRIVATE-TOKEN`, nên
+  // một webhook sau (ai cầm khoá webhook cũng gửi được) không được đổi host ⇒ không thể kéo token sang máy khác.
+  // Đổi host GitLab thật ⇒ ADMIN ngắt kết nối rồi nối lại.
   const webBase = safeGitlabBase(body?.project?.web_url);
   const cfgNow = (conn.config ?? {}) as GitlabConfig;
   await prisma.workGitlabConnection.update({
     where: { projectId },
-    data: { lastEventAt: new Date(), ...(repo && !conn.repoPath ? { repoPath: repo } : {}), ...(webBase && cfgNow.webBase !== webBase ? { config: { ...cfgNow, webBase } as object } : {}) },
+    data: { lastEventAt: new Date(), ...(repo && !conn.repoPath ? { repoPath: repo } : {}), ...(webBase && !cfgNow.webBase ? { config: { ...cfgNow, webBase } as object } : {}) },
   });
 
   // CTW Đóng góp (A26): giữ MỌI commit/MR (kể cả không nhắc mã thẻ) — không bao giờ ném.

@@ -45,8 +45,31 @@ export function validReadTokenShape(t: string): boolean {
 
 // ─── Gọi đi (thay được trong test) ───────────────────────────────
 
-type FetchLike = (url: string, init: { method?: string; headers: Record<string, string>; signal?: AbortSignal }) => Promise<Response>;
+type FetchLike = (url: string, init: { method?: string; headers: Record<string, string>; signal?: AbortSignal; redirect?: RequestRedirect }) => Promise<Response>;
 let fetchImpl: FetchLike = (url, init) => fetch(url, init);
+
+/**
+ * Gọi đi KHÔNG tự theo chuyển hướng (QA 18/10/2026): `fetch` mặc định theo 3xx tới BẤT KỲ đâu — kể cả `http://` và IP
+ * nội bộ (169.254.169.254, container khác) — và mang theo header `PRIVATE-TOKEN` (undici chỉ gỡ `Authorization` khi đổi
+ * nguồn). Một GitLab "tự host" do người cầm khoá webhook khai chỉ cần trả 302 là vượt được `safeGitlabBase`.
+ * Nên: chỉ theo 3xx CÙNG nguồn với `apiBase` (GitHub đổi tên repo ⇒ 301 trong api.github.com), tối đa 3 bước; khác nguồn ⇒ 502.
+ */
+async function fetchCungNguon(t: RepoTarget, url: string, init: { method?: string; headers: Record<string, string>; signal?: AbortSignal }): Promise<Response> {
+  const goc = new URL(t.apiBase).origin;
+  let dich = url;
+  for (let i = 0; i <= 3; i++) {
+    const res = await fetchImpl(dich, { ...init, redirect: 'manual' });
+    if (res.status < 300 || res.status >= 400 || res.status === 304) return res;
+    const loc = res.headers.get('location');
+    let next: URL | null = null;
+    try { next = loc ? new URL(loc, dich) : null; } catch { next = null; }
+    if (!next || next.origin !== goc) {
+      throw new AppError(`${t.provider === 'GITHUB' ? 'GitHub' : 'GitLab'} redirected the request somewhere else — not followed`, 502, 'WORK_GIT_UPSTREAM');
+    }
+    dich = next.toString();
+  }
+  throw new AppError('Too many redirects from the code host', 502, 'WORK_GIT_UPSTREAM');
+}
 /** Bỏ đệm + trạng thái hạn mức (đổi/xoá token chỉ đọc). */
 export function clearSourceCache(): void {
   cache.clear();
@@ -121,8 +144,9 @@ async function getJson<T>(t: RepoTarget, path: string, ttlMs: number): Promise<T
   const p = (async () => {
     let res: Response;
     try {
-      res = await fetchImpl(`${t.apiBase}${path}`, { method: 'GET', headers: headersFor(t), signal: AbortSignal.timeout(12_000) });
-    } catch {
+      res = await fetchCungNguon(t, `${t.apiBase}${path}`, { method: 'GET', headers: headersFor(t), signal: AbortSignal.timeout(12_000) });
+    } catch (err) {
+      if (err instanceof AppError) throw err;
       throw new AppError(`Could not reach ${t.provider === 'GITHUB' ? 'GitHub' : 'GitLab'} — try again in a moment`, 502, 'WORK_GIT_UPSTREAM');
     }
     noteLimit(t, res);
@@ -145,7 +169,13 @@ async function getJson<T>(t: RepoTarget, path: string, ttlMs: number): Promise<T
     if (!res.ok) throw new AppError(`${host} answered ${res.status} — try again in a moment`, 502, 'WORK_GIT_UPSTREAM');
     const len = Number(res.headers.get('content-length'));
     if (Number.isFinite(len) && len > 12 * MAX_FILE_BYTES) throw new AppError('The response is too large to show here', 413, 'WORK_GIT_TOO_LARGE');
-    const data = (await res.json()) as T;
+    let data: T;
+    try {
+      data = (await res.json()) as T;
+    } catch {
+      // Trang HTML / thân cụt (proxy, GitLab đang bảo trì) ⇒ 502 rõ ràng thay vì 500 SyntaxError.
+      throw new AppError(`${host} sent an unreadable answer — try again in a moment`, 502, 'WORK_GIT_UPSTREAM');
+    }
     cacheSet(key, data, ttlMs);
     return data;
   })();
@@ -187,7 +217,9 @@ export function safeGitlabBase(raw: unknown): string | null {
   try {
     const u = new URL(String(raw ?? ''));
     if (u.protocol !== 'https:') return null;
-    const h = u.hostname.toLowerCase();
+    // Bỏ dấu chấm cuối: `localhost.` / `x.internal.` là cùng một tên với bản không chấm (QA 18/10/2026).
+    const h = u.hostname.toLowerCase().replace(/\.+$/, '');
+    if (!h || u.username || u.password) return null;
     if (h === 'localhost' || h.endsWith('.localhost') || h.endsWith('.local') || h.endsWith('.internal')) return null;
     if (/^\d+\.\d+\.\d+\.\d+$/.test(h) || h.includes(':') || h.startsWith('[')) return null; // IP thô (v4/v6)
     return `https://${u.host}`;
@@ -348,7 +380,7 @@ export async function commit(t: RepoTarget, sha: string): Promise<CommitDetail> 
 export async function verifyToken(t: RepoTarget): Promise<boolean> {
   const path = t.provider === 'GITHUB' ? `/repos/${t.repo}` : `/projects/${encodeURIComponent(t.repo)}`;
   try {
-    const res = await fetchImpl(`${t.apiBase}${path}`, { method: 'GET', headers: headersFor(t), signal: AbortSignal.timeout(12_000) });
+    const res = await fetchCungNguon(t, `${t.apiBase}${path}`, { method: 'GET', headers: headersFor(t), signal: AbortSignal.timeout(12_000) });
     if (res.status === 401) throw new AppError(`${t.provider === 'GITHUB' ? 'GitHub' : 'GitLab'} rejected this token — check it was copied in full and has not expired`, 400, 'WORK_GIT_TOKEN_INVALID');
     return res.ok;
   } catch (err) {

@@ -10,6 +10,7 @@ import { Spinner } from '../ui';
 import { wt, wfmt } from '../i18n';
 import { codeApi, codeKeys } from './codeApi';
 import { BranchName, IssueChips, PrState, Sha, WhoChip } from './parts';
+import { safeHref } from './codeText';
 
 export default function BranchesTab({ pid, projectKey, onIssue, onSource, onCommit, onPulls }: {
   pid: number; projectKey: string; onIssue: (n: number) => void; onSource: (ref: string) => void; onCommit: (sha: string) => void; onPulls: () => void;
@@ -74,7 +75,7 @@ export default function BranchesTab({ pid, projectKey, onIssue, onSource, onComm
                       <div className="flex min-w-0 items-center gap-2">
                         {b.headSha && <Sha sha={b.headSha} onClick={() => onCommit(b.headSha!)} />}
                         <span className="min-w-0 truncate" title={b.lastCommit.title}>{b.lastCommit.title}</span>
-                        {b.lastCommit.url && <a href={b.lastCommit.url} target="_blank" rel="noopener noreferrer" aria-label={wt('code.openOnHost')} className="shrink-0 text-[var(--w-text-3)] hover:text-[var(--w-accent-text)]"><ExternalLink size={12} /></a>}
+                        {safeHref(b.lastCommit.url) && <a href={safeHref(b.lastCommit.url)} target="_blank" rel="noopener noreferrer" aria-label={wt('code.openOnHost')} className="shrink-0 text-[var(--w-text-3)] hover:text-[var(--w-accent-text)]"><ExternalLink size={12} /></a>}
                       </div>
                     ) : <span className="text-[var(--w-text-3)]">—</span>}
                   </td>

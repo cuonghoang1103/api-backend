@@ -15,7 +15,7 @@ import { Select } from '../settings/shared';
 import { wt, wfmt } from '../i18n';
 import { codeApi, codeKeys, type ActivityItem, type ActivityQuery, type IssueRef } from './codeApi';
 import { BranchName, EventDot, IssueChips, LineDelta, Sha, WhoChip } from './parts';
-import { localDay } from './codeText';
+import { localDay, safeHref } from './codeText';
 
 function dayLabel(day: string): string {
   const today = localDay(new Date().toISOString());
@@ -69,8 +69,8 @@ function ActivityRow({ it, refs, projectKey, onIssue, onCommit, onBranch, highli
         <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13.5px]">
           <Headline it={it} onBranch={onBranch} />
           <span className="text-[12px] text-[var(--w-text-3)]" title={wfmt.dateTime(it.occurredAt)}>· {wfmt.relative(it.occurredAt)}</span>
-          {it.url && (
-            <a href={it.url} target="_blank" rel="noopener noreferrer" className="ml-auto inline-flex items-center gap-1 text-[12px] text-[var(--w-text-3)] hover:text-[var(--w-accent-text)]" title={wt('code.openOnHost')}>
+          {safeHref(it.url) && (
+            <a href={safeHref(it.url)} target="_blank" rel="noopener noreferrer" className="ml-auto inline-flex items-center gap-1 text-[12px] text-[var(--w-text-3)] hover:text-[var(--w-accent-text)]" title={wt('code.openOnHost')}>
               <ExternalLink size={12} /> <span className="hidden sm:inline">{it.provider === 'GITLAB' ? 'GitLab' : 'GitHub'}</span>
             </a>
           )}
@@ -92,7 +92,7 @@ function ActivityRow({ it, refs, projectKey, onIssue, onCommit, onBranch, highli
                 <span className="min-w-0 flex-1 truncate text-[13px]" title={c.message}>{c.message.split('\n')[0]}</span>
                 <IssueChips nums={c.issueNumbers} refs={refs} projectKey={projectKey} onOpen={onIssue} />
                 <WhoChip who={c.author} size={16} muted className="max-w-[160px] text-[12px]" />
-                {c.url && <a href={c.url} target="_blank" rel="noopener noreferrer" aria-label={wt('code.openOnHost')} className="text-[var(--w-text-3)] hover:text-[var(--w-accent-text)]"><ExternalLink size={12} /></a>}
+                {safeHref(c.url) && <a href={safeHref(c.url)} target="_blank" rel="noopener noreferrer" aria-label={wt('code.openOnHost')} className="text-[var(--w-text-3)] hover:text-[var(--w-accent-text)]"><ExternalLink size={12} /></a>}
               </li>
             ))}
             {it.commits.length > 5 && (

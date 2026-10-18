@@ -10,7 +10,7 @@ import test from 'node:test';
 process.env.JWT_SECRET ||= 'bi-mat-chi-de-test-bang-model';
 
 const {
-  MA_MAC_DINH, TEN_CONG, TEN_INVISIBLE, bangModel, baoCongHong, baoCongOk, congDangHong, laLoiCongHong,
+  MA_MAC_DINH, TEN_CONG, TEN_INVISIBLE, anTenThat, bangModel, baoCongHong, baoCongOk, congDangHong, laLoiCongHong,
   timModel, tuongDuongFree,
 } = await import('./bangModel.js');
 const { daMoKhoa, mucChoApp } = await import('./anthropicChinhHang/dinhTuyen.js');
@@ -209,4 +209,25 @@ test('không giới hạn năng lực: trần ký tự theo cửa sổ thật, e
   assert.equal(effortGpt('thap'), 'low');
   assert.equal(effortGpt('ultracode'), 'xhigh');
   assert.equal(effortGpt(undefined), 'medium');
+});
+
+test('QA 18/10: app CŨ gửi mã cũ (rambo/modelapi/cl-*) ⇒ không lỗi, không mở khoá ngầm model trả phí', () => {
+  for (const cu of ['sonnet-5', 'opus-4-8', 'sonnet-4-6', 'haiku-4-5', 'opus-4-6', 'opus-4-7', 'fable-5', 'gpt-terra', '', undefined, null, 42]) {
+    const m = timModel(cu);
+    assert.equal(m.khoa, 'free', `mã cũ ${String(cu)} không được rơi vào model cần khoá`);
+    assert.equal(m.id, MA_MAC_DINH);
+  }
+  assert.equal(timModel('cl-opus-5-5').id, 'cm-optimum');
+  assert.equal(daMoKhoa(timModel('cl-opus-5-5'), KHONG_QUYEN), false, 'cl-opus-5-5 vẫn cần khoá');
+  assert.equal(daMoKhoa(timModel('cl-fable-5-1'), { laAdmin: false, modelCao: true, invisible: false }), false, 'khoá chung không mở Invisible');
+});
+
+test('QA 18/10: câu lỗi gửi app không lộ tên model thật / tên cổng thật', () => {
+  const loi = 'HTTP 503 {"error":{"message":"No available channel for model gpt-6-sol under group default"}}';
+  const ra = anTenThat(loi);
+  assert.ok(!ra.includes('gpt-6-sol') && ra.includes('CuongMini Solid'), ra);
+  assert.ok(!anTenThat('gpt-6-luna lỗi').includes('gpt-6-luna'));
+  assert.equal(anTenThat('Mọi key của cổng Claude chính hãng đều lỗi'), `Mọi key của ${TEN_CONG.anthropic} đều lỗi`);
+  assert.ok(!/claude-|gpt-|anthropic|modelapi/i.test(anTenThat('claude-sonnet-5-5 via api.anthropic.com / modelapi.vn: gpt-5.6-sol')));
+  assert.equal(anTenThat('x gpt-9 y', { 'gpt-9': 'CuongMini Z' }), 'x CuongMini Z y');
 });

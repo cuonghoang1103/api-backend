@@ -17,7 +17,7 @@ import { wt, wfmt } from '../i18n';
 import { codeApi, codeKeys, type CommitDetail } from './codeApi';
 import { CodeBlock, DiffView } from './CodeBlock';
 import { IssueChips, LineDelta, ProviderIcon, Sha, WhoChip } from './parts';
-import { languageOf, sizeLabel } from './codeText';
+import { languageOf, safeHref, sizeLabel } from './codeText';
 
 const errCode = (e: unknown): string | null => (e as { response?: { data?: { code?: string } } })?.response?.data?.code ?? null;
 
@@ -113,7 +113,7 @@ export default function SourceTab({ pid, projectKey, refName, path, commit, hist
       <div className="flex flex-wrap items-center gap-2">
         <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold">
           <ProviderIcon provider={meta.data.provider} />
-          <a href={meta.data.webUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">{meta.data.repo}</a>
+          <a href={safeHref(meta.data.webUrl)} target="_blank" rel="noopener noreferrer" className="hover:underline">{meta.data.repo}</a>
           {meta.data.private && <span className="inline-flex items-center gap-1 rounded-full border border-[var(--w-border-strong)] px-1.5 text-[11px] font-medium text-[var(--w-text-2)]"><Lock size={10} /> {wt('code.private')}</span>}
         </span>
         <span className="inline-flex items-center gap-1">
@@ -161,7 +161,7 @@ export default function SourceTab({ pid, projectKey, refName, path, commit, hist
               <span>{sizeLabel(blob.data.size)}</span>
               {blob.data.content !== null && <span>· {wt('code.nLines', { count: blob.data.content.replace(/\n$/, '').split('\n').length })}</span>}
               {languageOf(blob.data.path) && <span className="rounded bg-[var(--w-sunken)] px-1.5 text-[11px]">{languageOf(blob.data.path)}</span>}
-              <a href={blob.data.webUrl} target="_blank" rel="noopener noreferrer" className="ml-auto inline-flex items-center gap-1 hover:text-[var(--w-accent-text)]"><ExternalLink size={12} /> {meta.data.provider === 'GITLAB' ? 'GitLab' : 'GitHub'}</a>
+              <a href={safeHref(blob.data.webUrl)} target="_blank" rel="noopener noreferrer" className="ml-auto inline-flex items-center gap-1 hover:text-[var(--w-accent-text)]"><ExternalLink size={12} /> {meta.data.provider === 'GITLAB' ? 'GitLab' : 'GitHub'}</a>
             </div>
             {blob.data.tooLarge ? (
               <p className="px-4 py-8 text-center text-[13px] text-[var(--w-text-2)]">{wt('code.tooLarge', { s: sizeLabel(blob.data.size) })}</p>

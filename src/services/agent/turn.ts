@@ -50,7 +50,7 @@ import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { chuPdfKhongDoc, sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import { laMaRambo, modelAgentTu } from './models.js';
 import {
-  MA_MAC_DINH, baoCongHong, cauDoiCong, congDangHong, hangSo, laLoiCongHong, laMaCuongMini, modelapiGoiDuoc,
+  MA_MAC_DINH, anTenThat, baoCongHong, cauDoiCong, congDangHong, hangSo, laLoiCongHong, laMaCuongMini, modelapiGoiDuoc,
   timModel, tuongDuongFree, type MucModel,
 } from './bangModel.js';
 import { loiHetTranModel, xemTranModel } from './tranModel.js';
@@ -1499,8 +1499,10 @@ export async function runAgentTurn(
 
     /* Rambo sập và người dùng chưa có vé dự phòng ⇒ mã RIÊNG để app hiện hộp
        "CuongMini đang bảo trì — dùng cổng dự phòng?" thay vì một dòng lỗi đỏ. */
+    /* Bảng CuongMini: câu lỗi không lộ tên model thật / tên cổng thật (QA 18/10/2026). Rambo (bảng cũ) giữ nguyên. */
+    const an = (s: string) => (diRambo ? s : anTenThat(s, { [model]: muc.ten }));
     if (err instanceof CongAnthropicLoi) {
-      emit({ type: 'error', code: err.code, error: err.message });
+      emit({ type: 'error', code: err.code, error: an(err.message) });
       return;
     }
     if (err instanceof RamboBaoTri) {
@@ -1536,7 +1538,7 @@ export async function runAgentTurn(
      * kênh có tồn tại nhưng không cái nào đang bật cho nhóm của khoá.
      */
     const congThieuKenh = ma === 'LLM_NO_PROVIDER';
-    const tenModel = /unknown provider for model ([\w.-]+)/i.exec(message)?.[1] ?? model;
+    const tenModel = diRambo ? (/unknown provider for model ([\w.-]+)/i.exec(message)?.[1] ?? model) : muc.ten;
 
     emit(
       congThieuKenh
@@ -1552,7 +1554,7 @@ export async function runAgentTurn(
             /* Lỗi TẤT ĐỊNH — mã riêng để app KHÔNG thử lại (26/09/2026). */
             type: 'error',
             code: 'LLM_ERROR_4XX',
-            error: `Cổng AI từ chối yêu cầu: ${message}. Đây là lỗi cố định chứ không phải cổng đang bận — `
+            error: `Cổng AI từ chối yêu cầu: ${an(message)}. Đây là lỗi cố định chứ không phải cổng đang bận — `
               + 'gửi lại y hệt sẽ nhận lại y hệt. Nếu hội thoại đã rất dài, hãy bắt đầu phiên mới.',
           }
         : ma === 'CONNECTION_LOST'
@@ -1561,7 +1563,7 @@ export async function runAgentTurn(
             code: 'CONNECTION_LOST',
             error: 'Kết nối tới máy chủ đứt giữa chừng (thường là máy chủ vừa khởi động lại). Hãy hỏi lại — phần đã làm vẫn còn trong hội thoại.',
           }
-        : { type: 'error', error: `Cổng AI lỗi: ${message}`, code: 'LLM_ERROR' },
+        : { type: 'error', error: `Cổng AI lỗi: ${an(message)}`, code: 'LLM_ERROR' },
     );
   } finally {
     tra();

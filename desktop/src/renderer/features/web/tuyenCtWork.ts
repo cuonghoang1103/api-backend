@@ -101,6 +101,7 @@ export const TUYEN_CTWORK: readonly TuyenWeb[] = [
   /* CTW đợt 4b (10/10/2026): hồ sơ SWR302 theo Wiegers (?tab= overview|features|requirements|priority|glossary|dictionary|six-links). */
   { mau: '/work/:ws/:key/wiegers', nap: () => import('@/app/work/[ws]/[key]/wiegers/page') },
   { mau: '/work/:ws/:key/reviews', nap: () => import('@/app/work/[ws]/[key]/reviews/page') }, // CTW đợt 6: review/inspection + baseline
+  { mau: '/work/:ws/:key/code', nap: () => import('@/app/work/[ws]/[key]/code/page') }, // CTW Code (18/10/2026): hoạt động Git, nhánh, PR, mã nguồn
   { mau: '/work/:ws/:key/assets', nap: () => import('@/app/work/[ws]/[key]/assets/page') }, // CTW đợt 7c: sổ tài sản & giấy phép
   /* CTW đợt 7b (11/10/2026): biểu mẫu → thẻ · kênh ngoài → đề xuất (?tab=inbox|channels) · nhập Trello/Asana/Jira/CSV · knowledge base. */
   { mau: '/work/:ws/:key/forms', nap: () => import('@/app/work/[ws]/[key]/forms/page') },

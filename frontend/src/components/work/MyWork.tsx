@@ -19,7 +19,7 @@ import { CalendarButton } from '@/components/work/CalendarFeed';
 import WaitingOnMe from '@/components/work/studio/WaitingOnMe';
 import AgentsNeedYou from '@/components/work/agents/AgentsNeedYou';
 import { wt } from '@/components/work/i18n';
-import { WorkLanguageChip } from '@/components/work/i18n/LanguageSwitch';
+import { WorkLanguageChip, WorkThemeChip, useWorkThemeLabel } from '@/components/work/i18n/LanguageSwitch';
 
 const GROUPS: Array<{ id: MyWorkItem['bucket']; label: string; tone?: string }> = [
   { id: 'overdue', get label() { return wt('home.overdue'); }, tone: 'text-[var(--w-red)]' },
@@ -58,8 +58,11 @@ function NotifyForm({ initial, onClose }: { initial: NotifySettings; onClose: ()
   const [quiet, setQuiet] = useState(initial.quietStart !== null && initial.quietEnd !== null);
   const [start, setStart] = useState(initial.quietStart ?? 22);
   const [end, setEnd] = useState(initial.quietEnd ?? 7);
+  // CTW Code (18/10/2026): công tắc cá nhân "thông báo hoạt động Git" (push, PR mở/merge, yêu cầu review) — push.git ở máy chủ.
+  const [git, setGit] = useState((initial as NotifySettings & { push?: { git?: boolean } }).push?.git !== false);
+  const themeLabel = useWorkThemeLabel();
   const save = useMutation({
-    mutationFn: () => workApi.setNotifySettings({ emailMode: mode, quietStart: quiet ? start : null, quietEnd: quiet ? end : null }),
+    mutationFn: () => workApi.setNotifySettings({ emailMode: mode, quietStart: quiet ? start : null, quietEnd: quiet ? end : null, push: { git } } as Partial<NotifySettings>),
     onSuccess: (data) => {
       qc.setQueryData(wk.notifySettings, data);
       toast.success(wt('home.notifySaved'));
@@ -73,8 +76,13 @@ function NotifyForm({ initial, onClose }: { initial: NotifySettings; onClose: ()
       {/* i18n 10/10: ngôn ngữ giao diện CT Work — lưu NGAY khi bấm (không chờ nút Save của phần thông báo). */}
       <div className="mb-5">
         <div className="w-label">{wt('common.language')} / Language</div>
-        <WorkLanguageChip />
+        <WorkLanguageChip withTheme={false} />
         <p className="mt-1.5 text-[12px] leading-relaxed text-[var(--w-text-2)]">{wt('shell.languageHelp')} {wt('shell.languageGeneratedNote')}</p>
+      </div>
+      {/* 18/10/2026: giao diện Sáng / Tối / Tự động — cũng lưu NGAY khi bấm. */}
+      <div className="mb-5">
+        <div className="w-label">{themeLabel} / {themeLabel === 'Theme' ? 'Giao diện' : 'Theme'}</div>
+        <WorkThemeChip />
       </div>
       <fieldset className="mb-5">
         <legend className="w-label">{wt('home.emailNotifications')}</legend>
@@ -112,6 +120,14 @@ function NotifyForm({ initial, onClose }: { initial: NotifySettings; onClose: ()
           </div>
         )}
         {same && <p className="mt-1.5 text-[12px] text-[var(--w-red)]">{wt('home.startEndDiffer')}</p>}
+      </div>
+
+      <div className="mt-5 flex items-center justify-between gap-3 border-t border-[var(--w-border)] pt-4">
+        <div>
+          <div className="text-[13px] font-medium">{wt('code.myGitNotify')}</div>
+          <p className="text-[12px] text-[var(--w-text-2)]">{wt('code.myGitNotifyHelp')}</p>
+        </div>
+        <Switch checked={git} onChange={setGit} label={wt('code.myGitNotify')} />
       </div>
 
       <div className="mt-5 flex justify-end gap-2 border-t border-[var(--w-border)] pt-3">

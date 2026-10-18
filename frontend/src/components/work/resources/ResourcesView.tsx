@@ -41,7 +41,7 @@ function StatusDot({ r }: { r: WorkResource }) {
   if (r.linkStatus !== 'BROKEN') return null;
   const why = r.check?.error === 'DNS' ? wt('res.domainNotFound') : r.check?.status ? `HTTP ${r.check.status}` : wt('res.notReachable');
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,#dc2626_14%,transparent)] px-1.5 py-0.5 text-[11px] font-medium text-[#dc2626]" title={wt('res.brokenTitle', { w: why, t: r.checkedAt ? relativeTime(r.checkedAt) : '' })}>
+    <span className="inline-flex items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--w-red)_14%,transparent)] px-1.5 py-0.5 text-[11px] font-medium text-[var(--w-red-text)]" title={wt('res.brokenTitle', { w: why, t: r.checkedAt ? relativeTime(r.checkedAt) : '' })}>
       <AlertTriangle size={11} /> {wt('res.broken')}
     </span>
   );
@@ -66,7 +66,7 @@ function ItemMenu({ r, canEdit, onEdit, onDelete, onToggle, onRefresh }: {
             <PanelLeft size={13} /> {r.pinnedToSidebar ? wt('res.unpinSidebar') : wt('res.pinToSidebar')}
           </button>
           {r.kind === 'github' && <button type="button" role="menuitem" className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 hover:bg-[var(--w-hover)]" onClick={() => { m.close(); onRefresh(); }}><RefreshCw size={13} /> {wt('res.refreshGh')}</button>}
-          <button type="button" role="menuitem" className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-[var(--w-danger,#dc2626)] hover:bg-[var(--w-hover)]" onClick={() => { m.close(); onDelete(); }}><Trash2 size={13} /> {wt('common.delete')}</button>
+          <button type="button" role="menuitem" className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-[var(--w-red-text)] hover:bg-[var(--w-hover)]" onClick={() => { m.close(); onDelete(); }}><Trash2 size={13} /> {wt('common.delete')}</button>
         </div>
       </Popover>
     </>
@@ -96,7 +96,7 @@ function ResourceItem({ r, pid, compact, dragging, canDrag, onEdit, onDelete, on
   const star = (
     <button type="button" aria-pressed={r.pinned} aria-label={r.pinned ? wt('res.unstar') : wt('res.star')} title={r.pinned ? wt('res.starredTop') : wt('res.star')}
       disabled={!canEdit} onClick={(e) => { e.stopPropagation(); onToggle({ pinned: !r.pinned }); }}
-      style={{ color: r.pinned ? '#eab308' : 'var(--w-text-3)' }}
+      style={{ color: r.pinned ? 'var(--w-yellow)' : 'var(--w-text-3)' }}
       className={cn('w-btn w-btn-ghost w-btn-icon w-btn-sm', !canEdit && 'pointer-events-none')}>
       <Star size={14} fill={r.pinned ? 'currentColor' : 'none'} />
     </button>
@@ -216,7 +216,7 @@ function ImportDialog({ pid, open, onClose, onDone }: { pid: number; open: boole
                 </div>
               ))}
               {plan.errors.map((e) => (
-                <div key={`e${e.line}`} className="flex gap-2 px-3 py-1 text-[#dc2626]"><span className="w-8 shrink-0 text-right">{e.line}</span><span>{e.message}</span></div>
+                <div key={`e${e.line}`} className="flex gap-2 px-3 py-1 text-[var(--w-red-text)]"><span className="w-8 shrink-0 text-right">{e.line}</span><span>{e.message}</span></div>
               ))}
             </div>
           </div>
@@ -398,7 +398,7 @@ export default function ResourcesView({ config }: { config: ProjectConfig }) {
 
       {starred.length > 0 && !filtered && (
         <section className="mb-5" aria-label={wt('res.starred')}>
-          <h2 className="w-section-title mb-2 flex items-center gap-1.5"><Star size={13} className="text-[#eab308]" fill="currentColor" /> {wt('res.starred')}</h2>
+          <h2 className="w-section-title mb-2 flex items-center gap-1.5"><Star size={13} className="text-[var(--w-yellow)]" fill="currentColor" /> {wt('res.starred')}</h2>
           <div className="flex flex-wrap gap-1.5">
             {starred.map((r) => (
               <button key={r.id} type="button" onClick={() => openResourceLink(pid, r)} className="w-card flex max-w-[260px] items-center gap-2 px-2.5 py-1.5 text-[13px] hover:bg-[var(--w-hover)]" title={r.url}>

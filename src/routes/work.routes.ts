@@ -84,6 +84,7 @@ import ctwk3Routes from './work.ctwk3.routes.js'; // CTW K-3: kênh chat dự á
 import ctwk3bRoutes from './work.ctwk3b.routes.js'; // CTW K-3b: đồng soạn thảo Docs + bình luận gắn đoạn văn
 import uxdRoutes, { uxdPublicRoutes } from './work.uxd.routes.js'; // UX-D: ảnh xem trước link + ảnh bìa dự án
 import contribRoutes from './work.contrib.routes.js'; // CTW Đóng góp: chỉ số thành viên + đánh giá chéo
+import codeRoutes from './work.code.routes.js'; // CTW Code (18/10/2026): trang Code — hoạt động Git, nhánh, PR, mã nguồn
 import uxbRoutes from './work.uxb.routes.js'; // UX-B: CFD, cycle time, throughput, aging WIP, release burnup, KPI, dashboard overview
 import uxcRoutes from './work.uxc.routes.js'; // UX-C: Team overview, mốc + baseline Timeline, kéo-thả WBS
 import diagramRoutes from './work.diagrams.routes.js'; // CTW Diagram: Diagram Studio + AI vẽ sơ đồ
@@ -1372,7 +1373,7 @@ router.get('/me/notify-settings', asyncHandler(async (req, res) => {
 router.put('/me/notify-settings', asyncHandler(async (req, res) => {
   const hour = z.number().int().min(0).max(23).nullable();
   // 18/10/2026 (app iOS CT Work): `push` = công tắc đẩy theo loại, `timezone` = múi giờ IANA cho giờ im lặng.
-  const push = z.object({ assign: z.boolean(), comment: z.boolean(), mention: z.boolean(), alert: z.boolean(), approval: z.boolean(), chatAll: z.boolean() }).partial().strict();
+  const push = z.object({ assign: z.boolean(), comment: z.boolean(), mention: z.boolean(), alert: z.boolean(), approval: z.boolean(), chatAll: z.boolean(), git: z.boolean() }).partial().strict();
   const body = parse(z.object({
     emailMode: z.enum(EMAIL_MODES).optional(), quietStart: hour.optional(), quietEnd: hour.optional(),
     push: push.optional(), timezone: z.string().min(1).max(64).nullable().optional(),
@@ -2105,6 +2106,8 @@ router.use(ctw4bRoutes);
 router.use(uxdRoutes); // UX-D: ảnh bìa dự án (chỉ ADMIN dự án)
 // CTW Đóng góp (A26/A27): đóng góp & hiệu suất thành viên, đánh giá chéo, xuất xlsx/PDF (work.contrib.routes.ts).
 router.use(contribRoutes);
+// CTW Code (18/10/2026): hoạt động Git như GitHub + xem mã nguồn (proxy) + cài đặt token chỉ đọc / kênh chat (work.code.routes.ts).
+router.use(codeRoutes);
 // UX-B: báo cáo dòng chảy + KPI + dashboard "Project overview" (work.uxb.routes.ts — số liệu ở flowReports.service.ts).
 router.use(uxbRoutes);
 // UX-C: Team overview + mốc/baseline Timeline + kéo-thả WBS (work.uxc.routes.ts — số liệu ở uxc.service.ts).

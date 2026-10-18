@@ -59,13 +59,15 @@
   --w-sunken: #f3f2ef;        /* cột board, ô nhóm, nền chip */
   --w-hover: rgba(30, 28, 22, 0.05);
   --w-active: rgba(79, 91, 213, 0.1);
-  --w-border: rgba(30, 28, 22, 0.1);
-  --w-border-strong: rgba(30, 28, 22, 0.18);
+  /* 18/10/2026: nền sáng — viền đậm thêm một nấc (0.1→0.12, 0.18→0.26): thẻ/ô nhập/nút trên nền trắng tách rõ hơn,
+     trước đó viền mạnh chỉ 1.45:1 nên ô nhập gần như chìm vào trang. Theme tối giữ nguyên. */
+  --w-border: rgba(30, 28, 22, 0.12);
+  --w-border-strong: rgba(30, 28, 22, 0.26);
 
   /* Chữ 3 cấp */
   --w-text: #1a1a17;          /* 17.4:1 trên trắng */
   --w-text-2: #4b4a44;        /* 8.9:1 trên trắng · 7.9:1 trên sunken */
-  --w-text-3: #696861;        /* 5.6:1 trên trắng · 5.0:1 trên sunken · 5.0:1 trên bg */
+  --w-text-3: #64635c;        /* 6.0:1 trên trắng · 5.4:1 trên sunken/bg · 4.8:1 trên mục sidebar đang chọn (#696861 cũ: 4.42) */
 
   /* Nhấn — iris */
   --w-accent: #4f5bd5;        /* chữ trắng trên nó: 5.5:1 */
@@ -101,6 +103,14 @@
   --w-on-strong: #ffffff;
   --w-on-strong-dark: #1a1a17;
 
+  /* Tên token mà vài component đang gọi nhưng chưa từng được khai (18/10/2026): không có fallback ⇒ chữ/nền rơi về
+     màu thừa kế — chữ phụ của trang Nộp bài đậm như chữ chính, ảnh đại diện dự án mất nền lót. Trỏ về token thật
+     (tính theo theme vì var() giải ở chính .work-root). */
+  --w-text-dim: var(--w-text-3);
+  --w-surface: var(--w-panel);
+  --w-surface-2: var(--w-sunken);
+  --w-danger: var(--w-red-text);
+
   /* Trạng thái (nhóm) */
   --w-status-todo: #8a897f;     /* chỉ dùng cho glyph/chấm (đồ hoạ ≥ 3:1), không cho chữ */
   --w-status-progress: var(--w-blue);
@@ -129,6 +139,7 @@
   --w-shadow-lift: 0 2px 4px rgba(30, 28, 22, 0.06), 0 8px 20px rgba(30, 28, 22, 0.08);
   --w-shadow-pop: 0 12px 32px rgba(30, 28, 22, 0.14), 0 0 0 1px rgba(30, 28, 22, 0.08);
 
+  color-scheme: light; /* ô ngày/giờ, thanh cuộn gốc theo nền sáng; theme tối đè bằng `dark` ở dưới */
   background: var(--w-bg);
   color: var(--w-text);
   font-size: var(--w-fs-md);
@@ -685,3 +696,35 @@ html.theme-dark .work-root input[type='date'], html.theme-dark .work-root input[
 .w-flash { animation: w-flash 1.6s ease-out; border-radius: 6px; }
 @keyframes w-flash { 0%, 30% { background: color-mix(in srgb, var(--w-yellow) 22%, transparent); } 100% { background: transparent; } }
 @media (prefers-reduced-motion: reduce) { .w-flash { animation: none; outline: 2px solid var(--w-yellow); } }
+
+/* ── CTW Code (18/10/2026): xem mã nguồn + diff ở trang Code. Sáng = bảng màu kiểu GitHub Light, tối = VS Code Dark+.
+   Token do highlight.js gắn class hljs-*; số dòng không chọn được (bôi đen chỉ lấy mã). */
+.w-code-view { --cv-bg: #ffffff; --cv-gutter: #f6f8fa; --cv-num: #6e7781; --cv-text: #1f2328; --cv-line-hi: rgba(255, 213, 79, 0.28);
+  --cv-kw: #cf222e; --cv-type: #953800; --cv-fn: #8250df; --cv-str: #0a3069; --cv-num-lit: #0550ae; --cv-com: #6e7781; --cv-attr: #0550ae; --cv-meta: #8250df; --cv-tag: #116329;
+  --cv-add-bg: rgba(26, 127, 55, 0.12); --cv-add-num: rgba(26, 127, 55, 0.2); --cv-del-bg: rgba(207, 34, 46, 0.1); --cv-del-num: rgba(207, 34, 46, 0.18); --cv-hunk: rgba(84, 174, 255, 0.12);
+  background: var(--cv-bg); color: var(--cv-text); font-family: var(--w-font-mono); font-size: 12.5px; line-height: 20px; }
+html.theme-dark .work-root .w-code-view { --cv-bg: #1e1e1e; --cv-gutter: #1a1a1a; --cv-num: #858585; --cv-text: #d4d4d4; --cv-line-hi: rgba(255, 213, 79, 0.14);
+  --cv-kw: #569cd6; --cv-type: #4ec9b0; --cv-fn: #dcdcaa; --cv-str: #ce9178; --cv-num-lit: #b5cea8; --cv-com: #6a9955; --cv-attr: #9cdcfe; --cv-meta: #c586c0; --cv-tag: #569cd6;
+  --cv-add-bg: rgba(46, 160, 67, 0.16); --cv-add-num: rgba(46, 160, 67, 0.28); --cv-del-bg: rgba(248, 81, 73, 0.14); --cv-del-num: rgba(248, 81, 73, 0.26); --cv-hunk: rgba(56, 139, 253, 0.14); }
+.w-code-view table { border-collapse: collapse; width: 100%; }
+.w-code-view td { padding: 0; vertical-align: top; }
+.w-code-view .cv-num { width: 1%; min-width: 48px; padding: 0 10px 0 12px; text-align: right; color: var(--cv-num); background: var(--cv-gutter); user-select: none; white-space: nowrap; cursor: pointer; }
+.w-code-view .cv-num:hover { color: var(--cv-text); }
+.w-code-view .cv-code { padding: 0 16px 0 12px; white-space: pre; tab-size: 4; }
+.w-code-view tr.cv-hi td { background: var(--cv-line-hi); }
+.w-code-view tr.cv-add td.cv-code { background: var(--cv-add-bg); }
+.w-code-view tr.cv-add td.cv-num { background: var(--cv-add-num); }
+.w-code-view tr.cv-del td.cv-code { background: var(--cv-del-bg); }
+.w-code-view tr.cv-del td.cv-num { background: var(--cv-del-num); }
+.w-code-view tr.cv-hunk td { background: var(--cv-hunk); color: var(--cv-num); }
+.w-code-view .hljs-keyword, .w-code-view .hljs-built_in, .w-code-view .hljs-literal, .w-code-view .hljs-selector-tag { color: var(--cv-kw); }
+.w-code-view .hljs-type, .w-code-view .hljs-title.class_, .w-code-view .hljs-class .hljs-title { color: var(--cv-type); }
+.w-code-view .hljs-title, .w-code-view .hljs-title.function_ { color: var(--cv-fn); }
+.w-code-view .hljs-string, .w-code-view .hljs-regexp, .w-code-view .hljs-template-string { color: var(--cv-str); }
+.w-code-view .hljs-number { color: var(--cv-num-lit); }
+.w-code-view .hljs-comment, .w-code-view .hljs-quote { color: var(--cv-com); font-style: italic; }
+.w-code-view .hljs-attr, .w-code-view .hljs-attribute, .w-code-view .hljs-variable, .w-code-view .hljs-params, .w-code-view .hljs-property { color: var(--cv-attr); }
+.w-code-view .hljs-meta, .w-code-view .hljs-annotation, .w-code-view .hljs-symbol { color: var(--cv-meta); }
+.w-code-view .hljs-tag, .w-code-view .hljs-name, .w-code-view .hljs-section { color: var(--cv-tag); }
+.w-code-view .hljs-deletion { color: var(--w-red-text); }
+.w-code-view .hljs-addition { color: var(--w-green-text); }

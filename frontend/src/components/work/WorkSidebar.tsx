@@ -52,6 +52,8 @@ import { Crosshair, Spade, MessageSquareHeart } from 'lucide-react'; // CTW đ�
 import { ClipboardList, Inbox as InboxIcon, FileInput, BookOpen as BookOpenKb } from 'lucide-react'; // CTW đợt 7b
 import { PlugZap } from 'lucide-react'; // CTW đợt 8a
 import { Download } from 'lucide-react';
+import { Code2 } from 'lucide-react'; // CTW Code (18/10/2026)
+import { codeApi, codeKeys } from './code/codeApi';
 import { laAppCtWork, trongAppDesktop } from '@/lib/appDesktop';
 import { teachingApi, teachingKeys } from './teaching/teachingApi';
 import { wt } from './i18n';
@@ -109,6 +111,8 @@ interface NavDef {
   roles?: string[];
   /** CTW đợt 4b: chỉ hiện ở dự án tạo từ các mẫu này (Wiegers ⇒ SWR302 + Capstone). Trang vẫn mở được bằng đường dẫn. */
   templates?: string[];
+  /** CTW Code (18/10/2026): chỉ hiện khi dự án đã nối GitHub/GitLab. Trang vẫn mở được bằng đường dẫn. */
+  git?: boolean;
 }
 
 /**
@@ -136,6 +140,8 @@ const PROJECT_NAV: { group: string; items: NavDef[] }[] = [
       { path: 'list', get label() { return wt('nav.n_Issues'); }, icon: List, match: (v) => v === 'list' || v === 'issue' },
       // CTW K-3: kênh chat dự án (badge số chưa đọc). Khách (CLIENT) chỉ thấy kênh khách — mục riêng trong cổng khách.
       { path: 'chat', get label() { return wt('nav.n_Chat'); }, icon: MessagesSquare, match: (v) => v === 'chat', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'] },
+      // CTW Code (18/10/2026): hoạt động Git như GitHub (push/nhánh/PR/mã nguồn) — chỉ khi đã nối repo; khách không thấy.
+      { path: 'code', get label() { return wt('code.navCode'); }, icon: Code2, match: (v) => v === 'code', roles: ['ADMIN', 'MEMBER', 'TEACHER', 'VIEWER'], git: true },
       { path: 'tests', get label() { return wt('nav.n_Tests'); }, icon: FlaskConical, match: (v) => v === 'tests' },
       { path: 'docs', get label() { return wt('nav.n_Docs'); }, icon: FileText, match: (v) => v === 'docs', module: 'docs' },
       // Resources (06/10/2026): thư viện link của dự án — bật mặc định cho mọi loại dự án mới.
@@ -337,6 +343,10 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
   const onWorkspaces = pathname === '/work' && homeTab === 'workspaces';
 
   const groups = useCollapsedGroups();
+  // CTW Code: mục "Code" chỉ hiện khi dự án ĐANG MỞ đã nối GitHub/GitLab (một truy vấn rẻ, chỉ cho dự án đang mở).
+  const openPid = projects.find((p) => p.key === key && p.role !== 'CLIENT')?.id;
+  const gitStatus = useQuery({ queryKey: codeKeys.status(openPid ?? 0), queryFn: () => codeApi.status(openPid!), enabled: !!openPid, staleTime: 5 * 60_000, retry: false });
+  const gitOn = (pid: number) => pid === openPid && !!gitStatus.data?.connected;
   // Mở dự án ⇒ cuộn khối của nó (tên + điều hướng con) vào vùng nhìn thấy của sidebar;
   // rồi mục ĐANG CHỌN luôn nằm trọn trong khung (UX-A: Reports từng bị che nửa).
   const projectCount = projects.length;
@@ -522,7 +532,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                     {open && !isPortalClient(p) && (
                       <div className="w-subnav mb-2 ml-[18px] mt-0.5 border-l border-[var(--w-border)] pl-1.5">
                         {PROJECT_NAV.map((g) => {
-                          const items = g.items.filter((n) => (!n.module || p.modules?.[n.module]) && (!n.roles || n.roles.includes(String(p.role))) && (!n.templates || n.templates.includes(String((p as { template?: string }).template))));
+                          const items = g.items.filter((n) => (!n.module || p.modules?.[n.module]) && (!n.roles || n.roles.includes(String(p.role))) && (!n.templates || n.templates.includes(String((p as { template?: string }).template))) && (!n.git || gitOn(p.id) || n.match(view)));
                           if (!items.length) return null;
                           const hasActive = items.some((n) => n.match(view));
                           // Nhóm chứa trang đang mở luôn mở; thanh icon (rail) bỏ qua gập.

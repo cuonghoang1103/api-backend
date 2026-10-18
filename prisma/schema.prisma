@@ -10306,6 +10306,10 @@ model WorkProject {
   channels            WorkChannel[]
   /// CTW Đóng góp: commit/PR từ webhook (cả commit không nhắc mã thẻ), danh tính git ↔ người, phiếu đánh giá chéo.
   devContributions    WorkDevContribution[]
+  /// CTW Code (18/10/2026): dòng thời gian Git (push/nhánh/PR — kể cả không nhắc mã thẻ), nhánh, pull request.
+  gitEvents           WorkGitEvent[]
+  gitBranches         WorkGitBranch[]
+  gitPulls            WorkGitPull[]
   gitIdentities       WorkGitIdentity[]
   peerRounds          WorkPeerRound[]
   /// CTW Diagram: sơ đồ của dự án (Mermaid/Excalidraw) + phiên bản + bình luận.
@@ -11545,8 +11549,11 @@ model WorkGithubConnection {
   projectId    Int       @unique(map: "uk_work_github_project") @map("project_id")
   repoFullName String?   @map("repo_full_name") @db.VarChar(200)
   secret       String    @db.VarChar(100)
-  /// { prOpenedStatusId?, prMergedStatusId? }
+  /// { prOpenedStatusId?, prMergedStatusId?, chatChannelId?, notify? }
   config       Json      @default("{}")
+  /// CTW Code: token CHỈ ĐỌC (fine-grained: Contents + Metadata: Read) để xem mã repo private. Mã hoá bằng
+  /// sealToken (oauth/crypto.ts) — không bao giờ trả về client, không log.
+  readToken    String?   @map("read_token") @db.VarChar(1000)
   lastEventAt  DateTime? @map("last_event_at")
   createdAt    DateTime  @default(now()) @map("created_at")
 
@@ -11891,8 +11898,10 @@ model WorkGitlabConnection {
   projectId   Int       @unique(map: "uk_work_gitlab_project") @map("project_id")
   repoPath    String?   @map("repo_path") @db.VarChar(200)
   token       String    @db.VarChar(100)
-  /// { mrOpenedStatusId?, mrMergedStatusId? }
+  /// { mrOpenedStatusId?, mrMergedStatusId?, chatChannelId?, notify?, webBase? }
   config      Json      @default("{}")
+  /// CTW Code: token CHỈ ĐỌC (read_repository / read_api) cho repo private — mã hoá như GitHub, không trả về client.
+  readToken   String?   @map("read_token") @db.VarChar(1000)
   lastEventAt DateTime? @map("last_event_at")
   createdAt   DateTime  @default(now()) @map("created_at")
 
@@ -14150,6 +14159,102 @@ model WorkDevContribution {
   @@unique([projectId, kind, externalId], map: "uk_work_dev_contribution")
   @@index([projectId, occurredAt], map: "idx_work_dev_contribution_project")
   @@map("work_dev_contributions")
+}
+
+// ── CTW Code ── (18/10/2026) TRANG "CODE" CỦA DỰ ÁN: hoạt động Git như GitHub ngay trong CT Work (code.service.ts).
+
+/// Một sự kiện Git của dự án — MỌI push / tạo-xoá nhánh / PR mở-merge-đóng / yêu cầu review, KỂ CẢ khi không nhắc mã
+/// thẻ (WorkDevActivity chỉ giữ thứ nhắc mã thẻ). `dedupeKey` (vd `push:<ref>:<after>`) chặn ghi đôi khi GitHub/GitLab
+/// gửi lại — và vì vậy thông báo chỉ bắn khi dòng MỚI được ghi. kind: PUSH | BRANCH_CREATED | BRANCH_DELETED |
+/// PR_OPENED | PR_REOPENED | PR_MERGED | PR_CLOSED | REVIEW_REQUESTED.
+model WorkGitEvent {
+  id           Int      @id @default(autoincrement())
+  projectId    Int      @map("project_id")
+  /// GITHUB | GITLAB
+  provider     String   @db.VarChar(8)
+  kind         String   @db.VarChar(20)
+  dedupeKey    String   @map("dedupe_key") @db.VarChar(300)
+  repo         String?  @db.VarChar(200)
+  /// Nhánh (không có tiền tố refs/heads/).
+  ref          String?  @db.VarChar(255)
+  actorLogin   String?  @map("actor_login") @db.VarChar(100)
+  actorName    String?  @map("actor_name") @db.VarChar(100)
+  actorEmail   String?  @map("actor_email") @db.VarChar(200)
+  title        String?  @db.VarChar(500)
+  url          String?  @db.VarChar(500)
+  prNumber     Int?     @map("pr_number")
+  commitCount  Int      @default(0) @map("commit_count")
+  /// [{ sha, message, authorLogin, authorName, authorEmail, url, at, issueNumbers, files }] — tối đa 50.
+  commits      Json     @default("[]")
+  /// { forced?, created?, before?, after?, compare?, baseRef?, headRef?, reviewers?, reviewer? }
+  data         Json     @default("{}")
+  issueNumbers Int[]    @default([]) @map("issue_numbers")
+  occurredAt   DateTime @map("occurred_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, dedupeKey], map: "uk_work_git_event")
+  @@index([projectId, occurredAt], map: "idx_work_git_event_project")
+  @@map("work_git_events")
+}
+
+/// Nhánh của repo đã nối (theo webhook): commit cuối, ai đẩy, thẻ liên quan (mã thẻ trong tên nhánh/commit).
+/// deletedAt != null ⇒ nhánh đã xoá (giữ lịch sử).
+model WorkGitBranch {
+  id              Int       @id @default(autoincrement())
+  projectId       Int       @map("project_id")
+  provider        String    @db.VarChar(8)
+  name            String    @db.VarChar(255)
+  headSha         String?   @map("head_sha") @db.VarChar(64)
+  lastCommitTitle String?   @map("last_commit_title") @db.VarChar(300)
+  lastCommitUrl   String?   @map("last_commit_url") @db.VarChar(500)
+  lastAuthorLogin String?   @map("last_author_login") @db.VarChar(100)
+  lastAuthorName  String?   @map("last_author_name") @db.VarChar(100)
+  lastAuthorEmail String?   @map("last_author_email") @db.VarChar(200)
+  lastPushAt      DateTime? @map("last_push_at")
+  commitCount     Int       @default(0) @map("commit_count")
+  issueNumbers    Int[]     @default([]) @map("issue_numbers")
+  deletedAt       DateTime? @map("deleted_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, provider, name], map: "uk_work_git_branch")
+  @@map("work_git_branches")
+}
+
+/// Pull request (GitHub) / merge request (GitLab). state: open | draft | merged | closed. reviewers = mọi người từng
+/// được yêu cầu review (GitHub bỏ họ khỏi requested_reviewers sau khi review — ở đây giữ lại).
+model WorkGitPull {
+  id           Int       @id @default(autoincrement())
+  projectId    Int       @map("project_id")
+  provider     String    @db.VarChar(8)
+  number       Int
+  title        String    @db.VarChar(300)
+  url          String?   @db.VarChar(500)
+  state        String    @db.VarChar(16)
+  authorLogin  String?   @map("author_login") @db.VarChar(100)
+  headRef      String?   @map("head_ref") @db.VarChar(255)
+  baseRef      String?   @map("base_ref") @db.VarChar(255)
+  reviewers    String[]  @default([])
+  issueNumbers Int[]     @default([]) @map("issue_numbers")
+  additions    Int?
+  deletions    Int?
+  changedFiles Int?      @map("changed_files")
+  mergedBy     String?   @map("merged_by") @db.VarChar(100)
+  openedAt     DateTime  @map("opened_at")
+  mergedAt     DateTime? @map("merged_at")
+  closedAt     DateTime? @map("closed_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  project WorkProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, provider, number], map: "uk_work_git_pull")
+  @@index([projectId, state], map: "idx_work_git_pull_state")
+  @@map("work_git_pulls")
 }
 
 /// Ánh xạ tay "danh tính git" (login / email / tên tác giả, chữ thường) ⇒ người trong dự án. Trưởng nhóm gán khi commit

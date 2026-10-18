@@ -42,7 +42,7 @@ test('còn lại ⇒ CTW_DEFAULT; bình luận không url ⇒ DEFAULT (không tr
 });
 
 test('công tắc đẩy: thiếu khoá = bật; loại ⇒ khoá', () => {
-  assert.deepEqual(pushPrefsFrom(null), { assign: true, comment: true, mention: true, alert: true, approval: true, chatAll: true });
+  assert.deepEqual(pushPrefsFrom(null), { assign: true, comment: true, mention: true, alert: true, approval: true, chatAll: true, git: true });
   assert.equal(pushPrefsFrom({ chatAll: false }).chatAll, false);
   assert.equal(pushKeyFor('WORK_ALERT', { approvalId: 2 }), 'approval');
   assert.equal(pushKeyFor('WORK_ALERT', {}), 'alert');

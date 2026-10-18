@@ -185,6 +185,9 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/swr/elicitation/ELC-2/ai-stakeholder'], ['DELETE', '/swr/elicitation/2/ai-stakeholder'], ['GET', '/swr/package.zip'], ['PUT', '/swr/estimation'],
     // 18/10/2026 (app iOS): báo cáo nội dung (việc của người) + nhắn riêng 1-1 + báo cáo tin chat
     ['POST', '/meetings/3/report'], ['POST', '/issues/12/comments/4/report'], ['POST', '/chat/dm'], ['POST', '/chat/channels/2/messages/9/report'],
+    // CTW Code (18/10/2026): agent không xem mã nguồn qua proxy; cài token chỉ đọc / kênh / gửi thử nằm dưới /github|/gitlab.
+    ['GET', '/code/source/tree'], ['GET', '/code/source/blob'], ['GET', '/code/source/commit/abc1234'], ['GET', '/code/source'],
+    ['PUT', '/github/read-token'], ['PUT', '/gitlab/activity'], ['POST', '/github/test'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [
@@ -201,6 +204,8 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['GET', '/static-analysis'], ['GET', '/swr/status-report'], ['GET', '/swr/estimation'], ['POST', '/meetings/3/apply-template'],
     // 18/10/2026: đọc gọn một dashboard / một yêu cầu SWR
     ['GET', '/dashboards/4'], ['GET', '/swr/requirements/12'],
+    // CTW Code (18/10/2026): đọc hoạt động Git (dòng thời gian, nhánh, PR, panel Development) — mở.
+    ['GET', '/code/overview'], ['GET', '/code/activity'], ['GET', '/code/branches'], ['GET', '/code/pulls'], ['GET', '/code/issues/12'],
   ];
   it(`${denied.length} tuyến đối ngoại ⇒ cấm`, () => {
     assert.ok(denied.length >= 25);

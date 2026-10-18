@@ -18,10 +18,10 @@ const KB = (n: number) => (n < 1024 ? `${n} B` : n < 1024 * 1024 ? `${(n / 1024)
 const dmy = (s: string | null) => (s ? new Date(s).toLocaleDateString('vi-VN') : '—');
 
 function StatusChip({ it }: { it: SubmissionItem }) {
-  if (it.done && it.onTime === true) return <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-2 py-0.5 text-[11px] text-emerald-600 dark:text-emerald-400"><CheckCircle2 size={12} /> Đúng hạn</span>;
-  if (it.done && it.onTime === false) return <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/40 bg-amber-500/10 px-2 py-0.5 text-[11px] text-amber-600 dark:text-amber-400"><Clock size={12} /> Trễ hạn</span>;
-  if (it.done) return <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-2 py-0.5 text-[11px] text-emerald-600 dark:text-emerald-400"><CheckCircle2 size={12} /> Đã xong</span>;
-  if (it.overdue) return <span className="inline-flex items-center gap-1 rounded-full border border-rose-400/40 bg-rose-500/10 px-2 py-0.5 text-[11px] text-rose-600 dark:text-rose-400"><AlertTriangle size={12} /> Quá hạn</span>;
+  if (it.done && it.onTime === true) return <span className="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--w-green)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-green)_10%,transparent)] px-2 py-0.5 text-[11px] text-[var(--w-green-text)]"><CheckCircle2 size={12} /> Đúng hạn</span>;
+  if (it.done && it.onTime === false) return <span className="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--w-yellow)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-yellow)_10%,transparent)] px-2 py-0.5 text-[11px] text-[var(--w-yellow-text)]"><Clock size={12} /> Trễ hạn</span>;
+  if (it.done) return <span className="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--w-green)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-green)_10%,transparent)] px-2 py-0.5 text-[11px] text-[var(--w-green-text)]"><CheckCircle2 size={12} /> Đã xong</span>;
+  if (it.overdue) return <span className="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-red)_10%,transparent)] px-2 py-0.5 text-[11px] text-[var(--w-red-text)]"><AlertTriangle size={12} /> Quá hạn</span>;
   return <span className="rounded-full border border-[var(--w-border)] px-2 py-0.5 text-[11px] text-[var(--w-text-dim)]">{it.status}</span>;
 }
 
@@ -62,7 +62,7 @@ function GatePanel({ pid, gate, onSaved }: { pid: number; gate: SubmitGateConfig
             className="w-16 rounded border border-[var(--w-border)] bg-transparent px-2 py-1" />
         </label>
       </div>
-      {save.error ? <div className="mt-2 text-[12px] text-rose-500">{workError(save.error)}</div> : null}
+      {save.error ? <div className="mt-2 text-[12px] text-[var(--w-red-text)]">{workError(save.error)}</div> : null}
       <div className="mt-3 flex gap-2">
         <button type="button" className="w-btn w-btn-primary w-btn-sm" disabled={save.isPending} onClick={() => save.mutate()}>Lưu</button>
         <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setOpen(false)}>Huỷ</button>
@@ -119,12 +119,12 @@ export default function Submissions({ pid, config }: { pid: number; config: Proj
         {[['Thành viên', d.totals.members], ['Thẻ', d.totals.issues], ['Đã nộp', d.totals.submitted], ['Quá hạn', d.totals.overdue]].map(([k, v]) => (
           <div key={k as string} className="rounded-lg border border-[var(--w-border)] bg-[var(--w-surface)] px-3 py-2">
             <div className="text-[11px] text-[var(--w-text-dim)]">{k}</div>
-            <div className={cn('text-[18px] font-semibold', k === 'Quá hạn' && (v as number) > 0 && 'text-rose-500')}>{v as number}</div>
+            <div className={cn('text-[18px] font-semibold', k === 'Quá hạn' && (v as number) > 0 && 'text-[var(--w-red-text)]')}>{v as number}</div>
           </div>
         ))}
       </div>
 
-      {err ? <div className="mb-3 rounded border border-rose-400/40 bg-rose-500/10 px-3 py-2 text-[12px] text-rose-600">{err}</div> : null}
+      {err ? <div className="mb-3 rounded border border-[color-mix(in_srgb,var(--w-red)_40%,transparent)] bg-[color-mix(in_srgb,var(--w-red)_10%,transparent)] px-3 py-2 text-[12px] text-[var(--w-red-text)]">{err}</div> : null}
 
       {d.members.length === 0 ? <EmptyState title="Chưa có thẻ nào được giao" body="Gán thẻ cho thành viên để theo dõi nộp bài ở đây." /> : null}
 
@@ -138,8 +138,8 @@ export default function Submissions({ pid, config }: { pid: number; config: Proj
                 <span className="text-[12px] text-[var(--w-text-dim)]">{m.submitted}/{m.total} đã nộp · {m.files} tệp</span>
               </div>
               <div className="flex items-center gap-2 text-[12px]">
-                {m.onTimeOf > 0 ? <span className="text-emerald-600 dark:text-emerald-400">{m.onTime}/{m.onTimeOf} đúng hạn</span> : null}
-                {m.overdue > 0 ? <span className="text-rose-500">{m.overdue} quá hạn</span> : null}
+                {m.onTimeOf > 0 ? <span className="text-[var(--w-green-text)]">{m.onTime}/{m.onTimeOf} đúng hạn</span> : null}
+                {m.overdue > 0 ? <span className="text-[var(--w-red-text)]">{m.overdue} quá hạn</span> : null}
               </div>
             </div>
             <div className="divide-y divide-[var(--w-border)]">

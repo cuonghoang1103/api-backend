@@ -49,6 +49,8 @@ export function registerSettingsHandlers(): void {
     /* Cửa sổ robot nổi là entry riêng, đọc thiết đặt một lần lúc mở: đổi chủ
        đề sáng/tối hay "tự dính mép" ở chỗ khác thì phải báo nó. Đổi CỠ từ con
        robot trong app thì con nổi đổi theo (một khoá cho cả hai con). */
+    // Nền cửa sổ chính theo giao diện vừa chọn (khỏi loé màu ngược khi kéo giãn) — window.ts.
+    if (key === 'theme') void import('../window').then((m) => m.capNhatMauNenCuaSo(value));
     if (key === 'theme' || key === 'robotBamMep' || key === 'robotCo') {
       void import('../robotNoi').then((m) => {
         if (key === 'robotCo' && typeof value === 'number') m.datPhanTram(value);

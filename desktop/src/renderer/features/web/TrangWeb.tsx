@@ -32,6 +32,7 @@ import { useSession } from '../../auth/session';
 import { configureWebApi } from '../../shims/web-api-adapter';
 import { LoiChuyenHuong, LoiKhongTimThay, ThamSoTuyen, useSearchParams, chupTruyVan, datTruyVanCho, doiDuongApp } from '../../shims/next-navigation';
 import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider';
+import { ThemeBridgeProvider } from '@/context/ThemeContext';
 import { khopTuyenWeb } from './dinhTuyenWeb';
 /* ⚠️ `dich` (hàm tầm mô-đun) chứ không chỉ `useDich`: `RanhGioiTuyen` là CLASS
    component — ranh giới lỗi bắt buộc phải là class — và hook không gọi được
@@ -130,12 +131,16 @@ export function useLopToiWeb(bat: boolean) {
 }
 
 export function VoWeb({ children }: { children: React.ReactNode }) {
-  const { resolvedTheme } = useAppState();
+  const { theme, resolvedTheme, setSetting } = useAppState();
   useLopToiWeb(resolvedTheme === 'dark');
+  /* 18/10/2026: nút Sáng/Tối/Tự động của CT Work (web) gọi `useTheme()` — trong app không có ThemeProvider của web,
+     nên nối nó vào thiết đặt giao diện của APP (cùng ba giá trị light/dark/system). */
   return (
-    <div className={`ct-web-host${resolvedTheme === 'dark' ? ' dark' : ''}`}>
-      <TanStackQueryProvider>{children}</TanStackQueryProvider>
-    </div>
+    <ThemeBridgeProvider preference={theme} resolvedTheme={resolvedTheme} onChange={(p) => setSetting('theme', p)}>
+      <div className={`ct-web-host${resolvedTheme === 'dark' ? ' dark' : ''}`}>
+        <TanStackQueryProvider>{children}</TanStackQueryProvider>
+      </div>
+    </ThemeBridgeProvider>
   );
 }
 

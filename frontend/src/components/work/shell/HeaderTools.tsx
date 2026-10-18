@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Cụm công cụ bên phải thanh trên (≥md): ô tìm ⌘K · chuông · người dùng.
+ * Cụm công cụ bên phải thanh trên (≥md): ô tìm ⌘K · giao diện Sáng/Tối/Tự động · chuông · người dùng.
  * Trên điện thoại chúng nằm trong ngăn điều hướng (☰) — thanh trên ở 390px
  * chỉ đủ chỗ cho tiêu đề + các nút của trang.
  */
@@ -14,7 +14,7 @@ import { Popover, UserAvatar, useToggle } from '../ui';
 import { openHelp } from '../help/store';
 import WorkInbox from './WorkInbox';
 import { wt } from '../i18n';
-import { WorkLanguageChip } from '../i18n/LanguageSwitch';
+import { WorkLanguageChip, WorkThemeButton, WorkThemeChip, useWorkThemeLabel } from '../i18n/LanguageSwitch';
 import { TimerChip } from '../agile/Timer'; // CTW đợt 7a: đồng hồ đang chạy
 import { laAppCtWork } from '@/lib/appDesktop';
 
@@ -50,6 +50,7 @@ function UserMenu() {
   const user = useAuthStore((s) => s.user);
   const pop = useToggle();
   const ref = useRef<HTMLButtonElement>(null);
+  const themeLabel = useWorkThemeLabel();
   if (!user) return null;
   const u = { username: user.username, fullName: user.fullName ?? null, displayName: user.displayName ?? null, avatarUrl: user.avatarUrl ?? null };
   const item = 'flex h-8 w-full items-center gap-2.5 rounded-[6px] px-2 text-left text-[13px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]';
@@ -85,6 +86,11 @@ function UserMenu() {
             <span className="text-[12px] text-[var(--w-text-3)]">{wt('common.language')}</span>
             <WorkLanguageChip compact menu />
           </div>
+          {/* 18/10/2026: Sáng / Tối / Tự động — ngay dưới ngôn ngữ (cũng có nút riêng trên thanh trên). */}
+          <div className="flex items-center justify-between gap-2 px-2 py-1">
+            <span className="text-[12px] text-[var(--w-text-3)]">{themeLabel}</span>
+            <WorkThemeChip compact menu />
+          </div>
           {/* App CT Work riêng không có "trang chính" để quay về (13/10/2026). */}
           {!laAppCtWork() && (
             <>
@@ -106,6 +112,7 @@ export default function HeaderTools() {
       <span aria-hidden="true" className="w-tools-sep mx-1 h-5 w-px bg-[var(--w-border)]" />
       <TimerChip />
       <SearchTrigger />
+      <WorkThemeButton />
       <WorkInbox align="end" />
       <UserMenu />
     </div>

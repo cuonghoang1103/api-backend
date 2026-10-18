@@ -732,6 +732,8 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['*', /^\/chat(\/.*)?$/],
   // CTW Đóng góp: số liệu đóng góp + đánh giá chéo của NGƯỜI — agent không đọc, không chấm (contribGate cũng chặn).
   ['*', /^\/contrib(\/.*)?$/],
+  // CTW Code (18/10/2026): agent ĐỌC được hoạt động Git (dev_activity) nhưng KHÔNG xem mã nguồn qua proxy (code.service chặn lần nữa).
+  ['*', /^\/code\/source(\/.*)?$/],
   // CTW đợt 5: điểm rubric của sinh viên — agent không đọc, không chấm (teaching.service gradeGate cũng chặn).
   ['*', /^\/grades(\/.*)?$/],
   // CTW K-2: agent không ghi âm, không điểm danh/RSVP, không đổi cấu hình họp, không duyệt biên bản. Đọc transcript +

@@ -108,7 +108,7 @@ describe('CT Work — tuyến cho app iOS (HTTP + DB thật)', { skip: !RUN }, (
 
   it('N1 notify-settings: push mặc định bật hết, timezone null; PUT một phần giữ phần còn lại; múi giờ sai ⇒ 400', async () => {
     const g = await call(dev, 'GET', '/me/notify-settings');
-    assert.deepEqual(g.data.push, { assign: true, comment: true, mention: true, alert: true, approval: true, chatAll: true });
+    assert.deepEqual(g.data.push, { assign: true, comment: true, mention: true, alert: true, approval: true, chatAll: true, git: true });
     assert.equal(g.data.timezone, null);
     const p = await call(dev, 'PUT', '/me/notify-settings', { push: { chatAll: false }, timezone: 'Asia/Tokyo' });
     assert.equal(p.status, 200, JSON.stringify(p.raw));

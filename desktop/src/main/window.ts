@@ -44,6 +44,22 @@ export function layCuaSoChinh(): BrowserWindow | null {
   return cuaSoChinh && !cuaSoChinh.isDestroyed() ? cuaSoChinh : null;
 }
 
+/**
+ * Màu nền cửa sổ (thứ hiện ra trước lần vẽ đầu và lúc kéo giãn cửa sổ) theo ĐÚNG thiết đặt giao diện của app
+ * (18/10/2026). Trước đây chỉ theo hệ điều hành ⇒ chọn "Tối" trên máy đang sáng (hoặc ngược lại) là mỗi lần mở app /
+ * kéo giãn lại loé một mảng màu ngược. 'system' (mặc định) vẫn theo nativeTheme như cũ.
+ */
+export function mauNenCuaSo(theme: unknown = getSettings().theme): string {
+  const toi = theme === 'dark' ? true : theme === 'light' ? false : nativeTheme.shouldUseDarkColors;
+  return toi ? '#0b0b12' : '#f7f7fb';
+}
+
+/** Gọi sau khi người dùng đổi giao diện (ipc/settings.ts). */
+export function capNhatMauNenCuaSo(theme: unknown): void {
+  const w = layCuaSoChinh();
+  if (w) w.setBackgroundColor(mauNenCuaSo(theme));
+}
+
 export function createMainWindow(): BrowserWindow {
   const state = getWindowState();
   const positionIsUsable =
@@ -60,7 +76,7 @@ export function createMainWindow(): BrowserWindow {
     // Không hiện cho tới khi render xong khung đầu tiên. Bỏ qua bước này thì
     // người dùng thấy một ô trắng nhấp nháy trước khi giao diện xuất hiện.
     show: false,
-    backgroundColor: nativeTheme.shouldUseDarkColors ? '#0b0b12' : '#f7f7fb',
+    backgroundColor: mauNenCuaSo(),
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
     // Trên macOS `hiddenInset` giữ lại ba nút hệ thống ở đúng chỗ người dùng
     // quen tay. Windows/Linux dùng thanh tiêu đề gốc: thanh tự vẽ ở đó phải tự

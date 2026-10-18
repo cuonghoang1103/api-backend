@@ -57,6 +57,7 @@ import MusicHistoryRecorder from '@/components/music/MusicHistoryRecorder'
 import LocaleWrapper from '@/components/providers/LocaleWrapper'
 import ClientOnly from '@/components/providers/ClientOnly'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { THEME_BOOT_SCRIPT } from '@/context/themeLogic'
 
 // Font families are self-hosted via the @fontsource CSS imports above
 // and exposed as --font-inter / --font-poppins / --font-jetbrains-mono
@@ -372,11 +373,13 @@ export default function RootLayout({
             ships a class-less <html> (= light :root variables) and
             ThemeProvider only applies the stored theme in a useEffect
             — a visible wrong-theme flash on every load. Default is
-            'dark' to match ThemeContext's getServerSnapshot(). */}
+            'dark' to match ThemeContext's getServerSnapshot(). Từ 18/10/2026
+            hiểu cả 'system' (theo prefers-color-scheme) — script nằm ở
+            context/themeLogic.ts, có test. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{var t=localStorage.getItem('theme');document.documentElement.classList.add(t==='light'?'light':'theme-dark')}catch(e){document.documentElement.classList.add('theme-dark')}",
+              THEME_BOOT_SCRIPT,
           }}
         />
         {/* Site-wide JSON-LD. The next/script wrapper defers it

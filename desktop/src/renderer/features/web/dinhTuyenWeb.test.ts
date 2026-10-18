@@ -310,7 +310,8 @@ describe('khopTuyenWeb', () => {
     // 12/10/2026: +1 CT Work đợt 8a (/work/connections — kết nối Microsoft 365 / Google của tôi).
     // 12/10/2026: +2 CT Work đợt 8b (/work/:ws/:key/reports/builder — Builder + lịch gửi, /work/:ws/:key/connect — Notion & Slack).
     // 12/10/2026: +1 CT Work cổng Nộp bài (/work/:ws/:key/submit — gom deliverable + tải tất cả + bằng chứng đúng giờ).
-    expect(thay.size).toBe(179);
+    // 18/10/2026: +1 CT Work trang Code (/work/:ws/:key/code — hoạt động Git, nhánh, PR, mã nguồn).
+    expect(thay.size).toBe(180);
   });
 });
 

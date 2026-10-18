@@ -68,7 +68,7 @@ function OptionCard({
 }
 
 export default function AppearanceSettingsPage() {
-  const { theme, setTheme } = useTheme();
+  const { preference, setTheme } = useTheme();
   const { locale, setLocale } = useLocaleContext();
 
   const reduceMotion = usePreferencesStore((s) => s.reduceMotion);
@@ -91,18 +91,25 @@ export default function AppearanceSettingsPage() {
       >
         <div className="flex flex-col gap-3 sm:flex-row">
           <OptionCard
-            active={theme === 'light'}
+            active={preference === 'light'}
             onClick={() => setTheme('light')}
             icon={<Sun className="h-4 w-4" />}
             title="Sáng"
             subtitle="Nền trắng, hợp khi làm việc ban ngày"
           />
           <OptionCard
-            active={theme === 'dark'}
+            active={preference === 'dark'}
             onClick={() => setTheme('dark')}
             icon={<Moon className="h-4 w-4" />}
             title="Tối"
             subtitle="Nền tối, dịu mắt khi dùng buổi đêm"
+          />
+          <OptionCard
+            active={preference === 'system'}
+            onClick={() => setTheme('system')}
+            icon={<Monitor className="h-4 w-4" />}
+            title="Tự động"
+            subtitle="Theo cài đặt sáng/tối của máy (chỉ lưu trên máy này)"
           />
         </div>
       </SettingsCard>

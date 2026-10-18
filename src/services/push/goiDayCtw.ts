@@ -18,7 +18,8 @@ export const CTW_CATEGORY = {
 } as const;
 
 /** Khoá bật/tắt đẩy theo loại (GET|PUT /work/me/notify-settings → `push`). Mặc định bật hết. */
-export const PUSH_KEYS = ['assign', 'comment', 'mention', 'alert', 'approval', 'chatAll'] as const;
+/** `git` (18/10/2026, trang Code): thông báo hoạt động Git (push, PR mở/merge, yêu cầu review) — tắt ⇒ không chuông/đẩy/email. */
+export const PUSH_KEYS = ['assign', 'comment', 'mention', 'alert', 'approval', 'chatAll', 'git'] as const;
 export type PushKey = (typeof PUSH_KEYS)[number];
 export type PushPrefs = Record<PushKey, boolean>;
 
@@ -36,7 +37,7 @@ export function pushKeyFor(type: string, payload: unknown): PushKey | null {
     case 'WORK_ASSIGN': return 'assign';
     case 'WORK_COMMENT': return 'comment';
     case 'WORK_MENTION': return 'mention';
-    case 'WORK_ALERT': return typeof p.approvalId === 'number' ? 'approval' : 'alert';
+    case 'WORK_ALERT': return typeof p.approvalId === 'number' ? 'approval' : p.git === true ? 'git' : 'alert';
     default: return null;
   }
 }

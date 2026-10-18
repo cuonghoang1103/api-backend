@@ -17,6 +17,7 @@ import { prisma } from '../../config/database.js';
 import { emitAutomationSignal } from './automationSignals.js';
 import { BadRequestError, NotFoundError, UnauthorizedError } from '../../middleware/errorHandler.js';
 import { extractGithubContribs, recordDevContributions } from './contribDev.js';
+import { extractGithubGit, recordGit } from './gitEvents.js';
 import { logger } from '../../utils/logger.js';
 import { auditProject } from './audit.js';
 import { frontendUrl } from './common.js';
@@ -25,7 +26,7 @@ import { applyIssueChange } from './issueChange.js';
 import { requireProject } from './permissions.js';
 import { markFromDevActivity } from './provenance.js';
 
-interface GithubConfig { prOpenedStatusId?: number | null; prMergedStatusId?: number | null }
+interface GithubConfig { prOpenedStatusId?: number | null; prMergedStatusId?: number | null; chatChannelId?: number | null; notify?: boolean }
 
 function webhookUrl(projectId: number): string {
   // Cùng tên miền với web (nginx chuyển /api sang backend).
@@ -45,6 +46,9 @@ export async function getConnection(userId: number, projectId: number) {
     repoFullName: c.repoFullName,
     config: c.config as GithubConfig,
     lastEventAt: c.lastEventAt,
+    // CTW Code (18/10/2026): token chỉ đọc — CHỈ cho biết có hay không, không bao giờ trả token.
+    hasReadToken: !!c.readToken,
+    ...(await import('./code.service.js').then((m) => m.connectionStats(projectId, 'GITHUB'))),
   };
 }
 
@@ -151,6 +155,12 @@ export async function handleWebhook(projectId: number, event: string | undefined
   if (!event || event === 'ping') return { ok: true, linked: 0 };
   // CTW Đóng góp (A26): giữ MỌI commit/PR (kể cả không nhắc mã thẻ) + số dòng khi payload có — không bao giờ ném.
   await recordDevContributions(projectId, conn.project.key, 'GITHUB', extractGithubContribs(event, body));
+  // CTW Code (18/10/2026): dòng thời gian Git (mọi push/nhánh/PR, kể cả không nhắc mã thẻ) + thông báo — không bao giờ ném.
+  // Thông báo chạy SAU khi trả 200 (GitHub chỉ chờ 10 s); chỉ sự kiện MỚI ghi mới báo ⇒ "Redeliver" không báo lại.
+  const recorded = await recordGit(projectId, 'GITHUB', extractGithubGit(event, body, conn.project.key));
+  if (recorded.length) {
+    void import('./code.service.js').then((m) => m.notifyGit(projectId, 'GITHUB', recorded)).catch((err) => logger.warn('[work] github: thông báo Git lỗi', { projectId, err: (err as Error).message }));
+  }
 
   const cfg = conn.config as GithubConfig;
   const repo = body?.repository?.full_name ? String(body.repository.full_name).slice(0, 200) : null;

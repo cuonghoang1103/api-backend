@@ -19,13 +19,15 @@ import { logger } from '../../utils/logger.js';
 import { auditProject } from './audit.js';
 import { frontendUrl } from './common.js';
 import { extractGitlabContribs, recordDevContributions } from './contribDev.js';
+import { extractGitlabGit, recordGit } from './gitEvents.js';
+import { safeGitlabBase } from './gitSource.js';
 import { emitWorkEvent } from './events.js';
 import { issueNumbersIn } from './github.service.js';
 import { applyIssueChange } from './issueChange.js';
 import { requireProject } from './permissions.js';
 import { markFromDevActivity } from './provenance.js';
 
-interface GitlabConfig { mrOpenedStatusId?: number | null; mrMergedStatusId?: number | null }
+interface GitlabConfig { mrOpenedStatusId?: number | null; mrMergedStatusId?: number | null; chatChannelId?: number | null; notify?: boolean; webBase?: string | null }
 
 const webhookUrl = (projectId: number) => frontendUrl(`/api/v1/work/gitlab/webhook/${projectId}`);
 
@@ -40,6 +42,9 @@ export async function getConnection(userId: number, projectId: number) {
     repoPath: c.repoPath,
     config: c.config as GitlabConfig,
     lastEventAt: c.lastEventAt,
+    // CTW Code (18/10/2026): token chỉ đọc — CHỈ cho biết có hay không, không bao giờ trả token.
+    hasReadToken: !!c.readToken,
+    ...(await import('./code.service.js').then((m) => m.connectionStats(projectId, 'GITLAB'))),
   };
 }
 
@@ -124,10 +129,21 @@ export async function handleWebhook(projectId: number, token: string | undefined
   if (!conn || conn.project.deletedAt || !verifyToken(conn.token, token)) throw new UnauthorizedError('Invalid token');
   if (!body || typeof body !== 'object') throw new BadRequestError('Invalid JSON payload', 'WORK_BAD_PAYLOAD');
   const repo = body?.project?.path_with_namespace ? String(body.project.path_with_namespace).slice(0, 200) : null;
-  await prisma.workGitlabConnection.update({ where: { projectId }, data: { lastEventAt: new Date(), ...(repo && !conn.repoPath ? { repoPath: repo } : {}) } });
+  // CTW Code: gốc web của GitLab (gitlab.com hoặc GitLab tự host) để xem mã — chỉ https, không host nội bộ (safeGitlabBase).
+  const webBase = safeGitlabBase(body?.project?.web_url);
+  const cfgNow = (conn.config ?? {}) as GitlabConfig;
+  await prisma.workGitlabConnection.update({
+    where: { projectId },
+    data: { lastEventAt: new Date(), ...(repo && !conn.repoPath ? { repoPath: repo } : {}), ...(webBase && cfgNow.webBase !== webBase ? { config: { ...cfgNow, webBase } as object } : {}) },
+  });
 
   // CTW Đóng góp (A26): giữ MỌI commit/MR (kể cả không nhắc mã thẻ) — không bao giờ ném.
   await recordDevContributions(projectId, conn.project.key, 'GITLAB', extractGitlabContribs(body));
+  // CTW Code (18/10/2026): dòng thời gian Git + thông báo (sau khi trả lời) — không bao giờ ném; gửi lại không báo lại.
+  const recorded = await recordGit(projectId, 'GITLAB', extractGitlabGit(body, conn.project.key));
+  if (recorded.length) {
+    void import('./code.service.js').then((m) => m.notifyGit(projectId, 'GITLAB', recorded)).catch((err) => logger.warn('[work] gitlab: thông báo Git lỗi', { projectId, err: (err as Error).message }));
+  }
   const cfg = conn.config as GitlabConfig;
   let linked = 0;
   for (const a of extractGitlabActivities(body)) {

@@ -629,3 +629,15 @@ declare module '@/lib/bookBlocks' {
   /** Nhận Document hoặc ShadowRoot — hàm chỉ dùng querySelectorAll. */
   export function collectBookBlockRefs(doc: Document): BookBlockRef[];
 }
+
+/* ── Chế độ màu (18/10/2026): VoWeb nối nút Sáng/Tối/Tự động của cây web (CT Work) vào thiết đặt giao diện của app. ── */
+declare module '@/context/ThemeContext' {
+  import type { ReactNode } from 'react';
+  export type ThemePreference = 'light' | 'dark' | 'system';
+  export function ThemeBridgeProvider(props: {
+    preference: ThemePreference;
+    resolvedTheme: 'light' | 'dark';
+    onChange: (p: ThemePreference) => void;
+    children: ReactNode;
+  }): JSX.Element;
+}

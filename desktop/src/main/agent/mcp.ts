@@ -356,6 +356,10 @@ function dungLaiDanhSachTool(): void {
   toolDaBiet = tool;
 }
 
+let nguonBienBiMat: () => Record<string, string> = () => ({});
+/** `ctworkKetNoi.ts` cắm vào (tránh vòng import). */
+export function datNguonBienBiMat(f: () => Record<string, string>): void { nguonBienBiMat = f; }
+
 export function trangThaiServer(): KetQuaNap['server'] {
   return trangThaiCuoi;
 }
@@ -376,8 +380,11 @@ function hanCua(v: unknown, macDinh: number): number {
  */
 function dungVanChuyen(c: CauHinhServer, kieu: KieuKetNoi): VanChuyen {
   const thieu = new Set<string>();
-  const envThem = moRongBang(c.env, process.env, thieu);
-  const env = { ...process.env, ...envThem };
+  /* Biến BÍ MẬT do app giữ (đợt 3: `CTWORK_TOKEN` của `/ctwork`) — chỉ để mở rộng `${…}` lúc nối;
+     biến môi trường thật thắng. Token không bao giờ nằm trong mcp.json. */
+  const goc = { ...nguonBienBiMat(), ...process.env };
+  const envThem = moRongBang(c.env, goc, thieu);
+  const env = { ...goc, ...envThem };
   let vc: VanChuyen;
   if (kieu === 'stdio') {
     const command = moRongBien(c.command!, env, thieu);

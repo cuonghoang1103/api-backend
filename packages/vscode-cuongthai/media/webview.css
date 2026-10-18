@@ -315,3 +315,9 @@ button { font: inherit; color: inherit; }
 .dang-nhap .kq { min-height: 1.2em; font-size: 12px; }
 .dang-nhap .nho { font-size: 11.5px; line-height: 1.6; }
 .dang-nhap a { color: var(--vscode-textLink-foreground); }
+
+/* Đợt 3: dải chờ/hẹn trên ô nhập · thẻ hỏi lựa chọn */
+.hen-cho { font-size: 11.5px; color: var(--chu-phu); padding: 4px 10px; border-top: 1px solid var(--vien, #333); display: flex; flex-direction: column; gap: 3px; }
+.hen-cho .nut-nho { margin-left: 6px; }
+.hoi .hoi-cau + .hoi-cau { margin-top: 10px; }
+.hoi .hoi-khac { width: 100%; margin-top: 6px; box-sizing: border-box; }

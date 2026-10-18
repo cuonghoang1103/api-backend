@@ -35,7 +35,16 @@ const giaiMa = (s: string): string => s.replace(/&(amp|lt|gt|quot|#39|#x27|nbsp)
 /** Bọc một chuỗi đã tô màu cho vừa `rong` cột. */
 export function bocDong(s: string, rong: number): string[] {
   if (rong < 4) return s.split('\n');
-  return wrapAnsi(s, rong, { hard: true, trim: false, wordWrap: true }).split('\n');
+  /* `trim: false` giữ thụt lề của dòng ĐẦU — nhưng wrap-ansi để dấu cách ở chỗ ngắt sang ĐẦU dòng sau
+     (QA 18/10: "reload with\n /mcp reload"). Bỏ đúng một dấu cách đó ở các dòng nối. */
+  return wrapAnsi(s, rong, { hard: true, trim: false, wordWrap: true }).split('\n')
+    .map((d, i) => (i === 0 ? d : d.replace(/^((?:\x1b\[[0-9;]*m)*) /, '$1')));
+}
+
+/** Bọc VĂN XUÔI: bỏ dấu cách ở mép dòng (Ink/`bocDong` để lại " chữ" đầu dòng bọc — QA 18/10: " shell can read…"). */
+export function bocVan(s: string, rong: number): string[] {
+  if (rong < 4) return s.split('\n');
+  return wrapAnsi(s, rong, { hard: true, trim: true, wordWrap: true }).split('\n');
 }
 
 // ─── Trong dòng ──────────────────────────────────────────────────
@@ -90,19 +99,16 @@ function khoiCode(t: Tokens.Code, rong: number): string[] {
   const than = toMauCode(t.text.replace(/\n$/, ''), ngonNgu || null).split('\n');
   const ra = [vien(`┌─${ngonNgu ? ` ${mau('#a78bfa')(ngonNgu)}` : ''}`)];
   for (const d of than) {
-    // Dòng code dài: CẮT (kèm `…`) thay vì bọc — bọc làm sai thụt lề của code.
-    const chi = doRong(d) > rong - 2 ? catAnsi(d, rong - 2) : d;
-    ra.push(`${vien('│')} ${chi}`);
+    /* Dòng code dài: BỌC CỨNG (dòng nối có dấu ↪ mờ) — không cắt "…". Cắt là mất chữ: lệnh trong khối code
+       là thứ người dùng chép ra chạy (QA 18/10: `/mcp mo` in `open -t "…/scratchpad/qa…"` mất nửa đường dẫn). */
+    if (doRong(d) <= rong - 2) { ra.push(`${vien('│')} ${d}`); continue; }
+    wrapAnsi(d, Math.max(4, rong - 4), { hard: true, trim: false, wordWrap: false }).split('\n')
+      .forEach((m, i) => ra.push(`${vien('│')} ${i ? `${mo('↪')} ` : ''}${m}`));
   }
   ra.push(vien('└─'));
   return ra;
 }
 
-/** Cắt chuỗi CÓ MÀU theo số cột (giữ mã màu, thêm … ). */
-function catAnsi(s: string, n: number): string {
-  const tron = wrapAnsi(s, Math.max(1, n - 1), { hard: true, trim: false, wordWrap: false }).split('\n');
-  return `${tron[0] ?? ''}${mo('…')}`;
-}
 
 function bang(t: Tokens.Table, rong: number): string[] {
   const dau = t.header.map((o) => dam(trongDong(o.tokens, o.text)));

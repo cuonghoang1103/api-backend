@@ -223,6 +223,8 @@ class KhungChat implements vscode.WebviewViewProvider {
           return;
         }
         case 'moLink': { await vscode.env.openExternal(vscode.Uri.parse(String(m.url))); return; }
+        /* Đợt 3: `/worktree <tên>` ⇒ worktree là thư mục khác ⇒ mở ở cửa sổ mới. */
+        case 'moThuMuc': { await vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(String(m.duong)), { forceNewWindow: true }); return; }
         case 'rpc': { void this.rpc(m); return; }
         case 'dangXuat': { await this.dangXuat(); return; }
         case 'moCaiDat': { await vscode.commands.executeCommand('workbench.action.openSettings', '@ext:cuongthai.cuongthai-ai-code'); return; }

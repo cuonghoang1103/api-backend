@@ -166,9 +166,57 @@ async function kichBanCong(text) {
   return false;
 }
 
+/**
+ * Phiên DÀI nhiều tool web + kế hoạch (ảnh người dùng 18/10: "web_lien_ket", "Plan 0/5 việc",
+ * hộp kế hoạch đè nội dung, context 0%) — để chụp trước/sau. Gõ câu có chữ "ctwork" hoặc "web".
+ */
+async function kichBanWeb() {
+  const KH = ['Tìm đường vào CT Work và workspace LabFlow', 'Liệt kê các dự án trong workspace, mỗi dự án một dòng ngắn', 'Đọc board, backlog, timeline, releases và trang WBS dài', 'Đối chiếu với thư mục LabFlow-AI trên máy xem đã có code chưa', 'Tóm tắt những gì đã hiểu, nói rõ phần chưa đọc'];
+  const kh = (k) => KH.map((ten, i) => ({ ten, trangThai: i < k ? 'xong' : i === k ? 'dang' : 'cho' }));
+  let buoc = 0;
+  const vong = async (ten, thamSo, tomTat, chiTiet) => {
+    buoc += 1;
+    phat({ loai: 'batDau', model: 'claude-sonnet-5-5', buoc, tranBuoc: 160 });
+    phat({ loai: 'nghi' });
+    await ngu(60);
+    const id = `w${buoc}`;
+    phat({ loai: 'toolBatDau', id, ten, vong: 'may', thamSo });
+    await ngu(60);
+    phat({ loai: 'tool', id, ten, tomTat, vong: 'may', thamSo, ...(chiTiet ? { chiTiet } : {}) });
+    phat({ loai: 'tienTrinh', tokenRa: 380, tokenVao: 60_000 + buoc * 2400, tienUsd: 0.051, nguCanh: { kyTu: 1, tran: 2, phanTram: Math.min(70, 6 + buoc), soLuotDaBo: 0, token: 60_000 + buoc * 2400, cuaSo: 1_000_000 } });
+  };
+  phat({ loai: 'batDau', model: 'claude-sonnet-5-5', buoc: 0, tranBuoc: 160 });
+  phat({ loai: 'chu', delta: 'Mình sẽ mở CT Work, đọc các trang chính rồi tóm tắt.' });
+  await ngu(80);
+  phat({ loai: 'toolBatDau', id: 'kh0', ten: 'cap_nhat_ke_hoach', vong: 'may' });
+  phat({ loai: 'keHoach', viec: kh(0) });
+  phat({ loai: 'tool', id: 'kh0', ten: 'cap_nhat_ke_hoach', tomTat: '0/5 việc', vong: 'may' });
+  await vong('web_lien_ket', null, '6 liên kết');
+  await vong('web_mo', 'cuongthai.com/work', 'https://cuongthai.com/work');
+  await vong('web_doc', null, '8000/36356 ký tự', 'Nội dung https://cuongthai.com/work …');
+  await vong('web_anh', null, 'ảnh 386 KB');
+  await vong('web_lien_ket', null, '327 liên kết');
+  phat({ loai: 'keHoach', viec: kh(1) });
+  await vong('web_mo', 'cuongthai.com/work/labflow-studio', 'https://cuongthai.com/work/labflow-studio');
+  await vong('web_doc', null, '3628/3628 ký tự');
+  await vong('web_doc', 'tu=8000', '8000/37070 ký tự');
+  await vong('web_doc', 'tu=16000', '8000/37070 ký tự');
+  phat({ loai: 'keHoach', viec: kh(2) });
+  await vong('web_lien_ket', null, '27 liên kết');
+  await vong('read_file', 'LabFlow-AI/AGENTS.md', '42/42 dòng');
+  await vong('grep', '"TODO" in LabFlow-AI', '0 kết quả');
+  phat({ loai: 'keHoach', viec: kh(4) });
+  await ngu(2600);
+  const chu = '**Cấu trúc kế hoạch** (`/LF/board`, `/backlog`, `/releases`)\n\n- 20 sprint, mỗi sprint có Outcome, Gate và "Cắt nếu trễ".\n- 46 Req, mỗi Req có 5 sub-task: SRS → SDS → Code → Test → Integrate.\n\n**Bạn muốn làm gì tiếp?**\n\n- **A.** Đọc nốt phần chưa đọc.\n- **B.** Đề xuất thứ tự việc cho tuần 3.';
+  for (let i = 0; i < chu.length; i += 30) { if (huy) return; phat({ loai: 'chu', delta: chu.slice(i, i + 30) }); await ngu(20); }
+  phat({ loai: 'keHoach', viec: kh(5) });
+  phat({ loai: 'xong', hanMuc: { daDung: 9, tran: 9, phanTram: 100, hoiLucNao: null }, tienUsd: 0.663, daLuoc: 0, soFileDaSua: 0, nguCanh: { kyTu: 1, tran: 2, phanTram: 19, soLuotDaBo: 0 } });
+}
+
 async function kichBan(text) {
   huy = false;
   lanGui += 1;
+  if (/ctwork|\bweb\b/i.test(text)) { await kichBanWeb(); return; }
   if (/agent|song song|parallel/i.test(text)) { await kichBanPhu(); return; }
   if (await kichBanCong(text)) return;
   if (/baotri/i.test(text)) {

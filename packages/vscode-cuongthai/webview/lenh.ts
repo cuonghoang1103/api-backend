@@ -101,17 +101,88 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
 
     case '/quyen': {
       const d = thamSo.split(/\s+/).filter(Boolean);
+      // Đợt 3: thêm TIỀN TỐ — `/quyen them npm test` ⇒ mọi lệnh ĐƠN bắt đầu bằng `npm test`.
+      if (d[0] === 'them' || d[0] === 'thêm' || d[0] === 'add') {
+        const tt = d.slice(1).join(' ').replace(/\s*(\*|…)$/, '').trim();
+        if (!tt) { b.traLoi('Gõ tiền tố: `/quyen them npm test` ⇒ mọi lệnh ĐƠN bắt đầu bằng `npm test` tự chạy ở dự án này.'); return; }
+        const r = await b.goi<{ ok: boolean; loi?: string }>('agent:themTienTo', { tienTo: tt });
+        b.traLoi(r?.ok ? `Đã cho phép lâu dài mọi lệnh bắt đầu bằng \`${tt}\` (lệnh nối \`;\` \`&&\` \`|\` \`$(…)\` vẫn hỏi).` : `⚠ ${r?.loi ?? '?'}`);
+        return;
+      }
+      const r = await b.goi<{ goc: string | null; khoa: string[] }>('agent:dsQuyenLau');
       if (d[0] === 'xoa' || d[0] === 'clear') {
-        const rieng = d.slice(1).join(' ').trim();
+        let rieng = d.slice(1).join(' ').trim();
+        if (/^\d+$/.test(rieng) && r?.khoa[Number(rieng) - 1]) rieng = r.khoa[Number(rieng) - 1]!;
         const n = await b.goi<number>('agent:xoaQuyenLau', rieng ? { khoa: rieng } : {}) ?? 0;
         b.traLoi(n === 0 ? 'Không có quyền nào bị thu hồi.' : `Đã thu hồi **${n}** quyền${rieng ? ` cho \`${rieng}\`` : ' của dự án này'}.`);
         return;
       }
-      const r = await b.goi<{ goc: string | null; khoa: string[] }>('agent:dsQuyenLau');
       if (!r?.goc) { b.traLoi('Chưa mở dự án nào.'); return; }
+      const hien = (k: string): string => (k.startsWith('tien-to:') ? `\`${k.slice(8)} …\` (mọi lệnh bắt đầu bằng)` : `\`${k}\``);
       b.traLoi(r.khoa.length === 0
-        ? `Dự án \`${r.goc}\` chưa có quyền nào được "Luôn cho phép".`
-        : `**${r.khoa.length}** thứ đang được tự duyệt ở \`${r.goc}\`:\n\n${r.khoa.map((x) => `- \`${x}\``).join('\n')}\n\nThu hồi tất cả: \`/quyen xoa\` · thu hồi một cái: \`/quyen xoa <nguyên văn>\``);
+        ? `Dự án \`${r.goc}\` chưa có quyền nào được "Luôn cho phép". Thêm: \`/quyen them npm test\`.`
+        : `**${r.khoa.length}** thứ đang được tự duyệt ở \`${r.goc}\`:\n\n${r.khoa.map((x, i) => `${i + 1}. ${hien(x)}`).join('\n')}\n\nThêm tiền tố: \`/quyen them npm test\` · thu hồi một mục: \`/quyen xoa <số>\` · tất cả: \`/quyen xoa\``);
+      return;
+    }
+
+    /* ── Đợt 3 (18/10/2026) ── */
+    case '/sessions': {
+      const r = await b.goi<{ toi: { id: string; ten: string } | null; ds: Array<{ id: string; ten: string; noi: string; thuMuc: string | null; trangThai: string }> } | null>('agent:dsPhienMang').catch(() => null);
+      if (!r) { b.traLoi('Bản này chưa hỗ trợ nhắn giữa phiên (cập nhật app/extension).'); return; }
+      b.traLoi(`${r.toi ? `Phiên này: **${r.toi.ten}** (\`${r.toi.id}\`)` : 'Phiên này chưa đăng ký (đăng ký sau lượt đầu tiên).'}\n\n${r.ds.length
+        ? `Phiên khác đang mở:\n\n${r.ds.map((x) => `- \`${x.id}\` **${x.ten}** · ${x.noi} · ${x.trangThai === 'dangChay' ? 'đang chạy' : 'rảnh'} · ${x.thuMuc ?? '—'}`).join('\n')}\n\nAgent tự nhắn được bằng tool \`nhan_phien\` (bạn duyệt nội dung trước khi gửi). Đổi tên phiên này: \`/rename <tên>\`.`
+        : 'Không có phiên CuongMini nào khác đang mở trên máy này.'}`);
+      return;
+    }
+    case '/rename': {
+      if (!thamSo.trim()) { b.traLoi('Gõ tên: `/rename backend-api`'); return; }
+      const m = await b.goi<{ id: string; ten: string } | null>('agent:doiTenPhienMang', { ten: thamSo.trim().slice(0, 60) }).catch(() => null);
+      b.traLoi(m ? `Đã đặt tên phiên: **${m.ten}** (\`${m.id}\`).` : 'Không đổi được tên.');
+      return;
+    }
+    case '/worktree': {
+      const d = thamSo.split(/\s+/).filter(Boolean);
+      const ds = await b.goi<Array<{ duongDan: string; nhanh: string | null; laChinh: boolean; dangDung?: boolean }>>('agent:dsWorktree').catch(() => []) ?? [];
+      if (!d.length || d[0] === 'list' || d[0] === 'ds') {
+        b.traLoi(ds.length ? `Worktree của repo:\n\n${ds.map((w) => `- ${w.dangDung ? '▶ ' : ''}\`${w.duongDan}\` · ${w.nhanh ?? '(tách rời)'}${w.laChinh ? ' · cây chính' : ''}`).join('\n')}\n\nTạo + mở ở cửa sổ mới: \`/worktree <tên>\` · xoá: \`/worktree xoa <đường>\`` : 'Thư mục này không phải kho git.');
+        return;
+      }
+      if (d[0] === 'xoa' || d[0] === 'remove') {
+        const r = await b.goi<{ ok: boolean; loi?: string }>('agent:xoaWorktree', { duongDan: d.slice(1).join(' ') });
+        b.traLoi(r?.ok ? 'Đã xoá worktree (nhánh giữ lại).' : `⚠ ${r?.loi ?? '?'}`);
+        return;
+      }
+      const r = await b.goi<{ ok: boolean; loi?: string }>('agent:taoWorktree', { ten: d.join('-') });
+      if (!r?.ok) { b.traLoi(`⚠ ${r?.loi ?? 'Không tạo được worktree.'}`); return; }
+      const ws = await b.goi<{ path?: string; branch?: string }>('agent:getWorkspace').catch(() => null);
+      // VS Code: worktree là một THƯ MỤC khác ⇒ mở ở cửa sổ mới (cửa sổ này vẫn ở cây cũ).
+      if (ws?.path) b.gui({ loai: 'moThuMuc', duong: ws.path });
+      b.traLoi(`Đã tạo worktree \`${ws?.path ?? ''}\` (nhánh \`${ws?.branch ?? ''}\`) và mở ở cửa sổ VS Code mới.`);
+      return;
+    }
+    case '/hen': {
+      const d = thamSo.split(/\s+/).filter(Boolean);
+      if (d[0] === 'huy' || d[0] === 'cancel') { const n = await b.goi<number>('agent:huyHen', d[1] ? { id: d[1].replace(/^#/, '') } : {}).catch(() => 0); b.traLoi(`Đã huỷ ${n ?? 0} hẹn.`); return; }
+      const r = await b.goi<{ cho: Array<{ moTa: string }>; hen: Array<{ id: string; lyDo: string; luc: number; lap: boolean; phut: number; conLai: number }> } | null>('agent:henCho').catch(() => null);
+      b.traLoi(r && (r.cho.length || r.hen.length)
+        ? [...r.cho.map((c) => `- ⏳ Đang chờ: ${c.moTa}`), ...r.hen.map((h) => `- ⏰ \`${h.id}\` ${new Date(h.luc).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}${h.lap ? ` · lặp mỗi ${h.phut}′ · còn ${h.conLai}×` : ''} — ${h.lyDo}`), '', 'Huỷ: `/hen huy <id>` · `/hen huy` (tất cả). Hẹn chỉ chạy khi VS Code còn mở.'].join('\n')
+        : 'Không có việc chờ hay hẹn nào.');
+      return;
+    }
+    case '/ctwork': {
+      const q = thamSo.trim().toLowerCase();
+      type Kq = { ok: boolean; loi?: string; soTool?: number; quyen?: string | null; bienTay?: boolean; server?: { ok: boolean; soTool: number } | null };
+      if (/^(off|tat|tắt|ngat|ngắt)$/.test(q)) { const r = await b.goi<Kq>('agent:ctwork', { viec: 'ngat' }); b.traLoi(r?.ok ? 'Đã ngắt CT Work: thu hồi token, gỡ server `ctwork`.' : `⚠ ${r?.loi ?? '?'}`); return; }
+      if (/^(doc|đọc|read|ghi|write)$/.test(q)) {
+        b.thongBao('Đang kết nối CT Work…');
+        const r = await b.goi<Kq>('agent:ctwork', { viec: 'noi', quyen: /^(ghi|write)$/.test(q) ? 'ghi' : 'doc' });
+        b.traLoi(r?.ok ? `✓ ctwork · ${r.soTool ?? 0} tool. Hỏi thử: "việc của tôi trong CT Work hôm nay".` : `⚠ ${r?.loi ?? '?'}`);
+        return;
+      }
+      const t = await b.goi<Kq>('agent:ctwork', { viec: 'trangThai' }).catch(() => null);
+      b.traLoi(t?.server?.ok
+        ? `✓ ctwork · ${t.server.soTool} tool · ${t.bienTay ? 'token từ biến CTWORK_TOKEN' : t.quyen === 'ghi' ? 'đọc + ghi' : 'chỉ đọc'}. Đổi: \`/ctwork doc\` · \`/ctwork ghi\` · ngắt: \`/ctwork off\`.`
+        : 'Chưa kết nối CT Work. Gõ `/ctwork doc` (chỉ đọc, khuyên dùng) hoặc `/ctwork ghi` (đọc + ghi) — extension tạo token bằng tài khoản đang đăng nhập và cất riêng trên máy; AI không bao giờ thấy token.');
       return;
     }
 

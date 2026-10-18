@@ -16,9 +16,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   AgentCongNangCap, AgentDiff,
   AgentInfo, AgentMucKhoiPhuc, AgentNguCanh, AgentPhanLoaiLenh, AgentPhien, AgentQuota, AgentQuyetDinh,
-  AgentUiEvent, AgentViec, AgentWorkspace,
+  AgentUiEvent, AgentViec, AgentWorkspace, AgentCauHoi, AgentChoView, AgentHenView,
 } from '../../../shared/ipc';
 import type { TheXinPhep } from './XinPhep';
+import type { PhuView } from './Dot3';
 import { SU_KIEN_AGENT_XONG } from '../odin/useOdin';
 
 /** Một mục trên màn hình. Không phải một tin nhắn giao thức. */
@@ -65,9 +66,15 @@ export type MucHienThi =
    */
   | { kieu: 'xinPhep'; the: TheXinPhep; xong?: 'dongY' | 'tuChoi' }
   /** Thẻ duyệt LỆNH. Khác thẻ sửa file: hiện chuỗi lệnh + lý do nguy hiểm. */
-  | { kieu: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh; xong?: 'dongY' | 'tuChoi' }
+  | { kieu: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh; xong?: 'dongY' | 'tuChoi'; tienTo?: string; phuId?: string }
   | { kieu: 'xinPhepMcp'; id: string; server: string; tool: string; args: string; xong?: 'dongY' | 'tuChoi' }
-  | { kieu: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai'; chiTiet: string; xong?: 'dongY' | 'tuChoi' }
+  | { kieu: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop'; chiTiet: string; xong?: 'dongY' | 'tuChoi'; phuId?: string }
+  /** Đợt 3: agent hỏi bằng lựa chọn. `xong` = tóm tắt câu trả lời (đã trả lời). */
+  | { kieu: 'hoi'; id: string; cauHoi: AgentCauHoi[]; xong?: string }
+  /** Đợt 3: khối agent phụ (đọc / ghi) — cập nhật tại chỗ theo `phuId`. */
+  | { kieu: 'phu'; p: PhuView }
+  /** Đợt 3: tin từ phiên CuongMini khác. */
+  | { kieu: 'tinPhien'; tu: { id: string; ten: string; noi: string }; noiDung: string; luc: number }
   | { kieu: 'xinPhepNote'; id: string; viec: 'tao' | 'ghi'; chiTiet: string; xong?: 'dongY' | 'tuChoi' }
   /**
    * Đầu ra lệnh, gom dần khi lệnh còn đang chạy.
@@ -134,6 +141,8 @@ export interface TrangThaiAgent {
   soFileDaSua: number;
   /** Ngữ cảnh đã dùng tới đâu. `null` = chưa chạy lượt nào nên chưa biết. */
   nguCanh: AgentNguCanh | null;
+  /** Đợt 3: đang CHỜ điều kiện / các HẸN quay lại của cuộc. */
+  henCho: { cho: AgentChoView[]; hen: AgentHenView[] };
   /**
    * Lượt GẦN NHẤT (đang chạy hoặc vừa xong) chạy bằng AI trên máy — tên + nhãn.
    * `null` = lượt gần nhất đi máy chủ (hoặc chưa có lượt nào).
@@ -156,10 +165,15 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   const [buoc, datBuoc] = useState<{ nay: number; tran: number } | null>(null);
   const [hanMuc, datHanMuc] = useState<AgentQuota | null>(null);
   const [tienPhien, datTienPhien] = useState(0);
+  /** Tiền các vòng của lượt đang chạy (`tienTrinh`) — cộng vào khi lượt kết thúc theo bất kỳ đường nào. */
+  const tienLuotRef = useRef(0);
   const [soFileDaSua, datSoFileDaSua] = useState(0);
   const [keHoach, datKeHoach] = useState<AgentViec[]>([]);
   const [nguCanh, datNguCanh] = useState<AgentNguCanh | null>(null);
   const [cucBo, datCucBo] = useState<{ ten: string; nhan: string } | null>(null);
+  const [henCho, datHenCho] = useState<{ cho: AgentChoView[]; hen: AgentHenView[] }>({ cho: [], hen: [] });
+  /** Lượt hiện tại do APP tự mở (hẹn quay lại) — không có `gui()` nào chờ để tắt trạng thái chạy. */
+  const tuDongRef = useRef(false);
   /* Đọc trong listener (đóng một lần) — state sẽ là bản cũ, ref thì không. */
   const cucBoRef = useRef<string | null>(null);
 
@@ -192,6 +206,8 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
       if (cu.muc.length) datMuc((truoc) => (truoc.length > 0 ? truoc : cu.muc.map(doiSangMuc)));
       // Lượt vẫn đang chạy ở main ⇒ nút phải là Dừng, và con quay phải quay.
       if (cu.dangChay) { datDangChay(true); datDangNghi(true); }
+      const hc = await window.cuongthai?.agent.henCho?.(cuocId).catch(() => null);
+      if (!huy && hc) datHenCho(hc);
     })();
     return () => { huy = true; };
   }, [cuocId]);
@@ -214,8 +230,60 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
       /* Sự kiện BÊN TRONG agent phụ (bọc `phuSuKien`) + mốc đầu/cuối của nó:
          màn hình này chưa có bảng agent phụ ⇒ bỏ qua hẳn. Không bao giờ để chữ
          của agent phụ chảy vào câu trả lời chính. */
-      if (e.loai === 'phuBatDau' || e.loai === 'phuSuKien' || e.loai === 'phuXong') return;
+      /* Đợt 3: khối agent phụ — cập nhật TẠI CHỖ theo `phuId`; chữ của agent phụ
+         không bao giờ chảy vào câu trả lời chính. */
+      if (e.loai === 'phuBatDau' || e.loai === 'phuSuKien' || e.loai === 'phuXong') {
+        const sua = (f: (p: PhuView) => PhuView): void => datMuc((truoc) => truoc.map((m) =>
+          (m.kieu === 'phu' && m.p.phuId === e.phuId ? { kieu: 'phu', p: f(m.p) } : m)));
+        if (e.loai === 'phuBatDau') {
+          datMuc((truoc) => [...truoc, { kieu: 'phu', p: {
+            phuId: e.phuId, loaiAgent: e.kieuAgent, nhiemVu: e.nhiemVu, quyen: e.quyen ?? 'doc',
+            ...(e.thuMuc ? { thuMuc: e.thuMuc } : {}), buoc: [], trangThai: 'dang',
+          } }]);
+        } else if (e.loai === 'phuSuKien') {
+          const con = e.e as { loai: string; ten?: string; tomTat?: string; duongDan?: string };
+          if (con.loai === 'tool') sua((p) => ({ ...p, buoc: [...p.buoc, `${con.ten ?? ''}${con.duongDan ? `(${con.duongDan})` : ''} — ${con.tomTat ?? ''}`].slice(-80) }));
+        } else {
+          sua((p) => ({ ...p, trangThai: e.ok ? 'xong' : 'loi', tomTat: e.tomTat, tienUsd: e.tienUsd }));
+        }
+        return;
+      }
+      if (e.loai === 'henCho') { datHenCho({ cho: e.cho, hen: e.hen }); return; }
+      if (e.loai === 'tinPhien') {
+        datMuc((truoc) => [...truoc, { kieu: 'tinPhien', tu: e.tu, noiDung: e.noiDung, luc: e.luc }]);
+        return;
+      }
+      if (e.loai === 'tuDanhThuc') {
+        tuDongRef.current = true;
+        datMuc((truoc) => [...truoc, { kieu: 'nguoi', text: e.cauHoi.split('\n')[0] ?? e.cauHoi, luc: Date.now() }]);
+        datDangChay(true);
+        datDangNghi(true);
+        return;
+      }
+      if (e.loai === 'hoiLuaChon') {
+        datDangNghi(false);
+        datMuc((truoc) => [...truoc, { kieu: 'hoi', id: e.id, cauHoi: e.cauHoi }]);
+        return;
+      }
+      if (e.loai === 'xongHoi') {
+        datMuc((truoc) => truoc.map((m) => (m.kieu === 'hoi' && m.id === e.id ? { ...m, xong: e.tomTat } : m)));
+        datDangNghi(true);
+        return;
+      }
+      /* Lượt tự mở (hẹn) kết thúc ⇒ không có `gui()` nào chờ ở finally — tự tắt. */
+      if (tuDongRef.current && (e.loai === 'xong' || e.loai === 'huy' || (e.loai === 'loi' && !MA_DOI_CONG.has(e.ma ?? '') && !['TU_GO_ANH', 'COMPACT', 'KHOI_PHUC'].includes(e.ma ?? '')))) {
+        tuDongRef.current = false;
+        datDangChay(false);
+      }
       /* "Đang suy nghĩ…" chỉ sống tới sự kiện kế tiếp có nội dung. */
+      if (e.loai === 'tienTrinh') { tienLuotRef.current += e.tienUsd ?? 0; if (e.nguCanh) datNguCanh(e.nguCanh); return; }
+      /* Lượt kết thúc KHÔNG qua 'xong' (Dừng / lỗi giữa chừng): các vòng trước đã tính tiền ở máy chủ — cộng vào, đừng
+         để mất (QA 18/10: CLI báo ~$0.000 sau khi dừng, sổ máy chủ 0,84 $; app desktop cùng lỗi). */
+      if (e.loai === 'huy' || (e.loai === 'loi' && !MA_DOI_CONG.has(e.ma ?? '') && !['TU_GO_ANH', 'COMPACT', 'KHOI_PHUC'].includes(e.ma ?? ''))) {
+        const t = tienLuotRef.current;
+        tienLuotRef.current = 0;
+        if (t > 0) datTienPhien((x) => x + t);
+      }
       if (e.loai !== 'nghi' && e.loai !== 'lenhRa' && e.loai !== 'keHoach') datSuyNghi(false);
       switch (e.loai) {
         case 'nghi':
@@ -279,13 +347,14 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           datDangNghi(false);
           datMuc((truoc) => [...truoc, {
             kieu: 'xinPhep',
-            the: { id: e.id, ten: e.ten, duongDan: e.duongDan, taoMoi: e.taoMoi, diff: e.diff },
+            the: { id: e.id, ten: e.ten, duongDan: e.duongDan, taoMoi: e.taoMoi, diff: e.diff, ...(e.phuId ? { phuId: e.phuId } : {}) },
           }]);
           break;
         case 'xinPhepLenh':
           datDangNghi(false);
           datMuc((truoc) => [...truoc, {
             kieu: 'xinPhepLenh', id: e.id, lenh: e.lenh, phanLoai: e.phanLoai,
+            ...(e.tienTo ? { tienTo: e.tienTo } : {}), ...(e.phuId ? { phuId: e.phuId } : {}),
           }]);
           break;
         case 'xinPhepMcp':
@@ -297,7 +366,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
         case 'xinPhepGit':
           datDangNghi(false);
           datMuc((truoc) => [...truoc, {
-            kieu: 'xinPhepGit', id: e.id, viec: e.viec, chiTiet: e.chiTiet,
+            kieu: 'xinPhepGit', id: e.id, viec: e.viec, chiTiet: e.chiTiet, ...(e.phuId ? { phuId: e.phuId } : {}),
           }]);
           break;
         case 'xinPhepNote':
@@ -339,7 +408,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
         case 'xong':
           if (e.nguCanh) datNguCanh(e.nguCanh);
           if (e.hanMuc) datHanMuc(e.hanMuc);
-          datTienPhien((t) => t + e.tienUsd);
+          { const tLuot = tienLuotRef.current; tienLuotRef.current = 0; datTienPhien((t) => t + Math.max(e.tienUsd, tLuot)); }
           datSoFileDaSua(e.soFileDaSua);
           break;
         case 'loi':
@@ -621,6 +690,17 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     void window.cuongthai?.agent.traLoiXinPhep(cuocId, id, quyetDinh);
   }, [cuocId]);
 
+  /* ── Đợt 3 ── */
+  const traLoiHoi = useCallback((id: string, tl: Array<{ chon: string[]; khac?: string }> | null) => {
+    void window.cuongthai?.agent.traLoiHoi(cuocId, id, tl);
+  }, [cuocId]);
+  const huyCho = useCallback((id: string, cach: 'boCho' | 'xongNgay') => {
+    void window.cuongthai?.agent.huyCho(cuocId, id, cach);
+  }, [cuocId]);
+  const huyHen = useCallback((id: string) => {
+    void window.cuongthai?.agent.huyHen(cuocId, id);
+  }, [cuocId]);
+
   const hoanTac = useCallback(async (): Promise<{ soFile: number; loi: string[] } | null> => {
     const kq = await window.cuongthai?.agent.hoanTac(cuocId);
     if (!kq) return null;
@@ -643,7 +723,10 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   }, []);
 
   return {
-    trangThai: { muc, dangChay, dangNghi, suyNghi, buoc, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh, cucBo } satisfies TrangThaiAgent,
+    trangThai: { muc, dangChay, dangNghi, suyNghi, buoc, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh, cucBo, henCho } satisfies TrangThaiAgent,
+    traLoiHoi,
+    huyCho,
+    huyHen,
     gui,
     baoTin,
     datHanMuc,

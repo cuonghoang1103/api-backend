@@ -68,6 +68,14 @@ const NHAN_TOOL: Record<string, string> = {
   github_ket_noi: 'GitHub', github_dang_du_an: 'Lên GitHub', cai_cong_cu: 'Cài công cụ', web_mo: 'Mở web',
   web_doc: 'Đọc web', tim_web: 'Tìm web', doc_web: 'Đọc web', giao_viec_phu: 'Agent phụ', dung_ky_nang: 'Skill',
   cap_nhat_ke_hoach: 'Kế hoạch', ghi_nho: 'Ghi nhớ',
+  // Đủ MỌI tool (18/10/2026 — trước đây lộ tên thô `web_lien_ket`, `web_anh`…)
+  web_anh: 'Chụp trang', web_lien_ket: 'Liên kết', web_console: 'Console', web_bam: 'Bấm', web_go: 'Gõ', web_tai: 'Tải về', web_tai_nhieu: 'Tải nhiều',
+  sua_o_notebook: 'Notebook', ghi_file_ngoai: 'Ghi ngoài dự án', doc_dau_ra_nen: 'Đầu ra nền', dung_lenh_nen: 'Dừng nền',
+  terminal_mo: 'Terminal', terminal_gui: 'Gõ terminal', terminal_doc: 'Đọc terminal', terminal_dong: 'Đóng terminal',
+  nho_bai_hoc: 'Ghi nhớ', doc_bo_nho: 'Đọc bộ nhớ', quen_bai_hoc: 'Quên', sua_anh: 'Sửa ảnh', xuat_so_do: 'Xuất sơ đồ',
+  notes_search: 'Tìm ghi chú', notes_read: 'Đọc ghi chú', notes_tree: 'Cây ghi chú', notes_tao: 'Tạo ghi chú', notes_ghi: 'Ghi ghi chú',
+  giao_viec_ghi: 'Agent phụ ghi', gop_viec_phu: 'Gộp agent phụ', hoi_nguoi_dung: 'Hỏi bạn', cho_doi: 'Chờ', hen_goi_lai: 'Hẹn',
+  huy_hen: 'Huỷ hẹn', liet_ke_phien: 'Phiên khác', nhan_phien: 'Nhắn phiên',
 };
 
 const ICON = {
@@ -390,7 +398,59 @@ let khoiLenh: HTMLElement | null = null;
 
 function nhanTool(ten: string): string {
   if (ten.startsWith('mcp__')) return ten.split('__').slice(1).join(' · ');
-  return NHAN_TOOL[ten] ?? ten;
+  const t = NHAN_TOOL[ten];
+  if (t) return t;
+  const g = ten.replace(/_/g, ' ').trim();
+  return g ? g[0]!.toUpperCase() + g.slice(1) : ten;
+}
+
+/* ── Đợt 3 (18/10/2026): hỏi lựa chọn · chờ/hẹn · tin phiên ── */
+const NHAN_PHU = (phuId: unknown): string => (phuId ? `<span class="phu">🤖 Agent phụ · </span>` : '');
+
+function veHoi(id: string, cauHoi: Array<{ cauHoi: string; tieuDe?: string; luaChon: Array<{ nhan: string; moTa?: string }>; nhieu?: boolean }>): void {
+  S.pha = 'duyet';
+  const chon: string[][] = cauHoi.map(() => []);
+  const el = the('duyet thuong hoi', `${cauHoi.map((q, i) => `<div class="hoi-cau" data-i="${i}"><div class="duyet-dau">❓ ${esc(q.cauHoi)}${q.nhieu ? ' <span class="phu">(chọn nhiều)</span>' : ''}</div>
+<div class="nut-hang">${q.luaChon.map((l, k) => `<button class="nut" data-i="${i}" data-n="${esc(l.nhan)}" title="${esc(l.moTa ?? '')}">${cauHoi.length === 1 ? `${k + 1}. ` : ''}${esc(l.nhan)}</button>`).join('')}</div>
+${q.luaChon.some((l) => l.moTa) ? `<ul class="ly-do">${q.luaChon.filter((l) => l.moTa).map((l) => `<li><b>${esc(l.nhan)}</b> — ${esc(l.moTa!)}</li>`).join('')}</ul>` : ''}
+<input class="hoi-khac" data-i="${i}" placeholder="Khác — gõ câu trả lời của bạn…"/></div>`).join('')}
+<div class="nut-hang"><button class="nut chinh" data-v="gui">Gửi câu trả lời</button><button class="nut phu2" data-v="bo">Bỏ qua</button></div>`);
+  el.dataset.id = id;
+  const xong = (tra: Array<{ chon: string[]; khac?: string }> | null) => {
+    el.querySelectorAll<HTMLButtonElement | HTMLInputElement>('button,input').forEach((x) => { x.disabled = true; });
+    void goi('agent:traLoiHoi', { id, traLoi: tra }).catch(() => undefined);
+  };
+  const thu = () => cauHoi.map((_, i) => {
+    const k = el.querySelector<HTMLInputElement>(`input.hoi-khac[data-i="${i}"]`)?.value.trim();
+    return { chon: chon[i]!, ...(k ? { khac: k } : {}) };
+  });
+  el.querySelectorAll<HTMLButtonElement>('button[data-n]').forEach((b) => b.addEventListener('click', () => {
+    const i = Number(b.dataset.i); const n = b.dataset.n!; const q = cauHoi[i]!;
+    chon[i] = q.nhieu ? (chon[i]!.includes(n) ? chon[i]!.filter((x) => x !== n) : [...chon[i]!, n]) : [n];
+    el.querySelectorAll<HTMLButtonElement>(`button[data-i="${i}"]`).forEach((x) => x.classList.toggle('chinh', chon[i]!.includes(x.dataset.n!)));
+    if (cauHoi.length === 1 && !q.nhieu) xong(thu());
+  }));
+  el.querySelectorAll<HTMLInputElement>('input.hoi-khac').forEach((x) => x.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') xong(thu()); }));
+  el.querySelector<HTMLButtonElement>('button[data-v="gui"]')!.addEventListener('click', () => xong(thu()));
+  el.querySelector<HTMLButtonElement>('button[data-v="bo"]')!.addEventListener('click', () => xong(null));
+}
+
+let khoiHenCho: HTMLElement | null = null;
+function veHenCho(cho: Array<{ id: string; moTa: string; hetLuc: number }>, hen: Array<{ id: string; lyDo: string; luc: number; lap: boolean; phut: number; conLai: number }>): void {
+  if (!cho.length && !hen.length) { khoiHenCho?.remove(); khoiHenCho = null; return; }
+  if (!khoiHenCho) {
+    khoiHenCho = document.createElement('div');
+    khoiHenCho.className = 'hen-cho';
+    const soan = document.querySelector('footer.soan');
+    if (soan) soan.insertAdjacentElement('beforebegin', khoiHenCho); else document.body.appendChild(khoiHenCho);
+  }
+  const gioP = (t: number) => new Date(t).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+  khoiHenCho.innerHTML = [
+    ...cho.map((c) => `<div>⏳ Đang chờ: ${esc(c.moTa)} <button class="nut-nho" data-cho="${esc(c.id)}" data-cach="xongNgay">Tiếp ngay</button><button class="nut-nho" data-cho="${esc(c.id)}" data-cach="boCho">Bỏ chờ</button></div>`),
+    ...hen.map((h) => `<div>⏰ Hẹn quay lại lúc ${gioP(h.luc)}${h.lap ? ` (lặp mỗi ${h.phut}′, còn ${h.conLai}×)` : ''} — ${esc(h.lyDo.slice(0, 160))} <span class="phu">· chỉ chạy khi VS Code còn mở</span> <button class="nut-nho" data-hen="${esc(h.id)}">Huỷ</button></div>`),
+  ].join('');
+  khoiHenCho.querySelectorAll<HTMLButtonElement>('button[data-cho]').forEach((b) => b.addEventListener('click', () => void goi('agent:huyCho', { id: b.dataset.cho, cach: b.dataset.cach }).catch(() => undefined)));
+  khoiHenCho.querySelectorAll<HTMLButtonElement>('button[data-hen]').forEach((b) => b.addEventListener('click', () => void goi('agent:huyHen', { id: b.dataset.hen }).catch(() => undefined)));
 }
 
 function theDuyet(id: string, tieuDe: string, than: string, cacNut: Array<[string, string, string?]>, muc = 'cankiem'): void {
@@ -522,7 +582,7 @@ function xuLy(e: SuKien): void {
     }
     case 'xinPhep':
       ketThucTraLoi();
-      theDuyet(e.id, `${e.taoMoi ? '📄 Tạo file' : '✏️ Sửa file'} <a class="file-link" data-duong="${esc(e.duongDan)}">${esc(e.duongDan)}</a>`, veDiff(e.diff), DUYET_CHUAN);
+      theDuyet(e.id, `${NHAN_PHU(e.phuId)}${e.taoMoi ? '📄 Tạo file' : '✏️ Sửa file'} <a class="file-link" data-duong="${esc(e.duongDan)}">${esc(e.duongDan)}</a>`, veDiff(e.diff), DUYET_CHUAN);
       break;
     case 'xinPhepLenh': {
       ketThucTraLoi();
@@ -530,8 +590,10 @@ function xuLy(e: SuKien): void {
       const lyDo = pl.lyDo?.length ? `<ul class="ly-do">${pl.lyDo.map((x: string) => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
       const nut: Array<[string, string, string?]> = [['choPhep', 'Chạy', 'chinh']];
       if (pl.choNho) nut.push(['choPhepCaFile', 'Luôn cho lệnh này']);
+      // Đợt 3: theo TIỀN TỐ (lõi chặn lệnh nối ; && | $(…) khỏi khớp).
+      if (pl.choNho && e.tienTo && e.tienTo !== String(e.lenh ?? '').trim()) nut.push(['choPhepTienTo', `Luôn cho <code>${esc(e.tienTo)} …</code>`]);
       nut.push(['tuChoi', 'Từ chối', 'phu2']);
-      theDuyet(e.id, '⌨️ Chạy lệnh', `<pre class="lenh">${esc(e.lenh)}</pre>${lyDo}`, nut, pl.muc);
+      theDuyet(e.id, `${NHAN_PHU(e.phuId)}⌨️ Chạy lệnh`, `<pre class="lenh">${esc(e.lenh)}</pre>${lyDo}`, nut, pl.muc);
       break;
     }
     case 'xinPhepMcp':
@@ -541,8 +603,8 @@ function xuLy(e: SuKien): void {
       break;
     case 'xinPhepGit': {
       ketThucTraLoi();
-      const tieu = { commit: '🌿 Commit', pr: '🔀 Đẩy nhánh + mở Pull Request', day: '⬆️ Đẩy lên GitHub', cai: '🧰 Cài công cụ' }[e.viec as string] ?? 'Git';
-      const nhan = { commit: 'Commit', pr: 'Đẩy và mở PR', day: 'Đẩy lên GitHub', cai: 'Cài' }[e.viec as string] ?? 'Đồng ý';
+      const tieu = NHAN_PHU(e.phuId) + ({ commit: '🌿 Commit', pr: '🔀 Đẩy nhánh + mở Pull Request', day: '⬆️ Đẩy lên GitHub', cai: '🧰 Cài công cụ', gop: '🔀 Gộp thay đổi của agent phụ vào dự án' }[e.viec as string] ?? 'Git');
+      const nhan = { commit: 'Commit', pr: 'Đẩy và mở PR', day: 'Đẩy lên GitHub', cai: 'Cài', gop: 'Gộp vào dự án' }[e.viec as string] ?? 'Đồng ý';
       theDuyet(e.id, tieu, `<pre class="chitiet">${esc(e.chiTiet)}</pre>`, [['choPhep', nhan, 'chinh'], ['tuChoi', 'Từ chối', 'phu2']],
         e.viec === 'pr' || e.viec === 'day' ? 'nguyhiem' : 'cankiem');
       break;
@@ -561,6 +623,38 @@ function xuLy(e: SuKien): void {
       }
       break;
     }
+    /* ── Đợt 3 ── */
+    case 'hoiLuaChon':
+      ketThucTraLoi();
+      veHoi(String(e.id), (e.cauHoi ?? []) as Parameters<typeof veHoi>[1]);
+      break;
+    case 'xongHoi': {
+      S.pha = 'nghi';
+      const el = bang.querySelector<HTMLElement>(`.hoi[data-id="${CSS.escape(String(e.id))}"]`);
+      if (el) { el.classList.add('xong'); el.innerHTML = `<div class="phu">✓ Bạn trả lời: ${esc(String(e.tomTat ?? ''))}</div>`; }
+      break;
+    }
+    case 'henCho':
+      veHenCho((e.cho ?? []) as Parameters<typeof veHenCho>[0], (e.hen ?? []) as Parameters<typeof veHenCho>[1]);
+      break;
+    case 'tinPhien': {
+      const tu = (e.tu ?? {}) as { ten?: string; noi?: string; id?: string };
+      the('tool', `<details><summary><span class="cham xong"></span><b>📨 Tin từ phiên ${esc(tu.ten ?? '?')}</b> <span class="phu">${esc(tu.noi ?? '')} · agent đọc ở lượt kế</span><span class="mo-rong">›</span></summary><div class="ben-trong"><pre class="chitiet">${esc(String(e.noiDung ?? '').slice(0, 8000))}</pre></div></details>`);
+      break;
+    }
+    case 'tuDanhThuc': {
+      // App tự mở lượt theo lời hẹn của agent.
+      document.querySelector('.chao')?.remove();
+      veNguoi(`⏰ ${String(e.cauHoi ?? '').split('\n')[0]}`, [], Date.now());
+      S.dangChay = true; S.batDauLuot = Date.now(); S.pha = 'cho'; S.buoc = null;
+      batTrangThai(); capNhatNut();
+      break;
+    }
+    case 'tienTrinh':
+      // Đợt 3: tiến trình theo vòng — khung VS Code chưa có ô ngữ cảnh %. Tiền của vòng giữ lại: lượt kết thúc
+      // bằng Dừng/lỗi thì không có `xong` mang tổng (QA 18/10: tiền mất trắng sau khi dừng).
+      tienLuot += Number(e.tienUsd ?? 0);
+      break;
     case 'keHoach': {
       ketThucTraLoi();
       let el = bang.querySelector<HTMLElement>('.ke-hoach:last-of-type');
@@ -571,7 +665,8 @@ function xuLy(e: SuKien): void {
     }
     case 'xong': {
       ketThucTraLoi();
-      S.tienPhien += Number(e.tienUsd ?? 0);
+      S.tienPhien += Math.max(Number(e.tienUsd ?? 0), tienLuot);
+      tienLuot = 0;
       S.soFileDaSua = Number(e.soFileDaSua ?? S.soFileDaSua);
       ketLuot(`${S.soFileDaSua ? `${S.soFileDaSua} file đã sửa` : ''}`);
       if (S.choDuyetKeHoach) veDuyetKeHoach();
@@ -586,6 +681,8 @@ function xuLy(e: SuKien): void {
         if (e.ma === 'CONG_CHINH_HONG_FREE' && Array.isArray(e.cacCong) && e.cacCong.length) veMoiNangCap(el, e.cacCong as CongNangCap[]);
         break;
       }
+      S.tienPhien += tienLuot;
+      tienLuot = 0;
       ketLuot('', true);
       S.muc.push({ kieu: 'loi', text: e.thongDiep ?? '' });
       const el = the('tin loi', `⚠️ ${esc(e.thongDiep ?? 'Có lỗi.')}`);
@@ -608,6 +705,8 @@ function xuLy(e: SuKien): void {
     }
     case 'huy':
       ketThucTraLoi();
+      S.tienPhien += tienLuot;
+      tienLuot = 0;
       ketLuot('đã dừng');
       break;
     case 'daXoa':
@@ -615,6 +714,9 @@ function xuLy(e: SuKien): void {
       break;
   }
 }
+
+/** Tiền các vòng của lượt đang chạy (`tienTrinh`). */
+let tienLuot = 0;
 
 /** Kết một lượt: tắt trạng thái, ghi giờ xong + thời lượng dưới câu trả lời (như Claude Code). */
 function ketLuot(ghiChu: string, loi = false): void {

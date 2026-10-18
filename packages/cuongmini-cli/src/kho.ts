@@ -13,7 +13,7 @@
 import type { DuLieuDiff } from './diff';
 import { L } from './i18n';
 import { apSuKienPhu, dongAgentTreo, type AgentPhu, type LenhNen } from './viecPhu';
-import { coVeHong, tachKetQuaLenh, TOOL_GHI, TOOL_LENH, type Pha } from './trangThai';
+import { coVeHong, dichDanhThuc, tachKetQuaLenh, tienGon, TOOL_GOM, TOOL_GHI, TOOL_LENH, type Pha } from './trangThai';
 
 export interface ViecKeHoach { ten: string; trangThai: string }
 export interface WsLoi {
@@ -54,8 +54,12 @@ export type MucBang =
   | {
     id: number; loai: 'tool'; ten: string; tomTat: string; duongDan?: string; lenh?: string | null;
     ra?: string; diff?: DuLieuDiff; hong: boolean; moRong: boolean; chiTiet?: string;
+    /** Tham số chính (lõi đợt 3 gửi kèm) — `● Navigate(cuongthai.com/work)`. */
+    thamSo?: string;
+    /** Các lời gọi LIÊN TIẾP cùng tool chỉ-đọc được gom lại (`● Read 3 pages`). */
+    nhom?: Array<{ thamSo?: string; tomTat: string; hong: boolean; chiTiet?: string }>;
   }
-  | { id: number; loai: 'duyet'; tieuDe: string; dongY: boolean }
+  | { id: number; loai: 'duyet'; tieuDe: string; dongY: boolean; /** Dòng TRẢ LỜI thẻ hỏi — không phải "Allowed". */ traLoi?: boolean }
   | { id: number; loai: 'keHoach'; viec: ViecKeHoach[] }
   | { id: number; loai: 'heThong'; text: string }
   | { id: number; loai: 'thongBao'; text: string; muc: 'info' | 'loi' | 'canh' | 'ok' }
@@ -68,7 +72,7 @@ export type MucBang =
 type BoId<T> = T extends unknown ? Omit<T, 'id'> : never;
 export type MucMoi = BoId<MucBang>;
 
-export interface ToolDangChay { id: string; ten: string; lenh: string | null; ra: string; batDau: number }
+export interface ToolDangChay { id: string; ten: string; lenh: string | null; ra: string; batDau: number; thamSo?: string }
 
 export interface ChoDuyet {
   id: string;
@@ -77,7 +81,12 @@ export interface ChoDuyet {
   lenh?: string; phanLoai?: { muc: 'thuong' | 'cankiem' | 'nguyhiem'; lyDo: string[]; choNho: boolean };
   server?: string; tool?: string; args?: string;
   viec?: string; chiTiet?: string;
+  /** Đợt 3: tiền tố gợi ý ("Luôn cho phép `npm test …`"); thẻ của agent phụ ghi. */
+  tienTo?: string; phuId?: string;
 }
+
+/** Đợt 3: agent hỏi bằng lựa chọn (`hoi_nguoi_dung`). */
+export interface CauHoiLuaChon { cauHoi: string; tieuDe?: string; luaChon: Array<{ nhan: string; moTa?: string }>; nhieu?: boolean }
 
 /** Mục ghi lại cho /export, /rewind (cùng hình `MucGhi` của `lenhGach.ts`). */
 export interface MucGhi { kieu: string; text?: string; ten?: string; tomTat?: string; anh?: string[]; [k: string]: unknown }
@@ -132,6 +141,20 @@ export interface TrangThaiChat {
   agentPhu: AgentPhu[];
   /** Lệnh nền (`chay_lenh_nen`) — đếm vào "N shells". */
   lenhNen: LenhNen[];
+  /** Nhóm tool chỉ-đọc ĐANG GOM (chưa in) — in khi có mục khác chen vào hoặc hết lượt. */
+  toolCho: Extract<MucBang, { loai: 'tool' }> | null;
+  /** Token RA của lượt (từ `tienTrinh` của lõi) + số ký tự đã chảy (ước lượng khi lõi cũ). */
+  tokenRa: number;
+  kyTuRa: number;
+  /** Lượt này đã nhận `tienTrinh` (lõi mới) ⇒ tiền đã cộng theo vòng. */
+  coTienTrinh: boolean;
+  tienLuot: number;
+  /** Đã nhắc "ngữ cảnh sắp đầy" ở mốc nào (80 / 95) — mỗi mốc nhắc một lần. */
+  daNhacNguCanh: number;
+  /** Đợt 3: thẻ hỏi lựa chọn đang chờ trả lời. */
+  hoi: { id: string; cauHoi: CauHoiLuaChon[] } | null;
+  /** Đợt 3: việc đang CHỜ + các HẸN quay lại (toàn bộ danh sách, lõi gửi mỗi lần đổi). */
+  henCho: { cho: Array<{ id: string; moTa: string; batDau: number; hetLuc: number }>; hen: Array<{ id: string; lyDo: string; luc: number; phut: number; lap: boolean; conLai: number }> };
 }
 
 export function trangThaiDau(): TrangThaiChat {
@@ -140,6 +163,7 @@ export function trangThaiDau(): TrangThaiChat {
     chuDangViet: '', toolChay: [], choDuyet: [], keHoach: [], fileDaSua: {}, tienPhien: 0, soFileDaSua: 0,
     nguCanh: null, hanMucPhanTram: null, luotCuoi: null, muc: [], tieuDe: '', cauHoiCuoi: '', choDuyetKeHoach: false, hoiDuyetKeHoach: false,
     daCompact: false, chiTiet: false, loiCanXuLy: null, nghiThat: false, moiCong: null, daMoiCong: false, hoiQuayVe: null, ws: null, info: null, lenhDuAn: [], daBaoTrinhDuyet: false, agentPhu: [], lenhNen: [],
+    toolCho: null, tokenRa: 0, kyTuRa: 0, coTienTrinh: false, tienLuot: 0, hoi: null, henCho: { cho: [], hen: [] }, daNhacNguCanh: 0,
   };
 }
 
@@ -180,8 +204,22 @@ export class KhoChat {
   }
 
   them(m: MucMoi): void {
+    this.dayNhom();
+    this.themTho(m);
+  }
+
+  private themTho(m: MucMoi): void {
     this.dem += 1;
     this.S.bang = [...this.S.bang, { ...m, id: this.dem } as MucBang];
+  }
+
+  /** In nhóm tool đang gom (nếu có) vào bảng ghi. */
+  dayNhom(): void {
+    const g = this.S.toolCho;
+    if (!g) return;
+    this.S.toolCho = null;
+    const { id: _bo, ...con } = g;
+    this.themTho(con as MucMoi);
   }
 
   /** Câu trả lời của lệnh `/` chạy CỤC BỘ — không vào hội thoại gửi model. */
@@ -197,6 +235,12 @@ export class KhoChat {
     S.cauHoiCuoi = cauGui;
     S.dangChay = true;
     S.batDauLuot = bayGio;
+    S.tokenRa = 0;
+    S.kyTuRa = 0;
+    S.coTienTrinh = false;
+    S.tienLuot = 0;
+    // Kế hoạch của lượt TRƯỚC đã xong hết ⇒ cất đi: không treo "☒ ☒ ☒" cũ dưới một việc mới không liên quan.
+    if (S.keHoach.length && S.keHoach.every((v) => v.trangThai === 'xong')) S.keHoach = [];
     S.pha = 'cho';
     S.buoc = null;
     S.chuDangViet = '';
@@ -214,10 +258,19 @@ export class KhoChat {
     S.muc.push({ kieu: 'may', text: t });
   }
 
+  /** Cộng tiền ĐÃ TIÊU của lượt đang dở (từ `tienTrinh`) vào tiền của việc — khi lượt kết thúc không qua `xong`. */
+  private chotTienLuot(): number {
+    const t = this.S.tienLuot;
+    this.S.tienPhien += t;
+    this.S.tienLuot = 0;
+    return t;
+  }
+
   /** Kết lượt: tắt trạng thái chạy, in dòng giờ xong + thời lượng (như Claude Code). */
   ketLuot(ghiChu: string, loi = false, bayGio = Date.now()): void {
     const S = this.S;
     const tong = S.batDauLuot ? bayGio - S.batDauLuot : 0;
+    this.dayNhom();
     S.dangChay = false;
     S.pha = 'cho';
     S.toolDang = '';
@@ -225,6 +278,7 @@ export class KhoChat {
     S.batDauLuot = 0;
     S.toolChay = [];
     S.choDuyet = [];
+    S.hoi = null;
     dongAgentTreo(S, bayGio);
     S.luotCuoi = { luc: bayGio, thoiLuong: tong, loi };
     if (!loi) this.them({ loai: 'ketLuot', luc: bayGio, thoiLuong: tong, ghiChu });
@@ -274,7 +328,18 @@ export class KhoChat {
       case 'chu':
         S.pha = 'viet';
         S.chuDangViet += String(e.delta ?? '');
+        S.kyTuRa += String(e.delta ?? '').length;
         break;
+      case 'tienTrinh': {
+        // Lõi đợt 3: sau MỖI vòng — token ra thật + ngữ cảnh % từ usage thật (không đợi hết lượt).
+        S.tokenRa += Number(e.tokenRa ?? 0);
+        const nc = e.nguCanh as { phanTram?: number; soLuotDaBo?: number } | undefined;
+        if (nc && typeof nc.phanTram === 'number') { S.nguCanh = { phanTram: nc.phanTram, soLuotDaBo: Number(nc.soLuotDaBo ?? 0) }; this.nhacNguCanh(); }
+        // Tiền của vòng — chỉ để hiện SỐNG trong lúc chạy; tổng thật của lượt đến cùng `xong`.
+        S.coTienTrinh = true;
+        S.tienLuot += Number(e.tienUsd ?? 0);
+        break;
+      }
       case 'toolBatDau': {
         this.chotChu();
         if (!S.daBaoTrinhDuyet && /^web_/.test(String(e.ten ?? ''))) {
@@ -284,7 +349,7 @@ export class KhoChat {
         }
         S.pha = 'tool';
         S.toolDang = String(e.ten ?? '');
-        S.toolChay = [...S.toolChay, { id: String(e.id ?? ''), ten: S.toolDang, lenh: null, ra: '', batDau: bayGio }];
+        S.toolChay = [...S.toolChay, { id: String(e.id ?? ''), ten: S.toolDang, lenh: null, ra: '', batDau: bayGio, ...(typeof e.thamSo === 'string' ? { thamSo: e.thamSo } : {}) }];
         break;
       }
       case 'tool': {
@@ -293,6 +358,9 @@ export class KhoChat {
         const ten = String(e.ten ?? '');
         S.toolCuoi = ten;
         const tomTat = String(e.tomTat ?? '');
+        // Tóm tắt LÚC GIAO việc phụ (lõi phát không id, nhiệm vụ cắt 60 ký tự): bảng agent phụ đã nhận — in vào
+        // bảng ghi là một khối "● Task ⎿ nhiệm vụ…" trùng với dòng tool thật in khi agent phụ xong (QA 18/10).
+        if ((ten === 'giao_viec_phu' || ten === 'giao_viec_ghi') && !e.id) break;
         S.muc.push({ kieu: 'tool', ten, tomTat });
         const i = e.id ? S.toolChay.findIndex((t) => t.id === e.id) : -1;
         const dang = i >= 0 ? S.toolChay[i] : undefined;
@@ -302,12 +370,32 @@ export class KhoChat {
         const diff = e.diff as DuLieuDiff | undefined;
         const duongDan = typeof e.duongDan === 'string' ? e.duongDan : undefined;
         const hong = coVeHong(tomTat);
+        const thamSo = typeof e.thamSo === 'string' ? e.thamSo : dang?.thamSo;
+        // Kế hoạch đã có bảng riêng — KHÔNG in thành một dòng tool ("Plan 0/5 việc").
+        if (ten === 'cap_nhat_ke_hoach') { S.muc.pop(); break; }
+        if (TOOL_GOM.has(ten) && !hong) {
+          const motLan = { ...(thamSo ? { thamSo } : {}), tomTat, hong, ...(chiTiet ? { chiTiet } : {}) };
+          const g = S.toolCho;
+          if (g && g.ten === ten) {
+            g.nhom = [...(g.nhom ?? []), motLan];
+            g.tomTat = tomTat;
+            S.toolCho = { ...g };
+          } else {
+            this.dayNhom();
+            this.dem += 1;
+            S.toolCho = {
+              id: this.dem, loai: 'tool', ten, tomTat, hong, moRong: S.chiTiet, nhom: [motLan],
+              ...(duongDan ? { duongDan } : {}), ...(thamSo ? { thamSo } : {}), ...(chiTiet ? { chiTiet } : {}),
+            };
+          }
+          break;
+        }
         if (diff && duongDan && TOOL_GHI.has(ten) && !hong) {
           const cu = S.fileDaSua[duongDan] ?? { them: 0, bo: 0 };
           S.fileDaSua = { ...S.fileDaSua, [duongDan]: { them: cu.them + diff.soThem, bo: cu.bo + diff.soBo } };
         }
         this.them({
-          loai: 'tool', ten, tomTat, duongDan, hong, moRong: S.chiTiet, diff,
+          loai: 'tool', ten, tomTat, duongDan, hong, moRong: S.chiTiet, diff, ...(thamSo ? { thamSo } : {}),
           lenh: tach.lenh ?? dang?.lenh ?? null,
           ra: TOOL_LENH.has(ten) ? (tach.ra || dang?.ra || '') : undefined,
           chiTiet: TOOL_LENH.has(ten) ? undefined : chiTiet,
@@ -349,21 +437,59 @@ export class KhoChat {
         if (d) this.them({ loai: 'duyet', tieuDe: tieuDeDuyet(d), dongY: e.dongY === true });
         break;
       }
+      /* ── Đợt 3 ── */
+      case 'hoiLuaChon':
+        this.chotChu();
+        S.pha = 'duyet';
+        S.hoi = { id: String(e.id ?? ''), cauHoi: Array.isArray(e.cauHoi) ? e.cauHoi as CauHoiLuaChon[] : [] };
+        break;
+      case 'xongHoi':
+        if (S.hoi?.id === e.id) {
+          const tt = String(e.tomTat ?? '');
+          const boQua = !tt || tt === 'không trả lời'; // i18n-bo-qua: chữ của lõi
+          this.them({ loai: 'duyet', traLoi: true, dongY: !boQua, tieuDe: boQua ? L('Bạn bỏ qua câu hỏi', 'You skipped the question') : `${L('Bạn trả lời', 'You answered')}: ${tt}` });
+          S.hoi = null;
+          S.pha = 'nghi';
+        }
+        break;
+      case 'henCho': {
+        const cho = Array.isArray(e.cho) ? e.cho as TrangThaiChat['henCho']['cho'] : [];
+        const hen = Array.isArray(e.hen) ? e.hen as TrangThaiChat['henCho']['hen'] : [];
+        S.henCho = { cho, hen };
+        break;
+      }
+      case 'tinPhien': {
+        const tu = (e.tu ?? {}) as { id?: string; ten?: string; noi?: string };
+        const noiDung = String(e.noiDung ?? '');
+        this.them({ loai: 'heThong', text: `📨 **${L('Tin từ phiên', 'Message from session')} ${tu.ten ?? '?'}** (${tu.noi ?? ''} · \`${tu.id ?? ''}\`) — ${L('agent đọc ở lượt kế', 'the agent reads it next turn')}\n\n${noiDung.split('\n').slice(0, 12).map((d) => `> ${d}`).join('\n')}` });
+        this.bao(true);
+        return;
+      }
+      case 'tuDanhThuc': {
+        // App tự mở lượt theo lời hẹn của agent — vẽ như một câu hỏi (dòng đầu) + bật trạng thái chạy.
+        const cau = String(e.cauHoi ?? '');
+        this.batDauLuot(`⏰ ${dichDanhThuc(cau.split('\n')[0] ?? cau)}`, 0, cau, bayGio);
+        return;
+      }
       case 'keHoach':
         this.chotChu();
         S.keHoach = Array.isArray(e.viec) ? (e.viec as ViecKeHoach[]).map((v) => ({ ten: String(v.ten), trangThai: String(v.trangThai) })) : [];
         break;
       case 'xong': {
         this.chotChu();
-        S.tienPhien += Number(e.tienUsd ?? 0);
+        // Lõi đợt 3: `xong.tienUsd` = TỔNG cả lượt (mọi vòng + agent phụ). Lõi cũ chỉ gửi vòng cuối
+        // (lỗi đếm thiếu 18/10: hiện ~$0.25 trong khi sổ máy chủ 3,42 $) ⇒ lấy số lớn hơn.
+        const tongLuot = Math.max(Number(e.tienUsd ?? 0), S.tienLuot);
+        S.tienPhien += tongLuot;
+        S.tienLuot = 0;
         S.soFileDaSua = Number(e.soFileDaSua ?? S.soFileDaSua);
         const nc = e.nguCanh as { phanTram?: number; soLuotDaBo?: number } | undefined;
-        if (nc && typeof nc.phanTram === 'number') S.nguCanh = { phanTram: nc.phanTram, soLuotDaBo: Number(nc.soLuotDaBo ?? 0) };
+        if (nc && typeof nc.phanTram === 'number') { S.nguCanh = { phanTram: nc.phanTram, soLuotDaBo: Number(nc.soLuotDaBo ?? 0) }; this.nhacNguCanh(); }
         const hm = e.hanMuc as { phanTram?: number } | null | undefined;
         if (hm && typeof hm.phanTram === 'number') S.hanMucPhanTram = hm.phanTram;
         const soFile = Object.keys(S.fileDaSua).length || S.soFileDaSua;
-        const tien = Number(e.tienUsd ?? 0);
-        const ghi = [soFile ? L(`${soFile} file đã sửa`, `${soFile} file${soFile > 1 ? 's' : ''} changed`) : '', tien > 0 ? `~$${tien < 0.01 ? tien.toFixed(4) : tien.toFixed(3)}` : ''].filter(Boolean).join(' · ');
+        const tien = tongLuot;
+        const ghi = [soFile ? L(`${soFile} file đã sửa`, `${soFile} file${soFile > 1 ? 's' : ''} changed`) : '', tien > 0 ? tienGon(tien) : ''].filter(Boolean).join(' · ');
         this.ketLuot(ghi, false, bayGio);
         if (S.choDuyetKeHoach) { S.choDuyetKeHoach = false; S.hoiDuyetKeHoach = true; }
         break;
@@ -397,6 +523,8 @@ export class KhoChat {
           this.them({ loai: 'thongBao', text: thongDiep, muc: 'info' });
           break;
         }
+        // Lượt hỏng giữa chừng: các vòng TRƯỚC đó đã tính tiền ở máy chủ ⇒ vẫn cộng vào việc (/cost, chân trang).
+        this.chotTienLuot();
         this.ketLuot('', true, bayGio);
         S.choDuyetKeHoach = false;
         S.muc.push({ kieu: 'loi', text: thongDiep });
@@ -406,11 +534,15 @@ export class KhoChat {
         }
         break;
       }
-      case 'huy':
+      case 'huy': {
         this.chotChu();
         S.choDuyetKeHoach = false;
-        this.ketLuot(L('đã dừng', 'interrupted'), false, bayGio);
+        // Dừng giữa lượt (esc): lõi không gửi `xong` ⇒ tiền các vòng đã chạy (đến qua `tienTrinh`) phải cộng ở đây —
+        // trước đây mất trắng: /cost báo ~$0.000 trong khi sổ máy chủ ghi 0,84 $ (QA 18/10).
+        const tien = this.chotTienLuot();
+        this.ketLuot([L('đã dừng', 'interrupted'), tien > 0 ? tienGon(tien) : ''].filter(Boolean).join(' · '), false, bayGio);
         break;
+      }
       case 'daXoa':
         this.xoaBang();
         break;
@@ -418,6 +550,18 @@ export class KhoChat {
         return;
     }
     this.bao();
+  }
+
+  /**
+   * NHẮC NGỮ CẢNH SẮP ĐẦY (đợt 3 — như Claude Code "Context left until auto-compact"): mốc 80% và 95%,
+   * mỗi mốc một lần mỗi việc. Không tự /compact giữa lượt — chỉ gợi ý.
+   */
+  private nhacNguCanh(): void {
+    const p = this.S.nguCanh?.phanTram ?? 0;
+    const moc = p >= 95 ? 95 : p >= 80 ? 80 : 0;
+    if (!moc || moc <= this.S.daNhacNguCanh) return;
+    this.S.daNhacNguCanh = moc;
+    this.them({ loai: 'thongBao', muc: 'canh', text: L(`Ngữ cảnh đã dùng ${p}% — gõ /compact (kèm điều cần giữ) để tóm tắt phần cũ, hoặc /clear bắt đầu việc mới. Máy chủ sẽ tự cắt lượt cũ khi đầy.`, `Context is ${p}% full — run /compact (with what to keep) to summarize older turns, or /clear to start fresh. The server trims old turns automatically when full.`) });
   }
 
   /** /clear (hoặc lõi xoá hội thoại): dọn bảng + số liệu của việc. */
@@ -433,18 +577,29 @@ export class KhoChat {
     S.keHoach = [];
     S.daCompact = false;
     S.nguCanh = null;
+    S.daNhacNguCanh = 0;
     S.chuDangViet = '';
     S.hoiDuyetKeHoach = false;
     S.agentPhu = [];
+    S.toolCho = null;
     S.lenhNen = S.lenhNen.filter((x) => x.dangChay);
     this.bao(true);
   }
 }
 
 export function tieuDeDuyet(d: ChoDuyet): string {
+  const phu = d.phuId ? `🤖 ${L('Agent phụ', 'Subagent')} · ` : '';
+  return phu + tieuDeDuyetGoc(d);
+}
+
+function tieuDeDuyetGoc(d: ChoDuyet): string {
   switch (d.loai) {
     case 'xinPhep': return `${d.taoMoi ? L('Tạo file', 'Create file') : L('Sửa file', 'Edit file')} ${d.duongDan ?? ''}`;
-    case 'xinPhepLenh': return `${L('Chạy lệnh', 'Run command')} ${(d.lenh ?? '').split('\n')[0]}`;
+    case 'xinPhepLenh': {
+      const tin = /^📨 → (.*?):/u.exec(d.lenh ?? '');
+      if (tin) return `${L('Nhắn phiên', 'Message to')} ${tin[1]}`;
+      return `${L('Chạy lệnh', 'Run command')} ${(d.lenh ?? '').split('\n')[0]}`;
+    }
     case 'xinPhepMcp': return `${L('Công cụ', 'Tool')} ${d.server ?? ''} · ${d.tool ?? ''}`;
     case 'xinPhepGit': return tenViecGit(d.viec);
     case 'xinPhepNote': return d.viec === 'tao' ? L('Tạo ghi chú', 'Create note') : L('Ghi vào ghi chú', 'Write to note');
@@ -459,6 +614,7 @@ export function tenViecGit(viec: string | undefined): string {
     case 'pr': return L('Đẩy nhánh + mở Pull Request', 'Push branch + open pull request');
     case 'day': return L('Đẩy lên GitHub', 'Push to GitHub');
     case 'cai': return L('Cài công cụ', 'Install tool');
+    case 'gop': return L('Gộp thay đổi của agent phụ vào dự án', 'Merge the subagent\'s changes into the project');
     default: return 'Git';
   }
 }

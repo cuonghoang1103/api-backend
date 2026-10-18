@@ -58,6 +58,7 @@ export class LoiDocLap implements KetNoi {
           return (e as Error).message;
         }
       },
+      noi: 'vscode',
       chonThuMuc: async (o) => {
         const chonFile = o.properties?.includes('openFile') ?? false;
         const r = await vscode.window.showOpenDialog({

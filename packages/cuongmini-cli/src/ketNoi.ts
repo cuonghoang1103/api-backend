@@ -14,7 +14,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { LoiApi } from '../../cuongmini-core/src/kieuLoi';
 import { lamMoi, LoiDangNhap } from '../../cuongmini-core/src/dangNhap';
-import { chepChu, moNgoai } from './heThong';
+import { chepChu, moFileSua, moNgoai } from './heThong';
 import { L } from './i18n';
 import { luuPhien, thuMucDuLieu, type NguoiDung } from './phien';
 
@@ -41,6 +41,8 @@ export class KetNoiLoi {
   cuocId = '';
   /** Muốn cho AI dùng trình duyệt ở phiên này không (cài đặt + máy có Chrome/Edge, `/browser` đổi được). */
   trinhDuyet = false;
+  /** Lần mở file/đường dẫn gần nhất qua lõi (`/mcp mo`, `/hooks`) — để báo đúng khi KHÔNG mở được. */
+  moCuoi: { duong: string; ok: boolean } | null = null;
   private nguoiNghe = new Set<(e: SuKienAgent) => void>();
   private hen: NodeJS.Timeout | null = null;
 
@@ -59,9 +61,16 @@ export class KetNoiLoi {
       },
       moNgoai,
       chepChu: (chu) => { void chepChu(chu); },
-      moDuong: async (duong) => ((await moNgoai(duong)) ? '' : L('Không mở được bằng chương trình mặc định.', 'Could not open with the default app.')),
+      // File (đường dẫn tuyệt đối có đuôi) ⇒ mở để SỬA (`open -t`/notepad); còn lại ⇒ chương trình mặc định.
+      moDuong: async (duong) => {
+        const laFile = path.isAbsolute(duong) && /\.[a-z0-9]{1,8}$/i.test(duong);
+        const ok = laFile ? await moFileSua(duong) : await moNgoai(duong);
+        this.moCuoi = { duong, ok };
+        return ok ? '' : L('Không mở được bằng chương trình mặc định.', 'Could not open with the default app.');
+      },
       // Terminal không có hộp chọn thư mục — thư mục dự án luôn là thư mục đang đứng.
       chonThuMuc: async () => ({ canceled: true, filePaths: [] }),
+      noi: 'cli',
     });
     this.loi.datPhien({ userId: nguoi.userId, sessionToken: nguoi.token });
     this.hen = setInterval(() => void this.lamMoiPhien(), CHU_KY_LAM_MOI);

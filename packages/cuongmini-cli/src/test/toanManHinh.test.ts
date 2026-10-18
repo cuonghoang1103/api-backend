@@ -28,8 +28,10 @@ test('chuột SGR: con lăn lên/xuống (kể cả giữ phím), nhấn chuột
   assert.equal(docChuot('[I'), null);
   assert.equal(docChuot('a'), null);
   assert.equal(nenBatChuot('win32', {}), false, 'Windows: sự kiện chuột không tới Node ⇒ đừng phá bôi đen');
-  assert.equal(nenBatChuot('darwin', {}), true);
-  assert.equal(nenBatChuot('linux', { CUONGMINI_CHUOT: '0' }), false);
+  assert.equal(nenBatChuot('darwin', {}, 'tat'), false, 'mặc định KHÔNG bắt chuột — bôi đen chép tự nhiên');
+  assert.equal(nenBatChuot('darwin', {}, 'bat'), true, '/mouse on');
+  assert.equal(nenBatChuot('darwin', { CUONGMINI_CHUOT: '1' }, 'tat'), true);
+  assert.equal(nenBatChuot('linux', { CUONGMINI_CHUOT: '0' }, 'bat'), false);
 });
 
 test('cuộn bảng ghi: bám đáy, cuộn lên giữ chỗ khi có dòng mới, đếm "N dòng mới", không quá đầu', () => {
@@ -47,7 +49,7 @@ test('cuộn bảng ghi: bám đáy, cuộn lên giữ chỗ khi có dòng mới
   assert.deepEqual(catKhung(['a', 'b'], { cuon: 0 }, 5), ['a', 'b']);
 });
 
-test('xoá sạch: thêm lệnh xoá scrollback riêng của iTerm2', () => {
+test('xoá sạch (chỉ in nối tiếp): KHÔNG còn mã ClearScrollback riêng của iTerm2 (iTerm2 hỏi "Allow?")', () => {
   assert.equal(xoaSach({}), '\x1b[2J\x1b[3J\x1b[H');
-  assert.match(xoaSach({ TERM_PROGRAM: 'iTerm.app' }), /\x1b\]1337;ClearScrollback\x07$/);
+  assert.equal(xoaSach({ TERM_PROGRAM: 'iTerm.app' }), '\x1b[2J\x1b[3J\x1b[H');
 });

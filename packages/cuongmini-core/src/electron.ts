@@ -35,6 +35,8 @@ export interface VoDocLap {
   /** Mở file/thư mục bằng chương trình mặc định. Trả '' khi được (giống Electron). */
   moDuong: (duong: string) => Promise<string>;
   chonThuMuc: (o: { title?: string; defaultPath?: string; properties?: string[] }) => Promise<{ canceled: boolean; filePaths: string[] }>;
+  /** Đợt 3: nơi chạy (nhắn giữa phiên hiện tên này). */
+  noi?: 'cli' | 'vscode';
 }
 
 let vo: VoDocLap | null = null;

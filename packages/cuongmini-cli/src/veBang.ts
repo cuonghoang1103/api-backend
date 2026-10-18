@@ -12,9 +12,9 @@
 import { demDiff, veDiff } from './diff';
 import type { MucBang, ViecKeHoach } from './kho';
 import { THUONG_HIEU, capMau, catVua, chuyenSac, dam, dem, doRong, mau, mo, nen, nghieng } from './mau';
-import { bocDong, veMarkdown } from './markdown';
+import { bocDong, bocVan, veMarkdown } from './markdown';
 import { L } from './i18n';
-import { gio, giay, nhanTool, TOOL_GHI, TOOL_LENH } from './trangThai';
+import { dichTomTat, gio, giay, nhanNhom, nhanTool, TOOL_GHI, TOOL_LENH } from './trangThai';
 
 const XANH_LA = '#4ade80';
 const DO = '#f87171';
@@ -44,25 +44,51 @@ export function veDauRa(ra: string, rong: number, moRong: boolean): string[] {
   const lay = dong.length > tran ? (moRong ? dong.slice(0, tran) : dong.slice(-tran)) : dong;
   const ra2 = lay.map((d) => mo(catVua(d, Math.max(10, rong - 7))));
   const con = dong.length - lay.length;
-  if (con > 0) ra2[moRong ? 'push' : 'unshift'](mo(moRong ? L(`… +${con} dòng nữa`, `… +${con} more lines`) : L(`… ${con} dòng phía trên (ctrl+o để xem hết)`, `… +${con} lines above (ctrl+o to expand)`)));
+  if (con > 0) ra2[moRong ? 'push' : 'unshift'](mo(moRong ? L(`… +${con} dòng nữa`, `… +${con} more lines`) : L(`… ${con} dòng phía trên (ctrl+o để xem hết)`, `… +${con} line${con === 1 ? '' : 's'} above (ctrl+o to expand)`)));
   return ra2;
 }
 
+/** Tóm tắt kết quả cho người đọc: dịch theo ngôn ngữ; "Navigate(x) ⎿ https://x" ⇒ bỏ lặp. */
+function tomTatHien(ten: string, tomTat: string, thamSo: string | null | undefined): string {
+  const t = dichTomTat(tomTat);
+  if (ten === 'web_mo' && thamSo && t.replace(/^https?:\/\//, '').replace(/\/$/, '') === thamSo) return L('đã mở', 'opened');
+  return t;
+}
+
+/** Kết quả tool là lời dặn model khi người dùng từ chối/hook chặn (chữ của lõi) — ẩn khỏi bảng ghi. */
+const laLoiDanModel = (t: string | undefined): boolean => /^(NGƯỜI DÙNG TỪ CHỐI|BỊ CHẶN bởi hook)/.test(t ?? ''); // i18n-bo-qua: chữ của lõi
+
 export function veTool(m: Extract<MucBang, { loai: 'tool' }>, rong: number): string[] {
   const cham = m.hong ? mau(DO)('●') : mau(XANH_LA)('●');
-  const thamSo = m.duongDan ?? (TOOL_LENH.has(m.ten) ? m.lenh : null);
+  // Nhóm (`● Read 3 pages`): một dòng tiêu đề + các tham số; mở rộng (ctrl+o) thì từng lần một.
+  if (m.nhom && m.nhom.length > 1) {
+    const dau = `${cham} ${dam(nhanNhom(m.ten, m.nhom.length))}`;
+    const cac = m.nhom.map((x) => x.thamSo).filter(Boolean) as string[];
+    const than: string[] = [];
+    if (m.moRong) {
+      for (const x of m.nhom) than.push(`${x.thamSo ? `${x.thamSo} ${mo('—')} ` : ''}${mo(tomTatHien(m.ten, x.tomTat, x.thamSo))}`);
+    } else {
+      if (cac.length) than.push(mo(catVua(cac.join(' · '), Math.max(10, rong - 7))));
+      than.push(mo(`${tomTatHien(m.ten, m.tomTat, m.nhom[m.nhom.length - 1]!.thamSo)}${L(' (ctrl+o để xem từng lần)', ' (ctrl+o to expand)')}`));
+    }
+    return [dau, ...nhanhCon(than)];
+  }
+  // Tham số chính của lõi TRƯỚC (`Search("TODO" in src)`) — `duongDan` chỉ là đường dẫn, mất mẫu tìm (QA 18/10: `Search(src)`).
+  const thamSo = (TOOL_LENH.has(m.ten) ? m.lenh : null) ?? m.thamSo ?? m.duongDan ?? null;
   const dau = dongTieuDeTool(m.ten, thamSo, cham, rong);
   const than: string[] = [];
   if (m.diff?.dong?.length && TOOL_GHI.has(m.ten)) {
     than.push(`${m.diff.soThem || m.diff.soBo ? demDiff(m.diff) : ''}${m.tomTat && !/^\+\d+ −\d+/.test(m.tomTat) ? mo(` ${m.tomTat}`) : ''}`.trim() || mo(m.tomTat));
     than.push(...veDiff(m.diff, { rong: rong - 5, duong: m.duongDan, toiDa: m.moRong ? 400 : 24 }));
   } else if (TOOL_LENH.has(m.ten)) {
-    const ra = veDauRa(m.ra ?? '', rong, m.moRong);
+    // Từ chối: "đầu ra" là lời DẶN MODEL của lõi ("NGƯỜI DÙNG TỪ CHỐI… ĐỪNG gọi lại…") — không phải thứ người dùng cần đọc.
+    const ra = laLoiDanModel(m.ra) ? [] : veDauRa(m.ra ?? '', rong, m.moRong);
     than.push(...ra);
-    than.push(m.hong ? mau(DO)(m.tomTat) : mo(m.tomTat));
+    than.push(m.hong ? mau(DO)(dichTomTat(m.tomTat)) : mo(dichTomTat(m.tomTat)));
   } else {
-    than.push(m.hong ? mau(DO)(m.tomTat || L('lỗi', 'error')) : mo(m.tomTat || L('xong', 'done')));
-    if (m.moRong && m.chiTiet) than.push(...veDauRa(m.chiTiet, rong, true));
+    const tt = tomTatHien(m.ten, m.tomTat, thamSo);
+    than.push(m.hong ? mau(DO)(tt || L('lỗi', 'error')) : mo(tt || L('xong', 'done')));
+    if (m.moRong && m.chiTiet && !laLoiDanModel(m.chiTiet)) than.push(...veDauRa(m.chiTiet, rong, true));
   }
   return [dau, ...nhanhCon(than.filter((d) => d !== ''))];
 }
@@ -78,7 +104,8 @@ export function veKeHoach(viec: readonly ViecKeHoach[], rong: number): string[] 
 }
 
 export function veNguoi(m: Extract<MucBang, { loai: 'nguoi' }>, rong: number): string[] {
-  const dau = mau(THUONG_HIEU.tim)(dam('❯'));
+  // Kiểu Claude Code: `> câu hỏi` trên nền nhạt — nhìn là biết đâu là câu của mình.
+  const dau = mo('>');
   const gioChu = m.luc ? mo(gio(new Date(m.luc))) : '';
   const nenTin = capMau() >= 2 ? nen('#221d33') : (s: string) => s;
   const rongChu = Math.max(10, rong - 4 - (gioChu ? doRong(gioChu) + 1 : 0));
@@ -92,7 +119,11 @@ export function veNguoi(m: Extract<MucBang, { loai: 'nguoi' }>, rong: number): s
   return ra;
 }
 
-export function veMuc(m: MucBang, rong: number): string[] {
+/**
+ * `truoc` = mục ngay trước (để quyết khoảng trống): tool nối tool KHÔNG có dòng trống
+ * (kiểu Claude Code — một chuỗi đọc/tìm liền mạch), còn lại cách một dòng.
+ */
+export function veMuc(m: MucBang, rong: number, truoc?: MucBang): string[] {
   switch (m.loai) {
     case 'chao': return [];
     case 'nguoi': return ['', ...veNguoi(m, rong)];
@@ -100,8 +131,9 @@ export function veMuc(m: MucBang, rong: number): string[] {
       const md = veMarkdown(m.text, { rong: rong - 2 }).split('\n');
       return ['', ...md.map((d, i) => (i === 0 ? `${mau(THUONG_HIEU.timNhat)('●')} ${d}` : `  ${d}`))];
     }
-    case 'tool': return ['', ...veTool(m, rong)];
+    case 'tool': return [...(truoc?.loai === 'tool' || truoc?.loai === 'duyet' ? [] : ['']), ...veTool(m, rong)];
     case 'duyet':
+      if (m.traLoi) return [`  ${m.dongY ? mau(XANH_LA)('✓') : mo('–')} ${catVua(m.tieuDe, rong - 6)}`];
       return [`  ${m.dongY ? mau(XANH_LA)(L('✓ Đã cho phép', '✓ Allowed')) : mau(DO)(L('✕ Đã từ chối', '✕ Denied'))} ${mo('·')} ${catVua(m.tieuDe, rong - 20)}`];
     case 'keHoach': return ['', `${mau(THUONG_HIEU.timNhat)('●')} ${dam(L('Kế hoạch', 'Plan'))}`, ...nhanhCon(veKeHoach(m.viec, rong - 5))];
     case 'heThong': {
@@ -110,7 +142,8 @@ export function veMuc(m: MucBang, rong: number): string[] {
     }
     case 'thongBao': {
       const dau = m.muc === 'loi' ? mau(DO)('⚠') : m.muc === 'canh' ? mau(VANG)('⚠') : m.muc === 'ok' ? mau(XANH_LA)('✓') : mau(THUONG_HIEU.xanhNhat)('ℹ');
-      return bocDong(`${dau} ${m.muc === 'loi' ? mau(DO)(m.text) : mo(m.text)}`, rong);
+      // Dòng nối thụt 2 cột cho thẳng chữ (không chạy về cột 0 dưới dấu ✓).
+      return bocDong(m.muc === 'loi' ? mau(DO)(m.text) : mo(m.text), rong - 2).map((d, i) => (i === 0 ? `${dau} ${d}` : `  ${d}`));
     }
     case 'ketLuot': {
       const phan = [`CuongMini · ${gio(new Date(m.luc))}`];
@@ -141,11 +174,13 @@ export function veMuc(m: MucBang, rong: number): string[] {
 export function dungBanGhi(bang: readonly MucBang[], rong: number, moRong: ReadonlySet<number>): { dong: string[]; khoi: Array<{ id: number; dau: number; cuoi: number; nhan: string }> } {
   const dong: string[] = [];
   const khoi: Array<{ id: number; dau: number; cuoi: number; nhan: string }> = [];
+  let truoc: MucBang | undefined;
   for (const m of bang) {
     if (m.loai === 'chao') continue;
-    const coRa = (m.loai === 'tool' && Boolean(m.ra || m.chiTiet || m.diff)) || m.loai === 'shell';
+    const coRa = (m.loai === 'tool' && Boolean(m.ra || m.chiTiet || m.diff || (m.nhom && m.nhom.length > 1))) || m.loai === 'shell';
     const ban = coRa ? { ...m, moRong: moRong.has(m.id) } as MucBang : m;
-    const v = veMuc(ban, rong);
+    const v = veMuc(ban, rong, truoc);
+    truoc = m;
     const dau = dong.length + (v[0] === '' ? 1 : 0);
     dong.push(...v);
     if (coRa) khoi.push({ id: m.id, dau, cuoi: dong.length - 1, nhan: m.loai === 'shell' ? `! ${m.lenh}` : `${nhanTool(m.ten)}${m.duongDan ? ` ${m.duongDan}` : m.lenh ? ` ${m.lenh}` : ''}` });
@@ -174,6 +209,15 @@ export interface ThongTinMoDau {
   trinhDuyet?: boolean;
 }
 
+/** `/rất/dài/…/du-an` — rút GIỮA theo số cột, giữ đầu và đuôi (tên thư mục dự án). */
+export function rutGiua(s: string, n: number): string {
+  if (n <= 0 || doRong(s) <= n) return s;
+  if (n < 8) return catVua(s, n);
+  const duoi = Math.ceil((n - 1) * 0.6);
+  const dau = n - 1 - duoi;
+  return `${[...s].slice(0, dau).join('')}…${[...s].slice(-duoi).join('')}`;
+}
+
 /** Khung bo tròn, viền chuyển sắc tím → xanh, logo chữ, thông tin phiên, mẹo. */
 export function veManMoDau(t: ThongTinMoDau, logo: string[], rongMan: number): string[] {
   const W = Math.max(30, Math.min(rongMan - 1, 96));
@@ -190,15 +234,20 @@ export function veManMoDau(t: ThongTinMoDau, logo: string[], rongMan: number): s
   const ra = [ngang('╭', '╮', tieuDe), dong()];
   for (const d of logo) ra.push(dong(` ${d}`));
   ra.push(dong());
-  ra.push(dong(` ${dam(L(`Xin chào, ${t.ten}!`, `Welcome, ${t.ten}!`))} ${mo(L('Trợ lý lập trình của CuongThai — đọc, sửa code, chạy lệnh ngay tại đây.', 'Your CuongThai coding assistant — reads, edits and runs code right here.'))}`));
+  /* Câu dài trong khung: BỌC xuống dòng (thụt `thut`), không cắt "…" — ảnh người dùng 18/10: "reads, edits and runs code r…"
+     ngay cả ở terminal rộng 200 cột (khung chỉ 96). */
+  const dongBoc = (s: string, thut: number): string[] => bocVan(s, trong - thut).map((m) => dong(`${' '.repeat(thut)}${m}`));
+  ra.push(...dongBoc(`${dam(L(`Xin chào, ${t.ten}!`, `Welcome, ${t.ten}!`))} ${mo(L('Trợ lý lập trình của CuongThai — đọc, sửa code, chạy lệnh ngay tại đây.', 'Your CuongThai coding assistant — reads, edits and runs code right here.'))}`, 1));
   ra.push(dong());
   const nhan = (k: string) => mo(k.padEnd(9));
-  ra.push(dong(` ${nhan(L('Thư mục', 'cwd'))}${t.thuMuc}${t.nhanh ? `  ${mau('#a78bfa')(`⎇ ${t.nhanh}`)}` : ''}`));
+  // Đường dẫn dài: rút GIỮA (giữ tên dự án ở cuối) — cắt đuôi là mất đúng phần người dùng cần nhìn.
+  const nhanhChu = t.nhanh ? `  ${mau('#a78bfa')(`⎇ ${t.nhanh}`)}` : '';
+  ra.push(dong(` ${nhan(L('Thư mục', 'cwd'))}${rutGiua(t.thuMuc, trong - 10 - (t.nhanh ? doRong(t.nhanh) + 4 : 0))}${nhanhChu}`));
   if (t.model) ra.push(dong(` ${nhan('Model')}${mau(THUONG_HIEU.xanhNhat)(t.model)}${t.muc ? mo(L(` · mức ${t.muc}`, ` · effort ${t.muc}`)) : ''}`));
   if (t.cheDo) {
     ra.push(dong(` ${nhan(L('Chế độ', 'Mode'))}${mau(t.cheDo.mau)(`${t.cheDo.icon} ${t.cheDo.ten}`)}${t.trinhDuyet ? `  ${mau('#60a5fa')(L('🌐 trình duyệt', '🌐 browser'))}` : ''}${mo(L('  (shift+tab để đổi)', '  (shift+tab to cycle)'))}`));
-    ra.push(dong(` ${mo(L('         Đủ công cụ: sửa file, chạy lệnh, git, trình duyệt — mỗi lần sửa/chạy lệnh vẫn hỏi.', '         All tools on: edit files, run commands, git, browser — every edit/command still asks.'))}`));
-    ra.push(dong(` ${mo(L('         shift+tab sang "Tự động" hoặc "Bỏ qua hết" nếu muốn khỏi hỏi.', '         shift+tab to "Auto mode" or "Bypass" to skip the prompts.'))}`));
+    ra.push(...dongBoc(mo(L('Đủ công cụ: sửa file, chạy lệnh, git, trình duyệt — mỗi lần sửa/chạy lệnh vẫn hỏi.', 'All tools on: edit files, run commands, git, browser — every edit/command still asks.')), 10));
+    ra.push(...dongBoc(mo(L('shift+tab sang "Tự động" hoặc "Bỏ qua hết" nếu muốn khỏi hỏi.', 'shift+tab to "Auto mode" or "Bypass" to skip the prompts.')), 10));
   } else {
     ra.push(dong(` ${nhan(L('Chế độ', 'Mode'))}${mo(L('model, mức và chế độ đang dùng hiện ở dòng dưới cùng · shift+tab đổi chế độ', 'current model, effort and mode are shown in the bottom line · shift+tab to cycle'))}`));
   }

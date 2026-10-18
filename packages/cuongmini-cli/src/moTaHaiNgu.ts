@@ -54,7 +54,44 @@ export function trangThaiEn(t: { phienBan: string; duAn: string | null; duongDan
   ].filter(Boolean).join('\n');
 }
 
-export function chanDoanEn(ds: ReadonlyArray<{ ten: string; muc: 'ok' | 'canh' | 'loi'; chiTiet: string }>): string {
+/** Tên + chi tiết mục chẩn đoán của LÕI (`desktop/.../lenhMayChu.ts`, tiếng Việt) ⇒ tiếng Anh (QA 18/10: /doctor English mà nửa dưới tiếng Việt). */
+const TEN_CD_EN = new Map<string, string>([
+  ['Phiên bản app', 'App version'], ['Mạng', 'Network'], ['Đăng nhập', 'Sign-in'], ['Máy chủ', 'Server'], ['AI máy chủ', 'Server AI'],
+  ['Cổng AI', 'AI gateway'], ['AI ngoại tuyến', 'Offline AI'], ['Thư mục dự án', 'Project folder'], ['Chẩn đoán', 'Diagnostics'],
+]);
+const CHI_TIET_CD_EN: Array<[RegExp, string]> = [
+  [/^Không với tới máy chủ — đang mất mạng hoặc tường lửa chặn\.$/, 'Cannot reach the server — offline or blocked by a firewall.'],
+  [/^Có mạng\.$/, 'Online.'],
+  [/^Chưa đăng nhập — AI Code cần tài khoản\.$/, 'Not signed in — AI Code needs an account.'],
+  [/^Trả lời sau (\d+)ms( — chậm)?\.$/, 'Responded in $1ms.'],
+  [/^Phiên đăng nhập đã hết hạn — đăng xuất rồi đăng nhập lại\.$/, 'Session expired — sign out and sign in again.'],
+  [/^Trả (\d+) sau (\d+)ms\.$/, 'Returned $1 after $2ms.'],
+  [/^Tài khoản Pro\.$/, 'Pro account.'],
+  [/^Đã đăng nhập nhưng chưa có Pro — AI Code cần Pro\.$/, 'Signed in but not Pro — AI Code needs Pro.'],
+  [/^Đã cấu hình \((.*)\)\.$/, 'Configured ($1).'],
+  [/^Máy chủ chưa cắm khoá AI\.$/, 'The server has no AI key configured.'],
+  [/^Không gọi được: (.*)$/, 'Request failed: $1'],
+  [/^Cổng chính đang hỏng — có cổng dự phòng \((.*)\), gõ \/model để mở\.$/, 'The main gateway is down — a fallback gateway ($1) is available, open it with /model.'],
+  [/^Cổng chính đang hỏng\.$/, 'The main gateway is down.'],
+  [/^Cổng chính hoạt động\.$/, 'The main gateway is up.'],
+  [/^AI Code ngoại tuyến chỉ có trong app desktop CuongThai\.$/, 'Offline AI Code is only available in the CuongThai desktop app.'],
+  [/^Chưa cài — mất mạng thì AI Code dừng\.$/, 'Not installed — AI Code stops when you are offline.'],
+  [/^Không đọc được trạng thái\.$/, 'Could not read the status.'],
+  [/^Tab này chưa mở thư mục nào\.$/, 'No folder is open in this tab.'],
+  [/^(.*) — (KHÔNG )?đọc được, (KHÔNG )?ghi được\.$/, '$1 — §R, §W.'],
+];
+function chiTietCdEn(s: string): string {
+  for (const [re, en] of CHI_TIET_CD_EN) {
+    const m = re.exec(s);
+    if (!m) continue;
+    if (en.includes('§R')) return `${m[1]} — ${m[2] ? 'NOT readable' : 'readable'}, ${m[3] ? 'NOT writable' : 'writable'}.`;
+    return s.replace(re, en);
+  }
+  return s;
+}
+
+export function chanDoanEn(ds0: ReadonlyArray<{ ten: string; muc: 'ok' | 'canh' | 'loi'; chiTiet: string }>): string {
+  const ds = ds0.map((m) => ({ ...m, ten: TEN_CD_EN.get(m.ten) ?? m.ten, chiTiet: chiTietCdEn(m.chiTiet) }));
   const dau = { ok: '✓', canh: '⚠', loi: '✗' };
   const loi = ds.filter((m) => m.muc === 'loi').length;
   const canh = ds.filter((m) => m.muc === 'canh').length;

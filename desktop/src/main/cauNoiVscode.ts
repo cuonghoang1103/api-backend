@@ -29,6 +29,7 @@ import path from 'node:path';
 import type { IpcMainInvokeEvent } from 'electron';
 import { app } from 'electron';
 import type { InvokeChannel } from '../shared/ipc';
+import { themNguoiNgheNen } from './agent/loop';
 
 const KENH_DUOC: ReadonlySet<InvokeChannel> = new Set<InvokeChannel>([
   'agent:getInfo', 'agent:getWorkspace', 'agent:taoCuoc', 'agent:dongCuoc', 'agent:send', 'agent:cancel',
@@ -42,6 +43,9 @@ const KENH_DUOC: ReadonlySet<InvokeChannel> = new Set<InvokeChannel>([
   'agent:hookMoCauHinh',
   // Cổng Claude chính hãng (17/10/2026): trạng thái, mở khoá (app gọi máy chủ bằng phiên của nó), chọn cổng phụ.
   'agent:congAnthropic', 'agent:moCongAnthropic', 'agent:datCongPhu',
+  // Đợt 3 (18/10/2026): hỏi lựa chọn, chờ/hẹn, nhắn giữa phiên, tiền tố lệnh, worktree.
+  'agent:traLoiHoi', 'agent:huyCho', 'agent:huyHen', 'agent:henCho', 'agent:dsPhienMang', 'agent:doiTenPhienMang',
+  'agent:themTienTo', 'agent:dsWorktree', 'agent:taoWorktree', 'agent:xoaWorktree', 'agent:ctwork', 'agent:mcpNapLai',
 ]);
 
 const CONG_THU = [47821, 47822, 47823, 47824, 47825];
@@ -64,6 +68,9 @@ function phatSuKien(kenh: string, duLieu: unknown): void {
  * `event` giả cho handler: `sender.send` đẩy thẳng ra luồng SSE của extension.
  * Handler AI Code chỉ dùng `event.sender.send/isDestroyed` — đủ ở đây.
  */
+/* Sự kiện NGOÀI LƯỢT (đợt 3: chờ/hẹn, tin phiên, lượt tự thức) cũng phải tới VS Code. */
+themNguoiNgheNen((kenh, duLieu) => phatSuKien(kenh, duLieu));
+
 const suKienGia = {
   sender: {
     send: (kenh: string, duLieu: unknown) => phatSuKien(kenh, duLieu),

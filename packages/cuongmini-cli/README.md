@@ -79,16 +79,26 @@ Mặc định đoán theo `LANG`/`LC_ALL` (bắt đầu bằng `vi` ⇒ Tiếng 
 Trong `/language` có công tắc **"AI trả lời bằng ngôn ngữ này"**: bật thì mỗi câu gửi kèm một dòng nhắc ngôn ngữ.
 Chữ đến từ lõi/máy chủ (tóm tắt tool, lỗi, chẩn đoán của lõi) giữ nguyên ngôn ngữ gốc.
 
-## Toàn màn hình (mặc định từ 0.3.1)
+## Toàn màn hình (mặc định từ 0.3.1; 0.4.0 không bắt chuột)
 
-CuongMini mở trong **alternate screen** như Claude Code: ô nhập + chân trang ghim ở **đáy cửa sổ**, hội thoại tự cuộn phía trên; thoát thì terminal trả lại màn hình cũ và in một dòng tóm tắt phiên.
+CuongMini mở trong **alternate screen** như Claude Code: ô nhập + chân trang ghim ở **đáy cửa sổ**, hội thoại tự cuộn phía trên; thoát thì terminal trả lại màn hình cũ và in **toàn bộ bản ghi** (câu hỏi + trả lời + tool gọn) để cuộn/chép về sau.
 
-- Cuộn: **con lăn chuột** · `PgUp`/`PgDn` · `Home`/`End` (khi ô nhập trống). Đang cuộn lên mà có chữ mới ⇒ dòng `↓ N dòng mới`; gửi câu mới tự về cuối.
-- **Bôi đen chép chữ** (đang bật báo chuột): giữ `Option` (iTerm2) · `Fn` (Terminal macOS) · `Shift` (Linux). Hoặc `ctrl+r` xem bản ghi, `/fullscreen off`.
-- Windows: không bật báo chuột (Node không nhận được sự kiện chuột ở console Windows) ⇒ cuộn bằng `PgUp`/`PgDn`, bôi đen như thường.
-- Đổi cỡ cửa sổ ⇒ xoá khung và vẽ lại đúng cỡ. Đổi ngôn ngữ/model/mức ⇒ banner cập nhật ngay.
+- Cuộn: **con lăn chuột** (alternate scroll — terminal đổi con lăn thành ↑/↓) · `↑`/`↓` khi ô nhập trống · `PgUp`/`PgDn` · `Home`/`End`. Lịch sử câu hỏi: `ctrl+↑`/`ctrl+↓`.
+- **Bôi đen / chuột phải chép** như terminal thường (0.4.0 KHÔNG bắt chuột mặc định). Muốn bắt chuột (cuộn chính xác hơn): `/mouse on` — khi đó bôi đen phải giữ `Option` (iTerm2) · `Fn` (Terminal macOS) · `Shift` (Linux).
+- `/copy` chép câu trả lời cuối · `/copy 2` câu thứ 2 từ cuối · `/copy q` câu hỏi · `/copy all` cả hội thoại. `ctrl+o` mở bản ghi đầy đủ (mọi đầu ra tool) trong trình xem có cuộn.
+- **Shift+Enter xuống dòng** không cần cấu hình ở terminal hiểu kitty keyboard protocol (iTerm2 ≥ 3.5, kitty, WezTerm, ghostty…). Terminal cũ: `ctrl+j`, `Alt/Option+Enter`, hoặc `\` cuối dòng; `/terminal-setup` hướng dẫn.
+- Toàn màn hình KHÔNG bao giờ gửi lệnh xoá scrollback (iTerm2 hết hiện thanh "clear scrollback history?").
 - Tắt: `/fullscreen off` (lưu cho lần sau) · cờ `--no-fullscreen` · `CUONGMINI_TOAN_MAN_HINH=0`. CI, không TTY, `-p` thì không bao giờ bật.
-- Chế độ in nối tiếp (tắt toàn màn hình): đổi cỡ cửa sổ ⇒ xoá sạch (cả scrollback) rồi in lại bảng ghi — hết lỗi "ô nhập trùng 3 lần" của 0.3.0; `/language`, `/theme` chỉ áp cho phần in từ giờ (không in lại để khỏi sinh bản trùng).
+
+## Mới ở 0.4.0 (đợt 3)
+
+- **Agent phụ ghi được** (`giao_viec_ghi`): làm trong git worktree / thư mục tạm riêng, mọi lần sửa/chạy lệnh vẫn hiện thẻ duyệt "🤖 Agent phụ", xong trả diff để gộp (`gop_viec_phu`).
+- **Hỏi bằng lựa chọn**: agent hỏi 1–4 câu, chọn bằng ↑↓ / phím số / space, hoặc "Khác" để tự gõ.
+- **Chờ & hẹn**: agent chờ dev server/URL/file/lệnh nền mà không tốn token (`⏳` + `esc` bỏ chờ); hẹn tự quay lại sau N phút (`⏰`, `/hen` xem/huỷ — chỉ chạy khi CuongMini còn mở).
+- **Nhắn giữa phiên**: `/sessions` thấy các phiên CuongMini khác (app, CLI, VS Code), `/rename` đặt tên; agent nhắn qua lại (bạn duyệt nội dung), tin đến là DỮ LIỆU, không phải lệnh.
+- **Quyền theo tiền tố**: trên thẻ lệnh chọn "Luôn cho mọi lệnh `npm test …`" (lệnh nối `;` `&&` `|` `$(…)` vẫn hỏi) · `/quyen them npm test` · `/quyen xoa <số>`.
+- `/worktree [tên|list|xoa]`, `/ctwork [doc|ghi|off]` (kết nối CT Work một chạm, token cất trong kho bí mật), `/mouse`.
+- Tiền ở chân trang = tổng máy chủ báo cho mọi vòng (trước chỉ cộng vòng cuối); "context %" tính từ token thật, cập nhật giữa lượt.
 
 ## Gõ đặc biệt (như Claude Code)
 

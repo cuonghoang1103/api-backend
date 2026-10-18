@@ -359,7 +359,7 @@ export type AgentEvent =
        * hội thoại trên màn hình nhưng không biết bao nhiêu phần trong đó còn
        * thật sự tới được model.
        */
-      nguCanh: { kyTu: number; tran: number; phanTram: number; soLuotDaBo: number };
+      nguCanh: { kyTu: number; tran: number; phanTram: number; soLuotDaBo: number; token?: number; cuaSo?: number };
       /** Có nén ngữ cảnh không, và cắt được bao nhiêu. Để hiện "đã lược N kết quả cũ". */
       compact?: { soDaLuoc: number; kyTuDaCat: number };
     }
@@ -411,6 +411,12 @@ export interface AgentTurnInput {
   duPhongGiu?: unknown;
   /** Lượt này thuộc một AGENT PHỤ — prompt gọn hơn, trần bước riêng. */
   laPhu?: unknown;
+  /**
+   * Đợt 3: `'ghi'` = agent phụ GHI (`giao_viec_ghi`) — giữ tool đọc/sửa/chạy lệnh trong KHU RIÊNG của
+   * app, trần 25 bước. Mọi khả năng khác (giao việc tiếp, git ghi, GitHub, trình duyệt, MCP…) bị LỌC BỎ ở đây
+   * dù app có gửi — agent phụ không được lồng, không đẩy gì ra ngoài.
+   */
+  quyenPhu?: unknown;
   /**
    * Ghi chú dự án (`AGENTS.md`/`CLAUDE.md`) app đọc từ máy người dùng.
    *
@@ -937,6 +943,8 @@ export async function runAgentTurn(
   /* Chọn TAY model cao của cổng chính hãng (cửa sổ 1M) ⇒ trần ký tự rộng hơn —
      chất lượng trước; compact phía máy chủ lo phần quá dài. Mọi đường khác giữ trần cũ. */
   const tranKyTu = modelChinhHangTu(input.model)?.hang === 'cao' ? TRAN_KY_TU_CHINH_HANG : MAX_TOTAL_CHARS;
+  /** Cửa sổ ngữ cảnh (token) để tính "context %" từ usage thật. */
+  const cuaSoToken = modelChinhHangTu(input.model)?.hang === 'cao' ? 1_000_000 : 200_000;
   const boLuot = catLuotCu(messagesGoc, tranKyTu - CHO_GHI_NHO, MAX_MESSAGES);
   let messages = boLuot.messages;
   if (boLuot.soLuotDaBo > 0) {
@@ -948,17 +956,21 @@ export async function runAgentTurn(
     }
     messages = [loiNhacDaCat(boLuot.soLuotDaBo, ghiNho), ...boLuot.messages];
   }
-  const capabilities: AgentCapability[] = parseCapabilities(input.capabilities);
+  const laPhu = input.laPhu === true;
+  const phuGhi = laPhu && input.quyenPhu === 'ghi';
+  /* Agent phụ: chỉ những khả năng được phép — ĐỌC (mặc định) hoặc thêm SỬA + LỆNH (`phuGhi`). Lọc ở
+     MÁY CHỦ: app gửi gì thừa cũng không mời được tool lồng / git ghi / GitHub / trình duyệt. */
+  const CHO_PHU = new Set<AgentCapability>(phuGhi ? ['fs_read', 'git_read', 'fs_write', 'shell'] : ['fs_read', 'git_read']);
+  const capabilities: AgentCapability[] = parseCapabilities(input.capabilities).filter((c) => !laPhu || CHO_PHU.has(c));
   const buocDaDi = demBuocViecNay(messages);
   const mucNoLuc = docMucNoLuc(input.mucNoLuc);
-  const laPhu = input.laPhu === true;
   // Agent phụ KHÔNG được cắm tool MCP: nó chạy không có người ngồi duyệt từng
   // lời gọi, mà duyệt tay là chốt chặn chính của MCP.
   const toolMcp = laPhu ? [] : parseToolMcp(input.toolMcp);
   const tenMcp = new Set(toolMcp.map((t) => t.name));
   // Agent phụ có trần RIÊNG và cứng: 10 bước, bất kể người dùng chọn mức nào.
   // Để nó theo mức "Kỹ" thì ba việc phụ × 60 bước = 180 bước cho một câu hỏi.
-  const MAX_AGENT_STEPS = laPhu ? 10 : TRAN_BUOC[mucNoLuc];
+  const MAX_AGENT_STEPS = laPhu ? (phuGhi ? 25 : 10) : TRAN_BUOC[mucNoLuc];
 
   // ─── BỐN chốt chặn, theo thứ tự RẺ TRƯỚC ───────────────────────
   // Ba cái đầu chỉ đọc bộ nhớ / một truy vấn đã đánh chỉ mục. Cái đắt nhất
@@ -1036,6 +1048,7 @@ export async function runAgentTurn(
     tranBuoc: MAX_AGENT_STEPS,
     tranViecPhu: TRAN_VIEC_PHU[mucNoLuc],
     laPhu,
+    ...(phuGhi ? { phuGhi: true } : {}),
     soToolMcp: toolMcp.length,
     ...(input.workspace ? { workspace: input.workspace } : {}),
     ...(ghiChu ? { ghiChu } : {}),
@@ -1203,6 +1216,10 @@ export async function runAgentTurn(
 
   const append: AgentMessage[] = [];
   let inTong = 0;
+  /* Token VÀO của lời gọi GẦN NHẤT (đã gồm phần đọc/ghi đệm) = cỡ ngữ cảnh THẬT
+     đang gửi. Đợt 3: "context %" tính từ đây thay vì chỉ đếm ký tự — với cổng
+     chính hãng cửa sổ 1M, đếm ký tự trên trần 2,4M luôn ra 0%. */
+  let inCuoi = 0;
   let outTong = 0;
   let thanhCong = false;
   let daLuoc = 0;
@@ -1242,7 +1259,7 @@ export async function runAgentTurn(
       ...hanMuc,
       daDung: hanMuc.daDung + Math.round((inTong + outTong) * (model === MODEL_FABLE ? HE_SO_FABLE : 1)),
     }),
-    nguCanh: goiNguCanh([...messages, ...append], boLuot.soLuotDaBo, tranKyTu),
+    nguCanh: goiNguCanh([...messages, ...append], boLuot.soLuotDaBo, tranKyTu, inCuoi, cuaSoToken),
     ...(daLuoc > 0 ? { compact: { soDaLuoc: daLuoc, kyTuDaCat: daCat } } : {}),
   });
 
@@ -1332,6 +1349,7 @@ export async function runAgentTurn(
       uocLuongDangBay = 0;
       inTong += ketQua.inputTokens;
       outTong += ketQua.outputTokens;
+      if (ketQua.inputTokens > 0) inCuoi = ketQua.inputTokens;
       if (ketQua.usdChinhHang !== undefined) {
         usdCH += ketQua.usdChinhHang;
         inCH += ketQua.inputTokens;
@@ -1672,13 +1690,19 @@ function goiNguCanh(
   messages: readonly AgentMessage[],
   soLuotDaBo: number,
   tran = MAX_TOTAL_CHARS,
-): { kyTu: number; tran: number; phanTram: number; soLuotDaBo: number } {
+  /** Token vào thật của lời gọi gần nhất (0 = chưa gọi) + cửa sổ của model. */
+  tokenVao = 0,
+  cuaSo = 200_000,
+): { kyTu: number; tran: number; phanTram: number; soLuotDaBo: number; token?: number; cuaSo?: number } {
   const kyTu = tongKyTu(messages);
+  const theoKyTu = Math.round((kyTu / tran) * 100);
+  const theoToken = tokenVao > 0 && cuaSo > 0 ? Math.round((tokenVao / cuaSo) * 100) : 0;
   return {
     kyTu,
     tran,
-    phanTram: Math.min(100, Math.round((kyTu / tran) * 100)),
+    phanTram: Math.min(100, Math.max(theoKyTu, theoToken)),
     soLuotDaBo,
+    ...(tokenVao > 0 ? { token: tokenVao, cuaSo } : {}),
   };
 }
 

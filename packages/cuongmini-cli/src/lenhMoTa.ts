@@ -24,7 +24,8 @@ export const LENH_CLI: LenhGachCli[] = [
   { ten: '/transcript', get mo() { return L('Xem lại toàn bộ bảng ghi (ctrl+r)', 'Browse the full transcript (ctrl+r)'); }, khac: ['/banghi'], nhom: 'phien' },
   { ten: '/terminal-setup', get mo() { return L('Cài Shift+Enter xuống dòng cho terminal hoặc xem hướng dẫn', 'Set up Shift+Enter for newlines in your terminal'); }, khac: ['/caiterminal'], nhom: 'cong-cu' },
   { ten: '/add-dir', get mo() { return L('Cho agent đọc/sửa thêm một thư mục ngoài dự án', 'Let the agent work in an extra directory'); }, khac: ['/themthumuc'], get thamSo() { return L('<đường dẫn>', '<path>'); }, nhom: 'lam-viec' },
-  { ten: '/copy', get mo() { return L('Chép câu trả lời gần nhất vào clipboard', 'Copy the last answer to the clipboard'); }, khac: ['/chep'], nhom: 'lam-viec' },
+  { ten: '/copy', get mo() { return L('Chép câu trả lời (cuối, hoặc thứ N từ cuối) · q = câu hỏi · all = cả hội thoại', 'Copy an answer (last, or Nth from last) · q = a question · all = whole conversation'); }, khac: ['/chep'], thamSo: '[N|q [N]|all]', nhom: 'lam-viec' },
+  { ten: '/mouse', get mo() { return L('Bắt chuột ở toàn màn hình (mặc định TẮT: bôi đen chép tự nhiên, con lăn vẫn cuộn)', 'Capture the mouse in fullscreen (default OFF: select & copy naturally, the wheel still scrolls)'); }, khac: ['/chuot'], thamSo: '[on|off]', nhom: 'phien' },
 ];
 
 /** Bản tiếng Anh của mô tả + tham số các lệnh CHUNG (khớp theo tên trong `LENH_AGENT`). */
@@ -49,7 +50,12 @@ export const LENH_EN: Record<string, { mo: string; thamSo?: string }> = {
   '/hooks': { mo: 'Manage hooks' },
   '/mcp': { mo: 'Manage MCP servers' },
   '/kynang': { mo: 'Find and install skills from AI Templates into the project', thamSo: '[keyword | cai <name>]' },
-  '/quyen': { mo: 'View and revoke "always allow" permissions', thamSo: '[xoa]' },
+  '/quyen': { mo: 'View, add a prefix ("npm test"), revoke "always allow" permissions', thamSo: '[add <prefix> | remove [n]]' },
+  '/sessions': { mo: 'Other CuongMini sessions open on this machine (agents can message each other)' },
+  '/rename': { mo: 'Name this session (other sessions see this name)', thamSo: '<name>' },
+  '/worktree': { mo: 'Work in a separate git worktree (branch agent/…) — leaves your tree alone', thamSo: '[name | list | remove <path>]' },
+  '/ctwork': { mo: 'One-tap CT Work connection (token created with your signed-in account, kept in this machine\'s secret store)', thamSo: '[read | write | off]' },
+  '/hen': { mo: 'What the agent is WAITING for and its scheduled wake-ups — view / cancel', thamSo: '[cancel [id]]' },
   '/offline': { mo: 'Toggle on-device (offline) AI for this tab' },
   '/doctor': { mo: 'Diagnose: network, server, gateway, offline AI, folder permissions' },
   '/help': { mo: 'Show slash commands' },

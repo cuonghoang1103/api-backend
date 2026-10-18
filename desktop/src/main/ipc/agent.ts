@@ -35,7 +35,7 @@ import {
   datCheDoQuyen, tachNhanhCuoc, taoCuoc,
   xoaHoiThoai, type SuKienAgent,
   dsQuyenLauCua, xoaQuyenLauCua, veCongChinh, chayLuotCucBo, datCongPhuCua, veAnthropic,
-  datTomTatCua, hoiThoaiCua, nguCanhChiTietCua,
+  datTomTatCua, hoiThoaiCua, nguCanhChiTietCua, henChoCua, phatNen, phatNenTho, themTienToCua,
 } from '../agent/loop';
 import { chanDoan, goiCompact } from '../agent/lenhMayChu';
 import { dangMatMang } from '../aiCucBo/mang';
@@ -58,6 +58,10 @@ import { chayHook, docHook, docNhatKy, quenDemHook, duongDanCauHinh as duongHook
 import { dsKyNang } from '../agent/kyNang';
 import { dsDeGiaoDien, quenBaiHoc } from '../agent/boNho';
 import { traLoi } from '../agent/xinPhep';
+import { traLoiHoi } from '../agent/hoiLuaChon';
+import { ketNoiCtwork, napDemBiMat, ngatCtwork, trangThaiCtwork } from '../agent/ctworkKetNoi';
+import { cauDanhThuc, datBoChayHen, huyCho, huyHen } from '../agent/choHen';
+import { doiTen as doiTenPhienMang, dsPhienSong, toiLa } from '../agent/phienMang';
 import { readStoredSession } from './auth';
 import { handle } from './index';
 
@@ -502,6 +506,48 @@ export function registerAgentHandlers(): void {
     );
   };
 
+  /*
+   * ── HẸN QUAY LẠI (đợt 3) ──
+   * Tới giờ ⇒ tự mở một lượt "[Đánh thức …]" trong đúng cuộc. Không có cửa sổ
+   * nào hỏi ⇒ sự kiện đi qua `phatNenTho` (mọi cửa sổ + cầu nối VS Code), nên
+   * desktop, CLI, extension đều thấy lượt này. Cuộc đang bận ⇒ hoãn 15s.
+   */
+  const suKienNen = {
+    sender: { send: (kenh: string, duLieu: unknown) => phatNenTho(kenh, duLieu), isDestroyed: () => false },
+  } as unknown as IpcMainInvokeEvent;
+  datBoChayHen(async (hen) => {
+    if (cuocDangChay(hen.cuocId)) return 'hoan';
+    const cau = cauDanhThuc(hen);
+    phatNen(hen.cuocId, { loai: 'tuDanhThuc', cauHoi: cau, henId: hen.id });
+    void chayCho(hen.cuocId, cau, undefined, suKienNen, false).catch((e: Error) => {
+      phatNen(hen.cuocId, { loai: 'loi', thongDiep: `Lượt hẹn không chạy được: ${e.message}`, ma: 'HEN_LOI' });
+    });
+    return 'chay';
+  });
+
+  handle('agent:traLoiHoi', ({ cuocId: _c, id, traLoi: tl }) => traLoiHoi(id, tl ?? null));
+  handle('agent:huyCho', ({ cuocId, id, cach }) => huyCho(cuocId, id, cach ?? 'boCho'));
+  handle('agent:huyHen', ({ cuocId, id }) => huyHen(cuocId, id));
+  handle('agent:henCho', ({ cuocId }) => {
+    const h = henChoCua(cuocId);
+    return { cho: h.cho, hen: h.hen.map(({ id, lyDo, luc, phut, lap, conLai }) => ({ id, lyDo, luc, phut, lap, conLai })) };
+  });
+  handle('agent:dsPhienMang', ({ cuocId }) => {
+    const bo = (m: ReturnType<typeof dsPhienSong>[number]) => ({
+      id: m.id, cuocId: m.cuocId, pid: m.pid, ten: m.ten, noi: m.noi, thuMuc: m.thuMuc, trangThai: m.trangThai, capNhat: m.capNhat,
+    });
+    const toi = toiLa(cuocId);
+    return {
+      toi: toi ? bo(toi) : null,
+      ds: dsPhienSong().filter((m) => !(m.pid === process.pid && m.cuocId === cuocId)).map(bo),
+    };
+  });
+  handle('agent:doiTenPhienMang', ({ cuocId, ten }) => {
+    const m = doiTenPhienMang(cuocId, ten);
+    return m ? { id: m.id, cuocId: m.cuocId, pid: m.pid, ten: m.ten, noi: m.noi, thuMuc: m.thuMuc, trangThai: m.trangThai, capNhat: m.capNhat } : null;
+  });
+  handle('agent:themTienTo', ({ cuocId, tienTo }) => themTienToCua(cuocId, tienTo));
+
   handle('agent:send', async ({ cuocId, text, anh, chiDoc }, event) => {
     await chayCho(cuocId, text, anh, event, false, chiDoc === true);
   });
@@ -894,6 +940,7 @@ export function registerAgentHandlers(): void {
 
   handle('agent:mcpNapLai', async ({ cuocId }): Promise<AgentMcpTrangThai> => {
     // Nạp theo DỰ ÁN của tab đang hỏi: `.mcp.json` là của dự án.
+    await napDemBiMat().catch(() => {});
     await napLaiMcp(cuocId ? gocCua(cuocId) : null);
     return trangThaiMcp();
   });
@@ -970,6 +1017,18 @@ export function registerAgentHandlers(): void {
   handle('agent:kyNangDs', async ({ cuocId }) => {
     // Kể cả chưa mở dự án: vẫn có bộ kỹ năng cài sẵn.
     return dsKyNang(gocCuaCuoc(cuocId));
+  });
+
+  /* ── Đợt 3: CT Work một chạm (`/ctwork`, nút trong bảng MCP) ── */
+  void napDemBiMat().catch(() => {});
+  handle('agent:ctwork', async ({ cuocId, viec, quyen }) => {
+    await napDemBiMat().catch(() => {});
+    const goc = cuocId ? gocCua(cuocId) : null;
+    if (viec === 'trangThai') return { ok: true, ...(await trangThaiCtwork()) };
+    const phien = readStoredSession();
+    if (viec === 'ngat') return ngatCtwork(phien?.sessionToken ?? null, goc);
+    if (!phien) return { ok: false, loi: 'Chưa đăng nhập CuongThai.' };
+    return ketNoiCtwork(phien.sessionToken, quyen === 'ghi' ? 'ghi' : 'doc', goc);
   });
 
   handle('agent:mcpMoCauHinh', async () => {

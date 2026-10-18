@@ -55,7 +55,13 @@ export const LENH_AGENT: LenhGach[] = [
   { ten: '/hooks', mo: 'Mở quản lý hook', khac: ['/hook'], nhom: 'cong-cu' },
   { ten: '/mcp', mo: 'Mở quản lý máy chủ MCP', nhom: 'cong-cu' },
   { ten: '/kynang', mo: 'Tìm và cài kỹ năng từ kho AI Templates vào dự án', khac: ['/skill'], thamSo: '[từ khoá | cai <tên>]', nhom: 'cong-cu' },
-  { ten: '/quyen', mo: 'Xem và thu hồi các lệnh đã "Luôn cho phép"', khac: ['/permissions'], thamSo: '[xoa]', nhom: 'cong-cu' },
+  { ten: '/quyen', mo: 'Xem, thêm tiền tố ("npm test"), thu hồi các lệnh đã "Luôn cho phép"', khac: ['/permissions'], thamSo: '[them <tiền tố> | xoa [số]]', nhom: 'cong-cu' },
+  /* Đợt 3 (18/10/2026) */
+  { ten: '/sessions', mo: 'Các phiên CuongMini khác đang mở trên máy (agent nhắn qua lại được)', khac: ['/phien'], nhom: 'phien' },
+  { ten: '/rename', mo: 'Đặt tên phiên này (phiên khác thấy tên khi nhắn)', khac: ['/doiten'], thamSo: '<tên>', nhom: 'phien' },
+  { ten: '/worktree', mo: 'Làm ở một git worktree riêng (nhánh agent/…) — không đè cây đang làm', khac: ['/wt'], thamSo: '[tên | list | xoa <đường>]', nhom: 'lam-viec' },
+  { ten: '/ctwork', mo: 'Kết nối CT Work một chạm (token tự tạo bằng tài khoản đang đăng nhập, cất trong kho bí mật của máy)', thamSo: '[doc | ghi | off]', nhom: 'cong-cu' },
+  { ten: '/hen', mo: 'Việc đang CHỜ và các HẸN quay lại của agent — xem / huỷ', khac: ['/schedule', '/cho'], thamSo: '[huy [id]]', nhom: 'lam-viec' },
   { ten: '/offline', mo: 'Bật/tắt chạy bằng AI trên máy (ngoại tuyến) cho tab này', khac: ['/ngoaituyen'], nhom: 'cong-cu' },
   { ten: '/doctor', mo: 'Chẩn đoán: mạng, máy chủ, cổng, AI ngoại tuyến, quyền thư mục', khac: ['/chandoan'], nhom: 'cong-cu' },
   { ten: '/help', mo: 'Danh sách lệnh gạch chéo', khac: ['/?', '/tro-giup'], nhom: 'co-ban' },
@@ -113,7 +119,11 @@ export function timTheoChu<T extends { id: string; ten: string }>(chu: string, d
   const dung = ds.find((x) => chuanHoa(x.id) === q || chuanHoa(x.ten) === q);
   if (dung) return dung;
   const chua = ds.filter((x) => chuanHoa(x.id).includes(q) || chuanHoa(x.ten).includes(q));
-  return chua.length === 1 ? chua[0]! : null;
+  if (chua.length === 1) return chua[0]!;
+  /* Nhiều cái khớp ("opus" ⇒ opus-4-8 + cl-opus-5-5 đang khoá): chỉ một cái DÙNG ĐƯỢC thì lấy nó — QA 18/10:
+     `/model opus`, `/model sonnet` báo "Không rõ model" dù chỉ có đúng một Opus/Sonnet chọn được. */
+  const dungDuoc = chua.filter((x) => (x as { dungDuoc?: boolean }).dungDuoc !== false && !(x as { canMoKhoa?: boolean }).canMoKhoa);
+  return dungDuoc.length === 1 ? dungDuoc[0]! : null;
 }
 
 export function timMuc<T extends { id: string; ten: string }>(chu: string, ds: readonly T[]): T | null {

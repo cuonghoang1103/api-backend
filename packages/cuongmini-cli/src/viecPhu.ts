@@ -134,7 +134,8 @@ export function apSuKienPhu(S: TrangThaiPhu, e: { loai: string; [k: string]: unk
   switch (e.loai) {
     case 'phuBatDau': {
       const a = taoAgent(S, String(e.phuId ?? ''), bayGio, !S.agentPhu.some((x) => x.id === String(e.phuId) && x.trangThai === 'dang'));
-      if (typeof e.kieuAgent === 'string' && e.kieuAgent) a.kieu = e.kieuAgent;
+      // Lõi đặt tên "general-purpose (ghi)" cho agent phụ GHI — giao diện English: "(write)".
+      if (typeof e.kieuAgent === 'string' && e.kieuAgent) a.kieu = L(e.kieuAgent, e.kieuAgent.replace(/\(ghi\)$/, '(write)'));
       if (typeof e.model === 'string' && e.model) a.model = e.model;
       if (typeof e.nhiemVu === 'string') {
         a.nhiemVu = e.nhiemVu;
@@ -167,13 +168,13 @@ export function apSuKienPhu(S: TrangThaiPhu, e: { loai: string; [k: string]: unk
       return true;
     }
     case 'toolBatDau':
-      if (e.ten === 'giao_viec_phu' && e.id) taoAgent(S, String(e.id), bayGio, true);
+      if ((e.ten === 'giao_viec_phu' || e.ten === 'giao_viec_ghi') && e.id) taoAgent(S, String(e.id), bayGio, true);
       return false;
     case 'tool': {
       const ten = String(e.ten ?? '');
       const tomTat = String(e.tomTat ?? '');
       const chiTiet = typeof e.chiTiet === 'string' ? e.chiTiet : '';
-      if (ten === 'giao_viec_phu') {
+      if (ten === 'giao_viec_phu' || ten === 'giao_viec_ghi') {
         if (!e.id) {
           // Tóm tắt LÚC BẮT ĐẦU (lõi không gắn id) ⇒ gán cho agent phụ mới nhất chưa có nhiệm vụ.
           const a = [...S.agentPhu].reverse().find((x) => x.trangThai === 'dang' && !x.nhiemVu);

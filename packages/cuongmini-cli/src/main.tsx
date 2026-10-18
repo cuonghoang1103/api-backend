@@ -19,7 +19,8 @@ import { chuyenNhatKy } from './khoiDong';
 import { THUONG_HIEU, chuyenSac, datTheme, doTheme, mau, mo } from './mau';
 import { docPhien, tenHienThi, xoaPhien } from './phien';
 import { UngDung } from './ui/UngDung';
-import { batDauToanManHinh, dangToanManHinh, ketThucToanManHinh, layTomTatPhien, nenToanManHinh } from './toanManHinh';
+import { ganTatKhiThoat, nenBatKitty } from './banPhim';
+import { caiLocXoaScrollback, datChuotCaiDat, batDauToanManHinh, dangToanManHinh, ketThucToanManHinh, layTomTatPhien, nenToanManHinh } from './toanManHinh';
 
 /*
  * Ống ra bị đóng sớm (`cuongmini --help | head -3`, `| Select-Object -First 3`) ⇒ Node ném EPIPE
@@ -56,6 +57,7 @@ async function main(): Promise<number> {
   // Cài đặt giao diện áp TRƯỚC mọi dòng in ra (kể cả --help, doctor).
   const cd = docCaiDat();
   datTheme(cd.theme === 'tuDong' ? doTheme(process.env) : cd.theme);
+  datChuotCaiDat(cd.chuot);
   datAscii(cd.ascii === 'bat' ? true : cd.ascii === 'tat' ? false : canAscii(process.env));
   datNgonNgu(cd.ngonNgu === 'tuDong' ? doNgonNgu(process.env) : cd.ngonNgu);
   const co = phanTichCo(process.argv.slice(2));
@@ -113,7 +115,12 @@ async function main(): Promise<number> {
   const toanManHinh = co.lenh !== 'login' && nenToanManHinh({
     caiDat: cd.toanManHinh, co: co.toanManHinh, cheDoIn: co.cheDoIn, tty: Boolean(process.stdout.isTTY), env: process.env,
   });
+  caiLocXoaScrollback(process.stdout);
   if (toanManHinh) batDauToanManHinh(process.stdout);
+  /* Shift+Enter xuống dòng không cần cấu hình: kitty keyboard protocol (`banPhim.ts`). Ink gửi
+     `CSI > 1 u` lúc vẽ và `CSI < u` lúc unmount; `ganTatKhiThoat` lo cả lúc crash/`process.exit`. */
+  const kitty = nenBatKitty({ tty: Boolean(process.stdin.isTTY && process.stdout.isTTY), cheDoIn: co.cheDoIn, env: process.env });
+  if (kitty) ganTatKhiThoat(process.stdout);
   const ink = render(
     <UngDung
       co={co}
@@ -124,7 +131,7 @@ async function main(): Promise<number> {
       toanManHinh={toanManHinh}
       onThoat={(m) => { daThoat = true; loiNhan = m; }}
     />,
-    { exitOnCtrlC: false, maxFps: 30 },
+    { exitOnCtrlC: false, maxFps: 30, ...(kitty ? { kittyKeyboard: { mode: 'enabled' as const, flags: ['disambiguateEscapeCodes' as const] } } : {}) },
   );
   // Thoát toàn màn hình (kể cả khi tắt giữa phiên bằng /fullscreen off thì đã ra rồi) ⇒ in tóm tắt phiên lên màn hình cũ.
   const raToanManHinh = () => {

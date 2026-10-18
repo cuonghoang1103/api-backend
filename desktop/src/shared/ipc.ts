@@ -1059,7 +1059,8 @@ export interface AgentDiff {
 }
 
 /** Người dùng bấm gì trên thẻ duyệt. */
-export const agentQuyetDinhSchema = z.enum(['choPhep', 'choPhepCaFile', 'choPhepMai', 'tuChoi']);
+/** `choPhepTienTo` (đợt 3): luôn cho phép mọi lệnh bắt đầu bằng tiền tố gợi ý trên thẻ (`xinPhepLenh.tienTo`). */
+export const agentQuyetDinhSchema = z.enum(['choPhep', 'choPhepCaFile', 'choPhepMai', 'choPhepTienTo', 'tuChoi']);
 export type AgentQuyetDinh = z.infer<typeof agentQuyetDinhSchema>;
 
 export const agentTraLoiSchema = z.object({
@@ -1075,6 +1076,29 @@ export const agentTraLoiSchema = z.object({
   id: z.string().min(1).max(64),
   quyetDinh: agentQuyetDinhSchema,
 });
+
+/* ── ĐỢT 3 (18/10/2026): hỏi lựa chọn · chờ/hẹn · nhắn giữa phiên · tiền tố ── */
+export const agentTraLoiHoiSchema = z.object({
+  cuocId: cuocIdSchema,
+  id: z.string().min(1).max(64),
+  /** `null` = người dùng bấm "Bỏ qua". Mỗi phần tử = một câu: nhãn đã chọn + chữ tự gõ ("Khác"). */
+  traLoi: z.array(z.object({
+    chon: z.array(z.string().max(80)).max(4),
+    khac: z.string().max(2000).optional(),
+  })).max(4).nullable(),
+});
+export const agentHuyChoSchema = z.object({ cuocId: cuocIdSchema, id: z.string().min(1).max(32), cach: z.enum(['boCho', 'xongNgay']).optional() });
+export const agentHuyHenSchema = z.object({ cuocId: cuocIdSchema, id: z.string().min(1).max(32).optional() });
+export const agentDoiTenPhienMangSchema = z.object({ cuocId: cuocIdSchema, ten: z.string().min(1).max(60) });
+export const agentThemTienToSchema = z.object({ cuocId: cuocIdSchema, tienTo: z.string().min(1).max(80) });
+export interface AgentLuaChon { nhan: string; moTa?: string }
+export interface AgentCauHoi { cauHoi: string; tieuDe?: string; luaChon: AgentLuaChon[]; nhieu?: boolean }
+export interface AgentChoView { id: string; moTa: string; batDau: number; hetLuc: number }
+export interface AgentHenView { id: string; lyDo: string; luc: number; phut: number; lap: boolean; conLai: number }
+export interface AgentPhienMang {
+  id: string; cuocId: string; pid: number; ten: string; noi: 'desktop' | 'cli' | 'vscode';
+  thuMuc: string | null; trangThai: 'ranh' | 'dangChay'; capNhat: number;
+}
 
 // Quyền là của TỪNG cuộc, nên phải mang `cuocId`. Không mang thì bật quyền ghi
 // ở tab đang làm dự án A cũng bật luôn cho tab đang làm dự án B — người dùng
@@ -1517,15 +1541,16 @@ export type AgentUiEvent = { cuocId: string } & (
    * agent phụ thì BỎ QUA cả ba loại này (chữ của agent phụ không được lẫn vào
    * câu trả lời chính).
    */
-  | { loai: 'phuBatDau'; phuId: string; kieuAgent: string; nhiemVu: string; model?: string }
+  | { loai: 'phuBatDau'; phuId: string; kieuAgent: string; nhiemVu: string; model?: string; quyen?: 'doc' | 'ghi'; thuMuc?: string }
   | { loai: 'phuSuKien'; phuId: string; e: { loai: string; [k: string]: unknown } }
   | { loai: 'phuXong'; phuId: string; ok: boolean; tomTat: string; tienUsd: number; tokenVao: number; tokenRa: number }
   /** Agent ĐANG DỪNG chờ duyệt. Giao diện hiện thẻ diff và bắt buộc phải trả lời. */
-  | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: AgentDiff }
+  | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: AgentDiff; phuId?: string }
   /** Thẻ đã được trả lời (hoặc hết giờ 5 phút) — gỡ thẻ đi. */
   | { loai: 'xongXinPhep'; id: string; dongY: boolean }
   /** Xin phép CHẠY LỆNH — payload khác thẻ sửa file: có chuỗi lệnh + phân loại. */
-  | { loai: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh }
+  /** `tienTo` (đợt 3): gợi ý nút "Luôn cho phép `…`"; `phuId`: thẻ của agent phụ ghi. */
+  | { loai: 'xinPhepLenh'; id: string; lenh: string; phanLoai: AgentPhanLoaiLenh; tienTo?: string; phuId?: string }
   /**
    * Xin phép gọi một tool MCP. Mang cả THAM SỐ — tên tool một mình không đủ để
    * quyết định: `mcp__db__query` nghe vô hại tới khi nhìn thấy câu lệnh nó chạy.
@@ -1538,13 +1563,24 @@ export type AgentUiEvent = { cuocId: string } & (
    * sách file, lời nhắn (commit) hoặc nhánh + tiêu đề + mô tả (PR). Một thẻ chỉ
    * ghi "agent muốn commit" thì không ai duyệt được gì cả.
    */
-  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai'; chiTiet: string }
+  | { loai: 'xinPhepGit'; id: string; viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop'; chiTiet: string; phuId?: string }
   /** Xin phép GHI vào sổ ghi chú. `chiTiet` là nội dung sắp ghi — người dùng phải ĐỌC nó. */
   | { loai: 'xinPhepNote'; id: string; viec: 'tao' | 'ghi'; chiTiet: string }
   /** Đầu ra của lệnh, chảy ra khi nó còn đang chạy. */
   | { loai: 'lenhRa'; mau: string }
   /** Agent công bố/cập nhật danh sách việc. Luôn là TOÀN BỘ danh sách. */
   | { loai: 'keHoach'; viec: AgentViec[] }
+  /** Đợt 3: agent hỏi bằng lựa chọn — vòng lặp CHỜ `agent:traLoiHoi`. */
+  | { loai: 'hoiLuaChon'; id: string; cauHoi: AgentCauHoi[] }
+  | { loai: 'xongHoi'; id: string; tomTat: string }
+  /** Đợt 3: toàn bộ danh sách chờ (`cho_doi`) + hẹn (`hen_goi_lai`) của cuộc. */
+  | { loai: 'henCho'; cho: AgentChoView[]; hen: AgentHenView[] }
+  /** Đợt 3: tin từ phiên CuongMini khác (đọc ở lượt kế). */
+  | { loai: 'tinPhien'; tu: { id: string; ten: string; noi: string; thuMuc: string | null }; noiDung: string; luc: number }
+  /** Đợt 3: app tự mở lượt theo lời hẹn — vẽ bong bóng + bật trạng thái chạy. */
+  | { loai: 'tuDanhThuc'; cauHoi: string; henId: string }
+  /** Đợt 3: tiến trình sau MỖI vòng — ngữ cảnh % (usage thật), token ra/vào + tiền của vòng. */
+  | { loai: 'tienTrinh'; nguCanh?: AgentNguCanh; tokenRa: number; tokenVao: number; tienUsd: number }
   | {
       loai: 'xong'; hanMuc: AgentQuota | null; tienUsd: number; daLuoc: number; soFileDaSua: number;
       nguCanh?: AgentNguCanh;
@@ -1771,6 +1807,16 @@ export const INVOKE_CHANNELS = {
   'agent:taoCuoc': null,
   'agent:dongCuoc': agentCuocSchema,
   'agent:traLoiXinPhep': agentTraLoiSchema,
+  /* Đợt 3 */
+  'agent:traLoiHoi': agentTraLoiHoiSchema,
+  'agent:huyCho': agentHuyChoSchema,
+  'agent:huyHen': agentHuyHenSchema,
+  'agent:henCho': agentCuocSchema,
+  'agent:dsPhienMang': agentCuocSchema,
+  'agent:doiTenPhienMang': agentDoiTenPhienMangSchema,
+  'agent:themTienTo': agentThemTienToSchema,
+  /* CT Work một chạm: tạo token bằng phiên đăng nhập ⇒ kho bí mật ⇒ server `ctwork` trong mcp.json. */
+  'agent:ctwork': z.object({ cuocId: cuocIdSchema.optional(), viec: z.enum(['noi', 'ngat', 'trangThai']), quyen: z.enum(['doc', 'ghi']).optional() }),
   'agent:datCheDoSua': agentCheDoSuaSchema,
   'agent:datCheDoLenh': agentCheDoLenhSchema,
   /* Kho kỹ năng `/ai-templates`. `tuKhoa` là chuỗi người dùng gõ nên có trần
@@ -2875,6 +2921,23 @@ export interface DesktopBridge {
      * và nó chỉ tự thoát sau 5 phút hết giờ (coi như từ chối).
      */
     traLoiXinPhep(cuocId: string, id: string, quyetDinh: AgentQuyetDinh): Promise<void>;
+    /** Đợt 3 — trả lời thẻ hỏi lựa chọn (`null` = bỏ qua). */
+    traLoiHoi(cuocId: string, id: string, traLoi: Array<{ chon: string[]; khac?: string }> | null): Promise<boolean>;
+    /** Đợt 3 — bỏ chờ / tiếp ngay một `cho_doi` đang chạy. */
+    huyCho(cuocId: string, id: string, cach?: 'boCho' | 'xongNgay'): Promise<boolean>;
+    /** Đợt 3 — huỷ một hẹn (hoặc tất cả khi không có id). Trả số đã huỷ. */
+    huyHen(cuocId: string, id?: string): Promise<number>;
+    henCho(cuocId: string): Promise<{ cho: AgentChoView[]; hen: AgentHenView[] }>;
+    /** Đợt 3 — phiên CuongMini đang mở trên máy (nhắn giữa phiên). */
+    dsPhienMang(cuocId: string): Promise<{ toi: AgentPhienMang | null; ds: AgentPhienMang[] }>;
+    doiTenPhienMang(cuocId: string, ten: string): Promise<AgentPhienMang | null>;
+    /** Đợt 3 — thêm "luôn cho phép mọi lệnh bắt đầu bằng …". */
+    themTienTo(cuocId: string, tienTo: string): Promise<{ ok: boolean; khoa?: string; loi?: string }>;
+    /** CT Work một chạm (đợt 3). */
+    ctwork(cuocId: string | null, viec: 'noi' | 'ngat' | 'trangThai', quyen?: 'doc' | 'ghi'): Promise<{
+      ok: boolean; loi?: string; soTool?: number; quyen?: 'doc' | 'ghi' | null; coToken?: boolean; bienTay?: boolean;
+      server?: { ok: boolean; soTool: number; loi?: string } | null;
+    }>;
     /** Bật/tắt quyền sửa file. Không lưu xuống đĩa — mở app lại là tắt. */
     datCheDoSua(cuocId: string, bat: boolean): Promise<AgentWorkspace>;
     /** Bật/tắt quyền chạy lệnh. Cũng không lưu xuống đĩa. */

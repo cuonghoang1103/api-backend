@@ -44,6 +44,8 @@ interface LenhNen {
   cuocId: string;
   con: ChildProcess;
   dem: string;
+  /** Tổng số ký tự ĐÃ TỪNG in (không bị cắt như `dem`) — để `cho_doi` biết phần nào mới. */
+  tong: number;
   /** Đã đọc tới đâu — lần đọc sau chỉ trả phần MỚI. */
   daDoc: number;
   ma: number | null;
@@ -114,7 +116,7 @@ export function batLenhNen(opts: { lenh: string; cwd: string; cuocId: string }):
 
   const muc: LenhNen = {
     id, lenh: opts.lenh, cuocId: opts.cuocId, con,
-    dem: '', daDoc: 0, ma: null, dangChay: true, batDau: Date.now(),
+    dem: '', tong: 0, daDoc: 0, ma: null, dangChay: true, batDau: Date.now(),
   };
   bang.set(id, muc);
 
@@ -137,11 +139,11 @@ export function batLenhNen(opts: { lenh: string; cwd: string; cuocId: string }):
   (dongHo as unknown as { unref?: () => void }).unref?.();
   muc.dongHo = dongHo;
 
-  con.stdout?.on('data', (b: Buffer) => { muc.dem = catDem(muc.dem + b.toString('utf8')); });
+  con.stdout?.on('data', (b: Buffer) => { const t = b.toString('utf8'); muc.tong += t.length; muc.dem = catDem(muc.dem + t); });
   // stderr GỘP CHUNG vào một dòng thời gian, không để riêng: phần lớn công cụ
   // in tiến trình ra stderr và lỗi ra stdout hoặc ngược lại, nên tách ra chỉ
   // làm mất thứ tự thật của sự việc.
-  con.stderr?.on('data', (b: Buffer) => { muc.dem = catDem(muc.dem + b.toString('utf8')); });
+  con.stderr?.on('data', (b: Buffer) => { const t = b.toString('utf8'); muc.tong += t.length; muc.dem = catDem(muc.dem + t); });
 
   // `spawn` KHÔNG ném khi lệnh không tồn tại — nó báo qua sự kiện `error`. Ghi
   // vào đệm để agent ĐỌC ĐƯỢC lý do, thay vì thấy một tiến trình chết câm.
@@ -208,6 +210,21 @@ function catGiuDuoi(moi: string): string {
   const nl = moi.indexOf('\n', tu);
   if (nl >= 0 && nl - tu <= 400) tu = nl + 1;
   return `[… ĐÃ BỎ ${tu} ký tự CŨ hơn ở đầu phần mới — chỉ giữ ${moi.length - tu} ký tự mới nhất …]\n${moi.slice(tu)}`;
+}
+
+/**
+ * NHÌN TRỘM đầu ra (không dời mốc "đã đọc" của agent) — cho `cho_doi` (đợt 3).
+ * `tuTong` = mốc `tong` lúc bắt đầu chờ ⇒ trả đúng phần in ra SAU mốc đó
+ * (phần đã bị cắt khỏi đệm thì mất, nhưng đệm giữ 200k ký tự gần nhất).
+ */
+export function xemDauRaNen(id: string, tuTong = 0): { ok: boolean; lenh?: string; dangChay?: boolean; ma?: number | null; tong?: number; moi?: string; cuocId?: string } {
+  const muc = bang.get(id);
+  if (!muc) return { ok: false };
+  const soMoi = Math.max(0, muc.tong - tuTong);
+  return {
+    ok: true, lenh: muc.lenh, dangChay: muc.dangChay, ma: muc.ma, tong: muc.tong, cuocId: muc.cuocId,
+    moi: soMoi === 0 ? '' : muc.dem.slice(-Math.min(soMoi, muc.dem.length)),
+  };
 }
 
 export function dungLenhNen(id: string): { ok: boolean; loi?: string } {

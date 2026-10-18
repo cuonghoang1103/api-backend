@@ -23,7 +23,7 @@
  */
 import { execFile } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
+import { rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -171,11 +171,34 @@ export async function commit(cwd: string, loiNhan: string, file: string[]): Prom
   if (sach.length === 0) return { ok: false, noi: '', loi: 'Không còn file hợp lệ nào để commit.' };
 
   try {
-    // `--` ngăn một đường dẫn bắt đầu bằng `-` bị hiểu thành tuỳ chọn.
-    await git(cwd, ['add', '--', ...sach]);
-    await git(cwd, ['commit', '-m', loiNhan]);
+    /*
+     * INDEX RIÊNG (đợt 3, 18/10/2026). `git add` + `git commit` trên index CHUNG
+     * gom luôn mọi thứ người khác (một phiên CuongMini khác, chính người dùng)
+     * đang stage dở vào commit này — đúng lỗi đã gặp khi nhiều phiên cùng một
+     * repo. Dựng index tạm từ HEAD, chỉ thêm đúng các file này, commit, rồi
+     * đồng bộ lại index thật CHO RIÊNG các file đó (phần khác giữ nguyên).
+     * Repo chưa có commit nào ⇒ không có HEAD để dựng ⇒ đi đường cũ.
+     */
+    const gitDir = (await git(cwd, ['rev-parse', '--absolute-git-dir'])).trim();
+    const coHead = await git(cwd, ['rev-parse', '--verify', '-q', 'HEAD']).then(() => true, () => false);
+    if (coHead && gitDir) {
+      const tam = path.join(gitDir, `index-cuongmini-${process.pid}-${Date.now()}`);
+      const env = { ...process.env, GIT_INDEX_FILE: tam };
+      try {
+        await chay('git', ['read-tree', 'HEAD'], { cwd, env, timeout: 60_000, windowsHide: true });
+        await chay('git', ['add', '-A', '--', ...sach], { cwd, env, timeout: 60_000, windowsHide: true });
+        await chay('git', ['commit', '-m', loiNhan], { cwd, env, timeout: 60_000, windowsHide: true });
+      } finally {
+        await rm(tam, { force: true }).catch(() => {});
+      }
+      await git(cwd, ['reset', '-q', '--', ...sach]).catch(() => '');
+    } else {
+      // `--` ngăn một đường dẫn bắt đầu bằng `-` bị hiểu thành tuỳ chọn.
+      await git(cwd, ['add', '--', ...sach]);
+      await git(cwd, ['commit', '-m', loiNhan]);
+    }
     const bam = (await git(cwd, ['rev-parse', '--short', 'HEAD'])).trim();
-    return { ok: true, noi: `Đã commit ${bam} trên nhánh ${nhanh} (${sach.length} file).` };
+    return { ok: true, noi: `Đã commit ${bam} trên nhánh ${nhanh} (${sach.length} file — chỉ đúng các file này, phần người khác đang stage giữ nguyên).` };
   } catch (err) {
     const m = String((err as { stderr?: string }).stderr || (err as Error).message).trim();
     return { ok: false, noi: '', loi: m.split('\n').slice(0, 3).join(' ').slice(0, 300) };

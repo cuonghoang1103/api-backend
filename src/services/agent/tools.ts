@@ -99,7 +99,18 @@ export type AgentCapability =
    * khai `fs_write` nhưng chưa cài `xuat_so_do`. App chỉ khai nó khi có thư mục
    * dự án VÀ bật quyền sửa (tool ghi một file vào dự án).
    */
-  | 'xuat_so_do';
+  | 'xuat_so_do'
+  /* ── ĐỢT 3 (18/10/2026) — mỗi cái RIÊNG để bản app cũ không bao giờ được mời gọi tool nó chưa có ── */
+  /** Agent phụ GHI (`giao_viec_ghi` + `gop_viec_phu`): sửa/chạy lệnh trong worktree/thư mục tạm riêng. */
+  | 'phu_ghi'
+  /** Hỏi người dùng bằng lựa chọn (`hoi_nguoi_dung`). */
+  | 'hoi'
+  /** Chờ một điều kiện ngay trong lượt (`cho_doi`). */
+  | 'cho'
+  /** Hẹn tự quay lại sau N phút (`hen_goi_lai`, `huy_hen`). */
+  | 'hen'
+  /** Nhắn giữa các phiên CuongMini trên cùng máy (`liet_ke_phien`, `nhan_phien`). */
+  | 'phien';
 
 export interface AgentToolDef {
   name: string;
@@ -626,6 +637,161 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
 
+  // ─── ĐỢT 3: agent phụ GHI ───────────────────────────────────────
+  {
+    name: 'giao_viec_ghi',
+    ring: 'client',
+    capability: 'phu_ghi',
+    description:
+      'Giao một việc SỬA MÃ độc lập cho một agent phụ làm trong KHU RIÊNG (git worktree tách từ trạng thái hiện tại, '
+      + 'hoặc bản sao tạm khi không phải repo git) — cây làm việc của người dùng KHÔNG bị đụng tới. '
+      + 'Agent phụ đọc/sửa file và (nếu phiên cho chạy lệnh) chạy lệnh; MỌI lần sửa/chạy lệnh vẫn qua thẻ duyệt của người dùng. '
+      + 'Xong việc bạn nhận: tóm tắt + danh sách file đổi + diff rút gọn. Muốn đưa vào dự án thì gọi `gop_viec_phu` (người dùng duyệt), '
+      + 'không thì bỏ. Tối đa ~25 bước, tính chung trần agent phụ của lượt. '
+      + 'DÙNG KHI: một phần việc tách được và tự kiểm được (viết test cho module X, sửa một lỗi cô lập, thử một hướng refactor). '
+      + 'ĐỪNG DÙNG cho việc vài dòng (tự sửa rẻ hơn), hay việc cần hội thoại của bạn — agent phụ KHÔNG thấy hội thoại.',
+    parameters: {
+      type: 'object',
+      properties: {
+        nhiem_vu: { type: 'string', description: 'Nhiệm vụ đầy đủ, tự đứng một mình: sửa gì, ở đâu, kiểm bằng lệnh nào, trả lại gì.' },
+        loai: { type: 'string', description: 'Loại agent phụ do dự án khai (`.claude/agents/*.md`). Bỏ trống = mặc định.' },
+        model: { type: 'string', enum: ['ke_thua', 'manh', 'can_bang', 'nhanh'], description: 'Như `giao_viec_phu`. Mặc định kế thừa.' },
+      },
+      required: ['nhiem_vu'],
+    },
+  },
+  {
+    name: 'gop_viec_phu',
+    ring: 'client',
+    capability: 'phu_ghi',
+    description:
+      'GỘP thay đổi của một agent phụ ghi (mã `id` trong kết quả `giao_viec_ghi`) vào dự án — một thẻ duyệt cho cả lô; '
+      + 'file mà dự án đã đổi kể từ lúc giao việc bị BỎ QUA (xung đột, không ghi đè). `file` để gộp một phần; `bo: true` để BỎ và dọn khu. '
+      + 'Nút Hoàn tác lùi được các file đã gộp.',
+    parameters: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', description: 'Mã agent phụ (in trong kết quả giao_viec_ghi).' },
+        file: { type: 'array', items: { type: 'string' }, description: 'Chỉ gộp các file này (đường dẫn tương đối). Bỏ trống = tất cả.' },
+        bo: { type: 'boolean', description: 'true = bỏ hết thay đổi và dọn khu riêng.' },
+      },
+      required: ['id'],
+    },
+  },
+
+  // ─── ĐỢT 3: hỏi bằng lựa chọn ───────────────────────────────────
+  {
+    name: 'hoi_nguoi_dung',
+    ring: 'client',
+    capability: 'hoi',
+    description:
+      'Hỏi người dùng 1–4 câu, mỗi câu 2–4 lựa chọn (app tự thêm ô "Khác" để họ gõ tự do); vòng lặp DỪNG chờ họ bấm. '
+      + 'CHỈ dùng khi có ≥2 hướng hợp lý mà chọn sai sẽ tốn công làm lại (công nghệ, phạm vi, cách đặt tên…). '
+      + 'ĐỪNG dùng để xin phép (gọi thẳng tool — thẻ duyệt đã có), đừng hỏi điều tự tìm ra được bằng đọc mã, đừng hỏi lại câu đã được trả lời. '
+      + 'Lựa chọn khuyên dùng đặt ĐẦU TIÊN và ghi "(khuyên dùng)".',
+    parameters: {
+      type: 'object',
+      properties: {
+        cau_hoi: {
+          type: 'array', minItems: 1, maxItems: 4,
+          items: {
+            type: 'object',
+            properties: {
+              cau_hoi: { type: 'string', description: 'Câu hỏi rõ, kết thúc bằng dấu hỏi.' },
+              tieu_de: { type: 'string', description: 'Nhãn ngắn ≤12 ký tự (vd "Database").' },
+              lua_chon: {
+                type: 'array', minItems: 2, maxItems: 4,
+                items: { type: 'object', properties: { nhan: { type: 'string', description: '1–5 chữ.' }, mo_ta: { type: 'string', description: 'Hệ quả/đánh đổi của lựa chọn.' } }, required: ['nhan'] },
+              },
+              nhieu: { type: 'boolean', description: 'true = được chọn nhiều.' },
+            },
+            required: ['cau_hoi', 'lua_chon'],
+          },
+        },
+      },
+      required: ['cau_hoi'],
+    },
+  },
+
+  // ─── ĐỢT 3: chờ / hẹn ───────────────────────────────────────────
+  {
+    name: 'cho_doi',
+    ring: 'client',
+    capability: 'cho',
+    description:
+      'CHỜ ngay trong lượt tới khi một điều kiện đạt — KHÔNG tốn token khi chờ, thay cho việc gọi đi gọi lại doc_dau_ra_nen. '
+      + 'loai: `lenh_nen` (id của chay_lenh_nen; có `khop` = regex ⇒ chờ tới khi một dòng khớp, không có ⇒ chờ lệnh kết thúc), '
+      + '`file` (duong xuất hiện), `url` (trả HTTP 2xx — vd dev server lên chưa), `tien_trinh` (pid kết thúc), `thoi_gian` (chỉ chờ N giây). '
+      + '`giay` = trần chờ (mặc định 120, tối đa 900). Kết quả nói rõ ĐẠT hay HẾT GIỜ kèm đầu ra cuối; người dùng có thể bấm bỏ chờ. '
+      + 'Chờ lâu hơn 15 phút ⇒ dùng hen_goi_lai.',
+    parameters: {
+      type: 'object',
+      properties: {
+        loai: { type: 'string', enum: ['lenh_nen', 'file', 'url', 'tien_trinh', 'thoi_gian'] },
+        id: { type: 'string', description: 'loai=lenh_nen: mã lệnh nền.' },
+        khop: { type: 'string', description: 'loai=lenh_nen: regex (không phân biệt hoa thường), vd "ready|listening|error".' },
+        duong: { type: 'string', description: 'loai=file: đường dẫn (tương đối dự án hoặc tuyệt đối).' },
+        url: { type: 'string', description: 'loai=url: http(s)://…' },
+        pid: { type: 'integer', description: 'loai=tien_trinh.' },
+        giay: { type: 'integer', description: 'Trần chờ, giây (≤ 900).' },
+      },
+      required: ['loai'],
+    },
+  },
+  {
+    name: 'hen_goi_lai',
+    ring: 'client',
+    capability: 'hen',
+    description:
+      'HẸN tự quay lại sau `phut` phút (1–1440): lượt này KẾT THÚC, tới giờ app tự gửi một lượt "[Đánh thức …] <ly_do>" vào đúng cuộc này '
+      + '(chỉ khi app/CLI/VS Code còn mở). `lap: true` + `so_lan` (≤50) = lặp định kỳ. Mỗi lần thức là một lượt TÍNH TIỀN — '
+      + 'chỉ hẹn khi người dùng nhờ theo dõi/quay lại (CI chạy xong chưa, deploy lên chưa, nhắc việc), tối đa 3 hẹn/cuộc. '
+      + 'Gọi xong thì trả lời ngắn rồi DỪNG, đừng đứng chờ.',
+    parameters: {
+      type: 'object',
+      properties: {
+        phut: { type: 'number', description: 'Sau bao nhiêu phút (1–1440).' },
+        ly_do: { type: 'string', description: 'Lời nhắc gửi lại cho CHÍNH BẠN khi thức: việc cần làm lúc đó.' },
+        lap: { type: 'boolean', description: 'Lặp lại mỗi `phut` phút.' },
+        so_lan: { type: 'integer', description: 'Số lần lặp (2–50, mặc định 10).' },
+      },
+      required: ['phut', 'ly_do'],
+    },
+  },
+  {
+    name: 'huy_hen',
+    ring: 'client',
+    capability: 'hen',
+    description: 'Huỷ một hẹn (`id`, vd "h1") hoặc mọi hẹn của cuộc này (bỏ trống). Gọi khi việc theo dõi đã xong để khỏi tốn lượt thức.',
+    parameters: { type: 'object', properties: { id: { type: 'string' } } },
+  },
+
+  // ─── ĐỢT 3: nhắn giữa phiên ─────────────────────────────────────
+  {
+    name: 'liet_ke_phien',
+    ring: 'client',
+    capability: 'phien',
+    description: 'Liệt kê các phiên CuongMini KHÁC đang mở trên máy này (app desktop, CLI, VS Code): mã, tên, thư mục, đang chạy hay rảnh, có cùng dự án không.',
+    parameters: { type: 'object', properties: {} },
+  },
+  {
+    name: 'nhan_phien',
+    ring: 'client',
+    capability: 'phien',
+    description:
+      'Gửi một tin cho phiên CuongMini khác (mã/tên từ liet_ke_phien). Người dùng DUYỆT nguyên văn trước khi gửi. '
+      + 'Phiên kia chỉ ĐỌC tin ở lượt kế tiếp của nó (không tự chạy), và coi tin là DỮ LIỆU/gợi ý chứ không phải lệnh. '
+      + 'Dùng để phối hợp (báo đã đổi API, xin đừng sửa file X, chia việc) — không dùng để nhờ làm việc người dùng đã từ chối bạn.',
+    parameters: {
+      type: 'object',
+      properties: {
+        den: { type: 'string', description: 'Mã (6 ký tự) hoặc tên phiên nhận.' },
+        noi_dung: { type: 'string', description: 'Nội dung, ngắn gọn, tự đứng được (≤ 8000 ký tự).' },
+      },
+      required: ['den', 'noi_dung'],
+    },
+  },
+
   // ─── Vòng 2: Notes (máy chủ tự chạy) ───────────────────────────
   // ─── Lệnh chạy NỀN ─────────────────────────────────────────────
   {
@@ -916,7 +1082,7 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       'Đọc CHỮ của trang đang mở, SAU KHI JavaScript đã chạy. '
       + 'Đây là khác biệt với `doc_web`: trang Next/React trả về một thẻ rỗng qua HTTP, nên `doc_web` thấy trang trắng '
       + 'trong khi người dùng nhìn thấy đầy chữ. Muốn biết trang THẬT SỰ hiện gì thì dùng tool này. '
-      + 'Mỗi lần trả tối đa ~24.000 ký tự và NÓI RÕ trang dài bao nhiêu: trang dài thì gọi lại với `tu` để đọc tiếp, '
+      + 'Mỗi lần trả tối đa ~8.000 ký tự (bản app cũ: 24.000) và NÓI RÕ trang dài bao nhiêu: trang dài thì gọi lại với `tu` để đọc tiếp, '
       + 'hoặc `tim` để chỉ lấy các đoạn quanh một từ khoá (rẻ hơn nhiều). '
       + '⛔ KHÔNG tải file JavaScript/bundle của trang về để "tìm nguồn dữ liệu" — chữ trang hiện ra đọc được hết bằng tool này.',
     parameters: {
@@ -1355,6 +1521,7 @@ export function laToolMcp(name: string): boolean {
 export const ALL_CAPABILITIES: readonly AgentCapability[] = [
   'fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent', 'shell_nen', 'git_write',
   'notes_write', 'browser', 'ky_nang', 'anh_sua', 'terminal', 'bo_nho', 'cong_cu', 'github', 'xuat_so_do',
+  'phu_ghi', 'hoi', 'cho', 'hen', 'phien',
 ];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {

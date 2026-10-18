@@ -151,7 +151,7 @@ Trong phiên:
   !lệnh  chạy shell ngay  ·  # ghi chú  lưu quy ước dự án  ·  ctrl+v  dán ảnh
   esc  dừng việc đang chạy ·  esc esc  quay lui về câu cũ ·  ctrl+r  xem lại bảng ghi
   ctrl+p  bảng kế hoạch    ·  ctrl+o  mở/thu đầu ra lệnh ·  ctrl+c ×2  thoát
-  Alt+Enter, ctrl+j hoặc \\ cuối dòng  xuống dòng  ·  ↑↓  lịch sử
+  Shift+Enter, Alt+Enter, ctrl+j hoặc \\ cuối dòng  xuống dòng  ·  ctrl+↑↓  lịch sử · ↑↓ cuộn
 
 Dữ liệu: ~/.cuongmini (phiên đăng nhập, lịch sử, việc đã lưu).
 Cập nhật: chạy lại lệnh cài — curl -fsSL https://cuongthai.com/cli/install.sh | bash`, `CuongMini ${PHIEN_BAN} — a coding assistant in your terminal, powered by the CuongThai AI Code core.
@@ -187,7 +187,7 @@ In a session:
   !cmd  run shell now  ·  # note  save a project rule     ·  ctrl+v  paste image
   esc  interrupt       ·  esc esc  rewind                 ·  ctrl+r  transcript
   ↓  subagent panel    ·  /tasks  subagents & shells      ·  /language  English ↔ Tiếng Việt
-  Alt+Enter, ctrl+j or a trailing \\ for a newline  ·  ↑↓  history  ·  ctrl+c ×2  quit
+  Shift+Enter, Alt+Enter, ctrl+j or a trailing \\ for a newline  ·  ctrl+↑↓  history · ↑↓ scroll  ·  ctrl+c ×2  quit
 
 Data: ~/.cuongmini (session, history, saved tasks).
 Update: re-run the installer — curl -fsSL https://cuongthai.com/cli/install.sh | bash`);

@@ -290,7 +290,9 @@ async function bootstrap(): Promise<void> {
   // Bật server MCP ở NỀN, không `await`. Chờ ở đây nghĩa là một server MCP hỏng
   // giữ cửa sổ trắng thêm 10 giây — mà MCP là tính năng phần lớn người dùng
   // không cắm gì vào. Chưa cấu hình gì thì đây chỉ là một lần đọc file nhỏ.
-  void import('./agent/mcp').then(({ napLaiMcp }) => napLaiMcp()).catch(() => {});
+  // Nạp token CT Work của `/ctwork` (kho bí mật) TRƯỚC — server `ctwork` cần `${CTWORK_TOKEN}`.
+  void import('./agent/ctworkKetNoi').then(({ napDemBiMat }) => napDemBiMat()).catch(() => {})
+    .then(() => import('./agent/mcp')).then(({ napLaiMcp }) => napLaiMcp()).catch(() => {});
   app.on('will-quit', () => {
     void import('./agent/mcp').then(({ tatHet }) => tatHet()).catch(() => {});
     void import('./browser').then(({ huy }) => huy()).catch(() => {});

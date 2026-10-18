@@ -463,7 +463,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
     messages?: unknown; capabilities?: unknown; workspace?: unknown;
     ghiChuDuAn?: unknown; kyNang?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
     model?: unknown; agentPhu?: unknown; promptPhu?: unknown; boNho?: unknown; duPhongVe?: unknown; duPhongModel?: unknown; duPhongGiu?: unknown;
-    congAnthropicVe?: unknown; congPhu?: unknown; mucModelPhu?: unknown;
+    congAnthropicVe?: unknown; congPhu?: unknown; mucModelPhu?: unknown; quyenPhu?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
     res.status(400).json({ success: false, message: 'Thiếu "messages"', code: 'BAD_MESSAGES' });
@@ -593,6 +593,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         congPhu: body.congPhu,
         mucModelPhu: body.mucModelPhu,
         laPhu: body.laPhu,
+        quyenPhu: body.quyenPhu,
         toolMcp: body.toolMcp,
         userId: req.userId,
       },

@@ -1541,6 +1541,8 @@ async function toolRunCommand(
   const quyet = await hoiNguoiDung(
     {
       ten: 'run_command', duongDan: lenh, khoa: lenh, choNho: phanLoai.choNho,
+      // Tiền tố (đợt 3): `tien-to:npm test` cho qua `npm test -- a.ts`. Quyền cao thì không bao giờ.
+      ...(quyenCao ? {} : { lenhTienTo: lenh }),
       // Chỉ lệnh mức 'thuong' mới được tự duyệt — `tuDuyetLenh` đã lọc.
       tuDuyet: boiCanh.tuDuyetLenh?.(phanLoai.muc) === true,
     },
@@ -1937,7 +1939,7 @@ async function toolChayLenhNen(
   // bớt nguy hiểm — `rm -rf` ở nền vẫn xoá đúng ngần ấy file.
   const phanLoai = phanLoaiLenh(lenh);
   const quyet = await hoiNguoiDung(
-    { ten: 'run_command', duongDan: lenh, khoa: `nen:${lenh}`, choNho: phanLoai.choNho },
+    { ten: 'run_command', duongDan: lenh, khoa: `nen:${lenh}`, choNho: phanLoai.choNho, lenhTienTo: lenh },
     (y) => nen.xinPhepLenh({ ...y, phanLoai }),
     nen.signal,
     nen.so,
@@ -2330,8 +2332,12 @@ async function toolWebMo(args: Record<string, unknown>): Promise<KetQuaTool> {
   return { noiDung: `Đã mở ${trinhDuyet.urlHienTai()}`, tomTat: url.slice(0, 48) };
 }
 
-/** Một lần web_doc trả tối đa bấy nhiêu ký tự — phần còn lại đọc tiếp bằng `tu`. */
-const WEB_DOC_MOT_LAN = 24_000;
+/**
+ * Một lần web_doc trả tối đa bấy nhiêu ký tự — phần còn lại đọc tiếp bằng `tu`.
+ * 24k ⇒ 8k (đợt 3, 18/10/2026): kết quả tool bị CHỞ THEO mọi vòng sau; một việc đọc trang WBS dài
+ * 66 vòng có ngữ cảnh trung bình ~139k token và tốn 3,42 $ — phần lớn là các trang 24k đọc đi đọc lại.
+ */
+const WEB_DOC_MOT_LAN = 8_000;
 
 /**
  * Đọc chữ trang đang mở — CÓ PHÂN TRANG và TÌM THEO TỪ (26/09/2026).

@@ -208,3 +208,17 @@ describe('/export', () => {
     expect(tenFileXuat('', new Date(2026, 0, 9))).toBe('viec-ai-code-20260109.md');
   });
 });
+
+describe('timTheoChu — nhiều cái khớp (QA 18/10: `/model opus` báo "Không rõ model")', () => {
+  const ds = [
+    { id: 'sonnet-5', ten: 'Cuong Sonnet 5', dungDuoc: true }, { id: 'opus-4-8', ten: 'CuongMini Max 4.8', dungDuoc: true },
+    { id: 'cl-sonnet-5-5', ten: 'Claude Sonnet 5.5', dungDuoc: false, canMoKhoa: true }, { id: 'cl-opus-5-5', ten: 'Claude Opus 5.5', dungDuoc: false, canMoKhoa: true },
+  ];
+  it('chỉ MỘT cái dùng được ⇒ chọn nó', () => {
+    expect(timTheoChu('opus', ds)?.id).toBe('opus-4-8');
+    expect(timTheoChu('sonnet', ds)?.id).toBe('sonnet-5');
+  });
+  it('vẫn mơ hồ ⇒ null', () => {
+    expect(timTheoChu('cuong', ds)).toBeNull();
+  });
+});

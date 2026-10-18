@@ -11,9 +11,9 @@ import { veDiff } from '../diff';
 import { L } from '../i18n';
 import { tenViecGit, type ChoDuyet, type TrangThaiChat } from '../kho';
 import { THUONG_HIEU, catVua, dam, dao, doRong, mau, mauInk, mo } from '../mau';
-import { duoiMarkdown } from '../markdown';
-import { cauTrangThai, giay, SAO, TOOL_LENH } from '../trangThai';
-import { dongTieuDeTool, veDauRa, veKeHoach } from '../veBang';
+import { bocDong, bocVan, duoiMarkdown } from '../markdown';
+import { cauTrangThai, dichLyDo, dichMoTaCho, giay, SAO, TOOL_LENH } from '../trangThai';
+import { dongTieuDeTool, veDauRa, veKeHoach, veTool } from '../veBang';
 import type { ONhap } from './soanThao';
 
 const XAM = THUONG_HIEU.vien;
@@ -22,6 +22,8 @@ const XAM = THUONG_HIEU.vien;
 
 export function VungSong({ S, rong, toiDaDong, nhip }: { S: TrangThaiChat; rong: number; toiDaDong: number; nhip: number }) {
   const phan: string[] = [];
+  // Nhóm tool chỉ-đọc đang gom (chưa in vào bảng ghi) — hiện ngay ở đây cho khỏi "im".
+  if (S.toolCho) phan.push(...veTool(S.toolCho, rong));
   if (S.chuDangViet.trim()) {
     const { dong, anBot } = duoiMarkdown(S.chuDangViet, rong - 2, Math.max(3, toiDaDong));
     if (anBot) phan.push(mo(L(`  … ${anBot} dòng phía trên`, `  … ${anBot} lines above`)));
@@ -30,16 +32,19 @@ export function VungSong({ S, rong, toiDaDong, nhip }: { S: TrangThaiChat; rong:
   for (const t of S.toolChay) {
     const sang = nhip % 2 === 0;
     const cham = mau(sang ? THUONG_HIEU.timNhat : THUONG_HIEU.tim)(sang ? '●' : '○');
-    if (phan.length) phan.push('');
-    phan.push(dongTieuDeTool(t.ten, t.lenh, cham, rong));
+    // Tool nối tool: không có dòng trống (kiểu Claude Code).
+    phan.push(dongTieuDeTool(t.ten, t.lenh ?? t.thamSo, cham, rong));
     if (TOOL_LENH.has(t.ten)) {
       const ra = veDauRa(t.ra, rong, false);
-      const dong = ra.length ? ra : [mo(L(`đang chạy… ${giay(Date.now() - t.batDau)}`, `running… ${giay(Date.now() - t.batDau)}`))];
+      // Thẻ duyệt đang mở ⇒ lệnh CHƯA chạy (QA 18/10: "running… 10s" trong lúc chờ bạn bấm Yes).
+      const dong = ra.length ? ra : [mo(S.pha === 'duyet' && S.choDuyet.length ? L('chờ bạn duyệt…', 'waiting for approval…') : L(`đang chạy… ${giay(Date.now() - t.batDau)}`, `running… ${giay(Date.now() - t.batDau)}`))];
       dong.forEach((d, i) => phan.push(i === 0 ? `  ${mo('⎿')}  ${d}` : `     ${d}`));
     }
   }
   if (!phan.length) return null;
-  return <Box flexDirection="column" marginTop={1}><Text>{phan.join('\n')}</Text></Box>;
+  // Tool nối tiếp tool vừa in vào bảng ghi ⇒ không cách dòng (một chuỗi liền như Claude Code).
+  const sat = !S.chuDangViet.trim() && S.bang[S.bang.length - 1]?.loai === 'tool';
+  return <Box flexDirection="column" marginTop={sat ? 0 : 1}><Text>{phan.join('\n')}</Text></Box>;
 }
 
 // ─── Dòng trạng thái ✻ Đang … ────────────────────────────────────
@@ -49,14 +54,55 @@ export function DongTrangThai({ S, nhip }: { S: TrangThaiChat; nhip: number }) {
   const cho = S.pha === 'duyet';
   const sao = cho ? '⏸' : SAO[nhip % SAO.length]!;
   const mauSao = [THUONG_HIEU.tim, '#9f7aea', '#7c83f7', THUONG_HIEU.xanh, '#7c83f7', '#9f7aea'][nhip % 6]!;
+  // Kiểu Claude Code: `✻ Thinking… (10m 42s · ↓ 12.3k tokens · esc to interrupt)`.
   const phan = [giay(Date.now() - (S.batDauLuot || Date.now()))];
-  if (S.buoc?.nay) phan.push(S.buoc.tran && S.buoc.tran - S.buoc.nay <= 10 ? L(`bước ${S.buoc.nay}/${S.buoc.tran}`, `step ${S.buoc.nay}/${S.buoc.tran}`) : L(`bước ${S.buoc.nay}`, `step ${S.buoc.nay}`));
+  const token = Math.max(S.tokenRa, Math.round(S.kyTuRa / 4));
+  if (token > 0) phan.push(`↓ ${soGon(token)} tokens`);
+  if (S.buoc?.nay && S.buoc.tran && S.buoc.tran - S.buoc.nay <= 10) phan.push(L(`bước ${S.buoc.nay}/${S.buoc.tran}`, `step ${S.buoc.nay}/${S.buoc.tran}`));
   phan.push(cho ? L('chọn bên dưới', 'choose below') : L('esc để dừng', 'esc to interrupt'));
   return (
     <Box marginTop={1}>
       <Text>{`${mau(mauSao)(sao)} ${mau(cho ? '#fbbf24' : THUONG_HIEU.timNhat)(`${cauTrangThai(S)}${cho ? '' : '…'}`)} ${mo(`(${phan.join(' · ')})`)}`}</Text>
     </Box>
   );
+}
+
+/** 12345 ⇒ "12.3k". */
+export function soGon(n: number): string {
+  if (n < 1000) return String(n);
+  if (n < 1_000_000) return `${(n / 1000).toFixed(n < 10_000 ? 1 : 0).replace(/\.0$/, '')}k`;
+  return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+}
+
+/**
+ * KẾ HOẠCH kiểu Claude Code — danh sách ☐/☒/◐ gọn ngay DƯỚI dòng trạng thái (không còn hộp
+ * nổi bên phải đè lên nội dung). Dài ⇒ giữ cửa sổ quanh việc đang làm. ctrl+t thu/mở.
+ */
+export function KeHoachGon({ S, rong, toiDa = 8 }: { S: TrangThaiChat; rong: number; toiDa?: number }) {
+  return <Box paddingLeft={2}><Text>{dongKeHoachGon(S, rong, toiDa).join('\n')}</Text></Box>;
+}
+
+/** Các dòng của kế hoạch gọn — mỗi việc XUỐNG DÒNG hiện ĐỦ chữ (không cắt "…"). */
+export function dongKeHoachGon(S: Pick<TrangThaiChat, 'keHoach'>, rong: number, toiDa = 8): string[] {
+  if (!S.keHoach.length) return [];
+  const n = Math.max(3, toiDa);
+  const dang = Math.max(0, S.keHoach.findIndex((v) => v.trangThai !== 'xong'));
+  const dau = Math.max(0, Math.min(dang - 1, S.keHoach.length - n));
+  const trong = Math.max(10, rong - 9);
+  const dong: string[] = [];
+  if (dau > 0) dong.push(mo(L(`… ${dau} việc đã xong`, `… ${dau} completed`)));
+  for (const v of S.keHoach.slice(dau, dau + n)) {
+    const xong = v.trangThai === 'xong';
+    const dangLam = v.trangThai === 'dang';
+    const ky = xong ? mau('#4ade80')('☒') : dangLam ? mau('#fbbf24')('◐') : mo('☐');
+    const manh = bocDong(v.ten, trong);
+    manh.forEach((m, i) => {
+      const chu = xong ? mo(m) : dangLam ? dam(m) : m;
+      dong.push(i === 0 ? `${ky} ${chu}` : `  ${chu}`);
+    });
+  }
+  if (S.keHoach.length > dau + n) dong.push(mo(L(`… +${S.keHoach.length - dau - n} việc`, `… +${S.keHoach.length - dau - n} more`)));
+  return dong.map((d, i) => (i === 0 ? `${mo('⎿')}  ${d}` : `   ${d}`));
 }
 
 // ─── Bảng kế hoạch ───────────────────────────────────────────────
@@ -117,7 +163,7 @@ export type CheDoNhap = 'thuong' | 'shell' | 'ghiNho';
 /** Dòng đầu bắt đầu bằng `!` ⇒ chạy shell; `# ` ⇒ ghi nhớ quy ước (đổi màu ô nhập như Claude Code). */
 export const cheDoNhapCua = (text: string): CheDoNhap => (text.startsWith('!') ? 'shell' : /^#\s/.test(text) ? 'ghiNho' : 'thuong');
 
-export function ONhapView({ o, rong, cheDo, dangChay, goiYMo, soHangCho }: { o: ONhap; rong: number; cheDo: string; dangChay: boolean; goiYMo: boolean; soHangCho: number }) {
+export function ONhapView({ o, rong, cheDo, dangChay, goiYMo, soHangCho, xuongDong }: { o: ONhap; rong: number; cheDo: string; dangChay: boolean; goiYMo: boolean; soHangCho: number; xuongDong?: string }) {
   const cd = moTaCheDo(cheDo);
   const trong = rong - 6;
   const kieu = cheDoNhapCua(o.text);
@@ -149,7 +195,7 @@ export function ONhapView({ o, rong, cheDo, dangChay, goiYMo, soHangCho }: { o: 
       <Box borderStyle={kieuVien()} borderColor={mauInk(vienMau)} paddingX={1} width={rong}>
         <Text wrap="wrap">{hien}</Text>
       </Box>
-      {nhanKieu ? <Text>{mo(nhanKieu)}</Text> : null}
+      {nhanKieu ? <Text>{mo(nhanKieu)}</Text> : xuongDong && o.text && !dangChay ? <Text>{mo(`  ${catVua(xuongDong, trong)}`)}</Text> : null}
     </Box>
   );
 }
@@ -245,8 +291,13 @@ export function ChanTrang({ S, rong, model, muc, nhac }: { S: TrangThaiChat; ron
   const phaiPhan: string[] = [];
   if (S.ws?.name) phaiPhan.push(`${S.ws.name}${S.ws.branch ? ` ⎇ ${S.ws.branch}` : ''}`);
   if (S.nguCanh) phaiPhan.push(L(`ngữ cảnh ${S.nguCanh.phanTram}%`, `context ${S.nguCanh.phanTram}%`));
-  if (S.tienPhien > 0) phaiPhan.push(`~$${S.tienPhien < 0.1 ? S.tienPhien.toFixed(3) : S.tienPhien.toFixed(2)}`);
-  if (S.hanMucPhanTram !== null && S.hanMucPhanTram >= 50) phaiPhan.push(L(`hạn mức ${S.hanMucPhanTram}%`, `usage ${S.hanMucPhanTram}%`));
+  // Tiền = tổng máy chủ báo cho mọi lượt + phần ĐANG chạy của lượt hiện tại (cộng theo vòng).
+  const tien = S.tienPhien + (S.dangChay ? S.tienLuot : 0);
+  if (tien > 0) phaiPhan.push(`~$${tien < 0.1 ? tien.toFixed(3) : tien.toFixed(2)}`);
+  /* Hạn mức 5 GIỜ của AI Code (token, cổng CuongMini). Cổng Claude chính hãng (`cl-*`) tính trần riêng
+     theo tiền ⇒ con số này không áp dụng, đừng hiện "100%" gây hoảng. */
+  const chinhHang = /^cl-/.test(String((S.ws as { model?: string } | null)?.model ?? ''));
+  if (!chinhHang && S.hanMucPhanTram !== null && S.hanMucPhanTram >= 50) phaiPhan.push(L(`hạn mức 5 giờ ${S.hanMucPhanTram}%`, `5h quota ${S.hanMucPhanTram}%`));
   const phai = mo(phaiPhan.join(' · '));
   if (nhac) return <Box paddingLeft={2}><Text>{mau('#fbbf24')(nhac)}</Text></Box>;
   const tong = doRong(trai) + doRong(giua) + doRong(phai) + 8;
@@ -261,20 +312,23 @@ export function ChanTrang({ S, rong, model, muc, nhac }: { S: TrangThaiChat; ron
 
 // ─── Thẻ duyệt ───────────────────────────────────────────────────
 
-export interface LuaChonDuyet { q: 'choPhep' | 'choPhepCaFile' | 'tuChoi'; nhan: string }
+export interface LuaChonDuyet { q: 'choPhep' | 'choPhepCaFile' | 'choPhepTienTo' | 'tuChoi'; nhan: string }
 
 export function luaChonDuyet(d: ChoDuyet): LuaChonDuyet[] {
   const tuChoi: LuaChonDuyet = { q: 'tuChoi', nhan: L('Từ chối', 'No, and tell CuongMini what to do differently (esc)') };
   switch (d.loai) {
     case 'xinPhep': return [{ q: 'choPhep', nhan: L('Cho phép', 'Yes') }, { q: 'choPhepCaFile', nhan: L('Cho phép cả việc này (không hỏi lại file này)', 'Yes, allow all edits to this file during this task') }, tuChoi];
     case 'xinPhepLenh': {
-      const ds: LuaChonDuyet[] = [{ q: 'choPhep', nhan: L('Chạy', 'Yes') }];
-      if (d.phanLoai?.choNho !== false) ds.push({ q: 'choPhepCaFile', nhan: L('Luôn cho lệnh này ở dự án này', "Yes, and don't ask again for this command in this project") });
+      const ds: LuaChonDuyet[] = [{ q: 'choPhep', nhan: (d.lenh ?? '').startsWith('📨') ? L('Gửi', 'Yes, send it') : L('Chạy', 'Yes') }];
+      const laTin = (d.lenh ?? '').startsWith('📨');
+      if (d.phanLoai?.choNho !== false) ds.push({ q: 'choPhepCaFile', nhan: laTin ? L('Gửi, và không hỏi lại khi nhắn phiên này', "Yes, and don't ask again for messages to this session") : L('Luôn cho lệnh này ở dự án này', "Yes, and don't ask again for this command in this project") });
+      // Đợt 3: theo TIỀN TỐ — lõi chặn lệnh nối (`;` `&&` `|` `$(…)`) khỏi khớp.
+      if (d.phanLoai?.choNho !== false && d.tienTo && d.tienTo !== (d.lenh ?? '').trim()) ds.push({ q: 'choPhepTienTo', nhan: L(`Luôn cho mọi lệnh \`${d.tienTo} …\` ở dự án này`, `Yes, and don't ask again for \`${d.tienTo} …\` commands in this project`) });
       ds.push(tuChoi);
       return ds;
     }
     case 'xinPhepGit': {
-      const nhan = d.viec === 'commit' ? 'Commit' : d.viec === 'pr' ? L('Đẩy và mở PR', 'Push and open PR') : d.viec === 'day' ? L('Đẩy lên GitHub', 'Push to GitHub') : d.viec === 'cai' ? L('Cài', 'Install') : L('Đồng ý', 'Yes');
+      const nhan = d.viec === 'commit' ? 'Commit' : d.viec === 'pr' ? L('Đẩy và mở PR', 'Push and open PR') : d.viec === 'day' ? L('Đẩy lên GitHub', 'Push to GitHub') : d.viec === 'cai' ? L('Cài', 'Install') : d.viec === 'gop' ? L('Gộp vào dự án', 'Merge into the project') : L('Đồng ý', 'Yes');
       return [{ q: 'choPhep', nhan }, tuChoi];
     }
     case 'xinPhepNote': return [{ q: 'choPhep', nhan: L('Ghi', 'Write') }, tuChoi];
@@ -294,14 +348,26 @@ export function TheDuyet({ d, chon, rong, toiDaDong, conLai }: { d: ChoDuyet; ch
       tieuDe = `${d.taoMoi ? L('Tạo file', 'Create file') : L('Sửa file', 'Edit file')} ${mau('#7dd3fc')(d.duongDan ?? '')}`;
       dong.push(...veDiff(d.diff, { rong: trong, duong: d.duongDan, toiDa: Math.max(4, toiDaDong) }));
       break;
-    case 'xinPhepLenh':
-      tieuDe = L('Chạy lệnh', 'Bash command');
-      dong.push(...(d.lenh ?? '').split('\n').slice(0, 12).map((l, i) => `${i === 0 ? mau('#fbbf24')('$') : ' '} ${dam(catVua(l, trong - 2))}`));
+    case 'xinPhepLenh': {
+      // Nhắn phiên khác (`nhan_phien`) đi chung cơ chế thẻ lệnh — lõi gửi `📨 → "tên" (mã, nơi): nội dung`. Đó KHÔNG phải
+      // lệnh shell: đừng vẽ "Bash command $ 📨 …" (QA 18/10).
+      const tin = /^📨 → (.*?): ([\s\S]*)$/u.exec(d.lenh ?? '');
+      if (tin) {
+        tieuDe = `${L('Nhắn phiên khác', 'Message another session')} ${mau('#7dd3fc')(tin[1]!)}`;
+        dong.push(...tin[2]!.split('\n').slice(0, 12).flatMap((l) => bocVan(l, trong - 2)).map((l) => `${mo('│')} ${l}`));
+      } else {
+        tieuDe = L('Chạy lệnh', 'Bash command');
+        /* BỌC, không cắt: người dùng phải thấy TRỌN lệnh trước khi bấm Yes (đuôi `&& rm -rf …` mà bị "…" là duyệt mù). */
+        const dongLenh = (d.lenh ?? '').split('\n').flatMap((l) => bocDong(l, trong - 2));
+        dong.push(...dongLenh.slice(0, 16).map((l, i) => `${i === 0 ? mau('#fbbf24')('$') : ' '} ${dam(l)}`));
+        if (dongLenh.length > 16) dong.push(mo(L(`  … +${dongLenh.length - 16} dòng nữa`, `  … +${dongLenh.length - 16} more lines`)));
+      }
       if (d.phanLoai?.lyDo?.length) {
         dong.push('');
-        for (const l of d.phanLoai.lyDo.slice(0, 5)) dong.push(`${mau(MAU_MUC[muc])('▲')} ${catVua(l, trong - 2)}`);
+        for (const l of d.phanLoai.lyDo.slice(0, 5)) dong.push(...bocVan(dichLyDo(l), trong - 2).map((m, i) => `${i ? ' ' : mau(MAU_MUC[muc])('▲')} ${m}`));
       }
       break;
+    }
     case 'xinPhepMcp':
       tieuDe = `${L('Gọi công cụ', 'Call tool')} ${mau('#7dd3fc')(`${d.server} · ${d.tool}`)}`;
       dong.push(...String(d.args ?? '').slice(0, 2000).split('\n').slice(0, Math.max(3, toiDaDong)).map((l) => mo(catVua(l, trong))));
@@ -315,6 +381,7 @@ export function TheDuyet({ d, chon, rong, toiDaDong, conLai }: { d: ChoDuyet; ch
       dong.push(...String(d.chiTiet ?? '').slice(0, 4000).split('\n').slice(0, Math.max(3, toiDaDong)).map((l) => catVua(l, trong)));
       break;
   }
+  if (d.phuId) tieuDe = `${mau('#a78bfa')(`🤖 ${L('Agent phụ', 'Subagent')}`)} ${mo('·')} ${tieuDe}`;
   const lc = luaChonDuyet(d);
   const chonDong = lc.map((l, i) => (i === chon
     ? mau(MAU_MUC[muc])(dam(`❯ ${i + 1}. ${l.nhan}`))
@@ -361,7 +428,7 @@ export function MenuView({ tieuDe, moTa, ds, chon, loc, coLoc, rong, mauVien }: 
   return (
     <Box borderStyle={kieuVien()} borderColor={mauInk(mauVien ?? THUONG_HIEU.tim)} flexDirection="column" paddingX={1} width={rong} marginTop={1}>
       <Text>{dam(tieuDe)}</Text>
-      {moTa ? <Text>{mo(moTa)}</Text> : null}
+      {moTa ? <Text>{mo(bocVan(moTa, rong - 4).join('\n'))}</Text> : null}
       {coLoc ? <Text>{`${mau(THUONG_HIEU.timNhat)('⌕')} ${loc}${dao(' ')}${loc ? '' : mo(L(' gõ để lọc…', ' type to filter…'))}`}</Text> : null}
       <Box marginTop={1}><Text>{dong.join('\n')}</Text></Box>
       <Text>{mo(`${ds.length > cua ? `${chon + 1}/${ds.length} · ` : ''}${L('↑↓ chọn · Enter xác nhận · Esc huỷ', '↑↓ select · Enter confirm · Esc cancel')}`)}</Text>
@@ -373,4 +440,43 @@ export function MenuView({ tieuDe, moTa, ds, chon, loc, coLoc, rong, mauVien }: 
 export function ONhapNho({ nhan, giaTri, an, dangNhap }: { nhan: string; giaTri: string; an?: boolean; dangNhap?: boolean }) {
   const hien = an ? '•'.repeat([...giaTri].length) : giaTri;
   return <Text>{`${mo(nhan.padEnd(14))}${dangNhap ? mau(THUONG_HIEU.timNhat)('❯ ') : '  '}${hien}${dangNhap ? dao(' ') : ''}`}</Text>;
+}
+
+// ─── Đợt 3: hỏi lựa chọn · chờ/hẹn ─────────────────────────────
+
+/** Thẻ HỎI của agent (`hoi_nguoi_dung`): một câu tại một lúc, ↑↓/số chọn, space đánh dấu (chọn nhiều), Enter xác nhận. */
+export function TheHoi({ cau, so, tong, chon, daDanh, rong, nhapKhac }: {
+  cau: { cauHoi: string; tieuDe?: string; luaChon: Array<{ nhan: string; moTa?: string }>; nhieu?: boolean };
+  so: number; tong: number; chon: number; daDanh: string[]; rong: number; nhapKhac: boolean;
+}) {
+  const ds = [...cau.luaChon, { nhan: L('Khác — tự gõ câu trả lời', 'Other — type your own answer'), moTa: undefined as string | undefined }];
+  const dong = ds.map((l, i) => {
+    const dau = cau.nhieu && i < cau.luaChon.length ? (daDanh.includes(l.nhan) ? '☒ ' : '☐ ') : '';
+    const chu = `${i + 1}. ${dau}${l.nhan}`;
+    const moTa = l.moTa ? mo(`  — ${catVua(l.moTa, Math.max(10, rong - doRong(chu) - 12))}`) : '';
+    return i === chon ? `${mau(THUONG_HIEU.timNhat)(dam(`❯ ${chu}`))}${moTa}` : `  ${chu}${moTa}`;
+  });
+  return (
+    <Box borderStyle={kieuVien()} borderColor={mauInk(THUONG_HIEU.tim)} flexDirection="column" paddingX={1} width={rong} marginTop={1}>
+      <Text>{`${mau(THUONG_HIEU.timNhat)('?')} ${dam(cau.cauHoi)}${tong > 1 ? mo(` (${so}/${tong})`) : ''}${cau.tieuDe ? mo(`  [${cau.tieuDe}]`) : ''}`}</Text>
+      <Box marginTop={1}><Text>{dong.join('\n')}</Text></Box>
+      <Text>{mo(nhapKhac
+        ? L('Gõ câu trả lời vào ô nhập rồi Enter · Esc quay lại', 'Type your answer in the input and press Enter · Esc back')
+        : cau.nhieu
+          ? L('↑↓ chọn · space đánh dấu · Enter xác nhận · Esc bỏ qua', '↑↓ move · space toggle · Enter confirm · Esc skip')
+          : L('↑↓ chọn · Enter xác nhận · phím số chọn nhanh · Esc bỏ qua', '↑↓ select · Enter confirm · number keys · Esc skip'))}</Text>
+    </Box>
+  );
+}
+
+/** Dòng CHỜ / HẸN dưới dòng trạng thái. */
+export function DongHenCho({ S }: { S: TrangThaiChat }) {
+  const { cho, hen } = S.henCho;
+  if (!cho.length && !hen.length) return null;
+  const gioP = (t: number) => { const d = new Date(t); return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
+  const dong = [
+    ...cho.map((c) => `${mau('#fbbf24')('⏳')} ${L('Đang chờ', 'Waiting for')} ${dichMoTaCho(c.moTa)} ${mo(`· ${L('còn', 'left')} ${Math.max(0, Math.round((c.hetLuc - Date.now()) / 1000))}s · ${L('esc bỏ chờ', 'esc to stop waiting')}`)}`),
+    ...hen.map((h) => `${mau(THUONG_HIEU.xanhNhat)('⏰')} ${L('Hẹn quay lại lúc', 'Wakes up at')} ${gioP(h.luc)}${h.lap ? mo(L(` · lặp mỗi ${h.phut}′ (${h.conLai}×)`, ` · every ${h.phut}′ (${h.conLai}×)`)) : ''} ${mo('—')} ${h.lyDo.slice(0, 120)} ${mo(`· /hen ${L('huy', 'cancel')} ${h.id}`)}`),
+  ];
+  return <Box paddingLeft={2}><Text>{dong.join('\n')}</Text></Box>;
 }

@@ -28,8 +28,31 @@ export const XOA_KHUNG = '\x1b[2J\x1b[H';
  * nên in lại bảng ghi sau nó là để lại một bản trùng phía trên (lỗi 0.3.0 của /language) —
  * thêm `ESC[3J` và lệnh riêng của iTerm2 (`OSC 1337;ClearScrollback`; terminal khác bỏ qua).
  */
-export function xoaSach(env: NodeJS.ProcessEnv = process.env): string {
-  return `\x1b[2J\x1b[3J\x1b[H${env.TERM_PROGRAM === 'iTerm.app' ? '\x1b]1337;ClearScrollback\x07' : ''}`;
+export function xoaSach(_env: NodeJS.ProcessEnv = process.env): string {
+  /* KHÔNG còn mã riêng `OSC 1337;ClearScrollback` của iTerm2 (18/10/2026): iTerm2 hiện thanh hỏi
+     "A control sequence attempted to clear scrollback history. Allow?" — người dùng thấy như lỗi.
+     Chỉ dùng ở chế độ in nối tiếp (đổi cỡ / ctrl+l / /clear); toàn màn hình không bao giờ gọi. */
+  return '\x1b[2J\x1b[3J\x1b[H';
+}
+
+/**
+ * Chặn MỌI lệnh xoá scrollback (`ESC[3J`, `OSC 1337;ClearScrollback`) khi đang ở toàn màn hình.
+ * Thủ phạm thật: Ink tự ghi `ansiEscapes.clearTerminal` (= `ESC[2J ESC[3J ESC[H`) mỗi khi khung
+ * động cao ≥ số dòng terminal — ở alternate screen việc xoá scrollback là vô nghĩa mà iTerm2 lại hỏi.
+ */
+export function locXoaScrollback(chunk: unknown): unknown {
+  if (!dangBat || typeof chunk !== 'string') return chunk;
+  if (!chunk.includes('\x1b[3J') && !chunk.includes('ClearScrollback')) return chunk;
+  return chunk.replace(/\x1b\[3J/g, '').replace(/\x1b\]1337;ClearScrollback\x07/g, '');
+}
+
+let daCaiLoc = false;
+/** Gắn bộ lọc vào `stdout.write` (một lần). */
+export function caiLocXoaScrollback(out: NodeJS.WriteStream): void {
+  if (daCaiLoc) return;
+  daCaiLoc = true;
+  const goc = out.write.bind(out) as (...a: unknown[]) => boolean;
+  (out as unknown as { write: (...a: unknown[]) => boolean }).write = (chunk: unknown, ...con: unknown[]) => goc(locXoaScrollback(chunk), ...con);
 }
 
 /** Có bật toàn màn hình không: cờ thắng cài đặt; không TTY / CI / -p thì không bao giờ. */
@@ -97,33 +120,57 @@ let phaiTatChuot = false;
  * Có bật báo chuột không. Windows: Node bật raw mode KHÔNG kèm "VT input" nên sự kiện chuột không
  * tới được tiến trình — bật chỉ làm hỏng bôi đen mà con lăn vẫn không cuộn được ⇒ chỉ PgUp/PgDn.
  */
-export const nenBatChuot = (platform: NodeJS.Platform = process.platform, env: NodeJS.ProcessEnv = process.env): boolean =>
-  platform !== 'win32' && env.CUONGMINI_CHUOT !== '0';
+export const nenBatChuot = (platform: NodeJS.Platform = process.platform, env: NodeJS.ProcessEnv = process.env, caiDat: 'bat' | 'tat' = chuotCaiDat): boolean =>
+  platform !== 'win32' && env.CUONGMINI_CHUOT !== '0' && (env.CUONGMINI_CHUOT === '1' || caiDat === 'bat');
+
+/** Cài đặt `chuot` (đọc lúc mở, đổi bằng `/mouse`). */
+let chuotCaiDat: 'bat' | 'tat' = 'tat';
+export function datChuotCaiDat(c: 'bat' | 'tat'): void { chuotCaiDat = c; }
+
+/**
+ * ALTERNATE SCROLL (DECSET 1007): KHÔNG bắt chuột nhưng con lăn trong alternate screen gửi phím
+ * ↑/↓ (xterm, iTerm2, kitty, WezTerm…) ⇒ vẫn cuộn được bảng ghi, còn bôi đen chép chữ tự nhiên.
+ * `ManChat` phân biệt con lăn (nhiều mũi tên dồn trong vài ms) với một lần bấm ↑ (lịch sử ô nhập).
+ */
+export const BAT_CUON_PHU = '\x1b[?1007h';
+export const TAT_CUON_PHU = '\x1b[?1007l';
 
 /** Vào toàn màn hình (gọi TRƯỚC khi Ink vẽ). Tiến trình chết kiểu gì cũng trả lại màn hình. */
 export function batDauToanManHinh(out: NodeJS.WriteStream, chuot = nenBatChuot()): void {
   if (dangBat) return;
   dangBat = true;
   phaiTatChuot = chuot;
-  out.write(VAO_MAN_PHU + (chuot ? BAT_CHUOT : ''));
+  out.write(VAO_MAN_PHU + (chuot ? BAT_CHUOT : BAT_CUON_PHU));
   process.once('exit', () => ketThucToanManHinh(out));
 }
 
 export function ketThucToanManHinh(out: NodeJS.WriteStream): void {
   if (!dangBat) return;
   dangBat = false;
-  try { out.write((phaiTatChuot ? TAT_CHUOT : '') + '\x1b[?25h' + RA_MAN_PHU); } catch { /* ống đã đóng */ }
+  try { out.write((phaiTatChuot ? TAT_CHUOT : TAT_CUON_PHU) + '\x1b[?25h' + RA_MAN_PHU); } catch { /* ống đã đóng */ }
 }
 
 export const dangToanManHinh = (): boolean => dangBat;
 
 /** Đổi chế độ GIỮA phiên (/fullscreen): trả chuỗi phải ghi (qua kênh ghi của Ink để không lệch khung). */
 export function chuoiDoiCheDo(bat: boolean, env: NodeJS.ProcessEnv = process.env): string {
-  if (bat) { dangBat = true; phaiTatChuot = nenBatChuot(); return VAO_MAN_PHU + (phaiTatChuot ? BAT_CHUOT : ''); }
+  if (bat) { dangBat = true; phaiTatChuot = nenBatChuot(); return VAO_MAN_PHU + (phaiTatChuot ? BAT_CHUOT : BAT_CUON_PHU); }
   dangBat = false;
-  const tat = phaiTatChuot ? TAT_CHUOT : '';
+  const tat = phaiTatChuot ? TAT_CHUOT : TAT_CUON_PHU;
   phaiTatChuot = false;
-  return tat + RA_MAN_PHU + xoaSach(env);
+  /* Ra màn hình thường: ở đó CHƯA có gì của CuongMini (mọi thứ nằm ở alternate screen) ⇒ chỉ cần xoá khung, KHÔNG
+     xoá scrollback — `ESC[3J` vừa làm iTerm2 hỏi "clear scrollback?" vừa xoá luôn lịch sử shell của người dùng
+     từ trước khi mở CuongMini (QA 18/10, `/fullscreen off`). */
+  void env;
+  return tat + RA_MAN_PHU + XOA_KHUNG;
+}
+
+/** Đổi bắt chuột GIỮA phiên (`/mouse on|off`) — chuỗi phải ghi. */
+export function chuoiDoiChuot(bat: boolean): string {
+  chuotCaiDat = bat ? 'bat' : 'tat';
+  if (!dangBat) return '';
+  phaiTatChuot = bat && process.platform !== 'win32';
+  return phaiTatChuot ? TAT_CUON_PHU + BAT_CHUOT : TAT_CHUOT + BAT_CUON_PHU;
 }
 
 /** Tóm tắt in ra màn hình thường khi thoát toàn màn hình (alternate screen mất hết nội dung). */

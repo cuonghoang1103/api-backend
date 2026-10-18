@@ -25,7 +25,7 @@ import type {
   AgentHookNhatKy,
   AgentMucKhoiPhuc,
   AgentPhien,
-  AgentQuyetDinh,
+  AgentQuyetDinh, AgentChoView, AgentHenView, AgentPhienMang,
   AgentWorkspace,
   CheDoQuyen,
   AgentWorktree,
@@ -418,6 +418,24 @@ const bridge: DesktopBridge = {
     reset: (cuocId: string) => ipcRenderer.invoke('agent:reset', { cuocId }) as Promise<void>,
     traLoiXinPhep: (cuocId: string, id: string, quyetDinh: AgentQuyetDinh) =>
       ipcRenderer.invoke('agent:traLoiXinPhep', { cuocId, id, quyetDinh }) as Promise<void>,
+    traLoiHoi: (cuocId: string, id: string, traLoi: Array<{ chon: string[]; khac?: string }> | null) =>
+      ipcRenderer.invoke('agent:traLoiHoi', { cuocId, id, traLoi }) as Promise<boolean>,
+    huyCho: (cuocId: string, id: string, cach?: 'boCho' | 'xongNgay') =>
+      ipcRenderer.invoke('agent:huyCho', cach ? { cuocId, id, cach } : { cuocId, id }) as Promise<boolean>,
+    huyHen: (cuocId: string, id?: string) =>
+      ipcRenderer.invoke('agent:huyHen', id ? { cuocId, id } : { cuocId }) as Promise<number>,
+    henCho: (cuocId: string) => ipcRenderer.invoke('agent:henCho', { cuocId }) as Promise<{ cho: AgentChoView[]; hen: AgentHenView[] }>,
+    dsPhienMang: (cuocId: string) =>
+      ipcRenderer.invoke('agent:dsPhienMang', { cuocId }) as Promise<{ toi: AgentPhienMang | null; ds: AgentPhienMang[] }>,
+    doiTenPhienMang: (cuocId: string, ten: string) =>
+      ipcRenderer.invoke('agent:doiTenPhienMang', { cuocId, ten }) as Promise<AgentPhienMang | null>,
+    ctwork: (cuocId: string | null, viec: 'noi' | 'ngat' | 'trangThai', quyen?: 'doc' | 'ghi') =>
+      ipcRenderer.invoke('agent:ctwork', { ...(cuocId ? { cuocId } : {}), viec, ...(quyen ? { quyen } : {}) }) as Promise<{
+        ok: boolean; loi?: string; soTool?: number; quyen?: 'doc' | 'ghi' | null; coToken?: boolean; bienTay?: boolean;
+        server?: { ok: boolean; soTool: number; loi?: string } | null;
+      }>,
+    themTienTo: (cuocId: string, tienTo: string) =>
+      ipcRenderer.invoke('agent:themTienTo', { cuocId, tienTo }) as Promise<{ ok: boolean; khoa?: string; loi?: string }>,
     datCheDoSua: (cuocId: string, bat: boolean) =>
       ipcRenderer.invoke('agent:datCheDoSua', { cuocId, bat }) as Promise<AgentWorkspace>,
     datCheDoLenh: (cuocId: string, bat: boolean) =>

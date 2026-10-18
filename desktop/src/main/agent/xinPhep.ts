@@ -20,8 +20,14 @@
 
 import type { SoCuoc } from './so.js';
 import { themQuyenLau } from './quyenLau.js';
+import { choPhepTheoTienTo, goiYTienTo, khoaTienTo } from './tienTo.js';
 
-export type QuyetDinh = 'choPhep' | 'choPhepCaFile' | 'choPhepMai' | 'tuChoi';
+/**
+ * `choPhepTienTo` (đợt 3, 18/10/2026): "luôn cho phép mọi lệnh bắt đầu bằng
+ * `npm test`" — ghi khoá `tien-to:<…>` vào sổ cuộc + quyền lâu dài của dự án.
+ * Chỉ có tác dụng với yêu cầu mang `lenhTienTo` (lệnh shell đơn, được nhớ).
+ */
+export type QuyetDinh = 'choPhep' | 'choPhepCaFile' | 'choPhepMai' | 'choPhepTienTo' | 'tuChoi';
 
 export interface YeuCauXinPhep {
   id: string;
@@ -29,6 +35,8 @@ export interface YeuCauXinPhep {
   ten: string;
   /** Đường dẫn tương đối, hoặc chuỗi lệnh — thứ hiện lên cho người dùng đọc. */
   duongDan: string;
+  /** Tiền tố gợi ý cho nút "Luôn cho phép `…`" (chỉ lệnh shell đơn, được nhớ). */
+  tienTo?: string;
 }
 
 interface DangCho {
@@ -53,6 +61,8 @@ interface DangCho {
   quyenLau?: Set<string>;
   /** Ghi khoá xuống đĩa. Tiêm vào để module này không phải biết `electron`. */
   themLau?: (khoa: string) => Promise<boolean>;
+  /** Khoá tiền tố gợi ý (`tien-to:npm test`) — `null` = lệnh không nhớ theo tiền tố được. */
+  khoaTienTo?: string | null;
 }
 
 /**
@@ -91,7 +101,11 @@ export function daChoPhepCaFile(soNho: Set<string>, khoa: string): boolean {
  * này không biết gì về IPC, và nhờ thế test được mà không cần dựng Electron.
  */
 export function hoiNguoiDung(
-  yeuCau: Omit<YeuCauXinPhep, 'id'> & { khoa?: string; choNho?: boolean; tuDuyet?: boolean },
+  yeuCau: Omit<YeuCauXinPhep, 'id'> & {
+    khoa?: string; choNho?: boolean; tuDuyet?: boolean;
+    /** Lệnh shell nguyên văn ⇒ bật khớp/nhớ THEO TIỀN TỐ (`tienTo.ts`). */
+    lenhTienTo?: string;
+  },
   phat: (y: YeuCauXinPhep) => void,
   signal: AbortSignal,
   /* Nhận cả SỔ của cuộc, không chỉ cái `Set` khoá đã cấp: nhận sổ thì cờ
@@ -146,6 +160,16 @@ export function hoiNguoiDung(
      được nhớ qua nhiều cuộc. */
   if (choNho && quyenLau?.has(khoa)) return Promise.resolve('choPhepCaFile');
 
+  /* TIỀN TỐ (đợt 3): `tien-to:npm test` cho qua `npm test -- a.ts`, nhưng
+     KHÔNG cho qua lệnh có nối/chuyển hướng (`tienTo.ts › laLenhDon`). Cùng
+     điều kiện `choNho` — lệnh nguy hiểm không bao giờ đi đường này. */
+  if (choNho && yeuCau.lenhTienTo) {
+    if (choPhepTheoTienTo(soNho, yeuCau.lenhTienTo) || (quyenLau && choPhepTheoTienTo(quyenLau, yeuCau.lenhTienTo))) {
+      return Promise.resolve('choPhepCaFile');
+    }
+  }
+  const goiY = choNho && yeuCau.lenhTienTo ? goiYTienTo(yeuCau.lenhTienTo) : null;
+
   const id = `xp_${++demId}`;
   return new Promise<QuyetDinh>((resolve) => {
     let xong = false;
@@ -162,7 +186,7 @@ export function hoiNguoiDung(
 
     const dongHo = setTimeout(() => ketThuc('tuChoi'), HET_GIO_MS);
     dangCho.set(id, {
-      giaiPhong: ketThuc, dongHo, khoa, choNho, soNho,
+      giaiPhong: ketThuc, dongHo, khoa, choNho, soNho, khoaTienTo: goiY ? khoaTienTo(goiY) : null,
       ...(quyenLau ? { quyenLau } : {}),
       ...(gocCuoc ? { themLau: (k: string) => themQuyenLau(gocCuoc, k) } : {}),
     });
@@ -171,7 +195,7 @@ export function hoiNguoiDung(
     // được để treo: lượt đã bị huỷ thì không còn ai đọc kết quả nữa.
     signal.addEventListener('abort', huy, { once: true });
 
-    phat({ id, ten: yeuCau.ten, duongDan: yeuCau.duongDan });
+    phat({ id, ten: yeuCau.ten, duongDan: yeuCau.duongDan, ...(goiY ? { tienTo: goiY } : {}) });
   });
 }
 
@@ -195,6 +219,11 @@ export function traLoi(id: string, quyetDinh: QuyetDinh): boolean {
     muc.soNho.add(muc.khoa);
     muc.quyenLau?.add(muc.khoa);
     void muc.themLau?.(muc.khoa);
+  }
+  if (quyetDinh === 'choPhepTienTo' && muc.choNho && muc.khoaTienTo) {
+    muc.soNho.add(muc.khoaTienTo);
+    muc.quyenLau?.add(muc.khoaTienTo);
+    void muc.themLau?.(muc.khoaTienTo);
   }
   muc.giaiPhong(quyetDinh);
   return true;

@@ -19,6 +19,7 @@ import { caiDatVo, type VoDocLap } from './electron';
 import { datPhien as datPhienLoi, type PhienDangNhap } from './authThay';
 import { goiKenhNoiBo } from './ipcThay';
 import { registerAgentHandlers } from '../../../desktop/src/main/ipc/agent';
+import { datNoiChay } from '../../../desktop/src/main/agent/phienMang';
 import { datGocChoCuoc, gocCuaCuoc } from '../../../desktop/src/main/agent/loop';
 import { chuanHoaAnh as chuanHoaAnhApp } from '../../../desktop/src/main/agent/anhLa';
 import { API_ORIGIN, WEB_ORIGIN } from '../../../desktop/src/main/config';
@@ -58,6 +59,8 @@ const suKienGia = {
 export function khoiDong(v: VoDocLap): void {
   vo = v;
   caiDatVo(v);
+  // Đợt 3: nhắn giữa phiên cần biết phiên này chạy ở đâu (CLI hay VS Code) — hiện trong /sessions.
+  if (v.noi) datNoiChay(v.noi);
   if (daKhoiDong) return;
   registerAgentHandlers();
   datMacDinhDayDu();

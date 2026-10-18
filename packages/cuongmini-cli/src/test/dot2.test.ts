@@ -86,7 +86,7 @@ test('# ghi nhớ: tách, chọn file quy ước lõi đang đọc, chèn vào m
 test('cài đặt: trường sai ⇒ mặc định; "Bỏ qua hết" không đến từ file', () => {
   assert.deepEqual(chuanHoaCaiDat(null), MAC_DINH);
   const c = chuanHoaCaiDat({ theme: 'sang', thongBao: 'xyz', cheDoMacDinh: 'boQuaHet', modelMacDinh: 'opus-4-8', ascii: 'bat' });
-  assert.deepEqual(c, { theme: 'sang', thongBao: 'heThong', cheDoMacDinh: null, modelMacDinh: 'opus-4-8', ascii: 'bat', trinhDuyet: 'tuDong', ngonNgu: 'tuDong', traLoiTheoNgonNgu: 'tat', toanManHinh: 'bat' });
+  assert.deepEqual(c, { theme: 'sang', thongBao: 'heThong', cheDoMacDinh: null, modelMacDinh: 'opus-4-8', ascii: 'bat', trinhDuyet: 'tuDong', ngonNgu: 'tuDong', traLoiTheoNgonNgu: 'tat', toanManHinh: 'bat', chuot: 'tat' });
   assert.equal(MAC_DINH.cheDoMacDinh, null, 'chưa tự chọn ⇒ để lõi dùng "Hỏi trước"');
   assert.equal(chuanHoaCaiDat({ cheDoMacDinh: 'keHoach' }).cheDoMacDinh, 'keHoach');
   assert.equal(chuanHoaCaiDat({ modelMacDinh: '$(rm)' }).modelMacDinh, null);

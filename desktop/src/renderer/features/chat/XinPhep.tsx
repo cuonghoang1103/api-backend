@@ -81,6 +81,19 @@ export interface TheXinPhep {
   duongDan: string;
   taoMoi: boolean;
   diff: AgentDiff;
+  /** Đợt 3: thẻ của AGENT PHỤ ghi (sửa trong khu riêng, chưa đụng dự án). */
+  phuId?: string;
+}
+
+/** Nhãn "🤖 Agent phụ" trên thẻ duyệt của agent phụ ghi (đợt 3). */
+export function NhanPhu({ phuId }: { phuId?: string | undefined }) {
+  const { dich } = useDich();
+  if (!phuId) return null;
+  return (
+    <span className="ct-xinphep-phu" title={dich('Agent phụ đang làm trong KHU RIÊNG (worktree / thư mục tạm) — dự án chưa bị đụng tới cho tới khi gộp.')}>
+      🤖 {dich('Agent phụ')} · <code>{phuId.slice(-6)}</code>
+    </span>
+  );
 }
 
 /**
@@ -136,6 +149,7 @@ export function XinPhep({
         </div>
       )}
       <div className="ct-xinphep-dau">
+        <NhanPhu phuId={the.phuId} />
         {the.taoMoi ? <FilePlus2 size={14} aria-hidden /> : <FilePen size={14} aria-hidden />}
         <code className="ct-xinphep-duongdan">{the.duongDan}</code>
         <span className="ct-xinphep-dem">
@@ -202,17 +216,23 @@ export function XinPhepLenh({
   lenh,
   phanLoai,
   traLoi,
+  tienTo,
+  phuId,
 }: {
   id: string;
   lenh: string;
   phanLoai: AgentPhanLoaiLenh;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
+  /** Đợt 3: tiền tố gợi ý — nút "Luôn cho phép `npm test …`". */
+  tienTo?: string | undefined;
+  phuId?: string | undefined;
 }) {
   const { dich } = useDich();
   const nguyHiem = phanLoai.muc === 'nguyhiem';
   return (
     <div className="ct-xinphep" data-muc={phanLoai.muc}>
       <div className="ct-xinphep-dau">
+        <NhanPhu phuId={phuId} />
         <Terminal size={14} aria-hidden />
         <span>{dich('Agent muốn chạy lệnh')}</span>
       </div>
@@ -257,6 +277,17 @@ export function XinPhepLenh({
               <Infinity size={14} aria-hidden />
               {dich('Luôn cho phép lệnh này')}
             </button>
+            {/* Đợt 3: theo TIỀN TỐ — main chặn lệnh nối (`;`, `&&`, `|`, `$(…)`…) khỏi khớp. */}
+            {tienTo && tienTo !== lenh.trim() && (
+              <button
+                type="button" className="ct-btn ct-btn-ghost"
+                onClick={() => traLoi(id, 'choPhepTienTo')}
+                title={dich('Mọi lệnh ĐƠN bắt đầu bằng tiền tố này (không nối ; && | $(…)), nhớ cho dự án. Gõ /quyen để xem và thu hồi.')}
+              >
+                <Infinity size={14} aria-hidden />
+                {dich('Luôn cho phép')} <code>{tienTo} …</code>
+              </button>
+            )}
           </>
         )}
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
@@ -356,19 +387,21 @@ export function XinPhepGit({
   traLoi,
 }: {
   id: string;
-  viec: 'commit' | 'pr' | 'day' | 'cai';
+  viec: 'commit' | 'pr' | 'day' | 'cai' | 'gop';
   chiTiet: string;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
 }) {
   const { dich } = useDich();
   const laPr = viec === 'pr';
+  const laGop = viec === 'gop';
   /* `day` = đẩy lên GitHub / đưa dự án lên lần đầu · `cai` = tự cài git/gh (16/10/2026). */
   const raNgoai = laPr || viec === 'day';
   const tieuDe = laPr ? 'Agent muốn ĐẨY nhánh và mở Pull Request'
     : viec === 'day' ? 'Agent muốn ĐẨY dự án lên GitHub'
       : viec === 'cai' ? 'Agent muốn cài công cụ cho máy'
-        : 'Agent muốn commit';
-  const nutDongY = laPr ? 'Đẩy và mở PR' : viec === 'day' ? 'Đẩy lên GitHub' : viec === 'cai' ? 'Cài' : 'Commit';
+        : laGop ? 'Agent muốn GỘP thay đổi của agent phụ vào dự án'
+          : 'Agent muốn commit';
+  const nutDongY = laPr ? 'Đẩy và mở PR' : viec === 'day' ? 'Đẩy lên GitHub' : viec === 'cai' ? 'Cài' : laGop ? 'Gộp vào dự án' : 'Commit';
   return (
     <div className="ct-xinphep" data-muc={raNgoai ? 'nguyhiem' : 'cankiem'}>
       <div className="ct-xinphep-dau">

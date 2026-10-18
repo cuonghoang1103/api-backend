@@ -218,6 +218,8 @@ export const MODEL_CATALOG: Record<string, ModelInfo> = {
   //    đúng nếu sau này mở kênh, và để `llm:check` so sánh. ──
   /* 16/10/2026: khoá GPT ĐÃ mua được. Giá niêm yết ×0,9 ≈ 0,18/1,08 $ (đệm ×0,1); bài khó 20/20 qua OpenCode,
      đọc ảnh đúng — lựa chọn "Tiết kiệm" của cổng dự phòng AI Code (xem congDuPhong.ts). */
+  /* 18/10/2026: CuongMini Nova (AI Code). /api/pricing: cùng hệ số với gpt-6-sol ⇒ cùng giá ước. */
+  'gpt-6-luna': { vendor: 'openai', in: 1.25, out: 3.3, vision: true, note: 'Ngang gpt-6-sol (đo vòng lặp agent 18/10: đúng 2/2, sổ ~0,85× 6-sol)' },
   'gpt-5.6-luna': { vendor: 'openai', in: 0.18, out: 1.08, vision: true, note: 'Rẻ nhất nhóm GPT (~50× rẻ hơn 6-sol trên vòng lặp), đúng ngang bài thử, chậm hơn ~1,6×' },
   // ── Anthropic — ⚠ CHƯA MUA ĐƯỢC (kênh chưa mở trong nhóm của khoá) ──
   'claude-opus-5': { vendor: 'anthropic', in: 5, out: 25, vision: true, note: 'Qua cổng rambo: model MẶC ĐỊNH của mọi việc AI từ 26/09/2026' },
@@ -588,7 +590,10 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * lượt cho MỘT câu hỏi, nên mỗi giây và mỗi đồng đều nhân lên hàng chục lần.
    * sonnet-5 nhanh nhất trong ba model đo được và rẻ hơn opus 2,5 lần.
    */
-  agent_code: 'claude-sonnet-5',
+  /* 18/10/2026: rambo gỡ khỏi đường chính ⇒ AI Code đi modelapi `gpt-6-sol`
+     ("CuongMini Solid"). Người dùng chọn model khác qua bảng `agent/bangModel.ts`;
+     dòng này chỉ là mặc định khi app không gửi mã. */
+  agent_code: 'gpt-6-sol',
 
   /**
    * CuongMini (20/09/2026) — người dùng xác nhận rõ: "cổng rambo đi... vì 2
@@ -597,7 +602,9 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * mạnh nhất vì đây là tính năng Pro giảng bài + giải thích sâu từng câu.
    * Đổi bằng LLM_MODEL_EXAM_TUTOR nếu cần ghim tạm.
    */
-  exam_tutor: 'claude-opus-4-8',
+  /* 18/10/2026: rambo tắt ⇒ modelapi `gpt-6-sol` (chủ app chốt). Cổng chính hãng
+     vẫn là đường lùi ở `examTutor.service.ts`. */
+  exam_tutor: 'gpt-6-sol',
 
   /**
    * Phòng Lab LAB211 (10/09/2026) — người dùng yêu cầu rõ: "dùng opus 4.8 max ở
@@ -610,7 +617,8 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    *
    * Đổi tạm bằng LLM_MODEL_LAB_ROOM nếu cần ghim.
    */
-  lab_room: 'claude-opus-4-8',
+  /* 18/10/2026: rambo tắt ⇒ modelapi `gpt-6-sol`. */
+  lab_room: 'gpt-6-sol',
 };
 
 
@@ -907,6 +915,32 @@ function modelSeDungOCong(purpose: LlmPurpose): string {
 
 /**
  * ============================================================
+ * CÔNG TẮC CỔNG RAMBO (18/10/2026) — MẶC ĐỊNH TẮT
+ * ============================================================
+ *
+ * Chủ app: rambo.ai.vn "đã hỏng thật ở AI Code và web" ⇒ gỡ khỏi đường chính
+ * ở MỌI nơi, nhưng GIỮ MÃ để sau này cổng sống lại thì chỉ việc bật.
+ *
+ * Tắt ⇒ `congAgent()` trả `null` ⇒ mọi việc (kể cả `RAMBO_PURPOSES_CO_DINH`)
+ * đi modelapi theo `PURPOSE_MODEL`, không ai phải sửa thêm gì.
+ *
+ * Thứ tự quyết định:
+ *   1. env `RAMBO_BAT=1` ⇒ BẬT (bất kể admin) · `RAMBO_BAT=0` ⇒ TẮT cứng.
+ *   2. Công tắc trên trang admin (`app_settings.rambo_bat`, nạp vào bộ nhớ bởi
+ *      `llm/congTacRambo.ts`) — mặc định TẮT.
+ * Bật mà thiếu `AGENT_GATEWAY_BASE_URL`/`_API_KEY` thì vẫn coi như tắt.
+ */
+let ramboBatAdmin = false;
+export function datRamboBatAdmin(v: boolean): void { ramboBatAdmin = v; }
+export function ramboBat(): boolean {
+  const env = process.env.RAMBO_BAT?.trim();
+  if (env === '1' || env === 'true') return true;
+  if (env === '0' || env === 'false') return false;
+  return ramboBatAdmin;
+}
+
+/**
+ * ============================================================
  * CỔNG RIÊNG CHO AGENT LẬP TRÌNH
  * ============================================================
  *
@@ -942,6 +976,7 @@ function modelSeDungOCong(purpose: LlmPurpose): string {
  * nên không phải sửa header ở `goiCongCoLuoiDo`. Thiếu cả hai thì 401.
  */
 export function congAgent(): LlmEndpoint | null {
+  if (!ramboBat()) return null;
   const root = process.env.AGENT_GATEWAY_BASE_URL?.trim().replace(/\/+$/, '');
   const key = process.env.AGENT_GATEWAY_API_KEY?.trim();
   if (!root || !key) return null;
@@ -1212,6 +1247,53 @@ export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
   // nhưng áp cho CẢ nhánh env: đặt tay một model của nhóm chưa cắm khoá thì
   // cũng chết y hệt, và đó lại là nhánh người ta dùng lúc đang vội.
   return modelGoiDuoc(env || PURPOSE_MODEL[purpose]);
+}
+
+/**
+ * ============================================================
+ * SUY LUẬN + TRẦN RA cho việc chạy model GPT (18/10/2026)
+ * ============================================================
+ *
+ * Model GPT tính token SUY LUẬN vào `max_tokens`. Trần cũ của nhiều việc (1.500–4.000)
+ * đặt cho thời Claude không suy luận ⇒ với `gpt-6-sol` nó vừa làm model "nghĩ ít"
+ * (cổng mặc định `medium`), vừa có nguy cơ cắt cụt câu trả lời. Bảng dưới nâng
+ * `reasoning_effort` cho việc cần nghĩ và đặt SÀN trần ra tương ứng — trần là
+ * TRẦN, không phải chỉ tiêu: model chỉ viết thứ nó cần.
+ *
+ * Đo 18/10/2026: `gpt-6-sol` / `gpt-5.6-sol` nhận `low|medium|high|xhigh` (HTTP 200).
+ * Đổi một việc không cần deploy: `LLM_EFFORT_<VIỆC>=low|medium|high|xhigh|off`.
+ */
+export type MucSuyLuan = 'low' | 'medium' | 'high' | 'xhigh';
+const SUY_LUAN_THEO_VIEC: Partial<Record<LlmPurpose, MucSuyLuan>> = {
+  /* Đo 18/10/2026 (gpt-6-sol, trước → sau):
+     • interview_report: high ngang tiền/giờ (351 → 334 token ra, 11 s), nhận xét cụ thể hơn ⇒ GIỮ high.
+     • exam_tutor: high 17,8 s → 51,8 s — vượt trần CHỜ CHỮ ĐẦU 40 s của gia sư thi (sẽ tự lùi cổng) ⇒ medium;
+       phần cải thiện thật đến từ prompt mới (cấu trúc + tự kiểm), xem `examTutor.service.ts`.
+     • lab_room: medium đã 92 s; high > 128 s (cổng trả 524 khi không stream) ⇒ medium. */
+  // Người dùng đọc từng chữ / chấm điểm / dạy — nghĩ kỹ.
+  exam_tutor: 'medium', lab_room: 'medium', interview_report: 'high', chat_max: 'high', cv_critique: 'high',
+  study_verify: 'high', work_agent: 'high', codelab_bulk: 'high', doc_ocr: 'high',
+  // Sinh nội dung có cấu trúc (JSON/nét vẽ/đồ thị) — vừa đủ.
+  language_bulk: 'medium', work_digest: 'medium', ve_net: 'medium', vo_viet_lai: 'medium', so_do_khoi: 'medium',
+  mach_dien: 'medium', study_plan: 'medium', study_coach: 'medium', creator_script: 'medium', cv_writing: 'medium',
+  exphub_doc: 'medium', news_bulletin: 'medium', plan_review: 'medium',
+  // Máy đọc / tra cứu nhỏ / độ trễ quan trọng.
+  cv_parse: 'low', han_tra: 'low',
+};
+const SAN_RA: Record<MucSuyLuan, number> = { low: 0, medium: 8_000, high: 16_000, xhigh: 24_000 };
+
+/** `reasoning_effort` cho việc này với model này (`null` = không gửi: model không phải GPT, hoặc tắt). */
+export function suyLuanCho(purpose: LlmPurpose | undefined, model: string): MucSuyLuan | null {
+  if (!purpose || !/^gpt-/i.test(model) || /image/i.test(model)) return null;
+  const env = process.env[`LLM_EFFORT_${purpose.toUpperCase()}`]?.trim().toLowerCase();
+  if (env === 'off') return null;
+  if (env === 'low' || env === 'medium' || env === 'high' || env === 'xhigh') return env;
+  return SUY_LUAN_THEO_VIEC[purpose] ?? null;
+}
+
+/** Trần ra sau khi tính sàn theo mức suy luận (không bao giờ HẠ trần nơi gọi đặt). */
+export function tranRaCho(maxTokens: number, muc: MucSuyLuan | null): number {
+  return muc ? Math.max(maxTokens, SAN_RA[muc]) : maxTokens;
 }
 
 /** Toàn bộ bản đồ — cho trang quản trị và cho lệnh kiểm tra cấu hình. */

@@ -474,8 +474,8 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:datModel', { model }) as Promise<void>,
     veCongChinh: (cuocId: string) =>
       ipcRenderer.invoke('agent:veCongChinh', { cuocId }) as Promise<void>,
-    moCongAnthropic: (matKhau: string) =>
-      ipcRenderer.invoke('agent:moCongAnthropic', { matKhau }) as Promise<{ ten: string; hetHan: number | null }>,
+    moCongAnthropic: (matKhau: string, model?: string) =>
+      ipcRenderer.invoke('agent:moCongAnthropic', { matKhau, ...(model ? { model } : {}) }) as Promise<{ ten: string; hetHan: number | null }>,
     congAnthropic: () =>
       ipcRenderer.invoke('agent:congAnthropic') as Promise<AgentCongAnthropic | null>,
     datCongPhu: (cuocId: string, cong: 'modelapi' | null, model?: string) =>

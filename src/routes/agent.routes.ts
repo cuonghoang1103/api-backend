@@ -28,9 +28,11 @@ import type { ApiResponse } from '../types/index.js';
 import { AGENT_TOOLS, ALL_CAPABILITIES } from '../services/agent/tools.js';
 import { soGioCuaSo, tranToken, xemHanMuc } from '../services/agent/quota.js';
 import { AgentInputError, runAgentTurn, type AgentEvent } from '../services/agent/turn.js';
-import { congAgent, gatewayConfigured, kiemRamboSong, modelFor, ramboDangNghi } from '../services/llm/gateway.js';
+import { congAgent, gatewayConfigured, kiemRamboSong, ramboDangNghi } from '../services/llm/gateway.js';
 import { MODEL_DU_PHONG, MoKhoaLoi, congDuPhong, daCoMatKhau, modelDuPhongAgent, moKhoaDuPhong, tenDuPhong, veDuPhongHopLe } from '../services/agent/congDuPhong.js';
-import { dsModelAgent } from '../services/agent/models.js';
+import { MA_MAC_DINH, TEN_CONG, bangModel, laMaCuongMini, timModel } from '../services/agent/bangModel.js';
+import { xemTranModel } from '../services/agent/tranModel.js';
+import { goiTomTatBangModel } from '../services/agent/tomTatLuotCu.js';
 import { KeyGiaHanLoi, coKeyGiaHan, nhapKeyGiaHan } from '../services/agent/keyGiaHan.js';
 import { datTenViec } from '../services/agent/datTen.js';
 import { DS_MUC_NO_LUC } from '../services/agent/turn.js';
@@ -40,11 +42,10 @@ import { prisma } from '../config/database.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
 import { CompactLoi, compactChuDong } from '../services/agent/compactChuDong.js';
 import { hardCapUsd, softCapUsd, todaySpendUsd } from '../services/llm/budget.js';
-import { modelChinhHangTu } from '../services/agent/anthropicChinhHang/cauHinh.js';
 import { coKeyKhaDung } from '../services/agent/anthropicChinhHang/khoKey.js';
 import { xemHanMucChinhHang } from '../services/agent/anthropicChinhHang/hanMuc.js';
-import { daBatMatKhauAnthropic, moKhoaAnthropic } from '../services/agent/anthropicChinhHang/ve.js';
-import { cacCongNangCap, dsModelChinhHang, quyenChinhHang } from '../services/agent/anthropicChinhHang/dinhTuyen.js';
+import { daBatMatKhau, moKhoa, type LoaiVe } from '../services/agent/anthropicChinhHang/ve.js';
+import { cacCongNangCap, daMoKhoa, dsModelChoApp, quyenChinhHang } from '../services/agent/anthropicChinhHang/dinhTuyen.js';
 
 const router = Router();
 router.use(authenticate);
@@ -96,18 +97,22 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
     // biệt được "chưa đủ gói" với "máy chủ hỏng". Trả `pro: false` thì app hiện
     // được lời mời nâng cấp — một câu mời rõ ràng thay cho một lỗi.
     const pro = await duocDungAiCode(req.userId).catch(() => false);
-    /* Cổng Claude chính hãng (17/10/2026): thêm các mục `cong: 'anthropic'`.
-       App gửi `?congAnthropicVe=` để `canMoKhoa` phản ánh đúng vé đang giữ. */
-    const chinhHang = pro
-      ? await dsModelChinhHang(await quyenChinhHang(req.userId, req.query.congAnthropicVe)).catch(() => [])
+    /* Bảng CuongMini (18/10/2026, `bangModel.ts`): xếp năng lực cao → thấp, CHỈ tên
+       CuongMini (không tên model thật, không tên cổng thật). App gửi `?congAnthropicVe=`
+       (bó vé) để `canMoKhoa` phản ánh đúng vé đang giữ. */
+    const models = pro
+      ? await dsModelChoApp(await quyenChinhHang(req.userId, req.query.congAnthropicVe)).catch(() => [])
       : [];
     res.json({
       success: true,
       data: {
         pro,
         configured: gatewayConfigured(),
-        model: modelFor('agent_code'),
-        models: [...dsModelAgent().map((m) => ({ ...m, cong: congAgent() ? 'rambo' : 'modelapi' })), ...chinhHang],
+        /* Mã model mặc định (không phải tên thật). */
+        model: MA_MAC_DINH,
+        macDinh: MA_MAC_DINH,
+        tenCong: TEN_CONG,
+        models,
         mucNoLuc: DS_MUC_NO_LUC,
         capabilities: ALL_CAPABILITIES,
         limits: { tokenCap: tranToken(), windowHours: soGioCuaSo() },
@@ -261,17 +266,25 @@ router.get('/cong-anthropic', chiPro, async (req: any, res: Response<ApiResponse
       khongGioiHan: h.khongGioiHan, daDungThang: h.daDungThang, daDungNgay: h.daDungNgay,
       tranThang: h.tranThang, tranNgay: h.tranNgay, het: h.het,
     });
+    /* Trần theo model × người (18/10/2026) — app hiện "đã dùng / trần" cạnh tên. */
+    const tranModel = await Promise.all(bangModel().map(async (m) => {
+      const h = await xemTranModel(req.userId, m).catch(() => null);
+      return h ? { id: m.id, ten: m.ten, khongGioiHan: h.khongGioiHan, daDungThang: h.daDungThang, daDungNgay: h.daDungNgay, tranThang: h.tranThang, tranNgay: h.tranNgay, het: h.het } : null;
+    }));
     res.json({
       success: true,
       data: {
         coKey: await coKeyKhaDung(),
-        daBat: await daBatMatKhauAnthropic(),
+        daBat: await daBatMatKhau('chung'),
+        daBatInvisible: await daBatMatKhau('invisible'),
         laAdmin: q.laAdmin,
         veHopLe: q.modelCao && !q.laAdmin,
         modelCaoDuoc: q.modelCao,
+        invisibleDuoc: q.invisible,
+        tranModel: tranModel.filter(Boolean),
         congChinhDangHong: ramboDangNghi(),
         hanMuc: { free: goi(free), cao: goi(cao) },
-        models: await dsModelChinhHang(q),
+        models: await dsModelChoApp(q),
         cacCong: await cacCongNangCap(req.userId, { veAnthropic: req.query.ve, veDuPhong: req.query.veDuPhong }),
       },
     });
@@ -280,9 +293,16 @@ router.get('/cong-anthropic', chiPro, async (req: any, res: Response<ApiResponse
 
 router.post('/cong-anthropic/mo-khoa', chiPro, async (req: any, res: Response<ApiResponse>, next) => {
   try {
-    const matKhau = String((req.body as { matKhau?: unknown })?.matKhau ?? '');
-    const kq = await moKhoaAnthropic(req.userId, matKhau.slice(0, 200));
-    logger.info('[cong-anthropic] mở khoá cổng Claude chính hãng', { userId: req.userId });
+    /* 18/10/2026: máy chủ thử CẢ HAI khoá (chung + Invisible). Thân:
+       { matKhau, ve?: bó vé đang giữ, model?: mã model vừa bấm | loaiKhoa?: 'chung'|'invisible' }.
+       Trả { ve: BÓ vé mới (thay chuỗi đang giữ), hetHan, mo: { chung, invisible } } — vé sống 48 giờ. */
+    const b = (req.body ?? {}) as { matKhau?: unknown; ve?: unknown; model?: unknown; loaiKhoa?: unknown };
+    const matKhau = String(b.matKhau ?? '');
+    const canMo: LoaiVe | undefined = b.loaiKhoa === 'chung' || b.loaiKhoa === 'invisible'
+      ? b.loaiKhoa
+      : laMaCuongMini(b.model) && timModel(b.model).khoa !== 'free' ? (timModel(b.model).khoa as LoaiVe) : undefined;
+    const kq = await moKhoa(req.userId, matKhau.slice(0, 200), { boCu: b.ve, ...(canMo ? { canMo } : {}) });
+    logger.info('[cong-anthropic] mở khoá model CuongMini', { userId: req.userId, mo: kq.mo });
     res.json({ success: true, data: kq });
   } catch (err) {
     if (err instanceof MoKhoaLoi) {
@@ -419,8 +439,17 @@ const compactLimiter = rateLimit({
 
 router.post('/compact', chiPro, compactLimiter, async (req: any, res: Response<ApiResponse>, next) => {
   try {
-    const b = (req.body ?? {}) as { messages?: unknown; giuLuot?: unknown; ghiChu?: unknown };
-    const kq = await compactChuDong(b.messages, { giuLuot: b.giuLuot, ghiChu: b.ghiChu });
+    const b = (req.body ?? {}) as { messages?: unknown; giuLuot?: unknown; ghiChu?: unknown; model?: unknown; congAnthropicVe?: unknown };
+    /* 18/10/2026: tóm tắt bằng CHÍNH model của cuộc (app gửi `model` + vé như lượt
+       agent). Model cần khoá mà vé không mở ⇒ CuongMini Solid. Hết trần ⇒ báo. */
+    let muc = timModel(b.model);
+    if (muc.khoa !== 'free') {
+      const q = await quyenChinhHang(req.userId, b.congAnthropicVe).catch(() => ({ laAdmin: false, modelCao: false, invisible: false }));
+      if (!daMoKhoa(muc, q)) muc = timModel(MA_MAC_DINH);
+    }
+    const ht = await xemTranModel(req.userId, muc);
+    if (ht.het) throw new AppError(`Đã hết hạn mức ${muc.ten} — chọn model khác rồi /compact lại. / ${muc.ten} allowance used up.`, 429, 'CUONGMINI_HET_TRAN');
+    const kq = await compactChuDong(b.messages, { giuLuot: b.giuLuot, ghiChu: b.ghiChu, goi: goiTomTatBangModel(muc, req.userId) });
     logger.info('[agent/compact] tóm tắt chủ động', {
       userId: req.userId, soTinDaGop: kq.soTinDaGop, daGoiModel: kq.daGoiModel,
     });
@@ -470,17 +499,17 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
     return;
   }
 
-  /* Chọn TAY model cao của cổng Claude chính hãng mà chưa có vé ⇒ 403 TRƯỚC khi
-     mở SSE, để app hiện ô mật khẩu (xem docs/cong-anthropic-chinh-hang.md). */
-  const chonCH = modelChinhHangTu(body.model);
-  if (chonCH?.hang === 'cao') {
-    const q = await quyenChinhHang(req.userId, body.congAnthropicVe).catch(() => ({ laAdmin: false, modelCao: false }));
-    if (!q.modelCao) {
+  /* Model cần KHOÁ mà vé không mở được ⇒ 403 TRƯỚC khi mở SSE, để app hiện ô nhập
+     khoá. Kiểm ở MỌI lượt (lượt phụ cũng qua đây) — ẩn trên giao diện không phải chặn. */
+  const chon = timModel(body.model);
+  if (chon.khoa !== 'free' && (laMaCuongMini(body.model) || body.model === undefined)) {
+    const q = await quyenChinhHang(req.userId, body.congAnthropicVe).catch(() => ({ laAdmin: false, modelCao: false, invisible: false }));
+    if (!daMoKhoa(chon, q)) {
       res.status(403).json({
         success: false,
         code: 'CONG_ANTHROPIC_KHOA',
-        message: `${chonCH.ten} cần mật khẩu cổng Claude chính hãng. Nhập mật khẩu do quản trị cấp để mở khoá.`,
-        data: { model: chonCH.id, daBat: await daBatMatKhauAnthropic().catch(() => false) },
+        message: `${chon.ten} cần khoá. Nhập khoá do quản trị cấp để mở. / ${chon.ten} needs a key.`,
+        data: { model: chon.id, loaiKhoa: chon.khoa, daBat: await daBatMatKhau(chon.khoa as LoaiVe).catch(() => false) },
       } as any);
       return;
     }

@@ -28,7 +28,7 @@ import { useDich } from '../../i18n';
 /** Giây bắt đầu đổi sang câu thứ hai. Dưới ngần này thì câu đầu chưa kịp đọc xong. */
 const CHANG_HAI_GIAY = 6;
 /** Giây bắt đầu nói ra nguyên nhân. Dưới ngần này thì chưa có gì bất thường để báo. */
-const CHANG_LO_GIAY = 15;
+/* 18/10/2026: BỎ câu "Cổng AI đang chậm chứ app không treo…" (chủ app yêu cầu) — số giây đang chạy là đủ. */
 
 export function DangNghi({
   giay,
@@ -71,11 +71,6 @@ export function DangNghi({
         {/* Số giây chỉ hiện sau 3s: câu trả lời nhanh mà kèm một con số nhảy
             liên tục thì nó thành thứ gây lo, không phải thứ trấn an. */}
         {giay >= 3 && <span className="ct-nghi-giay"> {giay}s</span>}
-        {giay >= CHANG_LO_GIAY && (
-          <span className="ct-nghi-phu">
-            {' '}{dich('Cổng AI đang chậm chứ app không treo — bấm Dừng nếu muốn thử lại.')}
-          </span>
-        )}
       </span>
     </div>
   );

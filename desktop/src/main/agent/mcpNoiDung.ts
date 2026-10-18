@@ -8,7 +8,8 @@
 // ─── Kết quả tool ──────────────────────────────────────────────────
 
 /** Trần CHỮ của một kết quả. Nó chở theo ở mọi lượt sau, nên tốn tiền thật. */
-export const MAX_KET_QUA = 16_000;
+/* 18/10/2026: 16.000 → 60.000 ký tự mỗi kết quả tool MCP. */
+export const MAX_KET_QUA = 60_000;
 /** Bốn định dạng ảnh cổng Anthropic nhận — cùng bộ với `read_file` (tools.ts). */
 const KIEU_ANH = new Set(['image/png', 'image/jpeg', 'image/gif', 'image/webp']);
 /** Trần mỗi ảnh (byte gốc) — cùng trần với `read_file` đọc ảnh. */

@@ -183,9 +183,10 @@ function than(mau: Array<Record<string, unknown>>): ReadableStream<Uint8Array> {
 
 /** Môi trường cổng giả tuyến OpenAI — tự dựng, không mượn `.env`. */
 function dungMoiTruong(t: { after: (f: () => void) => void }): void {
-  const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_BASE_URL', 'AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY']
+  const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY_GPT', 'LLM_GATEWAY_BASE_URL', 'AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'RAMBO_BAT']
     .map((k) => [k, process.env[k]] as const);
   process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap-cho-kiem-thu';
+  process.env.LLM_GATEWAY_API_KEY_GPT = 'sk-gia-lap-cho-kiem-thu'; // 18/10/2026: model mặc định CuongMini Solid = gpt-6-sol (khoá nhóm GPT)
   process.env.LLM_GATEWAY_BASE_URL = 'https://vi-du.test/v1';
   delete process.env.AGENT_GATEWAY_BASE_URL;
   delete process.env.AGENT_GATEWAY_API_KEY;
@@ -194,8 +195,9 @@ function dungMoiTruong(t: { after: (f: () => void) => void }): void {
 
 test('việc phụ CHẠM TRẦN ⇒ nội dung trả về là các phát hiện, không phải câu cố định', async (t) => {
   dungMoiTruong(t);
+  /* 18/10/2026: trần bước việc phụ ĐỌC nâng 10 → 25. */
   const ds: AgentMessage[] = [{ role: 'user', content: 'tìm lỗi' }];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 25; i++) {
     const a = { ...goi(['read_file', { path: `f${i}.ts` }]), content: `Phát hiện số ${i}.` } as AgentMessage;
     ds.push(a, ...tra(a));
   }
@@ -204,7 +206,7 @@ test('việc phụ CHẠM TRẦN ⇒ nội dung trả về là các phát hiện
   const xong = sk.find((e) => e.type === 'done') as Extract<AgentEvent, { type: 'done' }>;
   assert.equal(xong.stop, 'max_steps');
   const nd = String(xong.append[xong.append.length - 1]!.content);
-  assert.ok(nd.includes('Phát hiện số 0.') && nd.includes('Phát hiện số 9.'), nd.slice(0, 300));
+  assert.ok(nd.includes('Phát hiện số 0.') && nd.includes('Phát hiện số 24.'), nd.slice(0, 300));
 });
 
 test('việc phụ ở bước CUỐI ⇒ bản gửi cổng mang lời nhắc "bước CUỐI"', async (t) => {
@@ -218,7 +220,7 @@ test('việc phụ ở bước CUỐI ⇒ bản gửi cổng mang lời nhắc "
   t.after(() => { globalThis.fetch = goc; });
 
   const ds: AgentMessage[] = [{ role: 'user', content: 'tìm lỗi' }];
-  for (let i = 0; i < 9; i++) { const a = goi(['read_file', { path: `f${i}.ts` }]); ds.push(a, ...tra(a)); }
+  for (let i = 0; i < 24; i++) { const a = goi(['read_file', { path: `f${i}.ts` }]); ds.push(a, ...tra(a)); }
   await runAgentTurn({ userId: 1, messages: ds, capabilities: ['fs_read'], laPhu: true } as any, () => {}, new AbortController().signal);
   const cuoi = daGui[0].messages[daGui[0].messages.length - 1];
   assert.ok(String(cuoi.content).includes(NHAC_BUOC_CUOI), 'thiếu lời nhắc bước cuối ở đuôi');

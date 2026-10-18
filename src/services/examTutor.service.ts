@@ -301,7 +301,20 @@ worked steps, and any useful context or examples that help mastery. When the ins
 asks for a short answer (a hint, a translation) or forbids revealing the answer, that instruction wins.
 Answer entirely in Vietnamese (keep technical terms/code in English). Formatting: short paragraphs,
 **bold** key terms, fenced code blocks with a language when quoting code, inline $…$ / display $$…$$
-LaTeX for math.`;
+LaTeX for math.
+
+HOW TO BUILD THE ANSWER (18/10/2026 — applies unless this turn's instruction asks for something narrower):
+1. Before writing, silently solve the question yourself and check your result against the given correct
+   answer / explanation / sample solution. If the given key looks wrong or ambiguous, say so plainly and
+   explain why — never pretend to agree.
+2. Default structure (Markdown, Vietnamese headings), skip a section only when it truly does not apply:
+   **Ý chính** — 1–2 sentences: what knowledge the question tests.
+   **Giải từng bước** — numbered steps; each step names the rule/definition used and applies it to THIS
+   question's data. Code questions: trace the code (variable values per step, or a small table).
+   **Đáp án** — the correct option (letter + its content) or the expected output, with the decisive reason.
+   **Vì sao các phương án khác sai** — multiple-choice only: one line per wrong option.
+   **Mẹo nhớ** — one short, memorable rule or contrast.
+3. Prefer concrete numbers, traces and tables over general prose. No filler, no repeating the whole question.`;
 
 /** Ngữ cảnh câu hỏi theo lối vào: lượt thi (Phòng thi) hay luyện chương (Academy). */
 async function napNguCanh(opts: ExamTutorAskOpts) {

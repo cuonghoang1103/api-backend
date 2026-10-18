@@ -99,7 +99,7 @@ const CHI_GOI: Record<string, string> = { '/logout': 'dangXuat', '/exit': 'thoat
 
 /** Tham số mẫu theo lệnh. */
 const THAM_SO: Record<string, string[]> = {
-  '/model': ['opus'], '/effort': ['cao', 'high'], '/compact': ['giữ tên file'], '/plan': ['thêm nút đăng xuất'], '/review': ['src/api'],
+  '/model': ['solid'], '/effort': ['cao', 'high'], '/compact': ['giữ tên file'], '/plan': ['thêm nút đăng xuất'], '/review': ['src/api'],
   '/rewind': ['1'], '/resume': ['1', 'việc'], '/kynang': ['docker'], '/quyen': ['them npm test', 'xoa 1', 'add npm run lint'],
   '/sessions': [], '/rename': ['backend api'], '/worktree': ['list', 'tinh-nang-a', 'xoa /tmp/wt'], '/hen': ['huy h1', 'cancel'],
   '/mcp': ['mo', 'mở', 'nap'], '/copy': ['1', 'q', 'all'], '/browser': ['on', 'off'], '/fullscreen': ['on', 'off'], '/mouse': ['on', 'off'],
@@ -143,7 +143,7 @@ test('mọi lệnh `/` trong /help: không ném, có phản hồi, giữ tham s�
         if (cau === '/hen huy h1') assert.match(kenh('agent:huyHen'), /h1/);
         if (cau === '/ctwork ghi') assert.match(kenh('agent:ctwork'), /"quyen":"ghi"/);
         if (cau === '/effort cao' || cau === '/effort high') assert.ok(g.cb.some((x) => x.startsWith('doiMuc(')), `${cau} phải đổi mức`);
-        if (cau === '/model opus') assert.ok(g.cb.some((x) => /doiModel|moKhoaModel|moMenu/.test(x)), `${cau} phải đổi/chọn model`);
+        if (cau === '/model solid') assert.ok(g.cb.some((x) => /doiModel|moKhoaModel|moMenu/.test(x)), `${cau} phải đổi/chọn model`);
         if (cau === '/mouse on') assert.ok(g.cb.includes('datChuot(true)'));
         if (cau === '/fullscreen off') assert.ok(g.cb.includes('datToanManHinh(false)'));
       }

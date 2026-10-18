@@ -1434,12 +1434,9 @@ export async function chayLuot(
            */
           const cho = CHO_THU_LAI_MS[daThuLai]!;
           daThuLai++;
-          phat({
-            loai: 'tool',
-            ten: 'kết nối',
-            tomTat: `${phanHoi.ma === '429' || phanHoi.ma === '529' ? 'cổng AI đang quá tải' : 'đứt giữa chừng'} — chờ ${Math.round(cho / 1000)}s rồi thử lại (lần ${daThuLai}/${CHO_THU_LAI_MS.length})`,
-            vong: 'may',
-          });
+          /* 18/10/2026: thử lại IM LẶNG — bỏ dòng "cổng AI đang quá tải — chờ Xs…"
+             (chủ app yêu cầu xoá mọi thông báo kiểu "cổng đang chậm/bận"). Máy chủ
+             tự chuyển cổng khi cổng hỏng; ở đây chỉ còn chờ rồi gửi lại. */
           // Huỷ giữa lúc chờ thì thôi, đừng ngủ hết rồi mới biết.
           const ngu = await new Promise<'xong' | 'huy'>((ok) => {
             const h = setTimeout(() => ok('xong'), cho);
@@ -3041,6 +3038,16 @@ async function mgoiMotLuotThat(o: {
           if (e.cong === 'du-phong') danhDauDuPhong(o.cuocId, e.model, o.phat);
           break;
         case 'cong':
+          /* 18/10/2026: cổng hỏng ⇒ máy chủ ĐÃ tự sang model free tương đương. Chỉ
+             một dòng mờ trong bảng ghi — không popup, không "giữ cổng phụ". */
+          if (e.ma === 'DOI_CONG_TU_DONG') {
+            o.phat({
+              loai: 'loi', ma: 'DOI_CONG_TU_DONG',
+              thongDiep: typeof e.thongDiep === 'string' && e.thongDiep ? e.thongDiep : `Đã chuyển sang ${String(e.ten ?? e.model ?? 'CuongMini')} vì cổng bận`,
+              ...(typeof e.thongDiepEn === 'string' && e.thongDiepEn ? { thongDiepEn: e.thongDiepEn } : {}),
+            });
+            break;
+          }
           /* Cổng chính hỏng ⇒ máy chủ tự sang CuongMini Free, kèm lời mời nâng
              cấp. Khung `cong` khác (lùi modelapi) giữ đường cũ, nhưng dùng câu
              của máy chủ nếu có — "CuongMini đang bảo trì" sai khi người dùng

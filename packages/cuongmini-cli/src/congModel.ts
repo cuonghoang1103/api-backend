@@ -8,7 +8,10 @@ import { L } from './i18n';
 export const doiTenModel = (ten: string): string => ten.replace(/^Claude Sonnet\b/, 'Cuong Sonnet').replace(/^Claude Opus\b/, 'CuongMini Max')
   .replace(/^Claude Haiku\b/, 'Cuong Haiku').replace(/^Claude Fable\b/, 'Cuong Fable');
 
-/** Tên hiện của một model: cổng Claude CHÍNH HÃNG giữ nguyên tên máy chủ khai (người dùng trả tiền cho đúng chữ "Claude" đó). */
+/**
+ * Tên hiện của một model. 18/10/2026: máy chủ gửi TÊN CuongMini cho mọi model (kể cả cổng
+ * chính hãng — "CuongMini Code Max") ⇒ hiện nguyên. Đổi tên "Claude …" chỉ còn cho máy chủ cũ.
+ */
 export const tenModel = (m: { ten: string; cong?: string }): string => (m.cong === 'anthropic' ? L(m.ten, m.ten.replace(/ · chính hãng$/, ' · official')) : doiTenModel(m.ten));
 
 /**
@@ -32,12 +35,13 @@ const MO_MODEL_EN = new Map<string, string>([
   ['Mạnh — việc khó, refactor lớn. $4/$20 mỗi triệu token', 'Strong — hard tasks, big refactors. $4/$20 per million tokens'],
   ['⚠ Đắt nhất ($10/$50) — chỉ cho việc cực khó', '⚠ Most expensive ($10/$50) — only for extremely hard tasks'],
 ]);
-export const moModel = (mo: string | undefined): string => (mo ? L(mo, MO_MODEL_EN.get(mo) ?? mo) : '');
+export const moModel = (mo: string | undefined, moEn?: string): string => (mo ? L(mo, moEn || MO_MODEL_EN.get(mo) || mo) : '');
 
 /** Nhóm cổng của model — thứ tự hiện trong menu `/model`. */
 export const NHOM_CONG = ['chinh', 'anthropic', 'modelapi'] as const;
 export type NhomCong = typeof NHOM_CONG[number];
 export const nhomCong = (m: { cong?: string }): NhomCong => (m.cong === 'anthropic' ? 'anthropic' : m.cong === 'modelapi' ? 'modelapi' : 'chinh');
 export function tenNhomCong(n: NhomCong): string {
-  return n === 'anthropic' ? L('Claude chính hãng', 'Official Claude') : n === 'modelapi' ? 'modelapi' : L('Cổng chính', 'Main gateway');
+  /* 18/10/2026: chỉ tên CuongMini — không lộ tên nhà cung cấp. */
+  return n === 'anthropic' ? 'CuongMini Code Max' : n === 'modelapi' ? 'CuongMini Core' : 'CuongMini';
 }

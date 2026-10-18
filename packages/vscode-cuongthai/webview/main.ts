@@ -22,9 +22,12 @@ type ModelMuc = {
   id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean;
   /** Cổng (17/10/2026): `anthropic` = Claude chính hãng; còn lại = cổng chính. */
   cong?: 'rambo' | 'modelapi' | 'anthropic';
-  /** Model cao chính hãng chưa có vé ⇒ ổ khoá, chọn là hỏi mật khẩu. */
+  /** Model cần khoá chưa có vé ⇒ TỐI HƠN + ổ khoá, chọn là hỏi khoá. */
   canMoKhoa?: boolean;
   mienPhi?: boolean;
+  /** 18/10/2026: mô tả tiếng Anh + tên cổng hiển thị (CuongMini …). */
+  moEn?: string;
+  nhom?: string;
 };
 /** Một cổng trong lời mời khi cổng chính hỏng (khung `cong` `CONG_CHINH_HONG_FREE`). */
 type CongNangCap = { cong: 'anthropic' | 'modelapi'; ten: string; daBat: boolean; canMatKhau: boolean; models: ModelMuc[] };
@@ -39,10 +42,9 @@ const CHE_DO: Array<{ id: string; ten: string; ngan: string; mo: string; icon: s
   { id: 'tuSuaVaLenh', ten: 'Tự sửa + lệnh an toàn', ngan: 'Tự động', mo: 'Sửa + chạy lệnh an toàn không hỏi', icon: '⚡' },
   { id: 'boQuaHet', ten: 'Bỏ qua tất cả', ngan: 'Bỏ qua hết', mo: 'Không hỏi gì — chỉ dùng khi tin tưởng', icon: '🚀' },
 ];
+/** Chỉ khi máy chủ CŨ chưa khai `models` (18/10/2026: máy chủ gửi bảng CuongMini). */
 const MODEL_DU_PHONG: ModelMuc[] = [
-  { id: 'sonnet-5', ten: 'Cuong Sonnet 5', mo: 'Mặc định — nhanh, rẻ', dungDuoc: true },
-  { id: 'opus-4-8', ten: 'CuongMini Max 4.8', mo: 'Mạnh nhất cho việc khó', dungDuoc: true },
-  { id: 'gpt-sol', ten: 'GPT 6 Sol', mo: 'Ý kiến thứ hai', dungDuoc: true },
+  { id: 'cm-solid', ten: 'CuongMini Solid', mo: 'Mặc định', dungDuoc: true },
 ];
 const MUC_DU_PHONG: MucNoLuc[] = [
   { id: 'thap', ten: 'Thấp', mo: 'hỏi nhanh' }, { id: 'vua', ten: 'Vừa', mo: 'mặc định' }, { id: 'cao', ten: 'Cao', mo: 'đọc rộng, tự test' },
@@ -735,6 +737,12 @@ function xuLy(e: SuKien): void {
     }
     case 'loi': {
       ketThucTraLoi();
+      /* 18/10/2026: cổng hỏng ⇒ máy chủ đã tự sang model free tương đương — MỘT dòng mờ, không lặp, không kết thúc lượt. */
+      if (e.ma === 'DOI_CONG_TU_DONG') {
+        const chu = L(String(e.thongDiep ?? ''), String(e.thongDiepEn ?? e.thongDiep ?? ''));
+        if (dongDoiCongCuoi !== chu) { dongDoiCongCuoi = chu; the('tin ket mo', esc(chu)); }
+        break;
+      }
       if (['DOI_CONG', 'KHOI_PHUC', 'LAM_TIEP', 'COMPACT', 'DOI_CHE_DO', 'TU_GO_ANH', 'CONG_CHINH_HONG_FREE'].includes(e.ma)) {
         if (e.ma === 'COMPACT') S.daCompact = true;
         const el = the('tin ket', `ℹ️ ${esc(e.thongDiep ?? '')}`);
@@ -750,10 +758,10 @@ function xuLy(e: SuKien): void {
       if (e.ma === 'RAMBO_BAO_TRI') veODuPhong(el);
       /* Cổng Claude chính hãng (17/10/2026). Vé chết ⇒ lõi đã xoá vé; hỏi lại mật khẩu. */
       if (e.ma === 'CONG_ANTHROPIC_KHOA') {
-        if (e.daBat === false) el.insertAdjacentHTML('beforeend', '<div class="phu">Quản trị chưa bật cổng Claude chính hãng.</div>');
+        if (e.daBat === false) el.insertAdjacentHTML('beforeend', `<div class="phu">${esc(L('Quản trị chưa đặt khoá cho model này.', 'The admin has not set a key for this model.'))}</div>`);
         else veOMatKhauAnthropic(el, () => { if (cauHoiCuoi) { o.value = cauHoiCuoi; void guiCauHoi(); } });
       }
-      if (e.ma === 'CONG_ANTHROPIC_HET_HAN_MUC' || e.ma === 'CONG_ANTHROPIC_HET_KEY') veODuPhong(el);
+      /* 18/10/2026: hết trần / cổng hỏng ⇒ không còn mời cổng dự phòng; chọn model khác ở menu. */
       if (e.ma === 'PRO_REQUIRED') {
         const n = document.createElement('div');
         n.className = 'nut-hang';
@@ -865,16 +873,18 @@ function veDuyetKeHoach(): void {
 
 /** Ô mật khẩu cổng dự phòng — giống hộp trong app (`CongDuPhong.tsx`). */
 let cauHoiCuoi = '';
+/** Dòng tự chuyển cổng gần nhất — không vẽ lặp mỗi bước. */
+let dongDoiCongCuoi = '';
 let oDangCho: { kq: HTMLElement; nut: HTMLButtonElement; khiXong?: () => void } | null = null;
 /** Ô mật khẩu cổng Claude chính hãng đang chờ trả lời từ host. */
 let oAnthropicCho: { kq: HTMLElement; nut: HTMLButtonElement; khiXong: () => void } | null = null;
 
-/** Ô mật khẩu cổng Claude CHÍNH HÃNG (mật khẩu riêng, khác cổng dự phòng). */
-function veOMatKhauAnthropic(el: HTMLElement, khiXong: () => void): void {
+/** Ô nhập KHOÁ model CuongMini (18/10/2026: khoá chung hoặc khoá Invisible — máy chủ tự nhận). */
+function veOMatKhauAnthropic(el: HTMLElement, khiXong: () => void, model?: string): void {
   const o2 = document.createElement('div');
   o2.className = 'du-phong';
-  o2.innerHTML = `<div class="phu">Nhập mật khẩu cổng Claude chính hãng (quản trị cấp) để mở model cao:</div>
-<div class="hang"><input type="password" placeholder="Mật khẩu cổng Claude chính hãng" autocomplete="off"><button class="nut chinh">Mở khoá</button></div>
+  o2.innerHTML = `<div class="phu">${esc(L('Nhập khoá do quản trị cấp để mở model này (vé 48 giờ):', 'Enter the admin-issued key to unlock this model (48-hour pass):'))}</div>
+<div class="hang"><input type="password" placeholder="${esc(L('Khoá CuongMini', 'CuongMini key'))}" autocomplete="off"><button class="nut chinh">${esc(L('Mở khoá', 'Unlock'))}</button></div>
 <div class="phu kq"></div>`;
   el.appendChild(o2);
   const inp = o2.querySelector('input')!;
@@ -885,7 +895,7 @@ function veOMatKhauAnthropic(el: HTMLElement, khiXong: () => void): void {
     nut.disabled = true;
     kq.textContent = 'Đang mở khoá…';
     oAnthropicCho = { kq, nut, khiXong };
-    gui({ loai: 'moCongAnthropic', matKhau: inp.value });
+    gui({ loai: 'moCongAnthropic', matKhau: inp.value, ...(model ? { model } : {}) });
     inp.value = '';
   };
   nut.addEventListener('click', mo);
@@ -1078,9 +1088,9 @@ Có app desktop CuongThai? <a href="#" id="dnMoApp">Mở app</a> — extension s
 
 // ─── Model / mức / chế độ ────────────────────────────────────────
 
+/* 18/10/2026: máy chủ gửi TÊN CuongMini (xếp năng lực cao → thấp) — hiện nguyên; đổi tên "Claude …" chỉ cho máy chủ cũ. */
 const dsModel = (): ModelMuc[] => (S.info?.models?.length ? S.info.models : MODEL_DU_PHONG)
-  /* Model chính hãng là Claude THẬT — không đổi tên thành "Cuong …". */
-  .map((m) => (m.cong === 'anthropic' ? m : { ...m, ten: m.ten.replace(/^Claude Sonnet\b/, 'Cuong Sonnet').replace(/^Claude Opus\b/, 'CuongMini Max').replace(/^Claude Haiku\b/, 'Cuong Haiku').replace(/^Claude Fable\b/, 'Cuong Fable') }));
+  .map((m) => ({ ...m, mo: L(m.mo, m.moEn || m.mo), ten: m.ten.replace(/^Claude Sonnet\b/, 'Cuong Sonnet').replace(/^Claude Opus\b/, 'CuongMini Max').replace(/^Claude Haiku\b/, 'Cuong Haiku').replace(/^Claude Fable\b/, 'Cuong Fable') }));
 const dsMuc = (): MucNoLuc[] => (S.info?.mucNoLuc?.length
   ? S.info.mucNoLuc.map((m) => ({ id: m.id, ten: m.ten, mo: `${m.buoc} bước${m.viecPhu ? ` · ${m.viecPhu} agent phụ` : ''}` }))
   : MUC_DU_PHONG);
@@ -1136,7 +1146,7 @@ async function doiCheDo(id: string): Promise<void> {
 
 // ─── Menu nổi (kiểu bảng lệnh của Claude Code) ───────────────────
 
-interface MucMenu { nhom?: string; ten: string; mo?: string; phai?: string; chon?: boolean; tat?: boolean; lam?: () => void; html?: string }
+interface MucMenu { nhom?: string; ten: string; mo?: string; phai?: string; chon?: boolean; tat?: boolean; toi?: boolean; lam?: () => void; html?: string }
 let menuMo: { ds: MucMenu[]; chi: number; loc: boolean; luaChon: MucMenu[]; khiDong?: () => void } | null = null;
 
 function moMenu(ds: MucMenu[], o2: { loc?: boolean; goiY?: string; khiDong?: () => void } = {}): void {
@@ -1168,7 +1178,7 @@ function veMenu(): void {
     if (m.nhom) nhomCu = m.nhom;
     if (m.html) return dauNhom + m.html;
     const i = chon.indexOf(m);
-    return `${dauNhom}<div class="muc-menu ${i === menuMo!.chi ? 'dang' : ''} ${m.tat ? 'tat' : ''}" data-i="${i}">
+    return `${dauNhom}<div class="muc-menu ${i === menuMo!.chi ? 'dang' : ''} ${m.tat ? 'tat' : ''} ${m.toi ? 'toi' : ''}" data-i="${i}">
 <span class="ten">${m.chon ? '✓ ' : ''}${esc(m.ten)}</span>${m.mo ? `<span class="mo">${esc(m.mo)}</span>` : ''}${m.phai ? `<span class="phai">${esc(m.phai)}</span>` : ''}</div>`;
   }).join('') || '<div class="trong">Không có gì khớp.</div>';
   d.querySelectorAll<HTMLElement>('.muc-menu').forEach((el) => {
@@ -1217,14 +1227,13 @@ function moMenuModel(): void {
   const hienModel = S.ws?.model ?? S.info?.model;
   const hienMuc = S.ws?.mucNoLuc ?? 'vua';
   const mucHtml = `<div class="hang-muc">${dsMuc().map((m) => `<button class="cham-muc ${m.id === hienMuc ? 'bat' : ''}" data-muc="${m.id}" title="${esc(`${m.ten} — ${m.mo}`)}"></button>`).join('')}</div>`;
-  const coChinhHang = dsModel().some((m) => m.cong === 'anthropic');
   moMenu([
-    /* Nhóm theo CỔNG (17/10/2026): Cổng chính · Claude chính hãng. */
+    /* 18/10/2026: MỘT danh sách theo năng lực (thứ tự máy chủ), CHỈ tên CuongMini; cần khoá ⇒ tối hơn + 🔒. */
     ...dsModel().map((m) => ({
-      nhom: m.cong === 'anthropic' ? 'Claude chính hãng' : coChinhHang ? 'Cổng chính' : 'Model',
+      nhom: 'Model',
       ten: `${m.canMoKhoa ? '🔒 ' : ''}${m.ten}`,
-      mo: !m.dungDuoc ? 'chưa mở trên máy chủ' : m.canMoKhoa ? `cần mật khẩu — ${m.mo}` : m.mo,
-      chon: m.id === hienModel, tat: !m.dungDuoc,
+      mo: !m.dungDuoc ? L('tạm thời chưa dùng được', 'temporarily unavailable') : m.canMoKhoa ? `${L('cần khoá', 'needs a key')} — ${m.mo}` : m.mo,
+      chon: m.id === hienModel, tat: !m.dungDuoc, toi: m.canMoKhoa === true,
       lam: () => {
         if (m.canMoKhoa) { hoiMatKhauRoiChon(m); return; }
         if (m.dat && !confirm(`${m.ten} tốn nhiều hơn hẳn các model khác. Vẫn chọn?`)) return;
@@ -1243,11 +1252,11 @@ function moMenuModel(): void {
 
 /** Model cao chính hãng bị khoá ⇒ thẻ mật khẩu ngay trong bảng ghi, mở xong thì chọn luôn. */
 function hoiMatKhauRoiChon(m: ModelMuc): void {
-  const el = the('tin ket', `🔒 <b>${esc(m.ten)}</b> cần mật khẩu cổng Claude chính hãng.`);
+  const el = the('tin ket', `🔒 <b>${esc(m.ten)}</b> ${esc(L('cần khoá.', 'needs a key.'))}`);
   veOMatKhauAnthropic(el, () => {
-    if (m.dat && !confirm(`${m.ten} đắt hơn hẳn các model khác. Vẫn chọn?`)) return;
-    void doiModel(m.id).then(() => thongBao(`Đã chọn ${m.ten}.`)).catch((e: Error) => thongBao(e.message, true));
-  });
+    if (m.dat && !confirm(L(`${m.ten} đắt hơn hẳn các model khác. Vẫn chọn?`, `${m.ten} costs much more than the others. Use it anyway?`))) return;
+    void doiModel(m.id).then(() => thongBao(L(`Đã chọn ${m.ten}.`, `Selected ${m.ten}.`))).catch((e: Error) => thongBao(e.message, true));
+  }, m.id);
   cuonXuong(true);
 }
 
@@ -1783,7 +1792,7 @@ window.addEventListener('message', (ev) => {
       if (m.info) { S.info = m.info; capNhatChon(); }
       if (cho) {
         cho.nut.disabled = false;
-        cho.kq.textContent = m.ok ? '✓ Đã mở khoá cổng Claude chính hãng (vé 30 ngày).' : `✕ ${m.loi}`;
+        cho.kq.textContent = m.ok ? L('✓ Đã mở khoá (vé 48 giờ).', '✓ Unlocked (48-hour pass).') : `✕ ${m.loi}`;
         if (m.ok) cho.khiXong();
       }
       break;

@@ -434,7 +434,9 @@ export function TheDuyet({ d, chon, rong, toiDaDong, conLai }: { d: ChoDuyet; ch
 
 // ─── Menu chọn (model, mức, việc cũ, duyệt kế hoạch, xác nhận) ───
 
-export interface MucMenu { nhan: string; mo?: string; nhom?: string; tat?: boolean; dangChon?: boolean; giaTri: string; /** Đợt 5: số hiện bên trái ("0" = Thoát). Gõ số đó là chọn. */ so?: string }
+export interface MucMenu { nhan: string; mo?: string; nhom?: string; tat?: boolean; dangChon?: boolean; giaTri: string;
+  /** 18/10/2026: hiện TỐI HƠN nhưng vẫn chọn được (model cần khoá chưa có vé). */
+  toi?: boolean; /** Đợt 5: số hiện bên trái ("0" = Thoát). Gõ số đó là chọn. */ so?: string }
 
 /** Số hiện của mục thứ `k` (đợt 5: mục tự khai `so` thắng; mặc định 1–9). */
 export const soCuaMuc = (m: MucMenu, k: number): string => m.so ?? (k < 9 ? String(k + 1) : '');
@@ -457,7 +459,7 @@ export function MenuView({ tieuDe, moTa, than, ds, chon, loc, coLoc, rong, mauVi
     const dang = k === chon;
     const so = m.so !== undefined ? `${m.so}.` : k < 9 ? `${k + 1}.` : '  ';
     const nhan = `${m.dangChon ? '✓ ' : ''}${m.nhan}`;
-    const trai = m.tat ? mo(`  ${so} ${nhan}`) : dang ? mau(THUONG_HIEU.timNhat)(dam(`❯ ${so} ${nhan}`)) : `  ${mo(so)} ${nhan}`;
+    const trai = m.tat ? mo(`  ${so} ${nhan}`) : dang ? mau(THUONG_HIEU.timNhat)(dam(`❯ ${so} ${nhan}`)) : m.toi ? mo(`  ${so} ${nhan}`) : `  ${mo(so)} ${nhan}`;
     const dem2 = ' '.repeat(Math.max(0, beTen - doRong(nhan)));
     dong.push(`${trai}${m.mo ? `${dem2}  ${mo(catVua(m.mo, Math.max(0, rong - Math.max(beTen, doRong(nhan)) - 12)))}` : ''}`);
   });

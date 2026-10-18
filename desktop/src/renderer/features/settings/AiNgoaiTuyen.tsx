@@ -149,7 +149,7 @@ export function AiNgoaiTuyen() {
   if (!tt) {
     return (
       <section className="ct-section">
-        <h2>{dich('AI ngoại tuyến')}</h2>
+        <h2>{dich('CuongMini ngoại tuyến')}</h2>
         <p className="ct-field-help">{dich('Đang xem cấu hình máy…')}</p>
       </section>
     );
@@ -216,15 +216,15 @@ export function AiNgoaiTuyen() {
 
   return (
     <section className="ct-section" id="ai-ngoai-tuyen" ref={khung}>
-      <h2>{dich('AI ngoại tuyến')}</h2>
+      <h2>{dich('CuongMini ngoại tuyến')}</h2>
       <p className="ct-field-help">
-        {dich('Tải AI về chạy thẳng trên máy bạn. Mất mạng vẫn hỏi được, và câu hỏi không rời khỏi máy. Đổi lại, nó trả lời kém hơn bản trên mạng.')}
+        {dich('Tải CuongMini về chạy thẳng trên máy bạn. Mất mạng vẫn hỏi được, và câu hỏi không rời khỏi máy. Đổi lại, nó trả lời kém hơn bản trên mạng.')}
       </p>
 
       {/* ── Hai công tắc ────────────────────────────────── */}
       <div className="ct-field" style={{ marginTop: 14 }}>
         <div>
-          <div className="ct-field-label">{dich('Cho phép chạy AI trên máy')}</div>
+          <div className="ct-field-label">{dich('Cho phép chạy CuongMini trên máy')}</div>
           <div className="ct-field-help">
             {dich('Tắt thì dừng ngay và trả lại bộ nhớ. File đã tải vẫn giữ nguyên, bật lại là dùng được.')}
           </div>
@@ -238,7 +238,7 @@ export function AiNgoaiTuyen() {
 
       <div className="ct-field" style={{ opacity: choChay ? 1 : 0.5 }}>
         <div>
-          <div className="ct-field-label">{dich('Mất mạng thì tự dùng AI trên máy')}</div>
+          <div className="ct-field-label">{dich('Mất mạng thì tự dùng CuongMini trên máy')}</div>
           <div className="ct-field-help">
             {dich('Tắt thì lúc mất mạng app báo lỗi như cũ thay vì tự trả lời bằng bản yếu hơn.')}
           </div>
@@ -363,7 +363,7 @@ export function AiNgoaiTuyen() {
         <span className="ct-the" data-tone={khuyenCode.muc === 'yeu' ? 'warn' : undefined}>{mucMay}</span>
       </div>
       <p className="ct-field-help" style={{ marginTop: 4 }}>
-        {dich('Mất mạng thì AI Code tự chạy bằng model trên máy: đọc mã, sửa file, chạy lệnh — vẫn qua đúng các bước duyệt như khi có mạng. Có mạng lại sẽ hỏi quay về AI máy chủ.')}
+        {dich('Mất mạng thì AI Code tự chạy bằng model trên máy: đọc mã, sửa file, chạy lệnh — vẫn qua đúng các bước duyệt như khi có mạng. Có mạng lại sẽ hỏi quay về CuongMini máy chủ.')}
       </p>
       <div style={{
         marginTop: 8, padding: '12px 14px', borderRadius: 10,
@@ -404,7 +404,7 @@ export function AiNgoaiTuyen() {
       )}
 
       <p className="ct-field-help" style={{ marginTop: 14 }}>
-        {dich('Khi có mạng, app vẫn tự dùng bản trên mạng vì nó trả lời tốt hơn. AI trên máy là lưới đỡ lúc mất kết nối.')}
+        {dich('Khi có mạng, app vẫn tự dùng bản trên mạng vì nó trả lời tốt hơn. CuongMini trên máy là lưới đỡ lúc mất kết nối.')}
         {' '}
         {/* Mở bằng trình duyệt HỆ THỐNG, không mở trong app: trang hướng dẫn là
             nội dung web thường, và nhét nó vào cửa sổ app chỉ tạo thêm một chỗ

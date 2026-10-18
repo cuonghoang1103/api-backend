@@ -99,11 +99,11 @@ describe('lệnh chạy nền', () => {
     expect(qua.loi).toMatch(/dừng bớt/i);
   });
 
-  it('đầu ra quá trần 12k: giữ phần MỚI NHẤT, nói rõ bỏ bao nhiêu (26/09/2026)', async () => {
-    expect(TRAN_DOC).toBe(12_000);
-    // 3000 dòng × ~12 ký tự ≈ 36k, dòng cuối là thứ agent cần thấy.
+  it('đầu ra quá trần 40k: giữ phần MỚI NHẤT, nói rõ bỏ bao nhiêu (26/09/2026, trần nâng 18/10)', async () => {
+    expect(TRAN_DOC).toBe(40_000);
+    // 6000 dòng × ~12 ký tự ≈ 72k, dòng cuối là thứ agent cần thấy.
     const kq = batLenhNen({
-      lenh: `node -e "for(let i=0;i<3000;i++)console.log('dong-'+String(i).padStart(5,'0'));console.log('CUOI-CUNG')"`,
+      lenh: `node -e "for(let i=0;i<6000;i++)console.log('dong-'+String(i).padStart(5,'0'));console.log('CUOI-CUNG')"`,
       cwd: process.cwd(), cuocId: CUOC,
     });
     await cho(() => trangThai(kq.id!)?.dangChay === false, 8000);

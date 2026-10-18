@@ -32,8 +32,8 @@ beforeAll(async () => {
   writeFileSync(path.join(goc, 'dai.ts'), Array.from({ length: 1000 }, (_, i) => `const x${i + 1} = ${i + 1};`).join('\n') + '\n');
   writeFileSync(path.join(goc, 'ngan.ts'), 'a\nb\nc\n');
   writeFileSync(path.join(goc, 'min.js'), `var a=1;${'x'.repeat(5000)}\nvar b=2;\n`);
-  // 200 dòng × 150 ký tự = 30k ký tự: chạm trần 16k trước trần 300 dòng.
-  writeFileSync(path.join(goc, 'rong.txt'), Array.from({ length: 200 }, () => 'y'.repeat(150)).join('\n'));
+  // 400 dòng × 250 ký tự = 100k ký tự: chạm trần 60k (18/10/2026, trước 16k) trước trần 300 dòng.
+  writeFileSync(path.join(goc, 'rong.txt'), Array.from({ length: 400 }, () => 'y'.repeat(250)).join('\n'));
 
   mkdirSync(path.join(goc, 'g'));
   writeFileSync(path.join(goc, 'g', 'mot.ts'), Array.from({ length: 150 }, (_, i) => `// KHOP ${i}`).join('\n'));
@@ -50,7 +50,7 @@ describe('read_file', () => {
     expect(r.tomTat).toBe('300/1000 dòng');
   });
 
-  it('limit vẫn khai được tới 2000 (nhưng trần 16k ký tự vẫn áp)', async () => {
+  it('limit vẫn khai được tới 2000 (nhưng trần 60k ký tự vẫn áp)', async () => {
     const r = await chay('read_file', { path: 'dai.ts', offset: 901, limit: 2000 });
     expect(dau(r.noiDung)).toContain('dòng 901–1000 / tổng 1000 dòng, đã hết file');
     expect(r.noiDung).toContain('1000\tconst x1000 = 1000;');
@@ -61,16 +61,16 @@ describe('read_file', () => {
     expect(dau(r.noiDung)).toContain('dòng 1–3 / tổng 3 dòng, đã hết file');
   });
 
-  it('trần 16k ký tự: dừng ở RANH GIỚI DÒNG và nói ở đầu', async () => {
+  it('trần 60k ký tự: dừng ở RANH GIỚI DÒNG và nói ở đầu', async () => {
     const r = await chay('read_file', { path: 'rong.txt' });
-    expect(r.noiDung.length).toBeLessThan(17_000);
-    const m = /dòng 1–(\d+) \/ tổng 200 dòng, CÒN TIẾP: gọi read_file offset=(\d+)/.exec(dau(r.noiDung));
+    expect(r.noiDung.length).toBeLessThan(61_500);
+    const m = /dòng 1–(\d+) \/ tổng 400 dòng, CÒN TIẾP: gọi read_file offset=(\d+)/.exec(dau(r.noiDung));
     expect(m).not.toBeNull();
     expect(Number(m![2])).toBe(Number(m![1]) + 1);
-    expect(dau(r.noiDung)).toContain('chạm trần 16k');
-    // Dòng cuối cùng của lát phải trọn vẹn 150 ký tự — không cắt giữa dòng.
+    expect(dau(r.noiDung)).toContain('chạm trần 60k');
+    // Dòng cuối cùng của lát phải trọn vẹn 250 ký tự — không cắt giữa dòng.
     const cacDong = r.noiDung.split('\n').filter((d) => /^\d+\t/.test(d));
-    expect(cacDong.at(-1)!.split('\t')[1]!.length).toBe(150);
+    expect(cacDong.at(-1)!.split('\t')[1]!.length).toBe(250);
   });
 
   it('dòng dài quá 500 ký tự bị cắt kèm …(+N ký tự)', async () => {
@@ -190,8 +190,8 @@ describe('git_diff', () => {
 });
 
 describe('catGiua — đầu ra lệnh', () => {
-  it('trần 12k', () => {
-    expect(TRAN_KY_TU_RA).toBe(12_000);
+  it('trần 40k (18/10/2026)', () => {
+    expect(TRAN_KY_TU_RA).toBe(40_000);
   });
 
   it('ngắn thì giữ nguyên', () => {
@@ -199,7 +199,7 @@ describe('catGiua — đầu ra lệnh', () => {
   });
 
   it('giữ ~35% ĐẦU + ~65% CUỐI, đánh dấu số ký tự bỏ ở giữa', () => {
-    const s = `DAU_LENH\n${'giua\n'.repeat(10_000)}LOI_O_CUOI: Cannot find module`;
+    const s = `DAU_LENH\n${'giua\n'.repeat(30_000)}LOI_O_CUOI: Cannot find module`;
     const { ra, catBot } = catGiua(s);
     expect(catBot).toBe(true);
     expect(ra.startsWith('DAU_LENH')).toBe(true);
@@ -208,10 +208,10 @@ describe('catGiua — đầu ra lệnh', () => {
     expect(m).not.toBeNull();
     const [bo, giuDau, giuCuoi] = [Number(m![1]), Number(m![2]), Number(m![3])];
     expect(bo + giuDau + giuCuoi).toBe(s.length);
-    expect(giuDau).toBeGreaterThan(12_000 * 0.35 - 400);
-    expect(giuDau).toBeLessThanOrEqual(12_000 * 0.35);
-    expect(giuCuoi).toBeGreaterThan(12_000 * 0.65 - 400);
-    expect(giuCuoi).toBeLessThanOrEqual(12_000 * 0.65);
+    expect(giuDau).toBeGreaterThan(TRAN_KY_TU_RA * 0.35 - 400);
+    expect(giuDau).toBeLessThanOrEqual(TRAN_KY_TU_RA * 0.35);
+    expect(giuCuoi).toBeGreaterThan(TRAN_KY_TU_RA * 0.65 - 400);
+    expect(giuCuoi).toBeLessThanOrEqual(TRAN_KY_TU_RA * 0.65);
   });
 
   it('cắt ở ranh giới dòng khi có dòng đủ gần', () => {

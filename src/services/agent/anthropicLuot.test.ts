@@ -21,10 +21,11 @@ function than(mau: Array<Record<string, unknown>>): ReadableStream<Uint8Array> {
 }
 
 test('tuyến Anthropic: gửi đúng hình dạng, đọc đúng tool', async (t) => {
-  const luu = ['AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY']
+  const luu = ['AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'RAMBO_BAT', 'LLM_GATEWAY_API_KEY']
     .map((k) => [k, process.env[k]] as const);
   process.env.AGENT_GATEWAY_BASE_URL = 'https://vi-du.test/api/claude';
   process.env.AGENT_GATEWAY_API_KEY = 'sk-gia-lap';
+  process.env.RAMBO_BAT = '1'; // 18/10/2026: rambo TẮT mặc định — phép kiểm này kiểm đường rambo
   process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap';
   t.after(() => { for (const [k, v] of luu) { if (v === undefined) delete process.env[k]; else process.env[k] = v; } });
 
@@ -95,10 +96,11 @@ test('tuyến Anthropic: gửi đúng hình dạng, đọc đúng tool', async (
  * phép kiểm đọc THÂN YÊU CẦU THẬT gửi đi mới thấy được chỗ rơi.
  */
 test('tuyến Anthropic: ảnh dán đi hết đường, tới THÂN yêu cầu gửi cổng', async (t) => {
-  const luu = ['AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY']
+  const luu = ['AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'RAMBO_BAT', 'LLM_GATEWAY_API_KEY']
     .map((k) => [k, process.env[k]] as const);
   process.env.AGENT_GATEWAY_BASE_URL = 'https://vi-du.test/api/claude';
   process.env.AGENT_GATEWAY_API_KEY = 'sk-gia-lap';
+  process.env.RAMBO_BAT = '1'; // 18/10/2026: rambo TẮT mặc định — phép kiểm này kiểm đường rambo
   process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap';
   t.after(() => { for (const [k, v] of luu) { if (v === undefined) delete process.env[k]; else process.env[k] = v; } });
 

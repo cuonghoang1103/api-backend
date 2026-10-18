@@ -89,7 +89,7 @@ export function tieuDeThan(keoDuoc: boolean): string {
   return keoDuoc
     ? dich('Kéo để dời robot · bấm 3 lần để xong')
     : dich('Bấm 1 lần: mở khung chat nhanh')
-      + '\n' + dich('Bấm 2 lần: mở trang AI Chat')
+      + '\n' + dich('Bấm 2 lần: mở trang CuongMini Chat')
       + '\n' + dich('Bấm 3 lần: bật/tắt chế độ kéo và đổi cỡ')
       + '\n' + dich('Bấm 4 lần: ẩn robot')
       + '\n' + dich('Chuột phải: menu đầy đủ');

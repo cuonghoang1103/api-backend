@@ -27,7 +27,7 @@ import type { KetNoiLoi } from '../ketNoi';
 import type { CongNangCap, KhoChat, MucBang } from '../kho';
 import { nhanKieu, quetDuAn, type KyHieu } from '../kyHieu';
 import { canAscii, datAscii } from '../kyTu';
-import { LENH_GOI_Y, MODEL_DU_PHONG, MUC_DU_PHONG, NHOM_CONG, chayLenh, giaoDienCtw, moModel, tenMuc as tenMucNoLuc, tenModel, nhomCong, tenNhomCong, moPhien, tachLenhCli, type BoiCanhLenh, type ModelMuc, type MucNoLuc } from '../lenh';
+import { LENH_GOI_Y, MODEL_DU_PHONG, MUC_DU_PHONG, chayLenh, giaoDienCtw, moModel, tenMuc as tenMucNoLuc, tenModel, tenNhomCong, moPhien, tachLenhCli, type BoiCanhLenh, type ModelMuc, type MucNoLuc } from '../lenh';
 import { veLogo } from '../logo';
 import { XOA_KHUNG, capNhatTong, nenBatChuot, catKhung, chuoiDoiCheDo, chuoiDoiChuot, cuon as cuonViTri, datTomTatPhien, docChuot, xoaSach, type ViTriCuon } from '../toanManHinh';
 import { giay } from '../trangThai';
@@ -442,14 +442,14 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     const laCH = cong === 'anthropic';
     setHop({
       loai: 'matKhau', giaTri: '',
-      tieuDe: laCH ? L('🔒 Cổng Claude chính hãng', '🔒 Official Claude gateway') : L('🔒 Cổng modelapi', '🔒 modelapi gateway'),
+      tieuDe: laCH ? '🔒 CuongMini Code Max' : '🔒 CuongMini Core',
       moTa: `${lyDo}\n${L('Nhập mật khẩu quản trị cấp cho cổng này (Enter mở khoá · Esc bỏ qua).', 'Enter the admin-issued password for this gateway (Enter to unlock · Esc to skip).')}`,
       khiXong: (mk) => {
         kho.thongBao(L('Đang mở khoá…', 'Unlocking…'));
         // Mỗi cổng một mật khẩu + một vé riêng; lõi lưu vé và gửi kèm mọi lượt.
         const mo = laCH ? kn.moCongAnthropic(mk).then((r) => r.ten) : kn.moDuPhong(mk);
         mo.then(async (ten) => {
-          kho.thongBao(L(`Đã mở khoá ${ten || (laCH ? 'cổng Claude chính hãng' : 'modelapi')}.`, `Unlocked ${ten || (laCH ? 'the official Claude gateway' : 'modelapi')}.`), 'ok');
+          kho.thongBao(L(`Đã mở khoá ${ten || (laCH ? 'CuongMini Code Max' : 'CuongMini Core')}.`, `Unlocked ${ten || (laCH ? 'CuongMini Code Max' : 'CuongMini Core')}.`), 'ok');
           await sauKhi();
         }).catch((e: Error) => kho.thongBao(L(`Không mở khoá được: ${e.message}`, `Could not unlock: ${e.message}`), 'loi'));
       },
@@ -467,11 +467,25 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   };
 
   /** Model 🔒 (cổng chính hãng, chưa có vé): mật khẩu ⇒ vé ⇒ datModel ⇒ getInfo (làm mới ổ khoá). */
+  /* 18/10/2026: model cần KHOÁ (khoá chung hoặc khoá riêng Invisible — máy chủ tự nhận) ⇒ ô nhập ẩn ký
+     tự ⇒ đúng thì sáng lên (getInfo) và chọn luôn. */
   const moKhoaModel = (id: string) => {
     const mm = dsModel().find((x) => x.id === id);
     if (!mm) return;
-    xacNhanDat(mm, () => hoiMatKhauCong('anthropic', L(`${mm.ten} cần mật khẩu cổng Claude chính hãng.`, `${mm.ten} needs the official Claude gateway password.`),
-      () => doiModel(id).then(() => kho.thongBao(`Model: ${mm.ten}`, 'ok'))));
+    xacNhanDat(mm, () => setHop({
+      loai: 'matKhau', giaTri: '',
+      tieuDe: L(`🔒 ${mm.ten}`, `🔒 ${mm.ten}`),
+      moTa: L('Model này cần khoá do quản trị cấp (Enter mở khoá · Esc bỏ qua). Vé sống 48 giờ.', 'This model needs an admin-issued key (Enter to unlock · Esc to skip). The pass lasts 48 hours.'),
+      khiXong: (mk) => {
+        kho.thongBao(L('Đang mở khoá…', 'Unlocking…'));
+        kn.moCongAnthropic(mk, id)
+          .then(async () => {
+            await doiModel(id);
+            kho.thongBao(L(`Đã mở khoá — Model: ${mm.ten}`, `Unlocked — Model: ${mm.ten}`), 'ok');
+          })
+          .catch((e: Error) => kho.thongBao(L(`Không mở khoá được: ${e.message}`, `Could not unlock: ${e.message}`), 'loi'));
+      },
+    }));
   };
 
   /** Lời mời / bảng chọn cổng: từ `CONG_CHINH_HONG_FREE.cacCong`, không có thì hỏi lõi (`agent:congAnthropic`). */
@@ -486,7 +500,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     const ds: MucMenu[] = [];
     if (dangFree) ds.push({ nhom: 'CuongMini Free', nhan: L('Ở lại CuongMini Free', 'Stay on CuongMini Free'), mo: L('miễn phí trong hạn mức — tự về cổng chính khi nó sống lại', 'free within quota — returns to the main gateway when it recovers'), giaTri: 'o:' });
     for (const c of cacCong) {
-      const nhom = c.cong === 'anthropic' ? tenNhomCong('anthropic') : c.ten || 'modelapi';
+      const nhom = c.cong === 'anthropic' ? tenNhomCong('anthropic') : c.ten || tenNhomCong('modelapi');
       if (!c.daBat) { ds.push({ nhom, nhan: L('Quản trị chưa bật cổng này', 'The admin has not enabled this gateway'), tat: true, giaTri: `x:${c.cong}` }); continue; }
       for (const m of c.models) {
         ds.push({
@@ -550,14 +564,14 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       return;
     }
     if (loai === 'model') {
-      // Nhóm theo cổng (Cổng chính · Claude chính hãng · modelapi); 🔒 = cần mật khẩu cổng chính hãng.
+      // 18/10/2026: MỘT danh sách theo năng lực (thứ tự máy chủ), CHỈ tên CuongMini; 🔒 + tối hơn = cần khoá.
       const tatCa = dsModel();
       const ds: MucMenu[] = [
-        ...NHOM_CONG.flatMap((n) => tatCa.filter((m) => nhomCong(m) === n).map((m) => ({
-          nhom: tenNhomCong(n), nhan: `${m.canMoKhoa ? '🔒 ' : ''}${m.ten}${m.mienPhi ? L(' · miễn phí', ' · free') : ''}`,
-          mo: !m.dungDuoc ? L('chưa mở trên máy chủ', 'not enabled on the server') : m.canMoKhoa ? L(`cần mật khẩu — ${m.mo}`, `password required — ${moModel(m.mo)}`) : moModel(m.mo),
-          tat: !m.dungDuoc, dangChon: m.id === modelNay?.id, giaTri: `m:${m.id}`,
-        }))),
+        ...tatCa.map((m) => ({
+          nhom: L('Model', 'Model'), nhan: `${m.canMoKhoa ? '🔒 ' : ''}${m.ten}`,
+          mo: !m.dungDuoc ? L('tạm thời chưa dùng được', 'temporarily unavailable') : m.canMoKhoa ? L(`cần khoá — ${m.mo}`, `needs a key — ${moModel(m.mo, m.moEn)}`) : moModel(m.mo, m.moEn),
+          tat: !m.dungDuoc, ...(m.canMoKhoa ? { toi: true } : {}), dangChon: m.id === modelNay?.id, giaTri: `m:${m.id}`,
+        })),
         ...dsMuc().map((m) => ({ nhom: L('Mức nỗ lực', 'Effort'), nhan: m.ten, mo: m.mo, dangChon: m.id === mucNay?.id, giaTri: `n:${m.id}` })),
       ];
       menu({
@@ -920,15 +934,13 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
       });
     } else if (l.ma === 'CONG_ANTHROPIC_KHOA') {
       // Vé đã bị lõi xoá (mật khẩu đổi/tắt) ⇒ hỏi lại rồi gửi lại câu hỏi.
-      if (l.daBat === false) { kho.thongBao(L('Quản trị chưa bật cổng Claude chính hãng — chọn model khác bằng /model.', 'The admin has not enabled the official Claude gateway — pick another model with /model.'), 'canh'); return; }
-      hoiMatKhauCong('anthropic', L('Model này cần mật khẩu cổng Claude chính hãng.', 'This model needs the official Claude gateway password.'), () => {
+      if (l.daBat === false) { kho.thongBao(L('Quản trị chưa đặt khoá cho model này — chọn model khác bằng /model.', 'The admin has not set a key for this model — pick another model with /model.'), 'canh'); return; }
+      hoiMatKhauCong('anthropic', L('Model này cần khoá (vé 48 giờ đã hết hoặc chưa có).', 'This model needs a key (the 48-hour pass expired or is missing).'), () => {
         if (S.cauHoiCuoi) { kho.thongBao(L('Đang gửi lại câu hỏi…', 'Resending…')); guiThat(S.cauHoiCuoi, {}); }
       });
-    } else if (l.ma === 'CONG_ANTHROPIC_HET_HAN_MUC' || l.ma === 'CONG_ANTHROPIC_HET_KEY') {
-      // Có vé modelapi thì máy chủ tự lùi sang đó cho các lượt sau.
-      hoiMatKhauCong('modelapi', L('Dùng modelapi (GPT, tính phí) thay thế? Có vé modelapi thì máy chủ tự chuyển sang đó.', 'Use modelapi (GPT, paid) instead? With a modelapi ticket the server switches there automatically.'), () => {
-        if (S.cauHoiCuoi) { kho.thongBao(L('Đang gửi lại câu hỏi…', 'Resending…')); guiThat(S.cauHoiCuoi, {}); }
-      });
+    } else if (l.ma === 'CONG_ANTHROPIC_HET_HAN_MUC' || l.ma === 'CONG_ANTHROPIC_HET_KEY' || l.ma === 'CUONGMINI_HET_TRAN') {
+      /* 18/10/2026: hết trần / cổng hỏng — máy chủ đã tự chuyển model free nếu được; còn lại mời chọn model khác. */
+      kho.thongBao(L('Gõ /model để chọn model khác.', 'Type /model to pick another model.'), 'canh');
     } else if (l.ma !== 'PRO_REQUIRED') {
       void kn.lamMoiPhien().then((ok) => {
         if (ok) kho.thongBao(L('Đã làm mới phiên đăng nhập — gửi lại câu hỏi nhé.', 'Session refreshed — please resend your message.'), 'ok');

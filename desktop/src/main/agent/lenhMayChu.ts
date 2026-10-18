@@ -29,6 +29,9 @@ export async function goiCompact(o: {
   hoiThoai: readonly TinGui[];
   ghiChu?: string;
   giuLuot?: number;
+  /** 18/10/2026: tóm tắt bằng CHÍNH model của cuộc ⇒ gửi mã model + bó vé như lượt agent. */
+  model?: string;
+  congAnthropicVe?: string;
   fetchFn?: Fetch;
   bayGio?: () => number;
 }): Promise<KetQuaCompactApp> {
@@ -42,12 +45,14 @@ export async function goiCompact(o: {
       signal: AbortSignal.timeout(90_000),
       body: JSON.stringify({
         /* `khoiAnthropic` (thinking có chữ ký, compaction của cổng chính hãng)
-           KHÔNG lên đây: việc tóm tắt chạy model rẻ của modelapi, vốn bỏ qua
-           trường đó — gửi chỉ phình thân yêu cầu. Bản trong `c.hoiThoai` giữ
+           KHÔNG lên đây: máy chủ dựng lại hội thoại thành CHỮ để tóm tắt (bằng
+           model của cuộc), không đọc trường đó — gửi chỉ phình thân yêu cầu. Bản trong `c.hoiThoai` giữ
            nguyên; `ghepTomTat` gửi lại các tin sau mốc gộp NGUYÊN VĂN. */
         messages: goAnhCu(o.hoiThoai, 0).messages.map(({ khoiAnthropic: _bo, ...m }) => m),
         ...(o.ghiChu?.trim() ? { ghiChu: o.ghiChu.trim().slice(0, 2000) } : {}),
         ...(o.giuLuot ? { giuLuot: o.giuLuot } : {}),
+        ...(o.model ? { model: o.model } : {}),
+        ...(o.congAnthropicVe ? { congAnthropicVe: o.congAnthropicVe } : {}),
       }),
     });
   } catch (e) {

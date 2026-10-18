@@ -190,6 +190,39 @@ ghi CT Work ⇒ từ chối (không ghi) ⇒ `?`; `sprint_current` ≤ 2 lần c
   `hoiNguoiDung` (không có lượt agent nào đang chạy để dừng).
 - Desktop + VS Code: chưa có test hiển thị (React/DOM) riêng cho thẻ lựa chọn — phần điều phối dùng chung đã test ở CLI.
 
+## 2e. Đợt "cổng & model CuongMini" (18/10/2026) — bỏ trần làm model kém đi
+
+Chủ app: "không giới hạn năng lực — giới hạn TIỀN thì giữ, nhưng chặn bằng trần chi tiêu, không bằng cách làm model ngu đi".
+Trần tiền mới: `src/services/agent/tranModel.ts` (USD/người/tháng+ngày theo từng model, admin chỉnh). Các trần đã đổi:
+
+| Chỗ | Trần | Trước | Sau |
+|---|---|---|---|
+| máy chủ `turn.ts` | ký tự hội thoại | 600.000 (2.400.000 chỉ khi chọn tay model cao chính hãng) | theo cửa sổ THẬT: `cửa sổ × 2,4` ⇒ 2.400.000 (model 1M) · 960.000 (GPT 400K) |
+| máy chủ `turn.ts` | cửa sổ tính "context %" | 200.000 (1M chỉ model cao) | đúng cửa sổ model (1M / 400K) |
+| máy chủ `turn.ts` | số tin hội thoại | 200 (≈100 bước) | 1.000 (trần thô 5.000) |
+| máy chủ `turn.ts` | `max_tokens` lượt agent tuyến OpenAI | 16.000 | trần thật của model (128.000) |
+| máy chủ `cauHinh.ts` | `max_tokens` lượt agent chính hãng | 64.000 | 128.000 (kẹp theo `/v1/models`) |
+| máy chủ `turn.ts` | `reasoning_effort` GPT | không gửi (cổng tự `medium` cho mọi mức) | theo mức người chọn: thấp→low · vừa→medium · cao→high · rất cao/tối đa/ultracode→xhigh |
+| máy chủ `turn.ts` | lược kết quả tool cũ | luôn lược (giữ 8–15 kết quả), trừ model cao chính hãng | chính hãng: KHÔNG lược (compact phía Anthropic); modelapi: chỉ lược khi hội thoại > ½ cửa sổ |
+| máy chủ `turn.ts` | một kết quả tool app gửi | 60.000 ký tự | 200.000 |
+| máy chủ `turn.ts` | bước agent phụ | đọc 10 · ghi 25 | đọc 25 · ghi 50 |
+| máy chủ `tomTatLuotCu.ts` | tóm tắt khi hội thoại đầy | model RẺ (`cv_parse`), vào 90.000 ký tự, mỗi kết quả tool 400, ra 2.000 token, ~900 từ | CHÍNH model của cuộc (`goiTomTatBangModel`), vào 400.000, mỗi kết quả tool 1.500, ra 16.000, ~1.800 từ; đệm theo băm có MÃ model |
+| máy chủ `/agent/compact` | `/compact` | model rẻ | model của cuộc (app gửi `model` + `congAnthropicVe`) |
+| app/lõi `lenh.ts` | đầu ra một lệnh | 12.000 ký tự | 40.000 |
+| app/lõi `lenhNen.ts` | mỗi lần đọc lệnh nền | 12.000 | 40.000 |
+| app/lõi `tools.ts` | một lần `read_file` | 16.000 ký tự | 60.000 (300 dòng mặc định, tối đa 2.000 giữ nguyên) |
+| app/lõi `tools.ts` | một lần `web_doc` | 8.000 | 24.000 |
+| app/lõi `mcpNoiDung.ts` | một kết quả tool MCP | 16.000 | 60.000 |
+
+Lõi `desktop/src/main/agent/*` chạy chung cho app desktop, CuongMini CLI và extension VS Code (`packages/cuongmini-core`) trên cả
+macOS / Windows / Linux ⇒ một chỗ sửa là đủ ba nơi, ba hệ điều hành. Mức nỗ lực (8/30/60/100/160/260 bước) giữ nguyên — đó là lựa
+chọn của người dùng, không phải trần ẩn.
+
+Danh sách model ở cả ba nơi: một danh sách, xếp năng lực cao → thấp (thứ tự máy chủ), CHỈ tên CuongMini; model cần khoá chưa có vé
+hiện tối hơn + 🔒, bấm/chọn ⇒ ô nhập khoá (CLI: thẻ + ô ẩn ký tự) ⇒ đúng thì chọn luôn. Cổng hỏng ⇒ máy chủ tự sang model free
+tương đương ở cổng kia, app chỉ in một dòng mờ "Đã chuyển sang … vì cổng bận". Bỏ dòng "Cổng AI đang chậm…" và dòng "cổng AI đang
+quá tải — chờ Xs…" (thử lại im lặng).
+
 ## 3. Thiết kế đợt 3/4 (đợt 3 ĐÃ LÀM — ghi chỗ đổi thiết kế)
 
 ### 3.1 Agent phụ GHI được (đợt 3)

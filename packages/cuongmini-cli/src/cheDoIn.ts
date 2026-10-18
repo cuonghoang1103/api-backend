@@ -150,12 +150,12 @@ export async function chayCheDoIn(co: CoDong, thuMuc: string): Promise<number> {
           if (ma === 'PRO_REQUIRED') viet(L('  Cần gói Pro — https://cuongthai.com/pro\n', '  Requires Pro — https://cuongthai.com/pro\n'));
           // Lỗi mở được bằng mật khẩu: bảo trì / hết trần chính hãng ⇒ modelapi; vé chính hãng chết ⇒ hỏi lại cổng chính hãng.
           const laCH = ma === 'CONG_ANTHROPIC_KHOA' && e.daBat !== false;
-          const laDp = ma === 'RAMBO_BAO_TRI' || ma === 'CONG_ANTHROPIC_HET_HAN_MUC' || ma === 'CONG_ANTHROPIC_HET_KEY';
-          if (ma === 'CONG_ANTHROPIC_KHOA' && e.daBat === false) viet(L('  Quản trị chưa bật cổng Claude chính hãng — chọn model khác (--model).\n', '  The admin has not enabled the official Claude gateway — pick another model (--model).\n'));
+          const laDp = ma === 'RAMBO_BAO_TRI';
+          if (ma === 'CONG_ANTHROPIC_KHOA' && e.daBat === false) viet(L('  Quản trị chưa đặt khoá cho model này — chọn model khác (--model).\n', '  The admin has not set a key for this model — pick another model (--model).\n'));
           if ((laCH || laDp) && process.stdin.isTTY && loiTTY && !dangDuPhong) {
             dangDuPhong = true;
             const cau = laCH
-              ? L('Mật khẩu cổng Claude chính hãng (Enter để bỏ qua): ', 'Official Claude gateway password (Enter to skip): ')
+              ? L('Khoá CuongMini (Enter để bỏ qua): ', 'CuongMini key (Enter to skip): ')
               : ma === 'RAMBO_BAO_TRI'
                 ? L('Cổng chính đang bảo trì. Mật khẩu cổng dự phòng (Enter để bỏ qua): ', 'Main gateway is under maintenance. Fallback gateway password (Enter to skip): ')
                 : L('Dùng modelapi thay thế? Mật khẩu modelapi (Enter để bỏ qua): ', 'Use modelapi instead? modelapi password (Enter to skip): ');

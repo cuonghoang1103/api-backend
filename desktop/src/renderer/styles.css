@@ -4593,6 +4593,16 @@ html[data-ct-theme='light'] .ct-diff .hljs-property { color: #0a4fa8; }
   color: var(--ct-text-muted);
 }
 
+/* Dòng MỜ (18/10/2026): "Đã chuyển sang CuongMini Solid vì cổng bận" — không nền, không viền. */
+.ct-notice[data-tone='mo'] {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ct-text-muted);
+  opacity: 0.7;
+  font-size: 0.92em;
+  padding-block: 2px;
+}
+
 .ct-lichsu-phu {
   position: absolute;
   inset: 0;

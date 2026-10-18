@@ -16,7 +16,11 @@ import {
   KhoKeyLoi, danhDauKey, doiThuTu, khoaThoCua, suaKey, themKey, xoaKey, xoaNho,
 } from '../services/agent/anthropicChinhHang/khoKey.js';
 import { datTranGoi, datTranRieng, docTranGoi, xoaTranRieng } from '../services/agent/anthropicChinhHang/hanMuc.js';
-import { daBatMatKhauAnthropic, datMatKhauAnthropic } from '../services/agent/anthropicChinhHang/ve.js';
+import { daBatMatKhau, datMatKhau, trungMatKhauKhac, type LoaiVe } from '../services/agent/anthropicChinhHang/ve.js';
+import { TEN_CONG, bangModel } from '../services/agent/bangModel.js';
+import { datTranModel, docTranModel } from '../services/agent/tranModel.js';
+import { datCongTacRambo, trangThaiRambo } from '../services/llm/congTacRambo.js';
+import { priceOf } from '../services/llm/gateway.js';
 import { dsKeyAdmin, dsTranRieng, hanMucNguoiAdmin, timNguoi, tongQuanDung } from '../services/agent/anthropicChinhHang/thongKe.js';
 import { doiChieu, dsAdminKey } from '../services/agent/anthropicChinhHang/doiChieu.js';
 import { dauThangVn } from '../services/agent/anthropicChinhHang/hanMuc.js';
@@ -52,8 +56,18 @@ router.get('/', boc(async (_req, res) => {
     success: true,
     data: {
       keys: await dsKeyAdmin(),
-      daBatMatKhau: await daBatMatKhauAnthropic(),
+      daBatMatKhau: await daBatMatKhau('chung'),
+      /* 18/10/2026: khoá RIÊNG của CuongMini Invisible 5.1. */
+      daBatMatKhauInvisible: await daBatMatKhau('invisible'),
       tranGoi: await docTranGoi(),
+      /* Bảng model CuongMini (thứ tự = năng lực) — admin thấy cả tên thật để đối chiếu sổ. */
+      bangModel: bangModel().map((m) => ({
+        id: m.id, ten: m.ten, model: m.model, cong: m.cong, tenCong: TEN_CONG[m.cong], khoa: m.khoa,
+        nangLuc: m.nangLuc, tuongDuong: m.tuongDuong, cuaSoToken: m.cuaSoToken, maxRa: m.maxRa,
+        gia: m.cong === 'anthropic' ? giaCua(m.model) : priceOf(m.model),
+      })),
+      tranModel: await docTranModel(),
+      rambo: trangThaiRambo(),
       modelFree: modelFree(),
       models: dsModelChinhHangGoc().map((m) => ({ ...m, gia: giaCua(m.model) })),
       bangGia: Object.keys(BANG_GIA).map((model) => ({ model, ...giaCua(model) })),
@@ -222,21 +236,52 @@ router.get('/gioi-han', boc(async (_req, res) => {
   res.json({ success: true, data: ds });
 }));
 
-// ─── Mật khẩu cổng ───────────────────────────────────────────────────
+// ─── Khoá (mật khẩu) ─────────────────────────────────────────────────
 
-/** Body `{ matKhau: string }` để đặt/đổi (vé cũ chết), `{ matKhau: null }` để TẮT model cao cho người thường. */
-router.put('/mat-khau', boc(async (req, res) => {
+/**
+ * Đặt/đổi một khoá. Body `{ matKhau: string }` (vé cũ của loại đó chết), `{ matKhau: null }`
+ * để TẮT loại đó với người thường. Hai khoá PHẢI khác nhau — trùng thì nhập khoá chung là
+ * mở luôn Invisible, mất nghĩa "khoá riêng".
+ */
+async function datKhoa(loai: LoaiVe, req: Request, res: Response<ApiResponse>): Promise<void> {
   const raw = (req.body as { matKhau?: unknown })?.matKhau;
   if (raw === null) {
-    await datMatKhauAnthropic(null);
+    await datMatKhau(loai, null);
   } else {
     const mk = String(raw ?? '');
-    if (mk.length < 6) throw new BadRequestError('Mật khẩu tối thiểu 6 ký tự.');
-    if (mk.length > 200) throw new BadRequestError('Mật khẩu quá dài.');
-    await datMatKhauAnthropic(mk);
+    if (mk.length < 6) throw new BadRequestError('Mật khẩu tối thiểu 6 ký tự. / Password must be at least 6 characters.');
+    if (mk.length > 200) throw new BadRequestError('Mật khẩu quá dài. / Password too long.');
+    if (await trungMatKhauKhac(loai, mk)) {
+      throw new BadRequestError('Hai khoá phải khác nhau (khoá chung ≠ khoá Invisible). / The two keys must differ.');
+    }
+    await datMatKhau(loai, mk);
   }
-  logger.info('[cong-anthropic] admin đổi mật khẩu cổng', { adminId: adminId(req), tat: raw === null });
-  res.json({ success: true, data: { daBatMatKhau: await daBatMatKhauAnthropic() } });
+  logger.info('[cong-anthropic] admin đổi khoá', { adminId: adminId(req), loai, tat: raw === null });
+  res.json({ success: true, data: { daBatMatKhau: await daBatMatKhau('chung'), daBatMatKhauInvisible: await daBatMatKhau('invisible') } });
+}
+
+/** Khoá CHUNG — mở mọi model không thuộc nhóm free, trừ Invisible. */
+router.put('/mat-khau', boc((req, res) => datKhoa('chung', req, res)));
+/** Khoá RIÊNG của CuongMini Invisible 5.1. */
+router.put('/mat-khau-invisible', boc((req, res) => datKhoa('invisible', req, res)));
+
+// ─── Trần theo model × người (18/10/2026) ───────────────────────────
+
+/** Body: { [maModel]: { pro?: {thang, ngay}, key_terminal?: {thang, ngay} } } — null = không giới hạn ô đó. */
+router.put('/tran-model', boc(async (req, res) => {
+  const tranModel = await datTranModel(req.body);
+  logger.info('[cong-anthropic] admin đổi trần theo model', { adminId: adminId(req) });
+  res.json({ success: true, data: { tranModel } });
+}));
+
+// ─── Công tắc cổng rambo (mặc định TẮT) ─────────────────────────────
+
+/** Body: { bat: boolean }. Env `RAMBO_BAT` (nếu đặt) thắng công tắc này. */
+router.put('/rambo', boc(async (req, res) => {
+  const bat = (req.body as { bat?: unknown })?.bat === true;
+  await datCongTacRambo(bat);
+  logger.info('[cong-anthropic] admin đổi công tắc rambo', { adminId: adminId(req), bat });
+  res.json({ success: true, data: trangThaiRambo() });
 }));
 
 export default router;

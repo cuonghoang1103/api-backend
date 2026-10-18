@@ -538,14 +538,14 @@ function ChiTiet({ de, L, en, t, luots, daLuu, onLuu, onBatDau, onXemLuot, onlin
   const my = dau?.my;
   const goiY = l === 'PE'
     ? de.peType === 'CODE'
-      ? t('Đọc đề, viết code ở IDE của bạn, nén thành .zip rồi nộp để AI chấm.', 'Read the problems, code in your own IDE, then upload one .zip for AI grading.')
+      ? t('Đọc đề, viết code ở IDE của bạn, nén thành .zip rồi nộp để CuongMini chấm.', 'Read the problems, code in your own IDE, then upload one .zip for CuongMini grading.')
       : de.peType === 'WRITE'
-        ? t('Viết bài bằng TIẾNG ANH ngay trong phòng thi. AI chấm theo tiêu chí.', 'Write your answer in ENGLISH right here. AI grades it against a rubric.')
-        : t('Thu âm câu trả lời cho từng câu hỏi. AI chấm nội dung & phát âm.', 'Record your answer for each question. AI grades content & pronunciation.')
+        ? t('Viết bài bằng TIẾNG ANH ngay trong phòng thi. CuongMini chấm theo tiêu chí.', 'Write your answer in ENGLISH right here. CuongMini grades it against a rubric.')
+        : t('Thu âm câu trả lời cho từng câu hỏi. CuongMini chấm nội dung & phát âm.', 'Record your answer for each question. CuongMini grades content & pronunciation.')
     : l === 'SPEAKING'
-      ? t('Thu âm câu trả lời cho từng câu hỏi. AI chấm nội dung & phát âm.', 'Record your answer for each question. AI grades content & pronunciation.')
+      ? t('Thu âm câu trả lời cho từng câu hỏi. CuongMini chấm nội dung & phát âm.', 'Record your answer for each question. CuongMini grades content & pronunciation.')
       : l === 'PT'
-        ? t('Trắc nghiệm kèm 1–2 câu lập trình gõ ngay trong phòng. Trắc nghiệm chấm tự động, câu code AI chấm.', 'Multiple choice plus 1–2 coding questions typed in the room. MCQs auto-graded, code AI-graded.')
+        ? t('Trắc nghiệm kèm 1–2 câu lập trình gõ ngay trong phòng. Trắc nghiệm chấm tự động, câu code CuongMini chấm.', 'Multiple choice plus 1–2 coding questions typed in the room. MCQs auto-graded, code CuongMini-graded.')
         : t('Chọn đáp án cho từng câu, có câu chọn nhiều. Chấm tự động ngay khi nộp.', 'Answer each question; some allow several answers. Auto-graded on submit.');
 
   return (
@@ -589,7 +589,7 @@ function ChiTiet({ de, L, en, t, luots, daLuu, onLuu, onBatDau, onXemLuot, onlin
           {my?.inProgressId ? t('Tiếp tục bài thi', 'Resume attempt') : t('Bắt đầu thi', 'Start exam')}
         </button>
         <button type="button" className="ctx-nut-ai" onClick={() => onBatDau(true)} disabled={!online}
-          title={t('Phòng ôn tập: không tính giờ, hỏi AI từng câu (Pro)', 'Study room: untimed, ask AI per question (Pro)')}>
+          title={t('Phòng ôn tập: không tính giờ, hỏi CuongMini từng câu (Pro)', 'Study room: untimed, ask CuongMini per question (Pro)')}>
           <Bot size={15} aria-hidden />
           {my?.aiInProgressId ? t('Tiếp tục với CuongMini', 'Continue with CuongMini') : t('Ôn với CuongMini', 'Study with CuongMini')}
         </button>

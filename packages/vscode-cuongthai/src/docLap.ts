@@ -146,11 +146,12 @@ export class LoiDocLap implements KetNoi {
 
   moDuPhong(matKhau: string): Promise<string> { return this.loi.moDuPhong(matKhau, this.nguoi.token); }
 
-  async moCongAnthropic(matKhau: string): Promise<string> {
-    const kq = this.loi.moCongAnthropic
+  async moCongAnthropic(matKhau: string, model?: string): Promise<string> {
+    /* 18/10/2026: kèm mã model vừa bấm (máy chủ thử khoá chung + khoá Invisible). */
+    const kq = this.loi.moCongAnthropic && !model
       ? await this.loi.moCongAnthropic(matKhau)
-      : await this.loi.goi('agent:moCongAnthropic', { matKhau }) as { ten?: string };
-    return kq?.ten ?? 'Claude chính hãng';
+      : await this.loi.goi('agent:moCongAnthropic', { matKhau, ...(model ? { model } : {}) }) as { ten?: string };
+    return kq?.ten ?? 'CuongMini';
   }
 
   chuanHoaAnh(dataUrl: string): Promise<string> { return this.loi.chuanHoaAnh(dataUrl); }

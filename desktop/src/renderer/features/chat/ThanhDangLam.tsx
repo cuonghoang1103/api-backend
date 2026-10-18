@@ -33,7 +33,7 @@ import type { ViecHienTai } from './viecDangLam';
 import { useDich } from '../../i18n';
 
 /** Giây bắt đầu nói ra nguyên nhân. Dưới ngần này thì chưa có gì bất thường. */
-const CHANG_LO_GIAY = 15;
+/* 18/10/2026: BỎ câu "Cổng AI đang chậm chứ app không treo…" (chủ app yêu cầu) — số giây đang chạy là đủ. */
 
 export function ThanhDangLam({
   viec,
@@ -78,11 +78,6 @@ export function ThanhDangLam({
         <span className="ct-danglam-giay">{giay}s</span>
       )}
 
-      {viec.kieu === 'lam' && giay >= CHANG_LO_GIAY && (
-        <span className="ct-danglam-phu">
-          {dich('Cổng AI đang chậm chứ app không treo — bấm Dừng nếu muốn thử lại.')}
-        </span>
-      )}
     </div>
   );
 }

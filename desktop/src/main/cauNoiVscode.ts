@@ -195,8 +195,9 @@ export async function batCauNoiVscode(): Promise<void> {
         try {
           const matKhau = String(b.matKhau ?? '');
           if (!matKhau || matKhau.length > 200) throw new Error('Thiếu mật khẩu.');
-          const kq = await goiKenhNoiBo('agent:moCongAnthropic', { matKhau }, suKienGia) as { ten?: string; hetHan?: number | null };
-          return tra(res, 200, { ok: true, ten: kq?.ten ?? 'Claude chính hãng', hetHan: kq?.hetHan ?? null });
+          const model = typeof b.model === 'string' && b.model.length <= 40 ? b.model : undefined;
+          const kq = await goiKenhNoiBo('agent:moCongAnthropic', { matKhau, ...(model ? { model } : {}) }, suKienGia) as { ten?: string; hetHan?: number | null };
+          return tra(res, 200, { ok: true, ten: kq?.ten ?? 'CuongMini', hetHan: kq?.hetHan ?? null });
         } catch (e) {
           return tra(res, 200, { ok: false, loi: (e as Error).message });
         }

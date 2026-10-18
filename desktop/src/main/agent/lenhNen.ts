@@ -34,7 +34,8 @@ const TRAN_DEM = 200_000;
  * và với lệnh nền thì phần đáng đọc là phần MỚI NHẤT (server lên chưa, vừa
  * báo lỗi gì) — nên cắt thì bỏ phần CŨ ở đầu, giữ đuôi.
  */
-export const TRAN_DOC = 12_000;
+/* 18/10/2026: 12.000 → 40.000 — không cắt quá sớm; tiền chặn bằng trần chi tiêu ở máy chủ. */
+export const TRAN_DOC = 40_000;
 /** Hạn giờ một lệnh nền — xem chú thích ở chỗ đặt hẹn giờ. */
 const TRAN_GIO_MS = 20 * 60_000;
 

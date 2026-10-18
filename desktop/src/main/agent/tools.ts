@@ -215,7 +215,8 @@ const MAX_MUC_THU_MUC = 200;
 const MAX_DONG_DOC = 300;
 const MAX_DONG_DOC_TRAN = 2000;
 /** Trần ký tự một lần read_file — cắt ở ranh giới dòng, kể cả khi `limit` cho nhiều hơn. */
-const TRAN_KY_TU_DOC = 16_000;
+/* 18/10/2026: 16.000 → 60.000 — một file 2.000 dòng ít khi vượt; trước đó read_file dừng sớm ở ~16k. */
+const TRAN_KY_TU_DOC = 60_000;
 /** Một dòng dài hơn thế gần như chắc là file minified/sinh máy — đọc hết là trả tiền cho rác. */
 const TRAN_KY_TU_MOT_DONG = 500;
 const MAX_KET_QUA_GREP = 100;
@@ -2337,7 +2338,8 @@ async function toolWebMo(args: Record<string, unknown>): Promise<KetQuaTool> {
  * 24k ⇒ 8k (đợt 3, 18/10/2026): kết quả tool bị CHỞ THEO mọi vòng sau; một việc đọc trang WBS dài
  * 66 vòng có ngữ cảnh trung bình ~139k token và tốn 3,42 $ — phần lớn là các trang 24k đọc đi đọc lại.
  */
-const WEB_DOC_MOT_LAN = 8_000;
+/* 18/10/2026: 8.000 → 24.000 ký tự mỗi lần đọc trang. */
+const WEB_DOC_MOT_LAN = 24_000;
 
 /**
  * Đọc chữ trang đang mở — CÓ PHÂN TRANG và TÌM THEO TỪ (26/09/2026).

@@ -86,11 +86,11 @@ export function DaiNgoaiTuyen({
         <WifiOff size={15} aria-hidden />
         <span className="ct-ngoai-tuyen-chu">
           {tt.nen === 'matMangDaTat'
-            ? dich('Mất mạng — AI ngoại tuyến đang tắt trong Cài đặt.')
-            : `${dich('Mất mạng — chưa có AI ngoại tuyến để chạy thay.')}${lyDo ? ` ${lyDo}` : ''}`}
+            ? dich('Mất mạng — CuongMini ngoại tuyến đang tắt trong Cài đặt.')
+            : `${dich('Mất mạng — chưa có CuongMini ngoại tuyến để chạy thay.')}${lyDo ? ` ${lyDo}` : ''}`}
         </span>
         <button type="button" className="ct-ngoai-tuyen-nut" onClick={moCai}>
-          <Settings2 size={13} aria-hidden /> {tt.nen === 'matMangDaTat' ? dich('Mở cài đặt') : dich('Cài AI ngoại tuyến')}
+          <Settings2 size={13} aria-hidden /> {tt.nen === 'matMangDaTat' ? dich('Mở cài đặt') : dich('Cài CuongMini ngoại tuyến')}
         </button>
       </div>
     );
@@ -107,17 +107,17 @@ export function DaiNgoaiTuyen({
       {tt.hoiQuayVe && (
         <span className="ct-ngoai-tuyen-hoi">
           {tt.hoiQuayVe.sauLuot || dangChay
-            ? dich('Đã có mạng — sẽ quay về AI máy chủ khi lượt này xong.')
-            : dich('Đã có mạng — quay về AI máy chủ?')}
+            ? dich('Đã có mạng — sẽ quay về CuongMini máy chủ khi lượt này xong.')
+            : dich('Đã có mạng — quay về CuongMini máy chủ?')}
         </span>
       )}
       {tt.hoiQuayVe && !tt.hoiQuayVe.sauLuot && !dangChay && (
         <button type="button" className="ct-ngoai-tuyen-nut" onClick={tt.quayVe}>
-          <RotateCcw size={13} aria-hidden /> {dich('Quay về AI máy chủ')}
+          <RotateCcw size={13} aria-hidden /> {dich('Quay về CuongMini máy chủ')}
         </button>
       )}
       {!tt.hoiQuayVe && (
-        <span className="ct-ngoai-tuyen-phu">{dichP('Có mạng lại sẽ hỏi quay về {x}.', { x: dich('AI máy chủ') })}</span>
+        <span className="ct-ngoai-tuyen-phu">{dichP('Có mạng lại sẽ hỏi quay về {x}.', { x: dich('CuongMini máy chủ') })}</span>
       )}
     </div>
   );
@@ -128,7 +128,7 @@ export function NhanMay({ ten }: { ten: string }) {
   const { dich } = useDich();
   return (
     <div className="ct-nhan-may" title={dich('Model nhỏ chạy trên máy bạn — có thể sót hoặc sai. Có mạng lại thì hỏi lại để có câu đầy đủ hơn.')}>
-      <PlugZap size={11} aria-hidden /> {dich('AI trên máy')} · {ten} · {dich('có thể sót, kiểm lại khi có mạng')}
+      <PlugZap size={11} aria-hidden /> {dich('CuongMini trên máy')} · {ten} · {dich('có thể sót, kiểm lại khi có mạng')}
     </div>
   );
 }

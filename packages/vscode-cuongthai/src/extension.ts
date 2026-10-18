@@ -282,7 +282,7 @@ class KhungChat implements vscode.WebviewViewProvider {
         }
         case 'moCongAnthropic': {
           try {
-            const ten = await cau.moCongAnthropic(String(m.matKhau ?? ''));
+            const ten = await cau.moCongAnthropic(String(m.matKhau ?? ''), typeof m.model === 'string' && m.model.length <= 40 ? m.model : undefined);
             this.gui({ loai: 'congAnthropicMo', ok: true, ten, info: await cau.goi('agent:getInfo').catch(() => null) });
           } catch (e) {
             this.gui({ loai: 'congAnthropicMo', ok: false, loi: (e as Error).message });

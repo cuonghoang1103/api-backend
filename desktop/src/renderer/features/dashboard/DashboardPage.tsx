@@ -719,7 +719,7 @@ export function DashboardPage() {
         <div className="ct-tq-khoi-dau"><h2>{dich('Công cụ của bạn')}</h2></div>
         <div className="ct-tq-nhanh">
           {([
-            { p: '/chat', t: 'AI Chat', m: 'Hỏi đáp, lập trình, chạy code', icon: Sparkles },
+            { p: '/chat', t: 'CuongMini Chat', m: 'Hỏi đáp, lập trình, chạy code', icon: Sparkles },
             { p: '/notes', t: 'Ghi chú', m: 'Sổ tay học tập', icon: NotebookPen },
             { p: '/music', t: 'Nhạc', m: 'Nghe online hoặc đã tải', icon: Music },
             { p: '/cv', t: 'CV', m: 'Dựng và mổ CV', icon: FileUser },

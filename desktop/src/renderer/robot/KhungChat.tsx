@@ -348,7 +348,7 @@ export function KhungChat({ an, onDong, onKeoKhung, onDangCho, onXong }: KhungCh
           <button
             type="button"
             onClick={() => void window.cuongthai?.robot.moChinh('/chat')}
-            title={dich('Mở trang AI Chat')}
+            title={dich('Mở trang CuongMini Chat')}
           >
             {dich('Đầy đủ')}
           </button>

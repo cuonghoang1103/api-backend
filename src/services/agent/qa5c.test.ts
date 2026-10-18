@@ -24,8 +24,9 @@ const TOOL_CTW = ['get_issue', 'sprint_current', 'comment'].map((t) => ({ name: 
 const TOOL_KHAC = [{ name: 'mcp__figma__get_file', description: 'Figma', parameters: { type: 'object', properties: {} } }];
 
 test('HÔM NAY + DỰ ÁN CT WORK ở CUỐI; hai lượt cùng ngày ⇒ system + tools giống hệt byte; LUAT_CTWORK chỉ khi có tool CT Work', async (t) => {
-  const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_BASE_URL', 'AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY'].map((k) => [k, process.env[k]] as const);
+  const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY_GPT', 'LLM_GATEWAY_BASE_URL', 'AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'RAMBO_BAT'].map((k) => [k, process.env[k]] as const);
   process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap-cho-kiem-thu';
+  process.env.LLM_GATEWAY_API_KEY_GPT = 'sk-gia-lap-cho-kiem-thu'; // 18/10/2026: model mặc định CuongMini Solid = gpt-6-sol (khoá nhóm GPT)
   process.env.LLM_GATEWAY_BASE_URL = 'https://vi-du.test/v1';
   delete process.env.AGENT_GATEWAY_BASE_URL;
   delete process.env.AGENT_GATEWAY_API_KEY;

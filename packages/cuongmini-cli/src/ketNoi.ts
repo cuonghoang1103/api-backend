@@ -134,7 +134,9 @@ export class KetNoiLoi {
    * Cổng Claude chính hãng: mật khẩu ⇒ vé (lõi lưu, gửi kèm mọi lượt). Lõi cũ không có hàm
    * riêng thì đi kênh `agent:moCongAnthropic`; lõi cũ hơn nữa không có kênh ⇒ ném lỗi rõ.
    */
-  async moCongAnthropic(matKhau: string): Promise<{ ten: string; hetHan: number | null }> {
+  async moCongAnthropic(matKhau: string, model?: string): Promise<{ ten: string; hetHan: number | null }> {
+    /* 18/10/2026: gửi kèm mã model vừa bấm (máy chủ thử khoá chung + khoá Invisible). */
+    if (model) return await this.loi.goi('agent:moCongAnthropic', { matKhau, model }) as { ten: string; hetHan: number | null };
     if (this.loi.moCongAnthropic) return this.loi.moCongAnthropic(matKhau);
     return await this.loi.goi('agent:moCongAnthropic', { matKhau }) as { ten: string; hetHan: number | null };
   }

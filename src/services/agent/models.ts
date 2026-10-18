@@ -32,7 +32,7 @@
  * bọc quanh yêu cầu, chứ không ở câu hỏi. Trong một vòng lặp gọi tool thì phần
  * bọc đó nhân lên theo số vòng.
  */
-import { congAgent, goiDuocModel } from '../llm/gateway.js';
+import { congAgent } from '../llm/gateway.js';
 
 /*
  * ⚠️ TÊN HIỂN THỊ là thương hiệu riêng (25/09/2026, người dùng yêu cầu): Haiku →
@@ -55,26 +55,11 @@ export interface ModelAgent {
   dat?: boolean;
 }
 
-export const MODEL_AGENT: readonly ModelAgent[] = Object.freeze([
-  {
-    id: 'sonnet-5',
-    model: 'claude-sonnet-5',
-    ten: 'Cuong Sonnet 5',
-    mo: 'Mặc định — rẻ nhất, đo 1,76 mỗi việc trên vòng lặp gọi tool',
-  },
-  {
-    id: 'opus-4-8',
-    model: 'claude-opus-4-8',
-    ten: 'CuongMini Max 4.8',
-    mo: 'Mạnh nhất — đắt gấp 2,3 lần (4,07/việc). Để dành việc khó',
-  },
-  {
-    id: 'gpt-sol',
-    model: 'gpt-6-sol',
-    ten: 'GPT 6 Sol',
-    mo: 'Nhà khác — rẻ hơn GPT 5.6 Sol cũ ~4 lần (đo 27/09). Khi cần ý kiến thứ hai',
-  },
-]);
+/*
+ * 18/10/2026: bảng modelapi cũ (`sonnet-5` / `opus-4-8` / `gpt-sol`) đã thay bằng
+ * bảng CuongMini chung ở `bangModel.ts`. File này chỉ còn bảng của CỔNG RAMBO —
+ * dùng khi admin BẬT lại rambo (`ramboBat()`), mặc định TẮT.
+ */
 
 /**
  * ============================================================
@@ -142,50 +127,23 @@ const MODEL_AGENT_RIENG: readonly ModelAgent[] = Object.freeze([
   },
 ]);
 
-/**
- * Bảng đang hiệu lực.
- *
- * Cắm cổng riêng thì dùng bảng 6 model của nó; không cắm thì về bảng cũ của
- * modelapi. Một hàm chứ không phải hằng số: `AGENT_GATEWAY_*` đọc từ môi
- * trường, và môi trường chỉ có thật lúc CHẠY.
- */
-function bangHienHanh(): readonly ModelAgent[] {
-  return congAgent() ? MODEL_AGENT_RIENG : MODEL_AGENT;
+/** Mã có thuộc bảng rambo không (chỉ có nghĩa khi rambo đang bật). */
+export function laMaRambo(id: unknown): boolean {
+  return typeof id === 'string' && MODEL_AGENT_RIENG.some((m) => m.id === id);
 }
 
-/**
- * Model này gọi được không?
- *
- * Cổng riêng phục vụ TRỌN bảng của nó (đo thật cả 6, đều 200 và gọi tool
- * đúng), nên không phải tra khoá theo nhóm như ở modelapi — chuyện "một token
- * thuộc đúng một nhóm" là đặc thù của cổng kia.
- */
-function goiDuoc(model: string): boolean {
-  return congAgent() ? true : goiDuocModel(model);
-}
-
-/** Mã mặc định. Cũng là thứ dùng khi app gửi mã lạ hoặc không gửi gì. */
+/** Mã mặc định của bảng rambo. */
 export const MODEL_AGENT_MAC_DINH = 'sonnet-5';
 
-/**
- * Mã → tên model thật.
- *
- * Trả về `null` khi nhóm của model đó CHƯA CẮM KHOÁ, thay vì trả tên rồi để
- * lời gọi chết bằng `503`. Người dùng chọn GPT trên máy mà VPS chưa có khoá
- * GPT là chuyện sẽ xảy ra — lúc đó phải nói được "chưa cắm khoá", chứ không
- * phải "cổng đang bận".
- */
+/** Mã rambo ⇒ tên model thật. `null` khi rambo không chạy được (tắt / thiếu cấu hình). */
 export function modelAgentTu(id: unknown): { model: string; id: string } | null {
-  const bang = bangHienHanh();
+  if (!congAgent()) return null;
   const ma = typeof id === 'string' && id ? id : MODEL_AGENT_MAC_DINH;
-  // Mã lạ (app cũ gửi `gpt-sol` trong khi đã chuyển cổng) rơi về mặc định
-  // thay vì lỗi — người dùng không nên phải cài lại app mới hỏi được.
-  const m = bang.find((x) => x.id === ma) ?? bang.find((x) => x.id === MODEL_AGENT_MAC_DINH) ?? bang[0]!;
-  if (!goiDuoc(m.model)) return null;
+  const m = MODEL_AGENT_RIENG.find((x) => x.id === ma) ?? MODEL_AGENT_RIENG.find((x) => x.id === MODEL_AGENT_MAC_DINH)!;
   return { model: m.model, id: m.id };
 }
 
-/** Danh sách cho app vẽ giao diện — kèm cờ nói model nào đang gọi được thật. */
-export function dsModelAgent(): Array<ModelAgent & { dungDuoc: boolean }> {
-  return bangHienHanh().map((m) => ({ ...m, dungDuoc: goiDuoc(m.model) }));
+/** Bảng rambo cho app — chỉ khi rambo bật. */
+export function dsModelRambo(): Array<ModelAgent & { dungDuoc: boolean }> {
+  return congAgent() ? MODEL_AGENT_RIENG.map((m) => ({ ...m, dungDuoc: true })) : [];
 }

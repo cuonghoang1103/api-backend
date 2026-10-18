@@ -31,6 +31,8 @@ import {
   gatewayKey,
   messagesUrl,
   modelFor,
+  suyLuanCho,
+  tranRaCho,
   uuTienCua,
   xinDiemCuoi,
   type LlmEndpoint,
@@ -87,7 +89,7 @@ export type LLMStep = 'interview' | 'report' | 'generation';
  */
 export interface LLMProvider {
   name: string;
-  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number; ep?: LlmEndpoint; onToken?: (t: string) => void }): Promise<LLMResult>;
+  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number; ep?: LlmEndpoint; onToken?: (t: string) => void; reasoningEffort?: string | null }): Promise<LLMResult>;
 }
 
 // ── Pricing lives in ONE place now: src/services/llm/gateway.ts. The table
@@ -237,6 +239,8 @@ const openAiCompatProvider: LLMProvider = {
         body: JSON.stringify({
           model,
           max_tokens: maxTokens,
+          /* 18/10/2026 — xem `suyLuanCho` ở gateway.ts. */
+          ...(opts.reasoningEffort ? { reasoning_effort: opts.reasoningEffort } : {}),
           messages: [
             { role: 'system', content: system },
             ...messages.map((m) => ({ role: m.role, content: toOpenAiContent(m.content) })),
@@ -757,7 +761,10 @@ export async function llmComplete(opts: {
         const provider = ep.local
           ? openAiCompatProvider
           : ep.giaoThuc === 'anthropic' ? anthropicProvider : getProvider();
-        const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs, ep, onToken: opts.onToken });
+        /* 18/10/2026: model GPT ⇒ `reasoning_effort` theo việc + sàn trần ra (token suy luận tính vào trần). */
+        const suyLuan = provider === openAiCompatProvider && !ep.local ? suyLuanCho(purpose, model) : null;
+        const maxTokens = suyLuan ? tranRaCho(opts.maxTokens ?? 1500, suyLuan) : opts.maxTokens;
+        const result = await provider.complete(model, opts.system, opts.messages, { maxTokens, timeoutMs: opts.timeoutMs, ep, onToken: opts.onToken, reasoningEffort: suyLuan });
         if (ep.label === 'cong-agent') baoRamboOk();
         /* Chạm trần độ dài — ghi WARN để CÒN LẦN RA ĐƯỢC. Trước đây không chỗ
            nào đọc `finish_reason`, nên một câu trả lời cụt giữa chừng trông y

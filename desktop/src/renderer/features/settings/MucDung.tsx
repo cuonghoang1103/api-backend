@@ -89,7 +89,7 @@ export function MucDung() {
 
       {vi && (['code', 'chat'] as const).map((m) => {
         const v = vi[m];
-        const ten = m === 'code' ? 'AI Code' : 'AI Chat';
+        const ten = m === 'code' ? 'AI Code' : 'CuongMini Chat';
         /* Giờ hồi lấy từ máy chủ dạng ISO. Hiện theo giờ MÁY NGƯỜI DÙNG —
            máy chủ chạy UTC, in giờ của nó ra là lệch 7 tiếng và người dùng
            tưởng hạn mức không bao giờ hồi. */

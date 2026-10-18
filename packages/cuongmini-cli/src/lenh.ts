@@ -36,6 +36,8 @@ import type { KhoChat } from './kho';
 export interface ModelMuc {
   id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean;
   cong?: 'rambo' | 'modelapi' | 'anthropic'; canMoKhoa?: boolean; mienPhi?: boolean; hang?: 'free' | 'cao';
+  /** 18/10/2026: mô tả tiếng Anh, tên cổng hiển thị (CuongMini …), loại khoá. */
+  moEn?: string; nhom?: string; khoa?: 'free' | 'chung' | 'invisible'; loaiKhoa?: 'chung' | 'invisible';
 }
 export interface MucNoLuc { id: string; ten: string; mo: string }
 
@@ -44,10 +46,9 @@ export { LENH_CLI };
 /** Lệnh hiện trong gợi ý `/` (bỏ `/offline` — AI ngoại tuyến chỉ có trong app). */
 export const LENH_GOI_Y: LenhGach[] = [...LENH_AGENT.filter((l) => l.ten !== '/offline'), ...(LENH_CLI as LenhGach[])];
 
+/** Chỉ khi máy chủ CŨ chưa khai `models` — máy chủ mới gửi bảng CuongMini (18/10/2026). */
 export const MODEL_DU_PHONG: ModelMuc[] = [
-  { id: 'sonnet-5', ten: 'Cuong Sonnet 5', get mo() { return L('Mặc định — nhanh, rẻ', 'Default — fast, cheap'); }, dungDuoc: true },
-  { id: 'opus-4-8', ten: 'CuongMini Max 4.8', get mo() { return L('Mạnh nhất cho việc khó', 'Strongest for hard tasks'); }, dungDuoc: true },
-  { id: 'gpt-sol', ten: 'GPT 6 Sol', get mo() { return L('Ý kiến thứ hai', 'A second opinion'); }, dungDuoc: true },
+  { id: 'cm-solid', ten: 'CuongMini Solid', get mo() { return L('Mặc định', 'Default'); }, dungDuoc: true },
 ];
 export const MUC_DU_PHONG: MucNoLuc[] = [
   { id: 'thap', get ten() { return L('Thấp', 'Low'); }, get mo() { return L('hỏi nhanh', 'quick questions'); } },
@@ -557,7 +558,8 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       const q = thamSo.trim();
       if (!q) { b.moMenu('model'); return; }
       const m = timTheoChu(q, b.dsModel());
-      if (!m) { traLoi(`${L(`Không rõ model "${q}". Có:`, `Unknown model "${q}". Available:`)}\n\n${b.dsModel().map((x) => `- \`${x.id}\` — ${x.ten}${x.dungDuoc ? '' : L(' (chưa mở)', ' (not enabled)')}`).join('\n')}`); return; }
+      /* 18/10/2026: chỉ in TÊN CuongMini (mã trung tính cũng không lộ model thật). */
+      if (!m) { traLoi(`${L(`Không rõ model "${q}". Có:`, `Unknown model "${q}". Available:`)}\n\n${b.dsModel().map((x) => `- ${x.ten}${x.dungDuoc ? '' : L(' (chưa mở)', ' (not enabled)')}${x.canMoKhoa ? L(' · cần khoá', ' · needs a key') : ''}`).join('\n')}`); return; }
       if (!m.dungDuoc) { traLoi(L(`**${m.ten}** chưa dùng được — máy chủ chưa mở nhà cung cấp này.`, `**${m.ten}** is not available — the server has not enabled this provider.`)); return; }
       if (m.canMoKhoa) { b.moKhoaModel(m.id); return; }
       if (m.dat) { b.moMenu('model'); traLoi(L(`**${m.ten}** tốn nhiều hơn hẳn — chọn lại trong menu vừa mở để xác nhận.`, `**${m.ten}** costs much more — pick it again in the menu to confirm.`)); return; }
@@ -607,7 +609,7 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
     }
 
     case '/status': {
-      const nayModel = b.dsModel().find((x) => x.id === (S.ws?.model ?? 'sonnet-5'));
+      const nayModel = b.dsModel().find((x) => x.id === (S.ws?.model ?? 'cm-solid'));
       const nayMuc = b.dsMuc().find((x) => x.id === (S.ws?.mucNoLuc ?? 'vua'));
       const tt = {
         phienBan: `CuongMini CLI ${b.phienBan} · Node ${process.versions.node}`,

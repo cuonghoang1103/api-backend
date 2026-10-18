@@ -161,8 +161,8 @@ function Robot() {
           datTin({
             loai: 'mang',
             chu: on
-              ? dich('Có mạng lại rồi! Tớ dùng AI máy chủ như thường nhé.')
-              : dich('Mất mạng rồi… Tớ vẫn trả lời bằng AI trên máy nếu bạn đã tải về.'),
+              ? dich('Có mạng lại rồi! Tớ dùng CuongMini máy chủ như thường nhé.')
+              : dich('Mất mạng rồi… Tớ vẫn trả lời bằng CuongMini trên máy nếu bạn đã tải về.'),
           });
           if (on) thoang('vui', 2000);
         }
@@ -556,7 +556,7 @@ function Robot() {
                 className="rb-bong"
                 data-loai={tin.loai}
                 data-co-x="true"
-                title={tin.loai === 'tra-loi' ? dich('Bấm để mở khung Trợ lý') : dich('Bấm để đọc đầy đủ trong AI Chat')}
+                title={tin.loai === 'tra-loi' ? dich('Bấm để mở khung Trợ lý') : dich('Bấm để đọc đầy đủ trong CuongMini Chat')}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (tin.loai === 'tra-loi') { datTin(null); doiRong(true); } else bamDup();

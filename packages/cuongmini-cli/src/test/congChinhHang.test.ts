@@ -135,11 +135,15 @@ test('khung nghi ⇒ "Đang suy nghĩ" tới sự kiện kế tiếp', () => {
   assert.equal(cauTrangThai(k.S), 'Đang viết câu trả lời');
 });
 
-test('model theo cổng: tên chính hãng giữ nguyên, nhóm Cổng chính · Claude chính hãng · modelapi', () => {
+test('model theo cổng: tên máy chủ giữ nguyên; nhóm cổng hiển thị bằng tên CuongMini (18/10/2026)', () => {
   assert.equal(tenModel({ ten: 'Claude Opus 5.5 · chính hãng', cong: 'anthropic' }), 'Claude Opus 5.5 · chính hãng');
   assert.equal(tenModel({ ten: 'Claude Opus 4.8', cong: 'rambo' }), 'CuongMini Max 4.8');
   assert.equal(tenModel({ ten: 'Claude Sonnet 5' }), 'Cuong Sonnet 5');
   assert.deepEqual([nhomCong({ cong: 'anthropic' }), nhomCong({ cong: 'modelapi' }), nhomCong({ cong: 'rambo' }), nhomCong({})], ['anthropic', 'modelapi', 'chinh', 'chinh']);
-  assert.equal(tenNhomCong('anthropic'), 'Claude chính hãng');
-  assert.equal(tenNhomCong('chinh'), 'Cổng chính');
+  assert.equal(tenNhomCong('anthropic'), 'CuongMini Code Max');
+  assert.equal(tenNhomCong('modelapi'), 'CuongMini Core');
+  assert.equal(tenNhomCong('chinh'), 'CuongMini');
+  // Tên CuongMini máy chủ gửi đi qua nguyên vẹn.
+  assert.equal(tenModel({ ten: 'CuongMini Optimum 5.5', cong: 'anthropic' }), 'CuongMini Optimum 5.5');
+  assert.equal(tenModel({ ten: 'CuongMini Solid', cong: 'modelapi' }), 'CuongMini Solid');
 });

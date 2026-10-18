@@ -43,9 +43,10 @@ test('chạm trần token thì VIẾT TIẾP, không trả về câu cụt', asy
    * lần đầu là `gateway.test.ts`. Xem
    * [[feedback_phep_kiem_dat_vi_ly_do_sai]] mục 3.
    */
-  const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_BASE_URL', 'AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY']
+  const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY_GPT', 'LLM_GATEWAY_BASE_URL', 'AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'RAMBO_BAT']
     .map((k) => [k, process.env[k]] as const);
   process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap-cho-kiem-thu';
+  process.env.LLM_GATEWAY_API_KEY_GPT = 'sk-gia-lap-cho-kiem-thu'; // 18/10/2026: model mặc định CuongMini Solid = gpt-6-sol (khoá nhóm GPT)
   process.env.LLM_GATEWAY_BASE_URL = 'https://vi-du.test/v1';
   // Cổng riêng của agent phải TẮT ở đây: bật thì `endpointFor` đi đường khác
   // và phép kiểm không còn đo cái nó định đo.

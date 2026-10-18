@@ -124,7 +124,7 @@ export default function AdminCommercePage() {
             { id: 'doikey' as const, ten: 'Đổi key', Icon: KeyRound, badge: canXuLy?.yeuCauDoiKey ?? 0 },
             { id: 'llmkey' as const, ten: 'Key terminal', Icon: Terminal, badge: 0 },
             { id: 'fable' as const, ten: 'Cuong Fable', Icon: Sparkles, badge: 0 },
-            { id: 'anthropic' as const, ten: 'Claude chính hãng', Icon: KeyRound, badge: 0 },
+            { id: 'anthropic' as const, ten: 'CuongMini Code Max · model', Icon: KeyRound, badge: 0 },
             { id: 'caidat' as const, ten: 'Cài đặt', Icon: Settings, badge: 0 },
           ]).map((t) => (
             <button
@@ -603,7 +603,7 @@ function CongDuPhongAdmin() {
         )}
       </div>
       <p className="text-text-muted">
-        Khi cổng chính (rambo) bảo trì, người dùng nhập mật khẩu này trong AI Code để chạy tạm qua modelapi
+        (18/10/2026: chỉ còn tác dụng khi BẬT lại cổng rambo ở tab CuongMini Code Max.) Khi cổng chính (rambo) bảo trì, người dùng nhập mật khẩu này trong AI Code để chạy tạm qua modelapi
         {t ? <> bằng <b className="text-text-primary">{t.ten}</b></> : null} — <b className="text-text-primary">tính phí thật</b>.
         Cổng chính sống lại là tự quay về. Đổi model bằng env <code>AGENT_DU_PHONG_MODEL</code>.
         {t && !t.coKhoa && <span className="text-amber-400"> ⚠ Máy chủ chưa có khoá cho model này.</span>}

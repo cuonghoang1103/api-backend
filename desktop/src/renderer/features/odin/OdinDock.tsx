@@ -550,7 +550,7 @@ export function OdinDock() {
                   className="rb-bong"
                   data-loai="tra-loi"
                   data-co-x="true"
-                  title={dich('Bấm để đọc đầy đủ trong AI Chat')}
+                  title={dich('Bấm để đọc đầy đủ trong CuongMini Chat')}
                   onClick={() => {
                     const id = phienNoiHienTai();
                     odin.dismissSay();

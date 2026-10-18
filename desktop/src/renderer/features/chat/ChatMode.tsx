@@ -792,15 +792,15 @@ export function ChatMode({ pro }: { pro: boolean }) {
           /* Gắn nhãn để KHÔNG ai nhầm câu từ máy (yếu hơn) với câu trên mạng.
              Hai lớp: nhãn chữ NẰM TRONG nội dung (sống qua sao chép/lưu), và
              `cucBo` để bong bóng tự vẽ huy hiệu + đổi màu. */
-          const daGanNhan = `${dich('_Trả lời bởi AI trên máy bạn (ngoại tuyến) — có thể kém chính xác hơn._')}
+          const daGanNhan = `${dich('_Trả lời bởi CuongMini trên máy bạn (ngoại tuyến) — có thể kém chính xác hơn._')}
 
 ${kq.chu}`;
           traLoiDayDu = kq.chu;
-          const tenMay = modelCucBoSanSang ?? dich('AI trên máy');
+          const tenMay = modelCucBoSanSang ?? dich('CuongMini trên máy');
           datLuot((cu) => [...cu, { vai: 'assistant', text: daGanNhan, cucBo: tenMay }]);
           onCauDau?.(kq.chu);
         } else {
-          datLoi(kq?.loi ?? dich('Mất mạng, và chưa có AI trên máy để dùng thay. Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.'));
+          datLoi(kq?.loi ?? dich('Mất mạng, và chưa có CuongMini trên máy để dùng thay. Vào Cài đặt → CuongMini ngoại tuyến để tải model dùng khi không có mạng.'));
         }
       } else {
         datLoi((err as Error).message);
@@ -1001,7 +1001,7 @@ ${kq.chu}`;
       <DaiNgoaiTuyen
         tt={ngoaiTuyen}
         tenModel={luotCuoi?.cucBo ?? modelCucBoSanSang ?? ''}
-        lyDo={dich('Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.')}
+        lyDo={dich('Vào Cài đặt → CuongMini ngoại tuyến để tải model dùng khi không có mạng.')}
         dangChay={dangChay}
       />
       <div className="ct-agent-scroll" ref={cuonRef}>

@@ -967,6 +967,9 @@ export const modelAgentSchema = z.enum([
   // `agentAnthropicVe`; `cl-free` = CuongMini Free, không cần vé. Bảng gốc ở
   // `src/services/agent/anthropicChinhHang/cauHinh.ts` (`agentModels.test.ts` đọc thẳng).
   'cl-free', 'cl-sonnet-5-5', 'cl-opus-5-5', 'cl-fable-5-1',
+  // 18/10/2026: bảng CuongMini chung (`src/services/agent/bangModel.ts`) — mã TRUNG TÍNH,
+  // không chứa tên model thật. Mã `cl-*`/cũ ở trên vẫn nhận (máy chủ đổi qua bí danh).
+  'cm-invisible', 'cm-optimum', 'cm-sonic', 'cm-solid', 'cm-nova', 'cm-shin', 'cm-heshin', 'cm-eco',
 ]);
 export type ModelAgent = z.infer<typeof modelAgentSchema>;
 
@@ -1472,8 +1475,13 @@ export interface AgentInfo {
      * (Claude chính hãng). Máy chủ cũ không khai ⇒ coi như cổng chính.
      */
     cong?: 'rambo' | 'modelapi' | 'anthropic';
-    /** `true` = model cao của cổng chính hãng, chưa có vé ⇒ hiện ổ khoá, bấm là hỏi mật khẩu. */
+    /** `true` = model cần khoá mà chưa có vé ⇒ hiện TỐI HƠN + ổ khoá, bấm là hỏi khoá. */
     canMoKhoa?: boolean;
+    /** 18/10/2026: mô tả tiếng Anh, tên CỔNG hiển thị (CuongMini …), loại khoá cần nhập. */
+    moEn?: string;
+    nhom?: string;
+    khoa?: 'free' | 'chung' | 'invisible';
+    loaiKhoa?: 'chung' | 'invisible';
     /** Chỉ `cl-free` (CuongMini Free). */
     mienPhi?: boolean;
     hang?: 'free' | 'cao';
@@ -1627,6 +1635,8 @@ export type AgentUiEvent = { cuocId: string } & (
    */
   | {
       loai: 'loi'; thongDiep: string; ma?: string; coKeyGiaHan?: boolean;
+      /** Bản tiếng Anh của `thongDiep` khi máy chủ gửi (vd. dòng tự chuyển cổng `DOI_CONG_TU_DONG`). */
+      thongDiepEn?: string;
       /**
        * Cổng chính hỏng ⇒ máy chủ tự chuyển sang CuongMini Free (`ma:
        * 'CONG_CHINH_HONG_FREE'`): kèm lời mời nâng cấp và các cổng chọn được.
@@ -2202,7 +2212,7 @@ export const INVOKE_CHANNELS = {
    * Cổng Claude chính hãng (17/10/2026): mở khoá model cao bằng mật khẩu RIÊNG
    * của cổng này. Main gọi máy chủ bằng phiên của app, giữ vé (`agentAnthropicVe`).
    */
-  'agent:moCongAnthropic': z.object({ matKhau: z.string().min(1).max(200) }),
+  'agent:moCongAnthropic': z.object({ matKhau: z.string().min(1).max(200), model: z.string().max(40).optional() }),
   /** Trạng thái cổng chính hãng + các cổng nâng cấp (`GET /agent/cong-anthropic`). */
   'agent:congAnthropic': z.object({}).passthrough().optional(),
   /**
@@ -3054,7 +3064,7 @@ export interface DesktopBridge {
     hoanTac(cuocId: string): Promise<{ soFile: number; loi: string[] }>;
     veCongChinh(cuocId: string): Promise<void>;
     /** Mở khoá cổng Claude chính hãng. Ném lỗi (câu của máy chủ) khi sai mật khẩu / chưa bật. */
-    moCongAnthropic(matKhau: string): Promise<{ ten: string; hetHan: number | null }>;
+    moCongAnthropic(matKhau: string, model?: string): Promise<{ ten: string; hetHan: number | null }>;
     /** Trạng thái cổng Claude chính hãng. `null` = máy chủ cũ / mất mạng. */
     congAnthropic(): Promise<AgentCongAnthropic | null>;
     /** Chọn cổng phụ cho tab (`modelapi` hoặc bỏ). */

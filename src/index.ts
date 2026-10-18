@@ -939,6 +939,14 @@ async function startServer(): Promise<void> {
     // Setup graceful shutdown handlers
     setupGracefulShutdown();
 
+    // Công tắc cổng rambo (18/10/2026, mặc định TẮT) — đọc từ app_settings vào bộ nhớ.
+    try {
+      const { napCongTacRambo } = await import(path.join(__dirname, 'services', 'llm', 'congTacRambo.js'));
+      napCongTacRambo();
+    } catch (ramboErr) {
+      logger.warn('Không nạp được công tắc rambo (giữ TẮT)', { error: ramboErr instanceof Error ? ramboErr.message : String(ramboErr) });
+    }
+
     // Start cron jobs (Mục #6: auto-train + cleanup)
     // CRON_DISABLED=1: chạy thêm một backend phụ (worktree, cổng khác) để thử
     // mà không nhân đôi việc định kỳ của backend chính đang chạy cùng DB.

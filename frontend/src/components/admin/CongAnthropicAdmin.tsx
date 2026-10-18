@@ -35,6 +35,15 @@ interface TongQuan {
   serverTool: { webSearch: boolean; codeExecution: boolean };
   thamSo: { effortMacDinh: string; maxTokensAgent: number; compactTokens: number; donTool: { trigger: number; keep: number; clearAtLeast: number }; tranKyTuHoiThoai: number };
   models: Array<{ id: string; model: string; ten: string; hang: 'free' | 'cao'; gia: { in: number; out: number; cacheDoc: number; cacheGhi: number } }>;
+  /* 18/10/2026 — bảng CuongMini + khoá Invisible + trần theo model + công tắc rambo. */
+  daBatMatKhauInvisible?: boolean;
+  bangModel?: ModelCm[];
+  tranModel?: Record<string, Record<'pro' | 'key_terminal', Cap>>;
+  rambo?: { bat: boolean; nguon: 'env' | 'admin'; coCauHinh: boolean };
+}
+interface ModelCm {
+  id: string; ten: string; model: string; cong: 'anthropic' | 'modelapi'; tenCong: string; khoa: 'free' | 'chung' | 'invisible';
+  nangLuc: number; tuongDuong: string; cuaSoToken: number; maxRa: number; gia: { in: number; out: number };
 }
 interface HanMuc { daDungThang: number; daDungNgay: number; tranThang: number | null; tranNgay: number | null; het: boolean; khongGioiHan: boolean; nguon: string }
 interface NguoiTim {
@@ -91,16 +100,24 @@ export default function CongAnthropicAdmin() {
         <Info className="w-5 h-5 text-sky-400 flex-shrink-0 mt-0.5" />
         <div className="text-text-muted space-y-1">
           <p>
-            <b className="text-text-primary">Cổng Claude chính hãng</b> gọi thẳng api.anthropic.com bằng key của bạn. Rambo hỏng ⇒ AI Code /
-            CuongMini tự chuyển sang <b className="text-text-primary">CuongMini Free</b> (<code>{tq.modelFree}</code>, không cần mật khẩu, tính
-            trần &ldquo;Free&rdquo;). Model cao (Sonnet 5.5 / Opus 5.5 / Fable 5.1) cần mật khẩu cổng ⇒ vé 30 ngày. Admin không bị giới hạn.
+            <b className="text-text-primary">CuongMini Code Max</b> = cổng Anthropic chính hãng (key của bạn); <b className="text-text-primary">CuongMini Core</b> =
+            modelapi (cổng chính, mặc định CuongMini Solid). Người dùng chỉ thấy tên CuongMini. Model free: Pro dùng không cần khoá, luôn có trần.
+            Model khác dùng <b className="text-text-primary">khoá chung</b>; CuongMini Invisible có <b className="text-text-primary">khoá riêng</b>. Vé sống
+            48 giờ. Cổng hỏng ⇒ tự chuyển sang model free tương đương ở cổng kia. Admin không bị giới hạn.
+          </p>
+          <p className="text-xs">
+            CuongMini Code Max = official Anthropic gateway; CuongMini Core = main gateway. Users only see CuongMini names. Free models need no key but are capped;
+            others share one key, Invisible has its own. Tickets last 48 hours. A failing gateway auto-switches to the free equivalent on the other one.
           </p>
           <p className="text-amber-300/90">⚠ {tq.ghiChu}</p>
         </div>
       </div>
 
       <KhoKey keys={tq.keys} onDoi={(keys) => setTq({ ...tq, keys })} onNap={nap} />
-      <MatKhau daBat={tq.daBatMatKhau} onXong={nap} />
+      {tq.bangModel && <BangModelCm models={tq.bangModel} tran={tq.tranModel ?? {}} onXong={(tranModel) => setTq({ ...tq, tranModel })} />}
+      <MatKhau loai="chung" daBat={tq.daBatMatKhau} onXong={nap} />
+      <MatKhau loai="invisible" daBat={tq.daBatMatKhauInvisible === true} onXong={nap} />
+      {tq.rambo && <CongTacRambo rambo={tq.rambo} onDoi={(rambo) => setTq({ ...tq, rambo })} />}
       <ThamSo tq={tq} onDoi={(serverTool) => setTq({ ...tq, serverTool })} />
       <TranGoiForm tranGoi={tq.tranGoi} onXong={(t) => setTq({ ...tq, tranGoi: t })} />
       <TranNguoi />
@@ -258,28 +275,123 @@ function KhoKey({ keys, onDoi, onNap }: { keys: KeyRow[]; onDoi: (k: KeyRow[]) =
 
 // ─── Mật khẩu ──────────────────────────────────────────────────────────
 
-function MatKhau({ daBat, onXong }: { daBat: boolean; onXong: () => void }) {
+function MatKhau({ loai, daBat, onXong }: { loai: 'chung' | 'invisible'; daBat: boolean; onXong: () => void }) {
   const [mk, setMk] = useState('');
   const [dang, setDang] = useState(false);
+  const laInv = loai === 'invisible';
   const luu = async (matKhau: string | null) => {
-    if (matKhau !== null && matKhau.length < 6) { toast.error('Mật khẩu tối thiểu 6 ký tự.'); return; }
-    if (matKhau === null && !window.confirm('Tắt mật khẩu? Người thường không mở được model cao nữa (CuongMini Free vẫn chạy).')) return;
+    if (matKhau !== null && matKhau.length < 6) { toast.error('Mật khẩu tối thiểu 6 ký tự. / At least 6 characters.'); return; }
+    if (matKhau === null && !window.confirm(laInv
+      ? 'Tắt khoá Invisible? Người thường không mở được CuongMini Invisible nữa. / Turn off the Invisible key?'
+      : 'Tắt khoá chung? Người thường không mở được model cần khoá nữa (model free vẫn chạy). / Turn off the shared key?')) return;
     setDang(true);
     try {
-      await goi('/mat-khau', { method: 'PUT', body: JSON.stringify({ matKhau }) });
-      toast.success(matKhau === null ? 'Đã tắt.' : 'Đã đặt mật khẩu — vé cũ (nếu có) hết hiệu lực.');
+      await goi(laInv ? '/mat-khau-invisible' : '/mat-khau', { method: 'PUT', body: JSON.stringify({ matKhau }) });
+      toast.success(matKhau === null ? 'Đã tắt. / Turned off.' : 'Đã đặt — vé cũ của khoá này hết hiệu lực. / Set — old tickets revoked.');
       setMk(''); onXong();
     } catch (e) { toast.error((e as Error).message); } finally { setDang(false); }
   };
   return (
-    <The tieuDe="🔒 Mật khẩu model cao" phai={<span className={`px-2 py-0.5 rounded-full text-xs border ${daBat ? 'border-green-500/50 text-green-400' : 'border-darkborder text-text-muted'}`}>{daBat ? 'Đang bật' : 'Chưa đặt'}</span>}>
-      <p className="text-text-muted text-xs">Người dùng nhập mật khẩu này (riêng, khác cổng dự phòng modelapi) để nhận vé 30 ngày mở Sonnet 5.5 / Opus 5.5 / Fable 5.1. Đổi mật khẩu = thu hồi mọi vé.</p>
+    <The tieuDe={laInv ? '🔐 Khoá riêng CuongMini Invisible (Invisible key)' : '🔒 Khoá chung (shared key)'}
+      phai={<span className={`px-2 py-0.5 rounded-full text-xs border ${daBat ? 'border-green-500/50 text-green-400' : 'border-darkborder text-text-muted'}`}>{daBat ? 'Đang bật / On' : 'Chưa đặt / Not set'}</span>}>
+      <p className="text-text-muted text-xs">
+        {laInv
+          ? 'Chỉ mở CuongMini Invisible (model đắt nhất). Phải khác khoá chung. Vé sống 48 giờ; đổi khoá = thu hồi mọi vé Invisible. / Opens only CuongMini Invisible; must differ from the shared key; tickets last 48 h.'
+          : 'Mở mọi model không thuộc nhóm free (trừ Invisible). Vé sống 48 giờ; đổi khoá = thu hồi mọi vé; không đổi thì người dùng nhập lại vẫn vào. / Opens every non-free model except Invisible; tickets last 48 h.'}
+      </p>
       <div className="flex flex-wrap gap-2">
         <input type="password" autoComplete="new-password" className={`${o} flex-1 min-w-[200px]`} value={mk} onChange={(e) => setMk(e.target.value)}
-          placeholder={daBat ? 'Mật khẩu mới (đổi = thu hồi vé cũ)' : 'Đặt mật khẩu để bật'} />
-        <button disabled={dang || !mk} onClick={() => luu(mk)} className={`${nut} border-neon-violet text-neon-violet`}>{daBat ? 'Đổi' : 'Bật'}</button>
-        {daBat && <button disabled={dang} onClick={() => luu(null)} className={`${nut} border-darkborder text-text-muted`}>Tắt</button>}
+          placeholder={daBat ? 'Khoá mới (đổi = thu hồi vé cũ) / New key' : 'Đặt khoá để bật / Set a key to enable'} />
+        <button disabled={dang || !mk} onClick={() => luu(mk)} className={`${nut} border-neon-violet text-neon-violet`}>{daBat ? 'Đổi / Change' : 'Bật / Enable'}</button>
+        {daBat && <button disabled={dang} onClick={() => luu(null)} className={`${nut} border-darkborder text-text-muted`}>Tắt / Off</button>}
       </div>
+    </The>
+  );
+}
+
+// ─── Bảng model CuongMini + trần theo model × người (18/10/2026) ──────
+
+const TEN_KHOA = { free: 'Free (Pro)', chung: 'Khoá chung / shared key', invisible: 'Khoá riêng / own key' } as const;
+
+function BangModelCm({ models, tran, onXong }: {
+  models: ModelCm[];
+  tran: Record<string, Record<'pro' | 'key_terminal', Cap>>;
+  onXong: (t: Record<string, Record<'pro' | 'key_terminal', Cap>>) => void;
+}) {
+  const [nhap, setNhap] = useState(() => JSON.parse(JSON.stringify(tran)) as typeof tran);
+  const [dang, setDang] = useState(false);
+  const tenCua = (id: string) => models.find((m) => m.id === id)?.ten ?? id;
+  const o1 = (id: string, g: 'pro' | 'key_terminal', k: keyof Cap) => (
+    <input className={`${o} w-16`} inputMode="decimal" placeholder="∞" value={nhap[id]?.[g]?.[k] ?? ''}
+      onChange={(e) => setNhap({ ...nhap, [id]: { ...nhap[id]!, [g]: { ...nhap[id]![g], [k]: soHoacNull(e.target.value) } } })} />
+  );
+  const luu = async () => {
+    setDang(true);
+    try {
+      const d = await goi<{ tranModel: typeof tran }>('/tran-model', { method: 'PUT', body: JSON.stringify(nhap) });
+      onXong(d.tranModel); toast.success('Đã lưu trần theo model. / Per-model caps saved.');
+    } catch (e) { toast.error((e as Error).message); } finally { setDang(false); }
+  };
+  return (
+    <The tieuDe="🧠 Bảng model CuongMini + trần theo người (USD) / CuongMini models + per-user caps">
+      <p className="text-text-muted text-xs">
+        Thứ tự = năng lực (cao → thấp), giống danh sách người dùng thấy (họ chỉ thấy tên CuongMini). Trần tính theo tháng/ngày lịch giờ Việt Nam
+        trên sổ <code>interview_llm_call_logs</code> (feature agent, đúng model). Ô trống = không giới hạn. Cổng chính hãng còn trần nhóm free/cao bên dưới.
+        <br />Order = capability; users only see CuongMini names. Empty = unlimited.
+      </p>
+      <div className="overflow-x-auto">
+        <table className="text-xs">
+          <thead className="text-text-muted text-left">
+            <tr><th className="pr-3">Tên / Name</th><th className="pr-3">Model thật</th><th className="pr-3">Cổng / Gateway</th><th className="pr-3">Khoá / Key</th>
+              <th className="pr-3">Cửa sổ / Ra</th><th className="pr-3">Lùi sang / Fallback</th>
+              <th>Pro / tháng</th><th>Pro / ngày</th><th>Key terminal / tháng</th><th>Key terminal / ngày</th></tr>
+          </thead>
+          <tbody>
+            {models.map((m) => (
+              <tr key={m.id}>
+                <td className="pr-3 py-1 text-text-primary">{m.ten}</td>
+                <td className="pr-3"><code>{m.model}</code></td>
+                <td className="pr-3">{m.tenCong}</td>
+                <td className="pr-3">{TEN_KHOA[m.khoa]}</td>
+                <td className="pr-3">{(m.cuaSoToken / 1000).toLocaleString('vi-VN')}K / {(m.maxRa / 1000).toLocaleString('vi-VN')}K</td>
+                <td className="pr-3">{tenCua(m.tuongDuong)}</td>
+                <td className="px-1">{o1(m.id, 'pro', 'thang')}</td><td className="px-1">{o1(m.id, 'pro', 'ngay')}</td>
+                <td className="px-1">{o1(m.id, 'key_terminal', 'thang')}</td><td className="px-1">{o1(m.id, 'key_terminal', 'ngay')}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <button disabled={dang} onClick={luu} className={`${nut} border-neon-violet text-neon-violet`}>Lưu trần theo model / Save caps</button>
+    </The>
+  );
+}
+
+// ─── Công tắc cổng rambo (mặc định TẮT) ──────────────────────────────
+
+function CongTacRambo({ rambo, onDoi }: {
+  rambo: { bat: boolean; nguon: 'env' | 'admin'; coCauHinh: boolean };
+  onDoi: (r: { bat: boolean; nguon: 'env' | 'admin'; coCauHinh: boolean }) => void;
+}) {
+  const [dang, setDang] = useState(false);
+  const doi = async (bat: boolean) => {
+    setDang(true);
+    try { onDoi(await goi('/rambo', { method: 'PUT', body: JSON.stringify({ bat }) })); toast.success(bat ? 'Đã bật rambo. / Rambo on.' : 'Đã tắt rambo. / Rambo off.'); }
+    catch (e) { toast.error((e as Error).message); } finally { setDang(false); }
+  };
+  return (
+    <The tieuDe="🔌 Cổng rambo (cũ) / Legacy rambo gateway"
+      phai={<span className={`px-2 py-0.5 rounded-full text-xs border ${rambo.bat ? 'border-amber-500/50 text-amber-400' : 'border-darkborder text-text-muted'}`}>{rambo.bat ? 'Đang BẬT / On' : 'TẮT / Off'}</span>}>
+      <p className="text-text-muted text-xs">
+        Mặc định TẮT: mọi việc đi CuongMini Core. Bật lại khi cổng rambo sống lại — bảng model cũ xuất hiện thêm ở cuối danh sách (nhóm &ldquo;CuongMini Classic&rdquo;).
+        {rambo.nguon === 'env' && ' ⚠ Đang bị env RAMBO_BAT ghi đè — công tắc này không có tác dụng tới khi bỏ biến đó.'}
+        {!rambo.coCauHinh && ' ⚠ Máy chủ chưa có AGENT_GATEWAY_BASE_URL/_API_KEY — bật cũng như tắt.'}
+        <br />Off by default. Turn it on only when the legacy gateway works again{rambo.nguon === 'env' ? ' (currently forced by RAMBO_BAT env)' : ''}.
+      </p>
+      <label className="flex items-center gap-2 text-xs">
+        <input type="checkbox" disabled={dang || rambo.nguon === 'env'} checked={rambo.bat} onChange={(e) => doi(e.target.checked)} />
+        Bật cổng rambo / Enable rambo
+      </label>
     </The>
   );
 }

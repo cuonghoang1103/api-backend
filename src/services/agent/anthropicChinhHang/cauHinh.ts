@@ -21,6 +21,8 @@
  * khi viết (khối `thinking` rỗng chữ) — bộ đọc luồng ở `turn.ts` bỏ qua khối đó.
  */
 
+import { bangModel, hangSo, laMaCuongMini, timModel } from '../bangModel.js';
+
 /** Gốc API, KHÔNG kèm `/v1`. Đổi được để test trỏ vào máy chủ giả trên 127.0.0.1. */
 export function gocChinhHang(): string {
   const goc = (process.env.ANTHROPIC_CHINH_HANG_BASE_URL?.trim() || 'https://api.anthropic.com').replace(/\/+$/, '');
@@ -61,54 +63,27 @@ export interface ModelChinhHang {
   dat?: boolean;
 }
 
-export const MA_FREE = 'cl-free';
+/**
+ * 18/10/2026: model của cổng này nay sống trong BẢNG CHUNG `../bangModel.ts`
+ * (tên CuongMini, khoá, trần, thứ tự). Hàm dưới chỉ lọc phần `cong: 'anthropic'`
+ * để mã cũ (admin, exam tutor) còn chạy. Mã cũ `cl-*` vẫn hiểu qua bí danh.
+ */
+export const MA_FREE = 'cm-heshin';
 
-/** Danh sách trắng. Thứ tự = thứ tự hiện trong app (nhẹ → nặng). */
 export function dsModelChinhHangGoc(): ModelChinhHang[] {
-  return [
-    {
-      id: MA_FREE,
-      model: modelFree(),
-      ten: 'CuongMini Free',
-      mo: 'Tự bật khi cổng chính gặp sự cố — không cần mật khẩu, có hạn mức riêng',
-      hang: 'free',
-    },
-    {
-      id: 'cl-sonnet-5-5',
-      model: 'claude-sonnet-5-5',
-      ten: 'Claude Sonnet 5.5 · chính hãng',
-      mo: 'Cân bằng — nhanh (1,8s tới chữ đầu), $2/$10 mỗi triệu token',
-      hang: 'cao',
-    },
-    {
-      id: 'cl-opus-5-5',
-      model: 'claude-opus-5-5',
-      ten: 'Claude Opus 5.5 · chính hãng',
-      mo: 'Mạnh — việc khó, refactor lớn. $4/$20 mỗi triệu token',
-      hang: 'cao',
-    },
-    {
-      id: 'cl-fable-5-1',
-      model: 'claude-fable-5-1',
-      ten: 'Claude Fable 5.1 · chính hãng',
-      mo: '⚠ Đắt nhất ($10/$50) — chỉ cho việc cực khó',
-      hang: 'cao',
-      dat: true,
-    },
-  ];
+  return bangModel()
+    .filter((m) => m.cong === 'anthropic')
+    .map((m) => ({ id: m.id, model: m.model, ten: m.ten, mo: m.mo, hang: hangSo(m), ...(m.dat ? { dat: true } : {}) }));
 }
 
-/** Mã cũ / bí danh ⇒ mã chuẩn. `cl-haiku-5-5` từng có trong bản nháp hợp đồng. */
-const BI_DANH: Record<string, string> = { 'cl-haiku-5-5': MA_FREE };
-
 export function laMaChinhHang(id: unknown): id is string {
-  return typeof id === 'string' && /^cl-/.test(id);
+  return laMaCuongMini(id) && timModel(id).cong === 'anthropic';
 }
 
 /** Mã app gửi ⇒ model chính hãng. `null` = không phải mã của cổng này. */
 export function modelChinhHangTu(id: unknown): ModelChinhHang | null {
   if (!laMaChinhHang(id)) return null;
-  const ma = BI_DANH[id] ?? id;
+  const ma = timModel(id).id;
   return dsModelChinhHangGoc().find((m) => m.id === ma) ?? null;
 }
 
@@ -150,7 +125,9 @@ export function effortTheoMuc(muc?: unknown): MucEffort {
 /** Trần token RA cho lượt agent — RỘNG, không cắt câu trả lời (thinking cũng tính vào đây). */
 export function maxTokensAgent(): number {
   const n = Number(process.env.ANTHROPIC_CHINH_HANG_MAX_TOKENS);
-  return Number.isFinite(n) && n >= 4096 ? Math.min(128_000, Math.floor(n)) : 64_000;
+  /* 18/10/2026: 64.000 → 128.000 (= trần thật của cả 4 model, đo `/v1/models`). Đây là TRẦN, không
+     phải chỉ tiêu — model chỉ viết thứ nó cần; thinking cũng ăn vào đây nên trần thấp là cắt cụt. */
+  return Number.isFinite(n) && n >= 4096 ? Math.min(128_000, Math.floor(n)) : 128_000;
 }
 
 /**

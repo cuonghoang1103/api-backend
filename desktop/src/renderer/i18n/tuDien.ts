@@ -185,7 +185,7 @@ export const TU_DIEN: Record<string, string> = {
   'Chuột phải vào robot: menu đầy đủ (cỡ, ghim mép, tắt).':
     'Right-click the robot for the full menu (size, snap to edge, turn off).',
   'Bấm 1 lần: mở khung chat nhanh': 'Click once: open the quick chat box',
-  'Bấm 2 lần: mở trang AI Chat': 'Click twice: open the AI Chat page',
+  'Bấm 2 lần: mở trang CuongMini Chat': 'Click twice: open the CuongMini Chat page',
   'Bấm 3 lần: bật/tắt chế độ kéo và đổi cỡ': 'Click 3 times: toggle drag and resize mode',
   'Bấm 4 lần: ẩn robot': 'Click 4 times: hide the robot',
   'Chuột phải: menu đầy đủ': 'Right-click: full menu',
@@ -226,8 +226,8 @@ export const TU_DIEN: Record<string, string> = {
   'Chọn một kỹ năng bên dưới, hoặc cứ hỏi — tớ tự nhận việc.': 'Pick a skill below, or just ask — I will figure out the task.',
   'Kỹ năng': 'Skills',
   'Đính kèm ảnh': 'Attach image',
-  'Có mạng lại rồi! Tớ dùng AI máy chủ như thường nhé.': 'Back online! Using the server AI again.',
-  'Mất mạng rồi… Tớ vẫn trả lời bằng AI trên máy nếu bạn đã tải về.': 'You are offline… I can still answer with the on-device AI if you downloaded it.',
+  'Có mạng lại rồi! Tớ dùng CuongMini máy chủ như thường nhé.': 'Back online! Using CuongMini on the server again.',
+  'Mất mạng rồi… Tớ vẫn trả lời bằng CuongMini trên máy nếu bạn đã tải về.': 'You are offline… I can still answer with the offline CuongMini if you downloaded it.',
   'Xong rồi nè!': 'All done!',
   'Ơ, tớ hỏi chưa được. Bấm để xem lỗi nhé.': 'Oops, that did not go through. Click to see the error.',
   'Bấm để mở khung Trợ lý': 'Click to open the Assistant',
@@ -301,7 +301,7 @@ export const TU_DIEN: Record<string, string> = {
   'Tôi đã đọc — bật bỏ qua tất cả': 'I’ve read this — skip all approvals',
 
   // ══ AI Chat / AI Code ══════════════════════════════════
-  'Trợ lý AI': 'AI assistant',
+  'Trợ lý CuongMini': 'CuongMini assistant',
   'Chế độ trợ lý': 'Assistant mode',
   'Trò chuyện': 'Chat',
   'Lập trình': 'Code',
@@ -472,7 +472,7 @@ export const TU_DIEN: Record<string, string> = {
   'Nhắn nhanh, dán ảnh được…': 'Quick message, paste an image…',
   'Chào bạn! Tớ giúp gì được nào?': 'Hi there! How can I help?',
   'Lịch sử trò chuyện': 'Chat history',
-  'Mở trang AI Chat': 'Open the AI Chat page',
+  'Mở trang CuongMini Chat': 'Open the CuongMini Chat page',
   'Bỏ ảnh': 'Remove image',
   'Đang đọc — bấm để dừng': 'Speaking — tap to stop',
   'Dừng đọc': 'Stop speaking',
@@ -563,7 +563,7 @@ export const TU_DIEN: Record<string, string> = {
     'Code mode needs a connection to check your access and quota.',
   'Chế độ Lập trình cần khoá AI ở máy chủ. Hãy thử lại sau.':
     'Code mode needs an AI key on the server. Please try again later.',
-  'Máy chủ chưa bật AI': 'AI is not enabled on the server',
+  'Máy chủ chưa bật CuongMini': 'CuongMini is not enabled on the server',
   'Kế hoạch còn {n} việc chưa xong mà agent đã dừng.':
     'The agent stopped with {n} plan items still unfinished.',
 
@@ -573,8 +573,6 @@ export const TU_DIEN: Record<string, string> = {
   'Mở màn nói chuyện': 'Open the voice screen',
   'Nói chuyện — rảnh tay, tự nghe tiếp sau mỗi câu':
     'Voice mode — hands free, it keeps listening after each reply',
-  'Cổng AI đang chậm chứ app không treo — bấm Dừng nếu muốn thử lại.':
-    'The AI gateway is slow — the app is not frozen. Press Stop if you want to retry.',
 
   // ── Gợi ý câu hỏi mẫu ───────────────────────────────────
   'Giải thích cho tôi luồng xác thực trong dự án này.':
@@ -724,7 +722,7 @@ export const TU_DIEN: Record<string, string> = {
   // ══ Trợ lý Odin ════════════════════════════════════════
   'Giữ để nói với Odin': 'Hold to talk to Odin',
   'Giữ để nói (hoặc giữ phím ` )': 'Hold to talk (or hold the ` key)',
-  'Bấm để đọc đầy đủ trong AI Chat': 'Open the full reply in AI Chat',
+  'Bấm để đọc đầy đủ trong CuongMini Chat': 'Open the full reply in CuongMini Chat',
   'Bấm để đọc đầy đủ →': 'Read the full reply →',
   'Ngắt lời bằng giọng': 'Interrupt by speaking',
   'Trong màn nói chuyện, cứ nói chen vào là trợ lý im ngay — không phải chạm. Dùng **tai nghe** thì chính xác nhất; loa ngoài mở to có thể rò tiếng vào micro làm nó tự ngắt lời chính mình, khi đó hãy tắt mục này.':
@@ -1183,11 +1181,11 @@ export const TU_DIEN: Record<string, string> = {
   'Bỏ thay đổi này': 'Discard this change',
   // ── Xưởng Remix ─────────────────────────────────────────
   'Xưởng Remix': 'Remix Studio',
-  'AI kèm cặp': 'AI coach',
+  'CuongMini kèm cặp': 'CuongMini coach',
   'Máy chủ chưa cắm khoá cổng AI, nên phần này tạm nghỉ. Mọi thứ còn lại của Xưởng Remix vẫn chạy bình thường.':
     'The server has no AI gateway key, so this part is resting. Everything else in Remix Studio works as usual.',
-  'AI đọc ĐÚNG bảng số đo ở trên — nó không nghe được bài của bạn. Nên nó giải thích số liệu và chỉ việc cần làm, chứ không nhận xét về giai điệu.':
-    'The AI reads exactly the measurements above — it cannot hear your track. So it explains the numbers and names the next move; it does not judge your melody.',
+  'CuongMini đọc ĐÚNG bảng số đo ở trên — nó không nghe được bài của bạn. Nên nó giải thích số liệu và chỉ việc cần làm, chứ không nhận xét về giai điệu.':
+    'CuongMini reads exactly the measurements above — it cannot hear your track. So it explains the numbers and names the next move; it does not judge your melody.',
   'Mổ xẻ bài này': 'Break this track down',
   'Hỏi một câu — ví dụ: làm sao cho drop mạnh hơn?': 'Ask something — for example: how do I make the drop hit harder?',
   'Hỏi': 'Ask',
@@ -1196,8 +1194,8 @@ export const TU_DIEN: Record<string, string> = {
   'Máy chủ trả về câu trả lời rỗng. Thử hỏi lại một câu hẹp hơn.':
     'The server returned an empty answer. Try asking something narrower.',
   'Những con số này KHÔNG có trong bảng đo:': 'These numbers are NOT in the measurements:',
-  'AI có thể đã tự nghĩ ra — đối chiếu lại trước khi làm theo.':
-    'The AI may have invented them — check before acting on them.',
+  'CuongMini có thể đã tự nghĩ ra — đối chiếu lại trước khi làm theo.':
+    'CuongMini may have invented them — check before acting on them.',
   'Chọn tệp .onnx': 'Pick an .onnx file',
   'Đã tải sẵn tệp .onnx? Trỏ app vào nó.': 'Already downloaded the .onnx? Point the app at it.',
 
@@ -1430,9 +1428,9 @@ export const TU_DIEN: Record<string, string> = {
     'Full tracks, mostly public domain or CC',
 
   /* ── Cài đặt → AI ngoại tuyến ──────────────────────────── */
-  'AI ngoại tuyến': 'Offline AI',
+  'CuongMini ngoại tuyến': 'Offline CuongMini',
   'Đang xem cấu hình máy…': 'Checking your computer…',
-  'Tải AI về chạy thẳng trên máy bạn. Mất mạng vẫn hỏi được, và câu hỏi không rời khỏi máy. Đổi lại, nó trả lời kém hơn bản trên mạng.':
+  'Tải CuongMini về chạy thẳng trên máy bạn. Mất mạng vẫn hỏi được, và câu hỏi không rời khỏi máy. Đổi lại, nó trả lời kém hơn bản trên mạng.':
     'Download an AI that runs on your own computer. It works with no internet, '
     + 'and your questions never leave the machine. In exchange, its answers are '
     + 'weaker than the online one.',
@@ -1457,10 +1455,10 @@ export const TU_DIEN: Record<string, string> = {
   'Xem hướng dẫn đầy đủ': 'Read the full guide',
   'Riêng key dùng ở terminal đi qua một cổng chung: lúc cả nhà cùng dùng nhiều, nó có thể tạm dừng vài phút rồi tự chạy lại — ví của bạn không bị trừ trong lúc đó.':
     'The key you use in the terminal goes through a shared gateway: when everyone is busy it may pause for a few minutes and then resume on its own — your allowance is not charged while it waits.',
-  'Cho phép chạy AI trên máy': 'Allow the AI to run on this computer',
+  'Cho phép chạy CuongMini trên máy': 'Allow CuongMini to run on this computer',
   'Tắt thì dừng ngay và trả lại bộ nhớ. File đã tải vẫn giữ nguyên, bật lại là dùng được.':
     'Turning it off stops it right away and gives the memory back. Downloaded files stay, so turning it back on just works.',
-  'Mất mạng thì tự dùng AI trên máy': 'Use the on-device AI automatically when offline',
+  'Mất mạng thì tự dùng CuongMini trên máy': 'Use the offline CuongMini automatically when offline',
   'Tắt thì lúc mất mạng app báo lỗi như cũ thay vì tự trả lời bằng bản yếu hơn.':
     'With this off, losing the connection shows the usual error instead of quietly answering with the weaker AI.',
   'Máy của bạn': 'Your computer',
@@ -1468,7 +1466,7 @@ export const TU_DIEN: Record<string, string> = {
   'Nên dùng:': 'Best for you:',
   'Tải bản này': 'Download this one',
   'chưa đọc được': 'could not read',
-  'Khi có mạng, app vẫn tự dùng bản trên mạng vì nó trả lời tốt hơn. AI trên máy là lưới đỡ lúc mất kết nối.':
+  'Khi có mạng, app vẫn tự dùng bản trên mạng vì nó trả lời tốt hơn. CuongMini trên máy là lưới đỡ lúc mất kết nối.':
     'When you are online the app still uses the online AI, because it answers '
     + 'better. The on-device AI is a safety net for when the connection drops.',
 
@@ -1513,16 +1511,16 @@ export const TU_DIEN: Record<string, string> = {
   'Quan trọng': 'Important',
   'Rất quan trọng': 'Critical',
   'phút': 'min',
-  'Nhờ AI xem lại ngày này': 'Ask AI to review this day',
+  'Nhờ CuongMini xem lại ngày này': 'Ask CuongMini to review this day',
   'Đang xem…': 'Reviewing…',
   'Chưa cắm khoá AI nên chỉ có phần số liệu ở trên.': 'No AI key configured — only the figures above are available.',
-  'AI chưa trả lời được, thử lại sau.': 'AI did not respond — try again later.',
+  'CuongMini chưa trả lời được, thử lại sau.': 'CuongMini did not respond — try again later.',
 
   // ── AI ngoại tuyến trong Chat (features/chat) ──
   'Đang ngoại tuyến — trả lời bằng AI trên máy ({ten}). Có mạng lại sẽ tự dùng model đầy đủ.': 'Offline — answering with the on-device AI ({ten}). Full model resumes automatically when you are back online.',
   'Đang ngoại tuyến, và chưa có AI trên máy. Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.': 'Offline, and no on-device AI is installed. Open Settings → Offline AI to download a model for offline use.',
-  '_Trả lời bởi AI trên máy bạn (ngoại tuyến) — có thể kém chính xác hơn._': '_Answered by the AI on your device (offline) — may be less accurate._',
-  'Mất mạng, và chưa có AI trên máy để dùng thay. Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.': 'You are offline and no on-device AI is available. Open Settings → Offline AI to download a model for offline use.',
+  '_Trả lời bởi CuongMini trên máy bạn (ngoại tuyến) — có thể kém chính xác hơn._': '_Answered by CuongMini on your device (offline) — may be less accurate._',
+  'Mất mạng, và chưa có CuongMini trên máy để dùng thay. Vào Cài đặt → CuongMini ngoại tuyến để tải model dùng khi không có mạng.': 'You are offline and no offline CuongMini is available. Open Settings → Offline CuongMini to download a model for offline use.',
 
   // ── Mạng nhà (features/mang) ──
   'Quét mạng gặp lỗi:': 'Network scan error:',
@@ -1582,25 +1580,25 @@ export const TU_DIEN: Record<string, string> = {
   'Đo tốc độ giữa máy bạn và máy chủ cuongthai.com — đủ để biết mạng đang khoẻ hay yếu, nhưng không thay cho công cụ đo tới máy chủ quốc tế.': 'Measures speed between your machine and the cuongthai.com server — enough to tell whether your network is healthy, but not a replacement for a test against international servers.',
   /* AI ngoại tuyến cho AI Code + Chat (03/10/2026) */
   'AI Code đang chạy bằng model trên máy này (không có mạng)': 'AI Code is running on a model on this device (offline)',
-  'AI trên máy': 'On-device AI',
+  'CuongMini trên máy': 'On-device CuongMini',
   'Mở cài đặt': 'Open settings',
-  'Cài AI ngoại tuyến': 'Install offline AI',
-  'Vào Cài đặt → AI ngoại tuyến để tải model dùng khi không có mạng.': 'Open Settings → Offline AI to download a model for offline use.',
-  'Mất mạng — AI ngoại tuyến đang tắt trong Cài đặt.': 'Offline — offline AI is turned off in Settings.',
-  'Mất mạng — chưa có AI ngoại tuyến để chạy thay.': 'Offline — no offline AI is installed to take over.',
+  'Cài CuongMini ngoại tuyến': 'Install offline CuongMini',
+  'Vào Cài đặt → CuongMini ngoại tuyến để tải model dùng khi không có mạng.': 'Open Settings → Offline CuongMini to download a model for offline use.',
+  'Mất mạng — CuongMini ngoại tuyến đang tắt trong Cài đặt.': 'Offline — offline CuongMini is turned off in Settings.',
+  'Mất mạng — chưa có CuongMini ngoại tuyến để chạy thay.': 'Offline — no offline CuongMini is installed to take over.',
   'chạy trên máy này': 'running on this device',
-  'Đã có mạng — sẽ quay về AI máy chủ khi lượt này xong.': 'Back online — will switch back to server AI when this turn finishes.',
-  'Đã có mạng — quay về AI máy chủ?': 'Back online — switch back to server AI?',
-  'Quay về AI máy chủ': 'Switch back to server AI',
+  'Đã có mạng — sẽ quay về CuongMini máy chủ khi lượt này xong.': 'Back online — will switch back to CuongMini on the server when this turn finishes.',
+  'Đã có mạng — quay về CuongMini máy chủ?': 'Back online — switch back to CuongMini on the server?',
+  'Quay về CuongMini máy chủ': 'Switch back to CuongMini on the server',
   'Có mạng lại sẽ hỏi quay về {x}.': 'You will be asked to switch back to {x} once online.',
-  'AI máy chủ': 'server AI',
+  'CuongMini máy chủ': 'CuongMini on the server',
   'Model nhỏ chạy trên máy bạn — có thể sót hoặc sai. Có mạng lại thì hỏi lại để có câu đầy đủ hơn.': 'A small model running on your device — it may miss things or be wrong. Ask again when online for a fuller answer.',
   'có thể sót, kiểm lại khi có mạng': 'may miss things, double-check when online',
   'Máy mạnh': 'Powerful machine',
   'Máy trung bình': 'Mid-range machine',
   'Máy yếu cho AI Code': 'Too weak for AI Code',
   'AI Code ngoại tuyến': 'Offline AI Code',
-  'Mất mạng thì AI Code tự chạy bằng model trên máy: đọc mã, sửa file, chạy lệnh — vẫn qua đúng các bước duyệt như khi có mạng. Có mạng lại sẽ hỏi quay về AI máy chủ.': 'When offline, AI Code switches to an on-device model: it reads code, edits files and runs commands — with the same approval steps as online. Once back online you will be asked to switch back to server AI.',
+  'Mất mạng thì AI Code tự chạy bằng model trên máy: đọc mã, sửa file, chạy lệnh — vẫn qua đúng các bước duyệt như khi có mạng. Có mạng lại sẽ hỏi quay về CuongMini máy chủ.': 'When offline, AI Code switches to an on-device model: it reads code, edits files and runs commands — with the same approval steps as online. Once back online you will be asked to switch back to CuongMini on the server.',
   'VRAM đo được:': 'Measured VRAM:',
   'đang dùng bộ chạy CUDA': 'using the CUDA runtime',
   'Tải bản này cho AI Code': 'Download this for AI Code',
@@ -1612,7 +1610,7 @@ export const TU_DIEN: Record<string, string> = {
   'đang bật': 'on',
   'đang tắt': 'off',
   'Bắt đầu việc mới': 'Start a new task',
-  'Mở cài đặt AI ngoại tuyến': 'Open offline AI settings',
+  'Mở cài đặt CuongMini ngoại tuyến': 'Open offline CuongMini settings',
   'Kế hoạch ở trên đã xong (chưa sửa gì). Duyệt thì agent làm theo; chế độ "Kế hoạch" sẽ được nâng lên "Hỏi từng việc".': 'The plan above is ready (nothing changed yet). Approve it and the agent follows it; "Plan" mode will be raised to "Ask for each step".',
   'Duyệt & làm': 'Approve & run',
   'lệnh': 'commands',
@@ -1734,7 +1732,7 @@ export const TU_DIEN: Record<string, string> = {
   'Hiện robot Odin': 'Show the Odin robot',
   'Hiện/ẩn robot, giọng đọc, tốc độ': 'Show/hide the robot, voice, speed',
   'hoàn thành': 'completed',
-  'Hỏi AI về dự án đang mở': 'Ask AI about the open project',
+  'Hỏi CuongMini về dự án đang mở': 'Ask CuongMini about the open project',
   'Huỷ hẹn giờ': 'Cancel the timer',
   'Kết quả cho “{q}”': 'Results for “{q}”',
   'Kêu “ting” khi tick xong một việc': 'Plays a “ting” when you tick off a task',
@@ -1765,8 +1763,8 @@ export const TU_DIEN: Record<string, string> = {
   'Một tiếng “ting” ngắn khi bạn tick xong một việc ở Tổng quan. Bật lên là kêu thử ngay.': 'A short “ting” when you tick off a task on Overview. Turning it on plays a sample right away.',
   'Mưa nhẹ': 'Light rain',
   'Mức độ': 'Level',
-  'Mức dùng AI': 'AI usage',
-  'Mức dùng, AI chạy trên máy': 'Usage, on-device AI',
+  'Mức dùng CuongMini': 'CuongMini usage',
+  'Mức dùng, CuongMini chạy trên máy': 'Usage, offline CuongMini',
   'Mục nhạc': 'Music sections',
   'Nâng cao → Cơ bản': 'Advanced → Beginner',
   'Nghe gần đây': 'Recently played',
@@ -1808,8 +1806,8 @@ export const TU_DIEN: Record<string, string> = {
   'Sáng, tối hoặc theo hệ thống': 'Light, dark or follow the system',
   'Sóng biển': 'Ocean waves',
   'Sóng biển · dịu tai · tự nhỏ dần và tắt sau 30 phút': 'Ocean waves · soft sound · fades out and stops after 30 minutes',
-  'Tải AI về chạy thẳng trên máy — vẫn hỏi được khi mất mạng.': 'Download an AI that runs on your device — still answers when you are offline.',
-  'Tải AI về chạy trên máy, dùng khi mất mạng': 'Download an on-device AI for offline use',
+  'Tải CuongMini về chạy thẳng trên máy — vẫn hỏi được khi mất mạng.': 'Download a CuongMini that runs on your device — still answers when you are offline.',
+  'Tải CuongMini về chạy trên máy, dùng khi mất mạng': 'Download an offline CuongMini for offline use',
   'Tài nguyên': 'Resources',
   'Tải về nghe offline': 'Download for offline listening',
   'Bỏ nhãn (để app tự đoán)': 'Remove label (let the app guess)',
@@ -1872,8 +1870,8 @@ export const TU_DIEN: Record<string, string> = {
   'Trong trẻo': 'Bright',
   'Tua 5 giây': 'Seek 5 seconds',
   'Vai trò': 'Role',
-  'Ví AI Code và AI Chat của bạn': 'Your AI Code and AI Chat wallets',
-  'Ví riêng của bạn cho AI Code và AI Chat — đã tiêu bao nhiêu, bao giờ hồi.': 'Your own AI Code and AI Chat wallets — how much is spent and when it refills.',
+  'Ví AI Code và CuongMini Chat của bạn': 'Your AI Code and CuongMini Chat wallets',
+  'Ví riêng của bạn cho AI Code và CuongMini Chat — đã tiêu bao nhiêu, bao giờ hồi.': 'Your own AI Code and CuongMini Chat wallets — how much is spent and when it refills.',
   'Video demo': 'Demo video',
   'Xem đủ phím tắt của trang Nhạc': 'See every Music page shortcut',
   'Xem nhiều nhất': 'Most viewed',
@@ -2009,6 +2007,16 @@ export const TU_DIEN: Record<string, string> = {
   'Cần mật khẩu cổng Claude chính hãng — bấm để mở khoá': 'Needs the official Claude gate password — click to unlock',
   'là model đắt nhất của cổng chính hãng — chỉ dùng cho việc cực khó.': 'is the most expensive model on the official gate — use it only for very hard tasks.',
   'Vẫn dùng': 'Use anyway',
+  // 18/10/2026 — bảng model CuongMini, khoá, dòng tự chuyển cổng.
+  'Quản trị chưa đặt khoá cho model này — hãy thử lại sau.': 'The admin has not set a key for this model yet — try again later.',
+  'Đã mở khoá trên máy này (vé 48 giờ).': 'Unlocked on this device (48-hour pass).',
+  'Khoá CuongMini': 'CuongMini key',
+  'Cần khoá — bấm để nhập': 'Needs a key — click to enter it',
+  'là model đắt nhất — chỉ dùng cho việc cực khó.': 'is the most expensive model — use it only for very hard tasks.',
+  'Model này tạm thời chưa dùng được': 'This model is temporarily unavailable',
+  'tạm thời chưa dùng được': 'temporarily unavailable',
+  'Xác nhận dùng model đắt': 'Confirm using an expensive model',
+  'Thôi': 'Cancel',
   'modelapi · cổng dự phòng': 'modelapi · fallback gate',
   // ── Đợt 3 (18/10/2026): hỏi lựa chọn · agent phụ ghi · chờ/hẹn · nhắn phiên · tiền tố ──
   'Bạn đã trả lời': 'You answered',

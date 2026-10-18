@@ -118,7 +118,7 @@ function suKienTrong(a: AgentPhu, e: { loai: string; [k: string]: unknown }, bay
     case 'loi': {
       // Lượt phụ cũng có thể bị đổi cổng (Free/modelapi) — đó là thông báo, không phải hỏng.
       const ma = String(e.ma ?? '');
-      const chiLaTin = ma === 'CONG_CHINH_HONG_FREE' || ma === 'DOI_CONG' || ma === 'KHOI_PHUC';
+      const chiLaTin = ma === 'CONG_CHINH_HONG_FREE' || ma === 'DOI_CONG' || ma === 'KHOI_PHUC' || ma === 'DOI_CONG_TU_DONG';
       a.buoc.push({ luc: bayGio, kieu: chiLaTin ? 'batDau' : 'loi', mo: chiLaTin ? L('Đổi cổng', 'Gateway switched') : L('Lỗi', 'Error'), chiTiet: String(e.thongDiep ?? ''), hong: !chiLaTin });
       break;
     }

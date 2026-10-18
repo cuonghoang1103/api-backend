@@ -424,15 +424,15 @@ function GioiThieu({ de, L, datL, en, t, onBatDau, onThoat, onXemLuot }: {
   const coCode = de.kind === 'FE' && de.questions.some((x) => x.kind === 'CODE');
   const moTa = de.kind === 'FE'
     ? toanCode
-      ? t('Đề gồm toàn câu lập trình: gõ code ngay trong phòng thi cho từng câu, AI chấm theo tiêu chí.', 'All coding questions: type your code right here for each one; AI grades it against a rubric.')
+      ? t('Đề gồm toàn câu lập trình: gõ code ngay trong phòng thi cho từng câu, CuongMini chấm theo tiêu chí.', 'All coding questions: type your code right here for each one; CuongMini grades it against a rubric.')
       : coCode
-        ? t('Trắc nghiệm chấm tự động; câu lập trình bạn gõ code ngay trong phòng và AI chấm theo tiêu chí.', 'MCQs are auto-graded; for the coding ones you type code right here and AI grades it.')
+        ? t('Trắc nghiệm chấm tự động; câu lập trình bạn gõ code ngay trong phòng và CuongMini chấm theo tiêu chí.', 'MCQs are auto-graded; for the coding ones you type code right here and CuongMini grades it.')
         : t('Chọn đáp án cho từng câu. Có câu chọn nhiều đáp án.', 'Answer each question. Some allow multiple answers.')
     : de.peType === 'CODE'
-      ? t('Đọc đề, viết code ở IDE/VS Code của bạn, nén tất cả file thành .zip rồi nộp để AI chấm.', 'Read the problems, code in your own IDE/VS Code, then upload all files as one .zip for AI grading.')
+      ? t('Đọc đề, viết code ở IDE/VS Code của bạn, nén tất cả file thành .zip rồi nộp để CuongMini chấm.', 'Read the problems, code in your own IDE/VS Code, then upload all files as one .zip for CuongMini grading.')
       : de.peType === 'WRITE'
-        ? t('Viết bài bằng TIẾNG ANH ngay trong phòng thi. Bài được AI chấm theo tiêu chí.', 'Write your answer in ENGLISH here in the exam room. Graded by AI against a rubric.')
-        : t('Thu âm câu trả lời bằng tiếng Anh cho từng câu hỏi. AI chấm nội dung & phát âm.', 'Record your English answer for each question. AI grades content & pronunciation.');
+        ? t('Viết bài bằng TIẾNG ANH ngay trong phòng thi. Bài được CuongMini chấm theo tiêu chí.', 'Write your answer in ENGLISH here in the exam room. Graded by CuongMini against a rubric.')
+        : t('Thu âm câu trả lời bằng tiếng Anh cho từng câu hỏi. CuongMini chấm nội dung & phát âm.', 'Record your English answer for each question. CuongMini grades content & pronunciation.');
 
   const bam = async (ai: boolean) => { datDang(ai ? 'ai' : 'thi'); try { await onBatDau(ai); } finally { datDang(null); } };
 
@@ -493,7 +493,7 @@ function GioiThieu({ de, L, datL, en, t, onBatDau, onThoat, onXemLuot }: {
             {de.my?.aiInProgressId ? t('Tiếp tục với CuongMini', 'Continue with CuongMini') : t('Ôn với CuongMini', 'Study with CuongMini')}
           </button>
           <p className="ctx-mo ctx-gt-chu">
-            {t('CuongMini: phòng ôn không tính giờ, làm từng câu, hỏi AI và bình luận (Pro). Nếu AI đang bận, vẫn xem được đáp án và bình luận.', 'CuongMini: an untimed study room — question by question, ask AI and discuss (Pro). If the AI is busy you can still reveal answers and comment.')}
+            {t('CuongMini: phòng ôn không tính giờ, làm từng câu, hỏi CuongMini và bình luận (Pro). Nếu CuongMini đang bận, vẫn xem được đáp án và bình luận.', 'CuongMini: an untimed study room — question by question, ask CuongMini and discuss (Pro). If CuongMini is busy you can still reveal answers and comment.')}
           </p>
           <ul className="ctx-gt-meo">
             <li><Clock size={13} aria-hidden /> {t('Đồng hồ chạy theo máy chủ, tự nộp một lần khi hết giờ.', 'The timer follows the server and auto-submits once when it ends.')}</li>
@@ -597,7 +597,7 @@ function CauCode({ q, idx, tong, L, t, giaTri, onDoi, co, onCo }: {
       {q.imageUrl && <AnhGoc url={q.imageUrl} t={t} />}
       {q.expectedOutput && (<><div className="ctx-nhan-nho">{t('Kết quả mong đợi', 'Expected output')}</div><pre className="exam-terminal">{q.expectedOutput}</pre></>)}
       <OMa giaTri={giaTri} onDoi={onDoi} t={t} />
-      <p className="ctx-mo">{dong} {t('dòng', 'lines')} · {t('AI chấm theo tiêu chí', 'Graded by AI against a rubric')}</p>
+      <p className="ctx-mo">{dong} {t('dòng', 'lines')} · {t('CuongMini chấm theo tiêu chí', 'Graded by CuongMini against a rubric')}</p>
     </article>
   );
 }
@@ -641,7 +641,7 @@ function NopZip({ de, L, t, zip, datZip }: { de: DeDay; L: 'en' | 'vi'; t: T; zi
         <span className="ctx-mo">
           {zip
             ? `${(zip.size / 1048576).toFixed(2)} MB — ${t('bấm "Nộp bài" để gửi', 'press "Submit" to send')}`
-            : t('Nén tất cả file mã nguồn (Q1.c, Q2.c…) thành một .zip. AI chấm từng câu theo đề + đáp án mẫu.', 'Zip all your source files (Q1.c, Q2.c…) into one .zip. AI grades each question against the spec.')}
+            : t('Nén tất cả file mã nguồn (Q1.c, Q2.c…) thành một .zip. CuongMini chấm từng câu theo đề + đáp án mẫu.', 'Zip all your source files (Q1.c, Q2.c…) into one .zip. CuongMini grades each question against the spec.')}
         </span>
         {zip && <button type="button" className="ctx-link" onClick={(e) => { e.preventDefault(); datZip(null); }}><X size={12} aria-hidden /> {t('Bỏ file', 'Remove')}</button>}
       </label>
@@ -673,7 +673,7 @@ function CauViet({ q, idx, tong, L, t, giaTri, onDoi, anh, onAnh }: {
       {q.imageUrl && <AnhGoc url={q.imageUrl} t={t} />}
       {soDo && (
         <div className="ctx-so-do">
-          <div className="ctx-nhan-nho">{t('Ảnh sơ đồ bạn đã vẽ (AI chấm theo ảnh này)', 'Your drawn diagram (AI grades from this image)')}</div>
+          <div className="ctx-nhan-nho">{t('Ảnh sơ đồ bạn đã vẽ (CuongMini chấm theo ảnh này)', 'Your drawn diagram (CuongMini grades from this image)')}</div>
           {xem ? (
             <>
               <img src={xem} alt={t('Ảnh sơ đồ', 'Diagram')} />
@@ -844,8 +844,8 @@ function SoatBai({ de, t, coBangCau, soXong, chua, co, zip, soGhiAm, dangNop, on
         )}
         <p className="ctx-mo">
           {de.kind === 'FE'
-            ? t('Trắc nghiệm chấm ngay; câu lập trình (nếu có) AI chấm, có thể mất tới một phút. Nộp rồi không sửa được.', 'MCQs are graded instantly; coding questions (if any) are AI-graded and may take up to a minute. You cannot edit after submitting.')
-            : t('AI chấm bài và trả kết quả ngay — có thể mất tới một phút. Nộp rồi không sửa được.', 'AI grades it right away — this can take up to a minute. You cannot edit after submitting.')}
+            ? t('Trắc nghiệm chấm ngay; câu lập trình (nếu có) CuongMini chấm, có thể mất tới một phút. Nộp rồi không sửa được.', 'MCQs are graded instantly; coding questions (if any) are CuongMini-graded and may take up to a minute. You cannot edit after submitting.')
+            : t('CuongMini chấm bài và trả kết quả ngay — có thể mất tới một phút. Nộp rồi không sửa được.', 'CuongMini grades it right away — this can take up to a minute. You cannot edit after submitting.')}
         </p>
         <footer>
           <button type="button" className="ctx-nut-phu" onClick={onDong}>{t('Làm tiếp', 'Keep working')}</button>

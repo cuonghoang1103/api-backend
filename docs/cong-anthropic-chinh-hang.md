@@ -1,5 +1,59 @@
 # Cổng Claude chính hãng — hợp đồng API (17/10/2026)
 
+> ## ⚠️ CẬP NHẬT 18/10/2026 — đọc mục này trước, nó THẮNG phần cũ bên dưới
+>
+> **Tên hiển thị.** Cổng này hiện cho người dùng là **"CuongMini Code Max"**; cổng modelapi là **"CuongMini Core"** (cổng CHÍNH).
+> App chỉ hiện tên CuongMini — không tên model thật, không tên cổng thật. Bảng duy nhất: `src/services/agent/bangModel.ts`
+> (đổi tên Invisible ở hằng `TEN_INVISIBLE`).
+>
+> | Tên | Mã app gửi | Model thật | Cổng | Khoá | Bí danh cũ |
+> |---|---|---|---|---|---|
+> | CuongMini Invisible 5.1 | `cm-invisible` | `claude-fable-5-1` | Code Max | **khoá riêng** | `cl-fable-5-1` |
+> | CuongMini Optimum 5.5 | `cm-optimum` | `claude-opus-5-5` | Code Max | khoá chung | `cl-opus-5-5` |
+> | CuongMini Sonic 5.5 | `cm-sonic` | `claude-sonnet-5-5` | Code Max | Pro free | `cl-sonnet-5-5` |
+> | CuongMini Solid (mặc định) | `cm-solid` | `gpt-6-sol` | Core | Pro free | `gpt-sol`, `gpt-6-sol`, mọi mã lạ |
+> | CuongMini Nova | `cm-nova` | `gpt-6-luna` | Core | Pro free | — |
+> | CuongMini Shin | `cm-shin` | `gpt-5.6-sol` | Core | Pro free | `gpt-5.6-sol` |
+> | CuongMini Heshin 5.5 | `cm-heshin` | `claude-haiku-5-5` | Code Max | Pro free | `cl-free`, `cl-haiku-5-5` |
+> | CuongMini Eco | `cm-eco` | `gpt-5.6-luna` | Core | Pro free | — |
+>
+> **Rambo tắt mặc định** (`ramboBat()` ở `llm/gateway.ts`; bật bằng công tắc admin hoặc `RAMBO_BAT=1`). Không còn "CuongMini Free tự
+> bật khi rambo hỏng" hay "cổng dự phòng modelapi" trong đường chính — mọi lượt đi theo model người dùng chọn.
+>
+> **Khoá.** Hai mật khẩu admin đặt: khoá CHUNG (`app_settings.anthropic_chinh_hang_mat_khau`, giữ khoá cũ) mở mọi model không free trừ
+> Invisible; khoá INVISIBLE (`app_settings.cuongmini_khoa_invisible`). Hai khoá phải khác nhau. Vé **48 giờ** (`ca.` chung · `ci.`
+> Invisible; vé hạn > 48 giờ — vé 30 ngày đời cũ — bị coi là chết). App vẫn giữ MỘT chuỗi `congAnthropicVe`, nay là **bó vé** nối bằng `~`.
+> Đổi khoá ⇒ vé loại đó chết; không đổi ⇒ nhập lại vẫn vào. Máy chủ kiểm vé ở MỌI `/agent/turn` (403 `CONG_ANTHROPIC_KHOA`,
+> `data.loaiKhoa`) và ở `runAgentTurn`.
+>
+> `POST /agent/cong-anthropic/mo-khoa` thân `{ matKhau, ve?: bó vé đang giữ, model?: mã vừa bấm | loaiKhoa? }` ⇒ máy chủ thử CẢ HAI
+> khoá, trả `{ ve: BÓ vé mới, hetHan, mo: { chung, invisible } }`. `model` cần khoá loại khác ⇒ 403 `CONG_ANTHROPIC_SAI_MAT_KHAU`.
+>
+> **`GET /agent/tools`** — `models[]` (xếp năng lực cao → thấp): `{ id, ten, mo, moEn, nhom (tên cổng CuongMini), cong, khoa,
+> canMoKhoa, loaiKhoa?, dungDuoc, mienPhi, hang, dat? }` — KHÔNG có `model`. `model`/`macDinh` = `cm-solid`; `tenCong`.
+> `GET /agent/cong-anthropic` thêm `daBatInvisible`, `invisibleDuoc`, `tranModel[]` (đã dùng/trần theo model).
+>
+> **Trần chi tiêu theo model × người** (`src/services/agent/tranModel.ts`, `app_settings.cuongmini_tran_model`): USD tháng+ngày lịch
+> VN, theo gói pro/key_terminal, admin không giới hạn; đếm trên `interview_llm_call_logs` (feature `agent`, đúng model — tự chuyển cổng
+> giữa lượt ⇒ ghi HAI dòng, mỗi đoạn đúng model/giá). Mặc định Pro (tháng/ngày): Invisible 10/3 · Optimum 20/5 · Sonic 10/2 · Solid 15/3
+> · Nova 15/3 · Shin 5/1 · Heshin 8/2 · Eco 10/2 (key terminal ≈ ½). Trần NHÓM free/cao của mục 4 vẫn áp chồng cho cổng này (nay Sonic +
+> Heshin thuộc `free`; Optimum + Invisible thuộc `cao`). Sổ hỏng: Code Max ⇒ chặn; Core ⇒ cho qua (như ví/hạn mức 5 giờ).
+>
+> **Tự chuyển cổng.** Cổng của model đang chạy hỏng (5xx/408/409/429/529, mất kết nối/hết giờ, hết credit/quota, không có kênh,
+> `CONG_ANTHROPIC_HET_KEY|HONG`) ⇒ máy chủ sang model **free tương đương ở cổng kia** (`tuongDuong`: Sonic⇄Solid, Optimum/Invisible/
+> Heshin→Solid…, Nova/Shin→Sonic, Eco→Heshin) và gọi lại ĐÚNG bước đó, một lần mỗi lượt; cổng hỏng nghỉ 60 s
+> (`CUONGMINI_CONG_NGHI_MS`). Model trả phí chỉ về model free, không tự nâng. Khung SSE: `{ type:'cong', cong:'tu-dong',
+> ma:'DOI_CONG_TU_DONG', model/ten: tên CuongMini, thongDiep: "Đã chuyển sang CuongMini Solid vì cổng bận", thongDiepEn }` — app vẽ MỘT
+> dòng mờ. Hết trần ⇒ báo `CUONGMINI_HET_TRAN` / `CONG_ANTHROPIC_HET_HAN_MUC`, không tự chuyển.
+>
+> **Admin** (`/api/v1/admin/cong-anthropic`): `GET /` thêm `daBatMatKhauInvisible`, `bangModel[]` (kèm tên thật, giá, cửa sổ, lùi sang),
+> `tranModel`, `rambo`; mới `PUT /mat-khau-invisible`, `PUT /tran-model`, `PUT /rambo { bat }`. Trang `/admin/commerce?tab=anthropic`.
+>
+> **Đo thật 18/10/2026:** KHÔNG gọi được `claude-opus-5-5` / `claude-fable-5-1` qua cổng chính hãng từ máy local — `.env` local không có
+> `ANTHROPIC_CHINH_HANG_KEYS` và CSDL local (nơi giữ kho key mã hoá) không chạy. Cần kiểm trên prod bằng nút "Thử kết nối" ở trang admin
+> (`POST /keys/:id/thu`, không tốn tiền) — nó báo `thieuModel` nếu key không thấy model nào.
+
+
 Cổng gọi thẳng `api.anthropic.com` bằng key của chủ app. Hai vai:
 
 1. **CuongMini Free.** Khi rambo hỏng, AI Code (`agent_code`) và CuongMini trong thi (`exam_tutor`) **tự chuyển ngay** sang model rẻ nhất của cổng này (mặc định `claude-haiku-5-5`, đổi bằng `ANTHROPIC_CHINH_HANG_MODEL_FREE`). Không cần mật khẩu: ai được dùng AI Code (`duocDungAiCode`) đều dùng được. Phần này vẫn tính vào **trần Free** theo gói/người.

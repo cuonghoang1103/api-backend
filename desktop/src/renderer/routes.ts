@@ -122,8 +122,8 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['friends', 'ban be', 'ket ban'] },
 
   // ── AI ───────────────────────────────────────────────────
-  { path: '/chat', label: 'AI Chat', icon: Bot, group: 'ai',
-    keywords: ['ai', 'chat', 'gpt', 'tro ly', 'hoi dap'] },
+  { path: '/chat', label: 'CuongMini Chat', icon: Bot, group: 'ai',
+    keywords: ['ai', 'ai chat', 'cuongmini', 'chat', 'gpt', 'tro ly', 'hoi dap'] },
   { path: '/ai-templates', label: 'Skill AI', icon: Wand2, group: 'ai',
     keywords: ['ai templates', 'mau ai', 'mẫu ai', 'skill', 'skills', 'agent', 'prompt'] },
   { path: '/voice', label: 'Giọng nói', icon: Mic, group: 'ai',
@@ -226,7 +226,7 @@ export const ROUTES: readonly RouteDef[] = [
 
 export const GROUP_LABELS: Record<RouteGroup, string> = {
   chinh: 'Chính',
-  ai: 'AI',
+  ai: 'CuongMini',
   hoc: 'Học tập',
   lam: 'Làm & sáng tạo',
   giai: 'Giải trí',

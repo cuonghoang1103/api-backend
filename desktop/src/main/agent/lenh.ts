@@ -335,7 +335,9 @@ export const TRAN_GIAY_TOI_DA = 1800;
  * nên 24k đầu ra của một lần `npm test` bị trả tiền lại ở mọi bước sau. Phần có
  * giá trị (lệnh gì, hỏng ở đâu, tổng kết) gần như luôn nằm gọn trong 12k.
  */
-export const TRAN_KY_TU_RA = 12_000;
+/* 18/10/2026: 12.000 → 40.000 ("không giới hạn năng lực" — chủ app): 12k hay cắt mất phần giữa của
+   một lỗi build dài. Tiền đã chặn bằng trần chi tiêu theo model × người ở máy chủ. */
+export const TRAN_KY_TU_RA = 40_000;
 /** Tỉ lệ giữ ở ĐẦU; phần còn lại giữ ở CUỐI — lỗi và tổng kết thường ở cuối. */
 const TI_LE_DAU = 0.35;
 /** Lùi tối đa bấy nhiêu ký tự để cắt đúng ranh giới dòng thay vì giữa dòng. */

@@ -86,16 +86,16 @@ export class CauNoi implements KetNoi {
   }
 
   /** Mở cổng Claude chính hãng (app tự gọi máy chủ bằng phiên của nó, giữ vé). */
-  async moCongAnthropic(matKhau: string): Promise<string> {
+  async moCongAnthropic(matKhau: string, model?: string): Promise<string> {
     let r: { ok: boolean; ten?: string; loi?: string };
     try {
-      r = await yeuCau(this.cau, 'POST', '/mo-cong-anthropic', { matKhau }, 30) as typeof r;
+      r = await yeuCau(this.cau, 'POST', '/mo-cong-anthropic', { matKhau, ...(model ? { model } : {}) }, 30) as typeof r;
     } catch (e) {
-      if (/HTTP 404/.test((e as Error).message)) throw new Error('App CuongThai bản này chưa có cổng Claude chính hãng — cập nhật app, hoặc đặt cuongthai.cheDo = "docLap".');
+      if (/HTTP 404/.test((e as Error).message)) throw new Error('App CuongThai bản này chưa hỗ trợ khoá CuongMini — cập nhật app, hoặc đặt cuongthai.cheDo = "docLap". / Update the CuongThai app.');
       throw e;
     }
     if (!r.ok) throw new Error(r.loi ?? 'Không mở khoá được.');
-    return r.ten ?? 'Claude chính hãng';
+    return r.ten ?? 'CuongMini';
   }
 
   async chuanHoaAnh(dataUrl: string): Promise<string> {

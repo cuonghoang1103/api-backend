@@ -115,11 +115,14 @@ const MODEL_HOP_LE = new Set<string>([
   'opus-5', 'fable-5',
   // Cổng Claude chính hãng (17/10/2026) — xem `modelAgentSchema`.
   'cl-free', 'cl-sonnet-5-5', 'cl-opus-5-5', 'cl-fable-5-1',
+  // 18/10/2026: bảng CuongMini chung.
+  'cm-invisible', 'cm-optimum', 'cm-sonic', 'cm-solid', 'cm-nova', 'cm-shin', 'cm-heshin', 'cm-eco',
 ]);
 
 function modelHienTai(): ModelAgent {
   const v = getSettings().agentModel;
-  return typeof v === 'string' && MODEL_HOP_LE.has(v) ? (v as ModelAgent) : 'sonnet-5';
+  /* 18/10/2026: mặc định CuongMini Solid. Mã cũ (`sonnet-5`…) máy chủ tự đổi về Solid. */
+  return typeof v === 'string' && MODEL_HOP_LE.has(v) ? (v as ModelAgent) : 'cm-solid';
 }
 
 /** Thư mục MẶC ĐỊNH cho tab mới — thư mục người dùng chọn gần nhất. */
@@ -617,6 +620,8 @@ export function registerAgentHandlers(): void {
     const kq = await goiCompact({
       origin: API_ORIGIN, token: phien.sessionToken, hoiThoai: hoiThoaiCua(cuocId),
       ...(dan ? { ghiChu: dan.slice(0, 2000) } : {}),
+      model: modelHienTai(),
+      ...(veAnthropic() ? { congAnthropicVe: veAnthropic()! } : {}),
     });
     if (!kq.ok) return kq;
     if (!('tomTat' in kq)) return { ok: true as const, soTinDaGop: 0 };
@@ -848,24 +853,27 @@ export function registerAgentHandlers(): void {
    * Chạy được cả trong lõi ngoài Electron (`packages/cuongmini-core`): chỉ dùng
    * `fetch`, `readStoredSession` và `store`, không API Electron nào.
    */
-  handle('agent:moCongAnthropic', async ({ matKhau }) => {
+  /* 18/10/2026: gửi kèm BÓ vé đang giữ (`ve`) + model vừa bấm — máy chủ thử cả khoá
+     chung lẫn khoá Invisible, trả BÓ vé mới (vé sống 48 giờ). */
+  handle('agent:moCongAnthropic', async ({ matKhau, model }) => {
     const phien = readStoredSession();
     if (!phien?.sessionToken) throw new Error('Chưa đăng nhập.');
     const r = await fetch(`${API_ORIGIN}/api/v1/agent/cong-anthropic/mo-khoa`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${phien.sessionToken}` },
-      body: JSON.stringify({ matKhau }),
+      body: JSON.stringify({ matKhau, ...(veAnthropic() ? { ve: veAnthropic() } : {}), ...(model ? { model } : {}) }),
       signal: AbortSignal.timeout(20_000),
     });
     const j = await r.json().catch(() => ({})) as {
-      data?: { ve?: string; hetHan?: number }; message?: string; code?: string; error?: { message?: string };
+      data?: { ve?: string; hetHan?: number | string }; message?: string; code?: string; error?: { message?: string };
     };
     if (!r.ok || !j.data?.ve) {
-      if (r.status === 404) throw new Error('Máy chủ chưa có cổng Claude chính hãng (bản máy chủ cũ).');
+      if (r.status === 404) throw new Error('Máy chủ chưa hỗ trợ khoá CuongMini (bản máy chủ cũ). / Server too old for CuongMini keys.');
       throw new Error(j.error?.message ?? j.message ?? `Máy chủ trả HTTP ${r.status}.`);
     }
     setSetting('agentAnthropicVe', j.data.ve);
-    return { ten: 'Claude chính hãng', hetHan: typeof j.data.hetHan === 'number' ? j.data.hetHan : null };
+    const het = typeof j.data.hetHan === 'number' ? j.data.hetHan : typeof j.data.hetHan === 'string' ? Date.parse(j.data.hetHan) : NaN;
+    return { ten: 'CuongMini', hetHan: Number.isFinite(het) ? het : null };
   });
 
   handle('agent:congAnthropic', async (): Promise<AgentCongAnthropic | null> => {

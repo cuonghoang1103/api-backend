@@ -175,7 +175,7 @@ export function trangThaiDau(): TrangThaiChat {
 }
 
 /** Mã lỗi thật ra là THÔNG BÁO (đổi cổng, tự compact…) — không kết lượt. */
-export const LOI_THONG_BAO = new Set(['DOI_CONG', 'KHOI_PHUC', 'LAM_TIEP', 'COMPACT', 'DOI_CHE_DO', 'TU_GO_ANH', 'CONG_CHINH_HONG_FREE', 'RAMBO_SONG_LAI']);
+export const LOI_THONG_BAO = new Set(['DOI_CONG', 'KHOI_PHUC', 'LAM_TIEP', 'COMPACT', 'DOI_CHE_DO', 'TU_GO_ANH', 'CONG_CHINH_HONG_FREE', 'RAMBO_SONG_LAI', 'DOI_CONG_TU_DONG']);
 /** Lỗi cổng Claude chính hãng giao diện phải xử lý thêm (hỏi mật khẩu / mời modelapi). */
 export const LOI_CONG_ANTHROPIC = new Set(['CONG_ANTHROPIC_KHOA', 'CONG_ANTHROPIC_HET_HAN_MUC', 'CONG_ANTHROPIC_HET_KEY']);
 export const LOI_HET_PHIEN = new Set(['401', 'UNAUTHORIZED', 'NO_SESSION']);
@@ -541,10 +541,17 @@ export class KhoChat {
               this.them({
                 loai: 'thongBao', muc: 'info',
                 text: S.daMoiCong
-                  ? L('↳ Gõ /gateway để chọn cổng mạnh hơn (Claude chính hãng / modelapi).', '↳ Type /gateway to pick a stronger gateway (official Claude / modelapi).')
-                  : L('↳ Lượt này vẫn chạy tiếp. Xong lượt, CuongMini sẽ mời bạn chọn cổng mạnh hơn (Claude chính hãng / modelapi) — hoặc gõ /gateway bất cứ lúc nào.', '↳ This turn keeps running. When it finishes you can pick a stronger gateway (official Claude / modelapi) — or type /gateway any time.'),
+                  ? L('↳ Gõ /gateway để chọn cổng mạnh hơn (CuongMini Code Max / CuongMini Core).', '↳ Type /gateway to pick a stronger gateway (CuongMini Code Max / CuongMini Core).')
+                  : L('↳ Lượt này vẫn chạy tiếp. Xong lượt, CuongMini sẽ mời bạn chọn cổng mạnh hơn (CuongMini Code Max / CuongMini Core) — hoặc gõ /gateway bất cứ lúc nào.', '↳ This turn keeps running. When it finishes you can pick a stronger gateway (CuongMini Code Max / CuongMini Core) — or type /gateway any time.'),
               });
             }
+            break;
+          }
+          if (ma === 'DOI_CONG_TU_DONG') {
+            /* 18/10/2026: cổng hỏng ⇒ máy chủ đã tự sang model free tương đương — một dòng mờ, không lặp. */
+            const chu = L(thongDiep, String(e.thongDiepEn ?? thongDiep));
+            const cuoi = [...S.bang].reverse().find((x) => x.loai === 'thongBao');
+            if (!(cuoi && cuoi.loai === 'thongBao' && cuoi.text === chu)) this.them({ loai: 'thongBao', text: chu, muc: 'info' });
             break;
           }
           if (ma === 'RAMBO_SONG_LAI') {

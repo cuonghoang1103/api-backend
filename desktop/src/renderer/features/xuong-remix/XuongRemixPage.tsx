@@ -902,7 +902,7 @@ export function XuongRemixPage() {
           {/* ── AI kèm cặp ──────────────────────────────── */}
           {pt && (
             <div className="ct-xr-chinh">
-              <span className="ct-xr-nhan">{dich('AI kèm cặp')}</span>
+              <span className="ct-xr-nhan">{dich('CuongMini kèm cặp')}</span>
 
               {aiSanSang === false ? (
                 <p className="ct-muted ct-xr-nhac">
@@ -911,7 +911,7 @@ export function XuongRemixPage() {
               ) : (
                 <>
                   <p className="ct-muted ct-xr-nhac">
-                    {dich('AI đọc ĐÚNG bảng số đo ở trên — nó không nghe được bài của bạn. Nên nó giải thích số liệu và chỉ việc cần làm, chứ không nhận xét về giai điệu.')}
+                    {dich('CuongMini đọc ĐÚNG bảng số đo ở trên — nó không nghe được bài của bạn. Nên nó giải thích số liệu và chỉ việc cần làm, chứ không nhận xét về giai điệu.')}
                   </p>
 
                   <div className="ct-xr-dieu-khien">
@@ -955,7 +955,7 @@ export function XuongRemixPage() {
                         <p className="ct-xr-ngo">
                           ⚠️ {dich('Những con số này KHÔNG có trong bảng đo:')}{' '}
                           <b>{traLoiAi.soLa.join(', ')}</b>.{' '}
-                          {dich('AI có thể đã tự nghĩ ra — đối chiếu lại trước khi làm theo.')}
+                          {dich('CuongMini có thể đã tự nghĩ ra — đối chiếu lại trước khi làm theo.')}
                         </p>
                       )}
 

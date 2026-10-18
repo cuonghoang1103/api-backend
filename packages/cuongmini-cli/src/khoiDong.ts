@@ -50,7 +50,7 @@ export async function khoiDongPhien(nguoi: NguoiDung, co: CoDong, thuMuc: string
     if (!m) canhBao.push(L(`Không rõ model "${model}" — có: ${ds.map((x) => x.id).join(', ')}. Giữ model đang chọn.`, `Unknown model "${model}" — available: ${ds.map((x) => x.id).join(', ')}. Keeping the current one.`));
     else if (!m.dungDuoc) canhBao.push(L(`${m.ten} chưa mở trên máy chủ — giữ model đang chọn.`, `${m.ten} is not enabled on the server — keeping the current model.`));
     else {
-      if (m.canMoKhoa) canhBao.push(L(`🔒 ${m.ten} cần mật khẩu cổng Claude chính hãng — CuongMini sẽ hỏi ở câu đầu tiên (hoặc chọn trong /model).`, `🔒 ${m.ten} needs the official Claude gateway password — CuongMini will ask on your first message (or pick it in /model).`));
+      if (m.canMoKhoa) canhBao.push(L(`🔒 ${m.ten} cần khoá — CuongMini sẽ hỏi ở câu đầu tiên (hoặc chọn trong /model).`, `🔒 ${m.ten} needs a key — CuongMini will ask on your first message (or pick it in /model).`));
       await kn.goi('agent:datModel', { model: m.id }).catch((e: Error) => canhBao.push(L(`Không đổi được model: ${e.message}`, `Could not switch model: ${e.message}`)));
       S.info = await kn.goi<InfoLoi>('agent:getInfo').catch(() => S.info);
     }

@@ -314,7 +314,7 @@ function TheChua({ q, i, L, t, exam, tt, pe, luu, onLuu, onGhiChu }: {
         <div className="ctx-pe-diem">
           <p className="ctx-mo">
             {pe?.ungraded
-              ? t('AI không chấm được câu này lúc bạn nộp nên câu này KHÔNG bị tính vào điểm (không trừ điểm). Thi lại để được chấm.', 'AI could not grade this question when you submitted, so it was left OUT of the score (no penalty). Retake to get it graded.')
+              ? t('CuongMini không chấm được câu này lúc bạn nộp nên câu này KHÔNG bị tính vào điểm (không trừ điểm). Thi lại để được chấm.', 'CuongMini could not grade this question when you submitted, so it was left OUT of the score (no penalty). Retake to get it graded.')
               : t('Chưa có bài chấm cho câu này.', 'No grade for this question.')}
           </p>
           {myCode && <pre className="exam-terminal">{myCode}</pre>}

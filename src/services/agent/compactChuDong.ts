@@ -9,14 +9,14 @@
  * app thay phần cũ bằng bản ghi nhớ đó trong hội thoại GỬI LÊN (bản đầy đủ vẫn
  * nằm trên màn hình để người dùng cuộn đọc).
  *
- * Dùng LẠI `ghiNhoLuotDaBo` — cùng prompt, cùng model rẻ, cùng đệm theo băm —
+ * Dùng LẠI `ghiNhoLuotDaBo` — cùng prompt, cùng model CỦA CUỘC (18/10/2026), cùng đệm theo băm —
  * nên lượt sau mà máy chủ tự cắt đúng phần đó thì trúng đệm, không gọi lại.
  *
  * ⛔ Đơn vị là LƯỢT (một `user` + mọi thứ theo sau), giống `catCu.ts`: cắt lẻ
  * một tin `tool` là làm mồ côi `tool_call` của nó và cổng từ chối cả lượt.
  */
 import type { AgentMessage } from './turn.js';
-import { ghiNhoLuotDaBo } from './tomTatLuotCu.js';
+import { ghiNhoLuotDaBo, type GoiTomTat } from './tomTatLuotCu.js';
 
 /** Mặc định giữ nguyên văn 2 lượt cuối — agent cần chúng để biết đang làm gì. */
 export const GIU_LUOT_MAC_DINH = 2;
@@ -111,7 +111,8 @@ export interface KetQuaCompact {
 
 export async function compactChuDong(
   messagesTho: unknown,
-  tuyChon: { giuLuot?: unknown; ghiChu?: unknown } = {},
+  /** `goi`: lời gọi bằng model của cuộc (18/10/2026, `goiTomTatBangModel`). Bỏ trống ⇒ model rẻ (cũ). */
+  tuyChon: { giuLuot?: unknown; ghiChu?: unknown; goi?: GoiTomTat & { maModel?: string } } = {},
 ): Promise<KetQuaCompact> {
   const messages = chuanHoaTin(messagesTho);
   const giu = typeof tuyChon.giuLuot === 'number' && Number.isFinite(tuyChon.giuLuot)
@@ -126,7 +127,7 @@ export async function compactChuDong(
     return { tomTat: null, deBai: null, soTinDaGop: 0, soLuotDaGop: 0, daGoiModel: false };
   }
   const soLuotDaGop = messages.slice(0, cat).filter((m) => m.role === 'user').length;
-  const g = await ghiNhoLuotDaBo(messages, messages.length - cat, ghiChu);
+  const g = await ghiNhoLuotDaBo(messages, messages.length - cat, ghiChu, tuyChon.goi);
   if (!g.tomTat) {
     throw new CompactLoi('Không tóm tắt được lúc này (cổng AI không trả lời). Thử lại sau ít phút.', 'COMPACT_HONG', 502);
   }

@@ -459,6 +459,34 @@ phát hành bắt buộc phải public.
 
 ## Cổng LLM — modelapi.vn (11/08/2026)
 
+> **⭐ 18/10/2026 — cổng & model CuongMini (thắng mọi dòng cũ bên dưới về AI Code / rambo).**
+> - **Rambo TẮT mặc định** ở MỌI nơi (`ramboBat()` trong `gateway.ts`; bật: công tắc trang admin `/admin/commerce?tab=anthropic`
+>   hoặc env `RAMBO_BAT=1`; `RAMBO_BAT=0` tắt cứng). Tắt ⇒ `congAgent()` = null ⇒ `agent_code`/`exam_tutor`/`lab_room` đi modelapi
+>   `gpt-6-sol`. Việc Claude mạnh (`course_tutor`, `codelab_coach`, `chat_vision`…) GIỮ nguyên model trên modelapi.
+> - **AI Code: bảng model DUY NHẤT `src/services/agent/bangModel.ts`** — tên CuongMini, thứ tự năng lực, khoá, model tương đương khi cổng
+>   hỏng. Mặc định **CuongMini Solid = `gpt-6-sol`** (cổng "CuongMini Core" = modelapi). Cổng Anthropic chính hãng hiện là
+>   **"CuongMini Code Max"**. Pro free: Solid · Nova (`gpt-6-luna`) · Shin (`gpt-5.6-sol`) · Eco (`gpt-5.6-luna`) · Sonic 5.5 · Heshin 5.5.
+>   Khoá chung: Optimum 5.5. Khoá riêng: Invisible 5.1. Vé 48 giờ. Trần USD theo model × người: `tranModel.ts`. Hợp đồng:
+>   `docs/cong-anthropic-chinh-hang.md` (mục đầu). App/CLI/extension KHÔNG được hiện tên model thật.
+> - **Việc GPT có `reasoning_effort` + sàn trần ra theo việc** (`suyLuanCho`/`tranRaCho` trong `gateway.ts`, đổi bằng
+>   `LLM_EFFORT_<VIỆC>=low|medium|high|xhigh|off`). Đo 18/10: interview_report high (ngang tiền, nhận xét cụ thể hơn); exam_tutor/
+>   lab_room giữ medium (high chậm 3× ⇒ vượt trần chờ chữ đầu 40 s / bị 524).
+> - **Đo vòng lặp agent THẬT 18/10/2026** (prompt + tool thật của máy chủ; việc: đọc 2 file + sửa 1 hàm + `node test.js`; tiền = chênh
+>   lệch sổ cổng `/api/usage/token` ÷ 500.000, có thể lẫn lưu lượng prod):
+>
+>   | Model | Lượt | Đúng | $/việc (sổ) | Token vào (đệm) | Thời gian |
+>   |---|---|---|---|---|---|
+>   | `gpt-6-sol` (mốc) | 2 | 2/2 | ~0,018 | 47,6k (37,4k) | 16 s |
+>   | `gpt-6-luna` | 2 | 2/2 | ~0,015 | 47,9k (37,4k) | 13–16 s |
+>   | `gpt-5.6-sol` | 2 | 2/2 | ~0,046 (≈2,5×) | 38–48k | 15–18 s |
+>   | `gpt-5.6-luna` | 2 | 2/2 | ~0,005 | 47,8k (46,4k) | 177–299 s |
+>   | `gpt-5.6-terra` | 3 | 1/3 (2 lần hết giờ) | ~0,008 | 47,9k | 446 s |
+>   | `gpt-6-astra` | 2 | 2/2 | 0,06–0,14 (3–7×) | 38–48k | 330–400 s |
+>
+>   ⇒ thêm Nova (6-luna) + Eco (5.6-luna, rẻ nhưng chậm) vào nhóm free; Shin ≈2,5× < ngưỡng 3× ⇒ giữ free (hỏi lại chủ app);
+>   astra / terra không thêm. `/api/pricing` (18/10): nhóm default ×0,6; 6-sol & 6-luna cùng hệ số.
+> - `LLM_MODEL_<VIỆC>` trên prod có thể ghi đè bảng — kiểm `GET /api/v1/ai/admin/llm-config`.
+
 **MỘT khoá, MỘT base URL, MỘT bảng model cho cả web.** Nguồn sự thật:
 `src/services/llm/gateway.ts`. Cổng chạy phần mềm **New API**, mở đồng thời
 `/v1/chat/completions` (tuyến OpenAI — ĐƯỜNG MẶC ĐỊNH) và `/v1/messages`
@@ -498,7 +526,7 @@ Kiểm bản đồ đang hiệu lực: `npx tsx --test src/services/llm/gateway.
 ⚠️ **Model `rb-*` cũ ĐÃ CHẾT.** Thấy `rb-` ở đâu là chỗ đó đang trỏ vào
 đường chết.
 
-### 🤖 AI Code chạy cổng RIÊNG (19/08/2026, mở rộng 20/09/2026)
+### 🤖 AI Code chạy cổng RIÊNG (19/08/2026, mở rộng 20/09/2026) — ⛔ TẮT từ 18/10/2026 (xem đầu mục)
 
 `agent_code` (AI Code app desktop) và `exam_tutor` (CuongMini — AI đồng hành
 khi thi, chỉ Pro) — nằm trong `RAMBO_PURPOSES` ở `gateway.ts` — đi qua cổng

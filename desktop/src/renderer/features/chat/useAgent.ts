@@ -12,7 +12,7 @@
  * Notes tra cứu rồi quay lại vẫn thấy kết quả), nhưng nghĩa là nút Dừng phải
  * thật sự gọi `cancel()` chứ không chỉ ẩn giao diện đi.
  */
-import { dich } from '../../i18n';
+import { dich, ngonNguHienTai } from '../../i18n';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   AgentCongNangCap, AgentDiff,
@@ -96,7 +96,7 @@ export type MucHienThi =
   | { kieu: 'loi'; text: string; ma?: string; coKeyGiaHan?: boolean; cacCong?: AgentCongNangCap[]; daBat?: boolean };
 
 /** Thông báo đổi cổng giữa lượt — lượt VẪN đang chạy, đừng tắt chỉ báo "đang nghĩ". */
-const MA_DOI_CONG = new Set(['DOI_CONG', 'CONG_CHINH_HONG_FREE']);
+const MA_DOI_CONG = new Set(['DOI_CONG', 'CONG_CHINH_HONG_FREE', 'DOI_CONG_TU_DONG']);
 
 /**
  * Gộp một mẩu chữ vào bảng ghi.
@@ -437,6 +437,15 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           /* `DOI_CONG` chỉ là dòng báo giữa lượt (đổi rambo ↔ dự phòng) — lượt
              vẫn đang chạy, đừng tắt chỉ báo "đang nghĩ". */
           if (!MA_DOI_CONG.has(e.ma ?? '')) datDangNghi(false);
+          /* Dòng tự chuyển cổng (18/10/2026): mỗi bước có thể báo lại ⇒ chỉ vẽ khi khác dòng cùng loại ngay trước. */
+          if (e.ma === 'DOI_CONG_TU_DONG') {
+            const chu = ngonNguHienTai() === 'en' && e.thongDiepEn ? e.thongDiepEn : e.thongDiep;
+            datMuc((truoc) => {
+              const cuoi = [...truoc].reverse().find((x) => x.kieu === 'loi' && x.ma === 'DOI_CONG_TU_DONG');
+              return cuoi && cuoi.kieu === 'loi' && cuoi.text === chu ? truoc : [...truoc, { kieu: 'loi', text: chu, ma: 'DOI_CONG_TU_DONG' }];
+            });
+            break;
+          }
           datMuc((truoc) => [...truoc, {
             kieu: 'loi', text: e.thongDiep,
             ...(e.ma ? { ma: e.ma } : {}),

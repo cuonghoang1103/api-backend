@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { API_ORIGIN, lamMoi, LoiDangNhap } from '../../cuongmini-core/src/dangNhap';
 import { timTrinhDuyet } from '../../cuongmini-core/src/timTrinhDuyet';
 import { L } from './i18n';
-import { capMau } from './mau';
+import { capMau, doCapMau } from './mau';
 import { laAscii } from './kyTu';
 import { damBaoThuMuc, docPhien, tenHienThi, thuMucGoc } from './phien';
 
@@ -90,9 +90,17 @@ export async function kiemMay(phienBan: string): Promise<MucKiem[]> {
 
   const sh = process.platform === 'win32' ? (coLenh('pwsh') ? 'pwsh' : 'powershell.exe') : process.env.SHELL ?? '/bin/sh';
   ds.push({ ten: L('Shell cho lệnh !', 'Shell for !commands'), muc: 'ok', chiTiet: sh });
-  const mauChu = [L('không màu', 'no color'), L('16 màu', '16 colors'), L('256 màu', '256 colors'), 'truecolor'][capMau()];
+  /*
+   * Đầu ra KHÔNG phải terminal (chạy qua ống `| cat`, hoặc agent gọi `cuongmini doctor` bằng tool) ⇒ màu tắt cho
+   * RIÊNG lần chạy này, còn terminal thật vẫn có màu. Trước 18/10/2026 dòng này báo cảnh báo "không màu" trên
+   * iTerm2 ⇒ người dùng tưởng terminal hỏng. Nay báo mức màu của TERMINAL (tính như thể là TTY) và nói rõ lý do.
+   */
+  const laTTY = Boolean(process.stdout.isTTY);
+  const tenMau = [L('không màu', 'no color'), L('16 màu', '16 colors'), L('256 màu', '256 colors'), 'truecolor'];
+  const mauChu = laTTY ? tenMau[capMau()]
+    : `${tenMau[doCapMau(process.env, true)]} (${L('lần chạy này đầu ra đi qua ống/agent nên tắt màu — mở trực tiếp trong terminal vẫn có màu', 'this run is piped/run by an agent so color is off — color works when run directly in the terminal')})`;
   ds.push({
-    ten: 'Terminal', muc: process.stdout.isTTY ? 'ok' : 'canh',
+    ten: 'Terminal', muc: 'ok',
     chiTiet: `${process.env.TERM_PROGRAM ?? process.env.TERM ?? (process.env.WT_SESSION ? 'Windows Terminal' : L('không rõ', 'unknown'))} · ${mauChu} · ${laAscii() ? L('ký tự ASCII', 'ASCII characters') : 'Unicode'}`,
   });
   if (existsSync(path.join(thuMucGoc(), 'node'))) ds.push({ ten: L('Node riêng', 'Bundled Node'), muc: 'ok', chiTiet: path.join(thuMucGoc(), 'node') });

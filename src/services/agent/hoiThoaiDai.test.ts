@@ -33,11 +33,12 @@ test('1001 tin nhắn KHÔNG ném — cắt bớt rồi đi tiếp', () => {
 });
 
 test('giữ phần MỚI NHẤT, bỏ phần cũ', () => {
-  const ds = Array.from({ length: 400 }, (_, i) => luot(i)).flat();
+  /* 18/10/2026: trần tuyệt đối nâng (MAX_MESSAGES 200 → 1.000 ⇒ 5.000 tin) — cần hội thoại dài hơn để chạm. */
+  const ds = Array.from({ length: 2000 }, (_, i) => luot(i)).flat();
   const ra = sanitizeIncoming(ds);
   const chu = JSON.stringify(ra);
   // Lượt cuối phải còn; lượt đầu thì không.
-  assert.ok(chu.includes('câu hỏi 399'), 'mất lượt mới nhất — agent quên việc đang làm');
+  assert.ok(chu.includes('câu hỏi 1999'), 'mất lượt mới nhất — agent quên việc đang làm');
   assert.ok(!chu.includes('câu hỏi 0"'), 'vẫn giữ lượt cũ nhất, tức chưa cắt gì');
 });
 
@@ -46,7 +47,7 @@ test('KHÔNG để lại tin nhắn tool MỒ CÔI ở đầu', () => {
      `tool_call_id`. Cắt trúng giữa một lượt là để lại một `tool` không có ai
      gọi nó, và cổng từ chối CẢ LƯỢT bằng một lỗi không nói rõ thiếu ở đâu —
      tức người dùng đổi một lỗi rõ ràng lấy một lỗi khó hiểu hơn. */
-  const ds = Array.from({ length: 400 }, (_, i) => luot(i)).flat();
+  const ds = Array.from({ length: 2000 }, (_, i) => luot(i)).flat();
   const ra = sanitizeIncoming(ds);
   assert.equal(ra[0]?.role, 'user', `bắt đầu bằng "${ra[0]?.role}" — phải là "user"`);
 });

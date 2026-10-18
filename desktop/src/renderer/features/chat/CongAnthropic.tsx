@@ -22,8 +22,12 @@ import type { AgentCongNangCap } from '../../../shared/ipc';
 import { useDich } from '../../i18n';
 import { MoCongDuPhong } from './CongDuPhong';
 
-/** Ô mật khẩu cổng Claude chính hãng. `daBat === false` ⇒ chỉ báo "Quản trị chưa bật". */
-export function MoCongAnthropic({ onXong, daBat }: { onXong?: () => void; daBat?: boolean }) {
+/**
+ * Ô nhập KHOÁ model CuongMini (18/10/2026: khoá chung hoặc khoá riêng Invisible —
+ * máy chủ tự nhận khoá nào). `model` = mã model vừa bấm (máy chủ báo sai nếu khoá
+ * không mở được đúng model đó). `daBat === false` ⇒ chỉ báo "Quản trị chưa bật".
+ */
+export function MoCongAnthropic({ onXong, daBat, model }: { onXong?: () => void; daBat?: boolean; model?: string }) {
   const { dich } = useDich();
   const [matKhau, datMatKhau] = useState('');
   const [dangGui, datDangGui] = useState(false);
@@ -31,12 +35,12 @@ export function MoCongAnthropic({ onXong, daBat }: { onXong?: () => void; daBat?
   const [xong, datXong] = useState(false);
 
   if (daBat === false) {
-    return <p className="ct-duphong-chu">{dich('Quản trị chưa bật cổng Claude chính hãng — hãy thử lại sau.')}</p>;
+    return <p className="ct-duphong-chu">{dich('Quản trị chưa đặt khoá cho model này — hãy thử lại sau.')}</p>;
   }
   if (xong) {
     return (
       <p className="ct-duphong-chu" data-xong="true">
-        <Check size={12} aria-hidden /> {dich('Đã mở khoá cổng Claude chính hãng trên máy này (vé 30 ngày).')}
+        <Check size={12} aria-hidden /> {dich('Đã mở khoá trên máy này (vé 48 giờ).')}
       </p>
     );
   }
@@ -46,7 +50,7 @@ export function MoCongAnthropic({ onXong, daBat }: { onXong?: () => void; daBat?
     datDangGui(true);
     datLoi(null);
     try {
-      await window.cuongthai?.agent.moCongAnthropic(matKhau);
+      await window.cuongthai?.agent.moCongAnthropic(matKhau, model);
       datMatKhau('');
       datXong(true);
       onXong?.();
@@ -66,7 +70,7 @@ export function MoCongAnthropic({ onXong, daBat }: { onXong?: () => void; daBat?
         <input
           type="password"
           className="ct-duphong-o"
-          placeholder={dich('Mật khẩu cổng Claude chính hãng')}
+          placeholder={dich('Khoá CuongMini')}
           autoComplete="off"
           value={matKhau}
           autoFocus

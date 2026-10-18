@@ -64,7 +64,7 @@ export interface BoiCanhLenh {
   doiModel: (id: string) => Promise<void>;
   doiMuc: (id: string) => Promise<void>;
   doiCheDo: (id: string) => Promise<void>;
-  dsModel: () => Array<{ id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean }>;
+  dsModel: () => Array<{ id: string; ten: string; mo: string; dungDuoc: boolean; dat?: boolean; canMoKhoa?: boolean }>;
   dsMuc: () => Array<{ id: string; ten: string; mo: string }>;
   datNhap: (t: string) => void;
   moMenuModel: () => void;
@@ -282,8 +282,10 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       const q = thamSo.trim();
       if (!q) { b.moMenuModel(); return; }
       const m = timTheoChu(q, b.dsModel());
-      if (!m) { b.traLoi(`Không rõ model "${q}". Có:\n\n${b.dsModel().map((x) => `- \`${x.id}\` — ${x.ten}${x.dungDuoc ? '' : ' (chưa mở)'}`).join('\n')}`); return; }
-      if (!m.dungDuoc) { b.traLoi(`**${m.ten}** chưa dùng được — máy chủ chưa mở nhà cung cấp này.`); return; }
+      /* 18/10/2026: chỉ in TÊN CuongMini. */
+      if (!m) { b.traLoi(`${Lv(`Không rõ model "${q}". Có:`, `Unknown model "${q}". Available:`)}\n\n${b.dsModel().map((x) => `- ${x.ten}${x.dungDuoc ? '' : Lv(' (chưa mở)', ' (not enabled)')}`).join('\n')}`); return; }
+      if (!m.dungDuoc) { b.traLoi(Lv(`**${m.ten}** tạm thời chưa dùng được.`, `**${m.ten}** is temporarily unavailable.`)); return; }
+      if (m.canMoKhoa) { b.moMenuModel(); b.traLoi(Lv(`**${m.ten}** cần khoá — bấm vào nó trong menu vừa mở để nhập.`, `**${m.ten}** needs a key — click it in the menu to enter one.`)); return; }
       if (m.dat) { b.moMenuModel(); b.traLoi(`**${m.ten}** tốn nhiều hơn hẳn — xác nhận trong menu vừa mở.`); return; }
       await b.doiModel(m.id);
       b.traLoi(`Đã đổi model sang **${m.ten}** — ${m.mo}.`);
@@ -326,7 +328,7 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
     }
 
     case '/status': {
-      const nayModel = b.dsModel().find((x) => x.id === (S.ws?.model ?? 'sonnet-5'));
+      const nayModel = b.dsModel().find((x) => x.id === (S.ws?.model ?? 'cm-solid'));
       const nayMuc = b.dsMuc().find((x) => x.id === (S.ws?.mucNoLuc ?? 'vua'));
       b.traLoi(moTaTrangThai({
         phienBan: `${S.phienBan} · ${S.cheDoKetNoi === 'docLap' ? 'chạy ngay trong VS Code' : 'chạy qua app CuongThai'}`,

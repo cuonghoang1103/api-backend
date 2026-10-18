@@ -78,7 +78,7 @@ export function Settings() {
     { ma: 'giao-dien', ten: dich('Giao diện'), moTa: dich('Chủ đề, ngôn ngữ, thanh bên, cỡ chữ'), icon: <Palette size={17} aria-hidden />, mau: '#8b9cff' },
     { ma: 'thong-bao', ten: dich('Thông báo & âm thanh'), moTa: dich('Tiếng chuông, lời nhắc, thanh phát nhạc'), icon: <Bell size={17} aria-hidden />, mau: '#e3a44f' },
     { ma: 'odin', ten: dich('Robot Odin'), moTa: dich('Hiện/ẩn robot, giọng đọc, tốc độ'), icon: <Bot size={17} aria-hidden />, mau: '#4fb6a8' },
-    { ma: 'ai', ten: 'AI', moTa: dich('Mức dùng, AI chạy trên máy'), icon: <BrainCircuit size={17} aria-hidden />, mau: '#d17bb5' },
+    { ma: 'ai', ten: 'CuongMini', moTa: dich('Mức dùng, CuongMini chạy trên máy'), icon: <BrainCircuit size={17} aria-hidden />, mau: '#d17bb5' },
     { ma: 'du-lieu', ten: dich('Dữ liệu & đồng bộ'), moTa: dich('Hàng đợi đồng bộ, dung lượng, cache'), icon: <Database size={17} aria-hidden />, mau: '#5aa0e0' },
     { ma: 'phim', ten: dich('Phím tắt'), moTa: dich('Mọi tổ hợp phím của app'), icon: <Keyboard size={17} aria-hidden />, mau: '#93b56f' },
     { ma: 'tai-khoan', ten: dich('Tài khoản'), moTa: dich('Người đang đăng nhập, đăng xuất'), icon: <UserRound size={17} aria-hidden />, mau: '#c98a6b' },
@@ -102,8 +102,8 @@ export function Settings() {
     { nhom: 'thong-bao', neo: 'thanh-phat', ten: dich('Thanh phát nhạc thu gọn'), moTa: dich('Thanh phát ở đáy app chỉ còn một dải mỏng'), tuKhoa: 'nhac music player thanh phat' },
     { nhom: 'odin', neo: 'robot', ten: dich('Hiện robot Odin'), moTa: dich('Trợ lý ở góc màn hình'), tuKhoa: 'robot odin tro ly an hien' },
     { nhom: 'odin', neo: 'giong-odin', ten: dich('Giọng đọc của Odin'), moTa: dich('Đọc thành tiếng, ngôn ngữ, tốc độ, giọng'), tuKhoa: 'giong noi doc tts voice toc do ngat loi' },
-    { nhom: 'ai', neo: 'muc-dung', ten: dich('Mức dùng AI'), moTa: dich('Ví AI Code và AI Chat của bạn'), tuKhoa: 'han muc usage ngan sach quota tien' },
-    { nhom: 'ai', neo: 'ai-ngoai-tuyen', ten: dich('AI ngoại tuyến'), moTa: dich('Tải AI về chạy trên máy, dùng khi mất mạng'), tuKhoa: 'offline local model mat mang tren may' },
+    { nhom: 'ai', neo: 'muc-dung', ten: dich('Mức dùng CuongMini'), moTa: dich('Ví AI Code và CuongMini Chat của bạn'), tuKhoa: 'han muc usage ngan sach quota tien' },
+    { nhom: 'ai', neo: 'ai-ngoai-tuyen', ten: dich('CuongMini ngoại tuyến'), moTa: dich('Tải CuongMini về chạy trên máy, dùng khi mất mạng'), tuKhoa: 'offline local model mat mang tren may' },
     { nhom: 'du-lieu', neo: 'dong-bo', ten: dich('Hàng đợi đồng bộ'), moTa: dich('Thay đổi chưa gửi lên máy chủ'), tuKhoa: 'sync dong bo xung dot conflict' },
     { nhom: 'du-lieu', neo: 'dung-luong', ten: dich('Dung lượng & cache'), moTa: dich('Xem và xoá cache ảnh, tệp tĩnh'), tuKhoa: 'cache bo nho storage xoa' },
     { nhom: 'phim', neo: 'phim', ten: dich('Phím tắt'), moTa: dich('Mọi tổ hợp phím của app'), tuKhoa: 'shortcut keyboard ban phim to hop' },
@@ -239,10 +239,10 @@ export function Settings() {
             )}
             {nhom === 'ai' && (
               <>
-                <The id="muc-dung" sang={sang('muc-dung')} ten={dich('Mức dùng AI')} moTa={dich('Ví riêng của bạn cho AI Code và AI Chat — đã tiêu bao nhiêu, bao giờ hồi.')} boc>
+                <The id="muc-dung" sang={sang('muc-dung')} ten={dich('Mức dùng CuongMini')} moTa={dich('Ví riêng của bạn cho AI Code và CuongMini Chat — đã tiêu bao nhiêu, bao giờ hồi.')} boc>
                   <MucDung />
                 </The>
-                <The id="ai-ngoai-tuyen" sang={sang('ai-ngoai-tuyen')} ten={dich('AI ngoại tuyến')} moTa={dich('Tải AI về chạy thẳng trên máy — vẫn hỏi được khi mất mạng.')} boc>
+                <The id="ai-ngoai-tuyen" sang={sang('ai-ngoai-tuyen')} ten={dich('CuongMini ngoại tuyến')} moTa={dich('Tải CuongMini về chạy thẳng trên máy — vẫn hỏi được khi mất mạng.')} boc>
                   <AiNgoaiTuyen />
                 </The>
               </>
@@ -614,7 +614,7 @@ function ThePhimTat({ sang }: { sang?: string | undefined }) {
       ten: 'CT Work',
       ds: [
         ['⌘ K', dich('Bảng lệnh riêng của CT Work')],
-        ['⌘ J', dich('Hỏi AI về dự án đang mở')],
+        ['⌘ J', dich('Hỏi CuongMini về dự án đang mở')],
       ],
     },
   ];

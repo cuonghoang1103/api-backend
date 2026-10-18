@@ -21,12 +21,11 @@ function maBenMayChu(): string[] {
   return [...new Set(ma)];
 }
 
-/** Mã cổng Claude chính hãng (`cl-*`) — bảng riêng, `cauHinh.ts` (17/10/2026). */
+/** Mã bảng CuongMini (`cm-*`, 18/10/2026) — thứ máy chủ GỬI trong `info.models` (`bangModel.ts`). Bí danh cũ chỉ là đầu vào máy chủ nhận. */
 function maChinhHang(): string[] {
-  const src = readFileSync(join(goc, '../src/services/agent/anthropicChinhHang/cauHinh.ts'), 'utf8');
-  const ma = [...src.matchAll(/^\s*id: '(cl-[a-z0-9-]+)',$/gm)].map((m) => m[1]!);
-  if (/MA_FREE = '(cl-[a-z0-9-]+)'/.test(src)) ma.push(/MA_FREE = '(cl-[a-z0-9-]+)'/.exec(src)![1]!);
-  expect(ma.length, 'không đọc được mã cl-* nào — bảng chính hãng đã đổi hình dạng?').toBeGreaterThanOrEqual(4);
+  const src = readFileSync(join(goc, '../src/services/agent/bangModel.ts'), 'utf8');
+  const ma = [...src.matchAll(/^\s*id: '([a-z0-9-]+)', model:/gm)].map((m) => m[1]!);
+  expect(ma.length, 'không đọc được mã nào trong bangModel.ts — bảng đã đổi hình dạng?').toBeGreaterThanOrEqual(6);
   return [...new Set(ma)];
 }
 
@@ -44,7 +43,7 @@ describe('mã model AI Code', () => {
     expect(thieu, `app không nhận: ${thieu.join(', ')} ⇒ nút chọn model sẽ im lặng`).toEqual([]);
   });
 
-  it('app nhận MỌI mã của cổng Claude chính hãng', () => {
+  it('app nhận MỌI mã của bảng CuongMini', () => {
     const app = new Set(maAppNhan());
     const thieu = maChinhHang().filter((m) => !app.has(m));
     expect(thieu, `app không nhận: ${thieu.join(', ')} ⇒ chọn model chính hãng sẽ im lặng`).toEqual([]);

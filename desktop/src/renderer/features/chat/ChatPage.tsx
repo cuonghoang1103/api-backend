@@ -216,7 +216,7 @@ export function ChatPage() {
               muốn "nho nhỏ thôi, để không gian làm việc". Tiêu đề vẫn còn cho
               trình đọc màn hình; dòng mô tả chuyển thành chữ gợi ý khi rê chuột. */}
           <div className="ct-page-head-chu">
-            <h1 className="ct-an-chu">{dich('Trợ lý AI')}</h1>
+            <h1 className="ct-an-chu">{dich('Trợ lý CuongMini')}</h1>
             <RobotGoChu
               title={cheDo === 'chat'
                 ? 'Hỏi đáp thường ngày.'

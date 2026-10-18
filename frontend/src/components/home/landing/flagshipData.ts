@@ -214,8 +214,8 @@ export function getFlagships(vi: boolean): Flagship[] {
           icon: 'shield',
           title: vi ? 'An toàn & chi phí' : 'Safety & cost',
           items: vi
-            ? ['5 chế độ quyền: lập kế hoạch → hỏi trước → tự sửa', 'Chặn lệnh phá huỷ, cấm thư mục nhạy cảm', 'Ví dùng AI theo ngày, trần chi phí', 'Cổng dự phòng khi cổng chính sập']
-            : ['5 permission modes: plan → ask → auto-edit', 'Blocks destructive commands and secret dirs', 'Daily AI wallet with cost caps', 'A fallback gateway if the main one is down'],
+            ? ['5 chế độ quyền: lập kế hoạch → hỏi trước → tự sửa', 'Chặn lệnh phá huỷ, cấm thư mục nhạy cảm', 'Ví dùng AI theo ngày, trần chi phí', 'Cổng bận ⇒ tự chuyển model tương đương']
+            : ['5 permission modes: plan → ask → auto-edit', 'Blocks destructive commands and secret dirs', 'Daily AI wallet with cost caps', 'Busy gateway ⇒ automatic switch to an equivalent model'],
         },
       ],
       strengths: vi

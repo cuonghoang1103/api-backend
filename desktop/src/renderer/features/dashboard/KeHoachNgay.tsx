@@ -214,7 +214,7 @@ export function KeHoachNgay({ onDoiViec }: { onDoiViec?: () => void }) {
       datNhanXet(j.nhanXet
         ?? (j.lyDo === 'ai_unavailable'
           ? dich('Chưa cắm khoá AI nên chỉ có phần số liệu ở trên.')
-          : dich('AI chưa trả lời được, thử lại sau.')));
+          : dich('CuongMini chưa trả lời được, thử lại sau.')));
     } catch (e) {
       datNhanXet(e instanceof Error ? e.message : String(e));
     } finally { datDangXem(false); }
@@ -328,7 +328,7 @@ export function KeHoachNgay({ onDoiViec }: { onDoiViec?: () => void }) {
         <div className="ct-kh-ai">
           <button type="button" className="ct-kh-ai-nut" disabled={dangXem} onClick={() => void nhoAiXem()}>
             <Sparkles size={14} aria-hidden />
-            {dangXem ? dich('Đang xem…') : dich('Nhờ AI xem lại ngày này')}
+            {dangXem ? dich('Đang xem…') : dich('Nhờ CuongMini xem lại ngày này')}
           </button>
           {dongTG.length > 0 && (
             <ol className="ct-kh-dong" aria-label={dich('Mọi việc trong ngày theo giờ')}>

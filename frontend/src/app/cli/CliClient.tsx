@@ -321,7 +321,7 @@ const SO_SANH: [string, string, string][] = [
   ['Cài đặt', 'Tự cài Node, npm i -g, đặt biến môi trường, viết opencode.json', 'Một dòng lệnh — tự lo Node, tự thêm PATH'],
   ['Đăng nhập', 'Dán key tay, giữ key như mật khẩu', 'Tài khoản cuongthai.com (Google/GitHub/Apple/mật khẩu)'],
   ['Bộ máy AI', 'Agent chung của OpenCode, gọi qua cổng key', 'Đúng lõi AI Code của app: skill dự án, bộ nhớ bài học, MCP, agent phụ'],
-  ['Khi cổng chính bảo trì', 'Dừng', 'Có cổng dự phòng như app'],
+  ['Khi cổng chính bảo trì', 'Dừng', 'Tự chuyển cổng như app'],
   ['Hạn mức', 'Ví riêng của key', 'Chung một ví với app và extension'],
   ['Lệnh & quyền', 'Bộ lệnh của OpenCode', 'Cùng lệnh /, @ file, 5 chế độ quyền với app — giao diện tiếng Việt'],
 ];

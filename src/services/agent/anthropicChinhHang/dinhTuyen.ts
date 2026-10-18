@@ -1,12 +1,10 @@
 /**
- * ĐỊNH TUYẾN cổng Claude chính hãng: quyền, danh sách model cho app, lời mời
- * nâng cấp, và lời gọi VĂN BẢN đơn (CuongMini trong thi — `exam_tutor`).
+ * ĐỊNH TUYẾN cổng Claude chính hãng ("CuongMini Code Max"): quyền theo vé
+ * (khoá chung / khoá Invisible), danh sách model CuongMini cho app, và lời gọi
+ * VĂN BẢN đơn (CuongMini trong thi — `exam_tutor`, tóm tắt hội thoại AI Code).
  *
- * Thứ tự khi rambo hỏng (agent_code + exam_tutor):
- *   rambo ⇒ (người dùng đã chọn model cao + có vé/admin ⇒ model cao chính hãng)
- *         ⇒ CuongMini Free (ai dùng được AI Code/CuongMini đều được, tính trần free)
- *         ⇒ modelapi (vé dự phòng, như cũ)
- *         ⇒ báo `RAMBO_BAO_TRI`.
+ * 18/10/2026: rambo tắt mặc định ⇒ AI Code đi theo bảng `../bangModel.ts`;
+ * cổng hỏng thì `turn.ts` tự chuyển sang model free tương đương ở cổng kia.
  */
 import type { LlmEndpoint } from '../../llm/gateway.js';
 import { logger } from '../../../utils/logger.js';
@@ -17,7 +15,9 @@ import {
 import { coKeyKhaDung } from './khoKey.js';
 import { ghiDung, guiChinhHang, type NguCanhGoi } from './goi.js';
 import { dungThanChinhHang, thanAnToan, type ThanAnthropic } from './thanYeuCau.js';
-import { daBatMatKhauAnthropic, veAnthropicHopLe } from './ve.js';
+import { daBatMatKhau, docBoVe } from './ve.js';
+import { TEN_CONG, bangModel, hangSo, modelapiGoiDuoc, type LoaiKhoa, type MucModel } from '../bangModel.js';
+import { ramboBat } from '../../llm/gateway.js';
 
 export const NHAN_CONG_ANTHROPIC = 'cong-anthropic';
 
@@ -37,33 +37,86 @@ async function laAdminNguoi(userId: number): Promise<boolean> {
 
 export interface QuyenChinhHang {
   laAdmin: boolean;
-  /** Được dùng MODEL CAO (admin hoặc vé hợp lệ). */
+  /** KHOÁ CHUNG mở (admin hoặc vé `ca` còn sống) — tên cũ giữ để mã 17/10 chạy. */
   modelCao: boolean;
+  /** Khoá RIÊNG của Invisible mở (admin hoặc vé `ci`). */
+  invisible: boolean;
 }
 
 export async function quyenChinhHang(userId: number, ve: unknown): Promise<QuyenChinhHang> {
   const laAdmin = await laAdminNguoi(userId);
-  return { laAdmin, modelCao: laAdmin || (ve ? await veAnthropicHopLe(userId, ve) : false) };
+  if (laAdmin) return { laAdmin, modelCao: true, invisible: true };
+  const q = ve ? await docBoVe(userId, ve).catch(() => ({ chung: false, invisible: false })) : { chung: false, invisible: false };
+  return { laAdmin, modelCao: q.chung, invisible: q.invisible };
 }
 
-export interface ModelChinhHangChoApp extends ModelChinhHang {
-  cong: 'anthropic';
-  mienPhi: boolean;
-  /** Cần nhập mật khẩu cổng này trước khi dùng (người thường chưa có vé). */
+/** Quyền ⇒ model này có mở chưa. Free luôn mở (trần chi tiêu kiểm riêng). */
+export function daMoKhoa(m: MucModel, q: QuyenChinhHang): boolean {
+  if (m.khoa === 'free') return true;
+  return m.khoa === 'invisible' ? q.invisible : q.modelCao;
+}
+
+export interface ModelChoApp {
+  id: string;
+  ten: string;
+  mo: string;
+  moEn: string;
+  /** Tên CỔNG hiển thị (CuongMini …) — không bao giờ là tên nhà cung cấp. */
+  nhom: string;
+  /** Định danh nội bộ của cổng (app dùng để nhóm, KHÔNG hiện): `anthropic` | `modelapi` | `rambo`. */
+  cong: 'anthropic' | 'modelapi' | 'rambo';
+  khoa: LoaiKhoa;
+  /** Cần nhập khoá trước khi dùng (người thường chưa có vé loại này). App hiện tối hơn. */
   canMoKhoa: boolean;
+  /** `chung` | `invisible` — loại khoá cần nhập (app gửi kèm khi mở khoá). */
+  loaiKhoa?: 'chung' | 'invisible';
   dungDuoc: boolean;
+  mienPhi: boolean;
+  hang: HangChinhHang;
+  dat?: boolean;
 }
 
-/** Bốn mục thêm vào `info.models` của `/agent/tools`. */
-export async function dsModelChinhHang(q: QuyenChinhHang): Promise<ModelChinhHangChoApp[]> {
+/**
+ * Danh sách model cho app (`/agent/tools`), xếp năng lực cao → thấp.
+ * KHÔNG có tên model thật. Rambo bật ⇒ thêm bảng rambo cũ ở cuối (nhóm "CuongMini Classic").
+ */
+/** Một mục cho app — THUẦN (test được): không có trường `model` (tên thật) nào đi ra. */
+export function mucChoApp(m: MucModel, q: QuyenChinhHang, coKeyAnthropic: boolean): ModelChoApp {
+  return {
+    id: m.id,
+    ten: m.ten,
+    mo: m.mo,
+    moEn: m.moEn,
+    nhom: TEN_CONG[m.cong],
+    cong: m.cong,
+    khoa: m.khoa,
+    canMoKhoa: !daMoKhoa(m, q),
+    ...(m.khoa !== 'free' ? { loaiKhoa: m.khoa as 'chung' | 'invisible' } : {}),
+    dungDuoc: m.cong === 'anthropic' ? coKeyAnthropic : modelapiGoiDuoc(m),
+    mienPhi: m.khoa === 'free',
+    hang: hangSo(m),
+    ...(m.dat ? { dat: true } : {}),
+  };
+}
+
+export async function dsModelChoApp(q: QuyenChinhHang): Promise<ModelChoApp[]> {
   const coKey = await coKeyKhaDung();
-  return dsModelChinhHangGoc().map((m) => ({
-    ...m,
-    cong: 'anthropic' as const,
-    mienPhi: m.hang === 'free',
-    canMoKhoa: m.hang === 'cao' && !q.modelCao,
-    dungDuoc: coKey,
-  }));
+  const ra: ModelChoApp[] = bangModel().map((m) => mucChoApp(m, q, coKey));
+  if (ramboBat()) {
+    const { dsModelRambo } = await import('../models.js');
+    for (const m of dsModelRambo()) {
+      ra.push({
+        id: m.id, ten: m.ten, mo: m.mo, moEn: m.mo, nhom: 'CuongMini Classic', cong: 'rambo', khoa: 'free',
+        canMoKhoa: false, dungDuoc: m.dungDuoc, mienPhi: true, hang: 'free', ...(m.dat ? { dat: true } : {}),
+      });
+    }
+  }
+  return ra;
+}
+
+/** Tên cũ (17/10): chỉ phần cổng chính hãng. */
+export async function dsModelChinhHang(q: QuyenChinhHang): Promise<ModelChoApp[]> {
+  return (await dsModelChoApp(q)).filter((m) => m.cong === 'anthropic');
 }
 
 export interface CongNangCap {
@@ -75,29 +128,22 @@ export interface CongNangCap {
   models: Array<{ id: string; ten: string; mo: string; dat?: boolean; dungDuoc: boolean }>;
 }
 
-/** Dữ liệu cho lời mời nâng cấp khi đang chạy CuongMini Free. */
+/**
+ * Lời mời nâng cấp (17/10, khi rambo hỏng ⇒ Free). 18/10: rambo đã tắt nên
+ * thẻ này hầu như không còn xuất hiện; giữ hình dạng cho app cũ, nội dung lấy
+ * từ bảng chung (tên CuongMini, không còn "modelapi"/"Anthropic").
+ */
 export async function cacCongNangCap(userId: number, o: { veAnthropic?: unknown; veDuPhong?: unknown }): Promise<CongNangCap[]> {
   const q = await quyenChinhHang(userId, o.veAnthropic);
   const coKey = await coKeyKhaDung();
-  const dp = await import('../congDuPhong.js');
-  const coVeDp = q.laAdmin || (o.veDuPhong ? await dp.veDuPhongHopLe(userId, o.veDuPhong).catch(() => false) : false);
-  return [
-    {
-      cong: 'anthropic',
-      ten: 'Anthropic chính hãng',
-      daBat: q.laAdmin || (await daBatMatKhauAnthropic()),
-      canMatKhau: !q.modelCao,
-      models: dsModelChinhHangGoc().filter((m) => m.hang === 'cao')
-        .map((m) => ({ id: m.id, ten: m.ten, mo: m.mo, ...(m.dat ? { dat: true } : {}), dungDuoc: coKey })),
-    },
-    {
-      cong: 'modelapi',
-      ten: 'modelapi',
-      daBat: q.laAdmin || (await dp.daCoMatKhau().catch(() => false)),
-      canMatKhau: !coVeDp,
-      models: dp.MODEL_DU_PHONG.map((m) => ({ id: m.id, ten: m.ten, mo: m.mo, dungDuoc: Boolean(dp.congDuPhong(m.id)) })),
-    },
-  ];
+  return [{
+    cong: 'anthropic',
+    ten: TEN_CONG.anthropic,
+    daBat: q.laAdmin || (await daBatMatKhau('chung')),
+    canMatKhau: !q.modelCao,
+    models: bangModel().filter((m) => m.cong === 'anthropic' && m.khoa === 'chung')
+      .map((m) => ({ id: m.id, ten: m.ten, mo: m.mo, dungDuoc: coKey })),
+  }];
 }
 
 export const CAU_DOI_CONG_FREE = 'Cổng chính đang gặp sự cố — đang tự chuyển sang model CuongMini Free.';

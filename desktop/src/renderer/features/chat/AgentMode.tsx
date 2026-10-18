@@ -47,7 +47,7 @@ import { KhungWeb } from './KhungWeb';
 import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
 import { NutCuongMiniCli } from './NutCuongMiniCli';
 import { NutTrinhSoan } from './NutTrinhSoan';
-import { ID_FABLE, XinThemFable, moTaHanMuc, useHanMucFable } from './HanMucFable';
+import { ID_FABLE, XinThemFable } from './HanMucFable';
 import { HoiQuayVeCongChinh, MoCongDuPhong, moTaDuPhong, useCongDuPhong } from './CongDuPhong';
 import { MoCongAnthropic, MoiNangCapCong, OKhoa } from './CongAnthropic';
 import { NhapKeyGiaHan } from './NhapKeyGiaHan';
@@ -71,7 +71,7 @@ import {
 import { ChupManHinh, NutChupManHinh } from './ChupManHinh';
 import { DaiHenCho, DongTinPhien, TheHoi, ThePhu } from './Dot3';
 import { XinPhep, XinPhepGit, XinPhepLenh, XinPhepMcp, XinPhepNote } from './XinPhep';
-import { useDich } from '../../i18n';
+import { ngonNguHienTai, useDich } from '../../i18n';
 import { Chu } from '../../i18n/Chu';
 import { DaiNgoaiTuyen, NhanMay, useCheDoCode, useGiaoDienNgoaiTuyen, useMoCaiNgoaiTuyen } from './NgoaiTuyen';
 
@@ -960,7 +960,7 @@ export function AgentMode({
 
       case '/status': {
         const app = await window.cuongthai?.app.getInfo().catch(() => null);
-        const nayModel = dsModel.find((x) => x.id === (thuMuc?.model ?? 'sonnet-5'));
+        const nayModel = dsModel.find((x) => x.id === (thuMuc?.model ?? 'cm-solid'));
         const nayMuc = dsMuc.find((x) => x.id === (thuMuc?.mucNoLuc ?? 'vua'));
         const duPhong = trangThai.muc.some((m) => m.kieu === 'loi' && m.ma === 'DOI_CONG');
         traLoi(moTaTrangThai({
@@ -1216,7 +1216,7 @@ export function AgentMode({
   if (!info.configured) {
     return (
       <div className="ct-empty">
-        <h1>{dich('Máy chủ chưa bật AI')}</h1>
+        <h1>{dich('Máy chủ chưa bật CuongMini')}</h1>
         <p>{dich('Chế độ Lập trình cần khoá AI ở máy chủ. Hãy thử lại sau.')}</p>
         <div className="ct-actions">
           <button type="button" className="ct-btn ct-btn-ghost" onClick={napLai}>{dich('Thử lại')}</button>
@@ -1286,7 +1286,7 @@ export function AgentMode({
             {' · '}{dich('bạn bật bằng /offline — không gửi lên máy chủ')}
           </span>
           <button type="button" className="ct-ngoai-tuyen-nut" onClick={() => void doiEpCucBo(false)}>
-            <RotateCcw size={13} aria-hidden /> {dich('Quay về AI máy chủ')}
+            <RotateCcw size={13} aria-hidden /> {dich('Quay về CuongMini máy chủ')}
           </button>
         </div>
       )}
@@ -1339,13 +1339,13 @@ export function AgentMode({
           {dangNgoaiTuyen || epCucBo ? (
             <span className="ct-chip-cucbo" title={dich('AI Code đang chạy bằng model trên máy này')}>
               {epCucBo && online ? <PlugZap size={12} aria-hidden /> : <WifiOff size={12} aria-hidden />}
-              <span>{tenCucBo || dich('AI trên máy')}</span>
+              <span>{tenCucBo || dich('CuongMini trên máy')}</span>
             </span>
           ) : (
             <ChonModelVaMuc
               cuocId={cuocId}
               muc={thuMuc?.mucNoLuc ?? 'vua'}
-              model={thuMuc?.model ?? 'sonnet-5'}
+              model={thuMuc?.model ?? 'cm-solid'}
               khoa={trangThai.dangChay}
               info={info}
               onChonMuc={(m) => void doiMucNoLuc(m)}
@@ -1674,7 +1674,8 @@ export function AgentMode({
             return (
               <div key={i} className="ct-notice" data-tone={
                 m.ma === 'HOAN_TAC' || m.ma === 'RAMBO_BAO_TRI' || m.ma === 'CUC_BO_CHUA_CAI' || m.ma === 'CUC_BO_DA_TAT' || m.ma === 'MAX_STEPS' || m.ma === 'TOOL_HONG'
-                || m.ma === 'CONG_ANTHROPIC_KHOA' || m.ma === 'CONG_ANTHROPIC_HET_HAN_MUC' || m.ma === 'CONG_ANTHROPIC_HET_KEY' || m.ma === 'CONG_ANTHROPIC_HONG' ? 'warn'
+                || m.ma === 'CONG_ANTHROPIC_KHOA' || m.ma === 'CONG_ANTHROPIC_HET_HAN_MUC' || m.ma === 'CONG_ANTHROPIC_HET_KEY' || m.ma === 'CONG_ANTHROPIC_HONG' || m.ma === 'CUONGMINI_HET_TRAN' ? 'warn'
+                  : m.ma === 'DOI_CONG_TU_DONG' ? 'mo'
                   : m.ma === 'KHOI_PHUC' || m.ma === 'DOI_CONG' || m.ma === 'CONG_CHINH_HONG_FREE' || m.ma === 'RAMBO_SONG_LAI' || m.ma === 'LAM_TIEP' || m.ma === 'TU_GO_ANH' || m.ma === 'COMPACT' || m.ma === 'DOI_CHE_DO' || m.ma === 'DA_CHEN' ? 'info'
                   : m.ma === 'NGU_CANH_DAY' ? 'warn' : 'err'
               }>
@@ -1697,11 +1698,11 @@ export function AgentMode({
                   <MoCongAnthropic {...(m.daBat === false ? { daBat: false } : {})} onXong={napLai} />
                 )}
                 {/* Hết trần / hết key chính hãng ⇒ mời modelapi (vé dự phòng). */}
-                {(m.ma === 'CONG_ANTHROPIC_HET_HAN_MUC' || m.ma === 'CONG_ANTHROPIC_HET_KEY') && <MoCongDuPhong baoTri />}
+                {/* 18/10/2026: hết trần / cổng hỏng ⇒ máy chủ đã tự chuyển model free nếu được; không còn mời cổng dự phòng. */}
                 {/* Mất mạng mà chưa có / đang tắt AI ngoại tuyến ⇒ một nút tới đúng chỗ cài. */}
                 {(m.ma === 'CUC_BO_CHUA_CAI' || m.ma === 'CUC_BO_DA_TAT') && (
                   <button type="button" className="ct-ngoai-tuyen-nut" onClick={moCaiNgoaiTuyen}>
-                    {m.ma === 'CUC_BO_DA_TAT' ? dich('Mở cài đặt') : dich('Cài AI ngoại tuyến')}
+                    {m.ma === 'CUC_BO_DA_TAT' ? dich('Mở cài đặt') : dich('Cài CuongMini ngoại tuyến')}
                   </button>
                 )}
                 {/* Hết hạn mức token 5 giờ + admin đã bật key gia hạn ⇒ nhập key,
@@ -1965,7 +1966,7 @@ export function AgentMode({
             )}
             {lenhNut === 'caiNgoaiTuyen' && (
               <button type="button" className="ct-ngoai-tuyen-nut" onClick={moCaiNgoaiTuyen}>
-                {dich('Mở cài đặt AI ngoại tuyến')}
+                {dich('Mở cài đặt CuongMini ngoại tuyến')}
               </button>
             )}
           </div>
@@ -2404,10 +2405,9 @@ export function doiTenModel(ten: string): string {
     .replace(/^Claude Fable\b/, 'Cuong Fable');
 }
 
+/** Chỉ dùng khi máy chủ CŨ chưa khai `models` — máy chủ mới luôn gửi bảng CuongMini (18/10/2026). */
 const DS_MODEL: Array<{ id: ModelAgent; ten: string; mo: string }> = [
-  { id: 'sonnet-5', ten: 'Cuong Sonnet 5', mo: 'rẻ nhất — mặc định (1,76/việc)' },
-  { id: 'opus-4-8', ten: 'CuongMini Max 4.8', mo: 'mạnh nhất — đắt gấp 2,3 lần (4,07/việc)' },
-  { id: 'gpt-sol', ten: 'GPT 6 Sol', mo: 'nhà khác — ý kiến thứ hai' },
+  { id: 'cm-solid', ten: 'CuongMini Solid', mo: 'Mặc định' },
 ];
 
 const DS_MUC: Array<{ id: MucNoLuc; ten: string; mo: string }> = [
@@ -2437,10 +2437,12 @@ function dsMucCua(info: AgentInfo): Array<{ id: MucNoLuc; ten: string; mo: strin
 
 interface MucModel {
   id: ModelAgent; ten: string; mo: string; dungDuoc: boolean; dat: boolean;
-  /** `anthropic` = Claude chính hãng; còn lại = cổng chính (rambo, hoặc modelapi khi chưa cắm rambo). */
+  /** `anthropic` = cổng "CuongMini Code Max"; còn lại = cổng chính. CHỈ để nhóm — không hiện. */
   cong: 'chinh' | 'anthropic';
   canMoKhoa: boolean;
   mienPhi: boolean;
+  /** Tên CỔNG hiển thị (CuongMini …) do máy chủ khai. */
+  nhom?: string;
 }
 
 /** Danh sách model hiện có — dùng chung cho menu và `/model`. */
@@ -2448,9 +2450,10 @@ function dsModelCua(info: AgentInfo): MucModel[] {
   return info.models?.length
     ? info.models.map((m) => ({
         id: m.id as ModelAgent,
-        /* Model chính hãng là Claude THẬT — không đổi tên thành "Cuong …". */
-        ten: m.cong === 'anthropic' ? m.ten : doiTenModel(m.ten),
-        mo: m.mo, dungDuoc: m.dungDuoc,
+        /* 18/10/2026: máy chủ đã gửi TÊN CuongMini, xếp năng lực cao → thấp — hiện nguyên. */
+        ten: doiTenModel(m.ten),
+        mo: ngonNguHienTai() === 'en' && m.moEn ? m.moEn : m.mo, dungDuoc: m.dungDuoc,
+        ...(m.nhom ? { nhom: m.nhom } : {}),
         dat: m.dat === true || m.id === ID_FABLE,
         cong: m.cong === 'anthropic' ? 'anthropic' as const : 'chinh' as const,
         canMoKhoa: m.canMoKhoa === true,
@@ -2479,9 +2482,7 @@ function ChonModelVaMuc({
      model rồi đổi luôn mức nỗ lực ngay bên dưới. */
   const { mo, bat, boc } = useMoRieng('agent:model');
   useMoTuNgoai(cuocId, 'model', mo, bat);
-  /* Cuong Fable 5 tốn gấp 3,5 lần ⇒ bấm chọn phải XÁC NHẬN, và menu nói rõ
-     còn bao nhiêu hạn mức. Chỉ hỏi máy chủ khi menu đang mở. */
-  const { h: hanMucFable } = useHanMucFable(mo);
+  /* Model đắt ⇒ bấm chọn phải XÁC NHẬN. */
   const [hoiFable, datHoiFable] = useState<ModelAgent | null>(null);
   useEffect(() => { if (!mo) datHoiFable(null); }, [mo]);
   /* Cổng dự phòng (modelapi, cần mật khẩu) — một mục riêng dưới danh sách model. */
@@ -2523,86 +2524,69 @@ function ChonModelVaMuc({
 
       {mo && (
         <div className="ct-chonmm-bang" role="dialog" aria-label={dich('Model và mức nỗ lực')}>
-          {/* Nhóm theo CỔNG (17/10/2026): Cổng chính · Claude chính hãng · modelapi. */}
-          {([['chinh', dich('Cổng chính')], ['anthropic', dich('Claude chính hãng')]] as const).map(([cong, nhan]) => {
-            const nhom = dsModel.filter((m) => m.cong === cong);
-            if (!nhom.length) return null;
-            return (
-              <div key={cong}>
-                <p className="ct-chonmm-nhan">{cong === 'chinh' && !dsModel.some((m) => m.cong === 'anthropic') ? 'Model' : nhan}</p>
-                <ul className="ct-chonmm-ds">
-                  {nhom.map((m) => (
-                    <li key={m.id}>
-                      <button
-                        type="button"
-                        data-chon-model={m.id}
-                        data-chon={m.id === model}
-                        data-dat={m.dat}
-                        data-khoa={m.canMoKhoa}
-                        data-mien-phi={m.mienPhi}
-                        disabled={!m.dungDuoc}
-                        title={m.dungDuoc ? m.mo : 'Máy chủ chưa cắm khoá cho nhà cung cấp này'}
-                        onClick={() => {
-                          /* Model cao chưa mở khoá ⇒ hỏi mật khẩu cổng chính hãng ngay dưới nó. */
-                          if (m.canMoKhoa) { datHoiKhoa((h) => (h === m.id ? null : m.id)); return; }
-                          if (m.dat && m.id !== model) { datHoiFable(m.id); return; }
-                          onChonModel(m.id);
-                        }}
-                      >
-                        {m.id === model ? <Check size={12} aria-hidden /> : <span className="ct-chonmm-o" />}
-                        <span>
-                          <strong>
-                            {m.ten}
-                            {m.dat && m.cong === 'chinh' && <b className="ct-chonmm-dat">×3,5</b>}
-                            {m.dat && m.cong === 'anthropic' && <b className="ct-chonmm-dat">$$$</b>}
-                            {m.canMoKhoa && <OKhoa />}
-                          </strong>
-                          <em>{m.dungDuoc ? m.mo : 'chưa cắm khoá trên máy chủ'}</em>
-                          {m.canMoKhoa && <em>{dich('Cần mật khẩu cổng Claude chính hãng — bấm để mở khoá')}</em>}
-                          {m.dat && m.id === ID_FABLE && moTaHanMuc(hanMucFable) && <em className="ct-chonmm-hanmuc">{moTaHanMuc(hanMucFable)}</em>}
-                        </span>
+          {/* 18/10/2026: MỘT danh sách, xếp năng lực cao → thấp (thứ tự của máy chủ), CHỈ tên CuongMini.
+              Model cần khoá chưa có vé ⇒ tối hơn; bấm ⇒ ô nhập khoá, đúng thì sáng lên và chọn luôn. */}
+          <p className="ct-chonmm-nhan">Model</p>
+          <ul className="ct-chonmm-ds">
+            {dsModel.map((m) => (
+              <li key={m.id}>
+                <button
+                  type="button"
+                  data-chon-model={m.id}
+                  data-chon={m.id === model}
+                  data-dat={m.dat}
+                  data-khoa={m.canMoKhoa}
+                  data-mien-phi={m.mienPhi}
+                  disabled={!m.dungDuoc}
+                  style={m.canMoKhoa ? { opacity: 0.62 } : undefined}
+                  title={m.dungDuoc ? m.mo : dich('Model này tạm thời chưa dùng được')}
+                  onClick={() => {
+                    if (m.canMoKhoa) { datHoiKhoa((h) => (h === m.id ? null : m.id)); return; }
+                    if (m.dat && m.id !== model) { datHoiFable(m.id); return; }
+                    onChonModel(m.id);
+                  }}
+                >
+                  {m.id === model ? <Check size={12} aria-hidden /> : <span className="ct-chonmm-o" />}
+                  <span>
+                    <strong>
+                      {m.ten}
+                      {m.dat && <b className="ct-chonmm-dat">$$$</b>}
+                      {m.canMoKhoa && <OKhoa />}
+                    </strong>
+                    <em>{m.dungDuoc ? m.mo : dich('tạm thời chưa dùng được')}</em>
+                    {m.canMoKhoa && <em>{dich('Cần khoá — bấm để nhập')}</em>}
+                  </span>
+                </button>
+                {m.canMoKhoa && hoiKhoa === m.id && (
+                  <div className="ct-chonmm-xacnhan">
+                    <MoCongAnthropic
+                      model={m.id}
+                      onXong={() => {
+                        datHoiKhoa(null);
+                        /* Đã có vé ⇒ chọn luôn model người dùng vừa bấm. */
+                        if (m.dat && m.id !== model) datHoiFable(m.id);
+                        else onChonModel(m.id);
+                        onNapLaiInfo?.();
+                      }}
+                    />
+                  </div>
+                )}
+                {m.dat && hoiFable === m.id && !m.canMoKhoa && (
+                  <div className="ct-chonmm-xacnhan" role="alertdialog" aria-label={dich('Xác nhận dùng model đắt')}>
+                    <p>⚠ <strong>{m.ten}</strong> {dich('là model đắt nhất — chỉ dùng cho việc cực khó.')}</p>
+                    <div>
+                      <button type="button" className="ct-btn" onClick={() => { datHoiFable(null); onChonModel(m.id); }}>
+                        {dich('Vẫn dùng')}
                       </button>
-                      {m.canMoKhoa && hoiKhoa === m.id && (
-                        <div className="ct-chonmm-xacnhan">
-                          <MoCongAnthropic
-                            onXong={() => {
-                              datHoiKhoa(null);
-                              /* Đã có vé ⇒ chọn luôn model người dùng vừa bấm. */
-                              if (m.dat && m.id !== model) datHoiFable(m.id);
-                              else onChonModel(m.id);
-                              onNapLaiInfo?.();
-                            }}
-                          />
-                        </div>
-                      )}
-                      {m.dat && hoiFable === m.id && !m.canMoKhoa && (
-                        <div className="ct-chonmm-xacnhan" role="alertdialog" aria-label="Xác nhận dùng model đắt">
-                          {m.cong === 'anthropic' ? (
-                            <p>
-                              ⚠ <strong>{m.ten}</strong> {dich('là model đắt nhất của cổng chính hãng — chỉ dùng cho việc cực khó.')}
-                            </p>
-                          ) : (
-                            <p>
-                              ⚠ <strong>Cuong Fable tốn token gấp 3,5 lần</strong> — một việc thường có thể ăn cả trăm nghìn
-                              token. Chỉ nên dùng cho việc thật sự khó; việc thường hãy dùng CuongMini Max 5.
-                            </p>
-                          )}
-                          <div>
-                            <button type="button" className="ct-btn" onClick={() => { datHoiFable(null); onChonModel(m.id); }}>
-                              {m.cong === 'anthropic' ? dich('Vẫn dùng') : 'Vẫn dùng Fable'}
-                            </button>
-                            <button type="button" className="ct-btn ct-btn-ghost" onClick={() => datHoiFable(null)}>
-                              Thôi
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
+                      <button type="button" className="ct-btn ct-btn-ghost" onClick={() => datHoiFable(null)}>
+                        {dich('Thôi')}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
 
           {duPhong?.coCongChinh && duPhong.daBat && (
             <p className="ct-chonmm-nhan">{dich('modelapi · cổng dự phòng')}</p>
@@ -2644,7 +2628,7 @@ function ChonModelVaMuc({
                 >
                   {cucBo.bat ? <Check size={12} aria-hidden /> : <PlugZap size={12} aria-hidden />}
                   <span>
-                    <strong>{dich('AI trên máy')} · {cucBo.ten}</strong>
+                    <strong>{dich('CuongMini trên máy')} · {cucBo.ten}</strong>
                     <em>{cucBo.bat ? dich('Đang dùng — bấm để quay về máy chủ') : dich('Chạy trên máy này, không gửi lên máy chủ (/offline)')}</em>
                   </span>
                 </button>

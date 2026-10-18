@@ -290,8 +290,27 @@ export function docDsTrang(text: string): TrangDocs[] {
 export function rutNoiDungAgents(text: string): string {
   const { khoi, dau } = tachKhoi(text);
   const than = (khoi[0] ?? text.replace(/^Page [^\n]*:\n?/, '')).trim() || dau;
-  const m = /```(?:markdown|md)[^\n]*\n([\s\S]*?)\n```/i.exec(than);
-  return (m ? m[1]! : than).trim();
+  return (khoiMarkdownDau(than) ?? than).trim();
+}
+
+/**
+ * Khối ```markdown ĐẦU TIÊN — tính cả khối code LỒNG bên trong (QA đợt 6: AGENTS.md thật hay có ```bash … ``` ở giữa; trang
+ * Docs xuất ra markdown giữ nguyên các rào đó (`docMarkdown.ts › blockMd`), regex không tham lam dừng ở rào ``` đầu tiên
+ * ⇒ mất mọi mục sau khối lệnh). Rào mở có ngôn ngữ (```bash) ⇒ sâu thêm một tầng; rào trơn ``` ⇒ đóng tầng trong cùng.
+ */
+function khoiMarkdownDau(than: string): string | null {
+  const dong = than.split('\n');
+  const dau = dong.findIndex((d) => /^\s*```(?:markdown|md)\b/i.test(d));
+  if (dau < 0) return null;
+  let sau = 0;
+  for (let i = dau + 1; i < dong.length; i++) {
+    const d = dong[i]!.trim();
+    if (/^```\s*$/.test(d)) {
+      if (sau === 0) return dong.slice(dau + 1, i).join('\n');
+      sau--;
+    } else if (/^```\S/.test(d)) sau++;
+  }
+  return dong.slice(dau + 1).join('\n');
 }
 
 const chuanTieuDe = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();

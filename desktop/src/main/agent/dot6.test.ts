@@ -259,6 +259,28 @@ describe('ctworkDanDuong — app tự làm với CT Work GIẢ', () => {
     expect((await DD.lamGoiY(goc, 'LF-18', 'chuyen:Review', '')).ok).toBe(false);
   });
 
+  it('QA đợt 6: gợi ý "Xong việc?" tự động CHỈ khi lượt vừa rồi đổi git (nhánh có commit sẵn + hỏi một câu ⇒ không bật)', async () => {
+    head = 'qa1';
+    await DD.ghiMocTruocLuot(goc); // đầu lượt "hôm nay tôi làm gì"
+    expect((await DD.goiYSau(goc, undefined, { tuDong: true })).boQua).toBe(true); // lượt không đổi git ⇒ im
+    await DD.ghiMocTruocLuot(goc); // đầu lượt "commit giúp mình"
+    head = 'qa2'; // lượt tạo commit
+    const a = await DD.goiYSau(goc, undefined, { tuDong: true });
+    expect(a.boQua).toBeUndefined();
+    expect(a.key).toBe('LF-18');
+    expect((await DD.goiYSau(goc, 'LF-18')).ok).toBe(true); // gọi tay (/ctwork xong) luôn hiện
+  });
+
+  it('QA đợt 6: trang AGENTS.md thật có khối ```bash LỒNG trong khối ```markdown ⇒ lấy ĐỦ, không cụt ở khối lệnh', () => {
+    const trangThat = ['# AGENTS.md — Hướng dẫn cho CuongMini', '', 'Ba dòng', 'hướng dẫn', 'ở đầu.', '', '```markdown', '## Vai trò', 'MENTOR.', '', '## Lệnh hay dùng', '```bash', './mvnw test', '```', '', '## Quy ước git', 'Nhánh LF-số-tên.', '```', '', 'Đuôi trang không lấy.'].join('\n');
+    const nd = D.rutNoiDungAgents(M.mauGetPage(5, trangThat));
+    expect(nd).toMatch(/^## Vai trò/);
+    expect(nd).toMatch(/\.\/mvnw test\n```\n\n## Quy ước git\nNhánh LF-số-tên\.$/);
+    expect(nd).not.toMatch(/Ba dòng|Đuôi trang/);
+    // Không đóng ⇒ lấy tới hết; khối ```md cũng nhận.
+    expect(D.rutNoiDungAgents(M.mauGetPage(5, 'x\n```md\n## A\nb'))).toBe('## A\nb');
+  });
+
   it('VIỆC 10: theo dõi — lần đầu chỉ lấy mốc, sau đó báo; ≥ 60 s mỗi lần; tắt ⇒ không gọi', async () => {
     expect((await DD.kiemTin(goc)).tin).toEqual([]); // mốc
     capNhat = { lastId: 5, events: [{ id: 4, type: 'WORK_MENTION', issue: 'LF-18', title: 'ERD', excerpt: null, by: '@gv' }], unblocked: [] };

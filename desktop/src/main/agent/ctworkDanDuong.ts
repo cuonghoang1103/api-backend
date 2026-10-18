@@ -51,7 +51,7 @@ export function _datDanDuong(o: { gh?: Gh; thuMuc?: () => string }): void {
   if (o.thuMuc) thuMucTrangThai = o.thuMuc;
 }
 /** CHỈ cho test: xoá mọi đệm của module. */
-export function _xoaDemDanDuong(): void { demNhom.clear(); demTrang.clear(); daGoiY.clear(); tinLuc.clear(); lastIdTin = null; demVai.clear(); }
+export function _xoaDemDanDuong(): void { demNhom.clear(); demTrang.clear(); daGoiY.clear(); mocTruocLuot.clear(); tinLuc.clear(); lastIdTin = null; demVai.clear(); }
 
 /** Server CT Work có tool này không (đọc `tools/list` — token chỉ đọc không có tool ghi). Chưa biết ⇒ coi như có. */
 function coTool(ten: string): boolean {
@@ -168,6 +168,26 @@ async function tinhTrangGit(goc: string): Promise<TinhTrangGit & { head: string 
 /** Gợi ý đã hiện (tự động) theo thẻ + HEAD + số file — không nhắc lại đúng tình trạng đó. */
 const daGoiY = new Set<string>();
 
+/**
+ * QA đợt 6: dấu git (HEAD + danh sách file đổi) ghi lúc BẮT ĐẦU mỗi lượt (`ipc/agent.ts › chayCho`). Gợi ý tự động sau
+ * lượt chỉ hiện khi LƯỢT ĐÓ đổi git. Trước đây: mở CuongMini trên nhánh `LF-18-…` đã có commit rồi hỏi "hôm nay tôi làm
+ * gì" ⇒ bật ngay thẻ "Xong việc ở LF-18?" 9 mục — dù lượt chỉ trả lời một câu hỏi.
+ */
+const mocTruocLuot = new Map<string, string>();
+
+async function dauGitNhanh(goc: string): Promise<string> {
+  const [h, st] = await Promise.all([gitCtw(['rev-parse', 'HEAD'], goc), gitCtw(['status', '--porcelain'], goc)]);
+  const ds = st.ok ? st.ra.split('\n').filter((d) => d.trim() && !/^.{2,3}\.cuongmini\//.test(d)).sort() : [];
+  return `${h.ok ? h.ra.trim() : '?'}|${ds.join('\n')}`;
+}
+
+/** Ghi mốc git trước lượt (chỉ khi thư mục đã gắn CT Work — không gắn thì gợi ý tự động không bao giờ chạy). */
+export async function ghiMocTruocLuot(goc: string | null): Promise<void> {
+  if (!goc || !ctworkSan()) return;
+  if (!(await ganCo(goc).catch(() => null))) return;
+  mocTruocLuot.set(goc, await dauGitNhanh(goc));
+}
+
 export async function goiYSau(goc: string | null, the?: string, o: { tuDong?: boolean } = {}): Promise<KetQuaXem & { key?: string; goiY?: GoiYViec[]; boQua?: boolean }> {
   if (o.tuDong && (!goc || !ctworkSan())) return { ok: true, boQua: true };
   const g = await canGan(goc);
@@ -177,6 +197,8 @@ export async function goiYSau(goc: string | null, the?: string, o: { tuDong?: bo
   const git = await tinhTrangGit(goc!);
   if (o.tuDong) {
     if (git.soCommit === 0 && git.soFileChuaCommit === 0 && !git.prUrl) return { ok: true, boQua: true };
+    const moc = mocTruocLuot.get(goc!);
+    if (moc !== undefined && moc === (await dauGitNhanh(goc!))) return { ok: true, boQua: true };
     const dau = `${goc}|${key}|${git.head}|${git.soFileChuaCommit}|${git.prUrl ?? ''}`;
     if (daGoiY.has(dau)) return { ok: true, boQua: true };
     daGoiY.add(dau);

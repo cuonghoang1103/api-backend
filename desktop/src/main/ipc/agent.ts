@@ -421,6 +421,8 @@ export function registerAgentHandlers(): void {
     const goc = gocCua(cuocId);
     const conSongDuAn = goc && (await conDungDuoc(goc)) ? goc : null;
     if (goc && !conSongDuAn) datGocChoCuoc(cuocId, null);
+    /* QA đợt 6: mốc git TRƯỚC lượt ⇒ gợi ý "Xong việc ở LF-xx?" chỉ khi lượt này đổi git (trần 1,5 s — git treo không giữ lượt). */
+    if (conSongDuAn) await Promise.race([ctwDd.ghiMocTruocLuot(conSongDuAn).catch(() => undefined), new Promise((ok) => { setTimeout(ok, 1500).unref?.(); })]);
     const quyenTab = quyenCuaCuoc(cuocId);
     /* Tab CHƯA CÓ thư mục + "Bỏ qua tất cả" (mặc định của tab trống từ
        16/10/2026) ⇒ làm việc ở THƯ MỤC NHÀ của người dùng. Không có gốc thì

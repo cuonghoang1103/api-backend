@@ -19,6 +19,10 @@ export const LINK_OPEN_VSX = 'https://open-vsx.org/extension/cuongthai/cuongthai
 /** Lệnh cài CuongMini CLI (bản dựng do phiên khác làm — giữ khớp `/cli/install.*`). */
 export const LENH_CLI_UNIX = 'curl -fsSL https://cuongthai.com/cli/install.sh | bash';
 export const LENH_CLI_WINDOWS = 'irm https://cuongthai.com/cli/install.ps1 | iex';
+/** Cùng trình cài Windows, gõ trong Command Prompt (cmd) — cmd không có `irm`. */
+export const LENH_CLI_WINDOWS_CMD = 'powershell -NoProfile -ExecutionPolicy Bypass -c "irm https://cuongthai.com/cli/install.ps1 | iex"';
+/** Git Bash trên Windows: install.sh tự chuyển sang trình cài Windows (kiểm trên runner windows-latest 18/10/2026). */
+export const LENH_CLI_GIT_BASH = LENH_CLI_UNIX;
 export const LENH_CHAY_CLI = 'cuongmini';
 
 export type MaTrinhSoan = 'vscode' | 'cursor' | 'antigravity' | 'windsurf' | 'vscodium';

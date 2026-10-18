@@ -20,10 +20,18 @@
  *     đi qua hội thoại AI, không vào log nào.
  *  3. kiểm `cuongmini --version` bằng ĐƯỜNG TUYỆT ĐỐI (PATH của app GUI không phải
  *     PATH của terminal — xem chú thích ở `opencode.ts`).
- *  4. (tuỳ chọn) mở Terminal/iTerm/PowerShell ở thư mục dự án và chạy luôn.
+ *  4. (tuỳ chọn) mở Terminal/iTerm/Windows Terminal ở thư mục dự án và chạy luôn.
+ *
+ * WINDOWS (sửa 18/10/2026 — người dùng: "ấn nút trên app desktop không được"):
+ *  Bản cũ ghi install.ps1 ra file (UTF-8 KHÔNG BOM) rồi `powershell -File`. Windows PowerShell 5.1 đọc file không
+ *  BOM theo bảng mã ANSI ⇒ byte 0x93/0x94 trong "—", "✓" thành dấu nháy kép ⇒ ParserError, thoát mã 1 trên MỌI máy
+ *  Windows (đo thật trên runner windows-latest). Nay chạy đúng lệnh một dòng người dùng gõ tay
+ *  (`irm … | iex` — web trả `charset=utf-8` nên chữ đọc đúng), ép đầu ra UTF-8, và đọc đầu ra bằng StringDecoder
+ *  (một ký tự tiếng Việt có thể bị cắt đôi giữa hai mẩu dữ liệu).
  */
-import { spawn } from 'node:child_process';
+import { spawn as spawnGoc } from 'node:child_process';
 import { existsSync } from 'node:fs';
+import { StringDecoder } from 'node:string_decoder';
 import { chmod, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { homedir, tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -33,6 +41,65 @@ import { readStoredSession } from './auth';
 import { handle } from './index';
 
 const laWin = process.platform === 'win32';
+
+/** Cho test thay `spawn` bằng bản giả (máy dev là macOS — hành vi Windows chỉ kiểm được bằng spawn giả). */
+let spawn = spawnGoc;
+export function _datSpawnChoTest(f: typeof spawnGoc): void { spawn = f; }
+
+/**
+ * Lệnh cài trên Windows — ĐÚNG lệnh hướng dẫn cho người dùng cmd, cộng hai dòng mở đầu:
+ *  • `[Console]::OutputEncoding = UTF8`: đầu ra đi qua ống về app, mặc định là bảng mã OEM ⇒ chữ Việt thành "?";
+ *  • TLS 1.2 TRƯỚC `irm`: script tự bật TLS 1.2 nhưng lúc đó nó đã phải được tải về rồi.
+ * `CUONGMINI_TU_APP=1`: trình cài bỏ đoạn hướng dẫn PATH dành cho người gõ tay (app tự nói, và tự mở terminal).
+ */
+export function lenhCaiWindows(url: string): { file: string; args: string[]; env: NodeJS.ProcessEnv } {
+  const ps = [
+    '[Console]::OutputEncoding = New-Object Text.UTF8Encoding $false',
+    '[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072',
+    `irm '${url.replace(/'/g, "''")}' | iex`,
+  ].join('; ');
+  return {
+    file: 'powershell.exe',
+    args: ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command', ps],
+    env: { CUONGMINI_TU_APP: '1' },
+  };
+}
+
+/** Nháy đơn PowerShell: `a'b` ⇒ `'a''b'`. */
+const nhayPs = (s: string): string => `'${s.replace(/'/g, "''")}'`;
+
+/**
+ * Lệnh mở terminal MỚI chạy `cuongmini` (Windows): thử Windows Terminal (`wt.exe`) trước, không có thì cửa sổ
+ * PowerShell riêng. Lệnh PowerShell đi bằng `-EncodedCommand` (UTF-16LE base64): `wt` tự cắt dòng lệnh ở dấu `;`,
+ * còn `cmd /c start` hiểu `&` là nối lệnh — mã hoá thì đường dẫn có dấu cách, dấu nháy, chữ Việt đều đi nguyên vẹn.
+ * Dòng đầu nạp lại PATH từ registry: cửa sổ mới kế thừa môi trường CỦA APP (mở trước khi cài, chưa có thư mục lệnh).
+ */
+export function lenhMoTerminalWindows(noi: string, duongLenhCli: string): Array<{ file: string; args: string[] }> {
+  const ps = [
+    "$env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')",
+    `Set-Location -LiteralPath ${nhayPs(noi)}`,
+    `& ${nhayPs(duongLenhCli)}`,
+  ].join('\n');
+  const ma = Buffer.from(ps, 'utf16le').toString('base64');
+  const powershell = ['powershell.exe', '-NoExit', '-ExecutionPolicy', 'Bypass', '-EncodedCommand', ma];
+  return [
+    { file: 'wt.exe', args: ['-d', noi, ...powershell] },
+    { file: powershell[0]!, args: powershell.slice(1) },
+  ];
+}
+
+/**
+ * Lỗi THẬT để hiện cho người dùng: dòng `✗ …` cuối cùng của trình cài, không có thì lỗi PowerShell
+ * (`… : The term … is not recognized`, `At line:…`), không có nữa thì vài dòng cuối.
+ */
+export function loiThat(chu: string): string | null {
+  const dong = chu.split(/\r?\n/).map((d) => d.trimEnd()).filter((d) => d.trim());
+  const x = [...dong].reverse().find((d) => d.trimStart().startsWith('✗'));
+  if (x) return x.trim();
+  const ps = dong.findIndex((d) => /(is not recognized|ParserError|Exception|Could not|Không thể|cannot|denied)/i.test(d));
+  if (ps >= 0) return dong.slice(Math.max(0, ps - 1), ps + 2).join('\n');
+  return dong.length ? dong.slice(-3).join('\n') : null;
+}
 
 /** Thư mục gốc của CLI — trùng `packages/cuongmini-cli/src/phien.ts`. */
 function thuMucGoc(): string {
@@ -46,7 +113,7 @@ function duongLenh(): string {
 }
 
 /** Chạy một lệnh, gom đầu ra; từng dòng bắn ra `moiDong` để giao diện hiện tiến độ. */
-function chay(
+export function chay(
   lenh: string, thamSo: string[], o: { hanMs: number; env?: NodeJS.ProcessEnv; moiDong?: (d: string) => void },
 ): Promise<{ ma: number | null; chu: string; loi?: string }> {
   return new Promise((xong) => {
@@ -55,16 +122,17 @@ function chay(
     let da = false;
     const ket = (kq: { ma: number | null; chu: string; loi?: string }) => { if (!da) { da = true; xong(kq); } };
     const con = spawn(lenh, thamSo, { windowsHide: true, env: { ...process.env, NO_COLOR: '1', ...o.env } });
-    const gom = (b: Buffer) => {
-      const s = b.toString();
+    // Mỗi luồng một bộ giải mã: một ký tự UTF-8 (chữ Việt, ✓) có thể bị cắt đôi giữa hai mẩu dữ liệu.
+    const gom = (giai: StringDecoder) => (b: Buffer) => {
+      const s = giai.write(b);
       chu = (chu + s).slice(-16_000);
       du += s;
       const dong = du.split(/\r?\n/);
       du = dong.pop() ?? '';
       for (const d of dong) if (d.trim()) o.moiDong?.(d);
     };
-    con.stdout?.on('data', gom);
-    con.stderr?.on('data', gom);
+    con.stdout?.on('data', gom(new StringDecoder('utf8')));
+    con.stderr?.on('data', gom(new StringDecoder('utf8')));
     const hen = setTimeout(() => { try { con.kill(); } catch { /* đã thoát */ } ket({ ma: null, chu, loi: 'Quá thời gian chờ — mạng chậm?' }); }, o.hanMs);
     hen.unref?.();
     con.on('error', (e) => { clearTimeout(hen); ket({ ma: null, chu, loi: e.message }); });
@@ -85,7 +153,7 @@ async function phienBanCli(): Promise<string | null> {
 /** Terminal sẽ mở: iTerm nếu có (người dùng hay dùng), không thì Terminal của máy. */
 function tenTerminal(): string {
   if (process.platform === 'darwin') return existsSync('/Applications/iTerm.app') ? 'iTerm' : 'Terminal';
-  if (laWin) return 'PowerShell';
+  if (laWin) return existsSync(join(process.env.LOCALAPPDATA ?? join(homedir(), 'AppData', 'Local'), 'Microsoft', 'WindowsApps', 'wt.exe')) ? 'Windows Terminal' : 'PowerShell';
   return 'Terminal';
 }
 
@@ -108,20 +176,30 @@ export function registerCuongMiniCliHandlers(): void {
     const bao = (buoc: string, dong?: string) => { if (!gui.isDestroyed()) gui.send('cli:tienDo', { buoc, dong }); };
     const tam = await mkdtemp(join(tmpdir(), 'cuongmini-cai-'));
     try {
-      // 1. Tải script cài chính thức bằng mạng của Electron (máy Linux tối giản có thể thiếu curl).
-      bao('tai', 'Đang tải trình cài…');
-      const ten = laWin ? 'install.ps1' : 'install.sh';
-      const r = await net.fetch(`${WEB_ORIGIN}/cli/${ten}?t=${Date.now()}`);
-      if (!r.ok) throw new Error(`Không tải được trình cài (HTTP ${r.status}).`);
-      const file = join(tam, ten);
-      await writeFile(file, Buffer.from(await r.arrayBuffer()));
-
-      // 2. Chạy nó — script tự lo Node, gói CLI, PATH. Mỗi dòng log ⇒ giao diện.
-      bao('cai', 'Đang cài (máy chưa có Node thì tải luôn — có thể mất 1–2 phút)…');
-      const kq = laWin
-        ? await chay('powershell.exe', ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', file], { hanMs: 15 * 60_000, moiDong: (d) => bao('cai', d) })
-        : await chay('/bin/bash', [file], { hanMs: 15 * 60_000, moiDong: (d) => bao('cai', d) });
-      if (kq.ma !== 0) return { ok: false as const, loi: kq.loi ?? `Trình cài thoát với mã ${kq.ma}.`, log: kq.chu };
+      // 1+2. Chạy script cài chính thức — nó tự lo Node, gói CLI, PATH. Mỗi dòng log ⇒ giao diện.
+      let kq: Awaited<ReturnType<typeof chay>>;
+      if (laWin) {
+        // Windows: đúng lệnh một dòng người dùng gõ (PowerShell tự tải script, đọc đúng UTF-8). KHÔNG `-File`
+        // một file tải về — xem chú thích đầu file.
+        bao('tai', 'Đang mở PowerShell để tải trình cài…');
+        const l = lenhCaiWindows(`${WEB_ORIGIN}/cli/install.ps1?t=${Date.now()}`);
+        bao('cai', 'Đang cài (máy chưa có Node thì tải luôn — có thể mất 1–2 phút)…');
+        kq = await chay(l.file, l.args, { hanMs: 15 * 60_000, env: l.env, moiDong: (d) => bao('cai', d) });
+      } else {
+        // macOS/Linux: tải bằng mạng của Electron (máy Linux tối giản có thể thiếu curl) rồi chạy bằng bash.
+        bao('tai', 'Đang tải trình cài…');
+        const r = await net.fetch(`${WEB_ORIGIN}/cli/install.sh?t=${Date.now()}`);
+        if (!r.ok) throw new Error(`Không tải được trình cài (HTTP ${r.status}).`);
+        const file = join(tam, 'install.sh');
+        await writeFile(file, Buffer.from(await r.arrayBuffer()));
+        bao('cai', 'Đang cài (máy chưa có Node thì tải luôn — có thể mất 1–2 phút)…');
+        kq = await chay('/bin/bash', [file], { hanMs: 15 * 60_000, moiDong: (d) => bao('cai', d) });
+      }
+      if (kq.ma !== 0) {
+        const that = loiThat(kq.chu);
+        const loi = kq.loi ?? (laWin && kq.ma === null ? 'Không chạy được powershell.exe — máy bị chặn PowerShell?' : `Trình cài thoát với mã ${kq.ma}.`);
+        return { ok: false as const, loi: that ? `${loi}\n${that}` : loi, log: kq.chu };
+      }
 
       // 3. Đăng nhập sẵn bằng phiên của app.
       bao('dangNhap', 'Đang đăng nhập CLI bằng tài khoản của app…');
@@ -157,11 +235,16 @@ export function registerCuongMiniCliHandlers(): void {
       return r.ma === 0 ? { ok: true as const } : { ok: false as const, loi: r.loi ?? r.chu.slice(-300) };
     }
     if (laWin) {
-      // `start` mở cửa sổ mới; PowerShell giữ cửa sổ sau khi cuongmini thoát (-NoExit).
-      const ps = `Set-Location -LiteralPath '${noi.replace(/'/g, "''")}'; & '${p.replace(/'/g, "''")}'`;
-      const con = spawn('cmd.exe', ['/d', '/c', 'start', '""', 'powershell.exe', '-NoExit', '-Command', ps], { windowsHide: false, detached: true, stdio: 'ignore' });
-      con.unref();
-      return { ok: true as const };
+      // detached ⇒ Windows cấp cho tiến trình con một CỬA SỔ console riêng; -NoExit giữ cửa sổ sau khi cuongmini thoát.
+      for (const l of lenhMoTerminalWindows(noi, p)) {
+        const ok = await new Promise<boolean>((xong) => {
+          const con = spawn(l.file, l.args, { cwd: noi, detached: true, stdio: 'ignore', windowsHide: false });
+          con.on('error', () => xong(false));
+          con.on('spawn', () => { con.unref(); xong(true); });
+        });
+        if (ok) return { ok: true as const };
+      }
+      return { ok: false as const, loi: `Không mở được PowerShell — mở PowerShell rồi chạy: & '${p}'` };
     }
     // Linux: thử lần lượt các terminal phổ biến.
     for (const [t, a] of [

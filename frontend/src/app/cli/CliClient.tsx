@@ -18,7 +18,7 @@ import {
   Gauge, KeyRound, ListChecks, LogIn, Plug, RefreshCw, ShieldCheck, ShoppingBag, Slash, Terminal, Trash2,
 } from 'lucide-react';
 import { detectPlatform } from '../download/DownloadClient';
-import { LENH_CHAY_CLI, LENH_CLI_UNIX, LENH_CLI_WINDOWS } from '../ai-code/trinhSoan';
+import { LENH_CHAY_CLI, LENH_CLI_GIT_BASH, LENH_CLI_UNIX, LENH_CLI_WINDOWS, LENH_CLI_WINDOWS_CMD } from '../ai-code/trinhSoan';
 
 type MaHDH = 'macos' | 'windows' | 'linux';
 
@@ -136,7 +136,41 @@ function AnhTerminal() {
 
 /* ── Cài đặt theo hệ điều hành ─────────────────────────────────────────── */
 
-interface BuocCai { tieuDe: string; moTa: ReactNode; lenh?: string; dauNhac?: string }
+interface LenhCoNhan { nhan: string; lenh: string; dauNhac: string }
+interface BuocCai { tieuDe: string; moTa: ReactNode; lenh?: string; dauNhac?: string; lenhKhac?: LenhCoNhan[] }
+
+/** Ba nơi người dùng Windows hay dán lệnh — mỗi nơi một lệnh đúng cú pháp của nó. */
+const LENH_CAI_WINDOWS: LenhCoNhan[] = [
+  { nhan: 'PowerShell / Windows Terminal', lenh: LENH_CLI_WINDOWS, dauNhac: 'PS>' },
+  { nhan: 'Command Prompt (cmd)', lenh: LENH_CLI_WINDOWS_CMD, dauNhac: 'C:\\>' },
+  { nhan: 'Git Bash', lenh: LENH_CLI_GIT_BASH, dauNhac: '$' },
+];
+
+/** Lệnh nạp lại PATH NGAY trong cửa sổ đang mở (không phải đóng terminal). */
+const LENH_NAP_PATH_WINDOWS: LenhCoNhan[] = [
+  { nhan: 'PowerShell', lenh: "$env:Path = [Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [Environment]::GetEnvironmentVariable('Path','User')", dauNhac: 'PS>' },
+  { nhan: 'cmd', lenh: 'set "PATH=%PATH%;%LOCALAPPDATA%\\CuongMini\\bin"', dauNhac: 'C:\\>' },
+  { nhan: 'Git Bash', lenh: 'export PATH="$PATH:$(cygpath "$LOCALAPPDATA")/CuongMini/bin"', dauNhac: '$' },
+];
+
+/** Gọi thẳng bằng đường dẫn đầy đủ — chạy được kể cả khi PATH chưa nhận. */
+const LENH_DUONG_DAY_WINDOWS: LenhCoNhan[] = [
+  { nhan: 'PowerShell', lenh: '& "$env:LOCALAPPDATA\\CuongMini\\bin\\cuongmini.cmd"', dauNhac: 'PS>' },
+  { nhan: 'cmd', lenh: '"%LOCALAPPDATA%\\CuongMini\\bin\\cuongmini.cmd"', dauNhac: 'C:\\>' },
+];
+
+function DanhSachLenh({ ds }: { ds: LenhCoNhan[] }) {
+  return (
+    <div className="space-y-2">
+      {ds.map((l) => (
+        <div key={l.nhan + l.lenh} className="min-w-0">
+          <p className="mb-1 text-xs font-medium text-[var(--text-secondary)]">{l.nhan}</p>
+          <DongLenh lenh={l.lenh} dauNhac={l.dauNhac} />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 /**
  * Các bước viết cho người CHƯA TỪNG mở terminal: nói cả chỗ bấm để mở nó, và
@@ -148,22 +182,21 @@ function cacBuocCai(hdh: MaHDH): BuocCai[] {
   if (hdh === 'windows') {
     return [
       {
-        tieuDe: 'Mở PowerShell',
-        moTa: <>Bấm phím <kbd>Windows</kbd>, gõ <strong>PowerShell</strong> (Windows 11 có thể gõ <strong>Terminal</strong>) rồi <kbd>Enter</kbd>. Không cần “Run as administrator”. <em>Đừng</em> dùng Command Prompt (cmd) — lệnh cài là lệnh PowerShell.</>,
+        tieuDe: 'Mở PowerShell (hoặc Windows Terminal)',
+        moTa: <>Bấm phím <kbd>Windows</kbd>, gõ <strong>PowerShell</strong> (Windows 11 có thể gõ <strong>Terminal</strong>) rồi <kbd>Enter</kbd>. Không cần “Run as administrator”. Đang mở sẵn <strong>cmd</strong> hay <strong>Git Bash</strong> thì dùng luôn — mỗi nơi có lệnh riêng ở bước sau.</>,
       },
       {
         tieuDe: 'Dán lệnh cài rồi Enter',
-        moTa: <>Bấm <strong>Chép</strong>, nhấp chuột phải vào cửa sổ PowerShell để dán (hoặc <kbd>Ctrl+V</kbd>), rồi <kbd>Enter</kbd>.</>,
-        lenh: LENH_CLI_WINDOWS,
-        dauNhac: 'PS>',
+        moTa: <>Chọn <strong>đúng dòng</strong> theo cửa sổ bạn đang mở, bấm <strong>Chép</strong>, nhấp chuột phải vào cửa sổ để dán (hoặc <kbd>Ctrl+V</kbd>), rồi <kbd>Enter</kbd>. Lệnh PowerShell dán vào cmd sẽ báo <code>&apos;irm&apos; is not recognized</code> — đó là dấu hiệu chọn nhầm dòng.</>,
+        lenhKhac: LENH_CAI_WINDOWS,
       },
       {
         tieuDe: 'Chờ cài xong',
-        moTa: <>Thường dưới một phút. Máy chưa có Node.js thì trình cài tự tải Node 22 chính thức (kiểm SHA-256) vào <code>%USERPROFILE%\.cuongmini\node</code> — không đụng gì khác trên máy. Xong sẽ thấy dòng <code>Bắt đầu: cd thu-muc-du-an; cuongmini</code>.</>,
+        moTa: <>Thường dưới một phút. Máy chưa có Node.js thì trình cài tự tải Node 22 chính thức (kiểm SHA-256) vào <code>%USERPROFILE%\.cuongmini\node</code> — không đụng gì khác trên máy. Xong sẽ thấy dòng <code>✓ Đã cài CuongMini …</code>.</>,
       },
       {
-        tieuDe: 'Đóng PowerShell, mở cửa sổ MỚI',
-        moTa: <>Lệnh <code>cuongmini</code> vừa được thêm vào PATH, mà PATH chỉ có hiệu lực ở cửa sổ mở <strong>sau</strong> khi cài.</>,
+        tieuDe: 'Đóng HẲN terminal rồi mở lại',
+        moTa: <>Lệnh <code>cuongmini</code> vừa được thêm vào PATH, mà PATH chỉ có hiệu lực ở cửa sổ mở <strong>sau</strong> khi cài. Với <strong>Windows Terminal</strong>: đóng <strong>mọi</strong> cửa sổ của nó (mở tab mới là chưa đủ), rồi mở lại. Riêng cửa sổ PowerShell vừa chạy <code>irm … | iex</code> thì gõ <code>cuongmini</code> được ngay. Không muốn đóng? Xem mục <a href="#loi-hay-gap">“Không chạy được?”</a> bên dưới.</>,
       },
       {
         tieuDe: 'Vào thư mục dự án',
@@ -221,12 +254,49 @@ function cacBuocCai(hdh: MaHDH): BuocCai[] {
 
 const LOI_HAY_GAP: { hoi: string; dap: ReactNode }[] = [
   {
-    hoi: '“command not found: cuongmini” / “cuongmini is not recognized”',
-    dap: <>Gần như luôn là đang dùng cửa sổ terminal mở <strong>trước</strong> khi cài. Mở cửa sổ mới. Vẫn không được: macOS chạy <code>source ~/.zshrc</code>, Linux chạy <code>source ~/.bashrc</code>; Windows đóng <strong>hết</strong> cửa sổ PowerShell rồi mở lại. Chạy thẳng không cần PATH: <code>~/.local/bin/cuongmini</code> (Windows: <code>%LOCALAPPDATA%\CuongMini\bin\cuongmini.cmd</code>).</>,
+    hoi: 'Windows — không chạy được? “cuongmini is not recognized” / CommandNotFoundException',
+    dap: (
+      <>
+        <p>Gần như luôn là cửa sổ terminal mở <strong>trước</strong> khi cài (Windows Terminal giữ PATH cũ cho cả tab mới). Thử lần lượt:</p>
+        <p><strong>1. Đóng HẲN</strong> Windows Terminal / PowerShell / cmd — mọi cửa sổ — rồi mở lại và gõ <code>cuongmini</code>.</p>
+        <p><strong>2. Hoặc nạp lại PATH ngay trong cửa sổ đang mở</strong> (chọn đúng dòng theo cửa sổ):</p>
+        <DanhSachLenh ds={LENH_NAP_PATH_WINDOWS} />
+        <p><strong>3. Hoặc chạy bằng đường dẫn đầy đủ</strong> (không cần PATH):</p>
+        <DanhSachLenh ds={LENH_DUONG_DAY_WINDOWS} />
+        <p>Chạy được rồi thì gõ <code>cuongmini doctor</code> — nó báo PATH, shell, terminal đang dùng và lệnh sửa đúng cho máy bạn. Vẫn không thấy file <code>cuongmini.cmd</code>? Lệnh cài chưa chạy xong — chạy lại và xem dòng <code>✗</code> đỏ.</p>
+      </>
+    ),
   },
   {
-    hoi: 'Windows: “irm is not recognized” hoặc “running scripts is disabled”',
-    dap: <>Bạn đang dán vào Command Prompt (cmd) hoặc chạy một file <code>.ps1</code> đã tải về. Mở <strong>PowerShell</strong> và dán đúng lệnh <code>irm https://cuongthai.com/cli/install.ps1 | iex</code> — lệnh này chạy thẳng trong PowerShell, không cần đổi ExecutionPolicy. Máy công ty khoá chặt PowerShell thì nhờ IT, hoặc cài trong WSL theo tab Linux.</>,
+    hoi: 'Windows: “irm is not recognized”',
+    dap: (
+      <>
+        <p>Bạn đang dán lệnh PowerShell vào <strong>Command Prompt (cmd)</strong>. Trong cmd dùng dòng này — nó gọi PowerShell giúp bạn, không cần đổi ExecutionPolicy:</p>
+        <DongLenh lenh={LENH_CLI_WINDOWS_CMD} dauNhac="C:\\>" />
+      </>
+    ),
+  },
+  {
+    hoi: 'Windows: “Could not create SSL/TLS secure channel” hoặc “running scripts is disabled”',
+    dap: (
+      <>
+        <p>Windows cũ chưa bật TLS 1.2 cho PowerShell. Dán lệnh này trong PowerShell (bật TLS 1.2 rồi mới tải):</p>
+        <DongLenh lenh="[Net.ServicePointManager]::SecurityProtocol = 'Tls12'; irm https://cuongthai.com/cli/install.ps1 | iex" dauNhac="PS>" />
+        <p>“running scripts is disabled” là khi chạy một file <code>.ps1</code> đã tải về — đừng tải file, dán đúng lệnh <code>irm … | iex</code> (không bị ExecutionPolicy chặn). Máy công ty khoá chặt PowerShell thì nhờ IT, hoặc cài trong WSL theo tab Linux.</p>
+      </>
+    ),
+  },
+  {
+    hoi: 'Git Bash: “cuongmini: command not found” hoặc “Raw mode is not supported”',
+    dap: <>Chạy lại lệnh cài cho Git Bash (<code>{LENH_CLI_GIT_BASH}</code>) — bản cài mới tạo thêm lệnh <code>cuongmini</code> không đuôi cho bash (bash không gọi được <code>.cmd</code> bằng tên trần) và tự chạy qua <code>winpty</code> trong cửa sổ Git Bash (mintty), nơi Node không thấy terminal. Vẫn lỗi: mở Git Bash bên trong Windows Terminal, hoặc dùng PowerShell.</>,
+  },
+  {
+    hoi: 'Windows: phần mềm diệt virus chặn hoặc xoá file',
+    dap: <>Một số phần mềm diệt virus chặn script tải bằng <code>irm</code> hoặc xoá <code>node.exe</code> mới tải. Cho phép thư mục <code>%USERPROFILE%\.cuongmini</code> và <code>%LOCALAPPDATA%\CuongMini</code> rồi chạy lại lệnh cài — trình cài kiểm SHA-256 mọi file nó tải.</>,
+  },
+  {
+    hoi: 'macOS / Linux: “command not found: cuongmini”',
+    dap: <>Đang dùng cửa sổ terminal mở <strong>trước</strong> khi cài. Mở cửa sổ mới, hoặc chạy <code>source ~/.zshrc</code> (macOS) / <code>source ~/.bashrc</code> (Linux). Chạy thẳng không cần PATH: <code>~/.local/bin/cuongmini</code>.</>,
   },
   {
     hoi: 'Mạng công ty / trường chặn, tải mãi không xong',
@@ -507,6 +577,7 @@ export default function CliClient() {
                 <h3 className="font-semibold">{b.tieuDe}</h3>
                 <p className="mt-1 text-sm text-[var(--text-secondary)]">{b.moTa}</p>
                 {b.lenh && <div className="mt-3"><DongLenh lenh={b.lenh} dauNhac={b.dauNhac} /></div>}
+                {b.lenhKhac && <div className="mt-3"><DanhSachLenh ds={b.lenhKhac} /></div>}
               </div>
             </li>
           ))}
@@ -532,7 +603,7 @@ export default function CliClient() {
                 <span className="min-w-0">{hoi}</span>
                 <ChevronDown size={16} aria-hidden className="shrink-0 text-[var(--text-secondary)] transition group-open:rotate-180" />
               </summary>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{dap}</p>
+              <div className="mt-2 space-y-2 text-sm text-[var(--text-secondary)]">{dap}</div>
             </details>
           ))}
         </div>

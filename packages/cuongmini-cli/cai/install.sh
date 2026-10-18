@@ -4,6 +4,8 @@
 #
 #    curl -fsSL https://cuongthai.com/cli/install.sh | bash
 #
+#  Git Bash / MSYS2 trên Windows: lệnh trên tự chuyển sang trình cài Windows (install.ps1 qua powershell.exe).
+#
 #  Chạy lại = cập nhật lên bản mới nhất. Không cần sudo:
 #    ~/.cuongmini/app     mã CLI          ~/.cuongmini/node   Node riêng (chỉ khi máy thiếu Node ≥ 20)
 #    ~/.local/bin/cuongmini (+ bí danh `cm` nếu tên đó còn trống)
@@ -65,6 +67,15 @@ cai_cuongmini() {
   case "$(uname -s)" in
     Darwin) HDH='darwin' ;;
     Linux) HDH='linux' ;;
+    MINGW* | MSYS* | CYGWIN*)
+      # Git Bash / MSYS2 / Cygwin trên Windows: cài bằng trình cài Windows (Node .exe, lệnh .cmd + lệnh không đuôi
+      # cho bash, PATH người dùng) — cùng một bản cài cho PowerShell, cmd và Git Bash.
+      command -v powershell.exe >/dev/null 2>&1 || hong 'Không thấy powershell.exe. Mở PowerShell rồi chạy: irm https://cuongthai.com/cli/install.ps1 | iex'
+      buoc 'Git Bash trên Windows — chạy trình cài Windows (install.ps1) qua PowerShell…'
+      local NGUON_PS1="${CUONGMINI_PS1_URL:-$BASE/install.ps1}"
+      powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "irm '$NGUON_PS1' | iex" || hong 'Trình cài Windows báo lỗi (xem dòng ✗ ở trên).'
+      return 0
+      ;;
     *) hong "Chưa hỗ trợ $(uname -s). Trên Windows dùng PowerShell: irm https://cuongthai.com/cli/install.ps1 | iex" ;;
   esac
   case "$(uname -m)" in

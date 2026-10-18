@@ -10,6 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { API_ORIGIN, lamMoi, LoiDangNhap } from '../../cuongmini-core/src/dangNhap';
 import { timTrinhDuyet } from '../../cuongmini-core/src/timTrinhDuyet';
+import { kiemWindows } from './doctorWin';
 import { L } from './i18n';
 import { capMau, doCapMau } from './mau';
 import { laAscii } from './kyTu';
@@ -37,6 +38,8 @@ export async function kiemMay(phienBan: string): Promise<MucKiem[]> {
   ds.push(lenh
     ? { ten: tenPath, muc: 'ok', chiTiet: lenh }
     : { ten: tenPath, muc: 'canh', chiTiet: L(`chưa thấy \`cuongmini\` trong PATH — mở terminal mới, hoặc thêm ${binDir} vào PATH`, `\`cuongmini\` is not on PATH yet — open a new terminal, or add ${binDir} to PATH`) });
+  // Windows: PATH registry ↔ cửa sổ này, shell đang dùng, TTY — kèm lệnh sửa đúng shell (doctorWin.ts).
+  if (process.platform === 'win32') ds.push(...kiemWindows(lenh));
 
   const tenDl = L('Thư mục dữ liệu', 'Data directory');
   try {

@@ -118,3 +118,34 @@ export function loiNhacDaCat(
   );
   return { role: 'user', content: phan.join('\n') };
 }
+
+/** Kết quả thay cho tool bị gián đoạn (lượt đứt / Esc lúc tool đang chạy). */
+export const KET_QUA_TOOL_GIAN_DOAN = '(Bước này bị gián đoạn — công cụ không trả kết quả. Nếu cần, hãy chạy lại.)';
+
+/**
+ * VÁ tool_call MỒ CÔI ở định dạng OpenAI (19/10/2026) — mọi cổng: tin `assistant` có `tool_calls` mà thiếu tin `tool`
+ * tương ứng ngay sau ⇒ chèn tin `tool` "gián đoạn"; tin `tool` không thuộc tool_call nào ngay trước ⇒ bỏ. Cổng chính
+ * hãng (qua `sangAnthropic`) còn có lớp vá riêng `vaToolMoCoi`. THUẦN.
+ */
+export function vaToolCallMoCoi(messages: AgentMessage[]): AgentMessage[] {
+  const ra: AgentMessage[] = [];
+  let choId = new Set<string>();
+  for (let i = 0; i < messages.length; i++) {
+    const m = messages[i]!;
+    if (m.role === 'tool') {
+      const id = (m as { tool_call_id?: string }).tool_call_id ?? '';
+      if (!choId.has(id)) continue; // mồ côi ⇒ bỏ
+      choId.delete(id);
+      ra.push(m);
+      continue;
+    }
+    // Sang tin không phải tool ⇒ id còn chờ là thiếu kết quả.
+    for (const id of choId) ra.push({ role: 'tool', tool_call_id: id, content: KET_QUA_TOOL_GIAN_DOAN } as AgentMessage);
+    choId = new Set<string>();
+    ra.push(m);
+    const tcs = (m as { tool_calls?: Array<{ id?: string }> }).tool_calls;
+    if (m.role === 'assistant' && Array.isArray(tcs)) for (const t of tcs) if (t?.id) choId.add(t.id);
+  }
+  for (const id of choId) ra.push({ role: 'tool', tool_call_id: id, content: KET_QUA_TOOL_GIAN_DOAN } as AgentMessage);
+  return ra;
+}

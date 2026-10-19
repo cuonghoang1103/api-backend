@@ -227,7 +227,58 @@ export function sangAnthropic(messages: TinVao[], tuyChon: { chinhHang?: boolean
     them('user', khoi);
   }
 
-  return { system: heThong.join('\n\n'), messages: ra };
+  return { system: heThong.join('\n\n'), messages: vaToolMoCoi(ra) };
+}
+
+/** Kết quả thay cho tool bị gián đoạn (không có `tool_result` thật). */
+export const KET_QUA_GIAN_DOAN = '(Bước này bị gián đoạn — công cụ không trả kết quả. Nếu cần, hãy chạy lại.)';
+
+/**
+ * VÁ `tool_use` / `tool_result` MỒ CÔI (19/10/2026).
+ *
+ * Anthropic đòi: MỌI `tool_use` của một tin assistant phải có `tool_result` ngay ở tin `user` KẾ TIẾP, và không có
+ * `tool_result` nào trỏ tới id không tồn tại — sai là `HTTP 400 tool_use ids were found without tool_result blocks`,
+ * gửi lại y hệt vẫn hỏng. Người dùng gặp ở cổng chính hãng (Opus 5.5) sau một lượt bị đứt / bấm Esc lúc tool đang chạy:
+ * lịch sử còn `tool_use` mà thiếu kết quả. OpenAI/rambo dễ dãi hơn nên trước giờ không lộ.
+ * Cách vá: thiếu kết quả ⇒ chèn `tool_result` báo "bị gián đoạn" (đầu tin user kế tiếp, hoặc tin user mới);
+ * `tool_result` không có `tool_use` ngay trước ⇒ bỏ. THUẦN.
+ */
+export function vaToolMoCoi(tin: TinAnthropic[]): TinAnthropic[] {
+  const ra: TinAnthropic[] = [];
+  const khoiCua = (t: TinAnthropic): KhoiAnthropic[] => (Array.isArray(t.content) ? t.content : [{ type: 'text', text: t.content } as KhoiAnthropic]);
+  for (let i = 0; i < tin.length; i++) {
+    const t = tin[i]!;
+    if (t.role === 'user') {
+      const truoc = ra[ra.length - 1];
+      const idTruoc = new Set(
+        truoc && truoc.role === 'assistant'
+          ? khoiCua(truoc).filter((k) => (k as { type: string }).type === 'tool_use').map((k) => (k as { id: string }).id)
+          : [],
+      );
+      const giu = khoiCua(t).filter((k) => (k as { type: string }).type !== 'tool_result' || idTruoc.has((k as { tool_use_id: string }).tool_use_id));
+      if (giu.length) ra.push({ ...t, content: giu });
+      continue;
+    }
+    ra.push(t);
+    const ids = khoiCua(t).filter((k) => (k as { type: string }).type === 'tool_use').map((k) => (k as { id: string }).id);
+    if (!ids.length) continue;
+    const sau = tin[i + 1];
+    const daCo = new Set(
+      sau && sau.role === 'user'
+        ? khoiCua(sau).filter((k) => (k as { type: string }).type === 'tool_result').map((k) => (k as { tool_use_id: string }).tool_use_id)
+        : [],
+    );
+    const thieu = ids.filter((id) => !daCo.has(id));
+    if (!thieu.length) continue;
+    const va = thieu.map((id) => ({ type: 'tool_result', tool_use_id: id, content: KET_QUA_GIAN_DOAN }) as KhoiAnthropic);
+    if (sau && sau.role === 'user') {
+      // tool_result phải đứng ĐẦU tin user ⇒ chèn trước, giữ phần còn lại.
+      tin[i + 1] = { ...sau, content: [...va, ...khoiCua(sau)] };
+    } else {
+      ra.push({ role: 'user', content: va });
+    }
+  }
+  return ra;
 }
 
 /** Câu thay cho PDF ở cổng KHÔNG đọc được PDF gốc. */

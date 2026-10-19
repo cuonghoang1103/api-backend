@@ -71,7 +71,7 @@ import { HE_SO_FABLE, MODEL_FABLE, loiHetFable, xemHanMucFable } from './fable.j
 import { loiCanViTien, xemViTien } from './viTien.js';
 import { runServerTool } from './serverTools.js';
 import { buildSystemPrompt, catGhiChu, dongDuAnCtwork, dongHomNay, LUAT_CTWORK, LUAT_DAN_DUONG, type WorkspaceHint } from './prompt.js';
-import { catLuotCu, loiNhacDaCat, tongKyTu } from './catCu.js';
+import { catLuotCu, loiNhacDaCat, tongKyTu, vaToolCallMoCoi } from './catCu.js';
 import { CAU_TU_TOM_TAT, CAU_VAN_QUA_DAI, catKetQuaToolTo, laLoiVuotCuaSo } from './cuuCuaSo.js';
 import { LocLuongGoiY, LUAT_GOI_Y, tachGoiY } from './goiYBuocTiep.js';
 import { stepNhom, type NguonNhom } from './hanMucNhom.js';
@@ -981,7 +981,8 @@ export async function runAgentTurn(
     return;
   }
 
-  const messagesGoc = sanitizeIncoming(input.messages);
+  // Vá tool_call mồ côi (lượt trước bị đứt / Esc lúc tool chạy) — cổng chính hãng trả 400 nếu không vá (19/10/2026).
+  const messagesGoc = vaToolCallMoCoi(sanitizeIncoming(input.messages));
   /** Đợt 6: lượt dùng hạn mức NHÓM ⇒ sổ mang dấu nhóm (đếm trần nhóm + bảng "ai dùng bao nhiêu"). */
   /* Đợt 8A: lượt do ADMIN WEB tài trợ (`taiTroAdmin.ts`) ⇒ sổ `taitro:p<pid>:u<admin>` (người dùng + nhà tài trợ + dự án). */
   const stepSo = input.taiTro ? stepTaiTro(input.taiTro.projectId, input.taiTro.nhaTaiTro.id)

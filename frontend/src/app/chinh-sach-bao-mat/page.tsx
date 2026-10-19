@@ -37,7 +37,7 @@ export default function Page() {
         <li><b>Cổng thanh toán</b> (PayOS, VNPay) — để xử lý giao dịch.</li>
         <li><b>Đăng nhập bên thứ ba</b> (Google, GitHub, Apple) — khi Quý khách chọn đăng nhập bằng các dịch vụ này.</li>
         <li><b>Hạ tầng lưu trữ &amp; giám sát lỗi</b> (lưu trữ tệp, theo dõi lỗi kỹ thuật) — để vận hành website.</li>
-        <li><b>Nhà cung cấp AI</b> — chỉ nội dung Quý khách chủ động gửi cho một tính năng AI (trò chuyện, tóm tắt, gợi ý…) được chuyển tới mô hình ngôn ngữ (Anthropic, OpenAI, trực tiếp hoặc qua cổng trung gian) để tạo câu trả lời. <b>Groq</b> chuyển giọng nói thành chữ (tin nhắn thoại, biên bản họp trong CT Work) — chỉ khi Quý khách đồng ý trong ứng dụng.</li>
+        <li><b>Nhà cung cấp AI</b> — chỉ nội dung Quý khách chủ động gửi cho một tính năng AI (trò chuyện, tóm tắt, gợi ý…) được chuyển tới mô hình ngôn ngữ (Anthropic, OpenAI, trực tiếp hoặc qua cổng trung gian) để tạo câu trả lời; khi Quý khách hỏi trợ lý AI trong CT Work, phần nội dung dự án cần cho câu trả lời (thẻ, tài liệu, bình luận liên quan) được gửi kèm. <b>Groq</b> chuyển giọng nói thành chữ (tin nhắn thoại, biên bản họp trong CT Work) — chỉ khi Quý khách đồng ý trong ứng dụng.</li>
         <li><b>Apple</b> — đăng nhập bằng Apple và gửi thông báo đẩy (APNs) tới ứng dụng iOS.</li>
       </ul>
       <p>Chúng tôi <b>không bán</b> dữ liệu cá nhân cho bên thứ ba vì mục đích quảng cáo.</p>

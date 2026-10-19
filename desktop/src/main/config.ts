@@ -62,6 +62,8 @@ export const DEEP_LINK_SCHEME = THONG_TIN_BIEN_THE.scheme;
 export const WEB_ORIGIN = 'https://cuongthai.com';
 export const API_ORIGIN = process.env.CUONGTHAI_API_ORIGIN ?? 'https://api.cuongthai.com';
 export const MEDIA_ORIGIN = 'https://media.cuongthai.com';
+/** Điểm cuối S3 của R2 — URL ký sẵn để PUT tệp trỏ vào đây (không phải CDN media). */
+export const R2_UPLOAD_ORIGIN = 'https://*.r2.cloudflarestorage.com';
 
 /** Vite dev server — chỉ dùng khi chạy `npm run dev`. */
 export const DEV_SERVER_URL = 'http://localhost:5273';
@@ -92,5 +94,8 @@ export const ALLOWED_CONNECT_ORIGINS: readonly string[] = [
   'turn:cuongthai.com:3478',
   'turns:cuongthai.com:5349',
   'stun:stun.l.google.com:19302',
+  // Tải tệp THẲNG lên kho R2 bằng URL ký sẵn (đính kèm thẻ / bình luận / chat CT Work). Thiếu ⇒ "Không tải lên được …"
+  // (19/10/2026). CORS của bucket chỉ nhận https://cuongthai.com — xem `R2_UPLOAD_URLS` trong security.ts.
+  R2_UPLOAD_ORIGIN,
   ...(IS_DEV ? [DEV_SERVER_URL, DEV_SERVER_URL.replace(/^http:/, 'ws:')] : []),
 ];

@@ -21,6 +21,7 @@ import {
   DEV_SERVER_URL,
   IS_DEV,
   MEDIA_ORIGIN,
+  WEB_ORIGIN,
 } from './config';
 import { duongNoiBoTuUrl } from './dieuHuongNoiBo';
 
@@ -201,13 +202,39 @@ function laHopCatWorker(rawUrl: string): boolean {
 /**
  * Áp các chính sách cấp session. Gọi một lần sau khi app ready.
  */
+/**
+ * TẢI TỆP LÊN R2 TỪ APP (19/10/2026) — thành viên CT Work đính kèm báo cáo trong app báo "Không tải lên được …".
+ * Web tải thẳng lên R2 bằng URL ký sẵn; CORS của bucket chỉ nhận `https://cuongthai.com`, còn origin của app là
+ * `app://cuongthai` ⇒ preflight 403. Thay vì nới CORS của bucket production, app tự trình diện là web (đổi `Origin`)
+ * rồi trả cho renderer header CORS mang đúng origin của nó. CHỈ áp cho điểm cuối R2 — chữ ký URL vẫn là thứ
+ * cho phép ghi (hết hạn sau vài phút, đúng một khoá), nên không mở thêm quyền nào.
+ */
+const R2_UPLOAD_URLS = ['https://*.r2.cloudflarestorage.com/*'];
+const laR2 = (u: string): boolean => {
+  try { return new URL(u).hostname.endsWith('.r2.cloudflarestorage.com'); } catch { return false; }
+};
+
 export function applySessionPolicies(): void {
   const ses = session.defaultSession;
 
+  ses.webRequest.onBeforeSendHeaders({ urls: R2_UPLOAD_URLS }, (details, callback) => {
+    const h = { ...details.requestHeaders };
+    if (h.Origin === APP_ORIGIN || h.origin === APP_ORIGIN) { delete h.origin; h.Origin = WEB_ORIGIN; }
+    callback({ requestHeaders: h });
+  });
+
   ses.webRequest.onHeadersReceived((details, callback) => {
+    const cors: Record<string, string[]> = {};
+    if (laR2(details.url)) {
+      for (const k of Object.keys(details.responseHeaders ?? {})) {
+        if (/^access-control-allow-origin$/i.test(k)) delete details.responseHeaders![k];
+      }
+      cors['Access-Control-Allow-Origin'] = [APP_ORIGIN];
+    }
     callback({
       responseHeaders: {
         ...details.responseHeaders,
+        ...cors,
         'Content-Security-Policy': [
           laHopCatWorker(details.url) ? CSP_HOP_CAT_WORKER : contentSecurityPolicy(),
         ],

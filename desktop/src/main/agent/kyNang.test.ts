@@ -9,7 +9,7 @@ import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { _datBanMayChu, dsKyNang, dsKyNangDuAn, docThanKyNang, docDauKyNang, kyNangSan } from './kyNang';
+import { _datBanMayChu, _datNhaKyNang, dsKyNang, dsKyNangDuAn, docThanKyNang, docDauKyNang, kyNangSan } from './kyNang';
 
 async function duAn(kn: Record<string, string>): Promise<string> {
   const goc = await mkdtemp(join(tmpdir(), 'ct-kn-'));
@@ -154,3 +154,28 @@ describe('kỹ năng tải từ MÁY CHỦ (sửa không cần phát hành app)'
   });
 });
 
+/* 19/10/2026: kỹ năng cài ở `~/.claude/skills` (chỗ Claude Code đọc) trước đây
+   vô hình với CuongMini — "không có kỹ năng đó" + đọc file "bị chặn". */
+describe('kỹ năng cả máy (~/.claude/skills, ~/.agents/skills)', () => {
+  it('liệt kê, dự án thắng khi trùng tên, đọc được thân + file đi kèm', async () => {
+    const nha = await mkdtemp(join(tmpdir(), 'ct-nha-'));
+    const kn = join(nha, '.claude/skills', 'ui-styling');
+    await mkdir(join(kn, 'scripts'), { recursive: true });
+    await writeFile(join(kn, 'SKILL.md'), '---\nname: ui-styling\ndescription: Giao diện đẹp\n---\nDùng shadcn.', 'utf8');
+    await writeFile(join(kn, 'scripts', 'goi-y.py'), 'print(1)', 'utf8');
+    await mkdir(join(nha, '.agents/skills', 'ra-de'), { recursive: true });
+    await writeFile(join(nha, '.agents/skills', 'ra-de', 'SKILL.md'), '---\nname: ra-de\ndescription: bản máy\n---\nthân máy', 'utf8');
+    _datNhaKyNang(nha);
+    try {
+      const goc = await duAn({ 'ra-de': DU });
+      const ds = await dsKyNang(goc);
+      expect(ds.find((k) => k.ten === 'ui-styling')?.moTa).toBe('Giao diện đẹp');
+      expect(ds.filter((k) => k.ten === 'ra-de')).toEqual([{ ten: 'ra-de', moTa: 'Soạn đề thi 50 câu' }]);
+      const than = await docThanKyNang(goc, 'ui-styling');
+      expect(than).toContain('Dùng shadcn.');
+      expect(than).toContain(join(kn, 'scripts', 'goi-y.py'));
+    } finally {
+      _datNhaKyNang(null);
+    }
+  });
+});

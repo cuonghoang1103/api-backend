@@ -23,13 +23,32 @@
  * Cùng lý do `AGENTS.md` được bọc trong khối có mốc rõ ràng.
  */
 import { promises as fs } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
+
+import { capQuyenDocNgoai } from './jail';
 
 import { KY_NANG_SAN_THO } from './kyNangSan';
 
 const THU_MUC = ['.claude/skills', '.agent/skills'] as const;
+/**
+ * Kỹ năng CÀI CHO CẢ MÁY (19/10/2026) — `~/.claude/skills`, `~/.agents/skills`…
+ *
+ * Người dùng cài bộ `ui-ux-pro-max`, `ui-styling`… vào `~/.claude/skills` (chỗ
+ * Claude Code đọc) rồi bảo CuongMini dùng: nó trả "không có kỹ năng đó", vì
+ * trước đây chỉ quét thư mục của DỰ ÁN. Claude Code đọc cả hai tầng; ta cũng vậy.
+ * Thứ tự ưu tiên khi trùng tên: dự án > máy > cài sẵn.
+ */
+const THU_MUC_MAY = ['.claude/skills', '.agents/skills', '.agent/skills', '.codex/skills', '.cuongmini/skills'] as const;
+/**
+ * Thư mục nhà để quét kỹ năng cả máy. Trong bộ kiểm thì TẮT mặc định — máy
+ * dev có hàng chục kỹ năng thật, để lọt vào là mọi phép đếm lệch theo máy.
+ */
+let nhaKyNang: string | null = process.env.VITEST ? null : os.homedir();
+/** Chỉ để kiểm thử. */
+export function _datNhaKyNang(p: string | null): void { nhaKyNang = p; }
 /** Trần số kỹ năng. Danh sách dài hơn thế thì model chọn bừa. */
-const MAX_KY_NANG = 40;
+const MAX_KY_NANG = 50;
 /** Trần một file kỹ năng. Dài hơn nữa thì một lần gọi ăn hết ngữ cảnh. */
 const MAX_BYTE = 128 * 1024;
 /**
@@ -62,10 +81,13 @@ function tenHopLe(t: string): boolean {
   return /^[a-z0-9][a-z0-9_-]{0,63}$/.test(t);
 }
 
-async function duyet(goc: string): Promise<Array<{ ten: string; moTa: string; duong: string }>> {
+async function duyet(
+  goc: string,
+  dsThuMuc: readonly string[] = THU_MUC,
+): Promise<Array<{ ten: string; moTa: string; duong: string }>> {
   const ra: Array<{ ten: string; moTa: string; duong: string }> = [];
   const daCo = new Set<string>();
-  for (const tuongDoi of THU_MUC) {
+  for (const tuongDoi of dsThuMuc) {
     const thuMuc = path.join(goc, ...tuongDoi.split('/'));
     let muc: string[];
     try {
@@ -177,11 +199,18 @@ export async function dsKyNangDuAn(goc: string): Promise<TomTatKyNang[]> {
   return (await duyet(goc)).map(({ ten, moTa }) => ({ ten, moTa }));
 }
 
+/** Kỹ năng cài cho CẢ MÁY (`~/.claude/skills`…). */
+async function duyetMay(): Promise<Array<{ ten: string; moTa: string; duong: string }>> {
+  return nhaKyNang ? duyet(nhaKyNang, THU_MUC_MAY) : [];
+}
+
 export async function dsKyNang(goc: string | null): Promise<TomTatKyNang[]> {
   const cuaDuAn = goc ? await dsKyNangDuAn(goc) : [];
   const daCo = new Set(cuaDuAn.map((k) => k.ten));
+  const cuaMay = (await duyetMay()).filter((k) => !daCo.has(k.ten)).map(({ ten, moTa }) => ({ ten, moTa }));
+  for (const k of cuaMay) daCo.add(k.ten);
   const san = kyNangSan().filter((k) => !daCo.has(k.ten)).map(({ ten, moTa }) => ({ ten, moTa }));
-  return [...cuaDuAn, ...san].slice(0, MAX_KY_NANG);
+  return [...cuaDuAn, ...cuaMay, ...san].slice(0, MAX_KY_NANG);
 }
 
 /**
@@ -190,7 +219,7 @@ export async function dsKyNang(goc: string | null): Promise<TomTatKyNang[]> {
  * Trả đường dẫn TƯƠNG ĐỐI so với gốc dự án, đúng dạng `read_file` nhận — đưa
  * đường tuyệt đối thì model phải đoán cách rút gọn, và nó đoán sai.
  */
-async function fileKemTheo(goc: string, thuMucKyNang: string): Promise<string[]> {
+async function fileKemTheo(goc: string | null, thuMucKyNang: string): Promise<string[]> {
   const ra: string[] = [];
   const di = async (thuMuc: string, sau = 0): Promise<void> => {
     if (ra.length >= MAX_FILE_PHU || sau > 2) return;
@@ -200,7 +229,7 @@ async function fileKemTheo(goc: string, thuMucKyNang: string): Promise<string[]>
       const p = path.join(thuMuc, m.name);
       if (m.isDirectory()) { await di(p, sau + 1); continue; }
       if (m.name === 'SKILL.md') continue; // chính nó, đã nằm ngay trên
-      ra.push(path.relative(goc, p).split(path.sep).join('/'));
+      ra.push(goc ? path.relative(goc, p).split(path.sep).join('/') : p);
     }
   };
   await di(thuMucKyNang);
@@ -211,6 +240,10 @@ async function fileKemTheo(goc: string, thuMucKyNang: string): Promise<string[]>
 export async function docThanKyNang(goc: string | null, ten: string): Promise<string | null> {
   const t = ten.trim().toLowerCase();
   const co = goc ? (await duyet(goc)).find((k) => k.ten === t) : undefined;
+  if (!co) {
+    const may = (await duyetMay()).find((k) => k.ten === t);
+    if (may) return docKyNangMay(goc, may.duong);
+  }
   if (!co || !goc) {
     /* Không có trong dự án ⇒ thử bộ cài sẵn. Không có file đi kèm: nội dung
        tự đủ, và đường dẫn trong app đóng gói không đọc được bằng `read_file`. */
@@ -226,5 +259,28 @@ export async function docThanKyNang(goc: string | null, ten: string): Promise<st
   const kem = await fileKemTheo(goc, path.dirname(co.duong));
   if (kem.length === 0) return than;
   return `${than}\n\n---\nFILE ĐI KÈM KỸ NĂNG NÀY (dùng \`read_file\` để đọc khi cần):\n`
+    + kem.map((f) => `• ${f}`).join('\n');
+}
+
+/**
+ * Thân một kỹ năng CẢ MÁY. File đi kèm (script, mẫu, dữ liệu) nằm NGOÀI dự án,
+ * nên cấp quyền ĐỌC đúng thư mục kỹ năng đó cho phiên này (`capQuyenDocNgoai`
+ * — vẫn giữ mọi chốt `.env`/khoá/symlink) rồi liệt kê đường TUYỆT ĐỐI mà
+ * `read_file` nhận. Không cấp thì model thấy tên file mà đọc bị chặn — đúng lỗi
+ * người dùng gặp ("bị chặn", "kéo thư mục vào khung chat").
+ */
+async function docKyNangMay(goc: string | null, duong: string): Promise<string | null> {
+  const noiDung = await fs.readFile(duong, 'utf8').catch(() => null);
+  if (noiDung === null) return null;
+  const than = docDauKyNang(noiDung).than.trim();
+  const thuMuc = path.dirname(duong);
+  let docDuoc = false;
+  if (goc) {
+    try { capQuyenDocNgoai(goc, thuMuc); docDuoc = true; } catch { /* thư mục bị cấm ⇒ chỉ dùng thân */ }
+  }
+  if (!docDuoc) return than;
+  const kem = await fileKemTheo(null, thuMuc);
+  if (kem.length === 0) return than;
+  return `${than}\n\n---\nFILE ĐI KÈM KỸ NĂNG NÀY (kỹ năng cài cho cả máy, đã được cấp quyền đọc; dùng \`read_file\` với đường tuyệt đối):\n`
     + kem.map((f) => `• ${f}`).join('\n');
 }

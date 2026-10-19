@@ -32,7 +32,13 @@ export type Clip = {
   sfx?: string;
   /** Im lặng chừng ấy mili-giây (thời gian đọc câu hỏi) thay vì đọc `text`. */
   pauseMs?: number;
+  /** Đoạn TIẾNG VIỆT — tự nhận khi chữ có dấu Việt. Máy chủ (/ielts/doc) chỉ có giọng ngoại ngữ ⇒ đọc bằng
+   *  giọng vi-VN của máy; máy không có giọng Việt thì bỏ qua (chữ vẫn hiện) — KHÔNG để giọng Anh đọc bồi. */
+  viet?: boolean;
 };
+
+const DAU_VIET = /[ăâđêôơưàáạảãầấậẩẫằắặẳẵèéẹẻẽềếệểễìíịỉĩòóọỏõồốộổỗờớợởỡùúụủũừứựửữỳýỵỷỹ]/i;
+const laViet = (c: Clip) => !c.sfx && !c.pauseMs && (c.viet || DAU_VIET.test(c.text));
 
 /**
  * Tốc độ nghe người học chọn (0,75 / 1 / 1,25) — nhớ trên máy. Áp bằng
@@ -120,7 +126,7 @@ function urlFor(c: Clip): Promise<Kq> {
 
 /** Tải trước (không chờ) — để câu sau đã sẵn khi câu trước đọc xong. */
 function taiTruoc(c?: Clip) {
-  if (c && !c.sfx && !c.pauseMs && c.text) {
+  if (c && !c.sfx && !c.pauseMs && c.text && !laViet(c)) {
     void urlFor(c).then((r) => {
       if (r.url) { const a = new Audio(); a.preload = 'auto'; a.src = r.url; } // trình duyệt kéo tệp vào bộ đệm
     });
@@ -149,6 +155,17 @@ function browserSay(c: Clip): Promise<void> {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return resolve();
     // Đánh vần: mỗi chữ một câu riêng, nếu gộp "W, A, L" giọng máy đọc "A" như mạo từ.
     const parts = c.kieu === 'danhvan' ? c.text.split(/\s*,\s*/) : [c.text];
+    if (laViet(c)) {
+      const vi = window.speechSynthesis.getVoices().filter((x) => x.lang?.replace('_', '-').toLowerCase().startsWith('vi'));
+      if (!vi.length) return resolve();
+      const u = new SpeechSynthesisUtterance(c.text);
+      u.voice = vi.sort((a, b) => Number(/premium|enhanced|natural|google/i.test(b.name)) - Number(/premium|enhanced|natural|google/i.test(a.name)))[0]!;
+      u.lang = u.voice.lang;
+      u.rate = 0.95 * userRate;
+      u.onend = () => resolve(); u.onerror = () => resolve();
+      window.speechSynthesis.speak(u);
+      return;
+    }
     const voice = browserVoice(c.voice);
     parts.forEach((t, i) => {
       const u = new SpeechSynthesisUtterance(t);
@@ -250,7 +267,7 @@ export async function play(clips: Clip | Clip[], onEnd?: () => void, opt?: { onC
         await new Promise<void>((resolve) => { const t = setTimeout(resolve, c.pauseMs); cancelCur = () => { clearTimeout(t); resolve(); }; });
         continue;
       }
-      const { url, don } = c.sfx ? { url: c.sfx, don: false } : await urlFor(c);
+      const { url, don } = c.sfx ? { url: c.sfx, don: false } : laViet(c) ? { url: null, don: false } : await urlFor(c);
       if (my !== run) return;
       opt?.onClip?.(i);
       if (url && el) {

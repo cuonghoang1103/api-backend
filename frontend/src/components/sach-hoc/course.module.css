@@ -1612,7 +1612,9 @@
 }
 .goiPhuNut:hover:not(:disabled) { background: rgba(255, 255, 255, 0.16); }
 .goiPhuNut:disabled { opacity: 0.4; cursor: default; }
-.goiGiua { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+/* Cột giữa RỘNG CỐ ĐỊNH (19/10/2026): để `auto` thì nhãn "Bấm để bắt đầu" ↔ "CuongMini đang nói — chạm để
+   ngắt lời…" đổi bề rộng cột ⇒ hai cụm nút hai bên nhảy ngang ~100px mỗi lần đổi pha. */
+.goiGiua { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 300px; }
 /* Vòng sóng quanh nút: kích thước theo --muc (0–1) do useMicro ghi thẳng vào style. */
 .goiVong { --muc: 0; position: relative; display: grid; place-items: center; }
 .goiVong::before, .goiVong::after {
@@ -1639,7 +1641,7 @@
 .goiSong i:nth-child(4) { animation-delay: -0.65s; }
 @keyframes goiSongNhay { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
 /* Chiều cao CỐ ĐỊNH 2 dòng (không min-height): nhãn dài xuống dòng thứ 3 từng đẩy chân trang ⇒ canvas co ⇒ nháy. */
-.goiNhan { height: 2.6em; overflow: hidden; max-width: 300px; font-size: 13.5px; line-height: 1.3; color: rgba(237, 233, 254, 0.78); text-align: center; }
+.goiNhan { height: 2.6em; overflow: hidden; width: 100%; font-size: 13.5px; line-height: 1.3; color: rgba(237, 233, 254, 0.78); text-align: center; }
 /* Dòng lỗi nổi PHÍA TRÊN chân trang (tuyệt đối) — trước đây là một hàng lưới mới ⇒ chân trang cao thêm ⇒ canvas co ⇒ nháy. */
 .goiLoi { position: absolute; left: 50%; bottom: calc(100% - 4px); transform: translateX(-50%); z-index: 4; width: max-content; max-width: min(560px, 92%); padding: 6px 12px; border-radius: 10px; font-size: 13.5px; background: rgba(60, 10, 24, 0.9); color: #fecdd3; text-align: center; pointer-events: none; }
 
@@ -1648,6 +1650,7 @@
   .goiKhung { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1.15fr) minmax(0, 1fr); gap: 12px; padding: 0 12px; }
   .goiThanh { padding: 12px; }
   .goiDay { gap: 10px; padding: 10px 12px 14px; }
+  .goiGiua { width: min(190px, 44cqw); }
   .goiPhuNut span { display: none; }
   .goiChonGiong select { max-width: 120px; }
   .goiPhuNut { padding: 12px; }

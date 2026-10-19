@@ -283,10 +283,13 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
 }): SanKhau {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   /* Trần điểm ảnh: màn Retina phóng toàn khung (1500×1100 CSS ⇒ 6,6 triệu điểm × MSAA) là thừa cho
-     một con robot — giữ ≤ ~2,4 triệu điểm ảnh, DPR không quá 2. */
+     một con robot — giữ ≤ ~4,2 triệu điểm ảnh, DPR không quá 2. Vừa trần thì dùng ĐÚNG DPR của màn
+     (19/10/2026): DPR lẻ (1,69 ở khung ~1000×850 trên MacBook) bắt trình duyệt co giãn ảnh canvas lên
+     mỗi khung ⇒ viền robot lăn tăn "nhiễu hạt" khi nó nhún. Chỉ khung rất to mới phải hạ. */
   const tinhDpr = (w: number, h: number) => {
     const goc = Math.min(2, window.devicePixelRatio || 1);
-    return Math.max(1, Math.min(goc, Math.sqrt(2_400_000 / Math.max(1, w * h))));
+    const dt = Math.max(1, w * h);
+    return dt * goc * goc <= 4_200_000 ? goc : Math.max(1, Math.sqrt(4_200_000 / dt));
   };
   renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -482,19 +485,22 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
     ? new IntersectionObserver((es) => { trongKhung = es.some((e) => e.isIntersecting); }) : null;
   io?.observe(canvas);
 
-  const dongHo = new THREE.Clock();
-  let t = 0, raf = 0, dangChay = true;
+  let t = 0, raf = 0, dangChay = true, truoc = 0;
   const cham = o.giamChuyenDong ? 0.4 : 1;
 
-  /* Màn 120 Hz (ProMotion) gọi rAF 120 lần/giây — vẽ 60 là đủ mượt, GPU nhẹ một nửa. */
+  /* Màn 120 Hz (ProMotion) gọi rAF 120 lần/giây — vẽ 60 là đủ mượt, GPU nhẹ một nửa.
+     Ngưỡng 12 ms (không phải 15): nhịp rAF xê dịch 7–9 ms, hai nhịp cộng lại có lúc chỉ 14,x ms ⇒ ngưỡng
+     15 bỏ thêm một khung ⇒ khoảng 25 ms chen giữa các khoảng 16,7 ms = khựng. dt lấy theo DẤU THỜI GIAN
+     của khung (không theo đồng hồ lúc hàm chạy — luồng chính bận là lệch). */
   let lanVe = 0;
   let matCu = '';
   const khung = (bay: number) => {
     raf = requestAnimationFrame(khung);
     if (!dangChay || !trongKhung) return;
-    if (bay - lanVe < 15) return;
+    if (bay - lanVe < 12) return;
     lanVe = bay;
-    const dt = Math.min(0.05, dongHo.getDelta());
+    const dt = truoc ? Math.min(0.05, Math.max(0, (bay - truoc) / 1000)) : 1 / 60;
+    truoc = bay;
     t += dt;
     const k = 1 - Math.pow(0.0025, dt); // mượt, không phụ thuộc tốc độ khung
     const d = DICH[camXuc];
@@ -587,7 +593,7 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
   };
   raf = requestAnimationFrame(khung);
 
-  const onAn = () => { dangChay = !document.hidden; if (dangChay) dongHo.getDelta(); };
+  const onAn = () => { dangChay = !document.hidden; if (dangChay) truoc = 0; };
   document.addEventListener('visibilitychange', onAn);
 
   const phaoSao = () => {

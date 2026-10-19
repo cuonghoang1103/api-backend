@@ -28,6 +28,7 @@ import { coKeyKhaDung } from '../../agent/anthropicChinhHang/khoKey.js';
 import { goiVanBanChinhHang } from '../../agent/anthropicChinhHang/dinhTuyen.js';
 import { dauNgayVn } from '../../agent/anthropicChinhHang/hanMuc.js';
 import { docGiaSuTheoGiong, docGiong, type GiongGoi } from '../goiGiaSu.service.js';
+import { boSungTheNN } from '../theNgoaiNgu.js';
 import { cauMoDau, docNN, timChuDe, type NgonNguTC } from './chuDe.js';
 import {
   BoCatCau, chonDuong, docCaiDat, docMeta, dungPrompt, loiNoiSach, sachLichSu, thanhTinNhan,
@@ -124,8 +125,9 @@ export class HangDoc {
   private cuoi: Promise<void> = Promise.resolve();
   private i = 0;
   dauLuc = 0;
-  constructor(private docMot: (t: string) => Promise<{ audioUrls: string[]; giongThat: GiongGoi }>, private gui: (e: SuKienTC) => void, private t0: number) {}
+  constructor(private docMot: (t: string) => Promise<{ audioUrls: string[]; giongThat: GiongGoi }>, private gui: (e: SuKienTC) => void, private t0: number, private chuan?: (t: string) => string) {}
   them(text: string) {
+    if (this.chuan) text = this.chuan(text);
     const i = this.i++;
     const p = this.docMot(text).catch(() => ({ audioUrls: [] as string[], giongThat: 'mac-dinh' as GiongGoi }));
     this.cuoi = this.cuoi.then(async () => {
@@ -192,7 +194,8 @@ export async function chayLuot(userId: number, v: VaoLuot, gui: (e: SuKienTC) =>
   const nn = docNN(v.ngonNgu);
   const giong = docGiong(v.giong);
   const chuDe = timChuDe(nn, v.chuDeId, String(v.tenBai ?? ''));
-  const hang = new HangDoc((t) => pt.tts(t, giong, nn), gui, t0);
+  // Chuẩn hoá thẻ ngoại ngữ NGAY ở đây: web tô đậm + lưu lịch sử đúng, "tiếp tục buổi trước" tìm đúng câu hỏi.
+  const hang = new HangDoc((t) => pt.tts(t, giong, nn), gui, t0, (t) => boSungTheNN(t, nn));
 
   if (!demLuot(userId)) { gui({ type: 'loi', lyDo: 'het_luot_ngay', message: 'Hôm nay bạn đã trò chuyện hết số lượt — mai mình nói tiếp nhé.' }); return; }
 
@@ -289,7 +292,7 @@ export async function chayLuot(userId: number, v: VaoLuot, gui: (e: SuKienTC) =>
   if (signal?.aborted) return;
   moc.het = Date.now() - t0;
   for (const c of bo.ket()) { if (!moc.cauDau) moc.cauDau = Date.now() - t0; hang.them(c); }
-  const noi = loiNoiSach(full);
+  const noi = boSungTheNN(loiNoiSach(full), nn);
   if (!noi) {
     gui({ type: 'loi', lyDo: 'loi_ai', message: 'CuongMini đang bận nghĩ, bạn nói lại nhé.' });
     return;

@@ -24,7 +24,7 @@ export function dungPrompt(nn: NgonNguTC, c: ChuDe): string {
       ? `- Giữ nhịp phòng thi: đáp bằng ${t}, KHÔNG chen tiếng Việt (lỗi chỉ ghi trong JSON). Người học nói tiếng Việt/bí thì mới giải thích 1 câu tiếng Việt rồi hỏi lại.`
       : `- Người học nói ${t}: đáp 1–2 câu ngắn bằng ${t}. Câu của họ sai ⇒ khen ngắn rồi chen MỘT câu tiếng Việt sửa nhẹ.\n- Người học nói tiếng Việt (bí, hỏi): giải thích 1 câu tiếng Việt + đưa câu mẫu ${t} để nói theo.`,
     `- Luôn kết thúc bằng ĐÚNG MỘT câu hỏi ngắn bằng ${t}.`,
-    `- Mọi chữ ${t} bọc trong [en]…[/en].${viet} Tối đa 45 chữ. Không markdown, không emoji, không phiên âm trong lời nói.`,
+    `- MỌI chữ ${t} (kể cả câu khen, câu hỏi) bọc trong [en]…[/en] — chữ ngoài thẻ bị đọc bằng giọng Việt.${viet} Tối đa 45 chữ. Không markdown, không emoji, không phiên âm trong lời nói.`,
     'Sau lời nói: xuống dòng, viết ###, rồi MỘT dòng JSON (người học không nghe phần này):',
     `{"sua":null hoặc {"ban":"câu người học vừa nói","dung":"câu đúng tự nhiên","viSao":"lý do, ≤ 15 chữ tiếng Việt","doc":"${DOC[nn]}"},"tu":[tối đa 2 từ/cụm đáng học trong lượt này {"tu":"","doc":"","nghia":""}],"dich":"dịch tiếng Việt phần ${t} trong lời bạn","cam":"khen|sua|hoi|vui"}`,
     '"sua" chỉ khi câu người học có lỗi thật (ngữ pháp, từ, trật tự). Câu đã đúng ⇒ null và "cam":"khen".',

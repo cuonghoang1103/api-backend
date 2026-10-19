@@ -254,7 +254,9 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
     // Giọng máy nhà trả NHIỀU tệp (đoạn Việt F5 + đoạn ngoại ngữ) — phát liền nhau, không ngắt.
     const tep = (Array.isArray(audio) ? audio : audio ? [audio] : []).filter(Boolean);
     if (tep.length) for (const u of tep) clips.push({ text: '', sfx: u });
-    else clips.push({ text: text.replace(/\[\/?en\]/gi, ''), voice: giongMau }); // không có giọng gia sư: đọc tạm
+    // Không có tệp giọng gia sư (máy chủ đọc hỏng): đọc tạm TỪNG ĐOẠN — phần ngoại ngữ giọng chuẩn của khoá,
+    // phần Việt giọng Việt của máy. Trước 19/10/2026 cả câu Việt–Anh đi giọng Anh ⇒ đọc tiếng Việt bồi.
+    else for (const [i, d] of text.split(/\[en\]([\s\S]*?)\[\/en\]/gi).entries()) if (d.trim()) clips.push(i % 2 ? { text: d.trim(), voice: giongMau } : { text: d.trim(), viet: true });
     // Luyện riêng một từ: đọc THẬT CHẬM trước (nghe rõ đuôi, hơi), rồi tốc độ thường.
     if (docMau && cauMau && tocMau) clips.push({ text: '', pauseMs: 300 }, { text: cauMau.text, voice: giongMau, toc: tocMau }, { text: '', pauseMs: 550 }, { text: cauMau.text, voice: giongMau, toc: 0.9 });
     else if (docMau && cauMau) clips.push({ text: '', pauseMs: 280 }, { text: cauMau.text, voice: giongMau, toc: 0.9 });

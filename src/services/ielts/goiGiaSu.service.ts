@@ -31,6 +31,7 @@ import { transcribeWithGroq } from '../interview/voice/stt.js';
 import { chamPhatAm, type KetQuaPhatAm } from './phatAm.service.js';
 import { synthesizeCuongMini } from '../makerlab/tts.js';
 import { logger } from '../../utils/logger.js';
+import { boSungTheNN } from './theNgoaiNgu.js';
 
 const GIONG_GIA_SU = 'en-GB-AdaMultilingualNeural';
 
@@ -358,6 +359,8 @@ const dangTao = new Map<string, Promise<string | null>>();
 
 /** Đọc lời gia sư → URL mp3 trên R2 (lưu theo băm; câu lặp lại phát tức thì). */
 export async function docGiaSu(noi: string, nn: NgonNgu = 'en'): Promise<string | null> {
+  // Model quên bọc [en] ⇒ đoạn ngoại ngữ bị đọc giọng Việt (19/10/2026). Bọc bù đổi chữ ⇒ đổi khoá băm ⇒ không dùng lại tệp cũ đọc sai.
+  noi = boSungTheNN(noi, nn);
   const key = process.env.AZURE_SPEECH_KEY;
   const region = process.env.AZURE_SPEECH_REGION || 'eastasia';
   if (!key) return null;
@@ -448,6 +451,7 @@ async function docDoanNha(t: string, voice: string, hanMs: number): Promise<stri
  * hỏng): giọng máy nhà hỏng thì `giongThat` = 'mac-dinh' để web báo nhẹ một dòng.
  */
 export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi, nn: NgonNgu = 'en'): Promise<{ audioUrl: string | null; audioUrls?: string[]; giongThat: GiongGoi }> {
+  noi = boSungTheNN(noi, nn);
   if (giong === 'mac-dinh' || Date.now() < nhaNghiDen) return { audioUrl: await docGiaSu(noi, nn), giongThat: 'mac-dinh' };
   const doan = tachDoan(noi);
   const tongViet = doan.filter((d) => !d.en).reduce((n, d) => n + d.t.length, 0);

@@ -401,6 +401,70 @@ duyệt làm tiếp; mã không lên màn hình / đĩa).
 - Trang web không gửi được vé khoá ⇒ trần của model trả phí chỉ gia hạn được trong app.
 - `chinhHang.db.test.ts` có 10 phép đỏ CŨ (giả định 17/10: trần free 0,5 $/ngày, vé 30 ngày, rambo bật) — đỏ y hệt ở worktree sạch `HEAD`, không do đợt này.
 
+## 2i. Rambo bật lại — CuongMini Default (19/10/2026)
+
+Chủ app: rambo.ai.vn chạy lại; rambo là gói TRẢ TRỌN (rẻ nhất) ⇒ khi admin bật công tắc, rambo là MẶC ĐỊNH, sập thì tự lùi.
+(Bản nháp gọi là "CuongMini Tự động" / `cm-tu-dong` — chủ app đổi thành **CuongMini Default** / `cm-default`; mã nháp còn là bí danh.)
+
+**Bảng model AI Code (desktop, CLI `/model`, extension) — `bangModel.ts › bangChoApp()`:**
+
+| Thứ tự | Rambo BẬT (sống) | Rambo TẮT |
+|---|---|---|
+| 1 | **CuongMini Default** ⇒ chạy Classic Sonic | **CuongMini Default** ⇒ chạy Solid |
+| 2 | CuongMini Classic Optimum (`claude-opus-5`) | — (Classic ẩn) |
+| 3 | CuongMini Classic Sonic (Sonnet mới nhất rambo có — hiện `claude-sonnet-5`) | |
+| 4 | CuongMini Classic Heshin (`claude-haiku-4-5`) | |
+| 5… | free: Sonic 5.5 · Solid · Nova · Shin · Heshin 5.5 · Eco | free: như cũ |
+| cuối | cần khoá: Invisible 5.1 · Optimum 5.5 | như cũ |
+
+- **Default** (`giaiDefault`): rambo bật + cầu dao đóng ⇒ Classic Sonic; tắt/cầu dao mở ⇒ Solid; lỗi giữa lượt ⇒ dòng mờ
+  "Đã chuyển sang CuongMini Solid vì cổng bận" rồi làm tiếp (cơ chế tự chuyển cổng 18/10, `tuongDuong: 'cm-solid'`).
+- **Sonnet 5.5:** đo 19/10 `GET /api/claude/v1/models` (không khoá, danh sách quảng cáo): opus-5 · fable-5 · opus-4-8/4-7/4-6 · sonnet-5 ·
+  sonnet-4-6 · haiku-4-5 — **chưa có `claude-sonnet-5-5`** ⇒ chạy `claude-sonnet-5`. Máy chủ đọc lại danh sách mỗi 10 phút khi rambo bật
+  (`congTacRambo.ts`) ⇒ rambo mở 5.5 là tự lên. Máy local không có khoá rambo ⇒ chưa gọi thật từng model; kiểm bằng nút **Thử rambo** ở admin.
+- **Tên không lộ:** mã trung tính `cm-classic-*`; bảng 8 dòng cũ ("Cuong Sonnet 5", "CuongMini Max 4.8"…) bỏ — `models.ts` chỉ còn bí danh
+  mã cũ ⇒ Classic (`haiku-4-5` ⇒ Heshin · `sonnet-4-6`/`sonnet-5` ⇒ Sonic · `opus-*`/`fable-5` ⇒ Optimum). `anTenThat` đổi mọi tên rambo ⇒ tên Classic.
+- **App cũ:** gửi `sonnet-5` mặc định ⇒ rambo bật chạy rambo Sonnet thật, tắt/sập ⇒ Solid. App đời `?bang=cm` (desktop 0.5.201–0.5.203,
+  CLI ≤ 0.6.1, extension ≤ 0.8.1, z.enum cố định) nhận Default/Classic dưới mã cũ (`maChoApp`, bỏ trùng). App mới gửi **`?bang=cm2`**;
+  chưa chọn model ⇒ `cm-default` (`modelHienTai()`).
+- **Tiền:** rambo gói trọn ⇒ đoạn chạy trên rambo ghi sổ `costUsd = 0` (sổ vẫn có lượt + token): không ăn ví 5 giờ, trần theo model, trần $
+  nhóm. Default lùi Solid ⇒ tính trần như Solid. Trần token 5 giờ chung vẫn áp như mọi model.
+- **Hạn mức nhóm:** dùng được Default + Classic (`dungChoNhom`).
+
+**Tài khoản FREE (mọi tài khoản đều dùng được Default — 3 nơi):**
+- `/agent/turn` + `/agent/compact` qua `chiProHoacNhomHoacFree`: Pro ⇒ như cũ; nhóm ⇒ như đợt 6; còn lại + model là Default ⇒ đường Free:
+  email PHẢI xác thực (`CAN_XAC_THUC_EMAIL`), rambo phải sống (`CUONGMINI_BAO_TRI` — KHÔNG lùi model tốn tiền, cả giữa lượt), rate limit lời
+  gọi 90/phút/người + 300/phút/IP (chặn vòng lặp bước bất thường). Model khác ⇒ 403 `PRO_REQUIRED` + câu mời dùng Default.
+- `/agent/tools` (`?bang=cm2`) trả `free: { duocDung, canXacThucEmail, dangBaoTri, luotHomNay, tranNgay, tranPhut }` + đủ danh sách: Default
+  dùng được, model khác `canPro` (🔒 "cần gói Pro"). Desktop mở AI Code khi `pro || free.duocDung || nhom`.
+- **Chống spam Default** (`defaultGioiHan.ts`, admin chỉnh `app_settings.cuongmini_default_gioi_han`, 0 = tắt): ≤ 10 câu/phút/người
+  (Free + Pro) · ≤ 500 câu/ngày (chỉ Free) · ≤ 1500 câu/ngày/IP (chỉ Free). Đếm CÂU HỎI MỚI (tin cuối của người, không phải lượt phụ),
+  không đếm bước tool. Chạm ⇒ 429 + câu nói rõ khi nào dùng lại (`thuLaiSauGiay`); không cần mã gia hạn. Sổ đánh dấu `step = default:luot`
+  / `default` ⇒ admin xem "ai dùng Default nhiều nhất hôm nay" + IP đông nhất.
+- "Không bị giới hạn": Default dùng đủ công cụ như Pro (cùng `buildSystemPrompt`, `toolsForGateway`, MCP CT Work + dẫn đường, đọc link,
+  trình duyệt ngầm), cửa sổ/`max_tokens` theo model, nén sớm 55% — grep `turn.ts`/`tools.ts`/`prompt.ts` không có nhánh nào theo gói.
+  Khác duy nhất: tìm web cổng chính hãng (đường thứ 3 sau SearXNG/Tavily) vẫn chỉ Pro/key — nó tính tiền thật.
+- ⚠ **Rủi ro:** rambo là gói của MỘT nhà cung cấp — dùng quá đà có thể bị họ giới hạn khoá. Cầu dao + lùi Solid (Pro) / báo bảo trì (Free) che
+  việc đó; bảng "ai dùng nhiều nhất" để phát hiện sớm.
+
+**Web (`gateway.ts`):** rambo bật ⇒ mọi việc không thuộc `VIEC_CHI_OPENAI` đi rambo như trước (model `RAMBO_MODEL_MANH` = opus-5), sập ⇒
+`MODELAPI_DU_PHONG` (gpt-6-sol). Ngoại lệ mới:
+
+| Việc | Rambo sống | Rambo sập / tắt |
+|---|---|---|
+| `language_tutor` (phòng Luyện nói, gia sư ngoại ngữ) | KHÔNG đi rambo (`VIEC_KHONG_RAMBO`) — Trò chuyện đi chính hãng Heshin 5.5, lùi `gpt-6-sol` low | như cũ |
+| `work_assistant` (AI mentor) · `work_spec_review` · `work_digest` (CT Work, cả app CT Work + iOS cùng API) | rambo **Sonnet** (`ramboSonic()`) | `gpt-6-sol` (modelapi) — KHÔNG lùi cổng chính hãng |
+| `work_agent` + `VIEC_CHI_OPENAI` | modelapi như cũ | như cũ |
+| `news_bulletin` | rambo Sonnet | `gpt-6-sol` |
+
+**Admin** (`/admin/commerce?tab=anthropic`): thẻ "Cổng rambo — CuongMini Default / Classic": công tắc, tình trạng (bật/sập/thiếu cấu hình),
+lần kiểm gần nhất, danh sách model đọc được, nút **Thử rambo** (`POST /admin/cong-anthropic/rambo/thu`: mỗi model một lời gọi 1 token,
+không lộ khoá), giải thích bật thì chuyện gì xảy ra. Thẻ "Chống spam CuongMini Default": ba ô + bảng ai dùng nhiều nhất hôm nay.
+
+Test: `npx tsx --test src/services/agent/ramboDefault.test.ts` (14 phép: bảng bật/tắt + thứ tự, Default chọn rambo / lùi Solid / chuyển cổng
+giữa lượt bằng `runAgentTurn` + cổng giả, app cũ `sonnet-5`, đời app `cm`/`cm2`, tên không lộ, `language_tutor`, CT Work, nhóm, Free bảo trì,
+chống spam).
+
 ## 3. Thiết kế đợt 3/4 (đợt 3 ĐÃ LÀM — ghi chỗ đổi thiết kế)
 
 ### 3.1 Agent phụ GHI được (đợt 3)

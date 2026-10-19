@@ -52,9 +52,19 @@ test('app mới (?bang=cm): giữ nguyên mã cm-* và đủ 8 model', () => {
   assert.ok(ds.every((m) => m.id.startsWith('cm-')));
 });
 
-test('mã cũ gửi lên /agent/turn ⇒ máy chủ đổi về ĐÚNG model (BI_DANH), không rơi về mặc định', () => {
-  for (const [cm, cu] of Object.entries(MA_CU)) {
-    assert.ok(laMaCuongMini(cu), `${cu} phải được nhận là mã CuongMini`);
-    assert.equal(timModel(cu).id, cm, `${cu} ⇒ ${cm}`);
+test('mã cũ gửi lên /agent/turn ⇒ máy chủ đổi về ĐÚNG model (BI_DANH), không rơi về mặc định (rambo BẬT)', () => {
+  const luu = ['AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'RAMBO_BAT'].map((t) => [t, process.env[t]] as const);
+  process.env.AGENT_GATEWAY_BASE_URL = 'https://rambo.example/api/claude';
+  process.env.AGENT_GATEWAY_API_KEY = 'sk-gia';
+  process.env.RAMBO_BAT = '1';
+  try {
+    for (const [cm, cu] of Object.entries(MA_CU)) {
+      assert.ok(laMaCuongMini(cu), `${cu} phải được nhận là mã CuongMini`);
+      /* Default và Classic Sonic cùng mã cũ `sonnet-5` ⇒ cả hai về Classic Sonic (đúng là thứ Default chạy khi rambo sống). */
+      const mong = cm === 'cm-default' ? 'cm-classic-sonic' : cm;
+      assert.equal(timModel(cu).id, mong, `${cu} ⇒ ${mong}`);
+    }
+  } finally {
+    for (const [t, gt] of luu) { if (gt === undefined) delete process.env[t]; else process.env[t] = gt; }
   }
 });

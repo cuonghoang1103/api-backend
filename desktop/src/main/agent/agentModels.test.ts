@@ -24,7 +24,8 @@ function maBenMayChu(): string[] {
 /** Mã bảng CuongMini (`cm-*`, 18/10/2026) — thứ máy chủ GỬI trong `info.models` (`bangModel.ts`). Bí danh cũ chỉ là đầu vào máy chủ nhận. */
 function maChinhHang(): string[] {
   const src = readFileSync(join(goc, '../src/services/agent/bangModel.ts'), 'utf8');
-  const ma = [...src.matchAll(/^\s*id: '([a-z0-9-]+)', model:/gm)].map((m) => m[1]!);
+  /* 19/10/2026: Classic Sonic khai `model` bằng getter (`get model()`) — Sonnet mới nhất rambo có. */
+  const ma = [...src.matchAll(/^\s*id: '([a-z0-9-]+)', (?:get )?model/gm)].map((m) => m[1]!);
   expect(ma.length, 'không đọc được mã nào trong bangModel.ts — bảng đã đổi hình dạng?').toBeGreaterThanOrEqual(6);
   return [...new Set(ma)];
 }
@@ -47,6 +48,15 @@ describe('mã model AI Code', () => {
     const app = new Set(maAppNhan());
     const thieu = maChinhHang().filter((m) => !app.has(m));
     expect(thieu, `app không nhận: ${thieu.join(', ')} ⇒ chọn model chính hãng sẽ im lặng`).toEqual([]);
+  });
+
+  it('app nhận CuongMini Default (mã mặc định của máy chủ từ 19/10/2026)', () => {
+    const src = readFileSync(join(goc, '../src/services/agent/bangModel.ts'), 'utf8');
+    const md = /export const MA_DEFAULT = '([a-z0-9-]+)'/.exec(src)?.[1];
+    expect(md, 'không đọc được MA_DEFAULT').toBeTruthy();
+    expect(maAppNhan()).toContain(md);
+    const main = readFileSync(join(goc, 'src/main/ipc/agent.ts'), 'utf8');
+    expect(main, 'modelHienTai() phải mặc định CuongMini Default').toContain(`: '${md}';`);
   });
 
   it('danh sách trong main khớp với schema', () => {

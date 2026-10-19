@@ -35,6 +35,15 @@ import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { HE_SO_FABLE, MODEL_FABLE } from './fable.js';
 import { tokenGiaHan } from './keyGiaHan.js';
+import { MODEL_AGENT_RIENG } from './models.js';
+
+/**
+ * 19/10/2026: lượt chạy trên RAMBO (CuongMini Default / Classic — gói TRẢ TRỌN) KHÔNG ăn bể token 5 giờ: sổ ghi chúng
+ * với `costUsd = 0` (`turn.ts › giaDoan`). Lọc bằng CẢ HAI điều kiện (model rambo VÀ 0 $) để dòng cổng chính hãng cùng tên
+ * (`claude-sonnet-5-5`, có giá) vẫn được đếm. Chống lạm dụng Default nằm ở `defaultGioiHan.ts` (lượt/phút, lượt/ngày).
+ */
+const MODEL_RAMBO = [...new Set([...MODEL_AGENT_RIENG.map((m) => m.model), 'claude-sonnet-5-5'])];
+const KHONG_TINH_RAMBO = { NOT: { model: { in: MODEL_RAMBO }, costUsd: 0 } };
 
 /** Mặc định. Đổi bằng env, không sửa mã. `AGENT_TOKEN_CAP=0` = tắt trần (có chủ ý). */
 /*
@@ -139,7 +148,7 @@ export async function xemHanMuc(userId: number): Promise<HanMuc> {
   try {
     const [tong, fable, cuNhat, moiNhat] = await Promise.all([
       prisma.interviewLLMCallLog.aggregate({
-        where: { userId, feature: 'agent', createdAt: { gte: tu } },
+        where: { userId, feature: 'agent', createdAt: { gte: tu }, ...KHONG_TINH_RAMBO },
         _sum: { inputTokens: true, outputTokens: true },
       }),
       prisma.interviewLLMCallLog.aggregate({

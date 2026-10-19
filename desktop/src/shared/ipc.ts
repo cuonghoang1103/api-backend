@@ -975,6 +975,9 @@ export const modelAgentSchema = z.enum([
   // 18/10/2026: bảng CuongMini chung (`src/services/agent/bangModel.ts`) — mã TRUNG TÍNH,
   // không chứa tên model thật. Mã `cl-*`/cũ ở trên vẫn nhận (máy chủ đổi qua bí danh).
   'cm-invisible', 'cm-optimum', 'cm-sonic', 'cm-solid', 'cm-nova', 'cm-shin', 'cm-heshin', 'cm-eco',
+  // 19/10/2026: CuongMini Default (tự chọn: rambo sống ⇒ Classic Sonic, không ⇒ Solid) + nhóm CuongMini Classic (rambo).
+  // App gửi `?bang=cm2` để máy chủ trả các mã này (app đời `?bang=cm` nhận mã cũ thay thế).
+  'cm-default', 'cm-classic-optimum', 'cm-classic-sonic', 'cm-classic-heshin',
 ]);
 export type ModelAgent = z.infer<typeof modelAgentSchema>;
 
@@ -1469,6 +1472,11 @@ export interface AgentInfo {
    * máy chủ vẫn quyết từng lượt theo dự án gắn với thư mục.
    */
   nhom?: Array<{ projectId: number; key: string }>;
+  /**
+   * 19/10/2026: tài khoản FREE (không Pro) dùng được CuongMini Default (rambo — gói trọn). `duocDung = false` khi
+   * email chưa xác thực. `dangBaoTri` = rambo đang không chạy (Free không lùi sang model tốn tiền).
+   */
+  free?: { duocDung: boolean; canXacThucEmail: boolean; dangBaoTri: boolean; luotHomNay: number; tranNgay: number | null; tranPhut: number | null };
   configured: boolean;
   model: string | null;
   quota: AgentQuota | null;
@@ -1491,6 +1499,8 @@ export interface AgentInfo {
     cong?: 'rambo' | 'modelapi' | 'anthropic';
     /** `true` = model cần khoá mà chưa có vé ⇒ hiện TỐI HƠN + ổ khoá, bấm là hỏi khoá. */
     canMoKhoa?: boolean;
+    /** 19/10/2026: tài khoản Free — model này cần gói Pro (ổ khoá + lời mời nâng cấp, không hỏi khoá). */
+    canPro?: boolean;
     /** 18/10/2026: mô tả tiếng Anh, tên CỔNG hiển thị (CuongMini …), loại khoá cần nhập. */
     moEn?: string;
     nhom?: string;

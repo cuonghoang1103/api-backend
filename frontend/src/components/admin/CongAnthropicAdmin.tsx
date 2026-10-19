@@ -40,7 +40,23 @@ interface TongQuan {
   daBatMatKhauInvisible?: boolean;
   bangModel?: ModelCm[];
   tranModel?: Record<string, Record<'pro' | 'key_terminal', Cap>>;
-  rambo?: { bat: boolean; nguon: 'env' | 'admin'; coCauHinh: boolean };
+  rambo?: TrangThaiRambo;
+  /* 19/10/2026: nhóm CuongMini Classic + chống spam CuongMini Default. */
+  bangClassic?: Array<{ id: string; ten: string; model: string; nangLuc: number; tuongDuong: string }>;
+  defaultGioiHan?: GioiHanDefault;
+}
+interface TrangThaiRambo {
+  bat: boolean; nguon: 'env' | 'admin'; coCauHinh: boolean;
+  dangNghi?: boolean;
+  kiemGanNhat?: { luc: string; song: boolean } | null;
+  modelSonic?: string;
+  dsModel?: { luc: string; ids: string[] } | null;
+  thuGanNhat?: { luc: string; models: Array<{ model: string; ok: boolean; ms: number; loi?: string }> } | null;
+}
+interface GioiHanDefault { phutNguoi: number; ngayFree: number; ngayIp: number }
+interface TopDefault {
+  nguoi: Array<{ userId: number; username: string | null; email: string | null; emailVerified: boolean; luot: number; buoc: number; token: number }>;
+  ip: Array<{ ip: string; luot: number }>;
 }
 interface ModelCm {
   id: string; ten: string; model: string; cong: 'anthropic' | 'modelapi'; tenCong: string; khoa: 'free' | 'chung' | 'invisible';
@@ -119,7 +135,8 @@ export default function CongAnthropicAdmin() {
       <MatKhau loai="chung" daBat={tq.daBatMatKhau} onXong={nap} />
       <MatKhau loai="invisible" daBat={tq.daBatMatKhauInvisible === true} onXong={nap} />
       <MaGiaHanTien />
-      {tq.rambo && <CongTacRambo rambo={tq.rambo} onDoi={(rambo) => setTq({ ...tq, rambo })} />}
+      {tq.rambo && <CongTacRambo rambo={tq.rambo} classic={tq.bangClassic ?? []} onDoi={(rambo) => setTq({ ...tq, rambo })} />}
+      {tq.defaultGioiHan && <ChongSpamDefault gh={tq.defaultGioiHan} onDoi={(defaultGioiHan) => setTq({ ...tq, defaultGioiHan })} />}
       <ThamSo tq={tq} onDoi={(serverTool) => setTq({ ...tq, serverTool })} />
       <TranGoiForm tranGoi={tq.tranGoi} onXong={(t) => setTq({ ...tq, tranGoi: t })} />
       <CuongMiniNgonNguAdmin />
@@ -481,31 +498,157 @@ function BangModelCm({ models, tran, onXong }: {
   );
 }
 
-// ─── Công tắc cổng rambo (mặc định TẮT) ──────────────────────────────
+// ─── Công tắc cổng rambo + tình trạng + nút Thử (19/10/2026) ─────────
 
-function CongTacRambo({ rambo, onDoi }: {
-  rambo: { bat: boolean; nguon: 'env' | 'admin'; coCauHinh: boolean };
-  onDoi: (r: { bat: boolean; nguon: 'env' | 'admin'; coCauHinh: boolean }) => void;
+function CongTacRambo({ rambo, classic, onDoi }: {
+  rambo: TrangThaiRambo;
+  classic: Array<{ id: string; ten: string; model: string }>;
+  onDoi: (r: TrangThaiRambo) => void;
 }) {
   const [dang, setDang] = useState(false);
+  const [dangThu, setDangThu] = useState(false);
   const doi = async (bat: boolean) => {
     setDang(true);
     try { onDoi(await goi('/rambo', { method: 'PUT', body: JSON.stringify({ bat }) })); toast.success(bat ? 'Đã bật rambo. / Rambo on.' : 'Đã tắt rambo. / Rambo off.'); }
     catch (e) { toast.error((e as Error).message); } finally { setDang(false); }
   };
+  const thu = async () => {
+    setDangThu(true);
+    try {
+      const r = await goi<{ ketQua: { models: Array<{ ok: boolean }> }; trangThai: TrangThaiRambo }>('/rambo/thu', { method: 'POST' });
+      onDoi(r.trangThai);
+      const ok = r.ketQua.models.filter((m) => m.ok).length;
+      if (ok) toast.success(`Rambo trả lời ${ok}/${r.ketQua.models.length} model. / Rambo answered ${ok}/${r.ketQua.models.length}.`);
+      else toast.error('Rambo không trả lời model nào. / Rambo answered none.');
+    } catch (e) { toast.error((e as Error).message); } finally { setDangThu(false); }
+  };
+  const song = rambo.bat && rambo.coCauHinh && !rambo.dangNghi;
+  const nhan = !rambo.bat ? { t: 'TẮT / Off', c: 'border-darkborder text-text-muted' }
+    : !rambo.coCauHinh ? { t: 'Thiếu cấu hình / Not configured', c: 'border-red-500/50 text-red-400' }
+      : rambo.dangNghi ? { t: 'SẬP — đang lùi / Down — falling back', c: 'border-red-500/50 text-red-400' }
+        : { t: 'BẬT · đang chạy / On · up', c: 'border-green-500/50 text-green-400' };
   return (
-    <The tieuDe="🔌 Cổng rambo (cũ) / Legacy rambo gateway"
-      phai={<span className={`px-2 py-0.5 rounded-full text-xs border ${rambo.bat ? 'border-amber-500/50 text-amber-400' : 'border-darkborder text-text-muted'}`}>{rambo.bat ? 'Đang BẬT / On' : 'TẮT / Off'}</span>}>
+    <The tieuDe="🔌 Cổng rambo — CuongMini Default / Classic"
+      phai={<span className={`px-2 py-0.5 rounded-full text-xs border ${nhan.c}`}>{nhan.t}</span>}>
+      <div className="text-text-muted text-xs space-y-1">
+        <p>
+          <b className="text-text-primary">Bật thì chuyện gì xảy ra:</b> rambo là gói trả trọn (rẻ nhất) nên thành MẶC ĐỊNH.
+          AI Code (app, CLI, extension): <b className="text-text-primary">CuongMini Default</b> chạy Sonnet mới nhất của rambo
+          ({rambo.modelSonic ?? '—'}), nhóm <b className="text-text-primary">CuongMini Classic</b> ({classic.map((m) => m.ten.replace(/^CuongMini /, '')).join(' · ') || '—'}) hiện ngay dưới Default;
+          tài khoản FREE dùng được Default (chống spam ở thẻ dưới). Web: các việc có model Claude trong bản đồ (gia sư bài học, Code Lab, CT Work…) đi rambo;
+          CT Work dùng Sonnet. Phòng Luyện nói giữ cổng chính hãng (nhanh hơn).
+          Rambo sập ⇒ cầu dao mở: Pro tự lùi CuongMini Solid, web lùi gpt-6-sol, Free nhận câu &ldquo;đang bảo trì&rdquo;; rambo sống lại là tự về.
+        </p>
+        <p>
+          When on, rambo (flat-rate, cheapest) becomes the DEFAULT: CuongMini Default runs rambo&apos;s newest Sonnet, the Classic group appears right below it,
+          free accounts can use Default (anti-spam below), web features with a Claude model go through rambo (CT Work uses Sonnet; speaking room stays official).
+          When it fails the breaker opens: Pro falls back to Solid, web to gpt-6-sol, free users see &ldquo;under maintenance&rdquo;; it comes back automatically.
+        </p>
+        {rambo.nguon === 'env' && <p className="text-amber-300/90">⚠ Đang bị env RAMBO_BAT ghi đè — công tắc không có tác dụng tới khi bỏ biến đó. / Forced by RAMBO_BAT env.</p>}
+        {!rambo.coCauHinh && <p className="text-amber-300/90">⚠ Máy chủ chưa có AGENT_GATEWAY_BASE_URL/_API_KEY — bật cũng như tắt. / Missing gateway env.</p>}
+        <p>
+          Lần kiểm gần nhất / Last check: {rambo.kiemGanNhat ? `${ngayVN(rambo.kiemGanNhat.luc)} — ${rambo.kiemGanNhat.song ? 'sống / up' : 'không trả lời / down'}` : 'chưa có / none yet'}
+          {rambo.dsModel && <> · Danh sách model ({ngayVN(rambo.dsModel.luc)}): {rambo.dsModel.ids.join(', ')}</>}
+        </p>
+      </div>
+      <div className="flex flex-wrap items-center gap-3">
+        <label className="flex items-center gap-2 text-xs">
+          <input type="checkbox" disabled={dang || rambo.nguon === 'env'} checked={rambo.bat} onChange={(e) => doi(e.target.checked)} />
+          Bật cổng rambo / Enable rambo
+        </label>
+        <button type="button" className={`${nut} border-sky-500/50 text-sky-300`} disabled={dangThu || !rambo.bat || !rambo.coCauHinh} onClick={thu}>
+          {dangThu ? 'Đang thử… / Testing…' : 'Thử rambo / Test rambo'}
+        </button>
+        {song ? null : rambo.bat && <span className="text-xs text-red-400">Đang lùi về Solid / gpt-6-sol.</span>}
+      </div>
+      {rambo.thuGanNhat && (
+        <div className="overflow-x-auto">
+          <table className="text-xs w-full">
+            <thead><tr className="text-text-muted text-left"><th className="pr-3">Model</th><th className="pr-3">Kết quả / Result</th><th className="pr-3">ms</th><th>Lỗi / Error</th></tr></thead>
+            <tbody>
+              {rambo.thuGanNhat.models.map((m) => (
+                <tr key={m.model}>
+                  <td className="pr-3 font-mono">{m.model}</td>
+                  <td className={`pr-3 ${m.ok ? 'text-green-400' : 'text-red-400'}`}>{m.ok ? 'OK' : 'Hỏng / Failed'}</td>
+                  <td className="pr-3">{m.ms}</td>
+                  <td className="text-text-muted break-all">{m.loi ?? ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="text-[11px] text-text-muted mt-1">Thử lúc / Tested at {ngayVN(rambo.thuGanNhat.luc)} — mỗi model một lời gọi 1 token (gói trọn, không tốn tiền theo token).</p>
+        </div>
+      )}
+    </The>
+  );
+}
+
+// ─── Chống spam CuongMini Default + ai dùng nhiều nhất hôm nay ─────────
+
+function ChongSpamDefault({ gh, onDoi }: { gh: GioiHanDefault; onDoi: (v: GioiHanDefault) => void }) {
+  const [nhap, setNhap] = useState({ phutNguoi: String(gh.phutNguoi), ngayFree: String(gh.ngayFree), ngayIp: String(gh.ngayIp) });
+  const [dang, setDang] = useState(false);
+  const [top, setTop] = useState<TopDefault | null>(null);
+  const napTop = useCallback(async () => {
+    try { setTop(await goi<TopDefault>('/default-top')); } catch (e) { toast.error((e as Error).message); }
+  }, []);
+  useEffect(() => { void napTop(); }, [napTop]);
+  const luu = async () => {
+    setDang(true);
+    try {
+      const v = await goi<GioiHanDefault>('/default-gioi-han', {
+        method: 'PUT',
+        body: JSON.stringify({ phutNguoi: Number(nhap.phutNguoi) || 0, ngayFree: Number(nhap.ngayFree) || 0, ngayIp: Number(nhap.ngayIp) || 0 }),
+      });
+      onDoi(v);
+      toast.success('Đã lưu. / Saved.');
+    } catch (e) { toast.error((e as Error).message); } finally { setDang(false); }
+  };
+  const o1 = (k: keyof typeof nhap, nhanVi: string, nhanEn: string) => (
+    <label className="flex flex-col gap-1 text-xs">
+      <span className="text-text-muted">{nhanVi} / {nhanEn}</span>
+      <input className={`${o} w-28`} type="number" min={0} value={nhap[k]} onChange={(e) => setNhap({ ...nhap, [k]: e.target.value })} />
+    </label>
+  );
+  return (
+    <The tieuDe="🛡 Chống spam CuongMini Default / Default anti-spam">
       <p className="text-text-muted text-xs">
-        Mặc định TẮT: mọi việc đi CuongMini Core. Bật lại khi cổng rambo sống lại — bảng model cũ xuất hiện thêm ở cuối danh sách (nhóm &ldquo;CuongMini Classic&rdquo;).
-        {rambo.nguon === 'env' && ' ⚠ Đang bị env RAMBO_BAT ghi đè — công tắc này không có tác dụng tới khi bỏ biến đó.'}
-        {!rambo.coCauHinh && ' ⚠ Máy chủ chưa có AGENT_GATEWAY_BASE_URL/_API_KEY — bật cũng như tắt.'}
-        <br />Off by default. Turn it on only when the legacy gateway works again{rambo.nguon === 'env' ? ' (currently forced by RAMBO_BAT env)' : ''}.
+        Default chạy trên rambo (gói trọn) cho MỌI tài khoản, gần như không giới hạn. Chỉ đếm câu hỏi MỚI (không đếm từng bước gọi tool). Free phải xác thực email.
+        0 = tắt. Chạm giới hạn ⇒ câu thân thiện nói rõ khi nào dùng lại. ⚠ Rambo là gói của một nhà cung cấp — dùng quá đà có thể bị họ giới hạn khoá; xem bảng dưới để phát hiện sớm.
+        <br />Counts new questions only. Free accounts need a verified email. 0 = off.
       </p>
-      <label className="flex items-center gap-2 text-xs">
-        <input type="checkbox" disabled={dang || rambo.nguon === 'env'} checked={rambo.bat} onChange={(e) => doi(e.target.checked)} />
-        Bật cổng rambo / Enable rambo
-      </label>
+      <div className="flex flex-wrap items-end gap-3">
+        {o1('phutNguoi', 'Lượt/phút/người (Free + Pro)', 'Per minute per user')}
+        {o1('ngayFree', 'Lượt/ngày/người (Free)', 'Per day per free user')}
+        {o1('ngayIp', 'Lượt/ngày/IP (Free)', 'Per day per IP')}
+        <button type="button" className={`${nut} border-sky-500/50 text-sky-300`} disabled={dang} onClick={luu}>Lưu / Save</button>
+      </div>
+      <div className="flex items-center justify-between">
+        <h4 className="text-xs font-semibold text-text-primary">Dùng Default nhiều nhất hôm nay / Top Default users today</h4>
+        <button type="button" className={`${nut} border-darkborder text-text-muted`} onClick={() => void napTop()}><RefreshCw className="w-3 h-3 inline" /> Tải lại</button>
+      </div>
+      {top && (
+        <div className="overflow-x-auto">
+          <table className="text-xs w-full">
+            <thead><tr className="text-text-muted text-left"><th className="pr-3">Người dùng / User</th><th className="pr-3">Câu hỏi / Questions</th><th className="pr-3">Bước / Steps</th><th className="pr-3">Token</th><th>Email</th></tr></thead>
+            <tbody>
+              {top.nguoi.length === 0 && <tr><td colSpan={5} className="text-text-muted py-2">Chưa ai dùng hôm nay. / Nobody yet today.</td></tr>}
+              {top.nguoi.map((n) => (
+                <tr key={n.userId}>
+                  <td className="pr-3">#{n.userId} {n.username ?? ''} <span className="text-text-muted">{n.email ?? ''}</span></td>
+                  <td className="pr-3">{n.luot}</td>
+                  <td className="pr-3">{n.buoc}</td>
+                  <td className="pr-3">{n.token.toLocaleString('vi-VN')}</td>
+                  <td className={n.emailVerified ? 'text-green-400' : 'text-amber-400'}>{n.emailVerified ? 'đã xác thực' : 'chưa'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {top.ip.length > 0 && (
+            <p className="text-[11px] text-text-muted mt-2">IP đông nhất (Free, từ lúc máy chủ khởi động) / Busiest IPs: {top.ip.slice(0, 8).map((x) => `${x.ip} (${x.luot})`).join(' · ')}</p>
+          )}
+        </div>
+      )}
     </The>
   );
 }

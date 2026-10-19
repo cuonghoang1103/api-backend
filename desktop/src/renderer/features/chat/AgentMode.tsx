@@ -988,7 +988,7 @@ export function AgentMode({
 
       case '/status': {
         const app = await window.cuongthai?.app.getInfo().catch(() => null);
-        const nayModel = dsModel.find((x) => x.id === (thuMuc?.model ?? 'cm-solid'));
+        const nayModel = dsModel.find((x) => x.id === (thuMuc?.model ?? 'cm-default'));
         const nayMuc = dsMuc.find((x) => x.id === (thuMuc?.mucNoLuc ?? 'vua'));
         const duPhong = trangThai.muc.some((m) => m.kieu === 'loi' && m.ma === 'DOI_CONG');
         traLoi(moTaTrangThai({
@@ -1241,7 +1241,18 @@ export function AgentMode({
   // ─── Chưa đủ điều kiện ─────────────────────────────────────
   // Thoát Ở ĐÂY, sau khi MỌI hook đã chạy — xem chú thích dài ở trên.
   /* Đợt 6: không Pro nhưng có dự án dùng được hạn mức NHÓM ⇒ vẫn mở; máy chủ quyết từng lượt theo dự án gắn. */
-  if (!info.pro && !info.nhom?.length) return <MoiNangCap />;
+  /* 19/10/2026: tài khoản miễn phí dùng được CuongMini Default (máy chủ chặn model khác bằng 403 + lời mời nâng cấp). */
+  if (!info.pro && !info.nhom?.length && !info.free?.duocDung) {
+    if (info.free?.canXacThucEmail) {
+      return (
+        <div className="ct-empty">
+          <h1>{dich('Xác thực email để dùng CuongMini Default')}</h1>
+          <p>{dich('Tài khoản miễn phí dùng được CuongMini Default sau khi xác thực email (mở thư xác thực trong hộp thư, hoặc Cài đặt → Tài khoản trên web). Gói Pro mở thêm mọi model khác.')}</p>
+        </div>
+      );
+    }
+    return <MoiNangCap />;
+  }
   if (!info.configured) {
     return (
       <div className="ct-empty">
@@ -1374,7 +1385,7 @@ export function AgentMode({
             <ChonModelVaMuc
               cuocId={cuocId}
               muc={thuMuc?.mucNoLuc ?? 'vua'}
-              model={thuMuc?.model ?? 'cm-solid'}
+              model={thuMuc?.model ?? 'cm-default'}
               khoa={trangThai.dangChay}
               info={info}
               onChonMuc={(m) => void doiMucNoLuc(m)}
@@ -2443,7 +2454,7 @@ export function doiTenModel(ten: string): string {
 
 /** Chỉ dùng khi máy chủ CŨ chưa khai `models` — máy chủ mới luôn gửi bảng CuongMini (18/10/2026). */
 const DS_MODEL: Array<{ id: ModelAgent; ten: string; mo: string }> = [
-  { id: 'cm-solid', ten: 'CuongMini Solid', mo: 'Mặc định' },
+  { id: 'cm-default', ten: 'CuongMini Default', mo: 'Mặc định' },
 ];
 
 const DS_MUC: Array<{ id: MucNoLuc; ten: string; mo: string }> = [
@@ -2476,6 +2487,8 @@ interface MucModel {
   /** `anthropic` = cổng "CuongMini Code Max"; còn lại = cổng chính. CHỈ để nhóm — không hiện. */
   cong: 'chinh' | 'anthropic';
   canMoKhoa: boolean;
+  /** 19/10/2026: tài khoản miễn phí — model cần gói Pro (ổ khoá + lời mời nâng cấp). */
+  canPro?: boolean;
   mienPhi: boolean;
   /** Tên CỔNG hiển thị (CuongMini …) do máy chủ khai. */
   nhom?: string;
@@ -2493,6 +2506,7 @@ function dsModelCua(info: AgentInfo): MucModel[] {
         dat: m.dat === true || m.id === ID_FABLE,
         cong: m.cong === 'anthropic' ? 'anthropic' as const : 'chinh' as const,
         canMoKhoa: m.canMoKhoa === true,
+        ...(m.canPro ? { canPro: true } : {}),
         mienPhi: m.mienPhi === true,
       }))
     : DS_MODEL.map((m) => ({ ...m, dungDuoc: true, dat: false, cong: 'chinh' as const, canMoKhoa: false, mienPhi: false }));
@@ -2574,8 +2588,8 @@ function ChonModelVaMuc({
                   data-khoa={m.canMoKhoa}
                   data-mien-phi={m.mienPhi}
                   disabled={!m.dungDuoc}
-                  style={m.canMoKhoa ? { opacity: 0.62 } : undefined}
-                  title={m.dungDuoc ? m.mo : dich('Model này tạm thời chưa dùng được')}
+                  style={m.canMoKhoa || m.canPro ? { opacity: 0.62 } : undefined}
+                  title={m.canPro ? dich('Cần gói Pro') : m.dungDuoc ? m.mo : dich('Model này tạm thời chưa dùng được')}
                   onClick={() => {
                     if (m.canMoKhoa) { datHoiKhoa((h) => (h === m.id ? null : m.id)); return; }
                     if (m.dat && m.id !== model) { datHoiFable(m.id); return; }
@@ -2587,9 +2601,9 @@ function ChonModelVaMuc({
                     <strong>
                       {m.ten}
                       {m.dat && <b className="ct-chonmm-dat">$$$</b>}
-                      {m.canMoKhoa && <OKhoa />}
+                      {(m.canMoKhoa || m.canPro) && <OKhoa />}
                     </strong>
-                    <em>{m.dungDuoc ? m.mo : dich('tạm thời chưa dùng được')}</em>
+                    <em>{m.canPro ? dich('Cần gói Pro — nâng cấp tại cuongthai.com/pro') : m.dungDuoc ? m.mo : dich('tạm thời chưa dùng được')}</em>
                     {m.canMoKhoa && <em>{dich('Cần khoá — bấm để nhập')}</em>}
                   </span>
                 </button>

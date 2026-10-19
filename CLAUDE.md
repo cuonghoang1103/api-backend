@@ -459,6 +459,19 @@ phát hành bắt buộc phải public.
 
 ## Cổng LLM — modelapi.vn (11/08/2026)
 
+> **⭐⭐ 19/10/2026 — rambo BẬT lại = MẶC ĐỊNH (thắng dòng 18/10 ngay dưới về rambo).** Chi tiết: `docs/cuongmini-doi-chieu-nang-luc.md` mục 2i.
+> - AI Code mặc định **CuongMini Default** (`cm-default`, `bangModel.ts › giaiDefault`): rambo bật + cầu dao đóng ⇒ **Classic Sonic** =
+>   Sonnet mới nhất rambo có (`ramboSonic()`: 5.5 nếu `/v1/models` có, giờ là `claude-sonnet-5`; ép `RAMBO_MODEL_SONIC`); không ⇒ **Solid**;
+>   lỗi giữa lượt ⇒ tự chuyển Solid. Nhóm **CuongMini Classic** (Optimum `claude-opus-5` · Sonic · Heshin `claude-haiku-4-5`, cổng `rambo`,
+>   gói trọn ⇒ `costUsd = 0`, không trần $) chỉ hiện khi rambo bật. Mã rambo cũ (`sonnet-5`…) là bí danh ⇒ Classic (`models.ts`).
+> - **Tài khoản FREE dùng được Default** (`/agent/turn` + `/compact`, `chiProHoacNhomHoacFree`): email phải xác thực, CHỈ chạy rambo —
+>   rambo không sống ⇒ `CUONGMINI_BAO_TRI`, KHÔNG lùi model tốn tiền. Chống spam (`defaultGioiHan.ts`, admin chỉnh, 0 = tắt): 10 câu/phút
+>   (Free + Pro), 500 câu/ngày (Free), 1500 câu/ngày/IP (Free) — đếm CÂU HỎI MỚI, không đếm bước tool. ⚠ Rambo là gói của MỘT nhà cung cấp.
+> - App mới gửi **`?bang=cm2`** (desktop/CLI/extension) — app `?bang=cm` (z.enum cố định) nhận Default/Classic dưới mã cũ (`maChoApp`).
+> - Web: việc không thuộc `VIEC_CHI_OPENAI` đi rambo như trước, **trừ `language_tutor`** (`VIEC_KHONG_RAMBO` — phòng Luyện nói giữ cổng
+>   chính hãng, lùi `gpt-6-sol`). CT Work (`work_assistant`/`work_spec_review`/`work_digest`) đi rambo **Sonnet** (`RAMBO_VIEC_SONNET`), sập ⇒
+>   `gpt-6-sol`; KHÔNG lùi cổng chính hãng. Admin: tình trạng + nút "Thử rambo" + chống spam + "ai dùng Default nhiều nhất".
+>
 > **⭐ 18/10/2026 — cổng & model CuongMini (thắng mọi dòng cũ bên dưới về AI Code / rambo).**
 > - **Rambo TẮT mặc định** ở MỌI nơi (`ramboBat()` trong `gateway.ts`; bật: công tắc trang admin `/admin/commerce?tab=anthropic`
 >   hoặc env `RAMBO_BAT=1`; `RAMBO_BAT=0` tắt cứng). Tắt ⇒ `congAgent()` = null ⇒ `agent_code`/`exam_tutor`/`lab_room` đi modelapi

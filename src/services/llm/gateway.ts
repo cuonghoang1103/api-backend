@@ -832,6 +832,74 @@ export async function kiemRamboSong(): Promise<boolean> {
   return song;
 }
 
+/** Lần gõ cửa rambo gần nhất (mũi dò / app / admin) — cho trang admin. `null` = chưa gõ lần nào từ lúc khởi động. */
+export function lanKiemRamboGanNhat(): { luc: number; song: boolean } | null { return kiemGanNhat; }
+
+/**
+ * Đọc danh sách model của rambo (`GET /v1/models`, kèm khoá) ⇒ nhớ để `ramboSonic()` chọn Sonnet mới nhất.
+ * ⚠️ Danh sách là QUẢNG CÁO (trả 200 kể cả không khoá) — không chứng minh gọi được; `thuRambo()` mới gọi thật.
+ */
+export async function docModelRambo(): Promise<string[] | null> {
+  const ep = congAgent();
+  if (!ep) return null;
+  try {
+    const r = await fetch(`${ep.root}/v1/models`, {
+      headers: { 'x-api-key': ep.key ?? '', 'anthropic-version': '2023-06-01' },
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!r.ok) return null;
+    const j = await r.json() as { data?: Array<{ id?: unknown }> };
+    const ids = (j.data ?? []).map((x) => String(x.id ?? '')).filter(Boolean);
+    if (ids.length) datDsModelRambo(ids);
+    return ids;
+  } catch {
+    return null;
+  }
+}
+
+export interface KetQuaThuRambo {
+  luc: number;
+  coCauHinh: boolean;
+  dsModel: string[] | null;
+  models: Array<{ model: string; ok: boolean; ms: number; loi?: string }>;
+}
+let thuGanNhat: KetQuaThuRambo | null = null;
+export function ketQuaThuRamboGanNhat(): KetQuaThuRambo | null { return thuGanNhat; }
+
+/**
+ * NÚT "THỬ RAMBO" của admin (19/10/2026): đọc danh sách model + gọi RẤT NGẮN (`max_tokens: 1`, một chữ, hạn 20 s)
+ * từng model đưa vào. Rambo là gói trả trọn ⇒ không tốn tiền theo token. Câu lỗi cắt 160 ký tự, KHÔNG BAO GIỜ kèm
+ * khoá. Gọi được ⇒ đóng cầu dao (`baoRamboOk`); mọi model hỏng ⇒ không tự mở cầu dao (để lượt thật quyết).
+ */
+export async function thuRambo(models: string[]): Promise<KetQuaThuRambo> {
+  const ep = congAgent();
+  const ra: KetQuaThuRambo = { luc: Date.now(), coCauHinh: Boolean(ep), dsModel: null, models: [] };
+  if (!ep) { thuGanNhat = ra; return ra; }
+  ra.dsModel = await docModelRambo();
+  ra.models = await Promise.all([...new Set(models)].slice(0, 8).map(async (model) => {
+    const t0 = Date.now();
+    try {
+      const r = await fetch(`${ep.root}/v1/messages`, {
+        method: 'POST',
+        headers: { 'x-api-key': ep.key ?? '', 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+        body: JSON.stringify({ model, max_tokens: 1, messages: [{ role: 'user', content: 'ok' }] }),
+        signal: AbortSignal.timeout(20_000),
+      });
+      const ms = Date.now() - t0;
+      if (r.ok) return { model, ok: true, ms };
+      const chu = (await r.text().catch(() => '')).replace(/sk-[\w-]+/g, 'sk-***').slice(0, 160);
+      return { model, ok: false, ms, loi: `HTTP ${r.status} ${chu}` };
+    } catch (e) {
+      return { model, ok: false, ms: Date.now() - t0, loi: String((e as Error).message || e).slice(0, 160) };
+    }
+  }));
+  const song = ra.models.some((m) => m.ok);
+  kiemGanNhat = { luc: Date.now(), song };
+  if (song) baoRamboOk();
+  thuGanNhat = ra;
+  return ra;
+}
+
 function batDauDo(): void {
   if (dangDo) return;
   dangDo = true;
@@ -873,6 +941,19 @@ function batDauDo(): void {
 // `modelFor()` đổi ngầm sang opus và trần mất nghĩa, nên giữ ở modelapi.
 const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai', 'study_plan', 'study_verify', 'study_coach', 'creator_script', 'work_agent']);
 
+/**
+ * Việc KHÔNG BAO GIỜ đi rambo vì lý do TỐC ĐỘ (19/10/2026, chủ app chốt khi bật lại rambo): `language_tutor` —
+ * phòng Luyện nói / Trò chuyện CuongMini đi cổng chính hãng (CuongMini Heshin 5.5, không nghĩ, chảy chữ) ở
+ * `ielts/troChuyen/troChuyenLuong.service.ts`; đường lùi của nó (`llmComplete`) và các việc ngoại ngữ khác cùng
+ * purpose cần chữ đầu sớm — rambo chậm hơn. Rambo bật hay tắt thì việc này vẫn đi modelapi (`gpt-6-sol`, effort low).
+ */
+const VIEC_KHONG_RAMBO = new Set<LlmPurpose>(['language_tutor']);
+
+/** Việc này có được đi rambo không (khi rambo bật). THUẦN — test đọc. */
+export function viecDiRambo(purpose: LlmPurpose): boolean {
+  return !VIEC_CHI_OPENAI.has(purpose) && !VIEC_KHONG_RAMBO.has(purpose);
+}
+
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // Đặt TRƯỚC nhánh máy nhà: `agent_code` nằm trong `TOOL_PURPOSES` nên nó
   // không bao giờ đi máy nhà, nhưng thứ tự này nói rõ ý định.
@@ -882,7 +963,7 @@ export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // phải đi rambo KỂ CẢ lúc cầu dao mở — chúng là việc tương tác trực tiếp mà
   // modelapi không phục vụ được bằng model Claude.
   const rieng = congAgent();
-  if (rieng && !VIEC_CHI_OPENAI.has(purpose) && (!ramboDangNghi() || RAMBO_PURPOSES.has(purpose))) return rieng;
+  if (rieng && viecDiRambo(purpose) && (!ramboDangNghi() || RAMBO_PURPOSES.has(purpose))) return rieng;
   const root = localRoot();
   if (root && !VISION_PURPOSES.has(purpose) && !TOOL_PURPOSES.has(purpose) && localPurposes().has(purpose) && process.env.LLM_LOCAL_API_KEY) {
     return { root, key: process.env.LLM_LOCAL_API_KEY, local: true, label: 'may-nha' };
@@ -1150,7 +1231,9 @@ function modelCong(purpose: LlmPurpose): string {
  */
 function modelBanDo(purpose: LlmPurpose): string {
   const m = PURPOSE_MODEL[purpose];
-  return !ramboBat() && m.startsWith('claude-') ? MODELAPI_DU_PHONG : m;
+  /* 19/10/2026: việc KHÔNG đi rambo (kể cả khi rambo BẬT — `language_tutor`) cũng không được gọi Claude qua
+     modelapi (giá ~3,3×) ⇒ cùng luật với rambo tắt. */
+  return (!ramboBat() || !viecDiRambo(purpose)) && m.startsWith('claude-') ? MODELAPI_DU_PHONG : m;
 }
 
 /**
@@ -1172,7 +1255,33 @@ function modelBanDo(purpose: LlmPurpose): string {
  * trả 200, đúng tên model. Muốn quay lại từng việc: `LLM_MODEL_<VIỆC>=…`.
  */
 const RAMBO_MODEL_MANH = 'claude-opus-5';
-const RAMBO_MODEL_HANG_LOAT = 'claude-sonnet-5';
+
+/**
+ * ============================================================
+ * SONNET MỚI NHẤT RAMBO CÓ (19/10/2026)
+ * ============================================================
+ * Chủ app chốt: CuongMini Default (AI Code) và mọi việc AI của CT Work chạy **Claude Sonnet 5.5 trên rambo** NẾU
+ * rambo có model đó, không thì Sonnet mới nhất rambo có. Đo 19/10/2026 `GET /api/claude/v1/models` (không khoá —
+ * danh sách quảng cáo): opus-5, fable-5, opus-4-8/4-7/4-6, **sonnet-5**, sonnet-4-6, haiku-4-5 — CHƯA có
+ * `claude-sonnet-5-5` ⇒ hiện chạy `claude-sonnet-5`. Danh sách đọc lại mỗi 10 phút khi rambo bật
+ * (`llm/congTacRambo.ts`) ⇒ rambo thêm 5.5 là tự lên, không cần deploy. Ép tay: env `RAMBO_MODEL_SONIC`.
+ */
+const SONNET_THU_TU = ['claude-sonnet-5-5', 'claude-sonnet-5', 'claude-sonnet-4-6'];
+let dsModelRambo: { luc: number; ids: string[] } | null = null;
+/** Ghi danh sách model rambo vừa đọc (`GET /v1/models`). */
+export function datDsModelRambo(ids: string[], luc = Date.now()): void {
+  dsModelRambo = { luc, ids: ids.filter((x) => typeof x === 'string').slice(0, 100) };
+}
+export function docDsModelRamboDaNho(): { luc: number; ids: string[] } | null { return dsModelRambo; }
+/** Sonnet mới nhất rambo có — model của CuongMini Default / Classic Sonic và việc CT Work trên rambo. */
+export function ramboSonic(): string {
+  const env = process.env.RAMBO_MODEL_SONIC?.trim();
+  if (env) return env;
+  const ids = dsModelRambo?.ids ?? [];
+  return SONNET_THU_TU.find((m) => ids.includes(m)) ?? 'claude-sonnet-5';
+}
+/** Việc CT Work đi rambo bằng Sonnet (không phải opus): rambo sống ⇒ Sonnet; sập ⇒ `MODELAPI_DU_PHONG` (gpt-6-sol). */
+export const RAMBO_VIEC_SONNET = new Set<LlmPurpose>(['work_assistant', 'work_spec_review', 'work_digest']);
 /**
  * ⚠️ THU HẸP 14/09/2026. Trước đây danh sách này gồm cả `codelab_bulk`,
  * `language_bulk`, `exphub_doc`, `cv_parse` — tức bài tập Code Lab, nội dung
@@ -1247,7 +1356,7 @@ export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
   const diem = ep ?? endpointFor(purpose);
   // Đường rambo: chỉ phục vụ model Claude, nên bản đồ `PURPOSE_MODEL` (vốn đầy
   // tên `gpt-*` của modelapi) KHÔNG dùng được ở đây — lấy nhầm là 404/503.
-  if (diem.label === 'cong-agent') return env || (RAMBO_VIEC_HANG_LOAT.has(purpose) ? RAMBO_MODEL_HANG_LOAT : RAMBO_MODEL_MANH);
+  if (diem.label === 'cong-agent') return env || (RAMBO_VIEC_HANG_LOAT.has(purpose) || RAMBO_VIEC_SONNET.has(purpose) ? ramboSonic() : RAMBO_MODEL_MANH);
   // Lùi về modelapi: dùng model dự phòng người dùng chỉ định, trừ khi việc này
   // vốn đã trỏ vào một model gpt còn sống (giữ nguyên lựa chọn cũ nếu có).
   if (!diem.local && ramboDangNghi()) return modelGoiDuoc(env || MODELAPI_DU_PHONG);

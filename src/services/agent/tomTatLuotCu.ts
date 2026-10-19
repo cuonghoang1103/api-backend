@@ -33,7 +33,7 @@
  */
 import { createHash } from 'node:crypto';
 import type { AgentMessage } from './turn.js';
-import { chatUrlOf, costUsd, endpointFor, gatewayKeyFor, gatewayRoot, modelFor } from '../llm/gateway.js';
+import { baoRamboHong, chatUrlOf, congAgent, costUsd, endpointFor, gatewayKeyFor, gatewayRoot, modelFor, ramboDangNghi } from '../llm/gateway.js';
 import { hangSo, laLoiCongHong, tuongDuongFree, type MucModel } from './bangModel.js';
 import { logger } from '../../utils/logger.js';
 
@@ -208,9 +208,27 @@ export async function ghiNhoLuotDaBo(
  * (feature `agent`, đúng model) ⇒ tính vào trần theo model của người dùng.
  */
 /** `step` (đợt 6): dấu hạn mức NHÓM — tóm tắt của lượt dùng hạn mức nhóm cũng tính vào trần nhóm. */
-export function goiTomTatBangModel(muc: MucModel, userId: number, step?: string): GoiTomTat & { maModel: string } {
+export function goiTomTatBangModel(muc: MucModel, userId: number, step?: string, o: { khongLui?: boolean } = {}): GoiTomTat & { maModel: string } {
   const goi = async (system: string, user: string): Promise<string | null> => {
     const thu = async (m: MucModel): Promise<string> => {
+      if (m.cong === 'rambo') {
+        /* Nhóm Classic / Default trên rambo (19/10/2026): gói trọn ⇒ sổ ghi token, 0 $. */
+        const ep = congAgent();
+        if (!ep || ramboDangNghi()) throw new Error('HTTP 503 rambo không chạy (tắt hoặc đang nghỉ)');
+        const res = await fetch(`${ep.root}/v1/messages`, {
+          method: 'POST',
+          headers: { 'x-api-key': ep.key ?? '', 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+          signal: AbortSignal.timeout(240_000),
+          body: JSON.stringify({ model: m.model, max_tokens: 16_000, system, messages: [{ role: 'user', content: user }] }),
+        });
+        if (!res.ok) {
+          if (res.status >= 500 || res.status === 429) baoRamboHong();
+          throw new Error(`HTTP ${res.status} ${(await res.text().catch(() => '')).slice(0, 200)}`);
+        }
+        const j = await res.json() as { content?: Array<{ type?: string; text?: string }>; usage?: { input_tokens?: number; output_tokens?: number } };
+        void ghiSoTomTat(userId, m.model, j.usage?.input_tokens ?? 0, j.usage?.output_tokens ?? 0, 0, step);
+        return (j.content ?? []).filter((k) => k.type === 'text').map((k) => k.text ?? '').join('');
+      }
       if (m.cong === 'anthropic') {
         const { goiVanBanChinhHang } = await import('./anthropicChinhHang/dinhTuyen.js');
         const kq = await goiVanBanChinhHang({
@@ -238,7 +256,8 @@ export function goiTomTatBangModel(muc: MucModel, userId: number, step?: string)
       return await thu(muc);
     } catch (e) {
       const msg = (e as Error).message || '';
-      const thay = laLoiCongHong(msg, (e as { code?: string }).code) ? tuongDuongFree(muc) : null;
+      /* `khongLui` (tài khoản Free): không có đường lùi sang model tốn tiền. */
+      const thay = !o.khongLui && laLoiCongHong(msg, (e as { code?: string }).code) ? tuongDuongFree(muc) : null;
       if (!thay) throw e;
       logger.warn('tóm tắt lượt cũ: cổng hỏng — dùng model tương đương', { tu: muc.id, sang: thay.id });
       return thu(thay);

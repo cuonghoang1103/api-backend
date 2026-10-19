@@ -24,6 +24,8 @@ type ModelMuc = {
   cong?: 'rambo' | 'modelapi' | 'anthropic';
   /** Model cần khoá chưa có vé ⇒ TỐI HƠN + ổ khoá, chọn là hỏi khoá. */
   canMoKhoa?: boolean;
+  /** 19/10/2026: tài khoản miễn phí — model cần gói Pro (chỉ CuongMini Default dùng được). */
+  canPro?: boolean;
   mienPhi?: boolean;
   /** 18/10/2026: mô tả tiếng Anh + tên cổng hiển thị (CuongMini …). */
   moEn?: string;
@@ -44,7 +46,7 @@ const CHE_DO: Array<{ id: string; ten: string; ngan: string; mo: string; icon: s
 ];
 /** Chỉ khi máy chủ CŨ chưa khai `models` (18/10/2026: máy chủ gửi bảng CuongMini). */
 const MODEL_DU_PHONG: ModelMuc[] = [
-  { id: 'cm-solid', ten: 'CuongMini Solid', mo: 'Mặc định', dungDuoc: true },
+  { id: 'cm-default', ten: 'CuongMini Default', mo: 'Mặc định', dungDuoc: true },
 ];
 const MUC_DU_PHONG: MucNoLuc[] = [
   { id: 'thap', ten: 'Thấp', mo: 'hỏi nhanh' }, { id: 'vua', ten: 'Vừa', mo: 'mặc định' }, { id: 'cao', ten: 'Cao', mo: 'đọc rộng, tự test' },
@@ -771,7 +773,9 @@ function xuLy(e: SuKien): void {
       if (e.ma === 'PRO_REQUIRED') {
         const n = document.createElement('div');
         n.className = 'nut-hang';
-        n.innerHTML = '<button class="nut chinh">Xem gói Pro</button>';
+        /* 19/10/2026: tài khoản miễn phí dùng được CuongMini Default — mời chọn nó, kèm nút xem gói Pro. */
+        el.insertAdjacentHTML('beforeend', `<div class="phu">${esc(L('Tài khoản miễn phí dùng được CuongMini Default — chọn nó ở menu Model.', 'Free accounts can use CuongMini Default — pick it in the Model menu.'))}</div>`);
+        n.innerHTML = `<button class="nut chinh">${esc(L('Xem gói Pro', 'See Pro'))}</button>`;
         n.querySelector('button')!.addEventListener('click', () => gui({ loai: 'moLink', url: 'https://cuongthai.com/pro' }));
         el.appendChild(n);
       }
@@ -1360,11 +1364,13 @@ function moMenuModel(): void {
     /* 18/10/2026: MỘT danh sách theo năng lực (thứ tự máy chủ), CHỈ tên CuongMini; cần khoá ⇒ tối hơn + 🔒. */
     ...dsModel().map((m) => ({
       nhom: 'Model',
-      ten: `${m.canMoKhoa ? '🔒 ' : ''}${m.ten}`,
-      mo: !m.dungDuoc ? L('tạm thời chưa dùng được', 'temporarily unavailable') : m.canMoKhoa ? `${L('cần khoá', 'needs a key')} — ${m.mo}` : m.mo,
-      chon: m.id === hienModel, tat: !m.dungDuoc, toi: m.canMoKhoa === true,
+      ten: `${m.canMoKhoa || m.canPro ? '🔒 ' : ''}${m.ten}`,
+      mo: m.canPro ? L('cần gói Pro — cuongthai.com/pro', 'needs Pro — cuongthai.com/pro')
+        : !m.dungDuoc ? L('tạm thời chưa dùng được', 'temporarily unavailable') : m.canMoKhoa ? `${L('cần khoá', 'needs a key')} — ${m.mo}` : m.mo,
+      chon: m.id === hienModel, tat: !m.dungDuoc && !m.canPro, toi: m.canMoKhoa === true || m.canPro === true,
       lam: () => {
         if (m.canMoKhoa) { hoiMatKhauRoiChon(m); return; }
+        if (m.canPro) { gui({ loai: 'moLink', url: 'https://cuongthai.com/pro' }); return; }
         if (m.dat && !confirm(`${m.ten} tốn nhiều hơn hẳn các model khác. Vẫn chọn?`)) return;
         void doiModel(m.id).catch((e: Error) => thongBao(e.message, true));
       },

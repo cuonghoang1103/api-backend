@@ -16,8 +16,10 @@ import { coKeyKhaDung } from './khoKey.js';
 import { ganCache, ghiDung, guiChinhHang, type NguCanhGoi } from './goi.js';
 import { dungThanChinhHang, thanAnToan, type ThanAnthropic } from './thanYeuCau.js';
 import { daBatMatKhau, docBoVe } from './ve.js';
-import { TEN_CONG, bangModel, hangSo, modelapiGoiDuoc, type LoaiKhoa, type MucModel } from '../bangModel.js';
-import { ramboBat } from '../../llm/gateway.js';
+import {
+  MA_DEFAULT, TEN_CONG, bangChoApp, bangModel, giaiDefault, hangSo, modelapiGoiDuoc, ramboChayDuoc, type LoaiKhoa, type MucModel,
+} from '../bangModel.js';
+import { congAgent } from '../../llm/gateway.js';
 
 export const NHAN_CONG_ANTHROPIC = 'cong-anthropic';
 
@@ -74,6 +76,11 @@ export interface ModelChoApp {
   mienPhi: boolean;
   hang: HangChinhHang;
   dat?: boolean;
+  /**
+   * 19/10/2026: tài khoản FREE (không Pro, không hạn mức nhóm) chỉ chạy được CuongMini Default ⇒ mọi model khác
+   * mang `canPro: true` + `dungDuoc: false`: app hiện ổ khoá + lời mời nâng cấp (không hỏi khoá).
+   */
+  canPro?: boolean;
 }
 
 /**
@@ -87,31 +94,39 @@ export function mucChoApp(m: MucModel, q: QuyenChinhHang, coKeyAnthropic: boolea
     ten: m.ten,
     mo: m.mo,
     moEn: m.moEn,
-    nhom: TEN_CONG[m.cong],
-    cong: m.cong,
+    /* Default: không thuộc cổng nào cố định — nhóm "CuongMini", `cong` = cổng nó đang chạy lúc này. */
+    nhom: m.id === MA_DEFAULT ? 'CuongMini' : TEN_CONG[m.cong],
+    cong: m.id === MA_DEFAULT ? giaiDefault().cong : m.cong,
     khoa: m.khoa,
     canMoKhoa: !daMoKhoa(m, q),
     ...(m.khoa !== 'free' ? { loaiKhoa: m.khoa as 'chung' | 'invisible' } : {}),
-    dungDuoc: m.cong === 'anthropic' ? coKeyAnthropic : modelapiGoiDuoc(m),
+    dungDuoc: m.id === MA_DEFAULT ? true : m.cong === 'anthropic' ? coKeyAnthropic : m.cong === 'rambo' ? Boolean(congAgent()) : modelapiGoiDuoc(m),
     mienPhi: m.khoa === 'free',
     hang: hangSo(m),
     ...(m.dat ? { dat: true } : {}),
   };
 }
 
-export async function dsModelChoApp(q: QuyenChinhHang): Promise<ModelChoApp[]> {
+/**
+ * 19/10/2026: Default → Classic (rambo, khi admin BẬT) → free → cần khoá (`bangChoApp`). `chiDefault` = tài khoản
+ * FREE: chỉ Default dùng được (khi rambo sống), mọi model khác `canPro`.
+ */
+export async function dsModelChoApp(q: QuyenChinhHang, o: { chiDefault?: boolean } = {}): Promise<ModelChoApp[]> {
   const coKey = await coKeyKhaDung();
-  const ra: ModelChoApp[] = bangModel().map((m) => mucChoApp(m, q, coKey));
-  if (ramboBat()) {
-    const { dsModelRambo } = await import('../models.js');
-    for (const m of dsModelRambo()) {
-      ra.push({
-        id: m.id, ten: m.ten, mo: m.mo, moEn: m.mo, nhom: 'CuongMini Classic', cong: 'rambo', khoa: 'free',
-        canMoKhoa: false, dungDuoc: m.dungDuoc, mienPhi: true, hang: 'free', ...(m.dat ? { dat: true } : {}),
-      });
+  return dsModelChoAppThuan(q, coKey, o);
+}
+
+/** THUẦN (test được): danh sách cho app theo trạng thái rambo hiện tại. */
+export function dsModelChoAppThuan(q: QuyenChinhHang, coKey: boolean, o: { chiDefault?: boolean } = {}): ModelChoApp[] {
+  return bangChoApp().map((m) => {
+    const muc = mucChoApp(m, q, coKey);
+    if (!o.chiDefault) return muc;
+    if (m.id === MA_DEFAULT) {
+      /* Free: Default chỉ chạy trên rambo (gói trọn) — rambo không sống ⇒ tạm bảo trì. */
+      return { ...muc, dungDuoc: ramboChayDuoc() };
     }
-  }
-  return ra;
+    return { ...muc, canMoKhoa: false, canPro: true, dungDuoc: false };
+  });
 }
 
 /** Tên cũ (17/10): chỉ phần cổng chính hãng. */

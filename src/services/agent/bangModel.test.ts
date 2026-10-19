@@ -32,7 +32,8 @@ test('bảng model: FREE trước rồi cần khoá, trong nhóm năng lực cao
   /* Thứ tự chủ app chốt: Sonic 5.5, Solid, Nova, Shin, Heshin 5.5, Eco — rồi mới tới hai model cần khoá. */
   assert.deepEqual(ds.map((m) => m.id), ['cm-sonic', 'cm-solid', 'cm-nova', 'cm-shin', 'cm-heshin', 'cm-eco', 'cm-invisible', 'cm-optimum']);
   assert.equal(ds.find((m) => m.khoa === 'invisible')!.ten, TEN_INVISIBLE);
-  assert.equal(MA_MAC_DINH, 'cm-solid');
+  /* 19/10/2026: mặc định là CuongMini Default — rambo tắt ⇒ chạy Solid. */
+  assert.equal(MA_MAC_DINH, 'cm-default');
   const solid = timModel(undefined);
   assert.equal(solid.model, 'gpt-6-sol');
   assert.equal(solid.ten, 'CuongMini Solid');
@@ -222,7 +223,8 @@ test('QA 18/10: app CŨ gửi mã cũ (rambo/modelapi/cl-*) ⇒ không lỗi, kh
   for (const cu of ['sonnet-5', 'opus-4-8', 'sonnet-4-6', 'haiku-4-5', 'opus-4-6', 'opus-4-7', 'fable-5', 'gpt-terra', '', undefined, null, 42]) {
     const m = timModel(cu);
     assert.equal(m.khoa, 'free', `mã cũ ${String(cu)} không được rơi vào model cần khoá`);
-    assert.equal(m.id, MA_MAC_DINH);
+    /* Rambo TẮT ⇒ mã rambo cũ / mã lạ / Default đều chạy Solid (19/10/2026: không còn "mặc định = Solid" cứng). */
+    assert.equal(m.id, 'cm-solid');
   }
   assert.equal(timModel('cl-opus-5-5').id, 'cm-optimum');
   assert.equal(daMoKhoa(timModel('cl-opus-5-5'), KHONG_QUYEN), false, 'cl-opus-5-5 vẫn cần khoá');

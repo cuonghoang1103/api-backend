@@ -32,118 +32,78 @@
  * bọc quanh yêu cầu, chứ không ở câu hỏi. Trong một vòng lặp gọi tool thì phần
  * bọc đó nhân lên theo số vòng.
  */
-import { congAgent } from '../llm/gateway.js';
-
 /*
- * ⚠️ TÊN HIỂN THỊ là thương hiệu riêng (25/09/2026, người dùng yêu cầu): Haiku →
- * "Cuong Haiku", Sonnet → "Cuong Sonnet", Opus → "CuongMini Max", số phiên bản
- * giữ nguyên — để không trùng tên Claude của Anthropic. Chỉ `ten` đổi; `id` và
- * `model` (tên thật gửi cổng) giữ nguyên.
+ * ⚠️ TÊN HIỂN THỊ không bao giờ là tên thật (19/10/2026): bảng dưới chỉ là BÍ DANH của mã cũ. Thứ app thấy là nhóm
+ * "CuongMini Classic" trong `bangModel.ts` (Classic Optimum / Sonic / Heshin) — tên CuongMini, mã `cm-classic-*`.
  */
 export interface ModelAgent {
-  /** Mã app gửi lên. Ngắn, không đổi khi nhà cung cấp đổi tên model. */
+  /** Mã CŨ app ≤ 0.5.200 gửi lên (z.enum cố định). Chỉ còn là bí danh. */
   id: string;
-  /** Tên thật gửi cho cổng. */
+  /** Tên thật gửi cho cổng rambo — KHÔNG BAO GIỜ trả cho app. */
   model: string;
-  ten: string;
-  /** Một dòng cho giao diện — nói bằng thứ đo được, không bằng tính từ. */
-  mo: string;
-  /**
-   * Model ĐẮT bất thường ⇒ app hiện cảnh báo trước khi dùng, và máy chủ áp hạn
-   * mức riêng (`fable.ts`). Chỉ `claude-fable-5` có cờ này (26/09/2026).
-   */
-  dat?: boolean;
+  /** Mục `cm-classic-*` của `bangModel.ts` mà mã cũ này trỏ tới. */
+  classic: 'cm-classic-optimum' | 'cm-classic-sonic' | 'cm-classic-heshin';
 }
 
 /*
- * 18/10/2026: bảng modelapi cũ (`sonnet-5` / `opus-4-8` / `gpt-sol`) đã thay bằng
- * bảng CuongMini chung ở `bangModel.ts`. File này chỉ còn bảng của CỔNG RAMBO —
- * dùng khi admin BẬT lại rambo (`ramboBat()`), mặc định TẮT.
- */
-
-/**
  * ============================================================
- * BẢNG MODEL KHI CHẠY QUA CỔNG RIÊNG (rambo.ai.vn)
+ * BẢNG CỔNG RAMBO (rambo.ai.vn) — MÃ CŨ ⇒ NHÓM CUONGMINI CLASSIC
  * ============================================================
  *
- * Cổng riêng của người dùng bán 6 model Claude, và họ nói rõ "cứ dùng thoải
- * mái, chất lượng là được" — nên bảng này xếp theo NẶNG DẦN chứ không theo
- * tiền. Số trong `mo` là ĐO THẬT 19/08/2026 trên đúng đường thật, mỗi model
- * một lời gọi có kèm tool: thời gian tới mẩu chữ đầu tiên.
+ * 18/10/2026 rambo bị tắt (hỏng thật); 19/10/2026 chủ app báo đã chạy lại ⇒ bật bằng công tắc admin, và rambo
+ * thành MẶC ĐỊNH ("CuongMini Default", gói trả trọn — rẻ nhất). Bảng model cũ 8 dòng (Cuong Sonnet 5, CuongMini
+ * Max 4.8… — LỘ tên thật) thay bằng 3 mục Classic trong `bangModel.ts`; mã cũ ở đây chỉ còn là bí danh để app cũ
+ * (z.enum cố định) vẫn chạy đúng model.
  *
- * ⚠️ KHÔNG chép bảng giá của modelapi sang đây. Hai cổng khác nhà, khác cách
- * bọc prompt; con số "đắt gấp 7,3 lần" của `gpt-5.6-sol` chỉ đúng ở cổng kia.
- * Cổng này không có model GPT nào.
+ * Đo 19/10/2026 `GET /api/claude/v1/models` (KHÔNG khoá — danh sách quảng cáo, không chứng minh gọi được): 8 model
+ * dưới đây, KHÔNG có `claude-sonnet-5-5`. Máy local không có khoá rambo ⇒ CHƯA gọi thật được từng model; kiểm trên
+ * production bằng nút "Thử rambo" ở /admin (Cổng Anthropic → Cổng rambo).
  */
-const MODEL_AGENT_RIENG: readonly ModelAgent[] = Object.freeze([
+export const MODEL_AGENT_RIENG: readonly ModelAgent[] = Object.freeze([
   {
     id: 'haiku-4-5',
     model: 'claude-haiku-4-5',
-    ten: 'Cuong Haiku 4.5',
-    mo: 'Nhẹ nhất — việc vặt, sửa một file, hỏi nhanh',
+    classic: 'cm-classic-heshin',
   },
   {
     id: 'sonnet-4-6',
     model: 'claude-sonnet-4-6',
-    ten: 'Cuong Sonnet 4.6',
-    mo: 'Nhanh nhất trong đo thật (2,4s tới chữ đầu) — việc thường ngày',
+    classic: 'cm-classic-sonic',
   },
   {
     id: 'sonnet-5',
     model: 'claude-sonnet-5',
-    ten: 'Cuong Sonnet 5',
-    mo: 'MẶC ĐỊNH — cân bằng nhất giữa nhanh và giỏi',
+    classic: 'cm-classic-sonic',
   },
   {
     id: 'opus-4-6',
     model: 'claude-opus-4-6',
-    ten: 'CuongMini Max 4.6',
-    mo: 'Nặng — việc cần suy luận nhiều bước',
+    classic: 'cm-classic-optimum',
   },
   {
     id: 'opus-4-7',
     model: 'claude-opus-4-7',
-    ten: 'CuongMini Max 4.7',
-    mo: 'Nặng hơn — refactor lớn, đọc cả kiến trúc',
+    classic: 'cm-classic-optimum',
   },
   {
     id: 'opus-4-8',
     model: 'claude-opus-4-8',
-    ten: 'CuongMini Max 4.8',
-    mo: 'Thế hệ trước (4,7s tới chữ đầu) — nay Max 5 rẻ và tốt hơn',
+    classic: 'cm-classic-optimum',
   },
   {
     id: 'opus-5',
     model: 'claude-opus-5',
-    ten: 'CuongMini Max 5',
-    mo: 'MỚI — mạnh nhất cho việc thường, rẻ và tốt hơn Max 4.8',
+    classic: 'cm-classic-optimum',
   },
   {
+    /* Fable (×3,5 token) KHÔNG có mục Classic riêng — mã cũ về Classic Optimum (không tự nâng lên model đắt hơn). */
     id: 'fable-5',
     model: 'claude-fable-5',
-    ten: 'Cuong Fable 5',
-    mo: '⚠ Tốn token GẤP 3,5 LẦN — chỉ dùng cho việc cực khó. Có hạn mức riêng',
-    dat: true,
+    classic: 'cm-classic-optimum',
   },
-]);
+] as ModelAgent[]);
 
-/** Mã có thuộc bảng rambo không (chỉ có nghĩa khi rambo đang bật). */
+/** Mã cũ của bảng rambo (chỉ còn là bí danh). */
 export function laMaRambo(id: unknown): boolean {
   return typeof id === 'string' && MODEL_AGENT_RIENG.some((m) => m.id === id);
-}
-
-/** Mã mặc định của bảng rambo. */
-export const MODEL_AGENT_MAC_DINH = 'sonnet-5';
-
-/** Mã rambo ⇒ tên model thật. `null` khi rambo không chạy được (tắt / thiếu cấu hình). */
-export function modelAgentTu(id: unknown): { model: string; id: string } | null {
-  if (!congAgent()) return null;
-  const ma = typeof id === 'string' && id ? id : MODEL_AGENT_MAC_DINH;
-  const m = MODEL_AGENT_RIENG.find((x) => x.id === ma) ?? MODEL_AGENT_RIENG.find((x) => x.id === MODEL_AGENT_MAC_DINH)!;
-  return { model: m.model, id: m.id };
-}
-
-/** Bảng rambo cho app — chỉ khi rambo bật. */
-export function dsModelRambo(): Array<ModelAgent & { dungDuoc: boolean }> {
-  return congAgent() ? MODEL_AGENT_RIENG.map((m) => ({ ...m, dungDuoc: true })) : [];
 }

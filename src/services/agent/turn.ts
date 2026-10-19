@@ -40,7 +40,7 @@ import {
   gatewayKeyFor,
   gatewayRoot,
   modelFor,
-  ramboBat,
+  congAgent,
   ramboDangNghi,
   xinDiemCuoi,
 } from '../llm/gateway.js';
@@ -48,9 +48,8 @@ import { checkBudget, budgetMessage } from '../llm/budget.js';
 import { nenNguCanh, tinhMoc } from './compact.js';
 import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { chuPdfKhongDoc, sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
-import { laMaRambo, modelAgentTu } from './models.js';
 import {
-  MA_MAC_DINH, anTenThat, baoCongHong, cauDoiCong, congDangHong, hangSo, laLoiCongHong, laMaCuongMini, modelapiGoiDuoc,
+  anTenThat, baoCongHong, cauDoiCong, congDangHong, hangSo, laDefault, laLoiCongHong, modelapiGoiDuoc,
   timModel, tuongDuongFree, type MucModel, dungChoNhom, tenModelNhom,
 } from './bangModel.js';
 import { loiHetTranModel, xemTranModel } from './tranModel.js';
@@ -450,6 +449,12 @@ export interface AgentTurnInput {
    * Có trường này ⇒ chỉ model free, sổ ghi dấu nhóm (`hanMucNhom.ts › stepNhom`).
    */
   nhom?: NguonNhom;
+  /**
+   * 19/10/2026: tài khoản FREE (không Pro, không hạn mức nhóm) chạy CuongMini Default — CHỈ route điền (sau khi đã
+   * kiểm email + chống spam), KHÔNG BAO GIỜ từ thân yêu cầu. Có trường này ⇒ chỉ chạy trên rambo (gói trọn): rambo
+   * không sống ⇒ báo bảo trì (`CUONGMINI_BAO_TRI`), KHÔNG lùi sang model tốn tiền.
+   */
+  free?: boolean;
   /**
    * Đợt 6 (việc 9): MỤC LỤC tool MCP chưa nạp schema — `[{ name, mo }]` (tên đầy đủ `mcp__server__tool` + một dòng
    * mô tả). Có ⇒ máy chủ thêm tool `nap_tool_mcp` + khối mục lục ở phần ổn định của prompt.
@@ -978,13 +983,17 @@ export async function runAgentTurn(
      chất lượng trước; compact phía máy chủ lo phần quá dài. Mọi đường khác giữ trần cũ. */
   /* 18/10/2026: trần theo CỬA SỔ THẬT của model người dùng chọn (`bangModel.ts`):
      1M token ⇒ 2,4M ký tự, 400K ⇒ 960K. Đường rambo cũ giữ 600K. */
-  /* Rambo (bảng cũ) chỉ khi admin BẬT lại VÀ app gửi mã bảng rambo (hoặc app cũ không gửi mã). */
-  const diRamboDuKien = ramboBat()
-    && (input.model === undefined || (laMaRambo(input.model) && !laMaCuongMini(input.model)));
-  const mucDuKien = diRamboDuKien ? null : timModel(input.model);
-  let tranKyTu = mucDuKien ? tranKyTuCua(mucDuKien.cuaSoToken) : MAX_TOTAL_CHARS;
+  /* 19/10/2026: MỌI mã (kể cả mã rambo cũ, CuongMini Default) đi qua bảng CuongMini — `timModel` giải Default
+     (rambo sống ⇒ Classic Sonic, không ⇒ Solid) và mã cũ (bí danh ⇒ Classic). Không còn nhánh "bảng rambo cũ". */
+  const mucDuKien = timModel(input.model);
+  let tranKyTu = tranKyTuCua(mucDuKien.cuaSoToken);
   /** Cửa sổ ngữ cảnh (token) để tính "context %" từ usage thật. */
-  let cuaSoToken = mucDuKien?.cuaSoToken ?? 200_000;
+  let cuaSoToken = mucDuKien.cuaSoToken;
+  /* Dấu sổ cho CuongMini Default (thống kê admin "ai dùng Default nhiều nhất"): lượt MỚI của người dùng (tin cuối là
+     của người, không phải lượt phụ) ⇒ `default:luot`; bước tiếp của cùng việc ⇒ `default`. Nhóm giữ dấu nhóm. */
+  const stepDefault = !input.nhom && laDefault(input.model)
+    ? (input.laPhu !== true && messagesGoc[messagesGoc.length - 1]?.role === 'user' ? 'default:luot' : 'default')
+    : undefined;
   const boLuot = catLuotCu(messagesGoc, tranKyTu - CHO_GHI_NHO, MAX_MESSAGES);
   /* Lời nhắc "đã bỏ N lượt" đặt NGAY (đếm bước cần nó); phần ghi nhớ (đề bài +
      tóm tắt) điền SAU khi biết model của cuộc — tóm tắt chạy bằng CHÍNH model đó. */
@@ -1038,7 +1047,9 @@ export async function runAgentTurn(
 
   // 2. Hạn mức 5 giờ của NGƯỜI DÙNG — bể riêng của agent.
   const hanMuc = await xemHanMuc(input.userId);
-  if (hanMuc.hetHan) {
+  /* 19/10/2026: lượt chạy RAMBO (Default/Classic — gói trọn) không bị bể token 5 giờ chặn (chủ app: "gần như không giới
+     hạn"); chống spam ở route (`defaultGioiHan.ts`). Lùi Solid giữa lượt vẫn qua ví tiền + trần model như thường. */
+  if (hanMuc.hetHan && mucDuKien.cong !== 'rambo') {
     emit({
       type: 'error', error: loiHetHan(hanMuc), code: 'AGENT_QUOTA_EXCEEDED',
       coKeyGiaHan: await coKeyGiaHan(),
@@ -1106,28 +1117,33 @@ export async function runAgentTurn(
   const tra = xin.tra;
   let ep = xin.ep;
   /*
-   * ─── CHỌN MODEL (18/10/2026) — bảng CuongMini `bangModel.ts` ───
+   * ─── CHỌN MODEL (18/10/2026, 19/10 thêm Default + Classic) — bảng CuongMini `bangModel.ts` ───
    *
-   * Mã app gửi ⇒ mục trong bảng (mã lạ/cũ ⇒ CuongMini Solid). Model cần khoá
+   * Mã app gửi ⇒ mục trong bảng (mã lạ ⇒ CuongMini Default). Model cần khoá
    * mà vé không mở được ⇒ TỪ CHỐI ở đây (route đã chặn 403 trước SSE; chặn lại
    * cho mọi đường khác). Ẩn trên giao diện không phải là chặn.
-   *
-   * Rambo chỉ còn khi admin BẬT công tắc VÀ app gửi mã của bảng rambo cũ.
    */
-  const diRambo = ep.label === 'cong-agent' && diRamboDuKien;
-  const quyen = diRambo
+  const laFree = input.free === true && !input.nhom;
+  const quyen = laFree
     ? { laAdmin: false, modelCao: false, invisible: false }
     : await quyenChinhHang(input.userId, input.congAnthropicVe)
       .catch(() => ({ laAdmin: false, modelCao: false, invisible: false }));
-  let muc: MucModel = mucDuKien ?? timModel(MA_MAC_DINH);
-  if (!diRambo && !daMoKhoa(muc, quyen)) {
+  let muc: MucModel = mucDuKien;
+  /** Câu bảo trì cho tài khoản Free khi rambo không chạy (không lùi sang model tốn tiền). */
+  const baoTriFree = (): AgentEvent => ({ type: 'error', code: 'CUONGMINI_BAO_TRI', error: CAU_BAO_TRI_FREE });
+  if (laFree && muc.cong !== 'rambo') {
+    tra();
+    emit(baoTriFree());
+    return;
+  }
+  if (!daMoKhoa(muc, quyen)) {
     tra();
     throw new AgentInputError(
       `${muc.ten} cần khoá. Nhập khoá do quản trị cấp để mở. / ${muc.ten} needs a key — enter the key your admin gave you.`,
       'CONG_ANTHROPIC_KHOA',
     );
   }
-  let model = diRambo ? (modelAgentTu(input.model)?.model ?? modelFor('agent_code', ep)) : muc.model;
+  let model = muc.model || modelFor('agent_code', ep);
   /** Đang đi cổng Claude chính hãng ở hạng nào (`null` = không). */
   let hangCH: HangChinhHang | null = null;
 
@@ -1154,6 +1170,10 @@ export async function runAgentTurn(
     }
   };
   const chuyenSang = async (m: MucModel): Promise<{ loai: 'cong' | 'tran'; code: string; error: string; giaHanTien?: GiaHanTienUi } | null> => {
+    /* Free: CHỈ rambo (gói trọn). */
+    if (laFree && m.cong !== 'rambo') {
+      return { loai: 'tran', code: 'CUONGMINI_BAO_TRI', error: CAU_BAO_TRI_FREE };
+    }
     /* Đợt 6 — HẠN MỨC NHÓM: chỉ model FREE của cổng web (modelapi) — kiểm TRƯỚC cổng chính hãng (người không gói có hạn
        mức chính hãng = 0 ⇒ câu "hết hạn mức CuongMini Free" sai chỗ). Tiền là của trưởng nhóm; model cần khoá vẫn cần
        khoá. Trần nhóm (người/ngày + nhóm/tháng) đã kiểm ở route trước khi mở SSE; trần model theo người KHÔNG áp. */
@@ -1163,7 +1183,13 @@ export async function runAgentTurn(
         error: `Hạn mức nhóm ${input.nhom.key} chỉ dùng model miễn phí (${tenModelNhom()}) — chọn lại bằng /model. / The ${input.nhom.key} team allowance only covers free models (${tenModelNhom()}) — pick one with /model.`,
       };
     }
-    if (m.cong === 'anthropic') {
+    /* Nhóm CuongMini Classic (rambo, 19/10/2026): cổng phải bật + cầu dao đóng; gói trọn ⇒ không trần $ theo model. */
+    const rambo = m.cong === 'rambo' ? congAgent() : null;
+    if (m.cong === 'rambo') {
+      if (!rambo || ramboDangNghi()) {
+        return { loai: 'cong', code: 'RAMBO_BAO_TRI', error: `${m.ten} tạm thời không chạy được (cổng bận). / ${m.ten} is temporarily unavailable (gateway busy).` };
+      }
+    } else if (m.cong === 'anthropic') {
       if (congDangHong('anthropic') || !(await coKeyKhaDung())) {
         return { loai: 'cong', code: 'CONG_ANTHROPIC_HET_KEY', error: `${m.ten} tạm thời không chạy được (cổng bận). / ${m.ten} is temporarily unavailable (gateway busy).` };
       }
@@ -1176,7 +1202,7 @@ export async function runAgentTurn(
     } else if (congDangHong('modelapi') || !modelapiGoiDuoc(m)) {
       return { loai: 'cong', code: 'MODEL_CHUA_CO_KHOA', error: `${m.ten} tạm thời không chạy được (cổng bận). / ${m.ten} is temporarily unavailable (gateway busy).` };
     }
-    if (!input.nhom) {
+    if (!input.nhom && m.cong !== 'rambo') {
       const ht = await xemTranModel(input.userId, m);
       if (ht.het) {
         /* Model trả phí tới được đây ⇒ vé khoá đã mở (kiểm ở trên) — gia hạn tiền được. */
@@ -1184,9 +1210,11 @@ export async function runAgentTurn(
         return { loai: 'tran', code: 'CUONGMINI_HET_TRAN', error: loiHetTranModel(ht, m.ten) + gh.them, ...(gh.ui ? { giaHanTien: gh.ui } : {}) };
       }
     }
-    ep = m.cong === 'anthropic'
-      ? diemCuoiChinhHang()
-      : { root: gatewayRoot(), key: gatewayKeyFor(m.model), local: false, label: 'cong', giaoThuc: 'openai' };
+    ep = rambo
+      ? rambo
+      : m.cong === 'anthropic'
+        ? diemCuoiChinhHang()
+        : { root: gatewayRoot(), key: gatewayKeyFor(m.model), local: false, label: 'cong', giaoThuc: 'openai' };
     model = m.model;
     const cuaSoCu = muc.cuaSoToken;
     muc = m;
@@ -1204,8 +1232,9 @@ export async function runAgentTurn(
   let daTuDoi = false;
   const tuDoiCong = async (): Promise<boolean> => {
     if (daTuDoi) return false;
-    /* Rambo (bảng cũ) hỏng ⇒ model mặc định; còn lại ⇒ model free tương đương ở cổng kia. */
-    const dich = ep.label === 'cong-agent' ? timModel(MA_MAC_DINH) : tuongDuongFree(muc);
+    /* Free: không có đường lùi tốn tiền. Còn lại ⇒ model free tương đương ở cổng kia (Classic ⇒ Solid). */
+    if (laFree) return false;
+    const dich = tuongDuongFree(muc);
     if (!dich) return false;
     if (await chuyenSang(dich)) return false;
     daTuDoi = true;
@@ -1219,20 +1248,18 @@ export async function runAgentTurn(
 
   /** Khung `cong` cần phát ngay sau `start` (đổi cổng xảy ra TRƯỚC lời gọi đầu). */
   let khungCongDau: AgentEvent | null = null;
-  if (!diRambo && !ep.local) {
+  if (!ep.local) {
     const chan = await chuyenSang(muc);
     if (chan) {
       if (chan.loai === 'cong' && (await tuDoiCong())) {
         khungCongDau = khungTuDoi();
       } else {
         tra();
-        emit({ type: 'error', code: chan.code, error: chan.error, ...(chan.giaHanTien ? { giaHanTien: chan.giaHanTien } : {}) });
+        emit(laFree && chan.loai === 'cong' ? baoTriFree()
+          : { type: 'error', code: chan.code, error: chan.error, ...(chan.giaHanTien ? { giaHanTien: chan.giaHanTien } : {}) });
         return;
       }
     }
-  } else if (diRambo && ramboDangNghi()) {
-    /* Rambo (đã bật lại) đang nghỉ ⇒ thẳng CuongMini Solid. */
-    if (await tuDoiCong()) khungCongDau = khungTuDoi();
   }
 
   /* GHI NHỚ lượt đã bỏ — bằng CHÍNH model của cuộc (18/10/2026, trước đây model
@@ -1240,7 +1267,7 @@ export async function runAgentTurn(
      tiết. Vẫn đệm theo băm (khoá có model) ⇒ chỉ tốn một lời gọi khi phần bỏ đổi. */
   if (boLuot.soLuotDaBo > 0) {
     const ghiNho = await ghiNhoLuotDaBo(messagesGoc, boLuot.messages.length, undefined,
-      diRambo ? undefined : goiTomTatBangModel(muc, input.userId, stepSo));
+      goiTomTatBangModel(muc, input.userId, stepSo, { khongLui: laFree }));
     if (ghiNho.daGoiModel) {
       emit({ type: 'server_tool', name: 'tóm tắt ngữ cảnh', summary: `ghi nhớ ${boLuot.soLuotDaBo} lượt cũ` });
     }
@@ -1250,7 +1277,7 @@ export async function runAgentTurn(
   /* AGENT PHỤ chọn model theo việc (17/10/2026) — `anthropicChinhHang/modelPhu.ts`.
      Không bao giờ đắt hơn model chính; trần tính theo model của lượt chính. */
   if (laPhu && !ep.local && input.mucModelPhu !== undefined) {
-    const cong = hangCH ? 'anthropic' : diRambo ? 'rambo' : 'modelapi';
+    const cong = hangCH ? 'anthropic' : muc.cong === 'rambo' ? 'rambo' : 'modelapi';
     model = chonModelPhu({ cong, modelChinh: model, muc: input.mucModelPhu });
   }
 
@@ -1265,10 +1292,10 @@ export async function runAgentTurn(
   }
 
   /* Trần token RA + nén theo khả năng thật của model (18/10/2026). */
-  const maxRa = (): number => (diRambo && hangCH === null && ep.label === 'cong-agent' ? MAX_OUTPUT_TOKENS : muc.maxRa);
+  const maxRa = (): number => muc.maxRa;
 
   emit({
-    type: 'start', model: diRambo && ep.label === 'cong-agent' ? model : muc.ten, buoc: buocDaDi + 1, tranBuoc: MAX_AGENT_STEPS,
+    type: 'start', model: muc.ten, buoc: buocDaDi + 1, tranBuoc: MAX_AGENT_STEPS,
     cong: hangCH ? 'anthropic' : 'chinh',
   });
   if (khungCongDau) emit(khungCongDau);
@@ -1308,7 +1335,10 @@ export async function runAgentTurn(
    */
   const doanDaChot: Array<{ model: string; inTong: number; outTong: number; cacheDoc: number; costUsd: number }> = [];
   const moc = { in: 0, out: 0, inCH: 0, outCH: 0, usdCH: 0, cache: 0 };
-  const chiPhiDoan = (): number => costUsd(model, Math.max(0, (inTong - moc.in) - (inCH - moc.inCH)), Math.max(0, (outTong - moc.out) - (outCH - moc.outCH)))
+  /* Rambo (nhóm Classic / Default trên rambo) là gói TRẢ TRỌN ⇒ đoạn chạy trên rambo tính 0 $ (sổ vẫn ghi lượt + token):
+     không ăn ví tiền 5 giờ, không ăn trần theo model, không ăn trần $ của hạn mức nhóm (19/10/2026). */
+  const giaDoan = (m: string, vao: number, ra: number): number => (muc.cong === 'rambo' ? 0 : costUsd(m, vao, ra));
+  const chiPhiDoan = (): number => giaDoan(model, Math.max(0, (inTong - moc.in) - (inCH - moc.inCH)), Math.max(0, (outTong - moc.out) - (outCH - moc.outCH)))
     + (usdCH - moc.usdCH);
   const chiPhi = (): number => doanDaChot.reduce((t, d) => t + d.costUsd, 0) + chiPhiDoan();
   /** Chốt đoạn đang chạy (gọi NGAY TRƯỚC khi đổi model/cổng giữa lượt). */
@@ -1419,7 +1449,7 @@ export async function runAgentTurn(
         const tuModel = model;
         chotDoan();
         if (!(await tuDoiCong())) {
-          if (ep.label === 'cong-agent') throw new RamboBaoTri(thong);
+          if (ep.label === 'cong-agent') throw laFree ? new FreeBaoTri(thong) : new RamboBaoTri(thong);
           throw err;
         }
         logger.warn('agent: cổng hỏng giữa lượt — tự chuyển model tương đương', { tu: tuModel, sang: model, loi: thong.slice(0, 120) });
@@ -1572,7 +1602,11 @@ export async function runAgentTurn(
     /* Rambo sập và người dùng chưa có vé dự phòng ⇒ mã RIÊNG để app hiện hộp
        "CuongMini đang bảo trì — dùng cổng dự phòng?" thay vì một dòng lỗi đỏ. */
     /* Bảng CuongMini: câu lỗi không lộ tên model thật / tên cổng thật (QA 18/10/2026). Rambo (bảng cũ) giữ nguyên. */
-    const an = (s: string) => (diRambo ? s : anTenThat(s, { [model]: muc.ten }));
+    const an = (s: string) => anTenThat(s, { [model]: muc.ten });
+    if (err instanceof FreeBaoTri) {
+      emit(baoTriFree());
+      return;
+    }
     if (err instanceof CongAnthropicLoi) {
       emit({ type: 'error', code: err.code, error: an(err.message) });
       return;
@@ -1610,7 +1644,7 @@ export async function runAgentTurn(
      * kênh có tồn tại nhưng không cái nào đang bật cho nhóm của khoá.
      */
     const congThieuKenh = ma === 'LLM_NO_PROVIDER';
-    const tenModel = diRambo ? (/unknown provider for model ([\w.-]+)/i.exec(message)?.[1] ?? model) : muc.ten;
+    const tenModel = muc.ten;
 
     emit(
       congThieuKenh
@@ -1642,11 +1676,13 @@ export async function runAgentTurn(
     // Ghi sổ dù thành công hay không: một lượt hỏng GIỮA CHỪNG vẫn đã tiêu
     // token vào rồi, và đó chính là loại chi phí mà biểu đồ cần nhìn thấy.
     /* Mỗi ĐOẠN một dòng sổ (tự chuyển cổng giữa lượt ⇒ hai model, hai giá). */
+    const stepDoan = stepSo ?? (stepDefault ? 'default' : undefined);
     for (const d of doanDaChot) {
-      void ghiSo({ userId: input.userId, model: d.model, inTong: d.inTong, outTong: d.outTong, thanhCong: true, cacheDoc: d.cacheDoc, costUsd: d.costUsd, ...(stepSo ? { step: stepSo } : {}) });
+      void ghiSo({ userId: input.userId, model: d.model, inTong: d.inTong, outTong: d.outTong, thanhCong: true, cacheDoc: d.cacheDoc, costUsd: d.costUsd, ...(stepDoan ? { step: stepDoan } : {}) });
     }
+    const stepCuoi = stepSo ?? stepDefault;
     void ghiSo({
-      ...(stepSo ? { step: stepSo } : {}),
+      ...(stepCuoi ? { step: stepCuoi } : {}),
       userId: input.userId,
       model,
       // Lời gọi hỏng giữa chừng: cộng ước lượng token vào của nó (26/09/2026).
@@ -1654,7 +1690,9 @@ export async function runAgentTurn(
       outTong: outTong - moc.out,
       thanhCong,
       cacheDoc: cacheDocTong - moc.cache,
-      ...(usdCH - moc.usdCH > 0 || doanDaChot.length ? { costUsd: chiPhiDoan() + (thanhCong || hangCH ? 0 : costUsd(model, uocLuongDangBay, 0)) } : {}),
+      ...(usdCH - moc.usdCH > 0 || doanDaChot.length || muc.cong === 'rambo'
+        ? { costUsd: chiPhiDoan() + (thanhCong || hangCH ? 0 : giaDoan(model, uocLuongDangBay, 0)) }
+        : {}),
     });
   }
 }
@@ -1764,7 +1802,12 @@ export function boKetQuaLap(messages: AgentMessage[]): AgentMessage[] {
 }
 
 /** Rambo hỏng và không có vé dự phòng — xem nhánh bắt lỗi của `runAgentTurn`. */
+/** Câu bảo trì của CuongMini Default cho tài khoản Free (song ngữ) — route dùng chung. */
+export const CAU_BAO_TRI_FREE = 'CuongMini Default đang bảo trì — bạn thử lại sau ít phút nhé. Gói Pro vẫn chạy được trong lúc này (tự chuyển model). / CuongMini Default is under maintenance — please try again in a few minutes. Pro keeps working meanwhile (switches model automatically).';
+
 class RamboBaoTri extends Error {}
+/** Tài khoản Free: rambo hỏng giữa lượt và không có đường lùi miễn phí ⇒ câu bảo trì. */
+class FreeBaoTri extends Error {}
 
 /**
  * Trần KÝ TỰ hội thoại theo CỬA SỔ THẬT của model (18/10/2026): ~2,4 ký tự/token

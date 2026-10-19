@@ -128,8 +128,8 @@ export async function chanDoan(p: PhuThuocChanDoan): Promise<MucChanDoan[]> {
   } else {
     const t0 = now();
     try {
-      // `?bang=cm`: app mới hiểu mã `cm-*` — thiếu cờ thì máy chủ trả mã cũ cho app cũ (e14d0a60), doctor in "gpt-sol".
-      const r = await f(`${p.origin}/api/v1/agent/tools?bang=cm`, {
+      // `?bang=cm2` (19/10/2026, trước là `?bang=cm`): app mới hiểu mã `cm-*` kể cả Default/Classic — thiếu cờ thì máy chủ trả mã cũ cho app cũ (e14d0a60), doctor in "gpt-sol".
+      const r = await f(`${p.origin}/api/v1/agent/tools?bang=cm2`, {
         headers: { Authorization: `Bearer ${p.token}` }, signal: AbortSignal.timeout(8000),
       });
       const ms = now() - t0;
@@ -139,9 +139,14 @@ export async function chanDoan(p: PhuThuocChanDoan): Promise<MucChanDoan[]> {
       } else if (!r.ok) {
         ra.push({ ten: 'Máy chủ', muc: 'loi', chiTiet: `Trả ${r.status} sau ${ms}ms.` });
       } else {
-        const j = await r.json().catch(() => ({})) as { data?: { pro?: boolean; configured?: boolean; model?: string } };
+        const j = await r.json().catch(() => ({})) as { data?: { pro?: boolean; configured?: boolean; model?: string; free?: { duocDung?: boolean; canXacThucEmail?: boolean } } };
         ra.push({ ten: 'Máy chủ', muc: ms > 3000 ? 'canh' : 'ok', chiTiet: `Trả lời sau ${ms}ms${ms > 3000 ? ' — chậm' : ''}.` });
-        ra.push({ ten: 'Đăng nhập', muc: j.data?.pro ? 'ok' : 'canh', chiTiet: j.data?.pro ? 'Tài khoản Pro.' : 'Đã đăng nhập nhưng chưa có Pro — AI Code cần Pro.' });
+        /* 19/10/2026: tài khoản miễn phí dùng được CuongMini Default (cần email đã xác thực). */
+        ra.push(j.data?.pro
+          ? { ten: 'Đăng nhập', muc: 'ok', chiTiet: 'Tài khoản Pro.' }
+          : j.data?.free?.duocDung
+            ? { ten: 'Đăng nhập', muc: 'ok', chiTiet: 'Tài khoản miễn phí — dùng được CuongMini Default; model khác cần Pro.' }
+            : { ten: 'Đăng nhập', muc: 'canh', chiTiet: j.data?.free?.canXacThucEmail ? 'Tài khoản miễn phí — xác thực email để dùng CuongMini Default.' : 'Đã đăng nhập nhưng chưa có Pro.' });
         ra.push({ ten: 'AI máy chủ', muc: j.data?.configured ? 'ok' : 'loi', chiTiet: j.data?.configured ? `Đã cấu hình (${j.data.model ?? '—'}).` : 'Máy chủ chưa cắm khoá AI.' });
       }
     } catch (e) {

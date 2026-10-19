@@ -17,11 +17,12 @@ import {
 } from '../services/agent/anthropicChinhHang/khoKey.js';
 import { datTranGoi, datTranRieng, docTranGoi, xoaTranRieng } from '../services/agent/anthropicChinhHang/hanMuc.js';
 import { daBatMatKhau, datMatKhau, trungMatKhauKhac, type LoaiVe } from '../services/agent/anthropicChinhHang/ve.js';
-import { TEN_CONG, bangModel } from '../services/agent/bangModel.js';
+import { TEN_CONG, bangClassic, bangModel } from '../services/agent/bangModel.js';
+import { datGioiHanDefault, docGioiHanDefault, topDefaultHomNay } from '../services/agent/defaultGioiHan.js';
 import { datTranModel, docTranModel } from '../services/agent/tranModel.js';
 import { datCongTacRambo, trangThaiRambo } from '../services/llm/congTacRambo.js';
 import { GiaHanLoi, datMaGiaHan, dsYeuCauAdmin, duyetYeuCau, trangThaiMa } from '../services/agent/maGiaHanTien.js';
-import { priceOf } from '../services/llm/gateway.js';
+import { priceOf, ramboSonic, thuRambo } from '../services/llm/gateway.js';
 import { dsKeyAdmin, dsTranRieng, hanMucNguoiAdmin, timNguoi, tongQuanDung } from '../services/agent/anthropicChinhHang/thongKe.js';
 import { doiChieu, dsAdminKey } from '../services/agent/anthropicChinhHang/doiChieu.js';
 import { dauThangVn } from '../services/agent/anthropicChinhHang/hanMuc.js';
@@ -70,6 +71,9 @@ router.get('/', boc(async (_req, res) => {
       })),
       tranModel: await docTranModel(),
       rambo: trangThaiRambo(),
+      /* 19/10/2026: nhóm CuongMini Classic (rambo) + chống spam CuongMini Default. */
+      bangClassic: bangClassic().map((m) => ({ id: m.id, ten: m.ten, model: m.model, nangLuc: m.nangLuc, tuongDuong: m.tuongDuong })),
+      defaultGioiHan: await docGioiHanDefault(),
       modelFree: modelFree(),
       models: dsModelChinhHangGoc().map((m) => ({ ...m, gia: giaCua(m.model) })),
       bangGia: Object.keys(BANG_GIA).map((model) => ({ model, ...giaCua(model) })),
@@ -307,6 +311,32 @@ router.put('/rambo', boc(async (req, res) => {
   await datCongTacRambo(bat);
   logger.info('[cong-anthropic] admin đổi công tắc rambo', { adminId: adminId(req), bat });
   res.json({ success: true, data: trangThaiRambo() });
+}));
+
+/**
+ * NÚT "THỬ RAMBO" (19/10/2026): đọc danh sách model + gọi RẤT NGẮN (`max_tokens: 1`) model của nhóm Classic.
+ * Rambo là gói trả trọn ⇒ không tốn tiền theo token. Không bao giờ trả khoá.
+ */
+router.post('/rambo/thu', boc(async (req, res) => {
+  const models = [...new Set([ramboSonic(), ...bangClassic().map((m) => m.model)])];
+  const kq = await thuRambo(models);
+  logger.info('[cong-anthropic] admin thử rambo', { adminId: adminId(req), ok: kq.models.filter((m) => m.ok).length, tong: kq.models.length });
+  res.json({ success: true, data: { ketQua: kq, trangThai: trangThaiRambo() } });
+}));
+
+/** Chống spam CuongMini Default — GET đọc, PUT ghi `{ phutNguoi?, ngayFree?, ngayIp? }` (0 = tắt). */
+router.get('/default-gioi-han', boc(async (_req, res) => {
+  res.json({ success: true, data: await docGioiHanDefault() });
+}));
+router.put('/default-gioi-han', boc(async (req, res) => {
+  const v = await datGioiHanDefault(req.body ?? {});
+  logger.info('[cong-anthropic] admin đổi chống spam Default', { adminId: adminId(req), ...v });
+  res.json({ success: true, data: v });
+}));
+
+/** Ai dùng CuongMini Default nhiều nhất hôm nay (phát hiện lạm dụng) + IP đông nhất. */
+router.get('/default-top', boc(async (_req, res) => {
+  res.json({ success: true, data: await topDefaultHomNay(20) });
 }));
 
 export default router;

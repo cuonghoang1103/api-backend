@@ -120,12 +120,15 @@ const MODEL_HOP_LE = new Set<string>([
   'cl-free', 'cl-sonnet-5-5', 'cl-opus-5-5', 'cl-fable-5-1',
   // 18/10/2026: bảng CuongMini chung.
   'cm-invisible', 'cm-optimum', 'cm-sonic', 'cm-solid', 'cm-nova', 'cm-shin', 'cm-heshin', 'cm-eco',
+  // 19/10/2026: CuongMini Default + nhóm Classic (rambo).
+  'cm-default', 'cm-classic-optimum', 'cm-classic-sonic', 'cm-classic-heshin',
 ]);
 
 function modelHienTai(): ModelAgent {
   const v = getSettings().agentModel;
-  /* 18/10/2026: mặc định CuongMini Solid. Mã cũ (`sonnet-5`…) máy chủ tự đổi về Solid. */
-  return typeof v === 'string' && MODEL_HOP_LE.has(v) ? (v as ModelAgent) : 'cm-solid';
+  /* 19/10/2026: mặc định CuongMini Default (rambo sống ⇒ model rambo — gói trọn; không ⇒ Solid). Mọi tài khoản dùng
+     được, kể cả Free. Người đã CHỌN model khác thì giữ lựa chọn đó. */
+  return typeof v === 'string' && MODEL_HOP_LE.has(v) ? (v as ModelAgent) : 'cm-default';
 }
 
 /** Thư mục MẶC ĐỊNH cho tab mới — thư mục người dùng chọn gần nhất. */
@@ -279,7 +282,7 @@ export function registerAgentHandlers(): void {
          không trần thì trang AI Code quay "Đang kiểm tra quyền…" mãi. */
       const [rTools, rUsage] = await Promise.all([
         /* `congAnthropicVe` để `canMoKhoa` của các model chính hãng phản ánh đúng vé đang giữ. */
-        fetch(`${API_ORIGIN}/api/v1/agent/tools?bang=cm${veAnthropic() ? `&congAnthropicVe=${encodeURIComponent(veAnthropic()!)}` : ''}`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(8000) }),
+        fetch(`${API_ORIGIN}/api/v1/agent/tools?bang=cm2${veAnthropic() ? `&congAnthropicVe=${encodeURIComponent(veAnthropic()!)}` : ''}`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(8000) }),
         fetch(`${API_ORIGIN}/api/v1/agent/usage`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(8000) }),
       ]);
       if (!rTools.ok) return trong;
@@ -287,6 +290,7 @@ export function registerAgentHandlers(): void {
       const tools = await rTools.json() as {
         data?: {
           pro?: boolean; configured?: boolean; model?: string; nhom?: Array<{ projectId: number; key: string }>;
+          free?: AgentInfo['free'];
           models?: AgentInfo['models']; mucNoLuc?: AgentInfo['mucNoLuc'];
         };
       };
@@ -301,6 +305,7 @@ export function registerAgentHandlers(): void {
       const ra: AgentInfo = {
         pro: tools.data?.pro ?? false,
         ...(tools.data?.nhom?.length ? { nhom: tools.data.nhom.slice(0, 20) } : {}),
+        ...(tools.data?.free ? { free: tools.data.free } : {}),
         configured: tools.data?.configured ?? false,
         model: tools.data?.model ?? null,
         quota,
@@ -893,7 +898,7 @@ export function registerAgentHandlers(): void {
     const veDp = getSettings().agentDuPhongVe;
     const q = new URLSearchParams();
     // App hiểu mã trung tính `cm-*` (bảng CuongMini 18/10/2026) — thiếu cờ này máy chủ trả mã cũ cho app cũ.
-    q.set('bang', 'cm');
+    q.set('bang', 'cm2');
     if (ve) q.set('ve', ve);
     if (typeof veDp === 'string' && veDp) q.set('veDuPhong', veDp);
     try {

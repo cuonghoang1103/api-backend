@@ -2106,4 +2106,9 @@ export const TU_DIEN: Record<string, string> = {
   'Xem log': 'View log',
   'Chép lỗi + log': 'Copy error + log',
   'Cài tay (máy này hoặc máy khác) — chọn đúng cửa sổ lệnh bạn đang dùng:': 'Install manually (this or another machine) — pick the shell you are using:',
+  /* 19/10/2026 — CuongMini Default cho tài khoản miễn phí. */
+  'Xác thực email để dùng CuongMini Default': 'Verify your email to use CuongMini Default',
+  'Tài khoản miễn phí dùng được CuongMini Default sau khi xác thực email (mở thư xác thực trong hộp thư, hoặc Cài đặt → Tài khoản trên web). Gói Pro mở thêm mọi model khác.': 'Free accounts can use CuongMini Default once the email is verified (open the verification email, or Settings → Account on the web). Pro unlocks every other model.',
+  'Cần gói Pro': 'Needs Pro',
+  'Cần gói Pro — nâng cấp tại cuongthai.com/pro': 'Needs Pro — upgrade at cuongthai.com/pro',
 };

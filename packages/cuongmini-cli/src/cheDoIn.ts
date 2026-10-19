@@ -147,7 +147,7 @@ export async function chayCheDoIn(co: CoDong, thuMuc: string): Promise<number> {
           // dòng thông báo vào bảng ⇒ in từ đó, khỏi in hai lần.
           if (LOI_THONG_BAO.has(ma)) { inTool(); return; }
           viet(`${mau('#f87171')('✗')} ${String(e.thongDiep ?? L('Có lỗi.', 'Something went wrong.'))}\n`);
-          if (ma === 'PRO_REQUIRED') viet(L('  Cần gói Pro — https://cuongthai.com/pro\n', '  Requires Pro — https://cuongthai.com/pro\n'));
+          if (ma === 'PRO_REQUIRED') viet(L('  Model này cần gói Pro — https://cuongthai.com/pro · tài khoản miễn phí dùng CuongMini Default (--model cm-default)\n', '  This model needs Pro — https://cuongthai.com/pro · free accounts can use CuongMini Default (--model cm-default)\n'));
           // Lỗi mở được bằng mật khẩu: bảo trì / hết trần chính hãng ⇒ modelapi; vé chính hãng chết ⇒ hỏi lại cổng chính hãng.
           const laCH = ma === 'CONG_ANTHROPIC_KHOA' && e.daBat !== false;
           const laDp = ma === 'RAMBO_BAO_TRI';

@@ -14,7 +14,7 @@ const NGUON = [
   'src/renderer/features/chat/NutCuongMiniCli.tsx',
 ];
 
-describe('app mới gửi ?bang=cm ở mọi lời gọi danh sách model', () => {
+describe('app mới gửi ?bang=cm2 ở mọi lời gọi danh sách model', () => {
   for (const f of NGUON) {
     it(f, () => {
       const s = readFileSync(path.join(goc, f), 'utf8');
@@ -22,7 +22,8 @@ describe('app mới gửi ?bang=cm ở mọi lời gọi danh sách model', () =
       expect(goi.length, `${f} phải có lời gọi /agent/tools hoặc /agent/cong-anthropic`).toBeGreaterThan(0);
       for (const m of goi) {
         const dong = s.slice(Math.max(0, (m.index ?? 0) - 400), (m.index ?? 0) + 200);
-        expect(/bang=cm|set\('bang', 'cm'\)/.test(dong), `${f}: ${m[0]} thiếu ?bang=cm`).toBe(true);
+        /* 19/10/2026: `?bang=cm2` — máy chủ chỉ trả mã CuongMini Default / Classic cho app gửi cm2 (app đời cm có z.enum cố định). */
+        expect(/bang=cm2|set\('bang', 'cm2'\)/.test(dong), `${f}: ${m[0]} thiếu ?bang=cm2`).toBe(true);
       }
     });
   }

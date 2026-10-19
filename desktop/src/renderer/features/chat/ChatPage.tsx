@@ -77,7 +77,9 @@ export function ChatPage() {
    * tạo mới khi nó thật sự không có cái nào.
    */
   useEffect(() => {
-    if (!info?.pro || tabs.length > 0) return;
+    /* 19/10/2026: tài khoản miễn phí (CuongMini Default) và hạn mức nhóm cũng mở được việc. */
+    const duocMo = info?.pro || info?.free?.duocDung || Boolean(info?.nhom?.length);
+    if (!duocMo || tabs.length > 0) return;
     let huy = false;
     void (async () => {
       const dangMo = (await window.cuongthai?.agent.dsCuoc()) ?? [];
@@ -99,7 +101,7 @@ export function ChatPage() {
       datTabMo(id);
     })();
     return () => { huy = true; };
-  }, [info?.pro, tabs.length]);
+  }, [info?.pro, info?.free?.duocDung, info?.nhom?.length, tabs.length]);
 
   /**
    * Mở một việc cũ VÀO TAB ĐANG MỞ.

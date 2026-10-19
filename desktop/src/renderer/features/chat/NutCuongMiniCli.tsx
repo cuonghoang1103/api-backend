@@ -84,8 +84,9 @@ export function NutCuongMiniCli({ dangChay, thuMuc }: { dangChay: boolean; thuMu
   useEffect(() => {
     if (!api || !mo) return;
     let huy = false;
-    api.request<{ pro?: boolean }>('/api/v1/agent/tools?bang=cm')
-      .then((d) => { if (!huy) setDuocDung(d?.pro === true); })
+    /* 19/10/2026: tài khoản miễn phí dùng được CuongMini Default (`free.duocDung`). */
+    api.request<{ pro?: boolean; free?: { duocDung?: boolean } }>('/api/v1/agent/tools?bang=cm2')
+      .then((d) => { if (!huy) setDuocDung(d?.pro === true || d?.free?.duocDung === true); })
       .catch(() => { if (!huy) setDuocDung(null); });
     return () => { huy = true; };
   }, [api, mo]);

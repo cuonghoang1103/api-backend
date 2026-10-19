@@ -168,7 +168,11 @@ export function veMuc(m: MucBang, rong: number, truoc?: MucBang): string[] {
     }
     case 'loi': {
       const ra = ['', ...bocDong(`${mau(DO)('✗')} ${mau(DO)(m.text)}`, rong)];
-      if (m.ma === 'PRO_REQUIRED') ra.push(`  ${mo(L('Cần gói Pro —', 'Requires Pro —'))} ${mau('#60a5fa')('https://cuongthai.com/pro')}`);
+      if (m.ma === 'PRO_REQUIRED') {
+        ra.push(`  ${mo(L('Model này cần gói Pro —', 'This model needs Pro —'))} ${mau('#60a5fa')('https://cuongthai.com/pro')}`);
+        /* 19/10/2026: tài khoản miễn phí dùng được CuongMini Default. */
+        ra.push(`  ${mo(L('Tài khoản miễn phí: chọn CuongMini Default bằng /model.', 'Free account: pick CuongMini Default with /model.'))}`);
+      }
       return ra;
     }
     case 'shell': {

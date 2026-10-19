@@ -90,6 +90,18 @@ CuongMini mở trong **alternate screen** như Claude Code: ô nhập + chân tr
 - Toàn màn hình KHÔNG bao giờ gửi lệnh xoá scrollback (iTerm2 hết hiện thanh "clear scrollback history?").
 - Tắt: `/fullscreen off` (lưu cho lần sau) · cờ `--no-fullscreen` · `CUONGMINI_TOAN_MAN_HINH=0`. CI, không TTY, `-p` thì không bao giờ bật.
 
+## Mới ở 0.6.2 (CuongMini Default — dùng được cả tài khoản miễn phí)
+
+**CuongMini Default / Default model**
+- Model mặc định mới: **CuongMini Default** (`cm-default`). Nó tự chọn model tốt nhất đang chạy: khi cổng **CuongMini Classic** (gói trả trọn) bật và sống thì chạy model của cổng đó, không thì chạy **CuongMini Solid**; đang chạy mà cổng bận ⇒ một dòng mờ "Đã chuyển sang CuongMini Solid vì cổng bận" rồi làm tiếp. *New default model: picks the best model that is up — the flat-rate Classic gateway when it is on, otherwise Solid; switches mid-task with one dim line.*
+- **Tài khoản miễn phí dùng được Default** (cần email đã xác thực). Model khác hiện 🔒 "cần gói Pro". Default đang bảo trì ⇒ báo "thử lại sau" (tài khoản miễn phí không chuyển sang model tốn tiền). *Free accounts can use Default (verified email required); other models show 🔒 "needs Pro"; during maintenance free accounts are asked to retry later.*
+- Default gần như không giới hạn — chỉ có lớp chống spam mức cao (mặc định 10 câu/phút; tài khoản miễn phí thêm 500 câu/ngày). Chạm ⇒ câu báo nói rõ khi nào dùng lại. *Near-unlimited, only a high anti-spam layer (10 questions/min; free accounts 500/day). Hitting it tells you when to retry.*
+- Đủ năng lực như Pro: mọi công cụ (code, CT Work MCP, đọc link, trình duyệt ngầm, tìm web), ngữ cảnh và nén sớm đầy đủ. *Same tools and context as Pro.*
+
+**Danh sách model / Model list**
+- `/model`: **Default** → nhóm **CuongMini Classic** (Optimum · Sonic · Heshin — chỉ khi cổng Classic bật) → model miễn phí → model cần khoá. *Default → Classic group (when on) → free models → keyed models.*
+- Người đã chọn model khác vẫn giữ lựa chọn đó; chưa chọn ⇒ Default. *Your saved choice is kept; otherwise Default.*
+
 ## Mới ở 0.6.1 (mã gia hạn + model free lên trên)
 
 **Mã gia hạn theo $ / Extension codes**

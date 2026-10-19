@@ -78,7 +78,7 @@ export const DANH_SACH_TRINH_SOAN: TrinhSoan[] = [
     linkCho: LINK_OPEN_VSX,
     tenCho: 'Open VSX',
     lenhCli: null,
-    ghiChu: 'Nếu nút không mở được: vào Extensions trong Antigravity, tìm “CuongMini” rồi bấm Install.',
+    ghiChu: 'Antigravity mở app nhưng KHÔNG tự mở trang extension (nó chưa xử lý link extension/…). Trong Antigravity: mở Extensions (⇧⌘X / Ctrl+Shift+X) → tìm “CuongMini” → Install. Không thấy thì tải tệp .vsix từ Open VSX (nút Download) rồi kéo thả vào khung Extensions, hoặc ⋯ → Install from VSIX.',
   },
   {
     ma: 'windsurf',

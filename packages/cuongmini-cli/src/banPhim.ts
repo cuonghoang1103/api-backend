@@ -59,6 +59,12 @@ export function laXuongDong(input: string, key: { return?: boolean; shift?: bool
   return Boolean(key.ctrl && input === 'j');
 }
 
+/**
+ * Phím DÁN ẢNH theo hệ (đợt 8C). Windows Terminal + conhost (cmd/PowerShell) GIỮ ctrl+v và ctrl+shift+v để dán CHỮ
+ * — clipboard chỉ có ảnh thì chúng không gửi gì cho CLI ⇒ trên Windows nói `alt+v` (ctrl+v vẫn nhận nếu terminal để lọt).
+ */
+export const phimDanAnh = (nenTang: string = process.platform): string => (nenTang === 'win32' ? 'alt+v' : 'ctrl+v');
+
 export type TerminalPhim = 'kitty' | 'iterm' | 'itermCu' | 'vscode' | 'appleTerminal' | 'windowsTerminal' | 'khac';
 
 /** Đoán terminal đang dùng (TERM_PROGRAM…) để nói ĐÚNG phím xuống dòng. */

@@ -10,7 +10,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { API_ORIGIN, lamMoi, LoiDangNhap } from '../../cuongmini-core/src/dangNhap';
 import { timTrinhDuyet } from '../../cuongmini-core/src/timTrinhDuyet';
+import { phimDanAnh } from './banPhim';
 import { kiemWindows } from './doctorWin';
+import { doKhaNang } from './hieuUngTerminal';
 import { L } from './i18n';
 import { capMau, doCapMau } from './mau';
 import { laAscii } from './kyTu';
@@ -79,7 +81,7 @@ export async function kiemMay(phienBan: string): Promise<MucKiem[]> {
     ? { ten: tenTd, muc: 'ok', chiTiet: td }
     : { ten: tenTd, muc: 'canh', chiTiet: L('không thấy Chrome/Edge/Brave/Chromium — AI sẽ KHÔNG mở được web. Cài Google Chrome (google.com/chrome) hoặc Microsoft Edge, hoặc đặt CUONGMINI_TRINH_DUYET trỏ tới file chạy', 'no Chrome/Edge/Brave/Chromium found — the AI can NOT browse. Install Google Chrome (google.com/chrome) or Microsoft Edge, or set CUONGMINI_TRINH_DUYET to the executable') });
 
-  const tenDan = L('Dán ảnh (ctrl+v)', 'Paste image (ctrl+v)');
+  const tenDan = L(`Dán ảnh (${phimDanAnh()})`, `Paste image (${phimDanAnh()})`);
   const clip = process.platform === 'darwin' ? (coLenh('pngpaste') ?? coLenh('osascript'))
     : process.platform === 'win32' ? coLenh('powershell.exe') ?? coLenh('pwsh')
       : coLenh('wl-paste') ?? coLenh('xclip');
@@ -88,7 +90,12 @@ export async function kiemMay(phienBan: string): Promise<MucKiem[]> {
 
   const tenTb = L('Thông báo hệ điều hành', 'OS notifications');
   const tb = process.platform === 'darwin' ? coLenh('osascript') : process.platform === 'win32' ? coLenh('powershell.exe') : coLenh('notify-send');
-  ds.push(tb ? { ten: tenTb, muc: 'ok', chiTiet: path.basename(tb) }
+  // Đợt 8C: iTerm2/ghostty/WezTerm ⇒ thông báo gốc của terminal; macOS có terminal-notifier ⇒ có logo CuongMini.
+  const goc = doKhaNang(process.env, { tty: true }).thongBao;
+  const tn = process.platform === 'darwin' ? coLenh('terminal-notifier') : null;
+  ds.push(goc ? { ten: tenTb, muc: 'ok', chiTiet: L(`thông báo gốc của terminal (${goc === 'osc9' ? 'OSC 9' : 'OSC 777'})`, `native terminal notifications (${goc === 'osc9' ? 'OSC 9' : 'OSC 777'})`) }
+    : tn ? { ten: tenTb, muc: 'ok', chiTiet: L('terminal-notifier (logo CuongMini)', 'terminal-notifier (CuongMini logo)') }
+    : tb ? { ten: tenTb, muc: 'ok', chiTiet: process.platform === 'darwin' ? L('osascript — muốn có logo CuongMini: brew install terminal-notifier', 'osascript — for the CuongMini logo: brew install terminal-notifier') : process.platform === 'win32' ? L('toast Windows (logo CuongMini)', 'Windows toast (CuongMini logo)') : path.basename(tb) }
     : { ten: tenTb, muc: 'canh', chiTiet: process.platform === 'linux' ? L('không có notify-send (gói libnotify) — chỉ còn chuông', 'no notify-send (libnotify) — bell only') : L('không có — chỉ còn chuông', 'none — bell only') });
 
   const sh = process.platform === 'win32' ? (coLenh('pwsh') ? 'pwsh' : 'powershell.exe') : process.env.SHELL ?? '/bin/sh';

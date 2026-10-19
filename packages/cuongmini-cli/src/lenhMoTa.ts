@@ -5,6 +5,7 @@
  *
  * File này KHÔNG import `ct-lenh` để test (tsx) nạp được không cần alias.
  */
+import { phimDanAnh } from './banPhim';
 import { L } from './i18n';
 
 export interface LenhGachCli { ten: string; mo: string; khac?: string[]; thamSo?: string; nhom?: 'co-ban' | 'phien' | 'lam-viec' | 'cong-cu' }
@@ -130,7 +131,7 @@ export function bangPhimTat(): string {
     ['/', 'lệnh', 'commands'], ['LF-123', 'nhắc thẻ CT Work ⇒ tự đính kèm', 'mention a CT Work issue ⇒ auto-attach'],
     ['shift+tab', 'đổi chế độ quyền', 'cycle permission mode'], ['esc', 'dừng · esc esc quay lui', 'interrupt · esc esc rewind'],
     ['shift+enter', 'xuống dòng (ctrl+j, \\ cuối dòng)', 'newline (ctrl+j, trailing \\)'], ['ctrl+o', 'mở/thu đầu ra tool', 'expand/collapse tool output'],
-    ['ctrl+r', 'xem lại bảng ghi', 'transcript'], ['ctrl+t', 'kế hoạch', 'plan'], ['ctrl+v', 'dán ảnh', 'paste image'], ['ctrl+c ×2', 'thoát', 'quit'],
+    ['ctrl+r', 'xem lại bảng ghi', 'transcript'], ['ctrl+t', 'kế hoạch', 'plan'], [phimDanAnh(), 'dán ảnh', 'paste image'], ['ctrl+c ×2', 'thoát', 'quit'],
   ];
   const be = Math.max(...d.map(([k]) => k.length));
   return d.map(([k, vi, en]) => `  ${k.padEnd(be)}  ${L(vi, en)}`).join('\n');

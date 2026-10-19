@@ -612,6 +612,65 @@ khác mất + `/usage`; thư mục lạ không CT Work / mở lại không hỏi
   dòng gợi ý chỉ hiện cho NGƯỜI.
 - Desktop: chưa có test DOM riêng cho chip/Tab (phần thuần + lõi đã test qua CLI PTY).
 
+## 2l. Đợt 8C (19/10/2026) — Windows dán ảnh · hiệu ứng tab khi đang làm · thông báo có logo
+
+CLI **0.6.4** (extension/desktop không đổi — thông báo chỉ CLI tự làm; desktop dùng Notification của Electron, extension dùng API VS Code).
+Chưa commit, chưa phát hành.
+
+**Nguyên nhân thật (có số đo):**
+
+| Hiện tượng | Nguyên nhân | Bằng chứng |
+|---|---|---|
+| Windows "dán ảnh không ăn" | Hàm đọc clipboard KHÔNG hỏng: bản cũ chạy trên `windows-latest` ra PNG 40×30 với cả PS 5.1 (459 ms) lẫn pwsh 7.6 (1,4 s). Hỏng ở PHÍM + LỜI BÁO: màn chào, bảng `?`, `--help` đều bảo `ctrl+v` trên mọi hệ, mà Windows Terminal (mặc định `ctrl+v` VÀ `ctrl+shift+v` = dán) và conhost (Ctrl shortcuts) GIỮ phím đó — clipboard chỉ có ảnh ⇒ không gửi gì cho CLI. Chỉ `/help` dài nhắc `alt+v`. Thêm: MỌI thất bại (PS 5.1 nguội "Preparing modules for first use" quá hạn 8 s, thiếu công cụ, lỗi OLE) đều báo chung "Clipboard không có ảnh"; file ảnh *Copy* trong Explorer (FileDropList, không phải bitmap) cũng bị báo "không có ảnh"; `Get-Clipboard -Format Image` không có ở pwsh 7 (lỗi bị nuốt) | runner: dòng `BAN CU …` trong `thu/kiemWindows.mts`; stderr CLIXML "Preparing modules for first use" |
+| macOS: chữ thông báo vỡ ("ti·∫øng Vi·ªát") | `display notification` đọc chữ bằng `system attribute` — AppleScript giải mã biến môi trường theo MacRoman. Cùng lỗi ở đường đích dán ảnh (`CM_DICH`) ⇒ `CUONGMINI_HOME`/tên người dùng có dấu là hỏng | `CM_X="tiếng Việt" osascript -e 'return system attribute "CM_X"'` ⇒ `ti·∫øng Vi·ªát` |
+| Logo xấu | osascript luôn mang icon Script Editor (sổ thông báo macOS ghi app `com.apple.scripteditor2`); Windows dùng `SystemIcons::Information` của NotifyIcon, tiêu đề "Windows PowerShell" | `~/Library/Group Containers/group.com.apple.usernoted/db2/db` |
+
+**Đã làm:**
+1. **Dán ảnh** (`anhDan.ts`): script PowerShell qua `-EncodedCommand` (UTF-16LE), `-STA -NoProfile -ExecutionPolicy Bypass`, chỉ `System.Windows.Forms.Clipboard` (chạy cả 5.1 lẫn 7),
+   đường đích qua env, kết quả bằng từ khoá `OK | EMPTY | FILE:<b64> | ERR:<b64>` (console Windows in bảng mã OEM ⇒ base64 UTF-8); file ảnh đã Copy
+   (Explorer `FileDropList` / Finder `«class furl»`) ⇒ gửi CHÍNH file đó; định dạng "PNG" thô của trình duyệt; hạn 15 s. macOS: osascript
+   nhận đường qua argv (lùi `pngpaste -`). Ba lời báo khác nhau: *không có ảnh* · *không đọc được (kèm lý do)* · *Linux thiếu wl-clipboard/xclip*.
+   Phím: `ctrl+v` / `alt+v` / `ctrl+shift+v` / `alt+shift+V` đều dán; mẹo, `?`, `--help`, `doctor` nói **`alt+v` trên Windows** (`phimDanAnh()`).
+   Kéo-thả (`anh.ts`): `"C:\…\a b (1).png"`, `'…'`, `& '…'` (PowerShell), `C:/…`, UNC `\\máy\…`, `file:///…%20…` — đường Windows chuẩn hoá bằng `path.win32` kể cả khi test trên macOS.
+2. **Hiệu ứng khi đang làm** (`hieuUngTerminal.ts`, `BoHieuUng`): tiêu đề `◐◓◑◒ <tên việc> · đang làm` (330 ms/khung, chỉ ghi khi đổi),
+   `◉ … · chờ duyệt`, `✓ … · xong`, `✗ … · lỗi` ⇒ về `CuongMini · <tên việc>` khi người dùng quay lại (focus `ESC[I` hoặc gõ phím); lưu/trả tiêu đề
+   cũ bằng XTWINOPS `CSI 22;0t` / `CSI 23;0t`. **OSC 9;4**: `3` chạy, `4` chờ duyệt (vàng), `2` lỗi (đỏ, tự xoá sau 8 s), `0` khi xong/dừng/thoát/tắt —
+   CHỈ ở Windows Terminal (`WT_SESSION`), ConEmu (`ConEmuANSI=ON`), iTerm2 ≥ 3.6.6, ghostty ≥ 1.2 (iTerm2 cũ/WezTerm/kitty hiểu OSC 9 là "đăng thông
+   báo" ⇒ phát 9;4 là ra thông báo rác "4;3"). iTerm2: user var `cuongmini` (working/waiting/done/error/idle) — không tự đặt badge/màu tab. Trong
+   tmux/screen chỉ giữ tiêu đề. Không phát khi `-p`, không TTY, CI, `TERM=dumb`, `CUONGMINI_HIEU_UNG=0`, `/config` → *Hiệu ứng terminal* = Tắt
+   (tắt giữa phiên dọn ngay). Dọn ĐỒNG BỘ trong `process.on('exit')` (crash vẫn trả tiêu đề, xoá 9;4). `/terminal-setup` in terminal đang dùng được gì.
+3. **Thông báo** (`thongBao.ts`, `bieuTuong.ts`): tiêu đề **CuongMini**, phụ đề = tên việc, một dòng "Xong · 2 phút 14 giây" / "Gặp lỗi · …" /
+   "Cần bạn duyệt" (bỏ ký tự điều khiển, không bắt đầu bằng `-`, ≤ 140 ký tự). iTerm2 ⇒ OSC 9 (thông báo gốc, bấm nhảy đúng tab); ghostty/WezTerm ⇒
+   OSC 777; macOS có `terminal-notifier` ⇒ `-contentImage` logo + `-activate` đúng app terminal; còn lại osascript `on run argv`. Windows ⇒ toast WinRT
+   (PS 5.1) AUMID `CuongMini.CLI` tự khai ở `HKCU\Software\Classes\AppUserModelId` (DisplayName + IconUri, không cần admin/lối tắt), XML dựng bằng
+   `CreateTextNode` + `appLogoOverride`; lùi BurntToast ⇒ bóng NotifyIcon với `cuongmini.ico`. Linux ⇒ `notify-send -a CuongMini -i <logo> --`. Chỉ gửi khi
+   KHÔNG nhìn terminal (dò focus); terminal chưa từng báo focus ⇒ chỉ lượt > 20 giây (trước: 30 giây và "không biết" = coi như đang nhìn ⇒ không bao giờ báo).
+4. **Logo**: `tai-nguyen/dung-bieu-tuong.mjs` (sharp) dựng từ `frontend/public/images/cuongmini-avatar.svg` ⇒ `tai-nguyen/cuongmini.png` (256) +
+   `cuongmini.ico` (16/32/48 BMP + 256 PNG) + `src/bieuTuongNhung.ts` (PNG 128 + ICO 16/32/48, base64 ~28 KB) NHÚNG vào bundle; CLI ghi ra
+   `~/.cuongmini/bieu-tuong/` lúc cần ⇒ chạy với mọi kiểu cài, không phải sửa `install.ps1`.
+
+**Kiểm:**
+- **Windows thật** (runner `windows-latest`, Windows Server build 26100, nhánh tạm `ci-win-anh-tam` đã xoá cùng workflow + lượt chạy):
+  `thu/kiemWindows.mts` chạy từ pwsh 7, Windows PowerShell 5.1 và cmd — 20/20 xanh mỗi lần: clipboard đặt bằng .NET STA ⇒ PS 5.1 (≈300 ms) và
+  pwsh 7 (≈450 ms) ra PNG đúng 40×30; ảnh 3840×2160 (500 ms); chỉ có chữ ⇒ "Clipboard không có ảnh … alt+v"; file ảnh Copy trong Explorer
+  (`ảnh chụp (1).png`) ⇒ chính file đó; `CUONGMINI_HOME` có dấu cách + tiếng Việt; kéo-thả `"…"`, `'…'`, `& '…'`; ICO nạp bằng `System.Drawing.Icon`;
+  toast chạy (`TOAST:CuongMini.CLI`, registry DisplayName = CuongMini), XML giữ nguyên "Xong · 2 phút 14 giây" / "Sửa lỗi … tệp", thoát `<`, `&`.
+  `thu/kiemWindowsPty.mts`: **CLI THẬT (`dist/`) trong ConPTY** (`@lydell/node-pty`) + máy chủ giả: alt+v ⇒ `[Ảnh #1]` ⇒ tin người dùng cuối của lượt có
+  PNG; ctrl+v ⇒ `[Ảnh #2]`; clipboard chỉ chữ ⇒ báo rõ; kéo-thả `"C:\…\ảnh kéo (1).png"` ⇒ lượt 2 có ảnh; với `WT_SESSION` OSC 0 / 9;4;3 / 9;4;0 lọt qua
+  ConPTY; `CUONGMINI_HIEU_UNG=0` ⇒ không chuỗi nào. (Toast không HIỆN được trên runner — chỉ kiểm script chạy + chữ đúng.)
+  Bẫy gặp khi dựng phép kiểm: đặt `CI=''` vẫn là "đang CI" với Ink (`'CI' in env`) ⇒ không vẽ khung — phải XOÁ biến.
+- **macOS máy này**: dán ảnh thật (chữ ⇒ không ảnh; PNG ⇒ file trong `CUONGMINI_HOME` có dấu; file Copy trong Finder `ảnh thử (1).png` ⇒ chính file đó;
+  clipboard người dùng sao lưu + trả lại). Một thông báo thử: sổ thông báo macOS ghi `titl=CuongMini`, `subt=Thử thông báo "đợt 8C" \ CuongMini`,
+  `body=Xong · 2 phút 14 giây` — đúng từng ký tự.
+- `src/test/dot8c.test.ts` (12) + `src/test/dot8cPty.test.ts` (3, PTY thật + lõi thật + công cụ GIẢ trên PATH: osascript/wl-paste/notify-send):
+  iTerm2 3.7.2 ⇒ alt+v/ctrl+v/kéo-thả, `CSI 22;0t`, tiêu đề xoay ≥ 3 khung, `9;4;3;0`, user var, rời cửa sổ ⇒ OSC 9 "CuongMini · Xong · … giây" và KHÔNG gọi
+  osascript, thoát ⇒ `9;4;0;0` + user var rỗng + `CSI 23;0t`; Apple Terminal ⇒ không 9;4/1337/OSC 9, osascript nhận argv đúng nguyên văn; WT ⇒ có 9;4, không
+  OSC 9 thông báo. Cả bộ CLI `--test-concurrency=1`: 154/154. Typecheck CLI · core · desktop · extension xanh.
+
+**Còn lại:** toast Windows HIỆN THẬT (logo + tên "CuongMini" trên Action Center) chưa nhìn bằng mắt — runner không có phiên tương tác; nếu máy
+nào AUMID tự khai không hiện, script tự lùi AUMID của PowerShell (vẫn có `appLogoOverride`). Mức iTerm2 3.6.6 cho 9;4 là chọn an toàn (chưa đo
+3.6.0–3.6.5). Chưa phát hành 0.6.4 (`node dong-goi.mjs` + deploy).
+
 ## 3. Thiết kế đợt 3/4 (đợt 3 ĐÃ LÀM — ghi chỗ đổi thiết kế)
 
 ### 3.1 Agent phụ GHI được (đợt 3)

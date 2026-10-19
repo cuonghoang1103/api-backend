@@ -35,7 +35,8 @@ import { giay } from '../trangThai';
 import { THUONG_HIEU, dam, datTheme, doTheme, mau, mo } from '../mau';
 import { damBaoThuMuc, duongLichSu, thuMucGoc, xoaPhien, type NguoiDung } from '../phien';
 import { chayShell, dungNguCanhShell, type LanChayShell } from '../shell';
-import { guiThongBaoHeThong, rungChuong } from '../thongBao';
+import { guiThongBaoHeThong, rungChuong, soanThongBao, type LoaiThongBao } from '../thongBao';
+import { BoHieuUng, doKhaNang, type Pha } from '../hieuUngTerminal';
 import { chiMucDuAn, diemMo, phuLucNhac, timMo, tokenNhac } from '../timFile';
 import { dungBanGhi, veManMoDau, veMuc, type ThongTinMoDau } from '../veBang';
 import { veMarkdown } from '../markdown';
@@ -65,7 +66,8 @@ interface GoiY { kieu: '/' | '@'; ds: MucGoiY[]; chon: number; dau: number; /** 
 const RONG_BANG = 40;
 const COT_HIEN_BANG = 110;
 /** Lượt dài hơn ngần này ⇒ rung chuông / báo hệ điều hành khi xong. */
-const LUOT_DAI_MS = 30_000;
+/** Lượt dài (đợt 8C: 20 giây) ⇒ chuông + thông báo. `CUONGMINI_LUOT_DAI_MS` chỉ để test PTY. */
+const LUOT_DAI_MS = Number(process.env.CUONGMINI_LUOT_DAI_MS) > 0 ? Number(process.env.CUONGMINI_LUOT_DAI_MS) : 20_000;
 /** Lệnh `/` gửi câu hỏi cho agent (hoặc đổi hội thoại) — lúc đang chạy thì xếp hàng thay vì chạy ngay. */
 const LENH_CAN_RANH = ['/plan', '/review', '/init', '/diff', '/clear', '/resume', '/rewind', '/compact', '/undo'];
 
@@ -160,6 +162,8 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   const lanCtrlC = useRef(0);
   const theDuyetHien = useRef<{ id: string; luc: number }>({ id: '', luc: 0 });
   const lanEsc = useRef(0);
+  /** Mốc `luotCuoi.luc` người dùng đã "xem" (quay lại terminal / gõ phím) ⇒ tiêu đề "✓ xong" về rảnh. */
+  const daXemLuot = useRef<number | undefined>(undefined);
   const henNhac = useRef<NodeJS.Timeout | null>(null);
   /** Kết quả lệnh `!` chưa gửi model — đính vào câu hỏi kế tiếp. */
   const shellChoGui = useRef<LanChayShell[]>([]);
@@ -168,6 +172,10 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   const soAnhDan = useRef(0);
   /** Terminal đang được nhìn không (báo qua chuỗi focus `ESC[I`/`ESC[O`). Chưa biết ⇒ coi như đang nhìn. */
   const dangNhin = useRef(true);
+  /** Terminal ĐÃ từng báo focus chưa — chưa ⇒ không biết người dùng có đang nhìn ⇒ chỉ báo khi lượt dài (> 20 giây). */
+  const bietFocus = useRef(false);
+  /** Đợt 8C: tiêu đề tab xoay + OSC 9;4 + user var iTerm2 (`hieuUngTerminal.ts`). */
+  const hieuUng = useRef<BoHieuUng | null>(null);
 
   const baoNhanh = (chu: string, ms = 2500) => {
     setNhac(chu);
@@ -247,11 +255,20 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     // KHÔNG gỡ khi unmount: main đọc tóm tắt SAU khi Ink đã tháo cây (thoát = unmount).
   }, [S]);
 
-  const baoChuY = useCallback((tieuDe: string, noiDung: string) => {
+  /**
+   * Chuông + thông báo (đợt 8C). Đang nhìn terminal (biết nhờ báo focus) ⇒ chỉ chuông. Terminal chưa từng báo focus ⇒
+   * không biết ⇒ chỉ báo khi lượt đã chạy > 20 giây. iTerm2/ghostty/WezTerm ⇒ thông báo GỐC của terminal (OSC 9/777:
+   * icon terminal, bấm vào nhảy đúng tab, không lỗi mã hoá); còn lại ⇒ thông báo hệ điều hành có logo CuongMini.
+   */
+  const baoChuY = useCallback((loai: LoaiThongBao, tenPhien: string, thoiLuongMs: number) => {
     const c = caiDat.current.thongBao;
     if (c === 'tat') return;
     rungChuong();
-    if (c === 'heThong' && !dangNhin.current) guiThongBaoHeThong(tieuDe, noiDung);
+    if (c !== 'heThong') return;
+    if (bietFocus.current ? dangNhin.current : thoiLuongMs < LUOT_DAI_MS) return;
+    const nd = soanThongBao(loai, tenPhien, loai === 'duyet' ? undefined : thoiLuongMs);
+    if (hieuUng.current?.thongBao(nd.tieuDe, nd.dayDu)) return;
+    guiThongBaoHeThong(nd);
   }, []);
 
   // ─── Model / mức / chế độ ──────────────────────────────────────
@@ -740,6 +757,11 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
             .catch((e: Error) => kho.thongBao(e.message, 'loi'));
           return;
         }
+        if (k === 'hieuUngTerminal') {
+          luu(moi, `${tenMuc(k)}: ${m.nhan}`);
+          hieuUng.current?.datKhaNang(doKhaNang(process.env, { tty: Boolean(stdout.isTTY), tat: m.giaTri === 'tat' }));
+          return;
+        }
         if (k === 'ascii') {
           caiDat.current = moi;
           ghiCaiDat(moi);
@@ -1031,11 +1053,27 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     setO({ text: t, contro: t.length });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [S.chenTraVe]);
-  // Tiêu đề cửa sổ terminal = tiêu đề phiên (kiểu Claude Code). Chỉ TTY thật.
+  /*
+   * HIỆU ỨNG TERMINAL (đợt 8C): tiêu đề tab = biểu tượng xoay + tên phiên + trạng thái ("đang làm" / "chờ duyệt" /
+   * "xong" / "lỗi"), OSC 9;4 (tab phát sáng iTerm2, taskbar Windows Terminal), user var iTerm2. Chỉ TTY thật; terminal
+   * không hỗ trợ thì không phát (`doKhaNang`); dọn sạch khi thoát.
+   */
   useEffect(() => {
-    if (!process.stdout.isTTY || process.env.CUONGMINI_KHONG_DAT_TIEU_DE === '1') return;
-    process.stdout.write(`\x1b]0;${`CuongMini${S.tieuDe ? ` · ${S.tieuDe.replace(/[\x00-\x1f\x07]/g, ' ').slice(0, 60)}` : ''}`}\x07`);
-  }, [S.tieuDe]);
+    const b = new BoHieuUng(doKhaNang(process.env, { tty: Boolean(stdout.isTTY), tat: caiDat.current.hieuUngTerminal === 'tat' }));
+    hieuUng.current = b;
+    b.batDau();
+    return () => { b.ketThuc(); hieuUng.current = null; };
+  }, [stdout]);
+  const phaHieuUng: Pha = S.choDuyet.length ? 'duyet' : S.dangChay ? 'chay' : S.luotCuoi ? (S.luotCuoi.loi ? 'loi' : 'xong') : 'nghi';
+  const tenHieuUng = S.tieuDe || S.ws?.name || '';
+  const lucLuotCuoi = S.luotCuoi?.luc;
+  useEffect(() => {
+    const b = hieuUng.current;
+    if (!b) return;
+    // "xong"/"lỗi" chỉ là pha CỦA lượt vừa xong — đã về rảnh (người dùng quay lại) thì giữ rảnh tới lượt sau.
+    if ((phaHieuUng === 'xong' || phaHieuUng === 'loi') && b.phaHienTai === 'nghi' && daXemLuot.current === lucLuotCuoi) { b.dat('nghi', tenHieuUng); return; }
+    b.dat(phaHieuUng, tenHieuUng);
+  }, [phaHieuUng, tenHieuUng, lucLuotCuoi]);
 
   // Lỗi cần xử lý thêm: cổng dự phòng, hết phiên.
   useEffect(() => {
@@ -1116,7 +1154,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   const idDuyet = S.choDuyet[0]?.id;
   useEffect(() => {
     setChonDuyet(0);
-    if (idDuyet) baoChuY(L('CuongMini cần bạn duyệt', 'CuongMini needs your approval'), L(`${S.ws?.name ?? 'Dự án'}: có yêu cầu đang chờ`, `${S.ws?.name ?? 'Project'}: a request is waiting`));
+    if (idDuyet) baoChuY('duyet', S.tieuDe || S.ws?.name || L('Dự án', 'Project'), S.batDauLuot ? Date.now() - S.batDauLuot : 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idDuyet]);
 
@@ -1125,7 +1163,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
   useEffect(() => {
     const l = S.luotCuoi;
     if (!l || l.thoiLuong < LUOT_DAI_MS) return;
-    baoChuY(l.loi ? L('CuongMini gặp lỗi', 'CuongMini hit an error') : L('CuongMini đã xong', 'CuongMini is done'), `${S.ws?.name ?? L('Dự án', 'Project')} · ${Math.round(l.thoiLuong / 1000)}s${S.tieuDe ? ` · ${S.tieuDe}` : ''}`);
+    baoChuY(l.loi ? 'loi' : 'xong', S.tieuDe || S.ws?.name || L('Dự án', 'Project'), l.thoiLuong);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lucXong]);
 
@@ -1239,9 +1277,10 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
 
   useInput((input, key) => {
     // 0) Báo focus của terminal (ESC[I / ESC[O) — không phải phím người dùng.
-    if (input === '[I') { dangNhin.current = true; return; }
-    if (input === '[O') { dangNhin.current = false; return; }
+    if (input === '[I') { dangNhin.current = true; bietFocus.current = true; daXemLuot.current = S.luotCuoi?.luc; hieuUng.current?.daXem(); return; }
+    if (input === '[O') { dangNhin.current = false; bietFocus.current = true; return; }
     lanGo.current = Date.now();
+    if (hieuUng.current && (hieuUng.current.phaHienTai === 'xong' || hieuUng.current.phaHienTai === 'loi')) { daXemLuot.current = S.luotCuoi?.luc; hieuUng.current.daXem(); }
     /* QA 5c: PHÍM DỒN — CLI đang bận vẽ thì terminal giao "\r\r" hay "1\r" trong MỘT lần đọc; Ink trả nguyên chuỗi nên
        mọi thẻ bỏ qua (bấm mà "không ăn"). Khi đang có THẺ (duyệt / menu / hỏi) ⇒ lấy PHÍM ĐẦU, bỏ phần thừa — không để
        Enter thứ hai rơi sang thẻ kế tiếp mà duyệt luôn nó. */
@@ -1530,7 +1569,9 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     // ctrl+o: bản ghi đầy đủ (mọi đầu ra tool mở sẵn) trong trình xem có cuộn — kiểu Claude Code.
     if (key.ctrl && input === 'o') { moBanGhi('cuon', true); return; }
     if (key.ctrl && input === 'l') { veLaiHet(); return; }
-    if ((key.ctrl || key.meta) && input === 'v') { danAnh(); return; }
+    // Dán ảnh: ctrl+v (macOS/Linux), alt+v (Windows — Windows Terminal/conhost GIỮ ctrl+v để dán chữ), ctrl+shift+v / alt+shift+v
+    // khi terminal để lọt (CSI u báo `V` hoa hoặc `v` + shift).
+    if ((key.ctrl || key.meta) && (input === 'v' || input === 'V')) { danAnh(); return; }
     if (key.escape) {
       if (goiY) { setGoiY(null); return; }
       if (shellRef.current) { shellRef.current.huy(); baoNhanh(L('Đang dừng lệnh…', 'Stopping the command…')); return; }

@@ -3,6 +3,7 @@
  * tiếng Việt, và phải kiểm được bằng test mà không chạy tiến trình nào.
  */
 import { cheDoTuChu, type CheDoQuyen } from './cheDo';
+import { phimDanAnh } from './banPhim';
 import { L } from './i18n';
 
 declare const __PHIEN_BAN__: string | undefined;
@@ -148,7 +149,7 @@ Cờ:
 
 Trong phiên:
   /help  danh sách lệnh   ·  @file  nhắc file/hàm  ·  shift+tab  đổi chế độ quyền
-  !lệnh  chạy shell ngay  ·  # ghi chú  lưu quy ước dự án  ·  ctrl+v  dán ảnh
+  !lệnh  chạy shell ngay  ·  # ghi chú  lưu quy ước dự án  ·  ${phimDanAnh()}  dán ảnh
   esc  dừng việc đang chạy ·  esc esc  quay lui về câu cũ ·  ctrl+r  xem lại bảng ghi
   ctrl+p  bảng kế hoạch    ·  ctrl+o  mở/thu đầu ra lệnh ·  ctrl+c ×2  thoát
   Shift+Enter, Alt+Enter, ctrl+j hoặc \\ cuối dòng  xuống dòng  ·  ctrl+↑↓  lịch sử · ↑↓ cuộn
@@ -184,7 +185,7 @@ Flags:
 
 In a session:
   /help  commands      ·  @file  mention files/functions  ·  shift+tab  permission mode
-  !cmd  run shell now  ·  # note  save a project rule     ·  ctrl+v  paste image
+  !cmd  run shell now  ·  # note  save a project rule     ·  ${phimDanAnh()}  paste image
   esc  interrupt       ·  esc esc  rewind                 ·  ctrl+r  transcript
   ↓  subagent panel    ·  /tasks  subagents & shells      ·  /language  English ↔ Tiếng Việt
   Shift+Enter, Alt+Enter, ctrl+j or a trailing \\ for a newline  ·  ctrl+↑↓  history · ↑↓ scroll  ·  ctrl+c ×2  quit

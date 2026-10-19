@@ -9,6 +9,7 @@
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export const DUOI_ANH = /\.(png|jpe?g|gif|webp|heic|heif|avif|tiff?|bmp)$/i;
 const MIME: Record<string, string> = {
@@ -17,11 +18,21 @@ const MIME: Record<string, string> = {
 };
 export const TRAN_ANH = 8;
 
+/** Đường Windows (`C:\…`, `C:/…`, `\\máy\chia-sẻ\…`) — nhận cả khi CLI chạy trên macOS/Linux (test) và KHÔNG gỡ `\ `. */
+const LA_DUONG_WIN = /^(?:[A-Za-z]:[\\/]|\\\\[^\\\s]+\\)/;
+
 function moRong(p: string, cwd: string): string {
+  // Một số terminal (kitty, GNOME khi kéo từ trình duyệt) thả `file:///…` thay cho đường.
+  if (/^file:\/\//i.test(p)) {
+    try { return fileURLToPath(p); } catch { /* không phải URL hợp lệ ⇒ xử như đường */ }
+  }
+  if (LA_DUONG_WIN.test(p)) return path.win32.normalize(p);
   const bo = p.replace(/\\ /g, ' ');
   if (bo.startsWith('~/')) return path.join(os.homedir(), bo.slice(2));
   return path.isAbsolute(bo) ? bo : path.resolve(cwd, bo);
 }
+
+const tenFile = (td: string): string => (LA_DUONG_WIN.test(td) ? path.win32.basename(td) : path.basename(td));
 
 export interface KetQuaTachAnh { text: string; anh: string[]; daNhac: Set<string> }
 
@@ -39,20 +50,20 @@ export function tachAnh(text: string, cwd: string, laFile: (p: string) => boolea
     return true;
   };
   // 1) Bọc nháy: '…/x.png' hoặc "…/x.png"
-  let ra = text.replace(/(['"])((?:~|\/|[A-Za-z]:[\\/])[^'"\n]*?)\1/g, (m, _q: string, p: string) => {
+  let ra = text.replace(/(['"])((?:~|\/|[A-Za-z]:[\\/]|\\\\|file:\/\/)[^'"\n]*?)\1/g, (m, _q: string, p: string) => {
     if (!DUOI_ANH.test(p)) return m;
     const td = moRong(p, cwd);
-    return them(td) ? `[ảnh: ${path.basename(td)}]` : m; // i18n-bo-qua: chữ gửi model
+    return them(td) ? `[ảnh: ${tenFile(td)}]` : m; // i18n-bo-qua: chữ gửi model
   });
   // 2) `@đường` và đường tuyệt đối trần (cho phép `\ ` bên trong).
-  ra = ra.replace(/(^|\s)(@?)((?:~\/|\/|[A-Za-z]:[\\/]|\.{0,2}[\w-])(?:\\ |[^\s])*)/g, (m, dau: string, a: string, p: string) => {
+  ra = ra.replace(/(^|\s)(@?)((?:~\/|\/|[A-Za-z]:[\\/]|\\\\|file:\/\/|\.{0,2}[\w-])(?:\\ |[^\s])*)/g, (m, dau: string, a: string, p: string) => {
     if (!DUOI_ANH.test(p)) return m;
     // Đường trần (không `@`) phải tuyệt đối — "xem a.png" trong câu chưa chắc là muốn gửi ảnh.
-    if (!a && !(p.startsWith('/') || p.startsWith('~/') || /^[A-Za-z]:[\\/]/.test(p))) return m;
+    if (!a && !(p.startsWith('/') || p.startsWith('~/') || LA_DUONG_WIN.test(p) || /^file:\/\//i.test(p))) return m;
     const td = moRong(p, cwd);
     if (!them(td)) return m;
     if (a) daNhac.add(p);
-    return `${dau}[ảnh: ${path.basename(td)}]`; // i18n-bo-qua: chữ gửi model
+    return `${dau}[ảnh: ${tenFile(td)}]`; // i18n-bo-qua: chữ gửi model
   });
   return { text: ra, anh, daNhac };
 }

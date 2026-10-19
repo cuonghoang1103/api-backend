@@ -13,6 +13,7 @@ import { demDiff, veDiff } from './diff';
 import type { MucBang, ViecKeHoach } from './kho';
 import { THUONG_HIEU, capMau, catVua, chuyenSac, dam, dem, doRong, mau, mo, nen, nghieng } from './mau';
 import { bocDong, bocVan, veMarkdown } from './markdown';
+import { phimDanAnh } from './banPhim';
 import { L } from './i18n';
 import { dichTomTat, gio, giay, nhanNhom, nhanTool, TOOL_GHI, TOOL_LENH } from './trangThai';
 
@@ -278,7 +279,7 @@ export function veManMoDau(t: ThongTinMoDau, logo: string[], rongMan: number): s
   ra.push(dong());
   const k = (s: string) => mau(THUONG_HIEU.timNhat)(s);
   ra.push(dong(` ${mo(L('Mẹo:', 'Tips:'))} ${k('/help')} ${mo(L('xem lệnh ·', 'commands ·'))} ${k('@file')} ${mo(L('nhắc file ·', 'mention files ·'))} ${k('/model')} ${mo(L('đổi model ·', 'switch model ·'))} ${k('/language')}`));
-  ra.push(dong(`      ${k(L('!lệnh', '!cmd'))} ${mo(L('chạy shell ·', 'run shell ·'))} ${k(L('# ghi chú', '# note'))} ${mo(L('lưu quy ước ·', 'save a rule ·'))} ${k('ctrl+v')} ${mo(L('dán ảnh', 'paste image'))}`));
+  ra.push(dong(`      ${k(L('!lệnh', '!cmd'))} ${mo(L('chạy shell ·', 'run shell ·'))} ${k(L('# ghi chú', '# note'))} ${mo(L('lưu quy ước ·', 'save a rule ·'))} ${k(phimDanAnh())} ${mo(L('dán ảnh', 'paste image'))}`));
   ra.push(dong(`      ${k('shift+tab')} ${mo(L('đổi chế độ ·', 'mode ·'))} ${k('esc esc')} ${mo(L('quay lui ·', 'rewind ·'))} ${k('ctrl+r')} ${mo(L('xem lại ·', 'transcript ·'))} ${k('↓')} ${mo(L('agent phụ', 'subagents'))}`));
   if (t.ngoaiTuyen) { ra.push(dong()); ra.push(dong(` ${mau(VANG)(L('⚠ Chưa kết nối được máy chủ — đang dùng phiên đã lưu.', '⚠ Server unreachable — using the saved session.'))}`)); }
   if (t.banMoi) {

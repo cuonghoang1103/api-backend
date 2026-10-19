@@ -90,6 +90,26 @@ CuongMini mở trong **alternate screen** như Claude Code: ô nhập + chân tr
 - Toàn màn hình KHÔNG bao giờ gửi lệnh xoá scrollback (iTerm2 hết hiện thanh "clear scrollback history?").
 - Tắt: `/fullscreen off` (lưu cho lần sau) · cờ `--no-fullscreen` · `CUONGMINI_TOAN_MAN_HINH=0`. CI, không TTY, `-p` thì không bao giờ bật.
 
+## Mới ở 0.6.4 (Windows dán ảnh, hiệu ứng tab khi đang làm, thông báo có logo)
+
+- **Dán ảnh trên Windows**: **`alt+v`** ở Windows Terminal / cmd / PowerShell — hai terminal này GIỮ `ctrl+v` và `ctrl+shift+v`
+  để dán chữ (clipboard chỉ có ảnh thì chúng không gửi gì), nên mẹo/phím tắt trên Windows nay ghi `alt+v`. Đã kiểm thật trên
+  `windows-latest` (Windows PowerShell 5.1 + pwsh 7, CLI thật trong ConPTY): ảnh chụp, ảnh 4K, file ảnh đã *Copy* trong
+  Explorer (gửi chính file đó), đường có dấu cách + tiếng Việt. Clipboard không có ảnh ⇒ báo rõ "Clipboard không có ảnh",
+  khác hẳn "không đọc được clipboard" (kèm lý do). Kéo-thả file ảnh: đường bọc `"…"`, `'…'`, `& '…'`, `\\máy\chia-sẻ`, `file://` đều nhận.
+  *Windows: paste images with `alt+v`; a clear message when the clipboard has no image; dragged paths with quotes/spaces work.*
+- **Hiệu ứng khi đang làm** (như Claude Code, nhẹ, không nháy): tiêu đề tab `◐ <tên việc> · đang làm` (xoay), `◉ … · chờ duyệt`,
+  `✓ … · xong`, `✗ … · lỗi` — về `CuongMini · <tên việc>` khi bạn quay lại; **OSC 9;4** (tab phát sáng iTerm2 ≥ 3.6.6, thanh tiến độ
+  taskbar Windows Terminal/ConEmu, ghostty ≥ 1.2): chạy / chờ duyệt (vàng) / lỗi (đỏ) / xoá khi xong-dừng-thoát; iTerm2 có biến
+  `user.cuongmini` (đặt Badge = `\(user.cuongmini)` nếu muốn thấy). Terminal không hỗ trợ ⇒ không phát; `-p` / không phải TTY ⇒
+  không phát; tắt: `/config` → *Hiệu ứng terminal* hoặc `CUONGMINI_HIEU_UNG=0`. `/terminal-setup` cho biết terminal đang dùng được gì.
+  *Spinning tab title + OSC 9;4 progress where supported; off via `/config`.*
+- **Thông báo khi xong / cần duyệt** làm lại: tiêu đề **CuongMini**, phụ đề = tên việc, nội dung một dòng "Xong · 2 phút 14 giây".
+  iTerm2 ⇒ thông báo gốc (OSC 9, bấm vào nhảy đúng tab); ghostty/WezTerm ⇒ OSC 777; macOS có `terminal-notifier` ⇒ kèm logo
+  CuongMini; còn lại osascript (sửa lỗi chữ Việt vỡ "ti·∫øng Vi·ªát"); Windows ⇒ toast "CuongMini" có logo (lùi BurntToast ⇒ bóng
+  NotifyIcon); Linux ⇒ `notify-send -i` logo. Chỉ gửi khi bạn không nhìn terminal (dò focus) — terminal không báo focus thì chỉ
+  với lượt > 20 giây. *Notifications redone: CuongMini title + logo, one clean line, correct Unicode.*
+
 ## Mới ở 0.6.3 (gợi ý bước tiếp, /usage đúng, CT Work theo thư mục, quản lý MCP)
 
 - **Gợi ý bước tiếp** (như Claude Code): xong một lượt có ích, câu gợi ý đầu hiện **chữ mờ** ở ô nhập trống — **Tab** điền vào ô, **Enter** gửi; gõ ký tự khác thì biến mất. Phiên gắn CT Work ⇒ ưu tiên việc CT Work (chuyển trạng thái, bình luận bằng chứng, log giờ…). *Next-step suggestion as dim text in the empty input — Tab fills, Enter sends; typing hides it.*
@@ -232,7 +252,7 @@ cả việc này · `3` từ chối, hoặc ↑↓ + Enter; `Esc` = từ chối.
 | `ctrl+r` | Xem lại toàn bộ bảng ghi, cuộn được (j/k, Space, g/G) |
 | `ctrl+o` | Chọn đầu ra lệnh/tool cũ để mở/thu (Enter), `p` in trọn ra màn hình |
 | `ctrl+p` / `ctrl+t` | Ẩn/hiện bảng kế hoạch |
-| `ctrl+v` (Windows: `alt+v`) | Dán ảnh từ clipboard (macOS: pngpaste/osascript · Windows: PowerShell · Linux: wl-paste/xclip) |
+| `ctrl+v` (Windows: `alt+v`; `ctrl+shift+v` nếu terminal để lọt) | Dán ảnh từ clipboard (macOS: osascript/pngpaste · Windows: PowerShell 5.1/7 · Linux: wl-paste/xclip); file ảnh đã Copy trong Finder/Explorer ⇒ gửi chính file đó |
 | `ctrl+j`, `Alt+Enter`, `\` cuối dòng | Xuống dòng (`/terminal-setup` để dùng Shift+Enter) |
 | `ctrl+l` | Vẽ lại màn hình |
 | `ctrl+c` | Dừng việc · xoá ô nhập · nhấn 2 lần để thoát |
@@ -277,8 +297,9 @@ Biến môi trường: `NO_COLOR` (tắt màu) · `CUONGMINI_HOME` (đổi thư 
 - **Màu**: truecolor ⇒ 256 màu ⇒ 16 màu (conhost Windows cũ, `TERM=linux`) tự hạ bậc; `NO_COLOR` tắt hẳn.
 - **Ký tự**: console không vẽ được Unicode (conhost Windows ngoài Windows Terminal/VS Code, `TERM=linux`) ⇒ khung
   `+-|` và ký hiệu ASCII; chữ tiếng Việt vẫn giữ nguyên.
-- **Thông báo**: lượt dài hơn 30 giây hoặc cần duyệt ⇒ chuông; nếu bạn đang ở cửa sổ khác ⇒ thông báo hệ điều hành
-  (osascript · PowerShell · notify-send). Tắt trong `/config`.
+- **Thông báo**: lượt dài hơn 20 giây hoặc cần duyệt ⇒ chuông; nếu bạn đang ở cửa sổ khác ⇒ thông báo có logo CuongMini
+  (iTerm2 OSC 9 · terminal-notifier/osascript · toast Windows · notify-send). Tắt trong `/config`.
+- **Tab/tiêu đề**: biểu tượng xoay + trạng thái khi đang làm, OSC 9;4 ở terminal hỗ trợ (xem "Mới ở 0.6.4"). Tắt trong `/config`.
 - **Windows**: chạy trong Windows Terminal, PowerShell 5.1/7, cmd. Alt+Enter của Windows Terminal là phím toàn màn
   hình ⇒ xuống dòng bằng `ctrl+j` hoặc `\` cuối dòng.
 

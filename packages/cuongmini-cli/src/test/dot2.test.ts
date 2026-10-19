@@ -40,25 +40,34 @@ test('shell `!`: ngữ cảnh gửi model giữ ĐUÔI, có trần, bỏ mã mà
   assert.equal(sachDauRa('a\rb\x1b[2K'), 'a\nb');
 });
 
-test('dán ảnh: lệnh đúng từng hệ, đích đi qua biến môi trường', () => {
-  const mac = cachDocAnh('darwin', '/t/a.png');
-  assert.deepEqual(mac.map((c) => c.file), ['pngpaste', 'osascript']);
-  assert.ok(mac[1]!.args.join(' ').includes('«class PNGf»'));
-  assert.ok(!mac[1]!.args.join(' ').includes('/t/a.png'), 'không ghép đường vào AppleScript');
+test('dán ảnh: lệnh đúng từng hệ, đích KHÔNG ghép vào mã script (8C: argv/env + -EncodedCommand)', () => {
+  const mac = cachDocAnh('darwin', '/t/a b.png');
+  assert.deepEqual(mac.map((c) => c.file), ['osascript', 'pngpaste']);
+  const as = mac[0]!.args;
+  assert.ok(as.join(' ').includes('«class PNGf»') && as.join(' ').includes('«class furl»'));
+  assert.equal(as.at(-1), '/t/a b.png', 'đường đích là ARGV cuối (UTF-8), không phải `system attribute` (MacRoman)');
+  assert.ok(!as.slice(0, -1).join(' ').includes('/t/a b.png'), 'không ghép đường vào AppleScript');
   const win = cachDocAnh('win32', 'C:\\t\\a.png');
-  assert.match(win[0]!.args.join(' '), /Get-Clipboard -Format Image/);
-  assert.ok(win[0]!.args.includes('-STA'));
+  assert.deepEqual(win.map((c) => c.file), ['powershell.exe', 'pwsh.exe']);
+  assert.ok(win[0]!.args.includes('-STA') && win[0]!.args.includes('-EncodedCommand') && win[0]!.args.includes('-NoProfile'));
+  const ps = Buffer.from(win[0]!.args.at(-1)!, 'base64').toString('utf16le');
+  assert.match(ps, /\$env:CM_DICH/);
+  assert.ok(!/Get-Clipboard -Format Image/.test(ps), 'pwsh 7 không có -Format Image');
+  assert.ok(!ps.includes('C:\\t'), 'đường đích không nằm trong script');
   assert.deepEqual(cachDocAnh('linux', '/t/a.png').map((c) => c.file), ['wl-paste', 'xclip']);
 });
 
-test('thông báo hệ điều hành: nội dung qua env, không ghép chuỗi', () => {
-  const m = lenhThongBao('darwin', 'Tiêu "đề"', 'nội dung; rm -rf');
+test('thông báo hệ điều hành: nội dung qua argv/env, không ghép chuỗi vào mã', () => {
+  const nd = { tieuDe: 'CuongMini', phuDe: 'Tiêu "đề" \\ x', noiDung: 'nội dung; rm -rf', dayDu: 'Xong · nội dung; rm -rf' };
+  const m = lenhThongBao('darwin', nd);
   assert.equal(m?.file, 'osascript');
-  assert.ok(!m!.args.join('').includes('rm -rf'));
-  assert.equal(m!.env.CM_NOI_DUNG, 'nội dung; rm -rf');
-  assert.equal(lenhThongBao('win32', 'a', 'b')?.file, 'powershell.exe');
-  assert.deepEqual(lenhThongBao('linux', 'a', 'b')?.args, ['--app-name=CuongMini', 'a', 'b']);
-  assert.equal(lenhThongBao('aix', 'a', 'b'), null);
+  assert.deepEqual(m!.args.slice(-3), ['CuongMini', 'Tiêu "đề" \\ x', 'nội dung; rm -rf']);
+  assert.ok(!m!.args.slice(0, -3).join('').includes('rm -rf'));
+  const w = lenhThongBao('win32', nd);
+  assert.equal(w?.file, 'powershell.exe');
+  assert.equal(w!.env.CM_TB_NOI_DUNG, 'nội dung; rm -rf');
+  assert.deepEqual(lenhThongBao('linux', nd)?.args, ['-a', 'CuongMini', '--', 'CuongMini', 'Xong · nội dung; rm -rf']);
+  assert.equal(lenhThongBao('aix', nd), null);
 });
 
 test('@ hàm/lớp: quét định nghĩa theo ngôn ngữ', () => {
@@ -86,7 +95,7 @@ test('# ghi nhớ: tách, chọn file quy ước lõi đang đọc, chèn vào m
 test('cài đặt: trường sai ⇒ mặc định; "Bỏ qua hết" không đến từ file', () => {
   assert.deepEqual(chuanHoaCaiDat(null), MAC_DINH);
   const c = chuanHoaCaiDat({ theme: 'sang', thongBao: 'xyz', cheDoMacDinh: 'boQuaHet', modelMacDinh: 'opus-4-8', ascii: 'bat' });
-  assert.deepEqual(c, { theme: 'sang', thongBao: 'heThong', cheDoMacDinh: null, modelMacDinh: 'opus-4-8', ascii: 'bat', trinhDuyet: 'tuDong', ngonNgu: 'tuDong', traLoiTheoNgonNgu: 'tat', toanManHinh: 'bat', chuot: 'tat' });
+  assert.deepEqual(c, { theme: 'sang', thongBao: 'heThong', cheDoMacDinh: null, modelMacDinh: 'opus-4-8', ascii: 'bat', trinhDuyet: 'tuDong', ngonNgu: 'tuDong', traLoiTheoNgonNgu: 'tat', toanManHinh: 'bat', chuot: 'tat', hieuUngTerminal: 'bat' });
   assert.equal(MAC_DINH.cheDoMacDinh, null, 'chưa tự chọn ⇒ để lõi dùng "Hỏi trước"');
   assert.equal(chuanHoaCaiDat({ cheDoMacDinh: 'keHoach' }).cheDoMacDinh, 'keHoach');
   assert.equal(chuanHoaCaiDat({ modelMacDinh: '$(rm)' }).modelMacDinh, null);

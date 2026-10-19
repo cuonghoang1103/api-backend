@@ -28,6 +28,8 @@ import { moModel } from './congModel';
 import { API_ORIGIN } from '../../cuongmini-core/src/dangNhap';
 import { LOI_KHONG_CO_TRINH_DUYET, timTrinhDuyet } from '../../cuongmini-core/src/timTrinhDuyet';
 import { caiVsCode, doTerminal, HUONG_DAN } from './caiTerminal';
+import { docCaiDat } from './caiDat';
+import { doKhaNang, moTaKhaNang } from './hieuUngTerminal';
 import { kiemMay } from './doctor';
 import { chepChu, lenhMoTay } from './heThong';
 import type { KetNoiLoi } from './ketNoi';
@@ -287,8 +289,8 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
       if (!/^(all|tat-ca|tatca|day-du|full|-a)$/i.test(thamSo.trim())) { traLoi(troGiupGon(LENH_GOI_Y, S.lenhDuAn)); return; }
       const coBan = troGiup(LENH_GOI_Y, S.lenhDuAn);
       traLoi(`${coBan}\n\n${L(
-        '**Gõ đặc biệt**\n- `!lệnh` chạy shell ngay ở thư mục dự án (không qua AI) — kết quả đi kèm câu hỏi kế tiếp\n- `# ghi chú` lưu thành quy ước dự án (AGENTS.md) — CuongMini đọc ở mọi lượt\n- `@đường` / `@tênHàm` nhắc file, thư mục, hàm/lớp · kéo file ảnh vào hoặc `ctrl+v` (Windows: `alt+v`) dán ảnh\n\n**Phím tắt**\n- `shift+tab` đổi chế độ quyền · `esc` dừng (hoặc huỷ hàng chờ) · `esc esc` quay lui về câu cũ · `ctrl+c` ×2 thoát\n- Đang chạy vẫn gõ + Enter được — tin được **chèn** vào lượt đang chạy (↳), agent đọc ngay ở bước kế; lệnh `/` vào hàng chờ\n- `↓` (ô nhập trống) vào bảng agent phụ · `/tasks` xem cả việc đã xong và lệnh nền\n- `ctrl+r` xem lại bảng ghi · `ctrl+o` mở/thu đầu ra lệnh cũ · `ctrl+p`/`ctrl+t` bảng kế hoạch · `ctrl+l` vẽ lại\n- `Shift+Enter` (terminal hỗ trợ CSI u: iTerm2 ≥ 3.5, kitty, WezTerm, ghostty), `Alt+Enter`, `ctrl+j` hoặc `\\` cuối dòng để xuống dòng (`/terminal-setup`) \n- Toàn màn hình: con lăn / `↑` `↓` (ô nhập trống) / PgUp PgDn cuộn bản ghi — ô nhập luôn ở đáy · `ctrl+↑`/`ctrl+↓` lịch sử câu hỏi · kéo chuột bôi đen chép như thường (`/mouse on` để bắt chuột) · `/copy` chép câu trả lời\n\n_Lệnh chạy ngay tại đây không tốn lượt nào trừ /plan, /review, /init, /diff._',
-        '**Special input**\n- `!command` runs a shell command in the project folder (no AI) — the output is attached to your next message\n- `# note` saves a project convention (AGENTS.md) — read on every turn\n- `@path` / `@functionName` mention files, folders, functions/classes · drag an image in or `ctrl+v` (Windows: `alt+v`) to paste one\n\n**Shortcuts**\n- `shift+tab` cycle permission mode · `esc` interrupt (or clear the queue) · `esc esc` rewind · `ctrl+c` ×2 quit\n- You can type while it works — the message is **added to the running turn** (↳) and the agent reads it at its next step; `/` commands are queued\n- `↓` (empty input) opens the subagent panel · `/tasks` also shows finished tasks and shells\n- `ctrl+r` transcript · `ctrl+o` expand/collapse old outputs · `ctrl+p`/`ctrl+t` plan panel · `ctrl+l` redraw\n- `Shift+Enter` (CSI u terminals: iTerm2 ≥ 3.5, kitty, WezTerm, ghostty), `Alt+Enter`, `ctrl+j` or a trailing `\\` for a newline (`/terminal-setup`) \n- Fullscreen: wheel / `↑` `↓` (empty input) / PgUp PgDn scroll the transcript — the input stays pinned · `ctrl+↑`/`ctrl+↓` prompt history · drag to select & copy as usual (`/mouse on` to capture the mouse) · `/copy` copies an answer\n\n_Local commands cost nothing except /plan, /review, /init, /diff._',
+        '**Gõ đặc biệt**\n- `!lệnh` chạy shell ngay ở thư mục dự án (không qua AI) — kết quả đi kèm câu hỏi kế tiếp\n- `# ghi chú` lưu thành quy ước dự án (AGENTS.md) — CuongMini đọc ở mọi lượt\n- `@đường` / `@tênHàm` nhắc file, thư mục, hàm/lớp · kéo file ảnh vào (đường có dấu cách/ngoặc kép vẫn được) hoặc `ctrl+v` dán ảnh — **Windows: `alt+v`** (Windows Terminal/cmd/PowerShell giữ ctrl+v và ctrl+shift+v để dán chữ); clipboard không có ảnh thì CuongMini báo rõ\n\n**Phím tắt**\n- `shift+tab` đổi chế độ quyền · `esc` dừng (hoặc huỷ hàng chờ) · `esc esc` quay lui về câu cũ · `ctrl+c` ×2 thoát\n- Đang chạy vẫn gõ + Enter được — tin được **chèn** vào lượt đang chạy (↳), agent đọc ngay ở bước kế; lệnh `/` vào hàng chờ\n- `↓` (ô nhập trống) vào bảng agent phụ · `/tasks` xem cả việc đã xong và lệnh nền\n- `ctrl+r` xem lại bảng ghi · `ctrl+o` mở/thu đầu ra lệnh cũ · `ctrl+p`/`ctrl+t` bảng kế hoạch · `ctrl+l` vẽ lại\n- `Shift+Enter` (terminal hỗ trợ CSI u: iTerm2 ≥ 3.5, kitty, WezTerm, ghostty), `Alt+Enter`, `ctrl+j` hoặc `\\` cuối dòng để xuống dòng (`/terminal-setup`) \n- Toàn màn hình: con lăn / `↑` `↓` (ô nhập trống) / PgUp PgDn cuộn bản ghi — ô nhập luôn ở đáy · `ctrl+↑`/`ctrl+↓` lịch sử câu hỏi · kéo chuột bôi đen chép như thường (`/mouse on` để bắt chuột) · `/copy` chép câu trả lời\n\n_Lệnh chạy ngay tại đây không tốn lượt nào trừ /plan, /review, /init, /diff._',
+        '**Special input**\n- `!command` runs a shell command in the project folder (no AI) — the output is attached to your next message\n- `# note` saves a project convention (AGENTS.md) — read on every turn\n- `@path` / `@functionName` mention files, folders, functions/classes · drag an image in (paths with spaces/quotes work) or `ctrl+v` to paste one — **Windows: `alt+v`** (Windows Terminal/cmd/PowerShell keep ctrl+v and ctrl+shift+v for pasting text); CuongMini says so when the clipboard has no image\n\n**Shortcuts**\n- `shift+tab` cycle permission mode · `esc` interrupt (or clear the queue) · `esc esc` rewind · `ctrl+c` ×2 quit\n- You can type while it works — the message is **added to the running turn** (↳) and the agent reads it at its next step; `/` commands are queued\n- `↓` (empty input) opens the subagent panel · `/tasks` also shows finished tasks and shells\n- `ctrl+r` transcript · `ctrl+o` expand/collapse old outputs · `ctrl+p`/`ctrl+t` plan panel · `ctrl+l` redraw\n- `Shift+Enter` (CSI u terminals: iTerm2 ≥ 3.5, kitty, WezTerm, ghostty), `Alt+Enter`, `ctrl+j` or a trailing `\\` for a newline (`/terminal-setup`) \n- Fullscreen: wheel / `↑` `↓` (empty input) / PgUp PgDn scroll the transcript — the input stays pinned · `ctrl+↑`/`ctrl+↓` prompt history · drag to select & copy as usual (`/mouse on` to capture the mouse) · `/copy` copies an answer\n\n_Local commands cost nothing except /plan, /review, /init, /diff._',
       )}`);
       return;
     }
@@ -904,21 +906,25 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
     }
 
     case '/terminal-setup': {
+      // Đợt 8C: kèm trạng thái hiệu ứng tab (tiêu đề xoay, OSC 9;4, thông báo gốc) + cách tắt.
+      const kn = doKhaNang(process.env, { tty: Boolean(process.stdout.isTTY), tat: docCaiDat().hieuUngTerminal === 'tat' });
+      const them = `\n\n**${L('Hiệu ứng khi đang làm', 'Working indicators')}** (${L('tắt: `/config` → Hiệu ứng terminal, hoặc `CUONGMINI_HIEU_UNG=0`', 'turn off: `/config` → Terminal effects, or `CUONGMINI_HIEU_UNG=0`')})\n${moTaKhaNang(kn).map((d) => `- ${d}`).join('\n')}`;
+      const tl = (chu: string) => traLoi(chu + them);
       const tp = doTerminalPhim(process.env);
       if (tp === 'kitty' || tp === 'iterm') {
-        traLoi(L('Terminal này hiểu **kitty keyboard protocol** — CuongMini bật nó lúc khởi động nên **Shift+Enter xuống dòng ngay**, không cần cấu hình gì. (Nếu vẫn bị gửi: iTerm2 → Settings → Profiles → Keys → General → bật *Report modifiers using CSI u*, hoặc dùng ctrl+j / `\\`+Enter.)',
+        tl(L('Terminal này hiểu **kitty keyboard protocol** — CuongMini bật nó lúc khởi động nên **Shift+Enter xuống dòng ngay**, không cần cấu hình gì. (Nếu vẫn bị gửi: iTerm2 → Settings → Profiles → Keys → General → bật *Report modifiers using CSI u*, hoặc dùng ctrl+j / `\\`+Enter.)',
           'This terminal speaks the **kitty keyboard protocol** — CuongMini enables it at startup, so **Shift+Enter inserts a newline** with no setup. (If it still sends: iTerm2 → Settings → Profiles → Keys → General → enable *Report modifiers using CSI u*, or use ctrl+j / `\\`+Enter.)'));
         return;
       }
       const loai = doTerminal();
       if (loai === 'vscode' || loai === 'cursor') {
         const r = caiVsCode(loai === 'cursor' ? 'Cursor' : 'Code');
-        traLoi(r.daCo ? L(`Shift+Enter đã được cài sẵn trong \`${r.duong}\` — không đổi gì.`, `Shift+Enter is already set up in \`${r.duong}\` — nothing changed.`)
+        tl(r.daCo ? L(`Shift+Enter đã được cài sẵn trong \`${r.duong}\` — không đổi gì.`, `Shift+Enter is already set up in \`${r.duong}\` — nothing changed.`)
           : L(`Đã thêm Shift+Enter (gửi ESC+Enter ⇒ xuống dòng) vào \`${r.duong}\`${r.saoLuu ? ` — bản cũ sao lưu ở \`${r.saoLuu}\`` : ''}. Có tác dụng ngay trong terminal của ${loai === 'cursor' ? 'Cursor' : 'VS Code'}.`,
             `Added Shift+Enter (sends ESC+Enter ⇒ newline) to \`${r.duong}\`${r.saoLuu ? ` — backup at \`${r.saoLuu}\`` : ''}. Works right away in the ${loai === 'cursor' ? 'Cursor' : 'VS Code'} terminal.`));
         return;
       }
-      traLoi(HUONG_DAN[loai]());
+      tl(HUONG_DAN[loai]());
       return;
     }
 

@@ -60,7 +60,7 @@ export default {
 
     /* ── 30/09/2026 — bài 📑 theo slide, 🧪 thực hành, bài nền tảng & Xưởng ERD (flm-nguon/DBI202/video-ket-qua.tsv) ── */
     "dbi202-bat-dau-tai-day": { yt: "wR0jg0eQsZA", credit: "Lucid Software — Database Tutorial for Beginners" },
-    "dbi202-cai-dat-ket-noi": { yt: "WdvTb7YKi6Y", credit: "SQL Server 101 — How to install SQL Server 2022 Developer and SQL Server Management Studio (SSMS) - for FREE" },
+    "dbi202-cai-dat-ket-noi": { yt: "WdvTb7YKi6Y", credit: "SQL Server 101 — How to install SQL Server 2022 Developer and SQL Server Management Studio (SSMS) - for FREE", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-02-cai-dat-ket-noi-sql-server-postgresql-3ec1c853.mp4' }, defaultVideoTrack: 'VI'},
     "dbi202-buoi-dau-tien": { yt: "ft_JWXmH9y4", credit: "SQL Server 101 — Creating tables and adding data in Microsoft SQL Server - using GUI and T-SQL code" },
     "dbi202-slide-dbi1-1": { yt: "OqjJjpjDRLc", credit: "IBM Technology — What is a Relational Database?" },
     "dbi202-slide-dbi2-1": { yt: "D-k-h0GuFmE", credit: "Stanford Dbclass — 01-01-introduction.mp4" },

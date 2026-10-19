@@ -23,6 +23,7 @@ import adv4 from './prj301/adv-quiz4.mjs';
 import cs from './prj301/chuyen-sau.mjs';
 import asm from './prj301/assignment.mjs';
 import fe from './prj301/fe.mjs';
+import nhatro from './prj301/nhatro.mjs';
 
 export default {
   semester: { code: 'FPTU_Hola4', name: 'Kỳ 4', ordinal: 6 },
@@ -4132,6 +4133,16 @@ input.addEventListener('input', () =&gt; {
         /* 🧩 Bài bổ sung — ./prj301/fe.mjs */
         ...fe.extrasEnd,
       ]
+    },
+    {
+      title: '🏠 Student Hostel project — startup: understand the project & environment|||🏠 Dự án Nhà trọ SV — khởi động: hiểu dự án & môi trường',
+      description: 'Phần TỰ THÊM: 4 video giúp nhóm hiểu đề "Quản lý nhà trọ sinh viên" và dựng môi trường trước khi code — đề bài/use case, bản đồ một request, đọc lỗi Tomcat, và luật Git cho nhóm.',
+      lessons: nhatro.khoiDong,
+    },
+    {
+      title: '🏠 Student Hostel project — build it, card by card (role-play)|||🏠 Dự án Nhà trọ SV — làm trọn, nhập vai từng thẻ',
+      description: 'Phần TỰ THÊM: 8 video nhập vai làm dự án theo đúng thẻ CT Work (NT-21 → NT-41): tạo repo, CSDL, layout, đăng ký, đăng nhập, filter phân quyền — mỗi thẻ một nhánh, một Pull Request, code chạy thật.',
+      lessons: nhatro.nhapVai,
     },
   ],
 };

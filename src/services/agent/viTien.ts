@@ -117,7 +117,7 @@ function rong(mang: MangAI, tran: number, soGio: number, miemTran: boolean): ViT
  * đồng hồ đo hỏng thì tệ hơn là không có khoá — cùng lý do đã viết ở
  * `quota.ts` và `llm/budget.ts`.
  */
-export async function xemViTien(userId: number, mang: MangAI): Promise<ViTien> {
+export async function xemViTien(userId: number, mang: MangAI, o: { boQuaNho?: boolean } = {}): Promise<ViTien> {
   const soGio = soGioViTien();
 
   // ── Trần RIÊNG theo gói đã mua (14/09/2026) ────────────────────────────
@@ -166,7 +166,8 @@ export async function xemViTien(userId: number, mang: MangAI): Promise<ViTien> {
   let cu: Date | null;
   let moi: Date | null;
 
-  const nho = dem.get(khoa);
+  /* `/usage` (QA 9.2): đọc thẳng sổ — bộ nhớ 60 s làm số vừa tiêu không hiện, người dùng thấy "/usage sai". */
+  const nho = o.boQuaNho ? undefined : dem.get(khoa);
   if (nho && gio - nho.luc < NHO_MS) {
     ({ usd, cu, moi } = nho);
   } else {

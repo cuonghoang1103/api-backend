@@ -107,8 +107,9 @@ export async function xemUsageAdmin(luc = new Date()): Promise<UsageAdmin> {
     where: { feature: 'agent', model: { in: [...rb] }, createdAt: { gte: dauNgayVn(luc) }, OR: [{ step: 'default:luot' }, { step: { endsWith: ':l' } }] },
   }).catch(() => 0);
   return {
-    keys: keys.map((k) => ({
-      ten: k.nhan, trangThai: k.trangThai, nganSachUsd: k.nganSachThangUsd, daDungUsd: k.daDungUsd,
+    /* Tên mặc định của khoá là "Key …<4 ký tự cuối>" — terminal không in đuôi khoá (QA 9.2) ⇒ "Key #n". */
+    keys: keys.map((k, i) => ({
+      ten: /^Key …/.test(k.nhan) ? `Key #${i + 1}` : k.nhan, trangThai: k.trangThai, nganSachUsd: k.nganSachThangUsd, daDungUsd: k.daDungUsd,
       conPhanTram: k.nganSachThangUsd > 0 ? Math.max(0, Math.round(((k.nganSachThangUsd - k.daDungUsd) / k.nganSachThangUsd) * 1000) / 10) : null,
       boQua: k.boQua, lamMoiLuc: k.chuKy.lamMoiLuc,
     })),
@@ -192,7 +193,7 @@ export async function xemUsageCuongMini(userId: number, o: { model?: unknown; pr
     : undefined;
 
   // ── Ví 5 giờ (mảng AI Code) — đúng hàm `turn.ts` dùng để chặn ──
-  const v = await xemViTien(userId, 'code').catch(() => null);
+  const v = await xemViTien(userId, 'code', { boQuaNho: true }).catch(() => null);
   const vi = v ? {
     daDung: r4(v.daTieu), tran: v.tran, phanTram: v.phanTram, soGio: v.soGio,
     hoiLucNao: v.hoiLucNao?.toISOString() ?? null, khongGioiHan: v.miemTran, giaHan: r4(v.giaHan ?? 0),

@@ -18,6 +18,7 @@
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { laAnhThat } from './anh';
 import { L } from './i18n';
 import { thuMucGoc } from './phien';
 
@@ -117,7 +118,7 @@ export function hieuTuKhoa(ra: string, ma: number | null, dich: string, laMac = 
   if (t === 'EMPTY') return { loai: 'trong' };
   if (t.startsWith('FILE:')) {
     const p = laMac ? t.slice(5) : giai64(t.slice(5));
-    return new RegExp(DUOI_ANH_PS, 'i').test(p) && existsSync(p) ? { loai: 'anh', duong: p } : { loai: 'trong' };
+    return new RegExp(DUOI_ANH_PS, 'i').test(p) && existsSync(p) && laAnhThat(p) ? { loai: 'anh', duong: p } : { loai: 'trong' };
   }
   if (t.startsWith('ERR:')) return { loai: 'loi', chiTiet: giai64(t.slice(4)).slice(0, 200) };
   return { loai: 'loi', chiTiet: `exit ${ma ?? '?'}${t ? `: ${t.slice(0, 120)}` : ''}` };

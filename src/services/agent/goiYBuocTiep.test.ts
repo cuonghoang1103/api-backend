@@ -55,3 +55,29 @@ test('runAgentTurn: chữ chảy không có khối, done mang goiY, hội thoạ
   assert.deepEqual(done.goiY, ['Chạy npm test', 'Chuyển LF-18 sang Review']);
   assert.equal(done.append.at(-1).content, 'Đã sửa file a.ts.');
 });
+
+test('QA 9.2: khối giữa câu, nhiều khối, thẻ trong mã — luồng và hội thoại lưu KHỚP nhau', () => {
+  const ca: Array<[string, string, string[]]> = [
+    ['Phần đầu.\n\n<goi-y>\nGiữa câu\n</goi-y>\n\nPhần SAU khối vẫn hiện.', 'Phần đầu.\n\nPhần SAU khối vẫn hiện.', ['Giữa câu']],
+    ['Hai khối.\n<goi-y>\nKhối 1\n</goi-y>\nGiữa hai khối.\n<goi-y>\nKhối 2\n</goi-y>', 'Hai khối.\nGiữa hai khối.', ['Khối 2']],
+    ["Mã:\n```ts\nconst THE_MO = '<goi-y>';\n<goi-y>\nconst x = 1;\n```\nHết mã.", "Mã:\n```ts\nconst THE_MO = '<goi-y>';\n<goi-y>\nconst x = 1;\n```\nHết mã.", []],
+    ['Nhắc thẻ <goi-y> giữa câu thì giữ nguyên.', 'Nhắc thẻ <goi-y> giữa câu thì giữ nguyên.', []],
+    ['Xong. <goi-y>\nCùng dòng nhưng xuống dòng sau thẻ\n</goi-y>', 'Xong.', ['Cùng dòng nhưng xuống dòng sau thẻ']],
+    ['Trả lời 4.\n\n<goi-y>\nGợi ý không đóng 1\nGợi ý không đóng 2', 'Trả lời 4.', ['Gợi ý không đóng 1', 'Gợi ý không đóng 2']],
+    ['Chỉ có chữ.', 'Chỉ có chữ.', []],
+  ];
+  for (const [vao, chu, goiY] of ca) {
+    const r = tachGoiY(vao);
+    assert.equal(r.chu, chu, vao);
+    assert.deepEqual(r.goiY, goiY, vao);
+    /* Luồng: chia mọi kiểu (từng ký tự, mẩu 3, mẩu 7) ⇒ đúng chữ của hội thoại lưu (bỏ khoảng trắng cuối). */
+    for (const n of [1, 3, 7]) {
+      const l = new LocLuongGoiY();
+      let ra = '';
+      for (let i = 0; i < vao.length; i += n) ra += l.day(vao.slice(i, i + n));
+      ra += l.xong();
+      assert.equal(ra.replace(/\s+$/, ''), chu.replace(/\s+$/, ''), `luồng mẩu ${n}: ${vao}`);
+      if (!/^<goi-y>$/m.test(chu)) assert.doesNotMatch(ra, /^<goi-y>$/m, 'không lộ thẻ khối');
+    }
+  }
+});

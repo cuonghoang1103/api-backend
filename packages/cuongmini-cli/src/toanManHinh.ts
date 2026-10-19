@@ -59,9 +59,48 @@ export function caiLocXoaScrollback(out: NodeJS.WriteStream): void {
   if (daCaiLoc) return;
   daCaiLoc = true;
   const goc = out.write.bind(out) as (...a: unknown[]) => boolean;
-  (out as unknown as { write: (...a: unknown[]) => boolean }).write = (chunk: unknown, ...con: unknown[]) => goc(locXoaScrollback(chunk), ...con);
+  const ve = new VeKhacBiet();
+  (out as unknown as { write: (...a: unknown[]) => boolean }).write = (chunk: unknown, ...con: unknown[]) => {
+    const c = locXoaScrollback(chunk);
+    return goc(dangBat && process.env.CUONGMINI_VE_KHAC_BIET !== '0' ? ve.loc(c, out.columns || 0, out.rows || 0) : (ve.quen(), c), ...con);
+  };
 }
 
+/**
+ * QA 9.2 — CHỈ VẼ LẠI DÒNG ĐỔI (toàn màn hình). Ink (log-update thường) xoá rồi ghi lại CẢ khung ở MỖI nhịp — kể cả logo
+ * nhiều màu: đo 10 MB/phút ra terminal khi model đang viết (~17 KB/khung × ~14 khung/giây) — SSH/tmux/terminal chậm thì
+ * giật, laptop tốn pin. Bộ lọc nhận đúng dạng khung của Ink (`eraseLines(n)` + khung + `\n`), nhớ khung trước; khung mới
+ * cùng số dòng ⇒ về dòng đầu rồi chỉ xoá-ghi các dòng khác (dòng giống ⇒ chỉ xuống dòng) — con trỏ kết thúc ĐÚNG chỗ bản
+ * đầy đủ để lại. Thứ gì khác ghi ra màn hình (xoá khung khi đổi cỡ, in thẳng…) ⇒ quên khung, lần sau vẽ đủ.
+ * Không dùng `incrementalRendering` của Ink: nó không biết các lần CLI tự xoá màn hình (đổi cỡ, ctrl+l) ⇒ để trống dòng.
+ * Tắt: `CUONGMINI_VE_KHAC_BIET=0`.
+ */
+const KHUNG_INK = /^((?:\x1b\[2K\x1b\[1A)*\x1b\[2K\x1b\[G)([\s\S]*\n)$/;
+export class VeKhacBiet {
+  private truoc: string[] | null = null;
+  private co = '';
+  quen(): void { this.truoc = null; }
+  loc(chunk: unknown, cot: number, dong: number): unknown {
+    if (typeof chunk !== 'string') { this.quen(); return chunk; }
+    const m = KHUNG_INK.exec(chunk);
+    if (!m) {
+      /* Ghi vô hại (tiêu đề/OSC, ẩn-hiện con trỏ, khối đồng bộ 2026, chuông) không đổi màn hình. */
+      if (!/^(?:\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)|\x1b\[\?(?:25|2026)[hl]|\x1b\[\d+;\d+t|\x07)*$/.test(chunk)) this.quen();
+      return chunk;
+    }
+    const soXoa = (m[1]!.match(/\x1b\[2K/g) ?? []).length;
+    const moi = m[2]!.slice(0, -1).split('\n');
+    const co = `${cot}x${dong}`;
+    const truoc = this.truoc;
+    this.truoc = null;
+    if (!cot || !dong || moi.length >= dong || /\x1b\[(?:\d*[ABCDEFGHJKSTf]|\?1049|2J)|\r/.test(m[2]!)) return chunk;
+    this.truoc = moi;
+    if (!truoc || co !== this.co || truoc.length !== moi.length || soXoa !== truoc.length + 1) { this.co = co; return chunk; }
+    let ra = moi.length > 1 ? `\x1b[${moi.length}A\x1b[G` : '\x1b[1A\x1b[G';
+    for (let i = 0; i < moi.length; i++) ra += moi[i] === truoc[i] ? '\n' : `\x1b[0m\x1b[2K${moi[i]}\n`;
+    return ra;
+  }
+}
 /** Có bật toàn màn hình không: cờ thắng cài đặt; không TTY / CI / -p thì không bao giờ. */
 export function nenToanManHinh(o: {
   caiDat: 'bat' | 'tat'; co?: boolean; cheDoIn: boolean; tty: boolean; env: NodeJS.ProcessEnv;

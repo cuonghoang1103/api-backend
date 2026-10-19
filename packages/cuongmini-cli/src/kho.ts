@@ -183,6 +183,32 @@ export function trangThaiDau(): TrangThaiChat {
 }
 
 /** Mã lỗi thật ra là THÔNG BÁO (đổi cổng, tự compact…) — không kết lượt. */
+/**
+ * QA 9.2 — CHỮ TỪ NGOÀI KHÔNG ĐƯỢC ĐIỀU KHIỂN TERMINAL. Chữ của model (và nội dung file/lệnh mà model đọc — có thể chứa
+ * prompt injection) từng đi thẳng ra terminal: `ESC ] 52 ; c ; …` GHI ĐÈ CLIPBOARD của người dùng (Windows Terminal, kitty,
+ * WezTerm, iTerm2 khi bật) — dán vào shell là chạy lệnh của kẻ khác; `ESC ] 0 ;` đổi tiêu đề; `ESC [ 2 J` xoá màn hình.
+ * Bỏ mọi chuỗi OSC/DCS/APC/PM/SOS, mọi CSI trừ màu SGR (`…m`, vô hại — và tool có màu), ký tự C1 và C0 trừ \t \n \r.
+ */
+export function sachDieuKhien(s: string, giuMau = true): string {
+  if (!/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]/.test(s)) return s;
+  return s
+    .replace(/\x1b[\]P_^X][\s\S]*?(?:\x07|\x1b\\|\u009c|$)/g, '')
+    .replace(/[\u0090\u009d\u009e\u009f\u0098][\s\S]*?(?:\x07|\x1b\\|\u009c|$)/g, '')
+    .replace(/\x1b\[[0-?]*[ -\/]*[@-~]/g, (m) => (giuMau && /^\x1b\[[0-9;:]*m$/.test(m) ? m : ''))
+    .replace(/\u009b[0-?]*[ -\/]*[@-~]/g, '')
+    .replace(/\x1b(?!\[[0-9;:]*m)[ -\/]*[0-~]?/g, '')
+    .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001a\u001c-\u001f\u007f-\u009f]/g, '');
+}
+const TRUONG_CHU = ['tomTat', 'chiTiet', 'thongDiep', 'thongDiepEn', 'mau', 'noiDung'] as const;
+function sachSuKien<T extends { loai: string; [k: string]: unknown }>(e: T): T {
+  let ra: T | null = null;
+  const dat = (k: string, v: unknown) => { if (!ra) ra = { ...e }; (ra as Record<string, unknown>)[k] = v; };
+  if (typeof e.delta === 'string') { const x = sachDieuKhien(e.delta, false); if (x !== e.delta) dat('delta', x); }
+  for (const k of TRUONG_CHU) { const v = e[k]; if (typeof v === 'string') { const x = sachDieuKhien(v); if (x !== v) dat(k, x); } }
+  if (Array.isArray(e.goiY)) { const g = (e.goiY as unknown[]).map((x) => (typeof x === 'string' ? sachDieuKhien(x, false) : x)); if (g.some((x, i) => x !== (e.goiY as unknown[])[i])) dat('goiY', g); }
+  return ra ?? e;
+}
+
 export const LOI_THONG_BAO = new Set(['DOI_CONG', 'KHOI_PHUC', 'LAM_TIEP', 'COMPACT', 'DOI_CHE_DO', 'TU_GO_ANH', 'CONG_CHINH_HONG_FREE', 'RAMBO_SONG_LAI', 'DOI_CONG_TU_DONG']);
 /** Lỗi cổng Claude chính hãng giao diện phải xử lý thêm (hỏi mật khẩu / mời modelapi). */
 export const LOI_CONG_ANTHROPIC = new Set(['CONG_ANTHROPIC_KHOA', 'CONG_ANTHROPIC_HET_HAN_MUC', 'CONG_ANTHROPIC_HET_KEY']);
@@ -382,8 +408,10 @@ export class KhoChat {
   veLai(): void { this.S.khoaBang += 1; this.bao(true); }
 
   /** Một sự kiện của lõi. */
-  xuLy(e: { loai: string; [k: string]: unknown }, bayGio = Date.now()): void {
+  xuLy(e0: { loai: string; [k: string]: unknown }, bayGio = Date.now()): void {
     const S = this.S;
+    /* QA 9.2: chữ của model / kết quả tool / câu lỗi đi THẲNG ra terminal ⇒ bỏ chuỗi điều khiển trước khi lưu. */
+    const e = sachSuKien(e0);
     // Bảng agent phụ / lệnh nền. Lệnh nền chỉ biết CÂU LỆNH qua thẻ xin phép trước đó (đã gắn vào tool đang chạy).
     const choPhu = e.loai === 'tool' && e.ten === 'chay_lenh_nen' ? { ...e, lenhNen: S.toolChay.find((t) => t.id === e.id)?.lenh ?? '' } : e;
     if (apSuKienPhu(S, choPhu, bayGio)) { this.bao(); return; }

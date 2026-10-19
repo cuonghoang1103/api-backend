@@ -565,7 +565,11 @@ router.get('/tai-tro-admin', async (req: any, res: Response<ApiResponse>, next) 
     const { laAdmin } = await import('../services/pro.service.js');
     const la = await laAdmin(req.userId);
     const pid = docDuAnId(req.query.projectId);
-    const nha = pid ? await timAdminTaiTro(pid).catch(() => null) : null;
+    /* QA 9.2: chỉ thành viên dự án (hoặc admin web) mới được biết dự án có được tài trợ không và ai tài trợ — trước đây
+       ai đăng nhập cũng dò được mã dự án (kể cả PRIVATE) và tên admin bằng cách duyệt projectId. */
+    const { loadProjectAccess } = await import('../services/work/permissions.js');
+    const duocXem = pid ? la || Boolean(await loadProjectAccess(req.userId, pid).catch(() => null)) : false;
+    const nha = pid && duocXem ? await timAdminTaiTro(pid).catch(() => null) : null;
     const ch = la ? await cauHinhTaiTroCua(req.userId) : null;
     res.json({
       success: true,

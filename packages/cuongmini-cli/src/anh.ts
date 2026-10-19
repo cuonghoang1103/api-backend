@@ -6,7 +6,7 @@
  *    Terminal.app). Cả hai dạng đều phải nhận ra.
  * Đường ảnh trong câu được thay bằng `[ảnh: tên]` — model nhận ảnh thật kèm theo.
  */
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { closeSync, existsSync, openSync, readFileSync, readSync, statSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -70,9 +70,39 @@ export function tachAnh(text: string, cwd: string, laFile: (p: string) => boolea
 
 function macDinhLaFile(p: string): boolean {
   try {
-    return existsSync(p) && statSync(p).isFile() && statSync(p).size < 40 * 1024 * 1024;
+    return existsSync(p) && statSync(p).isFile() && statSync(p).size < 40 * 1024 * 1024 && laAnhThat(p);
   } catch {
     return false;
+  }
+}
+
+/**
+ * QA 9.2: file có ĐUÔI ảnh chưa chắc là ảnh — repo lạ có thể chứa `shot.png` là symlink tới `~/.ssh/id_rsa`; gõ `@shot.png`
+ * (hay kéo thả nó) là gửi nguyên khoá lên máy chủ/cổng AI dưới dạng "ảnh". Chỉ nhận khi CHỮ KÝ đầu file là ảnh thật.
+ */
+export function laChuKyAnh(b: Buffer): boolean {
+  if (b.length < 4) return false;
+  const hex = b.subarray(0, 4).toString('hex');
+  if (hex === '89504e47') return true; // PNG
+  if (hex.startsWith('ffd8ff')) return true; // JPEG
+  if (b.subarray(0, 4).toString('latin1') === 'GIF8') return true;
+  if (b.subarray(0, 2).toString('latin1') === 'BM') return true;
+  if (hex === '49492a00' || hex === '4d4d002a') return true; // TIFF
+  if (b.length >= 12 && b.subarray(0, 4).toString('latin1') === 'RIFF' && b.subarray(8, 12).toString('latin1') === 'WEBP') return true;
+  if (b.length >= 12 && b.subarray(4, 8).toString('latin1') === 'ftyp') return true; // HEIC/HEIF/AVIF
+  return false;
+}
+export function laAnhThat(p: string): boolean {
+  let fd: number | null = null;
+  try {
+    fd = openSync(p, 'r');
+    const b = Buffer.alloc(16);
+    const n = readSync(fd, b, 0, 16, 0);
+    return laChuKyAnh(b.subarray(0, n));
+  } catch {
+    return false;
+  } finally {
+    if (fd !== null) try { closeSync(fd); } catch { /* bỏ qua */ }
   }
 }
 

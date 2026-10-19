@@ -1495,6 +1495,11 @@ export async function chayLuot(
            */
           const cho = CHO_THU_LAI_MS[daThuLai]!;
           daThuLai++;
+          /* QA 9.2: luồng ĐỨT (không phải cổng bận — chủ app đã bỏ các dòng "cổng chậm/bận") ⇒ MỘT dòng mờ để người dùng
+             biết vì sao vòng xoay đứng lâu. Dùng mã DOI_CONG_TU_DONG: cả CLI, desktop, VS Code vẽ thành dòng mờ, gộp trùng. */
+          if (MA_MAT_KET_NOI.has(phanHoi.ma)) {
+            phat({ loai: 'loi', ma: 'DOI_CONG_TU_DONG', thongDiep: CAU_DANG_NOI_LAI.vi, thongDiepEn: CAU_DANG_NOI_LAI.en });
+          }
           /* 18/10/2026: thử lại IM LẶNG — bỏ dòng "cổng AI đang quá tải — chờ Xs…"
              (chủ app yêu cầu xoá mọi thông báo kiểu "cổng đang chậm/bận"). Máy chủ
              tự chuyển cổng khi cổng hỏng; ở đây chỉ còn chờ rồi gửi lại. */
@@ -1510,8 +1515,10 @@ export async function chayLuot(
           continue;
         }
         giuChuDo();
+        /* QA 9.2: đã thử lại hết lượt mà câu vẫn nói "Đang thử lại" ⇒ người dùng ngồi chờ một việc đã dừng. */
+        const hetThuLai = MA_DANG_THU_LAI.has(phanHoi.ma) && daThuLai >= CHO_THU_LAI_MS.length;
         phat({
-          loai: 'loi', thongDiep: phanHoi.thongDiep, ma: phanHoi.ma,
+          loai: 'loi', thongDiep: hetThuLai ? cauHetThuLai(phanHoi.thongDiep, daThuLai) : phanHoi.thongDiep, ma: phanHoi.ma,
           ...(phanHoi.coKeyGiaHan ? { coKeyGiaHan: true } : {}),
           ...(phanHoi.giaHanTien ? { giaHanTien: phanHoi.giaHanTien } : {}),
           ...(typeof phanHoi.daBat === 'boolean' ? { daBat: phanHoi.daBat } : {}),
@@ -2705,6 +2712,17 @@ interface KetQuaLuot {
  * quay vòng đốt hạn mức.
  */
 const CHO_THU_LAI_MS = [2_000, 5_000, 12_000, 30_000];
+/** QA 9.2: mã "mất kết nối" (luồng đứt / im) — khác "cổng bận" (429/529/LLM_ERROR), có dòng mờ khi tự nối lại. */
+const MA_MAT_KET_NOI = new Set(['CONNECTION_LOST', 'GATEWAY_IM_LANG', 'LUOT_QUA_LAU']);
+export const CAU_DANG_NOI_LAI = {
+  vi: 'Mất kết nối tới máy chủ — CuongMini đang tự nối lại, phần đã làm vẫn giữ.',
+  en: 'Lost the connection to the server — CuongMini is reconnecting; work so far is kept.',
+};
+/** Câu lỗi cuối khi đã thử lại hết lượt: bỏ "Đang thử lại", nói rõ đã dừng + cách làm tiếp. */
+export function cauHetThuLai(thongDiep: string, soLan: number): string {
+  const goc = String(thongDiep ?? '').replace(/\s*Đang thử lại[^.]*\.\s*$/u, '').trim();
+  return `${goc}${goc.endsWith('.') ? '' : '.'} Đã tự thử lại ${soLan} lần không được — phần đã làm vẫn còn trong hội thoại; gửi lại câu hỏi (hoặc "tiếp tục") để làm tiếp.`;
+}
 
 const MA_DANG_THU_LAI = new Set([
   'CONNECTION_LOST', 'LLM_ERROR',

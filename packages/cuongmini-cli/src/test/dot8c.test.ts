@@ -3,11 +3,11 @@
  * (nội dung, thoát ký tự, logo), đọc clipboard (từ khoá, công cụ giả trên PATH), kéo-thả đường Windows/file://.
  */
 import assert from 'node:assert/strict';
-import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { after, test } from 'node:test';
-import { tachAnh } from '../anh';
+import { laChuKyAnh, tachAnh } from '../anh';
 import { danAnhTuClipboard, hieuTuKhoa, thuMotCach, PS_DOC_ANH } from '../anhDan';
 import { phimDanAnh } from '../banPhim';
 import { duongBieuTuong } from '../bieuTuong';
@@ -183,10 +183,14 @@ test('dán ảnh: từ khoá của script (OK / EMPTY / FILE / ERR) và phím th
   writeFileSync(dich, Buffer.from('89504e470d0a1a0a', 'hex'));
   assert.deepEqual(hieuTuKhoa('OK', 0, dich), { loai: 'anh', duong: dich });
   const fAnh = path.join(tam, 'ảnh chụp (1).png');
-  writeFileSync(fAnh, 'x');
+  writeFileSync(fAnh, Buffer.from('89504e470d0a1a0a', 'hex'));
   assert.deepEqual(hieuTuKhoa(`FILE:${Buffer.from(fAnh).toString('base64')}`, 0, dich), { loai: 'anh', duong: fAnh }, 'Windows: base64 UTF-8');
   assert.deepEqual(hieuTuKhoa(`FILE:${fAnh}`, 0, dich, true), { loai: 'anh', duong: fAnh }, 'macOS: chữ trần');
   assert.deepEqual(hieuTuKhoa(`FILE:${Buffer.from('C:\\a\\b.txt').toString('base64')}`, 0, dich), { loai: 'trong' }, 'file không phải ảnh');
+  /* QA 9.2: đuôi .png mà nội dung không phải ảnh (vd symlink tới khoá SSH) ⇒ không dán. */
+  const gia = path.join(tam, 'gia.png');
+  writeFileSync(gia, 'PRIVATE KEY');
+  assert.deepEqual(hieuTuKhoa(`FILE:${gia}`, 0, dich, true), { loai: 'trong' }, 'đuôi ảnh, nội dung không phải ảnh');
   assert.deepEqual(hieuTuKhoa(`ERR:${Buffer.from('Lỗi OLE').toString('base64')}`, 4, dich), { loai: 'loi', chiTiet: 'Lỗi OLE' });
   assert.ok(PS_DOC_ANH.includes('ContainsFileDropList') && PS_DOC_ANH.includes('ContainsImage') && !/[^\x00-\x7f]/.test(PS_DOC_ANH), 'script ASCII');
   assert.equal(phimDanAnh('win32'), 'alt+v');
@@ -242,4 +246,56 @@ test('cài đặt: hieuUngTerminal mặc định bật, giá trị lạ ⇒ mặ
   assert.equal(chuanHoaCaiDat({}).hieuUngTerminal, 'bat');
   assert.equal(chuanHoaCaiDat({ hieuUngTerminal: 'tat' }).hieuUngTerminal, 'tat');
   assert.equal(chuanHoaCaiDat({ hieuUngTerminal: 'xyz' }).hieuUngTerminal, 'bat');
+});
+
+test('QA 9.2: @file / kéo thả có đuôi ảnh nhưng nội dung KHÔNG phải ảnh (symlink tới khoá) ⇒ không gửi kèm', () => {
+  const d = path.join(tam, 'qa92');
+  mkdirSync(d, { recursive: true });
+  writeFileSync(path.join(d, 'id_gia'), '-----BEGIN OPENSSH PRIVATE KEY-----');
+  try { symlinkSync(path.join(d, 'id_gia'), path.join(d, 'shot.png')); } catch { /* đã có */ }
+  writeFileSync(path.join(d, 'that.png'), Buffer.from('89504e470d0a1a0a0000000d49484452', 'hex'));
+  writeFileSync(path.join(d, 'that.jpg'), Buffer.from('ffd8ffe000104a464946', 'hex'));
+  const r = tachAnh('@shot.png @that.png @that.jpg', d);
+  assert.deepEqual(r.anh.map((x) => path.basename(x)), ['that.png', 'that.jpg']);
+  assert.match(r.text, /^@shot\.png /, 'giữ nguyên chữ, không đổi thành [ảnh: …]');
+  assert.equal(laChuKyAnh(Buffer.from('RIFF0000WEBPVP8 ', 'latin1')), true);
+  assert.equal(laChuKyAnh(Buffer.from('0000ftypheic0000', 'latin1')), true);
+  assert.equal(laChuKyAnh(Buffer.from('ssh-rsa AAAA', 'latin1')), false);
+});
+
+test('QA 9.2: chữ model / tool không điều khiển được terminal (OSC 52 clipboard, tiêu đề, xoá màn hình)', async () => {
+  const { sachDieuKhien } = await import('../kho');
+  const x = 'A\x1b]52;c;ZWNobyBwd24=\x07B\x1b]0;PWN\x1b\\C\x1b[2J\x1b[HD\x9d0;x\x9cE\x1bPq#0\x1b\\F\x1b_Gf=1;AAAA\x1b\\G\x07\x08H';
+  assert.equal(sachDieuKhien(x, false), 'ABCDEFGH');
+  assert.equal(sachDieuKhien('\x1b[31mđỏ\x1b[0m\ttab\nxuống'), '\x1b[31mđỏ\x1b[0m\ttab\nxuống', 'giữ màu SGR + \\t \\n ở kết quả tool');
+  assert.equal(sachDieuKhien('\x1b[31mđỏ\x1b[0m', false), 'đỏ');
+  assert.equal(sachDieuKhien('Tiếng Việt 🚀 bình thường'), 'Tiếng Việt 🚀 bình thường');
+
+});
+
+test('QA 9.2: toàn màn hình chỉ vẽ lại dòng đổi (đo byte + màn hình cuối giống hệt vẽ đủ)', async () => {
+  const { VeKhacBiet } = await import('../toanManHinh');
+  const { Terminal } = await import('@xterm/headless');
+  const { default: ansi } = await import('ansi-escapes');
+  const v = new VeKhacBiet();
+  const tDu = new Terminal({ cols: 40, rows: 8, allowProposedApi: true, convertEol: true });
+  const tKb = new Terminal({ cols: 40, rows: 8, allowProposedApi: true, convertEol: true });
+  const ghi = (t: InstanceType<typeof Terminal>, s: string) => new Promise<void>((ok) => t.write(s, ok));
+  const logo = Array.from({ length: 30 }, (_, i) => `\x1b[38;2;${i};2;3m█`).join('') + '\x1b[39m';
+  const khung = (n: number) => [logo, `dòng ${n % 3}`, 'cố định', 'Tiếng Việt 🚀', `◐ đang làm ${n}s`, n > 14 ? '❯ gõ' : '❯ ô nhập'].join('\n') + '\n';
+  let du = 0; let kb = 0; let soDong = 0;
+  for (let n = 0; n < 20; n++) {
+    const c = ansi.eraseLines(soDong) + khung(n);
+    soDong = khung(n).split('\n').length;
+    du += c.length;
+    const r = v.loc(c, 40, 8) as string;
+    kb += r.length;
+    await ghi(tDu, c); await ghi(tKb, r);
+    if (n === 7) v.loc('\x1b]0;tiêu đề\x07', 40, 8);
+    if (n === 11) { await ghi(tDu, '\x1b[2J\x1b[H'); await ghi(tKb, v.loc('\x1b[2J\x1b[H', 40, 8) as string); soDong = 0; }
+  }
+  const man = (t: InstanceType<typeof Terminal>) => Array.from({ length: 8 }, (_, i) => t.buffer.active.getLine(i)!.translateToString(true)).join('|') + `@${t.buffer.active.cursorX},${t.buffer.active.cursorY}`;
+  assert.equal(man(tKb), man(tDu), 'màn hình + con trỏ cuối giống hệt (kể cả sau khi CLI tự xoá màn hình)');
+  assert.ok(kb < du / 2, `ít byte hơn hẳn (${kb} / ${du})`);
+  assert.equal(v.loc('chữ', 40, 8), 'chữ');
 });

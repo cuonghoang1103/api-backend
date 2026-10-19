@@ -274,7 +274,8 @@ export function moTaUsage2(d: unknown, phien: UsagePhien = {}, ngonNgu: 'vi' | '
   if (a) {
     dong.push('', `**${L('Admin — chi tiêu', 'Admin — spend')}**`, '');
     if (Array.isArray(a.keys) && a.keys.length) {
-      dong.push(`| ${L('Khoá Anthropic', 'Anthropic key')} | ${L('Ngân sách', 'Budget')} | ${L('Đã dùng', 'Used')} | ${L('Còn', 'Left')} |`, '|---|---|---|---|');
+      /* QA 9.2: terminal/khung chat có thể đang chia sẻ màn hình — không in tên cổng/hãng thật, kể cả với admin. */
+      dong.push(`| ${L('Khoá Code Max', 'Code Max key')} | ${L('Ngân sách', 'Budget')} | ${L('Đã dùng', 'Used')} | ${L('Còn', 'Left')} |`, '|---|---|---|---|');
       for (const k of a.keys) dong.push(`| ${k.ten}${k.trangThai !== 'hoatDong' ? ` (${k.trangThai})` : k.boQua ? ` (${k.boQua})` : ''} | ${k.nganSachUsd ? usd(k.nganSachUsd) : '—'} | ${usd(k.daDungUsd)} | ${k.conPhanTram === null ? '—' : `${k.conPhanTram}%`} |`);
       dong.push('');
     }
@@ -283,7 +284,7 @@ export function moTaUsage2(d: unknown, phien: UsagePhien = {}, ngonNgu: 'vi' | '
       for (const r of a.theoModel.slice(0, 14)) dong.push(`| ${r.ten} | ${usd(r.homNayUsd)} | ${usd(r.thangUsd)} | ${so(r.buocHomNay)} |`);
       dong.push('');
     }
-    dong.push(`- CuongMini Core (modelapi): ${L('hôm nay', 'today')} ${usd(a.modelapi?.homNayUsd)} · ${L('tháng', 'month')} ${usd(a.modelapi?.thangUsd)}`);
+    dong.push(`- CuongMini Core: ${L('hôm nay', 'today')} ${usd(a.modelapi?.homNayUsd)} · ${L('tháng', 'month')} ${usd(a.modelapi?.thangUsd)}`);
     dong.push(`- CuongMini Code Max: ${L('hôm nay', 'today')} ${usd(a.chinhHang?.homNayUsd)} · ${L('tháng', 'month')} ${usd(a.chinhHang?.thangUsd)}`);
     dong.push(`- CuongMini Classic (${L('gói trọn', 'flat-rate')}): ${L('hôm nay', 'today')} ${so(a.rambo?.cauHoiHomNay ?? 0)} ${L('câu', 'questions')} · ${so(a.rambo?.buocHomNay ?? 0)} ${L('bước', 'steps')}`);
   }

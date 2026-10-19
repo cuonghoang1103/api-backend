@@ -44,7 +44,12 @@ export const TRAN_IM_LANG_MS = 120_000;
  * 6 phút là gấp bốn lần lượt nặng nhất từng thấy — đủ rộng để không giết oan,
  * đủ chặt để người dùng không phải ngồi nhìn 454 giây rồi tự bấm Dừng.
  */
-export const TRAN_MOT_LUOT_MS = 360_000;
+/*
+ * 19/10/2026: nâng 6 ⇒ 20 phút. Từ đợt cổng & model, `max_tokens` lên 128K và model chính hãng nghĩ sâu: MỘT lời gọi viết
+ * một tệp lớn có thể quá 6 phút ⇒ trước đây bị cắt rồi thử lại TỪ ĐẦU bước đó (người dùng thấy "tự dừng, đọc lại từ đầu").
+ * Luồng chết thật vẫn do canh im lặng bắt; luồng ĐỨT không có 'done' do `docLuong` bắt (CONNECTION_LOST).
+ */
+export const TRAN_MOT_LUOT_MS = 1_200_000;
 
 export type KetQuaDoc<T> =
   | { ok: true; giaTri: T }

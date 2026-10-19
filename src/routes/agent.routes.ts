@@ -812,8 +812,12 @@ router.post('/turn', chiProHoacNhomHoacFree, async (req: any, res: Response) => 
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.flushHeaders();
 
+  /* Lượt PHẢI kết thúc bằng 'done' hoặc 'error' (19/10/2026): app coi luồng đóng mà không có hai sự kiện này là ĐỨT
+     kết nối và tự thử lại — nên mọi đường thoát của máy chủ đều phải nói rõ là đã xong hay đã lỗi. */
+  let daKetThuc = false;
   const guiKhung = (e: AgentEvent): void => {
     if (res.writableEnded) return;
+    if (e.type === 'done' || e.type === 'error') daKetThuc = true;
     res.write(`data: ${JSON.stringify(e)}\n\n`);
   };
 
@@ -872,6 +876,10 @@ router.post('/turn', chiProHoacNhomHoacFree, async (req: any, res: Response) => 
     }
   } finally {
     clearInterval(nhipTim);
+    if (!daKetThuc && !dungLai.signal.aborted) {
+      logger.warn('agent/turn kết thúc không có done/error', { userId: req.userId });
+      guiKhung({ type: 'error', error: 'Lượt kết thúc bất thường — CuongMini sẽ thử lại.', code: 'LLM_ERROR' });
+    }
     if (!res.writableEnded) res.end();
   }
 });

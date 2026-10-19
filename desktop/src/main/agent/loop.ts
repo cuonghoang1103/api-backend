@@ -3083,6 +3083,10 @@ async function mgoiMotLuotThat(o: {
   let dem = '';
   const ra: KetQuaLuot = { append: [], stop: 'end', toolCalls: [], quota: null, costUsd: 0, daLuoc: 0, tokenVao: 0, tokenRa: 0 };
   let loi: { thongDiep: string; ma: string; coKeyGiaHan?: boolean; giaHanTien?: AgentGiaHanTien } | null = null;
+  /* Luồng có sự kiện kết thúc ('done' hoặc 'error') chưa. 19/10/2026: luồng ĐỨT giữa chừng (máy chủ khởi động lại khi
+     deploy, mạng chập, proxy ngắt) mà không có 'done' từng bị coi là "model nói xong" ⇒ việc dài dừng im lặng ở mọi cổng,
+     người dùng phải bấm tiếp tục. Nay coi là CONNECTION_LOST ⇒ tự thử lại bước đó (máy chủ không giữ trạng thái giữa các bước). */
+  let daKetThuc = false;
 
   for (;;) {
     /* ⚠️ KHÔNG `await doc.read()` trần.
@@ -3160,6 +3164,7 @@ async function mgoiMotLuotThat(o: {
           ra.toolCalls.push({ id: e.id, name: e.name, args: e.args ?? {} });
           break;
         case 'done':
+          daKetThuc = true;
           ra.append = e.append ?? [];
           ra.stop = e.stop;
           ra.quota = e.quota ?? null;
@@ -3172,6 +3177,7 @@ async function mgoiMotLuotThat(o: {
           if (e.nguCanh) ra.nguCanh = e.nguCanh;
           break;
         case 'error':
+          daKetThuc = true;
           // Ghi lại, KHÔNG phát ngay: chỗ gọi có thể quyết định thử lại, và
           // phát lỗi trước khi thử lại là hiện một thông báo đỏ rồi tự sửa —
           // người dùng đọc được cái đỏ đó và tưởng đã hỏng.
@@ -3186,6 +3192,9 @@ async function mgoiMotLuotThat(o: {
     }
   }
 
+  if (!loi && !daKetThuc && !o.signal.aborted) {
+    return { ok: false, thongDiep: 'Mất kết nối giữa chừng (máy chủ khởi động lại hoặc mạng chập) — CuongMini đang tự nối lại và làm tiếp.', ma: 'CONNECTION_LOST' };
+  }
   return loi ? { ok: false, ...loi } : { ok: true, ketQua: ra };
 }
 

@@ -26,7 +26,7 @@ describe('① lượt không treo mãi', () => {
     /* Đủ rộng để không giết oan lượt nặng (quan sát được ~90s), đủ chặt để
        người dùng không ngồi nhìn 454 giây. */
     expect(TRAN_MOT_LUOT_MS).toBeGreaterThanOrEqual(180_000);
-    expect(TRAN_MOT_LUOT_MS).toBeLessThanOrEqual(600_000);
+    expect(TRAN_MOT_LUOT_MS).toBeLessThanOrEqual(1_800_000); // 19/10: 20 phút — max_tokens 128K, model chính hãng nghĩ sâu
   });
 
   it('hạn tổng ĐI KÈM tín hiệu huỷ, không thay thế nó', () => {

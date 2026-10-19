@@ -18,7 +18,7 @@ const {
 } = await import('./bangModel.js');
 const { dsModelChoAppThuan, mucChoApp } = await import('./anthropicChinhHang/dinhTuyen.js');
 const gw = await import('../llm/gateway.js');
-const { BoDemDefault, kiemThuan, gopGioiHan } = await import('./defaultGioiHan.js');
+const { BoDemDefault, kiemThuan, gopGioiHan, kiemBuocThuan, ipChongSpam } = await import('./defaultGioiHan.js');
 
 const KHONG_QUYEN = { laAdmin: false, modelCao: false, invisible: false };
 const TEN_THAT = /claude|gpt|anthropic|modelapi|opus|sonnet|haiku|fable|rambo|openai/i;
@@ -167,7 +167,7 @@ test('hạn mức nhóm dùng được Classic + Default; Free chỉ Default (mo
 
 test('chống spam Default: 10/phút (Free + Pro), 500/ngày Free, 1500/ngày/IP; 0 = tắt; câu nói rõ khi nào dùng lại', () => {
   const gh = gopGioiHan({});
-  assert.deepEqual(gh, { phutNguoi: 10, ngayFree: 500, ngayIp: 1500 });
+  assert.deepEqual(gh, { phutNguoi: 10, ngayFree: 500, ngayIp: 1500, buocNgayFree: 10_000 });
   const bo = new BoDemDefault();
   const t0 = Date.UTC(2026, 9, 19, 3, 0, 0); // 10:00 giờ VN
   for (let i = 0; i < 10; i++) { assert.ok(kiemThuan(bo, gh, { userId: 1, ip: '1.1.1.1', free: false, now: t0 + i }).ok); bo.ghi(1, '1.1.1.1', t0 + i); }
@@ -189,7 +189,26 @@ test('chống spam Default: 10/phút (Free + Pro), 500/ngày Free, 1500/ngày/IP
   const ip = kiemThuan(bo3, gh, { userId: 3, ip: '9.9.9.9', free: true, now: t0 });
   assert.ok(!ip.ok && ip.ma === 'DEFAULT_HET_NGAY_IP');
   /* 0 = tắt. */
-  assert.ok(kiemThuan(bo2, { phutNguoi: 0, ngayFree: 0, ngayIp: 0 }, { userId: 2, ip: '9.9.9.9', free: true, now: t0 }).ok);
+  assert.ok(kiemThuan(bo2, { phutNguoi: 0, ngayFree: 0, ngayIp: 0, buocNgayFree: 0 }, { userId: 2, ip: '9.9.9.9', free: true, now: t0 }).ok);
+});
+
+test('QA 19/10: trần BƯỚC/ngày của Free (lưới đỡ khi app khai sai "câu hỏi mới") + IP chống spam không tin X-Forwarded-For', () => {
+  const gh = gopGioiHan({ buocNgayFree: 3 });
+  assert.equal(gh.buocNgayFree, 3);
+  assert.equal(gopGioiHan({ phutNguoi: 5 }, gh).buocNgayFree, 3, 'admin lưu ba ô cũ ⇒ không mất ô thứ tư');
+  const bo = new BoDemDefault();
+  const t0 = Date.UTC(2026, 9, 19, 3, 0, 0);
+  for (let i = 0; i < 3; i++) { assert.ok(kiemBuocThuan(bo, gh, { userId: 7, now: t0 + i }).ok); bo.ghiBuoc(7, t0 + i); }
+  const k = kiemBuocThuan(bo, gh, { userId: 7, now: t0 + 9 });
+  assert.ok(!k.ok && k.ma === 'DEFAULT_HET_BUOC_NGAY' && /0:00/.test(k.cau) && k.thuLaiSauGiay > 0);
+  assert.ok(kiemBuocThuan(bo, gh, { userId: 7, now: t0 + 15 * 3600_000 }).ok, 'qua 0:00 giờ VN ⇒ về 0');
+  assert.ok(kiemBuocThuan(bo, { ...gh, buocNgayFree: 0 }, { userId: 7, now: t0 }).ok, '0 = tắt');
+  /* nginx (Docker, mạng nội bộ) GHI ĐÈ X-Real-IP = $remote_addr; X-Forwarded-For do client tự gửi KHÔNG được tin. */
+  const qua = (sock: string, h: Record<string, string>) => ipChongSpam({ socket: { remoteAddress: sock }, headers: h });
+  assert.equal(qua('172.18.0.5', { 'x-real-ip': '203.0.113.9', 'x-forwarded-for': '1.2.3.4, 203.0.113.9' }), '203.0.113.9');
+  assert.equal(qua('::ffff:172.18.0.5', { 'x-real-ip': '203.0.113.9' }), '203.0.113.9');
+  assert.equal(qua('203.0.113.7', { 'x-real-ip': '1.2.3.4', 'x-forwarded-for': '1.2.3.4' }), '203.0.113.7', 'gọi thẳng (không qua nginx) ⇒ socket');
+  assert.equal(qua('172.18.0.5', { 'x-real-ip': 'rác' }), '172.18.0.5');
 });
 
 // ─── Chạy THẬT runAgentTurn với cổng giả ─────────────────────────────

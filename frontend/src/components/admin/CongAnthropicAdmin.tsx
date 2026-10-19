@@ -54,7 +54,7 @@ interface TrangThaiRambo {
   dsModel?: { luc: string; ids: string[] } | null;
   thuGanNhat?: { luc: string; models: Array<{ model: string; ok: boolean; ms: number; loi?: string }> } | null;
 }
-interface GioiHanDefault { phutNguoi: number; ngayFree: number; ngayIp: number }
+interface GioiHanDefault { phutNguoi: number; ngayFree: number; ngayIp: number; buocNgayFree?: number }
 interface TopDefault {
   nguoi: Array<{ userId: number; username: string | null; email: string | null; emailVerified: boolean; luot: number; buoc: number; token: number }>;
   ip: Array<{ ip: string; luot: number }>;
@@ -589,7 +589,7 @@ function CongTacRambo({ rambo, classic, onDoi }: {
 // ─── Chống spam CuongMini Default + ai dùng nhiều nhất hôm nay ─────────
 
 function ChongSpamDefault({ gh, onDoi }: { gh: GioiHanDefault; onDoi: (v: GioiHanDefault) => void }) {
-  const [nhap, setNhap] = useState({ phutNguoi: String(gh.phutNguoi), ngayFree: String(gh.ngayFree), ngayIp: String(gh.ngayIp) });
+  const [nhap, setNhap] = useState({ phutNguoi: String(gh.phutNguoi), ngayFree: String(gh.ngayFree), ngayIp: String(gh.ngayIp), buocNgayFree: String(gh.buocNgayFree ?? 10000) });
   const [dang, setDang] = useState(false);
   const [top, setTop] = useState<TopDefault | null>(null);
   const napTop = useCallback(async () => {
@@ -601,7 +601,7 @@ function ChongSpamDefault({ gh, onDoi }: { gh: GioiHanDefault; onDoi: (v: GioiHa
     try {
       const v = await goi<GioiHanDefault>('/default-gioi-han', {
         method: 'PUT',
-        body: JSON.stringify({ phutNguoi: Number(nhap.phutNguoi) || 0, ngayFree: Number(nhap.ngayFree) || 0, ngayIp: Number(nhap.ngayIp) || 0 }),
+        body: JSON.stringify({ phutNguoi: Number(nhap.phutNguoi) || 0, ngayFree: Number(nhap.ngayFree) || 0, ngayIp: Number(nhap.ngayIp) || 0, buocNgayFree: Number(nhap.buocNgayFree) || 0 }),
       });
       onDoi(v);
       toast.success('Đã lưu. / Saved.');
@@ -624,6 +624,7 @@ function ChongSpamDefault({ gh, onDoi }: { gh: GioiHanDefault; onDoi: (v: GioiHa
         {o1('phutNguoi', 'Lượt/phút/người (Free + Pro)', 'Per minute per user')}
         {o1('ngayFree', 'Lượt/ngày/người (Free)', 'Per day per free user')}
         {o1('ngayIp', 'Lượt/ngày/IP (Free)', 'Per day per IP')}
+        {o1('buocNgayFree', 'Bước/ngày/người (Free, mọi lời gọi)', 'Steps per day per free user')}
         <button type="button" className={`${nut} border-sky-500/50 text-sky-300`} disabled={dang} onClick={luu}>Lưu / Save</button>
       </div>
       <div className="flex items-center justify-between">

@@ -178,7 +178,7 @@ export const TIEN_TO_TAI_TRO = 'taitro:';
 
 const BO = new BoDemDefault();
 export function gioiHanTaiTro(gh: GioiHanDefault): GioiHanDefault {
-  return { phutNguoi: gh.phutNguoi, ngayFree: NGAY_TAI_TRO, ngayIp: gh.ngayIp };
+  return { phutNguoi: gh.phutNguoi, ngayFree: NGAY_TAI_TRO, ngayIp: gh.ngayIp, buocNgayFree: 0 };
 }
 
 async function napNgayTuSo(userId: number, now: number): Promise<void> {

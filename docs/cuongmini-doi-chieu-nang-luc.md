@@ -967,3 +967,68 @@ desktop vitest 2244 + 8 bỏ qua · máy chủ `agent`+`llm`+`linkNgoai` 286 + 1
   hỏi" không hiện — chỉ thấy "Bạn chưa chạm giới hạn nào" + dòng "Đã cộng" ở Lượt gần đây.
 - `chuyenCheDo` khi lõi đang NỐI VÀO trình duyệt của tiến trình khác (CLI + VS Code cùng hồ sơ): đổi ngầm ⇄ hiện chỉ ngắt/nối lại
   cùng bản đó, chế độ thật không đổi.
+
+### 5f. QA rambo/8B/tự dừng (19/10/2026 — `633b1305` + `d151fe16` + `17947fe3`; máy chủ THẬT + CSDL tạm + cổng giả + PTY thật, nhánh `qa82-fix`)
+
+Cách làm: worktree sạch ở `17947fe3`; cụm Postgres 18 tạm có pgvector (`scripts/db-test-tu-migration.mjs` — migration
+`20261019200000_work_ai_calls` áp sạch, `migrate diff` không lệch `work_ai_calls`) + Redis tạm; **máy chủ thật** (routes `agent` +
+`admin/cong-anthropic` + `work`, `trust proxy` y hệt `src/index.ts`) với **rambo giả** (Anthropic SSE, `/v1/models`) + **Core giả**
+(OpenAI SSE) điều khiển được (503 · cắt luồng giữa chừng có/không `done` · chảy chữ 7 phút); 8 tài khoản (Pro, admin, 5 Free đã xác
+thực, 1 chưa xác thực). CLI bản dựng thật trong PTY. Bơm lỗi tạm vào `runAgentTurn` (ném lỗi / thoát không `done`) rồi trả lại.
+
+**Lỗi tìm ra và đã sửa** (🔴 cao · 🟠 vừa · 🟡 nhỏ):
+- 🔴 **Trang AI usage treo cả tiến trình Node 17–33 s** với người dùng nhiều (đo: 200k dòng `work_ai_calls` + 50k lượt CuongMini):
+  `phanBoLuot` quét MỌI lời gọi tool cho MỖI nhóm lượt (O(lượt × lời gọi)) — một thành viên mở trang là cả backend đứng. Truy vấn
+  SQL chỉ ~50 ms. Nay cửa sổ mỗi nhóm tìm bằng nhị phân ⇒ 0,5–0,7 s cùng dữ liệu; 300 bộ ngẫu nhiên: kết quả cũ = mới.
+- 🟠 **Chống spam Default lách được bằng sửa gói tin.** "Câu hỏi mới" do APP khai (tin cuối `role:'user'`, `laPhu !== true`) ⇒ gửi
+  `laPhu: true`, hoặc đội câu hỏi mới thành "kết quả tool", là 0 câu bị đếm (đo: 15/15 lọt cả hai cách; chỉ còn trần 90 lời
+  gọi/phút ⇒ ~130k lời gọi rambo/ngày/tài khoản). Bảng "Dùng Default nhiều nhất" của admin xếp theo câu hỏi nên KHÔNG thấy họ.
+  Nay thêm trần **bước/ngày cho Free** (`buocNgayFree`, mặc định 10 000, admin chỉnh, 0 = tắt; đếm MỌI lời gọi `/turn`, nạp lại từ
+  sổ sau khởi động lại — đo được) ⇒ 429 `DEFAULT_HET_BUOC_NGAY` có giờ dùng lại; bảng admin xếp theo bước.
+- 🟠 **Trần 1500 câu/ngày/IP lách bằng `X-Forwarded-For` giả.** `trust proxy` (src/index.ts) tin 2 chặng (viết cho Cloudflare →
+  nginx) nhưng cuongthai.com trỏ THẲNG về VPS (DNS 160.187.1.208, không qua Cloudflare) ⇒ `req.ip` = giá trị client tự gửi (đo:
+  5/5 lọt sau khi IP thật đã chạm trần). Nay đếm Default (và `freeLimiterIp`) theo `ipChongSpam`: `X-Real-IP` do nginx GHI ĐÈ, chỉ
+  tin khi kết nối tới từ mạng nội bộ; còn lại là địa chỉ socket.
+- 🟡 **Esc lúc đang chờ thử lại (luồng đứt — CONNECTION_LOST) ⇒ giao diện quay "đang làm…" mãi** (đo trong CLI: 2 phút sau vẫn
+  quay, không còn lời gọi nào). `chayLuot` `return` trần không phát `huy`. Nay phát `huy` như mọi đường dừng khác ⇒ "đã dừng".
+- 🟡 AI usage cấp không gian trả `projects` = MỌI dự án, kể cả PRIVATE mà thành viên không ở trong (lộ mã + tên). Nay lọc như
+  `listProjects`; ADMIN/OWNER vẫn thấy hết.
+- 🟡 Bộ đếm theo ngày (IP/người/bước) không bao giờ dọn ngày cũ ⇒ dọn khi phình.
+
+**Đã kiểm, đúng:** Free chưa xác thực email ⇒ 403 `CAN_XAC_THUC_EMAIL` · Free chọn mọi model khác (Solid, Classic, `sonnet-5`,
+`gpt-sol`, Invisible, mã rác) ⇒ 403 `PRO_REQUIRED`, không lời gọi cổng nào · Free gửi kèm `duPhongVe`/`congPhu`/`congAnthropicVe` ⇒
+vẫn chỉ rambo · agent phụ Free (`mucModelPhu` nhanh/cân bằng/mạnh/kế thừa) ⇒ chỉ model rambo · rambo 503 giữa lượt / cầu dao mở /
+`/compact` / hội thoại dài phải tóm tắt (`tomTatLuotCu`) ⇒ `CUONGMINI_BAO_TRI`, KHÔNG một lời gọi Core nào · tìm web Free không
+xuống cổng chính hãng (gói `khac` ⇒ chặn) · 10 câu/phút ⇒ câu 11 nhận 429 `thuLaiSauGiay` · 1 câu + 14 bước tool trong 1 phút
+không bị chặn · trần IP chặn cả tài khoản khác cùng IP · admin đặt/đọc giới hạn, người thường 403 · Pro Default: rambo sống ⇒ Classic
+Sonic 0 $; rambo hỏng giữa việc ⇒ chuyển Solid ĐÚNG MỘT lần, sổ: đoạn rambo 0 $ + đoạn Solid có tiền; cầu dao mở ⇒ thẳng Solid · mã
+app cũ `sonnet-5`/`haiku-4-5`/`opus-5` ⇒ Classic, `gpt-sol` ⇒ Solid · `/tools` `cu`/`cm`/`cm2` đúng mã từng đời, không lộ tên thật
+(khung SSE, câu đổi cổng, `/tools`, `/cong-anthropic`, AI usage) · `work_assistant`/`spec_review`/`digest` ⇒ rambo Sonnet, nghỉ ⇒
+`gpt-6-sol` trên Core (không chính hãng); `language_tutor` không bao giờ rambo · luồng `/turn` bị CẮT (đóng socket) hoặc ĐÓNG ÊM
+không `done` ⇒ CLI tự thử lại đúng bước (2 s, 5 s…) rồi trả lời; cắt liên tục ⇒ dừng sau 1 + 4 lần, báo lỗi · `runAgentTurn` ném lỗi
+⇒ khung `error` INTERNAL; thoát không `done`/`error` ⇒ máy chủ tự thêm `error` LLM_ERROR · một lời gọi chảy chữ 7 phút 20 giây
+xong trọn, không bị cắt, chỉ 1 lời gọi `/turn` · 8B: tool ghi ⇒ `readOnlyHint: false` (81/144 tool, so cả registry) · khách 403,
+người ngoài 404 · thả thẻ không phải của mình ⇒ `WORK_NOT_YOURS` · `worklog_update` giờ của người khác (cả activity lẫn phút) ⇒ 403
+· bản nháp bình luận của thẻ khác / người khác ⇒ `WORK_BAD_ATTACHMENT` · `testRun` không thuộc thẻ ⇒ `WORK_BAD_RUN` ·
+`attach_complete` key của thẻ khác ⇒ `WORK_BAD_KEY` · tự duyệt (khác hoa thường) ⇒ `WORK_SELF_APPROVAL` · nộp bài lớp không học ⇒
+chặn · sổ AI hỏng (DB ném) ⇒ lời gọi MCP vẫn xanh (~9–24 ms/lời gọi có ghi sổ).
+
+**Test thêm:** `ramboDefault.test.ts` (+1: trần bước, `ipChongSpam`), `aiUsage.test.ts` (+1: 30k × 60k < 1 s — bản cũ 6,2 s),
+`work.dot8b.db.test.ts` (+ dự án PRIVATE). Cả ba ĐỎ trên bản cũ, XANH trên bản sửa.
+
+**Chạy lại toàn bộ (worktree, sau sửa):** `tsc` gốc + `typecheck:seed` + frontend + desktop + lõi + CLI + extension: 0 lỗi · dựng
+CLI + extension xanh · `npm run build` frontend xanh (heap 12 GB, `node_modules` riêng — không symlink; `.next` 7,3 GB đã xoá) · CLI 137/137
+(`--test-concurrency=1`) · lõi 56 + 1 bỏ qua · desktop vitest 2244 + 8 bỏ qua (1 `docNgoai` hết giờ 5 s khi máy tải 200, chạy riêng
+xanh) · `agent`+`llm`+`work`+`mcp` (98 tệp) 1312/1313 · `npm test` 1707/1707 · `test:work-db` 65/65 tệp (419 s). ⚠️ Các test
+`runAgentTurn` (`chongLap`, `vietTiepLuot`, `ramboDefault` "lượt thật", `dot6`) phụ thuộc CSDL/máy: userId 1 phải là Pro và máy
+KHÔNG có khoá chính hãng — CSDL trống ⇒ `CUONGMINI_HET_TRAN`; `dot6` "1M ⇒ 400K" đỏ y hệt trên bản gốc.
+
+**Còn lại (chưa sửa, ghi để biết):**
+- 🟠 `trust proxy` toàn cục vẫn tin 2 chặng ⇒ MỌI rate limit theo IP khác (đăng nhập…) vẫn lách được bằng `X-Forwarded-For` giả.
+  Sửa đúng: tin chặng 0 khi là mạng nội bộ + chặng 1 CHỈ khi thuộc dải IP Cloudflare — đụng mọi limiter nên cần chủ app duyệt.
+- 🟡 `ramboDefault.test.ts`, `aiUsage.test.ts`, `schemaModel.test.ts`, `appCu.test.ts` KHÔNG nằm trong `npm test` ⇒ CI không chạy
+  (dòng `test` của `package.json` đang có sửa dở ở cây chính nên không đụng).
+- 🟡 Thử lại im lặng (chủ app chốt 18/10) ⇒ không có "dòng mờ"; hết 4 lần mới hiện lỗi, mà câu vẫn nói "Đang thử lại…".
+- 🟡 Lời gọi thử lại sau CONNECTION_LOST ở bước đầu bị đếm thêm một "câu" vào trần 10/phút.
+- 🟡 `approval_request` phân biệt "Unknown user" / "Not in this workspace" ⇒ dò được username toàn web.
+- 🟡 CLI xuất ~12 MB/phút ra terminal khi đang chạy (Ink vẽ lại cả khung mỗi nhịp) — PTY ghi 84 MB cho một lượt 7 phút.

@@ -1492,7 +1492,9 @@ export async function chayLuot(
             const h = setTimeout(() => ok('xong'), cho);
             dieuKhien.signal.addEventListener('abort', () => { clearTimeout(h); ok('huy'); }, { once: true });
           });
-          if (ngu === 'huy') return;
+          /* QA 19/10/2026: Esc giữa lúc chờ thử lại ⇒ PHẢI phát 'huy' như mọi đường dừng khác — `return` trần để giao diện
+             quay "đang làm…" mãi (gặp thật trong CLI khi luồng đứt — CONNECTION_LOST — rồi người dùng bấm Esc). */
+          if (ngu === 'huy') { giuChuDo(); phat({ loai: 'huy' }); return; }
           vong--; // lần thử lại không tính là một vòng
           continue;
         }

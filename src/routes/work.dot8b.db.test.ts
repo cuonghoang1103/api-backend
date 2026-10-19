@@ -411,6 +411,12 @@ describe('CT Work đợt 8B — AI làm thao tác thành viên + AI usage', { sk
     assert.equal((await call(outsider, 'GET', `/workspaces/${wsId}/ai-usage`)).status, 404);
     assert.equal((await call({ token: agentTok }, 'GET', `/workspaces/${wsId}/ai-usage`)).status, 403);
     assert.equal((await call(lead, 'GET', `/workspaces/${wsId}/ai-usage?from=2026-10-20&to=2026-10-01`)).status, 400);
+    // QA 19/10/2026: thành viên thường KHÔNG thấy tên dự án PRIVATE mình không ở trong (khớp listProjects); ADMIN thấy.
+    const pv = await call(lead, 'POST', `/workspaces/${wsId}/projects`, { key: 'BM', name: 'Bí mật', template: 'BLANK', kind: 'SCHOOL' });
+    assert.equal(pv.status, 201, JSON.stringify(pv.raw));
+    assert.equal((await call(lead, 'PATCH', `/projects/${pv.data.id}`, { visibility: 'PRIVATE' })).status, 200);
+    assert.ok(!(await call(dev, 'GET', `/workspaces/${wsId}/ai-usage`)).data.projects.some((x: any) => x.id === pv.data.id));
+    assert.ok((await call(lead, 'GET', `/workspaces/${wsId}/ai-usage`)).data.projects.some((x: any) => x.id === pv.data.id));
   });
 
   it('Ask AI (web) chạy lệnh registry ⇒ sổ client web', async () => {

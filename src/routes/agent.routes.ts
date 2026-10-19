@@ -33,7 +33,7 @@ import { MODEL_DU_PHONG, MoKhoaLoi, congDuPhong, daCoMatKhau, modelDuPhongAgent,
 import {
   TEN_CONG, bangModel, docBanApp, dungChoNhom, laDefault, laMaCuongMini, maChoApp, maMacDinhCho, ramboChayDuoc, timModel,
 } from '../services/agent/bangModel.js';
-import { demHomNay, docGioiHanDefault, kiemVaGhiLuotDefault } from '../services/agent/defaultGioiHan.js';
+import { demHomNay, docGioiHanDefault, ipChongSpam, kiemVaGhiBuocFree, kiemVaGhiLuotDefault } from '../services/agent/defaultGioiHan.js';
 import { CAU_BAO_TRI_FREE } from '../services/agent/turn.js';
 import { xemTranModel } from '../services/agent/tranModel.js';
 import {
@@ -169,7 +169,7 @@ const freeLimiterNguoi = rateLimit({
 });
 const freeLimiterIp = rateLimit({
   windowMs: 60_000, max: 300, standardHeaders: true, legacyHeaders: false,
-  keyGenerator: (req: any): string => `free-ip:${req.ip ?? 'anon'}`,
+  keyGenerator: (req: any): string => `free-ip:${ipChongSpam(req) ?? 'anon'}`,
   message: { success: false, message: 'Mạng của bạn đang gửi quá nhiều lời gọi — đợi chút rồi tiếp tục nhé. / Your network is sending too many calls — wait a moment.', code: 'DEFAULT_QUA_NHANH' },
 });
 const chayLimiter = (lim: ReturnType<typeof rateLimit>, req: any, res: Response): Promise<boolean> =>
@@ -810,16 +810,25 @@ router.post('/turn', chiProHoacNhomHoacFree, async (req: any, res: Response) => 
   if (req.nguonTaiTro) {
     const cuoi = (body.messages as Array<{ role?: unknown }>)[body.messages.length - 1];
     if (cuoi?.role === 'user' && body.laPhu !== true) {
-      const kq = await kiemVaGhiLuotTaiTro({ userId: req.userId, ip: typeof req.ip === 'string' ? req.ip : null });
+      const kq = await kiemVaGhiLuotTaiTro({ userId: req.userId, ip: ipChongSpam(req) });
       if (!kq.ok) {
         res.status(429).json({ success: false, code: kq.ma, message: kq.cau, data: { thuLaiSauGiay: kq.thuLaiSauGiay } } as any);
         return;
       }
     }
   } else if (laDefault(body.model) && !req.nguonNhom) {
+    /* QA 19/10/2026: Free — MỌI lời gọi (kể cả bước tool, lượt phụ) vào trần bước/ngày: "câu hỏi mới" do app khai nên
+       client sửa gói tin là lách được hai trần câu hỏi (xem `GioiHanDefault.buocNgayFree`). */
+    if (req.nguonFree === true) {
+      const kb = await kiemVaGhiBuocFree(req.userId);
+      if (!kb.ok) {
+        res.status(429).json({ success: false, code: kb.ma, message: kb.cau, data: { thuLaiSauGiay: kb.thuLaiSauGiay } } as any);
+        return;
+      }
+    }
     const cuoi = (body.messages as Array<{ role?: unknown }>)[body.messages.length - 1];
     if (cuoi?.role === 'user' && body.laPhu !== true) {
-      const kq = await kiemVaGhiLuotDefault({ userId: req.userId, ip: typeof req.ip === 'string' ? req.ip : null, free: req.nguonFree === true });
+      const kq = await kiemVaGhiLuotDefault({ userId: req.userId, ip: ipChongSpam(req), free: req.nguonFree === true });
       if (!kq.ok) {
         res.status(429).json({ success: false, code: kq.ma, message: kq.cau, data: { thuLaiSauGiay: kq.thuLaiSauGiay } } as any);
         return;

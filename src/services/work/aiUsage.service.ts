@@ -30,7 +30,8 @@ import { onLlmCallLogged, type LlmCallLogged } from '../interview/llm/index.js';
 import { bangClassic, bangModel, TEN_CONG } from '../agent/bangModel.js';
 import { MODEL_AGENT_RIENG } from '../agent/models.js';
 import { PUBLIC_USER, type PublicUser } from './common.js';
-import { agentForbidden, loadProjectAccess, loadWorkspaceAccess } from './permissions.js';
+import { agentForbidden, effectiveProjectRole, loadProjectAccess, loadWorkspaceAccess } from './permissions.js';
+import type { ProjectRole, ProjectVisibility } from './constants.js';
 import { vnDay } from './sprints.service.js';
 
 export const AI_CLIENTS = ['cuongmini', 'mcp', 'agent', 'web', 'builtin'] as const;
@@ -222,6 +223,10 @@ export function phanBoLuot(turns: CmTurn[], calls: CmCall[], projects: Set<numbe
   for (const [uid, list] of byUser) {
     list.sort((a, b) => a.at.getTime() - b.at.getTime() || a.id - b.id);
     const cs = (callsBy.get(uid) ?? []).slice().sort((a, b) => a.at.getTime() - b.at.getTime());
+    /* QA 19/10/2026: cửa sổ mỗi nhóm tìm bằng NHỊ PHÂN trên mảng thời gian đã xếp — bản cũ quét MỌI lời gọi cho MỖI nhóm
+       (O(lượt × lời gọi)): 50k lượt × 66k lời gọi của một người dùng nhiều ⇒ trang AI usage treo cả tiến trình Node 17–33 s. */
+    const ts = cs.map((c) => c.at.getTime());
+    const sau = (x: number): number => { let a = 0; let b = ts.length; while (a < b) { const m = (a + b) >> 1; if (ts[m]! <= x) a = m + 1; else b = m; } return a; };
     let prevEnd = -Infinity;
     for (let i = 0; i < list.length;) {
       let j = i + 1;
@@ -231,10 +236,7 @@ export function phanBoLuot(turns: CmTurn[], calls: CmCall[], projects: Set<numbe
       const hi = end + AHEAD_MS;
       const counts = new Map<number, number>();
       let total = 0;
-      for (const c of cs) {
-        const t = c.at.getTime();
-        if (t > lo && t <= hi) { counts.set(c.projectId, (counts.get(c.projectId) ?? 0) + 1); total++; }
-      }
+      for (let k = sau(lo), het = sau(hi); k < het; k++) { const c = cs[k]!; counts.set(c.projectId, (counts.get(c.projectId) ?? 0) + 1); total++; }
       if (total) {
         for (const [pid, n] of counts) {
           if (!projects.has(pid)) continue;
@@ -498,7 +500,14 @@ export async function workspaceAiUsage(viewerId: number, workspaceId: number, f:
   if (wa.role === 'GUEST') throw new ForbiddenError('AI usage is not available to guests');
   const canSeeAll = wa.role === 'OWNER' || wa.role === 'ADMIN';
   if (!canSeeAll && f.userId && f.userId !== viewerId) throw new ForbiddenError('You can only see your own AI usage');
-  const all = await prisma.workProject.findMany({ where: { workspaceId, deletedAt: null }, select: { id: true, key: true, name: true }, orderBy: { key: 'asc' }, take: 500 });
+  /* QA 19/10/2026: thành viên thường chỉ thấy dự án mình THẤY ĐƯỢC (như `listProjects`) — trước đây trả MỌI dự án của
+     không gian, kể cả dự án PRIVATE họ không ở trong (lộ mã + tên dự án). */
+  const all = (await prisma.workProject.findMany({
+    where: { workspaceId, deletedAt: null }, orderBy: { key: 'asc' }, take: 500,
+    select: { id: true, key: true, name: true, visibility: true, members: { where: { userId: viewerId }, select: { role: true } } },
+  }))
+    .filter((p) => canSeeAll || effectiveProjectRole({ workspaceRole: wa.role, projectRole: (p.members[0]?.role ?? null) as ProjectRole | null, visibility: p.visibility as ProjectVisibility }))
+    .map((p) => ({ id: p.id, key: p.key, name: p.name }));
   if (f.projectId && !all.some((p) => p.id === f.projectId)) throw new AppError('Project not found in this workspace', 404, 'NOT_FOUND');
   const projectIds = f.projectId ? [f.projectId] : all.map((p) => p.id);
   const userIds = canSeeAll ? (f.userId ? [f.userId] : null) : [viewerId];

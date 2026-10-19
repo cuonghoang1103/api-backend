@@ -101,3 +101,15 @@ describe('checklist (Tự kiểm / tiêu chí chấp nhận) — đọc, chọn,
     assert.deepEqual(checklistOf(setChecklist(out, new Set([2]), false)).map((x) => x.checked), [true, false, true, false]);
   });
 });
+
+describe('phân bổ lượt — hiệu năng (QA 19/10/2026)', () => {
+  it('người dùng nhiều (30k lượt × 60k lời gọi tool) ⇒ dưới 1 giây (bản cũ O(n²) treo Node ~30 s)', () => {
+    const t0 = Date.UTC(2026, 9, 1);
+    const turns = Array.from({ length: 30_000 }, (_, i) => ({ id: i + 1, userId: 1, at: new Date(t0 + i * 7_000), model: 'gpt-6-sol', inputTokens: 1, outputTokens: 1, costUsd: 0.001, step: 'default' }));
+    const calls = Array.from({ length: 60_000 }, (_, i) => ({ userId: 1, projectId: 1 + (i % 2), at: new Date(t0 + i * 3_500 + 100) }));
+    const bd = Date.now();
+    const out = phanBoLuot(turns, calls, new Set([1, 2]));
+    assert.ok(Date.now() - bd < 1_000, `${Date.now() - bd} ms`);
+    assert.ok(out.length >= 30_000);
+  });
+});

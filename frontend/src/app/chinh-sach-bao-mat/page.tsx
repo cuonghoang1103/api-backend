@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <LegalShell title="Chính sách bảo mật" activeHref="/chinh-sach-bao-mat" updated="2026-10-18">
+    <LegalShell title="Chính sách bảo mật" activeHref="/chinh-sach-bao-mat" updated="2026-10-19">
       <p>
         CuongThai tôn trọng và bảo vệ thông tin cá nhân của người dùng, tuân thủ
         <b> Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15</b> và <b>Nghị định 356/2025/NĐ-CP</b> (hiệu lực từ 01/01/2026, thay thế Nghị định 13/2023/NĐ-CP). Chính sách này
@@ -45,7 +45,7 @@ export default function Page() {
       <h2>4. Thời hạn lưu trữ</h2>
       <ul>
         <li><b>Dữ liệu tài khoản:</b> lưu trong suốt thời gian tài khoản hoạt động. Khi Quý khách yêu cầu xoá, dữ liệu cá nhân được ẩn danh hoá (xem mục 5).</li>
-        <li><b>Nhật ký đăng nhập</b> (IP, thiết bị): lưu tối đa <b>[90 ngày]</b> rồi tự xoá/ẩn danh.</li>
+        <li><b>Thông tin đăng nhập kỹ thuật</b> (IP, thiết bị): chỉ giữ của <b>lần đăng nhập gần nhất</b> (ghi đè ở mỗi lần đăng nhập) để phát hiện truy cập lạ; bị xoá/ẩn danh khi Quý khách xoá tài khoản.</li>
         <li><b>Dữ liệu đơn hàng:</b> lưu theo yêu cầu kế toán/pháp lý; khi tài khoản bị xoá, thông tin cá nhân gắn với đơn được <b>ẩn danh hoá</b> nhưng bản ghi giao dịch được giữ để đối soát.</li>
       </ul>
 
@@ -97,9 +97,6 @@ export default function Page() {
         </ul>
       </div>
 
-      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-        * Thời hạn trong [dấu ngoặc] cần được người bán chốt theo thực tế trước khi công bố.
-      </p>
     </LegalShell>
   );
 }

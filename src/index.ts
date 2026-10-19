@@ -232,33 +232,14 @@ const landingAdminRoutes = landingModule.adminRouter;
 const app: Express = express();
 const server = http.createServer(app);
 
-// ─── 1. Trust Proxy (for Cloudflare → Nginx → Express) ──
-// Stack in production: Cloudflare edge → Nginx reverse proxy →
-// Express. Two hops minimum. `trust proxy = 1` only trusted the
-// immediate upstream (Nginx), so `req.ip` resolved to Nginx's
-// internal IP — every real user shared the same IP, which
-// collapsed all of them into a single rate-limit bucket and
-// caused random "Too many authentication attempts" errors when
-// several users logged in within the same minute.
-//
-// We trust the X-Forwarded-For chain from our known reverse-proxy
-// sources. Express's built-in presets:
-//   • 'loopback'        — 127.0.0.1/8, ::1
-//   • 'linklocal'       — 169.254.0.0/16, fe80::/10
-//   • 'uniquelocal'     — 10/8, 172.16/12, 192.168/16, fc00::/7
-// We also whitelist Cloudflare's edge IP ranges. Setting a
-// function (req) => boolean lets us be precise about which hops
-// are trusted per request.
-app.set('trust proxy', (ip: string, hop: number): boolean => {
-  if (!ip) return false;
-  // Express sets `hop` to the hop count already extracted from
-  // X-Forwarded-For. We want to trust the most recent 2 hops
-  // (Cloudflare edge + Nginx). Anything beyond that is treated
-  // as untrusted and req.ip falls back to the connection's
-  // remote address.
-  if (hop <= 1) return true;
-  return false;
-});
+// ─── 1. Trust Proxy (Nginx → Express) ──────────────────────
+// 19/10/2026 (QA82): cuongthai.com trỏ THẲNG về VPS (DNS 160.187.1.208, `server: nginx`, không có Cloudflare).
+// Bản cũ tin MÙ 2 chặng theo số hop ⇒ XFF = "<giả>, <thật>" (nginx NỐI IP thật vào XFF người dùng gửi) thì
+// `req.ip` = IP GIẢ ⇒ mọi rate limit theo IP (đăng nhập, Free, chống spam) lách được bằng một header.
+// Nay chỉ tin địa chỉ NỘI BỘ (nginx trong mạng docker / loopback): chặng đầu tiên KHÔNG nội bộ tính từ phải
+// sang chính là IP thật nginx ghi vào. Vẫn đúng bài toán cũ (mọi người dùng chung IP của nginx) vì nginx là
+// địa chỉ nội bộ nên được tin. ⚠️ Sau này đặt Cloudflare phía trước thì phải thêm dải IP Cloudflare vào đây.
+app.set('trust proxy', 'loopback, linklocal, uniquelocal');
 
 // ─── 1b. Request ID (correlation) ──────────────────────────
 // OBSERVABILITY: stamp every request with a short correlation id,

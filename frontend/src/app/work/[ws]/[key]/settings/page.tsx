@@ -59,44 +59,49 @@ function ProjectSettings() {
 
   // Nhóm điều hướng dọc; `?tab=` giữ nguyên như cũ.
   const perms = config?.permissions;
+  // Đợt 8D (19/10/2026): gom gọn — Chung · Công việc dùng hằng ngày; AI, tự động hoá & tích hợp, dữ liệu, vùng nguy
+  // hiểm là nhóm NÂNG CAO (gập mặc định, tự mở khi chứa tab đang mở hoặc khi tìm). `keywords` = từ cho ô tìm cài đặt.
+  const staff = !!config && config.role !== 'CLIENT' && !config.clientView;
   const groups: NavGroup<Tab>[] = [
     { get label() { return wt('settings.tGeneral'); }, tabs: [
-      { key: 'details', get label() { return wt('settings.tDetails'); }, icon: SlidersHorizontal },
-      { key: 'studio', get label() { return wt('settings.tProjectTypeModules'); }, icon: Blocks },
-      { key: 'members', get label() { return wt('settings.tMembers'); }, icon: Users },
-      { key: 'labels', get label() { return wt('settings.tLabels'); }, icon: Tag },
-      { key: 'components', get label() { return wt('settings.tComponents'); }, icon: Boxes },
+      { key: 'details', get label() { return wt('settings.tDetails'); }, icon: SlidersHorizontal, keywords: 'details general name description key avatar icon color cover anh bia ten mo ta' },
+      { key: 'studio', get label() { return wt('settings.tProjectTypeModules'); }, icon: Blocks, keywords: 'project type kind modules studio bat tat mo dun' },
+      { key: 'members', get label() { return wt('settings.tMembers'); }, icon: Users, keywords: 'members people invite roles vai tro moi nguoi' },
     ] },
     { get label() { return wt('settings.tWork'); }, tabs: [
-      { key: 'workflow', get label() { return wt('settings.tWorkflow'); }, icon: Workflow },
-      { key: 'board', get label() { return wt('settings.tBoard'); }, icon: Columns3 },
-      { key: 'types', get label() { return wt('settings.tIssueTypes'); }, icon: Shapes },
-      { key: 'fields', get label() { return wt('settings.tFields'); }, icon: TextCursorInput },
-      ...(config && config.role !== 'CLIENT' ? [{ key: 'quality' as const, get label() { return wt('settings.tSpecQualityAi'); }, icon: Gauge }] : []),
-      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'agents' as const, label: wt('pages.aiAgents'), icon: Bot }] : []),
+      { key: 'workflow', get label() { return wt('settings.tWorkflow'); }, icon: Workflow, keywords: 'workflow status transitions trang thai quy trinh' },
+      { key: 'board', get label() { return wt('settings.tBoard'); }, icon: Columns3, keywords: 'board columns wip cot bang' },
+      { key: 'types', get label() { return wt('settings.tIssueTypes'); }, icon: Shapes, keywords: 'issue types epic story task bug loai the' },
+      { key: 'fields', get label() { return wt('settings.tFields'); }, icon: TextCursorInput, keywords: 'custom fields truong tuy chinh' },
+      { key: 'labels', get label() { return wt('settings.tLabels'); }, icon: Tag, keywords: 'labels tags nhan' },
+      { key: 'components', get label() { return wt('settings.tComponents'); }, icon: Boxes, keywords: 'components thanh phan' },
+    ] },
+    { get label() { return wt('g8d.gAi'); }, collapsible: true, tabs: [
+      ...(config && config.role !== 'CLIENT' ? [{ key: 'quality' as const, get label() { return wt('settings.tSpecQualityAi'); }, icon: Gauge, keywords: 'spec quality fidelity ai assisted chat luong dac ta' }] : []),
+      ...(staff ? [{ key: 'agents' as const, label: wt('pages.aiAgents'), icon: Bot, keywords: 'ai agents review lease bot' }] : []),
       /* Đợt 6: CuongMini cho cả nhóm — hạn mức của trưởng nhóm cho thành viên không Pro. */
-      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'cuongmini' as const, get label() { return currentWorkLocale() === 'vi' ? 'CuongMini cho cả nhóm' : 'CuongMini for the team'; }, icon: Bot }] : []),
+      ...(staff ? [{ key: 'cuongmini' as const, get label() { return currentWorkLocale() === 'vi' ? 'CuongMini cho cả nhóm' : 'CuongMini for the team'; }, icon: Bot, keywords: 'cuongmini quota sponsor han muc nha tai tro pro' }] : []),
       /* Đợt 8B: AI trong dự án — ai dùng AI nối CT Work, chi phí theo nguồn, thay đổi AI đã làm (thành viên: phần của mình). */
-      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'aiusage' as const, get label() { return wt('aiu.tab'); }, icon: Sparkles }] : []),
+      ...(staff ? [{ key: 'aiusage' as const, get label() { return wt('aiu.tab'); }, icon: Sparkles, keywords: 'ai usage cost tokens chi phi luot dung' }] : []),
     ] },
-    { get label() { return wt('settings.tAutomationIntegrations'); }, tabs: [
-      { key: 'automation', get label() { return wt('settings.tAutomation'); }, icon: Zap },
-      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'recurring' as const, get label() { return wt('classroom.tabRecurring'); }, icon: CalendarClock }] : []), // CTW đợt 5
-      { key: 'github', get label() { return wt('settings.tGithub'); }, icon: Github },
-      { key: 'gitlab', get label() { return wt('settings.tGitlab'); }, icon: GitMerge },
+    { get label() { return wt('settings.tAutomationIntegrations'); }, collapsible: true, tabs: [
+      { key: 'automation', get label() { return wt('settings.tAutomation'); }, icon: Zap, keywords: 'automation rules tu dong hoa' },
+      ...(staff ? [{ key: 'recurring' as const, get label() { return wt('classroom.tabRecurring'); }, icon: CalendarClock, keywords: 'recurring repeat dinh ky lap lai' }] : []), // CTW đợt 5
+      { key: 'github', get label() { return wt('settings.tGithub'); }, icon: Github, keywords: 'github git repo code' },
+      { key: 'gitlab', get label() { return wt('settings.tGitlab'); }, icon: GitMerge, keywords: 'gitlab git repo code' },
       // 19/10/2026: link ngoài cho trợ lý AI (Figma token chỉ đọc) — chỉ đội dự án, không khách.
-      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'figma' as const, label: 'Figma', icon: Figma }] : []),
+      ...(staff ? [{ key: 'figma' as const, label: 'Figma', icon: Figma, keywords: 'figma design token thiet ke' }] : []),
       // CTW đợt 8a: xuất Google Sheets / Excel (một chiều) — chỉ đội dự án, không khách.
-      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'cloud' as const, get label() { return wt('c8a.tabCloud'); }, icon: Cloud }] : []),
-      ...(perms?.settings ? [{ key: 'chat' as const, get label() { return wt('settings.tChatNotifications'); }, icon: MessageSquareShare }] : []),
-      { key: 'share', get label() { return wt('settings.tPublicLinks'); }, icon: Link2 },
+      ...(staff ? [{ key: 'cloud' as const, get label() { return wt('c8a.tabCloud'); }, icon: Cloud, keywords: 'microsoft 365 google sheets excel onedrive drive' }] : []),
+      ...(perms?.settings ? [{ key: 'chat' as const, get label() { return wt('settings.tChatNotifications'); }, icon: MessageSquareShare, keywords: 'chat notifications slack discord telegram webhook thong bao' }] : []),
+      { key: 'share', get label() { return wt('settings.tPublicLinks'); }, icon: Link2, keywords: 'public links share chia se lien ket cong khai' },
     ] },
-    { get label() { return wt('settings.tData'); }, tabs: [
-      { key: 'export', get label() { return wt('settings.tExport'); }, icon: Download },
-      ...(perms?.settings ? [{ key: 'import' as const, get label() { return wt('settings.tImport'); }, icon: Upload }] : []),
-      ...(perms?.deleteIssues ? [{ key: 'trash' as const, get label() { return wt('settings.tTrash'); }, icon: Trash2 }] : []),
+    { get label() { return wt('settings.tData'); }, collapsible: true, tabs: [
+      { key: 'export', get label() { return wt('settings.tExport'); }, icon: Download, keywords: 'export csv json xuat' },
+      ...(perms?.settings ? [{ key: 'import' as const, get label() { return wt('settings.tImport'); }, icon: Upload, keywords: 'import csv jira trello nhap' }] : []),
+      ...(perms?.deleteIssues ? [{ key: 'trash' as const, get label() { return wt('settings.tTrash'); }, icon: Trash2, keywords: 'trash deleted restore thung rac khoi phuc' }] : []),
     ] },
-    { get label() { return wt('settings.tDangerZone'); }, danger: true, tabs: perms?.settings ? [{ key: 'danger' as const, get label() { return wt('settings.tDangerZone'); }, icon: TriangleAlert }] : [] },
+    { get label() { return wt('settings.tDangerZone'); }, danger: true, collapsible: true, tabs: perms?.settings ? [{ key: 'danger' as const, get label() { return wt('settings.tDangerZone'); }, icon: TriangleAlert, keywords: 'archive delete transfer luu tru xoa' }] : [] },
   ];
   const tabs: TabDef<Tab>[] = groups.flatMap((g) => g.tabs);
   const raw = search?.get('tab') as Tab | null;
@@ -127,7 +132,7 @@ function ProjectSettings() {
   return (
     <div className="flex h-full flex-col">
       <ProjectHeader config={config} title={wt('common.settings')} tools={false} />
-      <SettingsLayout groups={groups} active={tab} onChange={setTab} label={wt('palette.projectSettings')}>
+      <SettingsLayout groups={groups} active={tab} onChange={setTab} label={wt('palette.projectSettings')} searchable>
         {config.archivedAt && (
           <div className="mb-6 flex items-center gap-2 rounded-[8px] border border-[var(--w-border)] bg-[var(--w-sunken)] px-3 py-2.5 text-[13px] text-[var(--w-text-2)]">
             <Archive size={14} className="shrink-0" />

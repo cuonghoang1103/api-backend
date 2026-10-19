@@ -4,15 +4,19 @@
  * Hàng điều khiển riêng của board: Group by (swimlane) + bộ lọc nhanh kiểu
  * Jira (Recently updated / Due this week / Unassigned / Labels). Bộ lọc tìm,
  * người, loại, "Only my issues" vẫn nằm ở thanh của trang.
+ *
+ * Đợt 8D (19/10/2026): hàng chỉ còn [tìm · avatar · Chỉ của tôi] (của trang) + Nhóm theo + MỘT nút "Bộ lọc"
+ * (bong bóng chứa loại thẻ, People/Agents, lọc nhanh, nhãn, bộ phận) + Xoá bộ lọc + số thẻ.
  */
 
 import { useRef } from 'react';
 import type React from 'react';
-import { ChevronDown, Rows3, Tag, Users, X } from 'lucide-react';
+import { ChevronDown, Rows3, SlidersHorizontal, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ProjectConfig, WorkTeam } from '@/lib/work-api';
-import { PickerList, Popover, useToggle } from '../ui';
-import { GROUP_OPTIONS, quickActive, EMPTY_QUICK, type GroupBy, type QuickFilters } from './grouping';
+import { Popover, useToggle } from '../ui';
+import { GROUP_OPTIONS, EMPTY_QUICK, type GroupBy, type QuickFilters } from './grouping';
+import { FilterSection, useBoardPageFilters } from './extraFilters';
 import { wt } from '@/components/work/i18n';
 
 const chip = (on: boolean) =>
@@ -36,10 +40,10 @@ export default function BoardToolbar({ config, group, onGroup, quick, onQuick, s
 }) {
   const groupMenu = useToggle();
   const groupRef = useRef<HTMLButtonElement>(null);
-  const labelMenu = useToggle();
-  const labelRef = useRef<HTMLButtonElement>(null);
-  const teamMenu = useToggle();
-  const teamRef = useRef<HTMLButtonElement>(null);
+  const filterMenu = useToggle();
+  const filterRef = useRef<HTMLButtonElement>(null);
+  const page = useBoardPageFilters();
+  const activeCount = (page?.count ?? 0) + Number(quick.recent) + Number(quick.dueWeek) + Number(quick.unassigned) + quick.labels.length + quick.teams.length;
   const cur = GROUP_OPTIONS.find((g) => g.value === group) ?? GROUP_OPTIONS[0];
   const set = (patch: Partial<QuickFilters>) => onQuick({ ...quick, ...patch });
 
@@ -82,55 +86,65 @@ export default function BoardToolbar({ config, group, onGroup, quick, onQuick, s
         </>
       )}
 
-      <span className="mx-1 h-4 w-px bg-[var(--w-border)]" aria-hidden />
-      <span className="text-[12px] font-medium text-[var(--w-text-3)] max-lg:sr-only">{wt('board.quickFilters')}</span>
-      <button type="button" aria-pressed={quick.recent} className={chip(quick.recent)} onClick={() => set({ recent: !quick.recent })} title={wt('board.recentTitle')}>
-        {wt('board.recent')}
+      {/* Đợt 8D: lọc nhanh / nhãn / bộ phận (+ loại thẻ, People/Agents của trang) gộp vào MỘT nút "Bộ lọc" — hàng
+          công cụ không còn 10+ nút tràn sang dòng hai ở cửa sổ hẹp. Số trên nút = số bộ lọc đang bật. */}
+      <button
+        ref={filterRef}
+        type="button"
+        onClick={filterMenu.toggle}
+        aria-haspopup="dialog"
+        aria-expanded={filterMenu.on}
+        className={chip(activeCount > 0)}
+        title={wt('g8d.filtersTitle')}
+        data-testid="board-filters"
+      >
+        <SlidersHorizontal size={12} /> {wt('g8d.filters')}
+        {activeCount > 0 && <span className="ml-0.5 rounded-full bg-[var(--w-accent)] px-1.5 text-[10.5px] font-semibold leading-[16px] text-white tabular-nums">{activeCount}</span>}
+        <ChevronDown size={12} className="opacity-60" />
       </button>
-      <button type="button" aria-pressed={quick.dueWeek} className={chip(quick.dueWeek)} onClick={() => set({ dueWeek: !quick.dueWeek })} title={wt('board.dueWeekTitle')}>
-        {wt('board.dueWeek')}
-      </button>
-      <button type="button" aria-pressed={quick.unassigned} className={chip(quick.unassigned)} onClick={() => set({ unassigned: !quick.unassigned })}>
-        {wt('board.unassigned')}
-      </button>
-      {config.labels.length > 0 && (
-        <>
-          <button ref={labelRef} type="button" className={chip(quick.labels.length > 0)} onClick={labelMenu.toggle} aria-haspopup="listbox" aria-expanded={labelMenu.on}>
-            <Tag size={12} /> {wt('board.labels')}{quick.labels.length > 0 && ` · ${quick.labels.length}`} <ChevronDown size={12} className="opacity-60" />
-          </button>
-          <Popover open={labelMenu.on} onClose={labelMenu.close} anchorRef={labelRef} width={230}>
-            <PickerList
-              multi
-              options={config.labels.map((l) => ({ value: l.id, label: l.name, icon: <span className="h-2 w-2 rounded-full" style={{ background: l.color }} /> }))}
-              selected={quick.labels}
-              onPick={(id) => set({ labels: quick.labels.includes(id) ? quick.labels.filter((x) => x !== id) : [...quick.labels, id] })}
-              placeholder={wt('board.filterLabel')}
-            />
-          </Popover>
-        </>
-      )}
-      {teams && teams.length > 0 && (
-        <>
-          <button ref={teamRef} type="button" className={chip(quick.teams.length > 0)} onClick={teamMenu.toggle} aria-haspopup="listbox" aria-expanded={teamMenu.on}>
-            <Users size={12} /> {wt('board.team')}{quick.teams.length > 0 && ` · ${quick.teams.length === 1 ? (teams.find((t) => t.id === quick.teams[0])?.key ?? 'None') : quick.teams.length}`} <ChevronDown size={12} className="opacity-60" />
-          </button>
-          <Popover open={teamMenu.on} onClose={teamMenu.close} anchorRef={teamRef} width={240}>
-            <PickerList
-              multi
-              options={[
-                { value: 0, label: wt('board.noTeam') },
-                ...teams.map((t) => ({ value: t.id, label: t.name, hint: t.key, keywords: t.key, icon: <span className="h-2 w-2 rounded-full" style={{ background: t.color }} /> })),
-              ]}
-              selected={quick.teams}
-              onPick={(id) => set({ teams: quick.teams.includes(id) ? quick.teams.filter((x) => x !== id) : [...quick.teams, id] })}
-              placeholder={wt('board.filterTeam')}
-            />
-          </Popover>
-        </>
-      )}
-      {quickActive(quick) && (
-        <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => onQuick(EMPTY_QUICK)}>
-          <X size={12} /> {wt('board.clearQuick')}
+      <Popover open={filterMenu.on} onClose={filterMenu.close} anchorRef={filterRef} width={320}>
+        <div role="dialog" aria-label={wt('g8d.filters')} className="max-h-[min(70vh,520px)] divide-y divide-[var(--w-border)] overflow-y-auto">
+          {page?.content}
+          <FilterSection title={wt('g8d.fQuick')}>
+            <button type="button" aria-pressed={quick.recent} className={chip(quick.recent)} onClick={() => set({ recent: !quick.recent })} title={wt('board.recentTitle')}>
+              {wt('board.recent')}
+            </button>
+            <button type="button" aria-pressed={quick.dueWeek} className={chip(quick.dueWeek)} onClick={() => set({ dueWeek: !quick.dueWeek })} title={wt('board.dueWeekTitle')}>
+              {wt('board.dueWeek')}
+            </button>
+            <button type="button" aria-pressed={quick.unassigned} className={chip(quick.unassigned)} onClick={() => set({ unassigned: !quick.unassigned })}>
+              {wt('board.unassigned')}
+            </button>
+          </FilterSection>
+          {config.labels.length > 0 && (
+            <FilterSection title={wt('g8d.fLabels')}>
+              {config.labels.map((l) => {
+                const on = quick.labels.includes(l.id);
+                return (
+                  <button key={l.id} type="button" aria-pressed={on} className={chip(on)} onClick={() => set({ labels: on ? quick.labels.filter((x) => x !== l.id) : [...quick.labels, l.id] })}>
+                    <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ background: l.color }} /> {l.name}
+                  </button>
+                );
+              })}
+            </FilterSection>
+          )}
+          {teams && teams.length > 0 && (
+            <FilterSection title={wt('g8d.fTeam')}>
+              {[{ id: 0, name: wt('board.noTeam'), color: 'transparent', key: '' }, ...teams].map((t) => {
+                const on = quick.teams.includes(t.id);
+                return (
+                  <button key={t.id} type="button" aria-pressed={on} title={t.key || undefined} className={chip(on)} onClick={() => set({ teams: on ? quick.teams.filter((x) => x !== t.id) : [...quick.teams, t.id] })}>
+                    {t.id !== 0 && <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ background: t.color }} />} {t.name}
+                  </button>
+                );
+              })}
+            </FilterSection>
+          )}
+        </div>
+      </Popover>
+      {(activeCount > 0 || page?.rowActive) && (
+        <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => { onQuick(EMPTY_QUICK); page?.clear(); }} data-testid="board-filters-clear">
+          <X size={12} /> {wt('g8d.clearAll')}
         </button>
       )}
       <span className="ml-auto pl-2 text-[12px] tabular text-[var(--w-text-3)]" title={wt('board.countTitle')}>

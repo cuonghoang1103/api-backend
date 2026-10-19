@@ -8,7 +8,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { CheckCircle2, Filter, Info, Plus, Search, X } from 'lucide-react';
+import { CheckCircle2, Info, Plus, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
 import { userName, workApi, workError, type ProjectConfig } from '@/lib/work-api';
@@ -20,9 +20,10 @@ import StartProjectButton from '@/components/work/onboarding/StartProjectButton'
 import ProjectHeader from '@/components/work/ProjectHeader';
 import { CompleteSprintDialog } from '@/components/work/SprintDialogs';
 import { CREATE_ISSUE_EVENT, useLookups, useProject, useProjectRealtime, wk } from '@/components/work/hooks';
-import { AgentLeasesProvider, AssigneeKindFilter, assigneeKindOk, type AssigneeKind } from '@/components/work/agents/leases';
+import { AgentLeasesProvider, AssigneeKindFilter, assigneeKindOk, projectHasAgents, type AssigneeKind } from '@/components/work/agents/leases';
+import { BoardPageFiltersContext, FilterSection, type BoardPageFilters } from '@/components/work/board/extraFilters';
 import {
-  EmptyState, IssueTypeIcon, isTyping, PickerList, Popover, UserAvatar, useToggle, PageLoading,
+  EmptyState, IssueTypeIcon, isTyping, UserAvatar, PageLoading,
 } from '@/components/work/ui';
 import { wt } from '@/components/work/i18n';
 
@@ -49,8 +50,6 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
   const [kind, setKind] = useState<AssigneeKind>('ALL');
   const [createOpen, setCreateOpen] = useState(false);
   const [completeOpen, setCompleteOpen] = useState(false);
-  const typeMenu = useToggle();
-  const typeRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
   const issueParam = Number(search?.get('issue')) || null;
@@ -132,26 +131,40 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
         <button type="button" onClick={() => setOnlyMine((v) => !v)} className={cn('w-btn w-btn-sm', onlyMine && 'w-btn-on')}>
           {wt('board.onlyMine')}
         </button>
-        <AssigneeKindFilter config={config} value={kind} onChange={setKind} />
-        <button ref={typeRef} type="button" onClick={typeMenu.toggle} className={cn('w-btn w-btn-sm', types.length > 0 && 'w-btn-on')}>
-          <Filter size={12} /> {wt('board.typeFilter')}{types.length > 0 && ` · ${types.length}`}
-        </button>
-        <Popover open={typeMenu.on} onClose={typeMenu.close} anchorRef={typeRef} width={220}>
-          <PickerList
-            multi
-            options={config.issueTypes.filter((t) => t.level !== 1).map((t) => ({ value: t.id, label: t.name, icon: <IssueTypeIcon type={t} size={12} /> }))}
-            selected={types}
-            onPick={(id) => setTypes((ts) => (ts.includes(id) ? ts.filter((x) => x !== id) : [...ts, id]))}
-            placeholder={wt('board.issueTypePh')}
-          />
-        </Popover>
-        {filtered && (
-          <button type="button" onClick={() => { setQ(''); setOnlyMine(false); setPeople([]); setTypes([]); setKind('ALL'); }} className="w-btn w-btn-ghost w-btn-sm">
-            <X size={12} /> {wt('board.clear')}
-          </button>
-        )}
+        {/* Đợt 8D: loại thẻ + People/Agents nằm trong nút "Bộ lọc" của BoardToolbar (pageFilters bên dưới). */}
     </>
   );
+
+  // Đợt 8D: phần của trang trong bong bóng "Bộ lọc" (BoardToolbar) — loại thẻ, People/Agents.
+  const issueTypes = useMemo(() => config.issueTypes.filter((t) => t.level !== 1), [config.issueTypes]);
+  const rowActive = !!q.trim() || onlyMine || people.length > 0;
+  const pageFilters = useMemo<BoardPageFilters>(() => ({
+    count: types.length + (kind !== 'ALL' ? 1 : 0),
+    rowActive,
+    clear: () => { setQ(''); setOnlyMine(false); setPeople([]); setTypes([]); setKind('ALL'); },
+    content: (
+      <>
+        {projectHasAgents(config) && !config.clientView && (
+          <FilterSection title={wt('g8d.fAssignee')}>
+            <AssigneeKindFilter config={config} value={kind} onChange={setKind} />
+          </FilterSection>
+        )}
+        {issueTypes.length > 0 && (
+          <FilterSection title={wt('g8d.fType')}>
+            {issueTypes.map((t) => {
+              const on = types.includes(t.id);
+              return (
+                <button key={t.id} type="button" aria-pressed={on} onClick={() => setTypes((ts) => (on ? ts.filter((x) => x !== t.id) : [...ts, t.id]))}
+                  className={cn('w-btn w-btn-sm', on && '!border-[var(--w-accent-border)] !bg-[var(--w-accent-soft)] !text-[var(--w-accent-text)]')}>
+                  <IssueTypeIcon type={t} size={12} /> {t.name}
+                </button>
+              );
+            })}
+          </FilterSection>
+        )}
+      </>
+    ),
+  }), [config, issueTypes, kind, types, rowActive]);
 
   return (
     <div className="flex h-full flex-col">
@@ -212,7 +225,9 @@ function BoardView({ config, pid, slug }: { config: ProjectConfig; pid: number; 
           />
         ) : board.data ? (
           <AgentLeasesProvider config={config}>
-            <Board config={config} lk={lk} data={board.data} visible={visible} onOpen={openIssue} toolbarLeading={filterControls} />
+            <BoardPageFiltersContext.Provider value={pageFilters}>
+              <Board config={config} lk={lk} data={board.data} visible={visible} onOpen={openIssue} toolbarLeading={filterControls} />
+            </BoardPageFiltersContext.Provider>
           </AgentLeasesProvider>
         ) : null}
       </div>

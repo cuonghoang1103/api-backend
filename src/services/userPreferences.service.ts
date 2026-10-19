@@ -115,10 +115,54 @@ export interface UserPreferences {
    *  không được kéo cả site đổi theo, và ngược lại. */
   work: {
     locale: 'vi' | 'en' | null;
+    /** Đợt 8D (19/10/2026): mục GHIM / BỎ GHIM của thanh bên dự án, theo dự án (khoá = id dự án).
+     *  `pin` = mục ngoài bộ cốt lõi được kéo lên nhóm chính; `hide` = mục cốt lõi người dùng cất vào "Thêm…".
+     *  Vắng khoá = chưa tuỳ chỉnh (dùng bộ cốt lõi theo loại dự án). Rỗng thì KHÔNG ghi (giữ bản ghi cũ y nguyên). */
+    navPins?: Record<string, NavPinEntry>;
   };
   /** ISO timestamp of the last successful write. Drives the
    *  newest-wins reconciliation on the client. */
   updatedAt: string | null;
+}
+
+export interface NavPinEntry { pin: string[]; hide: string[] }
+
+/** Giới hạn cho mục ghim thanh bên — đủ cho người dùng thật, không thành kho lưu tự do. */
+export const NAV_PINS_MAX_PROJECTS = 200;
+const NAV_PIN_MAX_ITEMS = 40;
+const NAV_PIN_PATH = /^[a-z][a-z0-9-]{0,31}$/;
+
+function asNavPinList(v: unknown): string[] {
+  if (!Array.isArray(v)) return [];
+  const out: string[] = [];
+  for (const x of v) {
+    if (typeof x === 'string' && NAV_PIN_PATH.test(x) && !out.includes(x)) out.push(x);
+    if (out.length >= NAV_PIN_MAX_ITEMS) break;
+  }
+  return out;
+}
+
+/** Gộp `navPins` gửi lên vào bản đang lưu: theo TỪNG dự án (null = bỏ tuỳ chỉnh của dự án đó). Khoá chỉ nhận id số. */
+export function mergeNavPins(current: Record<string, NavPinEntry> | undefined, incoming: unknown): Record<string, NavPinEntry> | undefined {
+  if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) return current;
+  const next = new Map<string, NavPinEntry>(Object.entries(current ?? {}));
+  const touched = new Set<string>();
+  for (const [k, v] of Object.entries(incoming as Record<string, unknown>)) {
+    if (!/^\d{1,10}$/.test(k)) continue;
+    next.delete(k);
+    if (v === null || typeof v !== 'object' || Array.isArray(v)) continue;
+    const e = v as Record<string, unknown>;
+    next.set(k, { pin: asNavPinList(e.pin), hide: asNavPinList(e.hide) });
+    touched.add(k);
+  }
+  // Chạm trần ⇒ bỏ dự án id NHỎ nhất (thường là dự án cũ nhất) — trừ dự án vừa ghi. Khoá số trong object JS luôn
+  // xếp theo số, nên không giữ được "thứ tự đụng gần nhất" qua JSON; id là thứ bền nhất có sẵn.
+  const keys = [...next.keys()].sort((a, b) => Number(a) - Number(b));
+  for (const k of keys) {
+    if (next.size <= NAV_PINS_MAX_PROJECTS) break;
+    if (!touched.has(k)) next.delete(k);
+  }
+  return next.size ? Object.fromEntries(next) : undefined;
 }
 
 const boolMap = <K extends string>(keys: readonly K[], value: boolean): Record<K, boolean> =>
@@ -216,7 +260,7 @@ export function sanitize(input: unknown, base: UserPreferences): UserPreferences
     notify: { ...base.notify, types: { ...base.notify.types } },
     ui: { ...base.ui },
     academy: { ...base.academy },
-    work: { ...base.work },
+    work: { locale: base.work.locale, ...(base.work.navPins ? { navPins: { ...base.work.navPins } } : {}) },
     updatedAt: base.updatedAt,
   };
   if (!input || typeof input !== 'object') return out;
@@ -264,6 +308,10 @@ export function sanitize(input: unknown, base: UserPreferences): UserPreferences
     const w = src.work as Record<string, unknown>;
     // null = "bỏ chọn, theo site"; giá trị lạ bị bỏ qua (giữ giá trị cũ).
     if ('locale' in w && (w.locale === 'vi' || w.locale === 'en' || w.locale === null)) out.work.locale = w.locale;
+    if ('navPins' in w) {
+      const np = mergeNavPins(out.work.navPins, w.navPins);
+      if (np) out.work.navPins = np; else delete out.work.navPins;
+    }
   }
 
   // Carry the stored stamp through. Without this, reading a row back

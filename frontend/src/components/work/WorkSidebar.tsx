@@ -31,7 +31,7 @@ import {
   Headset, Library, ExternalLink, Bot,
   FileSpreadsheet, MessagesSquare, UsersRound, ClipboardCheck, Package, Plug } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { workApi, type StudioModule } from '@/lib/work-api';
+import { workApi, type ProjectSummary, type StudioModule } from '@/lib/work-api';
 import { resApi, resKeys } from '@/lib/work-resources-api';
 import { useAuthStore } from '@/store/authStore';
 import { wk } from './hooks';
@@ -57,6 +57,10 @@ import { codeApi, codeKeys } from './code/codeApi';
 import { laAppCtWork, trongAppDesktop } from '@/lib/appDesktop';
 import { teachingApi, teachingKeys } from './teaching/teachingApi';
 import { wt } from './i18n';
+// Đợt 8D (19/10/2026): thanh bên gọn — bộ cốt lõi theo loại dự án + "Thêm…" + ghim/bỏ ghim theo người dùng.
+import { MoreHorizontal, Pin, PinOff, RotateCcw } from 'lucide-react';
+import { coreFor, isCustomized, matchesQuery, primaryOrder, togglePin } from './shell/sidebarNav';
+import { useNavPins } from './shell/navPins';
 
 const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes', 'security', 'connections']); // CTW đợt 5: + teaching, classes · đợt 7c: + security (2FA) · đợt 8a: + connections
 const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents', 'okrs', 'ai-usage']); // 'ai-usage': CTW đợt 8B
@@ -218,7 +222,8 @@ function useCollapsedGroups() {
       return next;
     });
   }, []);
-  return { collapsed: (g: string) => !!map[g], toggle };
+  // `pref` = lựa chọn người dùng đã bấm (undefined = chưa bấm lần nào ⇒ trang tự chọn mặc định).
+  return { collapsed: (g: string) => !!map[g], pref: (g: string): boolean | undefined => map[g], toggle };
 }
 
 /** Tên hiển thị của nhóm — khoá lưu trạng thái gập vẫn là tên tiếng Anh. */
@@ -317,6 +322,167 @@ function PortalChatLink({ pid, href, active }: { pid: number; href: string; acti
   const q = useQuery({ queryKey: chatKeys.channels(pid), queryFn: () => chatApi.channels(pid), staleTime: 60_000, retry: false });
   if (!q.data?.channels.length) return null;
   return <NavItem href={href} icon={MessagesSquare} label={wt('nav.n_Chat')} active={active} indent badge={<ChatNavBadge pid={pid} />} />;
+}
+
+// ─── Đợt 8D: điều hướng dự án GỌN ──────────────────────────────────
+// Nhóm chính = bộ cốt lõi theo loại dự án (shell/sidebarNav.ts) + mục người dùng ghim + mục đang mở.
+// Mọi mục khác vào "Thêm…" (gập mặc định, chia nhóm, có ô tìm). Mô-đun tắt / không đủ quyền ⇒ ẩn hẳn như cũ.
+
+type NavRow = NavDef & { group: string };
+
+const MORE_KEY = 'ctwork.sidebar.moreOpen';
+function useMoreOpen() {
+  const [on, setOn] = useState(false);
+  useEffect(() => { try { setOn(window.localStorage.getItem(MORE_KEY) === '1'); } catch { /* riêng tư */ } }, []);
+  const set = useCallback((v: boolean) => {
+    setOn(v);
+    try { window.localStorage.setItem(MORE_KEY, v ? '1' : '0'); } catch { /* riêng tư */ }
+  }, []);
+  return [on, set] as const;
+}
+
+/** Hàng điều hướng + nút ghim/bỏ ghim hiện khi rê chuột / Tab tới (nút nằm NGOÀI thẻ <a> — không lồng phần tử bấm được). */
+function PinnableItem({ n, base, view, pinned, onPin, badge }: { n: NavRow; base: string; view?: string; pinned: boolean; onPin: (on: boolean) => void; badge?: React.ReactNode }) {
+  const label = pinned ? wt('g8d.unpinX', { l: n.label }) : wt('g8d.pinX', { l: n.label });
+  return (
+    <div className="group/row relative">
+      <NavItem href={`${base}/${n.path}`} icon={n.icon} label={n.label} active={n.match(view)} indent badge={badge} />
+      <button
+        type="button"
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onPin(!pinned); }}
+        title={pinned ? wt('g8d.unpinTip') : wt('g8d.pinTip')}
+        aria-label={label}
+        data-testid={`nav-pin-${n.path}`}
+        className="w-rail-hide absolute right-1 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-[5px] bg-[var(--w-bg)] text-[var(--w-text-3)] opacity-0 transition-opacity hover:bg-[var(--w-hover)] hover:text-[var(--w-text)] focus-visible:opacity-100 group-hover/row:opacity-100 max-md:opacity-60"
+      >
+        {pinned ? <PinOff size={12} /> : <Pin size={12} />}
+      </button>
+    </div>
+  );
+}
+
+/** Ô "Thêm…": tìm + nhóm. Dùng chung cho dạng mở rộng ngay trong thanh bên và dạng bong bóng của thanh icon. */
+function MorePanel({ items, base, view, onPin, autoFocus, onReset, pid }: {
+  items: NavRow[]; base: string; view?: string; onPin: (path: string, on: boolean) => void; autoFocus?: boolean; onReset?: () => void; pid: number;
+}) {
+  const [q, setQ] = useState('');
+  const shown = items.filter((n) => matchesQuery(q, n.label, n.path, n.group));
+  const groupsIn = PROJECT_NAV.map((g) => ({ g: g.group, rows: shown.filter((n) => n.group === g.group) })).filter((x) => x.rows.length);
+  return (
+    <div data-testid="sidebar-more-panel">
+      {items.length > 5 && (
+        <div className="relative px-1 pb-1 pt-1">
+          <Search size={12} aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Escape' && q) { e.stopPropagation(); setQ(''); } }}
+            placeholder={wt('g8d.findItem')}
+            aria-label={wt('g8d.findItem')}
+            autoFocus={autoFocus}
+            className="w-input h-7 w-full pl-7 text-[12.5px]"
+            data-testid="sidebar-more-search"
+          />
+        </div>
+      )}
+      {groupsIn.map(({ g, rows }) => (
+        <div key={g} role="group" aria-label={groupLabel(g)}>
+          <div className="w-eyebrow px-2 pb-0.5 pt-2">{groupLabel(g)}</div>
+          {rows.map((n) => (
+            <PinnableItem key={n.path} n={n} base={base} view={view} pinned={false} onPin={(on) => onPin(n.path, on)} badge={n.path === 'chat' ? <ChatNavBadge pid={pid} /> : undefined} />
+          ))}
+        </div>
+      ))}
+      {!shown.length && <p className="px-2 py-2 text-[12.5px] text-[var(--w-text-3)]">{wt('g8d.noMatch')}</p>}
+      {onReset && (
+        <button type="button" onClick={onReset} className="mt-1 flex h-7 w-full items-center gap-2 rounded-[5px] px-2 text-left text-[12px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]">
+          <RotateCcw size={12} /> {wt('g8d.resetPins')}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function ProjectSubnav({ p, base, view, rail, git, onNavigate }: {
+  p: ProjectSummary; base: string; view?: string; rail: boolean; git: boolean; onNavigate?: () => void;
+}) {
+  const { map, set } = useNavPins();
+  const entry = map[String(p.id)];
+  const [moreOpen, setMoreOpen] = useMoreOpen();
+  const pop = useToggle();
+  const moreRef = useRef<HTMLButtonElement>(null);
+
+  const all: NavRow[] = PROJECT_NAV.flatMap((g) => g.items
+    .filter((n) => (!n.module || p.modules?.[n.module]) && (!n.roles || n.roles.includes(String(p.role))) && (!n.templates || n.templates.includes(String(p.template))) && (!n.git || git || n.match(view)))
+    .map((n): NavRow => ({ ...n, label: n.label, group: g.group })));
+  const byPath = new Map(all.map((n) => [n.path, n]));
+  const core = coreFor(p);
+  const order = primaryOrder(core, entry).filter((x) => byPath.has(x));
+  const primary = order.map((x) => byPath.get(x)!);
+  // Mục đang mở luôn hiện ở nhóm chính kể cả chưa ghim (kèm nút ghim) — không phải tìm trong "Thêm…".
+  const activeExtra = all.find((n) => n.match(view) && !order.includes(n.path));
+  const rest = all.filter((n) => !order.includes(n.path) && n !== activeExtra);
+  const pin = (path: string, on: boolean) => set(p.id, togglePin(path, on, core, entry));
+  const reset = isCustomized(entry) ? () => set(p.id, null) : undefined;
+  const badgeFor = (n: NavRow) => (n.path === 'chat' ? <ChatNavBadge pid={p.id} /> : undefined);
+
+  return (
+    <div className="w-subnav mb-2 ml-[18px] mt-0.5 border-l border-[var(--w-border)] pl-1.5" data-testid="project-subnav">
+      <div role="group" aria-label={wt('g8d.mainNav')} className="space-y-0.5 pt-1">
+        {primary.map((n) => <PinnableItem key={n.path} n={n} base={base} view={view} pinned onPin={(on) => pin(n.path, on)} badge={badgeFor(n)} />)}
+        {activeExtra && <PinnableItem n={activeExtra} base={base} view={view} pinned={false} onPin={(on) => pin(activeExtra.path, on)} badge={badgeFor(activeExtra)} />}
+      </div>
+      {rest.length > 0 && (rail ? (
+        <>
+          <button
+            ref={moreRef}
+            type="button"
+            onClick={pop.toggle}
+            aria-haspopup="dialog"
+            aria-expanded={pop.on}
+            title={wt('g8d.moreN', { n: rest.length })}
+            aria-label={wt('g8d.moreN', { n: rest.length })}
+            className={cn(ROW, ROW_IDLE, 'w-full text-left')}
+            data-testid="sidebar-more"
+          >
+            <MoreHorizontal size={15} className="shrink-0 opacity-80" />
+            <span className="min-w-0 flex-1 truncate">{wt('g8d.more')}</span>
+          </button>
+          <Popover open={pop.on} onClose={pop.close} anchorRef={moreRef} width={264}>
+            {/* Bấm một mục ⇒ đóng bong bóng (và ngăn kéo điện thoại nếu có). */}
+            <div className="max-h-[min(70vh,560px)] overflow-y-auto p-1" onClick={(e) => { if ((e.target as HTMLElement).closest('a')) { pop.close(); onNavigate?.(); } }}>
+              <MorePanel items={rest} base={base} view={view} onPin={pin} autoFocus onReset={reset ? () => { reset(); } : undefined} pid={p.id} />
+            </div>
+          </Popover>
+        </>
+      ) : (
+        <div className="mt-0.5">
+          <button
+            type="button"
+            onClick={() => setMoreOpen(!moreOpen)}
+            aria-expanded={moreOpen}
+            className={cn(ROW, ROW_IDLE, 'w-full pl-3 text-left')}
+            title={moreOpen ? wt('g8d.moreHide') : wt('g8d.moreN', { n: rest.length })}
+            data-testid="sidebar-more"
+          >
+            <MoreHorizontal size={15} className="shrink-0 opacity-80" />
+            <span className="min-w-0 flex-1 truncate">{moreOpen ? wt('g8d.moreHide') : wt('g8d.more')}</span>
+            {!moreOpen && <span className="shrink-0 text-[11px] tabular-nums text-[var(--w-text-3)]">{rest.length}</span>}
+            <ChevronDown size={12} aria-hidden="true" className={cn('shrink-0 text-[var(--w-text-3)] transition-transform', !moreOpen && '-rotate-90')} />
+          </button>
+          {moreOpen && <div className="pb-1"><MorePanel items={rest} base={base} view={view} onPin={pin} onReset={reset} pid={p.id} /></div>}
+        </div>
+      ))}
+      {rest.length === 0 && reset && (
+        <button type="button" onClick={reset} className="w-rail-hide mt-1 flex h-7 w-full items-center gap-2 rounded-[5px] px-3 text-left text-[12px] text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]">
+          <RotateCcw size={12} /> {wt('g8d.resetPins')}
+        </button>
+      )}
+      {p.modules?.resources && <SidebarPinnedLinks pid={p.id} />}
+      <div className="my-1.5 border-t border-[var(--w-border)]" />
+      <NavItem href={`${base}/settings`} icon={Settings} label={wt('palette.projectSettings')} active={view === 'settings'} indent />
+    </div>
+  );
 }
 
 export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void }) {
@@ -483,7 +649,10 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
             {(() => {
               const items = WORKSPACE_NAV.filter((n) => (!portalOnly || !n.path) && (!n.staffOnly || (!!ws.data && ws.data.role !== 'GUEST')) && (!n.module || (ws.data?.role !== 'GUEST' && projects.some((p) => p.modules?.[n.module!]))));
               const isOn = (n: (typeof items)[number]) => (n.path ? pathname.startsWith(`/work/${slug}${n.path}`) : pathname === `/work/${slug}`);
-              const open = rail || items.some(isOn) || !groups.collapsed('Workspace');
+              // Đợt 8D: đang ở trong một dự án ⇒ nhóm không gian gập mặc định (8 mục từng đẩy điều hướng dự án xuống
+              // dưới nếp gấp); người dùng bấm mở một lần thì nhớ lựa chọn đó.
+              const wsPref = groups.pref('Workspace');
+              const open = rail || items.some(isOn) || (wsPref === undefined ? !key : !wsPref);
               return (
                 <div role="group" aria-label={wt('nav.g_Workspace')} className="mt-3">
                   <GroupToggle label={wt('nav.g_Workspace')} open={open} count={items.length} onToggle={() => groups.toggle('Workspace', open)} />
@@ -503,7 +672,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                 </Link>
               ) : undefined}
             >
-              Projects
+              {wt('nav.n_Projects')}
             </GroupLabel>
             <div className="space-y-0.5">
               {projects.map((p) => {
@@ -532,26 +701,7 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
                       </div>
                     )}
                     {open && !isPortalClient(p) && (
-                      <div className="w-subnav mb-2 ml-[18px] mt-0.5 border-l border-[var(--w-border)] pl-1.5">
-                        {PROJECT_NAV.map((g) => {
-                          const items = g.items.filter((n) => (!n.module || p.modules?.[n.module]) && (!n.roles || n.roles.includes(String(p.role))) && (!n.templates || n.templates.includes(String((p as { template?: string }).template))) && (!n.git || gitOn(p.id) || n.match(view)));
-                          if (!items.length) return null;
-                          const hasActive = items.some((n) => n.match(view));
-                          // Nhóm chứa trang đang mở luôn mở; thanh icon (rail) bỏ qua gập.
-                          const open = rail || hasActive || !groups.collapsed(g.group);
-                          return (
-                            <div key={g.group} role="group" aria-label={groupLabel(g.group)}>
-                              <GroupToggle label={groupLabel(g.group)} open={open} count={items.length} onToggle={() => groups.toggle(g.group, open)} />
-                              {open && items.map((n) => (
-                                <NavItem key={n.path} href={`${base}/${n.path}`} icon={n.icon} label={n.label} active={n.match(view)} indent badge={n.path === 'chat' ? <ChatNavBadge pid={p.id} /> : undefined} />
-                              ))}
-                            </div>
-                          );
-                        })}
-                        {p.modules?.resources && <SidebarPinnedLinks pid={p.id} />}
-                        <div className="my-1.5 border-t border-[var(--w-border)]" />
-                        <NavItem href={`${base}/settings`} icon={Settings} label={wt('palette.projectSettings')} active={view === 'settings'} indent />
-                      </div>
+                      <ProjectSubnav p={p} base={base} view={view} rail={rail} git={gitOn(p.id)} onNavigate={onNavigate} />
                     )}
                   </div>
                 );

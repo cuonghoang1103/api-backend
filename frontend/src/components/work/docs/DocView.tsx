@@ -21,10 +21,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  AlertTriangle, BadgeCheck, Check, ChevronRight, CloudOff, Download, FileText, History, Link2, Loader2, MoreHorizontal, Plus, RefreshCw, Save, Sparkles, Trash2, X, Share2,
+  AlertTriangle, BadgeCheck, Check, ChevronRight, CloudOff, Download, FileText, History, Link2, Loader2, MessageSquareShare, MoreHorizontal, Plus, RefreshCw, Save, Sparkles, Trash2, X, Share2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { ShareToChannelButton } from '../chat/ShareToChannel';
+import { ShareToChannelDialog } from '../chat/ShareToChannel';
 import {
   userName, workApi, workDocsApi, workDocsKeys, workError, workStudioApi, workStudioKeys,
   type PageComment, type PageStatus, type PageVisibility, type ProjectConfig, type TiptapDoc, type WorkPageDetail,
@@ -105,6 +105,7 @@ export default function DocView({ config, num, details, focus = false }: { confi
   const [note, setNote] = useState('');
   const moreRef = useRef<HTMLButtonElement>(null);
   const [more, setMore] = useState(false);
+  const [sharing, setSharing] = useState(false); // Đợt 8D: "Chia sẻ vào kênh" chuyển vào menu "…"
   // UX-E: kiểm tra chính tả khi đang soạn (gạch chân chấm đỏ của trình duyệt) — bật/tắt, nhớ.
   const spell = useLayoutPrefs((s) => s.spell);
   const setSpell = useLayoutPrefs((s) => s.setSpell);
@@ -539,7 +540,8 @@ export default function DocView({ config, num, details, focus = false }: { confi
         ) : null)}
         <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[12.5px] text-[var(--w-text-3)]">
           <PageStatusPill status={page.status} />
-          <VisibilityBadge visibility={page.visibility} />
+          {/* Đợt 8D: hàng "Chỉ nội bộ · Chia sẻ với khách" ngay trên đã nói điều này — không lặp nhãn "Nội bộ" lần hai. */}
+          {!(portalStaff(config) && page.visibility !== 'CLIENT' && page.canManage && config.permissions.editDocs) && <VisibilityBadge visibility={page.visibility} />}
           {page.owner && <span className="flex items-center gap-1.5"><UserAvatar user={page.owner} size={16} /> {userName(page.owner)}</span>}
           <span title={fmtDateTime(page.updatedAt)}>{wt('docs.editedAgo', { t: relativeTime(page.updatedAt) })}{page.lastEditedBy ? wt('docs.byX', { name: userName(page.lastEditedBy) }) : ''}</span>
           {live ? <CollabBadge live={live} canEdit={liveEditable} /> : editable && <SaveBadge state={save} savedAt={savedAt} onRetry={() => void flush()} />}
@@ -568,13 +570,7 @@ export default function DocView({ config, num, details, focus = false }: { confi
                 <PanelRightOpen size={13} /> <span className="max-sm:hidden">{wt('common.details')}</span>
               </button>
             )}
-            {['ADMIN', 'MEMBER', 'TEACHER'].includes(config.role) && (
-              <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => setSpecOpen(true)} data-testid="docs-spec-check" title={wt('docs.specTip')}>
-                <Gauge size={13} /> <span className="max-sm:hidden">{wt('docs.specCheck')}</span>
-              </button>
-            )}
-            {/* CTW K-3: chia sẻ trang vào kênh chat (khách chỉ thấy thẻ xem trước nếu trang đã chia sẻ cho họ). */}
-            {config.role !== 'CLIENT' && <ShareToChannelButton pid={config.id} path={`/work/${config.workspace.slug}/${config.key}/docs/${page.number}`} label={page.title || wt('docs.untitledPage')} wsSlug={config.workspace.slug} projectKey={config.key} className="w-btn-ghost" />}
+            {/* Đợt 8D: "Kiểm đặc tả" + "Chia sẻ vào kênh" vào menu "…" — thanh chỉ còn Chi tiết, Lịch sử, Gửi duyệt. */}
             <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={() => { void flush(); setHistory(true); }} data-testid="docs-history">
               <History size={13} /> <span className="max-sm:hidden">{wt('docs.history')}</span> <span className="tabular text-[var(--w-text-3)]">v{page.currentVersion}</span>
             </button>
@@ -595,6 +591,13 @@ export default function DocView({ config, num, details, focus = false }: { confi
         )}
         <Popover open={more} onClose={() => setMore(false)} anchorRef={moreRef} width={220} align="end">
           <div className="p-1" role="menu">
+            {['ADMIN', 'MEMBER', 'TEACHER'].includes(config.role) && (
+              <button type="button" role="menuitem" onClick={() => { setMore(false); setSpecOpen(true); }} title={wt('docs.specTip')} data-testid="docs-spec-check" className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]">
+                <Gauge size={13} className="shrink-0 opacity-80" /> {wt('docs.specCheck')}
+              </button>
+            )}
+            {config.role !== 'CLIENT' && <MenuItem icon={MessageSquareShare} label={wt('chat.shareToChannel')} onClick={() => { setMore(false); setSharing(true); }} />}
+            {(['ADMIN', 'MEMBER', 'TEACHER'].includes(config.role) || config.role !== 'CLIENT') && <div className="my-1 border-t border-[var(--w-border)]" />}
             <MenuItem icon={FileDown} label={exportFile.isPending && exportFile.variables === 'docx' ? wt('docs.exportWordIng') : wt('docs.exportWord')} onClick={() => { setMore(false); exportFile.mutate('docx'); }} />
             <MenuItem icon={FileDown} label={exportFile.isPending && exportFile.variables === 'pdf' ? wt('docs.exportPdfIng') : wt('docs.exportPdf')} onClick={() => { setMore(false); exportFile.mutate('pdf'); }} />
             <MenuItem icon={Download} label={wt('docs.exportMd')} onClick={() => { setMore(false); exportMd.mutate(); }} />
@@ -710,6 +713,9 @@ export default function DocView({ config, num, details, focus = false }: { confi
         <PaneDrawer open={details.drawerOpen} onClose={details.close} side="right" label={wt('docs.pageDetails')} width={340}>
           <div className="space-y-5 p-4">{detailsBody}</div>
         </PaneDrawer>
+      )}
+      {config.role !== 'CLIENT' && (
+        <ShareToChannelDialog open={sharing} onClose={() => setSharing(false)} pid={config.id} path={`/work/${config.workspace.slug}/${config.key}/docs/${page.number}`} label={page.title || wt('docs.untitledPage')} wsSlug={config.workspace.slug} projectKey={config.key} />
       )}
       <DocSpecDrawer
         open={specOpen}

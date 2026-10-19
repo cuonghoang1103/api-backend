@@ -81,7 +81,7 @@ export function ProjectCrumbs({ config, title, extra, showWs = true }: { config:
   );
 }
 
-const MENU_ITEM = 'flex h-8 w-full items-center gap-2.5 rounded-[6px] px-2 text-left text-[13px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)] disabled:opacity-50';
+export const MENU_ITEM = 'flex h-8 w-full items-center gap-2.5 rounded-[6px] px-2 text-left text-[13px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)] disabled:opacity-50';
 
 /** Menu "More" (…): các nút phụ của header dự án. */
 function MoreMenu({ config, items }: { config: ProjectConfig; items?: ReactNode }) {
@@ -104,7 +104,8 @@ function MoreMenu({ config, items }: { config: ProjectConfig; items?: ReactNode 
         {lock.locked ? <Lock size={14} /> : <MoreHorizontal size={16} className="text-[var(--w-text-2)]" />}
       </button>
       <Popover open={pop.on} onClose={pop.close} anchorRef={ref} width={232} align="end">
-        <div role="menu" aria-label={wt('shell.moreActions')} className="p-1">
+        {/* Đợt 8D: mục do trang truyền vào (`more`) bấm xong thì menu tự đóng — trang không cần giữ state của menu. */}
+        <div role="menu" aria-label={wt('shell.moreActions')} className="p-1" onClick={(e) => { if ((e.target as HTMLElement).closest('[role="menuitem"]')) pop.close(); }}>
           {items}
           <button role="menuitem" type="button" className={MENU_ITEM} onClick={() => { pop.close(); openContextualHelp(); }}>
             <CircleHelp size={14} /> {wt('shell.helpForPage')} <kbd className="w-kbd ml-auto">?</kbd>

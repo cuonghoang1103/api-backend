@@ -24,7 +24,7 @@ import { FilePlus2, FileText, FileUp, Search, Sparkles } from 'lucide-react';
 import { openAiPanel } from '../ai/store';
 import { cn } from '@/lib/utils';
 import { workDocsApi, type PageStatus, type ProjectConfig, type WorkPageList } from '@/lib/work-api';
-import ProjectHeader from '../ProjectHeader';
+import ProjectHeader, { MENU_ITEM } from '../ProjectHeader';
 import { EmptyState, PageLoading, UserAvatar, relativeTime } from '../ui';
 import { ModuleOff, studioOn } from '../studio/shared';
 import { FocusToggle, PaneDrawer, PaneStrip, PaneToggle, escapePanes, focusBaseOf, toggleFocus, usePaneKeys, usePanes } from '../shell/panes';
@@ -71,16 +71,20 @@ export default function DocsShell({ config, num }: { config: ProjectConfig; num?
 
   return (
     <div className="flex h-full flex-col">
-      <ProjectHeader config={config} title={active ? active.title : 'Docs'}>
+      <ProjectHeader
+        config={config}
+        title={active ? active.title : 'Docs'}
+        // Đợt 8D: "Nhập Markdown" ít dùng ⇒ vào menu "…"; thanh chỉ còn Trang mới (chính) + bật/tắt cây trang + Tập trung.
+        more={on && canEdit && !focus ? (
+          <button type="button" role="menuitem" className={MENU_ITEM} onClick={() => setImportOpen(true)} data-testid="docs-import-md-open" title={wt('docs.importTip')}>
+            <FileUp size={14} /> {wt('docs.importMd')}
+          </button>
+        ) : undefined}
+      >
         {on && list.data && !mobileIndex && (
           <PaneToggle pane={tree} side="left" label={wt('docs.pages')} shortcut="[" showLabel={tree.mode === 'drawer'} />
         )}
         {on && num && list.data && <FocusToggle on={focus} onToggle={onFocus} compact={panes.frame < 768} />}
-        {on && canEdit && !focus && (
-          <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)} data-testid="docs-import-md-open" title={wt('docs.importTip')}>
-            <FileUp size={13} /> <span className="max-lg:hidden">{wt('docs.importMd')}</span>
-          </button>
-        )}
         {on && canEdit && !focus && (
           <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={() => setNewFor({ parent: null })} data-testid="docs-new">
             <FilePlus2 size={13} /> <span className="max-sm:hidden">{wt('docs.newPage')}</span>

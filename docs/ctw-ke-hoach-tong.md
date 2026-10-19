@@ -182,3 +182,10 @@ Việc LÀM TIẾP theo thứ tự:
   @prisma/client + generate" của script (client sinh ra không đọc đúng URL/CSDL tạm), hoặc bước dựng CSDL không chạy (nhật
   ký phép hỏng không có dòng nào của trình dựng). Xem bằng `KIEM_CI_GIU_LOG=<dir>`. Tới khi sửa: deploy-nha sẽ KHÔNG
   push ⇒ push tay `git push origin <SHA>:main` SAU khi tự kiểm (đợt 8 đã push qua phat-hanh).
+
+## 8D gọn giao diện 19/10 (chưa commit / chưa deploy)
+User 19/10: "tự show ra all nút … rối, khó dùng — mặc định ẩn, dùng gì thì ấn ra". Làm trên web ⇒ app CuongThai + app CT Work hưởng luôn.
+- **Thanh bên dự án** (`WorkSidebar.tsx` → `ProjectSubnav`): nhóm chính = bộ CỐT LÕI theo loại dự án (`shell/sidebarNav.ts`: PERSONAL Board·Thẻ·Docs·Dòng thời gian; SCHOOL + Backlog·Chat·Họp·Nộp bài; SOFTWARE Backlog·Board·Thẻ·Docs·Chat·Code·Phát hành; CLIENT + Phê duyệt·Cổng khách; mẫu SWT301/SWR302/SWP391/Capstone thêm Kiểm thử/Yêu cầu/Wiegers; Kanban bỏ Backlog) + mục GHIM + mục đang mở. Còn lại vào **"Thêm…"** (gập mặc định, chia nhóm, ô tìm bỏ dấu; thanh icon 60px ⇒ bong bóng). Ghim/bỏ ghim lưu ở `users.preferences.work.navPins` (theo người + id dự án; `userPreferences.service.ts` `mergeNavPins`, trần 200 dự án × 40 mục), đệm localStorage. Nhóm "Không gian" gập mặc định khi đang trong dự án. Lọc mô-đun/vai/mẫu/Code-khi-nối-repo giữ nguyên.
+- **Cài đặt dự án**: ô tìm cài đặt (Enter mở kết quả đầu), nhóm Chung · Công việc mở; AI & agent · Tự động hoá & tích hợp · Dữ liệu · Vùng nguy hiểm gập mặc định (`SettingsLayout` prop `searchable` + nhóm `collapsible`; cài đặt không gian không đổi). Đủ mọi tab cũ.
+- **Trong trang**: board — một nút **"Bộ lọc"** (loại thẻ, People/Agents, lọc nhanh, nhãn, bộ phận) qua context `board/extraFilters.tsx` (không đụng Board.tsx); thẻ — Chép link + Chia sẻ vào kênh vào "…", mã thẻ không xuống dòng; Docs — Kiểm đặc tả + Chia sẻ vào kênh vào "…", Nhập Markdown vào "…" của header, bỏ nhãn "Nội bộ" lặp.
+- Kiểm: `npx tsx --test frontend/src/components/work/shell/sidebarNav.test.ts src/services/userPreferences.navPins.test.ts`; ảnh trước/sau ở scratchpad `8d-anh/`.

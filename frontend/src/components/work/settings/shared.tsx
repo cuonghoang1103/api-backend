@@ -6,7 +6,8 @@
  */
 
 import { useEffect, useState, type ReactNode, type SelectHTMLAttributes } from 'react';
-import { Lock, type LucideIcon } from 'lucide-react';
+import { ChevronDown, Lock, Search, type LucideIcon } from 'lucide-react';
+import { matchesQuery } from '../shell/sidebarNav';
 import { cn } from '@/lib/utils';
 import { avatarColor, Dialog, Spinner } from '../ui';
 import { MobileNavButton } from '../shell/mobileNav';
@@ -28,7 +29,8 @@ export function PageHeader({ title, sub, actions }: { title: ReactNode; sub?: Re
   );
 }
 
-export interface TabDef<K extends string> { key: K; label: string; icon?: LucideIcon }
+/** `keywords`: từ để ô tìm cài đặt khớp thêm (tên tiếng Anh, từ đồng nghĩa) — không hiện ra. */
+export interface TabDef<K extends string> { key: K; label: string; icon?: LucideIcon; keywords?: string }
 
 /** Tab ngang, cuộn ngang khi hẹp (trong vùng riêng, không làm trang cuộn ngang). */
 export function SettingsTabs<K extends string>({ tabs, active, onChange }: { tabs: TabDef<K>[]; active: K; onChange: (k: K) => void }) {
@@ -53,17 +55,28 @@ export function SettingsTabs<K extends string>({ tabs, active, onChange }: { tab
   );
 }
 
-export interface NavGroup<K extends string> { label: string; tabs: TabDef<K>[]; danger?: boolean }
+/** `collapsible`: nhóm nâng cao — gập mặc định, tự mở khi chứa tab đang mở hoặc đang tìm (đợt 8D). */
+export interface NavGroup<K extends string> { label: string; tabs: TabDef<K>[]; danger?: boolean; collapsible?: boolean }
 
 /**
  * Khung trang cài đặt: cột điều hướng dọc chia nhóm bên trái (≥md), ô chọn ở
  * đầu trang trên điện thoại. Nội dung dùng hết bề ngang, riêng form giới hạn
  * ~880px cho dễ đọc. Nhóm rỗng (không đủ quyền) tự ẩn.
+ *
+ * Đợt 8D (19/10/2026): `searchable` ⇒ ô tìm cài đặt ở đầu cột (bỏ dấu; Enter mở kết quả đầu); nhóm `collapsible`
+ * gập mặc định. Trang không truyền hai thứ này (cài đặt không gian) vẫn y như cũ.
  */
-export function SettingsLayout<K extends string>({ groups, active, onChange, children, label = wt('settings.sections') }: {
-  groups: NavGroup<K>[]; active: K; onChange: (k: K) => void; children: ReactNode; label?: string;
+export function SettingsLayout<K extends string>({ groups, active, onChange, children, label = wt('settings.sections'), searchable }: {
+  groups: NavGroup<K>[]; active: K; onChange: (k: K) => void; children: ReactNode; label?: string; searchable?: boolean;
 }) {
+  const [q, setQ] = useState('');
+  const [opened, setOpened] = useState<Record<string, boolean>>({});
+  const searching = !!q.trim();
   const visible = groups.filter((g) => g.tabs.length);
+  const navGroups = visible
+    .map((g) => ({ ...g, tabs: searching ? g.tabs.filter((t) => matchesQuery(q, t.label, t.keywords, g.label)) : g.tabs }))
+    .filter((g) => g.tabs.length);
+  const firstHit = navGroups[0]?.tabs[0]?.key;
   return (
     <div className="flex min-h-0 flex-1 flex-col md:flex-row">
       {/* Điện thoại: một ô chọn thay cho cột điều hướng. */}
@@ -77,10 +90,49 @@ export function SettingsLayout<K extends string>({ groups, active, onChange, chi
         </Select>
       </div>
       <nav aria-label={label} className="hidden w-[220px] shrink-0 overflow-y-auto border-r border-[var(--w-border)] px-3 py-5 md:block">
-        {visible.map((g, gi) => (
-          <div key={g.label} className={cn(gi > 0 && 'mt-5')}>
-            <div className={cn('w-eyebrow mb-1.5 px-2', g.danger && '!text-[var(--w-red)]')}>{g.label}</div>
-            <ul className="space-y-0.5">
+        {searchable && (
+          <div className="relative mb-4">
+            <Search size={13} aria-hidden="true" className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--w-text-3)]" />
+            <input
+              type="search"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && firstHit) { e.preventDefault(); onChange(firstHit); }
+                if (e.key === 'Escape' && q) { e.stopPropagation(); setQ(''); }
+              }}
+              placeholder={wt('g8d.searchSettings')}
+              aria-label={wt('g8d.searchSettings')}
+              className="w-input h-8 w-full pl-8 text-[13px]"
+              data-testid="settings-search"
+            />
+          </div>
+        )}
+        {searching && !navGroups.length && (
+          <p className="px-2 text-[12.5px] leading-relaxed text-[var(--w-text-3)]">{wt('g8d.noSettingMatch', { q: q.trim() })}</p>
+        )}
+        {navGroups.map((g, gi) => {
+          const hasActive = g.tabs.some((t) => t.key === active);
+          const open = !g.collapsible || searching || hasActive || !!opened[g.label];
+          return (
+          <div key={g.label} className={cn(gi > 0 && (g.collapsible ? 'mt-3' : 'mt-5'))}>
+            {g.collapsible ? (
+              <button
+                type="button"
+                onClick={() => setOpened((m) => ({ ...m, [g.label]: !open }))}
+                aria-expanded={open}
+                disabled={searching || hasActive}
+                className={cn('group mb-1.5 flex h-6 w-full items-center gap-1 rounded-[5px] px-2 text-left disabled:cursor-default', g.danger && '[&>span]:!text-[var(--w-red)]')}
+                data-testid="settings-group-toggle"
+              >
+                <span className="w-eyebrow flex-1 group-hover:text-[var(--w-text-2)]">{g.label}</span>
+                {!open && <span className="text-[11px] tabular-nums text-[var(--w-text-3)]">{g.tabs.length}</span>}
+                {!(searching || hasActive) && <ChevronDown size={12} aria-hidden="true" className={cn('shrink-0 text-[var(--w-text-3)] transition-transform', !open && '-rotate-90')} />}
+              </button>
+            ) : (
+              <div className={cn('w-eyebrow mb-1.5 px-2', g.danger && '!text-[var(--w-red)]')}>{g.label}</div>
+            )}
+            {open && <ul className="space-y-0.5">
               {g.tabs.map((t) => {
                 const on = t.key === active;
                 const Icon = t.icon;
@@ -106,9 +158,10 @@ export function SettingsLayout<K extends string>({ groups, active, onChange, chi
                   </li>
                 );
               })}
-            </ul>
+            </ul>}
           </div>
-        ))}
+          );
+        })}
       </nav>
       <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">
         <div className="w-full max-w-[880px] px-4 py-6 md:px-8 md:py-7">

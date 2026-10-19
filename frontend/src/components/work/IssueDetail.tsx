@@ -14,11 +14,11 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  ArrowRightLeft, Copy, CopyPlus, ChevronDown, ChevronRight, Eye, ExternalLink, Link2, MoreHorizontal, Paperclip, Plus, Trash2, X, Download, FileText,
+  ArrowRightLeft, Copy, CopyPlus, ChevronDown, ChevronRight, Eye, ExternalLink, Link2, MessageSquareShare, MoreHorizontal, Paperclip, Plus, Trash2, X, Download, FileText,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
-import { ShareToChannelButton } from './chat/ShareToChannel';
+import { ShareToChannelDialog } from './chat/ShareToChannel';
 import {
   issueMovedTo, workApi, workError, workErrorStatus, type IssueDetail as TIssueDetail, type IssuePatch, type LinkType,
   type ProjectConfig, type TiptapDoc, type IssueAttachment,
@@ -458,6 +458,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
   const [subtaskOpen, setSubtaskOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [moving, setMoving] = useState(false);
+  const [sharing, setSharing] = useState(false); // Đợt 8D: "Chia sẻ vào kênh" chuyển vào menu "…"
   const router = useRouter();
   // Trang riêng trên điện thoại/iPad dọc: thẻ "Details" ngay dưới tiêu đề, mở sẵn.
   const [detailsOpen, setDetailsOpen] = useState(true);
@@ -703,8 +704,9 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         {variant === 'page' && <MobileNavButton />}
         {variant === 'page' && (
           <nav aria-label={wt('detail.breadcrumb')} className="flex min-w-0 shrink items-center gap-1.5 text-[13px] max-md:!hidden">
-            <Crumb href={`/work/${config.workspace.slug}`} className="max-w-[160px] max-lg:!hidden">{config.workspace.name}</Crumb>
-            <CrumbSep className="max-lg:!hidden" />
+            {/* Đợt 8D: tên không gian chỉ hiện khi rất rộng — ở 1280px nó từng cắt cả tên dự án lẫn mã thẻ ("APP-⏎1"). */}
+            <Crumb href={`/work/${config.workspace.slug}`} className="max-w-[160px] max-2xl:!hidden">{config.workspace.name}</Crumb>
+            <CrumbSep className="max-2xl:!hidden" />
             <Crumb href={`${base}/board`} className="max-w-[200px]">
               <ProjectMark k={config.key} size={18} brand={config} />
               <span className="truncate">{config.name}</span>
@@ -712,7 +714,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             <CrumbSep />
           </nav>
         )}
-        <div className={cn('flex min-w-0 items-center gap-1.5 text-[var(--w-text-3)]', variant === 'page' ? 'text-[13px]' : 'text-[12px]')}>
+        <div className={cn('flex min-w-0 shrink-0 items-center gap-1.5 text-[var(--w-text-3)]', variant === 'page' ? 'text-[13px]' : 'text-[12px]')}>
           {issue.parent && (
             <>
               <button type="button" onClick={() => onOpenIssue(issue.parent!.number)} className="flex items-center gap-1 hover:text-[var(--w-text)]">
@@ -723,7 +725,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             </>
           )}
           <IssueTypeIcon type={type} size={12} />
-          <span className="font-mono text-[var(--w-text-2)]">{lk.issueKey(issue.number)}</span>
+          <span className="whitespace-nowrap font-mono text-[var(--w-text-2)]">{lk.issueKey(issue.number)}</span>
         </div>
         {/* UX-C: đổi trạng thái ngay trên thanh đầu (phím S). */}
         <div className="ml-1 hidden w-auto max-w-[200px] shrink-0 sm:block" data-field="status-head" data-testid="issue-status-head">
@@ -741,17 +743,35 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
             <Eye size={13} className={issue.isWatching ? 'text-[var(--w-accent-text)]' : undefined} />
             <span className={cn('tabular', issue.isWatching && 'text-[var(--w-accent-text)]')}>{issue.watcherCount}</span>
           </button>
-          <button type="button" title={wt('common.copyLink')} onClick={() => { void navigator.clipboard.writeText(url); toast.success(wt('common.linkCopied')); }} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><Copy size={13} /></button>
-          {/* CTW K-3: chia sẻ thẻ vào kênh chat (thẻ xem trước theo quyền người xem). Khách không có kênh nội bộ. */}
-          {config.role !== 'CLIENT' && <ShareToChannelButton pid={config.id} path={`/work/${config.workspace.slug}/${config.key}/issue/${issue.number}`} label={`${lk.issueKey(issue.number)}: ${issue.title}`} wsSlug={config.workspace.slug} projectKey={config.key} compact className="w-btn-ghost" />}
+          {/* Đợt 8D: "Sao chép link" + "Chia sẻ vào kênh" vào menu "…" — thanh đầu chỉ còn trạng thái, AI, theo dõi. */}
           {variant === 'drawer' && (
             <Link href={`${base}/issue/${num}`} title={wt('detail.openFull')} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><ExternalLink size={13} /></Link>
           )}
-          {(issue.canDelete || config.permissions.createIssues) && (
-            <>
-              <button ref={menuRef} type="button" onClick={menu.toggle} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('common.moreActions')}><MoreHorizontal size={14} /></button>
+          <>
+              <button ref={menuRef} type="button" onClick={menu.toggle} className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('common.moreActions')} title={wt('g8d.moreIssue')} aria-haspopup="menu" aria-expanded={menu.on} data-testid="issue-more"><MoreHorizontal size={14} /></button>
               <Popover open={menu.on} onClose={menu.close} anchorRef={menuRef} width={230} align="end">
-                <div className="p-1">
+                <div className="p-1" role="menu">
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => { menu.close(); void navigator.clipboard.writeText(url); toast.success(wt('common.linkCopied')); }}
+                    className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]"
+                  >
+                    <Copy size={13} /> {wt('common.copyLink')}
+                  </button>
+                  {config.role !== 'CLIENT' && (
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={() => { menu.close(); setSharing(true); }}
+                      title={wt('chat.shareTip')}
+                      className="flex w-full items-center gap-2 rounded-[5px] px-2 py-1.5 text-left text-[13px] hover:bg-[var(--w-hover)]"
+                      data-testid="share-to-channel"
+                    >
+                      <MessageSquareShare size={13} /> {wt('chat.shareToChannel')}
+                    </button>
+                  )}
+                  {(issue.canDelete || config.permissions.createIssues) && <div className="my-1 border-t border-[var(--w-border)]" />}
                   {config.permissions.createIssues && (
                     <button
                       type="button"
@@ -784,8 +804,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
                   )}
                 </div>
               </Popover>
-            </>
-          )}
+          </>
           {onClose && <button type="button" onClick={onClose} title={wt('detail.closeEsc')} className="w-btn w-btn-ghost w-btn-icon w-btn-sm"><X size={15} /></button>}
           {variant === 'page' && sidePane.mode !== 'drawer' && (
             <PaneToggle pane={sidePane} side="right" label={wt('common.details')} shortcut="]" showLabel={false} className="w-btn-ghost" />
@@ -813,7 +832,7 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
                   className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-semibold"
                 >
                   {detailsOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                  Details
+                  {wt('common.details')}
                   {!detailsOpen && (
                     <span className="ml-auto flex min-w-0 items-center gap-2 font-normal">
                       <StatusBadge status={lk.statuses.get(issue.statusId)} />
@@ -905,6 +924,9 @@ export default function IssueDetail({ pid, num, config, onClose, onOpenIssue, va
         confirmLabel={wt('detail.deleteIssue')}
         pending={del.isPending}
       />
+      {config.role !== 'CLIENT' && (
+        <ShareToChannelDialog open={sharing} onClose={() => setSharing(false)} pid={config.id} path={`/work/${config.workspace.slug}/${config.key}/issue/${issue.number}`} label={`${lk.issueKey(issue.number)}: ${issue.title}`} wsSlug={config.workspace.slug} projectKey={config.key} />
+      )}
       {issue.canDelete && <MoveIssueDialog open={moving} onClose={() => setMoving(false)} config={config} issue={issue} lk={lk} />}
       <CreateIssueDialog open={subtaskOpen} onClose={() => setSubtaskOpen(false)} config={config} defaults={subtaskDefaults} onCreated={onOpenIssue} />
     </div>

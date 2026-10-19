@@ -39,7 +39,8 @@
  * script; lớp kia giữ được cả người gõ tay `gh workflow run`.
  */
 import { execFileSync, spawnSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import { fileURLToPath } from 'node:url';
@@ -225,8 +226,19 @@ if (!DONG_Y_SAN) {
 if (canBump) {
   pkg[TRUONG_PHIEN_BAN] = phienBanMoi;
   writeFileSync(duongDanPkg, `${JSON.stringify(pkg, null, 2)}\n`);
-  chay('git', ['add', 'desktop/package.json']);
-  chay('git', ['commit', '-m', `chore(${LA_CTWORK ? 'ctwork-desktop' : 'desktop'}): ${phienBanMoi} — ${moTa}`]);
+  /* INDEX RIÊNG (19/10/2026): nhiều phiên dùng chung `.git/index`. Commit bằng index chung từng gom luôn thứ phiên
+     khác đang stage — 866d8e46 (bản 0.5.203) lỡ xoá ngược 59 file của 2a2e2bda. Dựng index tạm từ HEAD, chỉ thêm đúng
+     `desktop/package.json`, commit, rồi đưa mục đó ở index chung về HEAD mới (không đụng mục nào khác). */
+  const idxTam = path.join(os.tmpdir(), `phat-hanh-idx-${process.pid}`);
+  const envIdx = { env: { ...process.env, GIT_INDEX_FILE: idxTam } };
+  try {
+    chay('git', ['read-tree', 'HEAD'], envIdx);
+    chay('git', ['add', 'desktop/package.json'], envIdx);
+    chay('git', ['commit', '-m', `chore(${LA_CTWORK ? 'ctwork-desktop' : 'desktop'}): ${phienBanMoi} — ${moTa}`], envIdx);
+  } finally {
+    try { unlinkSync(idxTam); } catch { /* chưa tạo */ }
+  }
+  chay('git', ['reset', '-q', '--', 'desktop/package.json']);
   ok(`Đã commit bump ${phienBanMoi}`);
 }
 if (canBump || truoc > 0) {

@@ -341,6 +341,22 @@ export function nhanXet(k: KetQuaPhatAm, mau: CauMau, lanThu: number, diemTruoc?
 
 const escXml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+/* ── Nhịp nói (19/10/2026) — người dùng: "nói một mạch, không ngắt câu". ────────────────
+ * Giọng người thật dừng sau mỗi câu và đổi hơi khi chuyển thứ tiếng; phần ngoại ngữ đọc chậm
+ * hơn cho người học nghe rõ. Đổi nhịp ⇒ đổi khoá băm (`NHIP`) ⇒ tệp R2 cũ (đọc liền) không bị
+ * dùng lại. Khoảng nghỉ GIỮA các câu chảy dần do web chèn (hangPhatAudio.ts). */
+const NHIP = 'nhip2';
+const TOC_VIET = '-6%';
+const TOC_NGOAI = '-12%';
+/** F5 máy nhà: 1 = tốc độ gốc của giọng nhân bản. */
+const TOC_F5 = 0.93;
+/** Tách câu (sau dấu kết câu) — mỗi câu một khối SSML, ngắt nằm GIỮA các khối (dấu phẩy Azure tự ngắt). */
+const tachCau = (t: string) => t.trim().split(/(?<=[.!?…。！？])\s+(?=\S)/).filter(Boolean);
+/** Một đoạn → các khối `<prosody><lang>câu</lang></prosody>` (kiểu lồng đã chạy trên prod) nối bằng `<break>`.
+ *  `lang` = null cho giọng ĐƠN ngữ (Sonia/Nanami/Xiaoxiao) — `<lang>` chỉ dành cho giọng Multilingual. */
+const khoiSsml = (t: string, lang: string | null, toc: string) =>
+  tachCau(t).map((c) => `<prosody rate="${toc}">${lang ? `<lang xml:lang="${lang}">${escXml(c)}</lang>` : escXml(c)}</prosody>`).join('<break time="320ms"/>');
+
 /** "[en]…[/en]" → các đoạn. */
 export function tachDoan(noi: string): { en: boolean; t: string }[] {
   const out: { en: boolean; t: string }[] = [];
@@ -365,14 +381,16 @@ export async function docGiaSu(noi: string, nn: NgonNgu = 'en'): Promise<string 
   const region = process.env.AZURE_SPEECH_REGION || 'eastasia';
   if (!key) return null;
   // Khoá băm của tiếng Anh giữ y như cũ ⇒ tệp đã lưu R2 vẫn dùng lại được.
-  const r2 = `ielts/audio/giasu/${crypto.createHash('sha1').update(`${GIONG_GIA_SU}|${nn === 'en' ? '' : `${nn}|`}${noi}`).digest('hex')}.mp3`;
+  const r2 = `ielts/audio/giasu/${crypto.createHash('sha1').update(`${GIONG_GIA_SU}|${NHIP}|${nn === 'en' ? '' : `${nn}|`}${noi}`).digest('hex')}.mp3`;
   const dang = dangTao.get(r2);
   if (dang) return dang;
   const p = (async () => {
     if (await objectExists(r2)) return buildPublicUrl(r2);
-    const body = tachDoan(noi).map((d) => `<lang xml:lang="${d.en ? LOCALE[nn] : 'vi-VN'}">${escXml(d.t)}</lang>`).join(' ');
+    const body = tachDoan(noi)
+      .map((d) => khoiSsml(d.t, d.en ? LOCALE[nn] : 'vi-VN', d.en ? TOC_NGOAI : TOC_VIET))
+      .join('<break time="220ms"/>');
     const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="vi-VN">`
-      + `<voice name="${GIONG_GIA_SU}"><prosody rate="-4%">${body}</prosody></voice></speak>`;
+      + `<voice name="${GIONG_GIA_SU}">${body}</voice></speak>`;
     const res = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
       method: 'POST',
       headers: {
@@ -422,13 +440,13 @@ async function docDoanAnh(t: string, nn: NgonNgu = 'en'): Promise<string | null>
   const key = process.env.AZURE_SPEECH_KEY;
   const region = process.env.AZURE_SPEECH_REGION || 'eastasia';
   if (!key) return null;
-  const r2 = `ielts/audio/giasu/${crypto.createHash('sha1').update(`${GIONG_ANH}|${t}`).digest('hex')}.mp3`;
+  const r2 = `ielts/audio/giasu/${crypto.createHash('sha1').update(`${GIONG_ANH}|${NHIP}|${t}`).digest('hex')}.mp3`;
   if (await objectExists(r2)) return buildPublicUrl(r2);
   const res = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
     method: 'POST',
     headers: { 'Ocp-Apim-Subscription-Key': key, 'Content-Type': 'application/ssml+xml', 'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3', 'User-Agent': 'cuongthai-ielts-goi' },
     signal: AbortSignal.timeout(15_000),
-    body: `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${LOCALE[nn]}"><voice name="${GIONG_ANH}"><prosody rate="-4%">${escXml(t)}</prosody></voice></speak>`,
+    body: `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${LOCALE[nn]}"><voice name="${GIONG_ANH}">${khoiSsml(t, null, TOC_NGOAI)}</voice></speak>`,
   });
   if (!res.ok) return null;
   return (await putObject(r2, Buffer.from(await res.arrayBuffer()), 'audio/mpeg')).url;
@@ -436,11 +454,11 @@ async function docDoanAnh(t: string, nn: NgonNgu = 'en'): Promise<string | null>
 
 /** Một đoạn tiếng Việt bằng giọng máy nhà → URL wav (lưu R2 theo băm). Ném lỗi khi hỏng. */
 async function docDoanNha(t: string, voice: string, hanMs: number): Promise<string> {
-  const r2 = `ielts/audio/giasu-nha/${crypto.createHash('sha1').update(`${voice}|${t}`).digest('hex')}.wav`;
+  const r2 = `ielts/audio/giasu-nha/${crypto.createHash('sha1').update(`${voice}|${NHIP}|${t}`).digest('hex')}.wav`;
   if (await objectExists(r2)) return buildPublicUrl(r2);
   let hen: ReturnType<typeof setTimeout> | undefined;
   const wav = await Promise.race([
-    synthesizeCuongMini(t, voice),
+    synthesizeCuongMini(t, voice, TOC_F5),
     new Promise<never>((_, loi) => { hen = setTimeout(() => loi(new Error(`máy nhà quá ${hanMs}ms`)), hanMs); }),
   ]).finally(() => clearTimeout(hen));
   return (await putObject(r2, wav, 'audio/wav')).url;

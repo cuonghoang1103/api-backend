@@ -261,7 +261,8 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
     if (docMau && cauMau && tocMau) clips.push({ text: '', pauseMs: 300 }, { text: cauMau.text, voice: giongMau, toc: tocMau }, { text: '', pauseMs: 550 }, { text: cauMau.text, voice: giongMau, toc: 0.9 });
     else if (docMau && cauMau) clips.push({ text: '', pauseMs: 280 }, { text: cauMau.text, voice: giongMau, toc: 0.9 });
     setPha('giasu');
-    play(clips, () => { if (!st.current.dong) batNghe(); });
+    // Giọng máy nhà: mỗi đoạn Việt / ngoại ngữ một tệp — nghỉ một nhịp khi đổi thứ tiếng, không đọc dính liền.
+    play(clips, () => { if (!st.current.dong) batNghe(); }, { gapMs: tep.length > 1 ? 170 : 0 });
   }, [batNghe, giongMau]);
 
   const nhan = useCallback((d: {

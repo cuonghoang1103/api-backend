@@ -1,12 +1,15 @@
-# Codex Instructions - api-backend
+# AI Agent Instructions - api-backend (Codex, CuongMini…)
 
 > ⚠️ File này là **bản sao của `CLAUDE.md`**, chỉ khác đúng hai chỗ: tiêu đề
-> trên và câu "Codex cannot do this" ở mục thêm biến môi trường. Đồng bộ bằng
+> trên và câu "the AI agent cannot do this" ở mục thêm biến môi trường. Đồng bộ bằng
 > cách chép `CLAUDE.md` đè lên rồi sửa lại HAI chỗ đó — **tuyệt đối không
 > tìm-thay "Claude" → "Codex" hàng loạt**: mọi chỗ còn lại nhắc "Claude" đều
 > là TÊN MODEL (`claude-sonnet-5`, `claude-opus-4-8`, nhóm khoá `claude`,
 > kênh Anthropic) hoặc ghi chép sự việc đã xảy ra. Bản trước file này đã dính
 > đúng lỗi ấy và đẻ ra `Codex-sonnet-5`, một model không tồn tại.
+
+>
+> CuongMini (CLI / AI Code / VS Code) đọc `AGENTS.md` TRƯỚC `CLAUDE.md` — file này phải luôn bằng `CLAUDE.md` (19/10/2026 phát hiện lệch từ 22/08: thiếu deploy-nha, cổng model, CT Work…).
 
 ## Project Overview
 
@@ -24,6 +27,31 @@ Full-stack application:
 - Local DB: PostgreSQL via `docker compose up -d postgres` (or local install)
 - Env files: `.env` (backend), `frontend/.env.local` — NEVER commit these
 
+### Chạy local an toàn với R2 (đợt 6, 10/10/2026)
+
+`.env` local mang khoá R2 **THẬT** (bucket production `cuongthai-media-storage`). Trước đợt 6 mỗi lượt test/dev
+tải ảnh lên là rác nằm trên bucket thật (10/10 phải dọn tay 98 tệp). Nay có **storage sandbox**
+(`src/config/storageSandbox.ts`, cắm ở `getR2Client()` tầng `requestHandler` ⇒ mọi `getR2Client().send` trong repo
+đều đi vào kho giả, không mở socket):
+
+- **Chạy test ⇒ sandbox BẮT BUỘC, tự bật.** `WORK_DB_TEST=1`, `NODE_ENV=test` hoặc tiến trình con của `node --test`
+  ⇒ kho trong RAM. Đặt `STORAGE_SANDBOX=0` lúc test ⇒ **ném lỗi** ngay lúc nạp cấu hình; client R2 thật mở trong lúc
+  test ⇒ **ném lỗi** (`assertNotRealEndpointInTests`). `npm test` và `npm run test:work-db` nạp thêm dây bẫy
+  `scripts/r2-tripwire.mjs` (chặn mọi kết nối tới `*.r2.cloudflarestorage.com`); `test:work-db` báo
+  `✓ r2-tripwire: 0 kết nối tới endpoint R2 thật` hoặc ĐỎ cả bộ.
+- **Dev local không đụng bucket thật:** `STORAGE_SANDBOX=1 npm run dev` ⇒ kho trong thư mục tạm
+  (`$TMPDIR/ctw-r2-sandbox`, đổi bằng `STORAGE_SANDBOX_DIR`); tệp phục vụ ở `http://localhost:<PORT>/__r2-sandbox/<key>`
+  (URL ký sẵn cũng trỏ về đó). Backend log `STORAGE SANDBOX đang bật` khi khởi động.
+- **Muốn S3 thật nhưng cục bộ:** MinIO — `STORAGE_SANDBOX=1 STORAGE_SANDBOX_ENDPOINT=http://localhost:9000`
+  (+ `STORAGE_SANDBOX_BUCKET` / `_ACCESS_KEY` / `_SECRET_KEY`). Host không phải localhost/127.0.0.1/minio ⇒ ném lỗi.
+- **Production không bao giờ sandbox:** `NODE_ENV=production` + `STORAGE_SANDBOX=1` ⇒ backend từ chối khởi động.
+- **Email cũng có hộp thư giả (11/10/2026).** `.env` local mang khoá Resend THẬT; ngoài `NODE_ENV=production`,
+  `email.service.ts` KHÔNG gửi mà ghi thư ra `$TMPDIR/ctw-email-sandbox/*.html` (mã xác thực xem ở đó). Gửi thật từ
+  local: `EMAIL_SANDBOX=0`. Địa chỉ tên miền dành riêng (`.local/.test/.invalid/example.com`) bị chặn ở MỌI môi trường.
+  Lý do: 10/10 lượt chụp ảnh của agent gửi báo cáo PDF thật tới `giangvien@fpt.edu.vn` + hàng chục thư bounce `@e2e.local`.
+- Chỉ khi CỐ Ý cần chạm bucket thật từ máy local (script upload tài nguyên khoá học…) mới chạy không có cờ — và
+  không bao giờ trong lúc test.
+
 ---
 
 ## NEVER DO - Forbidden Actions
@@ -33,7 +61,7 @@ Full-stack application:
 - **NEVER** run `npx prisma migrate reset` — it wipes ALL data
 - **NEVER** run `npx prisma db push` against production/VPS — bypasses migration history
 - **NEVER** run `git push --force` or `--force-with-lease` to `main`
-- **NEVER** push to `main` without completing the pre-push checklist below, and always ask the user for confirmation first. (A push no longer deploys — `deploy-nha.sh` does — but `main` is still the shared trunk, so it stays a confirm-first action)
+- **NEVER** push to `main` without completing the pre-push checklist below, and always ask the user for confirmation first. (A push no longer deploys — `deploy-nha.sh` does — but `main` is still the shared trunk, so it stays a confirm-first action.) ⚠️ **Running `deploy-nha.sh` counts as pushing** — it pushes to `origin/main` by itself at the end, so getting approval to deploy IS getting approval to push; see "Docker & Deploy"
 - **NEVER** auto-resolve failed migrations (`prisma migrate resolve`) — see Migration Failure Protocol
 - **NEVER** commit `.env`, `.env.local`, secrets, API keys, or credentials
 - **NEVER** SSH into VPS to modify database or containers directly, unless user explicitly asks
@@ -151,9 +179,16 @@ model Child {
    - A recommended fix, and wait for user approval
 5. If schema drift is suspected (DB doesn't match migration history), suggest running:
    ```bash
-   npx prisma migrate diff --from-migrations ./prisma/migrations --to-database-url "$DATABASE_URL" --script
+   # CSDL thật vs schema.prisma — KHÔNG cần shadow DB (dùng được trong repo này):
+   npx prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma --script
+   # Lịch sử migration vs CSDL thật — CẦN shadow DB, và trong repo này sẽ vấp P3006
+   # (migration add_music_and_profile không replay được — xem mục Pre-Push):
+   npx prisma migrate diff --from-migrations ./prisma/migrations --to-url "$DATABASE_URL" \
+     --shadow-database-url "$SHADOW_DATABASE_URL" --script
    ```
-   to see the actual difference before deciding anything.
+   to see the actual difference before deciding anything. ⚠️ `--to-database-url` KHÔNG tồn tại ở
+   Prisma 5.22 (bản repo đang dùng) — cờ đúng là `--to-url`/`--from-url` (đính chính 29/09/2026, kiểm
+   bằng `npx prisma migrate diff --help`).
 
 Rationale: auto-resolving partially-applied migrations can silently corrupt schema/data on production.
 
@@ -169,12 +204,40 @@ Rationale: auto-resolving partially-applied migrations can silently corrupt sche
 
 ## Docker & Deploy
 
-**STANDARD deploy + push flow (2026-07-06 — follow this order):**
+**STANDARD deploy + push flow (2026-07-06, corrected 2026-09-07 — follow this order):**
 1. Run the conditional pre-push checklist locally (tsc / build)
 2. Commit to **local `main`**
 3. Deploy with **`bash deploy-nha.sh`** (máy nhà build → GHCR → VPS chỉ tráo). This is the standard path since 2026-08-18. Do NOT deploy by pushing to GitHub
-4. **Wait for the user to test production and confirm the fix works**
-5. Only THEN `git push` to origin (with user confirmation, per Forbidden Actions). At this point the push is just syncing GitHub with what prod already runs
+4. **`deploy-nha.sh` pushes to `origin/main` ITSELF at the end — see the warning below.** There is no separate push step to run, and no waiting for the user to test first
+
+⚠️⚠️ **Deploying IS pushing (verified in the script 2026-09-07).** The old wording
+here said "wait for the user to test production, then push with confirmation" —
+that is **not what happens**. `deploy-nha.sh` step 8 runs the required CI checks
+itself and then **pushes with no prompt**. It skips the push **only** when one of
+those checks fails — in which case production still runs the freshly swapped image
+and only GitHub lags, deliberately.
+
+**Since đợt 8c (12/10/2026) the checks run on a CLEAN `git worktree` of exactly the
+deployed SHA, not on the working tree** (`scripts/kiem-ci-truoc-push.sh <SHA>`, runnable
+by hand). Before, they ran on the working tree: half-written files of a parallel
+session made them red for no reason (10/10: deploy `a531e43e` skipped the push because
+`tsc` tripped on another agent's unfinished `work.ctw8b.routes.ts`; the same SHA is
+green in a clean worktree), and they pushed `HEAD` *at push time*, not the deployed
+commit (23/09: 26 un-deployed commits reached GitHub). Now: the SHA is locked at the
+start (`SHA_DU`, also used for the home-machine push, nginx.conf and `da-len-prod`),
+the push is `git push origin <SHA_DU>:refs/heads/main`, and the worktree gets symlinked
+`node_modules` (root per entry + its own `prisma generate` for the SHA's schema;
+frontend/desktop whole), a symlinked `.env`, frontend `tsc` runs **before** the root
+`node_modules` exists (like the Docker build), and `npm run test:work-db` runs on a
+throw-away database built by `scripts/db-test-tu-migration.mjs` then dropped (~4 min;
+no local Postgres ⇒ skipped with a warning). The worktree and database are removed on
+exit. Full check ≈ 7–8 min. `--khong-hoi` skips step 8 entirely.
+
+So when the user says "deploy đi", the truthful reading is **"deploy and push"**.
+Tell them that before running it, and never promise "nothing is pushed until you
+have tested" — the script has already pushed by then. If a deploy must NOT reach
+GitHub, there is no flag for it: the push step has to be skipped by hand. Check
+the real state with `git log --oneline origin/main..HEAD`, never by assuming.
 
 Why not push-to-deploy: `deploy-ghcr.yml` and `backend-vps` once ran on every push to `main` and raced each other into real outages (2026-07-03: feed 500 while schema lagged the image; 2026-07-06: backend recreate race → `Exited(137)` + orphan containers, recovered via `docker start cuonghoangdev_backend`). Deploying stays a script you run, never a side effect of pushing.
 
@@ -192,11 +255,29 @@ Máy nhà (12 nhân/31GB) build cả hai ảnh SONG SONG rồi đẩy lên GHCR;
 - Chỉ nội dung **đã commit** đi qua (`git push` vào kho trần ở máy nhà), nên nó
   không thể chộp trúng file phiên khác đang lưu dở như `deploy.sh` từng làm.
 
+Từ 23/08/2026 nó **cũng đồng bộ `nginx/nginx.conf` và nạp lại nginx** (bước 6c,
+chạy sau smoke-test): so `sha256` nên không đổi thì không đụng tới, có đổi thì
+`nginx -t` trước, hỏng thì trả bản cũ về và dừng — ảnh vẫn đã tráo xong.
+
 ```bash
 bash deploy-nha.sh              # chuẩn; máy nhà hỏng thì tự lùi về deploy.sh
 bash deploy-nha.sh --khong-lui  # hỏng thì dừng hẳn
 bash deploy-nha.sh --khong-day  # chỉ build ở nhà, không đẩy, không tráo
 ```
+
+**Máy nhà chết (mất điện/mạng) ⇒ `bash deploy-nha.sh --build-github`** (03/10/2026).
+GitHub Actions (`.github/workflows/build-anh-deploy.yml`, chỉ `workflow_dispatch`)
+dựng hai ảnh THAY máy nhà — đúng `Dockerfile.backend` + `frontend/Dockerfile`,
+cùng build-arg, cùng phép kiểm libc ↔ engine Prisma, có kiểm `content/` — rồi
+đẩy GHCR `:<sha>` + `:latest`; từ bước tráo trở đi (migrate, **seed nội dung**,
+smoke-test, nginx, push main sau bộ kiểm CI, chốt cuối) chạy y nguyên. Khác
+`deploy.sh` (đẩy cây làm việc, build trên VPS) và `deploy-ghcr.yml` (ảnh thiếu
+`content/` ⇒ seed rỗng). Mã đi qua nhánh tạm `deploy-tam/<sha>` (tự xoá), KHÔNG
+đụng main trước bước 8. Cần: `gh` đã đăng nhập; workflow phải có trên
+`origin/main` (GitHub chỉ dispatch workflow có ở nhánh mặc định) VÀ trong commit
+đang deploy. Dựng nguội ~15–25 phút. Máy nhà không với tới thì bỏ qua báo
+Telegram + ghi mốc `da-len-prod`. Không bao giờ tự lùi về `deploy.sh`. Thử luồng
+không gọi GitHub: `DRY_GITHUB=1`.
 
 ⚠️ Nó **hỏi `[y/N]`** khi cây làm việc còn thay đổi chưa commit (những thay đổi
 đó sẽ KHÔNG lên production). Chạy nền thì phải `echo y | bash deploy-nha.sh`,
@@ -252,7 +333,7 @@ To re-arm it later: create a repo secret named exactly `ANTHROPIC_API_KEY` (put 
 1. Add to local `.env` / `frontend/.env.local`
 2. Add to `.env.example` (documentation)
 3. Add to docker-compose / Dockerfile `ENV`/`ARG` if needed
-4. **Remind the user** to add it to GitHub Actions secrets and the VPS environment — Codex cannot do this; missing this step is a common cause of deploy failures that local CI won't catch
+4. **Remind the user** to add it to GitHub Actions secrets and the VPS environment — the AI agent cannot do this; missing this step is a common cause of deploy failures that local CI won't catch
 5. For Next.js: `NEXT_PUBLIC_*` vars are baked in at **build time** — changing them requires a rebuild, not just a restart
 6. **Third-party API keys must NOT be `NEXT_PUBLIC_*`** — never ship keys in the client bundle. Add a small authenticated backend proxy route instead (pattern: `src/routes/gifs.routes.ts` for GIPHY) and read the key from runtime env
 7. **Production runtime env lives in `/opt/cuonghoangdev/.env` on the VPS.** `deploy.sh` loads it on every deploy and rsync EXCLUDES `.env*`, so values there survive deploys permanently. Caveat: if you append a var while a deploy is already running, that deploy loaded env before your change — recreate the container (`docker compose -p cuonghoangdev up -d --no-build <service>` with env loaded) or redeploy
@@ -285,7 +366,72 @@ git revert <bad_commit_sha>
 
 ---
 
+## Vào VPS khi mạng chặn cổng 22 (18/09/2026)
+
+**VPS nghe SSH trên CẢ hai cổng 22 và 993.** Cổng 993 do `ssh993.service` phục
+vụ (`sshd -D -p 993`), dựng vì mạng trường chỉ mở 80/443/587/993 ra ngoài — cổng
+22 bị chặn nên mất cả `ssh vps` lẫn `ssh linux-nha` (host này `ProxyJump` qua
+VPS). `~/.ssh/config` ở máy Mac có khối `Match host vps,<ip-vps> exec` dò IP của
+`en0`: ở trường tự đi 993, ở nhà tự về 22. Không phải bật tắt gì, và
+`deploy.sh`/`deploy-nha.sh` **không cần sửa** — chúng gọi IP trần nên khớp luôn
+vào khối `Host vps <ip-vps>`.
+
+⚠️ **`Port` trong `sshd_config` KHÔNG có tác dụng chỉ với `reload sshd`.** Ubuntu
+24.04 bật socket activation: `ssh.socket` (enabled) giữ cổng rồi trao fd cho sshd.
+*Đính chính 29/09/2026 (đo thật hai lần trong container Ubuntu 24.04 chạy systemd,
+khi soạn khoá Linux Ch9 + Ch11):* một **generator** của systemd đọc `Port` trong
+`sshd_config` rồi sinh cổng nghe cho `ssh.socket` — nên `Port` CÓ hiệu lực, nhưng
+chỉ sau `systemctl daemon-reload` **+** `systemctl restart ssh.socket`. Và một dòng
+`Port 993` đứng một mình **THAY** cổng 22 chứ không thêm (muốn hai cổng phải ghi
+cả `Port 22` lẫn `Port 993`). Kiểm trước khi sửa: `systemctl is-enabled ssh.socket`.
+Muốn thêm cổng thì khai `Port` đủ cả hai rồi daemon-reload + restart socket, hoặc
+`ListenStream=` trong drop-in của `ssh.socket`, **hoặc** dựng service riêng như
+`ssh993.service` (cách đang dùng — xem đoạn dưới vì sao an toàn hơn).
+
+**Service riêng an toàn hơn sửa `ssh.socket`** trên máy đang chạy sản xuất:
+không phải restart socket ⇒ không làm rơi **đường hầm 2222** (máy Fedora ở nhà
+tự mở ra VPS — xem `Host linux-nha`), và nếu hỏng thì cổng 22 vẫn nguyên vẹn.
+
+🔧 **Không SSH vào được VPS? Dùng runner GitHub làm cánh tay nối dài.** 11
+workflow đã có sẵn secrets `VPS_HOST`/`VPS_USER`/`VPS_SSH_PRIVATE_KEY` và chạy
+từ mạng GitHub (không bị chặn bởi mạng bạn đang ngồi). Hai workflow bấm tay dành
+riêng cho việc này — **đừng xoá**, chúng là lối thoát khi mất đường vào máy chủ:
+
+- `ssh-port-diagnostic.yml` — **CHỈ ĐỌC**: cổng nào đang nghe, socket activation,
+  trạng thái tường lửa, cổng 993 còn trống không, đường hầm 2222 còn sống không
+- `ssh-port-apply.yml` — dựng `ssh993.service`; tự kiểm 5 điều kiện sau khi khởi
+  động và **tự gỡ bỏ** nếu bất kỳ cái nào hỏng
+
+🔒 **SSH đã siết 18/09/2026.** `/etc/ssh/sshd_config.d/01-no-password.conf` đặt
+`PasswordAuthentication no`, `KbdInteractiveAuthentication no`,
+`PermitRootLogin prohibit-password`. **Chỉ vào được bằng khoá** — thêm máy mới
+thì phải nạp khoá công khai vào `/root/.ssh/authorized_keys`, không còn đường
+mật khẩu để cứu. Đã nghiệm thu: khoá vào được, mật khẩu bị từ chối, đường hầm
+2222 và runner GitHub không bị ảnh hưởng. Phần tường lửa VPS vẫn ở mức mặc định
+lỏng — chi tiết cố ý không ghi vào repo, hỏi người vận hành.
+
+⚠️ **Drop-in sshd phải đặt tên sắp xếp TRƯỚC file đang tranh cùng từ khoá.**
+`50-cloud-init.conf` có sẵn `PasswordAuthentication yes`, mà `sshd_config` lấy
+**giá trị đọc được ĐẦU TIÊN** còn glob `*.conf` duyệt theo thứ tự chữ cái — nên
+một file `70-` nói ngược lại là vô nghĩa. Dùng tiền tố `01-`. Nghiệm thu bằng
+`sshd -T | grep ^passwordauthentication`, **không** bằng `cat` file vừa ghi.
+
+Gỡ bỏ toàn bộ: xoá khối `Match` trong `~/.ssh/config`, và trên VPS
+`systemctl disable --now ssh993 && rm /etc/systemd/system/ssh993.service`.
+
+---
+
 ## Phát hành app desktop — MỘT CHỖ DUY NHẤT (20/08/2026)
+
+**Từ 13/10/2026 có HAI app desktop từ cùng mã `desktop/`:** app CuongThai (đầy đủ) và **app CT Work riêng**
+(biến thể dựng `CT_BIEN_THE=ctwork`, xem `desktop/src/shared/bienThe.ts` + `electron-builder.ctwork.yml`;
+appId/tên/thư mục dữ liệu/scheme `ctwork://` riêng, cài song song; phát hành ở kho public
+`cuonghoang1103/ctwork-desktop`, workflow `ctwork-desktop-release.yml`, số phiên bản `ctworkVersion`).
+- Sửa **giao diện CT Work** (`frontend/src/app/work`, `components/work`) ⇒ deploy web + `npm run phat-hanh:ca-hai -- "mô tả"`
+  (phát hành cả hai app — cả hai gói sẵn giao diện lúc dựng). Chỉ sửa backend ⇒ deploy là đủ, không phát hành app nào.
+- Sửa thứ chỉ có ở app CuongThai ⇒ `npm run phat-hanh` như cũ. Chỉ app CT Work ⇒ `npm run phat-hanh:ctwork`.
+- Thử app CT Work ở máy: `npm run ctwork:build && node scripts/smoke-ctwork.mjs` (đăng nhập tài khoản thử, kiểm
+  vỏ gọn, mở thẳng `/work`, đường ngoài CT Work mở trình duyệt).
 
 ```bash
 (cd desktop && npm run phat-hanh -- "mô tả ngắn")   # bump + push + dựng + KIỂM LẠI
@@ -323,6 +469,34 @@ phát hành bắt buộc phải public.
 ---
 
 ## Cổng LLM — modelapi.vn (11/08/2026)
+
+> **⭐ 18/10/2026 — cổng & model CuongMini (thắng mọi dòng cũ bên dưới về AI Code / rambo).**
+> - **Rambo TẮT mặc định** ở MỌI nơi (`ramboBat()` trong `gateway.ts`; bật: công tắc trang admin `/admin/commerce?tab=anthropic`
+>   hoặc env `RAMBO_BAT=1`; `RAMBO_BAT=0` tắt cứng). Tắt ⇒ `congAgent()` = null ⇒ `agent_code`/`exam_tutor`/`lab_room` đi modelapi
+>   `gpt-6-sol`. Việc Claude mạnh (`course_tutor`, `codelab_coach`, `chat_vision`…) GIỮ nguyên model trên modelapi.
+> - **AI Code: bảng model DUY NHẤT `src/services/agent/bangModel.ts`** — tên CuongMini, thứ tự năng lực, khoá, model tương đương khi cổng
+>   hỏng. Mặc định **CuongMini Solid = `gpt-6-sol`** (cổng "CuongMini Core" = modelapi). Cổng Anthropic chính hãng hiện là
+>   **"CuongMini Code Max"**. Pro free: Solid · Nova (`gpt-6-luna`) · Shin (`gpt-5.6-sol`) · Eco (`gpt-5.6-luna`) · Sonic 5.5 · Heshin 5.5.
+>   Khoá chung: Optimum 5.5. Khoá riêng: Invisible 5.1. Vé 48 giờ. Trần USD theo model × người: `tranModel.ts`. Hợp đồng:
+>   `docs/cong-anthropic-chinh-hang.md` (mục đầu). App/CLI/extension KHÔNG được hiện tên model thật.
+> - **Việc GPT có `reasoning_effort` + sàn trần ra theo việc** (`suyLuanCho`/`tranRaCho` trong `gateway.ts`, đổi bằng
+>   `LLM_EFFORT_<VIỆC>=low|medium|high|xhigh|off`). Đo 18/10: interview_report high (ngang tiền, nhận xét cụ thể hơn); exam_tutor/
+>   lab_room giữ medium (high chậm 3× ⇒ vượt trần chờ chữ đầu 40 s / bị 524).
+> - **Đo vòng lặp agent THẬT 18/10/2026** (prompt + tool thật của máy chủ; việc: đọc 2 file + sửa 1 hàm + `node test.js`; tiền = chênh
+>   lệch sổ cổng `/api/usage/token` ÷ 500.000, có thể lẫn lưu lượng prod):
+>
+>   | Model | Lượt | Đúng | $/việc (sổ) | Token vào (đệm) | Thời gian |
+>   |---|---|---|---|---|---|
+>   | `gpt-6-sol` (mốc) | 2 | 2/2 | ~0,018 | 47,6k (37,4k) | 16 s |
+>   | `gpt-6-luna` | 2 | 2/2 | ~0,015 | 47,9k (37,4k) | 13–16 s |
+>   | `gpt-5.6-sol` | 2 | 2/2 | ~0,046 (≈2,5×) | 38–48k | 15–18 s |
+>   | `gpt-5.6-luna` | 2 | 2/2 | ~0,005 | 47,8k (46,4k) | 177–299 s |
+>   | `gpt-5.6-terra` | 3 | 1/3 (2 lần hết giờ) | ~0,008 | 47,9k | 446 s |
+>   | `gpt-6-astra` | 2 | 2/2 | 0,06–0,14 (3–7×) | 38–48k | 330–400 s |
+>
+>   ⇒ thêm Nova (6-luna) + Eco (5.6-luna, rẻ nhưng chậm) vào nhóm free; Shin ≈2,5× < ngưỡng 3× ⇒ giữ free (hỏi lại chủ app);
+>   astra / terra không thêm. `/api/pricing` (18/10): nhóm default ×0,6; 6-sol & 6-luna cùng hệ số.
+> - `LLM_MODEL_<VIỆC>` trên prod có thể ghi đè bảng — kiểm `GET /api/v1/ai/admin/llm-config`.
 
 **MỘT khoá, MỘT base URL, MỘT bảng model cho cả web.** Nguồn sự thật:
 `src/services/llm/gateway.ts`. Cổng chạy phần mềm **New API**, mở đồng thời
@@ -363,10 +537,12 @@ Kiểm bản đồ đang hiệu lực: `npx tsx --test src/services/llm/gateway.
 ⚠️ **Model `rb-*` cũ ĐÃ CHẾT.** Thấy `rb-` ở đâu là chỗ đó đang trỏ vào
 đường chết.
 
-### 🤖 AI Code chạy cổng RIÊNG (19/08/2026)
+### 🤖 AI Code chạy cổng RIÊNG (19/08/2026, mở rộng 20/09/2026) — ⛔ TẮT từ 18/10/2026 (xem đầu mục)
 
-`agent_code` — và CHỈ nó — đi qua cổng riêng của người dùng. Chat, CV, bản
-tin… vẫn đi modelapi. Cắm bằng hai biến ở `/opt/cuonghoangdev/.env`:
+`agent_code` (AI Code app desktop) và `exam_tutor` (CuongMini — AI đồng hành
+khi thi, chỉ Pro) — nằm trong `RAMBO_PURPOSES` ở `gateway.ts` — đi qua cổng
+riêng của người dùng. Chat, CV, bản tin… vẫn đi modelapi. Cắm bằng hai biến ở
+`/opt/cuonghoangdev/.env`:
 
 ```bash
 AGENT_GATEWAY_BASE_URL=https://rambo.ai.vn/api/claude
@@ -425,8 +601,33 @@ Phân hiện tại: việc chạy nền + việc máy đọc (`cv_parse`, `exphu
 opus 39%). Việc tương tác (`chat_pro`, `exam_grade`, `language_tutor`,
 `codelab_coach`, `cv_writing`) và **`agent_code`** → giữ **`claude-sonnet-5`**.
 
-⛔ **`doc_ocr` KHÔNG hạ.** Model rẻ rụng mũi tên vector `AB` → `|AB|`, và một
-ký hiệu sai là hỏng cả bài toán.
+⛔ **`doc_ocr` KHÔNG hạ xuống model RẺ.** Model rẻ rụng mũi tên vector
+`AB` → `|AB|`, và một ký hiệu sai là hỏng cả bài toán.
+
+**Cập nhật 27/09/2026 — MỌI chỗ `gpt-5.6-sol` đã chuyển sang `gpt-6-sol`**
+(`chat_max`, `interview_report`, `cv_*`, `doc_ocr`, `MODELAPI_DU_PHONG`, mục GPT
+của AI Code). Đo cùng bộ việc: đúng ngang nhau (kể cả chép đề toán có vectơ
+từ ảnh), sổ cổng trừ ít hơn ~4 lần, nhanh ~3–6 lần. Chi tiết số đo ở
+`MODEL_CATALOG` trong `gateway.ts`. Muốn quay lại: `LLM_MODEL_<VIỆC>=gpt-5.6-sol`.
+
+**Cổng dự phòng AI Code (27/09/2026):** rambo sập ⇒ app hỏi, người dùng nhập
+mật khẩu (admin đặt ở `/admin/commerce?tab=fable`) ⇒ chạy `gpt-6-sol` trên
+modelapi; rambo sống lại tự về. Xem `src/services/agent/congDuPhong.ts`.
+⛔ Đừng đặt Claude làm model dự phòng: modelapi tính phần đọc-từ-đệm giá đầy
+đủ ×2 — một việc AI Code 227 đơn vị sổ, `gpt-6-sol` 16,4.
+
+**Cập nhật 14/09/2026 — `doc_ocr` = `gpt-5.6-sol`, KHÔNG còn `claude-opus-4-8`.**
+Đây KHÔNG mâu thuẫn với dòng trên: `gpt-5.6-sol` không phải model rẻ, và nó là
+**model GPT DUY NHẤT của cổng thật sự NHÌN được ảnh** (đo bằng ảnh 1×1 px:
+`gpt-5.5` / `gpt-5.6-terra` / `gpt-5.4-mini` nhận ảnh, không báo lỗi, rồi BỊA
+kích thước). Lý do đổi: `doc_ocr` nằm trong `VIEC_CHI_OPENAI` nên nó KHÔNG BAO
+GIỜ đi được cổng rambo (gói trả trọn) — nó ở lại modelapi vĩnh viễn, mà ở đó
+`claude-opus-4-8` có giá **3,3× so với mua thẳng của hãng** (người dùng cho
+biết 14/09). Trả 3,3× vĩnh viễn cho một chênh lệch chưa ai đo được là sai chỗ.
+
+⚠️ Phần CHƯA đo: `gpt-5.6-sol` so với `claude-opus-4-8` trên đúng việc đọc ký
+hiệu toán trong ảnh. Nếu thấy công thức bị đọc sai thì đây là chỗ đầu tiên cần
+nhìn, và vặn lại bằng env `LLM_MODEL_DOC_OCR=claude-opus-4-8` (không cần deploy).
 
 ⚠️ **`Upstream stream ended without a terminal response event` là lỗi TẢI,
 không phải tính chất của model.** 18/08 thấy `gpt-5.6-terra` trả lỗi đó ngay
@@ -504,6 +705,43 @@ Xem cấu hình đang chạy trên prod: `GET /api/v1/ai/admin/llm-config` (admi
 
 ---
 
+## Agent trong CT Work (CTW-28, GĐ1 — 09/10/2026)
+
+Thiết kế: `docs/ct-work-ai-agents-thiet-ke.md` · hợp đồng API đợt 2: `docs/ctw-dot-2-hop-dong-api.md`.
+
+- **Agent LÀ một `User` với `kind = 'AGENT'`** + hồ sơ `work_agents` (1:1, `ownerId` = NGƯỜI chịu trách nhiệm). Mọi FK
+  cũ (assignee, author, worklog…) trỏ `users.id` ⇒ bot `fp_*` chuyển thành agent bằng **Convert** mà giữ nguyên id.
+  `PUBLIC_USER` có `kind` ⇒ `UserAvatar` (ui.tsx) tự gắn 🤖 + tooltip "AI agent · model · owner" ở MỌI chỗ.
+- **Agent không bao giờ đăng nhập** (password NULL, `@agents.invalid`, login ⇒ 403 `AGENT_NO_LOGIN`). Xác thực DUY
+  NHẤT bằng token `ctw_` có scope `agent`, cấp ở `/work/<ws>/agents/<id>` (hiện MỘT lần kèm lệnh
+  `claude mcp add --transport http ctwork https://cuongthai.com/api/v1/work/mcp --header "Authorization: Bearer …"`).
+  PAUSED: đọc được, ghi ⇒ 423. RETIRED: token thu hồi, rời dự án, lịch sử giữ.
+- **Rào chắn ở server, một chỗ** — `src/services/work/permissions.ts`: `AGENT_DENIED_ACTIONS` (qua `can()`),
+  `AGENT_DENIED_ROUTES` (tuyến dưới `/projects/:pid`, khai CẤM), `agentTopRouteAllowed` (tuyến NGOÀI `/projects/:pid`,
+  khai MỞ — fail-closed). Agent không duyệt, không xoá, không cấu hình, không tài chính, không gửi khách, bình luận luôn
+  INTERNAL, cổng khách không bao giờ thấy agent (`scrubCardForClient` ⇒ "Team").
+- **"Done" của agent ⇒ cột Review** (trong cửa ghi chung `applyIssueChange`, nên REST/MCP/bulk như nhau). Tắt được ở
+  Project settings → **AI agents** (ADMIN, có audit). Lease (claim/heartbeat/release) = "đang làm"; sweeper 60 s:
+  hết hạn ⇒ cờ Blocked + báo owner. Chip `🤖 working · 72%` trên board/backlog/list đọc `GET /projects/:pid/agent-leases`.
+- **Chi phí agent là USD ƯỚC LƯỢNG, phần lớn TỰ KHAI** (`report_usage`, `source = REPORTED`) — mọi chỗ hiện tiền agent
+  phải ghi nhãn nguồn ("self-reported"), không trình bày như số đo. Báo cáo: Reports → **People vs Agents** (dự án),
+  Workload → **People vs Agents** (không gian).
+- JQL: `assigneeKind = AGENT | HUMAN`, `assignee IN agents()` / `people()` (khách cổng dùng ⇒ 400).
+- Test: `WORK_DB_TEST=1 npx tsx --test src/routes/work.agents.db.test.ts src/routes/work.agentsUi.db.test.ts` +
+  `npx tsx --test src/services/work/permissions.test.ts src/services/work/jql.test.ts`.
+
+**Checklist khi thêm tuyến CT Work** (tuyến mới dưới `/projects/:pid` mặc định MỞ cho agent):
+1. Tuyến có **tác dụng đối ngoại** — khách, tiền, xoá, cấu hình dự án, gửi ra ngoài (email/chat/webhook/export) ⇒ thêm
+   vào `AGENT_DENIED_ROUTES` **và** vào bảng trong `permissions.test.ts` (bảng đó là danh sách để không ai quên).
+2. Hành động mới đi qua `can()` mà phá huỷ/quản trị ⇒ thêm vào `AGENT_DENIED_ACTIONS` (chốt ở service, không chỉ tuyến —
+   "ẩn UI không phải ẩn API").
+3. Tuyến NGOÀI `/projects/:pid` mà agent cần ⇒ mở rõ trong `agentTopRouteAllowed` (mặc định agent bị 403).
+4. Dữ liệu trả cho khách cổng ⇒ không lộ agent (assignee/actor agent ⇒ "Team").
+5. Trang mới dưới `app/work` ⇒ thêm tuyến app desktop (`desktop/src/renderer/features/web/tuyenCtWork.ts` — từ 13/10/2026 KHÔNG còn ở `dinhTuyenWeb.ts`, test chặn tuyến `/work` lọt vào đó; tĩnh TRƯỚC
+   động); trang cấp không gian ⇒ thêm tên vào `WS_PAGES` trong `WorkSidebar.tsx` (không thì bị đọc thành mã dự án).
+
+---
+
 ## Feature Implementation Workflow
 
 1. **Plan first** — understand full scope, list files to change
@@ -534,6 +772,12 @@ Condensed log of past failures — do not repeat:
 | 2026-07-30 | Sân chơi 3D `/playground` "kẹt mãi ở màn hình tải, không lỗi nào" suốt hai phiên. Thủ phạm: **Next.js chốt danh sách file trong `public/` ngay lúc SERVER KHỞI ĐỘNG**. Dựng lại sân chơi ⇒ gói JS đổi tên (mã băm nội dung) ⇒ server đang chạy trả **404** dù file có thật trên đĩa ⇒ không có JS nào chạy ⇒ màn hình tải (HTML/CSS thuần) quay mãi và **không có lỗi nào để thấy**. Preload `.ktx` vẫn 200 (tên không đổi) nên nhìn Network lại tưởng ổn | Đổi bất cứ thứ gì trong `frontend/public/**` thì **PHẢI khởi động lại Next**. Và **diệt server theo CỔNG** (`lsof -ti:3000 \| xargs -r kill -9`) — `pkill -f "next start"` và `pkill -f "standalone/server.js"` đều KHÔNG khớp vì Node đổi tên tiến trình thành `next-server`; server mới chết vì `EADDRINUSE` còn server cũ vẫn sống, làm lỗi trông như bất trị. **Production không dính** (Dockerfile `COPY . .` rồi mới `next build`, mỗi deploy là container mới) |
 | 2026-08-08 | Đổi tên giá trị enum `ContentType.CODE` → `CODE_REVIEW` (để khớp frontend vốn đã nói `CODE_REVIEW`). Qua sạch toàn bộ pre-push checklist, vẫn **vỡ seed trên production**: `prisma/seed.ts` tự chép lại union `'VLOG' \| ... \| 'CODE' \| ...` nên nó tự kiểm với chính nó, và `tsconfig.json` lại **exclude `prisma/seed.ts`** | Union enum chép tay là mầm trôi dạt — import thẳng từ `@prisma/client`. Và `tsc --noEmit` KHÔNG đụng tới `prisma/**`: thêm `npm run typecheck:seed` + `npx prisma db seed` vào checklist khi đổi schema. Chạy thật mới biết, đọc không ra |
 | 2026-07-30 | Chốt kiểm frontend trong `deploy.sh` gọi `wget` bên trong container frontend — image đó **không cài wget lẫn curl** (Dockerfile cố ý bỏ, healthcheck của compose dùng module http của node). Lệnh luôn thất bại ⇒ vòng lặp quay đủ 6 lần, tốn không ~25s mỗi deploy và không kiểm được gì | Mọi phép kiểm HTTP **bên trong container frontend** phải dùng `node -e` + `require('http')`. Container backend thì có `curl`. Kiểm bộ kiểm trước khi tin nó — xem [[feedback_verify_the_checker_before_the_content]] |
+| 2026-08-23 | `next.config.js` khai `Cache-Control: public, max-age=604800` cho `/playground/**` (94MB tài nguyên) — và quy tắc đó **chưa từng có hiệu lực một ngày nào**. `location /` trong `nginx.conf` gọi `proxy_hide_header Cache-Control` rồi dán `no-store` lên MỌI response, nên nó gỡ đúng cái header Next vừa đặt. Cùng cơ chế đó nuốt luôn cache của cả `public/`: 12 logo SVG + robot.json tải lại mỗi lần điều hướng | **nginx thắng `next.config.js`, luôn luôn.** Đặt header cache trong Next mà không mở một `location` tương ứng ở nginx thì chỉ là trang trí. Muốn một nhánh giữ được header của chính nó thì phải cho nó `location` riêng và **không** `proxy_hide_header` ở đó. Kiểm bằng `curl -I`, đừng đọc config rồi tin |
+| 2026-08-23 | `deploy-nha.sh` **chưa bao giờ deploy thay đổi nginx**. Cả file nhắc chữ `nginx` đúng một lần, trong một dòng chú thích; bước trên VPS chỉ có `docker compose up -d --no-build backend frontend`. Mà `nginx/nginx.conf` là bind-mount từ `/home/deployer/repo`, và từ khi bỏ `deploy.sh` (thứ có rsync) thì không còn gì cập nhật thư mục đó. Mọi thay đổi nginx đều "deploy thành công" mà không có hiệu lực — log xanh, smoke-test sạch, config mới nằm im trên máy | Đã thêm bước 6c vào `deploy-nha.sh`: so `sha256`, chỉ đẩy khi khác, `nginx -t` rồi mới `reload`. **Hỏng thì TRẢ BẢN CŨ VỀ NGAY** — `reload` với config sai thì vô hại (nginx giữ config cũ trong bộ nhớ), nhưng để file sai nằm lại trên đĩa là bom hẹn giờ: container `restart: unless-stopped`, lần khởi động lại kế tiếp nginx không lên nổi và cả web chết, vào lúc không ai đang deploy. Bài học chung: **thứ gì bind-mount thì nằm NGOÀI ảnh, nên đẩy ảnh không đụng tới nó** |
+| 2026-08-25 | Bước 6c mới thêm báo `KQ=OK` — `nginx -t` xanh, `reload` xanh — nhưng **HTTP/2 vẫn tắt và mọi header cache vẫn `no-store`**, hai lần deploy liền. Thủ phạm: nó thay file bằng `mv`. `nginx/nginx.conf` là **bind-mount một FILE ĐƠN**, mà Docker gắn file đơn theo **INODE** lúc container khởi động, không theo đường dẫn. `mv` trỏ đường dẫn host sang inode MỚI ⇒ container vẫn đọc inode CŨ ⇒ `nginx -t` kiểm config cũ (hợp lệ), `reload` nạp lại config cũ, script báo OK, không gì thay đổi | **Ghi ĐÈ TẠI CHỖ (`cat mới > conf`), không bao giờ `mv`/`rsync`/`sed -i`/`:w` của vim** — tất cả đều ghi file tạm rồi đổi tên. Và thêm chốt: so `sha256` file trên host với `docker exec … sha256sum /etc/nginx/nginx.conf`; lệch thì trả bản cũ về và dừng. Bài học rộng hơn: **"đã ghi" ≠ "container đọc được"** — với bind-mount file đơn, phải kiểm từ BÊN TRONG container |
+| 2026-09-18 | Mạng trường chặn cổng 22 ⇒ mất cả `ssh vps` lẫn `ssh linux-nha`. Cách sửa hiển nhiên — thêm `Port 993` vào `sshd_config` rồi reload sshd — **sẽ không có tác dụng nào**: Ubuntu 24.04 bật `ssh.socket`, systemd giữ cổng và trao fd, sshd bỏ qua `Port` (*đính chính 29/09: generator của systemd CÓ áp `Port` sau `daemon-reload` + `restart ssh.socket`, và `Port 993` một mình sẽ THAY cổng 22 — restart socket trên prod là rủi ro rơi đường hầm 2222*). Làm mà không khảo sát trước thì sẽ ngồi nhìn một thay đổi "đã áp dụng thành công" mà không có gì đổi | Khảo sát TRƯỚC khi sửa (`systemctl is-enabled ssh.socket`). Trên máy đang chạy sản xuất, **THÊM** một listener độc lập (`ssh993.service`) an toàn hơn **SỬA** cái đang chạy: không restart `ssh.socket` ⇒ không làm rơi đường hầm 2222 về máy nhà, và hỏng thì cổng 22 vẫn nguyên. Xem mục "Vào VPS khi mạng chặn cổng 22" |
+| 2026-09-18 | Siết SSH: viết `PasswordAuthentication no` vào `/etc/ssh/sshd_config.d/70-no-password.conf`. `sshd -t` xanh, `systemctl reload` xanh, lệnh trả về 0 — và `sshd -T` **vẫn báo `passwordauthentication yes`**. Thủ phạm: `50-cloud-init.conf` (27 byte, đúng một dòng `PasswordAuthentication yes`) đã có sẵn từ lúc dựng máy, mà `sshd_config` theo luật **giá trị đọc được ĐẦU TIÊN thắng** còn glob `*.conf` duyệt theo thứ tự chữ cái ⇒ `50-` chốt trước, `70-` nói sau nên vô nghĩa. `PermitRootLogin` trong cùng file ĐÃ áp dụng được — vì cloud-init không khai nó, không ai tranh. Nửa ăn nửa trượt là dấu hiệu của va chạm thứ tự, không phải cú pháp sai | Drop-in của sshd phải **đặt tên để sắp xếp TRƯỚC** mọi file đang tranh cùng từ khoá (`01-` thắng cả `10-`/`50-`/`60-`). Bền hơn sửa file cloud-init: dựng lại máy thì cloud-init ghi lại `50-` nhưng `01-` vẫn thắng. Và **luôn nghiệm thu bằng `sshd -T`** (giá trị đang hiệu lực) chứ không bằng `cat` cái file vừa ghi — cùng bài học với nginx bind-mount theo inode và `next.config.js` bị nginx nuốt header: *"đã ghi" và "lệnh trả về 0" đều không có nghĩa là "đã có hiệu lực"* |
+| 2026-08-25 | Kết luận **SAI** rằng `/blog/<slug>` và `/tech-trends/<slug>` không thể trùng. Lý lẽ đọc từ mã hoàn toàn đúng — hai bảng riêng, hai endpoint riêng, không có đường rẽ chéo, không chỗ nào ghi cả hai. Nhưng production trả 200 cho CẢ HAI CHIỀU: `posts` và `tech_trend_articles` **có slug trùng nhau trong DỮ LIỆU** (cuộc gộp blog 05/08 chép nội dung sang bảng mới mà không xoá bảng cũ) | **Mã nói về khả năng, dữ liệu nói về thực tế.** "Mã không thể tạo ra trạng thái X" không suy ra được "trạng thái X không tồn tại" — dữ liệu có lịch sử riêng, do migration và thao tác tay tạo ra. Câu hỏi về trạng thái dữ liệu thì phải HỎI DỮ LIỆU. Ở đây một lệnh `curl` là đủ, và tôi đã có sẵn nó trong tay mà không chạy |
 
 ---
 

@@ -196,6 +196,7 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
   /* Mức micro đi thẳng vào nhân vật + vòng sóng của nút, KHÔNG qua state: trước 04/10
      mỗi lần âm lượng đổi là vẽ lại cả hộp thoại (đè lên nền kính mờ) ⇒ màn hình nhấp nháy. */
   const mucRef = useRef(0);
+  const mucCssRef = useRef(0);
   const vongRef = useRef<HTMLDivElement>(null);
   /** IELTS Part 2: một lượt nói dài (2 phút, im 4 giây mới tự gửi). */
   const [noiDai, setNoiDai] = useState(false);
@@ -210,7 +211,15 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
       setNoiDai(false);
       void guiLuot(blob, !coTieng);
     },
-    onMuc: (m) => { mucRef.current = m; vongRef.current?.style.setProperty('--muc', m.toFixed(3)); },
+    /* Mức micro THÔ nhảy theo từng tiếng ồn nhỏ ở mỗi khung hình ⇒ tai/đèn robot + vòng quanh nút mic chớp giật khi
+       bấm nói (20/10/2026). Làm mượt kiểu đồng hồ VU: lên nhanh vừa phải, xuống chậm; chỉ ghi CSS khi đổi thấy được. */
+    onMuc: (m) => {
+      const cu = mucRef.current;
+      const muot = cu + (m - cu) * (m > cu ? 0.25 : 0.06);
+      mucRef.current = muot;
+      const css = Math.round(muot * 40) / 40;
+      if (css !== mucCssRef.current) { mucCssRef.current = css; vongRef.current?.style.setProperty('--muc', css.toFixed(3)); }
+    },
   });
   /** Phản ứng tức thời của CuongMini (chào, mừng điểm cao, động viên) — giữ ~2,4 giây rồi về theo pha. */
   const [phanUng, setPhanUng] = useState<CamXuc | null>(null);
@@ -262,11 +271,11 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
     else if (docMau && cauMau) clips.push({ text: '', pauseMs: 280 }, { text: cauMau.text, voice: giongMau, toc: 0.9 });
     setPha('giasu');
     // Giọng máy nhà: mỗi đoạn Việt / ngoại ngữ một tệp — nghỉ một nhịp khi đổi thứ tiếng, không đọc dính liền.
-    play(clips, () => { if (!st.current.dong) batNghe(); }, { gapMs: tep.length > 1 ? 170 : 0 });
+    play(clips, () => { if (!st.current.dong) batNghe(); }, { gapMs: tep.length > 1 ? 320 : 0 });
   }, [batNghe, giongMau]);
 
   const nhan = useCallback((d: {
-    lyDo?: string; noi?: string; audioUrl?: string | null; audioUrls?: string[]; giongThat?: Giong; mau?: CauMau; viTri?: number; lanThu?: number;
+    lyDo?: string; noi?: string; audioUrl?: string | null; audioUrls?: string[]; giongThat?: Giong; docSau?: boolean; mau?: CauMau; viTri?: number; lanThu?: number;
     cham?: Cham | null; nghe?: string; doiCau?: boolean; loai?: string;
     che?: 'cau' | 'tu'; mauGoc?: CauMau | null; mauTu?: CauMau | null; lanTu?: number; amSai?: string | null; nhacAm?: string | null; tocMau?: number; ghepLai?: boolean; tachTu?: boolean;
   }) => {
@@ -294,6 +303,16 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
     return d;
   }, [giong]);
 
+  /** Lượt chấm trả điểm TRƯỚC (`docSau`, 20/10/2026) ⇒ xin tiếng đọc sau; hỏng ⇒ null (giaSuNoi đọc tạm từng đoạn). */
+  async function layTieng(d: { docSau?: boolean; noi?: string; audioUrl?: string | null; audioUrls?: string[] }) {
+    if (!d.docSau) return d.audioUrls ?? d.audioUrl ?? null;
+    if (!d.noi) return null;
+    try {
+      const t = (await api.post('/ielts/ai/goi-gia-su/doc', { noi: d.noi, giong, ngonNgu }, AI_TIMEOUT)).data?.data as { audioUrl?: string | null; audioUrls?: string[] } | undefined;
+      return t?.audioUrls?.length ? t.audioUrls : t?.audioUrl ?? null;
+    } catch { return null; }
+  }
+
   async function guiLuot(blob: Blob, imLang = false) {
     if (st.current.dong) return;
     if (cheDoRef.current === 'tro-chuyen') { void guiTroChuyen(blob, imLang); return; }
@@ -302,7 +321,8 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
     try {
       const fd = new FormData();
       if (!imLang) fd.append('audio', await blobToWav16k(blob), 'luot.wav');
-      fd.append('trangThai', imLang ? JSON.stringify({ ...JSON.parse(trangThai()), imLang: true }) : trangThai());
+      // docSau: máy chủ trả điểm + lời nhận xét ngay khi chấm xong, KHÔNG chờ đọc thành tiếng (xem layTieng).
+      fd.append('trangThai', JSON.stringify({ ...JSON.parse(trangThai()), ...(imLang ? { imLang: true } : {}), docSau: true }));
       const r = await api.post('/ielts/ai/goi-gia-su', fd, { headers: { 'Content-Type': 'multipart/form-data' }, ...AI_TIMEOUT });
       const d = nhan(r.data?.data ?? {});
       if (!d || st.current.dong) return;
@@ -324,7 +344,8 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
         setLuot((x) => [...x, { ai: true, text: d.noi ?? '' }]);
         setPha('nghi');
         const traLoi = api.post('/ielts/ai/goi-gia-su/hoi', { cauHoi: ngheDuoc, mau: d.mau?.text, chuDe, giong, ngonNgu }, AI_TIMEOUT);
-        const dem = d.audioUrls?.length ? d.audioUrls : d.audioUrl ? [d.audioUrl] : [];
+        const am0 = await layTieng(d);
+        const dem = Array.isArray(am0) ? am0 : am0 ? [am0] : [];
         if (dem.length) play(dem.map((u) => ({ text: '', sfx: u })), () => { /* chờ câu trả lời */ });
         const t = (await traLoi).data?.data as { noi?: string; audioUrl?: string | null; audioUrls?: string[]; lyDo?: string };
         if (st.current.dong) return;
@@ -341,7 +362,9 @@ export default function GoiGiaSu({ danhSach, chuDe, onClose, ngonNgu = 'en', sta
       setLuot((x) => [...x, { ai: true, text: d.noi ?? '' }]);
       // Đổi câu hay đọc lại: lượt nào cũng phát lại câu mẫu để người học nghe trước khi đọc.
       if (d.ghepLai && d.cham && d.cham.tong >= 80) phanUngNgan('vui', 2600);
-      giaSuNoi(d.audioUrls ?? d.audioUrl, d.noi ?? '', d.mau ?? null, true, d.tocMau);
+      const am = await layTieng(d);
+      if (st.current.dong) return;
+      giaSuNoi(am, d.noi ?? '', d.mau ?? null, true, d.tocMau);
     } catch (e) {
       if (st.current.dong) return;
       const m = (e as { response?: { status?: number } })?.response;

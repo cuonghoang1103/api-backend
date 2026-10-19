@@ -281,7 +281,9 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
   /** Gia sư đang phát tiếng — miệng mấp máy. */
   docDangNoi: () => boolean;
 }): SanKhau {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  /* Màn Retina (DPR ≥ 1,5) vẽ đúng DPR đã đủ mịn — MSAA chồng lên nhân ×4 bộ đệm màu ở ~3,4 triệu điểm ảnh, máy đang mở
+     nhiều tab là GPU hụt khung (20/10/2026: "vẫn giật"). Chỉ màn thường (DPR 1) mới cần khử răng cưa. */
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: (window.devicePixelRatio || 1) < 1.5, alpha: true, powerPreference: 'high-performance' });
   /* Trần điểm ảnh: màn Retina phóng toàn khung (1500×1100 CSS ⇒ 6,6 triệu điểm × MSAA) là thừa cho
      một con robot — giữ ≤ ~4,2 triệu điểm ảnh, DPR không quá 2. Vừa trần thì dùng ĐÚNG DPR của màn
      (19/10/2026): DPR lẻ (1,69 ở khung ~1000×850 trên MacBook) bắt trình duyệt co giãn ảnh canvas lên
@@ -530,10 +532,10 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
 
     // Micro: tai sáng + ăng-ten nhún theo giọng người học.
     const mic = camXuc === 'nghe' ? o.docMucMic() : 0;
-    p.tai = tien(p.tai, mic, 0.35);
-    const sangTai = 0.6 + (camXuc === 'nghe' ? 1.2 + p.tai * 5 : 0.25 * Math.sin(t * 2) + 0.25);
+    p.tai = tien(p.tai, mic, 1 - Math.pow(0.0001, dt)); // mượt theo thời gian (không theo số khung) — hết chớp theo tiếng ồn
+    const sangTai = 0.6 + (camXuc === 'nghe' ? 1.2 + p.tai * 2.2 : 0.25 * Math.sin(t * 2) + 0.25);
     phatSang.emissiveIntensity = sangTai;
-    for (const v of tai) v.scale.setScalar(1 + p.tai * 0.35);
+    for (const v of tai) v.scale.setScalar(1 + p.tai * 0.14);
 
     /* Màn hình mặt (canvas 2D có shadowBlur + tải lên GPU) chỉ vẽ lại khi nét mặt ĐỔI thấy được —
        đứng yên thì mắt/miệng không nhúc nhích mà trước đây vẫn vẽ + tải 768×384 mỗi khung. */
@@ -569,7 +571,7 @@ export function taoSanKhau(canvas: HTMLCanvasElement, o: {
     angTen.rotation.z = angTenGoc * 0.5 - 0.1;
     denDich.set(mauDen[camXuc]);
     bongDen.emissive.lerp(denDich, k);
-    bongDen.emissiveIntensity = camXuc === 'nghi' ? 1 + Math.max(0, Math.sin(t * 8)) * 1.6 : camXuc === 'nghe' ? 1.4 + p.tai * 3 : 1.6;
+    bongDen.emissiveIntensity = camXuc === 'nghi' ? 1 + Math.max(0, Math.sin(t * 8)) * 1.6 : camXuc === 'nghe' ? 1.4 + p.tai * 1.2 : 1.6;
 
     // Tay: phải vẫy chào / giơ lên, trái giơ khi vui.
     const vay = p.vay * Math.sin(t * 11) * 0.35;

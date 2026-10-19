@@ -7,7 +7,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { BoCatCau, chonDuong, docCaiDat, docMeta, dungPrompt, loiNoiSach, thanhTinNhan, TRAN_NGAY_MAC_DINH } from './luong.js';
 import { CHU_DE, cauMoDau, dsChoWeb, timChuDe, MA_BAI_HIEN_TAI } from './chuDe.js';
-import { HangDoc, cauHoiGanNhat, chayLuot, docKetQuaCham, type PhuThuocTC, type SuKienTC } from './troChuyenLuong.service.js';
+import { HangDoc, cauHoiGanNhat, chayLuot, docKetQuaCham, traLoiNhanhLanguage, type PhuThuocTC, type SuKienTC } from './troChuyenLuong.service.js';
 import { gotPhien, kiemMuc, tomTat } from './phien.service.js';
 
 /** Đẩy một chuỗi vào bộ cắt theo từng mẩu `n` ký tự (giả lập model chảy chữ). */
@@ -187,4 +187,26 @@ test('tiến độ buổi: mã hợp lệ, gọt lịch sử giữ đuôi, tóm 
   const t = tomTat('tc:x', JSON.stringify({ cheDo: 'phat-am', ten: 'Bài 3', viTri: 4, tongCau: 12, lichSu: [{ ai: true, text: '[en]Hi[/en]' }] }), new Date(0));
   assert.deepEqual([t.cheDo, t.viTri, t.tongCau, t.cauCuoi], ['phat-am', 4, 12, 'Hi']);
   assert.ok(!('lichSu' in t));
+});
+
+test('hỏi gia sư: Heshin chính hãng trước, hỏng/hết khoá ⇒ tự lùi gpt-6-sol modelapi (20/10/2026)', async () => {
+  const vao = { userId: 1, system: 's', content: 'Âm th đọc sao?' };
+  const a = gia({});
+  const r1 = await traLoiNhanhLanguage(vao, a.pt);
+  assert.equal(r1.duong, 'chinh-hang');
+  assert.ok(r1.text.includes('Nice'));
+  assert.equal(a.dem.duPhong, 0);
+
+  const b = gia({ chinhHangLoi: true });
+  b.pt.duPhong = async () => { b.dem.duPhong++; return { text: 'Từ [en]think[/en] cắn nhẹ đầu lưỡi.' }; };
+  const r2 = await traLoiNhanhLanguage(vao, b.pt);
+  assert.equal(r2.duong, 'du-phong');
+  assert.equal(r2.text, 'Từ [en]think[/en] cắn nhẹ đầu lưỡi.');
+  assert.equal(b.dem.chinhHang, 1);
+
+  const c = gia({ coKey: false });
+  c.pt.duPhong = async () => ({ text: 'ok' });
+  const r3 = await traLoiNhanhLanguage(vao, c.pt);
+  assert.equal(r3.duong, 'du-phong');
+  assert.equal(c.dem.chinhHang, 0);
 });

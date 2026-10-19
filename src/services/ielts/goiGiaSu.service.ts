@@ -345,17 +345,20 @@ const escXml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').rep
  * Giọng người thật dừng sau mỗi câu và đổi hơi khi chuyển thứ tiếng; phần ngoại ngữ đọc chậm
  * hơn cho người học nghe rõ. Đổi nhịp ⇒ đổi khoá băm (`NHIP`) ⇒ tệp R2 cũ (đọc liền) không bị
  * dùng lại. Khoảng nghỉ GIỮA các câu chảy dần do web chèn (hangPhatAudio.ts). */
-const NHIP = 'nhip2';
-const TOC_VIET = '-6%';
-const TOC_NGOAI = '-12%';
+const NHIP = 'nhip3';
+const TOC_VIET = '-10%';
+const TOC_NGOAI = '-16%';
 /** F5 máy nhà: 1 = tốc độ gốc của giọng nhân bản. */
-const TOC_F5 = 0.93;
+const TOC_F5 = 0.88;
 /** Tách câu (sau dấu kết câu) — mỗi câu một khối SSML, ngắt nằm GIỮA các khối (dấu phẩy Azure tự ngắt). */
 const tachCau = (t: string) => t.trim().split(/(?<=[.!?…。！？])\s+(?=\S)/).filter(Boolean);
+/** Một câu → các vế (sau dấu phẩy/chấm phẩy/hai chấm) — người thật lấy hơi ở đó (20/10/2026: "vẫn đọc một mạch"). */
+const tachVe = (c: string) => c.split(/(?<=[,;:，、；：])\s+(?=\S)/).filter(Boolean);
 /** Một đoạn → các khối `<prosody><lang>câu</lang></prosody>` (kiểu lồng đã chạy trên prod) nối bằng `<break>`.
  *  `lang` = null cho giọng ĐƠN ngữ (Sonia/Nanami/Xiaoxiao) — `<lang>` chỉ dành cho giọng Multilingual. */
 const khoiSsml = (t: string, lang: string | null, toc: string) =>
-  tachCau(t).map((c) => `<prosody rate="${toc}">${lang ? `<lang xml:lang="${lang}">${escXml(c)}</lang>` : escXml(c)}</prosody>`).join('<break time="320ms"/>');
+  tachCau(t).map((c) => tachVe(c).map((v) => `<prosody rate="${toc}">${lang ? `<lang xml:lang="${lang}">${escXml(v)}</lang>` : escXml(v)}</prosody>`)
+    .join('<break time="200ms"/>')).join('<break time="480ms"/>');
 
 /** "[en]…[/en]" → các đoạn. */
 export function tachDoan(noi: string): { en: boolean; t: string }[] {
@@ -388,7 +391,7 @@ export async function docGiaSu(noi: string, nn: NgonNgu = 'en'): Promise<string 
     if (await objectExists(r2)) return buildPublicUrl(r2);
     const body = tachDoan(noi)
       .map((d) => khoiSsml(d.t, d.en ? LOCALE[nn] : 'vi-VN', d.en ? TOC_NGOAI : TOC_VIET))
-      .join('<break time="220ms"/>');
+      .join('<break time="350ms"/>');
     const ssml = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="vi-VN">`
       + `<voice name="${GIONG_GIA_SU}">${body}</voice></speak>`;
     const res = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
@@ -477,7 +480,9 @@ export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi, nn: NgonNg
   const hanMs = Math.min(15_000, 3_000 + Math.round((tongViet / 16.5) * 0.38 * 2 * 1000));
   const t0 = Date.now();
   try {
-    const urls = await Promise.all(doan.map(async (d) => {
+    // Giọng máy nhà đọc nguyên khối liền một hơi ⇒ tách TỪNG CÂU thành tệp riêng, web nghỉ giữa các tệp (hangPhatAudio/giaSuNoi).
+    const doanCau = doan.flatMap((d) => (d.en ? [d] : tachCau(d.t).map((t) => ({ en: false, t }))));
+    const urls = await Promise.all(doanCau.map(async (d) => {
       if (d.en) {
         const u = await docDoanAnh(d.t, nn);
         if (!u) throw new Error('Azure giọng ngoại ngữ hỏng');
@@ -538,11 +543,19 @@ export async function goiGiaSu(
     thongKe?: unknown; daNhac?: unknown;
     /** 19/10/2026 — lời mở: 'moi' (lần đầu, chào đủ) · 'quen' (đã từng luyện, chào ngắn) · 'tiep' (tiếp tục buổi trước) · 'lai' (bắt đầu lại). */
     moDau?: unknown;
+    /** 20/10/2026 — web hiện điểm NGAY rồi mới tự xin tiếng (`docLoiGiaSu`): lượt chấm không chờ đọc lời nhận xét. */
+    docSau?: unknown;
   },
 ) {
   if (!demLuot(userId)) return { lyDo: 'het_luot_ngay' as const };
   const giong = docGiong(input.giong);
   const nn = docNgonNgu(input.ngonNgu);
+  /* Đọc lời gia sư thành tiếng mất 1–4 s (giọng máy nhà lâu hơn) — trước đây lượt chấm CHỜ xong mới trả, người học
+     nhìn vòng quay dù điểm đã có. `docSau` ⇒ trả chữ + điểm ngay, web gọi `/ai/goi-gia-su/doc` lấy tiếng sau. */
+  const docSau = input.docSau === true || input.docSau === '1';
+  const docLoi = (t: string): Promise<{ audioUrl: string | null; audioUrls?: string[]; giongThat: GiongGoi; docSau?: true }> => (docSau
+    ? Promise.resolve({ audioUrl: null, giongThat: giong, docSau: true as const })
+    : docGiaSuTheoGiong(t, giong, nn));
   const ds = sachDanhSach(input.danhSach, nn);
   let viTri = Math.max(0, Math.min(ds.length - 1, Number(input.viTri) || 0));
   let lanThu = Math.max(0, Number(input.lanThu) || 0);
@@ -562,7 +575,7 @@ export async function goiGiaSu(
   // không tính lượt đọc — chỉ nhắc tự nhiên (05/10/2026: trước đây im lặng bị chấm "đọc thiếu").
   if (input.imLang === true) {
     const noi = chon(CHUA_NGHE);
-    return { loai: 'luyen' as const, nghe: '', noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu, cham: null, doiCau: false, che, mauGoc: mauGocIn ?? null, mauTu: mauTu ?? null, lanTu };
+    return { loai: 'luyen' as const, nghe: '', noi, ...(await docLoi(noi)), mau, viTri, lanThu, cham: null, doiCau: false, che, mauGoc: mauGocIn ?? null, mauTu: mauTu ?? null, lanTu };
   }
   if (!input.audio?.length) {
     // Ngắn và CỐ ĐỊNH: đọc tên bài ("Nói: Trả lời câu hỏi Wh- (Part 1 · …)") nghe rất kỳ
@@ -576,11 +589,11 @@ export async function goiGiaSu(
       : kieu === 'lai' ? 'Mình bắt đầu lại từ đầu nhé. Câu đầu tiên đây.'
         : kieu === 'quen' ? chon(['Chào bạn, mình luyện tiếp nhé! Câu đầu tiên đây.', 'Sẵn sàng chưa? Mình bắt đầu nhé, nghe câu mẫu rồi đọc theo.', 'Hôm nay mình luyện phát âm tiếp nhé. Câu đầu tiên đây.'])
           : null;
-    if (ngan) return { loai: 'mo' as const, noi: ngan, ...(await docGiaSuTheoGiong(ngan, giong, nn)), mau, viTri, lanThu: 0 };
+    if (ngan) return { loai: 'mo' as const, noi: ngan, ...(await docLoi(ngan)), mau, viTri, lanThu: 0 };
     const noi = nn === 'en'
       ? 'Chào bạn! Mình là CuongMini, bạn luyện phát âm của bạn đây. Bạn nghe câu mẫu rồi đọc theo, mình chấm và sửa ngay nhé. Muốn hỏi gì cứ nói tiếng Việt. Câu đầu tiên đây.'
       : `Chào bạn! Mình là CuongMini, hôm nay mình cùng luyện nói ${TEN_TIENG[nn]} nhé. Bạn nghe câu mẫu rồi đọc theo, mình chấm và sửa ngay. Muốn hỏi gì cứ nói tiếng Việt. Câu đầu tiên đây.`;
-    return { loai: 'mo' as const, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu: 0 };
+    return { loai: 'mo' as const, noi, ...(await docLoi(noi)), mau, viTri, lanThu: 0 };
   }
   if (input.audio.length > 1024 * 1024) throw new BadRequestError('Bản ghi quá dài');
 
@@ -598,13 +611,13 @@ export async function goiGiaSu(
   if (nghe && CO_DAU.test(nghe) && giongNhau(mau.text, nghe) < 0.5) {
     // Câu đệm nói NGAY (tệp lưu R2 nên lần sau tức thì) trong lúc web gọi AI ~10 giây.
     const noi = chon(['Câu hỏi hay đấy, để mình giải thích nhé.', 'À, bạn hỏi hay lắm. Đợi mình một chút nhé.', 'Để mình giải thích cho bạn nhé.']);
-    return { loai: 'hoi' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu, che, mauGoc: mauGocIn ?? null, mauTu: mauTu ?? null, lanTu };
+    return { loai: 'hoi' as const, nghe, noi, ...(await docLoi(noi)), mau, viTri, lanThu, che, mauGoc: mauGocIn ?? null, mauTu: mauTu ?? null, lanTu };
   }
   if (!k) {
     const noi = pa?.lyDo === 'het_luot_thang'
       ? 'Máy chấm phát âm đã hết lượt miễn phí của tháng này. Bạn vẫn có thể hỏi mình bằng tiếng Việt nhé.'
       : chon(CHUA_NGHE);
-    return { loai: 'luyen' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)), mau, viTri, lanThu, cham: null, doiCau: false, che, mauGoc: mauGocIn ?? null, mauTu: mauTu ?? null, lanTu };
+    return { loai: 'luyen' as const, nghe, noi, ...(await docLoi(noi)), mau, viTri, lanThu, cham: null, doiCau: false, che, mauGoc: mauGocIn ?? null, mauTu: mauTu ?? null, lanTu };
   }
 
   // ── Đang LUYỆN RIÊNG một từ ─────────────────────────────────────────────
@@ -618,14 +631,14 @@ export async function goiGiaSu(
         ? `${chon(['Chuẩn rồi!', 'Đúng rồi đấy!', 'Hay lắm!'])} Từ [en]${mau.text}[/en] được ${k.diem.tong} điểm. Giờ mình ghép lại cả câu nhé, nhớ giữ đúng như vừa rồi.`
         : `Được ${k.diem.tong} điểm, gần được rồi. Mình ghép lại cả câu nhé, đọc chậm và nhớ chỗ vừa luyện.`;
       return {
-        loai: 'luyen' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)),
+        loai: 'luyen' as const, nghe, noi, ...(await docLoi(noi)),
         mau: mauGocIn, viTri, lanThu: 0, doiCau: false, che: 'cau' as const, mauGoc: null, mauTu: null, lanTu: 0, amSai, ghepLai: true,
         cham: { tong: k.diem.tong, tu: k.tu.map((w) => ({ tu: w.tu, diem: w.diem, loi: w.loi })) },
       };
     }
     const noi = `Được ${k.diem.tong} điểm. ${y ? huongDan(y) : 'Nghe kỹ mẫu rồi đọc chậm lại.'} Nghe mình đọc thật chậm rồi đọc lại theo nhé.`;
     return {
-      loai: 'luyen' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)),
+      loai: 'luyen' as const, nghe, noi, ...(await docLoi(noi)),
       mau, viTri, lanThu, doiCau: false, che: 'tu' as const, mauGoc: mauGocIn, mauTu: mau, lanTu, amSai, tocMau: 0.65,
       cham: { tong: k.diem.tong, tu: k.tu.map((w) => ({ tu: w.tu, diem: w.diem, loi: w.loi })) },
     };
@@ -645,7 +658,7 @@ export async function goiGiaSu(
     const loiMo = diemTruoc != null && k.diem.tong >= diemTruoc + 5 ? `Tiến bộ rồi, ${k.diem.tong} điểm.` : `Câu này được ${k.diem.tong} điểm.`;
     const noi = `${loiMo} Chỗ cần sửa là từ [en]${tuLuyen.text}[/en]. ${nn === 'en' ? huongDan(y) : chon(MEO_NN[nn])} Mình tách riêng từ này luyện trước nhé. Nghe mình đọc chậm, rồi đọc theo.`;
     return {
-      loai: 'luyen' as const, nghe, noi, ...(await docGiaSuTheoGiong(noi, giong, nn)),
+      loai: 'luyen' as const, nghe, noi, ...(await docLoi(noi)),
       mau: tuLuyen, viTri, lanThu, doiCau: false, che: 'tu' as const, mauGoc: mau, mauTu: tuLuyen, lanTu: 0, amSai, tocMau: 0.65, tachTu: true,
       cham: { tong: k.diem.tong, tu: k.tu.map((w) => ({ tu: w.tu, diem: w.diem, loi: w.loi })) },
     };
@@ -668,7 +681,7 @@ export async function goiGiaSu(
       const tuThem = chon(TU_LUYEN[hay[0]]!);
       const loi = `${noi} Mình để ý bạn hay vấp cùng một âm, đã ${hay[1]} lần rồi. ${MEO[hay[0]] ?? ''} Mình luyện riêng một từ có âm này nhé: [en]${tuThem.text}[/en].`;
       return {
-        loai: 'luyen' as const, nghe, noi: loi, ...(await docGiaSuTheoGiong(loi, giong, nn)),
+        loai: 'luyen' as const, nghe, noi: loi, ...(await docLoi(loi)),
         mau: tuThem, viTri, lanThu: 0, doiCau: true, che: 'tu' as const, mauGoc: moi, mauTu: tuThem, lanTu: 0, amSai, nhacAm, tocMau: 0.65,
         cham: { tong: k.diem.tong, tu: k.tu.map((w) => ({ tu: w.tu, diem: w.diem, loi: w.loi })) },
       };
@@ -679,7 +692,7 @@ export async function goiGiaSu(
     loai: 'luyen' as const,
     nghe,
     noi,
-    ...(await docGiaSuTheoGiong(noi, giong, nn)),
+    ...(await docLoi(noi)),
     mau: moi,
     viTri,
     lanThu,
@@ -707,16 +720,14 @@ export async function hoiGiaSu(userId: number, b: { cauHoi?: unknown; mau?: unkn
   if (!cauHoi) throw new BadRequestError('Thiếu câu hỏi');
   const mau = String(b.mau ?? '').trim().slice(0, 160);
   const chuDe = String(b.chuDe ?? '').trim().slice(0, 300);
-  const kq = await llmComplete({
-    step: 'generation',
-    purpose: 'language_tutor',
-    feature: 'chat',
-    userId,
-    maxTokens: 300,
-    system: heThongHoi(nn),
-    messages: [{ role: 'user', content: `${chuDe ? `Đang học: ${chuDe}\n` : ''}${mau ? `Câu mẫu đang luyện: "${mau}"\n` : ''}Người học hỏi: "${cauHoi}"` }],
+  // Heshin 5.5 chính hãng (nhanh) ⇒ hỏng thì gpt-6-sol modelapi — cùng đường với trò chuyện (20/10/2026).
+  // import động: troChuyenLuong.service nhập ngược file này (docGiaSuTheoGiong).
+  const { traLoiNhanhLanguage } = await import('./troChuyen/troChuyenLuong.service.js');
+  const kq = await traLoiNhanhLanguage({
+    userId, maxTokens: 300, system: heThongHoi(nn),
+    content: `${chuDe ? `Đang học: ${chuDe}\n` : ''}${mau ? `Câu mẫu đang luyện: "${mau}"\n` : ''}Người học hỏi: "${cauHoi}"`,
   });
-  const noi = (kq.text ?? '').replace(/```[a-z]*|```/g, '').trim();
+  const noi = boSungTheNN((kq.text ?? '').replace(/```[a-z]*|```/g, '').trim(), nn);
   if (!noi) return { lyDo: 'loi_ai' as const };
   return { noi, ...(await docGiaSuTheoGiong(noi, docGiong(b.giong), nn)) };
 }

@@ -305,6 +305,44 @@ export async function chayLuot(userId: number, v: VaoLuot, gui: (e: SuKienTC) =>
   gui({ type: 'xong', noi, nghe, meta, moc, duong, ...(usd !== undefined ? { usd } : {}) });
 }
 
+/**
+ * MỘT câu trả lời ngắn cho phòng luyện (không chảy chữ) — cùng đường như trò chuyện (20/10/2026, chủ app: "dùng
+ * Anthropic chính hãng nhanh, gpt-6-sol modelapi làm dự phòng, tự chuyển khi cổng chính không chạy"):
+ * Heshin 5.5 chính hãng (bật + có khoá + chưa chạm trần ngày) ⇒ hỏng/hết hạn ⇒ gpt-6-sol trên modelapi.
+ * Dùng cho "hỏi gia sư" của luyện phát âm. Trả '' khi cả hai cổng hỏng (web báo nhẹ, đọc tiếp câu mẫu).
+ */
+export async function traLoiNhanhLanguage(o: { userId: number; system: string; content: string; maxTokens?: number }, pt: PhuThuocTC = THAT): Promise<{ text: string; duong: DuongTC }> {
+  const messages = [{ role: 'user' as const, content: o.content }];
+  const cd = await pt.caiDat();
+  const [coKey, daChi] = await Promise.all([pt.coKey(), pt.daChi(o.userId)]);
+  const { duong } = chonDuong({ bat: cd.bat, coKey, daDungNgayUsd: daChi, tranNgayUsd: cd.tranNgayUsd });
+  if (duong === 'chinh-hang') {
+    let text = '';
+    const ctl = new AbortController();
+    const hen = setTimeout(() => ctl.abort(), HAN_TONG_MS);
+    try {
+      await pt.chinhHang({
+        system: o.system, messages, model: MODEL_HESHIN, hang: 'free', maxTokens: o.maxTokens ?? 400, userId: o.userId,
+        viec: 'language_tutor', onToken: (d: string) => { text += d; }, signal: ctl.signal, nhanh: { effort: 'low' },
+      } as Parameters<typeof goiVanBanChinhHang>[0]);
+      if (text.trim()) return { text, duong: 'chinh-hang' };
+    } catch (e) {
+      logger.warn('[hoi-gia-su] Heshin lỗi — lùi gpt-6-sol', { error: (e as Error).message });
+    } finally { clearTimeout(hen); }
+  }
+  try {
+    const kq = await pt.duPhong({
+      step: 'generation', purpose: 'language_tutor', feature: 'language', userId: o.userId,
+      maxTokens: Math.max(800, o.maxTokens ?? 400), maxRetries: 0, timeoutMs: HAN_TONG_MS,
+      system: o.system, messages,
+    }) as { text?: string };
+    return { text: kq?.text ?? '', duong: 'du-phong' };
+  } catch (e) {
+    logger.warn('[hoi-gia-su] dự phòng cũng lỗi', { error: (e as Error).message });
+    return { text: '', duong: 'du-phong' };
+  }
+}
+
 /* ── 📊 Ước lượng band / trình độ cho cả buổi ─────────────────────────── */
 
 export interface KetQuaCham {

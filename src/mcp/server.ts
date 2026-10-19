@@ -25,6 +25,7 @@ import {
 } from './protocol.js';
 // Đợt 3C: tools/list lấy từ REGISTRY LỆNH DÙNG CHUNG (cùng bộ lệnh với Ask AI + agent BUILTIN). 21 tool cũ vẫn đứng đầu.
 import { mcpCommands } from '../services/work/toolRegistry/index.js';
+import { clientOfToken, recordToolCall, runInAiScope } from '../services/work/aiUsage.service.js';
 import type { ToolDef } from './tools/types.js';
 
 export const SERVER_INFO = { name: 'ctwork', title: 'CT Work', version: '1.0.0' } as const;
@@ -84,7 +85,13 @@ async function callTool(ctx: McpCtx, params: Record<string, unknown>) {
   }
   try {
     const args = tool.input.parse(params.arguments ?? {});
-    const out = await tool.run(ctx, args);
+    // Đợt 8B: mỗi lời gọi tool vào sổ AI của dự án nó chạm tới (ai · client · tool · thẻ · đọc/ghi · lỗi).
+    const client = await clientOfToken(ctx);
+    const t0 = Date.now();
+    const r = await runInAiScope(client, () => tool.run(ctx, args));
+    await recordToolCall({ client, userId: ctx.userId, tool: tool.name, write: tool.write, hits: r.hits, args, error: r.error, durationMs: Date.now() - t0 });
+    if (r.error !== undefined) throw r.error;
+    const out = r.result as Awaited<ReturnType<ToolDef['run']>>;
     const text = typeof out === 'string' ? out : JSON.stringify(out, null, 2);
     return { result: { content: [{ type: 'text', text }], isError: false } };
   } catch (err) {

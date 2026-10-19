@@ -981,7 +981,26 @@ async function resolveAssignee(projectId: number, username: string | null | unde
  * Thực thi MỘT đề xuất dưới quyền người bấm. Mỗi nhánh gọi đúng service
  * người dùng vẫn gọi (có kiểm quyền) — không có đường tắt nào cho AI.
  */
+/**
+ * Đợt 8B: đề xuất của trợ lý được áp dụng = một thao tác GHI của AI ⇒ vào sổ AI usage (client 'web'). Lệnh registry
+ * (`command`) tự ghi trong runForPerson — không ghi trùng.
+ */
 export async function applyAction(userId: number, projectId: number, action: AiAction): Promise<{ summary: string; number?: number }> {
+  if (action.type === 'command') return applyActionInner(userId, projectId, action);
+  const { recordToolCall } = await import('./aiUsage.service.js');
+  const t0 = Date.now();
+  const n = (action as { number?: unknown }).number;
+  try {
+    const r = await applyActionInner(userId, projectId, action);
+    await recordToolCall({ client: 'web', userId, tool: `ai_${action.type}`, write: true, projectId, args: { issue: r.number ?? n }, durationMs: Date.now() - t0 });
+    return r;
+  } catch (err) {
+    await recordToolCall({ client: 'web', userId, tool: `ai_${action.type}`, write: true, projectId, args: { issue: n }, error: err, durationMs: Date.now() - t0 });
+    throw err;
+  }
+}
+
+async function applyActionInner(userId: number, projectId: number, action: AiAction): Promise<{ summary: string; number?: number }> {
   const access = await requireProject(userId, projectId, 'project.view');
   const key = (n: number) => `${access.key}-${n}`;
   switch (action.type) {

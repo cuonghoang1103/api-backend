@@ -767,6 +767,11 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   // 18/10/2026 (App Store 1.2): báo cáo nội dung là việc của NGƯỜI (đi hàng chờ kiểm duyệt + báo ADMIN) — agent không báo cáo.
   // Tin chat đã nằm dưới /chat (cấm ở trên); POST /work/report nằm ngoài dự án ⇒ agentTopRouteAllowed chặn.
   ['POST', /^\/(meetings\/\d+|issues\/\d+\/comments\/\d+)\/report$/],
+  // CTW đợt 8B (19/10/2026): sổ AI của dự án (ai dùng AI, tốn bao nhiêu — dữ liệu của NGƯỜI) — agent không đọc. Bỏ phiếu
+  // planning poker và sửa retro là ý kiến của NGƯỜI (service chặn agent lần nữa) — agent chỉ đọc phòng poker/retro.
+  ['*', /^\/ai-usage$/],
+  ['POST', /^\/poker(\/.*)?$/], ['DELETE', /^\/poker(\/.*)?$/],
+  ['POST', /^\/retros(\/.*)?$/], ['PATCH', /^\/retros(\/.*)?$/], ['DELETE', /^\/retros(\/.*)?$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

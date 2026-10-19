@@ -27,6 +27,8 @@ import ProjectRecurring from '@/components/work/settings/ProjectRecurring'; // C
 import ProjectGithub from '@/components/work/settings/ProjectGithub';
 import ProjectCloud from '@/components/work/settings/ProjectCloud'; // CTW đợt 8a
 import { Cloud } from 'lucide-react'; // CTW đợt 8a
+import { Sparkles } from 'lucide-react'; // CTW đợt 8B: AI trong dự án
+import ProjectAiUsage from '@/components/work/settings/ProjectAiUsage'; // CTW đợt 8B: AI usage của dự án
 import ProjectGitlab from '@/components/work/settings/ProjectGitlab';
 import ProjectChat from '@/components/work/settings/ProjectChat';
 import ProjectExport from '@/components/work/settings/ProjectExport';
@@ -44,7 +46,7 @@ import { Figma } from 'lucide-react';
 import { currentWorkLocale } from '@/components/work/i18n/store';
 import { wt } from '@/components/work/i18n';
 
-type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'agents' | 'cuongmini' | 'automation' | 'recurring' | 'github' | 'gitlab' | 'figma' | 'cloud' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
+type Tab = 'details' | 'studio' | 'members' | 'labels' | 'components' | 'workflow' | 'board' | 'types' | 'fields' | 'quality' | 'agents' | 'cuongmini' | 'aiusage' | 'automation' | 'recurring' | 'github' | 'gitlab' | 'figma' | 'cloud' | 'chat' | 'share' | 'export' | 'import' | 'trash' | 'danger';
 
 function ProjectSettings() {
   const params = useParams<{ ws: string; key: string }>();
@@ -74,6 +76,8 @@ function ProjectSettings() {
       ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'agents' as const, label: wt('pages.aiAgents'), icon: Bot }] : []),
       /* Đợt 6: CuongMini cho cả nhóm — hạn mức của trưởng nhóm cho thành viên không Pro. */
       ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'cuongmini' as const, get label() { return currentWorkLocale() === 'vi' ? 'CuongMini cho cả nhóm' : 'CuongMini for the team'; }, icon: Bot }] : []),
+      /* Đợt 8B: AI trong dự án — ai dùng AI nối CT Work, chi phí theo nguồn, thay đổi AI đã làm (thành viên: phần của mình). */
+      ...(config && config.role !== 'CLIENT' && !config.clientView ? [{ key: 'aiusage' as const, get label() { return wt('aiu.tab'); }, icon: Sparkles }] : []),
     ] },
     { get label() { return wt('settings.tAutomationIntegrations'); }, tabs: [
       { key: 'automation', get label() { return wt('settings.tAutomation'); }, icon: Zap },
@@ -145,6 +149,7 @@ function ProjectSettings() {
         {tab === 'quality' && <ProjectSpecQuality config={config} slug={slug} />}
         {tab === 'agents' && <ProjectAgents config={config} slug={slug} />}
         {tab === 'cuongmini' && <ProjectCuongMini config={config} slug={slug} />}
+        {tab === 'aiusage' && <ProjectAiUsage config={config} slug={slug} />}
         {tab === 'automation' && <ProjectAutomation config={config} slug={slug} />}
         {tab === 'recurring' && <ProjectRecurring config={config} />}
         {tab === 'github' && <ProjectGithub config={config} slug={slug} />}

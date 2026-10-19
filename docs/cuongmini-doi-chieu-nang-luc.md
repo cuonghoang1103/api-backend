@@ -465,6 +465,66 @@ Test: `npx tsx --test src/services/agent/ramboDefault.test.ts` (14 phép: bảng
 giữa lượt bằng `runAgentTurn` + cổng giả, app cũ `sonnet-5`, đời app `cm`/`cm2`, tên không lộ, `language_tutor`, CT Work, nhóm, Free bảo trì,
 chống spam).
 
+## 2j. Đợt 8B CT Work (19/10/2026) — AI làm mọi thao tác thành viên + AI usage
+
+**1. Phủ thao tác (REST ghi ↔ tool MCP).** 637 tuyến ghi trong `src/routes/work*.routes.ts`; phần thành viên hay làm đối
+chiếu như sau (✓ có sẵn · ＋ thêm đợt này · ✗ cố ý không):
+
+| Thao tác thành viên | Tool MCP |
+|---|---|
+| Đính kèm ảnh/tệp vào thẻ (inline ≤ 6 MB / presign R2 ⇒ `attach_complete`) | ✓ `attach_file`, `attach_complete` (đã kiểm luồng presign: key đúng thư mục thẻ, thẻ khác ⇒ `WORK_BAD_KEY`) |
+| Ảnh/tệp trong BÌNH LUẬN · bằng chứng test run | ＋ `attach_file {for:"comment"}` ⇒ id bản nháp ⇒ `comment {attachments:[id]}` (chỉ nháp của chính mình); `attach_file {testRun}` |
+| Tích/bỏ tích checklist "Tự kiểm" + tiêu chí chấp nhận (task list trong mô tả) | ＋ `checklist_list`, `checklist_toggle` (theo số hoặc chữ; qua `updateIssueAs` + kiểm version) |
+| Nộp bài lớp học (chữ, link, tệp, nhận xét riêng, nộp/huỷ nộp) | ＋ `class_work`, `class_submit`, `class_unsubmit` |
+| Điền form / intake của dự án | ＋ `form_list`, `form_submit` (như mở link form; có thể tạo thẻ) |
+| Gửi duyệt thẻ/trang Docs (KHÔNG tự duyệt) | ＋ `approval_request` (tự chọn mình làm người duyệt ⇒ `WORK_SELF_APPROVAL`), `approval_list` · ✗ quyết định duyệt |
+| Request review | ✓ `request_review` |
+| Bình luận Docs · sửa mục Docs | ＋ `docs_comment` · ✓ `docs_update_section` |
+| Log giờ · sửa worklog | ✓ `log_work`, `worklog_set_activity` · ＋ `worklog_list`, `worklog_update` (phút/ghi chú/giờ: ghi lại giờ CỦA MÌNH — thêm trước xoá sau) · ✗ xoá giờ (registry cấm tên phá huỷ) |
+| Nộp timesheet tuần | ＋ `timesheet_submit` (agent ⇒ tuyến `/finance` cấm) |
+| Kết quả test run | ✓ `test_run_record`, `fpt_unit_record_results`, `fpt_it_record_round` |
+| Họp: RSVP · thêm action | ＋ `meeting_rsvp` · ✓ `meeting_add_actions` |
+| RAID | ✓ `raid_create`, `raid_update` |
+| Chat kênh dự án · Q&A hỏi trưởng nhóm | ✓ `chat_post` · ✓ `qna_ask`, `ask_lead` |
+| Nhận/thả thẻ của chính mình | ＋ `issue_assign {to:"me"/"nobody"}` · ✗ giao cho người khác |
+| Chuyển sprint (nếu quyền cho phép) | ＋ `issue_move_sprint` (agent ⇒ "plan sprints" 403) |
+| Planning poker · retro | ＋ `agile_rooms`, `poker_vote`, `retro_card_add`, `retro_vote` |
+| Chuyển trạng thái theo luật | ✓ `transition` (luật workflow + Done⇒Review của agent) |
+| ✗ cố ý không | xoá (thẻ/giờ/bình luận), cài đặt/thành viên/mô-đun, quyết định duyệt, tài chính ngoài nộp timesheet, chia sẻ khách/cổng, xuất/nhập, kết nối OAuth, mở/đóng link form, cấu hình họp/ghi âm |
+
+Code: `src/services/work/toolRegistry/memberOps.ts` (20 tool), `src/mcp/tools/write.ts` (attach_file/attach_complete/comment).
+Mỗi tool: zod chặt, `write` đúng (MCP `readOnlyHint` ⇒ client hiện thẻ duyệt cho mọi tool ghi), `requireWrite` + `projectFor`
+với tuyến REST tương đương, gọi THẲNG service sẵn có. Tuyến ngoài dự án (lớp học, form theo token) ⇒ token agent chặn theo
+`agentTopRouteAllowed`. `AGENT_DENIED_ROUTES` thêm `/ai-usage`, ghi `/poker/**`, ghi `/retros/**` (+ dòng ở `permissions.test.ts`).
+
+**2. AI usage** — trang `/work/<ws>/ai-usage` (sidebar "AI trong không gian", `WS_PAGES`, tuyến desktop `tuyenCtWork.ts`) + tab
+"AI trong dự án" ở Cài đặt dự án. API `GET /work/workspaces/:id/ai-usage`, `GET /work/projects/:id/ai-usage` (`?from&to&userId[&projectId]`).
+Sổ mới `work_ai_calls` (migration `20261019200000_work_ai_calls`, viết tay): mỗi lời gọi tool CT Work của AI — MCP (client
+`cuongmini` ⇐ token "CuongMini · …", `agent`, còn lại `mcp`), Ask AI web (`runForPerson`, `applyAction`), agent dựng sẵn
+(`runForAgent`) — và mỗi lời gọi model của trợ lý AI web trong dự án (người nghe `onLlmCallLogged` ở sổ chung, dự án = ALS
+của middleware `/projects/:pid`). Chi phí: CuongMini từ `interview_llm_call_logs` (feature agent) **phân bổ theo lượt** (lượt có
+gọi tool CT Work của dự án; hạn mức nhóm `nhom:p<pid>` chính xác) — ghi nhãn ước lượng; AI web chính xác; agent từ
+`work_agent_usage` (tự khai / GATEWAY). Nguồn: chính hãng $ · CuongMini Core $ · Classic đếm lượt · agent $. Model chỉ hiện tên
+CuongMini (`phanLoaiModel`). Quyền: ADMIN dự án/OWNER-ADMIN không gian xem tất; thành viên chỉ của mình (agent mình sở hữu);
+khách cổng + agent 403; người ngoài 404.
+
+**3. Mọi model dùng được đủ tool CT Work** — `src/services/work/toolRegistry/schemaModel.test.ts` dựng thân đúng như app ⇒
+`parseToolMcp` ⇒ `toolsForGateway` (OpenAI: Solid/Nova/Shin/Eco, Default khi rambo nghỉ) ⇒ `toolSangAnthropic` (Sonic 5.5 /
+Heshin 5.5 chính hãng, Classic + Default khi rambo sống): 149 tool qua khuôn tên (≤ 48, không dấu chấm), gốc `type:object`, không
+anyOf ở gốc, mảng có items, không schema rỗng, máy chủ không lọc mất tool nào. Thử thật (0,15 $ theo bảng giá cổng): gửi ĐỦ 155
+tool (149 CT Work + tool máy chủ) — Solid: `checklist_list` ⇒ (kết quả) ⇒ `checklist_toggle {items:[2]}` đúng; Nova:
+`class_submit {classId:12, assignment:3, text, turnIn:true}` đúng ngay lượt đầu; cổng nhận đủ schema (HTTP 200).
+
+**Test:** `src/routes/work.dot8b.db.test.ts` (14, CSDL tạm pg18: mọi tool mới — thành viên được, người ngoài 404, khách 403,
+agent chặn đúng chỗ/được đúng chỗ; sổ MCP; phân bổ chi phí + không lộ tên thật; quyền trang AI usage dự án + không gian; Ask AI
+ghi client web), `src/services/work/aiUsage.test.ts` (10, phần thuần), `schemaModel.test.ts` (5), `permissions.test.ts`
+(bảng thêm dòng), desktop `dinhTuyenWeb.test.ts` (181 tuyến).
+
+**Còn lại:** mô tả 6 tool CŨ quá 500 ký tự bị app cắt đuôi (`export_file` 890, `swr_requirement_classify` 647,
+`diagram_sql_export`, `swr_doc_fill`, `teaching_overview`, `dev_activity`); tool lớp học không gắn dự án nên không vào trang
+AI usage; các tính năng AI web gọi `llmComplete` ngoài request `/projects/:pid` (job nền) không vào sổ dự án; sổ chưa có hạn
+lưu (dọn định kỳ).
+
 ## 3. Thiết kế đợt 3/4 (đợt 3 ĐÃ LÀM — ghi chỗ đổi thiết kế)
 
 ### 3.1 Agent phụ GHI được (đợt 3)

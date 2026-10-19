@@ -102,6 +102,8 @@ import ctw9aRoutes from './work.ctw9a.routes.js'; // CTW đợt 9a: lớp học 
 import ctw9bRoutes from './work.ctw9b.routes.js'; // CTW đợt 9b: lớp học — bài tập, nộp/trả bài, sổ điểm
 import ctw9cRoutes from './work.ctw9c.routes.js'; // CTW đợt 9c: lớp học — quiz trắc nghiệm tự chấm
 import iosRoutes from './work.ios.routes.js'; // 18/10/2026: app iOS CT Work — báo cáo nội dung, DM, agenda/timesheet của tôi, đọc gọn
+import aiUsageRoutes from './work.aiUsage.routes.js'; // CTW đợt 8B (19/10/2026): AI usage — không gian + tab dự án
+import { enterProjectScope } from '../services/work/aiUsage.service.js';
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
 import { startAgentJobs } from '../services/work/agents.service.js';
@@ -294,6 +296,8 @@ router.use('/projects/:pid', asyncHandler(async (req, _res, next) => {
   if (access && isClientScoped(access) && !clientPortalRouteAllowed(req.method, req.path)) {
     throw new AppError('This part of the project is not available in the client portal', 403, 'CLIENT_PORTAL_ONLY');
   }
+  // Đợt 8B: lời gọi model của trợ lý AI trong request này thuộc dự án pid (sổ AI usage).
+  if (access) enterProjectScope(pid);
   next();
 }));
 
@@ -2146,5 +2150,7 @@ router.use(ctw9bRoutes);
 router.use(ctw9cRoutes);
 // 18/10/2026: tuyến cho app iOS CT Work (work.ios.routes.ts) — báo cáo nội dung, nhắn riêng 1-1, lịch/giờ xuyên dự án.
 router.use(iosRoutes);
+// CTW đợt 8B (19/10/2026): AI usage — GET /workspaces/:wsId/ai-usage · GET /projects/:pid/ai-usage (work.aiUsage.routes.ts).
+router.use(aiUsageRoutes);
 
 export default router;

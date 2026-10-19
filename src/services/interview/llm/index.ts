@@ -632,6 +632,25 @@ export function backgroundLlmEnabled(): boolean {
   return String(process.env.LLM_BACKGROUND_ENABLED ?? 'false').toLowerCase() === 'true';
 }
 
+/**
+ * CT Work đợt 8B (19/10/2026): người nghe sổ gọi model — `work/aiUsage.service.ts` ghi lời gọi của trợ lý AI CT Work
+ * vào sổ AI theo DỰ ÁN (sổ này chỉ có người, không có dự án). Người nghe lỗi không bao giờ làm hỏng lời gọi.
+ */
+export interface LlmCallLogged {
+  userId: number | null;
+  feature: LLMFeature | null;
+  purpose: string | null;
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+  costUsd: number;
+  success: boolean;
+}
+const llmLogListeners: Array<(d: LlmCallLogged) => void> = [];
+export function onLlmCallLogged(fn: (d: LlmCallLogged) => void): void {
+  if (!llmLogListeners.includes(fn)) llmLogListeners.push(fn);
+}
+
 async function logLlmCall(d: {
   userId?: number | null;
   sessionId?: number | null;
@@ -641,7 +660,13 @@ async function logLlmCall(d: {
   inputTokens: number;
   outputTokens: number;
   success: boolean;
+  purpose?: string | null;
 }): Promise<void> {
+  for (const fn of llmLogListeners) {
+    try {
+      fn({ userId: d.userId ?? null, feature: d.feature ?? null, purpose: d.purpose ?? null, model: d.model, inputTokens: d.inputTokens, outputTokens: d.outputTokens, costUsd: costUsd(d.model, d.inputTokens, d.outputTokens), success: d.success });
+    } catch { /* người nghe lỗi không làm hỏng lời gọi */ }
+  }
   await prisma.interviewLLMCallLog.create({
     data: {
       userId: d.userId ?? null,
@@ -778,7 +803,7 @@ export async function llmComplete(opts: {
           );
         }
         recordSuccess(opts.feature);
-        await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true }).catch(() => {});
+        await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true, purpose }).catch(() => {});
         return result;
       } catch (e) {
         lastErr = e;
@@ -855,7 +880,7 @@ export async function llmComplete(opts: {
     }
     recordFailure(opts.feature);
     // Never charge quota for a failed call → log with zero tokens.
-    await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: 0, outputTokens: 0, success: false }).catch(() => {});
+    await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: 0, outputTokens: 0, success: false, purpose }).catch(() => {});
     // Trước dòng này KHÔNG có log nào ghi lại lỗi thật — caller nhận
     // `lastErr` nhưng nhiều nơi (vd CuongMini) chỉ in ra một câu chung
     // chung "chưa trả lời được", nên lỗi gốc (HTTP mấy, timeout hay

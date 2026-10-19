@@ -190,6 +190,9 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['PUT', '/github/read-token'], ['PUT', '/gitlab/activity'], ['POST', '/github/test'],
     // 19/10/2026: token Figma chỉ đọc của dự án
     ['GET', '/figma'], ['PUT', '/figma/token'],
+    // CTW đợt 8B (19/10/2026): sổ AI usage của dự án; bỏ phiếu poker / thẻ + phiếu retro (ý kiến của người)
+    ['GET', '/ai-usage'], ['POST', '/poker/3/items/9/vote'], ['POST', '/poker'], ['DELETE', '/poker/3'],
+    ['POST', '/retros/2/cards'], ['POST', '/retros/2/cards/5/vote'], ['PATCH', '/retros/2'], ['DELETE', '/retros/2/cards/5'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [
@@ -208,6 +211,9 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['GET', '/dashboards/4'], ['GET', '/swr/requirements/12'],
     // CTW Code (18/10/2026): đọc hoạt động Git (dòng thời gian, nhánh, PR, panel Development) — mở.
     ['GET', '/code/overview'], ['GET', '/code/activity'], ['GET', '/code/branches'], ['GET', '/code/pulls'], ['GET', '/code/issues/12'],
+    // CTW đợt 8B: agent ĐỌC phòng poker/retro (gợi ý ước lượng), sửa worklog của mình, bình luận Docs, gửi duyệt
+    ['GET', '/poker'], ['GET', '/poker/3'], ['GET', '/poker/3/items/9/suggest'], ['GET', '/retros'], ['GET', '/retros/2'],
+    ['PATCH', '/issues/12/worklogs/4'], ['DELETE', '/issues/12/worklogs/4'], ['POST', '/pages/2/comments'], ['GET', '/approvals'],
   ];
   it(`${denied.length} tuyến đối ngoại ⇒ cấm`, () => {
     assert.ok(denied.length >= 25);

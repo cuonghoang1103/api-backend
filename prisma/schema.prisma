@@ -16889,3 +16889,36 @@ model AnthropicUserCap {
 
   @@map("anthropic_user_caps")
 }
+
+/// CT Work đợt 8B (19/10/2026) — SỔ AI TRONG CT WORK: mỗi lời gọi tool CT Work của AI (MCP: CuongMini / AI khác / agent;
+/// Ask AI trên web; agent dựng sẵn) và mỗi lời gọi model của trợ lý AI web trong một dự án. Trang "AI trong không gian" +
+/// tab "AI usage" của dự án đọc bảng này (src/services/work/aiUsage.service.ts). `model` là TÊN THẬT — không bao giờ trả
+/// ra API (chỉ tên CuongMini). Không FK (bảng sổ — sống lâu hơn dự án/người), như work_audit_logs.
+model WorkAiCall {
+  id           Int      @id @default(autoincrement())
+  workspaceId  Int      @map("workspace_id")
+  projectId    Int      @map("project_id")
+  userId       Int      @map("user_id")
+  /// cuongmini | mcp | agent | web | builtin
+  client       String   @db.VarChar(12)
+  /// tool (một lệnh CT Work) | llm (một lời gọi model của AI web)
+  kind         String   @default("tool") @db.VarChar(8)
+  /// Tên lệnh (kind=tool) hoặc việc (purpose) của lời gọi model (kind=llm).
+  tool         String   @db.VarChar(64)
+  write        Boolean  @default(false)
+  /// Đối tượng bị tác động: "FP-12", "page:3", "meeting:2"…
+  target       String?  @db.VarChar(40)
+  ok           Boolean  @default(true)
+  errorCode    String?  @map("error_code") @db.VarChar(40)
+  model        String?  @db.VarChar(80)
+  inputTokens  Int      @default(0) @map("input_tokens")
+  outputTokens Int      @default(0) @map("output_tokens")
+  costUsd      Decimal  @default(0) @map("cost_usd") @db.Decimal(12, 6)
+  durationMs   Int      @default(0) @map("duration_ms")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([projectId, createdAt], map: "idx_work_ai_calls_project")
+  @@index([workspaceId, createdAt], map: "idx_work_ai_calls_ws")
+  @@index([userId, createdAt], map: "idx_work_ai_calls_user")
+  @@map("work_ai_calls")
+}

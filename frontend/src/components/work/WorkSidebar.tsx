@@ -59,7 +59,7 @@ import { teachingApi, teachingKeys } from './teaching/teachingApi';
 import { wt } from './i18n';
 
 const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes', 'security', 'connections']); // CTW đợt 5: + teaching, classes · đợt 7c: + security (2FA) · đợt 8a: + connections
-const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents', 'okrs']);
+const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents', 'okrs', 'ai-usage']); // 'ai-usage': CTW đợt 8B
 
 export function useWorkPath() {
   const pathname = usePathname() ?? '';
@@ -273,6 +273,8 @@ const WORKSPACE_NAV: { path: string; label: string; icon: LucideIcon; module?: S
   { path: '/okrs', get label() { return wt('agile.navOkrs'); }, icon: Crosshair, staffOnly: true },
   // CTW-28 (A14): AI agent thành viên — tạo, token, webhook, hộp thư.
   { path: '/agents', get label() { return wt('nav.n_AIagents'); }, icon: Bot, staffOnly: true },
+  // CTW đợt 8B (19/10/2026): AI trong không gian — ai dùng AI nối CT Work, chi phí theo nguồn, thay đổi AI đã làm.
+  { path: '/ai-usage', get label() { return wt('aiu.nav'); }, icon: Sparkles, staffOnly: true },
   { path: '/settings', get label() { return wt('nav.n_Memberssettings'); }, icon: Users },
 ];
 

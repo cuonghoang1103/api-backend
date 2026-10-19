@@ -14,6 +14,7 @@
 import { prisma } from '../config/database.js';
 import { AppError, BadRequestError, ForbiddenError } from '../middleware/errorHandler.js';
 import type { ReqAgent, TokenScope } from '../services/work/apiTokens.service.js';
+import { noteProjectHit } from '../services/work/aiUsage.service.js';
 import {
   agentForbidden, agentRouteAllowed, clientPortalRouteAllowed, isClientScoped, loadProjectAccess, type ProjectAccess,
 } from '../services/work/permissions.js';
@@ -76,6 +77,8 @@ export async function projectFor(ctx: McpCtx, ref: string, routes: Array<[method
   if (!ctx.agent && isClientScoped(access) && routes.some(([m, sub]) => !clientPortalRouteAllowed(m, sub))) {
     throw new AppError('This part of the project is not available in the client portal', 403, 'CLIENT_PORTAL_ONLY');
   }
+  // Đợt 8B: sổ AI ghi lời gọi tool vào dự án đầu tiên nó mở (chỉ khi đang ở trong một phạm vi ghi sổ).
+  noteProjectHit({ id: p.id, key: p.key, workspaceId: p.workspaceId });
   return { id: p.id, key: p.key, workspaceId: p.workspaceId, workspaceSlug: p.workspace.slug, access };
 }
 

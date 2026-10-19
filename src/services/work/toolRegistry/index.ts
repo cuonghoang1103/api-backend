@@ -31,12 +31,14 @@ import { MEETING2_COMMANDS } from './meetings2.js'; // CTW K-2: transcript họp
 import { SWR6B_COMMANDS } from './swr6b.js'; // CTW đợt 6b: stakeholder, elicitation, khảo sát, mô hình SRS, chất lượng, NFR
 import { ASK_READ_COMMANDS } from './askReads.js'; // 18/10/2026: trợ lý mentor — đọc đủ thẻ/tệp/Resources (chỉ đường Ask)
 import { CUONGMINI_COMMANDS } from './cuongMini.js'; // đợt 6 CuongMini: issue_guide / project_resources / my_updates (chỉ MCP)
+import { MEMBER_OPS_COMMANDS } from './memberOps.js'; // đợt 8B: thao tác thành viên còn thiếu (đính kèm, checklist, nộp bài, form, duyệt…)
+import { recordToolCall, runInAiScope } from '../aiUsage.service.js';
 import { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 export { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 /** Thứ tự = thứ tự trong tools/list: 21 tool cũ trước (client cũ thấy y hệt), lệnh mới sau. */
-export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS, ...SRS_COMMANDS, ...CHAT_COMMANDS, ...CONTRIB_COMMANDS, ...DIAGRAM_COMMANDS, ...TEACHING_COMMANDS, ...SWR_COMMANDS, ...MEETING2_COMMANDS, ...SWR6B_COMMANDS, ...ASK_READ_COMMANDS, ...CUONGMINI_COMMANDS, ...CODE_COMMANDS];
+export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS, ...SRS_COMMANDS, ...CHAT_COMMANDS, ...CONTRIB_COMMANDS, ...DIAGRAM_COMMANDS, ...TEACHING_COMMANDS, ...SWR_COMMANDS, ...MEETING2_COMMANDS, ...SWR6B_COMMANDS, ...ASK_READ_COMMANDS, ...CUONGMINI_COMMANDS, ...CODE_COMMANDS, ...MEMBER_OPS_COMMANDS];
 
 const BY_NAME = new Map(COMMANDS.map((t) => [t.name, t]));
 if (BY_NAME.size !== COMMANDS.length) throw new Error('toolRegistry: trùng tên lệnh');
@@ -124,7 +126,13 @@ export async function runForPerson(userId: number, projectId: number, name: stri
   if (mode === 'read' && t.write) throw new BadRequestError(`${name} changes data — propose it as an action instead`, 'WORK_AI_BAD_COMMAND');
   if (mode === 'apply' && !t.write) throw new BadRequestError(`${name} only reads data`, 'WORK_AI_BAD_COMMAND');
   const ref = await projectRefOf(projectId);
-  const output = await t.run(personCtx(userId), parseArgs(t, args, ref));
+  const parsed = parseArgs(t, args, ref);
+  // Đợt 8B: Ask AI (web) vào sổ AI của dự án — đọc lẫn ghi (ghi = người vừa bấm Apply).
+  const t0 = Date.now();
+  const r = await runInAiScope('web', () => t.run(personCtx(userId), parsed));
+  await recordToolCall({ client: 'web', userId, tool: t.name, write: t.write, projectId, hits: r.hits, args: parsed, error: r.error, durationMs: Date.now() - t0 });
+  if (r.error !== undefined) throw r.error;
+  const output = r.result as ToolOutput;
   return { text: outText(output), output };
 }
 
@@ -134,7 +142,13 @@ export async function runForAgent(ctx: McpCtx, projectRef: string, name: string,
   // `internal` = runner tự gọi (request_review / ask_lead khi kết thúc) — vẫn qua `run` của lệnh, vẫn rào chắn agent.
   if (!t || (!opts.internal && !builtinCommands().includes(t))) return { ok: false, text: `Unknown command "${name}". Use one from the list.`, write: false };
   try {
-    const out = await t.run(ctx, parseArgs(t, args, projectRef));
+    const parsed = parseArgs(t, args, projectRef);
+    // Đợt 8B: agent dựng sẵn vào sổ AI (thao tác ghi của agent hiện ở trang AI usage).
+    const t0 = Date.now();
+    const r = await runInAiScope('builtin', () => t.run(ctx, parsed));
+    await recordToolCall({ client: 'builtin', userId: ctx.userId, tool: t.name, write: t.write, hits: r.hits, args: parsed, error: r.error, durationMs: Date.now() - t0 });
+    if (r.error !== undefined) throw r.error;
+    const out = r.result as ToolOutput;
     return { ok: true, text: outText(out), write: t.write, output: out };
   } catch (err) {
     const e = err as { code?: string; message?: string; statusCode?: number; data?: unknown };

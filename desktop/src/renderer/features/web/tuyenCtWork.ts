@@ -51,6 +51,7 @@ export const TUYEN_CTWORK: readonly TuyenWeb[] = [
      trước `/:key/board` (cùng 4 đoạn — "agents" không bao giờ là mã dự án vì mã VIẾT HOA). */
   { mau: '/work/:ws/agents', nap: () => import('@/app/work/[ws]/agents/page') },
   { mau: '/work/:ws/agents/:id', nap: () => import('@/app/work/[ws]/agents/[id]/page') },
+  { mau: '/work/:ws/ai-usage', nap: () => import('@/app/work/[ws]/ai-usage/page') }, // CTW đợt 8B: AI trong không gian (tĩnh, trước /:key)
   { mau: '/work/:ws/:key', nap: () => import('@/app/work/[ws]/[key]/page') },
   { mau: '/work/:ws/:key/board', nap: () => import('@/app/work/[ws]/[key]/board/page') },
   { mau: '/work/:ws/:key/backlog', nap: () => import('@/app/work/[ws]/[key]/backlog/page') },

@@ -130,10 +130,12 @@ const comment = defineTool({
     project: projectArg, issue: issueArg, markdown: markdownArg,
     // CTW đợt 5b K-1: trả lời theo luồng — người được trả lời nhận thông báo "New reply".
     reply_to: z.number().int().positive().optional().describe('Comment id to reply to (from get_issue, "comment #<id>")'),
+    // Đợt 8B: ảnh/tệp trong bình luận — id bản nháp từ attach_file {for:"comment"} (chỉ bản nháp của CHÍNH người gửi).
+    attachments: z.array(z.number().int().positive()).max(10).optional().describe('Draft file ids from attach_file with for="comment"'),
   }),
   run: async (ctx, a) => {
     const { p, n, key } = await issueCtx(ctx, a.project, a.issue, (n) => [['POST', `/issues/${n}/comments`]]);
-    const c = await issues.addComment(ctx.userId, p.id, n, docOf(a.markdown), 'USER', 'INTERNAL', { parentId: a.reply_to ?? null });
+    const c = await issues.addComment(ctx.userId, p.id, n, docOf(a.markdown), 'USER', 'INTERNAL', { parentId: a.reply_to ?? null, ...(a.attachments?.length ? { attachmentIds: a.attachments } : {}) });
     await touchLease(ctx, await issueIdOf(p.id, n));
     return { commentId: c.id, issue: key, visibility: c.visibility, ...(c.parentId ? { thread: c.parentId } : {}) };
   },
@@ -327,7 +329,7 @@ const attachFile = defineTool({
   name: 'attach_file',
   surfaces: { ask: false, builtin: false },
   title: 'Attach file',
-  description: `Attaches a file (base64) to an issue — screenshots, logs, build output. Up to ${MCP_INLINE_FILE_MAX / 1024 / 1024} MB inline; for bigger files pass sizeBytes without base64: you get a presigned URL to PUT the bytes to, then call attach_complete.`,
+  description: `Attaches a file (base64) to an issue — screenshots, logs, build output. for="comment" makes it a draft for your next comment (pass the returned attachmentId in comment.attachments); testRun = evidence of that test run. Up to ${MCP_INLINE_FILE_MAX / 1024 / 1024} MB inline; bigger: pass sizeBytes without base64, PUT the bytes to the presigned URL, then attach_complete.`,
   write: true,
   input: z.object({
     project: projectArg, issue: issueArg,
@@ -335,24 +337,30 @@ const attachFile = defineTool({
     contentType: z.string().min(1).max(100),
     base64: z.string().max(Math.ceil((MCP_INLINE_FILE_MAX * 4) / 3) + 8).optional(),
     sizeBytes: z.number().int().positive().optional().describe('Only for files too big to send inline'),
+    // Đợt 8B: đích của tệp — khối Attachments của thẻ (mặc định) hoặc bản nháp cho bình luận; bằng chứng một lần chạy test.
+    for: z.enum(['issue', 'comment']).optional().describe('issue (default) or comment (draft for your next comment)'),
+    testRun: z.number().int().positive().optional().describe('Test run id — attach as evidence of that run'),
   }),
   run: async (ctx, a) => {
     const { p, n, key } = await issueCtx(ctx, a.project, a.issue, (n) => [['POST', `/issues/${n}/attachments/presign`], ['POST', `/issues/${n}/attachments/complete`]]);
+    const forComment = a.for === 'comment';
+    if (forComment && a.testRun) throw new BadRequestError('A comment draft cannot also be test-run evidence', 'VALIDATION_ERROR');
     if (!a.base64) {
       if (!a.sizeBytes) throw new BadRequestError('Send base64 (small files) or sizeBytes (to get an upload URL)', 'VALIDATION_ERROR');
-      const pre = await issues.presignAttachment(ctx.userId, p.id, n, { fileName: a.fileName, contentType: a.contentType, size: a.sizeBytes });
-      return { presign: { url: pre.uploadUrl, key: pre.key, headers: pre.headers, method: 'PUT' }, next: `PUT the bytes to url with those headers, then call attach_complete with key and fileName (issue ${key}).` };
+      const pre = await issues.presignAttachment(ctx.userId, p.id, n, { fileName: a.fileName, contentType: a.contentType, size: a.sizeBytes, forComment });
+      const extra = `${forComment ? ', for "comment"' : ''}${a.testRun ? `, testRun ${a.testRun}` : ''}`;
+      return { presign: { url: pre.uploadUrl, key: pre.key, headers: pre.headers, method: 'PUT' }, next: `PUT the bytes to url with those headers, then call attach_complete with key and fileName${extra} (issue ${key}).` };
     }
     const clean = a.base64.replace(/^data:[^,]*,/, '').replace(/\s+/g, '');
     if (!/^[A-Za-z0-9+/]*={0,2}$/.test(clean)) throw new BadRequestError('base64 is not valid base64', 'VALIDATION_ERROR');
     const buf = Buffer.from(clean, 'base64');
     if (!buf.length) throw new BadRequestError('The file is empty', 'VALIDATION_ERROR');
     if (buf.length > MCP_INLINE_FILE_MAX) throw new BadRequestError(`Files over ${MCP_INLINE_FILE_MAX / 1024 / 1024} MB go through sizeBytes + presigned upload`, 'WORK_FILE_TOO_LARGE');
-    const pre = await issues.presignAttachment(ctx.userId, p.id, n, { fileName: a.fileName, contentType: a.contentType, size: buf.length });
+    const pre = await issues.presignAttachment(ctx.userId, p.id, n, { fileName: a.fileName, contentType: a.contentType, size: buf.length, forComment });
     await putObject(pre.key, buf, a.contentType, 'private, max-age=0');
-    const att = await issues.completeAttachment(ctx.userId, p.id, n, { key: pre.key, fileName: a.fileName });
+    const att = await issues.completeAttachment(ctx.userId, p.id, n, { key: pre.key, fileName: a.fileName, forComment, runId: a.testRun ?? null });
     await touchLease(ctx, await issueIdOf(p.id, n));
-    return { attachmentId: att.id, issue: key, fileName: att.fileName, size: att.size };
+    return { attachmentId: att.id, issue: key, fileName: att.fileName, size: att.size, ...(forComment ? { for: 'comment', next: 'Pass attachmentId in comment.attachments' } : {}), ...(a.testRun ? { testRun: a.testRun } : {}) };
   },
 });
 
@@ -360,14 +368,18 @@ const attachComplete = defineTool({
   name: 'attach_complete',
   surfaces: { ask: false, builtin: false },
   title: 'Finish attachment',
-  description: 'Registers a file you uploaded with the presigned URL from attach_file.',
+  description: 'Registers a file you uploaded with the presigned URL from attach_file (pass the same for / testRun you used there).',
   write: true,
-  input: z.object({ project: projectArg, issue: issueArg, key: z.string().min(1).max(500), fileName: z.string().min(1).max(255) }),
+  input: z.object({
+    project: projectArg, issue: issueArg, key: z.string().min(1).max(500), fileName: z.string().min(1).max(255),
+    for: z.enum(['issue', 'comment']).optional(), testRun: z.number().int().positive().optional(),
+  }),
   run: async (ctx, a) => {
     const { p, n, key } = await issueCtx(ctx, a.project, a.issue, (n) => [['POST', `/issues/${n}/attachments/complete`]]);
-    const att = await issues.completeAttachment(ctx.userId, p.id, n, { key: a.key, fileName: a.fileName });
+    const forComment = a.for === 'comment';
+    const att = await issues.completeAttachment(ctx.userId, p.id, n, { key: a.key, fileName: a.fileName, forComment, runId: forComment ? null : a.testRun ?? null });
     await touchLease(ctx, await issueIdOf(p.id, n));
-    return { attachmentId: att.id, issue: key, fileName: att.fileName, size: att.size };
+    return { attachmentId: att.id, issue: key, fileName: att.fileName, size: att.size, ...(forComment ? { for: 'comment' } : {}) };
   },
 });
 

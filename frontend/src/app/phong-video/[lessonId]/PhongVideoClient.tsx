@@ -23,12 +23,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Loader2, Languages, MessageCircle, ListVideo, Captions } from 'lucide-react';
-import { videoHocApi, type PhuDeBai } from '@/lib/api';
+import { coursesApi, videoHocApi, type PhuDeBai, type TrackPhongVideo } from '@/lib/api';
 import { useGiaSuBai } from '@/components/academy/useGiaSuBai';
 import TrinhPhatYT, { type DieuKhienYT } from './TrinhPhatYT';
+import TrinhPhatVideo from './TrinhPhatVideo';
 import BangPhuDe from './BangPhuDe';
 import HoiAiVideo from './HoiAiVideo';
-import MucVideo from './MucVideo';
+import MucVideo, { MucVideoRieng } from './MucVideo';
 
 type Tab = 'phude' | 'muc' | 'ai';
 
@@ -51,15 +52,23 @@ function ChuaCoPhuDe({ viec }: { viec: string }) {
   );
 }
 
-export default function PhongVideoClient({ lessonId, ve }: {
+export default function PhongVideoClient({ lessonId, ve, track }: {
   lessonId: number;
   /** Đường về ĐÃ ĐƯỢC LỌC ở máy chủ — xem `duongVe()` trong `page.tsx`. */
   ve: string;
+  /**
+   * Track video bên mời đang phát (`?track=` — VI/EN = video riêng R2, YT =
+   * YouTube). Không có ⇒ máy chủ chọn như trang học (`auto`). Phòng PHẢI phát
+   * đúng video người học vừa xem: phụ đề và mốc của hai video khác nhau.
+   */
+  track?: TrackPhongVideo;
 }) {
   const router = useRouter();
 
   const [pd, datPd] = useState<(PhuDeBai & { coPhuDe: boolean }) | null>(null);
   const [loi, datLoi] = useState<string | null>(null);
+  /** URL ĐÃ KÝ của video riêng — lấy qua route bài học (cùng cửa kiểm quyền với trang học). */
+  const [srcRieng, datSrcRieng] = useState<string | null>(null);
   const [giay, datGiay] = useState(0);
   const [tab, datTab] = useState<Tab>('ai');
 
@@ -86,17 +95,40 @@ export default function PhongVideoClient({ lessonId, ve }: {
    * trúng bong bóng CÂU HỎI của lượt trước, tức câu trả lời ghi đè lên câu
    * hỏi. Một bản dùng chung thì `asking` chặn được lượt thứ hai.
    */
-  const giaSu = useGiaSuBai({ lessonId, phongVideo: true, phuDeGiay: giay });
+  const giaSu = useGiaSuBai({ lessonId, phongVideo: true, phuDeGiay: giay, videoTrack: pd?.videoTrack });
 
   useEffect(() => {
     let huy = false;
     /* `phongHoc`, không phải `phuDe`: bài chưa có phụ đề vẫn mở được phòng
        (video + gia sư đọc nội dung bài) — xem `phongHoc()` ở máy chủ. */
-    videoHocApi.phongHoc(lessonId)
-      .then((r) => { if (!huy) datPd(r.data.data); })
-      .catch(() => { if (!huy) datLoi('Bài này không có video YouTube nên chưa mở phòng học được.'); });
+    datPd(null); datSrcRieng(null); datLoi(null);
+    videoHocApi.phongHoc(lessonId, track ?? 'auto')
+      .then(async (r) => {
+        const d = r.data.data;
+        if (huy) return;
+        if (d.nguon === 'r2') {
+          /* Video riêng: URL đi qua route bài học — nó kiểm quyền (đã mua / miễn
+             phí / xem thử) và KÝ link R2 riêng tư. Phòng video không mở cửa thứ hai. */
+          if (!d.courseId) throw new Error('thiếu courseId');
+          try {
+            const bai = await coursesApi.getLesson(d.courseId, lessonId);
+            const ds = (bai.data?.data?.videoTracks ?? []) as { track: string; url: string | null }[];
+            const url = ds.find((t) => t.track === d.videoTrack)?.url;
+            if (!url) throw new Error('không có url');
+            if (!huy) { datSrcRieng(url); datPd(d); }
+          } catch (e) {
+            const st = (e as { response?: { status?: number } })?.response?.status;
+            if (!huy) datLoi(st === 401 || st === 402
+              ? 'Bạn cần đăng ký khoá học để xem video của bài này.'
+              : 'Chưa tải được video của bài này. Thử lại sau nhé.');
+          }
+          return;
+        }
+        datPd(d);
+      })
+      .catch(() => { if (!huy) datLoi('Bài này chưa có video để mở phòng học.'); });
     return () => { huy = true; };
-  }, [lessonId]);
+  }, [lessonId, track]);
 
   const tua = useCallback((g: number) => {
     mayRef.current?.tuaToi(g);
@@ -130,6 +162,9 @@ export default function PhongVideoClient({ lessonId, ve }: {
   /* Chưa có phụ đề: phòng vẫn chạy, nhưng tab Phụ đề và Mục video (mục lục
      được bóc từ câu tóm tắt DỰA TRÊN phụ đề) chưa có gì để hiện. */
   const coPhuDe = pd.coPhuDe !== false && pd.cues.length > 0;
+  /** Video riêng của khoá (tiếng Việt, R2) — phụ đề tiếng Việt, mục video là các cảnh thật. */
+  const laRieng = pd.nguon === 'r2';
+  const phanRieng = laRieng && coPhuDe ? (pd.parts ?? []) : [];
   const coDich = coPhuDe && !!pd.dichVi && pd.dichVi.length === pd.cues.length;
 
   /*
@@ -178,14 +213,20 @@ export default function PhongVideoClient({ lessonId, ve }: {
 
       {/* ── Thân: video bên trái, bảng bên phải (màn rộng) ── */}
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-        <div className="lg:flex-1 lg:p-3">
+        {/* Màn hẹp (điện thoại): video DÍNH dưới thanh điều hướng, để đọc phụ đề /
+            hỏi AI mà vẫn thấy video — cuộn trang không đẩy nó đi mất. */}
+        <div className="sticky top-[var(--app-nav-h,4rem)] z-20 bg-black lg:static lg:z-auto lg:flex-1 lg:bg-transparent lg:p-3">
           <div className="aspect-video w-full overflow-hidden bg-black lg:rounded-2xl">
-            <TrinhPhatYT
-              ref={mayRef}
-              videoId={pd.videoId}
-              tieuDe={pd.tieuDe}
-              onGiay={datGiay}
-            />
+            {laRieng ? (
+              srcRieng && <TrinhPhatVideo ref={mayRef} src={srcRieng} tieuDe={pd.tieuDe} onGiay={datGiay} />
+            ) : pd.videoId ? (
+              <TrinhPhatYT
+                ref={mayRef}
+                videoId={pd.videoId}
+                tieuDe={pd.tieuDe}
+                onGiay={datGiay}
+              />
+            ) : null}
           </div>
         </div>
 
@@ -221,10 +262,13 @@ export default function PhongVideoClient({ lessonId, ve }: {
                   có mốc thời gian mà model không có gì để chia. */}
               {!coPhuDe
                 ? <ChuaCoPhuDe viec="mục lục theo mốc thời gian" />
+                /* Video riêng có SẴN các phần thật (từ kịch bản dựng) ⇒ hiện ngay,
+                   không gọi model đoán mục lục. */
+                : phanRieng.length ? <MucVideoRieng parts={phanRieng} giay={giay} onTua={tua} />
                 : daMo.has('muc') && <MucVideo giaSu={giaSu} giay={giay} onTua={tua} />}
             </div>
             <div className={`h-full ${tab === 'ai' ? '' : 'hidden'}`}>
-              <HoiAiVideo giaSu={giaSu} giay={giay} onTua={tua} coPhuDe={coPhuDe} />
+              <HoiAiVideo giaSu={giaSu} giay={giay} onTua={tua} coPhuDe={coPhuDe} tiengViet={laRieng && pd.lang === 'vi'} />
             </div>
           </div>
         </aside>

@@ -66,7 +66,7 @@ export interface TuyChonHoi {
   noHistory?: boolean;
 }
 
-export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeGiay }: {
+export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeGiay, videoTrack }: {
   lessonId: number;
   quizContext?: TutorQuizItem[];
   /** Câu hỏi bắn đi NGAY khi `key` đổi — nút "Hỏi AI vì sao sai" ở từng câu quiz. */
@@ -79,6 +79,12 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
   phongVideo?: boolean;
   /** Giây người học đang xem — máy chủ lấy ±100s quanh đây làm đoạn TRỌNG TÂM. */
   phuDeGiay?: number;
+  /**
+   * Track video đang phát trong phòng ('VI'/'EN' = video riêng R2 ⇒ máy chủ đọc
+   * phụ đề riêng + các phần thật; 'YT'/không có ⇒ phụ đề YouTube). Đi qua ref
+   * như `phuDeGiay` để không dựng lại `hoi`.
+   */
+  videoTrack?: 'VI' | 'EN' | 'YT';
 }) {
   const inQuiz = !!quizContext?.length;
   const khoa = khoaGiaSu(lessonId, inQuiz);
@@ -121,6 +127,8 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
    */
   const giayRef = useRef<number | undefined>(phuDeGiay);
   giayRef.current = phuDeGiay;
+  const trackRef = useRef(videoTrack);
+  trackRef.current = videoTrack;
 
   /* Đổi bài ⇒ dọn ô nhập. KHÔNG dọn hội thoại: người học quay lại bài cũ thì
      mạch chat cũ vẫn còn, đó là điều mong đợi chứ không phải rác. */
@@ -184,7 +192,7 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
         question: q, history: history.map(toMsg), english, cacheKey, refresh,
         ...(images.length ? { images } : {}),
         ...(inQuiz ? { quizContext } : {}),
-        ...(phongVideo ? { phongVideo: true, ...(giayRef.current != null ? { phuDeGiay: Math.round(giayRef.current) } : {}) } : {}),
+        ...(phongVideo ? { phongVideo: true, ...(giayRef.current != null ? { phuDeGiay: Math.round(giayRef.current) } : {}), ...(trackRef.current ? { videoTrack: trackRef.current } : {}) } : {}),
       }),
     });
     if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
@@ -272,7 +280,7 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
           { question: q, history: history.map(toMsg), english, cacheKey, refresh,
             ...(anhGui.length ? { images: anhGui } : {}),
             ...(inQuiz ? { quizContext } : {}),
-            ...(phongVideo ? { phongVideo: true, ...(giayRef.current != null ? { phuDeGiay: Math.round(giayRef.current) } : {}) } : {}) },
+            ...(phongVideo ? { phongVideo: true, ...(giayRef.current != null ? { phuDeGiay: Math.round(giayRef.current) } : {}), ...(trackRef.current ? { videoTrack: trackRef.current } : {}) } : {}) },
           { timeout: 240_000 });
         patch(aIdx, { content: r.data.data.answer, streaming: false, cached: !!r.data.data.cached });
       } catch (e: unknown) {

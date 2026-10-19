@@ -49,11 +49,18 @@ function ghiTuChoi(lessonId: number) {
   } catch { /* chế độ riêng tư chặn ghi — không được làm hỏng trang vì việc này */ }
 }
 
-export default function MoiVaoPhongVideo({ lessonId, duongDanVe }: {
+export default function MoiVaoPhongVideo({ lessonId, duongDanVe, track }: {
   lessonId: number;
   /** Đường về ĐÚNG bài này — trang học đọc `?lessonId=`, xem `requestedLessonId`. */
   duongDanVe: string;
+  /**
+   * Track video trang học ĐANG PHÁT. 'VI'/'EN' = video riêng của khoá (R2) ⇒
+   * hỏi phụ đề RIÊNG và mở phòng phát đúng video đó; 'YT'/không có ⇒ như cũ.
+   * Phòng phải phát đúng video người học vừa xem — mốc của hai video khác nhau.
+   */
+  track?: 'VI' | 'EN' | 'YT' | null;
 }) {
+  const rieng = track === 'VI' || track === 'EN';
   const router = useRouter();
   /** Mở được phòng không (có phụ đề hoặc có video YouTube). */
   const [moDuoc, datMoDuoc] = useState(false);
@@ -71,7 +78,7 @@ export default function MoiVaoPhongVideo({ lessonId, duongDanVe }: {
     datMoDuoc(false);
     datCoPd(false);
     datHien(false);
-    videoHocApi.coPhuDe(lessonId)
+    videoHocApi.coPhuDe(lessonId, rieng ? track : null)
       .then((r) => {
         const kq = r.data.data;
         /* Máy chủ cũ chưa có `moDuoc` thì chỉ mời khi có phụ đề, như trước. */
@@ -90,12 +97,12 @@ export default function MoiVaoPhongVideo({ lessonId, duongDanVe }: {
       huy = true;
       if (hen !== undefined) window.clearTimeout(hen);
     };
-  }, [lessonId]);
+  }, [lessonId, rieng, track]);
 
   if (!moDuoc) return null;
 
   const vao = () => {
-    router.push(`/phong-video/${lessonId}?ve=${encodeURIComponent(duongDanVe)}`);
+    router.push(`/phong-video/${lessonId}?ve=${encodeURIComponent(duongDanVe)}${track ? `&track=${track}` : ''}`);
   };
 
   if (!hien) {
@@ -129,7 +136,13 @@ export default function MoiVaoPhongVideo({ lessonId, duongDanVe }: {
           <p className="pr-6 font-semibold text-text-primary">
             Bạn có muốn vào phòng học video cùng AI không?
           </p>
-          {coPd ? (
+          {coPd && rieng ? (
+            <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+              Trong phòng: phụ đề tiếng Việt bấm được để tua, mục lục theo đúng các phần của video,
+              và gia sư AI <strong className="text-text-primary">đã đọc lời giảng video này</strong> —
+              hỏi kiểu &ldquo;chỗ 3:20 em chưa hiểu&rdquo;, xin tóm tắt, giải thích thuật ngữ, vẽ sơ đồ.
+            </p>
+          ) : coPd ? (
             <p className="mt-1 text-sm leading-relaxed text-text-secondary">
               Trong phòng: phụ đề song ngữ bấm được để tua, mục lục chia theo mốc thời gian,
               và gia sư AI <strong className="text-text-primary">đã đọc phụ đề video này</strong> —

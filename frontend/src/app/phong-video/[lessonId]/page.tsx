@@ -46,5 +46,7 @@ export default function PhongVideoPage({ params, searchParams }: {
    * đăng nhập trả 200 kèm `<meta http-equiv="refresh">`. Máy chủ vốn đã có
    * sẵn `searchParams` — đọc ở đây rồi truyền xuống thì bỏ được cả vòng đó.
    */
-  return <PhongVideoClient lessonId={id} ve={duongVe(searchParams.ve)} />;
+  const tr = String((Array.isArray(searchParams.track) ? searchParams.track[0] : searchParams.track) ?? '').toUpperCase();
+  const track = tr === 'VI' || tr === 'EN' || tr === 'YT' ? tr : undefined;
+  return <PhongVideoClient lessonId={id} ve={duongVe(searchParams.ve)} track={track} />;
 }

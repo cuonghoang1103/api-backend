@@ -67,14 +67,27 @@ const CHIP_KHONG_PHU_DE: { key?: string; nhan: string; q: string }[] = [
   { key: 'video_kiemtra_kpd', nhan: 'Kiểm tra tôi', q: 'Đặt 5 câu hỏi kiểm tra xem tôi đã hiểu bài này chưa (kèm đáp án ở cuối).' },
 ];
 
-export default function HoiAiVideo({ giaSu, giay, onTua, coPhuDe = true }: {
+/*
+ * Chip cho VIDEO RIÊNG giảng tiếng Việt. Cùng khoá cache với `CHIP` — máy chủ
+ * tự tách khoá theo track (`khoaCacheTheoTrack`: `video_tomtat@vi`), nên câu
+ * trả lời của video YouTube và video tiếng Việt cùng bài không lẫn vào nhau.
+ * "Từ vựng tiếng Anh" đổi thành thuật ngữ tiếng Anh THẦY DÙNG trong lời giảng:
+ * lời giảng là tiếng Việt, xin "15 từ tiếng Anh trích từ video" là ép model bịa.
+ */
+const CHIP_TIENG_VIET: { key?: string; nhan: string; q: string }[] = CHIP.map((c) => (c.key === 'video_tuvung'
+  ? { key: 'video_tuvung', nhan: 'Thuật ngữ tiếng Anh', q: 'Liệt kê các thuật ngữ tiếng Anh thầy dùng trong video (giữ nguyên tiếng Anh), kèm phiên âm, nghĩa tiếng Việt và mốc thời gian chỗ thầy nói tới.' }
+  : c));
+
+export default function HoiAiVideo({ giaSu, giay, onTua, coPhuDe = true, tiengViet = false }: {
   giaSu: GiaSu;
   giay: number;
   onTua: (giay: number) => void;
   /** `false` ⇒ video chưa có phụ đề: gia sư chỉ đọc nội dung bài. */
   coPhuDe?: boolean;
+  /** `true` ⇒ video RIÊNG giảng bằng tiếng Việt — đổi chip "Từ vựng tiếng Anh" và lời gợi ý ô nhập. */
+  tiengViet?: boolean;
 }) {
-  const dsChip = coPhuDe ? CHIP : CHIP_KHONG_PHU_DE;
+  const dsChip = !coPhuDe ? CHIP_KHONG_PHU_DE : tiengViet ? CHIP_TIENG_VIET : CHIP;
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
   const { isPro } = usePro();
 
@@ -233,7 +246,9 @@ export default function HoiAiVideo({ giaSu, giay, onTua, coPhuDe = true }: {
           <input
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder={coPhuDe ? `Ask about the video… (at ${moc(giay)})` : 'Ask about the lesson…'}
+            placeholder={!coPhuDe ? 'Ask about the lesson…'
+              : tiengViet ? `Hỏi về video… (đang ở ${moc(giay)}, vd "chỗ ${moc(giay)} em chưa hiểu")`
+              : `Ask about the video… (at ${moc(giay)})`}
             className="min-w-0 flex-1 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-text-primary outline-none placeholder:text-text-muted focus:border-neon-violet/50"
           />
           <button type="submit" disabled={asking || !question.trim()}

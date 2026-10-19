@@ -235,7 +235,7 @@ router.post(
   async (req: any, res: any, next) => {
     try {
       const currentUserId = req.user?.userId;
-      const { cursor, limit = '20', authorId, visibility, hashtag, sort, following, type, videoCategoryId, excludeSeries } = req.query;
+      const { cursor, limit = '20', authorId, visibility, hashtag, sort, following, type, videoCategoryId, excludeSeries, newsCategory } = req.query;
       // Content-type tab filter. Only the known buckets pass through;
       // anything else falls back to "all" (undefined).
       const feedType = type === 'POST' || type === 'VIDEO' || type === 'FILE' ? type : undefined;
@@ -261,6 +261,10 @@ router.post(
         videoCategoryId: feedVideoCategoryId,
         // ?excludeSeries=true — bảng tin chung bỏ bài của các loạt nhiều kỳ.
         excludeSeries: excludeSeries === 'true' || excludeSeries === '1',
+        // ?newsCategory=claude|codex|gemini|antigravity|tech|ai-compare — lọc
+        // bảng tin theo MỘT kênh bot. Bỏ trống = "Tất cả" = mọi bài (bot +
+        // người). Giá trị lạ được coi như không lọc (ở tầng service).
+        newsCategory: typeof newsCategory === 'string' ? newsCategory : undefined,
         currentUserId,
       });
 

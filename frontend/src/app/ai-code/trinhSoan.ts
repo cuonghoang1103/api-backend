@@ -78,7 +78,7 @@ export const DANH_SACH_TRINH_SOAN: TrinhSoan[] = [
     linkCho: LINK_OPEN_VSX,
     tenCho: 'Open VSX',
     lenhCli: null,
-    ghiChu: 'Antigravity mở app nhưng KHÔNG tự mở trang extension (nó chưa xử lý link extension/…). Trong Antigravity: mở Extensions (⇧⌘X / Ctrl+Shift+X) → tìm “CuongMini” → Install. Không thấy thì tải tệp .vsix từ Open VSX (nút Download) rồi kéo thả vào khung Extensions, hoặc ⋯ → Install from VSIX.',
+    ghiChu: 'Antigravity bản 2.x (cửa sổ Agent Manager: New Conversation, Projects…) là app agent riêng, KHÔNG có trình soạn VS Code nên không cài được extension — dùng CuongMini CLI trong Terminal, hoặc cài vào VS Code / Cursor. Antigravity bản có trình soạn (Editor) thì: Extensions (⇧⌘X) → tìm “CuongMini” → Install, hoặc ⋯ → Install from VSIX (tải .vsix ở Open VSX).',
   },
   {
     ma: 'windsurf',

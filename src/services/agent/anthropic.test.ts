@@ -186,3 +186,18 @@ test('không có ảnh thì content vẫn là CHUỖI — đừng bọc mảng v
   assert.equal(typeof kh[0].content, 'string');
   assert.equal(kh.length, 1, 'không có ảnh thì đừng đẩy thêm khối nào');
 });
+
+test('hai tool song song, tool đầu trả ẢNH ⇒ mọi tool_result đứng trước ảnh (lỗi 400 19/10/2026)', () => {
+  const r = sangAnthropic([
+    { role: 'user', content: 'chụp trang rồi xem console' },
+    { role: 'assistant', content: '', tool_calls: [
+      { id: 'toolu_A', type: 'function', function: { name: 'chup_trang', arguments: '{}' } },
+      { id: 'toolu_B', type: 'function', function: { name: 'console', arguments: '{}' } },
+    ] },
+    { role: 'tool', tool_call_id: 'toolu_A', content: 'ảnh 311 KB', anh: [{ media_type: 'image/png', data: 'iVBORw0KGgo=' }] },
+    { role: 'tool', tool_call_id: 'toolu_B', content: '4 dòng, 4 lỗi' },
+  ] as never);
+  const u = r.messages[2]!;
+  const kieu = (u.content as Array<{ type: string; tool_use_id?: string }>).map((k) => k.type + (k.tool_use_id ? `:${k.tool_use_id}` : ''));
+  assert.deepEqual(kieu, ['tool_result:toolu_A', 'tool_result:toolu_B', 'image']);
+});

@@ -256,7 +256,12 @@ export function vaToolMoCoi(tin: TinAnthropic[]): TinAnthropic[] {
           : [],
       );
       const giu = khoiCua(t).filter((k) => (k as { type: string }).type !== 'tool_result' || idTruoc.has((k as { tool_use_id: string }).tool_use_id));
-      if (giu.length) ra.push({ ...t, content: giu });
+      /* THỨ TỰ cũng phải đúng (19/10/2026, lần 2): mọi `tool_result` đứng TRƯỚC mọi khối khác. Hai tool chạy song song mà
+         tool đầu trả ẢNH (chụp trang) ⇒ ghép thành [kết quả 1, ảnh, kết quả 2] ⇒ Anthropic coi kết quả 2 là "thiếu" ⇒ 400
+         vĩnh viễn với id của tool thứ hai, dù kết quả CÓ trong tin. Xếp lại: kết quả trước (giữ thứ tự), ảnh/chữ sau. */
+      const laKq = (k: KhoiAnthropic) => (k as { type: string }).type === 'tool_result';
+      const xep = [...giu.filter(laKq), ...giu.filter((k) => !laKq(k))];
+      if (xep.length) ra.push({ ...t, content: xep });
       continue;
     }
     ra.push(t);

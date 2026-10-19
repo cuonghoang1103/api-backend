@@ -23,6 +23,7 @@ import ch10Extra from './fer202/ch10.mjs';
 import ch11Extra from './fer202/ch11.mjs';
 import ch12Extra from './fer202/ch12.mjs';
 import advExtra from './fer202/chAdv.mjs';
+import onThiPe from './fer202/onThiPe.mjs';
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -2919,6 +2920,11 @@ npx create-next-app@latest my-app
 `,
         },
       ],
+    },
+    {
+      title: '📝 PE review — real exams, question by question|||📝 Ôn thi PE — làm đề thật từng câu',
+      description: 'Phần TỰ THÊM: video làm trọn đề thi thực hành thật (đọc đề tiếng Anh → phân tích → setup → code từng dòng → chạy → đối chiếu rubric), mỗi kiến thức chỉ về đúng chương FER202. Bắt đầu với Đề 4 (SP26 B3).',
+      lessons: onThiPe,
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",

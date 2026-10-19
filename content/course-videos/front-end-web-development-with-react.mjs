@@ -78,5 +78,9 @@ export default {
     'fer202-0-2-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/00-gioi-thieu-mon-hoc/00-02-dieu-kien-qua-mon-36c7e493.mp4' }, defaultVideoTrack: 'VI'},
     'fer202-0-3-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/00-gioi-thieu-mon-hoc/00-03-chuan-dau-ra-clo-c6e48892.mp4' }, defaultVideoTrack: 'VI'},
     'fer202-0-4-tai-lieu-cai-dat': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/00-gioi-thieu-mon-hoc/00-04-tai-lieu-cai-dat-9c3648b6.mp4' }, defaultVideoTrack: 'VI'},
+    'fer202-pe4-0-mo-dau': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/20-on-thi-pe/20-01-pe4-mo-dau-8a7f3087.mp4' }, defaultVideoTrack: 'VI' },
+    'fer202-pe4-1-cau-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/20-on-thi-pe/20-02-pe4-cau-1-f021ca86.mp4' }, defaultVideoTrack: 'VI' },
+    'fer202-pe4-2a-cau-2a': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/20-on-thi-pe/20-03-pe4-cau-2a-bcbab337.mp4' }, defaultVideoTrack: 'VI' },
+    'fer202-pe4-2b-cau-2b': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/20-on-thi-pe/20-04-pe4-cau-2b-3eb23d65.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

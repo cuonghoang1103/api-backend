@@ -23,7 +23,7 @@ import type {
   AgentCuocDangMo,
   AgentCongAnthropic,
   AgentKetQuaGiaHan,
-  AgentMcpTrangThai,
+  AgentMcpTrangThai, AgentUsageCuongMini,
   AgentHookNhatKy,
   AgentMucKhoiPhuc,
   AgentPhien,
@@ -446,6 +446,9 @@ const bridge: DesktopBridge = {
     henLo: () => ipcRenderer.invoke('agent:henLo') as Promise<{ ds: AgentHenLo[] }>,
     mcpBatTat: (cuocId: string, ten: string, bat: boolean) =>
       ipcRenderer.invoke('agent:mcpBatTat', { cuocId, ten, bat }) as Promise<{ ok: boolean; loi?: string; trangThai?: AgentMcpTrangThai }>,
+    mcpServer: (cuocId: string, ten: string, viec: 'ngat' | 'noiLai' | 'noi' | 'tatHan') =>
+      ipcRenderer.invoke('agent:mcpServer', { cuocId, ten, viec }) as Promise<{ ok: boolean; loi?: string; trangThai: AgentMcpTrangThai }>,
+    usage: (cuocId?: string) => ipcRenderer.invoke('agent:usage', cuocId ? { cuocId } : {}) as Promise<AgentUsageCuongMini>,
     mcpTool: (cuocId: string, ten?: string) =>
       ipcRenderer.invoke('agent:mcpTool', { cuocId, ...(ten ? { ten } : {}) }) as Promise<Array<{ server: string; ten: string; moTa: string }>>,
     xuLyHenLo: (cach: 'chay' | 'bo') => ipcRenderer.invoke('agent:xuLyHenLo', { cach }) as Promise<{ n: number }>,

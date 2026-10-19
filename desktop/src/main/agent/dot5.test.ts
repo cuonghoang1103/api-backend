@@ -90,7 +90,11 @@ describe('ctworkVe — đọc kết quả CT Work (không đổ JSON thô)', () 
   it('đoán dự án từ AGENTS.md của LabFlow ("Dự án **LF** (id 2) trong không gian **"LabFlow Studio"** (id 3)")', () => {
     const chu = '## 3. Kế hoạch\n- Dự án **LF** (id 2) trong không gian **"LabFlow Studio"** (id 3) trên cuongthai.com.';
     expect(V.doanDuAnTuTaiLieu(chu)).toEqual({ key: 'LF', projectId: 2, workspaceId: 3, workspace: 'LabFlow Studio' });
-    expect(V.doanDuAnTuTaiLieu('làm LF-1, LF-2 rồi LF-3; BR-01 BR-02 BR-03 BR-04')).toEqual({ key: 'LF', projectId: null, workspaceId: null, workspace: null });
+    /* Đợt 8A: chỉ khi tài liệu ghi RÕ mã dự án CT Work — đếm `LF-12` hay câu "project Foo" không còn đủ. */
+    expect(V.doanDuAnTuTaiLieu('làm LF-1, LF-2 rồi LF-3; BR-01 BR-02 BR-03 BR-04')).toBeNull();
+    expect(V.doanDuAnTuTaiLieu('This project README explains the API project. See ABC-1 ABC-2 ABC-3.')).toBeNull();
+    expect(V.doanDuAnTuTaiLieu('- Dự án CT Work: **NT**')).toEqual({ key: 'NT', projectId: null, workspaceId: null, workspace: null });
+    expect(V.doanDuAnTuTaiLieu('CT Work project key `LF`')?.key).toBe('LF');
     expect(V.doanDuAnTuTaiLieu('không có gì')).toBeNull();
   });
 

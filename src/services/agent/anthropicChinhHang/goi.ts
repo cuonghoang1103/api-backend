@@ -50,7 +50,7 @@ export function phanLoaiLoi(status: number, than: string): LoaiLoiHttp {
 export interface NguCanhGoi {
   userId: number | null;
   /** `language_tutor` (19/10/2026): Trò chuyện cùng CuongMini trong khoá ngoại ngữ — trần $/người/ngày riêng (`ielts/troChuyen`). */
-  viec: 'agent_code' | 'exam_tutor' | 'thu_ket_noi' | 'tim_web' | 'language_tutor';
+  viec: 'agent_code' | 'agent_taitro' | 'exam_tutor' | 'thu_ket_noi' | 'tim_web' | 'language_tutor';
   hang: HangChinhHang;
   model: string;
 }

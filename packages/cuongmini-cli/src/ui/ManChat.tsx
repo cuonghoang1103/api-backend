@@ -11,7 +11,7 @@ import { appendFileSync, readFileSync } from 'node:fs';
 import { Box, Static, measureElement, useApp, useInput, useStdout, type DOMElement } from 'ink';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type MutableRefObject } from 'react';
 import { chuanHoa, dsCauHoi, locPhien, type MucGhi, type PhienCu } from 'ct-lenh';
-import { homNay as homNayCtw, hoiCtworkMotLan, kiemTinCtw, laLoiXacThucCtw, moCtworkTuMcp, veDongCtw, xongViec as xongViecCtw, type DongCtw, type GiaoDienCtw } from '../../../../desktop/src/renderer/features/chat/ctworkLenh';
+import { homNay as homNayCtw, hoiCtworkMotLan, hoiGanDoan, kiemTinCtw, laLoiXacThucCtw, moCtworkTuMcp, veDongCtw, xongViec as xongViecCtw, type DongCtw, type GiaoDienCtw } from '../../../../desktop/src/renderer/features/chat/ctworkLenh';
 import { docAnhDataUrl, guiThangDuoc, tachAnh } from '../anh';
 import { danAnhTuClipboard } from '../anhDan';
 import { timTrinhDuyet } from '../../../cuongmini-core/src/timTrinhDuyet';
@@ -1014,6 +1014,8 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     if (S.dangChay) { vuaChay.current = true; return; }
     if (!vuaChay.current) return;
     vuaChay.current = false;
+    /* Đợt 8A: câu vừa rồi nhắc `KEY-123` khớp một dự án của bạn mà thư mục chưa gắn ⇒ hỏi gắn MỘT lần. */
+    if (S.hoiGanCtw) { const d = S.hoiGanCtw; S.hoiGanCtw = null; hoiGanDoan(giaoDienCtwTuBat(), d, 'key'); return; }
     if (!S.luotCuoi?.xong || S.luotCuoi.loi || S.choChiDan) return;
     void xongViecCtw(giaoDienCtwTuBat(), undefined, { tuDong: true }).catch(() => undefined);
     void baoTinCtw();
@@ -1574,6 +1576,14 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     }
 
     // 6) Ô nhập. Xuống dòng: Shift+Enter (kitty CSI u), Alt+Enter, ctrl+j (LF cũ hoặc CSI u) — `banPhim.ts`.
+    /* Đợt 8A — GỢI Ý BƯỚC TIẾP (như Claude Code): ô nhập TRỐNG + có gợi ý ⇒ Tab ĐIỀN câu đầu vào ô (Enter mới gửi).
+       Không đụng Tab của menu `/`/`@` (menu chỉ mở khi đã gõ chữ — bước 5 ở trên đã xử lý). */
+    if (key.tab && !key.shift && !o.text && !goiY && !S.dangChay && S.goiYTiep.length) {
+      const t = S.goiYTiep[0]!;
+      S.goiYTiep = [];
+      doiO({ text: t, contro: t.length });
+      return;
+    }
     if (laXuongDong(input, key)) { doiO(ST.chen(o, '\n')); return; }
     if (key.return) {
       const r = ST.enter(o);
@@ -1614,6 +1624,8 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     }
     if (input && !key.ctrl && !key.meta) {
       lichSu.current.datLai();
+      /* Đợt 8A: gõ ký tự khác ⇒ chữ mờ gợi ý biến mất (không quay lại khi xoá hết). */
+      if (S.goiYTiep.length) S.goiYTiep = [];
       doiO(ST.chen(o, input));
     }
   });
@@ -1782,7 +1794,7 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
           {S.hoi && hoiRef.current?.khac && hoiRef.current.id === S.hoi.id ? (
             <Text>{`${mau('#fbbf24')('?')} ${dam(S.hoi.cauHoi[hoiRef.current.buoc]?.cauHoi ?? '')} ${mo(L('· gõ câu trả lời · Enter gửi · Esc quay lại lựa chọn', '· type your answer · Enter to send · Esc back to the choices'))}`}</Text>
           ) : null}
-          <ONhapView o={o} rong={rongTrai} cheDo={S.ws?.cheDoQuyen ?? 'keHoach'} dangChay={S.dangChay} goiYMo={Boolean(goiY)} soHangCho={hangCho.length} xuongDong={xuongDong} choChiDan={S.choChiDan} />
+          <ONhapView o={o} rong={rongTrai} cheDo={S.ws?.cheDoQuyen ?? 'keHoach'} dangChay={S.dangChay} goiYMo={Boolean(goiY)} soHangCho={hangCho.length} xuongDong={xuongDong} choChiDan={S.choChiDan} goiYTiep={S.goiYTiep[0] ?? null} />
           {goiY ? <GoiYView ds={goiY.ds} chon={goiY.chon} rong={rongTrai} kieu={goiY.kieu} /> : null}
         </Box>
       )}

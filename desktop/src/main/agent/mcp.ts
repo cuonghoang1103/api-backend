@@ -264,6 +264,10 @@ export interface KetQuaNap {
     tat?: boolean;
     /** Đợt 5: server DỰNG SẴN của app (CT Work), không có dòng trong mcp.json. */
     dungSan?: boolean;
+    /** Đợt 8A: người dùng NGẮT trong phiên này (mcp.json không đổi) — "Kết nối" để nối lại. */
+    ngat?: boolean;
+    /** Đợt 8A: đang nối (chưa về). */
+    dangNoi?: boolean;
   }>;
 }
 
@@ -318,6 +322,8 @@ function themThuTu(ten: string): void {
 async function batVaAp(ten: string, c: CauHinhServer, them: Partial<KetQuaNap['server'][number]>): Promise<void> {
   const g = tangTheHe(ten);
   const kieu = kieuCua(c) ?? undefined;
+  /* Đợt 8A: trạng thái "đang nối" để `/mcp` hiện rõ (không phải "lỗi" hay "không có"). */
+  datTrangThai({ ten, ok: false, soTool: 0, dangNoi: true, ...(kieu ? { kieu } : {}), ...them });
   try {
     const s = await batServer(ten, c);
     if (theHe.get(ten) !== g) { await s.ketNoi.dong().catch(() => {}); return; }
@@ -372,6 +378,8 @@ async function cauHinhHieuLuc(goc: string | null): Promise<{
 async function napThat(goc: string | null): Promise<KetQuaNap> {
   await tatHet();
   const { cauHinh, daTat, tenDuAn, daDuyet } = await cauHinhHieuLuc(goc);
+  /* Đợt 8A: server người dùng NGẮT trong phiên ⇒ không tự nối lại khi nạp cả bộ (chỉ "Kết nối" mới nối). */
+  for (const t of Object.keys(cauHinh)) if (ngatPhien.has(t)) { datTrangThai({ ten: t, ok: false, soTool: 0, ngat: true, loi: 'đã ngắt (phiên này)', ...(dungSanTen.has(t) ? { dungSan: true } : {}) }); delete cauHinh[t]; }
   const ten = Object.keys(cauHinh).slice(0, MAX_SERVER);
   thuTuCauHinh = ten;
 
@@ -411,6 +419,7 @@ async function napThat(goc: string | null): Promise<KetQuaNap> {
  * bộ còn dở của CHÍNH server này bị bỏ nhờ thế hệ (`theHe`).
  */
 export async function napLaiMotServer(ten: string, goc: string | null = null): Promise<KetQuaNap> {
+  ngatPhien.delete(ten);
   tangTheHe(ten);
   const cu = dangChay.get(ten);
   if (cu) { dangChay.delete(ten); thuTu = thuTu.filter((x) => x !== ten); await cu.ketNoi.dong().catch(() => {}); }
@@ -492,15 +501,18 @@ const laGhiCtw = (t: ToolMcp): boolean => tinCay.has(t.server) && !t.chiDoc;
  * Tool MCP gửi model ở lượt của cuộc `cuocId`: bộ hằng ngày + những tool cuộc này đã nạp. `boGhiCtwork` ⇒ bỏ tool GHI của
  * CT Work (thư mục gắn dự án chỉ đọc — model không được mời gọi thứ sẽ bị từ chối).
  */
-export function toolGuiChoCuoc(cuocId: string | null | undefined, o: { boGhiCtwork?: boolean } = {}): ToolMcp[] {
+/* Đợt 8A: `boCtwork` — thư mục CHƯA gắn dự án CT Work ⇒ KHÔNG gửi tool `ctwork` cho model (đỡ ngữ cảnh, model không
+   tự lôi CT Work vào việc không liên quan). Token vẫn trong kho; gắn thư mục (`/ctwork du-an`, `/mcp`) là có lại. */
+const laCtw = (t: ToolMcp): boolean => t.server === 'ctwork';
+export function toolGuiChoCuoc(cuocId: string | null | undefined, o: { boGhiCtwork?: boolean; boCtwork?: boolean } = {}): ToolMcp[] {
   const nap = cuocId ? (daNapCuoc.get(cuocId) ?? []) : [];
   const them = nap.map((ten) => mucLucDaBiet.find((x) => x.ten === ten)).filter((x): x is ToolMcp => !!x);
-  return [...toolDaBiet, ...them].filter((t) => !o.boGhiCtwork || !laGhiCtw(t));
+  return [...toolDaBiet, ...them].filter((t) => (!o.boGhiCtwork || !laGhiCtw(t)) && (!o.boCtwork || !laCtw(t)));
 }
 
 /** Mục lục tool CHƯA gửi schema (tên đầy đủ + một dòng) — ỔN ĐỊNH theo server, không theo cuộc (giữ đệm tiền tố). */
-export function mucLucChoCuoc(o: { boGhiCtwork?: boolean } = {}): Array<{ name: string; mo: string }> {
-  return mucLucDaBiet.filter((t) => !o.boGhiCtwork || !laGhiCtw(t))
+export function mucLucChoCuoc(o: { boGhiCtwork?: boolean; boCtwork?: boolean } = {}): Array<{ name: string; mo: string }> {
+  return mucLucDaBiet.filter((t) => (!o.boGhiCtwork || !laGhiCtw(t)) && (!o.boCtwork || !laCtw(t)))
     .map((t) => ({ name: t.ten, mo: t.moTa.split('\n')[0]!.replace(/\s+/g, ' ').trim().slice(0, 110) }));
 }
 
@@ -776,6 +788,24 @@ async function lietKeTool(kn: KetNoiMcp, ten: string, hanMs: number): Promise<To
     });
   }
   return ra;
+}
+
+/** Đợt 8A: server người dùng ngắt TRONG PHIÊN (bộ nhớ tiến trình — mở lại app là nối như thường). */
+const ngatPhien = new Set<string>();
+
+/**
+ * Đợt 8A — NGẮT một server trong phiên này (`/mcp` → Ngắt kết nối): đóng kết nối, bỏ tool khỏi danh sách gửi model,
+ * KHÔNG đổi mcp.json (muốn tắt hẳn: `batTatServer(ten, false)`). "Kết nối" / "Kết nối lại" = `napLaiMotServer`.
+ */
+export async function ngatServer(ten: string): Promise<KetQuaNap> {
+  ngatPhien.add(ten);
+  tangTheHe(ten);
+  const cu = dangChay.get(ten);
+  if (cu) { dangChay.delete(ten); thuTu = thuTu.filter((x) => x !== ten); await cu.ketNoi.dong().catch(() => {}); }
+  const truoc = trangThaiCuoi.find((x) => x.ten === ten);
+  datTrangThai({ ten, ok: false, soTool: 0, ngat: true, loi: 'đã ngắt (phiên này)', ...(truoc?.kieu ? { kieu: truoc.kieu } : {}), ...(dungSanTen.has(ten) ? { dungSan: true } : {}), ...(truoc?.tuDuAn ? { tuDuAn: true } : {}) });
+  dungLaiDanhSachTool();
+  return { tool: toolDaBiet, server: trangThaiCuoi };
 }
 
 export async function tatHet(): Promise<void> {

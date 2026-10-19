@@ -49,7 +49,7 @@ const KENH_DUOC: ReadonlySet<InvokeChannel> = new Set<InvokeChannel>([
   'agent:traLoiHoi', 'agent:huyCho', 'agent:huyHen', 'agent:henCho', 'agent:dsPhienMang', 'agent:doiTenPhienMang',
   'agent:themTienTo', 'agent:dsWorktree', 'agent:taoWorktree', 'agent:xoaWorktree', 'agent:ctwork', 'agent:mcpNapLai',
   // Đợt 4 (18/10/2026): gõ thêm giữa lượt, điều khiển máy tính, hẹn đã lỡ.
-  'agent:chenTin', 'agent:mayTinh', 'agent:henLo', 'agent:xuLyHenLo', 'agent:mcpTool', 'agent:mcpBatTat',
+  'agent:chenTin', 'agent:mayTinh', 'agent:henLo', 'agent:xuLyHenLo', 'agent:mcpTool', 'agent:mcpBatTat', 'agent:mcpServer', 'agent:usage',
   // Đợt 5 (18/10/2026): CT Work hệ sinh thái — gắn dự án, dòng trạng thái, menu `/ctwork`, `/issue`.
   'agent:ctworkHe',
   // 19/10/2026: token Figma chỉ đọc (kho bí mật của app) + trình duyệt ngầm/hiện (app trả hoTro:false — khung nằm trong app).

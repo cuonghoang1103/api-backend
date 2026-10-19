@@ -14,7 +14,7 @@ import { marked } from 'marked';
 import { LENH_AGENT, chuanHoa, tachLenh, type LenhGach } from 'ct-lenh';
 import { gui, goi, nhanKetQua } from './rpc';
 import { chayLenh, giaoDienCtwVsc, type BoiCanhLenh } from './lenh';
-import { homNay as homNayCtw, hoiCtworkMotLan, kiemTinCtw, laLoiXacThucCtw, veDongCtw, xongViec as xongViecCtw, type DongCtw } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
+import { hoiGanDoan, homNay as homNayCtw, hoiCtworkMotLan, kiemTinCtw, laLoiXacThucCtw, veDongCtw, xongViec as xongViecCtw, type DongCtw } from '../../../desktop/src/renderer/features/chat/ctworkLenh';
 
 type SuKien = { loai: string; [k: string]: any };
 type Muc = { kieu: string; text?: string; ten?: string; tomTat?: string; anh?: string[]; [k: string]: unknown };
@@ -103,6 +103,10 @@ const ICON = {
 
 const logo = document.body.dataset.logo ?? '';
 const S = {
+  /** Đợt 8A: ngữ cảnh % của phiên (cho `/usage`). */
+  nguCanhPhanTram: null as number | null,
+  /** Đợt 8A: gợi ý bước tiếp của lượt vừa xong (chữ mờ trong ô nhập — Tab nhận). */
+  goiY: [] as string[],
   ketNoi: false,
   cheDoKetNoi: 'app' as 'app' | 'docLap',
   phienBan: '',
@@ -734,6 +738,12 @@ function xuLy(e: SuKien): void {
       S.soFileDaSua = Number(e.soFileDaSua ?? S.soFileDaSua);
       if (e.nguCanh && typeof e.nguCanh.phanTram === 'number') capNhatNguCanh(e.nguCanh.phanTram);
       ketLuot(`${S.soFileDaSua ? `${S.soFileDaSua} file đã sửa` : ''}`);
+      /* Đợt 8A: gợi ý bước tiếp (máy chủ tách khỏi câu trả lời) ⇒ chữ mờ ô nhập (Tab) + hàng nút dưới câu trả lời. */
+      S.goiY = Array.isArray(e.goiY) ? (e.goiY as unknown[]).filter((x): x is string => typeof x === 'string' && x.trim().length > 0).slice(0, 3) : [];
+      if (S.goiY.length) nutHeThong(S.goiY.map((g) => ({ nhan: `↳ ${g}`, lam: () => { o.value = g; S.goiY = []; capNhatNut(); tuCao(); o.focus(); } })));
+      capNhatNut();
+      /* Đợt 8A: câu vừa rồi nhắc `KEY-123` khớp dự án mà thư mục chưa gắn ⇒ hỏi gắn MỘT lần. */
+      if (hoiGanCho) { const d = hoiGanCho; hoiGanCho = null; hoiGanDoan(giaoDienCtwVsc(boiCanh()), d, 'key'); }
       if (S.choDuyetKeHoach) veDuyetKeHoach();
       /* Đợt 6: lượt xong bình thường ⇒ gợi ý bước tiếp CT Work đúng luật dự án (lõi chỉ trả khi nhánh của thẻ có thay đổi
          git mới) + một lần kiểm tin theo dõi. */
@@ -808,6 +818,9 @@ function xuLy(e: SuKien): void {
       }
       break;
     }
+    case 'ctwHoiGan':
+      hoiGanCho = (e as { doan?: typeof hoiGanCho }).doan ?? null;
+      break;
     case 'ctwHuongDanNhom':
       the('tin ket mo', `📎 ${esc(e.laAgents ? L(`Đọc hướng dẫn của nhóm: ${e.nguon}`, `Read the team instructions: ${e.nguon}`) : L(`Đọc bối cảnh dự án từ CT Work: ${e.nguon}`, `Read the project context from CT Work: ${e.nguon}`))}`);
       break;
@@ -845,6 +858,7 @@ function L(vi: string, en: string): string { return /^vi/i.test(navigator.langua
 /** Đợt 4 — ô ngữ cảnh % ở thanh dưới + nhắc một lần mỗi mốc 80/95% mỗi việc (như CLI). */
 let daNhacNguCanh = 0;
 function capNhatNguCanh(p: number): void {
+  S.nguCanhPhanTram = Math.round(p);
   const el = document.getElementById('oNguCanh');
   if (el) {
     el.hidden = p <= 0;
@@ -1515,9 +1529,13 @@ function phuLucNhac(text: string): string {
   return `${text}\n\nFile/thư mục tôi nhắc tới (đọc bằng read_file / list_dir trước khi trả lời):\n${ds.map((d) => `- ${d}`).join('\n')}`;
 }
 
+/** Đợt 8A: hỏi gắn CT Work chờ lượt xong (sự kiện `ctwHoiGan`). */
+let hoiGanCho: { key: string; projectId: number | null; workspaceId: number | null; workspace: string | null } | null = null;
+
 async function guiCauHoi(): Promise<void> {
   const text = o.value.trim();
   if (!text) return;
+  S.goiY = [];
   /* Đợt 4 — GÕ THÊM khi agent đang chạy: chèn vào lượt (lõi nối vào kết quả tool kế tiếp). Lệnh `/` đợi lượt xong. */
   if (S.dangChay) {
     if (text.startsWith('/')) { thongBao(L('Đang chạy — lệnh / chạy được sau khi lượt xong (Esc để dừng).', 'Running — slash commands work after the turn ends (Esc to stop).')); return; }
@@ -1592,7 +1610,9 @@ function capNhatNut(): void {
   nutGui.classList.toggle('dung', S.dangChay);
   nutGui.innerHTML = S.dangChay ? ICON.dung : ICON.gui;
   nutGui.title = S.dangChay ? 'Dừng (Esc)' : 'Gửi (Enter)';
-  o.placeholder = S.dangChay ? L('CuongMini đang làm… gõ thêm để chèn vào lượt · Esc để dừng', 'CuongMini is working… type to add to this turn · Esc to stop') : 'Hỏi hoặc giao việc cho CuongMini…';
+  o.placeholder = S.dangChay ? L('CuongMini đang làm… gõ thêm để chèn vào lượt · Esc để dừng', 'CuongMini is working… type to add to this turn · Esc to stop')
+    /* Đợt 8A: gợi ý bước tiếp = chữ mờ (placeholder) — Tab điền vào ô, Enter gửi. */
+    : S.goiY.length ? `${S.goiY[0]}   ⇥ Tab` : 'Hỏi hoặc giao việc cho CuongMini…';
   if (S.dangChay) batTrangThai(); else tatTrangThai();
 }
 
@@ -1810,7 +1830,7 @@ async function thaVao(dt: DataTransfer | null): Promise<void> {
 
 // ─── Sự kiện giao diện ───────────────────────────────────────────
 
-o.addEventListener('input', () => { tuCao(); goiYKhiGo(); });
+o.addEventListener('input', () => { if (o.value && S.goiY.length) { S.goiY = []; capNhatNut(); } tuCao(); goiYKhiGo(); });
 o.addEventListener('click', () => goiYKhiGo());
 o.addEventListener('keydown', (e) => {
   if (menuMo && !menu.querySelector('.loc') && phimMenu(e)) return;
@@ -1822,6 +1842,15 @@ o.addEventListener('keydown', (e) => {
       if (b && !b.disabled) { e.preventDefault(); b.click(); return; }
     }
     if (tc && e.key === 'Escape' && !S.dangChay) { e.preventDefault(); tc.querySelectorAll('button').forEach((x) => { x.disabled = true; }); delete tc.dataset.theChon; return; }
+  }
+  /* Đợt 8A: ô TRỐNG + có gợi ý bước tiếp ⇒ Tab điền câu đầu (Enter mới gửi). Menu `/`/`@` đã xử lý ở trên. */
+  if (e.key === 'Tab' && !e.shiftKey && !o.value && S.goiY.length && !S.dangChay) {
+    e.preventDefault();
+    o.value = S.goiY[0]!;
+    S.goiY = [];
+    capNhatNut();
+    tuCao();
+    return;
   }
   if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); void guiCauHoi(); return; }
   if (e.key === 'Escape' && S.dangChay) { e.preventDefault(); gui({ loai: 'dung' }); }

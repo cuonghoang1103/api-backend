@@ -163,7 +163,7 @@ export type CheDoNhap = 'thuong' | 'shell' | 'ghiNho';
 /** Dòng đầu bắt đầu bằng `!` ⇒ chạy shell; `# ` ⇒ ghi nhớ quy ước (đổi màu ô nhập như Claude Code). */
 export const cheDoNhapCua = (text: string): CheDoNhap => (text.startsWith('!') ? 'shell' : /^#\s/.test(text) ? 'ghiNho' : 'thuong');
 
-export function ONhapView({ o, rong, cheDo, dangChay, goiYMo, soHangCho, xuongDong, choChiDan }: { o: ONhap; rong: number; cheDo: string; dangChay: boolean; goiYMo: boolean; soHangCho: number; xuongDong?: string; /** Đợt 6: lượt vừa dừng chờ chỉ dẫn ("Không, và bảo CuongMini làm khác đi"). */ choChiDan?: boolean }) {
+export function ONhapView({ o, rong, cheDo, dangChay, goiYMo, soHangCho, xuongDong, choChiDan, goiYTiep }: { o: ONhap; rong: number; cheDo: string; dangChay: boolean; goiYMo: boolean; soHangCho: number; xuongDong?: string; /** Đợt 6: lượt vừa dừng chờ chỉ dẫn ("Không, và bảo CuongMini làm khác đi"). */ choChiDan?: boolean; /** Đợt 8A: gợi ý bước tiếp — chữ mờ khi ô trống, Tab nhận. */ goiYTiep?: string | null }) {
   const cd = moTaCheDo(cheDo);
   const trong = rong - 6;
   const kieu = cheDoNhapCua(o.text);
@@ -189,7 +189,12 @@ export function ONhapView({ o, rong, cheDo, dangChay, goiYMo, soHangCho, xuongDo
     : choChiDan
       ? L('CuongMini nên làm gì khác? Gõ chỉ dẫn rồi Enter…', 'What should CuongMini do instead? Type and press Enter…')
       : L('Hỏi hoặc giao việc…  / lệnh · @ file · ! shell · # ghi nhớ', 'Ask or give a task…  / commands · @ files · ! shell · # memory');
-  const hien = o.text ? ra.join('\n') : `${mau(THUONG_HIEU.timNhat)('❯')} ${dao(' ')}${mo(catVua(goi, trong - 2))}`;
+  /* Đợt 8A: có gợi ý bước tiếp ⇒ chữ MỜ thay chỗ câu nhắc thường, kèm "⇥ tab" (Tab điền vào ô, Enter gửi). */
+  const coGoiY = !o.text && !dangChay && !choChiDan && Boolean(goiYTiep);
+  const duoiTab = L('  ⇥ tab', '  ⇥ tab');
+  const hien = o.text ? ra.join('\n')
+    : coGoiY ? `${mau(THUONG_HIEU.timNhat)('❯')} ${dao(' ')}${mo(catVua(goiYTiep!, trong - 2 - duoiTab.length))}${mo(duoiTab)}`
+      : `${mau(THUONG_HIEU.timNhat)('❯')} ${dao(' ')}${mo(catVua(goi, trong - 2))}`;
   const nhanKieu = kieu === 'shell' ? mau('#fbbf24')(L(' chế độ shell — Enter chạy ngay ở thư mục dự án, không qua AI', ' shell mode — Enter runs it in the project folder, no AI'))
     : kieu === 'ghiNho' ? mau('#22d3ee')(L(' ghi nhớ — Enter lưu thành quy ước dự án (AGENTS.md)', ' memory — Enter saves a project rule (AGENTS.md)')) : '';
   const vienMau = kieu === 'shell' ? '#fbbf24' : kieu === 'ghiNho' ? '#22d3ee' : goiYMo ? THUONG_HIEU.tim : cd.id === 'boQuaHet' ? '#f87171' : XAM;

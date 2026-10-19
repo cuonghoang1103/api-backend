@@ -43,7 +43,7 @@ export const LENH_AGENT: LenhGach[] = [
   { ten: '/effort', mo: 'Đổi mức nỗ lực (số bước, agent phụ)', khac: ['/noluc'], thamSo: '[thấp|vừa|cao|rất cao|tối đa|ultracode]', nhom: 'phien' },
   { ten: '/compact', mo: 'Tóm tắt phần cũ NGAY để nhẹ ngữ cảnh (vẫn giữ bản đầy đủ để đọc)', khac: ['/tomtat', '/nen'], thamSo: '[ghi chú cần giữ]', nhom: 'phien' },
   { ten: '/context', mo: 'Ngữ cảnh đã dùng: đề bài, lịch sử, kết quả tool, ảnh', khac: ['/ngucanh'], nhom: 'phien' },
-  { ten: '/usage', mo: 'Hạn mức 5 giờ, lúc hồi, trần tiền ngày, key gia hạn', khac: ['/hanmuc'], nhom: 'phien' },
+  { ten: '/usage', mo: 'Hạn mức thật: trần $ theo model, ví 5 giờ, nhóm/tài trợ, gia hạn', khac: ['/hanmuc'], nhom: 'phien' },
   { ten: '/cost', mo: 'Tiền đã tiêu trong việc này', khac: ['/tien', '/chiphi'], nhom: 'phien' },
   { ten: '/status', mo: 'Phiên bản app, cổng đang dùng, mạng, dự án, nhánh git', khac: ['/trangthai'], nhom: 'phien' },
   { ten: '/plan', mo: 'Chỉ lập kế hoạch (không sửa, không chạy lệnh) — duyệt xong mới làm', khac: ['/kehoach'], thamSo: '<việc cần làm>', nhom: 'lam-viec' },
@@ -194,6 +194,100 @@ export function moTaUsage(u: DuLieuUsage, tokenMoiViec = 141_000): string {
       : `- Trần tiền ngày của máy chủ: ${u.tienNgay.phanTram}%${u.tienNgay.catViecNen ? ' · đã cắt việc chạy nền' : ''}`);
   }
   dong.push(`- Key gia hạn: ${u.coKeyGiaHan ? '**có** — nhập ở nút bên dưới khi hết hạn mức' : 'chưa bật (quản trị viên chưa đặt key)'}`);
+  return dong.join('\n');
+}
+
+// ─── /usage đợt 8A — hạn mức THẬT (một route máy chủ, app chỉ vẽ) ───
+
+/** Số của phiên (máy chủ gửi trong khung `done`/`tienTrinh`: ngữ cảnh % + tiền mỗi lượt, app cộng). */
+export interface UsagePhien { nguCanhPhanTram?: number | null; tienPhien?: number | null }
+
+const usd = (n: unknown): string => {
+  const x = Number(n ?? 0);
+  return `$${x < 1 ? x.toFixed(3) : x.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
+};
+const pc = (da: number, tran: number | null | undefined): number => (tran && tran > 0 ? Math.min(100, Math.round((da / tran) * 100)) : 0);
+
+/**
+ * Vẽ `data.cuongMini` của `GET /agent/usage` (`src/services/agent/usageCuongMini.ts`). `null` khi máy chủ cũ (không có
+ * `cuongMini`) ⇒ chỗ gọi lùi về `moTaUsage`. Song ngữ theo `ngonNgu`. Mọi số là của máy chủ — chỉ định dạng.
+ */
+export function moTaUsage2(d: unknown, phien: UsagePhien = {}, ngonNgu: 'vi' | 'en' = 'vi'): string | null {
+  const u = (d && typeof d === 'object' ? (d as Record<string, any>).cuongMini : null) as Record<string, any> | null;
+  if (!u || u.phienBan !== 2) return null;
+  const L = (vi: string, en: string) => (ngonNgu === 'en' ? en : vi);
+  const dong: string[] = [];
+  const m = u.model ?? {};
+  const tenGoi: Record<string, string> = { admin: L('admin', 'admin'), pro: 'Pro', key_terminal: L('key terminal', 'terminal key'), nhom: L('hạn mức nhóm', 'team allowance'), free: L('miễn phí', 'free') };
+  dong.push(`**${L('Hạn mức CuongMini', 'CuongMini usage')}** · ${L('gói', 'plan')} ${tenGoi[u.goi] ?? u.goi}`, '');
+  // Model đang chọn
+  const tenModel = `${m.ten ?? '?'}${m.dangChay ? L(` (đang chạy ${m.dangChay})`, ` (running ${m.dangChay})`) : ''}`;
+  if (m.loai === 'tra_tron') {
+    dong.push(`- **${tenModel}** — ${L('gói trọn, không tính $', 'flat-rate, no $ cap')} · ${L('hôm nay', 'today')} ${so(m.buocHomNay ?? 0)} ${L('bước', 'steps')}`);
+  } else if (m.khongGioiHan) {
+    dong.push(`- **${tenModel}** — ${L('không giới hạn', 'unlimited')} · ${L('hôm nay', 'today')} ${usd(m.daDungNgay)} · ${L('tháng', 'month')} ${usd(m.daDungThang)}`);
+  } else {
+    const ngay = m.tranNgay === null ? L('không trần', 'no cap') : `${usd(m.daDungNgay)} / ${usd(m.tranNgay)}`;
+    const thang = m.tranThang === null ? L('không trần', 'no cap') : `${usd(m.daDungThang)} / ${usd(m.tranThang)}`;
+    dong.push(`- **${tenModel}** ${thanh(Math.max(pc(m.daDungNgay, m.tranNgay), pc(m.daDungThang, m.tranThang)), 12)}`);
+    dong.push(`  - ${L('Hôm nay', 'Today')}: ${ngay}${m.giaHanNgay ? L(` (gồm +${usd(m.giaHanNgay)} gia hạn)`, ` (incl. +${usd(m.giaHanNgay)} extension)`) : ''}`);
+    dong.push(`  - ${L('Tháng này', 'This month')}: ${thang}${m.giaHanThang ? L(` (gồm +${usd(m.giaHanThang)} gia hạn)`, ` (incl. +${usd(m.giaHanThang)} extension)`) : ''}`);
+  }
+  if (u.chinhHang && !u.chinhHang.khongGioiHan) {
+    const c = u.chinhHang;
+    dong.push(`  - ${L('Nhóm Code Max', 'Code Max group')} (${c.hang === 'free' ? L('miễn phí', 'free') : L('cao', 'premium')}): ${L('hôm nay', 'today')} ${usd(c.daDungNgay)}${c.tranNgay !== null ? ` / ${usd(c.tranNgay)}` : ''} · ${L('tháng', 'month')} ${usd(c.daDungThang)}${c.tranThang !== null ? ` / ${usd(c.tranThang)}` : ''}`);
+  }
+  // Ví 5 giờ
+  if (u.vi) {
+    const v = u.vi;
+    dong.push(v.khongGioiHan
+      ? `- ${L(`Ví AI Code ${v.soGio} giờ`, `AI Code ${v.soGio}-hour wallet`)}: ${usd(v.daDung)} (${L('không giới hạn', 'unlimited')})`
+      : `- ${L(`Ví AI Code ${v.soGio} giờ`, `AI Code ${v.soGio}-hour wallet`)} ${thanh(v.phanTram, 12)} ${usd(v.daDung)} / ${usd(v.tran)}${v.giaHan ? L(` (gồm +${usd(v.giaHan)} gia hạn)`, ` (incl. +${usd(v.giaHan)} extension)`) : ''}${v.hoiLucNao && v.phanTram > 0 ? L(` · bắt đầu hồi ${gio(v.hoiLucNao)}`, ` · refills from ${gio(v.hoiLucNao)}`) : ''}`);
+  }
+  // Nhóm / admin tài trợ
+  const n = u.nhom;
+  if (n) {
+    if (n.loai === 'taiTro') {
+      dong.push(`- ${L('Dự án', 'Project')} **${n.key}** — ${L(`admin ${n.nhaTaiTro} tài trợ, KHÔNG trần $`, `sponsored by admin ${n.nhaTaiTro}, NO $ cap`)} · ${L('bạn dùng hôm nay', 'you today')} ${usd(n.daDungNgay)} · ${L('tháng', 'month')} ${usd(n.daDungThang)}`);
+      if (u.taiTro) dong.push(`  - ${L('Chống spam', 'Anti-spam')}: ${u.taiTro.phut}/${u.taiTro.tranPhut} ${L('câu/phút', 'q/min')} · ${u.taiTro.ngay}/${u.taiTro.tranNgay} ${L('câu/ngày', 'q/day')}`);
+    } else if (n.loai === 'nhom') {
+      dong.push(`- ${L('Hạn mức nhóm', 'Team allowance')} **${n.key}** (${L('tài trợ', 'sponsor')}: ${n.nhaTaiTro}) ${thanh(pc(n.daDungNgay, n.tranNgay), 12)}`);
+      dong.push(`  - ${L('Bạn hôm nay', 'You today')}: ${usd(n.daDungNgay)} / ${usd(n.tranNgay)} · ${L('cả nhóm tháng này', 'whole team this month')}: ${usd(n.daDungThangNhom)} / ${usd(n.tranThangNhom)}`);
+    } else if (n.loai === 'rieng') {
+      dong.push(`- ${L('Dự án CT Work đang gắn: dùng hạn mức riêng của bạn', 'Bound CT Work project: uses your own allowance')}`);
+    } else if (n.lyDo) {
+      dong.push(`- ${L('Hạn mức nhóm: không áp dụng', 'Team allowance: not available')} — ${String(n.lyDo).split(' / ')[ngonNgu === 'en' ? 1 : 0] ?? n.lyDo}`);
+    }
+  }
+  // Default chống spam
+  const df = u.default;
+  if (df) dong.push(`- CuongMini Default: ${df.phut}/${df.tranPhut || '∞'} ${L('câu/phút', 'q/min')}${df.tranNgay ? ` · ${df.ngay}/${df.tranNgay} ${L('câu/ngày', 'q/day')}` : ` · ${df.ngay} ${L('câu hôm nay', 'today')}`}`);
+  // Gia hạn
+  if (u.giaHan) dong.push(`- ${L('Gia hạn tháng này', 'Extensions this month')}: ${u.giaHan.soLanKy} ${L('lần', 'times')}${u.giaHan.usdKy ? ` (+${usd(u.giaHan.usdKy)})` : ''}${u.giaHan.dangCho ? L(` · ${u.giaHan.dangCho} yêu cầu chờ duyệt`, ` · ${u.giaHan.dangCho} pending`) : ''}`);
+  // Phiên
+  const p = phien;
+  if (typeof p.nguCanhPhanTram === 'number' || typeof p.tienPhien === 'number') {
+    dong.push(`- ${L('Phiên này', 'This session')}: ${typeof p.nguCanhPhanTram === 'number' ? `${L('ngữ cảnh', 'context')} ${p.nguCanhPhanTram}%` : ''}${typeof p.nguCanhPhanTram === 'number' && typeof p.tienPhien === 'number' ? ' · ' : ''}${typeof p.tienPhien === 'number' ? `${usd(p.tienPhien)}` : ''}`);
+  }
+  // Admin
+  const a = u.admin;
+  if (a) {
+    dong.push('', `**${L('Admin — chi tiêu', 'Admin — spend')}**`, '');
+    if (Array.isArray(a.keys) && a.keys.length) {
+      dong.push(`| ${L('Khoá Anthropic', 'Anthropic key')} | ${L('Ngân sách', 'Budget')} | ${L('Đã dùng', 'Used')} | ${L('Còn', 'Left')} |`, '|---|---|---|---|');
+      for (const k of a.keys) dong.push(`| ${k.ten}${k.trangThai !== 'hoatDong' ? ` (${k.trangThai})` : k.boQua ? ` (${k.boQua})` : ''} | ${k.nganSachUsd ? usd(k.nganSachUsd) : '—'} | ${usd(k.daDungUsd)} | ${k.conPhanTram === null ? '—' : `${k.conPhanTram}%`} |`);
+      dong.push('');
+    }
+    if (Array.isArray(a.theoModel) && a.theoModel.length) {
+      dong.push(`| Model | ${L('Hôm nay', 'Today')} | ${L('Tháng', 'Month')} | ${L('Bước hôm nay', 'Steps today')} |`, '|---|---|---|---|');
+      for (const r of a.theoModel.slice(0, 14)) dong.push(`| ${r.ten} | ${usd(r.homNayUsd)} | ${usd(r.thangUsd)} | ${so(r.buocHomNay)} |`);
+      dong.push('');
+    }
+    dong.push(`- CuongMini Core (modelapi): ${L('hôm nay', 'today')} ${usd(a.modelapi?.homNayUsd)} · ${L('tháng', 'month')} ${usd(a.modelapi?.thangUsd)}`);
+    dong.push(`- CuongMini Code Max: ${L('hôm nay', 'today')} ${usd(a.chinhHang?.homNayUsd)} · ${L('tháng', 'month')} ${usd(a.chinhHang?.thangUsd)}`);
+    dong.push(`- CuongMini Classic (${L('gói trọn', 'flat-rate')}): ${L('hôm nay', 'today')} ${so(a.rambo?.cauHoiHomNay ?? 0)} ${L('câu', 'questions')} · ${so(a.rambo?.buocHomNay ?? 0)} ${L('bước', 'steps')}`);
+  }
+  dong.push('', L('_Số lấy từ sổ máy chủ lúc này (USD là số tự đo theo bảng giá)._', '_Numbers come from the server ledger right now (USD is self-measured from the price table)._'));
   return dong.join('\n');
 }
 

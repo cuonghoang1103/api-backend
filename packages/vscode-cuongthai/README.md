@@ -13,6 +13,13 @@ Bộ máy là **đúng AI Code của app CuongThai**, nên chất lượng và t
 - Đính kèm ảnh (dán thẳng vào ô chat, cả ảnh HEIC của iPhone)
 - Tự cài git/GitHub CLI, kết nối GitHub một bước, commit + đẩy giúp người mới
 
+## Mới ở 0.8.3
+
+- **Gợi ý bước tiếp**: xong một lượt, câu gợi ý hiện mờ trong ô chat — **Tab** điền, **Enter** gửi; thêm hàng nút gợi ý bấm được. *Next-step suggestions: dim placeholder (Tab) + clickable chips.*
+- **`/usage` đúng** theo máy chủ: trần $ theo model, ví 5 giờ, hạn mức nhóm / admin tài trợ, lượt Default, gia hạn, ngữ cảnh + tiền phiên. Admin web thấy chi tiêu từng khoá. *Real usage from the server.*
+- **CT Work chỉ bật ở thư mục thuộc dự án** (gắn khi bạn chủ động, `/ctwork bo-gan` để gỡ); thư mục lạ chỉ có dòng gợi ý "gõ /ctwork". *CT Work only in bound folders.*
+- **`/mcp`**: mỗi server có Ngắt · Kết nối lại · Kết nối · Tắt hẳn; CT Work thêm đổi dự án · đổi quyền · bỏ gắn · đăng xuất. *Per-server MCP management.*
+
 ## Làm việc như Claude Code
 
 - **Lịch sử việc** (🕘 trên đầu khung): mở lại việc cũ, ghim, đổi tên, xoá

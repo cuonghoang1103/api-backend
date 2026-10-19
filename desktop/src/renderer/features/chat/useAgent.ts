@@ -169,6 +169,10 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
   const [buoc, datBuoc] = useState<{ nay: number; tran: number } | null>(null);
   const [hanMuc, datHanMuc] = useState<AgentQuota | null>(null);
   const [tienPhien, datTienPhien] = useState(0);
+  /** Đợt 8A: gợi ý bước tiếp (`xong.goiY`) — chữ mờ ô nhập (Tab) + hàng nút. */
+  const [goiYTiep, datGoiYTiep] = useState<string[]>([]);
+  /** Đợt 8A: câu vừa rồi nhắc `KEY-123` khớp dự án mà thư mục chưa gắn ⇒ hỏi gắn sau lượt. */
+  const [hoiGanCtw, datHoiGanCtw] = useState<{ key: string; projectId: number | null; workspaceId: number | null; workspace: string | null } | null>(null);
   /** Tiền các vòng của lượt đang chạy (`tienTrinh`) — cộng vào khi lượt kết thúc theo bất kỳ đường nào. */
   const tienLuotRef = useRef(0);
   const [soFileDaSua, datSoFileDaSua] = useState(0);
@@ -434,6 +438,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           datKeHoach(e.viec);
           break;
         case 'xong':
+          datGoiYTiep(Array.isArray(e.goiY) ? e.goiY.slice(0, 3) : []);
           datSoLanXong((n) => n + 1);
           if (e.nguCanh) datNguCanh(e.nguCanh);
           if (e.hanMuc) datHanMuc(e.hanMuc);
@@ -494,6 +499,9 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
               return [...sau, { kieu: 'loi', ma: 'DA_CHEN', text: dichP('↩ {n} tin bạn gõ thêm chưa kịp tới agent — đã trả về ô nhập.', { n: String(e.ds.length) }) }];
             });
           }
+          break;
+        case 'ctwHoiGan':
+          datHoiGanCtw(e.doan);
           break;
         case 'ctwHuongDanNhom':
           datMuc((truoc) => [...truoc, { kieu: 'loi', ma: 'DA_CHEN', text: e.laAgents ? dichP('📎 Đọc hướng dẫn của nhóm: {nguon}', { nguon: e.nguon }) : dichP('📎 Đọc bối cảnh dự án từ CT Work: {nguon}', { nguon: e.nguon }) }]);
@@ -647,6 +655,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
    * `/review src/main`). Bản lưu phiên giữ chữ GỬI ĐI — đó là thứ model đọc.
    */
   const gui = useCallback(async (text: string, anh?: string[], tuyChon?: { chiDoc?: boolean; hienThi?: string }) => {
+    datGoiYTiep([]);
     const cau = window.cuongthai;
     if (!cau || dangGui.current) return;
     dangGui.current = true;
@@ -801,6 +810,8 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     trangThai: { muc, dangChay, dangNghi, suyNghi, buoc, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh, cucBo, henCho } satisfies TrangThaiAgent,
     /* Đợt 6 */
     tinTraVe, xoaTinTraVe: () => datTinTraVe([]), soLanXong, choChiDan, boChoChiDan: () => datChoChiDan(false),
+    /* Đợt 8A */
+    goiYTiep, boGoiYTiep: () => datGoiYTiep([]), hoiGanCtw, xongHoiGanCtw: () => datHoiGanCtw(null),
     traLoiHoi,
     huyCho,
     huyHen,

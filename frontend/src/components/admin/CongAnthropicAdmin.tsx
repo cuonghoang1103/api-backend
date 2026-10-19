@@ -12,6 +12,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import CuongMiniNgonNguAdmin from './CuongMiniNgonNguAdmin';
+import TaiTroAdminCongTac from '@/components/cuongmini/TaiTroAdminCongTac';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import {
   ArrowDown, ArrowUp, Info, Loader2, Plug, Plus, RefreshCw, Search, Trash2,
@@ -137,6 +138,8 @@ export default function CongAnthropicAdmin() {
       <MaGiaHanTien />
       {tq.rambo && <CongTacRambo rambo={tq.rambo} classic={tq.bangClassic ?? []} onDoi={(rambo) => setTq({ ...tq, rambo })} />}
       {tq.defaultGioiHan && <ChongSpamDefault gh={tq.defaultGioiHan} onDoi={(defaultGioiHan) => setTq({ ...tq, defaultGioiHan })} />}
+      {/* Đợt 8A: admin web tài trợ CuongMini cho mọi dự án CT Work mình tham gia (không trần $, chỉ chống spam). */}
+      <TaiTroAdminCongTac />
       <ThamSo tq={tq} onDoi={(serverTool) => setTq({ ...tq, serverTool })} />
       <TranGoiForm tranGoi={tq.tranGoi} onXong={(t) => setTq({ ...tq, tranGoi: t })} />
       <CuongMiniNgonNguAdmin />

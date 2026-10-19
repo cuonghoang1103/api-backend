@@ -199,9 +199,10 @@ test('/mcp: thẻ lựa chọn đủ 5 hành động, chọn được từng cá
     assert.ok(chonSv.ds.some((x) => x.giaTri === 'ctwork'));
     await chonSv.khiChon('ctwork');
     const sv = g.the.at(-1)!;
-    assert.ok(sv.ds.some((x) => x.giaTri === 'tat'), 'server đang chạy ⇒ có "Tắt server này"');
-    await sv.khiChon('tat');
-    assert.match(JSON.stringify(g.kenh.filter(([k]) => k === 'agent:mcpBatTat')), /"ten":"ctwork","bat":false/);
+    /* Đợt 8A: server đang chạy ⇒ Ngắt (phiên) · Kết nối lại · Tắt hẳn (+ 4 việc CT Work). */
+    assert.deepEqual(sv.ds.slice(0, 3).map((x) => x.giaTri), ['ngat', 'noiLai', 'tatHan'], 'server đang chạy ⇒ Ngắt · Kết nối lại · Tắt hẳn');
+    await sv.khiChon('tatHan');
+    assert.match(JSON.stringify(g.kenh.filter(([k]) => k === 'agent:mcpServer')), /"ten":"ctwork","viec":"tatHan"/);
   }
   datNgonNgu('vi');
 });

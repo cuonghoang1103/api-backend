@@ -109,9 +109,11 @@ Không bịa thứ không có trong đoạn đọc. Tiếng Việt (giữ nguyê
 /** Lời gọi tóm tắt: (lời dặn hệ thống, nội dung) ⇒ chữ hoặc `null`. */
 export type GoiTomTat = (system: string, user: string) => Promise<string | null>;
 
-async function goiTomTat(dauVao: string, banCu: string | null, ghiChu?: string, goi?: GoiTomTat): Promise<string | null> {
-  const chu = dauVao.length > TRAN_VAO
-    ? `${dauVao.slice(0, TRAN_VAO / 3)}\n[… lược bớt phần giữa …]\n${dauVao.slice(-(TRAN_VAO * 2) / 3)}`
+async function goiTomTat(dauVao: string, banCu: string | null, ghiChu?: string, goi?: GoiTomTat & { tranVao?: number }): Promise<string | null> {
+  /* Đợt 8A: trần vào theo cửa sổ của model tóm tắt (rambo 200K token ⇒ 300K ký tự) — 400K ký tự cố định tự nó vượt cửa sổ. */
+  const tranVao = Math.min(TRAN_VAO, goi?.tranVao ?? TRAN_VAO);
+  const chu = dauVao.length > tranVao
+    ? `${dauVao.slice(0, Math.floor(tranVao / 3))}\n[… lược bớt phần giữa …]\n${dauVao.slice(-Math.floor((tranVao * 2) / 3))}`
     : dauVao;
   const than = banCu
     ? `BẢN TÓM TẮT ĐÃ CÓ (phần trước đó):\n${banCu}\n\nPHẦN MỚI CẦN GỘP VÀO:\n${chu}\n\nViết lại MỘT bản tóm tắt gộp cả hai.`
@@ -174,7 +176,7 @@ export async function ghiNhoLuotDaBo(
   /** Lời dặn của `/compact <ghi chú>` — đổi khoá đệm, không lẫn với bản không dặn. */
   ghiChu?: string,
   /** Lời gọi bằng model của cuộc (`goiTomTatBangModel`). Bỏ trống ⇒ model rẻ (đường cũ). */
-  goi?: GoiTomTat & { maModel?: string },
+  goi?: GoiTomTat & { maModel?: string; tranVao?: number },
 ): Promise<GhiNhoLuotCu> {
   const daBo = messagesGoc.slice(0, messagesGoc.length - soConLai);
   const dauTien = messagesGoc.find((m) => m.role === 'user');
@@ -208,7 +210,7 @@ export async function ghiNhoLuotDaBo(
  * (feature `agent`, đúng model) ⇒ tính vào trần theo model của người dùng.
  */
 /** `step` (đợt 6): dấu hạn mức NHÓM — tóm tắt của lượt dùng hạn mức nhóm cũng tính vào trần nhóm. */
-export function goiTomTatBangModel(muc: MucModel, userId: number, step?: string, o: { khongLui?: boolean } = {}): GoiTomTat & { maModel: string } {
+export function goiTomTatBangModel(muc: MucModel, userId: number, step?: string, o: { khongLui?: boolean } = {}): GoiTomTat & { maModel: string; tranVao: number } {
   const goi = async (system: string, user: string): Promise<string | null> => {
     const thu = async (m: MucModel): Promise<string> => {
       if (m.cong === 'rambo') {
@@ -263,7 +265,7 @@ export function goiTomTatBangModel(muc: MucModel, userId: number, step?: string,
       return thu(thay);
     }
   };
-  return Object.assign(goi, { maModel: muc.id });
+  return Object.assign(goi, { maModel: muc.id, tranVao: Math.round((muc.cuaSoToken > 0 ? muc.cuaSoToken : 200_000) * 1.5) });
 }
 
 async function ghiSoTomTat(userId: number, model: string, vao: number, ra: number, usd?: number, step?: string): Promise<void> {

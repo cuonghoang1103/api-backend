@@ -1438,6 +1438,16 @@ export interface AgentCuocDangMo {
 }
 
 /** Trạng thái các server MCP người dùng đã cắm. */
+/**
+ * Đợt 8A — `GET /agent/usage` (`data`): trường cũ (bể token 5 giờ) + `cuongMini` (hạn mức THẬT đang chặn — xem
+ * `src/services/agent/usageCuongMini.ts`). Chép lỏng: giao diện chỉ vẽ, `lenhGach.ts › moTaUsage2` đọc phòng thủ.
+ */
+export interface AgentUsageCuongMini {
+  daDung: number; tran: number; phanTram: number; conLai: number; hoiLucNao: string | null;
+  cuongMini?: Record<string, unknown> | null;
+  [k: string]: unknown;
+}
+
 export interface AgentMcpTrangThai {
   /** Đường dẫn file cấu hình — hiện lên để người dùng biết sửa ở đâu. */
   duongDan: string;
@@ -1457,6 +1467,10 @@ export interface AgentMcpTrangThai {
     tat?: boolean;
     /** Đợt 5: server DỰNG SẴN của app (CT Work) — không có dòng trong mcp.json. */
     dungSan?: boolean;
+    /** Đợt 8A: đã ngắt trong phiên này (mcp.json không đổi). */
+    ngat?: boolean;
+    /** Đợt 8A: đang nối. */
+    dangNoi?: boolean;
   }>;
   soTool: number;
   hanMuc: { daDung: number; tran: number };
@@ -1649,6 +1663,8 @@ export type AgentUiEvent = { cuocId: string } & (
   | { loai: 'dinhKemCtwork'; khoa: string[] }
   /** Đợt 6: đã đọc hướng dẫn của NHÓM từ CT Work (trang "AGENTS.md — …" / bối cảnh tự đọc) — một lần mỗi cuộc. */
   | { loai: 'ctwHuongDanNhom'; nguon: string; laAgents: boolean }
+  /** Đợt 8A: thư mục chưa gắn, câu nhắc `KEY-123` khớp dự án của người dùng ⇒ hỏi gắn MỘT lần (sau khi lượt xong). */
+  | { loai: 'ctwHoiGan'; doan: { key: string; projectId: number | null; workspaceId: number | null; workspace: string | null } }
   /** Đợt 6: tin gõ giữa lượt CHƯA tới model (Esc / lỗi) ⇒ đặt lại vào ô nhập. */
   | { loai: 'traChen'; ds: string[] }
   /**
@@ -1681,6 +1697,8 @@ export type AgentUiEvent = { cuocId: string } & (
   | {
       loai: 'xong'; hanMuc: AgentQuota | null; tienUsd: number; daLuoc: number; soFileDaSua: number;
       nguCanh?: AgentNguCanh;
+      /** Đợt 8A: 1–3 gợi ý bước tiếp (model viết, máy chủ tách) — chữ mờ trong ô nhập (Tab nhận) + hàng nút. */
+      goiY?: string[];
     }
   /**
    * `coKeyGiaHan` chỉ đi kèm `AGENT_QUOTA_EXCEEDED` (02/10/2026): admin đã đặt
@@ -1778,6 +1796,8 @@ export interface AgentCtworkHeRa {
   ok: boolean; loi?: string; md?: string;
   /** goiY: nên hỏi gì (một lần): kết nối · cấp lại token · gắn dự án đoán được. */
   hoi?: 'ketNoi' | 'capLai' | 'ganDuAn' | 'chonDuAn' | null;
+  /** Đợt 8A: chưa nối CT Work + thư mục chưa gắn ⇒ chỉ một dòng gợi ý nhẹ "gõ /ctwork" (không thẻ chặn). */
+  goiYNhe?: boolean;
   doan?: { key: string; projectId: number | null; workspaceId: number | null; workspace: string | null } | null;
   gan?: { key: string; projectId: number | null; workspaceId: number | null; ref?: string; ten?: string | null; workspace?: string | null } | null;
   ds?: Array<{ key: string; ten: string; id: number | null; workspaceId: number | null; workspace: string | null; vaiTro: string | null; soMo: number | null }>;
@@ -2413,6 +2433,10 @@ export const INVOKE_CHANNELS = {
   /* Đợt 4: `/mcp` dạng menu — xem tool của một server, bật/tắt một server. */
   'agent:mcpTool': z.object({ cuocId: z.string().min(1).optional(), ten: z.string().min(1).max(64).optional() }),
   'agent:mcpBatTat': z.object({ cuocId: z.string().min(1).optional(), ten: z.string().min(1).max(64), bat: z.boolean() }),
+  /* Đợt 8A: quản lý MỘT server — ngắt (phiên) · kết nối lại / kết nối · tắt hẳn (mcp.json `disabled`). */
+  'agent:mcpServer': z.object({ cuocId: z.string().min(1).optional(), ten: z.string().min(1).max(64), viec: z.enum(['ngat', 'noiLai', 'noi', 'tatHan']) }),
+  /* Đợt 8A: `/usage` — lõi hỏi máy chủ kèm model đang chọn + dự án CT Work của phiên (app chỉ vẽ). */
+  'agent:usage': z.object({ cuocId: z.string().min(1).optional() }),
   'agent:mcpDuyetDuAn': agentCuocSchema,
   'agent:mcpMoCauHinh': null,
   'agent:hookMoCauHinh': null,
@@ -3125,6 +3149,10 @@ export interface DesktopBridge {
     mayTinh(bat?: boolean): Promise<AgentMayTinh>;
     henLo(): Promise<{ ds: AgentHenLo[] }>;
     mcpBatTat(cuocId: string, ten: string, bat: boolean): Promise<{ ok: boolean; loi?: string; trangThai?: AgentMcpTrangThai }>;
+    /** Đợt 8A: ngắt (phiên) · kết nối lại · kết nối · tắt hẳn MỘT server. */
+    mcpServer(cuocId: string, ten: string, viec: 'ngat' | 'noiLai' | 'noi' | 'tatHan'): Promise<{ ok: boolean; loi?: string; trangThai: AgentMcpTrangThai }>;
+    /** Đợt 8A: hạn mức CuongMini (máy chủ `GET /agent/usage` kèm model + dự án của phiên). */
+    usage(cuocId?: string): Promise<AgentUsageCuongMini>;
     mcpTool(cuocId: string, ten?: string): Promise<Array<{ server: string; ten: string; moTa: string }>>;
     xuLyHenLo(cach: 'chay' | 'bo'): Promise<{ n: number }>;
     /** CT Work một chạm (đợt 3; đợt 5 thêm `capLai` — token hết hạn/bị thu hồi). */

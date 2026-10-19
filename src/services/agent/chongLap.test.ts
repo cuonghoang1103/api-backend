@@ -256,10 +256,16 @@ test('đọc trùng: KHÔNG phát tool_call xuống app, tự trả rồi gọi 
 test('cổng trả HTTP 400 ⇒ mã LLM_ERROR_4XX (app không thử lại)', async (t) => {
   dungMoiTruong(t);
   const goc = globalThis.fetch;
-  globalThis.fetch = (async () => new Response('{"error":"prompt is too long"}', { status: 400 })) as typeof fetch;
+  /* Đợt 8A: "prompt is too long" nay đi đường TỰ CỨU (tóm tắt + gửi lại một lần, `cuuCuaSo.test.ts`) ⇒ phép kiểm này dùng
+     một lỗi 400 tất định KHÁC; lỗi vượt cửa sổ còn lại sau khi cứu ⇒ `NGU_CANH_QUA_DAI` (app cũng không thử lại). */
+  let lan = 0;
+  globalThis.fetch = (async () => { lan++; return new Response(lan <= 1 ? '{"error":"invalid tool schema"}' : '{"error":"prompt is too long"}', { status: 400 }); }) as typeof fetch;
   t.after(() => { globalThis.fetch = goc; });
   const sk: AgentEvent[] = [];
   await runAgentTurn({ userId: 1, messages: [{ role: 'user', content: 'x' }], capabilities: [], mucNoLuc: 'vua' } as any, (e) => sk.push(e), new AbortController().signal);
   const loi = sk.find((e) => e.type === 'error') as Extract<AgentEvent, { type: 'error' }>;
   assert.equal(loi?.code, 'LLM_ERROR_4XX');
+  const sk2: AgentEvent[] = [];
+  await runAgentTurn({ userId: 1, messages: [{ role: 'user', content: 'x' }], capabilities: [], mucNoLuc: 'vua' } as any, (e) => sk2.push(e), new AbortController().signal);
+  assert.equal((sk2.find((e) => e.type === 'error') as Extract<AgentEvent, { type: 'error' }>)?.code, 'NGU_CANH_QUA_DAI');
 });

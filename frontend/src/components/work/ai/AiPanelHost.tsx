@@ -34,6 +34,7 @@ import { ActionGroup, type ActionItem } from './ActionCard';
 import UpgradeDialog from './UpgradeDialog';
 import { openAiPanel, useAiPanel, type AiQuickRequest } from './store';
 import { inAppPath, isModifiedClick } from './links';
+import { tachGoiYHienThi } from '@/lib/cuongmini/goiYBuocTiep';
 import { useLayoutPrefs } from '../shell/panes';
 import { wt, wfmt } from '@/components/work/i18n';
 
@@ -543,8 +544,19 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                             <Sparkles size={11} /> {m.title}
                           </div>
                         )}
-                        {m.content ? <AiMarkdown text={m.content} /> : <span className="text-[13px] text-[var(--w-text-3)]">{wt('ai.noAnswer')}</span>}
+                        {m.content ? <AiMarkdown text={tachGoiYHienThi(m.content).chu} /> : <span className="text-[13px] text-[var(--w-text-3)]">{wt('ai.noAnswer')}</span>}
                       </div>
+                      {/* Đợt 8A (CuongMini): chip gợi ý bước tiếp — chỉ hiện khi máy chủ trả (`goiY` / khối `<goi-y>`); bấm = điền ô hỏi. */}
+                      {(() => { const gy = tachGoiYHienThi(m.content, (m as { goiY?: unknown }).goiY).goiY; return gy.length ? (
+                        <div className="mt-1.5 flex flex-wrap gap-1.5 px-1">
+                          {gy.map((g) => (
+                            <button key={g} type="button" disabled={aiOff} onClick={() => fill(g)}
+                              className="max-w-full truncate rounded-full border border-[var(--w-border)] px-2.5 py-0.5 text-[12px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]">
+                              ↳ {g}
+                            </button>
+                          ))}
+                        </div>
+                      ) : null; })()}
                       <div className="mt-1 px-1 text-[11px] text-[var(--w-text-3)]" title={new Date(m.createdAt).toLocaleString(wfmt.intl())}>{relativeTime(m.createdAt)}</div>
                       {config && m.actions.length ? (
                         <ActionGroup

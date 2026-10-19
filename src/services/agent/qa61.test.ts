@@ -31,7 +31,7 @@ test('sơ đồ vẽ bằng ─── giữa dòng không bị đụng', () => {
 });
 
 // ─── Nén sớm 55% (1c33d89a) — chạy THẬT runAgentTurn với cổng giả ─────────────
-test('nén sớm 55%: hội thoại vượt 55% cửa sổ ⇒ tóm tắt bằng CHÍNH model của cuộc, ghim đề bài, thân gửi dưới trần (không 400)', async (t) => {
+test('nén theo ngưỡng cổng (đợt 8A): hội thoại vượt ngưỡng ⇒ tóm tắt bằng CHÍNH model của cuộc, ghim đề bài, thân gửi dưới trần (không 400)', async (t) => {
   const { runAgentTurn, tranKyTuCua } = await import('./turn.js');
   const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY_GPT', 'LLM_GATEWAY_BASE_URL', 'AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'RAMBO_BAT', 'AGENT_NEN_SOM_TI_LE'].map((k) => [k, process.env[k]] as const);
   process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap-cho-kiem-thu';
@@ -55,12 +55,12 @@ test('nén sớm 55%: hội thoại vượt 55% cửa sổ ⇒ tóm tắt bằng
   }) as typeof fetch;
   t.after(() => { globalThis.fetch = goc; for (const [k, v] of luu) { if (v === undefined) delete process.env[k]; else process.env[k] = v; } });
 
-  const tran = tranKyTuCua(400_000);
-  assert.equal(tran, Math.round(400_000 * 2.4 * 0.55), 'trần = 55% cửa sổ thật');
+  const tran = tranKyTuCua({ cong: 'modelapi', cuaSoToken: 400_000, maxRa: 128_000 });
+  assert.equal(tran, 700_000, 'đợt 8A: modelapi nén ở 350K token (2,0 ký tự/token)');
   const khoi = 'x'.repeat(15_000);
   const messages: Array<{ role: string; content: string }> = [{ role: 'user', content: 'ĐỀ BÀI GỐC: thiết kế ERD cho LabFlow' }];
-  for (let i = 0; i < 45; i++) messages.push({ role: 'assistant', content: `bước ${i} ${khoi}` }, { role: 'user', content: `tiếp ${i}` });
-  assert.ok(JSON.stringify(messages).length > tran, 'hội thoại phải vượt 55%');
+  for (let i = 0; i < 60; i++) messages.push({ role: 'assistant', content: `bước ${i} ${khoi}` }, { role: 'user', content: `tiếp ${i}` });
+  assert.ok(JSON.stringify(messages).length > tran, 'hội thoại phải vượt ngưỡng nén');
   const sk: Array<{ type: string; code?: string }> = [];
   await runAgentTurn({ userId: 1, messages, capabilities: ['fs_read'], model: 'cm-solid', ngayGio: { ngay: '2026-10-18', tz: 'Asia/Ho_Chi_Minh', lechPhut: 420 } } as any, (e) => sk.push(e as any), new AbortController().signal);
   assert.ok(sk.some((e) => e.type === 'done'), JSON.stringify(sk.filter((e) => e.type === 'error')));

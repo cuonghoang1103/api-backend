@@ -171,7 +171,8 @@ export async function xemViTien(userId: number, mang: MangAI): Promise<ViTien> {
     ({ usd, cu, moi } = nho);
   } else {
     try {
-      const dieuKien = { userId, feature: NHAN[mang], createdAt: { gte: tu } };
+      /* Đợt 8A: lượt do ADMIN WEB tài trợ (`step taitro:…`) là tiền của admin — không ăn ví riêng của người dùng. */
+      const dieuKien = { userId, feature: NHAN[mang], createdAt: { gte: tu }, NOT: { step: { startsWith: 'taitro:' } } };
       const [tong, cuNhat, moiNhat] = await Promise.all([
         prisma.interviewLLMCallLog.aggregate({ where: dieuKien, _sum: { costUsd: true } }),
         prisma.interviewLLMCallLog.findFirst({

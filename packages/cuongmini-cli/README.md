@@ -90,6 +90,15 @@ CuongMini mở trong **alternate screen** như Claude Code: ô nhập + chân tr
 - Toàn màn hình KHÔNG bao giờ gửi lệnh xoá scrollback (iTerm2 hết hiện thanh "clear scrollback history?").
 - Tắt: `/fullscreen off` (lưu cho lần sau) · cờ `--no-fullscreen` · `CUONGMINI_TOAN_MAN_HINH=0`. CI, không TTY, `-p` thì không bao giờ bật.
 
+## Mới ở 0.6.3 (gợi ý bước tiếp, /usage đúng, CT Work theo thư mục, quản lý MCP)
+
+- **Gợi ý bước tiếp** (như Claude Code): xong một lượt có ích, câu gợi ý đầu hiện **chữ mờ** ở ô nhập trống — **Tab** điền vào ô, **Enter** gửi; gõ ký tự khác thì biến mất. Phiên gắn CT Work ⇒ ưu tiên việc CT Work (chuyển trạng thái, bình luận bằng chứng, log giờ…). *Next-step suggestion as dim text in the empty input — Tab fills, Enter sends; typing hides it.*
+- **`/usage` đúng**: số lấy từ máy chủ — trần $ theo model đang chọn (hôm nay / tháng), ví AI Code 5 giờ, hạn mức nhóm hoặc admin tài trợ, lượt CuongMini Default, số lần gia hạn tháng này, ngữ cảnh % + tiền của phiên. *`/usage` now shows the real server-side limits.*
+- **Nhóm CT Work có admin web** ⇒ phiên gắn dự án đó dùng Sonic 5.5 · Heshin 5.5 · Solid (và Default/Classic) **không trần $** (admin trả, chỉ chống spam). *Projects with a site admin: no $ cap for Sonic 5.5 / Heshin 5.5 / Solid when the session is bound.*
+- **CT Work chỉ bật ở thư mục thuộc dự án**: thư mục lạ không hỏi "Kết nối CT Work?", không gửi tool CT Work cho model — chỉ một dòng gợi ý "gõ /ctwork". Gắn khi bạn chủ động (`/ctwork du-an`, `/mcp`, nhắc `KEY-123` ⇒ hỏi một lần, AGENTS.md ghi rõ mã ⇒ hỏi một lần). Gỡ: `/ctwork bo-gan`. *CT Work only in bound folders; unbind with `/ctwork unbind`.*
+- **`/mcp` quản lý từng server**: trạng thái rõ (đã nối · N tool / đang nối / lỗi / đã ngắt), **Ngắt** (phiên), **Kết nối lại** (chỉ server đó), **Kết nối**, **Tắt hẳn**; CT Work thêm đổi dự án · đổi quyền · bỏ gắn · đăng xuất. *Per-server disconnect / reconnect / disable.*
+- **Hội thoại dài**: cổng báo vượt cửa sổ ngữ cảnh ⇒ CuongMini tự tóm tắt phần cũ rồi làm tiếp (một dòng mờ); vẫn quá dài ⇒ gợi ý `/compact` hoặc `/clear`. *Auto-summarise once when the gateway says the context is too long.*
+
 ## Mới ở 0.6.2 (CuongMini Default — dùng được cả tài khoản miễn phí)
 
 **CuongMini Default / Default model**

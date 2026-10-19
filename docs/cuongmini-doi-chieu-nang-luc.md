@@ -525,6 +525,93 @@ ghi client web), `src/services/work/aiUsage.test.ts` (10, phần thuần), `sche
 AI usage; các tính năng AI web gọi `llmComplete` ngoài request `/projects/:pid` (job nền) không vào sổ dự án; sổ chưa có hạn
 lưu (dọn định kỳ).
 
+## 2k. Đợt 8A (19/10/2026) — /usage đúng · admin web tài trợ · gợi ý bước tiếp · tự cứu vượt cửa sổ · CT Work theo thư mục · quản lý MCP
+
+CLI **0.6.3**, extension **0.8.3** (desktop không bump — đi cùng bản desktop kế tiếp). Chưa deploy, chưa commit.
+
+**1. `/usage` đúng — MỘT route, app chỉ vẽ.** `GET /agent/usage?model=&ctworkDuAn=` giữ trường cũ (bể token 5 giờ, app cũ) và thêm
+`cuongMini` (`src/services/agent/usageCuongMini.ts`) — gom ĐÚNG các hàm lượt agent dùng để chặn, không tính lại:
+
+| Khối | Nguồn |
+|---|---|
+| model đang chọn (tên CuongMini; Default ⇒ "đang chạy …") — đã dùng / trần ngày · tháng (+ gia hạn) | `tranModel.ts › xemTranModel`; rambo (gói trọn) ⇒ số bước hôm nay |
+| nhóm Code Max free/cao (model chính hãng) | `anthropicChinhHang/hanMuc.ts › xemHanMucChinhHang` |
+| ví AI Code 5 giờ | `viTien.ts › xemViTien` |
+| dự án đang gắn: admin tài trợ / hạn mức nhóm (người/ngày · nhóm/tháng · nhà tài trợ) / riêng / không áp dụng | `taiTroAdmin.ts`, `hanMucNhom.ts › quyetDinhNhom` |
+| chống spam Default (x/10 câu/phút, x/500 câu/ngày nếu Free) · đường tài trợ (x/300) | `defaultGioiHan.ts` (+ `demPhutDefault`) |
+| gia hạn tháng này (số lần, $, đang chờ) | bảng `agent_gia_han_tien` |
+| **admin web**: mỗi khoá Anthropic (TÊN, ngân sách, đã dùng, còn %) — KHÔNG khoá/đuôi khoá · chi hôm nay/tháng theo model CuongMini · Core (modelapi) $ · Code Max $ · Classic (rambo) câu + bước hôm nay | `thongKe.ts › dsKeyAdmin` (cùng hàm trang admin), sổ `interview_llm_call_logs` |
+
+Ngữ cảnh % + tiền của phiên: số máy chủ gửi trong khung `done`/`tienTrinh` (app cộng). Lõi: kênh `agent:usage` (gửi model đang
+chọn + dự án của phiên); vẽ chung `lenhGach.ts › moTaUsage2` (song ngữ) ở CLI · desktop · VS Code; máy chủ cũ ⇒ lùi `moTaUsage`.
+
+**2. Nhóm CT Work có admin web ⇒ không giới hạn tiền** (`src/services/agent/taiTroAdmin.ts`). Phiên gắn dự án mà admin web (vai
+admin của site) là thành viên / trưởng dự án / chủ không gian ⇒ MỌI thành viên (kể cả có Pro) dùng Sonic 5.5 · Heshin 5.5 · Solid +
+Default/Classic, admin trả, KHÔNG trần $ — route `thuTaiTro` (trước Pro) gắn `req.nguonTaiTro`; `turn.ts` bỏ hạn mức token 5 giờ, ví,
+trần model, trần chính hãng riêng. Chỉ chống spam (bộ đếm `defaultGioiHan`): 10 câu/phút/người, **300 câu/ngày/người**, trần ngày theo
+IP ⇒ 429. Sổ `step = taitro:p<pid>:u<admin>` (câu mới `:l`) theo `user_id` người dùng; lượt chính hãng `viec = agent_taitro`;
+`viTien`/`tranModel`/`hanMuc.daDungNguoi` loại các dòng đó (không ăn tiền riêng của thành viên). Model khác ⇒ luật thường. Agent CT Work
+⇒ không bao giờ. Rambo sập ⇒ Default chạy Solid (admin trả), không báo bảo trì. Đồng ý: công tắc "Tài trợ CuongMini cho mọi dự án
+tôi tham gia" (mặc định BẬT) + tắt từng dự án — `app_settings.cuongmini_tai_tro_admin`, `GET/PUT /agent/tai-tro-admin` (PUT chỉ admin
+web); UI `frontend/src/components/cuongmini/TaiTroAdminCongTac.tsx` ở Project settings → CuongMini và trang admin cổng Anthropic.
+`/agent/tools` trả `taiTro` + thêm dự án vào `nhom` (app cũ mở AI Code) + Sonic/Heshin 5.5.
+
+**3. Gợi ý bước tiếp** (`src/services/agent/goiYBuocTiep.ts`). Chọn cách: model tự viết trong CHÍNH lượt, khối `<goi-y>…</goi-y>` cuối câu
+trả lời (luật `LUAT_GOI_Y` ở phần ổn định của prompt ⇒ không phá đệm) — ~20–40 token ra, không thêm lời gọi/độ trễ, biết đủ ngữ cảnh;
+một lời gọi rẻ riêng phải gửi lại cả hội thoại (đắt hơn ở hội thoại dài, model rẻ đoán kém). Máy chủ lọc khối khỏi luồng chữ
+(`LocLuongGoiY`, giữ đuôi có thể là thẻ) và khỏi hội thoại (`tachGoiY`), gửi `done.goiY` (1–3). CT Work ưu tiên chuyển trạng thái /
+bằng chứng / log giờ / tài liệu / hỏi trưởng nhóm. Lõi ⇒ sự kiện `xong.goiY`. CLI: ô trống ⇒ chữ mờ + "⇥ tab", Tab điền (Enter gửi), gõ
+khác ⇒ mất, không đụng Tab của menu `/`/`@` hay ↑↓. Desktop + VS Code: placeholder mờ + Tab + hàng chip. Web CT Work: chip dưới câu
+trả lời khi máy chủ trả (`goiY` hoặc khối `<goi-y>` — `frontend/src/lib/cuongmini/goiYBuocTiep.ts`); `aiMentor` chưa sinh gợi ý.
+
+**4. Tự cứu khi cổng báo vượt cửa sổ + ngưỡng nén theo cổng** (`src/services/agent/cuuCuaSo.ts`, `turn.ts`). Lỗi thật prod: rambo opus-5
+"longer than the model's context window" (bản trước `633b1305` không có rambo trong bảng ⇒ trần 600K ký tự). Nay mọi cổng: "longer than
+… context window" / "prompt is too long" / "maximum context length" / `context_length_exceeded` (không nhầm 429) ⇒ tóm tắt lượt cũ bằng
+CHÍNH model (ghim đề bài, giữ ≥ 2 lượt cuối) + cắt kết quả tool to (cũ 4K, 4 cái mới nhất 20K, giữ đầu + đuôi) ⇒ gửi lại ĐÚNG MỘT lần;
+dòng mờ "Hội thoại dài — CuongMini đã tự tóm tắt phần cũ để làm tiếp" (khung `cong` mã `DOI_CONG_TU_DONG` ⇒ app cũ cũng in đúng một
+dòng). Vẫn lỗi ⇒ `NGU_CANH_QUA_DAI` + gợi ý `/compact`, `/clear` (app không tự thử lại). Ngưỡng nén (chủ app chốt, thay 55% chung):
+
+| Cổng | Nén khi (token, gồm system + tool) | Env |
+|---|---|---|
+| chính hãng (1M) | 650K | `AGENT_NEN_ANTHROPIC_TOKEN` |
+| modelapi (GPT 400K) | 350K | `AGENT_NEN_MODELAPI_TOKEN` |
+| rambo (200K) | không nén sớm — ~190K TỔNG gồm cả chỗ ra (16K) | `AGENT_NEN_RAMBO_TOKEN` |
+
+Ước lượng 2,0 ký tự/token (2,4 quá lạc quan), trừ ký tự system + schema tool; lưới cứng ≤ cửa sổ − chỗ ra (≤ 32K). Mã lạ ⇒ 200K thận
+trọng. Lược kết quả tool cũ (modelapi) không sớm hơn ngưỡng nén. `AGENT_NEN_SOM_TI_LE` bỏ. Tóm tắt có trần vào theo cửa sổ model (×1,5).
+
+**5. CT Work chỉ bật ở thư mục thuộc dự án** (lỗi chủ app: mở ở thư mục bất kỳ cũng tự nối CT Work). Gắn theo THƯ MỤC:
+- Lõi `agent:ctworkHe goiY`: bỏ "Kết nối CT Work?" tự bật và danh sách dự án ở thư mục lạ; chưa nối ⇒ `goiYNhe` ⇒ một dòng "Làm dự án trên
+  CT Work? gõ /ctwork" (không thẻ chặn); cấp lại token chỉ khi thư mục ĐÃ gắn.
+- Thư mục chưa gắn ⇒ KHÔNG gửi tool `ctwork` (cả mục lục) cho model (`mcp.ts › toolGuiChoCuoc/mucLucChoCuoc {boCtwork}`); AGENTS.md
+  nhóm, dòng trạng thái, "Hôm nay", theo dõi vốn đã chỉ chạy khi gắn. Token vẫn trong kho.
+- Đoán từ AGENTS.md/CLAUDE.md chỉ khi ghi RÕ (`ctworkVe.ts › doanDuAnTuTaiLieu`: dòng có "CT Work"/cuongthai.com/"(id N)" + "dự án/
+  project/key KEY"); bản cũ khớp mọi "project Foo" và mọi tài liệu nhắc `ABC-12` ≥ 3 lần — gốc của lỗi. Hỏi MỘT lần/thư mục, "Không" ⇒ nhớ.
+- Nhắc `KEY-123` mà KEY là dự án của người dùng ⇒ sự kiện `ctwHoiGan` ⇒ hỏi gắn một lần sau lượt (`ctworkHe.ts › khopKeyChuaGan`,
+  `ctworkLenh.ts › hoiGanDoan`). Chọn gắn khi chưa nối ⇒ nối chỉ đọc trước.
+- `/ctwork bo-gan` (+ nút trong `/mcp`). Gắn theo phiên (thư mục không phải git) vẫn chỉ khi người dùng chủ động, hết phiên thì mất.
+
+**6. `/mcp` quản lý từng server** (`ctworkLenh.ts › hanhDongMcp/lamHanhDongMcp/trangThaiMcpChu` chung ba nơi; lõi `agent:mcpServer`,
+`mcp.ts › ngatServer`): trạng thái đã nối · N tool / đang nối / lỗi + lý do / đã ngắt (phiên) / đã tắt; **Ngắt** (trong phiên, mcp.json
+không đổi, nạp cả bộ không tự nối lại) · **Kết nối lại** (chỉ server đó) · **Kết nối** · **Tắt hẳn** (`disabled`). CT Work thêm: đổi dự án
+· đổi quyền (cấp lại token một chạm) · bỏ gắn · đăng xuất (hỏi xác nhận).
+
+**Test:** máy chủ `cuuCuaSo.test.ts` (4: nhận diện lỗi, cắt tool to, cổng giả 400 ⇒ tự nén + gửi lại 1 lần thành công, vẫn lỗi ⇒ dừng
+không lặp), `goiYBuocTiep.test.ts` (3: tách, lọc luồng thẻ chia mẩu, `runAgentTurn` thật ⇒ `done.goiY`), `bangModel.test.ts`/`qa61` (ngưỡng
+theo cổng + env), `chongLap.test.ts` (400 thường vẫn `LLM_ERROR_4XX`; vượt cửa sổ ⇒ `NGU_CANH_QUA_DAI`); DB `src/routes/agent.taiTro.db.test.ts`
+(7 — Postgres 18 tạm + cổng chính hãng/modelapi giả: thành viên chạy Sonic 5.5 không trần dù trần riêng cạn, sổ đúng người + nhà tài trợ +
+dự án + `agent_taitro`, ví/trần riêng không ăn; người ngoài 403; agent không; Default rambo không chạy ⇒ Solid; vượt chống spam 429; admin
+tắt dự án / tắt chung ⇒ về luật thường; `/usage` người thường + admin khớp sổ, không lộ khoá). Desktop `renderer/features/chat/dot8a.test.ts`
+(6). CLI `src/test/dot5.test.ts` (sửa theo luật mới), **PTY lõi thật** `src/test/dot8aPty.test.ts` (2: chữ mờ ⇒ Tab điền ⇒ Enter gửi ⇒ gõ
+khác mất + `/usage`; thư mục lạ không CT Work / mở lại không hỏi / AGENTS.md có mã hỏi 1 lần "Không" ⇒ không hỏi lại / thư mục gắn đủ +
+`/mcp` ngắt ⇒ lượt sau không tool ctwork ⇒ kết nối lại) + `dot5Pty.test.ts` sửa theo luật mới.
+
+**Chưa làm / làm khác:**
+- `aiMentor` (web CT Work) chưa sinh gợi ý — khung web chỉ hiện khi máy chủ trả (8B đang sửa vùng đó).
+- Thư mục chưa gắn: không thêm "dòng nhẹ" trong mục lục MCP cho model (một mục giả `mcp__ctwork__…` sẽ bật luật CT Work trong prompt) —
+  dòng gợi ý chỉ hiện cho NGƯỜI.
+- Desktop: chưa có test DOM riêng cho chip/Tab (phần thuần + lõi đã test qua CLI PTY).
+
 ## 3. Thiết kế đợt 3/4 (đợt 3 ĐÃ LÀM — ghi chỗ đổi thiết kế)
 
 ### 3.1 Agent phụ GHI được (đợt 3)

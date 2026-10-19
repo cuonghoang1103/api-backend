@@ -19,6 +19,7 @@ import { workError, type ProjectConfig } from '@/lib/work-api';
 import { currentWorkLocale } from '@/components/work/i18n/store';
 import { PageLoading } from '../ui';
 import { Section, Select, Switch } from './shared';
+import TaiTroAdminCongTac from '@/components/cuongmini/TaiTroAdminCongTac';
 
 interface CauHinh { bat: boolean; tranNgayNguoiUsd: number; tranThangNhomUsd: number; chuId: number | null }
 /** Máy chủ trả thêm `dongY` (ai đã tự đồng ý tài trợ) — KHÔNG gửi lại (PUT `.strict()` từ chối khoá lạ). */
@@ -74,6 +75,8 @@ export default function ProjectCuongMini({ config }: { config: ProjectConfig; sl
 
   return (
     <div className="max-w-[880px]" data-testid="project-cuongmini-settings">
+      {/* Đợt 8A: admin web tài trợ (không trần $) — trạng thái cho mọi người, công tắc cho admin web. */}
+      <div className="mb-4"><TaiTroAdminCongTac projectId={pid} vi={currentWorkLocale() === 'vi'} /></div>
       <Section
         title={T('CuongMini cho cả nhóm', 'CuongMini for the whole team')}
         description={T(

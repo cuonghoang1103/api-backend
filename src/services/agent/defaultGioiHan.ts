@@ -230,3 +230,8 @@ export async function topDefaultHomNay(gioiHan = 20): Promise<{
     ip,
   };
 }
+
+/** Đợt 8A (`/usage`): số câu Default của người này trong 60 giây qua (bộ nhớ). */
+export function demPhutDefault(userId: number): number {
+  return BO.soPhut(userId, Date.now()).length;
+}

@@ -17,6 +17,9 @@ declare module 'ct-lenh' {
   export interface DuLieuUsage { daDung: number; tran: number; conLai: number; phanTram: number; hoiLucNao: string | null; coKeyGiaHan?: boolean }
   export function layUsage(request: (duong: string) => Promise<unknown>): Promise<DuLieuUsage>;
   export function moTaUsage(u: DuLieuUsage, tokenMoiViec?: number): string;
+  /** Đợt 8A: hạn mức THẬT (`data.cuongMini`); `null` ⇒ máy chủ cũ, lùi `moTaUsage`. */
+  export interface UsagePhien { nguCanhPhanTram?: number | null; tienPhien?: number | null }
+  export function moTaUsage2(d: unknown, phien?: UsagePhien, ngonNgu?: 'vi' | 'en'): string | null;
   export function moTaNguCanh(ct: unknown, tran: number, soLuotDaBo: number): string;
   export function moTaTrangThai(t: {
     phienBan: string; cong: 'chinh' | 'duPhong' | 'ngoaiTuyen' | 'epNgoaiTuyen'; online: boolean; tenCucBo?: string;

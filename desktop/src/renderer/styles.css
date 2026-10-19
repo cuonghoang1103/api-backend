@@ -15647,3 +15647,8 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-chip-ctw { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
 .ct-chip-ctw .ct-chip { font-size: 11px; padding: 1px 7px; border-radius: 999px; background: rgba(125, 211, 252, .14); color: #7dd3fc; }
 .ct-ctw-gon { padding: 6px 10px 2px 28px; font-size: 12.5px; max-height: 420px; overflow: auto; }
+
+/* Đợt 8A — hàng chip gợi ý bước tiếp (trên ô nhập AI Code) + nút quản lý server MCP. */
+.ct-agent-goiy { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 2px 6px; }
+.ct-agent-goiy .ct-btn { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.85; }
+.ct-mcp-nut { display: inline-flex; flex-wrap: wrap; gap: 4px; margin-left: auto; }

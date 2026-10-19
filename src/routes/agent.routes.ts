@@ -46,6 +46,10 @@ import { DS_MUC_NO_LUC } from '../services/agent/turn.js';
 import { xemHanMucFable } from '../services/agent/fable.js';
 import { dsKyNangSan } from '../services/agent/kyNangSan.js';
 import { docDuAnId, duAnNhomCuaNguoi, quyetDinhNhom, stepNhom, type NguonNhom } from '../services/agent/hanMucNhom.js';
+import {
+  cauHinhTaiTroCua, datCauHinhTaiTro, duAnTaiTroCuaNguoi, dungChoTaiTro, kiemVaGhiLuotTaiTro, quyetDinhTaiTro, stepTaiTro, timAdminTaiTro, type NguonTaiTro,
+} from '../services/agent/taiTroAdmin.js';
+import { xemUsageCuongMini } from '../services/agent/usageCuongMini.js';
 import { prisma } from '../config/database.js';
 import { baoAdmin } from '../services/thongBaoAdmin.service.js';
 import { CompactLoi, compactChuDong } from '../services/agent/compactChuDong.js';
@@ -94,8 +98,24 @@ async function chiPro(req: any, res: Response<ApiResponse>, next: NextFunction):
  * chia sẻ ⇒ cho qua, gắn `req.nguonNhom`. Chỉ cho các tuyến TIÊU model (turn, compact, đặt tên) — tuyến cổng/khoá/
  * gia hạn vẫn chỉ Pro. Người CÓ Pro không bao giờ đi đường nhóm (không tiêu tiền của trưởng nhóm).
  */
+/**
+ * ĐỢT 8A — phiên gắn dự án CT Work có ADMIN WEB tài trợ (`taiTroAdmin.ts`) + model trong danh sách tài trợ ⇒ đường tài
+ * trợ (gắn `req.nguonTaiTro`), kể cả người có Pro (tiền của admin, không ăn trần riêng của họ). Chính nhà tài trợ ⇒ đường
+ * thường. Agent CT Work không bao giờ qua (`quyetDinhTaiTro` trả `TAI_TRO_AGENT`).
+ */
+async function thuTaiTro(req: any): Promise<boolean> {
+  const b = (req.body ?? {}) as { ctworkDuAn?: unknown; ctwork?: { projectId?: unknown }; model?: unknown };
+  const pid = docDuAnId(b.ctworkDuAn ?? req.query?.ctworkDuAn ?? b.ctwork?.projectId);
+  if (!pid || !dungChoTaiTro(timModel(b.model))) return false;
+  const q = await quyetDinhTaiTro(req.userId, pid);
+  if (q.loai !== 'taiTro' || q.nhaTaiTro.id === req.userId) return false;
+  req.nguonTaiTro = q;
+  return true;
+}
+
 async function chiProHoacNhom(req: any, res: Response<ApiResponse>, next: NextFunction): Promise<void> {
   try {
+    if (await thuTaiTro(req)) return next();
     if (await duocDungAiCode(req.userId)) return next();
     const b = (req.body ?? {}) as { ctworkDuAn?: unknown; ctwork?: { projectId?: unknown } };
     const pid = docDuAnId(b.ctworkDuAn ?? req.query?.ctworkDuAn ?? b.ctwork?.projectId);
@@ -161,6 +181,7 @@ const chayLimiter = (lim: ReturnType<typeof rateLimit>, req: any, res: Response)
  */
 async function chiProHoacNhomHoacFree(req: any, res: Response<ApiResponse>, next: NextFunction): Promise<void> {
   try {
+    if (await thuTaiTro(req)) return next();
     if (await duocDungAiCode(req.userId)) return next();
     const b = (req.body ?? {}) as { ctworkDuAn?: unknown; ctwork?: { projectId?: unknown }; model?: unknown };
     const pid = docDuAnId(b.ctworkDuAn ?? req.query?.ctworkDuAn ?? b.ctwork?.projectId);
@@ -219,7 +240,11 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
     // được lời mời nâng cấp — một câu mời rõ ràng thay cho một lỗi.
     const pro = await duocDungAiCode(req.userId).catch(() => false);
     /* Đợt 6: không Pro ⇒ các dự án dùng được hạn mức NHÓM (app không hiện lời mời nâng cấp khi có) — chỉ model free. */
-    const nhom = pro ? [] : await duAnNhomCuaNguoi(req.userId).catch(() => []);
+    const nhomRieng = pro ? [] : await duAnNhomCuaNguoi(req.userId).catch(() => []);
+    /* Đợt 8A: dự án có ADMIN WEB tài trợ — người không Pro cũng mở được AI Code (app cũ đọc `nhom`), thêm Sonic 5.5 /
+       Heshin 5.5 (chính hãng) vào danh sách. */
+    const taiTro = await duAnTaiTroCuaNguoi(req.userId).catch(() => []);
+    const nhom = [...nhomRieng, ...taiTro.filter((t) => !nhomRieng.some((n) => n.projectId === t.projectId)).map((t) => ({ projectId: t.projectId, key: t.key }))];
     const ban = docBanApp(req.query.bang);
     /* 19/10/2026: tài khoản FREE dùng được CuongMini Default (rambo). App mới (`?bang=cm2`) đọc `free` để mở AI Code. */
     const free = pro ? null : await (async () => {
@@ -239,7 +264,7 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
     const models = pro
       ? await dsModelChoApp(await quyenChinhHang(req.userId, req.query.congAnthropicVe)).catch(() => [])
       : nhom.length
-        ? (await dsModelChoApp(await quyenChinhHang(req.userId, undefined)).catch(() => [])).filter((m: { khoa?: string; cong?: string; id?: string }) => dungChoNhom(m))
+        ? (await dsModelChoApp(await quyenChinhHang(req.userId, undefined)).catch(() => [])).filter((m: { khoa?: string; cong?: string; id?: string }) => dungChoNhom(m) || (taiTro.length > 0 && dungChoTaiTro(m)))
         /* Free: đủ danh sách — Default dùng được, model khác `canPro` (ổ khoá + lời mời nâng cấp). App cũ nhận `[]` như trước. */
         : ban === 'cm2' ? await dsModelChoApp(await quyenChinhHang(req.userId, undefined), { chiDefault: true }).catch(() => []) : [];
     res.json({
@@ -248,6 +273,8 @@ router.get('/tools', async (req: any, res: Response<ApiResponse>, next) => {
         pro,
         /* Đợt 6: dự án dùng được hạn mức nhóm (rỗng khi có Pro hoặc không có nhóm nào). */
         nhom,
+        /* Đợt 8A: dự án do admin web tài trợ (không trần $ khi phiên gắn dự án đó). */
+        ...(taiTro.length ? { taiTro } : {}),
         ...(free ? { free } : {}),
         configured: gatewayConfigured(),
         /* Mã model mặc định (không phải tên thật): CuongMini Default — đổi mã theo đời app (`maChoApp`). */
@@ -510,16 +537,59 @@ async function tienNgay(): Promise<{ phanTram: number; catViecNen: boolean; dung
 
 router.get('/usage', async (req: any, res: Response<ApiResponse>, next) => {
   try {
+    /* Đợt 8A: `cuongMini` = hạn mức THẬT đang chặn (trần $ theo model, ví 5 giờ, nhóm / admin tài trợ, chống spam, gia
+       hạn, khối admin) — `usageCuongMini.ts`. App mới gửi `?model=&ctworkDuAn=`; trường cũ (bể token 5 giờ) giữ cho app cũ. */
+    const cuongMini = await xemUsageCuongMini(req.userId, {
+      model: typeof req.query.model === 'string' ? req.query.model : undefined,
+      projectId: docDuAnId(req.query.ctworkDuAn),
+    }).catch((err) => { logger.warn('agent/usage: không dựng được hạn mức CuongMini', { error: (err as Error).message }); return null; });
     res.json({
       success: true,
       data: {
         pro: await duocDungAiCode(req.userId).catch(() => false),
         ...(await goiUsage(req.userId)),
+        ...(cuongMini ? { cuongMini } : {}),
       },
     });
   } catch (err) {
     next(err);
   }
+});
+
+/**
+ * ĐỢT 8A — công tắc tài trợ của ADMIN WEB: "Tài trợ CuongMini cho mọi dự án tôi tham gia" (mặc định BẬT) + tắt từng dự
+ * án. Chỉ admin web. `GET ?projectId=` ⇒ trạng thái chung + dự án đó (có đang được ai tài trợ không — mọi thành viên xem).
+ */
+router.get('/tai-tro-admin', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { laAdmin } = await import('../services/pro.service.js');
+    const la = await laAdmin(req.userId);
+    const pid = docDuAnId(req.query.projectId);
+    const nha = pid ? await timAdminTaiTro(pid).catch(() => null) : null;
+    const ch = la ? await cauHinhTaiTroCua(req.userId) : null;
+    res.json({
+      success: true,
+      data: {
+        laAdmin: la,
+        ...(ch ? { bat: ch.bat, tatDuAn: ch.tatDuAn } : {}),
+        ...(pid ? { duAn: { projectId: pid, dangTaiTro: Boolean(nha), nhaTaiTro: nha?.ten ?? null, toiTat: ch ? ch.tatDuAn.includes(pid) : false } } : {}),
+      },
+    });
+  } catch (err) { next(err); }
+});
+
+router.put('/tai-tro-admin', async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { laAdmin } = await import('../services/pro.service.js');
+    if (!(await laAdmin(req.userId))) throw new AppError('Chỉ admin web. / Site admins only.', 403, 'FORBIDDEN');
+    const b = (req.body ?? {}) as { bat?: unknown; duAn?: { id?: unknown; bat?: unknown } };
+    const duAnId = docDuAnId(b.duAn?.id);
+    const ch = await datCauHinhTaiTro(req.userId, {
+      ...(typeof b.bat === 'boolean' ? { bat: b.bat } : {}),
+      ...(duAnId && typeof b.duAn?.bat === 'boolean' ? { duAn: { id: duAnId, bat: b.duAn.bat } } : {}),
+    });
+    res.json({ success: true, data: { laAdmin: true, bat: ch.bat, tatDuAn: ch.tatDuAn } });
+  } catch (err) { next(err); }
 });
 
 /**
@@ -641,8 +711,12 @@ router.post('/compact', chiProHoacNhomHoacFree, compactLimiter, async (req: any,
        agent). Model cần khoá mà vé không mở ⇒ CuongMini Solid. Hết trần ⇒ báo. */
     let muc = timModel(b.model);
     const nhom = req.nguonNhom as NguonNhom | undefined;
+    const taiTro = req.nguonTaiTro as NguonTaiTro | undefined;
     const laFree = req.nguonFree === true;
-    if (laFree) {
+    if (taiTro) {
+      /* Đợt 8A: admin tài trợ — model trong danh sách (đã kiểm ở middleware), không trần $. */
+      if (!dungChoTaiTro(muc)) muc = timModel(undefined);
+    } else if (laFree) {
       /* Free: chỉ Default trên rambo (gói trọn); rambo vừa sập ⇒ bảo trì. */
       if (muc.cong !== 'rambo') throw new AppError(CAU_BAO_TRI_FREE, 503, 'CUONGMINI_BAO_TRI');
     } else if (nhom) {
@@ -652,7 +726,7 @@ router.post('/compact', chiProHoacNhomHoacFree, compactLimiter, async (req: any,
       const q = await quyenChinhHang(req.userId, b.congAnthropicVe).catch(() => ({ laAdmin: false, modelCao: false, invisible: false }));
       if (!daMoKhoa(muc, q)) muc = timModel(undefined);
     }
-    if (!nhom && !laFree && muc.cong !== 'rambo') {
+    if (!nhom && !taiTro && !laFree && muc.cong !== 'rambo') {
       const ht = await xemTranModel(req.userId, muc);
       if (ht.het) {
         const gh = await giaHanChoLoi(req.userId, tranChamModel(ht, muc));
@@ -660,7 +734,7 @@ router.post('/compact', chiProHoacNhomHoacFree, compactLimiter, async (req: any,
           gh.ui ? { giaHanTien: gh.ui as unknown as Record<string, unknown> } : undefined);
       }
     }
-    const kq = await compactChuDong(b.messages, { giuLuot: b.giuLuot, ghiChu: b.ghiChu, goi: goiTomTatBangModel(muc, req.userId, nhom ? stepNhom(nhom.projectId, nhom.chu.id) : undefined, { khongLui: laFree }) });
+    const kq = await compactChuDong(b.messages, { giuLuot: b.giuLuot, ghiChu: b.ghiChu, goi: goiTomTatBangModel(muc, req.userId, taiTro ? stepTaiTro(taiTro.projectId, taiTro.nhaTaiTro.id) : nhom ? stepNhom(nhom.projectId, nhom.chu.id) : undefined, { khongLui: laFree }) });
     logger.info('[agent/compact] tóm tắt chủ động', {
       userId: req.userId, soTinDaGop: kq.soTinDaGop, daGoiModel: kq.daGoiModel,
     });
@@ -732,7 +806,17 @@ router.post('/turn', chiProHoacNhomHoacFree, async (req: any, res: Response) => 
    * CuongMini Default — chống spam (19/10/2026, `defaultGioiHan.ts`): chỉ đếm câu hỏi MỚI (tin cuối của người, không
    * phải lượt phụ). Free + Pro: lượt/phút; Free thêm lượt/ngày + lượt/ngày theo IP. Đường nhóm không đếm ở đây.
    */
-  if (laDefault(body.model) && !req.nguonNhom) {
+  /* Đợt 8A — admin tài trợ: chỉ chống spam (10 câu/phút · 300 câu/ngày/người · trần ngày theo IP), không trần $. */
+  if (req.nguonTaiTro) {
+    const cuoi = (body.messages as Array<{ role?: unknown }>)[body.messages.length - 1];
+    if (cuoi?.role === 'user' && body.laPhu !== true) {
+      const kq = await kiemVaGhiLuotTaiTro({ userId: req.userId, ip: typeof req.ip === 'string' ? req.ip : null });
+      if (!kq.ok) {
+        res.status(429).json({ success: false, code: kq.ma, message: kq.cau, data: { thuLaiSauGiay: kq.thuLaiSauGiay } } as any);
+        return;
+      }
+    }
+  } else if (laDefault(body.model) && !req.nguonNhom) {
     const cuoi = (body.messages as Array<{ role?: unknown }>)[body.messages.length - 1];
     if (cuoi?.role === 'user' && body.laPhu !== true) {
       const kq = await kiemVaGhiLuotDefault({ userId: req.userId, ip: typeof req.ip === 'string' ? req.ip : null, free: req.nguonFree === true });
@@ -861,6 +945,7 @@ router.post('/turn', chiProHoacNhomHoacFree, async (req: any, res: Response) => 
         mcpMucLuc: body.mcpMucLuc,
         /* ⛔ Chỉ từ middleware (máy chủ đã kiểm) — không bao giờ từ thân yêu cầu. */
         ...(req.nguonNhom ? { nhom: req.nguonNhom as NguonNhom } : {}),
+        ...(req.nguonTaiTro ? { taiTro: req.nguonTaiTro as NguonTaiTro } : {}),
         ...(req.nguonFree === true ? { free: true } : {}),
         userId: req.userId,
       },

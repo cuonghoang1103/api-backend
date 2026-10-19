@@ -33,11 +33,11 @@ import {
 import { useSession } from '../../auth/session';
 import { moTam, useMoTuNgoai } from './moTam';
 import {
-  PROMPT_DUYET_KE_HOACH, PROMPT_INIT, TEN_CHE_DO, chonPhien, dsCauHoi, layUsage, locPhien, moTaChanDoan,
+  PROMPT_DUYET_KE_HOACH, PROMPT_INIT, TEN_CHE_DO, chonPhien, dsCauHoi, layUsage, locPhien, moTaChanDoan, moTaUsage2,
   moTaDsCauHoi, moTaDsPhien, moTaNguCanh, moTaTrangThai, moTaTroGiup, moTaUsage, promptPlan, promptReview,
   tachLenh, tenFileXuat, timMuc, timTheoChu, xuatMarkdown,
 } from './lenhGach';
-import { homNay as homNayCtw, hoiCtworkMotLan, kiemTinCtw, laLoiXacThucCtw, lenhCtwork, moCtworkTuMcp, veDongCtw, xongViec as xongViecCtw, type DongCtw, type GiaoDienCtw, type TheChonCtw } from './ctworkLenh';
+import { hanhDongMcp, lamHanhDongMcp, trangThaiMcpChu, hoiGanDoan, homNay as homNayCtw, hoiCtworkMotLan, kiemTinCtw, laLoiXacThucCtw, lenhCtwork, moCtworkTuMcp, veDongCtw, xongViec as xongViecCtw, type DongCtw, type GiaoDienCtw, type TheChonCtw } from './ctworkLenh';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
 import { ThanhDangLam } from './ThanhDangLam';
@@ -123,6 +123,7 @@ export function AgentMode({
     traLoiHoi, huyCho, huyHen, chenTin,
     phien, phienDangMo, moPhien, xoaPhien, baoTin, datHanMuc,
     tinTraVe, xoaTinTraVe, soLanXong, choChiDan, boChoChiDan,
+    goiYTiep, boGoiYTiep, hoiGanCtw, xongHoiGanCtw,
   } = useAgent(cuocId, info);
   /* Đợt 4 — điều khiển máy tính: công tắc TOÀN APP (main giữ), mặc định tắt. */
   const [mayTinh, datMayTinhUi] = useState<{ bat: boolean; hoTro: boolean; quyen: { chup: boolean; dieuKhien: boolean } | null } | null>(null);
@@ -632,8 +633,22 @@ export function AgentMode({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tinTraVe]);
   useEffect(() => { if (!trangThai.dangChay) void napDongCtw(); }, [trangThai.dangChay, napDongCtw]);
+  /* Đợt 8A: câu vừa rồi nhắc `KEY-123` khớp một dự án của bạn mà thư mục chưa gắn ⇒ hỏi gắn MỘT lần (sau lượt). */
   useEffect(() => {
-    const f = (e: Event): void => { if ((e as CustomEvent<{ cuocId?: string }>).detail?.cuocId === cuocId) void moCtworkTuMcp(gdCtwRef.current()); };
+    if (!hoiGanCtw || trangThai.dangChay) return;
+    const d = hoiGanCtw;
+    xongHoiGanCtw();
+    hoiGanDoan(gdCtwRef.current(), d, 'key');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hoiGanCtw, trangThai.dangChay]);
+  useEffect(() => {
+    /* Đợt 8A: nút CT Work trong bảng MCP (đổi dự án · đổi quyền · bỏ gắn · đăng xuất) gửi `giaTri` của `hanhDongMcp`. */
+    const f = (e: Event): void => {
+      const d = (e as CustomEvent<{ cuocId?: string; giaTri?: string }>).detail;
+      if (d?.cuocId !== cuocId) return;
+      if (d.giaTri) void lamHanhDongMcp(gdCtwRef.current(), 'ctwork', d.giaTri).then((bao) => { if (bao) traLoi(bao); });
+      else void moCtworkTuMcp(gdCtwRef.current());
+    };
     window.addEventListener(SU_KIEN_CTW_DU_AN, f);
     return () => window.removeEventListener(SU_KIEN_CTW_DU_AN, f);
   }, [cuocId]);
@@ -958,6 +973,16 @@ export function AgentMode({
       case '/usage': {
         if (!api) { traLoi('Chưa đăng nhập.'); return; }
         traLoi('Đang hỏi hạn mức…');
+        /* Đợt 8A: lõi hỏi máy chủ kèm model + dự án CT Work của phiên ⇒ hạn mức THẬT đang chặn; máy chủ cũ ⇒ cách cũ. */
+        try {
+          const d2 = await window.cuongthai?.agent.usage?.(cuocId);
+          const md2 = d2 ? moTaUsage2(d2, { nguCanhPhanTram: trangThai.nguCanh?.phanTram ?? null, tienPhien: trangThai.tienPhien }, (document.documentElement.lang || 'vi').startsWith('en') ? 'en' : 'vi') : null;
+          if (md2) {
+            if (typeof d2?.phanTram === 'number') datHanMuc({ daDung: d2.daDung, tran: d2.tran, phanTram: d2.phanTram, hoiLucNao: d2.hoiLucNao });
+            traLoi(md2);
+            return;
+          }
+        } catch { /* lùi cách cũ */ }
         try {
           const u = await layUsage((d) => api.request(d));
           datHanMuc({ daDung: u.daDung, tran: u.tran, phanTram: u.phanTram, hoiLucNao: u.hoiLucNao });
@@ -1197,6 +1222,13 @@ export function AgentMode({
         if (m) { e.preventDefault(); const c = lenhNut.chon; traLoi(null); void Promise.resolve(c.khiChon(m.giaTri)).catch((er: Error) => traLoi(`⚠ ${er.message}`)); return; }
       }
       if (e.key === 'Escape') { e.preventDefault(); lenhNut.chon.khiHuy?.(); traLoi(null); return; }
+    }
+    /* Đợt 8A — gợi ý bước tiếp: ô TRỐNG + có gợi ý ⇒ Tab điền câu đầu (Enter mới gửi). Menu `/`/`@` chỉ mở khi đã gõ. */
+    if (e.key === 'Tab' && !e.shiftKey && !nhap && goiYTiep.length && !trangThai.dangChay) {
+      e.preventDefault();
+      capNhatNhap(goiYTiep[0]!, goiYTiep[0]!.length);
+      boGoiYTiep();
+      return;
     }
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -2095,6 +2127,17 @@ export function AgentMode({
           {veDongCtw(dongCtw, nn, 160)}
         </button>
       )}
+      {/* Đợt 8A: hàng chip gợi ý bước tiếp (máy chủ tách từ câu trả lời) — bấm để điền vào ô, Enter gửi. */}
+      {goiYTiep.length > 0 && !trangThai.dangChay && !nhap && (
+        <div className="ct-agent-goiy" role="list" aria-label={dich('Gợi ý bước tiếp')}>
+          {goiYTiep.map((g) => (
+            <button key={g} type="button" role="listitem" className="ct-btn ct-btn-ghost ct-mcp-nho"
+              onClick={() => { capNhatNhap(g, g.length); boGoiYTiep(); requestAnimationFrame(() => oNhapRef.current?.focus()); }}>
+              {g}
+            </button>
+          ))}
+        </div>
+      )}
       <div className="ct-agent-soan">
        <div className="ct-agent-soan-khung" data-chay={trangThai.dangChay}>
         <textarea
@@ -2105,10 +2148,12 @@ export function AgentMode({
           value={nhap}
           placeholder={choChiDan
             ? dich('CuongMini nên làm gì khác? Gõ chỉ dẫn rồi Enter…')
+            : goiYTiep.length && !trangThai.dangChay
+              ? `${goiYTiep[0]}   ⇥ Tab`
             : coThuMuc
               ? `Hỏi về ${thuMuc?.name}… (kéo thả hoặc dán file, gõ / để xem lệnh)`
               : 'Chọn thư mục dự án trước, rồi hỏi…'}
-          onChange={(e) => { if (choChiDan) boChoChiDan(); capNhatNhap(e.target.value, e.target.selectionStart ?? e.target.value.length); }}
+          onChange={(e) => { if (choChiDan) boChoChiDan(); if (goiYTiep.length && e.target.value) boGoiYTiep(); capNhatNhap(e.target.value, e.target.selectionStart ?? e.target.value.length); }}
           /* Di chuyển con trỏ bằng phím mũi tên hay chuột KHÔNG bắn `onChange`.
              Thiếu dòng này thì bảng gợi ý còn treo lại sau khi người dùng đã
              bấm ra chỗ khác trong câu — một bảng nổi nuốt phím Enter ở nơi
@@ -2981,6 +3026,7 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
   useMoTuNgoai(cuocId, 'mcp', mo, bat);
   const [tt, datTt] = useState<AgentMcpTrangThai | null>(null);
   const [dangNap, datDangNap] = useState(false);
+  const nnMcp: 'vi' | 'en' = (document.documentElement.lang || 'vi').startsWith('en') ? 'en' : 'vi';
 
   // Hỏi lại MỖI LẦN MỞ BẢNG, không chỉ lúc gắn component.
   //
@@ -3088,16 +3134,24 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
                   {/* Lỗi xuống dòng riêng, ĐỌC ĐƯỢC HẾT và chọn-chép được: dòng cuối
                       stderr ("thiếu FIGMA_API_KEY") là thứ duy nhất nói vì sao hỏng,
                       và bản trước cắt nó bằng dấu "…" sau chừng 30 ký tự. */}
-                  {!s.ok && !s.tat && <span className="ct-mcp-loi">{s.loi ?? 'hỏng'}</span>}
-                  {/* Đợt 4 — bật/tắt từng server (`"disabled": true` trong mcp.json), như menu `/mcp` của CLI. */}
-                  {!s.tuDuAn && !s.canDuyet && (
-                    <button
-                      type="button" className="ct-btn ct-btn-ghost ct-mcp-battat" disabled={khoa || dangNap}
-                      onClick={() => { void window.cuongthai?.agent.mcpBatTat(cuocId, s.ten, s.tat === true).then((r) => { if (r.trangThai) datTt(r.trangThai); }); }}
-                    >
-                      {s.tat ? dich('Bật') : dich('Tắt')}
-                    </button>
-                  )}
+                  {!s.ok && !s.tat && !s.ngat && !s.dangNoi && <span className="ct-mcp-loi">{s.loi ?? 'hỏng'}</span>}
+                  {(s.ngat || s.dangNoi || s.tat) && <span className="ct-mcp-phu">{trangThaiMcpChu(s, nnMcp)}</span>}
+                  {/* Đợt 8A — quản lý từng server (chung ba nơi, `ctworkLenh.ts › hanhDongMcp`): Ngắt (phiên) · Kết nối lại ·
+                      Kết nối · Tắt hẳn; CT Work thêm đổi dự án · đổi quyền · bỏ gắn · đăng xuất. */}
+                  <span className="ct-mcp-nut">
+                    {hanhDongMcp(s, nnMcp).map((h) => (
+                      <button
+                        key={h.giaTri} type="button" className="ct-btn ct-btn-ghost ct-mcp-battat" disabled={khoa || dangNap}
+                        title={h.mo}
+                        onClick={() => {
+                          if (h.giaTri.startsWith('ctw')) { window.dispatchEvent(new CustomEvent(SU_KIEN_CTW_DU_AN, { detail: { cuocId, giaTri: h.giaTri } })); return; }
+                          void window.cuongthai?.agent.mcpServer(cuocId, s.ten, h.giaTri as 'ngat' | 'noiLai' | 'noi' | 'tatHan').then((r) => datTt(r.trangThai)).catch(() => undefined);
+                        }}
+                      >
+                        {h.nhan}
+                      </button>
+                    ))}
+                  </span>
                 </li>
               ))}
             </ul>

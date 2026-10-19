@@ -210,10 +210,23 @@ test('trần theo model: mặc định đủ mọi model, admin ghi đè từng 
 });
 
 test('không giới hạn năng lực: trần ký tự theo cửa sổ thật, effort theo mức người dùng', () => {
-  // Nén sớm 55% cửa sổ (18/10/2026).
-  assert.equal(tranKyTuCua(1_000_000), 1_320_000);
-  assert.equal(tranKyTuCua(400_000), 528_000);
-  assert.equal(nguongNen(400_000), 480_000);
+  // Đợt 8A: ngưỡng nén THEO CỔNG, tính token (2,0 ký tự/token), trừ system + tool.
+  const ch = { cong: 'anthropic', cuaSoToken: 1_000_000, maxRa: 128_000 };
+  const gpt = { cong: 'modelapi', cuaSoToken: 400_000, maxRa: 128_000 };
+  const rb = { cong: 'rambo', cuaSoToken: 200_000, maxRa: 16_000 };
+  assert.equal(tranKyTuCua(ch), 1_300_000, 'chính hãng: 650K token');
+  assert.equal(tranKyTuCua(gpt), 700_000, 'modelapi: 350K token');
+  assert.equal(tranKyTuCua(rb), 348_000, 'rambo: 190K tổng − 16K chỗ ra (không nén sớm)');
+  assert.equal(tranKyTuCua(rb, 40_000), 308_000, 'trừ system + tool (40K ký tự = 20K token)');
+  assert.equal(tranKyTuCua(ch, 200_000), 1_100_000);
+  assert.equal(tranKyTuCua({}), 348_000, 'không biết model ⇒ 200K thận trọng như rambo');
+  process.env.AGENT_NEN_MODELAPI_TOKEN = '300000';
+  assert.equal(tranKyTuCua(gpt), 600_000, 'env chỉnh từng cổng');
+  delete process.env.AGENT_NEN_MODELAPI_TOKEN;
+  process.env.AGENT_NEN_ANTHROPIC_TOKEN = '990000';
+  assert.equal(tranKyTuCua(ch), Math.round((1_000_000 - 32_000) * 2), 'lưới an toàn: không vượt cửa sổ thật − chỗ ra');
+  delete process.env.AGENT_NEN_ANTHROPIC_TOKEN;
+  assert.equal(nguongNen(gpt), tranKyTuCua(gpt), 'lược kết quả tool không sớm hơn ngưỡng nén');
   assert.equal(effortGpt('thap'), 'low');
   assert.equal(effortGpt('ultracode'), 'xhigh');
   assert.equal(effortGpt(undefined), 'medium');

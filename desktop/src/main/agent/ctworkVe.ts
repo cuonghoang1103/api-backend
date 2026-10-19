@@ -347,16 +347,21 @@ export interface DoanDuAn { key: string; projectId: number | null; workspaceId: 
 
 /** "Dự án **LF** (id 2) trong không gian **"LabFlow Studio"** (id 3)" ⇒ {LF, 2, 3, LabFlow Studio}; hoặc thẻ "LF-12" lặp lại. */
 export function doanDuAnTuTaiLieu(chu: string): DoanDuAn | null {
-  const m = /(?:dự án|du an|project)\s+\*{0,2}`?([A-Z][A-Z0-9_]{1,9})`?\*{0,2}(?:\s*\(\s*id\s*(\d+)\s*\))?/i.exec(chu);
+  /*
+   * Đợt 8A (chủ app: "mở ở BẤT KỲ thư mục nào cũng tự nối CT Work"): CHỈ nhận khi tài liệu ghi RÕ mã dự án CT Work —
+   * một dòng có chữ "CT Work" kèm "dự án/project/key <KEY>". Bản cũ khớp mọi câu "project Foo" (cờ /i nuốt cả chữ
+   * thường) và mọi tài liệu nhắc `ABC-12` ≥ 3 lần ⇒ repo bất kỳ cũng bị hỏi gắn.
+   */
   const ws = /(?:không gian|khong gian|workspace)\s+\*{0,2}"?([^"*\n]{2,60}?)"?\*{0,2}\s*\(\s*id\s*(\d+)\s*\)/i.exec(chu);
-  if (m && /^[A-Z][A-Z0-9_]+$/.test(m[1]!)) {
-    return { key: m[1]!, projectId: m[2] ? Number(m[2]) : null, workspaceId: ws ? Number(ws[2]) : null, workspace: ws ? ws[1]!.trim() : null };
+  for (const dong of chu.split('\n')) {
+    /* Dòng phải nói rõ là CT Work (hoặc cuongthai.com), hoặc ghi kèm id dự án "(id 2)". */
+    if (!/\bCT\s?-?Work\b|\bctwork\b|cuongthai\.com|\(\s*id\s*\d+\s*\)/i.test(dong)) continue;
+    const m = /(?:[Dd]ự án|[Dd]u an|[Pp]roject|[Kk]ey|[Mm]ã dự án)\s*(?:CT\s?-?Work\s*)?(?:[:=]\s*)?\*{0,2}`?([A-Z][A-Z0-9_]{1,9})`?\*{0,2}(?![a-z])(?:\s*\(\s*id\s*(\d+)\s*\))?/.exec(dong);
+    if (m && m[1] !== 'CT') {
+      return { key: m[1]!, projectId: m[2] ? Number(m[2]) : null, workspaceId: ws ? Number(ws[2]) : null, workspace: ws ? ws[1]!.trim() : null };
+    }
   }
-  // Không có câu "dự án X": key xuất hiện dạng thẻ (`LF-12`) ít nhất 3 lần, một key áp đảo.
-  const dem = new Map<string, number>();
-  for (const x of chu.matchAll(/\b([A-Z][A-Z0-9]{1,6})-\d{1,5}\b/g)) if (!/^(UTF|ISO|RFC|SHA|CVE|BR|UC|SR|NFR|FR|TC)$/.test(x[1]!)) dem.set(x[1]!, (dem.get(x[1]!) ?? 0) + 1);
-  const top = [...dem.entries()].sort((a, b) => b[1] - a[1])[0];
-  return top && top[1] >= 3 ? { key: top[0], projectId: null, workspaceId: null, workspace: null } : null;
+  return null;
 }
 
 // ─── list_projects ───────────────────────────────────────────────

@@ -24,7 +24,7 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 
 import type {
-  AgentCongAnthropic, AgentCuocDangMo, AgentInfo, AgentKetQuaGiaHan, AgentMcpTrangThai, AgentWorktree, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, ModelAgent, MucNoLuc,
+  AgentCongAnthropic, AgentCuocDangMo, AgentInfo, AgentKetQuaGiaHan, AgentMcpTrangThai, AgentUsageCuongMini, AgentWorktree, AgentMucKhoiPhuc, AgentPhien, AgentQuota, AgentWorkspace, ModelAgent, MucNoLuc,
 } from '../../shared/ipc';
 import { API_ORIGIN } from '../config';
 import { getSettings, setSetting } from '../store';
@@ -47,7 +47,7 @@ import { dangMatMang } from '../aiCucBo/mang';
 import { modelChoCode } from '../aiCucBo/quanLy';
 import { duongCuaLuot } from '../agent/epCucBo';
 import { dungLenhNenCua } from '../agent/lenhNen';
-import { batTatServer, choNapMcp, duongDanCauHinh, duyetDuAn, hanMucMcp, loiCauHinh, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
+import { batTatServer, choNapMcp, duongDanCauHinh, duyetDuAn, hanMucMcp, loiCauHinh, napLaiMcp, napLaiMotServer, ngatServer, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
 import { cai, napChiMuc, tim } from '../agent/khoKyNang';
 import { WEB_ORIGIN } from '../config';
 import { dsWorktree, taoWorktree, xoaWorktree } from '../agent/worktree';
@@ -66,6 +66,7 @@ import { traLoi } from '../agent/xinPhep';
 import { traLoiHoi } from '../agent/hoiLuaChon';
 import { canCapLai, capLaiCtwork, docBiMat, ketNoiCtwork, napDemBiMat, ngatCtwork, trangThaiCtwork, TEN_SERVER as TEN_CTWORK } from '../agent/ctworkKetNoi';
 import * as ctw from '../agent/ctworkHe';
+import { nguCanhChoModel } from '../agent/ctworkHe';
 import * as ctwDd from '../agent/ctworkDanDuong';
 import { datNgonNgu as datNgonNguCtw } from '../agent/ctworkVe';
 import { cauDanhThuc, datBoChayHen, huyCho, huyHen } from '../agent/choHen';
@@ -1131,6 +1132,31 @@ export function registerAgentHandlers(): void {
     const r = await batTatServer(ten, bat, cuocId ? gocCuaCuoc(cuocId) : null);
     return { ...r, trangThai: trangThaiMcp() };
   });
+  /* Đợt 8A: quản lý MỘT server — ngắt trong phiên · kết nối lại (chỉ server đó) · kết nối (đang ngắt/tắt) · tắt hẳn. */
+  handle('agent:mcpServer', async ({ cuocId, ten, viec }) => {
+    const goc = cuocId ? gocCuaCuoc(cuocId) : null;
+    if (viec === 'ngat') { await ngatServer(ten); return { ok: true, trangThai: trangThaiMcp() }; }
+    if (viec === 'tatHan') { const r = await batTatServer(ten, false, goc); return { ...r, trangThai: trangThaiMcp() }; }
+    const dong = trangThaiServer().find((x) => x.ten === ten);
+    if (viec === 'noi' && dong?.tat) { const r = await batTatServer(ten, true, goc); return { ...r, trangThai: trangThaiMcp() }; }
+    await napLaiMotServer(ten, goc);
+    const sau = trangThaiServer().find((x) => x.ten === ten);
+    return { ok: Boolean(sau?.ok), ...(sau && !sau.ok && sau.loi ? { loi: sau.loi } : {}), trangThai: trangThaiMcp() };
+  });
+
+  /* Đợt 8A: `/usage` — MỘT route máy chủ, lõi gửi kèm model đang chọn + dự án CT Work của phiên; app chỉ vẽ. */
+  handle('agent:usage', async ({ cuocId }) => {
+    const phien = readStoredSession();
+    if (!phien?.sessionToken) throw new Error('Chưa đăng nhập. / Not signed in.');
+    const q = new URLSearchParams({ model: modelHienTai() });
+    const goc = cuocId ? gocCuaCuoc(cuocId) : null;
+    const pid = duAnCtworkCuaCuoc(cuocId) ?? (goc ? (await nguCanhChoModel(goc).catch(() => null))?.projectId ?? null : null);
+    if (pid) q.set('ctworkDuAn', String(pid));
+    const r = await fetch(`${API_ORIGIN}/api/v1/agent/usage?${q}`, { headers: { Authorization: `Bearer ${phien.sessionToken}` }, signal: AbortSignal.timeout(15_000) });
+    const j = await r.json().catch(() => ({})) as { data?: AgentUsageCuongMini; message?: string };
+    if (!r.ok || !j.data) throw new Error(j.message ?? `Máy chủ trả HTTP ${r.status}.`);
+    return j.data;
+  });
 
   handle('agent:boNhoDs', async ({ cuocId }) => dsDeGiaoDien(gocCuaCuoc(cuocId)));
   handle('agent:boNhoXoa', async ({ cuocId, id }) => quenBaiHoc(gocCuaCuoc(cuocId), id, 'người dùng xoá ở tab Bộ nhớ'));
@@ -1180,17 +1206,23 @@ export function registerAgentHandlers(): void {
         await napDemBiMat().catch(() => {});
         // Lần nạp MCP lúc mở còn chạy ⇒ đợi (tối đa 8 giây) để biết server CT Work đã nối chưa.
         await Promise.race([choNapMcp().catch(() => undefined), new Promise((ok) => { const t = setTimeout(ok, 8000); t.unref?.(); })]);
+        /*
+         * ĐỢT 8A (chủ app: "mở ở BẤT KỲ thư mục nào cũng tự nối CT Work"): CT Work gắn theo THƯ MỤC, không theo người.
+         *   • Thư mục CHƯA gắn ⇒ không hỏi "Kết nối CT Work?", không liệt kê dự án, không cấp lại token — chỉ một dòng gợi
+         *     ý nhẹ (`goiYNhe`) khi chưa nối: "Làm dự án trên CT Work? gõ /ctwork".
+         *   • AGENTS.md/CLAUDE.md của thư mục ghi RÕ mã dự án CT Work ⇒ hỏi MỘT lần cho thư mục đó ("Không" ⇒ nhớ).
+         *   • Thư mục ĐÃ gắn + token hết hạn ⇒ cấp lại một chạm (như cũ).
+         */
         const coPhien = Boolean(readStoredSession());
         const sv = trangThaiServer().find((s) => s.ten === TEN_CTWORK);
-        if (coPhien && await canCapLai()) return { ok: true, hoi: 'capLai' as const };
-        if (coPhien && !sv && !(await docBiMat()) && !process.env.CTWORK_TOKEN && getSettings().ctworkDaHoi !== true) return { ok: true, hoi: 'ketNoi' as const };
-        if (sv?.ok && goc && !(await ctw.docGan(goc)) && !(await ctw.daHoiGan(goc))) {
+        const gan = goc ? await ctw.docGan(goc) : null;
+        if (coPhien && gan && await canCapLai()) return { ok: true, hoi: 'capLai' as const };
+        const daNoi = Boolean(sv) || Boolean(await docBiMat()) || Boolean(process.env.CTWORK_TOKEN);
+        if (goc && !gan && !(await ctw.daHoiGan(goc))) {
           const doan = await ctw.doanGan(goc);
-          if (doan) return { ok: true, hoi: 'ganDuAn' as const, doan };
-          /* Đợt 6 (việc 4): không đoán được ⇒ liệt kê MỌI dự án để chọn (một lần mỗi thư mục). */
-          return { ok: true, hoi: 'chonDuAn' as const };
+          if (doan && coPhien) return { ok: true, hoi: 'ganDuAn' as const, doan };
         }
-        return { ok: true, hoi: null };
+        return { ok: true, hoi: null, ...(coPhien && !daNoi && !gan ? { goiYNhe: true } : {}) };
       }
       case 'daHoi':
         if (v.loai === 'ketNoi') setSetting('ctworkDaHoi', true);

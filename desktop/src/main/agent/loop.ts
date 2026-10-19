@@ -54,7 +54,7 @@ import { dungLenhNenCua } from './lenhNen';
 import { dongTerminalCua } from '../terminal/phienTerminal';
 import { hanMucMcp, goiToolMcp, laCtworkTinCay, laToolMcp, mucLucChoCuoc, napToolChoCuoc, timToolMcp, toolGuiChoCuoc } from './mcp';
 import { ghiChuGop } from './ctworkDanDuong';
-import { dinhKemThe, nguCanhChoModel } from './ctworkHe';
+import { dinhKemThe, khopKeyChuaGan, nguCanhChoModel } from './ctworkHe';
 import { baoLoiCtwork } from './ctworkKetNoi';
 import { coTokenFigma } from './figmaKetNoi';
 import * as trinhDuyetCheDo from '../browser';
@@ -172,6 +172,8 @@ export type SuKienAgent =
   | { loai: 'dinhKemCtwork'; khoa: string[] }
   /** Đợt 6: lượt này đã đọc hướng dẫn của NHÓM từ CT Work (trang "AGENTS.md — …" hoặc bối cảnh tự đọc) — một lần mỗi cuộc. */
   | { loai: 'ctwHuongDanNhom'; nguon: string; laAgents: boolean }
+  /** Đợt 8A: thư mục chưa gắn, câu nhắc `KEY-123` khớp dự án ⇒ hỏi gắn một lần (giao diện hỏi sau khi lượt xong). */
+  | { loai: 'ctwHoiGan'; doan: { key: string; projectId: number | null; workspaceId: number | null; workspace: string | null } }
   /**
    * Đợt 6 (lỗi đợt trước): tin người dùng gõ GIỮA lượt mà lượt đã dừng (Esc / lỗi) TRƯỚC khi agent kịp đọc ⇒ trả về để
    * giao diện đặt lại vào ô nhập (như Claude Code), không mất câm.
@@ -204,6 +206,8 @@ export type SuKienAgent =
   | {
       loai: 'xong'; hanMuc: HanMucUi | null; tienUsd: number; daLuoc: number; soFileDaSua: number;
       nguCanh?: NguCanhUi;
+      /** Đợt 8A: 1–3 gợi ý bước tiếp do model viết (máy chủ tách khỏi câu trả lời) — chữ mờ Tab + nút bấm. */
+      goiY?: string[];
     }
   /**
    * `coKeyGiaHan`: hết hạn mức token VÀ admin đã bật key gia hạn (02/10/2026).
@@ -1227,6 +1231,10 @@ export async function chayLuot(
       new Promise<typeof rong>((ok) => { const t = setTimeout(() => ok(rong), 8000); t.unref?.(); }),
     ]);
     if (dk.khoa.length) { cauHoi = `${cauHoi}${dk.chu}`; phat({ loai: 'dinhKemCtwork', khoa: dk.khoa }); }
+    /* Đợt 8A: thư mục CHƯA gắn mà câu nhắc `KEY-123` khớp một dự án của người dùng ⇒ giao diện hỏi MỘT lần "Gắn thư
+       mục này với dự án KEY?" (sau khi lượt xong). Không chặn lượt, không bao giờ tự gắn. */
+    const goc0 = boiCanh.goc;
+    void khopKeyChuaGan(goc0, cauHoi).then((d) => { if (d) phat({ loai: 'ctwHoiGan', doan: d }); }).catch(() => undefined);
   }
   /* ĐỢT 5: "Dự án CT Work: LF (id 2)…" — máy chủ ghi CẠNH dòng HÔM NAY ở cuối prompt (đổi theo dự án,
      không theo lượt ⇒ không phá đệm). Thư mục chưa gắn ⇒ không gửi. */
@@ -1435,11 +1443,11 @@ export async function chayLuot(
         ...(boiCanh.model ? { model: boiCanh.model } : {}),
         // Gửi ở MỌI vòng, không phải chỉ vòng đầu: người dùng có thể nạp lại
         // MCP giữa chừng, và máy chủ chỉ chấp nhận tool có mặt trong lượt NÀY.
-        toolMcp: toolGuiChoCuoc(c.id, { boGhiCtwork }).map((t) => ({
+        toolMcp: toolGuiChoCuoc(c.id, { boGhiCtwork, boCtwork: !ctworkTheoCuoc.get(c.id) }).map((t) => ({
           name: t.ten, description: t.moTa, parameters: t.thamSo,
         })),
         /* Đợt 6: mục lục tool chưa nạp (ổn định theo server ⇒ không phá đệm tiền tố). */
-        mcpMucLuc: mucLucChoCuoc({ boGhiCtwork }),
+        mcpMucLuc: mucLucChoCuoc({ boGhiCtwork, boCtwork: !ctworkTheoCuoc.get(c.id) }),
         signal: dieuKhien.signal,
         phat: phatVaGom,
       });
@@ -1547,6 +1555,7 @@ export async function chayLuot(
           loai: 'xong', hanMuc: ketQua.quota, tienUsd: Math.round(c.tienLuot * 1e6) / 1e6,
           daLuoc: ketQua.daLuoc, soFileDaSua: soFileDaSua(c.so),
           ...(ketQua.nguCanh ? { nguCanh: ketQua.nguCanh } : {}),
+          ...(ketQua.stop === 'end' && ketQua.goiY?.length ? { goiY: ketQua.goiY } : {}),
         });
         // Việc agent thường chạy nhiều phút; người dùng đi làm việc khác là
         // chuyện bình thường. Robot nổi báo hộ. Nhập động để `loop.ts` không kéo
@@ -2641,6 +2650,8 @@ interface KetQuaLuot {
   costUsd: number;
   daLuoc: number;
   nguCanh?: NguCanhUi;
+  /** Đợt 8A: gợi ý bước tiếp (`done.goiY`). */
+  goiY?: string[];
   /** Token vào/ra của lượt (`done.usage`) — cộng dồn cho `phuXong`. */
   tokenVao: number;
   tokenRa: number;
@@ -3175,6 +3186,7 @@ async function mgoiMotLuotThat(o: {
           ra.tokenVao = Number(e.usage?.inputTokens) || 0;
           ra.tokenRa = Number(e.usage?.outputTokens) || 0;
           if (e.nguCanh) ra.nguCanh = e.nguCanh;
+          if (Array.isArray(e.goiY)) ra.goiY = e.goiY.filter((x: unknown): x is string => typeof x === 'string' && x.trim().length > 0).slice(0, 3).map((x: string) => x.slice(0, 160));
           break;
         case 'error':
           daKetThuc = true;

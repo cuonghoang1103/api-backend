@@ -94,7 +94,8 @@ export function dauNgayVn(luc = new Date()): Date {
 
 export async function daDungNguoi(userId: number, hang: HangChinhHang, tu: Date): Promise<number> {
   const s = await prisma.anthropicUsage.aggregate({
-    where: { userId, hang, createdAt: { gte: tu } },
+    /* Đợt 8A: lượt do ADMIN WEB tài trợ (`viec = agent_taitro`) không ăn trần chính hãng riêng của người dùng. */
+    where: { userId, hang, createdAt: { gte: tu }, viec: { not: 'agent_taitro' } },
     _sum: { costUsd: true },
   });
   return s._sum.costUsd ?? 0;

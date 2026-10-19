@@ -116,6 +116,10 @@ export interface TrangThaiChat {
   tienPhien: number;
   soFileDaSua: number;
   nguCanh: { phanTram: number; soLuotDaBo: number } | null;
+  /** Đợt 8A: 1–3 gợi ý bước tiếp (máy chủ, khung `xong.goiY`) — câu đầu hiện CHỮ MỜ ở ô nhập trống, Tab nhận. */
+  goiYTiep: string[];
+  /** Đợt 8A: thư mục chưa gắn, câu nhắc `KEY-123` khớp dự án ⇒ hỏi gắn sau khi lượt xong. */
+  hoiGanCtw: { key: string; projectId: number | null; workspaceId: number | null; workspace: string | null } | null;
   /** Hạn mức 5 giờ đã dùng (%), lõi báo kèm sự kiện `xong`. */
   hanMucPhanTram: number | null;
   /** Thời điểm kết thúc lượt gần nhất + thời lượng — để báo thông báo lượt dài. */
@@ -172,7 +176,7 @@ export function trangThaiDau(): TrangThaiChat {
   return {
     bang: [], khoaBang: 0, dangChay: false, batDauLuot: 0, pha: 'cho', toolDang: '', toolCuoi: '', buoc: null,
     chuDangViet: '', toolChay: [], choDuyet: [], keHoach: [], fileDaSua: {}, tienPhien: 0, soFileDaSua: 0,
-    nguCanh: null, hanMucPhanTram: null, luotCuoi: null, muc: [], tieuDe: '', cauHoiCuoi: '', choDuyetKeHoach: false, hoiDuyetKeHoach: false,
+    nguCanh: null, goiYTiep: [], hoiGanCtw: null, hanMucPhanTram: null, luotCuoi: null, muc: [], tieuDe: '', cauHoiCuoi: '', choDuyetKeHoach: false, hoiDuyetKeHoach: false,
     daCompact: false, chiTiet: false, loiCanXuLy: null, chenTraVe: null, choChiDan: false, nghiThat: false, moiCong: null, daMoiCong: false, hoiQuayVe: null, ws: null, info: null, lenhDuAn: [], daBaoTrinhDuyet: false, agentPhu: [], lenhNen: [],
     toolCho: null, tokenRa: 0, kyTuRa: 0, coTienTrinh: false, tienLuot: 0, hoi: null, henCho: { cho: [], hen: [] }, daNhacNguCanh: 0,
   };
@@ -302,6 +306,7 @@ export class KhoChat {
     if (!S.tieuDe) S.tieuDe = hienThi.replace(/\s+/g, ' ').trim().slice(0, 80);
     S.cauHoiCuoi = cauGui;
     S.choChiDan = false;
+    S.goiYTiep = [];
     S.dangChay = true;
     S.batDauLuot = bayGio;
     S.tokenRa = 0;
@@ -478,6 +483,12 @@ export class KhoChat {
         if (khoa.length) this.them({ loai: 'dinhKem', khoa });
         break;
       }
+      case 'ctwHoiGan': {
+        /* Đợt 8A: hỏi gắn SAU khi lượt xong (ManChat mở thẻ khi rảnh) — không chen thẻ giữa lượt. */
+        const d = e.doan as TrangThaiChat['hoiGanCtw'];
+        if (d && typeof d.key === 'string') S.hoiGanCtw = d;
+        return;
+      }
       case 'ctwHuongDanNhom': {
         // Đợt 6: lõi đã đọc hướng dẫn của NHÓM từ CT Work (trang "AGENTS.md — …" hoặc bối cảnh tự đọc) — một lần mỗi việc.
         const nguon = String(e.nguon ?? '');
@@ -604,6 +615,8 @@ export class KhoChat {
         const ghi = [soFile ? L(`${soFile} file đã sửa`, `${soFile} file${soFile > 1 ? 's' : ''} changed`) : '', tien > 0 ? tienGon(tien) : ''].filter(Boolean).join(' · ');
         this.ketLuot(ghi, false, bayGio);
         if (S.choDuyetKeHoach) { S.choDuyetKeHoach = false; S.hoiDuyetKeHoach = true; }
+        /* Đợt 8A: gợi ý bước tiếp của model (đã tách khỏi câu trả lời ở máy chủ). */
+        S.goiYTiep = Array.isArray(e.goiY) ? (e.goiY as unknown[]).filter((x): x is string => typeof x === 'string' && x.trim().length > 0).slice(0, 3) : [];
         break;
       }
       case 'loi': {

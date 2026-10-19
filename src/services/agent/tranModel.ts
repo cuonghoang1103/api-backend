@@ -96,7 +96,8 @@ export async function datTranModel(moi: unknown): Promise<Record<string, Record<
 
 async function daDung(userId: number, model: string, tu: Date): Promise<number> {
   const s = await prisma.interviewLLMCallLog.aggregate({
-    where: { userId, feature: 'agent', model, createdAt: { gte: tu } },
+    /* Đợt 8A: lượt do ADMIN WEB tài trợ (`step taitro:…`) không ăn trần model riêng của người dùng. */
+    where: { userId, feature: 'agent', model, createdAt: { gte: tu }, NOT: { step: { startsWith: 'taitro:' } } },
     _sum: { costUsd: true },
   });
   return Number(s._sum.costUsd ?? 0);

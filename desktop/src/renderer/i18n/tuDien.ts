@@ -314,6 +314,7 @@ export const TU_DIEN: Record<string, string> = {
   'Làm tiếp': 'Continue',
   'Thử lại': 'Try again',
   'Nạp lại': 'Reload',
+  'Gợi ý bước tiếp': 'Suggested next steps',
   'Tạo': 'Create',
   'Tất cả': 'All',
   'Lùi': 'Back',

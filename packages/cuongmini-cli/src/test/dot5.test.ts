@@ -109,23 +109,23 @@ test('bình luận bằng chứng: soạn từ git ⇒ xem trước ⇒ Gửi / 
   assert.equal(x.goi.find(([, d]) => d.viec === 'binhLuan')![1].key, 'LF-18');
 });
 
-test('hỏi MỘT lần lúc mở: "Kết nối CT Work?" ⇒ nối chỉ đọc; "Gắn LF?" ⇒ gắn đúng id', async () => {
+test('hỏi MỘT lần lúc mở (đợt 8A): chưa nối ⇒ chỉ dòng gợi ý nhẹ; AGENTS.md ghi rõ LF ⇒ "Gắn LF?" ⇒ nối + gắn đúng id', async () => {
   let lan = 0;
+  let daNoi = false;
   const x = giaoDien((k, d) => {
-    if (d.viec === 'goiY') { lan += 1; return lan === 1 ? { ok: true, hoi: 'ketNoi' } : { ok: true, hoi: 'ganDuAn', doan: { key: 'LF', projectId: 2, workspaceId: 3, workspace: 'LabFlow Studio' } }; }
-    if (k === 'agent:ctwork') return { ok: true, soTool: 30 };
+    if (d.viec === 'goiY') { lan += 1; return lan === 1 ? { ok: true, hoi: null, goiYNhe: true } : { ok: true, hoi: 'ganDuAn', doan: { key: 'LF', projectId: 2, workspaceId: 3, workspace: 'LabFlow Studio' } }; }
+    if (k === 'agent:ctwork' && d.viec === 'trangThai') return { server: daNoi ? { ok: true } : null };
+    if (k === 'agent:ctwork') { daNoi = true; return { ok: true, soTool: 30 }; }
     return traMacDinh(k, d);
   });
+  assert.equal(await hoiCtworkMotLan(x.g), false, 'không thẻ chặn');
+  assert.ok(!x.the.length, 'không có thẻ "Kết nối CT Work?"');
+  assert.ok(x.chu.some((b) => /Làm dự án trên CT Work\? gõ \/ctwork/.test(b)), `dòng gợi ý nhẹ: ${JSON.stringify(x.chu)}`);
   assert.equal(await hoiCtworkMotLan(x.g), true);
-  const a = x.the.at(-1)!;
-  assert.equal(a.tieuDe, 'Kết nối CT Work?');
-  assert.deepEqual(a.ds.map((d) => d.giaTri), ['doc', 'ghi', 'khong']);
-  await a.khiChon('doc');
-  assert.ok(x.goi.some(([k, d]) => k === 'agent:ctworkHe' && d.viec === 'daHoi' && d.loai === 'ketNoi'), 'ghi nhớ đã hỏi');
-  assert.ok(x.goi.some(([k, d]) => k === 'agent:ctwork' && d.viec === 'noi' && d.quyen === 'doc'));
   const b = x.the.at(-1)!;
   assert.match(b.tieuDe, /Gắn thư mục này với dự án CT Work LF \(id 2\)\?/);
   await b.khiChon('gan');
+  assert.ok(x.goi.some(([k, d]) => k === 'agent:ctwork' && d.viec === 'noi' && d.quyen === 'doc'), 'chưa nối ⇒ nối chỉ đọc trước khi gắn');
   /* Đợt 6: kèm vai (myRole) — lõi ghi `vai` vào ctwork.json, máy chủ nói vai cho model. */
   assert.deepEqual(x.goi.find(([, d]) => d.viec === 'gan')![1].duAn, { key: 'LF', id: 2, workspaceId: 3, ten: 'LabFlow AI', workspace: 'LabFlow Studio', vaiTro: 'ADMIN' });
   assert.match(x.chu.at(-1)!, /Đã gắn thư mục với dự án \*\*LF\*\* \(id 2\)[\s\S]*\.gitignore/);

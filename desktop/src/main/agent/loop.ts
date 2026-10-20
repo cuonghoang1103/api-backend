@@ -218,6 +218,8 @@ export type SuKienAgent =
    */
   | {
       loai: 'loi'; thongDiep: string; ma?: string; coKeyGiaHan?: boolean;
+      /** Bản tiếng Anh của `thongDiep` (vd. dòng tự chuyển cổng `DOI_CONG_TU_DONG`) — như `shared/ipc.ts`. */
+      thongDiepEn?: string;
       moiNangCap?: boolean; cacCong?: AgentCongNangCap[]; daBat?: boolean;
       /** Mã gia hạn theo $ (19/10/2026): chạm trần TIỀN gia hạn được ⇒ giao diện hiện thẻ nhập mã. */
       giaHanTien?: AgentGiaHanTien;

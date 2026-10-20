@@ -63,7 +63,7 @@ async function chay(ten: string, coThem: string[]): Promise<{ su_kien: unknown[]
     cmd: [process.execPath, dist, ...coThem], cwd: path.join(tam, 'duan'), cols: 120, rows: 36, duration: 15.5, out: ra,
     env: {
       HOME: home, CUONGMINI_HOME: path.join(home, '.cuongmini'), CUONGTHAI_API_ORIGIN: `http://127.0.0.1:${cong}`,
-      CUONGMINI_LOI: path.join(goc, 'thu/loiGia.cjs'), LOI_GIA_NHANH: '1', CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_TIN_THU_MUC: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1',
+      CUONGMINI_LOI: path.join(goc, 'thu/loiGia.cjs'), LOI_GIA_NHANH: '1', CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_TIN_THU_MUC: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1', CUONGMINI_CTW_TRE_MS: '600000',
       TERM: 'xterm-256color', COLORTERM: 'truecolor', LANG: 'vi_VN.UTF-8', TERM_PROGRAM: '',
     },
     // Chạy trong CI: Ink thấy CI ⇒ tắt khung động, và CuongMini không bật toàn màn hình — bỏ đi để thử như terminal thật.

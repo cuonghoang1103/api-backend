@@ -5,6 +5,16 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { prisma } from '../../config/database.js';
+
+/** Ghim gói ADMIN (không trần $), đừng đọc CSDL thật — như chongLap.test.ts (user id 1 local là tài khoản thường ⇒ trần 0 $). */
+function ghimGoiAdmin(t: { after: (f: () => void) => void }): void {
+  const u = prisma.user as any;
+  const goc = u.findUnique;
+  u.findUnique = async () => ({ isPro: true, proExpiresAt: null, proSince: null, proSource: null, roles: [{ role: { name: 'ADMIN' } }] });
+  t.after(() => { u.findUnique = goc; });
+}
+
 const { LocLuongGoiY, tachGoiY, LUAT_GOI_Y } = await import('./goiYBuocTiep.js');
 
 test('tách khối gợi ý: 1–3 dòng sạch, chữ chính không còn khối', () => {
@@ -26,6 +36,7 @@ test('lọc luồng: thẻ bị chia nhiều mẩu không lọt ra; "<" thườn
 });
 
 test('runAgentTurn: chữ chảy không có khối, done mang goiY, hội thoại lưu không có khối', async (t) => {
+  ghimGoiAdmin(t);
   const { runAgentTurn } = await import('./turn.js');
   const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY_GPT', 'LLM_GATEWAY_BASE_URL', 'AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY'].map((k) => [k, process.env[k]] as const);
   process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap-cho-kiem-thu';

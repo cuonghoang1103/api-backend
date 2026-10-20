@@ -44,7 +44,8 @@ describe('moTaUsage2', () => {
     } } }, {}, 'en')!;
     expect(md).toMatch(/\| Key 1 \(200 USD\) \| \$200 \| \$50 \| 75% \|/);
     expect(md).toMatch(/\| CuongMini Sonic 5\.5 \| \$1 \| \$10 \| 4 \|/);
-    expect(md).toMatch(/CuongMini Core \(modelapi\): today \$0\.500 · month \$7/);
+    expect(md).toMatch(/CuongMini Core: today \$0\.500 · month \$7/);
+    expect(md).not.toMatch(/modelapi|Anthropic/); // QA 9.2: không in tên cổng/hãng thật, kể cả admin
     expect(md).toMatch(/CuongMini Classic \(flat-rate\): today 6 questions · 30 steps/);
   });
 });

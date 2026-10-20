@@ -13,6 +13,7 @@ import { submitApi, submitKeys, type SubmitGateConfig, type SubmissionItem } fro
 import { workError, type ProjectConfig } from '@/lib/work-api';
 import { EmptyState, PageLoading } from '@/components/work/ui';
 import { cn } from '@/lib/utils';
+import { taiVe, tepDinhKem, useXemTep } from '@/components/work/xemTep/XemTep';
 
 const KB = (n: number) => (n < 1024 ? `${n} B` : n < 1024 * 1024 ? `${(n / 1024).toFixed(0)} KB` : `${(n / 1024 / 1024).toFixed(1)} MB`);
 const dmy = (s: string | null) => (s ? new Date(s).toLocaleDateString('vi-VN') : '—');
@@ -77,10 +78,8 @@ export default function Submissions({ pid, config }: { pid: number; config: Proj
   const [downloading, setDownloading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  async function openFile(attachmentId: number) {
-    try { const { url } = await submitApi.fileUrl(pid, attachmentId); window.open(url, '_blank', 'noopener'); }
-    catch (e) { setErr(workError(e)); }
-  }
+  // 20/10/2026: bấm tệp ⇒ trình xem trong trang (←/→ qua các tệp của thẻ); nút ⬇ để tải về.
+  const xem = useXemTep();
   async function downloadAll() {
     setErr(null); setDownloading(true);
     try { await submitApi.downloadAll(pid); }
@@ -154,11 +153,17 @@ export default function Submissions({ pid, config }: { pid: number; config: Proj
                   </span>
                   {it.attachments.length ? (
                     <span className="flex flex-wrap gap-1">
-                      {it.attachments.map((a) => (
-                        <button key={a.id} type="button" onClick={() => openFile(a.id)}
-                          className="rounded border border-[var(--w-border)] px-1.5 py-0.5 text-[11px] hover:bg-[var(--w-hover)]" title={`${a.fileName} · ${KB(a.size)}`}>
-                          {a.fileName.length > 20 ? `${a.fileName.slice(0, 18)}…` : a.fileName}
-                        </button>
+                      {it.attachments.map((a, i) => (
+                        <span key={a.id} className="inline-flex items-center rounded border border-[var(--w-border)] text-[11px]">
+                          <button type="button" onClick={() => xem.mo(it.attachments.map((x) => tepDinhKem(pid, x)), i)}
+                            className="rounded-l px-1.5 py-0.5 hover:bg-[var(--w-hover)]" title={`${a.fileName} · ${KB(a.size)}`}>
+                            {a.fileName.length > 20 ? `${a.fileName.slice(0, 18)}…` : a.fileName}
+                          </button>
+                          <button type="button" onClick={() => void taiVe(tepDinhKem(pid, a))} aria-label={`Tải ${a.fileName}`} title="Tải về"
+                            className="rounded-r border-l border-[var(--w-border)] px-1 py-0.5 text-[var(--w-text-3)] hover:bg-[var(--w-hover)] hover:text-[var(--w-text)]">
+                            <Download size={11} />
+                          </button>
+                        </span>
                       ))}
                     </span>
                   ) : null}
@@ -174,6 +179,7 @@ export default function Submissions({ pid, config }: { pid: number; config: Proj
           Cổng đang {d.gate.mode === 'hard' ? <b>bắt buộc</b> : <b>nhắc nhở</b>}: thành viên cần đính kèm ≥ {d.gate.minAttachments} tệp vào thẻ trước khi kéo sang Done.
         </p>
       ) : null}
+      {xem.khung}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * CTW đợt 5b K-1 — tệp + VOICE NOTE trong bình luận: hiển thị (ảnh xem trước, PDF xem trong trang, tệp khác tải về),
+ * CTW đợt 5b K-1 — tệp + VOICE NOTE trong bình luận: hiển thị (bấm tệp ⇒ trình xem trong trang `xemTep/`, nút tải riêng),
  * trình phát voice note (độ dài, tua, tốc độ) + bản phiên âm, và phần soạn: chip bản nháp, nút ghi âm.
  *
  * Tệp không công khai: mỗi lần xem/nghe xin URL ký sẵn ngắn hạn (`/attachments/:id/url`, kiểm quyền — khách cổng chỉ
@@ -12,21 +12,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { Download, Eye, FileText, Image as ImageIcon, Mic, Paperclip, Pause, Play, RotateCcw, Square, X } from 'lucide-react';
+import { Download, Image as ImageIcon, Mic, Paperclip, Pause, Play, RotateCcw, Square, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { workError } from '@/lib/work-api';
 import {
   MAX_FILES_PER_COMMENT, transcriptNote, VOICE_MAX_SECONDS, workCommentsApi, type CommentFile,
 } from '@/lib/work-comments-api';
 import { dongHo, useGhiAm } from '../../messaging/useGhiAm';
-import { Dialog, formatBytes, Spinner } from '../ui';
+import { formatBytes, Spinner } from '../ui';
 import { wk } from '../hooks';
 import { wt } from '@/components/work/i18n';
+import { IconTep, taiVe, tepDinhKem, useXemTep } from '../xemTep/XemTep';
 
 const isImage = (m: string) => /^image\/(png|jpe?g|gif|webp|avif|bmp)$/i.test(m);
-const isPdf = (m: string, name: string) => m === 'application/pdf' || /\.pdf$/i.test(name);
-/** App desktop chặn mọi iframe (CSP frame-src 'none') ⇒ PDF mở bằng trình xem của máy thay vì khung trong trang. */
-const inDesktopApp = () => typeof navigator !== 'undefined' && /Electron/i.test(navigator.userAgent);
 
 const clock = (ms: number) => dongHo(Math.round(ms / 1000));
 
@@ -162,15 +160,14 @@ export function VoiceNotePlayer({ pid, num, file, canRetry }: { pid: number; num
 
 // ─── Tệp ─────────────────────────────────────────────────────────
 
-function ImageThumb({ pid, file, onOpen }: { pid: number; file: CommentFile; onOpen: (url: string) => void }) {
+function ImageThumb({ pid, file, onOpen }: { pid: number; file: CommentFile; onOpen: () => void }) {
   const q = useQuery({ queryKey: ['work', 'att-url', pid, file.id, 'inline'], queryFn: () => workCommentsApi.url(pid, file.id, true), staleTime: 60_000 });
   return (
     <button
       type="button"
       className="w-comment-thumb"
       aria-label={wt('chat.previewImage', { name: file.fileName })}
-      onClick={() => q.data && onOpen(q.data)}
-      disabled={!q.data}
+      onClick={onOpen}
     >
       {q.data ? <img src={q.data} alt="" loading="lazy" /> : <ImageIcon size={18} aria-hidden="true" />}
     </button>
@@ -178,50 +175,35 @@ function ImageThumb({ pid, file, onOpen }: { pid: number; file: CommentFile; onO
 }
 
 export function CommentAttachments({ pid, num, files, canRetry }: { pid: number; num: number; files: CommentFile[]; canRetry: (f: CommentFile) => boolean }) {
-  const [preview, setPreview] = useState<{ kind: 'image' | 'pdf'; url: string; name: string } | null>(null);
+  // 20/10/2026: bấm tệp ⇒ trình xem trong trang (ảnh, PDF, chữ, Office…); ←/→ đi qua mọi tệp (trừ voice note) của bình luận.
+  const xem = useXemTep();
   if (!files.length) return null;
   const voices = files.filter((f) => f.voice);
   const images = files.filter((f) => !f.voice && isImage(f.mime));
   const others = files.filter((f) => !f.voice && !isImage(f.mime));
-  const download = async (f: CommentFile) => {
-    try { window.open(await workCommentsApi.url(pid, f.id), '_blank', 'noopener'); } catch (err) { toast.error(workError(err, wt('chat.downloadFailed'))); }
-  };
-  const openPdf = async (f: CommentFile) => {
-    try {
-      const url = await workCommentsApi.url(pid, f.id, true);
-      if (inDesktopApp()) window.open(url, '_blank', 'noopener');
-      else setPreview({ kind: 'pdf', url, name: f.fileName });
-    } catch (err) {
-      toast.error(workError(err, wt('chat.openPdfFailed')));
-    }
-  };
+  const ds = [...images, ...others];
+  const mo = (f: CommentFile) => xem.mo(ds.map((x) => tepDinhKem(pid, x)), ds.indexOf(f));
   return (
     <div className="mt-2 space-y-2" data-testid="comment-files">
       {voices.map((f) => <VoiceNotePlayer key={f.id} pid={pid} num={num} file={f} canRetry={canRetry(f)} />)}
       {images.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {images.map((f) => <ImageThumb key={f.id} pid={pid} file={f} onOpen={(url) => setPreview({ kind: 'image', url, name: f.fileName })} />)}
+          {images.map((f) => <ImageThumb key={f.id} pid={pid} file={f} onOpen={() => mo(f)} />)}
         </div>
       )}
       {others.length > 0 && (
         <ul className="flex flex-wrap gap-1.5" aria-label={wt('chat.files')}>
           {others.map((f) => (
             <li key={f.id} className="w-file-chip">
-              <FileText size={13} className="shrink-0 text-[var(--w-text-3)]" aria-hidden="true" />
-              <span className="min-w-0 truncate" title={f.fileName}>{f.fileName}</span>
+              <IconTep fileName={f.fileName} mime={f.mime} size={13} className="shrink-0 text-[var(--w-text-3)]" />
+              <button type="button" className="min-w-0 truncate text-left hover:underline" title={f.fileName} aria-label={wt('chat.previewX', { name: f.fileName })} onClick={() => mo(f)}>{f.fileName}</button>
               <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{formatBytes(f.size)}</span>
-              {isPdf(f.mime, f.fileName) && (
-                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label={wt('chat.previewX', { name: f.fileName })} onClick={() => void openPdf(f)}><Eye size={12} /></button>
-              )}
-              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label={wt('chat.downloadX', { name: f.fileName })} onClick={() => void download(f)}><Download size={12} /></button>
+              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label={wt('chat.downloadX', { name: f.fileName })} onClick={() => void taiVe(tepDinhKem(pid, f))}><Download size={12} /></button>
             </li>
           ))}
         </ul>
       )}
-      <Dialog open={!!preview} onClose={() => setPreview(null)} width={preview?.kind === 'pdf' ? 960 : 880} title={<span className="block max-w-[60vw] truncate">{preview?.name}</span>}>
-        {preview?.kind === 'image' && <img src={preview.url} alt={preview.name} className="mx-auto max-h-[70vh] max-w-full rounded-[6px]" />}
-        {preview?.kind === 'pdf' && <iframe src={preview.url} title={wt('chat.pdfPreview', { name: preview.name })} className="h-[72vh] w-full rounded-[6px] border border-[var(--w-border)]" />}
-      </Dialog>
+      {xem.khung}
     </div>
   );
 }

@@ -21,6 +21,7 @@ import {
   DEV_SERVER_URL,
   IS_DEV,
   MEDIA_ORIGIN,
+  R2_UPLOAD_ORIGIN,
   WEB_ORIGIN,
 } from './config';
 import { duongNoiBoTuUrl } from './dieuHuongNoiBo';
@@ -162,8 +163,8 @@ function contentSecurityPolicy(): string {
     `font-src 'self' ${APP_ORIGIN} data:`,
     `media-src 'self' ${APP_ORIGIN} ${MEDIA_ORIGIN} https: blob:`,
     `connect-src ${connect}`,
-    // Chặn nhúng: app không có iframe hợp lệ nào.
-    `frame-src 'none'`,
+    // Nhúng CHỈ tệp đính kèm CT Work (PDF trong trình xem tệp, 20/10/2026): URL ký sẵn trên R2/media. Còn lại vẫn chặn.
+    `frame-src ${R2_UPLOAD_ORIGIN} ${MEDIA_ORIGIN}`,
     `object-src 'none'`,
     `base-uri 'none'`,
     `form-action 'none'`,

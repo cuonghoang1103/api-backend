@@ -12,7 +12,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  AlertTriangle, Bug, ChevronDown, ChevronUp, CheckCheck, FileText, ImagePlus, Link2, RotateCcw, X,
+  AlertTriangle, Bug, ChevronDown, ChevronUp, CheckCheck, Download, ImagePlus, Link2, RotateCcw, X,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -25,6 +25,7 @@ import { Dialog, Field, formatBytes, isTyping, PriorityIcon, relativeTime, Spinn
 import { Select } from '../settings/shared';
 import { formatDateTime, RUN_META, RunStatusPill, STEP_META } from './runStatus';
 import { wt } from '@/components/work/i18n';
+import { IconTep, taiVe, tepDinhKem, useXemTep } from '../xemTep/XemTep';
 
 type Step = TestRunDetail['steps'][number];
 
@@ -724,7 +725,8 @@ function EvidenceSection({ pid, evidence, uploads, canAttach, testKey, onFiles }
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [drag, setDrag] = useState(false);
-  const [preview, setPreview] = useState<RunEvidence | null>(null);
+  // 20/10/2026: bấm bằng chứng ⇒ trình xem trong trang (ảnh, PDF, log, CSV…); ←/→ qua mọi bằng chứng của lần chạy.
+  const xem = useXemTep();
   const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
 
   return (
@@ -748,7 +750,7 @@ function EvidenceSection({ pid, evidence, uploads, canAttach, testKey, onFiles }
 
       {evidence.length > 0 || uploads.length > 0 ? (
         <div className="flex flex-wrap gap-2">
-          {evidence.map((ev) => <EvidenceItem key={ev.id} pid={pid} ev={ev} onPreview={() => setPreview(ev)} />)}
+          {evidence.map((ev, i) => <EvidenceItem key={ev.id} pid={pid} ev={ev} onOpen={() => xem.mo(evidence.map((x) => tepDinhKem(pid, x)), i)} />)}
           {uploads.map((u) => (
             <div key={u.id} className="flex h-[118px] w-[132px] flex-col items-center justify-center gap-1.5 rounded-[6px] border border-dashed border-[var(--w-border-strong)] px-2 text-center">
               <Spinner />
@@ -778,7 +780,7 @@ function EvidenceSection({ pid, evidence, uploads, canAttach, testKey, onFiles }
         <p className="mt-1.5 text-[11px] text-[var(--w-text-3)]">{wt('tests.filesStored', { key: testKey })}{canAttach ? ` ${wt('tests.dropMore', { k: isMac ? '⌘' : 'Ctrl' })}` : ''}</p>
       )}
 
-      {preview && <EvidenceLightbox pid={pid} ev={preview} onClose={() => setPreview(null)} />}
+      {xem.khung}
     </section>
   );
 }
@@ -793,68 +795,37 @@ function useInlineUrl(pid: number, id: number, enabled: boolean) {
   });
 }
 
-function EvidenceItem({ pid, ev, onPreview }: { pid: number; ev: RunEvidence; onPreview: () => void }) {
+function EvidenceItem({ pid, ev, onOpen }: { pid: number; ev: RunEvidence; onOpen: () => void }) {
   const isImage = ev.mime.startsWith('image/');
   const thumb = useInlineUrl(pid, ev.id, isImage);
-  const open = async () => {
-    if (isImage) { onPreview(); return; }
-    try {
-      window.open(await workApi.attachmentUrl(pid, ev.id, true), '_blank', 'noopener');
-    } catch (err) {
-      toast.error(workError(err, wt('tests.openFileFailed')));
-    }
-  };
   return (
-    <button
-      type="button"
-      onClick={open}
-      title={`${ev.fileName}${ev.uploader ? ` · ${wt('tests.addedBy', { name: userName(ev.uploader) })}` : ''}`}
-      className="w-[132px] overflow-hidden rounded-[6px] border border-[var(--w-border)] text-left hover:border-[var(--w-accent-border)]"
-    >
-      <span className="flex h-[80px] w-full items-center justify-center bg-[var(--w-sunken)]">
-        {isImage && thumb.data ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={thumb.data} alt={ev.fileName} className="h-full w-full object-cover" />
-        ) : isImage && thumb.isLoading ? (
-          <Spinner />
-        ) : (
-          <FileText size={24} className="text-[var(--w-text-3)]" />
-        )}
-      </span>
-      <span className="block px-2 py-1.5">
-        <span className="block truncate text-[12px] font-medium">{ev.fileName}</span>
-        <span className="block text-[11px] text-[var(--w-text-3)]">{formatBytes(ev.size)} · {relativeTime(ev.createdAt)}</span>
-      </span>
-    </button>
-  );
-}
-
-function EvidenceLightbox({ pid, ev, onClose }: { pid: number; ev: RunEvidence; onClose: () => void }) {
-  const url = useInlineUrl(pid, ev.id, true);
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { e.preventDefault(); onClose(); } };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [onClose]);
-  return (
-    <WorkPortal>
-      <div role="dialog" aria-modal="true" aria-label={ev.fileName} className="w-safe-all fixed inset-0 z-[70] flex flex-col bg-black/80" onMouseDown={onClose}>
-        <div className="flex h-12 shrink-0 items-center gap-2 px-4 text-[13px] text-white" onMouseDown={(e) => e.stopPropagation()}>
-          <span className="min-w-0 flex-1 truncate">{ev.fileName}</span>
-          {url.data && <a href={url.data} target="_blank" rel="noopener noreferrer" className="w-btn w-btn-sm">{wt('tests.openOriginal')}</a>}
-          <button type="button" className="w-btn w-btn-sm w-btn-icon" onClick={onClose} aria-label={wt('tests.closePreview')}><X size={14} /></button>
-        </div>
-        <div className="flex min-h-0 flex-1 items-center justify-center p-4">
-          {url.data ? (
+    <div className="group relative w-[132px] overflow-hidden rounded-[6px] border border-[var(--w-border)] hover:border-[var(--w-accent-border)]">
+      <button
+        type="button"
+        onClick={onOpen}
+        title={`${ev.fileName}${ev.uploader ? ` · ${wt('tests.addedBy', { name: userName(ev.uploader) })}` : ''}`}
+        aria-label={wt('xem.openX', { name: ev.fileName })}
+        className="block w-full text-left"
+      >
+        <span className="flex h-[80px] w-full items-center justify-center bg-[var(--w-sunken)]">
+          {isImage && thumb.data ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={url.data} alt={ev.fileName} className="max-h-full max-w-full rounded-[4px] object-contain" onMouseDown={(e) => e.stopPropagation()} />
-          ) : url.error ? (
-            <span className="text-[13px] text-white">{workError(url.error, wt('tests.imageFailed'))}</span>
+            <img src={thumb.data} alt={ev.fileName} className="h-full w-full object-cover" />
+          ) : isImage && thumb.isLoading ? (
+            <Spinner />
           ) : (
-            <Spinner size={20} />
+            <IconTep fileName={ev.fileName} mime={ev.mime} size={24} className="text-[var(--w-text-3)]" />
           )}
-        </div>
-      </div>
-    </WorkPortal>
+        </span>
+        <span className="block px-2 py-1.5">
+          <span className="block truncate text-[12px] font-medium">{ev.fileName}</span>
+          <span className="block text-[11px] text-[var(--w-text-3)]">{formatBytes(ev.size)} · {relativeTime(ev.createdAt)}</span>
+        </span>
+      </button>
+      <button type="button" aria-label={wt('xem.downloadX', { name: ev.fileName })} title={wt('xem.download')} onClick={() => void taiVe(tepDinhKem(pid, ev))}
+        className="w-btn w-btn-icon w-btn-sm absolute right-1 top-1 opacity-0 transition-opacity focus-visible:opacity-100 group-hover:opacity-100 max-md:opacity-100">
+        <Download size={12} />
+      </button>
+    </div>
   );
 }

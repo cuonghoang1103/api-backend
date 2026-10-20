@@ -960,7 +960,11 @@ export async function completeAttachment(userId: number, projectId: number, numb
 /** Hạn URL tải tệp cấp cho khách bị cách ly (giây) — xem attachmentDownloadUrl. */
 export const CLIENT_URL_TTL_S = 120;
 
-export async function attachmentDownloadUrl(userId: number, projectId: number, attachmentId: number, inline = false) {
+/**
+ * Tệp đính kèm mà `userId` ĐỌC ĐƯỢC (cùng luật cho `/url`, `/content`, `/preview` — xem xemTep.ts). Khách bị cách ly:
+ * chỉ tệp đã chia sẻ trên thẻ đã chia sẻ, hoặc tệp của bình luận PUBLIC còn sống.
+ */
+export async function readableAttachment(userId: number, projectId: number, attachmentId: number) {
   const access = await requireProject(userId, projectId, 'project.view');
   // Khách bị cách ly: chỉ tệp đã chia sẻ, trên thẻ đã chia sẻ.
   const scoped = isClientScoped(access);
@@ -970,9 +974,14 @@ export async function attachmentDownloadUrl(userId: number, projectId: number, a
       // K-1: khách nghe/tải được tệp/voice note của bình luận PUBLIC (còn sống) trên thẻ đã chia sẻ — không gì khác.
       ...(scoped ? { OR: [{ clientVisible: true, forComment: false }, { comment: { visibility: 'PUBLIC', deletedAt: null } }] } : {}),
     },
-    select: { r2Key: true, fileName: true },
+    select: { r2Key: true, fileName: true, mime: true, size: true },
   });
   if (!att) throw new NotFoundError('Attachment not found');
+  return { att, scoped };
+}
+
+export async function attachmentDownloadUrl(userId: number, projectId: number, attachmentId: number, inline = false) {
+  const { att, scoped } = await readableAttachment(userId, projectId, attachmentId);
   // Khách bị cách ly: URL ký sẵn chỉ sống CLIENT_URL_TTL_S. Bỏ chia sẻ tệp/thẻ chặn ngay
   // việc XIN URL mới (truy vấn trên), nhưng URL đã cấp thì R2 không thu hồi được — hạn
   // ngắn là thứ giới hạn cửa sổ đó (≤ 2 phút thay vì 10). Client xin URL ngay trước khi

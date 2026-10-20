@@ -95,6 +95,10 @@ export function createMainWindow(): BrowserWindow {
       // trong ngữ cảnh đã đăng nhập.
       devTools: IS_DEV,
       spellcheck: true,
+      // Trình xem tệp CT Work (20/10/2026): PDF đính kèm xem ngay trong app = trình đọc PDF dựng sẵn của Chromium,
+      // chỉ chạy được khi bật `plugins`. Không mở thêm gì khác — Electron không còn plugin NPAPI/Flash; khung nhúng
+      // vẫn bị CSP `frame-src` khoá chỉ vào host R2/media (security.ts).
+      plugins: true,
     },
   });
 

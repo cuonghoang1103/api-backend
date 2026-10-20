@@ -107,15 +107,21 @@ export async function discardChatDraft(userId: number, projectId: number, fileId
 
 /** URL ký sẵn (10 phút; khách 2 phút) — kiểm quyền thấy kênh MỖI lần xin. Tin đã xoá ⇒ 404. */
 export async function chatFileUrl(userId: number, projectId: number, fileId: number, inline = false) {
+  const { f, restricted } = await readableChatFile(userId, projectId, fileId);
+  return getSignedDownloadUrl(f.r2Key, restricted ? 120 : 600, inline ? undefined : f.fileName);
+}
+
+/** Tệp chat mà `userId` ĐỌC ĐƯỢC — cùng luật cho `/url`, `/content`, `/preview` (xemTep.ts). */
+export async function readableChatFile(userId: number, projectId: number, fileId: number) {
   const f = await prisma.workChannelFile.findFirst({
     where: { id: fileId, channel: { projectId } },
-    select: { r2Key: true, fileName: true, channelId: true, uploaderId: true, messageId: true, message: { select: { deletedAt: true } } },
+    select: { r2Key: true, fileName: true, mime: true, size: true, channelId: true, uploaderId: true, messageId: true, message: { select: { deletedAt: true } } },
   });
   if (!f) throw new NotFoundError('File not found');
   const { access } = await channelAccess(userId, projectId, f.channelId, false);
   if (f.messageId === null ? f.uploaderId !== userId : f.message?.deletedAt) throw new NotFoundError('File not found');
   const restricted = chatAudience({ role: access.role, workspaceRole: access.workspaceRole }) === 'CLIENT';
-  return getSignedDownloadUrl(f.r2Key, restricted ? 120 : 600, inline ? undefined : f.fileName);
+  return { f, restricted };
 }
 
 /** Xoá tin ⇒ gỡ object R2 của nó (dòng giữ lại cho kiểm toán, đánh dấu tên). */

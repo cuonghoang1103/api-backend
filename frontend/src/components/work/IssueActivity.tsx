@@ -29,6 +29,7 @@ import { WorklogList } from './TimeTracking';
 import { ReactionBar, ReactionPickerButton, useCommentReactionsRealtime, useToggleReaction } from './comments/CommentReactions';
 import { ClientPill, CommentModeToggle, InternalPill, portalStaff } from './portal/ClientShare';
 import type { CommentVisibility } from '@/lib/work-api';
+import { VungAnhXemDuoc } from './xemTep/XemTep'; // 20/10/2026: bấm ảnh trong bình luận ⇒ xem ngay
 import { wt, wfmt } from '@/components/work/i18n';
 
 function CommentComposer({ config, pid, num, clientShared, parent, onDone }: {
@@ -281,7 +282,7 @@ function CommentItem({ c, config, pid, num, onReply, reply }: { c: ThreadComment
           </>
         ) : (
           <>
-            {!isDocEmpty(c.bodyJson) && <RichView value={c.bodyJson} />}
+            {!isDocEmpty(c.bodyJson) && <VungAnhXemDuoc><RichView value={c.bodyJson} /></VungAnhXemDuoc>}
             <CommentAttachments pid={pid} num={num} files={files} canRetry={() => mine || config.role === 'ADMIN'} />
             <ReactionBar reactions={reactions} meId={meId} canReact={canReact} onToggle={toggleReaction} />
           </>

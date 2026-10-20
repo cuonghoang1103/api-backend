@@ -480,6 +480,8 @@ const CLIENT_ROUTES: Array<[method: string, re: RegExp]> = [
   ['PUT', /^\/issues\/\d+\/comments\/\d+\/reactions\/[^/]+$/],
   ['POST', /^\/issues\/\d+\/attachments\/(presign|complete)$/],
   ['GET', /^\/attachments\/\d+\/url$/],
+  // 20/10/2026: trình xem tệp — byte chữ + xem trước Office, CÙNG luật lọc với /url (issues.readableAttachment).
+  ['GET', /^\/attachments\/\d+\/(content|preview)$/],
   ['GET', /^\/issues\/\d+\/pages$/],
   ['GET', /^\/approvals$/],
   ['GET', /^\/approvals\/\d+$/],

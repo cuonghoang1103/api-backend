@@ -219,6 +219,8 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     // 19/10/2026: liên kết thẻ, theo dõi, cờ, web link (issue_link / issue_watch / issue_flag / issue_web_link_add); đọc sprint
     ['POST', '/issues/12/links'], ['DELETE', '/issues/12/links/3'], ['PUT', '/issues/12/watch'], ['DELETE', '/issues/12/flag'],
     ['POST', '/issues/12/web-links'], ['GET', '/sprints'],
+    // 20/10/2026: trình xem tệp — agent ĐỌC tệp như đã đọc được qua /url (tuyến đọc, không đối ngoại)
+    ['GET', '/attachments/5/url'], ['GET', '/attachments/5/content'], ['GET', '/attachments/5/preview'],
   ];
   it(`${denied.length} tuyến đối ngoại ⇒ cấm`, () => {
     assert.ok(denied.length >= 25);

@@ -2,7 +2,7 @@
 
 /**
  * Một tin trong kênh chat: avatar + tên + giờ (gộp với tin trên khi cùng người < 5 phút), thân markdown, tệp (ảnh xem
- * trước, PDF xem trong trang — app desktop mở bằng trình xem của máy vì CSP chặn iframe —, voice note có phiên âm),
+ * trước; bấm tệp ⇒ trình xem trong trang/app `xemTep/` — PDF, chữ, Office…; voice note có phiên âm),
  * thẻ xem trước liên kết nội bộ (đã lọc quyền ở server), link ngoài (tên miền + tiêu đề có sẵn), cảm xúc, số trả lời,
  * và thanh hành động: cảm xúc · trả lời · sửa · ghim · tạo thẻ · chuyển tiếp · chép link · xoá.
  */
@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  Bug, CalendarClock, Copy, Download, Eye, FileText, FlaskConical, Forward, Image as ImageIcon, MessageSquareReply, MoreHorizontal,
+  Bug, CalendarClock, Copy, Download, FileText, FlaskConical, Forward, Image as ImageIcon, MessageSquareReply, MoreHorizontal,
   Pause, Pencil, Phone, Pin, PinOff, Play, RotateCcw, SmilePlus, SquarePlus, Trash2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -20,13 +20,12 @@ import { userName, workError } from '@/lib/work-api';
 import { chatApi, QUICK_REACTIONS, type ChatFile, type ChatMessage, type RefPreview } from '@/lib/work-chat-api';
 import EmojiPickerPopover from '../../messaging/EmojiPickerPopover';
 import { dongHo } from '../../messaging/useGhiAm';
-import { Dialog, formatBytes, Popover, Spinner, StatusGlyph, UserAvatar } from '../ui';
+import { formatBytes, Popover, Spinner, StatusGlyph, UserAvatar } from '../ui';
 import { ChatMarkdown } from './ChatMarkdown';
+import { IconTep, taiVe, tepChat, useXemTep } from '../xemTep/XemTep';
 import { wt, wfmt } from '@/components/work/i18n';
 
 const isImage = (m: string) => /^image\/(png|jpe?g|gif|webp|avif|bmp)$/i.test(m);
-const isPdf = (m: string, n: string) => m === 'application/pdf' || /\.pdf$/i.test(n);
-const inDesktopApp = () => typeof navigator !== 'undefined' && /Electron/i.test(navigator.userAgent);
 const timeOf = (iso: string) => new Date(iso).toLocaleTimeString(wfmt.intl(), { hour: '2-digit', minute: '2-digit' });
 /** Tin hệ thống: máy chủ ghi câu tiếng Anh + meta.type ⇒ dịch theo loại ở đây. */
 const systemText = (m: ChatMessage) => (m.meta?.type === 'call' ? wt('chat.sysCall') : m.meta?.type === 'issue' && m.meta.key ? wt('chat.sysIssue', { key: m.meta.key, title: m.meta.title ?? '' }) : m.meta?.type === 'created' ? m.body.replace(/^created /, `${wt('chat.sysCreated')} `) : m.body);
@@ -93,10 +92,10 @@ function VoicePlayer({ pid, file }: { pid: number; file: ChatFile }) {
   );
 }
 
-function Thumb({ pid, file, onOpen }: { pid: number; file: ChatFile; onOpen: (url: string) => void }) {
+function Thumb({ pid, file, onOpen }: { pid: number; file: ChatFile; onOpen: () => void }) {
   const q = useQuery({ queryKey: ['work', 'chat-file', pid, file.id, 'inline'], queryFn: () => chatApi.fileUrl(pid, file.id, true), staleTime: 300_000 });
   return (
-    <button type="button" className="w-comment-thumb !h-auto !max-h-[220px] !w-auto !max-w-[min(320px,100%)]" aria-label={wt('chat.previewImage', { name: file.fileName })} disabled={!q.data} onClick={() => q.data && onOpen(q.data)}>
+    <button type="button" className="w-comment-thumb !h-auto !max-h-[220px] !w-auto !max-w-[min(320px,100%)]" aria-label={wt('chat.previewImage', { name: file.fileName })} onClick={onOpen}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       {q.data ? <img src={q.data} alt={file.fileName} loading="lazy" className="max-h-[220px] max-w-full rounded-[6px] object-contain" /> : <ImageIcon size={18} aria-hidden="true" />}
     </button>
@@ -104,43 +103,31 @@ function Thumb({ pid, file, onOpen }: { pid: number; file: ChatFile; onOpen: (ur
 }
 
 export function ChatFiles({ pid, files }: { pid: number; files: ChatFile[] }) {
-  const [preview, setPreview] = useState<{ kind: 'image' | 'pdf'; url: string; name: string } | null>(null);
+  // 20/10/2026: bấm tệp ⇒ trình xem trong trang/app (ảnh, PDF, chữ, Office…); ←/→ đi qua các tệp của tin.
+  const xem = useXemTep();
   if (!files.length) return null;
   const voices = files.filter((f) => f.voice);
   const images = files.filter((f) => !f.voice && isImage(f.mime));
   const others = files.filter((f) => !f.voice && !isImage(f.mime));
-  const download = async (f: ChatFile) => {
-    try { window.open(await chatApi.fileUrl(pid, f.id), '_blank', 'noopener'); } catch (err) { toast.error(workError(err, wt('chat.downloadFailed'))); }
-  };
-  const openPdf = async (f: ChatFile) => {
-    try {
-      const url = await chatApi.fileUrl(pid, f.id, true);
-      if (inDesktopApp()) window.open(url, '_blank', 'noopener');
-      else setPreview({ kind: 'pdf', url, name: f.fileName });
-    } catch (err) { toast.error(workError(err, wt('chat.openPdfFailed'))); }
-  };
+  const ds = [...images, ...others];
+  const mo = (f: ChatFile) => xem.mo(ds.map((x) => tepChat(pid, x)), ds.indexOf(f));
   return (
     <div className="mt-1.5 space-y-2" data-testid="chat-files">
       {voices.map((f) => <VoicePlayer key={f.id} pid={pid} file={f} />)}
-      {images.length > 0 && <div className="flex flex-wrap gap-2">{images.map((f) => <Thumb key={f.id} pid={pid} file={f} onOpen={(url) => setPreview({ kind: 'image', url, name: f.fileName })} />)}</div>}
+      {images.length > 0 && <div className="flex flex-wrap gap-2">{images.map((f) => <Thumb key={f.id} pid={pid} file={f} onOpen={() => mo(f)} />)}</div>}
       {others.length > 0 && (
         <ul className="flex flex-wrap gap-1.5" aria-label={wt('chat.files')}>
           {others.map((f) => (
             <li key={f.id} className="w-file-chip">
-              <FileText size={13} className="shrink-0 text-[var(--w-text-3)]" aria-hidden="true" />
-              <span className="min-w-0 truncate" title={f.fileName}>{f.fileName}</span>
+              <IconTep fileName={f.fileName} mime={f.mime} size={13} className="shrink-0 text-[var(--w-text-3)]" />
+              <button type="button" className="min-w-0 truncate text-left hover:underline" title={f.fileName} aria-label={wt('chat.previewX', { name: f.fileName })} onClick={() => mo(f)}>{f.fileName}</button>
               <span className="shrink-0 text-[11px] text-[var(--w-text-3)]">{formatBytes(f.size)}</span>
-              {isPdf(f.mime, f.fileName) && <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label={wt('chat.previewX', { name: f.fileName })} onClick={() => void openPdf(f)}><Eye size={12} /></button>}
-              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label={wt('chat.downloadX', { name: f.fileName })} onClick={() => void download(f)}><Download size={12} /></button>
+              <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm h-6 w-6" aria-label={wt('chat.downloadX', { name: f.fileName })} onClick={() => void taiVe(tepChat(pid, f))}><Download size={12} /></button>
             </li>
           ))}
         </ul>
       )}
-      <Dialog open={!!preview} onClose={() => setPreview(null)} width={preview?.kind === 'pdf' ? 960 : 880} title={<span className="block max-w-[60vw] truncate">{preview?.name}</span>}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        {preview?.kind === 'image' && <img src={preview.url} alt={preview.name} className="mx-auto max-h-[70vh] max-w-full rounded-[6px]" />}
-        {preview?.kind === 'pdf' && <iframe src={preview.url} title={wt('chat.pdfPreview', { name: preview.name })} className="h-[72vh] w-full rounded-[6px] border border-[var(--w-border)]" />}
-      </Dialog>
+      {xem.khung}
     </div>
   );
 }

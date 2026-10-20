@@ -51,6 +51,7 @@ import { IssueDesk } from './desk/IssueDesk';
 import { IssueWebLinks } from './resources/IssueWebLinks';
 import { IssueCloudFiles } from './cloud/IssueCloudFiles'; // CTW đợt 8a
 import { AttachmentClientControls, IssueClientShare } from './portal/ClientShare';
+import { taiVe, tepDinhKem, useXemTep, VungAnhXemDuoc } from './xemTep/XemTep'; // 20/10/2026: bấm tệp ⇒ xem ngay trong trang
 import RichEditor, { isDocEmpty, RichView } from './RichEditor';
 // Đợt S6: nhãn nguồn gốc AI (AI-assisted) của thẻ.
 import { AiAssistedControl } from './spec/SpecPanel';
@@ -166,7 +167,8 @@ function Description({ issue, config, editable, onSave, saving }: {
       onClick={(e) => { if (editable && !(e.target as HTMLElement).closest('a,input')) start(); }}
       className={cn('-mx-2 rounded-[6px] px-2 py-1', editable && 'cursor-text hover:bg-[var(--w-hover)]')}
     >
-      <RichView value={issue.descriptionJson} />
+      {/* Bấm ảnh trong mô tả ⇒ trình xem (không vào chế độ sửa). */}
+      <VungAnhXemDuoc><RichView value={issue.descriptionJson} /></VungAnhXemDuoc>
     </div>
   );
 }
@@ -319,7 +321,7 @@ function Links({ issue, pid, lk, editable, onOpenKey }: { issue: TIssueDetail; p
 
 // ─── Đính kèm ────────────────────────────────────────────────────
 
-function AttachmentItem({ a, pid, canDelete, onDeleted, share }: { a: IssueAttachment; pid: number; canDelete: boolean; onDeleted: () => void; share?: ReactNode }) {
+function AttachmentItem({ a, pid, canDelete, onDeleted, share, onOpen }: { a: IssueAttachment; pid: number; canDelete: boolean; onDeleted: () => void; share?: ReactNode; onOpen: () => void }) {
   const isImage = a.mime.startsWith('image/');
   const thumb = useQuery({
     queryKey: ['work', 'att', pid, a.id],
@@ -329,13 +331,7 @@ function AttachmentItem({ a, pid, canDelete, onDeleted, share }: { a: IssueAttac
     // CLIENT_URL_TTL_S) — giữ dưới mức ngắn hơn để mở lại thẻ không vấp URL hết hạn.
     staleTime: 90_000,
   });
-  const download = async () => {
-    try {
-      window.open(await workApi.attachmentUrl(pid, a.id), '_blank', 'noopener');
-    } catch (err) {
-      toast.error(workError(err, wt('chat.downloadFailed')));
-    }
-  };
+  const download = () => taiVe(tepDinhKem(pid, a));
   const [confirmDel, setConfirmDel] = useState(false);
   const del = async () => {
     setConfirmDel(false);
@@ -343,7 +339,7 @@ function AttachmentItem({ a, pid, canDelete, onDeleted, share }: { a: IssueAttac
   };
   return (
     <div className="group relative w-[148px] overflow-hidden rounded-[6px] border border-[var(--w-border)]">
-      <button type="button" onClick={download} className="flex h-[92px] w-full items-center justify-center bg-[var(--w-sunken)]">
+      <button type="button" onClick={onOpen} aria-label={wt('xem.openX', { name: a.fileName })} className="flex h-[92px] w-full items-center justify-center bg-[var(--w-sunken)]">
         {isImage && thumb.data ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={thumb.data} alt={a.fileName} className="h-full w-full object-cover" />
@@ -357,7 +353,7 @@ function AttachmentItem({ a, pid, canDelete, onDeleted, share }: { a: IssueAttac
       </div>
       {share}
       <div className="absolute right-1 top-1 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-        <button type="button" title={wt('common.download')} onClick={download} className="w-btn w-btn-icon w-btn-sm"><Download size={12} /></button>
+        <button type="button" title={wt('common.download')} aria-label={wt('xem.downloadX', { name: a.fileName })} onClick={() => void download()} className="w-btn w-btn-icon w-btn-sm"><Download size={12} /></button>
         {canDelete && <button type="button" title={wt('common.remove')} onClick={() => setConfirmDel(true)} className="w-btn w-btn-icon w-btn-sm"><Trash2 size={12} /></button>}
       </div>
       <ConfirmDialog open={confirmDel} onClose={() => setConfirmDel(false)} onConfirm={del} title={wt('detail.removeAttachment')} body={wt('detail.removeAttBody', { f: a.fileName })} confirmLabel={wt('common.remove')} />
@@ -372,6 +368,7 @@ function Attachments({ issue, pid, config }: { issue: TIssueDetail; pid: number;
   const [uploads, setUploads] = useState<Array<{ name: string; pct: number }>>([]);
   const [drag, setDrag] = useState(false);
   const refresh = () => qc.invalidateQueries({ queryKey: wk.issue(pid, issue.number) });
+  const xem = useXemTep();
 
   const upload = async (files: FileList | File[]) => {
     for (const file of Array.from(files)) {
@@ -406,9 +403,10 @@ function Attachments({ issue, pid, config }: { issue: TIssueDetail; pid: number;
         )}
       </div>
       <div className="flex flex-wrap gap-2">
-        {issue.attachments.map((a) => (
+        {issue.attachments.map((a, i) => (
           <AttachmentItem
             key={a.id} a={a} pid={pid} canDelete={a.uploader?.id === meId || config.role === 'ADMIN'} onDeleted={refresh}
+            onOpen={() => xem.mo(issue.attachments.map((x) => tepDinhKem(pid, x)), i)}
             share={<AttachmentClientControls config={config} pid={pid} issueNumber={issue.number} issueShared={!!issue.clientVisible} a={a} />}
           />
         ))}
@@ -423,6 +421,7 @@ function Attachments({ issue, pid, config }: { issue: TIssueDetail; pid: number;
           <p className="text-[12px] text-[var(--w-text-3)]">{wt('detail.dropHint')}</p>
         )}
       </div>
+      {xem.khung}
     </section>
   );
 }

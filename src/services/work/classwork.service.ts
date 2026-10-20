@@ -44,7 +44,8 @@ const HOUR = 3_600_000;
 export interface ClassFileStore {
   put(key: string, body: Buffer, contentType: string): Promise<void>;
   del(key: string): Promise<void>;
-  url(key: string, fileName: string): Promise<string>;
+  /** `fileName` = tải về đúng tên; bỏ trống = xem inline (trình xem tệp CT Work). */
+  url(key: string, fileName?: string): Promise<string>;
 }
 const r2Store: ClassFileStore = {
   async put(key, body, ct) { await putObject(key, body, ct, 'private, max-age=0, no-store'); },
@@ -429,10 +430,16 @@ export async function removeAssignmentFile(userId: number, classId: number, aid:
   await store.del(f.r2Key).catch(() => undefined);
 }
 
-/** Link tải (ký sẵn 5 phút) — sau khi kiểm quyền: tệp đề ⇒ ai thấy bài; tệp nộp ⇒ giảng viên hoặc CHỦ bài nộp. */
-export async function fileUrl(userId: number, classId: number, fid: number) {
+/** Link tải (ký sẵn 5 phút) — sau khi kiểm quyền: tệp đề ⇒ ai thấy bài; tệp nộp ⇒ giảng viên hoặc CHỦ bài nộp. `inline` ⇒ xem trong trang. */
+export async function fileUrl(userId: number, classId: number, fid: number, inline = false) {
+  const f = await readableClassFile(userId, classId, fid);
+  return { url: await store.url(f.r2Key, inline ? undefined : f.fileName), fileName: f.fileName };
+}
+
+/** Tệp đề/bài nộp mà `userId` ĐỌC ĐƯỢC — cùng luật cho link tải, `/content`, `/preview` (xemTep.ts). */
+export async function readableClassFile(userId: number, classId: number, fid: number) {
   const c = await classCtx(userId, classId);
-  const f = await prisma.workClassFile.findFirst({ where: { id: fid, classId }, select: { id: true, r2Key: true, fileName: true, assignmentId: true, submissionId: true } });
+  const f = await prisma.workClassFile.findFirst({ where: { id: fid, classId }, select: { id: true, r2Key: true, fileName: true, mime: true, size: true, assignmentId: true, submissionId: true } });
   if (!f) throw new NotFoundError('File not found');
   if (!c.manage) {
     if (f.submissionId) {
@@ -440,7 +447,7 @@ export async function fileUrl(userId: number, classId: number, fid: number) {
       if (!s || !ownsSubmission(c, s, userId)) throw new NotFoundError('File not found');
     } else if (f.assignmentId) await loadAssignment(c, f.assignmentId);
   }
-  return { url: await store.url(f.r2Key, f.fileName), fileName: f.fileName };
+  return f;
 }
 
 // ─── Bài nộp của sinh viên ───────────────────────────────────────

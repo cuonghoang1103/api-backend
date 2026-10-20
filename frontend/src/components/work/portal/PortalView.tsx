@@ -23,7 +23,7 @@ import {
 import { cn } from '@/lib/utils';
 import {
   userName, workApi, workError, workPortalApi, workPortalKeys, type PortalRequestKind, type PortalTab, type PortalViewer,
-  type ProjectConfig, type TiptapDoc,
+  type ProjectConfig, type TiptapDoc, type WorkUser,
 } from '@/lib/work-api';
 import RichEditor, { isDocEmpty, RichView } from '../RichEditor';
 import { Dialog, EmptyState, formatBytes, formatDate, PageLoading, ProjectMark, relativeTime, Spinner, StatusBadge, UserAvatar } from '../ui';
@@ -41,6 +41,7 @@ import { AddToCalendar } from '../ctw';
 import PortalResources from '../resources/PortalResources';
 import { KbHelpTab, KbSuggest } from '../intake7b/KbView'; // CTW đợt 7b: knowledge base + gợi ý khi gửi yêu cầu
 import { wfmt, wt } from '@/components/work/i18n';
+import { IconTep, taiVe, tepDinhKem, useXemTep, VungAnhXemDuoc } from '../xemTep/XemTep'; // 20/10/2026: trình xem tệp trong trang
 
 export const PORTAL_TABS: Array<{ id: PortalTab; label: string; icon: typeof Inbox }> = [
   { id: 'overview', get label() { return wt('portal.tOverview'); }, icon: LayoutDashboard },
@@ -304,9 +305,9 @@ function RequestsTab({ pid, asClient, viewer, openIssue, deskOn }: { pid: number
   );
 }
 
-async function downloadFile(pid: number, aid: number) {
-  try { window.open(await workApi.attachmentUrl(pid, aid), '_blank', 'noopener'); } catch (err) { toast.error(workError(err, wt('gov.downloadFailed'))); }
-}
+type TepCong = { id: number; fileName: string; mime?: string; size: number; createdAt?: string; uploader?: WorkUser | null };
+/** Tải về (URL ký sẵn dạng attachment — khách cổng chỉ tệp đã chia sẻ, máy chủ kiểm). */
+const downloadFile = (pid: number, f: TepCong) => taiVe(tepDinhKem(pid, f));
 
 /** Một thẻ như khách thấy: mô tả, tệp đã chia sẻ, các trả lời công khai + ô trả lời. */
 export function RequestDialog({ pid, num, asClient, onClose, deskOn }: { pid: number; num: number | null; asClient: boolean; onClose: () => void; deskOn?: boolean }) {
@@ -322,6 +323,7 @@ export function RequestDialog({ pid, num, asClient, onClose, deskOn }: { pid: nu
   });
   const r = q.data;
   const canReply = r && !r.viewer.preview;
+  const xem = useXemTep(); // 20/10/2026: bấm tệp ⇒ trình xem trong trang
   return (
     <Dialog open={!!num} onClose={onClose} width={720} title={r ? <span className="flex min-w-0 items-center gap-2"><span className="font-mono text-[13px] text-[var(--w-accent-text)]">{r.key}</span><span className="truncate">{r.title}</span></span> : wt('common.loading')}>
       {q.isLoading ? <PageLoading rows={3} /> : q.error || !r ? <EmptyState title={wt('diagram.notAvail')} body={workError(q.error)} /> : (
@@ -339,19 +341,19 @@ export function RequestDialog({ pid, num, asClient, onClose, deskOn }: { pid: nu
           </div>
           <section>
             <h3 className="w-section-title mb-2">{wt('common.description')}</h3>
-            {r.descriptionJson && !isDocEmpty(r.descriptionJson) ? <RichView value={r.descriptionJson} /> : <p className="text-[13px] text-[var(--w-text-3)]">{wt('portal.noDescription')}</p>}
+            {r.descriptionJson && !isDocEmpty(r.descriptionJson) ? <VungAnhXemDuoc><RichView value={r.descriptionJson} /></VungAnhXemDuoc> : <p className="text-[13px] text-[var(--w-text-3)]">{wt('portal.noDescription')}</p>}
           </section>
           {r.attachments.length > 0 && (
             <section>
               <h3 className="w-section-title mb-2">{wt('portal.files')}</h3>
               <ul className="space-y-1.5">
-                {r.attachments.map((a) => (
+                {r.attachments.map((a, i) => (
                   <li key={a.id} className="flex min-w-0 items-center gap-2 text-[13px]">
-                    <FileText size={14} className="shrink-0 text-[var(--w-text-3)]" />
-                    <span className="min-w-0 flex-1 truncate">{a.fileName}</span>
+                    <IconTep fileName={a.fileName} mime={a.mime} size={14} className="shrink-0 text-[var(--w-text-3)]" />
+                    <button type="button" className="min-w-0 flex-1 truncate text-left hover:underline" title={a.fileName} onClick={() => xem.mo(r.attachments.map((x) => tepDinhKem(pid, x)), i)}>{a.fileName}</button>
                     {a.deliverable && <ClientPill label={wt('portal.deliverable')} />}
                     <span className="shrink-0 text-[12px] text-[var(--w-text-3)]">{formatBytes(a.size)}</span>
-                    <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('portal.downloadF', { f: a.fileName })} onClick={() => void downloadFile(pid, a.id)}><Download size={13} /></button>
+                    <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('portal.downloadF', { f: a.fileName })} onClick={() => void downloadFile(pid, a)}><Download size={13} /></button>
                   </li>
                 ))}
               </ul>
@@ -369,7 +371,7 @@ export function RequestDialog({ pid, num, asClient, onClose, deskOn }: { pid: nu
                       {c.author && r.clientIds.includes(c.author.id) ? <span className="text-[var(--w-text-3)]">{wt('portal.client')}</span> : <span className="text-[var(--w-text-3)]">{wt('portal.team')}</span>}
                       <span className="text-[var(--w-text-3)]">{relativeTime(c.createdAt)}</span>
                     </div>
-                    {!isDocEmpty(c.bodyJson) && <RichView value={c.bodyJson} />}
+                    {!isDocEmpty(c.bodyJson) && <VungAnhXemDuoc><RichView value={c.bodyJson} /></VungAnhXemDuoc>}
                     {num && <CommentAttachments pid={pid} num={num} files={(c.attachments ?? []).map((a) => ({ ...a, commentId: c.id }))} canRetry={() => false} />}
                   </div>
                 </div>
@@ -390,6 +392,7 @@ export function RequestDialog({ pid, num, asClient, onClose, deskOn }: { pid: nu
           </section>
         </div>
       )}
+      {xem.khung}
     </Dialog>
   );
 }
@@ -404,7 +407,7 @@ function DocumentDialog({ pid, num, asClient, onClose }: { pid: number; num: num
         // UX-E: cùng kiểu chữ trang Docs (cỡ chữ, khoảng dòng, độ dài dòng ~80 ký tự; bảng cuộn ngang trong khung riêng).
         <div className="w-doc min-w-0">
           <p className="mb-4 text-[12.5px] text-[var(--w-text-3)]">{q.data.stage ? `${q.data.stage} · ` : ''}Updated {relativeTime(q.data.updatedAt)}</p>
-          <RichView value={q.data.contentJson} docs />
+          <VungAnhXemDuoc><RichView value={q.data.contentJson} docs /></VungAnhXemDuoc>
         </div>
       )}
     </Dialog>
@@ -413,6 +416,7 @@ function DocumentDialog({ pid, num, asClient, onClose }: { pid: number; num: num
 
 function DocumentsTab({ pid, asClient, openDoc }: { pid: number; asClient: boolean; openDoc: (n: number) => void }) {
   const q = useQuery({ queryKey: workPortalKeys.tab(pid, 'documents', asClient), queryFn: () => workPortalApi.documents(pid, asClient) });
+  const xem = useXemTep();
   if (q.isLoading) return <PageLoading rows={4} />;
   if (q.error || !q.data) return <EmptyState title={wt('portal.loadDocsFailed')} body={workError(q.error)} />;
   return (
@@ -436,22 +440,24 @@ function DocumentsTab({ pid, asClient, openDoc }: { pid: number; asClient: boole
         <SectionTitle>{wt('portal.sharedFiles')}</SectionTitle>
         {q.data.files.length ? (
           <ul className="space-y-1">
-            {q.data.files.map((f) => (
+            {q.data.files.map((f, i) => (
               <li key={f.id} className="flex min-w-0 items-center gap-2 px-2 py-1.5 text-[13px]">
-                <Paperclip size={14} className="shrink-0 text-[var(--w-text-3)]" />
-                <span className="min-w-0 flex-1"><span className="block truncate">{f.fileName}</span><span className="block truncate text-[11.5px] text-[var(--w-text-3)]">{f.issue.key} · {formatBytes(f.size)}</span></span>
-                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('portal.downloadF', { f: f.fileName })} onClick={() => void downloadFile(pid, f.id)}><Download size={13} /></button>
+                <IconTep fileName={f.fileName} mime={f.mime} size={14} className="shrink-0 text-[var(--w-text-3)]" />
+                <span className="min-w-0 flex-1"><button type="button" className="block max-w-full truncate text-left hover:underline" title={f.fileName} onClick={() => xem.mo(q.data.files.map((x) => tepDinhKem(pid, x)), i)}>{f.fileName}</button><span className="block truncate text-[11.5px] text-[var(--w-text-3)]">{f.issue.key} · {formatBytes(f.size)}</span></span>
+                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('portal.downloadF', { f: f.fileName })} onClick={() => void downloadFile(pid, f)}><Download size={13} /></button>
               </li>
             ))}
           </ul>
         ) : <p className="text-[13px] text-[var(--w-text-3)]">{wt('portal.noFilesShared')}</p>}
       </section>
+      {xem.khung}
     </div>
   );
 }
 
 function DeliverablesTab({ pid, asClient }: { pid: number; asClient: boolean }) {
   const q = useQuery({ queryKey: workPortalKeys.tab(pid, 'deliverables', asClient), queryFn: () => workPortalApi.deliverables(pid, asClient) });
+  const xem = useXemTep();
   if (q.isLoading) return <PageLoading rows={4} />;
   if (q.error || !q.data) return <EmptyState title={wt('portal.loadDelivFailed')} body={workError(q.error)} />;
   if (!q.data.files.length && !q.data.releases.length) return <EmptyState icon={<PackageCheck size={20} />} title={wt('portal.noDeliv')} body={wt('portal.noDelivBody')} />;
@@ -461,12 +467,12 @@ function DeliverablesTab({ pid, asClient }: { pid: number; asClient: boolean }) 
         <section className={card}>
           <SectionTitle>{wt('portal.deliveredFiles')}</SectionTitle>
           <ul className="divide-y divide-[var(--w-border)]" data-testid="portal-deliverables">
-            {q.data.files.map((f) => (
+            {q.data.files.map((f, i) => (
               <li key={f.id} className="flex min-w-0 items-center gap-3 py-2.5">
                 <PackageCheck size={16} className="shrink-0 text-[var(--w-green)]" />
-                <span className="min-w-0 flex-1"><span className="block truncate text-[13.5px] font-medium">{f.fileName}</span><span className="block truncate text-[12px] text-[var(--w-text-3)]">{f.issue.key} {f.issue.title}{f.issue.version ? ` · ${f.issue.version}` : ''} · {formatBytes(f.size)}</span></span>
+                <span className="min-w-0 flex-1"><button type="button" className="block max-w-full truncate text-left text-[13.5px] font-medium hover:underline" title={f.fileName} onClick={() => xem.mo(q.data.files.map((x) => tepDinhKem(pid, x)), i)}>{f.fileName}</button><span className="block truncate text-[12px] text-[var(--w-text-3)]">{f.issue.key} {f.issue.title}{f.issue.version ? ` · ${f.issue.version}` : ''} · {formatBytes(f.size)}</span></span>
                 <span className="shrink-0 text-[12px] text-[var(--w-text-3)] max-sm:hidden">{formatDate(f.deliveredAt ?? f.createdAt)}</span>
-                <button type="button" className="w-btn w-btn-sm" onClick={() => void downloadFile(pid, f.id)}><Download size={13} /> <span className="max-sm:hidden">{wt('portal.download')}</span></button>
+                <button type="button" className="w-btn w-btn-sm" onClick={() => void downloadFile(pid, f)}><Download size={13} /> <span className="max-sm:hidden">{wt('portal.download')}</span></button>
               </li>
             ))}
           </ul>
@@ -485,6 +491,7 @@ function DeliverablesTab({ pid, asClient }: { pid: number; asClient: boolean }) 
           </ul>
         </section>
       )}
+      {xem.khung}
     </div>
   );
 }

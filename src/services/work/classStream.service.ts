@@ -141,11 +141,17 @@ export async function detachFiles(classId: number, fileIds: number[], target: { 
 
 /** URL ký sẵn (10 phút) — kiểm quyền thấy bài / tài liệu MỖI lần xin. */
 export async function classFileUrl(userId: number, classId: number, fileId: number, inline = false) {
+  const f = await readableClassStreamFile(userId, classId, fileId);
+  return getSignedDownloadUrl(f.r2Key, 600, inline ? undefined : f.fileName);
+}
+
+/** Tệp bảng tin/tài liệu lớp mà `userId` ĐỌC ĐƯỢC — cùng luật cho `/url`, `/content`, `/preview` (xemTep.ts). */
+export async function readableClassStreamFile(userId: number, classId: number, fileId: number) {
   const ctx = await classCtx(userId, classId);
   const f = await prisma.workClassStreamFile.findFirst({
     where: { id: fileId, classId },
     select: {
-      r2Key: true, fileName: true, uploaderId: true, postId: true, materialId: true,
+      r2Key: true, fileName: true, mime: true, size: true, uploaderId: true, postId: true, materialId: true,
       post: { select: { publishedAt: true, deletedAt: true, audienceGroupIds: true } },
       material: { select: { draft: true, deletedAt: true } },
     },
@@ -156,7 +162,7 @@ export async function classFileUrl(userId: number, classId: number, fileId: numb
   else if (f.material) ok = !f.material.deletedAt && (ctx.manage || !f.material.draft);
   else ok = f.uploaderId === userId;
   if (!ok) throw new NotFoundError('File not found');
-  return getSignedDownloadUrl(f.r2Key, 600, inline ? undefined : f.fileName);
+  return f;
 }
 
 // ─── Bảng tin ─────────────────────────────────────────────────────

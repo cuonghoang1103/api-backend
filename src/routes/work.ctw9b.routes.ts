@@ -10,7 +10,7 @@
  *   GET    /classes/:id/assignments/:aid                 chi tiết (SV: + bài nộp của tôi, điểm ĐÃ TRẢ)
  *   PATCH  /classes/:id/assignments/:aid · DELETE …
  *   POST   /classes/:id/assignments/:aid/files           multipart `file` (tệp đề) · DELETE …/files/:fid
- *   GET    /classes/:id/files/:fid                       { url } ký sẵn 5 phút (kiểm quyền trước)
+ *   GET    /classes/:id/files/:fid[?inline=1]            { url } ký sẵn 5 phút (kiểm quyền trước; inline = xem trong trang)
  *
  *   Sinh viên nộp
  *   PUT    /classes/:id/assignments/:aid/my              { text?, links? } — bản nháp
@@ -112,7 +112,7 @@ router.patch('/classes/:id/assignments/:aid', asyncHandler(async (req, res) => o
 router.delete('/classes/:id/assignments/:aid', asyncHandler(async (req, res) => { await classwork.deleteAssignment(callerId(req), P(req, 'id'), P(req, 'aid')); ok(res, { deleted: true }); }));
 router.post('/classes/:id/assignments/:aid/files', receive, asyncHandler(async (req, res) => ok(res, await classwork.uploadAssignmentFile(callerId(req), P(req, 'id'), P(req, 'aid'), fileOf(req)), 201)));
 router.delete('/classes/:id/assignments/:aid/files/:fid', asyncHandler(async (req, res) => { await classwork.removeAssignmentFile(callerId(req), P(req, 'id'), P(req, 'aid'), P(req, 'fid')); ok(res, { deleted: true }); }));
-router.get('/classes/:id/files/:fid', asyncHandler(async (req, res) => ok(res, await classwork.fileUrl(callerId(req), P(req, 'id'), P(req, 'fid')))));
+router.get('/classes/:id/files/:fid', asyncHandler(async (req, res) => ok(res, await classwork.fileUrl(callerId(req), P(req, 'id'), P(req, 'fid'), req.query.inline === '1'))));
 
 // ─── Sinh viên nộp ───────────────────────────────────────────────
 

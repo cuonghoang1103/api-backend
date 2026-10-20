@@ -36,7 +36,7 @@ describe('clientPortalRouteAllowed — danh sách trắng tuyến của khách',
     ['GET', '/issues'], ['GET', '/board'], ['GET', '/search'], ['GET', '/issues/12'],
     ['GET', '/issues/12/comments'], ['POST', '/issues/12/comments'], ['PATCH', '/issues/12/comments/3'], ['DELETE', '/issues/12/comments/3'],
     ['PUT', '/issues/12/comments/3/reactions/%F0%9F%91%8D'], ['POST', '/issues/12/attachments/presign'], ['POST', '/issues/12/attachments/complete'],
-    ['GET', '/attachments/9/url'], ['GET', '/issues/12/pages'], ['GET', '/approvals'], ['GET', '/approvals/4'], ['POST', '/approvals/4/decide'],
+    ['GET', '/attachments/9/url'], ['GET', '/attachments/9/content'], ['GET', '/attachments/9/preview'], ['GET', '/issues/12/pages'], ['GET', '/approvals'], ['GET', '/approvals/4'], ['POST', '/approvals/4/decide'],
     ['GET', '/pages'], ['GET', '/pages/search'], ['GET', '/pages/2'], ['GET', '/pages/2/markdown'], ['HEAD', '/issues'],
     // App Store 1.2: báo cáo bình luận thẻ (service kiểm khách THẤY bình luận đó).
     ['POST', '/issues/12/comments/3/report'], ['GET', '/chat/channels'], ['POST', '/chat/channels/3/messages/9/report'],
@@ -58,6 +58,8 @@ describe('clientPortalRouteAllowed — danh sách trắng tuyến của khách',
     ['POST', '/pages/2/comments'], ['PATCH', '/pages/2'], ['POST', '/approvals'], ['POST', '/approvals/4/cancel'],
     // Đường trông giống nhưng không khớp đúng.
     ['GET', '/issues/12/comments/3'], ['GET', '/issuesx'], ['GET', '/portalx'], ['POST', '/board'],
+    // Trình xem tệp: chỉ GET content/preview — không ghi, không đuôi lạ.
+    ['POST', '/attachments/9/content'], ['GET', '/attachments/9/contentx'], ['GET', '/attachments/9/raw'],
   ];
   it('mở đúng tuyến cổng khách cần', () => {
     for (const [m, p] of allowed) assert.equal(clientPortalRouteAllowed(m, p), true, `${m} ${p}`);

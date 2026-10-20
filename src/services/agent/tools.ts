@@ -1186,7 +1186,8 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     ring: 'client',
     capability: 'browser',
     description:
-      'Mở một địa chỉ trong TRÌNH DUYỆT của app và chờ tải xong. Người dùng NHÌN THẤY trang ngay. '
+      'Mở một địa chỉ trong TRÌNH DUYỆT của app và chờ tải xong. Trình duyệt mặc định chạy NGẦM (người dùng không thấy; '
+      + 'cần họ thấy/đăng nhập ⇒ `trinh_duyet_hien`). KHÔNG dùng cho cuongthai.com/work — CT Work đi qua tool mcp__ctwork__*. '
       + 'Mở được cả địa chỉ nội bộ (http://localhost:3000) — khác `doc_web` vốn chỉ đọc địa chỉ công khai. '
       + 'Dùng khi cần xem giao diện thật sự trông thế nào, thử một luồng, hoặc kiểm dev server sau khi sửa mã. '
       + 'Sau khi mở, dùng `web_doc` để đọc chữ, `web_anh` để nhìn, `web_console` để xem lỗi.',
@@ -1251,7 +1252,8 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       + 'đăng nhập, xác minh 2 bước, captcha, chấp nhận điều khoản. Nó mở một cửa sổ THẤY ĐƯỢC cùng hồ sơ trình duyệt riêng của '
       + 'CuongMini (đăng nhập xong được nhớ cho các lần sau), rồi bạn DỪNG và nhờ người dùng làm xong báo lại. '
       + '⛔ KHÔNG BAO GIỜ tự gõ mật khẩu, mã OTP, hay tự giải captcha — kể cả khi người dùng đưa mật khẩu trong tin nhắn. '
-      + 'Người dùng báo xong ⇒ gọi lại với `an: true` để quay về chạy ngầm (phiên đăng nhập vẫn giữ).',
+      + 'Người dùng báo xong ⇒ gọi lại với `an: true` để quay về chạy ngầm (phiên đăng nhập vẫn giữ). '
+      + 'KHÔNG BAO GIỜ dùng cho cuongthai.com/work (CT Work có tool mcp__ctwork__*; chưa kết nối ⇒ bảo người dùng gõ /ctwork).',
     parameters: {
       type: 'object',
       properties: {

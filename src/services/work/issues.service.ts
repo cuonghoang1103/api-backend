@@ -881,7 +881,7 @@ export async function listIssueTemplates(userId: number, projectId: number): Pro
 // URL ký sẵn 10 phút sau khi kiểm quyền xem dự án — tài liệu của khách hàng
 // không được nằm ở một link ai có cũng mở được.
 
-const MAX_ATTACHMENT_BYTES = 25 * 1024 * 1024;
+export const MAX_ATTACHMENT_BYTES = 25 * 1024 * 1024;
 const MAX_ATTACHMENTS_PER_ISSUE = 50;
 
 function assertR2() {
@@ -892,6 +892,12 @@ function assertR2() {
 
 function attachmentPrefix(projectId: number, issueId: number) {
   return `work/${projectId}/${issueId}/`;
+}
+
+/** Kiểm quyền đính kèm (attachment.add + thẻ thấy được) TRƯỚC khi máy chủ tải hộ tệp từ link (MCP attach_from_url). */
+export async function assertCanAttach(userId: number, projectId: number, number: number): Promise<void> {
+  const access = await requireProject(userId, projectId, 'attachment.add');
+  await findVisibleIssue(access, number);
 }
 
 export async function presignAttachment(userId: number, projectId: number, number: number, input: { fileName: string; contentType: string; size: number; forComment?: boolean }) {

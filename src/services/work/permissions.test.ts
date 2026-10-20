@@ -193,6 +193,8 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     // CTW đợt 8B (19/10/2026): sổ AI usage của dự án; bỏ phiếu poker / thẻ + phiếu retro (ý kiến của người)
     ['GET', '/ai-usage'], ['POST', '/poker/3/items/9/vote'], ['POST', '/poker'], ['DELETE', '/poker/3'],
     ['POST', '/retros/2/cards'], ['POST', '/retros/2/cards/5/vote'], ['PATCH', '/retros/2'], ['DELETE', '/retros/2/cards/5'],
+    // 19/10/2026: sprint (sprint_create / sprint_start / sprint_complete của MCP) — sprint.manage, agent cấm cả tầng tuyến
+    ['POST', '/sprints'], ['POST', '/sprints/3/start'], ['POST', '/sprints/3/complete'], ['PATCH', '/sprints/3'], ['DELETE', '/sprints/3'],
   ];
   /** Việc thường ngày của agent — phải MỞ. */
   const allowed: Array<[string, string]> = [
@@ -214,6 +216,9 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     // CTW đợt 8B: agent ĐỌC phòng poker/retro (gợi ý ước lượng), sửa worklog của mình, bình luận Docs, gửi duyệt
     ['GET', '/poker'], ['GET', '/poker/3'], ['GET', '/poker/3/items/9/suggest'], ['GET', '/retros'], ['GET', '/retros/2'],
     ['PATCH', '/issues/12/worklogs/4'], ['DELETE', '/issues/12/worklogs/4'], ['POST', '/pages/2/comments'], ['GET', '/approvals'],
+    // 19/10/2026: liên kết thẻ, theo dõi, cờ, web link (issue_link / issue_watch / issue_flag / issue_web_link_add); đọc sprint
+    ['POST', '/issues/12/links'], ['DELETE', '/issues/12/links/3'], ['PUT', '/issues/12/watch'], ['DELETE', '/issues/12/flag'],
+    ['POST', '/issues/12/web-links'], ['GET', '/sprints'],
   ];
   it(`${denied.length} tuyến đối ngoại ⇒ cấm`, () => {
     assert.ok(denied.length >= 25);

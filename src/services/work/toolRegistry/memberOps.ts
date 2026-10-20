@@ -3,7 +3,7 @@
  * làm được mọi việc hằng ngày của thành viên CT Work thay họ, ĐÚNG quyền của người đó:
  *
  *   Thẻ:        checklist_list / checklist_toggle (tích "Tự kiểm", tiêu chí chấp nhận — task list trong mô tả),
- *               issue_assign (nhận / thả thẻ của CHÍNH mình), issue_move_sprint (nếu quyền cho phép).
+ *               issue_assign (nhận / thả / giao cho người khác — theo quyền như web; agent chỉ nhận/thả thẻ của mình), issue_move_sprint (nếu quyền cho phép).
  *   Giờ:        worklog_list, worklog_update (sửa phút/ghi chú/activity của giờ CỦA MÌNH), timesheet_submit. KHÔNG có lệnh xoá
  *               (registry.test: không lệnh nào mang tên phá huỷ) — xoá giờ làm trên web.
  *   Duyệt:      approval_list, approval_request (GỬI duyệt thẻ/trang Docs — không bao giờ tự duyệt).
@@ -45,6 +45,7 @@ import { listSprints } from '../sprints.service.js';
 import * as timeActivity from '../timeActivity.service.js';
 import { TL_ACTIVITIES } from '../fptReports.js';
 import { defineTool, type ToolDef } from './types.js';
+import { assigneeIdOf, assignIssue } from './personOps.js';
 
 const json = (v: unknown) => JSON.stringify(v, null, 2);
 const ymd = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use YYYY-MM-DD');
@@ -202,20 +203,22 @@ const checklistToggle = defineTool({
 // ─── Nhận / thả thẻ · chuyển sprint ──────────────────────────────
 
 const issueAssign = defineTool({
-  name: 'issue_assign', title: 'Take or drop an issue', group: 'issues',
-  description: 'to="me": assign the issue to yourself (take it). to="nobody": unassign it if it is yours (drop it). Assigning to OTHER people is not done here — ask the lead.',
+  name: 'issue_assign', title: 'Assign an issue', group: 'issues',
+  description: 'Assigns an issue: to="me" (take it), "nobody" (unassign) or a username/email of a project member — whoever your role allows, like the web (editors and the issue\'s team lead can assign anyone; AI agent tokens only take/drop their own).',
   write: true,
-  input: z.object({ project: projectArg, issue: issueArg, to: z.enum(['me', 'nobody']) }),
+  input: z.object({ project: projectArg, issue: issueArg, to: z.string().min(1).max(254).describe('"me" | "nobody" | username or email') }),
   run: async (ctx, a) => {
     const { p, n, key } = await issueHit(ctx, a.project, a.issue, (n) => [['PATCH', `/issues/${n}`]]);
-    const cur = await prisma.workIssue.findFirst({ where: { projectId: p.id, number: n, deletedAt: null }, select: { assigneeId: true, version: true } });
+    const cur = await prisma.workIssue.findFirst({ where: { projectId: p.id, number: n, deletedAt: null }, select: { assigneeId: true } });
     if (!cur) throw new NotFoundError('Issue not found');
-    if (a.to === 'nobody' && cur.assigneeId !== ctx.userId) throw new AppError(`${key} is not assigned to you — only its assignee or the lead can drop it`, 403, 'WORK_NOT_YOURS');
-    const to = a.to === 'me' ? ctx.userId : null;
+    const to = await assigneeIdOf(ctx, p, a.to);
+    // Agent: chỉ tự nhận / thả thẻ CỦA MÌNH (service chặn lần nữa) — giữ câu báo cũ cho trường hợp thả thẻ người khác.
+    if (ctx.agent && to === null && cur.assigneeId !== ctx.userId) throw new AppError(`${key} is not assigned to you — only its assignee or the lead can drop it`, 403, 'WORK_NOT_YOURS');
     if (cur.assigneeId === to) return { issue: key, unchanged: true };
-    await issues.updateIssueAs(ctx.userId, p.id, n, { assigneeId: to }, cur.version);
+    await assignIssue(ctx, p, n, to);
     await touchLease(ctx, await issueIdOf(p.id, n));
-    return { issue: key, assignee: a.to };
+    const who = to === null ? 'nobody' : to === ctx.userId ? 'me' : (await prisma.user.findUnique({ where: { id: to }, select: { username: true } }))?.username ?? a.to;
+    return { issue: key, assignee: who };
   },
 });
 
@@ -239,7 +242,7 @@ const issueMoveSprint = defineTool({
     const s = typeof a.sprint === 'string' ? a.sprint.trim().toLowerCase() : a.sprint;
     if (s === 'backlog') sprintId = null;
     else if (s === 'active') sprintId = sprints.find((x) => x.state === 'ACTIVE')?.id ?? -1;
-    else if (s === 'next') sprintId = sprints.find((x) => x.state === 'FUTURE')?.id ?? -1;
+    else if (s === 'next') sprintId = sprints.find((x) => x.state === 'PLANNED')?.id ?? -1; // 19/10: trạng thái là PLANNED (FUTURE không tồn tại ⇒ "next" chưa từng khớp)
     else if (typeof s === 'number') sprintId = sprints.find((x) => x.id === s)?.id ?? -1;
     else sprintId = sprints.find((x) => x.name.toLowerCase() === s)?.id ?? -1;
     if (sprintId === -1) throw new AppError(`Sprint "${String(a.sprint)}" not found (open sprints: ${sprints.map((x) => `${x.name} [${x.state}]`).join(', ') || 'none'})`, 400, 'WORK_BAD_SPRINT');

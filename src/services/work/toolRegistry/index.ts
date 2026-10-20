@@ -32,13 +32,14 @@ import { SWR6B_COMMANDS } from './swr6b.js'; // CTW đợt 6b: stakeholder, elic
 import { ASK_READ_COMMANDS } from './askReads.js'; // 18/10/2026: trợ lý mentor — đọc đủ thẻ/tệp/Resources (chỉ đường Ask)
 import { CUONGMINI_COMMANDS } from './cuongMini.js'; // đợt 6 CuongMini: issue_guide / project_resources / my_updates (chỉ MCP)
 import { MEMBER_OPS_COMMANDS } from './memberOps.js'; // đợt 8B: thao tác thành viên còn thiếu (đính kèm, checklist, nộp bài, form, duyệt…)
+import { PERSON_OPS_COMMANDS } from './personOps.js'; // 19/10/2026: CuongMini làm thay người — đính từ link, liên kết, thành viên, mời, sprint
 import { recordToolCall, runInAiScope } from '../aiUsage.service.js';
 import { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 export { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 /** Thứ tự = thứ tự trong tools/list: 21 tool cũ trước (client cũ thấy y hệt), lệnh mới sau. */
-export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS, ...SRS_COMMANDS, ...CHAT_COMMANDS, ...CONTRIB_COMMANDS, ...DIAGRAM_COMMANDS, ...TEACHING_COMMANDS, ...SWR_COMMANDS, ...MEETING2_COMMANDS, ...SWR6B_COMMANDS, ...ASK_READ_COMMANDS, ...CUONGMINI_COMMANDS, ...CODE_COMMANDS, ...MEMBER_OPS_COMMANDS];
+export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS, ...SRS_COMMANDS, ...CHAT_COMMANDS, ...CONTRIB_COMMANDS, ...DIAGRAM_COMMANDS, ...TEACHING_COMMANDS, ...SWR_COMMANDS, ...MEETING2_COMMANDS, ...SWR6B_COMMANDS, ...ASK_READ_COMMANDS, ...CUONGMINI_COMMANDS, ...CODE_COMMANDS, ...MEMBER_OPS_COMMANDS, ...PERSON_OPS_COMMANDS];
 
 const BY_NAME = new Map(COMMANDS.map((t) => [t.name, t]));
 if (BY_NAME.size !== COMMANDS.length) throw new Error('toolRegistry: trùng tên lệnh');
@@ -52,7 +53,7 @@ export function commandByName(name: string): ToolDef | undefined {
 
 export const mcpCommands = (): ToolDef[] => COMMANDS.filter((t) => onSurface(t, 'mcp'));
 export const askCommands = (): ToolDef[] => COMMANDS.filter((t) => onSurface(t, 'ask') && !t.agentOnly && 'project' in t.input.shape);
-export const builtinCommands = (): ToolDef[] => COMMANDS.filter((t) => onSurface(t, 'builtin') && 'project' in t.input.shape);
+export const builtinCommands = (): ToolDef[] => COMMANDS.filter((t) => onSurface(t, 'builtin') && !t.personOnly && 'project' in t.input.shape);
 
 // ─── Mục lục lệnh cho prompt (Ask AI + agent BUILTIN) ─────────────
 

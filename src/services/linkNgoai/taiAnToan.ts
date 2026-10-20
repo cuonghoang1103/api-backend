@@ -54,13 +54,49 @@ async function kiemHost(loai: LoaiLink, u: URL): Promise<void> {
  * 401/403/404 ⇒ ném `RIENG_TU` (link chưa mở chia sẻ / không tồn tại) — người gọi tự diễn giải theo loại link.
  */
 export async function taiCoRao(loai: LoaiLink, url: string, o: { tranByte: number; headers?: Record<string, string>; hetGioMs?: number } ): Promise<KetQuaTai> {
+  return taiQuaRao(url, o, (u) => kiemHost(loai, u), (tiep) => hostChoPhep(loai, tiep.hostname) && tiep.protocol === 'https:');
+}
+
+/** Một chặng của link CÔNG KHAI bất kỳ: http(s), IP (gõ thẳng hoặc sau DNS) không được nội bộ. */
+async function kiemCongKhai(u: URL): Promise<void> {
+  if (u.protocol !== 'https:' && u.protocol !== 'http:') throw new LoiTai(`chỉ gọi http(s) (${u.protocol})`, 'CAM');
+  if (u.username || u.password) throw new LoiTai('URL không được chứa tài khoản/mật khẩu', 'CAM');
+  const host = u.hostname.replace(/^\[|\]$/g, '');
+  if (isIP(host)) {
+    if (ipBiCam(host)) throw new LoiTai(`địa chỉ nội bộ (${host}) không được phép`, 'CAM');
+    return;
+  }
+  if (!host.includes('.') || /\.(local|internal|localhost)$/i.test(host) || host === 'localhost') throw new LoiTai(`"${host}" không phải tên miền công khai`, 'CAM');
+  let ds: Array<{ address: string }>;
+  try {
+    ds = await lookupImpl(host);
+  } catch {
+    throw new LoiTai(`không phân giải được "${host}"`, 'MANG');
+  }
+  const ban = ds.find((r) => ipBiCam(r.address));
+  if (ban || !ds.length) throw new LoiTai(`"${host}" trỏ vào địa chỉ nội bộ`, 'CAM');
+}
+
+/**
+ * GET có rào cho URL CÔNG KHAI BẤT KỲ (không danh sách host) — `attach_from_url` của CT Work MCP (19/10/2026).
+ * Cùng ba lớp còn lại của `taiCoRao`: kiểm IP MỌI chặng (kể cả chuyển hướng), tối đa 4 chặng, trần byte + hết giờ.
+ * Không gửi header bí mật nào.
+ */
+export async function taiCongKhai(url: string, o: { tranByte: number; hetGioMs?: number }): Promise<KetQuaTai> {
+  return taiQuaRao(url, o, kiemCongKhai, () => true);
+}
+
+async function taiQuaRao(
+  url: string, o: { tranByte: number; headers?: Record<string, string>; hetGioMs?: number },
+  kiem: (u: URL) => Promise<void>, theoDuoc: (tiep: URL) => boolean,
+): Promise<KetQuaTai> {
   let u: URL;
   try { u = new URL(url); } catch { throw new LoiTai('URL hỏng', 'CAM'); }
   const hostDau = u.hostname;
   const signal = AbortSignal.timeout(o.hetGioMs ?? 20_000);
   let res: Response | null = null;
   for (let i = 0; i <= 4; i++) {
-    await kiemHost(loai, u);
+    await kiem(u);
     const headers: Record<string, string> = {
       'User-Agent': 'CuongThaiAgent/1.0 (+https://cuongthai.com)',
       Accept: '*/*',
@@ -78,7 +114,7 @@ export async function taiCoRao(loai: LoaiLink, url: string, o: { tranByte: numbe
     let tiep: URL;
     try { tiep = new URL(loc, u); } catch { throw new LoiTai('chuyển hướng hỏng', 'CAM'); }
     if (laDangNhapGoogle(tiep.toString())) throw new LoiTai('cần đăng nhập', 'RIENG_TU', 401);
-    if (!hostChoPhep(loai, tiep.hostname) || tiep.protocol !== 'https:') {
+    if (!theoDuoc(tiep)) {
       throw new LoiTai(`chuyển hướng sang "${tiep.hostname}" — không theo`, 'CAM');
     }
     u = tiep;

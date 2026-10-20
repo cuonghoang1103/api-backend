@@ -178,7 +178,8 @@ describe('CT Work — MCP + chi phí agent (A9–A12, HTTP + DB thật)', { skip
     assert.equal(LEGACY_MCP_TOOLS.length, 22);
     assert.equal(LEGACY_MCP_TOOLS[21], 'create_project');
     assert.deepEqual(names.slice(0, LEGACY_MCP_TOOLS.length), LEGACY_MCP_TOOLS);
-    assert.equal(names.length, mcpCommands().length);
+    // 19/10/2026: tool chỉ-người (thành viên, mời, sprint — personOnly) không hiện với token agent.
+    assert.equal(names.length, mcpCommands().filter((t) => !t.personOnly).length);
     for (const t of a.body.result.tools) assert.equal(t.inputSchema.type, 'object', t.name);
     const getIssue = a.body.result.tools.find((t: any) => t.name === 'get_issue');
     assert.deepEqual(getIssue.inputSchema.required, ['project', 'issue']);
@@ -514,7 +515,7 @@ describe('CT Work — MCP + chi phí agent (A9–A12, HTTP + DB thật)', { skip
     assert.equal(out.code, 0, out.err);
     assert.equal(out.lines.find((l) => l.id === 1).result.serverInfo.name, 'ctwork');
     const { mcpCommands } = await import('../services/work/toolRegistry/index.js');
-    assert.equal(out.lines.find((l) => l.id === 2).result.tools.length, mcpCommands().length); // 21 cũ + lệnh đợt 3C
+    assert.equal(out.lines.find((l) => l.id === 2).result.tools.length, mcpCommands().filter((t) => !t.personOnly).length); // token agent: trừ tool chỉ-người
     assert.match(out.lines.find((l) => l.id === 3).result.content[0].text, /"kind": "AGENT"/);
     assert.ok(!out.err.includes(agent.token));
   });

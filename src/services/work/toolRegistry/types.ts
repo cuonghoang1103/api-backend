@@ -37,6 +37,8 @@ export interface ToolDef {
   write: boolean;
   /** Chỉ token agent (claim/heartbeat/release/report_usage/wait_events). Người không thấy trong tools/list. */
   agentOnly?: boolean;
+  /** Chỉ token NGƯỜI (quản trị thành viên, mời người, sprint…) — agent không thấy trong tools/list; server vẫn chặn agent. */
+  personOnly?: boolean;
   surfaces?: CommandSurfaces;
   /** Nhóm để xếp mục lục: issues | docs | tests | export | planning | agent. */
   group?: string;
@@ -45,7 +47,7 @@ export interface ToolDef {
 }
 
 export function defineTool<S extends z.AnyZodObject>(t: {
-  name: string; title: string; description: string; write: boolean; agentOnly?: boolean; surfaces?: CommandSurfaces; group?: string; input: S;
+  name: string; title: string; description: string; write: boolean; agentOnly?: boolean; personOnly?: boolean; surfaces?: CommandSurfaces; group?: string; input: S;
   run: (ctx: CmdCtx, args: z.infer<S>) => Promise<ToolOutput>;
 }): ToolDef {
   return t as unknown as ToolDef;

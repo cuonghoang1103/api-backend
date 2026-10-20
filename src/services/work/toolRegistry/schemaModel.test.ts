@@ -19,6 +19,7 @@ process.env.NODE_ENV ??= 'test';
 
 const { mcpCommands, commandByName } = await import('./index.js');
 const { MEMBER_OPS_COMMANDS } = await import('./memberOps.js');
+const { PERSON_OPS_COMMANDS } = await import('./personOps.js');
 const { zodToJsonSchema } = await import('../../../mcp/protocol.js');
 const { parseToolMcp, toolsForGateway } = await import('../../agent/tools.js');
 const { toolSangAnthropic } = await import('../../agent/anthropic.js');
@@ -110,8 +111,8 @@ describe('Tool CT Work ⇒ định dạng của MỌI model CuongMini (đợt 8B
   });
 
   it('tool đợt 8B: mô tả vừa 500 ký tự của app (không bị cắt), ghi/đọc đúng để client hiện thẻ duyệt', () => {
-    const extra = ['attach_file', 'attach_complete', 'comment'].map((n) => commandByName(n)!);
-    for (const t of [...MEMBER_OPS_COMMANDS, ...extra]) {
+    const extra = ['attach_file', 'attach_complete', 'comment', 'update_issue', 'create_issue', 'transition'].map((n) => commandByName(n)!);
+    for (const t of [...MEMBER_OPS_COMMANDS, ...PERSON_OPS_COMMANDS, ...extra]) {
       const a = nhuApp(t);
       assert.ok(a.full.length <= MAX_MO_TA, `${t.name}: mô tả ${a.full.length} > ${MAX_MO_TA} — app cắt mất đuôi`);
       assert.ok(t.name.length <= 48, t.name);

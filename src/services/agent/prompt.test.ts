@@ -223,3 +223,17 @@ test('LUAT_CTWORK: đọc rẻ (JQL hẹp, get_issue từng thẻ, không mở t
   }
   assert.ok(LUAT_CTWORK.length < 2500, `luật CT Work phải gọn (${LUAT_CTWORK.length})`);
 });
+
+test('19/10/2026 — CT Work làm thay người: không trình duyệt, không bắt người dùng tự làm, đính tệp đúng đường; chưa kết nối ⇒ /ctwork', async () => {
+  const { LUAT_CTWORK, LUAT_CTWORK_CHUA_NOI } = await import('./prompt.js');
+  for (const can of [/trinh_duyet_hien/, /LÀM THAY NGƯỜI DÙNG/, /KHÔNG bảo người dùng tự làm/, /attach_file với `path`/, /gdoc_images rồi attach_from_url/, /for:"comment"/, /issue_assign/]) {
+    assert.match(LUAT_CTWORK, can);
+  }
+  for (const can of [/NT-13/, /KHÔNG dùng trình duyệt/, /web_\*/, /trinh_duyet_hien/, /\/ctwork/]) assert.match(LUAT_CTWORK_CHUA_NOI, can);
+  assert.ok(LUAT_CTWORK_CHUA_NOI.length < 400, `luật chưa kết nối phải gọn (${LUAT_CTWORK_CHUA_NOI.length})`);
+  // Mô tả tool trình duyệt: web_mo không còn nói "người dùng NHÌN THẤY" (trình duyệt chạy ngầm); cả hai cấm cuongthai.com/work.
+  const { AGENT_TOOLS } = await import('./tools.js');
+  const moTa = (n: string) => AGENT_TOOLS.find((t) => t.name === n)!.description;
+  assert.doesNotMatch(moTa('web_mo'), /NHÌN THẤY trang ngay/);
+  for (const n of ['web_mo', 'trinh_duyet_hien']) assert.match(moTa(n), /cuongthai\.com\/work/);
+});

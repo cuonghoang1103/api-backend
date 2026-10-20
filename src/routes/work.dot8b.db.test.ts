@@ -207,7 +207,13 @@ describe('CT Work đợt 8B — AI làm thao tác thành viên + AI usage', { sk
     const take = await tool(devTok, 'issue_assign', { project: 'NT', issue: i.number, to: 'me' });
     assert.equal(take.isError, false, take.text);
     assert.equal((await prisma.workIssue.findUniqueOrThrow({ where: { id: i.id } })).assigneeId, dev.id);
-    denied(await tool(leadTok, 'issue_assign', { project: 'NT', issue: i.number, to: 'nobody' }), /WORK_NOT_YOURS/);
+    // 19/10/2026: người sửa được thẻ (lead) bỏ giao / giao cho người khác như trên web; agent vẫn chỉ nhận/thả thẻ của mình.
+    assert.equal((await tool(leadTok, 'issue_assign', { project: 'NT', issue: i.number, to: 'nobody' })).isError, false);
+    assert.equal((await prisma.workIssue.findUniqueOrThrow({ where: { id: i.id } })).assigneeId, null);
+    assert.equal((await tool(leadTok, 'issue_assign', { project: 'NT', issue: i.number, to: dev.username })).isError, false);
+    assert.equal((await prisma.workIssue.findUniqueOrThrow({ where: { id: i.id } })).assigneeId, dev.id);
+    denied(await tool(agentTok, 'issue_assign', { project: 'NT', issue: i.number, to: 'nobody' }), /WORK_NOT_YOURS/);
+    denied(await tool(agentTok, 'issue_assign', { project: 'NT', issue: i.number, to: lead.username }), /WORK_AGENT_FORBIDDEN/);
     assert.equal((await tool(devTok, 'issue_assign', { project: 'NT', issue: i.number, to: 'nobody' })).isError, false);
     const sp = await call(lead, 'POST', `/projects/${pid}/sprints`, { name: 'Sprint 1' });
     assert.equal(sp.status, 201, JSON.stringify(sp.raw));

@@ -28,12 +28,15 @@ import { untrusted } from '../protocol.js';
 import { issueArg, projectArg } from './read.js';
 import { defineTool, type ToolDef } from './types.js';
 import { TL_ACTIVITIES } from '../../services/work/fptReports.js';
+import { assigneeIdOf, assignIssue, priorityArg, priorityOf, sprintIdOf, sprintRefArg } from '../../services/work/toolRegistry/personOps.js';
 
 /** Tệp gửi thẳng qua MCP (base64 trong JSON-RPC). Lớn hơn ⇒ trả URL ký sẵn để agent PUT thẳng lên kho. */
 export const MCP_INLINE_FILE_MAX = 6 * 1024 * 1024;
 const MAX_MARKDOWN = 20_000;
 
 const markdownArg = z.string().min(1).max(MAX_MARKDOWN);
+const visibilityArg = z.enum(['internal', 'public']).optional().describe('internal (default, team only) | public (reply to the client — shared issues, people only)');
+const visOf = (v: 'internal' | 'public' | undefined) => (v === 'public' ? 'PUBLIC' as const : 'INTERNAL' as const);
 
 function docOf(markdown: string): Prisma.InputJsonValue {
   return markdownToTiptap(markdown).doc as unknown as Prisma.InputJsonValue;
@@ -124,18 +127,20 @@ const comment = defineTool({
   name: 'comment',
   surfaces: { ask: false },
   title: 'Comment',
-  description: 'Adds an INTERNAL comment (markdown) to an issue — evidence of your work, questions, results. Agents can never reply to clients. To answer someone in a thread, pass reply_to = the comment id shown in get_issue (replies are one level deep: replying to a reply joins its thread).',
+  description: 'Adds a comment (markdown) to an issue — report, evidence, question, result. Internal by default; visibility="public" replies to the client on a shared issue (people only — AI agent comments are always internal). Images/files: attach_file or attach_from_url with for="comment", then pass the ids in attachments. reply_to = comment id from get_issue (one level of threads).',
   write: true,
   input: z.object({
     project: projectArg, issue: issueArg, markdown: markdownArg,
     // CTW đợt 5b K-1: trả lời theo luồng — người được trả lời nhận thông báo "New reply".
     reply_to: z.number().int().positive().optional().describe('Comment id to reply to (from get_issue, "comment #<id>")'),
     // Đợt 8B: ảnh/tệp trong bình luận — id bản nháp từ attach_file {for:"comment"} (chỉ bản nháp của CHÍNH người gửi).
-    attachments: z.array(z.number().int().positive()).max(10).optional().describe('Draft file ids from attach_file with for="comment"'),
+    attachments: z.array(z.number().int().positive()).max(10).optional().describe('Draft file ids from attach_file / attach_from_url with for="comment"'),
+    // 19/10/2026: người chọn được trả lời khách (service: chỉ khi thẻ đã chia sẻ; agent luôn INTERNAL; khách cổng luôn PUBLIC).
+    visibility: visibilityArg,
   }),
   run: async (ctx, a) => {
     const { p, n, key } = await issueCtx(ctx, a.project, a.issue, (n) => [['POST', `/issues/${n}/comments`]]);
-    const c = await issues.addComment(ctx.userId, p.id, n, docOf(a.markdown), 'USER', 'INTERNAL', { parentId: a.reply_to ?? null, ...(a.attachments?.length ? { attachmentIds: a.attachments } : {}) });
+    const c = await issues.addComment(ctx.userId, p.id, n, docOf(a.markdown), 'USER', visOf(a.visibility), { parentId: a.reply_to ?? null, ...(a.attachments?.length ? { attachmentIds: a.attachments } : {}) });
     await touchLease(ctx, await issueIdOf(p.id, n));
     return { commentId: c.id, issue: key, visibility: c.visibility, ...(c.parentId ? { thread: c.parentId } : {}) };
   },
@@ -147,12 +152,12 @@ const transition = defineTool({
   title: 'Change status',
   description: 'Moves an issue to another status: a status name from get_issue, or "todo" / "in_progress" / "review" / "done". When an AI agent asks for Done, CT Work moves it to the review status instead (redirected) — a person closes it.',
   write: true,
-  input: z.object({ project: projectArg, issue: issueArg, to: z.string().min(1).max(60), comment: markdownArg.optional().describe('Optional comment added after the move') }),
+  input: z.object({ project: projectArg, issue: issueArg, to: z.string().min(1).max(60), comment: markdownArg.optional().describe('Optional comment added after the move'), commentVisibility: visibilityArg }),
   run: async (ctx, a) => {
     const { p, n, key } = await issueCtx(ctx, a.project, a.issue, (n) => [['POST', `/issues/${n}/move`], ...(a.comment ? [['POST', `/issues/${n}/comments`] as [string, string]] : [])]);
     const r = await moveTo(ctx, p, n, a.to);
     let commentId: number | undefined;
-    if (a.comment) commentId = (await issues.addComment(ctx.userId, p.id, n, docOf(a.comment), 'USER', 'INTERNAL')).id;
+    if (a.comment) commentId = (await issues.addComment(ctx.userId, p.id, n, docOf(a.comment), 'USER', visOf(a.commentVisibility))).id;
     await touchLease(ctx, await issueIdOf(p.id, n));
     return { issue: key, ...r, ...(commentId ? { commentId } : {}) };
   },
@@ -207,36 +212,82 @@ async function labelIdsOf(ctx: McpCtx, projectId: number, names: string[]): Prom
   return ids;
 }
 
+/** Tên component ⇒ id (chỉ component đã có — tạo component là cấu hình dự án). */
+async function componentIdsOf(projectId: number, names: string[]): Promise<number[]> {
+  const all = await prisma.workComponent.findMany({ where: { projectId }, select: { id: true, name: true } });
+  const ids: number[] = [];
+  const missing: string[] = [];
+  for (const n of names) {
+    const hit = all.find((c) => c.name.toLowerCase() === n.trim().toLowerCase());
+    if (hit) ids.push(hit.id); else missing.push(n);
+  }
+  if (missing.length) throw new AppError(`Unknown component(s): ${missing.join(', ')} (project admins add components in project settings)`, 400, 'WORK_BAD_COMPONENT', { allowed: all.map((c) => c.name).slice(0, 50) });
+  return ids;
+}
+
+/** Tên phiên bản (fix version) ⇒ id; null = bỏ. */
+async function versionIdOf(projectId: number, name: string | null): Promise<number | null> {
+  if (name === null) return null;
+  const all = await prisma.workVersion.findMany({ where: { projectId }, select: { id: true, name: true } });
+  const hit = all.find((v) => v.name.toLowerCase() === name.trim().toLowerCase());
+  if (!hit) throw new AppError(`Unknown version "${name}"`, 400, 'WORK_BAD_VERSION', { allowed: all.map((v) => v.name).slice(0, 50) });
+  return hit.id;
+}
+
+const parentOf = async (projectId: number, ref: string | number) => resolveParentId(projectId, typeof ref === 'number' ? { parentNumber: ref } : /^\d+$/.test(ref.trim()) ? { parentNumber: Number(ref) } : { parentKey: ref });
+const dayOf = (d: string | null) => (d === null ? null : new Date(`${d}T00:00:00.000Z`));
+
 const updateIssue = defineTool({
   name: 'update_issue',
   surfaces: { ask: false },
   title: 'Update issue',
-  description: 'Edits fields of an issue assigned to you (or title/description/points of a subtask of your issue). Only the fields you pass change. labels replaces the whole set with existing project labels.',
+  description: 'Edits fields of an issue — only the fields you pass change: title, description, assignee ("me" / "nobody" / username), priority, story points, estimates, start/due date, parent, sprint, labels (replace the set), components, fix version. Your role decides what is allowed (as on the web); AI agent tokens edit only their own issues. Status: use transition.',
   write: true,
   input: z.object({
     project: projectArg, issue: issueArg,
     title: z.string().min(1).max(255).optional(),
     descriptionMarkdown: z.string().max(100_000).optional(),
+    assignee: z.string().min(1).max(254).optional().describe('"me" | "nobody" | username or email of a project member'),
+    priority: priorityArg.optional(),
     storyPoints: z.number().min(0).max(1000).nullable().optional(),
+    originalEstimateMinutes: z.number().int().min(0).max(100_000).nullable().optional(),
     remainingMinutes: z.number().int().min(0).max(100_000).nullable().optional(),
+    startDate: dateArg.nullable().optional(),
     dueDate: dateArg.nullable().optional(),
+    parent: issueArg.nullable().optional().describe('Parent issue (epic / story) — null removes it'),
+    sprint: sprintRefArg.optional().describe('"active" | "next" | "backlog" | sprint name | id'),
     labels: z.array(z.string().min(1).max(60)).max(30).optional(),
+    components: z.array(z.string().min(1).max(60)).max(30).optional().describe('Existing component names (replaces the set)'),
+    fixVersion: z.string().min(1).max(60).nullable().optional().describe('Version name, null removes it'),
   }),
   run: async (ctx, a) => {
     const { p, n, key } = await issueCtx(ctx, a.project, a.issue, (n) => [['PATCH', `/issues/${n}`]]);
     const patch: Record<string, unknown> = {};
     if (a.title !== undefined) patch.title = a.title;
     if (a.descriptionMarkdown !== undefined) patch.descriptionJson = a.descriptionMarkdown.trim() ? docOf(a.descriptionMarkdown) : null;
+    if (a.assignee !== undefined) patch.assigneeId = await assigneeIdOf(ctx, p, a.assignee);
+    if (a.priority !== undefined) patch.priority = priorityOf(a.priority);
     if (a.storyPoints !== undefined) patch.storyPoints = a.storyPoints;
+    if (a.originalEstimateMinutes !== undefined) patch.originalEstimateMin = a.originalEstimateMinutes;
     if (a.remainingMinutes !== undefined) patch.remainingEstimateMin = a.remainingMinutes;
-    if (a.dueDate !== undefined) patch.dueDate = a.dueDate === null ? null : new Date(`${a.dueDate}T00:00:00.000Z`);
+    if (a.startDate !== undefined) patch.startDate = dayOf(a.startDate);
+    if (a.dueDate !== undefined) patch.dueDate = dayOf(a.dueDate);
+    if (a.parent !== undefined) patch.parentId = a.parent === null ? null : await parentOf(p.id, a.parent);
+    if (a.sprint !== undefined) patch.sprintId = await sprintIdOf(ctx, p.id, a.sprint);
     if (a.labels !== undefined) patch.labelIds = await labelIdsOf(ctx, p.id, a.labels);
+    if (a.components !== undefined) patch.componentIds = await componentIdsOf(p.id, a.components);
+    if (a.fixVersion !== undefined) patch.fixVersionId = await versionIdOf(p.id, a.fixVersion);
     if (!Object.keys(patch).length) throw new BadRequestError('Nothing to change — pass at least one field', 'VALIDATION_ERROR');
     const cur = await prisma.workIssue.findFirst({ where: { projectId: p.id, number: n, deletedAt: null }, select: { version: true } });
     if (!cur) throw new AppError('Issue not found', 404, 'NOT_FOUND');
-    const after = await issues.updateIssueAs(ctx.userId, p.id, n, patch as Parameters<typeof issues.updateIssueAs>[3], cur.version);
+    // Chỉ đổi người được giao (người không sửa được thẻ nhưng là trưởng bộ phận) ⇒ đường giao việc như web (issue_assign).
+    const onlyAssignee = Object.keys(patch).length === 1 && 'assigneeId' in patch;
+    let version: number | null = null;
+    if (onlyAssignee) await assignIssue(ctx, p, n, patch.assigneeId as number | null);
+    else version = ((await issues.updateIssueAs(ctx.userId, p.id, n, patch as Parameters<typeof issues.updateIssueAs>[3], cur.version)) as { version?: number }).version ?? null;
     await touchLease(ctx, await issueIdOf(p.id, n));
-    return { issue: key, updated: Object.keys(patch).map((k) => (k === 'descriptionJson' ? 'description' : k === 'labelIds' ? 'labels' : k)), version: (after as { version?: number }).version ?? null };
+    const NAMES: Record<string, string> = { descriptionJson: 'description', labelIds: 'labels', componentIds: 'components', assigneeId: 'assignee', parentId: 'parent', sprintId: 'sprint', fixVersionId: 'fixVersion', originalEstimateMin: 'originalEstimate', remainingEstimateMin: 'remainingEstimate' };
+    return { issue: key, updated: Object.keys(patch).map((k) => NAMES[k] ?? k), version };
   },
 });
 
@@ -244,7 +295,7 @@ const createIssue = defineTool({
   name: 'create_issue',
   surfaces: { ask: false },
   title: 'Create issue',
-  description: 'Creates an issue (type key such as TASK, BUG, STORY, SUBTASK). SUBTASK needs parent. assignToMe takes it yourself. Agents cannot assign to others or plan sprints.',
+  description: 'Creates an issue (type key such as TASK, BUG, STORY, SUBTASK; SUBTASK needs parent). Optional: assignee ("me" / username), priority, story points, due date, sprint, labels. Your role decides what is allowed; AI agent tokens can only assign themselves and cannot plan sprints.',
   write: true,
   input: z.object({
     project: projectArg,
@@ -252,20 +303,30 @@ const createIssue = defineTool({
     title: z.string().min(1).max(255),
     descriptionMarkdown: z.string().max(100_000).optional(),
     parent: issueArg.optional(),
-    assignToMe: z.boolean().optional(),
+    assignee: z.string().min(1).max(254).optional().describe('"me" | username or email of a project member'),
+    assignToMe: z.boolean().optional().describe('Same as assignee="me"'),
+    priority: priorityArg.optional(),
+    storyPoints: z.number().min(0).max(1000).optional(),
+    dueDate: dateArg.optional(),
+    sprint: sprintRefArg.optional().describe('"active" | "next" | sprint name | id (default: backlog)'),
     labels: z.array(z.string().min(1).max(60)).max(30).optional(),
   }),
   run: async (ctx, a) => {
     requireWrite(ctx);
     const p = await projectFor(ctx, a.project, [['POST', '/issues']]);
     const typeId = await typeIdFromKey(p.id, a.type, 'type');
-    const parentId = a.parent === undefined ? undefined
-      : await resolveParentId(p.id, typeof a.parent === 'number' ? { parentNumber: a.parent } : /^\d+$/.test(a.parent.trim()) ? { parentNumber: Number(a.parent) } : { parentKey: a.parent });
+    const parentId = a.parent === undefined ? undefined : await parentOf(p.id, a.parent);
+    const assigneeId = a.assignee !== undefined ? await assigneeIdOf(ctx, p, a.assignee) : a.assignToMe ? ctx.userId : undefined;
+    const sprintId = a.sprint !== undefined ? await sprintIdOf(ctx, p.id, a.sprint) : undefined;
     const body: issues.CreateIssueBody = {
       typeId, title: a.title,
       ...(a.descriptionMarkdown?.trim() ? { descriptionJson: docOf(a.descriptionMarkdown) } : {}),
       ...(parentId ? { parentId } : {}),
-      ...(a.assignToMe ? { assigneeId: ctx.userId } : {}),
+      ...(assigneeId ? { assigneeId } : {}),
+      ...(a.priority !== undefined ? { priority: priorityOf(a.priority) } : {}),
+      ...(a.storyPoints !== undefined ? { storyPoints: a.storyPoints } : {}),
+      ...(a.dueDate ? { dueDate: dayOf(a.dueDate) } : {}),
+      ...(sprintId ? { sprintId } : {}),
       ...(a.labels?.length ? { labelIds: await labelIdsOf(ctx, p.id, a.labels) } : {}),
     };
     const issue = await issues.createIssueAs(ctx.userId, p.id, body);
@@ -329,7 +390,7 @@ const attachFile = defineTool({
   name: 'attach_file',
   surfaces: { ask: false, builtin: false },
   title: 'Attach file',
-  description: `Attaches a file (base64) to an issue — screenshots, logs, build output. for="comment" makes it a draft for your next comment (pass the returned attachmentId in comment.attachments); testRun = evidence of that test run. Up to ${MCP_INLINE_FILE_MAX / 1024 / 1024} MB inline; bigger: pass sizeBytes without base64, PUT the bytes to the presigned URL, then attach_complete.`,
+  description: `Attaches a file (base64) to an issue — screenshots, reports, logs. A file on the web or an image inside a Google Doc: use attach_from_url instead. for="comment" makes it a draft for your next comment (pass the returned attachmentId in comment.attachments); testRun = evidence of that test run. Up to ${MCP_INLINE_FILE_MAX / 1024 / 1024} MB inline; bigger: pass sizeBytes without base64, PUT the bytes to the presigned URL, then attach_complete.`,
   write: true,
   input: z.object({
     project: projectArg, issue: issueArg,

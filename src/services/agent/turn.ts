@@ -70,7 +70,7 @@ import { giaHanChoLoi, tranChamChinhHangFree, tranChamModel, tranChamVi, type Gi
 import { HE_SO_FABLE, MODEL_FABLE, loiHetFable, xemHanMucFable } from './fable.js';
 import { loiCanViTien, xemViTien } from './viTien.js';
 import { runServerTool } from './serverTools.js';
-import { buildSystemPrompt, catGhiChu, dongDuAnCtwork, dongHomNay, LUAT_CTWORK, LUAT_DAN_DUONG, type WorkspaceHint } from './prompt.js';
+import { buildSystemPrompt, catGhiChu, dongDuAnCtwork, dongHomNay, LUAT_CTWORK, LUAT_CTWORK_CHUA_NOI, LUAT_DAN_DUONG, type WorkspaceHint } from './prompt.js';
 import { catLuotCu, loiNhacDaCat, tongKyTu, vaToolCallMoCoi } from './catCu.js';
 import { CAU_TU_TOM_TAT, CAU_VAN_QUA_DAI, catKetQuaToolTo, laLoiVuotCuaSo } from './cuuCuaSo.js';
 import { LocLuongGoiY, LUAT_GOI_Y, tachGoiY } from './goiYBuocTiep.js';
@@ -1128,7 +1128,7 @@ export async function runAgentTurn(
     ...(input.kyNang?.length ? { kyNang: input.kyNang } : {}),
     ...(input.agentPhu?.length ? { agentPhu: input.agentPhu } : {}),
     ...(input.promptPhu ? { promptPhu: input.promptPhu } : {}),
-  }) + `\n\n${LOI_LAM_VIEC}${laPhu ? '' : `\n\n${LUAT_GOI_Y}`}${coCtwork ? `\n\n${LUAT_CTWORK}\n\n${LUAT_DAN_DUONG}` : ''}${mucLucMcp.length ? `\n\n${khoiMucLucMcp(mucLucMcp)}` : ''}\n\n${dongHomNay(input.ngayGio)}${dongCtw ? `\n${dongCtw}` : ''}`;
+  }) + `\n\n${LOI_LAM_VIEC}${laPhu ? '' : `\n\n${LUAT_GOI_Y}`}${coCtwork ? `\n\n${LUAT_CTWORK}\n\n${LUAT_DAN_DUONG}` : laPhu ? '' : `\n\n${LUAT_CTWORK_CHUA_NOI}`}${mucLucMcp.length ? `\n\n${khoiMucLucMcp(mucLucMcp)}` : ''}\n\n${dongHomNay(input.ngayGio)}${dongCtw ? `\n${dongCtw}` : ''}`;
   /* Đợt 6: `ctwork_huong_dan` chỉ khi cuộc có CT Work (tool hoặc dự án gắn); `nap_tool_mcp` chỉ khi có mục lục. */
   const tools = toolsForGateway(capabilities, toolMcp)
     .filter((t) => (t.function.name !== 'ctwork_huong_dan' || coCtwork || Boolean(input.ctwork)) && (t.function.name !== 'nap_tool_mcp' || mucLucMcp.length > 0));

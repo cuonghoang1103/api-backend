@@ -772,6 +772,9 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   ['*', /^\/ai-usage$/],
   ['POST', /^\/poker(\/.*)?$/], ['DELETE', /^\/poker(\/.*)?$/],
   ['POST', /^\/retros(\/.*)?$/], ['PATCH', /^\/retros(\/.*)?$/], ['DELETE', /^\/retros(\/.*)?$/],
+  // 19/10/2026 (CuongMini làm thay người — sprint_create/start/complete qua MCP): tạo/sửa/bắt đầu/kết thúc/xoá sprint là
+  // `sprint.manage` (đã trong AGENT_DENIED_ACTIONS) — chặn thêm ở tầng tuyến cho đủ hai lớp. Đọc sprint vẫn mở.
+  ['POST', /^\/sprints(\/\d+\/(start|complete))?$/], ['PATCH', /^\/sprints\/\d+$/], ['DELETE', /^\/sprints\/\d+$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */

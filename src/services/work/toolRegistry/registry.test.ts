@@ -64,6 +64,34 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
     for (const n of ['get_issue', 'comment', 'update_issue', 'create_issue', 'fpt_unit_add_cases', 'docs_draft_page', 'export_file']) assert.ok(b.includes(n), n);
   });
 
+  it('19/10/2026 — làm thay người: tool mới có trên MCP; quản trị (thành viên/mời/sprint) chỉ token NGƯỜI, không vào BUILTIN', async () => {
+    const mcp = r.mcpCommands().map((t) => t.name);
+    const builtin = r.builtinCommands().map((t) => t.name);
+    const ask = r.askCommands().map((t) => t.name);
+    for (const n of ['gdoc_images', 'attach_from_url', 'issue_link', 'issue_unlink', 'issue_flag', 'issue_watch', 'issue_web_link_add',
+      'project_member_add', 'project_member_set_role', 'project_member_remove', 'workspace_invite', 'sprint_create', 'sprint_start', 'sprint_complete']) {
+      assert.ok(mcp.includes(n), `${n} có trên MCP`);
+    }
+    const nguoi = ['project_member_add', 'project_member_set_role', 'project_member_remove', 'workspace_invite', 'sprint_create', 'sprint_start', 'sprint_complete'];
+    for (const n of nguoi) {
+      assert.equal(r.commandByName(n)!.personOnly, true, `${n} personOnly`);
+      assert.ok(!builtin.includes(n), `${n} không vào BUILTIN`);
+    }
+    // Tải từ link chạy trên máy chủ ⇒ không mở cho Ask AI / BUILTIN (model đọc nội dung untrusted có thể bị dụ gọi URL lạ).
+    for (const n of ['gdoc_images', 'attach_from_url']) assert.ok(!ask.includes(n) && !builtin.includes(n), n);
+    assert.equal(r.commandByName('gdoc_images')!.write, false);
+    // tools/list theo token: agent không thấy tool personOnly, người thì thấy.
+    const { TOOLS } = await import('../../../mcp/server.js');
+    const thay = (agent: boolean) => TOOLS.filter((t) => (!t.agentOnly || agent) && (!t.personOnly || !agent)).map((t) => t.name);
+    for (const n of nguoi) assert.ok(thay(false).includes(n) && !thay(true).includes(n), n);
+    // update_issue / create_issue nhận trường của người (assignee, priority, sprint…); comment chọn được visibility.
+    for (const [tool, fields] of [['update_issue', ['assignee', 'priority', 'sprint', 'parent', 'startDate', 'originalEstimateMinutes', 'components', 'fixVersion']],
+      ['create_issue', ['assignee', 'priority', 'storyPoints', 'dueDate', 'sprint']], ['comment', ['visibility']], ['transition', ['commentVisibility']]] as const) {
+      for (const f of fields) assert.ok(f in r.commandByName(tool)!.input.shape, `${tool}.${f}`);
+    }
+    assert.doesNotMatch(r.commandByName('update_issue')!.description, /assigned to you/);
+  });
+
   it('chữ ký cho prompt bỏ `project`; mục lục đánh dấu [WRITE]', () => {
     const sig = r.signatureOf(r.commandByName('fpt_unit_add_cases')!);
     assert.match(sig, /^fpt_unit_add_cases\(function:int\|string, rows\?:/);

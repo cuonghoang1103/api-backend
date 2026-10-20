@@ -37,6 +37,7 @@ const INSTRUCTIONS = [
   'CT Work is a Jira-like project tracker. You act as the account of your token (a person or an AI agent member).',
   'Typical loop for an agent: my_work → get_issue → claim_issue → do the work → comment (evidence) → log_work → report_usage → transition "done" (it lands in review; a person closes it) → release_issue. Use wait_events to wait for new work.',
   'Agents cannot approve, delete, assign to others, plan sprints, change settings, reach clients or touch finance — the server refuses (WORK_AGENT_FORBIDDEN). Ask with ask_lead instead of retrying.',
+  'A PERSON\'s token can do whatever that person\'s role allows on the web: assign, link, flag, plan sprints, manage members, invite. Files from a link or a Google Doc: gdoc_images + attach_from_url (the server downloads them).',
   'Besides issues and docs there are tools for FPT test reports (fpt_unit_* = Report 5.1, fpt_it_* = 5.2/5.3), Xray test cases (test_*), meetings, RAID, the current sprint, weekly reports and download links (export_file).',
   UNTRUSTED_NOTE,
 ].join('\n');
@@ -63,7 +64,7 @@ export function _resetMcpRateForTests(): void { calls.clear(); }
 // ─── tools / resources / prompts ─────────────────────────────────
 
 function visibleTools(ctx: McpCtx): ToolDef[] {
-  return TOOLS.filter((t) => (!t.agentOnly || ctx.agent) && (!t.write || ctx.scopes.includes('write')));
+  return TOOLS.filter((t) => (!t.agentOnly || ctx.agent) && (!t.personOnly || !ctx.agent) && (!t.write || ctx.scopes.includes('write')));
 }
 
 function toolListing(t: ToolDef) {

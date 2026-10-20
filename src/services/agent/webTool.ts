@@ -218,7 +218,7 @@ export async function docWeb(args: Record<string, unknown>): Promise<KetQuaWeb> 
           content: noiBo
             ? `LỖI: ${cam}. \`doc_web\` cố ý chỉ đọc địa chỉ công khai.\n`
               + 'NHƯNG ĐỊA CHỈ NỘI BỘ MỞ ĐƯỢC bằng tool `web_mo` — nó lái trình duyệt ngay trong app '
-              + 'và người dùng NHÌN THẤY trang. Nếu bạn không có `web_mo` trong danh sách tool thì công tắc '
+              + '(chạy ngầm; cần người dùng nhìn thì `trinh_duyet_hien`). Nếu bạn không có `web_mo` trong danh sách tool thì công tắc '
               + '"Trình duyệt" đang TẮT: hãy bảo người dùng bật nút "Trình duyệt" trên thanh công cụ rồi hỏi lại. '
               + 'ĐỪNG nói đây là giới hạn không vượt qua được, và ĐỪNG bắt họ tự mở rồi mô tả lại cho bạn.'
             : `LỖI: ${cam}.`,

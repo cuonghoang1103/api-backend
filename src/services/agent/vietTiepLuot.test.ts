@@ -9,6 +9,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { prisma } from '../../config/database.js';
+
 import { runAgentTurn, type AgentEvent } from './turn.js';
 
 /** Dựng một thân SSE giống hệt cổng thật. */
@@ -28,6 +30,19 @@ function goiCat(chu: string, ly: string) {
     choices: [{ delta: { content: chu }, finish_reason: ly }],
     usage: { prompt_tokens: 10, completion_tokens: 5 },
   };
+}
+
+/**
+ * Ghim gói của người thử = ADMIN (không trần $), ĐỪNG đọc CSDL thật (20/10/2026).
+ * `xemTranModel` tra gói qua `prisma.user`: máy có CSDL local thì user id 1 là tài khoản thường ⇒ trần model 0 $ ⇒
+ * lượt chết `CUONGMINI_HET_TRAN` trước khi gọi cổng; CI không có CSDL ⇒ tra lỗi ⇒ cho qua. Cùng phép kiểm, hai kết
+ * quả theo máy — phép kiểm này đo vòng lặp agent, không đo trần.
+ */
+function ghimGoiAdmin(t: { after: (f: () => void) => void }): void {
+  const u = prisma.user as any; // delegate của Prisma là proxy ⇒ `t.mock.method` không nhận, gán thẳng rồi trả lại
+  const goc = u.findUnique;
+  u.findUnique = async () => ({ isPro: true, proExpiresAt: null, proSince: null, proSource: null, roles: [{ role: { name: 'ADMIN' } }] });
+  t.after(() => { u.findUnique = goc; });
 }
 
 test('chạm trần token thì VIẾT TIẾP, không trả về câu cụt', async (t) => {
@@ -56,6 +71,7 @@ test('chạm trần token thì VIẾT TIẾP, không trả về câu cụt', asy
     for (const [k, v] of luu) { if (v === undefined) delete process.env[k]; else process.env[k] = v; }
   });
 
+  ghimGoiAdmin(t);
   const goc = globalThis.fetch;
   let lan = 0;
   const daGui: any[] = [];

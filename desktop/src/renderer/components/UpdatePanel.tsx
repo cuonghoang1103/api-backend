@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { AlertTriangle, Check, Download, FolderOpen, RefreshCw, RotateCw } from 'lucide-react';
 import type { AppInfo, UpdateStatus } from '../../shared/ipc';
 import { useUpdateStatus } from './UpdateBanner';
+import { THONG_TIN_BIEN_THE } from '../../shared/bienThe';
 
 export function UpdatePanel() {
   // Dùng CHUNG hook với dải ở sidebar. Hai chỗ tự giữ trạng thái riêng sẽ có
@@ -147,7 +148,8 @@ export function UpdatePanel() {
           <span>
             <strong>Bạn đang mở một bản dựng thử, không phải app đã cài.</strong>{' '}
             Nó chạy từ <code>{noi.duong}</code> nên sẽ không bao giờ nhận được bản mới.
-            Hãy thoát rồi mở CuongThai từ thư mục <strong>Applications</strong> (hoặc Spotlight).
+            Hãy thoát HẲN bản này (⌘Q) rồi mở {THONG_TIN_BIEN_THE.tenSanPham} từ thư mục <strong>Applications</strong> —
+            còn để bản này chạy thì mở app đã cài cũng chỉ nhảy về đúng cửa sổ này (hai bản dùng chung một khoá chạy-một-bản).
           </span>
         </div>
       )}

@@ -8,6 +8,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { prisma } from '../../config/database.js';
+
 import {
   CAU_TRUNG_DOC,
   NHAC_BUOC_CUOI,
@@ -181,8 +183,22 @@ function than(mau: Array<Record<string, unknown>>): ReadableStream<Uint8Array> {
   });
 }
 
+/**
+ * Ghim gói của người thử = ADMIN (không trần $), ĐỪNG đọc CSDL thật (20/10/2026).
+ * `xemTranModel` tra gói qua `prisma.user`: máy có CSDL local thì user id 1 là tài khoản thường ⇒ trần model 0 $ ⇒
+ * lượt chết `CUONGMINI_HET_TRAN` trước khi gọi cổng; CI không có CSDL ⇒ tra lỗi ⇒ cho qua. Cùng phép kiểm, hai kết
+ * quả theo máy — phép kiểm này đo vòng lặp agent, không đo trần.
+ */
+function ghimGoiAdmin(t: { after: (f: () => void) => void }): void {
+  const u = prisma.user as any; // delegate của Prisma là proxy ⇒ `t.mock.method` không nhận, gán thẳng rồi trả lại
+  const goc = u.findUnique;
+  u.findUnique = async () => ({ isPro: true, proExpiresAt: null, proSince: null, proSource: null, roles: [{ role: { name: 'ADMIN' } }] });
+  t.after(() => { u.findUnique = goc; });
+}
+
 /** Môi trường cổng giả tuyến OpenAI — tự dựng, không mượn `.env`. */
 function dungMoiTruong(t: { after: (f: () => void) => void }): void {
+  ghimGoiAdmin(t);
   const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY_GPT', 'LLM_GATEWAY_BASE_URL', 'AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'RAMBO_BAT']
     .map((k) => [k, process.env[k]] as const);
   process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap-cho-kiem-thu';

@@ -103,6 +103,7 @@ import ctw9bRoutes from './work.ctw9b.routes.js'; // CTW đợt 9b: lớp học 
 import ctw9cRoutes from './work.ctw9c.routes.js'; // CTW đợt 9c: lớp học — quiz trắc nghiệm tự chấm
 import iosRoutes from './work.ios.routes.js'; // 18/10/2026: app iOS CT Work — báo cáo nội dung, DM, agenda/timesheet của tôi, đọc gọn
 import aiUsageRoutes from './work.aiUsage.routes.js'; // CTW đợt 8B (19/10/2026): AI usage — không gian + tab dự án
+import taoCuongMiniRoutes from './work.taoCuongMini.routes.js'; // 20/10/2026: "Create with CuongMini" — dựng dự án/không gian từ đề bài
 import { enterProjectScope } from '../services/work/aiUsage.service.js';
 import { TL_ACTIVITIES } from '../services/work/fptReports.js';
 import { registerAgentEvents } from '../services/work/agentEvents.js';
@@ -2152,5 +2153,7 @@ router.use(ctw9cRoutes);
 router.use(iosRoutes);
 // CTW đợt 8B (19/10/2026): AI usage — GET /workspaces/:wsId/ai-usage · GET /projects/:pid/ai-usage (work.aiUsage.routes.ts).
 router.use(aiUsageRoutes);
+// 20/10/2026: "Create with CuongMini" — bản nháp, đọc tệp/link/repo, tóm tắt, kế hoạch, tạo (work.taoCuongMini.routes.ts).
+router.use(taoCuongMiniRoutes);
 
 export default router;

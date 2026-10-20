@@ -10188,9 +10188,46 @@ model WorkSpace {
   securityPolicy WorkSecurityPolicy?
   /// CTW đợt 8b: app Slack đã cài cho không gian (một workspace Slack).
   slackInstall   WorkSlackInstall?
+  /// 20/10/2026: bản nháp "Create with CuongMini".
+  setupDrafts    WorkSetupDraft[]
 
   @@index([ownerId], name: "idx_work_space_owner")
   @@map("work_spaces")
+}
+
+/// "Create with CuongMini" (20/10/2026): bản nháp dựng dự án / cả không gian. Đầu vào trình hướng dẫn, nguồn đã đọc
+/// (tệp R2 + chữ rút ra — chữ KHÔNG trả về client), bản tóm tắt "đã hiểu gì", kế hoạch (sửa được trước khi tạo),
+/// tiến độ job, sổ lời gọi model, kết quả (dự án đã tạo). `createdById` không FK (như WorkResource) — chỉ người tạo thấy.
+model WorkSetupDraft {
+  id              Int       @id @default(autoincrement())
+  workspaceId     Int       @map("workspace_id")
+  createdById     Int       @map("created_by_id")
+  /// PROJECT | WORKSPACE
+  mode            String    @default("PROJECT") @db.VarChar(12)
+  /// DRAFT | READING | UNDERSTOOD | PLANNING | READY | APPLYING | APPLIED | FAILED | CANCELLED
+  status          String    @default("DRAFT") @db.VarChar(12)
+  title           String    @default("") @db.VarChar(160)
+  /// cm-sonic | cm-optimum
+  model           String    @default("cm-sonic") @db.VarChar(20)
+  input           Json      @default("{}")
+  sources         Json      @default("[]")
+  understanding   Json?
+  plan            Json?
+  progress        Json      @default("[]")
+  usage           Json      @default("[]")
+  result          Json?
+  error           String?   @db.Text
+  /// Pha bị lỗi (để "thử lại" chạy đúng pha): READING | PLANNING | APPLYING
+  failedPhase     String?   @map("failed_phase") @db.VarChar(12)
+  cancelRequested Boolean   @default(false) @map("cancel_requested")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  appliedAt       DateTime? @map("applied_at")
+
+  workspace WorkSpace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, createdById, updatedAt], map: "idx_work_setup_draft_owner")
+  @@map("work_setup_drafts")
 }
 
 /// Thành viên cấp không gian. role: OWNER | ADMIN | MEMBER | GUEST.

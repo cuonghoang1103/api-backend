@@ -429,5 +429,7 @@ export async function acceptInvite(userId: number, token: string) {
     const project = invite.projectId ? { id: invite.projectId, role: (invite.projectRole ?? 'MEMBER') as ProjectRole } : null;
     await addMember(tx, invite.workspaceId, userId, (invite.projectRole === 'CLIENT' ? 'GUEST' : invite.role) as WorkspaceRole, project);
   });
+  // "Create with CuongMini": việc đã dự kiến cho người này (chưa có tài khoản lúc dựng) ⇒ giao luôn.
+  await import('./taoCuongMini/apDung.js').then((m) => m.applyPlannedOwners(userId, invite.workspaceId)).catch(() => undefined);
   return { slug: invite.workspace.slug, ...(portal ? { portalPath: portal.path } : {}) };
 }

@@ -63,7 +63,7 @@ import { coreFor, isCustomized, matchesQuery, primaryOrder, togglePin } from './
 import { useNavPins } from './shell/navPins';
 
 const NOT_SLUG = new Set(['invite', 'share', 'developer', 'search', 'teaching', 'classes', 'security', 'connections']); // CTW đợt 5: + teaching, classes · đợt 7c: + security (2FA) · đợt 8a: + connections
-const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents', 'okrs', 'ai-usage']); // 'ai-usage': CTW đợt 8B
+const WS_PAGES = new Set(['settings', 'teams', 'portfolio', 'workload', 'agents', 'okrs', 'ai-usage', 'setup']); // 'ai-usage': CTW đợt 8B · 'setup': Create with CuongMini
 
 export function useWorkPath() {
   const pathname = usePathname() ?? '';

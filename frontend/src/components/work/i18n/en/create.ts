@@ -53,6 +53,8 @@ export const create = {
   keyInvalid: 'Key must be 2–10 letters or digits and start with a letter.',
   keyHint: 'Filled in from the name. Issue keys will look like {key}-12.',
   addSample: 'Add sample data so I can explore',
+  withCuongMini: 'Create with CuongMini',
+  withCuongMiniBody: 'Upload the brief, code, members and deadlines — CuongMini builds epics, tasks, sprints, assignments and docs for you. You review before anything is created.',
   sampleSwt: 'Example requirements, 6 test cases with steps and a test plan.',
   sampleKanban: 'Example tasks and bugs, a few already in progress.',
   sampleScrum: 'Example epics, stories with story points and acceptance criteria, bugs and a planned Sprint 1.',

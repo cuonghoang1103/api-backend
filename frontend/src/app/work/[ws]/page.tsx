@@ -5,7 +5,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowUpRight, ChevronRight, FolderKanban, Lock, Plus, Settings } from 'lucide-react';
+import { ArrowUpRight, Bot, ChevronRight, FolderKanban, Lock, Plus, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { userName, workApi, workError, type ProjectSummary } from '@/lib/work-api';
@@ -134,6 +134,11 @@ function WorkspaceOverview() {
               <Settings size={14} /> <span className="max-sm:hidden">{wt('home.membersSettings')}</span>
             </Link>
             {canCreate && (
+              <Link href={`/work/${slug}/setup`} className="w-btn w-btn-sm" title={wt('home.setupCuongMiniHint')}>
+                <Bot size={14} /> <span className="max-sm:hidden">{wt('home.setupCuongMini')}</span>
+              </Link>
+            )}
+            {canCreate && (
               <button type="button" className="w-btn w-btn-primary w-btn-sm" onClick={dialog.open}>
                 <Plus size={14} /> {wt('home.newProject')}
               </button>
@@ -186,7 +191,12 @@ function WorkspaceOverview() {
                 body={canCreate
                   ? wt('home.noProjectsBodyAdmin')
                   : wt('home.noProjectsBody')}
-                action={canCreate ? <button type="button" className="w-btn w-btn-primary" onClick={dialog.open}><Plus size={14} /> {wt('home.createFirst')}</button> : undefined}
+                action={canCreate ? (
+                  <div className="flex flex-wrap justify-center gap-2">
+                    <button type="button" className="w-btn w-btn-primary" onClick={dialog.open}><Plus size={14} /> {wt('home.createFirst')}</button>
+                    <Link href={`/work/${slug}/setup`} className="w-btn"><Bot size={14} /> {wt('home.setupCuongMini')}</Link>
+                  </div>
+                ) : undefined}
               />
             </div>
           )}

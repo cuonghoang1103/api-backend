@@ -339,6 +339,7 @@ export type LlmPurpose =
   | 'work_assistant'      // CT Work — trợ lý trong dự án: viết story, tách việc, sinh test, trả lời về dự án
   | 'work_digest'         // CT Work — diễn đạt lại số liệu mã đã tính (báo cáo tuần, bản tin)
   | 'work_agent'          // CT Work đợt 3C — agent DỰNG SẴN (BUILTIN) tự làm một thẻ: vòng lặp gọi lệnh của registry
+  | 'work_setup'          // CT Work 20/10/2026 — "Create with CuongMini": đường LÙI (modelapi gpt-6-sol) khi cổng chính hãng hỏng
   | 'work_spec_review'    // CT Work S6 — soát ngữ nghĩa đặc tả (mâu thuẫn, thiếu edge case); phần xác định do MÃ chấm
   | 'note_format'         // Notes — "✨ Sắp xếp lại trang": sửa chính tả + dựng mục/bảng/khối code, KHÔNG thêm ý
   | 've_net'              // Vở iPad — "AI vẽ bằng nét": viết SVG nét đơn, máy chủ đổi ra điểm cho PKStroke
@@ -462,6 +463,8 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * theo model này, không bị đổi ngầm sang opus. Vặn bằng `LLM_MODEL_WORK_AGENT`.
    */
   work_agent: 'gpt-6-sol',
+  /** CT Work 20/10/2026 — "Create with CuongMini": chính là Claude Sonnet 5.5 cổng chính hãng (taoCuongMini/goiModel.ts); đây là đường LÙI ⇒ `gpt-6-sol`, không đi rambo. */
+  work_setup: 'gpt-6-sol',
   /**
    * CT Work đợt S6 (05/10/2026) — "Check spec quality": model chỉ BỔ SUNG nhận xét ngữ nghĩa (mâu thuẫn giữa hai yêu
    * cầu, thiếu edge case, câu hai nghĩa) cho phần mã đã chấm. Người dùng bấm và ngồi đọc từng phát hiện ⇒ việc tương
@@ -939,7 +942,7 @@ function batDauDo(): void {
 // ra model Claude vẽ kém hơn hẳn.
 // `work_agent` (đợt 3C): agent BUILTIN của CT Work có trần TIỀN riêng tính theo model của `PURPOSE_MODEL` — đi rambo thì
 // `modelFor()` đổi ngầm sang opus và trần mất nghĩa, nên giữ ở modelapi.
-const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai', 'study_plan', 'study_verify', 'study_coach', 'creator_script', 'work_agent']);
+const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai', 'study_plan', 'study_verify', 'study_coach', 'creator_script', 'work_agent', 'work_setup']);
 
 /**
  * Việc KHÔNG BAO GIỜ đi rambo vì lý do TỐC ĐỘ (19/10/2026, chủ app chốt khi bật lại rambo): `language_tutor` —
@@ -1395,7 +1398,7 @@ const SUY_LUAN_THEO_VIEC: Partial<Record<LlmPurpose, MucSuyLuan>> = {
   exam_tutor: 'medium', lab_room: 'medium', interview_report: 'high', chat_max: 'high', cv_critique: 'high',
   study_verify: 'high', work_agent: 'high', codelab_bulk: 'high', doc_ocr: 'high',
   // Sinh nội dung có cấu trúc (JSON/nét vẽ/đồ thị) — vừa đủ.
-  language_bulk: 'medium', work_digest: 'medium', ve_net: 'medium', vo_viet_lai: 'medium', so_do_khoi: 'medium',
+  language_bulk: 'medium', work_digest: 'medium', work_setup: 'medium', ve_net: 'medium', vo_viet_lai: 'medium', so_do_khoi: 'medium',
   mach_dien: 'medium', study_plan: 'medium', study_coach: 'medium', creator_script: 'medium', cv_writing: 'medium',
   exphub_doc: 'medium', news_bulletin: 'medium', plan_review: 'medium',
   // Máy đọc / tra cứu nhỏ / độ trễ quan trọng.

@@ -56,6 +56,8 @@ export const create: Strings<typeof En> = {
   keyInvalid: 'Mã dự án gồm 2–10 chữ hoặc số, bắt đầu bằng chữ.',
   keyHint: 'Tự điền từ tên. Mã thẻ sẽ có dạng {key}-12.',
   addSample: 'Thêm dữ liệu mẫu để tôi khám phá',
+  withCuongMini: 'Tạo cùng CuongMini',
+  withCuongMiniBody: 'Tải đề bài, mã nguồn, danh sách thành viên và hạn chót lên — CuongMini dựng epic, việc, sprint, phân công và tài liệu cho bạn. Bạn xem lại trước khi có gì được tạo.',
   sampleSwt: 'Yêu cầu ví dụ, 6 test case có bước và một test plan.',
   sampleKanban: 'Task và bug ví dụ, vài thẻ đang làm.',
   sampleScrum: 'Epic, story có story point và tiêu chí chấp nhận, bug và Sprint 1 đã lên kế hoạch.',

@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
-  ArrowLeft, Award, Briefcase, Building2, Check, ChevronDown, ChevronRight, Code2, FlaskConical, GraduationCap, ListChecks, Square, User, type LucideIcon,
+  ArrowLeft, Award, Bot, Briefcase, Building2, Check, ChevronDown, ChevronRight, Code2, FlaskConical, GraduationCap, ListChecks, Square, User, type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
@@ -166,6 +166,22 @@ export default function CreateProjectDialog({
     },
     onError: (err) => toast.error(workError(err, wt('create.projectCreateFailed'))),
   });
+
+  // "Create with CuongMini" (20/10/2026): mang mẫu/loại/tên/mã sang trang riêng (không nhồi vào hộp thoại).
+  const [toCuongMini, setToCuongMini] = useState(false);
+  const openCuongMini = async () => {
+    setToCuongMini(true);
+    try {
+      const ws = await ensureWorkspace();
+      const qs = new URLSearchParams({ from: 'dialog', template, type, kind, ...(name.trim() ? { name: name.trim() } : {}), ...(PROJECT_KEY_RE.test(key) ? { key } : {}) });
+      onClose();
+      router.push(`/work/${ws.slug}/setup?${qs.toString()}`);
+    } catch (err) {
+      toast.error(workError(err, wt('create.projectCreateFailed')));
+    } finally {
+      setToCuongMini(false);
+    }
+  };
 
   const keyValid = PROJECT_KEY_RE.test(key);
   const canSubmit = name.trim().length > 0 && keyValid && !create.isPending && !create.isSuccess;
@@ -345,6 +361,22 @@ export default function CreateProjectDialog({
               </span>
             </span>
           </label>
+
+          <button
+            type="button"
+            onClick={() => void openCuongMini()}
+            disabled={toCuongMini}
+            className="group mb-4 flex w-full items-start gap-2.5 rounded-[8px] border border-[var(--w-accent-border)] bg-[var(--w-accent-soft)] px-3 py-2.5 text-left transition-colors hover:brightness-[0.98]"
+          >
+            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] bg-[var(--w-panel)] text-[var(--w-accent-text)]">
+              {toCuongMini ? <Spinner size={13} /> : <Bot size={15} />}
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[13px] font-medium text-[var(--w-accent-text)]">{wt('create.withCuongMini')}</span>
+              <span className="block text-[12px] leading-snug text-[var(--w-text-2)]">{wt('create.withCuongMiniBody')}</span>
+            </span>
+            <ChevronRight size={14} className="mt-1.5 shrink-0 text-[var(--w-accent-text)]" />
+          </button>
 
           <button type="button" className="mb-2 flex items-center gap-1 text-[12px] text-[var(--w-text-2)] hover:text-[var(--w-text)]" onClick={() => setMore((v) => !v)} aria-expanded={more}>
             {more ? <ChevronDown size={13} /> : <ChevronRight size={13} />} {wt('create.moreOptions')}

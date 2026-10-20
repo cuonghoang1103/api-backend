@@ -118,4 +118,6 @@ export const home = {
   noProjectsBody: 'You have not been added to any project in this workspace yet. Ask a workspace admin to add you.',
   archived: 'Archived',
   typeTesting: 'Testing',
+  setupCuongMini: 'Set up with CuongMini',
+  setupCuongMiniHint: 'Give CuongMini the brief, members and deadlines — it plans one project or a whole workspace of groups',
 };

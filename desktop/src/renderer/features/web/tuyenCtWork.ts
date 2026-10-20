@@ -52,6 +52,7 @@ export const TUYEN_CTWORK: readonly TuyenWeb[] = [
   { mau: '/work/:ws/agents', nap: () => import('@/app/work/[ws]/agents/page') },
   { mau: '/work/:ws/agents/:id', nap: () => import('@/app/work/[ws]/agents/[id]/page') },
   { mau: '/work/:ws/ai-usage', nap: () => import('@/app/work/[ws]/ai-usage/page') }, // CTW đợt 8B: AI trong không gian (tĩnh, trước /:key)
+  { mau: '/work/:ws/setup', nap: () => import('@/app/work/[ws]/setup/page') }, // 20/10/2026: Create with CuongMini (tĩnh, trước /:key)
   { mau: '/work/:ws/:key', nap: () => import('@/app/work/[ws]/[key]/page') },
   { mau: '/work/:ws/:key/board', nap: () => import('@/app/work/[ws]/[key]/board/page') },
   { mau: '/work/:ws/:key/backlog', nap: () => import('@/app/work/[ws]/[key]/backlog/page') },

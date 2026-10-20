@@ -121,4 +121,6 @@ export const home: Strings<typeof En> = {
   noProjectsBody: 'Bạn chưa được thêm vào dự án nào trong không gian này. Hãy nhờ quản trị không gian thêm bạn.',
   archived: 'Đã lưu trữ',
   typeTesting: 'Kiểm thử',
+  setupCuongMini: 'Dựng cùng CuongMini',
+  setupCuongMiniHint: 'Đưa CuongMini đề bài, thành viên và hạn chót — nó lập kế hoạch một dự án hoặc cả không gian nhiều nhóm',
 };

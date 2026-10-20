@@ -169,7 +169,7 @@ describe('AI agent — tuyến đối ngoại dưới /projects/:pid bị chặn
     ['POST', '/avatar/presign'], ['POST', '/sample-data'], ['PUT', '/capacity/4'], ['POST', '/tests/enable'],
     ['POST', '/versions/2/release'], ['DELETE', '/versions/2'],
     ['DELETE', '/issues/12'], ['POST', '/issues/12/move-project'], ['POST', '/issues/bulk'], ['GET', '/trash'], ['POST', '/trash/3/restore'],
-    ['PUT', '/edit-lock'], ['POST', '/ai/chat'], ['GET', '/ai/threads'],
+    ['PUT', '/edit-lock'], ['POST', '/ai/chat'], ['POST', '/ai/chat/stream'], ['GET', '/ai/threads'],
     // Đợt 3C: agent không tự khởi động / dừng agent dựng sẵn (tiền LLM của web)
     ['POST', '/issues/12/agent-runs'], ['GET', '/issues/12/agent-runs'], ['POST', '/agent-runs/5/cancel'],
     // CTW Đóng góp: agent không đọc số liệu người, không chấm chéo, không xuất

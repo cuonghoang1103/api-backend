@@ -16,6 +16,7 @@ import { authenticate } from '../middleware/auth.js';
 import { AppError, asyncHandler, BadRequestError, UnauthorizedError, NotFoundError } from '../middleware/errorHandler.js';
 import { agentForbidden, agentRouteAllowed, clientPortalRouteAllowed, effectiveWorkspaceRole, isClientScoped, loadProjectAccess, portalOnlyWorkspaceIds } from '../services/work/permissions.js';
 import { prisma } from '../config/database.js';
+import { logger } from '../utils/logger.js';
 import {
   APPROVAL_MODES, APPROVAL_STATUSES, APPROVAL_TARGETS, COMMENT_VISIBILITY, HANDOFF_STATUSES, PORTAL_REQUEST_KINDS, LINK_TYPES, PAGE_STATUSES, PAGE_VISIBILITY, PRIORITY_MAX, PRIORITY_MIN,
   PROJECT_KINDS, PROJECT_ROLES, PROJECT_TEMPLATES, PROJECT_TYPES, PROJECT_VISIBILITY, STUDIO_MODULES, TEAM_ROLES, WORKSPACE_ROLES,
@@ -1020,6 +1021,72 @@ router.post('/projects/:pid/ai/chat', asyncHandler(async (req, res) => {
     threadId: id.nullable().optional(),
   }), req.body);
   ok(res, await ai.chat(callerId(req), idParam(req, 'pid'), body));
+}));
+/**
+ * Trợ lý dự án — bản STREAM (SSE, 20/10/2026). Cùng thân, cùng quyền, cùng hạn mức, cùng lưu câu hỏi/câu trả lời/đề xuất
+ * như POST /ai/chat (route đó GIỮ NGUYÊN cho web + bản iOS cũ). Hợp đồng đầy đủ: docs/ctw-ai-stream.md.
+ *
+ * Lỗi TRƯỚC khi mở luồng (thân sai 400, không có quyền 403/404, hết hạn mức 402/429, AI tắt 503) ⇒ JSON thường như /ai/chat.
+ * Sau đó HTTP 200 `text/event-stream`; mỗi sự kiện là `event: <loại>` + `data: <JSON có trường type>`:
+ *   progress {phase:'preparing', threadId, questionId}            — câu hỏi đã lưu
+ *   progress {phase:'reading', round, items:["LFD-75","Docs #3 — How to run LFD"], prefetched?}
+ *   progress {phase:'thinking', round}                            — trước mỗi lượt gọi model
+ *   progress {phase:'checking'}                                   — đề xuất lệnh bị loại, model đang sửa
+ *   delta    {text}                                               — mẩu Markdown của câu trả lời (nối vào nháp)
+ *   reset    {}                                                   — xoá nháp (lượt đó là lượt xin đọc / nháp lệch bản chuẩn)
+ *   done     {reply, actions, quota, threadId, question, answer}  — ĐÚNG `data` của /ai/chat; `reply` là bản CHUẨN (thay nháp)
+ *   error    {code, message, status}                              — cùng mã lỗi như /ai/chat; câu hỏi đã được đánh dấu lỗi
+ * Nhịp tim `: ping` mỗi 15 s. Client ngắt ⇒ không gọi thêm lượt model nào, câu hỏi đánh dấu lỗi (WORK_AI_CANCELLED) để bấm
+ * Hỏi lại; riêng lượt cuối đã chạy xong thì câu trả lời vẫn được lưu (mở lại hội thoại là thấy).
+ */
+router.post('/projects/:pid/ai/chat/stream', asyncHandler(async (req, res) => {
+  const body = parse(z.object({
+    message: z.string().min(1).max(8000),
+    history: z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(12000) })).max(20).optional(),
+    issueNumber: id.nullable().optional(),
+    threadId: id.nullable().optional(),
+    /** Hỏi lại câu đã lưu mà chưa có trả lời (như POST /ai/messages/:mid/retry); `message` khi đó bị bỏ qua. */
+    retryMessageId: id.nullable().optional(),
+  }), req.body);
+  const uid = callerId(req);
+  const pid = idParam(req, 'pid');
+  await ai.chatPrecheck(uid, pid);
+
+  res.status(200).set({
+    'Content-Type': 'text/event-stream; charset=utf-8',
+    // no-transform ⇒ middleware compression bỏ qua (không thì gzip gom cả luồng tới cuối mới gửi).
+    'Cache-Control': 'no-cache, no-transform',
+    Connection: 'keep-alive',
+    'X-Accel-Buffering': 'no',
+  });
+  res.flushHeaders?.();
+  const send = (type: string, data: Record<string, unknown> = {}) => {
+    if (res.writableEnded || res.destroyed) return;
+    res.write(`event: ${type}\ndata: ${JSON.stringify({ type, ...data })}\n\n`);
+  };
+  const ctrl = new AbortController();
+  // `res` 'close' trước khi ta end() = client ngắt (req 'close' của POST bắn ngay khi đọc xong thân — không dùng được).
+  res.on('close', () => { if (!res.writableEnded) ctrl.abort(); });
+  const ping = setInterval(() => { if (!res.writableEnded && !res.destroyed) res.write(': ping\n\n'); }, 15_000);
+  res.write('retry: 5000\n\n');
+  try {
+    const out = await ai.chat(uid, pid, body, {
+      signal: ctrl.signal,
+      onProgress: (p) => send('progress', p),
+      onDelta: (text) => send('delta', { text }),
+      onReset: () => send('reset'),
+    });
+    send('done', out as unknown as Record<string, unknown>);
+  } catch (err) {
+    const e = err as { statusCode?: number; code?: string; message?: string };
+    const status = e.statusCode ?? 500;
+    if (status >= 500 && !(err instanceof AppError)) logger.error('[work] ai/chat/stream lỗi', { pid, err: e.message });
+    // Như errorHandler: lỗi lạ 5xx không lộ chi tiết; AppError (502 WORK_AI_BAD_OUTPUT, 503…) giữ câu chữ có chủ ý.
+    send('error', { code: e.code ?? 'INTERNAL_ERROR', message: status >= 500 && !(err instanceof AppError) ? 'Internal Server Error' : (e.message ?? 'The AI could not answer'), status });
+  } finally {
+    clearInterval(ping);
+    if (!res.writableEnded) res.end();
+  }
 }));
 router.post('/projects/:pid/ai/quick', asyncHandler(async (req, res) => {
   const body = parse(z.object({

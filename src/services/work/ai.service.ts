@@ -25,7 +25,7 @@ import { displayName } from './common.js';
 import { foldVi } from './fold.js';
 import { PRIORITY_MAX, PRIORITY_MIN } from './constants.js';
 import { addComment, createIssueAs, updateIssueAs } from './issues.service.js';
-import { can, isClientScoped, requireProject, type ProjectAccess } from './permissions.js';
+import { can, canViewPage, isClientScoped, requireProject, type ProjectAccess } from './permissions.js';
 import { activeSprintPace, type SprintPace } from './sprintPace.js';
 import { computeLoads, LOAD_WINDOW_DAYS, overloadFact, workingDaysLeft } from './insightLoad.js';
 import { dayInZone, lastWeekPeriod, projectTimezone } from './projectTime.js';
@@ -39,6 +39,8 @@ import { applyDraftPage, applyUpdateSection, docsAiOn, docsIndex, DOCS_READ_DOC,
 // 18/10/2026 — trợ lý kiểu mentor: đọc SẴN việc của người hỏi + thẻ được hỏi (đủ mô tả/link/tệp/Docs), Resources.
 import { askerBrief, askIntent, linksFor, prefetchForQuestion, resourcesIndex, type WorkLinks } from './aiMentor.js';
 import { tiptapToMarkdown } from './docMarkdown.js';
+// 20/10/2026 — bản stream của trợ lý dự án: rút `reply` khỏi JSON đang viết dở.
+import { ReplyStreamer, reconcileReply } from './aiReplyStream.js';
 
 // ─── Hạn mức ─────────────────────────────────────────────────────
 
@@ -85,19 +87,32 @@ async function assertQuota(userId: number) {
 }
 
 /** CHỈ cho test (đợt S5c): thay lời gọi model bằng hàm giả — kiểm vòng đọc Docs + đề xuất mà không tốn lượt AI. */
-let askOverride: ((system: string, user: string) => Promise<string>) | null = null;
-export function _setAskForTests(fn: ((system: string, user: string) => Promise<string>) | null): void {
+/** 20/10/2026: hàm giả nhận thêm `onToken` (bản stream) — hàm giả cũ 2 tham số vẫn dùng được (không stream ⇒ route lùi về một `delta`). */
+type AskFake = (system: string, user: string, onToken?: (delta: string) => void) => Promise<string>;
+let askOverride: AskFake | null = null;
+export function _setAskForTests(fn: AskFake | null): void {
   askOverride = fn;
 }
 
-async function ask(userId: number, system: string, user: string, maxTokens = 1800, purpose: 'work_assistant' | 'work_digest' = 'work_assistant'): Promise<string> {
-  if (askOverride) return askOverride(system, user);
+async function ask(userId: number, system: string, user: string, maxTokens = 1800, purpose: 'work_assistant' | 'work_digest' = 'work_assistant', onToken?: (delta: string) => void): Promise<string> {
+  if (askOverride) return askOverride(system, user, onToken);
   await assertQuota(userId);
   const r = await llmComplete({
     step: 'report', system, messages: [{ role: 'user', content: user }], maxTokens,
     userId, feature: 'work', purpose, timeoutMs: 90_000, maxRetries: 2,
+    // Có onToken ⇒ llmComplete buộc stream (cả tuyến OpenAI lẫn Anthropic/rambo).
+    ...(onToken ? { onToken } : {}),
   });
   return r.text;
+}
+
+/**
+ * Kiểm TRƯỚC khi mở luồng SSE (route `/ai/chat/stream`): quyền `ai.use` + hạn mức — để 403/404/402/429/503 vẫn về
+ * đúng mã HTTP + JSON như route thường, thay vì thành sự kiện `error` sau khi đã trả 200. chat() vẫn kiểm lại như cũ.
+ */
+export async function chatPrecheck(userId: number, projectId: number): Promise<void> {
+  await requireProject(userId, projectId, 'ai.use');
+  if (!askOverride) await assertQuota(userId);
 }
 
 /**
@@ -449,6 +464,8 @@ export async function chat(
     /** Hỏi lại câu đã lưu nhưng chưa được trả lời (không tạo câu hỏi mới). */
     retryMessageId?: number | null;
   },
+  /** Bản STREAM (route `/ai/chat/stream`, 20/10/2026): báo tiến độ + chữ trả lời khi đang viết. Bỏ trống = như cũ. */
+  hooks?: AskStreamHooks,
 ) {
   const access = await requireProject(userId, projectId, 'ai.use');
   // Lượt "hỏi lại": lấy lại đúng câu hỏi đã lưu, kiểm nó thuộc hội thoại người này xem được.
@@ -467,6 +484,7 @@ export async function chat(
   const userMsg = retry ? null : await threads.addMessage(thread.id, { role: 'user', authorId: userId, content: input.message, issueNumber: input.issueNumber ?? null });
   const questionId = retry?.id ?? userMsg!.id;
   if (retry) await threads.clearFailed(retry.id);
+  hooks?.onProgress?.({ phase: 'preparing', threadId: thread.id, questionId });
 
   // Chế độ luyện bảo vệ: AI là hội đồng — chấm câu vừa trả lời rồi hỏi câu kế. Không đề xuất thay đổi gì.
   if (thread.mode === 'DEFENSE') {
@@ -475,7 +493,11 @@ export async function chat(
     const scope = await defenseScope(projectId, userId, focusTag);
     let reply: string;
     try {
-      reply = answerOf(await ask(userId, defenseSystem(ctx.project.name, scope, ctx.instructions), `${history ? `Session so far:\n${history}\n\n` : ''}Student @${me.username} answers: ${input.message}`, 2500)).reply;
+      throwIfCancelled(hooks);
+      hooks?.onProgress?.({ phase: 'thinking', round: 0 });
+      const streamer = hooks?.onDelta ? new ReplyStreamer(hooks.onDelta) : null;
+      reply = answerOf(await ask(userId, defenseSystem(ctx.project.name, scope, ctx.instructions), `${history ? `Session so far:\n${history}\n\n` : ''}Student @${me.username} answers: ${input.message}`, 2500, 'work_assistant', streamer ? (d) => streamer.push(d) : undefined)).reply;
+      if (streamer) settleDraft(hooks!, streamer.emitted, reply);
     } catch (err) {
       await threads.markFailed(questionId, err);
       throw err;
@@ -499,6 +521,7 @@ export async function chat(
   };
   const brief = await askerBrief(userId, access, links).catch(soft('người hỏi', { text: '', myOpen: [] as number[] }));
   const pre = await prefetchForQuestion(userId, access, links, intent, brief.myOpen, input.issueNumber ?? null).catch(soft('thẻ', { text: '', read: [] as number[] }));
+  if (pre.read.length) hooks?.onProgress?.({ phase: 'reading', round: 0, prefetched: true, items: pre.read.slice(0, 12).map((n) => `${access.key}-${n}`) });
   const resources = await resourcesIndex(access, links).catch(soft('resources', ''));
   const docsList = docsOn.read ? await docsIndex(access, 60, { docLink: links.doc, withHeadings: 25 }).catch(soft('mục lục docs', '')) : '';
   const system = `${mentorSystem(me.username, dayInZone(new Date()), links)}
@@ -518,16 +541,19 @@ Return ONLY JSON: {"reply":"markdown","actions":[…]} — or, to read first, {"
   ].filter(Boolean).join('\n\n');
   let out: AskResult;
   try {
-    out = await askWithReads(userId, access, system, user, 4000, docsOn.read, links);
+    out = await askWithReads(userId, access, system, user, 4000, docsOn.read, links, hooks);
   } catch (err) {
     await threads.markFailed(questionId, err);
     throw err;
   }
   let checked = await checkCommandActions(out.actions, access);
-  if (checked.rejected.length) {
+  // Bản stream mà client đã ngắt ⇒ không tốn thêm lượt sửa (câu trả lời đã có vẫn được LƯU bên dưới).
+  if (checked.rejected.length && !hooks?.signal?.aborted) {
     // Một lượt sửa: đưa lý do bị loại cho model (nó được đọc thêm trước khi trả lời lại). Không lặp quá một lần.
+    // Bản stream: lượt sửa KHÔNG phát chữ (có thể bị bỏ) — client nhận bản chuẩn ở sự kiện `done`.
+    hooks?.onProgress?.({ phase: 'checking' });
     try {
-      const again = await askWithReads(userId, access, system, `${user}\n\nYour previous answer:\n${JSON.stringify({ reply: out.reply, actions: out.actions }).slice(0, 8000)}\n\nThese proposed command actions were REJECTED and will not be shown:\n${checked.rejected.map((x) => `- ${x.command}: ${x.error}`).join('\n')}\nRead what you need first (reads), then return the WHOLE answer again with corrected actions.`, 4000, docsOn.read, links);
+      const again = await askWithReads(userId, access, system, `${user}\n\nYour previous answer:\n${JSON.stringify({ reply: out.reply, actions: out.actions }).slice(0, 8000)}\n\nThese proposed command actions were REJECTED and will not be shown:\n${checked.rejected.map((x) => `- ${x.command}: ${x.error}`).join('\n')}\nRead what you need first (reads), then return the WHOLE answer again with corrected actions.`, 4000, docsOn.read, links, hooks ? { onProgress: hooks.onProgress, signal: hooks.signal } : undefined);
       const second = await checkCommandActions(again.actions, access);
       if (second.kept.length >= checked.kept.length) { out = again; checked = second; }
     } catch (err) {
@@ -671,12 +697,83 @@ async function runCommandReads(userId: number, projectId: number, reads: Array<{
 export interface AskResult { reply: string; actions?: unknown; stats: { calls: number; reads: number; promptChars: number } }
 
 /**
+ * Tiến độ của bản STREAM (20/10/2026) — xem docs/ctw-ai-stream.md:
+ *   preparing — câu hỏi đã lưu (threadId/questionId), đang đọc sẵn ngữ cảnh;
+ *   reading   — đang đọc (items = nhãn người đọc được: "LFD-75", "Docs #3 — How to run"…); prefetched = mã đọc sẵn;
+ *   thinking  — đang gọi model (mỗi vòng một lần);
+ *   checking  — đề xuất lệnh bị loại, model đang sửa (chữ của lượt sửa KHÔNG stream — bản chuẩn ở `done`).
+ */
+export type AskProgress =
+  | { phase: 'preparing'; threadId: number; questionId: number }
+  | { phase: 'reading'; round: number; items: string[]; prefetched?: boolean }
+  | { phase: 'thinking'; round: number }
+  | { phase: 'checking' };
+
+export interface AskStreamHooks {
+  onProgress?: (p: AskProgress) => void;
+  /** Mẩu chữ (Markdown) của câu trả lời khi model đang viết. */
+  onDelta?: (text: string) => void;
+  /** Bỏ phần nháp đã gửi (lượt đó hoá ra là lượt xin đọc, hoặc nháp lệch bản chuẩn). */
+  onReset?: () => void;
+  /** Client ngắt ⇒ không gọi thêm lượt model nào; câu hỏi được đánh dấu lỗi (bấm Hỏi lại được). */
+  signal?: AbortSignal;
+}
+
+/** Client đã ngắt luồng ⇒ dừng ở mốc an toàn kế tiếp (trước mỗi lượt gọi model). 499 = client closed request. */
+function throwIfCancelled(hooks?: AskStreamHooks): void {
+  if (hooks?.signal?.aborted) throw new AppError('The connection closed before the answer was ready. Ask again.', 499, 'WORK_AI_CANCELLED');
+}
+
+/** Chốt nháp với câu chuẩn: phát nốt đuôi, hoặc bảo client xoá nháp rồi gửi trọn câu (gồm cả trường hợp KHÔNG stream được). */
+function settleDraft(hooks: AskStreamHooks, emitted: string, finalReply: string): void {
+  const r = reconcileReply(emitted, finalReply);
+  if (r.kind === 'reset' && emitted) hooks.onReset?.();
+  if (r.text) hooks.onDelta?.(r.text);
+}
+
+/** Nhãn người đọc được cho một vòng đọc — chỉ lộ tiêu đề trang Docs mà người hỏi được xem. */
+async function readLabels(access: ProjectAccess, reads: AskRead[]): Promise<string[]> {
+  const r = await registry();
+  const nums = reads.flatMap((x) => (x.tool === 'read_page' && x.number ? [x.number] : []));
+  const titles = new Map<number, string>();
+  if (nums.length) {
+    const rows = await prisma.workPage.findMany({
+      where: { projectId: access.projectId, number: { in: nums }, deletedAt: null },
+      select: { number: true, title: true, visibility: true },
+    }).catch(() => []);
+    for (const p of rows) if (canViewPage(access.role, access.workspaceRole, p.visibility)) titles.set(p.number, p.title);
+  }
+  const issueLabel = (v: unknown): string | null => {
+    if (typeof v === 'number' && Number.isInteger(v)) return `${access.key}-${v}`;
+    if (typeof v !== 'string' || !v.trim()) return null;
+    const t = v.trim();
+    if (/^#?\d+$/.test(t)) return `${access.key}-${t.replace('#', '')}`;
+    return clip(t.toUpperCase(), 40);
+  };
+  return reads.map((x) => {
+    if (x.tool !== 'command') {
+      if (x.tool === 'search_pages') return `Search Docs "${clip((x.query ?? '').trim(), 60)}"`;
+      return x.number ? `Docs #${x.number}${titles.has(x.number) ? ` — ${clip(titles.get(x.number)!, 80)}` : ''}` : 'Docs';
+    }
+    const a = (x.args ?? {}) as Record<string, unknown>;
+    const issue = issueLabel(a.issue ?? a.key ?? a.number);
+    if (issue) return issue;
+    if (x.name === 'read_attachment' && a.attachment !== undefined) return `File #${String(a.attachment).replace('#', '')}`;
+    if (x.name === 'member_work') return typeof a.user === 'string' && a.user && a.user !== 'me' ? `@${clip(a.user.replace(/^@/, ''), 40)} — open issues` : 'My open issues';
+    const title = r.commandByName(x.name)?.title ?? x.name;
+    return typeof a.query === 'string' && a.query.trim() ? `${title} "${clip(a.query.trim(), 60)}"` : title;
+  });
+}
+
+/**
  * Một câu hỏi có TOOL ĐỌC: model xin `reads` ⇒ mã đọc (đúng quyền người hỏi) ⇒ hỏi lại kèm kết quả. Tối đa
  * ASK_LIMITS.readRounds vòng; lượt đọc trùng bị bỏ; prompt chạm ASK_LIMITS.promptChars ⇒ thôi đọc, bảo model trả lời
  * ngay. Câu trả lời RỖNG (model chỉ xin đọc ở vòng cuối, hoặc trả "") ⇒ hỏi lại MỘT lần "trả lời ngay"; vẫn rỗng ⇒ 502
  * (câu hỏi được đánh dấu lỗi để bấm Hỏi lại) — không bao giờ lưu một câu trả lời trống.
+ * `hooks` (bản stream): mỗi lượt gọi model đều stream token; `ReplyStreamer` rút phần `reply` ra phát dần. Lượt hoá ra
+ * là lượt xin đọc mà đã lỡ phát chữ ⇒ `onReset`. Lượt cuối ⇒ `settleDraft` chốt nháp với câu chuẩn.
  */
-export async function askWithReads(userId: number, access: ProjectAccess, system: string, user: string, maxTokens: number, canReadDocs: boolean, links?: WorkLinks): Promise<AskResult> {
+export async function askWithReads(userId: number, access: ProjectAccess, system: string, user: string, maxTokens: number, canReadDocs: boolean, links?: WorkLinks, hooks?: AskStreamHooks): Promise<AskResult> {
   let prompt = user;
   let calls = 0;
   let reads = 0;
@@ -684,7 +781,10 @@ export async function askWithReads(userId: number, access: ProjectAccess, system
   const seen = new Set<string>();
   for (let round = 0; ; round++) {
     const canRead = round < ASK_LIMITS.readRounds && prompt.length < ASK_LIMITS.promptChars;
-    const out = readModelOutput(await ask(userId, system, prompt, maxTokens));
+    throwIfCancelled(hooks);
+    hooks?.onProgress?.({ phase: 'thinking', round });
+    const streamer = hooks?.onDelta ? new ReplyStreamer(hooks.onDelta) : null;
+    const out = readModelOutput(await ask(userId, system, prompt, maxTokens, 'work_assistant', streamer ? (d) => streamer.push(d) : undefined));
     calls++;
     const wanted = canRead ? parseReads(out.reads).reads : [];
     const fresh = wanted.filter((r) => {
@@ -694,13 +794,23 @@ export async function askWithReads(userId: number, access: ProjectAccess, system
       return true;
     }).slice(0, ASK_LIMITS.readsPerRound);
     if (!fresh.length) {
-      if (out.reply.trim()) return { reply: out.reply, actions: out.actions, stats: { calls, reads, promptChars: prompt.length } };
+      if (out.reply.trim()) {
+        if (hooks && streamer) settleDraft(hooks, streamer.emitted, out.reply);
+        return { reply: out.reply, actions: out.actions, stats: { calls, reads, promptChars: prompt.length } };
+      }
+      if (streamer?.emitted) hooks?.onReset?.();
       if (nudged) throw new AppError('The AI returned an empty answer. Please ask again.', 502, 'WORK_AI_BAD_OUTPUT');
       nudged = true;
       prompt = `${prompt}\n\nYou cannot read anything more. Answer the user NOW in "reply" with what you have (say clearly what is missing).`;
       continue;
     }
+    // Lượt xin đọc mà model lỡ viết chữ vào reply trước ⇒ client bỏ nháp đó.
+    if (streamer?.emitted) hooks?.onReset?.();
     reads += fresh.length;
+    if (hooks?.onProgress) {
+      const items = await readLabels(access, fresh).catch(() => fresh.map((x) => (x.tool === 'command' ? x.name : x.tool)));
+      hooks.onProgress({ phase: 'reading', round: round + 1, items });
+    }
     const docReads = fresh.filter((r): r is Extract<AskRead, { tool: 'search_pages' | 'read_page' }> => r.tool !== 'command');
     const cmdReads = fresh.filter((r): r is Extract<AskRead, { tool: 'command' }> => r.tool === 'command');
     const parts: string[] = [];

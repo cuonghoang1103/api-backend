@@ -151,9 +151,10 @@ export async function hoiCtworkMotLan(g: GiaoDienCtw): Promise<boolean> {
       ],
       khiChon: async (v) => {
         if (v === 'khong') { boQuaKetNoi = true; return; }
+        // QA 20/10: chỉ ghi "đã hỏi" khi người dùng bảo đừng hỏi lại hoặc NỐI ĐƯỢC — nối hỏng (mạng/máy chủ) thì lần mở sau hỏi lại.
+        if (v === 'khongHoiLai') { await he(g, 'daHoi', { loai: 'ketNoi' }); return; }
+        if (!(await ketNoi(g, v === 'doc' ? 'doc' : 'ghi'))) { boQuaKetNoi = true; return; }
         await he(g, 'daHoi', { loai: 'ketNoi' });
-        if (v === 'khongHoiLai') return;
-        if (!(await ketNoi(g, v === 'doc' ? 'doc' : 'ghi'))) return;
         await sauKhiNoi(g);
       },
       khiHuy: () => { boQuaKetNoi = true; },
@@ -755,7 +756,7 @@ export async function menuCtwork(g: GiaoDienCtw): Promise<void> {
   const tat = coGan ? {} : { tat: true };
   g.chon({
     tieuDe: 'CT Work',
-    moTa: `${coGan ? dong : `${dong ? `${dong}\n` : ''}${L('Chưa có dự án cụ thể — chọn mục 9 (một dự án, cả workspace, hoặc tất cả). Hỏi CuongMini về thẻ bất kỳ vẫn được.', 'No specific project — pick 9 (one project, a workspace, or all). You can still ask CuongMini about any issue.')}`}\n${L('Kết nối', 'Connection')}: ${t?.server?.ok ? `✔ ${t.server.soTool} ${L('tool', t.server.soTool === 1 ? 'tool' : 'tools')} · ${quyen}` : L('chưa nối', 'not connected')} · ${L('đổi', 'change')}: /ctwork ${L('ket-noi', 'connect')}`,
+    moTa: `${coGan ? dong : `${dong ? `${dong}\n` : ''}${(d.dong as { phamVi?: string } | null)?.phamVi === 'tatCa' || (d.dong as { phamVi?: string } | null)?.phamVi === 'workspace' ? L('Phạm vi đã chọn ở trên — các mục theo một dự án cần chọn dự án ở mục 9. Hỏi CuongMini về thẻ bất kỳ vẫn được.', 'Scope chosen above — per-project items need a project from item 9. You can still ask CuongMini about any issue.') : L('Chưa có dự án cụ thể — chọn mục 9 (một dự án, cả workspace, hoặc tất cả). Hỏi CuongMini về thẻ bất kỳ vẫn được.', 'No specific project — pick 9 (one project, a workspace, or all). You can still ask CuongMini about any issue.')}`}\n${L('Kết nối', 'Connection')}: ${t?.server?.ok ? `✔ ${t.server.soTool} ${L('tool', t.server.soTool === 1 ? 'tool' : 'tools')} · ${quyen}` : L('chưa nối', 'not connected')} · ${L('đổi', 'change')}: /ctwork ${L('ket-noi', 'connect')}`,
     ds: [
       { nhan: L('Sprint hiện tại', 'Current sprint'), giaTri: 'sprint', mo: L('bảng thẻ theo cột trạng thái', 'board by status column'), ...tat },
       { nhan: L('Hôm nay — việc của tôi', 'Today — my work'), giaTri: 'homNay', mo: L('hạn gần lên đầu · nên làm gì trước', 'nearest due first · what to do first'), ...tat },

@@ -436,7 +436,7 @@ export function moTaGhi(tool: string, args: Record<string, unknown>): XemTruocGh
       const co = typeof args.kichThuoc === 'string' ? args.kichThuoc
         : typeof args.base64 === 'string' ? args.base64 : typeof args.sizeBytes === 'number' ? `${Math.round(args.sizeBytes / 1024)} KB` : '';
       const dich = args.for === 'comment' ? T(' (bản nháp cho bình luận)', ' (draft for a comment)') : typeof args.testRun === 'number' ? T(` (bằng chứng lần chạy test #${args.testRun})`, ` (evidence for test run #${args.testRun})`) : '';
-      return { the, viec: `${T('Đính kèm tệp', 'Attach file')}${dich}`, noiDung: [`${chu(args.fileName)}${co ? ` · ${co}` : ''}${args.contentType ? ` · ${chu(args.contentType)}` : ''}`, typeof args.path === 'string' ? args.path : ''].filter(Boolean).join('\n') };
+      return { the, viec: `${T('Đính kèm tệp', 'Attach file')}${dich}`, noiDung: [`${chu(args.fileName)}${co ? ` · ${co}` : ''}${args.contentType ? ` · ${chu(args.contentType)}` : ''}`, typeof args.path === 'string' && args.path !== args.fileName ? args.path : ''].filter(Boolean).join('\n') };
     }
     default: {
       const con = Object.fromEntries(Object.entries(args).filter(([k]) => !BO_KHOA.has(k)));
@@ -500,7 +500,9 @@ export function tomTatKetQua(tool: string, text: string, loi = false): { tomTat:
       }
       case 'transition': {
         const j = rutJson(text) as Record<string, unknown> | null;
-        const to = j && typeof j === 'object' ? (j.status ?? j.to ?? (j as { now?: unknown }).now) : null;
+        const st = j && typeof j === 'object' ? (j.status ?? j.to ?? (j as { now?: unknown }).now) : null;
+        // Máy chủ trả `status: { name, category }` — đừng in "[object Object]".
+        const to = st && typeof st === 'object' ? (st as { name?: unknown }).name ?? null : st;
         return { tomTat: T(`đã chuyển${to ? ` → ${String(to)}` : ''}`, `moved${to ? ` → ${String(to)}` : ''}`) };
       }
       case 'log_work': return { tomTat: T('đã ghi giờ', 'work logged') };

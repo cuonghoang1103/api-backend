@@ -96,6 +96,6 @@ test('menu /ctwork khi chưa có dự án cụ thể: mục cần dự án mờ,
   await lenhCtwork('/ctwork', '', x.g);
   const m = x.the.at(-1)!;
   assert.equal(m.ds[0]!.tat, true);
-  assert.match(m.moTa ?? '', /⬡ CT Work · đã nối · tất cả dự án[\s\S]*Chưa có dự án cụ thể/);
+  assert.match(m.moTa ?? '', /⬡ CT Work · đã nối · tất cả dự án[\s\S]*Phạm vi đã chọn ở trên/); // QA 20/10: đã chọn "Tất cả" thì không nói "chưa có dự án"
   assert.match(m.ds.find((d) => d.giaTri === 'duAn')!.mo ?? '', /dự án · workspace · tất cả/);
 });

@@ -177,6 +177,11 @@ describe('kho token CT Work', () => {
 });
 
 describe('không mở giao diện CT Work bằng trình duyệt', () => {
+  it('QA 20/10: không lách được bằng dấu chấm cuối, // hay %77; /work/share công khai không chặn', () => {
+    for (const u of ['https://cuongthai.com./work/x', 'https://cuongthai.com//work/x', 'https://cuongthai.com/%77ork/x', 'https://CUONGTHAI.com/WORK']) expect(W.laTrangCtworkWeb(u)).toBe(true);
+    expect(W.laTrangCtworkWeb('https://cuongthai.com/work/share/abc')).toBe(false);
+  });
+
   it('nhận đúng trang /work (cuongthai.com · localhost · máy chủ đang nối · app://); /api và trang khác thì không', () => {
     for (const u of ['https://cuongthai.com/work', 'https://cuongthai.com/work/lf/issues/NT-13', 'cuongthai.com/work/x', 'https://www.cuongthai.com/work/', 'http://may-chu-gia.test/work/a', 'app://cuongthai/work/x']) {
       expect(W.laTrangCtworkWeb(u), u).toBe(true);

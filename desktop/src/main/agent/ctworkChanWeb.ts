@@ -25,10 +25,14 @@ export function laTrangCtworkWeb(url: unknown): boolean {
   try { u = new URL(tho); } catch {
     try { u = new URL(`https://${tho.replace(/^\/+/, '')}`); } catch { return false; }
   }
-  const p = u.pathname.replace(/\/+$/, '');
+  // Chuẩn hoá trước khi so (QA 20/10): `//work`, `/%77ork`, chữ hoa; liên kết chia sẻ công khai `/work/share/…` không chặn.
+  let p = u.pathname;
+  try { p = decodeURIComponent(p); } catch { /* giữ nguyên */ }
+  p = p.replace(/\/{2,}/g, '/').replace(/\/+$/, '').toLowerCase();
   if (p !== '/work' && !p.startsWith('/work/')) return false;
+  if (p.startsWith('/work/share/')) return false;
   if (u.protocol === 'app:') return true;
-  const host = u.hostname.toLowerCase().replace(/^\[|\]$/g, '');
+  const host = u.hostname.toLowerCase().replace(/^\[|\]$/g, '').replace(/\.$/, ''); // `cuongthai.com.` (dấu chấm cuối)
   if (host === 'cuongthai.com' || host.endsWith('.cuongthai.com')) return true;
   /* localhost KHÔNG chặn: người dùng tự phát triển CT Work cần CuongMini thử giao diện local. So cả cổng với máy chủ
      đang nối ⇒ frontend dev (cổng khác backend) vẫn mở được. */

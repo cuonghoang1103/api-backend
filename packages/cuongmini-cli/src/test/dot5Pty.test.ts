@@ -1,8 +1,8 @@
 /**
  * ĐỢT 5 — PTY THẬT + LÕI THẬT (`dist/loi.cjs`, không lõi giả) + máy chủ CuongThai GIẢ (cổng local, gồm
  * MCP CT Work giả theo đúng hình máy chủ): đi đúng đường người dùng —
- *   mở CLI ⇒ (đợt 8A: KHÔNG còn "Kết nối CT Work?" tự bật) "Gắn thư mục với LF (id 2)?" (AGENTS.md ghi RÕ mã dự án) ⇒ 1 ⇒
- *   nối (token tạo bằng phiên đăng nhập, server `ctwork` dựng sẵn) + gắn ⇒ dòng trạng thái "⬡ LF · Sprint 2 · còn 5 ngày" ⇒
+ *   mở CLI ⇒ (20/10/2026) "Bạn muốn kết nối CT Work không?" ⇒ 1 (đọc + ghi) ⇒ nối (token tạo bằng phiên đăng nhập, server
+ *   `ctwork` dựng sẵn) ⇒ "Gắn thư mục với LF (id 2)?" (AGENTS.md ghi RÕ mã dự án) ⇒ 1 ⇒ gắn ⇒ dòng trạng thái "⬡ LF · Sprint 2 · còn 5 ngày" ⇒
  *   `/ctwork` menu đánh số ⇒ 1 bảng sprint ⇒ `/issue LF-18` thẻ ⇒ câu có `LF-18` ⇒ chip 📎 + tóm tắt thẻ
  *   trong thân gửi model ⇒ agent muốn GHI bình luận ⇒ thẻ duyệt CT Work (xem trước) ⇒ 2 từ chối ⇒ `?` phím tắt.
  * Không chạm CT Work / máy chủ thật nào.
@@ -116,7 +116,8 @@ async function chay(phim: Array<[number, string] | [number, string, string]>, gi
 test('PTY lõi thật: kết nối một chạm ⇒ gắn LF ⇒ dòng trạng thái ⇒ /ctwork menu ⇒ /issue ⇒ chip LF-18 ⇒ thẻ duyệt ghi CT Work', { skip: boQua, timeout: 90_000 }, async () => {
   const { phatLai } = await import(path.join(goc, 'thu/phatLai.mjs')) as { phatLai: (g: unknown, t?: number) => Promise<{ manHinh: string[] }> };
   const g = await chay([
-    [6.4, '1', 'Gắn thư mục'], // Gắn thư mục với LF? ⇒ Đúng (đợt 8A: chưa nối ⇒ nối chỉ đọc rồi gắn)
+    [3.4, '1', 'Bạn muốn kết nối CT Work'], // 20/10/2026: hỏi kết nối lúc mở ⇒ Có — đọc + ghi
+    [6.4, '1', 'Gắn thư mục'], // nối xong ⇒ Gắn thư mục với LF? (đoán từ AGENTS.md) ⇒ Đúng
     [9.0, '/ctwork', '⬡ LF'], [9.4, '\r'],
     [11.2, '1', 'Sprint hiện tại'], // Sprint hiện tại
     [13.0, '/issue LF-18', 'To Do'], [13.4, '\r'],
@@ -132,7 +133,7 @@ test('PTY lõi thật: kết nối một chạm ⇒ gắn LF ⇒ dòng trạng t
   if (process.env.CUONGMINI_PTY_IN === '1') for (const t of [3.2, 6.2, 8.8, 11.0, 12.8, 15.2, 20.2, 22.5, 24.8]) console.log(`\n──── t=${t}s ────\n${xem(await man(t))}`);
 
   const m1 = await man(3.2);
-  assert.ok(!co(m1, 'Kết nối CT Work?'), `đợt 8A: không còn thẻ "Kết nối CT Work?" tự bật:\n${xem(m1)}`);
+  assert.ok(co(m1, 'Bạn muốn kết nối CT Work không?') && co(m1, /1\. Có — đọc \+ ghi/), `20/10: hỏi kết nối lúc mở, đọc + ghi đứng đầu:\n${xem(m1)}`);
 
   const m2 = await man(6.2);
   assert.ok(co(m2, /Gắn thư mục này với dự án CT Work LF \(id 2\)\?/), `phải đoán LF từ AGENTS.md:\n${xem(m2)}`);

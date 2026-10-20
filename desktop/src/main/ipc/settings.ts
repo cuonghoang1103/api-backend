@@ -27,7 +27,7 @@ import { handle } from './index';
  * lastRoute…) qua `app-state.tsx` — chặn hai khoá này không lấy đi của nó thứ
  * gì đang dùng.
  */
-const KHOA_CHI_MAIN: readonly SettingKey[] = ['notesFolder', 'agentWorkspace', 'aiMayTinh', 'ctworkTuGhi'];
+const KHOA_CHI_MAIN: readonly SettingKey[] = ['notesFolder', 'agentWorkspace', 'aiMayTinh', 'ctworkTuGhi', 'ctworkMacDinh'];
 
 export function registerSettingsHandlers(): void {
   handle('settings:getAll', () => getSettings());

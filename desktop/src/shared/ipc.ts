@@ -291,6 +291,17 @@ export const settingKeySchema = z.enum([
   'ctworkTuGhi',
   /** Đợt 5: đã hỏi "Kết nối CT Work?" một lần (người dùng chọn Không ⇒ không hỏi lại; vẫn `/ctwork`). */
   'ctworkDaHoi',
+  /**
+   * 20/10/2026: người dùng chọn "Không, đừng hỏi lại" ở thẻ "Bạn muốn kết nối CT Work không?". KHOÁ MỚI vì `ctworkDaHoi`
+   * cũ được ghi ở MỌI câu trả lời (kể cả "Có") — dùng lại nó thì người đã từng nối mà mất token sẽ không bao giờ được hỏi.
+   */
+  'ctworkKhongHoi',
+  /**
+   * 20/10/2026 — PHẠM VI CT Work MẶC ĐỊNH của máy (JSON, '' = chưa chọn): `{tatCa:true}` · `{workspaceId, workspace}` ·
+   * một dự án `{key, projectId, workspaceId, ref?, ten?, workspace?}`. Dùng khi thư mục chưa gắn dự án / không có thư mục
+   * (CLI mở ở ~). ⛔ Chỉ main ghi (`agent:ctworkHe` viec `macDinh`).
+   */
+  'ctworkMacDinh',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 
@@ -1766,6 +1777,8 @@ export const agentCtworkHeSchema = z.object({
     'chuanBiBatDau', 'batDau', 'gio', 'soanBinhLuan', 'binhLuan', 'baoCao', 'tuGhi',
     /* Đợt 6 — dẫn đường: hôm nay · hướng dẫn thẻ · gợi ý sau việc (xem trước / làm) · theo dõi · trưởng nhóm · Q&A · mẫu FPT. */
     'homNay', 'huongDan', 'goiYSau', 'xemTruocGoiY', 'lamGoiY', 'kiemTin', 'theoDoi', 'tongQuan', 'guiTinNhom', 'hoiQna', 'mauFpt', 'huongDanNhom',
+    /* 20/10/2026: phạm vi CT Work mặc định của máy (tất cả · một workspace · một dự án) — đặt / xoá. */
+    'macDinh',
   ]),
   ngonNgu: z.enum(['vi', 'en']).optional(),
   key: z.string().max(40).optional(),
@@ -1789,6 +1802,11 @@ export const agentCtworkHeSchema = z.object({
   quyen: z.enum(['doc', 'ghi']).optional(),
   /** Đợt 6: gắn THEO PHIÊN (thư mục không phải repo — không ghi file). */
   theoPhien: z.boolean().optional(),
+  /** 20/10/2026 (`macDinh`): phạm vi mặc định — `null` = xoá. */
+  macDinh: z.union([
+    z.object({ tatCa: z.literal(true) }),
+    z.object({ workspaceId: z.number().int().positive(), workspace: z.string().max(120).nullable().optional() }),
+  ]).nullable().optional(),
 });
 export type AgentCtworkHeVao = z.infer<typeof agentCtworkHeSchema>;
 /** Kết quả chung của `agent:ctworkHe` — mỗi `viec` điền vài trường. */
@@ -1802,8 +1820,12 @@ export interface AgentCtworkHeRa {
   gan?: { key: string; projectId: number | null; workspaceId: number | null; ref?: string; ten?: string | null; workspace?: string | null } | null;
   ds?: Array<{ key: string; ten: string; id: number | null; workspaceId: number | null; workspace: string | null; vaiTro: string | null; soMo: number | null }>;
   dsThe?: Array<{ key: string; title: string; status: string | null; dueDate: string | null; blocked?: boolean }>;
+  /** 20/10/2026: phạm vi mặc định của máy đang có (`docGan` / `macDinh`). */
+  macDinh?: { tatCa?: boolean; workspaceId?: number | null; workspace?: string | null; key?: string; projectId?: number | null; ten?: string | null } | null;
   dong?: {
+    /** '' = đã nối nhưng chưa có dự án cụ thể — xem `phamVi`. */
     key: string; projectId: number | null; ten: string | null; nhanh: string | null; daNoi: boolean; loi: string | null;
+    phamVi?: 'tatCa' | 'workspace' | 'chuaChon'; workspace?: string | null;
     sprint: { ten: string; conNgay: number | null; laFocus: boolean; tong: number } | null;
     the: string | null; theTen: string | null; theTrangThai: string | null;
   } | null;

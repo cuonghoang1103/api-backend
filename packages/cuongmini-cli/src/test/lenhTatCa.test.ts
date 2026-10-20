@@ -199,10 +199,12 @@ test('/mcp: thẻ lựa chọn đủ 5 hành động, chọn được từng cá
     assert.ok(chonSv.ds.some((x) => x.giaTri === 'ctwork'));
     await chonSv.khiChon('ctwork');
     const sv = g.the.at(-1)!;
-    /* Đợt 8A: server đang chạy ⇒ Ngắt (phiên) · Kết nối lại · Tắt hẳn (+ 4 việc CT Work). */
-    assert.deepEqual(sv.ds.slice(0, 3).map((x) => x.giaTri), ['ngat', 'noiLai', 'tatHan'], 'server đang chạy ⇒ Ngắt · Kết nối lại · Tắt hẳn');
-    await sv.khiChon('tatHan');
-    assert.match(JSON.stringify(g.kenh.filter(([k]) => k === 'agent:mcpServer')), /"ten":"ctwork","viec":"tatHan"/);
+    /* Đợt 8A: server đang chạy ⇒ Ngắt (phiên) · Kết nối lại (+ 4 việc CT Work). 20/10/2026: CT Work KHÔNG có "Tắt hẳn" (cờ
+       disabled sống mãi ⇒ "mở lại là mất kết nối"); bỏ hẳn = Đăng xuất CT Work. */
+    assert.deepEqual(sv.ds.slice(0, 3).map((x) => x.giaTri), ['ngat', 'noiLai', 'ctwDuAn'], 'server đang chạy ⇒ Ngắt · Kết nối lại · (không Tắt hẳn)');
+    assert.equal(sv.ds.some((x) => x.giaTri === 'tatHan'), false);
+    await sv.khiChon('ngat');
+    assert.match(JSON.stringify(g.kenh.filter(([k]) => k === 'agent:mcpServer')), /"ten":"ctwork","viec":"ngat"/);
   }
   datNgonNgu('vi');
 });

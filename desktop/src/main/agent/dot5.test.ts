@@ -203,8 +203,8 @@ describe('ctworkHe — app tự làm với CT Work GIẢ', () => {
     expect(H._demLanGoiSprint() - truoc).toBe(2);
   });
 
-  it('chưa gắn ⇒ dòng trạng thái null; chưa nối ⇒ không gọi CT Work', async () => {
-    expect(await H.dongTrangThai(goc)).toBeNull();
+  it('chưa gắn ⇒ dòng tối giản "chưa chọn dự án" (20/10: không còn null khi đã nối); chưa nối ⇒ không gọi CT Work', async () => {
+    expect(await H.dongTrangThai(goc)).toMatchObject({ key: '', daNoi: true, phamVi: 'chuaChon', sprint: null });
     await H.ghiGan(goc, { key: 'LF', projectId: 2, workspaceId: 3 });
     svGia = [];
     const d = await H.dongTrangThai(goc);

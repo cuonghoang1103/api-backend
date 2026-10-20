@@ -486,8 +486,8 @@ function dungLaiDanhSachTool(): void {
 
 /** Server CT Work có nhiều hơn ngần này tool ⇒ chế độ mục lục. */
 const NGUONG_NAP = 28;
-/** Số tool CT Work hằng ngày luôn gửi kèm schema (đầu `UU_TIEN_CTWORK`). */
-const LOI_CTWORK = 20;
+/** Số tool CT Work hằng ngày luôn gửi kèm schema (đầu `UU_TIEN_CTWORK`). 20/10/2026: 20 ⇒ 23 — thêm nhóm đính kèm. */
+const LOI_CTWORK = 23;
 /** Tool nạp thêm tối đa mỗi cuộc (cũ nhất rơi ra trước). */
 const MAX_NAP_CUOC = 24;
 let mucLucDaBiet: ToolMcp[] = [];
@@ -585,14 +585,44 @@ export function laServerDungSan(server: string): boolean { return dungSanTen.has
 const UU_TIEN_CTWORK = [
   /* Đợt 6: 20 tool đầu luôn gửi kèm schema khi CT Work ở chế độ mục lục — việc hằng ngày + dẫn đường. */
   'my_work', 'issue_guide', 'get_issue', 'search_issues', 'sprint_current', 'list_projects', 'list_pages', 'get_page',
-  'comment', 'log_work', 'transition', 'update_issue', 'create_issue', 'request_review', 'project_resources', 'chat_post', 'qna_ask', 'raid_create', 'whoami', 'ask_lead',
+  'comment', 'log_work', 'transition', 'update_issue', 'create_issue',
+  /* 20/10/2026: đính kèm (file trên máy qua `path`, ảnh từ URL, ảnh trong Google Doc) luôn có schema — trước đây
+     `attach_file` đứng cuối, ngoài bộ hằng ngày, nên model nói "không đính kèm được, bạn tự tải lên giúp". */
+  'attach_file', 'attach_from_url', 'gdoc_images',
+  'request_review', 'project_resources', 'chat_post', 'qna_ask', 'raid_create', 'whoami', 'ask_lead',
   'meeting_list', 'meeting_get', 'weekly_report_generate', 'raid_list', 'export_file', 'docs_draft_page', 'docs_update_section',
   'test_list', 'test_get', 'fpt_unit_list', 'fpt_unit_get', 'contrib_summary', 'time_by_activity', 'worklog_set_activity',
-  'chat_read', 'qna_list', 'rtm_get', 'srs_get', 'swr_overview', 'diagram_list', 'attach_file',
+  'chat_read', 'qna_list', 'rtm_get', 'srs_get', 'swr_overview', 'diagram_list', 'attach_complete',
+  /* 20/10/2026: tool thẻ mở rộng + việc chỉ NGƯỜI làm được (token agent không thấy) — ở mục lục, nạp khi cần. */
+  'issue_assign', 'issue_link', 'issue_unlink', 'issue_flag', 'issue_watch', 'issue_web_link_add',
+  'sprint_create', 'sprint_start', 'sprint_complete', 'project_member_add', 'project_member_set_role', 'project_member_remove', 'workspace_invite',
 ];
 function sapToolCtwork(ds: ToolMcp[]): ToolMcp[] {
   const hang = (t: ToolMcp) => { const i = UU_TIEN_CTWORK.indexOf(t.tenGoc); return i < 0 ? UU_TIEN_CTWORK.length : i; };
-  return ds.map((t, i) => ({ t, i })).sort((a, b) => hang(a.t) - hang(b.t) || a.i - b.i).map((x) => x.t);
+  return ds.map((t, i) => ({ t, i })).sort((a, b) => hang(a.t) - hang(b.t) || a.i - b.i).map((x) => chinhSchemaCtw(x.t));
+}
+
+/**
+ * 20/10/2026: `attach_file` của CT Work nhận thêm `path` — CuongMini tự đọc file trên máy (loop.ts › chayToolMcpCoDuyet,
+ * `ctworkDinhKem.ts`) nên model không phải tự mã hoá base64; `fileName`/`contentType` thành tuỳ chọn (tự điền theo file).
+ */
+export function chinhSchemaCtw(t: ToolMcp): ToolMcp {
+  if (t.tenGoc !== 'attach_file') return t;
+  const sc = t.thamSo as { properties?: Record<string, unknown>; required?: unknown };
+  if (!sc || typeof sc !== 'object' || sc.properties?.path) return t;
+  const required = Array.isArray(sc.required) ? sc.required.filter((k) => k !== 'fileName' && k !== 'contentType') : sc.required;
+  return {
+    ...t,
+    moTa: `${t.moTa}\nCuongMini: pass \`path\` (a local file — project-relative or absolute; images the user pasted in chat are saved at the path the app notes) instead of base64; CuongMini reads it and uploads any size.`.slice(0, 4000),
+    thamSo: {
+      ...sc,
+      properties: {
+        ...(sc.properties ?? {}),
+        path: { type: 'string', description: 'Local file path — CuongMini reads it; use instead of base64 (fileName/contentType are filled from the file).' },
+      },
+      ...(required !== undefined ? { required } : {}),
+    },
+  };
 }
 
 export function trangThaiServer(): KetQuaNap['server'] {

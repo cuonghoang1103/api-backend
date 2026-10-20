@@ -202,7 +202,7 @@ async function menuMcp(b: BoiCanhLenh, baoDau = ''): Promise<void> {
       { nhan: L('Mở file cấu hình', 'Open config file'), giaTri: 'mo', mo: L('sửa rồi chọn Nạp lại', 'edit, then Reload') },
       { nhan: L('Nạp lại', 'Reload'), giaTri: 'nap', mo: L('khởi động lại mọi server', 'restart every server') },
       /* Đợt 6 (việc 4): một chạm — nối bằng phiên đăng nhập ⇒ MỌI dự án (không gian · tên · vai) ⇒ quyền ⇒ gắn. */
-      { nhan: L('CT Work — chọn dự án & quyền', 'CT Work — pick project & access'), giaTri: 'ctworkDuAn', mo: ct?.server?.ok ? L('mọi dự án của bạn · đọc+ghi / chỉ đọc', 'all your projects · read+write / read only') : L('nối bằng tài khoản đang đăng nhập', 'connects with your signed-in account') },
+      { nhan: L('CT Work — chọn dự án & quyền', 'CT Work — pick project & access'), giaTri: 'ctworkDuAn', mo: ct?.server?.ok ? L('tất cả dự án · cả workspace · một dự án', 'all projects · a workspace · one project') : L('nối bằng tài khoản đang đăng nhập', 'connects with your signed-in account') },
       { nhan: ct?.server?.ok ? L('CT Work: đổi quyền / ngắt', 'CT Work: change access / disconnect') : L('Kết nối CT Work', 'Connect CT Work'), giaTri: 'ctwork', mo: L('một chạm, token cất trên máy', 'one tap, token kept on this machine') },
       { nhan: L('Quản lý một server (ngắt · nối lại · tắt · tool)', 'Manage a server (disconnect · reconnect · disable · tools)'), giaTri: 'server', ...((tt?.server ?? []).length ? {} : { tat: true }) },
       { nhan: L('Thoát', 'Exit'), giaTri: 'thoat', mo: 'Esc' },

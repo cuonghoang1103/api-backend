@@ -2,9 +2,10 @@
  * ĐỢT 8A — PTY THẬT + LÕI THẬT (`dist/loi.cjs`) + máy chủ CuongThai GIẢ (MCP CT Work giả). Không chạm máy chủ thật.
  *   1. Gợi ý bước tiếp: lượt xong ⇒ CHỮ MỜ câu gợi ý đầu ở ô nhập trống + "⇥ tab"; Tab ⇒ điền vào ô (chưa gửi); Enter ⇒
  *      gửi đúng câu đó; lượt sau gõ ký tự khác ⇒ chữ mờ biến mất. `/usage` ⇒ vẽ hạn mức THẬT của máy chủ (`cuongMini`).
- *   2. CT Work gắn theo THƯ MỤC: thư mục lạ ⇒ chỉ dòng gợi ý nhẹ "gõ /ctwork" (không thẻ "Kết nối CT Work?"); nối CT Work ở
- *      đây ⇒ KHÔNG dòng trạng thái, KHÔNG tool ctwork / `ctworkDuAn` gửi model; mở lại ⇒ không hỏi gì, vẫn không tool ctwork.
- *   3. AGENTS.md ghi rõ mã dự án CT Work ⇒ hỏi MỘT lần; "Không" ⇒ mở lại không hỏi nữa.
+ *   2. (20/10/2026 — thay luật 8A) mở CuongMini chưa nối ⇒ "Bạn muốn kết nối CT Work không?" ⇒ Có (đọc + ghi) ⇒ chọn phạm vi
+ *      "Tất cả dự án của tôi" ⇒ dòng "⬡ CT Work · đã nối · tất cả dự án", tool ctwork gửi model (không `ctworkDuAn`) kèm ghi
+ *      chú phạm vi; mở lại ⇒ không hỏi gì, VẪN nối + vẫn tool ctwork (token + phạm vi bền).
+ *   3. (xoá phạm vi máy) AGENTS.md ghi rõ mã dự án CT Work ⇒ hỏi MỘT lần; "Không" ⇒ mở lại không hỏi nữa.
  *   4. Thư mục ĐÃ gắn ⇒ dòng "⬡ LF", thân gửi có tool ctwork + `ctworkDuAn`; `/mcp` ⇒ Quản lý server ⇒ Ngắt ⇒ "đã ngắt
  *      (phiên này)" (lượt sau không còn tool ctwork) ⇒ Kết nối ⇒ "đã nối" lại.
  */
@@ -97,7 +98,7 @@ before(async () => {
 });
 after(() => { may?.close(); if (tam) rmSync(tam, { recursive: true, force: true }); });
 
-async function chay(cwd: string, home: string, phim: Array<[number, string] | [number, string, string]>, giayChay: number): Promise<unknown> {
+async function chay(cwd: string, home: string, phim: Array<[number, string] | [number, string, string]>, giayChay: number, treCtw = '800'): Promise<unknown> {
   const cauHinh = path.join(tam, `pty-${Date.now()}.json`);
   const ra = path.join(tam, `ghi-${Date.now()}.json`);
   writeFileSync(cauHinh, JSON.stringify({
@@ -105,7 +106,7 @@ async function chay(cwd: string, home: string, phim: Array<[number, string] | [n
     env: {
       HOME: home, CUONGMINI_HOME: path.join(home, '.cuongmini'), CUONGTHAI_API_ORIGIN: `http://127.0.0.1:${cong}`,
       CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1', CUONGMINI_KHONG_DAT_TIEU_DE: '1', CUONGMINI_TIN_THU_MUC: '1',
-      CUONGMINI_CTW_TRE_MS: '800',
+      CUONGMINI_CTW_TRE_MS: treCtw,
       TERM: 'xterm-256color', LANG: 'vi_VN.UTF-8', TERM_PROGRAM: 'iTerm.app', TERM_PROGRAM_VERSION: '3.5.10', CUONGMINI_NGON_NGU: 'vi',
     },
     bo_env: ['CI', 'GITHUB_ACTIONS', 'CONTINUOUS_INTEGRATION', 'BUILD_NUMBER', 'BUILD_ID', 'RUN_ID', 'TF_BUILD', 'GITLAB_CI', 'CTWORK_TOKEN', 'CUONGMINI_LOI'],
@@ -142,7 +143,7 @@ test('PTY: gợi ý bước tiếp = chữ mờ ⇒ Tab điền (Enter gửi) �
     [7.5, '\r'], // Enter ⇒ gửi đúng câu gợi ý
     [11.0, 'x', 'Trả lời lượt'], // lượt 2 xong ⇒ gõ "x" ⇒ chữ mờ biến mất
     [12.0, '\x7f'], [12.5, '/usage'], [12.9, '\r'],
-  ], 17);
+  ], 17, '600000'); // 20/10: thẻ "kết nối CT Work?" lúc mở hoãn xa — bài này không thử CT Work
   const man = async (t: number) => (await phatLai(g, t)).manHinh;
   if (process.env.CUONGMINI_PTY_IN === '1') for (const t of [5.9, 7.4, 10.9, 11.9, 16.5]) console.log(`\n──── t=${t}s ────\n${xem(await man(t))}`);
   const m1 = await man(5.9);
@@ -174,31 +175,43 @@ test('PTY: thư mục lạ ⇒ không CT Work (chỉ gợi ý nhẹ); AGENTS.md 
   mkdirSync(path.join(daGan, '.cuongmini'), { recursive: true });
   writeFileSync(path.join(daGan, '.cuongmini/ctwork.json'), JSON.stringify({ key: 'LF', projectId: 2, workspaceId: 3, ten: 'LabFlow AI' }));
 
-  // (a) Thư mục lạ, chưa nối: chỉ dòng gợi ý; nối ở đây; hỏi ⇒ không tool ctwork, không dòng ⬡.
+  // (a) 20/10/2026: chưa nối ⇒ "Bạn muốn kết nối CT Work không?" ⇒ 1 (đọc + ghi) ⇒ chọn phạm vi ⇒ 1 "Tất cả dự án của tôi".
   let t0 = ghi.turn.length;
   const a = await chay(la, home, [
-    [3.0, '/ctwork', 'gõ /ctwork'], [3.4, '\r'],
-    [5.5, '1', 'CT Work — kết nối'],
-    [8.0, 'chào', 'CT Work đã nối'], [8.4, '\r'],
+    [3.0, '1', 'Bạn muốn kết nối CT Work'],
+    [5.5, '1', 'làm việc với dự án nào'],
+    [8.0, 'chào', 'tất cả dự án CT Work của bạn'], [8.4, '\r'],
   ], 12);
   const ma = await phatLai(a, 2.9);
   if (process.env.CUONGMINI_PTY_IN === '1') console.log(`\n──── lạ ────\n${xem(ma.manHinh)}\n──── lạ cuối ────\n${xem((await phatLai(a)).manHinh)}`);
-  assert.ok(co(ma.manHinh, /Làm dự án trên CT Work\? gõ \/ctwork/), `dòng gợi ý nhẹ:\n${xem(ma.manHinh)}`);
-  assert.ok(!co(ma.manHinh, 'Kết nối CT Work?') && !co(ma.manHinh, /Gắn thư mục/), `không thẻ chặn / không hỏi gắn:\n${xem(ma.manHinh)}`);
-  assert.equal(ghi.token, 1, 'nối bằng phiên đăng nhập khi người dùng chủ động /ctwork');
+  assert.ok(co(ma.manHinh, 'Bạn muốn kết nối CT Work không?') && co(ma.manHinh, /1\. Có — đọc \+ ghi/), `hỏi kết nối lúc mở:\n${xem(ma.manHinh)}`);
+  assert.ok(!co(ma.manHinh, /Gắn thư mục/), `không hỏi gắn (AGENTS.md không ghi rõ mã):\n${xem(ma.manHinh)}`);
+  const mPv = await phatLai(a, 5.4);
+  assert.ok(co(mPv.manHinh, /1\. Tất cả dự án của tôi/) && co(mPv.manHinh, /2\. Cả workspace LabFlow Studio/) && co(mPv.manHinh, /3\. LF — LabFlow AI/), `chọn phạm vi:\n${xem(mPv.manHinh)}`);
+  assert.equal(ghi.token, 1, 'nối bằng phiên đăng nhập đúng 1 lần');
   const ba = ghi.turn.slice(t0).at(-1)!;
   assert.ok(ba, 'phải có lượt');
-  assert.ok(!coCtw(ba), `thư mục chưa gắn ⇒ không gửi tool ctwork: ${(ba.toolMcp ?? []).length}`);
+  assert.ok(coCtw(ba), 'phạm vi "tất cả" ⇒ gửi tool ctwork');
+  assert.deepEqual(ba.ctwork, { phamVi: 'tatCa' });
   assert.equal(ba.ctworkDuAn, undefined);
-  const caA = (await phatLai(a)).tatCa.join('\n');
-  assert.ok(!/⬡ /.test(caA) && !/AGENTS\.md \(CT Work\)/.test(caA) && !/Hôm nay/.test(caA), 'không dòng trạng thái / AGENTS.md nhóm / Hôm nay');
+  const tinA = ba.messages.filter((x: { role: string }) => x.role === 'user').at(-1);
+  assert.match(typeof tinA.content === 'string' ? tinA.content : tinA.content[0].text, /phạm vi: MỌI dự án của người dùng/);
+  assert.ok(co((await phatLai(a)).manHinh, '⬡ CT Work · đã nối · tất cả dự án'), `dòng trạng thái:\n${xem((await phatLai(a)).manHinh)}`);
 
-  // (a2) Mở lại thư mục lạ (đã nối): không hỏi gì; vẫn không tool ctwork.
+  // (a2) Mở lại (thoát ra mở lại — lỗi chủ app báo): không hỏi gì, VẪN nối, vẫn tool ctwork.
   t0 = ghi.turn.length;
   const a2 = await chay(la, home, [[3.5, 'chào lại', 'Hỏi hoặc giao việc'], [3.9, '\r']], 7);
   const m2 = (await phatLai(a2)).tatCa.join('\n');
-  assert.ok(!/Kết nối CT Work\?|Gắn thư mục|gõ \/ctwork|⬡ /.test(m2), `mở lại thư mục lạ: không gì về CT Work:\n${m2.slice(-1500)}`);
-  assert.ok(!coCtw(ghi.turn.slice(t0).at(-1)!), 'vẫn không tool ctwork');
+  assert.ok(!/Bạn muốn kết nối CT Work|Gắn thư mục|làm việc với dự án nào/.test(m2), `mở lại: không hỏi lại:\n${m2.slice(-1500)}`);
+  const m2c = (await phatLai(a2)).manHinh;
+  assert.ok(co(m2c, '⬡ CT Work · đã nối · tất cả dự án'), `mở lại vẫn nối:\n${xem(m2c)}`);
+  assert.ok(coCtw(ghi.turn.slice(t0).at(-1)!), 'mở lại vẫn có tool ctwork');
+  assert.equal(ghi.token, 1, 'không tạo token mới');
+  // Xoá phạm vi máy để thử luật "AGENTS.md ghi rõ mã ⇒ hỏi gắn" ở dưới.
+  const caiDat = path.join(home, '.cuongmini', 'data', 'cuongthai-desktop.json');
+  const cd = JSON.parse(readFileSync(caiDat, 'utf8'));
+  cd.settings.ctworkMacDinh = '';
+  writeFileSync(caiDat, JSON.stringify(cd));
 
   // (b) AGENTS.md ghi rõ mã ⇒ hỏi MỘT lần; "Không" ⇒ mở lại không hỏi.
   const b = await chay(coMa, home, [[3.5, '0', 'Gắn thư mục này với dự án CT Work LF']], 6);
@@ -224,7 +237,7 @@ test('PTY: thư mục lạ ⇒ không CT Work (chỉ gợi ý nhẹ); AGENTS.md 
   assert.ok(coCtw(lc[0]!) && lc[0]!.ctworkDuAn === 2, 'thư mục đã gắn ⇒ có tool ctwork + ctworkDuAn');
   assert.ok(co(await mc(6.9), /⬡ LF/), `dòng trạng thái:\n${xem(await mc(6.9))}`);
   const m12 = await mc(11.9);
-  assert.ok(co(m12, /1\. Ngắt kết nối/) && co(m12, /2\. Kết nối lại/) && co(m12, /Đổi dự án đang gắn/) && co(m12, /Đăng xuất CT Work/), `hành động server CT Work:\n${xem(m12)}`);
+  assert.ok(co(m12, /1\. Ngắt \(phiên này\)/) && co(m12, /2\. Kết nối lại/) && !co(m12, /Tắt hẳn/) && co(m12, /Đổi dự án đang gắn/) && co(m12, /Đăng xuất CT Work/), `hành động server CT Work:\n${xem(m12)}`);
   const m14 = await mc(14.4);
   assert.ok(co(m14, /Đã ngắt ctwork trong phiên này/) && co(m14, /đã ngắt \(phiên này\)/), `đã ngắt:\n${xem(m14)}`);
   assert.ok(lc[1] && !coCtw(lc[1]), 'đã ngắt ⇒ lượt sau không còn tool ctwork');

@@ -43,6 +43,8 @@ import {
 import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
 import { toolNotesTao, toolNotesGhi, type BoiCanhNote } from './ghiNote';
 import * as trinhDuyet from '../browser';
+import { chanWebCtwork } from './ctworkChanWeb';
+import { trangThaiServer } from './mcp';
 import { toolFigmaDoc } from './figmaKetNoi';
 import { layCuaSoChinh } from '../window';
 import { ghiSoTruoc, type SoCuoc } from './so';
@@ -276,6 +278,11 @@ export async function chayToolAgent(
   note?: BoiCanhNote,
 ): Promise<KetQuaTool> {
   try {
+    /* 20/10/2026: trình duyệt nhắm giao diện CT Work ⇒ từ chối, chỉ đường mcp__ctwork__* (chạy ngầm) — `ctworkChanWeb.ts`. */
+    if (ten.startsWith('web_') || ten === 'trinh_duyet_hien') {
+      const chan = chanWebCtwork(ten, args, trinhDuyet.urlHienTai(), trangThaiServer().some((s) => s.ten === 'ctwork' && s.ok));
+      if (chan) return { noiDung: chan, tomTat: 'CT Work — dùng tool ngầm' };
+    }
     switch (ten) {
       case 'cap_nhat_ke_hoach': {
         const viec = Array.isArray(args.viec) ? args.viec : [];

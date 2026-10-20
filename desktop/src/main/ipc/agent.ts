@@ -1167,6 +1167,8 @@ export function registerAgentHandlers(): void {
   });
 
   /* ── Đợt 3: CT Work một chạm (`/ctwork`, nút trong bảng MCP) ── */
+  /** 20/10/2026: khoá "đã hỏi chọn phạm vi" khi không có thư mục dự án. */
+  const NHA_KHOA = os.homedir();
   void napDemBiMat().catch(() => {});
   handle('agent:ctwork', async ({ cuocId, viec, quyen }) => {
     await napDemBiMat().catch(() => {});
@@ -1176,7 +1178,8 @@ export function registerAgentHandlers(): void {
     if (viec === 'ngat') return ngatCtwork(phien?.sessionToken ?? null, goc);
     if (!phien) return { ok: false, loi: 'Chưa đăng nhập CuongThai.' };
     if (viec === 'capLai') return capLaiCtwork(phien.sessionToken, goc);
-    return ketNoiCtwork(phien.sessionToken, quyen === 'ghi' ? 'ghi' : 'doc', goc);
+    /* 20/10/2026: mặc định ĐỌC + GHI — máy chủ vẫn xét vai của người dùng, mỗi lần ghi vẫn có thẻ duyệt; chỉ đọc = chọn rõ. */
+    return ketNoiCtwork(phien.sessionToken, quyen === 'doc' ? 'doc' : 'ghi', goc);
   });
 
   /* ── 19/10/2026: Figma token chỉ đọc (kho bí mật của máy) ── */
@@ -1201,34 +1204,49 @@ export function registerAgentHandlers(): void {
     const goc = v.cuocId ? gocCua(v.cuocId) : null;
     switch (v.viec) {
       case 'goiY': {
-        /* Hỏi MỘT lần: (1) đã đăng nhập mà chưa có CT Work ⇒ "Kết nối CT Work?"; (2) token hết hạn/bị thu hồi
-           ⇒ cấp lại một chạm; (3) đã nối, thư mục chưa gắn mà AGENTS.md nói rõ dự án ⇒ hỏi xác nhận. */
+        /* Hỏi MỘT lần: (1) đã đăng nhập mà chưa có CT Work ⇒ "Kết nối CT Work?"; (2) token hết hạn/bị thu hồi/kho hỏng
+           ⇒ cấp lại một chạm; (3) đã nối mà thư mục chưa có phạm vi ⇒ AGENTS.md nói rõ dự án thì hỏi xác nhận, không thì
+           "Chọn phạm vi" (tất cả · workspace · dự án). */
         await napDemBiMat().catch(() => {});
         // Lần nạp MCP lúc mở còn chạy ⇒ đợi (tối đa 8 giây) để biết server CT Work đã nối chưa.
         await Promise.race([choNapMcp().catch(() => undefined), new Promise((ok) => { const t = setTimeout(ok, 8000); t.unref?.(); })]);
         /*
-         * ĐỢT 8A (chủ app: "mở ở BẤT KỲ thư mục nào cũng tự nối CT Work"): CT Work gắn theo THƯ MỤC, không theo người.
-         *   • Thư mục CHƯA gắn ⇒ không hỏi "Kết nối CT Work?", không liệt kê dự án, không cấp lại token — chỉ một dòng gợi
-         *     ý nhẹ (`goiYNhe`) khi chưa nối: "Làm dự án trên CT Work? gõ /ctwork".
-         *   • AGENTS.md/CLAUDE.md của thư mục ghi RÕ mã dự án CT Work ⇒ hỏi MỘT lần cho thư mục đó ("Không" ⇒ nhớ).
-         *   • Thư mục ĐÃ gắn + token hết hạn ⇒ cấp lại một chạm (như cũ).
+         * 20/10/2026 (chủ app: "kết nối xong thoát ra mở lại là mất"; "mở CuongMini thì hỏi có muốn kết nối CT Work không,
+         * có thì chọn dự án / workspace / tất cả") — thay luật đợt 8A (chỉ gợi ý nhẹ):
+         *   • đã đăng nhập, chưa có token, chưa chọn "Không hỏi lại" ⇒ `ketNoi`;
+         *   • token hỏng (401/403, kho không giải mã được) ⇒ `capLai`;
+         *   • đã nối, thư mục không có gắn riêng, máy chưa có phạm vi mặc định, chưa hỏi thư mục này ⇒ `ganDuAn` (đoán từ
+         *     AGENTS.md) hoặc `chonDuAn`.
          */
         const coPhien = Boolean(readStoredSession());
+        if (!coPhien) return { ok: true, hoi: null };
         const sv = trangThaiServer().find((s) => s.ten === TEN_CTWORK);
+        const khoaHoi = goc ?? NHA_KHOA;
         const gan = goc ? await ctw.docGan(goc) : null;
-        if (coPhien && gan && await canCapLai()) return { ok: true, hoi: 'capLai' as const };
-        const daNoi = Boolean(sv) || Boolean(await docBiMat()) || Boolean(process.env.CTWORK_TOKEN);
-        if (goc && !gan && !(await ctw.daHoiGan(goc))) {
-          const doan = await ctw.doanGan(goc);
-          if (doan && coPhien) return { ok: true, hoi: 'ganDuAn' as const, doan };
-        }
-        return { ok: true, hoi: null, ...(coPhien && !daNoi && !gan ? { goiYNhe: true } : {}) };
+        return ctw.chonCauHoiLucMo({
+          canCapLai: await canCapLai(),
+          coToken: Boolean(await docBiMat()) || Boolean(process.env.CTWORK_TOKEN),
+          sv: sv ? { ok: sv.ok, ...(sv.tat ? { tat: true } : {}) } : null,
+          khongHoi: getSettings().ctworkKhongHoi === true,
+          coPhamVi: Boolean(gan || ctw.docMacDinh()),
+          daHoiThuMuc: await ctw.daHoiGan(khoaHoi),
+          doan: async () => (goc ? ctw.doanGan(goc) : null),
+        });
       }
       case 'daHoi':
-        if (v.loai === 'ketNoi') setSetting('ctworkDaHoi', true);
-        else if (v.loai === 'ganDuAn' && goc) await ctw.ghiDaHoiGan(goc);
+        if (v.loai === 'ketNoi') { setSetting('ctworkDaHoi', true); setSetting('ctworkKhongHoi', true); }
+        else if (v.loai === 'ganDuAn') await ctw.ghiDaHoiGan(goc ?? NHA_KHOA);
         return { ok: true };
-      case 'docGan': return { ok: true, gan: await ctw.docGan(goc) };
+      case 'docGan': {
+        const m = ctw.docMacDinh();
+        return { ok: true, gan: await ctw.docGan(goc), macDinh: m ? { ...m } : null };
+      }
+      case 'macDinh': {
+        /* 20/10/2026: phạm vi mặc định của máy — tất cả dự án · một workspace (một dự án đặt qua `gan` ở thư mục nhà). */
+        ctw.ghiMacDinh(v.macDinh ?? null);
+        if (v.macDinh) await ctw.ghiDaHoiGan(goc ?? NHA_KHOA);
+        return { ok: true, macDinh: ctw.docMacDinh() };
+      }
       case 'doan': return { ok: true, doan: await ctw.doanGan(goc) };
       case 'dsDuAn': {
         if (!ctw.ctworkSan()) return { ok: false, loi: 'Chưa kết nối CT Work.' };
@@ -1236,24 +1254,31 @@ export function registerAgentHandlers(): void {
         return { ok: r.ok, ds: r.ds, ...(r.loi ? { loi: r.loi } : {}) };
       }
       case 'gan': {
-        if (!goc) return { ok: false, loi: 'Chưa mở thư mục dự án.' };
         if (!v.duAn) return { ok: false, loi: 'Thiếu dự án.' };
         const g = ctw.ganTuDuAn({
           key: v.duAn.key, ten: v.duAn.ten ?? '', id: v.duAn.id ?? null, workspaceId: v.duAn.workspaceId ?? null,
           workspace: v.duAn.workspace ?? null, vaiTro: v.duAn.vaiTro ?? null, soMo: null, luuTru: false,
         }, v.quyen);
-        /* Đợt 6: thư mục KHÔNG phải repo git (vd home) hoặc người dùng chọn "chỉ phiên này" ⇒ gắn THEO PHIÊN (không ghi file). */
-        const laKho = await ctw.laKhoGit(goc);
-        if (v.theoPhien || !laKho) {
+        /* 20/10/2026: không có thư mục / thư mục NHÀ ⇒ thành dự án MẶC ĐỊNH của máy (bền qua lần mở sau — trước đây gắn
+           theo phiên rồi mất). Thư mục thường (kể cả không phải repo git) ⇒ ghi `.cuongmini/ctwork.json`. "Chỉ phiên này"
+           ⇒ gắn theo phiên (không ghi gì). */
+        const laKho = goc ? await ctw.laKhoGit(goc) : false;
+        if (v.theoPhien && goc) {
           ctw.ganTheoPhien(goc, g);
           return { ok: true, gan: g, laKho, theoPhien: true };
+        }
+        if (!goc || ctw.laThuMucNha(goc)) {
+          ctw.ghiMacDinh(g);
+          await ctw.ghiDaHoiGan(goc ?? NHA_KHOA);
+          return { ok: true, gan: g, laKho, macDinh: { key: g.key, projectId: g.projectId, workspaceId: g.workspaceId, ten: g.ten ?? null, workspace: g.workspace ?? null } };
         }
         const r = await ctw.ghiGan(goc, g);
         await ctw.ghiDaHoiGan(goc);
         return { ok: true, gan: g, duong: r.duong, goiYGitignore: r.goiYGitignore, laKho };
       }
       case 'boGan': {
-        if (!goc) return { ok: false, loi: 'Chưa mở thư mục dự án.' };
+        /* 20/10/2026: không có thư mục / thư mục nhà ⇒ bỏ phạm vi mặc định của máy. */
+        if (!goc || ctw.laThuMucNha(goc)) { ctw.ghiMacDinh(null); if (goc) ctw.ganTheoPhien(goc, null); return { ok: true }; }
         ctw.ganTheoPhien(goc, null);
         await fs.rm(path.join(goc, '.cuongmini', 'ctwork.json'), { force: true });
         await ctw.ghiDaHoiGan(goc);

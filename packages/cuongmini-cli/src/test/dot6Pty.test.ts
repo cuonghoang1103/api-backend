@@ -2,8 +2,8 @@
  * ĐỢT 6 — PTY THẬT + LÕI THẬT (`dist/loi.cjs`) + máy chủ CuongThai GIẢ (MCP CT Work giả ~153 tool, phân quyền đọc/ghi
  * như máy chủ thật). Đi đúng đường người dùng:
  *   1. mở ở thư mục MỚI ⇒ hộp "Mở thư mục làm việc … Có, tôi tin thư mục này / Không, thoát" ⇒ 1 ⇒ nhớ (mở lại không hỏi);
- *   2. `/mcp` ⇒ "CT Work — chọn dự án & quyền" ⇒ nối bằng phiên ⇒ MỌI dự án (không gian · vai) ⇒ LF ⇒ "Đọc + ghi" (token
- *      đang chỉ đọc ⇒ nối lại đọc + ghi) ⇒ gắn ⇒ TỰ đọc trang Docs "AGENTS.md — …" (khối ```markdown) ⇒ "Hôm nay";
+ *   2. `/mcp` ⇒ "CT Work — chọn dự án & quyền" ⇒ nối bằng phiên (20/10: đọc + ghi ngay) ⇒ phạm vi (tất cả · từng workspace)
+ *      + MỌI dự án (không gian · vai) ⇒ LF ⇒ "Đọc + ghi" ⇒ gắn ⇒ TỰ đọc trang Docs "AGENTS.md — …" (khối ```markdown) ⇒ "Hôm nay";
  *   3. câu hỏi ⇒ thân gửi mang AGENTS.md của nhóm (gộp), `ctworkDuAn`, MỤC LỤC tool + `mcp_nap` (dùng được mọi tool);
  *   4. lượt xong trên nhánh `LF-18-erd` có commit ⇒ thẻ "Xong việc ở LF-18? … đúng luật dự án" ⇒ Chuyển → Review ⇒ XEM TRƯỚC ⇒
  *      đồng ý ⇒ `transition {to: Review}` (chỉ sau khi đồng ý);
@@ -155,8 +155,8 @@ test('PTY lõi thật: tin thư mục ⇒ /mcp chọn dự án + quyền ⇒ AGE
     [2.0, '1', 'Mở thư mục làm việc'], // 1. hộp tin thư mục ⇒ Có
     [4.0, '/mcp', 'Hỏi hoặc giao việc'], [4.4, '\r'],
     [6.0, '3', 'CT Work — chọn dự án & quyền'], // /mcp ⇒ CT Work — chọn dự án & quyền
-    [9.0, '1', 'thư mục này làm cho dự án nào|Chọn dự án CT Work'], // LF
-    [11.0, '1', 'Quyền của CuongMini với LF'], // Đọc + ghi (token đang chỉ đọc ⇒ nối lại)
+    [9.0, '4', 'Chọn phạm vi / dự án CT Work'], // 1 tất cả · 2–3 từng workspace · 4 LF
+    [11.0, '1', 'Quyền của CuongMini với LF'], // Đọc + ghi (20/10: token đã đọc + ghi ⇒ không nối lại)
     [15.0, 'giải thích LF-18', 'Hôm nay'], [15.4, '\r'],
     [20.0, '3', 'Xong việc ở LF-18'], // gợi ý tự động: 1 push? · … ⇒ chọn "Chuyển LF-18 → Review" (số 3)
     [22.0, '1', 'Ghi lên CT Work · LF-18'], // xem trước ⇒ Đồng ý
@@ -184,9 +184,10 @@ test('PTY lõi thật: tin thư mục ⇒ /mcp chọn dự án + quyền ⇒ AGE
   assert.ok(co(m2, /3\. CT Work — chọn dự án & quyền/), `thẻ /mcp:\n${xem(m2)}`);
   const m3 = await man(8.9);
   assert.ok(co(m3, /LF — LabFlow AI\s+LabFlow Studio · thành viên · 42 thẻ mở/) && co(m3, /TP2 — SWR302 nhóm 2\s+SWR302 · giảng viên/), `mọi dự án + vai:\n${xem(m3)}`);
+  assert.ok(co(m3, /1\. Tất cả dự án của tôi/) && co(m3, /2\. Cả workspace LabFlow Studio/) && co(m3, /3\. Cả workspace SWR302/), `phạm vi rộng trên cùng:\n${xem(m3)}`);
   const m4 = await man(10.9);
   assert.ok(co(m4, /1\. Đọc \+ ghi/) && co(m4, /2\. Chỉ đọc/) && co(m4, /3\. Chỉ phiên này/), `thẻ quyền:\n${xem(m4)}`);
-  assert.deepEqual(ghi.scopes, [['read'], ['read', 'write']], 'nối (chỉ đọc) ⇒ chọn đọc + ghi ⇒ nối lại đọc + ghi');
+  assert.deepEqual(ghi.scopes, [['read', 'write']], '20/10: nối mặc định đọc + ghi ⇒ chọn đọc + ghi không phải nối lại');
   const gan = JSON.parse(readFileSync(path.join(duAn, '.cuongmini', 'ctwork.json'), 'utf8'));
   assert.deepEqual({ k: gan.key, p: gan.projectId, v: gan.vai, q: gan.quyen }, { k: 'LF', p: 2, v: 'MEMBER', q: undefined });
   const m5 = await man(14.9);

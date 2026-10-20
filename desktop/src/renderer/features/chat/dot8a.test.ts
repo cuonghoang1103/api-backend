@@ -58,7 +58,10 @@ describe('quản lý server MCP', () => {
     expect(hanhDongMcp({ ten: 'figma', ok: true, soTool: 3 }, 'vi').map((x) => x.giaTri)).toEqual(['ngat', 'noiLai', 'tatHan']);
     expect(hanhDongMcp({ ten: 'figma', ok: false, soTool: 0, ngat: true }, 'vi').map((x) => x.giaTri)).toEqual(['noi', 'tatHan']);
     expect(hanhDongMcp({ ten: 'figma', ok: false, soTool: 0, tat: true }, 'vi').map((x) => x.giaTri)).toEqual(['noi']);
-    expect(hanhDongMcp({ ten: 'ctwork', ok: true, soTool: 20 }, 'vi').map((x) => x.giaTri)).toEqual(['ngat', 'noiLai', 'tatHan', 'ctwDuAn', 'ctwQuyen', 'ctwBoGan', 'ctwDangXuat']);
+    /* 20/10/2026: CT Work KHÔNG có "Tắt hẳn" (cờ disabled sống mãi ⇒ "mở lại là mất kết nối") — bỏ hẳn = Đăng xuất. */
+    expect(hanhDongMcp({ ten: 'ctwork', ok: true, soTool: 20 }, 'vi').map((x) => x.giaTri)).toEqual(['ngat', 'noiLai', 'ctwDuAn', 'ctwQuyen', 'ctwBoGan', 'ctwDangXuat']);
+    expect(hanhDongMcp({ ten: 'ctwork', ok: true, soTool: 20 }, 'vi')[0]!.nhan).toBe('Ngắt (phiên này)');
+    expect(hanhDongMcp({ ten: 'ctwork', ok: false, soTool: 0, tat: true }, 'vi').map((x) => x.giaTri)).toContain('noi');
   });
   it('ngắt / kết nối gọi đúng kênh lõi với đúng server; đăng xuất hỏi xác nhận trước', async () => {
     const goi: Array<[string, Record<string, unknown>]> = [];

@@ -430,6 +430,14 @@ export function moTaGhi(tool: string, args: Record<string, unknown>): XemTruocGh
     case 'create_issue': return { the: duAn || null, viec: `${T('Tạo thẻ mới', 'Create issue')} (${chu(args.type)})`, noiDung: `${chu(args.title)}${args.descriptionMarkdown ? `\n\n${cat(chu(args.descriptionMarkdown), 800)}` : ''}` };
     case 'weekly_report_generate': return { the: duAn || null, viec: T('Tạo/làm mới Báo cáo tuần', 'Generate/refresh the weekly report'), noiDung: args.weekStart ? `${T('Tuần có ngày', 'Week of')} ${chu(args.weekStart)}` : T('Tuần này', 'This week') };
     case 'request_review': return { the, viec: T('Xin review', 'Request review'), noiDung: chu(args.message ?? args.note ?? '') };
+    case 'attach_from_url': return { the, viec: `${T('Đính kèm từ link', 'Attach from link')}${typeof args.image === 'number' ? T(` (ảnh số ${args.image})`, ` (image #${args.image})`) : ''}${args.for === 'comment' ? T(' (bản nháp cho bình luận)', ' (draft for a comment)') : ''}`, noiDung: [chu(args.url), args.fileName ? chu(args.fileName) : ''].filter(Boolean).join('\n') };
+    /* 20/10/2026: đính kèm ⇒ tên + cỡ + kiểu (đường dẫn trên máy nếu có) — KHÔNG đổ base64. */
+    case 'attach_file': {
+      const co = typeof args.kichThuoc === 'string' ? args.kichThuoc
+        : typeof args.base64 === 'string' ? args.base64 : typeof args.sizeBytes === 'number' ? `${Math.round(args.sizeBytes / 1024)} KB` : '';
+      const dich = args.for === 'comment' ? T(' (bản nháp cho bình luận)', ' (draft for a comment)') : typeof args.testRun === 'number' ? T(` (bằng chứng lần chạy test #${args.testRun})`, ` (evidence for test run #${args.testRun})`) : '';
+      return { the, viec: `${T('Đính kèm tệp', 'Attach file')}${dich}`, noiDung: [`${chu(args.fileName)}${co ? ` · ${co}` : ''}${args.contentType ? ` · ${chu(args.contentType)}` : ''}`, typeof args.path === 'string' ? args.path : ''].filter(Boolean).join('\n') };
+    }
     default: {
       const con = Object.fromEntries(Object.entries(args).filter(([k]) => !BO_KHOA.has(k)));
       let s = '';

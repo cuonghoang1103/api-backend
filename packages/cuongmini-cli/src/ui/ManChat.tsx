@@ -675,9 +675,10 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
     }
     if (loai === 'ctwork') {
       // CT Work một chạm: chọn quyền ⇒ lõi tạo token bằng phiên đăng nhập, cất vào kho bí mật, thêm server MCP.
+      // 20/10/2026: đọc + ghi lên đầu (khuyên dùng — máy chủ vẫn xét vai, mỗi lần ghi vẫn hỏi); nối xong ⇒ chọn phạm vi.
       const ds = [
-        { nhan: L('Chỉ đọc', 'Read only'), mo: L('Xem issue, sprint, tài liệu, WBS — không sửa gì (khuyên dùng)', 'View issues, sprints, docs, WBS — changes nothing (recommended)'), giaTri: 'doc' },
-        { nhan: L('Đọc + ghi', 'Read + write'), mo: L('Thêm cả tạo/sửa issue, bình luận, log work — mỗi lần gọi vẫn hỏi duyệt', 'Also create/edit issues, comment, log work — every call still asks'), giaTri: 'ghi' },
+        { nhan: L('Đọc + ghi', 'Read + write'), mo: L('Nộp việc, đính kèm file, chuyển trạng thái, bình luận, log work — chạy ngầm, mỗi lần ghi vẫn hỏi duyệt (khuyên dùng)', 'Submit work, attach files, move statuses, comment, log work — silently, every write still asks (recommended)'), giaTri: 'ghi' },
+        { nhan: L('Chỉ đọc', 'Read only'), mo: L('Xem issue, sprint, tài liệu, WBS — không sửa gì', 'View issues, sprints, docs, WBS — changes nothing'), giaTri: 'doc' },
       ];
       menu({
         tieuDe: L('Kết nối CT Work', 'Connect CT Work'),
@@ -686,8 +687,11 @@ export function ManChat({ kn, kho, thuMuc, phienBan, cauHoiDau, banMoi, ngoaiTuy
         khiChon: (m) => {
           kho.thongBao(L('Đang kết nối CT Work…', 'Connecting CT Work…'));
           void kn.goi<{ ok: boolean; loi?: string; soTool?: number }>('agent:ctwork', { viec: 'noi', quyen: m.giaTri }).then((r) => {
-            if (r?.ok) kho.thongBao(L(`✓ ctwork · ${r.soTool ?? 0} tool — hỏi thử: "việc của tôi trong CT Work hôm nay"`, `✓ ctwork · ${r.soTool ?? 0} tools — try: "what's on my CT Work plate today"`), 'ok');
-            else kho.thongBao(`ctwork: ${r?.loi ?? '?'}`, 'loi');
+            if (r?.ok) {
+              kho.thongBao(L(`✓ ctwork · ${r.soTool ?? 0} tool — hỏi thử: "việc của tôi trong CT Work hôm nay"`, `✓ ctwork · ${r.soTool ?? 0} tools — try: "what's on my CT Work plate today"`), 'ok');
+              /* 20/10/2026: nối xong ⇒ chọn phạm vi (tất cả · workspace · dự án) ngay — trước đây dừng ở đây, thư mục chưa gắn ⇒ không có tool. */
+              void moCtworkTuMcp(giaoDienCtwTuBat()).then(() => void napDongCtw()).catch(() => undefined);
+            } else kho.thongBao(`ctwork: ${r?.loi ?? '?'}`, 'loi');
           }).catch((e: Error) => kho.thongBao(e.message, 'loi'));
         },
       });

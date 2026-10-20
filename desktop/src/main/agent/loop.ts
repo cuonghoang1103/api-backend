@@ -52,9 +52,10 @@ import { getSettings, setSetting } from '../store';
 import type { AgentCongNangCap, AgentGiaHanTien, CheDoQuyen } from '../../shared/ipc';
 import { dungLenhNenCua } from './lenhNen';
 import { dongTerminalCua } from '../terminal/phienTerminal';
-import { hanMucMcp, goiToolMcp, laCtworkTinCay, laToolMcp, mucLucChoCuoc, napToolChoCuoc, timToolMcp, toolGuiChoCuoc } from './mcp';
+import { hanMucMcp, goiToolMcp, goiToolMcpTrucTiep, laCtworkTinCay, laToolMcp, mucLucChoCuoc, napToolChoCuoc, timToolMcp, toolGuiChoCuoc } from './mcp';
 import { ghiChuGop } from './ctworkDanDuong';
-import { dinhKemThe, khopKeyChuaGan, nguCanhChoModel } from './ctworkHe';
+import { dinhKemThe, ghiChuPhamVi, khopKeyChuaGan, nguCanhChoModel } from './ctworkHe';
+import { coDuongDan, coChu, ghiChuAnhChat, guiTepLenCtwork, luuAnhChat, thamSoGoc, thamSoHien, timTepDinhKem, type TepDinhKem } from './ctworkDinhKem';
 import { baoLoiCtwork } from './ctworkKetNoi';
 import { coTokenFigma } from './figmaKetNoi';
 import * as trinhDuyetCheDo from '../browser';
@@ -1223,23 +1224,33 @@ export async function chayLuot(
   if (!tuyChon.lamTiep && c.tinDen.length) { cauHoi = `${cauHoi}\n\n${bocTin(c.tinDen)}`; c.tinDen = []; }
   /* ĐỢT 5: người dùng nhắc `LF-123` (đúng key dự án CT Work đã gắn) ⇒ đính kèm tóm tắt thẻ như `@file`
      (≤ 1.500 ký tự/thẻ, ≤ 3 thẻ). Đọc hỏng thì bỏ qua thẻ đó — không chặn lượt. */
-  if (!tuyChon.lamTiep && boiCanh.goc) {
+  /* 20/10/2026: không cần thư mục — phạm vi CT Work mặc định của máy (một dự án / tất cả / workspace) vẫn áp dụng. */
+  if (!tuyChon.lamTiep) {
     /* Trần 8 giây: CT Work chậm không được giữ lượt của người dùng — quá hạn thì gửi câu như thường. */
     const rong = { khoa: [] as string[], chu: '' };
     const dk = await Promise.race([
-      dinhKemThe(boiCanh.goc, cauHoi).catch(() => rong),
+      dinhKemThe(boiCanh.goc ?? null, cauHoi).catch(() => rong),
       new Promise<typeof rong>((ok) => { const t = setTimeout(() => ok(rong), 8000); t.unref?.(); }),
     ]);
     if (dk.khoa.length) { cauHoi = `${cauHoi}${dk.chu}`; phat({ loai: 'dinhKemCtwork', khoa: dk.khoa }); }
     /* Đợt 8A: thư mục CHƯA gắn mà câu nhắc `KEY-123` khớp một dự án của người dùng ⇒ giao diện hỏi MỘT lần "Gắn thư
        mục này với dự án KEY?" (sau khi lượt xong). Không chặn lượt, không bao giờ tự gắn. */
     const goc0 = boiCanh.goc;
-    void khopKeyChuaGan(goc0, cauHoi).then((d) => { if (d) phat({ loai: 'ctwHoiGan', doan: d }); }).catch(() => undefined);
+    if (goc0) void khopKeyChuaGan(goc0, cauHoi).then((d) => { if (d) phat({ loai: 'ctwHoiGan', doan: d }); }).catch(() => undefined);
   }
   /* ĐỢT 5: "Dự án CT Work: LF (id 2)…" — máy chủ ghi CẠNH dòng HÔM NAY ở cuối prompt (đổi theo dự án,
-     không theo lượt ⇒ không phá đệm). Thư mục chưa gắn ⇒ không gửi. */
-  ctworkTheoCuoc.set(c.id, boiCanh.goc ? await nguCanhChoModel(boiCanh.goc).catch(() => null) : null);
+     không theo lượt ⇒ không phá đệm). Không có phạm vi nào ⇒ không gửi. */
+  ctworkTheoCuoc.set(c.id, await nguCanhChoModel(boiCanh.goc ?? null).catch(() => null));
   datDuAnChoDatTen(ctworkTheoCuoc.get(c.id)?.projectId ?? null);
+  if (!tuyChon.lamTiep) {
+    /* 20/10/2026: phạm vi "tất cả / một workspace" không có dòng DỰ ÁN ở máy chủ ⇒ nói cho model MỘT lần mỗi cuộc
+       (và khi phạm vi đổi) — nối sau câu hỏi như ghi chú PDF. */
+    const pv = ghiChuPhamVi(ctworkTheoCuoc.get(c.id) ?? null);
+    if (pv && (phamViDaBao.get(c.id) !== pv || !c.hoiThoai.some((m) => m.role === 'user'))) { cauHoi = `${cauHoi}${pv}`; phamViDaBao.set(c.id, pv); }
+    if (!pv) phamViDaBao.delete(c.id);
+    /* 20/10/2026: ảnh dán/kéo vào chat ⇒ lưu ra file + ghi chú đường dẫn — model đính kèm được lên CT Work (attach_file{path}). */
+    if (boiCanh.anh?.length) cauHoi = `${cauHoi}${ghiChuAnhChat(await luuAnhChat(boiCanh.anh))}`;
+  }
   if (tuyChon.lamTiep) {
     /* CÙNG lượt người dùng đang dở ⇒ không +1 (khớp cách `quayLui` đếm). */
     c.so.luot = Math.max(1, c.hoiThoai.filter((m) => m.role === 'user').length);
@@ -2138,15 +2149,30 @@ async function chayToolMcpCoDuyet(
   }
   const tuGhi = ctw && getSettings().ctworkTuGhi === true;
 
+  /* 20/10/2026: `attach_file { path }` ⇒ CuongMini tự đọc file qua nhà tù đường dẫn (dự án · thư mục đã kéo vào · thư
+     mục tải · ảnh dán trong chat) — thẻ duyệt hiện TÊN + CỠ, không bao giờ hiện chuỗi base64. */
+  let tep: TepDinhKem | null = null;
+  let argsXem = args;
+  if (ctw && t.tenGoc === 'attach_file') {
+    const p = coDuongDan(args);
+    if (p) {
+      try { tep = await timTepDinhKem(p, { goc: c.goc, thuMucTai: c.so.thuMucTai }); } catch (e) {
+        return { noiDung: `LỖI: ${(e as Error).message}`, tomTat: 'không đọc được file' };
+      }
+      argsXem = { ...thamSoGoc(args, tep), path: p };
+    }
+    argsXem = thamSoHien(argsXem, tep);
+  }
+
   let thamSo = '';
   try {
-    thamSo = JSON.stringify(args, null, 2).slice(0, 2000);
+    thamSo = JSON.stringify(argsXem, null, 2).slice(0, 2000);
   } catch {
     thamSo = '(không đọc được tham số)';
   }
 
   const id = `mcp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-  const xemTruoc = ctw ? moTaGhi(t.tenGoc, args) : undefined;
+  const xemTruoc = ctw ? moTaGhi(t.tenGoc, argsXem) : undefined;
   const quyet = await hoiNguoiDung(
     {
       ten: 'mcp', duongDan: `${t.server}: ${t.tenGoc}`, khoa: id, choNho: false,
@@ -2169,7 +2195,10 @@ async function chayToolMcpCoDuyet(
 
   // `signal`: người dùng bấm dừng ⇒ lời gọi MCP đang chờ bị huỷ ngay (và
   // server được báo `notifications/cancelled`), không đứng chờ hết 60 giây.
-  const kq = await goiToolMcp(ten, args, signal);
+  const kq = tep
+    ? { anh: [], ...(await guiTepLenCtwork(args, tep, (tool, a) => goiToolMcpTrucTiep(t.server, tool, a, signal))) }
+    : await goiToolMcp(ten, args, signal);
+  if (tep && !kq.loi) kq.noiDung = `Đã đính kèm ${tep.ten} (${coChu(tep.kichThuoc)}).\n${kq.noiDung}`;
   const h = hanMucMcp();
   if (ctw) {
     if (kq.loi) baoLoiCtwork(kq.noiDung);
@@ -2957,6 +2986,8 @@ function xoaVeAnthropic(): void {
 
 /** Đợt 5: ngữ cảnh CT Work của lượt đang chạy, theo cuộc (lượt phụ không mang). */
 const ctworkTheoCuoc = new Map<string, Awaited<ReturnType<typeof nguCanhChoModel>>>();
+/** 20/10/2026: ghi chú phạm vi CT Work đã nối vào câu hỏi của cuộc (không lặp ở mỗi lượt). */
+const phamViDaBao = new Map<string, string>();
 /** Đợt 6: id dự án CT Work của cuộc (cho `/compact` + đặt tên dùng hạn mức nhóm). */
 export function duAnCtworkCuaCuoc(cuocId: string | null | undefined): number | null {
   return (cuocId ? ctworkTheoCuoc.get(cuocId)?.projectId : null) ?? null;

@@ -35,23 +35,62 @@ export const URL_MCP = `${API_ORIGIN}/api/v1/work/mcp`;
 
 interface BiMat { token: string; id: number | string | null; quyen: 'doc' | 'ghi'; luc: number }
 
-function thuMucBiMat(): string { return path.join(app.getPath('userData'), 'bi-mat'); }
+/*
+ * 20/10/2026 — MỘT kho cho CLI + VS Code: hai nơi chạy cùng lõi ngoài Electron, trước đây mỗi nơi một kho (CLI
+ * `~/.cuongmini/data`, VS Code `globalStorage` của extension) ⇒ nối ở CLI rồi mở VS Code lại thấy "chưa nối". Nay lõi
+ * ngoài app dùng chung `~/.cuongmini/data/bi-mat/` (`CUONGMINI_HOME` đổi gốc — như CLI); token cũ của VS Code được
+ * chép sang lần đầu. App desktop giữ kho riêng (Keychain qua safeStorage).
+ */
+const laLoiDocLap = (): boolean => (app as unknown as { laLoiDocLap?: boolean }).laLoiDocLap === true;
+function thuMucBiMatCu(): string { return path.join(app.getPath('userData'), 'bi-mat'); }
+function thuMucBiMat(): string {
+  if (!laLoiDocLap()) return thuMucBiMatCu();
+  return path.join(process.env.CUONGMINI_HOME || path.join(os.homedir(), '.cuongmini'), 'data', 'bi-mat');
+}
 function fileBiMat(): string { return path.join(thuMucBiMat(), 'ctwork.bin'); }
 
 function coMaHoa(): boolean {
   try { return safeStorage.isEncryptionAvailable(); } catch { return false; }
 }
 
-export async function docBiMat(): Promise<BiMat | null> {
+/** Lõi ngoài app: kho chung chưa có mà kho riêng cũ (VS Code) có ⇒ chép sang một lần. */
+async function chuyenKhoCu(): Promise<void> {
+  if (!laLoiDocLap() || thuMucBiMatCu() === thuMucBiMat()) return;
+  try { await readFile(fileBiMat()); return; } catch { /* chưa có ⇒ thử kho cũ */ }
   try {
-    const b = await readFile(fileBiMat());
+    const cu = await readFile(path.join(thuMucBiMatCu(), 'ctwork.bin'));
+    await mkdir(thuMucBiMat(), { recursive: true, mode: 0o700 });
+    await writeFile(fileBiMat(), cu, { mode: 0o600 });
+  } catch { /* không có kho cũ */ }
+}
+
+/**
+ * Kho có file mà KHÔNG giải mã/đọc được (Keychain đổi, file hỏng…). Trước đây nuốt im ⇒ trông như "chưa nối", người
+ * dùng nối lại từ đầu mà không biết vì sao. Nay ghi log + `canCapLai()` báo cấp lại một chạm.
+ */
+let khoHong = false;
+export function khoBiMatHong(): boolean { return khoHong; }
+
+export async function docBiMat(): Promise<BiMat | null> {
+  await chuyenKhoCu();
+  let b: Buffer;
+  try { b = await readFile(fileBiMat()); } catch { khoHong = false; return null; }
+  try {
     const chu = b.subarray(0, 4).toString() === 'MAH1' ? safeStorage.decryptString(b.subarray(4)) : b.toString('utf8');
     const j = JSON.parse(chu) as BiMat;
-    return typeof j?.token === 'string' && j.token ? j : null;
-  } catch { return null; }
+    const ok = typeof j?.token === 'string' && j.token ? j : null;
+    khoHong = !ok;
+    if (!ok) console.warn('[ctwork] kho token CT Work không có token hợp lệ — cần cấp lại.');
+    return ok;
+  } catch (e) {
+    khoHong = true;
+    console.warn(`[ctwork] không đọc được kho token CT Work (${(e as Error).message}) — cần cấp lại.`);
+    return null;
+  }
 }
 
 async function ghiBiMat(m: BiMat | null): Promise<void> {
+  khoHong = false;
   if (!m) { await rm(fileBiMat(), { force: true }); return; }
   await mkdir(thuMucBiMat(), { recursive: true, mode: 0o700 });
   const chu = JSON.stringify(m);
@@ -95,7 +134,8 @@ export function baoLoiCtwork(chu: string): void { if (LOI_XAC_THUC.test(chu)) lo
 /** Có token của app mà server báo lỗi xác thực ⇒ cần cấp lại (một chạm). */
 export async function canCapLai(): Promise<boolean> {
   const m = await docBiMat();
-  if (!m || process.env[BIEN_TOKEN]) return false;
+  if (process.env[BIEN_TOKEN]) return false;
+  if (!m) return khoHong;
   const sv = trangThaiServer().find((x) => x.ten === TEN_SERVER);
   if (sv && !sv.ok && !sv.tat && LOI_XAC_THUC.test(sv.loi ?? '')) return true;
   return Date.now() - loiXacThucCuoi < 10 * 60_000;
@@ -159,11 +199,14 @@ async function goDongCu(kemCoTat: boolean): Promise<void> {
   if (doi) await ghiMcp(cfg);
 }
 
-/** Đợt 5: token hết hạn / bị thu hồi ⇒ cấp lại MỘT CHẠM, cùng quyền như lần trước. */
+/** Đợt 5: token hết hạn / bị thu hồi ⇒ cấp lại MỘT CHẠM, cùng quyền như lần trước (không rõ ⇒ đọc + ghi — máy chủ vẫn xét vai). */
 export async function capLaiCtwork(sessionToken: string, goc: string | null = null): Promise<KetQuaCtwork> {
   const m = await docBiMat();
-  return ketNoiCtwork(sessionToken, m?.quyen ?? 'doc', goc);
+  return ketNoiCtwork(sessionToken, m?.quyen ?? 'ghi', goc);
 }
+
+/** Có token CT Work trên máy (kho của app hoặc biến CTWORK_TOKEN) — không gọi mạng. */
+export function coTokenCtwork(): boolean { return Boolean(dem || process.env[BIEN_TOKEN]); }
 
 async function thuHoi(sessionToken: string, id: number | string): Promise<void> {
   await fetch(`${API_ORIGIN}/api/v1/work/me/api-tokens/${encodeURIComponent(String(id))}`, {
@@ -184,7 +227,7 @@ export async function ngatCtwork(sessionToken: string | null, goc: string | null
 }
 
 /** Trạng thái cho `/ctwork` không tham số. */
-export async function trangThaiCtwork(): Promise<{ coToken: boolean; quyen: 'doc' | 'ghi' | null; server: { ok: boolean; soTool: number; loi?: string; tat?: boolean; dungSan?: boolean } | null; bienTay: boolean; canCapLai: boolean; coGhi: boolean | null }> {
+export async function trangThaiCtwork(): Promise<{ coToken: boolean; quyen: 'doc' | 'ghi' | null; server: { ok: boolean; soTool: number; loi?: string; tat?: boolean; dungSan?: boolean } | null; bienTay: boolean; canCapLai: boolean; coGhi: boolean | null; khoHong?: boolean }> {
   const m = await docBiMat();
   const sv = trangThaiServer().find((s) => s.ten === TEN_SERVER);
   /* QA 5c: máy chủ chỉ liệt kê tool ghi cho token có scope `write` ⇒ đây là nguồn ĐÚNG (kể cả token từ biến
@@ -195,5 +238,6 @@ export async function trangThaiCtwork(): Promise<{ coToken: boolean; quyen: 'doc
     coGhi: ds.length ? ds.some((t) => !t.chiDoc) : null,
     server: sv ? { ok: sv.ok, soTool: sv.soTool, ...(sv.loi ? { loi: sv.loi } : {}), ...(sv.tat ? { tat: true } : {}), ...(sv.dungSan ? { dungSan: true } : {}) } : null,
     canCapLai: await canCapLai(),
+    ...(khoHong ? { khoHong: true } : {}),
   };
 }

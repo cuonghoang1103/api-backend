@@ -423,7 +423,7 @@ async function chay(ten: string, thamSo: string, goc: string, b: BoiCanhLenh): P
         { nhan: Lv('Mở file cấu hình', 'Open config file'), chinh: true, lam: async () => { await b.goi('agent:mcpMoCauHinh').catch(() => undefined); } },
         { nhan: Lv('Nạp lại', 'Reload'), lam: () => chayLenh('/mcp nap', b) },
         /* Đợt 6 (việc 4): nối bằng phiên đăng nhập ⇒ MỌI dự án (không gian · vai) ⇒ quyền ⇒ gắn. */
-        { nhan: Lv('CT Work — chọn dự án & quyền', 'CT Work — pick project & access'), lam: () => moCtworkTuMcp(giaoDienCtwVsc(b)) },
+        { nhan: Lv('CT Work — chọn phạm vi (tất cả · workspace · dự án)', 'CT Work — pick scope (all · workspace · project)'), lam: () => moCtworkTuMcp(giaoDienCtwVsc(b)) },
         { nhan: Lv('Kết nối CT Work', 'Connect CT Work'), lam: () => chayLenh('/ctwork', b) },
         /* Đợt 8A — quản lý từng server (chung ba nơi): Ngắt (phiên) · Kết nối lại · Kết nối · Tắt hẳn; CT Work thêm đổi
            dự án · đổi quyền · bỏ gắn · đăng xuất. */

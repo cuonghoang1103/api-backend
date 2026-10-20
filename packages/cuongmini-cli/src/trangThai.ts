@@ -114,6 +114,8 @@ export function nhanTool(ten: string): string {
 const CUM_TOM_TAT: Array<[RegExp, string]> = ([
   // Câu trọn (cụ thể nhất).
   ['hiện cửa sổ — chờ người dùng', 'window shown — waiting for you'], ['về ngầm', 'back to background'],
+  /* 20/10/2026: CT Work làm ngầm — trình duyệt nhắm CT Work bị từ chối · attach_file{path} đọc file hỏng. */
+  ['CT Work — dùng tool ngầm', 'CT Work — use the background tools'], ['không đọc được file', 'could not read the file'],
   ['chưa có token', 'no token yet'], ['link sai', 'wrong link'], ['Figma lỗi', 'Figma error'],
   ['từ chối ở hộp hệ thống', 'denied at the OS prompt'], ['chờ người dùng gõ mật khẩu', 'waiting for you to type the password'],
   ['không tạo được khu riêng', 'could not create the sandbox'], ['không có kỹ năng đó', 'no such skill'], ['không có loại đó', 'no such type'],

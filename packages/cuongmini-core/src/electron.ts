@@ -70,6 +70,8 @@ function duongTheoTen(ten: string): string {
 
 class AppGia extends EventEmitter {
   readonly isPackaged = true;
+  /** 20/10/2026: lõi ngoài Electron (CLI/VS Code) — kho token CT Work dùng chung `~/.cuongmini/data` (`ctworkKetNoi.ts`). */
+  readonly laLoiDocLap = true;
   getPath(ten: string): string { return duongTheoTen(ten); }
   getVersion(): string { return vo?.phienBan ?? '0.0.0'; }
   getName(): string { return 'CuongThai'; }

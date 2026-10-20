@@ -2,9 +2,9 @@
  * QA 5c — PTY THẬT + LÕI THẬT (`dist/loi.cjs`) + máy chủ giả LÀM ĐÚNG NHƯ MÁY CHỦ THẬT ở chỗ bộ test cũ bỏ sót:
  * token CT Work CHỈ ĐỌC ⇒ `tools/list` KHÔNG có tool ghi (`src/mcp/server.ts › visibleTools`).
  * Đường người dùng:
- *   gõ câu hỏi ngay lúc mở ⇒ thẻ tự bật (đợt 8A: "Gắn thư mục với LF?" — AGENTS.md ghi rõ mã; không còn "Kết nối CT Work?")
+ *   gõ câu hỏi ngay lúc mở ⇒ thẻ tự bật (20/10/2026: "Bạn muốn kết nối CT Work không?")
  *   KHÔNG được bật lên giữa lúc gõ (trước đây Enter của câu hỏi chọn luôn mục 1 của thẻ vừa bật) ⇒ thẻ hiện khi tay rời
- *   phím ⇒ 1 (gắn — chưa nối ⇒ nối chỉ đọc) ⇒ /ctwork ⇒ 5 Ghi giờ ⇒ thẻ "token
+ *   phím ⇒ 2 (Có — chỉ đọc) ⇒ "Gắn thư mục với LF?" (AGENTS.md ghi rõ mã) ⇒ 1 ⇒ /ctwork ⇒ 5 Ghi giờ ⇒ thẻ "token
  *   chỉ đọc" + một chạm nâng quyền (trước đây xem trước rồi hỏng "server "ctwork" không có tool "log_work"")
  *   ⇒ lượt có ngữ cảnh 83% ⇒ chân trang VẪN hiện "context 83%" + tiền (trước đây cả cụm phải biến mất ở 120 cột)
  *   ⇒ hai lệnh cần duyệt, bấm "1" ĐÚP ⇒ chỉ lệnh đầu được duyệt (trước đây phím thứ hai duyệt mù lệnh thứ hai).
@@ -122,7 +122,8 @@ test('PTY lõi thật: thẻ tự bật không cướp Enter khi đang gõ · to
   const g = await chay([
     [2.0, 'hello', 'Hỏi hoặc giao việc|Ask or give a task'], // gõ ngay lúc mở — thẻ kết nối (hẹn 2,5 s) KHÔNG được bật giữa chừng
     [3.0, '\r'], // Enter của câu hỏi ⇒ GỬI câu hỏi, không chọn gì trên thẻ nào
-    [10.5, '1', 'Bind this folder'], // "Bind this folder to LF?" (hiện khi tay rời phím) ⇒ Yes (chưa nối ⇒ nối chỉ đọc)
+    [10.5, '2', 'Do you want to connect CT Work'], // hiện khi tay rời phím ⇒ "Yes — read only" (thử luồng token chỉ đọc)
+    [13.0, '1', 'Bind this folder'], // nối xong ⇒ "Bind this folder to LF?" (AGENTS.md) ⇒ Yes
     [16.0, '/ctwork', '⬡ LF'], [16.4, '\r'],
     [18.0, '5', 'Log work'], // Log work… ⇒ token chỉ đọc
     [21.5, '\x1b', 'read only'],
@@ -136,11 +137,12 @@ test('PTY lõi thật: thẻ tự bật không cướp Enter khi đang gõ · to
 
   assert.equal(ghi.turn[0]?.messages?.at(-1)?.content, 'hello', 'Enter của câu hỏi phải GỬI câu hỏi');
   const m1 = await man(4.0);
-  assert.ok(!co(m1, 'Bind this folder') && !co(m1, 'Connect CT Work?'), `thẻ tự bật giữa lúc gõ:\n${xem(m1)}`);
+  assert.ok(!co(m1, 'Bind this folder') && !co(m1, 'Do you want to connect CT Work'), `thẻ tự bật giữa lúc gõ:\n${xem(m1)}`);
   const m2 = await man(10.3);
-  assert.ok(co(m2, /Bind this folder to CT Work project LF/), `thẻ gắn phải hiện khi ô nhập trống + tay rời phím:\n${xem(m2)}`);
-  assert.ok(!co(m2, 'Connect CT Work?'), 'đợt 8A: không còn "Kết nối CT Work?" tự bật');
-  assert.deepEqual(ghi.scopes, [['read']], 'chọn gắn ⇒ nối chỉ đọc đúng một lần');
+  assert.ok(co(m2, 'Do you want to connect CT Work?') && co(m2, /1\. Yes — read \+ write/), `thẻ kết nối phải hiện khi ô nhập trống + tay rời phím:\n${xem(m2)}`);
+  const m3 = await man(12.8);
+  assert.ok(co(m3, /Bind this folder to CT Work project LF/), `nối xong ⇒ hỏi gắn (AGENTS.md):\n${xem(m3)}`);
+  assert.deepEqual(ghi.scopes, [['read']], 'chọn "chỉ đọc" ⇒ nối chỉ đọc đúng một lần');
   const m4 = await man(17.8);
   assert.ok(co(m4, /5\. Log work…\s+needs write access/), `menu báo mục ghi cần quyền ghi:\n${xem(m4)}`);
   const m5 = await man(20.8);

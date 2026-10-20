@@ -94,6 +94,8 @@ async function chay(ten: string, envThem: Record<string, string>, phim: Array<[n
     env: {
       HOME: home, CUONGMINI_HOME: path.join(home, '.cuongmini'), CUONGTHAI_API_ORIGIN: `http://127.0.0.1:${cong}`, PATH: `${bin}${path.delimiter}${process.env.PATH}`,
       CUONGMINI_KHONG_KIEM_CAP_NHAT: '1', CUONGMINI_KHONG_MO_TRINH_DUYET: '1', CUONGMINI_TIN_THU_MUC: '1', CUONGMINI_LUOT_DAI_MS: '300',
+      /* 20/10/2026: lúc mở CuongMini hỏi "Bạn muốn kết nối CT Work không?" (thẻ chặn phím) — bài này không thử CT Work ⇒ hoãn. */
+      CUONGMINI_CTW_TRE_MS: '600000',
       TERM: 'xterm-256color', LANG: 'vi_VN.UTF-8', CUONGMINI_NGON_NGU: 'vi',
       CM_GIA_LOG: log, CM_GIA_DEM: path.join(tam, `dem-${ten}`), CM_GIA_KICH_BAN: path.join(tam, `kb-${ten}`), CM_GIA_PNG: path.join(goc, 'tai-nguyen/cuongmini.png'),
       ...envThem,

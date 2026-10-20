@@ -70,9 +70,12 @@ test('VIỆC 4: chọn dự án — MỌI dự án (không gian · vai · thẻ 
   await moCtworkTuMcp(x.g);
   const c = x.the.at(-1)!;
   assert.equal(c.loc, true, '12 dự án ⇒ gõ để lọc');
-  assert.equal(c.ds.length, 13);
-  assert.match(c.ds[0]!.mo ?? '', /LabFlow Studio · trưởng nhóm · 5 thẻ mở/);
-  assert.match(c.ds[7]!.mo ?? '', /SWR302 · thành viên/);
+  /* 20/10/2026: trên cùng là phạm vi rộng — "Tất cả dự án của tôi" + một dòng mỗi workspace — rồi mới tới từng dự án. */
+  assert.equal(c.ds.length, 15);
+  assert.deepEqual(c.ds.slice(0, 2).map((m) => m.giaTri), ['__tatCa', '__ws:3']);
+  assert.match(c.ds[1]!.nhan, /Cả workspace LabFlow Studio/);
+  assert.match(c.ds[2]!.mo ?? '', /LabFlow Studio · trưởng nhóm · 5 thẻ mở/);
+  assert.match(c.ds[9]!.mo ?? '', /SWR302 · thành viên/);
   await c.khiChon('P1'); // vai VIEWER
   const q1 = x.the.at(-1)!;
   assert.match(q1.tieuDe, /Quyền của CuongMini với P1/);
@@ -103,7 +106,8 @@ test('VIỆC 4: chọn dự án — MỌI dự án (không gian · vai · thẻ 
   });
   await moCtworkTuMcp(z.g);
   assert.equal(noi, true);
-  assert.equal(z.the.at(-1)!.ds.length, 3);
+  assert.equal(z.the.at(-1)!.ds.length, 5);
+  assert.ok(z.goi.some(([k, d]) => k === 'agent:ctwork' && d.viec === 'noi' && d.quyen === 'ghi'), '20/10: nối mặc định đọc + ghi');
   assert.equal(tenVai('TEACHER', 'en'), 'lecturer');
 });
 

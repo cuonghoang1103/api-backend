@@ -24,6 +24,7 @@ import ch11Extra from './fer202/ch11.mjs';
 import ch12Extra from './fer202/ch12.mjs';
 import advExtra from './fer202/chAdv.mjs';
 import onThiPe from './fer202/onThiPe.mjs';
+import chuaQuiz from './fer202/chuaQuiz.mjs';
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -352,6 +353,7 @@ npm run dev</code></pre>
 </div>
 `,
         },
+        ...(chuaQuiz.ch0 ?? []),
       ],
     },
 
@@ -535,6 +537,7 @@ npm run dev</code></pre>
             ],
           },
         },
+        ...(chuaQuiz.ch1 ?? []),
       ],
     },
 
@@ -732,6 +735,7 @@ count = 1;              <span class="tok-comment">// ok</span>
             ],
           },
         },
+        ...(chuaQuiz.ch2 ?? []),
       ],
     },
 
@@ -949,6 +953,7 @@ count = 1;              <span class="tok-comment">// ok</span>
             ],
           },
         },
+        ...(chuaQuiz.ch3 ?? []),
       ],
     },
 
@@ -1084,6 +1089,7 @@ count = 1;              <span class="tok-comment">// ok</span>
             ],
           },
         },
+        ...(chuaQuiz.ch4 ?? []),
       ],
     },
 
@@ -1297,6 +1303,7 @@ count = 1;              <span class="tok-comment">// ok</span>
             ],
           },
         },
+        ...(chuaQuiz.ch5 ?? []),
       ],
     },
 
@@ -1420,6 +1427,7 @@ count = 1;              <span class="tok-comment">// ok</span>
             ],
           },
         },
+        ...(chuaQuiz.ch6 ?? []),
       ],
     },
 
@@ -1623,6 +1631,7 @@ count = 1;              <span class="tok-comment">// ok</span>
             ],
           },
         },
+        ...(chuaQuiz.ch7 ?? []),
       ],
     },
 
@@ -1830,6 +1839,7 @@ count = 1;              <span class="tok-comment">// ok</span>
             ],
           },
         },
+        ...(chuaQuiz.ch8 ?? []),
       ],
     },
 
@@ -1984,6 +1994,7 @@ count = 1;              <span class="tok-comment">// ok</span>
             ],
           },
         },
+        ...(chuaQuiz.ch9 ?? []),
       ],
     },
 
@@ -2091,6 +2102,7 @@ count = 1;              <span class="tok-comment">// ok</span>
             ],
           },
         },
+        ...(chuaQuiz.ch10 ?? []),
       ],
     },
 
@@ -2314,6 +2326,7 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
             ],
           },
         },
+        ...(chuaQuiz.ch11 ?? []),
       ],
     },
 
@@ -2531,6 +2544,7 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
             ],
           },
         },
+        ...(chuaQuiz.ch12 ?? []),
       ],
     },
 

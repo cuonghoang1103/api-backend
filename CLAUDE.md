@@ -729,6 +729,13 @@ Thiết kế: `docs/ct-work-ai-agents-thiet-ke.md` · hợp đồng API đợt 2
   phải ghi nhãn nguồn ("self-reported"), không trình bày như số đo. Báo cáo: Reports → **People vs Agents** (dự án),
   Workload → **People vs Agents** (không gian).
 - JQL: `assigneeKind = AGENT | HUMAN`, `assignee IN agents()` / `people()` (khách cổng dùng ⇒ 400).
+- **CuongMini (app/CLI/VS Code) KHÔNG phải agent thành viên** (21/10/2026): nó nối bằng token `ctw_` CÁ NHÂN của người dùng
+  (`/ctwork` ⇒ `POST /work/me/api-tokens`), `McpCtx.agent = null` ⇒ làm được đúng những gì vai của người đó làm trên web, kể
+  cả sửa/xoá. Lệnh xoá của registry: `destructive: true` (MCP `destructiveHint` ⇒ app LUÔN hỏi, kể cả `/ctwork tu-ghi on`;
+  mô tả bắt đầu `DESTRUCTIVE:`) + `personOnly` + `requirePerson()` (agent ⇒ WORK_AGENT_FORBIDDEN). Lệnh của đợt này `mcpOnly` (không vào Ask AI/BUILTIN — giữ giá prompt web).
+  Không có lệnh cho: quyết định duyệt / APPROVED, tài chính, gửi khách/ra ngoài, cấu hình dự án, quiz/chấm điểm. Bảng đối
+  chiếu đầy đủ + việc còn thiếu: `docs/cuongmini-ctwork-parity.md`. Thêm lệnh xoá mới ⇒ thêm tuyến DELETE vào
+  `AGENT_DENIED_ROUTES` (bảng `permissions.test.ts`) — `registry.test.ts` bắt lệnh tên `*delete*` thiếu destructive/personOnly.
 - Test: `WORK_DB_TEST=1 npx tsx --test src/routes/work.agents.db.test.ts src/routes/work.agentsUi.db.test.ts` +
   `npx tsx --test src/services/work/permissions.test.ts src/services/work/jql.test.ts`.
 

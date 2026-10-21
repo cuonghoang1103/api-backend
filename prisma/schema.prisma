@@ -406,89 +406,100 @@ model User {
 
   // ─── CT Work — quản lý dự án kiểu Jira (23/09/2026) ─────────────
   // Xem mục "CT WORK" cuối file và docs/work-hub-plan.md.
-  workSpacesOwned        WorkSpace[]             @relation("WorkSpaceOwner")
-  workMemberships        WorkMember[]            @relation("WorkMemberUser")
-  workInvitesSent        WorkInvite[]            @relation("WorkInviteSender")
-  workProjectMemberships WorkProjectMember[]     @relation("WorkProjectMemberUser")
-  workProjectsLed        WorkProject[]           @relation("WorkProjectLead")
-  workIssuesAssigned     WorkIssue[]             @relation("WorkIssueAssignee")
-  workIssuesReported     WorkIssue[]             @relation("WorkIssueReporter")
-  workComments           WorkComment[]           @relation("WorkCommentAuthor")
-  workCommentReactions   WorkCommentReaction[]   @relation("WorkCommentReactionUser")
+  workSpacesOwned          WorkSpace[]               @relation("WorkSpaceOwner")
+  workMemberships          WorkMember[]              @relation("WorkMemberUser")
+  workInvitesSent          WorkInvite[]              @relation("WorkInviteSender")
+  workProjectMemberships   WorkProjectMember[]       @relation("WorkProjectMemberUser")
+  workProjectsLed          WorkProject[]             @relation("WorkProjectLead")
+  workIssuesAssigned       WorkIssue[]               @relation("WorkIssueAssignee")
+  workIssuesReported       WorkIssue[]               @relation("WorkIssueReporter")
+  workComments             WorkComment[]             @relation("WorkCommentAuthor")
+  workCommentReactions     WorkCommentReaction[]     @relation("WorkCommentReactionUser")
   // ── CTW K-3 ── kênh chat dự án
-  workChannelsCreated    WorkChannel[]           @relation("WorkChannelCreator")
-  workChannelMembers     WorkChannelMember[]     @relation("WorkChannelMemberUser")
-  workChannelMessages    WorkChannelMessage[]    @relation("WorkChannelMessageAuthor")
-  workChannelReactions   WorkChannelReaction[]   @relation("WorkChannelReactionUser")
-  workChannelFiles       WorkChannelFile[]       @relation("WorkChannelFileUploader")
-  workChatPref           WorkChatPref?           @relation("WorkChatPrefUser")
+  workChannelsCreated      WorkChannel[]             @relation("WorkChannelCreator")
+  workChannelMembers       WorkChannelMember[]       @relation("WorkChannelMemberUser")
+  workChannelMessages      WorkChannelMessage[]      @relation("WorkChannelMessageAuthor")
+  workChannelReactions     WorkChannelReaction[]     @relation("WorkChannelReactionUser")
+  workChannelFiles         WorkChannelFile[]         @relation("WorkChannelFileUploader")
+  workChatPref             WorkChatPref?             @relation("WorkChatPrefUser")
   // ── hết CTW K-3 ──
   // ── CTW Đóng góp ── đánh giá chéo + danh tính git
-  workPeerGiven          WorkPeerReview[]        @relation("WorkPeerReviewer")
-  workPeerReceived       WorkPeerReview[]        @relation("WorkPeerReviewee")
-  workGitIdentities      WorkGitIdentity[]       @relation("WorkGitIdentityUser")
+  workPeerGiven            WorkPeerReview[]          @relation("WorkPeerReviewer")
+  workPeerReceived         WorkPeerReview[]          @relation("WorkPeerReviewee")
+  workGitIdentities        WorkGitIdentity[]         @relation("WorkGitIdentityUser")
   // ── hết CTW Đóng góp ──
   // ── CTW đợt 5 ── lớp học + rubric của giảng viên
-  workClassesOwned       WorkClass[]             @relation("WorkClassOwner")
-  workClassesTaught      WorkClass[]             @relation("WorkClassTeacher")
-  workClassSeats         WorkClassStudent[]      @relation("WorkClassStudentUser")
+  workClassesOwned         WorkClass[]               @relation("WorkClassOwner")
+  workClassesTaught        WorkClass[]               @relation("WorkClassTeacher")
+  workClassSeats           WorkClassStudent[]        @relation("WorkClassStudentUser")
   // CTW đợt 9a — bảng tin, tài liệu lớp
-  workClassPosts         WorkClassPost[]         @relation("WorkClassPostAuthor")
-  workClassComments      WorkClassComment[]      @relation("WorkClassCommentAuthor")
-  workClassStreamFiles   WorkClassStreamFile[]   @relation("WorkClassFileUploader")
-  workClassMaterials     WorkClassMaterial[]     @relation("WorkClassMaterialAuthor")
-  workClassMaterialViews WorkClassMaterialView[] @relation("WorkClassMaterialViewUser")
-  workRubrics            WorkRubric[]            @relation("WorkRubricOwner")
+  workClassPosts           WorkClassPost[]           @relation("WorkClassPostAuthor")
+  workClassComments        WorkClassComment[]        @relation("WorkClassCommentAuthor")
+  workClassStreamFiles     WorkClassStreamFile[]     @relation("WorkClassFileUploader")
+  workClassMaterials       WorkClassMaterial[]       @relation("WorkClassMaterialAuthor")
+  workClassMaterialViews   WorkClassMaterialView[]   @relation("WorkClassMaterialViewUser")
+  // CT Work Bảng tin (21/10/2026)
+  workFeedPosts            WorkFeedPost[]            @relation("WorkFeedPostAuthor")
+  workFeedComments         WorkFeedComment[]         @relation("WorkFeedCommentAuthor")
+  workFeedAttachments      WorkFeedAttachment[]      @relation("WorkFeedAttachmentUploader")
+  workFeedReactions        WorkFeedReaction[]        @relation("WorkFeedReactionUser")
+  workFeedCommentReactions WorkFeedCommentReaction[] @relation("WorkFeedCommentReactionUser")
+  workFeedSaves            WorkFeedSave[]            @relation("WorkFeedSaveUser")
+  workFeedHides            WorkFeedHide[]            @relation("WorkFeedHideUser")
+  workFeedVotes            WorkFeedPollVote[]        @relation("WorkFeedPollVoteUser")
+  workFeedReports          WorkFeedReport[]          @relation("WorkFeedReportReporter")
+  workFeedFollows          WorkFeedFollow[]          @relation("WorkFeedFollowUser")
+  workRubrics              WorkRubric[]              @relation("WorkRubricOwner")
   // ── hết CTW đợt 5 ──
-  workAttachments        WorkAttachment[]        @relation("WorkAttachmentUploader")
-  workHistory            WorkHistory[]           @relation("WorkHistoryActor")
-  workWatching           WorkWatcher[]           @relation("WorkWatcherUser")
-  workTestRunsAssigned   WorkTestRun[]           @relation("WorkTestRunAssignee")
-  workTestRunsExecuted   WorkTestRun[]           @relation("WorkTestRunExecutor")
-  workSavedFilters       WorkSavedFilter[]       @relation("WorkSavedFilterOwner")
-  workDashboards         WorkDashboard[]         @relation("WorkDashboardOwner")
-  workTimeOff            WorkTimeOff[]           @relation("WorkTimeOffUser")
-  workWorklogs           WorkWorklog[]           @relation("WorkWorklogUser")
-  workNotifySetting      WorkNotifySetting?      @relation("WorkNotifySettingUser")
-  workEmailQueue         WorkEmailQueue[]        @relation("WorkEmailQueueUser")
-  workApiTokens          WorkApiToken[]          @relation("WorkApiTokenUser")
-  workAiThreads          WorkAiThread[]          @relation("WorkAiThreadCreator")
-  workAiMessages         WorkAiMessage[]         @relation("WorkAiMessageAuthor")
-  workEditLocks          WorkEditLock[]
+  workAttachments          WorkAttachment[]          @relation("WorkAttachmentUploader")
+  workHistory              WorkHistory[]             @relation("WorkHistoryActor")
+  workWatching             WorkWatcher[]             @relation("WorkWatcherUser")
+  workTestRunsAssigned     WorkTestRun[]             @relation("WorkTestRunAssignee")
+  workTestRunsExecuted     WorkTestRun[]             @relation("WorkTestRunExecutor")
+  workSavedFilters         WorkSavedFilter[]         @relation("WorkSavedFilterOwner")
+  workDashboards           WorkDashboard[]           @relation("WorkDashboardOwner")
+  workTimeOff              WorkTimeOff[]             @relation("WorkTimeOffUser")
+  workWorklogs             WorkWorklog[]             @relation("WorkWorklogUser")
+  workNotifySetting        WorkNotifySetting?        @relation("WorkNotifySettingUser")
+  workEmailQueue           WorkEmailQueue[]          @relation("WorkEmailQueueUser")
+  workApiTokens            WorkApiToken[]            @relation("WorkApiTokenUser")
+  workAiThreads            WorkAiThread[]            @relation("WorkAiThreadCreator")
+  workAiMessages           WorkAiMessage[]           @relation("WorkAiMessageAuthor")
+  workEditLocks            WorkEditLock[]
   // Lớp studio (04/10/2026): bộ phận, phê duyệt, bàn giao.
-  workTeamMemberships    WorkTeamMember[]        @relation("WorkTeamMemberUser")
-  workApprovalsCreated   WorkApproval[]          @relation("WorkApprovalCreator")
-  workApprovalSteps      WorkApprovalStep[]      @relation("WorkApprovalStepApprover")
-  workHandoffsFrom       WorkHandoff[]           @relation("WorkHandoffFromUser")
-  workHandoffsTo         WorkHandoff[]           @relation("WorkHandoffToUser")
-  workHandoffsCreated    WorkHandoff[]           @relation("WorkHandoffCreator")
+  workTeamMemberships      WorkTeamMember[]          @relation("WorkTeamMemberUser")
+  workApprovalsCreated     WorkApproval[]            @relation("WorkApprovalCreator")
+  workApprovalSteps        WorkApprovalStep[]        @relation("WorkApprovalStepApprover")
+  workHandoffsFrom         WorkHandoff[]             @relation("WorkHandoffFromUser")
+  workHandoffsTo           WorkHandoff[]             @relation("WorkHandoffToUser")
+  workHandoffsCreated      WorkHandoff[]             @relation("WorkHandoffCreator")
   // Tài liệu dự án (đợt S2a, 04/10/2026)
-  workPagesOwned         WorkPage[]              @relation("WorkPageOwner")
-  workPagesEdited        WorkPage[]              @relation("WorkPageEditor")
-  workPageVersions       WorkPageVersion[]       @relation("WorkPageVersionAuthor")
-  workPageComments       WorkPageComment[]       @relation("WorkPageCommentAuthor")
-  workPageIssueLinks     WorkPageIssueLink[]     @relation("WorkPageIssueLinkCreator")
+  workPagesOwned           WorkPage[]                @relation("WorkPageOwner")
+  workPagesEdited          WorkPage[]                @relation("WorkPageEditor")
+  workPageVersions         WorkPageVersion[]         @relation("WorkPageVersionAuthor")
+  workPageComments         WorkPageComment[]         @relation("WorkPageCommentAuthor")
+  workPageIssueLinks       WorkPageIssueLink[]       @relation("WorkPageIssueLinkCreator")
   // Quản trị dự án (đợt S3b, 04/10/2026): CR · RAID · họp
-  workCrRequested        WorkChangeRequest[]     @relation("WorkCrRequester")
-  workCrOwned            WorkChangeRequest[]     @relation("WorkCrOwner")
-  workCrCreated          WorkChangeRequest[]     @relation("WorkCrCreator")
-  workCrLinksCreated     WorkChangeRequestLink[] @relation("WorkCrLinkCreator")
-  workRaidOwned          WorkRaidItem[]          @relation("WorkRaidOwner")
-  workRaidCreated        WorkRaidItem[]          @relation("WorkRaidCreator")
-  workRaidLinksCreated   WorkRaidLink[]          @relation("WorkRaidLinkCreator")
-  workRaidHistory        WorkRaidHistory[]       @relation("WorkRaidHistoryActor")
-  workMeetingsOrganized  WorkMeeting[]           @relation("WorkMeetingOrganizer")
-  workMeetingInvites     WorkMeetingAttendee[]   @relation("WorkMeetingAttendeeUser")
-  workMeetingActions     WorkMeetingAction[]     @relation("WorkMeetingActionAssignee")
+  workCrRequested          WorkChangeRequest[]       @relation("WorkCrRequester")
+  workCrOwned              WorkChangeRequest[]       @relation("WorkCrOwner")
+  workCrCreated            WorkChangeRequest[]       @relation("WorkCrCreator")
+  workCrLinksCreated       WorkChangeRequestLink[]   @relation("WorkCrLinkCreator")
+  workRaidOwned            WorkRaidItem[]            @relation("WorkRaidOwner")
+  workRaidCreated          WorkRaidItem[]            @relation("WorkRaidCreator")
+  workRaidLinksCreated     WorkRaidLink[]            @relation("WorkRaidLinkCreator")
+  workRaidHistory          WorkRaidHistory[]         @relation("WorkRaidHistoryActor")
+  workMeetingsOrganized    WorkMeeting[]             @relation("WorkMeetingOrganizer")
+  workMeetingInvites       WorkMeetingAttendee[]     @relation("WorkMeetingAttendeeUser")
+  workMeetingActions       WorkMeetingAction[]       @relation("WorkMeetingActionAssignee")
   /// CTW-28 (06/10/2026): HUMAN (mặc định) | AGENT — agent KHÔNG đăng nhập (login/JWT ⇒ 403 AGENT_NO_LOGIN),
   /// chỉ xác thực bằng token ctw_ gắn agent. Hồ sơ agent ở WorkAgent (1:1). Xem docs/ct-work-ai-agents-thiet-ke.md.
-  kind                   String                  @default("HUMAN") @db.VarChar(8)
-  workAgent              WorkAgent?              @relation("WorkAgentUser")
-  workAgentsOwned        WorkAgent[]             @relation("WorkAgentOwner")
+  kind                     String                    @default("HUMAN") @db.VarChar(8)
+  workAgent                WorkAgent?                @relation("WorkAgentUser")
+  workAgentsOwned          WorkAgent[]               @relation("WorkAgentOwner")
   // CRM nhẹ của studio (đợt S5b, 05/10/2026) — /admin/crm
-  crmDealsOwned          CrmDeal[]               @relation("CrmDealOwner")
+  crmDealsOwned            CrmDeal[]                 @relation("CrmDealOwner")
   // CTW đợt 8a: kết nối OAuth theo người (Microsoft 365 / Google; 8b: Notion / Slack)
-  workOAuthConnections   WorkOAuthConnection[]   @relation("WorkOAuthConnectionUser")
+  workOAuthConnections     WorkOAuthConnection[]     @relation("WorkOAuthConnectionUser")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -10174,22 +10185,27 @@ model WorkSpace {
   /// bằng một cú bấm nhầm là mất cả kỳ đồ án của cả nhóm.
   deletedAt   DateTime? @map("deleted_at")
 
-  owner          User                @relation("WorkSpaceOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  members        WorkMember[]
-  invites        WorkInvite[]
-  projects       WorkProject[]
-  timeOff        WorkTimeOff[]
-  audit          WorkAuditLog[]
-  teams          WorkTeam[]
-  agents         WorkAgent[]
+  owner           User                 @relation("WorkSpaceOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members         WorkMember[]
+  invites         WorkInvite[]
+  projects        WorkProject[]
+  timeOff         WorkTimeOff[]
+  audit           WorkAuditLog[]
+  teams           WorkTeam[]
+  agents          WorkAgent[]
   /// CTW đợt 7a: chu kỳ OKR (quý) của không gian.
-  okrCycles      WorkOkrCycle[]
+  okrCycles       WorkOkrCycle[]
   /// CTW đợt 7c (C17): chính sách bảo mật (ép 2FA).
-  securityPolicy WorkSecurityPolicy?
+  securityPolicy  WorkSecurityPolicy?
   /// CTW đợt 8b: app Slack đã cài cho không gian (một workspace Slack).
-  slackInstall   WorkSlackInstall?
+  slackInstall    WorkSlackInstall?
   /// 20/10/2026: bản nháp "Create with CuongMini".
-  setupDrafts    WorkSetupDraft[]
+  setupDrafts     WorkSetupDraft[]
+  /// 21/10/2026: Bảng tin nhóm (bài cấp không gian + bài của dự án đều mang workspaceId).
+  feedPosts       WorkFeedPost[]
+  feedAttachments WorkFeedAttachment[]
+  feedReports     WorkFeedReport[]
+  feedFollows     WorkFeedFollow[]
 
   @@index([ownerId], name: "idx_work_space_owner")
   @@map("work_spaces")
@@ -10428,6 +10444,8 @@ model WorkProject {
   crAffectedRefs      WorkCrAffectedRef[]
   testDesigns         WorkTestDesign[]
   exploratorySessions WorkExploratorySession[]
+  /// 21/10/2026: Bảng tin của dự án.
+  feedPosts           WorkFeedPost[]
   // ── CTW đợt 7b ── forms, kênh ngoài → đề xuất thẻ, nhập Trello/Asana/Jira/CSV, knowledge base
   forms               WorkForm[]
   intakeChannels      WorkIntakeChannel[]
@@ -17008,4 +17026,243 @@ model WorkAiCall {
   @@index([workspaceId, createdAt], map: "idx_work_ai_calls_ws")
   @@index([userId, createdAt], map: "idx_work_ai_calls_user")
   @@map("work_ai_calls")
+}
+
+// ═══ CT Work — BẢNG TIN NHÓM (Team Feed, 21/10/2026) ═══════════════════════════════════════════════════════════
+// Hợp đồng: docs/ctw-feed-hop-dong-api.md · service: src/services/work/feed.service.ts · luật thuần: feedRules.ts.
+
+/// Một bài đăng. projectId NULL = bài cấp không gian (mọi thành viên không phải khách cổng đọc); có projectId = bài của
+/// dự án (thành viên dự án, trừ vai CLIENT). body = Markdown + @username. Bộ đếm reaction/comment cập nhật trong
+/// transaction cùng dòng con. Ghim = pinnedAt (quản trị). Gỡ bởi quản trị = hiddenAt. Xoá = deletedAt (xoá mềm).
+model WorkFeedPost {
+  id              Int       @id @default(autoincrement())
+  workspaceId     Int       @map("workspace_id")
+  projectId       Int?      @map("project_id")
+  authorId        Int       @map("author_id")
+  body            String    @default("") @db.Text
+  /// id người được @nhắc (đã đối chiếu với người đọc được phạm vi lúc đăng/sửa).
+  mentions        Int[]     @default([])
+  hashtags        String[]  @default([])
+  /// ChatRef[] — link nội bộ (thẻ/Docs/test/họp) dựng thẻ LÚC ĐỌC theo quyền người xem.
+  refs            Json?
+  /// Thẻ OpenGraph của link web ngoài đầu tiên: { url, domain, title, description, siteName, imageKey }.
+  linkPreview     Json?     @map("link_preview")
+  /// { options: [{ id, text }], multi, closesAt } — phiếu ở work_feed_poll_votes.
+  poll            Json?
+  commentsOff     Boolean   @default(false) @map("comments_off")
+  pinnedAt        DateTime? @map("pinned_at")
+  pinnedById      Int?      @map("pinned_by_id")
+  reactionCount   Int       @default(0) @map("reaction_count")
+  commentCount    Int       @default(0) @map("comment_count")
+  /// Gộp thông báo cảm xúc: tối đa một thông báo / bài / 15 phút (chiếm bằng UPDATE … WHERE).
+  reactNotifiedAt DateTime? @map("react_notified_at")
+  clientKey       String?   @map("client_key") @db.VarChar(40)
+  editedAt        DateTime? @map("edited_at")
+  hiddenAt        DateTime? @map("hidden_at")
+  hiddenById      Int?      @map("hidden_by_id")
+  deletedAt       DateTime? @map("deleted_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  workspace   WorkSpace            @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  project     WorkProject?         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author      User                 @relation("WorkFeedPostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  attachments WorkFeedAttachment[]
+  comments    WorkFeedComment[]
+  reactions   WorkFeedReaction[]
+  saves       WorkFeedSave[]
+  hides       WorkFeedHide[]
+  votes       WorkFeedPollVote[]
+  reports     WorkFeedReport[]
+
+  @@index([workspaceId, createdAt(sort: Desc), id(sort: Desc)], map: "idx_work_feed_post_ws")
+  @@index([projectId, createdAt(sort: Desc), id(sort: Desc)], map: "idx_work_feed_post_project")
+  @@index([authorId, createdAt], map: "idx_work_feed_post_author")
+  @@index([authorId, clientKey], map: "idx_work_feed_post_client_key")
+  @@map("work_feed_posts")
+}
+
+/// Ảnh / video / tệp của bài. postId NULL = nháp (chỉ người tải lên gắn được, dọn sau 24 giờ). R2 riêng tư, xem bằng URL
+/// ký sẵn ngắn hạn. status PENDING = đã xin URL PUT, chưa complete.
+model WorkFeedAttachment {
+  id          Int      @id @default(autoincrement())
+  workspaceId Int      @map("workspace_id")
+  postId      Int?     @map("post_id")
+  uploaderId  Int      @map("uploader_id")
+  /// IMAGE | VIDEO | FILE
+  kind        String   @db.VarChar(8)
+  /// PENDING | READY
+  status      String   @default("READY") @db.VarChar(8)
+  r2Key       String   @map("r2_key") @db.VarChar(500)
+  /// IMAGE: thumbnail ≤ 1280 px · VIDEO: ảnh poster.
+  thumbKey    String?  @map("thumb_key") @db.VarChar(500)
+  fileName    String   @map("file_name") @db.VarChar(255)
+  mime        String   @db.VarChar(100)
+  size        Int
+  width       Int?
+  height      Int?
+  durationMs  Int?     @map("duration_ms")
+  alt         String?  @db.VarChar(300)
+  position    Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  workspace WorkSpace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  post      WorkFeedPost? @relation(fields: [postId], references: [id], onDelete: SetNull)
+  uploader  User          @relation("WorkFeedAttachmentUploader", fields: [uploaderId], references: [id], onDelete: Cascade)
+
+  @@index([postId, position], map: "idx_work_feed_att_post")
+  @@index([uploaderId, postId, createdAt], map: "idx_work_feed_att_uploader")
+  @@map("work_feed_attachments")
+}
+
+/// Bình luận. parentId NULL = bình luận gốc; có = trả lời (đúng MỘT cấp — server luôn gắn vào bình luận gốc).
+model WorkFeedComment {
+  id            Int       @id @default(autoincrement())
+  postId        Int       @map("post_id")
+  parentId      Int?      @map("parent_id")
+  authorId      Int       @map("author_id")
+  body          String    @db.Text
+  mentions      Int[]     @default([])
+  reactionCount Int       @default(0) @map("reaction_count")
+  replyCount    Int       @default(0) @map("reply_count")
+  clientKey     String?   @map("client_key") @db.VarChar(40)
+  editedAt      DateTime? @map("edited_at")
+  hiddenAt      DateTime? @map("hidden_at")
+  hiddenById    Int?      @map("hidden_by_id")
+  deletedAt     DateTime? @map("deleted_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  post      WorkFeedPost              @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent    WorkFeedComment?          @relation("WorkFeedCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   WorkFeedComment[]         @relation("WorkFeedCommentReplies")
+  author    User                      @relation("WorkFeedCommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  reactions WorkFeedCommentReaction[]
+  reports   WorkFeedReport[]
+
+  @@index([postId, parentId, createdAt, id], map: "idx_work_feed_comment_post")
+  @@index([authorId, createdAt], map: "idx_work_feed_comment_author")
+  @@map("work_feed_comments")
+}
+
+/// Cảm xúc trên bài: like | love | haha | wow | sad | celebrate — mỗi người một.
+model WorkFeedReaction {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  kind      String   @db.VarChar(12)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post WorkFeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User         @relation("WorkFeedReactionUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId], map: "uk_work_feed_reaction")
+  @@index([postId, kind], map: "idx_work_feed_reaction_kind")
+  @@map("work_feed_reactions")
+}
+
+model WorkFeedCommentReaction {
+  id        Int      @id @default(autoincrement())
+  commentId Int      @map("comment_id")
+  userId    Int      @map("user_id")
+  kind      String   @db.VarChar(12)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment WorkFeedComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User            @relation("WorkFeedCommentReactionUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId], map: "uk_work_feed_comment_reaction")
+  @@map("work_feed_comment_reactions")
+}
+
+/// Bài đã lưu (bookmark) của từng người.
+model WorkFeedSave {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post WorkFeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User         @relation("WorkFeedSaveUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId], map: "uk_work_feed_save")
+  @@index([userId, createdAt], map: "idx_work_feed_save_user")
+  @@map("work_feed_saves")
+}
+
+/// "Ẩn bài này" — chỉ với người đó.
+model WorkFeedHide {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post WorkFeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User         @relation("WorkFeedHideUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId], map: "uk_work_feed_hide")
+  @@map("work_feed_hides")
+}
+
+model WorkFeedPollVote {
+  id        Int      @id @default(autoincrement())
+  postId    Int      @map("post_id")
+  userId    Int      @map("user_id")
+  optionId  String   @map("option_id") @db.VarChar(8)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post WorkFeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User         @relation("WorkFeedPollVoteUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId, optionId], map: "uk_work_feed_poll_vote")
+  @@map("work_feed_poll_votes")
+}
+
+/// Báo cáo bài/bình luận (App Store 1.2). targetKey = "p:<postId>" | "c:<commentId>" — một người báo một nội dung một lần.
+/// Quản trị phạm vi xem hàng chờ ở trang bảng tin (resolve: remove ⇒ gỡ nội dung | dismiss).
+model WorkFeedReport {
+  id           Int       @id @default(autoincrement())
+  workspaceId  Int       @map("workspace_id")
+  projectId    Int?      @map("project_id")
+  postId       Int?      @map("post_id")
+  commentId    Int?      @map("comment_id")
+  targetKey    String    @map("target_key") @db.VarChar(24)
+  reporterId   Int       @map("reporter_id")
+  reason       String    @db.VarChar(16)
+  detail       String?   @db.VarChar(1000)
+  /// OPEN | RESOLVED | DISMISSED
+  status       String    @default("OPEN") @db.VarChar(12)
+  /// remove | dismiss
+  action       String?   @db.VarChar(12)
+  resolvedById Int?      @map("resolved_by_id")
+  resolvedAt   DateTime? @map("resolved_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  workspace WorkSpace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  post      WorkFeedPost?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment   WorkFeedComment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  reporter  User             @relation("WorkFeedReportReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@unique([reporterId, targetKey], map: "uk_work_feed_report")
+  @@index([workspaceId, status, createdAt], map: "idx_work_feed_report_ws")
+  @@index([targetKey, status], map: "idx_work_feed_report_target")
+  @@map("work_feed_reports")
+}
+
+/// Mức theo dõi bảng tin theo phạm vi: scopeKey = "w:<workspaceId>" | "p:<projectId>". Không có dòng ⇒ ALL.
+model WorkFeedFollow {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  workspaceId Int      @map("workspace_id")
+  projectId   Int?     @map("project_id")
+  scopeKey    String   @map("scope_key") @db.VarChar(24)
+  /// ALL | MENTIONS | OFF
+  level       String   @db.VarChar(12)
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user      User      @relation("WorkFeedFollowUser", fields: [userId], references: [id], onDelete: Cascade)
+  workspace WorkSpace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scopeKey], map: "uk_work_feed_follow")
+  @@index([scopeKey, level], map: "idx_work_feed_follow_scope")
+  @@map("work_feed_follows")
 }

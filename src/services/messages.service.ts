@@ -24,11 +24,13 @@
  */
 
 import { prisma } from '../config/database.js';
+import { logger } from '../utils/logger.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { registerSocketEmitter, type MessageEventPayload } from '../socket/messaging.socket.js';
 import { messagingSafetyService } from './messaging-safety.service.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
 import { damBaoMfaAdmin, type MfaClaims } from './mfa/adminMfa.js';
+import { loadPresenceViewer, presenceFor, type PresenceViewer } from './presencePrivacy.js';
 
 const MAX_CONTENT_LENGTH = 4000;
 const MAX_ATTACHMENTS_PER_MESSAGE = 5;
@@ -312,6 +314,8 @@ export class MessagesService {
             senderId: true,
             createdAt: true,
             mediaKind: true,
+            deletedAt: true,
+            recalledAt: true,
             attachments: { select: { id: true, mimeType: true, fileName: true } },
           },
         },
@@ -364,8 +368,10 @@ export class MessagesService {
       nicknameByThreadAndPeer.set(`${row.threadId}-${row.targetId}`, row.alias || null);
     }
 
+    // Trạng thái hoạt động của người kia: luật chung (presencePrivacy.ts) — công tắc của HỌ, của MÌNH (đối ứng), chặn.
+    const presenceViewer = await loadPresenceViewer(userId, peerIds, { circleKnown: true });
     const serialized = await Promise.all(
-      filtered.map((t) => this.serializeThreadAsync(t, userId, nicknameByThreadAndPeer)),
+      filtered.map((t) => this.serializeThreadAsync(t, userId, nicknameByThreadAndPeer, presenceViewer)),
     );
 
     return filtered.map((t, idx) => {
@@ -404,6 +410,8 @@ export class MessagesService {
             senderId: true,
             createdAt: true,
             mediaKind: true,
+            deletedAt: true,
+            recalledAt: true,
             attachments: { select: { id: true, mimeType: true, fileName: true } },
           },
         },
@@ -448,8 +456,9 @@ export class MessagesService {
       nicknameByThreadAndPeer.set(`${row.threadId}-${row.targetId}`, row.alias || null);
     }
 
+    const presenceViewer = await loadPresenceViewer(adminId, peerIds, { circleKnown: true });
     const serialized = await Promise.all(
-      filtered.map((t) => this.serializeThreadAsync(t, adminId, nicknameByThreadAndPeer)),
+      filtered.map((t) => this.serializeThreadAsync(t, adminId, nicknameByThreadAndPeer, presenceViewer)),
     );
 
     return filtered.map((t, idx) => {
@@ -490,6 +499,8 @@ export class MessagesService {
             senderId: true,
             createdAt: true,
             mediaKind: true,
+            deletedAt: true,
+            recalledAt: true,
             attachments: { select: { id: true, mimeType: true, fileName: true } },
           },
         },
@@ -975,6 +986,56 @@ export class MessagesService {
       data: { deletedAt: new Date() },
     });
     this.emitMessageUpdated(msg.thread, messageId, { deleted: true });
+    await this.purgeMessageAttachments(messageId);
+  }
+
+  /**
+   * Gỡ tệp đính kèm của một tin vừa xoá/thu hồi (21/10/2026). Trước đây xoá/thu hồi chỉ ẩn chữ — tệp vẫn nằm trên R2
+   * vĩnh viễn và API vẫn trả URL mở được. Nay: xoá dòng `message_attachments` của tin; tệp nào KHÔNG còn tin nào khác
+   * dùng (người gửi có thể đính cùng một fileId vào hai tin) thì xoá object trên kho lưu trữ (+ ảnh thu nhỏ) và dòng
+   * `file_attachments`. Best-effort: kho lỗi thì ghi log, không làm hỏng thao tác xoá/thu hồi (người dùng đã thấy
+   * "đã thu hồi"; serializer cũng không trả tệp của tin đã xoá/thu hồi). Trong test, kho tự là sandbox.
+   */
+  async purgeMessageAttachments(messageId: number): Promise<{ removedKeys: string[] }> {
+    const removedKeys: string[] = [];
+    try {
+      const rows = await prisma.messageAttachment.findMany({
+        where: { messageId },
+        select: { id: true, fileId: true, thumbnailUrl: true, file: { select: { id: true, filePath: true } } },
+      });
+      if (!rows.length) return { removedKeys };
+      await prisma.messageAttachment.deleteMany({ where: { messageId } });
+      const fileIds = [...new Set(rows.map((r) => r.fileId))];
+      const conDung = await prisma.messageAttachment.findMany({
+        where: { fileId: { in: fileIds } },
+        select: { fileId: true },
+      });
+      const dangDung = new Set(conDung.map((r) => r.fileId));
+      const storage = getStorageProvider();
+      const keyOf = (v: string | null | undefined): string | null => {
+        if (!v) return null;
+        if (/^https?:\/\//i.test(v)) return storage.keyFromUrl(v);
+        return v.replace(/^\/+/, '').replace(/^uploads\//, '') || null;
+      };
+      const keys = new Set<string>();
+      const xoaFile = new Set<number>();
+      for (const r of rows) {
+        if (dangDung.has(r.fileId)) continue;
+        const k = keyOf(r.file?.filePath);
+        if (k) keys.add(k);
+        const t = keyOf(r.thumbnailUrl);
+        if (t) keys.add(t);
+        xoaFile.add(r.fileId);
+      }
+      if (keys.size) {
+        await storage.deleteMany([...keys]);
+        removedKeys.push(...keys);
+      }
+      if (xoaFile.size) await prisma.fileAttachment.deleteMany({ where: { id: { in: [...xoaFile] } } });
+    } catch (err) {
+      logger.warn('purgeMessageAttachments failed', { messageId, error: err instanceof Error ? err.message : String(err) });
+    }
+    return { removedKeys };
   }
 
   /**
@@ -1013,6 +1074,7 @@ export class MessagesService {
       data: { recalledAt: now, content: '' },
     });
     this.emitMessageUpdated(msg.thread, messageId, { recalled: true, recalledAt: now });
+    await this.purgeMessageAttachments(messageId);
   }
 
   // ─── Reactions ─────────────────────────────────────────
@@ -1412,6 +1474,8 @@ export class MessagesService {
     viewerId: number,
     /** Pre-fetched nickname map: key = `${threadId}-${peerId}`, value = alias string */
     nicknameByThreadAndPeer?: Map<string, string | null>,
+    /** Bối cảnh trạng thái hoạt động của người xem, nạp một lần cho cả danh sách. Bỏ trống ⇒ tự nạp cho một luồng. */
+    presenceViewer?: PresenceViewer | null,
   ) {
     const peer = t.type === 'ADMIN'
       ? (t.userId === viewerId ? t.adminUser : t.user)
@@ -1445,12 +1509,13 @@ export class MessagesService {
             displayName: alias ?? peer.displayName ?? peer.fullName ?? peer.username,
             avatarUrl: peer.avatarUrl,
             alias,
-            // ⚠️ Chỉ trả mốc hoạt động khi người ta CHO PHÉP.
-            //
-            // Che ở đây là chưa đủ — socket `presence:update` là đường thứ
-            // hai và đã được chặn cùng cờ này ở `messaging.socket.ts`. Bịt
-            // một đường thì trạng thái vẫn rò qua đường kia.
-            lastActiveAt: peer.showActiveStatus ? peer.lastActiveAt : null,
+            // ⚠️ Chỉ trả mốc hoạt động khi người ta CHO PHÉP, người XEM cũng bật (đối ứng kiểu Messenger) và không
+            // ai chặn ai — luật chung ở presencePrivacy.ts. Socket `presence:update` là đường thứ hai, lọc cùng
+            // luật ở `messaging.socket.ts`. Bịt một đường thì trạng thái vẫn rò qua đường kia.
+            lastActiveAt: presenceFor(
+              presenceViewer !== undefined ? presenceViewer : await loadPresenceViewer(viewerId, [peer.id], { circleKnown: true }),
+              { id: peer.id, showActiveStatus: peer.showActiveStatus, lastActiveAt: peer.lastActiveAt ?? null },
+            ).lastActiveAt,
           }
         : null,
       preferences,
@@ -1474,6 +1539,8 @@ export class MessagesService {
       userB?: { id: number; username: string; fullName: string | null; displayName?: string | null; avatarUrl: string | null; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null;
     },
     viewerId: number,
+    /** Không truyền ⇒ ẩn mốc hoạt động (fail-closed; bản đồng bộ không tự nạp được bối cảnh người xem). */
+    presenceViewer: PresenceViewer | null = null,
   ) {
     // For the sidebar, expose the "other" participant as `peer`
     const peer = t.type === 'ADMIN'
@@ -1492,12 +1559,10 @@ export class MessagesService {
             displayName: peer.displayName ?? peer.fullName ?? peer.username,
             avatarUrl: peer.avatarUrl,
             alias: null as string | null,
-            // ⚠️ Chỉ trả mốc hoạt động khi người ta CHO PHÉP.
-            //
-            // Che ở đây là chưa đủ — socket `presence:update` là đường thứ
-            // hai và đã được chặn cùng cờ này ở `messaging.socket.ts`. Bịt
-            // một đường thì trạng thái vẫn rò qua đường kia.
-            lastActiveAt: peer.showActiveStatus ? peer.lastActiveAt : null,
+            // Luật chung presencePrivacy.ts (xem serializeThreadAsync).
+            lastActiveAt: presenceFor(presenceViewer, {
+              id: peer.id, showActiveStatus: peer.showActiveStatus, lastActiveAt: peer.lastActiveAt ?? null,
+            }).lastActiveAt,
           }
         : null,
     };
@@ -1509,21 +1574,29 @@ export class MessagesService {
     senderId: number;
     createdAt: Date;
     mediaKind?: string | null;
+    deletedAt?: Date | null;
+    recalledAt?: Date | null;
     attachments: { id: number; mimeType: string; fileName: string }[];
   }) {
+    // Tin đã xoá/thu hồi: dòng xem trước trong hộp thư KHÔNG được lộ chữ hay tên tệp (xoá mềm giữ chữ trong CSDL).
+    const gone = !!(m.deletedAt || m.recalledAt);
     // For media-only messages the content is empty, so give the inbox
     // a friendly preview label instead of a blank last-message line.
-    const content =
-      m.content ||
-      (m.mediaKind === 'gif' ? '🎬 GIF' : m.mediaKind === 'sticker' ? '🪄 Nhãn dán' : '');
+    const content = gone
+      ? ''
+      : m.content ||
+        (m.mediaKind === 'gif' ? '🎬 GIF' : m.mediaKind === 'sticker' ? '🪄 Nhãn dán' : '');
+    const attachments = gone ? [] : m.attachments;
     return {
       id: m.id,
       content,
       senderId: m.senderId,
       createdAt: m.createdAt,
-      hasAttachment: m.attachments.length > 0,
-      attachmentMime: m.attachments[0]?.mimeType ?? null,
-      attachmentName: m.attachments[0]?.fileName ?? null,
+      deleted: !!m.deletedAt,
+      recalled: !!m.recalledAt,
+      hasAttachment: attachments.length > 0,
+      attachmentMime: attachments[0]?.mimeType ?? null,
+      attachmentName: attachments[0]?.fileName ?? null,
     };
   }
 
@@ -1576,7 +1649,9 @@ export class MessagesService {
         displayName: m.sender.displayName ?? m.sender.fullName ?? m.sender.username,
         avatarUrl: m.sender.avatarUrl,
       },
-      attachments: m.attachments.map((a) => ({
+      // Tin đã xoá/thu hồi KHÔNG trả tệp (21/10/2026): trước đây vẫn trả kèm URL mở được. Tệp còn bị xoá khỏi kho
+      // lưu trữ lúc xoá/thu hồi (`purgeMessageAttachments`); chốt này giữ cho cả tin cũ xoá trước bản vá.
+      attachments: (m.deletedAt || m.recalledAt ? [] : m.attachments).map((a) => ({
         id: a.id,
         fileId: a.fileId,
         mimeType: a.mimeType,
@@ -1603,6 +1678,37 @@ export class MessagesService {
     };
   }
 
+  // ─── Trạng thái hoạt động trên hàng hội thoại THÔ ────────────
+  // `POST /threads/admin` + `POST /threads/user/:peerId` trả hàng Prisma thô (client đọc user/userA/userB…), mỗi
+  // người tham gia kèm `lastActiveAt` + `showActiveStatus`. Che theo luật chung trước khi trả.
+
+  static withoutPresence<T extends Record<string, unknown>>(thread: T): T {
+    const out: Record<string, unknown> = { ...thread };
+    for (const k of ['user', 'adminUser', 'userA', 'userB']) {
+      const p = out[k] as Record<string, unknown> | null | undefined;
+      if (p && typeof p === 'object') out[k] = { ...p, lastActiveAt: null };
+    }
+    return out as T;
+  }
+
+  async redactThreadPresence<T extends Record<string, unknown>>(thread: T, viewerId: number): Promise<T> {
+    const out: Record<string, unknown> = { ...thread };
+    const keys = ['user', 'adminUser', 'userA', 'userB'] as const;
+    const people = keys
+      .map((k) => out[k] as { id: number; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null | undefined)
+      .filter((p): p is { id: number; lastActiveAt?: Date | null; showActiveStatus?: boolean } => !!p && typeof p.id === 'number');
+    const viewer = await loadPresenceViewer(viewerId, people.map((p) => p.id), { circleKnown: true });
+    for (const k of keys) {
+      const p = out[k] as { id: number; lastActiveAt?: Date | null; showActiveStatus?: boolean } | null | undefined;
+      if (!p || typeof p.id !== 'number') continue;
+      out[k] = {
+        ...p,
+        lastActiveAt: presenceFor(viewer, { id: p.id, showActiveStatus: p.showActiveStatus, lastActiveAt: p.lastActiveAt ?? null }).lastActiveAt,
+      };
+    }
+    return out as T;
+  }
+
   // ─── Realtime fan-out ──────────────────────────────────
 
   private emitThreadCreated(thread: {
@@ -1627,7 +1733,9 @@ export class MessagesService {
       threadId: thread.id,
       threadType: thread.type,
       participantIds,
-      thread,
+      // Hàng thô mang `lastActiveAt` của CẢ HAI người ⇒ che hết trước khi phát (danh sách hội thoại tải lại qua
+      // API sẽ có mốc đúng luật). Phát thô là rò trạng thái của người đã tắt công tắc.
+      thread: MessagesService.withoutPresence(thread),
     };
     // Fire to BOTH participants so the freshly-created thread shows
     // up in the sidebar of whoever didn't initiate the create.
@@ -1660,6 +1768,8 @@ export class MessagesService {
           content: true,
           senderId: true,
           createdAt: true,
+          deletedAt: true,
+          recalledAt: true,
           attachments: { select: { id: true, mimeType: true, fileName: true } },
         },
       },

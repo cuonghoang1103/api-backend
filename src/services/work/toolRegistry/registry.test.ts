@@ -82,6 +82,21 @@ describe('Registry lệnh dùng chung (đợt 3C)', async () => {
     assert.ok(!(r.commandByName('change_request_manage')!.input.shape.action.options as string[]).some((x) => /approve|reject/.test(x)));
     assert.ok(!('decision' in r.commandByName('review_manage')!.input.shape));
     assert.equal(r.commandByName('fpt_import_excel')!.destructive, true, 'replace ghi đè ⇒ luôn hỏi');
+    // Đợt 3 (21/10/2026) — gộp theo action
+    for (const n of [
+      'class_admin', 'class_quiz', 'swr_extras', 'issue_extras', 'issue_bulk', 'service_desk', 'chat_extras', 'docs_extras', 'meeting_extras', 'dashboard_save',
+      'exploratory_manage', 'wbs_manage', 'resource_extras', 'planning_extras', 'fpt_reports_manage', 'contrib_manage', 'form_manage', 'governance_extras',
+      'diagram_extras', 'test_extras', 'ctwork_delete', 'ctwork_read',
+    ]) assert.ok(mcp.includes(n), `${n} có trên MCP`);
+    // Không lệnh nào làm bài / chấm điểm / điểm danh thay người
+    for (const t of r.COMMANDS) assert.doesNotMatch(t.name, /grade|attempt|attendance|checkin|take_quiz/i, t.name);
+    for (const n of ['class_admin', 'class_quiz']) {
+      const acts = r.commandByName(n)!.input.shape.action.options as string[];
+      assert.ok(!acts.some((x) => /grade|return|attempt|attendance|checkin|submit/.test(x)), `${n}: ${acts.join(',')}`);
+    }
+    // Sự cố gốc: model phải tìm ra lệnh xoá UTCID qua mô tả
+    assert.match(r.commandByName('fpt_unit_delete_cases')!.description, /remove|delete|hide/i);
+    assert.match(r.commandByName('fpt_unit_delete_cases')!.description, /UTCID/);
     assert.ok(!('status' in r.commandByName('srs_use_case_update')!.input.shape), 'AI không tự duyệt use case');
     assert.ok(!('status' in r.commandByName('srs_rule_update')!.input.shape), 'AI không tự duyệt business rule');
   });

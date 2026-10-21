@@ -34,14 +34,15 @@ import { CUONGMINI_COMMANDS } from './cuongMini.js'; // đợt 6 CuongMini: issu
 import { MEMBER_OPS_COMMANDS } from './memberOps.js'; // đợt 8B: thao tác thành viên còn thiếu (đính kèm, checklist, nộp bài, form, duyệt…)
 import { PERSON_OPS_COMMANDS } from './personOps.js'; // 19/10/2026: CuongMini làm thay người — đính từ link, liên kết, thành viên, mời, sprint
 import { PARITY_COMMANDS } from './parity.js';
-import { PARITY2_COMMANDS } from './parity2.js'; // 21/10/2026 đợt 2: SWR302, RTM, CR, chat, Docs, họp, test plan/design, agile, review, version, lớp học // 21/10/2026: CuongMini ngang quyền người — sửa/xoá còn thiếu + repo dự án
+import { PARITY2_COMMANDS } from './parity2.js';
+import { PARITY3_COMMANDS } from './parity3.js'; // 21/10/2026 đợt 3: phần còn lại (gộp theo action) // 21/10/2026 đợt 2: SWR302, RTM, CR, chat, Docs, họp, test plan/design, agile, review, version, lớp học // 21/10/2026: CuongMini ngang quyền người — sửa/xoá còn thiếu + repo dự án
 import { recordToolCall, runInAiScope } from '../aiUsage.service.js';
 import { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 export { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 /** Thứ tự = thứ tự trong tools/list: 21 tool cũ trước (client cũ thấy y hệt), lệnh mới sau. */
-export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS, ...SRS_COMMANDS, ...CHAT_COMMANDS, ...CONTRIB_COMMANDS, ...DIAGRAM_COMMANDS, ...TEACHING_COMMANDS, ...SWR_COMMANDS, ...MEETING2_COMMANDS, ...SWR6B_COMMANDS, ...ASK_READ_COMMANDS, ...CUONGMINI_COMMANDS, ...CODE_COMMANDS, ...MEMBER_OPS_COMMANDS, ...PERSON_OPS_COMMANDS, ...PARITY_COMMANDS, ...PARITY2_COMMANDS];
+export const COMMANDS: ToolDef[] = [...READ_TOOLS, ...WRITE_TOOLS, ...TEST_COMMANDS, ...PLANNING_COMMANDS, ...SRS_COMMANDS, ...CHAT_COMMANDS, ...CONTRIB_COMMANDS, ...DIAGRAM_COMMANDS, ...TEACHING_COMMANDS, ...SWR_COMMANDS, ...MEETING2_COMMANDS, ...SWR6B_COMMANDS, ...ASK_READ_COMMANDS, ...CUONGMINI_COMMANDS, ...CODE_COMMANDS, ...MEMBER_OPS_COMMANDS, ...PERSON_OPS_COMMANDS, ...PARITY_COMMANDS, ...PARITY2_COMMANDS, ...PARITY3_COMMANDS];
 
 const BY_NAME = new Map(COMMANDS.map((t) => [t.name, t]));
 if (BY_NAME.size !== COMMANDS.length) throw new Error('toolRegistry: trùng tên lệnh');

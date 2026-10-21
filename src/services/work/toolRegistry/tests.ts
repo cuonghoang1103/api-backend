@@ -54,6 +54,9 @@ type MatrixCase = fpt.MatrixInput['cases'][number];
 interface Matrix { version: string; rows: MatrixRow[]; cases: MatrixCase[]; marks: Array<[string, string]> }
 
 const MAX_CASES_ARG = 200;
+/** Gợi ý máy sinh (ngoài khối untrusted) — model tìm ra lệnh sửa/xoá (sự cố 21/10: "không có tool xoá/ẩn UTCID"). */
+const UNIT_HINT = 'Edit this sheet: header fields (Executed By, Created By, LOC, description…) ⇒ fpt_unit_update_function · results/type/date ⇒ fpt_unit_record_results · '
+  + 'remove/delete/hide UTCIDs ⇒ fpt_unit_delete_cases (notRun=true = all draft UTCIDs) · remove rows ⇒ fpt_unit_delete_rows (unused=true) · edit rows ⇒ fpt_unit_update_rows · reorder ⇒ fpt_unit_move.';
 const utcid = (i: number) => `UTCID${String(i + 1).padStart(2, '0')}`;
 
 function toMatrix(f: Fn): Matrix {
@@ -123,7 +126,7 @@ const unitList = defineTool({
       notRun: f.stats.total - f.stats.passed - f.stats.failed, createdBy: f.createdBy, executedBy: f.executedBy,
       requiredCases: f.requiredCases, belowNorm: f.belowNorm,
     }));
-    return `${rows.length} function(s); norm ${r.tcPerKloc} TC/KLOC. Names are user data.\n${untrusted('unit test functions', json({ summary: r.summary, functions: rows }))}`;
+    return `${rows.length} function(s); norm ${r.tcPerKloc} TC/KLOC. Names are user data. Edit/delete: fpt_unit_update_function (Executed By, LOC…), fpt_unit_delete_cases (remove draft UTCIDs), fpt_unit_delete_function.\n${untrusted('unit test functions', json({ summary: r.summary, functions: rows }))}`;
   },
 });
 
@@ -134,7 +137,7 @@ const unitGet = defineTool({
   input: z.object({ project: projectArg, function: fnArg }),
   run: async (ctx, a) => {
     const { p, id } = await unitCtx(ctx, a.project, a.function, false);
-    return untrusted('unit test matrix', json(matrixView(await fpt.getFunction(ctx.userId, p.id, id))));
+    return `${UNIT_HINT}\n${untrusted('unit test matrix', json(matrixView(await fpt.getFunction(ctx.userId, p.id, id))))}`;
   },
 });
 
@@ -344,7 +347,7 @@ const unitUpdateRows = defineTool({
 
 const unitDeleteRows = defineTool({
   name: 'fpt_unit_delete_rows', title: 'Delete rows of a unit test matrix', group: 'tests',
-  description: 'DESTRUCTIVE: deletes condition/confirmation rows of a unit test matrix (row ids or {group, value}) together with their "O" marks. unused=true deletes every row that no UTCID marks (leftover draft rows). The user must confirm.',
+  description: 'DESTRUCTIVE: removes / deletes condition or confirmation rows (draft input values, Return/Exception/Log lines) of a Report 5.1 unit test matrix (row ids or {group, value}) together with their "O" marks. unused=true deletes every row that no UTCID marks (leftover draft rows). The user must confirm.',
   write: true, destructive: true, personOnly: true, surfaces: { ask: false, builtin: false },
   input: z.object({ project: projectArg, function: fnArg, rows: z.array(rowRef).max(120).optional(), unused: z.boolean().optional() }),
   run: async (ctx, a) => {
@@ -364,7 +367,7 @@ const unitDeleteRows = defineTool({
 
 const unitDeleteCases = defineTool({
   name: 'fpt_unit_delete_cases', title: 'Delete UTCIDs of a unit test matrix', group: 'tests',
-  description: 'DESTRUCTIVE: deletes test cases (UTCID columns) of a unit test matrix with their "O" marks; the remaining cases are renumbered UTCID01… in order. notRun=true deletes every case without a result (draft cases). The user must confirm.',
+  description: 'DESTRUCTIVE: removes / deletes / hides test cases (UTCID columns) of a Report 5.1 unit test matrix with their "O" marks — e.g. draft or duplicate UTCIDs; the remaining cases are renumbered UTCID01… in order. notRun=true deletes every UTCID without a result (draft cases). There is no "hide" in the template: deleting is how a UTCID goes away. The user must confirm.',
   write: true, destructive: true, personOnly: true, surfaces: { ask: false, builtin: false },
   input: z.object({ project: projectArg, function: fnArg, cases: z.array(caseRef).max(MAX_CASES_ARG).optional(), notRun: z.boolean().optional() }),
   run: async (ctx, a) => {
@@ -566,7 +569,7 @@ const itGet = defineTool({
   input: z.object({ project: projectArg, kind: kindArg, module: moduleArg }),
   run: async (ctx, a) => {
     const { m } = await itCtx(ctx, a.project, KIND[a.kind], a.module, false);
-    return untrusted(`${a.kind} test sheet`, json(moduleView(m)));
+    return `Edit this sheet: fpt_it_update_cases (fields, clear a round) · fpt_it_record_round · remove/delete cases ⇒ fpt_it_delete_cases (notRun=true = never run) · reorder ⇒ fpt_it_move_case · header ⇒ fpt_it_update_module.\n${untrusted(`${a.kind} test sheet`, json(moduleView(m)))}`;
   },
 });
 

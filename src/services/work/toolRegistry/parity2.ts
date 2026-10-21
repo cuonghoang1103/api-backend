@@ -38,6 +38,9 @@ import * as stream from '../classStream.service.js';
 import { MATERIAL_KINDS } from '../classStreamRules.js';
 import * as mats from '../classMaterials.service.js';
 import * as classwork from '../classwork.service.js';
+import * as cal from '../classCalendar.service.js';
+import * as classroom from '../classroom.service.js';
+import * as quiz from '../quiz.service.js';
 import { CR_LINK_ROLES, CR_URGENCY } from '../constants.js';
 import { markdownToTiptap } from '../docMarkdown.js';
 import * as fpt from '../fptTests.service.js';
@@ -180,10 +183,10 @@ const swrMockupUpdate = defineTool({
   },
 });
 
-const SWR_DEL = ['feature', 'feature_link', 'priority_row', 'glossary', 'dictionary', 'stakeholder', 'elicitation', 'origin', 'survey', 'mockup', 'nfr'] as const;
+const SWR_DEL = ['feature', 'feature_link', 'priority_row', 'glossary', 'dictionary', 'stakeholder', 'elicitation', 'origin', 'survey', 'mockup', 'nfr', 'raci_activity'] as const;
 const swrDelete = defineTool({
   name: 'swr_delete', title: 'Delete a SWR302 item', group: 'srs',
-  description: 'DESTRUCTIVE: deletes a SWR302 item — kind feature (FE-3) | feature_link (link id, with feature) | priority_row (row id) | glossary / dictionary (id or name) | stakeholder (SH-2) | elicitation (ELC-1) | origin (requirement source id) | survey (SV-1) | mockup (id) | nfr (requirement issue number). The user must confirm.',
+  description: 'DESTRUCTIVE: deletes a SWR302 item — kind feature (FE-3) | feature_link (link id, with feature) | priority_row (row id) | glossary / dictionary (id or name) | stakeholder (SH-2) | elicitation (ELC-1) | origin (requirement source id) | survey (SV-1) | mockup (id) | nfr (requirement issue number) | raci_activity (activity id). The user must confirm.',
   ...DEL,
   input: z.object({ project: projectArg, kind: z.enum(SWR_DEL), item: ref('Id / number / key / name of the item'), feature: ref('feature_link: the feature (FE-3)').optional() }),
   run: async (ctx, a) => {
@@ -207,6 +210,7 @@ const swrDelete = defineTool({
       survey: async () => [`/swr/surveys/${n('survey')}`, () => elic.deleteSurvey(ctx.userId, p0.id, n('survey'))],
       mockup: async () => [`/swr/mockups/${n('mockup')}`, () => deep.deleteMockup(ctx.userId, p0.id, n('mockup'))],
       nfr: async () => { const num = issueNumber(p0.key, a.item); return [`/swr/nfr/${num}`, () => deep.deleteNfr(ctx.userId, p0.id, num)]; },
+      raci_activity: async () => [`/swr/raci/activities/${n('activity')}`, () => elic.deleteRaciActivity(ctx.userId, p0.id, n('activity'))],
     };
     const [path, go] = await route[a.kind]();
     await projectFor(ctx, a.project, [['DELETE', path]]);
@@ -903,12 +907,16 @@ const linkArr = z.array(z.object({ url: z.string().min(1).max(2000), title: z.st
 
 const classContent = defineTool({
   name: 'class_content', title: 'Class stream and materials', group: 'teaching',
-  description: 'Reads a class: what = stream (announcements, newest first, with post ids) or materials (topics + materials with ids). Assignments: class_work.',
+  description: 'Reads a class: what = class (info, groups, roster with ids, join code for teachers) | stream (announcements with post + comment ids) | materials (topics + materials) | quiz_bank (questions with ids) | quizzes. Assignments: class_work.',
   write: false,
-  input: z.object({ classId: z.number().int().positive(), what: z.enum(['stream', 'materials']) }),
+  input: z.object({ classId: z.number().int().positive(), what: z.enum(['class', 'stream', 'materials', 'quiz_bank', 'quizzes']) }),
   run: async (ctx, a) => {
-    await topRoute(ctx, 'GET', `/classes/${a.classId}/${a.what}`, 'use classes');
-    return untrusted(`class ${a.what}`, json(a.what === 'stream' ? await stream.listStream(ctx.userId, a.classId, { limit: 30 }) : await mats.listMaterials(ctx.userId, a.classId)));
+    const seg = { class: '', stream: '/stream', materials: '/materials', quiz_bank: '/quiz-bank', quizzes: '/quizzes' }[a.what];
+    await topRoute(ctx, 'GET', `/classes/${a.classId}${seg}`, 'use classes');
+    const u = ctx.userId, c = a.classId;
+    const data = a.what === 'class' ? await classroom.getClass(u, c) : a.what === 'stream' ? await stream.listStream(u, c, { limit: 30 }) : a.what === 'materials' ? await mats.listMaterials(u, c)
+      : a.what === 'quiz_bank' ? await quiz.listBank(u, c, { drafts: true }) : await quiz.listQuizzes(u, c);
+    return untrusted(`class ${a.what}`, json(data));
   },
 });
 
@@ -983,18 +991,27 @@ const classAssignment = defineTool({
 
 const classContentDelete = defineTool({
   name: 'class_content_delete', title: 'Delete a class post / material / topic / assignment', group: 'teaching',
-  description: 'DESTRUCTIVE: teachers delete a stream post, material, topic or assignment (an assignment takes its submissions with it). The user must confirm.',
+  description: 'DESTRUCTIVE: teachers delete a stream post, material, topic, assignment (takes its submissions with it), stream comment, student from the roster, schedule (future sessions), session, bank question (archived) or quiz. The user must confirm.',
   ...DEL,
-  input: z.object({ classId: z.number().int().positive(), kind: z.enum(['post', 'material', 'topic', 'assignment']), id: z.number().int().positive() }),
+  input: z.object({ classId: z.number().int().positive(), kind: z.enum(['post', 'material', 'topic', 'assignment', 'stream_comment', 'student', 'schedule', 'session', 'question', 'quiz']), id: z.number().int().positive() }),
   run: async (ctx, a) => {
     await requirePerson(ctx, 'delete class content');
     W(ctx);
-    const seg = { post: 'stream', material: 'materials', topic: 'topics', assignment: 'assignments' }[a.kind];
+    const seg = { post: 'stream', material: 'materials', topic: 'topics', assignment: 'assignments', stream_comment: 'stream-comments', student: 'roster', schedule: 'schedules', session: 'sessions', question: 'quiz-bank', quiz: 'quizzes' }[a.kind];
     await topRoute(ctx, 'DELETE', `/classes/${a.classId}/${seg}/${a.id}`, 'delete class content');
-    if (a.kind === 'post') await stream.deletePost(ctx.userId, a.classId, a.id);
-    else if (a.kind === 'material') await mats.deleteMaterial(ctx.userId, a.classId, a.id);
-    else if (a.kind === 'topic') await mats.deleteTopic(ctx.userId, a.classId, a.id);
-    else await classwork.deleteAssignment(ctx.userId, a.classId, a.id);
+    const u = ctx.userId, c = a.classId, i = a.id;
+    switch (a.kind) {
+      case 'post': await stream.deletePost(u, c, i); break;
+      case 'material': await mats.deleteMaterial(u, c, i); break;
+      case 'topic': await mats.deleteTopic(u, c, i); break;
+      case 'assignment': await classwork.deleteAssignment(u, c, i); break;
+      case 'stream_comment': await stream.deleteComment(u, c, i); break;
+      case 'student': await classroom.removeStudent(u, c, i); break;
+      case 'schedule': await cal.deleteSeries(u, c, i); break;
+      case 'session': await cal.deleteSession(u, c, i); break;
+      case 'question': await quiz.archiveQuestion(u, c, i); break;
+      case 'quiz': await quiz.deleteQuiz(u, c, i); break;
+    }
     return { deleted: { kind: a.kind, id: a.id } };
   },
 });

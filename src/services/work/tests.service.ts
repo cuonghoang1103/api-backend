@@ -22,6 +22,7 @@ import { addLink, createIssueAs, updateIssueAs } from './issues.service.js';
 import { requireProject } from './permissions.js';
 import { logger } from '../../utils/logger.js';
 import { emitAutomationSignal } from './automationSignals.js';
+import { trashGraph } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
 
@@ -313,12 +314,21 @@ export async function updatePlan(userId: number, projectId: number, planId: numb
   touch(projectId, userId);
 }
 
-export async function deletePlan(userId: number, projectId: number, planId: number) {
+export async function deletePlan(userId: number, projectId: number, planId: number, opts: { trash?: boolean } = {}) {
   await requireProject(userId, projectId, 'issue.edit');
   await findPlan(projectId, planId);
   // Cycle của plan vẫn giữ (lịch sử chạy test quý hơn plan), chỉ mất liên kết.
-  await prisma.workTestPlan.delete({ where: { id: planId } });
+  // 22/10/2026: plan + danh sách case vào thùng rác 30 ngày (khôi phục nối lại cycle). Dọn dữ liệu mẫu thì không (trash:false).
+  let trashId: number | null = null;
+  await prisma.$transaction(async (tx) => {
+    if (opts.trash !== false) {
+      const p = await tx.workTestPlan.findUniqueOrThrow({ where: { id: planId }, select: { name: true } });
+      trashId = (await trashGraph(tx, { projectId, userId, kind: 'graph.work_test_plans', label: `Test plan "${p.name}"`, roots: [{ table: 'work_test_plans', ids: [planId] }] })).trashId;
+    }
+    await tx.workTestPlan.delete({ where: { id: planId } });
+  });
   touch(projectId, userId);
+  return { trashId };
 }
 
 // ─── Test cycle & lần chạy ───────────────────────────────────────
@@ -474,8 +484,15 @@ export async function updateCycle(
 export async function deleteCycle(userId: number, projectId: number, cycleId: number) {
   await requireProject(userId, projectId, 'issue.edit');
   await findCycle(projectId, cycleId);
-  await prisma.workTestCycle.delete({ where: { id: cycleId } });
+  // 22/10/2026: cycle + MỌI lần chạy (lịch sử thực thi test) vào thùng rác 30 ngày trước khi xoá.
+  const trashId = await prisma.$transaction(async (tx) => {
+    const c = await tx.workTestCycle.findUniqueOrThrow({ where: { id: cycleId }, select: { name: true, _count: { select: { runs: true } } } });
+    const t = await trashGraph(tx, { projectId, userId, kind: 'graph.work_test_cycles', label: `Test cycle "${c.name}" (${c._count.runs} run)`, itemCount: c._count.runs, roots: [{ table: 'work_test_cycles', ids: [cycleId] }] });
+    await tx.workTestCycle.delete({ where: { id: cycleId } });
+    return t.trashId;
+  }, { timeout: 30_000 });
   touch(projectId, userId);
+  return { trashId };
 }
 
 async function findRun(projectId: number, runId: number) {

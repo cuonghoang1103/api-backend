@@ -32,6 +32,7 @@ import { dayOf, govCtx, markdownDoc, nextNumber } from './governanceDb.js';
 import { createIssueAs } from './issues.service.js';
 import { canDeleteGovernance, governanceAccess, loadProjectAccess, assertHumanActor } from './permissions.js';
 import { tiptapToText } from './tiptapText.js';
+import { trashSoft } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
 
 const DAY = 86_400_000;
 
@@ -287,9 +288,10 @@ export async function deleteChangeRequest(userId: number, projectId: number, num
   if (!canDeleteGovernance(ctx.access.role, ctx.access.workspaceRole, userId, cr.createdById)) throw new ForbiddenError('Only the author or a project admin can delete this change request');
   if (!['DRAFT', 'SUBMITTED', 'REJECTED'].includes(cr.status)) throw new ConflictError('Change requests under review, approved or implemented are kept for the record');
   await prisma.workChangeRequest.update({ where: { id: cr.id }, data: { deletedAt: new Date() } });
+  const trashId = await trashSoft({ projectId, userId, table: 'work_change_requests', id: cr.id, label: `Change request CR-${number}: ${cr.title}` });
   emitWorkEvent({ type: 'governance.updated', projectId, entity: 'cr', number, action: 'deleted', actor: { kind: 'USER', userId } });
   await auditProject(projectId, { actorId: userId, action: 'cr.delete', targetType: 'change_request', targetId: cr.id, summary: `Deleted CR-${number}: ${cr.title}`.slice(0, 300) });
-  return { deleted: true };
+  return { deleted: true, trashId };
 }
 
 // ─── Liên kết ────────────────────────────────────────────────────

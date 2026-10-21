@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { workError, workErrorStatus } from '@/lib/work-api';
 import { Popover } from '../../ui';
 import { fptApi, fptKeys, TYPE_LABEL, utcId, type CaseResult, type CaseType, type UnitFunction, type UnitSection } from './fptApi';
+import { undoToast } from '../../settings/binApi';
 import { SaveState, shortDate, todayIso } from './shared';
 import AiSuggestDialog from './AiSuggestDialog';
 import { wt } from '@/components/work/i18n';
@@ -102,6 +103,8 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
       setState(rev.current === sending ? 'saved' : 'dirty');
       qc.setQueryData(fptKeys.fn(pid, fn.id), res);
       qc.invalidateQueries({ queryKey: fptKeys.unit(pid) });
+      // 22/10/2026: UTCID / dòng bị xoá ⇒ vào thùng rác; Hoàn tác = thêm lại vào cuối rồi tải lại hàm (ma trận dựng lại).
+      if (res.trashed) undoToast(pid, res.trashed.id, () => qc.resetQueries({ queryKey: fptKeys.fn(pid, fn.id) }), wt('bin.casesTrashed', { n: res.trashed.cases + res.trashed.rows }));
     } catch (e) {
       setState('error');
       if (workErrorStatus(e) === 409) {
@@ -229,7 +232,25 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
   const openMenu = (key: string, el: HTMLElement) => { anchor.current = el; setMenu(key); };
   const menuCase = draft.cases.find((c) => c.key === menu);
 
-  const width = 380 + Math.max(draft.cases.length, 1) * COL_W + 44;
+  // Cột nhãn (Group/Value) KÉO RỘNG ĐƯỢC để đọc rõ chữ dài — lưu theo máy (localStorage).
+  const LABEL_MIN = 240, LABEL_MAX = 960;
+  const [labelW, setLabelW] = useState<number>(() => {
+    try { const v = Number(localStorage.getItem('fpt:unit:labelW')); return v >= LABEL_MIN && v <= LABEL_MAX ? v : 380; } catch { return 380; }
+  });
+  const startLabelResize = (e: React.MouseEvent) => {
+    e.preventDefault(); e.stopPropagation();
+    const x0 = e.clientX, w0 = labelW;
+    const move = (ev: MouseEvent) => setLabelW(Math.min(LABEL_MAX, Math.max(LABEL_MIN, w0 + ev.clientX - x0)));
+    const up = () => {
+      window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up);
+      document.body.style.cursor = '';
+      setLabelW((w) => { const r = Math.round(w); try { localStorage.setItem('fpt:unit:labelW', String(r)); } catch { /* bỏ qua */ } return r; });
+    };
+    document.body.style.cursor = 'col-resize';
+    window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
+  };
+
+  const width = labelW + Math.max(draft.cases.length, 1) * COL_W + 44;
 
   const renderSection = (section: UnitSection) => {
     const groups = groupsOf(draft.rows, section);
@@ -296,7 +317,7 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
       <div className="fpt-matrix-wrap overflow-auto rounded-[8px] border border-[var(--w-border)]">
         <table className="fpt-matrix" style={{ width }}>
           <colgroup>
-            <col style={{ width: 380 }} />
+            <col style={{ width: labelW }} />
             {draft.cases.map((c) => <col key={c.key} style={{ width: COL_W }} />)}
             <col style={{ width: 44 }} />
           </colgroup>
@@ -305,6 +326,13 @@ export default function UnitMatrix({ pid, fn, canEdit, onStats }: {
               <th className="fpt-sticky fpt-corner" scope="col">
                 <div className="text-[11px] font-medium uppercase tracking-wide text-[var(--w-text-3)]">{wt('fpt.groupValue')}</div>
                 <div className="mt-0.5 text-[11px] text-[var(--w-text-3)]">{wt('fpt.clickMark')} <b>O</b></div>
+                {/* Tay cầm KÉO để chỉnh rộng cột nhãn — đọc chữ dài cho rõ. */}
+                <div
+                  onMouseDown={startLabelResize}
+                  title="Kéo để chỉnh rộng cột nhãn"
+                  aria-hidden
+                  className="absolute right-0 top-0 h-full w-[7px] cursor-col-resize select-none hover:bg-[var(--w-accent)]"
+                />
               </th>
               {draft.cases.map((c, i) => (
                 <th key={c.key} scope="col" className="fpt-utc">

@@ -45,6 +45,13 @@ export class ReplyStreamer {
 
   constructor(private readonly onDelta?: (text: string) => void) {}
 
+  /** Bắt đầu lại từ đầu (22/10/2026): cổng trước hỏng giữa chừng, cổng sau viết lại cả câu — nơi gọi tự báo client xoá nháp. */
+  restart(): void {
+    this.state = 'seek'; this.depth = 0; this.inString = false; this.escaped = false; this.expectKey = false;
+    this.readingKey = false; this.key = ''; this.awaitValue = false; this.replyStarted = false; this.replyDone = false;
+    this.sawReadsFirst = false; this.esc = ''; this.pendingHigh = ''; this.heldRaw = ''; this.out = '';
+  }
+
   /** Phần reply đã phát ra (đã giải mã). */
   get emitted(): string { return this.out; }
   /** Model xin đọc trước khi viết reply ⇒ lượt này không phải câu trả lời. */

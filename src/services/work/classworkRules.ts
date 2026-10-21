@@ -10,6 +10,7 @@
  *     nhóm đã có điểm — trọng số chia lại cho đủ 100).
  *   - Nhập điểm từ xlsx: khớp sinh viên theo MSSV hoặc email, cột theo tên bài; báo lỗi từng dòng, không đoán.
  */
+import { WORK_LIMITS } from './limits.js';
 
 
 export const DAY_MS = 86_400_000;
@@ -20,7 +21,8 @@ export type SubmissionStatus = (typeof SUBMISSION_STATUSES)[number];
 export const GRADEBOOK_MODES = ['POINTS', 'CATEGORY', 'TOPIC'] as const;
 export type GradebookMode = (typeof GRADEBOOK_MODES)[number];
 
-export const MAX_SUBMISSION_FILE_BYTES = 25 * 1024 * 1024;
+/** Trần một tệp bài nộp / tệp bài tập (limits.ts, env WORK_MAX_FILE_MB). */
+export const MAX_SUBMISSION_FILE_BYTES = WORK_LIMITS.fileBytes;
 export const MAX_FILES_PER_SUBMISSION = 10;
 export const MAX_FILES_PER_ASSIGNMENT = 10;
 export const MAX_LINKS = 10;

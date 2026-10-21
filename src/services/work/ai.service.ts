@@ -19,7 +19,13 @@ import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { getObjectText } from '../../config/r2.js';
 import { AppError, BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
-import { checkTokenQuota, extractJson, isAiAvailable, llmComplete } from '../interview/llm/index.js';
+import { extractJson, isAiAvailable, type LLMMessage } from '../interview/llm/index.js';
+import type { ClaudeImageBlock } from '../claudeChat.js';
+// 22/10/2026: chuỗi cổng riêng của CT Work + tài trợ theo gói Pro (người hỏi / trưởng nhóm).
+import { goiAiCtWork } from './aiCong.js';
+import { kiemHanMucAi, taiTroChoGiaoDien, taiTroCua } from './aiTaiTro.js';
+import { docTepChoModel, ganDauTep, MAX_AI_FILES, tachDauTep, type TepRef } from './aiTep.js';
+import { LINK_VA_SO_DO_DOC, lienKetHoa } from './aiLienKet.js';
 import { isProEffective } from '../pro.service.js';
 import { displayName } from './common.js';
 import { foldVi } from './fold.js';
@@ -63,24 +69,28 @@ async function usedToday(userId: number): Promise<number> {
   return prisma.interviewLLMCallLog.count({ where: { userId, feature: 'work', success: true, createdAt: { gte: start } } });
 }
 
-export async function aiQuota(userId: number) {
+export async function aiQuota(userId: number, projectId?: number | null) {
   const pro = await isProEffective(userId).catch(() => false);
   const used = await usedToday(userId);
-  const cap = pro ? null : FREE_DAILY();
-  return { pro, used, limit: cap, remaining: cap === null ? null : Math.max(0, cap - used), available: isAiAvailable('work') };
+  // 22/10/2026: được tài trợ (tự Pro, hoặc trưởng nhóm của dự án này là Pro) ⇒ không đếm lượt, không trần token/ngày.
+  const tt = taiTroChoGiaoDien(await taiTroCua(userId, projectId ?? null).catch(() => ({ sponsored: false }) as const));
+  const cap = pro || tt.sponsored ? null : FREE_DAILY();
+  return { pro, used, limit: cap, remaining: cap === null ? null : Math.max(0, cap - used), available: isAiAvailable('work'), sponsorship: tt };
 }
 
-async function assertQuota(userId: number) {
-  if (!isAiAvailable('work')) throw new AppError('The AI assistant is temporarily unavailable. Please try again later.', 503, 'WORK_AI_UNAVAILABLE');
-  const q = await aiQuota(userId);
-  // Pro, admin, và (mặc định) mọi thành viên: không đếm lượt — chỉ còn trần token/ngày chống lạm dụng.
-  if (q.pro || q.limit === null) {
-    if (!(await checkTokenQuota(userId))) throw new AppError('You have reached today’s AI usage limit.', 429, 'WORK_AI_TOKEN_CAP');
-    return;
-  }
+/**
+ * Hạn mức của MỘT lượt AI trong dự án. Được tài trợ (aiTaiTro.ts) ⇒ chỉ chống spam (đếm một lần mỗi câu hỏi) + trần tiền
+ * của web; không ⇒ trần token/ngày chung + `WORK_AI_FREE_DAILY` (nếu đặt). `chiKiem` ⇒ kiểm mà chưa đếm (trước SSE).
+ */
+async function assertQuota(userId: number, projectId: number, o: { chiKiem?: boolean } = {}) {
+  if (!isAiAvailable('work')) throw new AppError('CuongMini đang tạm nghỉ (cổng AI gặp sự cố) — thử lại sau ít phút. / The AI assistant is temporarily unavailable.', 503, 'WORK_AI_UNAVAILABLE');
+  const tt = await kiemHanMucAi(userId, projectId, o);
+  if (tt.sponsored) return;
+  const q = await aiQuota(userId, projectId);
+  if (q.limit === null) return;
   if ((q.remaining ?? 0) <= 0) {
     throw new AppError(
-      `You have used all ${q.limit} free AI requests for today. Upgrade to Pro to keep using the AI assistant.`,
+      `Bạn đã dùng hết ${q.limit} lượt AI miễn phí hôm nay. Nâng cấp Pro, hoặc nhờ trưởng nhóm dùng tài khoản Pro để cả nhóm được tài trợ CuongMini. / You have used all ${q.limit} free AI requests for today.`,
       402, 'WORK_AI_QUOTA_EXCEEDED', { limit: q.limit, used: q.used, upgradeUrl: '/pro' },
     );
   }
@@ -88,20 +98,30 @@ async function assertQuota(userId: number) {
 
 /** CHỈ cho test (đợt S5c): thay lời gọi model bằng hàm giả — kiểm vòng đọc Docs + đề xuất mà không tốn lượt AI. */
 /** 20/10/2026: hàm giả nhận thêm `onToken` (bản stream) — hàm giả cũ 2 tham số vẫn dùng được (không stream ⇒ route lùi về một `delta`). */
-type AskFake = (system: string, user: string, onToken?: (delta: string) => void) => Promise<string>;
+type AskFake = (system: string, user: string, onToken?: (delta: string) => void, extra?: AskExtra) => Promise<string>;
 let askOverride: AskFake | null = null;
 export function _setAskForTests(fn: AskFake | null): void {
   askOverride = fn;
 }
 
-async function ask(userId: number, system: string, user: string, maxTokens = 1800, purpose: 'work_assistant' | 'work_digest' = 'work_assistant', onToken?: (delta: string) => void): Promise<string> {
-  if (askOverride) return askOverride(system, user, onToken);
-  await assertQuota(userId);
-  const r = await llmComplete({
-    step: 'report', system, messages: [{ role: 'user', content: user }], maxTokens,
-    userId, feature: 'work', purpose, timeoutMs: 90_000, maxRetries: 2,
-    // Có onToken ⇒ llmComplete buộc stream (cả tuyến OpenAI lẫn Anthropic/rambo).
-    ...(onToken ? { onToken } : {}),
+/** Tuỳ chọn thêm của một lượt gọi model (22/10/2026). */
+export interface AskExtra {
+  /** Việc phân tích nặng ít lượt ⇒ Opus trên rambo (aiCong.ts). */
+  nang?: boolean;
+  /** Ảnh người dùng dán/tải (khối Anthropic base64) — đi kèm câu hỏi; mọi bậc của chuỗi cổng đều nhìn được ảnh. */
+  images?: ClaudeImageBlock[];
+  /** Bậc cổng trước đã lỡ phát chữ rồi hỏng ⇒ xoá nháp. */
+  onRestart?: () => void;
+}
+
+async function ask(userId: number, projectId: number, system: string, user: string, maxTokens = 1800, purpose: 'work_assistant' | 'work_digest' = 'work_assistant', onToken?: (delta: string) => void, extra: AskExtra = {}): Promise<string> {
+  if (askOverride) return askOverride(system, user, onToken, extra);
+  await assertQuota(userId, projectId);
+  const content: LLMMessage['content'] = extra.images?.length ? [{ type: 'text', text: user }, ...extra.images] : user;
+  // Chuỗi cổng CT Work (aiCong.ts): rambo → chính hãng → modelapi, tự chuyển khi bậc trước hỏng.
+  const r = await goiAiCtWork({
+    system, messages: [{ role: 'user', content }], maxTokens, userId, purpose, timeoutMs: 90_000, maxRetries: 2,
+    ...(onToken ? { onToken } : {}), ...(extra.onRestart ? { onRestart: extra.onRestart } : {}), ...(extra.nang ? { nang: true } : {}),
   });
   return r.text;
 }
@@ -112,7 +132,7 @@ async function ask(userId: number, system: string, user: string, maxTokens = 180
  */
 export async function chatPrecheck(userId: number, projectId: number): Promise<void> {
   await requireProject(userId, projectId, 'ai.use');
-  if (!askOverride) await assertQuota(userId);
+  if (!askOverride) await assertQuota(userId, projectId, { chiKiem: true });
 }
 
 /**
@@ -438,10 +458,34 @@ export async function checkCommandActions(raw: unknown, access: ProjectAccess): 
   const kept = actions.filter((a) => {
     if (a.type !== 'command') return true;
     const t = r.commandByName(a.command);
+    if (t?.destructive) {
+      // Lệnh xoá: chỉ giữ khi có cơ chế "yêu cầu xoá chờ trưởng nhóm duyệt" (Apply = tạo yêu cầu, không xoá ngay).
+      if (!guiYeuCauXoa) { rejected.push({ command: a.command, error: 'DELETE commands cannot be run or proposed from the assistant — tell the user to delete it on the page (or ask the team lead)' }); return false; }
+      try { r.parseArgs(t, a.args, ref); return true; } catch (err) { rejected.push({ command: a.command, error: (err as Error).message.slice(0, 300) }); return false; }
+    }
     if (!t || !allowed.has(a.command)) { rejected.push({ command: a.command, error: t && !t.write ? 'this is a READ command — use it in "reads", not as an action' : 'not a write command you can propose here' }); return false; }
     try { r.parseArgs(t, a.args, ref); return true; } catch (err) { rejected.push({ command: a.command, error: (err as Error).message.slice(0, 300) }); return false; }
   });
   return { kept, rejected };
+}
+
+// ─── Lệnh XOÁ (22/10/2026) ───────────────────────────────────────
+
+/**
+ * Cơ chế "yêu cầu xoá chờ trưởng nhóm duyệt + thùng rác 30 ngày" đang được dựng ở phiên khác (fptTests/permissions/
+ * registry). Khi có, nó ĐĂNG KÝ hàm tạo yêu cầu vào đây (`dangKyYeuCauXoa`) — trợ lý tự mời model đề xuất lệnh xoá dạng
+ * yêu cầu, và Apply chỉ TẠO YÊU CẦU (không bao giờ xoá ngay). Chưa đăng ký ⇒ lệnh xoá bị từ chối với câu rõ ràng.
+ */
+export type GuiYeuCauXoa = (userId: number, projectId: number, command: string, args: Record<string, unknown>, summary: string | null) => Promise<{ summary: string }>;
+let guiYeuCauXoa: GuiYeuCauXoa | null = null;
+export function dangKyYeuCauXoa(fn: GuiYeuCauXoa | null): void { guiYeuCauXoa = fn; }
+export const CAU_KHONG_XOA = 'CuongMini không xoá dữ liệu thay bạn. Hãy xoá trực tiếp trên trang đó (nếu bạn có quyền) hoặc nhờ trưởng nhóm. / The assistant cannot delete data — delete it on the page itself or ask the team lead.';
+
+async function xoaDoc(): Promise<string> {
+  if (!guiYeuCauXoa) return 'DELETING: you can never delete anything. If the user asks to delete, say they must delete it on the page itself (if their role allows) or ask the team lead — propose no delete action.';
+  const r = await registry();
+  const xoa = r.COMMANDS.filter((t) => t.destructive && 'project' in t.input.shape);
+  return `DELETING: you never delete directly. For a deletion the user explicitly asks for, PROPOSE {"type":"command","command":"<delete command>","args":{…},"summary":"…"} — applying it only creates a DELETION REQUEST that the team lead approves (items go to a 30-day trash). Delete commands:\n${r.commandCatalog(xoa)}`;
 }
 
 const ACTIONS_DOC = `Actions you may PROPOSE (the user reviews and applies them; never claim you already did anything):
@@ -463,6 +507,8 @@ export async function chat(
     threadId?: number | null;
     /** Hỏi lại câu đã lưu nhưng chưa được trả lời (không tạo câu hỏi mới). */
     retryMessageId?: number | null;
+    /** 22/10/2026: ảnh/tệp đã tải lên (`POST /projects/:pid/ai/files`) đi kèm câu hỏi. */
+    attachments?: TepRef[] | null;
   },
   /** Bản STREAM (route `/ai/chat/stream`, 20/10/2026): báo tiến độ + chữ trả lời khi đang viết. Bỏ trống = như cũ. */
   hooks?: AskStreamHooks,
@@ -473,15 +519,17 @@ export async function chat(
   if (input.retryMessageId) {
     retry = await threads.visibleMessage(userId, projectId, input.retryMessageId);
     if (retry.role !== 'user' || !retry.error) throw new BadRequestError('This question already has an answer', 'WORK_AI_NOTHING_TO_RETRY');
-    input = { ...input, message: retry.content, threadId: retry.threadId, issueNumber: retry.issueNumber };
+    const tach = tachDauTep(retry.content);
+    input = { ...input, message: tach.text, attachments: tach.files, threadId: retry.threadId, issueNumber: retry.issueNumber };
   }
+  const attachments = (input.attachments ?? []).slice(0, MAX_AI_FILES);
   const thread = await threads.openThread(userId, access, { threadId: input.threadId, seed: input.message, issueNumber: input.issueNumber });
   const ctx = await projectContext(access, input.message);
   const me = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { username: true } });
   // Lịch sử lấy từ SERVER (đúng thứ cả nhóm thấy), không tin mảng client gửi lên.
   const history = await threads.historyText(thread.id, retry?.id);
   // Lưu câu hỏi TRƯỚC khi gọi AI: cổng hỏng hay người dùng đóng khung khi chờ thì câu hỏi vẫn còn.
-  const userMsg = retry ? null : await threads.addMessage(thread.id, { role: 'user', authorId: userId, content: input.message, issueNumber: input.issueNumber ?? null });
+  const userMsg = retry ? null : await threads.addMessage(thread.id, { role: 'user', authorId: userId, content: ganDauTep(input.message, attachments), issueNumber: input.issueNumber ?? null });
   const questionId = retry?.id ?? userMsg!.id;
   if (retry) await threads.clearFailed(retry.id);
   hooks?.onProgress?.({ phase: 'preparing', threadId: thread.id, questionId });
@@ -496,14 +544,14 @@ export async function chat(
       throwIfCancelled(hooks);
       hooks?.onProgress?.({ phase: 'thinking', round: 0 });
       const streamer = hooks?.onDelta ? new ReplyStreamer(hooks.onDelta) : null;
-      reply = answerOf(await ask(userId, defenseSystem(ctx.project.name, scope, ctx.instructions), `${history ? `Session so far:\n${history}\n\n` : ''}Student @${me.username} answers: ${input.message}`, 2500, 'work_assistant', streamer ? (d) => streamer.push(d) : undefined)).reply;
+      reply = answerOf(await ask(userId, projectId, defenseSystem(ctx.project.name, scope, ctx.instructions), `${history ? `Session so far:\n${history}\n\n` : ''}Student @${me.username} answers: ${input.message}`, 2500, 'work_assistant', streamer ? (d) => streamer.push(d) : undefined, { nang: true, ...(streamer ? { onRestart: () => { if (streamer.emitted) hooks?.onReset?.(); streamer.restart(); } } : {}) })).reply;
       if (streamer) settleDraft(hooks!, streamer.emitted, reply);
     } catch (err) {
       await threads.markFailed(questionId, err);
       throw err;
     }
     const answer = await threads.addMessage(thread.id, { role: 'assistant', title: 'Panel', content: reply });
-    return { reply, actions: [], quota: await aiQuota(userId), threadId: thread.id, question: userMsg, answer };
+    return { reply, actions: [], quota: await aiQuota(userId, projectId), threadId: thread.id, question: userMsg, answer };
   }
 
   const docsOn = docsAiOn(access);
@@ -524,8 +572,13 @@ export async function chat(
   if (pre.read.length) hooks?.onProgress?.({ phase: 'reading', round: 0, prefetched: true, items: pre.read.slice(0, 12).map((n) => `${access.key}-${n}`) });
   const resources = await resourcesIndex(access, links).catch(soft('resources', ''));
   const docsList = docsOn.read ? await docsIndex(access, 60, { docLink: links.doc, withHeadings: 25 }).catch(soft('mục lục docs', '')) : '';
+  // 22/10/2026: ảnh ⇒ model nhìn (khối ảnh); tệp ⇒ chữ rút ở backend. Đọc hỏng ⇒ một dòng lỗi, câu hỏi vẫn chạy.
+  const tep = attachments.length ? await docTepChoModel(projectId, attachments).catch(soft('tệp đính kèm', { images: [] as ClaudeImageBlock[], text: '' })) : { images: [] as ClaudeImageBlock[], text: '' };
+  if (attachments.length) hooks?.onProgress?.({ phase: 'reading', round: 0, prefetched: true, items: attachments.map((f) => f.name).slice(0, 12) });
   const system = `${mentorSystem(me.username, dayInZone(new Date()), links)}
 ${ACTIONS_DOC}${docsBlock}${cmdBlock}
+${LINK_VA_SO_DO_DOC}
+${learnOnly ? '' : await xoaDoc()}
 Only propose actions when the user asks for changes or clearly benefits from them; otherwise return an empty list.
 Never invent issue numbers that are not in the context (except for issues you propose to create).
 Return ONLY JSON: {"reply":"markdown","actions":[…]} — or, to read first, {"reply":"","reads":[…]}.`;
@@ -537,11 +590,12 @@ Return ONLY JSON: {"reply":"markdown","actions":[…]} — or, to read first, {"
     input.issueNumber ? `The user has ${access.key}-${input.issueNumber} open in the panel — "this issue" means ${access.key}-${input.issueNumber}.` : '',
     pre.text,
     history ? `Conversation so far (several team members may have asked):\n${history}` : '',
+    tep.text,
     `User @${me.username}: ${input.message}`,
   ].filter(Boolean).join('\n\n');
   let out: AskResult;
   try {
-    out = await askWithReads(userId, access, system, user, 4000, docsOn.read, links, hooks);
+    out = await askWithReads(userId, access, system, user, 4000, docsOn.read, links, hooks, tep.images);
   } catch (err) {
     await threads.markFailed(questionId, err);
     throw err;
@@ -553,24 +607,26 @@ Return ONLY JSON: {"reply":"markdown","actions":[…]} — or, to read first, {"
     // Bản stream: lượt sửa KHÔNG phát chữ (có thể bị bỏ) — client nhận bản chuẩn ở sự kiện `done`.
     hooks?.onProgress?.({ phase: 'checking' });
     try {
-      const again = await askWithReads(userId, access, system, `${user}\n\nYour previous answer:\n${JSON.stringify({ reply: out.reply, actions: out.actions }).slice(0, 8000)}\n\nThese proposed command actions were REJECTED and will not be shown:\n${checked.rejected.map((x) => `- ${x.command}: ${x.error}`).join('\n')}\nRead what you need first (reads), then return the WHOLE answer again with corrected actions.`, 4000, docsOn.read, links, hooks ? { onProgress: hooks.onProgress, signal: hooks.signal } : undefined);
+      const again = await askWithReads(userId, access, system, `${user}\n\nYour previous answer:\n${JSON.stringify({ reply: out.reply, actions: out.actions }).slice(0, 8000)}\n\nThese proposed command actions were REJECTED and will not be shown:\n${checked.rejected.map((x) => `- ${x.command}: ${x.error}`).join('\n')}\nRead what you need first (reads), then return the WHOLE answer again with corrected actions.`, 4000, docsOn.read, links, hooks ? { onProgress: hooks.onProgress, signal: hooks.signal } : undefined, tep.images);
       const second = await checkCommandActions(again.actions, access);
       if (second.kept.length >= checked.kept.length) { out = again; checked = second; }
     } catch (err) {
       logger.warn('[work] ai: lượt sửa đề xuất lệnh lỗi', { err: (err as Error).message });
     }
   }
-  const actions = checked.kept;
+  const actions = checked.kept.slice(0, ASK_LIMITS.actionsPerAnswer);
   if (checked.rejected.length) {
     logger.info('[work] ai: đề xuất lệnh bị loại', { projectId, rejected: checked.rejected.slice(0, 5) });
     out = { ...out, reply: `${out.reply}\n\n_${checked.rejected.length} suggested change(s) were dropped because they were not valid (${checked.rejected.map((x) => x.command).slice(0, 3).join(', ')}). Ask again with more detail._` };
   }
-  logger.info('[work] ai: trả lời', { projectId, calls: out.stats.calls, reads: out.stats.reads, prefetched: pre.read.length, promptChars: out.stats.promptChars, learnOnly });
+  // 22/10/2026: link sâu do MÃ dựng từ dữ liệu thật (thẻ/Docs/họp/hàm 5.1/trang mục) — link model tự bịa bị bỏ.
+  out = { ...out, reply: await lienKetHoa(out.reply, access, links.slug) };
+  logger.info('[work] ai: trả lời', { projectId, calls: out.stats.calls, reads: out.stats.reads, prefetched: pre.read.length, promptChars: out.stats.promptChars, learnOnly, files: attachments.length });
   const answer = await threads.addMessage(thread.id, {
     role: 'assistant', content: out.reply, issueNumber: input.issueNumber ?? null,
     actions: actions.map((action) => ({ action, status: 'pending' as const })),
   });
-  return { reply: out.reply, actions, quota: await aiQuota(userId), threadId: thread.id, question: userMsg, answer };
+  return { reply: out.reply, actions, quota: await aiQuota(userId, projectId), threadId: thread.id, question: userMsg, answer };
 }
 
 /**
@@ -588,7 +644,7 @@ HOW TO ANSWER
 3. For each issue you explain give, briefly: **Đọc trước / Read first** (at most 3 links: Docs pages, resources, files the issue mentions), **Các bước / Steps** (at most 4 short numbered steps for this project's stack), **Xong khi / Done when** (one line from its acceptance criteria / checklist / Definition of Done), **Hỏi ai / Ask** (only when something is really unclear). Skip a part when it does not apply. Go deeper only when the user asks about ONE specific issue or asks for detail.
 4. Teach with general knowledge (programming, databases, security, testing, Scrum, FPT course conventions such as SRS/SDS/Report 5.1) to explain what the issue requires — but keep it apart from project facts: cite CT Work facts with their source (issue key, "Docs #3", file name, comment by @user) and mark general advice as general knowledge ("(kiến thức chung)" in Vietnamese).
 5. Never invent issues, pages, files, links, dates, people or requirements. If something is not in CT Work, say plainly that it is not there and suggest asking the team lead (@username from the data).
-6. Links: write in-app links as Markdown with the paths given in the data, e.g. [${links.key}-12](${links.issue(12)}), [Docs #3 — title](${links.doc(3)}), [Resources](${links.resources}). Copy external URLs exactly as they appear in the data. Never make up a URL or a path.
+6. Links: follow LINKS below (write issue keys like ${links.key}-12 and [[doc:3]] tokens — the server builds the real links; in-app paths that appear in the data, e.g. ${links.issue(12)}, are also fine). Copy external URLs exactly as they appear in the data. Never make up a URL or a path.
 7. Format — it is read on a PHONE as often as on a laptop: Markdown, the direct answer first in 1–2 sentences, then short ### headings and bullet lists. Keep the whole reply under about 300 words unless the user asks for detail ("chi tiết", "full", "explain more"). NO Markdown tables (they are cut off on phones) — use bullets. Short sentences, one idea per bullet. Dates as day/month (e.g. 18/10, "quá hạn 2 ngày" / "2 days overdue"), never ISO yyyy-mm-dd; write "chưa có hạn" / "no due date" instead of "—". Bold only deadlines and the single next action. No preamble, no filler. End with one short line offering to go deeper on a specific issue.`;
 }
 
@@ -609,6 +665,8 @@ export const ASK_LIMITS = {
   roundResultChars: 48_000,
   /** Prompt người dùng tối đa (ngữ cảnh + đọc sẵn + kết quả đọc). Chạm trần ⇒ không đọc thêm, trả lời ngay. */
   promptChars: 120_000,
+  /** 22/10/2026: số đề xuất thao tác (thẻ Apply) tối đa mỗi câu trả lời — nhiều hơn là đốt token + khó duyệt. */
+  actionsPerAnswer: 12,
 } as const;
 
 const readItemSchema = z.union([
@@ -773,7 +831,7 @@ async function readLabels(access: ProjectAccess, reads: AskRead[]): Promise<stri
  * `hooks` (bản stream): mỗi lượt gọi model đều stream token; `ReplyStreamer` rút phần `reply` ra phát dần. Lượt hoá ra
  * là lượt xin đọc mà đã lỡ phát chữ ⇒ `onReset`. Lượt cuối ⇒ `settleDraft` chốt nháp với câu chuẩn.
  */
-export async function askWithReads(userId: number, access: ProjectAccess, system: string, user: string, maxTokens: number, canReadDocs: boolean, links?: WorkLinks, hooks?: AskStreamHooks): Promise<AskResult> {
+export async function askWithReads(userId: number, access: ProjectAccess, system: string, user: string, maxTokens: number, canReadDocs: boolean, links?: WorkLinks, hooks?: AskStreamHooks, images?: ClaudeImageBlock[]): Promise<AskResult> {
   let prompt = user;
   let calls = 0;
   let reads = 0;
@@ -784,7 +842,11 @@ export async function askWithReads(userId: number, access: ProjectAccess, system
     throwIfCancelled(hooks);
     hooks?.onProgress?.({ phase: 'thinking', round });
     const streamer = hooks?.onDelta ? new ReplyStreamer(hooks.onDelta) : null;
-    const out = readModelOutput(await ask(userId, system, prompt, maxTokens, 'work_assistant', streamer ? (d) => streamer.push(d) : undefined));
+    const out = readModelOutput(await ask(userId, access.projectId, system, prompt, maxTokens, 'work_assistant', streamer ? (d) => streamer.push(d) : undefined, {
+      // Ảnh người dùng gửi đi kèm MỌI vòng (model đọc thêm rồi trả lời vẫn phải nhìn được ảnh).
+      ...(images?.length ? { images } : {}),
+      ...(streamer ? { onRestart: () => { if (streamer.emitted) hooks?.onReset?.(); streamer.restart(); } } : {}),
+    }));
     calls++;
     const wanted = canRead ? parseReads(out.reads).reads : [];
     const fresh = wanted.filter((r) => {
@@ -882,7 +944,7 @@ export async function startDefense(userId: number, projectId: number, input: { f
   const kickoff = await threads.addMessage(t.id, { role: 'user', authorId: userId, content: `Bắt đầu luyện bảo vệ (${focus === 'me' ? 'màn hình của em' : focus === 'all' ? 'cả dự án' : focus.toUpperCase()}).` });
   let reply: string;
   try {
-    reply = answerOf(await ask(userId, defenseSystem(project.name, scope, aiInstructionsOf(project.settings)), `Student @${me.username} is ready. Greet them in one line, say how the session works in one line, then ask the first question.`, 1200)).reply;
+    reply = answerOf(await ask(userId, projectId, defenseSystem(project.name, scope, aiInstructionsOf(project.settings)), `Student @${me.username} is ready. Greet them in one line, say how the session works in one line, then ask the first question.`, 1200, 'work_assistant', undefined, { nang: true })).reply;
   } catch (err) {
     await threads.markFailed(kickoff.id, err);
     throw err;
@@ -918,7 +980,7 @@ Return ONLY JSON: {"reply":"short markdown explanation","actions":[…]}`;
   const userMsg = await threads.addMessage(thread.id, { role: 'user', authorId: userId, content: asked, issueNumber: input.issueNumber ?? null });
   let out: { reply: string; actions?: unknown };
   try {
-    out = answerOf(await ask(userId, system, user, 5000));
+    out = answerOf(await ask(userId, projectId, system, user, 5000, 'work_assistant', undefined, { nang: computed }));
   } catch (err) {
     await threads.markFailed(userMsg.id, err);
     throw err;
@@ -928,7 +990,7 @@ Return ONLY JSON: {"reply":"short markdown explanation","actions":[…]}`;
     role: 'assistant', title: label, content: out.reply, issueNumber: input.issueNumber ?? null,
     actions: actions.map((action) => ({ action, status: 'pending' as const })),
   });
-  return { reply: out.reply, actions, quota: await aiQuota(userId), threadId: thread.id, question: userMsg, answer };
+  return { reply: out.reply, actions, quota: await aiQuota(userId, projectId), threadId: thread.id, question: userMsg, answer };
 }
 
 /** Việc một chạm của Docs (đợt S5c). Không có docs (tắt / khách) ⇒ 403 rõ ràng, không gọi AI. */
@@ -956,7 +1018,7 @@ Return ONLY JSON: {"reply":"short markdown","actions":[…]}`;
   const userMsg = await threads.addMessage(thread.id, { role: 'user', authorId: userId, content: asked, issueNumber: null });
   let out: { reply: string; actions?: unknown };
   try {
-    out = answerOf(await ask(userId, system, `Facts:\n${facts}\n\nToday is ${dayInZone(new Date())}.${input.text && input.task === 'summarize_page' ? `\nUser note: ${clip(input.text, 1000)}` : ''}`, input.task === 'draft_srs' ? 8000 : 2000));
+    out = answerOf(await ask(userId, access.projectId, system, `Facts:\n${facts}\n\nToday is ${dayInZone(new Date())}.${input.text && input.task === 'summarize_page' ? `\nUser note: ${clip(input.text, 1000)}` : ''}`, input.task === 'draft_srs' ? 8000 : 2000));
   } catch (err) {
     await threads.markFailed(userMsg.id, err);
     throw err;
@@ -967,7 +1029,7 @@ Return ONLY JSON: {"reply":"short markdown","actions":[…]}`;
     role: 'assistant', title: label, content: out.reply, issueNumber: null,
     actions: actions.map((action) => ({ action, status: 'pending' as const })),
   });
-  return { reply: out.reply, actions, quota: await aiQuota(userId), threadId: thread.id, question: userMsg, answer };
+  return { reply: out.reply, actions, quota: await aiQuota(userId, access.projectId), threadId: thread.id, question: userMsg, answer };
 }
 
 // ─── Đề xuất đã lưu trong hội thoại ──────────────────────────────
@@ -1023,7 +1085,7 @@ export async function naturalFilter(userId: number, projectId: number, question:
   const system = `Convert a question about issues in project ${access.key} into a JSON filter. ${LANG_RULE}
 Allowed values — statuses: ${[...new Set(statuses.map((s) => s.name))].join(', ')}; types: ${types.map((t) => t.key).join(', ')}; labels: ${labels.map((l) => l.name).join(', ') || 'none'}; members: ${members.map((m) => m.username).join(', ')}; the asking user is ${me.username}; sprints: ${sprints.map((s) => `${s.name}${s.state === 'ACTIVE' ? ' (active)' : ''}`).join(', ') || 'none'}.
 Return ONLY JSON: {"statuses":[names],"types":[keys],"assignees":[usernames or "unassigned"],"labels":[names],"sprint":"active|backlog|<name>|null","text":"free-text search or null","includeDone":true|false,"explanation":"one sentence describing the filter"}`;
-  const out = parseJson(await ask(userId, system, question, 600), z.object({
+  const out = parseJson(await ask(userId, projectId, system, question, 600), z.object({
     statuses: z.array(z.string()).nullish(), types: z.array(z.string()).nullish(), assignees: z.array(z.string()).nullish(),
     labels: z.array(z.string()).nullish(), sprint: z.string().nullish(), text: z.string().nullish(), includeDone: z.boolean().nullish(),
     explanation: z.string().nullish(),
@@ -1045,7 +1107,7 @@ Return ONLY JSON: {"statuses":[names],"types":[keys],"assignees":[usernames or "
       includeDone: out.includeDone ?? undefined,
     },
     explanation: out.explanation ?? null,
-    quota: await aiQuota(userId),
+    quota: await aiQuota(userId, projectId),
   };
 }
 
@@ -1183,6 +1245,14 @@ async function applyActionInner(userId: number, projectId: number, action: AiAct
       return applyUpdateSection(userId, projectId, action);
     // Đợt 3C: lệnh dùng chung — chạy ĐÚNG hàm `run` của registry dưới quyền người bấm (chốt tuyến + service như MCP).
     case 'command': {
+      // 22/10/2026: lệnh XOÁ (destructive) KHÔNG BAO GIỜ chạy từ trợ lý — chỉ tạo yêu cầu chờ trưởng nhóm duyệt (khi cơ
+      // chế đó đã đăng ký), không thì từ chối với câu rõ ràng.
+      const def = (await registry()).commandByName(action.command);
+      if (def?.destructive) {
+        if (!guiYeuCauXoa) throw new AppError(CAU_KHONG_XOA, 409, 'WORK_AI_DELETE_NOT_ALLOWED');
+        const r = await guiYeuCauXoa(userId, projectId, action.command, action.args, action.summary ?? null);
+        return { summary: r.summary };
+      }
       const r = await (await registry()).runForPerson(userId, projectId, action.command, action.args, 'apply');
       return { summary: commandSummary(action, r.output), number: commandNumber(r.output) };
     }
@@ -1373,8 +1443,8 @@ export async function weeklyReport(userId: number, projectId: number, input: { a
   const who = input.audience === 'teacher' ? 'the course lecturer (formal, highlight each member\'s work)' : input.audience === 'client' ? 'the client (non-technical, outcomes and risks)' : 'the team (direct, action-oriented)';
   const system = `Write a weekly status report for ${who}. Use ONLY the facts given — do not invent numbers, names or work. Markdown with sections: Summary, Completed this week, Risks & blockers, Next steps. ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"report":"markdown"}`;
   // Chỉ diễn đạt lại số liệu đã tính ⇒ model rẻ (work_digest).
-  const out = parseJson(await ask(userId, system, facts, 1800, 'work_digest'), z.object({ report: z.string() }));
-  return { report: out.report, period: { from: period.from, to: period.to, timezone: period.tz }, facts, quota: await aiQuota(userId) };
+  const out = parseJson(await ask(userId, projectId, system, facts, 1800, 'work_digest'), z.object({ report: z.string() }));
+  return { report: out.report, period: { from: period.from, to: period.to, timezone: period.tz }, facts, quota: await aiQuota(userId, projectId) };
 }
 
 
@@ -1403,8 +1473,8 @@ export async function releaseNotes(userId: number, projectId: number, versionId:
   ].join('\n');
   const tone = input.audience === 'users' ? 'end users (plain language, benefits, no issue keys)' : 'the team (keep issue keys, group by type)';
   const system = `Write release notes for ${tone}. Use ONLY the finished issues listed — never invent features. Markdown with sections such as "New", "Improvements", "Bug fixes" (omit empty sections). ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"notes":"markdown"}`;
-  const out = parseJson(await ask(userId, system, facts, 1800, 'work_digest'), z.object({ notes: z.string() }));
-  return { notes: out.notes, quota: await aiQuota(userId) };
+  const out = parseJson(await ask(userId, projectId, system, facts, 1800, 'work_digest'), z.object({ notes: z.string() }));
+  return { notes: out.notes, quota: await aiQuota(userId, projectId) };
 }
 
 // ─── Lập kế hoạch sprint theo velocity (4.7) ─────────────────────
@@ -1482,7 +1552,7 @@ export async function planSprint(userId: number, projectId: number, input: { spr
       `Warnings: ${warnings.join(' | ') || 'none'}.`,
     ].join('\n');
     const system = `You are a Scrum coach. Explain this sprint plan to the team in 4-7 short bullet points: whether the load is realistic versus velocity, notable risks, and what to clarify before starting. Use ONLY the facts. ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"rationale":"markdown"}`;
-    result.rationale = parseJson(await ask(userId, system, facts, 900, 'work_digest'), z.object({ rationale: z.string() })).rationale;
+    result.rationale = parseJson(await ask(userId, projectId, system, facts, 900, 'work_digest'), z.object({ rationale: z.string() })).rationale;
   }
   return result;
 }
@@ -1511,8 +1581,8 @@ export async function retro(userId: number, projectId: number, input: { sprintId
     input.notes ? `Team notes:\n${clip(input.notes, 12_000)}` : 'No team notes provided.',
   ].join('\n');
   const system = `You facilitate a sprint retrospective. Using ONLY the facts and team notes, write markdown with sections "What went well", "What didn't go well", "Action items" (each action item concrete, with an owner only if the notes name one). Then propose each action item as {"type":"create_issue","issueType":"TASK","title":"…","description":"…","assignee":"username"} (only usernames from the member list). ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"summary":"markdown","actions":[...]}`;
-  const out = parseJson(await ask(userId, system, facts, 1800, 'work_assistant'), z.object({ summary: z.string(), actions: z.unknown().optional() }));
-  return { summary: out.summary, actions: saneActions(out.actions), facts, quota: await aiQuota(userId) };
+  const out = parseJson(await ask(userId, projectId, system, facts, 1800, 'work_assistant', undefined, { nang: true }), z.object({ summary: z.string(), actions: z.unknown().optional() }));
+  return { summary: out.summary, actions: saneActions(out.actions), facts, quota: await aiQuota(userId, projectId) };
 }
 
 // ─── Bản tin hằng ngày (4.8) ─────────────────────────────────────
@@ -1541,11 +1611,11 @@ export async function dailyBrief(userId: number, projectId: number, input: { lan
     risks.sprintRisk ? risks.sprintRisk.summary : 'No active sprint.',
   ].join('\n');
   const system = `Write today's stand-up brief for the team: 3-6 short markdown bullets, most important first (risks, overdue work, who should look at what). Use ONLY the facts; do not invent. ${input.language === 'vi' ? 'Write in Vietnamese.' : 'Write in English.'} Return ONLY JSON: {"brief":"markdown"}`;
-  const out = parseJson(await ask(userId, system, facts, 700, 'work_digest'), z.object({ brief: z.string() }));
+  const out = parseJson(await ask(userId, projectId, system, facts, 700, 'work_digest'), z.object({ brief: z.string() }));
   const brief = { text: out.brief.slice(0, 5000), at: new Date().toISOString(), by: userId };
   const settings = (project.settings ?? {}) as Record<string, unknown>;
   await prisma.workProject.update({ where: { id: projectId }, data: { settings: { ...settings, dailyBrief: brief } as Prisma.InputJsonValue } });
-  return { ...brief, facts, quota: await aiQuota(userId) };
+  return { ...brief, facts, quota: await aiQuota(userId, projectId) };
 }
 
 /**

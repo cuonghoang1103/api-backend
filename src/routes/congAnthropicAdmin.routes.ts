@@ -334,6 +334,22 @@ router.put('/default-gioi-han', boc(async (req, res) => {
   res.json({ success: true, data: v });
 }));
 
+/**
+ * 22/10/2026 — CuongMini trong CT Work: chống spam của lượt ĐƯỢC TÀI TRỢ (người Pro / nhóm có trưởng nhóm Pro) + chuỗi cổng
+ * đang hiệu lực (rambo → chính hãng → modelapi; tên model thật — chỉ admin thấy). PUT `{ phutNguoi?, ngayNguoi?, ngayIp? }`, 0 = tắt.
+ */
+router.get('/ctwork-ai', boc(async (_req, res) => {
+  const { docGioiHanTaiTro } = await import('../services/work/aiTaiTro.js');
+  const { chuoiCongHienTai } = await import('../services/work/aiCong.js');
+  res.json({ success: true, data: { gioiHan: await docGioiHanTaiTro(), chuoi: { work_assistant: chuoiCongHienTai('work_assistant'), work_spec_review: chuoiCongHienTai('work_spec_review'), work_digest: chuoiCongHienTai('work_digest') } } });
+}));
+router.put('/ctwork-ai-gioi-han', boc(async (req, res) => {
+  const { datGioiHanTaiTro } = await import('../services/work/aiTaiTro.js');
+  const v = await datGioiHanTaiTro(req.body ?? {});
+  logger.info('[cong-anthropic] admin đổi chống spam CuongMini CT Work', { adminId: adminId(req), ...v });
+  res.json({ success: true, data: v });
+}));
+
 /** Ai dùng CuongMini Default nhiều nhất hôm nay (phát hiện lạm dụng) + IP đông nhất. */
 router.get('/default-top', boc(async (_req, res) => {
   res.json({ success: true, data: await topDefaultHomNay(20) });

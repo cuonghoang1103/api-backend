@@ -25,6 +25,7 @@ import * as renders from '../services/work/diagramRender.service.js';
 import * as stat from '../services/work/staticAnalysis.service.js';
 import * as pack from '../services/work/swrPack.service.js';
 import { askStakeholder, clearStakeholderTranscript, stakeholderAskInput } from '../services/work/swrElic.service.js';
+import { WORK_LIMITS } from '../services/work/limits.js';
 
 const router = Router();
 
@@ -97,7 +98,7 @@ router.get('/projects/:pid/diagrams/:n/image.:fmt(svg|png)', asyncHandler(async 
 
 // ═══ Phân tích tĩnh (T3) + V(G) (T4) ══════════════════════════════
 
-const rawText = express.text({ type: ['application/xml', 'text/xml', 'text/plain', 'text/csv', 'application/octet-stream', 'application/sarif+json'], limit: '15mb' });
+const rawText = express.text({ type: ['application/xml', 'text/xml', 'text/plain', 'text/csv', 'application/octet-stream', 'application/sarif+json'], limit: WORK_LIMITS.importBytes + 1024 });
 const KIND = { sarif: 'SARIF', jacoco: 'JACOCO', lizard: 'LIZARD', auto: 'AUTO' } as const;
 const staticQuery = z.object({
   kind: z.enum(['sarif', 'jacoco', 'lizard', 'auto']).optional(),
@@ -105,13 +106,13 @@ const staticQuery = z.object({
   createIssues: z.enum(['true', 'false', '1', '0']).optional(),
 });
 const staticJson = z.object({
-  report: z.union([z.string().max(16_000_000), z.record(z.unknown())]),
+  report: z.union([z.string().max(WORK_LIMITS.importBytes + 1024), z.record(z.unknown())]),
   kind: z.enum(['sarif', 'jacoco', 'lizard', 'auto']).optional(),
   build: z.string().max(80).nullable().optional(), branch: z.string().max(120).nullable().optional(), commit: z.string().max(64).nullable().optional(),
   createIssues: z.boolean().optional(),
 }).strict();
 
-router.post('/projects/:pid/tests/automation/static', express.json({ limit: '16mb' }), rawText, asyncHandler(async (req, res) => {
+router.post('/projects/:pid/tests/automation/static', express.json({ limit: WORK_LIMITS.importBytes + 1024 * 1024 }), rawText, asyncHandler(async (req, res) => {
   const meta = { source: (req.workToken ? 'API' : 'UPLOAD') as 'API' | 'UPLOAD', tokenId: req.workToken?.id ?? null };
   let input: stat.StaticInput;
   if (typeof req.body === 'string') {

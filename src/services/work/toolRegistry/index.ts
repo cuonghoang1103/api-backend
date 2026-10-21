@@ -37,6 +37,9 @@ import { PARITY_COMMANDS } from './parity.js';
 import { PARITY2_COMMANDS } from './parity2.js';
 import { PARITY3_COMMANDS } from './parity3.js'; // 21/10/2026 đợt 3: phần còn lại (gộp theo action) // 21/10/2026 đợt 2: SWR302, RTM, CR, chat, Docs, họp, test plan/design, agile, review, version, lớp học // 21/10/2026: CuongMini ngang quyền người — sửa/xoá còn thiếu + repo dự án
 import { recordToolCall, runInAiScope } from '../aiUsage.service.js';
+import { createRequest } from '../deleteRequests.service.js';
+import { can } from '../permissions.js';
+import { projectFor, requireWrite } from '../../../mcp/context.js';
 import { onSurface, type ToolDef, type ToolOutput } from './types.js';
 
 export { onSurface, type ToolDef, type ToolOutput } from './types.js';
@@ -133,7 +136,7 @@ export async function runForPerson(userId: number, projectId: number, name: stri
   const parsed = parseArgs(t, args, ref);
   // Đợt 8B: Ask AI (web) vào sổ AI của dự án — đọc lẫn ghi (ghi = người vừa bấm Apply).
   const t0 = Date.now();
-  const r = await runInAiScope('web', () => t.run(personCtx(userId), parsed));
+  const r = await runInAiScope('web', () => runGuarded(personCtx(userId), t, parsed));
   await recordToolCall({ client: 'web', userId, tool: t.name, write: t.write, projectId, hits: r.hits, args: parsed, error: r.error, durationMs: Date.now() - t0 });
   if (r.error !== undefined) throw r.error;
   const output = r.result as ToolOutput;
@@ -149,7 +152,7 @@ export async function runForAgent(ctx: McpCtx, projectRef: string, name: string,
     const parsed = parseArgs(t, args, projectRef);
     // Đợt 8B: agent dựng sẵn vào sổ AI (thao tác ghi của agent hiện ở trang AI usage).
     const t0 = Date.now();
-    const r = await runInAiScope('builtin', () => t.run(ctx, parsed));
+    const r = await runInAiScope('builtin', () => runGuarded(ctx, t, parsed));
     await recordToolCall({ client: 'builtin', userId: ctx.userId, tool: t.name, write: t.write, hits: r.hits, args: parsed, error: r.error, durationMs: Date.now() - t0 });
     if (r.error !== undefined) throw r.error;
     const out = r.result as ToolOutput;
@@ -159,4 +162,58 @@ export async function runForAgent(ctx: McpCtx, projectRef: string, name: string,
     if (!(err instanceof AppError) && typeof e.statusCode !== 'number') throw err; // lỗi máy chủ thật — để runner ghi FAILED
     return { ok: false, text: `ERROR ${e.code ?? e.statusCode ?? ''}: ${e.message ?? 'failed'}${e.data ? ` ${JSON.stringify(e.data).slice(0, 400)}` : ''}`, write: t.write };
   }
+}
+
+// ─── Lệnh xoá của AI ⇒ yêu cầu chờ trưởng nhóm duyệt (22/10/2026) ───
+
+/** Lời gọi này của lệnh có phá huỷ không (lệnh `destructive`, trừ khi `destructiveWhen` nói không). */
+export function isDestructiveCall(t: ToolDef, args: Record<string, unknown>): boolean {
+  if (!t.destructive) return false;
+  return t.destructiveWhen ? t.destructiveWhen(args) : true;
+}
+
+/** Tóm tắt tham số cho nhãn yêu cầu (bỏ base64/chuỗi dài). */
+function argSummary(args: Record<string, unknown>): string {
+  const parts: string[] = [];
+  for (const [k, v] of Object.entries(args)) {
+    if (k === 'project' || v === undefined || v === null) continue;
+    if (typeof v === 'string' && v.length > 60) continue;
+    const s = Array.isArray(v) ? `[${v.slice(0, 6).map((x) => (typeof x === 'object' ? JSON.stringify(x) : String(x))).join(', ')}${v.length > 6 ? ', …' : ''}]` : typeof v === 'object' ? JSON.stringify(v).slice(0, 60) : String(v);
+    parts.push(`${k}=${s}`);
+  }
+  return parts.join(' ').slice(0, 200);
+}
+
+/**
+ * Sự cố 22/10/2026: AI KHÔNG BAO GIỜ xoá ngay — kể cả khi người cầm token là trưởng nhóm (AI có thể hiểu sai). Lệnh
+ * `destructive` ⇒ một yêu cầu chờ trưởng nhóm bấm Duyệt trên web; duyệt ⇒ chạy đúng lệnh này dưới quyền người gửi.
+ * Agent thành viên: chạy `run` như cũ (lệnh tự chặn WORK_AGENT_FORBIDDEN).
+ */
+export async function queueToolDeletion(ctx: McpCtx, t: ToolDef, args: Record<string, unknown>) {
+  requireWrite(ctx);
+  let projectId: number | null = null;
+  let classId: number | null = null;
+  if (typeof args.project === 'string') {
+    const p = await projectFor(ctx, args.project, []);
+    if (!can(p.access.role, 'issue.edit')) throw new AppError('You cannot change this project', 403, 'FORBIDDEN');
+    projectId = p.id;
+  } else if (typeof args.classId === 'number') {
+    const { classRole } = await import('../classroom.service.js');
+    if (!(await classRole(ctx.userId, args.classId))) throw new NotFoundError('Class not found');
+    classId = args.classId;
+  } else {
+    throw new BadRequestError(`${t.name} needs a project`, 'VALIDATION_ERROR');
+  }
+  const label = `${t.title}${argSummary(args) ? ` — ${argSummary(args)}` : ''}`;
+  const q = await createRequest(ctx.userId, { projectId, classId, kind: 'tool', label, params: { tool: t.name, args } });
+  return {
+    status: 'PENDING_APPROVAL', deleted: false, request: q.id, waitingFor: q.approvers.map((a) => `@${a.username}`),
+    message: q.message, url: q.url,
+  };
+}
+
+/** Chạy một lệnh với cửa chặn xoá (MCP, Ask AI, agent dựng sẵn đều qua đây). */
+export function runGuarded(ctx: McpCtx, t: ToolDef, args: Record<string, unknown>): Promise<ToolOutput> {
+  if (!ctx.agent && isDestructiveCall(t, args)) return queueToolDeletion(ctx, t, args);
+  return t.run(ctx, args);
 }

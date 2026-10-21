@@ -31,6 +31,7 @@ import { ClientPill, CommentModeToggle, InternalPill, portalStaff } from './port
 import type { CommentVisibility } from '@/lib/work-api';
 import { VungAnhXemDuoc } from './xemTep/XemTep'; // 20/10/2026: bấm ảnh trong bình luận ⇒ xem ngay
 import { wt, wfmt } from '@/components/work/i18n';
+import { mb, workLimits } from '@/lib/work-limits';
 
 function CommentComposer({ config, pid, num, clientShared, parent, onDone }: {
   config: ProjectConfig; pid: number; num: number; clientShared: boolean;
@@ -145,7 +146,7 @@ function CommentComposer({ config, pid, num, clientShared, parent, onDone }: {
             <button type="button" className="w-btn w-btn-ghost w-btn-sm" onClick={cancel}>{wt('common.cancel')}</button>
             {canAttach && (
               <>
-                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('detail.attachFiles')} title={wt('detail.attachTip')} onClick={() => fileRef.current?.click()}>
+                <button type="button" className="w-btn w-btn-ghost w-btn-icon w-btn-sm" aria-label={wt('detail.attachFiles')} title={wt('detail.attachTip', { mb: mb(workLimits().fileBytes) })} onClick={() => fileRef.current?.click()}>
                   <Paperclip size={14} />
                 </button>
                 <input ref={fileRef} type="file" multiple hidden aria-hidden="true" tabIndex={-1} onChange={(e) => { if (e.target.files?.length) drafts.addFiles(e.target.files); e.target.value = ''; }} />

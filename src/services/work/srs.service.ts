@@ -18,10 +18,12 @@
 import type { Prisma } from '@prisma/client';
 import sharp from 'sharp';
 import { z } from 'zod';
+import { goiAiCtWork } from './aiCong.js'; // 22/10/2026: chuỗi cổng CT Work (rambo → chính hãng → modelapi)
+import { kiemHanMucAi } from './aiTaiTro.js';
 import { prisma } from '../../config/database.js';
 import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
-import { checkTokenQuota, extractJson, isAiAvailable, llmComplete } from '../interview/llm/index.js';
+import { extractJson, isAiAvailable } from '../interview/llm/index.js';
 import { auditProject } from './audit.js';
 import { displayName } from './common.js';
 import { DOC_IMAGE_SRC_RE, type PmNode } from './docMarkdown.js';
@@ -688,11 +690,11 @@ const suggestOut = z.object({
 async function askModel(userId: number, system: string, user: string): Promise<{ text: string; model: string | null }> {
   if (askOverride) return { text: await askOverride(system, user), model: 'test-model' };
   if (!isAiAvailable('work')) throw new AppError('The AI assistant is temporarily unavailable. Please try again later.', 503, 'WORK_AI_UNAVAILABLE');
-  if (!(await checkTokenQuota(userId))) throw new AppError('You have reached today’s AI usage limit.', 429, 'WORK_AI_TOKEN_CAP');
+  await kiemHanMucAi(userId, null); // 22/10/2026: tài trợ Pro (người / trưởng nhóm) + chống spam — aiTaiTro.ts
   const { aiQuota } = await import('./ai.service.js');
   const q = await aiQuota(userId);
   if (q.limit !== null && (q.remaining ?? 0) <= 0) throw new AppError(`You have used all ${q.limit} free AI requests for today. Upgrade to Pro to keep using the AI assistant.`, 402, 'WORK_AI_QUOTA_EXCEEDED', { limit: q.limit, used: q.used, upgradeUrl: '/pro' });
-  const r = await llmComplete({ step: 'report', system, messages: [{ role: 'user', content: user }], maxTokens: 4000, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 120_000, maxRetries: 1 });
+  const r = await goiAiCtWork({ step: 'report', system, messages: [{ role: 'user', content: user }], maxTokens: 4000, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 120_000, maxRetries: 1 });
   return { text: r.text, model: r.model ?? null };
 }
 

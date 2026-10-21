@@ -11,7 +11,7 @@
  *   GET    /setup-drafts/:id                         bản nháp (tiến độ job, tóm tắt, kế hoạch, kết quả)
  *   PATCH  /setup-drafts/:id                         { input?, understanding?, plan?, model?, mode? }
  *   DELETE /setup-drafts/:id
- *   POST   /setup-drafts/:id/files                   multipart `file` + category + note (≤ 25 MB)
+ *   POST   /setup-drafts/:id/files                   multipart `file` + category + note (≤ WORK_MAX_FILE_MB)
  *   POST   /setup-drafts/:id/links                   { url, category, note?, branch? }
  *   DELETE /setup-drafts/:id/sources/:sid
  *   POST   /setup-drafts/:id/understand              { reread?, ve?, model? } ⇒ job đọc & tóm tắt
@@ -31,6 +31,7 @@ import * as svc from '../services/work/taoCuongMini/banNhap.service.js';
 import { modelChoGiaoDien } from '../services/work/taoCuongMini/goiModel.js';
 import { CAP, SOURCE_CATEGORIES } from '../services/work/taoCuongMini/kieu.js';
 import { requireWorkspace, assertHumanActor } from '../services/work/permissions.js';
+import { tooLargeMessage } from '../services/work/limits.js';
 
 const router = Router();
 
@@ -58,7 +59,7 @@ function receive(field: string) {
   return (req: Request, res: Response, next: NextFunction) => {
     up.single(field)(req, res, (err: unknown) => {
       if (!err) { next(); return; }
-      if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') { next(new AppError('Files must be 25 MB or smaller', 413, 'WORK_FILE_TOO_LARGE')); return; }
+      if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') { next(new AppError(tooLargeMessage(CAP.fileBytes), 413, 'WORK_FILE_TOO_LARGE')); return; }
       next(new BadRequestError('Could not read the uploaded file', 'WORK_BAD_UPLOAD'));
     });
   };

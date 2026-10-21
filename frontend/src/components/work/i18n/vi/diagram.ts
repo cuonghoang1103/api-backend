@@ -198,7 +198,7 @@ export const diagram: Strings<typeof En> = {
   srcDataFlow: 'Từ các trang thiết kế, actor và docker-compose.',
   generateNote: 'Kết quả là một ĐỀ XUẤT: thành viên hoặc giảng viên bấm Nhận rồi mới vào Report 3/4. Thứ không có trong dữ liệu được ghi "(assumed)".',
   chooseFile: 'Chọn một tệp',
-  fileTooLarge: 'Tệp lớn hơn 8 MB',
+  fileTooLarge: 'Tệp lớn hơn {mb}',
   importFailed: 'Không nhập được tệp này',
   importTitle: 'Nhập sơ đồ',
   importIntro: 'draw.io (.drawio, .xml, hoặc PNG/SVG xuất kèm sơ đồ), Excalidraw (.excalidraw) hoặc Mermaid (.mmd, hoặc Markdown có khối mermaid).',

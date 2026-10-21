@@ -20,6 +20,8 @@ import FptDocDialog from './FptDocDialog';
 import FptImportDialog from './FptImportDialog';
 import { ExportButton, InlineText, ResultBar, Stat } from './shared';
 import UnitMatrix from './UnitMatrix';
+import TrashLink from './TrashLink';
+import { afterDelete } from '../../settings/binApi';
 import { KpiRow } from '../../KpiTile';
 import { PaneStrip, usePaneKeys, usePanes } from '../../shell/panes';
 import { wt } from '@/components/work/i18n';
@@ -96,6 +98,7 @@ export default function UnitTab({ config, pid }: { config: ProjectConfig; pid: n
           <button type="button" className="w-btn w-btn-sm" onClick={() => setDocOpen(true)}><FileText size={13} /> <span className="hidden sm:inline">{wt('fpt.coverChanges')}</span></button>
           {canEdit && <button type="button" className="w-btn w-btn-sm" onClick={() => setImportOpen(true)}><FileUp size={13} /> <span className="hidden sm:inline">{wt('common.import')}</span></button>}
           <ExportButton pid={pid} report="unit" label={wt('fpt.export51')} />
+          {canEdit && <TrashLink />}
         </div>
       </div>
 
@@ -227,7 +230,10 @@ function FunctionPane({ pid, id, canEdit, onDeleted, onOpen }: { pid: number; id
   };
 
   return (
-    <div className="mx-auto max-w-[1400px]">
+    // Dùng FULL chiều rộng khung (bỏ cap 1400px canh giữa): bảng ma trận 5.1 nhiều cột UTCID
+    // cần tối đa bề ngang; cap cũ làm nó bó giữa, chừa lề hai bên và che bớt trên màn rộng.
+    // Bảng tự cuộn ngang khi vượt màn (fpt-matrix-wrap overflow-auto trong UnitMatrix).
+    <div className="min-w-0">
       <div className="mb-3 flex flex-wrap items-start gap-3">
         <div className="min-w-0 flex-1">
           <div className="text-[12px] text-[var(--w-text-3)]">{wt('fpt.codeModule')}</div>
@@ -244,7 +250,13 @@ function FunctionPane({ pid, id, canEdit, onDeleted, onOpen }: { pid: number; id
             }}><Copy size={13} /> {wt('tests.duplicate')}</button>
             <button type="button" className="w-btn w-btn-sm text-[var(--w-red)]" onClick={async () => {
               if (!window.confirm(wt('fpt.deleteFnQ', { name: f.methodName, n: f.cases.length }))) return;
-              try { await fptApi.deleteFunction(pid, id); qc.invalidateQueries({ queryKey: fptKeys.unit(pid) }); onDeleted(); } catch (e) { toast.error(workError(e)); }
+              try {
+                const out = await fptApi.deleteFunction(pid, id);
+                qc.invalidateQueries({ queryKey: fptKeys.unit(pid) });
+                if (out.deleted) onDeleted();
+                // 22/10/2026: vào thùng rác 30 ngày + Hoàn tác (hoặc đã gửi trưởng nhóm duyệt).
+                afterDelete(pid, out, () => { qc.invalidateQueries({ queryKey: fptKeys.unit(pid) }); onOpen(id); });
+              } catch (e) { toast.error(workError(e)); }
             }}><Trash2 size={13} /> {wt('common.delete')}</button>
           </div>
         )}

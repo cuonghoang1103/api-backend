@@ -99,7 +99,8 @@ function ProjectSettings() {
     { get label() { return wt('settings.tData'); }, collapsible: true, tabs: [
       { key: 'export', get label() { return wt('settings.tExport'); }, icon: Download, keywords: 'export csv json xuat' },
       ...(perms?.settings ? [{ key: 'import' as const, get label() { return wt('settings.tImport'); }, icon: Upload, keywords: 'import csv jira trello nhap' }] : []),
-      ...(perms?.deleteIssues ? [{ key: 'trash' as const, get label() { return wt('settings.tTrash'); }, icon: Trash2, keywords: 'trash deleted restore thung rac khoi phuc' }] : []),
+      // 22/10/2026: thành viên (sửa được dự án) cũng thấy Trash — thùng rác dữ liệu 30 ngày + yêu cầu xoá chờ duyệt.
+      ...(perms?.deleteIssues || perms?.editIssues ? [{ key: 'trash' as const, get label() { return wt('settings.tTrash'); }, icon: Trash2, keywords: 'trash deleted restore undo thung rac khoi phuc yeu cau xoa duyet' }] : []),
     ] },
     { get label() { return wt('settings.tDangerZone'); }, danger: true, collapsible: true, tabs: perms?.settings ? [{ key: 'danger' as const, get label() { return wt('settings.tDangerZone'); }, icon: TriangleAlert, keywords: 'archive delete transfer luu tru xoa' }] : [] },
   ];

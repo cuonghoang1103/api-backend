@@ -26,6 +26,7 @@ import { Select } from '../settings/shared';
 import { formatDateTime, RUN_META, RunStatusPill, STEP_META } from './runStatus';
 import { wt } from '@/components/work/i18n';
 import { IconTep, taiVe, tepDinhKem, useXemTep } from '../xemTep/XemTep';
+import { mb, workLimits } from '@/lib/work-limits';
 
 type Step = TestRunDetail['steps'][number];
 
@@ -227,7 +228,7 @@ export default function RunPanel({ config, pid, runId, runIds, onNavigate, onClo
     if (!data || !canAttach) return;
     const testNumber = data.testCase.issue.number;
     for (const raw of files) {
-      if (raw.size > 25 * 1024 * 1024) { toast.error(wt('tests.tooLarge', { name: raw.name || wt('tests.file') })); continue; }
+      if (raw.size > workLimits().fileBytes) { toast.error(wt('tests.tooLarge', { name: raw.name || wt('tests.file'), mb: mb(workLimits().fileBytes) })); continue; }
       const file = namedFile(raw);
       const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
       setUploads((u) => [...u, { id, name: file.name, pct: 0 }]);
@@ -770,7 +771,7 @@ function EvidenceSection({ pid, evidence, uploads, canAttach, testKey, onFiles }
         >
           <span className="text-[13px] text-[var(--w-text-2)]">{wt('tests.dropHere')}</span>
           <span>
-            {wt('tests.pasteHint')} <span className="w-kbd">{isMac ? '⌘' : 'Ctrl'}</span><span className="w-kbd">V</span>. {wt('tests.max25')}
+            {wt('tests.pasteHint')} <span className="w-kbd">{isMac ? '⌘' : 'Ctrl'}</span><span className="w-kbd">V</span>. {wt('tests.max25', { mb: mb(workLimits().fileBytes) })}
           </span>
         </button>
       ) : (

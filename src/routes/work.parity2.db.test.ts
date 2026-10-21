@@ -63,6 +63,20 @@ describe('CT Work — CuongMini ngang quyền người đợt 2 (MCP)', { skip: 
   }
   const ok = <T extends { isError: boolean; text: string }>(r: T): T => { assert.equal(r.isError, false, r.text); return r; };
   const denied = (r: { isError: boolean; text: string }, code: RegExp) => { assert.equal(r.isError, true, r.text); assert.match(r.text, code); };
+  // 22/10/2026: lệnh xoá của AI KHÔNG chạy ngay — thành yêu cầu chờ trưởng nhóm duyệt; lead duyệt trên web ⇒ lệnh chạy dưới
+  // quyền người gửi. okDel = gửi lệnh ⇒ thấy PENDING_APPROVAL (chưa xoá gì) ⇒ duyệt ⇒ kết quả thật.
+  async function viaApproval(p: Promise<{ isError: boolean; text: string; out: any }>) {
+    const r = ok(await p);
+    assert.equal(r.out?.status, 'PENDING_APPROVAL', r.text);
+    const a = await call(lead, 'POST', `/delete-requests/${r.out.request}/approve`, {});
+    assert.equal(a.status, 200, JSON.stringify(a.raw));
+    return a.data as { status: string; error: string | null; result: { output: any; trash: Array<{ id: number }> } };
+  }
+  const okDel = async (p: Promise<{ isError: boolean; text: string; out: any }>) => {
+    const v = await viaApproval(p);
+    assert.equal(v.status, 'APPROVED', v.error ?? '');
+    return { isError: false, out: v.result.output, text: JSON.stringify(v.result.output) };
+  };
 
   before(async () => {
     (emailService as any).send = async () => ({ success: true });
@@ -133,7 +147,7 @@ describe('CT Work — CuongMini ngang quyền người đợt 2 (MCP)', { skip: 
     ok(await tool(devTok, 'swr_glossary_update', { project: 'LF', item: 'lab slot', definition: 'A 2-hour booking of a lab room' }));
     const g = await prisma.workGlossaryTerm.findFirstOrThrow({ where: { projectId: pid, term: 'Lab slot' } });
     assert.match(g.definition, /2-hour/);
-    ok(await tool(devTok, 'swr_delete', { project: 'LF', kind: 'glossary', item: 'Lab slot' }));
+    await okDel(tool(devTok, 'swr_delete', { project: 'LF', kind: 'glossary', item: 'Lab slot' }));
     assert.equal(await prisma.workGlossaryTerm.count({ where: { id: g.id } }), 0);
     const iss = ok(await tool(devTok, 'create_issue', { project: 'LF', type: 'TASK', title: 'trace me' })).out;
     const n = iss.number ?? Number(String(iss.key ?? iss.created).split('-')[1]);
@@ -155,7 +169,7 @@ describe('CT Work — CuongMini ngang quyền người đợt 2 (MCP)', { skip: 
     denied(await tool(devTok, 'change_request_manage', { project: 'LF', action: 'approve', number: c.number }), /action|Invalid/i);
     const g = ok(await tool(devTok, 'change_requests', { project: 'LF', number: c.number })).text;
     assert.match(g, /Auth module/);
-    ok(await tool(leadTok, 'change_request_delete', { project: 'LF', number: `CR-${c.number}` }));
+    await okDel(tool(leadTok, 'change_request_delete', { project: 'LF', number: `CR-${c.number}` }));
   });
 
   it('chat: tạo kênh, đổi chủ đề, lưu trữ; ghim + react tin', async () => {
@@ -172,7 +186,7 @@ describe('CT Work — CuongMini ngang quyền người đợt 2 (MCP)', { skip: 
     ok(await tool(devTok, 'docs_comment', { project: 'LF', page: pg.number, markdown: 'please review' }));
     const list = JSON.parse(ok(await tool(devTok, 'docs_comments', { project: 'LF', page: pg.number })).text.replace(/^[^[]*/, '').replace(/[^\]]*$/, ''));
     assert.equal(list.length, 1);
-    ok(await tool(devTok, 'docs_comment_delete', { project: 'LF', page: pg.number, comment: list[0].id }));
+    await okDel(tool(devTok, 'docs_comment_delete', { project: 'LF', page: pg.number, comment: list[0].id }));
     const mt = ok(await tool(devTok, 'meeting_create', { project: 'LF', title: 'Weekly', start: '2026-10-23T09:00:00+07:00', end: '2026-10-23T10:00:00+07:00' })).out;
     ok(await tool(devTok, 'meeting_attendees_set', { project: 'LF', meeting: mt.created, attendees: ['me', lead.username] }));
     ok(await tool(devTok, 'meeting_agenda_set', { project: 'LF', meeting: mt.created, items: [{ title: 'Demo', presenter: 'me', minutes: 15 }, { title: 'Risks', minutes: 10 }] }));
@@ -185,7 +199,7 @@ describe('CT Work — CuongMini ngang quyền người đợt 2 (MCP)', { skip: 
     const tc = ok(await tool(devTok, 'test_create', { project: 'LF', title: 'Login', steps: [{ action: 'open' }] })).out;
     const pl = ok(await tool(devTok, 'test_plan_manage', { project: 'LF', name: 'Release 1', addTests: [tc.number] })).out;
     ok(await tool(devTok, 'test_plan_manage', { project: 'LF', plan: pl.created, description: 'Smoke' }));
-    ok(await tool(devTok, 'test_plan_delete', { project: 'LF', plan: pl.created }));
+    await okDel(tool(devTok, 'test_plan_delete', { project: 'LF', plan: pl.created }));
     const story = ok(await tool(leadTok, 'create_issue', { project: 'LF', type: 'TASK', title: 'estimate me' })).out;
     const sn = story.number ?? Number(String(story.key ?? story.created).split('-')[1]);
     const ps = ok(await tool(leadTok, 'poker_session', { project: 'LF', action: 'create', title: 'Sprint 1', issues: [sn] })).out;
@@ -196,7 +210,7 @@ describe('CT Work — CuongMini ngang quyền người đợt 2 (MCP)', { skip: 
     assert.equal(Number((await prisma.workIssue.findFirstOrThrow({ where: { projectId: pid, number: sn } })).storyPoints), 5);
     const rt = ok(await tool(leadTok, 'retro_session', { project: 'LF', action: 'create', title: 'Retro 1' })).out;
     ok(await tool(leadTok, 'retro_session', { project: 'LF', action: 'update', retro: rt.created, locked: true }));
-    ok(await tool(leadTok, 'agile_delete', { project: 'LF', kind: 'retro', id: rt.created }));
+    await okDel(tool(leadTok, 'agile_delete', { project: 'LF', kind: 'retro', id: rt.created }));
     const v = ok(await tool(leadTok, 'version_manage', { project: 'LF', action: 'create', name: 'v1.0' })).out;
     ok(await tool(leadTok, 'version_manage', { project: 'LF', action: 'update', version: 'v1.0', releaseNotes: 'First' }));
     ok(await tool(leadTok, 'version_manage', { project: 'LF', action: 'release', version: v.created }));
@@ -210,7 +224,7 @@ describe('CT Work — CuongMini ngang quyền người đợt 2 (MCP)', { skip: 
     assert.ok(d.saved, JSON.stringify(d));
     assert.match(ok(await tool(devTok, 'test_designs', { project: 'LF', number: d.saved })).text, /Age rule/);
     ok(await tool(devTok, 'test_design_export', { project: 'LF', number: d.saved, target: 'XRAY' }));
-    ok(await tool(devTok, 'test_design_delete', { project: 'LF', number: d.saved }));
+    await okDel(tool(devTok, 'test_design_delete', { project: 'LF', number: d.saved }));
     denied(await tool(devTok, 'test_design_save', { project: 'LF', name: 'x', technique: 'EP_BVA', inputJson: '{bad' }), /inputJson/);
     // Excel 5.1: xuất của chính dự án ⇒ nhập lại dạng dryRun
     ok(await tool(devTok, 'fpt_unit_create_function', { project: 'LF', moduleName: 'Auth', methodName: 'login' }));
@@ -230,7 +244,7 @@ describe('CT Work — CuongMini ngang quyền người đợt 2 (MCP)', { skip: 
     assert.ok(Number.isInteger(itemId), 'review has checklist items');
     ok(await tool(leadTok, 'review_manage', { project: 'LF', action: 'items', number: r.out.created, items: [{ id: itemId, result: 'OK' }] }));
     ok(await tool(leadTok, 'review_manage', { project: 'LF', action: 'transition', number: r.out.created, to: 'PREPARATION' }));
-    ok(await tool(leadTok, 'review_delete', { project: 'LF', number: r.out.created }));
+    await okDel(tool(leadTok, 'review_delete', { project: 'LF', number: r.out.created }));
   });
 
   it('lớp học: giảng viên đăng thông báo, tài liệu, bài tập, xoá — không có lệnh chấm', async () => {
@@ -247,8 +261,8 @@ describe('CT Work — CuongMini ngang quyền người đợt 2 (MCP)', { skip: 
     assert.match(read, /Welcome/);
     // Sinh viên (dev) không phải giảng viên ⇒ service từ chối
     denied(await tool(devTok, 'class_post', { classId, title: 'hi', markdown: 'x' }), /FORBIDDEN|NOT_FOUND|not/i);
-    ok(await tool(leadTok, 'class_content_delete', { classId, kind: 'post', id: post.posted }));
-    ok(await tool(leadTok, 'class_content_delete', { classId, kind: 'topic', id: topic.created }));
+    await okDel(tool(leadTok, 'class_content_delete', { classId, kind: 'post', id: post.posted }));
+    await okDel(tool(leadTok, 'class_content_delete', { classId, kind: 'topic', id: topic.created }));
     const names = ((await rpc(leadTok, 'tools/list')).result.tools as Array<{ name: string }>).map((t) => t.name);
     assert.ok(!names.some((x) => /grade|return_work|gradebook/.test(x)), 'không có lệnh chấm điểm');
   });

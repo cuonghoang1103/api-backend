@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import { describe, it } from 'node:test';
 import {
-  describeAnswers, formClosedReason, looksLikeBot, normalizeFields, normalizeMapping, renderTitle, summarize, validateAnswers, visibleFields,
+  describeAnswers, formClosedReason, looksLikeBot, MAX_FILE_BYTES, normalizeFields, normalizeMapping, renderTitle, summarize, validateAnswers, visibleFields,
 } from './formRules.js';
 import { crossCheck, parseAsana, parseJiraComment, parseJiraCsv, parseTable, parseTrello, statusCategoryOf, suggestMapping, tableFromSheet } from './importParsers.js';
 import { parseCsv } from './exchange.service.js';
@@ -59,7 +59,7 @@ describe('formRules', () => {
     }, new Set([1, 2]));
     const codes = Object.fromEntries(r.errors.map((e) => [e.id, e.code]));
     assert.deepEqual(codes, { kind: 'INVALID', severity: 'INVALID', needed_by: 'INVALID', areas: 'INVALID', screenshot: 'FILE_TYPE', owner: 'INVALID' });
-    const big = validateAnswers(fields, { summary: 'x', kind: 'Idea', screenshot: [{ name: 'a.png', type: 'image/png', size: 6 * 1024 * 1024 }] });
+    const big = validateAnswers(fields, { summary: 'x', kind: 'Idea', screenshot: [{ name: 'a.png', type: 'image/png', size: MAX_FILE_BYTES + 1 }] });
     assert.deepEqual(big.errors, [{ id: 'screenshot', code: 'FILE_TOO_BIG' }]);
     const ok = validateAnswers(fields, { summary: '  Ok ', kind: 'Idea', severity: '3', needed_by: '2026-10-20', areas: ['Web', 'Web'], owner: 2 }, new Set([2]));
     assert.deepEqual(ok.errors, []);

@@ -2,7 +2,7 @@
 
 /**
  * UX-D (09/10/2026) — Project settings → Details → "Cover image".
- * Thư viện 29 ảnh bìa tự dựng (4 nhóm) + tải ảnh riêng (PNG/JPEG/WebP ≤ 8 MB, máy chủ nén lại JPEG) + chọn điểm lấy
+ * Thư viện 29 ảnh bìa tự dựng (4 nhóm) + tải ảnh riêng (PNG/JPEG/WebP ≤ WORK_MAX_IMAGE_MB, máy chủ nén lại JPEG) + chọn điểm lấy
  * nét dọc bằng cách KÉO ảnh xem trước (hoặc thanh trượt — dùng được bằng bàn phím). Chỉ ADMIN dự án đổi được.
  * Bìa hiện ở: thẻ dự án, dải đầu trang dự án, cổng khách, ảnh xem trước link mời/link công khai, thư mời.
  */
@@ -21,6 +21,7 @@ import ProjectCover from '../cover/ProjectCover';
 import { Section } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
 import { wt } from '@/components/work/i18n';
+import { mb, workLimits } from '@/lib/work-limits';
 
 export function ProjectCoverPicker({ config, slug }: { config: ProjectConfig; slug: string }) {
   const invalidate = useProjectInvalidate(config.id, slug);
@@ -81,7 +82,7 @@ export function ProjectCoverPicker({ config, slug }: { config: ProjectConfig; sl
                   <input type="range" min={0} max={100} value={y} onChange={(e) => setY(Number(e.target.value))} onPointerUp={() => move.mutate(y)} onKeyUp={() => move.mutate(y)} className="w-28 accent-[var(--w-accent)]" aria-valuetext={`${y}%`} />
                 </label>
               )}
-              <p className="basis-full text-[12px] text-[var(--w-text-3)]">{wt('cover.hint', { own: uploaded ? wt('cover.own') : '' })}</p>
+              <p className="basis-full text-[12px] text-[var(--w-text-3)]">{wt('cover.hint', { own: uploaded ? wt('cover.own') : '', mb: mb(workLimits().imageBytes) })}</p>
             </div>
             <div>
               <div role="tablist" aria-label={wt('cover.collections')} className="mb-2 flex flex-wrap gap-1">

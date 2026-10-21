@@ -602,8 +602,10 @@ const testDesignDelete = defineTool({
 
 const fptImport = defineTool({
   name: 'fpt_import_excel', title: 'Import a Report 5.1/5.2/5.3 Excel file', group: 'tests',
-  description: 'Imports an FPT test report .xlsx (base64, ≤ 6 MB) into Report 5.1/5.2/5.3. ALWAYS run with dryRun=true first and show the user what would change. mode "append" adds; "replace" OVERWRITES the existing sheets of that report — destructive, the user must confirm.',
+  description: 'Imports an FPT test report .xlsx (base64, ≤ 6 MB) into Report 5.1/5.2/5.3. ALWAYS run with dryRun=true first and show the user what would change. mode "append" adds; "replace" OVERWRITES the existing sheets of that report — destructive: it is never run directly, it becomes a deletion request the team lead approves on the web (old data goes to the 30-day trash).',
   write: true, destructive: true, personOnly: true,
+  // 22/10/2026: chỉ "replace" thật mới là xoá (thành yêu cầu chờ trưởng nhóm duyệt); dryRun / append chạy ngay.
+  destructiveWhen: (a) => a.mode === 'replace' && a.dryRun !== true,
   input: z.object({
     project: projectArg, base64: z.string().min(8).max(8_500_000), report: z.enum(['auto', 'unit', 'integration', 'system']).optional(),
     mode: z.enum(['append', 'replace']).optional(), dryRun: z.boolean().optional(),

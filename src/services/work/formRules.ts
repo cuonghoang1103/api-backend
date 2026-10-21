@@ -12,6 +12,7 @@
  *   describeAnswers   — mô tả thẻ dạng chữ: "Nhãn: giá trị" theo thứ tự trường.
  *   summarize         — tổng hợp câu trả lời (đếm lựa chọn, trung bình số, mẫu chữ gần nhất).
  */
+import { WORK_LIMITS } from './limits.js';
 
 export const FORM_FIELD_KINDS = ['text', 'longtext', 'select', 'multiselect', 'number', 'date', 'file', 'user'] as const;
 export type FormFieldKind = (typeof FORM_FIELD_KINDS)[number];
@@ -22,8 +23,12 @@ export type FormStatus = (typeof FORM_STATUSES)[number];
 
 export const MAX_FORM_FIELDS = 30;
 export const MAX_FILES_PER_FIELD = 3;
-export const MAX_FILE_BYTES = 5 * 1024 * 1024;
-export const MAX_FILES_TOTAL_BYTES = 10 * 1024 * 1024;
+/**
+ * Tệp gửi qua form (limits.ts, env WORK_FORM_MAX_TOTAL_MB): form công khai ai cũng gửi được và tệp đi base64 trong
+ * JSON ⇒ trần TỔNG một lần gửi thấp hơn đính kèm thường; một tệp được dùng trọn trần tổng.
+ */
+export const MAX_FILES_TOTAL_BYTES = WORK_LIMITS.formTotalBytes;
+export const MAX_FILE_BYTES = Math.min(WORK_LIMITS.fileBytes, MAX_FILES_TOTAL_BYTES);
 /** Kiểu tệp nhận từ form (ảnh, PDF, văn bản, bảng tính, zip) — không nhận HTML/SVG/thực thi. */
 export const FORM_FILE_MIMES = [
   'image/png', 'image/jpeg', 'image/gif', 'image/webp', 'application/pdf', 'text/plain', 'text/csv',

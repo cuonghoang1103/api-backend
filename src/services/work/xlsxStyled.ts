@@ -13,6 +13,8 @@
  */
 
 import AdmZip from 'adm-zip';
+import zlib from 'node:zlib';
+import { WORK_LIMITS } from './limits.js';
 
 // ─── Kiểu ────────────────────────────────────────────────────────
 
@@ -289,10 +291,37 @@ const allText = (xml: string) => [...xml.matchAll(/<(?:\w+:)?t(?:\s[^>]*)?>([\s\
 
 const BUILTIN_DATE_FMTS = new Set([14, 15, 16, 17, 18, 19, 20, 21, 22, 27, 30, 36, 45, 46, 47, 50, 57]);
 
+/**
+ * Đọc từng phần XML của zip với TRẦN TỔNG GIẢI NÉN (chống zip bomb) — 22/10/2026.
+ * Chỉ giải nén đúng phần được hỏi (workbook, rels, sharedStrings, styles, các sheet): ảnh `xl/media/*`, bản vẽ, máy in…
+ * KHÔNG BAO GIỜ được giải nén, nên một mẫu FPT 20–30 MB đầy ảnh chụp màn hình chỉ tốn RAM cho phần chữ. Kích thước khai
+ * trong mục lục zip có thể nói dối ⇒ còn chặn lần nữa lúc inflate bằng `maxOutputLength`.
+ */
+export function zipXmlReader(zip: AdmZip, maxTotal = WORK_LIMITS.zipXmlBytes): (p: string) => string | undefined {
+  let used = 0;
+  return (p) => {
+    const e = zip.getEntry(p);
+    if (!e || e.isDirectory) return undefined;
+    const left = maxTotal - used;
+    if (e.header.size > left) throw new Error('XLSX_TOO_BIG');
+    let out: Buffer;
+    if (e.header.method === 0) out = e.getCompressedData();
+    else if (e.header.method === 8) {
+      try { out = zlib.inflateRawSync(e.getCompressedData(), { maxOutputLength: Math.max(1, left) }); } catch (err) {
+        if ((err as { code?: string })?.code === 'ERR_BUFFER_TOO_LARGE') throw new Error('XLSX_TOO_BIG');
+        throw err;
+      }
+    } else out = e.getData();
+    used += out.length;
+    if (used > maxTotal) throw new Error('XLSX_TOO_BIG');
+    return out.toString('utf8');
+  };
+}
+
 export function readXlsx(buf: Buffer): RSheet[] {
   let zip: AdmZip;
   try { zip = new AdmZip(buf); } catch { throw new Error('NOT_XLSX'); }
-  const read = (p: string) => zip.getEntry(p)?.getData().toString('utf8');
+  const read = zipXmlReader(zip);
   const wb = read('xl/workbook.xml');
   if (!wb) throw new Error('NOT_XLSX');
   const rels = read('xl/_rels/workbook.xml.rels') ?? '';

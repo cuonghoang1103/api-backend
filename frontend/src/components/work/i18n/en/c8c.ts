@@ -116,7 +116,7 @@ export const c8c = {
   saCreateBugs: 'Create bugs for NEW errors (max 20)',
   saUpload: 'Import',
   saPickFile: 'Pick a report file first',
-  saTooBig: 'The file is larger than 10 MB',
+  saTooBig: 'The file is larger than {mb}',
   saUploaded: 'Imported: {total} findings, {n} new, {f} fixed, {u} functions with V(G)',
   vgTitle: 'Cyclomatic complexity V(G)',
   vgDesc: 'Read from your coverage / lint reports — V(G) is also the number of basis paths, i.e. the minimum tests for basis-path coverage.',

@@ -21,15 +21,16 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeSanitize from 'rehype-sanitize';
 import { toast } from 'sonner';
-import { Activity, AlertTriangle, ArrowUp, ClipboardCheck, FileText, GraduationCap, History, Lock, Maximize2, Minimize2, RotateCcw, Search, Sparkles, Square, SquarePen, Trash2, Users, X } from 'lucide-react';
+import { Activity, AlertTriangle, ArrowUp, ClipboardCheck, FileText, GraduationCap, History, Image as ImageIcon, Lock, Maximize2, Minimize2, Paperclip, RotateCcw, Search, Sparkles, Square, SquarePen, Trash2, Users, X } from 'lucide-react';
 import {
-  isAiQuotaError, workApi, workError, workErrorStatus,
-  type AiMessage, type AiQuickTask, type AiQuota, type ProjectConfig,
+  isAiQuotaError, isAiTokenCapError, workApi, workError, workErrorStatus,
+  type AiFileRef, type AiMessage, type AiQuickTask, type AiQuota, type ProjectConfig,
 } from '@/lib/work-api';
+import AiMermaid from './AiMermaid';
 import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/lib/utils';
 import { wk } from '../hooks';
-import { relativeTime, Spinner, UserAvatar, WorkPortal } from '../ui';
+import { Dialog, relativeTime, Spinner, UserAvatar, WorkPortal } from '../ui';
 import { ActionGroup, type ActionItem } from './ActionCard';
 import UpgradeDialog from './UpgradeDialog';
 import { openAiPanel, useAiPanel, type AiQuickRequest } from './store';
@@ -41,6 +42,25 @@ import { wt, wfmt } from '@/components/work/i18n';
 // ─── Kiểu + lưu trữ ──────────────────────────────────────────────
 
 const QUOTA_KEY = ['work', 'ai-quota'] as const;
+/** 22/10/2026: hạn mức + tài trợ THEO DỰ ÁN (trưởng nhóm Pro ⇒ cả nhóm). Tiền tố QUOTA_KEY ⇒ invalidate chung vẫn trúng. */
+const quotaKey = (pid: number) => ['work', 'ai-quota', pid] as const;
+
+// ─── Ảnh/tệp gửi kèm (22/10/2026) ─────────────────────────────────
+const MAX_FILES = 6;
+const MAX_FILE_MB = 15;
+/** Dấu tệp trong câu hỏi đã lưu (backend `aiTep.ts › ganDauTep`). */
+const DAU_TEP = /\n*<ctw-tep>(\[[\s\S]*?\])<\/ctw-tep>\s*$/;
+export function tachDauTep(content: string): { text: string; files: AiFileRef[] } {
+  const m = DAU_TEP.exec(content);
+  if (!m) return { text: content, files: [] };
+  try {
+    const arr = JSON.parse(m[1]) as AiFileRef[];
+    return { text: content.slice(0, m.index).trimEnd(), files: Array.isArray(arr) ? arr.filter((f) => f && typeof f.key === 'string' && typeof f.name === 'string') : [] };
+  } catch {
+    return { text: content.slice(0, m.index).trimEnd(), files: [] };
+  }
+}
+interface DraftFile { id: string; file: File; status: 'uploading' | 'ready' | 'error'; pct: number; ref?: AiFileRef; preview?: string }
 const threadKey = (pid: number, tid: number) => ['work', 'ai-thread', pid, tid] as const;
 const threadsKey = (pid: number) => ['work', 'ai-threads', pid] as const;
 
@@ -118,6 +138,15 @@ const AiMarkdown = memo(function AiMarkdown({ text }: { text: string }) {
               />
             );
           },
+          // 22/10/2026: khối ```mermaid ⇒ sơ đồ vẽ ngay trong khung (bộ vẽ CT Work Diagrams).
+          pre: ({ node, children, ...props }) => {
+            const c = node?.children?.[0] as { type?: string; tagName?: string; properties?: { className?: unknown }; children?: Array<{ value?: string }> } | undefined;
+            const cls = c?.properties?.className;
+            if (c?.tagName === 'code' && Array.isArray(cls) && cls.includes('language-mermaid')) {
+              return <AiMermaid code={(c.children ?? []).map((x) => x.value ?? '').join('')} />;
+            }
+            return <pre {...props}>{children}</pre>;
+          },
           table: ({ node: _n, ...props }) => (
             <div className="mb-2 overflow-x-auto">
               <table {...props} className="w-full border-collapse text-[12.5px] [&_td]:border [&_td]:border-[var(--w-border)] [&_td]:px-2 [&_td]:py-1 [&_th]:border [&_th]:border-[var(--w-border)] [&_th]:bg-[var(--w-sunken)] [&_th]:px-2 [&_th]:py-1 [&_th]:text-left" />
@@ -178,6 +207,11 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   const waitGen = useRef(0);
   const [unavailable, setUnavailable] = useState(false);
   const [upgrade, setUpgrade] = useState(false);
+  /** Hết trần token/ngày chung (không được tài trợ) ⇒ hộp thoại chỉ cách được tài trợ. */
+  const [capOpen, setCapOpen] = useState(false);
+  const [files, setFiles] = useState<DraftFile[]>([]);
+  const [dragging, setDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   /** Sửa tại chỗ của người đang xem (ô sửa đề xuất, trạng thái đang bấm) — phủ lên trạng thái server. */
   const [overlay, setOverlay] = useState<Record<string, Partial<ActionItem>>>({});
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -187,7 +221,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   const wide = useLayoutPrefs((s) => s.aiWide);
   useEffect(() => { useLayoutPrefs.getState().load(); }, []);
 
-  const { data: quota } = useQuery({ queryKey: QUOTA_KEY, queryFn: workApi.aiQuota, staleTime: 30_000 });
+  const { data: quota } = useQuery({ queryKey: quotaKey(pid), queryFn: () => workApi.aiQuota(pid), staleTime: 30_000 });
 
   const selectThread = useCallback((tid: number | null) => {
     setThreadId(tid);
@@ -233,12 +267,13 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   }, [qc, pid]);
 
   const onQuota = useCallback((q: AiQuota | undefined) => {
-    if (q) qc.setQueryData(QUOTA_KEY, q);
+    if (q) qc.setQueryData(quotaKey(pid), q);
     else qc.invalidateQueries({ queryKey: QUOTA_KEY });
-  }, [qc]);
+  }, [qc, pid]);
 
   const handleError = useCallback((err: unknown) => {
     if (isAiQuotaError(err)) setUpgrade(true);
+    else if (isAiTokenCapError(err)) setCapOpen(true);
     else if (workErrorStatus(err) === 503) setUnavailable(true);
     else toast.error(workError(err, wt('ai.couldNotAnswer')));
     qc.invalidateQueries({ queryKey: QUOTA_KEY });
@@ -254,9 +289,46 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
   }, [threadId, pid, issueNumber, newPrivate, qc, selectThread]);
 
   // ── Hỏi tự do ──
+  const uploading = files.some((f) => f.status === 'uploading');
+  const readyFiles = files.filter((f) => f.status === 'ready' && f.ref).map((f) => f.ref!);
+
+  /** Thêm ảnh/tệp (dán, kéo thả, chọn) ⇒ tải ngay lên backend; chip hiện tiến độ. */
+  const addFiles = useCallback((list: File[]) => {
+    if (!list.length) return;
+    setFiles((cur) => {
+      const room = MAX_FILES - cur.length;
+      if (room <= 0) { toast.error(wt('ai.tooManyFiles', { n: MAX_FILES })); return cur; }
+      if (list.length > room) toast.error(wt('ai.tooManyFiles', { n: MAX_FILES }));
+      const them: DraftFile[] = [];
+      for (const file of list.slice(0, room)) {
+        if (file.size > MAX_FILE_MB * 1024 * 1024) { toast.error(wt('ai.fileTooBig', { name: file.name, mb: MAX_FILE_MB })); continue; }
+        const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+        const preview = file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined;
+        them.push({ id, file, status: 'uploading', pct: 0, preview });
+        workApi.aiUploadFile(pid, file, (pct) => setFiles((fs) => fs.map((f) => (f.id === id ? { ...f, pct } : f))))
+          .then((ref) => setFiles((fs) => fs.map((f) => (f.id === id ? { ...f, status: 'ready', pct: 100, ref } : f))))
+          .catch((err) => {
+            toast.error(workError(err, wt('ai.uploadFailed', { name: file.name })));
+            setFiles((fs) => fs.map((f) => (f.id === id ? { ...f, status: 'error' } : f)));
+          });
+      }
+      return [...cur, ...them];
+    });
+  }, [pid]);
+  const removeFile = useCallback((id: string) => {
+    setFiles((fs) => {
+      const f = fs.find((x) => x.id === id);
+      if (f?.preview) URL.revokeObjectURL(f.preview);
+      return fs.filter((x) => x.id !== id);
+    });
+  }, []);
+
   const send = useCallback(async (text: string) => {
-    const message = text.trim();
-    if (!message || waiting) return;
+    const attachments = readyFiles;
+    const message = text.trim() || (attachments.length ? wt('ai.onlyFiles') : '');
+    if (!message || waiting || uploading) return;
+    const sentFiles = files;
+    setFiles([]);
     setPendingQ(message);
     setDraft('');
     setWaiting(CHAT_WAIT);
@@ -267,14 +339,18 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
     let tid: number | null = threadId;
     try {
       tid = await ensureThread(message);
-      const a = await workApi.aiChatAbortable(pid, { message, issueNumber, threadId: tid }, ctrl.signal);
+      const a = await workApi.aiChatAbortable(pid, { message, issueNumber, threadId: tid, ...(attachments.length ? { attachments } : {}) }, ctrl.signal);
       onQuota(a.quota);
+      for (const f of sentFiles) if (f.preview) URL.revokeObjectURL(f.preview);
     } catch (err) {
       // Server đã LƯU câu hỏi (kèm dấu lỗi + nút Retry) nếu request tới được nó.
       // Chỉ khi câu hỏi không có trong hội thoại mới trả nó về ô soạn để khỏi gõ lại.
       const fresh = tid ? await workApi.aiThread(pid, tid).catch(() => null) : null;
-      const saved = fresh?.messages.slice(-3).some((m) => m.role === 'user' && m.content === message);
-      if (!saved) setDraft((d) => d || message);
+      const saved = fresh?.messages.slice(-3).some((m) => m.role === 'user' && tachDauTep(m.content).text === message);
+      if (!saved) {
+        setDraft((d) => d || (message === wt('ai.onlyFiles') ? '' : message));
+        setFiles((cur) => (cur.length ? cur : sentFiles));
+      }
       if (ctrl.signal.aborted) {
         toast.message(wt('ai.stoppedWaiting'));
         qc.invalidateQueries({ queryKey: QUOTA_KEY });
@@ -284,7 +360,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
       if (waitGen.current === gen) { setWaiting(null); setPendingQ(null); }
       await refresh(tid);
     }
-  }, [waiting, threadId, pid, issueNumber, ensureThread, onQuota, handleError, qc, refresh]);
+  }, [waiting, uploading, files, readyFiles, threadId, pid, issueNumber, ensureThread, onQuota, handleError, qc, refresh]);
 
   const retry = useCallback(async (mid: number) => {
     if (waiting || !threadId) return;
@@ -451,7 +527,20 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
         className={cn('w-safe-y w-safe-r fixed inset-y-0 right-0 z-[66] flex w-full flex-col border-l border-[var(--w-border)] bg-[var(--w-bg)] transition-[width] duration-150', wide ? 'sm:w-[min(760px,92vw)]' : 'sm:w-[440px]')}
         data-wide={wide || undefined}
         style={{ boxShadow: 'var(--w-shadow-pop)' }}
+        onDragOver={(e) => { if (view === 'chat' && !aiOff && e.dataTransfer.types.includes('Files')) { e.preventDefault(); setDragging(true); } }}
+        onDragLeave={(e) => { if (e.currentTarget === e.target || !e.currentTarget.contains(e.relatedTarget as Node | null)) setDragging(false); }}
+        onDrop={(e) => {
+          if (!e.dataTransfer.files?.length) return;
+          e.preventDefault();
+          setDragging(false);
+          if (view === 'chat' && !aiOff) addFiles(Array.from(e.dataTransfer.files));
+        }}
       >
+        {dragging && (
+          <div className="pointer-events-none absolute inset-2 z-10 flex items-center justify-center rounded-[10px] border-2 border-dashed border-[var(--w-accent-border)] bg-[color-mix(in_srgb,var(--w-accent-soft)_85%,transparent)] text-[13px] font-medium text-[var(--w-accent-text)]">
+            {wt('ai.dropHere')}
+          </div>
+        )}
         {/* Đầu ngăn */}
         <div className="flex shrink-0 items-start gap-2 border-b border-[var(--w-border)] bg-[var(--w-panel)] px-4 py-3">
           <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-[7px] bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]">
@@ -468,6 +557,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
               {view === 'chat' && thread?.createdBy ? (
                 <span className="truncate">{wt('ai.startedBy', { who: thread.createdById === meId ? wt('common.you') : `@${thread.createdBy.username}`, when: relativeTime(thread.createdAt) })}</span>
               ) : quota ? <QuotaChip quota={quota} /> : null}
+              {view === 'chat' && thread?.createdBy && quota?.sponsorship?.sponsored ? <SponsorChip quota={quota} compact /> : null}
             </div>
           </div>
           <button type="button" className={cn('w-btn w-btn-ghost w-btn-icon w-btn-sm', view === 'history' && 'w-btn-on')} onClick={() => setView(view === 'history' ? 'chat' : 'history')} aria-label={wt('ai.convHistory')} title={wt('ai.teamConvs')}>
@@ -535,7 +625,7 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
               ) : (
                 <div className="space-y-4">
                   {messages.map((m) => (m.role === 'user' ? (
-                    <UserTurn key={m.id} m={m} mine={m.author?.id === meId} projectKey={key} onRetry={() => retry(m.id)} busy={!!waiting} />
+                    <UserTurn key={m.id} m={m} pid={pid} mine={m.author?.id === meId} projectKey={key} onRetry={() => retry(m.id)} busy={!!waiting} />
                   ) : (
                     <div key={m.id}>
                       <div className="rounded-[12px] rounded-bl-[4px] border border-[var(--w-border)] bg-[var(--w-panel)] px-3 py-2.5">
@@ -619,11 +709,51 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                   </button>
                 )}
               </div>
+              {files.length > 0 && (
+                <div className="mb-2 flex flex-wrap gap-1.5" data-testid="ai-draft-files">
+                  {files.map((f) => (
+                    <span key={f.id} className={cn('inline-flex h-[30px] max-w-[220px] items-center gap-1.5 rounded-[6px] border px-1.5 text-[12px]', f.status === 'error' ? 'border-[var(--w-red)] text-[var(--w-red)]' : 'border-[var(--w-border)] text-[var(--w-text-2)]')} title={f.file.name}>
+                      {f.preview ? <img src={f.preview} alt="" className="h-[22px] w-[22px] shrink-0 rounded-[3px] object-cover" /> : <FileText size={13} className="shrink-0" />}
+                      <span className="min-w-0 truncate">{f.file.name}</span>
+                      {f.status === 'uploading' && <span className="shrink-0 tabular-nums text-[11px] text-[var(--w-text-3)]">{f.pct}%</span>}
+                      <button type="button" onClick={() => removeFile(f.id)} aria-label={wt('ai.removeFile', { name: f.file.name })} className="inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full hover:bg-[var(--w-hover)]">
+                        <X size={11} />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
               <div className="flex items-end gap-2 rounded-[8px] border border-[var(--w-border-strong)] bg-[var(--w-panel)] p-1.5 focus-within:border-[var(--w-accent-border)] focus-within:shadow-[0_0_0_3px_var(--w-accent-soft)]">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  hidden
+                  accept="image/*,.pdf,.docx,.xlsx,.txt,.md,.csv,.json,.xml,.yaml,.yml,.sql,.log,.js,.jsx,.ts,.tsx,.java,.py,.cs,.cpp,.c,.h,.go,.rs,.php,.rb,.kt,.swift,.html,.css,.scss"
+                  onChange={(e) => { addFiles(Array.from(e.target.files ?? [])); e.target.value = ''; }}
+                />
+                <button
+                  type="button"
+                  className="w-btn w-btn-ghost w-btn-icon !h-[30px] !w-[30px] shrink-0 self-end"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={!!waiting || aiOff || thread?.mode === 'DEFENSE'}
+                  aria-label={wt('ai.attach')}
+                  title={wt('ai.attachHint', { n: MAX_FILES, mb: MAX_FILE_MB })}
+                  data-testid="ai-attach"
+                >
+                  <Paperclip size={14} />
+                </button>
                 <textarea
                   ref={inputRef}
                   value={draft}
                   onChange={(e) => setDraft(e.target.value)}
+                  onPaste={(e) => {
+                    // Dán ảnh chụp màn hình / tệp (Ctrl/⌘+V) ⇒ đính kèm; dán chữ ⇒ như thường.
+                    const pasted = Array.from(e.clipboardData?.files ?? []);
+                    if (!pasted.length || thread?.mode === 'DEFENSE') return;
+                    e.preventDefault();
+                    addFiles(pasted);
+                  }}
                   onKeyDown={(e) => {
                     // Đang gõ bộ gõ tiếng Việt/IME thì Enter là chốt chữ, không phải gửi.
                     if (e.nativeEvent.isComposing || e.keyCode === 229) return;
@@ -644,12 +774,13 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
                     <Square size={11} fill="currentColor" />
                   </button>
                 ) : (
-                  <button type="button" className="w-btn w-btn-primary w-btn-icon !h-[30px] !w-[30px] shrink-0" onClick={() => send(draft)} disabled={!draft.trim()} aria-label={wt('ai.send')} title={wt('ai.sendEnter')}>
+                  <button type="button" className="w-btn w-btn-primary w-btn-icon !h-[30px] !w-[30px] shrink-0" onClick={() => send(draft)} disabled={uploading || (!draft.trim() && !readyFiles.length)} aria-label={wt('ai.send')} title={wt('ai.sendEnter')}>
                     <ArrowUp size={15} />
                   </button>
                 )}
               </div>
               <p className="mt-1.5 text-[11px] leading-snug text-[var(--w-text-3)]">
+                {quota?.sponsorship ? <SponsorChip quota={quota} /> : null}
                 {isPrivate ? wt('ai.savedPrivate') : wt('ai.savedTeam')} {wt('ai.noSecrets')}
               </p>
             </div>
@@ -658,14 +789,19 @@ function AiPanel({ pid, config, issueNumber, quick, onClose, onClearIssue, onQui
       </div>
 
       <UpgradeDialog open={upgrade} onClose={() => setUpgrade(false)} limit={quota?.limit} />
+      <CapDialog open={capOpen} onClose={() => setCapOpen(false)} />
     </WorkPortal>
   );
 }
 
 // ─── Lượt hỏi (có tên người hỏi — hội thoại dùng chung) ───────────
 
-function UserTurn({ m, mine, projectKey, onRetry, busy }: { m: AiMessage; mine: boolean; projectKey: string; onRetry: () => void; busy: boolean }) {
+function UserTurn({ m, pid, mine, projectKey, onRetry, busy }: { m: AiMessage; pid: number; mine: boolean; projectKey: string; onRetry: () => void; busy: boolean }) {
   const name = mine ? wt('ai.you') : m.author ? `@${m.author.username}` : wt('ai.formerMember');
+  const { text, files } = tachDauTep(m.content);
+  const open = async (key: string) => {
+    try { window.open((await workApi.aiFileUrl(pid, key)).url, '_blank', 'noopener,noreferrer'); } catch (err) { toast.error(workError(err)); }
+  };
   return (
     <div className={cn('flex flex-col', mine ? 'items-end' : 'items-start')}>
       <div className={cn('mb-1 flex items-center gap-1.5 px-1 text-[11.5px] text-[var(--w-text-3)]', mine && 'flex-row-reverse')}>
@@ -678,8 +814,19 @@ function UserTurn({ m, mine, projectKey, onRetry, busy }: { m: AiMessage; mine: 
         'max-w-[85%] whitespace-pre-wrap break-words rounded-[12px] px-3 py-2 text-[13.5px] leading-relaxed',
         mine ? 'rounded-br-[4px] bg-[var(--w-accent)] text-white' : 'rounded-bl-[4px] border border-[var(--w-border)] bg-[var(--w-sunken)] text-[var(--w-text)]',
       )}>
-        {m.content}
+        {text}
       </div>
+      {files.length > 0 && (
+        <div className={cn('mt-1 flex max-w-[85%] flex-wrap gap-1', mine && 'justify-end')}>
+          {files.map((f) => (
+            <button key={f.key} type="button" onClick={() => open(f.key)} title={wt('ai.seeAttached')}
+              className="inline-flex h-6 max-w-[200px] items-center gap-1 rounded-[5px] border border-[var(--w-border)] bg-[var(--w-panel)] px-1.5 text-[11.5px] text-[var(--w-text-2)] hover:bg-[var(--w-hover)]">
+              {f.kind === 'image' ? <ImageIcon size={12} className="shrink-0" /> : <FileText size={12} className="shrink-0" />}
+              <span className="truncate">{f.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
       {m.error && (
         <div className="mt-1 flex max-w-[85%] items-center gap-2 px-1 text-[12px] text-[var(--w-red)]">
           <AlertTriangle size={12} className="shrink-0" />
@@ -776,7 +923,51 @@ function ThreadList({ pid, projectKey, meId, currentId, onOpen, onNew }: {
 
 // ─── Mảnh nhỏ ────────────────────────────────────────────────────
 
+/** 22/10/2026: ai đang tài trợ CuongMini cho người xem trong dự án này (tự Pro / trưởng nhóm Pro) — hoặc hạn mức miễn phí. */
+function SponsorChip({ quota, compact }: { quota: AiQuota; compact?: boolean }) {
+  const sp = quota.sponsorship;
+  if (!sp) return null;
+  if (!sp.sponsored) {
+    if (compact) return null;
+    return <span className="mr-1 inline-flex items-center gap-1 text-[var(--w-text-3)]" title={wt('ai.notSponsoredHint')} data-testid="ai-sponsor-none">{wt('ai.notSponsored')} ·</span>;
+  }
+  const label = sp.by === 'lead' && sp.sponsor ? wt('ai.sponsoredBy', { name: sp.sponsor.username }) : wt('ai.sponsoredSelf');
+  return (
+    <span className={cn('inline-flex items-center gap-1 font-medium text-[var(--w-accent-text)]', compact ? 'truncate text-[11px]' : 'mr-1')} title={sp.by === 'lead' ? wt('ai.sponsoredHint') : undefined} data-testid="ai-sponsor">
+      <Sparkles size={10} className="shrink-0" /> {label}{compact ? '' : ' ·'}
+    </span>
+  );
+}
+
+/** Hết trần token/ngày chung (không được tài trợ): nói rõ cách được tài trợ. */
+function CapDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      width={460}
+      title={<span className="inline-flex items-center gap-2"><Sparkles size={16} className="text-[var(--w-accent-text)]" />{wt('ai.capTitle')}</span>}
+      footer={(
+        <>
+          <button type="button" className="w-btn" onClick={onClose}>{wt('ai.maybeLater')}</button>
+          <a href="/pro" className="w-btn w-btn-primary" onClick={onClose}>{wt('ai.upgradePro')}</a>
+        </>
+      )}
+    >
+      <div className="space-y-2 text-[13px] leading-relaxed text-[var(--w-text-2)]" data-testid="ai-cap-dialog">
+        <p>{wt('ai.capBody')}</p>
+        <p className="font-medium text-[var(--w-text)]">{wt('ai.capHow')}</p>
+        <ul className="list-disc space-y-1 pl-5">
+          <li>{wt('ai.capHowPro')}</li>
+          <li>{wt('ai.capHowLead')}</li>
+        </ul>
+      </div>
+    </Dialog>
+  );
+}
+
 function QuotaChip({ quota }: { quota: AiQuota }) {
+  if (!quota.pro && quota.sponsorship?.sponsored) return <SponsorChip quota={quota} compact />;
   if (quota.pro) {
     return (
       <span className="inline-flex h-[18px] items-center gap-1 rounded-full bg-[var(--w-accent-soft)] px-2 text-[11px] font-semibold text-[var(--w-accent-text)]">

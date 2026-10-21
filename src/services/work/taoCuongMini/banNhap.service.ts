@@ -36,6 +36,7 @@ import { extractUpload, readLink, readRepo, supportedFile } from './docNguon.js'
 import { classifyLink, normalizeLink, parseRepoUrl } from './lienKet.js';
 import { parseRosterFile, parseRosterText, type RosterParse } from './danhSach.js';
 import type { z } from 'zod';
+import { tooLargeMessage } from '../limits.js';
 
 type Draft = NonNullable<Awaited<ReturnType<typeof prisma.workSetupDraft.findUnique>>>;
 
@@ -211,7 +212,7 @@ export async function addFile(userId: number, id: number, f: { buffer: Buffer; f
   assertNotApplied(d);
   const list = sourcesOf(d);
   if (list.length >= CAP.sources) throw new BadRequestError(`At most ${CAP.sources} files and links per draft`, 'WORK_LIMIT');
-  if (f.buffer.length > CAP.fileBytes) throw new AppError('Files must be 25 MB or smaller', 413, 'WORK_FILE_TOO_LARGE');
+  if (f.buffer.length > CAP.fileBytes) throw new AppError(tooLargeMessage(CAP.fileBytes), 413, 'WORK_FILE_TOO_LARGE');
   if (!supportedFile(f.fileName)) throw new BadRequestError('Unsupported file type — use PDF, DOCX, XLSX, PPTX, ZIP, images or text files', 'WORK_BAD_UPLOAD');
   const sid = crypto.randomUUID().slice(0, 12);
   let r2Key: string | undefined;

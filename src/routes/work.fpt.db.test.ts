@@ -256,8 +256,16 @@ describe('CT Work — đợt 1b: kiểm thử chuẩn FPT (HTTP + DB thật)', {
     assert.deepEqual(m.data.cases.map((c: any) => [c.section, c.description, c.testData, c.actual, c.rounds.length]),
       [['Login', 'Valid login', 'a@b.co / Test123@', null, 2], ['Login', 'Wrong password', null, '500 page', 1], ['Logout', 'Logout', null, null, 0]]);
 
-    const again = await upload(owner, `/projects/${pid2}/fpt-tests/import?mode=replace&report=unit`, unitXlsx);
-    assert.equal(again.status, 200);
+    // 22/10/2026: "Thay thế" của ADMIN phải gõ đúng số hàm sẽ bị xoá (dryRun báo trước), và dữ liệu cũ vào thùng rác.
+    const preview = await upload(owner, `/projects/${pid2}/fpt-tests/import?dryRun=1&report=unit`, unitXlsx);
+    assert.deepEqual(preview.data.replaceDeletes, { items: 2, changes: 1 });
+    assert.equal(preview.data.replaceNeedsApproval, false, 'ADMIN không cần duyệt');
+    const noConfirm = await upload(owner, `/projects/${pid2}/fpt-tests/import?mode=replace&report=unit`, unitXlsx);
+    assert.equal(noConfirm.status, 400);
+    assert.equal(noConfirm.code, 'WORK_CONFIRM_REQUIRED');
+    const again = await upload(owner, `/projects/${pid2}/fpt-tests/import?mode=replace&report=unit&confirm=2`, unitXlsx);
+    assert.equal(again.status, 200, JSON.stringify(again.raw));
+    assert.ok(again.data.trashId, 'dữ liệu cũ vào thùng rác');
     assert.equal((await call(owner, 'GET', `/projects/${pid2}/fpt-tests/unit`)).data.functions.length, 2, 'replace không nhân đôi');
 
     const junk = await upload(owner, `/projects/${pid2}/fpt-tests/import`, Buffer.from('hello'));

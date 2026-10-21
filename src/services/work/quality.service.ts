@@ -29,6 +29,7 @@ import {
   checklistByKey, checklistItems, CHECKLISTS, closeBlockers, REVIEW_FLOW, reviewMetrics, reviewMinutesMarkdown, type ReviewStatus,
 } from './reviewRules.js';
 import { baselineHash, diffBaselines, itemHash, signoffOutcome, type BaselineItem, type BaselineKind } from './baselineRules.js';
+import { trashSoft } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
 
 type Tx = Prisma.TransactionClient;
 
@@ -237,7 +238,8 @@ export async function deleteReview(userId: number, projectId: number, number: nu
   const s = await sessionOf(projectId, number);
   if (s.createdById !== userId && access.role !== 'ADMIN') throw new ForbiddenError('Only the person who opened the review or a project admin can delete it');
   await prisma.workReviewSession.update({ where: { id: s.id }, data: { deletedAt: new Date() } });
-  return { ok: true };
+  const trashId = await trashSoft({ projectId, userId, table: 'work_review_sessions', id: s.id, label: `Review #${number}: ${s.title}` });
+  return { ok: true, trashId };
 }
 
 /** Câu NG ⇒ thẻ Bug trong defect log (activity Review). Bấm lại ⇒ trả thẻ đã có. */

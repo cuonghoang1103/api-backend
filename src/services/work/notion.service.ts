@@ -30,13 +30,14 @@ import { createPage, getPage, updatePage } from './pages.service.js';
 import { parseTable, type ColumnMapping } from './importParsers.js';
 import { runImport } from './importer.service.js';
 import { requireProject } from './permissions.js';
+import { WORK_LIMITS } from './limits.js';
 
 registerCtw8bProviders();
 
 const MAX_BLOCKS = 3000;
 const MAX_DEPTH = 8;
 const MAX_CHILD_PAGES = 25;
-const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+const MAX_IMAGE_BYTES = WORK_LIMITS.imageBytes;
 const MAX_DB_ROWS = 2000;
 
 const headers = (extra: Record<string, string> = {}) => ({ 'Notion-Version': NOTION_VERSION, 'Content-Type': 'application/json', ...extra });

@@ -155,7 +155,7 @@ export const fpt: Strings<typeof En> = {
   noChanges: 'Chưa có thay đổi — bản xuất tự thêm dòng “Create document”.',
   addChange: 'Thêm thay đổi',
   itFunctions: 'hàm',
-  over10: 'Tệp lớn hơn 10 MB',
+  over10: 'Tệp lớn hơn {mb}',
   readFileFailed: 'Không đọc được tệp này',
   importedN: 'Đã nhập {n} {item} · {cases} test case',
   importFrom: 'Nhập {r} từ Excel',

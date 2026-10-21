@@ -18,7 +18,7 @@ export const cover: Strings<typeof En> = {
   uploadImg: 'Tải ảnh lên',
   removeCover: 'Gỡ ảnh bìa',
   vertical: 'Vị trí dọc',
-  hint: 'PNG, JPEG hoặc WebP tối đa 8 MB. Ảnh ngang (khoảng 1600 × 640) đẹp nhất{own}.',
+  hint: 'PNG, JPEG hoặc WebP tối đa {mb}. Ảnh ngang (khoảng 1600 × 640) đẹp nhất{own}.',
   own: ' — bạn đang dùng ảnh của mình',
   collections: 'Bộ ảnh bìa',
   xCover: 'Ảnh bìa {x}',

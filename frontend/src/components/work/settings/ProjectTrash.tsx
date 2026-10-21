@@ -14,28 +14,50 @@ import { EmptyState, IssueTypeIcon, relativeTime, Spinner, UserAvatar } from '..
 import { ConfirmDialog, ReadOnlyNotice, Section } from './shared';
 import { useProjectInvalidate } from './useProjectInvalidate';
 import DocsTrash from './DocsTrash';
+import DataTrash from './DataTrash';
+import DeleteRequests from './DeleteRequests';
+import { useSearchParams } from 'next/navigation';
 import { studioOn } from '../studio/shared';
 import { wt } from '@/components/work/i18n';
 
-/** Đợt S5c: Trash có hai tab — Issues (như cũ) · Docs (khi mô-đun docs bật và người xem sửa được tài liệu). */
+/**
+ * Đợt S5c: Trash có tab Issues · Docs. 22/10/2026 (sự cố SWT301 mất bảng 5.1): thêm "Kiểm thử & dữ liệu khác" (thùng rác
+ * dữ liệu 30 ngày — DataTrash) và "Yêu cầu xoá" (chờ trưởng nhóm duyệt — DeleteRequests). Thành viên (sửa được dự án) thấy
+ * hai tab mới; tab Issues vẫn cần quyền xoá thẻ. `?bin=data|requests|docs|issues` mở thẳng một tab (lối tắt, thông báo).
+ */
+type BinTab = 'issues' | 'docs' | 'data' | 'requests';
 export default function ProjectTrash({ config, slug }: { config: ProjectConfig; slug: string }) {
+  const search = useSearchParams();
+  const issuesOn = !!config.permissions.deleteIssues;
   const docsOn = studioOn(config, 'docs') && !!config.permissions.editDocs;
-  const [kind, setKind] = useState<'issues' | 'docs'>('issues');
-  const tabs = docsOn ? (
-    <div role="tablist" aria-label={wt('trash.contents')} className="mb-3 inline-flex rounded-[8px] border border-[var(--w-border)] p-0.5">
-      {(['issues', 'docs'] as const).map((k) => (
+  const dataOn = !!config.permissions.editIssues || issuesOn;
+  const avail: BinTab[] = [...(issuesOn ? ['issues' as const] : []), ...(docsOn ? ['docs' as const] : []), ...(dataOn ? ['data' as const, 'requests' as const] : [])];
+  const want = search?.get('bin') as BinTab | null;
+  const [kind, setKind] = useState<BinTab>(want && avail.includes(want) ? want : avail[0] ?? 'issues');
+  const label = (k: BinTab) => (k === 'issues' ? wt('common.issues') : k === 'docs' ? 'Docs' : k === 'data' ? wt('bin.tabData') : wt('bin.tabRequests'));
+  const tabs = avail.length > 1 ? (
+    <div role="tablist" aria-label={wt('trash.contents')} className="mb-3 inline-flex flex-wrap rounded-[8px] border border-[var(--w-border)] p-0.5">
+      {avail.map((k) => (
         <button key={k} type="button" role="tab" aria-selected={kind === k} onClick={() => setKind(k)}
           className={`rounded-[6px] px-3 py-1 text-[12.5px] font-medium ${kind === k ? 'bg-[var(--w-accent-soft)] text-[var(--w-accent-text)]' : 'text-[var(--w-text-2)] hover:bg-[var(--w-hover)]'}`}>
-          {k === 'issues' ? wt('common.issues') : 'Docs'}
+          {label(k)}
         </button>
       ))}
     </div>
   ) : null;
-  if (docsOn && kind === 'docs') {
+  if (kind === 'docs' && docsOn) {
     return (
       <Section title={wt('trash.trash')} description={wt('trash.docsDesc')}>
         {tabs}
         <DocsTrash config={config} />
+      </Section>
+    );
+  }
+  if ((kind === 'data' || kind === 'requests') && dataOn) {
+    return (
+      <Section title={wt('trash.trash')}>
+        {tabs}
+        {kind === 'data' ? <DataTrash config={config} /> : <DeleteRequests config={config} />}
       </Section>
     );
   }

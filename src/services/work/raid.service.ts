@@ -31,6 +31,7 @@ import { dayOf, govCtx, nextNumber } from './governanceDb.js';
 import { canDeleteGovernance, governanceAccess, loadProjectAccess } from './permissions.js';
 import { vnDay } from './sprints.service.js';
 import { modulesOf } from './studio.js';
+import { trashSoft } from './trashBin.service.js'; // 22/10/2026: thùng rác dữ liệu 30 ngày
 
 const RAID_SELECT = {
   id: true, number: true, type: true, title: true, description: true, category: true, status: true, probability: true, impact: true, clientVisible: true,
@@ -260,9 +261,10 @@ export async function deleteRaid(userId: number, projectId: number, number: numb
   const r = await findRaid(projectId, number);
   if (!canDeleteGovernance(ctx.access.role, ctx.access.workspaceRole, userId, r.createdById)) throw new ForbiddenError('Only the author or a project admin can delete this item');
   await prisma.workRaidItem.update({ where: { id: r.id }, data: { deletedAt: new Date() } });
+  const trashId = await trashSoft({ projectId, userId, table: 'work_raid_items', id: r.id, label: `RAID ${RAID_PREFIX[r.type as RaidType] ?? 'R'}-${number}: ${r.title}` });
   emitWorkEvent({ type: 'governance.updated', projectId, entity: 'raid', number, action: 'deleted', actor: { kind: 'USER', userId } });
   await auditProject(projectId, { actorId: userId, action: 'raid.delete', targetType: 'raid', targetId: r.id, summary: `Deleted RAID item ${RAID_PREFIX[r.type as RaidType] ?? 'R'}-${number}: ${r.title}`.slice(0, 300) });
-  return { deleted: true };
+  return { deleted: true, trashId };
 }
 
 // ─── Liên kết ────────────────────────────────────────────────────

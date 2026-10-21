@@ -35,8 +35,10 @@ import {
   baseMime, checkVoice, commentSearchText, MAX_COMMENT_FILES_PER_ISSUE, MAX_FILES_PER_COMMENT, VOICE_STT_DAILY_DEFAULT,
   vnDayStart, voiceExt, type TranscriptStatus,
 } from './commentThreads.js';
+import { tooLargeMessage, WORK_LIMITS } from './limits.js';
 
-export const MAX_COMMENT_FILE_BYTES = 25 * 1024 * 1024;
+/** Trần một tệp bình luận/chat/lớp học (limits.ts, env WORK_MAX_FILE_MB). */
+export const MAX_COMMENT_FILE_BYTES = WORK_LIMITS.fileBytes;
 
 // ─── Kho + STT thay được trong test (không chạm R2/Groq thật) ─────
 
@@ -165,7 +167,7 @@ export async function uploadCommentFile(userId: number, projectId: number, numbe
   assertStorage();
   const issue = await visibleIssue(access, number);
   if (!input.buffer.length) throw new BadRequestError('The file is empty', 'WORK_FILE_EMPTY');
-  if (input.buffer.length > MAX_COMMENT_FILE_BYTES) throw new BadRequestError('Files must be 25 MB or smaller', 'WORK_FILE_TOO_LARGE');
+  if (input.buffer.length > MAX_COMMENT_FILE_BYTES) throw new BadRequestError(tooLargeMessage(MAX_COMMENT_FILE_BYTES), 'WORK_FILE_TOO_LARGE');
   await assertCommentFileRoom(issue.id, userId);
   const fileName = input.fileName.slice(0, 255) || 'file';
   const mime = (input.mime || 'application/octet-stream').slice(0, 100);

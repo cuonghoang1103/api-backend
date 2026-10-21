@@ -17,9 +17,11 @@
 import zlib from 'node:zlib';
 import { mmId, mmLabel, mermaidKind, typeFromMermaid, type DiagramType } from './diagram.js';
 import { analyzeSql, DIALECT_LABEL, joinMeta, toMermaid } from './sqlDesign/index.js';
+import { mbText, WORK_LIMITS } from './limits.js';
 
-export const MAX_IMPORT_BYTES = 8 * 1024 * 1024;
-const MAX_XML_BYTES = 16 * 1024 * 1024;
+export const MAX_IMPORT_BYTES = WORK_LIMITS.importBytes;
+/** Trần XML giải nén của một trang draw.io (chống zip/deflate bomb) — tối thiểu 16 MB như trước. */
+const MAX_XML_BYTES = Math.max(16 * 1024 * 1024, Math.min(WORK_LIMITS.zipXmlBytes, 2 * MAX_IMPORT_BYTES));
 const MAX_CELLS = 10_000;
 
 export interface IrNode { id: string; label: string; shape: string; parent: string | null; container: boolean; x: number; y: number; w: number; h: number; dashed: boolean }
@@ -97,7 +99,7 @@ function classifyShape(st: Record<string, string>): string {
 /** Lấy <mxfile>/<mxGraphModel> từ: XML thô, trang nén, SVG xuất từ draw.io (thuộc tính content), PNG có chunk mxfile. */
 export function loadMxfile(input: Buffer | string): string {
   const buf = typeof input === 'string' ? Buffer.from(input, 'utf8') : input;
-  if (buf.length > MAX_IMPORT_BYTES) throw new ImportError(`The file is too large (max ${MAX_IMPORT_BYTES / 1024 / 1024} MB)`);
+  if (buf.length > MAX_IMPORT_BYTES) throw new ImportError(`The file is too large (max ${mbText(MAX_IMPORT_BYTES)})`);
   if (buf.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) {
     let pos = 8;
     while (pos + 8 <= buf.length) {
@@ -372,7 +374,7 @@ export interface ImportResult {
 export function importFile(input: { fileName: string; content: string; base64?: boolean; page?: number; to?: 'mermaid' | 'native' }): ImportResult {
   const name = input.fileName.toLowerCase();
   const buf = input.base64 ? Buffer.from(input.content, 'base64') : Buffer.from(input.content, 'utf8');
-  if (buf.length > MAX_IMPORT_BYTES) throw new ImportError(`The file is too large (max ${MAX_IMPORT_BYTES / 1024 / 1024} MB)`);
+  if (buf.length > MAX_IMPORT_BYTES) throw new ImportError(`The file is too large (max ${mbText(MAX_IMPORT_BYTES)})`);
   const title = input.fileName.replace(/\.(drawio|xml|excalidraw|json|mmd|mermaid|md|png|svg|sql|ddl)(\.(xml|png|svg))?$/i, '').replace(/[_-]+/g, ' ').trim().slice(0, 180) || 'Imported diagram';
   // Tệp .sql (CREATE TABLE…) ⇒ sơ đồ CSDL dạng SQL (Database designer), hoặc Mermaid ERD nếu người chọn.
   if (/\.(sql|ddl)$/.test(name)) {

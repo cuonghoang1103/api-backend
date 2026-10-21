@@ -345,6 +345,18 @@ export function startCronJobs(): void {
     }
   });
 
+  // CT Work 22/10/2026: thùng rác dữ liệu — mục quá 30 ngày rời thùng rác; yêu cầu xoá chờ duyệt quá 7 ngày ⇒ EXPIRED.
+  cron.schedule('50 * * * *', async () => {
+    try {
+      const { sweepTrash } = await import('./work/trashBin.service.js');
+      const { expireRequests } = await import('./work/deleteRequests.service.js');
+      const [a, b] = [await sweepTrash(), await expireRequests()];
+      if (a || b) logger.info('[work] trash sweep', { trashItems: a, expiredRequests: b });
+    } catch (err) {
+      logger.warn('[work] trash sweep failed', { error: (err as Error).message });
+    }
+  });
+
   // CT Work — Resources (06/10/2026): kiểm link chết hằng tuần, 02:30 Chủ nhật giờ VN (19:30 UTC thứ Bảy).
   // HEAD rồi GET qua safeFetch (chặn SSRF), tối đa WORK_LINK_CHECK_LIMIT link/lượt; tắt bằng WORK_LINK_CHECK_ENABLED=false.
   cron.schedule('30 19 * * 6', async () => {

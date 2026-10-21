@@ -18,6 +18,8 @@
 import crypto from 'node:crypto';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
+import { goiAiCtWork } from './aiCong.js'; // 22/10/2026: chuỗi cổng CT Work (rambo → chính hãng → modelapi)
+import { kiemHanMucAi } from './aiTaiTro.js';
 import { prisma } from '../../config/database.js';
 import { config } from '../../config/env.js';
 import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
@@ -429,9 +431,9 @@ export function _setElicitationAskForTests(fn: ((system: string, user: string) =
 export async function askerFor(userId: number, isAgent: boolean, canUseAi: boolean): Promise<Ask> {
   if (askOverride) { const f = askOverride; return async (s, u) => ({ text: await f(s, u), model: 'test-model' }); }
   if (!isAgent && !canUseAi) throw new ForbiddenError('Using the AI assistant needs a member or admin role');
-  const { checkTokenQuota, isAiAvailable, llmComplete } = await import('../interview/llm/index.js');
+  const { isAiAvailable } = await import('../interview/llm/index.js');
   if (!isAiAvailable('work')) throw new AppError('The AI assistant is temporarily unavailable. Please try again later.', 503, 'WORK_AI_UNAVAILABLE');
-  if (!(await checkTokenQuota(userId))) throw new AppError('You have reached today’s AI usage limit.', 429, 'WORK_AI_TOKEN_CAP');
+  await kiemHanMucAi(userId, null); // 22/10/2026: tài trợ Pro (người / trưởng nhóm) + chống spam — aiTaiTro.ts
   if (!isAgent) {
     const { aiQuota } = await import('./ai.service.js');
     const q = await aiQuota(userId);
@@ -439,7 +441,7 @@ export async function askerFor(userId: number, isAgent: boolean, canUseAi: boole
   }
   // purpose `work_assistant` (sẵn có, không đụng gateway.ts) — đề xuất purpose riêng `work_elicitation` trong báo cáo.
   return async (system, user) => {
-    const r = await llmComplete({ step: 'report', system, messages: [{ role: 'user', content: user }], maxTokens: 4000, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 120_000, maxRetries: 1 });
+    const r = await goiAiCtWork({ step: 'report', system, messages: [{ role: 'user', content: user }], maxTokens: 4000, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 120_000, maxRetries: 1 });
     return { text: r.text, model: r.model ?? null };
   };
 }
@@ -941,8 +943,7 @@ export async function askStakeholder(userId: number, projectId: number, ref: num
   } else {
     // Cùng cổng quota/AI của "AI đề xuất yêu cầu" (askerFor ném lỗi nếu hết lượt / không có quyền AI).
     await askerFor(userId, ctx.isAgent, can(ctx.access.role, 'ai.use', ctx.access.options, ctx.access.principal));
-    const { llmComplete } = await import('../interview/llm/index.js');
-    const r = await llmComplete({ step: 'report', system: prompt.system, messages: prompt.messages, maxTokens: 600, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 60_000, maxRetries: 1 });
+    const r = await goiAiCtWork({ step: 'report', system: prompt.system, messages: prompt.messages, maxTokens: 600, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 60_000, maxRetries: 1 });
     answer = r.text;
   }
   answer = String(answer ?? '').trim().slice(0, 4000) || '…';

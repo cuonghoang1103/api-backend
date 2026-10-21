@@ -8,7 +8,7 @@
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import {
-  congAgent, datRamboBatAdmin, docDsModelRamboDaNho, docModelRambo, ketQuaThuRamboGanNhat, lanKiemRamboGanNhat,
+  congAgent, ctworkDiRambo, datRamboBatAdmin, docDsModelRamboDaNho, docModelRambo, ketQuaThuRamboGanNhat, lanKiemRamboGanNhat,
   ramboBat, ramboDangNghi, ramboSonic,
 } from './gateway.js';
 
@@ -38,7 +38,8 @@ export async function datCongTacRambo(bat: boolean): Promise<void> {
 /** Danh sách model rambo đọc lại mỗi 10 phút khi rambo bật (để `ramboSonic()` tự lên Sonnet 5.5 khi cổng mở). */
 const DOC_MODEL_MS = 10 * 60_000;
 async function capNhatModelRambo(): Promise<void> {
-  if (!congAgent()) return;
+  /* 22/10/2026: CT Work đi rambo theo cờ riêng (`ctworkDiRambo`) ⇒ đọc danh sách model kể cả khi công tắc chung tắt. */
+  if (!congAgent() && !ctworkDiRambo()) return;
   const nho = docDsModelRamboDaNho();
   if (nho && Date.now() - nho.luc < DOC_MODEL_MS) return;
   await docModelRambo();

@@ -30,6 +30,7 @@ import {
   CLASS_SUBJECTS, INVITE_LIMITS, MAX_CLASS_STUDENTS, MAX_GROUP_SIZE, SUBJECT_KEY, SUBJECT_TEMPLATE, canResendInvite, formatJoinCode,
   generateJoinCode, isWellFormedJoinCode, joinState, normalizeJoinCode, parseCsv, rosterFromTable, type ClassSubject, type RosterRow,
 } from './teachingRules.js';
+import { mbText, WORK_LIMITS } from './limits.js';
 
 const DAY = 86_400_000;
 const dbDate = (s: string | null | undefined) => (s ? new Date(`${s.slice(0, 10)}T00:00:00Z`) : null);
@@ -436,12 +437,12 @@ export interface RosterSource { csv?: string; xlsxBase64?: string }
 
 function tableOf(src: RosterSource): string[][] {
   if (src.csv !== undefined) {
-    if (src.csv.length > 1_000_000) throw new BadRequestError('The file is too large (max 1 MB)', 'WORK_ROSTER_BAD');
+    if (src.csv.length > WORK_LIMITS.importBytes) throw new BadRequestError(`The file is too large (max ${mbText(WORK_LIMITS.importBytes)})`, 'WORK_ROSTER_BAD');
     return parseCsv(src.csv);
   }
   if (src.xlsxBase64) {
     const buf = Buffer.from(src.xlsxBase64, 'base64');
-    if (buf.length > 2_000_000) throw new BadRequestError('The file is too large (max 2 MB)', 'WORK_ROSTER_BAD');
+    if (buf.length > WORK_LIMITS.importBytes) throw new BadRequestError(`The file is too large (max ${mbText(WORK_LIMITS.importBytes)})`, 'WORK_ROSTER_BAD');
     let sheets;
     try { sheets = readXlsx(buf); } catch { throw new BadRequestError('This is not an .xlsx file', 'WORK_ROSTER_BAD'); }
     const first = sheets.find((s) => s.maxRow > 0 && s.maxCol > 0);

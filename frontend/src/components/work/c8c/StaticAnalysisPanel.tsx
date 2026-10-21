@@ -17,6 +17,7 @@ import KpiTile from '../KpiTile';
 import { Badge, Card, Tbl, Td, Th, type Tone } from '../quality/qui';
 import { copyText } from '../settings/ProjectShare';
 import { useWT } from '../i18n';
+import { mb, workLimits } from '@/lib/work-limits';
 
 const LEVEL_TONE: Record<string, Tone> = { error: 'red', warning: 'orange', note: 'muted' };
 const RISK_TONE: Record<Risk, Tone> = { LOW: 'green', MODERATE: 'yellow', HIGH: 'orange', VERY_HIGH: 'red' };
@@ -164,7 +165,7 @@ function UploadStatic({ pid, onDone }: { pid: number; onDone: () => void }) {
     mutationFn: async () => {
       const f = ref.current?.files?.[0];
       if (!f) throw new Error(t('c8c.saPickFile'));
-      if (f.size > 10 * 1024 * 1024) throw new Error(t('c8c.saTooBig'));
+      if (f.size > workLimits().importBytes) throw new Error(t('c8c.saTooBig', { mb: mb(workLimits().importBytes) }));
       return staticApi.importReport(pid, await f.text(), kind, bugs);
     },
     onSuccess: (r) => { onDone(); toast.success(t('c8c.saUploaded', { total: r.findings, n: r.newFindings, f: r.fixed, u: r.complexityUnits })); },

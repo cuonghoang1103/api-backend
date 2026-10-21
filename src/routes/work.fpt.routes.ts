@@ -13,6 +13,8 @@
  *   Excel:       GET  /projects/:pid/fpt-tests/export?report=unit|integration|system[&module=]
  *                POST /projects/:pid/fpt-tests/import?report=auto|unit|integration|system&mode=append|replace&dryRun=1
  *                     thân = tệp .xlsx nhị phân (application/octet-stream) — tránh bẫy axios đổi FormData thành JSON.
+ *                     22/10/2026: mode=replace — ADMIN phải gửi &confirm=<số mục sẽ xoá>; thành viên / token ⇒ 202 + yêu cầu chờ
+ *                     trưởng nhóm duyệt. Mọi DELETE ⇒ thùng rác (200 + trashId) hoặc 202 + queued.
  *
  * Quyền kiểm TRONG service (fptTests.service) — route chỉ kiểm đầu vào.
  */
@@ -45,6 +47,8 @@ function parse<T extends z.ZodTypeAny>(schema: T, value: unknown): z.infer<T> {
 }
 
 const id = z.coerce.number().int().positive();
+/** 22/10/2026: xoá ⇒ vào thùng rác (200 + trashId) hoặc thành yêu cầu chờ trưởng nhóm duyệt (202 + queued, CHƯA xoá gì). */
+const deleted = (r: Response, out: fpt.DeleteOutcome) => ok(r, out, out.deleted ? 200 : 202);
 const P = (req: Request, name: string) => parse(id, req.params[name]);
 const B = '/projects/:pid/fpt-tests';
 
@@ -53,10 +57,7 @@ router.get(`${B}/doc`, asyncHandler(async (req, res) => ok(res, await fpt.getDoc
 router.put(`${B}/doc`, asyncHandler(async (req, res) => ok(res, await fpt.updateDoc(callerId(req), P(req, 'pid'), parse(fpt.docInput, req.body)))));
 router.post(`${B}/changes`, asyncHandler(async (req, res) => ok(res, await fpt.addChange(callerId(req), P(req, 'pid'), parse(fpt.changeInput, req.body)), 201)));
 router.patch(`${B}/changes/:id`, asyncHandler(async (req, res) => ok(res, await fpt.updateChange(callerId(req), P(req, 'pid'), P(req, 'id'), parse(fpt.changeInput.partial(), req.body)))));
-router.delete(`${B}/changes/:id`, asyncHandler(async (req, res) => {
-  await fpt.deleteChange(callerId(req), P(req, 'pid'), P(req, 'id'));
-  ok(res, { deleted: true });
-}));
+router.delete(`${B}/changes/:id`, asyncHandler(async (req, res) => deleted(res, await fpt.deleteChange(callerId(req), P(req, 'pid'), P(req, 'id')))));
 
 // ─── Unit test ───────────────────────────────────────────────────
 router.get(`${B}/unit`, asyncHandler(async (req, res) => ok(res, await fpt.listFunctions(callerId(req), P(req, 'pid')))));
@@ -70,10 +71,7 @@ router.patch(`${B}/unit/:fid`, asyncHandler(async (req, res) => {
   if (!Object.keys(body).length) throw new BadRequestError('Nothing to change', 'VALIDATION_ERROR');
   ok(res, await fpt.updateFunction(callerId(req), P(req, 'pid'), P(req, 'fid'), body));
 }));
-router.delete(`${B}/unit/:fid`, asyncHandler(async (req, res) => {
-  await fpt.deleteFunction(callerId(req), P(req, 'pid'), P(req, 'fid'));
-  ok(res, { deleted: true });
-}));
+router.delete(`${B}/unit/:fid`, asyncHandler(async (req, res) => deleted(res, await fpt.deleteFunction(callerId(req), P(req, 'pid'), P(req, 'fid')))));
 router.put(`${B}/unit/:fid/matrix`, asyncHandler(async (req, res) => ok(res, await fpt.saveMatrix(callerId(req), P(req, 'pid'), P(req, 'fid'), parse(fpt.matrixInput, req.body)))));
 router.post(`${B}/unit/:fid/duplicate`, asyncHandler(async (req, res) => ok(res, await fpt.duplicateFunction(callerId(req), P(req, 'pid'), P(req, 'fid')), 201)));
 router.post(`${B}/unit/:fid/ai-suggest`, asyncHandler(async (req, res) => {
@@ -93,10 +91,7 @@ router.patch([`${B}/integration/:mid`, `${B}/system/:mid`], asyncHandler(async (
   if (!Object.keys(body).length) throw new BadRequestError('Nothing to change', 'VALIDATION_ERROR');
   ok(res, await fpt.updateModule(callerId(req), P(req, 'pid'), P(req, 'mid'), body));
 }));
-router.delete([`${B}/integration/:mid`, `${B}/system/:mid`], asyncHandler(async (req, res) => {
-  await fpt.deleteModule(callerId(req), P(req, 'pid'), P(req, 'mid'));
-  ok(res, { deleted: true });
-}));
+router.delete([`${B}/integration/:mid`, `${B}/system/:mid`], asyncHandler(async (req, res) => deleted(res, await fpt.deleteModule(callerId(req), P(req, 'pid'), P(req, 'mid')))));
 router.put([`${B}/integration/:mid/cases`, `${B}/system/:mid/cases`], asyncHandler(async (req, res) => ok(res, await fpt.saveItCases(callerId(req), P(req, 'pid'), P(req, 'mid'), parse(fpt.itCasesInput, req.body)))));
 
 // ─── Excel ───────────────────────────────────────────────────────
@@ -115,10 +110,13 @@ router.post(`${B}/import`, rawXlsx, asyncHandler(async (req, res) => {
     report: z.enum(['auto', 'unit', 'integration', 'system']).default('auto'),
     mode: z.enum(['append', 'replace']).default('append'),
     dryRun: z.enum(['0', '1', 'true', 'false']).optional(),
+    /** "Thay thế" của ADMIN: gõ đúng số mục sẽ bị xoá (dryRun trả replaceDeletes.items). */
+    confirm: z.string().max(20).optional(),
   }), req.query);
   const buf = Buffer.isBuffer(req.body) ? req.body : null;
   if (!buf || !buf.length) throw new BadRequestError('Send the .xlsx file as the request body (application/octet-stream)', 'WORK_IMPORT_NO_FILE');
-  ok(res, await fpt.importReport(callerId(req), P(req, 'pid'), buf, { report: q.report, mode: q.mode, dryRun: q.dryRun === '1' || q.dryRun === 'true' }));
+  const out = await fpt.importReport(callerId(req), P(req, 'pid'), buf, { report: q.report, mode: q.mode, dryRun: q.dryRun === '1' || q.dryRun === 'true', confirm: q.confirm });
+  ok(res, out, out.queued ? 202 : 200);
 }));
 
 export default router;

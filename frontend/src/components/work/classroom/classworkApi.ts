@@ -6,6 +6,7 @@
 import { api } from '@/lib/api';
 import type { TiptapDoc, WorkUser } from '@/lib/work-api';
 import type { RubricCriterion } from '@/components/work/teaching/teachingApi';
+import { mb, uploadTimeoutMs, workLimits } from '@/lib/work-limits';
 
 type Env<T> = { success: boolean; data: T };
 const d = <T,>(p: Promise<{ data: Env<T> }>) => p.then((r) => r.data.data);
@@ -106,10 +107,12 @@ export const classworkKeys = {
 
 const base = (classId: number) => `/work/classes/${classId}`;
 const upload = <T,>(url: string, file: File) => {
+  const max = workLimits().fileBytes;
+  if (file.size > max) return Promise.reject(new Error(`${file.name} is larger than ${mb(max)}`));
   const fd = new FormData();
   fd.append('file', file, file.name);
   // Không đặt Content-Type: interceptor ở lib/api.ts gỡ nó để trình duyệt tự sinh boundary.
-  return d<T>(api.post(url, fd));
+  return d<T>(api.post(url, fd, { timeout: uploadTimeoutMs(file.size) }));
 };
 
 export const classworkApi = {

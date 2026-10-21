@@ -38,8 +38,9 @@ import {
 import { cn } from '@/lib/utils';
 import { userName, type TiptapDoc, type WorkUser } from '@/lib/work-api';
 import { UserAvatar, WorkPortal, khungFixed } from './ui';
-import { IMAGE_SRC_RE, MAX_IMAGE_BYTES, renderMermaidSvg, workDocs3aApi } from '@/lib/work-docs3a-api';
+import { IMAGE_SRC_RE, renderMermaidSvg, workDocs3aApi } from '@/lib/work-docs3a-api';
 import { wt } from '@/components/work/i18n';
+import { mb, workLimits } from '@/lib/work-limits';
 
 /** ~35 ngôn ngữ phổ biến (java, ts, sql, bash, yaml, json…) — tạo một lần cho cả trang. */
 const LOWLIGHT = createLowlight(common);
@@ -174,7 +175,7 @@ function imageFiles(list: FileList | null | undefined): File[] {
 /** Tải ảnh lên dự án rồi chèn tại `pos` (mặc định: chỗ con trỏ). Mỗi ảnh một toast. */
 async function insertImages(view: EditorView, projectId: number, files: File[], pos?: number) {
   for (const f of files) {
-    if (f.size > MAX_IMAGE_BYTES) { toast.error(wt('editor.imgTooBig', { name: f.name || wt('editor.image') })); continue; }
+    if (f.size > workLimits().imageBytes) { toast.error(wt('editor.imgTooBig', { name: f.name || wt('editor.image'), mb: mb(workLimits().imageBytes) })); continue; }
     const id = toast.loading(wt('editor.uploadingX', { name: f.name || wt('editor.image').toLowerCase() }));
     try {
       const up = await workDocs3aApi.uploadImage(projectId, f, f.name || 'pasted-image.png');
@@ -297,12 +298,19 @@ export default function RichEditor({
   const editor = useEditor({
     immediatelyRender: false,
     editable,
+    // ⚠️ KHÔNG bật enableContentCheck: nó kiểm nghiêm ngặt hơn ProseMirror và khi vướng bất kỳ
+    // chi tiết nào (mark/attr/node) sẽ khởi tạo editor với doc RỖNG ⇒ xoá TRẮNG cả mô tả (đã gây
+    // mất Description 11/10). Không có cờ này thì ProseMirror vẫn nhận/ép nội dung và hiển thị bình
+    // thường. Schema đã đủ Table + heading 1–4 ở dưới — đó là cách sửa an toàn cho lỗi bảng.
     // K-3b: phiên đồng soạn đã nạp sẵn Y.Doc — đưa `content` vào sẽ gieo nội dung LẦN NỮA cho mỗi người mở.
     content: collab ? undefined : (value as object) ?? '',
     extensions: [
       // Khối code tô màu cú pháp (decoration của ProseMirror ⇒ đúng cả lúc xem lẫn lúc sửa).
       // Không khai ngôn ngữ thì lowlight tự đoán.
-      StarterKit.configure({ heading: { levels: docs ? [1, 2, 3, 4] : [1, 2, 3] }, codeBlock: false, ...(collab ? { history: false } : {}) }),
+      // Heading 1–4 ở MỌI chế độ (mô tả thẻ, bình luận, Docs). markdownToTiptap sinh tới mức 4
+      // (MAX_HEADING); nếu non-docs chỉ khai [1,2,3] thì một `#### H4` do MCP/paste đưa vào là node
+      // ngoài schema ⇒ ProseMirror ném lỗi ⇒ TRỐNG cả khối. Thanh công cụ vẫn gọn theo `docs`.
+      StarterKit.configure({ heading: { levels: [1, 2, 3, 4] }, codeBlock: false, ...(collab ? { history: false } : {}) }),
       CodeBlock.configure({ lowlight: LOWLIGHT, HTMLAttributes: { class: 'w-code' } }),
       // CTW đợt 3A: ảnh có ở MỌI chế độ (mô tả thẻ, bình luận, Docs) — nội dung đã có ảnh vẫn hiện ở chỗ chỉ xem.
       DocImage,
@@ -311,7 +319,11 @@ export default function RichEditor({
       TaskList,
       TaskItem.configure({ nested: true }),
       Mention,
-      ...(docs ? [DocTable, TableRow, TableHeader, TableCell] : []),
+      // Bảng ở MỌI chế độ. markdownToTiptap sinh node `table` cho mọi mô tả/bình luận tạo bằng MCP;
+      // nếu chỉ nạp khi `docs` thì mô tả thẻ có bảng (vd LAB-39/42) gặp node ngoài schema ⇒ TRỐNG cả
+      // khối. Thanh công cụ CHÈN bảng vẫn chỉ hiện ở `docs` (giữ mô tả thẻ gọn), nhưng bảng SẴN CÓ vẫn
+      // hiện + sửa ô được. DocTable tự xử lý chế độ chỉ-xem (khung cuộn) qua options.editable.
+      DocTable, TableRow, TableHeader, TableCell,
       CommentAnchor,
       ...(collab ? [
         Collaboration.configure({ document: collab.doc, field: 'default' }),

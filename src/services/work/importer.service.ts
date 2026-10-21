@@ -31,12 +31,13 @@ import {
 import { requireProject } from './permissions.js';
 import { projectMembers } from './projects.service.js';
 import { readXlsx } from './xlsxStyled.js';
+import { WORK_LIMITS } from './limits.js';
 
 export const importInput = z.object({
   source: z.enum(IMPORT_SOURCES),
   fileName: z.string().max(255).optional(),
   /** Chữ (JSON/CSV) hoặc base64 (Excel). */
-  content: z.string().min(1).max(20_000_000),
+  content: z.string().min(1).max(Math.max(20_000_000, Math.ceil((WORK_LIMITS.importBytes * 4) / 3) + 1024)),
   encoding: z.enum(['text', 'base64']).default('text'),
   mapping: z.record(z.enum(MAP_FIELDS), z.number().int().min(0).max(200).nullable()).optional(),
   /** personKey ⇒ id thành viên (null = để trống). */

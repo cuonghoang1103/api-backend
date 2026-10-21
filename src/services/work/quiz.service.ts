@@ -19,11 +19,13 @@
 
 import { randomInt, randomUUID } from 'node:crypto';
 import { Prisma } from '@prisma/client';
+import { goiAiCtWork } from './aiCong.js'; // 22/10/2026: chuỗi cổng CT Work (rambo → chính hãng → modelapi)
+import { kiemHanMucAi } from './aiTaiTro.js';
 import { prisma } from '../../config/database.js';
 import { putObject } from '../../config/r2.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
-import { checkTokenQuota, isAiAvailable, llmComplete } from '../interview/llm/index.js';
+import { isAiAvailable } from '../interview/llm/index.js';
 import { displayName, PUBLIC_USER } from './common.js';
 import { registerGradebookSource, type GradebookCell, type GradebookCellState, type GradebookCtx, type GradebookItem } from './classGradebookSources.js';
 import { postStreamItem, removeStreamItem } from './classStream.service.js';
@@ -36,6 +38,7 @@ import {
   validateQuestion, type BankQuestion, type ImportRow, type PaperItem, type QuestionData, type QuizItem, type QuizLayout,
   type Response as QResponse, type Scoring, type ShowAnswers, type StatAttempt,
 } from './quizRules.js';
+import { tooLargeMessage, WORK_LIMITS } from './limits.js';
 
 /** Trễ mạng cho lần lưu/nộp cuối: chấp nhận tới 2 giây sau hạn, sau đó từ chối. */
 export const SAVE_GRACE_MS = 2000;
@@ -150,7 +153,7 @@ export async function archiveQuestion(userId: number, classId: number, questionI
 // ─── Ảnh câu hỏi ────────────────────────────────────────────────
 
 const IMAGE_TYPES: Record<string, string> = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif' };
-const MAX_IMAGE = 3 * 1024 * 1024;
+const MAX_IMAGE = WORK_LIMITS.imageBytes;
 
 function sniffImage(buf: Buffer): string | null {
   if (buf.length > 8 && buf[0] === 0x89 && buf.toString('ascii', 1, 4) === 'PNG') return 'image/png';
@@ -165,7 +168,7 @@ export async function uploadImage(userId: number, classId: number, input: { data
   const b64 = input.dataBase64.replace(/^data:[^;]+;base64,/, '');
   const buf = Buffer.from(b64, 'base64');
   if (!buf.length) throw new BadRequestError('The image is empty', 'WORK_QUIZ_IMAGE_BAD');
-  if (buf.length > MAX_IMAGE) throw new BadRequestError('Images can be at most 3 MB', 'WORK_QUIZ_IMAGE_BAD');
+  if (buf.length > MAX_IMAGE) throw new BadRequestError(tooLargeMessage(MAX_IMAGE, 'Images'), 'WORK_QUIZ_IMAGE_BAD');
   // Kiểu lấy từ CHỮ KÝ tệp, không tin client (không có SVG ⇒ không có XSS qua ảnh).
   const mime = sniffImage(buf);
   if (!mime) throw new BadRequestError('Use a PNG, JPEG, WebP or GIF image', 'WORK_QUIZ_IMAGE_BAD');
@@ -271,8 +274,8 @@ export async function aiSuggest(userId: number, classId: number, input: { source
   if (askOverride) text = await askOverride(system, source);
   else {
     if (!isAiAvailable('work')) throw new AppError('The AI assistant is temporarily unavailable. Please try again later.', 503, 'WORK_AI_UNAVAILABLE');
-    if (!(await checkTokenQuota(userId))) throw new AppError('You have reached today’s AI usage limit.', 429, 'WORK_AI_TOKEN_CAP');
-    const r = await llmComplete({ step: 'report', system, messages: [{ role: 'user', content: source }], maxTokens: 4000, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 120_000, maxRetries: 1 });
+    await kiemHanMucAi(userId, null); // 22/10/2026: tài trợ Pro (người / trưởng nhóm) + chống spam — aiTaiTro.ts
+    const r = await goiAiCtWork({ step: 'report', system, messages: [{ role: 'user', content: source }], maxTokens: 4000, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 120_000, maxRetries: 1 });
     text = r.text;
   }
   const rows = parseAiQuestions(text, topic);

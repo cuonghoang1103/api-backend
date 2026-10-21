@@ -152,7 +152,7 @@ export const fpt = {
   noChanges: 'No changes yet — the export adds a “Create document” row.',
   addChange: 'Add change',
   itFunctions: 'functions',
-  over10: 'The file is larger than 10 MB',
+  over10: 'The file is larger than {mb}',
   readFileFailed: 'Could not read this file',
   importedN: 'Imported {n} {item} · {cases} test cases',
   importFrom: 'Import {r} from Excel',

@@ -19,6 +19,7 @@ import { useWT, wt, type WKey } from '@/components/work/i18n';
 import {
   teachingApi, teachingKeys, type ClassDetail, type InvitePlan, type RosterPreview, type RosterSource,
 } from '@/components/work/teaching/teachingApi';
+import { mb, workLimits } from '@/lib/work-limits';
 
 async function copy(text: string) {
   try { await navigator.clipboard.writeText(text); toast.success(wt('classroom.copied')); } catch { toast.error(text); }
@@ -28,7 +29,7 @@ async function copy(text: string) {
 
 function readFile(file: File): Promise<RosterSource> {
   return new Promise((resolve, reject) => {
-    if (file.size > 2_000_000) { reject(new Error(wt('classroom.fileTooBig'))); return; }
+    if (file.size > workLimits().importBytes) { reject(new Error(wt('classroom.fileTooBig', { mb: mb(workLimits().importBytes) }))); return; }
     const r = new FileReader();
     if (/\.xlsx$/i.test(file.name)) {
       r.onload = () => { const s = String(r.result); resolve({ xlsxBase64: s.slice(s.indexOf(',') + 1) }); };

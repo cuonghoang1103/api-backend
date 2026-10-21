@@ -29,6 +29,7 @@ import { logger } from '../../utils/logger.js';
 // CTW đợt 5b K-1: luồng trả lời + tệp/voice note trong bình luận.
 import { threadRootOf } from './commentThreads.js';
 import { assertCommentFileRoom, attachDrafts, COMMENT_FILE_SELECT, commentFilesFor, queueTranscriptions, refreshCommentText } from './commentFiles.service.js';
+import { tooLargeMessage, WORK_LIMITS } from './limits.js';
 
 const userActor = (userId: number): WorkActor => ({ kind: 'USER', userId });
 /**
@@ -881,7 +882,8 @@ export async function listIssueTemplates(userId: number, projectId: number): Pro
 // URL ký sẵn 10 phút sau khi kiểm quyền xem dự án — tài liệu của khách hàng
 // không được nằm ở một link ai có cũng mở được.
 
-export const MAX_ATTACHMENT_BYTES = 25 * 1024 * 1024;
+/** Trần một tệp đính kèm (limits.ts, env WORK_MAX_FILE_MB). Tải thẳng R2 bằng URL ký sẵn ⇒ không qua RAM backend. */
+export const MAX_ATTACHMENT_BYTES = WORK_LIMITS.fileBytes;
 const MAX_ATTACHMENTS_PER_ISSUE = 50;
 
 function assertR2() {
@@ -905,7 +907,7 @@ export async function presignAttachment(userId: number, projectId: number, numbe
   assertR2();
   const { id } = await findVisibleIssue(access, number);
   if (!Number.isFinite(input.size) || input.size <= 0 || input.size > MAX_ATTACHMENT_BYTES) {
-    throw new BadRequestError('Files must be 25 MB or smaller', 'WORK_FILE_TOO_LARGE');
+    throw new BadRequestError(tooLargeMessage(MAX_ATTACHMENT_BYTES), 'WORK_FILE_TOO_LARGE');
   }
   // K-1: tệp từ ô bình luận có trần riêng (commentFiles.service) — không ăn vào 50 tệp của thẻ.
   if (input.forComment) await assertCommentFileRoom(id, userId);
@@ -937,7 +939,7 @@ export async function completeAttachment(userId: number, projectId: number, numb
   if (!head) throw new BadRequestError('Upload not found. Please try again.', 'WORK_UPLOAD_MISSING');
   if (head.size > MAX_ATTACHMENT_BYTES) {
     await deleteObject(input.key);
-    throw new BadRequestError('Files must be 25 MB or smaller', 'WORK_FILE_TOO_LARGE');
+    throw new BadRequestError(tooLargeMessage(MAX_ATTACHMENT_BYTES), 'WORK_FILE_TOO_LARGE');
   }
   if (input.forComment) {
     // K-1: bản nháp của ô bình luận — gắn vào bình luận khi gửi (addComment.attachmentIds). Không ghi lịch sử thẻ,

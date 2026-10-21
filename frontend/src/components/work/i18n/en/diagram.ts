@@ -196,7 +196,7 @@ export const diagram = {
   srcDataFlow: 'From the design pages, actors and docker-compose.',
   generateNote: 'The result is a proposal: a member or lecturer accepts it before it goes into Report 3/4. Anything not found in your data is marked "(assumed)".',
   chooseFile: 'Choose a file',
-  fileTooLarge: 'The file is larger than 8 MB',
+  fileTooLarge: 'The file is larger than {mb}',
   importFailed: 'Could not import this file',
   importTitle: 'Import a diagram',
   importIntro: 'draw.io (.drawio, .xml, or PNG/SVG exported with the diagram), Excalidraw (.excalidraw) or Mermaid (.mmd, or Markdown with a mermaid block).',

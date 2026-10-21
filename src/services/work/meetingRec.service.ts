@@ -17,6 +17,8 @@
 
 import crypto from 'node:crypto';
 import { Prisma } from '@prisma/client';
+import { goiAiCtWork } from './aiCong.js'; // 22/10/2026: chuỗi cổng CT Work (rambo → chính hãng → modelapi)
+import { kiemHanMucAi } from './aiTaiTro.js';
 import { prisma } from '../../config/database.js';
 import { getSignedDownloadUrl } from '../../config/r2.js';
 import { AppError, BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
@@ -662,9 +664,9 @@ export function _setMinutesAskForTests(fn: ((system: string, user: string) => Pr
 
 async function askerFor(userId: number, ctx: Awaited<ReturnType<typeof govCtx>>): Promise<MinutesAsk> {
   if (askOverride) { const f = askOverride; return async (s, u) => ({ text: await f(s, u), model: 'test-model' }); }
-  const { checkTokenQuota, isAiAvailable, llmComplete } = await import('../interview/llm/index.js');
+  const { isAiAvailable } = await import('../interview/llm/index.js');
   if (!isAiAvailable('work')) throw new AppError('The AI assistant is temporarily unavailable. Please try again later.', 503, 'WORK_AI_UNAVAILABLE');
-  if (!(await checkTokenQuota(userId))) throw new AppError('You have reached today’s AI usage limit.', 429, 'WORK_AI_TOKEN_CAP');
+  await kiemHanMucAi(userId, null); // 22/10/2026: tài trợ Pro (người / trưởng nhóm) + chống spam — aiTaiTro.ts
   if (ctx.access.principal !== 'AGENT') {
     const { aiQuota } = await import('./ai.service.js');
     const q = await aiQuota(userId);
@@ -672,7 +674,7 @@ async function askerFor(userId: number, ctx: Awaited<ReturnType<typeof govCtx>>)
   }
   // purpose `work_assistant` (sẵn có) — đề xuất purpose riêng `work_minutes` trong báo cáo (không đụng gateway.ts).
   return async (system, user) => {
-    const r = await llmComplete({ step: 'report', system, messages: [{ role: 'user', content: user }], maxTokens: 4000, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 120_000, maxRetries: 1 });
+    const r = await goiAiCtWork({ step: 'report', system, messages: [{ role: 'user', content: user }], maxTokens: 4000, userId, feature: 'work', purpose: 'work_assistant', timeoutMs: 120_000, maxRetries: 1 });
     return { text: r.text, model: r.model ?? null };
   };
 }

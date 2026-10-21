@@ -223,10 +223,10 @@ export const tcm = {
   groupsHint: 'Or use a “Group” column in the member list.',
 
   chooseFiles: 'Choose files',
-  dropHint: 'Drop files here — PDF, DOCX, XLSX, PPTX, ZIP, images, text (≤ 25 MB each)',
+  dropHint: 'Drop files here — PDF, DOCX, XLSX, PPTX, ZIP, images, text (≤ {mb} each)',
   uploading: 'Uploading {name} · {pct}%',
   uploadFailed: 'Upload failed',
-  fileTooBig: '{name} is larger than 25 MB',
+  fileTooBig: '{name} is larger than {mb}',
   notePh: 'Note for CuongMini (optional)',
   noteLabel: 'Note',
   linkPh: 'Paste a link',

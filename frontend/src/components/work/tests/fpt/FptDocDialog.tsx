@@ -11,6 +11,7 @@ import { workError } from '@/lib/work-api';
 import { Dialog, Field, Spinner } from '../../ui';
 import { fptApi, fptKeys, type DocMeta } from './fptApi';
 import { todayIso } from './shared';
+import { afterDelete } from '../../settings/binApi';
 import { wt } from '@/components/work/i18n';
 
 export default function FptDocDialog({ open, onClose, pid, report }: { open: boolean; onClose: () => void; pid: number; report: 'UNIT' | 'INT' | 'SYS' }) {
@@ -55,7 +56,11 @@ export default function FptDocDialog({ open, onClose, pid, report }: { open: boo
     } catch (e) { toast.error(workError(e, wt('fpt.changeFailed'))); }
   };
   const delChange = async (id: number) => {
-    try { await fptApi.deleteChange(pid, id); qc.invalidateQueries({ queryKey: fptKeys.doc(pid) }); } catch (e) { toast.error(workError(e)); }
+    try {
+      const out = await fptApi.deleteChange(pid, id);
+      qc.invalidateQueries({ queryKey: fptKeys.doc(pid) });
+      afterDelete(pid, out, () => qc.invalidateQueries({ queryKey: fptKeys.doc(pid) }));
+    } catch (e) { toast.error(workError(e)); }
   };
 
   const changes = (q.data?.changes ?? []).filter((c) => c.report === report);

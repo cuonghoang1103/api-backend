@@ -24,7 +24,7 @@ import {
   type RpcRequest, type RpcResponse,
 } from './protocol.js';
 // Đợt 3C: tools/list lấy từ REGISTRY LỆNH DÙNG CHUNG (cùng bộ lệnh với Ask AI + agent BUILTIN). 21 tool cũ vẫn đứng đầu.
-import { mcpCommands } from '../services/work/toolRegistry/index.js';
+import { mcpCommands, runGuarded } from '../services/work/toolRegistry/index.js';
 import { clientOfToken, recordToolCall, runInAiScope } from '../services/work/aiUsage.service.js';
 import type { ToolDef } from './tools/types.js';
 
@@ -71,7 +71,7 @@ function visibleTools(ctx: McpCtx): ToolDef[] {
 function toolListing(t: ToolDef) {
   return {
     name: t.name, title: t.title,
-    description: `${t.description}${t.write ? '' : ' (read-only)'}`,
+    description: `${t.description}${t.write ? '' : ' (read-only)'}${t.destructive ? ' In CT Work this NEVER deletes directly: it files a deletion request that a team lead approves on the web; deleted data then stays in the 30-day trash.' : ''}`,
     inputSchema: zodToJsonSchema(t.input),
     annotations: { title: t.title, readOnlyHint: !t.write, destructiveHint: t.destructive === true, idempotentHint: !t.write, openWorldHint: false },
   };
@@ -90,7 +90,8 @@ async function callTool(ctx: McpCtx, params: Record<string, unknown>) {
     // Đợt 8B: mỗi lời gọi tool vào sổ AI của dự án nó chạm tới (ai · client · tool · thẻ · đọc/ghi · lỗi).
     const client = await clientOfToken(ctx);
     const t0 = Date.now();
-    const r = await runInAiScope(client, () => tool.run(ctx, args));
+    // 22/10/2026: lệnh xoá ⇒ yêu cầu chờ trưởng nhóm duyệt trên web (runGuarded), không bao giờ xoá ngay.
+    const r = await runInAiScope(client, () => runGuarded(ctx, tool, args));
     await recordToolCall({ client, userId: ctx.userId, tool: tool.name, write: tool.write, hits: r.hits, args, error: r.error, durationMs: Date.now() - t0 });
     if (r.error !== undefined) throw r.error;
     const out = r.result as Awaited<ReturnType<ToolDef['run']>>;

@@ -25,8 +25,10 @@ import {
 } from './docFill.js';
 import { docCtx, getPage, updatePage } from './pages.service.js';
 import { docAccess, isClientScoped, requireProject } from './permissions.js';
+import { tooLargeMessage, WORK_LIMITS } from './limits.js';
 
-export const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+/** Ảnh dán vào Docs/mô tả (limits.ts, env WORK_MAX_IMAGE_MB). */
+export const MAX_IMAGE_BYTES = WORK_LIMITS.imageBytes;
 const MAX_IMAGES_PER_PROJECT = 5000;
 const IMAGE_FORMATS: Record<string, string> = { png: 'image/png', jpeg: 'image/jpeg', webp: 'image/webp', gif: 'image/gif' };
 
@@ -49,7 +51,7 @@ export function _setImageStoreForTests(s: Store | null) { store = s ?? realStore
 export async function uploadImage(userId: number, projectId: number, body: Buffer, fileName: string) {
   await requireProject(userId, projectId, 'attachment.add');
   if (!body.length) throw new BadRequestError('Send the image as the request body', 'WORK_IMAGE_EMPTY');
-  if (body.length > MAX_IMAGE_BYTES) throw new BadRequestError('Images must be 10 MB or smaller', 'WORK_FILE_TOO_LARGE');
+  if (body.length > MAX_IMAGE_BYTES) throw new BadRequestError(tooLargeMessage(MAX_IMAGE_BYTES, 'Images'), 'WORK_FILE_TOO_LARGE');
   let meta: Awaited<ReturnType<ReturnType<typeof sharp>['metadata']>>;
   try {
     meta = await sharp(body, { animated: false }).metadata();

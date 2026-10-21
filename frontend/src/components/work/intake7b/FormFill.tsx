@@ -14,6 +14,7 @@ import { fileToBase64, workFormsApi, type FillForm, type FormField } from '@/lib
 import { CtWorkMark } from '@/components/work/brand/CtWorkMark';
 import { Spinner } from '@/components/work/ui';
 import { useWT, type WKey } from '@/components/work/i18n';
+import { mb, workLimits } from '@/lib/work-limits';
 
 const ERR_KEY: Record<string, WKey> = { REQUIRED: 'c7b.errRequired', INVALID: 'c7b.errInvalid', TOO_MANY_FILES: 'c7b.errTooMany', FILE_TOO_BIG: 'c7b.errTooBig', FILE_TYPE: 'c7b.errFileType' };
 const CLOSED_KEY: Record<string, WKey> = { CLOSED: 'c7b.pubClosed', EXPIRED: 'c7b.pubExpired', FULL: 'c7b.pubFull' };
@@ -71,7 +72,7 @@ export default function FormFill({ token }: { token: string }) {
     },
     onError: (e) => {
       const list = (e as { response?: { data?: { data?: { errors?: Array<{ id: string; code: string }> } } } })?.response?.data?.data?.errors ?? [];
-      setErrors(Object.fromEntries(list.map((x) => [x.id, t(ERR_KEY[x.code] ?? 'c7b.errInvalid')])));
+      setErrors(Object.fromEntries(list.map((x) => [x.id, t(ERR_KEY[x.code] ?? 'c7b.errInvalid', { mb: mb(workLimits().formTotalBytes) })])));
     },
   });
 
@@ -187,7 +188,7 @@ function FieldInput({ f, value, files, members, error, onChange, onFiles }: {
       <div>
         <input {...common} type="file" multiple accept={ACCEPT} className="block text-[13px]" onChange={(e) => onFiles(Array.from(e.target.files ?? []).slice(0, 3))} />
         {files.length > 0 && <ul className="mt-1 space-y-0.5 text-[12.5px] text-[var(--w-text-2)]">{files.map((x) => <li key={x.name} className="flex items-center gap-1"><Paperclip size={12} aria-hidden="true" />{x.name}</li>)}</ul>}
-        <p className="mt-1 text-[11.5px] text-[var(--w-text-3)]">{t('c7b.fileHint')}</p>
+        <p className="mt-1 text-[11.5px] text-[var(--w-text-3)]">{t('c7b.fileHint', { mb: mb(workLimits().formTotalBytes) })}</p>
       </div>
     ); break;
     default: input = <input {...common} className="w-input" value={String(value ?? '')} maxLength={500} onChange={(e) => onChange(e.target.value)} />;

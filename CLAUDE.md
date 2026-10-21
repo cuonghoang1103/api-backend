@@ -459,6 +459,28 @@ phát hành bắt buộc phải public.
 
 ## Cổng LLM — modelapi.vn (11/08/2026)
 
+> **⭐⭐⭐ 22/10/2026 — CuongMini trong CT Work (thắng các dòng cũ về work_*).** Một cửa: `src/services/work/aiCong.ts › goiAiCtWork`
+> (mọi service AI của CT Work gọi qua đây, không gọi `llmComplete` thẳng). Chuỗi tự chuyển trong CÙNG lượt, người dùng không thấy lỗi:
+>
+> | Việc | 1 · rambo (gói trọn, chi phí 0) | 2 · chính hãng "Code Max" (rambo hỏng) | 3 · modelapi (lùi cuối) |
+> |---|---|---|---|
+> | `work_assistant` (chat, thao tác, stream) | Sonnet mới nhất (`ramboSonic()`, hôm nay `claude-sonnet-5`) | `claude-sonnet-5-5` | `gpt-6-sol` |
+> | `work_spec_review` + việc nặng (`nang`: luyện bảo vệ, soát Req, sức khoẻ nhóm, retro) | `claude-opus-5` | `claude-sonnet-5-5` (KHÔNG Opus chính hãng) | `gpt-6-sol` |
+> | `work_digest` | Sonnet | `claude-haiku-5-5` | `gpt-6-sol` |
+> | ảnh người dùng dán | như việc chứa nó (cả 3 bậc đều nhìn ảnh) | | |
+>
+> - Rambo cho CT Work theo cờ RIÊNG `CTWORK_RAMBO` (mặc định BẬT, không phụ thuộc `ramboBat()`). Lỗi 401/403/410 ⇒ cầu dao nghỉ 10 phút
+>   (`RAMBO_NGHI_KHOA_MS`), mũi dò gõ cửa mỗi 30 s ⇒ thay khoá mới là tự về. Chính hãng: trần riêng `WORK_AI_CHINH_HANG_USD_NGAY` (30) /
+>   `…_NGUOI_NGAY` (3), sổ `anthropic_usage.viec = work_ai` (không ăn trần AI Code). Đè model: `LLM_MODEL_<VIỆC>=claude-…` (áp ở rambo) /
+>   `=gpt-…` (áp ở modelapi), `CTWORK_RAMBO_MODEL_NANG`, `CTWORK_MODEL_CHINH_HANG(_NHE)`. Bảng đang hiệu lực: admin `/admin/commerce?tab=anthropic`.
+> - ⚠️ **Sửa lỗi âm thầm từ 07/09:** adapter Anthropic của `llmComplete` bỏ qua điểm cuối ⇒ mọi việc "đi rambo" thật ra gọi Claude Ở
+>   MODELAPI (giá ~3,3×), chưa từng chạm rambo. Nay gọi đúng gốc + khoá rambo; lượt rambo ghi sổ `costUsd = 0` (không ăn trần tiền web).
+> - **Tài trợ (`aiTaiTro.ts`):** người hỏi Pro, HOẶC dự án có trưởng nhóm Pro (trưởng dự án `lead_id` · ADMIN dự án · chủ/OWNER/ADMIN không
+>   gian) ⇒ cả nhóm KHÔNG trần token/ngày trong dự án đó; chỉ chống spam (câu/phút · câu/ngày · câu/ngày/IP, admin chỉnh, 0 = tắt; đếm
+>   CÂU HỎI = request, không đếm vòng đọc) + trần tiền/ngày của web. Không tài trợ ⇒ trần cũ, lỗi 429 `WORK_AI_TOKEN_CAP` tiếng Việt chỉ cách.
+> - Ảnh/tệp trong ô hỏi: `POST /projects/:pid/ai/files` (`aiTep.ts`); link sâu do MÃ dựng (`aiLienKet.ts`), model viết `KEY-12` / `[[doc:3]]`.
+>   Test: `npx tsx --test src/services/work/aiCong.test.ts src/services/work/aiCuongMini22.test.ts` + `WORK_DB_TEST=1 … src/routes/work.aiTaiTro.db.test.ts`.
+
 > **⭐⭐ 19/10/2026 — rambo BẬT lại = MẶC ĐỊNH (thắng dòng 18/10 ngay dưới về rambo).** Chi tiết: `docs/cuongmini-doi-chieu-nang-luc.md` mục 2i.
 > - AI Code mặc định **CuongMini Default** (`cm-default`, `bangModel.ts › giaiDefault`): rambo bật + cầu dao đóng ⇒ **Classic Sonic** =
 >   Sonnet mới nhất rambo có (`ramboSonic()`: 5.5 nếu `/v1/models` có, giờ là `claude-sonnet-5`; ép `RAMBO_MODEL_SONIC`); không ⇒ **Solid**;

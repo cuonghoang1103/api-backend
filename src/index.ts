@@ -125,6 +125,9 @@ const githubRoutes = (await import(path.join(__dirname, 'routes', 'github.routes
 const dashboardRoutes = (await import(path.join(__dirname, 'routes', 'dashboard.routes.js'))).default;
 // CT Work — quản lý dự án kiểu Jira (docs/work-hub-plan.md).
 const workRoutes = (await import(path.join(__dirname, 'routes', 'work.routes.js'))).default;
+// CT Work 22/10/2026: trần tệp chung (limits.ts) + ngân sách RAM cho tệp đi qua backend (uploadGate.ts).
+const { workUploadGate } = await import(path.join(__dirname, 'services', 'work', 'uploadGate.js'));
+const { publicLimits: workPublicLimits } = await import(path.join(__dirname, 'services', 'work', 'limits.js'));
 const hubRoutesModule = await import(path.join(__dirname, 'routes', 'hub.routes.js'));
 const hubRoutes = hubRoutesModule.default;
 const { hubPublicRouter } = hubRoutesModule;
@@ -336,6 +339,9 @@ app.use('/api/v1/work/intake', express.raw({ type: '*/*', limit: '5mb' }));
 // turn.ts đã gỡ ảnh cũ trước khi gửi cổng nên trần này không làm tăng chi phí AI.
 // Phải đứng TRƯỚC bộ đọc chung: body đã đọc rồi thì bộ sau bỏ qua.
 app.use('/api/v1/agent', express.json({ limit: '48mb' }));
+// CT Work: tệp lớn (≤ 100 MB, limits.ts) — giữ chỗ trong ngân sách RAM TRƯỚC khi đọc thân, và đọc thân JSON của các
+// đường nhận tệp (báo cáo CI, sơ đồ/Excel base64, form…) bằng trần riêng. Phải đứng TRƯỚC bộ 10mb dưới đây.
+app.use('/api/v1/work', workUploadGate);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser(config.cookieSecret));
@@ -620,6 +626,8 @@ app.use('/api/v1/devices', deviceRoutes);
 app.use('/api/v1/feed', socialRoutes);
 app.use('/api/v1/repos', githubRoutes);
 app.use('/api/v1/dashboard', dashboardRoutes);
+// Trần tệp của CT Work cho frontend (công khai — form công khai cũng cần; không có gì bí mật).
+app.get('/api/v1/work/limits', (_req, res) => { res.setHeader('Cache-Control', 'public, max-age=300'); res.json({ success: true, data: workPublicLimits() }); });
 app.use('/api/v1/work', workRoutes);
 // Hub — personal bookmark manager. Authenticated router for
 // folders/links/scrape; public router for /public/:slug lookups

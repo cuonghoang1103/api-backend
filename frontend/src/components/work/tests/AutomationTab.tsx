@@ -23,6 +23,7 @@ import { Badge, Card, Tbl, Td, Th } from '../quality/qui';
 import { copyText } from '../settings/ProjectShare';
 import { useWT, type WKey } from '../i18n';
 import StaticAnalysisPanel from '../c8c/StaticAnalysisPanel';
+import { mb, workLimits } from '@/lib/work-limits';
 
 const DOT: Record<string, string> = { P: 'var(--w-green)', R: 'var(--w-yellow)', F: 'var(--w-red)', S: 'var(--w-border-strong)' };
 
@@ -103,7 +104,7 @@ export default function AutomationTab({ config, pid, onOpenIssue }: { config: Pr
           </ol>
           <Snippet label="GitHub Actions — ctwork-report" code={snip.yaml} />
           <Snippet label="curl" code={snip.curl} />
-          <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{t('c7c.tFormats')}</p>
+          <p className="mt-2 text-[12px] text-[var(--w-text-3)]">{t('c7c.tFormats', { mb: mb(workLimits().importBytes) })}</p>
         </Card>
         {canEdit && <UploadCard pid={pid} onDone={() => qc.invalidateQueries({ queryKey: c7cKeys.automation(pid) })} />}
       </div>
@@ -220,7 +221,9 @@ function UploadCard({ pid, onDone }: { pid: number; onDone: () => void }) {
     mutationFn: async () => {
       const f = rep.current?.files?.[0];
       if (!f) throw new Error(t('c7c.tPickFile'));
-      if (f.size > 10 * 1024 * 1024) throw new Error(t('c7c.tTooBig'));
+      if (f.size > workLimits().importBytes) throw new Error(t('c7c.tTooBig', { mb: mb(workLimits().importBytes) }));
+      const cf = cov.current?.files?.[0];
+      if (cf && cf.size > workLimits().importBytes) throw new Error(t('c7c.tTooBig', { mb: mb(workLimits().importBytes) }));
       const c = cov.current?.files?.[0];
       return autoTestApi.upload(pid, { report: await f.text(), build: build.trim() || undefined, createBugs: bugs, coverage: c ? { report: await c.text() } : null });
     },

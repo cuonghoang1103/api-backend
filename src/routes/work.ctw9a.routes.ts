@@ -7,7 +7,7 @@
  *   Stream       GET  /classes/:id/stream?before=&limit=  ·  POST /classes/:id/stream
  *                GET|PATCH|DELETE /classes/:id/stream/:pid  ·  POST /classes/:id/stream/:pid/comments { body }
  *                PATCH /classes/:id/stream-comments/:cid { hidden }  ·  DELETE /classes/:id/stream-comments/:cid
- *   Tệp          POST /classes/:id/stream-files (multipart `file`, ≤ 25 MB)  ·  DELETE /classes/:id/stream-files/:fid (nháp)
+ *   Tệp          POST /classes/:id/stream-files (multipart `file`, ≤ WORK_MAX_FILE_MB — limits.ts)  ·  DELETE /classes/:id/stream-files/:fid (nháp)
  *                GET  /classes/:id/stream-files/:fid/url?inline=1
  *   Tài liệu     GET|POST /classes/:id/materials  ·  GET|PATCH|DELETE /classes/:id/materials/:mid
  *                POST /classes/:id/materials/:mid/view  ·  GET /classes/:id/materials/:mid/viewers
@@ -31,6 +31,7 @@ import * as mats from '../services/work/classMaterials.service.js';
 import * as stream from '../services/work/classStream.service.js';
 import { ATTENDANCE_STATUSES, MATERIAL_KINDS } from '../services/work/classStreamRules.js';
 import { MAX_COMMENT_FILE_BYTES } from '../services/work/commentFiles.service.js';
+import { tooLargeMessage } from '../services/work/limits.js';
 
 const router = Router();
 
@@ -60,7 +61,7 @@ function receive(field: string, maxBytes: number) {
   return (req: Request, res: Response, next: NextFunction) => {
     up.single(field)(req, res, (err: unknown) => {
       if (!err) { next(); return; }
-      if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') { next(new AppError('Files must be 25 MB or smaller', 413, 'WORK_FILE_TOO_LARGE')); return; }
+      if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') { next(new AppError(tooLargeMessage(maxBytes), 413, 'WORK_FILE_TOO_LARGE')); return; }
       next(new BadRequestError('Could not read the uploaded file', 'WORK_BAD_UPLOAD'));
     });
   };

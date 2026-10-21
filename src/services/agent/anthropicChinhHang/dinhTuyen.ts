@@ -173,7 +173,8 @@ export function modelFreeChoApp(): ModelChinhHang {
  */
 export async function goiVanBanChinhHang(o: {
   system: string;
-  messages: Array<{ role: 'user' | 'assistant'; content: string }>;
+  /** Chữ, hoặc khối nội dung kiểu Anthropic (chữ + ảnh base64) — 22/10/2026: trợ lý CT Work gửi ảnh người dùng dán. */
+  messages: Array<{ role: 'user' | 'assistant'; content: string | Array<Record<string, unknown>> }>;
   model: string;
   hang: HangChinhHang;
   maxTokens: number;
@@ -194,7 +195,7 @@ export async function goiVanBanChinhHang(o: {
     max_tokens: o.maxTokens,
     stream: true,
     system: o.system,
-    messages: o.messages.filter((m) => m.content).map((m) => ({ ...m })),
+    messages: o.messages.filter((m) => (typeof m.content === 'string' ? m.content : m.content.length)).map((m) => ({ ...m })),
   };
   let beta: string[] = [];
   if (o.nhanh) {

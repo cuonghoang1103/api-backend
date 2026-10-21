@@ -18,6 +18,7 @@ import {
 import { EmptyState, PageLoading, Spinner } from '../ui';
 import KpiTile, { KpiRow } from '../KpiTile';
 import { useWT, type WKey } from '../i18n';
+import { mb, workLimits } from '@/lib/work-limits';
 
 const SOURCES: Array<{ id: ImportSource; label: WKey; hint: WKey; accept: string }> = [
   { id: 'TRELLO', label: 'c7b.srcTrello', hint: 'c7b.srcTrelloHint', accept: '.json,application/json' },
@@ -25,7 +26,6 @@ const SOURCES: Array<{ id: ImportSource; label: WKey; hint: WKey; accept: string
   { id: 'JIRA', label: 'c7b.srcJira', hint: 'c7b.srcJiraHint', accept: '.csv,text/csv' },
   { id: 'CSV', label: 'c7b.srcCsv', hint: 'c7b.srcCsvHint', accept: '.csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
 ];
-const MAX_BYTES = 7 * 1024 * 1024;
 
 export default function ImportView({ pid }: { pid: number }) {
   const { t, fmtDateTime } = useWT();
@@ -49,7 +49,7 @@ export default function ImportView({ pid }: { pid: number }) {
 
   const pick = async (f: File | undefined) => {
     if (!f) return;
-    if (f.size > MAX_BYTES) { toast.error(t('c7b.fileTooBig')); return; }
+    if (f.size > workLimits().importBytes) { toast.error(t('c7b.fileTooBig', { mb: mb(workLimits().importBytes) })); return; }
     const xlsx = /\.xlsx$/i.test(f.name);
     setFile({ name: f.name, content: xlsx ? await fileToBase64(f) : await f.text(), encoding: xlsx ? 'base64' : 'text' });
     setMapping({}); setPeople({}); setStatuses({}); setPreview(null); setReport(null);

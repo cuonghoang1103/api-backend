@@ -733,7 +733,7 @@ Thiết kế: `docs/ct-work-ai-agents-thiet-ke.md` · hợp đồng API đợt 2
   (`/ctwork` ⇒ `POST /work/me/api-tokens`), `McpCtx.agent = null` ⇒ làm được đúng những gì vai của người đó làm trên web, kể
   cả sửa/xoá. Lệnh xoá của registry: `destructive: true` (MCP `destructiveHint` ⇒ app LUÔN hỏi, kể cả `/ctwork tu-ghi on`;
   mô tả bắt đầu `DESTRUCTIVE:`) + `personOnly` + `requirePerson()` (agent ⇒ WORK_AGENT_FORBIDDEN). Lệnh của đợt này `mcpOnly` (không vào Ask AI/BUILTIN — giữ giá prompt web).
-  Không có lệnh cho: quyết định duyệt / APPROVED, tài chính, gửi khách/ra ngoài, cấu hình dự án, quiz/chấm điểm. Bảng đối
+  Không có lệnh cho: quyết định duyệt / APPROVED (cả quyết định CR + `decision` review), tài chính, gửi khách/ra ngoài, cấu hình dự án, làm quiz/chấm điểm/điểm danh. Token người thấy ~255 lệnh — mục lục máy chủ trần 300 (`parseMucLucMcp`), `registry.test` chặn > 280: thêm lệnh thì gộp theo `action`. Bảng đối
   chiếu đầy đủ + việc còn thiếu: `docs/cuongmini-ctwork-parity.md`. Thêm lệnh xoá mới ⇒ thêm tuyến DELETE vào
   `AGENT_DENIED_ROUTES` (bảng `permissions.test.ts`) — `registry.test.ts` bắt lệnh tên `*delete*` thiếu destructive/personOnly.
 - Test: `WORK_DB_TEST=1 npx tsx --test src/routes/work.agents.db.test.ts src/routes/work.agentsUi.db.test.ts` +

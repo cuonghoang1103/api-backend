@@ -1,6 +1,6 @@
 # CuongMini ↔ CT Work — đối chiếu quyền (parity) với người dùng
 
-Cập nhật 21/10/2026 (nhánh `ctw-mcp-full`). Bảng đầy đủ mọi tuyến GHI ở cuối file được sinh từ router thật
+Cập nhật 21/10/2026, đợt 2 cùng ngày (nhánh `ctw-mcp-full`). Bảng đầy đủ mọi tuyến GHI ở cuối file được sinh từ router thật
 (`work.routes.ts` + các router con) đối chiếu với registry lệnh (`src/services/work/toolRegistry/*`, `src/mcp/tools/*`).
 
 ## 1. CuongMini đăng nhập CT Work bằng gì?
@@ -27,14 +27,14 @@ ma trận bằng `PUT …/matrix`) chỉ có trên web. Thêm vào đó luật p
 | Ai cầm token | Làm được gì | Rào |
 |---|---|---|
 | **Người** (CuongMini, Claude Code, Cursor… với token cá nhân) | Mọi việc vai của người đó làm được trên web, kể cả sửa/xoá | Lệnh xoá khai `destructive` ⇒ MCP `annotations.destructiveHint: true` ⇒ app CuongMini **luôn hỏi** (kể cả `tu-ghi on` / "Bỏ qua hết"), thẻ duyệt mở đầu `⚠ XOÁ ·`. Mô tả lệnh bắt đầu bằng `DESTRUCTIVE:`. Thẻ và trang Docs vào thùng rác, khôi phục được (`issue_restore`, `docs_page_restore`). |
-| **Agent thành viên** (`kind = AGENT`, scope `agent`) | Như trước: làm thẻ của mình, ghi kết quả test, bình luận… | Lệnh xoá `personOnly` (không có trong `tools/list`) + `requirePerson` (gọi thẳng ⇒ `WORK_AGENT_FORBIDDEN`) + `AGENT_DENIED_ROUTES` thêm `DELETE` của sheet test 5.1/5.2/5.3 + Record of change, trang Docs, RAID, họp, Q&A, sơ đồ, test cycle, Resources, mục SRS (REST cũng 403). |
-| **Ask AI trên web / agent BUILTIN** | Như trước | 57 lệnh mới của đợt này chỉ ở MCP (`mcpOnly`): mục lục lệnh GHI của Ask AI đã ~17k ký tự/câu hỏi, web có nút riêng — không thêm tiền prompt ở đó. |
+| **Agent thành viên** (`kind = AGENT`, scope `agent`) | Như trước: làm thẻ của mình, ghi kết quả test, bình luận… | Lệnh xoá `personOnly` (không có trong `tools/list`) + `requirePerson` (gọi thẳng ⇒ `WORK_AGENT_FORBIDDEN`) + `AGENT_DENIED_ROUTES` thêm `DELETE` của sheet test 5.1/5.2/5.3 + Record of change, trang Docs, RAID, họp, Q&A, sơ đồ, test cycle, Resources, mục SRS; đợt 2: mục SWR302, Change Request, review, test plan, test design (REST cũng 403). |
+| **Ask AI trên web / agent BUILTIN** | Như trước | 97 lệnh mới của hai đợt chỉ ở MCP (`mcpOnly`): mục lục lệnh GHI của Ask AI đã ~17k ký tự/câu hỏi, web có nút riêng — không thêm tiền prompt ở đó. |
 
 ### Chỉ người (cố ý KHÔNG có lệnh, kể cả với token người)
 
 | Việc | Vì sao |
 |---|---|
-| Quyết định duyệt (`/approvals/:id/decide`, CR approval, đề xuất elicitation/intake, biên bản AI apply/dismiss, review mockup), đặt trang Docs = `APPROVED`, duyệt use case / business rule (`status` không có trong `srs_*_update`, `docs_page_update` chỉ nhận DRAFT/IN_REVIEW/ARCHIVED) | Phê duyệt là chữ ký của một người cụ thể; AI duyệt thay là giả mạo người duyệt. CuongMini vẫn **gửi** duyệt được (`approval_request`, `request_review`). |
+| Quyết định duyệt (`/approvals/:id/decide`, quyết định Change Request APPROVED/REJECTED, `decision` của review, đề xuất elicitation/intake, biên bản AI apply/dismiss, review mockup), đặt trang Docs = `APPROVED`, duyệt use case / business rule (`status` không có trong `srs_*_update`, `docs_page_update` chỉ nhận DRAFT/IN_REVIEW/ARCHIVED) | Phê duyệt là chữ ký của một người cụ thể; AI duyệt thay là giả mạo người duyệt. CuongMini vẫn **gửi** duyệt được (`approval_request`, `request_review`). |
 | Tài chính (`/finance/**` trừ nộp timesheet của chính mình), tài sản/giấy phép | Tiền và hợp đồng. |
 | Mọi thứ hướng khách/ra ngoài: cổng khách, share link, `client-visible`, gửi báo cáo khách, mời họp ra ngoài, mở link khảo sát/form công khai, Slack/Notion/OneDrive/webhook/chat-hooks, xuất dữ liệu | Không lấy lại được khi đã gửi ra ngoài. |
 | Cấu hình & thành viên dự án (workflow, trạng thái, loại thẻ, nhãn, trường tuỳ chỉnh, studio/mô-đun, GitHub/GitLab connection, automation), xoá/lưu trữ dự án hay không gian, xoá vĩnh viễn khỏi thùng rác | Ảnh hưởng cả nhóm, khó hoàn tác. (Thêm/đổi vai/bớt thành viên và sprint đã có lệnh `personOnly` từ 19/10.) |
@@ -58,7 +58,7 @@ Nếu sau này cần mở thêm một việc ở bảng này, làm theo kiểu l
 | **Report 5.2/5.3** — sửa đầu module/workflow | `PATCH /fpt-tests/(integration\|system)/:mid` | 🆕 `fpt_it_update_module` |
 | 5.2/5.3 — sửa case (procedure, data, expected, actual, evidence…), xoá kết quả một vòng | `PUT …/cases` | 🆕 `fpt_it_update_cases` |
 | 5.2/5.3 — xoá case (kể cả chưa chạy), dời case, xoá module | `PUT …/cases`, `DELETE …/:mid` | 🆕 `fpt_it_delete_cases`, `fpt_it_move_case`, `fpt_it_delete_module` |
-| 5.x — nhập Excel | `POST /fpt-tests/import` | — (tải tệp .xlsx; web) |
+| 5.x — nhập Excel | `POST /fpt-tests/import` | 🆕 `fpt_import_excel` (base64 ≤ 6 MB; dryRun trước; destructive vì `replace` ghi đè) |
 | **Thẻ** — tạo/sửa mọi trường, chuyển trạng thái, giao, sprint, liên kết, cờ, theo dõi, web link, checklist | `POST/PATCH /issues…` | ✅ `create_issue`, `update_issue`, `transition`, `issue_assign`, `issue_move_sprint`, `issue_link/unlink`, `issue_flag`, `issue_watch`, `issue_web_link_add`, `checklist_toggle` |
 | Thẻ — xoá (vào thùng rác) / khôi phục / nhân bản | `DELETE /issues/:num`, `POST /trash/:num/restore`, `POST …/clone` | 🆕 `issue_delete`, `issue_restore`, `issue_clone` |
 | Thẻ — trường tuỳ chỉnh | `PUT …/custom-values` | 🆕 `issue_custom_fields_set` |
@@ -70,24 +70,32 @@ Nếu sau này cần mở thêm một việc ở bảng này, làm theo kiểu l
 | **Sprint** — tạo / bắt đầu / kết thúc / sửa / xoá | `/sprints…` | ✅ `sprint_create/start/complete` · 🆕 `sprint_update`, `sprint_delete` (người có `sprint.manage`) |
 | **Xray** — test case tạo / sửa (bước, yêu cầu) | `POST /tests`, `PUT /tests/:num` | ✅ `test_create` · 🆕 `test_update` |
 | Xray — cycle tạo / sửa (thêm test, bỏ run, trạng thái) / xoá; ghi run; bug từ run | `/test-cycles…`, `/test-runs…` | ✅ `test_cycle_create`, `test_run_record` · 🆕 `test_cycle_update`, `test_cycle_delete`, `test_run_defect` |
+| Test plan · test design (EP/BVA, bảng quyết định…) ⇒ Xray / 5.1 | `/test-plans…`, `/test-designs…` | 🆕 `test_plans`, `test_plan_manage`, `test_plan_delete`, `test_designs`, `test_design_save`, `test_design_export`, `test_design_delete` |
 | **Docs** — tạo nháp / sửa một mục | `POST /pages`, `PATCH /pages/:num` | ✅ `docs_draft_page`, `docs_update_section` |
 | Docs — đổi tiêu đề, thay trọn nội dung Markdown, trạng thái (trừ APPROVED) | `PATCH /pages/:num` | 🆕 `docs_page_update` |
 | Docs — dời trong cây / xoá (thùng rác) / khôi phục / khôi phục phiên bản / liên kết thẻ | `…/move`, `DELETE`, `/trash/pages/:num/restore`, `…/versions/:n/restore`, `…/issues` | 🆕 `docs_page_move`, `docs_page_delete`, `docs_page_restore`, `docs_page_version_restore`, `docs_page_link_issue` |
-| Docs — bình luận | `POST …/comments` | ✅ `docs_comment` |
+| Docs — bình luận: thêm / liệt kê (có id + đoạn neo) / resolve / xoá | `…/comments`, `…/inline-comments/:cid/resolve` | ✅ `docs_comment` · 🆕 `docs_comments`, `docs_comment_resolve`, `docs_comment_delete` (thêm bình luận NEO đoạn văn cần neo trong nội dung: —) |
 | **SRS (Report 3)** — thêm actor/UC/BR/màn hình/chức năng, phân quyền màn | `/srs/*` POST | ✅ `srs_add_actor`, `srs_propose_use_case`, `srs_propose_business_rule`, `srs_add_screen`, `srs_set_screen_access`, `srs_add_non_ui_function` |
 | SRS — sửa / xoá từng mục | `PATCH/DELETE /srs/(actors\|use-cases\|rules\|screens\|functions)/…` | 🆕 `srs_actor_update`, `srs_use_case_update`, `srs_rule_update`, `srs_screen_update`, `srs_function_update`, `srs_delete` |
-| SWR302 — feature, yêu cầu, ưu tiên, glossary, dictionary, stakeholder, elicitation, khảo sát, NFR, mockup | `/swr/*` | ✅ 16 lệnh `swr_*` (thêm/sửa) — xoá từng mục SWR: — |
-| **RTM / trace link** — thêm | `POST /trace-links` | ✅ `trace_link_add` — gỡ: — (cần lệnh liệt kê id) |
+| SWR302 — feature, yêu cầu, ưu tiên, glossary, dictionary, stakeholder, elicitation, khảo sát, NFR, mockup | `/swr/*` | ✅ 16 lệnh `swr_*` (thêm/sửa) · 🆕 `swr_glossary_update`, `swr_dictionary_update`, `swr_priority_update`, `swr_survey_update`, `swr_mockup_update`, `swr_delete` (11 loại mục) |
+| **RTM / trace link** — thêm / liệt kê có id / gỡ | `/trace-links` | ✅ `trace_link_add` · 🆕 `trace_links`, `trace_link_remove` |
 | **Họp** — tạo / sửa (giờ, trạng thái, agenda, biên bản, quyết định) / xoá; action item; RSVP; transcript + đề xuất biên bản | `/meetings…` | 🆕 `meeting_create`, `meeting_update`, `meeting_delete` · ✅ `meeting_add_actions`, `meeting_create_issues`, `meeting_rsvp`, `meeting_transcript_get`, `meeting_minutes_propose` |
+| Họp — người dự, chương trình có giờ | `…/attendees`, `…/agenda-items` | 🆕 `meeting_attendees_set`, `meeting_agenda_set` |
 | **RAID** — tạo / sửa / xoá | `/raid…` | ✅ `raid_create`, `raid_update` · 🆕 `raid_delete` |
 | **Q&A** — hỏi / trả lời / sửa / xoá | `/qna…` | ✅ `qna_ask`, `qna_answer` · 🆕 `qna_update`, `qna_delete` |
 | **Sơ đồ** — sinh / sửa / từ SQL / điền báo cáo / xoá | `/diagrams…` | ✅ `diagram_generate`, `diagram_update`, `diagram_sql_create`, `diagram_fill_report` · 🆕 `diagram_delete` |
 | **Chat** — đọc / gửi / sửa / xoá tin | `/chat/channels/:cid/messages…` | ✅ `chat_read`, `chat_post` · 🆕 `chat_edit`, `chat_delete` |
+| Chat — kênh (tạo/sửa/lưu trữ/thành viên), ghim, react, tin ⇒ thẻ | `/chat/channels…` | 🆕 `chat_channel_manage`, `chat_message_act` (nhắn riêng `/chat/dm`: —) |
 | **Resources** — đọc / thêm / sửa / xoá link | `/resources…` | ✅ `project_resources` · 🆕 `resource_add`, `resource_update`, `resource_delete` |
 | **Mã nguồn** — repo của dự án để clone | GitHub/GitLab connection + Resources | 🆕 `project_repos` (URL clone HTTPS/SSH + nhánh mặc định) |
 | Form — điền | `POST /forms/:token/responses` | ✅ `form_submit` |
 | Lớp học — nộp / rút bài | `/classes/:id/assignments/:aid/my…` | ✅ `class_submit`, `class_unsubmit` |
-| Poker / retro — bỏ phiếu, thêm thẻ | `/poker…`, `/retros…` | ✅ `poker_vote`, `retro_card_add`, `retro_vote` (điều phối phiên: —) |
+| Lớp học (giảng viên) — thông báo, tài liệu, chủ đề, bài tập (tạo/sửa/xoá) | `/classes/:id/(stream\|materials\|topics\|assignments)…` | 🆕 `class_content`, `class_post`, `class_material`, `class_assignment`, `class_content_delete` · chấm / trả bài / sổ điểm / điểm danh: 👤 |
+| Poker / retro — bỏ phiếu, thêm thẻ | `/poker…`, `/retros…` | ✅ `poker_vote`, `retro_card_add`, `retro_vote` |
+| Poker / retro — điều phối (tạo, bắt đầu, lật, chốt điểm, đóng; sửa/khoá retro, action) / xoá | `/poker…`, `/retros…` | 🆕 `poker_session`, `retro_session`, `agile_delete` |
+| **Change Request** — đọc / tạo / sửa / nộp / rút / đã thực hiện / liên kết thẻ / gửi duyệt / xoá | `/changes…` | 🆕 `change_requests`, `change_request_manage`, `change_request_delete` · quyết định APPROVED/REJECTED: 👤 |
+| **Review / inspection** — tạo, người tham gia, checklist OK/NG/NA, chuyển bước, ghi defect / xoá | `/reviews…` | 🆕 `reviews`, `review_manage`, `review_delete` · `decision` (accept/reinspect): 👤 |
+| **Version / release** — đọc / tạo / sửa / release / xoá | `/versions…` | 🆕 `versions`, `version_manage`, `version_delete` |
 | Timesheet tuần — nộp | `POST /finance/timesheets/submit` | ✅ `timesheet_submit` |
 | Duyệt — gửi duyệt | `POST /approvals` | ✅ `approval_request`, `request_review` · quyết định: 👤 |
 | Cài đặt dự án — đọc | `GET /projects/:pid` | ✅ qua `get_issue` (workflow, transitions, DoD), `whoami`, `list_projects`, tài nguyên `ctwork://{project}/dod` |
@@ -100,27 +108,25 @@ Resources) kèm `cloneHttps`, `cloneSsh`, `defaultBranch` (GitHub API công khai
 mở không phải repo của dự án (`git remote -v`) ⇒ gọi `project_repos` rồi **đề nghị `git clone`**, đừng nói "không tìm
 thấy code". CLI/app chạy được git sẵn — không cần sửa app cho phần này.
 
-## 5. Còn thiếu (chưa làm, theo thứ tự đáng làm)
+## 5. Còn thiếu (sau đợt 2, theo thứ tự đáng làm)
 
-1. SWR302: xoá từng mục (feature, glossary, dictionary, stakeholder, elicitation, survey, NFR, mockup, nguồn yêu cầu) +
-   sửa hàng ưu tiên/khảo sát/mockup/NFR/requirement (`PUT /swr/requirements/:num`).
-2. Gỡ trace link (cần một lệnh liệt kê trace link kèm id).
-3. Change Request (`/changes`): tạo/sửa/liên kết — hiện chỉ web.
-4. Chat: tạo kênh, thành viên kênh, ghim, react, chuyển tin thành thẻ, nhắn riêng.
-5. Bình luận: react; ghi chú cá nhân (Notes ↔ thẻ); chuyển thẻ sang dự án khác; sửa hàng loạt.
-6. Docs: inline comment + resolve, xoá bình luận trang, autofill/fill-srs (AI của web).
-7. Họp: danh sách người tham dự, agenda-items, nhân bản họp, áp mẫu.
-8. Xray: test plan, test design, exploratory session, nhập test hàng loạt; 5.x nhập Excel.
-9. Poker/retro: điều phối phiên (tạo, reveal, finalize); review (`/reviews`); dashboards; WBS; versions/release.
-10. Lớp học phía giảng viên (bài tập, tài liệu, chủ đề, buổi học, stream) — phía sinh viên ngoài nộp bài (bình luận stream…).
+1. Lớp học phía giảng viên ngoài nội dung: danh sách lớp/roster (nhập, mời), lịch + buổi học, ngân hàng câu hỏi + tạo quiz
+   (soạn đề — không phải làm bài/chấm), cài đặt lớp, bình luận stream.
+2. SWR302 phần phụ: vòng đời yêu cầu (`/lifecycle` — có `swr_requirement_set_status`), RACI (agent cấm; người: —), seed, ước
+   lượng, chất lượng thủ công, đề xuất từ elicitation, NFR từ mẫu.
+3. Thẻ: ghi chú cá nhân (Notes ↔ thẻ), react bình luận, chuyển sang dự án khác, sửa hàng loạt, handoff, service desk.
+4. Chat: tệp/voice trong kênh, chuyển tiếp, gọi, thông báo kênh, nhắn riêng (`/chat/dm`).
+5. Docs: thêm bình luận NEO đoạn văn (cần chèn neo vào nội dung), đồng soạn bật/tắt, autofill/fill-srs (AI web).
+6. Họp: nhân bản, áp mẫu, link ghi hình, gợi ý action (AI web).
+7. Dashboard (widget), exploratory session, phân bổ tài nguyên, WBS, báo cáo trạng thái, đóng góp (cài đặt + đánh giá chéo).
 
 ## 6. Số liệu
 
-- Lệnh registry: **167 ⇒ 224** (+57; 20 lệnh `destructive`). MCP: token người thấy 215 lệnh, token agent 190 (lệnh xoá
-  và quản trị là `personOnly`).
-- Tuyến GHI của CT Work (router thật, 21/10/2026): **731**. Có lệnh: **144** · cố ý chỉ người (👤): **307** · còn thiếu:
-  **280** — phần lớn là lớp học phía giảng viên, SWR302 xoá/sửa từng mục, chat nâng cao, điều phối poker/retro, review,
-  CR, test plan/design, dashboard (xem mục 5).
+- Lệnh registry: **167 ⇒ 224 (đợt 1) ⇒ 264 (đợt 2)** (+97; 30 lệnh `destructive`). MCP: token người thấy **255** lệnh,
+  token agent 211. App gửi 23 lệnh kèm schema + ~232 vào mục lục (trần máy chủ 300 — `registry.test` giữ ≤ 280). Đợt 2 gộp
+  theo `action` (`change_request_manage`, `poker_session`, `review_manage`…) để không nở mục lục.
+- Tuyến GHI của CT Work (router thật, 21/10/2026): **731**. Có lệnh: **144 ⇒ 227** · cố ý chỉ người (👤): **306** · còn
+  thiếu: **280 ⇒ 198** (xem mục 5).
 - Cách sinh lại bảng dưới: liệt kê router bằng cách duyệt `router.stack` của `work.routes.ts`, khớp với các cặp
   `[METHOD, path]` mà mỗi lệnh truyền cho `projectFor` (+ bảng đối chiếu tay cho lệnh dùng đường động), phân loại 👤 theo
   danh sách ở mục 2.
@@ -149,7 +155,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 |---|---|---|---|
 | PUT | `/chat/prefs` | — |  |
 
-### (outside project) /classes — 4 tool · 14 chỉ người · 48 thiếu
+### (outside project) /classes — 16 tool · 14 chỉ người · 36 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -162,23 +168,23 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/classes/:id/roster/invite` | — |  |
 | DELETE | `/classes/:id/roster/:sid` | — |  |
 | PATCH | `/classes/:id/classroom-settings` | — |  |
-| POST | `/classes/:id/stream` | — |  |
-| PATCH | `/classes/:id/stream/:pid` | — |  |
-| DELETE | `/classes/:id/stream/:pid` | — |  |
+| POST | `/classes/:id/stream` | ✅ | class_post |
+| PATCH | `/classes/:id/stream/:pid` | ✅ | class_post |
+| DELETE | `/classes/:id/stream/:pid` | ✅ | class_content_delete |
 | POST | `/classes/:id/stream/:pid/comments` | — |  |
 | PATCH | `/classes/:id/stream-comments/:cid` | — |  |
 | DELETE | `/classes/:id/stream-comments/:cid` | — |  |
 | POST | `/classes/:id/stream-files` | — |  |
 | DELETE | `/classes/:id/stream-files/:fid` | — |  |
-| POST | `/classes/:id/materials` | — |  |
+| POST | `/classes/:id/materials` | ✅ | class_material |
 | PUT | `/classes/:id/materials-order` | — |  |
-| PATCH | `/classes/:id/materials/:mid` | — |  |
-| DELETE | `/classes/:id/materials/:mid` | — |  |
+| PATCH | `/classes/:id/materials/:mid` | ✅ | class_material |
+| DELETE | `/classes/:id/materials/:mid` | ✅ | class_content_delete |
 | POST | `/classes/:id/materials/:mid/view` | — |  |
-| POST | `/classes/:id/topics` | — |  |
+| POST | `/classes/:id/topics` | ✅ | class_material |
 | PUT | `/classes/:id/topics-order` | — |  |
-| PATCH | `/classes/:id/topics/:tid` | — |  |
-| DELETE | `/classes/:id/topics/:tid` | — |  |
+| PATCH | `/classes/:id/topics/:tid` | ✅ | class_material |
+| DELETE | `/classes/:id/topics/:tid` | ✅ | class_content_delete |
 | POST | `/classes/:id/schedules` | — |  |
 | DELETE | `/classes/:id/schedules/:sid` | — |  |
 | POST | `/classes/:id/sessions` | — |  |
@@ -188,9 +194,9 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | DELETE | `/classes/:id/sessions/:sid/checkin` | 👤 | academic integrity (taking a quiz / attendance check-in) |
 | PUT | `/classes/:id/sessions/:sid/attendance` | 👤 | grading / attendance decision (lecturer) |
 | POST | `/classes/:id/checkin` | 👤 | academic integrity (taking a quiz / attendance check-in) |
-| POST | `/classes/:id/assignments` | — |  |
-| PATCH | `/classes/:id/assignments/:aid` | — |  |
-| DELETE | `/classes/:id/assignments/:aid` | — |  |
+| POST | `/classes/:id/assignments` | ✅ | class_assignment |
+| PATCH | `/classes/:id/assignments/:aid` | ✅ | class_assignment |
+| DELETE | `/classes/:id/assignments/:aid` | ✅ | class_content_delete |
 | POST | `/classes/:id/assignments/:aid/files` | — |  |
 | DELETE | `/classes/:id/assignments/:aid/files/:fid` | — |  |
 | PUT | `/classes/:id/assignments/:aid/my` | ✅ | class_submit |
@@ -517,28 +523,28 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 |---|---|---|---|
 | PUT | `/projects/:pid/capacity/:userId` | 👤 | project configuration / membership |
 
-### changes — 0 tool · 2 chỉ người · 8 thiếu
+### changes — 7 tool · 1 chỉ người · 2 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/changes` | — |  |
-| PATCH | `/projects/:pid/changes/:num` | — |  |
-| DELETE | `/projects/:pid/changes/:num` | — |  |
-| POST | `/projects/:pid/changes/:num/status` | — |  |
+| POST | `/projects/:pid/changes` | ✅ | change_request_manage |
+| PATCH | `/projects/:pid/changes/:num` | ✅ | change_request_manage |
+| DELETE | `/projects/:pid/changes/:num` | ✅ | change_request_delete |
+| POST | `/projects/:pid/changes/:num/status` | ✅ | change_request_manage |
 | PUT | `/projects/:pid/changes/:num/client-visible` | 👤 | client-facing |
-| POST | `/projects/:pid/changes/:num/approval` | 👤 | decision / approval |
-| POST | `/projects/:pid/changes/:num/links` | — |  |
-| DELETE | `/projects/:pid/changes/:num/links/:linkId` | — |  |
+| POST | `/projects/:pid/changes/:num/approval` | ✅ | change_request_manage |
+| POST | `/projects/:pid/changes/:num/links` | ✅ | change_request_manage |
+| DELETE | `/projects/:pid/changes/:num/links/:linkId` | ✅ | change_request_manage |
 | POST | `/projects/:pid/changes/:num/implement` | — |  |
 | PUT | `/projects/:pid/changes/:num/affected` | — |  |
 
-### chat — 3 tool · 1 chỉ người · 16 thiếu
+### chat — 9 tool · 1 chỉ người · 10 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/chat/channels` | — |  |
-| PATCH | `/projects/:pid/chat/channels/:cid` | — |  |
-| PUT | `/projects/:pid/chat/channels/:cid/members` | — |  |
+| POST | `/projects/:pid/chat/channels` | ✅ | chat_channel_manage |
+| PATCH | `/projects/:pid/chat/channels/:cid` | ✅ | chat_channel_manage |
+| PUT | `/projects/:pid/chat/channels/:cid/members` | ✅ | chat_channel_manage |
 | PUT | `/projects/:pid/chat/channels/:cid/notify` | — |  |
 | POST | `/projects/:pid/chat/channels/:cid/read` | — |  |
 | POST | `/projects/:pid/chat/read-all` | — |  |
@@ -546,9 +552,9 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/chat/channels/:cid/messages` | ✅ | chat_post |
 | PATCH | `/projects/:pid/chat/channels/:cid/messages/:mid` | ✅ | chat_edit |
 | DELETE | `/projects/:pid/chat/channels/:cid/messages/:mid` | ✅ | chat_delete |
-| PUT | `/projects/:pid/chat/channels/:cid/messages/:mid/reactions/:emoji` | — |  |
-| PUT | `/projects/:pid/chat/channels/:cid/messages/:mid/pin` | — |  |
-| POST | `/projects/:pid/chat/channels/:cid/messages/:mid/issue` | — |  |
+| PUT | `/projects/:pid/chat/channels/:cid/messages/:mid/reactions/:emoji` | ✅ | chat_message_act |
+| PUT | `/projects/:pid/chat/channels/:cid/messages/:mid/pin` | ✅ | chat_message_act |
+| POST | `/projects/:pid/chat/channels/:cid/messages/:mid/issue` | ✅ | chat_message_act |
 | POST | `/projects/:pid/chat/channels/:cid/messages/:mid/forward` | — |  |
 | POST | `/projects/:pid/chat/channels/:cid/files` | — |  |
 | POST | `/projects/:pid/chat/channels/:cid/voice` | — |  |
@@ -767,7 +773,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | PATCH | `/projects/:pid/fpt-reports/ai-usage/:id` | — |  |
 | DELETE | `/projects/:pid/fpt-reports/ai-usage/:id` | — |  |
 
-### fpt-tests — 18 tool · 0 chỉ người · 1 thiếu
+### fpt-tests — 19 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -789,7 +795,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | DELETE | `/projects/:pid/fpt-tests/system/:mid` | ✅ | fpt_it_delete_module |
 | PUT | `/projects/:pid/fpt-tests/integration/:mid/cases` | ✅ | fpt_it_add_cases, fpt_it_record_round, fpt_it_update_cases, fpt_it_delete_cases, fpt_it_move_case |
 | PUT | `/projects/:pid/fpt-tests/system/:mid/cases` | ✅ | fpt_it_add_cases, fpt_it_record_round, fpt_it_update_cases, fpt_it_delete_cases, fpt_it_move_case |
-| POST | `/projects/:pid/fpt-tests/import` | — |  |
+| POST | `/projects/:pid/fpt-tests/import` | ✅ | fpt_import_excel |
 
 ### github — 0 tool · 3 chỉ người · 0 thiếu
 
@@ -943,21 +949,21 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 |---|---|---|---|
 | PUT | `/projects/:pid/meeting-settings` | 👤 | project configuration / membership |
 
-### meetings — 7 tool · 16 chỉ người · 6 thiếu
+### meetings — 9 tool · 16 chỉ người · 4 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/meetings` | ✅ | meeting_create |
 | PATCH | `/projects/:pid/meetings/:num` | ✅ | meeting_update |
 | DELETE | `/projects/:pid/meetings/:num` | ✅ | meeting_delete |
-| PUT | `/projects/:pid/meetings/:num/attendees` | — |  |
+| PUT | `/projects/:pid/meetings/:num/attendees` | ✅ | meeting_attendees_set |
 | PUT | `/projects/:pid/meetings/:num/actions` | ✅ | meeting_add_actions |
 | POST | `/projects/:pid/meetings/:num/actions/issues` | ✅ | meeting_create_issues |
 | POST | `/projects/:pid/meetings/:num/actions/suggest` | — |  |
 | POST | `/projects/:pid/meetings/:num/share` | 👤 | client-facing |
 | POST | `/projects/:pid/meetings/:num/duplicate` | — |  |
 | POST | `/projects/:pid/meetings/:num/invites` | 👤 | client-facing |
-| PUT | `/projects/:pid/meetings/:num/agenda-items` | — |  |
+| PUT | `/projects/:pid/meetings/:num/agenda-items` | ✅ | meeting_agenda_set |
 | PUT | `/projects/:pid/meetings/:num/recording-link` | — |  |
 | POST | `/projects/:pid/meetings/:num/rsvp` | ✅ | meeting_rsvp |
 | POST | `/projects/:pid/meetings/:num/join` | 👤 | live meeting / recording (needs the person present) |
@@ -998,7 +1004,7 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 |---|---|---|---|
 | POST | `/projects/:pid/okrs/objectives` | — |  |
 
-### pages — 9 tool · 0 chỉ người · 8 thiếu
+### pages — 11 tool · 0 chỉ người · 6 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
@@ -1011,31 +1017,31 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/pages/:num/issues` | ✅ | docs_page_link_issue |
 | DELETE | `/projects/:pid/pages/:num/issues/:issueNum` | ✅ | docs_page_link_issue |
 | POST | `/projects/:pid/pages/:num/comments` | ✅ | docs_comment |
-| DELETE | `/projects/:pid/pages/:num/comments/:cid` | — |  |
+| DELETE | `/projects/:pid/pages/:num/comments/:cid` | ✅ | docs_comment_delete |
 | POST | `/projects/:pid/pages/:num/export` | — |  |
 | POST | `/projects/:pid/pages/:num/autofill` | — |  |
 | POST | `/projects/:pid/pages/:num/fill-srs` | — |  |
 | PUT | `/projects/:pid/pages/:num/collab` | — |  |
 | POST | `/projects/:pid/pages/:num/collab/flush` | — |  |
 | POST | `/projects/:pid/pages/:num/inline-comments` | — |  |
-| POST | `/projects/:pid/pages/:num/inline-comments/:cid/resolve` | — |  |
+| POST | `/projects/:pid/pages/:num/inline-comments/:cid/resolve` | ✅ | docs_comment_resolve |
 
-### poker — 1 tool · 0 chỉ người · 11 thiếu
+### poker — 11 tool · 0 chỉ người · 1 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/poker` | — |  |
-| DELETE | `/projects/:pid/poker/:sid` | — |  |
-| POST | `/projects/:pid/poker/:sid/items` | — |  |
+| POST | `/projects/:pid/poker` | ✅ | poker_session |
+| DELETE | `/projects/:pid/poker/:sid` | ✅ | agile_delete |
+| POST | `/projects/:pid/poker/:sid/items` | ✅ | poker_session |
 | POST | `/projects/:pid/poker/:sid/timer` | — |  |
-| POST | `/projects/:pid/poker/:sid/close` | — |  |
-| DELETE | `/projects/:pid/poker/:sid/items/:iid` | — |  |
-| POST | `/projects/:pid/poker/:sid/items/:iid/start` | — |  |
+| POST | `/projects/:pid/poker/:sid/close` | ✅ | poker_session |
+| DELETE | `/projects/:pid/poker/:sid/items/:iid` | ✅ | agile_delete |
+| POST | `/projects/:pid/poker/:sid/items/:iid/start` | ✅ | poker_session |
 | POST | `/projects/:pid/poker/:sid/items/:iid/vote` | ✅ | poker_vote |
-| POST | `/projects/:pid/poker/:sid/items/:iid/reveal` | — |  |
-| POST | `/projects/:pid/poker/:sid/items/:iid/revote` | — |  |
-| POST | `/projects/:pid/poker/:sid/items/:iid/finalize` | — |  |
-| POST | `/projects/:pid/poker/:sid/items/:iid/skip` | — |  |
+| POST | `/projects/:pid/poker/:sid/items/:iid/reveal` | ✅ | poker_session |
+| POST | `/projects/:pid/poker/:sid/items/:iid/revote` | ✅ | poker_session |
+| POST | `/projects/:pid/poker/:sid/items/:iid/finalize` | ✅ | poker_session |
+| POST | `/projects/:pid/poker/:sid/items/:iid/skip` | ✅ | poker_session |
 
 ### portal — 0 tool · 10 chỉ người · 0 thiếu
 
@@ -1124,32 +1130,32 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/resources/:id/open` | — |  |
 | POST | `/projects/:pid/resources/:id/refresh` | — |  |
 
-### retros — 2 tool · 0 chỉ người · 8 thiếu
+### retros — 9 tool · 0 chỉ người · 1 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/retros` | — |  |
-| PATCH | `/projects/:pid/retros/:rid` | — |  |
-| DELETE | `/projects/:pid/retros/:rid` | — |  |
+| POST | `/projects/:pid/retros` | ✅ | retro_session |
+| PATCH | `/projects/:pid/retros/:rid` | ✅ | retro_session |
+| DELETE | `/projects/:pid/retros/:rid` | ✅ | agile_delete |
 | POST | `/projects/:pid/retros/:rid/cards` | ✅ | retro_card_add |
-| PATCH | `/projects/:pid/retros/:rid/cards/:cid` | — |  |
-| DELETE | `/projects/:pid/retros/:rid/cards/:cid` | — |  |
+| PATCH | `/projects/:pid/retros/:rid/cards/:cid` | ✅ | retro_session |
+| DELETE | `/projects/:pid/retros/:rid/cards/:cid` | ✅ | agile_delete |
 | POST | `/projects/:pid/retros/:rid/cards/:cid/vote` | ✅ | retro_vote |
-| POST | `/projects/:pid/retros/:rid/actions` | — |  |
-| DELETE | `/projects/:pid/retros/:rid/actions/:aid` | — |  |
+| POST | `/projects/:pid/retros/:rid/actions` | ✅ | retro_session |
+| DELETE | `/projects/:pid/retros/:rid/actions/:aid` | ✅ | agile_delete |
 | POST | `/projects/:pid/retros/:rid/summary` | — |  |
 
-### reviews — 0 tool · 0 chỉ người · 7 thiếu
+### reviews — 7 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/reviews` | — |  |
-| PATCH | `/projects/:pid/reviews/:num` | — |  |
-| DELETE | `/projects/:pid/reviews/:num` | — |  |
-| PUT | `/projects/:pid/reviews/:num/participants` | — |  |
-| PUT | `/projects/:pid/reviews/:num/items` | — |  |
-| POST | `/projects/:pid/reviews/:num/transition` | — |  |
-| POST | `/projects/:pid/reviews/:num/items/:itemId/defect` | — |  |
+| POST | `/projects/:pid/reviews` | ✅ | review_manage |
+| PATCH | `/projects/:pid/reviews/:num` | ✅ | review_manage |
+| DELETE | `/projects/:pid/reviews/:num` | ✅ | review_delete |
+| PUT | `/projects/:pid/reviews/:num/participants` | ✅ | review_manage |
+| PUT | `/projects/:pid/reviews/:num/items` | ✅ | review_manage |
+| POST | `/projects/:pid/reviews/:num/transition` | ✅ | review_manage |
+| POST | `/projects/:pid/reviews/:num/items/:itemId/defect` | ✅ | review_manage |
 
 ### sample-data — 0 tool · 2 chỉ người · 0 thiếu
 
@@ -1256,62 +1262,62 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | PUT | `/projects/:pid/studio` | 👤 | project configuration / membership |
 | POST | `/projects/:pid/studio/apply-defaults` | 👤 | project configuration / membership |
 
-### swr — 16 tool · 4 chỉ người · 35 thiếu
+### swr — 34 tool · 4 chỉ người · 17 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/swr/features` | ✅ | swr_feature_add |
 | PATCH | `/projects/:pid/swr/features/:fe` | ✅ | swr_feature_update |
-| DELETE | `/projects/:pid/swr/features/:fe` | — |  |
+| DELETE | `/projects/:pid/swr/features/:fe` | ✅ | swr_delete |
 | POST | `/projects/:pid/swr/features/:fe/links` | ✅ | swr_feature_link |
-| DELETE | `/projects/:pid/swr/features/:fe/links/:id` | — |  |
-| PUT | `/projects/:pid/swr/requirements/:num` | — |  |
+| DELETE | `/projects/:pid/swr/features/:fe/links/:id` | ✅ | swr_delete |
+| PUT | `/projects/:pid/swr/requirements/:num` | ✅ | swr_requirement_classify |
 | POST | `/projects/:pid/swr/requirements/:num/lifecycle` | — |  |
 | POST | `/projects/:pid/swr/priority/rows` | ✅ | swr_priority_set |
-| PATCH | `/projects/:pid/swr/priority/rows/:id` | — |  |
-| DELETE | `/projects/:pid/swr/priority/rows/:id` | — |  |
+| PATCH | `/projects/:pid/swr/priority/rows/:id` | ✅ | swr_priority_update |
+| DELETE | `/projects/:pid/swr/priority/rows/:id` | ✅ | swr_delete |
 | POST | `/projects/:pid/swr/priority/seed` | — |  |
 | POST | `/projects/:pid/swr/glossary` | ✅ | swr_glossary_add |
-| PATCH | `/projects/:pid/swr/glossary/:id` | — |  |
-| DELETE | `/projects/:pid/swr/glossary/:id` | — |  |
+| PATCH | `/projects/:pid/swr/glossary/:id` | ✅ | swr_glossary_update |
+| DELETE | `/projects/:pid/swr/glossary/:id` | ✅ | swr_delete |
 | POST | `/projects/:pid/swr/dictionary` | ✅ | swr_dictionary_add |
-| PATCH | `/projects/:pid/swr/dictionary/:id` | — |  |
-| DELETE | `/projects/:pid/swr/dictionary/:id` | — |  |
+| PATCH | `/projects/:pid/swr/dictionary/:id` | ✅ | swr_dictionary_update |
+| DELETE | `/projects/:pid/swr/dictionary/:id` | ✅ | swr_delete |
 | PUT | `/projects/:pid/swr/settings` | — |  |
 | POST | `/projects/:pid/swr/docs/:kind/fill` | ✅ | swr_doc_fill |
 | POST | `/projects/:pid/swr/docs/:kind/export` | — |  |
 | POST | `/projects/:pid/swr/stakeholders` | ✅ | swr_stakeholder_add |
 | POST | `/projects/:pid/swr/stakeholders/seed-actors` | — |  |
 | PATCH | `/projects/:pid/swr/stakeholders/:sh` | ✅ | swr_stakeholder_update |
-| DELETE | `/projects/:pid/swr/stakeholders/:sh` | — |  |
+| DELETE | `/projects/:pid/swr/stakeholders/:sh` | ✅ | swr_delete |
 | POST | `/projects/:pid/swr/raci/activities` | — |  |
 | DELETE | `/projects/:pid/swr/raci/activities/:id` | — |  |
 | PUT | `/projects/:pid/swr/raci/cells` | — |  |
 | POST | `/projects/:pid/swr/elicitation` | ✅ | swr_elicitation_add |
 | PATCH | `/projects/:pid/swr/elicitation/:elc` | ✅ | swr_elicitation_update |
-| DELETE | `/projects/:pid/swr/elicitation/:elc` | — |  |
+| DELETE | `/projects/:pid/swr/elicitation/:elc` | ✅ | swr_delete |
 | POST | `/projects/:pid/swr/elicitation/:elc/meeting` | — |  |
 | POST | `/projects/:pid/swr/elicitation/:elc/propose` | ✅ | swr_elicitation_propose |
 | POST | `/projects/:pid/swr/elicitation/:elc/proposals` | — |  |
 | POST | `/projects/:pid/swr/elicitation/:elc/proposals/:id/decide` | 👤 | decision / approval |
 | POST | `/projects/:pid/swr/origins` | ✅ | swr_requirement_source_add |
-| DELETE | `/projects/:pid/swr/origins/:id` | — |  |
+| DELETE | `/projects/:pid/swr/origins/:id` | ✅ | swr_delete |
 | POST | `/projects/:pid/swr/surveys` | ✅ | swr_survey_add |
-| PATCH | `/projects/:pid/swr/surveys/:sv` | — |  |
-| DELETE | `/projects/:pid/swr/surveys/:sv` | — |  |
+| PATCH | `/projects/:pid/swr/surveys/:sv` | ✅ | swr_survey_update |
+| DELETE | `/projects/:pid/swr/surveys/:sv` | ✅ | swr_delete |
 | POST | `/projects/:pid/swr/surveys/:sv/status` | 👤 | opens a public link (external) |
 | POST | `/projects/:pid/swr/surveys/:sv/rotate` | 👤 | opens a public link (external) |
 | POST | `/projects/:pid/swr/models/:kind/generate` | ✅ | swr_model_generate |
 | POST | `/projects/:pid/swr/mockups` | ✅ | swr_mockup_add_link |
-| PATCH | `/projects/:pid/swr/mockups/:id` | — |  |
-| DELETE | `/projects/:pid/swr/mockups/:id` | — |  |
+| PATCH | `/projects/:pid/swr/mockups/:id` | ✅ | swr_mockup_update |
+| DELETE | `/projects/:pid/swr/mockups/:id` | ✅ | swr_delete |
 | POST | `/projects/:pid/swr/mockups/:id/submit` | — |  |
 | POST | `/projects/:pid/swr/mockups/:id/review` | 👤 | decision / approval |
 | PUT | `/projects/:pid/swr/quality/:num` | — |  |
 | POST | `/projects/:pid/swr/quality/:num/ai-fix` | — |  |
 | POST | `/projects/:pid/swr/nfr/from-template` | — |  |
-| PUT | `/projects/:pid/swr/nfr/:num` | — |  |
-| DELETE | `/projects/:pid/swr/nfr/:num` | — |  |
+| PUT | `/projects/:pid/swr/nfr/:num` | ✅ | swr_nfr_set |
+| DELETE | `/projects/:pid/swr/nfr/:num` | ✅ | swr_delete |
 | PUT | `/projects/:pid/swr/estimation` | — |  |
 | POST | `/projects/:pid/swr/elicitation/:elc/ai-stakeholder` | — |  |
 | DELETE | `/projects/:pid/swr/elicitation/:elc/ai-stakeholder` | — |  |
@@ -1336,22 +1342,22 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 |---|---|---|---|
 | PUT | `/projects/:pid/test-defects/:num` | — |  |
 
-### test-designs — 0 tool · 0 chỉ người · 4 thiếu
+### test-designs — 3 tool · 0 chỉ người · 1 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/test-designs/preview` | — |  |
-| POST | `/projects/:pid/test-designs` | — |  |
-| DELETE | `/projects/:pid/test-designs/:num` | — |  |
-| POST | `/projects/:pid/test-designs/:num/export` | — |  |
+| POST | `/projects/:pid/test-designs` | ✅ | test_design_save |
+| DELETE | `/projects/:pid/test-designs/:num` | ✅ | test_design_delete |
+| POST | `/projects/:pid/test-designs/:num/export` | ✅ | test_design_export |
 
-### test-plans — 0 tool · 0 chỉ người · 4 thiếu
+### test-plans — 3 tool · 0 chỉ người · 1 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/test-plans` | — |  |
-| PATCH | `/projects/:pid/test-plans/:planId` | — |  |
-| DELETE | `/projects/:pid/test-plans/:planId` | — |  |
+| POST | `/projects/:pid/test-plans` | ✅ | test_plan_manage |
+| PATCH | `/projects/:pid/test-plans/:planId` | ✅ | test_plan_manage |
+| DELETE | `/projects/:pid/test-plans/:planId` | ✅ | test_plan_delete |
 | PUT | `/projects/:pid/test-plans/:planId/settings` | — |  |
 
 ### test-risks — 0 tool · 0 chỉ người · 1 thiếu
@@ -1394,12 +1400,12 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/timeline/baselines` | — |  |
 | DELETE | `/projects/:pid/timeline/baselines/:bid` | — |  |
 
-### trace-links — 1 tool · 0 chỉ người · 1 thiếu
+### trace-links — 2 tool · 0 chỉ người · 0 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
 | POST | `/projects/:pid/trace-links` | ✅ | trace_link_add |
-| DELETE | `/projects/:pid/trace-links/:id` | — |  |
+| DELETE | `/projects/:pid/trace-links/:id` | ✅ | trace_link_remove |
 
 ### trash — 2 tool · 2 chỉ người · 0 thiếu
 
@@ -1410,14 +1416,14 @@ thấy code". CLI/app chạy được git sẵn — không cần sửa app cho p
 | POST | `/projects/:pid/trash/pages/:num/restore` | ✅ | docs_page_restore |
 | DELETE | `/projects/:pid/trash/pages/:num` | 👤 | permanent purge |
 
-### versions — 0 tool · 0 chỉ người · 5 thiếu
+### versions — 4 tool · 0 chỉ người · 1 thiếu
 
 | Method | Route | | Tool / lý do |
 |---|---|---|---|
-| POST | `/projects/:pid/versions` | — |  |
-| PATCH | `/projects/:pid/versions/:versionId` | — |  |
-| POST | `/projects/:pid/versions/:versionId/release` | — |  |
-| DELETE | `/projects/:pid/versions/:versionId` | — |  |
+| POST | `/projects/:pid/versions` | ✅ | version_manage |
+| PATCH | `/projects/:pid/versions/:versionId` | ✅ | version_manage |
+| POST | `/projects/:pid/versions/:versionId/release` | ✅ | version_manage |
+| DELETE | `/projects/:pid/versions/:versionId` | ✅ | version_delete |
 | POST | `/projects/:pid/versions/:versionId/ai-notes` | — |  |
 
 ### wbs — 0 tool · 0 chỉ người · 3 thiếu

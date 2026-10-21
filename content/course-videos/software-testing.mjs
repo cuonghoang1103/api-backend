@@ -8,10 +8,10 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Giới thiệu (0.2/0.3 admin: bỏ) ── */
-    "swt301-gioi-thieu": { yt: "TDynSmrzpXw", credit: "Guru99 — What is Software Testing & Why Testing is Important?" },
+    "swt301-gioi-thieu": { yt: "TDynSmrzpXw", credit: "Guru99 — What is Software Testing & Why Testing is Important?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-01-gioi-thieu-swt301-istqb-697a1638.mp4' }, defaultVideoTrack: 'VI'},
     /* ── Chương 1 — Cơ bản ── */
-    "swt301-fundamentals-principles": { yt: "rFaWOw8bIMM", credit: "Guru99 — Seven Testing Principles: Software Testing" },
-    "swt301-test-process": { yt: "p5LRbJsw3Ys", credit: "Software Testing Mentor — ISTQB Foundation Level #6 - Fundamental Test Process - Part 1" },
+    "swt301-fundamentals-principles": { yt: "rFaWOw8bIMM", credit: "Guru99 — Seven Testing Principles: Software Testing", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-01-kiem-thu-la-gi-tron-0b8c0572.mp4' }, defaultVideoTrack: 'VI'},
+    "swt301-test-process": { yt: "p5LRbJsw3Ys", credit: "Software Testing Mentor — ISTQB Foundation Level #6 - Fundamental Test Process - Part 1", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-04-quy-trinh-test-tron-17b7c18b.mp4' }, defaultVideoTrack: 'VI'},
     /* ── Chương 2 — Cấp độ & loại kiểm thử ── */
     "swt301-test-levels": { yt: "cQ39AwhjxH8", credit: "Smart Software Testing. QA world — ISTQB Foundation Course. Test Levels: Component, Integration, System, and Acceptance Testing)" },
     "swt301-test-types": { yt: "pCC6kZulLZM", credit: "TM SQUARE — ISTQB FOUNDATION 4.0 | Tutorial 18 | Test Types | Functional Testing | Non-Functional Testing | CTFL" },
@@ -34,10 +34,10 @@ export default {
     /* ── Chương 9 — Agile ── */
     "swt301-agile-quadrants": { yt: "_BUlNzkyH58", credit: "Software Testing Mentor — ISTQB Agile Tester #43 - Agile Testing Quadrants and Test Levels" },
     "swt301-tdd-bdd": { yt: "Bq_oz7nCNUA", credit: "Modern Software Engineering — Test Driven Development vs Behavior Driven Development" },
-    "swt301-istqb-exam-strategy": { yt: "D8teFPYng3c", credit: "ASTQB - ISTQB in the U.S. and Globally — ASTQB Podcast: Interview with Diana - How She Passed ISTQB Foundation Level Certification" },
-    "swt301-why-testing-necessary": { yt: "NnclS4Qy5jY", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 1.2.3. Errors, Defects, Failures, and Root Causes" },
-    "swt301-seven-principles": { yt: "W2mVeHTh5AY", credit: "Software Testing Help — Principles of Software Testing - Seven Fundamental Principles of Testing (ISTQB Level)" },
-    "swt301-psychology-ethics": { yt: "Y8msb-bUYpM", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 1.5.3 Independence of Testing" },
+    "swt301-istqb-exam-strategy": { yt: "D8teFPYng3c", credit: "ASTQB - ISTQB in the U.S. and Globally — ASTQB Podcast: Interview with Diana - How She Passed ISTQB Foundation Level Certification", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-05-de-istqb-va-fe-tron-12b69dc5.mp4' }, defaultVideoTrack: 'VI'},
+    "swt301-why-testing-necessary": { yt: "NnclS4Qy5jY", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 1.2.3. Errors, Defects, Failures, and Root Causes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-02-vi-sao-can-kiem-thu-tron-967b92a7.mp4' }, defaultVideoTrack: 'VI'},
+    "swt301-seven-principles": { yt: "W2mVeHTh5AY", credit: "Software Testing Help — Principles of Software Testing - Seven Fundamental Principles of Testing (ISTQB Level)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-03-bay-nguyen-tac-tron-8774c750.mp4' }, defaultVideoTrack: 'VI'},
+    "swt301-psychology-ethics": { yt: "Y8msb-bUYpM", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 1.5.3 Independence of Testing", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-05-tam-ly-doc-lap-dao-duc-db73c082.mp4' }, defaultVideoTrack: 'VI'},
     "swt301-ch1-slides-2023": { yt: "Q5r--iE0tWw", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 1.4.1  Test Activities and Tasks" },
     "swt301-sdlc-models": { yt: "o3jDLVCpH1E", credit: "Modern Software Engineering — The WORST Way to Develop Software" },
     "swt301-system-acceptance": { yt: "JDD5EEJgpHU", credit: "Modern Software Engineering — How to Write Acceptance Tests" },
@@ -91,5 +91,10 @@ export default {
     "swt301-practice-mystbloom-blackbox": { yt: "D-Qv0ccFR84", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 4.2.1 Equivalence Partitioning" },
     "swt301-practice-mystbloom-integration": { yt: "brR4WaEF0u8", credit: "ASTQB - ISTQB in the U.S. and Globally — ISTQB Foundation Level: 4.4.2 Exploratory Testing" },
     "swt301-pe-fa23": { yt: "we3zJE3hlWE", credit: "IntelliJ IDEA, a JetBrains IDE — IntelliJ IDEA. Writing Tests with JUnit 5" },
+    'swt301-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-02-dieu-kien-qua-mon-cau-truc-diem-3f4a96e8.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-03-clo-business-outcomes-muc-k-tron-d479c177.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-tai-lieu-cong-cu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-06-tai-lieu-sach-ke-hoach-hoc-14d8c44c.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-books-guide': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-06-tai-lieu-sach-ke-hoach-hoc-14d8c44c.mp4' }, defaultVideoTrack: 'VI' },
+    'swt301-how-to-study': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-06-tai-lieu-sach-ke-hoach-hoc-14d8c44c.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

@@ -138,8 +138,9 @@ router.get(
 );
 
 // ─── GET /api/v1/users/online ────────────────────────────────
-// Mọi người đang online trên cả hệ thống (web, app, iOS), trừ chính mình và người
-// đã tắt hiện trạng thái hoạt động. Kèm friendStatus để vẽ đúng nút Kết bạn.
+// Người đang online mà MÌNH được phép thấy: chỉ người có quan hệ (bạn bè, đã nhắn nhau,
+// cùng không gian CT Work), trừ chặn và người tắt trạng thái; mình tắt ⇒ rỗng (đối ứng).
+// Kèm friendStatus để vẽ đúng nút Kết bạn.
 // Phải đứng TRƯỚC /:id.
 router.get('/online', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
   try {
@@ -214,7 +215,7 @@ router.get(
       const cursor = req.query.cursor ? parseInt(req.query.cursor as string, 10) : undefined;
       const limit = Math.min(parseInt(req.query.limit as string, 10) || 20, 50);
 
-      const result = await getFollowers(id, cursor, limit);
+      const result = await getFollowers(id, cursor, limit, req.user?.userId);
       res.json({ success: true, data: result });
     } catch (error) {
       next(error);
@@ -234,7 +235,7 @@ router.get(
       const cursor = req.query.cursor ? parseInt(req.query.cursor as string, 10) : undefined;
       const limit = Math.min(parseInt(req.query.limit as string, 10) || 20, 50);
 
-      const result = await getFollowing(id, cursor, limit);
+      const result = await getFollowing(id, cursor, limit, req.user?.userId);
       res.json({ success: true, data: result });
     } catch (error) {
       next(error);

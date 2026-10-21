@@ -1,6 +1,8 @@
 import { Router, type Response } from 'express';
 import { prisma } from '../config/database.js';
 import type { ApiResponse } from '../types/index.js';
+import { optionalAuth } from '../middleware/auth.js';
+import { loadPresenceViewer, presenceFor } from '../services/presencePrivacy.js';
 
 const router = Router();
 
@@ -432,7 +434,7 @@ router.get('/shop/featured', async (req, res: Response<ApiResponse>, next) => {
 
 // ─── GET /api/v1/mobile/profile/:username ─────────────────
 // Public profile for mobile
-router.get('/profile/:username', async (req, res: Response<ApiResponse>, next) => {
+router.get('/profile/:username', optionalAuth, async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const user = await prisma.user.findFirst({
       where: {
@@ -449,6 +451,8 @@ router.get('/profile/:username', async (req, res: Response<ApiResponse>, next) =
         gender: true,
         birthYear: true,
         lastActiveAt: true,
+        showActiveStatus: true,
+        kind: true,
         createdAt: true,
         _count: {
           select: {
@@ -483,7 +487,8 @@ router.get('/profile/:username', async (req, res: Response<ApiResponse>, next) =
         coverPhotoUrl: user.coverPhotoUrl,
         gender: user.gender,
         birthYear: user.birthYear,
-        lastActiveAt: user.lastActiveAt,
+        // Trạng thái hoạt động qua luật chung (presencePrivacy.ts): khách chưa đăng nhập / người tắt / chặn ⇒ null.
+        lastActiveAt: presenceFor(await loadPresenceViewer(req.user?.userId, [user.id]), user).lastActiveAt,
         createdAt: user.createdAt,
         followerCount: user._count.followers,
         followingCount: user._count.following,
@@ -502,7 +507,7 @@ router.get('/profile/:username', async (req, res: Response<ApiResponse>, next) =
 
 // ─── GET /api/v1/mobile/profile/public ────────────────────
 // Get public profile (for app owner - cuonghoang)
-router.get('/profile/public', async (req, res: Response<ApiResponse>, next) => {
+router.get('/profile/public', optionalAuth, async (req: any, res: Response<ApiResponse>, next) => {
   try {
     const user = await prisma.user.findFirst({
       where: {
@@ -522,6 +527,8 @@ router.get('/profile/public', async (req, res: Response<ApiResponse>, next) => {
         gender: true,
         birthYear: true,
         lastActiveAt: true,
+        showActiveStatus: true,
+        kind: true,
         createdAt: true,
         _count: {
           select: {
@@ -555,7 +562,8 @@ router.get('/profile/public', async (req, res: Response<ApiResponse>, next) => {
         coverPhotoUrl: user.coverPhotoUrl,
         gender: user.gender,
         birthYear: user.birthYear,
-        lastActiveAt: user.lastActiveAt,
+        // Trạng thái hoạt động qua luật chung (presencePrivacy.ts): khách chưa đăng nhập / người tắt / chặn ⇒ null.
+        lastActiveAt: presenceFor(await loadPresenceViewer(req.user?.userId, [user.id]), user).lastActiveAt,
         createdAt: user.createdAt,
         followerCount: user._count.followers,
         followingCount: user._count.following,

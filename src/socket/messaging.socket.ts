@@ -33,6 +33,7 @@ import { getRedis } from '../config/redis.js';
 import { UnauthorizedError } from '../middleware/errorHandler.js';
 import { extractToken, type JwtPayload } from '../middleware/auth.js';
 import { logger } from '../utils/logger.js';
+import { presenceAudience } from '../services/presencePrivacy.js';
 // Phase 3: Listen Together. Additive — registers its own listen:* socket
 // handlers + listen:<roomId> rooms; does not touch the messaging logic.
 import { registerListenTogether } from './listen-together.js';
@@ -192,13 +193,41 @@ export function getOnlineUserIds(): number[] {
  * broadcast was O(all sockets) per connect/disconnect — an O(N²) storm
  * during deploy reconnects. `audience` = friends ∪ thread peers.
  */
+type PhongPhat = { to(room: string): { emit(ev: string, payload: unknown): unknown } };
+
 function emitPresenceTo(
   audience: number[],
   payload: { userId: number; online: boolean; lastSeen: number },
+  dich: PhongPhat | null = io,
 ): void {
   for (const uid of audience) {
-    io?.to(`user:${uid}`).emit('presence:update', payload);
+    dich?.to(`user:${uid}`).emit('presence:update', payload);
   }
+}
+
+/**
+ * Lọc tập ứng viên (bạn bè ∪ người cùng cuộc trò chuyện) theo luật chung rồi phát "đã online" tới đúng tập đó.
+ * Trả audience đã lọc (để lúc ngắt phát "đã offline" cho cùng tập), hoặc `undefined` khi lọc lỗi — khi đó KHÔNG phát
+ * gì, không bao giờ rơi về phát toàn cục (21/10/2026). Tách riêng để test được không cần socket thật.
+ */
+export async function phatTrangThaiKhiNoi(
+  opts: { userId: number; ungVien: number[]; hienTrangThai: boolean; vuaOnline: boolean },
+  dich: PhongPhat | null = io,
+  loc: (userId: number, ids: number[]) => Promise<number[]> = presenceAudience,
+): Promise<number[] | undefined> {
+  let audience: number[];
+  try {
+    audience = await loc(opts.userId, opts.ungVien);
+  } catch (err) {
+    logger.error('presence-audience failed — không phát trạng thái', { error: err instanceof Error ? err.message : String(err) });
+    return undefined;
+  }
+  // ⚠️ Người đã TẮT "hiện trạng thái hoạt động" thì không phát gì cả. Che `lastActiveAt` ở API mà vẫn phát socket
+  // là trạng thái rò qua đường thứ hai — chấm xanh vẫn sáng đúng lúc họ vừa tắt nó đi.
+  if (opts.vuaOnline && opts.hienTrangThai) {
+    emitPresenceTo(audience, { userId: opts.userId, online: true, lastSeen: Date.now() }, dich);
+  }
+  return audience;
 }
 
 /**
@@ -385,25 +414,16 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
         for (const f of friendships) {
           audience.add(f.requesterId === user.id ? f.addresseeId : f.requesterId);
         }
-        const audienceArr = Array.from(audience);
-        socket.data.presenceAudience = audienceArr;
-        // ⚠️ Người đã TẮT "hiện trạng thái hoạt động" thì không phát gì cả.
-        // Che `lastActiveAt` ở API mà vẫn phát socket là trạng thái rò qua
-        // đường thứ hai — chấm xanh vẫn sáng đúng lúc họ vừa tắt nó đi.
-        if (wasOffline && user.showActiveStatus) {
-          emitPresenceTo(audienceArr, { userId: user.id, online: true, lastSeen: Date.now() });
-        }
+        // Lọc theo luật chung (presencePrivacy.ts): bỏ người chặn/bị chặn, người tự tắt trạng thái (đối ứng — API
+        // cũng không cho họ thấy), tài khoản bị vô hiệu hoá. Lỗi ở bước lọc ⇒ KHÔNG phát gì.
+        socket.data.presenceAudience = await phatTrangThaiKhiNoi({
+          userId: user.id, ungVien: Array.from(audience), hienTrangThai: user.showActiveStatus, vuaOnline: wasOffline,
+        });
       } catch (err) {
         logger.error('auto-join/presence-audience failed', { error: err instanceof Error ? err.message : String(err) });
-        // Fallback: don't lose the presence signal — broadcast globally
-        // (the old behavior) so the online dot still appears.
-        if (wasOffline && user.showActiveStatus) {
-          socket.broadcast.emit('presence:update', {
-            userId: user.id,
-            online: true,
-            lastSeen: Date.now(),
-          });
-        }
+        // ⛔ KHÔNG rơi về phát toàn cục (21/10/2026). Trước đây lỗi ở đây ⇒ `socket.broadcast.emit` tới MỌI socket
+        // đang nối — người lạ, người đã bị chặn — tức đúng lúc hệ thống trục trặc thì trạng thái rò ra cả web.
+        // Mất một chấm xanh tới lần nối sau là cái giá chấp nhận được; danh sách tải lại qua API vẫn đúng luật.
       }
     })();
 
@@ -548,20 +568,18 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
         // `POST /users/status` lúc chạy nền, nên thiếu dòng này thì "Hoạt động N phút trước" tính từ nhịp cũ. Không
         // phát gì thêm — cờ showActiveStatus vẫn che mốc này ở mọi API đọc.
         void prisma.user.update({ where: { id: user.id }, data: { lastActiveAt: new Date() } }).catch(() => undefined);
-        // Emit "went offline" only to this user's presence audience
-        // (friends ∪ thread peers) computed at connect. Fall back to a
-        // global broadcast if the audience wasn't computed (early
-        // disconnect / connect-time error) so presence isn't lost.
+        // Emit "went offline" only to this user's presence audience (friends ∪ thread peers, đã lọc chặn + đối ứng)
+        // computed at connect. Chưa tính được audience (ngắt sớm / lỗi lúc nối) ⇒ KHÔNG phát gì — không bao giờ
+        // `io.emit` toàn cục (21/10/2026).
         const payload = { userId: user.id, online: false, lastSeen: Date.now() };
         const audience = socket.data.presenceAudience as number[] | undefined;
-        if (!user.showActiveStatus) {
-          // Không phát "đã online" thì cũng không được phát "đã offline":
-          // một tin offline lẻ loi cũng nói cho người khác biết mình vừa
-          // đóng app, tức vẫn là rò trạng thái.
-        } else if (audience && audience.length > 0) {
-          emitPresenceTo(audience, payload);
-        } else {
-          io?.emit('presence:update', payload);
+        if (user.showActiveStatus && audience && audience.length > 0) {
+          // Không phát "đã online" thì cũng không được phát "đã offline": một tin offline lẻ loi cũng nói cho người
+          // khác biết mình vừa đóng app. Đọc lại công tắc lúc ngắt: người vừa TẮT trong phiên thì thôi phát.
+          void prisma.user
+            .findUnique({ where: { id: user.id }, select: { showActiveStatus: true } })
+            .then((u) => { if (u?.showActiveStatus) emitPresenceTo(audience, payload); })
+            .catch(() => undefined);
         }
       }
     });

@@ -97,19 +97,8 @@ export default function AdminDeletionRequestsPage() {
     }
   };
 
-  const handleReject = async (r: AdminDeletionRequest) => {
-    setActing(r.id);
-    try {
-      await adminDeletionRequestsApi.reject(r.id, note.trim() || undefined);
-      toast.success('Đã từ chối yêu cầu.');
-      closePanel();
-      await load();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Từ chối thất bại.');
-    } finally {
-      setActing(null);
-    }
-  };
+  // Không có nút "Từ chối" (21/10/2026): App Store 5.1.1(v) — người dùng phải xoá được tài khoản của mình, admin không
+  // được chặn. Yêu cầu tự có hiệu lực sau 72 giờ; admin chỉ có thể duyệt SỚM. Máy chủ cũng từ chối lệnh reject.
 
   return (
     <div className="min-h-screen p-4 sm:p-6" style={{ background: 'var(--bg-primary)' }}>
@@ -269,14 +258,14 @@ export default function AdminDeletionRequestsPage() {
 
                       <label className="block">
                         <span className="mb-1 block text-xs" style={{ color: 'var(--text-secondary)' }}>
-                          Ghi chú cho người dùng (hiện ở trang cài đặt của họ khi bị từ chối)
+                          Ghi chú nội bộ (lưu cùng yêu cầu). Yêu cầu không thể bị từ chối — nếu không duyệt sớm, nó tự có hiệu lực sau 72 giờ.
                         </span>
                         <textarea
                           rows={2}
                           maxLength={500}
                           value={note}
                           onChange={(e) => setNote(e.target.value)}
-                          placeholder="e.g. Account still has orders in progress…"
+                          placeholder="e.g. Expedited at the user's request"
                           className="w-full rounded-lg border px-3 py-2 text-sm outline-none"
                           style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
                         />
@@ -303,14 +292,6 @@ export default function AdminDeletionRequestsPage() {
                         >
                           {acting === r.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                           Duyệt & xoá tài khoản
-                        </button>
-                        <button
-                          onClick={() => void handleReject(r)}
-                          disabled={acting === r.id}
-                          className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium disabled:opacity-50"
-                          style={{ background: 'var(--bg-surface)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
-                        >
-                          <XCircle className="h-4 w-4" /> Từ chối
                         </button>
                         <button
                           onClick={closePanel}

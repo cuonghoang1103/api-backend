@@ -11,7 +11,8 @@
  *   GET  /                 — queue (PENDING first), cursor-paginated
  *   GET  /stats            — counters for the admin badge
  *   POST /:id/approve      — anonymise the account (irreversible)
- *   POST /:id/reject       — decline, with a note back to the user
+ *   POST /:id/reject       — LUÔN 409 DELETION_REJECT_NOT_ALLOWED (21/10/2026, App Store 5.1.1(v)): admin không được
+ *                            chặn người dùng xoá tài khoản; chỉ duyệt sớm được. Giữ tuyến để client cũ nhận lỗi rõ.
  */
 
 import { Router, type Response, type Request, type NextFunction } from 'express';
@@ -76,8 +77,7 @@ router.post('/:id/approve', async (req: any, res: Response<ApiResponse>, next: N
 // POST /api/v1/admin/deletion-requests/:id/reject
 router.post('/:id/reject', async (req: any, res: Response<ApiResponse>, next: NextFunction) => {
   try {
-    const request = await reject(parseId(req.params.id), req.user.userId, req.body?.note);
-    res.json({ success: true, data: { request }, message: 'Đã từ chối yêu cầu.' });
+    await reject(parseId(req.params.id), req.user.userId, req.body?.note); // luôn ném — xem accountDeletion.service.ts
   } catch (error) {
     next(error);
   }

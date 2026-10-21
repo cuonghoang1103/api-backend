@@ -23,11 +23,17 @@
  * giờ) xoá mọi yêu cầu PENDING đã quá 72 giờ. Admin vẫn duyệt sớm được;
  * người dùng vẫn huỷ được trong 72 giờ đó.
  *
+ * ⛔ 21/10/2026 — ADMIN KHÔNG ĐƯỢC TỪ CHỐI. Trước đây `reject()` cho admin chặn một yêu cầu tự xoá trong 72 giờ ân
+ * hạn — tức người dùng có thể không bao giờ xoá được tài khoản của chính mình, trái App Store 5.1.1(v) ("người dùng
+ * phải xoá được tài khoản ngay trong app"). Nay `reject()` luôn ném 409 `DELETION_REJECT_NOT_ALLOWED`; admin chỉ
+ * duyệt SỚM được. Nếu một ngày cần giữ dữ liệu vì nghĩa vụ pháp lý (legal hold), đó phải là một quy trình riêng có
+ * ghi nhật ký và BÁO cho người dùng — không phải một nút bấm lặng lẽ. Trạng thái REJECTED giữ trong kiểu/thống kê
+ * cho các dòng lịch sử cũ.
+ *
  * State machine:
  *
- *     (none) ──request()──► PENDING ──approve()──► APPROVED  (account erased)
+ *     (none) ──request()──► PENDING ──approve() / 72 h tuXoaQuaHan()──► APPROVED  (account erased)
  *                             │
- *                             ├────reject()────► REJECTED
  *                             └────cancel()────► CANCELLED   (user withdrew)
  *
  * Only PENDING is "open". A user may hold at most one open request; filing
@@ -129,7 +135,8 @@ export async function requestDeletion(userId: number, reason: unknown) {
       html:
         `<p>Người dùng <b>${user.username}</b> (${user.email}) đã yêu cầu xoá tài khoản.</p>` +
         `<p>Lý do: ${row.reason ? row.reason : '<i>(không ghi)</i>'}</p>` +
-        `<p>Duyệt hoặc từ chối tại trang quản trị: /admin/deletion-requests</p>`,
+        `<p>Yêu cầu tự có hiệu lực sau ${HAN_TU_XOA_GIO} giờ nếu người dùng không huỷ (không thể từ chối). `
+        + `Duyệt sớm tại trang quản trị: /admin/deletion-requests</p>`,
     })
     .catch((err: unknown) => {
       logger.warn('deletion request admin email failed', { error: (err as Error).message });
@@ -264,18 +271,19 @@ export async function approve(id: number, adminId: number, note: unknown) {
   return updated;
 }
 
-export async function reject(id: number, adminId: number, note: unknown) {
+/**
+ * Từ chối yêu cầu xoá — KHÔNG còn được phép (21/10/2026, App Store 5.1.1(v); xem đầu tệp). Giữ hàm + tuyến để client
+ * admin cũ nhận lỗi rõ ràng thay vì 404. Vẫn kiểm yêu cầu tồn tại/đang mở để thông báo lỗi đúng ngữ cảnh.
+ */
+export async function reject(id: number, adminId: number, _note: unknown): Promise<never> {
   const row = await loadPending(id);
-  return prisma.accountDeletionRequest.update({
-    where: { id: row.id },
-    data: {
-      status: 'REJECTED',
-      reviewedById: adminId,
-      reviewedAt: new Date(),
-      adminNote: cleanReason(note),
-    },
-    select: PUBLIC_SELECT,
-  });
+  logger.warn('admin tried to reject an account deletion request — refused', { requestId: row.id, userId: row.userId, adminId });
+  throw new AppError(
+    'Không thể từ chối yêu cầu xoá tài khoản: người dùng có quyền xoá tài khoản của mình. Yêu cầu tự có hiệu lực sau '
+      + `${HAN_TU_XOA_GIO} giờ nếu họ không huỷ; quản trị viên chỉ có thể duyệt sớm.`,
+    409,
+    'DELETION_REJECT_NOT_ALLOWED',
+  );
 }
 
 /** Thời hạn ân hạn trước khi yêu cầu xoá tự có hiệu lực (khớp chữ trong app/web). */

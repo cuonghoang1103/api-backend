@@ -58,7 +58,7 @@ const STATUS_META: Record<
   AccountDeletionRequest['status'],
   { label: string; color: string; icon: React.ReactNode }
 > = {
-  PENDING: { label: 'Đang chờ duyệt', color: '#f59e0b', icon: <Clock className="h-3 w-3" /> },
+  PENDING: { label: 'Đang chờ (tự xoá sau 72 giờ)', color: '#f59e0b', icon: <Clock className="h-3 w-3" /> },
   APPROVED: { label: 'Đã duyệt — tài khoản đã xoá', color: '#10b981', icon: <CheckCircle2 className="h-3 w-3" /> },
   REJECTED: { label: 'Đã từ chối', color: '#f43f5e', icon: <XCircle className="h-3 w-3" /> },
   CANCELLED: { label: 'Bạn đã huỷ yêu cầu', color: '#8a8d91', icon: <Undo2 className="h-3 w-3" /> },
@@ -275,8 +275,9 @@ export default function AccountDataPage() {
             {pending && (
               <>
                 <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  Tài khoản của bạn <b>vẫn hoạt động bình thường</b> trong lúc chờ.
-                  Bạn có thể huỷ yêu cầu bất cứ lúc nào trước khi được duyệt.
+                  Tài khoản của bạn <b>vẫn hoạt động bình thường</b> trong lúc chờ. Nếu bạn không huỷ, yêu cầu
+                  <b> tự có hiệu lực sau 72 giờ</b> kể từ lúc gửi (quản trị viên có thể xử lý sớm hơn, nhưng không thể từ chối).
+                  Bạn có thể huỷ yêu cầu bất cứ lúc nào trước đó.
                 </p>
                 <Button variant="secondary" onClick={handleCancelRequest} loading={cancelling}>
                   <Undo2 className="h-4 w-4" /> Huỷ yêu cầu xoá
@@ -297,12 +298,14 @@ export default function AccountDataPage() {
           <div className="space-y-4">
             <div className="space-y-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
               <p>
-                Việc xoá tài khoản <b>cần quản trị viên duyệt</b>. Sau khi bạn gửi yêu cầu,
-                tài khoản vẫn hoạt động bình thường cho tới khi được duyệt — và bạn có thể huỷ yêu cầu bất cứ lúc nào.
+                Sau khi bạn gửi yêu cầu, tài khoản vẫn hoạt động bình thường trong <b>72 giờ</b> để bạn đổi ý; hết thời hạn đó
+                yêu cầu <b>tự có hiệu lực</b> (quản trị viên có thể xử lý sớm hơn, nhưng không thể từ chối). Bạn có thể huỷ
+                yêu cầu bất cứ lúc nào trong 72 giờ đó.
               </p>
               <p>
-                Khi được duyệt, thao tác này <b>không thể hoàn tác</b>: thông tin cá nhân của bạn
-                (tên, email, số điện thoại, địa chỉ, ảnh) sẽ được <b>ẩn danh hoá</b> và tài khoản bị vô hiệu hoá.
+                Khi có hiệu lực, thao tác này <b>không thể hoàn tác</b>: thông tin cá nhân của bạn
+                (tên, email, số điện thoại, địa chỉ, ảnh) sẽ được <b>ẩn danh hoá</b>, tài khoản bị vô hiệu hoá, mọi phiên đăng nhập,
+                thẻ thông báo đẩy và token API bị thu hồi, hội thoại AI riêng của bạn bị xoá.
                 Bản ghi đơn hàng được giữ ở dạng ẩn danh cho mục đích kế toán/pháp lý.
               </p>
               <p style={{ color: 'var(--text-muted)' }}>

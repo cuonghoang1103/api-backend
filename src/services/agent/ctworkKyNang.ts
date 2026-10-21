@@ -71,10 +71,15 @@ export const CHU_DE_CUONGMINI: ChuDe[] = [
   {
     id: 'fpt-test-reports', ten: l('Report 5.1 / 5.2 / 5.3 (FPT) — Unit, Integration, System test', 'FPT Report 5.1 / 5.2 / 5.3 — unit, integration, system test'),
     tom: l('5.1 Unit test theo hàm (case + kết quả), 5.2 Integration theo module/vòng, 5.3 System. CT Work tự dựng file Excel đúng mẫu trường.', '5.1 unit tests per function (cases + results), 5.2 integration per module/round, 5.3 system. CT Work builds the school-format Excel.'),
-    buoc: [l('Tests → tab Unit: tạo hàm, thêm case (input/expected), đánh dấu Pass/Fail.', 'Tests → Unit tab: add the function, its cases (input/expected), mark Pass/Fail.'), l('Integration/System: tạo module, thêm case, ghi từng vòng.', 'Integration/System: create a module, add cases, record each round.'), l('Xuất: export_file unit_test / system_test.', 'Export: export_file unit_test / system_test.')],
-    tool: ['fpt_unit_list', 'fpt_unit_create_function', 'fpt_unit_add_cases', 'fpt_unit_mark', 'fpt_unit_suggest', 'fpt_it_create_module', 'fpt_it_add_cases', 'fpt_it_record_round', 'export_file'],
+    buoc: [
+      l('Tests → tab Unit: tạo hàm, thêm case (input/expected), đánh dấu Pass/Fail.', 'Tests → Unit tab: add the function, its cases (input/expected), mark Pass/Fail.'),
+      l('Đầu sheet (Executed By, Created By, LOC, mô tả, pre-condition): fpt_unit_update_function. Dòng/UTCID nháp: fpt_unit_delete_rows (unused) / fpt_unit_delete_cases (notRun).', 'Sheet header (Executed By, Created By, LOC, description, pre-condition): fpt_unit_update_function. Draft rows/UTCIDs: fpt_unit_delete_rows (unused) / fpt_unit_delete_cases (notRun).'),
+      l('Integration/System: tạo module, thêm case, ghi từng vòng; sửa/xoá case: fpt_it_update_cases / fpt_it_delete_cases.', 'Integration/System: create a module, add cases, record each round; edit/delete cases: fpt_it_update_cases / fpt_it_delete_cases.'),
+      l('Bìa (creator, reviewer, version) + Record of change: fpt_doc_update / fpt_change_add. Xuất: export_file unit_test / system_test.', 'Cover (creator, reviewer, version) + Record of change: fpt_doc_update / fpt_change_add. Export: export_file unit_test / system_test.'),
+    ],
+    tool: ['fpt_unit_list', 'fpt_unit_create_function', 'fpt_unit_add_cases', 'fpt_unit_mark', 'fpt_unit_record_results', 'fpt_unit_update_function', 'fpt_unit_update_rows', 'fpt_unit_delete_rows', 'fpt_unit_delete_cases', 'fpt_unit_suggest', 'fpt_it_create_module', 'fpt_it_add_cases', 'fpt_it_record_round', 'fpt_it_update_cases', 'fpt_it_delete_cases', 'fpt_doc_update', 'export_file'],
     trang: [tr('project', 'tests?tab=unit', 'Unit test (5.1)', 'Unit test (5.1)'), tr('project', 'tests?tab=integration', 'Integration (5.2)', 'Integration (5.2)'), tr('project', 'tests?tab=system', 'System (5.3)', 'System (5.3)')],
-    tuKhoa: ['5.1', '5.2', '5.3', 'unit test', 'integration', 'system test', 'report 5', 'bao cao kiem thu', 'test case'],
+    tuKhoa: ['5.1', '5.2', '5.3', 'unit test', 'integration', 'system test', 'report 5', 'bao cao kiem thu', 'test case', 'executed by', 'utcid', 'loc'],
   },
   {
     id: 'weekly-report', ten: l('Báo cáo tuần (weekly report)', 'Weekly report'),
@@ -95,8 +100,17 @@ export const CHU_DE_CUONGMINI: ChuDe[] = [
   {
     id: 'git-ctwork', ten: l('Git ↔ CT Work (nhánh, commit, PR)', 'Git ↔ CT Work (branches, commits, PRs)'),
     tom: l('Nhánh đặt theo thẻ (LF-18-ten-the), commit có key ("LF-18: …"); nối GitHub/GitLab thì commit/PR tự hiện trên thẻ. Sau push/PR: bình luận link vào thẻ làm bằng chứng.', 'Name branches after the issue (LF-18-title), put the key in commits ("LF-18: …"); with GitHub/GitLab connected commits/PRs show on the issue. After a push/PR, comment the link on the issue as evidence.'),
-    buoc: [l('/ctwork → Bắt đầu làm thẻ (tạo nhánh + In Progress).', '/ctwork → Start an issue (branch + In Progress).'), l('Commit "LF-18: …", push, mở PR.', 'Commit "LF-18: …", push, open a PR.'), l('/ctwork → Xong việc: bình luận bằng chứng + chuyển Review.', '/ctwork → Done: evidence comment + move to Review.')],
-    tool: ['comment', 'transition'], trang: [tr('project', 'settings?tab=github', 'GitHub / GitLab', 'GitHub / GitLab')], tuKhoa: ['git', 'branch', 'nhanh', 'commit', 'push', 'pull request', 'pr', 'github', 'gitlab'],
+    buoc: [
+      l('Chưa có code trên máy (thư mục đang mở không phải repo của dự án — xem `git remote -v`): project_repos ⇒ URL clone + nhánh mặc định ⇒ đề nghị `git clone`.', 'No code on this machine (the open folder is not the project repo — check `git remote -v`): project_repos ⇒ clone URL + default branch ⇒ offer `git clone`.'),
+      l('/ctwork → Bắt đầu làm thẻ (tạo nhánh + In Progress).', '/ctwork → Start an issue (branch + In Progress).'), l('Commit "LF-18: …", push, mở PR.', 'Commit "LF-18: …", push, open a PR.'), l('/ctwork → Xong việc: bình luận bằng chứng + chuyển Review.', '/ctwork → Done: evidence comment + move to Review.'),
+    ],
+    tool: ['project_repos', 'dev_activity', 'comment', 'transition'], trang: [tr('project', 'settings?tab=github', 'GitHub / GitLab', 'GitHub / GitLab')], tuKhoa: ['git', 'branch', 'nhanh', 'commit', 'push', 'pull request', 'pr', 'github', 'gitlab', 'clone', 'repo', 'checkout', 'ma nguon', 'source code'],
+  },
+  {
+    id: 'edit-delete', ten: l('Sửa / xoá / khôi phục (thẻ, bình luận, Docs, test, họp…)', 'Edit / delete / restore (issues, comments, Docs, tests, meetings…)'),
+    tom: l('CuongMini sửa/xoá được như bạn trên web, theo đúng vai của bạn. Lệnh xoá luôn hỏi lại (thẻ duyệt ⚠ XOÁ); thẻ và trang Docs vào thùng rác, khôi phục được. Duyệt / APPROVED / tài chính / gửi khách: bạn tự bấm.', 'CuongMini edits/deletes what you can on the web, by your role. Deletes always ask again (⚠ DELETE card); issues and Docs pages go to the trash and can be restored. Approvals / APPROVED / finance / client sends: you click them yourself.'),
+    tool: ['issue_delete', 'issue_restore', 'issue_clone', 'comment_edit', 'comment_delete', 'attachment_delete', 'worklog_delete', 'docs_page_update', 'docs_page_move', 'docs_page_delete', 'docs_page_restore', 'test_update', 'test_cycle_update', 'meeting_update', 'raid_delete', 'qna_update', 'resource_update'],
+    trang: [tr('project', 'settings?tab=trash', 'Trash', 'Thùng rác')], tuKhoa: ['xoa', 'delete', 'sua', 'edit', 'khoi phuc', 'restore', 'thung rac', 'trash', 'nhan ban', 'clone'],
   },
   {
     id: 'fpt-phases', ten: l('Mẫu FPT theo giai đoạn đồ án', 'FPT templates by project phase'),

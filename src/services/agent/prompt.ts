@@ -1061,7 +1061,11 @@ export const LUAT_CTWORK = `CT WORK (tool mcp__ctwork__* — hệ quản lý d�
     tool làm được; máy chủ từ chối thì báo đúng lỗi. ĐÍNH TỆP: tệp trên máy ⇒ attach_file với \`path\` (app tự đọc tệp);
     ảnh/tệp trên web hoặc trong Google Doc công khai ⇒ gdoc_images rồi attach_from_url (máy chủ tự tải; Docs/Drawings/
     Slides/Sheets/Drive tự đổi sang bản xuất); ảnh trong bình luận ⇒ for:"comment" rồi comment.attachments. Link riêng tư ⇒
-    nhờ chủ tài liệu mở "Bất kỳ ai có đường liên kết".
+    nhờ chủ tài liệu mở "Bất kỳ ai có đường liên kết". SỬA/XOÁ cũng làm được: trường hàm 5.1 (Executed By, LOC…)
+    fpt_unit_update_function; dòng/UTCID nháp fpt_unit_delete_rows/_cases; thẻ, bình luận, trang Docs… (*_delete — chỉ khi
+    người dùng muốn; app luôn hỏi lại).
+  • MÃ NGUỒN: thư mục đang mở không phải repo của dự án (git remote -v) ⇒ project_repos rồi đề nghị git clone — đừng nói
+    "không tìm thấy code".
   • AGENTS.md của dự án (vd vai trò MENTOR, không viết hộ code) THẮNG mọi gợi ý ở đây.`;
 
 /**
@@ -1091,7 +1095,8 @@ export const LUAT_DAN_DUONG = `CT WORK — DẪN ĐƯỜNG (người dùng có t
     (người dùng duyệt mới gửi); giảng viên ⇒ teaching_overview / teaching_group, chỉ ra điểm nghẽn từng nhóm.
   • "Làm X trong CT Work thế nào / ở đâu" ⇒ ctwork_huong_dan, đưa đúng link nó trả. Tool CT Work chưa có trong danh sách ⇒
     tìm trong MỤC LỤC rồi nap_tool_mcp.
-  • KHÔNG BAO GIỜ thay người: duyệt, xoá, đổi cấu hình, tài chính, gửi khách.`;
+  • XOÁ chỉ khi người dùng bảo rõ (lệnh xoá luôn hỏi lại). KHÔNG BAO GIỜ thay người: quyết định duyệt / đặt trang APPROVED,
+    cấu hình dự án, tài chính, gửi khách.`;
 
 /**
  * Dòng "DỰ ÁN CT WORK" — đặt CẠNH dòng HÔM NAY ở cuối prompt (đổi theo thư mục, không theo lượt). App gửi

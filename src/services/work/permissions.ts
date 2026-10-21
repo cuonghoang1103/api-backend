@@ -787,6 +787,8 @@ const AGENT_DENIED_ROUTES: Array<[method: string, re: RegExp]> = [
   // NFR), Change Request, review, test plan, test design.
   ['DELETE', /^\/swr\/(features(\/[^/]+\/links)?|priority\/rows|glossary|dictionary|stakeholders|elicitation|origins|surveys|mockups|nfr)\/[^/]+$/i],
   ['DELETE', /^\/changes\/\d+$/], ['DELETE', /^\/reviews\/\d+$/], ['DELETE', /^\/test-plans\/\d+$/], ['DELETE', /^\/test-designs\/\d+$/],
+  // 21/10/2026 đợt 3: dashboard, bộ lọc, baseline, phiên thăm dò, problem (service desk), nhóm Resources, báo cáo tuần + AI usage.
+  ['DELETE', /^\/(dashboards|filters|timeline\/baselines|exploratory|desk\/problems|resource-groups|fpt-reports\/(weekly|ai-usage))\/\d+$/],
 ];
 
 /** `sub` = phần SAU /projects/:pid. Hàm thuần — test bằng bảng (permissions.test.ts). */
